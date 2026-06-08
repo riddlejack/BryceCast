@@ -41,6 +41,13 @@ assert.equal(
 );
 assert.equal(careerCoverageMatrix.schemaVersion, 'bryce-career-coverage-matrix.v1', 'coverage matrix report must be generated');
 assert.equal(careerCoverageMatrix.series?.length, 7, 'coverage matrix must cover all seven imported production-scope series');
+assert.equal(careerCoverageMatrix.seasons?.length, 10, 'coverage matrix must include season-grain coverage rows');
+assert.equal(careerCoverageMatrix.sessions?.length, dataset.sessions.length, 'coverage matrix must include session-grain coverage rows');
+assert.equal(
+  careerCoverageMatrix.sessions?.every((row) => row.categories?.length === careerCoverageMatrix.categoryDefinitions?.length),
+  true,
+  'every session coverage row must contain every category id for matrix-grade auditing'
+);
 const indyCoverage = careerCoverageMatrix.series.find((row) => row.seriesId === 'series_indy_nxt');
 assert.equal(
   indyCoverage?.categories.find((row) => row.id === 'race_results')?.status,
@@ -75,6 +82,79 @@ assert.match(
   indySectionCoverage?.notes ?? '',
   /session_indy_nxt_2024_6325 \(official_pdf_has_no_extractable_text\)/,
   'INDY NXT section-data notes must identify the true remaining held-out Section Results report'
+);
+const coverageCategoryForSession = (sessionId, categoryId) =>
+  careerCoverageMatrix.sessions
+    .find((row) => row.sessionId === sessionId)
+    ?.categories.find((row) => row.id === categoryId);
+assert.equal(
+  coverageCategoryForSession('session_indy_nxt_2024_6314', 'lap_samples')?.status,
+  'partial',
+  'INDY NXT race sessions should remain applicable for lap-chart sample coverage'
+);
+assert.equal(
+  coverageCategoryForSession('session_indy_nxt_2024_6314', 'detailed_pit_context')?.status,
+  'blocked',
+  'INDY NXT race sessions should remain applicable for detailed pit-context gaps'
+);
+assert.equal(
+  coverageCategoryForSession('session_indy_nxt_2024_6328', 'lap_samples')?.status,
+  'out_of_scope',
+  'INDY NXT practice sessions must not be treated as missing race lap-chart samples'
+);
+assert.equal(
+  coverageCategoryForSession('session_indy_nxt_2024_6330', 'detailed_pit_context')?.status,
+  'out_of_scope',
+  'INDY NXT qualifying sessions must not be treated as missing race pit-context rows'
+);
+assert.equal(
+  coverageCategoryForSession('session_indy_nxt_2024_6330', 'indy_section_data')?.status,
+  'complete',
+  'INDY NXT qualifying sessions can still be applicable for official section-data reports'
+);
+const frpCoverage = careerCoverageMatrix.series.find((row) => row.seriesId === 'series_frp_f1600');
+const formulaFordCoverage = careerCoverageMatrix.series.find((row) => row.seriesId === 'series_formula_ford');
+const frp2019Coverage = careerCoverageMatrix.seasons.find((row) => row.seriesId === 'series_frp_f1600' && row.year === 2019);
+const formulaFord2020Coverage = careerCoverageMatrix.seasons.find((row) => row.seriesId === 'series_formula_ford' && row.year === 2020);
+assert.deepEqual(
+  frpCoverage?.priorityGaps,
+  [],
+  'FRP F1600 explicit penalty announcements must not be promoted into a missing no-penalty ledger gap'
+);
+assert.deepEqual(
+  frp2019Coverage?.priorityGaps,
+  [],
+  'FRP F1600 season matrix must apply the same no-penalty ledger exclusion as the series matrix'
+);
+assert.equal(
+  frpCoverage?.categories.find((row) => row.id === 'penalties_decisions')?.status,
+  'partial',
+  'FRP F1600 should preserve explicit source-backed penalty announcements as partial event-record coverage'
+);
+assert.equal(
+  frpCoverage?.sourceFamilyPriorityExclusions?.penalties_decisions?.includes('no complete official no-penalty decisions ledger'),
+  true,
+  'FRP F1600 penalty coverage must document why absent penalty rows are not a priority gap'
+);
+assert.deepEqual(
+  formulaFordCoverage?.priorityGaps,
+  ['grid_start_positions', 'lap_samples'],
+  'Formula Ford priority gaps should focus on grid/start and lap samples, not absent no-penalty rows'
+);
+assert.deepEqual(
+  formulaFord2020Coverage?.priorityGaps,
+  ['grid_start_positions', 'lap_samples'],
+  'Formula Ford season matrix must apply the same no-penalty ledger exclusion as the series matrix'
+);
+assert.equal(
+  formulaFordCoverage?.categories.find((row) => row.id === 'penalties_decisions')?.status,
+  'partial',
+  'Formula Ford should preserve explicit source-backed penalty notes as partial event-record coverage'
+);
+assert.equal(
+  formulaFordCoverage?.sourceFamilyPriorityExclusions?.penalties_decisions?.includes('no complete official no-penalty decisions ledger'),
+  true,
+  'Formula Ford penalty coverage must document why absent penalty rows are not a priority gap'
 );
 
 assert.ok(
@@ -119,6 +199,56 @@ assert.deepEqual(
   gb32021RaceRows.filter((row) => row.gridPosition === null || row.startPosition === null).map((row) => row.id),
   [],
   'GB3 2021 race starts must import from official TSL grid PDFs'
+);
+const gb3SeriesCoverage = careerCoverageMatrix.series.find((row) => row.seriesId === 'series_gb3');
+assert.deepEqual(
+  gb3SeriesCoverage?.priorityGaps,
+  [],
+  'GB3 source-family detail asymmetry must not be promoted as a priority gap once 2021 PDF and 2022 JSON coverage are classified separately'
+);
+assert.equal(
+  gb3SeriesCoverage?.openGapIds?.includes('gap_gb3_2022_session_1248_missing_json'),
+  true,
+  'GB3 coverage must still preserve the official 2022 session 1248 JSON 404 gap'
+);
+const gb32021Coverage = careerCoverageMatrix.seasons.find((row) => row.seriesId === 'series_gb3' && row.year === 2021);
+const gb32022Coverage = careerCoverageMatrix.seasons.find((row) => row.seriesId === 'series_gb3' && row.year === 2022);
+assert.equal(
+  gb32021Coverage?.categories.find((row) => row.id === 'grid_start_positions')?.status,
+  'complete',
+  'GB3 2021 official TSL grid/start coverage must stay complete at season grain'
+);
+assert.equal(
+  gb32021Coverage?.categories.find((row) => row.id === 'official_weather_conditions')?.status,
+  'complete',
+  'GB3 2021 official TSL weather coverage must stay complete at season grain'
+);
+assert.equal(
+  gb32021Coverage?.categories.find((row) => row.id === 'pit_stop_counts')?.status,
+  'unavailable',
+  'GB3 2021 TSL PDFs should mark pit-stop count fields unavailable, not blocked'
+);
+assert.equal(
+  gb32022Coverage?.categories.find((row) => row.id === 'grid_start_positions')?.status,
+  'unavailable',
+  'GB3 2022 official JSON should mark grid/start fields unavailable, not blocked'
+);
+assert.equal(
+  gb32022Coverage?.categories.find((row) => row.id === 'official_weather_conditions')?.status,
+  'unavailable',
+  'GB3 2022 official JSON should mark official weather fields unavailable, not blocked'
+);
+assert.equal(
+  gb32022Coverage?.categories.find((row) => row.id === 'pit_stop_counts')?.status,
+  'complete',
+  'GB3 2022 official JSON pit-stop count coverage must stay complete'
+);
+assert.equal(
+  careerCoverageMatrix.sessions
+    .find((row) => row.sessionId === 'session_gb3_2021_212005_race_1_result')
+    ?.categories.find((row) => row.id === 'pit_stop_counts')?.status,
+  'unavailable',
+  'GB3 2021 session rows should inherit the season/source-family pit-stop unavailable classification'
 );
 assert.equal(
   dataset.sourceEvidence.some((row) => row.id === 'source_gb3_2021_212005_gr3_bf3_pdf' && row.confidenceTier === 'official'),

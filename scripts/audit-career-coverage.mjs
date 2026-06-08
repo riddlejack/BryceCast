@@ -128,7 +128,7 @@ const categoryDefinitions = [
   {
     id: 'penalties_decisions',
     label: 'Penalties/decisions',
-    description: 'Official penalty or decision rows linked to sessions and drivers where possible.'
+    description: 'Official penalty or decision rows linked to sessions and drivers where source families expose explicit penalty records.'
   },
   {
     id: 'incidents_cautions',
@@ -318,6 +318,49 @@ const knownGapMap = {
   series_indy_nxt: ['gap_indy_nxt_qualifying_lap_reports']
 };
 
+const sourceFamilyPriorityExclusions = {
+  series_frp_f1600: {
+    penalties_decisions: 'FRP F1600 2019 archive PDFs expose explicit penalty announcements where present, but no complete official no-penalty decisions ledger was found for every session.'
+  },
+  series_formula_ford: {
+    penalties_decisions: 'Formula Ford 2020 event books expose explicit penalty-note rows where present, but no complete official no-penalty decisions ledger was found for every session.'
+  },
+  series_gb3: {
+    grid_start_positions: 'GB3 2021 official TSL PDFs expose race grid sheets and are complete; GB3 2022 official JSON result payloads do not expose grid/start fields.',
+    official_weather_conditions: 'GB3 2021 official TSL PDFs expose weather/track-condition rows and are complete; GB3 2022 official JSON payloads do not expose comparable weather/track-condition fields.',
+    pit_stop_counts: 'GB3 2022 official JSON payloads expose pit-stop count fields and are complete; GB3 2021 official TSL PDFs do not expose comparable pit-stop count fields.'
+  }
+};
+
+const seasonCategoryOverrides = {
+  series_gb3: {
+    2021: {
+      pit_stop_counts: {
+        status: 'unavailable',
+        notes: 'GB3 2021 official TSL classification PDFs do not expose comparable pit-stop count fields.'
+      }
+    },
+    2022: {
+      grid_start_positions: {
+        status: 'unavailable',
+        notes: 'GB3 2022 official JSON result payloads do not expose comparable grid/start fields.'
+      },
+      official_weather_conditions: {
+        status: 'unavailable',
+        notes: 'GB3 2022 official JSON result payloads do not expose comparable official weather/track-condition fields.'
+      }
+    }
+  }
+};
+
+const applySeasonOverrides = ({ seriesId, year, categories }) => {
+  const overrides = seasonCategoryOverrides[seriesId]?.[year] ?? {};
+  return categories.map((category) => {
+    const override = overrides[category.id];
+    return override ? { ...category, ...override } : category;
+  });
+};
+
 const buildCoverage = ({ dataset, summary, indyReport, canceledSessionEvidence }) => {
   const eventsById = new Map(asArray(dataset.events).map((row) => [row.id, row]));
   const sessionsById = new Map(asArray(dataset.sessions).map((row) => [row.id, row]));
@@ -350,6 +393,7 @@ const buildCoverage = ({ dataset, summary, indyReport, canceledSessionEvidence }
   const allOpenGaps = asArray(dataset.gaps).filter((gap) => gap.status !== 'closed');
   const seriesRows = [];
   const seasonRows = [];
+  const sessionRows = [];
 
   for (const series of asArray(dataset.series).sort((a, b) => a.name.localeCompare(b.name))) {
     const policy = seriesPolicies[series.id] ?? { supported: new Set(), unavailable: new Set() };
@@ -544,7 +588,8 @@ const buildCoverage = ({ dataset, summary, indyReport, canceledSessionEvidence }
       .filter((row) =>
         ['partial', 'blocked'].includes(row.status) &&
         policy.supported.has(row.id) &&
-        !['derived_benchmarks'].includes(row.id)
+        !['derived_benchmarks'].includes(row.id) &&
+        !sourceFamilyPriorityExclusions[series.id]?.[row.id]
       )
       .map((row) => row.id);
 
@@ -557,6 +602,7 @@ const buildCoverage = ({ dataset, summary, indyReport, canceledSessionEvidence }
       policyNote: policy.scopeNote ?? null,
       canceledOfficialSessionIds: sessions.filter((session) => canceledSessionEvidence.has(session.id)).map((session) => session.id),
       openGapIds: openGaps.map((gap) => gap.id),
+      sourceFamilyPriorityExclusions: sourceFamilyPriorityExclusions[series.id] ?? {},
       categories,
       priorityGaps
     });
@@ -564,9 +610,127 @@ const buildCoverage = ({ dataset, summary, indyReport, canceledSessionEvidence }
     for (const year of years) {
       const yearEvents = events.filter((event) => event.seasonYear === year);
       const yearEventIds = new Set(yearEvents.map((event) => event.id));
+      const yearTrackIds = new Set(yearEvents.map((event) => event.trackId).filter(Boolean));
       const yearSessions = sessions.filter((session) => yearEventIds.has(session.eventId));
       const yearRaceSessions = yearSessions.filter(isRaceLike);
-      const yearRaceRows = yearRaceSessions.flatMap((session) => resultsBySession.get(session.id) ?? []);
+      const yearComparableRaceSessions = yearRaceSessions.filter(isResultBearingComparable);
+      const yearQualifyingSessions = yearSessions.filter((session) => session.sessionType === 'qualifying');
+      const yearCanceledQualifyingSessions = yearQualifyingSessions.filter((session) => canceledSessionEvidence.has(session.id));
+      const yearComparableQualifyingSessions = yearQualifyingSessions.filter((session) =>
+        isResultBearingComparable(session) && !canceledSessionEvidence.has(session.id)
+      );
+      const yearPhysicalSessions = yearSessions.filter((session) => !isPhysicalWindowExempt(session));
+      const yearRaceRows = yearComparableRaceSessions.flatMap((session) => resultsBySession.get(session.id) ?? []);
+      const yearRaceResultSessions = yearComparableRaceSessions.filter((session) => (resultsBySession.get(session.id) ?? []).length > 0);
+      const yearQualifyingClassificationSessions = yearComparableQualifyingSessions.filter((session) =>
+        (resultsBySession.get(session.id) ?? []).length > 0 ||
+        (qualifyingBySession.get(session.id) ?? []).length > 0
+      );
+      const yearRaceRowsWithGrid = yearRaceRows.filter((row) => row.gridPosition != null || row.startPosition != null);
+      const yearExactWindowSessions = yearPhysicalSessions.filter(hasExactTimestamp);
+      const yearAnyWindowSessions = yearPhysicalSessions.filter(hasAnyStart);
+      const yearTrackMetadataComplete = [...yearTrackIds].filter((trackId) => {
+        const track = tracksById.get(trackId);
+        return Boolean(
+          track &&
+          Number.isFinite(track.latitude) &&
+          Number.isFinite(track.longitude) &&
+          track.timezone &&
+          (Number.isFinite(track.lengthKm) || Number.isFinite(track.lengthMi)) &&
+          track.direction &&
+          track.direction !== 'unknown' &&
+          track.surface &&
+          Number.isFinite(track.cornerCount)
+        );
+      }).length;
+      const yearWeatherSessions = yearSessions.filter((session) => (weatherBySession.get(session.id) ?? []).length > 0);
+      const yearLapSampleSessions = yearSessions.filter((session) => (lapSamplesBySession.get(session.id) ?? []).length > 0);
+      const yearRaceLapSampleSessions = yearComparableRaceSessions.filter((session) => (lapSamplesBySession.get(session.id) ?? []).length > 0);
+      const yearPenaltySessions = yearSessions.filter((session) => (penaltiesBySession.get(session.id) ?? []).length > 0);
+      const yearIncidentSessions = yearSessions.filter((session) => (incidentsBySession.get(session.id) ?? []).length > 0);
+      const yearRacecraftSessions = yearSessions.filter((session) => (racecraftBySession.get(session.id) ?? []).length > 0);
+      const yearRaceRowsWithPitStops = yearRaceRows.filter((row) => row.pitStops != null);
+      const yearSectionMetricSessions = yearSessions.filter((session) =>
+        (metricsBySession.get(session.id) ?? []).some((metric) =>
+          ['official_top_section_times', 'official_section_results'].includes(metric.metricType)
+        )
+      );
+      const yearBenchmarkMetrics = benchmarkMetrics.filter((metric) => yearEventIds.has(metric.eventId));
+      const yearCategories = applySeasonOverrides({ seriesId: series.id, year, categories: [
+        category('events_sessions', yearSessions.length, yearSessions.length, {
+          notes: `${yearEvents.length} events, ${yearSessions.length} sessions.`
+        }),
+        category('race_results', yearRaceResultSessions.length, yearComparableRaceSessions.length, {
+          notes: `${yearRaceRows.length} race/heat result rows across ${yearComparableRaceSessions.length} result-bearing race/heat sessions.`
+        }),
+        category('qualifying_classifications', yearQualifyingClassificationSessions.length, yearComparableQualifyingSessions.length, {
+          notes: `${yearComparableQualifyingSessions.length} result-bearing qualifying sessions; ${yearCanceledQualifyingSessions.length} official canceled qualifying sessions excluded.`
+        }),
+        category('grid_start_positions', yearRaceRowsWithGrid.length, yearRaceRows.length, {
+          notes: `${yearRaceRowsWithGrid.length}/${yearRaceRows.length} race/heat rows have gridPosition or startPosition.`
+        }),
+        category('exact_session_windows', yearExactWindowSessions.length, yearPhysicalSessions.length, {
+          status: yearExactWindowSessions.length === yearPhysicalSessions.length
+            ? 'complete'
+            : yearAnyWindowSessions.length === yearPhysicalSessions.length
+              ? 'partial'
+              : yearExactWindowSessions.length > 0
+                ? 'partial'
+                : 'blocked',
+          notes: `${yearExactWindowSessions.length}/${yearPhysicalSessions.length} physical sessions have clock-time starts; ${yearAnyWindowSessions.length}/${yearPhysicalSessions.length} have at least date-level starts.`
+        }),
+        category('track_metadata', yearTrackMetadataComplete, yearTrackIds.size, {
+          notes: `${yearTrackMetadataComplete}/${yearTrackIds.size} referenced tracks have complete metadata.`
+        }),
+        category('official_weather_conditions', yearWeatherSessions.length, yearSessions.length, {
+          notes: `${yearWeatherSessions.length}/${yearSessions.length} sessions have official weather/track-condition observations.`
+        }),
+        category('lap_samples', series.id === 'series_indy_nxt' ? yearRaceLapSampleSessions.length : yearLapSampleSessions.length, series.id === 'series_indy_nxt' ? yearComparableRaceSessions.length : yearSessions.length, {
+          status: series.id === 'series_formula_ford'
+            ? 'partial'
+            : series.id === 'series_indy_nxt'
+              ? 'partial'
+              : undefined,
+          notes: series.id === 'series_indy_nxt'
+            ? `${yearRaceLapSampleSessions.length}/${yearComparableRaceSessions.length} completed race sessions have lap-chart samples; chart fidelity is tracked in importer diagnostics.`
+            : `${yearLapSampleSessions} sessions have lap samples.`
+        }),
+        category('indy_section_data', yearSectionMetricSessions.length, series.id === 'series_indy_nxt' ? yearSessions.length : 0, {
+          status: series.id === 'series_indy_nxt'
+            ? (yearSectionMetricSessions.length === yearSessions.length ? 'complete' : yearSectionMetricSessions.length > 0 ? 'partial' : 'blocked')
+            : undefined,
+          notes: series.id === 'series_indy_nxt'
+            ? `${yearSectionMetricSessions}/${yearSessions.length} sessions have official top-section or section-result metrics.`
+            : null
+        }),
+        category('penalties_decisions', yearPenaltySessions.length, yearSessions.length, {
+          status: policy.supported.has('penalties_decisions')
+            ? (yearPenaltySessions.length > 0 ? (series.id === 'series_indy_nxt' ? 'complete' : 'partial') : 'blocked')
+            : undefined,
+          notes: `${yearPenaltySessions.length} sessions have official penalty/decision rows.`
+        }),
+        category('incidents_cautions', yearIncidentSessions.length, yearRaceSessions.length, {
+          status: series.id === 'series_indy_nxt' ? 'complete' : undefined,
+          notes: `${yearIncidentSessions.length} sessions have official incident/caution rows.`
+        }),
+        category('racecraft_summary', yearRacecraftSessions.length, yearRaceSessions.length, {
+          status: series.id === 'series_indy_nxt' ? 'complete' : undefined,
+          notes: `${yearRacecraftSessions.length} race sessions have official most-improved/racecraft summary rows.`
+        }),
+        category('pit_stop_counts', yearRaceRowsWithPitStops.length, yearRaceRows.length, {
+          notes: `${yearRaceRowsWithPitStops.length}/${yearRaceRows.length} race/heat result rows have pit-stop counts.`
+        }),
+        category('detailed_pit_context', 0, yearRaceSessions.length, {
+          status: policy.supported.has('detailed_pit_context') ? 'blocked' : undefined,
+          notes: series.id === 'series_indy_nxt'
+            ? 'INDY NXT has official/API pit-stop counts, but no detailed pit-summary or pit-lane sequence importer yet.'
+            : null
+        }),
+        category('derived_benchmarks', yearBenchmarkMetrics.length, Math.max(1, yearEvents.length), {
+          status: yearBenchmarkMetrics.length > 0 ? 'partial' : 'blocked',
+          notes: `${yearBenchmarkMetrics.length} non-report derived metrics exist for this season.`
+        })
+      ]});
       seasonRows.push({
         seriesId: series.id,
         seriesName: series.name,
@@ -575,14 +739,225 @@ const buildCoverage = ({ dataset, summary, indyReport, canceledSessionEvidence }
         sessions: yearSessions.length,
         raceSessions: yearRaceSessions.length,
         raceRows: yearRaceRows.length,
-        qualifyingSessions: yearSessions.filter((session) => session.sessionType === 'qualifying').length,
-        exactWindowSessions: yearSessions.filter((session) => !isPhysicalWindowExempt(session) && hasExactTimestamp(session)).length,
-        physicalSessions: yearSessions.filter((session) => !isPhysicalWindowExempt(session)).length,
-        raceRowsWithGridOrStart: yearRaceRows.filter((row) => row.gridPosition != null || row.startPosition != null).length,
-        raceRowsWithPitStops: yearRaceRows.filter((row) => row.pitStops != null).length,
-        lapSampleSessions: yearSessions.filter((session) => (lapSamplesBySession.get(session.id) ?? []).length > 0).length,
-        weatherSessions: yearSessions.filter((session) => (weatherBySession.get(session.id) ?? []).length > 0).length
+        qualifyingSessions: yearQualifyingSessions.length,
+        exactWindowSessions: yearExactWindowSessions.length,
+        physicalSessions: yearPhysicalSessions.length,
+        raceRowsWithGridOrStart: yearRaceRowsWithGrid.length,
+        raceRowsWithPitStops: yearRaceRowsWithPitStops.length,
+        lapSampleSessions: yearLapSampleSessions.length,
+        weatherSessions: yearWeatherSessions.length,
+        priorityGaps: yearCategories
+          .filter((row) =>
+            ['partial', 'blocked'].includes(row.status) &&
+            policy.supported.has(row.id) &&
+            !['derived_benchmarks'].includes(row.id) &&
+            !sourceFamilyPriorityExclusions[series.id]?.[row.id]
+          )
+          .map((row) => row.id),
+        categories: yearCategories
       });
+
+      for (const session of yearSessions) {
+        const event = eventsById.get(session.eventId);
+        const track = event?.trackId ? tracksById.get(event.trackId) : null;
+        const sessionResults = resultsBySession.get(session.id) ?? [];
+        const sessionQualifyingResults = qualifyingBySession.get(session.id) ?? [];
+        const sessionMetrics = metricsBySession.get(session.id) ?? [];
+        const sessionBenchmarkMetrics = sessionMetrics.filter((metric) =>
+          ![
+            'official_event_summary_race_stats',
+            'official_leader_lap_summary',
+            'official_top_section_times',
+            'official_section_results'
+          ].includes(metric.metricType)
+        );
+        const isComparableRace = isRaceLike(session) && isResultBearingComparable(session);
+        const isComparableQualifying = session.sessionType === 'qualifying' && isResultBearingComparable(session) && !canceledSessionEvidence.has(session.id);
+        const sessionTrackMetadataComplete = Boolean(
+          track &&
+          Number.isFinite(track.latitude) &&
+          Number.isFinite(track.longitude) &&
+          track.timezone &&
+          (Number.isFinite(track.lengthKm) || Number.isFinite(track.lengthMi)) &&
+          track.direction &&
+          track.direction !== 'unknown' &&
+          track.surface &&
+          Number.isFinite(track.cornerCount)
+        );
+        const sessionCategories = applySeasonOverrides({ seriesId: series.id, year, categories: [
+          {
+            id: 'events_sessions',
+            status: 'complete',
+            covered: 1,
+            total: 1
+          },
+          {
+            id: 'race_results',
+            status: !isRaceLike(session)
+              ? 'out_of_scope'
+              : !isResultBearingComparable(session)
+                ? 'unavailable'
+                : sessionResults.length > 0
+                  ? 'complete'
+                  : 'blocked',
+            covered: sessionResults.length,
+            total: isComparableRace ? 1 : 0
+          },
+          {
+            id: 'qualifying_classifications',
+            status: session.sessionType !== 'qualifying'
+              ? 'out_of_scope'
+              : canceledSessionEvidence.has(session.id)
+                ? 'unavailable'
+                : !isResultBearingComparable(session)
+                  ? 'unavailable'
+                  : (sessionResults.length > 0 || sessionQualifyingResults.length > 0)
+                    ? 'complete'
+                    : 'blocked',
+            covered: sessionResults.length + sessionQualifyingResults.length,
+            total: isComparableQualifying ? 1 : 0
+          },
+          {
+            id: 'grid_start_positions',
+            status: !isComparableRace || !policy.supported.has('grid_start_positions')
+              ? (policy.unavailable.has('grid_start_positions') ? 'unavailable' : 'out_of_scope')
+              : sessionResults.length > 0 && sessionResults.every((row) => row.gridPosition != null || row.startPosition != null)
+                ? 'complete'
+                : sessionResults.some((row) => row.gridPosition != null || row.startPosition != null)
+                  ? 'partial'
+                  : 'blocked',
+            covered: sessionResults.filter((row) => row.gridPosition != null || row.startPosition != null).length,
+            total: isComparableRace ? sessionResults.length : 0
+          },
+          {
+            id: 'exact_session_windows',
+            status: isPhysicalWindowExempt(session)
+              ? 'out_of_scope'
+              : hasExactTimestamp(session)
+                ? 'complete'
+                : hasAnyStart(session)
+                  ? 'partial'
+                  : 'blocked',
+            covered: hasExactTimestamp(session) ? 1 : 0,
+            total: isPhysicalWindowExempt(session) ? 0 : 1
+          },
+          {
+            id: 'track_metadata',
+            status: sessionTrackMetadataComplete ? 'complete' : 'blocked',
+            covered: sessionTrackMetadataComplete ? 1 : 0,
+            total: 1
+          },
+          {
+            id: 'official_weather_conditions',
+            status: !policy.supported.has('official_weather_conditions')
+              ? (policy.unavailable.has('official_weather_conditions') ? 'unavailable' : 'out_of_scope')
+              : (weatherBySession.get(session.id) ?? []).length > 0
+                ? 'complete'
+                : 'blocked',
+            covered: (weatherBySession.get(session.id) ?? []).length,
+            total: policy.supported.has('official_weather_conditions') ? 1 : 0
+          },
+          {
+            id: 'lap_samples',
+            status: !policy.supported.has('lap_samples')
+              ? (policy.unavailable.has('lap_samples') ? 'unavailable' : 'out_of_scope')
+              : series.id === 'series_indy_nxt' && !isComparableRace
+                ? 'out_of_scope'
+              : (lapSamplesBySession.get(session.id) ?? []).length > 0
+                ? (series.id === 'series_indy_nxt' || series.id === 'series_formula_ford' ? 'partial' : 'complete')
+                : 'blocked',
+            covered: (lapSamplesBySession.get(session.id) ?? []).length,
+            total: policy.supported.has('lap_samples') && !(series.id === 'series_indy_nxt' && !isComparableRace) ? 1 : 0
+          },
+          {
+            id: 'indy_section_data',
+            status: series.id !== 'series_indy_nxt'
+              ? 'unavailable'
+              : sessionMetrics.some((metric) => ['official_top_section_times', 'official_section_results'].includes(metric.metricType))
+                ? 'complete'
+                : canceledSessionEvidence.has(session.id)
+                  ? 'unavailable'
+                  : 'blocked',
+            covered: sessionMetrics.filter((metric) => ['official_top_section_times', 'official_section_results'].includes(metric.metricType)).length,
+            total: series.id === 'series_indy_nxt' ? 1 : 0
+          },
+          {
+            id: 'penalties_decisions',
+            status: !policy.supported.has('penalties_decisions')
+              ? (policy.unavailable.has('penalties_decisions') ? 'unavailable' : 'out_of_scope')
+              : (penaltiesBySession.get(session.id) ?? []).length > 0
+                ? 'complete'
+                : 'partial',
+            covered: (penaltiesBySession.get(session.id) ?? []).length,
+            total: policy.supported.has('penalties_decisions') ? 1 : 0
+          },
+          {
+            id: 'incidents_cautions',
+            status: !policy.supported.has('incidents_cautions')
+              ? (policy.unavailable.has('incidents_cautions') ? 'unavailable' : 'out_of_scope')
+              : !isComparableRace
+                ? 'out_of_scope'
+              : (incidentsBySession.get(session.id) ?? []).length > 0
+                ? 'complete'
+                : 'partial',
+            covered: (incidentsBySession.get(session.id) ?? []).length,
+            total: policy.supported.has('incidents_cautions') && isComparableRace ? 1 : 0
+          },
+          {
+            id: 'racecraft_summary',
+            status: !policy.supported.has('racecraft_summary')
+              ? (policy.unavailable.has('racecraft_summary') ? 'unavailable' : 'out_of_scope')
+              : !isComparableRace
+                ? 'out_of_scope'
+              : (racecraftBySession.get(session.id) ?? []).length > 0
+                ? 'complete'
+                : 'partial',
+            covered: (racecraftBySession.get(session.id) ?? []).length,
+            total: policy.supported.has('racecraft_summary') && isComparableRace ? 1 : 0
+          },
+          {
+            id: 'pit_stop_counts',
+            status: !isComparableRace || !policy.supported.has('pit_stop_counts')
+              ? (policy.unavailable.has('pit_stop_counts') ? 'unavailable' : 'out_of_scope')
+              : sessionResults.length > 0 && sessionResults.every((row) => row.pitStops != null)
+                ? 'complete'
+                : sessionResults.some((row) => row.pitStops != null)
+                  ? 'partial'
+                  : 'blocked',
+            covered: sessionResults.filter((row) => row.pitStops != null).length,
+            total: isComparableRace ? sessionResults.length : 0
+          },
+          {
+            id: 'detailed_pit_context',
+            status: !policy.supported.has('detailed_pit_context')
+              ? (policy.unavailable.has('detailed_pit_context') ? 'unavailable' : 'out_of_scope')
+              : !isComparableRace
+                ? 'out_of_scope'
+              : 'blocked',
+            covered: 0,
+            total: policy.supported.has('detailed_pit_context') && isComparableRace ? 1 : 0
+          },
+          {
+            id: 'derived_benchmarks',
+            status: sessionBenchmarkMetrics.length > 0 ? 'partial' : 'blocked',
+            covered: sessionBenchmarkMetrics.length,
+            total: 1
+          }
+        ]});
+        sessionRows.push({
+          seriesId: series.id,
+          seriesName: series.name,
+          year,
+          eventId: event?.id ?? null,
+          eventName: event?.name ?? null,
+          sessionId: session.id,
+          sessionName: session.sessionName,
+          sessionType: session.sessionType,
+          ingestionState: session.ingestionState ?? null,
+          sourceFamily: session.sourceFamily ?? session.sourceType ?? null,
+          categories: sessionCategories
+        });
+      }
     }
   }
 
@@ -603,7 +978,7 @@ const buildCoverage = ({ dataset, summary, indyReport, canceledSessionEvidence }
       rank: 3,
       id: 'resolve_or_preserve_gb3_2022_source_broken_rows',
       seriesId: 'series_gb3',
-      rationale: 'GB3 2021 is strong; GB3 2022 has one official manifest session with a row-level JSON 404 and broader start/grid asymmetry versus 2021.'
+      rationale: 'GB3 2021 TSL PDFs and GB3 2022 JSON expose different detail categories; after preserving that source-family split, the remaining hard GB3 gap is the official 2022 session 1248 JSON 404.'
     },
     {
       rank: 4,
@@ -628,6 +1003,7 @@ const buildCoverage = ({ dataset, summary, indyReport, canceledSessionEvidence }
     },
     series: seriesRows,
     seasons: seasonRows,
+    sessions: sessionRows,
     globalPriority,
     openGaps: asArray(dataset.gaps).filter((gap) => gap.status !== 'closed').map((gap) => ({
       id: gap.id,
@@ -686,6 +1062,38 @@ const buildMarkdown = (report) => {
     lines.push(`| ${row.seriesName} | ${row.year} | ${row.events} | ${row.sessions} | ${row.raceRows} | ${row.qualifyingSessions} | ${row.exactWindowSessions}/${row.physicalSessions} | ${row.raceRowsWithGridOrStart}/${row.raceRows} | ${row.raceRowsWithPitStops}/${row.raceRows} | ${row.lapSampleSessions} | ${row.weatherSessions} |`);
   }
   lines.push('');
+  lines.push('## Season Category Matrix');
+  lines.push('');
+  lines.push(`| Series | Year | Priority Gaps | ${report.categoryDefinitions.map((category) => category.label).join(' | ')} |`);
+  lines.push(`| --- | ---: | --- | ${categoryIds.map(() => '---').join(' | ')} |`);
+  for (const row of report.seasons) {
+    const byId = new Map(row.categories.map((category) => [category.id, category]));
+    lines.push(`| ${row.seriesName} | ${row.year} | ${row.priorityGaps.join(', ') || 'none'} | ${categoryIds.map((id) => statusIcon(byId.get(id)?.status)).join(' | ')} |`);
+  }
+  lines.push('');
+  const sessionGapRows = report.sessions
+    .map((session) => {
+      const series = report.series.find((row) => row.seriesId === session.seriesId);
+      const priorityGapSet = new Set(series?.priorityGaps ?? []);
+      const gaps = session.categories
+        .filter((category) => priorityGapSet.has(category.id) && ['partial', 'blocked'].includes(category.status))
+        .map((category) => `${category.id}:${category.status}`);
+      return { ...session, gaps };
+    })
+    .filter((row) => row.gaps.length > 0);
+  lines.push('## Session Gap Diagnostics');
+  lines.push('');
+  lines.push('This table lists sessions that still have partial or blocked coverage in that series priority categories. The JSON report contains all session/category rows.');
+  lines.push('');
+  lines.push('| Series | Year | Event | Session | Type | Gaps |');
+  lines.push('| --- | ---: | --- | --- | --- | --- |');
+  for (const row of sessionGapRows.slice(0, 200)) {
+    lines.push(`| ${row.seriesName} | ${row.year} | ${row.eventName ?? row.eventId ?? ''} | ${row.sessionName} (${row.sessionId}) | ${row.sessionType} | ${row.gaps.join(', ')} |`);
+  }
+  if (sessionGapRows.length > 200) {
+    lines.push(`| ... |  |  |  |  | ${sessionGapRows.length - 200} additional rows omitted from Markdown; inspect data/career/reports/career-coverage-matrix.json. |`);
+  }
+  lines.push('');
   lines.push('## Recommended Patch Order');
   lines.push('');
   for (const item of report.globalPriority) {
@@ -708,6 +1116,10 @@ const buildMarkdown = (report) => {
   for (const row of report.series) {
     lines.push(`### ${row.seriesName}`);
     if (row.policyNote) lines.push(`- ${row.policyNote}`);
+    for (const [categoryId, rationale] of Object.entries(row.sourceFamilyPriorityExclusions ?? {})) {
+      const label = report.categoryDefinitions.find((category) => category.id === categoryId)?.label ?? categoryId;
+      lines.push(`- ${label}: source-family split, not a priority gap. ${rationale}`);
+    }
     for (const category of row.categories.filter((category) => category.status !== 'complete')) {
       lines.push(`- ${category.label}: ${category.status}. ${category.notes ?? ''}`.trim());
     }
