@@ -1,0 +1,679 @@
+{
+  "checkedAt": "2026-06-08T15:13:37.356Z",
+  "ok": true,
+  "dryRun": false,
+  "verifySourceUrls": false,
+  "rawArtifact": "data/career/raw/track-metadata/track-metadata.v1.json",
+  "genericWeatherImported": false,
+  "preservedWeatherObservationRows": 86,
+  "counts": {
+    "rawTracks": 42,
+    "datasetTracksBefore": 42,
+    "datasetTracksAfter": 42,
+    "tracksUpdated": 41,
+    "sourceEvidenceUpserted": 42,
+    "eventTimezonesBackfilled": 7,
+    "sessionTimezonesBackfilled": 0,
+    "sessionTimezoneMismatches": 0,
+    "weatherPreciseWindowReadySessions": 307,
+    "weatherEventDayContextOnlySessions": 152,
+    "weatherBlockedSessions": 9
+  },
+  "qualityGates": {
+    "allImportedTracksHaveMetadataRows": true,
+    "allImportedTracksHaveWeatherJoinLocation": true,
+    "allImportedTracksHaveLayoutLength": true,
+    "allImportedTracksHaveKnownDirection": true,
+    "allImportedTracksHaveFullLayoutProfile": true,
+    "allEventsHaveTimezone": true,
+    "allSessionsHaveTimezone": true,
+    "weatherBackfillReadyForPreciseWindowsOnly": true,
+    "noGenericWeatherImported": true
+  },
+  "weatherPrep": {
+    "readinessCounts": {
+      "precise_window_ready": 307,
+      "blocked_missing_session_start": 9,
+      "not_applicable_aggregate_classification": 1,
+      "event_day_context_only": 152
+    },
+    "preciseWindowReadySample": [
+      {
+        "sessionId": "session_euroformula_2023_01-portimao-qualifying",
+        "eventId": "event_euroformula_2023_r1_portimao",
+        "trackId": "track_autodromo_internacional_do_algarve",
+        "readiness": "precise_window_ready"
+      },
+      {
+        "sessionId": "session_euroformula_2023_01-portimao-race-1",
+        "eventId": "event_euroformula_2023_r1_portimao",
+        "trackId": "track_autodromo_internacional_do_algarve",
+        "readiness": "precise_window_ready"
+      },
+      {
+        "sessionId": "session_euroformula_2023_01-portimao-race-2",
+        "eventId": "event_euroformula_2023_r1_portimao",
+        "trackId": "track_autodromo_internacional_do_algarve",
+        "readiness": "precise_window_ready"
+      },
+      {
+        "sessionId": "session_euroformula_2023_01-portimao-race-3",
+        "eventId": "event_euroformula_2023_r1_portimao",
+        "trackId": "track_autodromo_internacional_do_algarve",
+        "readiness": "precise_window_ready"
+      },
+      {
+        "sessionId": "session_euroformula_2023_02-spa_francorchamps-qualifying",
+        "eventId": "event_euroformula_2023_r2_spa_francorchamps",
+        "trackId": "track_circuit_de_spa_francorchamps",
+        "readiness": "precise_window_ready"
+      },
+      {
+        "sessionId": "session_euroformula_2023_02-spa_francorchamps-race-1",
+        "eventId": "event_euroformula_2023_r2_spa_francorchamps",
+        "trackId": "track_circuit_de_spa_francorchamps",
+        "readiness": "precise_window_ready"
+      },
+      {
+        "sessionId": "session_euroformula_2023_02-spa_francorchamps-race-2",
+        "eventId": "event_euroformula_2023_r2_spa_francorchamps",
+        "trackId": "track_circuit_de_spa_francorchamps",
+        "readiness": "precise_window_ready"
+      },
+      {
+        "sessionId": "session_euroformula_2023_02-spa_francorchamps-race-3",
+        "eventId": "event_euroformula_2023_r2_spa_francorchamps",
+        "trackId": "track_circuit_de_spa_francorchamps",
+        "readiness": "precise_window_ready"
+      },
+      {
+        "sessionId": "session_euroformula_2023_03-hungaroring-qualifying",
+        "eventId": "event_euroformula_2023_r3_hungaroring",
+        "trackId": "track_hungaroring",
+        "readiness": "precise_window_ready"
+      },
+      {
+        "sessionId": "session_euroformula_2023_03-hungaroring-race-1",
+        "eventId": "event_euroformula_2023_r3_hungaroring",
+        "trackId": "track_hungaroring",
+        "readiness": "precise_window_ready"
+      },
+      {
+        "sessionId": "session_euroformula_2023_03-hungaroring-race-2",
+        "eventId": "event_euroformula_2023_r3_hungaroring",
+        "trackId": "track_hungaroring",
+        "readiness": "precise_window_ready"
+      },
+      {
+        "sessionId": "session_euroformula_2023_03-hungaroring-race-3",
+        "eventId": "event_euroformula_2023_r3_hungaroring",
+        "trackId": "track_hungaroring",
+        "readiness": "precise_window_ready"
+      }
+    ],
+    "eventDayOnlySample": [
+      {
+        "sessionId": "session_indy_nxt_2024_6314",
+        "eventId": "event_indy_nxt_2024_5470",
+        "trackId": "track_barber_motorsports_park",
+        "readiness": "event_day_context_only"
+      },
+      {
+        "sessionId": "session_indy_nxt_2024_6315",
+        "eventId": "event_indy_nxt_2024_5471",
+        "trackId": "track_indianapolis_motor_speedway_road_course",
+        "readiness": "event_day_context_only"
+      },
+      {
+        "sessionId": "session_indy_nxt_2024_6316",
+        "eventId": "event_indy_nxt_2024_5472",
+        "trackId": "track_road_america",
+        "readiness": "event_day_context_only"
+      },
+      {
+        "sessionId": "session_indy_nxt_2024_6317",
+        "eventId": "event_indy_nxt_2024_5473",
+        "trackId": "track_weathertech_raceway_laguna_seca",
+        "readiness": "event_day_context_only"
+      },
+      {
+        "sessionId": "session_indy_nxt_2024_6318",
+        "eventId": "event_indy_nxt_2024_5474",
+        "trackId": "track_mid_ohio_sports_car_course",
+        "readiness": "event_day_context_only"
+      },
+      {
+        "sessionId": "session_indy_nxt_2024_6319",
+        "eventId": "event_indy_nxt_2024_5475",
+        "trackId": "track_iowa_speedway",
+        "readiness": "event_day_context_only"
+      },
+      {
+        "sessionId": "session_indy_nxt_2024_6320",
+        "eventId": "event_indy_nxt_2024_5476",
+        "trackId": "track_world_wide_technology_raceway",
+        "readiness": "event_day_context_only"
+      },
+      {
+        "sessionId": "session_indy_nxt_2024_6321",
+        "eventId": "event_indy_nxt_2024_5477",
+        "trackId": "track_portland_international_raceway",
+        "readiness": "event_day_context_only"
+      },
+      {
+        "sessionId": "session_indy_nxt_2024_6322",
+        "eventId": "event_indy_nxt_2024_5478",
+        "trackId": "track_the_milwaukee_mile",
+        "readiness": "event_day_context_only"
+      },
+      {
+        "sessionId": "session_indy_nxt_2024_6323",
+        "eventId": "event_indy_nxt_2024_5479",
+        "trackId": "track_nashville_superspeedway",
+        "readiness": "event_day_context_only"
+      },
+      {
+        "sessionId": "session_indy_nxt_2024_6324",
+        "eventId": "event_indy_nxt_2024_5480",
+        "trackId": "track_streets_of_st_petersburg",
+        "readiness": "event_day_context_only"
+      },
+      {
+        "sessionId": "session_indy_nxt_2024_6325",
+        "eventId": "event_indy_nxt_2024_5481",
+        "trackId": "track_indianapolis_motor_speedway_road_course",
+        "readiness": "event_day_context_only"
+      }
+    ],
+    "blockedSample": [
+      {
+        "sessionId": "session_froc_2024_r1_test_1",
+        "eventId": "event_froc_2024_r1_taupo_international_motorsport_park",
+        "trackId": "track_taupo_international_motorsport_park",
+        "readiness": "blocked_missing_session_start"
+      },
+      {
+        "sessionId": "session_froc_2024_r1_test_2",
+        "eventId": "event_froc_2024_r1_taupo_international_motorsport_park",
+        "trackId": "track_taupo_international_motorsport_park",
+        "readiness": "blocked_missing_session_start"
+      },
+      {
+        "sessionId": "session_froc_2024_r1_test_3",
+        "eventId": "event_froc_2024_r1_taupo_international_motorsport_park",
+        "trackId": "track_taupo_international_motorsport_park",
+        "readiness": "blocked_missing_session_start"
+      },
+      {
+        "sessionId": "session_froc_2024_r3_test_1",
+        "eventId": "event_froc_2024_r3_hampton_downs_motorsport_park",
+        "trackId": "track_hampton_downs_motorsport_park",
+        "readiness": "blocked_missing_session_start"
+      },
+      {
+        "sessionId": "session_froc_2024_r3_test_2",
+        "eventId": "event_froc_2024_r3_hampton_downs_motorsport_park",
+        "trackId": "track_hampton_downs_motorsport_park",
+        "readiness": "blocked_missing_session_start"
+      },
+      {
+        "sessionId": "session_froc_2024_r4_test_1",
+        "eventId": "event_froc_2024_r4_euromarque_motorsport_park",
+        "trackId": "track_euromarque_motorsport_park",
+        "readiness": "blocked_missing_session_start"
+      },
+      {
+        "sessionId": "session_froc_2024_r4_test_2",
+        "eventId": "event_froc_2024_r4_euromarque_motorsport_park",
+        "trackId": "track_euromarque_motorsport_park",
+        "readiness": "blocked_missing_session_start"
+      },
+      {
+        "sessionId": "session_froc_2024_r5_test_1",
+        "eventId": "event_froc_2024_r5_highlands_motorsport_park",
+        "trackId": "track_highlands_motorsport_park",
+        "readiness": "blocked_missing_session_start"
+      },
+      {
+        "sessionId": "session_froc_2024_r5_test_2",
+        "eventId": "event_froc_2024_r5_highlands_motorsport_park",
+        "trackId": "track_highlands_motorsport_park",
+        "readiness": "blocked_missing_session_start"
+      }
+    ],
+    "note": "Do not import generic ambient weather for date-only or missing-start sessions as session-hour weather. Only precise_window_ready rows are candidates for session-hour ambient weather; event_day_context_only rows can support date-level context."
+  },
+  "trackCoverage": {
+    "incompleteTracks": [],
+    "rows": [
+      {
+        "trackId": "track_autodromo_internacional_do_algarve",
+        "name": "Autodromo Internacional do Algarve",
+        "hasCoordinates": true,
+        "hasTimezone": true,
+        "hasLength": true,
+        "hasKnownDirection": true,
+        "hasLayoutProfile": true,
+        "confidenceTier": "high"
+      },
+      {
+        "trackId": "track_autodromo_nazionale_monza",
+        "name": "Autodromo Nazionale Monza",
+        "hasCoordinates": true,
+        "hasTimezone": true,
+        "hasLength": true,
+        "hasKnownDirection": true,
+        "hasLayoutProfile": true,
+        "confidenceTier": "high"
+      },
+      {
+        "trackId": "track_barber_motorsports_park",
+        "name": "Barber Motorsports Park",
+        "hasCoordinates": true,
+        "hasTimezone": true,
+        "hasLength": true,
+        "hasKnownDirection": true,
+        "hasLayoutProfile": true,
+        "confidenceTier": "high"
+      },
+      {
+        "trackId": "track_brands_hatch_gp",
+        "name": "Brands Hatch GP",
+        "hasCoordinates": true,
+        "hasTimezone": true,
+        "hasLength": true,
+        "hasKnownDirection": true,
+        "hasLayoutProfile": true,
+        "confidenceTier": "high"
+      },
+      {
+        "trackId": "track_brands_hatch_indy",
+        "name": "Brands Hatch Indy",
+        "hasCoordinates": true,
+        "hasTimezone": true,
+        "hasLength": true,
+        "hasKnownDirection": true,
+        "hasLayoutProfile": true,
+        "confidenceTier": "high"
+      },
+      {
+        "trackId": "track_cadwell_park_full",
+        "name": "Cadwell Park",
+        "hasCoordinates": true,
+        "hasTimezone": true,
+        "hasLength": true,
+        "hasKnownDirection": true,
+        "hasLayoutProfile": true,
+        "confidenceTier": "high"
+      },
+      {
+        "trackId": "track_circuit_de_barcelona_catalunya",
+        "name": "Circuit de Barcelona-Catalunya",
+        "hasCoordinates": true,
+        "hasTimezone": true,
+        "hasLength": true,
+        "hasKnownDirection": true,
+        "hasLayoutProfile": true,
+        "confidenceTier": "high"
+      },
+      {
+        "trackId": "track_circuit_de_spa_francorchamps",
+        "name": "Circuit de Spa-Francorchamps",
+        "hasCoordinates": true,
+        "hasTimezone": true,
+        "hasLength": true,
+        "hasKnownDirection": true,
+        "hasLayoutProfile": true,
+        "confidenceTier": "high"
+      },
+      {
+        "trackId": "track_circuit_paul_ricard",
+        "name": "Circuit Paul Ricard",
+        "hasCoordinates": true,
+        "hasTimezone": true,
+        "hasLength": true,
+        "hasKnownDirection": true,
+        "hasLayoutProfile": true,
+        "confidenceTier": "high"
+      },
+      {
+        "trackId": "track_daytona_international_speedway",
+        "name": "Daytona International Speedway",
+        "hasCoordinates": true,
+        "hasTimezone": true,
+        "hasLength": true,
+        "hasKnownDirection": true,
+        "hasLayoutProfile": true,
+        "confidenceTier": "official"
+      },
+      {
+        "trackId": "track_donington_park_gp",
+        "name": "Donington Park GP",
+        "hasCoordinates": true,
+        "hasTimezone": true,
+        "hasLength": true,
+        "hasKnownDirection": true,
+        "hasLayoutProfile": true,
+        "confidenceTier": "high"
+      },
+      {
+        "trackId": "track_euromarque_motorsport_park",
+        "name": "Euromarque Motorsport Park",
+        "hasCoordinates": true,
+        "hasTimezone": true,
+        "hasLength": true,
+        "hasKnownDirection": true,
+        "hasLayoutProfile": true,
+        "confidenceTier": "high"
+      },
+      {
+        "trackId": "track_hampton_downs_motorsport_park",
+        "name": "Hampton Downs Motorsport Park",
+        "hasCoordinates": true,
+        "hasTimezone": true,
+        "hasLength": true,
+        "hasKnownDirection": true,
+        "hasLayoutProfile": true,
+        "confidenceTier": "high"
+      },
+      {
+        "trackId": "track_highlands_motorsport_park",
+        "name": "Highlands Motorsport Park",
+        "hasCoordinates": true,
+        "hasTimezone": true,
+        "hasLength": true,
+        "hasKnownDirection": true,
+        "hasLayoutProfile": true,
+        "confidenceTier": "medium"
+      },
+      {
+        "trackId": "track_hungaroring",
+        "name": "Hungaroring",
+        "hasCoordinates": true,
+        "hasTimezone": true,
+        "hasLength": true,
+        "hasKnownDirection": true,
+        "hasLayoutProfile": true,
+        "confidenceTier": "high"
+      },
+      {
+        "trackId": "track_indianapolis_motor_speedway_road_course",
+        "name": "Indianapolis Motor Speedway Road Course",
+        "hasCoordinates": true,
+        "hasTimezone": true,
+        "hasLength": true,
+        "hasKnownDirection": true,
+        "hasLayoutProfile": true,
+        "confidenceTier": "high"
+      },
+      {
+        "trackId": "track_iowa_speedway",
+        "name": "Iowa Speedway",
+        "hasCoordinates": true,
+        "hasTimezone": true,
+        "hasLength": true,
+        "hasKnownDirection": true,
+        "hasLayoutProfile": true,
+        "confidenceTier": "high"
+      },
+      {
+        "trackId": "track_manfeild_circuit_chris_amon",
+        "name": "Manfeild - Circuit Chris Amon",
+        "hasCoordinates": true,
+        "hasTimezone": true,
+        "hasLength": true,
+        "hasKnownDirection": true,
+        "hasLayoutProfile": true,
+        "confidenceTier": "high"
+      },
+      {
+        "trackId": "track_michelin_raceway_road_atlanta",
+        "name": "Michelin Raceway Road Atlanta",
+        "hasCoordinates": true,
+        "hasTimezone": true,
+        "hasLength": true,
+        "hasKnownDirection": true,
+        "hasLayoutProfile": true,
+        "confidenceTier": "high"
+      },
+      {
+        "trackId": "track_mid_ohio_sports_car_course",
+        "name": "Mid-Ohio Sports Car Course",
+        "hasCoordinates": true,
+        "hasTimezone": true,
+        "hasLength": true,
+        "hasKnownDirection": true,
+        "hasLayoutProfile": true,
+        "confidenceTier": "high"
+      },
+      {
+        "trackId": "track_nashville_superspeedway",
+        "name": "Nashville Superspeedway",
+        "hasCoordinates": true,
+        "hasTimezone": true,
+        "hasLength": true,
+        "hasKnownDirection": true,
+        "hasLayoutProfile": true,
+        "confidenceTier": "official"
+      },
+      {
+        "trackId": "track_new_jersey_motorsports_park_thunderbolt",
+        "name": "New Jersey Motorsports Park Thunderbolt",
+        "hasCoordinates": true,
+        "hasTimezone": true,
+        "hasLength": true,
+        "hasKnownDirection": true,
+        "hasLayoutProfile": true,
+        "confidenceTier": "high"
+      },
+      {
+        "trackId": "track_oulton_park_international",
+        "name": "Oulton Park International",
+        "hasCoordinates": true,
+        "hasTimezone": true,
+        "hasLength": true,
+        "hasKnownDirection": true,
+        "hasLayoutProfile": true,
+        "confidenceTier": "high"
+      },
+      {
+        "trackId": "track_pittsburgh_international_race_complex",
+        "name": "Pittsburgh International Race Complex",
+        "hasCoordinates": true,
+        "hasTimezone": true,
+        "hasLength": true,
+        "hasKnownDirection": true,
+        "hasLayoutProfile": true,
+        "confidenceTier": "high"
+      },
+      {
+        "trackId": "track_portland_international_raceway",
+        "name": "Portland International Raceway",
+        "hasCoordinates": true,
+        "hasTimezone": true,
+        "hasLength": true,
+        "hasKnownDirection": true,
+        "hasLayoutProfile": true,
+        "confidenceTier": "high"
+      },
+      {
+        "trackId": "track_red_bull_ring",
+        "name": "Red Bull Ring",
+        "hasCoordinates": true,
+        "hasTimezone": true,
+        "hasLength": true,
+        "hasKnownDirection": true,
+        "hasLayoutProfile": true,
+        "confidenceTier": "high"
+      },
+      {
+        "trackId": "track_road_america",
+        "name": "Road America",
+        "hasCoordinates": true,
+        "hasTimezone": true,
+        "hasLength": true,
+        "hasKnownDirection": true,
+        "hasLayoutProfile": true,
+        "confidenceTier": "high"
+      },
+      {
+        "trackId": "track_silverstone_gp",
+        "name": "Silverstone GP",
+        "hasCoordinates": true,
+        "hasTimezone": true,
+        "hasLength": true,
+        "hasKnownDirection": true,
+        "hasLayoutProfile": true,
+        "confidenceTier": "high"
+      },
+      {
+        "trackId": "track_silverstone_international",
+        "name": "Silverstone International",
+        "hasCoordinates": true,
+        "hasTimezone": true,
+        "hasLength": true,
+        "hasKnownDirection": true,
+        "hasLayoutProfile": true,
+        "confidenceTier": "high"
+      },
+      {
+        "trackId": "track_silverstone_national",
+        "name": "Silverstone National",
+        "hasCoordinates": true,
+        "hasTimezone": true,
+        "hasLength": true,
+        "hasKnownDirection": true,
+        "hasLayoutProfile": true,
+        "confidenceTier": "high"
+      },
+      {
+        "trackId": "track_snetterton_300",
+        "name": "Snetterton 300",
+        "hasCoordinates": true,
+        "hasTimezone": true,
+        "hasLength": true,
+        "hasKnownDirection": true,
+        "hasLayoutProfile": true,
+        "confidenceTier": "high"
+      },
+      {
+        "trackId": "track_spa_gp",
+        "name": "Spa GP",
+        "hasCoordinates": true,
+        "hasTimezone": true,
+        "hasLength": true,
+        "hasKnownDirection": true,
+        "hasLayoutProfile": true,
+        "confidenceTier": "high"
+      },
+      {
+        "trackId": "track_streets_of_arlington",
+        "name": "Streets of Arlington",
+        "hasCoordinates": true,
+        "hasTimezone": true,
+        "hasLength": true,
+        "hasKnownDirection": true,
+        "hasLayoutProfile": true,
+        "confidenceTier": "medium"
+      },
+      {
+        "trackId": "track_streets_of_detroit",
+        "name": "Streets of Detroit",
+        "hasCoordinates": true,
+        "hasTimezone": true,
+        "hasLength": true,
+        "hasKnownDirection": true,
+        "hasLayoutProfile": true,
+        "confidenceTier": "high"
+      },
+      {
+        "trackId": "track_streets_of_st_petersburg",
+        "name": "Streets of St. Petersburg",
+        "hasCoordinates": true,
+        "hasTimezone": true,
+        "hasLength": true,
+        "hasKnownDirection": true,
+        "hasLayoutProfile": true,
+        "confidenceTier": "high"
+      },
+      {
+        "trackId": "track_summit_point_motorsports_park",
+        "name": "Summit Point Motorsports Park",
+        "hasCoordinates": true,
+        "hasTimezone": true,
+        "hasLength": true,
+        "hasKnownDirection": true,
+        "hasLayoutProfile": true,
+        "confidenceTier": "high"
+      },
+      {
+        "trackId": "track_taupo_international_motorsport_park",
+        "name": "Taupo International Motorsport Park",
+        "hasCoordinates": true,
+        "hasTimezone": true,
+        "hasLength": true,
+        "hasKnownDirection": true,
+        "hasLayoutProfile": true,
+        "confidenceTier": "high"
+      },
+      {
+        "trackId": "track_the_milwaukee_mile",
+        "name": "The Milwaukee Mile",
+        "hasCoordinates": true,
+        "hasTimezone": true,
+        "hasLength": true,
+        "hasKnownDirection": true,
+        "hasLayoutProfile": true,
+        "confidenceTier": "high"
+      },
+      {
+        "trackId": "track_virginia_international_raceway",
+        "name": "Virginia International Raceway",
+        "hasCoordinates": true,
+        "hasTimezone": true,
+        "hasLength": true,
+        "hasKnownDirection": true,
+        "hasLayoutProfile": true,
+        "confidenceTier": "high"
+      },
+      {
+        "trackId": "track_watkins_glen_international",
+        "name": "Watkins Glen International",
+        "hasCoordinates": true,
+        "hasTimezone": true,
+        "hasLength": true,
+        "hasKnownDirection": true,
+        "hasLayoutProfile": true,
+        "confidenceTier": "high"
+      },
+      {
+        "trackId": "track_weathertech_raceway_laguna_seca",
+        "name": "WeatherTech Raceway Laguna Seca",
+        "hasCoordinates": true,
+        "hasTimezone": true,
+        "hasLength": true,
+        "hasKnownDirection": true,
+        "hasLayoutProfile": true,
+        "confidenceTier": "high"
+      },
+      {
+        "trackId": "track_world_wide_technology_raceway",
+        "name": "World Wide Technology Raceway",
+        "hasCoordinates": true,
+        "hasTimezone": true,
+        "hasLength": true,
+        "hasKnownDirection": true,
+        "hasLayoutProfile": true,
+        "confidenceTier": "high"
+      }
+    ]
+  },
+  "sourceVerification": {
+    "requested": false,
+    "checked": 0,
+    "ok": null,
+    "failures": [],
+    "results": []
+  },
+  "issues": []
+}

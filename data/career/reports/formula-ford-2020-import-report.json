@@ -1,0 +1,770 @@
+{
+  "checkedAt": "2026-06-08T15:13:29.882Z",
+  "year": 2020,
+  "refresh": false,
+  "fetched": 0,
+  "cached": 11,
+  "pdfsConverted": 0,
+  "textCached": 8,
+  "classificationSessionsDiscovered": 46,
+  "gridPagesDiscovered": 32,
+  "lapAnalysisPagesDiscovered": 24,
+  "sessionsImported": 46,
+  "resultRowsImported": 1094,
+  "gridRowsImported": 746,
+  "lapSamplesImported": 282,
+  "bryceResultRowsImported": 24,
+  "bryceLapSamplesImported": 282,
+  "weatherObservationsImported": 46,
+  "penaltiesImported": 4,
+  "mediaAssetsImported": 11,
+  "rawArtifacts": [
+    "data/career/raw/formula-ford-2020/walter-hayes-trophy-event.html",
+    "data/career/raw/formula-ford-2020/pdf/walter-hayes-trophy-grand-final.pdf",
+    "data/career/raw/formula-ford-2020/text/walter-hayes-trophy-grand-final.txt",
+    "data/career/raw/formula-ford-2020/pdf/formula-ford-festival-book.pdf",
+    "data/career/raw/formula-ford-2020/text/formula-ford-festival-book.txt",
+    "data/career/raw/formula-ford-2020/pdf/walter-hayes-trophy-book.pdf",
+    "data/career/raw/formula-ford-2020/text/walter-hayes-trophy-book.txt",
+    "data/career/raw/formula-ford-2020/pdf/national-ff1600-oulton-park-book.pdf",
+    "data/career/raw/formula-ford-2020/text/national-ff1600-oulton-park-book.txt",
+    "data/career/raw/formula-ford-2020/pdf/national-ff1600-brands-hatch-book.pdf",
+    "data/career/raw/formula-ford-2020/text/national-ff1600-brands-hatch-book.txt",
+    "data/career/raw/formula-ford-2020/pdf/national-ff1600-silverstone-book.pdf",
+    "data/career/raw/formula-ford-2020/text/national-ff1600-silverstone-book.txt",
+    "data/career/raw/formula-ford-2020/event-pages/champion-of-cadwell-event.html",
+    "data/career/raw/formula-ford-2020/pdf/champion-of-cadwell-book.pdf",
+    "data/career/raw/formula-ford-2020/text/champion-of-cadwell-book.txt",
+    "data/career/raw/formula-ford-2020/event-pages/champion-of-brands-event.html",
+    "data/career/raw/formula-ford-2020/pdf/champion-of-brands-book.pdf",
+    "data/career/raw/formula-ford-2020/text/champion-of-brands-book.txt",
+    "data/career/raw/formula-ford-2020/extracted-classifications.json"
+  ],
+  "crossChecks": [
+    {
+      "source": "source_formula_ford_2020_wht_grand_final_pdf",
+      "check": "wht_grand_final_bryce_row",
+      "ok": true,
+      "observed": {
+        "driverName": "Bryce ARON",
+        "carNumber": "21",
+        "finishPosition": 3,
+        "totalTime": "5:48.470",
+        "bestLapTime": "1:08.899"
+      }
+    }
+  ],
+  "gridRowsUnmatched": [
+    {
+      "sourceId": "festival",
+      "sessionSlug": "semi_final_1_race_13",
+      "sessionName": "SEMI FINAL 1 (RACE 13)",
+      "pageNumber": 72,
+      "position": 17,
+      "carNumber": "55",
+      "driverName": "Stephen MAWHINNEY",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "festival",
+      "sessionSlug": "historic_final_race_17",
+      "sessionName": "HISTORIC FINAL - RACE 17",
+      "pageNumber": 103,
+      "position": 11,
+      "carNumber": "11",
+      "driverName": "Rick MORRIS",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "festival",
+      "sessionSlug": "historic_final_race_17",
+      "sessionName": "HISTORIC FINAL - RACE 17",
+      "pageNumber": 103,
+      "position": 12,
+      "carNumber": "72",
+      "driverName": "Marc SAWER",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "festival",
+      "sessionSlug": "historic_final_race_17",
+      "sessionName": "HISTORIC FINAL - RACE 17",
+      "pageNumber": 103,
+      "position": 15,
+      "carNumber": "60",
+      "driverName": "Matthew HAYES",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "festival",
+      "sessionSlug": "historic_final_race_17",
+      "sessionName": "HISTORIC FINAL - RACE 17",
+      "pageNumber": 103,
+      "position": 22,
+      "carNumber": "149",
+      "driverName": "Jordan HARRISON",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "festival",
+      "sessionSlug": "last_chance_race_race_19",
+      "sessionName": "LAST CHANCE RACE (RACE 19)",
+      "pageNumber": 117,
+      "position": 2,
+      "carNumber": "78",
+      "driverName": "Joe WALTON",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "festival",
+      "sessionSlug": "last_chance_race_race_19",
+      "sessionName": "LAST CHANCE RACE (RACE 19)",
+      "pageNumber": 117,
+      "position": 21,
+      "carNumber": "5",
+      "driverName": "Lorna VICKERS",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "wht",
+      "sessionSlug": "heat_1",
+      "sessionName": "HEAT 1",
+      "pageNumber": 18,
+      "position": 1,
+      "carNumber": "277",
+      "driverName": "Joey FOSTER",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "wht",
+      "sessionSlug": "heat_1",
+      "sessionName": "HEAT 1",
+      "pageNumber": 18,
+      "position": 10,
+      "carNumber": "217",
+      "driverName": "Samuel HARRISON",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "wht",
+      "sessionSlug": "heat_1",
+      "sessionName": "HEAT 1",
+      "pageNumber": 18,
+      "position": 16,
+      "carNumber": "33",
+      "driverName": "Neil BROOME",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "wht",
+      "sessionSlug": "heat_1",
+      "sessionName": "HEAT 1",
+      "pageNumber": 18,
+      "position": 21,
+      "carNumber": "41",
+      "driverName": "Chris PORRITT",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "wht",
+      "sessionSlug": "heat_2",
+      "sessionName": "HEAT 2",
+      "pageNumber": 46,
+      "position": 17,
+      "carNumber": "23",
+      "driverName": "Horatio FITZ-SIMON",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "wht",
+      "sessionSlug": "heat_2",
+      "sessionName": "HEAT 2",
+      "pageNumber": 46,
+      "position": 24,
+      "carNumber": "157",
+      "driverName": "Jeremy CAINE",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "wht",
+      "sessionSlug": "heat_3",
+      "sessionName": "HEAT 3",
+      "pageNumber": 76,
+      "position": 10,
+      "carNumber": "6",
+      "driverName": "Peter DALY",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "wht",
+      "sessionSlug": "heat_3",
+      "sessionName": "HEAT 3",
+      "pageNumber": 76,
+      "position": 13,
+      "carNumber": "4",
+      "driverName": "Alex FORES",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "wht",
+      "sessionSlug": "heat_3",
+      "sessionName": "HEAT 3",
+      "pageNumber": 76,
+      "position": 22,
+      "carNumber": "64",
+      "driverName": "Mark CARTER",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "wht",
+      "sessionSlug": "heat_4",
+      "sessionName": "HEAT 4",
+      "pageNumber": 105,
+      "position": 11,
+      "carNumber": "176",
+      "driverName": "Jamie VINALL-MEYER",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "wht",
+      "sessionSlug": "heat_4",
+      "sessionName": "HEAT 4",
+      "pageNumber": 105,
+      "position": 22,
+      "carNumber": "960",
+      "driverName": "Bob HIGGINS",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "wht",
+      "sessionSlug": "heat_4",
+      "sessionName": "HEAT 4",
+      "pageNumber": 105,
+      "position": 24,
+      "carNumber": "29",
+      "driverName": "Peter SIKSTROM",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "wht",
+      "sessionSlug": "race_7",
+      "sessionName": "RACE 7",
+      "pageNumber": 131,
+      "position": 17,
+      "carNumber": "17",
+      "driverName": "Joseph POMFRET",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "wht",
+      "sessionSlug": "race_7",
+      "sessionName": "RACE 7",
+      "pageNumber": 131,
+      "position": 28,
+      "carNumber": "55",
+      "driverName": "Joe PORTER",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "wht",
+      "sessionSlug": "race_8",
+      "sessionName": "RACE 8",
+      "pageNumber": 154,
+      "position": 1,
+      "carNumber": "2",
+      "driverName": "Rick MORRIS",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "wht",
+      "sessionSlug": "race_8",
+      "sessionName": "RACE 8",
+      "pageNumber": 154,
+      "position": 9,
+      "carNumber": "12",
+      "driverName": "Sean BYRNE",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "wht",
+      "sessionSlug": "race_8",
+      "sessionName": "RACE 8",
+      "pageNumber": 154,
+      "position": 11,
+      "carNumber": "960",
+      "driverName": "Bob HIGGINS",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "wht",
+      "sessionSlug": "race_8",
+      "sessionName": "RACE 8",
+      "pageNumber": 154,
+      "position": 15,
+      "carNumber": "29",
+      "driverName": "Peter SIKSTROM",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "wht",
+      "sessionSlug": "race_8",
+      "sessionName": "RACE 8",
+      "pageNumber": 154,
+      "position": 17,
+      "carNumber": "41",
+      "driverName": "Chris PORRITT",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "wht",
+      "sessionSlug": "progression_race",
+      "sessionName": "PROGRESSION RACE",
+      "pageNumber": 166,
+      "position": 19,
+      "carNumber": "39",
+      "driverName": "Henry CHART",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "wht",
+      "sessionSlug": "progression_race",
+      "sessionName": "PROGRESSION RACE",
+      "pageNumber": 166,
+      "position": 21,
+      "carNumber": "217",
+      "driverName": "Samuel HARRISON",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "wht",
+      "sessionSlug": "progression_race",
+      "sessionName": "PROGRESSION RACE",
+      "pageNumber": 166,
+      "position": 23,
+      "carNumber": "960",
+      "driverName": "Bob HIGGINS",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "wht",
+      "sessionSlug": "progression_race",
+      "sessionName": "PROGRESSION RACE",
+      "pageNumber": 166,
+      "position": 25,
+      "carNumber": "23",
+      "driverName": "Horatio FITZ-SIMON",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "wht",
+      "sessionSlug": "progression_race",
+      "sessionName": "PROGRESSION RACE",
+      "pageNumber": 166,
+      "position": 27,
+      "carNumber": "4",
+      "driverName": "Alex FORES",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "wht",
+      "sessionSlug": "progression_race",
+      "sessionName": "PROGRESSION RACE",
+      "pageNumber": 166,
+      "position": 29,
+      "carNumber": "64",
+      "driverName": "Mark CARTER",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "wht",
+      "sessionSlug": "last_chance_race",
+      "sessionName": "LAST CHANCE RACE",
+      "pageNumber": 182,
+      "position": 2,
+      "carNumber": "17",
+      "driverName": "Joseph POMFRET",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "wht",
+      "sessionSlug": "last_chance_race",
+      "sessionName": "LAST CHANCE RACE",
+      "pageNumber": 182,
+      "position": 9,
+      "carNumber": "124",
+      "driverName": "Tom WARD",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "wht",
+      "sessionSlug": "last_chance_race",
+      "sessionName": "LAST CHANCE RACE",
+      "pageNumber": 182,
+      "position": 10,
+      "carNumber": "13",
+      "driverName": "Dean FORWARD",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "wht",
+      "sessionSlug": "last_chance_race",
+      "sessionName": "LAST CHANCE RACE",
+      "pageNumber": 182,
+      "position": 14,
+      "carNumber": "50",
+      "driverName": "David PORTER",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "wht",
+      "sessionSlug": "last_chance_race",
+      "sessionName": "LAST CHANCE RACE",
+      "pageNumber": 182,
+      "position": 18,
+      "carNumber": "20",
+      "driverName": "George DITCHFIELD",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "wht",
+      "sessionSlug": "last_chance_race",
+      "sessionName": "LAST CHANCE RACE",
+      "pageNumber": 182,
+      "position": 20,
+      "carNumber": "14",
+      "driverName": "Richard MENDOZA",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "wht",
+      "sessionSlug": "last_chance_race",
+      "sessionName": "LAST CHANCE RACE",
+      "pageNumber": 182,
+      "position": 27,
+      "carNumber": "127",
+      "driverName": "Colin TURNER",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "wht",
+      "sessionSlug": "last_chance_race",
+      "sessionName": "LAST CHANCE RACE",
+      "pageNumber": 182,
+      "position": 28,
+      "carNumber": "33",
+      "driverName": "Neil BROOME",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "wht",
+      "sessionSlug": "last_chance_race",
+      "sessionName": "LAST CHANCE RACE",
+      "pageNumber": 182,
+      "position": 29,
+      "carNumber": "155",
+      "driverName": "Kenneth FINNERAN",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "wht",
+      "sessionSlug": "last_chance_race",
+      "sessionName": "LAST CHANCE RACE",
+      "pageNumber": 182,
+      "position": 31,
+      "carNumber": "6",
+      "driverName": "Peter DALY",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "wht",
+      "sessionSlug": "last_chance_race",
+      "sessionName": "LAST CHANCE RACE",
+      "pageNumber": 182,
+      "position": 33,
+      "carNumber": "32",
+      "driverName": "David BILLINGTON",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "wht",
+      "sessionSlug": "semi_final_1",
+      "sessionName": "SEMI FINAL 1",
+      "pageNumber": 198,
+      "position": 36,
+      "carNumber": "120",
+      "driverName": "Will ZANELLI",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "wht",
+      "sessionSlug": "semi_final_2",
+      "sessionName": "SEMI FINAL 2",
+      "pageNumber": 221,
+      "position": 12,
+      "carNumber": "135",
+      "driverName": "John SVENSSON",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "wht",
+      "sessionSlug": "semi_final_2",
+      "sessionName": "SEMI FINAL 2",
+      "pageNumber": 221,
+      "position": 25,
+      "carNumber": "12",
+      "driverName": "Sean BYRNE",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "wht",
+      "sessionSlug": "race_15",
+      "sessionName": "RACE 15",
+      "pageNumber": 144,
+      "position": 3,
+      "carNumber": "7",
+      "driverName": "Chris HODGEN",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "wht",
+      "sessionSlug": "race_15",
+      "sessionName": "RACE 15",
+      "pageNumber": 144,
+      "position": 11,
+      "carNumber": "6",
+      "driverName": "Peter DALY",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "wht",
+      "sessionSlug": "race_15",
+      "sessionName": "RACE 15",
+      "pageNumber": 144,
+      "position": 16,
+      "carNumber": "24",
+      "driverName": "Mark DE ROZARIEUX",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "wht",
+      "sessionSlug": "race_15",
+      "sessionName": "RACE 15",
+      "pageNumber": 144,
+      "position": 21,
+      "carNumber": "50",
+      "driverName": "David PORTER",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "wht",
+      "sessionSlug": "race_15",
+      "sessionName": "RACE 15",
+      "pageNumber": 144,
+      "position": 23,
+      "carNumber": "155",
+      "driverName": "Kenneth FINNERAN",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "wht",
+      "sessionSlug": "race_15",
+      "sessionName": "RACE 15",
+      "pageNumber": 144,
+      "position": 25,
+      "carNumber": "32",
+      "driverName": "David BILLINGTON",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "wht",
+      "sessionSlug": "race_16",
+      "sessionName": "RACE 16",
+      "pageNumber": 165,
+      "position": 13,
+      "carNumber": "99",
+      "driverName": "John EVANS",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "wht",
+      "sessionSlug": "race_16",
+      "sessionName": "RACE 16",
+      "pageNumber": 165,
+      "position": 19,
+      "carNumber": "12",
+      "driverName": "Sean BYRNE",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "wht",
+      "sessionSlug": "grand_final",
+      "sessionName": "GRAND FINAL",
+      "pageNumber": 268,
+      "position": 3,
+      "carNumber": "1",
+      "driverName": "Jordan DEMPSEY",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "wht",
+      "sessionSlug": "grand_final",
+      "sessionName": "GRAND FINAL",
+      "pageNumber": 268,
+      "position": 16,
+      "carNumber": "888",
+      "driverName": "Sebastian MELROSE",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "wht",
+      "sessionSlug": "grand_final",
+      "sessionName": "GRAND FINAL",
+      "pageNumber": 268,
+      "position": 19,
+      "carNumber": "188",
+      "driverName": "Morgan QUINN",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "wht",
+      "sessionSlug": "grand_final",
+      "sessionName": "GRAND FINAL",
+      "pageNumber": 268,
+      "position": 20,
+      "carNumber": "22",
+      "driverName": "Jackson LEE",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "wht",
+      "sessionSlug": "grand_final",
+      "sessionName": "GRAND FINAL",
+      "pageNumber": 268,
+      "position": 21,
+      "carNumber": "49",
+      "driverName": "Megan GILKES",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "wht",
+      "sessionSlug": "grand_final",
+      "sessionName": "GRAND FINAL",
+      "pageNumber": 268,
+      "position": 24,
+      "carNumber": "116",
+      "driverName": "Michael MACPHERSON",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "wht",
+      "sessionSlug": "grand_final",
+      "sessionName": "GRAND FINAL",
+      "pageNumber": 268,
+      "position": 27,
+      "carNumber": "122",
+      "driverName": "Jonathan BROWNE",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "wht",
+      "sessionSlug": "grand_final",
+      "sessionName": "GRAND FINAL",
+      "pageNumber": 268,
+      "position": 29,
+      "carNumber": "59",
+      "driverName": "Josh SMITH",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "wht",
+      "sessionSlug": "grand_final",
+      "sessionName": "GRAND FINAL",
+      "pageNumber": 268,
+      "position": 30,
+      "carNumber": "7",
+      "driverName": "Chris HODGEN",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "wht",
+      "sessionSlug": "grand_final",
+      "sessionName": "GRAND FINAL",
+      "pageNumber": 268,
+      "position": 31,
+      "carNumber": "63",
+      "driverName": "Tom BROWN",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "wht",
+      "sessionSlug": "grand_final",
+      "sessionName": "GRAND FINAL",
+      "pageNumber": 268,
+      "position": 33,
+      "carNumber": "115",
+      "driverName": "Matthew WRIGLEY",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "wht",
+      "sessionSlug": "grand_final",
+      "sessionName": "GRAND FINAL",
+      "pageNumber": 268,
+      "position": 34,
+      "carNumber": "111",
+      "driverName": "Adam HIGGINS",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "national_oulton_park",
+      "sessionSlug": "race_1",
+      "sessionName": "RACE 1",
+      "pageNumber": 13,
+      "position": 28,
+      "carNumber": "169",
+      "driverName": "Colin LAWSON",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "national_oulton_park",
+      "sessionSlug": "race_1",
+      "sessionName": "RACE 1",
+      "pageNumber": 13,
+      "position": 29,
+      "carNumber": "53",
+      "driverName": "Richard KETTERMAN",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "national_silverstone",
+      "sessionSlug": "race_3",
+      "sessionName": "RACE 3",
+      "pageNumber": 13,
+      "position": 17,
+      "carNumber": "156",
+      "driverName": "Horatio FITZ-SIMON",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "champion_brands",
+      "sessionSlug": "race_5",
+      "sessionName": "RACE 5",
+      "pageNumber": 10,
+      "position": 4,
+      "carNumber": "41",
+      "driverName": "Alex WALKER",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "champion_brands",
+      "sessionSlug": "race_11",
+      "sessionName": "RACE 11",
+      "pageNumber": 23,
+      "position": 25,
+      "carNumber": "18",
+      "driverName": "Chris PERKINS",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    }
+  ],
+  "gaps": []
+}

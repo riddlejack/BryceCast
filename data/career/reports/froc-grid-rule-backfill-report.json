@@ -1,0 +1,566 @@
+{
+  "checkedAt": "2026-06-08T15:13:32.945Z",
+  "refresh": false,
+  "highlandsPreviewFromCache": true,
+  "race2ArticleFromCache": true,
+  "round4Qualifying1ArticleFromCache": true,
+  "round1Qualifying1ArticleFromCache": true,
+  "round1Race2ArticleFromCache": true,
+  "round1Qualifying2ArticleFromCache": true,
+  "rawArtifacts": [
+    "data/career/raw/froc-2024/round-5-highlands-gp-qualifying-format.html",
+    "data/career/raw/froc-2024/round-5-highlands-race-2-article.html",
+    "data/career/raw/froc-2024/round-4-euromarque-qualifying-1-article.html",
+    "data/career/raw/froc-2024/round-1-taupo-qualifying-1-article.html",
+    "data/career/raw/froc-2024/round-1-taupo-race-2-article.html",
+    "data/career/raw/froc-2024/round-1-taupo-qualifying-2-article.html"
+  ],
+  "highlandsPreviewSourceEvidenceId": "source_froc_2024_r5_highlands_gp_qualifying_format_article",
+  "highlandsPreviewMediaAssetId": "asset_froc_2024_r5_highlands_gp_qualifying_format_article",
+  "race2SourceEvidenceId": "source_froc_2024_r5_race_2_toyota_article",
+  "race2MediaAssetId": "asset_froc_2024_r5_race_2_toyota_article",
+  "round4Qualifying1SourceEvidenceId": "source_froc_2024_r4_qualifying_1_toyota_article",
+  "round4Qualifying1MediaAssetId": "asset_froc_2024_r4_qualifying_1_toyota_article",
+  "round1Qualifying1SourceEvidenceId": "source_froc_2024_r1_qualifying_1_toyota_article",
+  "round1Qualifying1MediaAssetId": "asset_froc_2024_r1_qualifying_1_toyota_article",
+  "round1Race2SourceEvidenceId": "source_froc_2024_r1_race_2_toyota_article",
+  "round1Race2MediaAssetId": "asset_froc_2024_r1_race_2_toyota_article",
+  "round1Qualifying2SourceEvidenceId": "source_froc_2024_r1_qualifying_2_toyota_article",
+  "round1Qualifying2MediaAssetId": "asset_froc_2024_r1_qualifying_2_toyota_article",
+  "round1Race1RowsUpdated": [
+    {
+      "resultId": "result_froc_2024_r1_race_1_driver_alex_crosbie",
+      "carNumber": "41",
+      "startPosition": 7
+    },
+    {
+      "resultId": "result_froc_2024_r1_race_1_driver_christian_mansell",
+      "carNumber": "71",
+      "startPosition": 1
+    },
+    {
+      "resultId": "result_froc_2024_r1_race_1_driver_elliott_cleary",
+      "carNumber": "19",
+      "startPosition": 13
+    },
+    {
+      "resultId": "result_froc_2024_r1_race_1_driver_gerrard_xie",
+      "carNumber": "39",
+      "startPosition": 3
+    },
+    {
+      "resultId": "result_froc_2024_r1_race_1_driver_jake_bonilla",
+      "carNumber": "20",
+      "startPosition": 16
+    },
+    {
+      "resultId": "result_froc_2024_r1_race_1_driver_jett_bowling",
+      "carNumber": "22",
+      "startPosition": 11
+    },
+    {
+      "resultId": "result_froc_2024_r1_race_1_driver_kaden_probst",
+      "carNumber": "48",
+      "startPosition": 9
+    },
+    {
+      "resultId": "result_froc_2024_r1_race_1_driver_kaleb_ngatoa",
+      "carNumber": "15",
+      "startPosition": 5
+    },
+    {
+      "resultId": "result_froc_2024_r1_race_1_driver_landan_matriano_lim",
+      "carNumber": "739",
+      "startPosition": 14
+    },
+    {
+      "resultId": "result_froc_2024_r1_race_1_driver_liam_sceats",
+      "carNumber": "23",
+      "startPosition": 4
+    },
+    {
+      "resultId": "result_froc_2024_r1_race_1_driver_lucas_fecury",
+      "carNumber": "5",
+      "startPosition": 8
+    },
+    {
+      "resultId": "result_froc_2024_r1_race_1_driver_michael_shin",
+      "carNumber": "16",
+      "startPosition": 6
+    },
+    {
+      "resultId": "result_froc_2024_r1_race_1_driver_nicola_lacorte",
+      "carNumber": "7",
+      "startPosition": 12
+    },
+    {
+      "resultId": "result_froc_2024_r1_race_1_driver_patrick_woods_toth",
+      "carNumber": "14",
+      "startPosition": 17
+    },
+    {
+      "resultId": "result_froc_2024_r1_race_1_driver_roman_bilinski",
+      "carNumber": "4",
+      "startPosition": 2
+    },
+    {
+      "resultId": "result_froc_2024_r1_race_1_driver_titus_sherlock",
+      "carNumber": "31",
+      "startPosition": 15
+    },
+    {
+      "resultId": "result_froc_2024_r1_race_1_driver_tommy_smith",
+      "carNumber": "6",
+      "startPosition": 10
+    }
+  ],
+  "round1Race2RowsUpdated": [
+    {
+      "resultId": "result_froc_2024_r1_race_2_driver_alex_crosbie",
+      "carNumber": "41",
+      "startPosition": 1
+    },
+    {
+      "resultId": "result_froc_2024_r1_race_2_driver_christian_mansell",
+      "carNumber": "71",
+      "startPosition": 7
+    },
+    {
+      "resultId": "result_froc_2024_r1_race_2_driver_gerrard_xie",
+      "carNumber": "39",
+      "startPosition": 3
+    },
+    {
+      "resultId": "result_froc_2024_r1_race_2_driver_kaleb_ngatoa",
+      "carNumber": "15",
+      "startPosition": 5
+    },
+    {
+      "resultId": "result_froc_2024_r1_race_2_driver_liam_sceats",
+      "carNumber": "23",
+      "startPosition": 4
+    },
+    {
+      "resultId": "result_froc_2024_r1_race_2_driver_michael_shin",
+      "carNumber": "16",
+      "startPosition": 6
+    },
+    {
+      "resultId": "result_froc_2024_r1_race_2_driver_patrick_woods_toth",
+      "carNumber": "14",
+      "startPosition": 16
+    },
+    {
+      "resultId": "result_froc_2024_r1_race_2_driver_roman_bilinski",
+      "carNumber": "4",
+      "startPosition": 8
+    },
+    {
+      "resultId": "result_froc_2024_r1_race_2_driver_tommy_smith",
+      "carNumber": "6",
+      "startPosition": 2
+    }
+  ],
+  "round1Race2RowsPreservedWithoutStarts": [
+    "result_froc_2024_r1_race_2_driver_elliott_cleary",
+    "result_froc_2024_r1_race_2_driver_jake_bonilla",
+    "result_froc_2024_r1_race_2_driver_jett_bowling",
+    "result_froc_2024_r1_race_2_driver_kaden_probst",
+    "result_froc_2024_r1_race_2_driver_landan_matriano_lim",
+    "result_froc_2024_r1_race_2_driver_lucas_fecury",
+    "result_froc_2024_r1_race_2_driver_nicola_lacorte",
+    "result_froc_2024_r1_race_2_driver_titus_sherlock"
+  ],
+  "round1Race3RowsUpdated": [
+    {
+      "resultId": "result_froc_2024_r1_race_3_driver_alex_crosbie",
+      "carNumber": "41",
+      "startPosition": 2
+    },
+    {
+      "resultId": "result_froc_2024_r1_race_3_driver_christian_mansell",
+      "carNumber": "71",
+      "startPosition": 1
+    },
+    {
+      "resultId": "result_froc_2024_r1_race_3_driver_elliott_cleary",
+      "carNumber": "19",
+      "startPosition": 8
+    },
+    {
+      "resultId": "result_froc_2024_r1_race_3_driver_gerrard_xie",
+      "carNumber": "39",
+      "startPosition": 6
+    },
+    {
+      "resultId": "result_froc_2024_r1_race_3_driver_jake_bonilla",
+      "carNumber": "20",
+      "startPosition": 17
+    },
+    {
+      "resultId": "result_froc_2024_r1_race_3_driver_jett_bowling",
+      "carNumber": "22",
+      "startPosition": 14
+    },
+    {
+      "resultId": "result_froc_2024_r1_race_3_driver_kaden_probst",
+      "carNumber": "48",
+      "startPosition": 12
+    },
+    {
+      "resultId": "result_froc_2024_r1_race_3_driver_kaleb_ngatoa",
+      "carNumber": "15",
+      "startPosition": 5
+    },
+    {
+      "resultId": "result_froc_2024_r1_race_3_driver_landan_matriano_lim",
+      "carNumber": "739",
+      "startPosition": 16
+    },
+    {
+      "resultId": "result_froc_2024_r1_race_3_driver_liam_sceats",
+      "carNumber": "23",
+      "startPosition": 3
+    },
+    {
+      "resultId": "result_froc_2024_r1_race_3_driver_lucas_fecury",
+      "carNumber": "5",
+      "startPosition": 15
+    },
+    {
+      "resultId": "result_froc_2024_r1_race_3_driver_michael_shin",
+      "carNumber": "16",
+      "startPosition": 7
+    },
+    {
+      "resultId": "result_froc_2024_r1_race_3_driver_nicola_lacorte",
+      "carNumber": "7",
+      "startPosition": 9
+    },
+    {
+      "resultId": "result_froc_2024_r1_race_3_driver_patrick_woods_toth",
+      "carNumber": "14",
+      "startPosition": 10
+    },
+    {
+      "resultId": "result_froc_2024_r1_race_3_driver_roman_bilinski",
+      "carNumber": "4",
+      "startPosition": 4
+    },
+    {
+      "resultId": "result_froc_2024_r1_race_3_driver_titus_sherlock",
+      "carNumber": "31",
+      "startPosition": 13
+    },
+    {
+      "resultId": "result_froc_2024_r1_race_3_driver_tommy_smith",
+      "carNumber": "6",
+      "startPosition": 11
+    }
+  ],
+  "round4Race1RowsUpdated": [
+    {
+      "resultId": "result_froc_2024_r4_race_1_driver_alex_crosbie",
+      "carNumber": "41",
+      "startPosition": 6
+    },
+    {
+      "resultId": "result_froc_2024_r4_race_1_driver_bryce_aron",
+      "carNumber": "27",
+      "startPosition": 7
+    },
+    {
+      "resultId": "result_froc_2024_r4_race_1_driver_gerrard_xie",
+      "carNumber": "39",
+      "startPosition": 8
+    },
+    {
+      "resultId": "result_froc_2024_r4_race_1_driver_jacob_abel",
+      "carNumber": "51",
+      "startPosition": 3
+    },
+    {
+      "resultId": "result_froc_2024_r4_race_1_driver_jake_bonilla",
+      "carNumber": "20",
+      "startPosition": 14
+    },
+    {
+      "resultId": "result_froc_2024_r4_race_1_driver_jett_bowling",
+      "carNumber": "22",
+      "startPosition": 12
+    },
+    {
+      "resultId": "result_froc_2024_r4_race_1_driver_kaden_probst",
+      "carNumber": "48",
+      "startPosition": 11
+    },
+    {
+      "resultId": "result_froc_2024_r4_race_1_driver_kaleb_ngatoa",
+      "carNumber": "15",
+      "startPosition": 4
+    },
+    {
+      "resultId": "result_froc_2024_r4_race_1_driver_landan_matriano_lim",
+      "carNumber": "739",
+      "startPosition": 13
+    },
+    {
+      "resultId": "result_froc_2024_r4_race_1_driver_liam_sceats",
+      "carNumber": "23",
+      "startPosition": 2
+    },
+    {
+      "resultId": "result_froc_2024_r4_race_1_driver_lucas_fecury",
+      "carNumber": "5",
+      "startPosition": 15
+    },
+    {
+      "resultId": "result_froc_2024_r4_race_1_driver_michael_shin",
+      "carNumber": "16",
+      "startPosition": 9
+    },
+    {
+      "resultId": "result_froc_2024_r4_race_1_driver_patrick_woods_toth",
+      "carNumber": "14",
+      "startPosition": 5
+    },
+    {
+      "resultId": "result_froc_2024_r4_race_1_driver_roman_bilinski",
+      "carNumber": "4",
+      "startPosition": 1
+    },
+    {
+      "resultId": "result_froc_2024_r4_race_1_driver_titus_sherlock",
+      "carNumber": "31",
+      "startPosition": 10
+    }
+  ],
+  "race1RowsUpdated": [
+    {
+      "resultId": "result_froc_2024_r5_race_1_driver_alex_crosbie",
+      "carNumber": "41",
+      "startPosition": 9
+    },
+    {
+      "resultId": "result_froc_2024_r5_race_1_driver_bryce_aron",
+      "carNumber": "27",
+      "startPosition": 8
+    },
+    {
+      "resultId": "result_froc_2024_r5_race_1_driver_callum_hedge",
+      "carNumber": "17",
+      "startPosition": 3
+    },
+    {
+      "resultId": "result_froc_2024_r5_race_1_driver_elliott_cleary",
+      "carNumber": "19",
+      "startPosition": 11
+    },
+    {
+      "resultId": "result_froc_2024_r5_race_1_driver_gerrard_xie",
+      "carNumber": "39",
+      "startPosition": 7
+    },
+    {
+      "resultId": "result_froc_2024_r5_race_1_driver_jacob_abel",
+      "carNumber": "51",
+      "startPosition": 5
+    },
+    {
+      "resultId": "result_froc_2024_r5_race_1_driver_jake_bonilla",
+      "carNumber": "20",
+      "startPosition": 18
+    },
+    {
+      "resultId": "result_froc_2024_r5_race_1_driver_jett_bowling",
+      "carNumber": "22",
+      "startPosition": 12
+    },
+    {
+      "resultId": "result_froc_2024_r5_race_1_driver_landan_matriano_lim",
+      "carNumber": "739",
+      "startPosition": 17
+    },
+    {
+      "resultId": "result_froc_2024_r5_race_1_driver_liam_sceats",
+      "carNumber": "23",
+      "startPosition": 2
+    },
+    {
+      "resultId": "result_froc_2024_r5_race_1_driver_lucas_fecury",
+      "carNumber": "5",
+      "startPosition": 16
+    },
+    {
+      "resultId": "result_froc_2024_r5_race_1_driver_michael_shin",
+      "carNumber": "16",
+      "startPosition": 4
+    },
+    {
+      "resultId": "result_froc_2024_r5_race_1_driver_patrick_woods_toth",
+      "carNumber": "14",
+      "startPosition": 13
+    },
+    {
+      "resultId": "result_froc_2024_r5_race_1_driver_roman_bilinski",
+      "carNumber": "4",
+      "startPosition": 1
+    },
+    {
+      "resultId": "result_froc_2024_r5_race_1_driver_ryder_quinn",
+      "carNumber": "101",
+      "startPosition": 10
+    },
+    {
+      "resultId": "result_froc_2024_r5_race_1_driver_sebastian_manson",
+      "carNumber": "69",
+      "startPosition": 14
+    },
+    {
+      "resultId": "result_froc_2024_r5_race_1_driver_titus_sherlock",
+      "carNumber": "31",
+      "startPosition": 15
+    }
+  ],
+  "race2RowsUpdated": [
+    {
+      "resultId": "result_froc_2024_r5_race_2_driver_bryce_aron",
+      "carNumber": "27",
+      "startPosition": 1
+    },
+    {
+      "resultId": "result_froc_2024_r5_race_2_driver_callum_hedge",
+      "carNumber": "17",
+      "startPosition": 6
+    },
+    {
+      "resultId": "result_froc_2024_r5_race_2_driver_gerrard_xie",
+      "carNumber": "39",
+      "startPosition": 8
+    },
+    {
+      "resultId": "result_froc_2024_r5_race_2_driver_jacob_abel",
+      "carNumber": "51",
+      "startPosition": 3
+    },
+    {
+      "resultId": "result_froc_2024_r5_race_2_driver_liam_sceats",
+      "carNumber": "23",
+      "startPosition": 7
+    },
+    {
+      "resultId": "result_froc_2024_r5_race_2_driver_michael_shin",
+      "carNumber": "16",
+      "startPosition": 4
+    },
+    {
+      "resultId": "result_froc_2024_r5_race_2_driver_patrick_woods_toth",
+      "carNumber": "14",
+      "startPosition": 2
+    },
+    {
+      "resultId": "result_froc_2024_r5_race_2_driver_roman_bilinski",
+      "carNumber": "4",
+      "startPosition": 5
+    }
+  ],
+  "race3RowsUpdated": [
+    {
+      "resultId": "result_froc_2024_r5_race_3_driver_alex_crosbie",
+      "carNumber": "41",
+      "startPosition": 5
+    },
+    {
+      "resultId": "result_froc_2024_r5_race_3_driver_bryce_aron",
+      "carNumber": "27",
+      "startPosition": 6
+    },
+    {
+      "resultId": "result_froc_2024_r5_race_3_driver_callum_hedge",
+      "carNumber": "17",
+      "startPosition": 2
+    },
+    {
+      "resultId": "result_froc_2024_r5_race_3_driver_elliott_cleary",
+      "carNumber": "19",
+      "startPosition": 9
+    },
+    {
+      "resultId": "result_froc_2024_r5_race_3_driver_gerrard_xie",
+      "carNumber": "39",
+      "startPosition": 4
+    },
+    {
+      "resultId": "result_froc_2024_r5_race_3_driver_jacob_abel",
+      "carNumber": "51",
+      "startPosition": 3
+    },
+    {
+      "resultId": "result_froc_2024_r5_race_3_driver_jake_bonilla",
+      "carNumber": "20",
+      "startPosition": 18
+    },
+    {
+      "resultId": "result_froc_2024_r5_race_3_driver_jett_bowling",
+      "carNumber": "22",
+      "startPosition": 12
+    },
+    {
+      "resultId": "result_froc_2024_r5_race_3_driver_landan_matriano_lim",
+      "carNumber": "739",
+      "startPosition": 17
+    },
+    {
+      "resultId": "result_froc_2024_r5_race_3_driver_liam_sceats",
+      "carNumber": "23",
+      "startPosition": 1
+    },
+    {
+      "resultId": "result_froc_2024_r5_race_3_driver_lucas_fecury",
+      "carNumber": "5",
+      "startPosition": 16
+    },
+    {
+      "resultId": "result_froc_2024_r5_race_3_driver_michael_shin",
+      "carNumber": "16",
+      "startPosition": 8
+    },
+    {
+      "resultId": "result_froc_2024_r5_race_3_driver_patrick_woods_toth",
+      "carNumber": "14",
+      "startPosition": 11
+    },
+    {
+      "resultId": "result_froc_2024_r5_race_3_driver_roman_bilinski",
+      "carNumber": "4",
+      "startPosition": 13
+    },
+    {
+      "resultId": "result_froc_2024_r5_race_3_driver_ryder_quinn",
+      "carNumber": "101",
+      "startPosition": 10
+    },
+    {
+      "resultId": "result_froc_2024_r5_race_3_driver_sebastian_manson",
+      "carNumber": "69",
+      "startPosition": 14
+    },
+    {
+      "resultId": "result_froc_2024_r5_race_3_driver_titus_sherlock",
+      "carNumber": "31",
+      "startPosition": 15
+    }
+  ],
+  "race2RowsPreservedWithoutStarts": [
+    "result_froc_2024_r5_race_2_driver_alex_crosbie",
+    "result_froc_2024_r5_race_2_driver_elliott_cleary",
+    "result_froc_2024_r5_race_2_driver_jake_bonilla",
+    "result_froc_2024_r5_race_2_driver_jett_bowling",
+    "result_froc_2024_r5_race_2_driver_landan_matriano_lim",
+    "result_froc_2024_r5_race_2_driver_lucas_fecury",
+    "result_froc_2024_r5_race_2_driver_ryder_quinn",
+    "result_froc_2024_r5_race_2_driver_sebastian_manson",
+    "result_froc_2024_r5_race_2_driver_titus_sherlock"
+  ],
+  "conflicts": []
+}

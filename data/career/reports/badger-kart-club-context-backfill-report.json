@@ -1,0 +1,23 @@
+{
+  "checkedAt": "2026-06-08T15:13:38.861Z",
+  "refresh": false,
+  "pagesChecked": 2,
+  "pagesImported": 2,
+  "recordsImported": 3,
+  "fetched": 0,
+  "cached": 2,
+  "rawArtifacts": [
+    "data/career/raw/badger-kart-club/badger-kart-club-2016-fast-times-and-track-records.html",
+    "data/career/raw/badger-kart-club/badger-kart-club-2017-fast-times-and-track-records.html"
+  ],
+  "sourceEvidenceIds": [
+    "source_badger_kart_club_2016_fast_times_track_records",
+    "source_badger_kart_club_2017_fast_times_track_records"
+  ],
+  "derivedMetricIds": [
+    "metric_badger_kart_club_2016_yamaha_junior_fast_time",
+    "metric_badger_kart_club_2017_classic_tag_junior_fast_time",
+    "metric_badger_kart_club_2017_bus_stop_tag_junior_track_record"
+  ],
+  "failures": []
+}

@@ -1,0 +1,354 @@
+{
+  "checkedAt": "2026-06-08T15:13:34.384Z",
+  "refresh": false,
+  "fetched": 0,
+  "cached": 18,
+  "schedulesCached": [
+    "data/career/raw/session-windows/froc-2024/froc-2024-r1-schedule.jpg",
+    "data/career/raw/session-windows/froc-2024/froc-2024-r2-schedule.jpg",
+    "data/career/raw/session-windows/froc-2024/froc-2024-r3-schedule.jpg",
+    "data/career/raw/session-windows/froc-2024/froc-2024-r4-schedule.jpg",
+    "data/career/raw/session-windows/froc-2024/froc-2024-r5-schedule.jpg"
+  ],
+  "ocrArtifacts": [
+    "data/career/raw/session-windows/froc-2024/froc-2024-r1-schedule.ocr.txt",
+    "data/career/raw/session-windows/froc-2024/froc-2024-r2-schedule.ocr.txt",
+    "data/career/raw/session-windows/froc-2024/froc-2024-r3-schedule.ocr.txt",
+    "data/career/raw/session-windows/froc-2024/froc-2024-r4-schedule.ocr.txt",
+    "data/career/raw/session-windows/froc-2024/froc-2024-r5-schedule.ocr.txt"
+  ],
+  "pdfsCached": [
+    "data/career/raw/session-windows/froc-2024/froc-2024-r2-test-1.pdf",
+    "data/career/raw/session-windows/froc-2024/froc-2024-r2-test-2.pdf"
+  ],
+  "pdfTextArtifacts": [
+    "data/career/raw/session-windows/froc-2024/froc-2024-r2-test-1.txt",
+    "data/career/raw/session-windows/froc-2024/froc-2024-r2-test-2.txt"
+  ],
+  "testDayArticlesCached": 4,
+  "testDayArticleArtifacts": [
+    "data/career/raw/session-windows/froc-2024/froc-2024-r1-test-day-article.html",
+    "data/career/raw/session-windows/froc-2024/froc-2024-r3-test-day-article.html",
+    "data/career/raw/session-windows/froc-2024/froc-2024-r4-test-day-article.html",
+    "data/career/raw/session-windows/froc-2024/froc-2024-r5-test-day-article.html"
+  ],
+  "testDayContextSessionsAnnotated": 9,
+  "sessionsUpdated": [
+    {
+      "sessionId": "session_froc_2024_r1_practice_1",
+      "scheduledStart": "2024-01-19T09:46:00",
+      "sourceEvidenceId": "source_froc_2024_r1_toyota_schedule_image"
+    },
+    {
+      "sessionId": "session_froc_2024_r1_practice_2",
+      "scheduledStart": "2024-01-19T13:12:00",
+      "sourceEvidenceId": "source_froc_2024_r1_toyota_schedule_image"
+    },
+    {
+      "sessionId": "session_froc_2024_r1_practice_3",
+      "scheduledStart": "2024-01-19T16:20:00",
+      "sourceEvidenceId": "source_froc_2024_r1_toyota_schedule_image"
+    },
+    {
+      "sessionId": "session_froc_2024_r1_qualifying_1",
+      "scheduledStart": "2024-01-20T10:43:00",
+      "sourceEvidenceId": "source_froc_2024_r1_toyota_schedule_image"
+    },
+    {
+      "sessionId": "session_froc_2024_r1_race_1",
+      "scheduledStart": "2024-01-20T16:12:00",
+      "sourceEvidenceId": "source_froc_2024_r1_toyota_schedule_image"
+    },
+    {
+      "sessionId": "session_froc_2024_r1_qualifying_2",
+      "scheduledStart": "2024-01-21T10:04:00",
+      "sourceEvidenceId": "source_froc_2024_r1_toyota_schedule_image"
+    },
+    {
+      "sessionId": "session_froc_2024_r1_race_2",
+      "scheduledStart": "2024-01-21T12:30:00",
+      "sourceEvidenceId": "source_froc_2024_r1_toyota_schedule_image"
+    },
+    {
+      "sessionId": "session_froc_2024_r1_race_3",
+      "scheduledStart": "2024-01-21T16:04:00",
+      "sourceEvidenceId": "source_froc_2024_r1_toyota_schedule_image"
+    },
+    {
+      "sessionId": "session_froc_2024_r2_practice_1",
+      "scheduledStart": "2024-01-26T09:20:00",
+      "sourceEvidenceId": "source_froc_2024_r2_toyota_schedule_image"
+    },
+    {
+      "sessionId": "session_froc_2024_r2_practice_2",
+      "scheduledStart": "2024-01-26T12:20:00",
+      "sourceEvidenceId": "source_froc_2024_r2_toyota_schedule_image"
+    },
+    {
+      "sessionId": "session_froc_2024_r2_practice_3",
+      "scheduledStart": "2024-01-26T15:10:00",
+      "sourceEvidenceId": "source_froc_2024_r2_toyota_schedule_image"
+    },
+    {
+      "sessionId": "session_froc_2024_r2_qualifying_1",
+      "scheduledStart": "2024-01-27T11:50:00",
+      "sourceEvidenceId": "source_froc_2024_r2_toyota_schedule_image"
+    },
+    {
+      "sessionId": "session_froc_2024_r2_race_1",
+      "scheduledStart": "2024-01-27T15:11:00",
+      "sourceEvidenceId": "source_froc_2024_r2_toyota_schedule_image"
+    },
+    {
+      "sessionId": "session_froc_2024_r2_qualifying_2",
+      "scheduledStart": "2024-01-28T10:06:00",
+      "sourceEvidenceId": "source_froc_2024_r2_toyota_schedule_image"
+    },
+    {
+      "sessionId": "session_froc_2024_r2_race_2",
+      "scheduledStart": "2024-01-28T12:53:00",
+      "sourceEvidenceId": "source_froc_2024_r2_toyota_schedule_image"
+    },
+    {
+      "sessionId": "session_froc_2024_r2_race_3",
+      "scheduledStart": "2024-01-28T15:54:00",
+      "sourceEvidenceId": "source_froc_2024_r2_toyota_schedule_image"
+    },
+    {
+      "sessionId": "session_froc_2024_r2_test_1",
+      "scheduledStart": "2024-01-24T12:40:00",
+      "actualStart": "2024-01-24T12:40:37",
+      "sourceEvidenceId": "source_froc_2024_r2_test_1_toyota_timing_pdf"
+    },
+    {
+      "sessionId": "session_froc_2024_r2_test_2",
+      "scheduledStart": "2024-01-24T16:20:00",
+      "actualStart": "2024-01-24T16:22:00",
+      "sourceEvidenceId": "source_froc_2024_r2_test_2_toyota_timing_pdf"
+    },
+    {
+      "sessionId": "session_froc_2024_r3_practice_1",
+      "scheduledStart": "2024-02-02T09:21:00",
+      "sourceEvidenceId": "source_froc_2024_r3_toyota_schedule_image"
+    },
+    {
+      "sessionId": "session_froc_2024_r3_practice_2",
+      "scheduledStart": "2024-02-02T12:47:00",
+      "sourceEvidenceId": "source_froc_2024_r3_toyota_schedule_image"
+    },
+    {
+      "sessionId": "session_froc_2024_r3_practice_3",
+      "scheduledStart": "2024-02-02T15:49:00",
+      "sourceEvidenceId": "source_froc_2024_r3_toyota_schedule_image"
+    },
+    {
+      "sessionId": "session_froc_2024_r3_qualifying_1",
+      "scheduledStart": "2024-02-03T11:59:00",
+      "sourceEvidenceId": "source_froc_2024_r3_toyota_schedule_image"
+    },
+    {
+      "sessionId": "session_froc_2024_r3_race_1",
+      "scheduledStart": "2024-02-03T15:11:00",
+      "sourceEvidenceId": "source_froc_2024_r3_toyota_schedule_image"
+    },
+    {
+      "sessionId": "session_froc_2024_r3_qualifying_2",
+      "scheduledStart": "2024-02-04T10:02:00",
+      "sourceEvidenceId": "source_froc_2024_r3_toyota_schedule_image"
+    },
+    {
+      "sessionId": "session_froc_2024_r3_race_2",
+      "scheduledStart": "2024-02-04T12:52:00",
+      "sourceEvidenceId": "source_froc_2024_r3_toyota_schedule_image"
+    },
+    {
+      "sessionId": "session_froc_2024_r3_race_3",
+      "scheduledStart": "2024-02-04T16:03:00",
+      "sourceEvidenceId": "source_froc_2024_r3_toyota_schedule_image"
+    },
+    {
+      "sessionId": "session_froc_2024_r4_practice_1",
+      "scheduledStart": "2024-02-09T09:20:00",
+      "sourceEvidenceId": "source_froc_2024_r4_toyota_schedule_image"
+    },
+    {
+      "sessionId": "session_froc_2024_r4_practice_2",
+      "scheduledStart": "2024-02-09T12:55:00",
+      "sourceEvidenceId": "source_froc_2024_r4_toyota_schedule_image"
+    },
+    {
+      "sessionId": "session_froc_2024_r4_practice_3",
+      "scheduledStart": "2024-02-09T16:10:00",
+      "sourceEvidenceId": "source_froc_2024_r4_toyota_schedule_image"
+    },
+    {
+      "sessionId": "session_froc_2024_r4_qualifying_1",
+      "scheduledStart": "2024-02-10T11:42:00",
+      "sourceEvidenceId": "source_froc_2024_r4_toyota_schedule_image"
+    },
+    {
+      "sessionId": "session_froc_2024_r4_race_1",
+      "scheduledStart": "2024-02-10T15:57:00",
+      "sourceEvidenceId": "source_froc_2024_r4_toyota_schedule_image"
+    },
+    {
+      "sessionId": "session_froc_2024_r4_qualifying_2",
+      "scheduledStart": "2024-02-11T09:54:00",
+      "sourceEvidenceId": "source_froc_2024_r4_toyota_schedule_image"
+    },
+    {
+      "sessionId": "session_froc_2024_r4_race_2",
+      "scheduledStart": "2024-02-11T12:36:00",
+      "sourceEvidenceId": "source_froc_2024_r4_toyota_schedule_image"
+    },
+    {
+      "sessionId": "session_froc_2024_r4_race_3",
+      "scheduledStart": "2024-02-11T16:04:00",
+      "sourceEvidenceId": "source_froc_2024_r4_toyota_schedule_image"
+    },
+    {
+      "sessionId": "session_froc_2024_r5_practice_1",
+      "scheduledStart": "2024-02-16T10:18:00",
+      "sourceEvidenceId": "source_froc_2024_r5_toyota_schedule_image"
+    },
+    {
+      "sessionId": "session_froc_2024_r5_practice_2",
+      "scheduledStart": "2024-02-16T13:23:00",
+      "sourceEvidenceId": "source_froc_2024_r5_toyota_schedule_image"
+    },
+    {
+      "sessionId": "session_froc_2024_r5_practice_3",
+      "scheduledStart": "2024-02-16T16:21:00",
+      "sourceEvidenceId": "source_froc_2024_r5_toyota_schedule_image"
+    },
+    {
+      "sessionId": "session_froc_2024_r5_qualifying_1",
+      "scheduledStart": "2024-02-17T11:22:00",
+      "sourceEvidenceId": "source_froc_2024_r5_toyota_schedule_image"
+    },
+    {
+      "sessionId": "session_froc_2024_r5_qualifying_2",
+      "scheduledStart": "2024-02-17T11:22:00",
+      "sourceEvidenceId": "source_froc_2024_r5_toyota_schedule_image"
+    },
+    {
+      "sessionId": "session_froc_2024_r5_qualifying_3",
+      "scheduledStart": "2024-02-17T11:22:00",
+      "sourceEvidenceId": "source_froc_2024_r5_toyota_schedule_image"
+    },
+    {
+      "sessionId": "session_froc_2024_r5_race_1",
+      "scheduledStart": "2024-02-17T16:05:00",
+      "sourceEvidenceId": "source_froc_2024_r5_toyota_schedule_image"
+    },
+    {
+      "sessionId": "session_froc_2024_r5_race_2",
+      "scheduledStart": "2024-02-18T11:24:00",
+      "sourceEvidenceId": "source_froc_2024_r5_toyota_schedule_image"
+    },
+    {
+      "sessionId": "session_froc_2024_r5_race_3",
+      "scheduledStart": "2024-02-18T15:48:00",
+      "sourceEvidenceId": "source_froc_2024_r5_toyota_schedule_image"
+    }
+  ],
+  "sessionsMissing": [],
+  "unsourcedFrocTestSessions": [
+    {
+      "sessionId": "session_froc_2024_r1_test_1",
+      "eventId": "event_froc_2024_r1_taupo_international_motorsport_park",
+      "round": 1,
+      "testNumber": 1,
+      "reason": "official_toyota_round_page_has_test_result_tab_and_article_date_context_but_no_test_timing_pdf_link_or_exact_clock_time_source",
+      "checkedRoundPage": "https://www.toyota.co.nz/toyota-racing/castrol-toyota-fr-oceania/calendar-results/2024-season/round-1-taupo/",
+      "dateContextEvidenceId": "source_froc_2024_r1_toyota_test_day_article",
+      "matchingOfficialPdfLinks": []
+    },
+    {
+      "sessionId": "session_froc_2024_r1_test_2",
+      "eventId": "event_froc_2024_r1_taupo_international_motorsport_park",
+      "round": 1,
+      "testNumber": 2,
+      "reason": "official_toyota_round_page_has_test_result_tab_and_article_date_context_but_no_test_timing_pdf_link_or_exact_clock_time_source",
+      "checkedRoundPage": "https://www.toyota.co.nz/toyota-racing/castrol-toyota-fr-oceania/calendar-results/2024-season/round-1-taupo/",
+      "dateContextEvidenceId": "source_froc_2024_r1_toyota_test_day_article",
+      "matchingOfficialPdfLinks": []
+    },
+    {
+      "sessionId": "session_froc_2024_r1_test_3",
+      "eventId": "event_froc_2024_r1_taupo_international_motorsport_park",
+      "round": 1,
+      "testNumber": 3,
+      "reason": "official_toyota_round_page_has_test_result_tab_and_article_date_context_but_no_test_timing_pdf_link_or_exact_clock_time_source",
+      "checkedRoundPage": "https://www.toyota.co.nz/toyota-racing/castrol-toyota-fr-oceania/calendar-results/2024-season/round-1-taupo/",
+      "dateContextEvidenceId": "source_froc_2024_r1_toyota_test_day_article",
+      "matchingOfficialPdfLinks": []
+    },
+    {
+      "sessionId": "session_froc_2024_r3_test_1",
+      "eventId": "event_froc_2024_r3_hampton_downs_motorsport_park",
+      "round": 3,
+      "testNumber": 1,
+      "reason": "official_toyota_round_page_has_test_result_tab_and_article_date_context_but_no_test_timing_pdf_link_or_exact_clock_time_source",
+      "checkedRoundPage": "https://www.toyota.co.nz/toyota-racing/castrol-toyota-fr-oceania/calendar-results/2024-season/24-season-round-03/",
+      "dateContextEvidenceId": "source_froc_2024_r3_toyota_test_day_article",
+      "matchingOfficialPdfLinks": []
+    },
+    {
+      "sessionId": "session_froc_2024_r3_test_2",
+      "eventId": "event_froc_2024_r3_hampton_downs_motorsport_park",
+      "round": 3,
+      "testNumber": 2,
+      "reason": "official_toyota_round_page_has_test_result_tab_and_article_date_context_but_no_test_timing_pdf_link_or_exact_clock_time_source",
+      "checkedRoundPage": "https://www.toyota.co.nz/toyota-racing/castrol-toyota-fr-oceania/calendar-results/2024-season/24-season-round-03/",
+      "dateContextEvidenceId": "source_froc_2024_r3_toyota_test_day_article",
+      "matchingOfficialPdfLinks": []
+    },
+    {
+      "sessionId": "session_froc_2024_r4_test_1",
+      "eventId": "event_froc_2024_r4_euromarque_motorsport_park",
+      "round": 4,
+      "testNumber": 1,
+      "reason": "official_toyota_round_page_has_test_result_tab_and_article_date_context_but_no_test_timing_pdf_link_or_exact_clock_time_source",
+      "checkedRoundPage": "https://www.toyota.co.nz/toyota-racing/castrol-toyota-fr-oceania/calendar-results/2024-season/24-season-round-04/",
+      "dateContextEvidenceId": "source_froc_2024_r4_toyota_test_day_article",
+      "matchingOfficialPdfLinks": []
+    },
+    {
+      "sessionId": "session_froc_2024_r4_test_2",
+      "eventId": "event_froc_2024_r4_euromarque_motorsport_park",
+      "round": 4,
+      "testNumber": 2,
+      "reason": "official_toyota_round_page_has_test_result_tab_and_article_date_context_but_no_test_timing_pdf_link_or_exact_clock_time_source",
+      "checkedRoundPage": "https://www.toyota.co.nz/toyota-racing/castrol-toyota-fr-oceania/calendar-results/2024-season/24-season-round-04/",
+      "dateContextEvidenceId": "source_froc_2024_r4_toyota_test_day_article",
+      "matchingOfficialPdfLinks": []
+    },
+    {
+      "sessionId": "session_froc_2024_r5_test_1",
+      "eventId": "event_froc_2024_r5_highlands_motorsport_park",
+      "round": 5,
+      "testNumber": 1,
+      "reason": "official_toyota_round_page_has_test_result_tab_and_article_date_context_but_no_test_timing_pdf_link_or_exact_clock_time_source",
+      "checkedRoundPage": "https://www.toyota.co.nz/toyota-racing/castrol-toyota-fr-oceania/calendar-results/2024-season/24-season-round-052/",
+      "dateContextEvidenceId": "source_froc_2024_r5_toyota_test_day_article",
+      "matchingOfficialPdfLinks": []
+    },
+    {
+      "sessionId": "session_froc_2024_r5_test_2",
+      "eventId": "event_froc_2024_r5_highlands_motorsport_park",
+      "round": 5,
+      "testNumber": 2,
+      "reason": "official_toyota_round_page_has_test_result_tab_and_article_date_context_but_no_test_timing_pdf_link_or_exact_clock_time_source",
+      "checkedRoundPage": "https://www.toyota.co.nz/toyota-racing/castrol-toyota-fr-oceania/calendar-results/2024-season/24-season-round-052/",
+      "dateContextEvidenceId": "source_froc_2024_r5_toyota_test_day_article",
+      "matchingOfficialPdfLinks": []
+    }
+  ],
+  "notes": [
+    "FROC Round 2 Test 1 and Test 2 are backfilled from official Toyota timing PDFs because those PDFs expose exact header and started-at times.",
+    "FROC test sessions outside Round 2 are not present on the Toyota race-weekend schedule images or extracted official PDF links and remain without exact session windows.",
+    "Official Toyota test-day articles are cached and attached as date-level context for the remaining FROC test sessions; they are not used to fabricate scheduledStart or actualStart.",
+    "Round 5 Qualifying 1/2/3 are shown as one 54-minute qualifying block on the official image, so all three canonical qualifying segment rows share the block start."
+  ]
+}

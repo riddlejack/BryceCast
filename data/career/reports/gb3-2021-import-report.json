@@ -1,0 +1,1174 @@
+{
+  "checkedAt": "2026-06-08T15:13:20.952Z",
+  "year": 2021,
+  "refresh": false,
+  "concurrency": 4,
+  "fetched": 0,
+  "cached": 129,
+  "eventPagesImported": 7,
+  "pdfsImported": 39,
+  "gridPdfsImported": 21,
+  "pdfsStagedOnly": 0,
+  "sessionsImported": 39,
+  "resultsImported": 684,
+  "qualifyingResultsImported": 248,
+  "bryceResultsImported": 38,
+  "weatherObservationsImported": 39,
+  "mediaAssetsImported": 67,
+  "standingsImported": true,
+  "gridPositionsImported": 369,
+  "rawArtifacts": [
+    "data/career/raw/gb3-2021/gb3-event-format-and-costs.html",
+    "data/career/raw/gb3-2021/gb3-2021-official-standings-archive.html",
+    "data/career/raw/gb3-2021/212005-event.html",
+    "data/career/raw/gb3-2021/212505-event.html",
+    "data/career/raw/gb3-2021/212705-event.html",
+    "data/career/raw/gb3-2021/212905-event.html",
+    "data/career/raw/gb3-2021/213105-event.html",
+    "data/career/raw/gb3-2021/213605-event.html",
+    "data/career/raw/gb3-2021/214105-event.html",
+    "data/career/raw/gb3-2021/212005-grd-bf3.pdf",
+    "data/career/raw/gb3-2021/212005-gr2-bf3.pdf",
+    "data/career/raw/gb3-2021/212005-gr3-bf3.pdf",
+    "data/career/raw/gb3-2021/212505-grd-bf3.pdf",
+    "data/career/raw/gb3-2021/212005-grd-bf3.txt",
+    "data/career/raw/gb3-2021/212005-gr2-bf3.txt",
+    "data/career/raw/gb3-2021/212005-gr3-bf3.txt",
+    "data/career/raw/gb3-2021/212505-gr2-bf3.pdf",
+    "data/career/raw/gb3-2021/212505-gr3-bf3.pdf",
+    "data/career/raw/gb3-2021/212505-grd-bf3.txt",
+    "data/career/raw/gb3-2021/212705-grd-bf3.pdf",
+    "data/career/raw/gb3-2021/212705-gr2-bf3.pdf",
+    "data/career/raw/gb3-2021/212505-gr2-bf3.txt",
+    "data/career/raw/gb3-2021/212705-grd-bf3.txt",
+    "data/career/raw/gb3-2021/212505-gr3-bf3.txt",
+    "data/career/raw/gb3-2021/212705-gr3-bf3.pdf",
+    "data/career/raw/gb3-2021/212905-grd-bf3.pdf",
+    "data/career/raw/gb3-2021/212705-gr2-bf3.txt",
+    "data/career/raw/gb3-2021/212905-gr2-bf3.pdf",
+    "data/career/raw/gb3-2021/212905-gr3-bf3.pdf",
+    "data/career/raw/gb3-2021/212705-gr3-bf3.txt",
+    "data/career/raw/gb3-2021/213105-grd-bf3.pdf",
+    "data/career/raw/gb3-2021/212905-gr2-bf3.txt",
+    "data/career/raw/gb3-2021/213105-gr2-bf3.pdf",
+    "data/career/raw/gb3-2021/212905-grd-bf3.txt",
+    "data/career/raw/gb3-2021/213105-gr3-bf3.pdf",
+    "data/career/raw/gb3-2021/212905-gr3-bf3.txt",
+    "data/career/raw/gb3-2021/213605-grd-bf3.pdf",
+    "data/career/raw/gb3-2021/213105-gr2-bf3.txt",
+    "data/career/raw/gb3-2021/213105-grd-bf3.txt",
+    "data/career/raw/gb3-2021/213605-gr2-bf3.pdf",
+    "data/career/raw/gb3-2021/213605-gr3-bf3.pdf",
+    "data/career/raw/gb3-2021/213105-gr3-bf3.txt",
+    "data/career/raw/gb3-2021/214105-grd-bf3.pdf",
+    "data/career/raw/gb3-2021/213605-gr2-bf3.txt",
+    "data/career/raw/gb3-2021/213605-grd-bf3.txt",
+    "data/career/raw/gb3-2021/214105-gr2-bf3.pdf",
+    "data/career/raw/gb3-2021/214105-gr3-bf3.pdf",
+    "data/career/raw/gb3-2021/214105-grd-bf3.txt",
+    "data/career/raw/gb3-2021/213605-gr3-bf3.txt",
+    "data/career/raw/gb3-2021/214105-gr2-bf3.txt",
+    "data/career/raw/gb3-2021/214105-gr3-bf3.txt",
+    "data/career/raw/gb3-2021/212005-fp1-bf3.pdf",
+    "data/career/raw/gb3-2021/212005-qu1-bf3.pdf",
+    "data/career/raw/gb3-2021/212005-qu2-bf3.pdf",
+    "data/career/raw/gb3-2021/212005-rc1-bf3.pdf",
+    "data/career/raw/gb3-2021/212005-fp1-bf3.txt",
+    "data/career/raw/gb3-2021/212005-rc2-bf3.pdf",
+    "data/career/raw/gb3-2021/212005-rc1-bf3.txt",
+    "data/career/raw/gb3-2021/212005-qu1-bf3.txt",
+    "data/career/raw/gb3-2021/212005-rc3-bf3.pdf",
+    "data/career/raw/gb3-2021/212505-qu1-bf3.pdf",
+    "data/career/raw/gb3-2021/212005-qu2-bf3.txt",
+    "data/career/raw/gb3-2021/212505-qu2-bf3.pdf",
+    "data/career/raw/gb3-2021/212005-rc2-bf3.txt",
+    "data/career/raw/gb3-2021/212505-rc1-bf3.pdf",
+    "data/career/raw/gb3-2021/212005-rc3-bf3.txt",
+    "data/career/raw/gb3-2021/212505-qu1-bf3.txt",
+    "data/career/raw/gb3-2021/212505-rc2-bf3.pdf",
+    "data/career/raw/gb3-2021/212505-rc3-bf3.pdf",
+    "data/career/raw/gb3-2021/212505-qu2-bf3.txt",
+    "data/career/raw/gb3-2021/212705-qu1-bf3.pdf",
+    "data/career/raw/gb3-2021/212505-rc1-bf3.txt",
+    "data/career/raw/gb3-2021/212705-qu2-bf3.pdf",
+    "data/career/raw/gb3-2021/212505-rc2-bf3.txt",
+    "data/career/raw/gb3-2021/212505-rc3-bf3.txt",
+    "data/career/raw/gb3-2021/212705-qu1-bf3.txt",
+    "data/career/raw/gb3-2021/212705-rc1-bf3.pdf",
+    "data/career/raw/gb3-2021/212705-rc2-bf3.pdf",
+    "data/career/raw/gb3-2021/212705-rc3-bf3.pdf",
+    "data/career/raw/gb3-2021/212705-qu2-bf3.txt",
+    "data/career/raw/gb3-2021/212905-fp1-bf3.pdf",
+    "data/career/raw/gb3-2021/212705-rc1-bf3.txt",
+    "data/career/raw/gb3-2021/212705-rc2-bf3.txt",
+    "data/career/raw/gb3-2021/212705-rc3-bf3.txt",
+    "data/career/raw/gb3-2021/212905-fp2-bf3.pdf",
+    "data/career/raw/gb3-2021/212905-fp3-bf3.pdf",
+    "data/career/raw/gb3-2021/212905-qu1-bf3.pdf",
+    "data/career/raw/gb3-2021/212905-fp1-bf3.txt",
+    "data/career/raw/gb3-2021/212905-qu2-bf3.pdf",
+    "data/career/raw/gb3-2021/212905-fp2-bf3.txt",
+    "data/career/raw/gb3-2021/212905-rc1-bf3.pdf",
+    "data/career/raw/gb3-2021/212905-qu1-bf3.txt",
+    "data/career/raw/gb3-2021/212905-fp3-bf3.txt",
+    "data/career/raw/gb3-2021/212905-rc2-bf3.pdf",
+    "data/career/raw/gb3-2021/212905-rc3-bf3.pdf",
+    "data/career/raw/gb3-2021/212905-qu2-bf3.txt",
+    "data/career/raw/gb3-2021/213105-qu1-bf3.pdf",
+    "data/career/raw/gb3-2021/212905-rc1-bf3.txt",
+    "data/career/raw/gb3-2021/212905-rc2-bf3.txt",
+    "data/career/raw/gb3-2021/213105-qu2-bf3.pdf",
+    "data/career/raw/gb3-2021/212905-rc3-bf3.txt",
+    "data/career/raw/gb3-2021/213105-rc1-bf3.pdf",
+    "data/career/raw/gb3-2021/213105-rc2-bf3.pdf",
+    "data/career/raw/gb3-2021/213105-qu1-bf3.txt",
+    "data/career/raw/gb3-2021/213105-rc3-bf3.pdf",
+    "data/career/raw/gb3-2021/213105-qu2-bf3.txt",
+    "data/career/raw/gb3-2021/213105-rc1-bf3.txt",
+    "data/career/raw/gb3-2021/213605-qu1-bf3.pdf",
+    "data/career/raw/gb3-2021/213605-qu2-bf3.pdf",
+    "data/career/raw/gb3-2021/213105-rc2-bf3.txt",
+    "data/career/raw/gb3-2021/213605-rc1-bf3.pdf",
+    "data/career/raw/gb3-2021/213105-rc3-bf3.txt",
+    "data/career/raw/gb3-2021/213605-rc2-bf3.pdf",
+    "data/career/raw/gb3-2021/213605-qu1-bf3.txt",
+    "data/career/raw/gb3-2021/213605-qu2-bf3.txt",
+    "data/career/raw/gb3-2021/213605-rc3-bf3.pdf",
+    "data/career/raw/gb3-2021/214105-qu1-bf3.pdf",
+    "data/career/raw/gb3-2021/213605-rc1-bf3.txt",
+    "data/career/raw/gb3-2021/214105-qu2-bf3.pdf",
+    "data/career/raw/gb3-2021/213605-rc2-bf3.txt",
+    "data/career/raw/gb3-2021/214105-rc1-bf3.pdf",
+    "data/career/raw/gb3-2021/213605-rc3-bf3.txt",
+    "data/career/raw/gb3-2021/214105-qu1-bf3.txt",
+    "data/career/raw/gb3-2021/214105-rc2-bf3.pdf",
+    "data/career/raw/gb3-2021/214105-rc3-bf3.pdf",
+    "data/career/raw/gb3-2021/214105-qu2-bf3.txt",
+    "data/career/raw/gb3-2021/214105-rc1-bf3.txt",
+    "data/career/raw/gb3-2021/214105-rc2-bf3.txt",
+    "data/career/raw/gb3-2021/214105-rc3-bf3.txt"
+  ],
+  "parserValidation": [
+    {
+      "event": "Brands Hatch",
+      "eventId": "212005",
+      "code": "grd",
+      "label": "Grid for Race 1",
+      "sessionType": "grid",
+      "rowCount": 19,
+      "parserFailures": 0,
+      "scheduledStart": null,
+      "flagAt": null,
+      "endedAt": null,
+      "weather": {
+        "ambientConditionRaw": null,
+        "trackConditionRaw": null
+      },
+      "parserOk": true
+    },
+    {
+      "event": "Brands Hatch",
+      "eventId": "212005",
+      "code": "gr2",
+      "label": "Grid for Race 2",
+      "sessionType": "grid",
+      "rowCount": 19,
+      "parserFailures": 0,
+      "scheduledStart": null,
+      "flagAt": null,
+      "endedAt": null,
+      "weather": {
+        "ambientConditionRaw": null,
+        "trackConditionRaw": null
+      },
+      "parserOk": true
+    },
+    {
+      "event": "Brands Hatch",
+      "eventId": "212005",
+      "code": "gr3",
+      "label": "Grid for Race 3",
+      "sessionType": "grid",
+      "rowCount": 19,
+      "parserFailures": 0,
+      "scheduledStart": null,
+      "flagAt": null,
+      "endedAt": null,
+      "weather": {
+        "ambientConditionRaw": null,
+        "trackConditionRaw": null
+      },
+      "parserOk": true
+    },
+    {
+      "event": "Silverstone",
+      "eventId": "212505",
+      "code": "grd",
+      "label": "Grid for Race 1",
+      "sessionType": "grid",
+      "rowCount": 17,
+      "parserFailures": 0,
+      "scheduledStart": null,
+      "flagAt": null,
+      "endedAt": null,
+      "weather": {
+        "ambientConditionRaw": null,
+        "trackConditionRaw": null
+      },
+      "parserOk": true
+    },
+    {
+      "event": "Silverstone",
+      "eventId": "212505",
+      "code": "gr2",
+      "label": "Grid for Race 2",
+      "sessionType": "grid",
+      "rowCount": 17,
+      "parserFailures": 0,
+      "scheduledStart": null,
+      "flagAt": null,
+      "endedAt": null,
+      "weather": {
+        "ambientConditionRaw": null,
+        "trackConditionRaw": null
+      },
+      "parserOk": true
+    },
+    {
+      "event": "Silverstone",
+      "eventId": "212505",
+      "code": "gr3",
+      "label": "Grid for Race 3",
+      "sessionType": "grid",
+      "rowCount": 16,
+      "parserFailures": 0,
+      "scheduledStart": null,
+      "flagAt": null,
+      "endedAt": null,
+      "weather": {
+        "ambientConditionRaw": null,
+        "trackConditionRaw": null
+      },
+      "parserOk": true
+    },
+    {
+      "event": "Donington Park",
+      "eventId": "212705",
+      "code": "grd",
+      "label": "Grid for Race 1",
+      "sessionType": "grid",
+      "rowCount": 17,
+      "parserFailures": 0,
+      "scheduledStart": null,
+      "flagAt": null,
+      "endedAt": null,
+      "weather": {
+        "ambientConditionRaw": null,
+        "trackConditionRaw": null
+      },
+      "parserOk": true
+    },
+    {
+      "event": "Donington Park",
+      "eventId": "212705",
+      "code": "gr2",
+      "label": "Grid for Race 2",
+      "sessionType": "grid",
+      "rowCount": 17,
+      "parserFailures": 0,
+      "scheduledStart": null,
+      "flagAt": null,
+      "endedAt": null,
+      "weather": {
+        "ambientConditionRaw": null,
+        "trackConditionRaw": null
+      },
+      "parserOk": true
+    },
+    {
+      "event": "Donington Park",
+      "eventId": "212705",
+      "code": "gr3",
+      "label": "Grid for Race 3",
+      "sessionType": "grid",
+      "rowCount": 17,
+      "parserFailures": 0,
+      "scheduledStart": null,
+      "flagAt": null,
+      "endedAt": null,
+      "weather": {
+        "ambientConditionRaw": null,
+        "trackConditionRaw": null
+      },
+      "parserOk": true
+    },
+    {
+      "event": "Spa-Francorchamps",
+      "eventId": "212905",
+      "code": "grd",
+      "label": "Grid for Race 1",
+      "sessionType": "grid",
+      "rowCount": 16,
+      "parserFailures": 0,
+      "scheduledStart": null,
+      "flagAt": null,
+      "endedAt": null,
+      "weather": {
+        "ambientConditionRaw": null,
+        "trackConditionRaw": null
+      },
+      "parserOk": true
+    },
+    {
+      "event": "Spa-Francorchamps",
+      "eventId": "212905",
+      "code": "gr2",
+      "label": "Grid for Race 2",
+      "sessionType": "grid",
+      "rowCount": 16,
+      "parserFailures": 0,
+      "scheduledStart": null,
+      "flagAt": null,
+      "endedAt": null,
+      "weather": {
+        "ambientConditionRaw": null,
+        "trackConditionRaw": null
+      },
+      "parserOk": true
+    },
+    {
+      "event": "Spa-Francorchamps",
+      "eventId": "212905",
+      "code": "gr3",
+      "label": "Grid for Race 3",
+      "sessionType": "grid",
+      "rowCount": 16,
+      "parserFailures": 0,
+      "scheduledStart": null,
+      "flagAt": null,
+      "endedAt": null,
+      "weather": {
+        "ambientConditionRaw": null,
+        "trackConditionRaw": null
+      },
+      "parserOk": true
+    },
+    {
+      "event": "Snetterton",
+      "eventId": "213105",
+      "code": "grd",
+      "label": "Grid for Race 1",
+      "sessionType": "grid",
+      "rowCount": 18,
+      "parserFailures": 0,
+      "scheduledStart": null,
+      "flagAt": null,
+      "endedAt": null,
+      "weather": {
+        "ambientConditionRaw": null,
+        "trackConditionRaw": null
+      },
+      "parserOk": true
+    },
+    {
+      "event": "Snetterton",
+      "eventId": "213105",
+      "code": "gr2",
+      "label": "Grid for Race 2",
+      "sessionType": "grid",
+      "rowCount": 18,
+      "parserFailures": 0,
+      "scheduledStart": null,
+      "flagAt": null,
+      "endedAt": null,
+      "weather": {
+        "ambientConditionRaw": null,
+        "trackConditionRaw": null
+      },
+      "parserOk": true
+    },
+    {
+      "event": "Snetterton",
+      "eventId": "213105",
+      "code": "gr3",
+      "label": "Grid for Race 3",
+      "sessionType": "grid",
+      "rowCount": 18,
+      "parserFailures": 0,
+      "scheduledStart": null,
+      "flagAt": null,
+      "endedAt": null,
+      "weather": {
+        "ambientConditionRaw": null,
+        "trackConditionRaw": null
+      },
+      "parserOk": true
+    },
+    {
+      "event": "Oulton Park",
+      "eventId": "213605",
+      "code": "grd",
+      "label": "Grid for Race 1",
+      "sessionType": "grid",
+      "rowCount": 17,
+      "parserFailures": 0,
+      "scheduledStart": null,
+      "flagAt": null,
+      "endedAt": null,
+      "weather": {
+        "ambientConditionRaw": null,
+        "trackConditionRaw": null
+      },
+      "parserOk": true
+    },
+    {
+      "event": "Oulton Park",
+      "eventId": "213605",
+      "code": "gr2",
+      "label": "Grid for Race 2",
+      "sessionType": "grid",
+      "rowCount": 17,
+      "parserFailures": 0,
+      "scheduledStart": null,
+      "flagAt": null,
+      "endedAt": null,
+      "weather": {
+        "ambientConditionRaw": null,
+        "trackConditionRaw": null
+      },
+      "parserOk": true
+    },
+    {
+      "event": "Oulton Park",
+      "eventId": "213605",
+      "code": "gr3",
+      "label": "Grid for Race 3",
+      "sessionType": "grid",
+      "rowCount": 17,
+      "parserFailures": 0,
+      "scheduledStart": null,
+      "flagAt": null,
+      "endedAt": null,
+      "weather": {
+        "ambientConditionRaw": null,
+        "trackConditionRaw": null
+      },
+      "parserOk": true
+    },
+    {
+      "event": "Donington Park",
+      "eventId": "214105",
+      "code": "grd",
+      "label": "Grid for Race 1",
+      "sessionType": "grid",
+      "rowCount": 21,
+      "parserFailures": 0,
+      "scheduledStart": null,
+      "flagAt": null,
+      "endedAt": null,
+      "weather": {
+        "ambientConditionRaw": null,
+        "trackConditionRaw": null
+      },
+      "parserOk": true
+    },
+    {
+      "event": "Donington Park",
+      "eventId": "214105",
+      "code": "gr2",
+      "label": "Grid for Race 2",
+      "sessionType": "grid",
+      "rowCount": 21,
+      "parserFailures": 0,
+      "scheduledStart": null,
+      "flagAt": null,
+      "endedAt": null,
+      "weather": {
+        "ambientConditionRaw": null,
+        "trackConditionRaw": null
+      },
+      "parserOk": true
+    },
+    {
+      "event": "Donington Park",
+      "eventId": "214105",
+      "code": "gr3",
+      "label": "Grid for Race 3",
+      "sessionType": "grid",
+      "rowCount": 21,
+      "parserFailures": 0,
+      "scheduledStart": null,
+      "flagAt": null,
+      "endedAt": null,
+      "weather": {
+        "ambientConditionRaw": null,
+        "trackConditionRaw": null
+      },
+      "parserOk": true
+    },
+    {
+      "event": "Brands Hatch",
+      "eventId": "212005",
+      "code": "fp1",
+      "label": "Free Practice 1",
+      "sessionType": "practice",
+      "rowCount": 19,
+      "parserFailures": 0,
+      "scheduledStart": "2021-05-22T09:00:00",
+      "flagAt": "2021-05-22T09:20:00",
+      "endedAt": "2021-05-22T09:21:00",
+      "weather": {
+        "ambientConditionRaw": "Overcast",
+        "trackConditionRaw": "Wet"
+      },
+      "parserOk": true
+    },
+    {
+      "event": "Brands Hatch",
+      "eventId": "212005",
+      "code": "qu1",
+      "label": "Qualifying",
+      "sessionType": "qualifying",
+      "rowCount": 19,
+      "parserFailures": 0,
+      "scheduledStart": "2021-05-22T11:49:00",
+      "flagAt": "2021-05-22T12:13:00",
+      "endedAt": "2021-05-22T12:15:00",
+      "weather": {
+        "ambientConditionRaw": "Overcast",
+        "trackConditionRaw": "Dry"
+      },
+      "parserOk": true
+    },
+    {
+      "event": "Brands Hatch",
+      "eventId": "212005",
+      "code": "qu2",
+      "label": "Qualifying 2nd Fastest",
+      "sessionType": "qualifying",
+      "rowCount": 19,
+      "parserFailures": 0,
+      "scheduledStart": "2021-05-22T11:49:00",
+      "flagAt": "2021-05-22T12:13:00",
+      "endedAt": "2021-05-22T12:15:00",
+      "weather": {
+        "ambientConditionRaw": "Overcast",
+        "trackConditionRaw": "Dry"
+      },
+      "parserOk": true
+    },
+    {
+      "event": "Brands Hatch",
+      "eventId": "212005",
+      "code": "rc1",
+      "label": "Race 1 Result",
+      "sessionType": "race",
+      "rowCount": 19,
+      "parserFailures": 0,
+      "scheduledStart": "2021-05-22T15:27:00",
+      "flagAt": "2021-05-22T15:44:00",
+      "endedAt": "2021-05-22T15:45:00",
+      "weather": {
+        "ambientConditionRaw": "Overcast",
+        "trackConditionRaw": "Dry"
+      },
+      "parserOk": true
+    },
+    {
+      "event": "Brands Hatch",
+      "eventId": "212005",
+      "code": "rc2",
+      "label": "Race 2 Result",
+      "sessionType": "race",
+      "rowCount": 19,
+      "parserFailures": 0,
+      "scheduledStart": "2021-05-23T11:23:00",
+      "flagAt": "2021-05-23T11:40:00",
+      "endedAt": "2021-05-23T11:41:00",
+      "weather": {
+        "ambientConditionRaw": "Overcast",
+        "trackConditionRaw": "Dry"
+      },
+      "parserOk": true
+    },
+    {
+      "event": "Brands Hatch",
+      "eventId": "212005",
+      "code": "rc3",
+      "label": "Race 3 Result",
+      "sessionType": "race",
+      "rowCount": 19,
+      "parserFailures": 0,
+      "scheduledStart": "2021-05-23T16:28:00",
+      "flagAt": "2021-05-23T16:49:00",
+      "endedAt": "2021-05-23T16:50:00",
+      "weather": {
+        "ambientConditionRaw": "Overcast",
+        "trackConditionRaw": "Dry"
+      },
+      "parserOk": true
+    },
+    {
+      "event": "Silverstone",
+      "eventId": "212505",
+      "code": "qu1",
+      "label": "Qualifying",
+      "sessionType": "qualifying",
+      "rowCount": 16,
+      "parserFailures": 1,
+      "scheduledStart": "2021-06-27T11:10:00",
+      "flagAt": "2021-06-27T11:30:00",
+      "endedAt": "2021-06-27T11:34:00",
+      "weather": {
+        "ambientConditionRaw": "Overcast",
+        "trackConditionRaw": "Dry"
+      },
+      "parserOk": true
+    },
+    {
+      "event": "Silverstone",
+      "eventId": "212505",
+      "code": "qu2",
+      "label": "Qualifying 2nd Fastest",
+      "sessionType": "qualifying",
+      "rowCount": 16,
+      "parserFailures": 1,
+      "scheduledStart": "2021-06-27T11:10:00",
+      "flagAt": "2021-06-27T11:30:00",
+      "endedAt": "2021-06-27T11:34:00",
+      "weather": {
+        "ambientConditionRaw": "Overcast",
+        "trackConditionRaw": "Dry"
+      },
+      "parserOk": true
+    },
+    {
+      "event": "Silverstone",
+      "eventId": "212505",
+      "code": "rc1",
+      "label": "Race 1 Result",
+      "sessionType": "race",
+      "rowCount": 16,
+      "parserFailures": 1,
+      "scheduledStart": "2021-06-27T15:24:00",
+      "flagAt": "2021-06-27T15:43:00",
+      "endedAt": "2021-06-27T15:45:00",
+      "weather": {
+        "ambientConditionRaw": "Cloudy",
+        "trackConditionRaw": "Dry"
+      },
+      "parserOk": true
+    },
+    {
+      "event": "Silverstone",
+      "eventId": "212505",
+      "code": "rc2",
+      "label": "Race 2 Result",
+      "sessionType": "race",
+      "rowCount": 16,
+      "parserFailures": 1,
+      "scheduledStart": "2021-06-27T10:10:00",
+      "flagAt": "2021-06-27T10:29:00",
+      "endedAt": "2021-06-27T10:31:00",
+      "weather": {
+        "ambientConditionRaw": "Overcast",
+        "trackConditionRaw": "Dry"
+      },
+      "parserOk": true
+    },
+    {
+      "event": "Silverstone",
+      "eventId": "212505",
+      "code": "rc3",
+      "label": "Race 3 Result",
+      "sessionType": "race",
+      "rowCount": 15,
+      "parserFailures": 1,
+      "scheduledStart": "2021-06-27T16:21:00",
+      "flagAt": "2021-06-27T16:41:00",
+      "endedAt": "2021-06-27T16:42:00",
+      "weather": {
+        "ambientConditionRaw": "Overcast",
+        "trackConditionRaw": "Dry"
+      },
+      "parserOk": true
+    },
+    {
+      "event": "Donington Park",
+      "eventId": "212705",
+      "code": "qu1",
+      "label": "Qualifying",
+      "sessionType": "qualifying",
+      "rowCount": 17,
+      "parserFailures": 0,
+      "scheduledStart": "2021-07-10T11:00:00",
+      "flagAt": "2021-07-10T11:20:00",
+      "endedAt": "2021-07-10T11:23:00",
+      "weather": {
+        "ambientConditionRaw": "Cloudy",
+        "trackConditionRaw": "Dry"
+      },
+      "parserOk": true
+    },
+    {
+      "event": "Donington Park",
+      "eventId": "212705",
+      "code": "qu2",
+      "label": "Qualifying 2nd Fastest",
+      "sessionType": "qualifying",
+      "rowCount": 17,
+      "parserFailures": 0,
+      "scheduledStart": "2021-07-10T11:00:00",
+      "flagAt": "2021-07-10T11:20:00",
+      "endedAt": "2021-07-10T11:23:00",
+      "weather": {
+        "ambientConditionRaw": "Cloudy",
+        "trackConditionRaw": "Dry"
+      },
+      "parserOk": true
+    },
+    {
+      "event": "Donington Park",
+      "eventId": "212705",
+      "code": "rc1",
+      "label": "Race 1 Result",
+      "sessionType": "race",
+      "rowCount": 17,
+      "parserFailures": 0,
+      "scheduledStart": "2021-07-10T14:20:00",
+      "flagAt": "2021-07-10T14:37:00",
+      "endedAt": "2021-07-10T14:39:00",
+      "weather": {
+        "ambientConditionRaw": "Cloudy",
+        "trackConditionRaw": "Dry"
+      },
+      "parserOk": true
+    },
+    {
+      "event": "Donington Park",
+      "eventId": "212705",
+      "code": "rc2",
+      "label": "Race 2 Result",
+      "sessionType": "race",
+      "rowCount": 16,
+      "parserFailures": 1,
+      "scheduledStart": "2021-07-11T10:14:00",
+      "flagAt": "2021-07-11T10:32:00",
+      "endedAt": "2021-07-11T10:34:00",
+      "weather": {
+        "ambientConditionRaw": "Cloudy",
+        "trackConditionRaw": "Dry"
+      },
+      "parserOk": true
+    },
+    {
+      "event": "Donington Park",
+      "eventId": "212705",
+      "code": "rc3",
+      "label": "Race 3 Result",
+      "sessionType": "race",
+      "rowCount": 17,
+      "parserFailures": 0,
+      "scheduledStart": "2021-07-11T15:47:00",
+      "flagAt": "2021-07-11T16:06:00",
+      "endedAt": "2021-07-11T16:08:00",
+      "weather": {
+        "ambientConditionRaw": "Overcast",
+        "trackConditionRaw": "Dry"
+      },
+      "parserOk": true
+    },
+    {
+      "event": "Spa-Francorchamps",
+      "eventId": "212905",
+      "code": "fp1",
+      "label": "Free Practice 1",
+      "sessionType": "practice",
+      "rowCount": 16,
+      "parserFailures": 0,
+      "scheduledStart": "2021-07-23T10:00:00",
+      "flagAt": "2021-07-23T10:45:00",
+      "endedAt": "2021-07-23T10:49:00",
+      "weather": {
+        "ambientConditionRaw": "Sunny",
+        "trackConditionRaw": "Dry"
+      },
+      "parserOk": true
+    },
+    {
+      "event": "Spa-Francorchamps",
+      "eventId": "212905",
+      "code": "fp2",
+      "label": "Free Practice 2",
+      "sessionType": "practice",
+      "rowCount": 16,
+      "parserFailures": 0,
+      "scheduledStart": "2021-07-23T11:55:00",
+      "flagAt": "2021-07-23T12:40:00",
+      "endedAt": "2021-07-23T12:45:00",
+      "weather": {
+        "ambientConditionRaw": "Sunny",
+        "trackConditionRaw": "Dry"
+      },
+      "parserOk": true
+    },
+    {
+      "event": "Spa-Francorchamps",
+      "eventId": "212905",
+      "code": "fp3",
+      "label": "Free Practice 3",
+      "sessionType": "practice",
+      "rowCount": 16,
+      "parserFailures": 0,
+      "scheduledStart": "2021-07-23T14:00:00",
+      "flagAt": "2021-07-23T00:00:00",
+      "endedAt": "2021-07-23T14:47:00",
+      "weather": {
+        "ambientConditionRaw": "Sunny",
+        "trackConditionRaw": "Dry"
+      },
+      "parserOk": true
+    },
+    {
+      "event": "Spa-Francorchamps",
+      "eventId": "212905",
+      "code": "qu1",
+      "label": "Qualifying",
+      "sessionType": "qualifying",
+      "rowCount": 16,
+      "parserFailures": 0,
+      "scheduledStart": "2021-07-23T18:15:00",
+      "flagAt": "2021-07-23T18:40:00",
+      "endedAt": "2021-07-23T18:45:00",
+      "weather": {
+        "ambientConditionRaw": "Sunny",
+        "trackConditionRaw": "Dry"
+      },
+      "parserOk": true
+    },
+    {
+      "event": "Spa-Francorchamps",
+      "eventId": "212905",
+      "code": "qu2",
+      "label": "Qualifying 2nd Fastest",
+      "sessionType": "qualifying",
+      "rowCount": 16,
+      "parserFailures": 0,
+      "scheduledStart": "2021-07-23T18:15:00",
+      "flagAt": "2021-07-23T18:40:00",
+      "endedAt": "2021-07-23T18:45:00",
+      "weather": {
+        "ambientConditionRaw": "Sunny",
+        "trackConditionRaw": "Dry"
+      },
+      "parserOk": true
+    },
+    {
+      "event": "Spa-Francorchamps",
+      "eventId": "212905",
+      "code": "rc1",
+      "label": "Race 1 Result",
+      "sessionType": "race",
+      "rowCount": 16,
+      "parserFailures": 0,
+      "scheduledStart": "2021-07-24T14:33:00",
+      "flagAt": "2021-07-24T14:54:00",
+      "endedAt": "2021-07-24T14:58:00",
+      "weather": {
+        "ambientConditionRaw": "Overcast",
+        "trackConditionRaw": "Wet"
+      },
+      "parserOk": true
+    },
+    {
+      "event": "Spa-Francorchamps",
+      "eventId": "212905",
+      "code": "rc2",
+      "label": "Race 2 Result",
+      "sessionType": "race",
+      "rowCount": 16,
+      "parserFailures": 0,
+      "scheduledStart": "2021-07-24T18:42:00",
+      "flagAt": "2021-07-24T19:03:00",
+      "endedAt": "2021-07-24T19:07:00",
+      "weather": {
+        "ambientConditionRaw": "Overcast",
+        "trackConditionRaw": "Dry"
+      },
+      "parserOk": true
+    },
+    {
+      "event": "Spa-Francorchamps",
+      "eventId": "212905",
+      "code": "rc3",
+      "label": "Race 3 Result",
+      "sessionType": "race",
+      "rowCount": 16,
+      "parserFailures": 0,
+      "scheduledStart": "2021-07-25T11:04:00",
+      "flagAt": "2021-07-25T11:25:00",
+      "endedAt": "2021-07-25T11:30:00",
+      "weather": {
+        "ambientConditionRaw": "Sunny",
+        "trackConditionRaw": "Dry"
+      },
+      "parserOk": true
+    },
+    {
+      "event": "Snetterton",
+      "eventId": "213105",
+      "code": "qu1",
+      "label": "Qualifying",
+      "sessionType": "qualifying",
+      "rowCount": 18,
+      "parserFailures": 0,
+      "scheduledStart": "2021-08-07T10:39:00",
+      "flagAt": "2021-08-07T10:59:00",
+      "endedAt": "2021-08-07T11:03:00",
+      "weather": {
+        "ambientConditionRaw": "Rain",
+        "trackConditionRaw": "Damp"
+      },
+      "parserOk": true
+    },
+    {
+      "event": "Snetterton",
+      "eventId": "213105",
+      "code": "qu2",
+      "label": "Qualifying 2nd Fastest",
+      "sessionType": "qualifying",
+      "rowCount": 18,
+      "parserFailures": 0,
+      "scheduledStart": "2021-08-07T10:39:00",
+      "flagAt": "2021-08-07T10:59:00",
+      "endedAt": "2021-08-07T11:03:00",
+      "weather": {
+        "ambientConditionRaw": "Rain",
+        "trackConditionRaw": "Damp"
+      },
+      "parserOk": true
+    },
+    {
+      "event": "Snetterton",
+      "eventId": "213105",
+      "code": "rc1",
+      "label": "Race 1 Result",
+      "sessionType": "race",
+      "rowCount": 18,
+      "parserFailures": 0,
+      "scheduledStart": "2021-08-07T13:48:00",
+      "flagAt": "2021-08-07T14:06:00",
+      "endedAt": "2021-08-07T14:09:00",
+      "weather": {
+        "ambientConditionRaw": "Cloudy",
+        "trackConditionRaw": "Dry"
+      },
+      "parserOk": true
+    },
+    {
+      "event": "Snetterton",
+      "eventId": "213105",
+      "code": "rc2",
+      "label": "Race 2 Result",
+      "sessionType": "race",
+      "rowCount": 18,
+      "parserFailures": 0,
+      "scheduledStart": "2021-08-08T12:10:00",
+      "flagAt": "2021-08-08T12:28:00",
+      "endedAt": "2021-08-08T12:32:00",
+      "weather": {
+        "ambientConditionRaw": "Cloudy",
+        "trackConditionRaw": "Dry"
+      },
+      "parserOk": true
+    },
+    {
+      "event": "Snetterton",
+      "eventId": "213105",
+      "code": "rc3",
+      "label": "Race 3 Result",
+      "sessionType": "race",
+      "rowCount": 18,
+      "parserFailures": 0,
+      "scheduledStart": "2021-08-08T14:20:00",
+      "flagAt": "2021-08-08T14:39:00",
+      "endedAt": "2021-08-08T14:42:00",
+      "weather": {
+        "ambientConditionRaw": "Overcast",
+        "trackConditionRaw": "Dry"
+      },
+      "parserOk": true
+    },
+    {
+      "event": "Oulton Park",
+      "eventId": "213605",
+      "code": "qu1",
+      "label": "Qualifying",
+      "sessionType": "qualifying",
+      "rowCount": 17,
+      "parserFailures": 0,
+      "scheduledStart": "2021-09-11T11:10:00",
+      "flagAt": "2021-09-11T11:30:00",
+      "endedAt": "2021-09-11T11:31:00",
+      "weather": {
+        "ambientConditionRaw": "Sunny",
+        "trackConditionRaw": "Dry"
+      },
+      "parserOk": true
+    },
+    {
+      "event": "Oulton Park",
+      "eventId": "213605",
+      "code": "qu2",
+      "label": "Qualifying 2nd Fastest",
+      "sessionType": "qualifying",
+      "rowCount": 17,
+      "parserFailures": 0,
+      "scheduledStart": "2021-09-11T11:10:00",
+      "flagAt": "2021-09-11T11:30:00",
+      "endedAt": "2021-09-11T11:31:00",
+      "weather": {
+        "ambientConditionRaw": "Sunny",
+        "trackConditionRaw": "Dry"
+      },
+      "parserOk": true
+    },
+    {
+      "event": "Oulton Park",
+      "eventId": "213605",
+      "code": "rc1",
+      "label": "Race 1 Result",
+      "sessionType": "race",
+      "rowCount": 16,
+      "parserFailures": 1,
+      "scheduledStart": "2021-09-11T14:24:00",
+      "flagAt": "2021-09-11T14:44:00",
+      "endedAt": "2021-09-11T14:45:00",
+      "weather": {
+        "ambientConditionRaw": "Cloudy",
+        "trackConditionRaw": "Dry"
+      },
+      "parserOk": true
+    },
+    {
+      "event": "Oulton Park",
+      "eventId": "213605",
+      "code": "rc2",
+      "label": "Race 2 Result",
+      "sessionType": "race",
+      "rowCount": 17,
+      "parserFailures": 0,
+      "scheduledStart": "2021-09-12T12:29:00",
+      "flagAt": "2021-09-12T12:44:00",
+      "endedAt": "2021-09-12T12:50:00",
+      "weather": {
+        "ambientConditionRaw": "Overcast",
+        "trackConditionRaw": "Dry"
+      },
+      "parserOk": true
+    },
+    {
+      "event": "Oulton Park",
+      "eventId": "213605",
+      "code": "rc3",
+      "label": "Race 3 Result",
+      "sessionType": "race",
+      "rowCount": 17,
+      "parserFailures": 0,
+      "scheduledStart": "2021-09-12T15:42:00",
+      "flagAt": "2021-09-12T16:03:00",
+      "endedAt": "2021-09-12T16:05:00",
+      "weather": {
+        "ambientConditionRaw": "Rain",
+        "trackConditionRaw": "Wet"
+      },
+      "parserOk": true
+    },
+    {
+      "event": "Donington Park",
+      "eventId": "214105",
+      "code": "qu1",
+      "label": "Qualifying",
+      "sessionType": "qualifying",
+      "rowCount": 21,
+      "parserFailures": 0,
+      "scheduledStart": "2021-10-16T10:50:00",
+      "flagAt": "2021-10-16T11:10:00",
+      "endedAt": "2021-10-16T11:10:00",
+      "weather": {
+        "ambientConditionRaw": "Overcast",
+        "trackConditionRaw": "Dry"
+      },
+      "parserOk": true
+    },
+    {
+      "event": "Donington Park",
+      "eventId": "214105",
+      "code": "qu2",
+      "label": "Qualifying 2nd Fastest",
+      "sessionType": "qualifying",
+      "rowCount": 21,
+      "parserFailures": 0,
+      "scheduledStart": "2021-10-16T10:50:00",
+      "flagAt": "2021-10-16T11:10:00",
+      "endedAt": "2021-10-16T11:10:00",
+      "weather": {
+        "ambientConditionRaw": "Overcast",
+        "trackConditionRaw": "Dry"
+      },
+      "parserOk": true
+    },
+    {
+      "event": "Donington Park",
+      "eventId": "214105",
+      "code": "rc1",
+      "label": "Race 1 Result",
+      "sessionType": "race",
+      "rowCount": 21,
+      "parserFailures": 0,
+      "scheduledStart": "2021-10-16T15:08:00",
+      "flagAt": "2021-10-16T15:27:00",
+      "endedAt": "2021-10-16T15:30:00",
+      "weather": {
+        "ambientConditionRaw": "Cloudy",
+        "trackConditionRaw": "Dry"
+      },
+      "parserOk": true
+    },
+    {
+      "event": "Donington Park",
+      "eventId": "214105",
+      "code": "rc2",
+      "label": "Race 2 Result",
+      "sessionType": "race",
+      "rowCount": 21,
+      "parserFailures": 0,
+      "scheduledStart": "2021-10-17T10:03:00",
+      "flagAt": "2021-10-17T10:24:00",
+      "endedAt": "2021-10-17T10:28:00",
+      "weather": {
+        "ambientConditionRaw": "Drizzle",
+        "trackConditionRaw": "Wet"
+      },
+      "parserOk": true
+    },
+    {
+      "event": "Donington Park",
+      "eventId": "214105",
+      "code": "rc3",
+      "label": "Race 3 Result",
+      "sessionType": "race",
+      "rowCount": 21,
+      "parserFailures": 0,
+      "scheduledStart": "2021-10-17T16:01:00",
+      "flagAt": "2021-10-17T16:19:00",
+      "endedAt": "2021-10-17T16:21:00",
+      "weather": {
+        "ambientConditionRaw": "Overcast",
+        "trackConditionRaw": "Dry"
+      },
+      "parserOk": true
+    }
+  ],
+  "gaps": []
+}

@@ -1,0 +1,1443 @@
+{
+  "schemaVersion": "bryce-career-coverage-matrix.v1",
+  "generatedAt": "2026-06-08T15:13:45.361Z",
+  "datasetPath": "data/career/career.dataset.json",
+  "validation": {
+    "ok": true,
+    "checkedAt": "2026-06-08T15:13:44.060Z",
+    "errors": [],
+    "warnings": [
+      {
+        "severity": "warn",
+        "path": "sessions.timeCoverage",
+        "message": "9 physical sessions do not yet have scheduledStart or actualStart. Weather/live joins must wait for session time backfill."
+      }
+    ]
+  },
+  "categoryDefinitions": [
+    {
+      "id": "events_sessions",
+      "label": "Events and sessions",
+      "description": "Canonical event and session rows inside the 2019-2026 analytics window."
+    },
+    {
+      "id": "race_results",
+      "label": "Race/heat classifications",
+      "description": "Full-field race or heat classification rows."
+    },
+    {
+      "id": "qualifying_classifications",
+      "label": "Qualifying classifications",
+      "description": "Qualifying session classification rows, either in dedicated qualifyingResults or result rows."
+    },
+    {
+      "id": "grid_start_positions",
+      "label": "Grid/start positions",
+      "description": "Race/heat rows with source-backed gridPosition or startPosition."
+    },
+    {
+      "id": "exact_session_windows",
+      "label": "Exact session windows",
+      "description": "Physical sessions with sourced clock-time starts suitable for session-hour joins."
+    },
+    {
+      "id": "track_metadata",
+      "label": "Track metadata",
+      "description": "Coordinates, timezone, length, direction, surface, and corner-count metadata for referenced tracks."
+    },
+    {
+      "id": "official_weather_conditions",
+      "label": "Official weather/track conditions",
+      "description": "Series/timing-sheet weather or track-condition observations stored in weatherObservations."
+    },
+    {
+      "id": "lap_samples",
+      "label": "Lap samples",
+      "description": "Lap-level position or timing samples where official sources expose them."
+    },
+    {
+      "id": "indy_section_data",
+      "label": "INDY NXT section data",
+      "description": "Official INDY NXT Top Section Times and Section Results PDF-derived metrics."
+    },
+    {
+      "id": "penalties_decisions",
+      "label": "Penalties/decisions",
+      "description": "Official penalty or decision rows linked to sessions and drivers where possible."
+    },
+    {
+      "id": "incidents_cautions",
+      "label": "Incidents/cautions",
+      "description": "Official caution summaries or terminal-status incident rows."
+    },
+    {
+      "id": "racecraft_summary",
+      "label": "Racecraft summary",
+      "description": "Official racecraft-like rows such as most-improved notes."
+    },
+    {
+      "id": "pit_stop_counts",
+      "label": "Pit-stop counts",
+      "description": "Per-result pit-stop count fields from official result sources."
+    },
+    {
+      "id": "detailed_pit_context",
+      "label": "Detailed pit context",
+      "description": "Pit timing, pit-lane sequence, service context, or pit-summary report rows."
+    },
+    {
+      "id": "derived_benchmarks",
+      "label": "Derived benchmarks",
+      "description": "Teammate, field-strength, trend, and analytics-ready derived metrics."
+    }
+  ],
+  "statusDefinitions": {
+    "complete": "Canonical coverage is internally consistent for the category in this series/source family.",
+    "partial": "Some source-backed coverage exists, but comparable rows or sessions are incomplete or held out.",
+    "blocked": "The category is expected or high-value, but exact source evidence/import logic is missing or source-broken.",
+    "unavailable": "Current official source family does not expose this category consistently enough to require it.",
+    "out_of_scope": "Category is outside the production analytics scope for this series/source family."
+  },
+  "series": [
+    {
+      "seriesId": "series_froc",
+      "seriesName": "Castrol Toyota Formula Regional Oceania Championship",
+      "years": [
+        2024
+      ],
+      "events": 5,
+      "sessions": 52,
+      "policyNote": null,
+      "canceledOfficialSessionIds": [],
+      "openGapIds": [
+        "gap_froc_2024_round_4_date_conflict",
+        "gap_froc_2024_session_times_missing",
+        "gap_froc_2024_start_positions_partial"
+      ],
+      "categories": [
+        {
+          "id": "events_sessions",
+          "label": "Events and sessions",
+          "status": "complete",
+          "covered": 52,
+          "total": 52,
+          "coverage": 1,
+          "notes": "5 events, 52 sessions."
+        },
+        {
+          "id": "race_results",
+          "label": "Race/heat classifications",
+          "status": "complete",
+          "covered": 15,
+          "total": 15,
+          "coverage": 1,
+          "notes": "246 race/heat result rows across 15 result-bearing race/heat sessions; 0 schedule-only future sessions excluded from result completeness."
+        },
+        {
+          "id": "qualifying_classifications",
+          "label": "Qualifying classifications",
+          "status": "complete",
+          "covered": 11,
+          "total": 11,
+          "coverage": 1,
+          "notes": "11 result-bearing qualifying sessions; qualifying classifications may live in results for PDF source families. 0 schedule-only future sessions and 0 official canceled qualifying sessions excluded from result completeness."
+        },
+        {
+          "id": "grid_start_positions",
+          "label": "Grid/start positions",
+          "status": "partial",
+          "covered": 229,
+          "total": 246,
+          "coverage": 0.9309,
+          "notes": "229/246 race/heat rows have gridPosition or startPosition."
+        },
+        {
+          "id": "exact_session_windows",
+          "label": "Exact session windows",
+          "status": "partial",
+          "covered": 43,
+          "total": 52,
+          "coverage": 0.8269,
+          "notes": "43/52 physical sessions have clock-time starts; 43/52 have at least date-level starts."
+        },
+        {
+          "id": "track_metadata",
+          "label": "Track metadata",
+          "status": "complete",
+          "covered": 5,
+          "total": 5,
+          "coverage": 1,
+          "notes": "5/5 referenced tracks have coordinates, timezone, length, direction, surface, and corner count."
+        },
+        {
+          "id": "official_weather_conditions",
+          "label": "Official weather/track conditions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 52,
+          "coverage": 0,
+          "notes": "0/52 sessions have official weather/track-condition observations."
+        },
+        {
+          "id": "lap_samples",
+          "label": "Lap samples",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 52,
+          "coverage": 0,
+          "notes": "0 sessions have lap samples; Formula Ford rows are Bryce-only labeled lap-analysis samples."
+        },
+        {
+          "id": "indy_section_data",
+          "label": "INDY NXT section data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0,
+          "coverage": null,
+          "notes": null
+        },
+        {
+          "id": "penalties_decisions",
+          "label": "Penalties/decisions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 52,
+          "coverage": 0,
+          "notes": "0 sessions have official penalty/decision rows."
+        },
+        {
+          "id": "incidents_cautions",
+          "label": "Incidents/cautions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 15,
+          "coverage": 0,
+          "notes": "0 sessions have official incident/caution rows."
+        },
+        {
+          "id": "racecraft_summary",
+          "label": "Racecraft summary",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 15,
+          "coverage": 0,
+          "notes": "0 race sessions have official most-improved/racecraft summary rows."
+        },
+        {
+          "id": "pit_stop_counts",
+          "label": "Pit-stop counts",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 246,
+          "coverage": 0,
+          "notes": "0/246 race/heat result rows have pit-stop counts."
+        },
+        {
+          "id": "detailed_pit_context",
+          "label": "Detailed pit context",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 15,
+          "coverage": 0,
+          "notes": null
+        },
+        {
+          "id": "derived_benchmarks",
+          "label": "Derived benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 5,
+          "coverage": 0,
+          "notes": "0 non-report derived metrics exist for this series. Teammate/field-strength analytics are not production-ready yet."
+        }
+      ],
+      "priorityGaps": [
+        "grid_start_positions",
+        "exact_session_windows"
+      ]
+    },
+    {
+      "seriesId": "series_euroformula_open",
+      "seriesName": "Euroformula Open",
+      "years": [
+        2023
+      ],
+      "events": 7,
+      "sessions": 28,
+      "policyNote": null,
+      "canceledOfficialSessionIds": [],
+      "openGapIds": [
+        "gap_euroformula_2023_championship_classification_pdf_current_mismatch"
+      ],
+      "categories": [
+        {
+          "id": "events_sessions",
+          "label": "Events and sessions",
+          "status": "complete",
+          "covered": 28,
+          "total": 28,
+          "coverage": 1,
+          "notes": "7 events, 28 sessions."
+        },
+        {
+          "id": "race_results",
+          "label": "Race/heat classifications",
+          "status": "complete",
+          "covered": 21,
+          "total": 21,
+          "coverage": 1,
+          "notes": "178 race/heat result rows across 21 result-bearing race/heat sessions; 0 schedule-only future sessions excluded from result completeness."
+        },
+        {
+          "id": "qualifying_classifications",
+          "label": "Qualifying classifications",
+          "status": "complete",
+          "covered": 7,
+          "total": 7,
+          "coverage": 1,
+          "notes": "7 result-bearing qualifying sessions; qualifying classifications may live in results for PDF source families. 0 schedule-only future sessions and 0 official canceled qualifying sessions excluded from result completeness."
+        },
+        {
+          "id": "grid_start_positions",
+          "label": "Grid/start positions",
+          "status": "complete",
+          "covered": 178,
+          "total": 178,
+          "coverage": 1,
+          "notes": "178/178 race/heat rows have gridPosition or startPosition."
+        },
+        {
+          "id": "exact_session_windows",
+          "label": "Exact session windows",
+          "status": "complete",
+          "covered": 28,
+          "total": 28,
+          "coverage": 1,
+          "notes": "28/28 physical sessions have clock-time starts; 28/28 have at least date-level starts."
+        },
+        {
+          "id": "track_metadata",
+          "label": "Track metadata",
+          "status": "complete",
+          "covered": 7,
+          "total": 7,
+          "coverage": 1,
+          "notes": "7/7 referenced tracks have coordinates, timezone, length, direction, surface, and corner count."
+        },
+        {
+          "id": "official_weather_conditions",
+          "label": "Official weather/track conditions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 28,
+          "coverage": 0,
+          "notes": "0/28 sessions have official weather/track-condition observations."
+        },
+        {
+          "id": "lap_samples",
+          "label": "Lap samples",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 28,
+          "coverage": 0,
+          "notes": "0 sessions have lap samples; Formula Ford rows are Bryce-only labeled lap-analysis samples."
+        },
+        {
+          "id": "indy_section_data",
+          "label": "INDY NXT section data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0,
+          "coverage": null,
+          "notes": null
+        },
+        {
+          "id": "penalties_decisions",
+          "label": "Penalties/decisions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 28,
+          "coverage": 0,
+          "notes": "0 sessions have official penalty/decision rows."
+        },
+        {
+          "id": "incidents_cautions",
+          "label": "Incidents/cautions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 21,
+          "coverage": 0,
+          "notes": "0 sessions have official incident/caution rows."
+        },
+        {
+          "id": "racecraft_summary",
+          "label": "Racecraft summary",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 21,
+          "coverage": 0,
+          "notes": "0 race sessions have official most-improved/racecraft summary rows."
+        },
+        {
+          "id": "pit_stop_counts",
+          "label": "Pit-stop counts",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 178,
+          "coverage": 0,
+          "notes": "0/178 race/heat result rows have pit-stop counts."
+        },
+        {
+          "id": "detailed_pit_context",
+          "label": "Detailed pit context",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 21,
+          "coverage": 0,
+          "notes": null
+        },
+        {
+          "id": "derived_benchmarks",
+          "label": "Derived benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 7,
+          "coverage": 0,
+          "notes": "0 non-report derived metrics exist for this series. Teammate/field-strength analytics are not production-ready yet."
+        }
+      ],
+      "priorityGaps": []
+    },
+    {
+      "seriesId": "series_frp_f1600",
+      "seriesName": "F1600 Championship Series",
+      "years": [
+        2019
+      ],
+      "events": 7,
+      "sessions": 37,
+      "policyNote": null,
+      "canceledOfficialSessionIds": [],
+      "openGapIds": [
+        "gap_frp_f1600_2019_r5_01_qualifying_pdf_event_mismatch"
+      ],
+      "categories": [
+        {
+          "id": "events_sessions",
+          "label": "Events and sessions",
+          "status": "complete",
+          "covered": 37,
+          "total": 37,
+          "coverage": 1,
+          "notes": "7 events, 37 sessions."
+        },
+        {
+          "id": "race_results",
+          "label": "Race/heat classifications",
+          "status": "complete",
+          "covered": 21,
+          "total": 21,
+          "coverage": 1,
+          "notes": "315 race/heat result rows across 21 result-bearing race/heat sessions; 0 schedule-only future sessions excluded from result completeness."
+        },
+        {
+          "id": "qualifying_classifications",
+          "label": "Qualifying classifications",
+          "status": "complete",
+          "covered": 6,
+          "total": 6,
+          "coverage": 1,
+          "notes": "6 result-bearing qualifying sessions; qualifying classifications may live in results for PDF source families. 0 schedule-only future sessions and 0 official canceled qualifying sessions excluded from result completeness."
+        },
+        {
+          "id": "grid_start_positions",
+          "label": "Grid/start positions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 315,
+          "coverage": 0,
+          "notes": "0/315 race/heat rows have gridPosition or startPosition."
+        },
+        {
+          "id": "exact_session_windows",
+          "label": "Exact session windows",
+          "status": "complete",
+          "covered": 36,
+          "total": 36,
+          "coverage": 1,
+          "notes": "36/36 physical sessions have clock-time starts; 36/36 have at least date-level starts."
+        },
+        {
+          "id": "track_metadata",
+          "label": "Track metadata",
+          "status": "complete",
+          "covered": 7,
+          "total": 7,
+          "coverage": 1,
+          "notes": "7/7 referenced tracks have coordinates, timezone, length, direction, surface, and corner count."
+        },
+        {
+          "id": "official_weather_conditions",
+          "label": "Official weather/track conditions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 37,
+          "coverage": 0,
+          "notes": "0/37 sessions have official weather/track-condition observations."
+        },
+        {
+          "id": "lap_samples",
+          "label": "Lap samples",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 37,
+          "coverage": 0,
+          "notes": "0 sessions have lap samples; Formula Ford rows are Bryce-only labeled lap-analysis samples."
+        },
+        {
+          "id": "indy_section_data",
+          "label": "INDY NXT section data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0,
+          "coverage": null,
+          "notes": null
+        },
+        {
+          "id": "penalties_decisions",
+          "label": "Penalties/decisions",
+          "status": "partial",
+          "covered": 2,
+          "total": 37,
+          "coverage": 0.0541,
+          "notes": "2 sessions have official penalty/decision rows."
+        },
+        {
+          "id": "incidents_cautions",
+          "label": "Incidents/cautions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 21,
+          "coverage": 0,
+          "notes": "0 sessions have official incident/caution rows."
+        },
+        {
+          "id": "racecraft_summary",
+          "label": "Racecraft summary",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 21,
+          "coverage": 0,
+          "notes": "0 race sessions have official most-improved/racecraft summary rows."
+        },
+        {
+          "id": "pit_stop_counts",
+          "label": "Pit-stop counts",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 315,
+          "coverage": 0,
+          "notes": "0/315 race/heat result rows have pit-stop counts."
+        },
+        {
+          "id": "detailed_pit_context",
+          "label": "Detailed pit context",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 21,
+          "coverage": 0,
+          "notes": null
+        },
+        {
+          "id": "derived_benchmarks",
+          "label": "Derived benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 7,
+          "coverage": 0,
+          "notes": "0 non-report derived metrics exist for this series. Teammate/field-strength analytics are not production-ready yet."
+        }
+      ],
+      "priorityGaps": [
+        "penalties_decisions"
+      ]
+    },
+    {
+      "seriesId": "series_formula_ford",
+      "seriesName": "Formula Ford",
+      "years": [
+        2020
+      ],
+      "events": 7,
+      "sessions": 46,
+      "policyNote": null,
+      "canceledOfficialSessionIds": [],
+      "openGapIds": [],
+      "categories": [
+        {
+          "id": "events_sessions",
+          "label": "Events and sessions",
+          "status": "complete",
+          "covered": 46,
+          "total": 46,
+          "coverage": 1,
+          "notes": "7 events, 46 sessions."
+        },
+        {
+          "id": "race_results",
+          "label": "Race/heat classifications",
+          "status": "complete",
+          "covered": 32,
+          "total": 32,
+          "coverage": 1,
+          "notes": "782 race/heat result rows across 32 result-bearing race/heat sessions; 0 schedule-only future sessions excluded from result completeness."
+        },
+        {
+          "id": "qualifying_classifications",
+          "label": "Qualifying classifications",
+          "status": "complete",
+          "covered": 14,
+          "total": 14,
+          "coverage": 1,
+          "notes": "14 result-bearing qualifying sessions; qualifying classifications may live in results for PDF source families. 0 schedule-only future sessions and 0 official canceled qualifying sessions excluded from result completeness."
+        },
+        {
+          "id": "grid_start_positions",
+          "label": "Grid/start positions",
+          "status": "partial",
+          "covered": 760,
+          "total": 782,
+          "coverage": 0.9719,
+          "notes": "760/782 race/heat rows have gridPosition or startPosition."
+        },
+        {
+          "id": "exact_session_windows",
+          "label": "Exact session windows",
+          "status": "complete",
+          "covered": 46,
+          "total": 46,
+          "coverage": 1,
+          "notes": "46/46 physical sessions have clock-time starts; 46/46 have at least date-level starts."
+        },
+        {
+          "id": "track_metadata",
+          "label": "Track metadata",
+          "status": "complete",
+          "covered": 5,
+          "total": 5,
+          "coverage": 1,
+          "notes": "5/5 referenced tracks have coordinates, timezone, length, direction, surface, and corner count."
+        },
+        {
+          "id": "official_weather_conditions",
+          "label": "Official weather/track conditions",
+          "status": "complete",
+          "covered": 46,
+          "total": 46,
+          "coverage": 1,
+          "notes": "46/46 sessions have official weather/track-condition observations."
+        },
+        {
+          "id": "lap_samples",
+          "label": "Lap samples",
+          "status": "partial",
+          "covered": 24,
+          "total": 46,
+          "coverage": 0.5217,
+          "notes": "24 sessions have lap samples; Formula Ford rows are Bryce-only labeled lap-analysis samples."
+        },
+        {
+          "id": "indy_section_data",
+          "label": "INDY NXT section data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0,
+          "coverage": null,
+          "notes": null
+        },
+        {
+          "id": "penalties_decisions",
+          "label": "Penalties/decisions",
+          "status": "partial",
+          "covered": 4,
+          "total": 46,
+          "coverage": 0.087,
+          "notes": "4 sessions have official penalty/decision rows."
+        },
+        {
+          "id": "incidents_cautions",
+          "label": "Incidents/cautions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 32,
+          "coverage": 0,
+          "notes": "0 sessions have official incident/caution rows."
+        },
+        {
+          "id": "racecraft_summary",
+          "label": "Racecraft summary",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 32,
+          "coverage": 0,
+          "notes": "0 race sessions have official most-improved/racecraft summary rows."
+        },
+        {
+          "id": "pit_stop_counts",
+          "label": "Pit-stop counts",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 782,
+          "coverage": 0,
+          "notes": "0/782 race/heat result rows have pit-stop counts."
+        },
+        {
+          "id": "detailed_pit_context",
+          "label": "Detailed pit context",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 32,
+          "coverage": 0,
+          "notes": null
+        },
+        {
+          "id": "derived_benchmarks",
+          "label": "Derived benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 7,
+          "coverage": 0,
+          "notes": "0 non-report derived metrics exist for this series. Teammate/field-strength analytics are not production-ready yet."
+        }
+      ],
+      "priorityGaps": [
+        "grid_start_positions",
+        "lap_samples",
+        "penalties_decisions"
+      ]
+    },
+    {
+      "seriesId": "series_gb3",
+      "seriesName": "GB3 Championship",
+      "years": [
+        2021,
+        2022
+      ],
+      "events": 15,
+      "sessions": 116,
+      "policyNote": null,
+      "canceledOfficialSessionIds": [],
+      "openGapIds": [
+        "gap_gb3_2022_session_1248_missing_json"
+      ],
+      "categories": [
+        {
+          "id": "events_sessions",
+          "label": "Events and sessions",
+          "status": "complete",
+          "covered": 116,
+          "total": 116,
+          "coverage": 1,
+          "notes": "15 events, 116 sessions."
+        },
+        {
+          "id": "race_results",
+          "label": "Race/heat classifications",
+          "status": "complete",
+          "covered": 45,
+          "total": 45,
+          "coverage": 1,
+          "notes": "882 race/heat result rows across 45 result-bearing race/heat sessions; 0 schedule-only future sessions excluded from result completeness."
+        },
+        {
+          "id": "qualifying_classifications",
+          "label": "Qualifying classifications",
+          "status": "complete",
+          "covered": 22,
+          "total": 22,
+          "coverage": 1,
+          "notes": "22 result-bearing qualifying sessions; qualifying classifications may live in results for PDF source families. 0 schedule-only future sessions and 0 official canceled qualifying sessions excluded from result completeness."
+        },
+        {
+          "id": "grid_start_positions",
+          "label": "Grid/start positions",
+          "status": "partial",
+          "covered": 369,
+          "total": 882,
+          "coverage": 0.4184,
+          "notes": "369/882 race/heat rows have gridPosition or startPosition."
+        },
+        {
+          "id": "exact_session_windows",
+          "label": "Exact session windows",
+          "status": "complete",
+          "covered": 116,
+          "total": 116,
+          "coverage": 1,
+          "notes": "116/116 physical sessions have clock-time starts; 116/116 have at least date-level starts."
+        },
+        {
+          "id": "track_metadata",
+          "label": "Track metadata",
+          "status": "complete",
+          "covered": 6,
+          "total": 6,
+          "coverage": 1,
+          "notes": "6/6 referenced tracks have coordinates, timezone, length, direction, surface, and corner count."
+        },
+        {
+          "id": "official_weather_conditions",
+          "label": "Official weather/track conditions",
+          "status": "partial",
+          "covered": 39,
+          "total": 116,
+          "coverage": 0.3362,
+          "notes": "39/116 sessions have official weather/track-condition observations."
+        },
+        {
+          "id": "lap_samples",
+          "label": "Lap samples",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 116,
+          "coverage": 0,
+          "notes": "0 sessions have lap samples; Formula Ford rows are Bryce-only labeled lap-analysis samples."
+        },
+        {
+          "id": "indy_section_data",
+          "label": "INDY NXT section data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0,
+          "coverage": null,
+          "notes": null
+        },
+        {
+          "id": "penalties_decisions",
+          "label": "Penalties/decisions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 116,
+          "coverage": 0,
+          "notes": "0 sessions have official penalty/decision rows."
+        },
+        {
+          "id": "incidents_cautions",
+          "label": "Incidents/cautions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 45,
+          "coverage": 0,
+          "notes": "0 sessions have official incident/caution rows."
+        },
+        {
+          "id": "racecraft_summary",
+          "label": "Racecraft summary",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 45,
+          "coverage": 0,
+          "notes": "0 race sessions have official most-improved/racecraft summary rows."
+        },
+        {
+          "id": "pit_stop_counts",
+          "label": "Pit-stop counts",
+          "status": "partial",
+          "covered": 513,
+          "total": 882,
+          "coverage": 0.5816,
+          "notes": "513/882 race/heat result rows have pit-stop counts."
+        },
+        {
+          "id": "detailed_pit_context",
+          "label": "Detailed pit context",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 45,
+          "coverage": 0,
+          "notes": null
+        },
+        {
+          "id": "derived_benchmarks",
+          "label": "Derived benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 15,
+          "coverage": 0,
+          "notes": "0 non-report derived metrics exist for this series. Teammate/field-strength analytics are not production-ready yet."
+        }
+      ],
+      "priorityGaps": [
+        "grid_start_positions",
+        "official_weather_conditions",
+        "pit_stop_counts"
+      ]
+    },
+    {
+      "seriesId": "series_imsa_weathertech",
+      "seriesName": "IMSA WeatherTech SportsCar Championship",
+      "years": [
+        2025
+      ],
+      "events": 1,
+      "sessions": 1,
+      "policyNote": "One-event sports-car slice until additional official Bryce IMSA starts are confirmed.",
+      "canceledOfficialSessionIds": [],
+      "openGapIds": [],
+      "categories": [
+        {
+          "id": "events_sessions",
+          "label": "Events and sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1,
+          "coverage": 1,
+          "notes": "1 events, 1 sessions."
+        },
+        {
+          "id": "race_results",
+          "label": "Race/heat classifications",
+          "status": "complete",
+          "covered": 1,
+          "total": 1,
+          "coverage": 1,
+          "notes": "236 race/heat result rows across 1 result-bearing race/heat sessions; 0 schedule-only future sessions excluded from result completeness."
+        },
+        {
+          "id": "qualifying_classifications",
+          "label": "Qualifying classifications",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0,
+          "coverage": null,
+          "notes": "0 result-bearing qualifying sessions; qualifying classifications may live in results for PDF source families. 0 schedule-only future sessions and 0 official canceled qualifying sessions excluded from result completeness."
+        },
+        {
+          "id": "grid_start_positions",
+          "label": "Grid/start positions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 236,
+          "coverage": 0,
+          "notes": "0/236 race/heat rows have gridPosition or startPosition."
+        },
+        {
+          "id": "exact_session_windows",
+          "label": "Exact session windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1,
+          "coverage": 1,
+          "notes": "1/1 physical sessions have clock-time starts; 1/1 have at least date-level starts."
+        },
+        {
+          "id": "track_metadata",
+          "label": "Track metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1,
+          "coverage": 1,
+          "notes": "1/1 referenced tracks have coordinates, timezone, length, direction, surface, and corner count."
+        },
+        {
+          "id": "official_weather_conditions",
+          "label": "Official weather/track conditions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1,
+          "coverage": 1,
+          "notes": "1/1 sessions have official weather/track-condition observations."
+        },
+        {
+          "id": "lap_samples",
+          "label": "Lap samples",
+          "status": "complete",
+          "covered": 1,
+          "total": 1,
+          "coverage": 1,
+          "notes": "1 sessions have lap samples; Formula Ford rows are Bryce-only labeled lap-analysis samples."
+        },
+        {
+          "id": "indy_section_data",
+          "label": "INDY NXT section data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0,
+          "coverage": null,
+          "notes": null
+        },
+        {
+          "id": "penalties_decisions",
+          "label": "Penalties/decisions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 1,
+          "coverage": 0,
+          "notes": "0 sessions have official penalty/decision rows."
+        },
+        {
+          "id": "incidents_cautions",
+          "label": "Incidents/cautions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 1,
+          "coverage": 0,
+          "notes": "0 sessions have official incident/caution rows."
+        },
+        {
+          "id": "racecraft_summary",
+          "label": "Racecraft summary",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 1,
+          "coverage": 0,
+          "notes": "0 race sessions have official most-improved/racecraft summary rows."
+        },
+        {
+          "id": "pit_stop_counts",
+          "label": "Pit-stop counts",
+          "status": "complete",
+          "covered": 236,
+          "total": 236,
+          "coverage": 1,
+          "notes": "236/236 race/heat result rows have pit-stop counts."
+        },
+        {
+          "id": "detailed_pit_context",
+          "label": "Detailed pit context",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 1,
+          "coverage": 0,
+          "notes": null
+        },
+        {
+          "id": "derived_benchmarks",
+          "label": "Derived benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1,
+          "coverage": 0,
+          "notes": "0 non-report derived metrics exist for this series. Teammate/field-strength analytics are not production-ready yet."
+        }
+      ],
+      "priorityGaps": []
+    },
+    {
+      "seriesId": "series_indy_nxt",
+      "seriesName": "INDY NXT",
+      "years": [
+        2024,
+        2025,
+        2026
+      ],
+      "events": 45,
+      "sessions": 189,
+      "policyNote": null,
+      "canceledOfficialSessionIds": [
+        "session_indy_nxt_2024_6489",
+        "session_indy_nxt_2025_6596"
+      ],
+      "openGapIds": [
+        "gap_indy_nxt_qualifying_lap_reports"
+      ],
+      "categories": [
+        {
+          "id": "events_sessions",
+          "label": "Events and sessions",
+          "status": "complete",
+          "covered": 189,
+          "total": 189,
+          "coverage": 1,
+          "notes": "45 events, 189 sessions."
+        },
+        {
+          "id": "race_results",
+          "label": "Race/heat classifications",
+          "status": "complete",
+          "covered": 36,
+          "total": 36,
+          "coverage": 1,
+          "notes": "738 race/heat result rows across 36 result-bearing race/heat sessions; 9 schedule-only future sessions excluded from result completeness."
+        },
+        {
+          "id": "qualifying_classifications",
+          "label": "Qualifying classifications",
+          "status": "complete",
+          "covered": 87,
+          "total": 87,
+          "coverage": 1,
+          "notes": "87 result-bearing qualifying sessions; qualifying classifications may live in results for PDF source families. 6 schedule-only future sessions and 2 official canceled qualifying sessions excluded from result completeness."
+        },
+        {
+          "id": "grid_start_positions",
+          "label": "Grid/start positions",
+          "status": "complete",
+          "covered": 738,
+          "total": 738,
+          "coverage": 1,
+          "notes": "738/738 race/heat rows have gridPosition or startPosition."
+        },
+        {
+          "id": "exact_session_windows",
+          "label": "Exact session windows",
+          "status": "partial",
+          "covered": 37,
+          "total": 189,
+          "coverage": 0.1958,
+          "notes": "37/189 physical sessions have clock-time starts; 189/189 have at least date-level starts."
+        },
+        {
+          "id": "track_metadata",
+          "label": "Track metadata",
+          "status": "complete",
+          "covered": 13,
+          "total": 13,
+          "coverage": 1,
+          "notes": "13/13 referenced tracks have coordinates, timezone, length, direction, surface, and corner count."
+        },
+        {
+          "id": "official_weather_conditions",
+          "label": "Official weather/track conditions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 189,
+          "coverage": 0,
+          "notes": "0/189 sessions have official weather/track-condition observations."
+        },
+        {
+          "id": "lap_samples",
+          "label": "Lap samples",
+          "status": "partial",
+          "covered": 36,
+          "total": 36,
+          "coverage": 1,
+          "notes": "36/36 completed race sessions have lap-chart samples; 26 charts fully validate and 10 are clean partial visible-sample imports."
+        },
+        {
+          "id": "indy_section_data",
+          "label": "INDY NXT section data",
+          "status": "partial",
+          "covered": 145,
+          "total": 146,
+          "coverage": 0.9932,
+          "notes": "146/146 comparable Top Section reports parsed after excluding 1 official canceled session; 145/146 comparable Section Results reports parsed after excluding 1 official canceled session. True held-outs: session_indy_nxt_2024_6325 (official_pdf_has_no_extractable_text)."
+        },
+        {
+          "id": "penalties_decisions",
+          "label": "Penalties/decisions",
+          "status": "complete",
+          "covered": 27,
+          "total": 189,
+          "coverage": 0.1429,
+          "notes": "27 sessions have official penalty/decision rows."
+        },
+        {
+          "id": "incidents_cautions",
+          "label": "Incidents/cautions",
+          "status": "complete",
+          "covered": 32,
+          "total": 45,
+          "coverage": 0.7111,
+          "notes": "32 sessions have official incident/caution rows."
+        },
+        {
+          "id": "racecraft_summary",
+          "label": "Racecraft summary",
+          "status": "complete",
+          "covered": 35,
+          "total": 45,
+          "coverage": 0.7778,
+          "notes": "35 race sessions have official most-improved/racecraft summary rows."
+        },
+        {
+          "id": "pit_stop_counts",
+          "label": "Pit-stop counts",
+          "status": "complete",
+          "covered": 738,
+          "total": 738,
+          "coverage": 1,
+          "notes": "738/738 race/heat result rows have pit-stop counts."
+        },
+        {
+          "id": "detailed_pit_context",
+          "label": "Detailed pit context",
+          "status": "blocked",
+          "covered": 0,
+          "total": 45,
+          "coverage": 0,
+          "notes": "INDY NXT has official/API pit-stop counts, but no detailed pit-summary or pit-lane sequence importer yet."
+        },
+        {
+          "id": "derived_benchmarks",
+          "label": "Derived benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 45,
+          "coverage": 0,
+          "notes": "0 non-report derived metrics exist for this series. Teammate/field-strength analytics are not production-ready yet."
+        }
+      ],
+      "priorityGaps": [
+        "exact_session_windows",
+        "lap_samples",
+        "indy_section_data",
+        "detailed_pit_context"
+      ]
+    }
+  ],
+  "seasons": [
+    {
+      "seriesId": "series_froc",
+      "seriesName": "Castrol Toyota Formula Regional Oceania Championship",
+      "year": 2024,
+      "events": 5,
+      "sessions": 52,
+      "raceSessions": 15,
+      "raceRows": 246,
+      "qualifyingSessions": 11,
+      "exactWindowSessions": 43,
+      "physicalSessions": 52,
+      "raceRowsWithGridOrStart": 229,
+      "raceRowsWithPitStops": 0,
+      "lapSampleSessions": 0,
+      "weatherSessions": 0
+    },
+    {
+      "seriesId": "series_euroformula_open",
+      "seriesName": "Euroformula Open",
+      "year": 2023,
+      "events": 7,
+      "sessions": 28,
+      "raceSessions": 21,
+      "raceRows": 178,
+      "qualifyingSessions": 7,
+      "exactWindowSessions": 28,
+      "physicalSessions": 28,
+      "raceRowsWithGridOrStart": 178,
+      "raceRowsWithPitStops": 0,
+      "lapSampleSessions": 0,
+      "weatherSessions": 0
+    },
+    {
+      "seriesId": "series_frp_f1600",
+      "seriesName": "F1600 Championship Series",
+      "year": 2019,
+      "events": 7,
+      "sessions": 37,
+      "raceSessions": 21,
+      "raceRows": 315,
+      "qualifyingSessions": 6,
+      "exactWindowSessions": 36,
+      "physicalSessions": 36,
+      "raceRowsWithGridOrStart": 0,
+      "raceRowsWithPitStops": 0,
+      "lapSampleSessions": 0,
+      "weatherSessions": 0
+    },
+    {
+      "seriesId": "series_formula_ford",
+      "seriesName": "Formula Ford",
+      "year": 2020,
+      "events": 7,
+      "sessions": 46,
+      "raceSessions": 32,
+      "raceRows": 782,
+      "qualifyingSessions": 14,
+      "exactWindowSessions": 46,
+      "physicalSessions": 46,
+      "raceRowsWithGridOrStart": 760,
+      "raceRowsWithPitStops": 0,
+      "lapSampleSessions": 24,
+      "weatherSessions": 46
+    },
+    {
+      "seriesId": "series_gb3",
+      "seriesName": "GB3 Championship",
+      "year": 2021,
+      "events": 7,
+      "sessions": 39,
+      "raceSessions": 21,
+      "raceRows": 369,
+      "qualifyingSessions": 14,
+      "exactWindowSessions": 39,
+      "physicalSessions": 39,
+      "raceRowsWithGridOrStart": 369,
+      "raceRowsWithPitStops": 0,
+      "lapSampleSessions": 0,
+      "weatherSessions": 39
+    },
+    {
+      "seriesId": "series_gb3",
+      "seriesName": "GB3 Championship",
+      "year": 2022,
+      "events": 8,
+      "sessions": 77,
+      "raceSessions": 24,
+      "raceRows": 513,
+      "qualifyingSessions": 8,
+      "exactWindowSessions": 77,
+      "physicalSessions": 77,
+      "raceRowsWithGridOrStart": 0,
+      "raceRowsWithPitStops": 513,
+      "lapSampleSessions": 0,
+      "weatherSessions": 0
+    },
+    {
+      "seriesId": "series_imsa_weathertech",
+      "seriesName": "IMSA WeatherTech SportsCar Championship",
+      "year": 2025,
+      "events": 1,
+      "sessions": 1,
+      "raceSessions": 1,
+      "raceRows": 236,
+      "qualifyingSessions": 0,
+      "exactWindowSessions": 1,
+      "physicalSessions": 1,
+      "raceRowsWithGridOrStart": 0,
+      "raceRowsWithPitStops": 236,
+      "lapSampleSessions": 1,
+      "weatherSessions": 1
+    },
+    {
+      "seriesId": "series_indy_nxt",
+      "seriesName": "INDY NXT",
+      "year": 2024,
+      "events": 14,
+      "sessions": 68,
+      "raceSessions": 14,
+      "raceRows": 274,
+      "qualifyingSessions": 34,
+      "exactWindowSessions": 0,
+      "physicalSessions": 68,
+      "raceRowsWithGridOrStart": 274,
+      "raceRowsWithPitStops": 274,
+      "lapSampleSessions": 14,
+      "weatherSessions": 0
+    },
+    {
+      "seriesId": "series_indy_nxt",
+      "seriesName": "INDY NXT",
+      "year": 2025,
+      "events": 14,
+      "sessions": 66,
+      "raceSessions": 14,
+      "raceRows": 272,
+      "qualifyingSessions": 33,
+      "exactWindowSessions": 0,
+      "physicalSessions": 66,
+      "raceRowsWithGridOrStart": 272,
+      "raceRowsWithPitStops": 272,
+      "lapSampleSessions": 14,
+      "weatherSessions": 0
+    },
+    {
+      "seriesId": "series_indy_nxt",
+      "seriesName": "INDY NXT",
+      "year": 2026,
+      "events": 17,
+      "sessions": 55,
+      "raceSessions": 17,
+      "raceRows": 192,
+      "qualifyingSessions": 28,
+      "exactWindowSessions": 37,
+      "physicalSessions": 55,
+      "raceRowsWithGridOrStart": 192,
+      "raceRowsWithPitStops": 192,
+      "lapSampleSessions": 8,
+      "weatherSessions": 0
+    }
+  ],
+  "globalPriority": [
+    {
+      "rank": 1,
+      "id": "audit_and_patch_indy_nxt_detail_categories",
+      "seriesId": "series_indy_nxt",
+      "rationale": "INDY NXT is the richest and most UI-relevant source family. Lap charts, section data, penalties, cautions, racecraft, and pit-stop counts are already present; detailed pit context remains blocked unless official report availability is confirmed."
+    },
+    {
+      "rank": 2,
+      "id": "patch_froc_grid_and_exact_test_windows_where_source_exists",
+      "seriesId": "series_froc",
+      "rationale": "FROC has known partial grid/start and exact test-window gaps. Date-only article context is present; exact times should stay null until official timing evidence appears."
+    },
+    {
+      "rank": 3,
+      "id": "resolve_or_preserve_gb3_2022_source_broken_rows",
+      "seriesId": "series_gb3",
+      "rationale": "GB3 2021 is strong; GB3 2022 has one official manifest session with a row-level JSON 404 and broader start/grid asymmetry versus 2021."
+    },
+    {
+      "rank": 4,
+      "id": "harden_formula_ford_lap_and_grid_diagnostics",
+      "seriesId": "series_formula_ford",
+      "rationale": "Formula Ford 2020 has rich official PDFs, but grid rows and Bryce-only lap-analysis continuation pages remain partial by parser confidence."
+    }
+  ],
+  "openGaps": [
+    {
+      "id": "gap_euroformula_2023_championship_classification_pdf_current_mismatch",
+      "status": "open",
+      "description": "The supplied official classification PDF URL now serves a 2026 document, so 2023 championship position and points were not imported from that mutable S3 key."
+    },
+    {
+      "id": "gap_froc_2024_round_4_date_conflict",
+      "status": "open",
+      "description": "Toyota Round 4 results page title says 16-18 February 2024, while Toyota 2024 dates announcement places Euromarque Motorsport Park on 9-11 February 2024. Normalized event dates use 9-11 February and preserve the page-title conflict in event raw data."
+    },
+    {
+      "id": "gap_froc_2024_session_times_missing",
+      "status": "partial",
+      "description": "Official Toyota schedule images backfill practice, qualifying, and race starts for FROC 2024, and official Round 2 timing PDFs backfill Test 1 and Test 2. Official Toyota test-day articles are cached as date-level context for the other nine FROC test sessions, but those sessions remain unavailable for production session-hour weather joins because the official Toyota round pages expose test result tabs and article context but no official test timing PDF links or equivalent exact clock-time source for those sessions."
+    },
+    {
+      "id": "gap_froc_2024_start_positions_partial",
+      "status": "partial",
+      "description": "Toyota HTML Grid tabs, linked official grid PDFs, the official Taupo Qualifying 1/2 articles, the official Taupo Race 2 article, the official Euromarque Qualifying 1 article, the official Highlands Grand Prix qualifying-format article, and the official Highlands Race 2 article are normalized where present. FROC Round 1 Race 1 and Round 4 Race 1 start positions are imported from official Qualifying 1 articles plus qualifying tables. FROC Round 1 Race 2 top-eight start positions are imported from the official Race 2 reverse top-eight article rule plus Race 1 results, and Woods-Toth P16 is imported from the same article direct statement. FROC Round 1 Race 3 start positions are imported from the official Qualifying 2 article plus Qualifying 2 table. FROC Round 5 Race 1 and Grand Prix start positions are imported from the qualifying-format article plus qualifying tables. FROC Round 5 Race 2 top-eight start positions are imported from the official Race 2 article narrative. The remaining R1 Race 2 and R5 Race 2 tail start positions remain open until race-specific official grid evidence is found."
+    },
+    {
+      "id": "gap_frp_f1600_2019_r5_01_qualifying_pdf_event_mismatch",
+      "status": "open",
+      "description": "FRP archive labels Pittsburgh International Race Complex Qualifying, but the linked PDF header/date indicates a different event (FRP at SUMMIT POINT with KARTS                                                                   Sorted on best lap time; F1600 Championship Series                                                 Summit Point 2.000 miles; 2019-08-23T14:40:00). Rows were staged but not imported."
+    },
+    {
+      "id": "gap_gb3_2022_session_1248_missing_json",
+      "status": "open",
+      "description": "GB3 _rounds.json lists Donington Park Friday session 2 (1248) at 2022-05-27T14:45:00, so the session entity is retained from the official manifest. Row-level results remain unavailable because the session JSON endpoint returned 404."
+    },
+    {
+      "id": "gap_indy_nxt_qualifying_lap_reports",
+      "status": "open",
+      "description": "EventsSessionDetails imports race/session result rows, qualifyingResults for official SessionType=Q records, and official terminal-status incident rows for contact/mechanical/dns outcomes. Official Race Lap Chart PDFs now import complete lap-by-lap position samples when parser validation matches official completed-lap counts, plus clean source-visible partial samples when missing car-lap counts or official result/chart lap-count conflicts are explicitly reported and no parsed samples duplicate or reference unknown cars. Official Event Summary PDFs now import race-stat metrics and most-improved racecraft notes. Official Leader Lap Summary PDFs now import leader-by-lap timing, margin, and flag-state metrics. Official Top Section Times PDFs now import practice, qualifying, and race section-rank timing metrics when official section rows are present. Official Section Results PDFs now import practice, qualifying, and race lap-by-lap section times and speeds at per-car/per-lap grain when official section rows are present. Canceled reports without timing rows are held out, and source-visible rows without canonical API timing rows keep car/name text with null canonical IDs. Official race Results PDFs now import penalty/decision summary rows and caution-summary causal incident rows. Pit summaries, deeper report parsing, and lap-specific incident detail beyond official caution summaries remain open."
+    },
+    {
+      "id": "gap_remaining_career_rows_after_track_metadata",
+      "status": "open",
+      "description": "Karting race-by-race records, remaining early-career Formula Ford appearances outside imported National FF1600/Festival/Walter Hayes Trophy/Champion books, media narrative beyond imported Team USA 2020 context and structured Team USA/Badger Kart Club milestone and record facts, non-official ambient weather enrichment, historical INDY NXT date-only session windows not covered by official Race Control schedule/trackactivity feeds, remaining grid/pit/sector/deeper detail extraction beyond imported INDY NXT complete and partial lap-chart samples plus Results PDF penalty/caution rows, FRP grid-position-loss announcements, and Formula Ford matched grid/WHT penalty notes, and track metadata for future imported tracks remain open."
+    }
+  ],
+  "canceledSessionEvidence": [
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "officialSessionId": "6489",
+      "year": 2024,
+      "sessionName": "Qualifications",
+      "files": [
+        "data/career/raw/indy-nxt/report-details/2024-6489-section_results.layout.txt",
+        "data/career/raw/indy-nxt/report-details/2024-6489-top_section_times.raw.txt"
+      ],
+      "evidenceText": "Qualifications - Cancelled                                                                                                         September 14, 2024"
+    },
+    {
+      "sessionId": "session_indy_nxt_2025_6596",
+      "officialSessionId": "6596",
+      "year": 2025,
+      "sessionName": "Qualifications",
+      "files": [
+        "data/career/raw/indy-nxt/report-details/2025-6596-section_results.layout.txt",
+        "data/career/raw/indy-nxt/report-details/2025-6596-top_section_times.raw.txt"
+      ],
+      "evidenceText": "Qualifications - Canceled"
+    }
+  ]
+}

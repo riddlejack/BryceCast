@@ -1,0 +1,31 @@
+{
+  "checkedAt": "2026-06-08T15:13:40.344Z",
+  "refresh": false,
+  "pagesChecked": 3,
+  "pagesImported": 3,
+  "fetched": 0,
+  "cached": 3,
+  "rawArtifacts": [
+    "data/career/raw/team-usa/team-usa-2020-winners-announcement.html",
+    "data/career/raw/team-usa/team-usa-2020-bryce-aron-blog.html",
+    "data/career/raw/team-usa/team-usa-2020-walter-hayes-report.html"
+  ],
+  "sourceEvidenceIds": [
+    "source_team_usa_2020_winners_announcement",
+    "source_team_usa_2020_bryce_aron_blog",
+    "source_team_usa_2020_walter_hayes_report"
+  ],
+  "mediaAssetIds": [
+    "asset_team_usa_2020_winners_announcement",
+    "asset_team_usa_2020_bryce_aron_blog",
+    "asset_team_usa_2020_walter_hayes_report"
+  ],
+  "derivedMetricIds": [
+    "metric_team_usa_2020_scholarship_selection",
+    "metric_team_usa_2020_bkc_tag_jr_champion",
+    "metric_team_usa_2020_yamaha_kt100_runner_up",
+    "metric_team_usa_2020_frp_f1600_podiums_context"
+  ],
+  "tlsCertificateCaveat": "Team USA Scholarship HTTPS certificate is expired; importer disables TLS verification only for these public page fetches.",
+  "failures": []
+}

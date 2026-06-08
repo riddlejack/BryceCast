@@ -1,0 +1,36 @@
+{
+  "checkedAt": "2026-06-08T15:13:44.060Z",
+  "dataset": "/Users/example/Documents/Bryce POV access/data/career/career.dataset.json",
+  "ok": true,
+  "counts": {
+    "drivers": 558,
+    "series": 7,
+    "teams": 75,
+    "cars": 512,
+    "tracks": 42,
+    "seasons": 10,
+    "events": 87,
+    "sessions": 469,
+    "results": 8194,
+    "qualifyingResults": 1547,
+    "lapSamples": 67668,
+    "racecraftEvents": 35,
+    "penalties": 82,
+    "incidents": 132,
+    "weatherObservations": 86,
+    "mediaAssets": 940,
+    "broadcastRoutes": 0,
+    "notificationRules": 0,
+    "notificationEvents": 0,
+    "derivedMetrics": 370,
+    "sourceEvidence": 1093,
+    "gaps": 8
+  },
+  "issues": [
+    {
+      "severity": "warn",
+      "path": "sessions.timeCoverage",
+      "message": "9 physical sessions do not yet have scheduledStart or actualStart. Weather/live joins must wait for session time backfill."
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "checkedAt": "2026-06-08T15:13:25.188Z",
+  "year": 2025,
+  "refresh": false,
+  "fetched": 0,
+  "cached": 3,
+  "classificationRowsImported": 61,
+  "driverResultRowsImported": 236,
+  "bryceResultRowsImported": 1,
+  "lapSamplesImported": 37885,
+  "bryceCarLapSamplesImported": 780,
+  "weatherObservationsImported": 1,
+  "rawArtifacts": [
+    "data/career/raw/imsa/2025-daytona_rolex_24-race-official.json",
+    "data/career/raw/imsa/2025-daytona_rolex_24-race-official.csv",
+    "data/career/raw/imsa/2025-daytona_rolex_24-time-cards.json"
+  ],
+  "gaps": []
+}

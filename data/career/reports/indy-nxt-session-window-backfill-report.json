@@ -1,0 +1,834 @@
+{
+  "checkedAt": "2026-06-08T15:13:35.857Z",
+  "refresh": false,
+  "sources": {
+    "trackActivity": {
+      "sourceUrl": "https://indycar.blob.core.windows.net/racecontrol/trackactivityleaderboardfeed_nxt.json",
+      "rawArtifactPath": "data/career/raw/indy-nxt/racecontrol/trackactivityleaderboardfeed_nxt.json",
+      "fetched": 0,
+      "cached": 1
+    },
+    "schedule": {
+      "sourceUrl": "https://indycar.blob.core.windows.net/racecontrol/schedulefeed_nxt.json",
+      "rawArtifactPath": "data/career/raw/indy-nxt/racecontrol/schedulefeed_nxt.json",
+      "fetched": 0,
+      "cached": 1
+    }
+  },
+  "feedSessions": 25,
+  "scheduleFeedSessions": 38,
+  "directCanonicalMatches": 9,
+  "scheduleCanonicalMatches": 11,
+  "scheduleGreenFlagCanonicalMatches": 1,
+  "sessionsUpdated": [
+    {
+      "sessionId": "session_indy_nxt_2026_6850",
+      "officialSessionId": "6850",
+      "scheduledStart": "2026-05-29T14:00:00",
+      "actualStart": "2026-05-29T14:00:00",
+      "scheduledEnd": "2026-05-29T14:45:00",
+      "timezone": "America/Detroit",
+      "sourceStartUtc": "2026-05-29T18:00:00Z",
+      "sourceEstimatedGreenFlagUtc": "2026-05-29T18:00:00Z"
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6851",
+      "officialSessionId": "6851",
+      "scheduledStart": "2026-05-30T08:00:00",
+      "actualStart": "2026-05-30T08:00:00",
+      "scheduledEnd": "2026-05-30T08:45:00",
+      "timezone": "America/Detroit",
+      "sourceStartUtc": "2026-05-30T12:00:00Z",
+      "sourceEstimatedGreenFlagUtc": "2026-05-30T12:00:00Z"
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6852",
+      "officialSessionId": "6852",
+      "scheduledStart": "2026-05-30T12:00:00",
+      "actualStart": "2026-05-30T12:00:00",
+      "scheduledEnd": "2026-05-30T12:12:00",
+      "timezone": "America/Detroit",
+      "sourceStartUtc": "2026-05-30T16:00:00Z",
+      "sourceEstimatedGreenFlagUtc": "2026-05-30T16:00:00Z"
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6853",
+      "officialSessionId": "6853",
+      "scheduledStart": "2026-05-30T12:18:00",
+      "actualStart": "2026-05-30T12:18:00",
+      "scheduledEnd": "2026-05-30T12:30:00",
+      "timezone": "America/Detroit",
+      "sourceStartUtc": "2026-05-30T16:18:00Z",
+      "sourceEstimatedGreenFlagUtc": "2026-05-30T16:18:00Z"
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6854",
+      "officialSessionId": "6854",
+      "scheduledStart": "2026-05-30T12:30:00",
+      "actualStart": "2026-05-30T12:30:00",
+      "scheduledEnd": "2026-05-30T12:35:00",
+      "timezone": "America/Detroit",
+      "sourceStartUtc": "2026-05-30T16:30:00Z",
+      "sourceEstimatedGreenFlagUtc": "2026-05-30T16:30:00Z"
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6749",
+      "officialSessionId": "6749",
+      "scheduledStart": "2026-05-31T10:30:00",
+      "actualStart": "2026-05-31T10:36:00",
+      "scheduledEnd": "2026-05-31T11:30:00",
+      "timezone": "America/Detroit",
+      "sourceStartUtc": "2026-05-31T14:30:00Z",
+      "sourceEstimatedGreenFlagUtc": "2026-05-31T14:36:00Z"
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6863",
+      "officialSessionId": "6863",
+      "scheduledStart": "2026-06-06T14:00:00",
+      "actualStart": "2026-06-06T14:05:00",
+      "scheduledEnd": "2026-06-06T15:00:00",
+      "timezone": "America/Chicago",
+      "sourceStartUtc": "2026-06-06T19:00:00Z",
+      "sourceEstimatedGreenFlagUtc": "2026-06-06T19:05:00Z"
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6864",
+      "officialSessionId": "6864",
+      "scheduledStart": "2026-06-06T17:00:00",
+      "actualStart": "2026-06-06T17:05:00",
+      "scheduledEnd": "2026-06-06T18:00:00",
+      "timezone": "America/Chicago",
+      "sourceStartUtc": "2026-06-06T22:00:00Z",
+      "sourceEstimatedGreenFlagUtc": "2026-06-06T22:05:00Z"
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6763",
+      "officialSessionId": "6763",
+      "scheduledStart": "2026-06-07T16:30:00",
+      "actualStart": "2026-06-07T16:35:00",
+      "scheduledEnd": "2026-06-07T17:30:00",
+      "timezone": "America/Chicago",
+      "sourceStartUtc": "2026-06-07T21:30:00Z",
+      "sourceEstimatedGreenFlagUtc": "2026-06-07T21:35:00Z"
+    }
+  ],
+  "scheduleSessionsUpdated": [
+    {
+      "sessionId": "session_indy_nxt_2026_6766",
+      "eventId": "5534",
+      "scheduleLabel": "INDY NXT - Practice 1",
+      "scheduledStart": "2026-02-27T12:30:00",
+      "scheduledEnd": "2026-02-27T13:30:00",
+      "timezone": "America/New_York",
+      "sourceStartUtc": "2026-02-27T17:30:00Z",
+      "sourceEndUtc": "2026-02-27T18:30:00Z"
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6767",
+      "eventId": "5534",
+      "scheduleLabel": "INDY NXT - Practice 2",
+      "scheduledStart": "2026-02-28T08:30:00",
+      "scheduledEnd": "2026-02-28T09:30:00",
+      "timezone": "America/New_York",
+      "sourceStartUtc": "2026-02-28T13:30:00Z",
+      "sourceEndUtc": "2026-02-28T14:30:00Z"
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6751",
+      "eventId": "5534",
+      "scheduleLabel": "INDY NXT - Race",
+      "scheduledStart": "2026-03-01T10:00:00",
+      "scheduledEnd": "2026-03-01T11:00:00",
+      "timezone": "America/New_York",
+      "sourceStartUtc": "2026-03-01T15:00:00Z",
+      "sourceEndUtc": "2026-03-01T16:00:00Z"
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6783",
+      "eventId": "5536",
+      "scheduleLabel": "INDY NXT - Practice 1",
+      "scheduledStart": "2026-03-13T14:00:00",
+      "scheduledEnd": "2026-03-13T15:00:00",
+      "timezone": "America/Chicago",
+      "sourceStartUtc": "2026-03-13T19:00:00Z",
+      "sourceEndUtc": "2026-03-13T20:00:00Z"
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6784",
+      "eventId": "5536",
+      "scheduleLabel": "INDY NXT - Practice 2",
+      "scheduledStart": "2026-03-14T10:00:00",
+      "scheduledEnd": "2026-03-14T11:00:00",
+      "timezone": "America/Chicago",
+      "sourceStartUtc": "2026-03-14T15:00:00Z",
+      "sourceEndUtc": "2026-03-14T16:00:00Z"
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6753",
+      "eventId": "5536",
+      "scheduleLabel": "INDY NXT - Race",
+      "scheduledStart": "2026-03-15T09:30:00",
+      "scheduledEnd": "2026-03-15T10:30:00",
+      "timezone": "America/Chicago",
+      "sourceStartUtc": "2026-03-15T14:30:00Z",
+      "sourceEndUtc": "2026-03-15T15:30:00Z"
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6804",
+      "eventId": "5533",
+      "scheduleLabel": "INDY NXT - Practice",
+      "scheduledStart": "2026-03-27T13:30:00",
+      "scheduledEnd": "2026-03-27T14:30:00",
+      "timezone": "America/Chicago",
+      "sourceStartUtc": "2026-03-27T18:30:00Z",
+      "sourceEndUtc": "2026-03-27T19:30:00Z"
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6752",
+      "eventId": "5535",
+      "scheduleLabel": "INDY NXT - Race 2",
+      "scheduledStart": "2026-03-29T10:00:00",
+      "scheduledEnd": "2026-03-29T11:00:00",
+      "timezone": "America/Chicago",
+      "sourceStartUtc": "2026-03-29T15:00:00Z",
+      "sourceEndUtc": "2026-03-29T16:00:00Z"
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6828",
+      "eventId": "5539",
+      "scheduleLabel": "INDY NXT - Practice ",
+      "scheduledStart": "2026-05-08T08:00:00",
+      "scheduledEnd": "2026-05-08T09:00:00",
+      "timezone": "America/Indiana/Indianapolis",
+      "sourceStartUtc": "2026-05-08T12:00:00Z",
+      "sourceEndUtc": "2026-05-08T13:00:00Z"
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6756",
+      "eventId": "5539",
+      "scheduleLabel": "INDY NXT - Race 1",
+      "scheduledStart": "2026-05-08T16:00:00",
+      "scheduledEnd": "2026-05-08T17:00:00",
+      "timezone": "America/Indiana/Indianapolis",
+      "sourceStartUtc": "2026-05-08T20:00:00Z",
+      "sourceEndUtc": "2026-05-08T21:00:00Z"
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6765",
+      "eventId": "5548",
+      "scheduleLabel": "INDY NXT - Race 2",
+      "scheduledStart": "2026-05-09T14:30:00",
+      "scheduledEnd": "2026-05-09T15:30:00",
+      "timezone": "America/Indiana/Indianapolis",
+      "sourceStartUtc": "2026-05-09T18:30:00Z",
+      "sourceEndUtc": "2026-05-09T19:30:00Z"
+    }
+  ],
+  "scheduleGreenFlagSessionsUpdated": [
+    {
+      "sessionId": "session_indy_nxt_2026_6750",
+      "eventId": "5533",
+      "eventName": "Grand Prix of Alabama Race 1",
+      "scheduledStart": "2026-03-28T12:00:00",
+      "timezone": "America/Chicago",
+      "sourceGreenFlagUtc": "2026-03-28T17:00:00Z"
+    }
+  ],
+  "scheduleOnlyEventsCreated": [],
+  "scheduleOnlySessionsCreated": [],
+  "scheduleOnlySessionsUpdated": [
+    {
+      "sessionId": "session_indy_nxt_2026_6869",
+      "officialSessionId": "6869",
+      "eventId": "event_indy_nxt_2026_5545",
+      "officialEventId": "5545",
+      "sessionLabel": "Practice",
+      "sessionType": "practice",
+      "scheduledStart": "2026-06-19T14:00:00",
+      "actualStart": "2026-06-19T14:00:00",
+      "scheduledEnd": "2026-06-19T15:00:00",
+      "timezone": "America/Chicago",
+      "sourceStartUtc": "2026-06-19T19:00:00Z",
+      "sourceEstimatedGreenFlagUtc": "2026-06-19T19:00:00Z"
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6870",
+      "officialSessionId": "6870",
+      "eventId": "event_indy_nxt_2026_5545",
+      "officialEventId": "5545",
+      "sessionLabel": "Qualifying - Race 1 Group 1",
+      "sessionType": "qualifying",
+      "scheduledStart": "2026-06-20T09:00:00",
+      "actualStart": "2026-06-20T09:00:00",
+      "scheduledEnd": "2026-06-20T09:12:00",
+      "timezone": "America/Chicago",
+      "sourceStartUtc": "2026-06-20T14:00:00Z",
+      "sourceEstimatedGreenFlagUtc": "2026-06-20T14:00:00Z"
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6871",
+      "officialSessionId": "6871",
+      "eventId": "event_indy_nxt_2026_5545",
+      "officialEventId": "5545",
+      "sessionLabel": "Qualifying - Race 1 Group 2",
+      "sessionType": "qualifying",
+      "scheduledStart": "2026-06-20T09:18:00",
+      "actualStart": "2026-06-20T09:18:00",
+      "scheduledEnd": "2026-06-20T09:30:00",
+      "timezone": "America/Chicago",
+      "sourceStartUtc": "2026-06-20T14:18:00Z",
+      "sourceEstimatedGreenFlagUtc": "2026-06-20T14:18:00Z"
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6872",
+      "officialSessionId": "6872",
+      "eventId": "event_indy_nxt_2026_5545",
+      "officialEventId": "5545",
+      "sessionLabel": "Combined Qualifying - Race 1",
+      "sessionType": "qualifying",
+      "scheduledStart": "2026-06-20T09:30:00",
+      "actualStart": "2026-06-20T09:30:00",
+      "scheduledEnd": "2026-06-20T09:35:00",
+      "timezone": "America/Chicago",
+      "sourceStartUtc": "2026-06-20T14:30:00Z",
+      "sourceEstimatedGreenFlagUtc": "2026-06-20T14:30:00Z"
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6762",
+      "officialSessionId": "6762",
+      "eventId": "event_indy_nxt_2026_5545",
+      "officialEventId": "5545",
+      "sessionLabel": "Race",
+      "sessionType": "race",
+      "scheduledStart": "2026-06-20T11:30:00",
+      "actualStart": "2026-06-20T11:36:00",
+      "scheduledEnd": "2026-06-20T12:30:00",
+      "timezone": "America/Chicago",
+      "sourceStartUtc": "2026-06-20T16:30:00Z",
+      "sourceEstimatedGreenFlagUtc": "2026-06-20T16:36:00Z"
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6873",
+      "officialSessionId": "6873",
+      "eventId": "event_indy_nxt_2026_5537",
+      "officialEventId": "5537",
+      "sessionLabel": "Qualifying - Race 2 Group 1",
+      "sessionType": "qualifying",
+      "scheduledStart": "2026-06-20T09:00:00",
+      "actualStart": "2026-06-20T09:00:00",
+      "scheduledEnd": "2026-06-20T09:12:00",
+      "timezone": "America/Chicago",
+      "sourceStartUtc": "2026-06-20T14:00:00Z",
+      "sourceEstimatedGreenFlagUtc": "2026-06-20T14:00:00Z"
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6874",
+      "officialSessionId": "6874",
+      "eventId": "event_indy_nxt_2026_5537",
+      "officialEventId": "5537",
+      "sessionLabel": "Qualifying - Race 2 Group 2",
+      "sessionType": "qualifying",
+      "scheduledStart": "2026-06-20T09:18:00",
+      "actualStart": "2026-06-20T09:18:00",
+      "scheduledEnd": "2026-06-20T09:30:00",
+      "timezone": "America/Chicago",
+      "sourceStartUtc": "2026-06-20T14:18:00Z",
+      "sourceEstimatedGreenFlagUtc": "2026-06-20T14:18:00Z"
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6875",
+      "officialSessionId": "6875",
+      "eventId": "event_indy_nxt_2026_5537",
+      "officialEventId": "5537",
+      "sessionLabel": "Combined Qualifying - Race 2",
+      "sessionType": "qualifying",
+      "scheduledStart": "2026-06-20T09:30:00",
+      "actualStart": "2026-06-20T09:30:00",
+      "scheduledEnd": "2026-06-20T09:35:00",
+      "timezone": "America/Chicago",
+      "sourceStartUtc": "2026-06-20T14:30:00Z",
+      "sourceEstimatedGreenFlagUtc": "2026-06-20T14:30:00Z"
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6754",
+      "officialSessionId": "6754",
+      "eventId": "event_indy_nxt_2026_5537",
+      "officialEventId": "5537",
+      "sessionLabel": "Race",
+      "sessionType": "race",
+      "scheduledStart": "2026-06-21T11:00:00",
+      "actualStart": "2026-06-21T11:06:00",
+      "scheduledEnd": "2026-06-21T12:00:00",
+      "timezone": "America/Chicago",
+      "sourceStartUtc": "2026-06-21T16:00:00Z",
+      "sourceEstimatedGreenFlagUtc": "2026-06-21T16:06:00Z"
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6761",
+      "officialSessionId": "6761",
+      "eventId": "event_indy_nxt_2026_5544",
+      "officialEventId": "5544",
+      "sessionLabel": "Race",
+      "sessionType": "race",
+      "scheduledStart": "2026-07-04T13:00:00",
+      "actualStart": null,
+      "scheduledEnd": "2026-07-04T14:00:00",
+      "timezone": "America/New_York",
+      "sourceStartUtc": "2026-07-04T17:00:00Z",
+      "sourceEstimatedGreenFlagUtc": null
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6760",
+      "officialSessionId": "6760",
+      "eventId": "event_indy_nxt_2026_5543",
+      "officialEventId": "5543",
+      "sessionLabel": "Race",
+      "sessionType": "race",
+      "scheduledStart": "2026-07-05T10:00:00",
+      "actualStart": null,
+      "scheduledEnd": "2026-07-05T11:00:00",
+      "timezone": "America/New_York",
+      "sourceStartUtc": "2026-07-05T14:00:00Z",
+      "sourceEstimatedGreenFlagUtc": null
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6755",
+      "officialSessionId": "6755",
+      "eventId": "event_indy_nxt_2026_5538",
+      "officialEventId": "5538",
+      "sessionLabel": "Race",
+      "sessionType": "race",
+      "scheduledStart": "2026-07-18T23:00:00",
+      "actualStart": null,
+      "scheduledEnd": "2026-07-18T23:00:00",
+      "timezone": "America/Chicago",
+      "sourceStartUtc": "2026-07-19T04:00:00Z",
+      "sourceEstimatedGreenFlagUtc": null
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6764",
+      "officialSessionId": "6764",
+      "eventId": "event_indy_nxt_2026_5547",
+      "officialEventId": "5547",
+      "sessionLabel": "Race",
+      "sessionType": "race",
+      "scheduledStart": "2026-08-09T11:00:00",
+      "actualStart": null,
+      "scheduledEnd": "2026-08-09T12:00:00",
+      "timezone": "America/Los_Angeles",
+      "sourceStartUtc": "2026-08-09T18:00:00Z",
+      "sourceEstimatedGreenFlagUtc": null
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6757",
+      "officialSessionId": "6757",
+      "eventId": "event_indy_nxt_2026_5540",
+      "officialEventId": "5540",
+      "sessionLabel": "Race",
+      "sessionType": "race",
+      "scheduledStart": "2026-08-30T10:00:00",
+      "actualStart": null,
+      "scheduledEnd": "2026-08-30T11:00:00",
+      "timezone": "America/Chicago",
+      "sourceStartUtc": "2026-08-30T15:00:00Z",
+      "sourceEstimatedGreenFlagUtc": null
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6759",
+      "officialSessionId": "6759",
+      "eventId": "event_indy_nxt_2026_5542",
+      "officialEventId": "5542",
+      "sessionLabel": "Race",
+      "sessionType": "race",
+      "scheduledStart": "2026-09-05T15:30:00",
+      "actualStart": null,
+      "scheduledEnd": "2026-09-05T16:30:00",
+      "timezone": "America/Los_Angeles",
+      "sourceStartUtc": "2026-09-05T22:30:00Z",
+      "sourceEstimatedGreenFlagUtc": null
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6758",
+      "officialSessionId": "6758",
+      "eventId": "event_indy_nxt_2026_5541",
+      "officialEventId": "5541",
+      "sessionLabel": "Race",
+      "sessionType": "race",
+      "scheduledStart": "2026-09-06T09:30:00",
+      "actualStart": null,
+      "scheduledEnd": "2026-09-06T10:30:00",
+      "timezone": "America/Los_Angeles",
+      "sourceStartUtc": "2026-09-06T16:30:00Z",
+      "sourceEstimatedGreenFlagUtc": null
+    }
+  ],
+  "scheduleSessionsSkipped": [
+    {
+      "eventId": "5534",
+      "eventName": "Grand Prix of St. Petersburg",
+      "scheduleLabel": "INDY NXT - Qualifications",
+      "reason": "unsupported_or_ambiguous_schedule_label"
+    },
+    {
+      "eventId": "5536",
+      "eventName": "Grand Prix of Arlington",
+      "scheduleLabel": "INDY NXT - Qualifications",
+      "reason": "unsupported_or_ambiguous_schedule_label"
+    },
+    {
+      "eventId": "5535",
+      "eventName": "Grand Prix of Alabama Race 2",
+      "scheduleLabel": "INDY NXT - Qualifying",
+      "reason": "unsupported_or_ambiguous_schedule_label"
+    },
+    {
+      "eventId": "5535",
+      "eventName": "Grand Prix of Alabama Race 2",
+      "scheduleLabel": "INDY NXT - Race 1",
+      "matchKey": "race 1",
+      "reason": "no_unambiguous_canonical_session",
+      "candidateSessionIds": []
+    },
+    {
+      "eventId": "5539",
+      "eventName": "Indianapolis Grand Prix Race 1",
+      "scheduleLabel": "INDY NXT - Qualifying",
+      "reason": "unsupported_or_ambiguous_schedule_label"
+    },
+    {
+      "eventId": "5539",
+      "eventName": "Indianapolis Grand Prix Race 1",
+      "scheduleLabel": "INDY NXT - Race 2",
+      "matchKey": "race 2",
+      "reason": "no_unambiguous_canonical_session",
+      "candidateSessionIds": []
+    },
+    {
+      "eventId": "5548",
+      "eventName": "Indianapolis Grand Prix Race 2",
+      "scheduleLabel": "INDY NXT - Qualifying",
+      "reason": "unsupported_or_ambiguous_schedule_label"
+    },
+    {
+      "eventId": "5532",
+      "eventName": "Detroit Grand Prix",
+      "scheduleLabel": "INDY NXT - Practice 1",
+      "matchKey": "practice 1",
+      "reason": "higher_priority_trackactivity_window_exists",
+      "candidateSessionIds": [
+        "session_indy_nxt_2026_6850"
+      ]
+    },
+    {
+      "eventId": "5532",
+      "eventName": "Detroit Grand Prix",
+      "scheduleLabel": "INDY NXT - Practice 2",
+      "matchKey": "practice 2",
+      "reason": "higher_priority_trackactivity_window_exists",
+      "candidateSessionIds": [
+        "session_indy_nxt_2026_6851"
+      ]
+    },
+    {
+      "eventId": "5532",
+      "eventName": "Detroit Grand Prix",
+      "scheduleLabel": "INDY NXT - Qualifying",
+      "reason": "unsupported_or_ambiguous_schedule_label"
+    },
+    {
+      "eventId": "5532",
+      "eventName": "Detroit Grand Prix",
+      "scheduleLabel": "INDY NXT - Race",
+      "matchKey": "race",
+      "reason": "higher_priority_trackactivity_window_exists",
+      "candidateSessionIds": [
+        "session_indy_nxt_2026_6749"
+      ]
+    },
+    {
+      "eventId": "5546",
+      "eventName": "INDY NXT by Firestone at World Wide Technology Raceway",
+      "scheduleLabel": "INDY NXT - Practice",
+      "matchKey": "practice",
+      "reason": "higher_priority_trackactivity_window_exists",
+      "candidateSessionIds": [
+        "session_indy_nxt_2026_6863"
+      ]
+    },
+    {
+      "eventId": "5546",
+      "eventName": "INDY NXT by Firestone at World Wide Technology Raceway",
+      "scheduleLabel": "INDY NXT - Qualifying",
+      "reason": "unsupported_or_ambiguous_schedule_label"
+    },
+    {
+      "eventId": "5546",
+      "eventName": "INDY NXT by Firestone at World Wide Technology Raceway",
+      "scheduleLabel": "INDY NXT - Race",
+      "matchKey": "race",
+      "reason": "higher_priority_trackactivity_window_exists",
+      "candidateSessionIds": [
+        "session_indy_nxt_2026_6763"
+      ]
+    },
+    {
+      "eventId": "5545",
+      "eventName": "Grand Prix at Road America Race 1",
+      "scheduleLabel": "INDY NXT - Practice",
+      "matchKey": "practice",
+      "reason": "higher_priority_trackactivity_window_exists",
+      "candidateSessionIds": [
+        "session_indy_nxt_2026_6869"
+      ]
+    },
+    {
+      "eventId": "5545",
+      "eventName": "Grand Prix at Road America Race 1",
+      "scheduleLabel": "INDY NXT - Qualifying",
+      "reason": "unsupported_or_ambiguous_schedule_label"
+    },
+    {
+      "eventId": "5545",
+      "eventName": "Grand Prix at Road America Race 1",
+      "scheduleLabel": "INDY NXT - Race 1",
+      "matchKey": "race 1",
+      "reason": "higher_priority_trackactivity_window_exists",
+      "candidateSessionIds": [
+        "session_indy_nxt_2026_6762"
+      ]
+    },
+    {
+      "eventId": "5545",
+      "eventName": "Grand Prix at Road America Race 1",
+      "scheduleLabel": "INDY NXT - Race 2",
+      "matchKey": "race 2",
+      "reason": "no_unambiguous_canonical_session",
+      "candidateSessionIds": []
+    },
+    {
+      "eventId": "5537",
+      "eventName": "Grand Prix at Road America Race 2",
+      "scheduleLabel": "INDY NXT - Qualifying",
+      "reason": "unsupported_or_ambiguous_schedule_label"
+    },
+    {
+      "eventId": "5537",
+      "eventName": "Grand Prix at Road America Race 2",
+      "scheduleLabel": "INDY NXT - Race 2",
+      "matchKey": "race 2",
+      "reason": "higher_priority_trackactivity_window_exists",
+      "candidateSessionIds": [
+        "session_indy_nxt_2026_6754"
+      ]
+    },
+    {
+      "eventId": "5544",
+      "eventName": "Grand Prix at Mid-Ohio Race 1",
+      "scheduleLabel": "INDY NXT - Race 1",
+      "matchKey": "race 1",
+      "reason": "higher_priority_trackactivity_window_exists",
+      "candidateSessionIds": [
+        "session_indy_nxt_2026_6761"
+      ]
+    },
+    {
+      "eventId": "5543",
+      "eventName": "Grand Prix at Mid-Ohio Race 2",
+      "scheduleLabel": "INDY NXT - Race 2",
+      "matchKey": "race 2",
+      "reason": "higher_priority_trackactivity_window_exists",
+      "candidateSessionIds": [
+        "session_indy_nxt_2026_6760"
+      ]
+    },
+    {
+      "eventId": "5538",
+      "eventName": "Music City Grand Prix",
+      "scheduleLabel": "INDY NXT - Race",
+      "matchKey": "race",
+      "reason": "higher_priority_trackactivity_window_exists",
+      "candidateSessionIds": [
+        "session_indy_nxt_2026_6755"
+      ]
+    },
+    {
+      "eventId": "5547",
+      "eventName": "Grand Prix of Portland",
+      "scheduleLabel": "INDY NXT - Race",
+      "matchKey": "race",
+      "reason": "higher_priority_trackactivity_window_exists",
+      "candidateSessionIds": [
+        "session_indy_nxt_2026_6764"
+      ]
+    },
+    {
+      "eventId": "5540",
+      "eventName": "INDY NXT by Firestone at Milwaukee Mile",
+      "scheduleLabel": "INDY NXT - Race",
+      "matchKey": "race",
+      "reason": "higher_priority_trackactivity_window_exists",
+      "candidateSessionIds": [
+        "session_indy_nxt_2026_6757"
+      ]
+    },
+    {
+      "eventId": "5542",
+      "eventName": "Grand Prix of Monterey Race 1",
+      "scheduleLabel": "INDY NXT - Race 1",
+      "matchKey": "race 1",
+      "reason": "higher_priority_trackactivity_window_exists",
+      "candidateSessionIds": [
+        "session_indy_nxt_2026_6759"
+      ]
+    },
+    {
+      "eventId": "5541",
+      "eventName": "Grand Prix of Monterey Race 2",
+      "scheduleLabel": "INDY NXT - Race 2",
+      "matchKey": "race 2",
+      "reason": "higher_priority_trackactivity_window_exists",
+      "candidateSessionIds": [
+        "session_indy_nxt_2026_6758"
+      ]
+    }
+  ],
+  "scheduleGreenFlagSessionsSkipped": [
+    {
+      "eventId": "5534",
+      "eventName": "Grand Prix of St. Petersburg",
+      "reason": "higher_priority_window_exists",
+      "candidateSessionIds": [
+        "session_indy_nxt_2026_6751"
+      ]
+    },
+    {
+      "eventId": "5536",
+      "eventName": "Grand Prix of Arlington",
+      "reason": "higher_priority_window_exists",
+      "candidateSessionIds": [
+        "session_indy_nxt_2026_6753"
+      ]
+    },
+    {
+      "eventId": "5535",
+      "eventName": "Grand Prix of Alabama Race 2",
+      "reason": "higher_priority_window_exists",
+      "candidateSessionIds": [
+        "session_indy_nxt_2026_6752"
+      ]
+    },
+    {
+      "eventId": "5539",
+      "eventName": "Indianapolis Grand Prix Race 1",
+      "reason": "higher_priority_window_exists",
+      "candidateSessionIds": [
+        "session_indy_nxt_2026_6756"
+      ]
+    },
+    {
+      "eventId": "5548",
+      "eventName": "Indianapolis Grand Prix Race 2",
+      "reason": "higher_priority_window_exists",
+      "candidateSessionIds": [
+        "session_indy_nxt_2026_6765"
+      ]
+    },
+    {
+      "eventId": "5532",
+      "eventName": "Detroit Grand Prix",
+      "reason": "higher_priority_window_exists",
+      "candidateSessionIds": [
+        "session_indy_nxt_2026_6749"
+      ]
+    },
+    {
+      "eventId": "5546",
+      "eventName": "INDY NXT by Firestone at World Wide Technology Raceway",
+      "reason": "higher_priority_window_exists",
+      "candidateSessionIds": [
+        "session_indy_nxt_2026_6763"
+      ]
+    },
+    {
+      "eventId": "5545",
+      "eventName": "Grand Prix at Road America Race 1",
+      "reason": "higher_priority_window_exists",
+      "candidateSessionIds": [
+        "session_indy_nxt_2026_6762"
+      ]
+    },
+    {
+      "eventId": "5537",
+      "eventName": "Grand Prix at Road America Race 2",
+      "reason": "higher_priority_window_exists",
+      "candidateSessionIds": [
+        "session_indy_nxt_2026_6754"
+      ]
+    },
+    {
+      "eventId": "5544",
+      "eventName": "Grand Prix at Mid-Ohio Race 1",
+      "reason": "higher_priority_window_exists",
+      "candidateSessionIds": [
+        "session_indy_nxt_2026_6761"
+      ]
+    },
+    {
+      "eventId": "5543",
+      "eventName": "Grand Prix at Mid-Ohio Race 2",
+      "reason": "higher_priority_window_exists",
+      "candidateSessionIds": [
+        "session_indy_nxt_2026_6760"
+      ]
+    },
+    {
+      "eventId": "5538",
+      "eventName": "Music City Grand Prix",
+      "reason": "higher_priority_window_exists",
+      "candidateSessionIds": [
+        "session_indy_nxt_2026_6755"
+      ]
+    },
+    {
+      "eventId": "5547",
+      "eventName": "Grand Prix of Portland",
+      "reason": "higher_priority_window_exists",
+      "candidateSessionIds": [
+        "session_indy_nxt_2026_6764"
+      ]
+    },
+    {
+      "eventId": "5540",
+      "eventName": "INDY NXT by Firestone at Milwaukee Mile",
+      "reason": "higher_priority_window_exists",
+      "candidateSessionIds": [
+        "session_indy_nxt_2026_6757"
+      ]
+    },
+    {
+      "eventId": "5542",
+      "eventName": "Grand Prix of Monterey Race 1",
+      "reason": "higher_priority_window_exists",
+      "candidateSessionIds": [
+        "session_indy_nxt_2026_6759"
+      ]
+    },
+    {
+      "eventId": "5541",
+      "eventName": "Grand Prix of Monterey Race 2",
+      "reason": "higher_priority_window_exists",
+      "candidateSessionIds": [
+        "session_indy_nxt_2026_6758"
+      ]
+    }
+  ],
+  "feedSessionsWithoutCanonicalMatch": [],
+  "notes": [
+    "Only exact officialSessionId/sessionid matches are updated.",
+    "Trackactivity startdatetime becomes scheduledStart; estimatedgreenflag becomes actualStart when present because Race Control labels it as the expected green flag rather than the post-session official start.",
+    "Race Control datetime strings are treated as UTC source values and converted to event-local timestamps before canonical storage.",
+    "Schedule-feed updates require exact eventid plus an unambiguous normalized practice/race label. Qualifying rows are skipped because schedule labels do not expose canonical group timing.",
+    "Event-level green_flag values are used only for exact-event race sessions that do not already have a higher-priority trackactivity or broadcast schedule window.",
+    "Future Race Control trackactivity sessions can create schedule-only canonical event/session rows when the event has a curated track mapping. These rows carry no result rows and remain status=scheduled until official result imports arrive."
+  ]
+}

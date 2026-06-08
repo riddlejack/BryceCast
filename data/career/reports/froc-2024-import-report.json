@@ -1,0 +1,69 @@
+{
+  "checkedAt": "2026-06-08T15:13:31.433Z",
+  "year": 2024,
+  "refresh": false,
+  "fetched": 0,
+  "cached": 12,
+  "roundsDiscovered": 5,
+  "tablesExtracted": 59,
+  "tableRowsExtracted": 944,
+  "sessionsImported": 52,
+  "classificationRowsImported": 832,
+  "raceRowsImported": 246,
+  "bryceRowsImported": 20,
+  "bryceRaceRowsImported": 6,
+  "gridRowsPreserved": 112,
+  "gridPdfRowsImported": 17,
+  "mediaAssetsImported": 22,
+  "dateConflicts": [
+    {
+      "round": 4,
+      "pageTitle": "Round 04: 16-18 February 2024",
+      "pageStartDate": "2024-02-16",
+      "pageEndDate": "2024-02-18",
+      "officialStartDate": "2024-02-09",
+      "officialEndDate": "2024-02-11",
+      "officialCalendarEvidence": "source_froc_2024_calendar_confirmed"
+    }
+  ],
+  "rawArtifacts": [
+    "data/career/raw/froc-2024/official-2024-calendar-confirmed.html",
+    "data/career/raw/froc-2024/round-1-taupo.html",
+    "data/career/raw/froc-2024/round-1-taupo.extracted.json",
+    "data/career/raw/froc-2024/round-2-manfeild.html",
+    "data/career/raw/froc-2024/round-2-manfeild.extracted.json",
+    "data/career/raw/froc-2024/round-2-manfeild-grid_r1.pdf",
+    "data/career/raw/froc-2024/round-2-manfeild-grid_r1.txt",
+    "data/career/raw/froc-2024/round-2-manfeild-grid_r2.pdf",
+    "data/career/raw/froc-2024/round-2-manfeild-grid_r2.txt",
+    "data/career/raw/froc-2024/round-2-manfeild-grid_r3.pdf",
+    "data/career/raw/froc-2024/round-2-manfeild-grid_r3.txt",
+    "data/career/raw/froc-2024/round-3-hampton-downs.html",
+    "data/career/raw/froc-2024/round-3-hampton-downs.extracted.json",
+    "data/career/raw/froc-2024/round-4-euromarque.html",
+    "data/career/raw/froc-2024/round-4-euromarque.extracted.json",
+    "data/career/raw/froc-2024/round-5-highlands.html",
+    "data/career/raw/froc-2024/round-5-highlands.extracted.json",
+    "data/career/raw/froc-2024/froc-2024-extracted-index.json"
+  ],
+  "gaps": [
+    {
+      "id": "gap_froc_2024_round_4_date_conflict",
+      "scope": "froc_2024",
+      "status": "open",
+      "description": "Toyota Round 4 results page title says 16-18 February 2024, while Toyota 2024 dates announcement places Euromarque Motorsport Park on 9-11 February 2024. Normalized event dates use 9-11 February and preserve the page-title conflict in event raw data."
+    },
+    {
+      "id": "gap_froc_2024_session_times_missing",
+      "scope": "froc_2024",
+      "status": "partial",
+      "description": "Official Toyota schedule images backfill practice, qualifying, and race starts for FROC 2024, and official Round 2 timing PDFs backfill Test 1 and Test 2. Official Toyota test-day articles are cached as date-level context for the other nine FROC test sessions, but those sessions remain unavailable for production session-hour weather joins because the official Toyota round pages expose test result tabs and article context but no official test timing PDF links or equivalent exact clock-time source for those sessions."
+    },
+    {
+      "id": "gap_froc_2024_start_positions_partial",
+      "scope": "froc_2024",
+      "status": "partial",
+      "description": "Toyota HTML Grid tabs, linked official grid PDFs, the official Taupo Qualifying 1/2 articles, the official Taupo Race 2 article, the official Euromarque Qualifying 1 article, the official Highlands Grand Prix qualifying-format article, and the official Highlands Race 2 article are normalized where present. FROC Round 1 Race 1 and Round 4 Race 1 start positions are imported from official Qualifying 1 articles plus qualifying tables. FROC Round 1 Race 2 top-eight start positions are imported from the official Race 2 reverse top-eight article rule plus Race 1 results, and Woods-Toth P16 is imported from the same article direct statement. FROC Round 1 Race 3 start positions are imported from the official Qualifying 2 article plus Qualifying 2 table. FROC Round 5 Race 1 and Grand Prix start positions are imported from the qualifying-format article plus qualifying tables. FROC Round 5 Race 2 top-eight start positions are imported from the official Race 2 article narrative. The remaining R1 Race 2 and R5 Race 2 tail start positions remain open until race-specific official grid evidence is found."
+    }
+  ]
+}

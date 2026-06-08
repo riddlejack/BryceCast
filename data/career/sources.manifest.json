@@ -1,0 +1,160 @@
+{
+  "schemaVersion": "bryce-career-sources.v1",
+  "updatedAt": "2026-06-08T15:00:00.000Z",
+  "sourcePriority": [
+    "official_api",
+    "official_page",
+    "official_pdf",
+    "team_page",
+    "driver_page",
+    "weather_api",
+    "aggregator",
+    "news",
+    "manual_note"
+  ],
+  "collectionPolicy": {
+    "apiFirst": true,
+    "rule": "Prefer official/public APIs and machine-readable feeds over scraping whenever an API exists. Use scraping only for fields unavailable through APIs, and preserve source provenance.",
+    "parallelism": "Use bounded concurrency for independent API calls. Push concurrency high during discovery, then back off only when source errors, rate limits, or data quality issues appear.",
+    "qualityBar": "Speed optimizations must not drop raw artifact preservation, provenance, validation, or source confidence labels.",
+    "outOfScope": "Do not collect social media data for the production career analytics dataset."
+  },
+  "workstreams": [
+    {
+      "id": "indy_nxt_official",
+      "label": "INDY NXT Official Results",
+      "status": "imported_primary_json",
+      "coverageTarget": "2024-2026 INDY NXT race/session/results/standings for Bryce Aron.",
+      "seedUrls": [
+        "https://www.indynxt.com/api/results/DriverYearDetails?year=2024&series=09341e09-3216-4f89-a45f-db697d72ee13&driverID=4959",
+        "https://www.indynxt.com/api/results/DriverYearDetails?year=2025&series=09341e09-3216-4f89-a45f-db697d72ee13&driverID=4959",
+        "https://www.indynxt.com/api/results/DriverYearDetails?year=2026&series=09341e09-3216-4f89-a45f-db697d72ee13&driverID=4959"
+      ],
+      "reliabilityTier": "official",
+      "notes": "Official API importer covers 2024-2026 SeasonDropDown, YearPointSummary, DriverYearDetails, EventsSessionDetails, 1,238 official INDY NXT qualifyingResults rows from SessionType=Q records, and linked SessionReports. Official Race Lap Chart PDF backfill imports 21,029 validated lap-by-lap position samples from 26 charts, including 958 Bryce samples; 10 charts are held out because parser validation found duplicate car-lap keys or completed-lap count mismatches. Track metadata backfill supplies session timezones. Official Race Control feeds now backfill 21 source-supported 2026 INDY NXT session windows: 9 trackactivity rows where feed sessionid matches canonical officialSessionId, 11 schedulefeed practice/race rows matched by exact event ID and unambiguous label, and 1 event-level schedulefeed green-flag race window. Race Control feed datetime strings are treated as source UTC and converted to canonical event-local timestamps; remaining qualifying-group, doubleheader, and future rows stay date-only unless a precise official window source is imported."
+    },
+    {
+      "id": "gb3_british_f3",
+      "label": "GB3 / British F3 Pathway",
+      "status": "gb3_2021_2022_imported_primary_official",
+      "coverageTarget": "Bryce Aron GB3/BRDC British F3-style seasons and race results.",
+      "seedUrls": [
+        "https://www.tsl-timing.com/Results/bf3gt/2021",
+        "https://www.gb-3.net/standings/2021-championship-standings/",
+        "https://web.archive.org/web/20211127043937id_/https://www.gb-3.net/standings/2021-championship-standings/",
+        "https://www.gb-3.net/drivers/2022/bryce-aron",
+        "https://www.gb-3.net/json/results/2022/22/_rounds.json",
+        "https://www.gb-3.net/json/results/2022/22/_standings.json",
+        "https://www.gb-3.net/json/results/2022/{sessionId}.json"
+      ],
+      "reliabilityTier": "official_plus_crosscheck",
+      "notes": "2021 official TSL/BRSCC PDFs and event pages are imported through scripts/import-gb3-2021-career.mjs, covering 7 events, 39 sessions, 684 result rows, 248 qualifying rows, 38 Bryce result rows, 39 official weather/track-condition observations, and 67 media/PDF assets. Official TSL Grid for Race 1, Grid for Race 2, and Grid for Race 3 PDFs source all 369 GB3 2021 race start/grid positions, including penalty-adjusted and reverse-grid Race 3 starts. An archived official GB3 2021 Championship Standings page supplies Bryce Aron P12 with 238 points. 2022 official GB3 JSON is also imported; Bryce appears in 76/76 working session JSON payloads. Session 1248 is retained from official _rounds.json as a manifest-only session with exact local start time, while its row-level JSON remains a known 404 source gap with no PDF fallback."
+    },
+    {
+      "id": "euroformula_open",
+      "label": "Euroformula Open",
+      "status": "euroformula_2023_imported_primary_pdf",
+      "coverageTarget": "Bryce Aron Euroformula Open event/session results.",
+      "seedUrls": [
+        "https://euroformula.gtsport.es/carreras?year=2023",
+        "https://euroformula.gtsport.es/api/race-results?limit=100",
+        "https://gtsports-media.s3.eu-west-3.amazonaws.com/euroformulaclasgen-9.pdf",
+        "https://www.rfeda.es/docs/pdf/historico-de-clasificaciones/CLASIFICACIONES AUTOMOVILISMO 2023- FINALES V 18-01-2024.pdf"
+      ],
+      "reliabilityTier": "official_plus_crosscheck",
+      "notes": "2023 official GT Sport/Euroformula race-document page imports 28 qualifying/race PDFs through scripts/import-euroformula-2023-career.mjs, including race grid/start positions from official position-chart Grid columns. Public race-results API currently returns no 2023 rows, and the supplied euroformulaclasgen-9.pdf S3 key now serves a 2026 provisional classification. Bryce's 2023 championship position and points are imported from the RFEDA 2023 final classifications PDF: P4, 238 points."
+    },
+    {
+      "id": "formula_regional_oceania",
+      "label": "Formula Regional Oceania",
+      "status": "froc_2024_imported_primary_html_tables_and_session_windows",
+      "coverageTarget": "Bryce Aron 2024 Formula Regional Oceania/Toyota Racing Series event/session results.",
+      "seedUrls": [
+        "https://www.toyota.co.nz/toyota-racing/castrol-toyota-fr-oceania/calendar-results/2024-season/round-1-taupo/",
+        "https://www.toyota.co.nz/toyota-racing/castrol-toyota-fr-oceania/calendar-results/2024-season/24-season-round-02/",
+        "https://www.toyota.co.nz/toyota-racing/castrol-toyota-fr-oceania/calendar-results/2024-season/24-season-round-03/",
+        "https://www.toyota.co.nz/toyota-racing/castrol-toyota-fr-oceania/calendar-results/2024-season/24-season-round-04/",
+        "https://www.toyota.co.nz/toyota-racing/castrol-toyota-fr-oceania/calendar-results/2024-season/24-season-round-052/",
+        "https://www.toyota.co.nz/toyota-racing/castrol-toyota-fr-oceania/news/2023/march/2024-formula-regional-oceania-championship-dates-and-tracks-confirmed/",
+        "https://www.toyota.co.nz/toyota-racing/castrol-toyota-fr-oceania/news/2024/february/aron-wins-race-but-bilinski-takes-fr-oceania-title/"
+      ],
+      "reliabilityTier": "official_plus_crosscheck",
+      "notes": "2024 official Toyota NZ server-rendered HTML table ingest added for five rounds. Raw HTML and extracted tables are preserved under data/career/raw/froc-2024. HTML Grid tabs and linked official grid PDFs are normalized into race start positions where present; Round 2 Race 2 now imports 17 start positions from the official Grid R2 PDF. The official Taupo and Euromarque Qualifying 1 articles backfill Round 1 Race 1 and Round 4 Race 1 start positions from Qualifying 1 tables. The official Highlands qualifying-format article backfills Round 5 Race 1 and Grand Prix start positions from qualifying tables, and the official Highlands Race 2 article backfills the Race 2 top-eight grid narrative. Official Toyota schedule images backfill practice/qualifying/race session windows; Round 2 Test 1 and Test 2 scheduled/actual starts are backfilled from official Toyota timing PDFs. Round 4 page-title date conflict is preserved because Toyota's 2024 dates announcement places Euromarque on 9-11 February while the Round 4 results page title says 16-18 February."
+    },
+    {
+      "id": "imsa_sports_car",
+      "label": "IMSA / Sports Car Appearances",
+      "status": "daytona_2025_imported_primary_json_csv",
+      "coverageTarget": "Bryce Aron Daytona/GTP or other sports car entries, results, co-drivers, team/car context.",
+      "seedUrls": [
+        "https://imsa.results.alkamelcloud.com/index.php?season=25_2025&evvent=02_Daytona%20International%20Speedway",
+        "https://imsa.results.alkamelcloud.com/Results/25_2025/02_Daytona%20International%20Speedway/01_IMSA%20WeatherTech%20SportsCar%20Championship/202501251340_Race/24_Hour%2024/03_Results_Race_Official.JSON",
+        "https://imsa.results.alkamelcloud.com/Results/25_2025/02_Daytona%20International%20Speedway/01_IMSA%20WeatherTech%20SportsCar%20Championship/202501251340_Race/24_Hour%2024/03_Results_Race_Official.CSV",
+        "https://imsa.results.alkamelcloud.com/Results/25_2025/02_Daytona%20International%20Speedway/01_IMSA%20WeatherTech%20SportsCar%20Championship/202501251340_Race/24_Hour%2024/23_Time%20Cards_Race.JSON"
+      ],
+      "reliabilityTier": "official_plus_crosscheck",
+      "notes": "Al Kamel official JSON/CSV imported for 2025 Rolex 24 at Daytona. Verifies Bryce in car 85, JDC Miller MotorSports, GTP, Porsche 963. Time Cards JSON imported as lapSamples. Official session air temp, track temp, and dry track status imported as source-backed track condition."
+    },
+    {
+      "id": "early_career",
+      "label": "Karting / F1600 / Formula Ford / Team USA Scholarship",
+      "status": "f1600_formula_ford_2020_team_usa_and_bkc_context_imported",
+      "coverageTarget": "Earliest public Bryce Aron racing records through 2020/2021.",
+      "seedUrls": [
+        "https://www.racefrp.com/results-archive/f1600",
+        "https://www.racefrp.com/standings",
+        "https://cdn.prod.website-files.com/5e6065f5b2e7eb7c7741994a/5e6065f5b2e7ebeb26419ba1_F1600_Season_Points_NJMP_with_DROPS_2019(1).pdf",
+        "https://www.racefrp.com/f1600-news/2019-season-news-and-recap",
+        "https://www.tsl-timing.com/event/204456",
+        "https://www.tsl-timing.com/file/?f=HSCC/2020/204456wht.pdf",
+        "https://www.tsl-timing.com/file/?f=HSCC/2020/204456finwht.pdf",
+        "https://brscc.co.uk/wp-content/uploads/2021/04/2020-BRSCC-Formula-Ford-Festival-TSL-Results.pdf",
+        "https://www.tsl-timing.com/file/?f=BRSCC/2020/202931ffn.pdf",
+        "https://www.tsl-timing.com/file/?f=BRSCC/2020/203931ffn.pdf",
+        "https://www.tsl-timing.com/file/?f=BARC/2020/204121ffn.pdf",
+        "https://teamusascholarship.org/?p=5355",
+        "https://teamusascholarship.org/?p=5362",
+        "https://teamusascholarship.org/?p=5614",
+        "https://web.archive.org/web/20251112122951/https://badgerkartclub.com/2016-fast-times-and-track-records",
+        "https://web.archive.org/web/20251112102610/https://badgerkartclub.com/2017-fast-times-and-track-records"
+      ],
+      "reliabilityTier": "mixed",
+      "notes": "FRP F1600 2019 and Formula Ford 2020 are imported from official PDF timing sources. FRP F1600 imports 37 source-validated sessions, 564 full-field result rows, 37 Bryce rows, 21 Bryce race rows, 2 official qualifying grid-position penalties, and the official season points row showing Bryce P3 with 639 points; one archive-linked Pittsburgh qualifying PDF is staged only because its PDF header/date identify Summit Point. Formula Ford 2020 imports National FF1600, Formula Ford Festival, and Walter Hayes Trophy official TSL/BRSCC/BARC-hosted books: 40 classification sessions, 972 result rows, 667 matched official grid/start rows, 18 Bryce rows, 14 Bryce rows with starts, 204 Bryce-only lap-analysis samples from 18 official lap/sector-analysis pages with explicit Bryce block labels, 4 official WHT penalty notes, and 40 official weather/track-condition lines. Team USA Scholarship 2020 pages are imported as link-only source evidence/media context and structured official career milestones for Bryce's scholarship selection, 2018 BKC TaG Jr champion and Yamaha KT100 runner-up context, 2019 FRP P3/eight podiums context, and Walter Hayes Trophy podium narrative. Archived official Badger Kart Club pages import three career-grain Bryce records: 2016 Yamaha Junior fast time, 2017 TaG Junior Classic Track fast time, and 2017 TaG Junior Bus Stop track record. Formula Ford continuation lap-analysis rows without repeated Bryce labels, additional penalty semantics/result-adjustment notes, unmatched grid rows, karting race-by-race sheets, and remaining 2020 Formula Ford appearances outside imported National FF1600/Festival/Walter Hayes Trophy books remain open."
+    },
+    {
+      "id": "track_metadata",
+      "label": "Track Metadata",
+      "status": "imported_current_tracks_primary_metadata",
+      "coverageTarget": "Canonical metadata for every track in Bryce career dataset.",
+      "seedUrls": [
+        "data/career/raw/track-metadata/track-metadata.v1.json"
+      ],
+      "reliabilityTier": "official_plus_public_reference",
+      "notes": "The raw metadata manifest covers all 41 currently imported tracks across INDY NXT, GB3, Euroformula Open 2023, Formula Regional Oceania 2024, IMSA, FRP F1600 2019, and Formula Ford 2020. All current tracks have coordinates, timezone, layout length, direction, surface, corner count, source evidence, and weatherJoinReady flags. Direction coverage now clears validation for all 41 imported tracks. Arlington and Highlands are medium-confidence rows requiring future precision refinement."
+    },
+    {
+      "id": "weather_enrichment",
+      "label": "Historical Weather Enrichment",
+      "status": "source_plan_verified_ready_for_precise_window_subset",
+      "coverageTarget": "Race/session historical weather by track/date/time.",
+      "seedUrls": [
+        "https://api.weather.gov/",
+        "https://open-meteo.com/en/docs/historical-weather-api",
+        "https://archive-api.open-meteo.com/v1/archive",
+        "https://www.ncei.noaa.gov/access/services/search/v1/data",
+        "https://www.ncei.noaa.gov/access/services/data/v1"
+      ],
+      "reliabilityTier": "weather_api",
+      "notes": "Use Open-Meteo archive as fast historical default and NCEI Global Hourly as U.S. official station cross-check. Track coordinates and session timezones are now backfilled for all current tracks/sessions. Current readiness report shows 245 precise-window sessions, 181 event-day-context-only sessions, and 9 sessions blocked by missing session start. Do not import generic ambient weather for date-only or missing-start sessions as session-hour weather. NWS is for live/current forecast and alerts, not historical backfill."
+    },
+    {
+      "id": "media_narrative",
+      "label": "Media / Narrative Assets",
+      "status": "ready_for_research",
+      "coverageTarget": "Articles, race reports, quotes, photos, link-only clips, storyline tags.",
+      "seedUrls": [],
+      "reliabilityTier": "mixed",
+      "notes": "Store official/non-social links and summaries; do not copy full article bodies. Social media is out of scope for the production career analytics dataset."
+    }
+  ]
+}

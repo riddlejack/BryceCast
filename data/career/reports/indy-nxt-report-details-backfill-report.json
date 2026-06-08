@@ -1,0 +1,1892 @@
+{
+  "generatedAt": "2026-06-08T15:13:18.687Z",
+  "lapChartsDiscovered": 36,
+  "lapChartsParsed": 36,
+  "lapChartsFullyParsed": 26,
+  "lapChartsPartiallyParsed": 10,
+  "lapSamplesImported": 29501,
+  "partialLapSamplesImported": 8472,
+  "bryceLapSamplesImported": 1389,
+  "eventSummariesDiscovered": 36,
+  "eventSummariesParsed": 36,
+  "eventSummaryMetricsImported": 36,
+  "mostImprovedEventsImported": 35,
+  "leaderLapSummariesDiscovered": 36,
+  "leaderLapSummariesParsed": 36,
+  "leaderLapSummaryMetricsImported": 36,
+  "topSectionReportsDiscovered": 147,
+  "topSectionReportsParsed": 146,
+  "topSectionMetricsImported": 146,
+  "sectionResultsReportsDiscovered": 147,
+  "sectionResultsReportsParsed": 145,
+  "sectionResultsMetricsImported": 145,
+  "resultsReportsDiscovered": 36,
+  "resultsReportsParsed": 36,
+  "officialPenaltiesImported": 76,
+  "officialCautionIncidentsImported": 64,
+  "pdfsFetched": 0,
+  "pdfsCached": 438,
+  "textExtracted": 0,
+  "textCached": 438,
+  "xmlExtracted": 0,
+  "xmlCached": 10,
+  "partialLapChartImports": [
+    {
+      "sessionId": "session_indy_nxt_2024_6317",
+      "parser": "pdftotext -raw plus lap-header row-position inversion partial visible-sample import",
+      "samplesImported": 674,
+      "missingSamples": 1,
+      "missingByCar": [
+        {
+          "carNumber": "11",
+          "expected": 15,
+          "parsed": 14,
+          "missing": 1
+        }
+      ],
+      "resultLapConflicts": [],
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6317/2024-06-22/indynxt-race-lapchart-r1.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6319",
+      "parser": "pdftohtml -xml coordinate lap-column parser partial visible-sample import",
+      "samplesImported": 889,
+      "missingSamples": 2,
+      "missingByCar": [
+        {
+          "carNumber": "23",
+          "expected": 55,
+          "parsed": 53,
+          "missing": 2
+        }
+      ],
+      "resultLapConflicts": [],
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6319/2024-07-13/indynxt-race-lapchart.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6320",
+      "parser": "pdftotext -raw plus lap-header row-position inversion partial visible-sample import",
+      "samplesImported": 1023,
+      "missingSamples": 2,
+      "missingByCar": [
+        {
+          "carNumber": "18",
+          "expected": 33,
+          "parsed": 32,
+          "missing": 1
+        },
+        {
+          "carNumber": "40",
+          "expected": 1,
+          "parsed": 0,
+          "missing": 1
+        }
+      ],
+      "resultLapConflicts": [],
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6320/2024-08-17/indynxt-race-lapchart.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6321",
+      "parser": "pdftotext -raw plus lap-header row-position inversion partial visible-sample import",
+      "samplesImported": 547,
+      "missingSamples": 18,
+      "missingByCar": [
+        {
+          "carNumber": "27",
+          "expected": 35,
+          "parsed": 34,
+          "missing": 1
+        },
+        {
+          "carNumber": "18",
+          "expected": 35,
+          "parsed": 34,
+          "missing": 1
+        },
+        {
+          "carNumber": "17",
+          "expected": 35,
+          "parsed": 34,
+          "missing": 1
+        },
+        {
+          "carNumber": "7",
+          "expected": 35,
+          "parsed": 34,
+          "missing": 1
+        },
+        {
+          "carNumber": "39",
+          "expected": 35,
+          "parsed": 34,
+          "missing": 1
+        },
+        {
+          "carNumber": "40",
+          "expected": 35,
+          "parsed": 34,
+          "missing": 1
+        },
+        {
+          "carNumber": "51",
+          "expected": 35,
+          "parsed": 34,
+          "missing": 1
+        },
+        {
+          "carNumber": "29",
+          "expected": 32,
+          "parsed": 31,
+          "missing": 1
+        },
+        {
+          "carNumber": "28",
+          "expected": 35,
+          "parsed": 34,
+          "missing": 1
+        },
+        {
+          "carNumber": "23",
+          "expected": 35,
+          "parsed": 34,
+          "missing": 1
+        },
+        {
+          "carNumber": "14",
+          "expected": 35,
+          "parsed": 34,
+          "missing": 1
+        },
+        {
+          "carNumber": "26",
+          "expected": 35,
+          "parsed": 34,
+          "missing": 1
+        },
+        {
+          "carNumber": "99",
+          "expected": 35,
+          "parsed": 34,
+          "missing": 1
+        },
+        {
+          "carNumber": "10",
+          "expected": 35,
+          "parsed": 34,
+          "missing": 1
+        },
+        {
+          "carNumber": "76",
+          "expected": 8,
+          "parsed": 6,
+          "missing": 2
+        },
+        {
+          "carNumber": "2",
+          "expected": 35,
+          "parsed": 34,
+          "missing": 1
+        },
+        {
+          "carNumber": "22",
+          "expected": 35,
+          "parsed": 34,
+          "missing": 1
+        }
+      ],
+      "resultLapConflicts": [],
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6321/2024-08-25/indynxt-race-lapchart.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6326",
+      "parser": "pdftohtml -xml coordinate lap-column parser partial visible-sample import",
+      "samplesImported": 840,
+      "missingSamples": 1,
+      "missingByCar": [
+        {
+          "carNumber": "39",
+          "expected": 41,
+          "parsed": 40,
+          "missing": 1
+        }
+      ],
+      "resultLapConflicts": [
+        {
+          "carNumber": "75",
+          "expected": 0,
+          "parsed": 7,
+          "status": "unknown",
+          "reason": "official_result_zero_laps_with_source_visible_lap_chart_samples"
+        }
+      ],
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6326/2024-06-02/indynxt-race-lapchart.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6327",
+      "parser": "pdftotext -raw plus lap-header row-position inversion partial visible-sample import",
+      "samplesImported": 667,
+      "missingSamples": 2,
+      "missingByCar": [
+        {
+          "carNumber": "29",
+          "expected": 25,
+          "parsed": 24,
+          "missing": 1
+        },
+        {
+          "carNumber": "10",
+          "expected": 27,
+          "parsed": 26,
+          "missing": 1
+        }
+      ],
+      "resultLapConflicts": [],
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6327/2024-06-23/indynxt-race-lapchart-r2.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2025_6445",
+      "parser": "pdftotext -raw plus lap-header row-position inversion partial visible-sample import",
+      "samplesImported": 660,
+      "missingSamples": 2,
+      "missingByCar": [
+        {
+          "carNumber": "76",
+          "expected": 27,
+          "parsed": 26,
+          "missing": 1
+        },
+        {
+          "carNumber": "11",
+          "expected": 7,
+          "parsed": 6,
+          "missing": 1
+        }
+      ],
+      "resultLapConflicts": [],
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6445/2025-05-04/indynxt-race-lapchart.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2025_6446",
+      "parser": "pdftotext -raw plus lap-header row-position inversion partial visible-sample import",
+      "samplesImported": 798,
+      "missingSamples": 1,
+      "missingByCar": [
+        {
+          "carNumber": "10",
+          "expected": 1,
+          "parsed": 0,
+          "missing": 1
+        }
+      ],
+      "resultLapConflicts": [],
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6446/2025-03-02/indynxt-race-lapchart.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2025_6451",
+      "parser": "pdftohtml -xml coordinate lap-column parser partial visible-sample import",
+      "samplesImported": 1412,
+      "missingSamples": 1,
+      "missingByCar": [
+        {
+          "carNumber": "14",
+          "expected": 74,
+          "parsed": 73,
+          "missing": 1
+        }
+      ],
+      "resultLapConflicts": [],
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6451/2025-07-12/indynxt-race-lapchart.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6749",
+      "parser": "pdftohtml -xml coordinate lap-column parser partial visible-sample import",
+      "samplesImported": 962,
+      "missingSamples": 1,
+      "missingByCar": [
+        {
+          "carNumber": "68",
+          "expected": 42,
+          "parsed": 41,
+          "missing": 1
+        }
+      ],
+      "resultLapConflicts": [],
+      "url": "http://www.imscdn.com/INDYCAR/Documents/5532/6749/indynxt-race-lapchart.pdf"
+    }
+  ],
+  "parserFailures": [],
+  "eventSummaryFailures": [],
+  "leaderLapSummaryFailures": [],
+  "topSectionFailures": [],
+  "topSectionReportsHeldOut": [
+    {
+      "sessionId": "session_indy_nxt_2025_6596",
+      "reason": "official_report_has_no_section_rows",
+      "sessionName": "Qualifications",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6596/2025-07-11/indynxt-topsectiontimes-quals.pdf"
+    }
+  ],
+  "topSectionUnmappedRows": [
+    {
+      "sessionId": "session_indy_nxt_2024_6328",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Turns 5-8",
+      "carNumber": "29",
+      "driverName": "Roe, James",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6328/2024-03-08/indynxt-topsectiontimes-p1.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6328",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Turn 9",
+      "carNumber": "29",
+      "driverName": "Roe, James",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6328/2024-03-08/indynxt-topsectiontimes-p1.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Lap",
+      "carNumber": "22",
+      "driverName": "Sundaramoorthy, Yuven",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Lap",
+      "carNumber": "99",
+      "driverName": "Rowe, Myles",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Lap",
+      "carNumber": "23",
+      "driverName": "Browne, Jonathan",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Lap",
+      "carNumber": "14",
+      "driverName": "Pierson, Josh",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Lap",
+      "carNumber": "27",
+      "driverName": "Aron, Bryce",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Lap",
+      "carNumber": "7",
+      "driverName": "Bogle, Christian",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Lap",
+      "carNumber": "3",
+      "driverName": "d'Orlando, Michael",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Lap",
+      "carNumber": "40",
+      "driverName": "Miller, Jack William",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Lap",
+      "carNumber": "55",
+      "driverName": "Ferns, Taylor",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Turn 1 Entry",
+      "carNumber": "14",
+      "driverName": "Pierson, Josh",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Turn 1 Entry",
+      "carNumber": "23",
+      "driverName": "Browne, Jonathan",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Turn 1 Entry",
+      "carNumber": "99",
+      "driverName": "Rowe, Myles",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Turn 1 Entry",
+      "carNumber": "3",
+      "driverName": "d'Orlando, Michael",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Turn 1 Entry",
+      "carNumber": "22",
+      "driverName": "Sundaramoorthy, Yuven",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Turn 1 Entry",
+      "carNumber": "7",
+      "driverName": "Bogle, Christian",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Turn 1 Entry",
+      "carNumber": "27",
+      "driverName": "Aron, Bryce",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Turn 1 Entry",
+      "carNumber": "40",
+      "driverName": "Miller, Jack William",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Turn 1 Entry",
+      "carNumber": "55",
+      "driverName": "Ferns, Taylor",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Turn 1 Exit",
+      "carNumber": "14",
+      "driverName": "Pierson, Josh",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Turn 1 Exit",
+      "carNumber": "99",
+      "driverName": "Rowe, Myles",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Turn 1 Exit",
+      "carNumber": "23",
+      "driverName": "Browne, Jonathan",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Turn 1 Exit",
+      "carNumber": "22",
+      "driverName": "Sundaramoorthy, Yuven",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Turn 1 Exit",
+      "carNumber": "3",
+      "driverName": "d'Orlando, Michael",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Turn 1 Exit",
+      "carNumber": "7",
+      "driverName": "Bogle, Christian",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Turn 1 Exit",
+      "carNumber": "27",
+      "driverName": "Aron, Bryce",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Turn 1 Exit",
+      "carNumber": "40",
+      "driverName": "Miller, Jack William",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Turn 1 Exit",
+      "carNumber": "55",
+      "driverName": "Ferns, Taylor",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Turn 2 Entry",
+      "carNumber": "99",
+      "driverName": "Rowe, Myles",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Turn 2 Entry",
+      "carNumber": "23",
+      "driverName": "Browne, Jonathan",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Turn 2 Entry",
+      "carNumber": "14",
+      "driverName": "Pierson, Josh",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Turn 2 Entry",
+      "carNumber": "22",
+      "driverName": "Sundaramoorthy, Yuven",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Turn 2 Entry",
+      "carNumber": "27",
+      "driverName": "Aron, Bryce",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Turn 2 Entry",
+      "carNumber": "7",
+      "driverName": "Bogle, Christian",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Turn 2 Entry",
+      "carNumber": "3",
+      "driverName": "d'Orlando, Michael",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Turn 2 Entry",
+      "carNumber": "40",
+      "driverName": "Miller, Jack William",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Turn 2 Entry",
+      "carNumber": "55",
+      "driverName": "Ferns, Taylor",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "BackStretch Entry",
+      "carNumber": "22",
+      "driverName": "Sundaramoorthy, Yuven",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "BackStretch Entry",
+      "carNumber": "22",
+      "driverName": "Sundaramoorthy, Yuven",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "BackStretch Entry",
+      "carNumber": "27",
+      "driverName": "Aron, Bryce",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "BackStretch Entry",
+      "carNumber": "99",
+      "driverName": "Rowe, Myles",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "BackStretch Entry",
+      "carNumber": "23",
+      "driverName": "Browne, Jonathan",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "BackStretch Entry",
+      "carNumber": "14",
+      "driverName": "Pierson, Josh",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "BackStretch Entry",
+      "carNumber": "7",
+      "driverName": "Bogle, Christian",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "BackStretch Entry",
+      "carNumber": "3",
+      "driverName": "d'Orlando, Michael",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "BackStretch Entry",
+      "carNumber": "40",
+      "driverName": "Miller, Jack William",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "BackStretch Entry",
+      "carNumber": "55",
+      "driverName": "Ferns, Taylor",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "BackStretch Exit",
+      "carNumber": "22",
+      "driverName": "Sundaramoorthy, Yuven",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "BackStretch Exit",
+      "carNumber": "27",
+      "driverName": "Aron, Bryce",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "BackStretch Exit",
+      "carNumber": "99",
+      "driverName": "Rowe, Myles",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "BackStretch Exit",
+      "carNumber": "23",
+      "driverName": "Browne, Jonathan",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "BackStretch Exit",
+      "carNumber": "14",
+      "driverName": "Pierson, Josh",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "BackStretch Exit",
+      "carNumber": "7",
+      "driverName": "Bogle, Christian",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "BackStretch Exit",
+      "carNumber": "3",
+      "driverName": "d'Orlando, Michael",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "BackStretch Exit",
+      "carNumber": "40",
+      "driverName": "Miller, Jack William",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "BackStretch Exit",
+      "carNumber": "55",
+      "driverName": "Ferns, Taylor",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Turn 3",
+      "carNumber": "27",
+      "driverName": "Aron, Bryce",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Turn 3",
+      "carNumber": "22",
+      "driverName": "Sundaramoorthy, Yuven",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Turn 3",
+      "carNumber": "99",
+      "driverName": "Rowe, Myles",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Turn 3",
+      "carNumber": "7",
+      "driverName": "Bogle, Christian",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Turn 3",
+      "carNumber": "14",
+      "driverName": "Pierson, Josh",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Turn 3",
+      "carNumber": "23",
+      "driverName": "Browne, Jonathan",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Turn 3",
+      "carNumber": "3",
+      "driverName": "d'Orlando, Michael",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Turn 3",
+      "carNumber": "40",
+      "driverName": "Miller, Jack William",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Turn 3",
+      "carNumber": "55",
+      "driverName": "Ferns, Taylor",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Turn 4 Entry",
+      "carNumber": "99",
+      "driverName": "Rowe, Myles",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Turn 4 Entry",
+      "carNumber": "27",
+      "driverName": "Aron, Bryce",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Turn 4 Entry",
+      "carNumber": "22",
+      "driverName": "Sundaramoorthy, Yuven",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Turn 4 Entry",
+      "carNumber": "23",
+      "driverName": "Browne, Jonathan",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Turn 4 Entry",
+      "carNumber": "14",
+      "driverName": "Pierson, Josh",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Turn 4 Entry",
+      "carNumber": "7",
+      "driverName": "Bogle, Christian",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Turn 4 Entry",
+      "carNumber": "3",
+      "driverName": "d'Orlando, Michael",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Turn 4 Entry",
+      "carNumber": "40",
+      "driverName": "Miller, Jack William",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Turn 4 Entry",
+      "carNumber": "55",
+      "driverName": "Ferns, Taylor",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Turn 4 Exit",
+      "carNumber": "99",
+      "driverName": "Rowe, Myles",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Turn 4 Exit",
+      "carNumber": "23",
+      "driverName": "Browne, Jonathan",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Turn 4 Exit",
+      "carNumber": "14",
+      "driverName": "Pierson, Josh",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Turn 4 Exit",
+      "carNumber": "22",
+      "driverName": "Sundaramoorthy, Yuven",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Turn 4 Exit",
+      "carNumber": "3",
+      "driverName": "d'Orlando, Michael",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Turn 4 Exit",
+      "carNumber": "7",
+      "driverName": "Bogle, Christian",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Turn 4 Exit",
+      "carNumber": "27",
+      "driverName": "Aron, Bryce",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Turn 4 Exit",
+      "carNumber": "40",
+      "driverName": "Miller, Jack William",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "Turn 4 Exit",
+      "carNumber": "55",
+      "driverName": "Ferns, Taylor",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "T1 to T2",
+      "carNumber": "99",
+      "driverName": "Rowe, Myles",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "T1 to T2",
+      "carNumber": "14",
+      "driverName": "Pierson, Josh",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "T1 to T2",
+      "carNumber": "23",
+      "driverName": "Browne, Jonathan",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "T1 to T2",
+      "carNumber": "22",
+      "driverName": "Sundaramoorthy, Yuven",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "T1 to T2",
+      "carNumber": "7",
+      "driverName": "Bogle, Christian",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "T1 to T2",
+      "carNumber": "27",
+      "driverName": "Aron, Bryce",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "T1 to T2",
+      "carNumber": "3",
+      "driverName": "d'Orlando, Michael",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "T1 to T2",
+      "carNumber": "40",
+      "driverName": "Miller, Jack William",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "T1 to T2",
+      "carNumber": "55",
+      "driverName": "Ferns, Taylor",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "T2 to T3",
+      "carNumber": "22",
+      "driverName": "Sundaramoorthy, Yuven",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "T2 to T3",
+      "carNumber": "27",
+      "driverName": "Aron, Bryce",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "T2 to T3",
+      "carNumber": "99",
+      "driverName": "Rowe, Myles",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "T2 to T3",
+      "carNumber": "23",
+      "driverName": "Browne, Jonathan",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "T2 to T3",
+      "carNumber": "14",
+      "driverName": "Pierson, Josh",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "T2 to T3",
+      "carNumber": "7",
+      "driverName": "Bogle, Christian",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "T2 to T3",
+      "carNumber": "3",
+      "driverName": "d'Orlando, Michael",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "T2 to T3",
+      "carNumber": "40",
+      "driverName": "Miller, Jack William",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "T2 to T3",
+      "carNumber": "55",
+      "driverName": "Ferns, Taylor",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "T3 to T4",
+      "carNumber": "22",
+      "driverName": "Sundaramoorthy, Yuven",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "T3 to T4",
+      "carNumber": "99",
+      "driverName": "Rowe, Myles",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "T3 to T4",
+      "carNumber": "27",
+      "driverName": "Aron, Bryce",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "T3 to T4",
+      "carNumber": "23",
+      "driverName": "Browne, Jonathan",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "T3 to T4",
+      "carNumber": "14",
+      "driverName": "Pierson, Josh",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "T3 to T4",
+      "carNumber": "7",
+      "driverName": "Bogle, Christian",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "T3 to T4",
+      "carNumber": "3",
+      "driverName": "d'Orlando, Michael",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "T3 to T4",
+      "carNumber": "40",
+      "driverName": "Miller, Jack William",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "T3 to T4",
+      "carNumber": "55",
+      "driverName": "Ferns, Taylor",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "T2T to T2",
+      "carNumber": "99",
+      "driverName": "Rowe, Myles",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "T2T to T2",
+      "carNumber": "22",
+      "driverName": "Sundaramoorthy, Yuven",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "T2T to T2",
+      "carNumber": "27",
+      "driverName": "Aron, Bryce",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "T2T to T2",
+      "carNumber": "14",
+      "driverName": "Pierson, Josh",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "T2T to T2",
+      "carNumber": "23",
+      "driverName": "Browne, Jonathan",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "T2T to T2",
+      "carNumber": "7",
+      "driverName": "Bogle, Christian",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "T2T to T2",
+      "carNumber": "3",
+      "driverName": "d'Orlando, Michael",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "T2T to T2",
+      "carNumber": "3",
+      "driverName": "d'Orlando, Michael",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "T2T to T2",
+      "carNumber": "40",
+      "driverName": "Miller, Jack William",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "T2T to T2",
+      "carNumber": "55",
+      "driverName": "Ferns, Taylor",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "T3T to T3",
+      "carNumber": "22",
+      "driverName": "Sundaramoorthy, Yuven",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "T3T to T3",
+      "carNumber": "27",
+      "driverName": "Aron, Bryce",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "T3T to T3",
+      "carNumber": "99",
+      "driverName": "Rowe, Myles",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "T3T to T3",
+      "carNumber": "23",
+      "driverName": "Browne, Jonathan",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "T3T to T3",
+      "carNumber": "14",
+      "driverName": "Pierson, Josh",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "T3T to T3",
+      "carNumber": "7",
+      "driverName": "Bogle, Christian",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "T3T to T3",
+      "carNumber": "3",
+      "driverName": "d'Orlando, Michael",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "T3T to T3",
+      "carNumber": "40",
+      "driverName": "Miller, Jack William",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "T3T to T3",
+      "carNumber": "55",
+      "driverName": "Ferns, Taylor",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "PIC to PI",
+      "carNumber": "40",
+      "driverName": "Miller, Jack William",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "PIC to PI",
+      "carNumber": "14",
+      "driverName": "Pierson, Josh",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "PIC to PI",
+      "carNumber": "23",
+      "driverName": "Browne, Jonathan",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "PIC to PI",
+      "carNumber": "99",
+      "driverName": "Rowe, Myles",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "PIC to PI",
+      "carNumber": "27",
+      "driverName": "Aron, Bryce",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "PIC to PI",
+      "carNumber": "3",
+      "driverName": "d'Orlando, Michael",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "PIC to PI",
+      "carNumber": "7",
+      "driverName": "Bogle, Christian",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "PIC to PI",
+      "carNumber": "22",
+      "driverName": "Sundaramoorthy, Yuven",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "PI to PO",
+      "carNumber": "23",
+      "driverName": "Browne, Jonathan",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "PO to SF",
+      "carNumber": "23",
+      "driverName": "Browne, Jonathan",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "PO to SF",
+      "carNumber": "14",
+      "driverName": "Pierson, Josh",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "PO to SF",
+      "carNumber": "40",
+      "driverName": "Miller, Jack William",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "PO to SF",
+      "carNumber": "99",
+      "driverName": "Rowe, Myles",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "PO to SF",
+      "carNumber": "3",
+      "driverName": "d'Orlando, Michael",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "PO to SF",
+      "carNumber": "27",
+      "driverName": "Aron, Bryce",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "PO to SF",
+      "carNumber": "22",
+      "driverName": "Sundaramoorthy, Yuven",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "PO to SF",
+      "carNumber": "7",
+      "driverName": "Bogle, Christian",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "PO to SF",
+      "carNumber": "55",
+      "driverName": "Ferns, Taylor",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "SF to PI",
+      "carNumber": "40",
+      "driverName": "Miller, Jack William",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "SF to PI",
+      "carNumber": "55",
+      "driverName": "Ferns, Taylor",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "SF to PI",
+      "carNumber": "14",
+      "driverName": "Pierson, Josh",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "SF to PI",
+      "carNumber": "27",
+      "driverName": "Aron, Bryce",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "SF to PI",
+      "carNumber": "99",
+      "driverName": "Rowe, Myles",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "SF to PI",
+      "carNumber": "23",
+      "driverName": "Browne, Jonathan",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "SF to PI",
+      "carNumber": "7",
+      "driverName": "Bogle, Christian",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "SF to PI",
+      "carNumber": "3",
+      "driverName": "d'Orlando, Michael",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "SF to PI",
+      "carNumber": "22",
+      "driverName": "Sundaramoorthy, Yuven",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "PO to BS",
+      "carNumber": "40",
+      "driverName": "Miller, Jack William",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "PO to BS",
+      "carNumber": "14",
+      "driverName": "Pierson, Josh",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "PO to BS",
+      "carNumber": "23",
+      "driverName": "Browne, Jonathan",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "PO to BS",
+      "carNumber": "99",
+      "driverName": "Rowe, Myles",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "PO to BS",
+      "carNumber": "3",
+      "driverName": "d'Orlando, Michael",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "PO to BS",
+      "carNumber": "27",
+      "driverName": "Aron, Bryce",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "PO to BS",
+      "carNumber": "22",
+      "driverName": "Sundaramoorthy, Yuven",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "PO to BS",
+      "carNumber": "55",
+      "driverName": "Ferns, Taylor",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "PO to BS",
+      "carNumber": "7",
+      "driverName": "Bogle, Christian",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "T3 to PI",
+      "carNumber": "40",
+      "driverName": "Miller, Jack William",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "T3 to PI",
+      "carNumber": "55",
+      "driverName": "Ferns, Taylor",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "T3 to PI",
+      "carNumber": "14",
+      "driverName": "Pierson, Josh",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "T3 to PI",
+      "carNumber": "99",
+      "driverName": "Rowe, Myles",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "T3 to PI",
+      "carNumber": "23",
+      "driverName": "Browne, Jonathan",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "T3 to PI",
+      "carNumber": "27",
+      "driverName": "Aron, Bryce",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "T3 to PI",
+      "carNumber": "3",
+      "driverName": "d'Orlando, Michael",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "T3 to PI",
+      "carNumber": "7",
+      "driverName": "Bogle, Christian",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "T3 to PI",
+      "carNumber": "22",
+      "driverName": "Sundaramoorthy, Yuven",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "PO to PI",
+      "carNumber": "23",
+      "driverName": "Browne, Jonathan",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "PO to PI",
+      "carNumber": "14",
+      "driverName": "Pierson, Josh",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "PO to PI",
+      "carNumber": "40",
+      "driverName": "Miller, Jack William",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "PO to PI",
+      "carNumber": "99",
+      "driverName": "Rowe, Myles",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "PO to PI",
+      "carNumber": "27",
+      "driverName": "Aron, Bryce",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "PO to PI",
+      "carNumber": "55",
+      "driverName": "Ferns, Taylor",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "PO to PI",
+      "carNumber": "3",
+      "driverName": "d'Orlando, Michael",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "PO to PI",
+      "carNumber": "7",
+      "driverName": "Bogle, Christian",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "top_section_car_missing_canonical_timing_row",
+      "section": "PO to PI",
+      "carNumber": "22",
+      "driverName": "Sundaramoorthy, Yuven",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-topsectiontimes-quals.pdf"
+    }
+  ],
+  "sectionResultsFailures": [],
+  "sectionResultsReportsHeldOut": [
+    {
+      "sessionId": "session_indy_nxt_2024_6325",
+      "reason": "official_pdf_has_no_extractable_text",
+      "sessionName": "Race",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6325/2024-05-11/indynxt-sectionresults-r2.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2025_6596",
+      "reason": "official_report_has_no_section_rows",
+      "sessionName": "Qualifications",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6596/2025-07-11/indynxt-sectionresults-quals.pdf"
+    }
+  ],
+  "sectionResultsUnmappedCars": [
+    {
+      "sessionId": "session_indy_nxt_2024_6328",
+      "reason": "section_results_car_missing_canonical_timing_row",
+      "carNumber": "29",
+      "driverName": "Roe, James",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6328/2024-03-08/indynxt-sectionresults-p1.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "section_results_car_missing_canonical_timing_row",
+      "carNumber": "3",
+      "driverName": "d'Orlando, Michael",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-sectionresults-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "section_results_car_missing_canonical_timing_row",
+      "carNumber": "7",
+      "driverName": "Bogle, Christian",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-sectionresults-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "section_results_car_missing_canonical_timing_row",
+      "carNumber": "14",
+      "driverName": "Pierson, Josh",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-sectionresults-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "section_results_car_missing_canonical_timing_row",
+      "carNumber": "22",
+      "driverName": "Sundaramoorthy, Yuven",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-sectionresults-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "section_results_car_missing_canonical_timing_row",
+      "carNumber": "23",
+      "driverName": "Browne, Jonathan",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-sectionresults-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "section_results_car_missing_canonical_timing_row",
+      "carNumber": "27",
+      "driverName": "Aron, Bryce",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-sectionresults-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "section_results_car_missing_canonical_timing_row",
+      "carNumber": "40",
+      "driverName": "Miller, Jack William",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-sectionresults-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "section_results_car_missing_canonical_timing_row",
+      "carNumber": "55",
+      "driverName": "Ferns, Taylor",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-sectionresults-quals.pdf"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6489",
+      "reason": "section_results_car_missing_canonical_timing_row",
+      "carNumber": "99",
+      "driverName": "Rowe, Myles",
+      "url": "http://www.imscdn.com/INDYCAR/Documents/6489/2024-09-14/indynxt-sectionresults-quals.pdf"
+    }
+  ],
+  "resultsReportFailures": [],
+  "skipped": []
+}

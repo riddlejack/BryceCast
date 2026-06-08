@@ -1,0 +1,362 @@
+{
+  "schemaVersion": "bryce-career-ingestion-summary.v1",
+  "generatedAt": "2026-06-08T15:13:44.651Z",
+  "datasetPath": "data/career/career.dataset.json",
+  "validation": {
+    "ok": true,
+    "checkedAt": "2026-06-08T15:13:44.060Z",
+    "errors": [],
+    "warnings": [
+      {
+        "severity": "warn",
+        "path": "sessions.timeCoverage",
+        "message": "9 physical sessions do not yet have scheduledStart or actualStart. Weather/live joins must wait for session time backfill."
+      }
+    ]
+  },
+  "counts": {
+    "drivers": 558,
+    "series": 7,
+    "teams": 75,
+    "cars": 512,
+    "tracks": 42,
+    "seasons": 10,
+    "events": 87,
+    "sessions": 469,
+    "results": 8194,
+    "qualifyingResults": 1547,
+    "lapSamples": 67668,
+    "racecraftEvents": 35,
+    "penalties": 82,
+    "incidents": 132,
+    "weatherObservations": 86,
+    "mediaAssets": 940,
+    "broadcastRoutes": 0,
+    "notificationRules": 0,
+    "notificationEvents": 0,
+    "derivedMetrics": 370,
+    "sourceEvidence": 1093,
+    "gaps": 8
+  },
+  "readiness": {
+    "sessions": {
+      "total": 469,
+      "withScheduledStart": 459,
+      "withExactTimestamp": 307,
+      "withTimezone": 469,
+      "timezoneCoverage": 1
+    },
+    "tracks": {
+      "total": 42,
+      "withCoordinates": 42,
+      "withTimezone": 42,
+      "withLength": 42,
+      "withDirection": 42,
+      "coordinateCoverage": 1,
+      "timezoneCoverage": 1,
+      "lengthCoverage": 1
+    },
+    "weather": {
+      "observations": 86,
+      "sessionsCovered": 86,
+      "tracksCovered": 11,
+      "withAmbientTemp": 1,
+      "withTrackTemp": 1,
+      "trackTempCoverage": 0.0116
+    },
+    "analyticsSafeNow": [
+      "Source-backed result analytics for imported official families: INDY NXT 2024-2026, GB3/BRDC British F3 2021-2022, IMSA Daytona 2025, Euroformula 2023, FROC 2024, FRP F1600 2019, and Formula Ford 2020",
+      "IMSA Daytona lap-sample analytics from official Time Cards JSON",
+      "Session-hour ambient weather enrichment for the precise-window subset only",
+      "Official-source evidence and gap tracking"
+    ],
+    "analyticsBlockedOrPartial": []
+  },
+  "sourceEvidence": {
+    "total": 1093,
+    "bySourceType": {
+      "archived_official_page": 2,
+      "official_pdf": 683,
+      "official_page": 117,
+      "official_api": 264,
+      "official_html": 16,
+      "official_image": 5,
+      "official_article": 4,
+      "official_json": 2
+    }
+  },
+  "workstreams": [
+    {
+      "id": "indy_nxt_official",
+      "label": "INDY NXT Official Results",
+      "status": "imported_primary_json",
+      "reliabilityTier": "official"
+    },
+    {
+      "id": "gb3_british_f3",
+      "label": "GB3 / British F3 Pathway",
+      "status": "gb3_2021_2022_imported_primary_official",
+      "reliabilityTier": "official_plus_crosscheck"
+    },
+    {
+      "id": "euroformula_open",
+      "label": "Euroformula Open",
+      "status": "euroformula_2023_imported_primary_pdf",
+      "reliabilityTier": "official_plus_crosscheck"
+    },
+    {
+      "id": "formula_regional_oceania",
+      "label": "Formula Regional Oceania",
+      "status": "froc_2024_imported_primary_html_tables_and_session_windows",
+      "reliabilityTier": "official_plus_crosscheck"
+    },
+    {
+      "id": "imsa_sports_car",
+      "label": "IMSA / Sports Car Appearances",
+      "status": "daytona_2025_imported_primary_json_csv",
+      "reliabilityTier": "official_plus_crosscheck"
+    },
+    {
+      "id": "early_career",
+      "label": "Karting / F1600 / Formula Ford / Team USA Scholarship",
+      "status": "f1600_formula_ford_2020_team_usa_and_bkc_context_imported",
+      "reliabilityTier": "mixed"
+    },
+    {
+      "id": "track_metadata",
+      "label": "Track Metadata",
+      "status": "imported_current_tracks_primary_metadata",
+      "reliabilityTier": "official_plus_public_reference"
+    },
+    {
+      "id": "weather_enrichment",
+      "label": "Historical Weather Enrichment",
+      "status": "source_plan_verified_ready_for_precise_window_subset",
+      "reliabilityTier": "weather_api"
+    },
+    {
+      "id": "media_narrative",
+      "label": "Media / Narrative Assets",
+      "status": "ready_for_research",
+      "reliabilityTier": "mixed"
+    }
+  ],
+  "importReports": [
+    {
+      "name": "euroformula-2023-import-report.json",
+      "checkedAt": "2026-06-08T15:13:26.514Z",
+      "refresh": false,
+      "fetched": 0,
+      "cached": 32,
+      "sessionsImported": 28,
+      "resultsImported": null,
+      "bryceResultsImported": null,
+      "lapSamplesImported": null,
+      "weatherObservationsImported": null,
+      "standingsImported": null,
+      "gaps": [
+        {
+          "id": "gap_euroformula_2023_championship_classification_pdf_current_mismatch",
+          "scope": "euroformula_2023",
+          "status": "open",
+          "description": "The supplied official classification PDF URL now serves a 2026 document, so 2023 championship position and points were not imported from that mutable S3 key."
+        }
+      ]
+    },
+    {
+      "name": "formula-ford-2020-import-report.json",
+      "checkedAt": "2026-06-08T15:13:29.882Z",
+      "refresh": false,
+      "fetched": 0,
+      "cached": 11,
+      "sessionsImported": 46,
+      "resultsImported": null,
+      "bryceResultsImported": null,
+      "lapSamplesImported": 282,
+      "weatherObservationsImported": 46,
+      "standingsImported": null,
+      "gaps": []
+    },
+    {
+      "name": "froc-2024-import-report.json",
+      "checkedAt": "2026-06-08T15:13:31.433Z",
+      "refresh": false,
+      "fetched": 0,
+      "cached": 12,
+      "sessionsImported": 52,
+      "resultsImported": null,
+      "bryceResultsImported": null,
+      "lapSamplesImported": null,
+      "weatherObservationsImported": null,
+      "standingsImported": null,
+      "gaps": [
+        {
+          "id": "gap_froc_2024_round_4_date_conflict",
+          "scope": "froc_2024",
+          "status": "open",
+          "description": "Toyota Round 4 results page title says 16-18 February 2024, while Toyota 2024 dates announcement places Euromarque Motorsport Park on 9-11 February 2024. Normalized event dates use 9-11 February and preserve the page-title conflict in event raw data."
+        },
+        {
+          "id": "gap_froc_2024_session_times_missing",
+          "scope": "froc_2024",
+          "status": "partial",
+          "description": "Official Toyota schedule images backfill practice, qualifying, and race starts for FROC 2024, and official Round 2 timing PDFs backfill Test 1 and Test 2. Official Toyota test-day articles are cached as date-level context for the other nine FROC test sessions, but those sessions remain unavailable for production session-hour weather joins because the official Toyota round pages expose test result tabs and article context but no official test timing PDF links or equivalent exact clock-time source for those sessions."
+        },
+        {
+          "id": "gap_froc_2024_start_positions_partial",
+          "scope": "froc_2024",
+          "status": "partial",
+          "description": "Toyota HTML Grid tabs, linked official grid PDFs, the official Taupo Qualifying 1/2 articles, the official Taupo Race 2 article, the official Euromarque Qualifying 1 article, the official Highlands Grand Prix qualifying-format article, and the official Highlands Race 2 article are normalized where present. FROC Round 1 Race 1 and Round 4 Race 1 start positions are imported from official Qualifying 1 articles plus qualifying tables. FROC Round 1 Race 2 top-eight start positions are imported from the official Race 2 reverse top-eight article rule plus Race 1 results, and Woods-Toth P16 is imported from the same article direct statement. FROC Round 1 Race 3 start positions are imported from the official Qualifying 2 article plus Qualifying 2 table. FROC Round 5 Race 1 and Grand Prix start positions are imported from the qualifying-format article plus qualifying tables. FROC Round 5 Race 2 top-eight start positions are imported from the official Race 2 article narrative. The remaining R1 Race 2 and R5 Race 2 tail start positions remain open until race-specific official grid evidence is found."
+        }
+      ]
+    },
+    {
+      "name": "frp-f1600-import-report.json",
+      "checkedAt": "2026-06-08T15:13:28.426Z",
+      "refresh": false,
+      "fetched": 0,
+      "cached": 81,
+      "sessionsImported": 37,
+      "resultsImported": 564,
+      "bryceResultsImported": 37,
+      "lapSamplesImported": null,
+      "weatherObservationsImported": null,
+      "standingsImported": null,
+      "gaps": [
+        {
+          "id": "gap_frp_f1600_2019_r5_01_qualifying_pdf_event_mismatch",
+          "scope": "frp_f1600_2019",
+          "status": "open",
+          "description": "FRP archive labels Pittsburgh International Race Complex Qualifying, but the linked PDF header/date indicates a different event (FRP at SUMMIT POINT with KARTS                                                                   Sorted on best lap time; F1600 Championship Series                                                 Summit Point 2.000 miles; 2019-08-23T14:40:00). Rows were staged but not imported."
+        }
+      ]
+    },
+    {
+      "name": "gb3-2021-import-report.json",
+      "checkedAt": "2026-06-08T15:13:20.952Z",
+      "refresh": false,
+      "fetched": 0,
+      "cached": 129,
+      "sessionsImported": 39,
+      "resultsImported": 684,
+      "bryceResultsImported": 38,
+      "lapSamplesImported": null,
+      "weatherObservationsImported": 39,
+      "standingsImported": true,
+      "gaps": []
+    },
+    {
+      "name": "gb3-import-report.json",
+      "checkedAt": "2026-06-08T15:13:22.602Z",
+      "refresh": false,
+      "fetched": 0,
+      "cached": 78,
+      "sessionsImported": 77,
+      "resultsImported": 1620,
+      "bryceResultsImported": 76,
+      "lapSamplesImported": null,
+      "weatherObservationsImported": null,
+      "standingsImported": null,
+      "gaps": [
+        {
+          "id": "gap_gb3_2022_session_1248_missing_json",
+          "scope": "gb3_2022",
+          "status": "open",
+          "description": "GB3 _rounds.json lists Donington Park Friday session 2 (1248) at 2022-05-27T14:45:00, so the session entity is retained from the official manifest. Row-level results remain unavailable because the session JSON endpoint returned 404."
+        }
+      ]
+    },
+    {
+      "name": "imsa-import-report.json",
+      "checkedAt": "2026-06-08T15:13:25.188Z",
+      "refresh": false,
+      "fetched": 0,
+      "cached": 3,
+      "sessionsImported": null,
+      "resultsImported": null,
+      "bryceResultsImported": null,
+      "lapSamplesImported": 37885,
+      "weatherObservationsImported": 1,
+      "standingsImported": null,
+      "gaps": []
+    },
+    {
+      "name": "indy-nxt-import-report.json",
+      "checkedAt": "2026-06-08T15:13:17.062Z",
+      "refresh": false,
+      "fetched": 0,
+      "cached": 180,
+      "sessionsImported": 173,
+      "resultsImported": 2950,
+      "bryceResultsImported": 145,
+      "lapSamplesImported": null,
+      "weatherObservationsImported": null,
+      "standingsImported": null,
+      "gaps": []
+    },
+    {
+      "name": "track-metadata-import-report.json",
+      "checkedAt": "2026-06-08T15:13:37.356Z",
+      "refresh": null,
+      "fetched": null,
+      "cached": null,
+      "sessionsImported": null,
+      "resultsImported": null,
+      "bryceResultsImported": null,
+      "lapSamplesImported": null,
+      "weatherObservationsImported": null,
+      "standingsImported": null,
+      "gaps": []
+    }
+  ],
+  "openGaps": [
+    {
+      "id": "gap_euroformula_2023_championship_classification_pdf_current_mismatch",
+      "scope": "euroformula_2023",
+      "status": "open",
+      "description": "The supplied official classification PDF URL now serves a 2026 document, so 2023 championship position and points were not imported from that mutable S3 key."
+    },
+    {
+      "id": "gap_froc_2024_round_4_date_conflict",
+      "scope": "froc_2024",
+      "status": "open",
+      "description": "Toyota Round 4 results page title says 16-18 February 2024, while Toyota 2024 dates announcement places Euromarque Motorsport Park on 9-11 February 2024. Normalized event dates use 9-11 February and preserve the page-title conflict in event raw data."
+    },
+    {
+      "id": "gap_froc_2024_session_times_missing",
+      "scope": "froc_2024",
+      "status": "partial",
+      "description": "Official Toyota schedule images backfill practice, qualifying, and race starts for FROC 2024, and official Round 2 timing PDFs backfill Test 1 and Test 2. Official Toyota test-day articles are cached as date-level context for the other nine FROC test sessions, but those sessions remain unavailable for production session-hour weather joins because the official Toyota round pages expose test result tabs and article context but no official test timing PDF links or equivalent exact clock-time source for those sessions."
+    },
+    {
+      "id": "gap_froc_2024_start_positions_partial",
+      "scope": "froc_2024",
+      "status": "partial",
+      "description": "Toyota HTML Grid tabs, linked official grid PDFs, the official Taupo Qualifying 1/2 articles, the official Taupo Race 2 article, the official Euromarque Qualifying 1 article, the official Highlands Grand Prix qualifying-format article, and the official Highlands Race 2 article are normalized where present. FROC Round 1 Race 1 and Round 4 Race 1 start positions are imported from official Qualifying 1 articles plus qualifying tables. FROC Round 1 Race 2 top-eight start positions are imported from the official Race 2 reverse top-eight article rule plus Race 1 results, and Woods-Toth P16 is imported from the same article direct statement. FROC Round 1 Race 3 start positions are imported from the official Qualifying 2 article plus Qualifying 2 table. FROC Round 5 Race 1 and Grand Prix start positions are imported from the qualifying-format article plus qualifying tables. FROC Round 5 Race 2 top-eight start positions are imported from the official Race 2 article narrative. The remaining R1 Race 2 and R5 Race 2 tail start positions remain open until race-specific official grid evidence is found."
+    },
+    {
+      "id": "gap_frp_f1600_2019_r5_01_qualifying_pdf_event_mismatch",
+      "scope": "frp_f1600_2019",
+      "status": "open",
+      "description": "FRP archive labels Pittsburgh International Race Complex Qualifying, but the linked PDF header/date indicates a different event (FRP at SUMMIT POINT with KARTS                                                                   Sorted on best lap time; F1600 Championship Series                                                 Summit Point 2.000 miles; 2019-08-23T14:40:00). Rows were staged but not imported."
+    },
+    {
+      "id": "gap_gb3_2022_session_1248_missing_json",
+      "scope": "gb3_2022",
+      "status": "open",
+      "description": "GB3 _rounds.json lists Donington Park Friday session 2 (1248) at 2022-05-27T14:45:00, so the session entity is retained from the official manifest. Row-level results remain unavailable because the session JSON endpoint returned 404."
+    },
+    {
+      "id": "gap_indy_nxt_qualifying_lap_reports",
+      "scope": "indy_nxt_official",
+      "status": "open",
+      "description": "EventsSessionDetails imports race/session result rows, qualifyingResults for official SessionType=Q records, and official terminal-status incident rows for contact/mechanical/dns outcomes. Official Race Lap Chart PDFs now import complete lap-by-lap position samples when parser validation matches official completed-lap counts, plus clean source-visible partial samples when missing car-lap counts or official result/chart lap-count conflicts are explicitly reported and no parsed samples duplicate or reference unknown cars. Official Event Summary PDFs now import race-stat metrics and most-improved racecraft notes. Official Leader Lap Summary PDFs now import leader-by-lap timing, margin, and flag-state metrics. Official Top Section Times PDFs now import practice, qualifying, and race section-rank timing metrics when official section rows are present. Official Section Results PDFs now import practice, qualifying, and race lap-by-lap section times and speeds at per-car/per-lap grain when official section rows are present. Canceled reports without timing rows are held out, and source-visible rows without canonical API timing rows keep car/name text with null canonical IDs. Official race Results PDFs now import penalty/decision summary rows and caution-summary causal incident rows. Pit summaries, deeper report parsing, and lap-specific incident detail beyond official caution summaries remain open."
+    },
+    {
+      "id": "gap_remaining_career_rows_after_track_metadata",
+      "scope": "career_dataset",
+      "status": "open",
+      "description": "Karting race-by-race records, remaining early-career Formula Ford appearances outside imported National FF1600/Festival/Walter Hayes Trophy/Champion books, media narrative beyond imported Team USA 2020 context and structured Team USA/Badger Kart Club milestone and record facts, non-official ambient weather enrichment, historical INDY NXT date-only session windows not covered by official Race Control schedule/trackactivity feeds, remaining grid/pit/sector/deeper detail extraction beyond imported INDY NXT complete and partial lap-chart samples plus Results PDF penalty/caution rows, FRP grid-position-loss announcements, and Formula Ford matched grid/WHT penalty notes, and track metadata for future imported tracks remain open."
+    }
+  ]
+}

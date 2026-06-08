@@ -1,0 +1,146 @@
+{
+  "checkedAt": "2026-06-08T01:49:12.467Z",
+  "source": "INDY NXT official results API + Race Control timing feed for unpublished current session",
+  "points": [
+    {
+      "race": "St. Petersburg",
+      "type": "Street",
+      "start": 19,
+      "finish": 18,
+      "bestLapRank": 15,
+      "points": 12,
+      "status": "Running",
+      "source": "official session result"
+    },
+    {
+      "race": "Arlington",
+      "type": "Street",
+      "start": 23,
+      "finish": 18,
+      "bestLapRank": 23,
+      "points": 12,
+      "status": "Running",
+      "source": "official session result"
+    },
+    {
+      "race": "Alabama R1",
+      "type": "Road",
+      "start": 5,
+      "finish": 8,
+      "bestLapRank": 10,
+      "points": 24,
+      "status": "Running",
+      "source": "official session result"
+    },
+    {
+      "race": "Alabama R2",
+      "type": "Road",
+      "start": 11,
+      "finish": 7,
+      "bestLapRank": 10,
+      "points": 26,
+      "status": "Running",
+      "source": "official session result"
+    },
+    {
+      "race": "Indy GP R1",
+      "type": "Road",
+      "start": 13,
+      "finish": 22,
+      "bestLapRank": 18,
+      "points": 8,
+      "status": "Running",
+      "source": "official session result"
+    },
+    {
+      "race": "Indy GP R2",
+      "type": "Road",
+      "start": 14,
+      "finish": 12,
+      "bestLapRank": 13,
+      "points": 18,
+      "status": "Running",
+      "source": "official session result"
+    },
+    {
+      "race": "Detroit Grand Prix",
+      "type": "Street",
+      "start": 14,
+      "finish": 8,
+      "bestLapRank": 12,
+      "points": 24,
+      "status": "Running",
+      "source": "official session result"
+    },
+    {
+      "race": "WWTR",
+      "type": "Oval",
+      "start": 12,
+      "finish": 23,
+      "bestLapRank": 24,
+      "points": 7,
+      "status": "Mechanical",
+      "source": "official session result"
+    }
+  ],
+  "bryceStanding": {
+    "rank": 14,
+    "points": 131,
+    "wins": 0,
+    "top5": 0,
+    "top10": 3,
+    "bestFinish": 7
+  },
+  "yearSummaries": [
+    {
+      "year": 2024,
+      "starts": 14,
+      "bestFinish": 3,
+      "top10s": 8,
+      "averageFinish": 10.9
+    },
+    {
+      "year": 2025,
+      "starts": 14,
+      "bestFinish": 5,
+      "top10s": 6,
+      "averageFinish": 12.2
+    },
+    {
+      "year": 2026,
+      "starts": 8,
+      "bestFinish": 7,
+      "top10s": 3,
+      "averageFinish": 14.5
+    }
+  ],
+  "teammateSummaries": [
+    {
+      "name": "Niels Koolen",
+      "driverId": "4963",
+      "year": 2026,
+      "starts": 8,
+      "bestFinish": 4,
+      "top10s": 2,
+      "averageFinish": 15.1
+    },
+    {
+      "name": "James Roe",
+      "driverId": "4895",
+      "year": 2026,
+      "starts": 8,
+      "bestFinish": 10,
+      "top10s": 1,
+      "averageFinish": 17.6
+    },
+    {
+      "name": "Carson Etter",
+      "driverId": "4996",
+      "year": 2026,
+      "starts": 8,
+      "bestFinish": 16,
+      "top10s": 0,
+      "averageFinish": 19.5
+    }
+  ]
+}
