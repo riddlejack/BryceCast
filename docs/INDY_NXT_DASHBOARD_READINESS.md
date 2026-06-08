@@ -25,7 +25,8 @@ Current INDY NXT coverage:
 | Lap samples | partial by fidelity, 36/36 completed races imported | Lap-position charts from official Race Lap Charts with caveat labels for partial charts. |
 | Track metadata | complete, 13/13 INDY NXT tracks | Track cards, track type, length, corners, timezone. |
 | Exact session windows | partial, 111/189 physical sessions | Use exact-time rows for time joins; keep the remaining qualifying/group rows date-only. |
-| Official weather conditions | unavailable | Do not present as official INDY NXT weather. |
+| Official weather conditions | unavailable | Do not present modeled ambient weather as official INDY NXT weather. |
+| Modeled ambient weather | complete for archive-eligible exact-window sessions, 95 rows | Ambient context for exact-window race/practice/qualifying sessions with non-official labels. |
 | Detailed pit context | unavailable | Do not show stop lap, pit lane time, tire/service, or sequence. |
 | Derived benchmarks | blocked | Build separately before teammate/field-strength claims become production-safe. |
 
@@ -42,6 +43,7 @@ Current INDY NXT coverage:
 - Official Leader Lap Summary metrics with leader timing, margins, and flag-state context.
 - Official section timing/rank metrics for all comparable sessions except `session_indy_nxt_2024_6325`.
 - Track metadata and timezone-aware exact-window joins for the 111 source-backed exact session windows.
+- Non-official modeled ambient weather for 95 archive-eligible exact-window sessions, including all 36 completed race sessions. Use `modeled_medium` labels and the station cross-check report as supporting QA, not as official weather.
 
 ## Caveats For UI Copy
 
@@ -49,7 +51,7 @@ Current INDY NXT coverage:
 - Section data: `session_indy_nxt_2024_6325` is held out because the official Section Results URL returns corrupt/truncated non-PDF bytes. `session_indy_nxt_2025_6596` is an official canceled/no-row qualifying report and is excluded from the comparable denominator.
 - Exact session windows: the 78 remaining date-only INDY NXT rows are qualifying/group/combined qualifying sessions where official sources expose only coarse qualifying blocks or no exact qualifying row. Do not use those rows for hour-level weather or live-context joins.
 - Pit context: official sources expose pit-stop counts, but no dedicated pit-summary or pit-lane sequence. Keep UI language to counts.
-- Weather: no official INDY NXT session weather/track-condition observations are imported. Weather-readiness requires a separate, explicitly labeled non-official weather model.
+- Weather: no official INDY NXT session weather/track-condition observations are imported. The separate Open-Meteo model covers 95 archive-eligible exact-window sessions and is cross-checked against 6 NOAA/NCEI GHCNh station samples with no material conflicts. Keep UI labels to modeled ambient weather.
 - Derived benchmarks: teammate and field-strength analytics are not production-ready from this career dataset yet.
 
 ## Next Highest-Leverage Work

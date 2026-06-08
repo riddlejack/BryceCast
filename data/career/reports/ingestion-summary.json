@@ -1,10 +1,10 @@
 {
   "schemaVersion": "bryce-career-ingestion-summary.v1",
-  "generatedAt": "2026-06-08T18:40:17.588Z",
+  "generatedAt": "2026-06-08T19:38:15.513Z",
   "datasetPath": "data/career/career.dataset.json",
   "validation": {
     "ok": true,
-    "checkedAt": "2026-06-08T18:40:16.968Z",
+    "checkedAt": "2026-06-08T19:38:14.908Z",
     "errors": [],
     "warnings": [
       {
@@ -29,13 +29,13 @@
     "racecraftEvents": 35,
     "penalties": 82,
     "incidents": 132,
-    "weatherObservations": 86,
+    "weatherObservations": 181,
     "mediaAssets": 940,
     "broadcastRoutes": 0,
     "notificationRules": 0,
     "notificationEvents": 0,
     "derivedMetrics": 370,
-    "sourceEvidence": 1121,
+    "sourceEvidence": 1199,
     "gaps": 9
   },
   "readiness": {
@@ -57,12 +57,12 @@
       "lengthCoverage": 1
     },
     "weather": {
-      "observations": 86,
-      "sessionsCovered": 86,
-      "tracksCovered": 11,
-      "withAmbientTemp": 1,
+      "observations": 181,
+      "sessionsCovered": 181,
+      "tracksCovered": 24,
+      "withAmbientTemp": 96,
       "withTrackTemp": 1,
-      "trackTempCoverage": 0.0116
+      "trackTempCoverage": 0.0055
     },
     "analyticsSafeNow": [
       "Source-backed result analytics for imported official families: INDY NXT 2024-2026, GB3/BRDC British F3 2021-2022, IMSA Daytona 2025, Euroformula 2023, FROC 2024, FRP F1600 2019, and Formula Ford 2020",
@@ -73,7 +73,7 @@
     "analyticsBlockedOrPartial": []
   },
   "sourceEvidence": {
-    "total": 1121,
+    "total": 1199,
     "bySourceType": {
       "archived_official_page": 2,
       "official_pdf": 711,
@@ -82,7 +82,8 @@
       "official_html": 16,
       "official_image": 5,
       "official_article": 4,
-      "official_json": 2
+      "official_json": 2,
+      "weather_api": 78
     }
   },
   "workstreams": [
@@ -144,7 +145,7 @@
   "importReports": [
     {
       "name": "euroformula-2023-import-report.json",
-      "checkedAt": "2026-06-08T18:39:58.806Z",
+      "checkedAt": "2026-06-08T19:37:54.877Z",
       "refresh": false,
       "fetched": 0,
       "cached": 32,
@@ -165,7 +166,7 @@
     },
     {
       "name": "formula-ford-2020-import-report.json",
-      "checkedAt": "2026-06-08T18:40:02.269Z",
+      "checkedAt": "2026-06-08T19:37:58.252Z",
       "refresh": false,
       "fetched": 0,
       "cached": 11,
@@ -271,7 +272,7 @@
     },
     {
       "name": "froc-2024-import-report.json",
-      "checkedAt": "2026-06-08T18:40:03.970Z",
+      "checkedAt": "2026-06-08T19:37:59.813Z",
       "refresh": false,
       "fetched": 0,
       "cached": 12,
@@ -304,7 +305,7 @@
     },
     {
       "name": "frp-f1600-import-report.json",
-      "checkedAt": "2026-06-08T18:40:00.741Z",
+      "checkedAt": "2026-06-08T19:37:56.819Z",
       "refresh": false,
       "fetched": 0,
       "cached": 81,
@@ -325,7 +326,7 @@
     },
     {
       "name": "gb3-2021-import-report.json",
-      "checkedAt": "2026-06-08T18:39:53.836Z",
+      "checkedAt": "2026-06-08T19:37:49.936Z",
       "refresh": false,
       "fetched": 0,
       "cached": 129,
@@ -339,7 +340,7 @@
     },
     {
       "name": "gb3-import-report.json",
-      "checkedAt": "2026-06-08T18:39:55.335Z",
+      "checkedAt": "2026-06-08T19:37:51.506Z",
       "refresh": false,
       "fetched": 0,
       "cached": 78,
@@ -360,7 +361,7 @@
     },
     {
       "name": "imsa-import-report.json",
-      "checkedAt": "2026-06-08T18:39:57.553Z",
+      "checkedAt": "2026-06-08T19:37:53.600Z",
       "refresh": false,
       "fetched": 0,
       "cached": 3,
@@ -374,7 +375,7 @@
     },
     {
       "name": "indy-nxt-import-report.json",
-      "checkedAt": "2026-06-08T18:39:50.326Z",
+      "checkedAt": "2026-06-08T19:37:46.339Z",
       "refresh": false,
       "fetched": 0,
       "cached": 180,
@@ -388,7 +389,7 @@
     },
     {
       "name": "track-metadata-import-report.json",
-      "checkedAt": "2026-06-08T18:40:10.048Z",
+      "checkedAt": "2026-06-08T19:38:05.839Z",
       "refresh": null,
       "fetched": null,
       "cached": null,

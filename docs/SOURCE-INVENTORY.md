@@ -16,6 +16,7 @@ For the detailed analytics truth table, current audit output, and design implica
 | NXT schedule | `https://indycar.blob.core.windows.net/racecontrol/schedulefeed_nxt.json` | Event schedule, broadcasts, spotter guide, starting grid, pit assignments, previous results, track assets. | Fallback session route, Race Ops, pre-race cards. |
 | NXT track activity/results | `https://indycar.blob.core.windows.net/racecontrol/trackactivityleaderboardfeed_nxt.json` | Session metadata, current session networks, imported results across practice, qualifying, race. No car coordinates. | Primary current-session route, Engineer history, session status. |
 | Official results APIs | `https://www.indynxt.com/api/results/...` | Standings, driver-year results, session details, official post-session records. | Season analytics. |
+| Historical INDY NXT ambient weather | Open-Meteo Historical Weather API plus NOAA/NCEI GHCNh station cross-check report | Non-official modeled ambient weather for exact-window INDY NXT career sessions, with representative station-observation QA. | Career/session context only; never official weather or track temperature. |
 | Local race poller | `scripts/race-poller.mjs` | SQLite, JSONL, and latest public snapshot for Race Control, schedule, track activity, config, source freshness, and Bryce samples. | Season archive and race-day source proof. |
 | Local API service | `scripts/api-server.mjs`, `/api/*` | Normalized BryceCast snapshot, session, Bryce row, timing tower, source probes with freshness metadata, local logs, history, onboard catalog, replay analytics, and proof persistence. | Web, iPhone/mobile web, production-style local serving. |
 | INDYCAR LIVE catalog monitor | `scripts/probe-onboards.mjs`, `https://api.staylive.tv/platforms/by-domain/www.indycarlive.com`, `https://api.staylive.tv/livestreams/feed?limit=100&page=1` | Official INDYCAR LIVE channel metadata for `Onboards` and `Indy NXT`. Current probe found top-series in-car entries and INDY NXT session entries, with no strict Bryce/Aron match. | Historical research/audit only. Bryce confirmed no usable live POV for BryceCast. |
@@ -25,7 +26,7 @@ For the detailed analytics truth table, current audit output, and design implica
 
 | Source | Status | Next step |
 | --- | --- | --- |
-| Weather via NWS or another official weather source | Not implemented. Weather is a high-value target, not a confirmed BryceCast source. | Add adapter using event coordinates; show observation/forecast timestamp, checked age, station/office, and alert source. |
+| Live weather via NWS or another official weather source | Not implemented for race-day live operation. Historical INDY NXT modeled ambient weather is implemented separately in the career dataset. | Add adapter using event coordinates; show observation/forecast timestamp, checked age, station/office, and alert source. |
 | Live #9 onboard in INDYCAR App | Bryce has confirmed no live POV feed is available for BryceCast to include. | Out of active scope. |
 | Live #9 onboard through INDYCAR/FOX/CGR/production | Current product has no access. | Out of active scope unless a rights holder explicitly offers a feed later. |
 | INDYCAR LIVE Onboards catalog | Official metadata exposes an `Onboards` channel. Current checked entries are top-series in-car objects, with INDY NXT appearing as session-level objects only. | Optional audit only, not a product dependency. |
@@ -62,6 +63,6 @@ For the detailed analytics truth table, current audit output, and design implica
 2. Replace live POV verification surfaces with a concise unavailable-state and remove POV as a readiness blocker.
 3. Keep audio/frequency status first-class: official race audio, frequency metadata, permission bucket, and evidence/source freshness.
 4. Add timezone-aware upcoming-session route previews.
-5. Add weather and alert context from NWS or another official weather source.
+5. Add live weather and alert context from NWS or another official weather source.
 6. Add PDF/session-report ingestion.
 7. Add track animation only when `lapDistance` or official websocket data is live and nonzero.

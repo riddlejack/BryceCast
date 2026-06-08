@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-06-08T18:39:55.335Z",
+  "checkedAt": "2026-06-08T19:37:51.506Z",
   "year": 2022,
   "concurrency": 4,
   "refresh": false,
@@ -25,9 +25,9 @@
     "data/career/raw/gb3/2022-rounds.json",
     "data/career/raw/gb3/2022-standings.json",
     "data/career/raw/gb3/2022-session-1108.json",
-    "data/career/raw/gb3/2022-session-1111.json",
     "data/career/raw/gb3/2022-session-1110.json",
     "data/career/raw/gb3/2022-session-1109.json",
+    "data/career/raw/gb3/2022-session-1111.json",
     "data/career/raw/gb3/2022-session-1112.json",
     "data/career/raw/gb3/2022-session-1113.json",
     "data/career/raw/gb3/2022-session-778.json",

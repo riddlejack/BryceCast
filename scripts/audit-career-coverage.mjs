@@ -31,6 +31,8 @@ const hasAnyStart = (session) => Boolean(session.actualStart || session.schedule
 const hasExactTimestamp = (session) =>
   (typeof session.actualStart === 'string' && session.actualStart.includes('T')) ||
   (typeof session.scheduledStart === 'string' && session.scheduledStart.includes('T'));
+const isOfficialWeatherObservation = (row) =>
+  row.confidence === 'official' || row.weatherSourceType === 'series_report';
 const isExactWindowSourceUnavailable = (session) =>
   session.raw?.testDayContextBackfill?.timeWindowStatus === 'date_context_only_exact_time_unsourced' &&
   !hasExactTimestamp(session);
@@ -413,6 +415,7 @@ const buildCoverage = ({ dataset, summary, indyReport, indyWindowReport, cancele
   const qualifyingBySession = new Map();
   const lapSamplesBySession = new Map();
   const weatherBySession = new Map();
+  const officialWeatherBySession = new Map();
   const penaltiesBySession = new Map();
   const incidentsBySession = new Map();
   const racecraftBySession = new Map();
@@ -428,7 +431,10 @@ const buildCoverage = ({ dataset, summary, indyReport, indyWindowReport, cancele
   for (const row of asArray(dataset.results)) pushBySession(resultsBySession, row);
   for (const row of asArray(dataset.qualifyingResults)) pushBySession(qualifyingBySession, row);
   for (const row of asArray(dataset.lapSamples)) pushBySession(lapSamplesBySession, row);
-  for (const row of asArray(dataset.weatherObservations)) pushBySession(weatherBySession, row);
+  for (const row of asArray(dataset.weatherObservations)) {
+    pushBySession(weatherBySession, row);
+    if (isOfficialWeatherObservation(row)) pushBySession(officialWeatherBySession, row);
+  }
   for (const row of asArray(dataset.penalties)) pushBySession(penaltiesBySession, row);
   for (const row of asArray(dataset.incidents)) pushBySession(incidentsBySession, row);
   for (const row of asArray(dataset.racecraftEvents)) pushBySession(racecraftBySession, row);
@@ -480,6 +486,7 @@ const buildCoverage = ({ dataset, summary, indyReport, indyWindowReport, cancele
       );
     }).length;
     const weatherSessions = sessions.filter((session) => (weatherBySession.get(session.id) ?? []).length > 0);
+    const officialWeatherSessions = sessions.filter((session) => (officialWeatherBySession.get(session.id) ?? []).length > 0);
     const lapSampleSessions = sessions.filter((session) => (lapSamplesBySession.get(session.id) ?? []).length > 0);
     const raceLapSampleSessions = comparableRaceSessions.filter((session) => (lapSamplesBySession.get(session.id) ?? []).length > 0);
     const penaltySessions = sessions.filter((session) => (penaltiesBySession.get(session.id) ?? []).length > 0);
@@ -591,8 +598,8 @@ const buildCoverage = ({ dataset, summary, indyReport, indyWindowReport, cancele
       category('track_metadata', trackMetadataComplete, trackIds.size, {
         notes: `${trackMetadataComplete}/${trackIds.size} referenced tracks have coordinates, timezone, length, direction, surface, and corner count.`
       }),
-      category('official_weather_conditions', weatherSessions.length, sessions.length, {
-        notes: `${weatherSessions.length}/${sessions.length} sessions have official weather/track-condition observations.`
+      category('official_weather_conditions', officialWeatherSessions.length, sessions.length, {
+        notes: `${officialWeatherSessions.length}/${sessions.length} sessions have official weather/track-condition observations.`
       }),
       category('lap_samples', series.id === 'series_indy_nxt' ? raceLapSampleSessions.length : lapSampleSessions.length, series.id === 'series_indy_nxt' ? comparableRaceSessions.length : sessions.length, {
         status: series.id === 'series_formula_ford'
@@ -707,6 +714,7 @@ const buildCoverage = ({ dataset, summary, indyReport, indyWindowReport, cancele
         );
       }).length;
       const yearWeatherSessions = yearSessions.filter((session) => (weatherBySession.get(session.id) ?? []).length > 0);
+      const yearOfficialWeatherSessions = yearSessions.filter((session) => (officialWeatherBySession.get(session.id) ?? []).length > 0);
       const yearLapSampleSessions = yearSessions.filter((session) => (lapSamplesBySession.get(session.id) ?? []).length > 0);
       const yearRaceLapSampleSessions = yearComparableRaceSessions.filter((session) => (lapSamplesBySession.get(session.id) ?? []).length > 0);
       const yearPenaltySessions = yearSessions.filter((session) => (penaltiesBySession.get(session.id) ?? []).length > 0);
@@ -747,8 +755,8 @@ const buildCoverage = ({ dataset, summary, indyReport, indyWindowReport, cancele
         category('track_metadata', yearTrackMetadataComplete, yearTrackIds.size, {
           notes: `${yearTrackMetadataComplete}/${yearTrackIds.size} referenced tracks have complete metadata.`
         }),
-        category('official_weather_conditions', yearWeatherSessions.length, yearSessions.length, {
-          notes: `${yearWeatherSessions.length}/${yearSessions.length} sessions have official weather/track-condition observations.`
+        category('official_weather_conditions', yearOfficialWeatherSessions.length, yearSessions.length, {
+          notes: `${yearOfficialWeatherSessions.length}/${yearSessions.length} sessions have official weather/track-condition observations.`
         }),
         category('lap_samples', series.id === 'series_indy_nxt' ? yearRaceLapSampleSessions.length : yearLapSampleSessions.length, series.id === 'series_indy_nxt' ? yearComparableRaceSessions.length : yearSessions.length, {
           status: series.id === 'series_formula_ford'
@@ -925,10 +933,10 @@ const buildCoverage = ({ dataset, summary, indyReport, indyWindowReport, cancele
             id: 'official_weather_conditions',
             status: !policy.supported.has('official_weather_conditions')
               ? (policy.unavailable.has('official_weather_conditions') ? 'unavailable' : 'out_of_scope')
-              : (weatherBySession.get(session.id) ?? []).length > 0
+              : (officialWeatherBySession.get(session.id) ?? []).length > 0
                 ? 'complete'
                 : 'blocked',
-            covered: (weatherBySession.get(session.id) ?? []).length,
+            covered: (officialWeatherBySession.get(session.id) ?? []).length,
             total: policy.supported.has('official_weather_conditions') ? 1 : 0
           },
           {

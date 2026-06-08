@@ -1,10 +1,10 @@
 {
   "schemaVersion": "bryce-career-coverage-matrix.v1",
-  "generatedAt": "2026-06-08T18:40:18.296Z",
+  "generatedAt": "2026-06-08T19:38:16.255Z",
   "datasetPath": "data/career/career.dataset.json",
   "validation": {
     "ok": true,
-    "checkedAt": "2026-06-08T18:40:16.968Z",
+    "checkedAt": "2026-06-08T19:38:14.908Z",
     "errors": [],
     "warnings": [
       {
@@ -2291,7 +2291,7 @@
       "raceRowsWithGridOrStart": 274,
       "raceRowsWithPitStops": 274,
       "lapSampleSessions": 14,
-      "weatherSessions": 0,
+      "weatherSessions": 38,
       "priorityGaps": [],
       "categories": [
         {
@@ -2445,7 +2445,7 @@
       "raceRowsWithGridOrStart": 272,
       "raceRowsWithPitStops": 272,
       "lapSampleSessions": 14,
-      "weatherSessions": 0,
+      "weatherSessions": 36,
       "priorityGaps": [],
       "categories": [
         {
@@ -2599,7 +2599,7 @@
       "raceRowsWithGridOrStart": 192,
       "raceRowsWithPitStops": 192,
       "lapSampleSessions": 8,
-      "weatherSessions": 0,
+      "weatherSessions": 21,
       "priorityGaps": [],
       "categories": [
         {

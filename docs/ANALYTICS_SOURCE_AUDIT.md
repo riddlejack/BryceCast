@@ -10,7 +10,7 @@ BryceCast can already support a strong live timing and race-context analytics pr
 
 BryceCast does not currently have a validated live GPS/car-coordinate feed for Bryce. The track map is a static reference image. Do not build a live moving-dot map unless an official nonzero `lapDistance` stream, Race Control websocket, or another licensed telemetry source is discovered and proven during a live INDY NXT session.
 
-Weather is a high-value candidate feature but is not implemented in the current data stack. It should be added through an official weather source such as NWS using event coordinates, with timestamp and station/forecast metadata visible.
+Historical INDY NXT modeled ambient weather is implemented for the exact-window career slice through Open-Meteo Historical Weather API, with representative NOAA/NCEI GHCNh station cross-checks. Live race-weekend weather, radar, and alerts remain a separate high-value candidate feature and should be added through an official live weather source such as NWS using event coordinates, with timestamp and station/forecast metadata visible.
 
 ## Verified Live / Near-Live Sources
 
@@ -57,13 +57,13 @@ These features are not currently source-backed:
 - Team radio audio stream. Frequency metadata is not live audio.
 - Live POV or onboard video.
 - Predictive strategy, undercut windows, fuel windows, or tire degradation models unless they are explicitly derived from captured timing history and labeled as estimates.
-- Weather/radar until a weather source is implemented and tied to event coordinates.
+- Live weather/radar/alerts until a live weather source is implemented and tied to event coordinates. Historical INDY NXT modeled ambient weather exists only for source-backed exact-window career sessions and must be labeled non-official.
 
 ## High-Value Sources To Add Next
 
 | Candidate | Why it matters | Acceptance rule |
 | --- | --- | --- |
-| NWS forecast/observations/alerts by track coordinates | Track temperature/weather context affects pace, cautions, and strategy; easy high-value analytics layer. | Show source station/office, observed/forecast timestamp, checked age, and event coordinates. |
+| NWS forecast/observations/alerts by track coordinates | Track temperature/weather context affects pace, cautions, and strategy during live weekends; historical modeled ambient weather already exists for the INDY NXT exact-window career slice. | Show source station/office, observed/forecast timestamp, checked age, and event coordinates. |
 | Official PDF/session reports | Lap charts, pit summaries, qualifying sheets, section reports, penalties, and official post-race facts can enrich replay/history. | Parser must cite report URL and extracted fields; no manual-only numbers in production screens. |
 | Race Control track-map websocket or `lapDistance` field | Could enable real moving map or lap-progress strip. | Only ship if live INDY NXT data is nonzero, refreshes during green laps, maps to Bryce/driver ID, and matches timing lap progression. |
 | Historical clips / delayed onboard provided by Bryce/team/rights holder | Adds context and personality without pretending live POV exists. | Must be explicitly delayed, permissioned, and linked to lap/session metadata. |

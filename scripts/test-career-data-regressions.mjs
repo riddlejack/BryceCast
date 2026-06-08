@@ -1,16 +1,27 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 
+const readJsonOrNull = async (path) => {
+  try {
+    return JSON.parse(await readFile(path, 'utf8'));
+  } catch {
+    return null;
+  }
+};
+
 const dataset = JSON.parse(await readFile('data/career/career.dataset.json', 'utf8'));
 const report = JSON.parse(await readFile('data/career/reports/validation-report.json', 'utf8'));
 const ingestionSummary = JSON.parse(await readFile('data/career/reports/ingestion-summary.json', 'utf8'));
 const indyNxtReportDetailsBackfill = JSON.parse(await readFile('data/career/reports/indy-nxt-report-details-backfill-report.json', 'utf8'));
 const indyNxtSessionWindowBackfill = JSON.parse(await readFile('data/career/reports/indy-nxt-session-window-backfill-report.json', 'utf8'));
+const indyNxtWeatherBackfillReport = await readJsonOrNull('data/career/reports/indy-nxt-weather-backfill-report.json');
+const indyNxtWeatherStationCrosscheckReport = await readJsonOrNull('data/career/reports/indy-nxt-weather-station-crosscheck-report.json');
 const frocImportReport = JSON.parse(await readFile('data/career/reports/froc-2024-import-report.json', 'utf8'));
 const sessionWindowBackfillReport = JSON.parse(await readFile('data/career/reports/session-window-backfill-report.json', 'utf8'));
 const careerCoverageMatrix = JSON.parse(await readFile('data/career/reports/career-coverage-matrix.json', 'utf8'));
 const sourceManifest = JSON.parse(await readFile('data/career/sources.manifest.json', 'utf8'));
 const eventsById = new Map(dataset.events.map((row) => [row.id, row]));
+const sessionsById = new Map(dataset.sessions.map((row) => [row.id, row]));
 
 const duplicateIds = (rows) => {
   const seen = new Set();
@@ -105,6 +116,16 @@ assert.equal(
   indyCoverage?.categories.find((row) => row.id === 'pit_stop_counts')?.status,
   'complete',
   'INDY NXT official pit-stop count coverage should remain complete across race result rows'
+);
+assert.equal(
+  indyCoverage?.categories.find((row) => row.id === 'official_weather_conditions')?.status,
+  'unavailable',
+  'INDY NXT non-official ambient weather enrichment must not be counted as official weather/track conditions'
+);
+assert.equal(
+  indyCoverage?.categories.find((row) => row.id === 'official_weather_conditions')?.covered,
+  0,
+  'INDY NXT official weather/track-condition coverage must stay zero unless official series reports expose it'
 );
 assert.equal(
   indyCoverage?.categories.find((row) => row.id === 'detailed_pit_context')?.status,
@@ -208,6 +229,96 @@ assert.equal(
   /\[object Object\]/.test(careerCoverageMatrix.seasons.find((row) => row.seriesId === 'series_indy_nxt' && row.year === 2024)?.categories.find((row) => row.id === 'indy_section_data')?.notes ?? ''),
   false,
   'INDY NXT season-level section-data notes must render readable counts, not object serialization'
+);
+const indyNxtWeatherRows = dataset.weatherObservations.filter((row) => eventsById.get(sessionsById.get(row.sessionId)?.eventId)?.seriesId === 'series_indy_nxt');
+const indyNxtExactSessions = dataset.sessions.filter((session) => {
+  const event = eventsById.get(session.eventId);
+  const start = session.actualStart ?? session.scheduledStart;
+  return event?.seriesId === 'series_indy_nxt' && typeof start === 'string' && start.includes('T');
+});
+assert.ok(indyNxtWeatherBackfillReport, 'INDY NXT weather backfill report must exist');
+const indyNxtWeatherArchiveCutoffDate = indyNxtWeatherBackfillReport?.archiveCutoffDate ?? '1900-01-01';
+const indyNxtWeatherEligibleSessions = indyNxtExactSessions.filter((session) =>
+  String(session.actualStart ?? session.scheduledStart).slice(0, 10) <= indyNxtWeatherArchiveCutoffDate
+);
+const indyNxtWeatherEligibleByType = indyNxtWeatherEligibleSessions.reduce((counts, session) => {
+  counts[session.sessionType] = (counts[session.sessionType] ?? 0) + 1;
+  return counts;
+}, {});
+assert.equal(indyNxtWeatherBackfillReport?.source, 'open_meteo_historical_archive', 'INDY NXT weather report must identify Open-Meteo archive source');
+assert.equal(
+  indyNxtWeatherBackfillReport?.joinedSessions,
+  indyNxtWeatherEligibleSessions.length,
+  'INDY NXT weather backfill must join every exact-window session at or before the archive cutoff date'
+);
+assert.deepEqual(
+  indyNxtWeatherBackfillReport?.joinedBySessionType,
+  indyNxtWeatherEligibleByType,
+  'INDY NXT weather report must preserve race-first scope while also joining archive-eligible exact-window practice and qualifying sessions'
+);
+assert.equal(indyNxtWeatherBackfillReport?.skippedDateOnlySessions, 78, 'INDY NXT weather backfill must skip the 78 date-only sessions');
+assert.equal(
+  indyNxtWeatherBackfillReport?.skippedFutureSessions,
+  indyNxtExactSessions.length - indyNxtWeatherEligibleSessions.length,
+  'INDY NXT weather report must preserve future exact-window sessions as skipped rather than fabricating historical weather'
+);
+assert.equal(indyNxtWeatherRows.length, indyNxtWeatherEligibleSessions.length, 'INDY NXT weather rows must exist exactly for archive-eligible source-backed exact-window sessions');
+assert.equal(
+  indyNxtWeatherRows.some((row) => row.confidence === 'official' || row.weatherSourceType === 'series_report'),
+  false,
+  'INDY NXT ambient weather enrichment must never be marked official or series_report'
+);
+assert.deepEqual(
+  indyNxtWeatherRows
+    .filter((row) => !row.provenanceRefs?.length || !row.source || !row.weatherSourceType || !row.timeConfidence || !row.locationConfidence)
+    .map((row) => row.id),
+  [],
+  'Every INDY NXT weather row must include source, source type, time/location confidence, and provenance'
+);
+assert.deepEqual(
+  indyNxtWeatherRows
+    .filter((row) => !sessionsById.get(row.sessionId)?.actualStart && !sessionsById.get(row.sessionId)?.scheduledStart?.includes('T'))
+    .map((row) => row.sessionId),
+  [],
+  'INDY NXT weather backfill must not assign hour-level rows to date-only sessions'
+);
+assert.deepEqual(
+  indyNxtWeatherRows
+    .filter((row) => row.trackTempC != null || row.trackTempSource === 'weather_api_surface_model')
+    .map((row) => row.id),
+  [],
+  'INDY NXT weather backfill must keep trackTempC null and avoid treating soil temperature as track temperature'
+);
+assert.ok(indyNxtWeatherStationCrosscheckReport, 'INDY NXT weather station cross-check report must exist');
+assert.equal(
+  indyNxtWeatherStationCrosscheckReport?.source,
+  'noaa_ncei_ghcnh',
+  'INDY NXT station cross-check must use NOAA/NCEI GHCNh as the no-auth official station-observation route'
+);
+assert.ok(
+  indyNxtWeatherStationCrosscheckReport?.samplesMatched >= 5,
+  'INDY NXT station cross-check must match at least five representative exact-window sessions'
+);
+assert.equal(
+  indyNxtWeatherStationCrosscheckReport?.samplesMatched,
+  indyNxtWeatherStationCrosscheckReport?.samples?.length,
+  'INDY NXT station cross-check report must expose every matched sample'
+);
+assert.deepEqual(
+  indyNxtWeatherStationCrosscheckReport?.samples?.filter((sample) =>
+    !sample.station?.id ||
+    typeof sample.station?.distanceFromTrackKm !== 'number' ||
+    !sample.stationObservation?.observedAtUtc
+  ).map((sample) => sample.sessionId),
+  [],
+  'Every station cross-check sample must include station identity, station distance, and matched observation timestamp'
+);
+assert.deepEqual(
+  indyNxtWeatherRows
+    .filter((row) => row.confidence === 'observed_nearby_high' || row.confidence === 'modeled_high')
+    .map((row) => row.id),
+  [],
+  'Representative station cross-checks must not upgrade canonical INDY NXT weather confidence until a systematic row-level cross-check exists'
 );
 const coverageCategoryForSession = (sessionId, categoryId) =>
   careerCoverageMatrix.sessions

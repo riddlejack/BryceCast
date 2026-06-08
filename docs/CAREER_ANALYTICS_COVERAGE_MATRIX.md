@@ -1,6 +1,6 @@
 # Career Analytics Coverage Matrix
 
-Generated: 2026-06-08T18:40:18.296Z
+Generated: 2026-06-08T19:38:16.255Z
 
 This report is generated from the canonical dataset and importer reports. It covers the production analytics window starting with 2019 FRP F1600 and running through current 2026 INDY NXT. Pre-2019 karting remains narrative/context only.
 
@@ -47,9 +47,9 @@ This report is generated from the canonical dataset and importer reports. It cov
 | GB3 Championship | 2021 | 7 | 39 | 369 | 14 | 39/39 | 369/369 | 0/369 | 0 | 39 |
 | GB3 Championship | 2022 | 8 | 77 | 513 | 8 | 77/77 | 0/513 | 513/513 | 0 | 0 |
 | IMSA WeatherTech SportsCar Championship | 2025 | 1 | 1 | 236 | 0 | 1/1 | 0/236 | 236/236 | 1 | 1 |
-| INDY NXT | 2024 | 14 | 68 | 274 | 34 | 38/68 | 274/274 | 274/274 | 14 | 0 |
-| INDY NXT | 2025 | 14 | 66 | 272 | 33 | 36/66 | 272/272 | 272/272 | 14 | 0 |
-| INDY NXT | 2026 | 17 | 55 | 192 | 28 | 37/55 | 192/192 | 192/192 | 8 | 0 |
+| INDY NXT | 2024 | 14 | 68 | 274 | 34 | 38/68 | 274/274 | 274/274 | 14 | 38 |
+| INDY NXT | 2025 | 14 | 66 | 272 | 33 | 36/66 | 272/272 | 272/272 | 14 | 36 |
+| INDY NXT | 2026 | 17 | 55 | 192 | 28 | 37/55 | 192/192 | 192/192 | 8 | 21 |
 
 ## Season Category Matrix
 

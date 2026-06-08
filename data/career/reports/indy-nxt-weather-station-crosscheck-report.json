@@ -1,0 +1,489 @@
+{
+  "schemaVersion": "brycecast-indy-nxt-weather-station-crosscheck.v1",
+  "generatedAt": "2026-06-08T19:38:08.279Z",
+  "source": "noaa_ncei_ghcnh",
+  "stationListUrl": "https://www.ncei.noaa.gov/oa/global-historical-climatology-network/hourly/doc/ghcnh-station-list.csv",
+  "sourceDocs": [
+    "https://www.ncei.noaa.gov/products/global-historical-climatology-network-hourly",
+    "https://www.ncei.noaa.gov/oa/global-historical-climatology-network/hourly/doc/ghcnh_DOCUMENTATION.pdf"
+  ],
+  "requestedSessionIds": [
+    "session_indy_nxt_2024_6314",
+    "session_indy_nxt_2024_6317",
+    "session_indy_nxt_2024_6319",
+    "session_indy_nxt_2024_6326",
+    "session_indy_nxt_2025_6446",
+    "session_indy_nxt_2025_6454"
+  ],
+  "maxStationDistanceKm": 75,
+  "maxObservationOffsetMinutes": 75,
+  "samplesRequested": 6,
+  "samplesMatched": 6,
+  "samplesUnmatched": 0,
+  "samplesWithNoMaterialConflict": 6,
+  "samplesWithMaterialConflict": 0,
+  "fetched": 0,
+  "cacheHits": 7,
+  "rawArtifacts": [
+    "data/career/raw/weather/noaa-ghcnh/indy-nxt/doc/ghcnh-station-list.csv",
+    "data/career/raw/weather/noaa-ghcnh/indy-nxt/stations/2024/GHCNh_USW00004977_2024.psv",
+    "data/career/raw/weather/noaa-ghcnh/indy-nxt/stations/2024/GHCNh_USW00013876_2024.psv",
+    "data/career/raw/weather/noaa-ghcnh/indy-nxt/stations/2024/GHCNh_USW00014822_2024.psv",
+    "data/career/raw/weather/noaa-ghcnh/indy-nxt/stations/2024/GHCNh_USW00023259_2024.psv",
+    "data/career/raw/weather/noaa-ghcnh/indy-nxt/stations/2025/GHCNh_USW00003960_2025.psv",
+    "data/career/raw/weather/noaa-ghcnh/indy-nxt/stations/2025/GHCNh_USW00092806_2025.psv"
+  ],
+  "unmatched": [],
+  "samples": [
+    {
+      "sessionId": "session_indy_nxt_2024_6314",
+      "sessionName": "Race",
+      "sessionType": "race",
+      "sourceSessionStart": "2024-04-28T10:05:00",
+      "sourceSessionStartUtc": "2024-04-28T15:05:00.000Z",
+      "eventId": "event_indy_nxt_2024_5470",
+      "eventName": "Grand Prix of Alabama",
+      "track": {
+        "id": "track_barber_motorsports_park",
+        "name": "Barber Motorsports Park",
+        "latitude": 33.5325,
+        "longitude": -86.6189,
+        "timezone": "America/Chicago"
+      },
+      "station": {
+        "id": "USW00013876",
+        "name": "BIRMINGHAM AP",
+        "icao": "KBHM",
+        "latitude": 33.5656,
+        "longitude": -86.745,
+        "elevationM": 187.8,
+        "distanceFromTrackKm": 12.3
+      },
+      "stationFileUrl": "https://www.ncei.noaa.gov/oa/global-historical-climatology-network/hourly/access/by-year/2024/psv/GHCNh_USW00013876_2024.psv",
+      "rawArtifactPath": "data/career/raw/weather/noaa-ghcnh/indy-nxt/stations/2024/GHCNh_USW00013876_2024.psv",
+      "stationObservation": {
+        "observedAtUtc": "2024-04-28T14:53:00Z",
+        "offsetFromSessionStartMinutes": -12,
+        "temperatureC": 22.2,
+        "dewPointC": 15,
+        "relativeHumidityPct": 64,
+        "pressureHpa": 1022.5,
+        "windDirectionDeg": 150,
+        "windSpeedKph": 24.1,
+        "windGustKph": 38.9,
+        "precipitationMm": 0,
+        "skyCondition": null,
+        "quality": {
+          "temperature": "5",
+          "dewPoint": "5",
+          "pressure": "5",
+          "windSpeed": "5",
+          "precipitation": "5"
+        }
+      },
+      "openMeteoWeather": {
+        "weatherId": "weather_indy_nxt_open_meteo_session_indy_nxt_2024_6314",
+        "observedAtLocal": "2024-04-28T10:00",
+        "confidence": "modeled_medium",
+        "ambientTempC": 21.4,
+        "dewPointC": 15.2,
+        "relativeHumidityPct": 68,
+        "pressureHpa": 1022.5,
+        "windDirectionDeg": 151,
+        "windSpeedKph": 20.1,
+        "windGustKph": 46.1,
+        "precipitationMm": 0,
+        "wetDry": "dry"
+      },
+      "comparison": {
+        "deltas": {
+          "temperatureC": -0.8,
+          "dewPointC": 0.2,
+          "relativeHumidityPct": 4,
+          "pressureHpa": 0,
+          "windSpeedKph": -4,
+          "windGustKph": 7.2,
+          "precipitationMm": 0
+        },
+        "materialConflict": false,
+        "breachReasons": []
+      },
+      "confidenceDecision": "canonical_row_remains_modeled_medium_representative_crosscheck_only"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6317",
+      "sessionName": "Race",
+      "sessionType": "race",
+      "sourceSessionStart": "2024-06-22T12:25:00",
+      "sourceSessionStartUtc": "2024-06-22T19:25:00.000Z",
+      "eventId": "event_indy_nxt_2024_5473",
+      "eventName": "Grand Prix of Monterey Race 1",
+      "track": {
+        "id": "track_weathertech_raceway_laguna_seca",
+        "name": "WeatherTech Raceway Laguna Seca",
+        "latitude": 36.5843,
+        "longitude": -121.7539,
+        "timezone": "America/Los_Angeles"
+      },
+      "station": {
+        "id": "USW00023259",
+        "name": "MONTEREY PENINSUL AP",
+        "icao": "KMRY",
+        "latitude": 36.5903,
+        "longitude": -121.8489,
+        "elevationM": 48.8,
+        "distanceFromTrackKm": 8.5
+      },
+      "stationFileUrl": "https://www.ncei.noaa.gov/oa/global-historical-climatology-network/hourly/access/by-year/2024/psv/GHCNh_USW00023259_2024.psv",
+      "rawArtifactPath": "data/career/raw/weather/noaa-ghcnh/indy-nxt/stations/2024/GHCNh_USW00023259_2024.psv",
+      "stationObservation": {
+        "observedAtUtc": "2024-06-22T19:54:00Z",
+        "offsetFromSessionStartMinutes": 29,
+        "temperatureC": 20,
+        "dewPointC": 11.7,
+        "relativeHumidityPct": 59,
+        "pressureHpa": 1011.8,
+        "windDirectionDeg": 999,
+        "windSpeedKph": 9.4,
+        "windGustKph": null,
+        "precipitationMm": 0,
+        "skyCondition": "00;;",
+        "quality": {
+          "temperature": "5",
+          "dewPoint": "5",
+          "pressure": "5",
+          "windSpeed": "5",
+          "precipitation": "5"
+        }
+      },
+      "openMeteoWeather": {
+        "weatherId": "weather_indy_nxt_open_meteo_session_indy_nxt_2024_6317",
+        "observedAtLocal": "2024-06-22T12:00",
+        "confidence": "modeled_medium",
+        "ambientTempC": 22.3,
+        "dewPointC": 12.1,
+        "relativeHumidityPct": 52,
+        "pressureHpa": 1010.1,
+        "windDirectionDeg": 291,
+        "windSpeedKph": 11.2,
+        "windGustKph": 29.5,
+        "precipitationMm": 0,
+        "wetDry": "dry"
+      },
+      "comparison": {
+        "deltas": {
+          "temperatureC": 2.3,
+          "dewPointC": 0.4,
+          "relativeHumidityPct": -7,
+          "pressureHpa": -1.7,
+          "windSpeedKph": 1.8,
+          "windGustKph": null,
+          "precipitationMm": 0
+        },
+        "materialConflict": false,
+        "breachReasons": []
+      },
+      "confidenceDecision": "canonical_row_remains_modeled_medium_representative_crosscheck_only"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6319",
+      "sessionName": "Race",
+      "sessionType": "race",
+      "sourceSessionStart": "2024-07-13T13:05:00",
+      "sourceSessionStartUtc": "2024-07-13T18:05:00.000Z",
+      "eventId": "event_indy_nxt_2024_5475",
+      "eventName": "INDY NXT by Firestone at Iowa Speedway",
+      "track": {
+        "id": "track_iowa_speedway",
+        "name": "Iowa Speedway",
+        "latitude": 41.6779,
+        "longitude": -93.0147,
+        "timezone": "America/Chicago"
+      },
+      "station": {
+        "id": "USW00004977",
+        "name": "NEWTON MUNI AP",
+        "icao": "KTNU",
+        "latitude": 41.6742,
+        "longitude": -93.0217,
+        "elevationM": 290.5,
+        "distanceFromTrackKm": 0.7
+      },
+      "stationFileUrl": "https://www.ncei.noaa.gov/oa/global-historical-climatology-network/hourly/access/by-year/2024/psv/GHCNh_USW00004977_2024.psv",
+      "rawArtifactPath": "data/career/raw/weather/noaa-ghcnh/indy-nxt/stations/2024/GHCNh_USW00004977_2024.psv",
+      "stationObservation": {
+        "observedAtUtc": "2024-07-13T17:55:00Z",
+        "offsetFromSessionStartMinutes": -10,
+        "temperatureC": 30,
+        "dewPointC": 27,
+        "relativeHumidityPct": 84,
+        "pressureHpa": null,
+        "windDirectionDeg": 200,
+        "windSpeedKph": 24.1,
+        "windGustKph": null,
+        "precipitationMm": null,
+        "skyCondition": null,
+        "quality": {
+          "temperature": "5",
+          "dewPoint": "5",
+          "pressure": null,
+          "windSpeed": "5",
+          "precipitation": null
+        }
+      },
+      "openMeteoWeather": {
+        "weatherId": "weather_indy_nxt_open_meteo_session_indy_nxt_2024_6319",
+        "observedAtLocal": "2024-07-13T13:00",
+        "confidence": "modeled_medium",
+        "ambientTempC": 30.1,
+        "dewPointC": 23.3,
+        "relativeHumidityPct": 67,
+        "pressureHpa": 1015.7,
+        "windDirectionDeg": 198,
+        "windSpeedKph": 11.7,
+        "windGustKph": 30.2,
+        "precipitationMm": 0,
+        "wetDry": "dry"
+      },
+      "comparison": {
+        "deltas": {
+          "temperatureC": 0.1,
+          "dewPointC": -3.7,
+          "relativeHumidityPct": -17,
+          "pressureHpa": null,
+          "windSpeedKph": -12.4,
+          "windGustKph": null,
+          "precipitationMm": null
+        },
+        "materialConflict": false,
+        "breachReasons": []
+      },
+      "confidenceDecision": "canonical_row_remains_modeled_medium_representative_crosscheck_only"
+    },
+    {
+      "sessionId": "session_indy_nxt_2024_6326",
+      "sessionName": "Race",
+      "sessionType": "race",
+      "sourceSessionStart": "2024-06-02T10:20:00",
+      "sourceSessionStartUtc": "2024-06-02T14:20:00.000Z",
+      "eventId": "event_indy_nxt_2024_5482",
+      "eventName": "Detroit Grand Prix",
+      "track": {
+        "id": "track_streets_of_detroit",
+        "name": "Streets of Detroit",
+        "latitude": 42.3299,
+        "longitude": -83.0409,
+        "timezone": "America/Detroit"
+      },
+      "station": {
+        "id": "USW00014822",
+        "name": "DETROIT CITY AP",
+        "icao": "KDET",
+        "latitude": 42.4072,
+        "longitude": -83.0089,
+        "elevationM": 189.9,
+        "distanceFromTrackKm": 9
+      },
+      "stationFileUrl": "https://www.ncei.noaa.gov/oa/global-historical-climatology-network/hourly/access/by-year/2024/psv/GHCNh_USW00014822_2024.psv",
+      "rawArtifactPath": "data/career/raw/weather/noaa-ghcnh/indy-nxt/stations/2024/GHCNh_USW00014822_2024.psv",
+      "stationObservation": {
+        "observedAtUtc": "2024-06-02T13:53:00Z",
+        "offsetFromSessionStartMinutes": -27,
+        "temperatureC": 20,
+        "dewPointC": 17.2,
+        "relativeHumidityPct": 84,
+        "pressureHpa": 1013.4,
+        "windDirectionDeg": 210,
+        "windSpeedKph": 13,
+        "windGustKph": null,
+        "precipitationMm": 0,
+        "skyCondition": null,
+        "quality": {
+          "temperature": "5",
+          "dewPoint": "5",
+          "pressure": "5",
+          "windSpeed": "5",
+          "precipitation": "5"
+        }
+      },
+      "openMeteoWeather": {
+        "weatherId": "weather_indy_nxt_open_meteo_session_indy_nxt_2024_6326",
+        "observedAtLocal": "2024-06-02T10:00",
+        "confidence": "modeled_medium",
+        "ambientTempC": 19,
+        "dewPointC": 16.9,
+        "relativeHumidityPct": 88,
+        "pressureHpa": 1013.4,
+        "windDirectionDeg": 226,
+        "windSpeedKph": 14,
+        "windGustKph": 28.4,
+        "precipitationMm": 0.1,
+        "wetDry": "wet"
+      },
+      "comparison": {
+        "deltas": {
+          "temperatureC": -1,
+          "dewPointC": -0.3,
+          "relativeHumidityPct": 4,
+          "pressureHpa": 0,
+          "windSpeedKph": 1,
+          "windGustKph": null,
+          "precipitationMm": 0.1
+        },
+        "materialConflict": false,
+        "breachReasons": []
+      },
+      "confidenceDecision": "canonical_row_remains_modeled_medium_representative_crosscheck_only"
+    },
+    {
+      "sessionId": "session_indy_nxt_2025_6446",
+      "sessionName": "Race",
+      "sessionType": "race",
+      "sourceSessionStart": "2025-03-02T10:00:00",
+      "sourceSessionStartUtc": "2025-03-02T15:00:00.000Z",
+      "eventId": "event_indy_nxt_2025_5488",
+      "eventName": "Grand Prix of St. Petersburg",
+      "track": {
+        "id": "track_streets_of_st_petersburg",
+        "name": "Streets of St. Petersburg",
+        "latitude": 27.7676,
+        "longitude": -82.6321,
+        "timezone": "America/New_York"
+      },
+      "station": {
+        "id": "USW00092806",
+        "name": "ST PETERSBURG ALBERT WHITTED A",
+        "icao": "KSPG",
+        "latitude": 27.7683,
+        "longitude": -82.6256,
+        "elevationM": 1.2,
+        "distanceFromTrackKm": 0.6
+      },
+      "stationFileUrl": "https://www.ncei.noaa.gov/oa/global-historical-climatology-network/hourly/access/by-year/2025/psv/GHCNh_USW00092806_2025.psv",
+      "rawArtifactPath": "data/career/raw/weather/noaa-ghcnh/indy-nxt/stations/2025/GHCNh_USW00092806_2025.psv",
+      "stationObservation": {
+        "observedAtUtc": "2025-03-02T14:53:00Z",
+        "offsetFromSessionStartMinutes": -7,
+        "temperatureC": 20.6,
+        "dewPointC": 13.9,
+        "relativeHumidityPct": 66,
+        "pressureHpa": 1016.6,
+        "windDirectionDeg": 350,
+        "windSpeedKph": 18.4,
+        "windGustKph": null,
+        "precipitationMm": 0,
+        "skyCondition": "00;;",
+        "quality": {
+          "temperature": "5",
+          "dewPoint": "5",
+          "pressure": "5",
+          "windSpeed": "5",
+          "precipitation": "5"
+        }
+      },
+      "openMeteoWeather": {
+        "weatherId": "weather_indy_nxt_open_meteo_session_indy_nxt_2025_6446",
+        "observedAtLocal": "2025-03-02T10:00",
+        "confidence": "modeled_medium",
+        "ambientTempC": 18.7,
+        "dewPointC": 15.8,
+        "relativeHumidityPct": 83,
+        "pressureHpa": 1017.2,
+        "windDirectionDeg": 339,
+        "windSpeedKph": 12.3,
+        "windGustKph": 26.3,
+        "precipitationMm": 0,
+        "wetDry": "dry"
+      },
+      "comparison": {
+        "deltas": {
+          "temperatureC": -1.9,
+          "dewPointC": 1.9,
+          "relativeHumidityPct": 17,
+          "pressureHpa": 0.6,
+          "windSpeedKph": -6.1,
+          "windGustKph": null,
+          "precipitationMm": 0
+        },
+        "materialConflict": false,
+        "breachReasons": []
+      },
+      "confidenceDecision": "canonical_row_remains_modeled_medium_representative_crosscheck_only"
+    },
+    {
+      "sessionId": "session_indy_nxt_2025_6454",
+      "sessionName": "Race",
+      "sessionType": "race",
+      "sourceSessionStart": "2025-06-15T15:30:00",
+      "sourceSessionStartUtc": "2025-06-15T20:30:00.000Z",
+      "eventId": "event_indy_nxt_2025_5496",
+      "eventName": "INDY NXT by Firestone at World Wide Technology Raceway",
+      "track": {
+        "id": "track_world_wide_technology_raceway",
+        "name": "World Wide Technology Raceway",
+        "latitude": 38.6507,
+        "longitude": -90.1355,
+        "timezone": "America/Chicago"
+      },
+      "station": {
+        "id": "USW00003960",
+        "name": "CAHOKIA ST LOUIS DWTN AP",
+        "icao": "KCPS",
+        "latitude": 38.5639,
+        "longitude": -90.1486,
+        "elevationM": 123.4,
+        "distanceFromTrackKm": 9.7
+      },
+      "stationFileUrl": "https://www.ncei.noaa.gov/oa/global-historical-climatology-network/hourly/access/by-year/2025/psv/GHCNh_USW00003960_2025.psv",
+      "rawArtifactPath": "data/career/raw/weather/noaa-ghcnh/indy-nxt/stations/2025/GHCNh_USW00003960_2025.psv",
+      "stationObservation": {
+        "observedAtUtc": "2025-06-15T20:53:00Z",
+        "offsetFromSessionStartMinutes": 23,
+        "temperatureC": 27.8,
+        "dewPointC": 19.4,
+        "relativeHumidityPct": 60,
+        "pressureHpa": 1015.6,
+        "windDirectionDeg": 30,
+        "windSpeedKph": 16.6,
+        "windGustKph": null,
+        "precipitationMm": 0,
+        "skyCondition": null,
+        "quality": {
+          "temperature": "5",
+          "dewPoint": "5",
+          "pressure": "5",
+          "windSpeed": "5",
+          "precipitation": "5"
+        }
+      },
+      "openMeteoWeather": {
+        "weatherId": "weather_indy_nxt_open_meteo_session_indy_nxt_2025_6454",
+        "observedAtLocal": "2025-06-15T16:00",
+        "confidence": "modeled_medium",
+        "ambientTempC": 27.2,
+        "dewPointC": 19.6,
+        "relativeHumidityPct": 63,
+        "pressureHpa": 1015.3,
+        "windDirectionDeg": 22,
+        "windSpeedKph": 9.5,
+        "windGustKph": 23.4,
+        "precipitationMm": 0,
+        "wetDry": "dry"
+      },
+      "comparison": {
+        "deltas": {
+          "temperatureC": -0.6,
+          "dewPointC": 0.2,
+          "relativeHumidityPct": 3,
+          "pressureHpa": -0.3,
+          "windSpeedKph": -7.1,
+          "windGustKph": null,
+          "precipitationMm": 0
+        },
+        "materialConflict": false,
+        "breachReasons": []
+      },
+      "confidenceDecision": "canonical_row_remains_modeled_medium_representative_crosscheck_only"
+    }
+  ]
+}
