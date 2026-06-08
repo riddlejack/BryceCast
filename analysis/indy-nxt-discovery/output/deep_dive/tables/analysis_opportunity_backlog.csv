@@ -1,0 +1,8 @@
+analysis,status,reason,uiImpact,risk
+Race Debrief Scoring,build_now,"Combines official result, lap chart, section, incident, teammate, and weather context at the race grain.",Core INDY NXT debrief screen.,Derived labels need manual review before public-facing copy.
+Practice to Qualifying to Race Funnel,build_now,Practice and qualifying ranks are available and underused.,Race weekend prep and debrief preparation panel.,Session formats vary; use rank/context signal instead of absolute pace claim.
+Full Field Lap Dynamics,build_now,Lap chart covers field movement and lets us quantify chaos and stability.,Lap-position story with Bryce percentile versus field.,Partial chart caveats need propagation.
+Team Baseline,build_now_descriptive_only,Team rows and teammate rows exist for every race result.,Ganassi and Andretti context cards.,"No engineering telemetry, so do not claim mechanical root causes beyond official statuses."
+Section Results Deep Pace,prototype_now_then_filter,Official section results expose per-lap micro-sector comparisons.,"Where was he fast, where did the race get away.","Large table, odd section names, and suppressed low denominator comparisons need QA."
+Opponent Strength Model,later,"Full-field results allow a strength model, but the sample is small and repeated-driver balance is imperfect.",More credible rival and team context.,Requires careful shrinkage and season controls to avoid fake precision.
+Causal Weather Effects,do_not_headline,Weather rows are modeled and the sample is too small for causal claims.,"Context strip, not a driver-performance explanation.",High if overclaimed.

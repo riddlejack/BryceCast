@@ -1,0 +1,37 @@
+sessionId,raceLabel,leaderLapRows,leaderCount,leaderChangesFromLapRows,topLeader,topLeaderLaps,topLeaderShare,leaderEntropy,bryceLapsLedFromLeaderSummary,sourceState
+session_indy_nxt_2024_6324,2024 Grand Prix of St. Petersburg,45,1,0,Nolan Siegel,45,1.0,0.0,0,official_leader_lap_summary
+session_indy_nxt_2024_6314,2024 Grand Prix of Alabama,35,1,0,Jacob Abel,35,1.0,0.0,0,official_leader_lap_summary
+session_indy_nxt_2024_6315,2024 Indianapolis Grand Prix Race 1 R1,35,1,0,Jacob Abel,35,1.0,0.0,0,official_leader_lap_summary
+session_indy_nxt_2024_6325,2024 Indianapolis Grand Prix Race 2 R2,35,2,1,Caio Collet,24,0.6857142857142857,0.8980587934501658,0,official_leader_lap_summary
+session_indy_nxt_2024_6326,2024 Detroit Grand Prix,45,1,0,Louis Foster,45,1.0,0.0,0,official_leader_lap_summary
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,20,1,0,Jamie Chadwick,20,1.0,0.0,0,official_leader_lap_summary
+session_indy_nxt_2024_6317,2024 Grand Prix of Monterey Race 1 R1,35,1,0,Louis Foster,35,1.0,0.0,0,official_leader_lap_summary
+session_indy_nxt_2024_6327,2024 Grand Prix of Monterey Race 2 R2,35,1,0,Louis Foster,35,1.0,0.0,0,official_leader_lap_summary
+session_indy_nxt_2024_6318,2024 Grand Prix at Mid-Ohio,35,1,0,Caio Collet,35,1.0,0.0,0,official_leader_lap_summary
+session_indy_nxt_2024_6319,2024 INDY NXT by Firestone at Iowa Speedway,55,2,1,James Roe,49,0.8909090909090909,0.49716776141607527,0,official_leader_lap_summary
+session_indy_nxt_2024_6320,2024 OUTFRONT Showdown,75,1,0,Louis Foster,75,1.0,0.0,0,official_leader_lap_summary
+session_indy_nxt_2024_6321,2024 Grand Prix of Portland,35,1,0,Jacob Abel,35,1.0,0.0,0,official_leader_lap_summary
+session_indy_nxt_2024_6322,2024 INDY NXT By Firestone at The Milwaukee Mile,90,1,0,Louis Foster,90,1.0,0.0,0,official_leader_lap_summary
+session_indy_nxt_2024_6323,2024 Music City Grand Prix,65,1,0,Louis Foster,65,1.0,0.0,0,official_leader_lap_summary
+session_indy_nxt_2025_6446,2025 Grand Prix of St. Petersburg,44,1,0,Dennis Hauger,44,1.0,0.0,0,official_leader_lap_summary
+session_indy_nxt_2025_6445,2025 Grand Prix of Alabama,35,1,0,Dennis Hauger,35,1.0,0.0,0,official_leader_lap_summary
+session_indy_nxt_2025_6444,2025 Indianapolis Grand Prix Race 1 R1,35,1,0,Lochie Hughes,35,1.0,0.0,0,official_leader_lap_summary
+session_indy_nxt_2025_6443,2025 Indianapolis Grand Prix Race 2 R2,35,2,1,Dennis Hauger,30,0.8571428571428571,0.5916727785823274,0,official_leader_lap_summary
+session_indy_nxt_2025_6455,2025 Detroit Grand Prix,45,1,0,Dennis Hauger,45,1.0,0.0,0,official_leader_lap_summary
+session_indy_nxt_2025_6454,2025 INDY NXT by Firestone at World Wide Technology Raceway,75,3,2,Caio Collet,58,0.7733333333333333,0.5833210365315439,0,official_leader_lap_summary
+session_indy_nxt_2025_6453,2025 Grand Prix at Road America,20,2,1,Dennis Hauger,15,0.75,0.8112781244591328,0,official_leader_lap_summary
+session_indy_nxt_2025_6452,2025 Grand Prix at Mid-Ohio,33,1,0,Dennis Hauger,33,1.0,0.0,0,official_leader_lap_summary
+session_indy_nxt_2025_6451,2025 INDY NXT by Firestone at Iowa Speedway,75,2,1,Dennis Hauger,61,0.8133333333333334,0.6944460704939805,0,official_leader_lap_summary
+session_indy_nxt_2025_6442,2025 Grand Prix of Monterey Race 1 R1,35,1,0,Caio Collet,35,1.0,0.0,0,official_leader_lap_summary
+session_indy_nxt_2025_6450,2025 Grand Prix of Monterey Race 2 R2,35,1,0,Caio Collet,35,1.0,0.0,0,official_leader_lap_summary
+session_indy_nxt_2025_6449,2025 Grand Prix of Portland,35,1,0,Dennis Hauger,35,1.0,0.0,0,official_leader_lap_summary
+session_indy_nxt_2025_6448,2025 INDY NXT by Firestone at the Milwaukee Mile,90,1,0,Salvador de Alba,90,1.0,0.0,0,official_leader_lap_summary
+session_indy_nxt_2025_6447,2025 Music City Grand Prix,65,2,1,Salvador de Alba,45,0.6923076923076923,0.8904916402194913,0,official_leader_lap_summary
+session_indy_nxt_2026_6751,2026 Grand Prix of St. Petersburg,42,1,0,Nikita Johnson,42,1.0,0.0,0,official_leader_lap_summary
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,17,2,1,Enzo Fittipaldi,14,0.8235294117647058,0.672294817075638,0,official_leader_lap_summary
+session_indy_nxt_2026_6750,2026 Grand Prix of Alabama Race 1 R1,35,2,1,Alessandro de Tullio,26,0.7428571428571429,0.8224042259549891,0,official_leader_lap_summary
+session_indy_nxt_2026_6752,2026 Grand Prix of Alabama Race 2 R2,30,1,0,Alessandro de Tullio,30,1.0,0.0,0,official_leader_lap_summary
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,29,2,1,Lochie Hughes,25,0.8620689655172413,0.5787946246321198,0,official_leader_lap_summary
+session_indy_nxt_2026_6765,2026 Indianapolis Grand Prix Race 2 R2,30,1,0,Tymek Kucharczyk,30,1.0,0.0,0,official_leader_lap_summary
+session_indy_nxt_2026_6749,2026 Detroit Grand Prix,42,2,1,Tymek Kucharczyk,28,0.6666666666666666,0.9182958340544894,0,official_leader_lap_summary
+session_indy_nxt_2026_6763,2026 INDY NXT by Firestone at World Wide Technology Raceway,75,3,2,Myles Rowe,29,0.38666666666666666,0.9895498752015003,0,official_leader_lap_summary

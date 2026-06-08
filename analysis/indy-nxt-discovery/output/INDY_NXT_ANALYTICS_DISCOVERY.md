@@ -86,20 +86,20 @@ High-volatility races are the best candidates for annotated lap-position storyte
 | raceLabel | lapSamples | netLapChartGain | positionVolatility | bestRunningPosition | worstRunningPosition | earlyDelta | middleDelta | lateDelta |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 2026 Indianapolis Grand Prix Race 1 R1 | 28.00 | -8.00 | 24.00 | 10.00 | 22.00 | 1.00 | 2.00 | -10.00 |
-| 2024 Grand Prix of Monterey Race 1 R1 | 34.00 | -8.00 | 14.00 | 7.00 | 18.00 | 1.00 | -11.00 | 2.00 |
 | 2024 Indianapolis Grand Prix Race 1 R1 | 34.00 | -2.00 | 14.00 | 12.00 | 19.00 | -6.00 | 1.00 | 2.00 |
-| 2025 Grand Prix of Alabama | 35.00 | -7.00 | 11.00 | 8.00 | 17.00 | -8.00 | 1.00 | 0.00 |
+| 2024 Grand Prix of Monterey Race 1 R1 | 34.00 | -8.00 | 14.00 | 7.00 | 18.00 | 1.00 | -11.00 | 2.00 |
+| 2025 Indianapolis Grand Prix Race 2 R2 | 35.00 | 5.00 | 11.00 | 15.00 | 20.00 | 5.00 | 2.00 | 1.00 |
 | 2025 Indianapolis Grand Prix Race 1 R1 | 35.00 | 1.00 | 11.00 | 12.00 | 16.00 | 0.00 | 2.00 | -1.00 |
 
 Low-volatility races are good examples of steady execution or limited passing opportunity.
 
 | raceLabel | lapSamples | netLapChartGain | positionVolatility | bestRunningPosition | worstRunningPosition |
 | --- | --- | --- | --- | --- | --- |
-| 2024 Detroit Grand Prix | 2.00 | 0.00 | 0.00 | 11.00 | 11.00 |
 | 2026 Grand Prix of Alabama Race 2 R2 | 30.00 | 0.00 | 0.00 | 7.00 | 7.00 |
+| 2024 Detroit Grand Prix | 2.00 | 0.00 | 0.00 | 11.00 | 11.00 |
 | 2024 Grand Prix of Portland | 35.00 | 0.00 | 0.00 | 3.00 | 3.00 |
 | 2025 Grand Prix at Road America | 20.00 | 1.00 | 1.00 | 9.00 | 10.00 |
-| 2024 Grand Prix at Mid-Ohio | 32.00 | 0.00 | 2.00 | 18.00 | 19.00 |
+| 2026 INDY NXT by Firestone at World Wide Technology Raceway | 5.00 | 0.00 | 2.00 | 21.00 | 22.00 |
 
 ## Race Story Classifier
 

@@ -498,7 +498,14 @@ def analyze_laps(ctx: Context, race_rows: list[dict[str, Any]]) -> tuple[list[di
     lap_rows: list[dict[str, Any]] = []
     timeline_rows: list[dict[str, Any]] = []
     race_by_id = {r["sessionId"]: r for r in race_rows}
-    for sid in race_session_ids:
+    for sid in sorted(
+        race_session_ids,
+        key=lambda session_id: (
+            race_by_id[session_id].get("seasonYear") or 0,
+            race_by_id[session_id].get("scheduledStart") or "",
+            session_id,
+        ),
+    ):
         bryce_laps = sorted(laps_by_session_driver.get((sid, BRYCE_ID), []), key=lambda x: x.get("lapNumber") or 0)
         if not bryce_laps:
             lap_rows.append({"sessionId": sid, "raceLabel": race_by_id[sid]["raceLabel"], "lapDataState": "unavailable"})

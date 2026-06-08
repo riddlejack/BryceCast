@@ -1,0 +1,727 @@
+sessionId,raceLabel,driverId,driverName,lapSamples,firstLapPosition,finalLapPosition,bestRunningPosition,worstRunningPosition,netLapChartGain,positionVolatility,positiveLapMoves,negativeLapMoves,sourceState
+session_indy_nxt_2024_6324,2024 Grand Prix of St. Petersburg,driver_reece_gold,Reece Gold,45,5.0,5.0,5.0,8.0,0.0,6.0,3,2,available
+session_indy_nxt_2024_6324,2024 Grand Prix of St. Petersburg,driver_nolan_allaer,Nolan Allaer,45,18.0,14.0,13.0,18.0,4.0,6.0,5,1,available
+session_indy_nxt_2024_6324,2024 Grand Prix of St. Petersburg,driver_josh_pierson,Josh Pierson,45,9.0,13.0,9.0,20.0,-4.0,20.0,7,3,available
+session_indy_nxt_2024_6324,2024 Grand Prix of St. Petersburg,driver_callum_hedge,Callum Hedge,45,16.0,11.0,11.0,16.0,5.0,5.0,5,0,available
+session_indy_nxt_2024_6324,2024 Grand Prix of St. Petersburg,driver_caio_collet,Caio Collet,45,6.0,7.0,5.0,11.0,-1.0,11.0,5,1,available
+session_indy_nxt_2024_6324,2024 Grand Prix of St. Petersburg,driver_salvador_de_alba,Salvador de Alba,45,12.0,9.0,8.0,12.0,3.0,5.0,4,1,available
+session_indy_nxt_2024_6324,2024 Grand Prix of St. Petersburg,driver_josh_mason,Josh Mason,38,19.0,15.0,13.0,20.0,4.0,10.0,5,2,available
+session_indy_nxt_2024_6324,2024 Grand Prix of St. Petersburg,driver_yuven_sundaramoorthy,Yuven Sundaramoorthy,45,14.0,12.0,10.0,15.0,2.0,10.0,5,3,available
+session_indy_nxt_2024_6324,2024 Grand Prix of St. Petersburg,driver_jonathan_browne,Jonathan BROWNE,45,10.0,6.0,6.0,10.0,4.0,4.0,4,0,available
+session_indy_nxt_2024_6324,2024 Grand Prix of St. Petersburg,driver_louis_foster,Louis Foster,45,4.0,3.0,3.0,4.0,1.0,1.0,1,0,available
+session_indy_nxt_2024_6324,2024 Grand Prix of St. Petersburg,driver_bryce_aron,Bryce Aron,31,7.0,6.0,6.0,8.0,1.0,3.0,2,1,available
+session_indy_nxt_2024_6324,2024 Grand Prix of St. Petersburg,driver_jamie_chadwick,Jamie Chadwick,21,21.0,20.0,17.0,21.0,1.0,9.0,4,1,available
+session_indy_nxt_2024_6324,2024 Grand Prix of St. Petersburg,driver_james_roe,James Roe,41,11.0,16.0,10.0,20.0,-5.0,15.0,5,1,available
+session_indy_nxt_2024_6324,2024 Grand Prix of St. Petersburg,driver_michael_d_orlando,Michael d'Orlando,45,8.0,4.0,4.0,8.0,4.0,4.0,4,0,available
+session_indy_nxt_2024_6324,2024 Grand Prix of St. Petersburg,driver_niels_koolen,Niels Koolen,12,17.0,19.0,16.0,19.0,-2.0,4.0,1,2,available
+session_indy_nxt_2024_6324,2024 Grand Prix of St. Petersburg,driver_nolan_siegel,Nolan Siegel,45,1.0,1.0,1.0,1.0,0.0,0.0,0,0,available
+session_indy_nxt_2024_6324,2024 Grand Prix of St. Petersburg,driver_jack_william_miller,Jack William Miller,36,15.0,11.0,11.0,15.0,4.0,4.0,4,0,available
+session_indy_nxt_2024_6324,2024 Grand Prix of St. Petersburg,driver_jacob_abel,Jacob Abel,45,2.0,2.0,2.0,2.0,0.0,0.0,0,0,available
+session_indy_nxt_2024_6324,2024 Grand Prix of St. Petersburg,driver_christian_bogle,Christian Bogle,45,13.0,10.0,9.0,13.0,3.0,7.0,5,1,available
+session_indy_nxt_2024_6324,2024 Grand Prix of St. Petersburg,driver_lindsay_brewer,Lindsay Brewer,42,20.0,15.0,15.0,21.0,5.0,7.0,6,1,available
+session_indy_nxt_2024_6324,2024 Grand Prix of St. Petersburg,driver_myles_rowe,Myles Rowe,45,3.0,8.0,3.0,8.0,-5.0,5.0,0,4,available
+session_indy_nxt_2024_6314,2024 Grand Prix of Alabama,driver_reece_gold,Reece Gold,35,8.0,11.0,8.0,12.0,-3.0,5.0,1,3,available
+session_indy_nxt_2024_6314,2024 Grand Prix of Alabama,driver_nolan_allaer,Nolan Allaer,35,18.0,18.0,17.0,19.0,0.0,4.0,2,2,available
+session_indy_nxt_2024_6314,2024 Grand Prix of Alabama,driver_josh_pierson,Josh Pierson,35,11.0,17.0,11.0,21.0,-6.0,14.0,3,1,available
+session_indy_nxt_2024_6314,2024 Grand Prix of Alabama,driver_callum_hedge,Callum Hedge,35,10.0,9.0,9.0,11.0,1.0,3.0,2,1,available
+session_indy_nxt_2024_6314,2024 Grand Prix of Alabama,driver_caio_collet,Caio Collet,35,4.0,4.0,4.0,4.0,0.0,0.0,0,0,available
+session_indy_nxt_2024_6314,2024 Grand Prix of Alabama,driver_salvador_de_alba,Salvador de Alba,35,12.0,10.0,10.0,12.0,2.0,4.0,3,1,available
+session_indy_nxt_2024_6314,2024 Grand Prix of Alabama,driver_josh_mason,Josh Mason,35,13.0,16.0,11.0,17.0,-3.0,9.0,2,4,available
+session_indy_nxt_2024_6314,2024 Grand Prix of Alabama,driver_yuven_sundaramoorthy,Yuven Sundaramoorthy,32,17.0,21.0,15.0,21.0,-4.0,10.0,2,2,available
+session_indy_nxt_2024_6314,2024 Grand Prix of Alabama,driver_jonathan_browne,Jonathan BROWNE,35,14.0,14.0,14.0,17.0,0.0,6.0,3,2,available
+session_indy_nxt_2024_6314,2024 Grand Prix of Alabama,driver_louis_foster,Louis Foster,35,20.0,5.0,5.0,20.0,15.0,15.0,9,0,available
+session_indy_nxt_2024_6314,2024 Grand Prix of Alabama,driver_bryce_aron,Bryce Aron,35,7.0,8.0,5.0,8.0,-1.0,5.0,1,2,available
+session_indy_nxt_2024_6314,2024 Grand Prix of Alabama,driver_jamie_chadwick,Jamie Chadwick,33,5.0,8.0,5.0,8.0,-3.0,3.0,0,3,available
+session_indy_nxt_2024_6314,2024 Grand Prix of Alabama,driver_james_roe,James Roe,35,3.0,3.0,3.0,3.0,0.0,0.0,0,0,available
+session_indy_nxt_2024_6314,2024 Grand Prix of Alabama,driver_michael_d_orlando,Michael d'Orlando,35,6.0,7.0,6.0,9.0,-1.0,7.0,2,3,available
+session_indy_nxt_2024_6314,2024 Grand Prix of Alabama,driver_niels_koolen,Niels Koolen,35,19.0,15.0,15.0,19.0,4.0,4.0,4,0,available
+session_indy_nxt_2024_6314,2024 Grand Prix of Alabama,driver_nolan_siegel,Nolan Siegel,35,2.0,2.0,2.0,2.0,0.0,0.0,0,0,available
+session_indy_nxt_2024_6314,2024 Grand Prix of Alabama,driver_jack_william_miller,Jack William Miller,35,15.0,12.0,12.0,15.0,3.0,5.0,3,1,available
+session_indy_nxt_2024_6314,2024 Grand Prix of Alabama,driver_jacob_abel,Jacob Abel,35,1.0,1.0,1.0,1.0,0.0,0.0,0,0,available
+session_indy_nxt_2024_6314,2024 Grand Prix of Alabama,driver_christian_bogle,Christian Bogle,35,16.0,13.0,13.0,17.0,3.0,5.0,4,1,available
+session_indy_nxt_2024_6314,2024 Grand Prix of Alabama,driver_lindsay_brewer,Lindsay Brewer,34,21.0,19.0,19.0,21.0,2.0,4.0,3,1,available
+session_indy_nxt_2024_6314,2024 Grand Prix of Alabama,driver_myles_rowe,Myles Rowe,35,9.0,6.0,6.0,9.0,3.0,7.0,4,2,available
+session_indy_nxt_2024_6315,2024 Indianapolis Grand Prix Race 1 R1,driver_reece_gold,Reece Gold,35,7.0,6.0,5.0,7.0,1.0,3.0,2,1,available
+session_indy_nxt_2024_6315,2024 Indianapolis Grand Prix Race 1 R1,driver_nolan_allaer,Nolan Allaer,35,17.0,13.0,9.0,17.0,4.0,16.0,9,5,available
+session_indy_nxt_2024_6315,2024 Indianapolis Grand Prix Race 1 R1,driver_josh_pierson,Josh Pierson,6,13.0,13.0,12.0,14.0,0.0,4.0,2,2,available
+session_indy_nxt_2024_6315,2024 Indianapolis Grand Prix Race 1 R1,driver_callum_hedge,Callum Hedge,35,6.0,4.0,4.0,6.0,2.0,2.0,2,0,available
+session_indy_nxt_2024_6315,2024 Indianapolis Grand Prix Race 1 R1,driver_caio_collet,Caio Collet,32,2.0,19.0,2.0,20.0,-17.0,21.0,2,3,available
+session_indy_nxt_2024_6315,2024 Indianapolis Grand Prix Race 1 R1,driver_salvador_de_alba,Salvador de Alba,35,11.0,11.0,6.0,15.0,0.0,34.0,9,2,available
+session_indy_nxt_2024_6315,2024 Indianapolis Grand Prix Race 1 R1,driver_jordan_missig,Jordan Missig,33,20.0,18.0,10.0,20.0,2.0,20.0,9,4,available
+session_indy_nxt_2024_6315,2024 Indianapolis Grand Prix Race 1 R1,driver_yuven_sundaramoorthy,Yuven Sundaramoorthy,31,8.0,20.0,6.0,20.0,-12.0,16.0,2,6,available
+session_indy_nxt_2024_6315,2024 Indianapolis Grand Prix Race 1 R1,driver_jonathan_browne,Jonathan BROWNE,35,9.0,8.0,6.0,9.0,1.0,11.0,5,5,available
+session_indy_nxt_2024_6315,2024 Indianapolis Grand Prix Race 1 R1,driver_louis_foster,Louis Foster,35,3.0,7.0,2.0,16.0,-4.0,26.0,8,2,available
+session_indy_nxt_2024_6315,2024 Indianapolis Grand Prix Race 1 R1,driver_bryce_aron,Bryce Aron,34,12.0,14.0,12.0,19.0,-2.0,14.0,6,3,available
+session_indy_nxt_2024_6315,2024 Indianapolis Grand Prix Race 1 R1,driver_jamie_chadwick,Jamie Chadwick,35,5.0,3.0,3.0,5.0,2.0,2.0,2,0,available
+session_indy_nxt_2024_6315,2024 Indianapolis Grand Prix Race 1 R1,driver_james_roe,James Roe,34,21.0,15.0,14.0,21.0,6.0,10.0,7,2,available
+session_indy_nxt_2024_6315,2024 Indianapolis Grand Prix Race 1 R1,driver_michael_d_orlando,Michael d'Orlando,35,10.0,12.0,6.0,15.0,-2.0,24.0,10,4,available
+session_indy_nxt_2024_6315,2024 Indianapolis Grand Prix Race 1 R1,driver_niels_koolen,Niels Koolen,35,19.0,10.0,8.0,19.0,9.0,15.0,9,2,available
+session_indy_nxt_2024_6315,2024 Indianapolis Grand Prix Race 1 R1,driver_nolan_siegel,Nolan Siegel,35,4.0,2.0,2.0,4.0,2.0,2.0,2,0,available
+session_indy_nxt_2024_6315,2024 Indianapolis Grand Prix Race 1 R1,driver_jack_william_miller,Jack William Miller,34,15.0,16.0,8.0,17.0,-1.0,23.0,8,3,available
+session_indy_nxt_2024_6315,2024 Indianapolis Grand Prix Race 1 R1,driver_jacob_abel,Jacob Abel,35,1.0,1.0,1.0,1.0,0.0,0.0,0,0,available
+session_indy_nxt_2024_6315,2024 Indianapolis Grand Prix Race 1 R1,driver_christian_bogle,Christian Bogle,35,16.0,9.0,9.0,16.0,7.0,17.0,10,3,available
+session_indy_nxt_2024_6315,2024 Indianapolis Grand Prix Race 1 R1,driver_lindsay_brewer,Lindsay Brewer,33,18.0,17.0,17.0,21.0,1.0,7.0,4,1,available
+session_indy_nxt_2024_6315,2024 Indianapolis Grand Prix Race 1 R1,driver_myles_rowe,Myles Rowe,35,14.0,5.0,5.0,14.0,9.0,13.0,9,2,available
+session_indy_nxt_2024_6325,2024 Indianapolis Grand Prix Race 2 R2,driver_reece_gold,Reece Gold,35,10.0,11.0,10.0,11.0,-1.0,3.0,1,2,available
+session_indy_nxt_2024_6325,2024 Indianapolis Grand Prix Race 2 R2,driver_nolan_allaer,Nolan Allaer,35,19.0,17.0,17.0,19.0,2.0,4.0,3,1,available
+session_indy_nxt_2024_6325,2024 Indianapolis Grand Prix Race 2 R2,driver_josh_pierson,Josh Pierson,35,13.0,12.0,12.0,15.0,1.0,5.0,3,1,available
+session_indy_nxt_2024_6325,2024 Indianapolis Grand Prix Race 2 R2,driver_callum_hedge,Callum Hedge,35,8.0,10.0,8.0,10.0,-2.0,4.0,1,3,available
+session_indy_nxt_2024_6325,2024 Indianapolis Grand Prix Race 2 R2,driver_caio_collet,Caio Collet,35,1.0,3.0,1.0,3.0,-2.0,2.0,0,2,available
+session_indy_nxt_2024_6325,2024 Indianapolis Grand Prix Race 2 R2,driver_salvador_de_alba,Salvador de Alba,35,14.0,9.0,9.0,14.0,5.0,7.0,6,1,available
+session_indy_nxt_2024_6325,2024 Indianapolis Grand Prix Race 2 R2,driver_jordan_missig,Jordan Missig,35,11.0,13.0,11.0,15.0,-2.0,8.0,3,5,available
+session_indy_nxt_2024_6325,2024 Indianapolis Grand Prix Race 2 R2,driver_yuven_sundaramoorthy,Yuven Sundaramoorthy,35,21.0,21.0,21.0,21.0,0.0,0.0,0,0,available
+session_indy_nxt_2024_6325,2024 Indianapolis Grand Prix Race 2 R2,driver_jonathan_browne,Jonathan BROWNE,35,12.0,8.0,8.0,12.0,4.0,8.0,6,2,available
+session_indy_nxt_2024_6325,2024 Indianapolis Grand Prix Race 2 R2,driver_louis_foster,Louis Foster,35,3.0,1.0,1.0,3.0,2.0,2.0,2,0,available
+session_indy_nxt_2024_6325,2024 Indianapolis Grand Prix Race 2 R2,driver_bryce_aron,Bryce Aron,35,16.0,19.0,14.0,20.0,-3.0,9.0,3,1,available
+session_indy_nxt_2024_6325,2024 Indianapolis Grand Prix Race 2 R2,driver_jamie_chadwick,Jamie Chadwick,35,4.0,16.0,4.0,17.0,-12.0,14.0,1,2,available
+session_indy_nxt_2024_6325,2024 Indianapolis Grand Prix Race 2 R2,driver_james_roe,James Roe,35,5.0,4.0,4.0,5.0,1.0,1.0,1,0,available
+session_indy_nxt_2024_6325,2024 Indianapolis Grand Prix Race 2 R2,driver_michael_d_orlando,Michael d'Orlando,35,9.0,6.0,6.0,9.0,3.0,3.0,3,0,available
+session_indy_nxt_2024_6325,2024 Indianapolis Grand Prix Race 2 R2,driver_niels_koolen,Niels Koolen,35,17.0,14.0,14.0,17.0,3.0,3.0,3,0,available
+session_indy_nxt_2024_6325,2024 Indianapolis Grand Prix Race 2 R2,driver_nolan_siegel,Nolan Siegel,35,6.0,5.0,5.0,7.0,1.0,3.0,2,1,available
+session_indy_nxt_2024_6325,2024 Indianapolis Grand Prix Race 2 R2,driver_jack_william_miller,Jack William Miller,35,18.0,18.0,15.0,18.0,0.0,6.0,3,3,available
+session_indy_nxt_2024_6325,2024 Indianapolis Grand Prix Race 2 R2,driver_jacob_abel,Jacob Abel,35,2.0,2.0,2.0,3.0,0.0,2.0,1,1,available
+session_indy_nxt_2024_6325,2024 Indianapolis Grand Prix Race 2 R2,driver_christian_bogle,Christian Bogle,35,15.0,15.0,13.0,16.0,0.0,8.0,4,3,available
+session_indy_nxt_2024_6325,2024 Indianapolis Grand Prix Race 2 R2,driver_lindsay_brewer,Lindsay Brewer,35,20.0,20.0,18.0,20.0,0.0,4.0,2,2,available
+session_indy_nxt_2024_6325,2024 Indianapolis Grand Prix Race 2 R2,driver_myles_rowe,Myles Rowe,35,7.0,7.0,6.0,8.0,0.0,4.0,2,2,available
+session_indy_nxt_2024_6326,2024 Detroit Grand Prix,driver_reece_gold,Reece Gold,45,13.0,6.0,5.0,13.0,7.0,9.0,8,1,available
+session_indy_nxt_2024_6326,2024 Detroit Grand Prix,driver_nolan_allaer,Nolan Allaer,41,19.0,12.0,12.0,19.0,7.0,9.0,7,1,available
+session_indy_nxt_2024_6326,2024 Detroit Grand Prix,driver_josh_pierson,Josh Pierson,45,12.0,8.0,7.0,12.0,4.0,8.0,5,2,available
+session_indy_nxt_2024_6326,2024 Detroit Grand Prix,driver_callum_hedge,Callum Hedge,45,6.0,3.0,3.0,8.0,3.0,9.0,6,2,available
+session_indy_nxt_2024_6326,2024 Detroit Grand Prix,driver_caio_collet,Caio Collet,45,3.0,2.0,2.0,3.0,1.0,1.0,1,0,available
+session_indy_nxt_2024_6326,2024 Detroit Grand Prix,driver_salvador_de_alba,Salvador de Alba,45,16.0,7.0,7.0,16.0,9.0,9.0,9,0,available
+session_indy_nxt_2024_6326,2024 Detroit Grand Prix,driver_yuven_sundaramoorthy,Yuven Sundaramoorthy,44,8.0,14.0,5.0,16.0,-6.0,18.0,5,5,available
+session_indy_nxt_2024_6326,2024 Detroit Grand Prix,driver_jonathan_browne,Jonathan BROWNE,45,15.0,9.0,9.0,15.0,6.0,8.0,6,1,available
+session_indy_nxt_2024_6326,2024 Detroit Grand Prix,driver_louis_foster,Louis Foster,45,1.0,1.0,1.0,1.0,0.0,0.0,0,0,available
+session_indy_nxt_2024_6326,2024 Detroit Grand Prix,driver_bryce_aron,Bryce Aron,2,11.0,11.0,11.0,11.0,0.0,0.0,0,0,available
+session_indy_nxt_2024_6326,2024 Detroit Grand Prix,driver_jamie_chadwick,Jamie Chadwick,45,4.0,12.0,4.0,16.0,-8.0,18.0,3,3,available
+session_indy_nxt_2024_6326,2024 Detroit Grand Prix,driver_james_roe,James Roe,41,10.0,10.0,9.0,13.0,0.0,8.0,4,1,available
+session_indy_nxt_2024_6326,2024 Detroit Grand Prix,driver_michael_d_orlando,Michael d'Orlando,45,5.0,10.0,4.0,16.0,-5.0,19.0,6,1,available
+session_indy_nxt_2024_6326,2024 Detroit Grand Prix,driver_niels_koolen,Niels Koolen,44,18.0,13.0,13.0,18.0,5.0,9.0,7,1,available
+session_indy_nxt_2024_6326,2024 Detroit Grand Prix,driver_nolan_siegel,Nolan Siegel,41,22.0,18.0,18.0,22.0,4.0,4.0,4,0,available
+session_indy_nxt_2024_6326,2024 Detroit Grand Prix,driver_jack_william_miller,Jack William Miller,43,7.0,15.0,6.0,18.0,-8.0,16.0,3,1,available
+session_indy_nxt_2024_6326,2024 Detroit Grand Prix,driver_jacob_abel,Jacob Abel,45,2.0,5.0,2.0,5.0,-3.0,3.0,0,3,available
+session_indy_nxt_2024_6326,2024 Detroit Grand Prix,driver_christian_bogle,Christian Bogle,45,17.0,11.0,11.0,17.0,6.0,12.0,7,2,available
+session_indy_nxt_2024_6326,2024 Detroit Grand Prix,driver_ricardo_escotto,Ricardo Escotto,7,9.0,19.0,9.0,20.0,-10.0,12.0,1,1,available
+session_indy_nxt_2024_6326,2024 Detroit Grand Prix,driver_lindsay_brewer,Lindsay Brewer,38,20.0,19.0,17.0,20.0,1.0,5.0,3,1,available
+session_indy_nxt_2024_6326,2024 Detroit Grand Prix,driver_myles_rowe,Myles Rowe,45,14.0,4.0,3.0,14.0,10.0,12.0,10,1,available
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,driver_reece_gold,Reece Gold,20,5.0,4.0,4.0,7.0,1.0,5.0,3,1,available
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,driver_nolan_allaer,Nolan Allaer,20,17.0,10.0,10.0,17.0,7.0,11.0,6,2,available
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,driver_josh_pierson,Josh Pierson,20,8.0,7.0,7.0,13.0,1.0,15.0,6,3,available
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,driver_callum_hedge,Callum Hedge,20,9.0,6.0,5.0,9.0,3.0,7.0,4,2,available
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,driver_caio_collet,Caio Collet,20,4.0,5.0,4.0,5.0,-1.0,1.0,0,1,available
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,driver_salvador_de_alba,Salvador de Alba,8,11.0,14.0,11.0,14.0,-3.0,5.0,1,2,available
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,driver_jordan_missig,Jordan Missig,16,13.0,11.0,11.0,19.0,2.0,16.0,5,2,available
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,driver_yuven_sundaramoorthy,Yuven Sundaramoorthy,20,10.0,9.0,7.0,10.0,1.0,7.0,4,2,available
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,driver_jonathan_browne,Jonathan BROWNE,19,20.0,17.0,12.0,21.0,3.0,21.0,6,2,available
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,driver_louis_foster,Louis Foster,20,3.0,2.0,2.0,3.0,1.0,3.0,2,1,available
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,driver_bryce_aron,Bryce Aron,20,6.0,8.0,5.0,9.0,-2.0,8.0,3,3,available
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,driver_jamie_chadwick,Jamie Chadwick,20,1.0,1.0,1.0,1.0,0.0,0.0,0,0,available
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,driver_james_roe,James Roe,19,14.0,18.0,14.0,21.0,-4.0,12.0,3,2,available
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,driver_michael_d_orlando,Michael d'Orlando,20,12.0,11.0,8.0,12.0,1.0,7.0,2,3,available
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,driver_niels_koolen,Niels Koolen,20,19.0,13.0,13.0,20.0,6.0,12.0,5,3,available
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,driver_kiko_porto,Kiko Porto,20,16.0,12.0,12.0,20.0,4.0,14.0,7,2,available
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,driver_jack_william_miller,Jack William Miller,20,15.0,15.0,13.0,20.0,0.0,18.0,5,3,available
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,driver_jacob_abel,Jacob Abel,20,2.0,3.0,2.0,3.0,-1.0,3.0,1,2,available
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,driver_christian_bogle,Christian Bogle,20,18.0,14.0,12.0,18.0,4.0,8.0,6,2,available
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,driver_lindsay_brewer,Lindsay Brewer,20,21.0,16.0,16.0,21.0,5.0,9.0,4,2,available
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,driver_myles_rowe,Myles Rowe,16,7.0,10.0,7.0,10.0,-3.0,3.0,0,2,available
+session_indy_nxt_2024_6317,2024 Grand Prix of Monterey Race 1 R1,driver_reece_gold,Reece Gold,35,6.0,14.0,6.0,20.0,-8.0,20.0,6,1,available
+session_indy_nxt_2024_6317,2024 Grand Prix of Monterey Race 1 R1,driver_nolan_allaer,Nolan Allaer,14,16.0,18.0,15.0,18.0,-2.0,4.0,1,1,available
+session_indy_nxt_2024_6317,2024 Grand Prix of Monterey Race 1 R1,driver_josh_pierson,Josh Pierson,35,13.0,13.0,11.0,13.0,0.0,4.0,2,1,available
+session_indy_nxt_2024_6317,2024 Grand Prix of Monterey Race 1 R1,driver_callum_hedge,Callum Hedge,35,14.0,12.0,12.0,14.0,2.0,4.0,3,1,available
+session_indy_nxt_2024_6317,2024 Grand Prix of Monterey Race 1 R1,driver_caio_collet,Caio Collet,35,2.0,2.0,2.0,2.0,0.0,0.0,0,0,available
+session_indy_nxt_2024_6317,2024 Grand Prix of Monterey Race 1 R1,driver_salvador_de_alba,Salvador de Alba,35,15.0,11.0,11.0,15.0,4.0,4.0,4,0,available
+session_indy_nxt_2024_6317,2024 Grand Prix of Monterey Race 1 R1,driver_yuven_sundaramoorthy,Yuven Sundaramoorthy,35,4.0,4.0,3.0,4.0,0.0,2.0,1,1,available
+session_indy_nxt_2024_6317,2024 Grand Prix of Monterey Race 1 R1,driver_jonathan_browne,Jonathan BROWNE,35,17.0,15.0,14.0,17.0,2.0,4.0,3,1,available
+session_indy_nxt_2024_6317,2024 Grand Prix of Monterey Race 1 R1,driver_louis_foster,Louis Foster,35,1.0,1.0,1.0,1.0,0.0,0.0,0,0,available
+session_indy_nxt_2024_6317,2024 Grand Prix of Monterey Race 1 R1,driver_bryce_aron,Bryce Aron,34,8.0,16.0,7.0,18.0,-8.0,14.0,3,1,available
+session_indy_nxt_2024_6317,2024 Grand Prix of Monterey Race 1 R1,driver_jamie_chadwick,Jamie Chadwick,35,12.0,9.0,9.0,12.0,3.0,3.0,3,0,available
+session_indy_nxt_2024_6317,2024 Grand Prix of Monterey Race 1 R1,driver_james_roe,James Roe,35,9.0,5.0,5.0,9.0,4.0,4.0,4,0,available
+session_indy_nxt_2024_6317,2024 Grand Prix of Monterey Race 1 R1,driver_niels_koolen,Niels Koolen,33,18.0,19.0,17.0,20.0,-1.0,5.0,2,1,available
+session_indy_nxt_2024_6317,2024 Grand Prix of Monterey Race 1 R1,driver_christian_brooks,Christian Brooks,35,11.0,8.0,8.0,11.0,3.0,3.0,3,0,available
+session_indy_nxt_2024_6317,2024 Grand Prix of Monterey Race 1 R1,driver_jack_william_miller,Jack William Miller,35,10.0,10.0,8.0,10.0,0.0,4.0,2,1,available
+session_indy_nxt_2024_6317,2024 Grand Prix of Monterey Race 1 R1,driver_jacob_abel,Jacob Abel,35,3.0,3.0,3.0,4.0,0.0,2.0,1,1,available
+session_indy_nxt_2024_6317,2024 Grand Prix of Monterey Race 1 R1,driver_christian_bogle,Christian Bogle,35,5.0,7.0,5.0,7.0,-2.0,2.0,0,2,available
+session_indy_nxt_2024_6317,2024 Grand Prix of Monterey Race 1 R1,driver_ricardo_escotto,Ricardo Escotto,34,19.0,18.0,15.0,19.0,1.0,7.0,3,3,available
+session_indy_nxt_2024_6317,2024 Grand Prix of Monterey Race 1 R1,driver_lindsay_brewer,Lindsay Brewer,34,20.0,17.0,17.0,20.0,3.0,7.0,4,2,available
+session_indy_nxt_2024_6317,2024 Grand Prix of Monterey Race 1 R1,driver_myles_rowe,Myles Rowe,35,7.0,6.0,5.0,7.0,1.0,3.0,2,1,available
+session_indy_nxt_2024_6327,2024 Grand Prix of Monterey Race 2 R2,driver_reece_gold,Reece Gold,26,3.0,3.0,3.0,3.0,0.0,0.0,0,0,available
+session_indy_nxt_2024_6327,2024 Grand Prix of Monterey Race 2 R2,driver_nolan_allaer,Nolan Allaer,35,16.0,14.0,14.0,18.0,2.0,10.0,6,1,available
+session_indy_nxt_2024_6327,2024 Grand Prix of Monterey Race 2 R2,driver_josh_pierson,Josh Pierson,35,14.0,9.0,9.0,15.0,5.0,11.0,7,2,available
+session_indy_nxt_2024_6327,2024 Grand Prix of Monterey Race 2 R2,driver_callum_hedge,Callum Hedge,34,13.0,16.0,13.0,19.0,-3.0,9.0,3,1,available
+session_indy_nxt_2024_6327,2024 Grand Prix of Monterey Race 2 R2,driver_caio_collet,Caio Collet,35,2.0,2.0,2.0,2.0,0.0,0.0,0,0,available
+session_indy_nxt_2024_6327,2024 Grand Prix of Monterey Race 2 R2,driver_salvador_de_alba,Salvador de Alba,35,9.0,5.0,5.0,9.0,4.0,4.0,4,0,available
+session_indy_nxt_2024_6327,2024 Grand Prix of Monterey Race 2 R2,driver_yuven_sundaramoorthy,Yuven Sundaramoorthy,35,6.0,4.0,4.0,6.0,2.0,2.0,2,0,available
+session_indy_nxt_2024_6327,2024 Grand Prix of Monterey Race 2 R2,driver_jonathan_browne,Jonathan BROWNE,25,18.0,19.0,18.0,20.0,-1.0,3.0,1,1,available
+session_indy_nxt_2024_6327,2024 Grand Prix of Monterey Race 2 R2,driver_louis_foster,Louis Foster,35,1.0,1.0,1.0,1.0,0.0,0.0,0,0,available
+session_indy_nxt_2024_6327,2024 Grand Prix of Monterey Race 2 R2,driver_bryce_aron,Bryce Aron,35,5.0,3.0,3.0,5.0,2.0,2.0,1,0,available
+session_indy_nxt_2024_6327,2024 Grand Prix of Monterey Race 2 R2,driver_jamie_chadwick,Jamie Chadwick,35,12.0,6.0,6.0,12.0,6.0,6.0,6,0,available
+session_indy_nxt_2024_6327,2024 Grand Prix of Monterey Race 2 R2,driver_james_roe,James Roe,24,7.0,11.0,7.0,12.0,-4.0,6.0,1,3,available
+session_indy_nxt_2024_6327,2024 Grand Prix of Monterey Race 2 R2,driver_niels_koolen,Niels Koolen,35,19.0,12.0,12.0,20.0,7.0,9.0,8,1,available
+session_indy_nxt_2024_6327,2024 Grand Prix of Monterey Race 2 R2,driver_christian_brooks,Christian Brooks,35,10.0,7.0,7.0,12.0,3.0,7.0,5,1,available
+session_indy_nxt_2024_6327,2024 Grand Prix of Monterey Race 2 R2,driver_jack_william_miller,Jack William Miller,35,11.0,10.0,9.0,15.0,1.0,15.0,6,2,available
+session_indy_nxt_2024_6327,2024 Grand Prix of Monterey Race 2 R2,driver_jacob_abel,Jacob Abel,35,4.0,11.0,4.0,13.0,-7.0,11.0,2,2,available
+session_indy_nxt_2024_6327,2024 Grand Prix of Monterey Race 2 R2,driver_christian_bogle,Christian Bogle,35,15.0,8.0,8.0,17.0,7.0,11.0,8,2,available
+session_indy_nxt_2024_6327,2024 Grand Prix of Monterey Race 2 R2,driver_ricardo_escotto,Ricardo Escotto,35,17.0,13.0,10.0,17.0,4.0,14.0,7,3,available
+session_indy_nxt_2024_6327,2024 Grand Prix of Monterey Race 2 R2,driver_lindsay_brewer,Lindsay Brewer,35,20.0,15.0,15.0,20.0,5.0,9.0,7,2,available
+session_indy_nxt_2024_6327,2024 Grand Prix of Monterey Race 2 R2,driver_myles_rowe,Myles Rowe,33,8.0,17.0,6.0,17.0,-9.0,15.0,3,4,available
+session_indy_nxt_2024_6318,2024 Grand Prix at Mid-Ohio,driver_reece_gold,Reece Gold,35,6.0,6.0,6.0,6.0,0.0,0.0,0,0,available
+session_indy_nxt_2024_6318,2024 Grand Prix at Mid-Ohio,driver_nolan_allaer,Nolan Allaer,35,7.0,8.0,7.0,8.0,-1.0,1.0,0,1,available
+session_indy_nxt_2024_6318,2024 Grand Prix at Mid-Ohio,driver_josh_pierson,Josh Pierson,35,10.0,9.0,9.0,10.0,1.0,1.0,1,0,available
+session_indy_nxt_2024_6318,2024 Grand Prix at Mid-Ohio,driver_callum_hedge,Callum Hedge,35,4.0,4.0,4.0,4.0,0.0,0.0,0,0,available
+session_indy_nxt_2024_6318,2024 Grand Prix at Mid-Ohio,driver_caio_collet,Caio Collet,35,1.0,1.0,1.0,1.0,0.0,0.0,0,0,available
+session_indy_nxt_2024_6318,2024 Grand Prix at Mid-Ohio,driver_salvador_de_alba,Salvador de Alba,34,12.0,16.0,10.0,16.0,-4.0,8.0,2,1,available
+session_indy_nxt_2024_6318,2024 Grand Prix at Mid-Ohio,driver_jordan_missig,Jordan Missig,33,19.0,17.0,17.0,19.0,2.0,2.0,2,0,available
+session_indy_nxt_2024_6318,2024 Grand Prix at Mid-Ohio,driver_yuven_sundaramoorthy,Yuven Sundaramoorthy,35,13.0,14.0,11.0,14.0,-1.0,5.0,2,1,available
+session_indy_nxt_2024_6318,2024 Grand Prix at Mid-Ohio,driver_jonathan_browne,Jonathan BROWNE,35,8.0,7.0,7.0,8.0,1.0,1.0,1,0,available
+session_indy_nxt_2024_6318,2024 Grand Prix at Mid-Ohio,driver_louis_foster,Louis Foster,35,2.0,2.0,2.0,2.0,0.0,0.0,0,0,available
+session_indy_nxt_2024_6318,2024 Grand Prix at Mid-Ohio,driver_bryce_aron,Bryce Aron,32,18.0,18.0,18.0,19.0,0.0,2.0,1,1,available
+session_indy_nxt_2024_6318,2024 Grand Prix at Mid-Ohio,driver_jamie_chadwick,Jamie Chadwick,35,16.0,10.0,10.0,16.0,6.0,6.0,5,0,available
+session_indy_nxt_2024_6318,2024 Grand Prix at Mid-Ohio,driver_james_roe,James Roe,34,14.0,15.0,12.0,15.0,-1.0,5.0,2,1,available
+session_indy_nxt_2024_6318,2024 Grand Prix at Mid-Ohio,driver_jagger_jones,Jagger Jones,35,15.0,13.0,13.0,15.0,2.0,2.0,2,0,available
+session_indy_nxt_2024_6318,2024 Grand Prix at Mid-Ohio,driver_christian_brooks,Christian Brooks,35,5.0,5.0,5.0,5.0,0.0,0.0,0,0,available
+session_indy_nxt_2024_6318,2024 Grand Prix at Mid-Ohio,driver_jack_william_miller,Jack William Miller,35,17.0,12.0,12.0,17.0,5.0,5.0,4,0,available
+session_indy_nxt_2024_6318,2024 Grand Prix at Mid-Ohio,driver_jacob_abel,Jacob Abel,35,3.0,3.0,3.0,3.0,0.0,0.0,0,0,available
+session_indy_nxt_2024_6318,2024 Grand Prix at Mid-Ohio,driver_christian_bogle,Christian Bogle,35,11.0,11.0,10.0,11.0,0.0,4.0,2,2,available
+session_indy_nxt_2024_6318,2024 Grand Prix at Mid-Ohio,driver_myles_rowe,Myles Rowe,6,9.0,19.0,9.0,19.0,-10.0,10.0,0,2,available
+session_indy_nxt_2024_6319,2024 INDY NXT by Firestone at Iowa Speedway,driver_reece_gold,Reece Gold,55,8.0,12.0,8.0,14.0,-4.0,14.0,4,5,available
+session_indy_nxt_2024_6319,2024 INDY NXT by Firestone at Iowa Speedway,driver_josh_pierson,Josh Pierson,55,16.0,11.0,11.0,17.0,5.0,9.0,6,2,available
+session_indy_nxt_2024_6319,2024 INDY NXT by Firestone at Iowa Speedway,driver_callum_hedge,Callum Hedge,55,6.0,4.0,4.0,7.0,2.0,8.0,4,3,available
+session_indy_nxt_2024_6319,2024 INDY NXT by Firestone at Iowa Speedway,driver_caio_collet,Caio Collet,12,12.0,9.0,9.0,12.0,3.0,3.0,3,0,available
+session_indy_nxt_2024_6319,2024 INDY NXT by Firestone at Iowa Speedway,driver_salvador_de_alba,Salvador de Alba,55,10.0,3.0,3.0,10.0,7.0,11.0,6,2,available
+session_indy_nxt_2024_6319,2024 INDY NXT by Firestone at Iowa Speedway,driver_yuven_sundaramoorthy,Yuven Sundaramoorthy,55,13.0,10.0,10.0,14.0,3.0,7.0,3,2,available
+session_indy_nxt_2024_6319,2024 INDY NXT by Firestone at Iowa Speedway,driver_jonathan_browne,Jonathan BROWNE,53,11.0,9.0,9.0,13.0,2.0,6.0,2,2,available
+session_indy_nxt_2024_6319,2024 INDY NXT by Firestone at Iowa Speedway,driver_louis_foster,Louis Foster,55,2.0,1.0,1.0,2.0,1.0,1.0,1,0,available
+session_indy_nxt_2024_6319,2024 INDY NXT by Firestone at Iowa Speedway,driver_bryce_aron,Bryce Aron,55,9.0,8.0,8.0,11.0,1.0,7.0,3,3,available
+session_indy_nxt_2024_6319,2024 INDY NXT by Firestone at Iowa Speedway,driver_jamie_chadwick,Jamie Chadwick,55,3.0,7.0,3.0,7.0,-4.0,6.0,1,5,available
+session_indy_nxt_2024_6319,2024 INDY NXT by Firestone at Iowa Speedway,driver_james_roe,James Roe,55,1.0,2.0,1.0,2.0,-1.0,1.0,0,1,available
+session_indy_nxt_2024_6319,2024 INDY NXT by Firestone at Iowa Speedway,driver_niels_koolen,Niels Koolen,55,15.0,13.0,13.0,17.0,2.0,10.0,5,4,available
+session_indy_nxt_2024_6319,2024 INDY NXT by Firestone at Iowa Speedway,driver_christian_brooks,Christian Brooks,55,5.0,5.0,4.0,7.0,0.0,10.0,4,5,available
+session_indy_nxt_2024_6319,2024 INDY NXT by Firestone at Iowa Speedway,driver_jack_william_miller,Jack William Miller,52,14.0,11.0,11.0,15.0,3.0,7.0,3,2,available
+session_indy_nxt_2024_6319,2024 INDY NXT by Firestone at Iowa Speedway,driver_jacob_abel,Jacob Abel,52,7.0,15.0,7.0,16.0,-8.0,10.0,1,3,available
+session_indy_nxt_2024_6319,2024 INDY NXT by Firestone at Iowa Speedway,driver_taylor_ferns,Taylor Ferns,48,17.0,15.0,15.0,18.0,2.0,6.0,3,2,available
+session_indy_nxt_2024_6319,2024 INDY NXT by Firestone at Iowa Speedway,driver_christian_bogle,Christian Bogle,55,4.0,6.0,3.0,6.0,-2.0,4.0,1,2,available
+session_indy_nxt_2024_6319,2024 INDY NXT by Firestone at Iowa Speedway,driver_myles_rowe,Myles Rowe,12,18.0,10.0,10.0,18.0,8.0,8.0,6,0,available
+session_indy_nxt_2024_6320,2024 OUTFRONT Showdown,driver_reece_gold,Reece Gold,75,9.0,12.0,7.0,13.0,-3.0,11.0,3,5,available
+session_indy_nxt_2024_6320,2024 OUTFRONT Showdown,driver_josh_pierson,Josh Pierson,51,13.0,10.0,10.0,13.0,3.0,3.0,2,0,available
+session_indy_nxt_2024_6320,2024 OUTFRONT Showdown,driver_callum_hedge,Callum Hedge,75,8.0,5.0,4.0,8.0,3.0,13.0,5,3,available
+session_indy_nxt_2024_6320,2024 OUTFRONT Showdown,driver_caio_collet,Caio Collet,32,3.0,14.0,2.0,15.0,-11.0,15.0,2,1,available
+session_indy_nxt_2024_6320,2024 OUTFRONT Showdown,driver_salvador_de_alba,Salvador de Alba,75,10.0,4.0,4.0,12.0,6.0,18.0,10,4,available
+session_indy_nxt_2024_6320,2024 OUTFRONT Showdown,driver_jordan_missig,Jordan Missig,75,16.0,9.0,8.0,16.0,7.0,9.0,6,1,available
+session_indy_nxt_2024_6320,2024 OUTFRONT Showdown,driver_yuven_sundaramoorthy,Yuven Sundaramoorthy,75,7.0,3.0,3.0,8.0,4.0,6.0,4,1,available
+session_indy_nxt_2024_6320,2024 OUTFRONT Showdown,driver_jonathan_browne,Jonathan BROWNE,75,17.0,11.0,11.0,17.0,6.0,6.0,4,0,available
+session_indy_nxt_2024_6320,2024 OUTFRONT Showdown,driver_louis_foster,Louis Foster,75,1.0,1.0,1.0,1.0,0.0,0.0,0,0,available
+session_indy_nxt_2024_6320,2024 OUTFRONT Showdown,driver_bryce_aron,Bryce Aron,75,14.0,6.0,6.0,14.0,8.0,10.0,7,1,available
+session_indy_nxt_2024_6320,2024 OUTFRONT Showdown,driver_jamie_chadwick,Jamie Chadwick,7,2.0,3.0,2.0,3.0,-1.0,1.0,0,1,available
+session_indy_nxt_2024_6320,2024 OUTFRONT Showdown,driver_james_roe,James Roe,75,12.0,10.0,7.0,12.0,2.0,12.0,5,3,available
+session_indy_nxt_2024_6320,2024 OUTFRONT Showdown,driver_christian_brooks,Christian Brooks,75,4.0,7.0,2.0,7.0,-3.0,13.0,4,8,available
+session_indy_nxt_2024_6320,2024 OUTFRONT Showdown,driver_jacob_abel,Jacob Abel,75,6.0,2.0,2.0,6.0,4.0,6.0,3,1,available
+session_indy_nxt_2024_6320,2024 OUTFRONT Showdown,driver_taylor_ferns,Taylor Ferns,31,15.0,14.0,14.0,16.0,1.0,3.0,1,1,available
+session_indy_nxt_2024_6320,2024 OUTFRONT Showdown,driver_christian_bogle,Christian Bogle,75,5.0,8.0,4.0,9.0,-3.0,13.0,4,6,available
+session_indy_nxt_2024_6320,2024 OUTFRONT Showdown,driver_myles_rowe,Myles Rowe,2,11.0,17.0,11.0,17.0,-6.0,6.0,0,1,available
+session_indy_nxt_2024_6321,2024 Grand Prix of Portland,driver_reece_gold,Reece Gold,35,8.0,6.0,6.0,8.0,2.0,2.0,2,0,available
+session_indy_nxt_2024_6321,2024 Grand Prix of Portland,driver_josh_pierson,Josh Pierson,35,6.0,9.0,6.0,9.0,-3.0,3.0,0,3,available
+session_indy_nxt_2024_6321,2024 Grand Prix of Portland,driver_callum_hedge,Callum Hedge,35,15.0,13.0,11.0,15.0,2.0,6.0,4,1,available
+session_indy_nxt_2024_6321,2024 Grand Prix of Portland,driver_caio_collet,Caio Collet,35,5.0,4.0,4.0,5.0,1.0,1.0,1,0,available
+session_indy_nxt_2024_6321,2024 Grand Prix of Portland,driver_salvador_de_alba,Salvador de Alba,35,17.0,12.0,12.0,17.0,5.0,7.0,4,1,available
+session_indy_nxt_2024_6321,2024 Grand Prix of Portland,driver_yuven_sundaramoorthy,Yuven Sundaramoorthy,35,7.0,8.0,7.0,9.0,-1.0,3.0,1,2,available
+session_indy_nxt_2024_6321,2024 Grand Prix of Portland,driver_jonathan_browne,Jonathan BROWNE,35,14.0,10.0,10.0,14.0,4.0,6.0,4,1,available
+session_indy_nxt_2024_6321,2024 Grand Prix of Portland,driver_louis_foster,Louis Foster,35,2.0,2.0,2.0,2.0,0.0,0.0,0,0,available
+session_indy_nxt_2024_6321,2024 Grand Prix of Portland,driver_bryce_aron,Bryce Aron,35,3.0,3.0,3.0,3.0,0.0,0.0,0,0,available
+session_indy_nxt_2024_6321,2024 Grand Prix of Portland,driver_jamie_chadwick,Jamie Chadwick,35,13.0,14.0,10.0,14.0,-1.0,7.0,2,1,available
+session_indy_nxt_2024_6321,2024 Grand Prix of Portland,driver_james_roe,James Roe,32,16.0,16.0,15.0,16.0,0.0,2.0,1,1,available
+session_indy_nxt_2024_6321,2024 Grand Prix of Portland,driver_christian_brooks,Christian Brooks,35,4.0,5.0,4.0,5.0,-1.0,1.0,0,1,available
+session_indy_nxt_2024_6321,2024 Grand Prix of Portland,driver_jack_william_miller,Jack William Miller,35,11.0,15.0,10.0,15.0,-4.0,6.0,1,4,available
+session_indy_nxt_2024_6321,2024 Grand Prix of Portland,driver_jacob_abel,Jacob Abel,35,1.0,1.0,1.0,1.0,0.0,0.0,0,0,available
+session_indy_nxt_2024_6321,2024 Grand Prix of Portland,driver_christian_bogle,Christian Bogle,35,12.0,11.0,11.0,15.0,1.0,7.0,2,2,available
+session_indy_nxt_2024_6321,2024 Grand Prix of Portland,driver_ricardo_escotto,Ricardo Escotto,7,10.0,16.0,10.0,16.0,-6.0,6.0,0,1,available
+session_indy_nxt_2024_6321,2024 Grand Prix of Portland,driver_myles_rowe,Myles Rowe,35,9.0,7.0,7.0,9.0,2.0,2.0,2,0,available
+session_indy_nxt_2024_6322,2024 INDY NXT By Firestone at The Milwaukee Mile,driver_josh_pierson,Josh Pierson,89,8.0,12.0,8.0,12.0,-4.0,4.0,0,4,available
+session_indy_nxt_2024_6322,2024 INDY NXT By Firestone at The Milwaukee Mile,driver_callum_hedge,Callum Hedge,89,11.0,11.0,11.0,13.0,0.0,6.0,3,2,available
+session_indy_nxt_2024_6322,2024 INDY NXT By Firestone at The Milwaukee Mile,driver_caio_collet,Caio Collet,90,4.0,9.0,4.0,9.0,-5.0,5.0,0,4,available
+session_indy_nxt_2024_6322,2024 INDY NXT By Firestone at The Milwaukee Mile,driver_salvador_de_alba,Salvador de Alba,90,5.0,3.0,2.0,5.0,2.0,4.0,2,1,available
+session_indy_nxt_2024_6322,2024 INDY NXT By Firestone at The Milwaukee Mile,driver_yuven_sundaramoorthy,Yuven Sundaramoorthy,90,10.0,8.0,7.0,10.0,2.0,4.0,3,1,available
+session_indy_nxt_2024_6322,2024 INDY NXT By Firestone at The Milwaukee Mile,driver_jonathan_browne,Jonathan BROWNE,90,12.0,10.0,10.0,13.0,2.0,4.0,3,1,available
+session_indy_nxt_2024_6322,2024 INDY NXT By Firestone at The Milwaukee Mile,driver_louis_foster,Louis Foster,90,1.0,1.0,1.0,1.0,0.0,0.0,0,0,available
+session_indy_nxt_2024_6322,2024 INDY NXT By Firestone at The Milwaukee Mile,driver_bryce_aron,Bryce Aron,90,7.0,4.0,4.0,7.0,3.0,3.0,3,0,available
+session_indy_nxt_2024_6322,2024 INDY NXT By Firestone at The Milwaukee Mile,driver_jamie_chadwick,Jamie Chadwick,90,2.0,5.0,2.0,5.0,-3.0,3.0,0,3,available
+session_indy_nxt_2024_6322,2024 INDY NXT By Firestone at The Milwaukee Mile,driver_james_roe,James Roe,90,9.0,6.0,6.0,11.0,3.0,7.0,5,2,available
+session_indy_nxt_2024_6322,2024 INDY NXT By Firestone at The Milwaukee Mile,driver_christian_brooks,Christian Brooks,90,3.0,7.0,3.0,7.0,-4.0,6.0,1,4,available
+session_indy_nxt_2024_6322,2024 INDY NXT By Firestone at The Milwaukee Mile,driver_jack_william_miller,Jack William Miller,14,15.0,16.0,14.0,16.0,-1.0,3.0,1,1,available
+session_indy_nxt_2024_6322,2024 INDY NXT By Firestone at The Milwaukee Mile,driver_jacob_abel,Jacob Abel,90,6.0,2.0,2.0,6.0,4.0,6.0,5,1,available
+session_indy_nxt_2024_6322,2024 INDY NXT By Firestone at The Milwaukee Mile,driver_christian_bogle,Christian Bogle,89,14.0,14.0,13.0,15.0,0.0,4.0,2,2,available
+session_indy_nxt_2024_6322,2024 INDY NXT By Firestone at The Milwaukee Mile,driver_ricardo_escotto,Ricardo Escotto,89,16.0,13.0,12.0,16.0,3.0,5.0,4,1,available
+session_indy_nxt_2024_6322,2024 INDY NXT By Firestone at The Milwaukee Mile,driver_myles_rowe,Myles Rowe,88,13.0,15.0,10.0,15.0,-2.0,8.0,3,1,available
+session_indy_nxt_2024_6323,2024 Music City Grand Prix,driver_nolan_allaer,Nolan Allaer,63,7.0,13.0,7.0,16.0,-6.0,18.0,6,9,available
+session_indy_nxt_2024_6323,2024 Music City Grand Prix,driver_josh_pierson,Josh Pierson,64,14.0,10.0,10.0,15.0,4.0,16.0,8,5,available
+session_indy_nxt_2024_6323,2024 Music City Grand Prix,driver_callum_hedge,Callum Hedge,54,5.0,16.0,5.0,18.0,-11.0,15.0,2,2,available
+session_indy_nxt_2024_6323,2024 Music City Grand Prix,driver_caio_collet,Caio Collet,65,3.0,3.0,2.0,3.0,0.0,2.0,1,1,available
+session_indy_nxt_2024_6323,2024 Music City Grand Prix,driver_salvador_de_alba,Salvador de Alba,65,4.0,5.0,4.0,7.0,-1.0,5.0,2,3,available
+session_indy_nxt_2024_6323,2024 Music City Grand Prix,driver_yuven_sundaramoorthy,Yuven Sundaramoorthy,65,8.0,2.0,2.0,8.0,6.0,6.0,6,0,available
+session_indy_nxt_2024_6323,2024 Music City Grand Prix,driver_jonathan_browne,Jonathan BROWNE,64,13.0,12.0,9.0,13.0,1.0,15.0,8,6,available
+session_indy_nxt_2024_6323,2024 Music City Grand Prix,driver_louis_foster,Louis Foster,65,1.0,1.0,1.0,1.0,0.0,0.0,0,0,available
+session_indy_nxt_2024_6323,2024 Music City Grand Prix,driver_bryce_aron,Bryce Aron,65,11.0,7.0,6.0,13.0,4.0,10.0,7,2,available
+session_indy_nxt_2024_6323,2024 Music City Grand Prix,driver_jamie_chadwick,Jamie Chadwick,51,6.0,14.0,6.0,14.0,-8.0,16.0,4,7,available
+session_indy_nxt_2024_6323,2024 Music City Grand Prix,driver_james_roe,James Roe,65,9.0,4.0,4.0,10.0,5.0,7.0,6,1,available
+session_indy_nxt_2024_6323,2024 Music City Grand Prix,driver_michael_d_orlando,Michael d'Orlando,65,16.0,6.0,6.0,16.0,10.0,18.0,12,3,available
+session_indy_nxt_2024_6323,2024 Music City Grand Prix,driver_christian_brooks,Christian Brooks,65,2.0,9.0,2.0,10.0,-7.0,9.0,1,7,available
+session_indy_nxt_2024_6323,2024 Music City Grand Prix,driver_jack_william_miller,Jack William Miller,59,15.0,15.0,13.0,17.0,0.0,12.0,6,5,available
+session_indy_nxt_2024_6323,2024 Music City Grand Prix,driver_jacob_abel,Jacob Abel,65,18.0,8.0,8.0,18.0,10.0,16.0,11,3,available
+session_indy_nxt_2024_6323,2024 Music City Grand Prix,driver_taylor_ferns,Taylor Ferns,12,17.0,17.0,17.0,18.0,0.0,2.0,1,1,available
+session_indy_nxt_2024_6323,2024 Music City Grand Prix,driver_christian_bogle,Christian Bogle,64,12.0,11.0,11.0,14.0,1.0,23.0,11,8,available
+session_indy_nxt_2024_6323,2024 Music City Grand Prix,driver_myles_rowe,Myles Rowe,62,10.0,14.0,6.0,16.0,-4.0,22.0,9,4,available
+session_indy_nxt_2025_6446,2025 Grand Prix of St. Petersburg,driver_nolan_allaer,Nolan Allaer,20,13.0,14.0,13.0,15.0,-1.0,3.0,1,2,available
+session_indy_nxt_2025_6446,2025 Grand Prix of St. Petersburg,driver_josh_pierson,Josh Pierson,44,14.0,9.0,9.0,14.0,5.0,5.0,5,0,available
+session_indy_nxt_2025_6446,2025 Grand Prix of St. Petersburg,driver_tommy_smith,Tommy Smith,42,19.0,15.0,15.0,19.0,4.0,4.0,4,0,available
+session_indy_nxt_2025_6446,2025 Grand Prix of St. Petersburg,driver_callum_hedge,Callum Hedge,44,10.0,8.0,8.0,10.0,2.0,2.0,2,0,available
+session_indy_nxt_2025_6446,2025 Grand Prix of St. Petersburg,driver_nikita_johnson,Nikita Johnson,44,12.0,11.0,11.0,13.0,1.0,5.0,3,2,available
+session_indy_nxt_2025_6446,2025 Grand Prix of St. Petersburg,driver_seb_murray,Seb Murray,41,11.0,17.0,11.0,17.0,-6.0,12.0,3,5,available
+session_indy_nxt_2025_6446,2025 Grand Prix of St. Petersburg,driver_sophia_floersch,Sophia Floersch,44,15.0,12.0,12.0,15.0,3.0,3.0,3,0,available
+session_indy_nxt_2025_6446,2025 Grand Prix of St. Petersburg,driver_lochie_hughes,Lochie Hughes,44,2.0,2.0,2.0,2.0,0.0,0.0,0,0,available
+session_indy_nxt_2025_6446,2025 Grand Prix of St. Petersburg,driver_salvador_de_alba,Salvador de Alba,44,6.0,5.0,5.0,6.0,1.0,1.0,1,0,available
+session_indy_nxt_2025_6446,2025 Grand Prix of St. Petersburg,driver_dennis_hauger,Dennis Hauger,44,1.0,1.0,1.0,1.0,0.0,0.0,0,0,available
+session_indy_nxt_2025_6446,2025 Grand Prix of St. Petersburg,driver_james_roe,James Roe,5,18.0,19.0,18.0,19.0,-1.0,1.0,0,1,available
+session_indy_nxt_2025_6446,2025 Grand Prix of St. Petersburg,driver_ricardo_escotto,Ricardo Escotto,44,8.0,10.0,8.0,12.0,-2.0,6.0,2,3,available
+session_indy_nxt_2025_6446,2025 Grand Prix of St. Petersburg,driver_liam_sceats,Liam Sceats,33,20.0,18.0,18.0,20.0,2.0,2.0,2,0,available
+session_indy_nxt_2025_6446,2025 Grand Prix of St. Petersburg,driver_hailie_deegan,Hailie Deegan,44,17.0,14.0,14.0,17.0,3.0,5.0,4,1,available
+session_indy_nxt_2025_6446,2025 Grand Prix of St. Petersburg,driver_bryce_aron,Bryce Aron,44,16.0,13.0,13.0,16.0,3.0,5.0,4,1,available
+session_indy_nxt_2025_6446,2025 Grand Prix of St. Petersburg,driver_jack_william_miller,Jack William Miller,41,4.0,5.0,4.0,5.0,-1.0,1.0,0,1,available
+session_indy_nxt_2025_6446,2025 Grand Prix of St. Petersburg,driver_jordan_missig,Jordan Missig,44,9.0,6.0,6.0,9.0,3.0,3.0,2,0,available
+session_indy_nxt_2025_6446,2025 Grand Prix of St. Petersburg,driver_caio_collet,Caio Collet,44,3.0,3.0,3.0,3.0,0.0,0.0,0,0,available
+session_indy_nxt_2025_6446,2025 Grand Prix of St. Petersburg,driver_jonathan_browne,Jonathan BROWNE,44,7.0,7.0,7.0,8.0,0.0,2.0,1,1,available
+session_indy_nxt_2025_6446,2025 Grand Prix of St. Petersburg,driver_myles_rowe,Myles Rowe,44,5.0,4.0,4.0,5.0,1.0,1.0,1,0,available
+session_indy_nxt_2025_6445,2025 Grand Prix of Alabama,driver_niels_koolen,Niels Koolen,35,12.0,13.0,11.0,14.0,-1.0,7.0,2,4,available
+session_indy_nxt_2025_6445,2025 Grand Prix of Alabama,driver_nolan_allaer,Nolan Allaer,6,18.0,17.0,17.0,18.0,1.0,1.0,1,0,available
+session_indy_nxt_2025_6445,2025 Grand Prix of Alabama,driver_josh_pierson,Josh Pierson,35,6.0,5.0,5.0,6.0,1.0,1.0,1,0,available
+session_indy_nxt_2025_6445,2025 Grand Prix of Alabama,driver_tommy_smith,Tommy Smith,35,15.0,14.0,14.0,19.0,1.0,9.0,4,1,available
+session_indy_nxt_2025_6445,2025 Grand Prix of Alabama,driver_callum_hedge,Callum Hedge,34,20.0,18.0,18.0,20.0,2.0,2.0,2,0,available
+session_indy_nxt_2025_6445,2025 Grand Prix of Alabama,driver_max_taylor,Max Taylor,35,14.0,7.0,7.0,14.0,7.0,7.0,5,0,available
+session_indy_nxt_2025_6445,2025 Grand Prix of Alabama,driver_seb_murray,Seb Murray,35,10.0,16.0,9.0,18.0,-6.0,14.0,4,3,available
+session_indy_nxt_2025_6445,2025 Grand Prix of Alabama,driver_evagoras_papasavvas,Evagoras Papasavvas,35,3.0,2.0,2.0,3.0,1.0,1.0,1,0,available
+session_indy_nxt_2025_6445,2025 Grand Prix of Alabama,driver_lochie_hughes,Lochie Hughes,35,4.0,3.0,3.0,4.0,1.0,1.0,1,0,available
+session_indy_nxt_2025_6445,2025 Grand Prix of Alabama,driver_salvador_de_alba,Salvador de Alba,35,9.0,11.0,9.0,14.0,-2.0,10.0,4,2,available
+session_indy_nxt_2025_6445,2025 Grand Prix of Alabama,driver_dennis_hauger,Dennis Hauger,35,1.0,1.0,1.0,1.0,0.0,0.0,0,0,available
+session_indy_nxt_2025_6445,2025 Grand Prix of Alabama,driver_james_roe,James Roe,35,11.0,10.0,8.0,11.0,1.0,5.0,3,2,available
+session_indy_nxt_2025_6445,2025 Grand Prix of Alabama,driver_ricardo_escotto,Ricardo Escotto,35,13.0,9.0,9.0,15.0,4.0,8.0,5,1,available
+session_indy_nxt_2025_6445,2025 Grand Prix of Alabama,driver_liam_sceats,Liam Sceats,35,7.0,6.0,6.0,7.0,1.0,1.0,1,0,available
+session_indy_nxt_2025_6445,2025 Grand Prix of Alabama,driver_hailie_deegan,Hailie Deegan,34,19.0,17.0,17.0,19.0,2.0,4.0,3,1,available
+session_indy_nxt_2025_6445,2025 Grand Prix of Alabama,driver_jack_william_miller,Jack William Miller,35,16.0,8.0,8.0,16.0,8.0,8.0,6,0,available
+session_indy_nxt_2025_6445,2025 Grand Prix of Alabama,driver_jordan_missig,Jordan Missig,35,17.0,12.0,11.0,17.0,5.0,7.0,5,1,available
+session_indy_nxt_2025_6445,2025 Grand Prix of Alabama,driver_caio_collet,Caio Collet,26,2.0,19.0,2.0,19.0,-17.0,17.0,0,3,available
+session_indy_nxt_2025_6445,2025 Grand Prix of Alabama,driver_bryce_aron,Bryce Aron,35,8.0,15.0,8.0,17.0,-7.0,11.0,2,2,available
+session_indy_nxt_2025_6445,2025 Grand Prix of Alabama,driver_myles_rowe,Myles Rowe,35,5.0,4.0,4.0,5.0,1.0,1.0,1,0,available
+session_indy_nxt_2025_6444,2025 Indianapolis Grand Prix Race 1 R1,driver_niels_koolen,Niels Koolen,31,9.0,18.0,9.0,20.0,-9.0,13.0,2,2,available
+session_indy_nxt_2025_6444,2025 Indianapolis Grand Prix Race 1 R1,driver_nolan_allaer,Nolan Allaer,35,14.0,16.0,14.0,19.0,-2.0,10.0,3,2,available
+session_indy_nxt_2025_6444,2025 Indianapolis Grand Prix Race 1 R1,driver_josh_pierson,Josh Pierson,35,7.0,6.0,6.0,7.0,1.0,1.0,1,0,available
+session_indy_nxt_2025_6444,2025 Indianapolis Grand Prix Race 1 R1,driver_tommy_smith,Tommy Smith,35,20.0,13.0,13.0,20.0,7.0,7.0,5,0,available
+session_indy_nxt_2025_6444,2025 Indianapolis Grand Prix Race 1 R1,driver_callum_hedge,Callum Hedge,35,4.0,4.0,4.0,5.0,0.0,2.0,1,1,available
+session_indy_nxt_2025_6444,2025 Indianapolis Grand Prix Race 1 R1,driver_nikita_johnson,Nikita Johnson,28,11.0,9.0,9.0,11.0,2.0,2.0,2,0,available
+session_indy_nxt_2025_6444,2025 Indianapolis Grand Prix Race 1 R1,driver_seb_murray,Seb Murray,35,13.0,12.0,12.0,16.0,1.0,9.0,5,3,available
+session_indy_nxt_2025_6444,2025 Indianapolis Grand Prix Race 1 R1,driver_evagoras_papasavvas,Evagoras Papasavvas,35,17.0,10.0,10.0,17.0,7.0,7.0,6,0,available
+session_indy_nxt_2025_6444,2025 Indianapolis Grand Prix Race 1 R1,driver_lochie_hughes,Lochie Hughes,35,1.0,1.0,1.0,1.0,0.0,0.0,0,0,available
+session_indy_nxt_2025_6444,2025 Indianapolis Grand Prix Race 1 R1,driver_salvador_de_alba,Salvador de Alba,35,5.0,5.0,4.0,5.0,0.0,2.0,1,1,available
+session_indy_nxt_2025_6444,2025 Indianapolis Grand Prix Race 1 R1,driver_dennis_hauger,Dennis Hauger,35,19.0,8.0,8.0,19.0,11.0,11.0,8,0,available
+session_indy_nxt_2025_6444,2025 Indianapolis Grand Prix Race 1 R1,driver_james_roe,James Roe,29,6.0,18.0,6.0,18.0,-12.0,12.0,0,2,available
+session_indy_nxt_2025_6444,2025 Indianapolis Grand Prix Race 1 R1,driver_ricardo_escotto,Ricardo Escotto,35,12.0,14.0,11.0,16.0,-2.0,8.0,3,2,available
+session_indy_nxt_2025_6444,2025 Indianapolis Grand Prix Race 1 R1,driver_liam_sceats,Liam Sceats,35,10.0,7.0,7.0,10.0,3.0,3.0,3,0,available
+session_indy_nxt_2025_6444,2025 Indianapolis Grand Prix Race 1 R1,driver_hailie_deegan,Hailie Deegan,35,21.0,17.0,17.0,21.0,4.0,4.0,2,0,available
+session_indy_nxt_2025_6444,2025 Indianapolis Grand Prix Race 1 R1,driver_jm_correa,JM Correa,8,18.0,17.0,17.0,18.0,1.0,1.0,1,0,available
+session_indy_nxt_2025_6444,2025 Indianapolis Grand Prix Race 1 R1,driver_jack_william_miller,Jack William Miller,35,15.0,9.0,9.0,15.0,6.0,8.0,6,1,available
+session_indy_nxt_2025_6444,2025 Indianapolis Grand Prix Race 1 R1,driver_jordan_missig,Jordan Missig,35,8.0,11.0,8.0,11.0,-3.0,7.0,2,5,available
+session_indy_nxt_2025_6444,2025 Indianapolis Grand Prix Race 1 R1,driver_caio_collet,Caio Collet,35,2.0,2.0,2.0,2.0,0.0,0.0,0,0,available
+session_indy_nxt_2025_6444,2025 Indianapolis Grand Prix Race 1 R1,driver_bryce_aron,Bryce Aron,35,16.0,15.0,12.0,16.0,1.0,11.0,5,2,available
+session_indy_nxt_2025_6444,2025 Indianapolis Grand Prix Race 1 R1,driver_myles_rowe,Myles Rowe,35,3.0,3.0,3.0,3.0,0.0,0.0,0,0,available
+session_indy_nxt_2025_6443,2025 Indianapolis Grand Prix Race 2 R2,driver_niels_koolen,Niels Koolen,35,9.0,6.0,6.0,9.0,3.0,3.0,2,0,available
+session_indy_nxt_2025_6443,2025 Indianapolis Grand Prix Race 2 R2,driver_nolan_allaer,Nolan Allaer,31,15.0,20.0,15.0,21.0,-5.0,7.0,1,2,available
+session_indy_nxt_2025_6443,2025 Indianapolis Grand Prix Race 2 R2,driver_josh_pierson,Josh Pierson,35,8.0,9.0,7.0,10.0,-1.0,5.0,2,1,available
+session_indy_nxt_2025_6443,2025 Indianapolis Grand Prix Race 2 R2,driver_tommy_smith,Tommy Smith,23,19.0,17.0,16.0,19.0,2.0,10.0,4,2,available
+session_indy_nxt_2025_6443,2025 Indianapolis Grand Prix Race 2 R2,driver_callum_hedge,Callum Hedge,35,3.0,10.0,3.0,10.0,-7.0,7.0,0,5,available
+session_indy_nxt_2025_6443,2025 Indianapolis Grand Prix Race 2 R2,driver_nikita_johnson,Nikita Johnson,35,13.0,7.0,7.0,13.0,6.0,8.0,7,1,available
+session_indy_nxt_2025_6443,2025 Indianapolis Grand Prix Race 2 R2,driver_seb_murray,Seb Murray,35,18.0,12.0,12.0,18.0,6.0,8.0,5,1,available
+session_indy_nxt_2025_6443,2025 Indianapolis Grand Prix Race 2 R2,driver_evagoras_papasavvas,Evagoras Papasavvas,35,14.0,13.0,10.0,14.0,1.0,7.0,3,2,available
+session_indy_nxt_2025_6443,2025 Indianapolis Grand Prix Race 2 R2,driver_lochie_hughes,Lochie Hughes,35,1.0,2.0,1.0,2.0,-1.0,1.0,0,1,available
+session_indy_nxt_2025_6443,2025 Indianapolis Grand Prix Race 2 R2,driver_salvador_de_alba,Salvador de Alba,35,5.0,4.0,4.0,5.0,1.0,1.0,1,0,available
+session_indy_nxt_2025_6443,2025 Indianapolis Grand Prix Race 2 R2,driver_dennis_hauger,Dennis Hauger,35,2.0,1.0,1.0,2.0,1.0,1.0,1,0,available
+session_indy_nxt_2025_6443,2025 Indianapolis Grand Prix Race 2 R2,driver_james_roe,James Roe,35,7.0,11.0,7.0,11.0,-4.0,4.0,0,2,available
+session_indy_nxt_2025_6443,2025 Indianapolis Grand Prix Race 2 R2,driver_ricardo_escotto,Ricardo Escotto,35,17.0,16.0,14.0,18.0,1.0,11.0,4,3,available
+session_indy_nxt_2025_6443,2025 Indianapolis Grand Prix Race 2 R2,driver_liam_sceats,Liam Sceats,35,12.0,8.0,8.0,12.0,4.0,8.0,5,2,available
+session_indy_nxt_2025_6443,2025 Indianapolis Grand Prix Race 2 R2,driver_hailie_deegan,Hailie Deegan,35,21.0,18.0,18.0,21.0,3.0,7.0,4,2,available
+session_indy_nxt_2025_6443,2025 Indianapolis Grand Prix Race 2 R2,driver_jm_correa,JM Correa,35,16.0,14.0,13.0,16.0,2.0,8.0,4,2,available
+session_indy_nxt_2025_6443,2025 Indianapolis Grand Prix Race 2 R2,driver_jack_william_miller,Jack William Miller,34,10.0,19.0,10.0,20.0,-9.0,11.0,1,2,available
+session_indy_nxt_2025_6443,2025 Indianapolis Grand Prix Race 2 R2,driver_jordan_missig,Jordan Missig,35,11.0,17.0,11.0,19.0,-6.0,14.0,4,4,available
+session_indy_nxt_2025_6443,2025 Indianapolis Grand Prix Race 2 R2,driver_caio_collet,Caio Collet,35,6.0,5.0,5.0,6.0,1.0,1.0,1,0,available
+session_indy_nxt_2025_6443,2025 Indianapolis Grand Prix Race 2 R2,driver_bryce_aron,Bryce Aron,35,20.0,15.0,15.0,20.0,5.0,11.0,6,1,available
+session_indy_nxt_2025_6443,2025 Indianapolis Grand Prix Race 2 R2,driver_myles_rowe,Myles Rowe,35,4.0,3.0,3.0,4.0,1.0,1.0,1,0,available
+session_indy_nxt_2025_6455,2025 Detroit Grand Prix,driver_niels_koolen,Niels Koolen,44,13.0,9.0,9.0,13.0,4.0,10.0,6,3,available
+session_indy_nxt_2025_6455,2025 Detroit Grand Prix,driver_nolan_allaer,Nolan Allaer,41,16.0,15.0,15.0,16.0,1.0,1.0,1,0,available
+session_indy_nxt_2025_6455,2025 Detroit Grand Prix,driver_josh_pierson,Josh Pierson,45,7.0,4.0,4.0,7.0,3.0,3.0,3,0,available
+session_indy_nxt_2025_6455,2025 Detroit Grand Prix,driver_tommy_smith,Tommy Smith,38,18.0,17.0,17.0,18.0,1.0,1.0,1,0,available
+session_indy_nxt_2025_6455,2025 Detroit Grand Prix,driver_callum_hedge,Callum Hedge,44,5.0,11.0,5.0,13.0,-6.0,18.0,6,5,available
+session_indy_nxt_2025_6455,2025 Detroit Grand Prix,driver_seb_murray,Seb Murray,45,10.0,6.0,6.0,10.0,4.0,4.0,4,0,available
+session_indy_nxt_2025_6455,2025 Detroit Grand Prix,driver_lochie_hughes,Lochie Hughes,45,2.0,5.0,2.0,8.0,-3.0,11.0,3,4,available
+session_indy_nxt_2025_6455,2025 Detroit Grand Prix,driver_salvador_de_alba,Salvador de Alba,44,3.0,8.0,2.0,13.0,-5.0,17.0,6,1,available
+session_indy_nxt_2025_6455,2025 Detroit Grand Prix,driver_dennis_hauger,Dennis Hauger,45,1.0,1.0,1.0,1.0,0.0,0.0,0,0,available
+session_indy_nxt_2025_6455,2025 Detroit Grand Prix,driver_james_roe,James Roe,44,12.0,13.0,9.0,13.0,-1.0,13.0,6,3,available
+session_indy_nxt_2025_6455,2025 Detroit Grand Prix,driver_liam_sceats,Liam Sceats,43,15.0,14.0,14.0,15.0,1.0,1.0,1,0,available
+session_indy_nxt_2025_6455,2025 Detroit Grand Prix,driver_hailie_deegan,Hailie Deegan,40,17.0,16.0,16.0,17.0,1.0,1.0,1,0,available
+session_indy_nxt_2025_6455,2025 Detroit Grand Prix,driver_jm_correa,JM Correa,45,6.0,3.0,3.0,6.0,3.0,3.0,3,0,available
+session_indy_nxt_2025_6455,2025 Detroit Grand Prix,driver_jack_william_miller,Jack William Miller,44,9.0,5.0,5.0,9.0,4.0,4.0,4,0,available
+session_indy_nxt_2025_6455,2025 Detroit Grand Prix,driver_jordan_missig,Jordan Missig,44,14.0,12.0,7.0,14.0,2.0,14.0,8,1,available
+session_indy_nxt_2025_6455,2025 Detroit Grand Prix,driver_caio_collet,Caio Collet,45,4.0,2.0,2.0,4.0,2.0,2.0,2,0,available
+session_indy_nxt_2025_6455,2025 Detroit Grand Prix,driver_bryce_aron,Bryce Aron,44,11.0,10.0,9.0,12.0,1.0,9.0,5,3,available
+session_indy_nxt_2025_6455,2025 Detroit Grand Prix,driver_myles_rowe,Myles Rowe,9,8.0,18.0,8.0,18.0,-10.0,10.0,0,1,available
+session_indy_nxt_2025_6454,2025 INDY NXT by Firestone at World Wide Technology Raceway,driver_niels_koolen,Niels Koolen,75,12.0,10.0,10.0,12.0,2.0,2.0,2,0,available
+session_indy_nxt_2025_6454,2025 INDY NXT by Firestone at World Wide Technology Raceway,driver_nolan_allaer,Nolan Allaer,75,10.0,9.0,9.0,10.0,1.0,3.0,2,1,available
+session_indy_nxt_2025_6454,2025 INDY NXT by Firestone at World Wide Technology Raceway,driver_josh_pierson,Josh Pierson,75,6.0,6.0,5.0,6.0,0.0,4.0,2,2,available
+session_indy_nxt_2025_6454,2025 INDY NXT by Firestone at World Wide Technology Raceway,driver_tommy_smith,Tommy Smith,73,18.0,17.0,17.0,19.0,1.0,3.0,2,1,available
+session_indy_nxt_2025_6454,2025 INDY NXT by Firestone at World Wide Technology Raceway,driver_callum_hedge,Callum Hedge,75,8.0,7.0,7.0,8.0,1.0,1.0,1,0,available
+session_indy_nxt_2025_6454,2025 INDY NXT by Firestone at World Wide Technology Raceway,driver_seb_murray,Seb Murray,74,15.0,12.0,12.0,15.0,3.0,3.0,3,0,available
+session_indy_nxt_2025_6454,2025 INDY NXT by Firestone at World Wide Technology Raceway,driver_davey_hamilton_jr,Davey Hamilton Jr.,74,19.0,15.0,15.0,19.0,4.0,4.0,4,0,available
+session_indy_nxt_2025_6454,2025 INDY NXT by Firestone at World Wide Technology Raceway,driver_lochie_hughes,Lochie Hughes,75,5.0,1.0,1.0,6.0,4.0,6.0,5,1,available
+session_indy_nxt_2025_6454,2025 INDY NXT by Firestone at World Wide Technology Raceway,driver_salvador_de_alba,Salvador de Alba,75,4.0,4.0,4.0,6.0,0.0,4.0,2,2,available
+session_indy_nxt_2025_6454,2025 INDY NXT by Firestone at World Wide Technology Raceway,driver_dennis_hauger,Dennis Hauger,75,1.0,5.0,1.0,5.0,-4.0,4.0,0,4,available
+session_indy_nxt_2025_6454,2025 INDY NXT by Firestone at World Wide Technology Raceway,driver_james_roe,James Roe,72,17.0,18.0,15.0,18.0,-1.0,5.0,2,3,available
+session_indy_nxt_2025_6454,2025 INDY NXT by Firestone at World Wide Technology Raceway,driver_ricardo_escotto,Ricardo Escotto,74,11.0,13.0,11.0,13.0,-2.0,2.0,0,2,available
+session_indy_nxt_2025_6454,2025 INDY NXT by Firestone at World Wide Technology Raceway,driver_hailie_deegan,Hailie Deegan,73,16.0,16.0,16.0,18.0,0.0,4.0,2,2,available
+session_indy_nxt_2025_6454,2025 INDY NXT by Firestone at World Wide Technology Raceway,driver_jm_correa,JM Correa,75,7.0,8.0,7.0,8.0,-1.0,1.0,0,1,available
+session_indy_nxt_2025_6454,2025 INDY NXT by Firestone at World Wide Technology Raceway,driver_jack_william_miller,Jack William Miller,34,13.0,19.0,13.0,19.0,-6.0,6.0,0,5,available
+session_indy_nxt_2025_6454,2025 INDY NXT by Firestone at World Wide Technology Raceway,driver_jordan_missig,Jordan Missig,74,9.0,11.0,9.0,11.0,-2.0,4.0,1,3,available
+session_indy_nxt_2025_6454,2025 INDY NXT by Firestone at World Wide Technology Raceway,driver_caio_collet,Caio Collet,75,2.0,3.0,1.0,3.0,-1.0,3.0,1,2,available
+session_indy_nxt_2025_6454,2025 INDY NXT by Firestone at World Wide Technology Raceway,driver_bryce_aron,Bryce Aron,74,14.0,14.0,13.0,14.0,0.0,2.0,1,1,available
+session_indy_nxt_2025_6454,2025 INDY NXT by Firestone at World Wide Technology Raceway,driver_myles_rowe,Myles Rowe,75,3.0,2.0,2.0,4.0,1.0,3.0,2,1,available
+session_indy_nxt_2025_6453,2025 Grand Prix at Road America,driver_niels_koolen,Niels Koolen,20,13.0,15.0,13.0,15.0,-2.0,4.0,1,2,available
+session_indy_nxt_2025_6453,2025 Grand Prix at Road America,driver_nolan_allaer,Nolan Allaer,20,16.0,16.0,16.0,16.0,0.0,0.0,0,0,available
+session_indy_nxt_2025_6453,2025 Grand Prix at Road America,driver_josh_pierson,Josh Pierson,20,3.0,4.0,3.0,4.0,-1.0,1.0,0,1,available
+session_indy_nxt_2025_6453,2025 Grand Prix at Road America,driver_tommy_smith,Tommy Smith,20,17.0,17.0,17.0,18.0,0.0,2.0,1,1,available
+session_indy_nxt_2025_6453,2025 Grand Prix at Road America,driver_callum_hedge,Callum Hedge,20,8.0,6.0,6.0,8.0,2.0,2.0,2,0,available
+session_indy_nxt_2025_6453,2025 Grand Prix at Road America,driver_seb_murray,Seb Murray,20,12.0,11.0,11.0,12.0,1.0,1.0,1,0,available
+session_indy_nxt_2025_6453,2025 Grand Prix at Road America,driver_evagoras_papasavvas,Evagoras Papasavvas,20,15.0,12.0,12.0,15.0,3.0,3.0,3,0,available
+session_indy_nxt_2025_6453,2025 Grand Prix at Road America,driver_lochie_hughes,Lochie Hughes,20,4.0,3.0,3.0,4.0,1.0,1.0,1,0,available
+session_indy_nxt_2025_6453,2025 Grand Prix at Road America,driver_salvador_de_alba,Salvador de Alba,20,6.0,8.0,6.0,8.0,-2.0,2.0,0,1,available
+session_indy_nxt_2025_6453,2025 Grand Prix at Road America,driver_dennis_hauger,Dennis Hauger,20,1.0,2.0,1.0,2.0,-1.0,1.0,0,1,available
+session_indy_nxt_2025_6453,2025 Grand Prix at Road America,driver_james_roe,James Roe,20,18.0,14.0,14.0,18.0,4.0,4.0,2,0,available
+session_indy_nxt_2025_6453,2025 Grand Prix at Road America,driver_ricardo_escotto,Ricardo Escotto,20,14.0,13.0,13.0,14.0,1.0,3.0,2,1,available
+session_indy_nxt_2025_6453,2025 Grand Prix at Road America,driver_liam_sceats,Liam Sceats,20,11.0,10.0,10.0,11.0,1.0,1.0,1,0,available
+session_indy_nxt_2025_6453,2025 Grand Prix at Road America,driver_hailie_deegan,Hailie Deegan,20,19.0,18.0,18.0,19.0,1.0,1.0,1,0,available
+session_indy_nxt_2025_6453,2025 Grand Prix at Road America,driver_jack_william_miller,Jack William Miller,20,7.0,7.0,6.0,7.0,0.0,2.0,1,1,available
+session_indy_nxt_2025_6453,2025 Grand Prix at Road America,driver_jordan_missig,Jordan Missig,20,9.0,19.0,9.0,19.0,-10.0,10.0,0,5,available
+session_indy_nxt_2025_6453,2025 Grand Prix at Road America,driver_caio_collet,Caio Collet,20,2.0,1.0,1.0,2.0,1.0,1.0,1,0,available
+session_indy_nxt_2025_6453,2025 Grand Prix at Road America,driver_bryce_aron,Bryce Aron,20,10.0,9.0,9.0,10.0,1.0,1.0,1,0,available
+session_indy_nxt_2025_6453,2025 Grand Prix at Road America,driver_myles_rowe,Myles Rowe,20,5.0,5.0,5.0,5.0,0.0,0.0,0,0,available
+session_indy_nxt_2025_6452,2025 Grand Prix at Mid-Ohio,driver_niels_koolen,Niels Koolen,33,15.0,14.0,13.0,15.0,1.0,7.0,3,2,available
+session_indy_nxt_2025_6452,2025 Grand Prix at Mid-Ohio,driver_nolan_allaer,Nolan Allaer,33,17.0,16.0,16.0,17.0,1.0,1.0,1,0,available
+session_indy_nxt_2025_6452,2025 Grand Prix at Mid-Ohio,driver_josh_pierson,Josh Pierson,33,5.0,5.0,5.0,5.0,0.0,0.0,0,0,available
+session_indy_nxt_2025_6452,2025 Grand Prix at Mid-Ohio,driver_tommy_smith,Tommy Smith,33,16.0,15.0,14.0,16.0,1.0,5.0,2,2,available
+session_indy_nxt_2025_6452,2025 Grand Prix at Mid-Ohio,driver_callum_hedge,Callum Hedge,33,6.0,6.0,6.0,6.0,0.0,0.0,0,0,available
+session_indy_nxt_2025_6452,2025 Grand Prix at Mid-Ohio,driver_seb_murray,Seb Murray,3,12.0,12.0,12.0,12.0,0.0,0.0,0,0,available
+session_indy_nxt_2025_6452,2025 Grand Prix at Mid-Ohio,driver_evagoras_papasavvas,Evagoras Papasavvas,33,10.0,9.0,9.0,10.0,1.0,1.0,1,0,available
+session_indy_nxt_2025_6452,2025 Grand Prix at Mid-Ohio,driver_lochie_hughes,Lochie Hughes,33,3.0,3.0,3.0,3.0,0.0,0.0,0,0,available
+session_indy_nxt_2025_6452,2025 Grand Prix at Mid-Ohio,driver_salvador_de_alba,Salvador de Alba,33,4.0,4.0,4.0,4.0,0.0,0.0,0,0,available
+session_indy_nxt_2025_6452,2025 Grand Prix at Mid-Ohio,driver_dennis_hauger,Dennis Hauger,33,1.0,1.0,1.0,1.0,0.0,0.0,0,0,available
+session_indy_nxt_2025_6452,2025 Grand Prix at Mid-Ohio,driver_james_roe,James Roe,33,14.0,13.0,12.0,14.0,1.0,5.0,2,1,available
+session_indy_nxt_2025_6452,2025 Grand Prix at Mid-Ohio,driver_ricardo_escotto,Ricardo Escotto,3,13.0,13.0,13.0,13.0,0.0,0.0,0,0,available
+session_indy_nxt_2025_6452,2025 Grand Prix at Mid-Ohio,driver_hailie_deegan,Hailie Deegan,33,18.0,17.0,16.0,19.0,1.0,5.0,1,2,available
+session_indy_nxt_2025_6452,2025 Grand Prix at Mid-Ohio,driver_jm_correa,JM Correa,33,7.0,8.0,7.0,8.0,-1.0,1.0,0,1,available
+session_indy_nxt_2025_6452,2025 Grand Prix at Mid-Ohio,driver_jack_william_miller,Jack William Miller,33,11.0,11.0,10.0,11.0,0.0,2.0,1,1,available
+session_indy_nxt_2025_6452,2025 Grand Prix at Mid-Ohio,driver_jordan_missig,Jordan Missig,33,8.0,7.0,7.0,8.0,1.0,1.0,1,0,available
+session_indy_nxt_2025_6452,2025 Grand Prix at Mid-Ohio,driver_caio_collet,Caio Collet,33,2.0,2.0,2.0,2.0,0.0,0.0,0,0,available
+session_indy_nxt_2025_6452,2025 Grand Prix at Mid-Ohio,driver_bryce_aron,Bryce Aron,33,9.0,12.0,9.0,12.0,-3.0,3.0,0,2,available
+session_indy_nxt_2025_6452,2025 Grand Prix at Mid-Ohio,driver_myles_rowe,Myles Rowe,33,19.0,10.0,10.0,19.0,9.0,9.0,7,0,available
+session_indy_nxt_2025_6451,2025 INDY NXT by Firestone at Iowa Speedway,driver_niels_koolen,Niels Koolen,75,9.0,5.0,5.0,9.0,4.0,4.0,4,0,available
+session_indy_nxt_2025_6451,2025 INDY NXT by Firestone at Iowa Speedway,driver_nolan_allaer,Nolan Allaer,72,19.0,19.0,13.0,19.0,0.0,12.0,5,2,available
+session_indy_nxt_2025_6451,2025 INDY NXT by Firestone at Iowa Speedway,driver_josh_pierson,Josh Pierson,73,6.0,11.0,5.0,16.0,-5.0,19.0,5,2,available
+session_indy_nxt_2025_6451,2025 INDY NXT by Firestone at Iowa Speedway,driver_tommy_smith,Tommy Smith,74,18.0,17.0,16.0,19.0,1.0,7.0,4,3,available
+session_indy_nxt_2025_6451,2025 INDY NXT by Firestone at Iowa Speedway,driver_callum_hedge,Callum Hedge,75,8.0,6.0,6.0,8.0,2.0,4.0,3,1,available
+session_indy_nxt_2025_6451,2025 INDY NXT by Firestone at Iowa Speedway,driver_max_taylor,Max Taylor,75,17.0,10.0,10.0,17.0,7.0,7.0,6,0,available
+session_indy_nxt_2025_6451,2025 INDY NXT by Firestone at Iowa Speedway,driver_davey_hamilton_jr,Davey Hamilton Jr.,74,10.0,15.0,10.0,16.0,-5.0,13.0,4,2,available
+session_indy_nxt_2025_6451,2025 INDY NXT by Firestone at Iowa Speedway,driver_lochie_hughes,Lochie Hughes,74,2.0,16.0,2.0,19.0,-14.0,22.0,4,3,available
+session_indy_nxt_2025_6451,2025 INDY NXT by Firestone at Iowa Speedway,driver_salvador_de_alba,Salvador de Alba,75,5.0,3.0,3.0,6.0,2.0,6.0,4,2,available
+session_indy_nxt_2025_6451,2025 INDY NXT by Firestone at Iowa Speedway,driver_dennis_hauger,Dennis Hauger,75,1.0,2.0,1.0,2.0,-1.0,1.0,0,1,available
+session_indy_nxt_2025_6451,2025 INDY NXT by Firestone at Iowa Speedway,driver_james_roe,James Roe,75,13.0,7.0,7.0,13.0,6.0,10.0,7,1,available
+session_indy_nxt_2025_6451,2025 INDY NXT by Firestone at Iowa Speedway,driver_ricardo_escotto,Ricardo Escotto,74,15.0,13.0,13.0,16.0,2.0,8.0,4,3,available
+session_indy_nxt_2025_6451,2025 INDY NXT by Firestone at Iowa Speedway,driver_hailie_deegan,Hailie Deegan,73,16.0,18.0,16.0,18.0,-2.0,8.0,3,4,available
+session_indy_nxt_2025_6451,2025 INDY NXT by Firestone at Iowa Speedway,driver_jm_correa,JM Correa,74,12.0,12.0,8.0,16.0,0.0,16.0,6,1,available
+session_indy_nxt_2025_6451,2025 INDY NXT by Firestone at Iowa Speedway,driver_jack_william_miller,Jack William Miller,74,7.0,14.0,5.0,14.0,-7.0,11.0,2,4,available
+session_indy_nxt_2025_6451,2025 INDY NXT by Firestone at Iowa Speedway,driver_jordan_missig,Jordan Missig,75,11.0,8.0,8.0,11.0,3.0,7.0,5,2,available
+session_indy_nxt_2025_6451,2025 INDY NXT by Firestone at Iowa Speedway,driver_caio_collet,Caio Collet,75,4.0,4.0,3.0,4.0,0.0,4.0,2,2,available
+session_indy_nxt_2025_6451,2025 INDY NXT by Firestone at Iowa Speedway,driver_bryce_aron,Bryce Aron,75,14.0,9.0,9.0,14.0,5.0,7.0,6,1,available
+session_indy_nxt_2025_6451,2025 INDY NXT by Firestone at Iowa Speedway,driver_myles_rowe,Myles Rowe,75,3.0,1.0,1.0,3.0,2.0,2.0,2,0,available
+session_indy_nxt_2025_6442,2025 Grand Prix of Monterey Race 1 R1,driver_niels_koolen,Niels Koolen,35,14.0,11.0,11.0,14.0,3.0,3.0,3,0,available
+session_indy_nxt_2025_6442,2025 Grand Prix of Monterey Race 1 R1,driver_nolan_allaer,Nolan Allaer,35,11.0,9.0,9.0,11.0,2.0,4.0,3,1,available
+session_indy_nxt_2025_6442,2025 Grand Prix of Monterey Race 1 R1,driver_josh_pierson,Josh Pierson,35,3.0,3.0,3.0,3.0,0.0,0.0,0,0,available
+session_indy_nxt_2025_6442,2025 Grand Prix of Monterey Race 1 R1,driver_tommy_smith,Tommy Smith,34,7.0,12.0,7.0,12.0,-5.0,5.0,0,2,available
+session_indy_nxt_2025_6442,2025 Grand Prix of Monterey Race 1 R1,driver_callum_hedge,Callum Hedge,35,5.0,5.0,5.0,5.0,0.0,0.0,0,0,available
+session_indy_nxt_2025_6442,2025 Grand Prix of Monterey Race 1 R1,driver_max_taylor,Max Taylor,32,17.0,16.0,16.0,17.0,1.0,1.0,1,0,available
+session_indy_nxt_2025_6442,2025 Grand Prix of Monterey Race 1 R1,driver_seb_murray,Seb Murray,21,13.0,13.0,13.0,14.0,0.0,2.0,1,1,available
+session_indy_nxt_2025_6442,2025 Grand Prix of Monterey Race 1 R1,driver_lochie_hughes,Lochie Hughes,35,6.0,6.0,6.0,6.0,0.0,0.0,0,0,available
+session_indy_nxt_2025_6442,2025 Grand Prix of Monterey Race 1 R1,driver_dennis_hauger,Dennis Hauger,35,2.0,2.0,2.0,2.0,0.0,0.0,0,0,available
+session_indy_nxt_2025_6442,2025 Grand Prix of Monterey Race 1 R1,driver_james_roe,James Roe,34,16.0,14.0,14.0,16.0,2.0,2.0,2,0,available
+session_indy_nxt_2025_6442,2025 Grand Prix of Monterey Race 1 R1,driver_liam_sceats,Liam Sceats,35,8.0,8.0,8.0,11.0,0.0,6.0,2,1,available
+session_indy_nxt_2025_6442,2025 Grand Prix of Monterey Race 1 R1,driver_hailie_deegan,Hailie Deegan,35,12.0,12.0,12.0,14.0,0.0,4.0,2,1,available
+session_indy_nxt_2025_6442,2025 Grand Prix of Monterey Race 1 R1,driver_jm_correa,JM Correa,34,15.0,15.0,15.0,16.0,0.0,2.0,1,1,available
+session_indy_nxt_2025_6442,2025 Grand Prix of Monterey Race 1 R1,driver_jack_william_miller,Jack William Miller,35,10.0,7.0,7.0,10.0,3.0,3.0,3,0,available
+session_indy_nxt_2025_6442,2025 Grand Prix of Monterey Race 1 R1,driver_caio_collet,Caio Collet,35,1.0,1.0,1.0,1.0,0.0,0.0,0,0,available
+session_indy_nxt_2025_6442,2025 Grand Prix of Monterey Race 1 R1,driver_bryce_aron,Bryce Aron,35,9.0,10.0,7.0,10.0,-1.0,5.0,2,2,available
+session_indy_nxt_2025_6442,2025 Grand Prix of Monterey Race 1 R1,driver_myles_rowe,Myles Rowe,35,4.0,4.0,4.0,4.0,0.0,0.0,0,0,available
+session_indy_nxt_2025_6450,2025 Grand Prix of Monterey Race 2 R2,driver_niels_koolen,Niels Koolen,35,9.0,6.0,6.0,9.0,3.0,3.0,1,0,available
+session_indy_nxt_2025_6450,2025 Grand Prix of Monterey Race 2 R2,driver_nolan_allaer,Nolan Allaer,33,15.0,14.0,12.0,16.0,1.0,9.0,3,1,available
+session_indy_nxt_2025_6450,2025 Grand Prix of Monterey Race 2 R2,driver_josh_pierson,Josh Pierson,35,2.0,2.0,2.0,2.0,0.0,0.0,0,0,available
+session_indy_nxt_2025_6450,2025 Grand Prix of Monterey Race 2 R2,driver_tommy_smith,Tommy Smith,34,17.0,12.0,12.0,17.0,5.0,5.0,3,0,available
+session_indy_nxt_2025_6450,2025 Grand Prix of Monterey Race 2 R2,driver_callum_hedge,Callum Hedge,35,5.0,3.0,3.0,5.0,2.0,2.0,1,0,available
+session_indy_nxt_2025_6450,2025 Grand Prix of Monterey Race 2 R2,driver_max_taylor,Max Taylor,35,6.0,4.0,4.0,7.0,2.0,6.0,2,2,available
+session_indy_nxt_2025_6450,2025 Grand Prix of Monterey Race 2 R2,driver_seb_murray,Seb Murray,35,8.0,5.0,5.0,8.0,3.0,3.0,1,0,available
+session_indy_nxt_2025_6450,2025 Grand Prix of Monterey Race 2 R2,driver_lochie_hughes,Lochie Hughes,32,4.0,15.0,3.0,15.0,-11.0,13.0,1,1,available
+session_indy_nxt_2025_6450,2025 Grand Prix of Monterey Race 2 R2,driver_salvador_de_alba,Salvador de Alba,35,13.0,9.0,7.0,13.0,4.0,10.0,4,2,available
+session_indy_nxt_2025_6450,2025 Grand Prix of Monterey Race 2 R2,driver_dennis_hauger,Dennis Hauger,26,3.0,4.0,3.0,4.0,-1.0,1.0,0,1,available
+session_indy_nxt_2025_6450,2025 Grand Prix of Monterey Race 2 R2,driver_james_roe,James Roe,33,11.0,13.0,11.0,17.0,-2.0,10.0,2,1,available
+session_indy_nxt_2025_6450,2025 Grand Prix of Monterey Race 2 R2,driver_liam_sceats,Liam Sceats,14,18.0,18.0,18.0,18.0,0.0,0.0,0,0,available
+session_indy_nxt_2025_6450,2025 Grand Prix of Monterey Race 2 R2,driver_hailie_deegan,Hailie Deegan,34,16.0,11.0,11.0,16.0,5.0,9.0,3,2,available
+session_indy_nxt_2025_6450,2025 Grand Prix of Monterey Race 2 R2,driver_jm_correa,JM Correa,22,12.0,13.0,12.0,15.0,-1.0,5.0,2,1,available
+session_indy_nxt_2025_6450,2025 Grand Prix of Monterey Race 2 R2,driver_jack_william_miller,Jack William Miller,35,14.0,7.0,7.0,14.0,7.0,9.0,5,1,available
+session_indy_nxt_2025_6450,2025 Grand Prix of Monterey Race 2 R2,driver_jordan_missig,Jordan Missig,34,10.0,10.0,10.0,16.0,0.0,12.0,3,2,available
+session_indy_nxt_2025_6450,2025 Grand Prix of Monterey Race 2 R2,driver_caio_collet,Caio Collet,35,1.0,1.0,1.0,1.0,0.0,0.0,0,0,available
+session_indy_nxt_2025_6450,2025 Grand Prix of Monterey Race 2 R2,driver_myles_rowe,Myles Rowe,35,7.0,8.0,6.0,9.0,-1.0,7.0,3,2,available
+session_indy_nxt_2025_6449,2025 Grand Prix of Portland,driver_niels_koolen,Niels Koolen,35,5.0,6.0,5.0,7.0,-1.0,3.0,1,1,available
+session_indy_nxt_2025_6449,2025 Grand Prix of Portland,driver_nolan_allaer,Nolan Allaer,35,12.0,15.0,10.0,15.0,-3.0,9.0,1,5,available
+session_indy_nxt_2025_6449,2025 Grand Prix of Portland,driver_josh_pierson,Josh Pierson,35,16.0,11.0,11.0,16.0,5.0,5.0,5,0,available
+session_indy_nxt_2025_6449,2025 Grand Prix of Portland,driver_tommy_smith,Tommy Smith,35,8.0,12.0,6.0,12.0,-4.0,8.0,1,6,available
+session_indy_nxt_2025_6449,2025 Grand Prix of Portland,driver_callum_hedge,Callum Hedge,35,4.0,4.0,4.0,4.0,0.0,0.0,0,0,available
+session_indy_nxt_2025_6449,2025 Grand Prix of Portland,driver_seb_murray,Seb Murray,35,15.0,16.0,13.0,16.0,-1.0,5.0,1,1,available
+session_indy_nxt_2025_6449,2025 Grand Prix of Portland,driver_nicholas_monteiro,Nicholas Monteiro,35,13.0,14.0,11.0,15.0,-1.0,9.0,2,3,available
+session_indy_nxt_2025_6449,2025 Grand Prix of Portland,driver_lochie_hughes,Lochie Hughes,35,17.0,10.0,10.0,18.0,7.0,9.0,5,1,available
+session_indy_nxt_2025_6449,2025 Grand Prix of Portland,driver_salvador_de_alba,Salvador de Alba,35,6.0,5.0,5.0,6.0,1.0,1.0,1,0,available
+session_indy_nxt_2025_6449,2025 Grand Prix of Portland,driver_dennis_hauger,Dennis Hauger,35,1.0,1.0,1.0,1.0,0.0,0.0,0,0,available
+session_indy_nxt_2025_6449,2025 Grand Prix of Portland,driver_james_roe,James Roe,33,10.0,18.0,10.0,18.0,-8.0,8.0,0,1,available
+session_indy_nxt_2025_6449,2025 Grand Prix of Portland,driver_michael_d_orlando,Michael d'Orlando,35,7.0,7.0,7.0,8.0,0.0,2.0,1,1,available
+session_indy_nxt_2025_6449,2025 Grand Prix of Portland,driver_hailie_deegan,Hailie Deegan,34,14.0,17.0,12.0,17.0,-3.0,7.0,1,1,available
+session_indy_nxt_2025_6449,2025 Grand Prix of Portland,driver_jm_correa,JM Correa,35,18.0,9.0,9.0,18.0,9.0,9.0,5,0,available
+session_indy_nxt_2025_6449,2025 Grand Prix of Portland,driver_jack_william_miller,Jack William Miller,35,11.0,13.0,11.0,16.0,-2.0,8.0,3,1,available
+session_indy_nxt_2025_6449,2025 Grand Prix of Portland,driver_jordan_missig,Jordan Missig,35,9.0,8.0,8.0,9.0,1.0,1.0,1,0,available
+session_indy_nxt_2025_6449,2025 Grand Prix of Portland,driver_caio_collet,Caio Collet,35,2.0,2.0,2.0,2.0,0.0,0.0,0,0,available
+session_indy_nxt_2025_6449,2025 Grand Prix of Portland,driver_myles_rowe,Myles Rowe,35,3.0,3.0,3.0,3.0,0.0,0.0,0,0,available
+session_indy_nxt_2025_6448,2025 INDY NXT by Firestone at the Milwaukee Mile,driver_niels_koolen,Niels Koolen,89,11.0,12.0,10.0,13.0,-1.0,7.0,3,3,available
+session_indy_nxt_2025_6448,2025 INDY NXT by Firestone at the Milwaukee Mile,driver_josh_pierson,Josh Pierson,90,10.0,11.0,10.0,12.0,-1.0,7.0,3,3,available
+session_indy_nxt_2025_6448,2025 INDY NXT by Firestone at the Milwaukee Mile,driver_tommy_smith,Tommy Smith,39,12.0,18.0,10.0,18.0,-6.0,10.0,2,2,available
+session_indy_nxt_2025_6448,2025 INDY NXT by Firestone at the Milwaukee Mile,driver_callum_hedge,Callum Hedge,90,4.0,4.0,4.0,4.0,0.0,0.0,0,0,available
+session_indy_nxt_2025_6448,2025 INDY NXT by Firestone at the Milwaukee Mile,driver_max_taylor,Max Taylor,90,13.0,10.0,10.0,14.0,3.0,7.0,5,2,available
+session_indy_nxt_2025_6448,2025 INDY NXT by Firestone at the Milwaukee Mile,driver_seb_murray,Seb Murray,64,17.0,16.0,16.0,18.0,1.0,5.0,3,1,available
+session_indy_nxt_2025_6448,2025 INDY NXT by Firestone at the Milwaukee Mile,driver_davey_hamilton_jr,Davey Hamilton Jr.,77,16.0,15.0,14.0,16.0,1.0,5.0,3,2,available
+session_indy_nxt_2025_6448,2025 INDY NXT by Firestone at the Milwaukee Mile,driver_lochie_hughes,Lochie Hughes,90,3.0,3.0,3.0,3.0,0.0,0.0,0,0,available
+session_indy_nxt_2025_6448,2025 INDY NXT by Firestone at the Milwaukee Mile,driver_salvador_de_alba,Salvador de Alba,90,1.0,1.0,1.0,1.0,0.0,0.0,0,0,available
+session_indy_nxt_2025_6448,2025 INDY NXT by Firestone at the Milwaukee Mile,driver_dennis_hauger,Dennis Hauger,90,2.0,2.0,2.0,2.0,0.0,0.0,0,0,available
+session_indy_nxt_2025_6448,2025 INDY NXT by Firestone at the Milwaukee Mile,driver_james_roe,James Roe,90,9.0,9.0,8.0,9.0,0.0,4.0,2,2,available
+session_indy_nxt_2025_6448,2025 INDY NXT by Firestone at the Milwaukee Mile,driver_michael_d_orlando,Michael d'Orlando,90,6.0,8.0,6.0,9.0,-2.0,4.0,1,2,available
+session_indy_nxt_2025_6448,2025 INDY NXT by Firestone at the Milwaukee Mile,driver_hailie_deegan,Hailie Deegan,89,18.0,14.0,14.0,18.0,4.0,6.0,5,1,available
+session_indy_nxt_2025_6448,2025 INDY NXT by Firestone at the Milwaukee Mile,driver_jack_william_miller,Jack William Miller,46,14.0,13.0,13.0,14.0,1.0,3.0,2,1,available
+session_indy_nxt_2025_6448,2025 INDY NXT by Firestone at the Milwaukee Mile,driver_jordan_missig,Jordan Missig,89,15.0,13.0,10.0,18.0,2.0,14.0,8,2,available
+session_indy_nxt_2025_6448,2025 INDY NXT by Firestone at the Milwaukee Mile,driver_caio_collet,Caio Collet,90,8.0,7.0,6.0,8.0,1.0,3.0,2,1,available
+session_indy_nxt_2025_6448,2025 INDY NXT by Firestone at the Milwaukee Mile,driver_bryce_aron,Bryce Aron,90,7.0,5.0,5.0,9.0,2.0,6.0,4,2,available
+session_indy_nxt_2025_6448,2025 INDY NXT by Firestone at the Milwaukee Mile,driver_myles_rowe,Myles Rowe,90,5.0,6.0,5.0,6.0,-1.0,1.0,0,1,available
+session_indy_nxt_2025_6447,2025 Music City Grand Prix,driver_niels_koolen,Niels Koolen,65,9.0,7.0,7.0,12.0,2.0,12.0,5,5,available
+session_indy_nxt_2025_6447,2025 Music City Grand Prix,driver_nolan_allaer,Nolan Allaer,65,17.0,12.0,12.0,17.0,5.0,5.0,5,0,available
+session_indy_nxt_2025_6447,2025 Music City Grand Prix,driver_josh_pierson,Josh Pierson,65,12.0,9.0,8.0,12.0,3.0,9.0,6,2,available
+session_indy_nxt_2025_6447,2025 Music City Grand Prix,driver_tommy_smith,Tommy Smith,49,15.0,17.0,13.0,18.0,-2.0,8.0,3,1,available
+session_indy_nxt_2025_6447,2025 Music City Grand Prix,driver_callum_hedge,Callum Hedge,31,13.0,8.0,8.0,13.0,5.0,5.0,5,0,available
+session_indy_nxt_2025_6447,2025 Music City Grand Prix,driver_seb_murray,Seb Murray,65,10.0,11.0,10.0,14.0,-1.0,7.0,3,3,available
+session_indy_nxt_2025_6447,2025 Music City Grand Prix,driver_davey_hamilton_jr,Davey Hamilton Jr.,51,18.0,16.0,15.0,18.0,2.0,4.0,3,1,available
+session_indy_nxt_2025_6447,2025 Music City Grand Prix,driver_lochie_hughes,Lochie Hughes,65,3.0,5.0,3.0,5.0,-2.0,2.0,0,2,available
+session_indy_nxt_2025_6447,2025 Music City Grand Prix,driver_salvador_de_alba,Salvador de Alba,65,1.0,2.0,1.0,2.0,-1.0,1.0,0,1,available
+session_indy_nxt_2025_6447,2025 Music City Grand Prix,driver_dennis_hauger,Dennis Hauger,65,5.0,3.0,3.0,6.0,2.0,6.0,4,2,available
+session_indy_nxt_2025_6447,2025 Music City Grand Prix,driver_james_roe,James Roe,65,8.0,10.0,7.0,10.0,-2.0,6.0,2,2,available
+session_indy_nxt_2025_6447,2025 Music City Grand Prix,driver_michael_d_orlando,Michael d'Orlando,63,4.0,14.0,4.0,16.0,-10.0,18.0,4,7,available
+session_indy_nxt_2025_6447,2025 Music City Grand Prix,driver_hailie_deegan,Hailie Deegan,65,14.0,13.0,12.0,15.0,1.0,5.0,3,2,available
+session_indy_nxt_2025_6447,2025 Music City Grand Prix,driver_jack_william_miller,Jack William Miller,55,16.0,15.0,14.0,17.0,1.0,5.0,3,2,available
+session_indy_nxt_2025_6447,2025 Music City Grand Prix,driver_jordan_missig,Jordan Missig,65,11.0,8.0,8.0,13.0,3.0,9.0,6,2,available
+session_indy_nxt_2025_6447,2025 Music City Grand Prix,driver_caio_collet,Caio Collet,65,2.0,4.0,2.0,4.0,-2.0,2.0,0,2,available
+session_indy_nxt_2025_6447,2025 Music City Grand Prix,driver_bryce_aron,Bryce Aron,65,6.0,6.0,6.0,7.0,0.0,2.0,1,1,available
+session_indy_nxt_2025_6447,2025 Music City Grand Prix,driver_myles_rowe,Myles Rowe,65,7.0,1.0,1.0,7.0,6.0,8.0,6,1,available
+session_indy_nxt_2026_6751,2026 Grand Prix of St. Petersburg,driver_niels_koolen,Niels Koolen,20,24.0,20.0,20.0,24.0,4.0,4.0,4,0,available
+session_indy_nxt_2026_6751,2026 Grand Prix of St. Petersburg,driver_carson_etter,Carson Etter,5,19.0,20.0,19.0,20.0,-1.0,1.0,0,1,available
+session_indy_nxt_2026_6751,2026 Grand Prix of St. Petersburg,driver_max_garcia,Max Garcia,42,11.0,12.0,9.0,12.0,-1.0,5.0,2,2,available
+session_indy_nxt_2026_6751,2026 Grand Prix of St. Petersburg,driver_alessandro_de_tullio,Alessandro de Tullio,42,9.0,10.0,9.0,12.0,-1.0,7.0,3,4,available
+session_indy_nxt_2026_6751,2026 Grand Prix of St. Petersburg,driver_nicolas_stati,Nicolas Stati,42,15.0,16.0,15.0,16.0,-1.0,3.0,1,2,available
+session_indy_nxt_2026_6751,2026 Grand Prix of St. Petersburg,driver_salvador_de_alba,Salvador de Alba,42,10.0,8.0,8.0,10.0,2.0,4.0,3,1,available
+session_indy_nxt_2026_6751,2026 Grand Prix of St. Petersburg,driver_matteo_nannini,Matteo Nannini,42,20.0,19.0,17.0,20.0,1.0,9.0,5,3,available
+session_indy_nxt_2026_6751,2026 Grand Prix of St. Petersburg,driver_nikita_johnson,Nikita Johnson,42,1.0,1.0,1.0,1.0,0.0,0.0,0,0,available
+session_indy_nxt_2026_6751,2026 Grand Prix of St. Petersburg,driver_lochie_hughes,Lochie Hughes,42,5.0,5.0,5.0,5.0,0.0,0.0,0,0,available
+session_indy_nxt_2026_6751,2026 Grand Prix of St. Petersburg,driver_seb_murray,Seb Murray,42,4.0,4.0,4.0,4.0,0.0,0.0,0,0,available
+session_indy_nxt_2026_6751,2026 Grand Prix of St. Petersburg,driver_max_taylor,Max Taylor,42,2.0,2.0,2.0,2.0,0.0,0.0,0,0,available
+session_indy_nxt_2026_6751,2026 Grand Prix of St. Petersburg,driver_josh_pierson,Josh Pierson,42,7.0,7.0,7.0,7.0,0.0,0.0,0,0,available
+session_indy_nxt_2026_6751,2026 Grand Prix of St. Petersburg,driver_nicholas_monteiro,Nicholas Monteiro,16,12.0,11.0,11.0,12.0,1.0,1.0,1,0,available
+session_indy_nxt_2026_6751,2026 Grand Prix of St. Petersburg,driver_jack_beeton,Jack Beeton,42,23.0,11.0,10.0,23.0,12.0,14.0,9,1,available
+session_indy_nxt_2026_6751,2026 Grand Prix of St. Petersburg,driver_jordan_missig,Jordan Missig,42,22.0,14.0,14.0,24.0,8.0,12.0,7,1,available
+session_indy_nxt_2026_6751,2026 Grand Prix of St. Petersburg,driver_colin_kaminsky,Colin Kaminsky,42,14.0,15.0,13.0,15.0,-1.0,3.0,1,2,available
+session_indy_nxt_2026_6751,2026 Grand Prix of St. Petersburg,driver_enzo_fittipaldi,Enzo Fittipaldi,42,21.0,17.0,17.0,23.0,4.0,10.0,5,3,available
+session_indy_nxt_2026_6751,2026 Grand Prix of St. Petersburg,driver_jm_correa,JM Correa,42,8.0,9.0,8.0,9.0,-1.0,1.0,0,1,available
+session_indy_nxt_2026_6751,2026 Grand Prix of St. Petersburg,driver_tymek_kucharczyk,Tymek Kucharczyk,42,3.0,3.0,3.0,3.0,0.0,0.0,0,0,available
+session_indy_nxt_2026_6751,2026 Grand Prix of St. Petersburg,driver_alexander_koreiba,Alexander Koreiba,42,16.0,20.0,16.0,20.0,-4.0,8.0,2,5,available
+session_indy_nxt_2026_6751,2026 Grand Prix of St. Petersburg,driver_ricardo_escotto,Ricardo Escotto,42,13.0,13.0,12.0,13.0,0.0,2.0,1,1,available
+session_indy_nxt_2026_6751,2026 Grand Prix of St. Petersburg,driver_james_roe,James Roe,20,18.0,19.0,18.0,19.0,-1.0,3.0,1,2,available
+session_indy_nxt_2026_6751,2026 Grand Prix of St. Petersburg,driver_bryce_aron,Bryce Aron,42,17.0,18.0,16.0,18.0,-1.0,9.0,4,4,available
+session_indy_nxt_2026_6751,2026 Grand Prix of St. Petersburg,driver_myles_rowe,Myles Rowe,42,6.0,6.0,6.0,6.0,0.0,0.0,0,0,available
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,driver_niels_koolen,Niels Koolen,15,17.0,13.0,13.0,17.0,4.0,8.0,5,2,available
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,driver_carson_etter,Carson Etter,15,16.0,19.0,14.0,21.0,-3.0,11.0,3,2,available
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,driver_max_garcia,Max Garcia,15,18.0,14.0,14.0,23.0,4.0,18.0,7,2,available
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,driver_alessandro_de_tullio,Alessandro de Tullio,15,23.0,11.0,11.0,23.0,12.0,12.0,7,0,available
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,driver_nicolas_stati,Nicolas Stati,14,13.0,12.0,11.0,13.0,1.0,3.0,2,1,available
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,driver_salvador_de_alba,Salvador de Alba,15,11.0,20.0,10.0,22.0,-9.0,15.0,2,1,available
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,driver_matteo_nannini,Matteo Nannini,15,7.0,8.0,6.0,8.0,-1.0,3.0,1,2,available
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,driver_nikita_johnson,Nikita Johnson,15,6.0,6.0,5.0,6.0,0.0,2.0,1,1,available
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,driver_lochie_hughes,Lochie Hughes,15,10.0,5.0,5.0,10.0,5.0,5.0,4,0,available
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,driver_seb_murray,Seb Murray,15,9.0,7.0,7.0,9.0,2.0,2.0,2,0,available
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,driver_max_taylor,Max Taylor,15,4.0,1.0,1.0,4.0,3.0,3.0,3,0,available
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,driver_josh_pierson,Josh Pierson,10,12.0,22.0,11.0,22.0,-10.0,12.0,1,1,available
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,driver_nicholas_monteiro,Nicholas Monteiro,14,19.0,18.0,16.0,22.0,1.0,13.0,6,1,available
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,driver_jack_beeton,Jack Beeton,15,2.0,15.0,2.0,23.0,-13.0,29.0,3,1,available
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,driver_jordan_missig,Jordan Missig,15,14.0,10.0,10.0,14.0,4.0,4.0,3,0,available
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,driver_enzo_fittipaldi,Enzo Fittipaldi,15,1.0,2.0,1.0,2.0,-1.0,1.0,0,1,available
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,driver_jm_correa,JM Correa,15,5.0,4.0,3.0,5.0,1.0,3.0,2,1,available
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,driver_tymek_kucharczyk,Tymek Kucharczyk,15,3.0,3.0,2.0,4.0,0.0,4.0,2,1,available
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,driver_alexander_koreiba,Alexander Koreiba,15,21.0,16.0,15.0,21.0,5.0,9.0,5,2,available
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,driver_ricardo_escotto,Ricardo Escotto,15,15.0,12.0,12.0,15.0,3.0,3.0,3,0,available
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,driver_james_roe,James Roe,15,22.0,17.0,17.0,22.0,5.0,13.0,6,3,available
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,driver_bryce_aron,Bryce Aron,15,20.0,18.0,18.0,21.0,2.0,6.0,3,2,available
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,driver_myles_rowe,Myles Rowe,15,8.0,9.0,8.0,10.0,-1.0,3.0,1,1,available
+session_indy_nxt_2026_6750,2026 Grand Prix of Alabama Race 1 R1,driver_niels_koolen,Niels Koolen,35,15.0,17.0,15.0,21.0,-2.0,10.0,4,2,available
+session_indy_nxt_2026_6750,2026 Grand Prix of Alabama Race 1 R1,driver_carson_etter,Carson Etter,34,19.0,21.0,19.0,23.0,-2.0,8.0,3,3,available
+session_indy_nxt_2026_6750,2026 Grand Prix of Alabama Race 1 R1,driver_max_garcia,Max Garcia,35,6.0,4.0,4.0,6.0,2.0,2.0,1,0,available
+session_indy_nxt_2026_6750,2026 Grand Prix of Alabama Race 1 R1,driver_alessandro_de_tullio,Alessandro de Tullio,34,1.0,20.0,1.0,23.0,-19.0,25.0,1,1,available
+session_indy_nxt_2026_6750,2026 Grand Prix of Alabama Race 1 R1,driver_nicolas_stati,Nicolas Stati,35,11.0,10.0,9.0,11.0,1.0,3.0,2,1,available
+session_indy_nxt_2026_6750,2026 Grand Prix of Alabama Race 1 R1,driver_salvador_de_alba,Salvador de Alba,35,23.0,18.0,17.0,23.0,5.0,7.0,6,1,available
+session_indy_nxt_2026_6750,2026 Grand Prix of Alabama Race 1 R1,driver_matteo_nannini,Matteo Nannini,35,20.0,15.0,15.0,21.0,5.0,7.0,5,1,available
+session_indy_nxt_2026_6750,2026 Grand Prix of Alabama Race 1 R1,driver_nikita_johnson,Nikita Johnson,35,3.0,1.0,1.0,3.0,2.0,2.0,1,0,available
+session_indy_nxt_2026_6750,2026 Grand Prix of Alabama Race 1 R1,driver_lochie_hughes,Lochie Hughes,35,12.0,12.0,11.0,12.0,0.0,2.0,1,1,available
+session_indy_nxt_2026_6750,2026 Grand Prix of Alabama Race 1 R1,driver_seb_murray,Seb Murray,34,22.0,22.0,22.0,23.0,0.0,4.0,2,2,available
+session_indy_nxt_2026_6750,2026 Grand Prix of Alabama Race 1 R1,driver_max_taylor,Max Taylor,35,2.0,19.0,2.0,19.0,-17.0,17.0,0,2,available
+session_indy_nxt_2026_6750,2026 Grand Prix of Alabama Race 1 R1,driver_nicholas_monteiro,Nicholas Monteiro,35,14.0,14.0,14.0,16.0,0.0,4.0,2,2,available
+session_indy_nxt_2026_6750,2026 Grand Prix of Alabama Race 1 R1,driver_jack_beeton,Jack Beeton,35,17.0,9.0,9.0,17.0,8.0,8.0,6,0,available
+session_indy_nxt_2026_6750,2026 Grand Prix of Alabama Race 1 R1,driver_jordan_missig,Jordan Missig,35,9.0,6.0,6.0,9.0,3.0,3.0,2,0,available
+session_indy_nxt_2026_6750,2026 Grand Prix of Alabama Race 1 R1,driver_colin_kaminsky,Colin Kaminsky,35,16.0,16.0,15.0,17.0,0.0,6.0,3,3,available
+session_indy_nxt_2026_6750,2026 Grand Prix of Alabama Race 1 R1,driver_enzo_fittipaldi,Enzo Fittipaldi,35,4.0,2.0,2.0,4.0,2.0,2.0,1,0,available
+session_indy_nxt_2026_6750,2026 Grand Prix of Alabama Race 1 R1,driver_jm_correa,JM Correa,35,21.0,11.0,11.0,21.0,10.0,10.0,6,0,available
+session_indy_nxt_2026_6750,2026 Grand Prix of Alabama Race 1 R1,driver_tymek_kucharczyk,Tymek Kucharczyk,35,5.0,3.0,3.0,5.0,2.0,2.0,1,0,available
+session_indy_nxt_2026_6750,2026 Grand Prix of Alabama Race 1 R1,driver_alexander_koreiba,Alexander Koreiba,35,13.0,13.0,13.0,14.0,0.0,2.0,1,1,available
+session_indy_nxt_2026_6750,2026 Grand Prix of Alabama Race 1 R1,driver_ricardo_escotto,Ricardo Escotto,35,10.0,7.0,7.0,10.0,3.0,3.0,3,0,available
+session_indy_nxt_2026_6750,2026 Grand Prix of Alabama Race 1 R1,driver_james_roe,James Roe,34,18.0,23.0,18.0,23.0,-5.0,7.0,1,6,available
+session_indy_nxt_2026_6750,2026 Grand Prix of Alabama Race 1 R1,driver_bryce_aron,Bryce Aron,35,7.0,8.0,7.0,10.0,-1.0,5.0,2,1,available
+session_indy_nxt_2026_6750,2026 Grand Prix of Alabama Race 1 R1,driver_myles_rowe,Myles Rowe,35,8.0,5.0,5.0,8.0,3.0,3.0,2,0,available
+session_indy_nxt_2026_6752,2026 Grand Prix of Alabama Race 2 R2,driver_niels_koolen,Niels Koolen,30,19.0,20.0,19.0,20.0,-1.0,1.0,0,1,available
+session_indy_nxt_2026_6752,2026 Grand Prix of Alabama Race 2 R2,driver_carson_etter,Carson Etter,30,22.0,21.0,21.0,22.0,1.0,3.0,2,1,available
+session_indy_nxt_2026_6752,2026 Grand Prix of Alabama Race 2 R2,driver_max_garcia,Max Garcia,12,24.0,24.0,24.0,24.0,0.0,0.0,0,0,available
+session_indy_nxt_2026_6752,2026 Grand Prix of Alabama Race 2 R2,driver_alessandro_de_tullio,Alessandro de Tullio,30,1.0,1.0,1.0,1.0,0.0,0.0,0,0,available
+session_indy_nxt_2026_6752,2026 Grand Prix of Alabama Race 2 R2,driver_nicolas_stati,Nicolas Stati,30,13.0,15.0,13.0,15.0,-2.0,2.0,0,2,available
+session_indy_nxt_2026_6752,2026 Grand Prix of Alabama Race 2 R2,driver_salvador_de_alba,Salvador de Alba,30,11.0,11.0,11.0,12.0,0.0,2.0,1,1,available
+session_indy_nxt_2026_6752,2026 Grand Prix of Alabama Race 2 R2,driver_matteo_nannini,Matteo Nannini,30,14.0,13.0,13.0,14.0,1.0,3.0,2,1,available
+session_indy_nxt_2026_6752,2026 Grand Prix of Alabama Race 2 R2,driver_nikita_johnson,Nikita Johnson,30,3.0,3.0,3.0,3.0,0.0,0.0,0,0,available
+session_indy_nxt_2026_6752,2026 Grand Prix of Alabama Race 2 R2,driver_lochie_hughes,Lochie Hughes,30,15.0,16.0,15.0,16.0,-1.0,1.0,0,1,available
+session_indy_nxt_2026_6752,2026 Grand Prix of Alabama Race 2 R2,driver_seb_murray,Seb Murray,30,10.0,10.0,10.0,10.0,0.0,0.0,0,0,available
+session_indy_nxt_2026_6752,2026 Grand Prix of Alabama Race 2 R2,driver_max_taylor,Max Taylor,30,2.0,2.0,2.0,2.0,0.0,0.0,0,0,available
+session_indy_nxt_2026_6752,2026 Grand Prix of Alabama Race 2 R2,driver_josh_pierson,Josh Pierson,30,16.0,14.0,11.0,16.0,2.0,8.0,5,2,available
+session_indy_nxt_2026_6752,2026 Grand Prix of Alabama Race 2 R2,driver_nicholas_monteiro,Nicholas Monteiro,30,18.0,19.0,18.0,19.0,-1.0,1.0,0,1,available
+session_indy_nxt_2026_6752,2026 Grand Prix of Alabama Race 2 R2,driver_jack_beeton,Jack Beeton,30,9.0,9.0,9.0,9.0,0.0,0.0,0,0,available
+session_indy_nxt_2026_6752,2026 Grand Prix of Alabama Race 2 R2,driver_jordan_missig,Jordan Missig,30,6.0,6.0,6.0,6.0,0.0,0.0,0,0,available
+session_indy_nxt_2026_6752,2026 Grand Prix of Alabama Race 2 R2,driver_colin_kaminsky,Colin Kaminsky,30,21.0,18.0,18.0,21.0,3.0,3.0,3,0,available
+session_indy_nxt_2026_6752,2026 Grand Prix of Alabama Race 2 R2,driver_enzo_fittipaldi,Enzo Fittipaldi,30,4.0,4.0,4.0,4.0,0.0,0.0,0,0,available
+session_indy_nxt_2026_6752,2026 Grand Prix of Alabama Race 2 R2,driver_jm_correa,JM Correa,30,8.0,8.0,8.0,8.0,0.0,0.0,0,0,available
+session_indy_nxt_2026_6752,2026 Grand Prix of Alabama Race 2 R2,driver_tymek_kucharczyk,Tymek Kucharczyk,30,5.0,5.0,5.0,5.0,0.0,0.0,0,0,available
+session_indy_nxt_2026_6752,2026 Grand Prix of Alabama Race 2 R2,driver_alexander_koreiba,Alexander Koreiba,30,20.0,22.0,20.0,22.0,-2.0,4.0,1,3,available
+session_indy_nxt_2026_6752,2026 Grand Prix of Alabama Race 2 R2,driver_ricardo_escotto,Ricardo Escotto,30,17.0,17.0,17.0,17.0,0.0,0.0,0,0,available
+session_indy_nxt_2026_6752,2026 Grand Prix of Alabama Race 2 R2,driver_james_roe,James Roe,30,12.0,12.0,12.0,13.0,0.0,2.0,1,1,available
+session_indy_nxt_2026_6752,2026 Grand Prix of Alabama Race 2 R2,driver_bryce_aron,Bryce Aron,30,7.0,7.0,7.0,7.0,0.0,0.0,0,0,available
+session_indy_nxt_2026_6752,2026 Grand Prix of Alabama Race 2 R2,driver_myles_rowe,Myles Rowe,20,23.0,23.0,23.0,23.0,0.0,0.0,0,0,available
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,driver_niels_koolen,Niels Koolen,29,22.0,8.0,7.0,22.0,14.0,20.0,9,3,available
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,driver_carson_etter,Carson Etter,29,15.0,17.0,14.0,21.0,-2.0,20.0,6,4,available
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,driver_max_garcia,Max Garcia,29,23.0,15.0,10.0,23.0,8.0,26.0,7,2,available
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,driver_alessandro_de_tullio,Alessandro de Tullio,29,12.0,9.0,4.0,12.0,3.0,15.0,5,3,available
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,driver_nicolas_stati,Nicolas Stati,29,18.0,14.0,14.0,18.0,4.0,16.0,6,3,available
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,driver_salvador_de_alba,Salvador de Alba,29,13.0,13.0,11.0,14.0,0.0,12.0,4,5,available
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,driver_matteo_nannini,Matteo Nannini,27,24.0,23.0,23.0,24.0,1.0,1.0,1,0,available
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,driver_nikita_johnson,Nikita Johnson,29,9.0,3.0,3.0,11.0,6.0,16.0,7,3,available
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,driver_lochie_hughes,Lochie Hughes,29,1.0,2.0,1.0,2.0,-1.0,1.0,0,1,available
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,driver_seb_murray,Seb Murray,29,8.0,20.0,8.0,22.0,-12.0,22.0,3,5,available
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,driver_max_taylor,Max Taylor,29,2.0,5.0,2.0,6.0,-3.0,5.0,1,3,available
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,driver_josh_pierson,Josh Pierson,29,3.0,6.0,3.0,10.0,-3.0,19.0,3,5,available
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,driver_nicholas_monteiro,Nicholas Monteiro,29,21.0,18.0,11.0,21.0,3.0,27.0,5,4,available
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,driver_jack_beeton,Jack Beeton,28,10.0,21.0,10.0,23.0,-11.0,15.0,2,1,available
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,driver_jordan_missig,Jordan Missig,29,6.0,11.0,4.0,12.0,-5.0,13.0,4,6,available
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,driver_colin_kaminsky,Colin Kaminsky,29,20.0,16.0,9.0,22.0,4.0,30.0,7,1,available
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,driver_enzo_fittipaldi,Enzo Fittipaldi,29,4.0,1.0,1.0,12.0,3.0,21.0,4,1,available
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,driver_jm_correa,JM Correa,29,19.0,12.0,12.0,19.0,7.0,15.0,7,2,available
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,driver_tymek_kucharczyk,Tymek Kucharczyk,29,7.0,4.0,3.0,15.0,3.0,21.0,4,2,available
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,driver_alexander_koreiba,Alexander Koreiba,29,17.0,19.0,17.0,21.0,-2.0,12.0,3,3,available
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,driver_ricardo_escotto,Ricardo Escotto,21,5.0,20.0,5.0,20.0,-15.0,29.0,2,6,available
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,driver_james_roe,James Roe,29,16.0,10.0,10.0,22.0,6.0,18.0,6,3,available
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,driver_bryce_aron,Bryce Aron,28,14.0,22.0,10.0,22.0,-8.0,24.0,4,4,available
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,driver_myles_rowe,Myles Rowe,29,11.0,7.0,5.0,11.0,4.0,18.0,6,4,available
+session_indy_nxt_2026_6765,2026 Indianapolis Grand Prix Race 2 R2,driver_niels_koolen,Niels Koolen,30,19.0,14.0,14.0,21.0,5.0,13.0,6,2,available
+session_indy_nxt_2026_6765,2026 Indianapolis Grand Prix Race 2 R2,driver_carson_etter,Carson Etter,30,24.0,19.0,18.0,24.0,5.0,13.0,8,3,available
+session_indy_nxt_2026_6765,2026 Indianapolis Grand Prix Race 2 R2,driver_max_garcia,Max Garcia,25,11.0,23.0,11.0,23.0,-12.0,14.0,1,3,available
+session_indy_nxt_2026_6765,2026 Indianapolis Grand Prix Race 2 R2,driver_alessandro_de_tullio,Alessandro de Tullio,30,4.0,5.0,4.0,5.0,-1.0,1.0,0,1,available
+session_indy_nxt_2026_6765,2026 Indianapolis Grand Prix Race 2 R2,driver_nicolas_stati,Nicolas Stati,29,18.0,21.0,18.0,24.0,-3.0,9.0,3,1,available
+session_indy_nxt_2026_6765,2026 Indianapolis Grand Prix Race 2 R2,driver_salvador_de_alba,Salvador de Alba,30,14.0,10.0,10.0,14.0,4.0,4.0,3,0,available
+session_indy_nxt_2026_6765,2026 Indianapolis Grand Prix Race 2 R2,driver_matteo_nannini,Matteo Nannini,30,7.0,7.0,7.0,8.0,0.0,2.0,1,1,available
+session_indy_nxt_2026_6765,2026 Indianapolis Grand Prix Race 2 R2,driver_nikita_johnson,Nikita Johnson,30,6.0,6.0,6.0,6.0,0.0,0.0,0,0,available
+session_indy_nxt_2026_6765,2026 Indianapolis Grand Prix Race 2 R2,driver_lochie_hughes,Lochie Hughes,30,5.0,4.0,4.0,5.0,1.0,1.0,1,0,available
+session_indy_nxt_2026_6765,2026 Indianapolis Grand Prix Race 2 R2,driver_seb_murray,Seb Murray,30,8.0,9.0,8.0,9.0,-1.0,1.0,0,1,available
+session_indy_nxt_2026_6765,2026 Indianapolis Grand Prix Race 2 R2,driver_max_taylor,Max Taylor,30,2.0,2.0,2.0,2.0,0.0,0.0,0,0,available
+session_indy_nxt_2026_6765,2026 Indianapolis Grand Prix Race 2 R2,driver_josh_pierson,Josh Pierson,30,10.0,8.0,7.0,10.0,2.0,4.0,2,1,available
+session_indy_nxt_2026_6765,2026 Indianapolis Grand Prix Race 2 R2,driver_nicholas_monteiro,Nicholas Monteiro,30,23.0,18.0,18.0,23.0,5.0,9.0,6,2,available
+session_indy_nxt_2026_6765,2026 Indianapolis Grand Prix Race 2 R2,driver_jack_beeton,Jack Beeton,30,13.0,13.0,13.0,21.0,0.0,16.0,7,2,available
+session_indy_nxt_2026_6765,2026 Indianapolis Grand Prix Race 2 R2,driver_jordan_missig,Jordan Missig,30,15.0,16.0,13.0,16.0,-1.0,7.0,2,3,available
+session_indy_nxt_2026_6765,2026 Indianapolis Grand Prix Race 2 R2,driver_colin_kaminsky,Colin Kaminsky,30,21.0,15.0,15.0,21.0,6.0,10.0,6,1,available
+session_indy_nxt_2026_6765,2026 Indianapolis Grand Prix Race 2 R2,driver_enzo_fittipaldi,Enzo Fittipaldi,30,3.0,3.0,3.0,3.0,0.0,0.0,0,0,available
+session_indy_nxt_2026_6765,2026 Indianapolis Grand Prix Race 2 R2,driver_jm_correa,JM Correa,30,12.0,11.0,11.0,13.0,1.0,5.0,3,1,available
+session_indy_nxt_2026_6765,2026 Indianapolis Grand Prix Race 2 R2,driver_tymek_kucharczyk,Tymek Kucharczyk,30,1.0,1.0,1.0,1.0,0.0,0.0,0,0,available
+session_indy_nxt_2026_6765,2026 Indianapolis Grand Prix Race 2 R2,driver_alexander_koreiba,Alexander Koreiba,30,20.0,17.0,16.0,20.0,3.0,17.0,7,3,available
+session_indy_nxt_2026_6765,2026 Indianapolis Grand Prix Race 2 R2,driver_ricardo_escotto,Ricardo Escotto,30,9.0,20.0,9.0,20.0,-11.0,11.0,0,3,available
+session_indy_nxt_2026_6765,2026 Indianapolis Grand Prix Race 2 R2,driver_james_roe,James Roe,26,16.0,18.0,16.0,22.0,-2.0,12.0,4,2,available
+session_indy_nxt_2026_6765,2026 Indianapolis Grand Prix Race 2 R2,driver_bryce_aron,Bryce Aron,30,22.0,12.0,12.0,22.0,10.0,10.0,6,0,available
+session_indy_nxt_2026_6765,2026 Indianapolis Grand Prix Race 2 R2,driver_myles_rowe,Myles Rowe,9,17.0,23.0,16.0,23.0,-6.0,10.0,1,2,available
+session_indy_nxt_2026_6749,2026 Detroit Grand Prix,driver_niels_koolen,Niels Koolen,29,11.0,9.0,9.0,12.0,2.0,4.0,3,1,available
+session_indy_nxt_2026_6749,2026 Detroit Grand Prix,driver_carson_etter,Carson Etter,42,16.0,19.0,15.0,21.0,-3.0,17.0,6,7,available
+session_indy_nxt_2026_6749,2026 Detroit Grand Prix,driver_max_garcia,Max Garcia,42,6.0,4.0,4.0,7.0,2.0,4.0,3,1,available
+session_indy_nxt_2026_6749,2026 Detroit Grand Prix,driver_alessandro_de_tullio,Alessandro de Tullio,38,22.0,22.0,22.0,24.0,0.0,4.0,2,1,available
+session_indy_nxt_2026_6749,2026 Detroit Grand Prix,driver_nicolas_stati,Nicolas Stati,42,8.0,7.0,7.0,9.0,1.0,5.0,3,2,available
+session_indy_nxt_2026_6749,2026 Detroit Grand Prix,driver_salvador_de_alba,Salvador de Alba,42,23.0,12.0,12.0,23.0,11.0,15.0,9,2,available
+session_indy_nxt_2026_6749,2026 Detroit Grand Prix,driver_matteo_nannini,Matteo Nannini,42,4.0,11.0,4.0,14.0,-7.0,15.0,4,7,available
+session_indy_nxt_2026_6749,2026 Detroit Grand Prix,driver_nikita_johnson,Nikita Johnson,42,10.0,6.0,6.0,11.0,4.0,6.0,5,1,available
+session_indy_nxt_2026_6749,2026 Detroit Grand Prix,driver_lochie_hughes,Lochie Hughes,39,21.0,21.0,21.0,23.0,0.0,4.0,2,1,available
+session_indy_nxt_2026_6749,2026 Detroit Grand Prix,driver_seb_murray,Seb Murray,42,5.0,5.0,3.0,6.0,0.0,6.0,3,3,available
+session_indy_nxt_2026_6749,2026 Detroit Grand Prix,driver_max_taylor,Max Taylor,39,18.0,8.0,8.0,22.0,10.0,24.0,13,3,available
+session_indy_nxt_2026_6749,2026 Detroit Grand Prix,driver_josh_pierson,Josh Pierson,42,19.0,14.0,14.0,22.0,5.0,15.0,9,3,available
+session_indy_nxt_2026_6749,2026 Detroit Grand Prix,driver_nicholas_monteiro,Nicholas Monteiro,42,15.0,17.0,15.0,21.0,-2.0,18.0,7,6,available
+session_indy_nxt_2026_6749,2026 Detroit Grand Prix,driver_jack_beeton,Jack Beeton,42,14.0,13.0,11.0,22.0,1.0,25.0,10,2,available
+session_indy_nxt_2026_6749,2026 Detroit Grand Prix,driver_jordan_missig,Jordan Missig,42,20.0,15.0,10.0,21.0,5.0,19.0,7,3,available
+session_indy_nxt_2026_6749,2026 Detroit Grand Prix,driver_colin_kaminsky,Colin Kaminsky,42,9.0,10.0,9.0,16.0,-1.0,17.0,6,4,available
+session_indy_nxt_2026_6749,2026 Detroit Grand Prix,driver_enzo_fittipaldi,Enzo Fittipaldi,42,3.0,1.0,1.0,3.0,2.0,4.0,2,1,available
+session_indy_nxt_2026_6749,2026 Detroit Grand Prix,driver_jm_correa,JM Correa,41,2.0,9.0,2.0,18.0,-7.0,25.0,8,2,available
+session_indy_nxt_2026_6749,2026 Detroit Grand Prix,driver_tymek_kucharczyk,Tymek Kucharczyk,42,1.0,3.0,1.0,3.0,-2.0,2.0,0,1,available
+session_indy_nxt_2026_6749,2026 Detroit Grand Prix,driver_alexander_koreiba,Alexander Koreiba,42,13.0,16.0,12.0,17.0,-3.0,13.0,5,7,available
+session_indy_nxt_2026_6749,2026 Detroit Grand Prix,driver_ricardo_escotto,Ricardo Escotto,20,12.0,21.0,12.0,22.0,-9.0,21.0,4,6,available
+session_indy_nxt_2026_6749,2026 Detroit Grand Prix,driver_james_roe,James Roe,42,17.0,18.0,14.0,20.0,-1.0,15.0,6,7,available
+session_indy_nxt_2026_6749,2026 Detroit Grand Prix,driver_bryce_aron,Bryce Aron,42,7.0,8.0,6.0,9.0,-1.0,7.0,3,3,available
+session_indy_nxt_2026_6749,2026 Detroit Grand Prix,driver_myles_rowe,Myles Rowe,42,2.0,2.0,2.0,5.0,0.0,6.0,3,2,available
+session_indy_nxt_2026_6763,2026 INDY NXT by Firestone at World Wide Technology Raceway,driver_niels_koolen,Niels Koolen,75,9.0,4.0,4.0,11.0,5.0,13.0,9,4,available
+session_indy_nxt_2026_6763,2026 INDY NXT by Firestone at World Wide Technology Raceway,driver_carson_etter,Carson Etter,75,22.0,16.0,16.0,22.0,6.0,10.0,7,2,available
+session_indy_nxt_2026_6763,2026 INDY NXT by Firestone at World Wide Technology Raceway,driver_max_garcia,Max Garcia,75,14.0,8.0,8.0,14.0,6.0,10.0,6,2,available
+session_indy_nxt_2026_6763,2026 INDY NXT by Firestone at World Wide Technology Raceway,driver_alessandro_de_tullio,Alessandro de Tullio,75,2.0,2.0,2.0,8.0,0.0,12.0,5,6,available
+session_indy_nxt_2026_6763,2026 INDY NXT by Firestone at World Wide Technology Raceway,driver_yuven_sundaramoorthy,Yuven Sundaramoorthy,61,8.0,18.0,7.0,18.0,-10.0,16.0,2,5,available
+session_indy_nxt_2026_6763,2026 INDY NXT by Firestone at World Wide Technology Raceway,driver_salvador_de_alba,Salvador de Alba,60,10.0,8.0,7.0,10.0,2.0,6.0,4,2,available
+session_indy_nxt_2026_6763,2026 INDY NXT by Firestone at World Wide Technology Raceway,driver_matteo_nannini,Matteo Nannini,68,24.0,20.0,20.0,24.0,4.0,4.0,4,0,available
+session_indy_nxt_2026_6763,2026 INDY NXT by Firestone at World Wide Technology Raceway,driver_nikita_johnson,Nikita Johnson,75,6.0,7.0,4.0,7.0,-1.0,5.0,2,2,available
+session_indy_nxt_2026_6763,2026 INDY NXT by Firestone at World Wide Technology Raceway,driver_lochie_hughes,Lochie Hughes,75,1.0,6.0,1.0,6.0,-5.0,5.0,0,5,available
+session_indy_nxt_2026_6763,2026 INDY NXT by Firestone at World Wide Technology Raceway,driver_seb_murray,Seb Murray,75,11.0,12.0,11.0,14.0,-1.0,7.0,2,3,available
+session_indy_nxt_2026_6763,2026 INDY NXT by Firestone at World Wide Technology Raceway,driver_max_taylor,Max Taylor,75,4.0,5.0,2.0,5.0,-1.0,9.0,4,5,available
+session_indy_nxt_2026_6763,2026 INDY NXT by Firestone at World Wide Technology Raceway,driver_josh_pierson,Josh Pierson,75,3.0,3.0,1.0,3.0,0.0,8.0,4,4,available
+session_indy_nxt_2026_6763,2026 INDY NXT by Firestone at World Wide Technology Raceway,driver_nicholas_monteiro,Nicholas Monteiro,75,20.0,15.0,15.0,20.0,5.0,11.0,7,3,available
+session_indy_nxt_2026_6763,2026 INDY NXT by Firestone at World Wide Technology Raceway,driver_jack_beeton,Jack Beeton,75,7.0,11.0,7.0,16.0,-4.0,16.0,5,9,available
+session_indy_nxt_2026_6763,2026 INDY NXT by Firestone at World Wide Technology Raceway,driver_jordan_missig,Jordan Missig,75,13.0,10.0,9.0,14.0,3.0,11.0,6,4,available
+session_indy_nxt_2026_6763,2026 INDY NXT by Firestone at World Wide Technology Raceway,driver_colin_kaminsky,Colin Kaminsky,75,18.0,17.0,12.0,19.0,1.0,13.0,6,4,available
+session_indy_nxt_2026_6763,2026 INDY NXT by Firestone at World Wide Technology Raceway,driver_enzo_fittipaldi,Enzo Fittipaldi,75,23.0,13.0,13.0,23.0,10.0,12.0,10,1,available
+session_indy_nxt_2026_6763,2026 INDY NXT by Firestone at World Wide Technology Raceway,driver_jm_correa,JM Correa,75,12.0,14.0,12.0,16.0,-2.0,10.0,3,5,available
+session_indy_nxt_2026_6763,2026 INDY NXT by Firestone at World Wide Technology Raceway,driver_tymek_kucharczyk,Tymek Kucharczyk,75,5.0,9.0,5.0,12.0,-4.0,12.0,3,5,available
+session_indy_nxt_2026_6763,2026 INDY NXT by Firestone at World Wide Technology Raceway,driver_alexander_koreiba,Alexander Koreiba,4,16.0,15.0,15.0,16.0,1.0,1.0,1,0,available
+session_indy_nxt_2026_6763,2026 INDY NXT by Firestone at World Wide Technology Raceway,driver_ricardo_escotto,Ricardo Escotto,74,17.0,19.0,16.0,21.0,-2.0,12.0,4,6,available
+session_indy_nxt_2026_6763,2026 INDY NXT by Firestone at World Wide Technology Raceway,driver_james_roe,James Roe,74,15.0,18.0,15.0,21.0,-3.0,11.0,4,6,available
+session_indy_nxt_2026_6763,2026 INDY NXT by Firestone at World Wide Technology Raceway,driver_bryce_aron,Bryce Aron,5,21.0,21.0,21.0,22.0,0.0,2.0,1,1,available
+session_indy_nxt_2026_6763,2026 INDY NXT by Firestone at World Wide Technology Raceway,driver_myles_rowe,Myles Rowe,75,19.0,1.0,1.0,19.0,18.0,18.0,17,0,available
