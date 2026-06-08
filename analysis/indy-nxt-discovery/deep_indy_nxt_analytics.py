@@ -105,7 +105,7 @@ def write_csv(rows: list[dict[str, Any]], path: Path) -> None:
             if key not in keys:
                 keys.append(key)
     with path.open("w", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=keys)
+        writer = csv.DictWriter(f, fieldnames=keys, lineterminator="\n")
         writer.writeheader()
         writer.writerows(rows)
 
@@ -687,6 +687,429 @@ def future_weekend_prep(ctx: Context, race_df: pd.DataFrame) -> list[dict[str, A
     return rows
 
 
+def driver_strength_context(ctx: Context, idx: dict[str, Any], race_df: pd.DataFrame) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    completed_sids = set(race_df["sessionId"].astype(str).tolist())
+    all_rows = [
+        r for sid in completed_sids for r in idx["results_by_session"].get(sid, [])
+        if r.get("driverId") and clean_num(r.get("finishPosition")) is not None
+    ]
+    driver_groups: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    for row in all_rows:
+        driver_groups[row["driverId"]].append(row)
+    all_finish_pct = []
+    for row in all_rows:
+        finish = clean_num(row.get("finishPosition"))
+        field = clean_num(row.get("fieldSize"))
+        if finish is not None and field and field > 1:
+            all_finish_pct.append(1 - ((finish - 1) / (field - 1)))
+    global_mean = mean(all_finish_pct) if all_finish_pct else 0.5
+    prior_n = 8
+
+    rating_rows = []
+    raw_rating_by_driver = {}
+    for did, rows in driver_groups.items():
+        finish_pct = []
+        start_pct = []
+        points = []
+        issue_like = 0
+        for row in rows:
+            field = clean_num(row.get("fieldSize"))
+            finish = clean_num(row.get("finishPosition"))
+            start = clean_num(row.get("startPosition") or row.get("gridPosition"))
+            if finish is not None and field and field > 1:
+                finish_pct.append(1 - ((finish - 1) / (field - 1)))
+            if start is not None and start > 0 and field and field > 1:
+                start_pct.append(1 - ((start - 1) / (field - 1)))
+            if clean_num(row.get("points")) is not None:
+                points.append(clean_num(row.get("points")))
+            status = str(row.get("status") or "").lower()
+            if status and status not in {"running", "unknown"}:
+                issue_like += 1
+        n = len(finish_pct)
+        if not n:
+            continue
+        raw = mean(finish_pct)
+        shrunk = ((raw * n) + (global_mean * prior_n)) / (n + prior_n)
+        raw_rating_by_driver[did] = shrunk
+        rating_rows.append({
+            "driverId": did,
+            "driverName": driver_name(ctx, did),
+            "raceRows": len(rows),
+            "finishPercentileMean": raw,
+            "finishPercentileMedian": median(finish_pct),
+            "shrunkStrengthRating": shrunk,
+            "avgStartPercentile": mean(start_pct) if start_pct else None,
+            "avgPoints": mean(points) if points else None,
+            "top5Rate": safe_div(sum(1 for r in rows if clean_num(r.get("finishPosition")) is not None and clean_num(r.get("finishPosition")) <= 5), len(rows)),
+            "top10Rate": safe_div(sum(1 for r in rows if clean_num(r.get("finishPosition")) is not None and clean_num(r.get("finishPosition")) <= 10), len(rows)),
+            "issueLikeStatusRate": safe_div(issue_like, len(rows)),
+            "sourceState": "official_results_empirical_bayes",
+            "caveat": "Descriptive strength context with shrinkage toward field mean; not a causal or scouting model.",
+        })
+
+    race_rows = []
+    for race in race_df.to_dict("records"):
+        sid = race["sessionId"]
+        results = [r for r in idx["results_by_session"].get(sid, []) if r.get("driverId") and clean_num(r.get("finishPosition")) is not None]
+        rivals = [r for r in results if r.get("driverId") != BRYCE_ID]
+        field_ratings = [raw_rating_by_driver.get(r.get("driverId")) for r in rivals if raw_rating_by_driver.get(r.get("driverId")) is not None]
+        bryce_result = next((r for r in results if r.get("driverId") == BRYCE_ID), None)
+        top_rivals = sorted(
+            [
+                {
+                    "driverName": driver_name(ctx, r.get("driverId")),
+                    "rating": raw_rating_by_driver.get(r.get("driverId")),
+                    "finish": r.get("finishPosition"),
+                }
+                for r in rivals
+                if raw_rating_by_driver.get(r.get("driverId")) is not None
+            ],
+            key=lambda r: r["rating"],
+            reverse=True,
+        )[:5]
+        race_rows.append({
+            "sessionId": sid,
+            "raceLabel": race["raceLabel"],
+            "fieldRatedRivals": len(field_ratings),
+            "fieldStrengthMean": mean(field_ratings) if field_ratings else None,
+            "fieldStrengthMedian": median(field_ratings) if field_ratings else None,
+            "topRatedRivals": "; ".join(f"{r['driverName']}:{r['rating']:.2f}" for r in top_rivals),
+            "bryceFinish": bryce_result.get("finishPosition") if bryce_result else None,
+            "bryceFinishPercentile": race.get("finishPercentile"),
+            "resultVsFieldStrength": (clean_num(race.get("finishPercentile")) - mean(field_ratings)) if field_ratings and clean_num(race.get("finishPercentile")) is not None else None,
+            "sourceState": "official_results_descriptive_strength",
+            "caveat": "Field strength uses same-sample outcome history and should be read as context, not predictive truth.",
+        })
+    return (
+        sorted(rating_rows, key=lambda r: (r["shrunkStrengthRating"], r["raceRows"]), reverse=True),
+        sorted(race_rows, key=lambda r: session_sort_key(ctx, r["sessionId"])),
+    )
+
+
+def championship_progression(ctx: Context, idx: dict[str, Any], race_df: pd.DataFrame) -> list[dict[str, Any]]:
+    completed_sids = set(race_df["sessionId"].astype(str).tolist())
+    by_year_sids: dict[int, list[str]] = defaultdict(list)
+    for sid in completed_sids:
+        year = ctx.events[ctx.sessions[sid]["eventId"]].get("seasonYear")
+        if year:
+            by_year_sids[int(year)].append(sid)
+    rows = []
+    for year, sids in sorted(by_year_sids.items()):
+        points_by_driver: Counter[str] = Counter()
+        for round_index, sid in enumerate(sorted(sids, key=lambda s: session_sort_key(ctx, s)), 1):
+            for result in idx["results_by_session"].get(sid, []):
+                did = result.get("driverId")
+                pts = clean_num(result.get("points"))
+                if did and pts is not None:
+                    points_by_driver[did] += pts
+            sorted_points = sorted(points_by_driver.items(), key=lambda kv: (-kv[1], driver_name(ctx, kv[0])))
+            bryce_points = points_by_driver.get(BRYCE_ID, 0)
+            bryce_rank = next((i + 1 for i, (did, _) in enumerate(sorted_points) if did == BRYCE_ID), None)
+            leader_id, leader_points = sorted_points[0] if sorted_points else (None, None)
+            rows.append({
+                "seasonYear": year,
+                "roundIndex": round_index,
+                "sessionId": sid,
+                "raceLabel": race_label(ctx, sid),
+                "bryceRacePoints": next((r.get("points") for r in idx["results_by_session"].get(sid, []) if r.get("driverId") == BRYCE_ID), None),
+                "bryceCumulativePoints": bryce_points,
+                "bryceStandingRank": bryce_rank,
+                "leaderDriver": driver_name(ctx, leader_id),
+                "leaderPoints": leader_points,
+                "pointsBehindLeader": leader_points - bryce_points if leader_points is not None else None,
+                "sourceState": "official_results_points_progression",
+                "caveat": "Progression uses imported INDY NXT race rows available in the canonical dataset; future 2026 sessions are excluded.",
+            })
+    return rows
+
+
+def racecraft_context(ctx: Context, idx: dict[str, Any], race_df: pd.DataFrame) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    completed_sids = set(race_df["sessionId"].astype(str).tolist())
+    racecraft = [r for r in ctx.data["racecraftEvents"] if r.get("sessionId") in completed_sids]
+    by_driver = Counter(r.get("driverId") for r in racecraft if r.get("driverId"))
+    race_rows = []
+    for race in race_df.to_dict("records"):
+        sid = race["sessionId"]
+        rows = [r for r in racecraft if r.get("sessionId") == sid]
+        bryce_rows = [r for r in rows if r.get("driverId") == BRYCE_ID]
+        top = max(rows, key=lambda r: clean_num(r.get("raw", {}).get("positionsImproved")) or -999) if rows else None
+        race_rows.append({
+            "sessionId": sid,
+            "raceLabel": race["raceLabel"],
+            "officialRacecraftRows": len(rows),
+            "bryceRacecraftRows": len(bryce_rows),
+            "bryceMostImprovedFlag": bool(bryce_rows),
+            "bryceRacecraftDescription": " | ".join(r.get("description", "") for r in bryce_rows),
+            "sessionMostImprovedDriver": driver_name(ctx, top.get("driverId")) if top else "",
+            "sessionMostImprovedPositions": top.get("raw", {}).get("positionsImproved") if top else None,
+            "sourceState": "official_event_summary_racecraft",
+            "caveat": "Racecraft rows are official Event Summary most-improved facts, not a complete overtake log.",
+        })
+    driver_rows = [
+        {
+            "driverId": did,
+            "driverName": driver_name(ctx, did),
+            "officialMostImprovedCount": count,
+            "sourceState": "official_event_summary_racecraft",
+        }
+        for did, count in by_driver.most_common()
+    ]
+    return race_rows, driver_rows
+
+
+def source_family_audit(ctx: Context, idx: dict[str, Any], race_df: pd.DataFrame, outputs: dict[str, Any]) -> list[dict[str, Any]]:
+    completed_sids = set(race_df["sessionId"].astype(str).tolist())
+    indy_events = [e for e in ctx.events.values() if e.get("seriesId") == INDY_SERIES_ID]
+    indy_sessions = [s for s in ctx.sessions.values() if s.get("eventId") in {e["id"] for e in indy_events}]
+    family_counts = {
+        "race_results": sum(1 for sid in completed_sids for r in idx["results_by_session"].get(sid, []) if r.get("driverId") == BRYCE_ID),
+        "full_field_results": sum(len(idx["results_by_session"].get(sid, [])) for sid in completed_sids),
+        "practice_results": sum(1 for s in indy_sessions if s.get("sessionType") == "practice"),
+        "qualifying_results": sum(1 for q in ctx.data["qualifyingResults"] if q.get("sessionId") in ctx.indy_session_ids),
+        "lap_samples": sum(1 for l in ctx.data["lapSamples"] if l.get("sessionId") in completed_sids),
+        "section_results": sum(1 for m in ctx.data["derivedMetrics"] if m.get("sessionId") in completed_sids and m.get("metricType") == "official_section_results"),
+        "top_section_times": sum(1 for m in ctx.data["derivedMetrics"] if m.get("sessionId") in completed_sids and m.get("metricType") == "official_top_section_times"),
+        "event_summary_stats": sum(1 for m in ctx.data["derivedMetrics"] if m.get("sessionId") in completed_sids and m.get("metricType") == "official_event_summary_race_stats"),
+        "leader_lap_summary": sum(1 for m in ctx.data["derivedMetrics"] if m.get("sessionId") in completed_sids and m.get("metricType") == "official_leader_lap_summary"),
+        "incidents": sum(1 for i in ctx.data["incidents"] if i.get("sessionId") in completed_sids),
+        "penalties": sum(1 for p in ctx.data["penalties"] if p.get("sessionId") in completed_sids),
+        "racecraft_events": sum(1 for r in ctx.data["racecraftEvents"] if r.get("sessionId") in completed_sids),
+        "weather_observations": sum(1 for w in ctx.data["weatherObservations"] if w.get("sessionId") in ctx.indy_session_ids),
+        "future_schedule": sum(1 for s in indy_sessions if s.get("scheduledStart") and str(s.get("scheduledStart"))[:10] > str(TODAY)),
+        "pit_stop_counts": sum(
+            1 for sid in completed_sids
+            for r in idx["results_by_session"].get(sid, [])
+            if r.get("driverId") == BRYCE_ID and r.get("pitStops") is not None
+        ),
+        "telemetry_or_car_engineering": 0,
+    }
+    mapping = [
+        ("race_results", "complete", "race_debrief_scores.csv", "Core result, conversion, points, and status analysis."),
+        ("full_field_results", "complete", "driver_strength_ratings.csv; field_strength_by_race.csv; team_context_by_year.csv", "Full-field context, team context, and descriptive opponent strength."),
+        ("practice_results", "complete_source_bounded", "prep_session_signals.csv", "Practice is represented as rank context; no absolute pace claims."),
+        ("qualifying_results", "complete_source_bounded", "prep_session_signals.csv", "Qualifying is used for start/prep context; group/combined caveats remain."),
+        ("lap_samples", "complete_source_bounded", "full_field_lap_dynamics_by_driver.csv", "Full-field lap movement and volatility analysis with partial-chart caveats."),
+        ("section_results", "complete_source_bounded", "section_results_deep_by_race.csv", "Per-lap section percentiles with sparse-row suppression."),
+        ("top_section_times", "partial", "section_results_deep_by_section.csv", "Top-section facts were useful earlier; final pass favors per-lap section results."),
+        ("event_summary_stats", "complete", "race_debrief_scores.csv", "Cautions, passes, lead-change context folded into debrief scores."),
+        ("leader_lap_summary", "complete", "leader_lap_context.csv", "Leader entropy and dominance context."),
+        ("incidents", "complete", "incident_penalty_context.csv", "Incident exposure and type summaries."),
+        ("penalties", "complete", "incident_penalty_context.csv", "Penalty exposure and type summaries."),
+        ("racecraft_events", "complete_source_bounded", "racecraft_context_by_race.csv", "Official most-improved badges only; no inferred overtake log."),
+        ("weather_observations", "complete_context_only", "race_debrief_scores.csv; future_weekend_prep_inputs.csv", "Modeled non-official weather used as context, not causality."),
+        ("future_schedule", "complete_context_only", "future_weekend_prep_inputs.csv", "Future prep rows exclude forecast claims until current weather source is added."),
+        ("pit_stop_counts", "complete_low_signal", "race_debrief_scores.csv", "Pit counts are present but low-signal; no pit sequence/tire/service analysis exists."),
+        ("telemetry_or_car_engineering", "unavailable", "", "No telemetry or engineering-root-cause data in canonical sources."),
+    ]
+    return [
+        {
+            "sourceFamily": family,
+            "sourceRows": family_counts.get(family),
+            "analysisStatus": status,
+            "primaryArtifacts": artifacts,
+            "auditConclusion": conclusion,
+        }
+        for family, status, artifacts, conclusion in mapping
+    ]
+
+
+def make_adversarial_review(
+    audit_rows: list[dict[str, Any]],
+    race_scores: list[dict[str, Any]],
+    driver_strength_rows: list[dict[str, Any]],
+    championship_rows: list[dict[str, Any]],
+) -> str:
+    audit_df = pd.DataFrame(audit_rows)
+    race_df = pd.DataFrame(race_scores)
+    strength_df = pd.DataFrame(driver_strength_rows)
+    champ_df = pd.DataFrame(championship_rows)
+    incomplete = audit_df[audit_df["analysisStatus"].isin(["partial", "unavailable", "complete_low_signal"])]
+    issue_rows = [
+        {
+            "issue": "Derived race debrief labels are useful but not final copy.",
+            "severity": "medium",
+            "evidence": "36 race labels are generated from thresholds and need manual source review before UI narrative copy.",
+            "recommendedFix": "Keep labels as internal archetypes; add source drawer and manual-review status in UI contract.",
+        },
+        {
+            "issue": "Opponent strength uses same-sample outcomes.",
+            "severity": "medium",
+            "evidence": f"{len(strength_df)} driver ratings use imported INDY NXT race rows with empirical shrinkage.",
+            "recommendedFix": "Use it as descriptive field context. Avoid predictive claims until a larger model with season controls is built.",
+        },
+        {
+            "issue": "Weather is modeled and non-official.",
+            "severity": "medium",
+            "evidence": "INDY NXT official weather is unavailable; exact-window modeled rows exist for historical sessions.",
+            "recommendedFix": "Show weather as context and confidence state. Do not headline causal weather effects.",
+        },
+        {
+            "issue": "Section rows have uneven density.",
+            "severity": "medium",
+            "evidence": "Sparse section-result sessions are preserved but suppressed from headline rankings below 50 comparison rows.",
+            "recommendedFix": "Keep the denominator visible on every section visualization.",
+        },
+        {
+            "issue": "Engineering claims are unsupported.",
+            "severity": "high",
+            "evidence": "Team context has official result statuses but no telemetry, setup notes, reliability root-cause feed, or engineering logs.",
+            "recommendedFix": "Limit Ganassi analysis to result/team/status context unless new source-backed engineering evidence is added.",
+        },
+    ]
+    lines = [
+        "# INDY NXT Analytics Completion And Adversarial Review",
+        "",
+        "This review audits the INDY NXT analytics layer against source families available in the canonical career dataset and the generated analysis artifacts.",
+        "",
+        "## Completion Matrix",
+        "",
+        table_md(audit_rows, ["sourceFamily", "sourceRows", "analysisStatus", "primaryArtifacts", "auditConclusion"], 30),
+        "",
+        "## Structural Issues",
+        "",
+        table_md(issue_rows, ["severity", "issue", "evidence", "recommendedFix"], 10),
+        "",
+        "## Remaining Partial Or Unavailable Areas",
+        "",
+        table_md(incomplete, ["sourceFamily", "sourceRows", "analysisStatus", "auditConclusion"], 20),
+        "",
+        "## Final Assessment",
+        "",
+        f"- Race debrief coverage: {len(race_df)} Bryce INDY NXT race rows.",
+        f"- Driver strength context: {len(strength_df)} rated drivers.",
+        f"- Championship progression rows: {len(champ_df)} race checkpoints.",
+        "- The analysis layer is broad enough for a UI contract after manual review of labels and section denominators.",
+        "- The main unsafe area is overclaiming causality: weather, team engineering, and opponent strength must remain context unless new source families are added.",
+        "",
+        "## Analyses Considered And Rejected For Now",
+        "",
+        "- Causal weather regression: rejected because modeled weather plus small sample makes causal inference weak.",
+        "- Engineering reliability model: rejected because official result statuses do not expose engineering root causes.",
+        "- Pit strategy model: rejected because INDY NXT has counts only, not pit sequence, tire, service, or pit-time detail.",
+        "- Public scouting model: deferred because opponent strength needs more seasons and shrinkage before being fair as a public-facing claim.",
+        "",
+        "## Agent Navigation Notes",
+        "",
+        "- Use the bundled workspace Python for this analytics script in the current Codex environment; the machine default `python3` may not include numpy/pandas.",
+        "- Pit-stop counts are populated for all 36 Bryce INDY NXT race rows, but the source only supports count-level context.",
+        "- Team context is race-result based in the INDY NXT debrief layer; do not mix it with practice/qualifying session context without a visible grain label.",
+        "- Future weekend prep rows use historical same-track and track-type context only. Forecast weather needs a separate current-weather source before UI display.",
+        "",
+    ]
+    return "\n".join(lines)
+
+
+def ui_analytics_contract() -> tuple[list[dict[str, Any]], str]:
+    rows = [
+        {
+            "module": "Race Debrief Score",
+            "grain": "one Bryce INDY NXT race",
+            "primaryArtifact": "race_debrief_scores.csv",
+            "requiredFields": "sessionId, raceLabel, startPosition, finishPosition, positionGain, paceIndex, chaosExposureIndex, archetype, sourceState, confidence, caveat",
+            "sourceState": "derived_from_official_results_lap_chart_sections_and_modeled_weather",
+            "uiReadiness": "ready_after_manual_label_review",
+            "displayRule": "Show as debrief card with source/caveat drawer; keep archetype as reviewable label.",
+        },
+        {
+            "module": "Prep Funnel",
+            "grain": "race event",
+            "primaryArtifact": "prep_session_signals.csv",
+            "requiredFields": "bestPracticeRank, avgPracticeRank, bestQualifyingRank, avgQualifyingRank, raceStart, raceFinish, caveat",
+            "sourceState": "official_api_session_results",
+            "uiReadiness": "ready",
+            "displayRule": "Show practice and qualifying as context signals with session-format caveat.",
+        },
+        {
+            "module": "Full-Field Lap Dynamics",
+            "grain": "race and driver-race",
+            "primaryArtifact": "full_field_lap_dynamics_by_race.csv; full_field_lap_dynamics_by_driver.csv",
+            "requiredFields": "fieldLapDrivers, bryceNetLapChartGain, bryceLapGainPercentile, bryceVolatility, bryceStabilityPercentile",
+            "sourceState": "official_lap_chart",
+            "uiReadiness": "ready_with_partial_chart_badges",
+            "displayRule": "Use inverted lap-position trace plus percentile badges; expose lap-chart completeness.",
+        },
+        {
+            "module": "Team Context",
+            "grain": "race and team-season",
+            "primaryArtifact": "team_context_by_race.csv; team_context_by_year.csv",
+            "requiredFields": "teamName, bryceVsTeamAvgFinish, bryceTeamFinishRank, issueLikeStatusRate, caveat",
+            "sourceState": "official_results",
+            "uiReadiness": "ready_descriptive_only",
+            "displayRule": "Show result context only; no engineering-root-cause language.",
+        },
+        {
+            "module": "Track-Type Profile",
+            "grain": "track type",
+            "primaryArtifact": "race_track_type_summary.csv",
+            "requiredFields": "trackType, races, avgFinish, avgGain, top5Rate, top10Rate",
+            "sourceState": "official_results_derived_summary",
+            "uiReadiness": "ready",
+            "displayRule": "Use as compact comparison panel and upcoming-race prep context.",
+        },
+        {
+            "module": "Future Weekend Prep",
+            "grain": "future event",
+            "primaryArtifact": "future_weekend_prep_inputs.csv",
+            "requiredFields": "eventName, eventStartDate, trackName, trackType, sameTrackAvgFinish, trackTypeAvgFinish, weatherState",
+            "sourceState": "schedule_plus_historical_results",
+            "uiReadiness": "ready_no_forecast",
+            "displayRule": "Show historical same-track and track-type context; future weather remains unavailable until separate forecast source is added.",
+        },
+        {
+            "module": "Weather Context",
+            "grain": "session/race",
+            "primaryArtifact": "race_debrief_scores.csv",
+            "requiredFields": "weatherContext, weatherConfidence, wetDry, thermalStress, windRisk",
+            "sourceState": "modeled_non_official",
+            "uiReadiness": "ready_context_only",
+            "displayRule": "Visually secondary context strip; no causal performance claims.",
+        },
+        {
+            "module": "Source/Caveat State",
+            "grain": "every metric/module",
+            "primaryArtifact": "indy_nxt_source_family_audit.csv; all module CSVs",
+            "requiredFields": "sourceState, confidence, caveat, analysisStatus, primaryArtifacts",
+            "sourceState": "mixed_explicit",
+            "uiReadiness": "ready",
+            "displayRule": "Every stat must expose source state and caveat drawer entry.",
+        },
+        {
+            "module": "Opponent Strength Context",
+            "grain": "driver and race",
+            "primaryArtifact": "driver_strength_ratings.csv; field_strength_by_race.csv",
+            "requiredFields": "shrunkStrengthRating, fieldStrengthMean, resultVsFieldStrength, caveat",
+            "sourceState": "official_results_empirical_bayes",
+            "uiReadiness": "ready_descriptive_only",
+            "displayRule": "Use as field-quality context; suppress predictive/scouting language.",
+        },
+        {
+            "module": "Championship Progression",
+            "grain": "season race checkpoint",
+            "primaryArtifact": "championship_progression.csv",
+            "requiredFields": "bryceCumulativePoints, bryceStandingRank, leaderDriver, pointsBehindLeader",
+            "sourceState": "official_results_points_progression",
+            "uiReadiness": "ready",
+            "displayRule": "Use as season arc timeline and race weekend stakes context.",
+        },
+    ]
+    lines = [
+        "# INDY NXT UI Analytics Contract",
+        "",
+        "This contract defines the stable analytics modules the UI should consume. Each module has an explicit grain, artifact, source state, and display rule so the app can stay caveat-aware.",
+        "",
+        table_md(rows, ["module", "grain", "primaryArtifact", "sourceState", "uiReadiness", "displayRule"], 20),
+        "",
+        "## Contract Rules",
+        "",
+        "- Every displayed metric must carry a source state, confidence or readiness label, and caveat when applicable.",
+        "- Derived labels are internal analytics labels until manually reviewed.",
+        "- Modeled weather is context only.",
+        "- Team context cannot imply engineering root cause without new source-backed engineering data.",
+        "- Sparse section samples and partial lap charts must show denominators.",
+    ]
+    return rows, "\n".join(lines) + "\n"
+
+
 def analysis_backlog() -> list[dict[str, Any]]:
     return [
         {
@@ -838,6 +1261,11 @@ def make_report(outputs: dict[str, Any]) -> str:
     archetypes = pd.DataFrame(outputs["archetype_summary_rows"])
     track_summary = pd.DataFrame(outputs["track_summary_rows"])
     outcome_cohorts = pd.DataFrame(outputs["outcome_cohort_rows"])
+    strength = pd.DataFrame(outputs["driver_strength_rows"])
+    field_strength = pd.DataFrame(outputs["field_strength_rows"])
+    championship = pd.DataFrame(outputs["championship_rows"])
+    racecraft = pd.DataFrame(outputs["racecraft_race_rows"])
+    source_audit = pd.DataFrame(outputs["source_audit_rows"])
 
     best = race_scores.sort_values(["finishPosition", "positionGain"], ascending=[True, False]).head(8)
     worst = race_scores.sort_values(["finishPosition", "conversionPercentileDelta"], ascending=[False, True]).head(8)
@@ -920,6 +1348,24 @@ def make_report(outputs: dict[str, Any]) -> str:
         "",
         "Team status rows are official-result status summaries. They are evidence for outcome context, not engineering root-cause attribution.",
         "",
+        "## Opponent And Field Strength Context",
+        "",
+        "This is descriptive same-sample context with empirical shrinkage, designed to help the UI explain field quality without pretending to predict results.",
+        "",
+        table_md(strength.sort_values(["shrunkStrengthRating", "raceRows"], ascending=[False, False]), ["driverName", "raceRows", "finishPercentileMean", "shrunkStrengthRating", "avgStartPercentile", "top5Rate", "top10Rate", "issueLikeStatusRate"], 15),
+        "",
+        "Bryce race results versus rated field context:",
+        "",
+        table_md(field_strength.sort_values("resultVsFieldStrength", ascending=False), ["raceLabel", "bryceFinish", "bryceFinishPercentile", "fieldStrengthMean", "resultVsFieldStrength", "topRatedRivals"], 10),
+        "",
+        "## Championship Progression",
+        "",
+        table_md(championship[championship["seasonYear"].eq(championship["seasonYear"].max())] if not championship.empty else championship, ["seasonYear", "roundIndex", "raceLabel", "bryceRacePoints", "bryceCumulativePoints", "bryceStandingRank", "leaderDriver", "pointsBehindLeader"], 20),
+        "",
+        "## Official Racecraft Badges",
+        "",
+        table_md(racecraft[racecraft["bryceRacecraftRows"].fillna(0) > 0], ["raceLabel", "bryceMostImprovedFlag", "bryceRacecraftDescription", "sessionMostImprovedDriver", "sessionMostImprovedPositions"], 10),
+        "",
         "## Deep Section Results",
         "",
         "The headline section tables require at least 50 comparable per-lap section rows. Sparse rows are preserved in CSV for review but suppressed from headline rankings.",
@@ -940,6 +1386,10 @@ def make_report(outputs: dict[str, Any]) -> str:
         "",
         table_md(future, ["eventName", "eventStartDate", "trackName", "trackType", "bryceIndyNxtRacesAtTrack", "sameTrackAvgFinish", "sameTrackAvgGain", "trackTypeAvgFinish", "trackTypeTop10Rate", "weatherState"], 20),
         "",
+        "## Source Family Completion Audit",
+        "",
+        table_md(source_audit, ["sourceFamily", "sourceRows", "analysisStatus", "primaryArtifacts", "auditConclusion"], 30),
+        "",
         "## Adversarial Review Of The First Pass",
         "",
         "- First-pass result: good descriptive backbone. Weakness: too much attention on Bryce-only rows, leaving field context underused.",
@@ -954,7 +1404,7 @@ def make_report(outputs: dict[str, Any]) -> str:
         "1. Manual review of every race archetype and hidden-pace label against source caveats.",
         "2. Create a source-state-aware Race Debrief contract from the score table.",
         "3. Add a race-weekend prep contract that uses same-track history, track-type history, practice and qualifying signals, exact-window historical weather, and future-weather placeholders.",
-        "4. Build an opponent-strength model only after debrief scoring is stable, using shrinkage and season/team controls.",
+        "4. Keep opponent strength as descriptive context until a larger season-controlled model is justified.",
         "5. Start full-career expansion by metric family: result conversion, qualifying conversion, weather/context, lap shape where available, then section/pace only where series expose comparable data.",
     ]
     return "\n".join(lines) + "\n"
@@ -976,6 +1426,16 @@ def main() -> None:
     future_rows = future_weekend_prep(ctx, race_df)
     backlog_rows = analysis_backlog()
     archetype_summary_rows, track_summary_rows, outcome_cohort_rows = summarize_race_scores(race_scores)
+    driver_strength_rows, field_strength_rows = driver_strength_context(ctx, idx, race_df)
+    championship_rows = championship_progression(ctx, idx, race_df)
+    racecraft_race_rows, racecraft_driver_rows = racecraft_context(ctx, idx, race_df)
+    contract_rows, contract_md = ui_analytics_contract()
+    source_audit_rows = source_family_audit(ctx, idx, race_df, {
+        "race_scores": race_scores,
+        "driver_strength_rows": driver_strength_rows,
+        "championship_rows": championship_rows,
+    })
+    adversarial_md = make_adversarial_review(source_audit_rows, race_scores, driver_strength_rows, championship_rows)
 
     write_csv(lap_race_rows, TABLE_DIR / "full_field_lap_dynamics_by_race.csv")
     write_csv(lap_driver_rows, TABLE_DIR / "full_field_lap_dynamics_by_driver.csv")
@@ -991,6 +1451,13 @@ def main() -> None:
     write_csv(archetype_summary_rows, TABLE_DIR / "race_archetype_summary.csv")
     write_csv(track_summary_rows, TABLE_DIR / "race_track_type_summary.csv")
     write_csv(outcome_cohort_rows, TABLE_DIR / "race_outcome_cohort_comparison.csv")
+    write_csv(driver_strength_rows, TABLE_DIR / "driver_strength_ratings.csv")
+    write_csv(field_strength_rows, TABLE_DIR / "field_strength_by_race.csv")
+    write_csv(championship_rows, TABLE_DIR / "championship_progression.csv")
+    write_csv(racecraft_race_rows, TABLE_DIR / "racecraft_context_by_race.csv")
+    write_csv(racecraft_driver_rows, TABLE_DIR / "racecraft_context_by_driver.csv")
+    write_csv(source_audit_rows, TABLE_DIR / "indy_nxt_source_family_audit.csv")
+    write_csv(contract_rows, TABLE_DIR / "ui_analytics_contract.csv")
     write_csv(future_rows, TABLE_DIR / "future_weekend_prep_inputs.csv")
     write_csv(backlog_rows, TABLE_DIR / "analysis_opportunity_backlog.csv")
 
@@ -1010,9 +1477,16 @@ def main() -> None:
         "archetype_summary_rows": archetype_summary_rows,
         "track_summary_rows": track_summary_rows,
         "outcome_cohort_rows": outcome_cohort_rows,
+        "driver_strength_rows": driver_strength_rows,
+        "field_strength_rows": field_strength_rows,
+        "championship_rows": championship_rows,
+        "racecraft_race_rows": racecraft_race_rows,
+        "source_audit_rows": source_audit_rows,
     })
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     (OUT_DIR / "INDY_NXT_DEEP_ANALYTICS_REVIEW.md").write_text(report)
+    (OUT_DIR / "INDY_NXT_ANALYTICS_COMPLETION_AUDIT.md").write_text(adversarial_md)
+    (OUT_DIR / "INDY_NXT_UI_ANALYTICS_CONTRACT.md").write_text(contract_md)
     summary = {
         "datasetPath": str(DATASET_PATH.relative_to(ROOT)),
         "datasetUpdatedAt": ctx.data.get("updatedAt"),
@@ -1020,6 +1494,13 @@ def main() -> None:
         "archetypeSummaryRows": len(archetype_summary_rows),
         "trackSummaryRows": len(track_summary_rows),
         "outcomeCohortRows": len(outcome_cohort_rows),
+        "driverStrengthRows": len(driver_strength_rows),
+        "fieldStrengthRows": len(field_strength_rows),
+        "championshipProgressionRows": len(championship_rows),
+        "racecraftRaceRows": len(racecraft_race_rows),
+        "racecraftDriverRows": len(racecraft_driver_rows),
+        "sourceAuditRows": len(source_audit_rows),
+        "contractRows": len(contract_rows),
         "lapRaceRows": len(lap_race_rows),
         "lapDriverRows": len(lap_driver_rows),
         "leaderRows": len(leader_rows),
@@ -1033,6 +1514,8 @@ def main() -> None:
         "futureWeekendPrepRows": len(future_rows),
         "outputs": {
             "report": str((OUT_DIR / "INDY_NXT_DEEP_ANALYTICS_REVIEW.md").relative_to(ROOT)),
+            "completionAudit": str((OUT_DIR / "INDY_NXT_ANALYTICS_COMPLETION_AUDIT.md").relative_to(ROOT)),
+            "uiContract": str((OUT_DIR / "INDY_NXT_UI_ANALYTICS_CONTRACT.md").relative_to(ROOT)),
             "tablesDir": str(TABLE_DIR.relative_to(ROOT)),
             "chartsDir": str(CHART_DIR.relative_to(ROOT)),
         },

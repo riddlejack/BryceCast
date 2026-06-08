@@ -1,0 +1,8 @@
+seriesId,seriesName,raceRows,avgFinish,medianFinish,avgGain,avgFinishPercentile,top5Rate,top10Rate,issueLikeStatusRate
+series_gb3,GB3 Championship,42,10.738095238095237,11.0,0.55,0.49766666666666665,0.11904761904761904,0.42857142857142855,0.0
+series_indy_nxt,INDY NXT,36,12.222222222222221,12.0,-0.9722222222222222,0.4593833333333333,0.1111111111111111,0.4722222222222222,0.1388888888888889
+series_frp_f1600,F1600 Championship Series,20,4.75,4.0,,0.74518,0.7,0.95,0.0
+series_euroformula_open,Euroformula Open,17,4.176470588235294,4.0,-0.5882352941176471,0.6308117647058824,0.7058823529411765,1.0,0.0
+series_formula_ford,Formula Ford,15,4.733333333333333,5.0,0.8,0.8619666666666667,0.8,1.0,0.0
+series_froc,Castrol Toyota Formula Regional Oceania Championship,6,6.166666666666667,6.5,-0.5,0.6762,0.3333333333333333,1.0,0.0
+series_imsa_weathertech,IMSA WeatherTech SportsCar Championship,1,6.0,6.0,,0.918,0.0,1.0,0.0

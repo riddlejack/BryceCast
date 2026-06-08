@@ -158,6 +158,62 @@ Ganassi-specific descriptive rows:
 
 Team status rows are official-result status summaries. They are evidence for outcome context, not engineering root-cause attribution.
 
+## Opponent And Field Strength Context
+
+This is descriptive same-sample context with empirical shrinkage, designed to help the UI explain field quality without pretending to predict results.
+
+| driverName | raceRows | finishPercentileMean | shrunkStrengthRating | avgStartPercentile | top5Rate | top10Rate | issueLikeStatusRate |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Louis Foster | 14 | 0.945 | 0.783 | 0.885 | 0.929 | 1 | 0 |
+| Dennis Hauger | 14 | 0.875 | 0.739 | 0.969 | 0.857 | 0.929 | 0.071 |
+| Caio Collet | 28 | 0.768 | 0.708 | 0.859 | 0.75 | 0.857 | 0.107 |
+| Jacob Abel | 14 | 0.822 | 0.705 | 0.893 | 0.786 | 0.857 | 0 |
+| Tymek Kucharczyk | 8 | 0.875 | 0.688 | 0.804 | 0.875 | 1 | 0 |
+| Lochie Hughes | 22 | 0.722 | 0.663 | 0.795 | 0.636 | 0.773 | 0 |
+| Enzo Fittipaldi | 8 | 0.81 | 0.655 | 0.592 | 0.75 | 0.75 | 0 |
+| Nikita Johnson | 11 | 0.742 | 0.64 | 0.704 | 0.364 | 0.818 | 0.091 |
+| Nolan Siegel | 5 | 0.77 | 0.604 | 0.85 | 0.8 | 0.8 | 0 |
+| Myles Rowe | 36 | 0.603 | 0.584 | 0.57 | 0.417 | 0.722 | 0.167 |
+| Christian Brooks | 8 | 0.657 | 0.578 | 0.684 | 0.375 | 1 | 0 |
+| Salvador de Alba | 36 | 0.595 | 0.578 | 0.543 | 0.389 | 0.639 | 0.111 |
+| Callum Hedge | 28 | 0.599 | 0.577 | 0.612 | 0.357 | 0.679 | 0.036 |
+| Max Taylor | 14 | 0.616 | 0.574 | 0.714 | 0.5 | 0.714 | 0.143 |
+| Michael d'Orlando | 10 | 0.6 | 0.555 | 0.573 | 0.1 | 0.7 | 0 |
+
+Bryce race results versus rated field context:
+
+| raceLabel | bryceFinish | bryceFinishPercentile | fieldStrengthMean | resultVsFieldStrength | topRatedRivals |
+| --- | --- | --- | --- | --- | --- |
+| 2024 Grand Prix of Monterey Race 2 R2 | 3 | 0.9 | 0.508 | 0.392 | Louis Foster:0.78; Caio Collet:0.71; Jacob Abel:0.70; Myles Rowe:0.58; Christian Brooks:0.58 |
+| 2024 Grand Prix of Portland | 3 | 0.882 | 0.536 | 0.346 | Louis Foster:0.78; Caio Collet:0.71; Jacob Abel:0.70; Myles Rowe:0.58; Christian Brooks:0.58 |
+| 2024 INDY NXT By Firestone at The Milwaukee Mile | 4 | 0.833 | 0.526 | 0.308 | Louis Foster:0.78; Caio Collet:0.71; Jacob Abel:0.70; Myles Rowe:0.58; Christian Brooks:0.58 |
+| 2025 INDY NXT by Firestone at the Milwaukee Mile | 5 | 0.778 | 0.507 | 0.271 | Dennis Hauger:0.74; Caio Collet:0.71; Lochie Hughes:0.66; Myles Rowe:0.58; Salvador de Alba:0.58 |
+| 2026 Grand Prix of Alabama Race 2 R2 | 7 | 0.75 | 0.497 | 0.253 | Tymek Kucharczyk:0.69; Lochie Hughes:0.66; Enzo Fittipaldi:0.65; Nikita Johnson:0.64; Myles Rowe:0.58 |
+| 2025 Music City Grand Prix | 6 | 0.722 | 0.493 | 0.23 | Dennis Hauger:0.74; Caio Collet:0.71; Lochie Hughes:0.66; Myles Rowe:0.58; Salvador de Alba:0.58 |
+| 2026 Detroit Grand Prix | 8 | 0.708 | 0.497 | 0.212 | Tymek Kucharczyk:0.69; Lochie Hughes:0.66; Enzo Fittipaldi:0.65; Nikita Johnson:0.64; Myles Rowe:0.58 |
+| 2026 Grand Prix of Alabama Race 1 R1 | 8 | 0.708 | 0.497 | 0.212 | Tymek Kucharczyk:0.69; Lochie Hughes:0.66; Enzo Fittipaldi:0.65; Nikita Johnson:0.64; Myles Rowe:0.58 |
+| 2024 OUTFRONT Showdown | 6 | 0.722 | 0.533 | 0.189 | Louis Foster:0.78; Caio Collet:0.71; Jacob Abel:0.70; Myles Rowe:0.58; Christian Brooks:0.58 |
+| 2024 Grand Prix at Road America | 8 | 0.667 | 0.513 | 0.154 | Louis Foster:0.78; Caio Collet:0.71; Jacob Abel:0.70; Myles Rowe:0.58; Salvador de Alba:0.58 |
+
+## Championship Progression
+
+| seasonYear | roundIndex | raceLabel | bryceRacePoints | bryceCumulativePoints | bryceStandingRank | leaderDriver | pointsBehindLeader |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 2026 | 1 | 2026 Grand Prix of St. Petersburg | 12 | 12 | 18 | Nikita Johnson | 42 |
+| 2026 | 2 | 2026 Grand Prix of Arlington | 12 | 24 | 19 | Max Taylor | 68 |
+| 2026 | 3 | 2026 Grand Prix of Alabama Race 1 R1 | 24 | 48 | 15 | Nikita Johnson | 85 |
+| 2026 | 4 | 2026 Grand Prix of Alabama Race 2 R2 | 26 | 74 | 12 | Nikita Johnson | 94 |
+| 2026 | 5 | 2026 Indianapolis Grand Prix Race 1 R1 | 8 | 82 | 14 | Nikita Johnson | 121 |
+| 2026 | 6 | 2026 Indianapolis Grand Prix Race 2 R2 | 18 | 100 | 14 | Nikita Johnson | 131 |
+| 2026 | 7 | 2026 Detroit Grand Prix | 24 | 124 | 12 | Enzo Fittipaldi | 142 |
+| 2026 | 8 | 2026 INDY NXT by Firestone at World Wide Technology Raceway | 7 | 131 | 14 | Nikita Johnson | 154 |
+
+## Official Racecraft Badges
+
+| raceLabel | bryceMostImprovedFlag | bryceRacecraftDescription | sessionMostImprovedDriver | sessionMostImprovedPositions |
+| --- | --- | --- | --- | --- |
+| 2024 OUTFRONT Showdown | True | Aron, Bryce was listed as Most Improved in the official Event Summary, improving 7 positions from P13 to P6. | Bryce Aron | 7 |
+
 ## Deep Section Results
 
 The headline section tables require at least 50 comparable per-lap section rows. Sparse rows are preserved in CSV for review but suppressed from headline rankings.
@@ -211,6 +267,27 @@ Sparse section-result rows needing review:
 | Grand Prix of Monterey Race 1 | 2026-09-05 | WeatherTech Raceway Laguna Seca | road | 4 | 12 | -2 | 12.6 | 0.4 | future_unavailable_in_historical_dataset |
 | Grand Prix of Monterey Race 2 | 2026-09-06 | WeatherTech Raceway Laguna Seca | road | 4 | 12 | -2 | 12.6 | 0.4 | future_unavailable_in_historical_dataset |
 
+## Source Family Completion Audit
+
+| sourceFamily | sourceRows | analysisStatus | primaryArtifacts | auditConclusion |
+| --- | --- | --- | --- | --- |
+| race_results | 36 | complete | race_debrief_scores.csv | Core result, conversion, points, and status analysis. |
+| full_field_results | 738 | complete | driver_strength_ratings.csv; field_strength_by_race.csv; team_context_by_year.csv | Full-field context, team context, and descriptive opponent strength. |
+| practice_results | 49 | complete_source_bounded | prep_session_signals.csv | Practice is represented as rank context; no absolute pace claims. |
+| qualifying_results | 1238 | complete_source_bounded | prep_session_signals.csv | Qualifying is used for start/prep context; group/combined caveats remain. |
+| lap_samples | 29519 | complete_source_bounded | full_field_lap_dynamics_by_driver.csv | Full-field lap movement and volatility analysis with partial-chart caveats. |
+| section_results | 35 | complete_source_bounded | section_results_deep_by_race.csv | Per-lap section percentiles with sparse-row suppression. |
+| top_section_times | 36 | partial | section_results_deep_by_section.csv | Top-section facts were useful earlier; final pass favors per-lap section results. |
+| event_summary_stats | 36 | complete | race_debrief_scores.csv | Cautions, passes, lead-change context folded into debrief scores. |
+| leader_lap_summary | 36 | complete | leader_lap_context.csv | Leader entropy and dominance context. |
+| incidents | 132 | complete | incident_penalty_context.csv | Incident exposure and type summaries. |
+| penalties | 76 | complete | incident_penalty_context.csv | Penalty exposure and type summaries. |
+| racecraft_events | 35 | complete_source_bounded | racecraft_context_by_race.csv | Official most-improved badges only; no inferred overtake log. |
+| weather_observations | 95 | complete_context_only | race_debrief_scores.csv; future_weekend_prep_inputs.csv | Modeled non-official weather used as context, not causality. |
+| future_schedule | 91 | complete_context_only | future_weekend_prep_inputs.csv | Future prep rows exclude forecast claims until current weather source is added. |
+| pit_stop_counts | 36 | complete_low_signal | race_debrief_scores.csv | Pit counts are present but low-signal; no pit sequence/tire/service analysis exists. |
+| telemetry_or_car_engineering | 0 | unavailable |  | No telemetry or engineering-root-cause data in canonical sources. |
+
 ## Adversarial Review Of The First Pass
 
 - First-pass result: good descriptive backbone. Weakness: too much attention on Bryce-only rows, leaving field context underused.
@@ -225,5 +302,5 @@ Sparse section-result rows needing review:
 1. Manual review of every race archetype and hidden-pace label against source caveats.
 2. Create a source-state-aware Race Debrief contract from the score table.
 3. Add a race-weekend prep contract that uses same-track history, track-type history, practice and qualifying signals, exact-window historical weather, and future-weather placeholders.
-4. Build an opponent-strength model only after debrief scoring is stable, using shrinkage and season/team controls.
+4. Keep opponent strength as descriptive context until a larger season-controlled model is justified.
 5. Start full-career expansion by metric family: result conversion, qualifying conversion, weather/context, lap shape where available, then section/pace only where series expose comparable data.

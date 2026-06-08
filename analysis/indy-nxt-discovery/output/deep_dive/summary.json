@@ -1,7 +1,11 @@
 {
   "archetypeSummaryRows": 7,
+  "championshipProgressionRows": 36,
+  "contractRows": 10,
   "datasetPath": "data/career/career.dataset.json",
   "datasetUpdatedAt": "2026-06-08T19:38:11.232Z",
+  "driverStrengthRows": 50,
+  "fieldStrengthRows": 36,
   "futureWeekendPrepRows": 9,
   "incidentPenaltyRows": 36,
   "lapDriverRows": 726,
@@ -15,14 +19,19 @@
   "outcomeCohortRows": 2,
   "outputs": {
     "chartsDir": "analysis/indy-nxt-discovery/output/deep_dive/charts",
+    "completionAudit": "analysis/indy-nxt-discovery/output/deep_dive/INDY_NXT_ANALYTICS_COMPLETION_AUDIT.md",
     "report": "analysis/indy-nxt-discovery/output/deep_dive/INDY_NXT_DEEP_ANALYTICS_REVIEW.md",
-    "tablesDir": "analysis/indy-nxt-discovery/output/deep_dive/tables"
+    "tablesDir": "analysis/indy-nxt-discovery/output/deep_dive/tables",
+    "uiContract": "analysis/indy-nxt-discovery/output/deep_dive/INDY_NXT_UI_ANALYTICS_CONTRACT.md"
   },
   "prepCorrelationRows": 5,
   "prepRows": 36,
   "raceScoreRows": 36,
+  "racecraftDriverRows": 20,
+  "racecraftRaceRows": 36,
   "sectionFamilyRows": 378,
   "sectionSessionRows": 35,
+  "sourceAuditRows": 16,
   "teamRaceRows": 36,
   "teamYearRows": 20,
   "trackSummaryRows": 3

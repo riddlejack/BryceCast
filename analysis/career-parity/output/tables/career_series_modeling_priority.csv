@@ -1,0 +1,8 @@
+seriesId,seriesName,raceRows,parityScore,recommendedDepth
+series_gb3,GB3 Championship,42,17.0,next_deep_dive_candidate
+series_indy_nxt,INDY NXT,36,20.6,reference_model_complete_for_ui_contract
+series_formula_ford,Formula Ford,15,13.5,lap_weather_specialist_pass
+series_euroformula_open,Euroformula Open,17,12.7,result_conversion_pass
+series_imsa_weathertech,IMSA WeatherTech SportsCar Championship,1,12.1,standalone_daytona_feature
+series_frp_f1600,F1600 Championship Series,20,10.0,result_conversion_pass
+series_froc,Castrol Toyota Formula Regional Oceania Championship,6,8.6,lightweight_context_only
