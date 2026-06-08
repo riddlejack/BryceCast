@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="360" viewBox="0 0 980 360">
+<rect width="100%" height="100%" fill="#fbfaf7"/>
+<text x="28" y="28" font-family="Inter, Arial" font-size="18" font-weight="700" fill="#1f2933">Lap Position Trace: 2026 Indianapolis Grand Prix Race 1 R1</text>
+<line x1="62" y1="48" x2="62" y2="306" stroke="#aab2bd"/>
+<line x1="62" y1="306" x2="948" y2="306" stroke="#aab2bd"/>
+<polyline fill="none" stroke="#1f77b4" stroke-width="3" points="62.0,220.0 94.8,241.5 127.6,241.5 160.4,241.5 193.3,241.5 226.1,241.5 258.9,241.5 291.7,241.5 324.5,241.5 357.3,241.5 390.1,241.5 423.0,177.0 455.8,241.5 488.6,241.5 521.4,241.5 554.2,241.5 587.0,306.0 619.9,306.0 652.7,284.5 685.5,263.0 718.3,263.0 751.1,284.5 783.9,284.5 816.7,284.5 849.6,284.5 882.4,284.5 915.2,284.5 948.0,48.0"/>
+<circle cx="62.0" cy="220.0" r="3.5" fill="#1f77b4"/>
+<circle cx="94.8" cy="241.5" r="3.5" fill="#1f77b4"/>
+<circle cx="127.6" cy="241.5" r="3.5" fill="#1f77b4"/>
+<circle cx="160.4" cy="241.5" r="3.5" fill="#1f77b4"/>
+<circle cx="193.3" cy="241.5" r="3.5" fill="#1f77b4"/>
+<circle cx="226.1" cy="241.5" r="3.5" fill="#1f77b4"/>
+<circle cx="258.9" cy="241.5" r="3.5" fill="#1f77b4"/>
+<circle cx="291.7" cy="241.5" r="3.5" fill="#1f77b4"/>
+<circle cx="324.5" cy="241.5" r="3.5" fill="#1f77b4"/>
+<circle cx="357.3" cy="241.5" r="3.5" fill="#1f77b4"/>
+<circle cx="390.1" cy="241.5" r="3.5" fill="#1f77b4"/>
+<circle cx="423.0" cy="177.0" r="3.5" fill="#1f77b4"/>
+<circle cx="455.8" cy="241.5" r="3.5" fill="#1f77b4"/>
+<circle cx="488.6" cy="241.5" r="3.5" fill="#1f77b4"/>
+<circle cx="521.4" cy="241.5" r="3.5" fill="#1f77b4"/>
+<circle cx="554.2" cy="241.5" r="3.5" fill="#1f77b4"/>
+<circle cx="587.0" cy="306.0" r="3.5" fill="#1f77b4"/>
+<circle cx="619.9" cy="306.0" r="3.5" fill="#1f77b4"/>
+<circle cx="652.7" cy="284.5" r="3.5" fill="#1f77b4"/>
+<circle cx="685.5" cy="263.0" r="3.5" fill="#1f77b4"/>
+<circle cx="718.3" cy="263.0" r="3.5" fill="#1f77b4"/>
+<circle cx="751.1" cy="284.5" r="3.5" fill="#1f77b4"/>
+<circle cx="783.9" cy="284.5" r="3.5" fill="#1f77b4"/>
+<circle cx="816.7" cy="284.5" r="3.5" fill="#1f77b4"/>
+<circle cx="849.6" cy="284.5" r="3.5" fill="#1f77b4"/>
+<circle cx="882.4" cy="284.5" r="3.5" fill="#1f77b4"/>
+<circle cx="915.2" cy="284.5" r="3.5" fill="#1f77b4"/>
+<circle cx="948.0" cy="48.0" r="3.5" fill="#1f77b4"/>
+<line x1="58" y1="306.0" x2="948" y2="306.0" stroke="#e6e2dc"/>
+<text x="12" y="310.0" font-family="Inter, Arial" font-size="11" fill="#56616f">10.0</text>
+<line x1="58" y1="177.0" x2="948" y2="177.0" stroke="#e6e2dc"/>
+<text x="12" y="181.0" font-family="Inter, Arial" font-size="11" fill="#56616f">16.0</text>
+<line x1="58" y1="48.0" x2="948" y2="48.0" stroke="#e6e2dc"/>
+<text x="12" y="52.0" font-family="Inter, Arial" font-size="11" fill="#56616f">22.0</text>
+<text x="62.0" y="338" text-anchor="middle" font-family="Inter, Arial" font-size="10" fill="#56616f">1</text>
+<text x="226.1" y="338" text-anchor="middle" font-family="Inter, Arial" font-size="10" fill="#56616f">6</text>
+<text x="390.1" y="338" text-anchor="middle" font-family="Inter, Arial" font-size="10" fill="#56616f">11</text>
+<text x="587.0" y="338" text-anchor="middle" font-family="Inter, Arial" font-size="10" fill="#56616f">17</text>
+<text x="751.1" y="338" text-anchor="middle" font-family="Inter, Arial" font-size="10" fill="#56616f">22</text>
+<text x="948.0" y="338" text-anchor="middle" font-family="Inter, Arial" font-size="10" fill="#56616f">28</text>
+</svg>

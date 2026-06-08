@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="360" viewBox="0 0 980 360">
+<rect width="100%" height="100%" fill="#fbfaf7"/>
+<text x="28" y="28" font-family="Inter, Arial" font-size="18" font-weight="700" fill="#1f2933">Bryce INDY NXT Finish Position Over Time</text>
+<line x1="62" y1="48" x2="62" y2="306" stroke="#aab2bd"/>
+<line x1="62" y1="306" x2="948" y2="306" stroke="#aab2bd"/>
+<polyline fill="none" stroke="#1f77b4" stroke-width="3" points="62.0,99.6 87.3,241.5 112.6,164.1 137.9,99.6 163.3,86.7 188.6,241.5 213.9,138.3 239.2,306.0 264.5,112.5 289.8,241.5 315.1,267.3 340.5,306.0 365.8,293.1 391.1,254.4 416.4,177.0 441.7,151.2 467.0,151.2 492.3,151.2 517.7,215.7 543.0,164.1 568.3,228.6 593.6,189.9 618.9,228.6 644.2,215.7 669.5,99.6 694.9,99.6 720.2,280.2 745.5,267.3 770.8,112.5 796.1,112.5 821.4,241.5 846.7,254.4 872.1,60.9 897.4,189.9 922.7,241.5 948.0,48.0"/>
+<circle cx="62.0" cy="99.6" r="3.5" fill="#1f77b4"/>
+<circle cx="87.3" cy="241.5" r="3.5" fill="#1f77b4"/>
+<circle cx="112.6" cy="164.1" r="3.5" fill="#1f77b4"/>
+<circle cx="137.9" cy="99.6" r="3.5" fill="#1f77b4"/>
+<circle cx="163.3" cy="86.7" r="3.5" fill="#1f77b4"/>
+<circle cx="188.6" cy="241.5" r="3.5" fill="#1f77b4"/>
+<circle cx="213.9" cy="138.3" r="3.5" fill="#1f77b4"/>
+<circle cx="239.2" cy="306.0" r="3.5" fill="#1f77b4"/>
+<circle cx="264.5" cy="112.5" r="3.5" fill="#1f77b4"/>
+<circle cx="289.8" cy="241.5" r="3.5" fill="#1f77b4"/>
+<circle cx="315.1" cy="267.3" r="3.5" fill="#1f77b4"/>
+<circle cx="340.5" cy="306.0" r="3.5" fill="#1f77b4"/>
+<circle cx="365.8" cy="293.1" r="3.5" fill="#1f77b4"/>
+<circle cx="391.1" cy="254.4" r="3.5" fill="#1f77b4"/>
+<circle cx="416.4" cy="177.0" r="3.5" fill="#1f77b4"/>
+<circle cx="441.7" cy="151.2" r="3.5" fill="#1f77b4"/>
+<circle cx="467.0" cy="151.2" r="3.5" fill="#1f77b4"/>
+<circle cx="492.3" cy="151.2" r="3.5" fill="#1f77b4"/>
+<circle cx="517.7" cy="215.7" r="3.5" fill="#1f77b4"/>
+<circle cx="543.0" cy="164.1" r="3.5" fill="#1f77b4"/>
+<circle cx="568.3" cy="228.6" r="3.5" fill="#1f77b4"/>
+<circle cx="593.6" cy="189.9" r="3.5" fill="#1f77b4"/>
+<circle cx="618.9" cy="228.6" r="3.5" fill="#1f77b4"/>
+<circle cx="644.2" cy="215.7" r="3.5" fill="#1f77b4"/>
+<circle cx="669.5" cy="99.6" r="3.5" fill="#1f77b4"/>
+<circle cx="694.9" cy="99.6" r="3.5" fill="#1f77b4"/>
+<circle cx="720.2" cy="280.2" r="3.5" fill="#1f77b4"/>
+<circle cx="745.5" cy="267.3" r="3.5" fill="#1f77b4"/>
+<circle cx="770.8" cy="112.5" r="3.5" fill="#1f77b4"/>
+<circle cx="796.1" cy="112.5" r="3.5" fill="#1f77b4"/>
+<circle cx="821.4" cy="241.5" r="3.5" fill="#1f77b4"/>
+<circle cx="846.7" cy="254.4" r="3.5" fill="#1f77b4"/>
+<circle cx="872.1" cy="60.9" r="3.5" fill="#1f77b4"/>
+<circle cx="897.4" cy="189.9" r="3.5" fill="#1f77b4"/>
+<circle cx="922.7" cy="241.5" r="3.5" fill="#1f77b4"/>
+<circle cx="948.0" cy="48.0" r="3.5" fill="#1f77b4"/>
+<line x1="58" y1="306.0" x2="948" y2="306.0" stroke="#e6e2dc"/>
+<text x="12" y="310.0" font-family="Inter, Arial" font-size="11" fill="#56616f">3.0</text>
+<line x1="58" y1="177.0" x2="948" y2="177.0" stroke="#e6e2dc"/>
+<text x="12" y="181.0" font-family="Inter, Arial" font-size="11" fill="#56616f">13.0</text>
+<line x1="58" y1="48.0" x2="948" y2="48.0" stroke="#e6e2dc"/>
+<text x="12" y="52.0" font-family="Inter, Arial" font-size="11" fill="#56616f">23.0</text>
+<text x="62.0" y="338" text-anchor="middle" font-family="Inter, Arial" font-size="10" fill="#56616f">2024 Grand Prix of</text>
+<text x="239.2" y="338" text-anchor="middle" font-family="Inter, Arial" font-size="10" fill="#56616f">2024 Grand Prix of</text>
+<text x="416.4" y="338" text-anchor="middle" font-family="Inter, Arial" font-size="10" fill="#56616f">2025 Grand Prix of</text>
+<text x="593.6" y="338" text-anchor="middle" font-family="Inter, Arial" font-size="10" fill="#56616f">2025 Grand Prix at</text>
+<text x="770.8" y="338" text-anchor="middle" font-family="Inter, Arial" font-size="10" fill="#56616f">2026 Grand Prix of</text>
+<text x="948.0" y="338" text-anchor="middle" font-family="Inter, Arial" font-size="10" fill="#56616f">2026 INDY NXT by F</text>
+</svg>

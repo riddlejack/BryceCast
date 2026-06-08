@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="502" viewBox="0 0 960 502">
+<rect width="100%" height="100%" fill="#fbfaf7"/>
+<text x="28" y="28" font-family="Inter, Arial" font-size="18" font-weight="700" fill="#1f2933">Best Bryce Top-Section Percentiles</text>
+<text x="28" y="59" font-family="Inter, Arial" font-size="12" fill="#39434d">I6T to I6</text>
+<rect x="240" y="44" width="680.0" height="20" rx="3" fill="#1f77b4" opacity="0.86"/>
+<text x="928.0" y="59" font-family="Inter, Arial" font-size="12" fill="#1f2933">1</text>
+<text x="28" y="93" font-family="Inter, Arial" font-size="12" fill="#39434d">I13A to I14</text>
+<rect x="240" y="78" width="680.0" height="20" rx="3" fill="#1f77b4" opacity="0.86"/>
+<text x="928.0" y="93" font-family="Inter, Arial" font-size="12" fill="#1f2933">1</text>
+<text x="28" y="127" font-family="Inter, Arial" font-size="12" fill="#39434d">Turn 2</text>
+<rect x="240" y="112" width="680.0" height="20" rx="3" fill="#1f77b4" opacity="0.86"/>
+<text x="928.0" y="127" font-family="Inter, Arial" font-size="12" fill="#1f2933">1</text>
+<text x="28" y="161" font-family="Inter, Arial" font-size="12" fill="#39434d">Turn 5</text>
+<rect x="240" y="146" width="680.0" height="20" rx="3" fill="#1f77b4" opacity="0.86"/>
+<text x="928.0" y="161" font-family="Inter, Arial" font-size="12" fill="#1f2933">1</text>
+<text x="28" y="195" font-family="Inter, Arial" font-size="12" fill="#39434d">T3T to T3</text>
+<rect x="240" y="180" width="680.0" height="20" rx="3" fill="#1f77b4" opacity="0.86"/>
+<text x="928.0" y="195" font-family="Inter, Arial" font-size="12" fill="#1f2933">1</text>
+<text x="28" y="229" font-family="Inter, Arial" font-size="12" fill="#39434d">Turn 2</text>
+<rect x="240" y="214" width="680.0" height="20" rx="3" fill="#1f77b4" opacity="0.86"/>
+<text x="928.0" y="229" font-family="Inter, Arial" font-size="12" fill="#1f2933">1</text>
+<text x="28" y="263" font-family="Inter, Arial" font-size="12" fill="#39434d">I1 to I2</text>
+<rect x="240" y="248" width="680.0" height="20" rx="3" fill="#1f77b4" opacity="0.86"/>
+<text x="928.0" y="263" font-family="Inter, Arial" font-size="12" fill="#1f2933">1</text>
+<text x="28" y="297" font-family="Inter, Arial" font-size="12" fill="#39434d">T4 to FS</text>
+<rect x="240" y="282" width="680.0" height="20" rx="3" fill="#1f77b4" opacity="0.86"/>
+<text x="928.0" y="297" font-family="Inter, Arial" font-size="12" fill="#1f2933">1</text>
+<text x="28" y="331" font-family="Inter, Arial" font-size="12" fill="#39434d">FS to SF</text>
+<rect x="240" y="316" width="680.0" height="20" rx="3" fill="#1f77b4" opacity="0.86"/>
+<text x="928.0" y="331" font-family="Inter, Arial" font-size="12" fill="#1f2933">1</text>
+<text x="28" y="365" font-family="Inter, Arial" font-size="12" fill="#39434d">T3 to T4</text>
+<rect x="240" y="350" width="680.0" height="20" rx="3" fill="#1f77b4" opacity="0.86"/>
+<text x="928.0" y="365" font-family="Inter, Arial" font-size="12" fill="#1f2933">1</text>
+<text x="28" y="399" font-family="Inter, Arial" font-size="12" fill="#39434d">T4 to SF</text>
+<rect x="240" y="384" width="680.0" height="20" rx="3" fill="#1f77b4" opacity="0.86"/>
+<text x="928.0" y="399" font-family="Inter, Arial" font-size="12" fill="#1f2933">1</text>
+<text x="28" y="433" font-family="Inter, Arial" font-size="12" fill="#39434d">SF to SFT</text>
+<rect x="240" y="418" width="680.0" height="20" rx="3" fill="#1f77b4" opacity="0.86"/>
+<text x="928.0" y="433" font-family="Inter, Arial" font-size="12" fill="#1f2933">1</text>
+</svg>

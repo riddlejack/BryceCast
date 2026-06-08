@@ -1,0 +1,990 @@
+sessionId,raceLabel,sectionName,sectionLengthMi,bryceRank,fieldRows,rankPercentile,time,speedMph,lapNumber,confidence,provenanceRefs
+session_indy_nxt_2024_6314,2024 Grand Prix of Alabama,Lap,2.3,6.0,21,0.75,01:13.0139,113.403,19,official,source_indy_nxt_2024_6314_top_section_times_pdf
+session_indy_nxt_2024_6314,2024 Grand Prix of Alabama,FS-PO,0.08447,6.0,21,0.75,00:02.0283,149.925,27,official,source_indy_nxt_2024_6314_top_section_times_pdf
+session_indy_nxt_2024_6314,2024 Grand Prix of Alabama,Turns 1-3,0.288257,7.0,21,0.7,00:10.4238,99.553,21,official,source_indy_nxt_2024_6314_top_section_times_pdf
+session_indy_nxt_2024_6314,2024 Grand Prix of Alabama,Turn 4,0.266666,20.0,21,0.050000000000000044,00:07.3897,129.91,23,official,source_indy_nxt_2024_6314_top_section_times_pdf
+session_indy_nxt_2024_6314,2024 Grand Prix of Alabama,Turns 5-6,0.111174,5.0,21,0.8,00:05.7302,69.845,26,official,source_indy_nxt_2024_6314_top_section_times_pdf
+session_indy_nxt_2024_6314,2024 Grand Prix of Alabama,Turn 7,0.288257,12.0,21,0.44999999999999996,00:08.0252,129.308,26,official,source_indy_nxt_2024_6314_top_section_times_pdf
+session_indy_nxt_2024_6314,2024 Grand Prix of Alabama,Turns 8-9,0.180491,11.0,21,0.5,00:07.6111,85.371,18,official,source_indy_nxt_2024_6314_top_section_times_pdf
+session_indy_nxt_2024_6314,2024 Grand Prix of Alabama,Turn 10,0.151515,16.0,21,0.25,00:04.2679,127.804,27,official,source_indy_nxt_2024_6314_top_section_times_pdf
+session_indy_nxt_2024_6314,2024 Grand Prix of Alabama,Turn 11,0.250567,17.0,21,0.19999999999999996,00:06.0353,149.461,27,official,source_indy_nxt_2024_6314_top_section_times_pdf
+session_indy_nxt_2024_6314,2024 Grand Prix of Alabama,Turns 12-13,0.198862,5.0,21,0.8,00:05.7456,124.6,18,official,source_indy_nxt_2024_6314_top_section_times_pdf
+session_indy_nxt_2024_6314,2024 Grand Prix of Alabama,Turns 14-16,0.167235,11.0,21,0.5,00:05.6653,106.269,2,official,source_indy_nxt_2024_6314_top_section_times_pdf
+session_indy_nxt_2024_6314,2024 Grand Prix of Alabama,Turn 17,0.295832,3.0,21,0.9,00:09.6220,110.683,27,official,source_indy_nxt_2024_6314_top_section_times_pdf
+session_indy_nxt_2024_6314,2024 Grand Prix of Alabama,I2 to I3,0.37784,18.0,21,0.15000000000000002,00:13.1978,103.064,26,official,source_indy_nxt_2024_6314_top_section_times_pdf
+session_indy_nxt_2024_6314,2024 Grand Prix of Alabama,I4 to I5,0.332006,17.0,21,0.19999999999999996,00:11.9572,99.958,18,official,source_indy_nxt_2024_6314_top_section_times_pdf
+session_indy_nxt_2024_6314,2024 Grand Prix of Alabama,SF to SFT,0.025379,13.0,21,0.4,00:00.6228,146.699,27,official,source_indy_nxt_2024_6314_top_section_times_pdf
+session_indy_nxt_2024_6314,2024 Grand Prix of Alabama,I6T to I6,0.022917,13.0,21,0.4,00:00.5228,157.806,18,official,source_indy_nxt_2024_6314_top_section_times_pdf
+session_indy_nxt_2024_6314,2024 Grand Prix of Alabama,I7T to I7,0.018939,8.0,22,0.6666666666666667,00:00.5485,124.303,16,official,source_indy_nxt_2024_6314_top_section_times_pdf
+session_indy_nxt_2024_6314,2024 Grand Prix of Alabama,PO to SF,2.19147,15.0,21,0.30000000000000004,01:48.2049,72.911,0,official,source_indy_nxt_2024_6314_top_section_times_pdf
+session_indy_nxt_2024_6314,2024 Grand Prix of Alabama,PO to I2,0.28087,14.0,21,0.35,00:17.6646,57.241,0,official,source_indy_nxt_2024_6314_top_section_times_pdf
+session_indy_nxt_2024_6314,2024 Grand Prix of Alabama,SF to Turn 7,1.03882,8.0,21,0.65,00:33.7994,110.646,17,official,source_indy_nxt_2024_6314_top_section_times_pdf
+session_indy_nxt_2024_6314,2024 Grand Prix of Alabama,Turn 7 to Turn 11,0.582573,17.0,21,0.19999999999999996,00:18.0252,116.352,18,official,source_indy_nxt_2024_6314_top_section_times_pdf
+session_indy_nxt_2024_6314,2024 Grand Prix of Alabama,Turn 11 to SF,0.661929,3.0,21,0.9,00:21.0878,113.001,18,official,source_indy_nxt_2024_6314_top_section_times_pdf
+session_indy_nxt_2024_6315,2024 Indianapolis Grand Prix Race 1 R1,Lap,2.439,7.0,21,0.7,01:16.6784,114.509,9,official,source_indy_nxt_2024_6315_top_section_times_pdf
+session_indy_nxt_2024_6315,2024 Indianapolis Grand Prix Race 1 R1,FS - PO,0.200379,13.0,21,0.4,00:04.1898,172.172,17,official,source_indy_nxt_2024_6315_top_section_times_pdf
+session_indy_nxt_2024_6315,2024 Indianapolis Grand Prix Race 1 R1,FS - PO 2,0.053788,19.0,21,0.09999999999999998,00:01.1028,175.587,33,official,source_indy_nxt_2024_6315_top_section_times_pdf
+session_indy_nxt_2024_6315,2024 Indianapolis Grand Prix Race 1 R1,Turn 1/2,0.25284,6.0,21,0.75,00:09.2723,98.166,8,official,source_indy_nxt_2024_6315_top_section_times_pdf
+session_indy_nxt_2024_6315,2024 Indianapolis Grand Prix Race 1 R1,Turn 3,0.108523,19.0,21,0.09999999999999998,00:03.5760,109.251,8,official,source_indy_nxt_2024_6315_top_section_times_pdf
+session_indy_nxt_2024_6315,2024 Indianapolis Grand Prix Race 1 R1,Turn 4/5/6,0.232196,8.0,21,0.65,00:07.9116,105.656,17,official,source_indy_nxt_2024_6315_top_section_times_pdf
+session_indy_nxt_2024_6315,2024 Indianapolis Grand Prix Race 1 R1,Backstretch,0.341287,7.0,21,0.7,00:07.6865,159.843,1,official,source_indy_nxt_2024_6315_top_section_times_pdf
+session_indy_nxt_2024_6315,2024 Indianapolis Grand Prix Race 1 R1,Turn 7,0.16572,4.0,21,0.85,00:06.1998,96.228,8,official,source_indy_nxt_2024_6315_top_section_times_pdf
+session_indy_nxt_2024_6315,2024 Indianapolis Grand Prix Race 1 R1,Turn 8/9,0.129167,15.0,21,0.30000000000000004,00:05.0948,91.27,6,official,source_indy_nxt_2024_6315_top_section_times_pdf
+session_indy_nxt_2024_6315,2024 Indianapolis Grand Prix Race 1 R1,Turn 10,0.205114,13.0,22,0.4285714285714286,00:07.1620,103.101,6,official,source_indy_nxt_2024_6315_top_section_times_pdf
+session_indy_nxt_2024_6315,2024 Indianapolis Grand Prix Race 1 R1,Turn 11,0.195264,7.0,21,0.7,00:04.8636,144.533,1,official,source_indy_nxt_2024_6315_top_section_times_pdf
+session_indy_nxt_2024_6315,2024 Indianapolis Grand Prix Race 1 R1,Turn 12/13,0.152462,2.0,21,0.95,00:06.9915,78.504,7,official,source_indy_nxt_2024_6315_top_section_times_pdf
+session_indy_nxt_2024_6315,2024 Indianapolis Grand Prix Race 1 R1,Turn 14,0.237878,6.0,21,0.75,00:07.7060,111.129,10,official,source_indy_nxt_2024_6315_top_section_times_pdf
+session_indy_nxt_2024_6315,2024 Indianapolis Grand Prix Race 1 R1,FS - PI,0.164394,14.0,21,0.35,00:03.8258,154.691,33,official,source_indy_nxt_2024_6315_top_section_times_pdf
+session_indy_nxt_2024_6315,2024 Indianapolis Grand Prix Race 1 R1,SF to I1,0.254167,14.0,21,0.35,00:05.2969,172.743,26,official,source_indy_nxt_2024_6315_top_section_times_pdf
+session_indy_nxt_2024_6315,2024 Indianapolis Grand Prix Race 1 R1,I2 to I3,0.340719,9.0,21,0.6,00:11.4910,106.743,17,official,source_indy_nxt_2024_6315_top_section_times_pdf
+session_indy_nxt_2024_6315,2024 Indianapolis Grand Prix Race 1 R1,I4 to I5,0.294886,5.0,21,0.8,00:11.3301,93.696,8,official,source_indy_nxt_2024_6315_top_section_times_pdf
+session_indy_nxt_2024_6315,2024 Indianapolis Grand Prix Race 1 R1,SFT to SF,0.031155,11.0,21,0.5,00:00.6822,164.406,16,official,source_indy_nxt_2024_6315_top_section_times_pdf
+session_indy_nxt_2024_6315,2024 Indianapolis Grand Prix Race 1 R1,I1T to I1,0.016383,17.0,21,0.19999999999999996,00:00.3319,177.701,32,official,source_indy_nxt_2024_6315_top_section_times_pdf
+session_indy_nxt_2024_6315,2024 Indianapolis Grand Prix Race 1 R1,I4T to I4,0.022727,5.0,21,0.8,00:00.4672,175.122,1,official,source_indy_nxt_2024_6315_top_section_times_pdf
+session_indy_nxt_2024_6315,2024 Indianapolis Grand Prix Race 1 R1,I6T to I6,0.020455,1.0,21,1.0,00:00.5066,145.357,33,official,source_indy_nxt_2024_6315_top_section_times_pdf
+session_indy_nxt_2024_6315,2024 Indianapolis Grand Prix Race 1 R1,PI to SFP,0.194317,6.0,8,0.2857142857142857,00:48.0596,14.556,4,official,source_indy_nxt_2024_6315_top_section_times_pdf
+session_indy_nxt_2024_6315,2024 Indianapolis Grand Prix Race 1 R1,SFP to PO,0.200284,4.0,9,0.625,00:21.0881,34.191,5,official,source_indy_nxt_2024_6315_top_section_times_pdf
+session_indy_nxt_2024_6315,2024 Indianapolis Grand Prix Race 1 R1,SFPT to SFP,0.012405,3.0,8,0.7142857142857143,00:01.3020,34.3,4,official,source_indy_nxt_2024_6315_top_section_times_pdf
+session_indy_nxt_2024_6315,2024 Indianapolis Grand Prix Race 1 R1,PIC to PI,0.186364,2.0,8,0.8571428571428572,00:09.3801,71.525,4,official,source_indy_nxt_2024_6315_top_section_times_pdf
+session_indy_nxt_2024_6315,2024 Indianapolis Grand Prix Race 1 R1,POB to POC,0.220549,5.0,8,0.4285714285714286,00:11.5560,68.707,5,official,source_indy_nxt_2024_6315_top_section_times_pdf
+session_indy_nxt_2024_6315,2024 Indianapolis Grand Prix Race 1 R1,PI to PO,0.394602,6.0,8,0.2857142857142857,01:09.1477,20.544,5,official,source_indy_nxt_2024_6315_top_section_times_pdf
+session_indy_nxt_2024_6315,2024 Indianapolis Grand Prix Race 1 R1,PO to SF,2.23911,6.0,21,0.75,01:23.9052,96.07,5,official,source_indy_nxt_2024_6315_top_section_times_pdf
+session_indy_nxt_2024_6315,2024 Indianapolis Grand Prix Race 1 R1,SF to PI,2.2231,3.0,8,0.7142857142857143,01:16.5445,104.556,4,official,source_indy_nxt_2024_6315_top_section_times_pdf
+session_indy_nxt_2024_6315,2024 Indianapolis Grand Prix Race 1 R1,PO to I2,0.307102,6.0,21,0.75,00:16.8880,65.465,5,official,source_indy_nxt_2024_6315_top_section_times_pdf
+session_indy_nxt_2024_6315,2024 Indianapolis Grand Prix Race 1 R1,I7 to PI,0.338825,2.0,8,0.8571428571428572,00:16.9960,71.768,4,official,source_indy_nxt_2024_6315_top_section_times_pdf
+session_indy_nxt_2024_6315,2024 Indianapolis Grand Prix Race 1 R1,PO to PI,2.0232,5.0,8,0.4285714285714286,10:06.4361,12.01,4,official,source_indy_nxt_2024_6315_top_section_times_pdf
+session_indy_nxt_2024_6315,2024 Indianapolis Grand Prix Race 1 R1,SF to I3,0.847727,11.0,21,0.5,00:26.3278,115.916,8,official,source_indy_nxt_2024_6315_top_section_times_pdf
+session_indy_nxt_2024_6315,2024 Indianapolis Grand Prix Race 1 R1,I3 to I6,0.841287,8.0,21,0.65,00:26.5140,114.228,9,official,source_indy_nxt_2024_6315_top_section_times_pdf
+session_indy_nxt_2024_6315,2024 Indianapolis Grand Prix Race 1 R1,I6 to SF,0.749998,4.0,21,0.85,00:23.6345,114.239,7,official,source_indy_nxt_2024_6315_top_section_times_pdf
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,Lap,4.014,7.0,21,0.7,01:53.8088,126.971,8,official,source_indy_nxt_2024_6316_top_section_times_pdf
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,SF to I1B,0.235417,10.0,21,0.55,00:04.7115,179.879,18,official,source_indy_nxt_2024_6316_top_section_times_pdf
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,I1B to I1,0.041098,4.0,21,0.85,00:00.8077,183.178,6,official,source_indy_nxt_2024_6316_top_section_times_pdf
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,I1 to I2,0.221212,8.0,21,0.65,00:06.3548,125.317,8,official,source_indy_nxt_2024_6316_top_section_times_pdf
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,I2 to I3,0.158902,18.0,21,0.15000000000000002,00:04.2634,134.176,9,official,source_indy_nxt_2024_6316_top_section_times_pdf
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,I3 to I3A,0.257765,6.0,21,0.75,00:08.4496,109.822,9,official,source_indy_nxt_2024_6316_top_section_times_pdf
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,I3A to I4,0.191288,19.0,21,0.09999999999999998,00:04.3360,158.818,12,official,source_indy_nxt_2024_6316_top_section_times_pdf
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,I4 to I4A,0.173485,15.0,21,0.30000000000000004,00:03.5978,173.591,1,official,source_indy_nxt_2024_6316_top_section_times_pdf
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,I4A to I5,0.139583,17.0,21,0.19999999999999996,00:04.0492,124.098,14,official,source_indy_nxt_2024_6316_top_section_times_pdf
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,I5 to I6,0.139394,13.0,21,0.4,00:06.1966,80.983,7,official,source_indy_nxt_2024_6316_top_section_times_pdf
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,I6 to I7,0.190152,9.0,21,0.6,00:07.3031,93.734,9,official,source_indy_nxt_2024_6316_top_section_times_pdf
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,I7 to I8,0.254167,4.0,21,0.85,00:07.2036,127.02,9,official,source_indy_nxt_2024_6316_top_section_times_pdf
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,I8 to I9,0.14072,11.0,21,0.5,00:05.6578,89.539,8,official,source_indy_nxt_2024_6316_top_section_times_pdf
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,I9 to I10,0.222727,3.0,21,0.9,00:06.2333,128.634,19,official,source_indy_nxt_2024_6316_top_section_times_pdf
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,I10 to I11,0.285227,4.0,21,0.85,00:06.7798,151.452,19,official,source_indy_nxt_2024_6316_top_section_times_pdf
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,I11 to I11B,0.256629,6.0,21,0.75,00:05.4621,169.141,11,official,source_indy_nxt_2024_6316_top_section_times_pdf
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,I11B to I12,0.182765,15.0,21,0.30000000000000004,00:03.7560,175.174,13,official,source_indy_nxt_2024_6316_top_section_times_pdf
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,I12 to I13,0.281439,6.0,21,0.75,00:09.6029,105.508,5,official,source_indy_nxt_2024_6316_top_section_times_pdf
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,I13 to I13A,0.108523,2.0,21,0.95,00:02.8882,135.269,8,official,source_indy_nxt_2024_6316_top_section_times_pdf
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,I13A to I14,0.064205,1.0,21,1.0,00:01.8200,126.999,1,official,source_indy_nxt_2024_6316_top_section_times_pdf
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,I14 to I15C,0.201515,5.0,21,0.8,00:06.8358,106.126,1,official,source_indy_nxt_2024_6316_top_section_times_pdf
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,I15C to I15,0.08125,2.0,22,0.9523809523809523,00:01.9696,148.507,17,official,source_indy_nxt_2024_6316_top_section_times_pdf
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,I15 to SF,0.186364,5.0,21,0.8,00:04.0814,164.382,17,official,source_indy_nxt_2024_6316_top_section_times_pdf
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,SF to I1,0.276515,9.0,21,0.6,00:05.5206,180.316,19,official,source_indy_nxt_2024_6316_top_section_times_pdf
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,I3 to I4,0.449053,8.0,21,0.65,00:12.8537,125.769,9,official,source_indy_nxt_2024_6316_top_section_times_pdf
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,I4 to I5,0.313068,16.0,21,0.25,00:07.6860,146.636,18,official,source_indy_nxt_2024_6316_top_section_times_pdf
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,I11 to I12,0.439394,8.0,21,0.65,00:09.2238,171.493,11,official,source_indy_nxt_2024_6316_top_section_times_pdf
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,I13 to I14,0.172727,2.0,21,0.95,00:04.7487,130.945,1,official,source_indy_nxt_2024_6316_top_section_times_pdf
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,I14 to I15,0.282765,8.0,21,0.65,00:08.8688,114.779,1,official,source_indy_nxt_2024_6316_top_section_times_pdf
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,SF to SFT,0.022727,11.0,21,0.5,00:00.4718,173.415,19,official,source_indy_nxt_2024_6316_top_section_times_pdf
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,I4AT to I4A,0.022727,14.0,21,0.35,00:00.4636,176.482,1,official,source_indy_nxt_2024_6316_top_section_times_pdf
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,I12T to I12,0.022727,9.0,23,0.6363636363636364,00:00.4818,169.816,5,official,source_indy_nxt_2024_6316_top_section_times_pdf
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,PI to SFP,0.041667,12.0,19,0.38888888888888884,00:04.5446,33.006,16,official,source_indy_nxt_2024_6316_top_section_times_pdf
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,SFP to PO,0.233902,17.0,18,0.05882352941176472,05:12.1670,2.697,17,official,source_indy_nxt_2024_6316_top_section_times_pdf
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,PIC to PIA,0.102652,11.0,19,0.4444444444444444,00:08.0588,45.856,16,official,source_indy_nxt_2024_6316_top_section_times_pdf
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,PI to PO,0.275568,17.0,18,0.05882352941176472,05:16.7116,3.132,17,official,source_indy_nxt_2024_6316_top_section_times_pdf
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,PO to SF,3.77992,12.0,21,0.44999999999999996,02:26.8382,92.671,17,official,source_indy_nxt_2024_6316_top_section_times_pdf
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,SF to PI,3.97216,13.0,19,0.33333333333333337,02:58.6817,80.029,16,official,source_indy_nxt_2024_6316_top_section_times_pdf
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,PO to I1,0.042614,6.0,21,0.75,00:02.9960,51.205,0,official,source_indy_nxt_2024_6316_top_section_times_pdf
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,I14 to PI,0.427462,11.0,19,0.4444444444444444,00:38.3665,40.11,16,official,source_indy_nxt_2024_6316_top_section_times_pdf
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,PO to PI,3.73826,14.0,19,0.2777777777777778,39:16.0541,5.712,16,official,source_indy_nxt_2024_6316_top_section_times_pdf
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,SF to I4A,1.27917,11.0,21,0.5,00:32.9495,139.76,9,official,source_indy_nxt_2024_6316_top_section_times_pdf
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,I4A to I11,1.37197,3.0,21,0.9,00:43.5877,113.314,9,official,source_indy_nxt_2024_6316_top_section_times_pdf
+session_indy_nxt_2024_6316,2024 Grand Prix at Road America,I11 to SF,1.36269,4.0,21,0.85,00:36.8548,133.108,1,official,source_indy_nxt_2024_6316_top_section_times_pdf
+session_indy_nxt_2024_6317,2024 Grand Prix of Monterey Race 1 R1,Lap,2.238,8.0,20,0.631578947368421,01:15.3598,106.911,17,official,source_indy_nxt_2024_6317_top_section_times_pdf
+session_indy_nxt_2024_6317,2024 Grand Prix of Monterey Race 1 R1,Turn 1 Entry,0.098295,7.0,20,0.6842105263157895,00:02.3834,148.469,28,official,source_indy_nxt_2024_6317_top_section_times_pdf
+session_indy_nxt_2024_6317,2024 Grand Prix of Monterey Race 1 R1,Turn 1 Exit,0.128598,11.0,20,0.4736842105263158,00:03.1880,145.217,31,official,source_indy_nxt_2024_6317_top_section_times_pdf
+session_indy_nxt_2024_6317,2024 Grand Prix of Monterey Race 1 R1,Turn 2,0.196022,8.0,20,0.631578947368421,00:08.7813,80.362,18,official,source_indy_nxt_2024_6317_top_section_times_pdf
+session_indy_nxt_2024_6317,2024 Grand Prix of Monterey Race 1 R1,Turn 3,0.15928,3.0,20,0.8947368421052632,00:06.0006,95.558,13,official,source_indy_nxt_2024_6317_top_section_times_pdf
+session_indy_nxt_2024_6317,2024 Grand Prix of Monterey Race 1 R1,Turn 4,0.231628,5.0,20,0.7894736842105263,00:06.7325,123.856,13,official,source_indy_nxt_2024_6317_top_section_times_pdf
+session_indy_nxt_2024_6317,2024 Grand Prix of Monterey Race 1 R1,Turn 4A,0.079924,7.0,20,0.6842105263157895,00:02.0311,141.66,32,official,source_indy_nxt_2024_6317_top_section_times_pdf
+session_indy_nxt_2024_6317,2024 Grand Prix of Monterey Race 1 R1,Turn 5,0.155492,12.0,20,0.42105263157894735,00:05.7272,97.739,3,official,source_indy_nxt_2024_6317_top_section_times_pdf
+session_indy_nxt_2024_6317,2024 Grand Prix of Monterey Race 1 R1,Turn 5A,0.09697,12.0,20,0.42105263157894735,00:02.6498,131.743,19,official,source_indy_nxt_2024_6317_top_section_times_pdf
+session_indy_nxt_2024_6317,2024 Grand Prix of Monterey Race 1 R1,Turn 6,0.232007,10.0,20,0.5263157894736843,00:06.7031,124.603,16,official,source_indy_nxt_2024_6317_top_section_times_pdf
+session_indy_nxt_2024_6317,2024 Grand Prix of Monterey Race 1 R1,Turn 7,0.075568,3.0,20,0.8947368421052632,00:01.9895,136.74,10,official,source_indy_nxt_2024_6317_top_section_times_pdf
+session_indy_nxt_2024_6317,2024 Grand Prix of Monterey Race 1 R1,Turn 7A,0.041856,3.0,20,0.8947368421052632,00:01.7016,88.553,10,official,source_indy_nxt_2024_6317_top_section_times_pdf
+session_indy_nxt_2024_6317,2024 Grand Prix of Monterey Race 1 R1,Corkscrew,0.137121,15.0,20,0.26315789473684215,00:06.1029,80.885,20,official,source_indy_nxt_2024_6317_top_section_times_pdf
+session_indy_nxt_2024_6317,2024 Grand Prix of Monterey Race 1 R1,Turn 9,0.150379,17.0,21,0.19999999999999996,00:04.3783,123.647,16,official,source_indy_nxt_2024_6317_top_section_times_pdf
+session_indy_nxt_2024_6317,2024 Grand Prix of Monterey Race 1 R1,Turn 10,0.213824,3.0,20,0.8947368421052632,00:06.7395,114.217,16,official,source_indy_nxt_2024_6317_top_section_times_pdf
+session_indy_nxt_2024_6317,2024 Grand Prix of Monterey Race 1 R1,Turn 11,0.077841,12.0,21,0.44999999999999996,00:04.4998,62.276,11,official,source_indy_nxt_2024_6317_top_section_times_pdf
+session_indy_nxt_2024_6317,2024 Grand Prix of Monterey Race 1 R1,FS - PI,0.163258,8.0,20,0.631578947368421,00:04.9798,118.023,27,official,source_indy_nxt_2024_6317_top_section_times_pdf
+session_indy_nxt_2024_6317,2024 Grand Prix of Monterey Race 1 R1,I4 to I5,0.311552,6.0,20,0.736842105263158,00:08.7919,127.571,13,official,source_indy_nxt_2024_6317_top_section_times_pdf
+session_indy_nxt_2024_6317,2024 Grand Prix of Monterey Race 1 R1,I5 to I6,0.252461,13.0,20,0.368421052631579,00:08.3935,108.281,3,official,source_indy_nxt_2024_6317_top_section_times_pdf
+session_indy_nxt_2024_6317,2024 Grand Prix of Monterey Race 1 R1,I8 to I9,0.178977,11.0,21,0.5,00:07.8636,81.937,11,official,source_indy_nxt_2024_6317_top_section_times_pdf
+session_indy_nxt_2024_6317,2024 Grand Prix of Monterey Race 1 R1,SF to SFT,0.025568,8.0,21,0.65,00:00.6330,145.41,28,official,source_indy_nxt_2024_6317_top_section_times_pdf
+session_indy_nxt_2024_6317,2024 Grand Prix of Monterey Race 1 R1,I1T to I1,0.017803,7.0,20,0.6842105263157895,00:00.4198,152.67,0,official,source_indy_nxt_2024_6317_top_section_times_pdf
+session_indy_nxt_2024_6317,2024 Grand Prix of Monterey Race 1 R1,I10 to I10T,0.022727,15.0,21,0.30000000000000004,00:00.6448,126.888,21,official,source_indy_nxt_2024_6317_top_section_times_pdf
+session_indy_nxt_2024_6317,2024 Grand Prix of Monterey Race 1 R1,I11T to I11,0.018939,4.0,20,0.8421052631578947,00:00.6989,97.554,31,official,source_indy_nxt_2024_6317_top_section_times_pdf
+session_indy_nxt_2024_6317,2024 Grand Prix of Monterey Race 1 R1,Start/Finish Backup to Start/Finish,0.013447,11.0,21,0.5,00:00.3442,140.643,27,official,source_indy_nxt_2024_6317_top_section_times_pdf
+session_indy_nxt_2024_6317,2024 Grand Prix of Monterey Race 1 R1,SFP to PO,0.025758,8.0,20,0.631578947368421,00:02.7825,33.326,0,official,source_indy_nxt_2024_6317_top_section_times_pdf
+session_indy_nxt_2024_6317,2024 Grand Prix of Monterey Race 1 R1,PO to SF,2.21249,14.0,20,0.3157894736842105,01:51.8239,71.228,0,official,source_indy_nxt_2024_6317_top_section_times_pdf
+session_indy_nxt_2024_6317,2024 Grand Prix of Monterey Race 1 R1,PO to I3,0.397347,7.0,20,0.6842105263157895,00:21.3972,66.852,0,official,source_indy_nxt_2024_6317_top_section_times_pdf
+session_indy_nxt_2024_6317,2024 Grand Prix of Monterey Race 1 R1,SF to I5,0.813823,4.0,20,0.8421052631578947,00:27.2320,107.585,13,official,source_indy_nxt_2024_6317_top_section_times_pdf
+session_indy_nxt_2024_6317,2024 Grand Prix of Monterey Race 1 R1,I5 to I11,0.818937,9.0,20,0.5789473684210527,00:27.0974,108.799,16,official,source_indy_nxt_2024_6317_top_section_times_pdf
+session_indy_nxt_2024_6317,2024 Grand Prix of Monterey Race 1 R1,I11 to SF,0.605301,10.0,20,0.5263157894736843,00:20.8553,104.486,16,official,source_indy_nxt_2024_6317_top_section_times_pdf
+session_indy_nxt_2024_6318,2024 Grand Prix at Mid-Ohio,Lap,2.258,11.0,19,0.4444444444444444,01:11.2865,114.03,26,official,source_indy_nxt_2024_6318_top_section_times_pdf
+session_indy_nxt_2024_6318,2024 Grand Prix at Mid-Ohio,FS - PO,0.141667,15.0,19,0.2222222222222222,00:03.7236,136.965,23,official,source_indy_nxt_2024_6318_top_section_times_pdf
+session_indy_nxt_2024_6318,2024 Grand Prix at Mid-Ohio,Turn 1,0.127083,17.0,19,0.11111111111111116,00:03.5143,130.182,26,official,source_indy_nxt_2024_6318_top_section_times_pdf
+session_indy_nxt_2024_6318,2024 Grand Prix at Mid-Ohio,Turn 1A,0.146212,18.0,19,0.05555555555555558,00:03.7799,139.253,31,official,source_indy_nxt_2024_6318_top_section_times_pdf
+session_indy_nxt_2024_6318,2024 Grand Prix at Mid-Ohio,Turn 1B,0.110985,18.0,19,0.05555555555555558,00:02.7282,146.45,14,official,source_indy_nxt_2024_6318_top_section_times_pdf
+session_indy_nxt_2024_6318,2024 Grand Prix at Mid-Ohio,Turn 2,0.174242,1.0,19,1.0,00:07.2200,86.88,26,official,source_indy_nxt_2024_6318_top_section_times_pdf
+session_indy_nxt_2024_6318,2024 Grand Prix at Mid-Ohio,Turn 3,0.266666,17.0,19,0.11111111111111116,00:06.8458,140.232,26,official,source_indy_nxt_2024_6318_top_section_times_pdf
+session_indy_nxt_2024_6318,2024 Grand Prix at Mid-Ohio,Back Stretch,0.206817,17.0,19,0.11111111111111116,00:04.6709,159.4,11,official,source_indy_nxt_2024_6318_top_section_times_pdf
+session_indy_nxt_2024_6318,2024 Grand Prix at Mid-Ohio,Turn 4,0.129735,8.0,19,0.6111111111111112,00:04.5895,101.764,25,official,source_indy_nxt_2024_6318_top_section_times_pdf
+session_indy_nxt_2024_6318,2024 Grand Prix at Mid-Ohio,Turn 5,0.105492,1.0,19,1.0,00:04.7498,79.955,21,official,source_indy_nxt_2024_6318_top_section_times_pdf
+session_indy_nxt_2024_6318,2024 Grand Prix at Mid-Ohio,Turn 6/7,0.141098,11.0,19,0.4444444444444444,00:05.5073,92.233,23,official,source_indy_nxt_2024_6318_top_section_times_pdf
+session_indy_nxt_2024_6318,2024 Grand Prix at Mid-Ohio,Turn 8,0.060985,10.0,19,0.5,00:01.8111,121.222,23,official,source_indy_nxt_2024_6318_top_section_times_pdf
+session_indy_nxt_2024_6318,2024 Grand Prix at Mid-Ohio,Turn 9,0.15322,6.0,20,0.736842105263158,00:05.5506,99.375,25,official,source_indy_nxt_2024_6318_top_section_times_pdf
+session_indy_nxt_2024_6318,2024 Grand Prix at Mid-Ohio,Turn 10,0.152841,13.0,19,0.33333333333333337,00:04.0766,134.972,25,official,source_indy_nxt_2024_6318_top_section_times_pdf
+session_indy_nxt_2024_6318,2024 Grand Prix at Mid-Ohio,Turn 11,0.132765,11.0,19,0.4444444444444444,00:04.1114,116.251,23,official,source_indy_nxt_2024_6318_top_section_times_pdf
+session_indy_nxt_2024_6318,2024 Grand Prix at Mid-Ohio,Turn 12,0.092424,16.0,19,0.16666666666666663,00:04.1637,79.911,22,official,source_indy_nxt_2024_6318_top_section_times_pdf
+session_indy_nxt_2024_6318,2024 Grand Prix at Mid-Ohio,Turn 12C,0.034848,6.0,19,0.7222222222222222,00:01.3316,94.212,17,official,source_indy_nxt_2024_6318_top_section_times_pdf
+session_indy_nxt_2024_6318,2024 Grand Prix at Mid-Ohio,Turn 13,0.081061,6.0,19,0.7222222222222222,00:02.6399,110.542,29,official,source_indy_nxt_2024_6318_top_section_times_pdf
+session_indy_nxt_2024_6318,2024 Grand Prix at Mid-Ohio,I3 to I3T,0.022348,17.0,20,0.1578947368421053,00:00.5059,159.029,26,official,source_indy_nxt_2024_6318_top_section_times_pdf
+session_indy_nxt_2024_6318,2024 Grand Prix at Mid-Ohio,I10T to I10,0.022917,10.0,19,0.5,00:00.6985,118.112,25,official,source_indy_nxt_2024_6318_top_section_times_pdf
+session_indy_nxt_2024_6318,2024 Grand Prix at Mid-Ohio,PI to SFP,0.108522,4.0,5,0.25,00:12.3326,31.679,0,official,source_indy_nxt_2024_6318_top_section_times_pdf
+session_indy_nxt_2024_6318,2024 Grand Prix at Mid-Ohio,SFP to PO,0.140908,6.0,6,0.0,02:34.7169,3.279,1,official,source_indy_nxt_2024_6318_top_section_times_pdf
+session_indy_nxt_2024_6318,2024 Grand Prix at Mid-Ohio,PIC to PI,0.019697,5.0,5,0.0,00:02.3054,30.758,0,official,source_indy_nxt_2024_6318_top_section_times_pdf
+session_indy_nxt_2024_6318,2024 Grand Prix at Mid-Ohio,PI to PO,0.24943,4.0,5,0.25,02:47.0495,5.375,1,official,source_indy_nxt_2024_6318_top_section_times_pdf
+session_indy_nxt_2024_6318,2024 Grand Prix at Mid-Ohio,PO to SF,2.10264,5.0,19,0.7777777777777778,01:17.3734,97.831,1,official,source_indy_nxt_2024_6318_top_section_times_pdf
+session_indy_nxt_2024_6318,2024 Grand Prix at Mid-Ohio,SF to PI,2.13806,5.0,5,0.0,04:51.2702,26.426,0,official,source_indy_nxt_2024_6318_top_section_times_pdf
+session_indy_nxt_2024_6318,2024 Grand Prix at Mid-Ohio,PO to I1A,0.113258,2.0,19,0.9444444444444444,00:05.9027,69.075,1,official,source_indy_nxt_2024_6318_top_section_times_pdf
+session_indy_nxt_2024_6318,2024 Grand Prix at Mid-Ohio,I12 to PI,0.088257,5.0,5,0.0,00:07.1567,44.395,0,official,source_indy_nxt_2024_6318_top_section_times_pdf
+session_indy_nxt_2024_6318,2024 Grand Prix at Mid-Ohio,PO to PI,1.98257,2.0,5,0.75,08:12.1468,14.502,0,official,source_indy_nxt_2024_6318_top_section_times_pdf
+session_indy_nxt_2024_6318,2024 Grand Prix at Mid-Ohio,SF to I3,0.966853,17.0,19,0.11111111111111116,00:27.8691,124.894,26,official,source_indy_nxt_2024_6318_top_section_times_pdf
+session_indy_nxt_2024_6318,2024 Grand Prix at Mid-Ohio,I3 to I10,0.797346,5.0,19,0.7777777777777778,00:26.9844,106.374,25,official,source_indy_nxt_2024_6318_top_section_times_pdf
+session_indy_nxt_2024_6318,2024 Grand Prix at Mid-Ohio,I10 to SF,0.493938,12.0,19,0.38888888888888884,00:16.3730,108.604,22,official,source_indy_nxt_2024_6318_top_section_times_pdf
+session_indy_nxt_2024_6319,2024 INDY NXT by Firestone at Iowa Speedway,Lap,0.894,10.0,18,0.47058823529411764,00:19.6297,163.956,12,official,source_indy_nxt_2024_6319_top_section_times_pdf
+session_indy_nxt_2024_6319,2024 INDY NXT by Firestone at Iowa Speedway,SF to T1,0.131628,8.0,18,0.5882352941176471,00:02.7841,170.203,43,official,source_indy_nxt_2024_6319_top_section_times_pdf
+session_indy_nxt_2024_6319,2024 INDY NXT by Firestone at Iowa Speedway,T1 to SS1,0.094601,8.0,18,0.5882352941176471,00:02.0438,166.633,47,official,source_indy_nxt_2024_6319_top_section_times_pdf
+session_indy_nxt_2024_6319,2024 INDY NXT by Firestone at Iowa Speedway,SS1 to T2,0.115624,14.0,19,0.2777777777777778,00:02.6146,159.201,11,official,source_indy_nxt_2024_6319_top_section_times_pdf
+session_indy_nxt_2024_6319,2024 INDY NXT by Firestone at Iowa Speedway,T2 to BS,0.105491,15.0,18,0.17647058823529416,00:02.3456,161.906,47,official,source_indy_nxt_2024_6319_top_section_times_pdf
+session_indy_nxt_2024_6319,2024 INDY NXT by Firestone at Iowa Speedway,BS to T3,0.105682,10.0,18,0.47058823529411764,00:02.2529,168.874,4,official,source_indy_nxt_2024_6319_top_section_times_pdf
+session_indy_nxt_2024_6319,2024 INDY NXT by Firestone at Iowa Speedway,T3 to SS2,0.116856,6.0,18,0.7058823529411764,00:02.4721,170.172,42,official,source_indy_nxt_2024_6319_top_section_times_pdf
+session_indy_nxt_2024_6319,2024 INDY NXT by Firestone at Iowa Speedway,SS2 to T4,0.093465,9.0,18,0.5294117647058824,00:02.0895,161.031,11,official,source_indy_nxt_2024_6319_top_section_times_pdf
+session_indy_nxt_2024_6319,2024 INDY NXT by Firestone at Iowa Speedway,T4 to SF,0.130302,6.0,18,0.7058823529411764,00:02.8677,163.576,42,official,source_indy_nxt_2024_6319_top_section_times_pdf
+session_indy_nxt_2024_6319,2024 INDY NXT by Firestone at Iowa Speedway,T1 to TB,0.066477,7.0,18,0.6470588235294117,00:01.4197,168.569,43,official,source_indy_nxt_2024_6319_top_section_times_pdf
+session_indy_nxt_2024_6319,2024 INDY NXT by Firestone at Iowa Speedway,T1 to T2,0.210225,8.0,18,0.5882352941176471,00:04.6584,162.461,47,official,source_indy_nxt_2024_6319_top_section_times_pdf
+session_indy_nxt_2024_6319,2024 INDY NXT by Firestone at Iowa Speedway,T2 to T3,0.211173,15.0,18,0.17647058823529416,00:04.6100,164.907,4,official,source_indy_nxt_2024_6319_top_section_times_pdf
+session_indy_nxt_2024_6319,2024 INDY NXT by Firestone at Iowa Speedway,T3 to T4,0.210321,7.0,18,0.6470588235294117,00:04.5643,165.886,11,official,source_indy_nxt_2024_6319_top_section_times_pdf
+session_indy_nxt_2024_6319,2024 INDY NXT by Firestone at Iowa Speedway,PO to SF,0.0,17.0,18,0.05882352941176472,00:32.4472,0.0,0,official,source_indy_nxt_2024_6319_top_section_times_pdf
+session_indy_nxt_2024_6319,2024 INDY NXT by Firestone at Iowa Speedway,PO to BS,0.249241,16.0,18,0.11764705882352944,00:17.8354,50.308,0,official,source_indy_nxt_2024_6319_top_section_times_pdf
+session_indy_nxt_2024_6319,2024 INDY NXT by Firestone at Iowa Speedway,SF to TB,0.198104,3.0,18,0.8823529411764706,00:04.2038,169.65,43,official,source_indy_nxt_2024_6319_top_section_times_pdf
+session_indy_nxt_2024_6320,2024 OUTFRONT Showdown,Lap,1.25,7.0,18,0.6470588235294117,00:28.3413,158.779,73,official,source_indy_nxt_2024_6320_top_section_times_pdf
+session_indy_nxt_2024_6320,2024 OUTFRONT Showdown,FS - PO,0.161173,3.0,18,0.8823529411764706,00:03.3131,175.13,46,official,source_indy_nxt_2024_6320_top_section_times_pdf
+session_indy_nxt_2024_6320,2024 OUTFRONT Showdown,Turn 1,0.120455,6.0,18,0.7058823529411764,00:02.8290,153.283,28,official,source_indy_nxt_2024_6320_top_section_times_pdf
+session_indy_nxt_2024_6320,2024 OUTFRONT Showdown,Turn 2,0.144697,6.0,18,0.7058823529411764,00:03.6378,143.193,65,official,source_indy_nxt_2024_6320_top_section_times_pdf
+session_indy_nxt_2024_6320,2024 OUTFRONT Showdown,BS - T2,0.158144,6.0,18,0.7058823529411764,00:03.6520,155.892,69,official,source_indy_nxt_2024_6320_top_section_times_pdf
+session_indy_nxt_2024_6320,2024 OUTFRONT Showdown,BS - T3,0.158333,5.0,18,0.7647058823529411,00:03.4218,166.579,17,official,source_indy_nxt_2024_6320_top_section_times_pdf
+session_indy_nxt_2024_6320,2024 OUTFRONT Showdown,Turn 3,0.183523,5.0,18,0.7647058823529411,00:04.0424,163.438,21,official,source_indy_nxt_2024_6320_top_section_times_pdf
+session_indy_nxt_2024_6320,2024 OUTFRONT Showdown,Turn 4,0.163257,2.0,18,0.9411764705882353,00:03.6629,160.454,19,official,source_indy_nxt_2024_6320_top_section_times_pdf
+session_indy_nxt_2024_6320,2024 OUTFRONT Showdown,FS - PI,0.160417,2.0,18,0.9411764705882353,00:03.4085,169.43,19,official,source_indy_nxt_2024_6320_top_section_times_pdf
+session_indy_nxt_2024_6320,2024 OUTFRONT Showdown,Turns 1/2,0.265151,9.0,18,0.5294117647058824,00:06.5627,145.45,65,official,source_indy_nxt_2024_6320_top_section_times_pdf
+session_indy_nxt_2024_6320,2024 OUTFRONT Showdown,Backstretch,0.316476,7.0,18,0.6470588235294117,00:07.1040,160.376,74,official,source_indy_nxt_2024_6320_top_section_times_pdf
+session_indy_nxt_2024_6320,2024 OUTFRONT Showdown,Turns 3/4,0.346779,2.0,18,0.9411764705882353,00:07.7069,161.985,19,official,source_indy_nxt_2024_6320_top_section_times_pdf
+session_indy_nxt_2024_6320,2024 OUTFRONT Showdown,T1T to T1,0.022727,3.0,18,0.8823529411764706,00:00.4674,175.047,71,official,source_indy_nxt_2024_6320_top_section_times_pdf
+session_indy_nxt_2024_6320,2024 OUTFRONT Showdown,T2T to T2,0.022727,7.0,18,0.6470588235294117,00:00.5573,146.81,65,official,source_indy_nxt_2024_6320_top_section_times_pdf
+session_indy_nxt_2024_6320,2024 OUTFRONT Showdown,T3T to T3,0.022727,1.0,18,1.0,00:00.4798,170.524,17,official,source_indy_nxt_2024_6320_top_section_times_pdf
+session_indy_nxt_2024_6320,2024 OUTFRONT Showdown,T4T to T4,0.022727,2.0,20,0.9473684210526316,00:00.5004,163.504,19,official,source_indy_nxt_2024_6320_top_section_times_pdf
+session_indy_nxt_2024_6320,2024 OUTFRONT Showdown,PO - SF,1.06761,7.0,18,0.6470588235294117,00:43.6211,88.109,0,official,source_indy_nxt_2024_6320_top_section_times_pdf
+session_indy_nxt_2024_6320,2024 OUTFRONT Showdown,PO - T2,0.243938,9.0,18,0.5294117647058824,00:13.5269,64.921,0,official,source_indy_nxt_2024_6320_top_section_times_pdf
+session_indy_nxt_2024_6321,2024 Grand Prix of Portland,Lap,1.964,8.0,17,0.5625,01:03.6586,111.067,33,official,source_indy_nxt_2024_6321_top_section_times_pdf
+session_indy_nxt_2024_6321,2024 Grand Prix of Portland,FS-PO,0.064962,9.0,17,0.5,00:01.4277,163.804,33,official,source_indy_nxt_2024_6321_top_section_times_pdf
+session_indy_nxt_2024_6321,2024 Grand Prix of Portland,Turn 1,0.147159,5.0,17,0.75,00:04.6448,114.057,26,official,source_indy_nxt_2024_6321_top_section_times_pdf
+session_indy_nxt_2024_6321,2024 Grand Prix of Portland,Turn 2,0.049621,1.0,18,1.0,00:02.8927,61.754,24,official,source_indy_nxt_2024_6321_top_section_times_pdf
+session_indy_nxt_2024_6321,2024 Grand Prix of Portland,Turn 3,0.173295,2.0,17,0.9375,00:05.5428,112.554,21,official,source_indy_nxt_2024_6321_top_section_times_pdf
+session_indy_nxt_2024_6321,2024 Grand Prix of Portland,Turn 4,0.123674,4.0,17,0.8125,00:04.3068,103.378,18,official,source_indy_nxt_2024_6321_top_section_times_pdf
+session_indy_nxt_2024_6321,2024 Grand Prix of Portland,Turn 5,0.117045,16.0,18,0.11764705882352944,00:04.6781,90.071,13,official,source_indy_nxt_2024_6321_top_section_times_pdf
+session_indy_nxt_2024_6321,2024 Grand Prix of Portland,Turn 6,0.176136,3.0,17,0.875,00:07.4382,85.248,6,official,source_indy_nxt_2024_6321_top_section_times_pdf
+session_indy_nxt_2024_6321,2024 Grand Prix of Portland,Turn 7,0.102652,6.0,17,0.6875,00:04.6656,79.207,7,official,source_indy_nxt_2024_6321_top_section_times_pdf
+session_indy_nxt_2024_6321,2024 Grand Prix of Portland,Turn 8,0.135417,3.0,17,0.875,00:03.6783,132.534,32,official,source_indy_nxt_2024_6321_top_section_times_pdf
+session_indy_nxt_2024_6321,2024 Grand Prix of Portland,Turn 9,0.278408,8.0,17,0.5625,00:06.2178,161.193,33,official,source_indy_nxt_2024_6321_top_section_times_pdf
+session_indy_nxt_2024_6321,2024 Grand Prix of Portland,Turns 10/11,0.197158,5.0,17,0.75,00:05.5930,126.903,28,official,source_indy_nxt_2024_6321_top_section_times_pdf
+session_indy_nxt_2024_6321,2024 Grand Prix of Portland,Turn 12,0.177273,4.0,17,0.8125,00:06.2352,102.352,19,official,source_indy_nxt_2024_6321_top_section_times_pdf
+session_indy_nxt_2024_6321,2024 Grand Prix of Portland,FS-PI,0.221211,7.0,17,0.625,00:05.3984,147.518,32,official,source_indy_nxt_2024_6321_top_section_times_pdf
+session_indy_nxt_2024_6321,2024 Grand Prix of Portland,I1 to I2,0.196779,1.0,17,1.0,00:07.6027,93.178,24,official,source_indy_nxt_2024_6321_top_section_times_pdf
+session_indy_nxt_2024_6321,2024 Grand Prix of Portland,I1T to I1,0.022917,9.0,17,0.5,00:00.4976,165.798,33,official,source_indy_nxt_2024_6321_top_section_times_pdf
+session_indy_nxt_2024_6321,2024 Grand Prix of Portland,I9T to I9,0.022727,6.0,18,0.7058823529411764,00:00.4841,169.009,33,official,source_indy_nxt_2024_6321_top_section_times_pdf
+session_indy_nxt_2024_6321,2024 Grand Prix of Portland,SFP to PO,0.041856,9.0,14,0.3846153846153846,00:04.9204,30.624,0,official,source_indy_nxt_2024_6321_top_section_times_pdf
+session_indy_nxt_2024_6321,2024 Grand Prix of Portland,PO to SF,1.92196,14.0,17,0.1875,01:35.0319,72.808,0,official,source_indy_nxt_2024_6321_top_section_times_pdf
+session_indy_nxt_2024_6321,2024 Grand Prix of Portland,PO to I2A,0.170076,14.0,17,0.1875,00:12.3858,49.434,0,official,source_indy_nxt_2024_6321_top_section_times_pdf
+session_indy_nxt_2024_6321,2024 Grand Prix of Portland,SF to I5,0.675754,3.0,17,0.875,00:23.7271,102.529,24,official,source_indy_nxt_2024_6321_top_section_times_pdf
+session_indy_nxt_2024_6321,2024 Grand Prix of Portland,I5 to I9,0.692612,5.0,17,0.75,00:22.2013,112.309,32,official,source_indy_nxt_2024_6321_top_section_times_pdf
+session_indy_nxt_2024_6321,2024 Grand Prix of Portland,I9 to SF,0.595642,3.0,17,0.875,00:17.3293,123.739,30,official,source_indy_nxt_2024_6321_top_section_times_pdf
+session_indy_nxt_2024_6322,2024 INDY NXT By Firestone at The Milwaukee Mile,Lap,1.015,2.0,16,0.9333333333333333,00:25.5781,142.857,6,official,source_indy_nxt_2024_6322_top_section_times_pdf
+session_indy_nxt_2024_6322,2024 INDY NXT By Firestone at The Milwaukee Mile,SF to T1,0.128029,5.0,16,0.7333333333333334,00:02.9490,156.292,6,official,source_indy_nxt_2024_6322_top_section_times_pdf
+session_indy_nxt_2024_6322,2024 INDY NXT By Firestone at The Milwaukee Mile,T1 to SS1,0.126136,8.0,16,0.5333333333333333,00:03.3912,133.902,5,official,source_indy_nxt_2024_6322_top_section_times_pdf
+session_indy_nxt_2024_6322,2024 INDY NXT By Firestone at The Milwaukee Mile,SS1 to T2,0.144885,4.0,16,0.8,00:03.3561,155.414,2,official,source_indy_nxt_2024_6322_top_section_times_pdf
+session_indy_nxt_2024_6322,2024 INDY NXT By Firestone at The Milwaukee Mile,T2 to BS,0.097348,4.0,16,0.8,00:02.3812,147.175,2,official,source_indy_nxt_2024_6322_top_section_times_pdf
+session_indy_nxt_2024_6322,2024 INDY NXT By Firestone at The Milwaukee Mile,BS to T3,0.07481,3.0,16,0.8666666666666667,00:02.2461,119.904,2,official,source_indy_nxt_2024_6322_top_section_times_pdf
+session_indy_nxt_2024_6322,2024 INDY NXT By Firestone at The Milwaukee Mile,T3 to SS2,0.116098,3.0,16,0.8666666666666667,00:02.7943,149.573,5,official,source_indy_nxt_2024_6322_top_section_times_pdf
+session_indy_nxt_2024_6322,2024 INDY NXT By Firestone at The Milwaukee Mile,SS2 to T4,0.116477,3.0,16,0.8666666666666667,00:03.1320,133.882,1,official,source_indy_nxt_2024_6322_top_section_times_pdf
+session_indy_nxt_2024_6322,2024 INDY NXT By Firestone at The Milwaukee Mile,T4 to FS,0.132386,1.0,16,1.0,00:03.2841,145.12,1,official,source_indy_nxt_2024_6322_top_section_times_pdf
+session_indy_nxt_2024_6322,2024 INDY NXT By Firestone at The Milwaukee Mile,FS to SF,0.078787,1.0,16,1.0,00:01.8321,154.813,3,official,source_indy_nxt_2024_6322_top_section_times_pdf
+session_indy_nxt_2024_6322,2024 INDY NXT By Firestone at The Milwaukee Mile,T1 to T2,0.27102,6.0,16,0.6666666666666667,00:06.7689,144.14,2,official,source_indy_nxt_2024_6322_top_section_times_pdf
+session_indy_nxt_2024_6322,2024 INDY NXT By Firestone at The Milwaukee Mile,T2 to T3,0.172157,3.0,16,0.8666666666666667,00:04.6273,133.937,2,official,source_indy_nxt_2024_6322_top_section_times_pdf
+session_indy_nxt_2024_6322,2024 INDY NXT By Firestone at The Milwaukee Mile,T3 to T4,0.232574,1.0,16,1.0,00:05.9489,140.743,5,official,source_indy_nxt_2024_6322_top_section_times_pdf
+session_indy_nxt_2024_6322,2024 INDY NXT By Firestone at The Milwaukee Mile,T4 to SF,0.211172,1.0,16,1.0,00:05.1219,148.425,1,official,source_indy_nxt_2024_6322_top_section_times_pdf
+session_indy_nxt_2024_6322,2024 INDY NXT By Firestone at The Milwaukee Mile,T2T to T2,0.022916,4.0,16,0.8,00:00.5863,140.709,5,official,source_indy_nxt_2024_6322_top_section_times_pdf
+session_indy_nxt_2024_6322,2024 INDY NXT By Firestone at The Milwaukee Mile,T3T to T3,0.022727,3.0,16,0.8666666666666667,00:00.5152,158.807,3,official,source_indy_nxt_2024_6322_top_section_times_pdf
+session_indy_nxt_2024_6322,2024 INDY NXT By Firestone at The Milwaukee Mile,SF to SFT,0.023484,1.0,17,1.0,00:00.5313,159.124,4,official,source_indy_nxt_2024_6322_top_section_times_pdf
+session_indy_nxt_2024_6322,2024 INDY NXT By Firestone at The Milwaukee Mile,PO to SF,0.848295,9.0,16,0.4666666666666667,00:40.7940,74.861,0,official,source_indy_nxt_2024_6322_top_section_times_pdf
+session_indy_nxt_2024_6322,2024 INDY NXT By Firestone at The Milwaukee Mile,PO to T2,0.232385,8.0,16,0.5333333333333333,00:13.1528,63.605,0,official,source_indy_nxt_2024_6322_top_section_times_pdf
+session_indy_nxt_2024_6323,2024 Music City Grand Prix,Lap,1.33,7.0,18,0.6470588235294117,00:26.3767,181.524,10,official,source_indy_nxt_2024_6323_top_section_times_pdf
+session_indy_nxt_2024_6323,2024 Music City Grand Prix,Turn 1 Entry,0.157386,12.0,18,0.3529411764705882,00:03.0593,185.202,36,official,source_indy_nxt_2024_6323_top_section_times_pdf
+session_indy_nxt_2024_6323,2024 Music City Grand Prix,Turn 1 Exit,0.180491,1.0,18,1.0,00:03.4752,186.973,10,official,source_indy_nxt_2024_6323_top_section_times_pdf
+session_indy_nxt_2024_6323,2024 Music City Grand Prix,Turn 2 Entry,0.188446,7.0,18,0.6470588235294117,00:03.7956,178.735,8,official,source_indy_nxt_2024_6323_top_section_times_pdf
+session_indy_nxt_2024_6323,2024 Music City Grand Prix,BackStretch Entry,0.136174,5.0,18,0.7647058823529411,00:02.7350,179.242,8,official,source_indy_nxt_2024_6323_top_section_times_pdf
+session_indy_nxt_2024_6323,2024 Music City Grand Prix,BackStretch Exit,0.125189,5.0,18,0.7647058823529411,00:02.4457,184.275,8,official,source_indy_nxt_2024_6323_top_section_times_pdf
+session_indy_nxt_2024_6323,2024 Music City Grand Prix,Turn 3,0.200757,2.0,18,0.9411764705882353,00:03.8626,187.108,5,official,source_indy_nxt_2024_6323_top_section_times_pdf
+session_indy_nxt_2024_6323,2024 Music City Grand Prix,Turn 4 Entry,0.183711,3.0,18,0.8823529411764706,00:03.6849,179.478,9,official,source_indy_nxt_2024_6323_top_section_times_pdf
+session_indy_nxt_2024_6323,2024 Music City Grand Prix,Turn 4 Exit,0.152841,9.0,18,0.5294117647058824,00:03.0232,182.002,19,official,source_indy_nxt_2024_6323_top_section_times_pdf
+session_indy_nxt_2024_6323,2024 Music City Grand Prix,T1 to T2,0.368938,7.0,18,0.6470588235294117,00:07.3227,181.378,8,official,source_indy_nxt_2024_6323_top_section_times_pdf
+session_indy_nxt_2024_6323,2024 Music City Grand Prix,T2 to T3,0.261362,3.0,18,0.8823529411764706,00:05.1807,181.617,8,official,source_indy_nxt_2024_6323_top_section_times_pdf
+session_indy_nxt_2024_6323,2024 Music City Grand Prix,T3 to T4,0.384469,5.0,18,0.7647058823529411,00:07.5984,182.155,5,official,source_indy_nxt_2024_6323_top_section_times_pdf
+session_indy_nxt_2024_6323,2024 Music City Grand Prix,T2T to T2,0.023295,7.0,18,0.6470588235294117,00:00.4777,175.554,8,official,source_indy_nxt_2024_6323_top_section_times_pdf
+session_indy_nxt_2024_6323,2024 Music City Grand Prix,T3T to T3,0.022727,11.0,19,0.4444444444444444,00:00.4427,184.814,8,official,source_indy_nxt_2024_6323_top_section_times_pdf
+session_indy_nxt_2024_6323,2024 Music City Grand Prix,PO to SF,1.0964,11.0,18,0.4117647058823529,00:53.3448,73.991,0,official,source_indy_nxt_2024_6323_top_section_times_pdf
+session_indy_nxt_2024_6323,2024 Music City Grand Prix,PO to BS,0.4339,17.0,18,0.05882352941176472,00:28.4642,54.877,0,official,source_indy_nxt_2024_6323_top_section_times_pdf
+session_indy_nxt_2024_6324,2024 Grand Prix of St. Petersburg,Lap,1.8,5.0,21,0.8,01:05.1939,99.396,16,official,source_indy_nxt_2024_6324_top_section_times_pdf
+session_indy_nxt_2024_6324,2024 Grand Prix of St. Petersburg,FS-PO,0.130144,16.0,21,0.25,00:03.1308,149.648,24,official,source_indy_nxt_2024_6324_top_section_times_pdf
+session_indy_nxt_2024_6324,2024 Grand Prix of St. Petersburg,Turn 1,0.147348,8.0,21,0.65,00:06.4182,82.648,16,official,source_indy_nxt_2024_6324_top_section_times_pdf
+session_indy_nxt_2024_6324,2024 Grand Prix of St. Petersburg,Turns 2/3,0.244128,9.0,21,0.6,00:07.0302,125.012,16,official,source_indy_nxt_2024_6324_top_section_times_pdf
+session_indy_nxt_2024_6324,2024 Grand Prix of St. Petersburg,Turn 4,0.125568,4.0,21,0.85,00:04.8574,93.063,15,official,source_indy_nxt_2024_6324_top_section_times_pdf
+session_indy_nxt_2024_6324,2024 Grand Prix of St. Petersburg,Turns 5-8,0.168939,11.0,21,0.5,00:08.5400,71.216,17,official,source_indy_nxt_2024_6324_top_section_times_pdf
+session_indy_nxt_2024_6324,2024 Grand Prix of St. Petersburg,Turn 9,0.068182,13.0,21,0.4,00:03.8715,63.401,29,official,source_indy_nxt_2024_6324_top_section_times_pdf
+session_indy_nxt_2024_6324,2024 Grand Prix of St. Petersburg,Turn 9a,0.246211,16.0,21,0.25,00:07.0857,125.091,25,official,source_indy_nxt_2024_6324_top_section_times_pdf
+session_indy_nxt_2024_6324,2024 Grand Prix of St. Petersburg,Turn 10,0.128409,3.0,21,0.9,00:05.1759,89.312,20,official,source_indy_nxt_2024_6324_top_section_times_pdf
+session_indy_nxt_2024_6324,2024 Grand Prix of St. Petersburg,Turns 11/12,0.176894,12.0,21,0.44999999999999996,00:05.3345,119.377,16,official,source_indy_nxt_2024_6324_top_section_times_pdf
+session_indy_nxt_2024_6324,2024 Grand Prix of St. Petersburg,Turns 13/14,0.199431,4.0,21,0.85,00:08.8107,81.486,11,official,source_indy_nxt_2024_6324_top_section_times_pdf
+session_indy_nxt_2024_6324,2024 Grand Prix of St. Petersburg,FS-PI,0.164773,16.0,21,0.25,00:04.4475,133.374,0,official,source_indy_nxt_2024_6324_top_section_times_pdf
+session_indy_nxt_2024_6324,2024 Grand Prix of St. Petersburg,I3 to I4,0.294506,6.0,21,0.75,00:13.4649,78.74,15,official,source_indy_nxt_2024_6324_top_section_times_pdf
+session_indy_nxt_2024_6324,2024 Grand Prix of St. Petersburg,I4 to I5,0.314393,11.0,21,0.5,00:10.9640,103.23,29,official,source_indy_nxt_2024_6324_top_section_times_pdf
+session_indy_nxt_2024_6324,2024 Grand Prix of St. Petersburg,I5 to I6,0.305302,3.0,21,0.9,00:10.5282,104.395,20,official,source_indy_nxt_2024_6324_top_section_times_pdf
+session_indy_nxt_2024_6324,2024 Grand Prix of St. Petersburg,I3T to I3,0.022727,13.0,21,0.4,00:00.5604,145.998,16,official,source_indy_nxt_2024_6324_top_section_times_pdf
+session_indy_nxt_2024_6324,2024 Grand Prix of St. Petersburg,I5T to I5,0.022727,11.0,21,0.5,00:00.5604,145.998,9,official,source_indy_nxt_2024_6324_top_section_times_pdf
+session_indy_nxt_2024_6324,2024 Grand Prix of St. Petersburg,PO to SF,1.60246,14.0,21,0.35,01:23.7679,68.867,0,official,source_indy_nxt_2024_6324_top_section_times_pdf
+session_indy_nxt_2024_6324,2024 Grand Prix of St. Petersburg,PO to I2,0.079924,5.0,21,0.8,00:05.2542,54.761,0,official,source_indy_nxt_2024_6324_top_section_times_pdf
+session_indy_nxt_2024_6324,2024 Grand Prix of St. Petersburg,SF to I4,0.816126,8.0,21,0.65,00:30.1747,97.368,16,official,source_indy_nxt_2024_6324_top_section_times_pdf
+session_indy_nxt_2024_6324,2024 Grand Prix of St. Petersburg,I4 to I6,0.619695,8.0,21,0.65,00:21.5903,103.329,27,official,source_indy_nxt_2024_6324_top_section_times_pdf
+session_indy_nxt_2024_6324,2024 Grand Prix of St. Petersburg,I6 to SF,0.364204,3.0,21,0.9,00:13.2434,99.003,27,official,source_indy_nxt_2024_6324_top_section_times_pdf
+session_indy_nxt_2024_6325,2024 Indianapolis Grand Prix Race 2 R2,Lap,2.439,5.0,21,0.8,01:16.6615,114.535,8,official,source_indy_nxt_2024_6325_top_section_times_pdf
+session_indy_nxt_2024_6325,2024 Indianapolis Grand Prix Race 2 R2,FS - PO,0.200379,6.0,21,0.75,00:04.1494,173.848,2,official,source_indy_nxt_2024_6325_top_section_times_pdf
+session_indy_nxt_2024_6325,2024 Indianapolis Grand Prix Race 2 R2,FS - PO 2,0.053788,10.0,21,0.55,00:01.0971,176.499,2,official,source_indy_nxt_2024_6325_top_section_times_pdf
+session_indy_nxt_2024_6325,2024 Indianapolis Grand Prix Race 2 R2,Turn 1/2,0.25284,1.0,21,1.0,00:09.2311,98.604,24,official,source_indy_nxt_2024_6325_top_section_times_pdf
+session_indy_nxt_2024_6325,2024 Indianapolis Grand Prix Race 2 R2,Turn 3,0.108523,6.0,21,0.75,00:03.5222,110.92,5,official,source_indy_nxt_2024_6325_top_section_times_pdf
+session_indy_nxt_2024_6325,2024 Indianapolis Grand Prix Race 2 R2,Turn 4/5/6,0.232196,7.0,21,0.7,00:07.9461,105.197,7,official,source_indy_nxt_2024_6325_top_section_times_pdf
+session_indy_nxt_2024_6325,2024 Indianapolis Grand Prix Race 2 R2,Backstretch,0.341287,10.0,21,0.55,00:07.6873,159.826,34,official,source_indy_nxt_2024_6325_top_section_times_pdf
+session_indy_nxt_2024_6325,2024 Indianapolis Grand Prix Race 2 R2,Turn 7,0.16572,4.0,21,0.85,00:06.2110,96.054,7,official,source_indy_nxt_2024_6325_top_section_times_pdf
+session_indy_nxt_2024_6325,2024 Indianapolis Grand Prix Race 2 R2,Turn 8/9,0.129167,10.0,22,0.5714285714285714,00:05.1084,91.027,8,official,source_indy_nxt_2024_6325_top_section_times_pdf
+session_indy_nxt_2024_6325,2024 Indianapolis Grand Prix Race 2 R2,Turn 10,0.205114,4.0,21,0.85,00:07.1510,103.26,7,official,source_indy_nxt_2024_6325_top_section_times_pdf
+session_indy_nxt_2024_6325,2024 Indianapolis Grand Prix Race 2 R2,Turn 11,0.195264,1.0,21,1.0,00:04.8433,145.139,33,official,source_indy_nxt_2024_6325_top_section_times_pdf
+session_indy_nxt_2024_6325,2024 Indianapolis Grand Prix Race 2 R2,Turn 12/13,0.152462,1.0,21,1.0,00:07.0302,78.072,9,official,source_indy_nxt_2024_6325_top_section_times_pdf
+session_indy_nxt_2024_6325,2024 Indianapolis Grand Prix Race 2 R2,Turn 14,0.237878,9.0,22,0.6190476190476191,00:07.7131,111.027,8,official,source_indy_nxt_2024_6325_top_section_times_pdf
+session_indy_nxt_2024_6325,2024 Indianapolis Grand Prix Race 2 R2,FS - PI,0.164394,2.0,21,0.95,00:03.7859,156.322,1,official,source_indy_nxt_2024_6325_top_section_times_pdf
+session_indy_nxt_2024_6325,2024 Indianapolis Grand Prix Race 2 R2,SF to I1,0.254167,7.0,21,0.7,00:05.2465,174.402,2,official,source_indy_nxt_2024_6325_top_section_times_pdf
+session_indy_nxt_2024_6325,2024 Indianapolis Grand Prix Race 2 R2,I2 to I3,0.340719,7.0,21,0.7,00:11.5102,106.565,7,official,source_indy_nxt_2024_6325_top_section_times_pdf
+session_indy_nxt_2024_6325,2024 Indianapolis Grand Prix Race 2 R2,I4 to I5,0.294886,4.0,21,0.85,00:11.3385,93.627,7,official,source_indy_nxt_2024_6325_top_section_times_pdf
+session_indy_nxt_2024_6325,2024 Indianapolis Grand Prix Race 2 R2,SFT to SF,0.031155,2.0,21,0.95,00:00.6755,166.037,1,official,source_indy_nxt_2024_6325_top_section_times_pdf
+session_indy_nxt_2024_6325,2024 Indianapolis Grand Prix Race 2 R2,I1T to I1,0.016383,11.0,22,0.5238095238095238,00:00.3320,177.647,2,official,source_indy_nxt_2024_6325_top_section_times_pdf
+session_indy_nxt_2024_6325,2024 Indianapolis Grand Prix Race 2 R2,I4T to I4,0.022727,7.0,21,0.7,00:00.4695,174.265,34,official,source_indy_nxt_2024_6325_top_section_times_pdf
+session_indy_nxt_2024_6325,2024 Indianapolis Grand Prix Race 2 R2,I6T to I6,0.020455,7.0,21,0.7,00:00.5205,141.476,33,official,source_indy_nxt_2024_6325_top_section_times_pdf
+session_indy_nxt_2024_6325,2024 Indianapolis Grand Prix Race 2 R2,PI to SFP,0.194317,1.0,1,,00:20.0356,34.915,4,official,source_indy_nxt_2024_6325_top_section_times_pdf
+session_indy_nxt_2024_6325,2024 Indianapolis Grand Prix Race 2 R2,SFP to PO,0.200284,1.0,4,1.0,00:20.6908,34.847,5,official,source_indy_nxt_2024_6325_top_section_times_pdf
+session_indy_nxt_2024_6325,2024 Indianapolis Grand Prix Race 2 R2,SFPT to SFP,0.012405,1.0,2,1.0,00:01.2776,34.955,4,official,source_indy_nxt_2024_6325_top_section_times_pdf
+session_indy_nxt_2024_6325,2024 Indianapolis Grand Prix Race 2 R2,PIC to PI,0.186364,1.0,1,,00:08.9340,75.096,4,official,source_indy_nxt_2024_6325_top_section_times_pdf
+session_indy_nxt_2024_6325,2024 Indianapolis Grand Prix Race 2 R2,POB to POC,0.220549,1.0,1,,00:10.8792,72.981,5,official,source_indy_nxt_2024_6325_top_section_times_pdf
+session_indy_nxt_2024_6325,2024 Indianapolis Grand Prix Race 2 R2,PI to PO,0.394602,1.0,1,,00:40.7264,34.881,5,official,source_indy_nxt_2024_6325_top_section_times_pdf
+session_indy_nxt_2024_6325,2024 Indianapolis Grand Prix Race 2 R2,PO to SF,2.23911,1.0,21,1.0,01:15.9400,106.147,5,official,source_indy_nxt_2024_6325_top_section_times_pdf
+session_indy_nxt_2024_6325,2024 Indianapolis Grand Prix Race 2 R2,SF to PI,2.2231,1.0,1,,01:14.9185,106.825,4,official,source_indy_nxt_2024_6325_top_section_times_pdf
+session_indy_nxt_2024_6325,2024 Indianapolis Grand Prix Race 2 R2,PO to I2,0.307102,1.0,21,1.0,00:13.9301,79.365,5,official,source_indy_nxt_2024_6325_top_section_times_pdf
+session_indy_nxt_2024_6325,2024 Indianapolis Grand Prix Race 2 R2,I7 to PI,0.338825,1.0,1,,00:16.3152,74.763,4,official,source_indy_nxt_2024_6325_top_section_times_pdf
+session_indy_nxt_2024_6325,2024 Indianapolis Grand Prix Race 2 R2,PO to PI,2.0232,1.0,1,,09:53.7162,12.268,4,official,source_indy_nxt_2024_6325_top_section_times_pdf
+session_indy_nxt_2024_6325,2024 Indianapolis Grand Prix Race 2 R2,SF to I3,0.847727,6.0,21,0.75,00:26.2815,116.12,1,official,source_indy_nxt_2024_6325_top_section_times_pdf
+session_indy_nxt_2024_6325,2024 Indianapolis Grand Prix Race 2 R2,I3 to I6,0.841287,4.0,21,0.85,00:26.4125,114.667,7,official,source_indy_nxt_2024_6325_top_section_times_pdf
+session_indy_nxt_2024_6325,2024 Indianapolis Grand Prix Race 2 R2,I6 to SF,0.749998,1.0,21,1.0,00:23.7073,113.889,7,official,source_indy_nxt_2024_6325_top_section_times_pdf
+session_indy_nxt_2024_6326,2024 Detroit Grand Prix,Lap,1.645,21.0,21,0.0,01:12.3781,81.82,2,official,source_indy_nxt_2024_6326_top_section_times_pdf
+session_indy_nxt_2024_6326,2024 Detroit Grand Prix,SF to I1,0.105493,21.0,21,0.0,00:03.7357,101.661,2,official,source_indy_nxt_2024_6326_top_section_times_pdf
+session_indy_nxt_2024_6326,2024 Detroit Grand Prix,I1 to I2A,0.056061,21.0,21,0.0,00:03.9547,51.033,2,official,source_indy_nxt_2024_6326_top_section_times_pdf
+session_indy_nxt_2024_6326,2024 Detroit Grand Prix,I2A to I2,0.042235,21.0,21,0.0,00:01.9617,77.507,2,official,source_indy_nxt_2024_6326_top_section_times_pdf
+session_indy_nxt_2024_6326,2024 Detroit Grand Prix,I2 to I3,0.14375,20.0,21,0.050000000000000044,00:06.1363,84.334,2,official,source_indy_nxt_2024_6326_top_section_times_pdf
+session_indy_nxt_2024_6326,2024 Detroit Grand Prix,I3 to I4,0.164015,17.0,21,0.19999999999999996,00:04.2374,139.343,2,official,source_indy_nxt_2024_6326_top_section_times_pdf
+session_indy_nxt_2024_6326,2024 Detroit Grand Prix,I4 to I5,0.20322,12.0,21,0.44999999999999996,00:04.4776,163.389,2,official,source_indy_nxt_2024_6326_top_section_times_pdf
+session_indy_nxt_2024_6326,2024 Detroit Grand Prix,I5 to I6,0.138258,21.0,21,0.0,00:03.5257,141.172,1,official,source_indy_nxt_2024_6326_top_section_times_pdf
+session_indy_nxt_2024_6326,2024 Detroit Grand Prix,I6 to I7,0.099811,21.0,21,0.0,00:07.1388,50.333,1,official,source_indy_nxt_2024_6326_top_section_times_pdf
+session_indy_nxt_2024_6326,2024 Detroit Grand Prix,I7 to I8,0.053788,21.0,21,0.0,00:02.5892,74.786,1,official,source_indy_nxt_2024_6326_top_section_times_pdf
+session_indy_nxt_2024_6326,2024 Detroit Grand Prix,I8 to I9,0.050758,21.0,21,0.0,00:03.5162,51.968,1,official,source_indy_nxt_2024_6326_top_section_times_pdf
+session_indy_nxt_2024_6326,2024 Detroit Grand Prix,I9 to I10,0.064015,21.0,21,0.0,00:02.9340,78.546,1,official,source_indy_nxt_2024_6326_top_section_times_pdf
+session_indy_nxt_2024_6326,2024 Detroit Grand Prix,I10 to I11,0.072348,22.0,22,0.0,00:04.6571,55.926,2,official,source_indy_nxt_2024_6326_top_section_times_pdf
+session_indy_nxt_2024_6326,2024 Detroit Grand Prix,I11 to 12,0.090909,21.0,21,0.0,00:05.4810,59.71,1,official,source_indy_nxt_2024_6326_top_section_times_pdf
+session_indy_nxt_2024_6326,2024 Detroit Grand Prix,I12 to I13,0.093371,20.0,21,0.050000000000000044,00:03.1463,106.835,1,official,source_indy_nxt_2024_6326_top_section_times_pdf
+session_indy_nxt_2024_6326,2024 Detroit Grand Prix,Back Str 2,0.066098,21.0,21,0.0,00:02.4407,97.494,1,official,source_indy_nxt_2024_6326_top_section_times_pdf
+session_indy_nxt_2024_6326,2024 Detroit Grand Prix,I14 to I15,0.068939,21.0,21,0.0,00:04.4741,55.47,1,official,source_indy_nxt_2024_6326_top_section_times_pdf
+session_indy_nxt_2024_6326,2024 Detroit Grand Prix,I15 to I16,0.050758,21.0,21,0.0,00:03.7460,48.78,0,official,source_indy_nxt_2024_6326_top_section_times_pdf
+session_indy_nxt_2024_6326,2024 Detroit Grand Prix,I16 to SF,0.080682,17.0,21,0.19999999999999996,00:03.0779,94.368,1,official,source_indy_nxt_2024_6326_top_section_times_pdf
+session_indy_nxt_2024_6326,2024 Detroit Grand Prix,SF to SFT,0.022917,6.0,21,0.75,00:00.6858,120.299,2,official,source_indy_nxt_2024_6326_top_section_times_pdf
+session_indy_nxt_2024_6326,2024 Detroit Grand Prix,I5T to I5,0.026515,12.0,23,0.5,00:00.5606,170.271,2,official,source_indy_nxt_2024_6326_top_section_times_pdf
+session_indy_nxt_2024_6326,2024 Detroit Grand Prix,I13T to I13,0.011458,24.0,24,0.0,00:00.3339,123.536,1,official,source_indy_nxt_2024_6326_top_section_times_pdf
+session_indy_nxt_2024_6326,2024 Detroit Grand Prix,SFP to PO,0.026705,14.0,18,0.23529411764705888,00:03.7545,25.606,0,official,source_indy_nxt_2024_6326_top_section_times_pdf
+session_indy_nxt_2024_6326,2024 Detroit Grand Prix,PO to POC,0.143182,9.0,21,0.6,00:08.6055,59.898,0,official,source_indy_nxt_2024_6326_top_section_times_pdf
+session_indy_nxt_2024_6326,2024 Detroit Grand Prix,PO to SF,1.62481,7.0,21,0.7,01:40.4473,58.233,0,official,source_indy_nxt_2024_6326_top_section_times_pdf
+session_indy_nxt_2024_6326,2024 Detroit Grand Prix,PO to I1,0.085795,9.0,21,0.6,00:10.3547,29.828,0,official,source_indy_nxt_2024_6326_top_section_times_pdf
+session_indy_nxt_2024_6326,2024 Detroit Grand Prix,SF to I4,0.511553,21.0,21,0.0,00:20.0258,91.961,2,official,source_indy_nxt_2024_6326_top_section_times_pdf
+session_indy_nxt_2024_6326,2024 Detroit Grand Prix,I4 to I10,0.609848,21.0,21,0.0,00:24.3143,90.295,1,official,source_indy_nxt_2024_6326_top_section_times_pdf
+session_indy_nxt_2024_6326,2024 Detroit Grand Prix,I10 to SF,0.523106,21.0,21,0.0,00:27.2271,69.166,1,official,source_indy_nxt_2024_6326_top_section_times_pdf
+session_indy_nxt_2024_6327,2024 Grand Prix of Monterey Race 2 R2,Lap,2.238,7.0,20,0.6842105263157895,01:14.6641,107.907,29,official,source_indy_nxt_2024_6327_top_section_times_pdf
+session_indy_nxt_2024_6327,2024 Grand Prix of Monterey Race 2 R2,Turn 1 Entry,0.098295,12.0,20,0.42105263157894735,00:02.3935,147.843,18,official,source_indy_nxt_2024_6327_top_section_times_pdf
+session_indy_nxt_2024_6327,2024 Grand Prix of Monterey Race 2 R2,Turn 1 Exit,0.128598,3.0,20,0.8947368421052632,00:03.1158,148.582,27,official,source_indy_nxt_2024_6327_top_section_times_pdf
+session_indy_nxt_2024_6327,2024 Grand Prix of Monterey Race 2 R2,Turn 2,0.196022,4.0,20,0.8421052631578947,00:08.5973,82.081,12,official,source_indy_nxt_2024_6327_top_section_times_pdf
+session_indy_nxt_2024_6327,2024 Grand Prix of Monterey Race 2 R2,Turn 3,0.15928,2.0,20,0.9473684210526316,00:05.9012,97.168,13,official,source_indy_nxt_2024_6327_top_section_times_pdf
+session_indy_nxt_2024_6327,2024 Grand Prix of Monterey Race 2 R2,Turn 4,0.231628,3.0,20,0.8947368421052632,00:06.6661,125.09,28,official,source_indy_nxt_2024_6327_top_section_times_pdf
+session_indy_nxt_2024_6327,2024 Grand Prix of Monterey Race 2 R2,Turn 4A,0.079924,2.0,20,0.9473684210526316,00:02.0071,143.354,27,official,source_indy_nxt_2024_6327_top_section_times_pdf
+session_indy_nxt_2024_6327,2024 Grand Prix of Monterey Race 2 R2,Turn 5,0.155492,4.0,20,0.8421052631578947,00:05.6033,99.9,11,official,source_indy_nxt_2024_6327_top_section_times_pdf
+session_indy_nxt_2024_6327,2024 Grand Prix of Monterey Race 2 R2,Turn 5A,0.09697,11.0,20,0.4736842105263158,00:02.6369,132.387,11,official,source_indy_nxt_2024_6327_top_section_times_pdf
+session_indy_nxt_2024_6327,2024 Grand Prix of Monterey Race 2 R2,Turn 6,0.232007,15.0,20,0.26315789473684215,00:06.7591,123.57,30,official,source_indy_nxt_2024_6327_top_section_times_pdf
+session_indy_nxt_2024_6327,2024 Grand Prix of Monterey Race 2 R2,Turn 7,0.075568,13.0,20,0.368421052631579,00:02.0150,135.01,27,official,source_indy_nxt_2024_6327_top_section_times_pdf
+session_indy_nxt_2024_6327,2024 Grand Prix of Monterey Race 2 R2,Turn 7A,0.041856,16.0,20,0.21052631578947367,00:01.7378,86.708,13,official,source_indy_nxt_2024_6327_top_section_times_pdf
+session_indy_nxt_2024_6327,2024 Grand Prix of Monterey Race 2 R2,Corkscrew,0.137121,12.0,20,0.42105263157894735,00:06.0443,81.67,7,official,source_indy_nxt_2024_6327_top_section_times_pdf
+session_indy_nxt_2024_6327,2024 Grand Prix of Monterey Race 2 R2,Turn 9,0.150379,11.0,20,0.4736842105263158,00:04.2809,126.46,23,official,source_indy_nxt_2024_6327_top_section_times_pdf
+session_indy_nxt_2024_6327,2024 Grand Prix of Monterey Race 2 R2,Turn 10,0.213824,5.0,20,0.7894736842105263,00:06.7335,114.319,7,official,source_indy_nxt_2024_6327_top_section_times_pdf
+session_indy_nxt_2024_6327,2024 Grand Prix of Monterey Race 2 R2,Turn 11,0.077841,5.0,20,0.7894736842105263,00:04.4771,62.591,26,official,source_indy_nxt_2024_6327_top_section_times_pdf
+session_indy_nxt_2024_6327,2024 Grand Prix of Monterey Race 2 R2,FS - PI,0.163258,4.0,21,0.85,00:04.9441,118.875,31,official,source_indy_nxt_2024_6327_top_section_times_pdf
+session_indy_nxt_2024_6327,2024 Grand Prix of Monterey Race 2 R2,I4 to I5,0.311552,3.0,20,0.8947368421052632,00:08.6904,129.06,28,official,source_indy_nxt_2024_6327_top_section_times_pdf
+session_indy_nxt_2024_6327,2024 Grand Prix of Monterey Race 2 R2,I5 to I6,0.252461,5.0,20,0.7894736842105263,00:08.2402,110.296,11,official,source_indy_nxt_2024_6327_top_section_times_pdf
+session_indy_nxt_2024_6327,2024 Grand Prix of Monterey Race 2 R2,I8 to I9,0.178977,12.0,20,0.42105263157894735,00:07.8375,82.21,12,official,source_indy_nxt_2024_6327_top_section_times_pdf
+session_indy_nxt_2024_6327,2024 Grand Prix of Monterey Race 2 R2,SF to SFT,0.025568,9.0,22,0.6190476190476191,00:00.6336,145.273,19,official,source_indy_nxt_2024_6327_top_section_times_pdf
+session_indy_nxt_2024_6327,2024 Grand Prix of Monterey Race 2 R2,I1T to I1,0.017803,11.0,20,0.4736842105263158,00:00.4209,152.271,18,official,source_indy_nxt_2024_6327_top_section_times_pdf
+session_indy_nxt_2024_6327,2024 Grand Prix of Monterey Race 2 R2,I10 to I10T,0.022727,9.0,20,0.5789473684210527,00:00.6340,129.049,23,official,source_indy_nxt_2024_6327_top_section_times_pdf
+session_indy_nxt_2024_6327,2024 Grand Prix of Monterey Race 2 R2,I11T to I11,0.018939,3.0,20,0.8947368421052632,00:00.6937,98.285,27,official,source_indy_nxt_2024_6327_top_section_times_pdf
+session_indy_nxt_2024_6327,2024 Grand Prix of Monterey Race 2 R2,Start/Finish Backup to Start/Finish,0.013447,10.0,20,0.5263157894736843,00:00.3442,140.643,18,official,source_indy_nxt_2024_6327_top_section_times_pdf
+session_indy_nxt_2024_6327,2024 Grand Prix of Monterey Race 2 R2,SFP to PO,0.025758,13.0,20,0.368421052631579,00:02.8629,32.39,0,official,source_indy_nxt_2024_6327_top_section_times_pdf
+session_indy_nxt_2024_6327,2024 Grand Prix of Monterey Race 2 R2,PO to SF,2.21249,17.0,20,0.1578947368421053,01:47.3323,74.208,0,official,source_indy_nxt_2024_6327_top_section_times_pdf
+session_indy_nxt_2024_6327,2024 Grand Prix of Monterey Race 2 R2,PO to I3,0.397347,5.0,20,0.7894736842105263,00:21.2963,67.169,0,official,source_indy_nxt_2024_6327_top_section_times_pdf
+session_indy_nxt_2024_6327,2024 Grand Prix of Monterey Race 2 R2,SF to I5,0.813823,2.0,20,0.9473684210526316,00:26.8289,109.202,28,official,source_indy_nxt_2024_6327_top_section_times_pdf
+session_indy_nxt_2024_6327,2024 Grand Prix of Monterey Race 2 R2,I5 to I11,0.818937,13.0,20,0.368421052631579,00:27.0247,109.092,27,official,source_indy_nxt_2024_6327_top_section_times_pdf
+session_indy_nxt_2024_6327,2024 Grand Prix of Monterey Race 2 R2,I11 to SF,0.605301,8.0,20,0.631578947368421,00:20.5872,105.847,28,official,source_indy_nxt_2024_6327_top_section_times_pdf
+session_indy_nxt_2025_6442,2025 Grand Prix of Monterey Race 1 R1,Lap,2.238,11.0,17,0.375,01:15.6867,106.449,10,official,source_indy_nxt_2025_6442_top_section_times_pdf
+session_indy_nxt_2025_6442,2025 Grand Prix of Monterey Race 1 R1,Turn 1 Entry,0.098295,2.0,19,0.9444444444444444,00:02.3730,149.12,31,official,source_indy_nxt_2025_6442_top_section_times_pdf
+session_indy_nxt_2025_6442,2025 Grand Prix of Monterey Race 1 R1,Turn 1 Exit,0.128598,2.0,19,0.9444444444444444,00:03.1425,147.32,27,official,source_indy_nxt_2025_6442_top_section_times_pdf
+session_indy_nxt_2025_6442,2025 Grand Prix of Monterey Race 1 R1,Turn 2,0.196022,13.0,19,0.33333333333333337,00:08.8945,79.339,11,official,source_indy_nxt_2025_6442_top_section_times_pdf
+session_indy_nxt_2025_6442,2025 Grand Prix of Monterey Race 1 R1,Turn 3,0.15928,2.0,20,0.9473684210526316,00:06.0226,95.209,10,official,source_indy_nxt_2025_6442_top_section_times_pdf
+session_indy_nxt_2025_6442,2025 Grand Prix of Monterey Race 1 R1,Turn 4,0.231628,7.0,19,0.6666666666666667,00:06.7581,123.387,9,official,source_indy_nxt_2025_6442_top_section_times_pdf
+session_indy_nxt_2025_6442,2025 Grand Prix of Monterey Race 1 R1,Turn 4A,0.079924,2.0,19,0.9444444444444444,00:02.0222,142.284,15,official,source_indy_nxt_2025_6442_top_section_times_pdf
+session_indy_nxt_2025_6442,2025 Grand Prix of Monterey Race 1 R1,Turn 5,0.155492,6.0,19,0.7222222222222222,00:05.7413,97.499,9,official,source_indy_nxt_2025_6442_top_section_times_pdf
+session_indy_nxt_2025_6442,2025 Grand Prix of Monterey Race 1 R1,Turn 5A,0.09697,8.0,19,0.6111111111111112,00:02.6272,132.876,24,official,source_indy_nxt_2025_6442_top_section_times_pdf
+session_indy_nxt_2025_6442,2025 Grand Prix of Monterey Race 1 R1,Turn 6,0.232007,13.0,19,0.33333333333333337,00:06.7329,124.051,22,official,source_indy_nxt_2025_6442_top_section_times_pdf
+session_indy_nxt_2025_6442,2025 Grand Prix of Monterey Race 1 R1,Turn 7,0.075568,3.0,19,0.8888888888888888,00:02.0048,135.697,27,official,source_indy_nxt_2025_6442_top_section_times_pdf
+session_indy_nxt_2025_6442,2025 Grand Prix of Monterey Race 1 R1,Turn 7A,0.041856,2.0,19,0.9444444444444444,00:01.7101,88.113,15,official,source_indy_nxt_2025_6442_top_section_times_pdf
+session_indy_nxt_2025_6442,2025 Grand Prix of Monterey Race 1 R1,Corkscrew,0.137121,15.0,19,0.2222222222222222,00:06.1308,80.517,7,official,source_indy_nxt_2025_6442_top_section_times_pdf
+session_indy_nxt_2025_6442,2025 Grand Prix of Monterey Race 1 R1,Turn 9,0.150379,11.0,19,0.4444444444444444,00:04.3088,125.642,13,official,source_indy_nxt_2025_6442_top_section_times_pdf
+session_indy_nxt_2025_6442,2025 Grand Prix of Monterey Race 1 R1,Turn 10,0.213824,12.0,19,0.38888888888888884,00:06.8476,112.414,20,official,source_indy_nxt_2025_6442_top_section_times_pdf
+session_indy_nxt_2025_6442,2025 Grand Prix of Monterey Race 1 R1,Turn 11,0.077841,8.0,19,0.6111111111111112,00:04.5318,61.836,9,official,source_indy_nxt_2025_6442_top_section_times_pdf
+session_indy_nxt_2025_6442,2025 Grand Prix of Monterey Race 1 R1,FS - PI,0.163258,5.0,19,0.7777777777777778,00:04.9686,118.289,30,official,source_indy_nxt_2025_6442_top_section_times_pdf
+session_indy_nxt_2025_6442,2025 Grand Prix of Monterey Race 1 R1,I4 to I5,0.311552,5.0,19,0.7777777777777778,00:08.8083,127.333,9,official,source_indy_nxt_2025_6442_top_section_times_pdf
+session_indy_nxt_2025_6442,2025 Grand Prix of Monterey Race 1 R1,I5 to I6,0.252461,8.0,19,0.6111111111111112,00:08.3940,108.275,9,official,source_indy_nxt_2025_6442_top_section_times_pdf
+session_indy_nxt_2025_6442,2025 Grand Prix of Monterey Race 1 R1,I8 to I9,0.178977,15.0,19,0.2222222222222222,00:07.9499,81.047,18,official,source_indy_nxt_2025_6442_top_section_times_pdf
+session_indy_nxt_2025_6442,2025 Grand Prix of Monterey Race 1 R1,SF to SFT,0.025568,2.0,19,0.9444444444444444,00:00.6303,146.033,31,official,source_indy_nxt_2025_6442_top_section_times_pdf
+session_indy_nxt_2025_6442,2025 Grand Prix of Monterey Race 1 R1,I1T to I1,0.017803,2.0,19,0.9444444444444444,00:00.4180,153.327,31,official,source_indy_nxt_2025_6442_top_section_times_pdf
+session_indy_nxt_2025_6442,2025 Grand Prix of Monterey Race 1 R1,I10 to I10T,0.022727,6.0,20,0.736842105263158,00:00.6365,128.542,13,official,source_indy_nxt_2025_6442_top_section_times_pdf
+session_indy_nxt_2025_6442,2025 Grand Prix of Monterey Race 1 R1,I11T to I11,0.018939,6.0,20,0.736842105263158,00:00.7016,97.178,11,official,source_indy_nxt_2025_6442_top_section_times_pdf
+session_indy_nxt_2025_6442,2025 Grand Prix of Monterey Race 1 R1,Start/Finish Backup to Start/Finish,0.013447,2.0,21,0.95,00:00.3427,141.258,30,official,source_indy_nxt_2025_6442_top_section_times_pdf
+session_indy_nxt_2025_6442,2025 Grand Prix of Monterey Race 1 R1,SFP to PO,0.025758,14.0,19,0.2777777777777778,00:03.4043,27.239,0,official,source_indy_nxt_2025_6442_top_section_times_pdf
+session_indy_nxt_2025_6442,2025 Grand Prix of Monterey Race 1 R1,PO to SF,2.21249,10.0,19,0.5,01:50.4566,72.109,0,official,source_indy_nxt_2025_6442_top_section_times_pdf
+session_indy_nxt_2025_6442,2025 Grand Prix of Monterey Race 1 R1,PO to I3,0.397347,17.0,19,0.11111111111111116,00:27.5722,51.88,0,official,source_indy_nxt_2025_6442_top_section_times_pdf
+session_indy_nxt_2025_6442,2025 Grand Prix of Monterey Race 1 R1,PO to Alt S/F,1.75757,12.0,19,0.38888888888888884,01:29.4335,70.748,0,official,source_indy_nxt_2025_6442_top_section_times_pdf
+session_indy_nxt_2025_6442,2025 Grand Prix of Monterey Race 1 R1,SF to I5,0.813823,8.0,19,0.6111111111111112,00:27.4792,106.617,10,official,source_indy_nxt_2025_6442_top_section_times_pdf
+session_indy_nxt_2025_6442,2025 Grand Prix of Monterey Race 1 R1,I5 to I11,0.818937,14.0,19,0.2777777777777778,00:27.2616,108.144,9,official,source_indy_nxt_2025_6442_top_section_times_pdf
+session_indy_nxt_2025_6442,2025 Grand Prix of Monterey Race 1 R1,I11 to SF,0.605301,11.0,19,0.4444444444444444,00:20.8638,104.443,13,official,source_indy_nxt_2025_6442_top_section_times_pdf
+session_indy_nxt_2025_6442,2025 Grand Prix of Monterey Race 1 R1,Lap,2.238,11.0,17,0.375,01:15.6867,106.449,10,official,source_indy_nxt_2025_6442_top_section_times_pdf
+session_indy_nxt_2025_6443,2025 Indianapolis Grand Prix Race 2 R2,Lap,2.439,10.0,21,0.55,01:16.9704,114.075,34,official,source_indy_nxt_2025_6443_top_section_times_pdf
+session_indy_nxt_2025_6443,2025 Indianapolis Grand Prix Race 2 R2,FS - PO,0.200379,8.0,21,0.65,00:04.2054,171.533,29,official,source_indy_nxt_2025_6443_top_section_times_pdf
+session_indy_nxt_2025_6443,2025 Indianapolis Grand Prix Race 2 R2,FS - PO 2,0.053788,7.0,21,0.7,00:01.1008,175.906,21,official,source_indy_nxt_2025_6443_top_section_times_pdf
+session_indy_nxt_2025_6443,2025 Indianapolis Grand Prix Race 2 R2,Turn 1/2,0.25284,14.0,21,0.35,00:09.3610,97.236,13,official,source_indy_nxt_2025_6443_top_section_times_pdf
+session_indy_nxt_2025_6443,2025 Indianapolis Grand Prix Race 2 R2,Turn 3,0.108523,12.0,21,0.44999999999999996,00:03.5487,110.092,34,official,source_indy_nxt_2025_6443_top_section_times_pdf
+session_indy_nxt_2025_6443,2025 Indianapolis Grand Prix Race 2 R2,Turn 4/5/6,0.232196,14.0,21,0.35,00:07.9754,104.81,33,official,source_indy_nxt_2025_6443_top_section_times_pdf
+session_indy_nxt_2025_6443,2025 Indianapolis Grand Prix Race 2 R2,Backstretch,0.341287,6.0,21,0.75,00:07.7064,159.43,11,official,source_indy_nxt_2025_6443_top_section_times_pdf
+session_indy_nxt_2025_6443,2025 Indianapolis Grand Prix Race 2 R2,Turn 7,0.16572,6.0,21,0.75,00:06.2323,95.726,34,official,source_indy_nxt_2025_6443_top_section_times_pdf
+session_indy_nxt_2025_6443,2025 Indianapolis Grand Prix Race 2 R2,Turn 8/9,0.129167,20.0,21,0.050000000000000044,00:05.1056,91.077,12,official,source_indy_nxt_2025_6443_top_section_times_pdf
+session_indy_nxt_2025_6443,2025 Indianapolis Grand Prix Race 2 R2,Turn 10,0.205114,17.0,21,0.19999999999999996,00:07.1658,103.046,34,official,source_indy_nxt_2025_6443_top_section_times_pdf
+session_indy_nxt_2025_6443,2025 Indianapolis Grand Prix Race 2 R2,Turn 11,0.195264,18.0,21,0.15000000000000002,00:04.6854,150.03,34,official,source_indy_nxt_2025_6443_top_section_times_pdf
+session_indy_nxt_2025_6443,2025 Indianapolis Grand Prix Race 2 R2,Turn 12/13,0.152462,6.0,21,0.75,00:07.3919,74.252,33,official,source_indy_nxt_2025_6443_top_section_times_pdf
+session_indy_nxt_2025_6443,2025 Indianapolis Grand Prix Race 2 R2,Turn 14,0.237878,16.0,21,0.25,00:07.8438,109.177,10,official,source_indy_nxt_2025_6443_top_section_times_pdf
+session_indy_nxt_2025_6443,2025 Indianapolis Grand Prix Race 2 R2,FS - PI,0.164394,15.0,21,0.30000000000000004,00:03.8646,153.138,20,official,source_indy_nxt_2025_6443_top_section_times_pdf
+session_indy_nxt_2025_6443,2025 Indianapolis Grand Prix Race 2 R2,SF to I1,0.254167,8.0,21,0.65,00:05.3064,172.434,29,official,source_indy_nxt_2025_6443_top_section_times_pdf
+session_indy_nxt_2025_6443,2025 Indianapolis Grand Prix Race 2 R2,I2 to I3,0.340719,12.0,21,0.44999999999999996,00:11.5464,106.231,33,official,source_indy_nxt_2025_6443_top_section_times_pdf
+session_indy_nxt_2025_6443,2025 Indianapolis Grand Prix Race 2 R2,I4 to I5,0.294886,17.0,21,0.19999999999999996,00:11.3976,93.142,34,official,source_indy_nxt_2025_6443_top_section_times_pdf
+session_indy_nxt_2025_6443,2025 Indianapolis Grand Prix Race 2 R2,SFT to SF,0.031155,16.0,21,0.25,00:00.6900,162.548,20,official,source_indy_nxt_2025_6443_top_section_times_pdf
+session_indy_nxt_2025_6443,2025 Indianapolis Grand Prix Race 2 R2,I1T to I1,0.016383,8.0,21,0.65,00:00.3320,177.647,6,official,source_indy_nxt_2025_6443_top_section_times_pdf
+session_indy_nxt_2025_6443,2025 Indianapolis Grand Prix Race 2 R2,I4T to I4,0.022727,4.0,22,0.8571428571428572,00:00.4692,174.376,11,official,source_indy_nxt_2025_6443_top_section_times_pdf
+session_indy_nxt_2025_6443,2025 Indianapolis Grand Prix Race 2 R2,I6T to I6,0.020455,3.0,21,0.9,00:00.5155,142.848,6,official,source_indy_nxt_2025_6443_top_section_times_pdf
+session_indy_nxt_2025_6443,2025 Indianapolis Grand Prix Race 2 R2,PO to SF,2.23911,9.0,21,0.6,01:39.0177,81.408,0,official,source_indy_nxt_2025_6443_top_section_times_pdf
+session_indy_nxt_2025_6443,2025 Indianapolis Grand Prix Race 2 R2,PO to I2,0.307102,13.0,21,0.4,00:19.9666,55.371,0,official,source_indy_nxt_2025_6443_top_section_times_pdf
+session_indy_nxt_2025_6443,2025 Indianapolis Grand Prix Race 2 R2,PO to Alt S/F,1.48911,17.0,21,0.19999999999999996,01:09.9935,76.59,0,official,source_indy_nxt_2025_6443_top_section_times_pdf
+session_indy_nxt_2025_6443,2025 Indianapolis Grand Prix Race 2 R2,SF to I3,0.847727,13.0,21,0.4,00:26.4625,115.326,33,official,source_indy_nxt_2025_6443_top_section_times_pdf
+session_indy_nxt_2025_6443,2025 Indianapolis Grand Prix Race 2 R2,I3 to I6,0.841287,13.0,21,0.4,00:26.5175,114.213,34,official,source_indy_nxt_2025_6443_top_section_times_pdf
+session_indy_nxt_2025_6443,2025 Indianapolis Grand Prix Race 2 R2,I6 to SF,0.749998,13.0,21,0.4,00:23.9573,112.7,33,official,source_indy_nxt_2025_6443_top_section_times_pdf
+session_indy_nxt_2025_6443,2025 Indianapolis Grand Prix Race 2 R2,Lap,2.439,10.0,21,0.55,01:16.9704,114.075,34,official,source_indy_nxt_2025_6443_top_section_times_pdf
+session_indy_nxt_2025_6444,2025 Indianapolis Grand Prix Race 1 R1,Lap,2.439,14.0,21,0.35,01:16.7480,114.406,4,official,source_indy_nxt_2025_6444_top_section_times_pdf
+session_indy_nxt_2025_6444,2025 Indianapolis Grand Prix Race 1 R1,FS - PO,0.200379,2.0,21,0.95,00:04.1680,173.072,33,official,source_indy_nxt_2025_6444_top_section_times_pdf
+session_indy_nxt_2025_6444,2025 Indianapolis Grand Prix Race 1 R1,FS - PO 2,0.053788,2.0,21,0.95,00:01.0879,177.991,33,official,source_indy_nxt_2025_6444_top_section_times_pdf
+session_indy_nxt_2025_6444,2025 Indianapolis Grand Prix Race 1 R1,Turn 1/2,0.25284,13.0,21,0.4,00:09.3187,97.677,3,official,source_indy_nxt_2025_6444_top_section_times_pdf
+session_indy_nxt_2025_6444,2025 Indianapolis Grand Prix Race 1 R1,Turn 3,0.108523,16.0,21,0.25,00:03.5288,110.713,20,official,source_indy_nxt_2025_6444_top_section_times_pdf
+session_indy_nxt_2025_6444,2025 Indianapolis Grand Prix Race 1 R1,Turn 4/5/6,0.232196,9.0,21,0.6,00:07.9110,105.664,6,official,source_indy_nxt_2025_6444_top_section_times_pdf
+session_indy_nxt_2025_6444,2025 Indianapolis Grand Prix Race 1 R1,Backstretch,0.341287,1.0,21,1.0,00:07.5767,162.159,32,official,source_indy_nxt_2025_6444_top_section_times_pdf
+session_indy_nxt_2025_6444,2025 Indianapolis Grand Prix Race 1 R1,Turn 7,0.16572,6.0,21,0.75,00:06.1665,96.747,5,official,source_indy_nxt_2025_6444_top_section_times_pdf
+session_indy_nxt_2025_6444,2025 Indianapolis Grand Prix Race 1 R1,Turn 8/9,0.129167,19.0,21,0.09999999999999998,00:05.0764,91.601,24,official,source_indy_nxt_2025_6444_top_section_times_pdf
+session_indy_nxt_2025_6444,2025 Indianapolis Grand Prix Race 1 R1,Turn 10,0.205114,9.0,22,0.6190476190476191,00:07.0765,104.347,6,official,source_indy_nxt_2025_6444_top_section_times_pdf
+session_indy_nxt_2025_6444,2025 Indianapolis Grand Prix Race 1 R1,Turn 11,0.195264,18.0,21,0.15000000000000002,00:04.6487,151.214,24,official,source_indy_nxt_2025_6444_top_section_times_pdf
+session_indy_nxt_2025_6444,2025 Indianapolis Grand Prix Race 1 R1,Turn 12/13,0.152462,8.0,21,0.65,00:07.3764,74.408,8,official,source_indy_nxt_2025_6444_top_section_times_pdf
+session_indy_nxt_2025_6444,2025 Indianapolis Grand Prix Race 1 R1,Turn 14,0.237878,12.0,21,0.44999999999999996,00:07.7787,110.09,5,official,source_indy_nxt_2025_6444_top_section_times_pdf
+session_indy_nxt_2025_6444,2025 Indianapolis Grand Prix Race 1 R1,FS - PI,0.164394,5.0,22,0.8095238095238095,00:03.8153,155.117,32,official,source_indy_nxt_2025_6444_top_section_times_pdf
+session_indy_nxt_2025_6444,2025 Indianapolis Grand Prix Race 1 R1,SF to I1,0.254167,2.0,21,0.95,00:05.2559,174.09,33,official,source_indy_nxt_2025_6444_top_section_times_pdf
+session_indy_nxt_2025_6444,2025 Indianapolis Grand Prix Race 1 R1,I2 to I3,0.340719,14.0,21,0.35,00:11.4930,106.725,7,official,source_indy_nxt_2025_6444_top_section_times_pdf
+session_indy_nxt_2025_6444,2025 Indianapolis Grand Prix Race 1 R1,I4 to I5,0.294886,13.0,21,0.4,00:11.2636,94.25,7,official,source_indy_nxt_2025_6444_top_section_times_pdf
+session_indy_nxt_2025_6444,2025 Indianapolis Grand Prix Race 1 R1,SFT to SF,0.031155,4.0,22,0.8571428571428572,00:00.6822,164.406,32,official,source_indy_nxt_2025_6444_top_section_times_pdf
+session_indy_nxt_2025_6444,2025 Indianapolis Grand Prix Race 1 R1,I1T to I1,0.016383,1.0,21,1.0,00:00.3274,180.143,33,official,source_indy_nxt_2025_6444_top_section_times_pdf
+session_indy_nxt_2025_6444,2025 Indianapolis Grand Prix Race 1 R1,I4T to I4,0.022727,1.0,21,1.0,00:00.4620,177.094,32,official,source_indy_nxt_2025_6444_top_section_times_pdf
+session_indy_nxt_2025_6444,2025 Indianapolis Grand Prix Race 1 R1,I6T to I6,0.020455,8.0,21,0.65,00:00.5149,143.014,33,official,source_indy_nxt_2025_6444_top_section_times_pdf
+session_indy_nxt_2025_6444,2025 Indianapolis Grand Prix Race 1 R1,PO to SF,2.23911,7.0,21,0.7,01:42.8193,78.398,0,official,source_indy_nxt_2025_6444_top_section_times_pdf
+session_indy_nxt_2025_6444,2025 Indianapolis Grand Prix Race 1 R1,PO to I2,0.307102,8.0,21,0.65,00:19.9733,55.352,0,official,source_indy_nxt_2025_6444_top_section_times_pdf
+session_indy_nxt_2025_6444,2025 Indianapolis Grand Prix Race 1 R1,PO to Alt S/F,1.48911,6.0,21,0.75,01:12.6963,73.742,0,official,source_indy_nxt_2025_6444_top_section_times_pdf
+session_indy_nxt_2025_6444,2025 Indianapolis Grand Prix Race 1 R1,SF to I3,0.847727,8.0,21,0.65,00:26.2580,116.224,3,official,source_indy_nxt_2025_6444_top_section_times_pdf
+session_indy_nxt_2025_6444,2025 Indianapolis Grand Prix Race 1 R1,I3 to I6,0.841287,14.0,21,0.35,00:26.3657,114.87,25,official,source_indy_nxt_2025_6444_top_section_times_pdf
+session_indy_nxt_2025_6444,2025 Indianapolis Grand Prix Race 1 R1,I6 to SF,0.749998,17.0,21,0.19999999999999996,00:23.8924,113.006,24,official,source_indy_nxt_2025_6444_top_section_times_pdf
+session_indy_nxt_2025_6444,2025 Indianapolis Grand Prix Race 1 R1,Lap,2.439,14.0,21,0.35,01:16.7480,114.406,4,official,source_indy_nxt_2025_6444_top_section_times_pdf
+session_indy_nxt_2025_6445,2025 Grand Prix of Alabama,Lap,2.3,15.0,20,0.26315789473684215,01:13.8441,112.128,27,official,source_indy_nxt_2025_6445_top_section_times_pdf
+session_indy_nxt_2025_6445,2025 Grand Prix of Alabama,FS-PO,0.08447,2.0,20,0.9473684210526316,00:01.9920,152.657,33,official,source_indy_nxt_2025_6445_top_section_times_pdf
+session_indy_nxt_2025_6445,2025 Grand Prix of Alabama,Turns 1-3,0.288257,9.0,20,0.5789473684210527,00:10.5245,98.601,9,official,source_indy_nxt_2025_6445_top_section_times_pdf
+session_indy_nxt_2025_6445,2025 Grand Prix of Alabama,Turn 4,0.266666,4.0,20,0.8421052631578947,00:07.1458,134.344,27,official,source_indy_nxt_2025_6445_top_section_times_pdf
+session_indy_nxt_2025_6445,2025 Grand Prix of Alabama,Turns 5-6,0.111174,1.0,21,1.0,00:05.7800,69.243,18,official,source_indy_nxt_2025_6445_top_section_times_pdf
+session_indy_nxt_2025_6445,2025 Grand Prix of Alabama,Turn 7,0.288257,5.0,20,0.7894736842105263,00:07.9818,130.011,27,official,source_indy_nxt_2025_6445_top_section_times_pdf
+session_indy_nxt_2025_6445,2025 Grand Prix of Alabama,Turns 8-9,0.180491,17.0,20,0.1578947368421053,00:07.8157,83.136,19,official,source_indy_nxt_2025_6445_top_section_times_pdf
+session_indy_nxt_2025_6445,2025 Grand Prix of Alabama,Turn 10,0.151515,13.0,20,0.368421052631579,00:04.2701,127.738,28,official,source_indy_nxt_2025_6445_top_section_times_pdf
+session_indy_nxt_2025_6445,2025 Grand Prix of Alabama,Turn 11,0.250567,6.0,20,0.736842105263158,00:05.9985,150.378,28,official,source_indy_nxt_2025_6445_top_section_times_pdf
+session_indy_nxt_2025_6445,2025 Grand Prix of Alabama,Turns 12-13,0.198862,10.0,20,0.5263157894736843,00:05.9050,121.237,18,official,source_indy_nxt_2025_6445_top_section_times_pdf
+session_indy_nxt_2025_6445,2025 Grand Prix of Alabama,Turns 14-16,0.167235,6.0,21,0.75,00:05.7074,105.485,25,official,source_indy_nxt_2025_6445_top_section_times_pdf
+session_indy_nxt_2025_6445,2025 Grand Prix of Alabama,Turn 17,0.295832,5.0,21,0.8,00:09.6936,109.866,8,official,source_indy_nxt_2025_6445_top_section_times_pdf
+session_indy_nxt_2025_6445,2025 Grand Prix of Alabama,I2 to I3,0.37784,1.0,20,1.0,00:13.0435,104.284,26,official,source_indy_nxt_2025_6445_top_section_times_pdf
+session_indy_nxt_2025_6445,2025 Grand Prix of Alabama,I4 to I5,0.332006,18.0,20,0.10526315789473684,00:12.1903,98.047,9,official,source_indy_nxt_2025_6445_top_section_times_pdf
+session_indy_nxt_2025_6445,2025 Grand Prix of Alabama,SF to SFT,0.025379,13.0,22,0.4285714285714286,00:00.6126,149.142,27,official,source_indy_nxt_2025_6445_top_section_times_pdf
+session_indy_nxt_2025_6445,2025 Grand Prix of Alabama,I6T to I6,0.022917,15.0,20,0.26315789473684215,00:00.5271,156.519,28,official,source_indy_nxt_2025_6445_top_section_times_pdf
+session_indy_nxt_2025_6445,2025 Grand Prix of Alabama,I7T to I7,0.018939,17.0,20,0.1578947368421053,00:00.5608,121.577,18,official,source_indy_nxt_2025_6445_top_section_times_pdf
+session_indy_nxt_2025_6445,2025 Grand Prix of Alabama,PO to POC,0.098674,13.0,20,0.368421052631579,00:07.2171,49.22,0,official,source_indy_nxt_2025_6445_top_section_times_pdf
+session_indy_nxt_2025_6445,2025 Grand Prix of Alabama,PO to SF,2.19147,15.0,20,0.26315789473684215,01:42.8504,76.706,0,official,source_indy_nxt_2025_6445_top_section_times_pdf
+session_indy_nxt_2025_6445,2025 Grand Prix of Alabama,PO to I2,0.280871,12.0,20,0.42105263157894735,00:16.8127,60.141,0,official,source_indy_nxt_2025_6445_top_section_times_pdf
+session_indy_nxt_2025_6445,2025 Grand Prix of Alabama,PO to Alt S/F,1.7284,17.0,20,0.1578947368421053,01:18.5761,79.187,0,official,source_indy_nxt_2025_6445_top_section_times_pdf
+session_indy_nxt_2025_6445,2025 Grand Prix of Alabama,SF to Turn 7,1.03882,2.0,20,0.9473684210526316,00:33.7036,110.96,27,official,source_indy_nxt_2025_6445_top_section_times_pdf
+session_indy_nxt_2025_6445,2025 Grand Prix of Alabama,Turn 7 to Turn 11,0.582573,18.0,20,0.10526315789473684,00:18.2421,114.968,28,official,source_indy_nxt_2025_6445_top_section_times_pdf
+session_indy_nxt_2025_6445,2025 Grand Prix of Alabama,Turn 11 to SF,0.661929,8.0,20,0.631578947368421,00:21.4281,111.207,24,official,source_indy_nxt_2025_6445_top_section_times_pdf
+session_indy_nxt_2025_6445,2025 Grand Prix of Alabama,Lap,2.3,15.0,20,0.26315789473684215,01:13.8441,112.128,27,official,source_indy_nxt_2025_6445_top_section_times_pdf
+session_indy_nxt_2025_6446,2025 Grand Prix of St. Petersburg,Lap,1.8,15.0,21,0.30000000000000004,01:05.7839,98.504,40,official,source_indy_nxt_2025_6446_top_section_times_pdf
+session_indy_nxt_2025_6446,2025 Grand Prix of St. Petersburg,FS-PO,0.130144,7.0,21,0.7,00:03.0633,152.946,41,official,source_indy_nxt_2025_6446_top_section_times_pdf
+session_indy_nxt_2025_6446,2025 Grand Prix of St. Petersburg,Turn 1,0.147348,14.0,21,0.35,00:06.5503,80.981,39,official,source_indy_nxt_2025_6446_top_section_times_pdf
+session_indy_nxt_2025_6446,2025 Grand Prix of St. Petersburg,Turns 2/3,0.244128,14.0,21,0.35,00:07.0848,124.049,40,official,source_indy_nxt_2025_6446_top_section_times_pdf
+session_indy_nxt_2025_6446,2025 Grand Prix of St. Petersburg,Turn 4,0.125568,12.0,21,0.44999999999999996,00:05.0016,90.38,30,official,source_indy_nxt_2025_6446_top_section_times_pdf
+session_indy_nxt_2025_6446,2025 Grand Prix of St. Petersburg,Turns 5-8,0.168939,2.0,21,0.95,00:08.5706,70.961,34,official,source_indy_nxt_2025_6446_top_section_times_pdf
+session_indy_nxt_2025_6446,2025 Grand Prix of St. Petersburg,Turn 9,0.068182,13.0,21,0.4,00:03.8679,63.46,34,official,source_indy_nxt_2025_6446_top_section_times_pdf
+session_indy_nxt_2025_6446,2025 Grand Prix of St. Petersburg,Turn 9a,0.246211,12.0,21,0.44999999999999996,00:07.0494,125.735,40,official,source_indy_nxt_2025_6446_top_section_times_pdf
+session_indy_nxt_2025_6446,2025 Grand Prix of St. Petersburg,Turn 10,0.128409,15.0,21,0.30000000000000004,00:05.3393,86.579,39,official,source_indy_nxt_2025_6446_top_section_times_pdf
+session_indy_nxt_2025_6446,2025 Grand Prix of St. Petersburg,Turns 11/12,0.176894,14.0,21,0.35,00:05.3314,119.447,38,official,source_indy_nxt_2025_6446_top_section_times_pdf
+session_indy_nxt_2025_6446,2025 Grand Prix of St. Petersburg,Turns 13/14,0.199431,15.0,22,0.33333333333333337,00:08.9101,80.577,31,official,source_indy_nxt_2025_6446_top_section_times_pdf
+session_indy_nxt_2025_6446,2025 Grand Prix of St. Petersburg,FS-PI,0.164773,14.0,21,0.35,00:04.4205,134.189,14,official,source_indy_nxt_2025_6446_top_section_times_pdf
+session_indy_nxt_2025_6446,2025 Grand Prix of St. Petersburg,I3 to I4,0.294506,10.0,21,0.55,00:13.6602,77.614,30,official,source_indy_nxt_2025_6446_top_section_times_pdf
+session_indy_nxt_2025_6446,2025 Grand Prix of St. Petersburg,I4 to I5,0.314393,13.0,21,0.4,00:10.9371,103.484,40,official,source_indy_nxt_2025_6446_top_section_times_pdf
+session_indy_nxt_2025_6446,2025 Grand Prix of St. Petersburg,I5 to I6,0.305302,17.0,21,0.19999999999999996,00:10.7630,102.117,34,official,source_indy_nxt_2025_6446_top_section_times_pdf
+session_indy_nxt_2025_6446,2025 Grand Prix of St. Petersburg,I3T to I3,0.022727,7.0,22,0.7142857142857143,00:00.5585,146.495,38,official,source_indy_nxt_2025_6446_top_section_times_pdf
+session_indy_nxt_2025_6446,2025 Grand Prix of St. Petersburg,I5T to I5,0.022727,16.0,23,0.31818181818181823,00:00.5605,145.972,39,official,source_indy_nxt_2025_6446_top_section_times_pdf
+session_indy_nxt_2025_6446,2025 Grand Prix of St. Petersburg,SFP to PO,0.130587,3.0,7,0.6666666666666667,00:14.5907,32.22,0,official,source_indy_nxt_2025_6446_top_section_times_pdf
+session_indy_nxt_2025_6446,2025 Grand Prix of St. Petersburg,PO to SF,1.60246,17.0,21,0.19999999999999996,01:27.8051,65.701,0,official,source_indy_nxt_2025_6446_top_section_times_pdf
+session_indy_nxt_2025_6446,2025 Grand Prix of St. Petersburg,PO to I2,0.079924,21.0,21,0.0,00:07.3632,39.076,0,official,source_indy_nxt_2025_6446_top_section_times_pdf
+session_indy_nxt_2025_6446,2025 Grand Prix of St. Petersburg,PO to Alt S/F,1.23826,17.0,21,0.19999999999999996,01:10.3257,63.387,0,official,source_indy_nxt_2025_6446_top_section_times_pdf
+session_indy_nxt_2025_6446,2025 Grand Prix of St. Petersburg,SF to I4,0.816126,13.0,21,0.4,00:30.5339,96.223,40,official,source_indy_nxt_2025_6446_top_section_times_pdf
+session_indy_nxt_2025_6446,2025 Grand Prix of St. Petersburg,I4 to I6,0.619695,17.0,21,0.19999999999999996,00:21.7825,102.417,40,official,source_indy_nxt_2025_6446_top_section_times_pdf
+session_indy_nxt_2025_6446,2025 Grand Prix of St. Petersburg,I6 to SF,0.364204,12.0,21,0.44999999999999996,00:13.3399,98.287,38,official,source_indy_nxt_2025_6446_top_section_times_pdf
+session_indy_nxt_2025_6447,2025 Music City Grand Prix,Lap,1.33,5.0,18,0.7647058823529411,00:25.8454,185.255,4,official,source_indy_nxt_2025_6447_top_section_times_pdf
+session_indy_nxt_2025_6447,2025 Music City Grand Prix,Turn 1 Entry,0.157386,7.0,18,0.6470588235294117,00:02.9759,190.393,4,official,source_indy_nxt_2025_6447_top_section_times_pdf
+session_indy_nxt_2025_6447,2025 Music City Grand Prix,Turn 1 Exit,0.180491,7.0,18,0.6470588235294117,00:03.4176,190.124,56,official,source_indy_nxt_2025_6447_top_section_times_pdf
+session_indy_nxt_2025_6447,2025 Music City Grand Prix,Turn 2 Entry,0.188446,1.0,18,1.0,00:03.6902,183.84,3,official,source_indy_nxt_2025_6447_top_section_times_pdf
+session_indy_nxt_2025_6447,2025 Music City Grand Prix,BackStretch Entry,0.136174,1.0,18,1.0,00:02.6844,182.62,3,official,source_indy_nxt_2025_6447_top_section_times_pdf
+session_indy_nxt_2025_6447,2025 Music City Grand Prix,BackStretch Exit,0.125189,1.0,18,1.0,00:02.4120,186.849,58,official,source_indy_nxt_2025_6447_top_section_times_pdf
+session_indy_nxt_2025_6447,2025 Music City Grand Prix,Turn 3,0.200757,6.0,18,0.7058823529411764,00:03.8610,187.186,26,official,source_indy_nxt_2025_6447_top_section_times_pdf
+session_indy_nxt_2025_6447,2025 Music City Grand Prix,Turn 4 Entry,0.183711,9.0,18,0.5294117647058824,00:03.6701,180.202,13,official,source_indy_nxt_2025_6447_top_section_times_pdf
+session_indy_nxt_2025_6447,2025 Music City Grand Prix,Turn 4 Exit,0.152841,8.0,18,0.5882352941176471,00:02.9553,186.183,13,official,source_indy_nxt_2025_6447_top_section_times_pdf
+session_indy_nxt_2025_6447,2025 Music City Grand Prix,T1 to T2,0.368938,1.0,18,1.0,00:07.1120,186.752,3,official,source_indy_nxt_2025_6447_top_section_times_pdf
+session_indy_nxt_2025_6447,2025 Music City Grand Prix,T2 to T3,0.261362,1.0,18,1.0,00:05.1053,184.299,58,official,source_indy_nxt_2025_6447_top_section_times_pdf
+session_indy_nxt_2025_6447,2025 Music City Grand Prix,T3 to T4,0.384469,12.0,18,0.3529411764705882,00:07.5909,182.335,19,official,source_indy_nxt_2025_6447_top_section_times_pdf
+session_indy_nxt_2025_6447,2025 Music City Grand Prix,T2T to T2,0.023295,1.0,19,1.0,00:00.4645,180.543,3,official,source_indy_nxt_2025_6447_top_section_times_pdf
+session_indy_nxt_2025_6447,2025 Music City Grand Prix,T3T to T3,0.022727,4.0,18,0.8235294117647058,00:00.4376,186.968,27,official,source_indy_nxt_2025_6447_top_section_times_pdf
+session_indy_nxt_2025_6447,2025 Music City Grand Prix,PO to SF,1.0964,18.0,18,0.0,01:01.2307,64.462,0,official,source_indy_nxt_2025_6447_top_section_times_pdf
+session_indy_nxt_2025_6447,2025 Music City Grand Prix,PO to BS,0.4339,12.0,18,0.3529411764705882,00:30.4378,51.319,0,official,source_indy_nxt_2025_6447_top_section_times_pdf
+session_indy_nxt_2025_6447,2025 Music City Grand Prix,Lap,1.33,5.0,18,0.7647058823529411,00:25.8454,185.255,4,official,source_indy_nxt_2025_6447_top_section_times_pdf
+session_indy_nxt_2025_6448,2025 INDY NXT by Firestone at the Milwaukee Mile,Lap,1.015,9.0,19,0.5555555555555556,00:25.1987,145.007,3,official,source_indy_nxt_2025_6448_top_section_times_pdf
+session_indy_nxt_2025_6448,2025 INDY NXT by Firestone at the Milwaukee Mile,SF to T1,0.128029,6.0,18,0.7058823529411764,00:02.9006,158.9,7,official,source_indy_nxt_2025_6448_top_section_times_pdf
+session_indy_nxt_2025_6448,2025 INDY NXT by Firestone at the Milwaukee Mile,T1 to SS1,0.126136,8.0,18,0.5882352941176471,00:03.2510,139.677,5,official,source_indy_nxt_2025_6448_top_section_times_pdf
+session_indy_nxt_2025_6448,2025 INDY NXT by Firestone at the Milwaukee Mile,SS1 to T2,0.144885,5.0,18,0.7647058823529411,00:03.2954,158.277,2,official,source_indy_nxt_2025_6448_top_section_times_pdf
+session_indy_nxt_2025_6448,2025 INDY NXT by Firestone at the Milwaukee Mile,T2 to BS,0.097348,7.0,18,0.6470588235294117,00:02.3507,149.084,2,official,source_indy_nxt_2025_6448_top_section_times_pdf
+session_indy_nxt_2025_6448,2025 INDY NXT by Firestone at the Milwaukee Mile,BS to T3,0.07481,2.0,18,0.9411764705882353,00:02.2140,121.642,4,official,source_indy_nxt_2025_6448_top_section_times_pdf
+session_indy_nxt_2025_6448,2025 INDY NXT by Firestone at the Milwaukee Mile,T3 to SS2,0.116098,9.0,18,0.5294117647058824,00:02.8066,148.918,9,official,source_indy_nxt_2025_6448_top_section_times_pdf
+session_indy_nxt_2025_6448,2025 INDY NXT by Firestone at the Milwaukee Mile,SS2 to T4,0.116477,8.0,18,0.5882352941176471,00:03.0572,137.157,5,official,source_indy_nxt_2025_6448_top_section_times_pdf
+session_indy_nxt_2025_6448,2025 INDY NXT by Firestone at the Milwaukee Mile,T4 to FS,0.132386,12.0,19,0.38888888888888884,00:03.2923,144.759,3,official,source_indy_nxt_2025_6448_top_section_times_pdf
+session_indy_nxt_2025_6448,2025 INDY NXT by Firestone at the Milwaukee Mile,FS to SF,0.078787,9.0,19,0.5555555555555556,00:01.8247,155.441,2,official,source_indy_nxt_2025_6448_top_section_times_pdf
+session_indy_nxt_2025_6448,2025 INDY NXT by Firestone at the Milwaukee Mile,T1 to T2,0.27102,9.0,18,0.5294117647058824,00:06.5928,147.991,2,official,source_indy_nxt_2025_6448_top_section_times_pdf
+session_indy_nxt_2025_6448,2025 INDY NXT by Firestone at the Milwaukee Mile,T2 to T3,0.172157,5.0,18,0.7647058823529411,00:04.5673,135.696,2,official,source_indy_nxt_2025_6448_top_section_times_pdf
+session_indy_nxt_2025_6448,2025 INDY NXT by Firestone at the Milwaukee Mile,T3 to T4,0.232574,10.0,18,0.47058823529411764,00:05.8949,142.032,5,official,source_indy_nxt_2025_6448_top_section_times_pdf
+session_indy_nxt_2025_6448,2025 INDY NXT by Firestone at the Milwaukee Mile,T4 to SF,0.211172,12.0,18,0.3529411764705882,00:05.1264,148.295,3,official,source_indy_nxt_2025_6448_top_section_times_pdf
+session_indy_nxt_2025_6448,2025 INDY NXT by Firestone at the Milwaukee Mile,T2T to T2,0.022916,9.0,18,0.5294117647058824,00:00.5807,142.066,2,official,source_indy_nxt_2025_6448_top_section_times_pdf
+session_indy_nxt_2025_6448,2025 INDY NXT by Firestone at the Milwaukee Mile,T3T to T3,0.022727,1.0,18,1.0,00:00.5067,161.471,4,official,source_indy_nxt_2025_6448_top_section_times_pdf
+session_indy_nxt_2025_6448,2025 INDY NXT by Firestone at the Milwaukee Mile,SF to SFT,0.023484,6.0,20,0.736842105263158,00:00.5298,159.574,4,official,source_indy_nxt_2025_6448_top_section_times_pdf
+session_indy_nxt_2025_6448,2025 INDY NXT by Firestone at the Milwaukee Mile,PO to SF,0.848295,13.0,18,0.2941176470588235,00:43.6805,69.914,0,official,source_indy_nxt_2025_6448_top_section_times_pdf
+session_indy_nxt_2025_6448,2025 INDY NXT by Firestone at the Milwaukee Mile,PO to T2,0.232385,8.0,18,0.5882352941176471,00:13.3444,62.692,0,official,source_indy_nxt_2025_6448_top_section_times_pdf
+session_indy_nxt_2025_6448,2025 INDY NXT by Firestone at the Milwaukee Mile,Lap,1.015,9.0,19,0.5555555555555556,00:25.1987,145.007,3,official,source_indy_nxt_2025_6448_top_section_times_pdf
+session_indy_nxt_2025_6449,2025 Grand Prix of Portland,FS-PO,0.064962,20.0,20,0.0,00:01.5157,154.294,0,official,source_indy_nxt_2025_6449_top_section_times_pdf
+session_indy_nxt_2025_6449,2025 Grand Prix of Portland,Turn 1,0.147159,19.0,19,0.0,00:05.9971,88.338,0,official,source_indy_nxt_2025_6449_top_section_times_pdf
+session_indy_nxt_2025_6449,2025 Grand Prix of Portland,Turn 2,0.049621,19.0,19,0.0,00:03.4423,51.894,0,official,source_indy_nxt_2025_6449_top_section_times_pdf
+session_indy_nxt_2025_6449,2025 Grand Prix of Portland,Turn 3,0.173295,19.0,19,0.0,00:07.1708,87.0,0,official,source_indy_nxt_2025_6449_top_section_times_pdf
+session_indy_nxt_2025_6449,2025 Grand Prix of Portland,Turn 4,0.123674,19.0,19,0.0,00:06.2046,71.757,0,official,source_indy_nxt_2025_6449_top_section_times_pdf
+session_indy_nxt_2025_6449,2025 Grand Prix of Portland,Turn 5,0.117045,19.0,19,0.0,00:05.2193,80.732,0,official,source_indy_nxt_2025_6449_top_section_times_pdf
+session_indy_nxt_2025_6449,2025 Grand Prix of Portland,Turn 6,0.176136,19.0,19,0.0,00:09.9364,63.815,0,official,source_indy_nxt_2025_6449_top_section_times_pdf
+session_indy_nxt_2025_6449,2025 Grand Prix of Portland,Turn 7,0.102652,19.0,19,0.0,00:05.6381,65.545,0,official,source_indy_nxt_2025_6449_top_section_times_pdf
+session_indy_nxt_2025_6449,2025 Grand Prix of Portland,Turn 8,0.135417,19.0,19,0.0,00:06.8771,70.888,0,official,source_indy_nxt_2025_6449_top_section_times_pdf
+session_indy_nxt_2025_6449,2025 Grand Prix of Portland,Turn 9,0.278408,19.0,19,0.0,00:11.6979,85.679,0,official,source_indy_nxt_2025_6449_top_section_times_pdf
+session_indy_nxt_2025_6449,2025 Grand Prix of Portland,Turns 10/11,0.197158,19.0,19,0.0,00:07.3641,96.382,0,official,source_indy_nxt_2025_6449_top_section_times_pdf
+session_indy_nxt_2025_6449,2025 Grand Prix of Portland,Turn 12,0.177273,19.0,19,0.0,00:06.7914,93.969,0,official,source_indy_nxt_2025_6449_top_section_times_pdf
+session_indy_nxt_2025_6449,2025 Grand Prix of Portland,FS-PI,0.221211,19.0,19,0.0,00:05.6861,140.054,0,official,source_indy_nxt_2025_6449_top_section_times_pdf
+session_indy_nxt_2025_6449,2025 Grand Prix of Portland,I1 to I2,0.196779,19.0,19,0.0,00:09.4394,75.048,0,official,source_indy_nxt_2025_6449_top_section_times_pdf
+session_indy_nxt_2025_6449,2025 Grand Prix of Portland,I1T to I1,0.022917,20.0,20,0.0,00:00.5327,154.874,0,official,source_indy_nxt_2025_6449_top_section_times_pdf
+session_indy_nxt_2025_6449,2025 Grand Prix of Portland,I9T to I9,0.022727,20.0,20,0.0,00:00.7759,105.448,0,official,source_indy_nxt_2025_6449_top_section_times_pdf
+session_indy_nxt_2025_6449,2025 Grand Prix of Portland,SFP to PO,0.041856,12.0,15,0.2142857142857143,00:05.0613,29.771,0,official,source_indy_nxt_2025_6449_top_section_times_pdf
+session_indy_nxt_2025_6449,2025 Grand Prix of Portland,PO to SF,1.92196,9.0,19,0.5555555555555556,01:34.1734,73.471,0,official,source_indy_nxt_2025_6449_top_section_times_pdf
+session_indy_nxt_2025_6449,2025 Grand Prix of Portland,PO to I2A,0.170076,14.0,19,0.2777777777777778,00:12.6827,48.276,0,official,source_indy_nxt_2025_6449_top_section_times_pdf
+session_indy_nxt_2025_6449,2025 Grand Prix of Portland,PO to Alt S/F,1.32632,18.0,19,0.05555555555555558,01:13.1295,65.292,0,official,source_indy_nxt_2025_6449_top_section_times_pdf
+session_indy_nxt_2025_6449,2025 Grand Prix of Portland,SF to I5,0.675754,19.0,19,0.0,00:30.4790,79.816,0,official,source_indy_nxt_2025_6449_top_section_times_pdf
+session_indy_nxt_2025_6449,2025 Grand Prix of Portland,I5 to I9,0.692612,19.0,19,0.0,00:34.1495,73.014,0,official,source_indy_nxt_2025_6449_top_section_times_pdf
+session_indy_nxt_2025_6449,2025 Grand Prix of Portland,I9 to SF,0.595642,19.0,19,0.0,00:21.0439,101.897,0,official,source_indy_nxt_2025_6449_top_section_times_pdf
+session_indy_nxt_2025_6450,2025 Grand Prix of Monterey Race 2 R2,Turn 1 Entry,0.098295,19.0,19,0.0,00:02.5584,138.314,0,official,source_indy_nxt_2025_6450_top_section_times_pdf
+session_indy_nxt_2025_6450,2025 Grand Prix of Monterey Race 2 R2,Turn 1 Exit,0.128598,19.0,19,0.0,00:03.5784,129.374,0,official,source_indy_nxt_2025_6450_top_section_times_pdf
+session_indy_nxt_2025_6450,2025 Grand Prix of Monterey Race 2 R2,Turn 2,0.196022,19.0,19,0.0,00:10.1617,69.445,0,official,source_indy_nxt_2025_6450_top_section_times_pdf
+session_indy_nxt_2025_6450,2025 Grand Prix of Monterey Race 2 R2,Turn 3,0.15928,19.0,19,0.0,00:06.9209,82.852,0,official,source_indy_nxt_2025_6450_top_section_times_pdf
+session_indy_nxt_2025_6450,2025 Grand Prix of Monterey Race 2 R2,Turn 4,0.231628,19.0,19,0.0,00:10.9930,75.854,0,official,source_indy_nxt_2025_6450_top_section_times_pdf
+session_indy_nxt_2025_6450,2025 Grand Prix of Monterey Race 2 R2,Turn 4A,0.079924,19.0,19,0.0,00:03.0888,93.152,0,official,source_indy_nxt_2025_6450_top_section_times_pdf
+session_indy_nxt_2025_6450,2025 Grand Prix of Monterey Race 2 R2,Turn 5,0.155492,19.0,19,0.0,00:06.8912,81.23,0,official,source_indy_nxt_2025_6450_top_section_times_pdf
+session_indy_nxt_2025_6450,2025 Grand Prix of Monterey Race 2 R2,Turn 5A,0.09697,19.0,19,0.0,00:04.0468,86.264,0,official,source_indy_nxt_2025_6450_top_section_times_pdf
+session_indy_nxt_2025_6450,2025 Grand Prix of Monterey Race 2 R2,Turn 6,0.232007,19.0,19,0.0,00:08.6336,96.741,0,official,source_indy_nxt_2025_6450_top_section_times_pdf
+session_indy_nxt_2025_6450,2025 Grand Prix of Monterey Race 2 R2,Turn 7,0.075568,19.0,19,0.0,00:03.3883,80.289,0,official,source_indy_nxt_2025_6450_top_section_times_pdf
+session_indy_nxt_2025_6450,2025 Grand Prix of Monterey Race 2 R2,Turn 7A,0.041856,19.0,19,0.0,00:02.6890,56.036,0,official,source_indy_nxt_2025_6450_top_section_times_pdf
+session_indy_nxt_2025_6450,2025 Grand Prix of Monterey Race 2 R2,Corkscrew,0.137121,19.0,19,0.0,00:06.8375,72.195,0,official,source_indy_nxt_2025_6450_top_section_times_pdf
+session_indy_nxt_2025_6450,2025 Grand Prix of Monterey Race 2 R2,Turn 9,0.150379,19.0,19,0.0,00:04.7101,114.937,0,official,source_indy_nxt_2025_6450_top_section_times_pdf
+session_indy_nxt_2025_6450,2025 Grand Prix of Monterey Race 2 R2,Turn 10,0.213824,19.0,19,0.0,00:08.6650,88.836,0,official,source_indy_nxt_2025_6450_top_section_times_pdf
+session_indy_nxt_2025_6450,2025 Grand Prix of Monterey Race 2 R2,Turn 11,0.077841,19.0,19,0.0,00:05.1943,53.949,0,official,source_indy_nxt_2025_6450_top_section_times_pdf
+session_indy_nxt_2025_6450,2025 Grand Prix of Monterey Race 2 R2,FS - PI,0.163258,19.0,19,0.0,00:05.7109,102.914,0,official,source_indy_nxt_2025_6450_top_section_times_pdf
+session_indy_nxt_2025_6450,2025 Grand Prix of Monterey Race 2 R2,I4 to I5,0.311552,20.0,20,0.0,00:14.0818,79.648,0,official,source_indy_nxt_2025_6450_top_section_times_pdf
+session_indy_nxt_2025_6450,2025 Grand Prix of Monterey Race 2 R2,I5 to I6,0.252461,19.0,19,0.0,00:11.2931,80.479,0,official,source_indy_nxt_2025_6450_top_section_times_pdf
+session_indy_nxt_2025_6450,2025 Grand Prix of Monterey Race 2 R2,I8 to I9,0.178977,19.0,19,0.0,00:09.5265,67.634,0,official,source_indy_nxt_2025_6450_top_section_times_pdf
+session_indy_nxt_2025_6450,2025 Grand Prix of Monterey Race 2 R2,SF to SFT,0.025568,19.0,19,0.0,00:00.6939,132.649,0,official,source_indy_nxt_2025_6450_top_section_times_pdf
+session_indy_nxt_2025_6450,2025 Grand Prix of Monterey Race 2 R2,I1T to I1,0.017803,19.0,19,0.0,00:00.4441,144.316,0,official,source_indy_nxt_2025_6450_top_section_times_pdf
+session_indy_nxt_2025_6450,2025 Grand Prix of Monterey Race 2 R2,I10 to I10T,0.022727,19.0,19,0.0,00:00.7550,108.367,0,official,source_indy_nxt_2025_6450_top_section_times_pdf
+session_indy_nxt_2025_6450,2025 Grand Prix of Monterey Race 2 R2,I11T to I11,0.018939,19.0,19,0.0,00:01.0432,65.357,0,official,source_indy_nxt_2025_6450_top_section_times_pdf
+session_indy_nxt_2025_6450,2025 Grand Prix of Monterey Race 2 R2,Start/Finish Backup to Start/Finish,0.013447,20.0,20,0.0,00:00.3770,128.406,0,official,source_indy_nxt_2025_6450_top_section_times_pdf
+session_indy_nxt_2025_6450,2025 Grand Prix of Monterey Race 2 R2,SFP to PO,0.025758,14.0,19,0.2777777777777778,00:02.9016,31.958,0,official,source_indy_nxt_2025_6450_top_section_times_pdf
+session_indy_nxt_2025_6450,2025 Grand Prix of Monterey Race 2 R2,PO to SF,2.21249,12.0,19,0.38888888888888884,01:57.4977,67.788,0,official,source_indy_nxt_2025_6450_top_section_times_pdf
+session_indy_nxt_2025_6450,2025 Grand Prix of Monterey Race 2 R2,PO to I3,0.397347,14.0,19,0.2777777777777778,00:27.2508,52.492,0,official,source_indy_nxt_2025_6450_top_section_times_pdf
+session_indy_nxt_2025_6450,2025 Grand Prix of Monterey Race 2 R2,PO to Alt S/F,1.75757,15.0,19,0.2222222222222222,01:37.8900,64.636,0,official,source_indy_nxt_2025_6450_top_section_times_pdf
+session_indy_nxt_2025_6450,2025 Grand Prix of Monterey Race 2 R2,SF to I5,0.813823,19.0,19,0.0,00:42.1486,69.51,0,official,source_indy_nxt_2025_6450_top_section_times_pdf
+session_indy_nxt_2025_6450,2025 Grand Prix of Monterey Race 2 R2,I5 to I11,0.818937,19.0,19,0.0,00:37.9327,77.721,0,official,source_indy_nxt_2025_6450_top_section_times_pdf
+session_indy_nxt_2025_6450,2025 Grand Prix of Monterey Race 2 R2,I11 to SF,0.605301,19.0,19,0.0,00:24.8413,87.72,0,official,source_indy_nxt_2025_6450_top_section_times_pdf
+session_indy_nxt_2025_6451,2025 INDY NXT by Firestone at Iowa Speedway,Lap,0.894,14.0,19,0.2777777777777778,00:19.7624,162.855,46,official,source_indy_nxt_2025_6451_top_section_times_pdf
+session_indy_nxt_2025_6451,2025 INDY NXT by Firestone at Iowa Speedway,SF to T1,0.131628,14.0,19,0.2777777777777778,00:02.8371,167.023,49,official,source_indy_nxt_2025_6451_top_section_times_pdf
+session_indy_nxt_2025_6451,2025 INDY NXT by Firestone at Iowa Speedway,T1 to SS1,0.094601,13.0,20,0.368421052631579,00:02.0133,169.157,19,official,source_indy_nxt_2025_6451_top_section_times_pdf
+session_indy_nxt_2025_6451,2025 INDY NXT by Firestone at Iowa Speedway,SS1 to T2,0.115624,11.0,19,0.4444444444444444,00:02.5521,163.1,19,official,source_indy_nxt_2025_6451_top_section_times_pdf
+session_indy_nxt_2025_6451,2025 INDY NXT by Firestone at Iowa Speedway,T2 to BS,0.105491,10.0,19,0.5,00:02.3577,161.075,48,official,source_indy_nxt_2025_6451_top_section_times_pdf
+session_indy_nxt_2025_6451,2025 INDY NXT by Firestone at Iowa Speedway,BS to T3,0.105682,4.0,19,0.8333333333333334,00:02.2915,166.029,45,official,source_indy_nxt_2025_6451_top_section_times_pdf
+session_indy_nxt_2025_6451,2025 INDY NXT by Firestone at Iowa Speedway,T3 to SS2,0.116856,13.0,19,0.33333333333333337,00:02.5169,167.143,16,official,source_indy_nxt_2025_6451_top_section_times_pdf
+session_indy_nxt_2025_6451,2025 INDY NXT by Firestone at Iowa Speedway,SS2 to T4,0.093465,15.0,19,0.2222222222222222,00:02.1170,158.939,5,official,source_indy_nxt_2025_6451_top_section_times_pdf
+session_indy_nxt_2025_6451,2025 INDY NXT by Firestone at Iowa Speedway,T4 to SF,0.130302,14.0,19,0.2777777777777778,00:02.9127,161.049,6,official,source_indy_nxt_2025_6451_top_section_times_pdf
+session_indy_nxt_2025_6451,2025 INDY NXT by Firestone at Iowa Speedway,T1 to TB,0.066477,12.0,20,0.42105263157894735,00:01.4120,169.488,8,official,source_indy_nxt_2025_6451_top_section_times_pdf
+session_indy_nxt_2025_6451,2025 INDY NXT by Firestone at Iowa Speedway,T1 to T2,0.210225,10.0,19,0.5,00:04.5654,165.771,19,official,source_indy_nxt_2025_6451_top_section_times_pdf
+session_indy_nxt_2025_6451,2025 INDY NXT by Firestone at Iowa Speedway,T2 to T3,0.211173,5.0,19,0.7777777777777778,00:04.6507,163.464,45,official,source_indy_nxt_2025_6451_top_section_times_pdf
+session_indy_nxt_2025_6451,2025 INDY NXT by Firestone at Iowa Speedway,T3 to T4,0.210321,15.0,19,0.2222222222222222,00:04.6458,162.976,5,official,source_indy_nxt_2025_6451_top_section_times_pdf
+session_indy_nxt_2025_6451,2025 INDY NXT by Firestone at Iowa Speedway,PO to SF,0.0,5.0,19,0.7777777777777778,00:32.3118,0.0,0,official,source_indy_nxt_2025_6451_top_section_times_pdf
+session_indy_nxt_2025_6451,2025 INDY NXT by Firestone at Iowa Speedway,PO to BS,0.249241,5.0,19,0.7777777777777778,00:14.0147,64.023,0,official,source_indy_nxt_2025_6451_top_section_times_pdf
+session_indy_nxt_2025_6451,2025 INDY NXT by Firestone at Iowa Speedway,SF to TB,0.198104,16.0,19,0.16666666666666663,00:04.2850,166.435,8,official,source_indy_nxt_2025_6451_top_section_times_pdf
+session_indy_nxt_2025_6451,2025 INDY NXT by Firestone at Iowa Speedway,Lap,0.894,14.0,19,0.2777777777777778,00:19.7624,162.855,46,official,source_indy_nxt_2025_6451_top_section_times_pdf
+session_indy_nxt_2025_6452,2025 Grand Prix at Mid-Ohio,Lap,2.258,13.0,19,0.33333333333333337,01:11.3846,113.873,20,official,source_indy_nxt_2025_6452_top_section_times_pdf
+session_indy_nxt_2025_6452,2025 Grand Prix at Mid-Ohio,FS - PO,0.141667,9.0,19,0.5555555555555556,00:03.7187,137.145,31,official,source_indy_nxt_2025_6452_top_section_times_pdf
+session_indy_nxt_2025_6452,2025 Grand Prix at Mid-Ohio,Turn 1,0.127083,15.0,19,0.2222222222222222,00:03.4684,131.905,19,official,source_indy_nxt_2025_6452_top_section_times_pdf
+session_indy_nxt_2025_6452,2025 Grand Prix at Mid-Ohio,Turn 1A,0.146212,18.0,19,0.05555555555555558,00:03.7974,138.611,31,official,source_indy_nxt_2025_6452_top_section_times_pdf
+session_indy_nxt_2025_6452,2025 Grand Prix at Mid-Ohio,Turn 1B,0.110985,8.0,20,0.631578947368421,00:02.7080,147.543,31,official,source_indy_nxt_2025_6452_top_section_times_pdf
+session_indy_nxt_2025_6452,2025 Grand Prix at Mid-Ohio,Turn 2,0.174242,1.0,19,1.0,00:07.2266,86.8,32,official,source_indy_nxt_2025_6452_top_section_times_pdf
+session_indy_nxt_2025_6452,2025 Grand Prix at Mid-Ohio,Turn 3,0.266666,2.0,19,0.9444444444444444,00:06.5977,145.505,31,official,source_indy_nxt_2025_6452_top_section_times_pdf
+session_indy_nxt_2025_6452,2025 Grand Prix at Mid-Ohio,Back Stretch,0.206817,11.0,19,0.4444444444444444,00:04.5886,162.259,31,official,source_indy_nxt_2025_6452_top_section_times_pdf
+session_indy_nxt_2025_6452,2025 Grand Prix at Mid-Ohio,Turn 4,0.129735,3.0,19,0.8888888888888888,00:04.6946,99.486,19,official,source_indy_nxt_2025_6452_top_section_times_pdf
+session_indy_nxt_2025_6452,2025 Grand Prix at Mid-Ohio,Turn 5,0.105492,2.0,19,0.9444444444444444,00:04.7792,79.463,32,official,source_indy_nxt_2025_6452_top_section_times_pdf
+session_indy_nxt_2025_6452,2025 Grand Prix at Mid-Ohio,Turn 6/7,0.141098,12.0,19,0.38888888888888884,00:05.5147,92.109,26,official,source_indy_nxt_2025_6452_top_section_times_pdf
+session_indy_nxt_2025_6452,2025 Grand Prix at Mid-Ohio,Turn 8,0.060985,13.0,19,0.33333333333333337,00:01.8176,120.789,19,official,source_indy_nxt_2025_6452_top_section_times_pdf
+session_indy_nxt_2025_6452,2025 Grand Prix at Mid-Ohio,Turn 9,0.15322,6.0,19,0.7222222222222222,00:05.5234,99.865,19,official,source_indy_nxt_2025_6452_top_section_times_pdf
+session_indy_nxt_2025_6452,2025 Grand Prix at Mid-Ohio,Turn 10,0.152841,12.0,19,0.38888888888888884,00:04.0904,134.517,26,official,source_indy_nxt_2025_6452_top_section_times_pdf
+session_indy_nxt_2025_6452,2025 Grand Prix at Mid-Ohio,Turn 11,0.132765,16.0,19,0.16666666666666663,00:04.0827,117.068,25,official,source_indy_nxt_2025_6452_top_section_times_pdf
+session_indy_nxt_2025_6452,2025 Grand Prix at Mid-Ohio,Turn 12,0.092424,4.0,20,0.8421052631578947,00:04.0396,82.366,32,official,source_indy_nxt_2025_6452_top_section_times_pdf
+session_indy_nxt_2025_6452,2025 Grand Prix at Mid-Ohio,Turn 12C,0.034848,3.0,19,0.8888888888888888,00:01.3338,94.057,14,official,source_indy_nxt_2025_6452_top_section_times_pdf
+session_indy_nxt_2025_6452,2025 Grand Prix at Mid-Ohio,Turn 13,0.081061,8.0,19,0.6111111111111112,00:02.6491,110.158,26,official,source_indy_nxt_2025_6452_top_section_times_pdf
+session_indy_nxt_2025_6452,2025 Grand Prix at Mid-Ohio,I3 to I3T,0.022348,3.0,19,0.8888888888888888,00:00.4811,167.227,31,official,source_indy_nxt_2025_6452_top_section_times_pdf
+session_indy_nxt_2025_6452,2025 Grand Prix at Mid-Ohio,I10T to I10,0.022917,6.0,19,0.7222222222222222,00:00.6967,118.417,29,official,source_indy_nxt_2025_6452_top_section_times_pdf
+session_indy_nxt_2025_6452,2025 Grand Prix at Mid-Ohio,PI to SFP,0.108522,12.0,17,0.3125,00:19.1340,20.418,3,official,source_indy_nxt_2025_6452_top_section_times_pdf
+session_indy_nxt_2025_6452,2025 Grand Prix at Mid-Ohio,SFP to PO,0.140908,8.0,17,0.5625,37:45.1879,0.224,4,official,source_indy_nxt_2025_6452_top_section_times_pdf
+session_indy_nxt_2025_6452,2025 Grand Prix at Mid-Ohio,PIC to PI,0.019697,11.0,17,0.375,00:02.9857,23.75,3,official,source_indy_nxt_2025_6452_top_section_times_pdf
+session_indy_nxt_2025_6452,2025 Grand Prix at Mid-Ohio,PI to PO,0.24943,16.0,17,0.0625,38:04.3219,0.393,4,official,source_indy_nxt_2025_6452_top_section_times_pdf
+session_indy_nxt_2025_6452,2025 Grand Prix at Mid-Ohio,PO to SF,2.10264,7.0,19,0.6666666666666667,01:31.0745,83.113,4,official,source_indy_nxt_2025_6452_top_section_times_pdf
+session_indy_nxt_2025_6452,2025 Grand Prix at Mid-Ohio,SF to PI,2.13806,12.0,17,0.3125,01:26.7931,88.682,3,official,source_indy_nxt_2025_6452_top_section_times_pdf
+session_indy_nxt_2025_6452,2025 Grand Prix at Mid-Ohio,PO to I1A,0.113258,8.0,19,0.6111111111111112,00:07.9689,51.165,4,official,source_indy_nxt_2025_6452_top_section_times_pdf
+session_indy_nxt_2025_6452,2025 Grand Prix at Mid-Ohio,I12 to PI,0.088257,15.0,17,0.125,00:10.5035,30.249,3,official,source_indy_nxt_2025_6452_top_section_times_pdf
+session_indy_nxt_2025_6452,2025 Grand Prix at Mid-Ohio,PO to PI,1.98257,15.0,17,0.125,09:12.3495,12.922,3,official,source_indy_nxt_2025_6452_top_section_times_pdf
+session_indy_nxt_2025_6452,2025 Grand Prix at Mid-Ohio,PO to Alt S/F,1.60871,4.0,19,0.8333333333333334,01:07.0632,86.357,4,official,source_indy_nxt_2025_6452_top_section_times_pdf
+session_indy_nxt_2025_6452,2025 Grand Prix at Mid-Ohio,Alt S/F to PI,0.373863,16.0,17,0.0625,00:23.5920,57.049,3,official,source_indy_nxt_2025_6452_top_section_times_pdf
+session_indy_nxt_2025_6452,2025 Grand Prix at Mid-Ohio,SF to I3,0.966853,9.0,19,0.5555555555555556,00:27.5804,126.201,31,official,source_indy_nxt_2025_6452_top_section_times_pdf
+session_indy_nxt_2025_6452,2025 Grand Prix at Mid-Ohio,I3 to I10,0.797346,8.0,19,0.6111111111111112,00:27.1389,105.769,19,official,source_indy_nxt_2025_6452_top_section_times_pdf
+session_indy_nxt_2025_6452,2025 Grand Prix at Mid-Ohio,I10 to SF,0.493938,9.0,20,0.5789473684210527,00:16.2776,109.241,26,official,source_indy_nxt_2025_6452_top_section_times_pdf
+session_indy_nxt_2025_6452,2025 Grand Prix at Mid-Ohio,Lap,2.258,13.0,19,0.33333333333333337,01:11.3846,113.873,20,official,source_indy_nxt_2025_6452_top_section_times_pdf
+session_indy_nxt_2025_6453,2025 Grand Prix at Road America,Lap,4.014,13.0,19,0.33333333333333337,01:55.2771,125.354,16,official,source_indy_nxt_2025_6453_top_section_times_pdf
+session_indy_nxt_2025_6453,2025 Grand Prix at Road America,SF to I1B,0.235417,14.0,19,0.2777777777777778,00:05.1514,164.519,18,official,source_indy_nxt_2025_6453_top_section_times_pdf
+session_indy_nxt_2025_6453,2025 Grand Prix at Road America,I1B to I1,0.041098,13.0,19,0.33333333333333337,00:00.8715,169.768,18,official,source_indy_nxt_2025_6453_top_section_times_pdf
+session_indy_nxt_2025_6453,2025 Grand Prix at Road America,I1 to I2,0.221212,11.0,19,0.4444444444444444,00:06.3344,125.72,5,official,source_indy_nxt_2025_6453_top_section_times_pdf
+session_indy_nxt_2025_6453,2025 Grand Prix at Road America,I2 to I3,0.158902,12.0,20,0.42105263157894735,00:04.2427,134.831,11,official,source_indy_nxt_2025_6453_top_section_times_pdf
+session_indy_nxt_2025_6453,2025 Grand Prix at Road America,I3 to I3A,0.257765,18.0,19,0.05555555555555558,00:08.6273,107.56,8,official,source_indy_nxt_2025_6453_top_section_times_pdf
+session_indy_nxt_2025_6453,2025 Grand Prix at Road America,I3A to I4,0.191288,10.0,19,0.5,00:04.4105,156.136,0,official,source_indy_nxt_2025_6453_top_section_times_pdf
+session_indy_nxt_2025_6453,2025 Grand Prix at Road America,I4 to I4A,0.173485,8.0,19,0.6111111111111112,00:03.6563,170.814,0,official,source_indy_nxt_2025_6453_top_section_times_pdf
+session_indy_nxt_2025_6453,2025 Grand Prix at Road America,I4A to I5,0.139583,16.0,19,0.16666666666666663,00:03.9794,126.275,14,official,source_indy_nxt_2025_6453_top_section_times_pdf
+session_indy_nxt_2025_6453,2025 Grand Prix at Road America,I5 to I6,0.139394,11.0,19,0.4444444444444444,00:06.3337,79.23,15,official,source_indy_nxt_2025_6453_top_section_times_pdf
+session_indy_nxt_2025_6453,2025 Grand Prix at Road America,I6 to I7,0.190152,13.0,19,0.33333333333333337,00:07.3832,92.717,14,official,source_indy_nxt_2025_6453_top_section_times_pdf
+session_indy_nxt_2025_6453,2025 Grand Prix at Road America,I7 to I8,0.254167,16.0,19,0.16666666666666663,00:07.2010,127.066,7,official,source_indy_nxt_2025_6453_top_section_times_pdf
+session_indy_nxt_2025_6453,2025 Grand Prix at Road America,I8 to I9,0.14072,17.0,20,0.1578947368421053,00:05.7511,88.086,12,official,source_indy_nxt_2025_6453_top_section_times_pdf
+session_indy_nxt_2025_6453,2025 Grand Prix at Road America,I9 to I10,0.222727,15.0,19,0.2222222222222222,00:06.2899,127.477,13,official,source_indy_nxt_2025_6453_top_section_times_pdf
+session_indy_nxt_2025_6453,2025 Grand Prix at Road America,I10 to I11,0.285227,15.0,19,0.2222222222222222,00:06.8646,149.582,18,official,source_indy_nxt_2025_6453_top_section_times_pdf
+session_indy_nxt_2025_6453,2025 Grand Prix at Road America,I11 to I11B,0.256629,12.0,20,0.42105263157894735,00:05.5307,167.043,19,official,source_indy_nxt_2025_6453_top_section_times_pdf
+session_indy_nxt_2025_6453,2025 Grand Prix at Road America,I11B to I12,0.182765,6.0,19,0.7222222222222222,00:03.7724,174.413,17,official,source_indy_nxt_2025_6453_top_section_times_pdf
+session_indy_nxt_2025_6453,2025 Grand Prix at Road America,I12 to I13,0.281439,17.0,19,0.11111111111111116,00:09.7840,103.555,9,official,source_indy_nxt_2025_6453_top_section_times_pdf
+session_indy_nxt_2025_6453,2025 Grand Prix at Road America,I13 to I13A,0.108523,19.0,19,0.0,00:02.9488,132.489,9,official,source_indy_nxt_2025_6453_top_section_times_pdf
+session_indy_nxt_2025_6453,2025 Grand Prix at Road America,I13A to I14,0.064205,13.0,19,0.33333333333333337,00:01.8095,127.736,18,official,source_indy_nxt_2025_6453_top_section_times_pdf
+session_indy_nxt_2025_6453,2025 Grand Prix at Road America,I14 to I15C,0.201515,7.0,19,0.6666666666666667,00:06.9060,105.047,3,official,source_indy_nxt_2025_6453_top_section_times_pdf
+session_indy_nxt_2025_6453,2025 Grand Prix at Road America,I15C to I15,0.08125,12.0,19,0.38888888888888884,00:02.1119,138.501,15,official,source_indy_nxt_2025_6453_top_section_times_pdf
+session_indy_nxt_2025_6453,2025 Grand Prix at Road America,I15 to SF,0.186364,11.0,19,0.4444444444444444,00:04.4361,151.239,19,official,source_indy_nxt_2025_6453_top_section_times_pdf
+session_indy_nxt_2025_6453,2025 Grand Prix at Road America,SF to I1,0.276515,14.0,19,0.2777777777777778,00:06.0229,165.278,18,official,source_indy_nxt_2025_6453_top_section_times_pdf
+session_indy_nxt_2025_6453,2025 Grand Prix at Road America,I3 to I4,0.449053,19.0,19,0.0,00:13.0869,123.527,8,official,source_indy_nxt_2025_6453_top_section_times_pdf
+session_indy_nxt_2025_6453,2025 Grand Prix at Road America,I4 to I5,0.313068,13.0,19,0.33333333333333337,00:07.6786,146.777,14,official,source_indy_nxt_2025_6453_top_section_times_pdf
+session_indy_nxt_2025_6453,2025 Grand Prix at Road America,I11 to I12,0.439394,11.0,19,0.4444444444444444,00:09.3192,169.738,17,official,source_indy_nxt_2025_6453_top_section_times_pdf
+session_indy_nxt_2025_6453,2025 Grand Prix at Road America,I13 to I14,0.172727,16.0,19,0.16666666666666663,00:04.7599,130.637,18,official,source_indy_nxt_2025_6453_top_section_times_pdf
+session_indy_nxt_2025_6453,2025 Grand Prix at Road America,I14 to I15,0.282765,7.0,19,0.6666666666666667,00:09.0224,112.825,15,official,source_indy_nxt_2025_6453_top_section_times_pdf
+session_indy_nxt_2025_6453,2025 Grand Prix at Road America,SF to SFT,0.022727,11.0,20,0.4736842105263158,00:00.5167,158.346,20,official,source_indy_nxt_2025_6453_top_section_times_pdf
+session_indy_nxt_2025_6453,2025 Grand Prix at Road America,I4AT to I4A,0.022727,9.0,19,0.5555555555555556,00:00.4713,173.599,0,official,source_indy_nxt_2025_6453_top_section_times_pdf
+session_indy_nxt_2025_6453,2025 Grand Prix at Road America,I12T to I12,0.022727,6.0,19,0.7222222222222222,00:00.4747,172.356,6,official,source_indy_nxt_2025_6453_top_section_times_pdf
+session_indy_nxt_2025_6453,2025 Grand Prix at Road America,PO to SF,3.77992,11.0,19,0.4444444444444444,02:54.0610,78.178,0,official,source_indy_nxt_2025_6453_top_section_times_pdf
+session_indy_nxt_2025_6453,2025 Grand Prix at Road America,PO to I1,0.042614,18.0,19,0.05555555555555558,00:04.8839,31.411,0,official,source_indy_nxt_2025_6453_top_section_times_pdf
+session_indy_nxt_2025_6453,2025 Grand Prix at Road America,PO to Alt S/F,3.24659,11.0,19,0.4444444444444444,02:27.1505,79.427,0,official,source_indy_nxt_2025_6453_top_section_times_pdf
+session_indy_nxt_2025_6453,2025 Grand Prix at Road America,SF to I4A,1.27917,14.0,19,0.2777777777777778,00:33.5554,137.236,14,official,source_indy_nxt_2025_6453_top_section_times_pdf
+session_indy_nxt_2025_6453,2025 Grand Prix at Road America,I4A to I11,1.37197,16.0,19,0.16666666666666663,00:44.0529,112.117,13,official,source_indy_nxt_2025_6453_top_section_times_pdf
+session_indy_nxt_2025_6453,2025 Grand Prix at Road America,I11 to SF,1.36269,14.0,19,0.2777777777777778,00:37.5051,130.8,15,official,source_indy_nxt_2025_6453_top_section_times_pdf
+session_indy_nxt_2025_6453,2025 Grand Prix at Road America,Lap,4.014,13.0,19,0.33333333333333337,01:55.2771,125.354,16,official,source_indy_nxt_2025_6453_top_section_times_pdf
+session_indy_nxt_2025_6454,2025 INDY NXT by Firestone at World Wide Technology Raceway,Lap,1.25,15.0,19,0.2222222222222222,00:28.5466,157.637,6,official,source_indy_nxt_2025_6454_top_section_times_pdf
+session_indy_nxt_2025_6454,2025 INDY NXT by Firestone at World Wide Technology Raceway,FS - PO,0.161173,15.0,19,0.2222222222222222,00:03.4041,170.448,21,official,source_indy_nxt_2025_6454_top_section_times_pdf
+session_indy_nxt_2025_6454,2025 INDY NXT by Firestone at World Wide Technology Raceway,Turn 1,0.120455,16.0,19,0.16666666666666663,00:02.8575,151.754,14,official,source_indy_nxt_2025_6454_top_section_times_pdf
+session_indy_nxt_2025_6454,2025 INDY NXT by Firestone at World Wide Technology Raceway,Turn 2,0.144697,14.0,19,0.2777777777777778,00:03.6594,142.348,5,official,source_indy_nxt_2025_6454_top_section_times_pdf
+session_indy_nxt_2025_6454,2025 INDY NXT by Firestone at World Wide Technology Raceway,BS - T2,0.158144,17.0,20,0.1578947368421053,00:03.6963,154.024,71,official,source_indy_nxt_2025_6454_top_section_times_pdf
+session_indy_nxt_2025_6454,2025 INDY NXT by Firestone at World Wide Technology Raceway,BS - T3,0.158333,11.0,19,0.4444444444444444,00:03.4356,165.91,2,official,source_indy_nxt_2025_6454_top_section_times_pdf
+session_indy_nxt_2025_6454,2025 INDY NXT by Firestone at World Wide Technology Raceway,Turn 3,0.183523,12.0,19,0.38888888888888884,00:04.0475,163.232,5,official,source_indy_nxt_2025_6454_top_section_times_pdf
+session_indy_nxt_2025_6454,2025 INDY NXT by Firestone at World Wide Technology Raceway,Turn 4,0.163257,8.0,19,0.6111111111111112,00:03.6968,158.982,4,official,source_indy_nxt_2025_6454_top_section_times_pdf
+session_indy_nxt_2025_6454,2025 INDY NXT by Firestone at World Wide Technology Raceway,FS - PI,0.160417,15.0,19,0.2222222222222222,00:03.5072,164.662,4,official,source_indy_nxt_2025_6454_top_section_times_pdf
+session_indy_nxt_2025_6454,2025 INDY NXT by Firestone at World Wide Technology Raceway,Turns 1/2,0.265151,16.0,19,0.16666666666666663,00:06.5555,145.61,5,official,source_indy_nxt_2025_6454_top_section_times_pdf
+session_indy_nxt_2025_6454,2025 INDY NXT by Firestone at World Wide Technology Raceway,Backstretch,0.316476,14.0,19,0.2777777777777778,00:07.1604,159.113,1,official,source_indy_nxt_2025_6454_top_section_times_pdf
+session_indy_nxt_2025_6454,2025 INDY NXT by Firestone at World Wide Technology Raceway,Turns 3/4,0.346779,12.0,19,0.38888888888888884,00:07.7454,161.18,4,official,source_indy_nxt_2025_6454_top_section_times_pdf
+session_indy_nxt_2025_6454,2025 INDY NXT by Firestone at World Wide Technology Raceway,T1T to T1,0.022727,12.0,19,0.38888888888888884,00:00.4788,170.88,21,official,source_indy_nxt_2025_6454_top_section_times_pdf
+session_indy_nxt_2025_6454,2025 INDY NXT by Firestone at World Wide Technology Raceway,T2T to T2,0.022727,16.0,20,0.21052631578947367,00:00.5606,145.946,71,official,source_indy_nxt_2025_6454_top_section_times_pdf
+session_indy_nxt_2025_6454,2025 INDY NXT by Firestone at World Wide Technology Raceway,T3T to T3,0.022727,9.0,20,0.5789473684210527,00:00.4832,169.324,2,official,source_indy_nxt_2025_6454_top_section_times_pdf
+session_indy_nxt_2025_6454,2025 INDY NXT by Firestone at World Wide Technology Raceway,T4T to T4,0.022727,13.0,19,0.33333333333333337,00:00.5099,160.457,4,official,source_indy_nxt_2025_6454_top_section_times_pdf
+session_indy_nxt_2025_6454,2025 INDY NXT by Firestone at World Wide Technology Raceway,SFP - PO,0.138067,4.0,5,0.25,00:15.6778,31.704,0,official,source_indy_nxt_2025_6454_top_section_times_pdf
+session_indy_nxt_2025_6454,2025 INDY NXT by Firestone at World Wide Technology Raceway,PO - SF,1.06761,5.0,19,0.7777777777777778,00:56.7210,67.76,0,official,source_indy_nxt_2025_6454_top_section_times_pdf
+session_indy_nxt_2025_6454,2025 INDY NXT by Firestone at World Wide Technology Raceway,PO - T2,0.243938,3.0,19,0.8888888888888888,00:12.2534,71.668,0,official,source_indy_nxt_2025_6454_top_section_times_pdf
+session_indy_nxt_2025_6454,2025 INDY NXT by Firestone at World Wide Technology Raceway,Lap,1.25,15.0,19,0.2222222222222222,00:28.5466,157.637,6,official,source_indy_nxt_2025_6454_top_section_times_pdf
+session_indy_nxt_2025_6455,2025 Detroit Grand Prix,Lap,1.645,14.0,18,0.23529411764705888,01:08.1047,86.954,24,official,source_indy_nxt_2025_6455_top_section_times_pdf
+session_indy_nxt_2025_6455,2025 Detroit Grand Prix,SF to I1,0.105493,13.0,20,0.368421052631579,00:03.4807,109.109,22,official,source_indy_nxt_2025_6455_top_section_times_pdf
+session_indy_nxt_2025_6455,2025 Detroit Grand Prix,I1 to I2A,0.056061,13.0,20,0.368421052631579,00:03.5061,57.562,20,official,source_indy_nxt_2025_6455_top_section_times_pdf
+session_indy_nxt_2025_6455,2025 Detroit Grand Prix,I2A to I2,0.042235,16.0,20,0.21052631578947367,00:01.8330,82.949,15,official,source_indy_nxt_2025_6455_top_section_times_pdf
+session_indy_nxt_2025_6455,2025 Detroit Grand Prix,I2 to I3,0.14375,17.0,20,0.1578947368421053,00:06.1042,84.778,12,official,source_indy_nxt_2025_6455_top_section_times_pdf
+session_indy_nxt_2025_6455,2025 Detroit Grand Prix,I3 to I4,0.164015,14.0,20,0.3157894736842105,00:04.2095,140.267,34,official,source_indy_nxt_2025_6455_top_section_times_pdf
+session_indy_nxt_2025_6455,2025 Detroit Grand Prix,I4 to I5,0.20322,12.0,20,0.42105263157894735,00:04.5003,162.565,34,official,source_indy_nxt_2025_6455_top_section_times_pdf
+session_indy_nxt_2025_6455,2025 Detroit Grand Prix,I5 to I6,0.138258,14.0,20,0.3157894736842105,00:03.3065,150.53,34,official,source_indy_nxt_2025_6455_top_section_times_pdf
+session_indy_nxt_2025_6455,2025 Detroit Grand Prix,I6 to I7,0.099811,14.0,20,0.3157894736842105,00:06.4184,55.983,23,official,source_indy_nxt_2025_6455_top_section_times_pdf
+session_indy_nxt_2025_6455,2025 Detroit Grand Prix,I7 to I8,0.053788,13.0,20,0.368421052631579,00:02.3912,80.979,17,official,source_indy_nxt_2025_6455_top_section_times_pdf
+session_indy_nxt_2025_6455,2025 Detroit Grand Prix,I8 to I9,0.050758,14.0,20,0.3157894736842105,00:03.2387,56.42,23,official,source_indy_nxt_2025_6455_top_section_times_pdf
+session_indy_nxt_2025_6455,2025 Detroit Grand Prix,I9 to I10,0.064015,16.0,20,0.21052631578947367,00:02.6917,85.617,19,official,source_indy_nxt_2025_6455_top_section_times_pdf
+session_indy_nxt_2025_6455,2025 Detroit Grand Prix,I10 to I11,0.072348,14.0,20,0.3157894736842105,00:04.4530,58.489,16,official,source_indy_nxt_2025_6455_top_section_times_pdf
+session_indy_nxt_2025_6455,2025 Detroit Grand Prix,I11 to 12,0.090909,15.0,20,0.26315789473684215,00:05.2312,62.562,20,official,source_indy_nxt_2025_6455_top_section_times_pdf
+session_indy_nxt_2025_6455,2025 Detroit Grand Prix,I12 to I13,0.093371,17.0,20,0.1578947368421053,00:03.1165,107.857,35,official,source_indy_nxt_2025_6455_top_section_times_pdf
+session_indy_nxt_2025_6455,2025 Detroit Grand Prix,Back Str 2,0.066098,11.0,20,0.4736842105263158,00:02.1775,109.278,18,official,source_indy_nxt_2025_6455_top_section_times_pdf
+session_indy_nxt_2025_6455,2025 Detroit Grand Prix,I14 to I15,0.068939,16.0,20,0.21052631578947367,00:04.1689,59.531,17,official,source_indy_nxt_2025_6455_top_section_times_pdf
+session_indy_nxt_2025_6455,2025 Detroit Grand Prix,I15 to I16,0.050758,10.0,20,0.5263157894736843,00:03.2629,56.002,14,official,source_indy_nxt_2025_6455_top_section_times_pdf
+session_indy_nxt_2025_6455,2025 Detroit Grand Prix,I16 to SF,0.080682,14.0,20,0.3157894736842105,00:03.0477,95.303,25,official,source_indy_nxt_2025_6455_top_section_times_pdf
+session_indy_nxt_2025_6455,2025 Detroit Grand Prix,SF to SFT,0.022917,14.0,20,0.3157894736842105,00:00.6925,119.135,25,official,source_indy_nxt_2025_6455_top_section_times_pdf
+session_indy_nxt_2025_6455,2025 Detroit Grand Prix,I5T to I5,0.026515,11.0,21,0.5,00:00.5671,168.32,34,official,source_indy_nxt_2025_6455_top_section_times_pdf
+session_indy_nxt_2025_6455,2025 Detroit Grand Prix,I13T to I13,0.011458,9.0,20,0.5789473684210527,00:00.3264,126.375,31,official,source_indy_nxt_2025_6455_top_section_times_pdf
+session_indy_nxt_2025_6455,2025 Detroit Grand Prix,PI to SFP,0.097443,8.0,18,0.5882352941176471,00:11.0182,31.838,41,official,source_indy_nxt_2025_6455_top_section_times_pdf
+session_indy_nxt_2025_6455,2025 Detroit Grand Prix,SFP to PO,0.026705,6.0,19,0.7222222222222222,00:02.8276,34.0,42,official,source_indy_nxt_2025_6455_top_section_times_pdf
+session_indy_nxt_2025_6455,2025 Detroit Grand Prix,PIC to PI,0.007008,12.0,19,0.38888888888888884,00:01.0893,23.161,41,official,source_indy_nxt_2025_6455_top_section_times_pdf
+session_indy_nxt_2025_6455,2025 Detroit Grand Prix,PO to POC,0.143182,10.0,20,0.5263157894736843,00:07.1863,71.727,42,official,source_indy_nxt_2025_6455_top_section_times_pdf
+session_indy_nxt_2025_6455,2025 Detroit Grand Prix,PI to PO,0.124148,5.0,18,0.7647058823529411,00:13.8458,32.279,42,official,source_indy_nxt_2025_6455_top_section_times_pdf
+session_indy_nxt_2025_6455,2025 Detroit Grand Prix,PO to SF,1.62481,11.0,20,0.4736842105263158,01:25.0727,68.757,42,official,source_indy_nxt_2025_6455_top_section_times_pdf
+session_indy_nxt_2025_6455,2025 Detroit Grand Prix,SF to PI,1.52367,14.0,19,0.2777777777777778,01:30.7398,60.45,41,official,source_indy_nxt_2025_6455_top_section_times_pdf
+session_indy_nxt_2025_6455,2025 Detroit Grand Prix,PO to I1,0.085795,9.0,20,0.5789473684210527,00:08.0799,38.226,42,official,source_indy_nxt_2025_6455_top_section_times_pdf
+session_indy_nxt_2025_6455,2025 Detroit Grand Prix,I14 to PI,0.079545,12.0,19,0.38888888888888884,00:08.7872,32.589,41,official,source_indy_nxt_2025_6455_top_section_times_pdf
+session_indy_nxt_2025_6455,2025 Detroit Grand Prix,PO to PI,1.50398,15.0,19,0.2222222222222222,05:11.8051,17.364,0,official,source_indy_nxt_2025_6455_top_section_times_pdf
+session_indy_nxt_2025_6455,2025 Detroit Grand Prix,PO to Alt S/F,1.35833,11.0,20,0.4736842105263158,01:08.5639,71.32,42,official,source_indy_nxt_2025_6455_top_section_times_pdf
+session_indy_nxt_2025_6455,2025 Detroit Grand Prix,Alt S/F to PI,0.145644,11.0,19,0.4444444444444444,00:12.5184,41.884,0,official,source_indy_nxt_2025_6455_top_section_times_pdf
+session_indy_nxt_2025_6455,2025 Detroit Grand Prix,SF to I4,0.511553,14.0,20,0.3157894736842105,00:19.2325,95.754,23,official,source_indy_nxt_2025_6455_top_section_times_pdf
+session_indy_nxt_2025_6455,2025 Detroit Grand Prix,I4 to I10,0.609848,14.0,20,0.3157894736842105,00:22.8089,96.254,23,official,source_indy_nxt_2025_6455_top_section_times_pdf
+session_indy_nxt_2025_6455,2025 Detroit Grand Prix,I10 to SF,0.523106,15.0,20,0.26315789473684215,00:25.7188,73.222,14,official,source_indy_nxt_2025_6455_top_section_times_pdf
+session_indy_nxt_2025_6455,2025 Detroit Grand Prix,Lap,1.645,14.0,18,0.23529411764705888,01:08.1047,86.954,24,official,source_indy_nxt_2025_6455_top_section_times_pdf
+session_indy_nxt_2026_6749,2026 Detroit Grand Prix,Lap,1.645,12.0,24,0.5217391304347826,01:06.8601,88.573,24,official,source_indy_nxt_2026_6749_top_section_times_pdf
+session_indy_nxt_2026_6749,2026 Detroit Grand Prix,SF to I1,0.105493,7.0,25,0.75,00:03.3782,112.419,23,official,source_indy_nxt_2026_6749_top_section_times_pdf
+session_indy_nxt_2026_6749,2026 Detroit Grand Prix,I1 to I2A,0.056061,8.0,24,0.6956521739130435,00:03.4564,58.39,22,official,source_indy_nxt_2026_6749_top_section_times_pdf
+session_indy_nxt_2026_6749,2026 Detroit Grand Prix,I2A to I2,0.042235,14.0,24,0.4347826086956522,00:01.8034,84.311,23,official,source_indy_nxt_2026_6749_top_section_times_pdf
+session_indy_nxt_2026_6749,2026 Detroit Grand Prix,I2 to I3,0.14375,22.0,24,0.08695652173913049,00:06.0578,85.427,20,official,source_indy_nxt_2026_6749_top_section_times_pdf
+session_indy_nxt_2026_6749,2026 Detroit Grand Prix,I3 to I4,0.164015,16.0,24,0.34782608695652173,00:04.2230,139.819,28,official,source_indy_nxt_2026_6749_top_section_times_pdf
+session_indy_nxt_2026_6749,2026 Detroit Grand Prix,I4 to I5,0.20322,17.0,24,0.30434782608695654,00:04.5082,162.28,34,official,source_indy_nxt_2026_6749_top_section_times_pdf
+session_indy_nxt_2026_6749,2026 Detroit Grand Prix,I5 to I6,0.138258,12.0,25,0.5416666666666667,00:03.2275,154.215,17,official,source_indy_nxt_2026_6749_top_section_times_pdf
+session_indy_nxt_2026_6749,2026 Detroit Grand Prix,I6 to I7,0.099811,19.0,24,0.21739130434782605,00:06.3142,56.907,23,official,source_indy_nxt_2026_6749_top_section_times_pdf
+session_indy_nxt_2026_6749,2026 Detroit Grand Prix,I7 to I8,0.053788,4.0,24,0.8695652173913043,00:02.2984,84.249,17,official,source_indy_nxt_2026_6749_top_section_times_pdf
+session_indy_nxt_2026_6749,2026 Detroit Grand Prix,I8 to I9,0.050758,8.0,24,0.6956521739130435,00:03.1988,57.124,23,official,source_indy_nxt_2026_6749_top_section_times_pdf
+session_indy_nxt_2026_6749,2026 Detroit Grand Prix,I9 to I10,0.064015,8.0,24,0.6956521739130435,00:02.5912,88.937,20,official,source_indy_nxt_2026_6749_top_section_times_pdf
+session_indy_nxt_2026_6749,2026 Detroit Grand Prix,I10 to I11,0.072348,13.0,24,0.4782608695652174,00:04.4239,58.874,24,official,source_indy_nxt_2026_6749_top_section_times_pdf
+session_indy_nxt_2026_6749,2026 Detroit Grand Prix,I11 to 12,0.090909,18.0,24,0.26086956521739135,00:05.1450,63.61,23,official,source_indy_nxt_2026_6749_top_section_times_pdf
+session_indy_nxt_2026_6749,2026 Detroit Grand Prix,I12 to I13,0.093371,18.0,24,0.26086956521739135,00:03.1009,108.399,24,official,source_indy_nxt_2026_6749_top_section_times_pdf
+session_indy_nxt_2026_6749,2026 Detroit Grand Prix,Back Str 2,0.066098,1.0,24,1.0,00:02.0804,114.378,22,official,source_indy_nxt_2026_6749_top_section_times_pdf
+session_indy_nxt_2026_6749,2026 Detroit Grand Prix,I14 to I15,0.068939,13.0,24,0.4782608695652174,00:04.1266,60.142,22,official,source_indy_nxt_2026_6749_top_section_times_pdf
+session_indy_nxt_2026_6749,2026 Detroit Grand Prix,I15 to I16,0.050758,12.0,24,0.5217391304347826,00:03.2766,55.768,23,official,source_indy_nxt_2026_6749_top_section_times_pdf
+session_indy_nxt_2026_6749,2026 Detroit Grand Prix,I16 to SF,0.080682,20.0,24,0.17391304347826086,00:03.0784,94.353,21,official,source_indy_nxt_2026_6749_top_section_times_pdf
+session_indy_nxt_2026_6749,2026 Detroit Grand Prix,SF to SFT,0.022917,17.0,24,0.30434782608695654,00:00.6813,121.094,36,official,source_indy_nxt_2026_6749_top_section_times_pdf
+session_indy_nxt_2026_6749,2026 Detroit Grand Prix,I5T to I5,0.026515,16.0,24,0.34782608695652173,00:00.5668,168.409,29,official,source_indy_nxt_2026_6749_top_section_times_pdf
+session_indy_nxt_2026_6749,2026 Detroit Grand Prix,I13T to I13,0.011458,15.0,24,0.3913043478260869,00:00.3307,124.732,38,official,source_indy_nxt_2026_6749_top_section_times_pdf
+session_indy_nxt_2026_6749,2026 Detroit Grand Prix,SFP to PO,0.024053,3.0,23,0.9090909090909091,00:02.5894,33.44,0,official,source_indy_nxt_2026_6749_top_section_times_pdf
+session_indy_nxt_2026_6749,2026 Detroit Grand Prix,PO to POC,0.074242,11.0,24,0.5652173913043479,00:10.4424,25.595,0,official,source_indy_nxt_2026_6749_top_section_times_pdf
+session_indy_nxt_2026_6749,2026 Detroit Grand Prix,PO to SF,1.62746,13.0,24,0.4782608695652174,01:38.8613,59.263,0,official,source_indy_nxt_2026_6749_top_section_times_pdf
+session_indy_nxt_2026_6749,2026 Detroit Grand Prix,PO to I1,0.088446,12.0,24,0.5217391304347826,00:11.8298,26.916,0,official,source_indy_nxt_2026_6749_top_section_times_pdf
+session_indy_nxt_2026_6749,2026 Detroit Grand Prix,PO to Alt S/F,1.36098,16.0,24,0.34782608695652173,01:24.3426,58.091,0,official,source_indy_nxt_2026_6749_top_section_times_pdf
+session_indy_nxt_2026_6749,2026 Detroit Grand Prix,SF to I4,0.511553,17.0,24,0.30434782608695654,00:19.0817,96.511,22,official,source_indy_nxt_2026_6749_top_section_times_pdf
+session_indy_nxt_2026_6749,2026 Detroit Grand Prix,I4 to I10,0.609848,7.0,24,0.7391304347826086,00:22.3394,98.277,23,official,source_indy_nxt_2026_6749_top_section_times_pdf
+session_indy_nxt_2026_6749,2026 Detroit Grand Prix,I10 to SF,0.523106,16.0,24,0.34782608695652173,00:25.3864,74.181,23,official,source_indy_nxt_2026_6749_top_section_times_pdf
+session_indy_nxt_2026_6749,2026 Detroit Grand Prix,I13 to I13,0.614015,13.0,25,0.5,00:27.4332,80.576,23,official,source_indy_nxt_2026_6749_top_section_times_pdf
+session_indy_nxt_2026_6749,2026 Detroit Grand Prix,I3 to I9,0.709848,11.0,24,0.5652173913043479,00:24.0562,106.228,23,official,source_indy_nxt_2026_6749_top_section_times_pdf
+session_indy_nxt_2026_6749,2026 Detroit Grand Prix,I9 to I13,0.320644,16.0,24,0.34782608695652173,00:15.3242,75.327,24,official,source_indy_nxt_2026_6749_top_section_times_pdf
+session_indy_nxt_2026_6750,2026 Grand Prix of Alabama Race 1 R1,Lap,2.3,10.0,23,0.5909090909090908,01:12.6067,114.039,19,official,source_indy_nxt_2026_6750_top_section_times_pdf
+session_indy_nxt_2026_6750,2026 Grand Prix of Alabama Race 1 R1,FS-PO,0.08447,16.0,26,0.4,00:02.0501,148.33,26,official,source_indy_nxt_2026_6750_top_section_times_pdf
+session_indy_nxt_2026_6750,2026 Grand Prix of Alabama Race 1 R1,Turns 1-3,0.288257,9.0,24,0.6521739130434783,00:10.2516,101.226,15,official,source_indy_nxt_2026_6750_top_section_times_pdf
+session_indy_nxt_2026_6750,2026 Grand Prix of Alabama Race 1 R1,Turn 4,0.266666,1.0,24,1.0,00:07.0712,135.762,33,official,source_indy_nxt_2026_6750_top_section_times_pdf
+session_indy_nxt_2026_6750,2026 Grand Prix of Alabama Race 1 R1,Turns 5-6,0.111174,9.0,24,0.6521739130434783,00:05.7750,69.303,17,official,source_indy_nxt_2026_6750_top_section_times_pdf
+session_indy_nxt_2026_6750,2026 Grand Prix of Alabama Race 1 R1,Turn 7,0.288257,10.0,24,0.6086956521739131,00:07.9742,130.135,23,official,source_indy_nxt_2026_6750_top_section_times_pdf
+session_indy_nxt_2026_6750,2026 Grand Prix of Alabama Race 1 R1,Turns 8-9,0.180491,13.0,24,0.4782608695652174,00:07.5617,85.929,11,official,source_indy_nxt_2026_6750_top_section_times_pdf
+session_indy_nxt_2026_6750,2026 Grand Prix of Alabama Race 1 R1,Turn 10,0.151515,15.0,24,0.3913043478260869,00:04.2389,128.678,8,official,source_indy_nxt_2026_6750_top_section_times_pdf
+session_indy_nxt_2026_6750,2026 Grand Prix of Alabama Race 1 R1,Turn 11,0.250567,17.0,24,0.30434782608695654,00:05.9998,150.345,12,official,source_indy_nxt_2026_6750_top_section_times_pdf
+session_indy_nxt_2026_6750,2026 Grand Prix of Alabama Race 1 R1,Turns 12-13,0.198862,17.0,24,0.30434782608695654,00:05.8764,121.827,9,official,source_indy_nxt_2026_6750_top_section_times_pdf
+session_indy_nxt_2026_6750,2026 Grand Prix of Alabama Race 1 R1,Turns 14-16,0.167235,3.0,24,0.9130434782608696,00:05.5062,109.34,14,official,source_indy_nxt_2026_6750_top_section_times_pdf
+session_indy_nxt_2026_6750,2026 Grand Prix of Alabama Race 1 R1,Turn 17,0.295832,19.0,24,0.21739130434782605,00:09.7653,109.059,19,official,source_indy_nxt_2026_6750_top_section_times_pdf
+session_indy_nxt_2026_6750,2026 Grand Prix of Alabama Race 1 R1,I2 to I3,0.37784,8.0,24,0.6956521739130435,00:13.0183,104.486,14,official,source_indy_nxt_2026_6750_top_section_times_pdf
+session_indy_nxt_2026_6750,2026 Grand Prix of Alabama Race 1 R1,I4 to I5,0.332006,11.0,24,0.5652173913043479,00:11.8166,101.148,18,official,source_indy_nxt_2026_6750_top_section_times_pdf
+session_indy_nxt_2026_6750,2026 Grand Prix of Alabama Race 1 R1,SF to SFT,0.025379,8.0,24,0.6956521739130435,00:00.6220,146.888,31,official,source_indy_nxt_2026_6750_top_section_times_pdf
+session_indy_nxt_2026_6750,2026 Grand Prix of Alabama Race 1 R1,I6T to I6,0.022917,18.0,25,0.29166666666666663,00:00.5220,158.048,16,official,source_indy_nxt_2026_6750_top_section_times_pdf
+session_indy_nxt_2026_6750,2026 Grand Prix of Alabama Race 1 R1,I7T to I7,0.018939,15.0,24,0.3913043478260869,00:00.5526,123.381,18,official,source_indy_nxt_2026_6750_top_section_times_pdf
+session_indy_nxt_2026_6750,2026 Grand Prix of Alabama Race 1 R1,PO to POC,0.098674,6.0,24,0.782608695652174,00:06.3591,55.861,0,official,source_indy_nxt_2026_6750_top_section_times_pdf
+session_indy_nxt_2026_6750,2026 Grand Prix of Alabama Race 1 R1,PO to SF,2.19147,21.0,24,0.13043478260869568,01:46.6092,74.002,0,official,source_indy_nxt_2026_6750_top_section_times_pdf
+session_indy_nxt_2026_6750,2026 Grand Prix of Alabama Race 1 R1,PO to I2,0.28087,6.0,24,0.782608695652174,00:15.7468,64.212,0,official,source_indy_nxt_2026_6750_top_section_times_pdf
+session_indy_nxt_2026_6750,2026 Grand Prix of Alabama Race 1 R1,PO to I7,1.7284,20.0,24,0.17391304347826086,01:23.0276,74.942,0,official,source_indy_nxt_2026_6750_top_section_times_pdf
+session_indy_nxt_2026_6750,2026 Grand Prix of Alabama Race 1 R1,SF to Turn 7,1.03882,5.0,24,0.8260869565217391,00:33.4241,111.888,17,official,source_indy_nxt_2026_6750_top_section_times_pdf
+session_indy_nxt_2026_6750,2026 Grand Prix of Alabama Race 1 R1,Turn 7 to Turn 11,0.582573,13.0,24,0.4782608695652174,00:17.8243,117.663,11,official,source_indy_nxt_2026_6750_top_section_times_pdf
+session_indy_nxt_2026_6750,2026 Grand Prix of Alabama Race 1 R1,Turn 11 to SF,0.661929,16.0,24,0.34782608695652173,00:21.2729,112.018,18,official,source_indy_nxt_2026_6750_top_section_times_pdf
+session_indy_nxt_2026_6750,2026 Grand Prix of Alabama Race 1 R1,I7 to I3,1.21363,8.0,24,0.6956521739130435,00:40.7974,107.092,18,official,source_indy_nxt_2026_6750_top_section_times_pdf
+session_indy_nxt_2026_6750,2026 Grand Prix of Alabama Race 1 R1,I3 to I5A,0.468749,8.0,24,0.6956521739130435,00:15.6079,108.118,17,official,source_indy_nxt_2026_6750_top_section_times_pdf
+session_indy_nxt_2026_6750,2026 Grand Prix of Alabama Race 1 R1,I5A to I7,0.600944,15.0,24,0.3913043478260869,00:16.1435,134.01,9,official,source_indy_nxt_2026_6750_top_section_times_pdf
+session_indy_nxt_2026_6751,2026 Grand Prix of St. Petersburg,Lap,1.8,15.0,24,0.3913043478260869,01:06.1044,98.027,36,official,source_indy_nxt_2026_6751_top_section_times_pdf
+session_indy_nxt_2026_6751,2026 Grand Prix of St. Petersburg,FS-PO,0.130144,11.0,24,0.5652173913043479,00:03.0956,151.35,32,official,source_indy_nxt_2026_6751_top_section_times_pdf
+session_indy_nxt_2026_6751,2026 Grand Prix of St. Petersburg,Turn 1,0.147348,10.0,24,0.6086956521739131,00:06.6163,80.174,35,official,source_indy_nxt_2026_6751_top_section_times_pdf
+session_indy_nxt_2026_6751,2026 Grand Prix of St. Petersburg,Turns 2/3,0.244128,15.0,24,0.3913043478260869,00:07.1647,122.665,16,official,source_indy_nxt_2026_6751_top_section_times_pdf
+session_indy_nxt_2026_6751,2026 Grand Prix of St. Petersburg,Turn 4,0.125568,19.0,24,0.21739130434782605,00:05.1443,87.873,39,official,source_indy_nxt_2026_6751_top_section_times_pdf
+session_indy_nxt_2026_6751,2026 Grand Prix of St. Petersburg,Turns 5-8,0.168939,20.0,24,0.17391304347826086,00:08.6398,70.393,40,official,source_indy_nxt_2026_6751_top_section_times_pdf
+session_indy_nxt_2026_6751,2026 Grand Prix of St. Petersburg,Turn 9,0.068182,6.0,24,0.782608695652174,00:03.8946,63.024,35,official,source_indy_nxt_2026_6751_top_section_times_pdf
+session_indy_nxt_2026_6751,2026 Grand Prix of St. Petersburg,Turn 9a,0.246211,14.0,24,0.4347826086956522,00:07.1286,124.339,33,official,source_indy_nxt_2026_6751_top_section_times_pdf
+session_indy_nxt_2026_6751,2026 Grand Prix of St. Petersburg,Turn 10,0.128409,21.0,24,0.13043478260869568,00:05.4674,84.551,40,official,source_indy_nxt_2026_6751_top_section_times_pdf
+session_indy_nxt_2026_6751,2026 Grand Prix of St. Petersburg,Turns 11/12,0.176894,19.0,24,0.21739130434782605,00:05.3748,118.482,35,official,source_indy_nxt_2026_6751_top_section_times_pdf
+session_indy_nxt_2026_6751,2026 Grand Prix of St. Petersburg,Turns 13/14,0.199431,12.0,24,0.5217391304347826,00:08.9836,79.918,34,official,source_indy_nxt_2026_6751_top_section_times_pdf
+session_indy_nxt_2026_6751,2026 Grand Prix of St. Petersburg,FS-PI,0.164773,10.0,24,0.6086956521739131,00:04.3988,134.851,32,official,source_indy_nxt_2026_6751_top_section_times_pdf
+session_indy_nxt_2026_6751,2026 Grand Prix of St. Petersburg,I3 to I4,0.294506,20.0,24,0.17391304347826086,00:13.8186,76.724,35,official,source_indy_nxt_2026_6751_top_section_times_pdf
+session_indy_nxt_2026_6751,2026 Grand Prix of St. Petersburg,I4 to I5,0.314393,7.0,24,0.7391304347826086,00:11.0278,102.633,35,official,source_indy_nxt_2026_6751_top_section_times_pdf
+session_indy_nxt_2026_6751,2026 Grand Prix of St. Petersburg,I5 to I6,0.305302,21.0,24,0.13043478260869568,00:10.8628,101.179,35,official,source_indy_nxt_2026_6751_top_section_times_pdf
+session_indy_nxt_2026_6751,2026 Grand Prix of St. Petersburg,I3T to I3,0.022727,10.0,25,0.625,00:00.5656,144.656,32,official,source_indy_nxt_2026_6751_top_section_times_pdf
+session_indy_nxt_2026_6751,2026 Grand Prix of St. Petersburg,I5T to I5,0.022727,12.0,24,0.5217391304347826,00:00.5682,143.994,31,official,source_indy_nxt_2026_6751_top_section_times_pdf
+session_indy_nxt_2026_6751,2026 Grand Prix of St. Petersburg,SFP to PO,0.130587,6.0,9,0.375,00:14.9381,31.471,0,official,source_indy_nxt_2026_6751_top_section_times_pdf
+session_indy_nxt_2026_6751,2026 Grand Prix of St. Petersburg,PO to SF,1.60246,8.0,24,0.6956521739130435,01:26.3213,66.83,0,official,source_indy_nxt_2026_6751_top_section_times_pdf
+session_indy_nxt_2026_6751,2026 Grand Prix of St. Petersburg,PO to I2,0.079924,3.0,24,0.9130434782608696,00:05.2072,55.255,0,official,source_indy_nxt_2026_6751_top_section_times_pdf
+session_indy_nxt_2026_6751,2026 Grand Prix of St. Petersburg,PO to Alt S/F,1.23826,7.0,24,0.7391304347826086,01:08.1809,65.381,0,official,source_indy_nxt_2026_6751_top_section_times_pdf
+session_indy_nxt_2026_6751,2026 Grand Prix of St. Petersburg,SF to I4,0.816126,16.0,24,0.34782608695652173,00:30.7841,95.441,35,official,source_indy_nxt_2026_6751_top_section_times_pdf
+session_indy_nxt_2026_6751,2026 Grand Prix of St. Petersburg,I4 to I6,0.619695,19.0,24,0.21739130434782605,00:21.8906,101.911,35,official,source_indy_nxt_2026_6751_top_section_times_pdf
+session_indy_nxt_2026_6751,2026 Grand Prix of St. Petersburg,I6 to SF,0.364204,7.0,24,0.7391304347826086,00:13.3946,97.885,34,official,source_indy_nxt_2026_6751_top_section_times_pdf
+session_indy_nxt_2026_6752,2026 Grand Prix of Alabama Race 2 R2,Lap,2.3,10.0,24,0.6086956521739131,01:12.8378,113.677,25,official,source_indy_nxt_2026_6752_top_section_times_pdf
+session_indy_nxt_2026_6752,2026 Grand Prix of Alabama Race 2 R2,FS-PO,0.08447,5.0,24,0.8260869565217391,00:02.0370,149.284,24,official,source_indy_nxt_2026_6752_top_section_times_pdf
+session_indy_nxt_2026_6752,2026 Grand Prix of Alabama Race 2 R2,Turns 1-3,0.288257,1.0,24,1.0,00:10.2787,100.959,12,official,source_indy_nxt_2026_6752_top_section_times_pdf
+session_indy_nxt_2026_6752,2026 Grand Prix of Alabama Race 2 R2,Turn 4,0.266666,5.0,24,0.8260869565217391,00:07.1797,133.71,21,official,source_indy_nxt_2026_6752_top_section_times_pdf
+session_indy_nxt_2026_6752,2026 Grand Prix of Alabama Race 2 R2,Turns 5-6,0.111174,6.0,24,0.782608695652174,00:05.7764,69.286,25,official,source_indy_nxt_2026_6752_top_section_times_pdf
+session_indy_nxt_2026_6752,2026 Grand Prix of Alabama Race 2 R2,Turn 7,0.288257,10.0,24,0.6086956521739131,00:07.9932,129.826,26,official,source_indy_nxt_2026_6752_top_section_times_pdf
+session_indy_nxt_2026_6752,2026 Grand Prix of Alabama Race 2 R2,Turns 8-9,0.180491,12.0,24,0.5217391304347826,00:07.5774,85.751,14,official,source_indy_nxt_2026_6752_top_section_times_pdf
+session_indy_nxt_2026_6752,2026 Grand Prix of Alabama Race 2 R2,Turn 10,0.151515,7.0,24,0.7391304347826086,00:04.2171,129.343,25,official,source_indy_nxt_2026_6752_top_section_times_pdf
+session_indy_nxt_2026_6752,2026 Grand Prix of Alabama Race 2 R2,Turn 11,0.250567,18.0,24,0.26086956521739135,00:06.0176,149.9,26,official,source_indy_nxt_2026_6752_top_section_times_pdf
+session_indy_nxt_2026_6752,2026 Grand Prix of Alabama Race 2 R2,Turns 12-13,0.198862,18.0,25,0.29166666666666663,00:05.9107,121.12,16,official,source_indy_nxt_2026_6752_top_section_times_pdf
+session_indy_nxt_2026_6752,2026 Grand Prix of Alabama Race 2 R2,Turns 14-16,0.167235,2.0,24,0.9565217391304348,00:05.5241,108.985,13,official,source_indy_nxt_2026_6752_top_section_times_pdf
+session_indy_nxt_2026_6752,2026 Grand Prix of Alabama Race 2 R2,Turn 17,0.295832,17.0,24,0.30434782608695654,00:09.7262,109.498,28,official,source_indy_nxt_2026_6752_top_section_times_pdf
+session_indy_nxt_2026_6752,2026 Grand Prix of Alabama Race 2 R2,I2 to I3,0.37784,4.0,24,0.8695652173913043,00:13.0091,104.559,21,official,source_indy_nxt_2026_6752_top_section_times_pdf
+session_indy_nxt_2026_6752,2026 Grand Prix of Alabama Race 2 R2,I4 to I5,0.332006,7.0,24,0.7391304347826086,00:11.8130,101.178,20,official,source_indy_nxt_2026_6752_top_section_times_pdf
+session_indy_nxt_2026_6752,2026 Grand Prix of Alabama Race 2 R2,SF to SFT,0.025379,11.0,25,0.5833333333333333,00:00.6253,146.113,24,official,source_indy_nxt_2026_6752_top_section_times_pdf
+session_indy_nxt_2026_6752,2026 Grand Prix of Alabama Race 2 R2,I6T to I6,0.022917,20.0,24,0.17391304347826086,00:00.5245,157.295,12,official,source_indy_nxt_2026_6752_top_section_times_pdf
+session_indy_nxt_2026_6752,2026 Grand Prix of Alabama Race 2 R2,I7T to I7,0.018939,14.0,24,0.4347826086956522,00:00.5511,123.717,25,official,source_indy_nxt_2026_6752_top_section_times_pdf
+session_indy_nxt_2026_6752,2026 Grand Prix of Alabama Race 2 R2,SFP to PO,0.08447,13.0,18,0.2941176470588235,00:10.1123,30.071,0,official,source_indy_nxt_2026_6752_top_section_times_pdf
+session_indy_nxt_2026_6752,2026 Grand Prix of Alabama Race 2 R2,PO to POC,0.098674,11.0,24,0.5652173913043479,00:08.4609,41.984,0,official,source_indy_nxt_2026_6752_top_section_times_pdf
+session_indy_nxt_2026_6752,2026 Grand Prix of Alabama Race 2 R2,PO to SF,2.19147,14.0,24,0.4347826086956522,01:44.0101,75.851,0,official,source_indy_nxt_2026_6752_top_section_times_pdf
+session_indy_nxt_2026_6752,2026 Grand Prix of Alabama Race 2 R2,PO to I2,0.28087,8.0,24,0.6956521739130435,00:17.8767,56.561,0,official,source_indy_nxt_2026_6752_top_section_times_pdf
+session_indy_nxt_2026_6752,2026 Grand Prix of Alabama Race 2 R2,PO to I7,1.7284,6.0,24,0.782608695652174,01:20.2043,77.58,0,official,source_indy_nxt_2026_6752_top_section_times_pdf
+session_indy_nxt_2026_6752,2026 Grand Prix of Alabama Race 2 R2,SF to Turn 7,1.03882,1.0,24,1.0,00:33.4379,111.842,26,official,source_indy_nxt_2026_6752_top_section_times_pdf
+session_indy_nxt_2026_6752,2026 Grand Prix of Alabama Race 2 R2,Turn 7 to Turn 11,0.582573,11.0,24,0.5652173913043479,00:17.8604,117.425,20,official,source_indy_nxt_2026_6752_top_section_times_pdf
+session_indy_nxt_2026_6752,2026 Grand Prix of Alabama Race 2 R2,Turn 11 to SF,0.661929,18.0,24,0.26086956521739135,00:21.3061,111.843,13,official,source_indy_nxt_2026_6752_top_section_times_pdf
+session_indy_nxt_2026_6752,2026 Grand Prix of Alabama Race 2 R2,I7 to I3,1.21363,2.0,24,0.9565217391304348,00:40.8575,106.934,14,official,source_indy_nxt_2026_6752_top_section_times_pdf
+session_indy_nxt_2026_6752,2026 Grand Prix of Alabama Race 2 R2,I3 to I5A,0.468749,8.0,24,0.6956521739130435,00:15.6331,107.944,23,official,source_indy_nxt_2026_6752_top_section_times_pdf
+session_indy_nxt_2026_6752,2026 Grand Prix of Alabama Race 2 R2,I5A to I7,0.600944,17.0,24,0.30434782608695654,00:16.1867,133.653,25,official,source_indy_nxt_2026_6752_top_section_times_pdf
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,Lap,2.73,23.0,23,0.0,01:42.6011,95.788,15,official,source_indy_nxt_2026_6753_top_section_times_pdf
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,FS-PO,0.08428,21.0,24,0.13043478260869568,00:02.6447,114.723,9,official,source_indy_nxt_2026_6753_top_section_times_pdf
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,Turn 1,0.064773,11.0,24,0.5652173913043479,00:03.5259,66.134,9,official,source_indy_nxt_2026_6753_top_section_times_pdf
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,Turn 2,0.054924,16.0,24,0.34782608695652173,00:03.7057,53.357,14,official,source_indy_nxt_2026_6753_top_section_times_pdf
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,Turn 3,0.157955,21.0,24,0.13043478260869568,00:06.7136,84.699,9,official,source_indy_nxt_2026_6753_top_section_times_pdf
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,Turns 3/4,0.124621,19.0,24,0.21739130434782605,00:03.7868,118.474,13,official,source_indy_nxt_2026_6753_top_section_times_pdf
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,Turn 4,0.073864,21.0,24,0.13043478260869568,00:05.1744,51.39,14,official,source_indy_nxt_2026_6753_top_section_times_pdf
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,Turn 5,0.077841,23.0,24,0.04347826086956519,00:04.5617,61.431,14,official,source_indy_nxt_2026_6753_top_section_times_pdf
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,Turn 6,0.134848,23.0,24,0.04347826086956519,00:05.6758,85.53,14,official,source_indy_nxt_2026_6753_top_section_times_pdf
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,Turn 7,0.037311,23.0,24,0.04347826086956519,00:02.2917,58.611,14,official,source_indy_nxt_2026_6753_top_section_times_pdf
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,Turn 8,0.097538,18.0,24,0.26086956521739135,00:05.4438,64.502,9,official,source_indy_nxt_2026_6753_top_section_times_pdf
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,Turns 8/9,0.064015,22.0,24,0.08695652173913049,00:02.3262,99.069,13,official,source_indy_nxt_2026_6753_top_section_times_pdf
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,Turn 9,0.087121,23.0,24,0.04347826086956519,00:04.0523,77.397,14,official,source_indy_nxt_2026_6753_top_section_times_pdf
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,BS 1,0.179545,17.0,24,0.30434782608695654,00:05.0199,128.76,8,official,source_indy_nxt_2026_6753_top_section_times_pdf
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,BS 2,0.141098,8.0,24,0.6956521739130435,00:03.2113,158.177,12,official,source_indy_nxt_2026_6753_top_section_times_pdf
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,BS 3,0.202651,4.0,24,0.8695652173913043,00:04.2666,170.989,12,official,source_indy_nxt_2026_6753_top_section_times_pdf
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,BS 4,0.197916,23.0,24,0.04347826086956519,00:04.2039,169.485,6,official,source_indy_nxt_2026_6753_top_section_times_pdf
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,BS 5,0.12822,21.0,24,0.13043478260869568,00:03.2315,142.841,13,official,source_indy_nxt_2026_6753_top_section_times_pdf
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,Turn 10,0.134848,22.0,24,0.08695652173913049,00:06.2193,78.056,9,official,source_indy_nxt_2026_6753_top_section_times_pdf
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,Turn 11,0.112689,15.0,24,0.3913043478260869,00:03.2150,126.184,9,official,source_indy_nxt_2026_6753_top_section_times_pdf
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,Turns 11/12,0.112879,23.0,24,0.04347826086956519,00:03.4584,117.501,9,official,source_indy_nxt_2026_6753_top_section_times_pdf
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,Turn 12,0.091667,23.0,24,0.04347826086956519,00:04.6712,70.646,9,official,source_indy_nxt_2026_6753_top_section_times_pdf
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,Turn 13,0.119318,19.0,24,0.21739130434782605,00:03.6048,119.159,12,official,source_indy_nxt_2026_6753_top_section_times_pdf
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,Turns 13/14,0.132576,21.0,24,0.13043478260869568,00:03.9935,119.513,12,official,source_indy_nxt_2026_6753_top_section_times_pdf
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,Turn 14,0.050947,15.0,24,0.3913043478260869,00:03.6648,50.046,8,official,source_indy_nxt_2026_6753_top_section_times_pdf
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,FS PI,0.066667,23.0,24,0.04347826086956519,00:02.7456,87.413,7,official,source_indy_nxt_2026_6753_top_section_times_pdf
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,SFT to SF,0.022727,22.0,24,0.08695652173913049,00:00.7963,102.747,7,official,source_indy_nxt_2026_6753_top_section_times_pdf
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,I9ET to I9E,0.023674,18.0,24,0.26086956521739135,00:00.5007,170.214,6,official,source_indy_nxt_2026_6753_top_section_times_pdf
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,I13AT to I13A,0.011364,13.0,24,0.4782608695652174,00:00.3000,136.368,12,official,source_indy_nxt_2026_6753_top_section_times_pdf
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,SFP to PO,0.079545,6.0,13,0.5833333333333333,00:08.7444,32.748,0,official,source_indy_nxt_2026_6753_top_section_times_pdf
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,PO to POC,0.059091,13.0,24,0.4782608695652174,00:06.7072,31.716,0,official,source_indy_nxt_2026_6753_top_section_times_pdf
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,PO to SF,2.62935,4.0,24,0.8695652173913043,02:36.6574,60.423,0,official,source_indy_nxt_2026_6753_top_section_times_pdf
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,PO to I3,0.103219,10.0,24,0.6086956521739131,00:10.5056,35.371,0,official,source_indy_nxt_2026_6753_top_section_times_pdf
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,PO to I13A,2.37916,6.0,22,0.7619047619047619,02:21.0278,60.733,0,official,source_indy_nxt_2026_6753_top_section_times_pdf
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,SF to I8,0.810417,23.0,24,0.04347826086956519,00:38.2001,76.374,14,official,source_indy_nxt_2026_6753_top_section_times_pdf
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,I8 to I10,1.0981,23.0,24,0.04347826086956519,00:32.2546,122.561,14,official,source_indy_nxt_2026_6753_top_section_times_pdf
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,I10 to SF,0.821589,22.0,24,0.08695652173913049,00:31.9426,92.595,8,official,source_indy_nxt_2026_6753_top_section_times_pdf
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,I13A to I8A,1.15814,23.0,24,0.04347826086956519,00:54.3758,76.676,14,official,source_indy_nxt_2026_6753_top_section_times_pdf
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,I8A to I11,1.13541,23.0,24,0.04347826086956519,00:32.9955,123.88,13,official,source_indy_nxt_2026_6753_top_section_times_pdf
+session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,I11 to I13A,0.436552,23.0,24,0.04347826086956519,00:15.0188,104.641,9,official,source_indy_nxt_2026_6753_top_section_times_pdf
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,Lap,2.439,18.0,24,0.26086956521739135,01:17.3375,113.534,4,official,source_indy_nxt_2026_6756_top_section_times_pdf
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,FS - PO,0.200379,13.0,24,0.4782608695652174,00:04.2414,170.077,1,official,source_indy_nxt_2026_6756_top_section_times_pdf
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,FS - PO 2,0.053788,1.0,24,1.0,00:01.0887,177.861,1,official,source_indy_nxt_2026_6756_top_section_times_pdf
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,Turn 1/2,0.25284,20.0,24,0.17391304347826086,00:09.4703,96.114,7,official,source_indy_nxt_2026_6756_top_section_times_pdf
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,Turn 3,0.108523,21.0,24,0.13043478260869568,00:03.5889,108.859,4,official,source_indy_nxt_2026_6756_top_section_times_pdf
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,Turn 4/5/6,0.232196,7.0,24,0.7391304347826086,00:07.9214,105.525,5,official,source_indy_nxt_2026_6756_top_section_times_pdf
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,Backstretch,0.341287,17.0,24,0.30434782608695654,00:08.0486,152.652,6,official,source_indy_nxt_2026_6756_top_section_times_pdf
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,Turn 7,0.16572,20.0,24,0.17391304347826086,00:06.2545,95.386,4,official,source_indy_nxt_2026_6756_top_section_times_pdf
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,Turn 8/9,0.129167,21.0,24,0.13043478260869568,00:05.1042,91.102,4,official,source_indy_nxt_2026_6756_top_section_times_pdf
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,Turn 10,0.205114,9.0,24,0.6521739130434783,00:07.1477,103.307,2,official,source_indy_nxt_2026_6756_top_section_times_pdf
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,Turn 11,0.195264,14.0,24,0.4347826086956522,00:04.7267,148.719,0,official,source_indy_nxt_2026_6756_top_section_times_pdf
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,Turn 12/13,0.152462,8.0,25,0.7083333333333333,00:07.4127,74.044,4,official,source_indy_nxt_2026_6756_top_section_times_pdf
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,Turn 14,0.237878,18.0,24,0.26086956521739135,00:07.2520,118.086,6,official,source_indy_nxt_2026_6756_top_section_times_pdf
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,FS - PI,0.164394,12.0,24,0.5217391304347826,00:04.4764,132.209,0,official,source_indy_nxt_2026_6756_top_section_times_pdf
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,SF to I1,0.254167,12.0,24,0.5217391304347826,00:05.3301,171.667,1,official,source_indy_nxt_2026_6756_top_section_times_pdf
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,I2 to I3,0.340719,13.0,24,0.4782608695652174,00:11.5167,106.505,5,official,source_indy_nxt_2026_6756_top_section_times_pdf
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,I4 to I5,0.294886,18.0,24,0.26086956521739135,00:11.3587,93.46,4,official,source_indy_nxt_2026_6756_top_section_times_pdf
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,SFT to SF,0.031155,18.0,24,0.26086956521739135,00:00.7016,159.86,0,official,source_indy_nxt_2026_6756_top_section_times_pdf
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,I1T to I1,0.016383,2.0,27,0.9615384615384616,00:00.3299,178.778,1,official,source_indy_nxt_2026_6756_top_section_times_pdf
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,I4T to I4,0.022727,15.0,25,0.41666666666666663,00:00.4934,165.823,6,official,source_indy_nxt_2026_6756_top_section_times_pdf
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,I6T to I6,0.020455,11.0,27,0.6153846153846154,00:00.5316,138.521,4,official,source_indy_nxt_2026_6756_top_section_times_pdf
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,PI to SFP,0.194317,18.0,24,0.26086956521739135,09:11.2925,1.269,11,official,source_indy_nxt_2026_6756_top_section_times_pdf
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,SFP to PO,0.200284,5.0,24,0.8260869565217391,00:21.9244,32.887,12,official,source_indy_nxt_2026_6756_top_section_times_pdf
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,SFPT to SFP,0.012405,2.0,24,0.9565217391304348,00:01.3389,33.354,11,official,source_indy_nxt_2026_6756_top_section_times_pdf
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,PIC to PI,0.186364,20.0,24,0.17391304347826086,00:20.3766,32.926,11,official,source_indy_nxt_2026_6756_top_section_times_pdf
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,POB to POC,0.220549,11.0,16,0.33333333333333337,00:13.7521,57.735,12,official,source_indy_nxt_2026_6756_top_section_times_pdf
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,PI to PO,0.394602,15.0,24,0.3913043478260869,09:33.2169,2.478,12,official,source_indy_nxt_2026_6756_top_section_times_pdf
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,PO to SF,2.23911,10.0,24,0.6086956521739131,01:38.6097,81.744,12,official,source_indy_nxt_2026_6756_top_section_times_pdf
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,SF to PI,2.2231,19.0,24,0.21739130434782605,02:11.6897,60.773,11,official,source_indy_nxt_2026_6756_top_section_times_pdf
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,PO to I2,0.307102,11.0,24,0.5652173913043479,00:17.5889,62.856,12,official,source_indy_nxt_2026_6756_top_section_times_pdf
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,I7 to PI,0.338825,16.0,24,0.34782608695652173,00:35.3157,34.539,11,official,source_indy_nxt_2026_6756_top_section_times_pdf
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,PO to PI,2.0232,18.0,24,0.26086956521739135,22:33.1086,5.383,11,official,source_indy_nxt_2026_6756_top_section_times_pdf
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,PO to Alt S/F,1.48911,6.0,24,0.782608695652174,01:01.9501,86.534,12,official,source_indy_nxt_2026_6756_top_section_times_pdf
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,Alt S/F to PI,0.53409,14.0,24,0.4347826086956522,00:47.1019,40.821,11,official,source_indy_nxt_2026_6756_top_section_times_pdf
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,SF to I3,0.847727,14.0,24,0.4347826086956522,00:26.4690,115.298,5,official,source_indy_nxt_2026_6756_top_section_times_pdf
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,I3 to I6,0.841287,14.0,24,0.4347826086956522,00:26.6083,113.823,4,official,source_indy_nxt_2026_6756_top_section_times_pdf
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,I6 to SF,0.749998,19.0,24,0.21739130434782605,00:24.0697,112.174,4,official,source_indy_nxt_2026_6756_top_section_times_pdf
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,SF to I4,1.18901,14.0,24,0.4347826086956522,00:34.5588,123.86,5,official,source_indy_nxt_2026_6756_top_section_times_pdf
+session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,I4 to I6,0.5,18.0,24,0.26086956521739135,00:18.5427,97.073,4,official,source_indy_nxt_2026_6756_top_section_times_pdf
+session_indy_nxt_2026_6763,2026 INDY NXT by Firestone at World Wide Technology Raceway,Lap,1.25,24.0,24,0.0,00:29.7074,151.477,4,official,source_indy_nxt_2026_6763_top_section_times_pdf
+session_indy_nxt_2026_6763,2026 INDY NXT by Firestone at World Wide Technology Raceway,FS - PO,0.161173,21.0,24,0.13043478260869568,00:03.5163,165.009,4,official,source_indy_nxt_2026_6763_top_section_times_pdf
+session_indy_nxt_2026_6763,2026 INDY NXT by Firestone at World Wide Technology Raceway,Turn 1,0.120455,22.0,24,0.08695652173913049,00:02.8881,150.146,4,official,source_indy_nxt_2026_6763_top_section_times_pdf
+session_indy_nxt_2026_6763,2026 INDY NXT by Firestone at World Wide Technology Raceway,Turn 2,0.144697,24.0,24,0.0,00:03.8112,136.679,3,official,source_indy_nxt_2026_6763_top_section_times_pdf
+session_indy_nxt_2026_6763,2026 INDY NXT by Firestone at World Wide Technology Raceway,BS - T2,0.158144,24.0,24,0.0,00:03.8697,147.122,2,official,source_indy_nxt_2026_6763_top_section_times_pdf
+session_indy_nxt_2026_6763,2026 INDY NXT by Firestone at World Wide Technology Raceway,BS - T3,0.158333,24.0,24,0.0,00:03.6336,156.869,2,official,source_indy_nxt_2026_6763_top_section_times_pdf
+session_indy_nxt_2026_6763,2026 INDY NXT by Firestone at World Wide Technology Raceway,Turn 3,0.183523,24.0,24,0.0,00:04.1428,159.477,3,official,source_indy_nxt_2026_6763_top_section_times_pdf
+session_indy_nxt_2026_6763,2026 INDY NXT by Firestone at World Wide Technology Raceway,Turn 4,0.163257,23.0,24,0.04347826086956519,00:03.8337,153.305,3,official,source_indy_nxt_2026_6763_top_section_times_pdf
+session_indy_nxt_2026_6763,2026 INDY NXT by Firestone at World Wide Technology Raceway,FS - PI,0.160417,23.0,24,0.04347826086956519,00:03.6293,159.122,3,official,source_indy_nxt_2026_6763_top_section_times_pdf
+session_indy_nxt_2026_6763,2026 INDY NXT by Firestone at World Wide Technology Raceway,Turns 1/2,0.265151,24.0,24,0.0,00:06.7534,141.343,4,official,source_indy_nxt_2026_6763_top_section_times_pdf
+session_indy_nxt_2026_6763,2026 INDY NXT by Firestone at World Wide Technology Raceway,Backstretch,0.316476,24.0,24,0.0,00:07.5033,151.842,2,official,source_indy_nxt_2026_6763_top_section_times_pdf
+session_indy_nxt_2026_6763,2026 INDY NXT by Firestone at World Wide Technology Raceway,Turns 3/4,0.346779,24.0,24,0.0,00:07.9765,156.51,3,official,source_indy_nxt_2026_6763_top_section_times_pdf
+session_indy_nxt_2026_6763,2026 INDY NXT by Firestone at World Wide Technology Raceway,T1T to T1,0.022727,21.0,24,0.13043478260869568,00:00.4950,165.287,4,official,source_indy_nxt_2026_6763_top_section_times_pdf
+session_indy_nxt_2026_6763,2026 INDY NXT by Firestone at World Wide Technology Raceway,T2T to T2,0.022727,24.0,25,0.04166666666666663,00:00.5807,140.894,3,official,source_indy_nxt_2026_6763_top_section_times_pdf
+session_indy_nxt_2026_6763,2026 INDY NXT by Firestone at World Wide Technology Raceway,T3T to T3,0.022727,24.0,24,0.0,00:00.5073,161.28,2,official,source_indy_nxt_2026_6763_top_section_times_pdf
+session_indy_nxt_2026_6763,2026 INDY NXT by Firestone at World Wide Technology Raceway,T4T to T4,0.022727,25.0,25,0.0,00:00.5316,153.907,3,official,source_indy_nxt_2026_6763_top_section_times_pdf
+session_indy_nxt_2026_6763,2026 INDY NXT by Firestone at World Wide Technology Raceway,PO - SF,1.06761,13.0,24,0.4782608695652174,00:52.5075,73.197,0,official,source_indy_nxt_2026_6763_top_section_times_pdf
+session_indy_nxt_2026_6763,2026 INDY NXT by Firestone at World Wide Technology Raceway,PO - T2,0.243938,9.0,24,0.6521739130434783,00:13.1642,66.709,0,official,source_indy_nxt_2026_6763_top_section_times_pdf
+session_indy_nxt_2026_6765,2026 Indianapolis Grand Prix Race 2 R2,Lap,2.439,13.0,24,0.4782608695652174,01:17.4063,113.433,12,official,source_indy_nxt_2026_6765_top_section_times_pdf
+session_indy_nxt_2026_6765,2026 Indianapolis Grand Prix Race 2 R2,FS - PO,0.200379,9.0,24,0.6521739130434783,00:04.2057,171.521,1,official,source_indy_nxt_2026_6765_top_section_times_pdf
+session_indy_nxt_2026_6765,2026 Indianapolis Grand Prix Race 2 R2,FS - PO 2,0.053788,9.0,24,0.6521739130434783,00:01.1025,175.634,1,official,source_indy_nxt_2026_6765_top_section_times_pdf
+session_indy_nxt_2026_6765,2026 Indianapolis Grand Prix Race 2 R2,Turn 1/2,0.25284,9.0,24,0.6521739130434783,00:09.3389,97.466,21,official,source_indy_nxt_2026_6765_top_section_times_pdf
+session_indy_nxt_2026_6765,2026 Indianapolis Grand Prix Race 2 R2,Turn 3,0.108523,12.0,25,0.5416666666666667,00:03.5627,109.659,10,official,source_indy_nxt_2026_6765_top_section_times_pdf
+session_indy_nxt_2026_6765,2026 Indianapolis Grand Prix Race 2 R2,Turn 4/5/6,0.232196,3.0,24,0.9130434782608696,00:07.9380,105.304,13,official,source_indy_nxt_2026_6765_top_section_times_pdf
+session_indy_nxt_2026_6765,2026 Indianapolis Grand Prix Race 2 R2,Backstretch,0.341287,14.0,24,0.4347826086956522,00:07.9832,153.902,27,official,source_indy_nxt_2026_6765_top_section_times_pdf
+session_indy_nxt_2026_6765,2026 Indianapolis Grand Prix Race 2 R2,Turn 7,0.16572,6.0,24,0.782608695652174,00:06.1048,97.725,24,official,source_indy_nxt_2026_6765_top_section_times_pdf
+session_indy_nxt_2026_6765,2026 Indianapolis Grand Prix Race 2 R2,Turn 8/9,0.129167,17.0,24,0.30434782608695654,00:05.0762,91.604,9,official,source_indy_nxt_2026_6765_top_section_times_pdf
+session_indy_nxt_2026_6765,2026 Indianapolis Grand Prix Race 2 R2,Turn 10,0.205114,8.0,24,0.6956521739130435,00:07.2022,102.526,12,official,source_indy_nxt_2026_6765_top_section_times_pdf
+session_indy_nxt_2026_6765,2026 Indianapolis Grand Prix Race 2 R2,Turn 11,0.195264,10.0,24,0.6086956521739131,00:04.7196,148.943,28,official,source_indy_nxt_2026_6765_top_section_times_pdf
+session_indy_nxt_2026_6765,2026 Indianapolis Grand Prix Race 2 R2,Turn 12/13,0.152462,1.0,24,1.0,00:07.3385,74.792,8,official,source_indy_nxt_2026_6765_top_section_times_pdf
+session_indy_nxt_2026_6765,2026 Indianapolis Grand Prix Race 2 R2,Turn 14,0.237878,16.0,24,0.34782608695652173,00:07.2316,118.419,3,official,source_indy_nxt_2026_6765_top_section_times_pdf
+session_indy_nxt_2026_6765,2026 Indianapolis Grand Prix Race 2 R2,FS - PI,0.164394,6.0,24,0.782608695652174,00:04.4266,133.696,0,official,source_indy_nxt_2026_6765_top_section_times_pdf
+session_indy_nxt_2026_6765,2026 Indianapolis Grand Prix Race 2 R2,SF to I1,0.254167,9.0,24,0.6521739130434783,00:05.3082,172.375,1,official,source_indy_nxt_2026_6765_top_section_times_pdf
+session_indy_nxt_2026_6765,2026 Indianapolis Grand Prix Race 2 R2,I2 to I3,0.340719,3.0,24,0.9130434782608696,00:11.5110,106.558,13,official,source_indy_nxt_2026_6765_top_section_times_pdf
+session_indy_nxt_2026_6765,2026 Indianapolis Grand Prix Race 2 R2,I4 to I5,0.294886,8.0,24,0.6956521739130435,00:11.2169,94.642,9,official,source_indy_nxt_2026_6765_top_section_times_pdf
+session_indy_nxt_2026_6765,2026 Indianapolis Grand Prix Race 2 R2,SFT to SF,0.031155,9.0,24,0.6521739130434783,00:00.6872,163.21,0,official,source_indy_nxt_2026_6765_top_section_times_pdf
+session_indy_nxt_2026_6765,2026 Indianapolis Grand Prix Race 2 R2,I1T to I1,0.016383,10.0,25,0.625,00:00.3343,176.425,1,official,source_indy_nxt_2026_6765_top_section_times_pdf
+session_indy_nxt_2026_6765,2026 Indianapolis Grand Prix Race 2 R2,I4T to I4,0.022727,13.0,24,0.4782608695652174,00:00.4921,166.261,16,official,source_indy_nxt_2026_6765_top_section_times_pdf
+session_indy_nxt_2026_6765,2026 Indianapolis Grand Prix Race 2 R2,I6T to I6,0.020455,15.0,25,0.41666666666666663,00:00.5319,138.443,1,official,source_indy_nxt_2026_6765_top_section_times_pdf
+session_indy_nxt_2026_6765,2026 Indianapolis Grand Prix Race 2 R2,PO to SF,2.23911,3.0,24,0.9130434782608696,01:19.2104,101.764,0,official,source_indy_nxt_2026_6765_top_section_times_pdf
+session_indy_nxt_2026_6765,2026 Indianapolis Grand Prix Race 2 R2,PO to I2,0.307102,3.0,24,0.9130434782608696,00:14.8878,74.26,0,official,source_indy_nxt_2026_6765_top_section_times_pdf
+session_indy_nxt_2026_6765,2026 Indianapolis Grand Prix Race 2 R2,PO to Alt S/F,1.48911,3.0,24,0.9130434782608696,00:54.6739,98.05,0,official,source_indy_nxt_2026_6765_top_section_times_pdf
+session_indy_nxt_2026_6765,2026 Indianapolis Grand Prix Race 2 R2,SF to I3,0.847727,11.0,24,0.5652173913043479,00:26.4967,115.177,10,official,source_indy_nxt_2026_6765_top_section_times_pdf
+session_indy_nxt_2026_6765,2026 Indianapolis Grand Prix Race 2 R2,I3 to I6,0.841287,16.0,24,0.34782608695652173,00:26.7347,113.285,25,official,source_indy_nxt_2026_6765_top_section_times_pdf
+session_indy_nxt_2026_6765,2026 Indianapolis Grand Prix Race 2 R2,I6 to SF,0.749998,9.0,24,0.6521739130434783,00:24.0008,112.496,11,official,source_indy_nxt_2026_6765_top_section_times_pdf
+session_indy_nxt_2026_6765,2026 Indianapolis Grand Prix Race 2 R2,SF to I4,1.18901,12.0,24,0.5217391304347826,00:34.6648,123.481,23,official,source_indy_nxt_2026_6765_top_section_times_pdf
+session_indy_nxt_2026_6765,2026 Indianapolis Grand Prix Race 2 R2,I4 to I6,0.5,12.0,24,0.5217391304347826,00:18.5363,97.107,9,official,source_indy_nxt_2026_6765_top_section_times_pdf
