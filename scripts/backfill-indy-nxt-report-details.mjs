@@ -71,6 +71,18 @@ const fetchBinaryCached = async (url, path) => {
   return { buffer, fromCache: false };
 };
 
+const classifyEmptyOfficialPdf = (buffer, text) => {
+  if (String(text ?? '').trim()) return 'official_report_has_no_section_rows';
+  const content = Buffer.isBuffer(buffer) ? buffer.toString('latin1') : '';
+  const startXrefMatch = content.match(/startxref\s+(\d+)/);
+  const hasPdfHeader = content.includes('%PDF-');
+  const startXref = startXrefMatch ? Number(startXrefMatch[1]) : null;
+  if (!hasPdfHeader || (Number.isFinite(startXref) && startXref >= buffer.length)) {
+    return 'official_pdf_corrupt_or_truncated';
+  }
+  return 'official_pdf_has_no_extractable_text';
+};
+
 const extractTextCached = async (pdfPath, textPath) => {
   if (!refresh) {
     try {
@@ -137,12 +149,20 @@ const parseLapChartText = (text) => {
       parentheticalPosition: Number(parentheticalPosition),
       position: Number(position),
       lapNumbers: currentLapNumbers.slice(0, cells.length),
+      leadingLapOneCarNumber: currentLapNumbers[0] === 2 ? labelCarNumber : null,
       cells
     });
   }
 
   const samples = [];
   for (const row of rows) {
+    if (row.leadingLapOneCarNumber) {
+      samples.push({
+        carNumber: row.leadingLapOneCarNumber,
+        lapNumber: 1,
+        position: row.position
+      });
+    }
     for (const [index, carNumber] of row.cells.entries()) {
       samples.push({
         carNumber,
@@ -231,8 +251,16 @@ const parseLapChartXml = (xml) => {
         parentheticalPosition: labelMatch?.[3] ? Number(labelMatch[3]) : null,
         position: Number(positionElement.text),
         pageNumber,
+        leadingLapOneCarNumber: columns[0]?.lapNumber === 2 ? labelMatch?.[1] ?? null : null,
         cells: []
       };
+      if (row.leadingLapOneCarNumber) {
+        samples.push({
+          carNumber: row.leadingLapOneCarNumber,
+          lapNumber: 1,
+          position: row.position
+        });
+      }
 
       const dataElements = rowElements
         .filter((element) => element.left >= 300 && /^[\d\s]+$/.test(element.text))
@@ -416,6 +444,71 @@ const validateLapChartPartial = ({ parsed, canonicalSessionId, expectedByCar, re
     missingByCar,
     missingSamples: missingByCar.reduce((total, row) => total + row.missing, 0),
     resultLapConflicts
+  };
+};
+
+const sampleKey = (sample) => `${sample.carNumber}|${sample.lapNumber}`;
+
+const supplementPartialLapChart = ({ baseCandidate, candidates, canonicalSessionId, expectedByCar, resultMetaByCar, url }) => {
+  const baseValidation = baseCandidate.partialValidation;
+  if (!baseValidation?.ok || !baseValidation.missingSamples) {
+    return { ...baseCandidate, supplementalSamples: [] };
+  }
+
+  const baseSampleKeys = new Set(baseCandidate.parsed.samples.map(sampleKey));
+  const missingKeys = new Set();
+  for (const row of baseValidation.missingByCar ?? []) {
+    const expected = expectedByCar.get(row.carNumber) ?? 0;
+    for (let lapNumber = 1; lapNumber <= expected; lapNumber += 1) {
+      const key = `${row.carNumber}|${lapNumber}`;
+      if (!baseSampleKeys.has(key)) missingKeys.add(key);
+    }
+  }
+  if (!missingKeys.size) return { ...baseCandidate, supplementalSamples: [] };
+
+  const supplementByKey = new Map();
+  for (const candidate of candidates) {
+    if (candidate === baseCandidate) continue;
+    for (const sample of candidate.parsed.samples) {
+      const key = sampleKey(sample);
+      if (!missingKeys.has(key)) continue;
+      if (!expectedByCar.has(sample.carNumber)) continue;
+      if (!Number.isFinite(Number(sample.lapNumber))) continue;
+      const existing = supplementByKey.get(key) ?? [];
+      existing.push({ ...sample, supplementedFromParser: candidate.parsedWith });
+      supplementByKey.set(key, existing);
+    }
+  }
+
+  const supplementalSamples = [];
+  for (const key of missingKeys) {
+    const samples = supplementByKey.get(key) ?? [];
+    const uniqueSamples = [
+      ...new Map(samples.map((sample) => [`${sample.carNumber}|${sample.lapNumber}|${sample.position}`, sample])).values()
+    ];
+    if (uniqueSamples.length === 1) supplementalSamples.push(uniqueSamples[0]);
+  }
+  if (!supplementalSamples.length) return { ...baseCandidate, supplementalSamples: [] };
+
+  const parsed = {
+    rows: baseCandidate.parsed.rows,
+    samples: [...baseCandidate.parsed.samples, ...supplementalSamples]
+  };
+  const partialValidation = validateLapChartPartial({ parsed, canonicalSessionId, expectedByCar, resultMetaByCar, url });
+  if (
+    !partialValidation.ok
+    || partialValidation.missingSamples >= baseValidation.missingSamples
+    || (partialValidation.resultLapConflicts?.length ?? 0) !== (baseValidation.resultLapConflicts?.length ?? 0)
+  ) {
+    return { ...baseCandidate, supplementalSamples: [] };
+  }
+
+  return {
+    ...baseCandidate,
+    parsed,
+    parsedWith: `${baseCandidate.parsedWith} plus ${supplementalSamples.length} supplemental source-visible sample${supplementalSamples.length === 1 ? '' : 's'}`,
+    partialValidation,
+    supplementalSamples
   };
 };
 
@@ -960,15 +1053,24 @@ const main = async () => {
                 .filter((candidate) => candidate.partialValidation.ok && !candidate.partialValidation.complete)
                 .sort((a, b) => b.parsed.samples.length - a.parsed.samples.length);
 
-              const partialCandidate = partialCandidates[0] ?? null;
-              if (partialCandidate) {
-                parsed = partialCandidate.parsed;
-                parsedWith = `${partialCandidate.parsedWith} partial visible-sample import`;
-                partialValidation = partialCandidate.partialValidation;
-                validation = { ok: true };
-                isPartialImport = true;
-                extractedArtifactPath = partialCandidate.extractedArtifactPath;
-              } else {
+	              const partialCandidate = partialCandidates[0] ?? null;
+	              if (partialCandidate) {
+	                const supplementedCandidate = supplementPartialLapChart({
+	                  baseCandidate: partialCandidate,
+	                  candidates,
+	                  canonicalSessionId,
+	                  expectedByCar,
+	                  resultMetaByCar,
+	                  url
+	                });
+	                parsed = supplementedCandidate.parsed;
+	                parsedWith = `${supplementedCandidate.parsedWith} partial visible-sample import`;
+	                partialValidation = supplementedCandidate.partialValidation;
+	                validation = { ok: true };
+	                isPartialImport = true;
+	                extractedArtifactPath = partialCandidate.extractedArtifactPath;
+	                partialCandidate.supplementalSamples = supplementedCandidate.supplementalSamples ?? [];
+	              } else {
                 const partialFailure = candidates
                   .map((candidate) => validateLapChartPartial({ parsed: candidate.parsed, canonicalSessionId, expectedByCar, resultMetaByCar, url }).failure)
                   .find((failure) => failure?.reason === 'parsed_lap_counts_exceed_official_results')
@@ -1032,12 +1134,13 @@ const main = async () => {
                     officialResultLapConflict: Boolean(resultLapConflict),
                     officialResultLaps: resultLapConflict ? resultLapConflict.expected : null,
                     officialResultStatus: resultLapConflict ? resultLapConflict.status : null,
-                    chartSamplesForCar: resultLapConflict ? resultLapConflict.parsed : null,
-                    eventName: details.EventName ?? null,
-                    sessionName: details.SessionName ?? null,
-                    sourceDocumentId: lapChartReport.DocumentID ?? null,
-                    sourceDocumentType: lapChartReport.DocumentType ?? lapChartReport.Name ?? null
-                  },
+	                    chartSamplesForCar: resultLapConflict ? resultLapConflict.parsed : null,
+	                    eventName: details.EventName ?? null,
+	                    sessionName: details.SessionName ?? null,
+	                    sourceDocumentId: lapChartReport.DocumentID ?? null,
+	                    sourceDocumentType: lapChartReport.DocumentType ?? lapChartReport.Name ?? null,
+	                    ...(sample.supplementedFromParser ? { supplementedFromParser: sample.supplementedFromParser } : {})
+	                  },
                   provenanceRefs: [evidenceId]
                 });
                 report.lapSamplesImported += 1;
@@ -1050,8 +1153,9 @@ const main = async () => {
                 report.partialLapChartImports.push({
                   sessionId: canonicalSessionId,
                   parser: parsedWith,
-                  samplesImported: parsed.samples.length,
-                  missingSamples: partialValidation?.missingSamples ?? 0,
+	                  samplesImported: parsed.samples.length,
+	                  supplementalSamplesImported: parsed.samples.filter((sample) => sample.supplementedFromParser).length,
+	                  missingSamples: partialValidation?.missingSamples ?? 0,
                   missingByCar: partialValidation?.missingByCar ?? [],
                   resultLapConflicts: partialValidation?.resultLapConflicts ?? [],
                   url
@@ -1405,7 +1509,7 @@ const main = async () => {
               if (!textResult.text.trim() || /cancell?ed|no\s+data|no\s+time|Section Data for Car\s*$/i.test(textResult.text)) {
                 report.sectionResultsReportsHeldOut.push({
                   sessionId: canonicalSessionId,
-                  reason: textResult.text.trim() ? 'official_report_has_no_section_rows' : 'official_pdf_has_no_extractable_text',
+                  reason: classifyEmptyOfficialPdf(pdfResult.buffer, textResult.text),
                   sessionName: details.SessionName ?? null,
                   url: sectionResultsUrl
                 });
@@ -1633,12 +1737,21 @@ const main = async () => {
   dataset.incidents = nextIncidents.sort((a, b) => a.id.localeCompare(b.id));
   dataset.sourceEvidence = Array.from(sourceEvidenceMap.values()).sort((a, b) => a.id.localeCompare(b.id));
   dataset.updatedAt = retrievedAt;
+  const indyNxtDetailGapDescription = [
+    'EventsSessionDetails imports race/session result rows, qualifyingResults for official SessionType=Q records, and official terminal-status incident rows for contact/mechanical/dns outcomes.',
+    'Official Race Lap Chart PDFs now import 29,519 official lap-by-lap position samples from all 36 completed Race Lap Chart PDFs: 26 charts fully validate against official completed-lap counts and 10 clean partial Race Lap Chart PDFs preserve explicit missing car-lap or official result/chart conflict diagnostics without guessing terminal or conflict laps.',
+    'Official Event Summary PDFs import race-stat metrics and most-improved racecraft notes. Official Leader Lap Summary PDFs import leader-by-lap timing, margin, and flag-state metrics.',
+    'Official Top Section Times PDFs import practice, qualifying, and race section-rank timing metrics when official section rows are present. Official Section Results PDFs import practice, qualifying, and race lap-by-lap section times and speeds at per-car/per-lap grain when official section rows are present.',
+    'The remaining true section-results holdout is session_indy_nxt_2024_6325, where the official Section Results PDF URL returns corrupt non-PDF bytes; canceled/no-row reports remain held out rather than treated as missing data.',
+    'Source-visible rows without canonical API timing rows keep car/name text with null canonical IDs. Official race Results PDFs import penalty/decision summary rows and caution-summary causal incident rows.',
+    'Detailed pit-lane sequence context is source-unavailable in the current official report family; use official/API pit-stop counts as the production-safe pit metric unless a new official pit-summary source appears.'
+  ].join(' ');
   dataset.gaps = asArray(dataset.gaps).map((gap) =>
     gap.id === 'gap_indy_nxt_qualifying_lap_reports'
-	      ? {
-	          ...gap,
-	          description: 'EventsSessionDetails imports race/session result rows, qualifyingResults for official SessionType=Q records, and official terminal-status incident rows for contact/mechanical/dns outcomes. Official Race Lap Chart PDFs now import complete lap-by-lap position samples when parser validation matches official completed-lap counts, plus clean source-visible partial samples when missing car-lap counts or official result/chart lap-count conflicts are explicitly reported and no parsed samples duplicate or reference unknown cars. Official Event Summary PDFs now import race-stat metrics and most-improved racecraft notes. Official Leader Lap Summary PDFs now import leader-by-lap timing, margin, and flag-state metrics. Official Top Section Times PDFs now import practice, qualifying, and race section-rank timing metrics when official section rows are present. Official Section Results PDFs now import practice, qualifying, and race lap-by-lap section times and speeds at per-car/per-lap grain when official section rows are present. Canceled reports without timing rows are held out, and source-visible rows without canonical API timing rows keep car/name text with null canonical IDs. Official race Results PDFs now import penalty/decision summary rows and caution-summary causal incident rows. Pit summaries, deeper report parsing, and lap-specific incident detail beyond official caution summaries remain open.'
-	        }
+		      ? {
+		          ...gap,
+		          description: indyNxtDetailGapDescription
+		        }
       : gap
   );
 

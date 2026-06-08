@@ -310,11 +310,17 @@ const main = async () => {
   checkTemporalAndWeatherIntegrity(dataset, issues);
   checkTrackMetadataCoverage(dataset, issues);
 
+  const errors = issues.filter((issue) => issue.severity === 'error');
+  const warnings = issues.filter((issue) => issue.severity === 'warn');
   const report = {
     checkedAt: new Date().toISOString(),
     dataset: datasetPath,
-    ok: issues.every((issue) => issue.severity !== 'error'),
+    ok: errors.length === 0,
     counts: Object.fromEntries(collectionNames.map((name) => [name, Array.isArray(dataset[name]) ? dataset[name].length : null])),
+    errors,
+    warnings,
+    errorCount: errors.length,
+    warningCount: warnings.length,
     issues
   };
 

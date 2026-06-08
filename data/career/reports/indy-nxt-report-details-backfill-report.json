@@ -1,12 +1,12 @@
 {
-  "generatedAt": "2026-06-08T15:13:18.687Z",
+  "generatedAt": "2026-06-08T18:39:51.800Z",
   "lapChartsDiscovered": 36,
   "lapChartsParsed": 36,
   "lapChartsFullyParsed": 26,
   "lapChartsPartiallyParsed": 10,
-  "lapSamplesImported": 29501,
-  "partialLapSamplesImported": 8472,
-  "bryceLapSamplesImported": 1389,
+  "lapSamplesImported": 29519,
+  "partialLapSamplesImported": 8490,
+  "bryceLapSamplesImported": 1390,
   "eventSummariesDiscovered": 36,
   "eventSummariesParsed": 36,
   "eventSummaryMetricsImported": 36,
@@ -35,6 +35,7 @@
       "sessionId": "session_indy_nxt_2024_6317",
       "parser": "pdftotext -raw plus lap-header row-position inversion partial visible-sample import",
       "samplesImported": 674,
+      "supplementalSamplesImported": 0,
       "missingSamples": 1,
       "missingByCar": [
         {
@@ -51,6 +52,7 @@
       "sessionId": "session_indy_nxt_2024_6319",
       "parser": "pdftohtml -xml coordinate lap-column parser partial visible-sample import",
       "samplesImported": 889,
+      "supplementalSamplesImported": 0,
       "missingSamples": 2,
       "missingByCar": [
         {
@@ -67,6 +69,7 @@
       "sessionId": "session_indy_nxt_2024_6320",
       "parser": "pdftotext -raw plus lap-header row-position inversion partial visible-sample import",
       "samplesImported": 1023,
+      "supplementalSamplesImported": 0,
       "missingSamples": 2,
       "missingByCar": [
         {
@@ -88,109 +91,14 @@
     {
       "sessionId": "session_indy_nxt_2024_6321",
       "parser": "pdftotext -raw plus lap-header row-position inversion partial visible-sample import",
-      "samplesImported": 547,
-      "missingSamples": 18,
+      "samplesImported": 564,
+      "supplementalSamplesImported": 0,
+      "missingSamples": 1,
       "missingByCar": [
-        {
-          "carNumber": "27",
-          "expected": 35,
-          "parsed": 34,
-          "missing": 1
-        },
-        {
-          "carNumber": "18",
-          "expected": 35,
-          "parsed": 34,
-          "missing": 1
-        },
-        {
-          "carNumber": "17",
-          "expected": 35,
-          "parsed": 34,
-          "missing": 1
-        },
-        {
-          "carNumber": "7",
-          "expected": 35,
-          "parsed": 34,
-          "missing": 1
-        },
-        {
-          "carNumber": "39",
-          "expected": 35,
-          "parsed": 34,
-          "missing": 1
-        },
-        {
-          "carNumber": "40",
-          "expected": 35,
-          "parsed": 34,
-          "missing": 1
-        },
-        {
-          "carNumber": "51",
-          "expected": 35,
-          "parsed": 34,
-          "missing": 1
-        },
-        {
-          "carNumber": "29",
-          "expected": 32,
-          "parsed": 31,
-          "missing": 1
-        },
-        {
-          "carNumber": "28",
-          "expected": 35,
-          "parsed": 34,
-          "missing": 1
-        },
-        {
-          "carNumber": "23",
-          "expected": 35,
-          "parsed": 34,
-          "missing": 1
-        },
-        {
-          "carNumber": "14",
-          "expected": 35,
-          "parsed": 34,
-          "missing": 1
-        },
-        {
-          "carNumber": "26",
-          "expected": 35,
-          "parsed": 34,
-          "missing": 1
-        },
-        {
-          "carNumber": "99",
-          "expected": 35,
-          "parsed": 34,
-          "missing": 1
-        },
-        {
-          "carNumber": "10",
-          "expected": 35,
-          "parsed": 34,
-          "missing": 1
-        },
         {
           "carNumber": "76",
           "expected": 8,
-          "parsed": 6,
-          "missing": 2
-        },
-        {
-          "carNumber": "2",
-          "expected": 35,
-          "parsed": 34,
-          "missing": 1
-        },
-        {
-          "carNumber": "22",
-          "expected": 35,
-          "parsed": 34,
+          "parsed": 7,
           "missing": 1
         }
       ],
@@ -199,17 +107,11 @@
     },
     {
       "sessionId": "session_indy_nxt_2024_6326",
-      "parser": "pdftohtml -xml coordinate lap-column parser partial visible-sample import",
-      "samplesImported": 840,
-      "missingSamples": 1,
-      "missingByCar": [
-        {
-          "carNumber": "39",
-          "expected": 41,
-          "parsed": 40,
-          "missing": 1
-        }
-      ],
+      "parser": "pdftohtml -xml coordinate lap-column parser plus 1 supplemental source-visible sample partial visible-sample import",
+      "samplesImported": 841,
+      "supplementalSamplesImported": 1,
+      "missingSamples": 0,
+      "missingByCar": [],
       "resultLapConflicts": [
         {
           "carNumber": "75",
@@ -225,6 +127,7 @@
       "sessionId": "session_indy_nxt_2024_6327",
       "parser": "pdftotext -raw plus lap-header row-position inversion partial visible-sample import",
       "samplesImported": 667,
+      "supplementalSamplesImported": 0,
       "missingSamples": 2,
       "missingByCar": [
         {
@@ -247,6 +150,7 @@
       "sessionId": "session_indy_nxt_2025_6445",
       "parser": "pdftotext -raw plus lap-header row-position inversion partial visible-sample import",
       "samplesImported": 660,
+      "supplementalSamplesImported": 0,
       "missingSamples": 2,
       "missingByCar": [
         {
@@ -269,6 +173,7 @@
       "sessionId": "session_indy_nxt_2025_6446",
       "parser": "pdftotext -raw plus lap-header row-position inversion partial visible-sample import",
       "samplesImported": 798,
+      "supplementalSamplesImported": 0,
       "missingSamples": 1,
       "missingByCar": [
         {
@@ -285,6 +190,7 @@
       "sessionId": "session_indy_nxt_2025_6451",
       "parser": "pdftohtml -xml coordinate lap-column parser partial visible-sample import",
       "samplesImported": 1412,
+      "supplementalSamplesImported": 0,
       "missingSamples": 1,
       "missingByCar": [
         {
@@ -301,6 +207,7 @@
       "sessionId": "session_indy_nxt_2026_6749",
       "parser": "pdftohtml -xml coordinate lap-column parser partial visible-sample import",
       "samplesImported": 962,
+      "supplementalSamplesImported": 0,
       "missingSamples": 1,
       "missingByCar": [
         {
@@ -1804,7 +1711,7 @@
   "sectionResultsReportsHeldOut": [
     {
       "sessionId": "session_indy_nxt_2024_6325",
-      "reason": "official_pdf_has_no_extractable_text",
+      "reason": "official_pdf_corrupt_or_truncated",
       "sessionName": "Race",
       "url": "http://www.imscdn.com/INDYCAR/Documents/6325/2024-05-11/indynxt-sectionresults-r2.pdf"
     },

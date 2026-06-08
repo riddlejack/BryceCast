@@ -1,10 +1,10 @@
 {
   "schemaVersion": "bryce-career-coverage-matrix.v1",
-  "generatedAt": "2026-06-08T15:40:19.361Z",
+  "generatedAt": "2026-06-08T18:40:18.296Z",
   "datasetPath": "data/career/career.dataset.json",
   "validation": {
     "ok": true,
-    "checkedAt": "2026-06-08T15:13:44.060Z",
+    "checkedAt": "2026-06-08T18:40:16.968Z",
     "errors": [],
     "warnings": [
       {
@@ -115,6 +115,7 @@
         "gap_froc_2024_start_positions_partial"
       ],
       "sourceFamilyPriorityExclusions": {
+        "grid_start_positions": "FROC 2024 official Toyota grid tabs, linked grid PDFs, and official Toyota articles backfill every race grid row the source family exposes with enough specificity. The remaining Race 2 tail rows are held out because the official Race 2 narratives identify only the reverse/top-eight rows plus one direct P16 statement, without a complete race-specific tail grid.",
         "exact_session_windows": "FROC 2024 official Toyota schedule images expose exact practice/qualifying/race windows and official Round 2 timing PDFs expose exact Test 1/2 windows. The remaining nine test sessions have official date-level article context and result tabs, but no official timing PDF link or equivalent exact clock-time source was found on the Toyota round pages."
       },
       "categories": [
@@ -188,7 +189,7 @@
           "covered": 0,
           "total": 52,
           "coverage": 0,
-          "notes": "0 sessions have lap samples; Formula Ford rows are Bryce-only labeled lap-analysis samples."
+          "notes": "0 sessions have lap samples."
         },
         {
           "id": "indy_section_data",
@@ -254,9 +255,7 @@
           "notes": "0 non-report derived metrics exist for this series. Teammate/field-strength analytics are not production-ready yet."
         }
       ],
-      "priorityGaps": [
-        "grid_start_positions"
-      ]
+      "priorityGaps": []
     },
     {
       "seriesId": "series_euroformula_open",
@@ -343,7 +342,7 @@
           "covered": 0,
           "total": 28,
           "coverage": 0,
-          "notes": "0 sessions have lap samples; Formula Ford rows are Bryce-only labeled lap-analysis samples."
+          "notes": "0 sessions have lap samples."
         },
         {
           "id": "indy_section_data",
@@ -498,7 +497,7 @@
           "covered": 0,
           "total": 37,
           "coverage": 0,
-          "notes": "0 sessions have lap samples; Formula Ford rows are Bryce-only labeled lap-analysis samples."
+          "notes": "0 sessions have lap samples."
         },
         {
           "id": "indy_section_data",
@@ -576,8 +575,11 @@
       "sessions": 46,
       "policyNote": null,
       "canceledOfficialSessionIds": [],
-      "openGapIds": [],
+      "openGapIds": [
+        "gap_formula_ford_2020_grid_start_source_asymmetry_holdouts"
+      ],
       "sourceFamilyPriorityExclusions": {
+        "grid_start_positions": "Formula Ford 2020 official event books now import every source-matchable race/heat grid/start row, including an exact-name fallback for Colin Lawson where the official grid page uses car 169 and the classification uses car 69. The remaining seven classified race/heat rows are preserved in gap_formula_ford_2020_grid_start_source_asymmetry_holdouts because the official source family exposes reserve-only entries, restart-grid-only positions, or original-grid rows that do not safely match the classified driver/car row.",
         "penalties_decisions": "Formula Ford 2020 event books expose explicit penalty-note rows where present, but no complete official no-penalty decisions ledger was found for every session."
       },
       "categories": [
@@ -597,7 +599,7 @@
           "covered": 32,
           "total": 32,
           "coverage": 1,
-          "notes": "782 race/heat result rows across 32 result-bearing race/heat sessions; 0 schedule-only future sessions excluded from result completeness."
+          "notes": "762 race/heat result rows across 32 result-bearing race/heat sessions; 0 schedule-only future sessions excluded from result completeness."
         },
         {
           "id": "qualifying_classifications",
@@ -612,10 +614,10 @@
           "id": "grid_start_positions",
           "label": "Grid/start positions",
           "status": "partial",
-          "covered": 760,
-          "total": 782,
-          "coverage": 0.9719,
-          "notes": "760/782 race/heat rows have gridPosition or startPosition."
+          "covered": 755,
+          "total": 762,
+          "coverage": 0.9908,
+          "notes": "755/762 race/heat rows have gridPosition or startPosition."
         },
         {
           "id": "exact_session_windows",
@@ -694,9 +696,9 @@
           "label": "Pit-stop counts",
           "status": "unavailable",
           "covered": 0,
-          "total": 782,
+          "total": 762,
           "coverage": 0,
-          "notes": "0/782 race/heat result rows have pit-stop counts."
+          "notes": "0/762 race/heat result rows have pit-stop counts."
         },
         {
           "id": "detailed_pit_context",
@@ -718,7 +720,6 @@
         }
       ],
       "priorityGaps": [
-        "grid_start_positions",
         "lap_samples"
       ]
     },
@@ -812,7 +813,7 @@
           "covered": 0,
           "total": 116,
           "coverage": 0,
-          "notes": "0 sessions have lap samples; Formula Ford rows are Bryce-only labeled lap-analysis samples."
+          "notes": "0 sessions have lap samples."
         },
         {
           "id": "indy_section_data",
@@ -963,7 +964,7 @@
           "covered": 1,
           "total": 1,
           "coverage": 1,
-          "notes": "1 sessions have lap samples; Formula Ford rows are Bryce-only labeled lap-analysis samples."
+          "notes": "1 sessions have lap samples."
         },
         {
           "id": "indy_section_data",
@@ -1049,7 +1050,12 @@
       "openGapIds": [
         "gap_indy_nxt_qualifying_lap_reports"
       ],
-      "sourceFamilyPriorityExclusions": {},
+      "sourceFamilyPriorityExclusions": {
+        "exact_session_windows": "INDY NXT official Race Control feeds and cached weekend schedule PDFs expose exact clock-time starts for 111 physical sessions. The remaining 78 date-only rows are qualifying/group/combined qualifying sessions where official weekend schedules expose only coarse qualifying blocks or no exact qualifying row, so there is no safe source-backed group or aggregate split to promote into session-hour joins.",
+        "indy_section_data": "INDY NXT official Top Section Times and Section Results reports are parsed for every comparable source-exposed session except session_indy_nxt_2024_6325, where the official Section Results URL returns corrupt/truncated non-PDF bytes from the CDN. Keep the section-data category partial with an explicit source-broken gap unless an alternate official non-corrupt copy appears.",
+        "lap_samples": "INDY NXT official Race Lap Chart PDFs are imported for all 36 completed race sessions: 26 charts fully validate and 10 clean partial visible-sample imports preserve explicit missing car-lap or result/chart conflict diagnostics without guessing terminal or conflict laps.",
+        "detailed_pit_context": "INDY NXT official report inventory exposes PitStops counts in API/result rows and Race Lap Chart position samples, but no dedicated pit-summary, pit-lane sequence, stop-lap, tire/service, or pit-time report was found across the cached official report family."
+      },
       "categories": [
         {
           "id": "events_sessions",
@@ -1091,10 +1097,10 @@
           "id": "exact_session_windows",
           "label": "Exact session windows",
           "status": "partial",
-          "covered": 37,
+          "covered": 111,
           "total": 189,
-          "coverage": 0.1958,
-          "notes": "37/189 physical sessions have clock-time starts; 189/189 have at least date-level starts; 0 sessions are source-unavailable exact windows after official source review."
+          "coverage": 0.5873,
+          "notes": "111/189 physical sessions have clock-time starts; 189/189 have at least date-level starts; 78 sessions are source-unavailable exact windows after official source review."
         },
         {
           "id": "track_metadata",
@@ -1127,10 +1133,10 @@
           "id": "indy_section_data",
           "label": "INDY NXT section data",
           "status": "partial",
-          "covered": 145,
-          "total": 146,
-          "coverage": 0.9932,
-          "notes": "146/146 comparable Top Section reports parsed after excluding 1 official canceled session; 145/146 comparable Section Results reports parsed after excluding 1 official canceled session. True held-outs: session_indy_nxt_2024_6325 (official_pdf_has_no_extractable_text)."
+          "covered": 144,
+          "total": 145,
+          "coverage": 0.9931,
+          "notes": "144/145 comparable sessions have both official Top Section Times and Section Results metrics. Aggregate combined qualifying rows, future schedule-only sessions, canceled sessions, and official no-row reports are excluded. Report parser cross-check: 146/146 comparable Top Section reports parsed; 145/146 comparable Section Results reports parsed. True held-outs: session_indy_nxt_2024_6325 (official_pdf_corrupt_or_truncated)."
         },
         {
           "id": "penalties_decisions",
@@ -1171,11 +1177,11 @@
         {
           "id": "detailed_pit_context",
           "label": "Detailed pit context",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
           "total": 45,
           "coverage": 0,
-          "notes": "INDY NXT has official/API pit-stop counts, but no detailed pit-summary or pit-lane sequence importer yet."
+          "notes": "INDY NXT official/API rows expose pit-stop counts, but the official report family does not expose a dedicated detailed pit-summary or pit-lane sequence."
         },
         {
           "id": "derived_benchmarks",
@@ -1187,12 +1193,7 @@
           "notes": "0 non-report derived metrics exist for this series. Teammate/field-strength analytics are not production-ready yet."
         }
       ],
-      "priorityGaps": [
-        "exact_session_windows",
-        "lap_samples",
-        "indy_section_data",
-        "detailed_pit_context"
-      ]
+      "priorityGaps": []
     }
   ],
   "seasons": [
@@ -1211,9 +1212,7 @@
       "raceRowsWithPitStops": 0,
       "lapSampleSessions": 0,
       "weatherSessions": 0,
-      "priorityGaps": [
-        "grid_start_positions"
-      ],
+      "priorityGaps": [],
       "categories": [
         {
           "id": "events_sessions",
@@ -1285,7 +1284,7 @@
           "covered": 0,
           "total": 52,
           "coverage": 0,
-          "notes": " sessions have lap samples."
+          "notes": "0 sessions have lap samples."
         },
         {
           "id": "indy_section_data",
@@ -1439,7 +1438,7 @@
           "covered": 0,
           "total": 28,
           "coverage": 0,
-          "notes": " sessions have lap samples."
+          "notes": "0 sessions have lap samples."
         },
         {
           "id": "indy_section_data",
@@ -1593,7 +1592,7 @@
           "covered": 0,
           "total": 37,
           "coverage": 0,
-          "notes": " sessions have lap samples."
+          "notes": "0 sessions have lap samples."
         },
         {
           "id": "indy_section_data",
@@ -1667,16 +1666,15 @@
       "events": 7,
       "sessions": 46,
       "raceSessions": 32,
-      "raceRows": 782,
+      "raceRows": 762,
       "qualifyingSessions": 14,
       "exactWindowSessions": 46,
       "physicalSessions": 46,
-      "raceRowsWithGridOrStart": 760,
+      "raceRowsWithGridOrStart": 755,
       "raceRowsWithPitStops": 0,
       "lapSampleSessions": 24,
       "weatherSessions": 46,
       "priorityGaps": [
-        "grid_start_positions",
         "lap_samples"
       ],
       "categories": [
@@ -1696,7 +1694,7 @@
           "covered": 32,
           "total": 32,
           "coverage": 1,
-          "notes": "782 race/heat result rows across 32 result-bearing race/heat sessions."
+          "notes": "762 race/heat result rows across 32 result-bearing race/heat sessions."
         },
         {
           "id": "qualifying_classifications",
@@ -1711,10 +1709,10 @@
           "id": "grid_start_positions",
           "label": "Grid/start positions",
           "status": "partial",
-          "covered": 760,
-          "total": 782,
-          "coverage": 0.9719,
-          "notes": "760/782 race/heat rows have gridPosition or startPosition."
+          "covered": 755,
+          "total": 762,
+          "coverage": 0.9908,
+          "notes": "755/762 race/heat rows have gridPosition or startPosition."
         },
         {
           "id": "exact_session_windows",
@@ -1750,7 +1748,7 @@
           "covered": 24,
           "total": 46,
           "coverage": 0.5217,
-          "notes": "[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object] sessions have lap samples."
+          "notes": "24 sessions have lap samples."
         },
         {
           "id": "indy_section_data",
@@ -1793,9 +1791,9 @@
           "label": "Pit-stop counts",
           "status": "unavailable",
           "covered": 0,
-          "total": 782,
+          "total": 762,
           "coverage": 0,
-          "notes": "0/782 race/heat result rows have pit-stop counts."
+          "notes": "0/762 race/heat result rows have pit-stop counts."
         },
         {
           "id": "detailed_pit_context",
@@ -1904,7 +1902,7 @@
           "covered": 0,
           "total": 39,
           "coverage": 0,
-          "notes": " sessions have lap samples."
+          "notes": "0 sessions have lap samples."
         },
         {
           "id": "indy_section_data",
@@ -2058,7 +2056,7 @@
           "covered": 0,
           "total": 77,
           "coverage": 0,
-          "notes": " sessions have lap samples."
+          "notes": "0 sessions have lap samples."
         },
         {
           "id": "indy_section_data",
@@ -2212,7 +2210,7 @@
           "covered": 1,
           "total": 1,
           "coverage": 1,
-          "notes": "[object Object] sessions have lap samples."
+          "notes": "1 sessions have lap samples."
         },
         {
           "id": "indy_section_data",
@@ -2288,18 +2286,13 @@
       "raceSessions": 14,
       "raceRows": 274,
       "qualifyingSessions": 34,
-      "exactWindowSessions": 0,
+      "exactWindowSessions": 38,
       "physicalSessions": 68,
       "raceRowsWithGridOrStart": 274,
       "raceRowsWithPitStops": 274,
       "lapSampleSessions": 14,
       "weatherSessions": 0,
-      "priorityGaps": [
-        "exact_session_windows",
-        "lap_samples",
-        "indy_section_data",
-        "detailed_pit_context"
-      ],
+      "priorityGaps": [],
       "categories": [
         {
           "id": "events_sessions",
@@ -2341,10 +2334,10 @@
           "id": "exact_session_windows",
           "label": "Exact session windows",
           "status": "partial",
-          "covered": 0,
+          "covered": 38,
           "total": 68,
-          "coverage": 0,
-          "notes": "0/68 physical sessions have clock-time starts; 68/68 have at least date-level starts; 0 sessions are source-unavailable exact windows after official source review."
+          "coverage": 0.5588,
+          "notes": "38/68 physical sessions have clock-time starts; 68/68 have at least date-level starts; 30 sessions are source-unavailable exact windows after official source review."
         },
         {
           "id": "track_metadata",
@@ -2377,10 +2370,10 @@
           "id": "indy_section_data",
           "label": "INDY NXT section data",
           "status": "partial",
-          "covered": 58,
-          "total": 68,
-          "coverage": 0.8529,
-          "notes": "[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]/68 sessions have official top-section or section-result metrics."
+          "covered": 56,
+          "total": 57,
+          "coverage": 0.9825,
+          "notes": "56/57 comparable sessions have both official Top Section Times and Section Results metrics. Aggregate combined qualifying rows, future schedule-only sessions, canceled sessions, and official no-row reports are excluded."
         },
         {
           "id": "penalties_decisions",
@@ -2421,11 +2414,11 @@
         {
           "id": "detailed_pit_context",
           "label": "Detailed pit context",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
           "total": 14,
           "coverage": 0,
-          "notes": "INDY NXT has official/API pit-stop counts, but no detailed pit-summary or pit-lane sequence importer yet."
+          "notes": "INDY NXT official/API rows expose pit-stop counts, but the official report family does not expose a dedicated detailed pit-summary or pit-lane sequence."
         },
         {
           "id": "derived_benchmarks",
@@ -2447,18 +2440,13 @@
       "raceSessions": 14,
       "raceRows": 272,
       "qualifyingSessions": 33,
-      "exactWindowSessions": 0,
+      "exactWindowSessions": 36,
       "physicalSessions": 66,
       "raceRowsWithGridOrStart": 272,
       "raceRowsWithPitStops": 272,
       "lapSampleSessions": 14,
       "weatherSessions": 0,
-      "priorityGaps": [
-        "exact_session_windows",
-        "lap_samples",
-        "indy_section_data",
-        "detailed_pit_context"
-      ],
+      "priorityGaps": [],
       "categories": [
         {
           "id": "events_sessions",
@@ -2500,10 +2488,10 @@
           "id": "exact_session_windows",
           "label": "Exact session windows",
           "status": "partial",
-          "covered": 0,
+          "covered": 36,
           "total": 66,
-          "coverage": 0,
-          "notes": "0/66 physical sessions have clock-time starts; 66/66 have at least date-level starts; 0 sessions are source-unavailable exact windows after official source review."
+          "coverage": 0.5455,
+          "notes": "36/66 physical sessions have clock-time starts; 66/66 have at least date-level starts; 30 sessions are source-unavailable exact windows after official source review."
         },
         {
           "id": "track_metadata",
@@ -2535,11 +2523,11 @@
         {
           "id": "indy_section_data",
           "label": "INDY NXT section data",
-          "status": "partial",
+          "status": "complete",
           "covered": 56,
-          "total": 66,
-          "coverage": 0.8485,
-          "notes": "[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]/66 sessions have official top-section or section-result metrics."
+          "total": 56,
+          "coverage": 1,
+          "notes": "56/56 comparable sessions have both official Top Section Times and Section Results metrics. Aggregate combined qualifying rows, future schedule-only sessions, canceled sessions, and official no-row reports are excluded."
         },
         {
           "id": "penalties_decisions",
@@ -2580,11 +2568,11 @@
         {
           "id": "detailed_pit_context",
           "label": "Detailed pit context",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
           "total": 14,
           "coverage": 0,
-          "notes": "INDY NXT has official/API pit-stop counts, but no detailed pit-summary or pit-lane sequence importer yet."
+          "notes": "INDY NXT official/API rows expose pit-stop counts, but the official report family does not expose a dedicated detailed pit-summary or pit-lane sequence."
         },
         {
           "id": "derived_benchmarks",
@@ -2612,12 +2600,7 @@
       "raceRowsWithPitStops": 192,
       "lapSampleSessions": 8,
       "weatherSessions": 0,
-      "priorityGaps": [
-        "exact_session_windows",
-        "lap_samples",
-        "indy_section_data",
-        "detailed_pit_context"
-      ],
+      "priorityGaps": [],
       "categories": [
         {
           "id": "events_sessions",
@@ -2662,7 +2645,7 @@
           "covered": 37,
           "total": 55,
           "coverage": 0.6727,
-          "notes": "37/55 physical sessions have clock-time starts; 55/55 have at least date-level starts; 0 sessions are source-unavailable exact windows after official source review."
+          "notes": "37/55 physical sessions have clock-time starts; 55/55 have at least date-level starts; 18 sessions are source-unavailable exact windows after official source review."
         },
         {
           "id": "track_metadata",
@@ -2694,11 +2677,11 @@
         {
           "id": "indy_section_data",
           "label": "INDY NXT section data",
-          "status": "partial",
+          "status": "complete",
           "covered": 32,
-          "total": 55,
-          "coverage": 0.5818,
-          "notes": "[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]/55 sessions have official top-section or section-result metrics."
+          "total": 32,
+          "coverage": 1,
+          "notes": "32/32 comparable sessions have both official Top Section Times and Section Results metrics. Aggregate combined qualifying rows, future schedule-only sessions, canceled sessions, and official no-row reports are excluded."
         },
         {
           "id": "penalties_decisions",
@@ -2739,11 +2722,11 @@
         {
           "id": "detailed_pit_context",
           "label": "Detailed pit context",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
           "total": 17,
           "coverage": 0,
-          "notes": "INDY NXT has official/API pit-stop counts, but no detailed pit-summary or pit-lane sequence importer yet."
+          "notes": "INDY NXT official/API rows expose pit-stop counts, but the official report family does not expose a dedicated detailed pit-summary or pit-lane sequence."
         },
         {
           "id": "derived_benchmarks",
@@ -15051,20 +15034,20 @@
         {
           "id": "race_results",
           "status": "complete",
-          "covered": 35,
+          "covered": 26,
           "total": 1
         },
         {
           "id": "qualifying_classifications",
           "status": "out_of_scope",
-          "covered": 35,
+          "covered": 26,
           "total": 0
         },
         {
           "id": "grid_start_positions",
           "status": "partial",
-          "covered": 33,
-          "total": 35
+          "covered": 25,
+          "total": 26
         },
         {
           "id": "exact_session_windows",
@@ -15118,7 +15101,7 @@
           "id": "pit_stop_counts",
           "status": "unavailable",
           "covered": 0,
-          "total": 35
+          "total": 26
         },
         {
           "id": "detailed_pit_context",
@@ -15155,20 +15138,20 @@
         {
           "id": "race_results",
           "status": "complete",
-          "covered": 34,
+          "covered": 25,
           "total": 1
         },
         {
           "id": "qualifying_classifications",
           "status": "out_of_scope",
-          "covered": 34,
+          "covered": 25,
           "total": 0
         },
         {
           "id": "grid_start_positions",
-          "status": "partial",
-          "covered": 29,
-          "total": 34
+          "status": "complete",
+          "covered": 25,
+          "total": 25
         },
         {
           "id": "exact_session_windows",
@@ -15222,7 +15205,7 @@
           "id": "pit_stop_counts",
           "status": "unavailable",
           "covered": 0,
-          "total": 34
+          "total": 25
         },
         {
           "id": "detailed_pit_context",
@@ -15259,13 +15242,13 @@
         {
           "id": "race_results",
           "status": "out_of_scope",
-          "covered": 32,
+          "covered": 16,
           "total": 0
         },
         {
           "id": "qualifying_classifications",
           "status": "complete",
-          "covered": 32,
+          "covered": 16,
           "total": 1
         },
         {
@@ -15363,20 +15346,20 @@
         {
           "id": "race_results",
           "status": "complete",
-          "covered": 18,
+          "covered": 16,
           "total": 1
         },
         {
           "id": "qualifying_classifications",
           "status": "out_of_scope",
-          "covered": 18,
+          "covered": 16,
           "total": 0
         },
         {
           "id": "grid_start_positions",
           "status": "complete",
-          "covered": 18,
-          "total": 18
+          "covered": 16,
+          "total": 16
         },
         {
           "id": "exact_session_windows",
@@ -15430,7 +15413,7 @@
           "id": "pit_stop_counts",
           "status": "unavailable",
           "covered": 0,
-          "total": 18
+          "total": 16
         },
         {
           "id": "detailed_pit_context",
@@ -17247,7 +17230,7 @@
         {
           "id": "grid_start_positions",
           "status": "partial",
-          "covered": 28,
+          "covered": 33,
           "total": 34
         },
         {
@@ -17350,8 +17333,8 @@
         },
         {
           "id": "grid_start_positions",
-          "status": "partial",
-          "covered": 30,
+          "status": "complete",
+          "covered": 34,
           "total": 34
         },
         {
@@ -32109,8 +32092,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -32135,7 +32118,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -32163,9 +32146,9 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "derived_benchmarks",
@@ -32213,8 +32196,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -32239,7 +32222,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -32267,9 +32250,9 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "derived_benchmarks",
@@ -32317,8 +32300,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -32343,7 +32326,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -32371,9 +32354,9 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "derived_benchmarks",
@@ -32421,8 +32404,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -32447,7 +32430,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -32475,9 +32458,9 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "derived_benchmarks",
@@ -32525,8 +32508,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -32551,7 +32534,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -32579,9 +32562,9 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "derived_benchmarks",
@@ -32629,8 +32612,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -32655,7 +32638,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -32683,9 +32666,9 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "derived_benchmarks",
@@ -32733,8 +32716,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -32759,7 +32742,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -32787,9 +32770,9 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "derived_benchmarks",
@@ -32837,8 +32820,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -32856,14 +32839,14 @@
         {
           "id": "lap_samples",
           "status": "partial",
-          "covered": 547,
+          "covered": 564,
           "total": 1
         },
         {
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -32891,9 +32874,9 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "derived_benchmarks",
@@ -32941,8 +32924,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -32967,7 +32950,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -32995,9 +32978,9 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "derived_benchmarks",
@@ -33045,8 +33028,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -33071,7 +33054,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -33099,9 +33082,9 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "derived_benchmarks",
@@ -33149,8 +33132,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -33175,7 +33158,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -33203,9 +33186,9 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "derived_benchmarks",
@@ -33253,8 +33236,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -33277,9 +33260,9 @@
         },
         {
           "id": "indy_section_data",
-          "status": "complete",
+          "status": "partial",
           "covered": 1,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -33307,9 +33290,9 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "derived_benchmarks",
@@ -33357,8 +33340,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -33376,14 +33359,14 @@
         {
           "id": "lap_samples",
           "status": "partial",
-          "covered": 840,
+          "covered": 841,
           "total": 1
         },
         {
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -33411,9 +33394,9 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "derived_benchmarks",
@@ -33461,8 +33444,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -33487,7 +33470,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -33515,9 +33498,9 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "derived_benchmarks",
@@ -33565,8 +33548,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -33591,7 +33574,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -33619,7 +33602,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -33669,8 +33652,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -33695,7 +33678,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -33723,7 +33706,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -33799,7 +33782,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -33827,7 +33810,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -33903,7 +33886,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -33931,7 +33914,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -33981,8 +33964,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -34007,7 +33990,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -34035,7 +34018,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -34085,8 +34068,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -34111,7 +34094,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -34139,7 +34122,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -34215,7 +34198,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -34243,7 +34226,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -34319,7 +34302,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -34347,7 +34330,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -34397,8 +34380,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -34423,7 +34406,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -34451,7 +34434,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -34527,7 +34510,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -34555,7 +34538,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -34631,7 +34614,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -34659,7 +34642,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -34735,7 +34718,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -34763,7 +34746,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -34839,7 +34822,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -34867,7 +34850,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -34917,8 +34900,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -34943,7 +34926,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -34971,7 +34954,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -35021,8 +35004,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -35047,7 +35030,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -35075,7 +35058,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -35151,7 +35134,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -35179,7 +35162,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -35255,7 +35238,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -35283,7 +35266,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -35333,8 +35316,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -35359,7 +35342,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -35387,7 +35370,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -35437,8 +35420,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -35463,7 +35446,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -35491,7 +35474,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -35567,7 +35550,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -35595,7 +35578,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -35671,7 +35654,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -35699,7 +35682,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -35749,8 +35732,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -35775,7 +35758,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -35803,7 +35786,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -35853,8 +35836,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -35879,7 +35862,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -35907,7 +35890,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -35983,7 +35966,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -36011,7 +35994,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -36087,7 +36070,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -36115,7 +36098,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -36191,7 +36174,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -36219,7 +36202,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -36295,7 +36278,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -36323,7 +36306,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -36373,8 +36356,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -36399,7 +36382,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -36427,7 +36410,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -36477,8 +36460,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -36503,7 +36486,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -36531,7 +36514,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -36607,7 +36590,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -36635,7 +36618,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -36711,7 +36694,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -36739,7 +36722,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -36789,8 +36772,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -36815,7 +36798,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -36843,7 +36826,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -36893,8 +36876,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -36919,7 +36902,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -36947,7 +36930,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -36997,8 +36980,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -37023,7 +37006,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -37051,7 +37034,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -37101,8 +37084,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -37127,7 +37110,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -37155,7 +37138,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -37205,8 +37188,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -37231,7 +37214,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -37259,7 +37242,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -37309,8 +37292,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -37333,9 +37316,9 @@
         },
         {
           "id": "indy_section_data",
-          "status": "complete",
+          "status": "unavailable",
           "covered": 2,
-          "total": 1
+          "total": 0
         },
         {
           "id": "penalties_decisions",
@@ -37363,7 +37346,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -37413,8 +37396,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -37439,7 +37422,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -37467,7 +37450,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -37517,8 +37500,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -37543,7 +37526,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -37571,7 +37554,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -37621,8 +37604,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -37647,7 +37630,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -37675,7 +37658,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -37751,7 +37734,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -37779,7 +37762,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -37829,8 +37812,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -37855,7 +37838,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -37883,7 +37866,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -37933,8 +37916,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -37959,7 +37942,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -37987,7 +37970,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -38063,7 +38046,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -38091,7 +38074,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -38165,9 +38148,9 @@
         },
         {
           "id": "indy_section_data",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "penalties_decisions",
@@ -38195,7 +38178,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -38269,9 +38252,9 @@
         },
         {
           "id": "indy_section_data",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "penalties_decisions",
@@ -38299,7 +38282,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -38373,9 +38356,9 @@
         },
         {
           "id": "indy_section_data",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "penalties_decisions",
@@ -38403,7 +38386,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -38477,9 +38460,9 @@
         },
         {
           "id": "indy_section_data",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "penalties_decisions",
@@ -38507,7 +38490,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -38581,9 +38564,9 @@
         },
         {
           "id": "indy_section_data",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "penalties_decisions",
@@ -38611,7 +38594,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -38685,9 +38668,9 @@
         },
         {
           "id": "indy_section_data",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "penalties_decisions",
@@ -38715,7 +38698,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -38789,9 +38772,9 @@
         },
         {
           "id": "indy_section_data",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "penalties_decisions",
@@ -38819,7 +38802,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -38893,9 +38876,9 @@
         },
         {
           "id": "indy_section_data",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "penalties_decisions",
@@ -38923,7 +38906,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -38997,9 +38980,9 @@
         },
         {
           "id": "indy_section_data",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "penalties_decisions",
@@ -39027,7 +39010,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -39101,9 +39084,9 @@
         },
         {
           "id": "indy_section_data",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "penalties_decisions",
@@ -39131,7 +39114,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -39181,8 +39164,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -39207,7 +39190,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -39235,9 +39218,9 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "derived_benchmarks",
@@ -39285,8 +39268,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -39311,7 +39294,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -39339,9 +39322,9 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "derived_benchmarks",
@@ -39389,8 +39372,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -39415,7 +39398,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -39443,9 +39426,9 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "derived_benchmarks",
@@ -39493,8 +39476,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -39519,7 +39502,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -39547,9 +39530,9 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "derived_benchmarks",
@@ -39597,8 +39580,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -39623,7 +39606,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -39651,9 +39634,9 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "derived_benchmarks",
@@ -39701,8 +39684,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -39727,7 +39710,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -39755,9 +39738,9 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "derived_benchmarks",
@@ -39805,8 +39788,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -39831,7 +39814,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -39859,9 +39842,9 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "derived_benchmarks",
@@ -39909,8 +39892,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -39935,7 +39918,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -39963,9 +39946,9 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "derived_benchmarks",
@@ -40013,8 +39996,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -40039,7 +40022,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -40067,9 +40050,9 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "derived_benchmarks",
@@ -40117,8 +40100,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -40143,7 +40126,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -40171,9 +40154,9 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "derived_benchmarks",
@@ -40221,8 +40204,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -40247,7 +40230,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -40275,9 +40258,9 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "derived_benchmarks",
@@ -40325,8 +40308,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -40351,7 +40334,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -40379,9 +40362,9 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "derived_benchmarks",
@@ -40429,8 +40412,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -40455,7 +40438,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -40483,9 +40466,9 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "derived_benchmarks",
@@ -40533,8 +40516,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -40559,7 +40542,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -40587,9 +40570,9 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "derived_benchmarks",
@@ -40637,8 +40620,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -40663,7 +40646,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -40691,7 +40674,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -40741,8 +40724,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -40767,7 +40750,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -40795,7 +40778,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -40871,7 +40854,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -40899,7 +40882,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -40975,7 +40958,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -41003,7 +40986,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -41053,8 +41036,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -41079,7 +41062,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -41107,7 +41090,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -41181,9 +41164,9 @@
         },
         {
           "id": "indy_section_data",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "penalties_decisions",
@@ -41211,7 +41194,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -41285,9 +41268,9 @@
         },
         {
           "id": "indy_section_data",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "penalties_decisions",
@@ -41315,7 +41298,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -41389,9 +41372,9 @@
         },
         {
           "id": "indy_section_data",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "penalties_decisions",
@@ -41419,7 +41402,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -41493,9 +41476,9 @@
         },
         {
           "id": "indy_section_data",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "penalties_decisions",
@@ -41523,7 +41506,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -41573,8 +41556,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -41599,7 +41582,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -41627,7 +41610,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -41701,9 +41684,9 @@
         },
         {
           "id": "indy_section_data",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "penalties_decisions",
@@ -41731,7 +41714,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -41805,9 +41788,9 @@
         },
         {
           "id": "indy_section_data",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "penalties_decisions",
@@ -41835,7 +41818,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -41911,7 +41894,7 @@
           "id": "indy_section_data",
           "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "penalties_decisions",
@@ -41939,7 +41922,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -42013,9 +41996,9 @@
         },
         {
           "id": "indy_section_data",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "penalties_decisions",
@@ -42043,7 +42026,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -42117,9 +42100,9 @@
         },
         {
           "id": "indy_section_data",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "penalties_decisions",
@@ -42147,7 +42130,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -42197,8 +42180,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -42223,7 +42206,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -42251,7 +42234,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -42325,9 +42308,9 @@
         },
         {
           "id": "indy_section_data",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "penalties_decisions",
@@ -42355,7 +42338,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -42405,8 +42388,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -42431,7 +42414,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -42459,7 +42442,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -42509,8 +42492,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -42535,7 +42518,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -42563,7 +42546,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -42639,7 +42622,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -42667,7 +42650,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -42743,7 +42726,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -42771,7 +42754,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -42821,8 +42804,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -42847,7 +42830,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -42875,7 +42858,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -42951,7 +42934,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -42979,7 +42962,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -43055,7 +43038,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -43083,7 +43066,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -43159,7 +43142,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -43187,7 +43170,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -43263,7 +43246,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -43291,7 +43274,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -43341,8 +43324,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -43367,7 +43350,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -43395,7 +43378,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -43445,8 +43428,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -43471,7 +43454,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -43499,7 +43482,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -43575,7 +43558,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -43603,7 +43586,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -43679,7 +43662,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -43707,7 +43690,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -43757,8 +43740,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -43783,7 +43766,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -43811,7 +43794,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -43861,8 +43844,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -43887,7 +43870,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -43915,7 +43898,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -43965,8 +43948,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -43991,7 +43974,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -44019,7 +44002,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -44095,7 +44078,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -44123,7 +44106,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -44199,7 +44182,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -44227,7 +44210,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -44277,8 +44260,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -44303,7 +44286,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -44331,7 +44314,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -44381,8 +44364,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -44407,7 +44390,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -44435,7 +44418,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -44511,7 +44494,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -44539,7 +44522,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -44615,7 +44598,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -44643,7 +44626,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -44693,8 +44676,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -44719,7 +44702,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -44747,7 +44730,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -44797,8 +44780,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -44823,7 +44806,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -44851,7 +44834,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -44901,8 +44884,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -44927,7 +44910,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -44955,7 +44938,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -45031,7 +45014,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -45059,7 +45042,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -45135,7 +45118,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -45163,7 +45146,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -45239,7 +45222,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -45267,7 +45250,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -45343,7 +45326,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -45371,7 +45354,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -45421,8 +45404,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -45447,7 +45430,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -45475,7 +45458,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -45525,8 +45508,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -45551,7 +45534,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -45579,7 +45562,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -45655,7 +45638,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -45683,7 +45666,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -45759,7 +45742,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -45787,7 +45770,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -45837,8 +45820,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -45863,7 +45846,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -45891,7 +45874,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -45941,8 +45924,8 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
@@ -45967,7 +45950,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -45995,7 +45978,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -46071,7 +46054,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -46099,9 +46082,9 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "derived_benchmarks",
@@ -46175,7 +46158,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -46203,9 +46186,9 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "derived_benchmarks",
@@ -46279,7 +46262,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -46307,9 +46290,9 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "derived_benchmarks",
@@ -46383,7 +46366,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -46411,9 +46394,9 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "derived_benchmarks",
@@ -46487,7 +46470,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -46515,9 +46498,9 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "derived_benchmarks",
@@ -46589,9 +46572,9 @@
         },
         {
           "id": "indy_section_data",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "penalties_decisions",
@@ -46619,7 +46602,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -46693,9 +46676,9 @@
         },
         {
           "id": "indy_section_data",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "penalties_decisions",
@@ -46723,7 +46706,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -46799,7 +46782,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -46827,9 +46810,9 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "derived_benchmarks",
@@ -46901,9 +46884,9 @@
         },
         {
           "id": "indy_section_data",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "penalties_decisions",
@@ -46931,7 +46914,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -47005,9 +46988,9 @@
         },
         {
           "id": "indy_section_data",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "penalties_decisions",
@@ -47035,7 +47018,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -47109,9 +47092,9 @@
         },
         {
           "id": "indy_section_data",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "penalties_decisions",
@@ -47139,7 +47122,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -47213,9 +47196,9 @@
         },
         {
           "id": "indy_section_data",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "penalties_decisions",
@@ -47243,7 +47226,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -47317,9 +47300,9 @@
         },
         {
           "id": "indy_section_data",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "penalties_decisions",
@@ -47347,7 +47330,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -47421,9 +47404,9 @@
         },
         {
           "id": "indy_section_data",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "penalties_decisions",
@@ -47451,7 +47434,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -47527,7 +47510,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -47555,9 +47538,9 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "derived_benchmarks",
@@ -47629,9 +47612,9 @@
         },
         {
           "id": "indy_section_data",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "penalties_decisions",
@@ -47659,7 +47642,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -47735,7 +47718,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -47763,9 +47746,9 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "derived_benchmarks",
@@ -47839,7 +47822,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -47867,7 +47850,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -47943,7 +47926,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -47971,7 +47954,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -48047,7 +48030,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -48075,7 +48058,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -48151,7 +48134,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -48179,7 +48162,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -48253,9 +48236,9 @@
         },
         {
           "id": "indy_section_data",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "penalties_decisions",
@@ -48283,7 +48266,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -48359,7 +48342,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -48387,7 +48370,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -48463,7 +48446,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -48491,7 +48474,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -48567,7 +48550,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -48595,7 +48578,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -48671,7 +48654,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -48699,7 +48682,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -48773,9 +48756,9 @@
         },
         {
           "id": "indy_section_data",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "penalties_decisions",
@@ -48803,7 +48786,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -48879,7 +48862,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -48907,7 +48890,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -48983,7 +48966,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -49011,7 +48994,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -49087,7 +49070,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -49115,7 +49098,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -49189,9 +49172,9 @@
         },
         {
           "id": "indy_section_data",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "penalties_decisions",
@@ -49219,7 +49202,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -49295,7 +49278,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -49323,7 +49306,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -49399,7 +49382,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -49427,7 +49410,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -49501,9 +49484,9 @@
         },
         {
           "id": "indy_section_data",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "penalties_decisions",
@@ -49531,7 +49514,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -49607,7 +49590,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -49635,7 +49618,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -49709,9 +49692,9 @@
         },
         {
           "id": "indy_section_data",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "penalties_decisions",
@@ -49739,7 +49722,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -49815,7 +49798,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -49843,7 +49826,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -49919,7 +49902,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -49947,7 +49930,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -50021,9 +50004,9 @@
         },
         {
           "id": "indy_section_data",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "penalties_decisions",
@@ -50051,7 +50034,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -50127,7 +50110,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -50155,7 +50138,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -50231,7 +50214,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -50259,7 +50242,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -50335,7 +50318,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -50363,7 +50346,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -50439,7 +50422,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -50467,7 +50450,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -50543,7 +50526,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -50571,7 +50554,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -50647,7 +50630,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -50675,7 +50658,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -50749,9 +50732,9 @@
         },
         {
           "id": "indy_section_data",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "penalties_decisions",
@@ -50779,7 +50762,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -50855,7 +50838,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -50883,7 +50866,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -50959,7 +50942,7 @@
           "id": "indy_section_data",
           "status": "complete",
           "covered": 2,
-          "total": 1
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -50987,7 +50970,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -51061,9 +51044,9 @@
         },
         {
           "id": "indy_section_data",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "penalties_decisions",
@@ -51091,7 +51074,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -51165,9 +51148,9 @@
         },
         {
           "id": "indy_section_data",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "penalties_decisions",
@@ -51195,7 +51178,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -51269,9 +51252,9 @@
         },
         {
           "id": "indy_section_data",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "penalties_decisions",
@@ -51299,7 +51282,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -51373,9 +51356,9 @@
         },
         {
           "id": "indy_section_data",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "penalties_decisions",
@@ -51403,7 +51386,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -51477,9 +51460,9 @@
         },
         {
           "id": "indy_section_data",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "penalties_decisions",
@@ -51507,7 +51490,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -51581,9 +51564,9 @@
         },
         {
           "id": "indy_section_data",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "penalties_decisions",
@@ -51611,7 +51594,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -51685,9 +51668,9 @@
         },
         {
           "id": "indy_section_data",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "penalties_decisions",
@@ -51715,7 +51698,7 @@
         },
         {
           "id": "detailed_pit_context",
-          "status": "out_of_scope",
+          "status": "unavailable",
           "covered": 0,
           "total": 0
         },
@@ -51731,27 +51714,21 @@
   "globalPriority": [
     {
       "rank": 1,
-      "id": "audit_and_patch_indy_nxt_detail_categories",
+      "id": "publish_indy_nxt_dashboard_readiness",
       "seriesId": "series_indy_nxt",
-      "rationale": "INDY NXT is the richest and most UI-relevant source family. Lap charts, section data, penalties, cautions, racecraft, and pit-stop counts are already present; detailed pit context remains blocked unless official report availability is confirmed."
+      "rationale": "INDY NXT active source-backed detail blockers are closed or explicitly source-bounded. Publish the production-safe analytics list and caveats so BryceCast UI work can start from the stable official/API/PDF dataset."
     },
     {
       "rank": 2,
-      "id": "patch_froc_grid_tail_where_source_exists",
-      "seriesId": "series_froc",
-      "rationale": "FROC exact windows are complete where official exact-time sources were found; the remaining test sessions are source-unavailable for clock-time joins. Grid/start rows remain partial for reverse-grid Race 2 tail positions until race-specific official grid evidence is found."
-    },
-    {
-      "rank": 3,
       "id": "resolve_or_preserve_gb3_2022_source_broken_rows",
       "seriesId": "series_gb3",
       "rationale": "GB3 2021 TSL PDFs and GB3 2022 JSON expose different detail categories; after preserving that source-family split, the remaining hard GB3 gap is the official 2022 session 1248 JSON 404."
     },
     {
-      "rank": 4,
-      "id": "harden_formula_ford_lap_and_grid_diagnostics",
+      "rank": 3,
+      "id": "harden_formula_ford_lap_sample_scope",
       "seriesId": "series_formula_ford",
-      "rationale": "Formula Ford 2020 has rich official PDFs, but grid rows and Bryce-only lap-analysis continuation pages remain partial by parser confidence."
+      "rationale": "Formula Ford 2020 grid/start rows are now complete for source-matchable official event-book rows, with seven source-asymmetry holdouts preserved explicitly. The remaining active Formula Ford priority is deciding whether official lap-analysis pages justify expanding beyond the current Bryce-only lap samples."
     }
   ],
   "openGaps": [
@@ -51759,6 +51736,11 @@
       "id": "gap_euroformula_2023_championship_classification_pdf_current_mismatch",
       "status": "open",
       "description": "The supplied official classification PDF URL now serves a 2026 document, so 2023 championship position and points were not imported from that mutable S3 key."
+    },
+    {
+      "id": "gap_formula_ford_2020_grid_start_source_asymmetry_holdouts",
+      "status": "open",
+      "description": "Formula Ford 2020 official grid/start import is complete for 755 race/heat rows. The remaining 7 classified race/heat rows are held out because the official source family exposes reserve-only entries, restart-grid-only positions, or original-grid rows that do not safely match the classified driver/car row. These rows remain explicit holdouts instead of guessed grid/start positions."
     },
     {
       "id": "gap_froc_2024_round_4_date_conflict",
@@ -51788,7 +51770,7 @@
     {
       "id": "gap_indy_nxt_qualifying_lap_reports",
       "status": "open",
-      "description": "EventsSessionDetails imports race/session result rows, qualifyingResults for official SessionType=Q records, and official terminal-status incident rows for contact/mechanical/dns outcomes. Official Race Lap Chart PDFs now import complete lap-by-lap position samples when parser validation matches official completed-lap counts, plus clean source-visible partial samples when missing car-lap counts or official result/chart lap-count conflicts are explicitly reported and no parsed samples duplicate or reference unknown cars. Official Event Summary PDFs now import race-stat metrics and most-improved racecraft notes. Official Leader Lap Summary PDFs now import leader-by-lap timing, margin, and flag-state metrics. Official Top Section Times PDFs now import practice, qualifying, and race section-rank timing metrics when official section rows are present. Official Section Results PDFs now import practice, qualifying, and race lap-by-lap section times and speeds at per-car/per-lap grain when official section rows are present. Canceled reports without timing rows are held out, and source-visible rows without canonical API timing rows keep car/name text with null canonical IDs. Official race Results PDFs now import penalty/decision summary rows and caution-summary causal incident rows. Pit summaries, deeper report parsing, and lap-specific incident detail beyond official caution summaries remain open."
+      "description": "EventsSessionDetails imports race/session result rows, qualifyingResults for official SessionType=Q records, and official terminal-status incident rows for contact/mechanical/dns outcomes. Official Race Lap Chart PDFs now import 29,519 official lap-by-lap position samples from all 36 completed Race Lap Chart PDFs: 26 charts fully validate against official completed-lap counts and 10 clean partial Race Lap Chart PDFs preserve explicit missing car-lap or official result/chart conflict diagnostics without guessing terminal or conflict laps. Official Event Summary PDFs import race-stat metrics and most-improved racecraft notes. Official Leader Lap Summary PDFs import leader-by-lap timing, margin, and flag-state metrics. Official Top Section Times PDFs import practice, qualifying, and race section-rank timing metrics when official section rows are present. Official Section Results PDFs import practice, qualifying, and race lap-by-lap section times and speeds at per-car/per-lap grain when official section rows are present. The remaining true section-results holdout is session_indy_nxt_2024_6325, where the official Section Results PDF URL returns corrupt non-PDF bytes; canceled/no-row reports remain held out rather than treated as missing data. Source-visible rows without canonical API timing rows keep car/name text with null canonical IDs. Official race Results PDFs import penalty/decision summary rows and caution-summary causal incident rows. Detailed pit-lane sequence context is source-unavailable in the current official report family; use official/API pit-stop counts as the production-safe pit metric unless a new official pit-summary source appears."
     },
     {
       "id": "gap_remaining_career_rows_after_track_metadata",

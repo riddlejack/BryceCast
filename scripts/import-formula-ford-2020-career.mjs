@@ -537,7 +537,7 @@ const parseHeatNumber = (title) => {
 
 const isClassToken = (value) => {
   const clean = String(value ?? '').replace(/\*/g, '').trim();
-  return Boolean(clean) && /^(Pro|Club|SCA|SCB|SCC|SCD|SCE|CH|JC|O|H)$/i.test(clean);
+  return Boolean(clean) && /^(Pro|Club|SCA|SCB|SCC|SCD|SCE|CH|JC|O|H|P)$/i.test(clean);
 };
 
 const cleanClass = (value) => {
@@ -547,6 +547,7 @@ const cleanClass = (value) => {
 
 const cleanDriverName = (name) =>
   String(name ?? '')
+    .replace(/®/g, '')
     .replace(/\s+/g, ' ')
     .replace(/\s+\*+$/g, '')
     .trim();
@@ -722,7 +723,7 @@ const cleanPenaltyReason = (value) => String(value ?? '').replace(/\.+$/g, '').t
 const parseGridEntries = (page) => {
   const entries = [];
   const seen = new Set();
-  const entryPattern = /(?:^|\s)(?<position>\d{1,2})\s+(?<carNumber>\d{1,3})\s+(?<driverName>[A-Za-z][A-Za-z .'\-()]+?)(?=\s{2,}\d{1,2}\s+\d{1,3}\s+[A-Za-z]|\s*$)/g;
+  const entryPattern = /(?:^|\s)(?<position>\d{1,2})\s+(?<carNumber>\d{1,3})\s+(?<driverName>[A-Za-z][A-Za-z® .'\-()]+?)(?=\s{2,}\d{1,2}\s+\d{1,3}\s+[A-Za-z]|\s*$)/g;
   for (const line of page.split('\n')) {
     const normalized = line
       .replace(/\bROW\s+\d+\b/ig, ' ')
@@ -958,11 +959,16 @@ const main = async () => {
   const seasons = new Map(asArray(existing.seasons).map((row) => [row.id, row]));
   const events = new Map(asArray(existing.events).map((row) => [row.id, row]));
   const sessions = new Map(asArray(existing.sessions).map((row) => [row.id, row]));
+  const ownedResultPrefix = `result_formula_ford_${year}_`;
+  const ownedCarPrefix = `car_formula_ford_${year}_`;
   const ownedPenaltyPrefix = `penalty_formula_ford_${year}_`;
   const results = new Map(asArray(existing.results).map((row) => [row.id, {
     ...row,
     penaltyRefs: asArray(row.penaltyRefs).filter((ref) => !String(ref).startsWith(ownedPenaltyPrefix))
-  }]));
+  }]).filter(([id]) => !String(id).startsWith(ownedResultPrefix)));
+  for (const id of [...cars.keys()].filter((id) => String(id).startsWith(ownedCarPrefix))) {
+    cars.delete(id);
+  }
   const penalties = new Map(
     asArray(existing.penalties)
       .filter((row) => !String(row.id ?? '').startsWith(ownedPenaltyPrefix))
@@ -999,6 +1005,8 @@ const main = async () => {
     rawArtifacts: [],
     crossChecks: [],
     gridRowsUnmatched: [],
+    gridRowsMatchedByDriverName: [],
+    gridStartHoldouts: [],
     gaps: []
   };
 
@@ -1293,6 +1301,8 @@ const main = async () => {
     const fieldSize = parsedSession.rows.length;
     const resultIdsByCarNumber = new Map();
     const driverIdsByCarNumber = new Map();
+    const resultIdsByDriverName = new Map();
+    const duplicateDriverNames = new Set();
     for (const row of parsedSession.rows) {
       const driverId = driverIdFor(row.driverName);
       const normalizedName = identityName(row.driverName);
@@ -1376,6 +1386,8 @@ const main = async () => {
       });
       resultIdsByCarNumber.set(row.carNumber, resultId);
       driverIdsByCarNumber.set(row.carNumber, driverId);
+      if (resultIdsByDriverName.has(normalizedName)) duplicateDriverNames.add(normalizedName);
+      resultIdsByDriverName.set(normalizedName, resultId);
       report.resultRowsImported += 1;
       if (driverId === 'driver_bryce_aron') report.bryceResultRowsImported += 1;
     }
@@ -1395,7 +1407,30 @@ const main = async () => {
       }));
 
       for (const gridRow of gridPage.rows) {
-        const resultId = resultIdsByCarNumber.get(gridRow.carNumber);
+        let resultId = resultIdsByCarNumber.get(gridRow.carNumber);
+        let matchStrategy = 'car_number';
+        if (!resultId) {
+          const normalizedGridName = identityName(gridRow.driverName);
+          const candidateResultId = duplicateDriverNames.has(normalizedGridName)
+            ? null
+            : resultIdsByDriverName.get(normalizedGridName);
+          if (candidateResultId) {
+            resultId = candidateResultId;
+            matchStrategy = 'driver_name_fallback';
+            const result = results.get(resultId);
+            report.gridRowsMatchedByDriverName.push({
+              sourceId: source.id,
+              sessionSlug: parsedSession.sessionSlug,
+              sessionName: parsedSession.sessionName,
+              pageNumber: gridPage.pageNumber,
+              position: gridRow.position,
+              gridCarNumber: gridRow.carNumber,
+              resultCarNumber: result?.carNumber ?? null,
+              driverName: gridRow.driverName,
+              reason: 'official_grid_car_number_differs_from_classification_result_car_number'
+            });
+          }
+        }
         if (!resultId) {
           report.gridRowsUnmatched.push({
             sourceId: source.id,
@@ -1418,6 +1453,7 @@ const main = async () => {
             ...(result?.raw ?? {}),
             gridEvidence: {
               source: 'official_formula_ford_grid_page',
+              matchStrategy,
               gridTitle: gridPage.title,
               pageNumber: gridPage.pageNumber,
               carNumber: gridRow.carNumber,
@@ -1586,18 +1622,61 @@ const main = async () => {
     !staleGapIds.has(gap.id) &&
     !String(gap.id ?? '').startsWith('gap_formula_ford_2020_')
   );
+  const finalResults = Array.from(results.values()).sort((a, b) => a.id.localeCompare(b.id));
+  const finalCars = Array.from(cars.values()).sort((a, b) => a.id.localeCompare(b.id));
+  report.gridStartHoldouts = finalResults
+    .filter((row) => {
+      const session = sessions.get(row.sessionId);
+      return session?.eventId?.startsWith('event_formula_ford_2020_') &&
+        ['race', 'heat'].includes(session.sessionType) &&
+        row.gridPosition == null &&
+        row.startPosition == null;
+    })
+    .map((row) => {
+      const session = sessions.get(row.sessionId);
+      return {
+        resultId: row.id,
+        sessionId: row.sessionId,
+        sessionName: session?.sessionName ?? null,
+        carNumber: row.carNumber,
+        driverId: row.driverId,
+        finishPosition: row.finishPosition,
+        reason: 'official_classification_row_has_no_safe_original_grid_start_match'
+      };
+    });
+  if (report.gridStartHoldouts.length > 0) {
+    report.gaps.push({
+      id: 'gap_formula_ford_2020_grid_start_source_asymmetry_holdouts',
+      scope: 'series_formula_ford:2020:grid_start_positions',
+      status: 'open',
+      description: `Formula Ford 2020 official grid/start import is complete for ${report.gridRowsImported} race/heat rows. The remaining ${report.gridStartHoldouts.length} classified race/heat rows are held out because the official source family exposes reserve-only entries, restart-grid-only positions, or original-grid rows that do not safely match the classified driver/car row. These rows remain explicit holdouts instead of guessed grid/start positions.`,
+      provenanceRefs: sources.map((source) => source.sourceEvidenceId),
+      raw: {
+        resultIds: report.gridStartHoldouts.map((row) => row.resultId),
+        holdouts: report.gridStartHoldouts
+      }
+    });
+  }
+  const referencedDriverIds = new Set([
+    ...finalResults.map((row) => row.driverId).filter(Boolean),
+    ...finalCars.map((row) => row.driverId).filter(Boolean)
+  ]);
+  for (const staleDriverId of ['driver_h', 'driver_o', 'driver_p', 'driver_jc', 'driver_ch', 'driver_sca', 'driver_scb', 'driver_scc', 'driver_scd', 'driver_sce']) {
+    if (!referencedDriverIds.has(staleDriverId)) drivers.delete(staleDriverId);
+  }
+
   const dataset = {
     schemaVersion: 'bryce-career.v1',
     updatedAt: retrievedAt,
     drivers: Array.from(drivers.values()).sort((a, b) => a.id.localeCompare(b.id)),
     series: Array.from(series.values()).sort((a, b) => a.id.localeCompare(b.id)),
     teams: Array.from(teams.values()).sort((a, b) => a.id.localeCompare(b.id)),
-    cars: Array.from(cars.values()).sort((a, b) => a.id.localeCompare(b.id)),
+    cars: finalCars,
     tracks: Array.from(tracks.values()).sort((a, b) => a.id.localeCompare(b.id)),
     seasons: Array.from(seasons.values()).sort((a, b) => a.id.localeCompare(b.id)),
     events: Array.from(events.values()).sort((a, b) => a.id.localeCompare(b.id)),
     sessions: Array.from(sessions.values()).sort((a, b) => a.id.localeCompare(b.id)),
-    results: Array.from(results.values()).sort((a, b) => a.id.localeCompare(b.id)),
+    results: finalResults,
     qualifyingResults: asArray(existing.qualifyingResults),
     lapSamples: Array.from(lapSamples.values()).sort((a, b) => a.id.localeCompare(b.id)),
     racecraftEvents: asArray(existing.racecraftEvents),

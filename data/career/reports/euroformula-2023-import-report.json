@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-06-08T15:13:26.514Z",
+  "checkedAt": "2026-06-08T18:39:58.806Z",
   "year": 2023,
   "refresh": false,
   "imported": true,
@@ -125,18 +125,18 @@
     "dnfs": 1
   },
   "counts": {
-    "drivers": 558,
+    "drivers": 555,
     "series": 7,
     "teams": 75,
-    "cars": 512,
+    "cars": 472,
     "tracks": 42,
     "seasons": 10,
     "events": 87,
     "sessions": 469,
-    "results": 8194,
+    "results": 8158,
     "qualifyingResults": 1547,
     "mediaAssets": 940,
-    "sourceEvidence": 1093,
-    "gaps": 9
+    "sourceEvidence": 1121,
+    "gaps": 10
   }
 }

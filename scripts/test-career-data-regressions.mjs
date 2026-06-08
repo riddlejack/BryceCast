@@ -5,10 +5,12 @@ const dataset = JSON.parse(await readFile('data/career/career.dataset.json', 'ut
 const report = JSON.parse(await readFile('data/career/reports/validation-report.json', 'utf8'));
 const ingestionSummary = JSON.parse(await readFile('data/career/reports/ingestion-summary.json', 'utf8'));
 const indyNxtReportDetailsBackfill = JSON.parse(await readFile('data/career/reports/indy-nxt-report-details-backfill-report.json', 'utf8'));
+const indyNxtSessionWindowBackfill = JSON.parse(await readFile('data/career/reports/indy-nxt-session-window-backfill-report.json', 'utf8'));
 const frocImportReport = JSON.parse(await readFile('data/career/reports/froc-2024-import-report.json', 'utf8'));
 const sessionWindowBackfillReport = JSON.parse(await readFile('data/career/reports/session-window-backfill-report.json', 'utf8'));
 const careerCoverageMatrix = JSON.parse(await readFile('data/career/reports/career-coverage-matrix.json', 'utf8'));
 const sourceManifest = JSON.parse(await readFile('data/career/sources.manifest.json', 'utf8'));
+const eventsById = new Map(dataset.events.map((row) => [row.id, row]));
 
 const duplicateIds = (rows) => {
   const seen = new Set();
@@ -21,6 +23,26 @@ const duplicateIds = (rows) => {
 };
 
 assert.equal(report.ok, true, 'career validation report must be passing before regression checks');
+assert.deepEqual(
+  report.errors ?? [],
+  [],
+  'validation report must expose top-level errors array for direct report readers'
+);
+assert.deepEqual(
+  report.warnings ?? [],
+  ingestionSummary.validation?.warnings ?? [],
+  'validation report top-level warnings must match ingestion summary warnings'
+);
+assert.equal(
+  report.warningCount,
+  (report.warnings ?? []).length,
+  'validation report must expose warningCount for direct report readers'
+);
+assert.equal(
+  report.errorCount,
+  (report.errors ?? []).length,
+  'validation report must expose errorCount for direct report readers'
+);
 assert.deepEqual(duplicateIds(dataset.sessions), [], 'sessions must not contain duplicate ids');
 assert.deepEqual(duplicateIds(dataset.results), [], 'results must not contain duplicate ids');
 assert.deepEqual(duplicateIds(dataset.sourceEvidence), [], 'sourceEvidence must not contain duplicate ids');
@@ -48,6 +70,21 @@ assert.equal(
   true,
   'every session coverage row must contain every category id for matrix-grade auditing'
 );
+const coverageMatrixJson = JSON.stringify(careerCoverageMatrix);
+assert.equal(
+  coverageMatrixJson.includes('[object Object]'),
+  false,
+  'coverage matrix notes must not leak object coercion artifacts'
+);
+assert.deepEqual(
+  careerCoverageMatrix.series
+    .filter((row) => row.seriesId !== 'series_formula_ford')
+    .flatMap((row) => row.categories.filter((category) => category.id === 'lap_samples'))
+    .filter((category) => String(category.notes ?? '').includes('Formula Ford'))
+    .map((category) => category.notes),
+  [],
+  'coverage matrix lap-sample notes must not describe non-Formula Ford series as Formula Ford rows'
+);
 const indyCoverage = careerCoverageMatrix.series.find((row) => row.seriesId === 'series_indy_nxt');
 assert.equal(
   indyCoverage?.categories.find((row) => row.id === 'race_results')?.status,
@@ -71,17 +108,106 @@ assert.equal(
 );
 assert.equal(
   indyCoverage?.categories.find((row) => row.id === 'detailed_pit_context')?.status,
-  'blocked',
-  'INDY NXT detailed pit context must remain explicitly blocked until a detailed pit-summary importer exists'
+  'unavailable',
+  'INDY NXT detailed pit context must be source-limited unless official reports expose a detailed pit-summary or pit-lane sequence'
+);
+assert.equal(
+  indyCoverage?.priorityGaps?.includes('detailed_pit_context'),
+  false,
+  'INDY NXT detailed pit context must not remain a priority importer gap when the official report family lacks detailed pit-sequence rows'
+);
+assert.equal(
+  indyCoverage?.sourceFamilyPriorityExclusions?.detailed_pit_context?.includes('no dedicated pit-summary'),
+  true,
+  'INDY NXT detailed pit context must document the source-family limitation'
+);
+const indyExactWindowCoverage = indyCoverage?.categories.find((row) => row.id === 'exact_session_windows');
+assert.equal(indyExactWindowCoverage?.covered, 111, 'INDY NXT exact-window coverage must retain the 111 sourced clock-time starts');
+assert.equal(indyExactWindowCoverage?.total, 189, 'INDY NXT exact-window coverage must retain the 189 physical-session denominator');
+assert.match(
+  indyExactWindowCoverage?.notes ?? '',
+  /78 sessions are source-unavailable exact windows/,
+  'INDY NXT exact-window notes must account for all remaining source-reviewed date-only sessions'
+);
+assert.equal(
+  indyCoverage?.priorityGaps?.includes('exact_session_windows'),
+  false,
+  'INDY NXT exact session windows must not remain a priority importer gap after official source review proves the remaining rows are source-unavailable'
+);
+assert.equal(
+  indyCoverage?.sourceFamilyPriorityExclusions?.exact_session_windows?.includes('coarse qualifying'),
+  true,
+  'INDY NXT exact-window priority exclusion must document the coarse qualifying source limitation'
 );
 const indySectionCoverage = indyCoverage?.categories.find((row) => row.id === 'indy_section_data');
 assert.equal(indySectionCoverage?.status, 'partial', 'INDY NXT section data must remain partial until the true malformed Section Results PDF gap is resolved');
-assert.equal(indySectionCoverage?.covered, 145, 'INDY NXT section-data coverage must exclude official canceled sessions from parsed comparable reports');
-assert.equal(indySectionCoverage?.total, 146, 'INDY NXT section-data denominator must exclude official canceled sessions');
+assert.equal(indySectionCoverage?.covered, 144, 'INDY NXT section-data coverage must count sessions with both official Top Section Times and Section Results metrics');
+assert.equal(indySectionCoverage?.total, 145, 'INDY NXT section-data denominator must exclude combined aggregate, schedule-only, canceled, and official no-row sessions');
 assert.match(
   indySectionCoverage?.notes ?? '',
-  /session_indy_nxt_2024_6325 \(official_pdf_has_no_extractable_text\)/,
-  'INDY NXT section-data notes must identify the true remaining held-out Section Results report'
+  /session_indy_nxt_2024_6325 \(official_pdf_corrupt_or_truncated\)/,
+  'INDY NXT section-data notes must identify the true corrupt official Section Results report'
+);
+assert.equal(
+  indyCoverage?.priorityGaps?.includes('indy_section_data'),
+  false,
+  'INDY NXT section data must not remain an active importer priority gap when the only comparable holdout is an official corrupt/truncated PDF'
+);
+assert.equal(
+  indyCoverage?.sourceFamilyPriorityExclusions?.indy_section_data?.includes('session_indy_nxt_2024_6325'),
+  true,
+  'INDY NXT section-data priority exclusion must document the official corrupt/truncated Section Results holdout'
+);
+const indyLapSamplesCoverage = indyCoverage?.categories.find((row) => row.id === 'lap_samples');
+assert.equal(
+  indyLapSamplesCoverage?.status,
+  'partial',
+  'INDY NXT lap samples must remain partial while residual Race Lap Chart cells are explicit missing/conflict diagnostics'
+);
+assert.equal(
+  indyCoverage?.priorityGaps?.includes('lap_samples'),
+  false,
+  'INDY NXT lap samples must not remain an active priority gap after all official Race Lap Chart PDFs are imported and residual cells require guessing'
+);
+assert.equal(
+  indyCoverage?.sourceFamilyPriorityExclusions?.lap_samples?.includes('10 clean partial'),
+  true,
+  'INDY NXT lap-sample priority exclusion must document the residual clean partial Race Lap Chart imports'
+);
+assert.equal(
+  indyCoverage?.sourceFamilyPriorityExclusions?.lap_samples?.includes('without guessing terminal'),
+  true,
+  'INDY NXT lap-sample priority exclusion must reject inferred terminal/conflict laps'
+);
+assert.equal(
+  careerCoverageMatrix.globalPriority?.some((row) => row.id === 'audit_and_patch_indy_nxt_detail_categories'),
+  false,
+  'Coverage global priorities must not keep INDY NXT detail patching as active work after source-bounded detail gaps are excluded'
+);
+assert.equal(
+  careerCoverageMatrix.globalPriority?.find((row) => row.seriesId === 'series_indy_nxt')?.id,
+  'publish_indy_nxt_dashboard_readiness',
+  'Coverage global priorities should promote the INDY NXT dashboard-readiness handoff once active source-backed detail blockers are closed'
+);
+assert.match(
+  dataset.gaps.find((row) => row.id === 'gap_indy_nxt_qualifying_lap_reports')?.description ?? '',
+  /session_indy_nxt_2024_6325.*official Section Results PDF.*corrupt/i,
+  'INDY NXT canonical gap must preserve the true corrupt official Section Results PDF holdout'
+);
+assert.match(
+  dataset.gaps.find((row) => row.id === 'gap_indy_nxt_qualifying_lap_reports')?.description ?? '',
+  /10 clean partial Race Lap Chart PDFs/i,
+  'INDY NXT canonical gap must describe the remaining lap-chart partials precisely'
+);
+assert.equal(
+  /Pit summaries.*remain open/i.test(dataset.gaps.find((row) => row.id === 'gap_indy_nxt_qualifying_lap_reports')?.description ?? ''),
+  false,
+  'INDY NXT canonical gap must not keep detailed pit context open after source-family exclusion marks it unavailable'
+);
+assert.equal(
+  /\[object Object\]/.test(careerCoverageMatrix.seasons.find((row) => row.seriesId === 'series_indy_nxt' && row.year === 2024)?.categories.find((row) => row.id === 'indy_section_data')?.notes ?? ''),
+  false,
+  'INDY NXT season-level section-data notes must render readable counts, not object serialization'
 );
 const coverageCategoryForSession = (sessionId, categoryId) =>
   careerCoverageMatrix.sessions
@@ -94,8 +220,8 @@ assert.equal(
 );
 assert.equal(
   coverageCategoryForSession('session_indy_nxt_2024_6314', 'detailed_pit_context')?.status,
-  'blocked',
-  'INDY NXT race sessions should remain applicable for detailed pit-context gaps'
+  'unavailable',
+  'INDY NXT race sessions must not be treated as missing detailed pit-context rows without a source-exposed detailed pit report'
 );
 assert.equal(
   coverageCategoryForSession('session_indy_nxt_2024_6328', 'lap_samples')?.status,
@@ -104,30 +230,45 @@ assert.equal(
 );
 assert.equal(
   coverageCategoryForSession('session_indy_nxt_2024_6330', 'detailed_pit_context')?.status,
-  'out_of_scope',
-  'INDY NXT qualifying sessions must not be treated as missing race pit-context rows'
+  'unavailable',
+  'INDY NXT non-race sessions should inherit the source-family detailed pit-context limitation'
 );
 assert.equal(
   coverageCategoryForSession('session_indy_nxt_2024_6330', 'indy_section_data')?.status,
   'complete',
   'INDY NXT qualifying sessions can still be applicable for official section-data reports'
 );
+assert.equal(
+  coverageCategoryForSession('session_indy_nxt_2024_6325', 'indy_section_data')?.status,
+  'partial',
+  'INDY NXT IMS Race 2 section data must remain a partial true held-out because the official Section Results PDF is corrupt'
+);
+assert.equal(
+  coverageCategoryForSession('session_indy_nxt_2024_6536', 'indy_section_data')?.status,
+  'unavailable',
+  'INDY NXT combined qualifying aggregate rows must not be treated as missing section-data imports'
+);
 const frocCoverage = careerCoverageMatrix.series.find((row) => row.seriesId === 'series_froc');
 const froc2024Coverage = careerCoverageMatrix.seasons.find((row) => row.seriesId === 'series_froc' && row.year === 2024);
 assert.deepEqual(
   frocCoverage?.priorityGaps,
-  ['grid_start_positions'],
-  'FROC exact test windows without official clock-time sources must not remain a priority import gap'
+  [],
+  'FROC source-unavailable exact test windows and Race 2 tail grids must not remain priority import gaps'
 );
 assert.deepEqual(
   froc2024Coverage?.priorityGaps,
-  ['grid_start_positions'],
-  'FROC season matrix must apply the same exact-window source-unavailable exclusion as the series matrix'
+  [],
+  'FROC season matrix must apply the same source-unavailable exclusions as the series matrix'
 );
 assert.equal(
   frocCoverage?.sourceFamilyPriorityExclusions?.exact_session_windows?.includes('remaining nine test sessions'),
   true,
   'FROC exact-window coverage must document why unsourced test sessions are not a priority patch target'
+);
+assert.equal(
+  frocCoverage?.sourceFamilyPriorityExclusions?.grid_start_positions?.includes('Race 2 tail rows'),
+  true,
+  'FROC grid coverage must document why source-unavailable Race 2 tail rows are not a priority patch target'
 );
 assert.equal(
   sessionWindowBackfillReport.unsourcedFrocTestSessions?.length,
@@ -170,13 +311,28 @@ assert.equal(
 );
 assert.deepEqual(
   formulaFordCoverage?.priorityGaps,
-  ['grid_start_positions', 'lap_samples'],
-  'Formula Ford priority gaps should focus on grid/start and lap samples, not absent no-penalty rows'
+  ['lap_samples'],
+  'Formula Ford priority gaps should focus on source-backed lap-sample continuation work after grid/start source-asymmetry rows are explicitly held out'
 );
 assert.deepEqual(
   formulaFord2020Coverage?.priorityGaps,
-  ['grid_start_positions', 'lap_samples'],
-  'Formula Ford season matrix must apply the same no-penalty ledger exclusion as the series matrix'
+  ['lap_samples'],
+  'Formula Ford season matrix must apply the same grid/source-asymmetry and no-penalty exclusions as the series matrix'
+);
+assert.equal(
+  formulaFordCoverage?.sourceFamilyPriorityExclusions?.grid_start_positions?.includes('remaining seven'),
+  true,
+  'Formula Ford grid/start coverage must document why the remaining held-out rows are no longer active importer priority gaps'
+);
+assert.equal(
+  formulaFordCoverage?.openGapIds?.includes('gap_formula_ford_2020_grid_start_source_asymmetry_holdouts'),
+  true,
+  'Formula Ford coverage matrix must associate the explicit grid/start holdout gap with the Formula Ford series'
+);
+assert.equal(
+  careerCoverageMatrix.globalPriority?.find((row) => row.seriesId === 'series_formula_ford')?.id,
+  'harden_formula_ford_lap_sample_scope',
+  'Coverage global priorities must not keep stale Formula Ford grid diagnostic wording after grid/start is source-held-out'
 );
 assert.equal(
   formulaFordCoverage?.categories.find((row) => row.id === 'penalties_decisions')?.status,
@@ -614,6 +770,36 @@ assertGridStart({
   sourceId: 'source_formula_ford_2020_wht_heat_2_grid',
   label: 'Formula Ford WHT Heat 2 Sebastian Melrose row'
 });
+assertGridStart({
+  resultId: 'result_formula_ford_2020_national_oulton_park_race_1_41_driver_alexander_walker',
+  startPosition: 15,
+  sourceId: 'source_formula_ford_2020_national_oulton_park_race_1_grid',
+  label: 'Formula Ford National Oulton Park Race 1 Alexander Walker rookie-symbol grid row'
+});
+assertGridStart({
+  resultId: 'result_formula_ford_2020_national_oulton_park_race_1_17_driver_reece_lycett',
+  startPosition: 19,
+  sourceId: 'source_formula_ford_2020_national_oulton_park_race_1_grid',
+  label: 'Formula Ford National Oulton Park Race 1 Reece Lycett rookie-symbol grid row'
+});
+assertGridStart({
+  resultId: 'result_formula_ford_2020_national_oulton_park_race_1_69_driver_colin_lawson',
+  startPosition: 28,
+  sourceId: 'source_formula_ford_2020_national_oulton_park_race_1_grid',
+  label: 'Formula Ford National Oulton Park Race 1 Colin Lawson source car-number drift grid row'
+});
+{
+  const colinLawsonResult = dataset.results.find((row) => row.id === 'result_formula_ford_2020_national_oulton_park_race_1_69_driver_colin_lawson');
+  assert.equal(colinLawsonResult?.carNumber, '69', 'Formula Ford Colin Lawson classification car number must remain the official result car number');
+  assert.equal(colinLawsonResult?.raw?.gridEvidence?.carNumber, '169', 'Formula Ford Colin Lawson grid evidence must preserve the official grid-page car number');
+  assert.equal(colinLawsonResult?.raw?.gridEvidence?.matchStrategy, 'driver_name_fallback', 'Formula Ford Colin Lawson grid row must document the exact-name fallback match');
+}
+assertGridStart({
+  resultId: 'result_formula_ford_2020_national_oulton_park_race_8_41_driver_alexander_walker',
+  startPosition: 12,
+  sourceId: 'source_formula_ford_2020_national_oulton_park_race_8_grid',
+  label: 'Formula Ford National Oulton Park Race 8 Alexander Walker rookie-symbol grid row'
+});
 
 const assertNationalFf1600BryceResult = ({
   resultId,
@@ -774,8 +960,51 @@ assertNationalFf1600BryceResult({
 });
 
 const formulaFordImportReport = JSON.parse(await readFile('data/career/reports/formula-ford-2020-import-report.json', 'utf8'));
+const formulaFordClassTokenDriverIds = new Set(['driver_h', 'driver_o', 'driver_p', 'driver_jc', 'driver_ch', 'driver_sca', 'driver_scb', 'driver_scc', 'driver_scd', 'driver_sce']);
+assert.deepEqual(
+  dataset.results
+    .filter((row) => String(row.id).startsWith('result_formula_ford_2020_') && formulaFordClassTokenDriverIds.has(row.driverId))
+    .map((row) => row.id),
+  [],
+  'Formula Ford 2020 importer must not retain stale class-token parser rows as driver results'
+);
+assert.deepEqual(
+  dataset.drivers
+    .filter((row) => formulaFordClassTokenDriverIds.has(row.id))
+    .map((row) => row.id),
+  [],
+  'Formula Ford 2020 importer must clean unreferenced single-letter class-token drivers'
+);
 assert.equal(formulaFordImportReport.bryceLapSamplesImported, 282, 'Formula Ford importer must extract all source-backed Bryce lap-analysis samples');
 assert.equal(formulaFordImportReport.lapSamplesImported, 282, 'Formula Ford lap-sample import must stay scoped to Bryce-owned lap-analysis rows');
+assert.equal(formulaFordImportReport.gridRowsImported, 755, 'Formula Ford importer must include the Colin Lawson exact-name grid fallback row');
+assert.deepEqual(
+  formulaFordImportReport.gridRowsMatchedByDriverName,
+  [
+    {
+      sourceId: 'national_oulton_park',
+      sessionSlug: 'race_1',
+      sessionName: 'RACE 1',
+      pageNumber: 13,
+      position: 28,
+      gridCarNumber: '169',
+      resultCarNumber: '69',
+      driverName: 'Colin LAWSON',
+      reason: 'official_grid_car_number_differs_from_classification_result_car_number'
+    }
+  ],
+  'Formula Ford importer report must isolate exact-name fallback grid matches'
+);
+{
+  const formulaFordGridHoldoutGap = dataset.gaps.find((row) => row.id === 'gap_formula_ford_2020_grid_start_source_asymmetry_holdouts');
+  assert.equal(formulaFordGridHoldoutGap?.status, 'open', 'Formula Ford grid/start source-asymmetry holdouts must be explicit open gaps');
+  assert.equal(formulaFordGridHoldoutGap?.raw?.resultIds?.length, 7, 'Formula Ford grid/start holdout gap must enumerate the remaining seven held-out result rows');
+  assert.equal(
+    formulaFordGridHoldoutGap?.raw?.resultIds?.includes('result_formula_ford_2020_wht_grand_final_48_driver_benn_tilley'),
+    true,
+    'Formula Ford grid/start holdout gap must preserve reserve-only WHT Grand Final rows instead of assigning guessed grid positions'
+  );
+}
 
 const assertFormulaFordLapSample = ({
   sampleId,
@@ -1163,6 +1392,30 @@ assert.equal(
   false,
   'INDY NXT Iowa 2024 Race 2 must leave parserFailures once a clean partial parser output is imported'
 );
+const indyNxtPortland2024RaceLapSamples = dataset.lapSamples.filter((row) => row.sessionId === 'session_indy_nxt_2024_6321');
+const indyNxtPortland2024RaceDuplicateSampleKeys = new Set();
+const indyNxtPortland2024RaceSampleKeys = new Set();
+for (const row of indyNxtPortland2024RaceLapSamples) {
+  const sampleKey = `${row.carNumber}|${row.lapNumber}`;
+  if (indyNxtPortland2024RaceSampleKeys.has(sampleKey)) indyNxtPortland2024RaceDuplicateSampleKeys.add(sampleKey);
+  indyNxtPortland2024RaceSampleKeys.add(sampleKey);
+}
+assert.equal(
+  indyNxtPortland2024RaceLapSamples.length,
+  564,
+  'INDY NXT Portland 2024 Race lap chart must import source-visible lap-1 samples from the unlabeled position column'
+);
+assert.deepEqual(
+  [...indyNxtPortland2024RaceDuplicateSampleKeys],
+  [],
+  'INDY NXT Portland 2024 Race lap-1 position-column import must not create duplicate car-lap samples'
+);
+const indyNxtPortland2024RacePartialImport = indyNxtReportDetailsBackfill.partialLapChartImports.find((row) => row.sessionId === 'session_indy_nxt_2024_6321');
+assert.equal(
+  indyNxtPortland2024RacePartialImport?.missingSamples,
+  1,
+  'INDY NXT Portland 2024 Race partial import should retain only the one source-invisible car 76 sample after lap-1 position-column parsing'
+);
 const indyNxtStatusIncidents = dataset.incidents.filter((row) => /^incident_indy_nxt_status_/.test(row.id ?? ''));
 assert.equal(
   indyNxtStatusIncidents.length,
@@ -1376,7 +1629,7 @@ assert.deepEqual(
   [
     {
       sessionId: 'session_indy_nxt_2024_6325',
-      reason: 'official_pdf_has_no_extractable_text',
+      reason: 'official_pdf_corrupt_or_truncated',
       sessionName: 'Race',
       url: 'http://www.imscdn.com/INDYCAR/Documents/6325/2024-05-11/indynxt-sectionresults-r2.pdf'
     },
@@ -1424,7 +1677,7 @@ assert.equal(
 );
 assert.equal(
   indyNxtReportDetailsBackfill.partialLapSamplesImported,
-  8472,
+  8490,
   'INDY NXT report-detail backfill must record source-visible samples imported from partial lap charts'
 );
 assert.equal(
@@ -1435,8 +1688,18 @@ assert.equal(
 const indyNxtDetroit2024Race1PartialLapChart = indyNxtReportDetailsBackfill.partialLapChartImports.find((row) => row.sessionId === 'session_indy_nxt_2024_6326');
 assert.equal(
   indyNxtDetroit2024Race1PartialLapChart?.samplesImported,
-  840,
-  'INDY NXT Detroit 2024 Race 1 must import clean source-visible chart samples'
+  841,
+  'INDY NXT Detroit 2024 Race 1 must import clean source-visible chart samples across safe official extraction candidates'
+);
+assert.equal(
+  indyNxtDetroit2024Race1PartialLapChart?.missingSamples,
+  0,
+  'INDY NXT Detroit 2024 Race 1 must recover the source-visible car 39 lap sample from an alternate official extraction'
+);
+assert.deepEqual(
+  indyNxtDetroit2024Race1PartialLapChart?.missingByCar,
+  [],
+  'INDY NXT Detroit 2024 Race 1 must not report missing expected car-lap samples after safe supplementation'
 );
 assert.deepEqual(
   indyNxtDetroit2024Race1PartialLapChart?.resultLapConflicts,
@@ -1446,8 +1709,15 @@ assert.deepEqual(
 const indyNxtDetroit2024Race1LapSamples = dataset.lapSamples.filter((row) => row.sessionId === 'session_indy_nxt_2024_6326');
 assert.equal(
   indyNxtDetroit2024Race1LapSamples.length,
-  840,
+  841,
   'INDY NXT Detroit 2024 Race 1 partial lap chart must import visible chart samples'
+);
+assert.deepEqual(
+  indyNxtDetroit2024Race1LapSamples
+    .filter((row) => row.carNumber === '39' && row.lapNumber === 2)
+    .map((row) => row.position),
+  [21],
+  'INDY NXT Detroit 2024 Race 1 must import the official source-visible car 39 lap-2 position'
 );
 assert.equal(
   indyNxtDetroit2024Race1LapSamples.filter((row) => row.driverId === 'driver_bryce_aron').length,
@@ -1673,12 +1943,232 @@ for (const [sessionId, sessionName, sessionType, scheduledStart, actualStart] of
   assert.equal(dataset.results.some((row) => row.sessionId === sessionId), false, `${sessionId} must remain schedule-only with no fabricated result rows`);
 }
 
-for (const sessionId of ['session_indy_nxt_2026_6805', 'session_indy_nxt_2026_6806', 'session_indy_nxt_2026_6807']) {
+const indyNxtWeekendSchedulePdfWindows2024 = [
+  ['session_indy_nxt_2024_6328', '2024-03-08T13:35:00', 'stp'],
+  ['session_indy_nxt_2024_6329', '2024-03-09T08:25:00', 'stp'],
+  ['session_indy_nxt_2024_6324', '2024-03-10T10:00:00', 'stp'],
+  ['session_indy_nxt_2024_6354', '2024-04-26T13:30:00', 'ala'],
+  ['session_indy_nxt_2024_6355', '2024-04-27T10:05:00', 'ala'],
+  ['session_indy_nxt_2024_6314', '2024-04-28T10:05:00', 'ala'],
+  ['session_indy_nxt_2024_6365', '2024-05-10T11:05:00', 'ims'],
+  ['session_indy_nxt_2024_6315', '2024-05-10T18:10:00', 'ims'],
+  ['session_indy_nxt_2024_6325', '2024-05-11T13:00:00', 'ims'],
+  ['session_indy_nxt_2024_6391', '2024-05-31T13:50:00', 'det'],
+  ['session_indy_nxt_2024_6392', '2024-06-01T08:00:00', 'det'],
+  ['session_indy_nxt_2024_6326', '2024-06-02T10:20:00', 'det'],
+  ['session_indy_nxt_2024_6402', '2024-06-07T13:50:00', 'ra'],
+  ['session_indy_nxt_2024_6403', '2024-06-08T09:00:00', 'ra'],
+  ['session_indy_nxt_2024_6316', '2024-06-09T12:05:00', 'ra'],
+  ['session_indy_nxt_2024_6413', '2024-06-21T13:10:00', 'lag'],
+  ['session_indy_nxt_2024_6414', '2024-06-21T15:40:00', 'lag'],
+  ['session_indy_nxt_2024_6317', '2024-06-22T12:25:00', 'lag'],
+  ['session_indy_nxt_2024_6327', '2024-06-23T12:55:00', 'lag'],
+  ['session_indy_nxt_2024_6426', '2024-07-05T14:05:00', 'mid'],
+  ['session_indy_nxt_2024_6427', '2024-07-06T09:40:00', 'mid'],
+  ['session_indy_nxt_2024_6318', '2024-07-07T11:15:00', 'mid'],
+  ['session_indy_nxt_2024_6437', '2024-07-12T13:00:00', 'iow'],
+  ['session_indy_nxt_2024_6438', '2024-07-12T17:30:00', 'iow'],
+  ['session_indy_nxt_2024_6319', '2024-07-13T13:05:00', 'iow'],
+  ['session_indy_nxt_2024_6480', '2024-08-16T14:15:00', 'stl'],
+  ['session_indy_nxt_2024_6481', '2024-08-16T17:45:00', 'stl'],
+  ['session_indy_nxt_2024_6320', '2024-08-17T14:55:00', 'stl'],
+  ['session_indy_nxt_2024_6494', '2024-08-23T13:45:00', 'por'],
+  ['session_indy_nxt_2024_6495', '2024-08-24T11:20:00', 'por'],
+  ['session_indy_nxt_2024_6321', '2024-08-25T10:10:00', 'por'],
+  ['session_indy_nxt_2024_6505', '2024-08-30T13:30:00', 'mil'],
+  ['session_indy_nxt_2024_6506', '2024-08-31T12:00:00', 'mil'],
+  ['session_indy_nxt_2024_6322', '2024-08-31T14:50:00', 'mil'],
+  ['session_indy_nxt_2024_6488', '2024-09-14T09:00:00', 'nsh'],
+  ['session_indy_nxt_2024_6490', '2024-09-14T12:00:00', 'nsh'],
+  ['session_indy_nxt_2024_6489', '2024-09-14T14:45:00', 'nsh'],
+  ['session_indy_nxt_2024_6323', '2024-09-15T10:50:00', 'nsh']
+];
+for (const [sessionId, scheduledStart, scheduleKey] of indyNxtWeekendSchedulePdfWindows2024) {
+  const session = dataset.sessions.find((row) => row.id === sessionId);
+  assert.equal(session?.scheduledStart, scheduledStart, `${sessionId} must store official 2024 weekend-schedule PDF start time`);
+  assert.equal(session?.actualStart ?? null, null, `${sessionId} must not treat 2024 weekend-schedule race timing as actualStart`);
+  assert.equal(session?.timeSource, 'official_indycar_weekend_schedule_pdf', `${sessionId} must mark the official weekend schedule PDF as the time source`);
+  assert.equal(session?.raw?.indycarWeekendScheduleWindow?.scheduleYear, 2024, `${sessionId} must retain the source schedule year`);
+  assert.equal(session?.raw?.indycarWeekendScheduleWindow?.scheduleKey, scheduleKey, `${sessionId} must retain the source schedule key`);
+  assert.equal(session?.raw?.indycarWeekendScheduleWindow?.parser, 'pdftotext_layout', `${sessionId} must retain the 2024 PDF parser`);
+  assert.ok(
+    (session?.provenanceRefs ?? []).includes(`source_indy_nxt_2024_weekend_schedule_${scheduleKey}`),
+    `${sessionId} must cite its official 2024 weekend schedule PDF source`
+  );
+}
+
+const indyNxtWeekendSchedulePdfWindows = [
+  ['session_indy_nxt_2025_6515', '2025-02-28T14:00:00', 'stp', 'pdftotext_layout'],
+  ['session_indy_nxt_2025_6516', '2025-03-01T09:00:00', 'stp', 'pdftotext_layout'],
+  ['session_indy_nxt_2025_6446', '2025-03-02T10:00:00', 'stp', 'pdftotext_layout'],
+  ['session_indy_nxt_2025_6611', '2025-05-02T13:30:00', 'ala', 'pdftotext_layout'],
+  ['session_indy_nxt_2025_6612', '2025-05-03T09:00:00', 'ala', 'pdftotext_layout'],
+  ['session_indy_nxt_2025_6445', '2025-05-04T10:30:00', 'ala', 'pdftotext_layout'],
+  ['session_indy_nxt_2025_6627', '2025-05-09T11:00:00', 'ims', 'pdftotext_layout'],
+  ['session_indy_nxt_2025_6444', '2025-05-09T19:00:00', 'ims', 'pdftotext_layout'],
+  ['session_indy_nxt_2025_6443', '2025-05-10T13:00:00', 'ims', 'pdftotext_layout'],
+  ['session_indy_nxt_2025_6639', '2025-05-30T14:00:00', 'det', 'pdftotext_layout'],
+  ['session_indy_nxt_2025_6640', '2025-05-31T08:00:00', 'det', 'pdftotext_layout'],
+  ['session_indy_nxt_2025_6455', '2025-06-01T10:30:00', 'det', 'pdftotext_layout'],
+  ['session_indy_nxt_2025_6667', '2025-06-14T15:15:00', 'stl', 'tesseract_ocr'],
+  ['session_indy_nxt_2025_6599', '2025-06-14T19:00:00', 'stl', 'tesseract_ocr'],
+  ['session_indy_nxt_2025_6454', '2025-06-15T15:30:00', 'stl', 'tesseract_ocr'],
+  ['session_indy_nxt_2025_6675', '2025-06-20T14:30:00', 'ra', 'pdftotext_layout'],
+  ['session_indy_nxt_2025_6676', '2025-06-21T09:00:00', 'ra', 'pdftotext_layout'],
+  ['session_indy_nxt_2025_6453', '2025-06-22T10:00:00', 'ra', 'pdftotext_layout'],
+  ['session_indy_nxt_2025_6679', '2025-07-04T15:00:00', 'mid', 'pdftotext_layout'],
+  ['session_indy_nxt_2025_6680', '2025-07-05T08:30:00', 'mid', 'pdftotext_layout'],
+  ['session_indy_nxt_2025_6452', '2025-07-06T10:30:00', 'mid', 'pdftotext_layout'],
+  ['session_indy_nxt_2025_6690', '2025-07-11T13:30:00', 'iow', 'pdftotext_layout'],
+  ['session_indy_nxt_2025_6451', '2025-07-12T11:00:00', 'iow', 'pdftotext_layout'],
+  ['session_indy_nxt_2025_6707', '2025-07-25T13:00:00', 'lag', 'pdftotext_layout'],
+  ['session_indy_nxt_2025_6708', '2025-07-25T15:30:00', 'lag', 'pdftotext_layout'],
+  ['session_indy_nxt_2025_6442', '2025-07-26T13:30:00', 'lag', 'pdftotext_layout'],
+  ['session_indy_nxt_2025_6450', '2025-07-27T15:30:00', 'lag', 'pdftotext_layout'],
+  ['session_indy_nxt_2025_6713', '2025-08-08T13:00:00', 'por', 'pdftotext_layout'],
+  ['session_indy_nxt_2025_6714', '2025-08-09T13:30:00', 'por', 'pdftotext_layout'],
+  ['session_indy_nxt_2025_6449', '2025-08-10T10:00:00', 'por', 'pdftotext_layout'],
+  ['session_indy_nxt_2025_6727', '2025-08-23T08:00:00', 'mil', 'pdftotext_layout'],
+  ['session_indy_nxt_2025_6588', '2025-08-23T14:30:00', 'mil', 'pdftotext_layout'],
+  ['session_indy_nxt_2025_6448', '2025-08-24T10:30:00', 'mil', 'pdftotext_layout'],
+  ['session_indy_nxt_2025_6731', '2025-08-30T08:00:00', 'nsh', 'pdftotext_layout'],
+  ['session_indy_nxt_2025_6593', '2025-08-30T11:30:00', 'nsh', 'pdftotext_layout'],
+  ['session_indy_nxt_2025_6447', '2025-08-31T10:30:00', 'nsh', 'pdftotext_layout']
+];
+for (const [sessionId, scheduledStart, scheduleKey, parser] of indyNxtWeekendSchedulePdfWindows) {
+  const session = dataset.sessions.find((row) => row.id === sessionId);
+  assert.equal(session?.scheduledStart, scheduledStart, `${sessionId} must store official 2025 weekend-schedule PDF start time`);
+  assert.equal(session?.actualStart ?? null, null, `${sessionId} must not treat weekend-schedule race timing as actualStart`);
+  assert.equal(session?.timeSource, 'official_indycar_weekend_schedule_pdf', `${sessionId} must mark the official weekend schedule PDF as the time source`);
+  assert.equal(session?.raw?.indycarWeekendScheduleWindow?.scheduleYear, 2025, `${sessionId} must retain the source schedule year`);
+  assert.equal(session?.raw?.indycarWeekendScheduleWindow?.scheduleKey, scheduleKey, `${sessionId} must retain the source schedule key`);
+  assert.equal(session?.raw?.indycarWeekendScheduleWindow?.parser, parser, `${sessionId} must retain whether text came from pdftotext or OCR`);
+  assert.ok(
+    (session?.provenanceRefs ?? []).includes(`source_indy_nxt_2025_weekend_schedule_${scheduleKey}`),
+    `${sessionId} must cite its official weekend schedule PDF source`
+  );
+}
+assert.equal(
+  dataset.sessions.filter((row) => row.id.startsWith('session_indy_nxt_2024_') && row.timeSource === 'official_indycar_weekend_schedule_pdf').length,
+  38,
+  '2024 INDY NXT weekend schedule PDFs must backfill the 38 unambiguous practice/race/single-qualifying windows'
+);
+assert.equal(
+  dataset.sessions.filter((row) => row.id.startsWith('session_indy_nxt_2025_') && row.timeSource === 'official_indycar_weekend_schedule_pdf').length,
+  36,
+  '2025 INDY NXT weekend schedule PDFs must backfill the 36 unambiguous practice/race/single-qualifying windows'
+);
+assert.equal(indyNxtSessionWindowBackfill.weekendSchedulePdfSessionsUpdated.filter((row) => row.year === 2024).length, 38, 'INDY NXT session-window report must show 38 official 2024 weekend-schedule PDF updates');
+assert.equal(indyNxtSessionWindowBackfill.weekendSchedulePdfSessionsUpdated.filter((row) => row.year === 2025).length, 36, 'INDY NXT session-window report must show 36 official 2025 weekend-schedule PDF updates');
+assert.equal(indyNxtSessionWindowBackfill.weekendSchedulePdfSessionsUpdated.filter((row) => row.year === 2026).length, 0, 'INDY NXT 2026 weekend-schedule PDFs must not override higher-priority Race Control windows or coarse qualifying groups');
+assert.equal(indyNxtSessionWindowBackfill.weekendSchedulePdfSessionsUpdated.length, 74, 'INDY NXT session-window report must show 74 official 2024-2025 weekend-schedule PDF updates');
+assert.equal(indyNxtSessionWindowBackfill.weekendSchedulePdfSessionsSkipped.filter((row) => row.year === 2024).length, 8, 'INDY NXT session-window report must preserve eight skipped/ambiguous 2024 weekend-schedule rows');
+assert.equal(indyNxtSessionWindowBackfill.weekendSchedulePdfSessionsSkipped.filter((row) => row.year === 2025).length, 9, 'INDY NXT session-window report must preserve nine skipped/ambiguous 2025 weekend-schedule rows');
+assert.equal(indyNxtSessionWindowBackfill.weekendSchedulePdfSessionsSkipped.filter((row) => row.year === 2026).length, 16, 'INDY NXT session-window report must preserve 16 skipped/ambiguous or higher-priority 2026 weekend-schedule rows');
+assert.equal(indyNxtSessionWindowBackfill.weekendSchedulePdfSessionsSkipped.length, 33, 'INDY NXT session-window report must preserve all 33 skipped/ambiguous 2024-2026 weekend-schedule rows');
+assert.equal(
+  indyNxtSessionWindowBackfill.sources.weekendSchedules.filter((row) => row.year === 2024).length,
+  12,
+  'INDY NXT session-window report must cache all 12 official 2024 weekend schedule PDFs'
+);
+assert.equal(
+  indyNxtSessionWindowBackfill.sources.weekendSchedules.filter((row) => row.year === 2025).length,
+  12,
+  'INDY NXT session-window report must cache all 12 official 2025 weekend schedule PDFs'
+);
+assert.equal(
+  indyNxtSessionWindowBackfill.sources.weekendSchedules.filter((row) => row.year === 2026).length,
+  4,
+  'INDY NXT session-window report must cache the four official completed-event 2026 weekend schedule PDFs reviewed for exact qualifying windows'
+);
+assert.equal(
+  indyNxtSessionWindowBackfill.sources.weekendSchedules.some((row) => row.year === 2025 && row.key === 'stl' && row.parser === 'tesseract_ocr'),
+  true,
+  'WWTR 2025 image-only weekend schedule PDF must be parsed through the OCR fallback'
+);
+for (const key of ['stp', 'arl', 'ala', 'ims']) {
+  assert.ok(
+    dataset.sourceEvidence.some((row) => row.id === `source_indy_nxt_2026_weekend_schedule_${key}`),
+    `2026 ${key.toUpperCase()} official weekend schedule PDF must be retained as source evidence`
+  );
+}
+assert.equal(
+  indyNxtSessionWindowBackfill.weekendSchedulePdfSessionsSkipped.some((row) => row.year === 2025 && row.key === 'iow' && row.reason === 'not_present_in_official_weekend_schedule_pdf'),
+  true,
+  'Iowa 2025 qualifying must remain an explicit skipped row because the official weekend schedule PDF does not expose a qualifying window'
+);
+const indyNxtSourceReviewedExactWindowReasons = new Set([
+  'coarse_schedule_label_ambiguous_with_group_qualifying_sessions',
+  'coarse_schedule_label_ambiguous_with_race_1_and_race_2_group_sessions',
+  'not_present_in_official_weekend_schedule_pdf'
+]);
+const indyNxtSourceReviewedExactWindowSessionIds = new Set(
+  indyNxtSessionWindowBackfill.weekendSchedulePdfSessionsSkipped
+    .filter((row) => indyNxtSourceReviewedExactWindowReasons.has(row.reason))
+    .flatMap((row) => row.candidateSessionIds ?? [])
+);
+const indyNxtDateOnlyPhysicalSessionIds = new Set(
+  dataset.sessions
+    .filter((session) => {
+      const event = eventsById.get(session.eventId);
+      return event?.seriesId === 'series_indy_nxt' && !String(session.scheduledStart ?? session.actualStart ?? '').includes('T');
+    })
+    .map((session) => session.id)
+);
+assert.equal(
+  indyNxtSourceReviewedExactWindowSessionIds.size,
+  indyNxtDateOnlyPhysicalSessionIds.size,
+  'INDY NXT source-reviewed exact-window skipped rows must account for every remaining date-only physical session'
+);
+for (const sessionId of ['session_indy_nxt_2025_6590', 'session_indy_nxt_2025_6591']) {
+  const imsSkipped = indyNxtSessionWindowBackfill.weekendSchedulePdfSessionsSkipped.find((row) => row.year === 2025 && row.key === 'ims' && row.reason === 'coarse_schedule_label_ambiguous_with_race_1_and_race_2_group_sessions');
+  assert.ok(
+    imsSkipped?.candidateSessionIds?.includes(sessionId),
+    `2025 IMS coarse qualifying skip must include aggregate combined qualifying session ${sessionId}`
+  );
+}
+for (const sessionId of ['session_indy_nxt_2025_6589', 'session_indy_nxt_2025_6595']) {
+  const lagSkipped = indyNxtSessionWindowBackfill.weekendSchedulePdfSessionsSkipped.find((row) => row.year === 2025 && row.key === 'lag' && row.reason === 'coarse_schedule_label_ambiguous_with_race_1_and_race_2_group_sessions');
+  assert.ok(
+    lagSkipped?.candidateSessionIds?.includes(sessionId),
+    `2025 Monterey coarse qualifying skip must include aggregate combined qualifying session ${sessionId}`
+  );
+}
+for (const sessionId of ['session_indy_nxt_2025_6517', 'session_indy_nxt_2025_6518', 'session_indy_nxt_2025_6596']) {
+  const session = dataset.sessions.find((row) => row.id === sessionId);
+  assert.equal(session?.timeSource === 'official_indycar_weekend_schedule_pdf', false, `${sessionId} must not be backfilled from a coarse or missing 2025 weekend-schedule qualifying row`);
+}
+
+const indyNxt2026CoarseQualifyingWeekendRows = [
+  ['stp', 'coarse_schedule_label_ambiguous_with_group_qualifying_sessions', ['session_indy_nxt_2026_6768', 'session_indy_nxt_2026_6769', 'session_indy_nxt_2026_6770']],
+  ['arl', 'coarse_schedule_label_ambiguous_with_group_qualifying_sessions', ['session_indy_nxt_2026_6785', 'session_indy_nxt_2026_6786', 'session_indy_nxt_2026_6787']],
+  ['ala', 'coarse_schedule_label_ambiguous_with_race_1_and_race_2_group_sessions', ['session_indy_nxt_2026_6805', 'session_indy_nxt_2026_6806', 'session_indy_nxt_2026_6807', 'session_indy_nxt_2026_6808', 'session_indy_nxt_2026_6809', 'session_indy_nxt_2026_6810']],
+  ['ims', 'coarse_schedule_label_ambiguous_with_race_1_and_race_2_group_sessions', ['session_indy_nxt_2026_6829', 'session_indy_nxt_2026_6830', 'session_indy_nxt_2026_6831', 'session_indy_nxt_2026_6832', 'session_indy_nxt_2026_6833', 'session_indy_nxt_2026_6834']]
+];
+for (const [key, reason, sessionIds] of indyNxt2026CoarseQualifyingWeekendRows) {
+  const skippedRow = indyNxtSessionWindowBackfill.weekendSchedulePdfSessionsSkipped.find((row) => row.year === 2026 && row.key === key && row.reason === reason);
+  assert.deepEqual(
+    skippedRow?.candidateSessionIds,
+    sessionIds,
+    `2026 ${key.toUpperCase()} qualifying must remain an explicit skipped PDF row with canonical candidate IDs`
+  );
+}
+for (const sessionId of indyNxt2026CoarseQualifyingWeekendRows.flatMap(([, , sessionIds]) => sessionIds)) {
   const session = dataset.sessions.find((row) => row.id === sessionId);
   assert.equal(
     session?.timeSource === 'official_race_control_schedule',
     false,
     `${sessionId} must not be backfilled from the schedule feed because qualifying group timing is ambiguous`
+  );
+  assert.equal(
+    session?.timeSource === 'official_indycar_weekend_schedule_pdf',
+    false,
+    `${sessionId} must not be backfilled from a coarse 2026 weekend-schedule qualifying row`
+  );
+  assert.equal(
+    typeof session?.scheduledStart === 'string' && session.scheduledStart.includes('T'),
+    false,
+    `${sessionId} must remain date-only until an official source exposes a group-specific exact window`
   );
 }
 

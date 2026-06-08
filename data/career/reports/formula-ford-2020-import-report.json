@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-06-08T15:13:29.882Z",
+  "checkedAt": "2026-06-08T18:40:02.269Z",
   "year": 2020,
   "refresh": false,
   "fetched": 0,
@@ -11,7 +11,7 @@
   "lapAnalysisPagesDiscovered": 24,
   "sessionsImported": 46,
   "resultRowsImported": 1094,
-  "gridRowsImported": 746,
+  "gridRowsImported": 755,
   "lapSamplesImported": 282,
   "bryceResultRowsImported": 24,
   "bryceLapSamplesImported": 282,
@@ -720,16 +720,6 @@
       "sessionSlug": "race_1",
       "sessionName": "RACE 1",
       "pageNumber": 13,
-      "position": 28,
-      "carNumber": "169",
-      "driverName": "Colin LAWSON",
-      "reason": "official_grid_row_has_no_imported_classification_result_row"
-    },
-    {
-      "sourceId": "national_oulton_park",
-      "sessionSlug": "race_1",
-      "sessionName": "RACE 1",
-      "pageNumber": 13,
       "position": 29,
       "carNumber": "53",
       "driverName": "Richard KETTERMAN",
@@ -766,5 +756,175 @@
       "reason": "official_grid_row_has_no_imported_classification_result_row"
     }
   ],
-  "gaps": []
+  "gridRowsMatchedByDriverName": [
+    {
+      "sourceId": "national_oulton_park",
+      "sessionSlug": "race_1",
+      "sessionName": "RACE 1",
+      "pageNumber": 13,
+      "position": 28,
+      "gridCarNumber": "169",
+      "resultCarNumber": "69",
+      "driverName": "Colin LAWSON",
+      "reason": "official_grid_car_number_differs_from_classification_result_car_number"
+    }
+  ],
+  "gridStartHoldouts": [
+    {
+      "resultId": "result_formula_ford_2020_champion_brands_race_11_87_driver_ian_jeary",
+      "sessionId": "session_formula_ford_2020_champion_brands_race_11",
+      "sessionName": "RACE 11",
+      "carNumber": "87",
+      "driverId": "driver_ian_jeary",
+      "finishPosition": 18,
+      "reason": "official_classification_row_has_no_safe_original_grid_start_match"
+    },
+    {
+      "resultId": "result_formula_ford_2020_national_oulton_park_race_1_16_driver_neil_mcarthur",
+      "sessionId": "session_formula_ford_2020_national_oulton_park_race_1",
+      "sessionName": "RACE 1",
+      "carNumber": "16",
+      "driverId": "driver_neil_mcarthur",
+      "finishPosition": 26,
+      "reason": "official_classification_row_has_no_safe_original_grid_start_match"
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_grand_final_3_driver_roger_orgee",
+      "sessionId": "session_formula_ford_2020_wht_grand_final",
+      "sessionName": "GRAND FINAL",
+      "carNumber": "3",
+      "driverId": "driver_roger_orgee",
+      "finishPosition": 16,
+      "reason": "official_classification_row_has_no_safe_original_grid_start_match"
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_grand_final_48_driver_benn_tilley",
+      "sessionId": "session_formula_ford_2020_wht_grand_final",
+      "sessionName": "GRAND FINAL",
+      "carNumber": "48",
+      "driverId": "driver_benn_tilley",
+      "finishPosition": 22,
+      "reason": "official_classification_row_has_no_safe_original_grid_start_match"
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_last_chance_race_18_driver_christopher_perkins",
+      "sessionId": "session_formula_ford_2020_wht_last_chance_race",
+      "sessionName": "LAST CHANCE RACE",
+      "carNumber": "18",
+      "driverId": "driver_christopher_perkins",
+      "finishPosition": 20,
+      "reason": "official_classification_row_has_no_safe_original_grid_start_match"
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_semi_final_1_194_driver_mark_bates",
+      "sessionId": "session_formula_ford_2020_wht_semi_final_1",
+      "sessionName": "SEMI FINAL 1",
+      "carNumber": "194",
+      "driverId": "driver_mark_bates",
+      "finishPosition": 32,
+      "reason": "official_classification_row_has_no_safe_original_grid_start_match"
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_semi_final_2_91_driver_bob_hawkins",
+      "sessionId": "session_formula_ford_2020_wht_semi_final_2",
+      "sessionName": "SEMI FINAL 2",
+      "carNumber": "91",
+      "driverId": "driver_bob_hawkins",
+      "finishPosition": null,
+      "reason": "official_classification_row_has_no_safe_original_grid_start_match"
+    }
+  ],
+  "gaps": [
+    {
+      "id": "gap_formula_ford_2020_grid_start_source_asymmetry_holdouts",
+      "scope": "series_formula_ford:2020:grid_start_positions",
+      "status": "open",
+      "description": "Formula Ford 2020 official grid/start import is complete for 755 race/heat rows. The remaining 7 classified race/heat rows are held out because the official source family exposes reserve-only entries, restart-grid-only positions, or original-grid rows that do not safely match the classified driver/car row. These rows remain explicit holdouts instead of guessed grid/start positions.",
+      "provenanceRefs": [
+        "source_formula_ford_2020_festival_book_pdf",
+        "source_formula_ford_2020_wht_book_pdf",
+        "source_formula_ford_2020_national_oulton_park_book_pdf",
+        "source_formula_ford_2020_national_brands_hatch_book_pdf",
+        "source_formula_ford_2020_national_silverstone_book_pdf",
+        "source_formula_ford_2020_champion_cadwell_book_pdf",
+        "source_formula_ford_2020_champion_brands_book_pdf"
+      ],
+      "raw": {
+        "resultIds": [
+          "result_formula_ford_2020_champion_brands_race_11_87_driver_ian_jeary",
+          "result_formula_ford_2020_national_oulton_park_race_1_16_driver_neil_mcarthur",
+          "result_formula_ford_2020_wht_grand_final_3_driver_roger_orgee",
+          "result_formula_ford_2020_wht_grand_final_48_driver_benn_tilley",
+          "result_formula_ford_2020_wht_last_chance_race_18_driver_christopher_perkins",
+          "result_formula_ford_2020_wht_semi_final_1_194_driver_mark_bates",
+          "result_formula_ford_2020_wht_semi_final_2_91_driver_bob_hawkins"
+        ],
+        "holdouts": [
+          {
+            "resultId": "result_formula_ford_2020_champion_brands_race_11_87_driver_ian_jeary",
+            "sessionId": "session_formula_ford_2020_champion_brands_race_11",
+            "sessionName": "RACE 11",
+            "carNumber": "87",
+            "driverId": "driver_ian_jeary",
+            "finishPosition": 18,
+            "reason": "official_classification_row_has_no_safe_original_grid_start_match"
+          },
+          {
+            "resultId": "result_formula_ford_2020_national_oulton_park_race_1_16_driver_neil_mcarthur",
+            "sessionId": "session_formula_ford_2020_national_oulton_park_race_1",
+            "sessionName": "RACE 1",
+            "carNumber": "16",
+            "driverId": "driver_neil_mcarthur",
+            "finishPosition": 26,
+            "reason": "official_classification_row_has_no_safe_original_grid_start_match"
+          },
+          {
+            "resultId": "result_formula_ford_2020_wht_grand_final_3_driver_roger_orgee",
+            "sessionId": "session_formula_ford_2020_wht_grand_final",
+            "sessionName": "GRAND FINAL",
+            "carNumber": "3",
+            "driverId": "driver_roger_orgee",
+            "finishPosition": 16,
+            "reason": "official_classification_row_has_no_safe_original_grid_start_match"
+          },
+          {
+            "resultId": "result_formula_ford_2020_wht_grand_final_48_driver_benn_tilley",
+            "sessionId": "session_formula_ford_2020_wht_grand_final",
+            "sessionName": "GRAND FINAL",
+            "carNumber": "48",
+            "driverId": "driver_benn_tilley",
+            "finishPosition": 22,
+            "reason": "official_classification_row_has_no_safe_original_grid_start_match"
+          },
+          {
+            "resultId": "result_formula_ford_2020_wht_last_chance_race_18_driver_christopher_perkins",
+            "sessionId": "session_formula_ford_2020_wht_last_chance_race",
+            "sessionName": "LAST CHANCE RACE",
+            "carNumber": "18",
+            "driverId": "driver_christopher_perkins",
+            "finishPosition": 20,
+            "reason": "official_classification_row_has_no_safe_original_grid_start_match"
+          },
+          {
+            "resultId": "result_formula_ford_2020_wht_semi_final_1_194_driver_mark_bates",
+            "sessionId": "session_formula_ford_2020_wht_semi_final_1",
+            "sessionName": "SEMI FINAL 1",
+            "carNumber": "194",
+            "driverId": "driver_mark_bates",
+            "finishPosition": 32,
+            "reason": "official_classification_row_has_no_safe_original_grid_start_match"
+          },
+          {
+            "resultId": "result_formula_ford_2020_wht_semi_final_2_91_driver_bob_hawkins",
+            "sessionId": "session_formula_ford_2020_wht_semi_final_2",
+            "sessionName": "SEMI FINAL 2",
+            "carNumber": "91",
+            "driverId": "driver_bob_hawkins",
+            "finishPosition": null,
+            "reason": "official_classification_row_has_no_safe_original_grid_start_match"
+          }
+        ]
+      }
+    }
+  ]
 }

@@ -1,10 +1,10 @@
 {
   "schemaVersion": "bryce-career-ingestion-summary.v1",
-  "generatedAt": "2026-06-08T15:13:44.651Z",
+  "generatedAt": "2026-06-08T18:40:17.588Z",
   "datasetPath": "data/career/career.dataset.json",
   "validation": {
     "ok": true,
-    "checkedAt": "2026-06-08T15:13:44.060Z",
+    "checkedAt": "2026-06-08T18:40:16.968Z",
     "errors": [],
     "warnings": [
       {
@@ -15,17 +15,17 @@
     ]
   },
   "counts": {
-    "drivers": 558,
+    "drivers": 555,
     "series": 7,
     "teams": 75,
-    "cars": 512,
+    "cars": 472,
     "tracks": 42,
     "seasons": 10,
     "events": 87,
     "sessions": 469,
-    "results": 8194,
+    "results": 8158,
     "qualifyingResults": 1547,
-    "lapSamples": 67668,
+    "lapSamples": 67686,
     "racecraftEvents": 35,
     "penalties": 82,
     "incidents": 132,
@@ -35,14 +35,14 @@
     "notificationRules": 0,
     "notificationEvents": 0,
     "derivedMetrics": 370,
-    "sourceEvidence": 1093,
-    "gaps": 8
+    "sourceEvidence": 1121,
+    "gaps": 9
   },
   "readiness": {
     "sessions": {
       "total": 469,
       "withScheduledStart": 459,
-      "withExactTimestamp": 307,
+      "withExactTimestamp": 381,
       "withTimezone": 469,
       "timezoneCoverage": 1
     },
@@ -73,10 +73,10 @@
     "analyticsBlockedOrPartial": []
   },
   "sourceEvidence": {
-    "total": 1093,
+    "total": 1121,
     "bySourceType": {
       "archived_official_page": 2,
-      "official_pdf": 683,
+      "official_pdf": 711,
       "official_page": 117,
       "official_api": 264,
       "official_html": 16,
@@ -144,7 +144,7 @@
   "importReports": [
     {
       "name": "euroformula-2023-import-report.json",
-      "checkedAt": "2026-06-08T15:13:26.514Z",
+      "checkedAt": "2026-06-08T18:39:58.806Z",
       "refresh": false,
       "fetched": 0,
       "cached": 32,
@@ -165,7 +165,7 @@
     },
     {
       "name": "formula-ford-2020-import-report.json",
-      "checkedAt": "2026-06-08T15:13:29.882Z",
+      "checkedAt": "2026-06-08T18:40:02.269Z",
       "refresh": false,
       "fetched": 0,
       "cached": 11,
@@ -175,11 +175,103 @@
       "lapSamplesImported": 282,
       "weatherObservationsImported": 46,
       "standingsImported": null,
-      "gaps": []
+      "gaps": [
+        {
+          "id": "gap_formula_ford_2020_grid_start_source_asymmetry_holdouts",
+          "scope": "series_formula_ford:2020:grid_start_positions",
+          "status": "open",
+          "description": "Formula Ford 2020 official grid/start import is complete for 755 race/heat rows. The remaining 7 classified race/heat rows are held out because the official source family exposes reserve-only entries, restart-grid-only positions, or original-grid rows that do not safely match the classified driver/car row. These rows remain explicit holdouts instead of guessed grid/start positions.",
+          "provenanceRefs": [
+            "source_formula_ford_2020_festival_book_pdf",
+            "source_formula_ford_2020_wht_book_pdf",
+            "source_formula_ford_2020_national_oulton_park_book_pdf",
+            "source_formula_ford_2020_national_brands_hatch_book_pdf",
+            "source_formula_ford_2020_national_silverstone_book_pdf",
+            "source_formula_ford_2020_champion_cadwell_book_pdf",
+            "source_formula_ford_2020_champion_brands_book_pdf"
+          ],
+          "raw": {
+            "resultIds": [
+              "result_formula_ford_2020_champion_brands_race_11_87_driver_ian_jeary",
+              "result_formula_ford_2020_national_oulton_park_race_1_16_driver_neil_mcarthur",
+              "result_formula_ford_2020_wht_grand_final_3_driver_roger_orgee",
+              "result_formula_ford_2020_wht_grand_final_48_driver_benn_tilley",
+              "result_formula_ford_2020_wht_last_chance_race_18_driver_christopher_perkins",
+              "result_formula_ford_2020_wht_semi_final_1_194_driver_mark_bates",
+              "result_formula_ford_2020_wht_semi_final_2_91_driver_bob_hawkins"
+            ],
+            "holdouts": [
+              {
+                "resultId": "result_formula_ford_2020_champion_brands_race_11_87_driver_ian_jeary",
+                "sessionId": "session_formula_ford_2020_champion_brands_race_11",
+                "sessionName": "RACE 11",
+                "carNumber": "87",
+                "driverId": "driver_ian_jeary",
+                "finishPosition": 18,
+                "reason": "official_classification_row_has_no_safe_original_grid_start_match"
+              },
+              {
+                "resultId": "result_formula_ford_2020_national_oulton_park_race_1_16_driver_neil_mcarthur",
+                "sessionId": "session_formula_ford_2020_national_oulton_park_race_1",
+                "sessionName": "RACE 1",
+                "carNumber": "16",
+                "driverId": "driver_neil_mcarthur",
+                "finishPosition": 26,
+                "reason": "official_classification_row_has_no_safe_original_grid_start_match"
+              },
+              {
+                "resultId": "result_formula_ford_2020_wht_grand_final_3_driver_roger_orgee",
+                "sessionId": "session_formula_ford_2020_wht_grand_final",
+                "sessionName": "GRAND FINAL",
+                "carNumber": "3",
+                "driverId": "driver_roger_orgee",
+                "finishPosition": 16,
+                "reason": "official_classification_row_has_no_safe_original_grid_start_match"
+              },
+              {
+                "resultId": "result_formula_ford_2020_wht_grand_final_48_driver_benn_tilley",
+                "sessionId": "session_formula_ford_2020_wht_grand_final",
+                "sessionName": "GRAND FINAL",
+                "carNumber": "48",
+                "driverId": "driver_benn_tilley",
+                "finishPosition": 22,
+                "reason": "official_classification_row_has_no_safe_original_grid_start_match"
+              },
+              {
+                "resultId": "result_formula_ford_2020_wht_last_chance_race_18_driver_christopher_perkins",
+                "sessionId": "session_formula_ford_2020_wht_last_chance_race",
+                "sessionName": "LAST CHANCE RACE",
+                "carNumber": "18",
+                "driverId": "driver_christopher_perkins",
+                "finishPosition": 20,
+                "reason": "official_classification_row_has_no_safe_original_grid_start_match"
+              },
+              {
+                "resultId": "result_formula_ford_2020_wht_semi_final_1_194_driver_mark_bates",
+                "sessionId": "session_formula_ford_2020_wht_semi_final_1",
+                "sessionName": "SEMI FINAL 1",
+                "carNumber": "194",
+                "driverId": "driver_mark_bates",
+                "finishPosition": 32,
+                "reason": "official_classification_row_has_no_safe_original_grid_start_match"
+              },
+              {
+                "resultId": "result_formula_ford_2020_wht_semi_final_2_91_driver_bob_hawkins",
+                "sessionId": "session_formula_ford_2020_wht_semi_final_2",
+                "sessionName": "SEMI FINAL 2",
+                "carNumber": "91",
+                "driverId": "driver_bob_hawkins",
+                "finishPosition": null,
+                "reason": "official_classification_row_has_no_safe_original_grid_start_match"
+              }
+            ]
+          }
+        }
+      ]
     },
     {
       "name": "froc-2024-import-report.json",
-      "checkedAt": "2026-06-08T15:13:31.433Z",
+      "checkedAt": "2026-06-08T18:40:03.970Z",
       "refresh": false,
       "fetched": 0,
       "cached": 12,
@@ -212,7 +304,7 @@
     },
     {
       "name": "frp-f1600-import-report.json",
-      "checkedAt": "2026-06-08T15:13:28.426Z",
+      "checkedAt": "2026-06-08T18:40:00.741Z",
       "refresh": false,
       "fetched": 0,
       "cached": 81,
@@ -233,7 +325,7 @@
     },
     {
       "name": "gb3-2021-import-report.json",
-      "checkedAt": "2026-06-08T15:13:20.952Z",
+      "checkedAt": "2026-06-08T18:39:53.836Z",
       "refresh": false,
       "fetched": 0,
       "cached": 129,
@@ -247,7 +339,7 @@
     },
     {
       "name": "gb3-import-report.json",
-      "checkedAt": "2026-06-08T15:13:22.602Z",
+      "checkedAt": "2026-06-08T18:39:55.335Z",
       "refresh": false,
       "fetched": 0,
       "cached": 78,
@@ -268,7 +360,7 @@
     },
     {
       "name": "imsa-import-report.json",
-      "checkedAt": "2026-06-08T15:13:25.188Z",
+      "checkedAt": "2026-06-08T18:39:57.553Z",
       "refresh": false,
       "fetched": 0,
       "cached": 3,
@@ -282,7 +374,7 @@
     },
     {
       "name": "indy-nxt-import-report.json",
-      "checkedAt": "2026-06-08T15:13:17.062Z",
+      "checkedAt": "2026-06-08T18:39:50.326Z",
       "refresh": false,
       "fetched": 0,
       "cached": 180,
@@ -296,7 +388,7 @@
     },
     {
       "name": "track-metadata-import-report.json",
-      "checkedAt": "2026-06-08T15:13:37.356Z",
+      "checkedAt": "2026-06-08T18:40:10.048Z",
       "refresh": null,
       "fetched": null,
       "cached": null,
@@ -315,6 +407,97 @@
       "scope": "euroformula_2023",
       "status": "open",
       "description": "The supplied official classification PDF URL now serves a 2026 document, so 2023 championship position and points were not imported from that mutable S3 key."
+    },
+    {
+      "id": "gap_formula_ford_2020_grid_start_source_asymmetry_holdouts",
+      "scope": "series_formula_ford:2020:grid_start_positions",
+      "status": "open",
+      "description": "Formula Ford 2020 official grid/start import is complete for 755 race/heat rows. The remaining 7 classified race/heat rows are held out because the official source family exposes reserve-only entries, restart-grid-only positions, or original-grid rows that do not safely match the classified driver/car row. These rows remain explicit holdouts instead of guessed grid/start positions.",
+      "provenanceRefs": [
+        "source_formula_ford_2020_festival_book_pdf",
+        "source_formula_ford_2020_wht_book_pdf",
+        "source_formula_ford_2020_national_oulton_park_book_pdf",
+        "source_formula_ford_2020_national_brands_hatch_book_pdf",
+        "source_formula_ford_2020_national_silverstone_book_pdf",
+        "source_formula_ford_2020_champion_cadwell_book_pdf",
+        "source_formula_ford_2020_champion_brands_book_pdf"
+      ],
+      "raw": {
+        "resultIds": [
+          "result_formula_ford_2020_champion_brands_race_11_87_driver_ian_jeary",
+          "result_formula_ford_2020_national_oulton_park_race_1_16_driver_neil_mcarthur",
+          "result_formula_ford_2020_wht_grand_final_3_driver_roger_orgee",
+          "result_formula_ford_2020_wht_grand_final_48_driver_benn_tilley",
+          "result_formula_ford_2020_wht_last_chance_race_18_driver_christopher_perkins",
+          "result_formula_ford_2020_wht_semi_final_1_194_driver_mark_bates",
+          "result_formula_ford_2020_wht_semi_final_2_91_driver_bob_hawkins"
+        ],
+        "holdouts": [
+          {
+            "resultId": "result_formula_ford_2020_champion_brands_race_11_87_driver_ian_jeary",
+            "sessionId": "session_formula_ford_2020_champion_brands_race_11",
+            "sessionName": "RACE 11",
+            "carNumber": "87",
+            "driverId": "driver_ian_jeary",
+            "finishPosition": 18,
+            "reason": "official_classification_row_has_no_safe_original_grid_start_match"
+          },
+          {
+            "resultId": "result_formula_ford_2020_national_oulton_park_race_1_16_driver_neil_mcarthur",
+            "sessionId": "session_formula_ford_2020_national_oulton_park_race_1",
+            "sessionName": "RACE 1",
+            "carNumber": "16",
+            "driverId": "driver_neil_mcarthur",
+            "finishPosition": 26,
+            "reason": "official_classification_row_has_no_safe_original_grid_start_match"
+          },
+          {
+            "resultId": "result_formula_ford_2020_wht_grand_final_3_driver_roger_orgee",
+            "sessionId": "session_formula_ford_2020_wht_grand_final",
+            "sessionName": "GRAND FINAL",
+            "carNumber": "3",
+            "driverId": "driver_roger_orgee",
+            "finishPosition": 16,
+            "reason": "official_classification_row_has_no_safe_original_grid_start_match"
+          },
+          {
+            "resultId": "result_formula_ford_2020_wht_grand_final_48_driver_benn_tilley",
+            "sessionId": "session_formula_ford_2020_wht_grand_final",
+            "sessionName": "GRAND FINAL",
+            "carNumber": "48",
+            "driverId": "driver_benn_tilley",
+            "finishPosition": 22,
+            "reason": "official_classification_row_has_no_safe_original_grid_start_match"
+          },
+          {
+            "resultId": "result_formula_ford_2020_wht_last_chance_race_18_driver_christopher_perkins",
+            "sessionId": "session_formula_ford_2020_wht_last_chance_race",
+            "sessionName": "LAST CHANCE RACE",
+            "carNumber": "18",
+            "driverId": "driver_christopher_perkins",
+            "finishPosition": 20,
+            "reason": "official_classification_row_has_no_safe_original_grid_start_match"
+          },
+          {
+            "resultId": "result_formula_ford_2020_wht_semi_final_1_194_driver_mark_bates",
+            "sessionId": "session_formula_ford_2020_wht_semi_final_1",
+            "sessionName": "SEMI FINAL 1",
+            "carNumber": "194",
+            "driverId": "driver_mark_bates",
+            "finishPosition": 32,
+            "reason": "official_classification_row_has_no_safe_original_grid_start_match"
+          },
+          {
+            "resultId": "result_formula_ford_2020_wht_semi_final_2_91_driver_bob_hawkins",
+            "sessionId": "session_formula_ford_2020_wht_semi_final_2",
+            "sessionName": "SEMI FINAL 2",
+            "carNumber": "91",
+            "driverId": "driver_bob_hawkins",
+            "finishPosition": null,
+            "reason": "official_classification_row_has_no_safe_original_grid_start_match"
+          }
+        ]
+      }
     },
     {
       "id": "gap_froc_2024_round_4_date_conflict",
@@ -350,7 +533,7 @@
       "id": "gap_indy_nxt_qualifying_lap_reports",
       "scope": "indy_nxt_official",
       "status": "open",
-      "description": "EventsSessionDetails imports race/session result rows, qualifyingResults for official SessionType=Q records, and official terminal-status incident rows for contact/mechanical/dns outcomes. Official Race Lap Chart PDFs now import complete lap-by-lap position samples when parser validation matches official completed-lap counts, plus clean source-visible partial samples when missing car-lap counts or official result/chart lap-count conflicts are explicitly reported and no parsed samples duplicate or reference unknown cars. Official Event Summary PDFs now import race-stat metrics and most-improved racecraft notes. Official Leader Lap Summary PDFs now import leader-by-lap timing, margin, and flag-state metrics. Official Top Section Times PDFs now import practice, qualifying, and race section-rank timing metrics when official section rows are present. Official Section Results PDFs now import practice, qualifying, and race lap-by-lap section times and speeds at per-car/per-lap grain when official section rows are present. Canceled reports without timing rows are held out, and source-visible rows without canonical API timing rows keep car/name text with null canonical IDs. Official race Results PDFs now import penalty/decision summary rows and caution-summary causal incident rows. Pit summaries, deeper report parsing, and lap-specific incident detail beyond official caution summaries remain open."
+      "description": "EventsSessionDetails imports race/session result rows, qualifyingResults for official SessionType=Q records, and official terminal-status incident rows for contact/mechanical/dns outcomes. Official Race Lap Chart PDFs now import 29,519 official lap-by-lap position samples from all 36 completed Race Lap Chart PDFs: 26 charts fully validate against official completed-lap counts and 10 clean partial Race Lap Chart PDFs preserve explicit missing car-lap or official result/chart conflict diagnostics without guessing terminal or conflict laps. Official Event Summary PDFs import race-stat metrics and most-improved racecraft notes. Official Leader Lap Summary PDFs import leader-by-lap timing, margin, and flag-state metrics. Official Top Section Times PDFs import practice, qualifying, and race section-rank timing metrics when official section rows are present. Official Section Results PDFs import practice, qualifying, and race lap-by-lap section times and speeds at per-car/per-lap grain when official section rows are present. The remaining true section-results holdout is session_indy_nxt_2024_6325, where the official Section Results PDF URL returns corrupt non-PDF bytes; canceled/no-row reports remain held out rather than treated as missing data. Source-visible rows without canonical API timing rows keep car/name text with null canonical IDs. Official race Results PDFs import penalty/decision summary rows and caution-summary causal incident rows. Detailed pit-lane sequence context is source-unavailable in the current official report family; use official/API pit-stop counts as the production-safe pit metric unless a new official pit-summary source appears."
     },
     {
       "id": "gap_remaining_career_rows_after_track_metadata",

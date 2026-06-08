@@ -34,6 +34,9 @@ const hasExactTimestamp = (session) =>
 const isExactWindowSourceUnavailable = (session) =>
   session.raw?.testDayContextBackfill?.timeWindowStatus === 'date_context_only_exact_time_unsourced' &&
   !hasExactTimestamp(session);
+const indyNxtSectionMetricTypes = ['official_top_section_times', 'official_section_results'];
+const hasIndyNxtAggregateSectionShape = (session) =>
+  session.sessionType === 'qualifying' && /\bcombined qual/i.test(String(session.sessionName ?? ''));
 
 const collectCanceledSessionEvidence = async (dataset) => {
   const evidence = new Map();
@@ -175,10 +178,9 @@ const seriesPolicies = {
       'incidents_cautions',
       'racecraft_summary',
       'pit_stop_counts',
-      'detailed_pit_context',
       'derived_benchmarks'
     ]),
-    unavailable: new Set(['official_weather_conditions'])
+    unavailable: new Set(['official_weather_conditions', 'detailed_pit_context'])
   },
   series_gb3: {
     supported: new Set([
@@ -318,17 +320,26 @@ const knownGapMap = {
   ],
   series_euroformula_open: ['gap_euroformula_2023_championship_classification_pdf_current_mismatch'],
   series_frp_f1600: ['gap_frp_f1600_2019_r5_01_qualifying_pdf_event_mismatch'],
+  series_formula_ford: ['gap_formula_ford_2020_grid_start_source_asymmetry_holdouts'],
   series_indy_nxt: ['gap_indy_nxt_qualifying_lap_reports']
 };
 
 const sourceFamilyPriorityExclusions = {
+  series_indy_nxt: {
+    exact_session_windows: 'INDY NXT official Race Control feeds and cached weekend schedule PDFs expose exact clock-time starts for 111 physical sessions. The remaining 78 date-only rows are qualifying/group/combined qualifying sessions where official weekend schedules expose only coarse qualifying blocks or no exact qualifying row, so there is no safe source-backed group or aggregate split to promote into session-hour joins.',
+    indy_section_data: 'INDY NXT official Top Section Times and Section Results reports are parsed for every comparable source-exposed session except session_indy_nxt_2024_6325, where the official Section Results URL returns corrupt/truncated non-PDF bytes from the CDN. Keep the section-data category partial with an explicit source-broken gap unless an alternate official non-corrupt copy appears.',
+    lap_samples: 'INDY NXT official Race Lap Chart PDFs are imported for all 36 completed race sessions: 26 charts fully validate and 10 clean partial visible-sample imports preserve explicit missing car-lap or result/chart conflict diagnostics without guessing terminal or conflict laps.',
+    detailed_pit_context: 'INDY NXT official report inventory exposes PitStops counts in API/result rows and Race Lap Chart position samples, but no dedicated pit-summary, pit-lane sequence, stop-lap, tire/service, or pit-time report was found across the cached official report family.'
+  },
   series_froc: {
+    grid_start_positions: 'FROC 2024 official Toyota grid tabs, linked grid PDFs, and official Toyota articles backfill every race grid row the source family exposes with enough specificity. The remaining Race 2 tail rows are held out because the official Race 2 narratives identify only the reverse/top-eight rows plus one direct P16 statement, without a complete race-specific tail grid.',
     exact_session_windows: 'FROC 2024 official Toyota schedule images expose exact practice/qualifying/race windows and official Round 2 timing PDFs expose exact Test 1/2 windows. The remaining nine test sessions have official date-level article context and result tabs, but no official timing PDF link or equivalent exact clock-time source was found on the Toyota round pages.'
   },
   series_frp_f1600: {
     penalties_decisions: 'FRP F1600 2019 archive PDFs expose explicit penalty announcements where present, but no complete official no-penalty decisions ledger was found for every session.'
   },
   series_formula_ford: {
+    grid_start_positions: 'Formula Ford 2020 official event books now import every source-matchable race/heat grid/start row, including an exact-name fallback for Colin Lawson where the official grid page uses car 169 and the classification uses car 69. The remaining seven classified race/heat rows are preserved in gap_formula_ford_2020_grid_start_source_asymmetry_holdouts because the official source family exposes reserve-only entries, restart-grid-only positions, or original-grid rows that do not safely match the classified driver/car row.',
     penalties_decisions: 'Formula Ford 2020 event books expose explicit penalty-note rows where present, but no complete official no-penalty decisions ledger was found for every session.'
   },
   series_gb3: {
@@ -367,10 +378,37 @@ const applySeasonOverrides = ({ seriesId, year, categories }) => {
   });
 };
 
-const buildCoverage = ({ dataset, summary, indyReport, canceledSessionEvidence }) => {
+const collectIndyNxtSourceReviewedExactWindowHoldouts = (indyWindowReport) => {
+  const sourceReviewedReasons = new Set([
+    'coarse_schedule_label_ambiguous_with_group_qualifying_sessions',
+    'coarse_schedule_label_ambiguous_with_race_1_and_race_2_group_sessions',
+    'not_present_in_official_weekend_schedule_pdf'
+  ]);
+  const ids = new Set();
+  for (const row of asArray(indyWindowReport?.weekendSchedulePdfSessionsSkipped)) {
+    if (!sourceReviewedReasons.has(row.reason)) continue;
+    for (const sessionId of asArray(row.candidateSessionIds)) ids.add(sessionId);
+  }
+  return ids;
+};
+
+const collectIndyNxtNoSectionRowReports = (indyReport) => {
+  const ids = new Set();
+  for (const row of [
+    ...asArray(indyReport?.topSectionReportsHeldOut),
+    ...asArray(indyReport?.sectionResultsReportsHeldOut)
+  ]) {
+    if (row.reason === 'official_report_has_no_section_rows') ids.add(row.sessionId);
+  }
+  return ids;
+};
+
+const buildCoverage = ({ dataset, summary, indyReport, indyWindowReport, canceledSessionEvidence }) => {
   const eventsById = new Map(asArray(dataset.events).map((row) => [row.id, row]));
   const sessionsById = new Map(asArray(dataset.sessions).map((row) => [row.id, row]));
   const tracksById = new Map(asArray(dataset.tracks).map((row) => [row.id, row]));
+  const sourceReviewedExactWindowHoldoutIds = collectIndyNxtSourceReviewedExactWindowHoldouts(indyWindowReport);
+  const indyNxtNoSectionRowReportIds = collectIndyNxtNoSectionRowReports(indyReport);
   const resultsBySession = new Map();
   const qualifyingBySession = new Map();
   const lapSamplesBySession = new Map();
@@ -423,7 +461,9 @@ const buildCoverage = ({ dataset, summary, indyReport, canceledSessionEvidence }
     const raceResultSessions = comparableRaceSessions.filter((session) => (resultsBySession.get(session.id) ?? []).length > 0);
     const raceRowsWithGrid = raceRows.filter((row) => row.gridPosition != null || row.startPosition != null);
     const exactWindowSessions = physicalSessions.filter(hasExactTimestamp);
-    const exactWindowSourceUnavailableSessions = physicalSessions.filter(isExactWindowSourceUnavailable);
+    const exactWindowSourceUnavailableSessions = physicalSessions.filter((session) =>
+      isExactWindowSourceUnavailable(session) || sourceReviewedExactWindowHoldoutIds.has(session.id)
+    );
     const anyWindowSessions = physicalSessions.filter(hasAnyStart);
     const trackMetadataComplete = [...trackIds].filter((trackId) => {
       const track = tracksById.get(trackId);
@@ -469,6 +509,18 @@ const buildCoverage = ({ dataset, summary, indyReport, canceledSessionEvidence }
     const sectionResultsTrueHeldOut = series.id === 'series_indy_nxt'
       ? asArray(indyReport?.sectionResultsReportsHeldOut).filter((row) => !canceledSessionEvidence.has(row.sessionId))
       : [];
+    const isIndyNxtComparableSectionSession = (session) =>
+      series.id === 'series_indy_nxt' &&
+      isResultBearingComparable(session) &&
+      !canceledSessionEvidence.has(session.id) &&
+      !indyNxtNoSectionRowReportIds.has(session.id) &&
+      !hasIndyNxtAggregateSectionShape(session);
+    const hasBothIndyNxtSectionMetricTypes = (session) => {
+      const types = new Set((metricsBySession.get(session.id) ?? []).map((metric) => metric.metricType));
+      return indyNxtSectionMetricTypes.every((type) => types.has(type));
+    };
+    const sectionComparableSessions = sessions.filter(isIndyNxtComparableSectionSession);
+    const sectionCompleteSessions = sectionComparableSessions.filter(hasBothIndyNxtSectionMetricTypes);
     const topSectionComparableDiscovered = series.id === 'series_indy_nxt'
       ? Math.max(0, (indyReport?.topSectionReportsDiscovered ?? 0) - topSectionCanceledHeldOut)
       : 0;
@@ -550,14 +602,16 @@ const buildCoverage = ({ dataset, summary, indyReport, canceledSessionEvidence }
           : undefined,
         notes: series.id === 'series_indy_nxt'
           ? `${raceLapSampleSessions.length}/${comparableRaceSessions.length} completed race sessions have lap-chart samples; 26 charts fully validate and 10 are clean partial visible-sample imports.`
-          : `${lapSampleSessions.length} sessions have lap samples; Formula Ford rows are Bryce-only labeled lap-analysis samples.`
+          : series.id === 'series_formula_ford'
+            ? `${lapSampleSessions.length} sessions have lap samples; Formula Ford rows are Bryce-only labeled lap-analysis samples.`
+            : `${lapSampleSessions.length} sessions have lap samples.`
       }),
       category('indy_section_data', sectionMetricSessions.length, series.id === 'series_indy_nxt' ? sessions.length : 0, {
-        covered: series.id === 'series_indy_nxt' ? Math.min(topSectionComparableParsed, sectionResultsComparableParsed) : sectionMetricSessions.length,
-        total: series.id === 'series_indy_nxt' ? Math.max(topSectionComparableDiscovered, sectionResultsComparableDiscovered) : 0,
+        covered: series.id === 'series_indy_nxt' ? sectionCompleteSessions.length : sectionMetricSessions.length,
+        total: series.id === 'series_indy_nxt' ? sectionComparableSessions.length : 0,
         status: indySectionStatus,
         notes: series.id === 'series_indy_nxt'
-          ? `${topSectionComparableParsed}/${topSectionComparableDiscovered} comparable Top Section reports parsed after excluding ${topSectionCanceledHeldOut} official canceled session; ${sectionResultsComparableParsed}/${sectionResultsComparableDiscovered} comparable Section Results reports parsed after excluding ${sectionResultsCanceledHeldOut} official canceled session. True held-outs: ${sectionResultsTrueHeldOut.map((row) => `${row.sessionId} (${row.reason})`).join(', ') || 'none'}.`
+          ? `${sectionCompleteSessions.length}/${sectionComparableSessions.length} comparable sessions have both official Top Section Times and Section Results metrics. Aggregate combined qualifying rows, future schedule-only sessions, canceled sessions, and official no-row reports are excluded. Report parser cross-check: ${topSectionComparableParsed}/${topSectionComparableDiscovered} comparable Top Section reports parsed; ${sectionResultsComparableParsed}/${sectionResultsComparableDiscovered} comparable Section Results reports parsed. True held-outs: ${sectionResultsTrueHeldOut.filter((row) => row.reason !== 'official_report_has_no_section_rows').map((row) => `${row.sessionId} (${row.reason})`).join(', ') || 'none'}.`
           : null
       }),
       category('penalties_decisions', penaltySessions.length, sessions.length, {
@@ -578,9 +632,8 @@ const buildCoverage = ({ dataset, summary, indyReport, canceledSessionEvidence }
         notes: `${raceRowsWithPitStops.length}/${raceRows.length} race/heat result rows have pit-stop counts.`
       }),
       category('detailed_pit_context', 0, raceSessions.length, {
-        status: policy.supported.has('detailed_pit_context') ? 'blocked' : undefined,
         notes: series.id === 'series_indy_nxt'
-          ? 'INDY NXT has official/API pit-stop counts, but no detailed pit-summary or pit-lane sequence importer yet.'
+          ? 'INDY NXT official/API rows expose pit-stop counts, but the official report family does not expose a dedicated detailed pit-summary or pit-lane sequence.'
           : null
       }),
       category('derived_benchmarks', benchmarkMetrics.length, Math.max(1, eventIds.size), {
@@ -635,7 +688,9 @@ const buildCoverage = ({ dataset, summary, indyReport, canceledSessionEvidence }
       );
       const yearRaceRowsWithGrid = yearRaceRows.filter((row) => row.gridPosition != null || row.startPosition != null);
       const yearExactWindowSessions = yearPhysicalSessions.filter(hasExactTimestamp);
-      const yearExactWindowSourceUnavailableSessions = yearPhysicalSessions.filter(isExactWindowSourceUnavailable);
+      const yearExactWindowSourceUnavailableSessions = yearPhysicalSessions.filter((session) =>
+        isExactWindowSourceUnavailable(session) || sourceReviewedExactWindowHoldoutIds.has(session.id)
+      );
       const yearAnyWindowSessions = yearPhysicalSessions.filter(hasAnyStart);
       const yearTrackMetadataComplete = [...yearTrackIds].filter((trackId) => {
         const track = tracksById.get(trackId);
@@ -660,9 +715,11 @@ const buildCoverage = ({ dataset, summary, indyReport, canceledSessionEvidence }
       const yearRaceRowsWithPitStops = yearRaceRows.filter((row) => row.pitStops != null);
       const yearSectionMetricSessions = yearSessions.filter((session) =>
         (metricsBySession.get(session.id) ?? []).some((metric) =>
-          ['official_top_section_times', 'official_section_results'].includes(metric.metricType)
+          indyNxtSectionMetricTypes.includes(metric.metricType)
         )
       );
+      const yearSectionComparableSessions = yearSessions.filter(isIndyNxtComparableSectionSession);
+      const yearSectionCompleteSessions = yearSectionComparableSessions.filter(hasBothIndyNxtSectionMetricTypes);
       const yearBenchmarkMetrics = benchmarkMetrics.filter((metric) => yearEventIds.has(metric.eventId));
       const yearCategories = applySeasonOverrides({ seriesId: series.id, year, categories: [
         category('events_sessions', yearSessions.length, yearSessions.length, {
@@ -701,14 +758,16 @@ const buildCoverage = ({ dataset, summary, indyReport, canceledSessionEvidence }
               : undefined,
           notes: series.id === 'series_indy_nxt'
             ? `${yearRaceLapSampleSessions.length}/${yearComparableRaceSessions.length} completed race sessions have lap-chart samples; chart fidelity is tracked in importer diagnostics.`
-            : `${yearLapSampleSessions} sessions have lap samples.`
+            : `${yearLapSampleSessions.length} sessions have lap samples.`
         }),
         category('indy_section_data', yearSectionMetricSessions.length, series.id === 'series_indy_nxt' ? yearSessions.length : 0, {
+          covered: series.id === 'series_indy_nxt' ? yearSectionCompleteSessions.length : yearSectionMetricSessions.length,
+          total: series.id === 'series_indy_nxt' ? yearSectionComparableSessions.length : 0,
           status: series.id === 'series_indy_nxt'
-            ? (yearSectionMetricSessions.length === yearSessions.length ? 'complete' : yearSectionMetricSessions.length > 0 ? 'partial' : 'blocked')
+            ? (yearSectionCompleteSessions.length === yearSectionComparableSessions.length ? 'complete' : yearSectionCompleteSessions.length > 0 ? 'partial' : 'blocked')
             : undefined,
           notes: series.id === 'series_indy_nxt'
-            ? `${yearSectionMetricSessions}/${yearSessions.length} sessions have official top-section or section-result metrics.`
+            ? `${yearSectionCompleteSessions.length}/${yearSectionComparableSessions.length} comparable sessions have both official Top Section Times and Section Results metrics. Aggregate combined qualifying rows, future schedule-only sessions, canceled sessions, and official no-row reports are excluded.`
             : null
         }),
         category('penalties_decisions', yearPenaltySessions.length, yearSessions.length, {
@@ -729,9 +788,8 @@ const buildCoverage = ({ dataset, summary, indyReport, canceledSessionEvidence }
           notes: `${yearRaceRowsWithPitStops.length}/${yearRaceRows.length} race/heat result rows have pit-stop counts.`
         }),
         category('detailed_pit_context', 0, yearRaceSessions.length, {
-          status: policy.supported.has('detailed_pit_context') ? 'blocked' : undefined,
           notes: series.id === 'series_indy_nxt'
-            ? 'INDY NXT has official/API pit-stop counts, but no detailed pit-summary or pit-lane sequence importer yet.'
+            ? 'INDY NXT official/API rows expose pit-stop counts, but the official report family does not expose a dedicated detailed pit-summary or pit-lane sequence.'
             : null
         }),
         category('derived_benchmarks', yearBenchmarkMetrics.length, Math.max(1, yearEvents.length), {
@@ -781,6 +839,12 @@ const buildCoverage = ({ dataset, summary, indyReport, canceledSessionEvidence }
         );
         const isComparableRace = isRaceLike(session) && isResultBearingComparable(session);
         const isComparableQualifying = session.sessionType === 'qualifying' && isResultBearingComparable(session) && !canceledSessionEvidence.has(session.id);
+        const isComparableIndyNxtSectionSession = isIndyNxtComparableSectionSession(session);
+        const sessionIndyNxtSectionMetricTypes = new Set(
+          sessionMetrics
+            .filter((metric) => indyNxtSectionMetricTypes.includes(metric.metricType))
+            .map((metric) => metric.metricType)
+        );
         const sessionTrackMetadataComplete = Boolean(
           track &&
           Number.isFinite(track.latitude) &&
@@ -883,13 +947,15 @@ const buildCoverage = ({ dataset, summary, indyReport, canceledSessionEvidence }
             id: 'indy_section_data',
             status: series.id !== 'series_indy_nxt'
               ? 'unavailable'
-              : sessionMetrics.some((metric) => ['official_top_section_times', 'official_section_results'].includes(metric.metricType))
+              : !isComparableIndyNxtSectionSession
+                ? 'unavailable'
+              : indyNxtSectionMetricTypes.every((type) => sessionIndyNxtSectionMetricTypes.has(type))
                 ? 'complete'
-                : canceledSessionEvidence.has(session.id)
-                  ? 'unavailable'
+                : sessionIndyNxtSectionMetricTypes.size > 0
+                  ? 'partial'
                   : 'blocked',
-            covered: sessionMetrics.filter((metric) => ['official_top_section_times', 'official_section_results'].includes(metric.metricType)).length,
-            total: series.id === 'series_indy_nxt' ? 1 : 0
+            covered: sessionIndyNxtSectionMetricTypes.size,
+            total: series.id === 'series_indy_nxt' && isComparableIndyNxtSectionSession ? indyNxtSectionMetricTypes.length : 0
           },
           {
             id: 'penalties_decisions',
@@ -971,30 +1037,32 @@ const buildCoverage = ({ dataset, summary, indyReport, canceledSessionEvidence }
     }
   }
 
+  const indyNxtCoverage = seriesRows.find((row) => row.seriesId === 'series_indy_nxt');
   const globalPriority = [
-    {
-      rank: 1,
-      id: 'audit_and_patch_indy_nxt_detail_categories',
-      seriesId: 'series_indy_nxt',
-      rationale: 'INDY NXT is the richest and most UI-relevant source family. Lap charts, section data, penalties, cautions, racecraft, and pit-stop counts are already present; detailed pit context remains blocked unless official report availability is confirmed.'
-    },
+    indyNxtCoverage?.priorityGaps?.length
+      ? {
+          rank: 1,
+          id: 'audit_and_patch_indy_nxt_detail_categories',
+          seriesId: 'series_indy_nxt',
+          rationale: `INDY NXT is the richest and most UI-relevant source family. Active source-backed priority gaps remain: ${indyNxtCoverage.priorityGaps.join(', ')}.`
+        }
+      : {
+          rank: 1,
+          id: 'publish_indy_nxt_dashboard_readiness',
+          seriesId: 'series_indy_nxt',
+          rationale: 'INDY NXT active source-backed detail blockers are closed or explicitly source-bounded. Publish the production-safe analytics list and caveats so BryceCast UI work can start from the stable official/API/PDF dataset.'
+        },
     {
       rank: 2,
-      id: 'patch_froc_grid_tail_where_source_exists',
-      seriesId: 'series_froc',
-      rationale: 'FROC exact windows are complete where official exact-time sources were found; the remaining test sessions are source-unavailable for clock-time joins. Grid/start rows remain partial for reverse-grid Race 2 tail positions until race-specific official grid evidence is found.'
-    },
-    {
-      rank: 3,
       id: 'resolve_or_preserve_gb3_2022_source_broken_rows',
       seriesId: 'series_gb3',
       rationale: 'GB3 2021 TSL PDFs and GB3 2022 JSON expose different detail categories; after preserving that source-family split, the remaining hard GB3 gap is the official 2022 session 1248 JSON 404.'
     },
     {
-      rank: 4,
-      id: 'harden_formula_ford_lap_and_grid_diagnostics',
+      rank: 3,
+      id: 'harden_formula_ford_lap_sample_scope',
       seriesId: 'series_formula_ford',
-      rationale: 'Formula Ford 2020 has rich official PDFs, but grid rows and Bryce-only lap-analysis continuation pages remain partial by parser confidence.'
+      rationale: 'Formula Ford 2020 grid/start rows are now complete for source-matchable official event-book rows, with seven source-asymmetry holdouts preserved explicitly. The remaining active Formula Ford priority is deciding whether official lap-analysis pages justify expanding beyond the current Bryce-only lap samples.'
     }
   ];
 
@@ -1139,15 +1207,16 @@ const buildMarkdown = (report) => {
 };
 
 const main = async () => {
-  const [dataset, summary, indyReport] = await Promise.all([
+  const [dataset, summary, indyReport, indyWindowReport] = await Promise.all([
     readJson(datasetPath),
     readJson(join(reportsDir, 'ingestion-summary.json'), null),
-    readJson(join(reportsDir, 'indy-nxt-report-details-backfill-report.json'), null)
+    readJson(join(reportsDir, 'indy-nxt-report-details-backfill-report.json'), null),
+    readJson(join(reportsDir, 'indy-nxt-session-window-backfill-report.json'), null)
   ]);
   if (!dataset) throw new Error(`Missing dataset at ${datasetPath}`);
 
   const canceledSessionEvidence = await collectCanceledSessionEvidence(dataset);
-  const report = buildCoverage({ dataset, summary, indyReport, canceledSessionEvidence });
+  const report = buildCoverage({ dataset, summary, indyReport, indyWindowReport, canceledSessionEvidence });
   await writeFile(jsonOutputPath, `${JSON.stringify(report, null, 2)}\n`);
   await writeFile(markdownOutputPath, buildMarkdown(report));
   console.log(JSON.stringify({

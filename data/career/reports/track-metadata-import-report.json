@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-06-08T15:13:37.356Z",
+  "checkedAt": "2026-06-08T18:40:10.048Z",
   "ok": true,
   "dryRun": false,
   "verifySourceUrls": false,
@@ -15,8 +15,8 @@
     "eventTimezonesBackfilled": 7,
     "sessionTimezonesBackfilled": 0,
     "sessionTimezoneMismatches": 0,
-    "weatherPreciseWindowReadySessions": 307,
-    "weatherEventDayContextOnlySessions": 152,
+    "weatherPreciseWindowReadySessions": 381,
+    "weatherEventDayContextOnlySessions": 78,
     "weatherBlockedSessions": 9
   },
   "qualityGates": {
@@ -32,10 +32,10 @@
   },
   "weatherPrep": {
     "readinessCounts": {
-      "precise_window_ready": 307,
+      "precise_window_ready": 381,
       "blocked_missing_session_start": 9,
       "not_applicable_aggregate_classification": 1,
-      "event_day_context_only": 152
+      "event_day_context_only": 78
     },
     "preciseWindowReadySample": [
       {
@@ -113,75 +113,75 @@
     ],
     "eventDayOnlySample": [
       {
-        "sessionId": "session_indy_nxt_2024_6314",
-        "eventId": "event_indy_nxt_2024_5470",
-        "trackId": "track_barber_motorsports_park",
-        "readiness": "event_day_context_only"
-      },
-      {
-        "sessionId": "session_indy_nxt_2024_6315",
-        "eventId": "event_indy_nxt_2024_5471",
-        "trackId": "track_indianapolis_motor_speedway_road_course",
-        "readiness": "event_day_context_only"
-      },
-      {
-        "sessionId": "session_indy_nxt_2024_6316",
-        "eventId": "event_indy_nxt_2024_5472",
-        "trackId": "track_road_america",
-        "readiness": "event_day_context_only"
-      },
-      {
-        "sessionId": "session_indy_nxt_2024_6317",
-        "eventId": "event_indy_nxt_2024_5473",
-        "trackId": "track_weathertech_raceway_laguna_seca",
-        "readiness": "event_day_context_only"
-      },
-      {
-        "sessionId": "session_indy_nxt_2024_6318",
-        "eventId": "event_indy_nxt_2024_5474",
-        "trackId": "track_mid_ohio_sports_car_course",
-        "readiness": "event_day_context_only"
-      },
-      {
-        "sessionId": "session_indy_nxt_2024_6319",
-        "eventId": "event_indy_nxt_2024_5475",
-        "trackId": "track_iowa_speedway",
-        "readiness": "event_day_context_only"
-      },
-      {
-        "sessionId": "session_indy_nxt_2024_6320",
-        "eventId": "event_indy_nxt_2024_5476",
-        "trackId": "track_world_wide_technology_raceway",
-        "readiness": "event_day_context_only"
-      },
-      {
-        "sessionId": "session_indy_nxt_2024_6321",
-        "eventId": "event_indy_nxt_2024_5477",
-        "trackId": "track_portland_international_raceway",
-        "readiness": "event_day_context_only"
-      },
-      {
-        "sessionId": "session_indy_nxt_2024_6322",
-        "eventId": "event_indy_nxt_2024_5478",
-        "trackId": "track_the_milwaukee_mile",
-        "readiness": "event_day_context_only"
-      },
-      {
-        "sessionId": "session_indy_nxt_2024_6323",
-        "eventId": "event_indy_nxt_2024_5479",
-        "trackId": "track_nashville_superspeedway",
-        "readiness": "event_day_context_only"
-      },
-      {
-        "sessionId": "session_indy_nxt_2024_6324",
+        "sessionId": "session_indy_nxt_2024_6330",
         "eventId": "event_indy_nxt_2024_5480",
         "trackId": "track_streets_of_st_petersburg",
         "readiness": "event_day_context_only"
       },
       {
-        "sessionId": "session_indy_nxt_2024_6325",
+        "sessionId": "session_indy_nxt_2024_6346",
+        "eventId": "event_indy_nxt_2024_5480",
+        "trackId": "track_streets_of_st_petersburg",
+        "readiness": "event_day_context_only"
+      },
+      {
+        "sessionId": "session_indy_nxt_2024_6356",
+        "eventId": "event_indy_nxt_2024_5470",
+        "trackId": "track_barber_motorsports_park",
+        "readiness": "event_day_context_only"
+      },
+      {
+        "sessionId": "session_indy_nxt_2024_6357",
+        "eventId": "event_indy_nxt_2024_5470",
+        "trackId": "track_barber_motorsports_park",
+        "readiness": "event_day_context_only"
+      },
+      {
+        "sessionId": "session_indy_nxt_2024_6366",
+        "eventId": "event_indy_nxt_2024_5471",
+        "trackId": "track_indianapolis_motor_speedway_road_course",
+        "readiness": "event_day_context_only"
+      },
+      {
+        "sessionId": "session_indy_nxt_2024_6367",
+        "eventId": "event_indy_nxt_2024_5471",
+        "trackId": "track_indianapolis_motor_speedway_road_course",
+        "readiness": "event_day_context_only"
+      },
+      {
+        "sessionId": "session_indy_nxt_2024_6389",
         "eventId": "event_indy_nxt_2024_5481",
         "trackId": "track_indianapolis_motor_speedway_road_course",
+        "readiness": "event_day_context_only"
+      },
+      {
+        "sessionId": "session_indy_nxt_2024_6390",
+        "eventId": "event_indy_nxt_2024_5481",
+        "trackId": "track_indianapolis_motor_speedway_road_course",
+        "readiness": "event_day_context_only"
+      },
+      {
+        "sessionId": "session_indy_nxt_2024_6393",
+        "eventId": "event_indy_nxt_2024_5482",
+        "trackId": "track_streets_of_detroit",
+        "readiness": "event_day_context_only"
+      },
+      {
+        "sessionId": "session_indy_nxt_2024_6394",
+        "eventId": "event_indy_nxt_2024_5482",
+        "trackId": "track_streets_of_detroit",
+        "readiness": "event_day_context_only"
+      },
+      {
+        "sessionId": "session_indy_nxt_2024_6404",
+        "eventId": "event_indy_nxt_2024_5472",
+        "trackId": "track_road_america",
+        "readiness": "event_day_context_only"
+      },
+      {
+        "sessionId": "session_indy_nxt_2024_6405",
+        "eventId": "event_indy_nxt_2024_5472",
+        "trackId": "track_road_america",
         "readiness": "event_day_context_only"
       }
     ],
