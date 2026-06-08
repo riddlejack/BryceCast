@@ -1,10 +1,10 @@
 {
   "schemaVersion": "bryce-career-coverage-matrix.v1",
-  "generatedAt": "2026-06-08T15:32:45.816Z",
+  "generatedAt": "2026-06-08T15:40:19.361Z",
   "datasetPath": "data/career/career.dataset.json",
   "validation": {
     "ok": true,
-    "checkedAt": "2026-06-08T15:32:44.526Z",
+    "checkedAt": "2026-06-08T15:13:44.060Z",
     "errors": [],
     "warnings": [
       {
@@ -114,7 +114,9 @@
         "gap_froc_2024_session_times_missing",
         "gap_froc_2024_start_positions_partial"
       ],
-      "sourceFamilyPriorityExclusions": {},
+      "sourceFamilyPriorityExclusions": {
+        "exact_session_windows": "FROC 2024 official Toyota schedule images expose exact practice/qualifying/race windows and official Round 2 timing PDFs expose exact Test 1/2 windows. The remaining nine test sessions have official date-level article context and result tabs, but no official timing PDF link or equivalent exact clock-time source was found on the Toyota round pages."
+      },
       "categories": [
         {
           "id": "events_sessions",
@@ -159,7 +161,7 @@
           "covered": 43,
           "total": 52,
           "coverage": 0.8269,
-          "notes": "43/52 physical sessions have clock-time starts; 43/52 have at least date-level starts."
+          "notes": "43/52 physical sessions have clock-time starts; 43/52 have at least date-level starts; 9 sessions are source-unavailable exact windows after official source review."
         },
         {
           "id": "track_metadata",
@@ -253,8 +255,7 @@
         }
       ],
       "priorityGaps": [
-        "grid_start_positions",
-        "exact_session_windows"
+        "grid_start_positions"
       ]
     },
     {
@@ -315,7 +316,7 @@
           "covered": 28,
           "total": 28,
           "coverage": 1,
-          "notes": "28/28 physical sessions have clock-time starts; 28/28 have at least date-level starts."
+          "notes": "28/28 physical sessions have clock-time starts; 28/28 have at least date-level starts; 0 sessions are source-unavailable exact windows after official source review."
         },
         {
           "id": "track_metadata",
@@ -470,7 +471,7 @@
           "covered": 36,
           "total": 36,
           "coverage": 1,
-          "notes": "36/36 physical sessions have clock-time starts; 36/36 have at least date-level starts."
+          "notes": "36/36 physical sessions have clock-time starts; 36/36 have at least date-level starts; 0 sessions are source-unavailable exact windows after official source review."
         },
         {
           "id": "track_metadata",
@@ -623,7 +624,7 @@
           "covered": 46,
           "total": 46,
           "coverage": 1,
-          "notes": "46/46 physical sessions have clock-time starts; 46/46 have at least date-level starts."
+          "notes": "46/46 physical sessions have clock-time starts; 46/46 have at least date-level starts; 0 sessions are source-unavailable exact windows after official source review."
         },
         {
           "id": "track_metadata",
@@ -784,7 +785,7 @@
           "covered": 116,
           "total": 116,
           "coverage": 1,
-          "notes": "116/116 physical sessions have clock-time starts; 116/116 have at least date-level starts."
+          "notes": "116/116 physical sessions have clock-time starts; 116/116 have at least date-level starts; 0 sessions are source-unavailable exact windows after official source review."
         },
         {
           "id": "track_metadata",
@@ -935,7 +936,7 @@
           "covered": 1,
           "total": 1,
           "coverage": 1,
-          "notes": "1/1 physical sessions have clock-time starts; 1/1 have at least date-level starts."
+          "notes": "1/1 physical sessions have clock-time starts; 1/1 have at least date-level starts; 0 sessions are source-unavailable exact windows after official source review."
         },
         {
           "id": "track_metadata",
@@ -1093,7 +1094,7 @@
           "covered": 37,
           "total": 189,
           "coverage": 0.1958,
-          "notes": "37/189 physical sessions have clock-time starts; 189/189 have at least date-level starts."
+          "notes": "37/189 physical sessions have clock-time starts; 189/189 have at least date-level starts; 0 sessions are source-unavailable exact windows after official source review."
         },
         {
           "id": "track_metadata",
@@ -1211,8 +1212,7 @@
       "lapSampleSessions": 0,
       "weatherSessions": 0,
       "priorityGaps": [
-        "grid_start_positions",
-        "exact_session_windows"
+        "grid_start_positions"
       ],
       "categories": [
         {
@@ -1258,7 +1258,7 @@
           "covered": 43,
           "total": 52,
           "coverage": 0.8269,
-          "notes": "43/52 physical sessions have clock-time starts; 43/52 have at least date-level starts."
+          "notes": "43/52 physical sessions have clock-time starts; 43/52 have at least date-level starts; 9 sessions are source-unavailable exact windows after official source review."
         },
         {
           "id": "track_metadata",
@@ -1412,7 +1412,7 @@
           "covered": 28,
           "total": 28,
           "coverage": 1,
-          "notes": "28/28 physical sessions have clock-time starts; 28/28 have at least date-level starts."
+          "notes": "28/28 physical sessions have clock-time starts; 28/28 have at least date-level starts; 0 sessions are source-unavailable exact windows after official source review."
         },
         {
           "id": "track_metadata",
@@ -1566,7 +1566,7 @@
           "covered": 36,
           "total": 36,
           "coverage": 1,
-          "notes": "36/36 physical sessions have clock-time starts; 36/36 have at least date-level starts."
+          "notes": "36/36 physical sessions have clock-time starts; 36/36 have at least date-level starts; 0 sessions are source-unavailable exact windows after official source review."
         },
         {
           "id": "track_metadata",
@@ -1723,7 +1723,7 @@
           "covered": 46,
           "total": 46,
           "coverage": 1,
-          "notes": "46/46 physical sessions have clock-time starts; 46/46 have at least date-level starts."
+          "notes": "46/46 physical sessions have clock-time starts; 46/46 have at least date-level starts; 0 sessions are source-unavailable exact windows after official source review."
         },
         {
           "id": "track_metadata",
@@ -1877,7 +1877,7 @@
           "covered": 39,
           "total": 39,
           "coverage": 1,
-          "notes": "39/39 physical sessions have clock-time starts; 39/39 have at least date-level starts."
+          "notes": "39/39 physical sessions have clock-time starts; 39/39 have at least date-level starts; 0 sessions are source-unavailable exact windows after official source review."
         },
         {
           "id": "track_metadata",
@@ -2031,7 +2031,7 @@
           "covered": 77,
           "total": 77,
           "coverage": 1,
-          "notes": "77/77 physical sessions have clock-time starts; 77/77 have at least date-level starts."
+          "notes": "77/77 physical sessions have clock-time starts; 77/77 have at least date-level starts; 0 sessions are source-unavailable exact windows after official source review."
         },
         {
           "id": "track_metadata",
@@ -2185,7 +2185,7 @@
           "covered": 1,
           "total": 1,
           "coverage": 1,
-          "notes": "1/1 physical sessions have clock-time starts; 1/1 have at least date-level starts."
+          "notes": "1/1 physical sessions have clock-time starts; 1/1 have at least date-level starts; 0 sessions are source-unavailable exact windows after official source review."
         },
         {
           "id": "track_metadata",
@@ -2344,7 +2344,7 @@
           "covered": 0,
           "total": 68,
           "coverage": 0,
-          "notes": "0/68 physical sessions have clock-time starts; 68/68 have at least date-level starts."
+          "notes": "0/68 physical sessions have clock-time starts; 68/68 have at least date-level starts; 0 sessions are source-unavailable exact windows after official source review."
         },
         {
           "id": "track_metadata",
@@ -2503,7 +2503,7 @@
           "covered": 0,
           "total": 66,
           "coverage": 0,
-          "notes": "0/66 physical sessions have clock-time starts; 66/66 have at least date-level starts."
+          "notes": "0/66 physical sessions have clock-time starts; 66/66 have at least date-level starts; 0 sessions are source-unavailable exact windows after official source review."
         },
         {
           "id": "track_metadata",
@@ -2662,7 +2662,7 @@
           "covered": 37,
           "total": 55,
           "coverage": 0.6727,
-          "notes": "37/55 physical sessions have clock-time starts; 55/55 have at least date-level starts."
+          "notes": "37/55 physical sessions have clock-time starts; 55/55 have at least date-level starts; 0 sessions are source-unavailable exact windows after official source review."
         },
         {
           "id": "track_metadata",
@@ -3628,9 +3628,9 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "track_metadata",
@@ -3732,9 +3732,9 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "track_metadata",
@@ -3836,9 +3836,9 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "track_metadata",
@@ -5812,9 +5812,9 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "track_metadata",
@@ -5916,9 +5916,9 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "track_metadata",
@@ -6852,9 +6852,9 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "track_metadata",
@@ -6956,9 +6956,9 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "track_metadata",
@@ -7996,9 +7996,9 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "track_metadata",
@@ -8100,9 +8100,9 @@
         },
         {
           "id": "exact_session_windows",
-          "status": "blocked",
+          "status": "unavailable",
           "covered": 0,
-          "total": 1
+          "total": 0
         },
         {
           "id": "track_metadata",
@@ -51737,9 +51737,9 @@
     },
     {
       "rank": 2,
-      "id": "patch_froc_grid_and_exact_test_windows_where_source_exists",
+      "id": "patch_froc_grid_tail_where_source_exists",
       "seriesId": "series_froc",
-      "rationale": "FROC has known partial grid/start and exact test-window gaps. Date-only article context is present; exact times should stay null until official timing evidence appears."
+      "rationale": "FROC exact windows are complete where official exact-time sources were found; the remaining test sessions are source-unavailable for clock-time joins. Grid/start rows remain partial for reverse-grid Race 2 tail positions until race-specific official grid evidence is found."
     },
     {
       "rank": 3,

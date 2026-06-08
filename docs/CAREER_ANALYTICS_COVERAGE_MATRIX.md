@@ -1,6 +1,6 @@
 # Career Analytics Coverage Matrix
 
-Generated: 2026-06-08T15:32:45.816Z
+Generated: 2026-06-08T15:40:19.361Z
 
 This report is generated from the canonical dataset and importer reports. It covers the production analytics window starting with 2019 FRP F1600 and running through current 2026 INDY NXT. Pre-2019 karting remains narrative/context only.
 
@@ -16,7 +16,7 @@ This report is generated from the canonical dataset and importer reports. It cov
 
 | Series | Years | Events | Sessions | Priority Gaps | Open Gap IDs |
 | --- | ---: | ---: | ---: | --- | --- |
-| Castrol Toyota Formula Regional Oceania Championship | 2024 | 5 | 52 | grid_start_positions, exact_session_windows | gap_froc_2024_round_4_date_conflict, gap_froc_2024_session_times_missing, gap_froc_2024_start_positions_partial |
+| Castrol Toyota Formula Regional Oceania Championship | 2024 | 5 | 52 | grid_start_positions | gap_froc_2024_round_4_date_conflict, gap_froc_2024_session_times_missing, gap_froc_2024_start_positions_partial |
 | Euroformula Open | 2023 | 7 | 28 | none | gap_euroformula_2023_championship_classification_pdf_current_mismatch |
 | F1600 Championship Series | 2019 | 7 | 37 | none | gap_frp_f1600_2019_r5_01_qualifying_pdf_event_mismatch |
 | Formula Ford | 2020 | 7 | 46 | grid_start_positions, lap_samples | none |
@@ -55,7 +55,7 @@ This report is generated from the canonical dataset and importer reports. It cov
 
 | Series | Year | Priority Gaps | Events and sessions | Race/heat classifications | Qualifying classifications | Grid/start positions | Exact session windows | Track metadata | Official weather/track conditions | Lap samples | INDY NXT section data | Penalties/decisions | Incidents/cautions | Racecraft summary | Pit-stop counts | Detailed pit context | Derived benchmarks |
 | --- | ---: | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Castrol Toyota Formula Regional Oceania Championship | 2024 | grid_start_positions, exact_session_windows | complete | complete | complete | partial | partial | complete | unavailable | unavailable | unavailable | unavailable | unavailable | unavailable | unavailable | unavailable | blocked |
+| Castrol Toyota Formula Regional Oceania Championship | 2024 | grid_start_positions | complete | complete | complete | partial | partial | complete | unavailable | unavailable | unavailable | unavailable | unavailable | unavailable | unavailable | unavailable | blocked |
 | Euroformula Open | 2023 | none | complete | complete | complete | complete | complete | complete | unavailable | unavailable | unavailable | unavailable | unavailable | unavailable | unavailable | unavailable | blocked |
 | F1600 Championship Series | 2019 | none | complete | complete | complete | unavailable | complete | complete | unavailable | unavailable | unavailable | partial | unavailable | unavailable | unavailable | unavailable | blocked |
 | Formula Ford | 2020 | grid_start_positions, lap_samples | complete | complete | complete | partial | complete | complete | complete | partial | unavailable | partial | unavailable | unavailable | unavailable | unavailable | blocked |
@@ -73,16 +73,7 @@ This table lists sessions that still have partial or blocked coverage in that se
 | Series | Year | Event | Session | Type | Gaps |
 | --- | ---: | --- | --- | --- | --- |
 | Castrol Toyota Formula Regional Oceania Championship | 2024 | FROC 2024 Round 1 - Taupo International Motorsport Park | Race 2 (session_froc_2024_r1_race_2) | race | grid_start_positions:partial |
-| Castrol Toyota Formula Regional Oceania Championship | 2024 | FROC 2024 Round 1 - Taupo International Motorsport Park | Test 1 (session_froc_2024_r1_test_1) | test | exact_session_windows:blocked |
-| Castrol Toyota Formula Regional Oceania Championship | 2024 | FROC 2024 Round 1 - Taupo International Motorsport Park | Test 2 (session_froc_2024_r1_test_2) | test | exact_session_windows:blocked |
-| Castrol Toyota Formula Regional Oceania Championship | 2024 | FROC 2024 Round 1 - Taupo International Motorsport Park | Test 3 (session_froc_2024_r1_test_3) | test | exact_session_windows:blocked |
-| Castrol Toyota Formula Regional Oceania Championship | 2024 | FROC 2024 Round 3 - Hampton Downs Motorsport Park | Test 1 (session_froc_2024_r3_test_1) | test | exact_session_windows:blocked |
-| Castrol Toyota Formula Regional Oceania Championship | 2024 | FROC 2024 Round 3 - Hampton Downs Motorsport Park | Test 2 (session_froc_2024_r3_test_2) | test | exact_session_windows:blocked |
-| Castrol Toyota Formula Regional Oceania Championship | 2024 | FROC 2024 Round 4 - Euromarque Motorsport Park | Test 1 (session_froc_2024_r4_test_1) | test | exact_session_windows:blocked |
-| Castrol Toyota Formula Regional Oceania Championship | 2024 | FROC 2024 Round 4 - Euromarque Motorsport Park | Test 2 (session_froc_2024_r4_test_2) | test | exact_session_windows:blocked |
 | Castrol Toyota Formula Regional Oceania Championship | 2024 | FROC 2024 Round 5 - Highlands Motorsport Park | Race 2 (session_froc_2024_r5_race_2) | race | grid_start_positions:partial |
-| Castrol Toyota Formula Regional Oceania Championship | 2024 | FROC 2024 Round 5 - Highlands Motorsport Park | Test 1 (session_froc_2024_r5_test_1) | test | exact_session_windows:blocked |
-| Castrol Toyota Formula Regional Oceania Championship | 2024 | FROC 2024 Round 5 - Highlands Motorsport Park | Test 2 (session_froc_2024_r5_test_2) | test | exact_session_windows:blocked |
 | Formula Ford | 2020 | Champion of Brands 2020 | QUALIFYING - RACE 5 (session_formula_ford_2020_champion_brands_qualifying_race_5) | qualifying | lap_samples:partial |
 | Formula Ford | 2020 | Champion of Brands 2020 | RACE 11 (session_formula_ford_2020_champion_brands_race_11) | race | grid_start_positions:partial, lap_samples:partial |
 | Formula Ford | 2020 | Champion of Brands 2020 | RACE 5 (session_formula_ford_2020_champion_brands_race_5) | race | grid_start_positions:partial, lap_samples:partial |
@@ -272,12 +263,21 @@ This table lists sessions that still have partial or blocked coverage in that se
 | INDY NXT | 2026 | Music City Grand Prix | Race (session_indy_nxt_2026_6755) | race | indy_section_data:blocked |
 | INDY NXT | 2026 | Indianapolis Grand Prix Race 1 | Race (session_indy_nxt_2026_6756) | race | lap_samples:partial, detailed_pit_context:blocked |
 | INDY NXT | 2026 | INDY NXT by Firestone at Milwaukee Mile | Race (session_indy_nxt_2026_6757) | race | indy_section_data:blocked |
-| ... |  |  |  |  | 34 additional rows omitted from Markdown; inspect data/career/reports/career-coverage-matrix.json. |
+| INDY NXT | 2026 | Grand Prix of Monterey Race 2 | Race (session_indy_nxt_2026_6758) | race | indy_section_data:blocked |
+| INDY NXT | 2026 | Grand Prix of Monterey Race 1 | Race (session_indy_nxt_2026_6759) | race | indy_section_data:blocked |
+| INDY NXT | 2026 | Grand Prix at Mid-Ohio Race 2 | Race (session_indy_nxt_2026_6760) | race | indy_section_data:blocked |
+| INDY NXT | 2026 | Grand Prix at Mid-Ohio Race 1 | Race (session_indy_nxt_2026_6761) | race | indy_section_data:blocked |
+| INDY NXT | 2026 | Grand Prix at Road America Race 1 | Race (session_indy_nxt_2026_6762) | race | indy_section_data:blocked |
+| INDY NXT | 2026 | INDY NXT by Firestone at World Wide Technology Raceway | Race (session_indy_nxt_2026_6763) | race | lap_samples:partial, detailed_pit_context:blocked |
+| INDY NXT | 2026 | Grand Prix of Portland | Race (session_indy_nxt_2026_6764) | race | indy_section_data:blocked |
+| INDY NXT | 2026 | Indianapolis Grand Prix Race 2 | Race (session_indy_nxt_2026_6765) | race | lap_samples:partial, detailed_pit_context:blocked |
+| INDY NXT | 2026 | Grand Prix of St. Petersburg | Qualifications - Group 1 (session_indy_nxt_2026_6768) | qualifying | exact_session_windows:partial |
+| ... |  |  |  |  | 25 additional rows omitted from Markdown; inspect data/career/reports/career-coverage-matrix.json. |
 
 ## Recommended Patch Order
 
 1. audit_and_patch_indy_nxt_detail_categories: INDY NXT is the richest and most UI-relevant source family. Lap charts, section data, penalties, cautions, racecraft, and pit-stop counts are already present; detailed pit context remains blocked unless official report availability is confirmed.
-2. patch_froc_grid_and_exact_test_windows_where_source_exists: FROC has known partial grid/start and exact test-window gaps. Date-only article context is present; exact times should stay null until official timing evidence appears.
+2. patch_froc_grid_tail_where_source_exists: FROC exact windows are complete where official exact-time sources were found; the remaining test sessions are source-unavailable for clock-time joins. Grid/start rows remain partial for reverse-grid Race 2 tail positions until race-specific official grid evidence is found.
 3. resolve_or_preserve_gb3_2022_source_broken_rows: GB3 2021 TSL PDFs and GB3 2022 JSON expose different detail categories; after preserving that source-family split, the remaining hard GB3 gap is the official 2022 session 1248 JSON 404.
 4. harden_formula_ford_lap_and_grid_diagnostics: Formula Ford 2020 has rich official PDFs, but grid rows and Bryce-only lap-analysis continuation pages remain partial by parser confidence.
 
@@ -291,8 +291,9 @@ This table lists sessions that still have partial or blocked coverage in that se
 ## Notes By Series
 
 ### Castrol Toyota Formula Regional Oceania Championship
+- Exact session windows: source availability exception, not a priority gap. FROC 2024 official Toyota schedule images expose exact practice/qualifying/race windows and official Round 2 timing PDFs expose exact Test 1/2 windows. The remaining nine test sessions have official date-level article context and result tabs, but no official timing PDF link or equivalent exact clock-time source was found on the Toyota round pages.
 - Grid/start positions: partial. 229/246 race/heat rows have gridPosition or startPosition.
-- Exact session windows: partial. 43/52 physical sessions have clock-time starts; 43/52 have at least date-level starts.
+- Exact session windows: partial. 43/52 physical sessions have clock-time starts; 43/52 have at least date-level starts; 9 sessions are source-unavailable exact windows after official source review.
 - Official weather/track conditions: unavailable. 0/52 sessions have official weather/track-condition observations.
 - Lap samples: unavailable. 0 sessions have lap samples; Formula Ford rows are Bryce-only labeled lap-analysis samples.
 - INDY NXT section data: unavailable.
@@ -315,7 +316,7 @@ This table lists sessions that still have partial or blocked coverage in that se
 - Derived benchmarks: blocked. 0 non-report derived metrics exist for this series. Teammate/field-strength analytics are not production-ready yet.
 
 ### F1600 Championship Series
-- Penalties/decisions: source-family split, not a priority gap. FRP F1600 2019 archive PDFs expose explicit penalty announcements where present, but no complete official no-penalty decisions ledger was found for every session.
+- Penalties/decisions: source availability exception, not a priority gap. FRP F1600 2019 archive PDFs expose explicit penalty announcements where present, but no complete official no-penalty decisions ledger was found for every session.
 - Grid/start positions: unavailable. 0/315 race/heat rows have gridPosition or startPosition.
 - Official weather/track conditions: unavailable. 0/37 sessions have official weather/track-condition observations.
 - Lap samples: unavailable. 0 sessions have lap samples; Formula Ford rows are Bryce-only labeled lap-analysis samples.
@@ -328,7 +329,7 @@ This table lists sessions that still have partial or blocked coverage in that se
 - Derived benchmarks: blocked. 0 non-report derived metrics exist for this series. Teammate/field-strength analytics are not production-ready yet.
 
 ### Formula Ford
-- Penalties/decisions: source-family split, not a priority gap. Formula Ford 2020 event books expose explicit penalty-note rows where present, but no complete official no-penalty decisions ledger was found for every session.
+- Penalties/decisions: source availability exception, not a priority gap. Formula Ford 2020 event books expose explicit penalty-note rows where present, but no complete official no-penalty decisions ledger was found for every session.
 - Grid/start positions: partial. 760/782 race/heat rows have gridPosition or startPosition.
 - Lap samples: partial. 24 sessions have lap samples; Formula Ford rows are Bryce-only labeled lap-analysis samples.
 - INDY NXT section data: unavailable.
@@ -340,9 +341,9 @@ This table lists sessions that still have partial or blocked coverage in that se
 - Derived benchmarks: blocked. 0 non-report derived metrics exist for this series. Teammate/field-strength analytics are not production-ready yet.
 
 ### GB3 Championship
-- Grid/start positions: source-family split, not a priority gap. GB3 2021 official TSL PDFs expose race grid sheets and are complete; GB3 2022 official JSON result payloads do not expose grid/start fields.
-- Official weather/track conditions: source-family split, not a priority gap. GB3 2021 official TSL PDFs expose weather/track-condition rows and are complete; GB3 2022 official JSON payloads do not expose comparable weather/track-condition fields.
-- Pit-stop counts: source-family split, not a priority gap. GB3 2022 official JSON payloads expose pit-stop count fields and are complete; GB3 2021 official TSL PDFs do not expose comparable pit-stop count fields.
+- Grid/start positions: source availability exception, not a priority gap. GB3 2021 official TSL PDFs expose race grid sheets and are complete; GB3 2022 official JSON result payloads do not expose grid/start fields.
+- Official weather/track conditions: source availability exception, not a priority gap. GB3 2021 official TSL PDFs expose weather/track-condition rows and are complete; GB3 2022 official JSON payloads do not expose comparable weather/track-condition fields.
+- Pit-stop counts: source availability exception, not a priority gap. GB3 2022 official JSON payloads expose pit-stop count fields and are complete; GB3 2021 official TSL PDFs do not expose comparable pit-stop count fields.
 - Grid/start positions: partial. 369/882 race/heat rows have gridPosition or startPosition.
 - Official weather/track conditions: partial. 39/116 sessions have official weather/track-condition observations.
 - Lap samples: unavailable. 0 sessions have lap samples; Formula Ford rows are Bryce-only labeled lap-analysis samples.
@@ -366,7 +367,7 @@ This table lists sessions that still have partial or blocked coverage in that se
 - Derived benchmarks: blocked. 0 non-report derived metrics exist for this series. Teammate/field-strength analytics are not production-ready yet.
 
 ### INDY NXT
-- Exact session windows: partial. 37/189 physical sessions have clock-time starts; 189/189 have at least date-level starts.
+- Exact session windows: partial. 37/189 physical sessions have clock-time starts; 189/189 have at least date-level starts; 0 sessions are source-unavailable exact windows after official source review.
 - Official weather/track conditions: unavailable. 0/189 sessions have official weather/track-condition observations.
 - Lap samples: partial. 36/36 completed race sessions have lap-chart samples; 26 charts fully validate and 10 are clean partial visible-sample imports.
 - INDY NXT section data: partial. 146/146 comparable Top Section reports parsed after excluding 1 official canceled session; 145/146 comparable Section Results reports parsed after excluding 1 official canceled session. True held-outs: session_indy_nxt_2024_6325 (official_pdf_has_no_extractable_text).

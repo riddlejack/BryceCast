@@ -31,6 +31,9 @@ const hasAnyStart = (session) => Boolean(session.actualStart || session.schedule
 const hasExactTimestamp = (session) =>
   (typeof session.actualStart === 'string' && session.actualStart.includes('T')) ||
   (typeof session.scheduledStart === 'string' && session.scheduledStart.includes('T'));
+const isExactWindowSourceUnavailable = (session) =>
+  session.raw?.testDayContextBackfill?.timeWindowStatus === 'date_context_only_exact_time_unsourced' &&
+  !hasExactTimestamp(session);
 
 const collectCanceledSessionEvidence = async (dataset) => {
   const evidence = new Map();
@@ -319,6 +322,9 @@ const knownGapMap = {
 };
 
 const sourceFamilyPriorityExclusions = {
+  series_froc: {
+    exact_session_windows: 'FROC 2024 official Toyota schedule images expose exact practice/qualifying/race windows and official Round 2 timing PDFs expose exact Test 1/2 windows. The remaining nine test sessions have official date-level article context and result tabs, but no official timing PDF link or equivalent exact clock-time source was found on the Toyota round pages.'
+  },
   series_frp_f1600: {
     penalties_decisions: 'FRP F1600 2019 archive PDFs expose explicit penalty announcements where present, but no complete official no-penalty decisions ledger was found for every session.'
   },
@@ -417,6 +423,7 @@ const buildCoverage = ({ dataset, summary, indyReport, canceledSessionEvidence }
     const raceResultSessions = comparableRaceSessions.filter((session) => (resultsBySession.get(session.id) ?? []).length > 0);
     const raceRowsWithGrid = raceRows.filter((row) => row.gridPosition != null || row.startPosition != null);
     const exactWindowSessions = physicalSessions.filter(hasExactTimestamp);
+    const exactWindowSourceUnavailableSessions = physicalSessions.filter(isExactWindowSourceUnavailable);
     const anyWindowSessions = physicalSessions.filter(hasAnyStart);
     const trackMetadataComplete = [...trackIds].filter((trackId) => {
       const track = tracksById.get(trackId);
@@ -527,7 +534,7 @@ const buildCoverage = ({ dataset, summary, indyReport, canceledSessionEvidence }
             : exactWindowSessions.length > 0
               ? 'partial'
               : 'blocked',
-        notes: `${exactWindowSessions.length}/${physicalSessions.length} physical sessions have clock-time starts; ${anyWindowSessions.length}/${physicalSessions.length} have at least date-level starts.`
+        notes: `${exactWindowSessions.length}/${physicalSessions.length} physical sessions have clock-time starts; ${anyWindowSessions.length}/${physicalSessions.length} have at least date-level starts; ${exactWindowSourceUnavailableSessions.length} sessions are source-unavailable exact windows after official source review.`
       }),
       category('track_metadata', trackMetadataComplete, trackIds.size, {
         notes: `${trackMetadataComplete}/${trackIds.size} referenced tracks have coordinates, timezone, length, direction, surface, and corner count.`
@@ -628,6 +635,7 @@ const buildCoverage = ({ dataset, summary, indyReport, canceledSessionEvidence }
       );
       const yearRaceRowsWithGrid = yearRaceRows.filter((row) => row.gridPosition != null || row.startPosition != null);
       const yearExactWindowSessions = yearPhysicalSessions.filter(hasExactTimestamp);
+      const yearExactWindowSourceUnavailableSessions = yearPhysicalSessions.filter(isExactWindowSourceUnavailable);
       const yearAnyWindowSessions = yearPhysicalSessions.filter(hasAnyStart);
       const yearTrackMetadataComplete = [...yearTrackIds].filter((trackId) => {
         const track = tracksById.get(trackId);
@@ -677,7 +685,7 @@ const buildCoverage = ({ dataset, summary, indyReport, canceledSessionEvidence }
               : yearExactWindowSessions.length > 0
                 ? 'partial'
                 : 'blocked',
-          notes: `${yearExactWindowSessions.length}/${yearPhysicalSessions.length} physical sessions have clock-time starts; ${yearAnyWindowSessions.length}/${yearPhysicalSessions.length} have at least date-level starts.`
+          notes: `${yearExactWindowSessions.length}/${yearPhysicalSessions.length} physical sessions have clock-time starts; ${yearAnyWindowSessions.length}/${yearPhysicalSessions.length} have at least date-level starts; ${yearExactWindowSourceUnavailableSessions.length} sessions are source-unavailable exact windows after official source review.`
         }),
         category('track_metadata', yearTrackMetadataComplete, yearTrackIds.size, {
           notes: `${yearTrackMetadataComplete}/${yearTrackIds.size} referenced tracks have complete metadata.`
@@ -833,13 +841,15 @@ const buildCoverage = ({ dataset, summary, indyReport, canceledSessionEvidence }
             id: 'exact_session_windows',
             status: isPhysicalWindowExempt(session)
               ? 'out_of_scope'
+              : isExactWindowSourceUnavailable(session)
+                ? 'unavailable'
               : hasExactTimestamp(session)
                 ? 'complete'
                 : hasAnyStart(session)
                   ? 'partial'
                   : 'blocked',
             covered: hasExactTimestamp(session) ? 1 : 0,
-            total: isPhysicalWindowExempt(session) ? 0 : 1
+            total: isPhysicalWindowExempt(session) || isExactWindowSourceUnavailable(session) ? 0 : 1
           },
           {
             id: 'track_metadata',
@@ -970,9 +980,9 @@ const buildCoverage = ({ dataset, summary, indyReport, canceledSessionEvidence }
     },
     {
       rank: 2,
-      id: 'patch_froc_grid_and_exact_test_windows_where_source_exists',
+      id: 'patch_froc_grid_tail_where_source_exists',
       seriesId: 'series_froc',
-      rationale: 'FROC has known partial grid/start and exact test-window gaps. Date-only article context is present; exact times should stay null until official timing evidence appears.'
+      rationale: 'FROC exact windows are complete where official exact-time sources were found; the remaining test sessions are source-unavailable for clock-time joins. Grid/start rows remain partial for reverse-grid Race 2 tail positions until race-specific official grid evidence is found.'
     },
     {
       rank: 3,
@@ -1118,7 +1128,7 @@ const buildMarkdown = (report) => {
     if (row.policyNote) lines.push(`- ${row.policyNote}`);
     for (const [categoryId, rationale] of Object.entries(row.sourceFamilyPriorityExclusions ?? {})) {
       const label = report.categoryDefinitions.find((category) => category.id === categoryId)?.label ?? categoryId;
-      lines.push(`- ${label}: source-family split, not a priority gap. ${rationale}`);
+      lines.push(`- ${label}: source availability exception, not a priority gap. ${rationale}`);
     }
     for (const category of row.categories.filter((category) => category.status !== 'complete')) {
       lines.push(`- ${category.label}: ${category.status}. ${category.notes ?? ''}`.trim());

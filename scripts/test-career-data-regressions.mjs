@@ -112,6 +112,38 @@ assert.equal(
   'complete',
   'INDY NXT qualifying sessions can still be applicable for official section-data reports'
 );
+const frocCoverage = careerCoverageMatrix.series.find((row) => row.seriesId === 'series_froc');
+const froc2024Coverage = careerCoverageMatrix.seasons.find((row) => row.seriesId === 'series_froc' && row.year === 2024);
+assert.deepEqual(
+  frocCoverage?.priorityGaps,
+  ['grid_start_positions'],
+  'FROC exact test windows without official clock-time sources must not remain a priority import gap'
+);
+assert.deepEqual(
+  froc2024Coverage?.priorityGaps,
+  ['grid_start_positions'],
+  'FROC season matrix must apply the same exact-window source-unavailable exclusion as the series matrix'
+);
+assert.equal(
+  frocCoverage?.sourceFamilyPriorityExclusions?.exact_session_windows?.includes('remaining nine test sessions'),
+  true,
+  'FROC exact-window coverage must document why unsourced test sessions are not a priority patch target'
+);
+assert.equal(
+  sessionWindowBackfillReport.unsourcedFrocTestSessions?.length,
+  9,
+  'FROC session-window backfill report must preserve the nine official-source-unavailable test sessions'
+);
+assert.equal(
+  coverageCategoryForSession('session_froc_2024_r1_test_1', 'exact_session_windows')?.status,
+  'unavailable',
+  'FROC test sessions with only date-level official article context should be unavailable for exact session-window coverage'
+);
+assert.equal(
+  coverageCategoryForSession('session_froc_2024_r2_test_1', 'exact_session_windows')?.status,
+  'complete',
+  'FROC Round 2 test sessions with official timing PDFs should remain exact-window complete'
+);
 const frpCoverage = careerCoverageMatrix.series.find((row) => row.seriesId === 'series_frp_f1600');
 const formulaFordCoverage = careerCoverageMatrix.series.find((row) => row.seriesId === 'series_formula_ford');
 const frp2019Coverage = careerCoverageMatrix.seasons.find((row) => row.seriesId === 'series_frp_f1600' && row.year === 2019);
