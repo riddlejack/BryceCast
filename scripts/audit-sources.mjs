@@ -1,51 +1,38 @@
-const endpoints = [
-  ['timing', 'https://indycar.blob.core.windows.net/racecontrol/timingscoring-ris.json'],
-  ['drivers_nxt', 'https://indycar.blob.core.windows.net/racecontrol/driversfeed_nxt.json'],
-  ['config', 'https://indycar.blob.core.windows.net/racecontrol/tsconfig.json'],
-  ['schedule_nxt', 'https://indycar.blob.core.windows.net/racecontrol/schedulefeed_nxt.json'],
-  ['trackactivity_nxt', 'https://indycar.blob.core.windows.net/racecontrol/trackactivityleaderboardfeed_nxt.json']
-];
+import { isBryceProfile, isBryceTimingRow, liveSourceEndpoints } from './live-source-endpoints.mjs';
 
-const bryceRcDriverId = '2143';
-
-const isBryceTimingRow = (row) => {
-  const first = String(row?.firstName ?? '').toLowerCase();
-  const last = String(row?.lastName ?? '').toLowerCase();
-  const driverId = String(row?.DriverID ?? '');
-  return (first === 'bryce' && last === 'aron') || driverId === bryceRcDriverId;
-};
-
-const isBryceProfile = (driver) => {
-  const first = String(driver?.firstname ?? '').toLowerCase();
-  const last = String(driver?.lastname ?? '').toLowerCase();
-  const driverId = String(driver?.rc_driver_id ?? driver?.driverid ?? '');
-  return (first === 'bryce' && last === 'aron') || driverId === bryceRcDriverId;
-};
+const endpoints = liveSourceEndpoints;
+const fetchTimeoutMs = Number(process.argv.find((arg) => arg.startsWith('--timeout-ms='))?.slice('--timeout-ms='.length) ?? '5000');
 
 const readJson = async (url) => {
-  const response = await fetch(`${url}?t=${Date.now()}`, {
-    headers: {
-      accept: 'application/json',
-      origin: 'http://localhost:5173'
-    }
-  });
-
-  const text = await response.text();
-  let json = null;
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), fetchTimeoutMs);
   try {
-    json = JSON.parse(text);
-  } catch {}
+    const response = await fetch(`${url}?t=${Date.now()}`, {
+      signal: controller.signal,
+      headers: {
+        accept: 'application/json',
+        origin: 'http://localhost:5173'
+      }
+    });
+    const text = await response.text();
+    let json = null;
+    try {
+      json = JSON.parse(text);
+    } catch {}
 
-  return {
-    ok: response.ok,
-    status: response.status,
-    type: response.headers.get('content-type'),
-    allowOrigin: response.headers.get('access-control-allow-origin'),
-    lastModified: response.headers.get('last-modified'),
-    etag: response.headers.get('etag'),
-    bytes: text.length,
-    json
-  };
+    return {
+      ok: response.ok,
+      status: response.status,
+      type: response.headers.get('content-type'),
+      allowOrigin: response.headers.get('access-control-allow-origin'),
+      lastModified: response.headers.get('last-modified'),
+      etag: response.headers.get('etag'),
+      bytes: text.length,
+      json
+    };
+  } finally {
+    clearTimeout(timeout);
+  }
 };
 
 const summarize = (id, result) => {
@@ -53,7 +40,7 @@ const summarize = (id, result) => {
 
   if (id === 'timing') {
     const timing = result.json.timing_results ?? {};
-    const bryce = (timing.Item ?? []).find(isBryceTimingRow);
+    const bryce = (timing.Item ?? []).find((row) => isBryceTimingRow(row, timing.heartbeat));
     return {
       event: timing.heartbeat?.eventName,
       flag: timing.heartbeat?.currentFlag,
@@ -95,6 +82,16 @@ const summarize = (id, result) => {
     };
   }
 
+  if (id === 'ntt_data_polling') {
+    const rows = Array.isArray(result.json) ? result.json : [];
+    return {
+      rowCount: rows.length,
+      datasets: [...new Set(rows.map((row) => row.Dataset).filter(Boolean))],
+      latestDatetime: rows.map((row) => row.Datetime).filter(Boolean).sort().at(-1) ?? null,
+      sampleKeys: Object.keys(rows[0] ?? {}).slice(0, 20)
+    };
+  }
+
   return {
     topKeys: Object.keys(result.json).slice(0, 5)
   };
@@ -103,12 +100,17 @@ const summarize = (id, result) => {
 const main = async () => {
   const output = [];
 
-  for (const [id, url] of endpoints) {
+  for (const endpoint of endpoints) {
     try {
-      const result = await readJson(url);
+      const result = await readJson(endpoint.url);
       output.push({
-        id,
-        url,
+        id: endpoint.id,
+        label: endpoint.label,
+        series: endpoint.series,
+        cadence: endpoint.cadence,
+        role: endpoint.role,
+        proxyPath: endpoint.proxyPath,
+        url: endpoint.url,
         ok: result.ok,
         status: result.status,
         contentType: result.type,
@@ -116,12 +118,13 @@ const main = async () => {
         lastModified: result.lastModified,
         etag: result.etag,
         bytes: result.bytes,
-        summary: summarize(id, result)
+        summary: summarize(endpoint.id, result)
       });
     } catch (error) {
       output.push({
-        id,
-        url,
+        id: endpoint.id,
+        label: endpoint.label,
+        url: endpoint.url,
         ok: false,
         error: error instanceof Error ? error.message : String(error)
       });

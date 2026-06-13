@@ -19,6 +19,9 @@ For the detailed analytics truth table, current audit output, and design implica
 | Historical INDY NXT ambient weather | Open-Meteo Historical Weather API plus NOAA/NCEI GHCNh station cross-check report | Non-official modeled ambient weather for exact-window INDY NXT career sessions, with representative station-observation QA. | Career/session context only; never official weather or track temperature. |
 | Local race poller | `scripts/race-poller.mjs` | SQLite, JSONL, and latest public snapshot for Race Control, schedule, track activity, config, source freshness, and Bryce samples. | Season archive and race-day source proof. |
 | Local API service | `scripts/api-server.mjs`, `/api/*` | Normalized BryceCast snapshot, session, Bryce row, timing tower, source probes with freshness metadata, local logs, history, onboard catalog, replay analytics, and proof persistence. | Web, iPhone/mobile web, production-style local serving. |
+| Live source endpoint catalog | `scripts/live-source-endpoints.mjs` | Central list of public live/candidate feeds found in the official leaderboard bundle: primary timing, NXT profile/schedule/activity, config, top-series reference feeds, and NTT prediction candidate. | Prevents source drift across API, poller, and audits. |
+| Live source pressure test | `scripts/live-source-pressure-test.mjs`, `npm run audit:live:pressure` | Repeatable 1-second cadence checks for status, latency, Last-Modified, ETag, payload hash changes, Bryce row presence, timing field coverage, points fields, and candidate source summaries. | Road America readiness gate and race-day source proof. |
+| Live weather | NWS API through `scripts/live-weather-service.mjs`, `npm run weather:live`, `GET /api/weather/live`, `GET /api/weather/upcoming` | Current observation, hourly forecast, daily forecast, active alerts, station/grid metadata, probe status, and forecast-readiness labels for upcoming INDY NXT events. | Race-day/prep weather overlay. Not official series weather or track temperature. Long-range event forecasts stay unavailable until the forecast window opens. |
 | INDYCAR LIVE catalog monitor | `scripts/probe-onboards.mjs`, `https://api.staylive.tv/platforms/by-domain/www.indycarlive.com`, `https://api.staylive.tv/livestreams/feed?limit=100&page=1` | Official INDYCAR LIVE channel metadata for `Onboards` and `Indy NXT`. Current probe found top-series in-car entries and INDY NXT session entries, with no strict Bryce/Aron match. | Historical research/audit only. Bryce confirmed no usable live POV for BryceCast. |
 | INDYCAR Radio | `https://www.indycar.com/Radio`, Mixlr/TuneIn/SiriusXM paths | Official race call and session context. | Audio baseline when Bryce-specific radio is absent. |
 | INDYCAR App radio | INDYCAR App | Official sources say fans can listen to driver radio streams free during each race. #9 selection is not currently proven. | Candidate only; official race-call audio plus frequency metadata are the dependable baseline. |
@@ -26,7 +29,7 @@ For the detailed analytics truth table, current audit output, and design implica
 
 | Source | Status | Next step |
 | --- | --- | --- |
-| Live weather via NWS or another official weather source | Not implemented for race-day live operation. Historical INDY NXT modeled ambient weather is implemented separately in the career dataset. | Add adapter using event coordinates; show observation/forecast timestamp, checked age, station/office, and alert source. |
+| NTT prediction data blob | Publicly exposed by the official leaderboard bundle at `https://indycar.blob.core.windows.net/ntt-data/INDYCAR_DATA_POLLING/data_polling_blob.json`. | Current payload is only a stale 2024 heartbeat; keep candidate/unavailable unless it wakes up during a live session and proves relevance to INDY NXT. |
 | Live #9 onboard in INDYCAR App | Bryce has confirmed no live POV feed is available for BryceCast to include. | Out of active scope. |
 | Live #9 onboard through INDYCAR/FOX/CGR/production | Current product has no access. | Out of active scope unless a rights holder explicitly offers a feed later. |
 | INDYCAR LIVE Onboards catalog | Official metadata exposes an `Onboards` channel. Current checked entries are top-series in-car objects, with INDY NXT appearing as session-level objects only. | Optional audit only, not a product dependency. |
@@ -57,12 +60,16 @@ For the detailed analytics truth table, current audit output, and design implica
    - Current-session routing now consumes track activity and schedule feeds.
    - Future work: timezone-polished display, preview cards for upcoming Road America sessions, and friend-facing route instructions for FS1/FS2/FOX One changes.
 
+5. Long-range event-specific weather.
+   - Current NWS live weather route works for upcoming venues.
+   - Event forecasts should remain explicitly unavailable until the forecast window opens.
+
 ## Build Order
 
-1. Soak-test the local API service, source freshness scoring, and replay analytics through a full live session.
+1. Soak-test the local API service, source freshness scoring, and replay analytics through a full live session. Use `npm run audit:live:pressure:primary` and `npm run poll:race:watch -- --interval-ms=1000` during Road America.
 2. Replace live POV verification surfaces with a concise unavailable-state and remove POV as a readiness blocker.
 3. Keep audio/frequency status first-class: official race audio, frequency metadata, permission bucket, and evidence/source freshness.
 4. Add timezone-aware upcoming-session route previews.
-5. Add live weather and alert context from NWS or another official weather source.
-6. Add PDF/session-report ingestion.
+5. Add production caching/rate limiting around live weather and upcoming-event weather refresh.
+6. Expand report ingestion only for source-backed categories that materially improve UI analytics, such as pit summaries or lap-specific incident timing if an official source appears.
 7. Add track animation only when `lapDistance` or official websocket data is live and nonzero.

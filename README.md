@@ -31,6 +31,9 @@ Open the Vite URL, usually `http://localhost:5173`, only for UI development. TV 
 
 ```bash
 npm run audit:sources
+npm run audit:live:pressure:primary
+npm run weather:live
+npm run weather:live:upcoming
 npm run ingest:history
 npm run probe:pov
 npm run poll:race
@@ -44,8 +47,12 @@ For race day, `scripts/api-server.mjs` fetches official/public INDYCAR Race Cont
 - `/racecontrol/tsconfig.json`
 - `/racecontrol/schedulefeed_nxt.json`
 - `/racecontrol/trackactivityleaderboardfeed_nxt.json`
+- `/ntt-data/INDYCAR_DATA_POLLING/data_polling_blob.json`
+- top-series reference feeds for wrong-series guard checks
 
 Timing and driver feeds power Bryce status. Schedule and track-activity feeds now resolve the current session's authorized video/audio route, such as FS1 plus INDYCAR Radio, from the current `EventID` and `EventSessionID`.
+
+Live source URLs are centralized in `scripts/live-source-endpoints.mjs`. The API service, source audit, race poller, and pressure-test tool all consume that catalog so endpoint changes do not drift across files. The primary BryceCast race snapshot still uses only timing, NXT driver, config, NXT schedule, and NXT track-activity feeds; top-series feeds and the NTT prediction blob are reference/candidate probes only.
 
 The history ingest writes `public/data/history-bryce.json` from the INDY NXT official results API. If the current race has timing data but official results are not published, that row is marked provisional and race points are left `null`.
 
@@ -55,9 +62,11 @@ The race poller writes a local race-day archive:
 - `data/live/snapshots.jsonl` for easy inspection and archival.
 - `public/data/live-snapshot.json` so the dashboard can show the latest persisted logger sample.
 
-On race day, run `npm run poll:race:watch` beside `npm run serve:app` to capture timing, source health, schedule, config, track activity, and Bryce samples every 15 seconds.
+On race day, run `npm run poll:race:watch -- --interval-ms=1000` beside `npm run serve:app` to capture timing, source health, schedule, config, track activity, and Bryce samples at the current race-day target cadence. The default watch cadence remains slower for casual development, so pass the explicit interval during live-session proof. Watch mode compensates for fetch/write elapsed time before sleeping; slow upstream probes become explicit errors or cadence degradation rather than hidden extra delay.
 
-The local API service exposes `GET /api/health`, `/api/snapshot`, `/api/session`, `/api/bryce`, `/api/timing`, `/api/sources`, `/api/history/bryce`, `/api/history/bryce?compact=1`, `/api/onboard-catalog`, `/api/race-log/latest`, `/api/replay/bryce`, plus legacy `GET`/`POST` proof routes for POV and audio. `/api/sources` and the in-app Source Health panel include checked age, Last-Modified age, byte counts, and local artifact status. The compact history route is the first iPhone-ready season analytics projection.
+Live race-weekend weather uses the NWS API through `scripts/live-weather-service.mjs`. `npm run weather:live` checks current Road America observations/forecast/alerts, and `npm run weather:live:upcoming` loads the remaining 2026 INDY NXT events from the canonical career dataset and reports each venue's current weather plus forecast-readiness state. Long-range event forecasts stay labeled unavailable until the forecast window opens.
+
+The local API service exposes `GET /api/health`, `/api/snapshot`, `/api/session`, `/api/bryce`, `/api/timing`, `/api/sources`, `/api/weather/live`, `/api/weather/upcoming`, `/api/history/bryce`, `/api/history/bryce?compact=1`, `/api/onboard-catalog`, `/api/race-log/latest`, `/api/replay/bryce`, plus legacy `GET`/`POST` proof routes for POV and audio. `/api/sources` and the in-app Source Health panel include checked age, Last-Modified age, byte counts, source role/cadence, proxy paths, and local artifact status. The compact history route is the first iPhone-ready season analytics projection.
 
 Engineer mode uses `/api/replay/bryce` for SQLite-backed replay analytics. A tiny archive is labeled as coverage proof; a full race trend requires `npm run poll:race:watch` through a live session.
 
@@ -73,6 +82,8 @@ Live #9 POV is currently unavailable for this project and must not be presented 
 
 ## Current Shape
 
+This is the current implementation shape, not a requirement for the next UI. The active UI/product lane may replace or restructure these modes as long as the new screens preserve the source-state and live-readiness contracts above.
+
 - `TV Mode`: shared room-status strip, session-specific broadcast launcher, Bryce focus stack, timing ribbon, compact room layout, reference map, frequency/official-audio tile, and timing notes.
 - `Engineer`: shared room-status strip, timing tower, pace chart, pass delta chart, source health, season pulse, source-backed track-type splits, qualifying-to-finish gains/losses, CGR teammate benchmark, and gated SQLite replay analytics.
 - `Phone`: compact iPhone companion surface with Bryce race pulse, authorized route links, alerts, source-backed track-form lens, and room checks.
@@ -83,9 +94,13 @@ Live #9 POV is currently unavailable for this project and must not be presented 
 
 The core requirement is now a polished Bryce-centric companion surface for desktop web and iPhone: live timing, source freshness, official broadcast routing, Bryce-focused analytics, alerts, race context, historical benchmarks, and clear unavailable-state handling for POV and isolated radio. Use `docs/LIVE_POV_ACCESS_FINDINGS.md` and `docs/POV_ESCALATION_LADDER.md` only as historical research unless new access appears.
 
+Use `docs/CODEX_HANDOFF_CURRENT.md` first for current lane boundaries, canonical generated counts, known same-file churn, live/career split, and the ambiguity register. If a contradiction cannot be resolved from source files, generated reports, live checks, tests, or official sources, record it there rather than guessing.
+
 Use `docs/SOURCE-INVENTORY.md` for the current source map, confirmed feeds, candidate sources, and unresolved access gaps.
 
 Use `docs/ANALYTICS_SOURCE_AUDIT.md` as the product truth for what live and historical analytics can be built now, what is not proven, and what needs new source discovery.
+
+Use `docs/LIVE_DATA_READINESS_AUDIT.md` for the live-source endpoint catalog, 1-second pressure-test results, Road America acceptance gates, live-weather contract, and remaining live-session proof checklist.
 
 Use `docs/CAREER_DATA_SPEC.md`, `docs/CAREER_RESEARCH_WORKSTREAMS.md`, and `docs/CAREER_DATA_FEASIBILITY_MATRIX.md` for the full Bryce Aron career warehouse: schema, provenance rules, validation gates, source workstreams, feasibility by data category, and import layout.
 

@@ -4,6 +4,12 @@ import { createServer } from 'node:http';
 import { dirname, extname, join, normalize, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { DatabaseSync } from 'node:sqlite';
+import { isBryceProfile, isBryceTimingRow, liveSourceEndpoints, raceSnapshotEndpoints } from './live-source-endpoints.mjs';
+import {
+  buildUpcomingIndyNxtWeatherReport,
+  fetchCachedLiveWeatherForTrack,
+  loadTrackMetadata
+} from './live-weather-service.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = dirname(__dirname);
@@ -16,20 +22,14 @@ const historyPath = join(publicDataDir, 'history-bryce.json');
 const povProofPath = join(dataDir, 'pov-proof.json');
 const audioProofPath = join(dataDir, 'audio-proof.json');
 
-const raceControlEndpoints = [
-  { id: 'timing', label: 'Timing and scoring', path: 'timingscoring-ris.json', url: 'https://indycar.blob.core.windows.net/racecontrol/timingscoring-ris.json' },
-  { id: 'drivers_nxt', label: 'INDY NXT drivers', path: 'driversfeed_nxt.json', url: 'https://indycar.blob.core.windows.net/racecontrol/driversfeed_nxt.json' },
-  { id: 'config', label: 'Race Control config', path: 'tsconfig.json', url: 'https://indycar.blob.core.windows.net/racecontrol/tsconfig.json' },
-  { id: 'schedule_nxt', label: 'INDY NXT schedule', path: 'schedulefeed_nxt.json', url: 'https://indycar.blob.core.windows.net/racecontrol/schedulefeed_nxt.json' },
-  {
-    id: 'trackactivity_nxt',
-    label: 'INDY NXT track activity',
-    path: 'trackactivityleaderboardfeed_nxt.json',
-    url: 'https://indycar.blob.core.windows.net/racecontrol/trackactivityleaderboardfeed_nxt.json'
-  }
-];
+const raceControlEndpoints = raceSnapshotEndpoints;
+const sourceProbeEndpoints = liveSourceEndpoints;
+const sourceFetchTimeoutMs = 5000;
+const enrichmentCacheTtlMs = 30000;
 
-const sourceUrlByPath = new Map(raceControlEndpoints.map((endpoint) => [`/racecontrol/${endpoint.path}`, endpoint.url]));
+const sourceUrlByPath = new Map(sourceProbeEndpoints.map((endpoint) => [endpoint.proxyPath, endpoint.url]));
+const endpointResultCache = new Map();
+const endpointRefreshes = new Map();
 
 const defaultRouteUrls = {
   fs1: 'https://www.foxsports.com/live/fs1',
@@ -75,6 +75,7 @@ const mimeTypes = {
 };
 
 const safeNumber = (value) => {
+  if (value === null || value === undefined || value === '') return null;
   const parsed = Number(value);
   return Number.isFinite(parsed) ? parsed : null;
 };
@@ -107,19 +108,36 @@ const asArray = (value) => {
 
 const bryceRcDriverId = '2143';
 
-const isBryceTimingRow = (row) => {
-  const first = String(row?.firstName ?? '').toLowerCase();
-  const last = String(row?.lastName ?? '').toLowerCase();
-  const driverId = String(row?.DriverID ?? '');
-  return (first === 'bryce' && last === 'aron') || driverId === bryceRcDriverId;
-};
-
-const isBryceProfile = (driver) => {
-  const first = String(driver?.firstname ?? '').toLowerCase();
-  const last = String(driver?.lastname ?? '').toLowerCase();
-  const driverId = String(driver?.rc_driver_id ?? driver?.driverid ?? '');
-  return (first === 'bryce' && last === 'aron') || driverId === bryceRcDriverId;
-};
+const fallbackBryceProfile = (bryce = null) => ({
+  driverid: '4959',
+  rc_driver_id: bryceRcDriverId,
+  name: 'Bryce Aron',
+  firstname: 'Bryce',
+  lastname: 'Aron',
+  number: bryce?.no ?? '9',
+  team: '',
+  headshot: '',
+  heroshot: '',
+  waistupimage: '',
+  carillustration: '',
+  endplatesmall: '',
+  radiofrequency: '',
+  hometown: '',
+  residence: '',
+  website: '',
+  stats: {
+    starts: '',
+    poles: '',
+    wins: '',
+    top5: '',
+    top10: '',
+    avgstart: '',
+    avgfinish: '',
+    lapsled: '',
+    running: '',
+    points: ''
+  }
+});
 
 const describeBryceMiss = (heartbeat, timingRows) => {
   const carNine = timingRows.find((row) => String(row?.no) === '9');
@@ -369,11 +387,7 @@ const buildConfigRoute = (payload, heartbeat) => {
     .filter((link) => link.show !== false)
     .map((link, index) => normalizeWatchLink(link, index))
     .filter(Boolean);
-  const fallback = [
-    { id: 'fs1', name: 'FS1', url: defaultRouteUrls.fs1, kind: 'video' },
-    { id: 'indycar-radio', name: 'INDYCAR Radio Network', url: defaultRouteUrls.indycarRadio, kind: 'audio' },
-    { id: 'indycar-live', name: 'INDYCAR LIVE', url: defaultRouteUrls.indycarLive, kind: 'international' }
-  ];
+  if (networks.length === 0) return null;
 
   return routeFromNetworks({
     heartbeat,
@@ -381,16 +395,35 @@ const buildConfigRoute = (payload, heartbeat) => {
     sessionName: heartbeat.SessionName ?? 'Race',
     sessionType: heartbeat.SessionType ?? '',
     startsAt: '',
-    source: networks.length ? 'config' : 'seed',
-    note: networks.length ? 'Using generic Race Control watch links because no session route matched.' : 'Using fallback route because no current session route matched.',
-    networks: networks.length ? networks : fallback
+    source: 'config',
+    note: 'Using generic Race Control watch links because no session route matched.',
+    networks
   });
 };
 
+const buildUnavailableRoute = (heartbeat, note = 'Session route feeds are pending or unavailable; no authorized broadcast route is source-backed yet.') => ({
+  eventId: heartbeat.EventID ?? '',
+  sessionId: heartbeat.EventSessionID ?? '',
+  eventName: heartbeat.eventName ?? 'Unknown event',
+  sessionName: heartbeat.SessionName ?? 'Session pending',
+  sessionType: heartbeat.SessionType ?? '',
+  startsAt: '',
+  alternates: [],
+  audio: [],
+  international: [],
+  source: 'unavailable',
+  note
+});
+
 const fetchEndpoint = async (endpoint) => {
   const fetchedAt = new Date().toISOString();
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), sourceFetchTimeoutMs);
   try {
-    const response = await fetch(`${endpoint.url}?t=${Date.now()}`, { headers: { accept: 'application/json' } });
+    const response = await fetch(`${endpoint.url}?t=${Date.now()}`, {
+      signal: controller.signal,
+      headers: { accept: 'application/json' }
+    });
     const text = await response.text();
     const payload = text ? JSON.parse(text) : null;
     return {
@@ -416,9 +449,54 @@ const fetchEndpoint = async (endpoint) => {
       bytes: 0,
       fetchedAt,
       payload: null,
-      error: error instanceof Error ? error.message : 'Unknown fetch error'
+      error: error?.name === 'AbortError' ? `Timed out after ${sourceFetchTimeoutMs} ms` : error instanceof Error ? error.message : 'Unknown fetch error'
     };
+  } finally {
+    clearTimeout(timeout);
   }
+};
+
+const cacheEndpointResult = (endpoint, result) => {
+  const cacheEntry = {
+    result,
+    checkedAt: Date.now()
+  };
+  endpointResultCache.set(endpoint.id, cacheEntry);
+  return cacheEntry.result;
+};
+
+const fetchEndpointAndCache = async (endpoint) => {
+  const result = await fetchEndpoint(endpoint);
+  return cacheEndpointResult(endpoint, result);
+};
+
+const pendingEndpointResult = (endpoint, note) => ({
+  ...endpoint,
+  ok: false,
+  status: 0,
+  contentType: null,
+  lastModified: null,
+  etag: null,
+  bytes: 0,
+  fetchedAt: new Date().toISOString(),
+  payload: null,
+  error: note
+});
+
+const refreshEndpointInBackground = (endpoint) => {
+  if (endpointRefreshes.has(endpoint.id)) return;
+  const refresh = fetchEndpointAndCache(endpoint).finally(() => {
+    endpointRefreshes.delete(endpoint.id);
+  });
+  endpointRefreshes.set(endpoint.id, refresh);
+};
+
+const cachedOrPendingEndpoint = (endpoint) => {
+  const cacheEntry = endpointResultCache.get(endpoint.id);
+  const cacheAgeMs = cacheEntry ? Date.now() - cacheEntry.checkedAt : Infinity;
+  if (cacheAgeMs > enrichmentCacheTtlMs) refreshEndpointInBackground(endpoint);
+  if (cacheEntry?.result) return cacheEntry.result;
+  return pendingEndpointResult(endpoint, 'Enrichment feed refresh is pending; not blocking live timing response.');
 };
 
 const freshnessForResult = (result, state) => {
@@ -441,6 +519,147 @@ const freshnessForResult = (result, state) => {
   };
 };
 
+const parseNttDatetime = (value) => {
+  if (!value) return null;
+  const normalized = String(value).trim().replace(' ', 'T');
+  const parsed = Date.parse(normalized.endsWith('Z') ? normalized : `${normalized}Z`);
+  return Number.isFinite(parsed) ? parsed : null;
+};
+
+const sourceEndpointSemantics = (result) => {
+  if (!result.ok) {
+    return {
+      sourceState: 'error',
+      readinessState: 'error',
+      sourceSummary: null,
+      note: result.error
+    };
+  }
+
+  if (result.id === 'ntt_data_polling') {
+    const rows = Array.isArray(result.payload) ? result.payload : [];
+    const latestDatetime = rows.map((row) => row?.Datetime).filter(Boolean).sort().at(-1) ?? null;
+    const latestMs = parseNttDatetime(latestDatetime);
+    const payloadAgeSeconds = latestMs === null ? null : Math.max(0, Math.round((Date.now() - latestMs) / 1000));
+    const stale = payloadAgeSeconds === null || payloadAgeSeconds > 3600;
+    return {
+      sourceState: stale ? 'stale' : 'cold',
+      readinessState: stale ? 'candidate_unavailable' : 'candidate_unverified',
+      sourceSummary: {
+        rowCount: rows.length,
+        datasets: [...new Set(rows.map((row) => row?.Dataset).filter(Boolean))],
+        latestDatetime,
+        payloadAgeSeconds
+      },
+      note: stale
+        ? `Candidate NTT prediction blob is reachable but stale${latestDatetime ? `; latest payload datetime ${latestDatetime}` : ''}. Treat as unavailable for INDY NXT readiness.`
+        : 'Candidate NTT prediction blob is fresh enough to inspect, but must remain unverified until live INDY NXT relevance is proven.'
+    };
+  }
+
+  if (result.id === 'timing') {
+    const timing = result.payload?.timing_results;
+    const heartbeat = timing?.heartbeat;
+    const rows = Array.isArray(timing?.Item) ? timing.Item : [];
+    const bryce = rows.find((row) => isBryceTimingRow(row, heartbeat)) ?? null;
+    const timingState = sourceState(heartbeat);
+    const sourceSummary = {
+      eventName: heartbeat?.eventName ?? null,
+      series: heartbeat?.Series ?? null,
+      sessionName: heartbeat?.SessionName ?? null,
+      sessionStatus: heartbeat?.SessionStatus ?? null,
+      flag: heartbeat?.currentFlag ?? null,
+      lap: heartbeat?.lapNumber ?? null,
+      totalLaps: heartbeat?.totalLaps ?? null,
+      eventId: heartbeat?.EventID ?? null,
+      eventSessionId: heartbeat?.EventSessionID ?? null,
+      trackName: heartbeat?.trackName ?? null,
+      rowCount: rows.length,
+      brycePresent: Boolean(bryce)
+    };
+
+    if (!heartbeat) {
+      return {
+        sourceState: 'error',
+        readinessState: 'payload_invalid',
+        sourceSummary,
+        note: 'Timing endpoint is reachable but missing a Race Control heartbeat; unavailable for BryceCast readiness.'
+      };
+    }
+
+    if (!bryce) {
+      return {
+        sourceState: 'stale',
+        readinessState: 'wrong_session',
+        sourceSummary,
+        note: `${rows.length} timing rows loaded, but no Bryce Aron timing row is present. Treat as wrong-session or stale for BryceCast readiness.`
+      };
+    }
+
+    return {
+      sourceState: timingState,
+      readinessState: timingState === 'live' ? 'available' : 'cold_session',
+      sourceSummary,
+      note: `${rows.length} timing rows loaded with Bryce Aron present; session ${heartbeat.currentFlag ?? 'unknown'}.`
+    };
+  }
+
+  if (result.id === 'drivers_nxt') {
+    const drivers = Array.isArray(result.payload?.drivers?.driver) ? result.payload.drivers.driver : [];
+    const bryce = drivers.find(isBryceProfile) ?? null;
+    const sourceSummary = {
+      driverCount: drivers.length,
+      brycePresent: Boolean(bryce),
+      driverid: bryce?.driverid ?? null,
+      rcDriverId: bryce?.rc_driver_id ?? null,
+      team: bryce?.team ?? null,
+      radiofrequency: bryce?.radiofrequency ?? null,
+      points: bryce?.stats?.points ?? null
+    };
+
+    if (!bryce) {
+      return {
+        sourceState: 'stale',
+        readinessState: 'profile_unavailable',
+        sourceSummary,
+        note: `${drivers.length} NXT driver profiles loaded, but Bryce Aron was not present. Treat profile/radio enrichment as unavailable.`
+      };
+    }
+
+    if (!bryce.radiofrequency) {
+      return {
+        sourceState: 'stale',
+        readinessState: 'profile_partial',
+        sourceSummary,
+        note: 'Bryce profile loaded from NXT driver feed, but radio frequency metadata is unavailable.'
+      };
+    }
+
+    return {
+      sourceState: 'live',
+      readinessState: 'available',
+      sourceSummary,
+      note: `Bryce profile loaded with radio frequency ${bryce.radiofrequency}.`
+    };
+  }
+
+  if (result.role === 'wrong_series_guard_reference') {
+    return {
+      sourceState: 'cold',
+      readinessState: 'reference_only',
+      sourceSummary: null,
+      note: `${result.bytes} bytes loaded. Reference-only wrong-series guard; do not treat as Bryce live timing.`
+    };
+  }
+
+  return {
+    sourceState: 'live',
+    readinessState: 'available',
+    sourceSummary: null,
+    note: `${result.bytes} bytes loaded.`
+  };
+};
+
 const endpointProbe = (result, state, note) => ({
   id: result.id,
   label: result.label,
@@ -450,16 +669,70 @@ const endpointProbe = (result, state, note) => ({
   ...freshnessForResult(result, state)
 });
 
-const fetchRaceControl = async () => Promise.all(raceControlEndpoints.map(fetchEndpoint));
+const driverProfileEndpointProbe = (result, profile, unavailableNote) => {
+  if (!profile) {
+    return endpointProbe(result, 'stale', unavailableNote);
+  }
+  if (!profile.radiofrequency) {
+    return endpointProbe(result, 'stale', 'Bryce profile loaded, but radio frequency metadata is unavailable.');
+  }
+  return endpointProbe(result, 'live', `Bryce profile loaded with radio frequency ${profile.radiofrequency}.`);
+};
+
+const fetchRaceControl = async () => {
+  const timingEndpoint = raceControlEndpoints.find((endpoint) => endpoint.id === 'timing');
+  const enrichmentEndpoints = raceControlEndpoints.filter((endpoint) => endpoint.id !== 'timing');
+  const timingResult = timingEndpoint
+    ? await fetchEndpointAndCache(timingEndpoint)
+    : pendingEndpointResult(
+        {
+          id: 'timing',
+          label: 'Timing and scoring',
+          url: '',
+          series: 'global_active_session',
+          cadence: 'fast',
+          role: 'primary_timing'
+        },
+        'Timing endpoint is not configured.'
+      );
+  const enrichmentResults = enrichmentEndpoints.map(cachedOrPendingEndpoint);
+  return [timingResult, ...enrichmentResults];
+};
+const fetchSourceProbes = async () => Promise.all(sourceProbeEndpoints.map(fetchEndpointAndCache));
 
 const readLatestArchivedRaw = () => {
   try {
     const db = new DatabaseSync(sqlitePath, { readOnly: true });
     try {
-      const row = db.prepare('SELECT payload_json FROM race_snapshots ORDER BY checked_at DESC LIMIT 1').get();
-      if (!row?.payload_json) return null;
-      const payload = JSON.parse(row.payload_json);
-      return payload.raw ?? null;
+      const rows = db
+        .prepare(
+          `SELECT checked_at, payload_json
+           FROM race_snapshots
+           WHERE payload_json LIKE '%"DriverID":"2143"%'
+              OR payload_json LIKE '%"DriverID":2143%'
+              OR (
+                payload_json LIKE '%"firstName":"Bryce"%'
+                AND payload_json LIKE '%"lastName":"Aron"%'
+                AND (payload_json LIKE '%"no":"9"%' OR payload_json LIKE '%"no":9%')
+              )
+           ORDER BY checked_at DESC
+           LIMIT 500`
+        )
+        .all();
+      for (const row of rows) {
+        if (!row?.payload_json) continue;
+        const payload = JSON.parse(row.payload_json);
+        const timing = payload.raw?.timing?.timing_results;
+        const heartbeat = timing?.heartbeat;
+        const timingRows = Array.isArray(timing?.Item) ? timing.Item : [];
+        if (timingRows.some((row) => isBryceTimingRow(row, heartbeat))) {
+          return {
+            raw: payload.raw ?? null,
+            checkedAt: row.checked_at ?? payload.summary?.checkedAt ?? null
+          };
+        }
+      }
+      return null;
     } finally {
       db.close();
     }
@@ -469,7 +742,9 @@ const readLatestArchivedRaw = () => {
 };
 
 const archivedSnapshot = ({ reason, liveResults, fallbackProfile }) => {
-  const raw = readLatestArchivedRaw();
+  const archived = readLatestArchivedRaw();
+  const raw = archived?.raw;
+  const archivedCheckedAt = archived?.checkedAt ?? new Date().toISOString();
   const timing = raw?.timing?.timing_results;
   const heartbeat = timing?.heartbeat;
   const timingRows = Array.isArray(timing?.Item) ? timing.Item : [];
@@ -477,17 +752,26 @@ const archivedSnapshot = ({ reason, liveResults, fallbackProfile }) => {
   const config = raw?.config ?? {};
   const schedule = raw?.schedule_nxt;
   const trackActivity = raw?.trackactivity_nxt;
-  const bryce = timingRows.find(isBryceTimingRow);
-  const bryceProfile = (Array.isArray(drivers) ? drivers.find(isBryceProfile) : null) ?? fallbackProfile;
+  const bryce = timingRows.find((row) => isBryceTimingRow(row, heartbeat));
+  const archivedBryceProfile = Array.isArray(drivers) ? drivers.find(isBryceProfile) : null;
+  const bryceProfile = archivedBryceProfile ?? fallbackProfile ?? fallbackBryceProfile(bryce);
 
-  if (!heartbeat || !bryce || !bryceProfile || timingRows.length === 0) return null;
+  if (!heartbeat || !bryce || timingRows.length === 0) return null;
 
   const archivedResults = liveResults.map((result) => {
     if (result.id === 'timing') {
       return endpointProbe(result, 'stale', `${reason} Using the latest archived INDY NXT Race Control timing sample instead.`);
     }
     if (!result.ok) return endpointProbe(result, 'error', result.error);
-    if (result.id === 'drivers_nxt') return endpointProbe(result, 'live', `Bryce profile ${bryceProfile.radiofrequency ? 'with radio frequency' : 'loaded'}.`);
+    if (result.id === 'drivers_nxt') {
+      const currentDrivers = Array.isArray(result.payload?.drivers?.driver) ? result.payload.drivers.driver : [];
+      const currentBryceProfile = currentDrivers.find(isBryceProfile) ?? null;
+      return driverProfileEndpointProbe(
+        result,
+        currentBryceProfile,
+        'Archived Bryce timing fallback is active, but the current NXT driver profile feed did not prove Bryce profile/radio enrichment.'
+      );
+    }
     if (result.id === 'config') return endpointProbe(result, config.track_map_url ? 'live' : 'stale', config.track_map_url ? 'Track map URL found.' : 'Config loaded without map.');
     if (result.id === 'schedule_nxt') return endpointProbe(result, 'live', 'Schedule feed loaded for session broadcast routing.');
     if (result.id === 'trackactivity_nxt') return endpointProbe(result, 'live', 'Track activity feed loaded for EventSessionID routing.');
@@ -500,8 +784,8 @@ const archivedSnapshot = ({ reason, liveResults, fallbackProfile }) => {
     bryce,
     bryceProfile,
     trackMapUrl: config.track_map_url ?? '',
-    broadcastRoute: buildTrackActivityRoute(trackActivity, heartbeat) ?? buildScheduleRoute(schedule, heartbeat) ?? buildConfigRoute(config, heartbeat),
-    updatedAt: new Date().toISOString(),
+    broadcastRoute: buildTrackActivityRoute(trackActivity, heartbeat) ?? buildScheduleRoute(schedule, heartbeat) ?? buildConfigRoute(config, heartbeat) ?? buildUnavailableRoute(heartbeat, 'Archived timing is available, but current route feeds did not produce a source-backed session route.'),
+    updatedAt: archivedCheckedAt,
     sourceState: 'stale',
     sourceProbes: [
       endpointProbe(
@@ -511,7 +795,7 @@ const archivedSnapshot = ({ reason, liveResults, fallbackProfile }) => {
           url: raceControlEndpoints.find((endpoint) => endpoint.id === 'timing')?.url ?? '',
           ok: true,
           bytes: 0,
-          fetchedAt: new Date().toISOString()
+          fetchedAt: archivedCheckedAt
         },
         'stale',
         reason
@@ -530,15 +814,16 @@ const buildRaceSnapshot = async () => {
   const trackActivity = results.find((result) => result.id === 'trackactivity_nxt')?.payload;
   const heartbeat = timing?.heartbeat;
   const timingRows = Array.isArray(timing?.Item) ? timing.Item : [];
-  const bryce = timingRows.find(isBryceTimingRow);
-  const bryceProfile = Array.isArray(drivers) ? drivers.find(isBryceProfile) : null;
+  const bryce = timingRows.find((row) => isBryceTimingRow(row, heartbeat));
+  const liveBryceProfile = Array.isArray(drivers) ? drivers.find(isBryceProfile) : null;
+  const bryceProfile = liveBryceProfile ?? fallbackBryceProfile(bryce);
 
-  if (!heartbeat || !bryce || !bryceProfile || timingRows.length === 0) {
-    if (heartbeat && !bryce && bryceProfile && timingRows.length > 0) {
+  if (!heartbeat || !bryce || timingRows.length === 0) {
+    if (heartbeat && !bryce && timingRows.length > 0) {
       const cached = archivedSnapshot({
         reason: describeBryceMiss(heartbeat, timingRows),
         liveResults: results,
-        fallbackProfile: bryceProfile
+        fallbackProfile: liveBryceProfile
       });
       if (cached) return cached;
     }
@@ -550,7 +835,13 @@ const buildRaceSnapshot = async () => {
   const sourceProbes = results.map((result) => {
     if (!result.ok) return endpointProbe(result, 'error', result.error);
     if (result.id === 'timing') return endpointProbe(result, state, `${timingRows.length} timing rows loaded; session ${heartbeat.currentFlag ?? 'unknown'}.`);
-    if (result.id === 'drivers_nxt') return endpointProbe(result, 'live', `Bryce profile ${bryceProfile.radiofrequency ? 'with radio frequency' : 'loaded'}.`);
+    if (result.id === 'drivers_nxt') {
+      return driverProfileEndpointProbe(
+        result,
+        liveBryceProfile,
+        'Bryce timing row is live, but the NXT driver profile was unavailable; using fallback profile identity fields.'
+      );
+    }
     if (result.id === 'config') return endpointProbe(result, config.track_map_url ? 'live' : 'stale', config.track_map_url ? 'Track map URL found.' : 'Config loaded without map.');
     if (result.id === 'schedule_nxt') return endpointProbe(result, 'live', 'Schedule feed loaded for session broadcast routing.');
     if (result.id === 'trackactivity_nxt') return endpointProbe(result, 'live', 'Track activity feed loaded for EventSessionID routing.');
@@ -563,7 +854,7 @@ const buildRaceSnapshot = async () => {
     bryce,
     bryceProfile,
     trackMapUrl: config.track_map_url ?? '',
-    broadcastRoute: buildTrackActivityRoute(trackActivity, heartbeat) ?? buildScheduleRoute(schedule, heartbeat) ?? buildConfigRoute(config, heartbeat),
+    broadcastRoute: buildTrackActivityRoute(trackActivity, heartbeat) ?? buildScheduleRoute(schedule, heartbeat) ?? buildConfigRoute(config, heartbeat) ?? buildUnavailableRoute(heartbeat),
     updatedAt: new Date().toISOString(),
     sourceState: state,
     sourceProbes
@@ -571,25 +862,36 @@ const buildRaceSnapshot = async () => {
 };
 
 const buildSourceReport = async () => {
-  const results = await fetchRaceControl();
+  const results = await fetchSourceProbes();
   return {
     checkedAt: new Date().toISOString(),
-    endpoints: results.map((result) => ({
-      id: result.id,
-      label: result.label,
-      url: result.url,
-      ok: result.ok,
-      status: result.status,
-      contentType: result.contentType,
-      fetchedAt: result.fetchedAt,
-      lastModified: result.lastModified,
-      etag: result.etag,
-      bytes: result.bytes,
-      checkedAgeSeconds: ageSeconds(result.fetchedAt),
-      modifiedAgeSeconds: ageSeconds(result.lastModified),
-      freshnessLabel: freshnessForResult(result, result.ok ? 'live' : 'error').freshnessLabel,
-      note: result.ok ? `${result.bytes} bytes` : result.error
-    }))
+    endpoints: results.map((result) => {
+      const semantics = sourceEndpointSemantics(result);
+      const freshness = freshnessForResult(result, semantics.sourceState);
+      return {
+        id: result.id,
+        label: result.label,
+        series: result.series ?? null,
+        cadence: result.cadence ?? null,
+        role: result.role ?? null,
+        proxyPath: result.proxyPath ?? null,
+        url: result.url,
+        ok: result.ok,
+        status: result.status,
+        sourceState: semantics.sourceState,
+        readinessState: semantics.readinessState,
+        contentType: result.contentType,
+        fetchedAt: result.fetchedAt,
+        lastModified: result.lastModified,
+        etag: result.etag,
+        bytes: result.bytes,
+        checkedAgeSeconds: freshness.checkedAgeSeconds,
+        modifiedAgeSeconds: freshness.modifiedAgeSeconds,
+        freshnessLabel: freshness.freshnessLabel,
+        sourceSummary: semantics.sourceSummary,
+        note: semantics.note
+      };
+    })
   };
 };
 
@@ -639,8 +941,7 @@ const fileStatus = async (path) => {
 };
 
 const replayNumber = (value) => {
-  const parsed = Number(value);
-  return Number.isFinite(parsed) ? parsed : null;
+  return safeNumber(value);
 };
 
 const replayTime = (value) => {
@@ -681,13 +982,27 @@ const buildReplayRows = (rows) => {
       liveGap: row.live_gap || '',
       diff: row.diff || '',
       bestLapTime: row.best_lap_time || '',
+      bestLap: row.best_lap || '',
       lastLapTime: row.last_lap_time || '',
       bestSpeed: replayNumber(row.best_speed),
       lastSpeed: replayNumber(row.last_speed),
+      averageSpeed: replayNumber(row.average_speed),
       passes,
       passed,
       netPasses: passes !== null && passed !== null ? passes - passed : null,
       pitStops: replayNumber(row.pit_stops),
+      lastPitLap: replayNumber(row.last_pit_lap),
+      sincePitLap: replayNumber(row.since_pit_lap),
+      tire: row.tire || '',
+      overtakeRemain: replayNumber(row.overtake_remain),
+      overtakeActive: row.overtake_active || '',
+      lapDistance: replayNumber(row.lap_distance),
+      liveDiffAhead: row.live_diff_ahead || '',
+      liveDiffBehind: row.live_diff_behind || '',
+      totalDriverPoints: replayNumber(row.total_driver_points),
+      totalEntrantPoints: replayNumber(row.total_entrant_points),
+      runningDriverPoints: replayNumber(row.running_driver_points),
+      radiofrequency: row.radiofrequency || '',
       sourceState: row.source_state || '',
       flag: row.flag || ''
     };
@@ -755,6 +1070,8 @@ const queryReplay = ({ limit: limitValue, offset: offsetValue, sessionKey: reque
       const totalCount = Number(total?.count ?? 0);
       const latest = db.prepare('SELECT session_key FROM bryce_samples ORDER BY checked_at DESC LIMIT 1').get();
       const sessionKey = requestedSessionKey || latest?.session_key || null;
+      const sampleColumns = new Set(db.prepare('PRAGMA table_info(bryce_samples)').all().map((column) => column.name));
+      const sampleColumn = (column) => (sampleColumns.has(column) ? `b.${column}` : `NULL AS ${column}`);
       const sessions = db
         .prepare(
           `
@@ -780,8 +1097,13 @@ const queryReplay = ({ limit: limitValue, offset: offsetValue, sessionKey: reque
         .prepare(
           `
           SELECT b.checked_at, b.session_key, b.rank, b.live_rank, b.start_position, b.laps, b.status, b.comment,
-                 b.gap, b.live_gap, b.diff, b.best_lap_time, b.last_lap_time, b.best_speed, b.last_speed,
-                 b.passes, b.passed, b.pit_stops, s.source_state, s.flag
+                 b.gap, b.live_gap, b.diff, b.best_lap_time, ${sampleColumn('best_lap')}, b.last_lap_time,
+                 b.best_speed, b.last_speed, ${sampleColumn('average_speed')}, b.passes, b.passed,
+                 b.pit_stops, ${sampleColumn('last_pit_lap')}, ${sampleColumn('since_pit_lap')},
+                 ${sampleColumn('tire')}, ${sampleColumn('overtake_remain')}, ${sampleColumn('overtake_active')},
+                 ${sampleColumn('lap_distance')}, ${sampleColumn('live_diff_ahead')}, ${sampleColumn('live_diff_behind')},
+                 ${sampleColumn('total_driver_points')}, ${sampleColumn('total_entrant_points')},
+                 ${sampleColumn('running_driver_points')}, ${sampleColumn('radiofrequency')}, s.source_state, s.flag
           FROM bryce_samples b
           LEFT JOIN race_snapshots s ON s.id = b.snapshot_id
           WHERE (? IS NULL OR b.session_key = ?)
@@ -850,8 +1172,13 @@ const sendError = (res, statusCode, message, detail) => {
 const proxyRaceControl = async (req, res, pathname) => {
   const target = sourceUrlByPath.get(pathname);
   if (!target) return false;
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), sourceFetchTimeoutMs);
   try {
-    const response = await fetch(`${target}?t=${Date.now()}`, { headers: { accept: req.headers.accept ?? 'application/json' } });
+    const response = await fetch(`${target}?t=${Date.now()}`, {
+      signal: controller.signal,
+      headers: { accept: req.headers.accept ?? 'application/json' }
+    });
     const body = Buffer.from(await response.arrayBuffer());
     res.writeHead(response.status, {
       'content-type': response.headers.get('content-type') ?? 'application/json',
@@ -860,7 +1187,14 @@ const proxyRaceControl = async (req, res, pathname) => {
     });
     res.end(body);
   } catch (error) {
-    sendError(res, 502, 'Race Control proxy failed', error instanceof Error ? error.message : String(error));
+    sendError(
+      res,
+      502,
+      'Race Control proxy failed',
+      error?.name === 'AbortError' ? `Timed out after ${sourceFetchTimeoutMs} ms` : error instanceof Error ? error.message : String(error)
+    );
+  } finally {
+    clearTimeout(timeout);
   }
   return true;
 };
@@ -990,9 +1324,22 @@ const handler = async (req, res) => {
           lastLapTime: row.lastLapTime,
           bestSpeed: row.BestSpeed,
           lastSpeed: row.LastSpeed,
+          averageSpeed: row.AverageSpeed,
           passes: row.Passes,
           passed: row.Passed,
-          bryce: isBryceTimingRow(row)
+          pitStops: row.pitStops,
+          lastPitLap: row.lastPitLap,
+          sincePitLap: row.sincePitLap,
+          tire: row.Tire,
+          overtakeRemain: row.OverTake_Remain,
+          overtakeActive: row.OverTake_Active,
+          lapDistance: row.lapDistance,
+          liveDiffAhead: row.liveDiffAhead,
+          liveDiffBehind: row.liveDiffBehind,
+          totalDriverPoints: row.totalDriverPoints,
+          totalEntrantPoints: row.totalEntrantPoints,
+          runningDriverPoints: row.runningDriverPoints,
+          bryce: isBryceTimingRow(row, snapshot.heartbeat)
         }))
       });
       return;
@@ -1011,6 +1358,20 @@ const handler = async (req, res) => {
           audioProof: await fileStatus(audioProofPath)
         }
       });
+      return;
+    }
+
+    if (pathname === '/api/weather/live') {
+      const trackId = url.searchParams.get('trackId') ?? 'track_road_america';
+      const forceRefresh = url.searchParams.get('cache') === '0' || url.searchParams.get('refresh') === '1';
+      const track = await loadTrackMetadata(trackId);
+      sendJson(res, 200, await fetchCachedLiveWeatherForTrack(track, { forceRefresh }));
+      return;
+    }
+
+    if (pathname === '/api/weather/upcoming') {
+      const forceRefresh = url.searchParams.get('cache') === '0' || url.searchParams.get('refresh') === '1';
+      sendJson(res, 200, await buildUpcomingIndyNxtWeatherReport({ forceRefresh }));
       return;
     }
 

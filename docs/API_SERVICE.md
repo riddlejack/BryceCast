@@ -27,6 +27,8 @@ npm run serve:api
 | `GET /api/bryce` | Bryce #9 timing row, driver profile, radio frequency, and route context. |
 | `GET /api/timing` | Compact timing tower with Bryce highlighted. |
 | `GET /api/sources` | Upstream Race Control probes plus local storage/proof file status. |
+| `GET /api/weather/live?trackId=track_road_america` | Current NWS observation, forecast, alerts, station, grid metadata, and probe status for one track. |
+| `GET /api/weather/upcoming` | Current NWS weather plus forecast-readiness labels for every remaining 2026 INDY NXT event in the career dataset. |
 | `GET /api/history/bryce` | Official/provisional Bryce season history snapshot with schema and source-confidence metadata. |
 | `GET /api/history/bryce?compact=1` | Compact season analytics projection for iPhone/mobile widgets: latest race, track splits, gain/loss, best-lap rank, and CGR teammate bench. |
 | `GET /api/onboard-catalog` | Legacy/latest official INDYCAR LIVE catalog probe. Research only; live POV is unavailable for the active product. |
@@ -38,28 +40,36 @@ npm run serve:api
 | `POST /api/audio-proof` | Persist audio/radio proof state. |
 | `POST /api/refresh` | Manual Race Control/source refresh. |
 
-The service also proxies known `/racecontrol/*.json` paths server-side for compatibility, but BryceCast clients should use `/api/*` as the primary contract.
+The service also proxies known live-source paths server-side for compatibility, but BryceCast clients should use `/api/*` as the primary contract. Proxied paths are centralized in `scripts/live-source-endpoints.mjs` and include the Race Control JSON feeds plus the exposed NTT prediction candidate path.
 
 ## Analytics Contract
 
-The API can currently power analytics from timing rows, official history, source probes, and local archive rows.
+The API can currently power analytics from timing rows, official history, source probes, live weather, upcoming-event weather readiness, and local archive rows.
 
 Source-backed live fields include:
 
 - Session: event, track, track type/length, session name/type/status, flag, lap, total laps, EventID, EventSessionID, updated timestamp, source state.
+- Critical live path: `/api/snapshot`, `/api/session`, `/api/bryce`, and `/api/timing` block on the Race Control timing feed only. NXT driver profile, config, schedule, and track-activity feeds are enrichment; the API serves their latest cached result, including failed refresh states, and refreshes stale/missing enrichment in the background so a slow profile or schedule feed does not stall a valid live timing response.
 - Bryce row: rank, liveRank, start position, laps, status/comment, marker, diff, gap, liveGap, last lap, best lap, best lap number, best/last/average speed, pit stops, last pit lap, laps since pit, passes, passed, running points fields when present.
-- Timing tower: every timing row sorted by rank with the same Race Control row fields.
-- Sources: endpoint status, byte count, Last-Modified, ETag, checked age, modified age, and notes.
+- Bryce profile: identity/team/radio/image metadata from the NXT driver feed when available. Driver-profile failure is enrichment degradation, not a core timing failure; valid Bryce timing and valid archived Bryce timing fallback can return with fallback identity fields and stale/error profile source state.
+- Timing tower: every timing row sorted by rank with compact Race Control row fields, including running/total points, live diff ahead/behind, lap distance, tire, overtake, pit, pass, pace, and status fields when present.
+- Sources: endpoint status, byte count, Last-Modified, ETag, checked age, modified age, series, cadence class, source role, proxy path, timeout/error state, and notes. Upstream source probes and the source-audit CLI use a bounded 5-second timeout by default.
+- Source readiness: `/api/sources` exposes `sourceState` and `readinessState`. Candidate/reference feeds cannot become app-available from HTTP success alone. The stale NTT prediction blob reports payload datetime/age and stays `candidate_unavailable`; top-series guard feeds stay `reference_only`; global timing reports `wrong_session` unless the shared live-source predicate sees an INDY NXT heartbeat and Bryce as car `9` with `DriverID=2143` or exact `Bryce Aron` identity; the NXT driver feed reports `profile_unavailable` or `profile_partial` when profile/radio enrichment is incomplete.
+- Proxied Race Control/reference/candidate JSON routes use the same bounded 5-second upstream timeout and return a 502 error instead of hanging a client request indefinitely.
+- Weather: NWS current observation, hourly forecast, daily forecast, active alerts, station/grid metadata, source state, forecast-readiness label, cache state, and probe proof. Long-range event forecasts remain unavailable until the NWS forecast window opens. Individual NWS leg failures should return `sourceState: partial`, not an API 500. Operator refreshes force cache refresh but preserve in-flight request reuse. Upcoming-event weather uses bounded concurrent track refreshes and per-track deadline fallbacks.
+- Missing NWS observation-station, hourly-forecast, or daily-forecast URLs are recorded as failed probes so weather cannot be marked `live` while silently omitting current observation or forecast legs. HTTP 200 is not sufficient for weather readiness; JSON parse failures and schema-empty observation/hourly/daily payloads are failed probes.
 - History: official/provisional season rows, track-type splits, qualifying-to-finish deltas, best-lap-rank signal, points/standing, and teammate benchmark.
-- Replay archive: sampled Bryce rows over time from SQLite after `npm run poll:race:watch`.
+- Replay archive: sampled Bryce rows over time from SQLite after `npm run poll:race:watch`. Watch mode compensates for fetch/write elapsed time, and optional live timing numbers preserve missing values as `null` from poller write through replay read. Expanded fields persisted for new samples include best-lap number, average speed, pit recency, tire/overtake, lap distance, live diff ahead/behind, running/total points, and radio metadata.
 
 Not currently available through the API:
 
 - Live Bryce GPS coordinates or a validated moving-dot track position.
-- Weather observations/forecast/radar.
+- Radar and official series weather.
+- Unbounded high-frequency weather fan-out. Weather routes use a per-track cache and in-flight request reuse; clients can request `?refresh=1` or `?cache=0` for operator checks, but those refreshes still reuse in-flight requests.
 - Sector timing unless new fields or official reports are added.
 - Team radio audio stream.
 - Live POV/onboard video.
+- NTT prediction data for INDY NXT. The official leaderboard exposes a prediction blob, but the current public payload is stale and must remain candidate/unavailable until live-session proof exists.
 
 If the UI renders any unavailable item, it must be labeled as unavailable, reference-only, candidate, or estimate. Do not silently substitute seed data for production analytics.
 
@@ -87,6 +97,10 @@ All compact fields are derived from the same official/provisional season history
 ```bash
 npm run build
 npm run api:smoke
+npm run weather:live
+npm run weather:live:upcoming
+npm run audit:live:pressure
+npm run audit:live:pressure:primary
 BRYCECAST_URL=http://127.0.0.1:8788 BRYCECAST_EXPECT_API=1 npm run qa:render
 ```
 

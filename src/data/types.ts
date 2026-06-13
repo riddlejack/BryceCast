@@ -35,8 +35,11 @@ export interface TimingRow {
   diff: string;
   gap: string;
   liveGap: string;
+  liveDiffAhead?: string;
+  liveDiffBehind?: string;
   laps: string;
   lapsLed: string;
+  lapDistance?: number | string;
   bestLapTime: string;
   bestLap: string;
   lastLapTime: string;
@@ -49,9 +52,12 @@ export interface TimingRow {
   sincePitLap: number;
   onTrack: string;
   Tire: string;
+  OverTake_Remain?: number | string;
+  OverTake_Active?: string;
   Passes: number;
   Passed: number;
   totalEntrantPoints: number;
+  totalDriverPoints?: number;
   runningDriverPoints: number;
 }
 
@@ -137,7 +143,7 @@ export interface BroadcastSessionRoute {
   alternates: BroadcastNetwork[];
   audio: BroadcastNetwork[];
   international: BroadcastNetwork[];
-  source: 'trackactivity' | 'schedule' | 'config' | 'seed';
+  source: 'trackactivity' | 'schedule' | 'config' | 'seed' | 'unavailable';
   note: string;
 }
 
@@ -192,10 +198,21 @@ export interface RaceLogSnapshot {
     lastLapTime: string;
     bestSpeed: string;
     lastSpeed: string;
+    averageSpeed?: string;
     passes: number | null;
     passed: number | null;
     pitStops: number | null;
     lastPitLap: number | null;
+    sincePitLap?: number | null;
+    tire?: string;
+    overtakeRemain?: number | null;
+    overtakeActive?: string;
+    lapDistance?: number | null;
+    liveDiffAhead?: string;
+    liveDiffBehind?: string;
+    totalDriverPoints?: number | null;
+    totalEntrantPoints?: number | null;
+    runningDriverPoints?: number | null;
     radiofrequency: string;
   } | null;
   storage: {
@@ -225,13 +242,27 @@ export interface BryceReplayRow {
   liveGap: string;
   diff: string;
   bestLapTime: string;
+  bestLap: string;
   lastLapTime: string;
   bestSpeed: number | null;
   lastSpeed: number | null;
+  averageSpeed: number | null;
   passes: number | null;
   passed: number | null;
   netPasses: number | null;
   pitStops: number | null;
+  lastPitLap: number | null;
+  sincePitLap: number | null;
+  tire: string;
+  overtakeRemain: number | null;
+  overtakeActive: string;
+  lapDistance: number | null;
+  liveDiffAhead: string;
+  liveDiffBehind: string;
+  totalDriverPoints: number | null;
+  totalEntrantPoints: number | null;
+  runningDriverPoints: number | null;
+  radiofrequency: string;
   sourceState: string;
   flag: string;
 }

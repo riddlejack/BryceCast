@@ -235,7 +235,7 @@ Each source family should report:
 5. Maintain FRP F1600 2019 and Formula Ford 2020 official PDF ingests.
 6. Maintain track metadata backfill for every newly imported track.
 7. Add remaining early-career rows with confidence labels.
-8. Add ambient weather enrichment first for precise-window sessions, including the 28 Euroformula PDF-derived windows and 37 Race Control-backed INDY NXT window rows, then extend to remaining historical INDY NXT only after exact session windows are imported.
+8. Maintain ambient-weather enrichment only where track coordinates, timezone, provenance, and source-backed session windows exist. INDY NXT now has 95 non-official Open-Meteo modeled rows for archive-eligible exact-window sessions, with representative NOAA/NCEI station cross-checks; the 78 date-only INDY NXT sessions remain unavailable for hour-level weather joins unless an official exact clock-time source is added. Future weather work should target source-backed exact-window gaps, not broad date-only backfills.
 
 ## Future Automation Requirement
 

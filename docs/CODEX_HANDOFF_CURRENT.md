@@ -1,6 +1,6 @@
 # BryceCast Current Codex Handoff
 
-Updated: 2026-06-08 13:13 CDT.
+Updated: 2026-06-13 12:42 CDT.
 
 ## Current Chat / Thread Label
 
@@ -15,6 +15,8 @@ Use this file as the first stop for a fresh Codex instance. The chat context has
 BryceCast is now a Bryce Aron racing analytics product. Live Bryce in-car POV is out of scope unless Bryce/team later provides authorized access. Team radio is also out of scope for now unless reliable authorized access is later established.
 
 Current highest-value path: build a rigorous, source-backed career/session analytics foundation and then design the website/mobile experience around verified data.
+
+The live/race-day data lane is separate from the career ingestion lane. Career facts live in `data/career/career.dataset.json` and generated reports; live timing/source/weather readiness lives in `scripts/api-server.mjs`, `scripts/race-poller.mjs`, `scripts/live-source-endpoints.mjs`, `scripts/live-source-pressure-test.mjs`, `scripts/live-weather-service.mjs`, `scripts/live-weather.mjs`, `docs/LIVE_DATA_READINESS_AUDIT.md`, `docs/API_SERVICE.md`, and `docs/SOURCE-INVENTORY.md`.
 
 ## Current Validation Baseline
 
@@ -39,6 +41,48 @@ npm run build
 
 Validation result: `ok: true`.
 
+Live/API verification from the current UI/product lane:
+
+```bash
+npm run audit:sources
+npm run weather:live
+npm run weather:live:upcoming
+npm run audit:live:pressure
+npm run audit:live:pressure:primary
+npm run api:smoke
+npm run build
+git diff --check
+```
+
+Live/API result: full cold/post-session pressure checks passed on June 8, 2026, and source/weather quick checks passed again on June 13, 2026. `npm run build` has the existing Vite chunk-size warning only.
+
+Live/API current state:
+
+- `scripts/live-source-endpoints.mjs` is the source catalog for all public/candidate/reference live endpoints. Primary BryceCast snapshots use timing, NXT drivers, config, NXT schedule, and NXT track activity. Top-series feeds and the NTT prediction blob are guard/candidate probes only.
+- `npm run audit:live:pressure` sustained 270 requests across 9 endpoints at 1-second cadence with 0 errors. Highest p95 latency was 75 ms.
+- `npm run audit:live:pressure:primary` sustained 300 requests across the 5 primary BryceCast feeds at 1-second cadence with 0 errors. Endpoint p95 latencies were 41-51 ms.
+- `npm run audit:live:pressure:primary -- --iterations=3 --no-write` passed repeatedly on June 13, 2026 with 15 primary-feed requests, 0 errors, and highest endpoint p95 latency roughly in the 160-180 ms range during quick checks.
+- These are cold/post-session proofs. Road America green-flag INDY NXT proof is still required before calling live mode production-ready.
+- `scripts/live-weather-service.mjs` and `scripts/live-weather.mjs` implement NWS live weather. `/api/weather/live?trackId=track_road_america` and `/api/weather/upcoming` expose current venue weather and forecast-readiness labels to clients.
+- Weather routes use per-track cache, in-flight request reuse, NWS request timeouts, bounded concurrent upcoming-track refresh, per-track deadline fallbacks, and partial probe reporting. Operator refreshes force cache refresh but must not disable in-flight reuse. Missing observation-station, hourly-forecast, or daily-forecast URLs are failed probes, so weather should be `partial` rather than `live` when current observation or forecast legs are unavailable.
+- NWS HTTP success is not enough for `sourceState: live`; weather probes fail JSON parse errors and schema-empty observation/hourly/daily payloads before source state is calculated.
+- Source probes, `npm run audit:sources`, and API proxy routes use a bounded 5-second upstream timeout so one slow Race Control/reference/candidate endpoint should become an error probe or 502 response rather than a hung readiness check.
+- `/api/sources` separates HTTP reachability from readiness. NTT prediction data reports payload datetime/age and `readinessState: candidate_unavailable` while the public blob remains the stale 2024 heartbeat. Top-series feeds report `reference_only` so they cannot be mistaken for Bryce sources. Global timing reports `wrong_session` unless the shared Bryce timing predicate sees an INDY NXT heartbeat plus car `9` and either `DriverID=2143` or exact Bryce Aron identity. The NXT driver feed reports `profile_unavailable` when Bryce is absent and `profile_partial` when radio metadata is missing.
+- Stale archive fallback searches archived payloads containing Bryce's live timing `DriverID=2143`, verifies the parsed timing row, and preserves the selected archive row's `checked_at` timestamp before using a sample; wrong-series top-series samples should not evict Bryce fallback after only a short 1-second polling window or make stale data look freshly checked.
+- The stale archive fallback SQLite prefilter also scans exact Bryce Aron name plus car `9` candidates, then verifies each parsed row through the shared Bryce timing predicate. Do not narrow fallback lookup to only `DriverID=2143`.
+- Live timing and archived Bryce timing fallback are allowed to survive NXT driver-profile failure. If the timing feed has Bryce but the profile feed fails or omits him, the API returns fallback Bryce identity fields, leaves enrichment fields empty, and marks the profile probe stale/error instead of 502ing the snapshot.
+- Archived profile fields may be used as fallback identity/enrichment while serving stale archived timing, but current driver-profile source health must be evaluated only against the current `drivers_nxt` response. Do not mark profile/radio readiness live from archived profile data.
+- Core live routes block only on the critical Race Control timing feed. NXT driver profile, config, schedule, and track-activity feeds are enrichment for `/api/snapshot`, `/api/session`, `/api/bryce`, and `/api/timing`; they are served from a short in-memory cache and refreshed in the background so a slow support feed cannot break the 1-second race-day cadence. The cache stores the latest result, including explicit failures, so later source outages are not hidden behind older successful payloads.
+- `npm run api:smoke` treats driver-profile data as enrichment too: radio frequency is required only when the driver-profile source probe is live; fallback identity is required otherwise.
+- `scripts/race-poller.mjs` now reads the last repeated CLI argument, so `npm run poll:race:watch -- --interval-ms=1000` overrides the package default. Poller endpoint fetches use a bounded 5-second timeout, optional live timing numbers preserve missing values as `null`, replay keeps SQLite `NULL` values as unavailable, and watch mode compensates for fetch/write elapsed time before sleeping.
+- Race-poller snapshots use `sourceState: error` for timing fetch failure or missing timing heartbeat; `stale` is reserved for successful wrong-series/no-Bryce timing payloads or explicit archived fallback.
+- SQLite replay now persists expanded live timing fields from the poller, including best-lap number, average speed, pit recency, tire/overtake, lap distance, live diff ahead/behind, running/total points, and radio metadata. Replay queries tolerate older archives by returning `null` for additive columns that do not exist yet.
+- `scripts/live-source-pressure-test.mjs` uses the same null-preserving numeric parser for optional candidate timing fields, so null lap-distance/overtake fields are not counted as real zeroes.
+- `npm run weather:live:upcoming` found 9 remaining 2026 INDY NXT events. In the June 13 final sweep, Road America Race 1 and Race 2 were `forecast_window_open`; Mid-Ohio, Nashville, Portland, Milwaukee, and Monterey remained `too_far_for_event_forecast` until their NWS forecast windows open.
+- NWS weather is a live/prep overlay, not official series weather, radar, track temperature, or a long-range event forecast.
+- The NTT prediction blob is accessible but stale: one 2024 heartbeat row only. Keep pit prediction unavailable unless it wakes up during a live session and proves INDY NXT relevance.
+- The current global timing feed points to the top-series WWTR race, flag `COLD`, lap `260/260`, with no Bryce row. API readiness, race-poller archive capture, source audit, and pressure-test tooling share the Bryce timing predicate from `scripts/live-source-endpoints.mjs`: require an INDY NXT heartbeat plus Bryce car `9` and either `DriverID=2143` or exact Bryce Aron timing-row identity before treating timing as Bryce data. Archived INDY NXT samples use heartbeat `Series: "L"`.
+
 Current canonical counts:
 
 | Entity | Count |
@@ -58,9 +102,9 @@ Current canonical counts:
 | Penalties | 82 |
 | Incidents | 132 |
 | Derived metrics | 370 |
-| Weather / track-condition observations | 86 |
+| Weather / track-condition observations | 181 |
 | Media assets | 940 |
-| Source evidence rows | 1,121 |
+| Source evidence rows | 1,199 |
 | Open gaps | 9 |
 
 Validation warnings:
@@ -76,7 +120,7 @@ Track metadata:
 
 The current dataset includes these source-backed imports:
 
-- INDY NXT 2024-2026 official API/session results, 1,238 official INDY NXT qualifyingResults rows from SessionType=Q records, 738 race/heat result rows with official/API pit-stop counts, 68 official terminal-status incident rows from contact/mechanical/DNS result statuses, 76 official Results PDF penalty/decision-summary rows, 64 official Results PDF caution-summary causal incident rows, 29,519 official lap-by-lap position samples from all 36 Race Lap Chart PDFs, 36 official Event Summary race-stat metric rows, 35 official Event Summary most-improved racecraft rows, 36 official Leader Lap Summary metric rows with leader timing/margins/flag states, 146 official Top Section Times metric rows across practice, qualifying, and race sessions, 145 official Section Results metric rows with lap-by-lap section time/speed metrics, plus 111 source-backed exact physical-session windows: 74 from cached official 2024-2025 weekend schedule PDFs and 37 from 2026 Race Control feeds, including 16 future schedule-only sessions that carry no result rows. The remaining 78 date-only INDY NXT exact-window rows are source-reviewed unavailable because official sources expose only coarse qualifying blocks or no exact qualifying row. Detailed pit context is source-limited: the official report inventory exposes counts and lap-chart position samples, but no dedicated pit-summary, pit-lane sequence, stop-lap, tire/service, or pit-time report was found across cached official reports.
+- INDY NXT 2024-2026 official API/session results, 1,238 official INDY NXT qualifyingResults rows from SessionType=Q records, 738 race/heat result rows with official/API pit-stop counts, 68 official terminal-status incident rows from contact/mechanical/DNS result statuses, 76 official Results PDF penalty/decision-summary rows, 64 official Results PDF caution-summary causal incident rows, 29,519 official lap-by-lap position samples from all 36 Race Lap Chart PDFs, 36 official Event Summary race-stat metric rows, 35 official Event Summary most-improved racecraft rows, 36 official Leader Lap Summary metric rows with leader timing/margins/flag states, 146 official Top Section Times metric rows across practice, qualifying, and race sessions, 145 official Section Results metric rows with lap-by-lap section time/speed metrics, 95 non-official modeled ambient weather rows from Open-Meteo for exact-window archive-eligible sessions with representative NOAA/NCEI station cross-checks, plus 111 source-backed exact physical-session windows: 74 from cached official 2024-2025 weekend schedule PDFs and 37 from 2026 Race Control feeds, including 16 future schedule-only sessions that carry no result rows. The remaining 78 date-only INDY NXT rows are source-reviewed unavailable for hour-level weather joins because official sources expose only coarse qualifying blocks or no exact qualifying row. Detailed pit context is source-limited: the official report inventory exposes counts and lap-chart position samples, but no dedicated pit-summary, pit-lane sequence, stop-lap, tire/service, or pit-time report was found across cached official reports.
 - GB3/BRDC British F3 2021 official TSL/BRSCC event pages and timing PDFs: 7 events, 39 sessions, 684 result rows, 248 qualifying rows, 38 Bryce result rows, 39 official weather/track-condition observations, 67 media/PDF assets, all 369 race start/grid positions sourced from official TSL grid PDFs, plus archived official GB3 championship standings showing Bryce P12 with 238 points.
 - GB3 2022 official JSON route, plus one official-manifest-only session for source-broken session `1248`; row-level results for `1248` remain blocked by the official JSON 404.
 - IMSA Daytona 2025 official Al Kamel classification/time-card data, including 37,885 lap samples and official air/track-condition fields.
@@ -127,6 +171,25 @@ The parallelization was useful, but messy. Multiple same-directory threads edite
 
 Any fresh agent should assume same-file churn happened and audit final file contents against actual dataset/reports, not against chat summaries.
 
+## Navigation And Ambiguity Register
+
+Project rule: if a future agent finds contradictory docs or cannot prove the ground truth from generated reports, source files, live checks, raw artifacts, tests, or official sources, record the ambiguity here or in the most specific audit doc. Do not choose a convenient value just to make prose consistent.
+
+Current resolved cleanup from the June 13 documentation audit:
+
+- The handoff had stale generated counts after INDY NXT weather enrichment. Generated reports now control the count: `data/career/reports/ingestion-summary.json` and `validation-report.json` show 181 weather/track-condition observations and 1,199 source evidence rows.
+- Live-weather docs still described June 8 as the current state. June 13 checks now control the live-weather snapshot: Road America Race 1 and Race 2 are `forecast_window_open`; later 2026 INDY NXT events remain `too_far_for_event_forecast`.
+- The local archive description needed a sharper split. `race_snapshots` contains newer stale top-series snapshots, but `bryce_samples` currently contains only six Bryce-valid INDY NXT WWTR samples from June 7-8, 2026.
+- The timing feed description needed a stronger guard. Live timing is not Bryce data unless the shared predicate sees an INDY NXT heartbeat plus car `9` and either Race Control `DriverID=2143` or exact `Bryce Aron` timing-row identity.
+
+Current unresolved or live-session-gated ambiguities:
+
+- Race Control schedule and track-activity datetime strings lack explicit timezone offsets in the source JSON. Career importers have a documented normalization rule for imported canonical rows, but live UI route cards should continue to display/source-label times carefully until the Road America live-session proof confirms the intended live display semantics.
+- Race Control exposes candidate fields such as `lapDistance`, `Tire`, `OverTake_Remain`, live diff fields, and running points. Cold samples do not prove these are meaningful for INDY NXT green-flag use. Keep moving-dot, tire/overtake strategy, and points-projection UI behind live Road America verification.
+- The NTT prediction blob is reachable but currently a stale 2024 heartbeat. Its true live-race behavior is unknown until it wakes up during a relevant session; do not infer pit-prediction support from HTTP 200.
+- Bryce-specific radio remains frequency metadata unless a legal, reliable live receiver/app route is proven per event/session. Do not generalize one successful future check across qualifying, Race 1, Race 2, or later venues.
+- Arlington track direction is medium-confidence because it is inferred from official track-map turn sequence for a future temporary circuit. Keep that confidence label until stronger GIS or supplemental-regulation evidence exists.
+
 ## Audit Items Before More Feature Work
 
 1. Re-run `npm run career:validate && npm run career:summary`.
@@ -144,14 +207,20 @@ Any fresh agent should assume same-file churn happened and audit final file cont
 13. INDY NXT Race Lap Chart partials are no longer a priority importer gap unless a better official PDF extraction/OCR path can recover source-visible cells without guessing. The coverage matrix keeps `lap_samples` partial for fidelity, but excludes it from `priorityGaps` because all 36 completed Race Lap Chart PDFs are imported and the remaining 10 partials are explicit missing car-lap or official result/chart conflict diagnostics.
 14. The canonical INDY NXT detail gap now describes the residual Race Lap Chart partials precisely and marks detailed pit-lane sequence context source-unavailable. Use official/API pit-stop counts as the production-safe pit metric unless a new official pit-summary source appears.
 15. `docs/INDY_NXT_DASHBOARD_READINESS.md` is the current UI-facing contract. It lists production-safe INDY NXT analytics, caveats, and categories that must stay out of production copy.
+16. For live UI work, read `docs/LIVE_DATA_READINESS_AUDIT.md`, `docs/API_SERVICE.md`, `docs/SOURCE-INVENTORY.md`, and `docs/ANALYTICS_SOURCE_AUDIT.md` before designing screens. They define the live-source catalog, `/api/*` contracts, weather readiness, wrong-series guards, and fields that remain unavailable.
+17. Do not use live weather to imply official series weather, track temperature, radar, or long-range event forecasts. Missing NWS numeric fields must remain `null`; do not coerce missing values to zero.
+18. Do not build moving-dot, live track-map, tire/overtake strategy, or pit-prediction UI until Road America live-session proof shows populated INDY NXT fields. Current cold samples have `lapDistance=0`, tire `P`, overtake `0`, and no sector keys.
 
 ## Recommended Next Step
 
-For the next implementation pass, treat INDY NXT as dashboard-ready with explicit caveats. The generated coverage matrix now ranks `publish_indy_nxt_dashboard_readiness` first, and `docs/INDY_NXT_DASHBOARD_READINESS.md` is the handoff contract for UI/data-layer work.
+For the next implementation pass, treat INDY NXT historical/career analytics as dashboard-ready with explicit caveats, and treat race-day live mode as API-plumbed but still requiring green-flag Road America proof. The generated coverage matrix now ranks `publish_indy_nxt_dashboard_readiness` first, and `docs/INDY_NXT_DASHBOARD_READINESS.md` is the handoff contract for UI/data-layer work.
 
 Highest-leverage next work:
 
 - wire the UI/data layer to consume production-safe INDY NXT categories from the canonical dataset, with caveat badges driven by coverage matrix status and gap IDs,
+- wire the race-day frontend/mobile data layer to `/api/snapshot`, `/api/timing`, `/api/sources`, `/api/weather/live`, `/api/weather/upcoming`, `/api/replay/bryce`, and `/api/history/bryce?compact=1`,
+- rehearse Road America live proof with `npm run audit:live:pressure:primary` and `npm run poll:race:watch -- --interval-ms=1000` during practice/qualifying/race windows,
+- add caching/rate limiting around `/api/weather/upcoming` before any deployed production service,
 - check whether GB3 2022 official session `1248` has an alternate official JSON/PDF artifact before leaving the official endpoint 404 gap as source-broken,
 - decide whether Formula Ford official lap-analysis pages justify expanding beyond the current Bryce-only lap samples, or explicitly hold the category to Bryce-only scope,
 - audit lap-specific incident timing beyond caution-summary rows only where an official Results/Event Summary/Lap Chart row explicitly supports it,
@@ -160,5 +229,5 @@ Highest-leverage next work:
 Suggested fresh-thread prompt:
 
 ```text
-You are continuing the BryceCast career-data project in /Users/example/Documents/Bryce POV access. Start by reading docs/CODEX_HANDOFF_CURRENT.md, docs/PARALLEL_INGESTION_COORDINATION.md, package.json, data/career/reports/validation-report.json, data/career/reports/ingestion-summary.json, and the import reports under data/career/reports. Verify the true current dataset state from disk before editing. Treat chat summaries as lower authority than files, validation output, importer reports, raw artifacts, and rerunnable commands. Preserve source provenance and rerun npm run career:import:all, npm run career:test, and npm run build after importer changes.
+You are continuing BryceCast in /Users/example/Documents/Bryce POV access. Start by reading docs/CODEX_HANDOFF_CURRENT.md, README.md, docs/READINESS.md, docs/SOURCE-INVENTORY.md, docs/API_SERVICE.md, docs/ANALYTICS_SOURCE_AUDIT.md, and docs/LIVE_DATA_READINESS_AUDIT.md. For career-data or ingestion work, also read docs/PARALLEL_INGESTION_COORDINATION.md, docs/CAREER_DATA_SPEC.md, data/career/README.md, data/career/reports/validation-report.json, data/career/reports/ingestion-summary.json, and the relevant import reports under data/career/reports. Verify the true current dataset/live-source state from disk before editing. Treat chat summaries as lower authority than files, validation output, importer reports, raw artifacts, and rerunnable commands. Keep live Race Control/API/weather work separate from career ingestion. Preserve source provenance and rerun npm run career:import:all, npm run career:test, and npm run build after importer changes. For live/API changes, run npm run audit:sources, npm run weather:live, npm run weather:live:upcoming, npm run api:smoke, npm run build, and git diff --check; run npm run audit:live:pressure:primary when source cadence/reliability changes.
 ```

@@ -101,6 +101,8 @@ try {
   assert(snapshot?.bryce?.no === '9', '/api/snapshot missing Bryce #9 row');
   assert(snapshot?.bryce?.firstName === 'Bryce' && snapshot?.bryce?.lastName === 'Aron', '/api/snapshot bound #9 to the wrong driver');
   assert(!snapshot.timingRows.some((row) => row.no === '9' && row.lastName === 'Dixon'), '/api/snapshot included top-series #9 collision as Bryce timing');
+  const driverProfileProbe = snapshot.sourceProbes?.find((probe) => probe.id === 'drivers_nxt');
+  assert(driverProfileProbe, '/api/snapshot missing driver-profile source probe');
 
   const session = (await fetchJson('/api/session')).json;
   assert(session?.eventSessionId, '/api/session missing eventSessionId');
@@ -109,17 +111,83 @@ try {
   const bryce = (await fetchJson('/api/bryce')).json;
   assert(bryce?.bryce?.no === '9', '/api/bryce missing Bryce row');
   assert(bryce?.bryce?.firstName === 'Bryce' && bryce?.bryce?.lastName === 'Aron', '/api/bryce bound #9 to the wrong driver');
-  assert(bryce?.profile?.radiofrequency, '/api/bryce missing radio frequency');
+  assert(bryce?.profile?.firstname === 'Bryce' && bryce?.profile?.lastname === 'Aron', '/api/bryce missing fallback Bryce profile identity');
+  if (driverProfileProbe.state === 'live') {
+    assert(bryce?.profile?.radiofrequency, '/api/bryce live driver-profile probe missing radio frequency');
+  }
 
   const timing = (await fetchJson('/api/timing')).json;
   assert(timing?.rowCount > 0, '/api/timing missing row count');
   assert(timing?.rows?.some((row) => row.bryce), '/api/timing missing Bryce highlight');
 
   const sources = (await fetchJson('/api/sources')).json;
-  assert(sources?.endpoints?.length >= 5, '/api/sources missing upstream probes');
+  assert(sources?.endpoints?.length >= 9, '/api/sources missing expanded upstream probes');
+  const timingSource = sources.endpoints.find((endpoint) => endpoint.id === 'timing');
+  assert(timingSource, '/api/sources missing timing source probe');
+  assert(
+    timingSource.sourceSummary?.brycePresent || ['wrong_session', 'payload_invalid', 'error'].includes(timingSource.readinessState),
+    '/api/sources treats global timing as Bryce-ready without a Bryce timing row'
+  );
+  if (timingSource.sourceSummary?.brycePresent === false) {
+    assert(timingSource.readinessState === 'wrong_session', '/api/sources missing wrong-session readiness for no-Bryce global timing');
+  }
+  const nxtDriverSource = sources.endpoints.find((endpoint) => endpoint.id === 'drivers_nxt');
+  assert(nxtDriverSource, '/api/sources missing NXT driver source probe');
+  assert(
+    nxtDriverSource.sourceSummary?.brycePresent || ['profile_unavailable', 'error'].includes(nxtDriverSource.readinessState),
+    '/api/sources treats NXT driver feed as profile-ready without Bryce profile'
+  );
+  if (nxtDriverSource.sourceSummary?.brycePresent && !nxtDriverSource.sourceSummary?.radiofrequency) {
+    assert(nxtDriverSource.readinessState === 'profile_partial', '/api/sources missing partial profile readiness when radio frequency is unavailable');
+  }
+  const nttCandidate = sources.endpoints.find((endpoint) => endpoint.id === 'ntt_data_polling');
+  assert(nttCandidate, '/api/sources missing NTT prediction candidate probe');
+  assert(
+    ['candidate_unavailable', 'candidate_unverified', 'error'].includes(nttCandidate.readinessState),
+    '/api/sources exposes NTT prediction candidate without candidate readiness state'
+  );
+  if (nttCandidate.ok && nttCandidate.sourceSummary?.payloadAgeSeconds !== null) {
+    assert(nttCandidate.readinessState !== 'available', '/api/sources treats NTT prediction candidate as available from HTTP success alone');
+  }
+  const topDriverSource = sources.endpoints.find((endpoint) => endpoint.id === 'drivers_top');
+  assert(topDriverSource, '/api/sources missing top-series guard probe');
+  assert(topDriverSource.readinessState === 'reference_only' || topDriverSource.readinessState === 'error', '/api/sources treats top-series guard as an app-available Bryce source');
   assert(sources.endpoints.every((endpoint) => typeof endpoint.freshnessLabel === 'string'), '/api/sources missing freshness labels');
   assert(sources.endpoints.every((endpoint) => Object.prototype.hasOwnProperty.call(endpoint, 'checkedAgeSeconds')), '/api/sources missing checked age');
+  assert(sources.endpoints.every((endpoint) => typeof endpoint.readinessState === 'string'), '/api/sources missing readiness state');
   assert(sources?.local?.sqlite, '/api/sources missing local storage status');
+
+  const liveWeather = (await fetchJson('/api/weather/live?trackId=track_road_america')).json;
+  assert(liveWeather?.schemaVersion === 'live-weather.v1', '/api/weather/live missing schema version');
+  assert(['live', 'partial'].includes(liveWeather?.sourceState), '/api/weather/live missing live/partial state');
+  assert(liveWeather?.track?.id === 'track_road_america', '/api/weather/live returned wrong track');
+  assert(
+    liveWeather.sourceState === 'partial' || liveWeather?.station?.id,
+    '/api/weather/live missing station id for live weather response'
+  );
+  assert(
+    liveWeather.sourceState !== 'live' || (liveWeather.observation?.timestamp && liveWeather.observation?.station),
+    '/api/weather/live marked weather live without observation identity fields'
+  );
+  assert(
+    liveWeather.sourceState === 'live' || liveWeather.probes?.some((probe) => !probe.ok),
+    '/api/weather/live partial response did not include a failed probe'
+  );
+  assert(['hit', 'miss', 'joined_inflight'].includes(liveWeather?.cache?.status), '/api/weather/live missing cache status');
+
+  const upcomingWeather = (await fetchJson('/api/weather/upcoming')).json;
+  assert(upcomingWeather?.schemaVersion === 'live-weather-upcoming.v1', '/api/weather/upcoming missing schema version');
+  assert(Array.isArray(upcomingWeather?.events), '/api/weather/upcoming missing event list');
+  assert(upcomingWeather.events.length > 0, '/api/weather/upcoming found no future INDY NXT events');
+  assert(
+    upcomingWeather.events.every((row) => row.forecastReadiness?.status && row.weather?.track?.id),
+    '/api/weather/upcoming missing readiness or weather payloads'
+  );
+  const cachedUpcomingWeather = (await fetchJson('/api/weather/upcoming')).json;
+  assert(
+    cachedUpcomingWeather.events.every((row) => row.weather?.cache?.status === 'hit'),
+    '/api/weather/upcoming did not reuse cached per-track weather on immediate repeat'
+  );
 
   const history = (await fetchJson('/api/history/bryce')).json;
   assert(Array.isArray(history?.points) && history.points.length > 0, '/api/history/bryce missing history points');
@@ -183,6 +251,10 @@ try {
 
   const raceControl = await fetch(`${baseUrl}/racecontrol/timingscoring-ris.json`, { headers: { accept: 'application/json' } });
   assert(raceControl.ok, '/racecontrol proxy did not return OK');
+  const topDrivers = await fetch(`${baseUrl}/racecontrol/driversfeed.json`, { headers: { accept: 'application/json' } });
+  assert(topDrivers.ok, '/racecontrol top-series driver proxy did not return OK');
+  const nttData = await fetch(`${baseUrl}/ntt-data/INDYCAR_DATA_POLLING/data_polling_blob.json`, { headers: { accept: 'application/json' } });
+  assert(nttData.ok, '/ntt-data proxy did not return OK');
 
   let rootStatus = null;
   if (await distExists()) {
@@ -214,6 +286,8 @@ try {
           '/api/bryce',
           '/api/timing',
           '/api/sources',
+          '/api/weather/live?trackId=track_road_america',
+          '/api/weather/upcoming',
           '/api/history/bryce',
           '/api/history/bryce?compact=1',
           '/api/race-log/latest',
@@ -221,7 +295,9 @@ try {
           '/api/replay/bryce',
           '/api/pov-proof',
           '/api/audio-proof',
-          '/racecontrol/timingscoring-ris.json'
+          '/racecontrol/timingscoring-ris.json',
+          '/racecontrol/driversfeed.json',
+          '/ntt-data/INDYCAR_DATA_POLLING/data_polling_blob.json'
         ]
         ,
         sourceFreshness: sources.endpoints.map((endpoint) => ({ id: endpoint.id, freshness: endpoint.freshnessLabel }))

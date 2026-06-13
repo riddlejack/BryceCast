@@ -2,6 +2,7 @@ import { appendFile, mkdir, writeFile } from 'node:fs/promises';
 import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { DatabaseSync } from 'node:sqlite';
+import { isBryceProfile, isBryceTimingRow, liveSourceEndpoints, raceSnapshotEndpoints } from './live-source-endpoints.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = dirname(__dirname);
@@ -12,19 +13,13 @@ const jsonlPath = join(dataDir, 'snapshots.jsonl');
 const latestPath = join(dataDir, 'latest-snapshot.json');
 const publicLatestPath = join(publicDataDir, 'live-snapshot.json');
 
-const endpoints = [
-  { id: 'timing', label: 'Timing and scoring', url: 'https://indycar.blob.core.windows.net/racecontrol/timingscoring-ris.json' },
-  { id: 'drivers_nxt', label: 'INDY NXT drivers', url: 'https://indycar.blob.core.windows.net/racecontrol/driversfeed_nxt.json' },
-  { id: 'config', label: 'Race Control config', url: 'https://indycar.blob.core.windows.net/racecontrol/tsconfig.json' },
-  { id: 'schedule_nxt', label: 'INDY NXT schedule', url: 'https://indycar.blob.core.windows.net/racecontrol/schedulefeed_nxt.json' },
-  { id: 'trackactivity_nxt', label: 'INDY NXT track activity', url: 'https://indycar.blob.core.windows.net/racecontrol/trackactivityleaderboardfeed_nxt.json' }
-];
+const endpoints = process.argv.includes('--all-sources') ? liveSourceEndpoints : raceSnapshotEndpoints;
 
 const argValue = (name, fallback) => {
   const prefix = `--${name}=`;
-  const inline = process.argv.find((arg) => arg.startsWith(prefix));
+  const inline = process.argv.findLast((arg) => arg.startsWith(prefix));
   if (inline) return inline.slice(prefix.length);
-  const index = process.argv.indexOf(`--${name}`);
+  const index = process.argv.lastIndexOf(`--${name}`);
   return index >= 0 ? process.argv[index + 1] ?? fallback : fallback;
 };
 
@@ -32,8 +27,10 @@ const watch = process.argv.includes('--watch');
 const once = process.argv.includes('--once') || !watch;
 const intervalMs = Number(argValue('interval-ms', argValue('interval', '15000')));
 const iterations = once ? 1 : Number(argValue('iterations', '0'));
+const fetchTimeoutMs = Number(argValue('timeout-ms', '5000'));
 
 const safeNumber = (value) => {
+  if (value === null || value === undefined || value === '') return null;
   const parsed = Number(value);
   return Number.isFinite(parsed) ? parsed : null;
 };
@@ -49,22 +46,6 @@ const formatAge = (seconds) => {
   if (seconds < 3600) return `${Math.round(seconds / 60)}m ago`;
   if (seconds < 86400) return `${Math.round(seconds / 3600)}h ago`;
   return `${Math.round(seconds / 86400)}d ago`;
-};
-
-const bryceRcDriverId = '2143';
-
-const isBryceTimingRow = (row) => {
-  const first = String(row?.firstName ?? '').toLowerCase();
-  const last = String(row?.lastName ?? '').toLowerCase();
-  const driverId = String(row?.DriverID ?? '');
-  return (first === 'bryce' && last === 'aron') || driverId === bryceRcDriverId;
-};
-
-const isBryceProfile = (driver) => {
-  const first = String(driver?.firstname ?? '').toLowerCase();
-  const last = String(driver?.lastname ?? '').toLowerCase();
-  const driverId = String(driver?.rc_driver_id ?? driver?.driverid ?? '');
-  return (first === 'bryce' && last === 'aron') || driverId === bryceRcDriverId;
 };
 
 const describeBryceMiss = (heartbeat, timingRows) => {
@@ -86,8 +67,13 @@ const sourceState = (heartbeat) => {
 
 const fetchEndpoint = async (endpoint) => {
   const fetchedAt = new Date().toISOString();
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), fetchTimeoutMs);
   try {
-    const response = await fetch(endpoint.url, { headers: { accept: 'application/json' } });
+    const response = await fetch(endpoint.url, {
+      signal: controller.signal,
+      headers: { accept: 'application/json' }
+    });
     const text = await response.text();
     const payload = text ? JSON.parse(text) : null;
     return {
@@ -113,25 +99,33 @@ const fetchEndpoint = async (endpoint) => {
       bytes: 0,
       fetchedAt,
       payload: null,
-      error: error instanceof Error ? error.message : 'Unknown fetch error'
+      error: error?.name === 'AbortError' ? `Timed out after ${fetchTimeoutMs} ms` : error instanceof Error ? error.message : 'Unknown fetch error'
     };
+  } finally {
+    clearTimeout(timeout);
   }
 };
 
 const buildSummary = (results) => {
-  const timing = results.find((result) => result.id === 'timing')?.payload?.timing_results;
+  const timingResult = results.find((result) => result.id === 'timing');
+  const timing = timingResult?.payload?.timing_results;
   const drivers = results.find((result) => result.id === 'drivers_nxt')?.payload?.drivers?.driver ?? [];
   const config = results.find((result) => result.id === 'config')?.payload ?? {};
   const heartbeat = timing?.heartbeat ?? {};
   const timingRows = Array.isArray(timing?.Item) ? timing.Item : [];
-  const bryce = timingRows.find(isBryceTimingRow) ?? null;
+  const bryce = timingRows.find((row) => isBryceTimingRow(row, heartbeat)) ?? null;
   const bryceProfile = Array.isArray(drivers) ? drivers.find(isBryceProfile) ?? null : null;
   const checkedAt = new Date().toISOString();
   const sessionKey = `${heartbeat.EventID ?? 'unknown'}-${heartbeat.EventSessionID ?? heartbeat.SessionName ?? 'unknown'}`;
   const state = sourceState(heartbeat);
+  const timingUnavailable = !timingResult?.ok || !timing?.heartbeat;
   const endpointSummaries = results.map((result) => ({
     id: result.id,
     label: result.label,
+    series: result.series ?? null,
+    cadence: result.cadence ?? null,
+    role: result.role ?? null,
+    proxyPath: result.proxyPath ?? null,
     url: result.url,
     ok: result.ok,
     status: result.status,
@@ -163,9 +157,13 @@ const buildSummary = (results) => {
     flag: heartbeat.currentFlag ?? '',
     lap: heartbeat.lapNumber ?? '',
     totalLaps: heartbeat.totalLaps ?? '',
-    sourceState: bryce ? state : 'stale',
+    sourceState: timingUnavailable ? 'error' : bryce ? state : 'stale',
     rowCount: timingRows.length,
-    bryceUnavailableReason: bryce ? undefined : describeBryceMiss(heartbeat, timingRows),
+    bryceUnavailableReason: bryce
+      ? undefined
+      : timingUnavailable
+        ? `Race Control timing payload unavailable: ${timingResult?.error ?? 'missing timing heartbeat'}.`
+        : describeBryceMiss(heartbeat, timingRows),
     bryce: bryce
       ? {
           no: bryce.no,
@@ -184,10 +182,21 @@ const buildSummary = (results) => {
           lastLapTime: bryce.lastLapTime ?? '',
           bestSpeed: bryce.BestSpeed ?? '',
           lastSpeed: bryce.LastSpeed ?? '',
+          averageSpeed: bryce.AverageSpeed ?? '',
           passes: safeNumber(bryce.Passes),
           passed: safeNumber(bryce.Passed),
           pitStops: safeNumber(bryce.pitStops),
           lastPitLap: safeNumber(bryce.lastPitLap),
+          sincePitLap: safeNumber(bryce.sincePitLap),
+          tire: bryce.Tire ?? '',
+          overtakeRemain: safeNumber(bryce.OverTake_Remain),
+          overtakeActive: bryce.OverTake_Active ?? '',
+          lapDistance: safeNumber(bryce.lapDistance),
+          liveDiffAhead: bryce.liveDiffAhead ?? '',
+          liveDiffBehind: bryce.liveDiffBehind ?? '',
+          totalDriverPoints: safeNumber(bryce.totalDriverPoints),
+          totalEntrantPoints: safeNumber(bryce.totalEntrantPoints),
+          runningDriverPoints: safeNumber(bryce.runningDriverPoints),
           radiofrequency: bryceProfile?.radiofrequency ?? ''
         }
       : null,
@@ -254,15 +263,50 @@ const openDb = () => {
       live_gap TEXT,
       diff TEXT,
       best_lap_time TEXT,
+      best_lap TEXT,
       last_lap_time TEXT,
       best_speed TEXT,
       last_speed TEXT,
+      average_speed TEXT,
       passes INTEGER,
       passed INTEGER,
       pit_stops INTEGER,
+      last_pit_lap INTEGER,
+      since_pit_lap INTEGER,
+      tire TEXT,
+      overtake_remain INTEGER,
+      overtake_active TEXT,
+      lap_distance REAL,
+      live_diff_ahead TEXT,
+      live_diff_behind TEXT,
+      total_driver_points INTEGER,
+      total_entrant_points INTEGER,
+      running_driver_points INTEGER,
+      radiofrequency TEXT,
       FOREIGN KEY(snapshot_id) REFERENCES race_snapshots(id)
     );
   `);
+  const existingColumns = new Set(db.prepare('PRAGMA table_info(bryce_samples)').all().map((column) => column.name));
+  for (const [column, definition] of [
+    ['best_lap', 'TEXT'],
+    ['average_speed', 'TEXT'],
+    ['last_pit_lap', 'INTEGER'],
+    ['since_pit_lap', 'INTEGER'],
+    ['tire', 'TEXT'],
+    ['overtake_remain', 'INTEGER'],
+    ['overtake_active', 'TEXT'],
+    ['lap_distance', 'REAL'],
+    ['live_diff_ahead', 'TEXT'],
+    ['live_diff_behind', 'TEXT'],
+    ['total_driver_points', 'INTEGER'],
+    ['total_entrant_points', 'INTEGER'],
+    ['running_driver_points', 'INTEGER'],
+    ['radiofrequency', 'TEXT']
+  ]) {
+    if (!existingColumns.has(column)) {
+      db.exec(`ALTER TABLE bryce_samples ADD COLUMN ${column} ${definition}`);
+    }
+  }
   return db;
 };
 
@@ -286,9 +330,12 @@ const writeStorage = async (summary, results) => {
     const insertBryce = db.prepare(`
       INSERT INTO bryce_samples (
         snapshot_id, checked_at, session_key, rank, live_rank, start_position, laps, status, comment, gap,
-        live_gap, diff, best_lap_time, last_lap_time, best_speed, last_speed, passes, passed, pit_stops
+        live_gap, diff, best_lap_time, best_lap, last_lap_time, best_speed, last_speed, average_speed,
+        passes, passed, pit_stops, last_pit_lap, since_pit_lap, tire, overtake_remain, overtake_active,
+        lap_distance, live_diff_ahead, live_diff_behind, total_driver_points, total_entrant_points,
+        running_driver_points, radiofrequency
       )
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
 
     const rawPayload = {
@@ -334,12 +381,26 @@ const writeStorage = async (summary, results) => {
         summary.bryce.liveGap,
         summary.bryce.diff,
         summary.bryce.bestLapTime,
+        summary.bryce.bestLap,
         summary.bryce.lastLapTime,
         summary.bryce.bestSpeed,
         summary.bryce.lastSpeed,
+        summary.bryce.averageSpeed,
         summary.bryce.passes,
         summary.bryce.passed,
-        summary.bryce.pitStops
+        summary.bryce.pitStops,
+        summary.bryce.lastPitLap,
+        summary.bryce.sincePitLap,
+        summary.bryce.tire,
+        summary.bryce.overtakeRemain,
+        summary.bryce.overtakeActive,
+        summary.bryce.lapDistance,
+        summary.bryce.liveDiffAhead,
+        summary.bryce.liveDiffBehind,
+        summary.bryce.totalDriverPoints,
+        summary.bryce.totalEntrantPoints,
+        summary.bryce.runningDriverPoints,
+        summary.bryce.radiofrequency
       );
     }
   } finally {
@@ -388,15 +449,20 @@ process.on('SIGINT', () => {
   stopped = true;
 });
 
-await pollOnce();
-
-if (!once) {
-  let count = 1;
+if (once) {
+  await pollOnce();
+} else {
+  let count = 0;
   while (!stopped && (iterations === 0 || count < iterations)) {
-    await new Promise((resolve) => setTimeout(resolve, intervalMs));
+    const startedAt = Date.now();
     if (!stopped) {
       await pollOnce();
       count += 1;
+    }
+    const elapsedMs = Date.now() - startedAt;
+    const sleepMs = Math.max(0, intervalMs - elapsedMs);
+    if (!stopped && (iterations === 0 || count < iterations) && sleepMs > 0) {
+      await new Promise((resolve) => setTimeout(resolve, sleepMs));
     }
   }
 }

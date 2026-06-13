@@ -43,10 +43,12 @@ Minimum API contract:
 - `GET /api/session`: event name, session type, flag, lap, total laps, track type, updated timestamp, stale status.
 - `GET /api/bryce`: car #9 row, position, start, gap, last lap, best lap, speed, status, comment, source confidence.
 - `GET /api/timing`: compact leaderboard rows, sorted order, deltas, pit/status markers.
-- `GET /api/sources`: Race Control, driver feed, config, schedule, track activity, history, broadcast route, POV route, radio route, last checked, error notes.
+- `GET /api/sources`: Race Control, driver feed, config, schedule, track activity, source role/cadence, proxy paths, history, broadcast route, POV route, radio route, last checked, error notes.
+- `GET /api/weather/live?trackId=...`: current NWS observation, forecast, alerts, station/grid metadata, source state, and probe proof.
+- `GET /api/weather/upcoming`: remaining 2026 INDY NXT event weather plus forecast-readiness labels.
 - `GET /api/history/bryce`: full season points, starts, finishes, best finish, top 5s, top 10s, teammate comparisons, official/provisional source labels, and schema/freshness metadata.
 - `GET /api/history/bryce?compact=1`: compact season widgets for tvOS and iPhone, including latest race, track-type splits, best gain/loss, best-lap-rank signal, and CGR teammate benchmark.
-- `POST /api/pov-proof`: live POV state, source, device, timestamp, evidence note, 60-second proof result.
+- `POST /api/pov-proof`: legacy/operator proof state only. Active clients should not imply live POV is available.
 
 Implementation shape:
 
@@ -54,7 +56,7 @@ Implementation shape:
 - Add a local or hosted Node service that owns polling, caching, stale detection, feed normalization, and source logging.
 - Store season and session snapshots in SQLite or another small durable store.
 - Generate one shared schema file for web and mobile clients so `RaceSnapshot`, source probes, and history rows stay aligned. tvOS should only be considered after the deferred status changes.
-- Have tvOS poll the normalized BryceCast API every 10 to 15 seconds during live sessions and back off when cold.
+- Have tvOS consume the same normalized BryceCast API as web/mobile. The current race-day proof target is 1-second polling for primary live feeds, with backoff when cold, stale, or wrong-series.
 - Treat direct INDYCAR/Race Control access from tvOS as a fallback only. The service should absorb CORS differences, API drift, rate limits, and provisional-versus-official labeling.
 
 ## Alternatives

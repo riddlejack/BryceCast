@@ -122,7 +122,8 @@ const routeSourceLabel: Record<BroadcastSessionRoute['source'], string> = {
   trackactivity: 'Track activity',
   schedule: 'Schedule',
   config: 'Config fallback',
-  seed: 'Seed fallback'
+  seed: 'Seed fallback',
+  unavailable: 'Route unavailable'
 };
 
 const sourceModeCopy = (snapshot: RaceSnapshot) => {
@@ -234,7 +235,7 @@ const getRaceReadiness = ({
   const audioGate = audioGateCopy(audioState);
   const raceLogAge = ageSecondsFrom(raceLog?.checkedAt);
   const catalogAge = ageSecondsFrom(onboardCatalog?.checkedAt);
-  const routeIsOperational = Boolean(snapshot.broadcastRoute.primaryVideo) && snapshot.broadcastRoute.source !== 'seed';
+  const routeIsOperational = Boolean(snapshot.broadcastRoute.primaryVideo) && !['seed', 'unavailable'].includes(snapshot.broadcastRoute.source);
   const loggerTone: ReadinessTone = !raceLog ? 'red' : raceLogAge !== null && raceLogAge < 120 ? 'green' : 'amber';
   const timingTone: ReadinessTone = snapshot.sourceState === 'live' ? 'green' : snapshot.sourceState === 'cold' || snapshot.sourceState === 'stale' ? 'amber' : 'red';
   const catalogTone: ReadinessTone = !onboardCatalog ? 'amber' : catalogAge !== null && catalogAge < 1800 ? 'green' : 'amber';
