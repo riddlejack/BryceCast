@@ -709,7 +709,7 @@
     {
       "id": "debrief_section_strengths",
       "surface": "race_debrief",
-      "priority": "v1",
+      "priority": "v1.5",
       "stakeholder": [
         "Bryce",
         "team/engineering"
@@ -739,17 +739,17 @@
         "sourceState",
         "caveat"
       ],
-      "availability": "partial",
+      "availability": "source_bounded",
       "confidence": "medium",
       "caveatBehavior": {
         "gapIds": [
           "gap_indy_nxt_qualifying_lap_reports"
         ],
-        "copy": "144/145 comparable INDY NXT sessions have both reports; session_indy_nxt_2024_6325 is source-broken.",
+        "copy": "Useful as a v1.5 drilldown only. The section artifacts still need denominator QA and display filtering before headline claims; session_indy_nxt_2024_6325 remains source-broken.",
         "drawer": true
       },
       "recommendedVisualizationFamily": "ranked bars or segment heatmap",
-      "fallbackState": "If session is the corrupt holdout, show unavailable with source-broken gap.",
+      "fallbackState": "If denominator QA/display filtering is not implemented, hide section strengths from v1 debrief and keep the source-bounded caveat in the drawer.",
       "implementationOwner": "historical analytics"
     },
     {

@@ -158,6 +158,15 @@ const sourceState = (heartbeat) => {
   return flags.includes('COLD') || flags.includes('CHECKER') || flags.includes('COMPLETE') || complete ? 'cold' : 'live';
 };
 
+const isActiveTimingHeartbeat = (heartbeat) => {
+  if (sourceState(heartbeat) !== 'live') return false;
+  const flags = `${heartbeat?.currentFlag ?? ''} ${heartbeat?.SessionStatus ?? ''}`.toUpperCase();
+  if (flags.includes('GREEN') || flags.includes('YELLOW')) return true;
+  if (flags.includes('RED')) return false;
+  const lap = safeNumber(heartbeat?.lapNumber);
+  return lap !== null && lap > 0;
+};
+
 const historyPoints = (payload) => (Array.isArray(payload?.points) ? payload.points : []);
 
 const isOfficialHistoryPoint = (point) => String(point?.source ?? '').toLowerCase().includes('official');
@@ -1166,6 +1175,8 @@ const hasNumericSourceValue = (value) => value !== null && value !== undefined &
 
 export const compactTimingRowForReadiness = (row, heartbeat = null) => ({
   no: row?.no ?? '',
+  firstName: row?.firstName ?? '',
+  lastName: row?.lastName ?? '',
   name: `${row?.firstName ?? ''} ${row?.lastName ?? ''}`.trim(),
   team: row?.team ?? '',
   rank: safeNumber(row?.rank),
@@ -1449,6 +1460,7 @@ export const buildReadinessPayloadFromParts = ({
   const timingRowsArray = asArray(timingRows);
   const hasRows = timingRowsArray.length > 0;
   const seriesOk = isIndyNxtTimingHeartbeat(heartbeat);
+  const activeTiming = isActiveTimingHeartbeat(heartbeat);
   const timingCheckedAgeSeconds = timingEndpoint?.checkedAgeSeconds ?? null;
   const timingModifiedAgeSeconds = timingEndpoint?.modifiedAgeSeconds ?? null;
   const timingPayloadStale = timingModifiedAgeSeconds !== null && timingModifiedAgeSeconds > liveTimingPayloadMaxAgeSeconds;
@@ -1482,6 +1494,9 @@ export const buildReadinessPayloadFromParts = ({
   } else if (sourceStateValue === 'cold') {
     state = 'pre_session';
     reason = 'Timing feed is cold; live Bryce race mode is not active yet.';
+  } else if (bryce && seriesOk && !activeTiming) {
+    state = 'pre_session';
+    reason = 'Bryce timing row is present, but Race Control is not in an active green/yellow or lap-progress state yet.';
   } else if (bryce && seriesOk && enrichmentDegraded) {
     state = 'degraded';
     reason = 'Core Bryce timing is usable, but one or more enrichment sources are partial.';

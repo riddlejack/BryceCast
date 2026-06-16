@@ -143,6 +143,16 @@ assert.equal(ready.points.bryce.historicalRank, 14);
 assert.equal(ready.points.officialModelAvailable, false);
 assert.equal(ready.liveTiming.rows[0].passed, null, 'missing numeric source values stay null');
 assert.equal(ready.liveTiming.rows[0].passes, 0, 'source-present zero stays zero');
+assert.equal(ready.liveTiming.rows[0].firstName, 'Bryce', 'compact timing rows preserve firstName for UI contracts');
+assert.equal(ready.liveTiming.rows[0].lastName, 'Aron', 'compact timing rows preserve lastName for UI contracts');
+
+const nonActiveSession = buildReadinessPayloadFromParts(
+  baseParts({
+    heartbeat: heartbeat({ currentFlag: 'RED', SessionStatus: 'Red', lapNumber: '0' })
+  })
+);
+assert.equal(nonActiveSession.state, 'pre_session', 'guarded Bryce rows should not enter ready until timing is active-running');
+assert.equal(nonActiveSession.points.mode, 'historical_fallback');
 
 const wrongSeries = buildReadinessPayloadFromParts(
   baseParts({
@@ -244,4 +254,4 @@ assert.equal(compactNulls.bestSpeed, null);
 assert.equal(compactNulls.pitStops, 0);
 assert.equal(compactNulls.runningDriverPoints, null);
 
-console.log(JSON.stringify({ ok: true, assertions: 38 }, null, 2));
+console.log(JSON.stringify({ ok: true, assertions: 42 }, null, 2));

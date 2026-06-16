@@ -64,7 +64,6 @@ export const analyticsSurfaceMetricIds: Record<AnalyticsSurface, string[]> = {
     'debrief_header',
     'debrief_qualifying_conversion',
     'debrief_lap_position_story',
-    'debrief_section_strengths',
     'debrief_incidents_penalties',
     'debrief_team_context',
     'debrief_source_drawer'
