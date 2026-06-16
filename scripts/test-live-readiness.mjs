@@ -253,8 +253,19 @@ const sameSeriesNoBryce = buildReadinessPayloadFromParts(
     sourceReport: sourceReport('wrong_session')
   })
 );
-assert.equal(sameSeriesNoBryce.state, 'pre_session', 'INDY NXT timing without Bryce should not be classified as wrong_series');
+assert.equal(sameSeriesNoBryce.state, 'blocked', 'active INDY NXT timing without Bryce should block live display');
 assert.equal(sameSeriesNoBryce.bryce.identityGuard.seriesOk, true);
+
+const coldSameSeriesNoBryce = buildReadinessPayloadFromParts(
+  baseParts({
+    heartbeat: heartbeat({ currentFlag: 'RED', SessionStatus: 'Red', lapNumber: '0' }),
+    timingRows: [timingRow({ no: '10', DriverID: '999', firstName: 'Other', lastName: 'Driver' })],
+    bryce: null,
+    sourceReport: sourceReport('wrong_session')
+  })
+);
+assert.equal(coldSameSeriesNoBryce.state, 'pre_session', 'cold INDY NXT timing without Bryce remains a pre-session state');
+assert.equal(coldSameSeriesNoBryce.bryce.identityGuard.seriesOk, true);
 
 const compactNulls = compactTimingRowForReadiness(
   timingRow({
@@ -274,4 +285,4 @@ assert.equal(compactNulls.bestSpeed, null);
 assert.equal(compactNulls.pitStops, 0);
 assert.equal(compactNulls.runningDriverPoints, null);
 
-console.log(JSON.stringify({ ok: true, assertions: 45 }, null, 2));
+console.log(JSON.stringify({ ok: true, assertions: 47 }, null, 2));

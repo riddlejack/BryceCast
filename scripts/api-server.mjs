@@ -1488,15 +1488,18 @@ export const buildReadinessPayloadFromParts = ({
   } else if (!seriesOk && heartbeat) {
     state = 'wrong_series';
     reason = describeBryceMiss(heartbeat, timingRowsArray);
-  } else if (!bryce && heartbeat) {
-    state = 'pre_session';
-    reason = 'INDY NXT session context exists, but Bryce is not in a fresh live timing row yet.';
   } else if (sourceStateValue === 'stale' || timingPayloadStale || (timingCheckedAgeSeconds !== null && timingCheckedAgeSeconds > 10)) {
     state = 'stale';
     reason = 'Timing data is too old for live Bryce display.';
   } else if (sourceStateValue === 'cold') {
     state = 'pre_session';
     reason = 'Timing feed is cold; live Bryce race mode is not active yet.';
+  } else if (!bryce && heartbeat && seriesOk && activeTiming) {
+    state = 'blocked';
+    reason = 'Active INDY NXT timing is available, but no guarded Bryce car #9 row is present.';
+  } else if (!bryce && heartbeat) {
+    state = 'pre_session';
+    reason = 'INDY NXT session context exists, but Bryce is not in a fresh live timing row yet.';
   } else if (bryce && seriesOk && !activeTiming) {
     state = 'pre_session';
     reason = 'Bryce timing row is present, but Race Control is not in an active green/yellow or lap-progress state yet.';

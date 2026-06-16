@@ -262,11 +262,11 @@
       "dataSources": [
         {
           "kind": "api",
-          "path": "/api/sources"
+          "path": "/api/readiness"
         },
         {
           "kind": "api",
-          "path": "/api/snapshot"
+          "path": "/api/sources"
         }
       ],
       "grain": [
@@ -274,29 +274,28 @@
         "session"
       ],
       "requiredFields": [
-        "endpoints[].id",
-        "endpoints[].state",
-        "endpoints[].readinessState",
-        "endpoints[].freshnessLabel",
-        "endpoints[].checkedAgeSeconds",
-        "endpoints[].modifiedAgeSeconds",
-        "heartbeat.Series",
-        "heartbeat.EventID",
-        "heartbeat.EventSessionID",
-        "bryce.DriverID",
-        "bryce.no",
-        "bryce.firstName",
-        "bryce.lastName"
+        "state",
+        "severity",
+        "reason",
+        "gates[]",
+        "sources.endpoints[]",
+        "raceWeekend.heartbeat",
+        "liveTiming.heartbeat",
+        "bryce.identityGuard",
+        "bryce.bryce.driverId",
+        "bryce.bryce.no",
+        "bryce.bryce.firstName",
+        "bryce.bryce.lastName"
       ],
       "availability": "live_only",
       "confidence": "medium",
       "caveatBehavior": {
         "gapIds": [],
-        "copy": "Timing endpoint can point to top-series; require INDY NXT heartbeat plus car 9 and DriverID 2143 or exact Bryce identity.",
+        "copy": "Timing endpoint can point to top-series; require /api/readiness to prove INDY NXT heartbeat plus car 9 and DriverID 2143 or exact Bryce identity.",
         "drawer": true
       },
       "recommendedVisualizationFamily": "source health banner + drawer",
-      "fallbackState": "If wrong_session, show schedule/watch context and latest archived sample only as stale.",
+      "fallbackState": "If wrong_series, blocked, or stale, show schedule/watch context and latest archived sample only as stale.",
       "implementationOwner": "live API"
     },
     {
@@ -465,19 +464,15 @@
       "dataSources": [
         {
           "kind": "api",
-          "path": "/api/bryce"
+          "path": "/api/readiness"
         },
         {
           "kind": "api",
-          "path": "/api/snapshot"
-        },
-        {
-          "kind": "api",
-          "path": "/api/timing"
+          "path": "/api/timing (underlying provenance only)"
         },
         {
           "kind": "upstream",
-          "path": "https://indycar.blob.core.windows.net/racecontrol/timingscoring-ris.json"
+          "path": "https://indycar.blob.core.windows.net/racecontrol/timingscoring-ris.json (underlying provenance only)"
         }
       ],
       "grain": [
@@ -485,24 +480,26 @@
         "session"
       ],
       "requiredFields": [
-        "runningDriverPoints",
-        "totalDriverPoints",
-        "totalEntrantPoints",
-        "rank",
-        "liveRank",
-        "status",
-        "EventSessionID",
-        "sourceState"
+        "points.mode",
+        "points.source",
+        "points.bryce.runningDriverPoints",
+        "points.bryce.totalDriverPoints",
+        "points.bryce.totalEntrantPoints",
+        "points.bryce.historicalDriverPoints",
+        "points.fieldCoverage",
+        "points.warnings",
+        "state",
+        "liveTiming.heartbeat.EventSessionID"
       ],
       "availability": "live_only",
       "confidence": "medium",
       "caveatBehavior": {
         "gapIds": [],
-        "copy": "Required v1 card. Display only Race Control point fields populated live; reconcile against official standings after session. Do not fabricate from local formula.",
+        "copy": "Required v1 card. Display only the /api/readiness.points state; reconcile against official standings after session. Do not fabricate from local formula or promote raw timing fields outside the readiness reducer.",
         "drawer": true
       },
       "recommendedVisualizationFamily": "points delta card + compact field context",
-      "fallbackState": "If point fields are null, missing, or stale, show Live points not populated by Race Control and keep historical championship context separate.",
+      "fallbackState": "If point fields are null, missing, sparse, or stale, show the readiness fallback/warning and keep historical championship context separate.",
       "implementationOwner": "live API"
     },
     {
