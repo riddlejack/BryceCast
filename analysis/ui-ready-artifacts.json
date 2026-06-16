@@ -126,11 +126,9 @@
     }
   ],
   "missingBackendContracts": [
-    "Live readiness state, wrong-series guard, stale timing state, Bryce-row identity guard, and replay join keys.",
-    "Live points projection API/artifact or explicit v1 deferral.",
-    "Future weather forecast/current-weather source with source state.",
-    "Manual review state for race debrief archetype labels.",
-    "Section result denominator display/suppression rule."
+    "Remaining live-readiness hardening fixtures for pre_session, degraded, stale, blocked, weather partial, replay states, and no-Bryce archived fallback.",
+    "Post-official-results points reconciliation report path.",
+    "Timezone-normalized schedule countdown semantics for Race Control schedule and track-activity strings."
   ],
   "roadAmericaPrep": {
     "artifact": "analysis/indy-nxt-discovery/output/deep_dive/tables/future_weekend_prep_inputs.csv",

@@ -22,6 +22,7 @@ npm run serve:api
 | Route | Purpose |
 | --- | --- |
 | `GET /api/health` | Service, storage, static app, and local file availability. |
+| `GET /api/readiness` | Product-level live readiness wrapper with race-weekend, timing, Bryce, points, weather, replay, source, and gate state. Use this as the live-mode UI gate. |
 | `GET /api/snapshot` | Full normalized `RaceSnapshot` for the web app. |
 | `GET /api/session` | Compact event, session, flag, lap, track, source, and broadcast route. |
 | `GET /api/bryce` | Bryce #9 timing row, driver profile, radio frequency, and route context. |
@@ -44,7 +45,7 @@ The service also proxies known live-source paths server-side for compatibility, 
 
 ## Analytics Contract
 
-The API can currently power analytics from timing rows, official history, source probes, live weather, upcoming-event weather readiness, and local archive rows.
+The API can currently power analytics from timing rows, official history, source probes, live weather, upcoming-event weather readiness, local archive rows, and the product-level `/api/readiness` state.
 
 Source-backed live fields include:
 
@@ -55,8 +56,9 @@ Source-backed live fields include:
 - Timing tower: every timing row sorted by rank with compact Race Control row fields, including running/total points, live diff ahead/behind, lap distance, tire, overtake, pit, pass, pace, and status fields when present.
 - Sources: endpoint status, byte count, Last-Modified, ETag, checked age, modified age, series, cadence class, source role, proxy path, timeout/error state, and notes. Upstream source probes and the source-audit CLI use a bounded 5-second timeout by default.
 - Source readiness: `/api/sources` exposes `sourceState` and `readinessState`. Candidate/reference feeds cannot become app-available from HTTP success alone. The stale NTT prediction blob reports payload datetime/age and stays `candidate_unavailable`; top-series guard feeds stay `reference_only`; global timing reports `wrong_session` unless the shared live-source predicate sees an INDY NXT heartbeat and Bryce as car `9` with `DriverID=2143` or exact `Bryce Aron` identity; the NXT driver feed reports `profile_unavailable` or `profile_partial` when profile/radio enrichment is incomplete.
+- Product readiness: `/api/readiness` consumes timing, source health, compact history, replay, and weather into `ready`, `pre_session`, `degraded`, `wrong_series`, `stale`, or `blocked`. Current off-session smoke should report `wrong_series` when Race Control points at top-series car `9`; that is a successful guard, not a Bryce data failure.
 - Proxied Race Control/reference/candidate JSON routes use the same bounded 5-second upstream timeout and return a 502 error instead of hanging a client request indefinitely.
-- Weather: NWS current observation, hourly forecast, daily forecast, active alerts, station/grid metadata, source state, forecast-readiness label, cache state, and probe proof. Long-range event forecasts remain unavailable until the NWS forecast window opens. Individual NWS leg failures should return `sourceState: partial`, not an API 500. Operator refreshes force cache refresh but preserve in-flight request reuse. Upcoming-event weather uses bounded concurrent track refreshes and per-track deadline fallbacks.
+- Weather: NWS current observation, hourly forecast, daily forecast, active alerts, station/grid metadata, source state, forecast-readiness label, cache state, and probe proof. Long-range event forecasts remain unavailable until the NWS forecast window opens. Individual NWS leg failures should return `sourceState: partial`, not an API 500. Operator refreshes force cache refresh but preserve in-flight request reuse. Upcoming-event weather uses bounded concurrent track refreshes and per-track deadline fallbacks. `/api/readiness` selects weather from the active INDY NXT heartbeat when it can match source metadata, otherwise from the next upcoming INDY NXT event in the career dataset.
 - Missing NWS observation-station, hourly-forecast, or daily-forecast URLs are recorded as failed probes so weather cannot be marked `live` while silently omitting current observation or forecast legs. HTTP 200 is not sufficient for weather readiness; JSON parse failures and schema-empty observation/hourly/daily payloads are failed probes.
 - History: official/provisional season rows, track-type splits, qualifying-to-finish deltas, best-lap-rank signal, points/standing, and teammate benchmark.
 - Replay archive: sampled Bryce rows over time from SQLite after `npm run poll:race:watch`. Watch mode compensates for fetch/write elapsed time, and optional live timing numbers preserve missing values as `null` from poller write through replay read. Expanded fields persisted for new samples include best-lap number, average speed, pit recency, tire/overtake, lap distance, live diff ahead/behind, running/total points, and radio metadata.

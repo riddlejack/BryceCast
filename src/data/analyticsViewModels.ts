@@ -100,7 +100,7 @@ export const buildRaceWeekendPrepState = (input: BuildAnalyticsViewModelsInput):
     sourceDrawer: buildSourceDrawer(items),
     artifactInputs: collectProvenance(items, 'artifact'),
     liveInputs: collectProvenance(items, 'api'),
-    deferredBackendFields: ['timezone-normalized schedule countdown', 'official series weather', '/api/readiness live gate']
+    deferredBackendFields: ['timezone-normalized schedule countdown', 'official series weather']
   };
 };
 
@@ -116,9 +116,8 @@ export const buildLiveRaceCompanionState = (input: BuildAnalyticsViewModelsInput
     historicalCareer: buildHistoricalCareerContext(input.seasonHistory ?? null),
     replay: input.replay ?? null,
     blockedUntilReadiness: [
-      '/api/readiness product gate',
-      'wrong-series versus pre-session reducer',
-      'stale timing age thresholds',
+      'green-flag INDY NXT live-session proof',
+      'remaining pre_session/degraded/stale/blocked fixture coverage',
       'live point-field coverage and reconciliation status'
     ]
   };
@@ -161,7 +160,7 @@ export const buildSourceOpsState = (input: BuildAnalyticsViewModelsInput): Sourc
     metrics: buildMetricMap(items),
     sourceDrawer: buildSourceDrawer(items),
     missingBackendContracts: input.uiReadyArtifacts?.missingBackendContracts ?? [
-      'Formal /api/readiness product wrapper is still pending for UI gating.'
+      'Remaining readiness hardening fixtures are pending for pre_session, degraded, stale, blocked, weather partial, replay states, and no-Bryce archived fallback.'
     ],
     requiredReadinessRoute: '/api/readiness'
   };

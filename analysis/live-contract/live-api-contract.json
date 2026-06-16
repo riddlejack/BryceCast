@@ -6,13 +6,13 @@
     {
       "path": "/api/readiness",
       "state": "ReadinessState",
-      "status": "required_new_or_embedded",
+      "status": "implemented",
       "purpose": "Single product-level race-day readiness reducer for UI gating."
     },
     {
       "path": "/api/session",
       "state": "RaceWeekendState",
-      "status": "existing_needs_readiness_wrapper",
+      "status": "existing_wrapped_by_readiness",
       "purpose": "Event, session, flag, lap, route, and pre-session context."
     },
     {
@@ -24,14 +24,14 @@
     {
       "path": "/api/bryce",
       "state": "BryceLiveState",
-      "status": "existing_needs_readiness_wrapper",
+      "status": "existing_wrapped_by_readiness",
       "purpose": "Bryce timing row, identity/profile, and route context."
     },
     {
-      "path": "/api/weather/live?trackId=track_road_america",
+      "path": "/api/weather/live?trackId=...",
       "state": "WeatherState",
       "status": "existing",
-      "purpose": "NWS venue observation, forecast, alerts, station/grid, probes, and cache state."
+      "purpose": "NWS venue observation, forecast, alerts, station/grid, probes, and cache state for a requested track; /api/readiness selects active/upcoming INDY NXT track metadata."
     },
     {
       "path": "/api/replay/bryce",
@@ -269,10 +269,7 @@
   ],
   "backlog": {
     "mustHaveBeforeUi": [
-      "Expose /api/readiness or equivalent readiness wrapper.",
-      "Implement product readiness reducer tests.",
-      "Implement PointsProjectionState builder and fallback modes.",
-      "Add smoke coverage for readiness, wrong-series, stale, null-vs-zero, weather partial, replay, and points fallback.",
+      "Add remaining readiness reducer fixtures for pre_session, degraded, stale, blocked, weather partial, replay states, and no-Bryce archived fallback.",
       "Add post-official-results reconciliation report path."
     ],
     "canHappenDuringUi": [
@@ -287,6 +284,12 @@
       "Prove live point-field availability.",
       "Prove or reject lapDistance, tire, and overtake fields.",
       "Reconcile official post-race points."
+    ],
+    "completedBeforeUi": [
+      "Expose /api/readiness readiness wrapper.",
+      "Implement first-pass product readiness reducer tests for ready, wrong_series, null-vs-zero, and points fallback modes.",
+      "Implement PointsProjectionState builder and fallback modes.",
+      "Add smoke coverage for /api/readiness and wrong-series off-session behavior."
     ]
   }
 }

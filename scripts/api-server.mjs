@@ -8,6 +8,7 @@ import { bryceCarNumber, isBryceProfile, isBryceTimingRow, isIndyNxtTimingHeartb
 import {
   buildUpcomingIndyNxtWeatherReport,
   fetchCachedLiveWeatherForTrack,
+  loadUpcomingIndyNxtEvents,
   loadTrackMetadata
 } from './live-weather-service.mjs';
 
@@ -1552,9 +1553,20 @@ export const buildReadinessPayloadFromParts = ({
   };
 };
 
-const fetchReadinessWeather = async (checkedAt) => {
+const pickReadinessWeatherTrack = async (heartbeat = null) => {
+  const upcomingEvents = await loadUpcomingIndyNxtEvents();
+  const heartbeatEventId = String(heartbeat?.EventID ?? '');
+  const heartbeatEventName = String(heartbeat?.eventName ?? '').toLowerCase();
+  const matchedEvent =
+    upcomingEvents.find((event) => heartbeatEventId && String(event.officialEventId ?? '') === heartbeatEventId) ??
+    upcomingEvents.find((event) => heartbeatEventName && String(event.name ?? '').toLowerCase() === heartbeatEventName) ??
+    upcomingEvents.find((event) => heartbeatEventName && heartbeatEventName.includes(String(event.track?.name ?? '').toLowerCase()));
+  return matchedEvent?.track ?? upcomingEvents[0]?.track ?? (await loadTrackMetadata('track_road_america'));
+};
+
+const fetchReadinessWeather = async (checkedAt, heartbeat = null) => {
   try {
-    const track = await loadTrackMetadata('track_road_america');
+    const track = await pickReadinessWeatherTrack(heartbeat);
     return await fetchCachedLiveWeatherForTrack(track, {});
   } catch (error) {
     return {
@@ -1570,12 +1582,11 @@ const fetchReadinessWeather = async (checkedAt) => {
 
 const buildReadinessPayload = async () => {
   const checkedAt = new Date().toISOString();
-  const [results, sourceReportBase, historyPayload, replay, weather] = await Promise.all([
+  const [results, sourceReportBase, historyPayload, replay] = await Promise.all([
     fetchRaceControl(),
     buildSourceReport(),
     readJsonFile(historyPath),
-    Promise.resolve(queryReplay({ limit: 5 })),
-    fetchReadinessWeather(checkedAt)
+    Promise.resolve(queryReplay({ limit: 5 }))
   ]);
   const sourceReport = {
     ...sourceReportBase,
@@ -1597,6 +1608,7 @@ const buildReadinessPayload = async () => {
   const timingRows = Array.isArray(timing?.Item) ? timing.Item : [];
   const bryce = timingRows.find((row) => isBryceTimingRow(row, heartbeat)) ?? null;
   const bryceProfile = (Array.isArray(drivers) ? drivers.find(isBryceProfile) : null) ?? fallbackBryceProfile(bryce);
+  const weather = await fetchReadinessWeather(checkedAt, heartbeat);
   const broadcastRoute = heartbeat
     ? buildTrackActivityRoute(trackActivity, heartbeat) ?? buildScheduleRoute(schedule, heartbeat) ?? buildConfigRoute(config, heartbeat) ?? buildUnavailableRoute(heartbeat)
     : null;

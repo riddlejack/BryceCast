@@ -12,9 +12,11 @@ Do not build v1 around live GPS, moving-dot track position, sector timing, tire 
 
 ## Current Evidence
 
+- `GET /api/readiness` is implemented as an additive product-level wrapper for live UI gating.
 - `GET /api/snapshot`, `/api/session`, `/api/bryce`, and `/api/timing` already normalize Race Control timing and block only on the critical `timing` feed.
 - `GET /api/sources` already reports endpoint-level `sourceState`, `readinessState`, freshness, role, and semantic summaries.
-- `GET /api/weather/live?trackId=track_road_america` and `/api/weather/upcoming` already expose NWS weather with `live`, `partial`, or `error` behavior.
+- `GET /api/weather/live?trackId=...` and `/api/weather/upcoming` already expose NWS weather with `live`, `partial`, or `error` behavior.
+- `/api/readiness` selects its weather track from the active INDY NXT heartbeat when source metadata can be matched, otherwise from the next upcoming INDY NXT event, with Road America only as a final fallback.
 - `GET /api/replay/bryce` already exposes archive states: `missing`, `empty`, `tiny`, `ready`.
 - `TimingRow` already carries `runningDriverPoints`, `totalDriverPoints`, and `totalEntrantPoints` when Race Control provides them.
 - `public/data/history-bryce.json` is present and currently records Bryce with 131 points and rank 14 after 8 2026 rows, sourced from official INDY NXT results plus provisional timing when applicable.
@@ -27,10 +29,10 @@ The UI should treat these as the race-day backend boundary.
 
 | Route | Product state | Use | Required before UI |
 | --- | --- | --- | --- |
-| `GET /api/readiness` | `ReadinessState` | Single room/product status reducer for UI gating. | Yes, or equivalent embedded `readiness` object on `/api/snapshot`, `/api/session`, and `/api/bryce`. |
-| `GET /api/session` | `RaceWeekendState` | Event, session, lap, flag, route, and pre-session context. | Existing route, needs readiness wrapper. |
+| `GET /api/readiness` | `ReadinessState` | Single room/product status reducer for UI gating. | Implemented. |
+| `GET /api/session` | `RaceWeekendState` | Event, session, lap, flag, route, and pre-session context. | Existing route, wrapped by `/api/readiness` for product state. |
 | `GET /api/timing` | `LiveTimingState` | Timing tower rows, Bryce highlight, point fields, gaps, pace, pit/pass fields. | Existing route, needs field freshness/null rules documented in tests. |
-| `GET /api/bryce` | `BryceLiveState` | Bryce row, identity/profile, radio frequency metadata, and route context. | Existing route, needs readiness wrapper. |
+| `GET /api/bryce` | `BryceLiveState` | Bryce row, identity/profile, radio frequency metadata, and route context. | Existing route, wrapped by `/api/readiness` for product state. |
 | `GET /api/weather/live?trackId=...` | `WeatherState` | Venue observation, forecast, alerts, station/grid, cache/probes. | Existing route. |
 | `GET /api/replay/bryce?limit=...` | `ReplayState` | Local archive replay and post-session summary. | Existing route. |
 | `GET /api/sources` | `SourceHealthState` | Operator/source diagnostics and product readiness inputs. | Existing route, keep endpoint-level states separate from product-level states. |
@@ -45,7 +47,7 @@ Product readiness states are intentionally narrower than endpoint-level `readine
 | State | Meaning | UI behavior | Primary trigger |
 | --- | --- | --- | --- |
 | `ready` | Live INDY NXT timing is fresh, Bryce row is present, and core timing route is usable. | Enable live race mode and 1-second UI polling. | Timing heartbeat is INDY NXT, car `9` is Bryce by `DriverID=2143` or exact name, and timing freshness is within live threshold. |
-| `pre_session` | The weekend/session route is known, but the active timing feed is not a fresh Bryce NXT session yet. | Show schedule, route, weather, historical prep, source countdown, and archive controls. | Track activity or schedule has upcoming/current Road America NXT session; timing is cold, absent, or not yet green. |
+| `pre_session` | The weekend/session route is known, but the active timing feed is not a fresh Bryce NXT session yet. | Show schedule, route, weather, historical prep, source countdown, and archive controls. | Track activity, schedule, or upcoming-event metadata has current/next NXT session context; timing is cold, absent, or not yet green. |
 | `degraded` | Core live timing is usable, but one or more enrichments are partial. | Show live race mode with visible amber source labels and hide affected widgets. | Timing/Bryce guard passes, but driver profile, route, weather leg, archive writer, or history fallback is partial/stale. |
 | `wrong_series` | The global Race Control timing feed is live/reachable but not the Bryce INDY NXT session. | Block live Bryce labels; show source warning, next NXT session, and last archived Bryce sample if available. | Timing feed lacks Bryce row or heartbeat is top-series/non-NXT. |
 | `stale` | Last usable live data is too old for live display. | Freeze values, mark stale, stop live deltas, keep replay/source diagnostics visible. | Timing `checkedAgeSeconds` or snapshot age exceeds freshness threshold, or only archived fallback is available. |
@@ -309,19 +311,27 @@ Cold/post-session proof is not enough. A live-session pass requires:
 - Payload semantics: fresh timing payloads, changing timing hashes or heartbeat/timing fields during running, Bryce row present.
 - Archive: poll-start-to-poll-start cadence preserved closely enough to reconstruct race changes.
 
-## Tests Needed
+## Tests
 
-Must add before UI implementation:
+Implemented before UI implementation:
 
-- Product readiness reducer tests for `ready`, `pre_session`, `degraded`, `wrong_series`, `stale`, and `blocked`.
+- API smoke assertion that `/api/readiness` exists and maps endpoint facts without requiring UI logic.
+- Product readiness fixture coverage for `ready` and `wrong_series`.
 - Wrong-series fixture where top-series car `9` exists but Bryce guard fails.
-- Null-vs-zero fixture for timing numeric fields, weather measurements, and replay point fields.
+- Null-vs-zero fixture for timing numeric fields.
+- Points field coverage fixtures for all fields present, absent/historical fallback, partial row coverage, and wrong-series fallback.
+
+Still needed for backend hardening:
+
+- Reducer fixture coverage for `pre_session`, `degraded`, `stale`, and `blocked`.
 - Stale timing fixture where Race Control fetch succeeds but checked age exceeds threshold.
 - No-Bryce-row fixture with archived fallback available and unavailable.
 - Weather partial fixture where one NWS leg fails and the route returns `partial`.
 - Replay fixture for `missing`, `empty`, `tiny`, `ready`, and repeated-cold warning.
-- Points field coverage fixture with all fields present, all absent, partial row coverage, and stale/wrong-series fallback.
-- API smoke assertion that `/api/readiness` or equivalent wrapper exists and maps endpoint facts without requiring UI logic.
+
+Remaining race-weekend proof:
+
+- A real green-flag INDY NXT Road America session must still prove live cadence, Bryce row presence, point-field behavior, candidate lap-distance/tire/overtake fields, and broadcast lag.
 
 Can happen during UI implementation:
 
@@ -341,13 +351,17 @@ Race-weekend rehearsal only:
 
 ## Implementation Backlog
 
-Must-have before UI:
+Completed before UI:
 
-1. Add `/api/readiness` or embed equivalent `ReadinessState` on existing normalized routes.
-2. Add readiness reducer tests and fixtures listed above.
-3. Add API smoke coverage for product readiness states, null-vs-zero, and point fallback modes.
+1. Add `/api/readiness` as a `ReadinessState` route.
+2. Add first-pass readiness reducer tests for ready/wrong-series, null-vs-zero, and point fallback modes.
+3. Add API smoke coverage for `/api/readiness` and off-session/wrong-series behavior.
 4. Add explicit `PointsProjectionState` builder that uses Race Control fields when fresh and compact history when absent/stale.
-5. Add a small reconciliation report path for post-official-results comparison.
+
+Remaining backend follow-up:
+
+1. Add a small reconciliation report path for post-official-results comparison.
+2. Add the remaining readiness fixtures listed above.
 
 Can happen during UI:
 
@@ -364,7 +378,6 @@ Race-weekend rehearsal:
 
 ## Non-Goals
 
-- No API source edits in this lane.
-- No frontend UI source edits in this lane.
-- No ingestion-owned file edits in this lane.
+- No frontend visual UI source is defined by this contract.
+- No ingestion-owned file edits are required by this live readiness layer.
 - No official points-table model in v1 unless a later backend lane adds source-backed rules and tests.

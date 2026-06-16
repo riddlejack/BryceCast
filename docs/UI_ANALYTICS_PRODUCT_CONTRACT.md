@@ -109,12 +109,12 @@ Blocking backend contracts:
 
 - Live points projection needs a live INDY NXT rehearsal proving point fields are populated and reconcilable. The UI card remains v1 required but must degrade to unavailable when Race Control does not populate the fields.
 - Full replay trend analytics need a full-session archive; current archive is tiny/cold.
-- Live race readiness should eventually get a formal `/api/readiness` route or equivalent view model combining wrong-series, stale, no-Bryce, weather, replay, and source health states.
+- Live race readiness now has `/api/readiness`; remaining backend hardening is green-flag INDY NXT proof plus reducer fixtures for pre-session, degraded, stale, blocked, weather partial, replay states, and no-Bryce archived fallback.
 - Timezone normalization is still needed for schedule/track-activity feed strings before polished session countdowns ship.
 
 Frontend can safely build first:
 
 1. Race Debrief v1 for one INDY NXT completed race using `race_debrief_scores.csv`, lap dynamics, section results, championship progression, and source drawer.
 2. Career Lab v1 metric parity and coverage matrix.
-3. Race Weekend Prep shell using `/api/session`, `/api/weather/upcoming`, and `future_weekend_prep_inputs.csv`.
-4. Live Race Companion static/live-state shell with strong wrong-session and unavailable states before green-flag proof.
+3. Race Weekend Prep shell using `/api/readiness`, `/api/weather/upcoming`, and `future_weekend_prep_inputs.csv`.
+4. Live Race Companion static/live-state shell with strong wrong-series and unavailable states before green-flag proof.
