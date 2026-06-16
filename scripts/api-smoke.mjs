@@ -95,30 +95,58 @@ child.stderr.on('data', (chunk) => {
 
 try {
   const health = await waitForHealth();
-  const snapshot = (await fetchJson('/api/snapshot')).json;
-  assert(snapshot?.heartbeat?.EventID, '/api/snapshot missing heartbeat EventID');
-  assert(Array.isArray(snapshot?.timingRows) && snapshot.timingRows.length > 0, '/api/snapshot missing timing rows');
-  assert(snapshot?.bryce?.no === '9', '/api/snapshot missing Bryce #9 row');
-  assert(snapshot?.bryce?.firstName === 'Bryce' && snapshot?.bryce?.lastName === 'Aron', '/api/snapshot bound #9 to the wrong driver');
-  assert(!snapshot.timingRows.some((row) => row.no === '9' && row.lastName === 'Dixon'), '/api/snapshot included top-series #9 collision as Bryce timing');
-  const driverProfileProbe = snapshot.sourceProbes?.find((probe) => probe.id === 'drivers_nxt');
-  assert(driverProfileProbe, '/api/snapshot missing driver-profile source probe');
-
-  const session = (await fetchJson('/api/session')).json;
-  assert(session?.eventSessionId, '/api/session missing eventSessionId');
-  assert(session?.broadcastRoute, '/api/session missing broadcastRoute');
-
-  const bryce = (await fetchJson('/api/bryce')).json;
-  assert(bryce?.bryce?.no === '9', '/api/bryce missing Bryce row');
-  assert(bryce?.bryce?.firstName === 'Bryce' && bryce?.bryce?.lastName === 'Aron', '/api/bryce bound #9 to the wrong driver');
-  assert(bryce?.profile?.firstname === 'Bryce' && bryce?.profile?.lastname === 'Aron', '/api/bryce missing fallback Bryce profile identity');
-  if (driverProfileProbe.state === 'live') {
-    assert(bryce?.profile?.radiofrequency, '/api/bryce live driver-profile probe missing radio frequency');
+  const readiness = (await fetchJson('/api/readiness')).json;
+  assert(readiness?.schemaVersion === 'live-readiness.v1', '/api/readiness missing schema version');
+  assert(
+    ['ready', 'pre_session', 'degraded', 'wrong_series', 'stale', 'blocked'].includes(readiness?.state),
+    '/api/readiness returned unknown product state'
+  );
+  assert(['green', 'amber', 'red'].includes(readiness?.severity), '/api/readiness missing severity');
+  assert(readiness?.raceWeekend && readiness?.liveTiming && readiness?.bryce && readiness?.points, '/api/readiness missing nested state summaries');
+  assert(readiness.points?.schemaVersion === 'live-points.v1', '/api/readiness missing live points state');
+  assert(readiness.points?.officialModelAvailable === false, '/api/readiness must not claim an official local points model');
+  assert(Array.isArray(readiness?.gates) && readiness.gates.length > 0, '/api/readiness missing gates');
+  assert(Array.isArray(readiness?.sources?.endpoints), '/api/readiness missing source endpoint summary');
+  if (readiness.state === 'wrong_series') {
+    assert(readiness.bryce?.bryce === null, '/api/readiness wrong_series must not expose top-series car #9 as Bryce');
+    assert(readiness.bryce?.identityGuard?.seriesOk === false, '/api/readiness wrong_series missing failed series guard');
+  }
+  for (const row of readiness.liveTiming?.rows ?? []) {
+    for (const field of ['rank', 'liveRank', 'startPosition', 'passes', 'passed', 'pitStops', 'runningDriverPoints', 'totalDriverPoints', 'totalEntrantPoints']) {
+      assert(row[field] === null || typeof row[field] === 'number', `/api/readiness row ${field} must be number or null`);
+    }
   }
 
-  const timing = (await fetchJson('/api/timing')).json;
-  assert(timing?.rowCount > 0, '/api/timing missing row count');
-  assert(timing?.rows?.some((row) => row.bryce), '/api/timing missing Bryce highlight');
+  let snapshot = null;
+  const liveSnapshotRequired = ['ready', 'degraded'].includes(readiness.state);
+  if (liveSnapshotRequired) {
+    snapshot = (await fetchJson('/api/snapshot')).json;
+    assert(snapshot?.heartbeat?.EventID, '/api/snapshot missing heartbeat EventID');
+    assert(Array.isArray(snapshot?.timingRows) && snapshot.timingRows.length > 0, '/api/snapshot missing timing rows');
+    assert(snapshot?.bryce?.no === '9', '/api/snapshot missing Bryce #9 row');
+    assert(snapshot?.bryce?.firstName === 'Bryce' && snapshot?.bryce?.lastName === 'Aron', '/api/snapshot bound #9 to the wrong driver');
+    assert(!snapshot.timingRows.some((row) => row.no === '9' && row.lastName === 'Dixon'), '/api/snapshot included top-series #9 collision as Bryce timing');
+    const driverProfileProbe = snapshot.sourceProbes?.find((probe) => probe.id === 'drivers_nxt');
+    assert(driverProfileProbe, '/api/snapshot missing driver-profile source probe');
+
+    const session = (await fetchJson('/api/session')).json;
+    assert(session?.eventSessionId, '/api/session missing eventSessionId');
+    assert(session?.broadcastRoute, '/api/session missing broadcastRoute');
+
+    const bryce = (await fetchJson('/api/bryce')).json;
+    assert(bryce?.bryce?.no === '9', '/api/bryce missing Bryce row');
+    assert(bryce?.bryce?.firstName === 'Bryce' && bryce?.bryce?.lastName === 'Aron', '/api/bryce bound #9 to the wrong driver');
+    assert(bryce?.profile?.firstname === 'Bryce' && bryce?.profile?.lastname === 'Aron', '/api/bryce missing fallback Bryce profile identity');
+    if (driverProfileProbe.state === 'live') {
+      assert(bryce?.profile?.radiofrequency, '/api/bryce live driver-profile probe missing radio frequency');
+    }
+
+    const timing = (await fetchJson('/api/timing')).json;
+    assert(timing?.rowCount > 0, '/api/timing missing row count');
+    assert(timing?.rows?.some((row) => row.bryce), '/api/timing missing Bryce highlight');
+  } else {
+    assert(readiness.reason, '/api/readiness non-live state missing reason');
+  }
 
   const sources = (await fetchJson('/api/sources')).json;
   assert(sources?.endpoints?.length >= 9, '/api/sources missing expanded upstream probes');
@@ -201,11 +229,28 @@ try {
   assert(compactHistory.json?.latestRace?.race, '/api/history/bryce compact missing latest race');
   assert(Array.isArray(compactHistory.json?.teammateBench) && compactHistory.json.teammateBench.some((row) => row.driverId === 'bryce'), '/api/history/bryce compact missing Bryce teammate bench');
 
-  const raceLog = (await fetchJson('/api/race-log/latest')).json;
-  assert(raceLog?.sessionKey, '/api/race-log/latest missing sessionKey');
+  const checkedEndpoints = [
+    '/api/health',
+    '/api/readiness',
+    ...(liveSnapshotRequired ? ['/api/snapshot', '/api/session', '/api/bryce', '/api/timing'] : []),
+    '/api/sources',
+    '/api/weather/live?trackId=track_road_america',
+    '/api/weather/upcoming',
+    '/api/history/bryce',
+    '/api/history/bryce?compact=1'
+  ];
 
-  const onboards = (await fetchJson('/api/onboard-catalog')).json;
-  assert(onboards?.counts, '/api/onboard-catalog missing counts');
+  if (health.storage?.latestSnapshot?.exists) {
+    const raceLog = (await fetchJson('/api/race-log/latest')).json;
+    assert(raceLog?.sessionKey, '/api/race-log/latest missing sessionKey');
+    checkedEndpoints.push('/api/race-log/latest');
+  }
+
+  if (health.storage?.onboardCatalog?.exists) {
+    const onboards = (await fetchJson('/api/onboard-catalog')).json;
+    assert(onboards?.counts, '/api/onboard-catalog missing counts');
+    checkedEndpoints.push('/api/onboard-catalog');
+  }
 
   const replay = (await fetchJson('/api/replay/bryce?limit=5')).json;
   assert(typeof replay?.available === 'boolean', '/api/replay/bryce missing availability flag');
@@ -229,6 +274,7 @@ try {
   assert(replayLimitOne?.rows?.length <= 1, '/api/replay/bryce limit=1 returned too many rows');
   const replayClamp = (await fetchJson('/api/replay/bryce?limit=9999')).json;
   assert(replayClamp?.rows?.length <= 500, '/api/replay/bryce limit clamp failed');
+  checkedEndpoints.push('/api/replay/bryce');
 
   const povPayload = { status: 'inconclusive', source: 'INDYCAR App', evidenceRef: 'api-smoke-pov', proofItems: [] };
   await fetchJson('/api/pov-proof', {
@@ -238,6 +284,7 @@ try {
   });
   const povProof = (await fetchJson('/api/pov-proof')).json;
   assert(povProof?.evidenceRef === 'api-smoke-pov', '/api/pov-proof did not persist POST payload');
+  checkedEndpoints.push('/api/pov-proof');
 
   const audioPayload = { status: 'official_race_audio_available', source: 'INDYCAR Radio', evidenceRef: 'api-smoke-audio', proofItems: [] };
   await fetchJson('/api/audio-proof', {
@@ -247,14 +294,18 @@ try {
   });
   const audioProof = (await fetchJson('/api/audio-proof')).json;
   assert(audioProof?.evidenceRef === 'api-smoke-audio', '/api/audio-proof did not persist POST payload');
+  checkedEndpoints.push('/api/audio-proof');
   await resetProofs();
 
   const raceControl = await fetch(`${baseUrl}/racecontrol/timingscoring-ris.json`, { headers: { accept: 'application/json' } });
   assert(raceControl.ok, '/racecontrol proxy did not return OK');
+  checkedEndpoints.push('/racecontrol/timingscoring-ris.json');
   const topDrivers = await fetch(`${baseUrl}/racecontrol/driversfeed.json`, { headers: { accept: 'application/json' } });
   assert(topDrivers.ok, '/racecontrol top-series driver proxy did not return OK');
+  checkedEndpoints.push('/racecontrol/driversfeed.json');
   const nttData = await fetch(`${baseUrl}/ntt-data/INDYCAR_DATA_POLLING/data_polling_blob.json`, { headers: { accept: 'application/json' } });
   assert(nttData.ok, '/ntt-data proxy did not return OK');
+  checkedEndpoints.push('/ntt-data/INDYCAR_DATA_POLLING/data_polling_blob.json');
 
   let rootStatus = null;
   if (await distExists()) {
@@ -274,32 +325,20 @@ try {
           staticDir: health.staticDir,
           sqlite: health.storage?.sqlite?.exists ?? false
         },
-        snapshot: {
-          event: snapshot.heartbeat.eventName,
-          flag: snapshot.heartbeat.currentFlag,
-          bryceRank: snapshot.bryce.rank
+        snapshot: snapshot
+          ? {
+              event: snapshot.heartbeat.eventName,
+              flag: snapshot.heartbeat.currentFlag,
+              bryceRank: snapshot.bryce.rank
+            }
+          : null,
+        endpointsChecked: checkedEndpoints,
+        readiness: {
+          state: readiness.state,
+          reason: readiness.reason,
+          pointsMode: readiness.points.mode,
+          timingRows: readiness.liveTiming.rowCount
         },
-        endpointsChecked: [
-          '/api/health',
-          '/api/snapshot',
-          '/api/session',
-          '/api/bryce',
-          '/api/timing',
-          '/api/sources',
-          '/api/weather/live?trackId=track_road_america',
-          '/api/weather/upcoming',
-          '/api/history/bryce',
-          '/api/history/bryce?compact=1',
-          '/api/race-log/latest',
-          '/api/onboard-catalog',
-          '/api/replay/bryce',
-          '/api/pov-proof',
-          '/api/audio-proof',
-          '/racecontrol/timingscoring-ris.json',
-          '/racecontrol/driversfeed.json',
-          '/ntt-data/INDYCAR_DATA_POLLING/data_polling_blob.json'
-        ]
-        ,
         sourceFreshness: sources.endpoints.map((endpoint) => ({ id: endpoint.id, freshness: endpoint.freshnessLabel }))
       },
       null,

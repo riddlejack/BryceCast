@@ -2,9 +2,9 @@ import { createReadStream } from 'node:fs';
 import { access, mkdir, readFile, stat, writeFile } from 'node:fs/promises';
 import { createServer } from 'node:http';
 import { dirname, extname, join, normalize, relative, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { DatabaseSync } from 'node:sqlite';
-import { isBryceProfile, isBryceTimingRow, liveSourceEndpoints, raceSnapshotEndpoints } from './live-source-endpoints.mjs';
+import { bryceCarNumber, isBryceProfile, isBryceTimingRow, isIndyNxtTimingHeartbeat, liveSourceEndpoints, raceSnapshotEndpoints } from './live-source-endpoints.mjs';
 import {
   buildUpcomingIndyNxtWeatherReport,
   fetchCachedLiveWeatherForTrack,
@@ -1160,6 +1160,462 @@ const queryReplay = ({ limit: limitValue, offset: offsetValue, sessionKey: reque
   }
 };
 
+const hasNumericSourceValue = (value) => value !== null && value !== undefined && value !== '' && Number.isFinite(Number(value));
+
+export const compactTimingRowForReadiness = (row, heartbeat = null) => ({
+  no: row?.no ?? '',
+  name: `${row?.firstName ?? ''} ${row?.lastName ?? ''}`.trim(),
+  team: row?.team ?? '',
+  rank: safeNumber(row?.rank),
+  liveRank: safeNumber(row?.liveRank),
+  startPosition: safeNumber(row?.startPosition),
+  status: row?.status ?? '',
+  comment: row?.comment ?? '',
+  gap: row?.gap ?? '',
+  liveGap: row?.liveGap ?? '',
+  diff: row?.diff ?? '',
+  laps: row?.laps ?? '',
+  bestLapTime: row?.bestLapTime ?? '',
+  lastLapTime: row?.lastLapTime ?? '',
+  bestSpeed: safeNumber(row?.BestSpeed),
+  lastSpeed: safeNumber(row?.LastSpeed),
+  averageSpeed: safeNumber(row?.AverageSpeed),
+  passes: safeNumber(row?.Passes),
+  passed: safeNumber(row?.Passed),
+  pitStops: safeNumber(row?.pitStops),
+  lastPitLap: safeNumber(row?.lastPitLap),
+  sincePitLap: safeNumber(row?.sincePitLap),
+  tire: row?.Tire ?? '',
+  overtakeRemain: safeNumber(row?.OverTake_Remain),
+  overtakeActive: row?.OverTake_Active ?? '',
+  lapDistance: safeNumber(row?.lapDistance),
+  liveDiffAhead: row?.liveDiffAhead ?? '',
+  liveDiffBehind: row?.liveDiffBehind ?? '',
+  runningDriverPoints: safeNumber(row?.runningDriverPoints),
+  totalDriverPoints: safeNumber(row?.totalDriverPoints),
+  totalEntrantPoints: safeNumber(row?.totalEntrantPoints),
+  bryce: isBryceTimingRow(row, heartbeat)
+});
+
+const heartbeatSummary = (heartbeat = null) => ({
+  eventName: heartbeat?.eventName ?? null,
+  eventId: heartbeat?.EventID ?? null,
+  eventSessionId: heartbeat?.EventSessionID ?? null,
+  sessionName: heartbeat?.SessionName ?? null,
+  sessionType: heartbeat?.SessionType ?? null,
+  sessionStatus: heartbeat?.SessionStatus ?? null,
+  series: heartbeat?.Series ?? null,
+  flag: heartbeat?.currentFlag ?? null,
+  lap: safeNumber(heartbeat?.lapNumber),
+  totalLaps: safeNumber(heartbeat?.totalLaps),
+  trackName: heartbeat?.trackName ?? null,
+  trackType: heartbeat?.trackType ?? null
+});
+
+const compactSourceHealthState = (sourceReport = {}) => {
+  const endpoints = asArray(sourceReport.endpoints).map((endpoint) => ({
+    id: endpoint.id,
+    role: endpoint.role ?? null,
+    series: endpoint.series ?? null,
+    cadence: endpoint.cadence ?? null,
+    ok: Boolean(endpoint.ok),
+    status: endpoint.status ?? null,
+    sourceState: endpoint.sourceState ?? 'error',
+    readinessState: endpoint.readinessState ?? 'unknown',
+    checkedAgeSeconds: endpoint.checkedAgeSeconds ?? null,
+    modifiedAgeSeconds: endpoint.modifiedAgeSeconds ?? null,
+    freshnessLabel: endpoint.freshnessLabel ?? 'freshness unknown',
+    sourceSummary: endpoint.sourceSummary ?? null,
+    note: endpoint.note ?? ''
+  }));
+  return {
+    checkedAt: sourceReport.checkedAt ?? new Date().toISOString(),
+    endpoints,
+    local: sourceReport.local ?? {},
+    critical: endpoints.filter((endpoint) => endpoint.role === 'primary_timing').map((endpoint) => endpoint.id),
+    enrichment: endpoints
+      .filter((endpoint) => ['driver_identity_profile', 'track_map_watch_links_config', 'schedule_broadcast_grid_context', 'session_route_results_context'].includes(endpoint.role))
+      .map((endpoint) => endpoint.id),
+    reference: endpoints.filter((endpoint) => endpoint.role === 'wrong_series_guard_reference').map((endpoint) => endpoint.id),
+    candidate: endpoints.filter((endpoint) => String(endpoint.role ?? '').includes('candidate')).map((endpoint) => endpoint.id)
+  };
+};
+
+const latestHistoricalStanding = (history = null) => ({
+  points: safeNumber(history?.bryceStanding?.points),
+  rank: safeNumber(history?.bryceStanding?.rank)
+});
+
+export const buildPointsProjectionState = ({ checkedAt, timingRows = [], bryce = null, readinessState, history = null }) => {
+  const rows = asArray(timingRows);
+  const countField = (field) => rows.filter((row) => hasNumericSourceValue(row?.[field])).length;
+  const fieldCoverage = {
+    rows: rows.length,
+    runningDriverPointsRows: countField('runningDriverPoints'),
+    totalDriverPointsRows: countField('totalDriverPoints'),
+    totalEntrantPointsRows: countField('totalEntrantPoints')
+  };
+  const historical = latestHistoricalStanding(history);
+  const bryceValues = {
+    runningDriverPoints: safeNumber(bryce?.runningDriverPoints),
+    totalDriverPoints: safeNumber(bryce?.totalDriverPoints),
+    totalEntrantPoints: safeNumber(bryce?.totalEntrantPoints),
+    historicalDriverPoints: historical.points,
+    historicalRank: historical.rank
+  };
+  const brycePointFields = ['runningDriverPoints', 'totalDriverPoints', 'totalEntrantPoints'];
+  const brycePresentFields = brycePointFields.filter((field) => hasNumericSourceValue(bryce?.[field]));
+  const anyLivePointField =
+    fieldCoverage.runningDriverPointsRows > 0 || fieldCoverage.totalDriverPointsRows > 0 || fieldCoverage.totalEntrantPointsRows > 0 || brycePresentFields.length > 0;
+  const hasHistory = historical.points !== null || historical.rank !== null;
+
+  let mode = 'unavailable';
+  let source = 'none';
+  let label = 'Live points unavailable';
+  const warnings = [];
+
+  if (readinessState === 'stale') {
+    mode = 'stale';
+    source = anyLivePointField ? 'archive' : hasHistory ? 'history_compact' : 'none';
+    label = anyLivePointField ? 'Stale Race Control points' : hasHistory ? 'Historical points baseline' : 'Points unavailable';
+    warnings.push('Live timing is stale; points must not be treated as current.');
+  } else if (readinessState === 'wrong_series') {
+    mode = hasHistory ? 'historical_fallback' : 'unavailable';
+    source = hasHistory ? 'history_compact' : 'none';
+    label = hasHistory ? 'Historical points baseline' : 'Points unavailable';
+    warnings.push('Active Race Control feed is not Bryce INDY NXT; live points are blocked.');
+  } else if (brycePresentFields.length === brycePointFields.length) {
+    mode = 'race_control_live';
+    source = 'race_control_timing';
+    label = 'Race Control running points';
+  } else if (anyLivePointField) {
+    mode = 'partial';
+    source = 'race_control_timing';
+    label = hasHistory ? 'Partial Race Control points with historical baseline' : 'Partial Race Control points';
+    warnings.push('Race Control points fields are only partially populated.');
+  } else if (hasHistory) {
+    mode = 'historical_fallback';
+    source = 'history_compact';
+    label = 'Historical points baseline';
+    warnings.push('Race Control live points fields are unavailable.');
+  }
+
+  return {
+    schemaVersion: 'live-points.v1',
+    checkedAt,
+    mode,
+    source,
+    label,
+    bryce: bryceValues,
+    fieldCoverage,
+    officialModelAvailable: false,
+    reconciliationRequired: mode === 'race_control_live' || mode === 'partial',
+    warnings
+  };
+};
+
+const buildRaceWeekendState = ({ checkedAt, heartbeat, broadcastRoute, sourceState, readiness }) => ({
+  checkedAt,
+  eventId: heartbeat?.EventID ?? null,
+  eventSessionId: heartbeat?.EventSessionID ?? null,
+  eventName: heartbeat?.eventName ?? null,
+  sessionName: heartbeat?.SessionName ?? null,
+  sessionType: heartbeat?.SessionType ?? null,
+  sessionStatus: heartbeat?.SessionStatus ?? null,
+  trackName: heartbeat?.trackName ?? null,
+  trackType: heartbeat?.trackType ?? null,
+  trackLength: safeNumber(heartbeat?.trackLength),
+  flag: heartbeat?.currentFlag ?? null,
+  lap: safeNumber(heartbeat?.lapNumber),
+  totalLaps: safeNumber(heartbeat?.totalLaps),
+  startsAt: broadcastRoute?.startsAt ?? null,
+  estimatedGreenFlag: broadcastRoute?.estimatedGreenFlag ?? null,
+  endsAt: broadcastRoute?.endsAt ?? null,
+  timezone: null,
+  broadcastRoute: broadcastRoute ?? null,
+  sourceState,
+  readiness
+});
+
+const buildBryceLiveState = ({ checkedAt, heartbeat, timingRows, bryce, bryceProfile, broadcastRoute, sourceState, readiness }) => {
+  const seriesOk = isIndyNxtTimingHeartbeat(heartbeat);
+  const carNine = asArray(timingRows).find((row) => String(row?.no ?? '').trim() === bryceCarNumber) ?? null;
+  const identityRow = bryce ?? carNine;
+  const driverIdMatch = String(identityRow?.DriverID ?? '') === bryceRcDriverId;
+  const exactNameMatch = String(identityRow?.firstName ?? '').toLowerCase() === 'bryce' && String(identityRow?.lastName ?? '').toLowerCase() === 'aron';
+  const matchedBy = seriesOk && driverIdMatch ? 'driver_id' : seriesOk && exactNameMatch ? 'exact_name' : null;
+  const warnings = [];
+  if (!seriesOk) warnings.push('Active timing heartbeat is not INDY NXT.');
+  if (!bryce) warnings.push(carNine ? 'Car #9 exists in the active feed but failed the Bryce INDY NXT identity guard.' : 'No Bryce timing row is present.');
+
+  return {
+    checkedAt,
+    sourceState,
+    readiness,
+    heartbeat: heartbeatSummary(heartbeat),
+    bryce: bryce ? compactTimingRowForReadiness(bryce, heartbeat) : null,
+    profile: bryceProfile ?? fallbackBryceProfile(bryce),
+    identityGuard: {
+      carNumber: bryceCarNumber,
+      rcDriverId: bryceRcDriverId,
+      matchedBy,
+      seriesOk
+    },
+    broadcastRoute: broadcastRoute ?? null,
+    warnings
+  };
+};
+
+const buildReadinessGates = ({ timingEndpoint, sourceReport, heartbeat, timingRows, bryce, sourceState, state, weather, replay }) => {
+  const endpointList = asArray(sourceReport?.endpoints);
+  const enrichmentFailures = endpointList.filter(
+    (endpoint) =>
+      !['timing', 'drivers_top', 'schedule_top', 'trackactivity_top', 'ntt_data_polling'].includes(endpoint.id) &&
+      !['available', 'reference_only'].includes(endpoint.readinessState)
+  );
+  const checkedAgeSeconds = timingEndpoint?.checkedAgeSeconds ?? null;
+  return [
+    {
+      id: 'timing_reachable',
+      state: timingEndpoint?.ok ? 'pass' : 'fail',
+      summary: timingEndpoint?.ok ? 'Race Control timing endpoint is reachable.' : timingEndpoint?.note ?? 'Race Control timing endpoint is unavailable.'
+    },
+    {
+      id: 'indy_nxt_heartbeat',
+      state: isIndyNxtTimingHeartbeat(heartbeat) ? 'pass' : 'fail',
+      summary: isIndyNxtTimingHeartbeat(heartbeat) ? 'Timing heartbeat is INDY NXT-compatible.' : 'Timing heartbeat is not INDY NXT.'
+    },
+    {
+      id: 'bryce_identity',
+      state: bryce ? 'pass' : 'fail',
+      summary: bryce ? 'Bryce car #9 passed driver-id/name guard.' : describeBryceMiss(heartbeat, asArray(timingRows))
+    },
+    {
+      id: 'timing_freshness',
+      state: sourceState === 'live' && (checkedAgeSeconds === null || checkedAgeSeconds <= 3) ? 'pass' : state === 'stale' ? 'fail' : 'warn',
+      summary: `Timing source is ${sourceState}; ${timingEndpoint?.freshnessLabel ?? 'freshness unknown'}.`
+    },
+    {
+      id: 'enrichment_sources',
+      state: enrichmentFailures.length === 0 ? 'pass' : 'warn',
+      summary:
+        enrichmentFailures.length === 0
+          ? 'Required enrichment sources are available or not blocking.'
+          : `${enrichmentFailures.length} enrichment source(s) are partial or unavailable.`
+    },
+    {
+      id: 'points_fields',
+      state: bryce && ['race_control_live', 'partial'].includes(buildPointsProjectionState({ checkedAt: new Date().toISOString(), timingRows, bryce, readinessState: state }).mode) ? 'pass' : 'warn',
+      summary: bryce ? 'Race Control points fields inspected for Bryce.' : 'Live Bryce points are unavailable without a guarded Bryce row.'
+    },
+    {
+      id: 'weather',
+      state: weather?.sourceState === 'live' ? 'pass' : weather?.sourceState === 'partial' ? 'warn' : 'fail',
+      summary: `Weather source is ${weather?.sourceState ?? 'unavailable'}.`
+    },
+    {
+      id: 'replay_archive',
+      state: ['ready', 'tiny'].includes(replay?.archiveState) ? 'pass' : 'warn',
+      summary: `Replay archive is ${replay?.archiveState ?? 'unavailable'}.`
+    }
+  ];
+};
+
+export const buildReadinessPayloadFromParts = ({
+  checkedAt = new Date().toISOString(),
+  heartbeat = null,
+  timingRows = [],
+  bryce = null,
+  bryceProfile = null,
+  broadcastRoute = null,
+  sourceState: inputSourceState = null,
+  sourceReport = {},
+  history = null,
+  replay = null,
+  weather = null
+}) => {
+  const sources = compactSourceHealthState(sourceReport);
+  const timingEndpoint = sources.endpoints.find((endpoint) => endpoint.id === 'timing') ?? null;
+  const timingRowsArray = asArray(timingRows);
+  const hasRows = timingRowsArray.length > 0;
+  const seriesOk = isIndyNxtTimingHeartbeat(heartbeat);
+  const timingCheckedAgeSeconds = timingEndpoint?.checkedAgeSeconds ?? null;
+  const sourceStateValue = inputSourceState ?? timingEndpoint?.sourceState ?? (heartbeat ? sourceState(heartbeat) : 'error');
+  const enrichmentDegraded =
+    sources.endpoints.some(
+      (endpoint) =>
+        !['timing', 'drivers_top', 'schedule_top', 'trackactivity_top', 'ntt_data_polling'].includes(endpoint.id) &&
+        !['available', 'reference_only'].includes(endpoint.readinessState)
+    ) ||
+    weather?.sourceState === 'partial' ||
+    weather?.sourceState === 'error' ||
+    replay?.archiveState === 'missing' ||
+    replay?.archiveState === 'empty';
+
+  let state = 'blocked';
+  let reason = 'Required live timing context is unavailable.';
+
+  if (!heartbeat && !hasRows) {
+    state = 'blocked';
+    reason = 'Race Control timing payload has no heartbeat or timing rows.';
+  } else if (!seriesOk && hasRows) {
+    state = 'wrong_series';
+    reason = describeBryceMiss(heartbeat, timingRowsArray);
+  } else if (!bryce && heartbeat) {
+    state = timingEndpoint?.readinessState === 'wrong_session' ? 'wrong_series' : 'pre_session';
+    reason =
+      state === 'wrong_series'
+        ? describeBryceMiss(heartbeat, timingRowsArray)
+        : 'INDY NXT session context exists, but Bryce is not in a fresh live timing row yet.';
+  } else if (sourceStateValue === 'stale' || (timingCheckedAgeSeconds !== null && timingCheckedAgeSeconds > 10)) {
+    state = 'stale';
+    reason = 'Timing data is too old for live Bryce display.';
+  } else if (sourceStateValue === 'cold') {
+    state = 'pre_session';
+    reason = 'Timing feed is cold; live Bryce race mode is not active yet.';
+  } else if (bryce && seriesOk && enrichmentDegraded) {
+    state = 'degraded';
+    reason = 'Core Bryce timing is usable, but one or more enrichment sources are partial.';
+  } else if (bryce && seriesOk) {
+    state = 'ready';
+    reason = 'Fresh INDY NXT timing has a guarded Bryce car #9 row.';
+  }
+
+  const severity = state === 'ready' ? 'green' : ['blocked', 'wrong_series'].includes(state) ? 'red' : 'amber';
+  const points = buildPointsProjectionState({ checkedAt, timingRows: timingRowsArray, bryce, readinessState: state, history });
+  const gates = buildReadinessGates({
+    timingEndpoint,
+    sourceReport: sources,
+    heartbeat,
+    timingRows: timingRowsArray,
+    bryce,
+    sourceState: sourceStateValue,
+    state,
+    weather,
+    replay
+  });
+
+  return {
+    schemaVersion: 'live-readiness.v1',
+    checkedAt,
+    state,
+    severity,
+    reason,
+    raceWeekend: buildRaceWeekendState({ checkedAt, heartbeat, broadcastRoute, sourceState: sourceStateValue, readiness: state }),
+    liveTiming: {
+      checkedAt,
+      sourceState: sourceStateValue,
+      rowCount: timingRowsArray.length,
+      bryceNo: bryceCarNumber,
+      heartbeat: heartbeatSummary(heartbeat),
+      rows: timingRowsArray
+        .slice()
+        .sort((left, right) => Number(left?.rank ?? 999) - Number(right?.rank ?? 999))
+        .map((row) => compactTimingRowForReadiness(row, heartbeat))
+    },
+    bryce: buildBryceLiveState({
+      checkedAt,
+      heartbeat,
+      timingRows: timingRowsArray,
+      bryce,
+      bryceProfile,
+      broadcastRoute,
+      sourceState: sourceStateValue,
+      readiness: state
+    }),
+    points,
+    weather:
+      weather ?? {
+        schemaVersion: 'live-weather.v1',
+        checkedAt,
+        sourceState: 'error',
+        track: null,
+        probes: [],
+        cache: null,
+        warnings: ['Weather payload unavailable.']
+      },
+    replay:
+      replay ?? {
+        available: false,
+        archiveState: 'missing',
+        count: 0,
+        returned: 0,
+        selectedCount: 0,
+        sessionKey: null,
+        sessions: [],
+        summary: buildReplaySummary([]),
+        rows: [],
+        warnings: ['Replay payload unavailable.']
+      },
+    sources,
+    gates
+  };
+};
+
+const fetchReadinessWeather = async (checkedAt) => {
+  try {
+    const track = await loadTrackMetadata('track_road_america');
+    return await fetchCachedLiveWeatherForTrack(track, {});
+  } catch (error) {
+    return {
+      schemaVersion: 'live-weather.v1',
+      checkedAt,
+      sourceState: 'error',
+      track: { id: 'track_road_america', name: 'Road America' },
+      probes: [{ ok: false, label: 'weather', error: error instanceof Error ? error.message : String(error) }],
+      cache: { status: 'error' }
+    };
+  }
+};
+
+const buildReadinessPayload = async () => {
+  const checkedAt = new Date().toISOString();
+  const [results, sourceReportBase, historyPayload, replay, weather] = await Promise.all([
+    fetchRaceControl(),
+    buildSourceReport(),
+    readJsonFile(historyPath),
+    Promise.resolve(queryReplay({ limit: 5 })),
+    fetchReadinessWeather(checkedAt)
+  ]);
+  const sourceReport = {
+    ...sourceReportBase,
+    local: {
+      latestSnapshot: await fileStatus(latestSnapshotPath),
+      onboardCatalog: await fileStatus(onboardCatalogPath),
+      history: await fileStatus(historyPath),
+      sqlite: await fileStatus(sqlitePath),
+      povProof: await fileStatus(povProofPath),
+      audioProof: await fileStatus(audioProofPath)
+    }
+  };
+  const timing = results.find((result) => result.id === 'timing')?.payload?.timing_results;
+  const drivers = results.find((result) => result.id === 'drivers_nxt')?.payload?.drivers?.driver ?? [];
+  const config = results.find((result) => result.id === 'config')?.payload ?? {};
+  const schedule = results.find((result) => result.id === 'schedule_nxt')?.payload;
+  const trackActivity = results.find((result) => result.id === 'trackactivity_nxt')?.payload;
+  const heartbeat = timing?.heartbeat ?? null;
+  const timingRows = Array.isArray(timing?.Item) ? timing.Item : [];
+  const bryce = timingRows.find((row) => isBryceTimingRow(row, heartbeat)) ?? null;
+  const bryceProfile = (Array.isArray(drivers) ? drivers.find(isBryceProfile) : null) ?? fallbackBryceProfile(bryce);
+  const broadcastRoute = heartbeat
+    ? buildTrackActivityRoute(trackActivity, heartbeat) ?? buildScheduleRoute(schedule, heartbeat) ?? buildConfigRoute(config, heartbeat) ?? buildUnavailableRoute(heartbeat)
+    : null;
+
+  return buildReadinessPayloadFromParts({
+    checkedAt,
+    heartbeat,
+    timingRows,
+    bryce,
+    bryceProfile,
+    broadcastRoute,
+    sourceState: heartbeat ? sourceState(heartbeat) : null,
+    sourceReport,
+    history: historyPayload ? compactHistory(historyPayload) : null,
+    replay,
+    weather
+  });
+};
+
 const sendJson = (res, statusCode, payload, headers = {}) => {
   res.writeHead(statusCode, { ...jsonHeaders, ...headers });
   res.end(JSON.stringify(payload, null, 2));
@@ -1266,6 +1722,11 @@ const handler = async (req, res) => {
       return;
     }
 
+    if (pathname === '/api/readiness') {
+      sendJson(res, 200, await buildReadinessPayload());
+      return;
+    }
+
     if (pathname === '/api/session') {
       const snapshot = await buildRaceSnapshot();
       sendJson(res, 200, {
@@ -1307,40 +1768,8 @@ const handler = async (req, res) => {
         sourceState: snapshot.sourceState,
         rowCount: snapshot.timingRows.length,
         bryceNo: snapshot.bryce.no,
-        rows: snapshot.timingRows.map((row) => ({
-          no: row.no,
-          name: `${row.firstName} ${row.lastName}`.trim(),
-          team: row.team,
-          rank: row.rank,
-          liveRank: row.liveRank,
-          startPosition: row.startPosition,
-          status: row.status,
-          comment: row.comment,
-          gap: row.gap,
-          liveGap: row.liveGap,
-          diff: row.diff,
-          laps: row.laps,
-          bestLapTime: row.bestLapTime,
-          lastLapTime: row.lastLapTime,
-          bestSpeed: row.BestSpeed,
-          lastSpeed: row.LastSpeed,
-          averageSpeed: row.AverageSpeed,
-          passes: row.Passes,
-          passed: row.Passed,
-          pitStops: row.pitStops,
-          lastPitLap: row.lastPitLap,
-          sincePitLap: row.sincePitLap,
-          tire: row.Tire,
-          overtakeRemain: row.OverTake_Remain,
-          overtakeActive: row.OverTake_Active,
-          lapDistance: row.lapDistance,
-          liveDiffAhead: row.liveDiffAhead,
-          liveDiffBehind: row.liveDiffBehind,
-          totalDriverPoints: row.totalDriverPoints,
-          totalEntrantPoints: row.totalEntrantPoints,
-          runningDriverPoints: row.runningDriverPoints,
-          bryce: isBryceTimingRow(row, snapshot.heartbeat)
-        }))
+        heartbeat: heartbeatSummary(snapshot.heartbeat),
+        rows: snapshot.timingRows.map((row) => compactTimingRowForReadiness(row, snapshot.heartbeat))
       });
       return;
     }
@@ -1443,16 +1872,23 @@ const handler = async (req, res) => {
   }
 };
 
-const server = createServer(handler);
+export const startServer = () => {
+  const server = createServer(handler);
 
-server.listen(port, host, () => {
-  const staticNote = staticDir ? `, static ${relative(root, staticDir)}` : '';
-  console.log(`BryceCast API listening on http://${host}:${port}${staticNote}`);
-});
+  server.listen(port, host, () => {
+    const staticNote = staticDir ? `, static ${relative(root, staticDir)}` : '';
+    console.log(`BryceCast API listening on http://${host}:${port}${staticNote}`);
+  });
 
-const shutdown = () => {
-  server.close(() => process.exit(0));
+  const shutdown = () => {
+    server.close(() => process.exit(0));
+  };
+
+  process.on('SIGINT', shutdown);
+  process.on('SIGTERM', shutdown);
+  return server;
 };
 
-process.on('SIGINT', shutdown);
-process.on('SIGTERM', shutdown);
+if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
+  startServer();
+}
