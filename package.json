@@ -11,6 +11,7 @@
     "serve:app": "node scripts/api-server.mjs --static=dist",
     "api:smoke": "node scripts/api-smoke.mjs",
     "test:live-readiness": "node scripts/test-live-readiness.mjs",
+    "analytics:view-models:validate": "node scripts/validate-ui-view-models.mjs",
     "audit:sources": "node scripts/audit-sources.mjs",
     "audit:live:pressure": "node scripts/live-source-pressure-test.mjs --endpoints=all --interval-ms=1000 --iterations=30",
     "audit:live:pressure:primary": "node scripts/live-source-pressure-test.mjs --endpoints=primary --interval-ms=1000 --iterations=60",
