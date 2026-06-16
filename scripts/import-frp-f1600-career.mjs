@@ -817,11 +817,27 @@ const main = async () => {
 
     if (!eventMatch || !dateMatch) {
       importReport.pdfsStagedOnly += 1;
+      const gapId = `gap_frp_f1600_${year}_r${entry.event.eventIndex + 1}_${entry.sessionSlug}_pdf_event_mismatch`;
+      const isKnownPittsburghQualifyingMismatch = gapId === 'gap_frp_f1600_2019_r5_01_qualifying_pdf_event_mismatch';
       importReport.gaps.push({
-        id: `gap_frp_f1600_${year}_r${entry.event.eventIndex + 1}_${entry.sessionSlug}_pdf_event_mismatch`,
+        id: gapId,
         scope: 'frp_f1600_2019',
         status: 'open',
-        description: `FRP archive labels ${entry.event.eventName} ${entry.link.label}, but the linked PDF header/date indicates a different event (${entry.metadata.firstLine}; ${entry.metadata.trackLine.trim()}; ${entry.metadata.localDateTime ?? 'no session time'}). Rows were staged but not imported.`
+        description: isKnownPittsburghQualifyingMismatch
+          ? `FRP archive labels ${entry.event.eventName} ${entry.link.label}, but the linked PDF header/date indicates a different event (${entry.metadata.firstLine}; ${entry.metadata.trackLine.trim()}; ${entry.metadata.localDateTime ?? 'no session time'}). The correct Pittsburgh qualifying PDF was not found on the official archive route, so rows were staged but not imported.`
+          : `FRP archive labels ${entry.event.eventName} ${entry.link.label}, but the linked PDF header/date indicates a different event (${entry.metadata.firstLine}; ${entry.metadata.trackLine.trim()}; ${entry.metadata.localDateTime ?? 'no session time'}). Rows were staged but not imported.`,
+        raw: {
+          archiveUrl,
+          linkedPdfUrl: entry.link.url,
+          expectedEvent: entry.event.eventName,
+          expectedSession: entry.link.label,
+          observedHeader: entry.metadata.firstLine,
+          observedTrackLine: entry.metadata.trackLine.trim(),
+          observedStart: entry.metadata.localDateTime ?? null,
+          unavailableReason: isKnownPittsburghQualifyingMismatch
+            ? 'official_archive_link_points_to_summit_point_qualifying_pdf'
+            : 'official_archive_link_pdf_event_or_date_mismatch'
+        }
       });
       continue;
     }

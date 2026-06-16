@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-06-08T19:38:06.829Z",
+  "generatedAt": "2026-06-16T18:12:26.512Z",
   "source": "open_meteo_historical_archive",
-  "archiveCutoffDate": "2026-06-07",
+  "archiveCutoffDate": "2026-06-15",
   "requestedVariables": [
     "temperature_2m",
     "apparent_temperature",

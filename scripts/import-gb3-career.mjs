@@ -354,11 +354,28 @@ const main = async () => {
       });
       importReport.sessionsImported += 1;
       importReport.manifestOnlySessionsImported += 1;
+      const knownMissing1248 = entry.id === '1248' && entry.error?.status === 404;
       importReport.gaps.push({
         id: `gap_gb3_2022_session_${entry.id}_missing_json`,
         scope: 'gb3_2022',
         status: 'open',
-        description: `GB3 _rounds.json lists ${round.Venue} ${session.Name} (${entry.id}) at ${session.DateTime ?? 'an unknown time'}, so the session entity is retained from the official manifest. Row-level results remain unavailable because the session JSON endpoint returned ${entry.error?.status ?? 'an error'}.`
+        description: knownMissing1248
+          ? `GB3 _rounds.json lists ${round.Venue} ${session.Name} (${entry.id}) at ${session.DateTime ?? 'an unknown time'}, so the session entity is retained from the official manifest. Row-level results remain unavailable because the official session JSON endpoint returned 404 and a focused source audit found that the rendered official results page did not expose row-level table data without that JSON payload.`
+          : `GB3 _rounds.json lists ${round.Venue} ${session.Name} (${entry.id}) at ${session.DateTime ?? 'an unknown time'}, so the session entity is retained from the official manifest. Row-level results remain unavailable because the official session JSON endpoint returned ${entry.error?.status ?? 'an error'}.`,
+        provenanceRefs: ['source_gb3_2022_rounds'],
+        raw: {
+          officialManifestUrl: roundsUrl,
+          officialJsonUrl: entry.url,
+          ...(knownMissing1248
+            ? {
+                renderedResultsPageUrl: `https://www.gb-3.net/results?round=R${round.Number}&session=${entry.id}&year=${year}`,
+                alternateOfficialCheck: 'rendered_results_page_checked_no_row_level_table_without_json_payload',
+                unavailableReason: 'official_session_json_404_rendered_page_has_empty_client_table'
+              }
+            : {
+                unavailableReason: `official_session_json_fetch_failed_${entry.error?.status ?? 'unknown'}`
+              })
+        }
       });
       continue;
     }

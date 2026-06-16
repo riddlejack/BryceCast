@@ -441,6 +441,14 @@ const main = async () => {
         matchingOfficialPdfLinks: matchingOfficialPdfLinks.map((asset) => ({ label: asset.label, url: asset.url }))
       };
     });
+  const frocSessionTimeGap = gaps.find((gap) => gap.id === 'gap_froc_2024_session_times_missing');
+  if (frocSessionTimeGap) {
+    frocSessionTimeGap.raw = {
+      ...(frocSessionTimeGap.raw ?? {}),
+      unsourcedTestSessions: report.unsourcedFrocTestSessions,
+      unavailableReason: 'official_toyota_test_result_tabs_and_article_context_do_not_expose_exact_clock_times'
+    };
+  }
 
   const nextDataset = {
     ...dataset,

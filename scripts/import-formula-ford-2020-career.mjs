@@ -1649,11 +1649,13 @@ const main = async () => {
       id: 'gap_formula_ford_2020_grid_start_source_asymmetry_holdouts',
       scope: 'series_formula_ford:2020:grid_start_positions',
       status: 'open',
-      description: `Formula Ford 2020 official grid/start import is complete for ${report.gridRowsImported} race/heat rows. The remaining ${report.gridStartHoldouts.length} classified race/heat rows are held out because the official source family exposes reserve-only entries, restart-grid-only positions, or original-grid rows that do not safely match the classified driver/car row. These rows remain explicit holdouts instead of guessed grid/start positions.`,
+      description: `Formula Ford 2020 official grid/start import is complete for ${report.gridRowsImported} race/heat rows. The remaining ${report.gridStartHoldouts.length} classified race/heat rows are held out because the official source family exposes reserve-only entries, restart-grid-only positions, or original-grid rows that do not safely match the classified driver/car row. These rows remain explicit holdouts instead of guessed grid/start positions. Lap-analysis imports remain scoped to Bryce-labeled blocks; continuation pages without a repeated Bryce label stay held out until a layout-aware parser can match them deterministically.`,
       provenanceRefs: sources.map((source) => source.sourceEvidenceId),
       raw: {
         resultIds: report.gridStartHoldouts.map((row) => row.resultId),
-        holdouts: report.gridStartHoldouts
+        holdouts: report.gridStartHoldouts,
+        lapAnalysisScope: 'bryce_labeled_blocks_only',
+        lapAnalysisHoldoutReason: 'continuation_pages_without_repeated_bryce_label_are_not_matched'
       }
     });
   }
@@ -1696,7 +1698,7 @@ const main = async () => {
         id: 'gap_remaining_career_rows_after_formula_ford_2020_refresh',
         scope: 'career_dataset',
         status: 'open',
-        description: 'Karting race-by-race records, media narrative beyond imported Team USA 2020 context and structured Team USA/Badger Kart Club milestone and record facts, remaining early-career Formula Ford appearances outside imported National FF1600/Festival/Walter Hayes Trophy/Champion books, non-official ambient weather enrichment, historical INDY NXT date-only session windows not covered by official Race Control schedule/trackactivity feeds, remaining grid/pit/sector/deeper detail extraction beyond imported INDY NXT complete and partial lap-chart samples plus Results PDF penalty/caution rows, FRP grid-position-loss announcements, and Formula Ford matched grid/WHT penalty notes, and track metadata for future imported tracks remain open.'
+        description: 'Broad historical-tail placeholder, not a UI-readiness blocker. Remaining optional or metric-specific work includes pre-2019 karting race-by-race records, early-career Formula Ford appearances outside the imported official books, future imported-track metadata, non-official ambient weather outside current exact-window scope, and future derived benchmark models. Current production caveats are tracked by specific gap IDs.'
       }
     ]
   };

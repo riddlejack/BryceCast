@@ -779,8 +779,14 @@ const main = async () => {
     report.gaps.push({
       id: 'gap_euroformula_2023_championship_classification_pdf_current_mismatch',
       scope: 'euroformula_2023',
-      status: 'open',
-      description: 'The supplied official classification PDF URL now serves a 2026 document, so 2023 championship position and points were not imported from that mutable S3 key.'
+      status: 'source_broken_preserved',
+      description: 'The supplied Euroformula classification PDF URL now serves a 2026 document, so that mutable S3 key is preserved as source-broken evidence. RFEDA 2023 final classifications PDF is the stable official standings source used for Bryce Aron P4 and 238 European F. Open points.',
+      provenanceRefs: ['source_euroformula_2023_rfeda_final_classifications_pdf'],
+      raw: {
+        mutablePdfUrl: providedClassificationPdfUrl,
+        stableOfficialPdfUrl: rfedaFinalClassificationsPdfUrl,
+        unavailableReason: 'mutable_s3_key_serves_2026_document'
+      }
     });
   }
 

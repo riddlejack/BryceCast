@@ -1,6 +1,6 @@
 {
   "schemaVersion": "brycecast-indy-nxt-weather-station-crosscheck.v1",
-  "generatedAt": "2026-06-08T19:38:08.279Z",
+  "generatedAt": "2026-06-16T18:12:28.054Z",
   "source": "noaa_ncei_ghcnh",
   "stationListUrl": "https://www.ncei.noaa.gov/oa/global-historical-climatology-network/hourly/doc/ghcnh-station-list.csv",
   "sourceDocs": [

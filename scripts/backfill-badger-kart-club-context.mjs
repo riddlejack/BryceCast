@@ -218,7 +218,7 @@ const main = async () => {
       ? {
           ...gap,
           description:
-            'Karting race-by-race records, remaining early-career Formula Ford appearances outside imported National FF1600/Festival/Walter Hayes Trophy/Champion books, media narrative beyond imported Team USA 2020 context and structured Team USA/Badger Kart Club milestone and record facts, non-official ambient weather enrichment, historical INDY NXT date-only session windows not covered by official Race Control schedule/trackactivity feeds, remaining grid/pit/sector/deeper detail extraction beyond imported INDY NXT complete and partial lap-chart samples plus Results PDF penalty/caution rows, FRP grid-position-loss announcements, and Formula Ford matched grid/WHT penalty notes, and track metadata for future imported tracks remain open.'
+            'Broad historical-tail placeholder, not a UI-readiness blocker. Remaining optional or metric-specific work includes pre-2019 karting race-by-race records, early-career Formula Ford appearances outside the imported official books, future imported-track metadata, non-official ambient weather outside current exact-window scope, and future derived benchmark models. Current production caveats are tracked by specific gap IDs.'
         }
       : gap
   );

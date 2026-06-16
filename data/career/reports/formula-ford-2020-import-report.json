@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-06-08T19:37:58.252Z",
+  "checkedAt": "2026-06-16T18:12:18.025Z",
   "year": 2020,
   "refresh": false,
   "fetched": 0,
@@ -839,7 +839,7 @@
       "id": "gap_formula_ford_2020_grid_start_source_asymmetry_holdouts",
       "scope": "series_formula_ford:2020:grid_start_positions",
       "status": "open",
-      "description": "Formula Ford 2020 official grid/start import is complete for 755 race/heat rows. The remaining 7 classified race/heat rows are held out because the official source family exposes reserve-only entries, restart-grid-only positions, or original-grid rows that do not safely match the classified driver/car row. These rows remain explicit holdouts instead of guessed grid/start positions.",
+      "description": "Formula Ford 2020 official grid/start import is complete for 755 race/heat rows. The remaining 7 classified race/heat rows are held out because the official source family exposes reserve-only entries, restart-grid-only positions, or original-grid rows that do not safely match the classified driver/car row. These rows remain explicit holdouts instead of guessed grid/start positions. Lap-analysis imports remain scoped to Bryce-labeled blocks; continuation pages without a repeated Bryce label stay held out until a layout-aware parser can match them deterministically.",
       "provenanceRefs": [
         "source_formula_ford_2020_festival_book_pdf",
         "source_formula_ford_2020_wht_book_pdf",
@@ -923,7 +923,9 @@
             "finishPosition": null,
             "reason": "official_classification_row_has_no_safe_original_grid_start_match"
           }
-        ]
+        ],
+        "lapAnalysisScope": "bryce_labeled_blocks_only",
+        "lapAnalysisHoldoutReason": "continuation_pages_without_repeated_bryce_label_are_not_matched"
       }
     }
   ]

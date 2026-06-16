@@ -420,6 +420,24 @@ assert.equal(
   true,
   'FRP F1600 penalty coverage must document why absent penalty rows are not a priority gap'
 );
+{
+  const frpPittsburghQualifyingGap = dataset.gaps.find((row) => row.id === 'gap_frp_f1600_2019_r5_01_qualifying_pdf_event_mismatch');
+  assert.equal(
+    frpPittsburghQualifyingGap?.raw?.linkedPdfUrl,
+    'https://cdn.prod.website-files.com/5e6065f5b2e7eb0f83419949/6095518398870138f8bf4afb_F16_Q1_FOR_R1.pdf',
+    'FRP Pittsburgh qualifying mismatch gap must preserve the exact official archive PDF URL that points to Summit Point'
+  );
+  assert.equal(
+    frpPittsburghQualifyingGap?.raw?.expectedEvent,
+    'Pittsburgh International Race Complex',
+    'FRP Pittsburgh qualifying mismatch gap must preserve the expected event'
+  );
+  assert.match(
+    frpPittsburghQualifyingGap?.description ?? '',
+    /correct Pittsburgh qualifying PDF was not found on the official archive route/i,
+    'FRP Pittsburgh qualifying mismatch gap must state that the official archive route did not expose a correct Pittsburgh qualifying PDF'
+  );
+}
 assert.deepEqual(
   formulaFordCoverage?.priorityGaps,
   ['lap_samples'],
@@ -591,6 +609,24 @@ assert.match(
   /session entity is retained from the official manifest/i,
   'GB3 2022 session 1248 gap must distinguish retained session metadata from missing row-level JSON'
 );
+{
+  const gb31248Gap = dataset.gaps.find((row) => row.id === 'gap_gb3_2022_session_1248_missing_json');
+  assert.equal(
+    gb31248Gap?.raw?.officialJsonUrl,
+    'https://www.gb-3.net/json/results/2022/1248.json',
+    'GB3 2022 session 1248 gap must preserve the official JSON URL that 404s'
+  );
+  assert.equal(
+    gb31248Gap?.raw?.renderedResultsPageUrl,
+    'https://www.gb-3.net/results?round=R3&session=1248&year=2022',
+    'GB3 2022 session 1248 gap must preserve the official rendered results route checked as an alternate artifact'
+  );
+  assert.match(
+    gb31248Gap?.description ?? '',
+    /rendered official results page did not expose row-level table data/i,
+    'GB3 2022 session 1248 gap must record that the official rendered page did not clear the row-level 404'
+  );
+}
 
 const euroformulaBryceRaceResults = dataset.results.filter((row) =>
   row.id.startsWith('result_euroformula_2023_') &&
@@ -609,6 +645,19 @@ assert.equal(
   false,
   'Euroformula 2023 points gap must close after official standings recovery'
 );
+{
+  const euroformulaMutableSourceGap = dataset.gaps.find((row) => row.id === 'gap_euroformula_2023_championship_classification_pdf_current_mismatch');
+  assert.equal(
+    euroformulaMutableSourceGap?.status,
+    'source_broken_preserved',
+    'Euroformula mutable classification PDF mismatch should be preserved as source-broken evidence, not an unresolved standings fact'
+  );
+  assert.match(
+    euroformulaMutableSourceGap?.description ?? '',
+    /RFEDA 2023 final classifications PDF is the stable official standings source/i,
+    'Euroformula mutable classification gap must point to the stable RFEDA source used for P4 and 238 points'
+  );
+}
 assert.equal(euroformulaBryceRaceResults.length, 18, 'Euroformula 2023 Bryce race-result coverage should remain 18 official race rows');
 assert.deepEqual(
   euroformulaBryceRaceResults.filter((row) => row.gridPosition === null || row.startPosition === null).map((row) => row.sessionId),
@@ -1115,6 +1164,11 @@ assert.deepEqual(
     true,
     'Formula Ford grid/start holdout gap must preserve reserve-only WHT Grand Final rows instead of assigning guessed grid positions'
   );
+  assert.match(
+    formulaFordGridHoldoutGap?.description ?? '',
+    /Lap-analysis imports remain scoped to Bryce-labeled blocks/i,
+    'Formula Ford gap must explicitly preserve the Bryce-only lap-analysis scope until unlabeled continuation pages can be matched deterministically'
+  );
 }
 
 const assertFormulaFordLapSample = ({
@@ -1200,6 +1254,14 @@ assert.match(
   /FROC Round 1 Race 3 start positions are imported/i,
   'FROC import report start-position gap must reflect integrated Taupo Race 3 Q2 grid backfill'
 );
+{
+  const frocTimeGap = dataset.gaps.find((row) => row.id === 'gap_froc_2024_session_times_missing');
+  assert.equal(
+    frocTimeGap?.raw?.unsourcedTestSessions?.length,
+    9,
+    'FROC session-time gap must enumerate the nine official-date-context-only test sessions still lacking exact clock times'
+  );
+}
 
 const frocRound5GridRuleSource = dataset.sourceEvidence.find((row) => row.id === 'source_froc_2024_r5_highlands_gp_qualifying_format_article');
 assert.equal(

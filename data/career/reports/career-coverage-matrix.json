@@ -1,10 +1,10 @@
 {
   "schemaVersion": "bryce-career-coverage-matrix.v1",
-  "generatedAt": "2026-06-08T19:38:16.255Z",
+  "generatedAt": "2026-06-16T18:12:36.313Z",
   "datasetPath": "data/career/career.dataset.json",
   "validation": {
     "ok": true,
-    "checkedAt": "2026-06-08T19:38:14.908Z",
+    "checkedAt": "2026-06-16T18:12:34.976Z",
     "errors": [],
     "warnings": [
       {
@@ -51734,13 +51734,13 @@
   "openGaps": [
     {
       "id": "gap_euroformula_2023_championship_classification_pdf_current_mismatch",
-      "status": "open",
-      "description": "The supplied official classification PDF URL now serves a 2026 document, so 2023 championship position and points were not imported from that mutable S3 key."
+      "status": "source_broken_preserved",
+      "description": "The supplied Euroformula classification PDF URL now serves a 2026 document, so that mutable S3 key is preserved as source-broken evidence. RFEDA 2023 final classifications PDF is the stable official standings source used for Bryce Aron P4 and 238 European F. Open points."
     },
     {
       "id": "gap_formula_ford_2020_grid_start_source_asymmetry_holdouts",
       "status": "open",
-      "description": "Formula Ford 2020 official grid/start import is complete for 755 race/heat rows. The remaining 7 classified race/heat rows are held out because the official source family exposes reserve-only entries, restart-grid-only positions, or original-grid rows that do not safely match the classified driver/car row. These rows remain explicit holdouts instead of guessed grid/start positions."
+      "description": "Formula Ford 2020 official grid/start import is complete for 755 race/heat rows. The remaining 7 classified race/heat rows are held out because the official source family exposes reserve-only entries, restart-grid-only positions, or original-grid rows that do not safely match the classified driver/car row. These rows remain explicit holdouts instead of guessed grid/start positions. Lap-analysis imports remain scoped to Bryce-labeled blocks; continuation pages without a repeated Bryce label stay held out until a layout-aware parser can match them deterministically."
     },
     {
       "id": "gap_froc_2024_round_4_date_conflict",
@@ -51760,12 +51760,12 @@
     {
       "id": "gap_frp_f1600_2019_r5_01_qualifying_pdf_event_mismatch",
       "status": "open",
-      "description": "FRP archive labels Pittsburgh International Race Complex Qualifying, but the linked PDF header/date indicates a different event (FRP at SUMMIT POINT with KARTS                                                                   Sorted on best lap time; F1600 Championship Series                                                 Summit Point 2.000 miles; 2019-08-23T14:40:00). Rows were staged but not imported."
+      "description": "FRP archive labels Pittsburgh International Race Complex Qualifying, but the linked PDF header/date indicates a different event (FRP at SUMMIT POINT with KARTS                                                                   Sorted on best lap time; F1600 Championship Series                                                 Summit Point 2.000 miles; 2019-08-23T14:40:00). The correct Pittsburgh qualifying PDF was not found on the official archive route, so rows were staged but not imported."
     },
     {
       "id": "gap_gb3_2022_session_1248_missing_json",
       "status": "open",
-      "description": "GB3 _rounds.json lists Donington Park Friday session 2 (1248) at 2022-05-27T14:45:00, so the session entity is retained from the official manifest. Row-level results remain unavailable because the session JSON endpoint returned 404."
+      "description": "GB3 _rounds.json lists Donington Park Friday session 2 (1248) at 2022-05-27T14:45:00, so the session entity is retained from the official manifest. Row-level results remain unavailable because the official session JSON endpoint returned 404 and a focused source audit found that the rendered official results page did not expose row-level table data without that JSON payload."
     },
     {
       "id": "gap_indy_nxt_qualifying_lap_reports",
@@ -51775,7 +51775,7 @@
     {
       "id": "gap_remaining_career_rows_after_track_metadata",
       "status": "open",
-      "description": "Karting race-by-race records, remaining early-career Formula Ford appearances outside imported National FF1600/Festival/Walter Hayes Trophy/Champion books, media narrative beyond imported Team USA 2020 context and structured Team USA/Badger Kart Club milestone and record facts, non-official ambient weather enrichment, historical INDY NXT date-only session windows not covered by official Race Control schedule/trackactivity feeds, remaining grid/pit/sector/deeper detail extraction beyond imported INDY NXT complete and partial lap-chart samples plus Results PDF penalty/caution rows, FRP grid-position-loss announcements, and Formula Ford matched grid/WHT penalty notes, and track metadata for future imported tracks remain open."
+      "description": "Broad historical-tail placeholder, not a UI-readiness blocker. Remaining optional or metric-specific work includes pre-2019 karting race-by-race records, early-career Formula Ford appearances outside the imported official books, future imported-track metadata, non-official ambient weather outside current exact-window scope, and future derived benchmark models. Current production caveats are tracked by specific gap IDs."
     }
   ],
   "canceledSessionEvidence": [

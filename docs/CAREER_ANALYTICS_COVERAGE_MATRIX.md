@@ -1,6 +1,6 @@
 # Career Analytics Coverage Matrix
 
-Generated: 2026-06-08T19:38:16.255Z
+Generated: 2026-06-16T18:12:36.313Z
 
 This report is generated from the canonical dataset and importer reports. It covers the production analytics window starting with 2019 FRP F1600 and running through current 2026 INDY NXT. Pre-2019 karting remains narrative/context only.
 

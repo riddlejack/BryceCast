@@ -1,10 +1,10 @@
 {
   "schemaVersion": "bryce-career-ingestion-summary.v1",
-  "generatedAt": "2026-06-08T19:38:15.513Z",
+  "generatedAt": "2026-06-16T18:12:35.595Z",
   "datasetPath": "data/career/career.dataset.json",
   "validation": {
     "ok": true,
-    "checkedAt": "2026-06-08T19:38:14.908Z",
+    "checkedAt": "2026-06-16T18:12:34.976Z",
     "errors": [],
     "warnings": [
       {
@@ -145,7 +145,7 @@
   "importReports": [
     {
       "name": "euroformula-2023-import-report.json",
-      "checkedAt": "2026-06-08T19:37:54.877Z",
+      "checkedAt": "2026-06-16T18:12:14.672Z",
       "refresh": false,
       "fetched": 0,
       "cached": 32,
@@ -159,14 +159,22 @@
         {
           "id": "gap_euroformula_2023_championship_classification_pdf_current_mismatch",
           "scope": "euroformula_2023",
-          "status": "open",
-          "description": "The supplied official classification PDF URL now serves a 2026 document, so 2023 championship position and points were not imported from that mutable S3 key."
+          "status": "source_broken_preserved",
+          "description": "The supplied Euroformula classification PDF URL now serves a 2026 document, so that mutable S3 key is preserved as source-broken evidence. RFEDA 2023 final classifications PDF is the stable official standings source used for Bryce Aron P4 and 238 European F. Open points.",
+          "provenanceRefs": [
+            "source_euroformula_2023_rfeda_final_classifications_pdf"
+          ],
+          "raw": {
+            "mutablePdfUrl": "https://gtsports-media.s3.eu-west-3.amazonaws.com/euroformulaclasgen-9.pdf",
+            "stableOfficialPdfUrl": "https://www.rfeda.es/docs/pdf/historico-de-clasificaciones/CLASIFICACIONES AUTOMOVILISMO 2023- FINALES V 18-01-2024.pdf",
+            "unavailableReason": "mutable_s3_key_serves_2026_document"
+          }
         }
       ]
     },
     {
       "name": "formula-ford-2020-import-report.json",
-      "checkedAt": "2026-06-08T19:37:58.252Z",
+      "checkedAt": "2026-06-16T18:12:18.025Z",
       "refresh": false,
       "fetched": 0,
       "cached": 11,
@@ -181,7 +189,7 @@
           "id": "gap_formula_ford_2020_grid_start_source_asymmetry_holdouts",
           "scope": "series_formula_ford:2020:grid_start_positions",
           "status": "open",
-          "description": "Formula Ford 2020 official grid/start import is complete for 755 race/heat rows. The remaining 7 classified race/heat rows are held out because the official source family exposes reserve-only entries, restart-grid-only positions, or original-grid rows that do not safely match the classified driver/car row. These rows remain explicit holdouts instead of guessed grid/start positions.",
+          "description": "Formula Ford 2020 official grid/start import is complete for 755 race/heat rows. The remaining 7 classified race/heat rows are held out because the official source family exposes reserve-only entries, restart-grid-only positions, or original-grid rows that do not safely match the classified driver/car row. These rows remain explicit holdouts instead of guessed grid/start positions. Lap-analysis imports remain scoped to Bryce-labeled blocks; continuation pages without a repeated Bryce label stay held out until a layout-aware parser can match them deterministically.",
           "provenanceRefs": [
             "source_formula_ford_2020_festival_book_pdf",
             "source_formula_ford_2020_wht_book_pdf",
@@ -265,14 +273,16 @@
                 "finishPosition": null,
                 "reason": "official_classification_row_has_no_safe_original_grid_start_match"
               }
-            ]
+            ],
+            "lapAnalysisScope": "bryce_labeled_blocks_only",
+            "lapAnalysisHoldoutReason": "continuation_pages_without_repeated_bryce_label_are_not_matched"
           }
         }
       ]
     },
     {
       "name": "froc-2024-import-report.json",
-      "checkedAt": "2026-06-08T19:37:59.813Z",
+      "checkedAt": "2026-06-16T18:12:19.556Z",
       "refresh": false,
       "fetched": 0,
       "cached": 12,
@@ -305,7 +315,7 @@
     },
     {
       "name": "frp-f1600-import-report.json",
-      "checkedAt": "2026-06-08T19:37:56.819Z",
+      "checkedAt": "2026-06-16T18:12:16.539Z",
       "refresh": false,
       "fetched": 0,
       "cached": 81,
@@ -320,13 +330,23 @@
           "id": "gap_frp_f1600_2019_r5_01_qualifying_pdf_event_mismatch",
           "scope": "frp_f1600_2019",
           "status": "open",
-          "description": "FRP archive labels Pittsburgh International Race Complex Qualifying, but the linked PDF header/date indicates a different event (FRP at SUMMIT POINT with KARTS                                                                   Sorted on best lap time; F1600 Championship Series                                                 Summit Point 2.000 miles; 2019-08-23T14:40:00). Rows were staged but not imported."
+          "description": "FRP archive labels Pittsburgh International Race Complex Qualifying, but the linked PDF header/date indicates a different event (FRP at SUMMIT POINT with KARTS                                                                   Sorted on best lap time; F1600 Championship Series                                                 Summit Point 2.000 miles; 2019-08-23T14:40:00). The correct Pittsburgh qualifying PDF was not found on the official archive route, so rows were staged but not imported.",
+          "raw": {
+            "archiveUrl": "https://www.racefrp.com/results-archive/f1600",
+            "linkedPdfUrl": "https://cdn.prod.website-files.com/5e6065f5b2e7eb0f83419949/6095518398870138f8bf4afb_F16_Q1_FOR_R1.pdf",
+            "expectedEvent": "Pittsburgh International Race Complex",
+            "expectedSession": "Qualifying",
+            "observedHeader": "FRP at SUMMIT POINT with KARTS                                                                   Sorted on best lap time",
+            "observedTrackLine": "F1600 Championship Series                                                 Summit Point 2.000 miles",
+            "observedStart": "2019-08-23T14:40:00",
+            "unavailableReason": "official_archive_link_points_to_summit_point_qualifying_pdf"
+          }
         }
       ]
     },
     {
       "name": "gb3-2021-import-report.json",
-      "checkedAt": "2026-06-08T19:37:49.936Z",
+      "checkedAt": "2026-06-16T18:12:09.670Z",
       "refresh": false,
       "fetched": 0,
       "cached": 129,
@@ -340,7 +360,7 @@
     },
     {
       "name": "gb3-import-report.json",
-      "checkedAt": "2026-06-08T19:37:51.506Z",
+      "checkedAt": "2026-06-16T18:12:11.217Z",
       "refresh": false,
       "fetched": 0,
       "cached": 78,
@@ -355,13 +375,23 @@
           "id": "gap_gb3_2022_session_1248_missing_json",
           "scope": "gb3_2022",
           "status": "open",
-          "description": "GB3 _rounds.json lists Donington Park Friday session 2 (1248) at 2022-05-27T14:45:00, so the session entity is retained from the official manifest. Row-level results remain unavailable because the session JSON endpoint returned 404."
+          "description": "GB3 _rounds.json lists Donington Park Friday session 2 (1248) at 2022-05-27T14:45:00, so the session entity is retained from the official manifest. Row-level results remain unavailable because the official session JSON endpoint returned 404 and a focused source audit found that the rendered official results page did not expose row-level table data without that JSON payload.",
+          "provenanceRefs": [
+            "source_gb3_2022_rounds"
+          ],
+          "raw": {
+            "officialManifestUrl": "https://www.gb-3.net/json/results/2022/22/_rounds.json",
+            "officialJsonUrl": "https://www.gb-3.net/json/results/2022/1248.json",
+            "renderedResultsPageUrl": "https://www.gb-3.net/results?round=R3&session=1248&year=2022",
+            "alternateOfficialCheck": "rendered_results_page_checked_no_row_level_table_without_json_payload",
+            "unavailableReason": "official_session_json_404_rendered_page_has_empty_client_table"
+          }
         }
       ]
     },
     {
       "name": "imsa-import-report.json",
-      "checkedAt": "2026-06-08T19:37:53.600Z",
+      "checkedAt": "2026-06-16T18:12:13.430Z",
       "refresh": false,
       "fetched": 0,
       "cached": 3,
@@ -375,7 +405,7 @@
     },
     {
       "name": "indy-nxt-import-report.json",
-      "checkedAt": "2026-06-08T19:37:46.339Z",
+      "checkedAt": "2026-06-16T18:12:05.961Z",
       "refresh": false,
       "fetched": 0,
       "cached": 180,
@@ -389,7 +419,7 @@
     },
     {
       "name": "track-metadata-import-report.json",
-      "checkedAt": "2026-06-08T19:38:05.839Z",
+      "checkedAt": "2026-06-16T18:12:25.504Z",
       "refresh": null,
       "fetched": null,
       "cached": null,
@@ -406,14 +436,22 @@
     {
       "id": "gap_euroformula_2023_championship_classification_pdf_current_mismatch",
       "scope": "euroformula_2023",
-      "status": "open",
-      "description": "The supplied official classification PDF URL now serves a 2026 document, so 2023 championship position and points were not imported from that mutable S3 key."
+      "status": "source_broken_preserved",
+      "description": "The supplied Euroformula classification PDF URL now serves a 2026 document, so that mutable S3 key is preserved as source-broken evidence. RFEDA 2023 final classifications PDF is the stable official standings source used for Bryce Aron P4 and 238 European F. Open points.",
+      "provenanceRefs": [
+        "source_euroformula_2023_rfeda_final_classifications_pdf"
+      ],
+      "raw": {
+        "mutablePdfUrl": "https://gtsports-media.s3.eu-west-3.amazonaws.com/euroformulaclasgen-9.pdf",
+        "stableOfficialPdfUrl": "https://www.rfeda.es/docs/pdf/historico-de-clasificaciones/CLASIFICACIONES AUTOMOVILISMO 2023- FINALES V 18-01-2024.pdf",
+        "unavailableReason": "mutable_s3_key_serves_2026_document"
+      }
     },
     {
       "id": "gap_formula_ford_2020_grid_start_source_asymmetry_holdouts",
       "scope": "series_formula_ford:2020:grid_start_positions",
       "status": "open",
-      "description": "Formula Ford 2020 official grid/start import is complete for 755 race/heat rows. The remaining 7 classified race/heat rows are held out because the official source family exposes reserve-only entries, restart-grid-only positions, or original-grid rows that do not safely match the classified driver/car row. These rows remain explicit holdouts instead of guessed grid/start positions.",
+      "description": "Formula Ford 2020 official grid/start import is complete for 755 race/heat rows. The remaining 7 classified race/heat rows are held out because the official source family exposes reserve-only entries, restart-grid-only positions, or original-grid rows that do not safely match the classified driver/car row. These rows remain explicit holdouts instead of guessed grid/start positions. Lap-analysis imports remain scoped to Bryce-labeled blocks; continuation pages without a repeated Bryce label stay held out until a layout-aware parser can match them deterministically.",
       "provenanceRefs": [
         "source_formula_ford_2020_festival_book_pdf",
         "source_formula_ford_2020_wht_book_pdf",
@@ -497,7 +535,9 @@
             "finishPosition": null,
             "reason": "official_classification_row_has_no_safe_original_grid_start_match"
           }
-        ]
+        ],
+        "lapAnalysisScope": "bryce_labeled_blocks_only",
+        "lapAnalysisHoldoutReason": "continuation_pages_without_repeated_bryce_label_are_not_matched"
       }
     },
     {
@@ -510,7 +550,102 @@
       "id": "gap_froc_2024_session_times_missing",
       "scope": "froc_2024",
       "status": "partial",
-      "description": "Official Toyota schedule images backfill practice, qualifying, and race starts for FROC 2024, and official Round 2 timing PDFs backfill Test 1 and Test 2. Official Toyota test-day articles are cached as date-level context for the other nine FROC test sessions, but those sessions remain unavailable for production session-hour weather joins because the official Toyota round pages expose test result tabs and article context but no official test timing PDF links or equivalent exact clock-time source for those sessions."
+      "description": "Official Toyota schedule images backfill practice, qualifying, and race starts for FROC 2024, and official Round 2 timing PDFs backfill Test 1 and Test 2. Official Toyota test-day articles are cached as date-level context for the other nine FROC test sessions, but those sessions remain unavailable for production session-hour weather joins because the official Toyota round pages expose test result tabs and article context but no official test timing PDF links or equivalent exact clock-time source for those sessions.",
+      "raw": {
+        "unsourcedTestSessions": [
+          {
+            "sessionId": "session_froc_2024_r1_test_1",
+            "eventId": "event_froc_2024_r1_taupo_international_motorsport_park",
+            "round": 1,
+            "testNumber": 1,
+            "reason": "official_toyota_round_page_has_test_result_tab_and_article_date_context_but_no_test_timing_pdf_link_or_exact_clock_time_source",
+            "checkedRoundPage": "https://www.toyota.co.nz/toyota-racing/castrol-toyota-fr-oceania/calendar-results/2024-season/round-1-taupo/",
+            "dateContextEvidenceId": "source_froc_2024_r1_toyota_test_day_article",
+            "matchingOfficialPdfLinks": []
+          },
+          {
+            "sessionId": "session_froc_2024_r1_test_2",
+            "eventId": "event_froc_2024_r1_taupo_international_motorsport_park",
+            "round": 1,
+            "testNumber": 2,
+            "reason": "official_toyota_round_page_has_test_result_tab_and_article_date_context_but_no_test_timing_pdf_link_or_exact_clock_time_source",
+            "checkedRoundPage": "https://www.toyota.co.nz/toyota-racing/castrol-toyota-fr-oceania/calendar-results/2024-season/round-1-taupo/",
+            "dateContextEvidenceId": "source_froc_2024_r1_toyota_test_day_article",
+            "matchingOfficialPdfLinks": []
+          },
+          {
+            "sessionId": "session_froc_2024_r1_test_3",
+            "eventId": "event_froc_2024_r1_taupo_international_motorsport_park",
+            "round": 1,
+            "testNumber": 3,
+            "reason": "official_toyota_round_page_has_test_result_tab_and_article_date_context_but_no_test_timing_pdf_link_or_exact_clock_time_source",
+            "checkedRoundPage": "https://www.toyota.co.nz/toyota-racing/castrol-toyota-fr-oceania/calendar-results/2024-season/round-1-taupo/",
+            "dateContextEvidenceId": "source_froc_2024_r1_toyota_test_day_article",
+            "matchingOfficialPdfLinks": []
+          },
+          {
+            "sessionId": "session_froc_2024_r3_test_1",
+            "eventId": "event_froc_2024_r3_hampton_downs_motorsport_park",
+            "round": 3,
+            "testNumber": 1,
+            "reason": "official_toyota_round_page_has_test_result_tab_and_article_date_context_but_no_test_timing_pdf_link_or_exact_clock_time_source",
+            "checkedRoundPage": "https://www.toyota.co.nz/toyota-racing/castrol-toyota-fr-oceania/calendar-results/2024-season/24-season-round-03/",
+            "dateContextEvidenceId": "source_froc_2024_r3_toyota_test_day_article",
+            "matchingOfficialPdfLinks": []
+          },
+          {
+            "sessionId": "session_froc_2024_r3_test_2",
+            "eventId": "event_froc_2024_r3_hampton_downs_motorsport_park",
+            "round": 3,
+            "testNumber": 2,
+            "reason": "official_toyota_round_page_has_test_result_tab_and_article_date_context_but_no_test_timing_pdf_link_or_exact_clock_time_source",
+            "checkedRoundPage": "https://www.toyota.co.nz/toyota-racing/castrol-toyota-fr-oceania/calendar-results/2024-season/24-season-round-03/",
+            "dateContextEvidenceId": "source_froc_2024_r3_toyota_test_day_article",
+            "matchingOfficialPdfLinks": []
+          },
+          {
+            "sessionId": "session_froc_2024_r4_test_1",
+            "eventId": "event_froc_2024_r4_euromarque_motorsport_park",
+            "round": 4,
+            "testNumber": 1,
+            "reason": "official_toyota_round_page_has_test_result_tab_and_article_date_context_but_no_test_timing_pdf_link_or_exact_clock_time_source",
+            "checkedRoundPage": "https://www.toyota.co.nz/toyota-racing/castrol-toyota-fr-oceania/calendar-results/2024-season/24-season-round-04/",
+            "dateContextEvidenceId": "source_froc_2024_r4_toyota_test_day_article",
+            "matchingOfficialPdfLinks": []
+          },
+          {
+            "sessionId": "session_froc_2024_r4_test_2",
+            "eventId": "event_froc_2024_r4_euromarque_motorsport_park",
+            "round": 4,
+            "testNumber": 2,
+            "reason": "official_toyota_round_page_has_test_result_tab_and_article_date_context_but_no_test_timing_pdf_link_or_exact_clock_time_source",
+            "checkedRoundPage": "https://www.toyota.co.nz/toyota-racing/castrol-toyota-fr-oceania/calendar-results/2024-season/24-season-round-04/",
+            "dateContextEvidenceId": "source_froc_2024_r4_toyota_test_day_article",
+            "matchingOfficialPdfLinks": []
+          },
+          {
+            "sessionId": "session_froc_2024_r5_test_1",
+            "eventId": "event_froc_2024_r5_highlands_motorsport_park",
+            "round": 5,
+            "testNumber": 1,
+            "reason": "official_toyota_round_page_has_test_result_tab_and_article_date_context_but_no_test_timing_pdf_link_or_exact_clock_time_source",
+            "checkedRoundPage": "https://www.toyota.co.nz/toyota-racing/castrol-toyota-fr-oceania/calendar-results/2024-season/24-season-round-052/",
+            "dateContextEvidenceId": "source_froc_2024_r5_toyota_test_day_article",
+            "matchingOfficialPdfLinks": []
+          },
+          {
+            "sessionId": "session_froc_2024_r5_test_2",
+            "eventId": "event_froc_2024_r5_highlands_motorsport_park",
+            "round": 5,
+            "testNumber": 2,
+            "reason": "official_toyota_round_page_has_test_result_tab_and_article_date_context_but_no_test_timing_pdf_link_or_exact_clock_time_source",
+            "checkedRoundPage": "https://www.toyota.co.nz/toyota-racing/castrol-toyota-fr-oceania/calendar-results/2024-season/24-season-round-052/",
+            "dateContextEvidenceId": "source_froc_2024_r5_toyota_test_day_article",
+            "matchingOfficialPdfLinks": []
+          }
+        ],
+        "unavailableReason": "official_toyota_test_result_tabs_and_article_context_do_not_expose_exact_clock_times"
+      }
     },
     {
       "id": "gap_froc_2024_start_positions_partial",
@@ -522,13 +657,33 @@
       "id": "gap_frp_f1600_2019_r5_01_qualifying_pdf_event_mismatch",
       "scope": "frp_f1600_2019",
       "status": "open",
-      "description": "FRP archive labels Pittsburgh International Race Complex Qualifying, but the linked PDF header/date indicates a different event (FRP at SUMMIT POINT with KARTS                                                                   Sorted on best lap time; F1600 Championship Series                                                 Summit Point 2.000 miles; 2019-08-23T14:40:00). Rows were staged but not imported."
+      "description": "FRP archive labels Pittsburgh International Race Complex Qualifying, but the linked PDF header/date indicates a different event (FRP at SUMMIT POINT with KARTS                                                                   Sorted on best lap time; F1600 Championship Series                                                 Summit Point 2.000 miles; 2019-08-23T14:40:00). The correct Pittsburgh qualifying PDF was not found on the official archive route, so rows were staged but not imported.",
+      "raw": {
+        "archiveUrl": "https://www.racefrp.com/results-archive/f1600",
+        "linkedPdfUrl": "https://cdn.prod.website-files.com/5e6065f5b2e7eb0f83419949/6095518398870138f8bf4afb_F16_Q1_FOR_R1.pdf",
+        "expectedEvent": "Pittsburgh International Race Complex",
+        "expectedSession": "Qualifying",
+        "observedHeader": "FRP at SUMMIT POINT with KARTS                                                                   Sorted on best lap time",
+        "observedTrackLine": "F1600 Championship Series                                                 Summit Point 2.000 miles",
+        "observedStart": "2019-08-23T14:40:00",
+        "unavailableReason": "official_archive_link_points_to_summit_point_qualifying_pdf"
+      }
     },
     {
       "id": "gap_gb3_2022_session_1248_missing_json",
       "scope": "gb3_2022",
       "status": "open",
-      "description": "GB3 _rounds.json lists Donington Park Friday session 2 (1248) at 2022-05-27T14:45:00, so the session entity is retained from the official manifest. Row-level results remain unavailable because the session JSON endpoint returned 404."
+      "description": "GB3 _rounds.json lists Donington Park Friday session 2 (1248) at 2022-05-27T14:45:00, so the session entity is retained from the official manifest. Row-level results remain unavailable because the official session JSON endpoint returned 404 and a focused source audit found that the rendered official results page did not expose row-level table data without that JSON payload.",
+      "provenanceRefs": [
+        "source_gb3_2022_rounds"
+      ],
+      "raw": {
+        "officialManifestUrl": "https://www.gb-3.net/json/results/2022/22/_rounds.json",
+        "officialJsonUrl": "https://www.gb-3.net/json/results/2022/1248.json",
+        "renderedResultsPageUrl": "https://www.gb-3.net/results?round=R3&session=1248&year=2022",
+        "alternateOfficialCheck": "rendered_results_page_checked_no_row_level_table_without_json_payload",
+        "unavailableReason": "official_session_json_404_rendered_page_has_empty_client_table"
+      }
     },
     {
       "id": "gap_indy_nxt_qualifying_lap_reports",
@@ -540,7 +695,7 @@
       "id": "gap_remaining_career_rows_after_track_metadata",
       "scope": "career_dataset",
       "status": "open",
-      "description": "Karting race-by-race records, remaining early-career Formula Ford appearances outside imported National FF1600/Festival/Walter Hayes Trophy/Champion books, media narrative beyond imported Team USA 2020 context and structured Team USA/Badger Kart Club milestone and record facts, non-official ambient weather enrichment, historical INDY NXT date-only session windows not covered by official Race Control schedule/trackactivity feeds, remaining grid/pit/sector/deeper detail extraction beyond imported INDY NXT complete and partial lap-chart samples plus Results PDF penalty/caution rows, FRP grid-position-loss announcements, and Formula Ford matched grid/WHT penalty notes, and track metadata for future imported tracks remain open."
+      "description": "Broad historical-tail placeholder, not a UI-readiness blocker. Remaining optional or metric-specific work includes pre-2019 karting race-by-race records, early-career Formula Ford appearances outside the imported official books, future imported-track metadata, non-official ambient weather outside current exact-window scope, and future derived benchmark models. Current production caveats are tracked by specific gap IDs."
     }
   ]
 }

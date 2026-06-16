@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-06-08T19:37:51.506Z",
+  "checkedAt": "2026-06-16T18:12:11.217Z",
   "year": 2022,
   "concurrency": 4,
   "refresh": false,
@@ -45,11 +45,11 @@
     "data/career/raw/gb3/2022-session-1083.json",
     "data/career/raw/gb3/2022-session-1084.json",
     "data/career/raw/gb3/2022-session-1244.json",
-    "data/career/raw/gb3/2022-session-1245.json",
     "data/career/raw/gb3/2022-session-1246.json",
+    "data/career/raw/gb3/2022-session-1245.json",
     "data/career/raw/gb3/2022-session-1247.json",
-    "data/career/raw/gb3/2022-session-1249.json",
     "data/career/raw/gb3/2022-session-1243.json",
+    "data/career/raw/gb3/2022-session-1249.json",
     "data/career/raw/gb3/2022-session-1085.json",
     "data/career/raw/gb3/2022-session-1257.json",
     "data/career/raw/gb3/2022-session-1087.json",
@@ -106,7 +106,17 @@
       "id": "gap_gb3_2022_session_1248_missing_json",
       "scope": "gb3_2022",
       "status": "open",
-      "description": "GB3 _rounds.json lists Donington Park Friday session 2 (1248) at 2022-05-27T14:45:00, so the session entity is retained from the official manifest. Row-level results remain unavailable because the session JSON endpoint returned 404."
+      "description": "GB3 _rounds.json lists Donington Park Friday session 2 (1248) at 2022-05-27T14:45:00, so the session entity is retained from the official manifest. Row-level results remain unavailable because the official session JSON endpoint returned 404 and a focused source audit found that the rendered official results page did not expose row-level table data without that JSON payload.",
+      "provenanceRefs": [
+        "source_gb3_2022_rounds"
+      ],
+      "raw": {
+        "officialManifestUrl": "https://www.gb-3.net/json/results/2022/22/_rounds.json",
+        "officialJsonUrl": "https://www.gb-3.net/json/results/2022/1248.json",
+        "renderedResultsPageUrl": "https://www.gb-3.net/results?round=R3&session=1248&year=2022",
+        "alternateOfficialCheck": "rendered_results_page_checked_no_row_level_table_without_json_payload",
+        "unavailableReason": "official_session_json_404_rendered_page_has_empty_client_table"
+      }
     }
   ]
 }
