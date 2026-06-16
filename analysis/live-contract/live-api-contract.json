@@ -1,7 +1,7 @@
 {
   "schemaVersion": "live-api-contract.v1",
   "generatedAt": "2026-06-16",
-  "baselineCommit": "e24edd0",
+  "baselineCommit": "5636bb6",
   "routes": [
     {
       "path": "/api/readiness",

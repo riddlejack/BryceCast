@@ -2,7 +2,7 @@
 
 Generated: 2026-06-16
 Lane: Live Race Contract And Points Projection
-Baseline: `e24edd0 Plan UI readiness execution lanes`
+Baseline: `5636bb6 Harden preserved career data gaps`
 
 ## Decision
 

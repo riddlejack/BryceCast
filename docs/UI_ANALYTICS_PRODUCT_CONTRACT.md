@@ -2,7 +2,7 @@
 
 Generated: 2026-06-16
 
-Baseline lane: `e24edd0 Plan UI readiness execution lanes`
+Baseline: `5636bb6 Harden preserved career data gaps`
 
 ## Contract Position
 

@@ -1468,7 +1468,11 @@ export const buildReadinessPayloadFromParts = ({
   const timingModifiedAgeSeconds = timingEndpoint?.modifiedAgeSeconds ?? null;
   const timingPayloadStale = timingModifiedAgeSeconds !== null && timingModifiedAgeSeconds > liveTimingPayloadMaxAgeSeconds;
   const sourceStateValue = inputSourceState ?? timingEndpoint?.sourceState ?? (heartbeat ? sourceState(heartbeat) : 'error');
+  const bryceProfilePending = Boolean(bryce) && !bryceProfile?.radiofrequency;
+  const broadcastRoutePending = Boolean(heartbeat && seriesOk) && (!broadcastRoute || broadcastRoute.source === 'unavailable');
   const enrichmentDegraded =
+    bryceProfilePending ||
+    broadcastRoutePending ||
     sources.endpoints.some(
       (endpoint) =>
         !['timing', 'drivers_top', 'schedule_top', 'trackactivity_top', 'ntt_data_polling'].includes(endpoint.id) &&

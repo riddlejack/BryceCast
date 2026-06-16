@@ -1,7 +1,7 @@
 # BryceCast Analytics UI Artifact Index
 
 Generated: 2026-06-16
-Baseline: `e24edd0 Plan UI readiness execution lanes`
+Baseline: `5636bb6 Harden preserved career data gaps`
 Canonical dataset updated: `2026-06-16T18:12:31.143Z`
 
 This index promotes only source-backed analytics artifacts that can feed the UI contract after the current backend baseline. It separates stable v1 inputs from exploratory work that should stay out of the first frontend build.

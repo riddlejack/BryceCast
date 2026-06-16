@@ -146,6 +146,26 @@ assert.equal(ready.liveTiming.rows[0].passes, 0, 'source-present zero stays zero
 assert.equal(ready.liveTiming.rows[0].firstName, 'Bryce', 'compact timing rows preserve firstName for UI contracts');
 assert.equal(ready.liveTiming.rows[0].lastName, 'Aron', 'compact timing rows preserve lastName for UI contracts');
 
+const pendingEnrichment = buildReadinessPayloadFromParts(
+  baseParts({
+    bryceProfile: { firstname: 'Bryce', lastname: 'Aron', radiofrequency: '' },
+    broadcastRoute: {
+      eventId: '710',
+      sessionId: '6762',
+      eventName: 'Grand Prix at Road America Race 1',
+      sessionName: 'Race',
+      sessionType: 'Race',
+      startsAt: '',
+      alternates: [],
+      audio: [],
+      international: [],
+      source: 'unavailable',
+      note: 'Session route feeds are pending.'
+    }
+  })
+);
+assert.equal(pendingEnrichment.state, 'degraded', 'active Bryce timing with pending profile/route enrichment should not be ready');
+
 const nonActiveSession = buildReadinessPayloadFromParts(
   baseParts({
     heartbeat: heartbeat({ currentFlag: 'RED', SessionStatus: 'Red', lapNumber: '0' })
@@ -288,4 +308,4 @@ assert.equal(compactNulls.bestSpeed, null);
 assert.equal(compactNulls.pitStops, 0);
 assert.equal(compactNulls.runningDriverPoints, null);
 
-console.log(JSON.stringify({ ok: true, assertions: 50 }, null, 2));
+console.log(JSON.stringify({ ok: true, assertions: 51 }, null, 2));
