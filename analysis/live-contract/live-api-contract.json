@@ -1,0 +1,292 @@
+{
+  "schemaVersion": "live-api-contract.v1",
+  "generatedAt": "2026-06-16",
+  "baselineCommit": "e24edd0",
+  "routes": [
+    {
+      "path": "/api/readiness",
+      "state": "ReadinessState",
+      "status": "required_new_or_embedded",
+      "purpose": "Single product-level race-day readiness reducer for UI gating."
+    },
+    {
+      "path": "/api/session",
+      "state": "RaceWeekendState",
+      "status": "existing_needs_readiness_wrapper",
+      "purpose": "Event, session, flag, lap, route, and pre-session context."
+    },
+    {
+      "path": "/api/timing",
+      "state": "LiveTimingState",
+      "status": "existing",
+      "purpose": "Timing tower rows, Bryce highlight, point fields, gaps, pace, pit/pass fields."
+    },
+    {
+      "path": "/api/bryce",
+      "state": "BryceLiveState",
+      "status": "existing_needs_readiness_wrapper",
+      "purpose": "Bryce timing row, identity/profile, and route context."
+    },
+    {
+      "path": "/api/weather/live?trackId=track_road_america",
+      "state": "WeatherState",
+      "status": "existing",
+      "purpose": "NWS venue observation, forecast, alerts, station/grid, probes, and cache state."
+    },
+    {
+      "path": "/api/replay/bryce",
+      "state": "ReplayState",
+      "status": "existing",
+      "purpose": "SQLite-backed Bryce archive replay and trend sufficiency."
+    },
+    {
+      "path": "/api/sources",
+      "state": "SourceHealthState",
+      "status": "existing",
+      "purpose": "Endpoint-level source diagnostics and readiness inputs."
+    },
+    {
+      "path": "/api/history/bryce?compact=1",
+      "state": "HistoricalPointsFallback",
+      "status": "existing",
+      "purpose": "Historical official/provisional points baseline when live points are absent or stale."
+    }
+  ],
+  "readinessStates": {
+    "ready": "Fresh INDY NXT timing, Bryce car 9 row present, core timing usable.",
+    "pre_session": "Session context exists but fresh Bryce NXT timing is not active yet.",
+    "degraded": "Core timing usable with one or more enrichment failures.",
+    "wrong_series": "Global timing feed is reachable but not the Bryce INDY NXT session.",
+    "stale": "Only old timing or archived Bryce data is available.",
+    "blocked": "Required data for honest race-day mode is missing or invalid."
+  },
+  "states": {
+    "RaceWeekendState": {
+      "requiredFields": [
+        "eventId",
+        "eventSessionId",
+        "eventName",
+        "sessionName",
+        "sessionType",
+        "sessionStatus",
+        "trackName",
+        "trackType",
+        "trackLength",
+        "flag",
+        "lap",
+        "totalLaps",
+        "startsAt",
+        "estimatedGreenFlag",
+        "broadcastRoute",
+        "sourceState",
+        "readiness"
+      ]
+    },
+    "LiveTimingState": {
+      "requiredFields": [
+        "checkedAt",
+        "sourceState",
+        "rowCount",
+        "heartbeat",
+        "rows",
+        "bryceNo"
+      ],
+      "rowFields": [
+        "no",
+        "name",
+        "team",
+        "rank",
+        "liveRank",
+        "startPosition",
+        "status",
+        "comment",
+        "gap",
+        "liveGap",
+        "diff",
+        "laps",
+        "bestLapTime",
+        "lastLapTime",
+        "bestSpeed",
+        "lastSpeed",
+        "averageSpeed",
+        "passes",
+        "passed",
+        "pitStops",
+        "lastPitLap",
+        "sincePitLap",
+        "tire",
+        "overtakeRemain",
+        "overtakeActive",
+        "lapDistance",
+        "liveDiffAhead",
+        "liveDiffBehind",
+        "runningDriverPoints",
+        "totalDriverPoints",
+        "totalEntrantPoints",
+        "bryce"
+      ]
+    },
+    "BryceLiveState": {
+      "requiredFields": [
+        "checkedAt",
+        "sourceState",
+        "readiness",
+        "heartbeat",
+        "bryce",
+        "profile",
+        "identityGuard",
+        "broadcastRoute",
+        "warnings"
+      ],
+      "identityGuard": {
+        "carNumber": "9",
+        "rcDriverId": "2143",
+        "allowedMatches": [
+          "driver_id",
+          "exact_name"
+        ],
+        "seriesRequired": "INDY_NXT"
+      }
+    },
+    "PointsProjectionState": {
+      "modes": [
+        "race_control_live",
+        "historical_fallback",
+        "partial",
+        "unavailable",
+        "stale"
+      ],
+      "fields": [
+        "runningDriverPoints",
+        "totalDriverPoints",
+        "totalEntrantPoints",
+        "historicalDriverPoints",
+        "historicalRank",
+        "fieldCoverage",
+        "officialModelAvailable",
+        "reconciliationRequired",
+        "warnings"
+      ],
+      "v1Recommendation": "Use Race Control point fields when populated and fresh; fallback to compact history when absent, stale, or wrong-series. Do not implement a local official points-table model for v1."
+    },
+    "WeatherState": {
+      "sourceStates": [
+        "live",
+        "partial",
+        "error"
+      ],
+      "requiredFields": [
+        "schemaVersion",
+        "checkedAt",
+        "sourceState",
+        "track",
+        "station",
+        "observation",
+        "forecastHourly",
+        "forecast",
+        "alerts",
+        "probes",
+        "cache"
+      ]
+    },
+    "ReplayState": {
+      "archiveStates": [
+        "missing",
+        "empty",
+        "tiny",
+        "ready"
+      ],
+      "requiredFields": [
+        "available",
+        "generatedAt",
+        "archiveState",
+        "count",
+        "returned",
+        "selectedCount",
+        "sessionKey",
+        "sessions",
+        "summary",
+        "rows",
+        "warnings"
+      ]
+    },
+    "SourceHealthState": {
+      "requiredEndpointFields": [
+        "id",
+        "role",
+        "series",
+        "cadence",
+        "ok",
+        "status",
+        "sourceState",
+        "readinessState",
+        "checkedAgeSeconds",
+        "modifiedAgeSeconds",
+        "freshnessLabel",
+        "sourceSummary",
+        "note"
+      ],
+      "critical": [
+        "timing"
+      ],
+      "enrichment": [
+        "drivers_nxt",
+        "config",
+        "schedule_nxt",
+        "trackactivity_nxt"
+      ],
+      "reference": [
+        "drivers_top",
+        "schedule_top",
+        "trackactivity_top"
+      ],
+      "candidate": [
+        "ntt_data_polling"
+      ]
+    }
+  },
+  "pointsProjection": {
+    "raceControlFieldsEnoughForV1Display": true,
+    "raceControlFieldsEnoughForStandaloneOfficialModel": false,
+    "officialPointsTableNeededForV1": false,
+    "fallbackWhenAbsentOrStale": "Show compact historical standing and mark live projection unavailable, partial, stale, or wrong_series.",
+    "reconcileAfterOfficialResults": [
+      "Refresh official history ingestion.",
+      "Compare Race Control live point fields with official race points and championship totals.",
+      "Record discrepancies by eventSessionId, driver, entrant, live value, official value, and reason when known.",
+      "Promote official result into history-bryce and compact history.",
+      "Mark replay/session reconciled only after identity and session keys agree."
+    ]
+  },
+  "liveProofGates": [
+    "Road America live INDY NXT rehearsal completed.",
+    "Primary feeds poll at 1-second cadence for at least 20 minutes during active running.",
+    "Timing heartbeat is INDY NXT and Bryce guard passes for car 9 plus DriverID 2143 or exact Bryce Aron identity.",
+    "Null numeric values remain null and source-present zero remains zero.",
+    "Weather partial failures return sourceState partial with failed probes.",
+    "Replay archive reaches ready state with enough samples for rank, gap, pass, status, and source-health replay.",
+    "Broadcast lag measured against Race Control timing."
+  ],
+  "backlog": {
+    "mustHaveBeforeUi": [
+      "Expose /api/readiness or equivalent readiness wrapper.",
+      "Implement product readiness reducer tests.",
+      "Implement PointsProjectionState builder and fallback modes.",
+      "Add smoke coverage for readiness, wrong-series, stale, null-vs-zero, weather partial, replay, and points fallback.",
+      "Add post-official-results reconciliation report path."
+    ],
+    "canHappenDuringUi": [
+      "Render source labels and degraded widget states.",
+      "Build operator source detail view from /api/sources.",
+      "Add UI polling backoff for wrong_series, stale, and blocked.",
+      "Build compact mobile readiness card."
+    ],
+    "raceWeekendRehearsalOnly": [
+      "Run the 20-minute primary-feed pressure test.",
+      "Measure broadcast lag.",
+      "Prove live point-field availability.",
+      "Prove or reject lapDistance, tire, and overtake fields.",
+      "Reconcile official post-race points."
+    ]
+  }
+}
