@@ -186,12 +186,24 @@ const livePoints = buildPointsProjectionState({
   readinessState: 'ready',
   history
 });
-assert.equal(livePoints.mode, 'race_control_live');
+assert.equal(livePoints.mode, 'partial', 'sparse competitor point fields must be partial even when Bryce fields are populated');
 assert.equal(livePoints.bryce.runningDriverPoints, 12);
 assert.equal(livePoints.bryce.totalDriverPoints, 143);
 assert.equal(livePoints.bryce.totalEntrantPoints, 160);
 assert.equal(livePoints.fieldCoverage.runningDriverPointsRows, 2, 'zero live points are source-present values');
 assert.equal(livePoints.fieldCoverage.totalDriverPointsRows, 1);
+
+const fullCoverageLivePoints = buildPointsProjectionState({
+  checkedAt,
+  timingRows: [
+    timingRow({ runningDriverPoints: '12', totalDriverPoints: '143', totalEntrantPoints: '160' }),
+    timingRow({ no: '10', DriverID: '999', firstName: 'Other', lastName: 'Driver', runningDriverPoints: '0', totalDriverPoints: '99', totalEntrantPoints: '88' })
+  ],
+  bryce: timingRow({ runningDriverPoints: '12', totalDriverPoints: '143', totalEntrantPoints: '160' }),
+  readinessState: 'ready',
+  history
+});
+assert.equal(fullCoverageLivePoints.mode, 'race_control_live');
 
 const partialPoints = buildPointsProjectionState({
   checkedAt,
@@ -262,4 +274,4 @@ assert.equal(compactNulls.bestSpeed, null);
 assert.equal(compactNulls.pitStops, 0);
 assert.equal(compactNulls.runningDriverPoints, null);
 
-console.log(JSON.stringify({ ok: true, assertions: 44 }, null, 2));
+console.log(JSON.stringify({ ok: true, assertions: 45 }, null, 2));

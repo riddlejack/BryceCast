@@ -1276,6 +1276,11 @@ export const buildPointsProjectionState = ({ checkedAt, timingRows = [], bryce =
   };
   const brycePointFields = ['runningDriverPoints', 'totalDriverPoints', 'totalEntrantPoints'];
   const brycePresentFields = brycePointFields.filter((field) => hasNumericSourceValue(bryce?.[field]));
+  const fullPointFieldCoverage =
+    rows.length > 0 &&
+    fieldCoverage.runningDriverPointsRows === rows.length &&
+    fieldCoverage.totalDriverPointsRows === rows.length &&
+    fieldCoverage.totalEntrantPointsRows === rows.length;
   const anyLivePointField =
     fieldCoverage.runningDriverPointsRows > 0 || fieldCoverage.totalDriverPointsRows > 0 || fieldCoverage.totalEntrantPointsRows > 0 || brycePresentFields.length > 0;
   const hasHistory = historical.points !== null || historical.rank !== null;
@@ -1301,7 +1306,7 @@ export const buildPointsProjectionState = ({ checkedAt, timingRows = [], bryce =
     source = hasHistory ? 'history_compact' : 'none';
     label = hasHistory ? 'Historical points baseline' : 'Points unavailable';
     warnings.push(`Live Race Control points are unavailable while readiness is ${readinessState ?? 'unknown'}.`);
-  } else if (brycePresentFields.length === brycePointFields.length) {
+  } else if (brycePresentFields.length === brycePointFields.length && fullPointFieldCoverage) {
     mode = 'race_control_live';
     source = 'race_control_timing';
     label = 'Race Control running points';
