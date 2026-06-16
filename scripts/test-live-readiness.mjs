@@ -3,7 +3,8 @@ import assert from 'node:assert/strict';
 import {
   buildPointsProjectionState,
   buildReadinessPayloadFromParts,
-  compactTimingRowForReadiness
+  compactTimingRowForReadiness,
+  replayArchiveState
 } from './api-server.mjs';
 
 const checkedAt = '2026-06-16T18:00:00.000Z';
@@ -308,4 +309,8 @@ assert.equal(compactNulls.bestSpeed, null);
 assert.equal(compactNulls.pitStops, 0);
 assert.equal(compactNulls.runningDriverPoints, null);
 
-console.log(JSON.stringify({ ok: true, assertions: 51 }, null, 2));
+assert.equal(replayArchiveState(true, 20, 20), 'ready', 'replay readiness should use stored sample count, not preview row count');
+assert.equal(replayArchiveState(true, 5, 5), 'tiny');
+assert.equal(replayArchiveState(true, 0, 0), 'empty');
+
+console.log(JSON.stringify({ ok: true, assertions: 54 }, null, 2));

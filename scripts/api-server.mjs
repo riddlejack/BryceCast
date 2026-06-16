@@ -958,7 +958,7 @@ const replayTime = (value) => {
   return Number.isFinite(parsed) ? parsed : null;
 };
 
-const replayArchiveState = (available, totalCount, rowCount) => {
+export const replayArchiveState = (available, totalCount, rowCount) => {
   if (!available) return 'missing';
   if (totalCount === 0) return 'empty';
   if (rowCount < 10) return 'tiny';
@@ -1124,8 +1124,9 @@ const queryReplay = ({ limit: limitValue, offset: offsetValue, sessionKey: reque
         .all(sessionKey, sessionKey, limit, offset)
         .reverse();
       const selected = sessionKey ? db.prepare('SELECT COUNT(*) AS count FROM bryce_samples WHERE session_key = ?').get(sessionKey) : total;
+      const selectedCount = Number(selected?.count ?? rows.length);
       const returnedRows = buildReplayRows(rows);
-      const archiveState = replayArchiveState(true, totalCount, rows.length);
+      const archiveState = replayArchiveState(true, selectedCount, selectedCount);
       const warnings = [];
       if (archiveState === 'empty') warnings.push('No Bryce samples found. Run npm run poll:race or npm run poll:race:watch during a session.');
       if (archiveState === 'tiny') warnings.push('Archive has fewer than 10 samples. Treat this as coverage proof, not a full race trend.');
@@ -1140,7 +1141,7 @@ const queryReplay = ({ limit: limitValue, offset: offsetValue, sessionKey: reque
         archiveState,
         count: totalCount,
         returned: rows.length,
-        selectedCount: Number(selected?.count ?? rows.length),
+        selectedCount,
         sessionKey,
         sessions,
         summary: buildReplaySummary(rows),
