@@ -21,7 +21,7 @@ Do not build v1 around live GPS, moving-dot track position, sector timing, tire 
 - `TimingRow` already carries `runningDriverPoints`, `totalDriverPoints`, and `totalEntrantPoints` when Race Control provides them.
 - `public/data/history-bryce.json` is present and currently records Bryce with 131 points and rank 14 after 8 2026 rows, sourced from official INDY NXT results plus provisional timing when applicable.
 - `data/live/live-source-pressure-latest.json` is not present in this worktree. Prior docs record cold/post-session pressure proof, but this lane should not claim a current generated pressure artifact.
-- Current `npm run api:smoke` fails in this isolated worktree because `/api/snapshot` requires a live or archived Bryce row, while the active global Race Control feed is not a Bryce INDY NXT session and no local SQLite archive is present. Treat that as evidence for the required `pre_session`/`wrong_series` readiness path, not as live-data proof.
+- Current `npm run api:smoke` passes by checking `/api/readiness` first and only requiring Bryce-specific snapshot/session/timing routes when readiness is `ready` or `degraded`. On 2026-06-16 the smoke path correctly reports `wrong_series` because the active global Race Control feed is not a Bryce INDY NXT session; treat that as evidence for the guarded off-session/wrong-series path, not as live green-flag proof.
 
 ## Routes
 

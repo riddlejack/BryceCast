@@ -141,6 +141,22 @@ export interface RaceControlLiveContext {
   timingRows: TimingRow[];
 }
 
+export interface LiveReadinessPayload {
+  schemaVersion: 'live-readiness.v1';
+  checkedAt: string;
+  state: 'ready' | 'pre_session' | 'degraded' | 'wrong_series' | 'stale' | 'blocked';
+  severity: 'green' | 'amber' | 'red';
+  reason: string;
+  raceWeekend: Record<string, unknown>;
+  liveTiming: Record<string, unknown>;
+  bryce: Record<string, unknown>;
+  points: Record<string, unknown>;
+  weather: Record<string, unknown>;
+  replay: Record<string, unknown>;
+  sources: Record<string, unknown>;
+  gates: Array<Record<string, unknown>>;
+}
+
 export interface HistoricalCareerContext {
   history: SeasonHistoryPayload | null;
   sourceState: 'source_backed' | 'seed' | 'unavailable';
@@ -164,6 +180,9 @@ export interface LiveRaceCompanionState {
   readiness: AnalyticsFallbackState;
   metrics: Record<string, AnalyticsMetric<AnalyticsMetricValue>>;
   sourceDrawer: AnalyticsSourceDrawerEntry[];
+  readinessPayload: LiveReadinessPayload | null;
+  productState: LiveReadinessPayload['state'] | 'unavailable';
+  pointsProjection: LiveReadinessPayload['points'] | null;
   raceControl: RaceControlLiveContext;
   historicalCareer: HistoricalCareerContext;
   replay: BryceReplayPayload | null;

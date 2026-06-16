@@ -100,4 +100,14 @@ for (const [surface, ids] of Object.entries(requiredSurfaceIds)) {
   }
 }
 
+if (!contractsSource.includes('interface LiveReadinessPayload')) {
+  fail('analyticsContracts.ts missing LiveReadinessPayload');
+}
+
+for (const requiredSnippet of ['liveReadiness?: LiveReadinessPayload | null', 'readinessPayload:', 'productState:', 'pointsProjection:']) {
+  if (!viewModelsSource.includes(requiredSnippet)) {
+    fail(`analyticsViewModels.ts missing readiness contract snippet: ${requiredSnippet}`);
+  }
+}
+
 console.log(`Validated ${manifest.items.length} manifest items across ${requiredSurfaces.length} UI view-model surfaces.`);

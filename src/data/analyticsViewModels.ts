@@ -10,6 +10,7 @@ import type {
   AnalyticsViewModelRegistry,
   CareerLabState,
   HistoricalCareerContext,
+  LiveReadinessPayload,
   LiveRaceCompanionState,
   RaceControlIdentityMapping,
   RaceControlLiveContext,
@@ -36,6 +37,7 @@ const readinessRank: Record<AnalyticsFallbackState, number> = {
 export interface BuildAnalyticsViewModelsInput {
   uiMetricManifest: UiMetricManifest;
   uiReadyArtifacts?: UiReadyArtifactsManifest | null;
+  liveReadiness?: LiveReadinessPayload | null;
   raceSnapshot?: RaceSnapshot | null;
   replay?: BryceReplayPayload | null;
   seasonHistory?: SeasonHistoryPayload | null;
@@ -111,6 +113,9 @@ export const buildLiveRaceCompanionState = (input: BuildAnalyticsViewModelsInput
     readiness: combineReadiness(items),
     metrics: buildMetricMap(items),
     sourceDrawer: buildSourceDrawer(items),
+    readinessPayload: input.liveReadiness ?? null,
+    productState: input.liveReadiness?.state ?? 'unavailable',
+    pointsProjection: input.liveReadiness?.points ?? null,
     raceControl: buildRaceControlLiveContext(input.raceSnapshot ?? null),
     historicalCareer: buildHistoricalCareerContext(input.seasonHistory ?? null),
     replay: input.replay ?? null,
