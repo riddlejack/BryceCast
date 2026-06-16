@@ -1,5 +1,7 @@
 # Live POV Access Findings
 
+> Legacy research archive. Preserve this memo as evidence for why live #9 POV is out of active BryceCast scope; do not use it as active product direction or UI taste reference.
+
 Current date of this research pass: June 8, 2026.
 
 Target: Bryce Aron, car #9, Chip Ganassi Racing, INDY NXT.

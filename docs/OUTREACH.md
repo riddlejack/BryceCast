@@ -1,5 +1,7 @@
 # Bryce/Team Outreach Checklist
 
+> Legacy outreach archive. Use only if access or permission boundaries change; do not treat these questions as active build requirements.
+
 Use only for follow-up questions after the product reset. Do not interrupt Bryce while he is preparing to drive.
 
 The old POV escalation path is superseded because Bryce confirmed there is no live #9 POV feed available for BryceCast to include during races.

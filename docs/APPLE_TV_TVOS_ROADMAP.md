@@ -1,5 +1,7 @@
 # Apple TV and tvOS Roadmap
 
+> Legacy/deferred roadmap. Do not use native tvOS or integrated video as the active BryceCast target; current work should start from the web/mobile analytics-first contracts.
+
 Status: deferred. Do not prioritize Apple TV/tvOS for the active BryceCast build. The active target is a polished website/PWA for Mac/PC plus iPhone/mobile web. Revisit Apple TV only after an authorized integrated race-video path exists or the web/mobile product is already production-grade.
 
 ## Recommendation

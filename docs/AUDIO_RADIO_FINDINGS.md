@@ -1,5 +1,7 @@
 # Audio and Radio Findings
 
+> Legacy research archive. Official race-call audio remains useful, but Bryce-specific radio is not an active product dependency; frequency metadata is not a playable audio stream.
+
 Current research pass: June 7, 2026.
 
 Target: Bryce Aron, car #9, Chip Ganassi Racing, INDY NXT.

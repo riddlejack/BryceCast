@@ -1,5 +1,7 @@
 # BryceCast POV Escalation Ladder
 
+> Legacy research archive. This ladder is superseded by the analytics-first product contracts unless a rights-holder-controlled live feed is explicitly offered later.
+
 Current target: Bryce Aron, car #9, Chip Ganassi Racing, INDY NXT.
 
 June 2026 product reset: this escalation ladder is superseded for the active BryceCast build. Bryce has confirmed that there is no live #9 POV feed available for BryceCast to include during races. Do not keep chasing POV as a blocking requirement, and do not design UI surfaces that imply a live feed is pending. The product should now ship as a polished Bryce-centric timing, analytics, alerting, source-health, and broadcast-companion system.

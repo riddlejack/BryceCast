@@ -1,5 +1,7 @@
 # BryceCast Radio and Official Audio Plan
 
+> Legacy research archive for the active product. Preserve the official-audio and frequency-boundary findings, but do not treat Bryce-specific radio, scanner access, or radio proof UI as active product direction unless a legal reliable route is proven later.
+
 ## Recommendation
 
 Treat INDYCAR Radio and other official race-call paths as the reliable audio baseline. Treat Bryce/team radio as frequency metadata only until a legal, reliable route is proven. Bryce has said the exact team frequency may be obtainable, but without a scanner or receiver at the track it should not be treated as a dependable product feature. Do not require scanner hardware, SDR hardware, or scraped stream URLs for BryceCast to be considered usable on race day.
