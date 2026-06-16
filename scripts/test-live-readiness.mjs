@@ -190,6 +190,42 @@ assert.equal(partialPoints.bryce.runningDriverPoints, 0);
 assert.equal(partialPoints.bryce.totalDriverPoints, null);
 assert.equal(partialPoints.bryce.historicalDriverPoints, 131);
 
+const preSessionPoints = buildPointsProjectionState({
+  checkedAt,
+  timingRows: [timingRow({ runningDriverPoints: '12', totalDriverPoints: '143', totalEntrantPoints: '160' })],
+  bryce: timingRow({ runningDriverPoints: '12', totalDriverPoints: '143', totalEntrantPoints: '160' }),
+  readinessState: 'pre_session',
+  history
+});
+assert.equal(preSessionPoints.mode, 'historical_fallback', 'pre-session/cold timing must not be labeled live points');
+assert.equal(preSessionPoints.source, 'history_compact');
+assert.ok(preSessionPoints.warnings.some((warning) => warning.includes('Live Race Control points are unavailable')));
+
+const stalePayload = buildReadinessPayloadFromParts(
+  baseParts({
+    sourceReport: {
+      ...sourceReport(),
+      endpoints: sourceReport().endpoints.map((endpoint) =>
+        endpoint.id === 'timing'
+          ? { ...endpoint, checkedAgeSeconds: 0, modifiedAgeSeconds: 3600, freshnessLabel: 'checked 0s ago; modified 1h ago' }
+          : endpoint
+      )
+    }
+  })
+);
+assert.equal(stalePayload.state, 'stale', 'old upstream timing payloads must not become ready just because the fetch is fresh');
+assert.equal(stalePayload.severity, 'amber');
+
+const sameSeriesNoBryce = buildReadinessPayloadFromParts(
+  baseParts({
+    timingRows: [timingRow({ no: '10', DriverID: '999', firstName: 'Other', lastName: 'Driver' })],
+    bryce: null,
+    sourceReport: sourceReport('wrong_session')
+  })
+);
+assert.equal(sameSeriesNoBryce.state, 'pre_session', 'INDY NXT timing without Bryce should not be classified as wrong_series');
+assert.equal(sameSeriesNoBryce.bryce.identityGuard.seriesOk, true);
+
 const compactNulls = compactTimingRowForReadiness(
   timingRow({
     rank: '',
@@ -208,4 +244,4 @@ assert.equal(compactNulls.bestSpeed, null);
 assert.equal(compactNulls.pitStops, 0);
 assert.equal(compactNulls.runningDriverPoints, null);
 
-console.log(JSON.stringify({ ok: true, assertions: 31 }, null, 2));
+console.log(JSON.stringify({ ok: true, assertions: 38 }, null, 2));

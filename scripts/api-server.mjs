@@ -27,6 +27,7 @@ const raceControlEndpoints = raceSnapshotEndpoints;
 const sourceProbeEndpoints = liveSourceEndpoints;
 const sourceFetchTimeoutMs = 5000;
 const enrichmentCacheTtlMs = 30000;
+const liveTimingPayloadMaxAgeSeconds = 30;
 
 const sourceUrlByPath = new Map(sourceProbeEndpoints.map((endpoint) => [endpoint.proxyPath, endpoint.url]));
 const endpointResultCache = new Map();
@@ -1269,6 +1270,7 @@ export const buildPointsProjectionState = ({ checkedAt, timingRows = [], bryce =
   const anyLivePointField =
     fieldCoverage.runningDriverPointsRows > 0 || fieldCoverage.totalDriverPointsRows > 0 || fieldCoverage.totalEntrantPointsRows > 0 || brycePresentFields.length > 0;
   const hasHistory = historical.points !== null || historical.rank !== null;
+  const livePointEligible = ['ready', 'degraded'].includes(readinessState);
 
   let mode = 'unavailable';
   let source = 'none';
@@ -1285,6 +1287,11 @@ export const buildPointsProjectionState = ({ checkedAt, timingRows = [], bryce =
     source = hasHistory ? 'history_compact' : 'none';
     label = hasHistory ? 'Historical points baseline' : 'Points unavailable';
     warnings.push('Active Race Control feed is not Bryce INDY NXT; live points are blocked.');
+  } else if (!livePointEligible) {
+    mode = hasHistory ? 'historical_fallback' : 'unavailable';
+    source = hasHistory ? 'history_compact' : 'none';
+    label = hasHistory ? 'Historical points baseline' : 'Points unavailable';
+    warnings.push(`Live Race Control points are unavailable while readiness is ${readinessState ?? 'unknown'}.`);
   } else if (brycePresentFields.length === brycePointFields.length) {
     mode = 'race_control_live';
     source = 'race_control_timing';
@@ -1375,6 +1382,8 @@ const buildReadinessGates = ({ timingEndpoint, sourceReport, heartbeat, timingRo
       !['available', 'reference_only'].includes(endpoint.readinessState)
   );
   const checkedAgeSeconds = timingEndpoint?.checkedAgeSeconds ?? null;
+  const modifiedAgeSeconds = timingEndpoint?.modifiedAgeSeconds ?? null;
+  const timingPayloadStale = modifiedAgeSeconds !== null && modifiedAgeSeconds > liveTimingPayloadMaxAgeSeconds;
   return [
     {
       id: 'timing_reachable',
@@ -1393,7 +1402,7 @@ const buildReadinessGates = ({ timingEndpoint, sourceReport, heartbeat, timingRo
     },
     {
       id: 'timing_freshness',
-      state: sourceState === 'live' && (checkedAgeSeconds === null || checkedAgeSeconds <= 3) ? 'pass' : state === 'stale' ? 'fail' : 'warn',
+      state: sourceState === 'live' && !timingPayloadStale && (checkedAgeSeconds === null || checkedAgeSeconds <= 3) ? 'pass' : state === 'stale' ? 'fail' : 'warn',
       summary: `Timing source is ${sourceState}; ${timingEndpoint?.freshnessLabel ?? 'freshness unknown'}.`
     },
     {
@@ -1441,6 +1450,8 @@ export const buildReadinessPayloadFromParts = ({
   const hasRows = timingRowsArray.length > 0;
   const seriesOk = isIndyNxtTimingHeartbeat(heartbeat);
   const timingCheckedAgeSeconds = timingEndpoint?.checkedAgeSeconds ?? null;
+  const timingModifiedAgeSeconds = timingEndpoint?.modifiedAgeSeconds ?? null;
+  const timingPayloadStale = timingModifiedAgeSeconds !== null && timingModifiedAgeSeconds > liveTimingPayloadMaxAgeSeconds;
   const sourceStateValue = inputSourceState ?? timingEndpoint?.sourceState ?? (heartbeat ? sourceState(heartbeat) : 'error');
   const enrichmentDegraded =
     sources.endpoints.some(
@@ -1459,16 +1470,13 @@ export const buildReadinessPayloadFromParts = ({
   if (!heartbeat && !hasRows) {
     state = 'blocked';
     reason = 'Race Control timing payload has no heartbeat or timing rows.';
-  } else if (!seriesOk && hasRows) {
+  } else if (!seriesOk && heartbeat) {
     state = 'wrong_series';
     reason = describeBryceMiss(heartbeat, timingRowsArray);
   } else if (!bryce && heartbeat) {
-    state = timingEndpoint?.readinessState === 'wrong_session' ? 'wrong_series' : 'pre_session';
-    reason =
-      state === 'wrong_series'
-        ? describeBryceMiss(heartbeat, timingRowsArray)
-        : 'INDY NXT session context exists, but Bryce is not in a fresh live timing row yet.';
-  } else if (sourceStateValue === 'stale' || (timingCheckedAgeSeconds !== null && timingCheckedAgeSeconds > 10)) {
+    state = 'pre_session';
+    reason = 'INDY NXT session context exists, but Bryce is not in a fresh live timing row yet.';
+  } else if (sourceStateValue === 'stale' || timingPayloadStale || (timingCheckedAgeSeconds !== null && timingCheckedAgeSeconds > 10)) {
     state = 'stale';
     reason = 'Timing data is too old for live Bryce display.';
   } else if (sourceStateValue === 'cold') {
