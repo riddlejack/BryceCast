@@ -10,6 +10,7 @@ This index promotes only source-backed analytics artifacts that can feed the UI 
 
 | UI use case | Stable artifact | Grain | Source/caveat state | UI status |
 | --- | --- | --- | --- | --- |
+| Hydrated UI data package | `analysis/ui-data-package/ui-data-package.json` | screen package | `schemaVersion=brycecast.uiDataPackage.v1`; includes source refs/caveats per screen | Use as the primary design/build fixture source before polished UI work. Regenerate with `npm run analytics:ui-data-package`; validate with `npm run analytics:ui-data-package:validate`. |
 | Race-weekend prep, including Road America | `analysis/indy-nxt-discovery/output/deep_dive/tables/future_weekend_prep_inputs.csv` | future INDY NXT event | `sourceState=schedule_plus_historical_results`; `weatherState=future_unavailable_in_historical_dataset` | Use for preview cards. Road America Race 1 is 2026-06-19 and Race 2 is 2026-06-20. Do not show forecast/weather claims from this file. |
 | Race-weekend prep funnel | `analysis/indy-nxt-discovery/output/deep_dive/tables/prep_session_signals.csv` | completed race event | `sourceState=official_api_session_results`; caveat says practice/group qualifying are rank-context signals | Use as context, not absolute pace proof. |
 | Live race companion historical join context | `analysis/indy-nxt-discovery/output/deep_dive/tables/championship_progression.csv` | season race checkpoint | `sourceState=official_results_points_progression`; future 2026 sessions excluded | Join by season/session context when live timing identifies the current event. Requires live readiness contract before live use. |
@@ -46,14 +47,15 @@ This is stable for historical prep context. It is not a weather forecast, live s
 | Pit strategy analysis | Current source supports pit-stop counts only. No pit sequence, tire, service, stop-lap, or pit-time detail exists. |
 | Engineering or reliability root-cause analysis | Official result status and team rows do not expose engineering telemetry, setup notes, or root-cause evidence. |
 
-## Backend Contract Gaps Before Frontend Build
+## Remaining Proof Gaps Before Production Live Mode
 
-- Live race companion still needs the Lane 3 live contract: readiness state, wrong-series guard, stale timing state, Bryce-row identity guard, and replay join keys.
-- Live points projection needs either a backend artifact/API or an explicit v1 deferral and fallback copy.
+- Live race companion has `/api/readiness`, guarded points modes, wrong-series guard, stale/no-Bryce states, and replay state. It still needs a real green/yellow INDY NXT session rehearsal before claiming production live mode.
+- Live points projection can render Race Control point fields when `/api/readiness.points.mode` permits it. It still needs live-session field-population proof and post-session official reconciliation.
 - Future-weather display needs a separate forecast/current-weather source with source state. The prep artifact intentionally leaves future weather unavailable.
 - Race debrief archetype labels need manual review before public copy. The score table is stable; the prose labels are not final editorial truth.
 - Section results need a UI denominator rule before headline display: suppress or badge low-comparison rows.
 - Career Lab must read parity by metric family, not assume INDY NXT-grade depth across older series.
+- Polished visual direction is still intentionally unresolved; use the UI data package and fixture-state library before asking for final taste decisions.
 
 ## Verification Snapshot
 

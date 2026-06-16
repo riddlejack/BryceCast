@@ -86,6 +86,7 @@ export interface UiReadyArtifactsManifest {
   stableArtifacts: UiReadyArtifact[];
   exploratoryOrDeferred: Array<{ artifact: string; reason: string }>;
   missingBackendContracts: string[];
+  uiFixtureCoverage?: string[];
   validationSnapshot?: Record<string, number>;
 }
 
@@ -126,10 +127,8 @@ export interface SeedDataPolicy {
 
 export interface RaceControlIdentityMapping {
   carNumber: '9';
-  raceControlDriverId: '2143';
-  driverOverrideId: '4959';
-  mergePolicy: 'documented_mapping_only';
-  matchedBy: 'driver_id' | 'exact_name' | 'unverified' | 'missing';
+  rcDriverId: '2143';
+  matchedBy: 'driver_id' | 'exact_name' | null;
   seriesOk: boolean;
 }
 

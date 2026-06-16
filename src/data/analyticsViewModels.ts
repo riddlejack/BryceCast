@@ -121,7 +121,7 @@ export const buildLiveRaceCompanionState = (input: BuildAnalyticsViewModelsInput
     replay: input.replay ?? null,
     blockedUntilReadiness: [
       'green-flag INDY NXT live-session proof',
-      'remaining pre_session/degraded/stale/blocked fixture coverage',
+      'runtime /api/readiness reducer proof for degraded/stale/blocked edge cases',
       'live point-field coverage and reconciliation status'
     ]
   };
@@ -317,13 +317,11 @@ const buildRaceControlIdentityGuard = (snapshot: RaceSnapshot | null, bryceRow: 
   const seriesOk = series.includes('nxt') || series === 'l' || sessionName.includes('nxt');
   const driverId = String(bryceRow?.DriverID ?? '');
   const exactName = bryceRow ? `${bryceRow.firstName} ${bryceRow.lastName}` === 'Bryce Aron' : false;
-  const matchedBy: RaceControlIdentityMapping['matchedBy'] = driverId === '2143' ? 'driver_id' : exactName ? 'exact_name' : bryceRow ? 'unverified' : 'missing';
+  const matchedBy: RaceControlIdentityMapping['matchedBy'] = driverId === '2143' ? 'driver_id' : exactName ? 'exact_name' : null;
 
   return {
     carNumber: '9',
-    raceControlDriverId: '2143',
-    driverOverrideId: '4959',
-    mergePolicy: 'documented_mapping_only',
+    rcDriverId: '2143',
     matchedBy,
     seriesOk
   };

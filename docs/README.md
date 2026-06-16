@@ -14,14 +14,15 @@ Read these first for frontend, view-model, and product work:
 | 2 | [UI_READINESS_EXECUTION_PLAN.md](UI_READINESS_EXECUTION_PLAN.md) | Lane plan and integration gates for analytics-first frontend readiness. |
 | 3 | [UI_ANALYTICS_PRODUCT_CONTRACT.md](UI_ANALYTICS_PRODUCT_CONTRACT.md) | Controlling UI product contract for screens, metrics, caveats, unavailable states, and source drawers. |
 | 4 | [LIVE_RACE_DAY_PRODUCT_CONTRACT.md](LIVE_RACE_DAY_PRODUCT_CONTRACT.md) | Live timing/readiness/points/weather/replay contract and wrong-series guard rules. |
-| 5 | [READINESS.md](READINESS.md) | Current product readiness brief and the no-POV/no-scanner baseline. |
-| 6 | [API_SERVICE.md](API_SERVICE.md) | Local `/api/*` service contract and API-mode verification commands. |
-| 7 | [ANALYTICS_SOURCE_AUDIT.md](ANALYTICS_SOURCE_AUDIT.md) | Source-backed live, archived, and historical analytics truth table. |
-| 8 | [LIVE_DATA_READINESS_AUDIT.md](LIVE_DATA_READINESS_AUDIT.md) | Live-source audit, weather readiness, and Race Control pressure-test context. |
-| 9 | [INDY_NXT_DASHBOARD_READINESS.md](INDY_NXT_DASHBOARD_READINESS.md) | Production-safe INDY NXT dashboard categories and caveats. |
-| 10 | [CAREER_ANALYTICS_COVERAGE_MATRIX.md](CAREER_ANALYTICS_COVERAGE_MATRIX.md) | Generated career coverage status and source-bounded gaps. |
-| 11 | [CAREER_DATA_SPEC.md](CAREER_DATA_SPEC.md) | Durable career analytics data model and provenance rules. |
-| 12 | [SOURCE-INVENTORY.md](SOURCE-INVENTORY.md) | Source inventory for official/live/candidate feeds. |
+| 5 | [../analysis/ui-data-package/README.md](../analysis/ui-data-package/README.md) | Generated UI data package: hydrated screen seeds, live fixtures, source refs, and validation commands. |
+| 6 | [READINESS.md](READINESS.md) | Current product readiness brief and the no-POV/no-scanner baseline. |
+| 7 | [API_SERVICE.md](API_SERVICE.md) | Local `/api/*` service contract and API-mode verification commands. |
+| 8 | [ANALYTICS_SOURCE_AUDIT.md](ANALYTICS_SOURCE_AUDIT.md) | Source-backed live, archived, and historical analytics truth table. |
+| 9 | [LIVE_DATA_READINESS_AUDIT.md](LIVE_DATA_READINESS_AUDIT.md) | Live-source audit, weather readiness, and Race Control pressure-test context. |
+| 10 | [INDY_NXT_DASHBOARD_READINESS.md](INDY_NXT_DASHBOARD_READINESS.md) | Production-safe INDY NXT dashboard categories and caveats. |
+| 11 | [CAREER_ANALYTICS_COVERAGE_MATRIX.md](CAREER_ANALYTICS_COVERAGE_MATRIX.md) | Generated career coverage status and source-bounded gaps. |
+| 12 | [CAREER_DATA_SPEC.md](CAREER_DATA_SPEC.md) | Durable career analytics data model and provenance rules. |
+| 13 | [SOURCE-INVENTORY.md](SOURCE-INVENTORY.md) | Source inventory for official/live/candidate feeds. |
 
 ## Legacy Research Boundary
 
@@ -43,4 +44,4 @@ Screenshot/mockup artifacts are not active design taste references unless they w
 
 ## Deferred Cleanup
 
-`src/App.tsx` is now an analytics-first contract shell for the next UI lane. Legacy POV/radio proof modules remain in `src/data/pov.ts` and `src/data/audio.ts` only as inactive research/proof utilities; do not reintroduce them as product navigation without a new permissioned-source decision. The active frontend should build from the readiness, analytics, unavailable-state, and source-drawer model in [UI_ANALYTICS_PRODUCT_CONTRACT.md](UI_ANALYTICS_PRODUCT_CONTRACT.md) and [LIVE_RACE_DAY_PRODUCT_CONTRACT.md](LIVE_RACE_DAY_PRODUCT_CONTRACT.md).
+`src/App.tsx` is now an analytics-first contract shell for the next UI lane. Legacy POV/radio proof modules remain in `src/data/pov.ts` and `src/data/audio.ts` only as inactive research/proof utilities; do not reintroduce them as product navigation without a new permissioned-source decision. The active frontend should build from `/api/readiness`, `src/data/analyticsViewModels.ts`, `src/data/uiDataPackage.ts`, [UI_ANALYTICS_PRODUCT_CONTRACT.md](UI_ANALYTICS_PRODUCT_CONTRACT.md), and [LIVE_RACE_DAY_PRODUCT_CONTRACT.md](LIVE_RACE_DAY_PRODUCT_CONTRACT.md).

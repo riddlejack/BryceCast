@@ -3,6 +3,7 @@ import { Activity, AlertTriangle, CheckCircle2, Database, FileText, Gauge, Radio
 import { loadApiJson } from './data/api';
 import { analyticsSurfaceMetricIds, analyticsSurfaceOrder, buildAnalyticsViewModels } from './data/analyticsViewModels';
 import type { AnalyticsSurface, LiveReadinessPayload, UiMetricManifest } from './data/analyticsContracts';
+import { uiDataPackage } from './data/uiDataPackage';
 import uiMetricManifestJson from '../analysis/ui-contract/ui-metric-manifest.json';
 
 const uiMetricManifest = uiMetricManifestJson as UiMetricManifest;
@@ -55,6 +56,10 @@ function App() {
   }, []);
 
   const liveState = viewModels.liveRaceCompanion.productState;
+  const roadAmericaEvents = uiDataPackage.screens.roadAmericaPrep.events;
+  const featuredDebrief = uiDataPackage.screens.raceDebrief.featuredDebriefs[0];
+  const careerSeriesCount = uiDataPackage.screens.careerLab.seriesSummary.length;
+  const liveFixtureCount = uiDataPackage.screens.liveCompanionFixtures.fixtures.length;
   const points = viewModels.liveRaceCompanion.pointsProjection as
     | {
         mode?: string;
@@ -113,10 +118,10 @@ function App() {
         <article className="status-card">
           <div className="card-kicker">
             <Database size={18} />
-            Contract Surfaces
+            UI Data Package
           </div>
           <strong>{uiMetricManifest.items.length}</strong>
-          <p>Metric slots across prep, live, debrief, career lab, and source ops.</p>
+          <p>{roadAmericaEvents.length} Road America prep events, {liveFixtureCount} live fixtures, {careerSeriesCount} career series, and source refs for every package screen.</p>
         </article>
       </section>
 
@@ -126,6 +131,29 @@ function App() {
           <h2>Start here, then design the final visual system</h2>
         </div>
         <span>{checkedAt ? `Last checked ${new Date(checkedAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}` : 'API not checked yet'}</span>
+      </section>
+
+      <section className="data-package-grid" aria-label="Hydrated data package preview">
+        <article className="package-card">
+          <p className="eyebrow">Road America seed</p>
+          <h3>{roadAmericaEvents.map((event) => event.eventName.replace('Grand Prix at ', '')).join(' + ')}</h3>
+          <p>
+            {roadAmericaEvents[0]?.trackLengthMi} mi, {roadAmericaEvents[0]?.cornerCount} corners. Bryce INDY NXT same-track average finish{' '}
+            {roadAmericaEvents[0]?.sameTrack.avgFinish ?? 'unavailable'} across {roadAmericaEvents[0]?.sameTrack.raceCount ?? 0} races.
+          </p>
+        </article>
+        <article className="package-card">
+          <p className="eyebrow">Debrief seed</p>
+          <h3>{featuredDebrief?.raceLabel ?? 'No featured debrief'}</h3>
+          <p>
+            Finish P{featuredDebrief?.result.finishPosition ?? '-'}, gain {featuredDebrief?.result.positionGain ?? '-'}, source {featuredDebrief?.confidence ?? 'unknown'} with caveat retained.
+          </p>
+        </article>
+        <article className="package-card">
+          <p className="eyebrow">Fixture coverage</p>
+          <h3>{uiDataPackage.screens.liveCompanionFixtures.requiredStates.join(', ')}</h3>
+          <p>Design and QA can exercise live readiness states and edge-case variants without waiting for a green-flag session.</p>
+        </article>
       </section>
 
       <section className="surface-grid" aria-label="UI contract surfaces">

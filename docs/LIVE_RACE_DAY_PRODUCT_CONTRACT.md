@@ -133,7 +133,7 @@ Required fields:
 - `heartbeat`
 - `bryce` timing row
 - `profile` from NXT driver feed or fallback identity
-- `identityGuard`: `{ carNumber: '9', rcDriverId: '2143', matchedBy: 'driver_id' | 'exact_name', seriesOk: boolean }`
+- `identityGuard`: `{ carNumber: '9', rcDriverId: '2143', matchedBy: 'driver_id' | 'exact_name' | null, seriesOk: boolean }`; `matchedBy: null` is the explicit guard-failure state for wrong-series, no-Bryce, or car #9 collision fixtures.
 - `broadcastRoute`
 - `warnings[]`
 
@@ -316,18 +316,11 @@ Cold/post-session proof is not enough. A live-session pass requires:
 Implemented before UI implementation:
 
 - API smoke assertion that `/api/readiness` exists and maps endpoint facts without requiring UI logic.
-- Product readiness fixture coverage for `ready` and `wrong_series`.
+- Product readiness fixture coverage for `ready`, `wrong_series`, `pre_session`, `degraded`, `stale`, and `blocked` in `analysis/ui-data-package/ui-data-package.json`.
 - Wrong-series fixture where top-series car `9` exists but Bryce guard fails.
 - Null-vs-zero fixture for timing numeric fields.
 - Points field coverage fixtures for all fields present, absent/historical fallback, partial row coverage, and wrong-series fallback.
-
-Still needed for backend hardening:
-
-- Reducer fixture coverage for `pre_session`, `degraded`, `stale`, and `blocked`.
-- Stale timing fixture where Race Control fetch succeeds but checked age exceeds threshold.
-- No-Bryce-row fixture with archived fallback available and unavailable.
-- Weather partial fixture where one NWS leg fails and the route returns `partial`.
-- Replay fixture for `missing`, `empty`, `tiny`, `ready`, and repeated-cold warning.
+- UI data-package validation that every live fixture includes runtime-shaped `raceWeekend`, `liveTiming`, `bryce`, `points`, `sources`, and `gates` objects.
 
 Remaining race-weekend proof:
 
@@ -361,7 +354,8 @@ Completed before UI:
 Remaining backend follow-up:
 
 1. Add a small reconciliation report path for post-official-results comparison.
-2. Add the remaining readiness fixtures listed above.
+2. Normalize schedule and track-activity strings for final countdown UI.
+3. Rehearse the readiness reducer during a real green/yellow INDY NXT session.
 
 Can happen during UI:
 

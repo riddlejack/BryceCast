@@ -269,10 +269,10 @@
   ],
   "backlog": {
     "mustHaveBeforeUi": [
-      "Add remaining readiness reducer fixtures for pre_session, degraded, stale, blocked, weather partial, replay states, and no-Bryce archived fallback.",
       "Add post-official-results reconciliation report path."
     ],
     "canHappenDuringUi": [
+      "Use UI data-package readiness fixtures for pre_session, degraded, stale, blocked, weather partial, replay states, and no-Bryce fallback while real live proof is pending.",
       "Render source labels and degraded widget states.",
       "Build operator source detail view from /api/sources.",
       "Add UI polling backoff for wrong_series, stale, and blocked.",

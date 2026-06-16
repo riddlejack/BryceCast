@@ -109,7 +109,7 @@ Blocking backend contracts:
 
 - Live points projection needs a live INDY NXT rehearsal proving point fields are populated and reconcilable. The UI card remains v1 required but must degrade to unavailable when Race Control does not populate the fields.
 - Full replay trend analytics need a full-session archive; current archive is tiny/cold.
-- Live race readiness now has `/api/readiness`; remaining backend hardening is green-flag INDY NXT proof plus reducer fixtures for pre-session, degraded, stale, blocked, weather partial, replay states, and no-Bryce archived fallback.
+- Live race readiness now has `/api/readiness`, and `analysis/ui-data-package/ui-data-package.json` carries runtime-shaped static UI fixtures for ready, wrong-series, pre-session, degraded, stale, blocked, weather partial, replay, and historical-fallback states. Runtime hardening still needs green-flag INDY NXT proof, reducer/API edge-case rehearsal, and post-session reconciliation.
 - Timezone normalization is still needed for schedule/track-activity feed strings before polished session countdowns ship.
 
 Frontend can safely build first:
