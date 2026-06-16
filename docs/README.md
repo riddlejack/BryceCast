@@ -43,4 +43,4 @@ Screenshot/mockup artifacts are not active design taste references unless they w
 
 ## Deferred Cleanup
 
-`src/App.tsx` and `src/data/pov.ts` still contain legacy POV/radio proof surfaces and copy. They were read in this cleanup lane but intentionally not edited because API/view-model/UI implementation lanes own source changes. After the active API/view-model lanes land, replace those assumptions with the readiness, analytics, unavailable-state, and source-drawer model from [UI_ANALYTICS_PRODUCT_CONTRACT.md](UI_ANALYTICS_PRODUCT_CONTRACT.md) and [LIVE_RACE_DAY_PRODUCT_CONTRACT.md](LIVE_RACE_DAY_PRODUCT_CONTRACT.md).
+`src/App.tsx` is now an analytics-first contract shell for the next UI lane. Legacy POV/radio proof modules remain in `src/data/pov.ts` and `src/data/audio.ts` only as inactive research/proof utilities; do not reintroduce them as product navigation without a new permissioned-source decision. The active frontend should build from the readiness, analytics, unavailable-state, and source-drawer model in [UI_ANALYTICS_PRODUCT_CONTRACT.md](UI_ANALYTICS_PRODUCT_CONTRACT.md) and [LIVE_RACE_DAY_PRODUCT_CONTRACT.md](LIVE_RACE_DAY_PRODUCT_CONTRACT.md).

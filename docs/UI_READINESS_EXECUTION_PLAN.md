@@ -88,7 +88,7 @@ Acceptance:
 
 - Active docs and historical docs are clearly separated.
 - Old screenshots/mockups are archived or labeled legacy.
-- `src/` no longer presents POV/radio assumptions as the active product direction.
+- `src/App.tsx` no longer presents POV/radio assumptions as the active product direction; legacy POV/radio helper modules may remain as inactive research utilities.
 - No active contract/source files are deleted.
 
 ## Integration Gates
