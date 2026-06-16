@@ -171,6 +171,9 @@ const wrongSeries = buildReadinessPayloadFromParts(
   })
 );
 assert.equal(wrongSeries.state, 'wrong_series');
+assert.equal(wrongSeries.raceWeekend.eventId, null, 'wrong-series heartbeat must not populate product raceWeekend identity');
+assert.equal(wrongSeries.raceWeekend.trackName, null, 'wrong-series heartbeat must stay out of product raceWeekend track fields');
+assert.equal(wrongSeries.liveTiming.heartbeat.eventName, 'Bommarito Automotive Group 500', 'wrong-series heartbeat remains diagnostic timing context');
 assert.equal(wrongSeries.bryce.bryce, null);
 assert.equal(wrongSeries.bryce.identityGuard.seriesOk, false);
 assert.equal(wrongSeries.points.mode, 'historical_fallback');
@@ -285,4 +288,4 @@ assert.equal(compactNulls.bestSpeed, null);
 assert.equal(compactNulls.pitStops, 0);
 assert.equal(compactNulls.runningDriverPoints, null);
 
-console.log(JSON.stringify({ ok: true, assertions: 47 }, null, 2));
+console.log(JSON.stringify({ ok: true, assertions: 50 }, null, 2));

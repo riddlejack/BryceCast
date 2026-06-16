@@ -1513,6 +1513,8 @@ export const buildReadinessPayloadFromParts = ({
 
   const severity = state === 'ready' ? 'green' : ['blocked', 'wrong_series'].includes(state) ? 'red' : 'amber';
   const points = buildPointsProjectionState({ checkedAt, timingRows: timingRowsArray, bryce, readinessState: state, history });
+  const productHeartbeat = seriesOk ? heartbeat : null;
+  const productBroadcastRoute = seriesOk ? broadcastRoute : null;
   const gates = buildReadinessGates({
     timingEndpoint,
     sourceReport: sources,
@@ -1531,7 +1533,7 @@ export const buildReadinessPayloadFromParts = ({
     state,
     severity,
     reason,
-    raceWeekend: buildRaceWeekendState({ checkedAt, heartbeat, broadcastRoute, sourceState: sourceStateValue, readiness: state }),
+    raceWeekend: buildRaceWeekendState({ checkedAt, heartbeat: productHeartbeat, broadcastRoute: productBroadcastRoute, sourceState: sourceStateValue, readiness: state }),
     liveTiming: {
       checkedAt,
       sourceState: sourceStateValue,

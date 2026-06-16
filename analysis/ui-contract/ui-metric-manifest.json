@@ -1146,13 +1146,16 @@
       ],
       "requiredFields": [
         "endpoints[].id",
-        "endpoints[].state",
+        "endpoints[].sourceState",
         "endpoints[].readinessState",
-        "endpoints[].latency",
+        "endpoints[].ok",
         "endpoints[].freshnessLabel",
+        "endpoints[].checkedAgeSeconds",
+        "endpoints[].modifiedAgeSeconds",
         "endpoints[].bytes",
         "endpoints[].lastModified",
         "endpoints[].etag",
+        "endpoints[].note",
         "local.sqlite"
       ],
       "availability": "live_only",
