@@ -3,29 +3,9 @@ import { Activity, AlertTriangle, CheckCircle2, Database, FileText, Gauge, Radio
 import { loadApiJson } from './data/api';
 import { analyticsSurfaceMetricIds, analyticsSurfaceOrder, buildAnalyticsViewModels } from './data/analyticsViewModels';
 import type { AnalyticsSurface, LiveReadinessPayload, UiMetricManifest } from './data/analyticsContracts';
+import uiMetricManifestJson from '../analysis/ui-contract/ui-metric-manifest.json';
 
-const uiMetricManifest: UiMetricManifest = {
-  schemaVersion: 'brycecast.uiMetricManifest.v1',
-  generatedAt: '2026-06-16T00:00:00.000Z',
-  baselineCommit: '5636bb6',
-  items: analyticsSurfaceOrder.flatMap((surface) =>
-    analyticsSurfaceMetricIds[surface].map((id) => ({
-      id,
-      surface,
-      priority: id.includes('v1.5') ? 'v1.5' : 'v1',
-      stakeholder: ['operator'],
-      userQuestion: id.replaceAll('_', ' '),
-      dataSources: id.startsWith('live') ? [{ kind: 'api', path: id === 'live_points_projection' ? '/api/readiness' : '/api/readiness' }] : [],
-      grain: ['contract'],
-      requiredFields: [],
-      availability: id.startsWith('live') ? 'live_only' : 'available',
-      confidence: 'medium',
-      recommendedVisualizationFamily: 'contract card',
-      fallbackState: 'Render source state from the contract before adding final UI.',
-      implementationOwner: 'frontend'
-    }))
-  )
-};
+const uiMetricManifest = uiMetricManifestJson as UiMetricManifest;
 
 const surfaceLabels: Record<AnalyticsSurface, string> = {
   race_weekend_prep: 'Race Weekend Prep',
