@@ -162,9 +162,7 @@ const isActiveTimingHeartbeat = (heartbeat) => {
   if (sourceState(heartbeat) !== 'live') return false;
   const flags = `${heartbeat?.currentFlag ?? ''} ${heartbeat?.SessionStatus ?? ''}`.toUpperCase();
   if (flags.includes('GREEN') || flags.includes('YELLOW')) return true;
-  if (flags.includes('RED')) return false;
-  const lap = safeNumber(heartbeat?.lapNumber);
-  return lap !== null && lap > 0;
+  return false;
 };
 
 const historyPoints = (payload) => (Array.isArray(payload?.points) ? payload.points : []);

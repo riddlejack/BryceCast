@@ -154,6 +154,14 @@ const nonActiveSession = buildReadinessPayloadFromParts(
 assert.equal(nonActiveSession.state, 'pre_session', 'guarded Bryce rows should not enter ready until timing is active-running');
 assert.equal(nonActiveSession.points.mode, 'historical_fallback');
 
+const unknownFlagWithLap = buildReadinessPayloadFromParts(
+  baseParts({
+    heartbeat: heartbeat({ currentFlag: '', SessionStatus: '', lapNumber: '7' })
+  })
+);
+assert.equal(unknownFlagWithLap.state, 'pre_session', 'positive laps alone must not prove active live readiness');
+assert.equal(unknownFlagWithLap.points.mode, 'historical_fallback');
+
 const wrongSeries = buildReadinessPayloadFromParts(
   baseParts({
     heartbeat: heartbeat({ Series: 'I', eventName: 'Bommarito Automotive Group 500' }),
@@ -254,4 +262,4 @@ assert.equal(compactNulls.bestSpeed, null);
 assert.equal(compactNulls.pitStops, 0);
 assert.equal(compactNulls.runningDriverPoints, null);
 
-console.log(JSON.stringify({ ok: true, assertions: 42 }, null, 2));
+console.log(JSON.stringify({ ok: true, assertions: 44 }, null, 2));
