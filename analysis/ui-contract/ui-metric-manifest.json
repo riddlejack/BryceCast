@@ -1,0 +1,1279 @@
+{
+  "schemaVersion": "brycecast.uiMetricManifest.v1",
+  "generatedAt": "2026-06-16",
+  "baselineCommit": "e24edd0",
+  "sourcePrecedence": [
+    "data/career/career.dataset.json",
+    "data/career/reports/validation-report.json",
+    "data/career/reports/ingestion-summary.json",
+    "data/career/reports/career-coverage-matrix.json",
+    "analysis/indy-nxt-discovery/output",
+    "analysis/career-parity/output",
+    "scripts/api-server.mjs API routes"
+  ],
+  "generatedReportState": {
+    "validation": {
+      "path": "data/career/reports/validation-report.json",
+      "errorCount": 0,
+      "warningCount": 1,
+      "warning": "9 physical sessions do not yet have scheduledStart or actualStart. Weather/live joins must wait for session time backfill."
+    },
+    "ingestionSummary": {
+      "path": "data/career/reports/ingestion-summary.json",
+      "generatedAt": "2026-06-16T18:12:35.595Z",
+      "openGapCount": 9,
+      "priorityGaps": []
+    },
+    "coverageMatrix": {
+      "path": "data/career/reports/career-coverage-matrix.json",
+      "generatedAt": "2026-06-16T18:12:36.313Z",
+      "indyNxt": {
+        "events": 45,
+        "sessions": 189,
+        "completedRaceSessions": 36,
+        "raceRows": 738,
+        "qualifyingSessions": 87,
+        "openGapIds": [
+          "gap_indy_nxt_qualifying_lap_reports"
+        ],
+        "priorityGaps": []
+      }
+    }
+  },
+  "globalRules": [
+    "Every rendered metric must expose a source drawer entry with artifact or API path, source family, confidence, caveat IDs where applicable, denominator, and generated or fetched time when available.",
+    "Live Race Control fields are separate from historical official result fields.",
+    "Points projection is required for live race v1, but it must degrade to unavailable unless Race Control live point fields are populated and source-ready.",
+    "Unsupported features must render unavailable or deferred states instead of implied data."
+  ],
+  "items": [
+    {
+      "id": "prep_event_command_center",
+      "surface": "race_weekend_prep",
+      "priority": "v1",
+      "stakeholder": [
+        "Bryce",
+        "family/friends",
+        "serious fans"
+      ],
+      "userQuestion": "What weekend is coming up and how do I follow it?",
+      "dataSources": [
+        {
+          "kind": "api",
+          "path": "/api/session"
+        },
+        {
+          "kind": "api",
+          "path": "/api/weather/upcoming"
+        },
+        {
+          "kind": "artifact",
+          "path": "analysis/indy-nxt-discovery/output/deep_dive/tables/future_weekend_prep_inputs.csv"
+        }
+      ],
+      "grain": [
+        "event",
+        "session"
+      ],
+      "requiredFields": [
+        "eventId",
+        "eventName",
+        "sessionId",
+        "sessionName",
+        "startsAt",
+        "estimatedGreenFlag",
+        "trackName",
+        "trackType",
+        "trackLengthMi",
+        "cornerCount",
+        "primaryVideo",
+        "audio",
+        "readiness",
+        "weatherState"
+      ],
+      "availability": "partial",
+      "confidence": "medium",
+      "caveatBehavior": {
+        "gapIds": [],
+        "copy": "Schedule feed timestamps lack explicit timezone offsets; weather forecast readiness is NWS context, not official series weather.",
+        "drawer": true
+      },
+      "recommendedVisualizationFamily": "schedule timeline + venue facts + watch/listen actions",
+      "fallbackState": "Show source timestamp and a time-normalization badge when offset is missing; show weather readiness only when NWS route returns data.",
+      "implementationOwner": "view model"
+    },
+    {
+      "id": "prep_track_history",
+      "surface": "race_weekend_prep",
+      "priority": "v1",
+      "stakeholder": [
+        "Bryce",
+        "team/engineering",
+        "serious fans"
+      ],
+      "userQuestion": "What has Bryce done at this track or track type?",
+      "dataSources": [
+        {
+          "kind": "artifact",
+          "path": "analysis/indy-nxt-discovery/output/deep_dive/tables/future_weekend_prep_inputs.csv"
+        },
+        {
+          "kind": "artifact",
+          "path": "analysis/indy-nxt-discovery/output/deep_dive/tables/race_track_type_summary.csv"
+        },
+        {
+          "kind": "artifact",
+          "path": "analysis/career-parity/output/tables/career_result_conversion.csv"
+        }
+      ],
+      "grain": [
+        "event",
+        "session",
+        "series"
+      ],
+      "requiredFields": [
+        "trackName",
+        "trackType",
+        "bryceIndyNxtRacesAtTrack",
+        "sameTrackAvgFinish",
+        "sameTrackAvgGain",
+        "sameTrackTop10Rate",
+        "trackTypeAvgFinish",
+        "trackTypeAvgGain",
+        "trackTypeTop10Rate"
+      ],
+      "availability": "available",
+      "confidence": "high",
+      "caveatBehavior": {
+        "gapIds": [],
+        "copy": "Small same-track samples need denominators in the drawer.",
+        "drawer": true
+      },
+      "recommendedVisualizationFamily": "compact comparison cards + small bar set",
+      "fallbackState": "If no same-track rows exist, fall back to track-type context only.",
+      "implementationOwner": "historical analytics"
+    },
+    {
+      "id": "prep_practice_qualifying_funnel",
+      "surface": "race_weekend_prep",
+      "priority": "v1.5",
+      "stakeholder": [
+        "Bryce",
+        "team/engineering"
+      ],
+      "userQuestion": "Did practice and qualifying point toward a good race?",
+      "dataSources": [
+        {
+          "kind": "artifact",
+          "path": "analysis/indy-nxt-discovery/output/deep_dive/tables/prep_session_signals.csv"
+        },
+        {
+          "kind": "artifact",
+          "path": "analysis/indy-nxt-discovery/output/deep_dive/tables/prep_session_correlations.csv"
+        }
+      ],
+      "grain": [
+        "session",
+        "result"
+      ],
+      "requiredFields": [
+        "practiceSessionsWithBryce",
+        "qualifyingSessionsWithBryce",
+        "bestPracticeRank",
+        "avgPracticeRank",
+        "bestQualifyingRank",
+        "avgQualifyingRank",
+        "raceStart",
+        "raceFinish",
+        "raceGain",
+        "practiceFieldMedian"
+      ],
+      "availability": "source_bounded",
+      "confidence": "medium",
+      "caveatBehavior": {
+        "gapIds": [],
+        "copy": "Practice and group qualifying are rank/context signals; session formats are not fully equivalent.",
+        "drawer": true
+      },
+      "recommendedVisualizationFamily": "funnel/slope card",
+      "fallbackState": "Show raw signals only; hide correlation claim when prep rows are absent.",
+      "implementationOwner": "historical analytics"
+    },
+    {
+      "id": "prep_weather_window",
+      "surface": "race_weekend_prep",
+      "priority": "v1",
+      "stakeholder": [
+        "Bryce",
+        "family/friends",
+        "operator"
+      ],
+      "userQuestion": "What conditions may frame the session?",
+      "dataSources": [
+        {
+          "kind": "api",
+          "path": "/api/weather/live?trackId={trackId}"
+        },
+        {
+          "kind": "api",
+          "path": "/api/weather/upcoming"
+        }
+      ],
+      "grain": [
+        "event",
+        "session",
+        "source"
+      ],
+      "requiredFields": [
+        "sourceState",
+        "readiness",
+        "station.id",
+        "observation.timestamp",
+        "temperature",
+        "windSpeed",
+        "windGust",
+        "windDirection",
+        "alerts",
+        "hourlyForecast",
+        "dailyForecast",
+        "cache.status",
+        "probes"
+      ],
+      "availability": "live_only",
+      "confidence": "medium",
+      "caveatBehavior": {
+        "gapIds": [],
+        "copy": "NWS weather is current and forecast context, not official series weather or track temperature.",
+        "drawer": true
+      },
+      "recommendedVisualizationFamily": "weather strip + readiness badge",
+      "fallbackState": "If one NWS leg fails, render partial with failed probe; if outside forecast window, show too_far_for_event_forecast.",
+      "implementationOwner": "live API"
+    },
+    {
+      "id": "live_source_readiness",
+      "surface": "live_race_companion",
+      "priority": "v1",
+      "stakeholder": [
+        "operator",
+        "serious fans"
+      ],
+      "userQuestion": "Is this actually the right live INDY NXT session?",
+      "dataSources": [
+        {
+          "kind": "api",
+          "path": "/api/sources"
+        },
+        {
+          "kind": "api",
+          "path": "/api/snapshot"
+        }
+      ],
+      "grain": [
+        "source",
+        "session"
+      ],
+      "requiredFields": [
+        "endpoints[].id",
+        "endpoints[].state",
+        "endpoints[].readinessState",
+        "endpoints[].freshnessLabel",
+        "endpoints[].checkedAgeSeconds",
+        "endpoints[].modifiedAgeSeconds",
+        "heartbeat.Series",
+        "heartbeat.EventID",
+        "heartbeat.EventSessionID",
+        "bryce.DriverID",
+        "bryce.no",
+        "bryce.firstName",
+        "bryce.lastName"
+      ],
+      "availability": "live_only",
+      "confidence": "medium",
+      "caveatBehavior": {
+        "gapIds": [],
+        "copy": "Timing endpoint can point to top-series; require INDY NXT heartbeat plus car 9 and DriverID 2143 or exact Bryce identity.",
+        "drawer": true
+      },
+      "recommendedVisualizationFamily": "source health banner + drawer",
+      "fallbackState": "If wrong_session, show schedule/watch context and latest archived sample only as stale.",
+      "implementationOwner": "live API"
+    },
+    {
+      "id": "live_bryce_status_tile",
+      "surface": "live_race_companion",
+      "priority": "v1",
+      "stakeholder": [
+        "Bryce",
+        "family/friends"
+      ],
+      "userQuestion": "Where is Bryce right now and what changed?",
+      "dataSources": [
+        {
+          "kind": "api",
+          "path": "/api/bryce"
+        },
+        {
+          "kind": "api",
+          "path": "/api/snapshot"
+        }
+      ],
+      "grain": [
+        "driver",
+        "session"
+      ],
+      "requiredFields": [
+        "rank",
+        "liveRank",
+        "startPosition",
+        "status",
+        "comment",
+        "laps",
+        "gap",
+        "liveGap",
+        "diff",
+        "lastLapTime",
+        "bestLapTime",
+        "BestSpeed",
+        "LastSpeed",
+        "Passes",
+        "Passed",
+        "pitStops",
+        "onTrack"
+      ],
+      "availability": "live_only",
+      "confidence": "medium",
+      "caveatBehavior": {
+        "gapIds": [],
+        "copy": "Gap strings need label discipline; null and zero are different.",
+        "drawer": true
+      },
+      "recommendedVisualizationFamily": "KPI tile + delta strip",
+      "fallbackState": "If Bryce row missing, render wrong-session/no-Bryce state, not zeros.",
+      "implementationOwner": "view model"
+    },
+    {
+      "id": "live_timing_tower",
+      "surface": "live_race_companion",
+      "priority": "v1",
+      "stakeholder": [
+        "family/friends",
+        "serious fans"
+      ],
+      "userQuestion": "Who is around Bryce on track?",
+      "dataSources": [
+        {
+          "kind": "api",
+          "path": "/api/timing"
+        }
+      ],
+      "grain": [
+        "driver",
+        "session"
+      ],
+      "requiredFields": [
+        "rows[].rank",
+        "rows[].liveRank",
+        "rows[].no",
+        "rows[].firstName",
+        "rows[].lastName",
+        "rows[].team",
+        "rows[].gap",
+        "rows[].liveGap",
+        "rows[].diff",
+        "rows[].status",
+        "rows[].laps",
+        "rows[].bryce"
+      ],
+      "availability": "live_only",
+      "confidence": "medium",
+      "caveatBehavior": {
+        "gapIds": [],
+        "copy": "Top-series car-number collisions must be guarded by Bryce identity predicate.",
+        "drawer": true
+      },
+      "recommendedVisualizationFamily": "timing tower with Bryce focus band",
+      "fallbackState": "If timing rows exist but Bryce is absent, show wrong-session tower disabled.",
+      "implementationOwner": "UI only"
+    },
+    {
+      "id": "live_gap_lap_trend",
+      "surface": "live_race_companion",
+      "priority": "v1.5",
+      "stakeholder": [
+        "Bryce",
+        "team/engineering",
+        "serious fans"
+      ],
+      "userQuestion": "Is the race trending toward or away from Bryce?",
+      "dataSources": [
+        {
+          "kind": "api",
+          "path": "/api/replay/bryce"
+        },
+        {
+          "kind": "local_archive",
+          "path": "data/live/brycecast.sqlite"
+        },
+        {
+          "kind": "local_archive",
+          "path": "data/live/snapshots.jsonl"
+        }
+      ],
+      "grain": [
+        "lap",
+        "driver",
+        "source"
+      ],
+      "requiredFields": [
+        "checkedAt",
+        "elapsedSeconds",
+        "rank",
+        "liveRank",
+        "startPosition",
+        "positionDelta",
+        "gap",
+        "liveGap",
+        "lastLapTime",
+        "passes",
+        "passed",
+        "netPasses",
+        "pitStops",
+        "sourceState"
+      ],
+      "availability": "replay_only",
+      "confidence": "low",
+      "caveatBehavior": {
+        "gapIds": [],
+        "copy": "Current archive is tiny; full-session trend quality requires race watch capture.",
+        "drawer": true
+      },
+      "recommendedVisualizationFamily": "rank/gap trend lines with source-state overlay",
+      "fallbackState": "If archive state is missing, empty, or tiny, show live tile only and a capture-needed state.",
+      "implementationOwner": "live API"
+    },
+    {
+      "id": "live_points_projection",
+      "surface": "live_race_companion",
+      "priority": "v1",
+      "stakeholder": [
+        "Bryce",
+        "family/friends",
+        "serious fans"
+      ],
+      "userQuestion": "What does the current running order mean for points?",
+      "dataSources": [
+        {
+          "kind": "api",
+          "path": "/api/bryce"
+        },
+        {
+          "kind": "api",
+          "path": "/api/snapshot"
+        },
+        {
+          "kind": "api",
+          "path": "/api/timing"
+        },
+        {
+          "kind": "upstream",
+          "path": "https://indycar.blob.core.windows.net/racecontrol/timingscoring-ris.json"
+        }
+      ],
+      "grain": [
+        "driver",
+        "session"
+      ],
+      "requiredFields": [
+        "runningDriverPoints",
+        "totalDriverPoints",
+        "totalEntrantPoints",
+        "rank",
+        "liveRank",
+        "status",
+        "EventSessionID",
+        "sourceState"
+      ],
+      "availability": "live_only",
+      "confidence": "medium",
+      "caveatBehavior": {
+        "gapIds": [],
+        "copy": "Required v1 card. Display only Race Control point fields populated live; reconcile against official standings after session. Do not fabricate from local formula.",
+        "drawer": true
+      },
+      "recommendedVisualizationFamily": "points delta card + compact field context",
+      "fallbackState": "If point fields are null, missing, or stale, show Live points not populated by Race Control and keep historical championship context separate.",
+      "implementationOwner": "live API"
+    },
+    {
+      "id": "live_weather_strip",
+      "surface": "live_race_companion",
+      "priority": "v1",
+      "stakeholder": [
+        "Bryce",
+        "family/friends"
+      ],
+      "userQuestion": "What is the current venue weather?",
+      "dataSources": [
+        {
+          "kind": "api",
+          "path": "/api/weather/live?trackId={trackId}"
+        }
+      ],
+      "grain": [
+        "source",
+        "event"
+      ],
+      "requiredFields": [
+        "sourceState",
+        "observation.timestamp",
+        "condition",
+        "temperature",
+        "windSpeed",
+        "windGust",
+        "windDirection",
+        "alerts",
+        "station.id",
+        "probes"
+      ],
+      "availability": "live_only",
+      "confidence": "medium",
+      "caveatBehavior": {
+        "gapIds": [],
+        "copy": "NWS only; no official track temp or radar.",
+        "drawer": true
+      },
+      "recommendedVisualizationFamily": "compact weather strip",
+      "fallbackState": "If partial, suppress missing numeric fields rather than rendering zero.",
+      "implementationOwner": "live API"
+    },
+    {
+      "id": "debrief_header",
+      "surface": "race_debrief",
+      "priority": "v1",
+      "stakeholder": [
+        "Bryce",
+        "family/friends"
+      ],
+      "userQuestion": "What happened in the race?",
+      "dataSources": [
+        {
+          "kind": "artifact",
+          "path": "analysis/indy-nxt-discovery/output/deep_dive/tables/race_debrief_scores.csv"
+        },
+        {
+          "kind": "artifact",
+          "path": "analysis/career-parity/output/tables/career_result_conversion.csv"
+        },
+        {
+          "kind": "artifact",
+          "path": "analysis/indy-nxt-discovery/output/deep_dive/tables/championship_progression.csv"
+        }
+      ],
+      "grain": [
+        "session",
+        "result"
+      ],
+      "requiredFields": [
+        "sessionId",
+        "raceLabel",
+        "seasonYear",
+        "trackName",
+        "trackType",
+        "teamName",
+        "startPosition",
+        "finishPosition",
+        "positionGain",
+        "finishPercentile",
+        "points",
+        "status",
+        "sourceState",
+        "confidence",
+        "caveat"
+      ],
+      "availability": "available",
+      "confidence": "high",
+      "caveatBehavior": {
+        "gapIds": [],
+        "copy": "Derived archetype labels are review aids until manually approved.",
+        "drawer": true
+      },
+      "recommendedVisualizationFamily": "outcome KPI strip + concise narrative",
+      "fallbackState": "If derived score missing, fall back to official result fields only.",
+      "implementationOwner": "historical analytics"
+    },
+    {
+      "id": "debrief_qualifying_conversion",
+      "surface": "race_debrief",
+      "priority": "v1",
+      "stakeholder": [
+        "Bryce",
+        "team/engineering",
+        "family/friends"
+      ],
+      "userQuestion": "Did qualifying translate into race result?",
+      "dataSources": [
+        {
+          "kind": "artifact",
+          "path": "analysis/indy-nxt-discovery/output/deep_dive/tables/prep_session_signals.csv"
+        },
+        {
+          "kind": "artifact",
+          "path": "analysis/career-parity/output/tables/career_result_conversion.csv"
+        },
+        {
+          "kind": "canonical_dataset",
+          "path": "data/career/career.dataset.json"
+        }
+      ],
+      "grain": [
+        "session",
+        "result"
+      ],
+      "requiredFields": [
+        "bestQualifyingRank",
+        "avgQualifyingRank",
+        "raceStart",
+        "raceFinish",
+        "raceGain",
+        "startPosition",
+        "finishPosition",
+        "positionGain"
+      ],
+      "availability": "available",
+      "confidence": "high",
+      "caveatBehavior": {
+        "gapIds": [
+          "gap_indy_nxt_qualifying_lap_reports"
+        ],
+        "copy": "Group and combined qualifying formats need source/session caveats.",
+        "drawer": true
+      },
+      "recommendedVisualizationFamily": "slope/dumbbell chart",
+      "fallbackState": "If qualifying row absent, show start-to-finish only.",
+      "implementationOwner": "historical analytics"
+    },
+    {
+      "id": "debrief_lap_position_story",
+      "surface": "race_debrief",
+      "priority": "v1",
+      "stakeholder": [
+        "Bryce",
+        "team/engineering",
+        "serious fans"
+      ],
+      "userQuestion": "Where did the race turn?",
+      "dataSources": [
+        {
+          "kind": "artifact",
+          "path": "analysis/indy-nxt-discovery/output/deep_dive/tables/full_field_lap_dynamics_by_race.csv"
+        },
+        {
+          "kind": "artifact",
+          "path": "analysis/indy-nxt-discovery/output/deep_dive/tables/full_field_lap_dynamics_by_driver.csv"
+        },
+        {
+          "kind": "canonical_dataset",
+          "path": "data/career/career.dataset.json"
+        }
+      ],
+      "grain": [
+        "lap",
+        "driver",
+        "session"
+      ],
+      "requiredFields": [
+        "lapSamples",
+        "firstLapPosition",
+        "finalLapPosition",
+        "bestRunningPosition",
+        "worstRunningPosition",
+        "netLapChartGain",
+        "positionVolatility",
+        "sourceState",
+        "brycePrimaryStory"
+      ],
+      "availability": "source_bounded",
+      "confidence": "medium",
+      "caveatBehavior": {
+        "gapIds": [
+          "gap_indy_nxt_qualifying_lap_reports"
+        ],
+        "copy": "36/36 completed INDY NXT races have lap samples; 26 fully validate and 10 are clean partial visible-sample imports.",
+        "drawer": true
+      },
+      "recommendedVisualizationFamily": "inverted y-axis lap-position line",
+      "fallbackState": "If chart is partial, badge it and avoid missing-lap inference.",
+      "implementationOwner": "historical analytics"
+    },
+    {
+      "id": "debrief_section_strengths",
+      "surface": "race_debrief",
+      "priority": "v1",
+      "stakeholder": [
+        "Bryce",
+        "team/engineering"
+      ],
+      "userQuestion": "Where was Bryce fast or weak by section?",
+      "dataSources": [
+        {
+          "kind": "artifact",
+          "path": "analysis/indy-nxt-discovery/output/deep_dive/tables/section_results_deep_by_race.csv"
+        },
+        {
+          "kind": "artifact",
+          "path": "analysis/indy-nxt-discovery/output/deep_dive/tables/section_results_deep_by_section.csv"
+        }
+      ],
+      "grain": [
+        "session",
+        "lap"
+      ],
+      "requiredFields": [
+        "sectionComparisonRows",
+        "medianSectionPercentile",
+        "topQuartileShare",
+        "bottomQuartileShare",
+        "bestSectionFamilies",
+        "weakestSectionFamilies",
+        "sourceState",
+        "caveat"
+      ],
+      "availability": "partial",
+      "confidence": "medium",
+      "caveatBehavior": {
+        "gapIds": [
+          "gap_indy_nxt_qualifying_lap_reports"
+        ],
+        "copy": "144/145 comparable INDY NXT sessions have both reports; session_indy_nxt_2024_6325 is source-broken.",
+        "drawer": true
+      },
+      "recommendedVisualizationFamily": "ranked bars or segment heatmap",
+      "fallbackState": "If session is the corrupt holdout, show unavailable with source-broken gap.",
+      "implementationOwner": "historical analytics"
+    },
+    {
+      "id": "debrief_incidents_penalties",
+      "surface": "race_debrief",
+      "priority": "v1.5",
+      "stakeholder": [
+        "Bryce",
+        "family/friends",
+        "serious fans"
+      ],
+      "userQuestion": "Were cautions, penalties, or status events part of the story?",
+      "dataSources": [
+        {
+          "kind": "artifact",
+          "path": "analysis/indy-nxt-discovery/output/deep_dive/tables/incident_penalty_context.csv"
+        },
+        {
+          "kind": "artifact",
+          "path": "analysis/indy-nxt-discovery/output/deep_dive/tables/leader_lap_context.csv"
+        },
+        {
+          "kind": "generated_report",
+          "path": "data/career/reports/career-coverage-matrix.json"
+        }
+      ],
+      "grain": [
+        "event",
+        "session"
+      ],
+      "requiredFields": [
+        "sessionIncidentCount",
+        "sessionPenaltyCount",
+        "flagState",
+        "leader",
+        "margin",
+        "status",
+        "sourceState"
+      ],
+      "availability": "available",
+      "confidence": "medium",
+      "caveatBehavior": {
+        "gapIds": [],
+        "copy": "Rows exist when official PDFs/API expose them; absence is not proof nothing happened unless source family has complete no-event semantics.",
+        "drawer": true
+      },
+      "recommendedVisualizationFamily": "event chips + caution timeline",
+      "fallbackState": "If no rows, say no imported official rows, not none occurred.",
+      "implementationOwner": "historical analytics"
+    },
+    {
+      "id": "debrief_team_context",
+      "surface": "race_debrief",
+      "priority": "v1.5",
+      "stakeholder": [
+        "Bryce",
+        "team/engineering",
+        "serious fans"
+      ],
+      "userQuestion": "How did Bryce compare inside the team?",
+      "dataSources": [
+        {
+          "kind": "artifact",
+          "path": "analysis/indy-nxt-discovery/output/deep_dive/tables/team_context_by_race.csv"
+        },
+        {
+          "kind": "artifact",
+          "path": "analysis/indy-nxt-discovery/output/deep_dive/tables/team_context_by_year.csv"
+        }
+      ],
+      "grain": [
+        "team",
+        "result"
+      ],
+      "requiredFields": [
+        "teamName",
+        "bryceFinish",
+        "teamCars",
+        "teammates",
+        "teamBestFinish",
+        "teamAverageFinish",
+        "bryceVsTeamAvgFinish",
+        "bryceTeamFinishRank",
+        "statusCaveat"
+      ],
+      "availability": "source_bounded",
+      "confidence": "medium",
+      "caveatBehavior": {
+        "gapIds": [],
+        "copy": "Descriptive only; no engineering root-cause claims.",
+        "drawer": true
+      },
+      "recommendedVisualizationFamily": "ranked dot plot/table",
+      "fallbackState": "If team rows missing, show official result only.",
+      "implementationOwner": "historical analytics"
+    },
+    {
+      "id": "debrief_source_drawer",
+      "surface": "race_debrief",
+      "priority": "v1",
+      "stakeholder": [
+        "Bryce",
+        "family/friends",
+        "team/engineering",
+        "serious fans",
+        "operator"
+      ],
+      "userQuestion": "Why should I trust this screen?",
+      "dataSources": [
+        {
+          "kind": "artifact",
+          "path": "analysis/indy-nxt-discovery/output/deep_dive/tables/indy_nxt_source_family_audit.csv"
+        },
+        {
+          "kind": "generated_report",
+          "path": "data/career/reports/career-coverage-matrix.json"
+        },
+        {
+          "kind": "generated_report",
+          "path": "data/career/reports/validation-report.json"
+        }
+      ],
+      "grain": [
+        "source"
+      ],
+      "requiredFields": [
+        "sourceFamily",
+        "sourceRows",
+        "analysisStatus",
+        "primaryArtifacts",
+        "auditConclusion",
+        "openGapIds",
+        "validationWarning"
+      ],
+      "availability": "available",
+      "confidence": "high",
+      "caveatBehavior": {
+        "gapIds": [
+          "gap_indy_nxt_qualifying_lap_reports"
+        ],
+        "copy": "Drawer owns detail so main screen stays clean.",
+        "drawer": true
+      },
+      "recommendedVisualizationFamily": "drawer/table",
+      "fallbackState": "Always available for v1 screens; if artifact missing, block frontend build for that module.",
+      "implementationOwner": "UI only"
+    },
+    {
+      "id": "career_series_summary",
+      "surface": "career_lab",
+      "priority": "v1",
+      "stakeholder": [
+        "Bryce",
+        "serious fans"
+      ],
+      "userQuestion": "How has Bryce performed across series?",
+      "dataSources": [
+        {
+          "kind": "artifact",
+          "path": "analysis/career-parity/output/tables/career_series_result_summary.csv"
+        },
+        {
+          "kind": "artifact",
+          "path": "analysis/career-parity/output/tables/career_result_conversion.csv"
+        }
+      ],
+      "grain": [
+        "series",
+        "result"
+      ],
+      "requiredFields": [
+        "seriesId",
+        "seriesName",
+        "raceRows",
+        "avgFinish",
+        "medianFinish",
+        "avgGain",
+        "avgFinishPercentile",
+        "top5Rate",
+        "top10Rate",
+        "issueLikeStatusRate"
+      ],
+      "availability": "available",
+      "confidence": "high",
+      "caveatBehavior": {
+        "gapIds": [],
+        "copy": "Use percentiles with raw finish because field sizes differ.",
+        "drawer": true
+      },
+      "recommendedVisualizationFamily": "sortable series table + small multiples",
+      "fallbackState": "If a series has too few rows, show row count and suppress trend claims.",
+      "implementationOwner": "historical analytics"
+    },
+    {
+      "id": "career_metric_parity_matrix",
+      "surface": "career_lab",
+      "priority": "v1",
+      "stakeholder": [
+        "operator",
+        "serious fans"
+      ],
+      "userQuestion": "Which analyses are safe beyond INDY NXT?",
+      "dataSources": [
+        {
+          "kind": "artifact",
+          "path": "analysis/career-parity/output/tables/career_metric_family_parity.csv"
+        },
+        {
+          "kind": "generated_report",
+          "path": "data/career/reports/career-coverage-matrix.json"
+        }
+      ],
+      "grain": [
+        "series",
+        "source"
+      ],
+      "requiredFields": [
+        "seriesName",
+        "metricFamily",
+        "sourceRowsOrSessions",
+        "parityStatus",
+        "uiUse",
+        "caveat",
+        "openGapIds",
+        "categoryStatus"
+      ],
+      "availability": "available",
+      "confidence": "high",
+      "caveatBehavior": {
+        "gapIds": [
+          "gap_formula_ford_2020_grid_start_source_asymmetry_holdouts",
+          "gap_gb3_2022_session_1248_missing_json"
+        ],
+        "copy": "Prevent weak source families from poisoning INDY NXT-grade views.",
+        "drawer": true
+      },
+      "recommendedVisualizationFamily": "matrix heatmap",
+      "fallbackState": "If metric family is unavailable, show unavailable cell and omit chart affordance.",
+      "implementationOwner": "historical analytics"
+    },
+    {
+      "id": "career_result_conversion_explorer",
+      "surface": "career_lab",
+      "priority": "v1.5",
+      "stakeholder": [
+        "Bryce",
+        "serious fans"
+      ],
+      "userQuestion": "Which races were gains, losses, or standout finishes?",
+      "dataSources": [
+        {
+          "kind": "artifact",
+          "path": "analysis/career-parity/output/tables/career_result_conversion.csv"
+        }
+      ],
+      "grain": [
+        "result",
+        "session"
+      ],
+      "requiredFields": [
+        "seriesName",
+        "seasonYear",
+        "eventName",
+        "sessionId",
+        "raceLabel",
+        "trackName",
+        "trackType",
+        "teamName",
+        "startPosition",
+        "finishPosition",
+        "positionGain",
+        "finishPercentile",
+        "points",
+        "status",
+        "sourceState"
+      ],
+      "availability": "source_bounded",
+      "confidence": "high",
+      "caveatBehavior": {
+        "gapIds": [
+          "gap_froc_2024_start_positions_partial"
+        ],
+        "copy": "Start/gain unavailable for series without grid/start source; do not compute gain from missing start.",
+        "drawer": true
+      },
+      "recommendedVisualizationFamily": "filterable scatter/table",
+      "fallbackState": "If startPosition is missing, show finish percentile only.",
+      "implementationOwner": "historical analytics"
+    },
+    {
+      "id": "career_gap_ledger",
+      "surface": "career_lab",
+      "priority": "v1",
+      "stakeholder": [
+        "operator",
+        "serious fans"
+      ],
+      "userQuestion": "What is known, partial, blocked, or unavailable?",
+      "dataSources": [
+        {
+          "kind": "generated_report",
+          "path": "data/career/reports/career-coverage-matrix.json"
+        },
+        {
+          "kind": "doc",
+          "path": "docs/CAREER_ANALYTICS_COVERAGE_MATRIX.md"
+        }
+      ],
+      "grain": [
+        "series",
+        "source"
+      ],
+      "requiredFields": [
+        "seriesId",
+        "seriesName",
+        "categories[].id",
+        "categories[].status",
+        "categories[].covered",
+        "categories[].total",
+        "categories[].coverage",
+        "openGapIds",
+        "priorityGaps"
+      ],
+      "availability": "available",
+      "confidence": "high",
+      "caveatBehavior": {
+        "gapIds": [
+          "gap_remaining_career_rows_after_track_metadata"
+        ],
+        "copy": "Open gaps can be caveats, not blockers. Priority gaps drive blocked UI calls.",
+        "drawer": true
+      },
+      "recommendedVisualizationFamily": "coverage matrix + source drawer",
+      "fallbackState": "If generated matrix missing, block career lab build.",
+      "implementationOwner": "view model"
+    },
+    {
+      "id": "ops_validation_status",
+      "surface": "source_ops",
+      "priority": "v1",
+      "stakeholder": [
+        "operator"
+      ],
+      "userQuestion": "Is the backend baseline safe to build from?",
+      "dataSources": [
+        {
+          "kind": "generated_report",
+          "path": "data/career/reports/validation-report.json"
+        },
+        {
+          "kind": "generated_report",
+          "path": "data/career/reports/ingestion-summary.json"
+        }
+      ],
+      "grain": [
+        "source"
+      ],
+      "requiredFields": [
+        "errorCount",
+        "warningCount",
+        "issues",
+        "generatedAt",
+        "openGaps",
+        "readiness"
+      ],
+      "availability": "available",
+      "confidence": "high",
+      "caveatBehavior": {
+        "gapIds": [],
+        "copy": "Warning about 9 sessions without exact starts blocks weather/live joins for those sessions only.",
+        "drawer": true
+      },
+      "recommendedVisualizationFamily": "status checklist",
+      "fallbackState": "If errorCount is greater than 0, block frontend analytics work.",
+      "implementationOwner": "UI only"
+    },
+    {
+      "id": "ops_live_source_console",
+      "surface": "source_ops",
+      "priority": "v1",
+      "stakeholder": [
+        "operator"
+      ],
+      "userQuestion": "Which live sources are reachable and app-ready?",
+      "dataSources": [
+        {
+          "kind": "api",
+          "path": "/api/sources"
+        },
+        {
+          "kind": "doc",
+          "path": "docs/LIVE_DATA_READINESS_AUDIT.md"
+        }
+      ],
+      "grain": [
+        "source"
+      ],
+      "requiredFields": [
+        "endpoints[].id",
+        "endpoints[].state",
+        "endpoints[].readinessState",
+        "endpoints[].latency",
+        "endpoints[].freshnessLabel",
+        "endpoints[].bytes",
+        "endpoints[].lastModified",
+        "endpoints[].etag",
+        "local.sqlite"
+      ],
+      "availability": "live_only",
+      "confidence": "medium",
+      "caveatBehavior": {
+        "gapIds": [],
+        "copy": "HTTP 200 is not readiness; candidate/reference feeds must not become Bryce data.",
+        "drawer": true
+      },
+      "recommendedVisualizationFamily": "source table + filters",
+      "fallbackState": "If API unavailable, show docs-backed checklist and a command hint.",
+      "implementationOwner": "live API"
+    },
+    {
+      "id": "ops_replay_archive_state",
+      "surface": "source_ops",
+      "priority": "v1.5",
+      "stakeholder": [
+        "operator",
+        "team/engineering"
+      ],
+      "userQuestion": "Is there enough archived data to debrief trends?",
+      "dataSources": [
+        {
+          "kind": "api",
+          "path": "/api/replay/bryce"
+        },
+        {
+          "kind": "local_archive",
+          "path": "data/live/brycecast.sqlite"
+        },
+        {
+          "kind": "local_archive",
+          "path": "data/live/snapshots.jsonl"
+        }
+      ],
+      "grain": [
+        "source",
+        "session"
+      ],
+      "requiredFields": [
+        "available",
+        "archiveState",
+        "sessions",
+        "summary",
+        "warnings",
+        "rows",
+        "storage"
+      ],
+      "availability": "replay_only",
+      "confidence": "low",
+      "caveatBehavior": {
+        "gapIds": [],
+        "copy": "Tiny archive is proof of plumbing, not full-session analysis.",
+        "drawer": true
+      },
+      "recommendedVisualizationFamily": "archive state card + sample count trend",
+      "fallbackState": "If archiveState is missing, empty, or tiny, disable replay analytics and show capture procedure.",
+      "implementationOwner": "live API"
+    }
+  ],
+  "deferredOrUnavailable": [
+    {
+      "id": "live_moving_dot_map",
+      "availability": "unavailable",
+      "rationale": "No validated live GPS or car-coordinate feed. Static track map exists only as reference.",
+      "requiredProof": "Official nonzero live lapDistance, websocket, or licensed telemetry that maps to Bryce and refreshes during green laps."
+    },
+    {
+      "id": "tire_overtake_strategy",
+      "availability": "deferred",
+      "rationale": "Race Control fields exist but cold samples are not enough to prove live INDY NXT meaning.",
+      "requiredProof": "Live INDY NXT session where Tire and OverTake_Remain are populated and meaningful."
+    },
+    {
+      "id": "detailed_pit_sequence",
+      "availability": "unavailable",
+      "rationale": "Official INDY NXT sources expose pit-stop counts, not pit lane time, stop lap sequence, service, tire, or pit time.",
+      "requiredProof": "Official source/parser with sequence fields."
+    },
+    {
+      "id": "official_indy_nxt_weather",
+      "availability": "unavailable",
+      "rationale": "0/189 official weather rows in current career coverage.",
+      "requiredProof": "Official series timing/report weather rows."
+    },
+    {
+      "id": "team_radio_audio_or_live_pov",
+      "availability": "unavailable",
+      "rationale": "Radio frequency metadata is not audio; POV is out of scope without permissioned stream.",
+      "requiredProof": "Permissioned source plus explicit delayed/live labeling."
+    },
+    {
+      "id": "predictive_field_strength_teammate_model",
+      "availability": "deferred",
+      "rationale": "Derived benchmarks are blocked in coverage matrix; existing context is descriptive only.",
+      "requiredProof": "Reviewed derived benchmark package with denominators and validation."
+    }
+  ],
+  "selfCheck": {
+    "readyV1Screens": [
+      "race_weekend_prep",
+      "live_race_companion",
+      "race_debrief",
+      "career_lab",
+      "source_ops"
+    ],
+    "blockingBackendContracts": [
+      "Live points projection requires live INDY NXT proof that Race Control point fields populate and reconcile; UI card remains v1 required with unavailable fallback.",
+      "Replay trend analytics require full-session archive capture.",
+      "A formal /api/readiness or equivalent view model is still needed for a polished single readiness contract.",
+      "Timezone normalization is needed for schedule and track-activity strings before final countdown UI."
+    ],
+    "frontendCanBuildFirst": [
+      "Race Debrief v1 for one completed INDY NXT race.",
+      "Career Lab v1 metric parity and coverage matrix.",
+      "Race Weekend Prep shell using session, weather, and future prep inputs.",
+      "Live Race Companion shell with wrong-session and unavailable states."
+    ]
+  }
+}
