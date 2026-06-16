@@ -1,6 +1,6 @@
 # Career Analytics Parity Pass
 
-Generated from canonical career dataset updated `2026-06-08T19:38:11.232Z`.
+Generated from canonical career dataset updated `2026-06-16T18:12:31.143Z`.
 
 ## Series Result Summary
 

@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import json
 import math
+import subprocess
 from collections import Counter, defaultdict
 from dataclasses import dataclass
 from pathlib import Path
@@ -28,6 +29,18 @@ TABLE_DIR = OUT_DIR / "tables"
 
 BRYCE_ID = "driver_bryce_aron"
 INDY_SERIES_ID = "series_indy_nxt"
+
+
+def current_git_head() -> str:
+    try:
+        return subprocess.check_output(
+            ["git", "rev-parse", "--short", "HEAD"],
+            cwd=ROOT,
+            text=True,
+            stderr=subprocess.DEVNULL,
+        ).strip()
+    except Exception:
+        return "unknown"
 
 
 def clean_num(value: Any) -> float | None:
@@ -1046,7 +1059,7 @@ def main() -> None:
     summary = {
         "datasetPath": str(DATASET_PATH.relative_to(ROOT)),
         "datasetUpdatedAt": ctx.data.get("updatedAt"),
-        "repoHead": "f3e5e32",
+        "repoHead": current_git_head(),
         "indyNxtEvents": len(ctx.indy_event_ids),
         "indyNxtSessions": len(ctx.indy_session_ids),
         "analyzableBryceRaceRows": len(race_rows),

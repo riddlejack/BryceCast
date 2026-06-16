@@ -1,0 +1,169 @@
+{
+  "baselineCommit": "e24edd0",
+  "canonicalDatasetUpdatedAt": "2026-06-16T18:12:31.143Z",
+  "generatedOn": "2026-06-16",
+  "stableArtifacts": [
+    {
+      "artifact": "analysis/indy-nxt-discovery/output/deep_dive/tables/future_weekend_prep_inputs.csv",
+      "caveatRule": "Historical same-track and track-type context only; future weather unavailable until a separate forecast source is added.",
+      "grain": "future INDY NXT event",
+      "sourceState": "schedule_plus_historical_results",
+      "uiUseCase": "race_weekend_prep"
+    },
+    {
+      "artifact": "analysis/indy-nxt-discovery/output/deep_dive/tables/prep_session_signals.csv",
+      "caveatRule": "Practice and qualifying are rank/context signals; session formats are not fully equivalent.",
+      "grain": "completed race event",
+      "sourceState": "official_api_session_results",
+      "uiUseCase": "race_weekend_prep"
+    },
+    {
+      "artifact": "analysis/indy-nxt-discovery/output/deep_dive/tables/race_debrief_scores.csv",
+      "caveatRule": "Derived archetype labels require manual review before public-facing copy.",
+      "grain": "one Bryce INDY NXT race",
+      "sourceState": "derived_from_official_results_lap_chart_sections_and_modeled_weather",
+      "uiUseCase": "race_debrief_scoring"
+    },
+    {
+      "artifact": "analysis/indy-nxt-discovery/output/deep_dive/tables/full_field_lap_dynamics_by_race.csv",
+      "caveatRule": "Partial lap charts need explicit badges and denominator display.",
+      "grain": "race",
+      "sourceState": "official_lap_chart",
+      "uiUseCase": "live_companion_historical_context"
+    },
+    {
+      "artifact": "analysis/indy-nxt-discovery/output/deep_dive/tables/full_field_lap_dynamics_by_driver.csv",
+      "caveatRule": "Historical lap-position context only; not telemetry.",
+      "grain": "driver-race",
+      "sourceState": "official_lap_chart",
+      "uiUseCase": "live_companion_historical_context"
+    },
+    {
+      "artifact": "analysis/indy-nxt-discovery/output/deep_dive/tables/championship_progression.csv",
+      "caveatRule": "Uses imported race rows only; future 2026 sessions are excluded.",
+      "grain": "season race checkpoint",
+      "sourceState": "official_results_points_progression",
+      "uiUseCase": "live_companion_and_season_context"
+    },
+    {
+      "artifact": "analysis/indy-nxt-discovery/output/deep_dive/tables/race_track_type_summary.csv",
+      "caveatRule": "Derived from historical official results; use as context baseline only.",
+      "grain": "track type",
+      "sourceState": "official_results_derived_summary",
+      "uiUseCase": "race_weekend_prep"
+    },
+    {
+      "artifact": "analysis/indy-nxt-discovery/output/deep_dive/tables/team_context_by_race.csv",
+      "caveatRule": "Descriptive result context only; no engineering-root-cause attribution.",
+      "grain": "race",
+      "sourceState": "official_results",
+      "uiUseCase": "race_debrief_context"
+    },
+    {
+      "artifact": "analysis/indy-nxt-discovery/output/deep_dive/tables/team_context_by_year.csv",
+      "caveatRule": "Team aggregates are field-position context, not setup or reliability evidence.",
+      "grain": "team-season",
+      "sourceState": "official_results",
+      "uiUseCase": "race_debrief_context"
+    },
+    {
+      "artifact": "analysis/indy-nxt-discovery/output/deep_dive/tables/indy_nxt_source_family_audit.csv",
+      "caveatRule": "Use analysisStatus and auditConclusion for source drawers and unavailable states.",
+      "grain": "source family",
+      "sourceState": "mixed_explicit",
+      "uiUseCase": "source_confidence"
+    },
+    {
+      "artifact": "analysis/indy-nxt-discovery/output/deep_dive/tables/ui_analytics_contract.csv",
+      "caveatRule": "Every UI module must preserve sourceState, uiReadiness, and displayRule.",
+      "grain": "UI module",
+      "sourceState": "mixed_explicit",
+      "uiUseCase": "indy_nxt_deep_analytics_contract"
+    },
+    {
+      "artifact": "analysis/career-parity/output/tables/career_metric_family_parity.csv",
+      "caveatRule": "Use parityStatus and uiUse by metric family; do not project INDY NXT depth onto older series.",
+      "grain": "series by metric family",
+      "sourceState": "source_bounded_by_metric_family",
+      "uiUseCase": "career_lab_parity"
+    },
+    {
+      "artifact": "analysis/career-parity/output/tables/career_result_conversion.csv",
+      "caveatRule": "Use finish percentiles alongside raw finish because field sizes and formats vary.",
+      "grain": "race result",
+      "sourceState": "official_or_source_backed_result",
+      "uiUseCase": "career_lab_result_conversion"
+    }
+  ],
+  "exploratoryOrDeferred": [
+    {
+      "artifact": "analysis/indy-nxt-discovery/output/tables/indy_nxt_correlations.csv",
+      "reason": "Exploratory correlations only; not causal."
+    },
+    {
+      "artifact": "analysis/indy-nxt-discovery/output/tables/indy_nxt_exploratory_model.csv",
+      "reason": "Small-sample model for hypothesis selection only."
+    },
+    {
+      "artifact": "analysis/indy-nxt-discovery/output/deep_dive/tables/prep_session_correlations.csv",
+      "reason": "Directional prep signal; use prep_session_signals.csv for UI context."
+    },
+    {
+      "artifact": "analysis/indy-nxt-discovery/output/deep_dive/tables/driver_strength_ratings.csv",
+      "reason": "Descriptive same-sample opponent context, not predictive strength truth."
+    },
+    {
+      "artifact": "analysis/indy-nxt-discovery/output/deep_dive/tables/field_strength_by_race.csv",
+      "reason": "Descriptive same-sample opponent context, not public scouting or prediction."
+    },
+    {
+      "artifact": "analysis/indy-nxt-discovery/output/deep_dive/tables/section_results_deep_by_race.csv",
+      "reason": "Needs denominator QA and display filtering before headline UI."
+    },
+    {
+      "artifact": "analysis/indy-nxt-discovery/output/deep_dive/tables/section_results_deep_by_section.csv",
+      "reason": "Needs denominator QA and display filtering before headline UI."
+    }
+  ],
+  "missingBackendContracts": [
+    "Live readiness state, wrong-series guard, stale timing state, Bryce-row identity guard, and replay join keys.",
+    "Live points projection API/artifact or explicit v1 deferral.",
+    "Future weather forecast/current-weather source with source state.",
+    "Manual review state for race debrief archetype labels.",
+    "Section result denominator display/suppression rule."
+  ],
+  "roadAmericaPrep": {
+    "artifact": "analysis/indy-nxt-discovery/output/deep_dive/tables/future_weekend_prep_inputs.csv",
+    "events": [
+      {
+        "date": "2026-06-19",
+        "eventName": "Grand Prix at Road America Race 1",
+        "priorBryceIndyNxtRacesAtTrack": 2,
+        "sameTrackAverageFinish": 8.5,
+        "sourceState": "schedule_plus_historical_results",
+        "track": "Road America",
+        "weatherState": "future_unavailable_in_historical_dataset"
+      },
+      {
+        "date": "2026-06-20",
+        "eventName": "Grand Prix at Road America Race 2",
+        "priorBryceIndyNxtRacesAtTrack": 2,
+        "sameTrackAverageFinish": 8.5,
+        "sourceState": "schedule_plus_historical_results",
+        "track": "Road America",
+        "weatherState": "future_unavailable_in_historical_dataset"
+      }
+    ]
+  },
+  "validationSnapshot": {
+    "careerMetricFamilyRows": 49,
+    "careerResultRows": 137,
+    "deepFuturePrepRows": 9,
+    "deepRaceScoreRows": 36,
+    "firstPassIndyNxtRaceRows": 36,
+    "firstPassLapTimelineRows": 1390,
+    "ingestionOpenGaps": 9,
+    "validationErrors": 0,
+    "validationWarnings": 1
+  }
+}

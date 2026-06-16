@@ -30,7 +30,7 @@ CHART_DIR = OUT_DIR / "charts"
 
 BRYCE_ID = "driver_bryce_aron"
 INDY_SERIES_ID = "series_indy_nxt"
-TODAY = date(2026, 6, 8)
+RUN_DATE = date.today()
 
 
 def clean_num(value: Any) -> float | None:
@@ -660,7 +660,7 @@ def future_weekend_prep(ctx: Context, race_df: pd.DataFrame) -> list[dict[str, A
             start_date = date.fromisoformat(start[:10])
         except ValueError:
             continue
-        if start_date < TODAY:
+        if start_date < RUN_DATE:
             continue
         track = ctx.tracks.get(event.get("trackId"), {})
         same_track = [r for r in race_history if r.get("trackId") == track.get("id")]
@@ -781,7 +781,10 @@ def driver_strength_context(ctx: Context, idx: dict[str, Any], race_df: pd.DataF
             "caveat": "Field strength uses same-sample outcome history and should be read as context, not predictive truth.",
         })
     return (
-        sorted(rating_rows, key=lambda r: (r["shrunkStrengthRating"], r["raceRows"]), reverse=True),
+        sorted(
+            rating_rows,
+            key=lambda r: (-(r["shrunkStrengthRating"] or 0), -(r["raceRows"] or 0), r["driverName"]),
+        ),
         sorted(race_rows, key=lambda r: session_sort_key(ctx, r["sessionId"])),
     )
 
@@ -875,7 +878,7 @@ def source_family_audit(ctx: Context, idx: dict[str, Any], race_df: pd.DataFrame
         "penalties": sum(1 for p in ctx.data["penalties"] if p.get("sessionId") in completed_sids),
         "racecraft_events": sum(1 for r in ctx.data["racecraftEvents"] if r.get("sessionId") in completed_sids),
         "weather_observations": sum(1 for w in ctx.data["weatherObservations"] if w.get("sessionId") in ctx.indy_session_ids),
-        "future_schedule": sum(1 for s in indy_sessions if s.get("scheduledStart") and str(s.get("scheduledStart"))[:10] > str(TODAY)),
+        "future_schedule": sum(1 for s in indy_sessions if s.get("scheduledStart") and str(s.get("scheduledStart"))[:10] >= str(RUN_DATE)),
         "pit_stop_counts": sum(
             1 for sid in completed_sids
             for r in idx["results_by_session"].get(sid, [])
@@ -1490,6 +1493,7 @@ def main() -> None:
     summary = {
         "datasetPath": str(DATASET_PATH.relative_to(ROOT)),
         "datasetUpdatedAt": ctx.data.get("updatedAt"),
+        "runDate": RUN_DATE.isoformat(),
         "raceScoreRows": len(race_scores),
         "archetypeSummaryRows": len(archetype_summary_rows),
         "trackSummaryRows": len(track_summary_rows),
