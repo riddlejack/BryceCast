@@ -1,0 +1,52 @@
+{
+  "artifacts": [
+    "qualifying_result_context.csv",
+    "result_context.csv",
+    "qualifying_session_conversion_summary.csv",
+    "team_dimension_context.csv",
+    "team_era_context.csv",
+    "track_venue_context.csv",
+    "track_archetype_analog_context.csv",
+    "driver_cohort_context.csv",
+    "car_entrant_context.csv",
+    "context-packs/career-dimension-context.json",
+    "CAREER_DIMENSION_CONTEXT_LAYER.md"
+  ],
+  "causalAttribution": false,
+  "claimStrength": "source_bounded_dimension_context_not_rating_or_forecast",
+  "conversionSourceStateCounts": {
+    "same_event_driver_race_result_one_to_one": 1240,
+    "same_event_multi_race_result_ambiguous": 307
+  },
+  "counts": {
+    "carRows": 472,
+    "driverRows": 555,
+    "qualifyingRows": 1547,
+    "qualifyingSessionRows": 108,
+    "resultRows": 8158,
+    "teamEraRows": 90,
+    "teamRows": 75,
+    "trackAnalogRows": 210,
+    "trackRows": 42
+  },
+  "driverCohortCounts": {
+    "bryce": 1,
+    "observed_competitor_or_codriver": 56,
+    "shared_race_field": 475,
+    "teammate_overlap": 23
+  },
+  "generatedAt": "2026-06-18T10:49:58Z",
+  "ok": true,
+  "publicPointPrediction": false,
+  "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+  "trackArchetypeCounts": {
+    "oval_short_low_corner_count": 4,
+    "road_long_high_corner_count": 7,
+    "road_long_medium_corner_count": 6,
+    "road_medium_high_corner_count": 4,
+    "road_medium_low_corner_count": 3,
+    "road_medium_medium_corner_count": 14,
+    "road_short_low_corner_count": 1,
+    "temporary_street_medium_medium_corner_count": 3
+  }
+}

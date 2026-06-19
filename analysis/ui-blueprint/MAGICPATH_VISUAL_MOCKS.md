@@ -2,6 +2,8 @@
 
 Generated: 2026-06-17
 
+Status: legacy/rejected after the June 18 context-pack analytics baseline. Preserve this file for links and design-history context only. Do not use it as the current frontend starting point; start from `analysis/ui-blueprint/README.md`, `analysis/ui-blueprint/UI_BLUEPRINT.md`, `analysis/ui-blueprint/COMPONENT_FIELD_MATRIX.md`, and `analysis/ui-data-package/ui-data-package.json`.
+
 Project: [BryceCast UI Directions](https://www.magicpath.ai/files/418122821135405056)
 
 These MagicPath mocks translate the committed UI blueprint into reviewable visual targets only. They do not implement the production React frontend, alter ingestion, edit backend contracts, or change generated data.

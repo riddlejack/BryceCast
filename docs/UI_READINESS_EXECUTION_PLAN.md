@@ -3,6 +3,8 @@
 Generated: 2026-06-16
 Baseline commit: `5636bb6 Harden preserved career data gaps`
 
+Status after June 18: superseded execution plan. The lanes in this file were completed or overtaken by the June 18 analytics productization/context-pack sprint. Use `CODEX_HANDOFF_CURRENT.md`, `analysis/ui-blueprint/README.md`, `analysis/ui-data-package/README.md`, `analysis/ANALYTICS_UI_ARTIFACT_INDEX.md`, `docs/UI_ANALYTICS_PRODUCT_CONTRACT.md`, and `docs/LIVE_RACE_DAY_PRODUCT_CONTRACT.md` as the active current-state and UI transition baseline.
+
 ## Objective
 
 Prepare BryceCast for a polished analytics-first frontend by turning the clean source/backend baseline into explicit product contracts, refreshed analytics artifacts, live-race readiness contracts, and a clean active workspace boundary.

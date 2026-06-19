@@ -1,0 +1,49 @@
+{
+  "claimStrength": "post_race_descriptive_only",
+  "displayRules": [
+    "Use these rows as completed Road America race history only.",
+    "Do not blend with future session claims without live/current source rows."
+  ],
+  "generatedAt": "2026-06-18T10:49:41Z",
+  "historicalRaceRows": [
+    {
+      "bestCleanSectionFamilies": "I11B to I12 I12 to I13 I13 to I13A I13A to I14 I14 to I15C I15C to I15:0.94 n=12; I10 to I11 I11 to I11B:0.85 n=12; I7 to I8:0.72 n=12; I9 to I10:0.72 n=12",
+      "bestRunningPosition": 5.0,
+      "bestSegment": "green_run L1-2 gain 0.0",
+      "finishPosition": 8.0,
+      "lapRows": 20,
+      "medianCleanTrackSectionPercentile": 0.6,
+      "netLapChartGain": -2.0,
+      "raceLabel": "2024 Grand Prix at Road America",
+      "seasonYear": 2024,
+      "sessionId": "session_indy_nxt_2024_6316",
+      "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+      "startPosition": 6.0,
+      "trackName": "Road America",
+      "weakestCleanSectionFamilies": "I2 to I3:0.36 n=12; I4A to I5:0.42 n=12; I6 to I7:0.46 n=12; I3 to I3A:0.49 n=12",
+      "worstRunningPosition": 9.0
+    },
+    {
+      "bestCleanSectionFamilies": "I1 to I2:0.61 n=20; I4 to I4A:0.61 n=20; I3A to I4:0.58 n=20; I6 to I7:0.58 n=20",
+      "bestRunningPosition": 9.0,
+      "bestSegment": "green_run L1-20 gain 1.0",
+      "finishPosition": 9.0,
+      "lapRows": 20,
+      "medianCleanTrackSectionPercentile": 0.4444444444444444,
+      "netLapChartGain": 1.0,
+      "raceLabel": "2025 Grand Prix at Road America",
+      "seasonYear": 2025,
+      "sessionId": "session_indy_nxt_2025_6453",
+      "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+      "startPosition": 10.0,
+      "trackName": "Road America",
+      "weakestCleanSectionFamilies": "I11B to I12 I12 to I13 I13 to I13A I13A to I14 I14 to I15C I15C to I15:0.17 n=20; I3 to I3A:0.25 n=20; I8 to I9:0.25 n=20; I7 to I8:0.36 n=20",
+      "worstRunningPosition": 10.0
+    }
+  ],
+  "id": "road-america-race-context",
+  "publicPointPrediction": false,
+  "sourceDataset": "data/career/career.dataset.json",
+  "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+  "trackName": "Road America"
+}

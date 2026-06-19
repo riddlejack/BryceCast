@@ -1,0 +1,43 @@
+{
+  "car85Result": {
+    "bestLapNumber": 759,
+    "bestLapTime": "1:36.406",
+    "carNumber": "85",
+    "class": "GTP",
+    "classFinishPosition": 6,
+    "finishPosition": 6,
+    "lapsCompleted": 780,
+    "pitStops": 34,
+    "status": "running",
+    "teamName": "JDC Miller MotorSports",
+    "vehicle": "Porsche 963"
+  },
+  "caveats": [
+    "Time-card laps expose timing, sectors, pit flags, driver, car, and class context, not live telemetry or setup.",
+    "validNonPitLap excludes invalid and pit laps but does not certify green-flag or traffic-free conditions.",
+    "Class-hour deltas are descriptive and source-bounded, not predictive."
+  ],
+  "claimStrength": "source_bounded_descriptive_stint_class_pace",
+  "counts": {
+    "bryceStints": 10,
+    "car85CodriverRows": 4,
+    "driverSummaries": 231,
+    "hourlyClassRows": 100,
+    "lapObservations": 37885,
+    "stints": 1680
+  },
+  "generatedAt": "2026-06-18T10:49:44Z",
+  "officialWeather": {
+    "ambientTempC": 17.5,
+    "confidence": "official",
+    "source": "IMSA/Al Kamel official race result JSON",
+    "trackCondition": "dry",
+    "trackTempC": 34.6,
+    "wetDry": "dry"
+  },
+  "ok": true,
+  "positionTraceAvailable": false,
+  "publicPointPrediction": false,
+  "sourceDataset": "data/career/career.dataset.json",
+  "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc"
+}

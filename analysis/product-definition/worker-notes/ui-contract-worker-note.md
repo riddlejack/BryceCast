@@ -1,10 +1,12 @@
 # UI Contract Worker Note
 
+Status after June 18: background evidence only. The active UI fixture baseline is `analysis/ui-data-package/ui-data-package.json` generated `2026-06-18T17:52:13.930Z` plus `analysis/predictive-race-intelligence/output/context-packs/context-pack-manifest.json`. If this note conflicts with those files, use the newer context-pack baseline.
+
 Scope: read-only review of `analysis/ui-data-package/ui-data-package.json`, `docs/UI_ANALYTICS_PRODUCT_CONTRACT.md`, `docs/LIVE_RACE_DAY_PRODUCT_CONTRACT.md`, `analysis/ANALYTICS_UI_ARTIFACT_INDEX.md`, `analysis/ui-ready-artifacts.json`, and supporting generated contract manifests.
 
 ## Source-Backed Findings
 
-- The UI data package is the primary design/build fixture source for this packet. It was generated as `schemaVersion=brycecast.uiDataPackage.v1`, `generatedAt=2026-06-16T22:26:08.630Z`, and `baselineCommit=5636bb6`.
+- The active UI data package is the primary design/build fixture source for current UI work. It was regenerated as `schemaVersion=brycecast.uiDataPackage.v1`, `generatedAt=2026-06-18T17:52:13.930Z`, and `baselineCommit=ce904af`.
 - Package screens are `roadAmericaPrep`, `liveCompanionFixtures`, `raceDebrief`, `careerLab`, and `sourceOps`.
 - The package rules explicitly say static package values do not replace canonical career ingestion or runtime live APIs. Live timing, live weather, and live points remain runtime API truth.
 - Road America prep is `readiness=partial`, with two event rows:

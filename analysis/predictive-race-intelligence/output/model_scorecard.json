@@ -1,0 +1,276 @@
+{
+  "generatedAt": "2026-06-18T17:52:08Z",
+  "methodology": {
+    "claimPolicy": "Use source-bounded historical prior bands, paths, and analog races. Do not publish point predictions from this sample.",
+    "promotionPolicy": "Product prediction requires out-of-sample lift over the relevant naive baseline and no leakage.",
+    "sample": "36 Bryce INDY NXT race rows from existing deep-dive artifacts.",
+    "validation": "Leave-one-race-out for model candidates; no sklearn dependency."
+  },
+  "models": [
+    {
+      "allowedInContextPacks": true,
+      "baselineMae": null,
+      "caveat": "Safe as a calibration baseline, not a prediction.",
+      "features": [],
+      "id": "overall_mean",
+      "leakageStatus": "pre_race_safe",
+      "liftVsBaselinePct": null,
+      "mae": 0.229,
+      "n": 36,
+      "productUse": "baseline",
+      "rmse": 0.258,
+      "target": "finish_percentile",
+      "validation": "constant_baseline"
+    },
+    {
+      "allowedInContextPacks": true,
+      "baselineMae": 0.229,
+      "caveat": "Descriptive grouped baseline.",
+      "features": [],
+      "id": "track_type_mean",
+      "leakageStatus": "pre_race_safe",
+      "liftVsBaselinePct": 2.4,
+      "mae": 0.224,
+      "n": 36,
+      "productUse": "baseline",
+      "rmse": 0.265,
+      "target": "finish_percentile",
+      "validation": "leave_one_race_out"
+    },
+    {
+      "allowedInContextPacks": false,
+      "baselineMae": 0.229,
+      "caveat": "Leave-one-out season aggregate is not time-aware; keep out of pre-race context packs.",
+      "features": [],
+      "id": "season_mean",
+      "leakageStatus": "time_leakage_control",
+      "liftVsBaselinePct": -7.2,
+      "mae": 0.246,
+      "n": 36,
+      "productUse": "analyst_only",
+      "rmse": 0.279,
+      "target": "finish_percentile",
+      "validation": "leave_one_race_out_not_time_aware"
+    },
+    {
+      "allowedInContextPacks": true,
+      "baselineMae": 0.229,
+      "caveat": "Leave-one-out only; promote only if it beats baseline and calibration gates hold.",
+      "features": [
+        "startPosition"
+      ],
+      "id": "start_position_ridge",
+      "leakageStatus": "pre_race_safe",
+      "liftVsBaselinePct": 4.7,
+      "mae": 0.218,
+      "n": 36,
+      "productUse": "internal_context_band",
+      "rmse": 0.255,
+      "target": "finish_percentile",
+      "validation": "leave_one_race_out"
+    },
+    {
+      "allowedInContextPacks": false,
+      "baselineMae": 0.229,
+      "caveat": "Leave-one-out only; promote only if it beats baseline and calibration gates hold.",
+      "features": [
+        "bestQualifyingRank"
+      ],
+      "id": "best_qualifying_ridge",
+      "leakageStatus": "pre_race_safe",
+      "liftVsBaselinePct": -4.3,
+      "mae": 0.239,
+      "n": 34,
+      "productUse": "analyst_only",
+      "rmse": 0.274,
+      "target": "finish_percentile",
+      "validation": "leave_one_race_out"
+    },
+    {
+      "allowedInContextPacks": false,
+      "baselineMae": 0.229,
+      "caveat": "Leave-one-out only; promote only if it beats baseline and calibration gates hold.",
+      "features": [
+        "startPosition",
+        "bestQualifyingRank"
+      ],
+      "id": "start_plus_qualifying_ridge",
+      "leakageStatus": "pre_race_safe",
+      "liftVsBaselinePct": -1.2,
+      "mae": 0.232,
+      "n": 34,
+      "productUse": "analyst_only",
+      "rmse": 0.266,
+      "target": "finish_percentile",
+      "validation": "leave_one_race_out"
+    },
+    {
+      "allowedInContextPacks": false,
+      "baselineMae": 0.229,
+      "caveat": "Leave-one-out only; promote only if it beats baseline and calibration gates hold.",
+      "features": [
+        "bestPracticeRank",
+        "avgPracticeRank",
+        "bestQualifyingRank",
+        "avgQualifyingRank"
+      ],
+      "id": "prep_practice_qualifying_ridge",
+      "leakageStatus": "pre_race_safe",
+      "liftVsBaselinePct": -2.6,
+      "mae": 0.235,
+      "n": 28,
+      "productUse": "analyst_only",
+      "rmse": 0.273,
+      "target": "finish_percentile",
+      "validation": "leave_one_race_out"
+    },
+    {
+      "allowedInContextPacks": true,
+      "baselineMae": 0.229,
+      "caveat": "Leave-one-out only; promote only if it beats baseline and calibration gates hold.",
+      "features": [
+        "startPosition",
+        "bestQualifyingRank",
+        "track_oval",
+        "track_road",
+        "track_street"
+      ],
+      "id": "track_start_qualifying_ridge",
+      "leakageStatus": "pre_race_safe",
+      "liftVsBaselinePct": 1.4,
+      "mae": 0.226,
+      "n": 34,
+      "productUse": "internal_context_band",
+      "rmse": 0.271,
+      "target": "finish_percentile",
+      "validation": "leave_one_race_out"
+    },
+    {
+      "allowedInContextPacks": false,
+      "baselineMae": 0.229,
+      "caveat": "Leave-one-out only; promote only if it beats baseline and calibration gates hold.",
+      "features": [
+        "startPosition",
+        "bestQualifyingRank",
+        "fieldStrengthMean",
+        "teamCars",
+        "track_oval",
+        "track_road",
+        "track_street"
+      ],
+      "id": "field_context_ridge",
+      "leakageStatus": "pre_race_safe",
+      "liftVsBaselinePct": -2.7,
+      "mae": 0.235,
+      "n": 34,
+      "productUse": "analyst_only",
+      "rmse": 0.282,
+      "target": "finish_percentile",
+      "validation": "leave_one_race_out"
+    },
+    {
+      "allowedInContextPacks": true,
+      "baselineMae": 0.229,
+      "caveat": "Good for race-week path language after practice/qualifying, not a public point forecast.",
+      "features": [
+        "bestPracticeRank",
+        "avgPracticeRank",
+        "bestQualifyingRank",
+        "avgQualifyingRank"
+      ],
+      "id": "prep_practice_qualifying_knn5",
+      "leakageStatus": "pre_race_safe",
+      "liftVsBaselinePct": 8.2,
+      "mae": 0.21,
+      "n": 28,
+      "productUse": "internal_context_band",
+      "rmse": 0.257,
+      "target": "finish_percentile",
+      "validation": "leave_one_race_out"
+    },
+    {
+      "allowedInContextPacks": false,
+      "baselineMae": 0.229,
+      "caveat": "Best observed lift uses post-race team outcome context; do not use pre-race.",
+      "features": [
+        "startPosition",
+        "bestQualifyingRank",
+        "teamAverageFinish",
+        "bryceTeamFinishRank"
+      ],
+      "id": "team_context_posthoc_ridge",
+      "leakageStatus": "post_race_leakage",
+      "liftVsBaselinePct": 21.9,
+      "mae": 0.179,
+      "n": 34,
+      "productUse": "leakage_control_only",
+      "rmse": 0.217,
+      "target": "finish_percentile",
+      "validation": "leave_one_race_out"
+    },
+    {
+      "allowedInContextPacks": true,
+      "brier": 0.249,
+      "caveat": "Use as base-rate context only.",
+      "id": "top10_overall_rate",
+      "leakageStatus": "pre_race_safe",
+      "n": 36,
+      "productUse": "baseline",
+      "rate": 0.472,
+      "target": "top10",
+      "validation": "leave_one_race_out_not_required_for_constant_rate"
+    },
+    {
+      "allowedInContextPacks": false,
+      "baselineBrier": 0.249,
+      "brier": 0.256,
+      "caveat": "Did not beat overall base rate in the first no-write probe; keep as diagnostic until further lift exists.",
+      "id": "top10_track_type_rate",
+      "leakageStatus": "pre_race_safe",
+      "n": 36,
+      "productUse": "analyst_only",
+      "target": "top10",
+      "validation": "leave_one_race_out"
+    },
+    {
+      "allowedInContextPacks": false,
+      "baselineBrier": 0.249,
+      "brier": 0.289,
+      "caveat": "Season grouping is not time-aware; keep as leakage-control diagnostic.",
+      "id": "top10_season_rate",
+      "leakageStatus": "time_leakage_control",
+      "n": 36,
+      "productUse": "analyst_only",
+      "target": "top10",
+      "validation": "leave_one_race_out_not_time_aware"
+    }
+  ],
+  "promotionGates": [
+    {
+      "description": "Candidate must improve MAE/RMSE or Brier against relevant baseline out of sample.",
+      "id": "beats_naive_baseline"
+    },
+    {
+      "description": "Pre-race model may not use finish, lap dynamics, team outcome, incident, penalty, section, or archetype fields.",
+      "id": "no_post_race_leakage"
+    },
+    {
+      "description": "Every prediction or path claim must display n and source family.",
+      "id": "minimum_denominator"
+    },
+    {
+      "description": "Top-10 probabilities require Brier/calibration evidence before product promotion.",
+      "id": "calibration_visible"
+    },
+    {
+      "description": "Full-career priors need metric-family eligibility and cannot overwrite INDY NXT target-domain signal.",
+      "id": "source_family_guard"
+    },
+    {
+      "description": "Weather and field-strength claims stay analyst-only unless they provide validated incremental lift.",
+      "id": "negative_control"
+    }
+  ],
+  "schemaVersion": "brycecast.predictiveRaceIntelligence.modelScorecard.v1",
+  "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc"
+}

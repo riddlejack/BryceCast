@@ -1,0 +1,26 @@
+{
+  "caveats": [
+    "Lap microstates are official race lap chart positions, not telemetry or lap-time pace.",
+    "Race section aggregates use clean-lap filters and low-denominator suppression.",
+    "Race section rows without a same-session/same-lap Bryce lap chart row are retained as official_section_results_only and do not receive clean-lap or caution labels.",
+    "Context packs are for post-race debrief and Career Lab exploration, not future finish forecasting."
+  ],
+  "claimStrength": "post_race_descriptive_only",
+  "counts": {
+    "raceLapInflectionPoints": 151,
+    "raceLapMicrostates": 1390,
+    "raceLapSegments": 159,
+    "raceSectionLapObservations": 16001,
+    "raceSectionSessionSummaries": 35,
+    "roadAmericaRows": 2
+  },
+  "generatedAt": "2026-06-18T10:49:41Z",
+  "ok": true,
+  "publicPointPrediction": false,
+  "sectionSourceStateCounts": {
+    "official_section_results+official_lap_chart+official_incident_caution_context": 15800,
+    "official_section_results_only": 201
+  },
+  "sourceDataset": "data/career/career.dataset.json",
+  "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc"
+}

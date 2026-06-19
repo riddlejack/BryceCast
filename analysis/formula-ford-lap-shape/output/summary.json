@@ -1,0 +1,20 @@
+{
+  "caveats": [
+    "Formula Ford lap samples are Bryce-only labeled lap-analysis blocks.",
+    "Continuation-page rows without repeated Bryce labels are not expanded in this lane.",
+    "Use lap counts and source-shape caveats before drawing broad conclusions from sparse sessions."
+  ],
+  "claimStrength": "source_bounded_bryce_only_lap_shape",
+  "counts": {
+    "conditionRows": 9,
+    "eventProgressionRows": 7,
+    "lapObservations": 282,
+    "sessionSummaries": 24
+  },
+  "fieldRelativePaceAvailable": false,
+  "generatedAt": "2026-06-18T10:49:53Z",
+  "ok": true,
+  "publicPointPrediction": false,
+  "sourceDataset": "data/career/career.dataset.json",
+  "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc"
+}

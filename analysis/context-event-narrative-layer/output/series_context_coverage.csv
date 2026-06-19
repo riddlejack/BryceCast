@@ -1,0 +1,9 @@
+seriesId,seriesName,seasonYears,eventCount,sessionCount,totalContextRows,racecraftCount,penaltyCount,incidentCount,weatherCount,mediaCount,bryceContextCount,officialContextShare,sourceHash
+global_context,Global / career context,,0,0,5,0,0,0,0,5,3,0.0,da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc
+series_euroformula_open,Euroformula Open,2023,7,28,28,0,0,0,0,28,0,0.0,da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc
+series_formula_ford,Formula Ford,2020,7,46,61,0,4,0,46,11,1,0.8197,da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc
+series_froc,Castrol Toyota Formula Regional Oceania Championship,2024,5,11,32,0,0,0,0,32,3,0.0,da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc
+series_frp_f1600,F1600 Championship Series,2019,7,37,39,0,2,0,0,37,0,0.0513,da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc
+series_gb3,GB3 Championship,2021; 2022,15,113,180,0,0,0,39,141,0,0.2167,da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc
+series_imsa_weathertech,IMSA WeatherTech SportsCar Championship,2025,1,1,5,0,0,0,1,4,0,0.2,da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc
+series_indy_nxt,INDY NXT,2024; 2025; 2026,36,163,1020,35,76,132,95,682,12,0.2382,da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc

@@ -1,7 +1,7 @@
 {
   "schemaVersion": "live-api-contract.v1",
-  "generatedAt": "2026-06-16",
-  "baselineCommit": "5636bb6",
+  "generatedAt": "2026-06-18",
+  "baselineCommit": "ce904af",
   "routes": [
     {
       "path": "/api/readiness",
@@ -50,6 +50,12 @@
       "state": "HistoricalPointsFallback",
       "status": "existing",
       "purpose": "Historical official/provisional points baseline when live points are absent or stale."
+    },
+    {
+      "path": "analysis/predictive-race-intelligence/output/context-packs/live-race-day-context.json",
+      "state": "StaticLiveRaceDayContext",
+      "status": "existing_context_pack_not_runtime_proof",
+      "purpose": "Source-bounded UI design/build context for live-mode rules, route expectations, and missing green-flag proof."
     }
   ],
   "readinessStates": {
@@ -289,7 +295,8 @@
       "Expose /api/readiness readiness wrapper.",
       "Implement first-pass product readiness reducer tests for ready, wrong_series, null-vs-zero, and points fallback modes.",
       "Implement PointsProjectionState builder and fallback modes.",
-      "Add smoke coverage for /api/readiness and wrong-series off-session behavior."
+      "Add smoke coverage for /api/readiness and wrong-series off-session behavior.",
+      "Generate live race-day context pack and UI package fixture coverage for live states."
     ]
   }
 }

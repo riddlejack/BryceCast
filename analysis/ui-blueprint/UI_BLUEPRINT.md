@@ -1,12 +1,14 @@
 # BryceCast UI Blueprint
 
-Generated: 2026-06-17
+Generated: 2026-06-18
 
 Source baseline:
 
 - Product packet: `analysis/product-definition/PRODUCT_DEFINITION_PACKET.md`
-- UI data package: `analysis/ui-data-package/ui-data-package.json`, `schemaVersion=brycecast.uiDataPackage.v1`, `generatedAt=2026-06-16T22:26:08.630Z`, `baselineCommit=5636bb6`
+- UI data package: `analysis/ui-data-package/ui-data-package.json`, `schemaVersion=brycecast.uiDataPackage.v1`, `generatedAt=2026-06-18T17:52:13.930Z`, `baselineCommit=ce904af`
 - Metric manifest: `analysis/ui-contract/ui-metric-manifest.json`, 24 metric IDs across 5 surfaces
+- Context-pack manifest: `analysis/predictive-race-intelligence/output/context-packs/context-pack-manifest.json`, with 9 upcoming-event packs, 36 race-debrief packs, 1 Career Lab pack, and 1 live race-day pack
+- Predictive scorecard: `analysis/predictive-race-intelligence/output/model_scorecard.json`, for model-policy/source-drawer use only
 - Runtime live gate: `/api/readiness`, `schemaVersion=live-readiness.v1`
 
 This blueprint is an information architecture and component contract. It does not choose final visual style, implement frontend visuals, or change ingestion.
@@ -18,9 +20,11 @@ BryceCast v1 should be a mobile-first race companion with a dynamic homepage. Th
 Hard boundaries:
 
 - Live race truth comes from `/api/readiness` first, not raw endpoint reachability.
-- Static package values can seed prep, debrief, career, and QA states; they do not become live timing, live weather, or live points.
+- Static package values and context packs can seed prep, debrief, career, and QA states; they do not become live timing, live weather, or live points.
+- Race-week prep must hydrate the upcoming-event `contextPackRef.path` before falling back to shallow screen summaries.
 - Weather is NWS runtime context only. Do not label it as official INDY NXT weather or track temperature.
 - Points display is v1, but only through `/api/readiness.points`; no local championship model or rank-to-points math.
+- Predictive content is allowed as historical prior bands, analogs, model-policy notes, and "what needs to go right" path language. Do not show a single expected finish, top-10 probability, or betting-style line.
 - No live GPS/moving-dot, POV, radio audio, detailed pit sequence, tire/fuel/overtake strategy, engineering root-cause, official weather, or unsupported team/field-strength claims.
 - Debrief archetype labels are review aids until manually approved.
 - Incident/penalty and team context stay drawer/v1.5 unless Jack explicitly promotes reviewed detail.
@@ -30,10 +34,10 @@ Hard boundaries:
 | Route | Surface | Purpose | Primary source | V1 status |
 | --- | --- | --- | --- | --- |
 | `/` | Dynamic Home | Resolve current user task: prep, imminent session, live, guarded fallback, debrief, career/off-week. | `/api/readiness`; `uiDataPackage.screens.*` | v1 |
-| `/weekend/:eventId` | Race Weekend Prep | Event command center, track facts, same-track/track-type history, runtime weather readiness. | `screens.roadAmericaPrep`; `/api/session`; `/api/weather/*` | v1 |
+| `/weekend/:eventId` | Race Weekend Prep | Event command center, race-intelligence band, top-10 path, analogs, track facts, same-track/track-type history, runtime weather readiness. | `screens.roadAmericaPrep`; upcoming-event context pack; `/api/session`; `/api/weather/*` | v1 |
 | `/live` | Live Companion | Readiness banner, Bryce status, timing tower, guarded points, weather strip. | `/api/readiness`; `/api/timing`; `/api/bryce`; `/api/weather/live`; `/api/sources` | v1 shell |
-| `/debrief/:sessionId` | Race Debrief | Official result framing, qualifying conversion, lap story, source drawer. | `screens.raceDebrief.featuredDebriefs`; debrief/lap artifacts | v1 |
-| `/career` | Career Lab | Series summary, metric-family parity, gap ledger, result-conversion drilldown later. | `screens.careerLab`; career parity artifacts | v1 plus v1.5 explorer |
+| `/debrief/:sessionId` | Race Debrief | Official result framing, qualifying conversion, lap story, race-section story, source drawer. | `screens.raceDebrief.featuredDebriefs`; race-debrief context packs; section/lap artifacts | v1 |
+| `/career` | Career Lab | Series summary, metric-family parity, gap ledger, result-conversion, career dimension context, and source-bounded deep modules. | `screens.careerLab`; career-lab context pack; career parity/context artifacts | v1 plus drilldowns |
 | `/sources` | Source Ops | Validation, live source console, replay/archive state, backend gaps. | `screens.sourceOps`; `/api/sources`; `/api/replay/bryce` | v1 operator |
 | Drawer routes or overlays | Source Detail | Metric/source/caveat detail without cluttering family layer. | Screen `sourceRefs`, manifest caveats, readiness gates | v1 |
 
@@ -57,7 +61,9 @@ Router inputs:
 - `/api/readiness.state`, `severity`, `reason`, `checkedAt`, `gates[]`
 - `/api/readiness.raceWeekend`, `liveTiming`, `bryce`, `points`, `weather`, `replay`, `sources`
 - `uiDataPackage.screens.roadAmericaPrep.events[]`
+- `uiDataPackage.screens.roadAmericaPrep.events[].contextPackRef.path`
 - `uiDataPackage.screens.raceDebrief.featuredDebriefs[]`
+- Race-debrief context packs from `analysis/predictive-race-intelligence/output/context-packs/race-debriefs/`
 - `uiDataPackage.screens.careerLab.seriesSummary[]`
 - `uiDataPackage.screens.sourceOps.validation`, `ingestion`, `coverage`, `historyStanding`
 
@@ -100,10 +106,13 @@ Second layer:
 Hierarchy:
 
 1. Event command center: event/session, track facts, date, runtime watch/listen route if supplied.
-2. Track history: same-track and track-type comparison with denominators.
-3. Weather context: runtime NWS only; static prep `weatherState=future_unavailable_in_historical_dataset` remains a caveat.
-4. Prep funnel: v1.5 raw practice/qualifying context only, no correlation or causal claim.
-5. Source drawer: prep artifact, generation time/source refs, countdown/timezone caveat.
+2. Race-intelligence band: finish-percentile prior interval with `p25`, `median`, `p75`, `n`, confidence, and model-policy caveat.
+3. Top-10 path: ordered source-backed factors from `top10Path`, phrased as what to watch, not as probability.
+4. Analog races: ranked/curated table from the upcoming-event context pack with source refs and confidence.
+5. Track history: same-track and track-type comparison with denominators.
+6. Weather context: runtime NWS only; static prep `weatherState=future_unavailable_in_historical_dataset` remains a caveat.
+7. Prep funnel: v1.5 raw practice/qualifying context only, no correlation or causal claim until post-practice/qualifying context is available.
+8. Source drawer: context pack path, prep artifact, model scorecard, generation time/source refs, countdown/timezone caveat.
 
 ### Session Imminent
 
@@ -134,9 +143,10 @@ Hierarchy:
 1. Debrief header: race label, result, start/finish/gain, points if source-present, source/confidence/caveat.
 2. Qualifying conversion: qualifying-to-race or start-to-finish fallback.
 3. Lap-position story: badge partial lap charts; do not infer missing laps.
-4. Source drawer with debrief score, lap dynamics, coverage matrix, validation warning.
-5. Incident/penalty chips and team context are v1.5/drawer detail unless reviewed for v1 promotion.
-6. Archetype labels must be factual-only or review-gated until Jack approves editorial language.
+4. Race-section/lap enhancement: segment strips, inflection points, section-family strengths, and Road America section context when the context pack/session coverage supports it.
+5. Incident/penalty and team context as reviewed source-bounded panels; keep causality out of headline copy.
+6. Source drawer with debrief context pack, debrief score, lap dynamics, section/race-lap lane, coverage matrix, validation warning.
+7. Archetype labels must be factual-only or review-gated until Jack approves editorial language.
 
 ### Career Lab
 
@@ -144,9 +154,11 @@ Hierarchy:
 
 1. Series summary table/cards using raw finish plus percentiles.
 2. Metric parity matrix by series and metric family.
-3. Gap/source ledger.
-4. Result conversion explorer is v1.5 drilldown.
-5. No INDY NXT-grade lap/section/live assumptions projected onto older series.
+3. Career dimension browser: team eras, track archetypes, driver cohorts, car/entrant context, and qualifying conversion where source-backed.
+4. Deep modules: IMSA Daytona stint/class/co-driver pace and Formula Ford lap shape where validators prove coverage.
+5. Gap/source ledger.
+6. Result conversion explorer and career prior matrix.
+7. No INDY NXT-grade lap/section/live assumptions projected onto older series.
 
 ### Source Ops
 
@@ -168,7 +180,11 @@ Hierarchy:
 | `SourcePill` | All | Compact confidence/availability/source-state disclosure. | v1 |
 | `SourceDrawer` | All | Metric provenance, caveats, denominators, gates, source refs, backend gaps. | v1 |
 | `RaceWeekendCommandCenter` | Prep | Event/session, venue facts, route/weather readiness. | v1 |
+| `RaceIntelligenceBand` | Prep | Source-bounded finish-percentile prior interval with model-policy caveat. | v1 |
+| `Top10PathPanel` | Prep | What needs to go right, using path language without public probability claims. | v1 |
+| `AnalogRaceTable` | Prep | Source-backed comparable races and confidence labels. | v1 |
 | `TrackHistoryComparison` | Prep | Same-track and track-type context with denominators. | v1 |
+| `RoadAmericaSectionProfile` | Prep/Debrief | Section-family and section-lap context for Road America where source-backed. | v1 |
 | `RuntimeWeatherStrip` | Prep/Live | NWS live/partial/error context, no official weather claim. | v1 |
 | `PrepFunnelCard` | Prep | Practice/qualifying raw context, no causal correlation claim. | v1.5 |
 | `SessionCountdownCard` | Session Imminent | Pre-session route/countdown/readiness state. | v1, countdown caveat |
@@ -180,12 +196,16 @@ Hierarchy:
 | `DebriefHeader` | Debrief | Official result/outcome framing. | v1 |
 | `QualifyingConversionCard` | Debrief | Qualifying/start to finish relationship. | v1 |
 | `LapPositionStory` | Debrief | Official lap-chart shape with partial badges. | v1 |
+| `RaceLapSegmentStory` | Debrief | Race microstates, segments, and inflection points. | v1 |
+| `SectionStrengthsPanel` | Debrief | Source-bounded section-family and section-lap strengths. | v1 |
 | `IncidentPenaltyChips` | Debrief | Imported incident/penalty/status context. | v1.5 drawer/detail |
 | `TeamContextPanel` | Debrief | Descriptive team context only. | v1.5 drawer/detail |
 | `SeriesSummaryTable` | Career | Cross-series performance summary. | v1 |
 | `MetricParityMatrix` | Career | Metric-family availability and safe UI use. | v1 |
+| `CareerDimensionBrowser` | Career | Team era, track archetype, driver cohort, car/entrant, and qualifying context. | v1 |
+| `CareerDeepModuleMenu` | Career | Route to IMSA stint/class and Formula Ford lap-shape modules where available. | v1 |
 | `GapLedgerDrawer` | Career/Ops | Open gaps, priority gaps, source categories. | v1 |
-| `ResultConversionExplorer` | Career | Filterable race result drilldown. | v1.5 |
+| `ResultConversionExplorer` | Career | Filterable race result drilldown. | v1 |
 | `ValidationStatusPanel` | Ops | Build safety from generated validation report. | v1 |
 | `LiveSourceConsole` | Ops | Endpoint health/detail from `/api/sources`. | v1 |
 | `ReplayArchiveStatePanel` | Ops | Archive availability and sufficiency. | v1.5 |
@@ -206,6 +226,7 @@ Source pill model:
 Drawer contents:
 
 - Source path or API endpoint.
+- Context-pack path and pack SHA when a `contextPackRef` is present.
 - Metric ID when available.
 - `sourceState`, `readiness`, `confidence`, caveat IDs/copy.
 - Denominator or row-count fields when relevant.
@@ -258,10 +279,10 @@ Desktop expands density without changing hierarchy.
 V1 includes:
 
 - Dynamic homepage router across Race Weekend Prep, Session Imminent, Live Ready, Degraded, Wrong-Series, Stale, Blocked, Race Debrief, Career Lab, and Off-Week.
-- Race Weekend Prep command center, track history, and runtime NWS weather strip.
+- Race Weekend Prep command center, race-intelligence band, top-10 path, analog table, track history, and runtime NWS weather strip.
 - Live Companion readiness banner, Bryce status tile, timing tower, guarded points card, weather strip, and source drawer.
-- Race Debrief header, qualifying conversion, lap-position story, and source drawer.
-- Career Lab series summary, metric parity matrix, and gap ledger.
+- Race Debrief header, qualifying conversion, lap-position story, race-lap/section story, and source drawer.
+- Career Lab series summary, metric parity matrix, career dimension browser, deep module menu, result conversion explorer, and gap ledger.
 - Source Ops validation status and live source console.
 
 ## V1.5 Cut
@@ -270,9 +291,7 @@ V1.5 includes:
 
 - Prep practice/qualifying funnel.
 - Replay rank/gap trend after full-session archive proof.
-- Section strengths after denominator QA/display filtering.
 - Incident/penalty chips and team context as reviewed debrief details.
-- Career result conversion explorer.
 - Replay archive trend/operator drilldown.
 
 ## Later Or Blocked
@@ -283,5 +302,5 @@ Later/deferred until source contracts prove them:
 - Formal post-official-results reconciliation report path and reconciled/unreconciled backend state.
 - Timezone-normalized countdown semantics.
 - Official points-table model and rule tests.
-- Field-strength/driver-strength product claims.
+- Betting-style public predictive model, single expected finish, top-10 probability, and field-strength/driver-strength headline claims.
 - Live GPS/moving dot, tire/fuel/overtake strategy, detailed pit sequence, POV/radio, notification rules, broadcast route inventory, official INDY NXT weather.

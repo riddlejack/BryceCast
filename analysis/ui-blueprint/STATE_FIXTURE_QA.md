@@ -1,8 +1,12 @@
 # State Fixture QA
 
-Generated: 2026-06-17
+Generated: 2026-06-18
 
 Source fixtures: `analysis/ui-data-package/ui-data-package.json`, `screens.liveCompanionFixtures.fixtures[]`.
+
+Package baseline: generated `2026-06-18T17:52:13.930Z`, `baselineCommit=ce904af`, source hash `da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc`.
+
+Context-pack baseline: `analysis/predictive-race-intelligence/output/context-packs/context-pack-manifest.json` with 9 upcoming-event packs, 36 race-debrief packs, 1 Career Lab pack, and 1 live race-day pack. These context packs are source-backed design/build fixtures; live runtime truth still comes from `/api/readiness`.
 
 Current fixture coverage:
 
@@ -45,7 +49,7 @@ Current fixture coverage:
 
 | Product state | Trigger/source truth | Current fixture support | Expected UI behavior |
 | --- | --- | --- | --- |
-| Race week | Upcoming INDY NXT event from `screens.roadAmericaPrep.events[]`; current package has Road America Race 1 on `2026-06-19` and Race 2 on `2026-06-20`. | Not a live fixture; package prep state is `readiness=partial`. | Show Race Weekend Prep command center, track facts, same-track/track-type history, source drawer. Weather unavailable from static artifact unless runtime NWS route supplies it. |
+| Race week | Upcoming INDY NXT event from `screens.roadAmericaPrep.events[]`; current package has Road America Race 1 on `2026-06-19` and Race 2 on `2026-06-20`; each event carries `contextPackRef.path`. | Not a live fixture; package prep state is `readiness=partial`. Upcoming-event context packs are available. | Show Race Weekend Prep command center, track facts, race-intelligence band, top-10 path, analogs, same-track/track-type history, source drawer. Weather unavailable from static artifact unless runtime NWS route supplies it. |
 | Session imminent | `/api/readiness.state=pre_session` or next known NXT session close to start. | `pre_session / base`, `replay_empty`, `replay_repeated_cold`. | Show countdown/session, readiness gates, weather/prep. No live rank/gap/tower/points-as-live. |
 | Live ready | `/api/readiness.state=ready`. | `ready / base`. | Show full guarded live shell. Points remain Race Control/provisional until reconciled. |
 | Degraded live | `/api/readiness.state=degraded`. | `degraded / base`. | Show live shell with affected widgets hidden/badged. |
@@ -59,6 +63,8 @@ Current fixture coverage:
 ## Validator And Test Behaviors To Preserve
 
 - Every live fixture must include runtime-shaped `raceWeekend`, `liveTiming`, `bryce`, `points`, `weather`, `replay`, `sources`, and `gates`.
+- Every roadAmericaPrep event should preserve `contextPackRef.path`, `predictionBand`, `top10Path`, and `chartSpecs`; UI should not regress to shallow same-track cards only.
+- Predictive fixture language must stay source-bounded: historical prior bands/path language only, no single expected finish or public top-10 probability.
 - `wrong_series` must not populate product `raceWeekend.eventName` or `trackName`.
 - `wrong_series` must include a non-Bryce car #9 row so top-series contamination is tested.
 - Same-series timing without a guarded Bryce row is `blocked`, not live.

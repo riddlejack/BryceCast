@@ -1,6 +1,6 @@
 # BryceCast Visual Direction Options
 
-Generated: 2026-06-17
+Generated: 2026-06-18
 
 Source baseline:
 
@@ -9,7 +9,8 @@ Source baseline:
 - `analysis/ui-blueprint/STATE_FIXTURE_QA.md`
 - `analysis/ui-blueprint/DECISIONS_FOR_JACK.md`
 - `analysis/product-definition/PRODUCT_DEFINITION_PACKET.md`
-- `analysis/ui-data-package/ui-data-package.json`, `schemaVersion=brycecast.uiDataPackage.v1`, `generatedAt=2026-06-16T22:26:08.630Z`, `baselineCommit=5636bb6`
+- `analysis/ui-data-package/ui-data-package.json`, `schemaVersion=brycecast.uiDataPackage.v1`, `generatedAt=2026-06-18T17:52:13.930Z`, `baselineCommit=ce904af`
+- `analysis/predictive-race-intelligence/output/context-packs/context-pack-manifest.json`, with 9 upcoming-event packs, 36 race-debrief packs, 1 Career Lab pack, and 1 live race-day pack
 
 This document is visual direction only. It does not choose the final style, implement frontend code, change ingestion, change backend contracts, or modify source data.
 
@@ -24,6 +25,7 @@ The source contract is the design anchor:
 - Live timing, live points, and live weather must come from runtime APIs.
 - Weather is NWS context, not official INDY NXT weather or track temperature.
 - Points render from `/api/readiness.points`; the UI must not compute points locally.
+- Race-intelligence content comes from context packs and must use historical-prior/analog/path language, not point forecasts.
 - Wrong-series, stale, blocked, partial, replay-only, and unavailable states must look intentional, not broken.
 - Source detail belongs behind compact source affordances except when the state itself is blocked.
 
@@ -34,6 +36,10 @@ These values should appear in design mocks and reviews instead of placeholder da
 - Race week prep: `Grand Prix at Road America Race 1`, `2026-06-19`, Road America, road course, `4.048 mi`, `14 corners`.
 - Road America same-track history: `2 races`, average finish `8.5`, average gain `0`, top-10 rate `100%`.
 - Road-course history: average finish `12.6`, average gain `-2.45`, top-10 rate `40%`.
+- Road-course finish-percentile prior band: `p25=0.223`, `median=0.401`, `p75=0.667`, `n=20`, confidence `medium_low`, claim strength `source_bounded_historical_prior_band`.
+- Road America Race 1 context pack: `analysis/predictive-race-intelligence/output/context-packs/upcoming-events/upcoming_event_indy_nxt_2026_5545_grand_prix_at_road_america_race_1.json`.
+- Top-10 path factors available for design copy: qualifying/start position, road-course conversion, same-track execution, race chaos avoidance, recent Road America analog.
+- Race-week chart specs available: `same_track_vs_track_type` bar, `finish_percentile_band` interval, `analog_race_table` ranked table.
 - Ready live fixture: Road America Race 1, `GREEN`, lap `12/20`, guarded Bryce row, Bryce `P1`, car `9`, status `Running`.
 - Ready points fixture: `race_control_live`, running driver points `25`, total driver points `143`, total entrant points `160`, historical baseline `131`, historical rank `14`, reconciliation required.
 - Degraded fixture: Bryce timing still guarded, points mode `partial`, running points `12`, running-points coverage `8/25`, total driver/entrant points unavailable, weather `partial`.
@@ -42,6 +48,7 @@ These values should appear in design mocks and reviews instead of placeholder da
 - Lap story seed: official lap chart, Bryce net lap-chart gain `0`, best running position `21`, worst running position `22`, field lap drivers `24`, top mover Myles Rowe `+18`.
 - Best finish seed: `2024 Grand Prix of Monterey Race 2 R2`, start `P5`, finish `P3`, gain `+2`, finish percentile `90`, points `35`.
 - Career context: INDY NXT has `36` race rows, average finish `12.22`, average gain `-0.97`, top-10 rate `47.2%`; Formula Ford has `15` race rows, average finish `4.73`, top-10 rate `100%`.
+- Deep career modules now exist for source-bounded design: IMSA Daytona stint/class/co-driver pace, Formula Ford lap shape, career dimension filters, track archetype analogs, team era context, driver cohorts, and qualifying conversion.
 - Source Ops: validation `ok=true`, `errorCount=0`, `warningCount=1`, open gaps `9`, priority gaps `0`.
 
 ## Shared Visual Rules
@@ -106,6 +113,9 @@ Second stack:
 | `TimingTowerFocus` | Mobile shows Bryce plus nearby rows, not the full field. Bryce row is a horizontal driver band with car `9`, `P1`, `Running`, `12 laps`. Desktop can show a wider table with rank, car, driver, team, status, laps, and points fields when populated. Wrong-series hides live labels and sends timing detail to diagnostics only. |
 | `LapPositionStory` | Narrative chart card with an inverted y-axis line and short caption. For WWTR, show `P12 -> P23`, gain `-11`, lap-chart best/worst `21/22`, and a badge for official lap chart. Partial charts get a badge before the chart title, not buried in the drawer. |
 | `TrackHistoryComparison` | Two stat bands: Road America and road courses. Each band shows finish, gain, top-10 rate, and denominator. Example: `Road America: 2 races, avg finish 8.5, top-10 100%`; `Road courses: avg finish 12.6, avg gain -2.45, top-10 40%`. |
+| `RaceIntelligenceBand` | Historical-prior interval with explicit caveat. Show `p25 0.223`, `median 0.401`, `p75 0.667`, `n=20`, and `medium_low` confidence. Label as "historical prior band", not projection. |
+| `Top10PathPanel` | Five concise factors with current state and watch note. Treat it like a race-week checklist, not a prediction card. |
+| `AnalogRaceTable` | Compact table/list with race label, analog type, confidence, and source affordance. It should feel curated and explorable. |
 | `LivePointsCard` | Plain points ledger. Header says `Race Control running points` or `Historical points baseline`. Ready state shows running `25`, driver total `143`, entrant total `160`, historical baseline `131`, rank `14`, and a visible `Provisional until reconciled` label. Partial state shows only running `12` and coverage `8/25`; null totals render unavailable. |
 | `RuntimeWeatherStrip` | Compact horizontal strip: source, observed condition, temp, wind, gust, alert count. Example: `NWS API`, `Clear`, `72 F`, `Wind 9 mph`, `Gust 16 mph`. In partial state, hide missing legs and show `partial` plus failed-probe detail in drawer. |
 | `SourcePill` / `SourceDrawer` | First-screen source pill uses translated labels: `Source backed`, `Partial`, `Live only`, `Replay only`, `Unavailable`, `Race Control mismatch`. Drawer starts with plain explanation, then exact source path/API, confidence, denominator, gates, and caveats. |
@@ -176,6 +186,9 @@ Second stack:
 | `TimingTowerFocus` | Treat as a ranked ladder with Bryce highlighted, not as a generic table. Mobile shows top rows plus Bryce context; desktop shows rank, car, driver, team, status, laps, liveRank, and points fields when present. If fields are null, the column remains visually absent or unavailable, not zero. |
 | `LapPositionStory` | Core visual asset. Inverted y-axis line with start/finish markers, best/worst range, and partial-source overlays. WWTR can show `Start P12`, `Finish P23`, `Best running P21`, `Worst running P22`, field lap drivers `24`, and top mover `Myles Rowe +18`. Monterey can show the positive case: `P5 -> P3`, finish percentile `90`. |
 | `TrackHistoryComparison` | Compact bar pair with aligned scales: same-track vs road-course. Denominators are part of the axis label, not a footnote. Top-10 rates use small horizontal bars; average gain uses a zero-centered bar to make `0` vs `-2.45` readable. |
+| `RaceIntelligenceBand` | The interval band can be the race-week hero: one horizontal range with median mark, sample size, confidence, and a short "not a forecast" source label. |
+| `Top10PathPanel` | Analytical checklist with each factor mapped to the evidence that will update it: qualifying/start, road-course prior, same-track analog, live/replay race shape, debrief analog. |
+| `AnalogRaceTable` | Ranked/curated table with confidence labels, finish/start/gain where present, and direct links into debrief context packs. |
 | `LivePointsCard` | Ledger chart, not a KPI tile. Show source mode, populated fields, and coverage. Ready state can show `running 25`, `driver total 143`, `entrant total 160`, `historical 131`, rank `14`, with `reconciliationRequired=true` as a visible annotation. Partial state visibly gaps missing totals. |
 | `RuntimeWeatherStrip` | Micro-chart strip: current condition, temp, wind, gust, forecast leg, alerts. NWS source label sits in the strip, and partial probes create a small broken segment rather than hiding the weather card. |
 | `SourcePill` / `SourceDrawer` | Source pill is more technical than Option 1: `available/high`, `partial/medium`, `live_only`, `source_bounded`, `replay_only`. Drawer is a methods panel with source paths, metric IDs, confidence, caveat copy, denominator, and gate history. |
@@ -246,6 +259,9 @@ Second stack:
 | `TimingTowerFocus` | Table-first. Rows are compact, stable-height, and source-aware. Bryce row gets a left rail and lock icon treatment when identity guard passes by `driver_id` or `exact_name`. Wrong-series car `9` appears only in diagnostics with `seriesOk=false`; never as Bryce. |
 | `LapPositionStory` | Evidence panel. Chart appears only when source state supports it. Partial lap charts show a visible validation strip, sample coverage, and unavailable spans. Debrief labels stay factual unless manually reviewed. |
 | `TrackHistoryComparison` | Fact ledger with two rows and visible denominators. It reads like an audited source table: Road America `2 races`, avg finish `8.5`, gain `0`, top-10 `100%`; road courses avg finish `12.6`, gain `-2.45`, top-10 `40%`. |
+| `RaceIntelligenceBand` | Contract-state panel: `source_bounded_historical_prior_band`, `calibrationState=not_calibrated_for_point_probability`, `confidence=medium_low`, and the interval fields. |
+| `Top10PathPanel` | Source-backed gate list for what will update after qualifying/live/debrief, without probability language. |
+| `AnalogRaceTable` | Audited comparison table with pack SHA/source refs available in the inspector. |
 | `LivePointsCard` | Contract-state panel. Top line is `points.mode`; fields render only if source-present. Ready state shows `race_control_live`, running `25`, total driver `143`, total entrant `160`, coverage `25/25/25`, reconciliation required. Partial state shows `partial`, running `12`, coverage `8/25`, totals unavailable. |
 | `RuntimeWeatherStrip` | Probe-aware weather module. Top line: `NWS API`, sourceState, checkedAt. Values: `72 F`, `clear`, wind `9 mph`, gust `16 mph`. Partial state shows failed probe list in the rail and suppresses missing gust instead of showing zero. |
 | `SourcePill` / `SourceDrawer` | Source pill can use exact terms because this direction is source-literate: `ready`, `degraded`, `wrong_series`, `stale`, `blocked`, `live_only`, `replay_only`. Drawer is an inspector with gates, endpoints, source refs, caveats, field coverage, and missing backend contracts. |

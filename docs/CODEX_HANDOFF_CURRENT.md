@@ -1,6 +1,6 @@
 # BryceCast Current Codex Handoff
 
-Updated: 2026-06-13 12:42 CDT.
+Updated: 2026-06-18 06:35 CDT.
 
 ## Current Chat / Thread Label
 
@@ -16,9 +16,30 @@ BryceCast is now a Bryce Aron racing analytics product. Live Bryce in-car POV is
 
 Current highest-value path: build a rigorous, source-backed career/session analytics foundation and then design the website/mobile experience around verified data.
 
+June 18 productization update: the analytics foundation is now context-pack backed, not just a set of CSV/report artifacts. Fresh UI agents should start from `analysis/ui-data-package/ui-data-package.json`, `analysis/predictive-race-intelligence/output/context-packs/context-pack-manifest.json`, `analysis/ANALYTICS_UI_ARTIFACT_INDEX.md`, and `analysis/ui-blueprint/README.md` before opening older blueprint, worker-note, or MagicPath files.
+
 The live/race-day data lane is separate from the career ingestion lane. Career facts live in `data/career/career.dataset.json` and generated reports; live timing/source/weather readiness lives in `scripts/api-server.mjs`, `scripts/race-poller.mjs`, `scripts/live-source-endpoints.mjs`, `scripts/live-source-pressure-test.mjs`, `scripts/live-weather-service.mjs`, `scripts/live-weather.mjs`, `docs/LIVE_DATA_READINESS_AUDIT.md`, `docs/API_SERVICE.md`, and `docs/SOURCE-INVENTORY.md`.
 
 ## Current Validation Baseline
+
+Current analytics/UI productization baseline verified in this cleanup lane:
+
+```bash
+npm run analytics:ui-data-package:validate
+npm run analytics:view-models:validate
+python3 analysis/predictive-race-intelligence/scripts/validate_predictive_race_intelligence.py
+python3 analysis/data-utilization-audit/scripts/validate_data_utilization_audit.py
+python3 analysis/indy-nxt-section-lap-deep-dive/scripts/validate_indy_nxt_section_lap_deep_dive.py
+python3 analysis/indy-nxt-race-lap-section-enhancement/scripts/validate_indy_nxt_race_lap_section_enhancement.py
+python3 analysis/imsa-daytona-stint-class-pace/scripts/validate_imsa_daytona_stint_class_pace.py
+python3 analysis/formula-ford-lap-shape/scripts/validate_formula_ford_lap_shape.py
+python3 analysis/context-event-narrative-layer/scripts/validate_context_event_narrative_layer.py
+python3 analysis/career-dimension-context-layer/scripts/validate_career_dimension_context_layer.py
+npm run build
+git diff --check
+```
+
+Result: all listed gates pass. `npm run build` still has the existing Vite chunk-size warning only. This cleanup lane did not rerun ingestion import/summary because those commands mutate ingestion-owned generated reports; the current canonical ingestion reports remain the June 16 source of truth below.
 
 Last verified with:
 
@@ -106,6 +127,43 @@ Current canonical counts:
 | Media assets | 940 |
 | Source evidence rows | 1,199 |
 | Open gaps | 9 |
+
+## June 18 Analytics Productization Baseline
+
+The active UI/product baseline now includes these generated, source-hash checked artifacts:
+
+| Artifact family | Current state |
+| --- | --- |
+| UI data package | `analysis/ui-data-package/ui-data-package.json`, generated `2026-06-18T17:52:13.930Z`, `asOfDate=2026-06-18`, source hash `da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc`, 5 screen payloads. |
+| Predictive race intelligence | 76 inventory items, 36 INDY NXT feature rows, 68 career-prior rows, 14 model rows, 9 upcoming-event packs, 36 race-debrief packs, 1 Career Lab pack, 1 live race-day pack. Use bands/paths/analogs only; no public point forecasts. |
+| Data utilization audit | No remaining generated utilization backlog rows for the current canonical dataset. The 25 non-empty collections are productized; 3 empty notification/broadcast collections are marked not worth analyzing with rationale. |
+| INDY NXT section-lap deep dive | 21,044 practice/qualifying Bryce section observations, 83 session summaries, 2,678 Top Section Times rows, 248 section-family aggregates, Road America prep context pack. |
+| INDY NXT race lap/section enhancement | 1,390 race lap microstates, 159 caution-aware lap segments, 151 inflection points, 16,001 race section observations, Road America race context pack. |
+| Career dimension context | 8,158 result rows, 1,547 qualifying rows, 75 teams, 42 tracks, 555 drivers, 472 cars, full-field result and qualifying conversion context. |
+| Context event narrative | 1,370 context timeline rows, 181 weather rows, 940 media rows, 1,199 source-evidence rows, 9 source-boundary gap rows. |
+| IMSA Daytona stint/class pace | 37,885 official time-card lap rows, 1,680 stints, 10 Bryce stint rows, car 85 co-driver/class-hour pace context. |
+| Formula Ford lap shape | 282 Bryce-labeled lap-analysis rows, 24 session lap-shape summaries, 7 event progression rows, 9 condition rows. |
+
+Road America Race 1 and Race 2 context packs are the first upcoming-event UI sources:
+
+- Race 1: `analysis/predictive-race-intelligence/output/context-packs/upcoming-events/upcoming_event_indy_nxt_2026_5545_grand_prix_at_road_america_race_1.json`
+- Race 2: `analysis/predictive-race-intelligence/output/context-packs/upcoming-events/upcoming_event_indy_nxt_2026_5537_grand_prix_at_road_america_race_2.json`
+
+Key Road America prep facts in the package:
+
+- Same-track INDY NXT history: 2 races, average finish `8.5`, average gain `0`, top-10 rate `100%`.
+- INDY NXT road-course history: 20 races, average finish `12.6`, average gain `-2.45`, finish-percentile median `0.401`, top-10 rate `40%`.
+- Finish-percentile prior band: p25 `0.223`, median `0.401`, p75 `0.667`, n `20`, `claimStrength=source_bounded_historical_prior_band`.
+- Static prep weather remains `future_unavailable_in_historical_dataset`; runtime NWS routes own current/forecast weather.
+
+Predictive policy:
+
+- Promote a race-intelligence workbench, not betting-style predictions.
+- Pre-race-safe models provide only modest lift over baseline. The strongest candidate in the scorecard is useful for internal context bands, not public finish copy.
+- Any model using team outcome, lap dynamics, section results, incident/penalty, or archetype fields is post-race only and barred from pre-race predictions.
+- Top-10 probabilities remain path language until calibration/Brier gates beat baseline.
+
+Frontend rule after June 18: React components should consume `analysis/ui-data-package/ui-data-package.json`, runtime `/api/*` routes, and referenced context packs through a typed adapter. Do not parse raw CSV files directly inside UI components.
 
 Validation warnings:
 
@@ -213,18 +271,24 @@ Current unresolved or live-session-gated ambiguities:
 
 ## Recommended Next Step
 
-For the next implementation pass, treat INDY NXT historical/career analytics as dashboard-ready with explicit caveats, and treat race-day live mode as API-plumbed but still requiring green-flag Road America proof. The generated coverage matrix now ranks `publish_indy_nxt_dashboard_readiness` first, and `docs/INDY_NXT_DASHBOARD_READINESS.md` is the handoff contract for UI/data-layer work.
+The next implementation pass should be UI V2 architecture and frontend data-adapter work, not another backend analytics sprint. Start by reading:
+
+1. `analysis/ui-blueprint/README.md`
+2. `analysis/ui-data-package/README.md`
+3. `analysis/ui-data-package/ui-data-package.json`
+4. `analysis/predictive-race-intelligence/output/PREDICTIVE_RACE_INTELLIGENCE_REPORT.md`
+5. `analysis/predictive-race-intelligence/output/context-packs/context-pack-manifest.json`
+6. `docs/UI_ANALYTICS_PRODUCT_CONTRACT.md`
+7. `docs/LIVE_RACE_DAY_PRODUCT_CONTRACT.md`
 
 Highest-leverage next work:
 
-- wire the UI/data layer to consume production-safe INDY NXT categories from the canonical dataset, with caveat badges driven by coverage matrix status and gap IDs,
-- wire the race-day frontend/mobile data layer to `/api/snapshot`, `/api/timing`, `/api/sources`, `/api/weather/live`, `/api/weather/upcoming`, `/api/replay/bryce`, and `/api/history/bryce?compact=1`,
+- build a typed frontend adapter for the UI data package and context-pack refs,
+- refresh the dynamic homepage around Road America Race Intelligence, Live Companion readiness, Race Debrief, Career Lab, and Source Ops,
+- render visualizations from chart specs and context packs: prior-band interval, same-track vs road-course bars, analog race table, top-10 path checklist, lap-position line, caution-aware segment timeline, section-strength bars/heatmap, career parity heatmap, result-conversion scatter, and source/gap ledger,
+- keep live mode fixture-backed until active INDY NXT green/yellow proof exists,
 - rehearse Road America live proof with `npm run audit:live:pressure:primary` and `npm run poll:race:watch -- --interval-ms=1000` during practice/qualifying/race windows,
-- add caching/rate limiting around `/api/weather/upcoming` before any deployed production service,
-- check whether GB3 2022 official session `1248` has an alternate official JSON/PDF artifact before leaving the official endpoint 404 gap as source-broken,
-- decide whether Formula Ford official lap-analysis pages justify expanding beyond the current Bryce-only lap samples, or explicitly hold the category to Bryce-only scope,
-- audit lap-specific incident timing beyond caution-summary rows only where an official Results/Event Summary/Lap Chart row explicitly supports it,
-- resolve the remaining INDY NXT Section Results holdout for `session_indy_nxt_2024_6325` only if an alternate official non-corrupt PDF/source is found.
+- after the session, add official-result/points reconciliation before calling any post-race points/replay state reconciled.
 
 Suggested fresh-thread prompt:
 

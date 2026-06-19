@@ -2,6 +2,8 @@
 
 Generated: 2026-06-17
 
+Status: legacy/rejected after the June 18 context-pack analytics baseline. Preserve this file for links and design-history context only. Do not use it as the current frontend starting point; start from `analysis/ui-blueprint/README.md`, `analysis/ui-blueprint/UI_BLUEPRINT.md`, `analysis/ui-blueprint/COMPONENT_FIELD_MATRIX.md`, and `analysis/ui-data-package/ui-data-package.json`.
+
 Project: [BryceCast UI Directions](https://www.magicpath.ai/files/418122821135405056)
 
 V2 treats the first MagicPath pass as rejected. The new mocks are consumer-facing visual targets: source honesty remains present, but the primary screen language is race-week context, live race position, and debrief analytics.

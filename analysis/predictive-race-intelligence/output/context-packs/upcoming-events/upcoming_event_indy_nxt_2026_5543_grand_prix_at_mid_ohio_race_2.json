@@ -1,0 +1,297 @@
+{
+  "analogRaces": [
+    {
+      "analogType": "same_track",
+      "analogyBasis": "track_match",
+      "confidence": "medium",
+      "historicalOutcomePolicy": "outcome_fields_suppressed_in_upcoming_pack; use race_debrief context packs for detailed outcomes",
+      "raceLabel": "2025 Grand Prix at Mid-Ohio",
+      "sessionId": "session_indy_nxt_2025_6452",
+      "trackName": "Mid-Ohio Sports Car Course",
+      "trackType": "road"
+    },
+    {
+      "analogType": "same_track",
+      "analogyBasis": "track_match",
+      "confidence": "medium",
+      "historicalOutcomePolicy": "outcome_fields_suppressed_in_upcoming_pack; use race_debrief context packs for detailed outcomes",
+      "raceLabel": "2024 Grand Prix at Mid-Ohio",
+      "sessionId": "session_indy_nxt_2024_6318",
+      "trackName": "Mid-Ohio Sports Car Course",
+      "trackType": "road"
+    },
+    {
+      "analogType": "same_track_type",
+      "analogyBasis": "track_type_match",
+      "confidence": "medium",
+      "historicalOutcomePolicy": "outcome_fields_suppressed_in_upcoming_pack; use race_debrief context packs for detailed outcomes",
+      "raceLabel": "2026 Indianapolis Grand Prix Race 2 R2",
+      "sessionId": "session_indy_nxt_2026_6765",
+      "trackName": "Indianapolis Motor Speedway Road Course",
+      "trackType": "road"
+    },
+    {
+      "analogType": "same_track_type",
+      "analogyBasis": "track_type_match",
+      "confidence": "medium",
+      "historicalOutcomePolicy": "outcome_fields_suppressed_in_upcoming_pack; use race_debrief context packs for detailed outcomes",
+      "raceLabel": "2026 Indianapolis Grand Prix Race 1 R1",
+      "sessionId": "session_indy_nxt_2026_6756",
+      "trackName": "Indianapolis Motor Speedway Road Course",
+      "trackType": "road"
+    },
+    {
+      "analogType": "same_track_type",
+      "analogyBasis": "track_type_match",
+      "confidence": "medium",
+      "historicalOutcomePolicy": "outcome_fields_suppressed_in_upcoming_pack; use race_debrief context packs for detailed outcomes",
+      "raceLabel": "2026 Grand Prix of Alabama Race 2 R2",
+      "sessionId": "session_indy_nxt_2026_6752",
+      "trackName": "Barber Motorsports Park",
+      "trackType": "road"
+    },
+    {
+      "analogType": "same_track_type",
+      "analogyBasis": "track_type_match",
+      "confidence": "medium",
+      "historicalOutcomePolicy": "outcome_fields_suppressed_in_upcoming_pack; use race_debrief context packs for detailed outcomes",
+      "raceLabel": "2026 Grand Prix of Alabama Race 1 R1",
+      "sessionId": "session_indy_nxt_2026_6750",
+      "trackName": "Barber Motorsports Park",
+      "trackType": "road"
+    }
+  ],
+  "analogSelectionPolicy": "pre_race_track_match_then_recency_no_outcome_sort",
+  "asOfDate": "2026-06-18",
+  "careerPriorContext": [
+    {
+      "avgFinishPercentile": 0.498,
+      "avgGain": 0.55,
+      "caveat": "Use as normalized prior; do not compare raw finish across different field sizes.",
+      "eligibility": "prior_allowed",
+      "metricFamily": "result_conversion",
+      "parityStatus": "production_safe",
+      "priorId": "series:series_gb3",
+      "priorType": "series_outcome",
+      "raceRows": 42,
+      "seriesId": "series_gb3",
+      "seriesName": "GB3 Championship",
+      "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+      "sourceState": "official_or_source_backed_result",
+      "top10Rate": 0.429,
+      "top5Rate": 0.119,
+      "trackType": ""
+    },
+    {
+      "avgFinishPercentile": 0.459,
+      "avgGain": -0.972,
+      "caveat": "Use as normalized prior; do not compare raw finish across different field sizes.",
+      "eligibility": "prior_allowed",
+      "metricFamily": "result_conversion",
+      "parityStatus": "production_safe",
+      "priorId": "series:series_indy_nxt",
+      "priorType": "series_outcome",
+      "raceRows": 36,
+      "seriesId": "series_indy_nxt",
+      "seriesName": "INDY NXT",
+      "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+      "sourceState": "official_or_source_backed_result",
+      "top10Rate": 0.472,
+      "top5Rate": 0.111,
+      "trackType": ""
+    },
+    {
+      "avgFinishPercentile": 0.862,
+      "avgGain": 0.8,
+      "caveat": "Use as normalized prior; do not compare raw finish across different field sizes.",
+      "eligibility": "prior_allowed",
+      "metricFamily": "result_conversion",
+      "parityStatus": "production_safe",
+      "priorId": "series:series_formula_ford",
+      "priorType": "series_outcome",
+      "raceRows": 15,
+      "seriesId": "series_formula_ford",
+      "seriesName": "Formula Ford",
+      "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+      "sourceState": "official_or_source_backed_result",
+      "top10Rate": 1.0,
+      "top5Rate": 0.8,
+      "trackType": ""
+    },
+    {
+      "avgFinishPercentile": 0.605,
+      "avgGain": -0.5,
+      "caveat": "Aggregated prior; use with denominator and source-family caveats.",
+      "eligibility": "prior_allowed",
+      "metricFamily": "result_conversion",
+      "parityStatus": "production_safe",
+      "priorId": "track_type:road",
+      "priorType": "track_type_outcome",
+      "raceRows": 121,
+      "seriesId": "",
+      "seriesName": "",
+      "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+      "sourceState": "official_or_source_backed_result",
+      "top10Rate": 0.694,
+      "top5Rate": 0.388,
+      "trackType": "road"
+    }
+  ],
+  "caveats": [
+    "Static prep has no future-weather forecast; use runtime NWS APIs for weather context.",
+    "This is a prior band, not a point forecast or betting line.",
+    "Full-career priors are normalized context and cannot override INDY NXT target-domain evidence."
+  ],
+  "chartSpecs": [
+    {
+      "fields": [
+        "sameTrackAvgFinish",
+        "trackTypeAvgFinish",
+        "sameTrackTop10Rate",
+        "trackTypeTop10Rate"
+      ],
+      "id": "same_track_vs_track_type",
+      "type": "bar"
+    },
+    {
+      "fields": [
+        "p25",
+        "median",
+        "p75"
+      ],
+      "id": "finish_percentile_band",
+      "source": "predictionBand.finishPercentileBand",
+      "type": "interval"
+    },
+    {
+      "fields": [
+        "raceLabel",
+        "trackName",
+        "trackType",
+        "analogType",
+        "confidence"
+      ],
+      "id": "analog_race_table",
+      "type": "ranked_table"
+    }
+  ],
+  "eventId": "event_indy_nxt_2026_5543",
+  "eventName": "Grand Prix at Mid-Ohio Race 2",
+  "eventStartDate": "2026-07-05",
+  "generatedAt": "2026-06-18T17:52:08Z",
+  "id": "upcoming_event_indy_nxt_2026_5543_grand_prix_at_mid_ohio_race_2",
+  "predictionBand": {
+    "calibrationState": "not_calibrated_for_point_probability",
+    "claimStrength": "source_bounded_historical_prior_band",
+    "confidence": "medium_low",
+    "finishPercentileBand": {
+      "median": 0.401,
+      "n": 20,
+      "p25": 0.223,
+      "p75": 0.667
+    },
+    "modelPolicy": "No point prediction. Band is a source-backed historical prior for story/context until qualifying and live data arrive.",
+    "scorecardRef": "analysis/predictive-race-intelligence/output/model_scorecard.json",
+    "target": "finish_percentile_prior_and_top10_path",
+    "top10Policy": "path_language_only_until_calibration; show historical denominators outside predictionBand"
+  },
+  "prepUpdateHooks": [
+    "Refresh after first practice with bestPracticeRank and avgPracticeRank.",
+    "Refresh after qualifying with bestQualifyingRank, startPosition, and conversion path.",
+    "During live race, switch to /api/readiness and replay-quality gates rather than static priors."
+  ],
+  "sameTrackHistory": {
+    "avgFinish": 15.0,
+    "avgGain": -4.5,
+    "raceCount": 2,
+    "sourceState": "schedule_plus_historical_results",
+    "top10Rate": 0.0
+  },
+  "schemaVersion": "brycecast.upcomingEventIntelligencePack.v1",
+  "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+  "sourceRefs": [
+    {
+      "bytes": 2452,
+      "path": "analysis/indy-nxt-discovery/output/deep_dive/tables/future_weekend_prep_inputs.csv",
+      "role": "event prep row",
+      "sha256": "107798792c67a95cf7945d03bc427c98920e5b52019ca91e689f0fa93b543048"
+    },
+    {
+      "bytes": 17334,
+      "path": "analysis/indy-nxt-discovery/output/deep_dive/tables/race_debrief_scores.csv",
+      "role": "historical race priors",
+      "sha256": "ba15811c217d16c4dcf5cdc666a0d3fe110e99dcf1d6a2ab992c48c3cf816890"
+    },
+    {
+      "bytes": 914,
+      "path": "analysis/career-parity/output/tables/career_series_result_summary.csv",
+      "role": "career series priors",
+      "sha256": "b8b7399ebdc8056b8628f7a5fe6204992dfa2090f17dfc563ad259bf050c3a36"
+    },
+    {
+      "bytes": 35106,
+      "path": "analysis/career-parity/output/tables/career_result_conversion.csv",
+      "role": "career conversion priors",
+      "sha256": "a43fd0126ab204a7524deeae936955c08c71636dece520561f5b1708dbc54570"
+    },
+    {
+      "bytes": 23440,
+      "path": "analysis/predictive-race-intelligence/output/career_prior_matrix.csv",
+      "role": "generated career prior context",
+      "sha256": "9b2958fa1af10c6ea992cdd2308654d392213516ddb61e788932824eed7324c1"
+    },
+    {
+      "bytes": 8924,
+      "path": "analysis/predictive-race-intelligence/output/model_scorecard.json",
+      "role": "prediction validation",
+      "sha256": "77e85cc9e11bd24b1a5fba5b3278e9302809ba12f4aa197f6084012df332ed62"
+    }
+  ],
+  "top10Path": [
+    {
+      "actionableRead": "After qualifying, compare start position to the historical road-course conversion band and Mid-Ohio Sports Car Course analogs.",
+      "currentState": "Unknown until qualifying.",
+      "factor": "Qualifying and start position",
+      "whyItMatters": "Start-position-only LOO model modestly improves finish-percentile error versus the overall mean."
+    },
+    {
+      "actionableRead": "The product should show the range and analogs, not a single expected finish.",
+      "currentState": "Pre-event prior only.",
+      "factor": "Road-course conversion",
+      "whyItMatters": "INDY NXT road rows currently show avg finish 12.6 and top-10 rate 0.4."
+    },
+    {
+      "actionableRead": "Use same-track rows as analog stories with denominator labels.",
+      "currentState": "Small sample; useful but not enough alone.",
+      "factor": "Same-track execution",
+      "whyItMatters": "Bryce has 2 prior INDY NXT races at Mid-Ohio Sports Car Course."
+    },
+    {
+      "actionableRead": "Use live/replay data to explain when the race deviates from the pre-race band.",
+      "currentState": "Not knowable pre-race.",
+      "factor": "Keep chaos out of the result",
+      "whyItMatters": "Incident/reliability-limited races dominate downside stories in the debrief score table."
+    },
+    {
+      "actionableRead": "Anchor a Race Week card to the concrete Mid-Ohio Sports Car Course analog, with raw outcome details deferred to race-debrief packs.",
+      "currentState": "Historical analog.",
+      "factor": "Recent Mid-Ohio Sports Car Course analog",
+      "whyItMatters": "2025 Grand Prix at Mid-Ohio is retained as a same-track historical analog without ranking by outcome."
+    }
+  ],
+  "track": {
+    "cornerCount": 13,
+    "lengthMi": 2.258,
+    "name": "Mid-Ohio Sports Car Course",
+    "type": "road"
+  },
+  "trackTypeHistory": {
+    "avgFinish": 12.6,
+    "avgGain": -2.45,
+    "finishPercentileMedian": 0.401,
+    "raceCount": 20,
+    "top10Rate": 0.4
+  },
+  "type": "upcoming_event",
+  "weatherState": "future_unavailable_in_historical_dataset"
+}

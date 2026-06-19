@@ -17,6 +17,31 @@ const dataPackage = JSON.parse(fs.readFileSync(packagePath, 'utf8'));
 if (dataPackage.schemaVersion !== 'brycecast.uiDataPackage.v1') {
   fail(`Unexpected UI data package schemaVersion: ${dataPackage.schemaVersion}`);
 }
+if (!/^\d{4}-\d{2}-\d{2}$/.test(String(dataPackage.asOfDate ?? ''))) {
+  fail('UI data package asOfDate must be recorded as YYYY-MM-DD.');
+}
+const packageAsOfDate = dataPackage.asOfDate;
+
+const hashFile = (relativePath) =>
+  createHash('sha256').update(fs.readFileSync(path.join(repoRoot, relativePath))).digest('hex');
+
+const numberOrZero = (value) => {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : 0;
+};
+
+const dateMs = (value) => {
+  const parsed = Date.parse(String(value ?? ''));
+  return Number.isFinite(parsed) ? parsed : 0;
+};
+
+const percentValue = (value) => {
+  if (value === null || value === undefined || value === '') {
+    return null;
+  }
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? Math.round(parsed * 1000) / 10 : null;
+};
 
 const requiredScreens = ['roadAmericaPrep', 'liveCompanionFixtures', 'raceDebrief', 'careerLab', 'sourceOps'];
 const sourceInventory = dataPackage.sourceInventory ?? {};
@@ -34,11 +59,186 @@ for (const [key, source] of Object.entries(sourceInventory)) {
     fail(`sourceInventory entry ${key} points to missing file: ${source.path}`);
   }
   const currentStat = fs.statSync(sourcePath);
-  const currentSha256 = createHash('sha256').update(fs.readFileSync(sourcePath)).digest('hex');
+  const currentSha256 = hashFile(source.path);
   if (currentStat.size !== source.bytes || currentSha256 !== source.sha256) {
     fail(`sourceInventory entry ${key} is stale for ${source.path}`);
   }
 }
+
+if (sourceInventory.canonicalDataset?.path !== 'data/career/career.dataset.json') {
+  fail('sourceInventory missing canonicalDataset.');
+}
+if (dataPackage.sourceHash !== hashFile('data/career/career.dataset.json')) {
+  fail('UI data package sourceHash does not match canonical dataset.');
+}
+
+const canonicalDataset = JSON.parse(fs.readFileSync(path.join(repoRoot, sourceInventory.canonicalDataset.path), 'utf8'));
+const canonicalIndexes = (dataset) => ({
+  sessions: new Map((dataset.sessions ?? []).map((row) => [row.id, row])),
+  events: new Map((dataset.events ?? []).map((row) => [row.id, row]))
+});
+const canonicalIndyBryceRaceSessions = (dataset) => {
+  const { sessions, events } = canonicalIndexes(dataset);
+  const out = new Set();
+  for (const result of dataset.results ?? []) {
+    if (result.driverId !== 'driver_bryce_aron') continue;
+    const session = sessions.get(result.sessionId);
+    const event = events.get(session?.eventId);
+    if (session?.sessionType === 'race' && event?.seriesId === 'series_indy_nxt') {
+      out.add(result.sessionId);
+    }
+  }
+  return out;
+};
+const canonicalFutureIndyEvents = (dataset, asOfDate) => {
+  const { sessions, events } = canonicalIndexes(dataset);
+  const bryceResultEventIds = new Set();
+  for (const result of dataset.results ?? []) {
+    if (result.driverId !== 'driver_bryce_aron') continue;
+    const session = sessions.get(result.sessionId);
+    if (session?.sessionType === 'race') {
+      bryceResultEventIds.add(session.eventId);
+    }
+  }
+  return new Set(
+    [...events.values()]
+      .filter((event) => {
+        const eventDateKey = String(event.eventStartDate ?? '').slice(0, 10);
+        return (
+          event.seriesId === 'series_indy_nxt' &&
+          !bryceResultEventIds.has(event.id) &&
+          /^\d{4}-\d{2}-\d{2}$/.test(eventDateKey) &&
+          eventDateKey >= asOfDate
+        );
+      })
+      .map((event) => event.id)
+  );
+};
+const canonicalBryceFinishedRaceSessions = (dataset) => {
+  const { sessions } = canonicalIndexes(dataset);
+  return new Set(
+    (dataset.results ?? [])
+      .filter(
+        (result) =>
+          result.driverId === 'driver_bryce_aron' &&
+          result.finishPosition !== null &&
+          sessions.get(result.sessionId)?.sessionType === 'race'
+      )
+      .map((result) => result.sessionId)
+  );
+};
+const expectedUpcomingEventIds = canonicalFutureIndyEvents(canonicalDataset, packageAsOfDate);
+const expectedRaceDebriefSessionIds = canonicalIndyBryceRaceSessions(canonicalDataset);
+const expectedUpcomingEventPacks = expectedUpcomingEventIds.size;
+const expectedRaceDebriefPacks = expectedRaceDebriefSessionIds.size;
+const expectedCareerResultConversionRows = canonicalBryceFinishedRaceSessions(canonicalDataset).size;
+
+const validatePackRef = (packRef, label) => {
+  if (!packRef?.path || typeof packRef.bytes !== 'number' || !packRef.sha256) {
+    fail(`${label} context pack ref is missing path/bytes/sha256.`);
+  }
+  const packPath = path.join(repoRoot, packRef.path);
+  if (!fs.existsSync(packPath)) {
+    fail(`${label} context pack ref points to missing file: ${packRef.path}`);
+  }
+  const currentStat = fs.statSync(packPath);
+  const currentSha256 = hashFile(packRef.path);
+  if (currentStat.size !== packRef.bytes || currentSha256 !== packRef.sha256) {
+    fail(`${label} context pack ref is stale for ${packRef.path}`);
+  }
+  const pack = JSON.parse(fs.readFileSync(packPath, 'utf8'));
+  if (pack.sourceHash !== dataPackage.sourceHash) {
+    fail(`${label} context pack sourceHash does not match UI package sourceHash.`);
+  }
+  if (pack.type === 'upcoming_event' && pack.asOfDate !== dataPackage.asOfDate) {
+    fail(`${label} upcoming context pack asOfDate does not match UI package asOfDate.`);
+  }
+  for (const field of ['id', 'type']) {
+    if (pack[field] !== packRef[field]) {
+      fail(`${label} context pack ${field} mismatch: ref=${packRef[field]} pack=${pack[field]}`);
+    }
+  }
+  for (const field of ['eventId', 'sessionId']) {
+    if (Object.hasOwn(packRef, field) && String(pack[field] ?? '') !== String(packRef[field] ?? '')) {
+      fail(`${label} context pack ${field} mismatch: ref=${packRef[field]} pack=${pack[field]}`);
+    }
+  }
+  if (!Array.isArray(pack.sourceRefs) || pack.sourceRefs.length === 0) {
+    fail(`${label} context pack is missing embedded sourceRefs.`);
+  }
+  pack.sourceRefs.forEach((ref, index) => validateEmbeddedSourceRef(ref, `${label} sourceRefs[${index}]`));
+  return pack;
+};
+
+const packIdentityKey = (pack) => [
+  pack.id ?? '',
+  pack.type ?? '',
+  pack.eventId ?? '',
+  pack.sessionId ?? '',
+  pack.path ?? ''
+].join('|');
+
+const assertSetEqual = (actual, expected, label) => {
+  const missing = [...expected].filter((item) => !actual.has(item)).sort();
+  const extra = [...actual].filter((item) => !expected.has(item)).sort();
+  if (missing.length > 0 || extra.length > 0) {
+    fail(`${label} mismatch: missing=${missing.join(',') || 'none'} extra=${extra.join(',') || 'none'}`);
+  }
+};
+
+const validateJsonSourceRefs = (sourceInventoryKey, label, { requireAsOfDate = false } = {}) => {
+  const source = sourceInventory[sourceInventoryKey];
+  if (!source) {
+    fail(`sourceInventory missing ${sourceInventoryKey}`);
+  }
+  const object = JSON.parse(fs.readFileSync(path.join(repoRoot, source.path), 'utf8'));
+  if (object.sourceHash !== dataPackage.sourceHash) {
+    fail(`${label} sourceHash does not match UI package sourceHash.`);
+  }
+  if (requireAsOfDate && object.asOfDate !== packageAsOfDate) {
+    fail(`${label} asOfDate must match UI package asOfDate.`);
+  }
+  for (const [index, ref] of (object.sourceRefs ?? []).entries()) {
+    validateEmbeddedSourceRef(ref, `${label} sourceRefs[${index}]`);
+  }
+  return object;
+};
+
+const validateEmbeddedSourceRef = (ref, label) => {
+  if (!ref?.path) {
+    fail(`${label} is missing path.`);
+  }
+  if (typeof ref.path === 'string' && ref.path.startsWith('/api/')) {
+    return;
+  }
+  if (typeof ref.bytes !== 'number' || !ref.sha256) {
+    fail(`${label} is missing bytes/sha256 for ${ref.path}.`);
+  }
+  const sourcePath = path.join(repoRoot, ref.path);
+  if (!fs.existsSync(sourcePath)) {
+    fail(`${label} points to missing source file: ${ref.path}`);
+  }
+  const currentStat = fs.statSync(sourcePath);
+  const currentSha256 = createHash('sha256').update(fs.readFileSync(sourcePath)).digest('hex');
+  if (currentStat.size !== ref.bytes || currentSha256 !== ref.sha256) {
+    fail(`${label} is stale for ${ref.path}`);
+  }
+};
+
+const validateChartRef = (chartRef, label) => {
+  if (!chartRef?.path || typeof chartRef.bytes !== 'number' || !chartRef.sha256) {
+    fail(`${label} chart ref is missing path/bytes/sha256.`);
+  }
+  const chartPath = path.join(repoRoot, chartRef.path);
+  if (!fs.existsSync(chartPath)) {
+    fail(`${label} chart ref points to missing file: ${chartRef.path}`);
+  }
+  const currentStat = fs.statSync(chartPath);
+  const currentSha256 = createHash('sha256').update(fs.readFileSync(chartPath)).digest('hex');
+  if (currentStat.size !== chartRef.bytes || currentSha256 !== chartRef.sha256) {
+    fail(`${label} chart ref is stale for ${chartRef.path}`);
+  }
+};
 
 for (const screen of requiredScreens) {
   if (!dataPackage.screens?.[screen]) fail(`UI data package missing screen ${screen}`);
@@ -57,8 +257,159 @@ for (const screen of requiredScreens) {
   }
 }
 
+const predictive = dataPackage.predictiveRaceIntelligence;
+if (!predictive) {
+  fail('UI data package must expose predictiveRaceIntelligence context-pack handoff.');
+}
+if (!dataPackage.baselineCommit || dataPackage.predictiveRaceIntelligenceRepoHead !== dataPackage.baselineCommit) {
+  fail('UI data package predictiveRaceIntelligenceRepoHead must match generated baselineCommit.');
+}
+
+for (const key of [
+  'predictiveSummary',
+  'predictiveInventory',
+  'predictiveModelScorecard',
+  'predictiveContextPackManifest',
+  'predictiveCareerPriorMatrix',
+  'predictiveIndyFeatureMatrix',
+  'prepSessionSignals',
+  'fieldStrengthByRace',
+  'sectionResultsDeepByRace',
+  'leaderLapContext',
+  'indyNxtLapTimeline'
+]) {
+  if (!sourceInventory[key]) {
+    fail(`sourceInventory missing predictive source ${key}`);
+  }
+}
+for (const key of ['predictiveBuilderScript', 'predictiveValidatorScript', 'predictiveRunnerScript', 'uiDataPackageBuilderScript', 'uiDataPackageValidatorScript']) {
+  if (!sourceInventory[key]) {
+    fail(`sourceInventory missing generator source ${key}`);
+  }
+}
+const predictiveInventory = validateJsonSourceRefs('predictiveInventory', 'Predictive inventory', { requireAsOfDate: true });
+const predictiveSummary = validateJsonSourceRefs('predictiveSummary', 'Predictive summary', { requireAsOfDate: true });
+const predictiveScorecard = validateJsonSourceRefs('predictiveModelScorecard', 'Predictive model scorecard');
+for (const item of predictiveInventory.items ?? []) {
+  validateEmbeddedSourceRef(
+    { path: item.sourcePath, bytes: item.bytes, sha256: item.sha256 },
+    `Predictive inventory item ${item.id}`
+  );
+}
+const predictiveManifest = validateJsonSourceRefs('predictiveContextPackManifest', 'Predictive context-pack manifest', { requireAsOfDate: true });
+if (predictiveSummary.upcomingEventPacks !== predictive.contextPackCounts?.upcomingEvent || predictiveScorecard.sourceHash !== dataPackage.sourceHash) {
+  fail('Predictive summary/scorecard source metadata does not match UI package handoff.');
+}
+if (predictive.asOfDate !== predictiveSummary.asOfDate || predictive.asOfDate !== predictiveManifest.asOfDate || dataPackage.asOfDate !== predictive.asOfDate) {
+  fail('Predictive asOfDate metadata must match across UI package, summary, and manifest.');
+}
+
+if (predictive.contextPackCounts?.upcomingEvent !== expectedUpcomingEventPacks) {
+  fail(`Expected ${expectedUpcomingEventPacks} upcoming-event context packs, got ${predictive.contextPackCounts?.upcomingEvent}`);
+}
+if (predictive.contextPackCounts?.raceDebrief !== expectedRaceDebriefPacks) {
+  fail(`Expected ${expectedRaceDebriefPacks} race-debrief context packs, got ${predictive.contextPackCounts?.raceDebrief}`);
+}
+if (predictive.contextPackCounts?.careerLab !== 1 || predictive.contextPackCounts?.liveRaceDay !== 1) {
+  fail('Expected one Career Lab and one live race-day context pack.');
+}
+if (!Array.isArray(predictive.validationGates) || !predictive.validationGates.some((gate) => gate.id === 'live_green_flag_proof' && gate.status === 'blocked_by_live_proof')) {
+  fail('Predictive race-intelligence handoff must preserve live green-flag proof as blocked_by_live_proof.');
+}
+if (!Array.isArray(predictive.modelPromotionGates) || predictive.modelPromotionGates.length < 5) {
+  fail('Predictive race-intelligence handoff must expose model promotion gates.');
+}
+if (!Array.isArray(predictive.chartRefs) || predictive.chartRefs.length === 0) {
+  fail('Predictive race-intelligence handoff must expose hashed chart refs.');
+}
+predictive.chartRefs.forEach((chartRef, index) => validateChartRef(chartRef, `Predictive chartRefs[${index}]`));
+if (!Array.isArray(predictive.contextPackRefs)) {
+  fail('Predictive race-intelligence handoff must expose all context pack refs.');
+}
+for (const [index, pack] of (predictiveManifest.packs ?? []).entries()) {
+  validateChartRef(pack, `Predictive manifest packs[${index}]`);
+}
+const manifestPackKeys = new Set((predictiveManifest.packs ?? []).map(packIdentityKey));
+const uiPackKeys = new Set(predictive.contextPackRefs.map(packIdentityKey));
+if (manifestPackKeys.size !== uiPackKeys.size) {
+  fail('Predictive contextPackRefs key count must match the current context-pack manifest.');
+}
+for (const key of manifestPackKeys) {
+  if (!uiPackKeys.has(key)) {
+    fail(`Predictive contextPackRefs are missing current manifest pack ${key}`);
+  }
+}
+const contextPackRefsByType = predictive.contextPackRefs.reduce((acc, packRef) => {
+  validatePackRef(packRef, `Predictive ${packRef.id}`);
+  acc[packRef.type] = (acc[packRef.type] ?? 0) + 1;
+  return acc;
+}, {});
+if (
+  contextPackRefsByType.upcoming_event !== predictive.contextPackCounts.upcomingEvent ||
+  contextPackRefsByType.race_debrief !== predictive.contextPackCounts.raceDebrief ||
+  contextPackRefsByType.career_lab !== predictive.contextPackCounts.careerLab ||
+  contextPackRefsByType.live_race_day !== predictive.contextPackCounts.liveRaceDay
+) {
+  fail('Predictive contextPackRefs counts must match contextPackCounts.');
+}
+assertSetEqual(
+  new Set(predictive.contextPackRefs.filter((packRef) => packRef.type === 'upcoming_event').map((packRef) => packRef.eventId)),
+  expectedUpcomingEventIds,
+  'Predictive upcoming-event context pack eventId set'
+);
+assertSetEqual(
+  new Set(predictive.contextPackRefs.filter((packRef) => packRef.type === 'race_debrief').map((packRef) => packRef.sessionId)),
+  expectedRaceDebriefSessionIds,
+  'Predictive race-debrief context pack sessionId set'
+);
+
 if (dataPackage.screens.roadAmericaPrep.events.length < 2) {
   fail('Road America prep should include both Race 1 and Race 2 event rows.');
+}
+
+if (dataPackage.screens.roadAmericaPrep.contextPackRefs?.length !== dataPackage.screens.roadAmericaPrep.events.length) {
+  fail('Road America prep must link both Road America predictive context packs.');
+}
+dataPackage.screens.roadAmericaPrep.contextPackRefs.forEach((packRef, index) => {
+  if (packRef.type !== 'upcoming_event' || !/road_america/.test(packRef.id)) {
+    fail(`Unexpected Road America context pack ref: ${packRef.id}`);
+  }
+  const event = dataPackage.screens.roadAmericaPrep.events[index];
+  if (packRef.eventId !== event.eventId) {
+    fail(`Road America context pack ref ${packRef.id} does not match event ${event.eventId}`);
+  }
+  if (event.sourcePayload !== 'upcoming_event_context_pack') {
+    fail(`Road America event ${event.eventId} must be sourced from an upcoming-event context pack.`);
+  }
+  if (event.contextPackRef?.path !== packRef.path) {
+    fail(`Road America event ${event.eventId} must embed the matching context pack ref.`);
+  }
+  const pack = validatePackRef(packRef, `Road America ${packRef.id}`);
+  if (
+    event.trackName !== pack.track?.name ||
+    event.predictionBand?.claimStrength !== pack.predictionBand?.claimStrength ||
+    event.top10Path?.length !== pack.top10Path?.length
+  ) {
+    fail(`Road America event ${event.eventId} does not mirror its context-pack payload.`);
+  }
+  if (!Object.hasOwn(event, 'weatherState')) {
+    fail(`Road America event ${event.eventId} must preserve the public weatherState field.`);
+  }
+  if (
+    typeof event.sameTrack?.top10RatePct !== 'number' ||
+    typeof event.trackTypeHistory?.top10RatePct !== 'number' ||
+    Object.hasOwn(event.sameTrack ?? {}, 'top10Rate') ||
+    Object.hasOwn(event.trackTypeHistory ?? {}, 'top10Rate')
+  ) {
+    fail(`Road America event ${event.eventId} must expose stable top10RatePct fields, not raw 0-1 top10Rate fields.`);
+  }
+});
+for (let index = 1; index < dataPackage.screens.roadAmericaPrep.events.length; index += 1) {
+  const previous = dataPackage.screens.roadAmericaPrep.events[index - 1];
+  const current = dataPackage.screens.roadAmericaPrep.events[index];
+  if (dateMs(current.eventStartDate) < dateMs(previous.eventStartDate)) {
+    fail('Road America prep events must be ordered by context-pack eventStartDate.');
+  }
 }
 
 const fixtureStates = new Set(dataPackage.screens.liveCompanionFixtures.fixtures.map((fixture) => fixture.state));
@@ -78,6 +429,11 @@ const hasWeatherPartialFixture = dataPackage.screens.liveCompanionFixtures.fixtu
 if (!hasWeatherPartialFixture) {
   fail('Live fixture coverage must include a partial weather fixture with warnings and a warn weather gate.');
 }
+
+if (dataPackage.screens.liveCompanionFixtures.contextPackRef?.type !== 'live_race_day') {
+  fail('Live companion fixtures must link the live race-day context pack.');
+}
+validatePackRef(dataPackage.screens.liveCompanionFixtures.contextPackRef, 'Live companion');
 
 const historyStanding = dataPackage.screens.sourceOps.historyStanding ?? {};
 for (const fixture of dataPackage.screens.liveCompanionFixtures.fixtures) {
@@ -177,14 +533,110 @@ if (dataPackage.screens.raceDebrief.featuredDebriefs.length < 3) {
   fail('Race debrief package should include latest, best, and lowest finish percentile debrief seeds.');
 }
 
+if (dataPackage.screens.raceDebrief.contextPackCoverage?.raceDebriefPacks !== expectedRaceDebriefPacks) {
+  fail(`Race debrief screen must expose all ${expectedRaceDebriefPacks} race-debrief context packs through coverage metadata.`);
+}
+if (!Array.isArray(dataPackage.screens.raceDebrief.contextPackRefs) || dataPackage.screens.raceDebrief.contextPackRefs.length !== expectedRaceDebriefPacks) {
+  fail(`Race debrief screen must enumerate all ${expectedRaceDebriefPacks} race-debrief context pack refs.`);
+}
+const raceDebriefPackSessionIds = new Set();
+const raceDebriefPackPayloads = [];
+for (const packRef of dataPackage.screens.raceDebrief.contextPackRefs) {
+  if (packRef.type !== 'race_debrief' || !packRef.sessionId) {
+    fail('Race debrief contextPackRefs must contain race_debrief refs with sessionId.');
+  }
+  if (raceDebriefPackSessionIds.has(packRef.sessionId)) {
+    fail(`Race debrief contextPackRefs duplicate sessionId ${packRef.sessionId}`);
+  }
+  raceDebriefPackSessionIds.add(packRef.sessionId);
+  raceDebriefPackPayloads.push(validatePackRef(packRef, `Race debrief context pack ${packRef.sessionId}`));
+}
+
 for (const debrief of dataPackage.screens.raceDebrief.featuredDebriefs) {
   if (!debrief.sourceState || !debrief.confidence || !debrief.caveat) {
     fail(`Debrief ${debrief.sessionId} is missing source/confidence/caveat state`);
   }
+  if (debrief.sourcePayload !== 'race_debrief_context_pack') {
+    fail(`Debrief ${debrief.sessionId} must be sourced from a race-debrief context pack.`);
+  }
+  if (debrief.contextPackRef?.type !== 'race_debrief' || debrief.contextPackRef?.sessionId !== debrief.sessionId) {
+    fail(`Debrief ${debrief.sessionId} is missing its race-debrief context pack ref`);
+  }
+  const pack = validatePackRef(debrief.contextPackRef, `Debrief ${debrief.sessionId}`);
+  if (
+    debrief.raceLabel !== pack.raceLabel ||
+    debrief.track?.name !== pack.track?.name ||
+    debrief.result?.finishPosition !== pack.outcome?.finishPosition
+  ) {
+    fail(`Debrief ${debrief.sessionId} does not mirror its context-pack payload.`);
+  }
+  if (
+    debrief.analysis?.paceIndex !== percentValue(pack.conversion?.paceIndex) ||
+    debrief.analysis?.conversionPercentileDelta !== percentValue(pack.conversion?.conversionPercentileDelta)
+  ) {
+    fail(`Debrief ${debrief.sessionId} analysis fields must use UI percentage units derived from the context pack.`);
+  }
+  if (pack.raceContext) {
+    if (!debrief.incidentPenalty) {
+      fail(`Debrief ${debrief.sessionId} must preserve incident/penalty context from its raceContext pack.`);
+    }
+    for (const field of ['sessionIncidentCount', 'sessionPenaltyCount', 'bryceIncidentCount', 'brycePenaltyCount']) {
+      if (numberOrZero(debrief.incidentPenalty[field]) !== numberOrZero(pack.raceContext[field])) {
+        fail(`Debrief ${debrief.sessionId} incidentPenalty.${field} must mirror raceContext.${field}.`);
+      }
+    }
+  }
+  if (!Array.isArray(debrief.sourceRefs) || debrief.sourceRefs.length === 0) {
+    fail(`Debrief ${debrief.sessionId} must expose UI-shaped nested sourceRefs.`);
+  }
+  for (const [index, ref] of debrief.sourceRefs.entries()) {
+    if (!ref.key || !ref.note || !ref.path) {
+      fail(`Debrief ${debrief.sessionId} sourceRefs[${index}] must include key/path/note.`);
+    }
+    validateEmbeddedSourceRef(ref, `Debrief ${debrief.sessionId} sourceRefs[${index}]`);
+  }
+}
+const expectedLatestDebrief = raceDebriefPackPayloads
+  .slice()
+  .sort(
+    (left, right) =>
+      numberOrZero(right.seasonYear) - numberOrZero(left.seasonYear) ||
+      numberOrZero(right.raceOrder?.roundIndex) - numberOrZero(left.raceOrder?.roundIndex)
+  )[0];
+const actualLatestDebrief = dataPackage.screens.raceDebrief.featuredDebriefs.find((debrief) => debrief.label === 'latestCompleted');
+if (actualLatestDebrief?.sessionId !== expectedLatestDebrief?.sessionId) {
+  fail(`Race debrief latestCompleted must use max raceOrder, expected ${expectedLatestDebrief?.sessionId} got ${actualLatestDebrief?.sessionId}`);
 }
 
 if (dataPackage.screens.careerLab.seriesSummary.length === 0) {
   fail('Career Lab series summary is empty.');
+}
+
+if (dataPackage.screens.careerLab.contextPackRef?.type !== 'career_lab') {
+  fail('Career Lab must link the Career Lab context pack.');
+}
+const careerLabPack = validatePackRef(dataPackage.screens.careerLab.contextPackRef, 'Career Lab');
+if (dataPackage.screens.careerLab.sourcePayload !== 'career_lab_context_pack') {
+  fail('Career Lab must be sourced from the Career Lab context pack.');
+}
+if (dataPackage.screens.careerLab.careerPriorMatrixPath !== sourceInventory.predictiveCareerPriorMatrix.path) {
+  fail('Career Lab must expose the predictive career prior matrix path.');
+}
+if (dataPackage.screens.careerLab.resultConversionRows !== expectedCareerResultConversionRows || dataPackage.screens.careerLab.resultConversion?.length !== expectedCareerResultConversionRows) {
+  fail(`Career Lab must expose all ${expectedCareerResultConversionRows} result-conversion rows, not only a preview sample.`);
+}
+if (
+  dataPackage.screens.careerLab.seriesSummary.length !== (careerLabPack.seriesSummary ?? []).length ||
+  dataPackage.screens.careerLab.resultConversionRows !== careerLabPack.resultConversionRows ||
+  dataPackage.screens.careerLab.resultConversion?.length !== (careerLabPack.resultConversion ?? []).length
+) {
+  fail('Career Lab screen payload does not mirror the Career Lab context pack.');
+}
+const resultConversionFields = new Set(Object.keys(dataPackage.screens.careerLab.resultConversion[0] ?? {}));
+for (const field of ['startPosition', 'finishPosition', 'finishPercentile', 'seriesName']) {
+  if (!resultConversionFields.has(field)) {
+    fail(`Career Lab result-conversion rows are missing ${field}`);
+  }
 }
 
 if (dataPackage.screens.sourceOps.validation.errorCount !== 0) {
@@ -193,6 +645,36 @@ if (dataPackage.screens.sourceOps.validation.errorCount !== 0) {
 
 if (!dataPackage.screens.sourceOps.sourceRefs.some((ref) => ref.path === 'public/data/history-bryce.json')) {
   fail('Source Ops historyStanding must include public/data/history-bryce.json sourceRef');
+}
+
+if (dataPackage.screens.sourceOps.gapBoundary?.path !== sourceInventory.contextEventGapBoundary.path) {
+  fail('Source Ops gapBoundary must point to the generated gap source-boundary artifact.');
+}
+if (dataPackage.screens.sourceOps.gapBoundary?.rowCount !== dataPackage.screens.sourceOps.ingestion.openGapCount) {
+  fail('Source Ops gapBoundary rowCount must match ingestion openGapCount.');
+}
+const ingestionSummaryForGaps = JSON.parse(fs.readFileSync(path.join(repoRoot, sourceInventory.ingestionSummary.path), 'utf8'));
+const expectedGapById = new Map((ingestionSummaryForGaps.openGaps ?? []).map((gap) => [gap.id, gap]));
+const gapBoundaryRows = dataPackage.screens.sourceOps.gapBoundary?.rows ?? [];
+const observedGapIds = new Set(gapBoundaryRows.map((row) => row.gapId));
+if (observedGapIds.size !== expectedGapById.size) {
+  fail('Source Ops gapBoundary must expose each current open gap exactly once.');
+}
+for (const [gapId, expectedGap] of expectedGapById) {
+  const row = gapBoundaryRows.find((candidate) => candidate.gapId === gapId);
+  if (!row) {
+    fail(`Source Ops gapBoundary missing open gap ${gapId}.`);
+  }
+  if (row.sourceHash !== dataPackage.sourceHash) {
+    fail(`Source Ops gapBoundary row ${gapId} sourceHash does not match UI package sourceHash.`);
+  }
+  if (row.description !== expectedGap.description) {
+    fail(`Source Ops gapBoundary row ${gapId} description does not match ingestion summary.`);
+  }
+}
+
+if (dataPackage.screens.sourceOps.predictiveRaceIntelligence?.contextPackManifestPath !== sourceInventory.predictiveContextPackManifest.path) {
+  fail('Source Ops must expose predictive race-intelligence context-pack manifest path.');
 }
 
 if (!(dataPackage.uiReadyArtifacts?.missingBackendContracts ?? []).some((contract) => /Runtime live-readiness hardening proof/i.test(contract))) {
@@ -211,7 +693,8 @@ console.log(
       roadAmericaEvents: dataPackage.screens.roadAmericaPrep.events.length,
       liveFixtures: dataPackage.screens.liveCompanionFixtures.fixtures.length,
       debriefSeeds: dataPackage.screens.raceDebrief.featuredDebriefs.length,
-      careerSeries: dataPackage.screens.careerLab.seriesSummary.length
+      careerSeries: dataPackage.screens.careerLab.seriesSummary.length,
+      contextPacks: predictive.contextPackCounts
     },
     null,
     2

@@ -1,0 +1,86 @@
+{
+  "caveats": [
+    "Live context packs describe readiness and proof gates; they do not replace runtime APIs.",
+    "Local replay evidence is runtime-only and intentionally excluded from static context-pack hashing."
+  ],
+  "currentLocalEvidence": {
+    "policy": "Ignored local live archives and poller snapshots are intentionally excluded from static analytics artifacts.",
+    "pressureCaveat": "Cold/wrong-series proof is not green-flag INDY NXT proof.",
+    "runtimeEndpoints": [
+      "/api/readiness",
+      "/api/replay/bryce",
+      "/api/sources"
+    ],
+    "state": "not_embedded_in_static_context_pack"
+  },
+  "featureFlags": {
+    "livePov": false,
+    "movingDotMap": false,
+    "officialWeather": false,
+    "overtakeStrategy": false,
+    "teamRadioAudio": false,
+    "tireStrategy": false
+  },
+  "generatedAt": "2026-06-18T17:52:08Z",
+  "id": "live_race_day_context",
+  "replayQuality": {
+    "archiveState": "runtime_only",
+    "staticPackPolicy": "Use /api/replay/bryce and /api/readiness for live replay evidence; do not bake ignored local archives into generated analytics packages."
+  },
+  "runtimeBoundary": [
+    "/api/readiness",
+    "/api/session",
+    "/api/timing",
+    "/api/bryce",
+    "/api/weather/live",
+    "/api/weather/upcoming",
+    "/api/replay/bryce",
+    "/api/sources",
+    "/api/history/bryce?compact=1"
+  ],
+  "schemaVersion": "brycecast.liveRaceDayContextPack.v1",
+  "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+  "sourceRefs": [
+    {
+      "bytes": 22303,
+      "path": "docs/LIVE_RACE_DAY_PRODUCT_CONTRACT.md",
+      "role": "live product contract",
+      "sha256": "569bf18e1aae13d9f43aff10291509912c03e1ad1bbb0d9e53325bb4ff26e3ae"
+    },
+    {
+      "bytes": 72463,
+      "path": "scripts/api-server.mjs",
+      "role": "runtime API",
+      "sha256": "d639efc01d001834524dd0529206b8af987f8458cd0b79cec0e31750152be9b7"
+    },
+    {
+      "bytes": 4250,
+      "path": "scripts/live-source-endpoints.mjs",
+      "role": "source map",
+      "sha256": "d90c5eafe75b041d824212e53c70dd48d95e73a10ea02cf7da8e14f738133993"
+    }
+  ],
+  "type": "live_race_day",
+  "validationGates": [
+    {
+      "id": "active_indy_nxt_rehearsal",
+      "requirement": "20 minutes at 1-second polling during active INDY NXT running.",
+      "status": "blocked_by_live_proof"
+    },
+    {
+      "id": "fresh_bryce_identity",
+      "requirement": "INDY NXT heartbeat plus car 9 and DriverID 2143 or exact Bryce Aron.",
+      "status": "blocked_by_live_proof"
+    },
+    {
+      "id": "replay_trend_ready",
+      "requirement": "Archive has enough live samples, changing payloads, and chronological rows.",
+      "status": "blocked_by_live_proof"
+    },
+    {
+      "id": "points_reconciliation",
+      "requirement": "Race Control running points reconcile to official result after publish.",
+      "status": "blocked_by_live_proof"
+    }
+  ]
+}

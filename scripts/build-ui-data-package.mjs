@@ -1,13 +1,16 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
+import { execSync, spawnSync } from 'node:child_process';
 
 import { buildPointsProjectionState } from './live-points-state.mjs';
+import { analyticsPython, runPredictiveRaceIntelligence } from './run-predictive-race-intelligence.mjs';
 
 const repoRoot = process.cwd();
 const outputPath = path.join(repoRoot, 'analysis/ui-data-package/ui-data-package.json');
 
 const sources = {
+  canonicalDataset: 'data/career/career.dataset.json',
   manifest: 'analysis/ui-contract/ui-metric-manifest.json',
   uiReadyArtifacts: 'analysis/ui-ready-artifacts.json',
   validationReport: 'data/career/reports/validation-report.json',
@@ -16,14 +19,31 @@ const sources = {
   historyBryce: 'public/data/history-bryce.json',
   futureWeekendPrep: 'analysis/indy-nxt-discovery/output/deep_dive/tables/future_weekend_prep_inputs.csv',
   raceDebriefScores: 'analysis/indy-nxt-discovery/output/deep_dive/tables/race_debrief_scores.csv',
+  indyNxtLapTimeline: 'analysis/indy-nxt-discovery/output/tables/indy_nxt_lap_timeline.csv',
   fullFieldLapDynamicsByRace: 'analysis/indy-nxt-discovery/output/deep_dive/tables/full_field_lap_dynamics_by_race.csv',
   incidentPenaltyContext: 'analysis/indy-nxt-discovery/output/deep_dive/tables/incident_penalty_context.csv',
   teamContextByRace: 'analysis/indy-nxt-discovery/output/deep_dive/tables/team_context_by_race.csv',
   championshipProgression: 'analysis/indy-nxt-discovery/output/deep_dive/tables/championship_progression.csv',
   sourceFamilyAudit: 'analysis/indy-nxt-discovery/output/deep_dive/tables/indy_nxt_source_family_audit.csv',
+  contextEventGapBoundary: 'analysis/context-event-narrative-layer/output/gap_source_boundary_context.csv',
+  prepSessionSignals: 'analysis/indy-nxt-discovery/output/deep_dive/tables/prep_session_signals.csv',
+  fieldStrengthByRace: 'analysis/indy-nxt-discovery/output/deep_dive/tables/field_strength_by_race.csv',
+  sectionResultsDeepByRace: 'analysis/indy-nxt-discovery/output/deep_dive/tables/section_results_deep_by_race.csv',
+  leaderLapContext: 'analysis/indy-nxt-discovery/output/deep_dive/tables/leader_lap_context.csv',
   careerSeriesSummary: 'analysis/career-parity/output/tables/career_series_result_summary.csv',
   careerMetricParity: 'analysis/career-parity/output/tables/career_metric_family_parity.csv',
-  careerResultConversion: 'analysis/career-parity/output/tables/career_result_conversion.csv'
+  careerResultConversion: 'analysis/career-parity/output/tables/career_result_conversion.csv',
+  predictiveSummary: 'analysis/predictive-race-intelligence/output/summary.json',
+  predictiveInventory: 'analysis/predictive-race-intelligence/output/analytics_inventory_registry.json',
+  predictiveModelScorecard: 'analysis/predictive-race-intelligence/output/model_scorecard.json',
+  predictiveContextPackManifest: 'analysis/predictive-race-intelligence/output/context-packs/context-pack-manifest.json',
+  predictiveCareerPriorMatrix: 'analysis/predictive-race-intelligence/output/career_prior_matrix.csv',
+  predictiveIndyFeatureMatrix: 'analysis/predictive-race-intelligence/output/indy_nxt_feature_matrix.csv',
+  predictiveBuilderScript: 'analysis/predictive-race-intelligence/scripts/build_predictive_race_intelligence.py',
+  predictiveValidatorScript: 'analysis/predictive-race-intelligence/scripts/validate_predictive_race_intelligence.py',
+  predictiveRunnerScript: 'scripts/run-predictive-race-intelligence.mjs',
+  uiDataPackageBuilderScript: 'scripts/build-ui-data-package.mjs',
+  uiDataPackageValidatorScript: 'scripts/validate-ui-data-package.mjs'
 };
 
 const requiredSourceKeys = Object.keys(sources);
@@ -77,16 +97,34 @@ const parseCsv = (text) => {
 
 const readCsv = (relativePath) => parseCsv(readText(relativePath));
 
+const runContextEventNarrativeLayer = () => {
+  const python = analyticsPython();
+  for (const script of [
+    'analysis/context-event-narrative-layer/scripts/build_context_event_narrative_layer.py',
+    'analysis/context-event-narrative-layer/scripts/validate_context_event_narrative_layer.py'
+  ]) {
+    const result = spawnSync(python, [script], { cwd: repoRoot, stdio: 'inherit' });
+    if (result.error) {
+      throw new Error(`Failed to run ${script} with ${python}: ${result.error.message}`);
+    }
+    if (result.status !== 0) {
+      throw new Error(`${script} exited ${result.status ?? 'without a status'} using ${python}`);
+    }
+  }
+};
+
+const gitHead = () => {
+  try {
+    return execSync('git rev-parse --short HEAD', { cwd: repoRoot, encoding: 'utf8' }).trim();
+  } catch {
+    return null;
+  }
+};
+
 const numberOrNull = (value) => {
   if (value === null || value === undefined || value === '') return null;
   const parsed = Number(value);
   return Number.isFinite(parsed) ? parsed : null;
-};
-
-const textOrNull = (value) => {
-  if (value === null || value === undefined) return null;
-  const trimmed = String(value).trim();
-  return trimmed ? trimmed : null;
 };
 
 const percentOrNull = (value) => {
@@ -94,10 +132,45 @@ const percentOrNull = (value) => {
   return parsed === null ? null : Math.round(parsed * 1000) / 10;
 };
 
-const byNumericDesc = (field) => (left, right) => (numberOrNull(right[field]) ?? -Infinity) - (numberOrNull(left[field]) ?? -Infinity);
-const byNumericAsc = (field) => (left, right) => (numberOrNull(left[field]) ?? Infinity) - (numberOrNull(right[field]) ?? Infinity);
+const dateMs = (value) => {
+  const parsed = Date.parse(String(value ?? ''));
+  return Number.isFinite(parsed) ? parsed : 0;
+};
 
 const sourceRef = (key, note) => ({ key, path: sources[key], note });
+
+const sourceKeyFromPath = (relativePath) =>
+  String(relativePath ?? 'source')
+    .replace(/[^a-zA-Z0-9]+/g, '_')
+    .replace(/^_+|_+$/g, '')
+    .slice(0, 80) || 'source';
+
+const uiSourceRefFromContextPackRef = (ref) => ({
+  key: `context-pack:${sourceKeyFromPath(ref.path)}`,
+  path: ref.path,
+  note: ref.role ?? ref.note ?? 'Context-pack source.',
+  bytes: ref.bytes,
+  sha256: ref.sha256
+});
+
+const incidentPenaltyFromContextPack = (pack) => {
+  const context = pack.incidentPenalty ?? pack.raceContext;
+  if (!context) return null;
+  return {
+    sourceState: pack.sourceState ?? null,
+    sessionIncidentCount: numberOrNull(context.sessionIncidentCount),
+    sessionPenaltyCount: numberOrNull(context.sessionPenaltyCount),
+    bryceIncidentCount: numberOrNull(context.bryceIncidentCount),
+    brycePenaltyCount: numberOrNull(context.brycePenaltyCount),
+    bryceIncidentDescriptions: context.bryceIncidentDescriptions ?? null,
+    brycePenaltyDescriptions: context.brycePenaltyDescriptions ?? null,
+    leaderEntropy: numberOrNull(context.leaderEntropy),
+    topLeader: context.topLeader ?? null,
+    topLeaderShare: percentOrNull(context.topLeaderShare),
+    weatherContext: context.weatherContext ?? null,
+    policy: 'source_bounded_context_pack'
+  };
+};
 
 const coveredByUiFixtures = (contract) => /live-readiness hardening fixtures/i.test(contract);
 const uiFixtureCoverageText = (contract) => contract.replace(/^Remaining\s+/i, 'Static UI fixture coverage: ');
@@ -114,81 +187,78 @@ const summarizeArtifact = (relativePath) => {
   };
 };
 
-const rowForSession = (rows, sessionId) => rows.find((row) => row.sessionId === sessionId) ?? null;
-
-const debriefCard = ({ debrief, lapDynamics, incidents, team, championship, label }) => ({
+const debriefCardFromContextPack = ({ pack, packRef, label }) => ({
   label,
-  sessionId: debrief.sessionId,
-  raceLabel: debrief.raceLabel,
-  seasonYear: numberOrNull(debrief.seasonYear),
-  track: {
-    name: debrief.trackName,
-    type: debrief.trackType
-  },
-  teamName: debrief.teamName,
+  sourcePayload: 'race_debrief_context_pack',
+  contextPackRef: packRef,
+  sessionId: pack.sessionId,
+  raceLabel: pack.raceLabel,
+  seasonYear: numberOrNull(pack.seasonYear),
+  track: pack.track ?? null,
+  teamName: pack.outcome?.teamName ?? pack.teamContext?.teamName ?? null,
   result: {
-    startPosition: numberOrNull(debrief.startPosition),
-    finishPosition: numberOrNull(debrief.finishPosition),
-    positionGain: numberOrNull(debrief.positionGain),
-    finishPercentile: percentOrNull(debrief.finishPercentile),
-    points: numberOrNull(championship?.bryceRacePoints),
-    cumulativePoints: numberOrNull(championship?.bryceCumulativePoints),
-    standingRank: numberOrNull(championship?.bryceStandingRank)
+    startPosition: numberOrNull(pack.outcome?.startPosition),
+    finishPosition: numberOrNull(pack.outcome?.finishPosition),
+    positionGain: numberOrNull(pack.outcome?.positionGain),
+    finishPercentile: percentOrNull(pack.outcome?.finishPercentile),
+    points: numberOrNull(pack.outcome?.points),
+    cumulativePoints: numberOrNull(pack.outcome?.cumulativePoints),
+    standingRank: numberOrNull(pack.outcome?.standingRank)
   },
-  analysis: {
-    archetype: debrief.archetype,
-    paceIndex: percentOrNull(debrief.paceIndex),
-    conversionPercentileDelta: percentOrNull(debrief.conversionPercentileDelta),
-    weatherContext: debrief.weatherContext,
-    chaosExposureIndex: percentOrNull(debrief.chaosExposureIndex)
-  },
-  lapStory: lapDynamics
+  analysis: pack.conversion
     ? {
-        sourceState: lapDynamics.sourceState,
-        brycePrimaryStory: lapDynamics.brycePrimaryStory,
-        bryceNetLapChartGain: numberOrNull(lapDynamics.bryceNetLapChartGain),
-        bryceBestRunningPosition: numberOrNull(lapDynamics.bryceBestRunningPosition),
-        bryceWorstRunningPosition: numberOrNull(lapDynamics.bryceWorstRunningPosition),
-        fieldLapDrivers: numberOrNull(lapDynamics.fieldLapDrivers),
-        topLapChartMover: lapDynamics.topLapChartMover,
-        topLapChartGain: numberOrNull(lapDynamics.topLapChartGain),
-        mostVolatileDriver: lapDynamics.mostVolatileDriver,
-        mostVolatileScore: numberOrNull(lapDynamics.mostVolatileScore)
+        archetype: pack.conversion.archetype ?? null,
+        bestLapRank: numberOrNull(pack.conversion.bestLapRank),
+        conversionPercentileDelta: percentOrNull(pack.conversion.conversionPercentileDelta),
+        labelReviewState: pack.conversion.labelReviewState ?? null,
+        paceIndex: percentOrNull(pack.conversion.paceIndex)
       }
     : null,
-  incidentPenalty: incidents
+  lapStory: pack.lapStory ?? null,
+  incidentPenalty: incidentPenaltyFromContextPack(pack),
+  raceContext: pack.raceContext ?? null,
+  teamContext: pack.teamContext ?? null,
+  sectionSignal: pack.sectionSignal ?? null,
+  chartSpecs: pack.chartSpecs ?? [],
+  sourceState: pack.sourceState,
+  confidence: pack.confidence,
+  caveat: (pack.caveats ?? []).join(' ') || 'Race debrief context pack has no public-copy caveat.',
+  sourceRefs: (pack.sourceRefs ?? []).map(uiSourceRefFromContextPackRef)
+});
+
+const eventFromUpcomingContextPack = ({ pack, packRef }) => ({
+  sourcePayload: 'upcoming_event_context_pack',
+  contextPackRef: packRef,
+  eventId: pack.eventId,
+  eventName: pack.eventName,
+  eventStartDate: pack.eventStartDate,
+  trackName: pack.track?.name ?? null,
+  trackType: pack.track?.type ?? null,
+  trackLengthMi: numberOrNull(pack.track?.lengthMi),
+  cornerCount: numberOrNull(pack.track?.cornerCount),
+  sameTrack: pack.sameTrackHistory
     ? {
-        sourceState: incidents.sourceState,
-        sessionIncidentCount: numberOrNull(incidents.sessionIncidentCount),
-        sessionPenaltyCount: numberOrNull(incidents.sessionPenaltyCount),
-        bryceIncidentCount: numberOrNull(incidents.bryceIncidentCount),
-        brycePenaltyCount: numberOrNull(incidents.brycePenaltyCount),
-        bryceIncidentDescriptions: textOrNull(incidents.bryceIncidentDescriptions),
-        brycePenaltyDescriptions: textOrNull(incidents.brycePenaltyDescriptions)
+        raceCount: numberOrNull(pack.sameTrackHistory.raceCount),
+        avgFinish: numberOrNull(pack.sameTrackHistory.avgFinish),
+        avgGain: numberOrNull(pack.sameTrackHistory.avgGain),
+        top10RatePct: percentOrNull(pack.sameTrackHistory.top10Rate)
       }
     : null,
-  teamContext: team
+  trackTypeHistory: pack.trackTypeHistory
     ? {
-        sourceState: team.sourceState,
-        teamName: team.teamName,
-        teamCars: numberOrNull(team.teamCars),
-        teammates: textOrNull(team.teammates),
-        teamAverageFinish: numberOrNull(team.teamAverageFinish),
-        bryceVsTeamAvgFinish: numberOrNull(team.bryceVsTeamAvgFinish),
-        bryceTeamFinishRank: numberOrNull(team.bryceTeamFinishRank),
-        caveat: team.statusCaveat
+        raceCount: numberOrNull(pack.trackTypeHistory.raceCount),
+        avgFinish: numberOrNull(pack.trackTypeHistory.avgFinish),
+        avgGain: numberOrNull(pack.trackTypeHistory.avgGain),
+        finishPercentileMedian: numberOrNull(pack.trackTypeHistory.finishPercentileMedian),
+        top10RatePct: percentOrNull(pack.trackTypeHistory.top10Rate)
       }
     : null,
-  sourceState: debrief.sourceState,
-  confidence: debrief.confidence,
-  caveat: debrief.caveat,
-  sourceRefs: [
-    sourceRef('raceDebriefScores', 'Derived race debrief score row.'),
-    sourceRef('fullFieldLapDynamicsByRace', 'Official lap-chart-derived race-shape row.'),
-    sourceRef('incidentPenaltyContext', 'Official incident/penalty context where imported.'),
-    sourceRef('teamContextByRace', 'Descriptive team context only.'),
-    sourceRef('championshipProgression', 'Official imported points progression.')
-  ]
+  predictionBand: pack.predictionBand ?? null,
+  top10Path: pack.top10Path ?? [],
+  analogRaces: pack.analogRaces ?? [],
+  chartSpecs: pack.chartSpecs ?? [],
+  weatherState: pack.weatherState ?? null,
+  sourceState: pack.sameTrackHistory?.sourceState ?? 'predictive_context_pack'
 });
 
 const fixtureCheckedAt = 'fixture';
@@ -557,58 +627,57 @@ const buildPackage = () => {
   const ingestionSummary = readJson(sources.ingestionSummary);
   const coverageMatrix = readJson(sources.coverageMatrix);
   const history = readJson(sources.historyBryce);
-  const futureWeekendPrep = readCsv(sources.futureWeekendPrep);
-  const raceDebriefs = readCsv(sources.raceDebriefScores);
-  const lapDynamics = readCsv(sources.fullFieldLapDynamicsByRace);
-  const incidents = readCsv(sources.incidentPenaltyContext);
-  const teams = readCsv(sources.teamContextByRace);
-  const championship = readCsv(sources.championshipProgression);
   const sourceFamilyAudit = readCsv(sources.sourceFamilyAudit);
-  const careerSeriesSummary = readCsv(sources.careerSeriesSummary);
-  const careerMetricParity = readCsv(sources.careerMetricParity);
-  const careerResultConversion = readCsv(sources.careerResultConversion);
+  const contextEventGapBoundary = readCsv(sources.contextEventGapBoundary);
+  const predictiveSummary = readJson(sources.predictiveSummary);
+  const predictiveInventory = readJson(sources.predictiveInventory);
+  const predictiveModelScorecard = readJson(sources.predictiveModelScorecard);
+  const predictiveContextPackManifest = readJson(sources.predictiveContextPackManifest);
+  const predictiveChartRefs = (predictiveSummary.charts ?? []).map((chartPath) => summarizeArtifact(chartPath));
 
-  const roadAmericaEvents = futureWeekendPrep
-    .filter((row) => row.trackName === 'Road America')
-    .map((row) => ({
-      eventId: row.eventId,
-      eventName: row.eventName,
-      eventStartDate: row.eventStartDate,
-      trackName: row.trackName,
-      trackType: row.trackType,
-      trackLengthMi: numberOrNull(row.trackLengthMi),
-      cornerCount: numberOrNull(row.cornerCount),
-      sameTrack: {
-        raceCount: numberOrNull(row.bryceIndyNxtRacesAtTrack),
-        avgFinish: numberOrNull(row.sameTrackAvgFinish),
-        avgGain: numberOrNull(row.sameTrackAvgGain),
-        top10RatePct: percentOrNull(row.sameTrackTop10Rate)
-      },
-      trackTypeHistory: {
-        avgFinish: numberOrNull(row.trackTypeAvgFinish),
-        avgGain: numberOrNull(row.trackTypeAvgGain),
-        top10RatePct: percentOrNull(row.trackTypeTop10Rate)
-      },
-      weatherState: row.weatherState,
-      sourceState: row.sourceState
-    }));
+  const contextPackRefs = predictiveContextPackManifest.packs.map((pack) => ({
+    ...pack,
+    ...summarizeArtifact(pack.path)
+  }));
+  const packsByType = (type) => contextPackRefs.filter((pack) => pack.type === type);
+  const contextPackPayloads = new Map(contextPackRefs.map((packRef) => [packRef.path, readJson(packRef.path)]));
+  const payloadForPack = (packRef, label) => {
+    const payload = contextPackPayloads.get(packRef.path);
+    if (!payload) throw new Error(`Missing payload for ${label}: ${packRef.path}`);
+    return payload;
+  };
+  const packPairsByType = (type) => packsByType(type).map((packRef) => ({ packRef, pack: payloadForPack(packRef, packRef.id) }));
+  const upcomingPackPairs = packPairsByType('upcoming_event');
+  const raceDebriefPackPairs = packPairsByType('race_debrief');
+  const careerLabContextPack = packsByType('career_lab')[0] ?? null;
+  const liveRaceDayContextPack = packsByType('live_race_day')[0] ?? null;
+  const careerLabPayload = careerLabContextPack ? payloadForPack(careerLabContextPack, 'career_lab') : null;
+  if (!careerLabPayload) {
+    throw new Error('Missing Career Lab context pack payload');
+  }
 
-  const latestChampionshipRow = championship.slice().sort((left, right) => (numberOrNull(right.seasonYear) ?? 0) - (numberOrNull(left.seasonYear) ?? 0) || (numberOrNull(right.roundIndex) ?? 0) - (numberOrNull(left.roundIndex) ?? 0))[0];
-  const latestDebrief = rowForSession(raceDebriefs, latestChampionshipRow?.sessionId) ?? raceDebriefs.at(-1);
-  const bestDebrief = raceDebriefs.slice().sort(byNumericDesc('finishPercentile'))[0];
-  const worstDebrief = raceDebriefs.slice().sort(byNumericAsc('finishPercentile'))[0];
-  const debriefRows = [latestDebrief, bestDebrief, worstDebrief].map((debrief, index) =>
-    debriefCard({
-      debrief,
-      lapDynamics: rowForSession(lapDynamics, debrief.sessionId),
-      incidents: rowForSession(incidents, debrief.sessionId),
-      team: rowForSession(teams, debrief.sessionId),
-      championship: rowForSession(championship, debrief.sessionId),
-      label: ['latestCompleted', 'bestFinishPercentile', 'lowestFinishPercentile'][index]
-    })
-  );
+  const roadAmericaPackPairs = upcomingPackPairs
+    .filter(({ pack }) => pack.track?.name === 'Road America')
+    .sort((left, right) => dateMs(left.pack.eventStartDate) - dateMs(right.pack.eventStartDate));
+  const roadAmericaEvents = roadAmericaPackPairs.map(eventFromUpcomingContextPack);
+  const roadAmericaContextPackRefs = roadAmericaPackPairs.map(({ packRef }) => packRef);
 
-  const parityBySeries = careerMetricParity.reduce((acc, row) => {
+  const latestDebrief = raceDebriefPackPairs
+    .slice()
+    .sort(
+      (left, right) =>
+        (numberOrNull(right.pack.seasonYear) ?? 0) - (numberOrNull(left.pack.seasonYear) ?? 0) ||
+        (numberOrNull(right.pack.raceOrder?.roundIndex) ?? 0) - (numberOrNull(left.pack.raceOrder?.roundIndex) ?? 0)
+    )[0];
+  const bestDebrief = raceDebriefPackPairs.slice().sort((left, right) => (numberOrNull(right.pack.outcome?.finishPercentile) ?? -Infinity) - (numberOrNull(left.pack.outcome?.finishPercentile) ?? -Infinity))[0];
+  const worstDebrief = raceDebriefPackPairs.slice().sort((left, right) => (numberOrNull(left.pack.outcome?.finishPercentile) ?? Infinity) - (numberOrNull(right.pack.outcome?.finishPercentile) ?? Infinity))[0];
+  const debriefRows = [
+    { label: 'latestCompleted', pair: latestDebrief },
+    { label: 'bestFinishPercentile', pair: bestDebrief },
+    { label: 'lowestFinishPercentile', pair: worstDebrief }
+  ].map(({ label, pair }) => debriefCardFromContextPack({ label, packRef: pair.packRef, pack: pair.pack }));
+
+  const parityBySeries = (careerLabPayload.metricFamilyParity ?? []).reduce((acc, row) => {
     acc[row.seriesName] ??= [];
     acc[row.seriesName].push({
       metricFamily: row.metricFamily,
@@ -626,30 +695,65 @@ const buildPackage = () => {
   return {
     schemaVersion: 'brycecast.uiDataPackage.v1',
     generatedAt: new Date().toISOString(),
-    baselineCommit: manifest.baselineCommit,
+    sourceHash: sourceInventory.canonicalDataset.sha256,
+    asOfDate: predictiveSummary.asOfDate,
+    baselineCommit: gitHead(),
+    metricManifestBaselineCommit: manifest.baselineCommit,
+    predictiveRaceIntelligenceRepoHead: predictiveSummary.repoHead,
     sourceInventory,
     packageRules: [
       'This package hydrates UI-ready data for design/build work; it does not replace canonical career ingestion or live API routes.',
       'Live weather, timing, and points remain runtime API data. Static package values are historical/prep context and fixtures.',
       'Every screen object includes source refs and caveat text for source-drawer wiring.',
+      'Full analytics depth lives in predictive race-intelligence context packs; screen summaries should link to those packs instead of re-parsing raw CSVs.',
       'Visual design may change presentation, but should not change these source, confidence, or availability states in component code.'
     ],
+    predictiveRaceIntelligence: {
+      schemaVersion: predictiveSummary.schemaVersion,
+      generatedAt: predictiveSummary.generatedAt,
+      asOfDate: predictiveSummary.asOfDate,
+      inventoryItems: predictiveSummary.inventoryItems,
+      careerPriorRows: predictiveSummary.careerPriorRows,
+      indyNxtRaceRows: predictiveSummary.indyNxtRaceRows,
+      modelRows: predictiveSummary.modelRows,
+      contextPackCounts: {
+        upcomingEvent: predictiveSummary.upcomingEventPacks,
+        raceDebrief: predictiveSummary.raceDebriefPacks,
+        careerLab: predictiveSummary.careerLabPacks,
+        liveRaceDay: predictiveSummary.liveRaceDayPacks
+      },
+      contextPackManifestPath: sources.predictiveContextPackManifest,
+      modelScorecardPath: sources.predictiveModelScorecard,
+      inventoryStatusCounts: predictiveInventory.statusCounts,
+      modelPromotionGates: predictiveModelScorecard.promotionGates,
+      validationGates: predictiveSummary.validationGates,
+      chartRefs: predictiveChartRefs,
+      contextPackRefs,
+      sourceRefs: [
+        sourceRef('predictiveSummary', 'Predictive race-intelligence validation summary.'),
+        sourceRef('predictiveInventory', 'Inventory of productized, context-ready, analyst-only, deferred, and blocked analytics.'),
+        sourceRef('predictiveModelScorecard', 'Predictive feasibility and backtest scorecard.'),
+        sourceRef('predictiveContextPackManifest', 'Manifest for upcoming-event, race-debrief, Career Lab, and live race-day context packs.')
+      ]
+    },
     screens: {
       roadAmericaPrep: {
         title: 'Road America Race Weekend Prep',
         readiness: 'partial',
         events: roadAmericaEvents,
+        contextPackRefs: roadAmericaContextPackRefs,
         runtimeApiRequirements: ['/api/readiness', '/api/weather/upcoming', '/api/weather/live?trackId=track_road_america'],
         caveats: [
           'Schedule feed timestamps can lack explicit timezone offsets; polished countdowns need runtime normalization.',
           'Weather is NWS current/forecast context, not official INDY NXT session weather or track temperature.'
         ],
-        sourceRefs: [sourceRef('futureWeekendPrep', 'Road America prep inputs from INDY NXT analytics.'), sourceRef('manifest', 'UI metric contract and caveats.')]
+        sourceRefs: [sourceRef('futureWeekendPrep', 'Road America prep inputs from INDY NXT analytics.'), sourceRef('predictiveContextPackManifest', 'Full Road America predictive race-intelligence pack refs.'), sourceRef('manifest', 'UI metric contract and caveats.')]
       },
       liveCompanionFixtures: {
         title: 'Live Companion Fixture States',
         requiredStates: ['wrong_series', 'pre_session', 'ready', 'degraded', 'stale', 'blocked'],
         requiredVariants: ['base', 'no_bryce_archive_ready', 'no_bryce_archive_missing', 'replay_empty', 'replay_repeated_cold'],
+        contextPackRef: liveRaceDayContextPack,
         fixtures: [
           buildLiveFixture({ state: 'wrong_series', severity: 'red', reason: 'Current Race Control feed is not Bryce INDY NXT.', history }),
           buildLiveFixture({ state: 'pre_session', severity: 'amber', reason: 'INDY NXT context exists, but green/yellow live Bryce timing is not active.', history }),
@@ -666,12 +770,17 @@ const buildPackage = () => {
           'These are synthetic readiness fixtures for design and QA. Runtime truth still comes from /api/readiness.',
           'A green fixture is not proof that live INDY NXT session polling has been rehearsed under race conditions.'
         ],
-        sourceRefs: [sourceRef('manifest', 'Live companion metric requirements.'), { key: 'api-readiness', path: '/api/readiness', note: 'Runtime source for live product gate.' }]
+        sourceRefs: [sourceRef('manifest', 'Live companion metric requirements.'), sourceRef('predictiveContextPackManifest', 'Live race-day context pack and proof gates.'), { key: 'api-readiness', path: '/api/readiness', note: 'Runtime source for live product gate.' }]
       },
       raceDebrief: {
         title: 'INDY NXT Race Debrief Seeds',
         readiness: 'available',
         featuredDebriefs: debriefRows,
+        contextPackCoverage: {
+          raceDebriefPacks: predictiveSummary.raceDebriefPacks,
+          manifestPath: sources.predictiveContextPackManifest
+        },
+        contextPackRefs: packsByType('race_debrief'),
         chartFamilies: [
           'outcome KPI strip',
           'qualifying-to-finish slope',
@@ -681,12 +790,15 @@ const buildPackage = () => {
           'source drawer'
         ],
         caveats: ['Derived archetype labels are review aids until approved for public UI copy.'],
-        sourceRefs: [sourceRef('raceDebriefScores', 'Race debrief seed rows.'), sourceRef('fullFieldLapDynamicsByRace', 'Lap position story rows.')]
+        sourceRefs: [sourceRef('raceDebriefScores', 'Race debrief seed rows.'), sourceRef('fullFieldLapDynamicsByRace', 'Lap position story rows.'), sourceRef('predictiveContextPackManifest', 'All 36 race-debrief context pack refs.')]
       },
       careerLab: {
         title: 'Career Analytics Lab',
         readiness: 'available',
-        seriesSummary: careerSeriesSummary.map((row) => ({
+        sourcePayload: 'career_lab_context_pack',
+        contextPackRef: careerLabContextPack,
+        careerPriorMatrixPath: sources.predictiveCareerPriorMatrix,
+        seriesSummary: (careerLabPayload.seriesSummary ?? []).map((row) => ({
           seriesId: row.seriesId,
           seriesName: row.seriesName,
           raceRows: numberOrNull(row.raceRows),
@@ -699,15 +811,27 @@ const buildPackage = () => {
           issueLikeStatusRatePct: percentOrNull(row.issueLikeStatusRate)
         })),
         parityBySeries,
-        resultConversionSample: careerResultConversion.slice(0, 25),
+        sourceFamilyRules: careerLabPayload.sourceFamilyRules ?? [],
+        topCareerStories: careerLabPayload.topCareerStories ?? [],
+        chartSpecs: careerLabPayload.chartSpecs ?? [],
+        resultConversionRows: careerLabPayload.resultConversionRows,
+        resultConversion: careerLabPayload.resultConversion ?? [],
+        resultConversionSample: (careerLabPayload.resultConversion ?? []).slice(0, 25),
         caveats: [
           'Career analytics must use metric-family parity states; older series do not expose INDY NXT-grade depth.',
-          'Result-conversion samples are source-bounded historical context, not a universal driver-strength model.'
+          'Result-conversion rows are source-bounded historical context, not a universal driver-strength model.'
         ],
-        sourceRefs: [sourceRef('careerSeriesSummary', 'Series-level performance rows.'), sourceRef('careerMetricParity', 'Metric parity/source-boundary rows.'), sourceRef('careerResultConversion', 'Cross-series result conversion rows.')]
+        sourceRefs: [sourceRef('careerSeriesSummary', 'Series-level performance rows.'), sourceRef('careerMetricParity', 'Metric parity/source-boundary rows.'), sourceRef('careerResultConversion', 'Cross-series result conversion rows.'), sourceRef('predictiveCareerPriorMatrix', 'Parity-aware career prior matrix.')]
       },
       sourceOps: {
         title: 'Source Ops Baseline',
+        predictiveRaceIntelligence: {
+          summaryPath: sources.predictiveSummary,
+          inventoryPath: sources.predictiveInventory,
+          modelScorecardPath: sources.predictiveModelScorecard,
+          contextPackManifestPath: sources.predictiveContextPackManifest,
+          validationGates: predictiveSummary.validationGates
+        },
         validation: {
           ok: validationReport.ok,
           errorCount: validationReport.errorCount,
@@ -719,6 +843,15 @@ const buildPackage = () => {
           openGapCount: ingestionSummary.openGaps?.length ?? 0,
           priorityGaps: ingestionSummary.priorityGaps ?? []
         },
+        gapBoundary: {
+          path: sources.contextEventGapBoundary,
+          rowCount: contextEventGapBoundary.length,
+          statusCounts: contextEventGapBoundary.reduce((acc, row) => {
+            acc[row.status] = (acc[row.status] ?? 0) + 1;
+            return acc;
+          }, {}),
+          rows: contextEventGapBoundary
+        },
         coverage: {
           totals: coverageMatrix.totals ?? null,
           indyNxt: coverageMatrix.series?.find?.((series) => series.seriesId === 'series_indy_nxt') ?? null
@@ -729,7 +862,7 @@ const buildPackage = () => {
           'Source Ops is a secondary/admin surface; it should not become front-page product clutter.',
           'Validation warnings and preserved gaps are transparency states, not automatic UI blockers.'
         ],
-        sourceRefs: [sourceRef('validationReport', 'Canonical validation result.'), sourceRef('ingestionSummary', 'Canonical ingestion summary.'), sourceRef('coverageMatrix', 'Canonical coverage matrix.'), sourceRef('historyBryce', 'Compact Bryce history and standings baseline.'), sourceRef('sourceFamilyAudit', 'INDY NXT source family audit rows.')]
+        sourceRefs: [sourceRef('validationReport', 'Canonical validation result.'), sourceRef('ingestionSummary', 'Canonical ingestion summary.'), sourceRef('coverageMatrix', 'Canonical coverage matrix.'), sourceRef('historyBryce', 'Compact Bryce history and standings baseline.'), sourceRef('sourceFamilyAudit', 'INDY NXT source family audit rows.'), sourceRef('contextEventGapBoundary', 'Canonical gap source-boundary rows.'), sourceRef('predictiveSummary', 'Predictive race-intelligence artifact summary.')]
       }
     },
     uiReadyArtifacts: {
@@ -745,6 +878,8 @@ const buildPackage = () => {
 };
 
 fs.mkdirSync(path.dirname(outputPath), { recursive: true });
+runContextEventNarrativeLayer();
+runPredictiveRaceIntelligence();
 const dataPackage = buildPackage();
 fs.writeFileSync(outputPath, `${JSON.stringify(dataPackage, null, 2)}\n`);
 console.log(JSON.stringify({ ok: true, wrote: path.relative(repoRoot, outputPath), schemaVersion: dataPackage.schemaVersion }, null, 2));

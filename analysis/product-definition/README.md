@@ -2,6 +2,8 @@
 
 This directory is the analytics-first product definition handoff for BryceCast UI/design work. It does not implement frontend visuals and does not change ingestion data.
 
+Status after June 18: this packet remains useful background, but the active UI baseline has moved to the source-hash checked context-pack layer. Fresh UI agents should read `analysis/ui-blueprint/README.md`, `analysis/ui-data-package/ui-data-package.json`, and `analysis/predictive-race-intelligence/output/context-packs/context-pack-manifest.json` before relying on older worker notes in this directory.
+
 ## Contents
 
 - `PRODUCT_DEFINITION_PACKET.md`: the final source-backed product packet for screen states, metric menu, stakeholder jobs, visualization inventory, claim ladder, release cut, and unresolved product decisions.
@@ -12,12 +14,13 @@ This directory is the analytics-first product definition handoff for BryceCast U
 Use this precedence when a future UI/design agent sees conflicting facts:
 
 1. `analysis/ui-data-package/ui-data-package.json`
-2. Generated career reports: `data/career/reports/validation-report.json`, `data/career/reports/ingestion-summary.json`, `data/career/reports/career-coverage-matrix.json`
-3. `analysis/ui-ready-artifacts.json`
-4. Generated machine-readable contracts: `analysis/ui-contract/ui-metric-manifest.json`, `analysis/live-contract/live-api-contract.json`
-5. Reader-facing docs: `docs/UI_ANALYTICS_PRODUCT_CONTRACT.md`, `docs/LIVE_RACE_DAY_PRODUCT_CONTRACT.md`, `analysis/ANALYTICS_UI_ARTIFACT_INDEX.md`
-6. Frontend TypeScript contracts under `src/data/`
-7. Prose summaries and chat context
+2. `analysis/predictive-race-intelligence/output/context-packs/context-pack-manifest.json` and the referenced context packs
+3. Generated career reports: `data/career/reports/validation-report.json`, `data/career/reports/ingestion-summary.json`, `data/career/reports/career-coverage-matrix.json`
+4. `analysis/ui-ready-artifacts.json`
+5. Generated machine-readable contracts: `analysis/ui-contract/ui-metric-manifest.json`, `analysis/live-contract/live-api-contract.json`
+6. Reader-facing docs: `docs/UI_ANALYTICS_PRODUCT_CONTRACT.md`, `docs/LIVE_RACE_DAY_PRODUCT_CONTRACT.md`, `analysis/ANALYTICS_UI_ARTIFACT_INDEX.md`
+7. Frontend TypeScript contracts under `src/data/`
+8. Prose summaries, worker notes, and chat context
 
 Generated artifacts and package fields win over prose docs. If a prose doc names a capability that the package/manifest does not formalize, record the mismatch and use the package/manifest state.
 

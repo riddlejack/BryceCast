@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="260" viewBox="0 0 980 260">
+<rect width="100%" height="100%" fill="#fbfaf7"/>
+<text x="28" y="30" font-family="Inter, Arial" font-size="19" font-weight="700" fill="#1f2933">Career Track-Type Priors</text>
+<text x="28" y="52" font-family="Inter, Arial" font-size="12" fill="#5d6875">Normalized finish percentile by track type.</text>
+<text x="28" y="91" font-family="Inter, Arial" font-size="12" fill="#39434d">oval (9)</text>
+<rect x="280" y="76" width="633.9" height="20" rx="3" fill="#2d6f8f" opacity="0.88"/>
+<text x="921.8842975206611" y="91" font-family="Inter, Arial" font-size="12" fill="#1f2933">0.590</text>
+<text x="28" y="125" font-family="Inter, Arial" font-size="12" fill="#39434d">road (121)</text>
+<rect x="280" y="110" width="650.0" height="20" rx="3" fill="#2d6f8f" opacity="0.88"/>
+<text x="938.0" y="125" font-family="Inter, Arial" font-size="12" fill="#1f2933">0.605</text>
+<text x="28" y="159" font-family="Inter, Arial" font-size="12" fill="#39434d">street (7)</text>
+<rect x="280" y="144" width="384.6" height="20" rx="3" fill="#2d6f8f" opacity="0.88"/>
+<text x="672.6280991735537" y="159" font-family="Inter, Arial" font-size="12" fill="#1f2933">0.358</text>
+</svg>

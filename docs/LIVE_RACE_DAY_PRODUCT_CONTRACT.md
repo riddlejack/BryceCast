@@ -1,12 +1,12 @@
 # BryceCast Live Race-Day Product Contract
 
-Generated: 2026-06-16
+Generated: 2026-06-18
 Lane: Live Race Contract And Points Projection
-Baseline: `5636bb6 Harden preserved career data gaps`
+Baseline: `ce904af`
 
 ## Decision
 
-BryceCast can start UI implementation after the backend exposes one product-level readiness wrapper over the existing live routes. The underlying data surface is already broad enough for v1 live timing, Bryce focus, source health, weather, replay, and a cautious points card. The missing piece is a stable UI contract that prevents the frontend from inferring race-day truth directly from raw endpoint reachability.
+BryceCast can start UI implementation against the readiness-wrapper contract and June 18 context packs, but it cannot claim production-live race-day proof until a real green/yellow INDY NXT session is rehearsed. The underlying data surface is broad enough for v1 live timing, Bryce focus, source health, weather, replay shells, and a cautious points card. The remaining race-day backend gap is proof and reconciliation, not another static analytics pass.
 
 Do not build v1 around live GPS, moving-dot track position, sector timing, tire strategy, overtake strategy, pit prediction, live POV, or team radio audio. Those remain unavailable or rehearsal-only until live INDY NXT proof exists.
 
@@ -20,8 +20,11 @@ Do not build v1 around live GPS, moving-dot track position, sector timing, tire 
 - `GET /api/replay/bryce` already exposes archive states: `missing`, `empty`, `tiny`, `ready`.
 - `TimingRow` already carries `runningDriverPoints`, `totalDriverPoints`, and `totalEntrantPoints` when Race Control provides them.
 - `public/data/history-bryce.json` is present and currently records Bryce with 131 points and rank 14 after 8 2026 rows, sourced from official INDY NXT results plus provisional timing when applicable.
+- `analysis/ui-data-package/ui-data-package.json` records `baselineCommit=ce904af` and includes 10 live companion fixtures covering ready, wrong-series, pre-session, degraded, stale, blocked, archive-empty, archive-missing, and repeated-cold replay states.
+- `analysis/predictive-race-intelligence/output/context-packs/live-race-day-context.json` exists as a source-bounded live race-day context pack, and `context-pack-manifest.json` records one `live_race_day` pack.
+- `analysis/predictive-race-intelligence/output/summary.json` intentionally marks `live_green_flag_proof` as `blocked_by_live_proof`.
 - `data/live/live-source-pressure-latest.json` is not present in this worktree. Prior docs record cold/post-session pressure proof, but this lane should not claim a current generated pressure artifact.
-- Current `npm run api:smoke` passes by checking `/api/readiness` first and only requiring Bryce-specific snapshot/session/timing routes when readiness is `ready` or `degraded`. On 2026-06-16 the smoke path correctly reports `wrong_series` because the active global Race Control feed is not a Bryce INDY NXT session; treat that as evidence for the guarded off-session/wrong-series path, not as live green-flag proof.
+- Current smoke behavior should check `/api/readiness` first and only require Bryce-specific snapshot/session/timing routes when readiness is `ready` or `degraded`. A `wrong_series` result from a non-Bryce/global Race Control heartbeat is evidence for the guard, not live green-flag proof.
 
 ## Routes
 
@@ -37,6 +40,7 @@ The UI should treat these as the race-day backend boundary.
 | `GET /api/replay/bryce?limit=...` | `ReplayState` | Local archive replay and post-session summary. | Existing route. |
 | `GET /api/sources` | `SourceHealthState` | Operator/source diagnostics and product readiness inputs. | Existing route, keep endpoint-level states separate from product-level states. |
 | `GET /api/history/bryce?compact=1` | Historical points baseline | Current official/provisional season standing fallback. | Existing route. |
+| `analysis/predictive-race-intelligence/output/context-packs/live-race-day-context.json` | Static live product context | Source-bounded design/build context for live mode rules, missing proof, and route expectations. | Existing context pack; not runtime proof. |
 
 `/api/readiness` should be additive. It should not replace `/api/sources`; it should consume source facts and expose a UI-safe state machine.
 
@@ -270,7 +274,7 @@ Mapping rules:
 
 ## Road America Live-Session Rehearsal Checklist
 
-Run these during the June 19-21, 2026 Road America INDY NXT windows documented in the readiness audit.
+Run these during the June 19-20, 2026 Road America INDY NXT race windows documented by the current UI package, or the next live INDY NXT green/yellow window if those windows have passed.
 
 Before session:
 
@@ -321,6 +325,7 @@ Implemented before UI implementation:
 - Null-vs-zero fixture for timing numeric fields.
 - Points field coverage fixtures for all fields present, absent/historical fallback, partial row coverage, and wrong-series fallback.
 - UI data-package validation that every live fixture includes runtime-shaped `raceWeekend`, `liveTiming`, `bryce`, `points`, `sources`, and `gates` objects.
+- Source-bounded live context pack exists under `analysis/predictive-race-intelligence/output/context-packs/live-race-day-context.json`.
 
 Remaining race-weekend proof:
 
@@ -350,6 +355,7 @@ Completed before UI:
 2. Add first-pass readiness reducer tests for ready/wrong-series, null-vs-zero, and point fallback modes.
 3. Add API smoke coverage for `/api/readiness` and off-session/wrong-series behavior.
 4. Add explicit `PointsProjectionState` builder that uses Race Control fields when fresh and compact history when absent/stale.
+5. Generate the live race-day context pack and live fixture set in the UI data package.
 
 Remaining backend follow-up:
 

@@ -1,0 +1,163 @@
+{
+  "caveats": [
+    "derived score for product discovery; review labels before public UI copy",
+    "Archetype labels require review before public UI copy."
+  ],
+  "chartSpecs": [
+    {
+      "fields": [
+        "startPosition",
+        "finishPosition"
+      ],
+      "id": "start_finish_slope",
+      "type": "slope"
+    },
+    {
+      "filter": {
+        "sessionId": "session_indy_nxt_2024_6316"
+      },
+      "id": "lap_position_story",
+      "source": "analysis/indy-nxt-discovery/output/tables/indy_nxt_lap_timeline.csv",
+      "type": "inverted_line"
+    },
+    {
+      "displayPolicy": "denominator_badged",
+      "fields": [
+        "bestSectionFamilies",
+        "weakestSectionFamilies"
+      ],
+      "id": "section_strengths",
+      "type": "ranked_bar"
+    },
+    {
+      "fields": [
+        "teamAverageFinish",
+        "bryceVsTeamAvgFinish",
+        "bryceTeamFinishRank"
+      ],
+      "id": "team_context_dotplot",
+      "type": "dot_plot"
+    }
+  ],
+  "confidence": "medium",
+  "conversion": {
+    "archetype": "baseline_execution",
+    "bestLapRank": 7.0,
+    "conversionPercentileDelta": -0.033,
+    "labelReviewState": "review_required_before_public_copy",
+    "paceIndex": 0.625
+  },
+  "generatedAt": "2026-06-18T17:52:08Z",
+  "id": "debrief_session_indy_nxt_2024_6316",
+  "lapStory": {
+    "bryceBestRunningPosition": 5.0,
+    "bryceNetLapChartGain": -2.0,
+    "brycePrimaryStory": "steady_conversion",
+    "bryceWorstRunningPosition": 9.0,
+    "fieldLapDrivers": 21.0,
+    "sourceState": "official_lap_chart",
+    "topLapChartGain": 7.0,
+    "topLapChartMover": "Nolan Allaer"
+  },
+  "outcome": {
+    "cumulativePoints": 96.0,
+    "finishPercentile": 0.667,
+    "finishPosition": 8.0,
+    "points": 24.0,
+    "positionGain": -1.0,
+    "standingRank": 15.0,
+    "startPosition": 7.0,
+    "teamName": "Andretti Global"
+  },
+  "raceContext": {
+    "bryceIncidentCount": 0.0,
+    "brycePenaltyCount": 0.0,
+    "leaderEntropy": 0.0,
+    "sessionIncidentCount": 6.0,
+    "sessionPenaltyCount": 1.0,
+    "topLeader": "Jamie Chadwick",
+    "topLeaderShare": 1.0,
+    "weatherContext": "dry/cool/high"
+  },
+  "raceLabel": "2024 Grand Prix at Road America",
+  "raceOrder": {
+    "roundIndex": 6,
+    "seasonYear": 2024,
+    "source": "analysis/indy-nxt-discovery/output/deep_dive/tables/championship_progression.csv"
+  },
+  "schemaVersion": "brycecast.raceDebriefContextPack.v1",
+  "seasonYear": 2024,
+  "sectionSignal": {
+    "bestSectionFamilies": "I10 to I11 I11 to I11B:0.68; I9 to I10:0.64; I7 to I8:0.63; I1 to I2:0.61",
+    "displayPolicy": "headline_allowed_if_sectionComparisonRows_gte_50_else_badge_or_suppress",
+    "medianSectionPercentile": 0.55,
+    "sectionComparisonRows": 264.0,
+    "weakestSectionFamilies": "I2 to I3:0.34; I4A to I5:0.40; I6 to I7:0.45; I8 to I9:0.47"
+  },
+  "sessionId": "session_indy_nxt_2024_6316",
+  "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+  "sourceRefs": [
+    {
+      "bytes": 17334,
+      "path": "analysis/indy-nxt-discovery/output/deep_dive/tables/race_debrief_scores.csv",
+      "role": "debrief score",
+      "sha256": "ba15811c217d16c4dcf5cdc666a0d3fe110e99dcf1d6a2ab992c48c3cf816890"
+    },
+    {
+      "bytes": 9110,
+      "path": "analysis/indy-nxt-discovery/output/deep_dive/tables/full_field_lap_dynamics_by_race.csv",
+      "role": "lap dynamics",
+      "sha256": "1d2f62634a2f611724ae4835032814d2199e9a54b7c178fdcb0ca910d7cdccfb"
+    },
+    {
+      "bytes": 7698,
+      "path": "analysis/indy-nxt-discovery/output/deep_dive/tables/incident_penalty_context.csv",
+      "role": "incident and penalty context",
+      "sha256": "5fa16b50c578337f20cc1b07f3e5835a081d7d9a86895c5ca221fa3f6203048e"
+    },
+    {
+      "bytes": 4990,
+      "path": "analysis/indy-nxt-discovery/output/deep_dive/tables/leader_lap_context.csv",
+      "role": "leader lap context",
+      "sha256": "ebc6bc27f5a4f146be6b6f9a032f43e47fe06d56a7dafdb19495e52590fe5cbe"
+    },
+    {
+      "bytes": 9851,
+      "path": "analysis/indy-nxt-discovery/output/deep_dive/tables/team_context_by_race.csv",
+      "role": "team context",
+      "sha256": "adf1d3cb447c54da13abefe50711377ce2becf466e16eddc6fb53c37699e032f"
+    },
+    {
+      "bytes": 13120,
+      "path": "analysis/indy-nxt-discovery/output/deep_dive/tables/section_results_deep_by_race.csv",
+      "role": "section context",
+      "sha256": "ffd0645c56cc8c7d91e2acedad155e20ff87740fdd21cd5e0ea676e6d9bf9ab1"
+    },
+    {
+      "bytes": 9455,
+      "path": "analysis/indy-nxt-discovery/output/deep_dive/tables/championship_progression.csv",
+      "role": "championship context",
+      "sha256": "b1c6e8e2cfe2e647ccdca63713d260cb99da3824e4391004d0f8b8d25e10cbdc"
+    },
+    {
+      "bytes": 152882,
+      "path": "analysis/indy-nxt-discovery/output/tables/indy_nxt_lap_timeline.csv",
+      "role": "lap timeline chart source",
+      "sha256": "08e9840e070c829d55222149fb7aee1dd1ca1bb11f6d0636abd12c12f8704a2d"
+    }
+  ],
+  "sourceState": "derived_from_official_results_lap_chart_sections_and_modeled_weather",
+  "teamContext": {
+    "bryceTeamFinishRank": 3.0,
+    "bryceVsTeamAvgFinish": 0.75,
+    "policy": "descriptive_result_context_only",
+    "teamAverageFinish": 7.25,
+    "teamCars": 4.0,
+    "teammates": "James Roe; Jamie Chadwick; Louis Foster"
+  },
+  "track": {
+    "name": "Road America",
+    "type": "road"
+  },
+  "type": "race_debrief"
+}

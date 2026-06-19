@@ -2,13 +2,15 @@
 
 Generated: 2026-06-17
 
+Status after June 18: background packet only. The active UI/backend analytics baseline is now `analysis/ui-blueprint/README.md`, `analysis/ui-data-package/ui-data-package.json`, `analysis/predictive-race-intelligence/output/context-packs/context-pack-manifest.json`, `docs/UI_ANALYTICS_PRODUCT_CONTRACT.md`, and `docs/LIVE_RACE_DAY_PRODUCT_CONTRACT.md`. If this packet conflicts with those June 18 files, use the newer context-pack baseline.
+
 Baseline inspected: current working tree at `19b16af Build UI analytics data package`. Primary package baseline inside generated artifacts: `5636bb6 Harden preserved career data gaps`.
 
 ## Executive Summary
 
 - **The product should be a mobile-first race companion with a dynamic homepage, not a static dashboard.** The same route should resolve into Race Weekend Prep, Session Imminent, Live Companion, degraded/wrong-series/source states, Race Debrief, or Off-Week depending on `/api/readiness`, schedule context, replay/reconciliation state, and generated prep artifacts.
 - **The first screen should be family-readable, with serious analytics one tap down.** First-screen space should go to event/session context, Bryce status when guarded live data is ready, source/readiness state, points state, weather context, and one or two historical context cards. Lap dynamics, parity matrices, source family audit, and replay detail belong in drilldowns or drawers.
-- **The data is strong enough for v1 if the UI respects availability states.** Race Weekend Prep, guarded Live Companion shell, Race Debrief seed, Career Lab parity, and Source/Ops status are supported. Full replay trend analytics, section-strength headlines, field-strength/teammate models, and production-live confidence are not supported until proof gaps close.
+- **The data is strong enough for v1 if the UI respects availability states.** Race Weekend Prep, guarded Live Companion shell, Race Debrief seed, Career Lab parity, and Source/Ops status are supported. After the June 18 context-pack sprint, section/lap stories are source-bounded v1 drilldowns; full replay trend analytics, public predictive point forecasts, field-strength/teammate headline models, and production-live confidence are still not supported until proof gaps close.
 - **The biggest product risks are overclaiming live and causal truth.** Current sources ban official INDY NXT weather claims, live GPS/moving-dot claims, POV/radio claims, detailed pit sequence, tire/fuel/overtake strategy, engineering root-cause claims, and local points-model math.
 
 ## Source Precedence And Conflict Log
