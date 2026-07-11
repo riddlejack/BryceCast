@@ -299,21 +299,20 @@ const useEventWeather = (eventId: string | null): EventWeather | null => {
         const temperatureC = asNumber(observation.temperatureC);
         const readiness = (match.forecastReadiness ?? {}) as Row;
         const eventRow = (match.event ?? {}) as Row;
-        const eventDates = [asString(eventRow.eventStartDate), asString(eventRow.eventEndDate)].filter(
-          (value): value is string => value !== null
-        );
-        const dayNames = new Set(
-          eventDates.map((date) => {
-            const parts = /^(\d{4})-(\d{2})-(\d{2})/.exec(date);
-            if (!parts) return '';
-            return new Date(Number(parts[1]), Number(parts[2]) - 1, Number(parts[3])).toLocaleDateString('en-US', {
-              weekday: 'long'
-            });
-          })
+        const eventDates = new Set(
+          [asString(eventRow.eventStartDate), asString(eventRow.eventEndDate)].filter(
+            (value): value is string => value !== null
+          )
         );
         const forecast = Array.isArray(weatherData.forecast) ? (weatherData.forecast as Row[]) : [];
         const periods = forecast
-          .filter((period) => dayNames.has(asString(period.name) ?? ''))
+          .filter((period) => {
+            // Match by the period's actual date (NWS startTime carries the local
+            // offset) — weekday names would hit the wrong week for events 6+ days out.
+            const startTime = asString(period.startTime);
+            const isDaytime = period.isDaytime !== false;
+            return isDaytime && startTime !== null && eventDates.has(startTime.slice(0, 10));
+          })
           .slice(0, 3)
           .map((period) => ({
             name: asString(period.name) ?? '',

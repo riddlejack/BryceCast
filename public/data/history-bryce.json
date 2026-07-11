@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-07-02T17:18:49.184Z",
+  "checkedAt": "2026-07-11T21:08:52.733Z",
   "source": "INDY NXT official results API + Race Control timing feed for unpublished current session",
   "points": [
     {
@@ -101,11 +101,31 @@
       "points": 20,
       "status": "Running",
       "source": "official session result"
+    },
+    {
+      "race": "Grand Prix at Mid-Ohio R1",
+      "type": "Road",
+      "start": 13,
+      "finish": 16,
+      "bestLapRank": 22,
+      "points": 14,
+      "status": "Running",
+      "source": "official session result"
+    },
+    {
+      "race": "Grand Prix at Mid-Ohio R2",
+      "type": "Road",
+      "start": 15,
+      "finish": 14,
+      "bestLapRank": 19,
+      "points": 16,
+      "status": "Running",
+      "source": "official session result"
     }
   ],
   "bryceStanding": {
     "rank": 17,
-    "points": 160,
+    "points": 190,
     "wins": 0,
     "top5": 0,
     "top10": 4,
@@ -128,10 +148,10 @@
     },
     {
       "year": 2026,
-      "starts": 10,
+      "starts": 12,
       "bestFinish": 7,
       "top10s": 4,
-      "averageFinish": 14.7
+      "averageFinish": 14.8
     }
   ],
   "teammateSummaries": [
@@ -139,28 +159,28 @@
       "name": "Niels Koolen",
       "driverId": "4963",
       "year": 2026,
-      "starts": 10,
+      "starts": 12,
       "bestFinish": 4,
       "top10s": 3,
-      "averageFinish": 14.1
+      "averageFinish": 13.9
     },
     {
       "name": "James Roe",
       "driverId": "4895",
       "year": 2026,
-      "starts": 10,
+      "starts": 12,
       "bestFinish": 10,
       "top10s": 1,
-      "averageFinish": 17.5
+      "averageFinish": 17.8
     },
     {
       "name": "Carson Etter",
       "driverId": "4996",
       "year": 2026,
-      "starts": 10,
+      "starts": 12,
       "bestFinish": 13,
       "top10s": 0,
-      "averageFinish": 18.5
+      "averageFinish": 19.1
     }
   ]
 }

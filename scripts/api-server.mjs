@@ -29,7 +29,7 @@ const audioProofPath = join(dataDir, 'audio-proof.json');
 
 const raceControlEndpoints = raceSnapshotEndpoints;
 const sourceProbeEndpoints = liveSourceEndpoints;
-const sourceFetchTimeoutMs = 5000;
+const sourceFetchTimeoutMs = Number(process.env.BRYCECAST_SOURCE_FETCH_TIMEOUT_MS ?? 5000);
 const enrichmentCacheTtlMs = 30000;
 const apiCacheRefreshMs = Number(process.env.BRYCECAST_API_CACHE_REFRESH_MS ?? 15000);
 const apiRunnerFreshMs = Number(process.env.BRYCECAST_API_RUNNER_FRESH_MS ?? 60000);
@@ -1814,7 +1814,14 @@ const proxyRaceControl = async (req, res, pathname) => {
     return true;
   }
 
-  const cached = await cachedEndpointResult(endpoint);
+  let cached = await cachedEndpointResult(endpoint);
+  if (cached && !cached.ok) {
+    // Self-heal a poisoned cache entry (e.g. a startup-burst timeout) with one
+    // deduped retry instead of serving the stale error until the next cycle.
+    refreshEndpointInBackground(endpoint);
+    await endpointRefreshes.get(endpoint.id)?.catch(() => {});
+    cached = endpointResultCache.get(endpoint.id)?.result ?? cached;
+  }
   if (!cached) {
     sendError(res, 503, 'Race Control proxy cache unavailable', 'Use POST /api/refresh for an explicit operator refresh, then retry the cached proxy path.');
     return true;

@@ -288,7 +288,7 @@ const trackShort = (entry: ArchiveEntry): string => {
   const text = typeof name === 'string' ? name : '';
   return text
     .replace(/^(the\s+)/i, '')
-    .split(/\s+/)
+    .split(/[\s-]+/)
     .filter((word) => !/^(sports?|car|course|race(way)?|park|street|circuit|of|at|the|mile)$/i.test(word))
     .map((word) => word[0])
     .join('')

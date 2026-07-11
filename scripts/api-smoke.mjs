@@ -85,7 +85,10 @@ if (await distExists()) {
 
 const child = spawn(process.execPath, serverArgs, {
   cwd: root,
-  stdio: ['ignore', 'pipe', 'pipe']
+  stdio: ['ignore', 'pipe', 'pipe'],
+  // Smoke checks route behavior, not latency SLAs — give upstream fetches
+  // headroom so a burst of parallel probes doesn't flake the run.
+  env: { ...process.env, BRYCECAST_SOURCE_FETCH_TIMEOUT_MS: process.env.BRYCECAST_SOURCE_FETCH_TIMEOUT_MS ?? '15000' }
 });
 
 let stderr = '';
