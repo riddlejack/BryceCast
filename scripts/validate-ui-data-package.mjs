@@ -440,6 +440,71 @@ for (const key of ['prepSection', 'raceLapSection']) {
   }
 }
 
+/* ---------- Race Week prep modules ---------- */
+
+const nextEventPrep = dataPackage.screens.upcomingPrep.nextEventPrep;
+if (expectedUpcomingEventPacks > 0) {
+  if (!nextEventPrep) {
+    fail('Upcoming prep must carry nextEventPrep while future events exist.');
+  } else {
+    const nextEvent = dataPackage.screens.upcomingPrep.events[0];
+    if (nextEventPrep.eventId !== nextEvent.eventId || nextEventPrep.trackType !== nextEvent.trackType) {
+      fail('nextEventPrep must describe the first upcoming event.');
+    }
+    if (!Array.isArray(nextEventPrep.races) || nextEventPrep.races.length === 0) {
+      fail('nextEventPrep.races must contain the Bryce track-type history rows.');
+    }
+    for (const row of nextEventPrep.races ?? []) {
+      if (!row.sessionId || typeof row.startPosition !== 'number' || typeof row.finishPosition !== 'number') {
+        fail(`nextEventPrep race row ${row.sessionId ?? '(missing id)'} needs sessionId, startPosition, finishPosition.`);
+      }
+      if (!Object.hasOwn(row, 'officialStatus')) {
+        fail(`nextEventPrep race row ${row.sessionId} must carry officialStatus for honest exclusion labels.`);
+      }
+    }
+    const summary = nextEventPrep.raceSummary ?? {};
+    if (summary.raceCount !== nextEventPrep.races.length) {
+      fail('nextEventPrep.raceSummary.raceCount must match the race rows.');
+    }
+    if (summary.cleanRaceCount !== nextEventPrep.races.filter((row) => row.officialStatus === 'running').length) {
+      fail('nextEventPrep.raceSummary.cleanRaceCount must equal the running-status rows.');
+    }
+    const raceIds = new Set(nextEventPrep.races.map((row) => row.sessionId));
+    for (const row of nextEventPrep.fridaySignal ?? []) {
+      if (!raceIds.has(row.sessionId)) {
+        fail(`nextEventPrep.fridaySignal row ${row.sessionId} must join to a race row.`);
+      }
+    }
+    if (!Array.isArray(nextEventPrep.caveats) || nextEventPrep.caveats.length === 0) {
+      fail('nextEventPrep must state its caveats.');
+    }
+  }
+}
+
+const standingsSnapshot = dataPackage.screens.upcomingPrep.standingsSnapshot;
+if (!standingsSnapshot || typeof standingsSnapshot.available !== 'boolean') {
+  fail('Upcoming prep must carry standingsSnapshot with an explicit available flag.');
+} else if (standingsSnapshot.available) {
+  if (standingsSnapshot.seriesGuard?.ok !== true) {
+    fail('standingsSnapshot must only publish entries behind a passing series guard.');
+  }
+  const bryceEntries = (standingsSnapshot.entries ?? []).filter((entry) => entry.isBryce);
+  if (bryceEntries.length !== 1) {
+    fail('standingsSnapshot must contain exactly one guarded Bryce entry.');
+  }
+  for (let index = 1; index < (standingsSnapshot.entries ?? []).length; index += 1) {
+    if (standingsSnapshot.entries[index - 1].points < standingsSnapshot.entries[index].points) {
+      fail('standingsSnapshot entries must be sorted by points, descending.');
+    }
+  }
+  if (bryceEntries[0] && standingsSnapshot.bryce?.points !== bryceEntries[0].points) {
+    fail('standingsSnapshot.bryce must mirror the guarded Bryce entry.');
+  }
+  if (!Array.isArray(standingsSnapshot.caveats) || standingsSnapshot.caveats.length === 0) {
+    fail('standingsSnapshot must state its unofficial-points caveats.');
+  }
+}
+
 const fixtureStates = new Set(dataPackage.screens.liveCompanionFixtures.fixtures.map((fixture) => fixture.state));
 for (const state of dataPackage.screens.liveCompanionFixtures.requiredStates) {
   if (!fixtureStates.has(state)) fail(`Live fixture state missing: ${state}`);

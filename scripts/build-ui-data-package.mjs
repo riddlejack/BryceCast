@@ -28,6 +28,7 @@ const sources = {
   contextEventGapBoundary: 'analysis/context-event-narrative-layer/output/gap_source_boundary_context.csv',
   prepSessionSignals: 'analysis/indy-nxt-discovery/output/deep_dive/tables/prep_session_signals.csv',
   fieldStrengthByRace: 'analysis/indy-nxt-discovery/output/deep_dive/tables/field_strength_by_race.csv',
+  headToHead: 'analysis/indy-nxt-discovery/output/tables/indy_nxt_head_to_head.csv',
   sectionResultsDeepByRace: 'analysis/indy-nxt-discovery/output/deep_dive/tables/section_results_deep_by_race.csv',
   leaderLapContext: 'analysis/indy-nxt-discovery/output/deep_dive/tables/leader_lap_context.csv',
   careerSeriesSummary: 'analysis/career-parity/output/tables/career_series_result_summary.csv',
@@ -302,6 +303,167 @@ const eventFromUpcomingContextPack = ({ pack, packRef }) => ({
   weatherState: pack.weatherState ?? null,
   sourceState: pack.sameTrackHistory?.sourceState ?? 'predictive_context_pack'
 });
+
+/* ------------------------------------------------------------------
+   Race Week prep modules (docs/CREATIVE_DIRECTION.md): start→finish
+   conversion rows for the next event's track type, the practice→race
+   "Friday signal", and a points-standings snapshot from our last COLD
+   Race Control capture. All rows carry official status so the one
+   mechanical DNF is labeled, never hidden and never silently dropped.
+   ------------------------------------------------------------------ */
+
+const buildNextEventPrep = ({ nextEvent, debriefScores, prepSignals, resultsBySession }) => {
+  if (!nextEvent) return null;
+  const races = debriefScores
+    .filter((row) => row.trackType === nextEvent.trackType)
+    .map((row) => {
+      const official = resultsBySession.get(row.sessionId) ?? null;
+      return {
+        sessionId: row.sessionId,
+        raceLabel: row.raceLabel,
+        seasonYear: numberOrNull(row.seasonYear),
+        trackName: row.trackName,
+        sameTrack: row.trackName === nextEvent.trackName,
+        startPosition: numberOrNull(row.startPosition),
+        finishPosition: numberOrNull(row.finishPosition),
+        positionGain: numberOrNull(row.positionGain),
+        finishPercentile: numberOrNull(row.finishPercentile),
+        officialStatus: official?.status ?? null,
+        fieldSize: official?.fieldSize ?? null
+      };
+    });
+  if (races.length === 0) return null;
+
+  const clean = races.filter((row) => row.officialStatus === 'running');
+  const mean = (values) => (values.length === 0 ? null : Math.round((values.reduce((sum, value) => sum + value, 0) / values.length) * 10) / 10);
+  const raceSummary = {
+    raceCount: races.length,
+    movedForwardCount: races.filter((row) => (row.positionGain ?? 0) > 0).length,
+    cleanRaceCount: clean.length,
+    cleanAvgFinish: mean(clean.map((row) => row.finishPosition).filter((value) => value !== null)),
+    cleanAvgGain: mean(clean.map((row) => row.positionGain).filter((value) => value !== null)),
+    cleanTop10Count: clean.filter((row) => (row.finishPosition ?? 99) <= 10).length,
+    nonRunningStatuses: races.filter((row) => row.officialStatus !== 'running').map((row) => ({ sessionId: row.sessionId, officialStatus: row.officialStatus }))
+  };
+
+  const raceBySession = new Map(races.map((row) => [row.sessionId, row]));
+  const fridaySignal = prepSignals
+    .filter((row) => raceBySession.has(row.sessionId) && numberOrNull(row.bestPracticeRank) !== null)
+    .map((row) => {
+      const race = raceBySession.get(row.sessionId);
+      return {
+        sessionId: row.sessionId,
+        raceLabel: row.raceLabel,
+        seasonYear: race.seasonYear,
+        trackName: race.trackName,
+        sameTrack: race.sameTrack,
+        bestPracticeRank: numberOrNull(row.bestPracticeRank),
+        bestQualifyingRank: numberOrNull(row.bestQualifyingRank),
+        raceStart: numberOrNull(row.raceStart),
+        raceFinish: numberOrNull(row.raceFinish),
+        officialStatus: race.officialStatus,
+        practiceFieldMedian: numberOrNull(row.practiceFieldMedian)
+      };
+    });
+  const fridayClean = fridaySignal.filter((row) => row.officialStatus === 'running' && row.raceFinish !== null);
+  const fridayDeltas = fridayClean.map((row) => row.bestPracticeRank - row.raceFinish).sort((left, right) => left - right);
+  const fridaySummary = {
+    weekendCount: fridayClean.length,
+    finishBeatBestPractice: fridayClean.filter((row) => row.raceFinish < row.bestPracticeRank).length,
+    finishMatchedBestPractice: fridayClean.filter((row) => row.raceFinish === row.bestPracticeRank).length,
+    medianPositionsBetter: fridayDeltas.length === 0 ? null : fridayDeltas[Math.floor(fridayDeltas.length / 2)]
+  };
+
+  return {
+    eventId: nextEvent.eventId,
+    trackType: nextEvent.trackType,
+    trackName: nextEvent.trackName,
+    races,
+    raceSummary,
+    fridaySignal,
+    fridaySummary,
+    sourceState: 'official_results_with_official_status_join',
+    caveats: [
+      'Rows are Bryce INDY NXT races on this track type; official result status labels non-running races (summaries that exclude them must say so on screen).',
+      'Practice and group qualifying are rank/context signals; session formats are not fully equivalent across weekends.'
+    ]
+  };
+};
+
+const readLatestColdRaceCapture = () => {
+  const dbPath = path.join(repoRoot, 'data/live/brycecast.sqlite');
+  if (!fs.existsSync(dbPath)) return { available: false, reason: 'live capture database not present' };
+  const query = "SELECT checked_at || '\t' || session_key || '\t' || payload_json FROM race_snapshots WHERE flag='COLD' AND session_name LIKE 'Race%' ORDER BY id DESC LIMIT 1";
+  const result = spawnSync('sqlite3', [dbPath, query], { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
+  if (result.status !== 0 || !result.stdout.trim()) {
+    return { available: false, reason: `no COLD race snapshot readable from live capture (${result.stderr?.trim() || 'empty result'})` };
+  }
+  const [checkedAt, sessionKey, ...rest] = result.stdout.trim().split('\t');
+  try {
+    return { available: true, checkedAt, sessionKey, payload: JSON.parse(rest.join('\t')) };
+  } catch (error) {
+    return { available: false, reason: `COLD snapshot payload did not parse: ${error.message}` };
+  }
+};
+
+const buildStandingsSnapshot = ({ headToHeadRows, racesRemaining, roundsCompleted }) => {
+  const capture = readLatestColdRaceCapture();
+  if (!capture.available) return { available: false, reason: capture.reason };
+  const timing = capture.payload?.raw?.timing?.timing_results ?? {};
+  const heartbeat = timing.heartbeat ?? {};
+  const items = Array.isArray(timing.Item) ? timing.Item : [];
+  const seriesOk = heartbeat.Series === 'L' && heartbeat.SessionType === 'R';
+  if (!seriesOk || items.length === 0) {
+    return { available: false, reason: 'latest COLD capture is not an INDY NXT race with timing rows' };
+  }
+
+  const headToHeadByName = new Map(headToHeadRows.map((row) => [row.driverName.toLowerCase(), row]));
+  const entries = items
+    .map((item) => {
+      const driverName = `${item.firstName ?? ''} ${item.lastName ?? ''}`.trim();
+      const headToHead = headToHeadByName.get(driverName.toLowerCase()) ?? null;
+      return {
+        carNo: String(item.no ?? ''),
+        driverName,
+        teamName: item.team ?? null,
+        points: numberOrNull(item.runningDriverPoints),
+        isBryce: String(item.DriverID ?? '') === '2143' && String(item.no ?? '') === '9',
+        headToHead: headToHead
+          ? {
+              racesTogether: numberOrNull(headToHead.racesTogether),
+              bryceAhead: numberOrNull(headToHead.bryceAhead),
+              bryceBehind: numberOrNull(headToHead.bryceBehind)
+            }
+          : null
+      };
+    })
+    .filter((entry) => entry.points !== null)
+    .sort((left, right) => right.points - left.points)
+    .map((entry, index) => ({ ...entry, pointsRankInCapture: index + 1 }));
+
+  const bryce = entries.find((entry) => entry.isBryce) ?? null;
+  if (!bryce) return { available: false, reason: 'no guarded Bryce row in the latest COLD capture' };
+
+  return {
+    available: true,
+    capturedAt: capture.checkedAt,
+    capturePath: 'data/live/brycecast.sqlite',
+    sessionKey: capture.sessionKey,
+    eventName: heartbeat.eventName ?? null,
+    sessionName: heartbeat.SessionName ?? null,
+    seriesGuard: { series: heartbeat.Series ?? null, sessionType: heartbeat.SessionType ?? null, ok: seriesOk },
+    roundsCompleted,
+    racesRemaining,
+    bryce: { carNo: bryce.carNo, points: bryce.points, pointsRankInCapture: bryce.pointsRankInCapture },
+    entries,
+    sourceState: 'race_control_capture_cold_unofficial',
+    caveats: [
+      'Points come from our Race Control capture at the end of the last completed race; official standings can differ after post-race penalties or adjustments.',
+      'Only cars in that session appear; part-season drivers who missed it are not listed.',
+      'Career head-to-head counts every shared INDY NXT race since 2024, not just this season.'
+    ]
+  };
+};
 
 const fixtureCheckedAt = 'fixture';
 
@@ -700,6 +862,29 @@ const buildPackage = () => {
 
   const upcomingEvents = upcomingPackPairs.map(eventFromUpcomingContextPack);
   const upcomingContextPackRefs = upcomingPackPairs.map(({ packRef }) => packRef);
+
+  const canonicalDataset = readJson(sources.canonicalDataset);
+  const resultsBySession = new Map(
+    (canonicalDataset.results ?? [])
+      .filter((row) => row.driverId === 'driver_bryce_aron')
+      .map((row) => [row.sessionId, { status: row.status ?? null, fieldSize: numberOrNull(row.fieldSize) }])
+  );
+  const debriefScoreRows = readCsv(sources.raceDebriefScores);
+  const prepSignalRows = readCsv(sources.prepSessionSignals);
+  const headToHeadRows = readCsv(sources.headToHead);
+  const championshipRows = readCsv(sources.championshipProgression);
+  const latestSeasonYear = Math.max(...championshipRows.map((row) => numberOrNull(row.seasonYear) ?? 0));
+  const nextEventPrep = buildNextEventPrep({
+    nextEvent: upcomingEvents[0] ?? null,
+    debriefScores: debriefScoreRows,
+    prepSignals: prepSignalRows,
+    resultsBySession
+  });
+  const standingsSnapshot = buildStandingsSnapshot({
+    headToHeadRows,
+    racesRemaining: upcomingEvents.length,
+    roundsCompleted: championshipRows.filter((row) => numberOrNull(row.seasonYear) === latestSeasonYear).length
+  });
   const nextUpcomingVenue = upcomingEvents[0]?.trackName ?? null;
   const nextUpcomingVenueSlug = venueSlug(nextUpcomingVenue);
   const nextUpcomingVenuePackSlug = nextUpcomingVenueSlug.replaceAll('_', '-');
@@ -796,6 +981,8 @@ const buildPackage = () => {
         readiness: 'partial',
         nextVenue: nextUpcomingVenue,
         events: upcomingEvents,
+        nextEventPrep,
+        standingsSnapshot,
         contextPackRefs: upcomingContextPackRefs,
         supplementalContextRefs: {
           prepSection: supplementalPrepSectionRef,
@@ -808,6 +995,10 @@ const buildPackage = () => {
         ],
         sourceRefs: [
           sourceRef('futureWeekendPrep', 'Upcoming-event prep inputs from INDY NXT analytics.'),
+          sourceRef('raceDebriefScores', 'Start→finish rows for the next event’s track type, joined to official result status.'),
+          sourceRef('prepSessionSignals', 'Practice/qualifying rank signals behind the Friday-signal module.'),
+          sourceRef('headToHead', 'Career head-to-head records joined into the points-standings snapshot.'),
+          { key: 'live-capture-timing', path: '/api/timing', note: 'Full-field points in standingsSnapshot come from the same Race Control capture this route serves (archived in data/live/brycecast.sqlite; COLD snapshot; unofficial).' },
           sourceRef('predictiveContextPackManifest', 'Full upcoming-event predictive race-intelligence pack refs.'),
           sourceRef('sectionLapDeepDiveSummary', 'Practice/qualifying section-lap supplemental context summary.'),
           sourceRef('raceLapSectionSummary', 'Race lap/section supplemental context summary.'),

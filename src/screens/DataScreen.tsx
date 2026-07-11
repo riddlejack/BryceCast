@@ -1,4 +1,5 @@
 import { Card, ScreenHead, StatusChip, Unavailable } from '../app/components';
+import { trackOutlineAttribution } from '../assets/tracks';
 import { asNumber, asString, formatNumber } from '../app/format';
 import { useApiJson } from '../app/useApiJson';
 import { uiDataPackage } from '../data/uiDataPackage';
@@ -102,6 +103,8 @@ export const DataScreen = () => {
           <li>Pit, tire, or fuel strategy claims — the official feeds don’t carry them.</li>
         </ul>
       </Card>
+
+      <p style={{ margin: 0, fontSize: 11.5, color: 'var(--ink-muted)' }}>{trackOutlineAttribution}</p>
     </div>
   );
 };

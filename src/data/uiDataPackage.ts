@@ -94,6 +94,91 @@ export interface UiUpcomingPrepEvent {
   sourceState: string;
 }
 
+export interface UiNextEventPrepRace {
+  sessionId: string;
+  raceLabel: string;
+  seasonYear: number | null;
+  trackName: string;
+  sameTrack: boolean;
+  startPosition: number | null;
+  finishPosition: number | null;
+  positionGain: number | null;
+  finishPercentile: number | null;
+  officialStatus: string | null;
+  fieldSize: number | null;
+}
+
+export interface UiNextEventPrepFridayRow {
+  sessionId: string;
+  raceLabel: string;
+  seasonYear: number | null;
+  trackName: string;
+  sameTrack: boolean;
+  bestPracticeRank: number | null;
+  bestQualifyingRank: number | null;
+  raceStart: number | null;
+  raceFinish: number | null;
+  officialStatus: string | null;
+  practiceFieldMedian: number | null;
+}
+
+export interface UiNextEventPrep {
+  eventId: string;
+  trackType: string;
+  trackName: string;
+  races: UiNextEventPrepRace[];
+  raceSummary: {
+    raceCount: number;
+    movedForwardCount: number;
+    cleanRaceCount: number;
+    cleanAvgFinish: number | null;
+    cleanAvgGain: number | null;
+    cleanTop10Count: number;
+    nonRunningStatuses: Array<{ sessionId: string; officialStatus: string | null }>;
+  };
+  fridaySignal: UiNextEventPrepFridayRow[];
+  fridaySummary: {
+    weekendCount: number;
+    finishBeatBestPractice: number;
+    finishMatchedBestPractice: number;
+    medianPositionsBetter: number | null;
+  };
+  sourceState: string;
+  caveats: string[];
+}
+
+export interface UiStandingsEntry {
+  carNo: string;
+  driverName: string;
+  teamName: string | null;
+  points: number;
+  isBryce: boolean;
+  pointsRankInCapture: number;
+  headToHead: {
+    racesTogether: number | null;
+    bryceAhead: number | null;
+    bryceBehind: number | null;
+  } | null;
+}
+
+export type UiStandingsSnapshot =
+  | { available: false; reason: string }
+  | {
+      available: true;
+      capturedAt: string;
+      capturePath: string;
+      sessionKey: string;
+      eventName: string | null;
+      sessionName: string | null;
+      seriesGuard: { series: string | null; sessionType: string | null; ok: boolean };
+      roundsCompleted: number;
+      racesRemaining: number;
+      bryce: { carNo: string; points: number; pointsRankInCapture: number };
+      entries: UiStandingsEntry[];
+      sourceState: string;
+      caveats: string[];
+    };
+
 export interface UiLiveFixture {
   schemaVersion: 'live-readiness.v1';
   checkedAt: string;
@@ -151,6 +236,8 @@ export interface UiDataPackage {
       readiness: string;
       nextVenue?: string;
       events: UiUpcomingPrepEvent[];
+      nextEventPrep: UiNextEventPrep | null;
+      standingsSnapshot: UiStandingsSnapshot;
       runtimeApiRequirements: string[];
       caveats: string[];
       sourceRefs: UiSourceRef[];

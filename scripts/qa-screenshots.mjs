@@ -39,8 +39,10 @@ try {
     const context = await browser.newContext({ viewport, deviceScaleFactor: 2, colorScheme: 'dark' });
     const page = await context.newPage();
     for (const [routeName, route] of routes) {
-      await page.goto(`${base}${route}`, { waitUntil: 'networkidle' });
-      await page.waitForTimeout(400);
+      // 'load' + settle delay, not 'networkidle': live routes poll /api every
+      // second, so network never idles and the run would time out.
+      await page.goto(`${base}${route}`, { waitUntil: 'load' });
+      await page.waitForTimeout(1200);
       const file = path.join(outDir, `${routeName}--${viewportName}.png`);
       await page.screenshot({ path: file, fullPage: true });
       console.log(file);

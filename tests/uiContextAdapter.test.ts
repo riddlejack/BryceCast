@@ -41,6 +41,31 @@ const debriefWithRaceContext = context.raceDebrief.featuredDebriefs.find((debrie
 });
 assert.ok(debriefWithRaceContext, 'at least one hydrated race debrief must expose incident or penalty race context');
 
+/* Race Week prep modules ride inside the package; invariants stay
+   venue-agnostic so schedule roll-forwards don't break CI. */
+const upcomingScreen = context.dataPackage.screens.upcomingPrep;
+if (context.upcomingPrep.events.length > 0) {
+  const nextEventPrep = upcomingScreen.nextEventPrep;
+  assert.ok(nextEventPrep, 'nextEventPrep must exist while future events exist');
+  assert.equal(nextEventPrep.eventId, context.upcomingPrep.events[0].eventId);
+  assert.ok(nextEventPrep.races.length >= 1, 'nextEventPrep must carry track-type history rows');
+  for (const row of nextEventPrep.races) {
+    assert.ok('officialStatus' in row, `${row.raceLabel} must carry officialStatus`);
+  }
+  assert.equal(
+    nextEventPrep.raceSummary.cleanRaceCount,
+    nextEventPrep.races.filter((row) => row.officialStatus === 'running').length,
+    'clean-race summary must count only official running results'
+  );
+}
+const standings = upcomingScreen.standingsSnapshot;
+assert.ok(standings && typeof standings.available === 'boolean', 'standingsSnapshot must carry an explicit available flag');
+if (standings.available) {
+  assert.equal(standings.seriesGuard.ok, true, 'standings must sit behind a passing series guard');
+  assert.equal(standings.entries.filter((entry) => entry.isBryce).length, 1, 'exactly one guarded Bryce standings entry');
+  assert.ok(standings.caveats.length >= 1, 'standings must state unofficial-points caveats');
+}
+
 assert.ok(context.careerLab.contextPack.resultConversionRows >= 100);
 assert.ok(context.careerLab.contextPack.metricFamilyParity.length > 0);
 assert.ok(context.careerLab.deepContextPacks.careerDimension, 'career dimension deep pack must load');
