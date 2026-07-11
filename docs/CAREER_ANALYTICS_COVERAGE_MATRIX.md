@@ -1,6 +1,6 @@
 # Career Analytics Coverage Matrix
 
-Generated: 2026-07-02T17:44:51.158Z
+Generated: 2026-07-11T20:53:59.142Z
 
 This report is generated from the canonical dataset and importer reports. It covers the production analytics window starting with 2019 FRP F1600 and running through current 2026 INDY NXT. Pre-2019 karting remains narrative/context only.
 
@@ -22,7 +22,7 @@ This report is generated from the canonical dataset and importer reports. It cov
 | Formula Ford | 2020 | 7 | 46 | lap_samples | gap_formula_ford_2020_grid_start_source_asymmetry_holdouts |
 | GB3 Championship | 2021, 2022 | 15 | 116 | none | gap_gb3_2022_session_1248_missing_json |
 | IMSA WeatherTech SportsCar Championship | 2025 | 1 | 1 | none | none |
-| INDY NXT | 2024, 2025, 2026 | 45 | 189 | none | gap_indy_nxt_qualifying_lap_reports |
+| INDY NXT | 2024, 2025, 2026 | 45 | 203 | none | gap_indy_nxt_qualifying_lap_reports |
 
 ## Category Matrix
 
@@ -49,7 +49,7 @@ This report is generated from the canonical dataset and importer reports. It cov
 | IMSA WeatherTech SportsCar Championship | 2025 | 1 | 1 | 236 | 0 | 1/1 | 0/236 | 236/236 | 1 | 1 |
 | INDY NXT | 2024 | 14 | 68 | 274 | 34 | 38/68 | 274/274 | 274/274 | 14 | 38 |
 | INDY NXT | 2025 | 14 | 66 | 272 | 33 | 36/66 | 272/272 | 272/272 | 14 | 36 |
-| INDY NXT | 2026 | 17 | 55 | 240 | 28 | 37/55 | 240/240 | 240/240 | 10 | 30 |
+| INDY NXT | 2026 | 17 | 69 | 288 | 38 | 51/69 | 288/288 | 288/288 | 12 | 39 |
 
 ## Season Category Matrix
 
@@ -215,12 +215,12 @@ This table lists sessions that still have partial or blocked coverage in that se
 ### INDY NXT
 - Exact session windows: source availability exception, not a priority gap. INDY NXT official Race Control feeds and cached weekend schedule PDFs expose exact clock-time starts for 111 physical sessions. The remaining 78 date-only rows are qualifying/group/combined qualifying sessions where official weekend schedules expose only coarse qualifying blocks or no exact qualifying row, so there is no safe source-backed group or aggregate split to promote into session-hour joins.
 - INDY NXT section data: source availability exception, not a priority gap. INDY NXT official Top Section Times and Section Results reports are parsed for every comparable source-exposed session except session_indy_nxt_2024_6325, where the official Section Results URL returns corrupt/truncated non-PDF bytes from the CDN. Keep the section-data category partial with an explicit source-broken gap unless an alternate official non-corrupt copy appears.
-- Lap samples: source availability exception, not a priority gap. INDY NXT official Race Lap Chart PDFs are imported for all 38 completed race sessions: 28 charts fully parsed and 10 clean partial visible-sample imports; residual partials preserve explicit missing car-lap or result/chart conflict diagnostics without guessing terminal or conflict laps.
+- Lap samples: source availability exception, not a priority gap. INDY NXT official Race Lap Chart PDFs are imported for all 40 completed race sessions: 30 charts fully parsed and 10 clean partial visible-sample imports; residual partials preserve explicit missing car-lap or result/chart conflict diagnostics without guessing terminal or conflict laps.
 - Detailed pit context: source availability exception, not a priority gap. INDY NXT official report inventory exposes PitStops counts in API/result rows and Race Lap Chart position samples, but no dedicated pit-summary, pit-lane sequence, stop-lap, tire/service, or pit-time report was found across the cached official report family.
-- Exact session windows: partial. 111/189 physical sessions have clock-time starts; 189/189 have at least date-level starts; 78 sessions are source-unavailable exact windows after official source review.
-- Official weather/track conditions: unavailable. 0/189 sessions have official weather/track-condition observations.
-- Lap samples: partial. 38/38 completed race sessions have lap-chart samples; 38 completed race sessions: 28 charts fully parsed and 10 clean partial visible-sample imports.
-- INDY NXT section data: partial. 151/152 comparable sessions have both official Top Section Times and Section Results metrics. Aggregate combined qualifying rows, future schedule-only sessions, canceled sessions, and official no-row reports are excluded. Report parser cross-check: 153/153 comparable Top Section reports parsed; 152/153 comparable Section Results reports parsed. True held-outs: session_indy_nxt_2024_6325 (official_pdf_corrupt_or_truncated).
+- Exact session windows: partial. 125/203 physical sessions have clock-time starts; 203/203 have at least date-level starts; 78 sessions are source-unavailable exact windows after official source review.
+- Official weather/track conditions: unavailable. 0/203 sessions have official weather/track-condition observations.
+- Lap samples: partial. 40/40 completed race sessions have lap-chart samples; 40 completed race sessions: 30 charts fully parsed and 10 clean partial visible-sample imports.
+- INDY NXT section data: partial. 158/159 comparable sessions have both official Top Section Times and Section Results metrics. Aggregate combined qualifying rows, future schedule-only sessions, canceled sessions, and official no-row reports are excluded. Report parser cross-check: 160/160 comparable Top Section reports parsed; 159/160 comparable Section Results reports parsed. True held-outs: session_indy_nxt_2024_6325 (official_pdf_corrupt_or_truncated).
 - Detailed pit context: unavailable. INDY NXT official/API rows expose pit-stop counts, but the official report family does not expose a dedicated detailed pit-summary or pit-lane sequence.
 - Derived benchmarks: blocked. 0 non-report derived metrics exist for this series. Teammate/field-strength analytics are not production-ready yet.
 
