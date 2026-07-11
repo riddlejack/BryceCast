@@ -1,5 +1,5 @@
-import { useEffect, useState, type ReactNode } from 'react';
-import { AlertTriangle, CheckCircle2, CircleAlert, Database, Info, X } from 'lucide-react';
+import { useEffect, useState, type CSSProperties, type ReactNode } from 'react';
+import { AlertTriangle, CheckCircle2, ChevronDown, ChevronUp, CircleAlert, Database, Info, X } from 'lucide-react';
 
 /* ---------- status chips (icon + label always; never color alone) ---------- */
 
@@ -94,6 +94,105 @@ export const Card = ({
     ) : null}
     {children}
   </section>
+);
+
+/* ---------- hero panel: flagship moments with atmosphere ---------- */
+
+export const HeroPanel = ({
+  tint,
+  children,
+  className,
+  style
+}: {
+  tint?: 'bryce' | 'live';
+  children: ReactNode;
+  className?: string;
+  style?: CSSProperties;
+}) => (
+  <section
+    className={`panel panel--hero${tint ? ` panel--hero--${tint}` : ''}${className ? ` ${className}` : ''}`}
+    style={style}
+  >
+    {children}
+  </section>
+);
+
+/* ---------- screen header ---------- */
+
+export const ScreenHead = ({ kicker, title, sub }: { kicker?: ReactNode; title: ReactNode; sub?: ReactNode }) => (
+  <header className="screen-head">
+    {kicker ? <span className="kicker">{kicker}</span> : null}
+    <h1 className="screen-head__title">{title}</h1>
+    {sub ? <p className="screen-head__sub">{sub}</p> : null}
+  </header>
+);
+
+/* ---------- number plate ---------- */
+
+export const Plate = ({ size = 'nav' }: { size?: 'nav' | 'hero' }) => (
+  <span className={`plate plate--${size}`} aria-hidden>
+    <span>9</span>
+  </span>
+);
+
+/* ---------- countdown (ticks every 30s; days/hours/minutes) ---------- */
+
+const countdownParts = (target: Date): Array<{ num: number; label: string }> | null => {
+  const remaining = target.getTime() - Date.now();
+  if (!Number.isFinite(remaining) || remaining <= 0) return null;
+  const minutes = Math.floor(remaining / 60_000);
+  const days = Math.floor(minutes / (60 * 24));
+  const hours = Math.floor((minutes - days * 60 * 24) / 60);
+  const mins = minutes % 60;
+  if (days > 0) {
+    return [
+      { num: days, label: days === 1 ? 'day' : 'days' },
+      { num: hours, label: hours === 1 ? 'hour' : 'hours' }
+    ];
+  }
+  return [
+    { num: hours, label: hours === 1 ? 'hour' : 'hours' },
+    { num: mins, label: 'min' }
+  ];
+};
+
+export const Countdown = ({ to }: { to: string }) => {
+  const [, tick] = useState(0);
+  useEffect(() => {
+    const timer = setInterval(() => tick((value) => value + 1), 30_000);
+    return () => clearInterval(timer);
+  }, []);
+  const target = new Date(to);
+  if (Number.isNaN(target.getTime())) return null;
+  const parts = countdownParts(target);
+  if (!parts) return null;
+  return (
+    <div className="countdown" role="timer" aria-label="Time to green flag">
+      {parts.map((part) => (
+        <div key={part.label} className="countdown__cell">
+          <span className="countdown__num">{part.num}</span>
+          <span className="countdown__label">{part.label}</span>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+/* ---------- ghost expand/collapse button ---------- */
+
+export const GhostButton = ({
+  expanded,
+  onClick,
+  children
+}: {
+  expanded?: boolean;
+  onClick: () => void;
+  children: ReactNode;
+}) => (
+  <button type="button" className="btn-ghost" onClick={onClick}>
+    {expanded === undefined ? null : expanded ? <ChevronUp size={14} aria-hidden /> : <ChevronDown size={14} aria-hidden />}
+    {children}
+  </button>
 );
 
 /* ---------- unavailable state ---------- */

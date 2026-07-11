@@ -1078,9 +1078,10 @@ const buildReplaySummary = (rows) => {
   };
 };
 
-const queryReplay = ({ limit: limitValue, offset: offsetValue, sessionKey: requestedSessionKey }) => {
+const queryReplay = ({ limit: limitValue, offset: offsetValue, sessionKey: requestedSessionKey, sample: sampleMode }) => {
   const limit = Math.min(Math.max(Number(limitValue) || 100, 1), 500);
   const offset = Math.max(Number(offsetValue) || 0, 0);
+  const perLap = sampleMode === 'lap';
   try {
     const db = new DatabaseSync(sqlitePath, { readOnly: true });
     try {
@@ -1125,13 +1126,19 @@ const queryReplay = ({ limit: limitValue, offset: offsetValue, sessionKey: reque
           FROM bryce_samples b
           LEFT JOIN race_snapshots s ON s.id = b.snapshot_id
           WHERE (? IS NULL OR b.session_key = ?)
-          ORDER BY b.checked_at DESC
+          ${perLap
+            ? `AND b.checked_at = (
+                 SELECT MAX(b2.checked_at) FROM bryce_samples b2
+                 WHERE b2.session_key = b.session_key AND b2.laps = b.laps
+               )`
+            : ''}
+          ORDER BY ${perLap ? 'CAST(b.laps AS INTEGER) ASC' : 'b.checked_at DESC'}
           LIMIT ?
           OFFSET ?
         `
         )
-        .all(sessionKey, sessionKey, limit, offset)
-        .reverse();
+        .all(sessionKey, sessionKey, limit, offset);
+      if (!perLap) rows.reverse();
       const selected = sessionKey ? db.prepare('SELECT COUNT(*) AS count FROM bryce_samples WHERE session_key = ?').get(sessionKey) : total;
       const selectedCount = Number(selected?.count ?? rows.length);
       const returnedRows = buildReplayRows(rows);
@@ -1898,6 +1905,26 @@ const handler = async (req, res) => {
       return;
     }
 
+    if (pathname === '/api/next-session') {
+      // Schedule-aware view from the live-runner status file (trackactivity/schedule
+      // feeds); read-only. Day-to-day source for "when does Bryce run next".
+      const status = await readJsonFile(runnerStatusPath);
+      if (!status) {
+        sendJson(res, 200, { available: false, reason: 'Live runner status not available on this host.' });
+        return;
+      }
+      sendJson(res, 200, {
+        available: true,
+        checkedAt: status.updatedAt ?? null,
+        statusAgeSeconds: ageSeconds(status.updatedAt),
+        phase: status.phase ?? null,
+        currentSession: status.currentSession ?? null,
+        nextSession: status.nextSession ?? null,
+        source: status.nextSession?.source ?? null
+      });
+      return;
+    }
+
     if (pathname === '/api/session') {
       const snapshot = await cachedRaceSnapshot();
       sendJson(res, 200, {
@@ -2008,7 +2035,7 @@ const handler = async (req, res) => {
     }
 
     if (pathname === '/api/replay/bryce') {
-      sendJson(res, 200, queryReplay({ limit: url.searchParams.get('limit'), offset: url.searchParams.get('offset'), sessionKey: url.searchParams.get('sessionKey') }));
+      sendJson(res, 200, queryReplay({ limit: url.searchParams.get('limit'), offset: url.searchParams.get('offset'), sessionKey: url.searchParams.get('sessionKey'), sample: url.searchParams.get('sample') }));
       return;
     }
 

@@ -2,6 +2,7 @@ import type { ComponentType, ReactNode } from 'react';
 import { CalendarClock, Flag, Home, LineChart, Radio } from 'lucide-react';
 import './theme.css';
 import { Link, RouterProvider, matchPath, useRouter } from './router';
+import { Plate } from './components';
 import { useReadiness } from './useReadiness';
 import { HomeScreen } from '../screens/HomeScreen';
 import { LiveScreen } from '../screens/LiveScreen';
@@ -28,10 +29,10 @@ const Shell = ({ children, liveState }: { children: ReactNode; liveState: string
     <>
       <nav className="topnav">
         <Link to="/" className="brand">
-          <span className="brand__nine">9</span>
+          <Plate size="nav" />
           BryceCast
         </Link>
-        <div className="row" style={{ gap: 22, flex: 1 }}>
+        <div className="row" style={{ gap: 24, flex: 1 }}>
           {navItems.slice(1).map((item) => (
             <Link key={item.to} to={item.to} className={`navlink${isActive(route.path, item.to) ? ' navlink--active' : ''}`}>
               {item.label}
@@ -43,7 +44,17 @@ const Shell = ({ children, liveState }: { children: ReactNode; liveState: string
           Data
         </Link>
       </nav>
-      {children}
+      <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>{children}</div>
+      <footer className="footer">
+        <div className="footer__inner">
+          <span>
+            BryceCast · following Bryce Aron, No. 9, Chip Ganassi Racing · built by family, powered by official sources
+          </span>
+          <span className="row" style={{ gap: 14 }}>
+            <Link to="/data">Data &amp; sources</Link>
+          </span>
+        </div>
+      </footer>
       <nav className="tabbar">
         {navItems.map((item) => {
           const Icon = item.icon;

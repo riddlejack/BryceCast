@@ -1,7 +1,23 @@
-import { useMemo, useState } from 'react';
-import { ChevronDown, ChevronUp, Flag, Trophy, Wind } from 'lucide-react';
-import { Card, SourcePill, Stat, StatusChip, TrustBanner, Unavailable, readinessCopy, type Tone } from '../app/components';
+import { useEffect, useMemo, useState } from 'react';
+import { ArrowDown, ArrowUp, CalendarClock, Flag, Trophy, Wind } from 'lucide-react';
+import {
+  Card,
+  Countdown,
+  GhostButton,
+  HeroPanel,
+  Plate,
+  SourcePill,
+  Stat,
+  StatusChip,
+  TrustBanner,
+  Unavailable,
+  readinessCopy,
+  type Tone
+} from '../app/components';
+import { LapStoryChart, type LapPoint } from '../app/charts';
 import { asNumber, asString, formatGain, formatGap, formatLapTime, formatNumber, trackTypeLabel } from '../app/format';
+import { Link } from '../app/router';
+import { useNextSession } from '../app/useNextSession';
 import type { LiveReadiness } from '../app/useReadiness';
 
 type Row = Record<string, unknown>;
@@ -26,6 +42,9 @@ const flagTone = (flag: string | null): Tone => {
   return 'neutral';
 };
 
+const driverLabel = (row: Row | undefined): string | null =>
+  row ? asString(row.lastName) ?? asString(row.name) ?? (asString(row.no) ? `Car ${asString(row.no)}` : null) : null;
+
 /* ---------- session header ---------- */
 
 const SessionHeader = ({ payload }: { payload: LiveReadiness }) => {
@@ -34,20 +53,28 @@ const SessionHeader = ({ payload }: { payload: LiveReadiness }) => {
   const flag = asString(heartbeat.flag ?? weekend.flag);
   const lap = asNumber(heartbeat.lap ?? weekend.lap);
   const totalLaps = asNumber(heartbeat.totalLaps ?? weekend.totalLaps);
+  const sessionName = asString(heartbeat.sessionName ?? weekend.sessionName);
+  const typeLabel = asString(weekend.trackType) ? trackTypeLabel(weekend.trackType) : null;
+  const kicker = [typeLabel, asString(weekend.trackName)].filter(Boolean).join(' · ') || 'Live companion';
   return (
-    <div className="row row--between row--wrap">
+    <div className="row row--between row--wrap" style={{ alignItems: 'flex-end', gap: 14 }}>
       <div>
-        <div className="caption caption--secondary">{trackTypeLabel(weekend.trackType)} · {asString(weekend.trackName) ?? '—'}</div>
-        <h1 className="display" style={{ fontSize: 22, margin: '2px 0 0' }}>
+        <span className="kicker">{kicker}</span>
+        <h1 className="screen-head__title" style={{ marginTop: 8 }}>
           {asString(weekend.eventName) ?? 'INDY NXT'}
         </h1>
       </div>
-      <div className="row">
+      <div className="row" style={{ gap: 10 }}>
         {flag ? <StatusChip tone={flagTone(flag)} label={`${flag} flag`} live={flag.toUpperCase() === 'GREEN'} /> : null}
         {lap !== null && totalLaps !== null ? (
-          <span className="chip chip--outline figure" style={{ fontSize: 13 }}>
-            Lap {lap}/{totalLaps}
-          </span>
+          <div className="stat" style={{ alignItems: 'flex-end' }}>
+            <span className="caption">Lap</span>
+            <span className="figure" style={{ fontSize: 26, lineHeight: 1 }}>
+              {lap}<span style={{ color: 'var(--ink-muted)', fontWeight: 600 }}>/{totalLaps}</span>
+            </span>
+          </div>
+        ) : sessionName ? (
+          <span className="chip chip--outline">{sessionName}</span>
         ) : null}
       </div>
     </div>
@@ -58,13 +85,17 @@ const SessionHeader = ({ payload }: { payload: LiveReadiness }) => {
 
 const BryceHero = ({ payload }: { payload: LiveReadiness }) => {
   const bryce = bryceRowOf(payload);
+  const heartbeat = heartbeatOf(payload);
+  const green = (asString(heartbeat.flag) ?? '').toUpperCase() === 'GREEN';
+
   if (!bryce) {
     return (
       <Card>
-        <Unavailable>Bryce isn’t in this timing feed. His live card will light up when his session starts.</Unavailable>
+        <Unavailable>Bryce isn’t in this timing feed. His live card lights up when his session starts.</Unavailable>
       </Card>
     );
   }
+
   const rank = asNumber(bryce.rank);
   const start = asNumber(bryce.startPosition);
   const gain = start !== null && rank !== null ? formatGain(start - rank) : null;
@@ -72,12 +103,34 @@ const BryceHero = ({ payload }: { payload: LiveReadiness }) => {
   const ahead = rank !== null ? rows.find((row) => asNumber(row.rank) === rank - 1) : undefined;
   const behind = rank !== null ? rows.find((row) => asNumber(row.rank) === rank + 1) : undefined;
 
+  const detailStats: Array<{ label: string; value: string }> = [];
+  const gapAhead = asString(bryce.liveDiffAhead) ?? asString(bryce.diff);
+  if (gapAhead) detailStats.push({ label: 'Gap ahead', value: formatGap(gapAhead) });
+  if (asString(bryce.lastLapTime)) detailStats.push({ label: 'Last lap', value: formatLapTime(bryce.lastLapTime) });
+  if (asString(bryce.bestLapTime)) detailStats.push({ label: 'Best lap', value: formatLapTime(bryce.bestLapTime) });
+  if (asNumber(bryce.pitStops) !== null) detailStats.push({ label: 'Pit stops', value: formatNumber(bryce.pitStops, 0) });
+
   return (
-    <Card className="bryce-hero">
+    <HeroPanel tint={green ? 'live' : 'bryce'}>
       <div className="row row--between" style={{ alignItems: 'flex-start' }}>
-        <div className="row" style={{ gap: 18, alignItems: 'flex-start' }}>
+        <span className="caption" style={{ color: 'var(--bryce)', letterSpacing: '0.12em' }}>
+          Bryce Aron · No. 9
+        </span>
+        <SourcePill
+          title="Bryce live tile"
+          entries={[
+            {
+              label: 'Race Control timing feed (car 9, DriverID 2143)',
+              path: '/api/bryce',
+              note: 'Identity-guarded: only counted as Bryce when the INDY NXT heartbeat and car 9 identity both match.'
+            }
+          ]}
+        />
+      </div>
+      <div className="grid grid--split" style={{ alignItems: 'center', marginTop: 6 }}>
+        <div className="row" style={{ gap: 18 }}>
+          <Plate size="hero" />
           <div className="stat">
-            <span className="caption" style={{ color: 'var(--bryce)' }}>Bryce Aron · No. 9</span>
             <span className="stat__value stat__value--hero" style={{ color: 'var(--bryce)' }}>
               {rank !== null ? `P${rank}` : '—'}
             </span>
@@ -90,32 +143,38 @@ const BryceHero = ({ payload }: { payload: LiveReadiness }) => {
             )}
           </div>
         </div>
-        <SourcePill
-          title="Bryce live tile"
-          entries={[
-            { label: 'Race Control timing feed (car 9, DriverID 2143)', path: '/api/bryce', note: 'Identity-guarded: only counted as Bryce when the INDY NXT heartbeat and car 9 identity both match.' }
-          ]}
-        />
-      </div>
-      <div className="grid grid--3" style={{ marginTop: 16 }}>
-        <Stat label="Gap ahead" value={ahead ? formatGap(bryce.liveDiffAhead ?? bryce.diff) : '—'} delta={null} />
-        <Stat label="Last lap" value={formatLapTime(bryce.lastLapTime)} />
-        <Stat label="Best lap" value={formatLapTime(bryce.bestLapTime)} />
+        {detailStats.length > 0 ? (
+          <div className="row" style={{ gap: 28, flexWrap: 'wrap' }}>
+            {detailStats.map((stat) => (
+              <Stat key={stat.label} label={stat.label} value={stat.value} />
+            ))}
+          </div>
+        ) : (
+          <p style={{ margin: 0, fontSize: 12.5, color: 'var(--ink-muted)', maxWidth: '32ch' }}>
+            Lap times and gaps appear here as Race Control publishes them.
+          </p>
+        )}
       </div>
       {(ahead || behind) && (
-        <div className="row row--wrap" style={{ marginTop: 14, gap: 8 }}>
+        <div className="row row--wrap" style={{ marginTop: 18, gap: 8 }}>
           {ahead ? (
-            <span className="chip chip--outline">▲ chasing {asString(ahead.lastName) ?? asString(ahead.name) ?? 'car ahead'}</span>
+            <span className="chip chip--outline">
+              <ArrowUp size={11} aria-hidden /> chasing {driverLabel(ahead)}
+            </span>
+          ) : rank === 1 ? (
+            <span className="chip chip--bryce">
+              <Trophy size={11} aria-hidden /> leading the field
+            </span>
           ) : null}
           {behind ? (
             <span className="chip chip--outline">
-              ▼ {asString(behind.lastName) ?? asString(behind.name) ?? 'car behind'} behind
-              {asString(bryce.liveDiffBehind) ? ` ${formatGap(bryce.liveDiffBehind)}` : ''}
+              <ArrowDown size={11} aria-hidden /> {driverLabel(behind)} behind
+              {asString(bryce.liveDiffBehind) ? ` · ${formatGap(bryce.liveDiffBehind)}` : ''}
             </span>
           ) : null}
         </div>
       )}
-    </Card>
+    </HeroPanel>
   );
 };
 
@@ -154,10 +213,10 @@ const PointsProjection = ({ payload }: { payload: LiveReadiness }) => {
       <Card
         flush
         title={
-          <span className="row" style={{ gap: 7 }}>
+          <>
             <Trophy size={15} style={{ color: 'var(--bryce)' }} aria-hidden />
             If the race ended now
-          </span>
+          </>
         }
         action={
           <SourcePill
@@ -173,12 +232,17 @@ const PointsProjection = ({ payload }: { payload: LiveReadiness }) => {
           />
         }
       >
-        <div style={{ padding: '4px 18px 8px' }}>
-          <div className="row row--wrap" style={{ gap: 8, marginBottom: 8 }}>
+        <div style={{ padding: '0 18px 10px' }}>
+          <div className="row row--wrap" style={{ gap: 8 }}>
             <StatusChip tone="warn" label="Provisional · Race Control" />
             {championshipMove && projectedBryceRank !== null ? (
               <span className="chip chip--bryce">
-                Bryce {championshipMove.direction === 'up' ? `up to P${projectedBryceRank}` : championshipMove.direction === 'down' ? `to P${projectedBryceRank}` : `holds P${projectedBryceRank}`}
+                Bryce{' '}
+                {championshipMove.direction === 'up'
+                  ? `up to P${projectedBryceRank}`
+                  : championshipMove.direction === 'down'
+                    ? `to P${projectedBryceRank}`
+                    : `holds P${projectedBryceRank}`}
                 {historicalRank !== null ? ` · was P${historicalRank}` : ''}
               </span>
             ) : null}
@@ -193,53 +257,31 @@ const PointsProjection = ({ payload }: { payload: LiveReadiness }) => {
                 {row.isBryce ? <span className="tower__team" style={{ color: 'var(--bryce)' }}> · No. 9</span> : null}
               </span>
               <span className="tower__gap figure">{row.total}</span>
-              <span className="tower__gap" style={{ fontSize: 11.5 }}>
-                {row.running !== null ? `+${row.running} today` : ''}
-              </span>
+              <span className="tower__gap" style={{ fontSize: 11.5 }}>{row.running !== null ? `+${row.running} today` : ''}</span>
             </div>
           ))}
         </div>
         {projected.length > visible.length || expanded ? (
-          <button
-            type="button"
-            onClick={() => setExpanded((value) => !value)}
-            style={{
-              width: '100%',
-              background: 'none',
-              border: 'none',
-              borderTop: '1px solid var(--border-hairline)',
-              color: 'var(--ink-secondary)',
-              padding: '10px 0',
-              fontSize: 12.5,
-              fontWeight: 600,
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: 6
-            }}
-          >
-            {expanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+          <GhostButton expanded={expanded} onClick={() => setExpanded((value) => !value)}>
             {expanded ? 'Show fewer' : `Show all ${projected.length}`}
-          </button>
+          </GhostButton>
         ) : null}
       </Card>
     );
   }
 
-  /* fallback modes: historical baseline or unavailable */
   const historicalPoints = asNumber(brycePoints.historicalDriverPoints);
   return (
     <Card
       title={
-        <span className="row" style={{ gap: 7 }}>
+        <>
           <Trophy size={15} style={{ color: 'var(--bryce)' }} aria-hidden />
           Championship
-        </span>
+        </>
       }
     >
       {historicalPoints !== null ? (
-        <div className="row" style={{ gap: 24 }}>
+        <div className="row" style={{ gap: 26 }}>
           <Stat label="Season points" value={historicalPoints} />
           <Stat label="Standing" value={historicalRank !== null ? `P${historicalRank}` : '—'} />
         </div>
@@ -284,41 +326,128 @@ const TimingTower = ({ payload }: { payload: LiveReadiness }) => {
       <div className="tower" role="table" aria-label="Live timing tower">
         {windowed.map((row) => {
           const isBryce = row.bryce === true;
+          const start = asNumber(row.startPosition);
+          const rank = asNumber(row.rank);
+          const moved = start !== null && rank !== null ? start - rank : null;
           return (
             <div key={asString(row.no) ?? String(row.rank)} className={`tower__row${isBryce ? ' tower__row--bryce' : ''}`} role="row">
               <span className="tower__pos">{formatNumber(row.rank, 0)}</span>
               <span className="tower__name">
-                {asString(row.lastName) ?? asString(row.name) ?? `Car ${asString(row.no) ?? '—'}`}
+                {driverLabel(row) ?? '—'}
+                {moved !== null && moved !== 0 ? (
+                  <span style={{ marginLeft: 6, fontSize: 11, color: moved > 0 ? 'var(--status-good)' : 'var(--ink-muted)' }}>
+                    {moved > 0 ? `▲${moved}` : `▽${Math.abs(moved)}`}
+                  </span>
+                ) : null}
                 <span className="tower__team"> {asString(row.team) ?? ''}</span>
               </span>
               <span className="tower__gap">{formatGap(row.gap)}</span>
-              <span className="tower__gap" style={{ fontSize: 11.5 }}>{asNumber(row.pitStops) !== null ? `${formatNumber(row.pitStops, 0)} stops` : ''}</span>
+              <span className="tower__gap" style={{ fontSize: 11.5 }}>
+                {asNumber(row.pitStops) !== null ? `${formatNumber(row.pitStops, 0)} stops` : ''}
+              </span>
             </div>
           );
         })}
       </div>
-      <button
-        type="button"
-        onClick={() => setExpanded((value) => !value)}
-        style={{
-          width: '100%',
-          background: 'none',
-          border: 'none',
-          borderTop: '1px solid var(--border-hairline)',
-          color: 'var(--ink-secondary)',
-          padding: '10px 0',
-          fontSize: 12.5,
-          fontWeight: 600,
-          cursor: 'pointer',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: 6
-        }}
-      >
-        {expanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+      <GhostButton expanded={expanded} onClick={() => setExpanded((value) => !value)}>
         {expanded ? 'Focus on Bryce' : `Show all ${sorted.length} cars`}
-      </button>
+      </GhostButton>
+    </Card>
+  );
+};
+
+/* ---------- race trend (Bryce position by lap, from the live archive) ---------- */
+
+interface TrendState {
+  points: LapPoint[];
+  sessionLabel: string | null;
+  isCurrentSession: boolean;
+}
+
+const useRaceTrend = (payload: LiveReadiness | null, fixtureMode: boolean): TrendState | null => {
+  const [trend, setTrend] = useState<TrendState | null>(null);
+  const heartbeat = payload ? heartbeatOf(payload) : {};
+  const liveKey =
+    !fixtureMode && asString(heartbeat.eventId) && asString(heartbeat.eventSessionId)
+      ? `${asString(heartbeat.eventId)}-${asString(heartbeat.eventSessionId)}`
+      : null;
+  const live = payload?.state === 'ready' || payload?.state === 'degraded';
+
+  useEffect(() => {
+    let cancelled = false;
+    const load = async () => {
+      try {
+        const key = liveKey ? `&sessionKey=${encodeURIComponent(liveKey)}` : '';
+        const response = await fetch(`/api/replay/bryce?sample=lap&limit=200${key}`, { headers: { accept: 'application/json' } });
+        if (!response.ok) return;
+        const data = (await response.json()) as Row;
+        if (cancelled || data.available !== true) return;
+        const rows = Array.isArray(data.rows) ? (data.rows as Row[]) : [];
+        const byLap = new Map<number, LapPoint>();
+        for (const row of rows) {
+          const lap = asNumber(row.laps);
+          const rank = asNumber(row.rank);
+          if (lap === null || rank === null) continue;
+          byLap.set(lap, { lap, rank, flag: asString(row.flag) });
+        }
+        const points = [...byLap.values()].sort((a, b) => a.lap - b.lap);
+        const sessionKey = asString(data.sessionKey);
+        const sessions = Array.isArray(data.sessions) ? (data.sessions as Row[]) : [];
+        const session = sessions.find((candidate) => asString(candidate.sessionKey) === sessionKey);
+        const label = session
+          ? [asString(session.eventName), asString(session.sessionName)].filter(Boolean).join(' · ')
+          : null;
+        setTrend({
+          points,
+          sessionLabel: label,
+          isCurrentSession: liveKey !== null && sessionKey === liveKey
+        });
+      } catch {
+        /* archive optional */
+      }
+    };
+    void load();
+    if (live && !fixtureMode) {
+      const timer = setInterval(load, 15_000);
+      return () => {
+        cancelled = true;
+        clearInterval(timer);
+      };
+    }
+    return () => {
+      cancelled = true;
+    };
+  }, [liveKey, live, fixtureMode]);
+
+  return trend;
+};
+
+const RaceTrend = ({ trend }: { trend: TrendState | null }) => {
+  if (!trend || trend.points.length < 2) return null;
+  return (
+    <Card
+      title="Race trend · position by lap"
+      action={
+        <SourcePill
+          title="Race trend"
+          entries={[
+            {
+              label: 'BryceCast live archive (SQLite)',
+              path: '/api/replay/bryce?sample=lap',
+              note: 'One point per lap from our own 1-second Race Control capture.'
+            }
+          ]}
+        />
+      }
+    >
+      {!trend.isCurrentSession && trend.sessionLabel ? (
+        <div className="row" style={{ marginBottom: 6 }}>
+          <span className="chip chip--neutral">
+            <Flag size={11} aria-hidden /> {trend.sessionLabel}
+          </span>
+        </div>
+      ) : null}
+      <LapStoryChart points={trend.points} />
     </Card>
   );
 };
@@ -334,10 +463,10 @@ const WeatherStrip = ({ payload }: { payload: LiveReadiness }) => {
   const wind = asNumber((observation.windSpeed as Row)?.value ?? observation.windSpeed);
   if (temperature === null && wind === null) return null;
   return (
-    <div className="row row--between card" style={{ padding: '10px 16px' }}>
+    <div className="row row--between panel panel--quiet" style={{ padding: '10px 16px' }}>
       <div className="row" style={{ gap: 14 }}>
         <Wind size={15} style={{ color: 'var(--ink-secondary)' }} aria-hidden />
-        {temperature !== null ? <span className="figure" style={{ fontSize: 15 }}>{Math.round(temperature)}°</span> : null}
+        {temperature !== null ? <span className="figure" style={{ fontSize: 16 }}>{Math.round(temperature)}°</span> : null}
         {wind !== null ? <span style={{ fontSize: 13, color: 'var(--ink-secondary)' }}>wind {Math.round(wind)}</span> : null}
         {sourceState === 'partial' ? <StatusChip tone="warn" label="partial" /> : null}
       </div>
@@ -346,20 +475,58 @@ const WeatherStrip = ({ payload }: { payload: LiveReadiness }) => {
   );
 };
 
+/* ---------- waiting states ---------- */
+
+const WaitingCard = ({ payload }: { payload: LiveReadiness }) => {
+  const copy = readinessCopy[payload.state];
+  const nextSession = useNextSession();
+  const heartbeat = heartbeatOf(payload);
+  const onTrackNow = payload.state === 'wrong_series' ? asString(heartbeat.eventName) : null;
+
+  return (
+    <HeroPanel tint="bryce">
+      <span className="kicker">{payload.state === 'pre_session' ? 'Almost time' : 'While we wait'}</span>
+      <p style={{ margin: '10px 0 0', fontSize: 15, color: 'var(--ink-secondary)', maxWidth: '58ch' }}>
+        {copy?.detail ?? payload.reason}
+        {onTrackNow ? ` Race Control is currently showing ${onTrackNow}.` : ''}
+        {payload.state === 'pre_session'
+          ? ' Live timing, the Bryce tile, and the points projection light up the moment Race Control goes live.'
+          : ''}
+      </p>
+      {nextSession?.startsAt && new Date(nextSession.startsAt).getTime() > Date.now() ? (
+        <div style={{ marginTop: 16 }}>
+          <span className="caption">
+            Next up · {[nextSession.eventName, nextSession.sessionName].filter(Boolean).join(' · ')}
+          </span>
+          <div style={{ marginTop: 8 }}>
+            <Countdown to={nextSession.startsAt} />
+          </div>
+        </div>
+      ) : null}
+      <div className="row" style={{ marginTop: 16 }}>
+        <Link to="/race-week" className="chip chip--outline">
+          <CalendarClock size={11} aria-hidden /> Race week HQ
+        </Link>
+      </div>
+    </HeroPanel>
+  );
+};
+
 /* ---------- screen ---------- */
 
 export const LiveScreen = ({ payload, fixtureMode }: { payload: LiveReadiness | null; fixtureMode: boolean }) => {
+  const trend = useRaceTrend(payload, fixtureMode);
+
   if (!payload) {
     return (
       <div className="page stack">
         <div className="skeleton" style={{ height: 46 }} />
-        <div className="skeleton" style={{ height: 210 }} />
+        <div className="skeleton" style={{ height: 230 }} />
         <div className="skeleton" style={{ height: 320 }} />
       </div>
     );
   }
 
-  const copy = readinessCopy[payload.state];
   const liveish = payload.state === 'ready' || payload.state === 'degraded';
 
   return (
@@ -375,27 +542,23 @@ export const LiveScreen = ({ payload, fixtureMode }: { payload: LiveReadiness | 
         <>
           <SessionHeader payload={payload} />
           <BryceHero payload={payload} />
-          <div className="grid grid--2">
+          <div className="grid grid--split">
             <PointsProjection payload={payload} />
-            <TimingTower payload={payload} />
+            <div className="stack">
+              <TimingTower payload={payload} />
+              <WeatherStrip payload={payload} />
+            </div>
           </div>
-          <WeatherStrip payload={payload} />
+          <RaceTrend trend={trend} />
         </>
       ) : (
         <>
           <SessionHeader payload={payload} />
-          {payload.state === 'pre_session' ? (
-            <Card title="Almost time">
-              <p style={{ margin: 0, color: 'var(--ink-secondary)', fontSize: 14 }}>
-                {copy?.detail} Live timing, the Bryce tile, and the points projection go live the moment Race Control does.
-              </p>
-            </Card>
-          ) : (
-            <Card title="While we wait">
-              <p style={{ margin: 0, color: 'var(--ink-secondary)', fontSize: 14 }}>{copy?.detail ?? payload.reason}</p>
-            </Card>
-          )}
-          <PointsProjection payload={payload} />
+          <WaitingCard payload={payload} />
+          <div className="grid grid--split">
+            <PointsProjection payload={payload} />
+            <RaceTrend trend={trend} />
+          </div>
         </>
       )}
     </div>
