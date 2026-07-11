@@ -6,7 +6,66 @@ export interface UiSourceRef {
   note: string;
 }
 
-export interface UiRoadAmericaPrepEvent {
+export interface UiChartSpec {
+  displayPolicy?: string;
+  fields?: string[];
+  filter?: Record<string, string>;
+  id: string;
+  source?: string;
+  type: string;
+}
+
+export interface UiPredictionBand {
+  calibrationState: string;
+  claimStrength: string;
+  confidence: string;
+  finishPercentileBand: {
+    median: number;
+    n: number;
+    p25: number;
+    p75: number;
+  };
+  modelPolicy: string;
+  scorecardRef: string;
+  target: string;
+  top10Policy: string;
+}
+
+export interface UiTop10PathItem {
+  actionableRead: string;
+  currentState: string;
+  factor: string;
+  whyItMatters: string;
+}
+
+export interface UiAnalogRace {
+  analogType: string;
+  analogyBasis: string;
+  confidence: string;
+  finishPercentile?: number | null;
+  finishPosition?: number | null;
+  historicalOutcomePolicy?: string;
+  positionGain?: number | null;
+  raceLabel: string;
+  seasonYear?: number | null;
+  sessionId: string;
+  startPosition?: number | null;
+  trackName: string;
+  trackType: string;
+}
+
+export interface UiUpcomingPrepEvent {
+  sourcePayload: string;
+  contextPackRef: {
+    bytes: number;
+    eventId: string;
+    id: string;
+    modifiedAt: string;
+    path: string;
+    sha256: string;
+    sourceRefs: string[];
+    type: 'upcoming_event';
+  };
   eventId: string;
   eventName: string;
   eventStartDate: string;
@@ -21,10 +80,16 @@ export interface UiRoadAmericaPrepEvent {
     top10RatePct: number | null;
   };
   trackTypeHistory: {
+    raceCount: number | null;
     avgFinish: number | null;
     avgGain: number | null;
+    finishPercentileMedian?: number | null;
     top10RatePct: number | null;
   };
+  predictionBand: UiPredictionBand;
+  top10Path: UiTop10PathItem[];
+  analogRaces: UiAnalogRace[];
+  chartSpecs: UiChartSpec[];
   weatherState: string;
   sourceState: string;
 }
@@ -76,14 +141,16 @@ export interface UiDataPackageArtifacts {
 export interface UiDataPackage {
   schemaVersion: 'brycecast.uiDataPackage.v1';
   generatedAt: string;
+  asOfDate: string;
   baselineCommit: string;
   sourceInventory: Record<string, { path: string; bytes: number; modifiedAt: string; sha256: string }>;
   packageRules: string[];
   screens: {
-    roadAmericaPrep: {
+    upcomingPrep: {
       title: string;
       readiness: string;
-      events: UiRoadAmericaPrepEvent[];
+      nextVenue?: string;
+      events: UiUpcomingPrepEvent[];
       runtimeApiRequirements: string[];
       caveats: string[];
       sourceRefs: UiSourceRef[];
@@ -127,7 +194,10 @@ export interface UiDataPackage {
   uiReadyArtifacts: UiDataPackageArtifacts;
 }
 
-export const uiDataPackage = uiDataPackageJson as UiDataPackage;
+/** Back-compat alias for pre-roll-forward call sites. */
+export type UiRoadAmericaPrepEvent = UiUpcomingPrepEvent;
+
+export const uiDataPackage = uiDataPackageJson as unknown as UiDataPackage;
 
 export const getLiveReadinessFixture = (state: UiLiveFixture['state'], variant: NonNullable<UiLiveFixture['variant']> = 'base'): UiLiveFixture | null =>
   uiDataPackage.screens.liveCompanionFixtures.fixtures.find((fixture) => fixture.state === state && (fixture.variant ?? 'base') === variant) ?? null;
