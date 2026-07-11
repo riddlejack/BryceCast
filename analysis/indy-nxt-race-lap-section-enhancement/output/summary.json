@@ -7,26 +7,26 @@
   ],
   "claimStrength": "post_race_descriptive_only",
   "counts": {
-    "raceLapInflectionPoints": 157,
-    "raceLapMicrostates": 1428,
-    "raceLapSegments": 173,
-    "raceSectionLapObservations": 16660,
-    "raceSectionSessionSummaries": 37,
+    "raceLapInflectionPoints": 164,
+    "raceLapMicrostates": 1493,
+    "raceLapSegments": 184,
+    "raceSectionLapObservations": 17841,
+    "raceSectionSessionSummaries": 39,
     "roadAmericaRows": 4,
     "upcomingVenueRows": 2
   },
-  "generatedAt": "2026-07-02T17:45:39Z",
+  "generatedAt": "2026-07-11T20:55:33Z",
   "ok": true,
   "publicPointPrediction": false,
   "sectionSourceStateCounts": {
-    "official_section_results+official_lap_chart+official_incident_caution_context": 16452,
-    "official_section_results_only": 208
+    "official_section_results+official_lap_chart+official_incident_caution_context": 17622,
+    "official_section_results_only": 219
   },
   "sourceDataset": "data/career/career.dataset.json",
-  "sourceHash": "5d66d442aa62ff829f41a78a998f82218eacb1e92cf10834dc3b4316d03ba7cb",
+  "sourceHash": "900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681",
   "upcomingVenue": {
-    "artifactSlug": "mid_ohio",
-    "asOfDate": "2026-07-02",
-    "trackName": "Mid-Ohio Sports Car Course"
+    "artifactSlug": "nashville_superspeedway",
+    "asOfDate": "2026-07-11",
+    "trackName": "Nashville Superspeedway"
   }
 }

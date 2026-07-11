@@ -143,8 +143,8 @@ assert.equal(
   'INDY NXT detailed pit context must document the source-family limitation'
 );
 const indyExactWindowCoverage = indyCoverage?.categories.find((row) => row.id === 'exact_session_windows');
-assert.equal(indyExactWindowCoverage?.covered, 111, 'INDY NXT exact-window coverage must retain the 111 sourced clock-time starts');
-assert.equal(indyExactWindowCoverage?.total, 189, 'INDY NXT exact-window coverage must retain the 189 physical-session denominator');
+assert.equal(indyExactWindowCoverage?.covered, 125, 'INDY NXT exact-window coverage must retain the 125 sourced clock-time starts');
+assert.equal(indyExactWindowCoverage?.total, 203, 'INDY NXT exact-window coverage must retain the 203 physical-session denominator');
 assert.match(
   indyExactWindowCoverage?.notes ?? '',
   /78 sessions are source-unavailable exact windows/,
@@ -162,8 +162,8 @@ assert.equal(
 );
 const indySectionCoverage = indyCoverage?.categories.find((row) => row.id === 'indy_section_data');
 assert.equal(indySectionCoverage?.status, 'partial', 'INDY NXT section data must remain partial until the true malformed Section Results PDF gap is resolved');
-assert.equal(indySectionCoverage?.covered, 151, 'INDY NXT section-data coverage must count sessions with both official Top Section Times and Section Results metrics');
-assert.equal(indySectionCoverage?.total, 152, 'INDY NXT section-data denominator must exclude combined aggregate, schedule-only, canceled, and official no-row sessions');
+assert.equal(indySectionCoverage?.covered, 158, 'INDY NXT section-data coverage must count sessions with both official Top Section Times and Section Results metrics');
+assert.equal(indySectionCoverage?.total, 159, 'INDY NXT section-data denominator must exclude combined aggregate, schedule-only, canceled, and official no-row sessions');
 assert.match(
   indySectionCoverage?.notes ?? '',
   /session_indy_nxt_2024_6325 \(official_pdf_corrupt_or_truncated\)/,
@@ -1489,10 +1489,10 @@ assert.equal(
 );
 
 const indyNxtQualifyingResults = dataset.qualifyingResults.filter((row) => row.sessionId.startsWith('session_indy_nxt_'));
-assert.equal(indyNxtQualifyingResults.length, 1334, 'INDY NXT qualifyingResults must import all official API SessionType=Q records');
+assert.equal(indyNxtQualifyingResults.length, 1430, 'INDY NXT qualifyingResults must import all official API SessionType=Q records');
 assert.equal(
   indyNxtQualifyingResults.filter((row) => row.driverId === 'driver_bryce_aron').length,
-  65,
+  69,
   'INDY NXT qualifyingResults must include Bryce rows from official API SessionType=Q records'
 );
 const indyNxtStPeteBryceQual = indyNxtQualifyingResults.find((row) => row.id === 'qualifying_indy_nxt_2024_6346_driver_bryce_aron');
@@ -1592,7 +1592,7 @@ assert.equal(
 const indyNxtStatusIncidents = dataset.incidents.filter((row) => /^incident_indy_nxt_status_/.test(row.id ?? ''));
 assert.equal(
   indyNxtStatusIncidents.length,
-  71,
+  72,
   'INDY NXT official terminal statuses contact/mechanical/dns must normalize to incident rows'
 );
 const indyNxtStatusIncidentTypes = indyNxtStatusIncidents.reduce((counts, row) => {
@@ -1601,7 +1601,7 @@ const indyNxtStatusIncidentTypes = indyNxtStatusIncidents.reduce((counts, row) =
 }, {});
 assert.deepEqual(
   indyNxtStatusIncidentTypes,
-  { contact: 58, dns: 2, mechanical: 11 },
+  { contact: 58, dns: 2, mechanical: 12 },
   'INDY NXT official terminal-status incidents must preserve source status categories without inferring unknowns'
 );
 const brycePortland2024ContactIncident = dataset.incidents.find((row) => row.id === 'incident_indy_nxt_status_2024_6324_driver_bryce_aron');
@@ -1706,7 +1706,7 @@ const indyNxtAlabama2024LeaderSummary = dataset.derivedMetrics.find((row) => row
 assert.ok(indyNxtAlabama2024LeaderSummary, 'INDY NXT Alabama 2024 Leader Lap Summary metric must import from the official PDF');
 assert.equal(
   dataset.derivedMetrics.filter((row) => /^metric_indy_nxt_\d{4}_\d+_leader_lap_summary$/.test(row.id ?? '')).length,
-  37,
+  39,
   'INDY NXT Leader Lap Summary metrics must import every official race-session PDF'
 );
 assert.equal(
@@ -1790,12 +1790,12 @@ assert.equal(indyNxtStPete2024QualBryceSectionCar?.carNumber, '27', 'INDY NXT St
 assert.equal(indyNxtStPete2024QualBryceSectionLap5Overall?.timeSeconds, 64.8883, 'INDY NXT St. Petersburg 2024 Bryce lap 5 official Section Results lap time must parse from the official PDF');
 assert.equal(indyNxtStPete2024QualBryceSectionLap5Overall?.speedMph, 99.864, 'INDY NXT St. Petersburg 2024 Bryce lap 5 official Section Results lap speed must parse from the official PDF');
 assert.equal(indyNxtStPete2024QualBryceSectionLap5Turn1?.timeSeconds, 6.3801, 'INDY NXT St. Petersburg 2024 Bryce lap 5 official Section Results Turn 1 time must parse from the official PDF');
-assert.equal(indyNxtReportDetailsBackfill.topSectionReportsDiscovered, 154, 'INDY NXT report-detail backfill must discover all official Top Section Times PDFs from session metadata');
-assert.equal(indyNxtReportDetailsBackfill.topSectionReportsParsed, 153, 'INDY NXT report-detail backfill must parse all non-canceled official Top Section Times PDFs');
-assert.equal(indyNxtReportDetailsBackfill.topSectionMetricsImported, 153, 'INDY NXT report-detail backfill must import one metric per parsed official Top Section Times PDF');
-assert.equal(indyNxtReportDetailsBackfill.sectionResultsReportsDiscovered, 154, 'INDY NXT report-detail backfill must discover all official Section Results PDFs from session metadata');
-assert.equal(indyNxtReportDetailsBackfill.sectionResultsReportsParsed, 152, 'INDY NXT report-detail backfill must parse all extractable non-canceled official Section Results PDFs');
-assert.equal(indyNxtReportDetailsBackfill.sectionResultsMetricsImported, 152, 'INDY NXT report-detail backfill must import one metric per parsed official Section Results PDF');
+assert.equal(indyNxtReportDetailsBackfill.topSectionReportsDiscovered, 161, 'INDY NXT report-detail backfill must discover all official Top Section Times PDFs from session metadata');
+assert.equal(indyNxtReportDetailsBackfill.topSectionReportsParsed, 160, 'INDY NXT report-detail backfill must parse all non-canceled official Top Section Times PDFs');
+assert.equal(indyNxtReportDetailsBackfill.topSectionMetricsImported, 160, 'INDY NXT report-detail backfill must import one metric per parsed official Top Section Times PDF');
+assert.equal(indyNxtReportDetailsBackfill.sectionResultsReportsDiscovered, 161, 'INDY NXT report-detail backfill must discover all official Section Results PDFs from session metadata');
+assert.equal(indyNxtReportDetailsBackfill.sectionResultsReportsParsed, 159, 'INDY NXT report-detail backfill must parse all extractable non-canceled official Section Results PDFs');
+assert.equal(indyNxtReportDetailsBackfill.sectionResultsMetricsImported, 159, 'INDY NXT report-detail backfill must import one metric per parsed official Section Results PDF');
 assert.deepEqual(indyNxtReportDetailsBackfill.sectionResultsFailures, [], 'INDY NXT Section Results parser must not leave parser failures');
 assert.deepEqual(
   indyNxtReportDetailsBackfill.sectionResultsReportsHeldOut,
@@ -1826,7 +1826,7 @@ assert.deepEqual(
   }],
   'INDY NXT canceled Iowa 2025 qualifying Top Section Times report must be held out as no-row official evidence'
 );
-assert.equal(indyNxtReportDetailsBackfill.resultsReportsDiscovered, 38, 'INDY NXT Results PDF penalty/caution parser must stay scoped to race sessions');
+assert.equal(indyNxtReportDetailsBackfill.resultsReportsDiscovered, 40, 'INDY NXT Results PDF penalty/caution parser must stay scoped to race sessions');
 assert.deepEqual(indyNxtReportDetailsBackfill.resultsReportFailures, [], 'INDY NXT race Results PDF parser must not treat qualifying results as penalty/caution failures');
 const indyNxtStPete2026LapSamples = dataset.lapSamples.filter((row) => row.sessionId === 'session_indy_nxt_2026_6751');
 const indyNxtStPete2026BryceLapSamples = indyNxtStPete2026LapSamples

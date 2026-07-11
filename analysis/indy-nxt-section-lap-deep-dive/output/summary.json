@@ -10,8 +10,8 @@
       "caveat": "Exploratory association only; no public point prediction and no post-race leakage for upcoming events.",
       "claimStrength": "historical_backtest_only",
       "label": "Practice section median vs race finish percentile",
-      "n": 31,
-      "pearson": 0.2660868090325819,
+      "n": 32,
+      "pearson": 0.26532128641486175,
       "x": "practiceMedianTrackSectionPercentile",
       "y": "finishPercentile"
     },
@@ -19,8 +19,8 @@
       "caveat": "Exploratory association only; no public point prediction and no post-race leakage for upcoming events.",
       "claimStrength": "historical_backtest_only",
       "label": "Qualifying section median vs race finish percentile",
-      "n": 37,
-      "pearson": 0.23075358410736885,
+      "n": 39,
+      "pearson": 0.2326142192260736,
       "x": "qualifyingMedianTrackSectionPercentile",
       "y": "finishPercentile"
     }
@@ -28,20 +28,20 @@
   "counts": {
     "roadAmericaPrepRows": 9,
     "sectionFamilyRows": 248,
-    "sectionObservations": 21629,
-    "sessionSummaries": 86,
-    "sessionToRaceTransferRows": 38,
-    "topSectionRows": 2909,
-    "upcomingVenuePrepRows": 6
+    "sectionObservations": 22421,
+    "sessionSummaries": 89,
+    "sessionToRaceTransferRows": 40,
+    "topSectionRows": 3004,
+    "upcomingVenuePrepRows": 5
   },
-  "generatedAt": "2026-07-02T17:45:36Z",
+  "generatedAt": "2026-07-11T20:55:29Z",
   "ok": true,
   "publicPointPrediction": false,
   "sourceDataset": "data/career/career.dataset.json",
-  "sourceHash": "5d66d442aa62ff829f41a78a998f82218eacb1e92cf10834dc3b4316d03ba7cb",
+  "sourceHash": "900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681",
   "upcomingVenue": {
-    "artifactSlug": "mid_ohio",
-    "asOfDate": "2026-07-02",
-    "trackName": "Mid-Ohio Sports Car Course"
+    "artifactSlug": "nashville_superspeedway",
+    "asOfDate": "2026-07-11",
+    "trackName": "Nashville Superspeedway"
   }
 }

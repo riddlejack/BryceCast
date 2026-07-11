@@ -1,6 +1,6 @@
 {
-  "asOfDate": "2026-07-02",
-  "generatedAt": "2026-07-02T17:45:19Z",
+  "asOfDate": "2026-07-11",
+  "generatedAt": "2026-07-11T20:55:09Z",
   "items": [
     {
       "availability": "partial",
@@ -424,7 +424,7 @@
     },
     {
       "availability": "analyst_only",
-      "bytes": 1248,
+      "bytes": 1253,
       "caveat": "Correlation is exploratory and non-causal.",
       "columns": 6,
       "confidence": "low",
@@ -434,13 +434,13 @@
       "productizationStatus": "analyst_only",
       "recommendedAction": "Keep for hypothesis selection or internal diagnostics until validated out of sample.",
       "rows": 11,
-      "sha256": "6e544fdbee71be5047e745821a5e9f339c85a3354c79e4a8c01f1bfdc9a57841",
+      "sha256": "31e8a96cfef1095800c9694362a4b758d86064f15532098d28d201153c5e5572",
       "sourcePath": "analysis/indy-nxt-discovery/output/tables/indy_nxt_correlations.csv",
       "surface": "cross_surface"
     },
     {
       "availability": "analyst_only",
-      "bytes": 1557,
+      "bytes": 1544,
       "caveat": "In-sample OLS only; existing interpretation text has coefficient-sign QA issues.",
       "columns": 5,
       "confidence": "low",
@@ -450,13 +450,13 @@
       "productizationStatus": "analyst_only",
       "recommendedAction": "Keep for hypothesis selection or internal diagnostics until validated out of sample.",
       "rows": 10,
-      "sha256": "9dbd859fe2857f7f85f36f853d82ef9c8082d56519daed6aa723c685549db55a",
+      "sha256": "0239f025b4edc86fda463d20ec9f0377abc268b636b7b1e57f0e36dce1486df5",
       "sourcePath": "analysis/indy-nxt-discovery/output/tables/indy_nxt_exploratory_model.csv",
       "surface": "cross_surface"
     },
     {
       "availability": "context_pack_ready",
-      "bytes": 889,
+      "bytes": 939,
       "caveat": null,
       "columns": 10,
       "confidence": "high",
@@ -466,13 +466,13 @@
       "productizationStatus": "context_pack_ready",
       "recommendedAction": "Inventory and expose if a context pack has a matching product use.",
       "rows": 6,
-      "sha256": "12853e2c06d5ca585583fa609b49ca135aed49c5c796ef10448b274297c48821",
+      "sha256": "c562eb85ef48c851b69fa9afe313c020d61e4432ccc5a661bd0b97ae77aeb4fb",
       "sourcePath": "analysis/indy-nxt-discovery/output/tables/indy_nxt_group_summary.csv",
       "surface": "cross_surface"
     },
     {
       "availability": "context_pack_ready",
-      "bytes": 10731,
+      "bytes": 11069,
       "caveat": null,
       "columns": 10,
       "confidence": "high",
@@ -482,13 +482,13 @@
       "productizationStatus": "context_pack_ready",
       "recommendedAction": "Inventory and expose if a context pack has a matching product use.",
       "rows": 49,
-      "sha256": "ad8dfebb98d8699d85d148bae80608e02a3e0553b0e6e9d8ef2aa30020c12138",
+      "sha256": "32d7c3be318c75190dbfec70fee32b9de3126ba8d62f840242cf3e29ce69622b",
       "sourcePath": "analysis/indy-nxt-discovery/output/tables/indy_nxt_head_to_head.csv",
       "surface": "cross_surface"
     },
     {
       "availability": "context_pack_ready",
-      "bytes": 5415,
+      "bytes": 5698,
       "caveat": null,
       "columns": 18,
       "confidence": "high",
@@ -497,14 +497,14 @@
       "label": "indy_nxt_lap_shape.csv",
       "productizationStatus": "context_pack_ready",
       "recommendedAction": "Inventory and expose if a context pack has a matching product use.",
-      "rows": 38,
-      "sha256": "982c28cc0b5f58e8be294802b4d756b5cbae0ef380ddb4956e817de970028604",
+      "rows": 40,
+      "sha256": "eaf642b95e65b01886cfed6da3e2da1d54ecbfc53f914dbb27e64b43b96f9189",
       "sourcePath": "analysis/indy-nxt-discovery/output/tables/indy_nxt_lap_shape.csv",
       "surface": "race_debrief"
     },
     {
       "availability": "context_pack_ready",
-      "bytes": 157272,
+      "bytes": 164534,
       "caveat": null,
       "columns": 6,
       "confidence": "high",
@@ -513,14 +513,14 @@
       "label": "indy_nxt_lap_timeline.csv",
       "productizationStatus": "context_pack_ready",
       "recommendedAction": "Promote through context packs with source refs, caveats, and denominator rules.",
-      "rows": 1428,
-      "sha256": "6ef649f1e17f4842b73a7c46d9c5192ff39cc3068259930ed5cb7228ee8eb9c2",
+      "rows": 1493,
+      "sha256": "53a63eee105f123cb79672a1526f7ad98417f6e4faa7287ff924e07714c4baa6",
       "sourcePath": "analysis/indy-nxt-discovery/output/tables/indy_nxt_lap_timeline.csv",
       "surface": "race_debrief"
     },
     {
       "availability": "context_pack_ready",
-      "bytes": 32131,
+      "bytes": 33723,
       "caveat": null,
       "columns": 91,
       "confidence": "high",
@@ -529,14 +529,14 @@
       "label": "indy_nxt_race_outcomes.csv",
       "productizationStatus": "context_pack_ready",
       "recommendedAction": "Promote through context packs with source refs, caveats, and denominator rules.",
-      "rows": 38,
-      "sha256": "3bfd43fd082303fb73e5762663b7444ef8bf01d982cb01168c670ca6aa5d24a0",
+      "rows": 40,
+      "sha256": "7271f03dad12bb4ee0f18d4ec994d554051d140856809f308ee4c498b3fd5121",
       "sourcePath": "analysis/indy-nxt-discovery/output/tables/indy_nxt_race_outcomes.csv",
       "surface": "cross_surface"
     },
     {
       "availability": "context_pack_ready",
-      "bytes": 194603,
+      "bytes": 204331,
       "caveat": "Headline display needs denominator filtering and partial-source badges.",
       "columns": 12,
       "confidence": "medium",
@@ -545,14 +545,14 @@
       "label": "indy_nxt_section_strengths.csv",
       "productizationStatus": "context_pack_ready",
       "recommendedAction": "Promote through context packs with source refs, caveats, and denominator rules.",
-      "rows": 1079,
-      "sha256": "ff334df82c606d3c7656e9dd974c722d26645ebd195f76450d2b9d33fb2c9fb4",
+      "rows": 1131,
+      "sha256": "1a0b541e24d1cf0358ed39fd2651a29e3bb6d5aade0b608dda5f2d2a05684c01",
       "sourcePath": "analysis/indy-nxt-discovery/output/tables/indy_nxt_section_strengths.csv",
       "surface": "race_debrief"
     },
     {
       "availability": "context_pack_ready",
-      "bytes": 1035,
+      "bytes": 888,
       "caveat": "Weather context is non-official/modelled unless a source row proves otherwise.",
       "columns": 8,
       "confidence": "medium",
@@ -562,7 +562,7 @@
       "productizationStatus": "context_pack_ready",
       "recommendedAction": "Inventory and expose if a context pack has a matching product use.",
       "rows": 10,
-      "sha256": "ced9ec1bcc10e16678c6054d0f221830b8c1267c6e9d462229e82e69b48850e7",
+      "sha256": "2c7bcc921534ea33f2fae561a0bc491a6a03a69736918c726cd8f51a2327a2d4",
       "sourcePath": "analysis/indy-nxt-discovery/output/tables/indy_nxt_weather_segments.csv",
       "surface": "cross_surface"
     },
@@ -584,7 +584,7 @@
     },
     {
       "availability": "context_pack_ready",
-      "bytes": 9989,
+      "bytes": 10520,
       "caveat": null,
       "columns": 12,
       "confidence": "high",
@@ -593,14 +593,14 @@
       "label": "championship_progression.csv",
       "productizationStatus": "context_pack_ready",
       "recommendedAction": "Promote through context packs with source refs, caveats, and denominator rules.",
-      "rows": 38,
-      "sha256": "747da5c10d17aaebfd77ba294260ac73752c6d1194ab31f4e199866d642ab408",
+      "rows": 40,
+      "sha256": "54d42d5b49db0182ac341b8b52355afad215277d86dfc4302b6a1e25fa040028",
       "sourcePath": "analysis/indy-nxt-discovery/output/deep_dive/tables/championship_progression.csv",
       "surface": "cross_surface"
     },
     {
       "availability": "analyst_only",
-      "bytes": 14223,
+      "bytes": 14220,
       "caveat": "Descriptive same-sample context; not a predictive scouting model.",
       "columns": 13,
       "confidence": "low",
@@ -610,13 +610,13 @@
       "productizationStatus": "analyst_only",
       "recommendedAction": "Keep for hypothesis selection or internal diagnostics until validated out of sample.",
       "rows": 50,
-      "sha256": "1039d05b1926cb9bdb05dfd512ef721c78c0de003f36ce9b5020cd754a3b4d8e",
+      "sha256": "3bcf99b4fa87363f4653aa30ef5dc4022b44a9488a6b31fe1a94e5bacc32fce3",
       "sourcePath": "analysis/indy-nxt-discovery/output/deep_dive/tables/driver_strength_ratings.csv",
       "surface": "race_intelligence"
     },
     {
       "availability": "analyst_only",
-      "bytes": 14208,
+      "bytes": 15005,
       "caveat": "Descriptive same-sample context; not a predictive scouting model.",
       "columns": 11,
       "confidence": "low",
@@ -625,14 +625,14 @@
       "label": "field_strength_by_race.csv",
       "productizationStatus": "analyst_only",
       "recommendedAction": "Keep for hypothesis selection or internal diagnostics until validated out of sample.",
-      "rows": 38,
-      "sha256": "de365eb0a9be656a70f552b2df9349f8a1c83e6c3519b8f5880824144a45ce95",
+      "rows": 40,
+      "sha256": "be66e8f4a398c6ed53e1c2834342e634ababe9838fae839ac19cfcd267aa1d4d",
       "sourcePath": "analysis/indy-nxt-discovery/output/deep_dive/tables/field_strength_by_race.csv",
       "surface": "race_intelligence"
     },
     {
       "availability": "context_pack_ready",
-      "bytes": 109555,
+      "bytes": 116456,
       "caveat": null,
       "columns": 14,
       "confidence": "high",
@@ -641,14 +641,14 @@
       "label": "full_field_lap_dynamics_by_driver.csv",
       "productizationStatus": "context_pack_ready",
       "recommendedAction": "Promote through context packs with source refs, caveats, and denominator rules.",
-      "rows": 773,
-      "sha256": "2e5b90ad5397a9965745b61af5434ce28e9d63ee5613dc0d5e779aa873f82809",
+      "rows": 821,
+      "sha256": "828ba054df83d1cc324be07408fd83ccad4701f76ea6d1d497d019ec2b007dbe",
       "sourcePath": "analysis/indy-nxt-discovery/output/deep_dive/tables/full_field_lap_dynamics_by_driver.csv",
       "surface": "race_debrief"
     },
     {
       "availability": "context_pack_ready",
-      "bytes": 9626,
+      "bytes": 10120,
       "caveat": null,
       "columns": 20,
       "confidence": "high",
@@ -657,14 +657,14 @@
       "label": "full_field_lap_dynamics_by_race.csv",
       "productizationStatus": "context_pack_ready",
       "recommendedAction": "Promote through context packs with source refs, caveats, and denominator rules.",
-      "rows": 38,
-      "sha256": "4fa25fc331babee76bdc4ed0bf6e92fb5d0e548c1612f9b142f45e6cd9ad530f",
+      "rows": 40,
+      "sha256": "35727abc1d7abe4c1aff808c8578087feec2e953fc1f13f12c9dedd764b24b1f",
       "sourcePath": "analysis/indy-nxt-discovery/output/deep_dive/tables/full_field_lap_dynamics_by_race.csv",
       "surface": "race_debrief"
     },
     {
       "availability": "context_pack_ready",
-      "bytes": 2206,
+      "bytes": 1606,
       "caveat": null,
       "columns": 17,
       "confidence": "high",
@@ -673,14 +673,14 @@
       "label": "future_weekend_prep_inputs.csv",
       "productizationStatus": "context_pack_ready",
       "recommendedAction": "Promote through context packs with source refs, caveats, and denominator rules.",
-      "rows": 7,
-      "sha256": "892be4f5c11d8de5f07ab540486bc47faf89fcb678216983d85ec02c582ce501",
+      "rows": 5,
+      "sha256": "bed5edc3b674ccaa1a38d91c9cddd532046f119114f601a71f40b5cb3d355896",
       "sourcePath": "analysis/indy-nxt-discovery/output/deep_dive/tables/future_weekend_prep_inputs.csv",
       "surface": "race_weekend_prep"
     },
     {
       "availability": "context_pack_ready",
-      "bytes": 8224,
+      "bytes": 8501,
       "caveat": null,
       "columns": 13,
       "confidence": "high",
@@ -689,8 +689,8 @@
       "label": "incident_penalty_context.csv",
       "productizationStatus": "context_pack_ready",
       "recommendedAction": "Promote through context packs with source refs, caveats, and denominator rules.",
-      "rows": 38,
-      "sha256": "11308ebdef3bcdc19eb370b163dcf7b428817083ae8e09e3cc13576ed818f5e6",
+      "rows": 40,
+      "sha256": "b085705605d0f76df35247504ad73dcb6c66de632e7b09286671fb710f17a38a",
       "sourcePath": "analysis/indy-nxt-discovery/output/deep_dive/tables/incident_penalty_context.csv",
       "surface": "race_debrief"
     },
@@ -706,13 +706,13 @@
       "productizationStatus": "productized",
       "recommendedAction": "Use as governance/source-contract input.",
       "rows": 16,
-      "sha256": "e721094f7012e9594c9c0ca4c918808eea392e445d941d84734e36525f976244",
+      "sha256": "48117fa4306ae7878e2d267eaf4cc719a4a29d1a4ede7b4bbba908c565bae8a3",
       "sourcePath": "analysis/indy-nxt-discovery/output/deep_dive/tables/indy_nxt_source_family_audit.csv",
       "surface": "source_ops"
     },
     {
       "availability": "context_pack_ready",
-      "bytes": 5136,
+      "bytes": 5394,
       "caveat": null,
       "columns": 11,
       "confidence": "high",
@@ -721,14 +721,14 @@
       "label": "leader_lap_context.csv",
       "productizationStatus": "context_pack_ready",
       "recommendedAction": "Promote through context packs with source refs, caveats, and denominator rules.",
-      "rows": 37,
-      "sha256": "fa9cf916a0ea4c76c44407e2b5b7512df0a868caf82093523c6bc16509774ca0",
+      "rows": 39,
+      "sha256": "1ac7a045a3fb737f03339c703575cb23035c034aa56a5b05f6d6e0aec4e707fa",
       "sourcePath": "analysis/indy-nxt-discovery/output/deep_dive/tables/leader_lap_context.csv",
       "surface": "race_debrief"
     },
     {
       "availability": "analyst_only",
-      "bytes": 800,
+      "bytes": 804,
       "caveat": "Correlation is exploratory and non-causal.",
       "columns": 6,
       "confidence": "low",
@@ -738,13 +738,13 @@
       "productizationStatus": "analyst_only",
       "recommendedAction": "Keep for hypothesis selection or internal diagnostics until validated out of sample.",
       "rows": 5,
-      "sha256": "8a5ce9081d68c439c4e30f82f79eaa32c1b8ec10bffc5101c3e04d8d1dec4a76",
+      "sha256": "b58af9014ff95a8e4ea8bf2e493c90bdab87386d969720416d0ade997b003403",
       "sourcePath": "analysis/indy-nxt-discovery/output/deep_dive/tables/prep_session_correlations.csv",
       "surface": "race_weekend_prep"
     },
     {
       "availability": "context_pack_ready",
-      "bytes": 9527,
+      "bytes": 10018,
       "caveat": null,
       "columns": 16,
       "confidence": "high",
@@ -753,14 +753,14 @@
       "label": "prep_session_signals.csv",
       "productizationStatus": "context_pack_ready",
       "recommendedAction": "Promote through context packs with source refs, caveats, and denominator rules.",
-      "rows": 38,
-      "sha256": "0d1bb4c6953c165ea0a057dc95c7a1c86726ca9c6a3d882139505673b54a635b",
+      "rows": 40,
+      "sha256": "f2599590233f5e113c7aa9f9c6b0f4105f618eaaa24a669d57dbc8497c3ab937",
       "sourcePath": "analysis/indy-nxt-discovery/output/deep_dive/tables/prep_session_signals.csv",
       "surface": "race_weekend_prep"
     },
     {
       "availability": "context_pack_ready",
-      "bytes": 828,
+      "bytes": 855,
       "caveat": null,
       "columns": 8,
       "confidence": "high",
@@ -770,13 +770,13 @@
       "productizationStatus": "context_pack_ready",
       "recommendedAction": "Inventory and expose if a context pack has a matching product use.",
       "rows": 7,
-      "sha256": "03e61e1d93a0e0210971a3ea8cf8a90b102f602d6d2a529a7c07f9f05f0be2f8",
+      "sha256": "63196b7f9bd373871ad66b189743b77f59e438af50dd8bc7dd013e36fee47fab",
       "sourcePath": "analysis/indy-nxt-discovery/output/deep_dive/tables/race_archetype_summary.csv",
       "surface": "cross_surface"
     },
     {
       "availability": "context_pack_ready",
-      "bytes": 18290,
+      "bytes": 19255,
       "caveat": null,
       "columns": 29,
       "confidence": "high",
@@ -785,8 +785,8 @@
       "label": "race_debrief_scores.csv",
       "productizationStatus": "context_pack_ready",
       "recommendedAction": "Promote through context packs with source refs, caveats, and denominator rules.",
-      "rows": 38,
-      "sha256": "30da64be58bfe4db116e10674fa12008da7fc2d62bb695871565f392f4f848c6",
+      "rows": 40,
+      "sha256": "3b75fe199977f9b705a93cc2fbbd9d115c02d28aa307fa108cf2e906527e500b",
       "sourcePath": "analysis/indy-nxt-discovery/output/deep_dive/tables/race_debrief_scores.csv",
       "surface": "race_debrief"
     },
@@ -808,7 +808,7 @@
     },
     {
       "availability": "context_pack_ready",
-      "bytes": 435,
+      "bytes": 423,
       "caveat": null,
       "columns": 8,
       "confidence": "high",
@@ -818,7 +818,7 @@
       "productizationStatus": "context_pack_ready",
       "recommendedAction": "Promote through context packs with source refs, caveats, and denominator rules.",
       "rows": 3,
-      "sha256": "d2766bcd44c1ae006f72f78fefcabad1ad2e158496e36f07143f12d898a42cef",
+      "sha256": "5139d60b1dccecd374fc92aa2c0e795f6403a52741f5aa1993fee888d3d830ee",
       "sourcePath": "analysis/indy-nxt-discovery/output/deep_dive/tables/race_track_type_summary.csv",
       "surface": "cross_surface"
     },
@@ -834,13 +834,13 @@
       "productizationStatus": "context_pack_ready",
       "recommendedAction": "Inventory and expose if a context pack has a matching product use.",
       "rows": 22,
-      "sha256": "17dfb845e64d6576033280636ee8794c7728cc88e621adb35f1f26e97275f802",
+      "sha256": "02f983e76422b3529ee6d8b583b8f8b26f17c84fa7a139408b49bb8b138648ec",
       "sourcePath": "analysis/indy-nxt-discovery/output/deep_dive/tables/racecraft_context_by_driver.csv",
       "surface": "race_intelligence"
     },
     {
       "availability": "context_pack_ready",
-      "bytes": 8513,
+      "bytes": 8946,
       "caveat": null,
       "columns": 10,
       "confidence": "high",
@@ -849,14 +849,14 @@
       "label": "racecraft_context_by_race.csv",
       "productizationStatus": "context_pack_ready",
       "recommendedAction": "Promote through context packs with source refs, caveats, and denominator rules.",
-      "rows": 38,
-      "sha256": "aa4ef539c17df76c6f47027dadef099fddea5cea5d8a972392768a81d8141b7c",
+      "rows": 40,
+      "sha256": "147688afa1bc3ccb39aeb0263698acce0fc218018b7adb8d278a22295300b536",
       "sourcePath": "analysis/indy-nxt-discovery/output/deep_dive/tables/racecraft_context_by_race.csv",
       "surface": "race_intelligence"
     },
     {
       "availability": "context_pack_ready",
-      "bytes": 13871,
+      "bytes": 14603,
       "caveat": "Headline display needs denominator filtering and partial-source badges.",
       "columns": 10,
       "confidence": "medium",
@@ -865,14 +865,14 @@
       "label": "section_results_deep_by_race.csv",
       "productizationStatus": "context_pack_ready",
       "recommendedAction": "Promote through context packs with source refs, caveats, and denominator rules.",
-      "rows": 37,
-      "sha256": "eb3c5d4fc38ee2592a7ba4a8149af299312abebee74c813fd6ce612887e9e4b7",
+      "rows": 39,
+      "sha256": "2cfe0faef37b8775d944b88fc64479f21ed119a68ebd5423c973a3c328487b45",
       "sourcePath": "analysis/indy-nxt-discovery/output/deep_dive/tables/section_results_deep_by_race.csv",
       "surface": "race_debrief"
     },
     {
       "availability": "context_pack_ready",
-      "bytes": 68301,
+      "bytes": 73593,
       "caveat": "Headline display needs denominator filtering and partial-source badges.",
       "columns": 9,
       "confidence": "medium",
@@ -881,14 +881,14 @@
       "label": "section_results_deep_by_section.csv",
       "productizationStatus": "context_pack_ready",
       "recommendedAction": "Promote through context packs with source refs, caveats, and denominator rules.",
-      "rows": 406,
-      "sha256": "a2f77a3b39e2bef498ffa4c49ffdae5b8b9d9595bdb4335f59521c4a9d03e3b7",
+      "rows": 436,
+      "sha256": "6b9215793989d6e412a03df4152fde74338a05dc95a5a7b7867709cd639434e8",
       "sourcePath": "analysis/indy-nxt-discovery/output/deep_dive/tables/section_results_deep_by_section.csv",
       "surface": "race_debrief"
     },
     {
       "availability": "context_pack_ready",
-      "bytes": 10423,
+      "bytes": 10987,
       "caveat": null,
       "columns": 17,
       "confidence": "high",
@@ -897,14 +897,14 @@
       "label": "team_context_by_race.csv",
       "productizationStatus": "context_pack_ready",
       "recommendedAction": "Promote through context packs with source refs, caveats, and denominator rules.",
-      "rows": 38,
-      "sha256": "37adda6154fbf074172689e25ae536f99ad5ccec9d7c56c453487c087aaf5e2a",
+      "rows": 40,
+      "sha256": "128eb6a61884f191f4d6cf1442b9633e342ee6b4a958225460fa5a7509de0486",
       "sourcePath": "analysis/indy-nxt-discovery/output/deep_dive/tables/team_context_by_race.csv",
       "surface": "race_intelligence"
     },
     {
       "availability": "context_pack_ready",
-      "bytes": 4718,
+      "bytes": 5045,
       "caveat": null,
       "columns": 13,
       "confidence": "high",
@@ -914,7 +914,7 @@
       "productizationStatus": "context_pack_ready",
       "recommendedAction": "Promote through context packs with source refs, caveats, and denominator rules.",
       "rows": 20,
-      "sha256": "bf8dc80f5b8ac3cf9798cbb615d236541177f9ffb1e3f5c49806c044e54e8bdc",
+      "sha256": "503a2891e72a3f57d431bab35d03286ec9d99cd58ca2461c37011c50806fc358",
       "sourcePath": "analysis/indy-nxt-discovery/output/deep_dive/tables/team_context_by_year.csv",
       "surface": "race_intelligence"
     },
@@ -946,13 +946,13 @@
       "productizationStatus": "context_pack_ready",
       "recommendedAction": "Promote through context packs with source refs, caveats, and denominator rules.",
       "rows": 49,
-      "sha256": "e3cfe0d74baf9068e00e903cbb336eba6bb2510cd7f2a4d102b88da5eef745e9",
+      "sha256": "c72df4e8627d5a2b35afe96e3a3eb5cdf23e215588c48bc28665a70ad993bcb1",
       "sourcePath": "analysis/career-parity/output/tables/career_metric_family_parity.csv",
       "surface": "career_lab"
     },
     {
       "availability": "context_pack_ready",
-      "bytes": 35571,
+      "bytes": 36049,
       "caveat": null,
       "columns": 16,
       "confidence": "high",
@@ -961,8 +961,8 @@
       "label": "career_result_conversion.csv",
       "productizationStatus": "context_pack_ready",
       "recommendedAction": "Promote through context packs with source refs, caveats, and denominator rules.",
-      "rows": 139,
-      "sha256": "5902409972f10edcbf35e118d1324f5282e232a41a9821ee7136250bd0582c82",
+      "rows": 141,
+      "sha256": "5d0da9cdb880592f16df59e0553113dbb6b09741e216201f029293aa85b39b07",
       "sourcePath": "analysis/career-parity/output/tables/career_result_conversion.csv",
       "surface": "career_lab"
     },
@@ -978,13 +978,13 @@
       "productizationStatus": "context_pack_ready",
       "recommendedAction": "Promote through context packs with source refs, caveats, and denominator rules.",
       "rows": 7,
-      "sha256": "b437b796bcf808f0ed39020ce0e5526b73d3b1bac11ab0bc102cfed5269dd631",
+      "sha256": "09fb74cc65fcdb586187735574a4935b3da56471c2c4f3c084c85fdc9268b3d0",
       "sourcePath": "analysis/career-parity/output/tables/career_series_modeling_priority.csv",
       "surface": "career_lab"
     },
     {
       "availability": "context_pack_ready",
-      "bytes": 917,
+      "bytes": 835,
       "caveat": null,
       "columns": 10,
       "confidence": "high",
@@ -994,7 +994,7 @@
       "productizationStatus": "context_pack_ready",
       "recommendedAction": "Promote through context packs with source refs, caveats, and denominator rules.",
       "rows": 7,
-      "sha256": "ff5d459b40d3240cca4bbaadc3cc2c52d44f5230c9e9f58f3d80104d916a74d2",
+      "sha256": "dad1bf01ac409cbf56cefad861c23092cb4ae77f15994fe9ec9a7772e91e9031",
       "sourcePath": "analysis/career-parity/output/tables/career_series_result_summary.csv",
       "surface": "career_lab"
     },
@@ -1064,7 +1064,7 @@
       "label": "indySummary",
       "productizationStatus": "productized",
       "recommendedAction": "Use as source precedence, caveat, or validation input.",
-      "sha256": "873c16b9a959529427d600c9359ed7769bc6335bb7168d4f0fb28fc559bd1c2d",
+      "sha256": "b76ad870564e428ca925bc24b6d47378b19c9a626f690f8e3cc69a707e8a1339",
       "sourcePath": "analysis/indy-nxt-discovery/output/summary.json",
       "surface": "governance"
     },
@@ -1078,7 +1078,7 @@
       "label": "indyDeepSummary",
       "productizationStatus": "productized",
       "recommendedAction": "Use as source precedence, caveat, or validation input.",
-      "sha256": "4ffc428de5629e7c047ae990a19e1a708b37976dd81b447c7020659fd72d5a4f",
+      "sha256": "a51baec8efb889906f5da45b3ec6b124fa7a4b5efde5307be6a99322adf910f0",
       "sourcePath": "analysis/indy-nxt-discovery/output/deep_dive/summary.json",
       "surface": "governance"
     },
@@ -1092,13 +1092,13 @@
       "label": "careerParitySummary",
       "productizationStatus": "productized",
       "recommendedAction": "Use as source precedence, caveat, or validation input.",
-      "sha256": "16b66a60f3317a716d42c7868a1d1bb8a307a57086ecbc2c1aa23c11f14346bf",
+      "sha256": "c8e41f50c9248eac5d22ac8eb5d4b88c126d5cc65c0d77451028986bf69e9e98",
       "sourcePath": "analysis/career-parity/output/summary.json",
       "surface": "governance"
     },
     {
       "availability": "available",
-      "bytes": 1299850,
+      "bytes": 1334643,
       "caveat": null,
       "confidence": "high",
       "id": "governance:careerCoverage",
@@ -1106,7 +1106,7 @@
       "label": "careerCoverage",
       "productizationStatus": "productized",
       "recommendedAction": "Use as source precedence, caveat, or validation input.",
-      "sha256": "c5917fad9d95d0966c51240050b7b86d68b7ff07f81f4aa3dbe06e94c97f421f",
+      "sha256": "db7f4033b8fa8116a94255971b69e68f04c1fe23e9ff138a511d3c0d19957a7b",
       "sourcePath": "data/career/reports/career-coverage-matrix.json",
       "surface": "governance"
     },
@@ -1120,13 +1120,13 @@
       "label": "ingestionSummary",
       "productizationStatus": "productized",
       "recommendedAction": "Use as source precedence, caveat, or validation input.",
-      "sha256": "6b442e6e8e35baebc25f491905dfc50911b7add8418adf3bcabbfc7ffd4046ca",
+      "sha256": "605ddd90e54a5deb67039543bbec89ae5ec9d7380c4843623fc22aba5c6e777b",
       "sourcePath": "data/career/reports/ingestion-summary.json",
       "surface": "governance"
     },
     {
       "availability": "available",
-      "bytes": 1209,
+      "bytes": 1210,
       "caveat": null,
       "confidence": "high",
       "id": "governance:validationReport",
@@ -1134,14 +1134,14 @@
       "label": "validationReport",
       "productizationStatus": "productized",
       "recommendedAction": "Use as source precedence, caveat, or validation input.",
-      "sha256": "81903c87fe1ec2d476d7a797578a286935cd76d1c7b303549e0914ca8fbd46c4",
+      "sha256": "7706d8983aa3bfca93266c8ea378c901526dd8b7ede78b5440c4fbdeaf2cae22",
       "sourcePath": "data/career/reports/validation-report.json",
       "surface": "governance"
     }
   ],
-  "repoHead": "4dd1e2f",
+  "repoHead": "a26c80d",
   "schemaVersion": "brycecast.predictiveRaceIntelligence.inventory.v1",
-  "sourceHash": "5d66d442aa62ff829f41a78a998f82218eacb1e92cf10834dc3b4316d03ba7cb",
+  "sourceHash": "900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681",
   "sourceRefs": [
     {
       "bytes": 39290,
@@ -1171,37 +1171,37 @@
       "bytes": 1722,
       "path": "analysis/indy-nxt-discovery/output/summary.json",
       "role": "indySummary",
-      "sha256": "873c16b9a959529427d600c9359ed7769bc6335bb7168d4f0fb28fc559bd1c2d"
+      "sha256": "b76ad870564e428ca925bc24b6d47378b19c9a626f690f8e3cc69a707e8a1339"
     },
     {
       "bytes": 1461,
       "path": "analysis/indy-nxt-discovery/output/deep_dive/summary.json",
       "role": "indyDeepSummary",
-      "sha256": "4ffc428de5629e7c047ae990a19e1a708b37976dd81b447c7020659fd72d5a4f"
+      "sha256": "a51baec8efb889906f5da45b3ec6b124fa7a4b5efde5307be6a99322adf910f0"
     },
     {
       "bytes": 362,
       "path": "analysis/career-parity/output/summary.json",
       "role": "careerParitySummary",
-      "sha256": "16b66a60f3317a716d42c7868a1d1bb8a307a57086ecbc2c1aa23c11f14346bf"
+      "sha256": "c8e41f50c9248eac5d22ac8eb5d4b88c126d5cc65c0d77451028986bf69e9e98"
     },
     {
-      "bytes": 1299850,
+      "bytes": 1334643,
       "path": "data/career/reports/career-coverage-matrix.json",
       "role": "careerCoverage",
-      "sha256": "c5917fad9d95d0966c51240050b7b86d68b7ff07f81f4aa3dbe06e94c97f421f"
+      "sha256": "db7f4033b8fa8116a94255971b69e68f04c1fe23e9ff138a511d3c0d19957a7b"
     },
     {
       "bytes": 38885,
       "path": "data/career/reports/ingestion-summary.json",
       "role": "ingestionSummary",
-      "sha256": "6b442e6e8e35baebc25f491905dfc50911b7add8418adf3bcabbfc7ffd4046ca"
+      "sha256": "605ddd90e54a5deb67039543bbec89ae5ec9d7380c4843623fc22aba5c6e777b"
     },
     {
-      "bytes": 1209,
+      "bytes": 1210,
       "path": "data/career/reports/validation-report.json",
       "role": "validationReport",
-      "sha256": "81903c87fe1ec2d476d7a797578a286935cd76d1c7b303549e0914ca8fbd46c4"
+      "sha256": "7706d8983aa3bfca93266c8ea378c901526dd8b7ede78b5440c4fbdeaf2cae22"
     }
   ],
   "statusCounts": {

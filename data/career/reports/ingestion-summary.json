@@ -1,10 +1,10 @@
 {
   "schemaVersion": "bryce-career-ingestion-summary.v1",
-  "generatedAt": "2026-07-02T17:44:50.516Z",
+  "generatedAt": "2026-07-11T20:53:58.265Z",
   "datasetPath": "data/career/career.dataset.json",
   "validation": {
     "ok": true,
-    "checkedAt": "2026-07-02T17:44:49.994Z",
+    "checkedAt": "2026-07-11T20:53:57.595Z",
     "errors": [],
     "warnings": [
       {
@@ -22,28 +22,28 @@
     "tracks": 42,
     "seasons": 10,
     "events": 87,
-    "sessions": 469,
-    "results": 8326,
-    "qualifyingResults": 1643,
-    "lapSamples": 68533,
-    "racecraftEvents": 37,
+    "sessions": 483,
+    "results": 8494,
+    "qualifyingResults": 1739,
+    "lapSamples": 70061,
+    "racecraftEvents": 39,
     "penalties": 86,
-    "incidents": 140,
-    "weatherObservations": 190,
-    "mediaAssets": 973,
+    "incidents": 144,
+    "weatherObservations": 199,
+    "mediaAssets": 1010,
     "broadcastRoutes": 0,
     "notificationRules": 0,
     "notificationEvents": 0,
-    "derivedMetrics": 387,
-    "sourceEvidence": 1232,
+    "derivedMetrics": 405,
+    "sourceEvidence": 1266,
     "gaps": 10
   },
   "readiness": {
     "sessions": {
-      "total": 469,
-      "withScheduledStart": 459,
-      "withExactTimestamp": 381,
-      "withTimezone": 469,
+      "total": 483,
+      "withScheduledStart": 473,
+      "withExactTimestamp": 395,
+      "withTimezone": 483,
       "timezoneCoverage": 1
     },
     "tracks": {
@@ -57,12 +57,12 @@
       "lengthCoverage": 1
     },
     "weather": {
-      "observations": 190,
-      "sessionsCovered": 190,
+      "observations": 199,
+      "sessionsCovered": 199,
       "tracksCovered": 24,
-      "withAmbientTemp": 105,
+      "withAmbientTemp": 114,
       "withTrackTemp": 1,
-      "trackTempCoverage": 0.0053
+      "trackTempCoverage": 0.005
     },
     "analyticsSafeNow": [
       "Source-backed result analytics for imported official families: INDY NXT 2024-2026, GB3/BRDC British F3 2021-2022, IMSA Daytona 2025, Euroformula 2023, FROC 2024, FRP F1600 2019, and Formula Ford 2020",
@@ -73,17 +73,17 @@
     "analyticsBlockedOrPartial": []
   },
   "sourceEvidence": {
-    "total": 1232,
+    "total": 1266,
     "bySourceType": {
       "archived_official_page": 2,
-      "official_pdf": 732,
+      "official_pdf": 754,
       "official_page": 117,
-      "official_api": 273,
+      "official_api": 282,
       "official_html": 16,
       "official_image": 5,
       "official_article": 4,
       "official_json": 2,
-      "weather_api": 81
+      "weather_api": 84
     }
   },
   "workstreams": [
@@ -405,13 +405,13 @@
     },
     {
       "name": "indy-nxt-import-report.json",
-      "checkedAt": "2026-07-02T17:41:02.135Z",
+      "checkedAt": "2026-07-11T20:53:51.783Z",
       "refresh": false,
       "fetched": 0,
-      "cached": 189,
-      "sessionsImported": 182,
-      "resultsImported": 3118,
-      "bryceResultsImported": 152,
+      "cached": 198,
+      "sessionsImported": 191,
+      "resultsImported": 3286,
+      "bryceResultsImported": 159,
       "lapSamplesImported": null,
       "weatherObservationsImported": null,
       "standingsImported": null,
@@ -419,7 +419,7 @@
     },
     {
       "name": "track-metadata-import-report.json",
-      "checkedAt": "2026-07-02T17:41:00.714Z",
+      "checkedAt": "2026-07-11T20:47:16.634Z",
       "refresh": null,
       "fetched": null,
       "cached": null,

@@ -1,8 +1,8 @@
 # INDY NXT Race Lap/Section Enhancement
 
-Generated: `2026-07-02T17:45:39Z`
+Generated: `2026-07-11T20:55:33Z`
 Source dataset: `data/career/career.dataset.json`
-Source hash: `5d66d442aa62ff829f41a78a998f82218eacb1e92cf10834dc3b4316d03ba7cb`
+Source hash: `900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681`
 
 ## Source Scope
 
@@ -10,13 +10,13 @@ This lane uses official INDY NXT race lap chart rows, official caution/incidents
 
 ## What Became Productized
 
-- `race_lap_microstates.csv`: 1428 Bryce lap-position rows with field percentiles and caution/restart labels.
-- `race_lap_segments.csv`: 173 caution-aware lap segments.
-- `race_lap_inflection_points.csv`: 157 position-movement events.
+- `race_lap_microstates.csv`: 1493 Bryce lap-position rows with field percentiles and caution/restart labels.
+- `race_lap_segments.csv`: 184 caution-aware lap segments.
+- `race_lap_inflection_points.csv`: 164 position-movement events.
 - `race_section_lap_observations.csv`: clean-lap-aware race section observations.
-- `race_section_session_summary.csv`: 37 race section summaries.
+- `race_section_session_summary.csv`: 39 race section summaries.
 - Context packs: `context-packs/indy-nxt-race-lap-section-context.json`, `context-packs/road-america-race-context.json`, and the current next-venue race context pack.
-- Source split: {'official_section_results+official_lap_chart+official_incident_caution_context': 16452, 'official_section_results_only': 208}.
+- Source split: {'official_section_results+official_lap_chart+official_incident_caution_context': 17622, 'official_section_results_only': 219}.
 
 ## Lap Microstates
 
@@ -46,10 +46,10 @@ Clean-lap race section highlights:
 
 ## Upcoming Venue Race Context
 
-Track: `Mid-Ohio Sports Car Course`
+Track: `Nashville Superspeedway`
 
-- 2024 Grand Prix at Mid-Ohio: start 18.0, finish 18.0, best running 18.0, section median 0.529.
-- 2025 Grand Prix at Mid-Ohio: start 9.0, finish 12.0, best running 9.0, section median 0.375.
+- 2024 Music City Grand Prix: start 11.0, finish 7.0, best running 6.0, section median 0.5.
+- 2025 Music City Grand Prix: start 6.0, finish 6.0, best running 6.0, section median 0.571.
 
 ## Caveats
 

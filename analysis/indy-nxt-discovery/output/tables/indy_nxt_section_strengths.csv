@@ -982,6 +982,58 @@ session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,I3 to I6,0.841
 session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,I6 to SF,0.749998,19.0,24,0.21739130434782605,00:24.0697,112.174,4,official,source_indy_nxt_2026_6756_top_section_times_pdf
 session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,SF to I4,1.18901,14.0,24,0.4347826086956522,00:34.5588,123.86,5,official,source_indy_nxt_2026_6756_top_section_times_pdf
 session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,I4 to I6,0.5,18.0,24,0.26086956521739135,00:18.5427,97.073,4,official,source_indy_nxt_2026_6756_top_section_times_pdf
+session_indy_nxt_2026_6760,2026 Grand Prix at Mid-Ohio Race 2 R2,Lap,2.258,19.0,24,0.21739130434782605,01:11.3914,113.862,23,official,source_indy_nxt_2026_6760_top_section_times_pdf
+session_indy_nxt_2026_6760,2026 Grand Prix at Mid-Ohio Race 2 R2,FS - PO,0.141667,18.0,24,0.26086956521739135,00:03.7334,136.605,26,official,source_indy_nxt_2026_6760_top_section_times_pdf
+session_indy_nxt_2026_6760,2026 Grand Prix at Mid-Ohio Race 2 R2,Turn 1,0.127083,17.0,24,0.30434782608695654,00:03.3552,136.355,28,official,source_indy_nxt_2026_6760_top_section_times_pdf
+session_indy_nxt_2026_6760,2026 Grand Prix at Mid-Ohio Race 2 R2,Turn 1A,0.146212,21.0,24,0.13043478260869568,00:03.7460,140.513,27,official,source_indy_nxt_2026_6760_top_section_times_pdf
+session_indy_nxt_2026_6760,2026 Grand Prix at Mid-Ohio Race 2 R2,Turn 1B,0.110985,22.0,24,0.08695652173913049,00:02.7183,146.984,18,official,source_indy_nxt_2026_6760_top_section_times_pdf
+session_indy_nxt_2026_6760,2026 Grand Prix at Mid-Ohio Race 2 R2,Turn 2,0.174242,18.0,25,0.29166666666666663,00:07.3060,85.857,14,official,source_indy_nxt_2026_6760_top_section_times_pdf
+session_indy_nxt_2026_6760,2026 Grand Prix at Mid-Ohio Race 2 R2,Turn 3,0.266666,10.0,24,0.6086956521739131,00:06.7009,143.264,25,official,source_indy_nxt_2026_6760_top_section_times_pdf
+session_indy_nxt_2026_6760,2026 Grand Prix at Mid-Ohio Race 2 R2,Back Stretch,0.206817,8.0,24,0.6956521739130435,00:04.5805,162.546,25,official,source_indy_nxt_2026_6760_top_section_times_pdf
+session_indy_nxt_2026_6760,2026 Grand Prix at Mid-Ohio Race 2 R2,Turn 4,0.129735,8.0,24,0.6956521739130435,00:04.6536,100.362,15,official,source_indy_nxt_2026_6760_top_section_times_pdf
+session_indy_nxt_2026_6760,2026 Grand Prix at Mid-Ohio Race 2 R2,Turn 5,0.105492,8.0,24,0.6956521739130435,00:04.8261,78.691,24,official,source_indy_nxt_2026_6760_top_section_times_pdf
+session_indy_nxt_2026_6760,2026 Grand Prix at Mid-Ohio Race 2 R2,Turn 6/7,0.141098,23.0,24,0.04347826086956519,00:05.5535,91.465,14,official,source_indy_nxt_2026_6760_top_section_times_pdf
+session_indy_nxt_2026_6760,2026 Grand Prix at Mid-Ohio Race 2 R2,Turn 8,0.060985,17.0,24,0.30434782608695654,00:01.8152,120.949,28,official,source_indy_nxt_2026_6760_top_section_times_pdf
+session_indy_nxt_2026_6760,2026 Grand Prix at Mid-Ohio Race 2 R2,Turn 9,0.15322,12.0,24,0.5217391304347826,00:05.5086,100.133,14,official,source_indy_nxt_2026_6760_top_section_times_pdf
+session_indy_nxt_2026_6760,2026 Grand Prix at Mid-Ohio Race 2 R2,Turn 10,0.152841,15.0,24,0.3913043478260869,00:04.0519,135.795,24,official,source_indy_nxt_2026_6760_top_section_times_pdf
+session_indy_nxt_2026_6760,2026 Grand Prix at Mid-Ohio Race 2 R2,Turn 11,0.132765,14.0,24,0.4347826086956522,00:04.0011,119.456,28,official,source_indy_nxt_2026_6760_top_section_times_pdf
+session_indy_nxt_2026_6760,2026 Grand Prix at Mid-Ohio Race 2 R2,Turn 12,0.092424,12.0,24,0.5217391304347826,00:04.0737,81.677,16,official,source_indy_nxt_2026_6760_top_section_times_pdf
+session_indy_nxt_2026_6760,2026 Grand Prix at Mid-Ohio Race 2 R2,Turn 12C,0.034848,14.0,24,0.4347826086956522,00:01.3325,94.148,17,official,source_indy_nxt_2026_6760_top_section_times_pdf
+session_indy_nxt_2026_6760,2026 Grand Prix at Mid-Ohio Race 2 R2,Turn 13,0.081061,17.0,24,0.30434782608695654,00:02.6617,109.637,23,official,source_indy_nxt_2026_6760_top_section_times_pdf
+session_indy_nxt_2026_6760,2026 Grand Prix at Mid-Ohio Race 2 R2,I3 to I3T,0.022348,15.0,24,0.3913043478260869,00:00.4915,163.688,25,official,source_indy_nxt_2026_6760_top_section_times_pdf
+session_indy_nxt_2026_6760,2026 Grand Prix at Mid-Ohio Race 2 R2,I10T to I10,0.022917,16.0,25,0.375,00:00.7032,117.323,14,official,source_indy_nxt_2026_6760_top_section_times_pdf
+session_indy_nxt_2026_6760,2026 Grand Prix at Mid-Ohio Race 2 R2,PO to SF,2.10264,3.0,24,0.9130434782608696,01:35.2347,79.483,0,official,source_indy_nxt_2026_6760_top_section_times_pdf
+session_indy_nxt_2026_6760,2026 Grand Prix at Mid-Ohio Race 2 R2,PO to I1A,0.113258,8.0,24,0.6956521739130435,00:08.1373,50.106,0,official,source_indy_nxt_2026_6760_top_section_times_pdf
+session_indy_nxt_2026_6760,2026 Grand Prix at Mid-Ohio Race 2 R2,PO to Alt S/F,1.60871,5.0,24,0.8260869565217391,01:13.7584,78.518,0,official,source_indy_nxt_2026_6760_top_section_times_pdf
+session_indy_nxt_2026_6760,2026 Grand Prix at Mid-Ohio Race 2 R2,SF to I3,0.966856,18.0,24,0.26086956521739135,00:27.7195,125.568,29,official,source_indy_nxt_2026_6760_top_section_times_pdf
+session_indy_nxt_2026_6760,2026 Grand Prix at Mid-Ohio Race 2 R2,I3 to I10,0.797348,18.0,24,0.26086956521739135,00:27.2095,105.495,14,official,source_indy_nxt_2026_6760_top_section_times_pdf
+session_indy_nxt_2026_6760,2026 Grand Prix at Mid-Ohio Race 2 R2,I10 to SF,0.966856,15.0,24,0.3913043478260869,00:16.1994,214.865,16,official,source_indy_nxt_2026_6760_top_section_times_pdf
+session_indy_nxt_2026_6761,2026 Grand Prix at Mid-Ohio Race 1 R1,Lap,2.258,22.0,24,0.08695652173913049,01:12.7239,111.776,32,official,source_indy_nxt_2026_6761_top_section_times_pdf
+session_indy_nxt_2026_6761,2026 Grand Prix at Mid-Ohio Race 1 R1,FS - PO,0.141667,17.0,24,0.30434782608695654,00:03.7706,135.257,33,official,source_indy_nxt_2026_6761_top_section_times_pdf
+session_indy_nxt_2026_6761,2026 Grand Prix at Mid-Ohio Race 1 R1,Turn 1,0.127083,20.0,24,0.17391304347826086,00:03.5021,130.636,18,official,source_indy_nxt_2026_6761_top_section_times_pdf
+session_indy_nxt_2026_6761,2026 Grand Prix at Mid-Ohio Race 1 R1,Turn 1A,0.146212,21.0,24,0.13043478260869568,00:03.7873,138.981,10,official,source_indy_nxt_2026_6761_top_section_times_pdf
+session_indy_nxt_2026_6761,2026 Grand Prix at Mid-Ohio Race 1 R1,Turn 1B,0.110985,20.0,24,0.17391304347826086,00:02.7181,146.995,31,official,source_indy_nxt_2026_6761_top_section_times_pdf
+session_indy_nxt_2026_6761,2026 Grand Prix at Mid-Ohio Race 1 R1,Turn 2,0.174242,12.0,24,0.5217391304347826,00:07.3696,85.116,31,official,source_indy_nxt_2026_6761_top_section_times_pdf
+session_indy_nxt_2026_6761,2026 Grand Prix at Mid-Ohio Race 1 R1,Turn 3,0.266666,21.0,24,0.13043478260869568,00:06.8273,140.612,8,official,source_indy_nxt_2026_6761_top_section_times_pdf
+session_indy_nxt_2026_6761,2026 Grand Prix at Mid-Ohio Race 1 R1,Back Stretch,0.206817,17.0,24,0.30434782608695654,00:04.6997,158.423,32,official,source_indy_nxt_2026_6761_top_section_times_pdf
+session_indy_nxt_2026_6761,2026 Grand Prix at Mid-Ohio Race 1 R1,Turn 4,0.129735,23.0,24,0.04347826086956519,00:04.8536,96.227,17,official,source_indy_nxt_2026_6761_top_section_times_pdf
+session_indy_nxt_2026_6761,2026 Grand Prix at Mid-Ohio Race 1 R1,Turn 5,0.105492,15.0,24,0.3913043478260869,00:04.9057,77.414,20,official,source_indy_nxt_2026_6761_top_section_times_pdf
+session_indy_nxt_2026_6761,2026 Grand Prix at Mid-Ohio Race 1 R1,Turn 6/7,0.141098,23.0,24,0.04347826086956519,00:05.6594,89.754,27,official,source_indy_nxt_2026_6761_top_section_times_pdf
+session_indy_nxt_2026_6761,2026 Grand Prix at Mid-Ohio Race 1 R1,Turn 8,0.060985,19.0,24,0.21739130434782605,00:01.8529,118.488,4,official,source_indy_nxt_2026_6761_top_section_times_pdf
+session_indy_nxt_2026_6761,2026 Grand Prix at Mid-Ohio Race 1 R1,Turn 9,0.15322,18.0,24,0.26086956521739135,00:05.6342,97.901,33,official,source_indy_nxt_2026_6761_top_section_times_pdf
+session_indy_nxt_2026_6761,2026 Grand Prix at Mid-Ohio Race 1 R1,Turn 10,0.152841,18.0,24,0.26086956521739135,00:04.1047,134.048,33,official,source_indy_nxt_2026_6761_top_section_times_pdf
+session_indy_nxt_2026_6761,2026 Grand Prix at Mid-Ohio Race 1 R1,Turn 11,0.132765,21.0,24,0.13043478260869568,00:04.1417,115.4,31,official,source_indy_nxt_2026_6761_top_section_times_pdf
+session_indy_nxt_2026_6761,2026 Grand Prix at Mid-Ohio Race 1 R1,Turn 12,0.092424,12.0,24,0.5217391304347826,00:04.1216,80.727,16,official,source_indy_nxt_2026_6761_top_section_times_pdf
+session_indy_nxt_2026_6761,2026 Grand Prix at Mid-Ohio Race 1 R1,Turn 12C,0.034848,25.0,25,0.0,00:01.3791,90.967,16,official,source_indy_nxt_2026_6761_top_section_times_pdf
+session_indy_nxt_2026_6761,2026 Grand Prix at Mid-Ohio Race 1 R1,Turn 13,0.081061,21.0,25,0.16666666666666663,00:02.6987,108.133,32,official,source_indy_nxt_2026_6761_top_section_times_pdf
+session_indy_nxt_2026_6761,2026 Grand Prix at Mid-Ohio Race 1 R1,I3 to I3T,0.022348,14.0,24,0.4347826086956522,00:00.4901,164.156,8,official,source_indy_nxt_2026_6761_top_section_times_pdf
+session_indy_nxt_2026_6761,2026 Grand Prix at Mid-Ohio Race 1 R1,I10T to I10,0.022917,13.0,25,0.5,00:00.7065,116.775,32,official,source_indy_nxt_2026_6761_top_section_times_pdf
+session_indy_nxt_2026_6761,2026 Grand Prix at Mid-Ohio Race 1 R1,PO to SF,2.10264,3.0,24,0.9130434782608696,01:15.6180,100.102,0,official,source_indy_nxt_2026_6761_top_section_times_pdf
+session_indy_nxt_2026_6761,2026 Grand Prix at Mid-Ohio Race 1 R1,PO to I1A,0.113258,2.0,24,0.9565217391304348,00:05.9173,68.905,0,official,source_indy_nxt_2026_6761_top_section_times_pdf
+session_indy_nxt_2026_6761,2026 Grand Prix at Mid-Ohio Race 1 R1,PO to Alt S/F,1.60871,2.0,24,0.9565217391304348,00:58.1440,99.604,0,official,source_indy_nxt_2026_6761_top_section_times_pdf
+session_indy_nxt_2026_6761,2026 Grand Prix at Mid-Ohio Race 1 R1,SF to I3,0.966856,18.0,24,0.26086956521739135,00:28.1110,123.819,31,official,source_indy_nxt_2026_6761_top_section_times_pdf
+session_indy_nxt_2026_6761,2026 Grand Prix at Mid-Ohio Race 1 R1,I3 to I10,0.797348,24.0,24,0.0,00:27.8341,103.127,17,official,source_indy_nxt_2026_6761_top_section_times_pdf
+session_indy_nxt_2026_6761,2026 Grand Prix at Mid-Ohio Race 1 R1,I10 to SF,0.966856,18.0,24,0.26086956521739135,00:16.4950,211.014,32,official,source_indy_nxt_2026_6761_top_section_times_pdf
 session_indy_nxt_2026_6762,2026 Grand Prix at Road America Race 1 R1,Lap,4.014,1.0,23,1.0,01:52.6679,128.257,17,official,source_indy_nxt_2026_6762_top_section_times_pdf
 session_indy_nxt_2026_6762,2026 Grand Prix at Road America Race 1 R1,SF to I1B,0.235417,3.0,24,0.9130434782608696,00:04.6899,180.708,4,official,source_indy_nxt_2026_6762_top_section_times_pdf
 session_indy_nxt_2026_6762,2026 Grand Prix at Road America Race 1 R1,I1B to I1,0.041098,5.0,24,0.8260869565217391,00:00.8115,182.32,4,official,source_indy_nxt_2026_6762_top_section_times_pdf

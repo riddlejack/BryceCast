@@ -4,10 +4,10 @@ Generated from `data/career/career.dataset.json` at repo head `f3e5e32` after th
 
 ## Executive Readout
 
-- Analyzable Bryce INDY NXT race rows: **38**. Weather-enriched race rows: **38** of 36 race rows, all modeled/non-official.
-- Mean start: **11.4**. Mean finish: **12.4**. Mean position gain: **-0.9**.
-- Top-10 rate: **47%**. Top-5 rate: **11%**. Running/classified rate: **87%**.
-- Races where Bryce finished ahead of or tied his best same-team comparison: **29%** of races with teammate rows.
+- Analyzable Bryce INDY NXT race rows: **40**. Weather-enriched race rows: **40** of 36 race rows, all modeled/non-official.
+- Mean start: **11.6**. Mean finish: **12.5**. Mean position gain: **-0.9**.
+- Top-10 rate: **45%**. Top-5 rate: **10%**. Running/classified rate: **88%**.
+- Races where Bryce finished ahead of or tied his best same-team comparison: **28%** of races with teammate rows.
 - Causal regression should stay out of the headline product for now. The useful near-term product is decomposition, race-shape analysis, context-aware comparisons, and confidence-labeled modeled weather.
 
 ## Most UI-Worthy Findings To Build Around
@@ -95,11 +95,11 @@ Low-volatility races are good examples of steady execution or limited passing op
 
 | raceLabel | lapSamples | netLapChartGain | positionVolatility | bestRunningPosition | worstRunningPosition |
 | --- | --- | --- | --- | --- | --- |
-| 2024 Grand Prix of Portland | 35.00 | 0.00 | 0.00 | 3.00 | 3.00 |
-| 2024 Detroit Grand Prix | 2.00 | 0.00 | 0.00 | 11.00 | 11.00 |
 | 2026 Grand Prix of Alabama Race 2 R2 | 30.00 | 0.00 | 0.00 | 7.00 | 7.00 |
+| 2024 Detroit Grand Prix | 2.00 | 0.00 | 0.00 | 11.00 | 11.00 |
+| 2024 Grand Prix of Portland | 35.00 | 0.00 | 0.00 | 3.00 | 3.00 |
 | 2025 Grand Prix at Road America | 20.00 | 1.00 | 1.00 | 9.00 | 10.00 |
-| 2026 INDY NXT by Firestone at World Wide Technology Raceway | 5.00 | 0.00 | 2.00 | 21.00 | 22.00 |
+| 2026 Grand Prix at Mid-Ohio Race 2 R2 | 30.00 | 2.00 | 2.00 | 14.00 | 16.00 |
 
 ## Race Story Classifier
 
@@ -107,7 +107,7 @@ This is a first-pass product classifier for UI copy and filtering. It should be 
 
 | primaryStory | races | avgFinish | avgGain | top10Rate |
 | --- | --- | --- | --- | --- |
-| steady_context_race | 9 | 11.67 | 0.67 | 0.56 |
+| steady_context_race | 11 | 12.27 | 0.36 | 0.45 |
 | recovery_drive | 6 | 10.83 | 5.83 | 0.67 |
 | incident_or_reliability_limited | 5 | 20.00 | -10.40 | 0.00 |
 | volatile_race_shape | 5 | 12.60 | 1.60 | 0.20 |
@@ -140,15 +140,15 @@ These rows are useful for serious users because they put results into local comp
 | driverName | racesTogether | bryceAhead | bryceBehind | headToHeadWinRate | avgFinishDeltaVsRival | sameTeamRaces |
 | --- | --- | --- | --- | --- | --- | --- |
 | Hailie Deegan | 14 | 12 | 2 | 0.86 | -3.36 | 1 |
-| Alexander Koreiba | 10 | 8 | 2 | 0.80 | -3.70 | 0 |
+| Alexander Koreiba | 12 | 10 | 2 | 0.83 | -4.17 | 0 |
+| Carson Etter | 12 | 9 | 3 | 0.75 | -4.33 | 12 |
 | Tommy Smith | 14 | 10 | 4 | 0.71 | -3.36 | 1 |
-| Carson Etter | 10 | 7 | 3 | 0.70 | -3.80 | 10 |
-| Nicholas Monteiro | 11 | 7 | 4 | 0.64 | -3.36 | 0 |
+| Nicholas Monteiro | 13 | 9 | 4 | 0.69 | -3.54 | 0 |
+| Colin Kaminsky | 12 | 8 | 4 | 0.67 | -2.83 | 0 |
+| Nolan Allaer | 25 | 16 | 9 | 0.64 | -2.32 | 1 |
+| Nicolas Stati | 11 | 7 | 4 | 0.64 | -1.73 | 0 |
 | Ricardo Escotto | 24 | 15 | 9 | 0.62 | -2.71 | 0 |
-| Nolan Allaer | 23 | 14 | 9 | 0.61 | -2.00 | 1 |
-| Colin Kaminsky | 10 | 6 | 4 | 0.60 | -2.50 | 0 |
-| James Roe | 38 | 21 | 17 | 0.55 | -1.11 | 24 |
-| Niels Koolen | 33 | 18 | 15 | 0.55 | 0.27 | 23 |
+| James Roe | 40 | 23 | 17 | 0.57 | -1.27 | 26 |
 | Jack William Miller | 28 | 15 | 13 | 0.54 | -1.75 | 0 |
 | Jonathan Browne | 15 | 8 | 7 | 0.53 | 0.27 | 0 |
 
@@ -160,31 +160,31 @@ Best section percentiles can become a 'where he was fast' module. Worst section 
 
 | raceLabel | sectionName | bryceRank | fieldRows | rankPercentile | time | speedMph | lapNumber |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| 2026 Grand Prix at Road America Race 1 R1 | I5 to I6 | 1.00 | 24 | 1.00 | 00:06.1443 | 81.67 | 14 |
-| 2024 Indianapolis Grand Prix Race 2 R2 | PO to I2 | 1.00 | 21 | 1.00 | 00:13.9301 | 79.36 | 5 |
-| 2026 Grand Prix at Road America Race 1 R1 | I12 to I13 | 1.00 | 24 | 1.00 | 00:09.4570 | 107.14 | 16 |
-| 2024 Grand Prix at Road America | I13A to I14 | 1.00 | 21 | 1.00 | 00:01.8200 | 127.00 | 1 |
-| 2026 Grand Prix at Road America Race 1 R1 | I4 to I9 | 1.00 | 24 | 1.00 | 00:33.7461 | 110.68 | 14 |
-| 2026 Grand Prix of Alabama Race 2 R2 | SF to Turn 7 | 1.00 | 24 | 1.00 | 00:33.4379 | 111.84 | 26 |
-| 2026 Grand Prix at Road America Race 1 R1 | I13A to I14 | 1.00 | 24 | 1.00 | 00:01.7727 | 130.39 | 15 |
-| 2024 OUTFRONT Showdown | T3T to T3 | 1.00 | 18 | 1.00 | 00:00.4798 | 170.52 | 17 |
-| 2026 Grand Prix at Road America Race 1 R1 | I4A to I11 | 1.00 | 24 | 1.00 | 00:42.8964 | 115.14 | 14 |
+| 2025 INDY NXT by Firestone at the Milwaukee Mile | T3T to T3 | 1.00 | 18 | 1.00 | 00:00.5067 | 161.47 | 4 |
+| 2025 Indianapolis Grand Prix Race 1 R1 | I4T to I4 | 1.00 | 21 | 1.00 | 00:00.4620 | 177.09 | 32 |
 | 2024 Indianapolis Grand Prix Race 2 R2 | I6 to SF | 1.00 | 21 | 1.00 | 00:23.7073 | 113.89 | 7 |
+| 2026 Grand Prix at Road America Race 1 R1 | I9 to I10 | 1.00 | 24 | 1.00 | 00:06.0866 | 131.74 | 16 |
+| 2026 Grand Prix at Road America Race 1 R1 | I7 to I8 | 1.00 | 24 | 1.00 | 00:06.9348 | 131.94 | 16 |
+| 2024 Grand Prix of Portland | Turn 2 | 1.00 | 18 | 1.00 | 00:02.8927 | 61.75 | 24 |
+| 2026 Grand Prix at Road America Race 1 R1 | I5 to I6 | 1.00 | 24 | 1.00 | 00:06.1443 | 81.67 | 14 |
+| 2025 Grand Prix at Mid-Ohio | Turn 2 | 1.00 | 19 | 1.00 | 00:07.2266 | 86.80 | 32 |
+| 2024 Indianapolis Grand Prix Race 1 R1 | I6T to I6 | 1.00 | 21 | 1.00 | 00:00.5066 | 145.36 | 33 |
+| 2026 Grand Prix at Road America Race 1 R1 | Lap | 1.00 | 23 | 1.00 | 01:52.6679 | 128.26 | 17 |
 
 ### Weakest section rows
 
 | raceLabel | sectionName | bryceRank | fieldRows | rankPercentile | time | speedMph | lapNumber |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| 2026 INDY NXT by Firestone at World Wide Technology Raceway | BS - T3 | 24.00 | 24 | 0.00 | 00:03.6336 | 156.87 | 2 |
-| 2025 Grand Prix at Road America | I13 to I13A | 19.00 | 19 | 0.00 | 00:02.9488 | 132.49 | 9 |
-| 2026 INDY NXT by Firestone at World Wide Technology Raceway | Turn 2 | 24.00 | 24 | 0.00 | 00:03.8112 | 136.68 | 3 |
 | 2024 Detroit Grand Prix | I7 to I8 | 21.00 | 21 | 0.00 | 00:02.5892 | 74.79 | 1 |
-| 2024 Detroit Grand Prix | I6 to I7 | 21.00 | 21 | 0.00 | 00:07.1388 | 50.33 | 1 |
-| 2026 INDY NXT by Firestone at World Wide Technology Raceway | BS - T2 | 24.00 | 24 | 0.00 | 00:03.8697 | 147.12 | 2 |
+| 2026 INDY NXT by Firestone at World Wide Technology Raceway | Backstretch | 24.00 | 24 | 0.00 | 00:07.5033 | 151.84 | 2 |
+| 2024 Detroit Grand Prix | SF to I4 | 21.00 | 21 | 0.00 | 00:20.0258 | 91.96 | 2 |
+| 2026 INDY NXT by Firestone at World Wide Technology Raceway | Turns 1/2 | 24.00 | 24 | 0.00 | 00:06.7534 | 141.34 | 4 |
+| 2024 Detroit Grand Prix | I4 to I10 | 21.00 | 21 | 0.00 | 00:24.3143 | 90.30 | 1 |
 | 2024 Detroit Grand Prix | I5 to I6 | 21.00 | 21 | 0.00 | 00:03.5257 | 141.17 | 1 |
 | 2026 INDY NXT by Firestone at World Wide Technology Raceway | Turn 3 | 24.00 | 24 | 0.00 | 00:04.1428 | 159.48 | 3 |
-| 2026 INDY NXT by Firestone at World Wide Technology Raceway | Turns 1/2 | 24.00 | 24 | 0.00 | 00:06.7534 | 141.34 | 4 |
-| 2026 INDY NXT by Firestone at World Wide Technology Raceway | Backstretch | 24.00 | 24 | 0.00 | 00:07.5033 | 151.84 | 2 |
+| 2026 INDY NXT by Firestone at World Wide Technology Raceway | BS - T3 | 24.00 | 24 | 0.00 | 00:03.6336 | 156.87 | 2 |
+| 2026 INDY NXT by Firestone at World Wide Technology Raceway | BS - T2 | 24.00 | 24 | 0.00 | 00:03.8697 | 147.12 | 2 |
+| 2026 INDY NXT by Firestone at World Wide Technology Raceway | Turn 2 | 24.00 | 24 | 0.00 | 00:03.8112 | 136.68 | 3 |
 
 ## Weather Context Segments
 
@@ -192,16 +192,16 @@ Weather rows are modeled/non-official, so this should inform UI context rather t
 
 | dimension | segment | races | avgFinish | avgGain | top10Rate | dnfOrIssueRate | avgCautionShare |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| wetDry | dry | 35 | 11.60 | -0.20 | 0.51 | 0.09 | 0.14 |
-| wetDry | wet | 3 | 21.67 | -9.67 | 0.00 | 0.67 | 0.23 |
+| wetDry | dry | 36 | 11.72 | -0.28 | 0.50 | 0.08 | 0.15 |
+| wetDry | wet | 4 | 19.75 | -7.00 | 0.00 | 0.50 | 0.17 |
 | thermalStress | cold | 1 | 7.00 | 4.00 | 1.00 | 0.00 | 0.00 |
 | thermalStress | cool | 12 | 13.58 | -2.17 | 0.42 | 0.08 | 0.16 |
-| thermalStress | hot | 7 | 10.86 | -0.29 | 0.57 | 0.14 | 0.15 |
-| thermalStress | moderate | 18 | 12.50 | -0.67 | 0.44 | 0.17 | 0.15 |
+| thermalStress | hot | 8 | 11.50 | -0.62 | 0.50 | 0.12 | 0.15 |
+| thermalStress | moderate | 19 | 12.58 | -0.58 | 0.42 | 0.16 | 0.14 |
 | windRisk | high | 5 | 10.60 | -0.20 | 0.60 | 0.00 | 0.10 |
-| windRisk | low | 7 | 11.57 | 2.00 | 0.43 | 0.00 | 0.10 |
-| windRisk | medium | 26 | 12.96 | -1.88 | 0.46 | 0.19 | 0.18 |
-| weatherConfidence | modeled_medium | 38 | 12.39 | -0.95 | 0.47 | 0.13 | 0.15 |
+| windRisk | low | 8 | 11.88 | 1.88 | 0.38 | 0.00 | 0.08 |
+| windRisk | medium | 27 | 13.07 | -1.93 | 0.44 | 0.19 | 0.18 |
+| weatherConfidence | modeled_medium | 40 | 12.53 | -0.95 | 0.45 | 0.12 | 0.15 |
 
 ## Exploratory Relationship Checks
 
@@ -209,17 +209,17 @@ These are scan lines for product ideation, not causal evidence.
 
 | x | y | label | n | pearson | caution |
 | --- | --- | --- | --- | --- | --- |
-| startPosition | finishPosition | Lower start vs lower finish | 38 | 0.40 | exploratory_correlation_not_causal |
-| qualifyingPosition | finishPosition | Qualifying rank vs finish | 36 | 0.39 | exploratory_correlation_not_causal |
-| qualifyingToFinishDelta | finishPosition | Qualifying conversion vs finish | 36 | -0.69 | exploratory_correlation_not_causal |
-| positionGain | finishPosition | Position gain vs finish | 38 | -0.68 | exploratory_correlation_not_causal |
-| bestLapRank | finishPosition | Best-lap rank vs finish | 36 | 0.44 | exploratory_correlation_not_causal |
-| cautionShare | positionGain | Caution share vs gain | 38 | -0.04 | exploratory_correlation_not_causal |
-| passesPerLap | positionGain | Race passing density vs gain | 38 | 0.02 | exploratory_correlation_not_causal |
-| ambientTempC | finishPosition | Ambient temp vs finish | 38 | -0.15 | exploratory_correlation_not_causal |
-| windGustKph | positionGain | Wind gust vs gain | 38 | -0.11 | exploratory_correlation_not_causal |
-| precipitationMm | positionGain | Precipitation vs gain | 38 | -0.41 | exploratory_correlation_not_causal |
-| pitStops | finishPosition | Pit stops vs finish | 38 | 0.00 | exploratory_correlation_not_causal |
+| startPosition | finishPosition | Lower start vs lower finish | 40 | 0.41 | exploratory_correlation_not_causal |
+| qualifyingPosition | finishPosition | Qualifying rank vs finish | 38 | 0.39 | exploratory_correlation_not_causal |
+| qualifyingToFinishDelta | finishPosition | Qualifying conversion vs finish | 38 | -0.69 | exploratory_correlation_not_causal |
+| positionGain | finishPosition | Position gain vs finish | 40 | -0.68 | exploratory_correlation_not_causal |
+| bestLapRank | finishPosition | Best-lap rank vs finish | 38 | 0.46 | exploratory_correlation_not_causal |
+| cautionShare | positionGain | Caution share vs gain | 40 | -0.05 | exploratory_correlation_not_causal |
+| passesPerLap | positionGain | Race passing density vs gain | 40 | 0.01 | exploratory_correlation_not_causal |
+| ambientTempC | finishPosition | Ambient temp vs finish | 40 | -0.12 | exploratory_correlation_not_causal |
+| windGustKph | positionGain | Wind gust vs gain | 40 | -0.12 | exploratory_correlation_not_causal |
+| precipitationMm | positionGain | Precipitation vs gain | 40 | -0.02 | exploratory_correlation_not_causal |
+| pitStops | finishPosition | Pit stops vs finish | 40 | -0.01 | exploratory_correlation_not_causal |
 
 ## Exploratory Multivariate Model
 
@@ -227,16 +227,16 @@ This is intentionally framed as a scan, not a claim engine. It is useful for pro
 
 | feature | coefficient | sampleSize | rSquared | interpretation |
 | --- | --- | --- | --- | --- |
-| model | n/a | 34 | 0.36 | Exploratory OLS; finishPosition lower is better; continuous fields are standardized; coefficients are directional, not causal. |
-| qualifyingPosition | 0.85 | 34 | 0.36 | Negative coefficient means associated with better finishing position after included controls. |
-| startPosition | 0.88 | 34 | 0.36 | Negative coefficient means associated with better finishing position after included controls. |
-| bestLapRank | 1.73 | 34 | 0.36 | Negative coefficient means associated with better finishing position after included controls. |
-| cautionShare | 0.95 | 34 | 0.36 | Negative coefficient means associated with better finishing position after included controls. |
-| pitStops | 0.03 | 34 | 0.36 | Negative coefficient means associated with better finishing position after included controls. |
-| ambientTempC | 0.34 | 34 | 0.36 | Negative coefficient means associated with better finishing position after included controls. |
-| windGustKph | 0.58 | 34 | 0.36 | Negative coefficient means associated with better finishing position after included controls. |
-| track_road | 3.58 | 34 | 0.36 | Negative coefficient means associated with better finishing position after included controls. |
-| track_street | 2.36 | 34 | 0.36 | Negative coefficient means associated with better finishing position after included controls. |
+| model | n/a | 36 | 0.36 | Exploratory OLS; finishPosition lower is better; continuous fields are standardized; coefficients are directional, not causal. |
+| qualifyingPosition | 0.81 | 36 | 0.36 | Negative coefficient means associated with better finishing position after included controls. |
+| startPosition | 0.92 | 36 | 0.36 | Negative coefficient means associated with better finishing position after included controls. |
+| bestLapRank | 1.67 | 36 | 0.36 | Negative coefficient means associated with better finishing position after included controls. |
+| cautionShare | 0.94 | 36 | 0.36 | Negative coefficient means associated with better finishing position after included controls. |
+| pitStops | 0.09 | 36 | 0.36 | Negative coefficient means associated with better finishing position after included controls. |
+| ambientTempC | 0.19 | 36 | 0.36 | Negative coefficient means associated with better finishing position after included controls. |
+| windGustKph | 0.60 | 36 | 0.36 | Negative coefficient means associated with better finishing position after included controls. |
+| track_road | 3.21 | 36 | 0.36 | Negative coefficient means associated with better finishing position after included controls. |
+| track_street | 2.16 | 36 | 0.36 | Negative coefficient means associated with better finishing position after included controls. |
 
 ## Chart-Ready Output Inventory
 

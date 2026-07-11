@@ -1,21 +1,21 @@
 {
-  "checkedAt": "2026-07-02T17:41:00.714Z",
+  "checkedAt": "2026-07-11T20:47:16.634Z",
   "ok": true,
   "dryRun": false,
   "verifySourceUrls": false,
   "rawArtifact": "data/career/raw/track-metadata/track-metadata.v1.json",
   "genericWeatherImported": false,
-  "preservedWeatherObservationRows": 190,
+  "preservedWeatherObservationRows": 199,
   "counts": {
     "rawTracks": 42,
     "datasetTracksBefore": 42,
     "datasetTracksAfter": 42,
-    "tracksUpdated": 13,
+    "tracksUpdated": 0,
     "sourceEvidenceUpserted": 42,
     "eventTimezonesBackfilled": 0,
-    "sessionTimezonesBackfilled": 0,
+    "sessionTimezonesBackfilled": 7,
     "sessionTimezoneMismatches": 0,
-    "weatherPreciseWindowReadySessions": 381,
+    "weatherPreciseWindowReadySessions": 395,
     "weatherEventDayContextOnlySessions": 78,
     "weatherBlockedSessions": 9
   },
@@ -32,7 +32,7 @@
   },
   "weatherPrep": {
     "readinessCounts": {
-      "precise_window_ready": 381,
+      "precise_window_ready": 395,
       "blocked_missing_session_start": 9,
       "not_applicable_aggregate_classification": 1,
       "event_day_context_only": 78

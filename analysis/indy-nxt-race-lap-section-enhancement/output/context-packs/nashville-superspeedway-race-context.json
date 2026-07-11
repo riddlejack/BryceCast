@@ -1,0 +1,50 @@
+{
+  "asOfDate": "2026-07-11",
+  "claimStrength": "post_race_descriptive_only",
+  "displayRules": [
+    "Use these rows as completed Nashville Superspeedway race history only.",
+    "Do not blend with future session claims without live/current source rows."
+  ],
+  "generatedAt": "2026-07-11T20:55:33Z",
+  "historicalRaceRows": [
+    {
+      "bestCleanSectionFamilies": "Turn 3:0.55 n=57; Turn 1 Entry Turn 1 Exit Turn 2 Entry BackStretch BackStretch:0.50 n=57; Turn 4 Entry Turn 4 Exit:0.50 n=57",
+      "bestRunningPosition": 6.0,
+      "bestSegment": "green_run L1-51 gain 5.0",
+      "finishPosition": 7.0,
+      "lapRows": 65,
+      "medianCleanTrackSectionPercentile": 0.5,
+      "netLapChartGain": 4.0,
+      "raceLabel": "2024 Music City Grand Prix",
+      "seasonYear": 2024,
+      "sessionId": "session_indy_nxt_2024_6323",
+      "sourceHash": "900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681",
+      "startPosition": 11.0,
+      "trackName": "Nashville Superspeedway",
+      "weakestCleanSectionFamilies": "Turn 1 Entry Turn 1 Exit Turn 2 Entry BackStretch BackStretch:0.50 n=57; Turn 4 Entry Turn 4 Exit:0.50 n=57; Turn 3:0.55 n=57",
+      "worstRunningPosition": 13.0
+    },
+    {
+      "bestCleanSectionFamilies": "Turn 3:0.58 n=52; Turn 1 Entry Turn 1 Exit Turn 2 Entry BackStretch BackStretch:0.57 n=52; Turn 4 Entry Turn 4 Exit:0.55 n=52",
+      "bestRunningPosition": 6.0,
+      "bestSegment": "green_run L1-31 gain 0.0",
+      "finishPosition": 6.0,
+      "lapRows": 65,
+      "medianCleanTrackSectionPercentile": 0.5714285714285714,
+      "netLapChartGain": 0.0,
+      "raceLabel": "2025 Music City Grand Prix",
+      "seasonYear": 2025,
+      "sessionId": "session_indy_nxt_2025_6447",
+      "sourceHash": "900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681",
+      "startPosition": 6.0,
+      "trackName": "Nashville Superspeedway",
+      "weakestCleanSectionFamilies": "Turn 4 Entry Turn 4 Exit:0.55 n=52; Turn 1 Entry Turn 1 Exit Turn 2 Entry BackStretch BackStretch:0.57 n=52; Turn 3:0.58 n=52",
+      "worstRunningPosition": 7.0
+    }
+  ],
+  "id": "nashville-superspeedway-race-context",
+  "publicPointPrediction": false,
+  "sourceDataset": "data/career/career.dataset.json",
+  "sourceHash": "900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681",
+  "trackName": "Nashville Superspeedway"
+}

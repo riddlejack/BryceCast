@@ -14,7 +14,7 @@
     },
     {
       "filter": {
-        "sessionId": "session_indy_nxt_2026_6751"
+        "sessionId": "session_indy_nxt_2026_6761"
       },
       "id": "lap_position_story",
       "source": "analysis/indy-nxt-discovery/output/tables/indy_nxt_lap_timeline.csv",
@@ -42,49 +42,49 @@
   "confidence": "medium",
   "conversion": {
     "archetype": "team_context_outperformed_teammates",
-    "bestLapRank": 15.0,
-    "conversionPercentileDelta": 0.074,
+    "bestLapRank": 22.0,
+    "conversionPercentileDelta": -0.103,
     "labelReviewState": "review_required_before_public_copy",
-    "paceIndex": 0.377
+    "paceIndex": 0.217
   },
-  "eventStartDate": "2026-02-27",
-  "generatedAt": "2026-07-11T20:55:15Z",
-  "id": "debrief_session_indy_nxt_2026_6751",
+  "eventStartDate": "2026-07-03",
+  "generatedAt": "2026-07-11T20:55:16Z",
+  "id": "debrief_session_indy_nxt_2026_6761",
   "lapStory": {
-    "bryceBestRunningPosition": 16.0,
-    "bryceNetLapChartGain": -1.0,
+    "bryceBestRunningPosition": 14.0,
+    "bryceNetLapChartGain": -2.0,
     "brycePrimaryStory": "steady_context_race",
     "bryceWorstRunningPosition": 18.0,
     "fieldLapDrivers": 24.0,
     "sourceState": "official_lap_chart",
-    "topLapChartGain": 12.0,
-    "topLapChartMover": "Jack Beeton"
+    "topLapChartGain": 11.0,
+    "topLapChartMover": "Myles Rowe"
   },
   "outcome": {
-    "cumulativePoints": 12.0,
-    "finishPercentile": 0.292,
-    "finishPosition": 18.0,
-    "points": 12.0,
-    "positionGain": 1.0,
-    "standingRank": 18.0,
-    "startPosition": 19.0,
+    "cumulativePoints": 174.0,
+    "finishPercentile": 0.375,
+    "finishPosition": 16.0,
+    "points": 14.0,
+    "positionGain": -3.0,
+    "standingRank": 17.0,
+    "startPosition": 13.0,
     "teamName": "Chip Ganassi Racing"
   },
   "raceContext": {
     "bryceIncidentCount": 0.0,
     "brycePenaltyCount": 0.0,
     "leaderEntropy": 0.0,
-    "sessionIncidentCount": 8.0,
-    "sessionPenaltyCount": 2.0,
-    "topLeader": "Nikita Johnson",
+    "sessionIncidentCount": 4.0,
+    "sessionPenaltyCount": 0.0,
+    "topLeader": "Enzo Fittipaldi",
     "topLeaderShare": 1.0,
-    "weatherContext": "dry/cool/medium"
+    "weatherContext": "dry/hot/medium"
   },
-  "raceLabel": "2026 Grand Prix of St. Petersburg",
+  "raceLabel": "2026 Grand Prix at Mid-Ohio Race 1 R1",
   "raceOrder": {
-    "roundIndex": 1,
+    "roundIndex": 11,
     "seasonYear": 2026,
-    "sessionStartDate": "2026-03-01",
+    "sessionStartDate": "2026-07-04",
     "source": "data/career/career.dataset.json",
     "sourceFields": [
       "events.eventStartDate",
@@ -95,13 +95,13 @@
   "schemaVersion": "brycecast.raceDebriefContextPack.v1",
   "seasonYear": 2026,
   "sectionSignal": {
-    "bestSectionFamilies": "FS-PI:0.52; Turns 2/3:0.48; Turn 1:0.48; FS-PO:0.45",
+    "bestSectionFamilies": "Turn 2:0.58; Turn 9:0.57; Turn 12:0.57; Back Stretch:0.48",
     "displayPolicy": "headline_allowed_if_sectionComparisonRows_gte_50_else_badge_or_suppress",
-    "medianSectionPercentile": 0.364,
-    "sectionComparisonRows": 190.0,
-    "weakestSectionFamilies": "Turn 4:0.30; Turn 10:0.34; Turn 9a:0.36; Turns 5-8:0.36"
+    "medianSectionPercentile": 0.348,
+    "sectionComparisonRows": 285.0,
+    "weakestSectionFamilies": "Turn 1A:0.30; Turn 11:0.31; Turn 1:0.32; Turn 5:0.34"
   },
-  "sessionId": "session_indy_nxt_2026_6751",
+  "sessionId": "session_indy_nxt_2026_6761",
   "sourceHash": "900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681",
   "sourceRefs": [
     {
@@ -161,16 +161,16 @@
   ],
   "sourceState": "derived_from_official_results_lap_chart_sections_and_modeled_weather",
   "teamContext": {
-    "bryceTeamFinishRank": 1.0,
-    "bryceVsTeamAvgFinish": -3.25,
+    "bryceTeamFinishRank": 2.0,
+    "bryceVsTeamAvgFinish": -1.5,
     "policy": "descriptive_result_context_only",
-    "teamAverageFinish": 21.25,
+    "teamAverageFinish": 17.5,
     "teamCars": 4.0,
     "teammates": "Carson Etter; James Roe; Niels Koolen"
   },
   "track": {
-    "name": "Streets of St. Petersburg",
-    "type": "street"
+    "name": "Mid-Ohio Sports Car Course",
+    "type": "road"
   },
   "type": "race_debrief"
 }

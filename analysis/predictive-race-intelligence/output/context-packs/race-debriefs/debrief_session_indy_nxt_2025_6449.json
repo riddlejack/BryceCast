@@ -48,7 +48,7 @@
     "paceIndex": null
   },
   "eventStartDate": "2025-08-08",
-  "generatedAt": "2026-07-02T17:45:24Z",
+  "generatedAt": "2026-07-11T20:55:14Z",
   "id": "debrief_session_indy_nxt_2025_6449",
   "lapStory": {
     "bryceBestRunningPosition": null,
@@ -102,61 +102,61 @@
     "weakestSectionFamilies": "FS-PO:0.17; Turn 12:0.67; Turn 1:0.71; FS-PI:0.89"
   },
   "sessionId": "session_indy_nxt_2025_6449",
-  "sourceHash": "5d66d442aa62ff829f41a78a998f82218eacb1e92cf10834dc3b4316d03ba7cb",
+  "sourceHash": "900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681",
   "sourceRefs": [
     {
-      "bytes": 18290,
+      "bytes": 19255,
       "path": "analysis/indy-nxt-discovery/output/deep_dive/tables/race_debrief_scores.csv",
       "role": "debrief score",
-      "sha256": "30da64be58bfe4db116e10674fa12008da7fc2d62bb695871565f392f4f848c6"
+      "sha256": "3b75fe199977f9b705a93cc2fbbd9d115c02d28aa307fa108cf2e906527e500b"
     },
     {
-      "bytes": 9626,
+      "bytes": 10120,
       "path": "analysis/indy-nxt-discovery/output/deep_dive/tables/full_field_lap_dynamics_by_race.csv",
       "role": "lap dynamics",
-      "sha256": "4fa25fc331babee76bdc4ed0bf6e92fb5d0e548c1612f9b142f45e6cd9ad530f"
+      "sha256": "35727abc1d7abe4c1aff808c8578087feec2e953fc1f13f12c9dedd764b24b1f"
     },
     {
-      "bytes": 8224,
+      "bytes": 8501,
       "path": "analysis/indy-nxt-discovery/output/deep_dive/tables/incident_penalty_context.csv",
       "role": "incident and penalty context",
-      "sha256": "11308ebdef3bcdc19eb370b163dcf7b428817083ae8e09e3cc13576ed818f5e6"
+      "sha256": "b085705605d0f76df35247504ad73dcb6c66de632e7b09286671fb710f17a38a"
     },
     {
-      "bytes": 5136,
+      "bytes": 5394,
       "path": "analysis/indy-nxt-discovery/output/deep_dive/tables/leader_lap_context.csv",
       "role": "leader lap context",
-      "sha256": "fa9cf916a0ea4c76c44407e2b5b7512df0a868caf82093523c6bc16509774ca0"
+      "sha256": "1ac7a045a3fb737f03339c703575cb23035c034aa56a5b05f6d6e0aec4e707fa"
     },
     {
-      "bytes": 10423,
+      "bytes": 10987,
       "path": "analysis/indy-nxt-discovery/output/deep_dive/tables/team_context_by_race.csv",
       "role": "team context",
-      "sha256": "37adda6154fbf074172689e25ae536f99ad5ccec9d7c56c453487c087aaf5e2a"
+      "sha256": "128eb6a61884f191f4d6cf1442b9633e342ee6b4a958225460fa5a7509de0486"
     },
     {
-      "bytes": 13871,
+      "bytes": 14603,
       "path": "analysis/indy-nxt-discovery/output/deep_dive/tables/section_results_deep_by_race.csv",
       "role": "section context",
-      "sha256": "eb3c5d4fc38ee2592a7ba4a8149af299312abebee74c813fd6ce612887e9e4b7"
+      "sha256": "2cfe0faef37b8775d944b88fc64479f21ed119a68ebd5423c973a3c328487b45"
     },
     {
-      "bytes": 9989,
+      "bytes": 10520,
       "path": "analysis/indy-nxt-discovery/output/deep_dive/tables/championship_progression.csv",
       "role": "championship context",
-      "sha256": "747da5c10d17aaebfd77ba294260ac73752c6d1194ab31f4e199866d642ab408"
+      "sha256": "54d42d5b49db0182ac341b8b52355afad215277d86dfc4302b6a1e25fa040028"
     },
     {
-      "bytes": 157272,
+      "bytes": 164534,
       "path": "analysis/indy-nxt-discovery/output/tables/indy_nxt_lap_timeline.csv",
       "role": "lap timeline chart source",
-      "sha256": "6ef649f1e17f4842b73a7c46d9c5192ff39cc3068259930ed5cb7228ee8eb9c2"
+      "sha256": "53a63eee105f123cb79672a1526f7ad98417f6e4faa7287ff924e07714c4baa6"
     },
     {
-      "bytes": 308701710,
+      "bytes": 321366859,
       "path": "data/career/career.dataset.json",
       "role": "canonical event/session chronology",
-      "sha256": "5d66d442aa62ff829f41a78a998f82218eacb1e92cf10834dc3b4316d03ba7cb"
+      "sha256": "900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681"
     }
   ],
   "sourceState": "derived_from_official_results_lap_chart_sections_and_modeled_weather",

@@ -1,8 +1,8 @@
 {
-  "checkedAt": "2026-07-02T17:23:43.548Z",
-  "refresh": false,
-  "fetched": 0,
-  "cached": 18,
+  "checkedAt": "2026-07-11T20:49:25.844Z",
+  "refresh": true,
+  "fetched": 11,
+  "cached": 0,
   "schedulesCached": [
     "data/career/raw/session-windows/froc-2024/froc-2024-r1-schedule.jpg",
     "data/career/raw/session-windows/froc-2024/froc-2024-r2-schedule.jpg",

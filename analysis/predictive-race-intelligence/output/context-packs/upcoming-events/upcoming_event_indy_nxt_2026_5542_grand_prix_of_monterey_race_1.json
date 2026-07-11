@@ -62,7 +62,7 @@
     }
   ],
   "analogSelectionPolicy": "pre_race_track_match_then_recency_no_outcome_sort",
-  "asOfDate": "2026-07-02",
+  "asOfDate": "2026-07-11",
   "careerPriorContext": [
     {
       "avgFinishPercentile": 0.498,
@@ -76,28 +76,28 @@
       "raceRows": 42,
       "seriesId": "series_gb3",
       "seriesName": "GB3 Championship",
-      "sourceHash": "5d66d442aa62ff829f41a78a998f82218eacb1e92cf10834dc3b4316d03ba7cb",
+      "sourceHash": "900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681",
       "sourceState": "official_or_source_backed_result",
       "top10Rate": 0.429,
       "top5Rate": 0.119,
       "trackType": ""
     },
     {
-      "avgFinishPercentile": 0.456,
-      "avgGain": -0.947,
+      "avgFinishPercentile": 0.454,
+      "avgGain": -0.95,
       "caveat": "Use as normalized prior; do not compare raw finish across different field sizes.",
       "eligibility": "prior_allowed",
       "metricFamily": "result_conversion",
       "parityStatus": "production_safe",
       "priorId": "series:series_indy_nxt",
       "priorType": "series_outcome",
-      "raceRows": 38,
+      "raceRows": 40,
       "seriesId": "series_indy_nxt",
       "seriesName": "INDY NXT",
-      "sourceHash": "5d66d442aa62ff829f41a78a998f82218eacb1e92cf10834dc3b4316d03ba7cb",
+      "sourceHash": "900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681",
       "sourceState": "official_or_source_backed_result",
-      "top10Rate": 0.474,
-      "top5Rate": 0.105,
+      "top10Rate": 0.45,
+      "top5Rate": 0.1,
       "trackType": ""
     },
     {
@@ -112,28 +112,28 @@
       "raceRows": 15,
       "seriesId": "series_formula_ford",
       "seriesName": "Formula Ford",
-      "sourceHash": "5d66d442aa62ff829f41a78a998f82218eacb1e92cf10834dc3b4316d03ba7cb",
+      "sourceHash": "900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681",
       "sourceState": "official_or_source_backed_result",
       "top10Rate": 1.0,
       "top5Rate": 0.8,
       "trackType": ""
     },
     {
-      "avgFinishPercentile": 0.601,
-      "avgGain": -0.5,
+      "avgFinishPercentile": 0.598,
+      "avgGain": -0.512,
       "caveat": "Aggregated prior; use with denominator and source-family caveats.",
       "eligibility": "prior_allowed",
       "metricFamily": "result_conversion",
       "parityStatus": "production_safe",
       "priorId": "track_type:road",
       "priorType": "track_type_outcome",
-      "raceRows": 123,
+      "raceRows": 125,
       "seriesId": "",
       "seriesName": "",
-      "sourceHash": "5d66d442aa62ff829f41a78a998f82218eacb1e92cf10834dc3b4316d03ba7cb",
+      "sourceHash": "900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681",
       "sourceState": "official_or_source_backed_result",
-      "top10Rate": 0.691,
-      "top5Rate": 0.382,
+      "top10Rate": 0.68,
+      "top5Rate": 0.376,
       "trackType": "road"
     }
   ],
@@ -178,7 +178,7 @@
   "eventId": "event_indy_nxt_2026_5542",
   "eventName": "Grand Prix of Monterey Race 1",
   "eventStartDate": "2026-09-05",
-  "generatedAt": "2026-07-02T17:45:20Z",
+  "generatedAt": "2026-07-11T20:55:10Z",
   "id": "upcoming_event_indy_nxt_2026_5542_grand_prix_of_monterey_race_1",
   "predictionBand": {
     "calibrationState": "not_calibrated_for_point_probability",
@@ -186,9 +186,9 @@
     "confidence": "medium_low",
     "finishPercentileBand": {
       "median": 0.401,
-      "n": 22,
-      "p25": 0.188,
-      "p75": 0.656
+      "n": 24,
+      "p25": 0.229,
+      "p75": 0.635
     },
     "modelPolicy": "No point prediction. Band is a source-backed historical prior for story/context until qualifying and live data arrive.",
     "scorecardRef": "analysis/predictive-race-intelligence/output/model_scorecard.json",
@@ -208,43 +208,43 @@
     "top10Rate": 0.5
   },
   "schemaVersion": "brycecast.upcomingEventIntelligencePack.v1",
-  "sourceHash": "5d66d442aa62ff829f41a78a998f82218eacb1e92cf10834dc3b4316d03ba7cb",
+  "sourceHash": "900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681",
   "sourceRefs": [
     {
-      "bytes": 2206,
+      "bytes": 1606,
       "path": "analysis/indy-nxt-discovery/output/deep_dive/tables/future_weekend_prep_inputs.csv",
       "role": "event prep row",
-      "sha256": "892be4f5c11d8de5f07ab540486bc47faf89fcb678216983d85ec02c582ce501"
+      "sha256": "bed5edc3b674ccaa1a38d91c9cddd532046f119114f601a71f40b5cb3d355896"
     },
     {
-      "bytes": 18290,
+      "bytes": 19255,
       "path": "analysis/indy-nxt-discovery/output/deep_dive/tables/race_debrief_scores.csv",
       "role": "historical race priors",
-      "sha256": "30da64be58bfe4db116e10674fa12008da7fc2d62bb695871565f392f4f848c6"
+      "sha256": "3b75fe199977f9b705a93cc2fbbd9d115c02d28aa307fa108cf2e906527e500b"
     },
     {
-      "bytes": 917,
+      "bytes": 835,
       "path": "analysis/career-parity/output/tables/career_series_result_summary.csv",
       "role": "career series priors",
-      "sha256": "ff5d459b40d3240cca4bbaadc3cc2c52d44f5230c9e9f58f3d80104d916a74d2"
+      "sha256": "dad1bf01ac409cbf56cefad861c23092cb4ae77f15994fe9ec9a7772e91e9031"
     },
     {
-      "bytes": 35571,
+      "bytes": 36049,
       "path": "analysis/career-parity/output/tables/career_result_conversion.csv",
       "role": "career conversion priors",
-      "sha256": "5902409972f10edcbf35e118d1324f5282e232a41a9821ee7136250bd0582c82"
+      "sha256": "5d0da9cdb880592f16df59e0553113dbb6b09741e216201f029293aa85b39b07"
     },
     {
-      "bytes": 23446,
+      "bytes": 23443,
       "path": "analysis/predictive-race-intelligence/output/career_prior_matrix.csv",
       "role": "generated career prior context",
-      "sha256": "541612c6be512624a699fe4a2057c42afc582f69aa1bc2c352bed68af276e96c"
+      "sha256": "cb228dac9752a89a8cd8a1e9aa0739c4aebf46c2694758beed958f2db16d01a3"
     },
     {
-      "bytes": 8924,
+      "bytes": 8911,
       "path": "analysis/predictive-race-intelligence/output/model_scorecard.json",
       "role": "prediction validation",
-      "sha256": "290a302faa09de271e526aa3e80aaf8cdd42cad8a16267d67124ff5ffbf13e44"
+      "sha256": "68fc10c8654d4e25b0be15b165b6c98c0adf707608f0569cfc4df9ba8375fbde"
     }
   ],
   "top10Path": [
@@ -258,7 +258,7 @@
       "actionableRead": "The product should show the range and analogs, not a single expected finish.",
       "currentState": "Pre-event prior only.",
       "factor": "Road-course conversion",
-      "whyItMatters": "INDY NXT road rows currently show avg finish 12.9 and top-10 rate 41%."
+      "whyItMatters": "INDY NXT road rows currently show avg finish 13.0 and top-10 rate 38%."
     },
     {
       "actionableRead": "Use same-track rows as analog stories with denominator labels.",
@@ -286,11 +286,11 @@
     "type": "road"
   },
   "trackTypeHistory": {
-    "avgFinish": 12.864,
-    "avgGain": -2.273,
+    "avgFinish": 13.042,
+    "avgGain": -2.167,
     "finishPercentileMedian": 0.401,
-    "raceCount": 22,
-    "top10Rate": 0.409
+    "raceCount": 24,
+    "top10Rate": 0.375
   },
   "type": "upcoming_event",
   "weatherState": "future_unavailable_in_historical_dataset"

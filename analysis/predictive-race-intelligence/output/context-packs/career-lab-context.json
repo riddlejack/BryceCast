@@ -38,7 +38,7 @@
       "type": "small_multiple"
     }
   ],
-  "generatedAt": "2026-07-02T17:45:25Z",
+  "generatedAt": "2026-07-11T20:55:16Z",
   "id": "career_lab_context",
   "metricFamilyParity": [
     {
@@ -468,7 +468,7 @@
       "parityStatus": "production_safe",
       "seriesId": "series_indy_nxt",
       "seriesName": "INDY NXT",
-      "sourceRowsOrSessions": "38",
+      "sourceRowsOrSessions": "40",
       "uiUse": "Use in Career Analytics Lab."
     },
     {
@@ -478,7 +478,7 @@
       "parityStatus": "production_safe",
       "seriesId": "series_indy_nxt",
       "seriesName": "INDY NXT",
-      "sourceRowsOrSessions": "65",
+      "sourceRowsOrSessions": "69",
       "uiUse": "Use in Career Analytics Lab."
     },
     {
@@ -498,7 +498,7 @@
       "parityStatus": "source_bounded_partial",
       "seriesId": "series_indy_nxt",
       "seriesName": "INDY NXT",
-      "sourceRowsOrSessions": "104",
+      "sourceRowsOrSessions": "113",
       "uiUse": "Use with coverage badge and denominators."
     },
     {
@@ -508,7 +508,7 @@
       "parityStatus": "source_bounded_partial",
       "seriesId": "series_indy_nxt",
       "seriesName": "INDY NXT",
-      "sourceRowsOrSessions": "1428",
+      "sourceRowsOrSessions": "1493",
       "uiUse": "Use with coverage badge and denominators."
     },
     {
@@ -518,7 +518,7 @@
       "parityStatus": "source_bounded_partial",
       "seriesId": "series_indy_nxt",
       "seriesName": "INDY NXT",
-      "sourceRowsOrSessions": "2966",
+      "sourceRowsOrSessions": "3127",
       "uiUse": "Use with coverage badge and denominators."
     },
     {
@@ -528,7 +528,7 @@
       "parityStatus": "source_bounded_partial",
       "seriesId": "series_indy_nxt",
       "seriesName": "INDY NXT",
-      "sourceRowsOrSessions": "305",
+      "sourceRowsOrSessions": "319",
       "uiUse": "Use with coverage badge and denominators."
     }
   ],
@@ -2982,6 +2982,42 @@
       "trackType": "road"
     },
     {
+      "eventName": "Grand Prix at Mid-Ohio Race 2",
+      "finishPercentile": "0.4583",
+      "finishPosition": "14.0",
+      "points": "16",
+      "positionGain": "1.0",
+      "raceLabel": "2026 Grand Prix at Mid-Ohio Race 2",
+      "seasonYear": "2026",
+      "seriesId": "series_indy_nxt",
+      "seriesName": "INDY NXT",
+      "sessionId": "session_indy_nxt_2026_6760",
+      "sourceState": "official_or_source_backed_result",
+      "startPosition": "15.0",
+      "status": "running",
+      "teamName": "Chip Ganassi Racing",
+      "trackName": "Mid-Ohio Sports Car Course",
+      "trackType": "road"
+    },
+    {
+      "eventName": "Grand Prix at Mid-Ohio Race 1",
+      "finishPercentile": "0.375",
+      "finishPosition": "16.0",
+      "points": "14",
+      "positionGain": "-3.0",
+      "raceLabel": "2026 Grand Prix at Mid-Ohio Race 1",
+      "seasonYear": "2026",
+      "seriesId": "series_indy_nxt",
+      "seriesName": "INDY NXT",
+      "sessionId": "session_indy_nxt_2026_6761",
+      "sourceState": "official_or_source_backed_result",
+      "startPosition": "13.0",
+      "status": "running",
+      "teamName": "Chip Ganassi Racing",
+      "trackName": "Mid-Ohio Sports Car Course",
+      "trackType": "road"
+    },
+    {
       "eventName": "Grand Prix at Road America Race 1",
       "finishPercentile": "0.1667",
       "finishPosition": "21.0",
@@ -3036,7 +3072,7 @@
       "trackType": "road"
     }
   ],
-  "resultConversionRows": 139,
+  "resultConversionRows": 141,
   "schemaVersion": "brycecast.careerLabContextPack.v1",
   "seriesSummary": [
     {
@@ -3052,16 +3088,16 @@
       "top5Rate": "0.11904761904761904"
     },
     {
-      "avgFinish": "12.394736842105264",
-      "avgFinishPercentile": "0.4560394736842105",
-      "avgGain": "-0.9473684210526315",
-      "issueLikeStatusRate": "0.13157894736842105",
-      "medianFinish": "12.0",
-      "raceRows": "38",
+      "avgFinish": "12.525",
+      "avgFinishPercentile": "0.45407",
+      "avgGain": "-0.95",
+      "issueLikeStatusRate": "0.125",
+      "medianFinish": "12.5",
+      "raceRows": "40",
       "seriesId": "series_indy_nxt",
       "seriesName": "INDY NXT",
-      "top10Rate": "0.47368421052631576",
-      "top5Rate": "0.10526315789473684"
+      "top10Rate": "0.45",
+      "top5Rate": "0.1"
     },
     {
       "avgFinish": "4.75",
@@ -3131,31 +3167,31 @@
     "Formula Ford lap/weather context is source-bounded and should be labeled separately.",
     "IMSA Daytona remains a standalone sports-car feature."
   ],
-  "sourceHash": "5d66d442aa62ff829f41a78a998f82218eacb1e92cf10834dc3b4316d03ba7cb",
+  "sourceHash": "900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681",
   "sourceRefs": [
     {
-      "bytes": 917,
+      "bytes": 835,
       "path": "analysis/career-parity/output/tables/career_series_result_summary.csv",
       "role": "career summary",
-      "sha256": "ff5d459b40d3240cca4bbaadc3cc2c52d44f5230c9e9f58f3d80104d916a74d2"
+      "sha256": "dad1bf01ac409cbf56cefad861c23092cb4ae77f15994fe9ec9a7772e91e9031"
     },
     {
       "bytes": 12247,
       "path": "analysis/career-parity/output/tables/career_metric_family_parity.csv",
       "role": "metric parity",
-      "sha256": "e3cfe0d74baf9068e00e903cbb336eba6bb2510cd7f2a4d102b88da5eef745e9"
+      "sha256": "c72df4e8627d5a2b35afe96e3a3eb5cdf23e215588c48bc28665a70ad993bcb1"
     },
     {
-      "bytes": 35571,
+      "bytes": 36049,
       "path": "analysis/career-parity/output/tables/career_result_conversion.csv",
       "role": "result conversion",
-      "sha256": "5902409972f10edcbf35e118d1324f5282e232a41a9821ee7136250bd0582c82"
+      "sha256": "5d0da9cdb880592f16df59e0553113dbb6b09741e216201f029293aa85b39b07"
     },
     {
-      "bytes": 23446,
+      "bytes": 23443,
       "path": "analysis/predictive-race-intelligence/output/career_prior_matrix.csv",
       "role": "career prior matrix chart source",
-      "sha256": "541612c6be512624a699fe4a2057c42afc582f69aa1bc2c352bed68af276e96c"
+      "sha256": "cb228dac9752a89a8cd8a1e9aa0739c4aebf46c2694758beed958f2db16d01a3"
     }
   ],
   "topCareerStories": [
@@ -3172,7 +3208,7 @@
       "story": "Track-type prior"
     },
     {
-      "detail": "2022 GB3 2022 Round 3 - Donington Park; 2023 Euroformula Open 2023 Round 2 - Spa-Francorchamps; 2024 FROC 2024 Round 5 - Highlands Motorsport Park",
+      "detail": "2024 FROC 2024 Round 5 - Highlands Motorsport Park; 2023 Euroformula Open 2023 Round 2 - Spa-Francorchamps; 2023 Euroformula Open 2023 Round 3 - Hungaroring",
       "story": "Best finish-percentile races"
     }
   ],

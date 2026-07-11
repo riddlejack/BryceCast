@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-02T17:23:45.896Z",
+  "generatedAt": "2026-07-11T20:43:23.500Z",
   "source": "open_meteo_historical_archive",
-  "archiveCutoffDate": "2026-07-01",
+  "archiveCutoffDate": "2026-07-10",
   "requestedVariables": [
     "temperature_2m",
     "apparent_temperature",
@@ -18,14 +18,14 @@
     "shortwave_radiation",
     "soil_temperature_0_to_7cm"
   ],
-  "eligibleExactWindowSessions": 104,
+  "eligibleExactWindowSessions": 113,
   "skippedDateOnlySessions": 78,
-  "skippedFutureSessions": 7,
-  "joinedSessions": 104,
+  "skippedFutureSessions": 12,
+  "joinedSessions": 113,
   "joinedBySessionType": {
-    "race": 38,
-    "practice": 49,
-    "qualifying": 17
+    "race": 40,
+    "practice": 50,
+    "qualifying": 23
   },
   "skipped": [],
   "joined": [
@@ -840,6 +840,26 @@
       "rawArtifactPath": "data/career/raw/weather/open-meteo/indy-nxt/track_indianapolis_motor_speedway_road_course/2026-05-08.json"
     },
     {
+      "sessionId": "session_indy_nxt_2026_6760",
+      "sessionType": "race",
+      "trackId": "track_mid_ohio_sports_car_course",
+      "sourceSessionStart": "2026-07-05T10:08:00",
+      "joinedLocalHour": "2026-07-05T10:00",
+      "weatherId": "weather_indy_nxt_open_meteo_session_indy_nxt_2026_6760",
+      "confidence": "modeled_medium",
+      "rawArtifactPath": "data/career/raw/weather/open-meteo/indy-nxt/track_mid_ohio_sports_car_course/2026-07-05.json"
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6761",
+      "sessionType": "race",
+      "trackId": "track_mid_ohio_sports_car_course",
+      "sourceSessionStart": "2026-07-04T13:08:00",
+      "joinedLocalHour": "2026-07-04T13:00",
+      "weatherId": "weather_indy_nxt_open_meteo_session_indy_nxt_2026_6761",
+      "confidence": "modeled_medium",
+      "rawArtifactPath": "data/career/raw/weather/open-meteo/indy-nxt/track_mid_ohio_sports_car_course/2026-07-04.json"
+    },
+    {
       "sessionId": "session_indy_nxt_2026_6762",
       "sessionType": "race",
       "trackId": "track_road_america",
@@ -1068,11 +1088,81 @@
       "weatherId": "weather_indy_nxt_open_meteo_session_indy_nxt_2026_6875",
       "confidence": "modeled_medium",
       "rawArtifactPath": "data/career/raw/weather/open-meteo/indy-nxt/track_road_america/2026-06-20.json"
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6891",
+      "sessionType": "practice",
+      "trackId": "track_mid_ohio_sports_car_course",
+      "sourceSessionStart": "2026-07-03T14:00:00",
+      "joinedLocalHour": "2026-07-03T14:00",
+      "weatherId": "weather_indy_nxt_open_meteo_session_indy_nxt_2026_6891",
+      "confidence": "modeled_medium",
+      "rawArtifactPath": "data/career/raw/weather/open-meteo/indy-nxt/track_mid_ohio_sports_car_course/2026-07-03.json"
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6892",
+      "sessionType": "qualifying",
+      "trackId": "track_mid_ohio_sports_car_course",
+      "sourceSessionStart": "2026-07-04T09:00:00",
+      "joinedLocalHour": "2026-07-04T09:00",
+      "weatherId": "weather_indy_nxt_open_meteo_session_indy_nxt_2026_6892",
+      "confidence": "modeled_medium",
+      "rawArtifactPath": "data/career/raw/weather/open-meteo/indy-nxt/track_mid_ohio_sports_car_course/2026-07-04.json"
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6893",
+      "sessionType": "qualifying",
+      "trackId": "track_mid_ohio_sports_car_course",
+      "sourceSessionStart": "2026-07-04T09:18:00",
+      "joinedLocalHour": "2026-07-04T09:00",
+      "weatherId": "weather_indy_nxt_open_meteo_session_indy_nxt_2026_6893",
+      "confidence": "modeled_medium",
+      "rawArtifactPath": "data/career/raw/weather/open-meteo/indy-nxt/track_mid_ohio_sports_car_course/2026-07-04.json"
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6894",
+      "sessionType": "qualifying",
+      "trackId": "track_mid_ohio_sports_car_course",
+      "sourceSessionStart": "2026-07-04T09:30:00",
+      "joinedLocalHour": "2026-07-04T10:00",
+      "weatherId": "weather_indy_nxt_open_meteo_session_indy_nxt_2026_6894",
+      "confidence": "modeled_medium",
+      "rawArtifactPath": "data/career/raw/weather/open-meteo/indy-nxt/track_mid_ohio_sports_car_course/2026-07-04.json"
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6895",
+      "sessionType": "qualifying",
+      "trackId": "track_mid_ohio_sports_car_course",
+      "sourceSessionStart": "2026-07-04T09:00:00",
+      "joinedLocalHour": "2026-07-04T09:00",
+      "weatherId": "weather_indy_nxt_open_meteo_session_indy_nxt_2026_6895",
+      "confidence": "modeled_medium",
+      "rawArtifactPath": "data/career/raw/weather/open-meteo/indy-nxt/track_mid_ohio_sports_car_course/2026-07-04.json"
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6896",
+      "sessionType": "qualifying",
+      "trackId": "track_mid_ohio_sports_car_course",
+      "sourceSessionStart": "2026-07-04T09:18:00",
+      "joinedLocalHour": "2026-07-04T09:00",
+      "weatherId": "weather_indy_nxt_open_meteo_session_indy_nxt_2026_6896",
+      "confidence": "modeled_medium",
+      "rawArtifactPath": "data/career/raw/weather/open-meteo/indy-nxt/track_mid_ohio_sports_car_course/2026-07-04.json"
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6897",
+      "sessionType": "qualifying",
+      "trackId": "track_mid_ohio_sports_car_course",
+      "sourceSessionStart": "2026-07-04T09:30:00",
+      "joinedLocalHour": "2026-07-04T10:00",
+      "weatherId": "weather_indy_nxt_open_meteo_session_indy_nxt_2026_6897",
+      "confidence": "modeled_medium",
+      "rawArtifactPath": "data/career/raw/weather/open-meteo/indy-nxt/track_mid_ohio_sports_car_course/2026-07-04.json"
     }
   ],
-  "fetched": 3,
-  "cacheHits": 101,
-  "sourceEvidenceUpserted": 81,
+  "fetched": 1,
+  "cacheHits": 112,
+  "sourceEvidenceUpserted": 84,
   "rawArtifacts": [
     "data/career/raw/weather/open-meteo/indy-nxt/track_barber_motorsports_park/2024-04-26.json",
     "data/career/raw/weather/open-meteo/indy-nxt/track_barber_motorsports_park/2024-04-27.json",
@@ -1099,6 +1189,9 @@
     "data/career/raw/weather/open-meteo/indy-nxt/track_mid_ohio_sports_car_course/2025-07-04.json",
     "data/career/raw/weather/open-meteo/indy-nxt/track_mid_ohio_sports_car_course/2025-07-05.json",
     "data/career/raw/weather/open-meteo/indy-nxt/track_mid_ohio_sports_car_course/2025-07-06.json",
+    "data/career/raw/weather/open-meteo/indy-nxt/track_mid_ohio_sports_car_course/2026-07-03.json",
+    "data/career/raw/weather/open-meteo/indy-nxt/track_mid_ohio_sports_car_course/2026-07-04.json",
+    "data/career/raw/weather/open-meteo/indy-nxt/track_mid_ohio_sports_car_course/2026-07-05.json",
     "data/career/raw/weather/open-meteo/indy-nxt/track_nashville_superspeedway/2024-09-14.json",
     "data/career/raw/weather/open-meteo/indy-nxt/track_nashville_superspeedway/2024-09-15.json",
     "data/career/raw/weather/open-meteo/indy-nxt/track_nashville_superspeedway/2025-08-30.json",

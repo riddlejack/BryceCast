@@ -3,45 +3,47 @@
 <text x="28" y="28" font-family="Inter, Arial" font-size="18" font-weight="700" fill="#1f2933">Bryce INDY NXT Finish Position Over Time</text>
 <line x1="62" y1="48" x2="62" y2="306" stroke="#aab2bd"/>
 <line x1="62" y1="306" x2="948" y2="306" stroke="#aab2bd"/>
-<polyline fill="none" stroke="#1f77b4" stroke-width="3" points="62.0,99.6 85.9,241.5 109.9,164.1 133.8,99.6 157.8,86.7 181.7,241.5 205.7,138.3 229.6,306.0 253.6,112.5 277.5,241.5 301.5,267.3 325.4,306.0 349.4,293.1 373.3,254.4 397.2,177.0 421.2,151.2 445.1,151.2 469.1,151.2 493.0,215.7 517.0,164.1 540.9,228.6 564.9,189.9 588.8,228.6 612.8,215.7 636.7,99.6 660.6,99.6 684.6,280.2 708.5,267.3 732.5,112.5 756.4,112.5 780.4,241.5 804.3,254.4 828.3,60.9 852.2,189.9 876.2,241.5 900.1,48.0 924.1,73.8 948.0,215.7"/>
+<polyline fill="none" stroke="#1f77b4" stroke-width="3" points="62.0,99.6 84.7,241.5 107.4,164.1 130.2,99.6 152.9,86.7 175.6,241.5 198.3,138.3 221.0,306.0 243.7,112.5 266.5,241.5 289.2,267.3 311.9,306.0 334.6,293.1 357.3,254.4 380.1,177.0 402.8,151.2 425.5,151.2 448.2,151.2 470.9,215.7 493.6,164.1 516.4,228.6 539.1,189.9 561.8,228.6 584.5,215.7 607.2,99.6 629.9,99.6 652.7,280.2 675.4,267.3 698.1,112.5 720.8,112.5 743.5,241.5 766.3,254.4 789.0,60.9 811.7,189.9 834.4,241.5 857.1,48.0 879.8,73.8 902.6,215.7 925.3,138.3 948.0,164.1"/>
 <circle cx="62.0" cy="99.6" r="3.5" fill="#1f77b4"/>
-<circle cx="85.9" cy="241.5" r="3.5" fill="#1f77b4"/>
-<circle cx="109.9" cy="164.1" r="3.5" fill="#1f77b4"/>
-<circle cx="133.8" cy="99.6" r="3.5" fill="#1f77b4"/>
-<circle cx="157.8" cy="86.7" r="3.5" fill="#1f77b4"/>
-<circle cx="181.7" cy="241.5" r="3.5" fill="#1f77b4"/>
-<circle cx="205.7" cy="138.3" r="3.5" fill="#1f77b4"/>
-<circle cx="229.6" cy="306.0" r="3.5" fill="#1f77b4"/>
-<circle cx="253.6" cy="112.5" r="3.5" fill="#1f77b4"/>
-<circle cx="277.5" cy="241.5" r="3.5" fill="#1f77b4"/>
-<circle cx="301.5" cy="267.3" r="3.5" fill="#1f77b4"/>
-<circle cx="325.4" cy="306.0" r="3.5" fill="#1f77b4"/>
-<circle cx="349.4" cy="293.1" r="3.5" fill="#1f77b4"/>
-<circle cx="373.3" cy="254.4" r="3.5" fill="#1f77b4"/>
-<circle cx="397.2" cy="177.0" r="3.5" fill="#1f77b4"/>
-<circle cx="421.2" cy="151.2" r="3.5" fill="#1f77b4"/>
-<circle cx="445.1" cy="151.2" r="3.5" fill="#1f77b4"/>
-<circle cx="469.1" cy="151.2" r="3.5" fill="#1f77b4"/>
-<circle cx="493.0" cy="215.7" r="3.5" fill="#1f77b4"/>
-<circle cx="517.0" cy="164.1" r="3.5" fill="#1f77b4"/>
-<circle cx="540.9" cy="228.6" r="3.5" fill="#1f77b4"/>
-<circle cx="564.9" cy="189.9" r="3.5" fill="#1f77b4"/>
-<circle cx="588.8" cy="228.6" r="3.5" fill="#1f77b4"/>
-<circle cx="612.8" cy="215.7" r="3.5" fill="#1f77b4"/>
-<circle cx="636.7" cy="99.6" r="3.5" fill="#1f77b4"/>
-<circle cx="660.6" cy="99.6" r="3.5" fill="#1f77b4"/>
-<circle cx="684.6" cy="280.2" r="3.5" fill="#1f77b4"/>
-<circle cx="708.5" cy="267.3" r="3.5" fill="#1f77b4"/>
-<circle cx="732.5" cy="112.5" r="3.5" fill="#1f77b4"/>
-<circle cx="756.4" cy="112.5" r="3.5" fill="#1f77b4"/>
-<circle cx="780.4" cy="241.5" r="3.5" fill="#1f77b4"/>
-<circle cx="804.3" cy="254.4" r="3.5" fill="#1f77b4"/>
-<circle cx="828.3" cy="60.9" r="3.5" fill="#1f77b4"/>
-<circle cx="852.2" cy="189.9" r="3.5" fill="#1f77b4"/>
-<circle cx="876.2" cy="241.5" r="3.5" fill="#1f77b4"/>
-<circle cx="900.1" cy="48.0" r="3.5" fill="#1f77b4"/>
-<circle cx="924.1" cy="73.8" r="3.5" fill="#1f77b4"/>
-<circle cx="948.0" cy="215.7" r="3.5" fill="#1f77b4"/>
+<circle cx="84.7" cy="241.5" r="3.5" fill="#1f77b4"/>
+<circle cx="107.4" cy="164.1" r="3.5" fill="#1f77b4"/>
+<circle cx="130.2" cy="99.6" r="3.5" fill="#1f77b4"/>
+<circle cx="152.9" cy="86.7" r="3.5" fill="#1f77b4"/>
+<circle cx="175.6" cy="241.5" r="3.5" fill="#1f77b4"/>
+<circle cx="198.3" cy="138.3" r="3.5" fill="#1f77b4"/>
+<circle cx="221.0" cy="306.0" r="3.5" fill="#1f77b4"/>
+<circle cx="243.7" cy="112.5" r="3.5" fill="#1f77b4"/>
+<circle cx="266.5" cy="241.5" r="3.5" fill="#1f77b4"/>
+<circle cx="289.2" cy="267.3" r="3.5" fill="#1f77b4"/>
+<circle cx="311.9" cy="306.0" r="3.5" fill="#1f77b4"/>
+<circle cx="334.6" cy="293.1" r="3.5" fill="#1f77b4"/>
+<circle cx="357.3" cy="254.4" r="3.5" fill="#1f77b4"/>
+<circle cx="380.1" cy="177.0" r="3.5" fill="#1f77b4"/>
+<circle cx="402.8" cy="151.2" r="3.5" fill="#1f77b4"/>
+<circle cx="425.5" cy="151.2" r="3.5" fill="#1f77b4"/>
+<circle cx="448.2" cy="151.2" r="3.5" fill="#1f77b4"/>
+<circle cx="470.9" cy="215.7" r="3.5" fill="#1f77b4"/>
+<circle cx="493.6" cy="164.1" r="3.5" fill="#1f77b4"/>
+<circle cx="516.4" cy="228.6" r="3.5" fill="#1f77b4"/>
+<circle cx="539.1" cy="189.9" r="3.5" fill="#1f77b4"/>
+<circle cx="561.8" cy="228.6" r="3.5" fill="#1f77b4"/>
+<circle cx="584.5" cy="215.7" r="3.5" fill="#1f77b4"/>
+<circle cx="607.2" cy="99.6" r="3.5" fill="#1f77b4"/>
+<circle cx="629.9" cy="99.6" r="3.5" fill="#1f77b4"/>
+<circle cx="652.7" cy="280.2" r="3.5" fill="#1f77b4"/>
+<circle cx="675.4" cy="267.3" r="3.5" fill="#1f77b4"/>
+<circle cx="698.1" cy="112.5" r="3.5" fill="#1f77b4"/>
+<circle cx="720.8" cy="112.5" r="3.5" fill="#1f77b4"/>
+<circle cx="743.5" cy="241.5" r="3.5" fill="#1f77b4"/>
+<circle cx="766.3" cy="254.4" r="3.5" fill="#1f77b4"/>
+<circle cx="789.0" cy="60.9" r="3.5" fill="#1f77b4"/>
+<circle cx="811.7" cy="189.9" r="3.5" fill="#1f77b4"/>
+<circle cx="834.4" cy="241.5" r="3.5" fill="#1f77b4"/>
+<circle cx="857.1" cy="48.0" r="3.5" fill="#1f77b4"/>
+<circle cx="879.8" cy="73.8" r="3.5" fill="#1f77b4"/>
+<circle cx="902.6" cy="215.7" r="3.5" fill="#1f77b4"/>
+<circle cx="925.3" cy="138.3" r="3.5" fill="#1f77b4"/>
+<circle cx="948.0" cy="164.1" r="3.5" fill="#1f77b4"/>
 <line x1="58" y1="306.0" x2="948" y2="306.0" stroke="#e6e2dc"/>
 <text x="12" y="310.0" font-family="Inter, Arial" font-size="11" fill="#56616f">3.0</text>
 <line x1="58" y1="177.0" x2="948" y2="177.0" stroke="#e6e2dc"/>
@@ -49,9 +51,9 @@
 <line x1="58" y1="48.0" x2="948" y2="48.0" stroke="#e6e2dc"/>
 <text x="12" y="52.0" font-family="Inter, Arial" font-size="11" fill="#56616f">23.0</text>
 <text x="62.0" y="338" text-anchor="middle" font-family="Inter, Arial" font-size="10" fill="#56616f">2024 Grand Prix of</text>
-<text x="229.6" y="338" text-anchor="middle" font-family="Inter, Arial" font-size="10" fill="#56616f">2024 Grand Prix of</text>
-<text x="397.2" y="338" text-anchor="middle" font-family="Inter, Arial" font-size="10" fill="#56616f">2025 Grand Prix of</text>
-<text x="588.8" y="338" text-anchor="middle" font-family="Inter, Arial" font-size="10" fill="#56616f">2025 INDY NXT by F</text>
-<text x="756.4" y="338" text-anchor="middle" font-family="Inter, Arial" font-size="10" fill="#56616f">2026 Grand Prix of</text>
+<text x="221.0" y="338" text-anchor="middle" font-family="Inter, Arial" font-size="10" fill="#56616f">2024 Grand Prix of</text>
+<text x="402.8" y="338" text-anchor="middle" font-family="Inter, Arial" font-size="10" fill="#56616f">2025 Grand Prix of</text>
+<text x="584.5" y="338" text-anchor="middle" font-family="Inter, Arial" font-size="10" fill="#56616f">2025 Grand Prix of</text>
+<text x="766.3" y="338" text-anchor="middle" font-family="Inter, Arial" font-size="10" fill="#56616f">2026 Grand Prix of</text>
 <text x="948.0" y="338" text-anchor="middle" font-family="Inter, Arial" font-size="10" fill="#56616f">2026 Grand Prix at</text>
 </svg>

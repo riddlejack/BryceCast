@@ -1,10 +1,10 @@
 {
   "schemaVersion": "bryce-career-coverage-matrix.v1",
-  "generatedAt": "2026-07-02T17:44:51.158Z",
+  "generatedAt": "2026-07-11T20:53:59.142Z",
   "datasetPath": "data/career/career.dataset.json",
   "validation": {
     "ok": true,
-    "checkedAt": "2026-07-02T17:44:49.994Z",
+    "checkedAt": "2026-07-11T20:53:57.595Z",
     "errors": [],
     "warnings": [
       {
@@ -1041,7 +1041,7 @@
         2026
       ],
       "events": 45,
-      "sessions": 189,
+      "sessions": 203,
       "policyNote": null,
       "canceledOfficialSessionIds": [
         "session_indy_nxt_2024_6489",
@@ -1053,7 +1053,7 @@
       "sourceFamilyPriorityExclusions": {
         "exact_session_windows": "INDY NXT official Race Control feeds and cached weekend schedule PDFs expose exact clock-time starts for 111 physical sessions. The remaining 78 date-only rows are qualifying/group/combined qualifying sessions where official weekend schedules expose only coarse qualifying blocks or no exact qualifying row, so there is no safe source-backed group or aggregate split to promote into session-hour joins.",
         "indy_section_data": "INDY NXT official Top Section Times and Section Results reports are parsed for every comparable source-exposed session except session_indy_nxt_2024_6325, where the official Section Results URL returns corrupt/truncated non-PDF bytes from the CDN. Keep the section-data category partial with an explicit source-broken gap unless an alternate official non-corrupt copy appears.",
-        "lap_samples": "INDY NXT official Race Lap Chart PDFs are imported for all 38 completed race sessions: 28 charts fully parsed and 10 clean partial visible-sample imports; residual partials preserve explicit missing car-lap or result/chart conflict diagnostics without guessing terminal or conflict laps.",
+        "lap_samples": "INDY NXT official Race Lap Chart PDFs are imported for all 40 completed race sessions: 30 charts fully parsed and 10 clean partial visible-sample imports; residual partials preserve explicit missing car-lap or result/chart conflict diagnostics without guessing terminal or conflict laps.",
         "detailed_pit_context": "INDY NXT official report inventory exposes PitStops counts in API/result rows and Race Lap Chart position samples, but no dedicated pit-summary, pit-lane sequence, stop-lap, tire/service, or pit-time report was found across the cached official report family."
       },
       "categories": [
@@ -1061,46 +1061,46 @@
           "id": "events_sessions",
           "label": "Events and sessions",
           "status": "complete",
-          "covered": 189,
-          "total": 189,
+          "covered": 203,
+          "total": 203,
           "coverage": 1,
-          "notes": "45 events, 189 sessions."
+          "notes": "45 events, 203 sessions."
         },
         {
           "id": "race_results",
           "label": "Race/heat classifications",
           "status": "complete",
-          "covered": 38,
-          "total": 38,
+          "covered": 40,
+          "total": 40,
           "coverage": 1,
-          "notes": "786 race/heat result rows across 38 result-bearing race/heat sessions; 7 schedule-only future sessions excluded from result completeness."
+          "notes": "834 race/heat result rows across 40 result-bearing race/heat sessions; 5 schedule-only future sessions excluded from result completeness."
         },
         {
           "id": "qualifying_classifications",
           "label": "Qualifying classifications",
           "status": "complete",
-          "covered": 93,
-          "total": 93,
+          "covered": 99,
+          "total": 99,
           "coverage": 1,
-          "notes": "93 result-bearing qualifying sessions; qualifying classifications may live in results for PDF source families. 0 schedule-only future sessions and 2 official canceled qualifying sessions excluded from result completeness."
+          "notes": "99 result-bearing qualifying sessions; qualifying classifications may live in results for PDF source families. 4 schedule-only future sessions and 2 official canceled qualifying sessions excluded from result completeness."
         },
         {
           "id": "grid_start_positions",
           "label": "Grid/start positions",
           "status": "complete",
-          "covered": 786,
-          "total": 786,
+          "covered": 834,
+          "total": 834,
           "coverage": 1,
-          "notes": "786/786 race/heat rows have gridPosition or startPosition."
+          "notes": "834/834 race/heat rows have gridPosition or startPosition."
         },
         {
           "id": "exact_session_windows",
           "label": "Exact session windows",
           "status": "partial",
-          "covered": 111,
-          "total": 189,
-          "coverage": 0.5873,
-          "notes": "111/189 physical sessions have clock-time starts; 189/189 have at least date-level starts; 78 sessions are source-unavailable exact windows after official source review."
+          "covered": 125,
+          "total": 203,
+          "coverage": 0.6158,
+          "notes": "125/203 physical sessions have clock-time starts; 203/203 have at least date-level starts; 78 sessions are source-unavailable exact windows after official source review."
         },
         {
           "id": "track_metadata",
@@ -1116,63 +1116,63 @@
           "label": "Official weather/track conditions",
           "status": "unavailable",
           "covered": 0,
-          "total": 189,
+          "total": 203,
           "coverage": 0,
-          "notes": "0/189 sessions have official weather/track-condition observations."
+          "notes": "0/203 sessions have official weather/track-condition observations."
         },
         {
           "id": "lap_samples",
           "label": "Lap samples",
           "status": "partial",
-          "covered": 38,
-          "total": 38,
+          "covered": 40,
+          "total": 40,
           "coverage": 1,
-          "notes": "38/38 completed race sessions have lap-chart samples; 38 completed race sessions: 28 charts fully parsed and 10 clean partial visible-sample imports."
+          "notes": "40/40 completed race sessions have lap-chart samples; 40 completed race sessions: 30 charts fully parsed and 10 clean partial visible-sample imports."
         },
         {
           "id": "indy_section_data",
           "label": "INDY NXT section data",
           "status": "partial",
-          "covered": 151,
-          "total": 152,
-          "coverage": 0.9934,
-          "notes": "151/152 comparable sessions have both official Top Section Times and Section Results metrics. Aggregate combined qualifying rows, future schedule-only sessions, canceled sessions, and official no-row reports are excluded. Report parser cross-check: 153/153 comparable Top Section reports parsed; 152/153 comparable Section Results reports parsed. True held-outs: session_indy_nxt_2024_6325 (official_pdf_corrupt_or_truncated)."
+          "covered": 158,
+          "total": 159,
+          "coverage": 0.9937,
+          "notes": "158/159 comparable sessions have both official Top Section Times and Section Results metrics. Aggregate combined qualifying rows, future schedule-only sessions, canceled sessions, and official no-row reports are excluded. Report parser cross-check: 160/160 comparable Top Section reports parsed; 159/160 comparable Section Results reports parsed. True held-outs: session_indy_nxt_2024_6325 (official_pdf_corrupt_or_truncated)."
         },
         {
           "id": "penalties_decisions",
           "label": "Penalties/decisions",
           "status": "complete",
           "covered": 29,
-          "total": 189,
-          "coverage": 0.1534,
+          "total": 203,
+          "coverage": 0.1429,
           "notes": "29 sessions have official penalty/decision rows."
         },
         {
           "id": "incidents_cautions",
           "label": "Incidents/cautions",
           "status": "complete",
-          "covered": 34,
+          "covered": 35,
           "total": 45,
-          "coverage": 0.7556,
-          "notes": "34 sessions have official incident/caution rows."
+          "coverage": 0.7778,
+          "notes": "35 sessions have official incident/caution rows."
         },
         {
           "id": "racecraft_summary",
           "label": "Racecraft summary",
           "status": "complete",
-          "covered": 37,
+          "covered": 39,
           "total": 45,
-          "coverage": 0.8222,
-          "notes": "37 race sessions have official most-improved/racecraft summary rows."
+          "coverage": 0.8667,
+          "notes": "39 race sessions have official most-improved/racecraft summary rows."
         },
         {
           "id": "pit_stop_counts",
           "label": "Pit-stop counts",
           "status": "complete",
-          "covered": 786,
-          "total": 786,
+          "covered": 834,
+          "total": 834,
           "coverage": 1,
-          "notes": "786/786 race/heat result rows have pit-stop counts."
+          "notes": "834/834 race/heat result rows have pit-stop counts."
         },
         {
           "id": "detailed_pit_context",
@@ -2590,62 +2590,62 @@
       "seriesName": "INDY NXT",
       "year": 2026,
       "events": 17,
-      "sessions": 55,
+      "sessions": 69,
       "raceSessions": 17,
-      "raceRows": 240,
-      "qualifyingSessions": 28,
-      "exactWindowSessions": 37,
-      "physicalSessions": 55,
-      "raceRowsWithGridOrStart": 240,
-      "raceRowsWithPitStops": 240,
-      "lapSampleSessions": 10,
-      "weatherSessions": 30,
+      "raceRows": 288,
+      "qualifyingSessions": 38,
+      "exactWindowSessions": 51,
+      "physicalSessions": 69,
+      "raceRowsWithGridOrStart": 288,
+      "raceRowsWithPitStops": 288,
+      "lapSampleSessions": 12,
+      "weatherSessions": 39,
       "priorityGaps": [],
       "categories": [
         {
           "id": "events_sessions",
           "label": "Events and sessions",
           "status": "complete",
-          "covered": 55,
-          "total": 55,
+          "covered": 69,
+          "total": 69,
           "coverage": 1,
-          "notes": "17 events, 55 sessions."
+          "notes": "17 events, 69 sessions."
         },
         {
           "id": "race_results",
           "label": "Race/heat classifications",
           "status": "complete",
-          "covered": 10,
-          "total": 10,
+          "covered": 12,
+          "total": 12,
           "coverage": 1,
-          "notes": "240 race/heat result rows across 10 result-bearing race/heat sessions."
+          "notes": "288 race/heat result rows across 12 result-bearing race/heat sessions."
         },
         {
           "id": "qualifying_classifications",
           "label": "Qualifying classifications",
           "status": "complete",
-          "covered": 28,
-          "total": 28,
+          "covered": 34,
+          "total": 34,
           "coverage": 1,
-          "notes": "28 result-bearing qualifying sessions; 0 official canceled qualifying sessions excluded."
+          "notes": "34 result-bearing qualifying sessions; 0 official canceled qualifying sessions excluded."
         },
         {
           "id": "grid_start_positions",
           "label": "Grid/start positions",
           "status": "complete",
-          "covered": 240,
-          "total": 240,
+          "covered": 288,
+          "total": 288,
           "coverage": 1,
-          "notes": "240/240 race/heat rows have gridPosition or startPosition."
+          "notes": "288/288 race/heat rows have gridPosition or startPosition."
         },
         {
           "id": "exact_session_windows",
           "label": "Exact session windows",
           "status": "partial",
-          "covered": 37,
-          "total": 55,
-          "coverage": 0.6727,
-          "notes": "37/55 physical sessions have clock-time starts; 55/55 have at least date-level starts; 18 sessions are source-unavailable exact windows after official source review."
+          "covered": 51,
+          "total": 69,
+          "coverage": 0.7391,
+          "notes": "51/69 physical sessions have clock-time starts; 69/69 have at least date-level starts; 18 sessions are source-unavailable exact windows after official source review."
         },
         {
           "id": "track_metadata",
@@ -2661,63 +2661,63 @@
           "label": "Official weather/track conditions",
           "status": "unavailable",
           "covered": 0,
-          "total": 55,
+          "total": 69,
           "coverage": 0,
-          "notes": "0/55 sessions have official weather/track-condition observations."
+          "notes": "0/69 sessions have official weather/track-condition observations."
         },
         {
           "id": "lap_samples",
           "label": "Lap samples",
           "status": "partial",
-          "covered": 10,
-          "total": 10,
+          "covered": 12,
+          "total": 12,
           "coverage": 1,
-          "notes": "10/10 completed race sessions have lap-chart samples; chart fidelity is tracked in importer diagnostics."
+          "notes": "12/12 completed race sessions have lap-chart samples; chart fidelity is tracked in importer diagnostics."
         },
         {
           "id": "indy_section_data",
           "label": "INDY NXT section data",
           "status": "complete",
-          "covered": 39,
-          "total": 39,
+          "covered": 46,
+          "total": 46,
           "coverage": 1,
-          "notes": "39/39 comparable sessions have both official Top Section Times and Section Results metrics. Aggregate combined qualifying rows, future schedule-only sessions, canceled sessions, and official no-row reports are excluded."
+          "notes": "46/46 comparable sessions have both official Top Section Times and Section Results metrics. Aggregate combined qualifying rows, future schedule-only sessions, canceled sessions, and official no-row reports are excluded."
         },
         {
           "id": "penalties_decisions",
           "label": "Penalties/decisions",
           "status": "complete",
           "covered": 10,
-          "total": 55,
-          "coverage": 0.1818,
+          "total": 69,
+          "coverage": 0.1449,
           "notes": "10 sessions have official penalty/decision rows."
         },
         {
           "id": "incidents_cautions",
           "label": "Incidents/cautions",
           "status": "complete",
-          "covered": 9,
+          "covered": 10,
           "total": 17,
-          "coverage": 0.5294,
-          "notes": "9 sessions have official incident/caution rows."
+          "coverage": 0.5882,
+          "notes": "10 sessions have official incident/caution rows."
         },
         {
           "id": "racecraft_summary",
           "label": "Racecraft summary",
           "status": "complete",
-          "covered": 10,
+          "covered": 12,
           "total": 17,
-          "coverage": 0.5882,
-          "notes": "10 race sessions have official most-improved/racecraft summary rows."
+          "coverage": 0.7059,
+          "notes": "12 race sessions have official most-improved/racecraft summary rows."
         },
         {
           "id": "pit_stop_counts",
           "label": "Pit-stop counts",
           "status": "complete",
-          "covered": 240,
-          "total": 240,
+          "covered": 288,
+          "total": 288,
           "coverage": 1,
-          "notes": "240/240 race/heat result rows have pit-stop counts."
+          "notes": "288/288 race/heat result rows have pit-stop counts."
         },
         {
           "id": "detailed_pit_context",
@@ -47143,7 +47143,7 @@
       "sessionId": "session_indy_nxt_2026_6760",
       "sessionName": "Race",
       "sessionType": "race",
-      "ingestionState": "schedule_only",
+      "ingestionState": null,
       "sourceFamily": null,
       "categories": [
         {
@@ -47154,21 +47154,21 @@
         },
         {
           "id": "race_results",
-          "status": "unavailable",
-          "covered": 0,
-          "total": 0
+          "status": "complete",
+          "covered": 24,
+          "total": 1
         },
         {
           "id": "qualifying_classifications",
           "status": "out_of_scope",
-          "covered": 0,
+          "covered": 24,
           "total": 0
         },
         {
           "id": "grid_start_positions",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
+          "status": "complete",
+          "covered": 24,
+          "total": 24
         },
         {
           "id": "exact_session_windows",
@@ -47190,15 +47190,15 @@
         },
         {
           "id": "lap_samples",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
+          "status": "partial",
+          "covered": 719,
+          "total": 1
         },
         {
           "id": "indy_section_data",
-          "status": "unavailable",
-          "covered": 0,
-          "total": 0
+          "status": "complete",
+          "covered": 2,
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -47208,21 +47208,21 @@
         },
         {
           "id": "incidents_cautions",
-          "status": "out_of_scope",
+          "status": "partial",
           "covered": 0,
-          "total": 0
+          "total": 1
         },
         {
           "id": "racecraft_summary",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
+          "status": "complete",
+          "covered": 1,
+          "total": 1
         },
         {
           "id": "pit_stop_counts",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
+          "status": "complete",
+          "covered": 24,
+          "total": 24
         },
         {
           "id": "detailed_pit_context",
@@ -47247,7 +47247,7 @@
       "sessionId": "session_indy_nxt_2026_6761",
       "sessionName": "Race",
       "sessionType": "race",
-      "ingestionState": "schedule_only",
+      "ingestionState": null,
       "sourceFamily": null,
       "categories": [
         {
@@ -47258,21 +47258,21 @@
         },
         {
           "id": "race_results",
-          "status": "unavailable",
-          "covered": 0,
-          "total": 0
+          "status": "complete",
+          "covered": 24,
+          "total": 1
         },
         {
           "id": "qualifying_classifications",
           "status": "out_of_scope",
-          "covered": 0,
+          "covered": 24,
           "total": 0
         },
         {
           "id": "grid_start_positions",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
+          "status": "complete",
+          "covered": 24,
+          "total": 24
         },
         {
           "id": "exact_session_windows",
@@ -47294,15 +47294,15 @@
         },
         {
           "id": "lap_samples",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
+          "status": "partial",
+          "covered": 809,
+          "total": 1
         },
         {
           "id": "indy_section_data",
-          "status": "unavailable",
-          "covered": 0,
-          "total": 0
+          "status": "complete",
+          "covered": 2,
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -47312,21 +47312,21 @@
         },
         {
           "id": "incidents_cautions",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
+          "status": "complete",
+          "covered": 4,
+          "total": 1
         },
         {
           "id": "racecraft_summary",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
+          "status": "complete",
+          "covered": 1,
+          "total": 1
         },
         {
           "id": "pit_stop_counts",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
+          "status": "complete",
+          "covered": 24,
+          "total": 24
         },
         {
           "id": "detailed_pit_context",
@@ -51694,6 +51694,1462 @@
           "id": "pit_stop_counts",
           "status": "out_of_scope",
           "covered": 24,
+          "total": 0
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_indy_nxt",
+      "seriesName": "INDY NXT",
+      "year": 2026,
+      "eventId": "event_indy_nxt_2026_5544",
+      "eventName": "Grand Prix at Mid-Ohio Race 1",
+      "sessionId": "session_indy_nxt_2026_6891",
+      "sessionName": "Practice",
+      "sessionType": "practice",
+      "ingestionState": null,
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "out_of_scope",
+          "covered": 24,
+          "total": 0
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "out_of_scope",
+          "covered": 24,
+          "total": 0
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "out_of_scope",
+          "covered": 24,
+          "total": 0
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "lap_samples",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "indy_section_data",
+          "status": "complete",
+          "covered": 2,
+          "total": 2
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "partial",
+          "covered": 0,
+          "total": 1
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "out_of_scope",
+          "covered": 24,
+          "total": 0
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_indy_nxt",
+      "seriesName": "INDY NXT",
+      "year": 2026,
+      "eventId": "event_indy_nxt_2026_5544",
+      "eventName": "Grand Prix at Mid-Ohio Race 1",
+      "sessionId": "session_indy_nxt_2026_6892",
+      "sessionName": "Qualifying - Race 1 Group 1",
+      "sessionType": "qualifying",
+      "ingestionState": null,
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "out_of_scope",
+          "covered": 12,
+          "total": 0
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "complete",
+          "covered": 24,
+          "total": 1
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "out_of_scope",
+          "covered": 12,
+          "total": 0
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "lap_samples",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "indy_section_data",
+          "status": "complete",
+          "covered": 2,
+          "total": 2
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "partial",
+          "covered": 0,
+          "total": 1
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "out_of_scope",
+          "covered": 12,
+          "total": 0
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_indy_nxt",
+      "seriesName": "INDY NXT",
+      "year": 2026,
+      "eventId": "event_indy_nxt_2026_5544",
+      "eventName": "Grand Prix at Mid-Ohio Race 1",
+      "sessionId": "session_indy_nxt_2026_6893",
+      "sessionName": "Qualifying - Race 1 Group 2",
+      "sessionType": "qualifying",
+      "ingestionState": null,
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "out_of_scope",
+          "covered": 12,
+          "total": 0
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "complete",
+          "covered": 24,
+          "total": 1
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "out_of_scope",
+          "covered": 12,
+          "total": 0
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "lap_samples",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "indy_section_data",
+          "status": "complete",
+          "covered": 2,
+          "total": 2
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "partial",
+          "covered": 0,
+          "total": 1
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "out_of_scope",
+          "covered": 12,
+          "total": 0
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_indy_nxt",
+      "seriesName": "INDY NXT",
+      "year": 2026,
+      "eventId": "event_indy_nxt_2026_5544",
+      "eventName": "Grand Prix at Mid-Ohio Race 1",
+      "sessionId": "session_indy_nxt_2026_6894",
+      "sessionName": "Combined Qualifying - Race 1",
+      "sessionType": "qualifying",
+      "ingestionState": null,
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "out_of_scope",
+          "covered": 24,
+          "total": 0
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "complete",
+          "covered": 48,
+          "total": 1
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "out_of_scope",
+          "covered": 24,
+          "total": 0
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "lap_samples",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "indy_section_data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "partial",
+          "covered": 0,
+          "total": 1
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "out_of_scope",
+          "covered": 24,
+          "total": 0
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_indy_nxt",
+      "seriesName": "INDY NXT",
+      "year": 2026,
+      "eventId": "event_indy_nxt_2026_5543",
+      "eventName": "Grand Prix at Mid-Ohio Race 2",
+      "sessionId": "session_indy_nxt_2026_6895",
+      "sessionName": "Qualifying - Race 2 Group 1",
+      "sessionType": "qualifying",
+      "ingestionState": null,
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "out_of_scope",
+          "covered": 12,
+          "total": 0
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "complete",
+          "covered": 24,
+          "total": 1
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "out_of_scope",
+          "covered": 12,
+          "total": 0
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "lap_samples",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "indy_section_data",
+          "status": "complete",
+          "covered": 2,
+          "total": 2
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "partial",
+          "covered": 0,
+          "total": 1
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "out_of_scope",
+          "covered": 12,
+          "total": 0
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_indy_nxt",
+      "seriesName": "INDY NXT",
+      "year": 2026,
+      "eventId": "event_indy_nxt_2026_5543",
+      "eventName": "Grand Prix at Mid-Ohio Race 2",
+      "sessionId": "session_indy_nxt_2026_6896",
+      "sessionName": "Qualifying - Race 2 Group 2",
+      "sessionType": "qualifying",
+      "ingestionState": null,
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "out_of_scope",
+          "covered": 12,
+          "total": 0
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "complete",
+          "covered": 24,
+          "total": 1
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "out_of_scope",
+          "covered": 12,
+          "total": 0
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "lap_samples",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "indy_section_data",
+          "status": "complete",
+          "covered": 2,
+          "total": 2
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "partial",
+          "covered": 0,
+          "total": 1
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "out_of_scope",
+          "covered": 12,
+          "total": 0
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_indy_nxt",
+      "seriesName": "INDY NXT",
+      "year": 2026,
+      "eventId": "event_indy_nxt_2026_5543",
+      "eventName": "Grand Prix at Mid-Ohio Race 2",
+      "sessionId": "session_indy_nxt_2026_6897",
+      "sessionName": "Combined Qualifying - Race 2",
+      "sessionType": "qualifying",
+      "ingestionState": null,
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "out_of_scope",
+          "covered": 24,
+          "total": 0
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "complete",
+          "covered": 48,
+          "total": 1
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "out_of_scope",
+          "covered": 24,
+          "total": 0
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "lap_samples",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "indy_section_data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "partial",
+          "covered": 0,
+          "total": 1
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "out_of_scope",
+          "covered": 24,
+          "total": 0
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_indy_nxt",
+      "seriesName": "INDY NXT",
+      "year": 2026,
+      "eventId": "event_indy_nxt_2026_5547",
+      "eventName": "Grand Prix of Portland",
+      "sessionId": "session_indy_nxt_2026_6898",
+      "sessionName": "Practice 1",
+      "sessionType": "practice",
+      "ingestionState": "schedule_only",
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "lap_samples",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "indy_section_data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "partial",
+          "covered": 0,
+          "total": 1
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_indy_nxt",
+      "seriesName": "INDY NXT",
+      "year": 2026,
+      "eventId": "event_indy_nxt_2026_5547",
+      "eventName": "Grand Prix of Portland",
+      "sessionId": "session_indy_nxt_2026_6899",
+      "sessionName": "Practice 2",
+      "sessionType": "practice",
+      "ingestionState": "schedule_only",
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "lap_samples",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "indy_section_data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "partial",
+          "covered": 0,
+          "total": 1
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_indy_nxt",
+      "seriesName": "INDY NXT",
+      "year": 2026,
+      "eventId": "event_indy_nxt_2026_5547",
+      "eventName": "Grand Prix of Portland",
+      "sessionId": "session_indy_nxt_2026_6900",
+      "sessionName": "Qualifying - Group 1",
+      "sessionType": "qualifying",
+      "ingestionState": "schedule_only",
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "lap_samples",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "indy_section_data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "partial",
+          "covered": 0,
+          "total": 1
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_indy_nxt",
+      "seriesName": "INDY NXT",
+      "year": 2026,
+      "eventId": "event_indy_nxt_2026_5547",
+      "eventName": "Grand Prix of Portland",
+      "sessionId": "session_indy_nxt_2026_6901",
+      "sessionName": "Qualifying - Group 2",
+      "sessionType": "qualifying",
+      "ingestionState": "schedule_only",
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "lap_samples",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "indy_section_data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "partial",
+          "covered": 0,
+          "total": 1
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_indy_nxt",
+      "seriesName": "INDY NXT",
+      "year": 2026,
+      "eventId": "event_indy_nxt_2026_5547",
+      "eventName": "Grand Prix of Portland",
+      "sessionId": "session_indy_nxt_2026_6902",
+      "sessionName": "Combined Qualifying",
+      "sessionType": "qualifying",
+      "ingestionState": "schedule_only",
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "lap_samples",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "indy_section_data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "partial",
+          "covered": 0,
+          "total": 1
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_indy_nxt",
+      "seriesName": "INDY NXT",
+      "year": 2026,
+      "eventId": "event_indy_nxt_2026_5538",
+      "eventName": "Music City Grand Prix",
+      "sessionId": "session_indy_nxt_2026_6923",
+      "sessionName": "Qualifying",
+      "sessionType": "qualifying",
+      "ingestionState": "schedule_only",
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "lap_samples",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "indy_section_data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "partial",
+          "covered": 0,
+          "total": 1
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_indy_nxt",
+      "seriesName": "INDY NXT",
+      "year": 2026,
+      "eventId": "event_indy_nxt_2026_5538",
+      "eventName": "Music City Grand Prix",
+      "sessionId": "session_indy_nxt_2026_6924",
+      "sessionName": "Practice",
+      "sessionType": "practice",
+      "ingestionState": "schedule_only",
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "lap_samples",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "indy_section_data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "partial",
+          "covered": 0,
+          "total": 1
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "out_of_scope",
+          "covered": 0,
           "total": 0
         },
         {

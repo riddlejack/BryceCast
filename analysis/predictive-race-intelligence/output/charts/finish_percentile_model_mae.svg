@@ -3,18 +3,18 @@
 <text x="28" y="30" font-family="Inter, Arial" font-size="19" font-weight="700" fill="#1f2933">Finish-Percentile Model Backtest</text>
 <text x="28" y="52" font-family="Inter, Arial" font-size="12" fill="#5d6875">Pre-race-safe context models only; lower MAE is better.</text>
 <text x="28" y="91" font-family="Inter, Arial" font-size="12" fill="#39434d">prep_practice_qualifying_knn5</text>
-<rect x="280" y="76" width="579.0" height="20" rx="3" fill="#2d6f8f" opacity="0.88"/>
-<text x="867.0393013100436" y="91" font-family="Inter, Arial" font-size="12" fill="#1f2933">0.204</text>
+<rect x="280" y="76" width="605.7" height="20" rx="3" fill="#2d6f8f" opacity="0.88"/>
+<text x="893.6818181818181" y="91" font-family="Inter, Arial" font-size="12" fill="#1f2933">0.205</text>
 <text x="28" y="125" font-family="Inter, Arial" font-size="12" fill="#39434d">start_position_ridge</text>
-<rect x="280" y="110" width="621.6" height="20" rx="3" fill="#2d6f8f" opacity="0.88"/>
-<text x="909.6157205240174" y="125" font-family="Inter, Arial" font-size="12" fill="#1f2933">0.219</text>
+<rect x="280" y="110" width="623.4" height="20" rx="3" fill="#2d6f8f" opacity="0.88"/>
+<text x="911.4090909090909" y="125" font-family="Inter, Arial" font-size="12" fill="#1f2933">0.211</text>
 <text x="28" y="159" font-family="Inter, Arial" font-size="12" fill="#39434d">track_type_mean</text>
-<rect x="280" y="144" width="635.8" height="20" rx="3" fill="#2d6f8f" opacity="0.88"/>
-<text x="923.8078602620087" y="159" font-family="Inter, Arial" font-size="12" fill="#1f2933">0.224</text>
+<rect x="280" y="144" width="632.3" height="20" rx="3" fill="#2d6f8f" opacity="0.88"/>
+<text x="920.2727272727273" y="159" font-family="Inter, Arial" font-size="12" fill="#1f2933">0.214</text>
 <text x="28" y="193" font-family="Inter, Arial" font-size="12" fill="#39434d">track_start_qualifying_ridge</text>
-<rect x="280" y="178" width="641.5" height="20" rx="3" fill="#2d6f8f" opacity="0.88"/>
-<text x="929.4847161572052" y="193" font-family="Inter, Arial" font-size="12" fill="#1f2933">0.226</text>
+<rect x="280" y="178" width="638.2" height="20" rx="3" fill="#2d6f8f" opacity="0.88"/>
+<text x="926.1818181818181" y="193" font-family="Inter, Arial" font-size="12" fill="#1f2933">0.216</text>
 <text x="28" y="227" font-family="Inter, Arial" font-size="12" fill="#39434d">overall_mean</text>
 <rect x="280" y="212" width="650.0" height="20" rx="3" fill="#2d6f8f" opacity="0.88"/>
-<text x="938.0" y="227" font-family="Inter, Arial" font-size="12" fill="#1f2933">0.229</text>
+<text x="938.0" y="227" font-family="Inter, Arial" font-size="12" fill="#1f2933">0.220</text>
 </svg>

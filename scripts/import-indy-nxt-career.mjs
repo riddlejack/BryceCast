@@ -528,13 +528,23 @@ const main = async () => {
       const canonicalSessionId = `session_indy_nxt_${year}_${sessionIdRaw}`;
       const sessionRaceNumber = raceNumberFromName(details.SessionName) ?? raceNumberFromName(discoveredSession.sessionName) ?? raceNumberFromName(details.EventName);
       const canonicalSessionType = sessionType(details.SessionName ?? discoveredSession.sessionName ?? details.SessionType, details.SessionType);
+      // Session-window backfills stamp precise local-datetime starts from Race
+      // Control feeds/PDFs; the API's date-only SessionDate must never downgrade
+      // them (the trackactivity feed is rolling, so past stamps can't be re-derived).
+      const existingSessionRow = sessions.get(canonicalSessionId);
+      const preservedScheduledStart =
+        existingSessionRow?.timePrecision === 'local_datetime' &&
+        typeof existingSessionRow.scheduledStart === 'string' &&
+        existingSessionRow.scheduledStart.includes('T')
+          ? existingSessionRow.scheduledStart
+          : null;
       upsert(sessions, {
         id: canonicalSessionId,
         eventId,
         sessionType: canonicalSessionType,
         sessionName: details.SessionName ?? discoveredSession.sessionName ?? details.EventName,
         raceNumber: sessionRaceNumber,
-        scheduledStart: details.SessionDate ?? null,
+        scheduledStart: preservedScheduledStart ?? details.SessionDate ?? null,
         actualStart: null,
         timezone: null,
         lapsScheduled: null,

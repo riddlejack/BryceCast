@@ -1,18 +1,18 @@
 {
-  "checkedAt": "2026-07-02T17:41:03.634Z",
-  "refresh": false,
+  "checkedAt": "2026-07-11T20:49:34.150Z",
+  "refresh": true,
   "sources": {
     "trackActivity": {
       "sourceUrl": "https://indycar.blob.core.windows.net/racecontrol/trackactivityleaderboardfeed_nxt.json",
       "rawArtifactPath": "data/career/raw/indy-nxt/racecontrol/trackactivityleaderboardfeed_nxt.json",
-      "fetched": 0,
-      "cached": 1
+      "fetched": 1,
+      "cached": 0
     },
     "schedule": {
       "sourceUrl": "https://indycar.blob.core.windows.net/racecontrol/schedulefeed_nxt.json",
       "rawArtifactPath": "data/career/raw/indy-nxt/racecontrol/schedulefeed_nxt.json",
-      "fetched": 0,
-      "cached": 1
+      "fetched": 1,
+      "cached": 0
     },
     "weekendSchedules": [
       {
@@ -21,9 +21,9 @@
         "sourceUrl": "https://www.indycar.com/-/media/Files/2024/NICS/01-STP/indycar-weekendschedule-STP.pdf",
         "rawArtifactPath": "data/career/raw/indy-nxt/weekend-schedules/2024/stp.pdf",
         "textArtifactPath": "data/career/raw/indy-nxt/weekend-schedules/2024/stp.layout.txt",
-        "fetched": 0,
-        "cached": 1,
-        "textFromCache": 1,
+        "fetched": 1,
+        "cached": 0,
+        "textFromCache": 0,
         "parser": "pdftotext_layout"
       },
       {
@@ -32,9 +32,9 @@
         "sourceUrl": "https://www.indycar.com/-/media/Files/2024/NICS/04-ALA/indycar-weekendschedule-ALA24.pdf",
         "rawArtifactPath": "data/career/raw/indy-nxt/weekend-schedules/2024/ala.pdf",
         "textArtifactPath": "data/career/raw/indy-nxt/weekend-schedules/2024/ala.layout.txt",
-        "fetched": 0,
-        "cached": 1,
-        "textFromCache": 1,
+        "fetched": 1,
+        "cached": 0,
+        "textFromCache": 0,
         "parser": "pdftotext_layout"
       },
       {
@@ -43,9 +43,9 @@
         "sourceUrl": "https://www.indycar.com/-/media/Files/2024/NICS/05-IMSRC/indycar-weekendschedule-IMSRC24.pdf",
         "rawArtifactPath": "data/career/raw/indy-nxt/weekend-schedules/2024/ims.pdf",
         "textArtifactPath": "data/career/raw/indy-nxt/weekend-schedules/2024/ims.layout.txt",
-        "fetched": 0,
-        "cached": 1,
-        "textFromCache": 1,
+        "fetched": 1,
+        "cached": 0,
+        "textFromCache": 0,
         "parser": "pdftotext_layout"
       },
       {
@@ -54,9 +54,9 @@
         "sourceUrl": "https://www.indycar.com/-/media/Files/2024/NICS/07-DET/indycar-weekendschedule-DET24.pdf",
         "rawArtifactPath": "data/career/raw/indy-nxt/weekend-schedules/2024/det.pdf",
         "textArtifactPath": "data/career/raw/indy-nxt/weekend-schedules/2024/det.layout.txt",
-        "fetched": 0,
-        "cached": 1,
-        "textFromCache": 1,
+        "fetched": 1,
+        "cached": 0,
+        "textFromCache": 0,
         "parser": "pdftotext_layout"
       },
       {
@@ -65,9 +65,9 @@
         "sourceUrl": "https://www.indycar.com/-/media/Files/2024/NICS/08-RA/indycar-weekendschedule-RA24.pdf",
         "rawArtifactPath": "data/career/raw/indy-nxt/weekend-schedules/2024/ra.pdf",
         "textArtifactPath": "data/career/raw/indy-nxt/weekend-schedules/2024/ra.layout.txt",
-        "fetched": 0,
-        "cached": 1,
-        "textFromCache": 1,
+        "fetched": 1,
+        "cached": 0,
+        "textFromCache": 0,
         "parser": "pdftotext_layout"
       },
       {
@@ -76,9 +76,9 @@
         "sourceUrl": "https://www.indycar.com/-/media/Files/2024/NICS/09-LAG/indycar-weekendschedule-LAG24.pdf",
         "rawArtifactPath": "data/career/raw/indy-nxt/weekend-schedules/2024/lag.pdf",
         "textArtifactPath": "data/career/raw/indy-nxt/weekend-schedules/2024/lag.layout.txt",
-        "fetched": 0,
-        "cached": 1,
-        "textFromCache": 1,
+        "fetched": 1,
+        "cached": 0,
+        "textFromCache": 0,
         "parser": "pdftotext_layout"
       },
       {
@@ -87,9 +87,9 @@
         "sourceUrl": "https://www.indycar.com/-/media/Files/2024/NICS/10-MID/indycar-weekendschedule-MID24.pdf",
         "rawArtifactPath": "data/career/raw/indy-nxt/weekend-schedules/2024/mid.pdf",
         "textArtifactPath": "data/career/raw/indy-nxt/weekend-schedules/2024/mid.layout.txt",
-        "fetched": 0,
-        "cached": 1,
-        "textFromCache": 1,
+        "fetched": 1,
+        "cached": 0,
+        "textFromCache": 0,
         "parser": "pdftotext_layout"
       },
       {
@@ -98,9 +98,9 @@
         "sourceUrl": "https://www.indycar.com/-/media/Files/2024/NICS/11-12-IOW/indycar-weekendschedule-IOW24.pdf",
         "rawArtifactPath": "data/career/raw/indy-nxt/weekend-schedules/2024/iow.pdf",
         "textArtifactPath": "data/career/raw/indy-nxt/weekend-schedules/2024/iow.layout.txt",
-        "fetched": 0,
-        "cached": 1,
-        "textFromCache": 1,
+        "fetched": 1,
+        "cached": 0,
+        "textFromCache": 0,
         "parser": "pdftotext_layout"
       },
       {
@@ -109,9 +109,9 @@
         "sourceUrl": "https://www.indycar.com/-/media/Files/2024/NICS/14-STL/indycar-weekendschedule-STL24.pdf",
         "rawArtifactPath": "data/career/raw/indy-nxt/weekend-schedules/2024/stl.pdf",
         "textArtifactPath": "data/career/raw/indy-nxt/weekend-schedules/2024/stl.layout.txt",
-        "fetched": 0,
-        "cached": 1,
-        "textFromCache": 1,
+        "fetched": 1,
+        "cached": 0,
+        "textFromCache": 0,
         "parser": "pdftotext_layout"
       },
       {
@@ -120,9 +120,9 @@
         "sourceUrl": "https://www.indycar.com/-/media/Files/2024/NICS/15-POR/indycar-weekendschedule-POR24.pdf",
         "rawArtifactPath": "data/career/raw/indy-nxt/weekend-schedules/2024/por.pdf",
         "textArtifactPath": "data/career/raw/indy-nxt/weekend-schedules/2024/por.layout.txt",
-        "fetched": 0,
-        "cached": 1,
-        "textFromCache": 1,
+        "fetched": 1,
+        "cached": 0,
+        "textFromCache": 0,
         "parser": "pdftotext_layout"
       },
       {
@@ -131,9 +131,9 @@
         "sourceUrl": "https://www.indycar.com/-/media/Files/2024/NICS/16-17-MIL/indycar-weekendschedule-MIL24.pdf",
         "rawArtifactPath": "data/career/raw/indy-nxt/weekend-schedules/2024/mil.pdf",
         "textArtifactPath": "data/career/raw/indy-nxt/weekend-schedules/2024/mil.layout.txt",
-        "fetched": 0,
-        "cached": 1,
-        "textFromCache": 1,
+        "fetched": 1,
+        "cached": 0,
+        "textFromCache": 0,
         "parser": "pdftotext_layout"
       },
       {
@@ -142,9 +142,9 @@
         "sourceUrl": "https://www.indycar.com/-/media/Files/2024/NICS/18-NSH/indycar-weekendschedule-NSH24.pdf",
         "rawArtifactPath": "data/career/raw/indy-nxt/weekend-schedules/2024/nsh.pdf",
         "textArtifactPath": "data/career/raw/indy-nxt/weekend-schedules/2024/nsh.layout.txt",
-        "fetched": 0,
-        "cached": 1,
-        "textFromCache": 1,
+        "fetched": 1,
+        "cached": 0,
+        "textFromCache": 0,
         "parser": "pdftotext_layout"
       },
       {
@@ -153,9 +153,9 @@
         "sourceUrl": "https://www.indycar.com/-/media/Files/2025/NICS/01-STP/indycar-weekendschedule-STP25.pdf",
         "rawArtifactPath": "data/career/raw/indy-nxt/weekend-schedules/2025/stp.pdf",
         "textArtifactPath": "data/career/raw/indy-nxt/weekend-schedules/2025/stp.layout.txt",
-        "fetched": 0,
-        "cached": 1,
-        "textFromCache": 1,
+        "fetched": 1,
+        "cached": 0,
+        "textFromCache": 0,
         "parser": "pdftotext_layout"
       },
       {
@@ -164,9 +164,9 @@
         "sourceUrl": "https://www.indycar.com/-/media/Files/2025/NICS/04-ALA/indycar-weekendschedule-ALA25.pdf",
         "rawArtifactPath": "data/career/raw/indy-nxt/weekend-schedules/2025/ala.pdf",
         "textArtifactPath": "data/career/raw/indy-nxt/weekend-schedules/2025/ala.layout.txt",
-        "fetched": 0,
-        "cached": 1,
-        "textFromCache": 1,
+        "fetched": 1,
+        "cached": 0,
+        "textFromCache": 0,
         "parser": "pdftotext_layout"
       },
       {
@@ -175,9 +175,9 @@
         "sourceUrl": "https://www.indycar.com/-/media/Files/2025/NICS/05-IMSRC/indycar-weekendschedule-IMSRC25.pdf",
         "rawArtifactPath": "data/career/raw/indy-nxt/weekend-schedules/2025/ims.pdf",
         "textArtifactPath": "data/career/raw/indy-nxt/weekend-schedules/2025/ims.layout.txt",
-        "fetched": 0,
-        "cached": 1,
-        "textFromCache": 1,
+        "fetched": 1,
+        "cached": 0,
+        "textFromCache": 0,
         "parser": "pdftotext_layout"
       },
       {
@@ -186,9 +186,9 @@
         "sourceUrl": "https://www.indycar.com/-/media/Files/2025/NICS/07-DET/indycar-weekendschedule-DET25.pdf",
         "rawArtifactPath": "data/career/raw/indy-nxt/weekend-schedules/2025/det.pdf",
         "textArtifactPath": "data/career/raw/indy-nxt/weekend-schedules/2025/det.layout.txt",
-        "fetched": 0,
-        "cached": 1,
-        "textFromCache": 1,
+        "fetched": 1,
+        "cached": 0,
+        "textFromCache": 0,
         "parser": "pdftotext_layout"
       },
       {
@@ -197,9 +197,9 @@
         "sourceUrl": "https://www.indycar.com/-/media/Files/2025/NICS/08-STL/indycar-weekendschedule-V2-STL25.pdf",
         "rawArtifactPath": "data/career/raw/indy-nxt/weekend-schedules/2025/stl.pdf",
         "textArtifactPath": "data/career/raw/indy-nxt/weekend-schedules/2025/stl.ocr.txt",
-        "fetched": 0,
-        "cached": 1,
-        "textFromCache": 1,
+        "fetched": 1,
+        "cached": 0,
+        "textFromCache": 0,
         "parser": "tesseract_ocr"
       },
       {
@@ -208,9 +208,9 @@
         "sourceUrl": "https://www.indycar.com/-/media/Files/2025/NICS/09-RA/indycar-weekendschedule-RA25.pdf",
         "rawArtifactPath": "data/career/raw/indy-nxt/weekend-schedules/2025/ra.pdf",
         "textArtifactPath": "data/career/raw/indy-nxt/weekend-schedules/2025/ra.layout.txt",
-        "fetched": 0,
-        "cached": 1,
-        "textFromCache": 1,
+        "fetched": 1,
+        "cached": 0,
+        "textFromCache": 0,
         "parser": "pdftotext_layout"
       },
       {
@@ -219,9 +219,9 @@
         "sourceUrl": "https://www.indycar.com/-/media/Files/2025/NICS/10-MID/indycar-weekendschedule-MID25.pdf",
         "rawArtifactPath": "data/career/raw/indy-nxt/weekend-schedules/2025/mid.pdf",
         "textArtifactPath": "data/career/raw/indy-nxt/weekend-schedules/2025/mid.layout.txt",
-        "fetched": 0,
-        "cached": 1,
-        "textFromCache": 1,
+        "fetched": 1,
+        "cached": 0,
+        "textFromCache": 0,
         "parser": "pdftotext_layout"
       },
       {
@@ -230,9 +230,9 @@
         "sourceUrl": "https://www.indycar.com/-/media/Files/2025/NICS/11-12-IOW/indycar-weekendschedule-V2-IOW25.pdf",
         "rawArtifactPath": "data/career/raw/indy-nxt/weekend-schedules/2025/iow.pdf",
         "textArtifactPath": "data/career/raw/indy-nxt/weekend-schedules/2025/iow.layout.txt",
-        "fetched": 0,
-        "cached": 1,
-        "textFromCache": 1,
+        "fetched": 1,
+        "cached": 0,
+        "textFromCache": 0,
         "parser": "pdftotext_layout"
       },
       {
@@ -241,9 +241,9 @@
         "sourceUrl": "https://www.indycar.com/-/media/Files/2025/NICS/14-LAG/indycar-weekendschedule-V3-LAG25.pdf",
         "rawArtifactPath": "data/career/raw/indy-nxt/weekend-schedules/2025/lag.pdf",
         "textArtifactPath": "data/career/raw/indy-nxt/weekend-schedules/2025/lag.layout.txt",
-        "fetched": 0,
-        "cached": 1,
-        "textFromCache": 1,
+        "fetched": 1,
+        "cached": 0,
+        "textFromCache": 0,
         "parser": "pdftotext_layout"
       },
       {
@@ -252,9 +252,9 @@
         "sourceUrl": "https://www.indycar.com/-/media/Files/2025/NICS/15-POR/indycar-weekendschedule-V2-POR25.pdf",
         "rawArtifactPath": "data/career/raw/indy-nxt/weekend-schedules/2025/por.pdf",
         "textArtifactPath": "data/career/raw/indy-nxt/weekend-schedules/2025/por.layout.txt",
-        "fetched": 0,
-        "cached": 1,
-        "textFromCache": 1,
+        "fetched": 1,
+        "cached": 0,
+        "textFromCache": 0,
         "parser": "pdftotext_layout"
       },
       {
@@ -263,9 +263,9 @@
         "sourceUrl": "https://www.indycar.com/-/media/Files/2025/NICS/16-MIL/indycar-weekendschedule-V3-MIL25.pdf",
         "rawArtifactPath": "data/career/raw/indy-nxt/weekend-schedules/2025/mil.pdf",
         "textArtifactPath": "data/career/raw/indy-nxt/weekend-schedules/2025/mil.layout.txt",
-        "fetched": 0,
-        "cached": 1,
-        "textFromCache": 1,
+        "fetched": 1,
+        "cached": 0,
+        "textFromCache": 0,
         "parser": "pdftotext_layout"
       },
       {
@@ -274,9 +274,9 @@
         "sourceUrl": "https://www.indycar.com/-/media/Files/2025/NICS/17-NSH/indycar-weekendschedule-V2-NSH25.pdf",
         "rawArtifactPath": "data/career/raw/indy-nxt/weekend-schedules/2025/nsh.pdf",
         "textArtifactPath": "data/career/raw/indy-nxt/weekend-schedules/2025/nsh.layout.txt",
-        "fetched": 0,
-        "cached": 1,
-        "textFromCache": 1,
+        "fetched": 1,
+        "cached": 0,
+        "textFromCache": 0,
         "parser": "pdftotext_layout"
       },
       {
@@ -285,9 +285,9 @@
         "sourceUrl": "https://www.indycar.com/-/media/Files/2026/NICS/01-STP/indycar-weekendschedule-STP26.pdf",
         "rawArtifactPath": "data/career/raw/indy-nxt/weekend-schedules/2026/stp.pdf",
         "textArtifactPath": "data/career/raw/indy-nxt/weekend-schedules/2026/stp.layout.txt",
-        "fetched": 0,
-        "cached": 1,
-        "textFromCache": 1,
+        "fetched": 1,
+        "cached": 0,
+        "textFromCache": 0,
         "parser": "pdftotext_layout"
       },
       {
@@ -296,9 +296,9 @@
         "sourceUrl": "https://www.indycar.com/-/media/Files/2026/NICS/03-ARL/indycar-weekendschedule-V2-ARL26.pdf",
         "rawArtifactPath": "data/career/raw/indy-nxt/weekend-schedules/2026/arl.pdf",
         "textArtifactPath": "data/career/raw/indy-nxt/weekend-schedules/2026/arl.layout.txt",
-        "fetched": 0,
-        "cached": 1,
-        "textFromCache": 1,
+        "fetched": 1,
+        "cached": 0,
+        "textFromCache": 0,
         "parser": "pdftotext_layout"
       },
       {
@@ -307,9 +307,9 @@
         "sourceUrl": "https://www.indycar.com/-/media/Files/2026/NICS/04-ALA/indycar-weekendschedule-v2-ALA26.pdf",
         "rawArtifactPath": "data/career/raw/indy-nxt/weekend-schedules/2026/ala.pdf",
         "textArtifactPath": "data/career/raw/indy-nxt/weekend-schedules/2026/ala.layout.txt",
-        "fetched": 0,
-        "cached": 1,
-        "textFromCache": 1,
+        "fetched": 1,
+        "cached": 0,
+        "textFromCache": 0,
         "parser": "pdftotext_layout"
       },
       {
@@ -318,198 +318,108 @@
         "sourceUrl": "https://www.indycar.com/-/media/Files/2026/NICS/06-IMSRC/indycar-weekendschedule-v2-IMSRC26.pdf",
         "rawArtifactPath": "data/career/raw/indy-nxt/weekend-schedules/2026/ims.pdf",
         "textArtifactPath": "data/career/raw/indy-nxt/weekend-schedules/2026/ims.layout.txt",
-        "fetched": 0,
-        "cached": 1,
-        "textFromCache": 1,
+        "fetched": 1,
+        "cached": 0,
+        "textFromCache": 0,
         "parser": "pdftotext_layout"
       }
     ]
   },
-  "feedSessions": 25,
-  "scheduleFeedSessions": 38,
-  "directCanonicalMatches": 18,
+  "feedSessions": 21,
+  "scheduleFeedSessions": 48,
+  "directCanonicalMatches": 9,
   "scheduleCanonicalMatches": 11,
   "scheduleGreenFlagCanonicalMatches": 1,
   "sessionsUpdated": [
     {
-      "sessionId": "session_indy_nxt_2026_6850",
-      "officialSessionId": "6850",
-      "scheduledStart": "2026-05-29T14:00:00",
-      "actualStart": "2026-05-29T14:00:00",
-      "scheduledEnd": "2026-05-29T14:45:00",
-      "timezone": "America/Detroit",
-      "sourceStartUtc": "2026-05-29T18:00:00Z",
-      "sourceEstimatedGreenFlagUtc": "2026-05-29T18:00:00Z"
+      "sessionId": "session_indy_nxt_2026_6891",
+      "officialSessionId": "6891",
+      "scheduledStart": "2026-07-03T14:00:00",
+      "actualStart": "2026-07-03T14:00:00",
+      "scheduledEnd": "2026-07-03T14:45:00",
+      "timezone": "America/New_York",
+      "sourceStartUtc": "2026-07-03T18:00:00Z",
+      "sourceEstimatedGreenFlagUtc": "2026-07-03T18:00:00Z"
     },
     {
-      "sessionId": "session_indy_nxt_2026_6851",
-      "officialSessionId": "6851",
-      "scheduledStart": "2026-05-30T08:00:00",
-      "actualStart": "2026-05-30T08:00:00",
-      "scheduledEnd": "2026-05-30T08:45:00",
-      "timezone": "America/Detroit",
-      "sourceStartUtc": "2026-05-30T12:00:00Z",
-      "sourceEstimatedGreenFlagUtc": "2026-05-30T12:00:00Z"
+      "sessionId": "session_indy_nxt_2026_6892",
+      "officialSessionId": "6892",
+      "scheduledStart": "2026-07-04T09:00:00",
+      "actualStart": "2026-07-04T09:00:00",
+      "scheduledEnd": "2026-07-04T09:12:00",
+      "timezone": "America/New_York",
+      "sourceStartUtc": "2026-07-04T13:00:00Z",
+      "sourceEstimatedGreenFlagUtc": "2026-07-04T13:00:00Z"
     },
     {
-      "sessionId": "session_indy_nxt_2026_6852",
-      "officialSessionId": "6852",
-      "scheduledStart": "2026-05-30T12:00:00",
-      "actualStart": "2026-05-30T12:00:00",
-      "scheduledEnd": "2026-05-30T12:12:00",
-      "timezone": "America/Detroit",
-      "sourceStartUtc": "2026-05-30T16:00:00Z",
-      "sourceEstimatedGreenFlagUtc": "2026-05-30T16:00:00Z"
+      "sessionId": "session_indy_nxt_2026_6893",
+      "officialSessionId": "6893",
+      "scheduledStart": "2026-07-04T09:18:00",
+      "actualStart": "2026-07-04T09:18:00",
+      "scheduledEnd": "2026-07-04T09:30:00",
+      "timezone": "America/New_York",
+      "sourceStartUtc": "2026-07-04T13:18:00Z",
+      "sourceEstimatedGreenFlagUtc": "2026-07-04T13:18:00Z"
     },
     {
-      "sessionId": "session_indy_nxt_2026_6853",
-      "officialSessionId": "6853",
-      "scheduledStart": "2026-05-30T12:18:00",
-      "actualStart": "2026-05-30T12:18:00",
-      "scheduledEnd": "2026-05-30T12:30:00",
-      "timezone": "America/Detroit",
-      "sourceStartUtc": "2026-05-30T16:18:00Z",
-      "sourceEstimatedGreenFlagUtc": "2026-05-30T16:18:00Z"
+      "sessionId": "session_indy_nxt_2026_6894",
+      "officialSessionId": "6894",
+      "scheduledStart": "2026-07-04T09:30:00",
+      "actualStart": "2026-07-04T09:30:00",
+      "scheduledEnd": "2026-07-04T09:35:00",
+      "timezone": "America/New_York",
+      "sourceStartUtc": "2026-07-04T13:30:00Z",
+      "sourceEstimatedGreenFlagUtc": "2026-07-04T13:30:00Z"
     },
     {
-      "sessionId": "session_indy_nxt_2026_6854",
-      "officialSessionId": "6854",
-      "scheduledStart": "2026-05-30T12:30:00",
-      "actualStart": "2026-05-30T12:30:00",
-      "scheduledEnd": "2026-05-30T12:35:00",
-      "timezone": "America/Detroit",
-      "sourceStartUtc": "2026-05-30T16:30:00Z",
-      "sourceEstimatedGreenFlagUtc": "2026-05-30T16:30:00Z"
+      "sessionId": "session_indy_nxt_2026_6761",
+      "officialSessionId": "6761",
+      "scheduledStart": "2026-07-04T13:00:00",
+      "actualStart": "2026-07-04T13:08:00",
+      "scheduledEnd": "2026-07-04T14:00:00",
+      "timezone": "America/New_York",
+      "sourceStartUtc": "2026-07-04T17:00:00Z",
+      "sourceEstimatedGreenFlagUtc": "2026-07-04T17:08:00Z"
     },
     {
-      "sessionId": "session_indy_nxt_2026_6749",
-      "officialSessionId": "6749",
-      "scheduledStart": "2026-05-31T10:30:00",
-      "actualStart": "2026-05-31T10:36:00",
-      "scheduledEnd": "2026-05-31T11:30:00",
-      "timezone": "America/Detroit",
-      "sourceStartUtc": "2026-05-31T14:30:00Z",
-      "sourceEstimatedGreenFlagUtc": "2026-05-31T14:36:00Z"
+      "sessionId": "session_indy_nxt_2026_6895",
+      "officialSessionId": "6895",
+      "scheduledStart": "2026-07-04T09:00:00",
+      "actualStart": "2026-07-04T09:00:00",
+      "scheduledEnd": "2026-07-04T09:12:00",
+      "timezone": "America/New_York",
+      "sourceStartUtc": "2026-07-04T13:00:00Z",
+      "sourceEstimatedGreenFlagUtc": "2026-07-04T13:00:00Z"
     },
     {
-      "sessionId": "session_indy_nxt_2026_6863",
-      "officialSessionId": "6863",
-      "scheduledStart": "2026-06-06T14:00:00",
-      "actualStart": "2026-06-06T14:05:00",
-      "scheduledEnd": "2026-06-06T15:00:00",
-      "timezone": "America/Chicago",
-      "sourceStartUtc": "2026-06-06T19:00:00Z",
-      "sourceEstimatedGreenFlagUtc": "2026-06-06T19:05:00Z"
+      "sessionId": "session_indy_nxt_2026_6896",
+      "officialSessionId": "6896",
+      "scheduledStart": "2026-07-04T09:18:00",
+      "actualStart": "2026-07-04T09:18:00",
+      "scheduledEnd": "2026-07-04T09:30:00",
+      "timezone": "America/New_York",
+      "sourceStartUtc": "2026-07-04T13:18:00Z",
+      "sourceEstimatedGreenFlagUtc": "2026-07-04T13:18:00Z"
     },
     {
-      "sessionId": "session_indy_nxt_2026_6864",
-      "officialSessionId": "6864",
-      "scheduledStart": "2026-06-06T17:00:00",
-      "actualStart": "2026-06-06T17:05:00",
-      "scheduledEnd": "2026-06-06T18:00:00",
-      "timezone": "America/Chicago",
-      "sourceStartUtc": "2026-06-06T22:00:00Z",
-      "sourceEstimatedGreenFlagUtc": "2026-06-06T22:05:00Z"
+      "sessionId": "session_indy_nxt_2026_6897",
+      "officialSessionId": "6897",
+      "scheduledStart": "2026-07-04T09:30:00",
+      "actualStart": "2026-07-04T09:30:00",
+      "scheduledEnd": "2026-07-04T09:35:00",
+      "timezone": "America/New_York",
+      "sourceStartUtc": "2026-07-04T13:30:00Z",
+      "sourceEstimatedGreenFlagUtc": "2026-07-04T13:30:00Z"
     },
     {
-      "sessionId": "session_indy_nxt_2026_6763",
-      "officialSessionId": "6763",
-      "scheduledStart": "2026-06-07T16:30:00",
-      "actualStart": "2026-06-07T16:35:00",
-      "scheduledEnd": "2026-06-07T17:30:00",
-      "timezone": "America/Chicago",
-      "sourceStartUtc": "2026-06-07T21:30:00Z",
-      "sourceEstimatedGreenFlagUtc": "2026-06-07T21:35:00Z"
-    },
-    {
-      "sessionId": "session_indy_nxt_2026_6869",
-      "officialSessionId": "6869",
-      "scheduledStart": "2026-06-19T14:00:00",
-      "actualStart": "2026-06-19T14:00:00",
-      "scheduledEnd": "2026-06-19T15:00:00",
-      "timezone": "America/Chicago",
-      "sourceStartUtc": "2026-06-19T19:00:00Z",
-      "sourceEstimatedGreenFlagUtc": "2026-06-19T19:00:00Z"
-    },
-    {
-      "sessionId": "session_indy_nxt_2026_6870",
-      "officialSessionId": "6870",
-      "scheduledStart": "2026-06-20T09:00:00",
-      "actualStart": "2026-06-20T09:00:00",
-      "scheduledEnd": "2026-06-20T09:12:00",
-      "timezone": "America/Chicago",
-      "sourceStartUtc": "2026-06-20T14:00:00Z",
-      "sourceEstimatedGreenFlagUtc": "2026-06-20T14:00:00Z"
-    },
-    {
-      "sessionId": "session_indy_nxt_2026_6871",
-      "officialSessionId": "6871",
-      "scheduledStart": "2026-06-20T09:18:00",
-      "actualStart": "2026-06-20T09:18:00",
-      "scheduledEnd": "2026-06-20T09:30:00",
-      "timezone": "America/Chicago",
-      "sourceStartUtc": "2026-06-20T14:18:00Z",
-      "sourceEstimatedGreenFlagUtc": "2026-06-20T14:18:00Z"
-    },
-    {
-      "sessionId": "session_indy_nxt_2026_6872",
-      "officialSessionId": "6872",
-      "scheduledStart": "2026-06-20T09:30:00",
-      "actualStart": "2026-06-20T09:30:00",
-      "scheduledEnd": "2026-06-20T09:35:00",
-      "timezone": "America/Chicago",
-      "sourceStartUtc": "2026-06-20T14:30:00Z",
-      "sourceEstimatedGreenFlagUtc": "2026-06-20T14:30:00Z"
-    },
-    {
-      "sessionId": "session_indy_nxt_2026_6762",
-      "officialSessionId": "6762",
-      "scheduledStart": "2026-06-20T11:30:00",
-      "actualStart": "2026-06-20T11:36:00",
-      "scheduledEnd": "2026-06-20T12:30:00",
-      "timezone": "America/Chicago",
-      "sourceStartUtc": "2026-06-20T16:30:00Z",
-      "sourceEstimatedGreenFlagUtc": "2026-06-20T16:36:00Z"
-    },
-    {
-      "sessionId": "session_indy_nxt_2026_6873",
-      "officialSessionId": "6873",
-      "scheduledStart": "2026-06-20T09:00:00",
-      "actualStart": "2026-06-20T09:00:00",
-      "scheduledEnd": "2026-06-20T09:12:00",
-      "timezone": "America/Chicago",
-      "sourceStartUtc": "2026-06-20T14:00:00Z",
-      "sourceEstimatedGreenFlagUtc": "2026-06-20T14:00:00Z"
-    },
-    {
-      "sessionId": "session_indy_nxt_2026_6874",
-      "officialSessionId": "6874",
-      "scheduledStart": "2026-06-20T09:18:00",
-      "actualStart": "2026-06-20T09:18:00",
-      "scheduledEnd": "2026-06-20T09:30:00",
-      "timezone": "America/Chicago",
-      "sourceStartUtc": "2026-06-20T14:18:00Z",
-      "sourceEstimatedGreenFlagUtc": "2026-06-20T14:18:00Z"
-    },
-    {
-      "sessionId": "session_indy_nxt_2026_6875",
-      "officialSessionId": "6875",
-      "scheduledStart": "2026-06-20T09:30:00",
-      "actualStart": "2026-06-20T09:30:00",
-      "scheduledEnd": "2026-06-20T09:35:00",
-      "timezone": "America/Chicago",
-      "sourceStartUtc": "2026-06-20T14:30:00Z",
-      "sourceEstimatedGreenFlagUtc": "2026-06-20T14:30:00Z"
-    },
-    {
-      "sessionId": "session_indy_nxt_2026_6754",
-      "officialSessionId": "6754",
-      "scheduledStart": "2026-06-21T11:00:00",
-      "actualStart": "2026-06-21T11:06:00",
-      "scheduledEnd": "2026-06-21T12:00:00",
-      "timezone": "America/Chicago",
-      "sourceStartUtc": "2026-06-21T16:00:00Z",
-      "sourceEstimatedGreenFlagUtc": "2026-06-21T16:06:00Z"
+      "sessionId": "session_indy_nxt_2026_6760",
+      "officialSessionId": "6760",
+      "scheduledStart": "2026-07-05T10:00:00",
+      "actualStart": "2026-07-05T10:08:00",
+      "scheduledEnd": "2026-07-05T11:00:00",
+      "timezone": "America/New_York",
+      "sourceStartUtc": "2026-07-05T14:00:00Z",
+      "sourceEstimatedGreenFlagUtc": "2026-07-05T14:08:00Z"
     }
   ],
   "scheduleSessionsUpdated": [
@@ -2053,32 +1963,32 @@
   "scheduleOnlySessionsCreated": [],
   "scheduleOnlySessionsUpdated": [
     {
-      "sessionId": "session_indy_nxt_2026_6761",
-      "officialSessionId": "6761",
-      "eventId": "event_indy_nxt_2026_5544",
-      "officialEventId": "5544",
-      "sessionLabel": "Race",
-      "sessionType": "race",
-      "scheduledStart": "2026-07-04T13:00:00",
-      "actualStart": null,
-      "scheduledEnd": "2026-07-04T14:00:00",
-      "timezone": "America/New_York",
-      "sourceStartUtc": "2026-07-04T17:00:00Z",
-      "sourceEstimatedGreenFlagUtc": null
+      "sessionId": "session_indy_nxt_2026_6924",
+      "officialSessionId": "6924",
+      "eventId": "event_indy_nxt_2026_5538",
+      "officialEventId": "5538",
+      "sessionLabel": "Practice",
+      "sessionType": "practice",
+      "scheduledStart": "2026-07-18T10:30:00",
+      "actualStart": "2026-07-18T10:35:00",
+      "scheduledEnd": "2026-07-18T11:30:00",
+      "timezone": "America/Chicago",
+      "sourceStartUtc": "2026-07-18T15:30:00Z",
+      "sourceEstimatedGreenFlagUtc": "2026-07-18T15:35:00Z"
     },
     {
-      "sessionId": "session_indy_nxt_2026_6760",
-      "officialSessionId": "6760",
-      "eventId": "event_indy_nxt_2026_5543",
-      "officialEventId": "5543",
-      "sessionLabel": "Race",
-      "sessionType": "race",
-      "scheduledStart": "2026-07-05T10:00:00",
-      "actualStart": null,
-      "scheduledEnd": "2026-07-05T11:00:00",
-      "timezone": "America/New_York",
-      "sourceStartUtc": "2026-07-05T14:00:00Z",
-      "sourceEstimatedGreenFlagUtc": null
+      "sessionId": "session_indy_nxt_2026_6923",
+      "officialSessionId": "6923",
+      "eventId": "event_indy_nxt_2026_5538",
+      "officialEventId": "5538",
+      "sessionLabel": "Qualifying",
+      "sessionType": "qualifying",
+      "scheduledStart": "2026-07-18T15:30:00",
+      "actualStart": "2026-07-18T15:35:00",
+      "scheduledEnd": "2026-07-18T16:30:00",
+      "timezone": "America/Chicago",
+      "sourceStartUtc": "2026-07-18T20:30:00Z",
+      "sourceEstimatedGreenFlagUtc": "2026-07-18T20:35:00Z"
     },
     {
       "sessionId": "session_indy_nxt_2026_6755",
@@ -2087,12 +1997,82 @@
       "officialEventId": "5538",
       "sessionLabel": "Race",
       "sessionType": "race",
-      "scheduledStart": "2026-07-18T23:00:00",
-      "actualStart": null,
-      "scheduledEnd": "2026-07-18T23:00:00",
+      "scheduledStart": "2026-07-19T12:00:00",
+      "actualStart": "2026-07-18T12:05:00",
+      "scheduledEnd": "2026-07-19T13:00:00",
       "timezone": "America/Chicago",
-      "sourceStartUtc": "2026-07-19T04:00:00Z",
-      "sourceEstimatedGreenFlagUtc": null
+      "sourceStartUtc": "2026-07-19T17:00:00Z",
+      "sourceEstimatedGreenFlagUtc": "2026-07-18T17:05:00Z"
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6898",
+      "officialSessionId": "6898",
+      "eventId": "event_indy_nxt_2026_5547",
+      "officialEventId": "5547",
+      "sessionLabel": "Practice 1",
+      "sessionType": "practice",
+      "scheduledStart": "2026-08-07T13:30:00",
+      "actualStart": "2026-08-07T13:30:00",
+      "scheduledEnd": "2026-08-07T14:15:00",
+      "timezone": "America/Los_Angeles",
+      "sourceStartUtc": "2026-08-07T20:30:00Z",
+      "sourceEstimatedGreenFlagUtc": "2026-08-07T20:30:00Z"
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6899",
+      "officialSessionId": "6899",
+      "eventId": "event_indy_nxt_2026_5547",
+      "officialEventId": "5547",
+      "sessionLabel": "Practice 2",
+      "sessionType": "practice",
+      "scheduledStart": "2026-08-08T09:00:00",
+      "actualStart": "2026-08-08T09:00:00",
+      "scheduledEnd": "2026-08-08T09:45:00",
+      "timezone": "America/Los_Angeles",
+      "sourceStartUtc": "2026-08-08T16:00:00Z",
+      "sourceEstimatedGreenFlagUtc": "2026-08-08T16:00:00Z"
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6900",
+      "officialSessionId": "6900",
+      "eventId": "event_indy_nxt_2026_5547",
+      "officialEventId": "5547",
+      "sessionLabel": "Qualifying - Group 1",
+      "sessionType": "qualifying",
+      "scheduledStart": "2026-08-08T12:00:00",
+      "actualStart": "2026-08-08T12:00:00",
+      "scheduledEnd": "2026-08-08T12:12:00",
+      "timezone": "America/Los_Angeles",
+      "sourceStartUtc": "2026-08-08T19:00:00Z",
+      "sourceEstimatedGreenFlagUtc": "2026-08-08T19:00:00Z"
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6901",
+      "officialSessionId": "6901",
+      "eventId": "event_indy_nxt_2026_5547",
+      "officialEventId": "5547",
+      "sessionLabel": "Qualifying - Group 2",
+      "sessionType": "qualifying",
+      "scheduledStart": "2026-08-08T12:18:00",
+      "actualStart": "2026-08-08T12:18:00",
+      "scheduledEnd": "2026-08-08T12:30:00",
+      "timezone": "America/Los_Angeles",
+      "sourceStartUtc": "2026-08-08T19:18:00Z",
+      "sourceEstimatedGreenFlagUtc": "2026-08-08T19:18:00Z"
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6902",
+      "officialSessionId": "6902",
+      "eventId": "event_indy_nxt_2026_5547",
+      "officialEventId": "5547",
+      "sessionLabel": "Combined Qualifying",
+      "sessionType": "qualifying",
+      "scheduledStart": "2026-08-08T12:30:00",
+      "actualStart": "2026-08-08T12:30:00",
+      "scheduledEnd": "2026-08-08T12:35:00",
+      "timezone": "America/Los_Angeles",
+      "sourceStartUtc": "2026-08-08T19:30:00Z",
+      "sourceEstimatedGreenFlagUtc": "2026-08-08T19:30:00Z"
     },
     {
       "sessionId": "session_indy_nxt_2026_6764",
@@ -2102,11 +2082,11 @@
       "sessionLabel": "Race",
       "sessionType": "race",
       "scheduledStart": "2026-08-09T11:00:00",
-      "actualStart": null,
+      "actualStart": "2026-08-09T11:08:00",
       "scheduledEnd": "2026-08-09T12:00:00",
       "timezone": "America/Los_Angeles",
       "sourceStartUtc": "2026-08-09T18:00:00Z",
-      "sourceEstimatedGreenFlagUtc": null
+      "sourceEstimatedGreenFlagUtc": "2026-08-09T18:08:00Z"
     },
     {
       "sessionId": "session_indy_nxt_2026_6757",
@@ -2314,12 +2294,50 @@
     {
       "eventId": "5544",
       "eventName": "Grand Prix at Mid-Ohio Race 1",
+      "scheduleLabel": "INDY NXT - Practice",
+      "matchKey": "practice",
+      "reason": "higher_priority_trackactivity_window_exists",
+      "candidateSessionIds": [
+        "session_indy_nxt_2026_6891"
+      ]
+    },
+    {
+      "eventId": "5544",
+      "eventName": "Grand Prix at Mid-Ohio Race 1",
+      "scheduleLabel": "INDY NXT - Qualifying",
+      "reason": "unsupported_or_ambiguous_schedule_label"
+    },
+    {
+      "eventId": "5544",
+      "eventName": "Grand Prix at Mid-Ohio Race 1",
       "scheduleLabel": "INDY NXT - Race 1",
       "matchKey": "race 1",
       "reason": "higher_priority_trackactivity_window_exists",
       "candidateSessionIds": [
         "session_indy_nxt_2026_6761"
       ]
+    },
+    {
+      "eventId": "5544",
+      "eventName": "Grand Prix at Mid-Ohio Race 1",
+      "scheduleLabel": "INDY NXT - Race 2",
+      "matchKey": "race 2",
+      "reason": "no_unambiguous_canonical_session",
+      "candidateSessionIds": []
+    },
+    {
+      "eventId": "5543",
+      "eventName": "Grand Prix at Mid-Ohio Race 2",
+      "scheduleLabel": "INDY NXT - Qualifying",
+      "reason": "unsupported_or_ambiguous_schedule_label"
+    },
+    {
+      "eventId": "5543",
+      "eventName": "Grand Prix at Mid-Ohio Race 2",
+      "scheduleLabel": "INDY NXT - Race 1",
+      "matchKey": "race 1",
+      "reason": "no_unambiguous_canonical_session",
+      "candidateSessionIds": []
     },
     {
       "eventId": "5543",
@@ -2334,12 +2352,54 @@
     {
       "eventId": "5538",
       "eventName": "Music City Grand Prix",
+      "scheduleLabel": "INDY NXT - Practice",
+      "matchKey": "practice",
+      "reason": "higher_priority_trackactivity_window_exists",
+      "candidateSessionIds": [
+        "session_indy_nxt_2026_6924"
+      ]
+    },
+    {
+      "eventId": "5538",
+      "eventName": "Music City Grand Prix",
+      "scheduleLabel": "INDY NXT - Qualifying",
+      "reason": "unsupported_or_ambiguous_schedule_label"
+    },
+    {
+      "eventId": "5538",
+      "eventName": "Music City Grand Prix",
       "scheduleLabel": "INDY NXT - Race",
       "matchKey": "race",
       "reason": "higher_priority_trackactivity_window_exists",
       "candidateSessionIds": [
         "session_indy_nxt_2026_6755"
       ]
+    },
+    {
+      "eventId": "5547",
+      "eventName": "Grand Prix of Portland",
+      "scheduleLabel": "INDY NXT - Practice 1",
+      "matchKey": "practice 1",
+      "reason": "higher_priority_trackactivity_window_exists",
+      "candidateSessionIds": [
+        "session_indy_nxt_2026_6898"
+      ]
+    },
+    {
+      "eventId": "5547",
+      "eventName": "Grand Prix of Portland",
+      "scheduleLabel": "INDY NXT - Practice 2",
+      "matchKey": "practice 2",
+      "reason": "higher_priority_trackactivity_window_exists",
+      "candidateSessionIds": [
+        "session_indy_nxt_2026_6899"
+      ]
+    },
+    {
+      "eventId": "5547",
+      "eventName": "Grand Prix of Portland",
+      "scheduleLabel": "INDY NXT - Qualifying",
+      "reason": "unsupported_or_ambiguous_schedule_label"
     },
     {
       "eventId": "5547",

@@ -1,12 +1,12 @@
 x,y,label,n,pearson,caution
-startPosition,finishPosition,Lower start vs lower finish,38,0.401290599997514,exploratory_correlation_not_causal
-qualifyingPosition,finishPosition,Qualifying rank vs finish,36,0.388277770017298,exploratory_correlation_not_causal
-qualifyingToFinishDelta,finishPosition,Qualifying conversion vs finish,36,-0.6923159315206202,exploratory_correlation_not_causal
-positionGain,finishPosition,Position gain vs finish,38,-0.6829045281974057,exploratory_correlation_not_causal
-bestLapRank,finishPosition,Best-lap rank vs finish,36,0.4447427952825564,exploratory_correlation_not_causal
-cautionShare,positionGain,Caution share vs gain,38,-0.04329265812224748,exploratory_correlation_not_causal
-passesPerLap,positionGain,Race passing density vs gain,38,0.015833463344334334,exploratory_correlation_not_causal
-ambientTempC,finishPosition,Ambient temp vs finish,38,-0.14802019766331367,exploratory_correlation_not_causal
-windGustKph,positionGain,Wind gust vs gain,38,-0.11309459260919454,exploratory_correlation_not_causal
-precipitationMm,positionGain,Precipitation vs gain,38,-0.4095532115986497,exploratory_correlation_not_causal
-pitStops,finishPosition,Pit stops vs finish,38,0.00036110955842693,exploratory_correlation_not_causal
+startPosition,finishPosition,Lower start vs lower finish,40,0.40598136873841234,exploratory_correlation_not_causal
+qualifyingPosition,finishPosition,Qualifying rank vs finish,38,0.39306292491223815,exploratory_correlation_not_causal
+qualifyingToFinishDelta,finishPosition,Qualifying conversion vs finish,38,-0.6878136300020157,exploratory_correlation_not_causal
+positionGain,finishPosition,Position gain vs finish,40,-0.6800212686177002,exploratory_correlation_not_causal
+bestLapRank,finishPosition,Best-lap rank vs finish,38,0.4552970508721435,exploratory_correlation_not_causal
+cautionShare,positionGain,Caution share vs gain,40,-0.05454640822329661,exploratory_correlation_not_causal
+passesPerLap,positionGain,Race passing density vs gain,40,0.011511688928226476,exploratory_correlation_not_causal
+ambientTempC,finishPosition,Ambient temp vs finish,40,-0.11838771069513909,exploratory_correlation_not_causal
+windGustKph,positionGain,Wind gust vs gain,40,-0.1246419789867599,exploratory_correlation_not_causal
+precipitationMm,positionGain,Precipitation vs gain,40,-0.01619593382454059,exploratory_correlation_not_causal
+pitStops,finishPosition,Pit stops vs finish,40,-0.00849249014182025,exploratory_correlation_not_causal

@@ -1,12 +1,12 @@
 {
   "datasetPath": "data/career/career.dataset.json",
-  "datasetUpdatedAt": "2026-07-02T17:41:03.634Z",
+  "datasetUpdatedAt": "2026-07-11T20:53:51.783Z",
   "metricFamilyRows": 49,
   "modelingPriorityRows": 7,
   "outputs": {
     "report": "analysis/career-parity/output/CAREER_ANALYTICS_PARITY_PASS.md",
     "tablesDir": "analysis/career-parity/output/tables"
   },
-  "resultRows": 139,
+  "resultRows": 141,
   "seriesSummaryRows": 7
 }
