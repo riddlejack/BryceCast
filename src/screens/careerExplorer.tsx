@@ -21,8 +21,8 @@ interface ConversionRow {
 /* Track-type colors from the validated categorical order (blue, orange→skip, aqua, violet). */
 const trackTypeColor: Record<string, string> = {
   road: 'var(--series-1)',
-  street: 'var(--series-4)',
-  oval: 'var(--series-3)'
+  oval: 'var(--series-2)',
+  street: 'var(--series-3)'
 };
 
 const useConversionRows = (): ConversionRow[] | null => {
@@ -65,8 +65,12 @@ const FilterChip = ({ label, active, onClick }: { label: string; active: boolean
   <button
     type="button"
     onClick={onClick}
-    className={`chip ${active ? 'chip--bryce' : 'chip--outline'}`}
-    style={{ cursor: 'pointer', background: active ? undefined : 'none' }}
+    className="chip"
+    style={
+      active
+        ? { cursor: 'pointer', background: 'var(--ink-primary)', color: '#fff', borderColor: 'transparent' }
+        : { cursor: 'pointer', color: 'var(--ink-secondary)' }
+    }
   >
     {label}
   </button>
@@ -77,7 +81,7 @@ const ExplorerTooltip = ({ active, payload }: { active?: boolean; payload?: Arra
   const row = payload[0].payload;
   const gain = row.gain !== null ? formatGain(row.gain) : null;
   return (
-    <div style={{ background: 'var(--surface-2)', border: '1px solid var(--border-strong)', borderRadius: 8, padding: '8px 12px', fontSize: 12.5, maxWidth: 240 }}>
+    <div style={{ background: 'var(--surface-0)', border: '1px solid var(--divider)', borderRadius: 8, padding: '8px 12px', fontSize: 12.5, maxWidth: 240, boxShadow: '0 6px 20px rgba(0,0,0,0.10)' }}>
       <div style={{ fontWeight: 600 }}>{row.raceLabel}</div>
       <div style={{ color: 'var(--ink-secondary)' }}>
         P{row.start} → P{row.finish}
@@ -185,7 +189,7 @@ export const CareerExplorer = () => {
             stroke="var(--axis-baseline)"
             strokeDasharray="4 4"
           />
-          <Tooltip content={<ExplorerTooltip />} cursor={{ stroke: 'var(--border-strong)' }} />
+          <Tooltip content={<ExplorerTooltip />} cursor={{ stroke: 'var(--axis-baseline)' }} />
           {(['road', 'street', 'oval'] as const).map((type) => (
             <Scatter
               key={type}

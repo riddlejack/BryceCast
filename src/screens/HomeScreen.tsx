@@ -51,8 +51,8 @@ const LiveNowHero = ({ readiness }: { readiness: ReadinessStatus }) => {
           <div className="row" style={{ gap: 16, alignItems: 'center' }}>
             <Plate size="hero" />
             <div className="stat">
-              <span className="caption" style={{ color: 'var(--bryce)' }}>Bryce Aron · running</span>
-              <span className="stat__value stat__value--hero" style={{ color: 'var(--bryce)' }}>
+              <span className="caption">Bryce Aron · running</span>
+              <span className="stat__value stat__value--hero">
                 {rank !== null ? `P${rank}` : '—'}
               </span>
               {gain ? (
@@ -147,33 +147,7 @@ const NextRaceHero = ({ readiness }: { readiness: ReadinessStatus }) => {
   return (
     <Link to="/race-week">
       <HeroPanel tint="bryce">
-        <span
-          aria-hidden
-          className="figure"
-          style={{
-            position: 'absolute',
-            right: '0.06em',
-            top: '-0.16em',
-            fontSize: 230,
-            fontWeight: 850,
-            lineHeight: 1,
-            color: 'transparent',
-            WebkitTextStroke: '1.5px rgba(245, 182, 63, 0.13)',
-            transform: 'skewX(-6deg)',
-            pointerEvents: 'none',
-            userSelect: 'none',
-            zIndex: -1
-          }}
-        >
-          9
-        </span>
-        <div className="row row--wrap" style={{ gap: 8 }}>
-          <span className="chip chip--bryce">
-            <CalendarClock size={12} aria-hidden />
-            {daysChip}
-          </span>
-          <span className="chip chip--outline">{trackTypeLabel(nextEvent.trackType)}</span>
-        </div>
+        <span className="kicker">{daysChip} · {trackTypeLabel(nextEvent.trackType)}</span>
         <h2
           className="display"
           style={{ fontSize: 'clamp(28px, 6vw, 40px)', margin: '14px 0 4px', letterSpacing: '-0.025em' }}
@@ -259,15 +233,19 @@ const SeasonStrip = ({ season }: { season: ArchiveEntry[] }) => {
                   alignItems: 'center',
                   gap: 1,
                   minWidth: 44,
-                  padding: '7px 8px 5px',
+                  padding: '7px 9px 5px',
                   borderRadius: 10,
                   fontSize: 15,
-                  background: top10 ? 'var(--bryce-faint)' : 'color-mix(in srgb, var(--surface-2) 70%, transparent)',
-                  border: `1px solid ${top10 ? 'var(--bryce-border)' : 'var(--border-hairline)'}`,
-                  color: top10 ? 'var(--bryce)' : 'var(--ink-primary)'
+                  background: 'var(--surface-0)',
+                  color: 'var(--ink-primary)'
                 }}
               >
-                {formatPosition(finish)}
+                <span className="row" style={{ gap: 4 }}>
+                  {formatPosition(finish)}
+                  {top10 ? (
+                    <span aria-label="top ten" style={{ width: 5, height: 5, borderRadius: 2, background: 'var(--bryce)' }} />
+                  ) : null}
+                </span>
                 <span style={{ fontSize: 9, fontWeight: 650, letterSpacing: '0.06em', color: 'var(--ink-muted)' }}>
                   {trackShort(entry)}
                   {gained && start !== null && finish !== null ? (
@@ -302,7 +280,7 @@ const SeasonSoFar = ({ season }: { season: ArchiveEntry[] }) => {
     <Card
       title={
         <>
-          <Trophy size={15} style={{ color: 'var(--bryce)' }} aria-hidden />
+          <Trophy size={15} aria-hidden />
           2026 season so far
         </>
       }
@@ -351,9 +329,7 @@ const LastTimeOut = ({ latest }: { latest: ArchiveEntry | null }) => {
       >
         <span className="caption caption--secondary">{displayRaceLabel(latest.pack)}</span>
         <div className="row" style={{ alignItems: 'baseline', gap: 12, marginTop: 4 }}>
-          <span className="stat__value stat__value--big" style={{ color: 'var(--bryce)' }}>
-            {formatPosition(finish)}
-          </span>
+          <span className="stat__value stat__value--big">{formatPosition(finish)}</span>
           {gain ? (
             <span className={`stat__delta ${gain.direction === 'up' ? 'stat__delta--up' : 'stat__delta--down'}`}>
               {gain.text} from {formatPosition(start)} start

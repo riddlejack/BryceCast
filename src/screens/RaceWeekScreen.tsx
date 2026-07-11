@@ -129,7 +129,7 @@ const PriorBand = ({ event }: { event: UpcomingPrepEvent }) => {
         days below the {toPct(p25)}th, a quarter above the {toPct(p75)}th.
       </p>
       <div style={{ position: 'relative', height: 34, margin: '0 6px' }}>
-        <div style={{ position: 'absolute', top: 14, left: 0, right: 0, height: 6, borderRadius: 3, background: 'var(--surface-3)' }} />
+        <div style={{ position: 'absolute', top: 14, left: 0, right: 0, height: 6, borderRadius: 3, background: 'var(--surface-2)' }} />
         <div
           style={{
             position: 'absolute',
@@ -138,7 +138,7 @@ const PriorBand = ({ event }: { event: UpcomingPrepEvent }) => {
             width: `${Math.max(toPct(p75) - toPct(p25), 2)}%`,
             height: 10,
             borderRadius: 5,
-            background: 'color-mix(in srgb, var(--series-1) 45%, transparent)'
+            background: 'color-mix(in srgb, var(--series-1) 30%, transparent)'
           }}
         />
         <div
@@ -155,7 +155,7 @@ const PriorBand = ({ event }: { event: UpcomingPrepEvent }) => {
       </div>
       <div className="row row--between" style={{ marginTop: 4 }}>
         <span className="caption">Tougher day</span>
-        <span className="caption" style={{ color: 'var(--bryce)' }}>median · {toPct(median)}th pctile</span>
+        <span className="caption" style={{ color: 'var(--ink-primary)', fontWeight: 570 }}>median · {toPct(median)}th pctile</span>
         <span className="caption">Stronger day</span>
       </div>
       <p style={{ margin: '14px 0 0', fontSize: 11.5, color: 'var(--ink-muted)' }}>History, not a prediction.</p>
@@ -190,19 +190,7 @@ const PathFactors = ({ event }: { event: UpcomingPrepEvent }) => {
             <div key={title} className="row" style={{ gap: 12, alignItems: 'flex-start' }}>
               <span
                 className="figure"
-                style={{
-                  flex: 'none',
-                  width: 26,
-                  height: 26,
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  borderRadius: 8,
-                  fontSize: 13,
-                  background: 'var(--bryce-faint)',
-                  color: 'var(--bryce)',
-                  border: '1px solid var(--bryce-border)'
-                }}
+                style={{ flex: 'none', width: 20, fontSize: 14, color: 'var(--ink-muted)', textAlign: 'right' }}
               >
                 {index + 1}
               </span>
@@ -248,8 +236,7 @@ const AnalogRaces = ({ event }: { event: UpcomingPrepEvent }) => {
               style={{
                 padding: '9px 12px',
                 borderRadius: 10,
-                background: 'color-mix(in srgb, var(--surface-2) 55%, transparent)',
-                border: '1px solid var(--border-hairline)'
+                background: 'var(--surface-0)'
               }}
             >
               <span style={{ fontSize: 13.5, fontWeight: linked ? 600 : 450 }}>{label}</span>
@@ -481,19 +468,16 @@ export const RaceWeekScreen = () => {
       </header>
 
       <HeroPanel tint="bryce">
-        <div className="row row--wrap" style={{ gap: 8 }}>
-          <span className="chip chip--bryce">
-            <CalendarClock size={12} aria-hidden />
-            {days === 0 ? 'Race day' : days === 1 ? 'Tomorrow' : days !== null ? `In ${days} days` : 'Upcoming'}
-          </span>
-          {races.map((race) => (
-            <span key={race.eventId} className="chip chip--outline">
-              <Flag size={11} aria-hidden />
-              {formatDate(race.eventStartDate, { weekday: 'long' })}
-              {races.length > 1 ? ` · ${race.eventName.replace(/^.*Race (\d)$/, 'Race $1')}` : ''}
-            </span>
-          ))}
-        </div>
+        <span className="kicker">
+          {days === 0 ? 'Race day' : days === 1 ? 'Tomorrow' : days !== null ? `In ${days} days` : 'Upcoming'}
+          {' · '}
+          {races
+            .map(
+              (race) =>
+                `${formatDate(race.eventStartDate, { weekday: 'long' })}${races.length > 1 ? ` ${race.eventName.replace(/^.*Race (\d)$/, 'Race $1')}` : ''}`
+            )
+            .join(' · ')}
+        </span>
         <div className="grid grid--split" style={{ marginTop: 18, alignItems: 'end', gap: 20 }}>
           <div>
             {preciseStart ? (

@@ -113,9 +113,7 @@ const BryceHero = ({ payload }: { payload: LiveReadiness }) => {
   return (
     <HeroPanel tint={green ? 'live' : 'bryce'}>
       <div className="row row--between" style={{ alignItems: 'flex-start' }}>
-        <span className="caption" style={{ color: 'var(--bryce)', letterSpacing: '0.12em' }}>
-          Bryce Aron · No. 9
-        </span>
+        <span className="caption">Bryce Aron · No. 9</span>
         <SourcePill
           title="Bryce live tile"
           entries={[
@@ -131,9 +129,7 @@ const BryceHero = ({ payload }: { payload: LiveReadiness }) => {
         <div className="row" style={{ gap: 18 }}>
           <Plate size="hero" />
           <div className="stat">
-            <span className="stat__value stat__value--hero" style={{ color: 'var(--bryce)' }}>
-              {rank !== null ? `P${rank}` : '—'}
-            </span>
+            <span className="stat__value stat__value--hero">{rank !== null ? `P${rank}` : '—'}</span>
             {gain ? (
               <span className={`stat__delta ${gain.direction === 'up' ? 'stat__delta--up' : 'stat__delta--down'}`}>
                 {gain.text} from P{start} start
@@ -214,7 +210,7 @@ const PointsProjection = ({ payload }: { payload: LiveReadiness }) => {
         flush
         title={
           <>
-            <Trophy size={15} style={{ color: 'var(--bryce)' }} aria-hidden />
+            <Trophy size={15} aria-hidden />
             If the race ended now
           </>
         }
@@ -254,7 +250,7 @@ const PointsProjection = ({ payload }: { payload: LiveReadiness }) => {
               <span className="tower__pos">{index + 1}</span>
               <span className="tower__name">
                 {row.name || `Car ${row.no ?? '—'}`}
-                {row.isBryce ? <span className="tower__team" style={{ color: 'var(--bryce)' }}> · No. 9</span> : null}
+                {row.isBryce ? <Plate size="row" /> : null}
               </span>
               <span className="tower__gap figure">{row.total}</span>
               <span className="tower__gap" style={{ fontSize: 11.5 }}>{row.running !== null ? `+${row.running} today` : ''}</span>
@@ -275,7 +271,7 @@ const PointsProjection = ({ payload }: { payload: LiveReadiness }) => {
     <Card
       title={
         <>
-          <Trophy size={15} style={{ color: 'var(--bryce)' }} aria-hidden />
+          <Trophy size={15} aria-hidden />
           Championship
         </>
       }
@@ -333,6 +329,7 @@ const TimingTower = ({ payload }: { payload: LiveReadiness }) => {
             <div key={asString(row.no) ?? String(row.rank)} className={`tower__row${isBryce ? ' tower__row--bryce' : ''}`} role="row">
               <span className="tower__pos">{formatNumber(row.rank, 0)}</span>
               <span className="tower__name">
+                {isBryce ? <Plate size="row" /> : null}
                 {driverLabel(row) ?? '—'}
                 {moved !== null && moved !== 0 ? (
                   <span style={{ marginLeft: 6, fontSize: 11, color: moved > 0 ? 'var(--status-good)' : 'var(--ink-muted)' }}>

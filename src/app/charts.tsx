@@ -4,7 +4,7 @@ import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YA
  * 2px lines, recessive grid, tabular tick labels, tooltip always on,
  * Bryce data always and only in Bryce gold. */
 
-const axisTick = { fill: 'var(--ink-muted)', fontSize: 10.5, fontFamily: 'Inter, system-ui, sans-serif' } as const;
+const axisTick = { fill: 'var(--ink-muted)', fontSize: 10.5, fontFamily: '-apple-system, system-ui, sans-serif' } as const;
 
 export interface LapPoint {
   lap: number;
@@ -18,13 +18,13 @@ const LapTooltip = ({ active, payload }: { active?: boolean; payload?: Array<{ p
   return (
     <div
       style={{
-        background: 'var(--surface-3)',
-        border: '1px solid var(--border-strong)',
+        background: 'var(--surface-0)',
+        border: '1px solid var(--divider)',
         borderRadius: 8,
         padding: '6px 10px',
         fontSize: 12,
         fontVariantNumeric: 'tabular-nums',
-        boxShadow: '0 6px 18px rgba(0,0,0,0.4)'
+        boxShadow: '0 6px 20px rgba(0,0,0,0.10)'
       }}
     >
       <strong>Lap {point.lap}</strong> · P{point.rank}
@@ -68,11 +68,11 @@ export const LapStoryChart = ({ points, height = 190 }: { points: LapPoint[]; he
           allowDecimals={false}
           tickCount={5}
         />
-        <Tooltip content={<LapTooltip />} cursor={{ stroke: 'var(--border-strong)', strokeDasharray: '3 3' }} />
+        <Tooltip content={<LapTooltip />} cursor={{ stroke: 'var(--axis-baseline)', strokeDasharray: '3 3' }} />
         <Line
           type="stepAfter"
           dataKey="rank"
-          stroke="var(--bryce)"
+          stroke="var(--ink-primary)"
           strokeWidth={2}
           dot={false}
           activeDot={{ r: 4.5, fill: 'var(--bryce)', stroke: 'var(--surface-1)', strokeWidth: 2 }}
@@ -107,7 +107,7 @@ export const SlopeChart = ({ start, finish, height = 150 }: { start: number; fin
         <Line
           type="linear"
           dataKey="rank"
-          stroke="var(--bryce)"
+          stroke="var(--axis-baseline)"
           strokeWidth={2.5}
           isAnimationActive={false}
           dot={{ r: 5, fill: 'var(--bryce)', stroke: 'var(--surface-1)', strokeWidth: 2 }}
@@ -122,8 +122,8 @@ export const SlopeChart = ({ start, finish, height = 150 }: { start: number; fin
                 textAnchor={index === 0 ? 'end' : 'start'}
                 style={{
                   fill: 'var(--ink-primary)',
-                  fontFamily: 'Archivo, system-ui, sans-serif',
-                  fontWeight: 750,
+                  fontFamily: '-apple-system, system-ui, sans-serif',
+                  fontWeight: 650,
                   fontSize: 16,
                   fontVariantNumeric: 'tabular-nums'
                 }}

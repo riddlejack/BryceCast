@@ -1,26 +1,30 @@
 import { useEffect, useState, type CSSProperties, type ReactNode } from 'react';
-import { AlertTriangle, CheckCircle2, ChevronDown, ChevronUp, CircleAlert, Database, Info, X } from 'lucide-react';
+import { ChevronDown, ChevronUp, Database, Info, X } from 'lucide-react';
 
-/* ---------- status chips (icon + label always; never color alone) ---------- */
+/* ---------- status chips (dot + label always; never color alone) ---------- */
 
 export type Tone = 'good' | 'warn' | 'bad' | 'neutral';
 
-const toneIcon: Record<Tone, typeof CheckCircle2> = {
-  good: CheckCircle2,
-  warn: CircleAlert,
-  bad: AlertTriangle,
-  neutral: Info
+const toneDot: Record<Tone, string> = {
+  good: 'var(--status-good-dot)',
+  warn: 'var(--status-warn-dot)',
+  bad: 'var(--status-bad-dot)',
+  neutral: 'var(--ink-muted)'
 };
 
-export const StatusChip = ({ tone, label, live }: { tone: Tone; label: string; live?: boolean }) => {
-  const Icon = toneIcon[tone];
-  return (
-    <span className={`chip chip--${tone}`}>
-      {live ? <span className="live-dot" aria-hidden /> : <Icon size={12} aria-hidden />}
-      {label}
-    </span>
-  );
-};
+export const StatusChip = ({ tone, label, live }: { tone: Tone; label: string; live?: boolean }) => (
+  <span className={`chip chip--${tone}`}>
+    {live ? (
+      <span className="live-dot" aria-hidden />
+    ) : (
+      <span
+        aria-hidden
+        style={{ width: 7, height: 7, borderRadius: '50%', background: toneDot[tone], flex: 'none' }}
+      />
+    )}
+    {label}
+  </span>
+);
 
 /** Family-readable translations of product readiness states. */
 export const readinessCopy: Record<string, { tone: Tone; label: string; detail: string }> = {
@@ -35,10 +39,9 @@ export const readinessCopy: Record<string, { tone: Tone; label: string; detail: 
 export const TrustBanner = ({ state, reason }: { state: string; reason?: string }) => {
   const copy = readinessCopy[state] ?? { tone: 'neutral' as Tone, label: state, detail: reason ?? '' };
   const toneClass = copy.tone === 'good' ? 'trust--good' : copy.tone === 'bad' ? 'trust--bad' : 'trust--warn';
-  const Icon = toneIcon[copy.tone];
   return (
     <div className={`trust ${toneClass}`} role="status">
-      {state === 'ready' || state === 'degraded' ? <span className="live-dot" aria-hidden /> : <Icon size={16} aria-hidden />}
+      {state === 'ready' || state === 'degraded' ? <span className="live-dot" aria-hidden /> : <span className="trust__dot" aria-hidden />}
       <strong>{copy.label}</strong>
       <span className="trust__detail">{copy.detail}</span>
     </div>
@@ -129,7 +132,7 @@ export const ScreenHead = ({ kicker, title, sub }: { kicker?: ReactNode; title: 
 
 /* ---------- number plate ---------- */
 
-export const Plate = ({ size = 'nav' }: { size?: 'nav' | 'hero' }) => (
+export const Plate = ({ size = 'nav' }: { size?: 'nav' | 'hero' | 'row' }) => (
   <span className={`plate plate--${size}`} aria-hidden>
     <span>9</span>
   </span>
@@ -254,7 +257,7 @@ export const SourceDrawer = ({
         <p style={{ color: 'var(--ink-secondary)', fontSize: 13, marginTop: 0 }}>{title}</p>
         <div className="stack" style={{ gap: 10 }}>
           {entries.map((entry, index) => (
-            <div key={index} style={{ borderTop: '1px solid var(--border-hairline)', paddingTop: 10 }}>
+            <div key={index} style={{ borderTop: '1px solid var(--divider)', paddingTop: 10 }}>
               <div style={{ fontSize: 13, fontWeight: 600 }}>{entry.label}</div>
               {entry.path ? (
                 <div style={{ fontFamily: 'ui-monospace, monospace', fontSize: 11, color: 'var(--ink-muted)', wordBreak: 'break-all' }}>{entry.path}</div>

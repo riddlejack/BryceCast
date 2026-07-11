@@ -17,10 +17,10 @@ const StartFinishSlope = ({ start, finish, fieldSize }: { start: number; finish:
       <line x1="60" y1={toY(start)} x2="240" y2={toY(finish)} stroke="var(--axis-baseline)" strokeWidth="2.5" />
       <circle cx="60" cy={toY(start)} r="6" fill="var(--ink-secondary)" stroke="var(--surface-1)" strokeWidth="2" />
       <circle cx="240" cy={toY(finish)} r="7" fill="var(--bryce)" stroke="var(--surface-1)" strokeWidth="2" />
-      <text x="60" y={toY(start) - 12} textAnchor="middle" fill="var(--ink-secondary)" fontSize="12" fontWeight="600" fontFamily="Archivo, sans-serif">
+      <text x="60" y={toY(start) - 12} textAnchor="middle" fill="var(--ink-secondary)" fontSize="12" fontWeight="550" fontFamily="-apple-system, system-ui, sans-serif">
         P{start}
       </text>
-      <text x="240" y={toY(finish) - 13} textAnchor="middle" fill="var(--bryce)" fontSize="14" fontWeight="750" fontFamily="Archivo, sans-serif">
+      <text x="240" y={toY(finish) - 13} textAnchor="middle" fill="var(--ink-primary)" fontSize="14" fontWeight="650" fontFamily="-apple-system, system-ui, sans-serif">
         P{finish}
       </text>
       <text x="60" y="102" textAnchor="middle" fill="var(--ink-muted)" fontSize="10">
@@ -237,7 +237,7 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
         style={undefined}
       >
         <div className="row row--between" style={{ alignItems: 'flex-start' }}>
-          <span className="caption" style={{ color: 'var(--bryce)', letterSpacing: '0.12em' }}>Result</span>
+          <span className="caption">Result</span>
           <SourcePill
             title={pack.raceLabel}
             entries={pack.sourceRefs.slice(0, 6).map((ref) => ({
@@ -249,9 +249,7 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
         </div>
         <div className="grid grid--split" style={{ alignItems: 'center' }}>
           <div className="stat">
-            <span className="stat__value stat__value--hero" style={{ color: 'var(--bryce)' }}>
-              {formatPosition(finish)}
-            </span>
+            <span className="stat__value stat__value--hero">{formatPosition(finish)}</span>
             {gain ? (
               <span className={`stat__delta ${gain.direction === 'up' ? 'stat__delta--up' : 'stat__delta--down'}`}>
                 {gain.text} from {formatPosition(start)}

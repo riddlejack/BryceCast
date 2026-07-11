@@ -1,7 +1,10 @@
 # BryceCast V3 Design Brief
 
 Author: Claude Fable 5 (lead product/design). Date: 2026-07-02.
-Status: controlling document for the V3 frontend rebuild. Supersedes all prior
+Status: product structure, data contracts, and editorial rules remain binding.
+The VISUAL SYSTEM sections below (dark-first theme, Archivo/Inter, gold-as-text)
+were superseded on 2026-07-11 by docs/DESIGN_TASTE.md — light, system-font,
+near-monochrome, gold as a mark only. Supersedes all prior
 UI direction (MagicPath mocks, UI blueprint visual options, V2 scaffold layout).
 Data contracts, source guardrails, and live-state gates from
 `docs/UI_ANALYTICS_PRODUCT_CONTRACT.md` and `docs/LIVE_RACE_DAY_PRODUCT_CONTRACT.md`

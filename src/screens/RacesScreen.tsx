@@ -22,14 +22,9 @@ const RaceRow = ({ entry }: { entry: ArchiveEntry }) => {
       className="tower__row"
       style={{ gridTemplateColumns: '56px minmax(0,1fr) auto auto auto 16px' }}
     >
-      <span
-        className="figure"
-        style={{
-          fontSize: 18,
-          color: top10 ? 'var(--bryce)' : 'var(--ink-primary)'
-        }}
-      >
+      <span className="figure row" style={{ fontSize: 17, gap: 4, color: 'var(--ink-primary)' }}>
         {formatPosition(finish)}
+        {top10 ? <span aria-label="top ten" style={{ width: 5, height: 5, borderRadius: 2, background: 'var(--bryce)' }} /> : null}
       </span>
       <span className="tower__name" style={{ whiteSpace: 'normal' }}>
         {shortLabel}

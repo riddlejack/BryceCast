@@ -65,7 +65,7 @@ const ChapterCard = ({
       <Card className={current ? undefined : 'panel--quiet'}>
         <div className="row row--between row--wrap" style={{ alignItems: 'flex-start', gap: 10 }}>
           <div>
-            <span className="caption" style={current ? { color: 'var(--bryce)' } : undefined}>{chapter.years}</span>
+            <span className="caption" style={current ? { color: 'var(--ink-primary)', fontWeight: 570 } : undefined}>{chapter.years}</span>
             <h2 className="display" style={{ fontSize: 18, margin: '3px 0 0' }}>
               {chapter.short ?? chapter.name}
             </h2>
