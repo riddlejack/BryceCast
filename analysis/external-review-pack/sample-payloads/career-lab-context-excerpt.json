@@ -1,0 +1,315 @@
+{
+  "schemaVersion": "brycecast.careerLabContextPack.v1",
+  "generatedAt": "2026-06-18T17:52:08Z",
+  "resultConversionRows": 137,
+  "seriesSummary": [
+    {
+      "avgFinish": "10.738095238095237",
+      "avgFinishPercentile": "0.49766666666666665",
+      "avgGain": "0.55",
+      "issueLikeStatusRate": "0.0",
+      "medianFinish": "11.0",
+      "raceRows": "42",
+      "seriesId": "series_gb3",
+      "seriesName": "GB3 Championship",
+      "top10Rate": "0.42857142857142855",
+      "top5Rate": "0.11904761904761904"
+    },
+    {
+      "avgFinish": "12.222222222222221",
+      "avgFinishPercentile": "0.4593833333333333",
+      "avgGain": "-0.9722222222222222",
+      "issueLikeStatusRate": "0.1388888888888889",
+      "medianFinish": "12.0",
+      "raceRows": "36",
+      "seriesId": "series_indy_nxt",
+      "seriesName": "INDY NXT",
+      "top10Rate": "0.4722222222222222",
+      "top5Rate": "0.1111111111111111"
+    },
+    {
+      "avgFinish": "4.75",
+      "avgFinishPercentile": "0.74518",
+      "avgGain": "",
+      "issueLikeStatusRate": "0.0",
+      "medianFinish": "4.0",
+      "raceRows": "20",
+      "seriesId": "series_frp_f1600",
+      "seriesName": "F1600 Championship Series",
+      "top10Rate": "0.95",
+      "top5Rate": "0.7"
+    },
+    {
+      "avgFinish": "4.176470588235294",
+      "avgFinishPercentile": "0.6308117647058824",
+      "avgGain": "-0.5882352941176471",
+      "issueLikeStatusRate": "0.0",
+      "medianFinish": "4.0",
+      "raceRows": "17",
+      "seriesId": "series_euroformula_open",
+      "seriesName": "Euroformula Open",
+      "top10Rate": "1.0",
+      "top5Rate": "0.7058823529411765"
+    },
+    {
+      "avgFinish": "4.733333333333333",
+      "avgFinishPercentile": "0.8619666666666667",
+      "avgGain": "0.8",
+      "issueLikeStatusRate": "0.0",
+      "medianFinish": "5.0",
+      "raceRows": "15",
+      "seriesId": "series_formula_ford",
+      "seriesName": "Formula Ford",
+      "top10Rate": "1.0",
+      "top5Rate": "0.8"
+    },
+    {
+      "avgFinish": "6.166666666666667",
+      "avgFinishPercentile": "0.6762",
+      "avgGain": "-0.5",
+      "issueLikeStatusRate": "0.0",
+      "medianFinish": "6.5",
+      "raceRows": "6",
+      "seriesId": "series_froc",
+      "seriesName": "Castrol Toyota Formula Regional Oceania Championship",
+      "top10Rate": "1.0",
+      "top5Rate": "0.3333333333333333"
+    },
+    {
+      "avgFinish": "6.0",
+      "avgFinishPercentile": "0.918",
+      "avgGain": "",
+      "issueLikeStatusRate": "0.0",
+      "medianFinish": "6.0",
+      "raceRows": "1",
+      "seriesId": "series_imsa_weathertech",
+      "seriesName": "IMSA WeatherTech SportsCar Championship",
+      "top10Rate": "1.0",
+      "top5Rate": "0.0"
+    }
+  ],
+  "metricFamilyParity": [
+    {
+      "caveat": "Use percentiles alongside raw finish because field sizes and formats vary by series.",
+      "metricFamily": "result_conversion",
+      "metricLabel": "Result conversion across all series",
+      "parityStatus": "production_safe",
+      "seriesId": "series_euroformula_open",
+      "seriesName": "Euroformula Open",
+      "sourceRowsOrSessions": "17",
+      "uiUse": "Use in Career Analytics Lab."
+    },
+    {
+      "caveat": "Qualifying rows exist; display session-format and group caveats where applicable.",
+      "metricFamily": "qualifying_conversion",
+      "metricLabel": "Qualifying-to-race conversion where qualifying rows exist",
+      "parityStatus": "production_safe",
+      "seriesId": "series_euroformula_open",
+      "seriesName": "Euroformula Open",
+      "sourceRowsOrSessions": "6",
+      "uiUse": "Use in Career Analytics Lab."
+    },
+    {
+      "caveat": "Venue and track-type coverage comes from canonical event and track metadata.",
+      "metricFamily": "track_venue_history",
+      "metricLabel": "Track type and venue history",
+      "parityStatus": "production_safe",
+      "seriesId": "series_euroformula_open",
+      "seriesName": "Euroformula Open",
+      "sourceRowsOrSessions": "6",
+      "uiUse": "Use in Career Analytics Lab."
+    },
+    {
+      "caveat": "No trustworthy source-backed weather rows currently available for this series.",
+      "metricFamily": "weather_context",
+      "metricLabel": "Weather or conditions where source-backed",
+      "parityStatus": "unavailable",
+      "seriesId": "series_euroformula_open",
+      "seriesName": "Euroformula Open",
+      "sourceRowsOrSessions": "0",
+      "uiUse": "Show unavailable or omit from comparison charts."
+    },
+    {
+      "caveat": "No lap-sample rows currently available for Bryce in this series.",
+      "metricFamily": "lap_shape",
+      "metricLabel": "Lap-shape where lap samples exist",
+      "parityStatus": "unavailable",
+      "seriesId": "series_euroformula_open",
+      "seriesName": "Euroformula Open",
+      "sourceRowsOrSessions": "0",
+      "uiUse": "Show unavailable or omit from comparison charts."
+    },
+    {
+      "caveat": "Full-field results support descriptive team/teammate context, not engineering root-cause attribution.",
+      "metricFamily": "team_teammate_context",
+      "metricLabel": "Team and teammate context where field rows support it",
+      "parityStatus": "source_bounded_partial",
+      "seriesId": "series_euroformula_open",
+      "seriesName": "Euroformula Open",
+      "sourceRowsOrSessions": "160",
+      "uiUse": "Use with coverage badge and denominators."
+    },
+    {
+      "caveat": "No official section-metric rows currently available for this series.",
+      "metricFamily": "section_pace",
+      "metricLabel": "Section pace where official section metrics exist",
+      "parityStatus": "unavailable",
+      "seriesId": "series_euroformula_open",
+      "seriesName": "Euroformula Open",
+      "sourceRowsOrSessions": "0",
+      "uiUse": "Show unavailable or omit from comparison charts."
+    },
+    {
+      "caveat": "Use percentiles alongside raw finish because field sizes and formats vary by series.",
+      "metricFamily": "result_conversion",
+      "metricLabel": "Result conversion across all series",
+      "parityStatus": "production_safe",
+      "seriesId": "series_formula_ford",
+      "seriesName": "Formula Ford",
+      "sourceRowsOrSessions": "15",
+      "uiUse": "Use in Career Analytics Lab."
+    },
+    {
+      "caveat": "No qualifying rows currently support a start-to-race conversion model for this series.",
+      "metricFamily": "qualifying_conversion",
+      "metricLabel": "Qualifying-to-race conversion where qualifying rows exist",
+      "parityStatus": "unavailable_without_guessing",
+      "seriesId": "series_formula_ford",
+      "seriesName": "Formula Ford",
+      "sourceRowsOrSessions": "0",
+      "uiUse": "Show unavailable or omit from comparison charts."
+    },
+    {
+      "caveat": "Venue and track-type coverage comes from canonical event and track metadata.",
+      "metricFamily": "track_venue_history",
+      "metricLabel": "Track type and venue history",
+      "parityStatus": "production_safe",
+      "seriesId": "series_formula_ford",
+      "seriesName": "Formula Ford",
+      "sourceRowsOrSessions": "4",
+      "uiUse": "Use in Career Analytics Lab."
+    },
+    {
+      "caveat": "Use as ambient/session context with source and confidence labels; do not claim causal weather effects.",
+      "metricFamily": "weather_context",
+      "metricLabel": "Weather or conditions where source-backed",
+      "parityStatus": "source_bounded_partial",
+      "seriesId": "series_formula_ford",
+      "seriesName": "Formula Ford",
+      "sourceRowsOrSessions": "46",
+      "uiUse": "Use with coverage badge and denominators."
+    },
+    {
+      "caveat": "Lap row grains differ by source family; use within-series first and show coverage denominators.",
+      "metricFamily": "lap_shape",
+      "metricLabel": "Lap-shape where lap samples exist",
+      "parityStatus": "source_bounded_partial",
+      "seriesId": "series_formula_ford",
+      "seriesName": "Formula Ford",
+      "sourceRowsOrSessions": "282",
+      "uiUse": "Use with coverage badge and denominators."
+    },
+    {
+      "caveat": "Full-field results support descriptive team/teammate context, not engineering root-cause attribution.",
+      "metricFamily": "team_teammate_context",
+      "metricLabel": "Team and teammate context where field rows support it",
+      "parityStatus": "source_bounded_partial",
+      "seriesId": "series_formula_ford",
+      "seriesName": "Formula Ford",
+      "sourceRowsOrSessions": "1070",
+      "uiUse": "Use with coverage badge and denominators."
+    },
+    {
+      "caveat": "No official section-metric rows currently available for this series.",
+      "metricFamily": "section_pace",
+      "metricLabel": "Section pace where official section metrics exist",
+      "parityStatus": "unavailable",
+      "seriesId": "series_formula_ford",
+      "seriesName": "Formula Ford",
+      "sourceRowsOrSessions": "0",
+      "uiUse": "Show unavailable or omit from comparison charts."
+    }
+  ],
+  "topCareerStories": [
+    {
+      "detail": "GB3 Championship has 42 race rows.",
+      "story": "Largest source-backed race sample"
+    },
+    {
+      "detail": "GB3 combines the largest non-INDY result sample with qualifying support.",
+      "story": "Best next historic deep dive"
+    },
+    {
+      "detail": "Career road-course rows are broad enough for priors, but INDY NXT road-course rows control Road America context.",
+      "story": "Track-type prior"
+    },
+    {
+      "detail": "2024 FROC 2024 Round 5 - Highlands Motorsport Park; 2023 Euroformula Open 2023 Round 2 - Spa-Francorchamps; 2023 Euroformula Open 2023 Round 3 - Hungaroring",
+      "story": "Best finish-percentile races"
+    }
+  ],
+  "chartSpecs": [
+    {
+      "fields": [
+        "seriesName",
+        "avgFinishPercentile"
+      ],
+      "id": "series_finish_percentile",
+      "type": "bar"
+    },
+    {
+      "fields": [
+        "seriesName",
+        "metricFamily",
+        "parityStatus"
+      ],
+      "id": "metric_family_parity_heatmap",
+      "type": "heatmap"
+    },
+    {
+      "fields": [
+        "startPosition",
+        "finishPosition",
+        "finishPercentile",
+        "seriesName"
+      ],
+      "id": "result_conversion_scatter",
+      "type": "scatter"
+    },
+    {
+      "id": "track_type_prior_strip",
+      "source": "analysis/predictive-race-intelligence/output/career_prior_matrix.csv",
+      "type": "small_multiple"
+    }
+  ],
+  "caveats": [
+    "Career Lab is parity-aware; unavailable metric families must render unavailable instead of inferred.",
+    "Raw top-10 rates are not comparable across every junior series without field-size context."
+  ],
+  "sourceRefs": [
+    {
+      "bytes": 914,
+      "path": "analysis/career-parity/output/tables/career_series_result_summary.csv",
+      "role": "career summary",
+      "sha256": "b8b7399ebdc8056b8628f7a5fe6204992dfa2090f17dfc563ad259bf050c3a36"
+    },
+    {
+      "bytes": 12246,
+      "path": "analysis/career-parity/output/tables/career_metric_family_parity.csv",
+      "role": "metric parity",
+      "sha256": "53701a457859aa05eaf5cb7ad2e47506bb130af27b5da27a36af61fa5cf3044c"
+    },
+    {
+      "bytes": 35106,
+      "path": "analysis/career-parity/output/tables/career_result_conversion.csv",
+      "role": "result conversion",
+      "sha256": "a43fd0126ab204a7524deeae936955c08c71636dece520561f5b1708dbc54570"
+    },
+    {
+      "bytes": 23440,
+      "path": "analysis/predictive-race-intelligence/output/career_prior_matrix.csv",
+      "role": "career prior matrix chart source",
+      "sha256": "9b2958fa1af10c6ea992cdd2308654d392213516ddb61e788932824eed7324c1"
+    }
+  ]
+}

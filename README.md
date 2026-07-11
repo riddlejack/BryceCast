@@ -94,7 +94,9 @@ This is the current implementation shape, not a requirement for the next UI. The
 
 The core requirement is now a polished Bryce-centric companion surface for desktop web and iPhone: live timing, source freshness, official broadcast routing, Bryce-focused analytics, alerts, race context, historical benchmarks, and clear unavailable-state handling for POV and isolated radio. Use `docs/LIVE_POV_ACCESS_FINDINGS.md` and `docs/POV_ESCALATION_LADDER.md` only as historical research unless new access appears.
 
-Use `docs/CODEX_HANDOFF_CURRENT.md` first for current lane boundaries, canonical generated counts, known same-file churn, live/career split, and the ambiguity register. If a contradiction cannot be resolved from source files, generated reports, live checks, tests, or official sources, record it there rather than guessing.
+Use `CLAUDE.md` and `docs/FABLE_HANDOFF.md` first when starting the Claude Fable 5 / Codex GPT-5.5 build phase. They record the current lead-agent workflow, Jack's latest product vision, the verified Codex plugin setup, and the post-Road America live-data interpretation.
+
+Use `docs/CODEX_HANDOFF_CURRENT.md` next for current lane boundaries, canonical generated counts, known same-file churn, live/career split, and the ambiguity register. If a contradiction cannot be resolved from source files, generated reports, live checks, tests, or official sources, record it there rather than guessing.
 
 Use `docs/SOURCE-INVENTORY.md` for the current source map, confirmed feeds, candidate sources, and unresolved access gaps.
 

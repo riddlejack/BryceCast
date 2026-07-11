@@ -1,0 +1,374 @@
+{
+  "title": "Road America Race Weekend Prep",
+  "readiness": "partial",
+  "events": [
+    {
+      "sourcePayload": "upcoming_event_context_pack",
+      "contextPackRef": {
+        "bytes": 11505,
+        "eventId": "event_indy_nxt_2026_5545",
+        "id": "upcoming_event_indy_nxt_2026_5545_grand_prix_at_road_america_race_1",
+        "path": "analysis/predictive-race-intelligence/output/context-packs/upcoming-events/upcoming_event_indy_nxt_2026_5545_grand_prix_at_road_america_race_1.json",
+        "sha256": "da27cdd63898cff626c3d39e5fb0493ab32e7949c03525ee863976c47d12d3fc",
+        "sourceRefs": [
+          "analysis/indy-nxt-discovery/output/deep_dive/tables/future_weekend_prep_inputs.csv",
+          "analysis/indy-nxt-discovery/output/deep_dive/tables/race_debrief_scores.csv",
+          "analysis/career-parity/output/tables/career_series_result_summary.csv",
+          "analysis/career-parity/output/tables/career_result_conversion.csv",
+          "analysis/predictive-race-intelligence/output/career_prior_matrix.csv",
+          "analysis/predictive-race-intelligence/output/model_scorecard.json"
+        ],
+        "type": "upcoming_event",
+        "modifiedAt": "2026-06-18T17:52:08.301Z"
+      },
+      "eventId": "event_indy_nxt_2026_5545",
+      "eventName": "Grand Prix at Road America Race 1",
+      "eventStartDate": "2026-06-19",
+      "trackName": "Road America",
+      "trackType": "road",
+      "trackLengthMi": 4.048,
+      "cornerCount": 14,
+      "sameTrack": {
+        "raceCount": 2,
+        "avgFinish": 8.5,
+        "avgGain": 0,
+        "top10RatePct": 100
+      },
+      "trackTypeHistory": {
+        "raceCount": 20,
+        "avgFinish": 12.6,
+        "avgGain": -2.45,
+        "finishPercentileMedian": 0.401,
+        "top10RatePct": 40
+      },
+      "predictionBand": {
+        "calibrationState": "not_calibrated_for_point_probability",
+        "claimStrength": "source_bounded_historical_prior_band",
+        "confidence": "medium_low",
+        "finishPercentileBand": {
+          "median": 0.401,
+          "n": 20,
+          "p25": 0.223,
+          "p75": 0.667
+        },
+        "modelPolicy": "No point prediction. Band is a source-backed historical prior for story/context until qualifying and live data arrive.",
+        "scorecardRef": "analysis/predictive-race-intelligence/output/model_scorecard.json",
+        "target": "finish_percentile_prior_and_top10_path",
+        "top10Policy": "path_language_only_until_calibration; show historical denominators outside predictionBand"
+      },
+      "top10Path": [
+        {
+          "actionableRead": "After qualifying, compare start position to the historical road-course conversion band and Road America analogs.",
+          "currentState": "Unknown until qualifying.",
+          "factor": "Qualifying and start position",
+          "whyItMatters": "Start-position-only LOO model modestly improves finish-percentile error versus the overall mean."
+        },
+        {
+          "actionableRead": "The product should show the range and analogs, not a single expected finish.",
+          "currentState": "Pre-event prior only.",
+          "factor": "Road-course conversion",
+          "whyItMatters": "INDY NXT road rows currently show avg finish 12.6 and top-10 rate 0.4."
+        },
+        {
+          "actionableRead": "Use same-track rows as analog stories with denominator labels.",
+          "currentState": "Small sample; useful but not enough alone.",
+          "factor": "Same-track execution",
+          "whyItMatters": "Bryce has 2 prior INDY NXT races at Road America."
+        },
+        {
+          "actionableRead": "Use live/replay data to explain when the race deviates from the pre-race band.",
+          "currentState": "Not knowable pre-race.",
+          "factor": "Keep chaos out of the result",
+          "whyItMatters": "Incident/reliability-limited races dominate downside stories in the debrief score table."
+        },
+        {
+          "actionableRead": "Anchor a Race Week card to the concrete Road America analog, with raw outcome details deferred to race-debrief packs.",
+          "currentState": "Historical analog.",
+          "factor": "Recent Road America analog",
+          "whyItMatters": "2025 Grand Prix at Road America is retained as a same-track historical analog without ranking by outcome."
+        }
+      ],
+      "analogRaces": [
+        {
+          "analogType": "same_track",
+          "analogyBasis": "track_match",
+          "confidence": "medium",
+          "historicalOutcomePolicy": "outcome_fields_suppressed_in_upcoming_pack; use race_debrief context packs for detailed outcomes",
+          "raceLabel": "2025 Grand Prix at Road America",
+          "sessionId": "session_indy_nxt_2025_6453",
+          "trackName": "Road America",
+          "trackType": "road"
+        },
+        {
+          "analogType": "same_track",
+          "analogyBasis": "track_match",
+          "confidence": "medium",
+          "historicalOutcomePolicy": "outcome_fields_suppressed_in_upcoming_pack; use race_debrief context packs for detailed outcomes",
+          "raceLabel": "2024 Grand Prix at Road America",
+          "sessionId": "session_indy_nxt_2024_6316",
+          "trackName": "Road America",
+          "trackType": "road"
+        },
+        {
+          "analogType": "same_track_type",
+          "analogyBasis": "track_type_match",
+          "confidence": "medium",
+          "historicalOutcomePolicy": "outcome_fields_suppressed_in_upcoming_pack; use race_debrief context packs for detailed outcomes",
+          "raceLabel": "2026 Indianapolis Grand Prix Race 2 R2",
+          "sessionId": "session_indy_nxt_2026_6765",
+          "trackName": "Indianapolis Motor Speedway Road Course",
+          "trackType": "road"
+        },
+        {
+          "analogType": "same_track_type",
+          "analogyBasis": "track_type_match",
+          "confidence": "medium",
+          "historicalOutcomePolicy": "outcome_fields_suppressed_in_upcoming_pack; use race_debrief context packs for detailed outcomes",
+          "raceLabel": "2026 Indianapolis Grand Prix Race 1 R1",
+          "sessionId": "session_indy_nxt_2026_6756",
+          "trackName": "Indianapolis Motor Speedway Road Course",
+          "trackType": "road"
+        },
+        {
+          "analogType": "same_track_type",
+          "analogyBasis": "track_type_match",
+          "confidence": "medium",
+          "historicalOutcomePolicy": "outcome_fields_suppressed_in_upcoming_pack; use race_debrief context packs for detailed outcomes",
+          "raceLabel": "2026 Grand Prix of Alabama Race 2 R2",
+          "sessionId": "session_indy_nxt_2026_6752",
+          "trackName": "Barber Motorsports Park",
+          "trackType": "road"
+        },
+        {
+          "analogType": "same_track_type",
+          "analogyBasis": "track_type_match",
+          "confidence": "medium",
+          "historicalOutcomePolicy": "outcome_fields_suppressed_in_upcoming_pack; use race_debrief context packs for detailed outcomes",
+          "raceLabel": "2026 Grand Prix of Alabama Race 1 R1",
+          "sessionId": "session_indy_nxt_2026_6750",
+          "trackName": "Barber Motorsports Park",
+          "trackType": "road"
+        }
+      ],
+      "chartSpecs": [
+        {
+          "fields": [
+            "sameTrackAvgFinish",
+            "trackTypeAvgFinish",
+            "sameTrackTop10Rate",
+            "trackTypeTop10Rate"
+          ],
+          "id": "same_track_vs_track_type",
+          "type": "bar"
+        },
+        {
+          "fields": [
+            "p25",
+            "median",
+            "p75"
+          ],
+          "id": "finish_percentile_band",
+          "source": "predictionBand.finishPercentileBand",
+          "type": "interval"
+        },
+        {
+          "fields": [
+            "raceLabel",
+            "trackName",
+            "trackType",
+            "analogType",
+            "confidence"
+          ],
+          "id": "analog_race_table",
+          "type": "ranked_table"
+        }
+      ],
+      "weatherState": "future_unavailable_in_historical_dataset",
+      "sourceState": "schedule_plus_historical_results"
+    },
+    {
+      "sourcePayload": "upcoming_event_context_pack",
+      "contextPackRef": {
+        "bytes": 11505,
+        "eventId": "event_indy_nxt_2026_5537",
+        "id": "upcoming_event_indy_nxt_2026_5537_grand_prix_at_road_america_race_2",
+        "path": "analysis/predictive-race-intelligence/output/context-packs/upcoming-events/upcoming_event_indy_nxt_2026_5537_grand_prix_at_road_america_race_2.json",
+        "sha256": "1eb517aa1e7092c1d0ae523159f7a47d98ea4ab3b1b0924574cf8384d6cdd7d7",
+        "sourceRefs": [
+          "analysis/indy-nxt-discovery/output/deep_dive/tables/future_weekend_prep_inputs.csv",
+          "analysis/indy-nxt-discovery/output/deep_dive/tables/race_debrief_scores.csv",
+          "analysis/career-parity/output/tables/career_series_result_summary.csv",
+          "analysis/career-parity/output/tables/career_result_conversion.csv",
+          "analysis/predictive-race-intelligence/output/career_prior_matrix.csv",
+          "analysis/predictive-race-intelligence/output/model_scorecard.json"
+        ],
+        "type": "upcoming_event",
+        "modifiedAt": "2026-06-18T17:52:08.303Z"
+      },
+      "eventId": "event_indy_nxt_2026_5537",
+      "eventName": "Grand Prix at Road America Race 2",
+      "eventStartDate": "2026-06-20",
+      "trackName": "Road America",
+      "trackType": "road",
+      "trackLengthMi": 4.048,
+      "cornerCount": 14,
+      "sameTrack": {
+        "raceCount": 2,
+        "avgFinish": 8.5,
+        "avgGain": 0,
+        "top10RatePct": 100
+      },
+      "trackTypeHistory": {
+        "raceCount": 20,
+        "avgFinish": 12.6,
+        "avgGain": -2.45,
+        "finishPercentileMedian": 0.401,
+        "top10RatePct": 40
+      },
+      "predictionBand": {
+        "calibrationState": "not_calibrated_for_point_probability",
+        "claimStrength": "source_bounded_historical_prior_band",
+        "confidence": "medium_low",
+        "finishPercentileBand": {
+          "median": 0.401,
+          "n": 20,
+          "p25": 0.223,
+          "p75": 0.667
+        },
+        "modelPolicy": "No point prediction. Band is a source-backed historical prior for story/context until qualifying and live data arrive.",
+        "scorecardRef": "analysis/predictive-race-intelligence/output/model_scorecard.json",
+        "target": "finish_percentile_prior_and_top10_path",
+        "top10Policy": "path_language_only_until_calibration; show historical denominators outside predictionBand"
+      },
+      "top10Path": [
+        {
+          "actionableRead": "After qualifying, compare start position to the historical road-course conversion band and Road America analogs.",
+          "currentState": "Unknown until qualifying.",
+          "factor": "Qualifying and start position",
+          "whyItMatters": "Start-position-only LOO model modestly improves finish-percentile error versus the overall mean."
+        },
+        {
+          "actionableRead": "The product should show the range and analogs, not a single expected finish.",
+          "currentState": "Pre-event prior only.",
+          "factor": "Road-course conversion",
+          "whyItMatters": "INDY NXT road rows currently show avg finish 12.6 and top-10 rate 0.4."
+        },
+        {
+          "actionableRead": "Use same-track rows as analog stories with denominator labels.",
+          "currentState": "Small sample; useful but not enough alone.",
+          "factor": "Same-track execution",
+          "whyItMatters": "Bryce has 2 prior INDY NXT races at Road America."
+        },
+        {
+          "actionableRead": "Use live/replay data to explain when the race deviates from the pre-race band.",
+          "currentState": "Not knowable pre-race.",
+          "factor": "Keep chaos out of the result",
+          "whyItMatters": "Incident/reliability-limited races dominate downside stories in the debrief score table."
+        },
+        {
+          "actionableRead": "Anchor a Race Week card to the concrete Road America analog, with raw outcome details deferred to race-debrief packs.",
+          "currentState": "Historical analog.",
+          "factor": "Recent Road America analog",
+          "whyItMatters": "2025 Grand Prix at Road America is retained as a same-track historical analog without ranking by outcome."
+        }
+      ],
+      "analogRaces": [
+        {
+          "analogType": "same_track",
+          "analogyBasis": "track_match",
+          "confidence": "medium",
+          "historicalOutcomePolicy": "outcome_fields_suppressed_in_upcoming_pack; use race_debrief context packs for detailed outcomes",
+          "raceLabel": "2025 Grand Prix at Road America",
+          "sessionId": "session_indy_nxt_2025_6453",
+          "trackName": "Road America",
+          "trackType": "road"
+        },
+        {
+          "analogType": "same_track",
+          "analogyBasis": "track_match",
+          "confidence": "medium",
+          "historicalOutcomePolicy": "outcome_fields_suppressed_in_upcoming_pack; use race_debrief context packs for detailed outcomes",
+          "raceLabel": "2024 Grand Prix at Road America",
+          "sessionId": "session_indy_nxt_2024_6316",
+          "trackName": "Road America",
+          "trackType": "road"
+        },
+        {
+          "analogType": "same_track_type",
+          "analogyBasis": "track_type_match",
+          "confidence": "medium",
+          "historicalOutcomePolicy": "outcome_fields_suppressed_in_upcoming_pack; use race_debrief context packs for detailed outcomes",
+          "raceLabel": "2026 Indianapolis Grand Prix Race 2 R2",
+          "sessionId": "session_indy_nxt_2026_6765",
+          "trackName": "Indianapolis Motor Speedway Road Course",
+          "trackType": "road"
+        },
+        {
+          "analogType": "same_track_type",
+          "analogyBasis": "track_type_match",
+          "confidence": "medium",
+          "historicalOutcomePolicy": "outcome_fields_suppressed_in_upcoming_pack; use race_debrief context packs for detailed outcomes",
+          "raceLabel": "2026 Indianapolis Grand Prix Race 1 R1",
+          "sessionId": "session_indy_nxt_2026_6756",
+          "trackName": "Indianapolis Motor Speedway Road Course",
+          "trackType": "road"
+        },
+        {
+          "analogType": "same_track_type",
+          "analogyBasis": "track_type_match",
+          "confidence": "medium",
+          "historicalOutcomePolicy": "outcome_fields_suppressed_in_upcoming_pack; use race_debrief context packs for detailed outcomes",
+          "raceLabel": "2026 Grand Prix of Alabama Race 2 R2",
+          "sessionId": "session_indy_nxt_2026_6752",
+          "trackName": "Barber Motorsports Park",
+          "trackType": "road"
+        },
+        {
+          "analogType": "same_track_type",
+          "analogyBasis": "track_type_match",
+          "confidence": "medium",
+          "historicalOutcomePolicy": "outcome_fields_suppressed_in_upcoming_pack; use race_debrief context packs for detailed outcomes",
+          "raceLabel": "2026 Grand Prix of Alabama Race 1 R1",
+          "sessionId": "session_indy_nxt_2026_6750",
+          "trackName": "Barber Motorsports Park",
+          "trackType": "road"
+        }
+      ],
+      "chartSpecs": [
+        {
+          "fields": [
+            "sameTrackAvgFinish",
+            "trackTypeAvgFinish",
+            "sameTrackTop10Rate",
+            "trackTypeTop10Rate"
+          ],
+          "id": "same_track_vs_track_type",
+          "type": "bar"
+        },
+        {
+          "fields": [
+            "p25",
+            "median",
+            "p75"
+          ],
+          "id": "finish_percentile_band",
+          "source": "predictionBand.finishPercentileBand",
+          "type": "interval"
+        },
+        {
+          "fields": [
+            "raceLabel",
+            "trackName",
+            "trackType",
+            "analogType",
+            "confidence"
+          ],
+          "id": "analog_race_table",
+          "type": "ranked_table"
+        }
+      ],
+      "weatherState": "future_unavailable_in_historical_dataset",
+      "sourceState": "schedule_plus_historical_results"
+    }
+  ]
+}

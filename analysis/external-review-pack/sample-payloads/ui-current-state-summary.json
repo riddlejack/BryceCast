@@ -1,0 +1,19 @@
+{
+  "screens": [
+    "roadAmericaPrep",
+    "liveCompanionFixtures",
+    "raceDebrief",
+    "careerLab",
+    "sourceOps"
+  ],
+  "roadAmericaEventCount": 2,
+  "liveFixtureCount": 10,
+  "debriefSeedCount": 3,
+  "careerSeriesCount": 7,
+  "sourceInventoryCount": 34,
+  "adapterFiles": [
+    "src/data/uiContextAdapter.ts",
+    "tests/uiContextAdapter.test.ts",
+    "scripts/test-ui-context-adapter.mjs"
+  ]
+}

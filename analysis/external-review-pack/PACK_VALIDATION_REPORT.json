@@ -1,0 +1,120 @@
+{
+  "ok": true,
+  "generatedAt": "2026-06-19T21:18:41.503Z",
+  "checks": [
+    {
+      "id": "ui_data_package_schema",
+      "ok": true,
+      "details": "brycecast.uiDataPackage.v1"
+    },
+    {
+      "id": "context_pack_manifest_schema",
+      "ok": true,
+      "details": "brycecast.predictiveRaceIntelligence.contextPackManifest.v1"
+    },
+    {
+      "id": "context_pack_counts",
+      "ok": true,
+      "details": {
+        "career_lab": 1,
+        "live_race_day": 1,
+        "race_debrief": 36,
+        "upcoming_event": 9
+      }
+    },
+    {
+      "id": "road_america_events",
+      "ok": true,
+      "details": [
+        "Grand Prix at Road America Race 1",
+        "Grand Prix at Road America Race 2"
+      ]
+    },
+    {
+      "id": "road_america_payload_fields",
+      "ok": true,
+      "details": [
+        {
+          "eventName": "Grand Prix at Road America Race 1",
+          "hasPredictionBand": true,
+          "top10Path": 5,
+          "chartSpecs": 3,
+          "contextPackRef": "analysis/predictive-race-intelligence/output/context-packs/upcoming-events/upcoming_event_indy_nxt_2026_5545_grand_prix_at_road_america_race_1.json"
+        },
+        {
+          "eventName": "Grand Prix at Road America Race 2",
+          "hasPredictionBand": true,
+          "top10Path": 5,
+          "chartSpecs": 3,
+          "contextPackRef": "analysis/predictive-race-intelligence/output/context-packs/upcoming-events/upcoming_event_indy_nxt_2026_5537_grand_prix_at_road_america_race_2.json"
+        }
+      ]
+    },
+    {
+      "id": "debrief_incident_penalty_context",
+      "ok": true,
+      "details": {
+        "bryceIncidentCount": 2,
+        "brycePenaltyCount": 0,
+        "leaderEntropy": 0,
+        "sessionIncidentCount": 8,
+        "sessionPenaltyCount": 6,
+        "topLeader": "Caio Collet",
+        "topLeaderShare": 1,
+        "weatherContext": "dry/cool/medium"
+      }
+    },
+    {
+      "id": "career_lab_depth",
+      "ok": true,
+      "details": {
+        "seriesSummary": 7,
+        "resultConversionRows": 137,
+        "metricFamilyParity": 14
+      }
+    },
+    {
+      "id": "career_series_count",
+      "ok": true,
+      "details": [
+        "Castrol Toyota Formula Regional Oceania Championship",
+        "Euroformula Open",
+        "F1600 Championship Series",
+        "Formula Ford",
+        "GB3 Championship",
+        "IMSA WeatherTech SportsCar Championship",
+        "INDY NXT"
+      ]
+    },
+    {
+      "id": "source_manifest_files",
+      "ok": true,
+      "details": 105
+    },
+    {
+      "id": "source_manifest_declared_files_exist",
+      "ok": true,
+      "details": []
+    },
+    {
+      "id": "source_manifest_includes_adapter_test",
+      "ok": true,
+      "details": [
+        "src/data/uiContextAdapter.ts",
+        "tests/uiContextAdapter.test.ts",
+        "scripts/test-ui-context-adapter.mjs"
+      ]
+    },
+    {
+      "id": "devspace_audit_evidence",
+      "ok": true,
+      "details": {
+        "schemaVersion": "brycecast.devspaceAuditEvidence.v1",
+        "package": "@waishnav/devspace@1.0.1",
+        "denyHome": "passed",
+        "localServerSmoke": "passed",
+        "publicTunnelStarted": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,72 @@
+[
+  {
+    "surface": "Race Weekend Prep",
+    "question": "What range does the historical context suggest before qualifying?",
+    "data": "predictionBand.finishPercentileBand plus same-track and road-course denominators",
+    "visual": "Interval band with denominator and confidence drawer",
+    "caveat": "Historical prior band only; no expected finish or top-10 probability."
+  },
+  {
+    "surface": "Race Weekend Prep",
+    "question": "What needs to go right for a strong Road America result?",
+    "data": "top10Path, analogRaces, same-track and track-type history",
+    "visual": "Ordered path cards plus analog race table",
+    "caveat": "Path language only; analogs are comparables, not forecasts."
+  },
+  {
+    "surface": "Race Weekend Prep",
+    "question": "Where does Road America historically stress Bryce by section?",
+    "data": "section lap deep dive Road America prep context",
+    "visual": "Section-family profile and top/weak family ranked bars",
+    "caveat": "Official PDF-derived historical rows, not telemetry."
+  },
+  {
+    "surface": "Live Companion",
+    "question": "Can we trust the current live session?",
+    "data": "/api/readiness, /api/sources, live race-day context pack",
+    "visual": "Readiness banner, gates checklist, source drawer",
+    "caveat": "Fixture/API-plumbed until an active INDY NXT rehearsal proves it."
+  },
+  {
+    "surface": "Live Companion",
+    "question": "Where is Bryce and what changed?",
+    "data": "/api/bryce, /api/timing, /api/replay/bryce",
+    "visual": "Bryce status tile, timing tower focus band, guarded replay trend shell",
+    "caveat": "No GPS/moving dots, team radio audio, live POV, or tire/overtake strategy without proof."
+  },
+  {
+    "surface": "Race Debrief",
+    "question": "Where did the race turn?",
+    "data": "race-debrief pack, lapStory, raceContext, sectionSignal",
+    "visual": "Lap-position line, segment strip, inflection callouts, incident/penalty chips",
+    "caveat": "Race debrief labels require review before public copy."
+  },
+  {
+    "surface": "Race Debrief",
+    "question": "How did qualifying convert into result?",
+    "data": "career_result_conversion, prep_session_signals, race_debrief_scores",
+    "visual": "Start-finish slope/dumbbell and conversion percentile badge",
+    "caveat": "Group/combined qualifying formats need explicit source caveats."
+  },
+  {
+    "surface": "Career Lab",
+    "question": "What can we compare across series without overclaiming?",
+    "data": "career metric parity, career series summary, coverage matrix",
+    "visual": "Parity heatmap, sortable series table, available/unavailable cells",
+    "caveat": "Do not project INDY NXT lap depth onto older series."
+  },
+  {
+    "surface": "Career Lab",
+    "question": "What deep career modules are actually source-backed?",
+    "data": "career dimension, IMSA stint/class pace, Formula Ford lap-shape context packs",
+    "visual": "Module menu with source badges and drilldowns",
+    "caveat": "Descriptive only; no telemetry, setup, or causal root-cause claims."
+  },
+  {
+    "surface": "Source/Confidence",
+    "question": "Why should a user trust or distrust a screen?",
+    "data": "sourceInventory, sourceRefs, validation-report, gap ledger",
+    "visual": "Global source drawer and compact confidence/availability affordances",
+    "caveat": "Absence of imported rows is not proof nothing happened unless source semantics prove it."
+  }
+]

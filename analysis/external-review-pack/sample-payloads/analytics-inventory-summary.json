@@ -1,0 +1,492 @@
+{
+  "lanes": [
+    {
+      "lane": "UI data package",
+      "source": "analysis/ui-data-package/ui-data-package.json",
+      "generatedAt": "2026-06-18T17:52:13.930Z",
+      "counts": {
+        "screens": 5,
+        "sourceInventory": 34,
+        "liveFixtures": 10
+      },
+      "productUse": "Primary frontend fixture and source-ref package."
+    },
+    {
+      "lane": "Predictive race intelligence",
+      "source": "analysis/predictive-race-intelligence/output/summary.json",
+      "generatedAt": "2026-06-18T17:52:08Z",
+      "counts": {
+        "inventoryItems": 76,
+        "careerPriorRows": 68,
+        "indyNxtRaceRows": 36,
+        "modelRows": 14,
+        "upcomingEventPacks": 9,
+        "raceDebriefPacks": 36
+      },
+      "productUse": "Historical prior bands, top-10 path language, analogs, debrief packs, Career Lab pack."
+    },
+    {
+      "lane": "INDY NXT discovery",
+      "source": "analysis/indy-nxt-discovery/output/summary.json",
+      "generatedAt": "2026-06-16T18:12:31.143Z",
+      "counts": {
+        "analyzableBryceRaceRows": 36,
+        "datasetPath": "data/career/career.dataset.json",
+        "datasetUpdatedAt": "2026-06-16T18:12:31.143Z",
+        "headToHeadRows": 49,
+        "indyNxtEvents": 45,
+        "indyNxtSessions": 189,
+        "lapShapeRows": 36,
+        "lapTimelineRows": 1390,
+        "outputs": {
+          "charts": [
+            "analysis/indy-nxt-discovery/output/charts/best_section_percentiles.svg",
+            "analysis/indy-nxt-discovery/output/charts/featured_lap_position_trace.svg",
+            "analysis/indy-nxt-discovery/output/charts/finish_position_over_time.svg",
+            "analysis/indy-nxt-discovery/output/charts/head_to_head_win_rate.svg",
+            "analysis/indy-nxt-discovery/output/charts/largest_position_gains.svg"
+          ],
+          "insightInventory": "analysis/indy-nxt-discovery/output/UI_ANALYTICS_INSIGHT_INVENTORY.md",
+          "report": "analysis/indy-nxt-discovery/output/INDY_NXT_ANALYTICS_DISCOVERY.md",
+          "tables": [
+            "analysis/indy-nxt-discovery/output/tables/indy_nxt_correlations.csv",
+            "analysis/indy-nxt-discovery/output/tables/indy_nxt_exploratory_model.csv",
+            "analysis/indy-nxt-discovery/output/tables/indy_nxt_group_summary.csv",
+            "analysis/indy-nxt-discovery/output/tables/indy_nxt_head_to_head.csv",
+            "analysis/indy-nxt-discovery/output/tables/indy_nxt_lap_shape.csv",
+            "analysis/indy-nxt-discovery/output/tables/indy_nxt_lap_timeline.csv",
+            "analysis/indy-nxt-discovery/output/tables/indy_nxt_race_outcomes.csv",
+            "analysis/indy-nxt-discovery/output/tables/indy_nxt_section_strengths.csv",
+            "analysis/indy-nxt-discovery/output/tables/indy_nxt_weather_segments.csv"
+          ]
+        },
+        "repoHead": "ce904af",
+        "sectionStrengthRows": 989,
+        "weatherRowsInRaceSet": 36,
+        "weatherSegmentRows": 10
+      },
+      "productUse": "INDY NXT outcomes, lap shape, section strengths, weather segments, debrief seeds."
+    },
+    {
+      "lane": "Career parity",
+      "source": "analysis/career-parity/output/summary.json",
+      "generatedAt": "2026-06-16T18:12:31.143Z",
+      "counts": {
+        "datasetPath": "data/career/career.dataset.json",
+        "datasetUpdatedAt": "2026-06-16T18:12:31.143Z",
+        "metricFamilyRows": 49,
+        "modelingPriorityRows": 7,
+        "outputs": {
+          "report": "analysis/career-parity/output/CAREER_ANALYTICS_PARITY_PASS.md",
+          "tablesDir": "analysis/career-parity/output/tables"
+        },
+        "resultRows": 137,
+        "seriesSummaryRows": 7
+      },
+      "productUse": "Cross-series result conversion, series summary, metric-family parity guardrails."
+    },
+    {
+      "lane": "Section lap deep dive",
+      "source": "analysis/indy-nxt-section-lap-deep-dive/output/summary.json",
+      "generatedAt": "2026-06-18T10:49:39Z",
+      "counts": {
+        "roadAmericaPrepRows": 6,
+        "sectionFamilyRows": 248,
+        "sectionObservations": 21044,
+        "sessionSummaries": 83,
+        "sessionToRaceTransferRows": 36,
+        "topSectionRows": 2678
+      },
+      "claimStrength": "historical_backtest_only",
+      "productUse": "Practice/qualifying section profiles and Road America prep context."
+    },
+    {
+      "lane": "Race lap/section enhancement",
+      "source": "analysis/indy-nxt-race-lap-section-enhancement/output/summary.json",
+      "generatedAt": "2026-06-18T10:49:41Z",
+      "counts": {
+        "raceLapInflectionPoints": 151,
+        "raceLapMicrostates": 1390,
+        "raceLapSegments": 159,
+        "raceSectionLapObservations": 16001,
+        "raceSectionSessionSummaries": 35,
+        "roadAmericaRows": 2
+      },
+      "claimStrength": "post_race_descriptive_only",
+      "productUse": "Race lap microstates, segments, inflection overlays, race section context."
+    },
+    {
+      "lane": "Career dimension context",
+      "source": "analysis/career-dimension-context-layer/output/summary.json",
+      "generatedAt": "2026-06-18T10:49:58Z",
+      "counts": {
+        "carRows": 472,
+        "driverRows": 555,
+        "qualifyingRows": 1547,
+        "qualifyingSessionRows": 108,
+        "resultRows": 8158,
+        "teamEraRows": 90,
+        "teamRows": 75,
+        "trackAnalogRows": 210,
+        "trackRows": 42
+      },
+      "claimStrength": "source_bounded_dimension_context_not_rating_or_forecast",
+      "productUse": "Career Lab filters, team/track/driver/cohort context."
+    },
+    {
+      "lane": "Context/event narrative",
+      "source": "analysis/context-event-narrative-layer/output/summary.json",
+      "generatedAt": "2026-06-18T17:52:01Z",
+      "counts": {
+        "derivedMetricRows": 370,
+        "gapRows": 9,
+        "mediaRows": 940,
+        "seriesCoverageRows": 8,
+        "sessionRollupRows": 399,
+        "sourceEvidenceRows": 1199,
+        "timelineRows": 1370,
+        "weatherRows": 181
+      },
+      "claimStrength": "source_bounded_context_narrative_not_telemetry",
+      "productUse": "Timelines, weather/media/source lineage, gap/caveat display."
+    },
+    {
+      "lane": "IMSA Daytona stint/class pace",
+      "source": "analysis/imsa-daytona-stint-class-pace/output/summary.json",
+      "generatedAt": "2026-06-18T10:49:44Z",
+      "counts": {
+        "bryceStints": 10,
+        "car85CodriverRows": 4,
+        "driverSummaries": 231,
+        "hourlyClassRows": 100,
+        "lapObservations": 37885,
+        "stints": 1680
+      },
+      "claimStrength": "source_bounded_descriptive_stint_class_pace",
+      "productUse": "Career Lab IMSA stint/class/co-driver module."
+    },
+    {
+      "lane": "Formula Ford lap shape",
+      "source": "analysis/formula-ford-lap-shape/output/summary.json",
+      "generatedAt": "2026-06-18T10:49:53Z",
+      "counts": {
+        "conditionRows": 9,
+        "eventProgressionRows": 7,
+        "lapObservations": 282,
+        "sessionSummaries": 24
+      },
+      "claimStrength": "source_bounded_bryce_only_lap_shape",
+      "productUse": "Career Lab early-career lap-shape module."
+    }
+  ],
+  "statusCounts": {
+    "analyst_only": 5,
+    "blocked": 4,
+    "context_pack_ready": 29,
+    "deferred": 2,
+    "productized": 36
+  },
+  "contextPacks": {
+    "schemaVersion": "brycecast.predictiveRaceIntelligence.contextPackManifest.v1",
+    "generatedAt": "2026-06-18T17:52:08Z",
+    "packCounts": {
+      "career_lab": 1,
+      "live_race_day": 1,
+      "race_debrief": 36,
+      "upcoming_event": 9
+    },
+    "totalPacks": 47,
+    "byType": {
+      "career_lab": [
+        {
+          "id": "career_lab_context",
+          "path": "analysis/predictive-race-intelligence/output/context-packs/career-lab-context.json",
+          "bytes": 114796,
+          "sourceRefs": 4
+        }
+      ],
+      "live_race_day": [
+        {
+          "id": "live_race_day_context",
+          "path": "analysis/predictive-race-intelligence/output/context-packs/live-race-day-context.json",
+          "bytes": 2902,
+          "sourceRefs": 3
+        }
+      ],
+      "race_debrief": [
+        {
+          "id": "debrief_session_indy_nxt_2024_6314",
+          "path": "analysis/predictive-race-intelligence/output/context-packs/race-debriefs/debrief_session_indy_nxt_2024_6314.json",
+          "bytes": 5369,
+          "sourceRefs": 8
+        },
+        {
+          "id": "debrief_session_indy_nxt_2024_6315",
+          "path": "analysis/predictive-race-intelligence/output/context-packs/race-debriefs/debrief_session_indy_nxt_2024_6315.json",
+          "bytes": 5404,
+          "sourceRefs": 8
+        },
+        {
+          "id": "debrief_session_indy_nxt_2024_6316",
+          "path": "analysis/predictive-race-intelligence/output/context-packs/race-debriefs/debrief_session_indy_nxt_2024_6316.json",
+          "bytes": 5388,
+          "sourceRefs": 8
+        },
+        {
+          "id": "debrief_session_indy_nxt_2024_6317",
+          "path": "analysis/predictive-race-intelligence/output/context-packs/race-debriefs/debrief_session_indy_nxt_2024_6317.json",
+          "bytes": 5395,
+          "sourceRefs": 8
+        },
+        {
+          "id": "debrief_session_indy_nxt_2024_6318",
+          "path": "analysis/predictive-race-intelligence/output/context-packs/race-debriefs/debrief_session_indy_nxt_2024_6318.json",
+          "bytes": 5385,
+          "sourceRefs": 8
+        },
+        {
+          "id": "debrief_session_indy_nxt_2024_6319",
+          "path": "analysis/predictive-race-intelligence/output/context-packs/race-debriefs/debrief_session_indy_nxt_2024_6319.json",
+          "bytes": 5388,
+          "sourceRefs": 8
+        },
+        {
+          "id": "debrief_session_indy_nxt_2024_6320",
+          "path": "analysis/predictive-race-intelligence/output/context-packs/race-debriefs/debrief_session_indy_nxt_2024_6320.json",
+          "bytes": 5357,
+          "sourceRefs": 8
+        },
+        {
+          "id": "debrief_session_indy_nxt_2024_6321",
+          "path": "analysis/predictive-race-intelligence/output/context-packs/race-debriefs/debrief_session_indy_nxt_2024_6321.json",
+          "bytes": 5385,
+          "sourceRefs": 8
+        },
+        {
+          "id": "debrief_session_indy_nxt_2024_6322",
+          "path": "analysis/predictive-race-intelligence/output/context-packs/race-debriefs/debrief_session_indy_nxt_2024_6322.json",
+          "bytes": 5403,
+          "sourceRefs": 8
+        },
+        {
+          "id": "debrief_session_indy_nxt_2024_6323",
+          "path": "analysis/predictive-race-intelligence/output/context-packs/race-debriefs/debrief_session_indy_nxt_2024_6323.json",
+          "bytes": 5495,
+          "sourceRefs": 8
+        },
+        {
+          "id": "debrief_session_indy_nxt_2024_6324",
+          "path": "analysis/predictive-race-intelligence/output/context-packs/race-debriefs/debrief_session_indy_nxt_2024_6324.json",
+          "bytes": 5423,
+          "sourceRefs": 8
+        },
+        {
+          "id": "debrief_session_indy_nxt_2024_6325",
+          "path": "analysis/predictive-race-intelligence/output/context-packs/race-debriefs/debrief_session_indy_nxt_2024_6325.json",
+          "bytes": 5304,
+          "sourceRefs": 8
+        },
+        {
+          "id": "debrief_session_indy_nxt_2024_6326",
+          "path": "analysis/predictive-race-intelligence/output/context-packs/race-debriefs/debrief_session_indy_nxt_2024_6326.json",
+          "bytes": 5421,
+          "sourceRefs": 8
+        },
+        {
+          "id": "debrief_session_indy_nxt_2024_6327",
+          "path": "analysis/predictive-race-intelligence/output/context-packs/race-debriefs/debrief_session_indy_nxt_2024_6327.json",
+          "bytes": 5416,
+          "sourceRefs": 8
+        },
+        {
+          "id": "debrief_session_indy_nxt_2025_6442",
+          "path": "analysis/predictive-race-intelligence/output/context-packs/race-debriefs/debrief_session_indy_nxt_2025_6442.json",
+          "bytes": 5388,
+          "sourceRefs": 8
+        },
+        {
+          "id": "debrief_session_indy_nxt_2025_6443",
+          "path": "analysis/predictive-race-intelligence/output/context-packs/race-debriefs/debrief_session_indy_nxt_2025_6443.json",
+          "bytes": 5405,
+          "sourceRefs": 8
+        },
+        {
+          "id": "debrief_session_indy_nxt_2025_6444",
+          "path": "analysis/predictive-race-intelligence/output/context-packs/race-debriefs/debrief_session_indy_nxt_2025_6444.json",
+          "bytes": 5404,
+          "sourceRefs": 8
+        },
+        {
+          "id": "debrief_session_indy_nxt_2025_6445",
+          "path": "analysis/predictive-race-intelligence/output/context-packs/race-debriefs/debrief_session_indy_nxt_2025_6445.json",
+          "bytes": 5371,
+          "sourceRefs": 8
+        },
+        {
+          "id": "debrief_session_indy_nxt_2025_6446",
+          "path": "analysis/predictive-race-intelligence/output/context-packs/race-debriefs/debrief_session_indy_nxt_2025_6446.json",
+          "bytes": 5473,
+          "sourceRefs": 8
+        },
+        {
+          "id": "debrief_session_indy_nxt_2025_6447",
+          "path": "analysis/predictive-race-intelligence/output/context-packs/race-debriefs/debrief_session_indy_nxt_2025_6447.json",
+          "bytes": 5463,
+          "sourceRefs": 8
+        },
+        {
+          "id": "debrief_session_indy_nxt_2025_6448",
+          "path": "analysis/predictive-race-intelligence/output/context-packs/race-debriefs/debrief_session_indy_nxt_2025_6448.json",
+          "bytes": 5389,
+          "sourceRefs": 8
+        },
+        {
+          "id": "debrief_session_indy_nxt_2025_6449",
+          "path": "analysis/predictive-race-intelligence/output/context-packs/race-debriefs/debrief_session_indy_nxt_2025_6449.json",
+          "bytes": 5381,
+          "sourceRefs": 8
+        },
+        {
+          "id": "debrief_session_indy_nxt_2025_6450",
+          "path": "analysis/predictive-race-intelligence/output/context-packs/race-debriefs/debrief_session_indy_nxt_2025_6450.json",
+          "bytes": 5418,
+          "sourceRefs": 8
+        },
+        {
+          "id": "debrief_session_indy_nxt_2025_6451",
+          "path": "analysis/predictive-race-intelligence/output/context-packs/race-debriefs/debrief_session_indy_nxt_2025_6451.json",
+          "bytes": 5375,
+          "sourceRefs": 8
+        },
+        {
+          "id": "debrief_session_indy_nxt_2025_6452",
+          "path": "analysis/predictive-race-intelligence/output/context-packs/race-debriefs/debrief_session_indy_nxt_2025_6452.json",
+          "bytes": 5369,
+          "sourceRefs": 8
+        },
+        {
+          "id": "debrief_session_indy_nxt_2025_6453",
+          "path": "analysis/predictive-race-intelligence/output/context-packs/race-debriefs/debrief_session_indy_nxt_2025_6453.json",
+          "bytes": 5369,
+          "sourceRefs": 8
+        },
+        {
+          "id": "debrief_session_indy_nxt_2025_6454",
+          "path": "analysis/predictive-race-intelligence/output/context-packs/race-debriefs/debrief_session_indy_nxt_2025_6454.json",
+          "bytes": 5391,
+          "sourceRefs": 8
+        },
+        {
+          "id": "debrief_session_indy_nxt_2025_6455",
+          "path": "analysis/predictive-race-intelligence/output/context-packs/race-debriefs/debrief_session_indy_nxt_2025_6455.json",
+          "bytes": 5361,
+          "sourceRefs": 8
+        },
+        {
+          "id": "debrief_session_indy_nxt_2026_6749",
+          "path": "analysis/predictive-race-intelligence/output/context-packs/race-debriefs/debrief_session_indy_nxt_2026_6749.json",
+          "bytes": 5406,
+          "sourceRefs": 8
+        },
+        {
+          "id": "debrief_session_indy_nxt_2026_6750",
+          "path": "analysis/predictive-race-intelligence/output/context-packs/race-debriefs/debrief_session_indy_nxt_2026_6750.json",
+          "bytes": 5409,
+          "sourceRefs": 8
+        },
+        {
+          "id": "debrief_session_indy_nxt_2026_6751",
+          "path": "analysis/predictive-race-intelligence/output/context-packs/race-debriefs/debrief_session_indy_nxt_2026_6751.json",
+          "bytes": 5408,
+          "sourceRefs": 8
+        },
+        {
+          "id": "debrief_session_indy_nxt_2026_6752",
+          "path": "analysis/predictive-race-intelligence/output/context-packs/race-debriefs/debrief_session_indy_nxt_2026_6752.json",
+          "bytes": 5413,
+          "sourceRefs": 8
+        },
+        {
+          "id": "debrief_session_indy_nxt_2026_6753",
+          "path": "analysis/predictive-race-intelligence/output/context-packs/race-debriefs/debrief_session_indy_nxt_2026_6753.json",
+          "bytes": 5402,
+          "sourceRefs": 8
+        },
+        {
+          "id": "debrief_session_indy_nxt_2026_6756",
+          "path": "analysis/predictive-race-intelligence/output/context-packs/race-debriefs/debrief_session_indy_nxt_2026_6756.json",
+          "bytes": 5418,
+          "sourceRefs": 8
+        },
+        {
+          "id": "debrief_session_indy_nxt_2026_6763",
+          "path": "analysis/predictive-race-intelligence/output/context-packs/race-debriefs/debrief_session_indy_nxt_2026_6763.json",
+          "bytes": 5436,
+          "sourceRefs": 8
+        },
+        {
+          "id": "debrief_session_indy_nxt_2026_6765",
+          "path": "analysis/predictive-race-intelligence/output/context-packs/race-debriefs/debrief_session_indy_nxt_2026_6765.json",
+          "bytes": 5451,
+          "sourceRefs": 8
+        }
+      ],
+      "upcoming_event": [
+        {
+          "id": "upcoming_event_indy_nxt_2026_5537_grand_prix_at_road_america_race_2",
+          "path": "analysis/predictive-race-intelligence/output/context-packs/upcoming-events/upcoming_event_indy_nxt_2026_5537_grand_prix_at_road_america_race_2.json",
+          "bytes": 11505,
+          "sourceRefs": 6
+        },
+        {
+          "id": "upcoming_event_indy_nxt_2026_5538_music_city_grand_prix",
+          "path": "analysis/predictive-race-intelligence/output/context-packs/upcoming-events/upcoming_event_indy_nxt_2026_5538_music_city_grand_prix.json",
+          "bytes": 11579,
+          "sourceRefs": 6
+        },
+        {
+          "id": "upcoming_event_indy_nxt_2026_5540_indy_nxt_by_firestone_at_milwaukee_mile",
+          "path": "analysis/predictive-race-intelligence/output/context-packs/upcoming-events/upcoming_event_indy_nxt_2026_5540_indy_nxt_by_firestone_at_milwaukee_mile.json",
+          "bytes": 11630,
+          "sourceRefs": 6
+        },
+        {
+          "id": "upcoming_event_indy_nxt_2026_5541_grand_prix_of_monterey_race_2",
+          "path": "analysis/predictive-race-intelligence/output/context-packs/upcoming-events/upcoming_event_indy_nxt_2026_5541_grand_prix_of_monterey_race_2.json",
+          "bytes": 11652,
+          "sourceRefs": 6
+        },
+        {
+          "id": "upcoming_event_indy_nxt_2026_5542_grand_prix_of_monterey_race_1",
+          "path": "analysis/predictive-race-intelligence/output/context-packs/upcoming-events/upcoming_event_indy_nxt_2026_5542_grand_prix_of_monterey_race_1.json",
+          "bytes": 11652,
+          "sourceRefs": 6
+        },
+        {
+          "id": "upcoming_event_indy_nxt_2026_5543_grand_prix_at_mid_ohio_race_2",
+          "path": "analysis/predictive-race-intelligence/output/context-packs/upcoming-events/upcoming_event_indy_nxt_2026_5543_grand_prix_at_mid_ohio_race_2.json",
+          "bytes": 11585,
+          "sourceRefs": 6
+        },
+        {
+          "id": "upcoming_event_indy_nxt_2026_5544_grand_prix_at_mid_ohio_race_1",
+          "path": "analysis/predictive-race-intelligence/output/context-packs/upcoming-events/upcoming_event_indy_nxt_2026_5544_grand_prix_at_mid_ohio_race_1.json",
+          "bytes": 11585,
+          "sourceRefs": 6
+        },
+        {
+          "id": "upcoming_event_indy_nxt_2026_5545_grand_prix_at_road_america_race_1",
+          "path": "analysis/predictive-race-intelligence/output/context-packs/upcoming-events/upcoming_event_indy_nxt_2026_5545_grand_prix_at_road_america_race_1.json",
+          "bytes": 11505,
+          "sourceRefs": 6
+        },
+        {
+          "id": "upcoming_event_indy_nxt_2026_5547_grand_prix_of_portland",
+          "path": "analysis/predictive-race-intelligence/output/context-packs/upcoming-events/upcoming_event_indy_nxt_2026_5547_grand_prix_of_portland.json",
+          "bytes": 11603,
+          "sourceRefs": 6
+        }
+      ]
+    }
+  }
+}

@@ -2,6 +2,21 @@
 
 Updated: 2026-06-18 06:35 CDT.
 
+## July 2 Fable / Post-Road America Note
+
+For the current Claude Fable 5 / Codex GPT-5.5 handoff, read
+`../CLAUDE.md` and `FABLE_HANDOFF.md` before this file. The Codex plugin
+for Claude Code is installed/enabled, Codex CLI is updated, and the local Codex
+default model is `gpt-5.5`.
+
+The June 21 Road America live drill now supersedes the pre-race statement that
+active INDY NXT green-flag proof was still blocked. Read
+`../LIVE_DRILL_CLOSEOUT_2026-06-21.md` and
+`../LIVE_DRILL_PROCESS_EXHAUSTION_RCA_2026-06-21.md` for current live-readiness
+truth: the upstream Race Control data and 1-second ingestion path worked; the
+remaining fix is a one-ingestor/cache-backed runtime that avoids local process
+exhaustion.
+
 ## Current Chat / Thread Label
 
 - Current parent/orchestrator Codex thread: `Build Bryce race dashboard`
