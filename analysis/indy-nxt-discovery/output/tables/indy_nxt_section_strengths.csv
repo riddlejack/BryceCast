@@ -902,6 +902,47 @@ session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,I10 to SF,0.821589,22.0,
 session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,I13A to I8A,1.15814,23.0,24,0.04347826086956519,00:54.3758,76.676,14,official,source_indy_nxt_2026_6753_top_section_times_pdf
 session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,I8A to I11,1.13541,23.0,24,0.04347826086956519,00:32.9955,123.88,13,official,source_indy_nxt_2026_6753_top_section_times_pdf
 session_indy_nxt_2026_6753,2026 Grand Prix of Arlington,I11 to I13A,0.436552,23.0,24,0.04347826086956519,00:15.0188,104.641,9,official,source_indy_nxt_2026_6753_top_section_times_pdf
+session_indy_nxt_2026_6754,2026 Grand Prix at Road America Race 2 R2,Lap,4.014,15.0,24,0.3913043478260869,01:55.4879,125.125,5,official,source_indy_nxt_2026_6754_top_section_times_pdf
+session_indy_nxt_2026_6754,2026 Grand Prix at Road America Race 2 R2,SF to I1B,0.235417,13.0,24,0.4782608695652174,00:04.8671,174.129,7,official,source_indy_nxt_2026_6754_top_section_times_pdf
+session_indy_nxt_2026_6754,2026 Grand Prix at Road America Race 2 R2,I1B to I1,0.041098,7.0,24,0.7391304347826086,00:00.8278,178.73,7,official,source_indy_nxt_2026_6754_top_section_times_pdf
+session_indy_nxt_2026_6754,2026 Grand Prix at Road America Race 2 R2,I1 to I2,0.221212,4.0,24,0.8695652173913043,00:06.3833,124.757,4,official,source_indy_nxt_2026_6754_top_section_times_pdf
+session_indy_nxt_2026_6754,2026 Grand Prix at Road America Race 2 R2,I2 to I3,0.158902,17.0,24,0.30434782608695654,00:04.2395,134.933,13,official,source_indy_nxt_2026_6754_top_section_times_pdf
+session_indy_nxt_2026_6754,2026 Grand Prix at Road America Race 2 R2,I3 to I3A,0.257765,20.0,24,0.17391304347826086,00:08.6973,106.694,4,official,source_indy_nxt_2026_6754_top_section_times_pdf
+session_indy_nxt_2026_6754,2026 Grand Prix at Road America Race 2 R2,I3A to I4,0.191288,10.0,24,0.6086956521739131,00:04.3186,159.458,7,official,source_indy_nxt_2026_6754_top_section_times_pdf
+session_indy_nxt_2026_6754,2026 Grand Prix at Road America Race 2 R2,I4 to I4A,0.173485,18.0,24,0.26086956521739135,00:03.6248,172.298,17,official,source_indy_nxt_2026_6754_top_section_times_pdf
+session_indy_nxt_2026_6754,2026 Grand Prix at Road America Race 2 R2,I4A to I5,0.139583,7.0,24,0.7391304347826086,00:03.8232,131.434,10,official,source_indy_nxt_2026_6754_top_section_times_pdf
+session_indy_nxt_2026_6754,2026 Grand Prix at Road America Race 2 R2,I5 to I6,0.139394,21.0,24,0.13043478260869568,00:06.4411,77.909,11,official,source_indy_nxt_2026_6754_top_section_times_pdf
+session_indy_nxt_2026_6754,2026 Grand Prix at Road America Race 2 R2,I6 to I7,0.190152,16.0,24,0.34782608695652173,00:07.5011,91.26,3,official,source_indy_nxt_2026_6754_top_section_times_pdf
+session_indy_nxt_2026_6754,2026 Grand Prix at Road America Race 2 R2,I7 to I8,0.254167,13.0,24,0.4782608695652174,00:07.2460,126.277,9,official,source_indy_nxt_2026_6754_top_section_times_pdf
+session_indy_nxt_2026_6754,2026 Grand Prix at Road America Race 2 R2,I8 to I9,0.14072,23.0,24,0.04347826086956519,00:05.8701,86.3,4,official,source_indy_nxt_2026_6754_top_section_times_pdf
+session_indy_nxt_2026_6754,2026 Grand Prix at Road America Race 2 R2,I9 to I10,0.222727,12.0,24,0.5217391304347826,00:06.4125,125.04,4,official,source_indy_nxt_2026_6754_top_section_times_pdf
+session_indy_nxt_2026_6754,2026 Grand Prix at Road America Race 2 R2,I10 to I11,0.285227,17.0,24,0.30434782608695654,00:06.8864,149.108,8,official,source_indy_nxt_2026_6754_top_section_times_pdf
+session_indy_nxt_2026_6754,2026 Grand Prix at Road America Race 2 R2,I11 to I11B,0.256629,15.0,24,0.3913043478260869,00:05.5067,167.771,13,official,source_indy_nxt_2026_6754_top_section_times_pdf
+session_indy_nxt_2026_6754,2026 Grand Prix at Road America Race 2 R2,I11B to I12,0.182765,17.0,24,0.30434782608695654,00:03.7747,174.306,13,official,source_indy_nxt_2026_6754_top_section_times_pdf
+session_indy_nxt_2026_6754,2026 Grand Prix at Road America Race 2 R2,I12 to I13,0.281439,10.0,24,0.6086956521739131,00:09.7735,103.666,3,official,source_indy_nxt_2026_6754_top_section_times_pdf
+session_indy_nxt_2026_6754,2026 Grand Prix at Road America Race 2 R2,I13 to I13A,0.108523,16.0,24,0.34782608695652173,00:02.9564,132.148,9,official,source_indy_nxt_2026_6754_top_section_times_pdf
+session_indy_nxt_2026_6754,2026 Grand Prix at Road America Race 2 R2,I13A to I14,0.064205,19.0,24,0.21739130434782605,00:01.8720,123.471,13,official,source_indy_nxt_2026_6754_top_section_times_pdf
+session_indy_nxt_2026_6754,2026 Grand Prix at Road America Race 2 R2,I14 to I15C,0.201515,8.0,24,0.6956521739130435,00:06.9365,104.585,3,official,source_indy_nxt_2026_6754_top_section_times_pdf
+session_indy_nxt_2026_6754,2026 Grand Prix at Road America Race 2 R2,I15C to I15,0.08125,16.0,24,0.34782608695652173,00:02.0340,143.805,16,official,source_indy_nxt_2026_6754_top_section_times_pdf
+session_indy_nxt_2026_6754,2026 Grand Prix at Road America Race 2 R2,I15 to SF,0.186364,16.0,24,0.34782608695652173,00:04.2318,158.54,6,official,source_indy_nxt_2026_6754_top_section_times_pdf
+session_indy_nxt_2026_6754,2026 Grand Prix at Road America Race 2 R2,SF to I1,0.276515,12.0,24,0.5217391304347826,00:05.6949,174.797,7,official,source_indy_nxt_2026_6754_top_section_times_pdf
+session_indy_nxt_2026_6754,2026 Grand Prix at Road America Race 2 R2,I3 to I4,0.449053,21.0,24,0.13043478260869568,00:13.1464,122.968,7,official,source_indy_nxt_2026_6754_top_section_times_pdf
+session_indy_nxt_2026_6754,2026 Grand Prix at Road America Race 2 R2,I4 to I5,0.313068,8.0,24,0.6956521739130435,00:07.5217,149.839,10,official,source_indy_nxt_2026_6754_top_section_times_pdf
+session_indy_nxt_2026_6754,2026 Grand Prix at Road America Race 2 R2,I11 to I12,0.439394,15.0,24,0.3913043478260869,00:09.2814,170.429,13,official,source_indy_nxt_2026_6754_top_section_times_pdf
+session_indy_nxt_2026_6754,2026 Grand Prix at Road America Race 2 R2,I13 to I14,0.172727,17.0,24,0.30434782608695654,00:04.8324,128.677,9,official,source_indy_nxt_2026_6754_top_section_times_pdf
+session_indy_nxt_2026_6754,2026 Grand Prix at Road America Race 2 R2,I14 to I15,0.282765,12.0,24,0.5217391304347826,00:09.0289,112.744,3,official,source_indy_nxt_2026_6754_top_section_times_pdf
+session_indy_nxt_2026_6754,2026 Grand Prix at Road America Race 2 R2,SF to SFT,0.022727,15.0,24,0.3913043478260869,00:00.4905,166.804,7,official,source_indy_nxt_2026_6754_top_section_times_pdf
+session_indy_nxt_2026_6754,2026 Grand Prix at Road America Race 2 R2,I4AT to I4A,0.022727,14.0,24,0.4347826086956522,00:00.4658,175.649,12,official,source_indy_nxt_2026_6754_top_section_times_pdf
+session_indy_nxt_2026_6754,2026 Grand Prix at Road America Race 2 R2,I12T to I12,0.022727,12.0,24,0.5217391304347826,00:00.4764,171.741,9,official,source_indy_nxt_2026_6754_top_section_times_pdf
+session_indy_nxt_2026_6754,2026 Grand Prix at Road America Race 2 R2,PO to SF,3.77992,13.0,24,0.4782608695652174,02:38.6897,85.75,0,official,source_indy_nxt_2026_6754_top_section_times_pdf
+session_indy_nxt_2026_6754,2026 Grand Prix at Road America Race 2 R2,PO to I1,0.042614,4.0,24,0.8695652173913043,00:02.9108,52.704,0,official,source_indy_nxt_2026_6754_top_section_times_pdf
+session_indy_nxt_2026_6754,2026 Grand Prix at Road America Race 2 R2,PO to Alt S/F,3.24659,13.0,24,0.4782608695652174,02:16.1224,85.862,0,official,source_indy_nxt_2026_6754_top_section_times_pdf
+session_indy_nxt_2026_6754,2026 Grand Prix at Road America Race 2 R2,SF to I4A,1.27917,17.0,24,0.30434782608695654,00:33.5238,137.365,4,official,source_indy_nxt_2026_6754_top_section_times_pdf
+session_indy_nxt_2026_6754,2026 Grand Prix at Road America Race 2 R2,I4A to I11,1.37197,14.0,24,0.4347826086956522,00:44.3927,111.259,4,official,source_indy_nxt_2026_6754_top_section_times_pdf
+session_indy_nxt_2026_6754,2026 Grand Prix at Road America Race 2 R2,I11 to SF,1.36269,10.0,24,0.6086956521739131,00:37.3223,131.441,13,official,source_indy_nxt_2026_6754_top_section_times_pdf
+session_indy_nxt_2026_6754,2026 Grand Prix at Road America Race 2 R2,I13A to I4,1.63902,14.0,24,0.4347826086956522,00:45.0732,130.909,4,official,source_indy_nxt_2026_6754_top_section_times_pdf
+session_indy_nxt_2026_6754,2026 Grand Prix at Road America Race 2 R2,I4 to I9,1.0375,13.0,24,0.4782608695652174,00:34.7236,107.564,9,official,source_indy_nxt_2026_6754_top_section_times_pdf
+session_indy_nxt_2026_6754,2026 Grand Prix at Road America Race 2 R2,I9 to I13A,1.33731,16.0,24,0.34782608695652173,00:35.5284,135.506,13,official,source_indy_nxt_2026_6754_top_section_times_pdf
 session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,Lap,2.439,18.0,24,0.26086956521739135,01:17.3375,113.534,4,official,source_indy_nxt_2026_6756_top_section_times_pdf
 session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,FS - PO,0.200379,13.0,24,0.4782608695652174,00:04.2414,170.077,1,official,source_indy_nxt_2026_6756_top_section_times_pdf
 session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,FS - PO 2,0.053788,1.0,24,1.0,00:01.0887,177.861,1,official,source_indy_nxt_2026_6756_top_section_times_pdf
@@ -941,6 +982,55 @@ session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,I3 to I6,0.841
 session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,I6 to SF,0.749998,19.0,24,0.21739130434782605,00:24.0697,112.174,4,official,source_indy_nxt_2026_6756_top_section_times_pdf
 session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,SF to I4,1.18901,14.0,24,0.4347826086956522,00:34.5588,123.86,5,official,source_indy_nxt_2026_6756_top_section_times_pdf
 session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,I4 to I6,0.5,18.0,24,0.26086956521739135,00:18.5427,97.073,4,official,source_indy_nxt_2026_6756_top_section_times_pdf
+session_indy_nxt_2026_6762,2026 Grand Prix at Road America Race 1 R1,Lap,4.014,1.0,23,1.0,01:52.6679,128.257,17,official,source_indy_nxt_2026_6762_top_section_times_pdf
+session_indy_nxt_2026_6762,2026 Grand Prix at Road America Race 1 R1,SF to I1B,0.235417,3.0,24,0.9130434782608696,00:04.6899,180.708,4,official,source_indy_nxt_2026_6762_top_section_times_pdf
+session_indy_nxt_2026_6762,2026 Grand Prix at Road America Race 1 R1,I1B to I1,0.041098,5.0,24,0.8260869565217391,00:00.8115,182.32,4,official,source_indy_nxt_2026_6762_top_section_times_pdf
+session_indy_nxt_2026_6762,2026 Grand Prix at Road America Race 1 R1,I1 to I2,0.221212,2.0,24,0.9565217391304348,00:06.1661,129.152,16,official,source_indy_nxt_2026_6762_top_section_times_pdf
+session_indy_nxt_2026_6762,2026 Grand Prix at Road America Race 1 R1,I2 to I3,0.158902,3.0,24,0.9130434782608696,00:04.1415,138.126,19,official,source_indy_nxt_2026_6762_top_section_times_pdf
+session_indy_nxt_2026_6762,2026 Grand Prix at Road America Race 1 R1,I3 to I3A,0.257765,4.0,24,0.8695652173913043,00:08.4281,110.102,14,official,source_indy_nxt_2026_6762_top_section_times_pdf
+session_indy_nxt_2026_6762,2026 Grand Prix at Road America Race 1 R1,I3A to I4,0.191288,12.0,25,0.5416666666666667,00:04.3410,158.636,11,official,source_indy_nxt_2026_6762_top_section_times_pdf
+session_indy_nxt_2026_6762,2026 Grand Prix at Road America Race 1 R1,I4 to I4A,0.173485,19.0,24,0.21739130434782605,00:03.6652,170.399,19,official,source_indy_nxt_2026_6762_top_section_times_pdf
+session_indy_nxt_2026_6762,2026 Grand Prix at Road America Race 1 R1,I4A to I5,0.139583,4.0,24,0.8695652173913043,00:03.8005,132.219,18,official,source_indy_nxt_2026_6762_top_section_times_pdf
+session_indy_nxt_2026_6762,2026 Grand Prix at Road America Race 1 R1,I5 to I6,0.139394,1.0,24,1.0,00:06.1443,81.672,14,official,source_indy_nxt_2026_6762_top_section_times_pdf
+session_indy_nxt_2026_6762,2026 Grand Prix at Road America Race 1 R1,I6 to I7,0.190152,3.0,24,0.9130434782608696,00:07.2989,93.788,14,official,source_indy_nxt_2026_6762_top_section_times_pdf
+session_indy_nxt_2026_6762,2026 Grand Prix at Road America Race 1 R1,I7 to I8,0.254167,1.0,24,1.0,00:06.9348,131.943,16,official,source_indy_nxt_2026_6762_top_section_times_pdf
+session_indy_nxt_2026_6762,2026 Grand Prix at Road America Race 1 R1,I8 to I9,0.14072,13.0,24,0.4782608695652174,00:05.7136,88.664,13,official,source_indy_nxt_2026_6762_top_section_times_pdf
+session_indy_nxt_2026_6762,2026 Grand Prix at Road America Race 1 R1,I9 to I10,0.222727,1.0,24,1.0,00:06.0866,131.735,16,official,source_indy_nxt_2026_6762_top_section_times_pdf
+session_indy_nxt_2026_6762,2026 Grand Prix at Road America Race 1 R1,I10 to I11,0.285227,15.0,24,0.3913043478260869,00:06.8214,150.529,15,official,source_indy_nxt_2026_6762_top_section_times_pdf
+session_indy_nxt_2026_6762,2026 Grand Prix at Road America Race 1 R1,I11 to I11B,0.256629,12.0,24,0.5217391304347826,00:05.5097,167.68,4,official,source_indy_nxt_2026_6762_top_section_times_pdf
+session_indy_nxt_2026_6762,2026 Grand Prix at Road America Race 1 R1,I11B to I12,0.182765,6.0,24,0.782608695652174,00:03.7236,176.698,4,official,source_indy_nxt_2026_6762_top_section_times_pdf
+session_indy_nxt_2026_6762,2026 Grand Prix at Road America Race 1 R1,I12 to I13,0.281439,1.0,24,1.0,00:09.4570,107.135,16,official,source_indy_nxt_2026_6762_top_section_times_pdf
+session_indy_nxt_2026_6762,2026 Grand Prix at Road America Race 1 R1,I13 to I13A,0.108523,3.0,24,0.9130434782608696,00:02.8688,136.183,15,official,source_indy_nxt_2026_6762_top_section_times_pdf
+session_indy_nxt_2026_6762,2026 Grand Prix at Road America Race 1 R1,I13A to I14,0.064205,1.0,24,1.0,00:01.7727,130.388,15,official,source_indy_nxt_2026_6762_top_section_times_pdf
+session_indy_nxt_2026_6762,2026 Grand Prix at Road America Race 1 R1,I14 to I15C,0.201515,1.0,24,1.0,00:06.7597,107.32,13,official,source_indy_nxt_2026_6762_top_section_times_pdf
+session_indy_nxt_2026_6762,2026 Grand Prix at Road America Race 1 R1,I15C to I15,0.08125,8.0,24,0.6956521739130435,00:01.9990,146.323,7,official,source_indy_nxt_2026_6762_top_section_times_pdf
+session_indy_nxt_2026_6762,2026 Grand Prix at Road America Race 1 R1,I15 to SF,0.186364,4.0,25,0.875,00:04.1185,162.902,7,official,source_indy_nxt_2026_6762_top_section_times_pdf
+session_indy_nxt_2026_6762,2026 Grand Prix at Road America Race 1 R1,SF to I1,0.276515,2.0,24,0.9565217391304348,00:05.5014,180.946,4,official,source_indy_nxt_2026_6762_top_section_times_pdf
+session_indy_nxt_2026_6762,2026 Grand Prix at Road America Race 1 R1,I3 to I4,0.449053,12.0,24,0.5217391304347826,00:12.8893,125.421,16,official,source_indy_nxt_2026_6762_top_section_times_pdf
+session_indy_nxt_2026_6762,2026 Grand Prix at Road America Race 1 R1,I4 to I5,0.313068,4.0,24,0.8695652173913043,00:07.4668,150.941,19,official,source_indy_nxt_2026_6762_top_section_times_pdf
+session_indy_nxt_2026_6762,2026 Grand Prix at Road America Race 1 R1,I11 to I12,0.439394,8.0,24,0.6956521739130435,00:09.2333,171.317,4,official,source_indy_nxt_2026_6762_top_section_times_pdf
+session_indy_nxt_2026_6762,2026 Grand Prix at Road America Race 1 R1,I13 to I14,0.172727,1.0,24,1.0,00:04.6415,133.969,15,official,source_indy_nxt_2026_6762_top_section_times_pdf
+session_indy_nxt_2026_6762,2026 Grand Prix at Road America Race 1 R1,I14 to I15,0.282765,2.0,24,0.9565217391304348,00:08.8315,115.264,13,official,source_indy_nxt_2026_6762_top_section_times_pdf
+session_indy_nxt_2026_6762,2026 Grand Prix at Road America Race 1 R1,SF to SFT,0.022727,3.0,24,0.9130434782608696,00:00.4708,173.783,4,official,source_indy_nxt_2026_6762_top_section_times_pdf
+session_indy_nxt_2026_6762,2026 Grand Prix at Road America Race 1 R1,I4AT to I4A,0.022727,18.0,24,0.26086956521739135,00:00.4708,173.783,19,official,source_indy_nxt_2026_6762_top_section_times_pdf
+session_indy_nxt_2026_6762,2026 Grand Prix at Road America Race 1 R1,I12T to I12,0.022727,5.0,24,0.8260869565217391,00:00.4673,175.085,4,official,source_indy_nxt_2026_6762_top_section_times_pdf
+session_indy_nxt_2026_6762,2026 Grand Prix at Road America Race 1 R1,PI to SFP,0.041667,2.0,6,0.8,00:04.4524,33.69,8,official,source_indy_nxt_2026_6762_top_section_times_pdf
+session_indy_nxt_2026_6762,2026 Grand Prix at Road America Race 1 R1,SFP to PO,0.233902,1.0,5,1.0,00:25.0020,33.679,12,official,source_indy_nxt_2026_6762_top_section_times_pdf
+session_indy_nxt_2026_6762,2026 Grand Prix at Road America Race 1 R1,PIC to PIA,0.102652,1.0,5,1.0,00:03.9556,93.424,8,official,source_indy_nxt_2026_6762_top_section_times_pdf
+session_indy_nxt_2026_6762,2026 Grand Prix at Road America Race 1 R1,PI to PO,0.275568,1.0,6,1.0,00:29.4689,33.664,12,official,source_indy_nxt_2026_6762_top_section_times_pdf
+session_indy_nxt_2026_6762,2026 Grand Prix at Road America Race 1 R1,PO to SF,3.77992,1.0,24,1.0,01:53.1205,120.294,12,official,source_indy_nxt_2026_6762_top_section_times_pdf
+session_indy_nxt_2026_6762,2026 Grand Prix at Road America Race 1 R1,SF to PI,3.97216,1.0,6,1.0,02:10.5140,109.565,11,official,source_indy_nxt_2026_6762_top_section_times_pdf
+session_indy_nxt_2026_6762,2026 Grand Prix at Road America Race 1 R1,PO to I1,0.042614,1.0,24,1.0,00:02.7425,55.938,9,official,source_indy_nxt_2026_6762_top_section_times_pdf
+session_indy_nxt_2026_6762,2026 Grand Prix at Road America Race 1 R1,I14 to PI,0.427462,1.0,6,1.0,00:25.9413,59.321,8,official,source_indy_nxt_2026_6762_top_section_times_pdf
+session_indy_nxt_2026_6762,2026 Grand Prix at Road America Race 1 R1,PO to PI,3.73826,1.0,6,1.0,06:09.2563,36.446,11,official,source_indy_nxt_2026_6762_top_section_times_pdf
+session_indy_nxt_2026_6762,2026 Grand Prix at Road America Race 1 R1,PO to Alt S/F,3.24659,1.0,24,1.0,01:37.8990,119.386,12,official,source_indy_nxt_2026_6762_top_section_times_pdf
+session_indy_nxt_2026_6762,2026 Grand Prix at Road America Race 1 R1,Alt S/F to PI,0.491666,1.0,6,1.0,00:27.8864,63.472,8,official,source_indy_nxt_2026_6762_top_section_times_pdf
+session_indy_nxt_2026_6762,2026 Grand Prix at Road America Race 1 R1,SF to I4A,1.27917,1.0,24,1.0,00:32.7179,140.749,19,official,source_indy_nxt_2026_6762_top_section_times_pdf
+session_indy_nxt_2026_6762,2026 Grand Prix at Road America Race 1 R1,I4A to I11,1.37197,1.0,24,1.0,00:42.8964,115.14,14,official,source_indy_nxt_2026_6762_top_section_times_pdf
+session_indy_nxt_2026_6762,2026 Grand Prix at Road America Race 1 R1,I11 to SF,1.36269,4.0,24,0.8695652173913043,00:36.7644,133.436,16,official,source_indy_nxt_2026_6762_top_section_times_pdf
+session_indy_nxt_2026_6762,2026 Grand Prix at Road America Race 1 R1,I13A to I4,1.63902,2.0,24,0.9565217391304348,00:44.1000,133.798,19,official,source_indy_nxt_2026_6762_top_section_times_pdf
+session_indy_nxt_2026_6762,2026 Grand Prix at Road America Race 1 R1,I4 to I9,1.0375,1.0,24,1.0,00:33.7461,110.679,14,official,source_indy_nxt_2026_6762_top_section_times_pdf
+session_indy_nxt_2026_6762,2026 Grand Prix at Road America Race 1 R1,I9 to I13A,1.33731,1.0,24,1.0,00:34.7082,138.708,16,official,source_indy_nxt_2026_6762_top_section_times_pdf
 session_indy_nxt_2026_6763,2026 INDY NXT by Firestone at World Wide Technology Raceway,Lap,1.25,24.0,24,0.0,00:29.7074,151.477,4,official,source_indy_nxt_2026_6763_top_section_times_pdf
 session_indy_nxt_2026_6763,2026 INDY NXT by Firestone at World Wide Technology Raceway,FS - PO,0.161173,21.0,24,0.13043478260869568,00:03.5163,165.009,4,official,source_indy_nxt_2026_6763_top_section_times_pdf
 session_indy_nxt_2026_6763,2026 INDY NXT by Firestone at World Wide Technology Raceway,Turn 1,0.120455,22.0,24,0.08695652173913049,00:02.8881,150.146,4,official,source_indy_nxt_2026_6763_top_section_times_pdf

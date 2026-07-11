@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-06-16T18:12:34.976Z",
+  "checkedAt": "2026-07-02T17:44:49.994Z",
   "dataset": "/Users/example/Documents/Bryce POV access/data/career/career.dataset.json",
   "ok": true,
   "counts": {
@@ -11,20 +11,20 @@
     "seasons": 10,
     "events": 87,
     "sessions": 469,
-    "results": 8158,
-    "qualifyingResults": 1547,
-    "lapSamples": 67686,
-    "racecraftEvents": 35,
-    "penalties": 82,
-    "incidents": 132,
-    "weatherObservations": 181,
-    "mediaAssets": 940,
+    "results": 8326,
+    "qualifyingResults": 1643,
+    "lapSamples": 68533,
+    "racecraftEvents": 37,
+    "penalties": 86,
+    "incidents": 140,
+    "weatherObservations": 190,
+    "mediaAssets": 973,
     "broadcastRoutes": 0,
     "notificationRules": 0,
     "notificationEvents": 0,
-    "derivedMetrics": 370,
-    "sourceEvidence": 1199,
-    "gaps": 9
+    "derivedMetrics": 387,
+    "sourceEvidence": 1232,
+    "gaps": 10
   },
   "errors": [],
   "warnings": [

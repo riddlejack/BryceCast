@@ -7,10 +7,11 @@ import csv
 import hashlib
 import json
 import math
+import os
 import re
 import statistics
 from collections import defaultdict
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable
 
@@ -23,6 +24,19 @@ DATASET_PATH = ROOT / "data/career/career.dataset.json"
 
 BRYCE_ID = "driver_bryce_aron"
 INDY_NXT_ID = "series_indy_nxt"
+
+
+def resolve_run_date() -> date:
+    override = os.environ.get("BRYCECAST_ANALYTICS_AS_OF_DATE")
+    if override:
+        try:
+            return date.fromisoformat(override)
+        except ValueError as exc:
+            raise SystemExit("BRYCECAST_ANALYTICS_AS_OF_DATE must be YYYY-MM-DD") from exc
+    return date.today()
+
+
+RUN_DATE = resolve_run_date()
 
 
 def now_iso() -> str:
@@ -58,6 +72,44 @@ def clean_float(value: Any) -> float | None:
         return None
 
 
+def slug(value: str) -> str:
+    out = re.sub(r"[^a-z0-9]+", "_", value.lower()).strip("_")
+    return out or "track"
+
+
+def venue_slug(track_name: str) -> str:
+    normalized = track_name.lower()
+    if "mid-ohio" in normalized:
+        return "mid_ohio"
+    return slug(track_name)
+
+
+def parse_event_date(value: Any) -> date | None:
+    try:
+        return date.fromisoformat(str(value or "")[:10])
+    except ValueError:
+        return None
+
+
+def next_upcoming_track_name(data: dict[str, Any]) -> str | None:
+    tracks = {row["id"]: row for row in data.get("tracks", [])}
+    candidates: list[tuple[date, str, str]] = []
+    for event in data.get("events", []):
+        if event.get("seriesId") != INDY_NXT_ID:
+            continue
+        event_date = parse_event_date(event.get("eventStartDate"))
+        if event_date is None or event_date < RUN_DATE:
+            continue
+        track = tracks.get(event.get("trackId") or "", {})
+        track_name = track.get("name") or event.get("trackName") or ""
+        if track_name:
+            candidates.append((event_date, str(event.get("id") or ""), str(track_name)))
+    if not candidates:
+        return None
+    candidates.sort(key=lambda row: (row[0], row[1]))
+    return candidates[0][2]
+
+
 def median(values: Iterable[float]) -> float | None:
     clean = [value for value in values if value is not None]
     if not clean:
@@ -83,7 +135,7 @@ def fmt(value: Any, digits: int = 4) -> Any:
 def write_csv(path: Path, rows: list[dict[str, Any]], fields: list[str]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=fields, extrasaction="ignore")
+        writer = csv.DictWriter(f, fieldnames=fields, extrasaction="ignore", lineterminator="\n")
         writer.writeheader()
         for row in rows:
             writer.writerow({field: fmt(row.get(field)) for field in fields})
@@ -519,20 +571,22 @@ def build_section_session_summary(observations: list[dict[str, Any]], source_has
     return summaries
 
 
-def build_road_america_rows(
+def build_track_race_rows(
     microstates: list[dict[str, Any]],
     segments: list[dict[str, Any]],
     section_summaries: list[dict[str, Any]],
     source_hash: str,
+    track_name: str,
 ) -> list[dict[str, Any]]:
     micro_by_session: dict[str, list[dict[str, Any]]] = defaultdict(list)
     segment_by_session: dict[str, list[dict[str, Any]]] = defaultdict(list)
     section_by_session = {row["sessionId"]: row for row in section_summaries}
+    track_match = track_name.lower()
     for row in microstates:
-        if "road america" in row["trackName"].lower():
+        if track_match in row["trackName"].lower():
             micro_by_session[row["sessionId"]].append(row)
     for row in segments:
-        if "road america" in row.get("trackName", "").lower():
+        if track_match in row.get("trackName", "").lower():
             segment_by_session[row["sessionId"]].append(row)
     rows = []
     for session_id, laps in sorted(micro_by_session.items()):
@@ -570,7 +624,9 @@ def build_context_packs(
     section_observations: list[dict[str, Any]],
     section_summaries: list[dict[str, Any]],
     road_america_rows: list[dict[str, Any]],
-) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any]]:
+    upcoming_track_name: str,
+    upcoming_rows: list[dict[str, Any]],
+) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any], dict[str, Any]]:
     best_segments = sorted(segments, key=lambda row: clean_float(row.get("netGain")) or -999, reverse=True)[:8]
     biggest_inflections = sorted(inflections, key=lambda row: clean_float(row.get("magnitude")) or -999, reverse=True)[:12]
     best_sections = sorted(
@@ -585,6 +641,7 @@ def build_context_packs(
         "raceSectionLapObservations": len(section_observations),
         "raceSectionSessionSummaries": len(section_summaries),
         "roadAmericaRows": len(road_america_rows),
+        "upcomingVenueRows": len(upcoming_rows),
     }
     section_source_state_counts = {
         state: sum(1 for row in section_observations if row.get("sourceState") == state)
@@ -598,6 +655,11 @@ def build_context_packs(
         "claimStrength": "post_race_descriptive_only",
         "publicPointPrediction": False,
         "counts": counts,
+        "upcomingVenue": {
+            "asOfDate": RUN_DATE.isoformat(),
+            "trackName": upcoming_track_name,
+            "artifactSlug": venue_slug(upcoming_track_name),
+        },
         "sectionSourceStateCounts": section_source_state_counts,
         "caveats": [
             "Lap microstates are official race lap chart positions, not telemetry or lap-time pace.",
@@ -646,7 +708,23 @@ def build_context_packs(
             "Do not blend with future session claims without live/current source rows.",
         ],
     }
-    return summary, pack, road_pack
+    upcoming_slug = venue_slug(upcoming_track_name).replace("_", "-")
+    upcoming_pack = {
+        "id": f"{upcoming_slug}-race-context",
+        "generatedAt": generated_at,
+        "sourceDataset": "data/career/career.dataset.json",
+        "sourceHash": source_hash,
+        "claimStrength": "post_race_descriptive_only",
+        "publicPointPrediction": False,
+        "asOfDate": RUN_DATE.isoformat(),
+        "trackName": upcoming_track_name,
+        "historicalRaceRows": upcoming_rows,
+        "displayRules": [
+            f"Use these rows as completed {upcoming_track_name} race history only.",
+            "Do not blend with future session claims without live/current source rows.",
+        ],
+    }
+    return summary, pack, road_pack, upcoming_pack
 
 
 def render_report(
@@ -654,12 +732,18 @@ def render_report(
     summary: dict[str, Any],
     road_america_rows: list[dict[str, Any]],
     section_summaries: list[dict[str, Any]],
+    upcoming_track_name: str,
+    upcoming_rows: list[dict[str, Any]],
 ) -> str:
     counts = summary["counts"]
     road_lines = "\n".join(
         f"- {row['raceLabel']}: start {fmt(row['startPosition'])}, finish {fmt(row['finishPosition'])}, best running {fmt(row['bestRunningPosition'])}, section median {fmt(row['medianCleanTrackSectionPercentile'], 3)}."
         for row in road_america_rows
     ) or "- No Road America race lap rows were available."
+    upcoming_lines = "\n".join(
+        f"- {row['raceLabel']}: start {fmt(row['startPosition'])}, finish {fmt(row['finishPosition'])}, best running {fmt(row['bestRunningPosition'])}, section median {fmt(row['medianCleanTrackSectionPercentile'], 3)}."
+        for row in upcoming_rows
+    ) or f"- No {upcoming_track_name} race lap rows were available."
     section_lines = "\n".join(
         f"- {row['raceLabel']}: clean section median {fmt(row['medianCleanTrackSectionPercentile'], 3)}, best {row['bestCleanSectionFamilies'] or 'n/a'}."
         for row in sorted(section_summaries, key=lambda r: clean_float(r.get("medianCleanTrackSectionPercentile")) or -999, reverse=True)[:6]
@@ -681,7 +765,7 @@ This lane uses official INDY NXT race lap chart rows, official caution/incidents
 - `race_lap_inflection_points.csv`: {counts['raceLapInflectionPoints']} position-movement events.
 - `race_section_lap_observations.csv`: clean-lap-aware race section observations.
 - `race_section_session_summary.csv`: {counts['raceSectionSessionSummaries']} race section summaries.
-- Context packs: `context-packs/indy-nxt-race-lap-section-context.json` and `context-packs/road-america-race-context.json`.
+- Context packs: `context-packs/indy-nxt-race-lap-section-context.json`, `context-packs/road-america-race-context.json`, and the current next-venue race context pack.
 - Source split: {summary.get('sectionSourceStateCounts', {})}.
 
 ## Lap Microstates
@@ -701,6 +785,12 @@ Clean-lap race section highlights:
 ## Road America Context
 
 {road_lines}
+
+## Upcoming Venue Race Context
+
+Track: `{upcoming_track_name}`
+
+{upcoming_lines}
 
 ## Caveats
 
@@ -724,8 +814,10 @@ def main() -> int:
     inflections = build_inflections(microstates, source_hash)
     section_observations = build_race_section_observations(data, idx, source_hash, microstates)
     section_summaries = build_section_session_summary(section_observations, source_hash)
-    road_america_rows = build_road_america_rows(microstates, segments, section_summaries, source_hash)
-    summary, pack, road_pack = build_context_packs(
+    road_america_rows = build_track_race_rows(microstates, segments, section_summaries, source_hash, "Road America")
+    upcoming_track_name = next_upcoming_track_name(data) or "Road America"
+    upcoming_rows = build_track_race_rows(microstates, segments, section_summaries, source_hash, upcoming_track_name)
+    summary, pack, road_pack, upcoming_pack = build_context_packs(
         generated_at,
         source_hash,
         microstates,
@@ -734,6 +826,8 @@ def main() -> int:
         section_observations,
         section_summaries,
         road_america_rows,
+        upcoming_track_name,
+        upcoming_rows,
     )
 
     write_csv(
@@ -866,11 +960,34 @@ def main() -> int:
             "sourceHash",
         ],
     )
+    upcoming_slug = venue_slug(upcoming_track_name)
+    write_csv(
+        OUTPUT_DIR / f"{upcoming_slug}_race_lap_section_context.csv",
+        upcoming_rows,
+        [
+            "sessionId",
+            "raceLabel",
+            "seasonYear",
+            "trackName",
+            "lapRows",
+            "startPosition",
+            "finishPosition",
+            "netLapChartGain",
+            "bestRunningPosition",
+            "worstRunningPosition",
+            "bestSegment",
+            "medianCleanTrackSectionPercentile",
+            "bestCleanSectionFamilies",
+            "weakestCleanSectionFamilies",
+            "sourceHash",
+        ],
+    )
     write_json(OUTPUT_DIR / "summary.json", summary)
     write_json(PACK_DIR / "indy-nxt-race-lap-section-context.json", pack)
     write_json(PACK_DIR / "road-america-race-context.json", road_pack)
+    write_json(PACK_DIR / f"{upcoming_slug.replace('_', '-')}-race-context.json", upcoming_pack)
     (OUTPUT_DIR / "INDY_NXT_RACE_LAP_SECTION_ENHANCEMENT.md").write_text(
-        render_report(generated_at, summary, road_america_rows, section_summaries)
+        render_report(generated_at, summary, road_america_rows, section_summaries, upcoming_track_name, upcoming_rows)
     )
 
     print(json.dumps({"ok": True, "output": str(OUTPUT_DIR.relative_to(ROOT)), "counts": summary["counts"]}, indent=2))

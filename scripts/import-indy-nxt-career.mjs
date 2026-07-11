@@ -59,11 +59,37 @@ const statusCategory = (status) => {
 
 const officialStatusIncidentTypes = new Set(['contact', 'mechanical', 'dns']);
 const statusIncidentPrefix = 'incident_indy_nxt_status_';
+const indyNxtReportDetailGapDescription = 'EventsSessionDetails imports race/session result rows, qualifyingResults for official SessionType=Q records, and official terminal-status incident rows for contact/mechanical/dns outcomes. Official Race Lap Chart PDFs now import 29,519 official lap-by-lap position samples from all 36 completed Race Lap Chart PDFs: 26 charts fully validate against official completed-lap counts and 10 clean partial Race Lap Chart PDFs preserve explicit missing car-lap or official result/chart conflict diagnostics without guessing terminal or conflict laps. Official Event Summary PDFs import race-stat metrics and most-improved racecraft notes. Official Leader Lap Summary PDFs import leader-by-lap timing, margin, and flag-state metrics. Official Top Section Times PDFs import practice, qualifying, and race section-rank timing metrics when official section rows are present. Official Section Results PDFs import practice, qualifying, and race lap-by-lap section times and speeds at per-car/per-lap grain when official section rows are present. The remaining true section-results holdout is session_indy_nxt_2024_6325, where the official Section Results PDF URL returns corrupt non-PDF bytes; canceled/no-row reports remain held out rather than treated as missing data. Source-visible rows without canonical API timing rows keep car/name text with null canonical IDs. Official race Results PDFs import penalty/decision summary rows and caution-summary causal incident rows. Detailed pit-lane sequence context is source-unavailable in the current official report family; use official/API pit-stop counts as the production-safe pit metric unless a new official pit-summary source appears.';
 
 const nullableGap = (value) => {
   const normalized = String(value ?? '').trim();
   if (!normalized || normalized === '--.----' || /^-+\.-+$/.test(normalized)) return null;
   return normalized;
+};
+
+const normalizeDateOnly = (value) => {
+  const normalized = String(value ?? '').trim();
+  if (!normalized) return null;
+  const iso = normalized.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (iso) return `${iso[1]}-${iso[2]}-${iso[3]}`;
+  const mdy = normalized.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+  if (!mdy) return null;
+  const [, month, day, year] = mdy;
+  return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+};
+
+const eventDateSpan = (current, sourceDate) => {
+  const dates = [
+    normalizeDateOnly(current?.eventStartDate),
+    normalizeDateOnly(current?.eventEndDate),
+    normalizeDateOnly(sourceDate)
+  ]
+    .filter(Boolean)
+    .sort();
+  return {
+    eventStartDate: dates[0] ?? null,
+    eventEndDate: dates.at(-1) ?? dates[0] ?? null
+  };
 };
 
 const raceNumberFromName = (name) => {
@@ -432,41 +458,67 @@ const main = async () => {
 
       const trackName = trackNameFromEvent(details.EventName ?? discoveredSession.eventName);
       const trackId = `track_${slug(trackName)}`;
+      const currentTrack = tracks.get(trackId);
+      const keep = (key, fallback = null) => currentTrack?.[key] ?? fallback;
+      const keepKnown = (key, fallback = 'unknown') => {
+        const value = currentTrack?.[key];
+        return value && value !== 'unknown' ? value : fallback;
+      };
       upsert(tracks, {
         id: trackId,
         name: trackName,
-        canonicalName: trackName,
-        country: 'United States',
-        region: null,
-        city: null,
-        latitude: null,
-        longitude: null,
-        timezone: null,
-        trackType: trackTypeLabel(details.TrackType),
-        configuration: null,
-        lengthKm: null,
-        lengthMi: null,
-        direction: 'unknown',
-        surface: null,
-        elevationM: null,
-        cornerCount: null,
-        passingDifficulty: null,
-        brakingSeverity: null,
-        temporary: trackTypeLabel(details.TrackType) === 'street',
-        altitudeM: null,
+        canonicalName: keep('canonicalName', trackName),
+        country: keep('country', 'United States'),
+        region: keep('region'),
+        city: keep('city'),
+        latitude: keep('latitude'),
+        longitude: keep('longitude'),
+        timezone: keep('timezone'),
+        trackType: keep('trackType', trackTypeLabel(details.TrackType)),
+        configuration: keep('configuration'),
+        lengthKm: keep('lengthKm'),
+        lengthMi: keep('lengthMi'),
+        direction: keepKnown('direction'),
+        surface: keep('surface'),
+        elevationM: keep('elevationM'),
+        cornerCount: keep('cornerCount'),
+        passingDifficulty: keep('passingDifficulty'),
+        brakingSeverity: keep('brakingSeverity'),
+        temporary: keep('temporary', trackTypeLabel(details.TrackType) === 'street'),
+        altitudeM: keep('altitudeM'),
         aliases: Array.from(new Set([details.EventName, discoveredSession.eventName].filter(Boolean))),
         provenanceRefs: [sessionEvidenceId]
       });
 
       const eventId = `event_indy_nxt_${year}_${discoveredSession.eventId ?? slug(trackName)}`;
+      const currentEvent = events.get(eventId);
+      const normalizedEventDates = eventDateSpan(currentEvent, details.SessionDate);
+      if (
+        currentEvent &&
+        (currentEvent.eventStartDate !== normalizedEventDates.eventStartDate ||
+          currentEvent.eventEndDate !== normalizedEventDates.eventEndDate)
+      ) {
+        importReport.gaps.push({
+          year,
+          eventId,
+          status: 'event_date_normalized_from_official_api',
+          oldEventStartDate: currentEvent.eventStartDate ?? null,
+          oldEventEndDate: currentEvent.eventEndDate ?? null,
+          eventStartDate: normalizedEventDates.eventStartDate,
+          eventEndDate: normalizedEventDates.eventEndDate,
+          sourceField: 'EventsSessionDetails.SessionDate',
+          sourceValue: details.SessionDate ?? null,
+          sourceEvidenceId: sessionEvidenceId
+        });
+      }
       upsert(events, {
         id: eventId,
         seriesId: 'series_indy_nxt',
         seasonYear: year,
         name: details.EventName ?? discoveredSession.eventName,
         round: null,
-        eventStartDate: details.SessionDate ? String(details.SessionDate).slice(0, 10) : null,
-        eventEndDate: details.SessionDate ? String(details.SessionDate).slice(0, 10) : null,
+        eventStartDate: normalizedEventDates.eventStartDate,
+        eventEndDate: normalizedEventDates.eventEndDate,
         trackId,
         country: 'United States',
         officialEventId: discoveredSession.eventId ? String(discoveredSession.eventId) : null,
@@ -733,7 +785,7 @@ const main = async () => {
         id: 'gap_indy_nxt_qualifying_lap_reports',
         scope: 'indy_nxt_official',
         status: 'open',
-        description: 'EventsSessionDetails imports race/session result rows, qualifyingResults for official SessionType=Q records, and official terminal-status incident rows for contact/mechanical/dns outcomes. Official Race Lap Chart PDFs, Event Summary PDFs, Leader Lap Summary PDFs, Top Section Times PDFs, and Results PDF penalty/caution summaries are handled by the report-detail backfill. Pit summaries, sector PDFs, and deeper report parsing remain open.'
+        description: indyNxtReportDetailGapDescription
       },
       remainingCareerGap
     ]

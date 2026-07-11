@@ -1,10 +1,10 @@
 {
   "schemaVersion": "bryce-career-ingestion-summary.v1",
-  "generatedAt": "2026-06-16T18:12:35.595Z",
+  "generatedAt": "2026-07-02T17:44:50.516Z",
   "datasetPath": "data/career/career.dataset.json",
   "validation": {
     "ok": true,
-    "checkedAt": "2026-06-16T18:12:34.976Z",
+    "checkedAt": "2026-07-02T17:44:49.994Z",
     "errors": [],
     "warnings": [
       {
@@ -23,20 +23,20 @@
     "seasons": 10,
     "events": 87,
     "sessions": 469,
-    "results": 8158,
-    "qualifyingResults": 1547,
-    "lapSamples": 67686,
-    "racecraftEvents": 35,
-    "penalties": 82,
-    "incidents": 132,
-    "weatherObservations": 181,
-    "mediaAssets": 940,
+    "results": 8326,
+    "qualifyingResults": 1643,
+    "lapSamples": 68533,
+    "racecraftEvents": 37,
+    "penalties": 86,
+    "incidents": 140,
+    "weatherObservations": 190,
+    "mediaAssets": 973,
     "broadcastRoutes": 0,
     "notificationRules": 0,
     "notificationEvents": 0,
-    "derivedMetrics": 370,
-    "sourceEvidence": 1199,
-    "gaps": 9
+    "derivedMetrics": 387,
+    "sourceEvidence": 1232,
+    "gaps": 10
   },
   "readiness": {
     "sessions": {
@@ -57,12 +57,12 @@
       "lengthCoverage": 1
     },
     "weather": {
-      "observations": 181,
-      "sessionsCovered": 181,
+      "observations": 190,
+      "sessionsCovered": 190,
       "tracksCovered": 24,
-      "withAmbientTemp": 96,
+      "withAmbientTemp": 105,
       "withTrackTemp": 1,
-      "trackTempCoverage": 0.0055
+      "trackTempCoverage": 0.0053
     },
     "analyticsSafeNow": [
       "Source-backed result analytics for imported official families: INDY NXT 2024-2026, GB3/BRDC British F3 2021-2022, IMSA Daytona 2025, Euroformula 2023, FROC 2024, FRP F1600 2019, and Formula Ford 2020",
@@ -73,17 +73,17 @@
     "analyticsBlockedOrPartial": []
   },
   "sourceEvidence": {
-    "total": 1199,
+    "total": 1232,
     "bySourceType": {
       "archived_official_page": 2,
-      "official_pdf": 711,
+      "official_pdf": 732,
       "official_page": 117,
-      "official_api": 264,
+      "official_api": 273,
       "official_html": 16,
       "official_image": 5,
       "official_article": 4,
       "official_json": 2,
-      "weather_api": 78
+      "weather_api": 81
     }
   },
   "workstreams": [
@@ -405,13 +405,13 @@
     },
     {
       "name": "indy-nxt-import-report.json",
-      "checkedAt": "2026-06-16T18:12:05.961Z",
+      "checkedAt": "2026-07-02T17:41:02.135Z",
       "refresh": false,
       "fetched": 0,
-      "cached": 180,
-      "sessionsImported": 173,
-      "resultsImported": 2950,
-      "bryceResultsImported": 145,
+      "cached": 189,
+      "sessionsImported": 182,
+      "resultsImported": 3118,
+      "bryceResultsImported": 152,
       "lapSamplesImported": null,
       "weatherObservationsImported": null,
       "standingsImported": null,
@@ -419,7 +419,7 @@
     },
     {
       "name": "track-metadata-import-report.json",
-      "checkedAt": "2026-06-16T18:12:25.504Z",
+      "checkedAt": "2026-07-02T17:41:00.714Z",
       "refresh": null,
       "fetched": null,
       "cached": null,
@@ -686,16 +686,22 @@
       }
     },
     {
+      "id": "gap_remaining_career_rows_after_track_metadata",
+      "scope": "career_dataset",
+      "status": "open",
+      "description": "Broad historical-tail placeholder, not a UI-readiness blocker. Remaining optional or metric-specific work includes pre-2019 karting race-by-race records, early-career Formula Ford appearances outside the imported official books, future imported-track metadata, non-official ambient weather outside current exact-window scope, and future derived benchmark models. Current production caveats are tracked by specific gap IDs."
+    },
+    {
       "id": "gap_indy_nxt_qualifying_lap_reports",
       "scope": "indy_nxt_official",
       "status": "open",
       "description": "EventsSessionDetails imports race/session result rows, qualifyingResults for official SessionType=Q records, and official terminal-status incident rows for contact/mechanical/dns outcomes. Official Race Lap Chart PDFs now import 29,519 official lap-by-lap position samples from all 36 completed Race Lap Chart PDFs: 26 charts fully validate against official completed-lap counts and 10 clean partial Race Lap Chart PDFs preserve explicit missing car-lap or official result/chart conflict diagnostics without guessing terminal or conflict laps. Official Event Summary PDFs import race-stat metrics and most-improved racecraft notes. Official Leader Lap Summary PDFs import leader-by-lap timing, margin, and flag-state metrics. Official Top Section Times PDFs import practice, qualifying, and race section-rank timing metrics when official section rows are present. Official Section Results PDFs import practice, qualifying, and race lap-by-lap section times and speeds at per-car/per-lap grain when official section rows are present. The remaining true section-results holdout is session_indy_nxt_2024_6325, where the official Section Results PDF URL returns corrupt non-PDF bytes; canceled/no-row reports remain held out rather than treated as missing data. Source-visible rows without canonical API timing rows keep car/name text with null canonical IDs. Official race Results PDFs import penalty/decision summary rows and caution-summary causal incident rows. Detailed pit-lane sequence context is source-unavailable in the current official report family; use official/API pit-stop counts as the production-safe pit metric unless a new official pit-summary source appears."
     },
     {
-      "id": "gap_remaining_career_rows_after_track_metadata",
+      "id": "gap_remaining_career_rows_after_imsa",
       "scope": "career_dataset",
       "status": "open",
-      "description": "Broad historical-tail placeholder, not a UI-readiness blocker. Remaining optional or metric-specific work includes pre-2019 karting race-by-race records, early-career Formula Ford appearances outside the imported official books, future imported-track metadata, non-official ambient weather outside current exact-window scope, and future derived benchmark models. Current production caveats are tracked by specific gap IDs."
+      "description": "Later source families, karting race-by-race records, media narrative beyond imported Team USA 2020 context and structured Team USA/Badger Kart Club milestone and record facts, non-official ambient weather enrichment, session-window precision, and track metadata for future imported tracks remain open."
     }
   ]
 }

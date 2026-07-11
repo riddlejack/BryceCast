@@ -62,7 +62,7 @@
     }
   ],
   "analogSelectionPolicy": "pre_race_track_match_then_recency_no_outcome_sort",
-  "asOfDate": "2026-06-18",
+  "asOfDate": "2026-07-02",
   "careerPriorContext": [
     {
       "avgFinishPercentile": 0.498,
@@ -76,28 +76,28 @@
       "raceRows": 42,
       "seriesId": "series_gb3",
       "seriesName": "GB3 Championship",
-      "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+      "sourceHash": "5d66d442aa62ff829f41a78a998f82218eacb1e92cf10834dc3b4316d03ba7cb",
       "sourceState": "official_or_source_backed_result",
       "top10Rate": 0.429,
       "top5Rate": 0.119,
       "trackType": ""
     },
     {
-      "avgFinishPercentile": 0.459,
-      "avgGain": -0.972,
+      "avgFinishPercentile": 0.456,
+      "avgGain": -0.947,
       "caveat": "Use as normalized prior; do not compare raw finish across different field sizes.",
       "eligibility": "prior_allowed",
       "metricFamily": "result_conversion",
       "parityStatus": "production_safe",
       "priorId": "series:series_indy_nxt",
       "priorType": "series_outcome",
-      "raceRows": 36,
+      "raceRows": 38,
       "seriesId": "series_indy_nxt",
       "seriesName": "INDY NXT",
-      "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+      "sourceHash": "5d66d442aa62ff829f41a78a998f82218eacb1e92cf10834dc3b4316d03ba7cb",
       "sourceState": "official_or_source_backed_result",
-      "top10Rate": 0.472,
-      "top5Rate": 0.111,
+      "top10Rate": 0.474,
+      "top5Rate": 0.105,
       "trackType": ""
     },
     {
@@ -112,7 +112,7 @@
       "raceRows": 15,
       "seriesId": "series_formula_ford",
       "seriesName": "Formula Ford",
-      "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+      "sourceHash": "5d66d442aa62ff829f41a78a998f82218eacb1e92cf10834dc3b4316d03ba7cb",
       "sourceState": "official_or_source_backed_result",
       "top10Rate": 1.0,
       "top5Rate": 0.8,
@@ -130,7 +130,7 @@
       "raceRows": 9,
       "seriesId": "",
       "seriesName": "",
-      "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+      "sourceHash": "5d66d442aa62ff829f41a78a998f82218eacb1e92cf10834dc3b4316d03ba7cb",
       "sourceState": "official_or_source_backed_result",
       "top10Rate": 0.778,
       "top5Rate": 0.222,
@@ -178,7 +178,7 @@
   "eventId": "event_indy_nxt_2026_5538",
   "eventName": "Music City Grand Prix",
   "eventStartDate": "2026-07-18",
-  "generatedAt": "2026-06-18T17:52:08Z",
+  "generatedAt": "2026-07-02T17:45:20Z",
   "id": "upcoming_event_indy_nxt_2026_5538_music_city_grand_prix",
   "predictionBand": {
     "calibrationState": "not_calibrated_for_point_probability",
@@ -208,43 +208,43 @@
     "top10Rate": 1.0
   },
   "schemaVersion": "brycecast.upcomingEventIntelligencePack.v1",
-  "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+  "sourceHash": "5d66d442aa62ff829f41a78a998f82218eacb1e92cf10834dc3b4316d03ba7cb",
   "sourceRefs": [
     {
-      "bytes": 2452,
+      "bytes": 2206,
       "path": "analysis/indy-nxt-discovery/output/deep_dive/tables/future_weekend_prep_inputs.csv",
       "role": "event prep row",
-      "sha256": "107798792c67a95cf7945d03bc427c98920e5b52019ca91e689f0fa93b543048"
+      "sha256": "892be4f5c11d8de5f07ab540486bc47faf89fcb678216983d85ec02c582ce501"
     },
     {
-      "bytes": 17334,
+      "bytes": 18290,
       "path": "analysis/indy-nxt-discovery/output/deep_dive/tables/race_debrief_scores.csv",
       "role": "historical race priors",
-      "sha256": "ba15811c217d16c4dcf5cdc666a0d3fe110e99dcf1d6a2ab992c48c3cf816890"
+      "sha256": "30da64be58bfe4db116e10674fa12008da7fc2d62bb695871565f392f4f848c6"
     },
     {
-      "bytes": 914,
+      "bytes": 917,
       "path": "analysis/career-parity/output/tables/career_series_result_summary.csv",
       "role": "career series priors",
-      "sha256": "b8b7399ebdc8056b8628f7a5fe6204992dfa2090f17dfc563ad259bf050c3a36"
+      "sha256": "ff5d459b40d3240cca4bbaadc3cc2c52d44f5230c9e9f58f3d80104d916a74d2"
     },
     {
-      "bytes": 35106,
+      "bytes": 35571,
       "path": "analysis/career-parity/output/tables/career_result_conversion.csv",
       "role": "career conversion priors",
-      "sha256": "a43fd0126ab204a7524deeae936955c08c71636dece520561f5b1708dbc54570"
+      "sha256": "5902409972f10edcbf35e118d1324f5282e232a41a9821ee7136250bd0582c82"
     },
     {
-      "bytes": 23440,
+      "bytes": 23446,
       "path": "analysis/predictive-race-intelligence/output/career_prior_matrix.csv",
       "role": "generated career prior context",
-      "sha256": "9b2958fa1af10c6ea992cdd2308654d392213516ddb61e788932824eed7324c1"
+      "sha256": "541612c6be512624a699fe4a2057c42afc582f69aa1bc2c352bed68af276e96c"
     },
     {
       "bytes": 8924,
       "path": "analysis/predictive-race-intelligence/output/model_scorecard.json",
       "role": "prediction validation",
-      "sha256": "77e85cc9e11bd24b1a5fba5b3278e9302809ba12f4aa197f6084012df332ed62"
+      "sha256": "290a302faa09de271e526aa3e80aaf8cdd42cad8a16267d67124ff5ffbf13e44"
     }
   ],
   "top10Path": [
@@ -258,7 +258,7 @@
       "actionableRead": "The product should show the range and analogs, not a single expected finish.",
       "currentState": "Pre-event prior only.",
       "factor": "Oval conversion",
-      "whyItMatters": "INDY NXT oval rows currently show avg finish 9.11111111111111 and top-10 rate 0.7777777777777778."
+      "whyItMatters": "INDY NXT oval rows currently show avg finish 9.1 and top-10 rate 78%."
     },
     {
       "actionableRead": "Use same-track rows as analog stories with denominator labels.",

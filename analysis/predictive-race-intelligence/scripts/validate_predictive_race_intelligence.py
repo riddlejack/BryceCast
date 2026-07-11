@@ -137,6 +137,48 @@ def canonical_bryce_finished_race_sessions(data: dict[str, Any]) -> set[str]:
     }
 
 
+def iso_date_prefix(value: Any) -> str | None:
+    candidate = str(value or "").strip()[:10]
+    try:
+        date.fromisoformat(candidate)
+        return candidate
+    except ValueError:
+        return None
+
+
+def race_session_chronology(data: dict[str, Any]) -> dict[str, dict[str, Any]]:
+    sessions, events = dataset_indexes(data)
+    by_year: dict[int, list[dict[str, Any]]] = {}
+    for session_id in canonical_indy_bryce_race_sessions(data):
+        session = sessions.get(session_id) or {}
+        event = events.get(session.get("eventId") or "") or {}
+        event_start_date = iso_date_prefix(event.get("eventStartDate"))
+        if not event_start_date:
+            fail(f"{session_id} missing ISO eventStartDate in canonical dataset")
+        session_start = session.get("actualStart") or session.get("scheduledStart") or event_start_date
+        session_start_date = iso_date_prefix(session_start) or event_start_date
+        try:
+            season_year = int(event.get("seasonYear"))
+        except (TypeError, ValueError):
+            season_year = 0
+        by_year.setdefault(season_year, []).append(
+            {
+                "sessionId": session_id,
+                "seasonYear": season_year,
+                "eventStartDate": event_start_date,
+                "sessionStart": session_start,
+                "sessionStartDate": session_start_date,
+            }
+        )
+
+    by_session: dict[str, dict[str, Any]] = {}
+    for _, rows in by_year.items():
+        rows.sort(key=lambda row: (row["sessionStartDate"], str(row["sessionStart"] or ""), row["eventStartDate"], row["sessionId"]))
+        for index, row in enumerate(rows, start=1):
+            by_session[row["sessionId"]] = {**row, "roundIndex": index}
+    return by_session
+
+
 def csv_id_set(path: Path, field: str) -> set[str]:
     return {row[field] for row in read_csv(path) if row.get(field)}
 
@@ -417,23 +459,52 @@ def validate_context_packs() -> None:
     )
 
     race_debriefs = [pack for pack in parsed_packs if pack.get("type") == "race_debrief"]
+    chronology = race_session_chronology(data)
+    dataset_source = str(DATASET_PATH.relative_to(ROOT))
     for pack in race_debriefs:
+        expected_chronology = chronology.get(str(pack.get("sessionId") or ""))
+        if not expected_chronology:
+            fail(f"race debrief pack {pack.get('id')} does not map to canonical chronology")
+        if pack.get("eventStartDate") != expected_chronology["eventStartDate"]:
+            fail(f"race debrief pack {pack.get('id')} must include canonical eventStartDate")
         race_order = pack.get("raceOrder")
         if not isinstance(race_order, dict) or not isinstance(race_order.get("roundIndex"), int) or not race_order.get("source"):
             fail(f"race debrief pack {pack.get('id')} must include source-backed raceOrder.roundIndex")
+        if race_order.get("roundIndex") != expected_chronology["roundIndex"]:
+            fail(
+                f"race debrief pack {pack.get('id')} roundIndex must be chronological from canonical dataset: "
+                f"expected {expected_chronology['roundIndex']}, got {race_order.get('roundIndex')}"
+            )
+        if race_order.get("source") != dataset_source:
+            fail(f"race debrief pack {pack.get('id')} raceOrder.source must be canonical dataset")
+        if dataset_source not in {ref.get("path") for ref in pack.get("sourceRefs", []) if isinstance(ref, dict)}:
+            fail(f"race debrief pack {pack.get('id')} sourceRefs must include canonical dataset chronology source")
 
     upcoming = [pack for pack in parsed_packs if pack.get("type") == "upcoming_event"]
+    expected_future_events = canonical_future_indy_events(data)
+    if expected_future_events and not upcoming:
+        fail("future INDY NXT events exist but no upcoming-event context packs were generated")
     for pack in upcoming:
         text = json.dumps(pack.get("top10Path", []))
         analog_text = json.dumps(pack.get("analogRaces", []))
         track = pack.get("track", {})
-        track_name = track.get("name", "")
         track_type = track.get("type", "")
-        if track_name != "Road America" and "Road America" in text:
-            fail(f"upcoming pack {pack.get('id')} contains Road America-specific copy")
         if track_type != "road" and "road-course" in text:
             fail(f"upcoming pack {pack.get('id')} contains road-course copy for non-road track")
+        required_fields = ["eventId", "eventName", "eventStartDate", "track", "sameTrackHistory", "trackTypeHistory", "top10Path", "predictionBand", "analogRaces", "sourceRefs", "chartSpecs"]
+        for field in required_fields:
+            if field not in pack:
+                fail(f"upcoming pack {pack.get('id')} missing {field}")
+        if pack.get("eventId") not in expected_future_events:
+            fail(f"upcoming pack {pack.get('id')} eventId is not a future INDY NXT event as of {RUN_DATE.isoformat()}")
+        if not isinstance(pack.get("track"), dict) or not pack["track"].get("name") or not pack["track"].get("type"):
+            fail(f"upcoming pack {pack.get('id')} must carry track name/type")
+        for field in ["top10Path", "analogRaces", "sourceRefs", "chartSpecs"]:
+            if not isinstance(pack.get(field), list):
+                fail(f"upcoming pack {pack.get('id')} field {field} must be a list")
         band = pack.get("predictionBand", {})
+        if not isinstance(band, dict) or not isinstance(band.get("finishPercentileBand"), dict):
+            fail(f"upcoming pack {pack.get('id')} must carry predictionBand.finishPercentileBand")
         if "weatherState" not in pack:
             fail(f"upcoming pack {pack.get('id')} must carry the source weatherState for UI package compatibility")
         if band.get("claimStrength") == "point_prediction":
@@ -457,14 +528,6 @@ def validate_context_packs() -> None:
                 fail(f"upcoming pack {pack.get('id')} analogRaces leaks post-race fields: {sorted(leaked_fields)}")
         if any(field in analog_text for field in forbidden_analog_fields):
             fail(f"upcoming pack {pack.get('id')} analogRaces text contains post-race field names")
-
-    road_america = [pack for pack in upcoming if "road_america" in pack.get("id", "")]
-    if len(road_america) != 2:
-        fail("expected two Road America upcoming-event packs")
-    for pack in road_america:
-        for field in ["top10Path", "predictionBand", "analogRaces", "sourceRefs", "chartSpecs"]:
-            if field not in pack:
-                fail(f"Road America pack {pack.get('id')} missing {field}")
 
     career_packs = [pack for pack in parsed_packs if pack.get("type") == "career_lab"]
     if len(career_packs) != 1:

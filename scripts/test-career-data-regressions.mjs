@@ -162,8 +162,8 @@ assert.equal(
 );
 const indySectionCoverage = indyCoverage?.categories.find((row) => row.id === 'indy_section_data');
 assert.equal(indySectionCoverage?.status, 'partial', 'INDY NXT section data must remain partial until the true malformed Section Results PDF gap is resolved');
-assert.equal(indySectionCoverage?.covered, 144, 'INDY NXT section-data coverage must count sessions with both official Top Section Times and Section Results metrics');
-assert.equal(indySectionCoverage?.total, 145, 'INDY NXT section-data denominator must exclude combined aggregate, schedule-only, canceled, and official no-row sessions');
+assert.equal(indySectionCoverage?.covered, 151, 'INDY NXT section-data coverage must count sessions with both official Top Section Times and Section Results metrics');
+assert.equal(indySectionCoverage?.total, 152, 'INDY NXT section-data denominator must exclude combined aggregate, schedule-only, canceled, and official no-row sessions');
 assert.match(
   indySectionCoverage?.notes ?? '',
   /session_indy_nxt_2024_6325 \(official_pdf_corrupt_or_truncated\)/,
@@ -1489,10 +1489,10 @@ assert.equal(
 );
 
 const indyNxtQualifyingResults = dataset.qualifyingResults.filter((row) => row.sessionId.startsWith('session_indy_nxt_'));
-assert.equal(indyNxtQualifyingResults.length, 1238, 'INDY NXT qualifyingResults must import all official API SessionType=Q records');
+assert.equal(indyNxtQualifyingResults.length, 1334, 'INDY NXT qualifyingResults must import all official API SessionType=Q records');
 assert.equal(
   indyNxtQualifyingResults.filter((row) => row.driverId === 'driver_bryce_aron').length,
-  61,
+  65,
   'INDY NXT qualifyingResults must include Bryce rows from official API SessionType=Q records'
 );
 const indyNxtStPeteBryceQual = indyNxtQualifyingResults.find((row) => row.id === 'qualifying_indy_nxt_2024_6346_driver_bryce_aron');
@@ -1592,7 +1592,7 @@ assert.equal(
 const indyNxtStatusIncidents = dataset.incidents.filter((row) => /^incident_indy_nxt_status_/.test(row.id ?? ''));
 assert.equal(
   indyNxtStatusIncidents.length,
-  68,
+  71,
   'INDY NXT official terminal statuses contact/mechanical/dns must normalize to incident rows'
 );
 const indyNxtStatusIncidentTypes = indyNxtStatusIncidents.reduce((counts, row) => {
@@ -1601,7 +1601,7 @@ const indyNxtStatusIncidentTypes = indyNxtStatusIncidents.reduce((counts, row) =
 }, {});
 assert.deepEqual(
   indyNxtStatusIncidentTypes,
-  { contact: 55, dns: 2, mechanical: 11 },
+  { contact: 58, dns: 2, mechanical: 11 },
   'INDY NXT official terminal-status incidents must preserve source status categories without inferring unknowns'
 );
 const brycePortland2024ContactIncident = dataset.incidents.find((row) => row.id === 'incident_indy_nxt_status_2024_6324_driver_bryce_aron');
@@ -1706,7 +1706,7 @@ const indyNxtAlabama2024LeaderSummary = dataset.derivedMetrics.find((row) => row
 assert.ok(indyNxtAlabama2024LeaderSummary, 'INDY NXT Alabama 2024 Leader Lap Summary metric must import from the official PDF');
 assert.equal(
   dataset.derivedMetrics.filter((row) => /^metric_indy_nxt_\d{4}_\d+_leader_lap_summary$/.test(row.id ?? '')).length,
-  36,
+  37,
   'INDY NXT Leader Lap Summary metrics must import every official race-session PDF'
 );
 assert.equal(
@@ -1790,12 +1790,12 @@ assert.equal(indyNxtStPete2024QualBryceSectionCar?.carNumber, '27', 'INDY NXT St
 assert.equal(indyNxtStPete2024QualBryceSectionLap5Overall?.timeSeconds, 64.8883, 'INDY NXT St. Petersburg 2024 Bryce lap 5 official Section Results lap time must parse from the official PDF');
 assert.equal(indyNxtStPete2024QualBryceSectionLap5Overall?.speedMph, 99.864, 'INDY NXT St. Petersburg 2024 Bryce lap 5 official Section Results lap speed must parse from the official PDF');
 assert.equal(indyNxtStPete2024QualBryceSectionLap5Turn1?.timeSeconds, 6.3801, 'INDY NXT St. Petersburg 2024 Bryce lap 5 official Section Results Turn 1 time must parse from the official PDF');
-assert.equal(indyNxtReportDetailsBackfill.topSectionReportsDiscovered, 147, 'INDY NXT report-detail backfill must discover all official Top Section Times PDFs from session metadata');
-assert.equal(indyNxtReportDetailsBackfill.topSectionReportsParsed, 146, 'INDY NXT report-detail backfill must parse all non-canceled official Top Section Times PDFs');
-assert.equal(indyNxtReportDetailsBackfill.topSectionMetricsImported, 146, 'INDY NXT report-detail backfill must import one metric per parsed official Top Section Times PDF');
-assert.equal(indyNxtReportDetailsBackfill.sectionResultsReportsDiscovered, 147, 'INDY NXT report-detail backfill must discover all official Section Results PDFs from session metadata');
-assert.equal(indyNxtReportDetailsBackfill.sectionResultsReportsParsed, 145, 'INDY NXT report-detail backfill must parse all extractable non-canceled official Section Results PDFs');
-assert.equal(indyNxtReportDetailsBackfill.sectionResultsMetricsImported, 145, 'INDY NXT report-detail backfill must import one metric per parsed official Section Results PDF');
+assert.equal(indyNxtReportDetailsBackfill.topSectionReportsDiscovered, 154, 'INDY NXT report-detail backfill must discover all official Top Section Times PDFs from session metadata');
+assert.equal(indyNxtReportDetailsBackfill.topSectionReportsParsed, 153, 'INDY NXT report-detail backfill must parse all non-canceled official Top Section Times PDFs');
+assert.equal(indyNxtReportDetailsBackfill.topSectionMetricsImported, 153, 'INDY NXT report-detail backfill must import one metric per parsed official Top Section Times PDF');
+assert.equal(indyNxtReportDetailsBackfill.sectionResultsReportsDiscovered, 154, 'INDY NXT report-detail backfill must discover all official Section Results PDFs from session metadata');
+assert.equal(indyNxtReportDetailsBackfill.sectionResultsReportsParsed, 152, 'INDY NXT report-detail backfill must parse all extractable non-canceled official Section Results PDFs');
+assert.equal(indyNxtReportDetailsBackfill.sectionResultsMetricsImported, 152, 'INDY NXT report-detail backfill must import one metric per parsed official Section Results PDF');
 assert.deepEqual(indyNxtReportDetailsBackfill.sectionResultsFailures, [], 'INDY NXT Section Results parser must not leave parser failures');
 assert.deepEqual(
   indyNxtReportDetailsBackfill.sectionResultsReportsHeldOut,
@@ -1826,7 +1826,7 @@ assert.deepEqual(
   }],
   'INDY NXT canceled Iowa 2025 qualifying Top Section Times report must be held out as no-row official evidence'
 );
-assert.equal(indyNxtReportDetailsBackfill.resultsReportsDiscovered, 36, 'INDY NXT Results PDF penalty/caution parser must stay scoped to race sessions');
+assert.equal(indyNxtReportDetailsBackfill.resultsReportsDiscovered, 38, 'INDY NXT Results PDF penalty/caution parser must stay scoped to race sessions');
 assert.deepEqual(indyNxtReportDetailsBackfill.resultsReportFailures, [], 'INDY NXT race Results PDF parser must not treat qualifying results as penalty/caution failures');
 const indyNxtStPete2026LapSamples = dataset.lapSamples.filter((row) => row.sessionId === 'session_indy_nxt_2026_6751');
 const indyNxtStPete2026BryceLapSamples = indyNxtStPete2026LapSamples
@@ -2095,14 +2095,14 @@ assert.equal(roadAmericaRace1Event?.eventEndDate, '2026-06-20', 'Road America Ra
 assert.equal(roadAmericaRace1Event?.timezone, 'America/Chicago', 'Road America Race 1 schedule-only event must carry track timezone');
 assert.ok((roadAmericaRace1Event?.provenanceRefs ?? []).includes('source_indy_nxt_2026_race_control_schedule'), 'Road America Race 1 event must cite Race Control schedule provenance');
 
-const roadAmericaScheduleOnlySessions = [
+const roadAmericaRace1TrackactivitySessions = [
   ['session_indy_nxt_2026_6869', 'Practice', 'practice', '2026-06-19T14:00:00', '2026-06-19T14:00:00'],
   ['session_indy_nxt_2026_6870', 'Qualifying - Race 1 Group 1', 'qualifying', '2026-06-20T09:00:00', '2026-06-20T09:00:00'],
   ['session_indy_nxt_2026_6871', 'Qualifying - Race 1 Group 2', 'qualifying', '2026-06-20T09:18:00', '2026-06-20T09:18:00'],
   ['session_indy_nxt_2026_6872', 'Combined Qualifying - Race 1', 'qualifying', '2026-06-20T09:30:00', '2026-06-20T09:30:00'],
   ['session_indy_nxt_2026_6762', 'Race', 'race', '2026-06-20T11:30:00', '2026-06-20T11:36:00']
 ];
-for (const [sessionId, sessionName, sessionType, scheduledStart, actualStart] of roadAmericaScheduleOnlySessions) {
+for (const [sessionId, sessionName, sessionType, scheduledStart, actualStart] of roadAmericaRace1TrackactivitySessions) {
   const session = dataset.sessions.find((row) => row.id === sessionId);
   assert.equal(session?.eventId, 'event_indy_nxt_2026_5545', `${sessionId} must attach to the official Road America Race 1 event`);
   assert.equal(session?.sessionName, sessionName, `${sessionId} must preserve the Race Control session label`);
@@ -2111,9 +2111,14 @@ for (const [sessionId, sessionName, sessionType, scheduledStart, actualStart] of
   assert.equal(session?.actualStart, actualStart, `${sessionId} must convert source estimated green flag to event-local actualStart`);
   assert.equal(session?.scheduledEnd?.startsWith(scheduledStart.slice(0, 10)), true, `${sessionId} must retain an event-local scheduled end`);
   assert.equal(session?.timezone, 'America/Chicago', `${sessionId} must retain Road America timezone`);
-  assert.equal(session?.timeSource, 'official_race_control_trackactivity_schedule_only', `${sessionId} must mark schedule-only Race Control timing`);
+  assert.equal(session?.timeSource, 'official_race_control_trackactivity', `${sessionId} must mark official Race Control timing after the INDY NXT API result import`);
+  assert.equal(session?.ingestionState ?? null, null, `${sessionId} must not remain schedule-only after official API rows are imported`);
   assert.ok((session?.provenanceRefs ?? []).includes('source_indy_nxt_2026_race_control_trackactivity_schedule'), `${sessionId} must cite Race Control trackactivity provenance`);
-  assert.equal(dataset.results.some((row) => row.sessionId === sessionId), false, `${sessionId} must remain schedule-only with no fabricated result rows`);
+  assert.ok(
+    (session?.provenanceRefs ?? []).some((ref) => /^source_indynxt_events_session_/.test(ref)),
+    `${sessionId} must cite the official INDY NXT EventsSessionDetails API source`
+  );
+  assert.equal(dataset.results.some((row) => row.sessionId === sessionId), true, `${sessionId} must retain sourced official API result/classification rows`);
 }
 
 const indyNxtWeekendSchedulePdfWindows2024 = [

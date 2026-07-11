@@ -14,51 +14,51 @@
   "causalAttribution": false,
   "claimStrength": "source_bounded_context_narrative_not_telemetry",
   "contextTypeCounts": {
-    "incident": 132,
-    "media": 940,
-    "penalty": 82,
-    "racecraft": 35,
-    "weather": 181
+    "incident": 140,
+    "media": 973,
+    "penalty": 86,
+    "racecraft": 37,
+    "weather": 190
   },
   "counts": {
-    "derivedMetricRows": 370,
-    "gapRows": 9,
-    "mediaRows": 940,
+    "derivedMetricRows": 387,
+    "gapRows": 10,
+    "mediaRows": 973,
     "seriesCoverageRows": 8,
-    "sessionRollupRows": 399,
-    "sourceEvidenceRows": 1199,
-    "timelineRows": 1370,
-    "weatherRows": 181
+    "sessionRollupRows": 408,
+    "sourceEvidenceRows": 1232,
+    "timelineRows": 1426,
+    "weatherRows": 190
   },
   "derivedMetricTypeCounts": {
     "career_award": 1,
     "karting_championship_milestone": 2,
     "karting_fast_time": 2,
     "karting_track_record": 1,
-    "official_event_summary_race_stats": 36,
-    "official_leader_lap_summary": 36,
-    "official_section_results": 145,
-    "official_top_section_times": 146,
+    "official_event_summary_race_stats": 38,
+    "official_leader_lap_summary": 37,
+    "official_section_results": 152,
+    "official_top_section_times": 153,
     "season_context_milestone": 1
   },
   "gapStatusCounts": {
-    "open": 6,
+    "open": 7,
     "partial": 2,
     "source_broken_preserved": 1
   },
-  "generatedAt": "2026-06-18T17:52:01Z",
+  "generatedAt": "2026-07-02T17:45:12Z",
   "ok": true,
   "publicPointPrediction": false,
   "sourceEvidenceTypeCounts": {
     "archived_official_page": 2,
-    "official_api": 264,
+    "official_api": 273,
     "official_article": 4,
     "official_html": 16,
     "official_image": 5,
     "official_json": 2,
     "official_page": 117,
-    "official_pdf": 711,
-    "weather_api": 78
+    "official_pdf": 732,
+    "weather_api": 81
   },
-  "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc"
+  "sourceHash": "5d66d442aa62ff829f41a78a998f82218eacb1e92cf10834dc3b4316d03ba7cb"
 }

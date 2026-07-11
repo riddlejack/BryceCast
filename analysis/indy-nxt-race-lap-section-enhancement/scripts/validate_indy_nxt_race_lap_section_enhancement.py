@@ -6,8 +6,10 @@ from __future__ import annotations
 import csv
 import hashlib
 import json
+import os
 import re
 import sys
+from datetime import date
 from pathlib import Path
 from typing import Any
 
@@ -18,6 +20,28 @@ OUTPUT_DIR = LANE_DIR / "output"
 
 BRYCE_ID = "driver_bryce_aron"
 INDY_NXT_ID = "series_indy_nxt"
+
+
+def resolve_run_date() -> date:
+    override = os.environ.get("BRYCECAST_ANALYTICS_AS_OF_DATE")
+    if override:
+        try:
+            return date.fromisoformat(override)
+        except ValueError as exc:
+            raise SystemExit("BRYCECAST_ANALYTICS_AS_OF_DATE must be YYYY-MM-DD") from exc
+    summary_path = OUTPUT_DIR / "summary.json"
+    if summary_path.exists():
+        try:
+            summary = json.loads(summary_path.read_text())
+            as_of = summary.get("upcomingVenue", {}).get("asOfDate")
+            if as_of:
+                return date.fromisoformat(str(as_of))
+        except (OSError, ValueError, TypeError):
+            pass
+    return date.today()
+
+
+RUN_DATE = resolve_run_date()
 
 REQUIRED_FILES = [
     "race_lap_microstates.csv",
@@ -31,6 +55,44 @@ REQUIRED_FILES = [
     "context-packs/indy-nxt-race-lap-section-context.json",
     "context-packs/road-america-race-context.json",
 ]
+
+
+def slug(value: str) -> str:
+    out = re.sub(r"[^a-z0-9]+", "_", value.lower()).strip("_")
+    return out or "track"
+
+
+def venue_slug(track_name: str) -> str:
+    normalized = track_name.lower()
+    if "mid-ohio" in normalized:
+        return "mid_ohio"
+    return slug(track_name)
+
+
+def parse_event_date(value: Any) -> date | None:
+    try:
+        return date.fromisoformat(str(value or "")[:10])
+    except ValueError:
+        return None
+
+
+def next_upcoming_track_name(dataset: dict[str, Any]) -> str | None:
+    tracks = {row["id"]: row for row in dataset.get("tracks", [])}
+    candidates: list[tuple[date, str, str]] = []
+    for event in dataset.get("events", []):
+        if event.get("seriesId") != INDY_NXT_ID:
+            continue
+        event_date = parse_event_date(event.get("eventStartDate"))
+        if event_date is None or event_date < RUN_DATE:
+            continue
+        track = tracks.get(event.get("trackId") or "", {})
+        track_name = track.get("name") or event.get("trackName") or ""
+        if track_name:
+            candidates.append((event_date, str(event.get("id") or ""), str(track_name)))
+    if not candidates:
+        return None
+    candidates.sort(key=lambda row: (row[0], row[1]))
+    return candidates[0][2]
 
 MICROSTATE_FIELDS = {
     "sessionId",
@@ -362,7 +424,20 @@ def validate_sections(expected_hash: str, counts: dict[str, int]) -> None:
         require_no_low_denominator_strings(row.get("weakestCleanSectionFamilies", ""), "race section summary weakestCleanSectionFamilies")
 
 
-def validate_context_and_report(expected_hash: str) -> None:
+def validate_race_context_csv(expected_hash: str, path: Path, track_name: str, label: str) -> list[dict[str, str]]:
+    rows = read_csv(path)
+    if len(rows) < 1:
+        fail(f"{path.name} is too small for {label}: {len(rows)} rows")
+    if any(row.get("sourceHash") != expected_hash for row in rows):
+        fail(f"{label} context sourceHash does not match canonical dataset")
+    track_match = track_name.lower()
+    bad_tracks = sorted({row.get("trackName", "") for row in rows if track_match not in row.get("trackName", "").lower()})
+    if bad_tracks:
+        fail(f"{label} context contains rows for unexpected tracks: {bad_tracks[:5]}")
+    return rows
+
+
+def validate_context_and_report(expected_hash: str, next_track_name: str) -> None:
     summary = load_json(OUTPUT_DIR / "summary.json")
     if summary.get("ok") is not True:
         fail("summary.json must set ok=true")
@@ -370,10 +445,21 @@ def validate_context_and_report(expected_hash: str) -> None:
         fail("summary.json sourceHash does not match canonical dataset")
     if summary.get("claimStrength") != "post_race_descriptive_only":
         fail("summary.json must be post_race_descriptive_only")
+    if summary.get("upcomingVenue", {}).get("trackName") != next_track_name:
+        fail("summary.json upcomingVenue trackName does not match the next future INDY NXT event")
+    validate_race_context_csv(expected_hash, OUTPUT_DIR / "road_america_race_lap_section_context.csv", "Road America", "legacy race")
+    validate_race_context_csv(
+        expected_hash,
+        OUTPUT_DIR / f"{venue_slug(next_track_name)}_race_lap_section_context.csv",
+        next_track_name,
+        "next-venue race",
+    )
 
+    dynamic_pack_name = f"context-packs/{venue_slug(next_track_name).replace('_', '-')}-race-context.json"
     for name in [
         "context-packs/indy-nxt-race-lap-section-context.json",
         "context-packs/road-america-race-context.json",
+        dynamic_pack_name,
     ]:
         pack = load_json(OUTPUT_DIR / name)
         if pack.get("sourceHash") != expected_hash:
@@ -386,6 +472,13 @@ def validate_context_and_report(expected_hash: str) -> None:
         hits = [phrase for phrase in forbidden if phrase in text]
         if hits:
             fail(f"{name} contains forbidden predictive claim text: {hits}")
+        if name == dynamic_pack_name:
+            if pack.get("trackName") != next_track_name:
+                fail(f"{name} trackName does not match next venue")
+            if pack.get("asOfDate") != RUN_DATE.isoformat():
+                fail(f"{name} asOfDate does not match validator as-of date")
+            if len(pack.get("historicalRaceRows") or []) < 1:
+                fail(f"{name} must include same-track historical race rows")
 
     report = OUTPUT_DIR / "INDY_NXT_RACE_LAP_SECTION_ENHANCEMENT.md"
     require_file(report)
@@ -399,7 +492,7 @@ def validate_context_and_report(expected_hash: str) -> None:
         "Lap Microstates",
         "Caution-Aware Segments",
         "Race Section Shape",
-        "Road America Context",
+        "Upcoming Venue Race Context",
         "Caveats",
     ]:
         if phrase not in text:
@@ -412,11 +505,16 @@ def main() -> int:
             require_file(OUTPUT_DIR / relative)
         dataset = load_json(ROOT / "data/career/career.dataset.json")
         expected_hash = dataset_hash()
+        next_track_name = next_upcoming_track_name(dataset)
+        if not next_track_name:
+            fail("canonical dataset has no future INDY NXT venue for next-venue race context")
+        require_file(OUTPUT_DIR / f"{venue_slug(next_track_name)}_race_lap_section_context.csv")
+        require_file(OUTPUT_DIR / f"context-packs/{venue_slug(next_track_name).replace('_', '-')}-race-context.json")
         counts = expected_counts(dataset)
         validate_microstates(expected_hash, counts)
         validate_segments_and_inflections(expected_hash, counts)
         validate_sections(expected_hash, counts)
-        validate_context_and_report(expected_hash)
+        validate_context_and_report(expected_hash, next_track_name)
     except AssertionError as exc:
         print(json.dumps({"ok": False, "error": str(exc)}, indent=2))
         return 1

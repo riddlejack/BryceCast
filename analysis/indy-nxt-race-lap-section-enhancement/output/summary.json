@@ -7,20 +7,26 @@
   ],
   "claimStrength": "post_race_descriptive_only",
   "counts": {
-    "raceLapInflectionPoints": 151,
-    "raceLapMicrostates": 1390,
-    "raceLapSegments": 159,
-    "raceSectionLapObservations": 16001,
-    "raceSectionSessionSummaries": 35,
-    "roadAmericaRows": 2
+    "raceLapInflectionPoints": 157,
+    "raceLapMicrostates": 1428,
+    "raceLapSegments": 173,
+    "raceSectionLapObservations": 16660,
+    "raceSectionSessionSummaries": 37,
+    "roadAmericaRows": 4,
+    "upcomingVenueRows": 2
   },
-  "generatedAt": "2026-06-18T10:49:41Z",
+  "generatedAt": "2026-07-02T17:45:39Z",
   "ok": true,
   "publicPointPrediction": false,
   "sectionSourceStateCounts": {
-    "official_section_results+official_lap_chart+official_incident_caution_context": 15800,
-    "official_section_results_only": 201
+    "official_section_results+official_lap_chart+official_incident_caution_context": 16452,
+    "official_section_results_only": 208
   },
   "sourceDataset": "data/career/career.dataset.json",
-  "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc"
+  "sourceHash": "5d66d442aa62ff829f41a78a998f82218eacb1e92cf10834dc3b4316d03ba7cb",
+  "upcomingVenue": {
+    "artifactSlug": "mid_ohio",
+    "asOfDate": "2026-07-02",
+    "trackName": "Mid-Ohio Sports Car Course"
+  }
 }

@@ -269,6 +269,46 @@ def canonical_bryce_finished_race_sessions(data: dict[str, Any]) -> set[str]:
     }
 
 
+def iso_date_prefix(value: Any) -> str | None:
+    text = str(value or "").strip()
+    match = re.match(r"^(\d{4}-\d{2}-\d{2})", text)
+    return match.group(1) if match else None
+
+
+def race_session_chronology(data: dict[str, Any]) -> dict[str, dict[str, Any]]:
+    sessions, events = dataset_indexes(data)
+    items: list[dict[str, Any]] = []
+    for session_id in canonical_indy_bryce_race_sessions(data):
+        session = sessions.get(session_id) or {}
+        event = events.get(session.get("eventId") or "") or {}
+        event_start_date = iso_date_prefix(event.get("eventStartDate"))
+        if not event_start_date:
+            raise ValueError(f"{session_id} missing ISO eventStartDate in canonical dataset")
+        session_start = session.get("actualStart") or session.get("scheduledStart") or event_start_date
+        session_start_date = iso_date_prefix(session_start) or event_start_date
+        items.append(
+            {
+                "sessionId": session_id,
+                "seasonYear": int(clean_num(event.get("seasonYear")) or 0),
+                "eventId": event.get("id"),
+                "eventName": event.get("name"),
+                "eventStartDate": event_start_date,
+                "sessionStart": session_start,
+                "sessionStartDate": session_start_date,
+            }
+        )
+
+    by_session: dict[str, dict[str, Any]] = {}
+    by_year: dict[int, list[dict[str, Any]]] = defaultdict(list)
+    for item in items:
+        by_year[item["seasonYear"]].append(item)
+    for _, rows in by_year.items():
+        rows.sort(key=lambda row: (row["sessionStartDate"], str(row["sessionStart"] or ""), row["eventStartDate"], row["sessionId"]))
+        for index, row in enumerate(rows, start=1):
+            by_session[row["sessionId"]] = {**row, "roundIndex": index}
+    return by_session
+
+
 def csv_id_set(path: Path, field: str) -> set[str]:
     return {row[field] for row in read_csv(path) if row.get(field)}
 
@@ -1072,6 +1112,16 @@ def track_type_label(track_type: str) -> str:
     return labels.get(track_type, track_type.replace("_", " ") or "track-type")
 
 
+def finish_text(value: Any) -> str:
+    parsed = clean_num(value)
+    return "n/a" if parsed is None else f"{parsed:.1f}"
+
+
+def rate_text(value: Any) -> str:
+    parsed = clean_num(value)
+    return "n/a" if parsed is None else f"{round(parsed * 100):.0f}%"
+
+
 def top10_path(event: pd.Series, same_track: pd.DataFrame, same_type: pd.DataFrame, scorecard: dict[str, Any]) -> list[dict[str, Any]]:
     track_name = str(event.trackName)
     type_label = track_type_label(str(event.trackType))
@@ -1084,7 +1134,7 @@ def top10_path(event: pd.Series, same_track: pd.DataFrame, same_type: pd.DataFra
         },
         {
             "factor": f"{type_label.capitalize()} conversion",
-            "whyItMatters": f"INDY NXT {event.trackType} rows currently show avg finish {event.trackTypeAvgFinish} and top-10 rate {event.trackTypeTop10Rate}.",
+            "whyItMatters": f"INDY NXT {event.trackType} rows currently show avg finish {finish_text(event.trackTypeAvgFinish)} and top-10 rate {rate_text(event.trackTypeTop10Rate)}.",
             "currentState": "Pre-event prior only.",
             "actionableRead": "The product should show the range and analogs, not a single expected finish.",
         },
@@ -1139,6 +1189,8 @@ def choose_analog_races(race: pd.DataFrame, track_name: str, track_type: str, li
 
 
 def build_race_debrief_packs(feature_df: pd.DataFrame) -> list[dict[str, Any]]:
+    data = load_json(DATASET_PATH)
+    chronology = race_session_chronology(data)
     race = pd.read_csv(DEEP_TABLES / "race_debrief_scores.csv")
     lap = pd.read_csv(DEEP_TABLES / "full_field_lap_dynamics_by_race.csv")
     incident = pd.read_csv(DEEP_TABLES / "incident_penalty_context.csv")
@@ -1158,6 +1210,9 @@ def build_race_debrief_packs(feature_df: pd.DataFrame) -> list[dict[str, Any]]:
     )
     for _, row in joined.iterrows():
         pack_id = f"debrief_{row.sessionId}"
+        race_chronology = chronology.get(str(row.sessionId))
+        if not race_chronology:
+            raise ValueError(f"Missing canonical chronology for {row.sessionId}")
         pack = {
             "schemaVersion": "brycecast.raceDebriefContextPack.v1",
             "id": pack_id,
@@ -1167,10 +1222,13 @@ def build_race_debrief_packs(feature_df: pd.DataFrame) -> list[dict[str, Any]]:
             "sessionId": row.sessionId,
             "raceLabel": row.raceLabel,
             "seasonYear": int(clean_num(row.seasonYear) or 0),
+            "eventStartDate": race_chronology["eventStartDate"],
             "raceOrder": {
                 "seasonYear": int(clean_num(row.seasonYear) or 0),
-                "roundIndex": int(clean_num(row.get("roundIndex")) or 0),
-                "source": rel(DEEP_TABLES / "championship_progression.csv"),
+                "roundIndex": race_chronology["roundIndex"],
+                "source": rel(DATASET_PATH),
+                "sourceFields": ["events.eventStartDate", "sessions.actualStart", "sessions.scheduledStart"],
+                "sessionStartDate": race_chronology["sessionStartDate"],
             },
             "track": {"name": row.trackName, "type": row.trackType},
             "outcome": {
@@ -1240,6 +1298,7 @@ def build_race_debrief_packs(feature_df: pd.DataFrame) -> list[dict[str, Any]]:
                 source_ref(DEEP_TABLES / "section_results_deep_by_race.csv", "section context"),
                 source_ref(DEEP_TABLES / "championship_progression.csv", "championship context"),
                 source_ref(INDY_TABLES / "indy_nxt_lap_timeline.csv", "lap timeline chart source"),
+                source_ref(DATASET_PATH, "canonical event/session chronology"),
             ],
             "caveats": [row.caveat, "Archetype labels require review before public UI copy."],
             "sourceState": row.sourceState,
@@ -1254,7 +1313,8 @@ def build_race_debrief_packs(feature_df: pd.DataFrame) -> list[dict[str, Any]]:
                 "path": rel(path),
                 "sessionId": row.sessionId,
                 "seasonYear": int(clean_num(row.seasonYear) or 0),
-                "roundIndex": int(clean_num(row.get("roundIndex")) or 0),
+                "roundIndex": race_chronology["roundIndex"],
+                "eventStartDate": race_chronology["eventStartDate"],
                 "sourceRefs": [
                     rel(DEEP_TABLES / "race_debrief_scores.csv"),
                     rel(DEEP_TABLES / "full_field_lap_dynamics_by_race.csv"),
@@ -1264,6 +1324,7 @@ def build_race_debrief_packs(feature_df: pd.DataFrame) -> list[dict[str, Any]]:
                     rel(DEEP_TABLES / "section_results_deep_by_race.csv"),
                     rel(DEEP_TABLES / "championship_progression.csv"),
                     rel(INDY_TABLES / "indy_nxt_lap_timeline.csv"),
+                    rel(DATASET_PATH),
                 ],
             }
         )
@@ -1333,7 +1394,7 @@ def career_stories(series_summary: list[dict[str, str]], result_conversion: list
     return [
         {"story": "Largest source-backed race sample", "detail": f"{summaries[0]['seriesName']} has {summaries[0]['raceRows']} race rows."},
         {"story": "Best next historic deep dive", "detail": "GB3 combines the largest non-INDY result sample with qualifying support."},
-        {"story": "Track-type prior", "detail": "Career road-course rows are broad enough for priors, but INDY NXT road-course rows control Road America context."},
+        {"story": "Track-type prior", "detail": "Career track-type rows are broad enough for priors, but INDY NXT rows control upcoming-event context."},
         {"story": "Best finish-percentile races", "detail": "; ".join(best["raceLabel"].astype(str).head(3).tolist())},
     ]
 
@@ -1425,6 +1486,7 @@ def build_manifest(pack_refs: list[dict[str, Any]], upstream_coverage: dict[str,
         "packs": sorted(enriched_pack_refs, key=lambda p: (p["type"], p["id"])),
         "packCounts": dict(sorted(count_by(enriched_pack_refs, "type").items())),
         "sourceRefs": [
+            source_ref(DATASET_PATH, "canonical event/session chronology"),
             source_ref(DEEP_TABLES / "future_weekend_prep_inputs.csv", "upcoming event packs"),
             source_ref(DEEP_TABLES / "race_debrief_scores.csv", "race debrief packs"),
             source_ref(CAREER_TABLES / "career_result_conversion.csv", "career lab pack"),
@@ -1486,11 +1548,19 @@ def build_charts(scorecard: dict[str, Any], career_priors: list[dict[str, Any]],
     ]
     simple_bar_svg(CHART_DIR / "career_track_type_priors.svg", track_rows, "Career Track-Type Priors", "Normalized finish percentile by track type.")
 
-    road = feature_df[feature_df["trackName"].astype(str).str.contains("Road America", na=False)]
-    road_rows = [(row["raceLabel"], float(row["finishPercentile"])) for _, row in road.iterrows()]
-    simple_bar_svg(CHART_DIR / "road_america_indy_nxt_history.svg", road_rows, "Road America INDY NXT History", "Bryce finish percentile in prior Road America races.")
+    future = pd.read_csv(DEEP_TABLES / "future_weekend_prep_inputs.csv")
+    future = future.sort_values(["eventStartDate", "eventId"], ascending=[True, True])
+    next_track_name = str(future.iloc[0].trackName) if len(future) else "upcoming track"
+    next_track_history = feature_df[feature_df["trackName"] == next_track_name]
+    next_track_rows = [(row["raceLabel"], float(row["finishPercentile"])) for _, row in next_track_history.iterrows()]
+    simple_bar_svg(
+        CHART_DIR / "upcoming_track_indy_nxt_history.svg",
+        next_track_rows,
+        f"{next_track_name} INDY NXT History",
+        f"Bryce finish percentile in prior {next_track_name} races.",
+    )
 
-    return [rel(CHART_DIR / name) for name in ["finish_percentile_model_mae.svg", "career_track_type_priors.svg", "road_america_indy_nxt_history.svg"]]
+    return [rel(CHART_DIR / name) for name in ["finish_percentile_model_mae.svg", "career_track_type_priors.svg", "upcoming_track_indy_nxt_history.svg"]]
 
 
 def build_report(
@@ -1513,7 +1583,10 @@ def build_report(
     )
     top_model = models[0]
     baseline = next(m for m in scorecard["models"] if m["id"] == "overall_mean")
-    road = feature_df[feature_df["trackName"].astype(str).str.contains("Road America", na=False)]
+    future = pd.read_csv(DEEP_TABLES / "future_weekend_prep_inputs.csv")
+    future = future.sort_values(["eventStartDate", "eventId"], ascending=[True, True])
+    next_track_name = str(future.iloc[0].trackName) if len(future) else "upcoming track"
+    next_track_history = feature_df[feature_df["trackName"] == next_track_name]
     lines = [
         "# Predictive Race Intelligence Productization Pass",
         "",
@@ -1539,16 +1612,16 @@ def build_report(
         "- Any model using team outcome, lap, section, incident, penalty, or archetype fields is post-race only and barred from pre-race predictions.",
         "- Top-10 grouped rates did not beat the base-rate Brier score in the first scorecard, so top-10 should stay as a path/probability-band concept.",
         "",
-        "## Road America Intelligence",
+        f"## {next_track_name} Intelligence",
         "",
     ]
-    if len(road):
-        for _, row in road.iterrows():
+    if len(next_track_history):
+        for _, row in next_track_history.iterrows():
             lines.append(f"- `{row['raceLabel']}`: start P{fmt(clean_num(row['startPosition']))}, finish P{fmt(clean_num(row['finishPosition']))}, gain `{fmt(clean_num(row['positionGain']))}`, finish percentile `{fmt(clean_num(row['finishPercentile']))}`.")
     lines.extend(
         [
             "",
-            "The generated Road America packs add top-10 path factors, analog races, prediction bands, and prep-update hooks. They intentionally avoid point predictions.",
+            "The generated upcoming-event packs add top-10 path factors, analog races, prediction bands, and prep-update hooks. They intentionally avoid point predictions.",
             "",
             "## Context Pack Surfaces",
             "",

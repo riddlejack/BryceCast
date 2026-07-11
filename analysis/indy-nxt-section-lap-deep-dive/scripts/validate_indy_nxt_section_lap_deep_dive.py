@@ -6,8 +6,10 @@ from __future__ import annotations
 import csv
 import hashlib
 import json
+import os
 import re
 import sys
+from datetime import date
 from pathlib import Path
 from typing import Any
 
@@ -18,6 +20,28 @@ OUTPUT_DIR = LANE_DIR / "output"
 BRYCE_ID = "driver_bryce_aron"
 INDY_NXT_ID = "series_indy_nxt"
 PREP_SESSION_TYPES = {"practice", "qualifying"}
+
+
+def resolve_run_date() -> date:
+    override = os.environ.get("BRYCECAST_ANALYTICS_AS_OF_DATE")
+    if override:
+        try:
+            return date.fromisoformat(override)
+        except ValueError as exc:
+            raise SystemExit("BRYCECAST_ANALYTICS_AS_OF_DATE must be YYYY-MM-DD") from exc
+    summary_path = OUTPUT_DIR / "summary.json"
+    if summary_path.exists():
+        try:
+            summary = json.loads(summary_path.read_text())
+            as_of = summary.get("upcomingVenue", {}).get("asOfDate")
+            if as_of:
+                return date.fromisoformat(str(as_of))
+        except (OSError, ValueError, TypeError):
+            pass
+    return date.today()
+
+
+RUN_DATE = resolve_run_date()
 
 REQUIRED_FILES = [
     "practice_qualifying_bryce_section_observations.csv",
@@ -31,6 +55,44 @@ REQUIRED_FILES = [
     "context-packs/indy-nxt-section-lap-context.json",
     "context-packs/road-america-prep-context.json",
 ]
+
+
+def slug(value: str) -> str:
+    out = re.sub(r"[^a-z0-9]+", "_", value.lower()).strip("_")
+    return out or "track"
+
+
+def venue_slug(track_name: str) -> str:
+    normalized = track_name.lower()
+    if "mid-ohio" in normalized:
+        return "mid_ohio"
+    return slug(track_name)
+
+
+def parse_event_date(value: Any) -> date | None:
+    try:
+        return date.fromisoformat(str(value or "")[:10])
+    except ValueError:
+        return None
+
+
+def next_upcoming_track_name(dataset: dict[str, Any]) -> str | None:
+    tracks = {row["id"]: row for row in dataset.get("tracks", [])}
+    candidates: list[tuple[date, str, str]] = []
+    for event in dataset.get("events", []):
+        if event.get("seriesId") != INDY_NXT_ID:
+            continue
+        event_date = parse_event_date(event.get("eventStartDate"))
+        if event_date is None or event_date < RUN_DATE:
+            continue
+        track = tracks.get(event.get("trackId") or "", {})
+        track_name = track.get("name") or event.get("trackName") or ""
+        if track_name:
+            candidates.append((event_date, str(event.get("id") or ""), str(track_name)))
+    if not candidates:
+        return None
+    candidates.sort(key=lambda row: (row[0], row[1]))
+    return candidates[0][2]
 
 OBSERVATION_FIELDS = {
     "sessionId",
@@ -414,7 +476,20 @@ def validate_top_sections(expected_hash: str, source_counts: dict[str, int]) -> 
         fail(f"top-section identity mismatch; missing={missing} extra={extra}")
 
 
-def validate_strengths_and_transfer(expected_hash: str) -> None:
+def validate_prep_context_csv(expected_hash: str, path: Path, track_name: str, label: str) -> list[dict[str, str]]:
+    rows = read_csv(path)
+    if len(rows) < 5:
+        fail(f"{path.name} is too small for {label}: {len(rows)} rows")
+    if any(row.get("sourceHash") != expected_hash for row in rows):
+        fail(f"{label} context sourceHash does not match canonical dataset")
+    track_match = track_name.lower()
+    bad_tracks = sorted({row.get("trackName", "") for row in rows if track_match not in row.get("trackName", "").lower()})
+    if bad_tracks:
+        fail(f"{label} context contains rows for unexpected tracks: {bad_tracks[:5]}")
+    return rows
+
+
+def validate_strengths_and_transfer(expected_hash: str, next_track_name: str) -> None:
     strengths = read_csv(OUTPUT_DIR / "section_family_strengths.csv")
     require_fields(
         strengths,
@@ -448,14 +523,16 @@ def validate_strengths_and_transfer(expected_hash: str) -> None:
         if row["transferClaimStrength"] not in {"historical_backtest_only", "descriptive_context_only"}:
             fail(f"invalid transferClaimStrength {row['transferClaimStrength']!r}")
 
-    road_america = read_csv(OUTPUT_DIR / "road_america_prep_section_context.csv")
-    if len(road_america) < 5:
-        fail(f"road_america_prep_section_context.csv is too small: {len(road_america)} rows")
-    if any(row.get("sourceHash") != expected_hash for row in road_america):
-        fail("Road America context sourceHash does not match canonical dataset")
+    validate_prep_context_csv(expected_hash, OUTPUT_DIR / "road_america_prep_section_context.csv", "Road America", "legacy prep")
+    validate_prep_context_csv(
+        expected_hash,
+        OUTPUT_DIR / f"{venue_slug(next_track_name)}_prep_section_context.csv",
+        next_track_name,
+        "next-venue prep",
+    )
 
 
-def validate_json_and_report(expected_hash: str) -> None:
+def validate_json_and_report(expected_hash: str, next_track_name: str) -> None:
     summary = load_json(OUTPUT_DIR / "summary.json")
     if summary.get("ok") is not True:
         fail("summary.json must set ok=true")
@@ -465,10 +542,14 @@ def validate_json_and_report(expected_hash: str) -> None:
         fail("summary.json must avoid point-prediction claim strength")
     if summary.get("publicPointPrediction") not in (False, None):
         fail("summary.json must not expose public point predictions")
+    if summary.get("upcomingVenue", {}).get("trackName") != next_track_name:
+        fail("summary.json upcomingVenue trackName does not match the next future INDY NXT event")
 
+    dynamic_pack_name = f"context-packs/{venue_slug(next_track_name).replace('_', '-')}-prep-context.json"
     for name in [
         "context-packs/indy-nxt-section-lap-context.json",
         "context-packs/road-america-prep-context.json",
+        dynamic_pack_name,
     ]:
         pack = load_json(OUTPUT_DIR / name)
         if pack.get("sourceHash") != expected_hash:
@@ -481,6 +562,13 @@ def validate_json_and_report(expected_hash: str) -> None:
         hits = [phrase for phrase in forbidden if phrase in text]
         if hits:
             fail(f"{name} contains forbidden predictive claim text: {hits}")
+        if name == dynamic_pack_name:
+            if pack.get("trackName") != next_track_name:
+                fail(f"{name} trackName does not match next venue")
+            if pack.get("asOfDate") != RUN_DATE.isoformat():
+                fail(f"{name} asOfDate does not match validator as-of date")
+            if len(pack.get("historicalPrepRows") or []) < 5:
+                fail(f"{name} must include same-track historical prep rows")
 
     report = OUTPUT_DIR / "INDY_NXT_SECTION_LAP_DEEP_DIVE.md"
     require_file(report)
@@ -494,7 +582,7 @@ def validate_json_and_report(expected_hash: str) -> None:
         "Practice/Qualifying Section-Lap Findings",
         "Top Section Times",
         "Session-To-Race Transfer",
-        "Road America Context",
+        "Upcoming Venue Context",
         "Caveats",
     ]:
         if phrase not in text:
@@ -507,12 +595,17 @@ def main() -> int:
             require_file(OUTPUT_DIR / relative)
         dataset = load_json(ROOT / "data/career/career.dataset.json")
         expected_hash = dataset_hash()
+        next_track_name = next_upcoming_track_name(dataset)
+        if not next_track_name:
+            fail("canonical dataset has no future INDY NXT venue for next-venue prep context")
+        require_file(OUTPUT_DIR / f"{venue_slug(next_track_name)}_prep_section_context.csv")
+        require_file(OUTPUT_DIR / f"context-packs/{venue_slug(next_track_name).replace('_', '-')}-prep-context.json")
         source_counts = expected_source_counts(dataset)
         validate_observations(expected_hash, source_counts)
         validate_session_summary(expected_hash, source_counts)
         validate_top_sections(expected_hash, source_counts)
-        validate_strengths_and_transfer(expected_hash)
-        validate_json_and_report(expected_hash)
+        validate_strengths_and_transfer(expected_hash, next_track_name)
+        validate_json_and_report(expected_hash, next_track_name)
     except AssertionError as exc:
         print(json.dumps({"ok": False, "error": str(exc)}, indent=2))
         return 1

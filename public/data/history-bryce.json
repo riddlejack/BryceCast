@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-06-08T01:49:12.467Z",
+  "checkedAt": "2026-07-02T17:18:49.184Z",
   "source": "INDY NXT official results API + Race Control timing feed for unpublished current session",
   "points": [
     {
@@ -81,14 +81,34 @@
       "points": 7,
       "status": "Mechanical",
       "source": "official session result"
+    },
+    {
+      "race": "Grand Prix at Road America R1",
+      "type": "Road",
+      "start": 15,
+      "finish": 21,
+      "bestLapRank": 1,
+      "points": 9,
+      "status": "Running",
+      "source": "official session result"
+    },
+    {
+      "race": "Grand Prix at Road America R2",
+      "type": "Road",
+      "start": 15,
+      "finish": 10,
+      "bestLapRank": 14,
+      "points": 20,
+      "status": "Running",
+      "source": "official session result"
     }
   ],
   "bryceStanding": {
-    "rank": 14,
-    "points": 131,
+    "rank": 17,
+    "points": 160,
     "wins": 0,
     "top5": 0,
-    "top10": 3,
+    "top10": 4,
     "bestFinish": 7
   },
   "yearSummaries": [
@@ -108,10 +128,10 @@
     },
     {
       "year": 2026,
-      "starts": 8,
+      "starts": 10,
       "bestFinish": 7,
-      "top10s": 3,
-      "averageFinish": 14.5
+      "top10s": 4,
+      "averageFinish": 14.7
     }
   ],
   "teammateSummaries": [
@@ -119,28 +139,28 @@
       "name": "Niels Koolen",
       "driverId": "4963",
       "year": 2026,
-      "starts": 8,
+      "starts": 10,
       "bestFinish": 4,
-      "top10s": 2,
-      "averageFinish": 15.1
+      "top10s": 3,
+      "averageFinish": 14.1
     },
     {
       "name": "James Roe",
       "driverId": "4895",
       "year": 2026,
-      "starts": 8,
+      "starts": 10,
       "bestFinish": 10,
       "top10s": 1,
-      "averageFinish": 17.6
+      "averageFinish": 17.5
     },
     {
       "name": "Carson Etter",
       "driverId": "4996",
       "year": 2026,
-      "starts": 8,
-      "bestFinish": 16,
+      "starts": 10,
+      "bestFinish": 13,
       "top10s": 0,
-      "averageFinish": 19.5
+      "averageFinish": 18.5
     }
   ]
 }

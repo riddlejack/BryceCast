@@ -43,7 +43,7 @@ const percentValue = (value) => {
   return Number.isFinite(parsed) ? Math.round(parsed * 1000) / 10 : null;
 };
 
-const requiredScreens = ['roadAmericaPrep', 'liveCompanionFixtures', 'raceDebrief', 'careerLab', 'sourceOps'];
+const requiredScreens = ['upcomingPrep', 'liveCompanionFixtures', 'raceDebrief', 'careerLab', 'sourceOps'];
 const sourceInventory = dataPackage.sourceInventory ?? {};
 
 if (Object.keys(sourceInventory).length === 0) {
@@ -272,6 +272,12 @@ for (const key of [
   'predictiveContextPackManifest',
   'predictiveCareerPriorMatrix',
   'predictiveIndyFeatureMatrix',
+  'sectionLapDeepDiveSummary',
+  'sectionLapContextPack',
+  'raceLapSectionSummary',
+  'raceLapSectionContextPack',
+  'supplementalPrepSectionContextPack',
+  'supplementalRaceLapSectionContextPack',
   'prepSessionSignals',
   'fieldStrengthByRace',
   'sectionResultsDeepByRace',
@@ -282,7 +288,7 @@ for (const key of [
     fail(`sourceInventory missing predictive source ${key}`);
   }
 }
-for (const key of ['predictiveBuilderScript', 'predictiveValidatorScript', 'predictiveRunnerScript', 'uiDataPackageBuilderScript', 'uiDataPackageValidatorScript']) {
+for (const key of ['predictiveBuilderScript', 'predictiveValidatorScript', 'sectionLapBuilderScript', 'sectionLapValidatorScript', 'raceLapSectionBuilderScript', 'raceLapSectionValidatorScript', 'predictiveRunnerScript', 'uiDataPackageBuilderScript', 'uiDataPackageValidatorScript']) {
   if (!sourceInventory[key]) {
     fail(`sourceInventory missing generator source ${key}`);
   }
@@ -363,37 +369,44 @@ assertSetEqual(
   'Predictive race-debrief context pack sessionId set'
 );
 
-if (dataPackage.screens.roadAmericaPrep.events.length < 2) {
-  fail('Road America prep should include both Race 1 and Race 2 event rows.');
+if (!Array.isArray(dataPackage.screens.upcomingPrep.events) || dataPackage.screens.upcomingPrep.events.length !== expectedUpcomingEventPacks) {
+  fail(`Upcoming prep should include all ${expectedUpcomingEventPacks} future INDY NXT event row(s).`);
 }
-
-if (dataPackage.screens.roadAmericaPrep.contextPackRefs?.length !== dataPackage.screens.roadAmericaPrep.events.length) {
-  fail('Road America prep must link both Road America predictive context packs.');
+if (expectedUpcomingEventPacks > 0 && !dataPackage.screens.upcomingPrep.nextVenue) {
+  fail('Upcoming prep must identify the next upcoming venue.');
 }
-dataPackage.screens.roadAmericaPrep.contextPackRefs.forEach((packRef, index) => {
-  if (packRef.type !== 'upcoming_event' || !/road_america/.test(packRef.id)) {
-    fail(`Unexpected Road America context pack ref: ${packRef.id}`);
+if (dataPackage.screens.upcomingPrep.contextPackRefs?.length !== dataPackage.screens.upcomingPrep.events.length) {
+  fail('Upcoming prep must link every predictive upcoming-event context pack.');
+}
+assertSetEqual(
+  new Set(dataPackage.screens.upcomingPrep.events.map((event) => event.eventId)),
+  expectedUpcomingEventIds,
+  'Upcoming prep eventId set'
+);
+dataPackage.screens.upcomingPrep.contextPackRefs.forEach((packRef, index) => {
+  if (packRef.type !== 'upcoming_event') {
+    fail(`Unexpected upcoming prep context pack type for ${packRef.id}: ${packRef.type}`);
   }
-  const event = dataPackage.screens.roadAmericaPrep.events[index];
+  const event = dataPackage.screens.upcomingPrep.events[index];
   if (packRef.eventId !== event.eventId) {
-    fail(`Road America context pack ref ${packRef.id} does not match event ${event.eventId}`);
+    fail(`Upcoming prep context pack ref ${packRef.id} does not match event ${event.eventId}`);
   }
   if (event.sourcePayload !== 'upcoming_event_context_pack') {
-    fail(`Road America event ${event.eventId} must be sourced from an upcoming-event context pack.`);
+    fail(`Upcoming prep event ${event.eventId} must be sourced from an upcoming-event context pack.`);
   }
   if (event.contextPackRef?.path !== packRef.path) {
-    fail(`Road America event ${event.eventId} must embed the matching context pack ref.`);
+    fail(`Upcoming prep event ${event.eventId} must embed the matching context pack ref.`);
   }
-  const pack = validatePackRef(packRef, `Road America ${packRef.id}`);
+  const pack = validatePackRef(packRef, `Upcoming prep ${packRef.id}`);
   if (
     event.trackName !== pack.track?.name ||
     event.predictionBand?.claimStrength !== pack.predictionBand?.claimStrength ||
     event.top10Path?.length !== pack.top10Path?.length
   ) {
-    fail(`Road America event ${event.eventId} does not mirror its context-pack payload.`);
+    fail(`Upcoming prep event ${event.eventId} does not mirror its context-pack payload.`);
   }
   if (!Object.hasOwn(event, 'weatherState')) {
-    fail(`Road America event ${event.eventId} must preserve the public weatherState field.`);
+    fail(`Upcoming prep event ${event.eventId} must preserve the public weatherState field.`);
   }
   if (
     typeof event.sameTrack?.top10RatePct !== 'number' ||
@@ -401,14 +414,29 @@ dataPackage.screens.roadAmericaPrep.contextPackRefs.forEach((packRef, index) => 
     Object.hasOwn(event.sameTrack ?? {}, 'top10Rate') ||
     Object.hasOwn(event.trackTypeHistory ?? {}, 'top10Rate')
   ) {
-    fail(`Road America event ${event.eventId} must expose stable top10RatePct fields, not raw 0-1 top10Rate fields.`);
+    fail(`Upcoming prep event ${event.eventId} must expose stable top10RatePct fields, not raw 0-1 top10Rate fields.`);
   }
 });
-for (let index = 1; index < dataPackage.screens.roadAmericaPrep.events.length; index += 1) {
-  const previous = dataPackage.screens.roadAmericaPrep.events[index - 1];
-  const current = dataPackage.screens.roadAmericaPrep.events[index];
+for (let index = 1; index < dataPackage.screens.upcomingPrep.events.length; index += 1) {
+  const previous = dataPackage.screens.upcomingPrep.events[index - 1];
+  const current = dataPackage.screens.upcomingPrep.events[index];
   if (dateMs(current.eventStartDate) < dateMs(previous.eventStartDate)) {
-    fail('Road America prep events must be ordered by context-pack eventStartDate.');
+    fail('Upcoming prep events must be ordered by context-pack eventStartDate.');
+  }
+}
+for (const [key, ref] of Object.entries(dataPackage.screens.upcomingPrep.supplementalContextRefs ?? {})) {
+  validateEmbeddedSourceRef(ref, `Upcoming prep supplementalContextRefs.${key}`);
+  const pack = JSON.parse(fs.readFileSync(path.join(repoRoot, ref.path), 'utf8'));
+  if (pack.sourceHash !== dataPackage.sourceHash) {
+    fail(`Upcoming prep supplementalContextRefs.${key} sourceHash does not match UI package sourceHash.`);
+  }
+  if (pack.trackName !== dataPackage.screens.upcomingPrep.nextVenue) {
+    fail(`Upcoming prep supplementalContextRefs.${key} trackName must match nextVenue.`);
+  }
+}
+for (const key of ['prepSection', 'raceLapSection']) {
+  if (!dataPackage.screens.upcomingPrep.supplementalContextRefs?.[key]) {
+    fail(`Upcoming prep missing supplementalContextRefs.${key}`);
   }
 }
 
@@ -690,7 +718,7 @@ console.log(
     {
       ok: true,
       screens: requiredScreens.length,
-      roadAmericaEvents: dataPackage.screens.roadAmericaPrep.events.length,
+      upcomingEvents: dataPackage.screens.upcomingPrep.events.length,
       liveFixtures: dataPackage.screens.liveCompanionFixtures.fixtures.length,
       debriefSeeds: dataPackage.screens.raceDebrief.featuredDebriefs.length,
       careerSeries: dataPackage.screens.careerLab.seriesSummary.length,

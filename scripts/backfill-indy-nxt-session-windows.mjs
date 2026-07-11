@@ -706,6 +706,150 @@ const scheduleFeedEvents = (payload) =>
 
 const localDate = (value) => (typeof value === 'string' && value.includes('T') ? value.slice(0, 10) : null);
 
+const normalizeDateOnly = (value) => {
+  const normalized = String(value ?? '').trim();
+  if (!normalized) return null;
+  const iso = normalized.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (iso) return `${iso[1]}-${iso[2]}-${iso[3]}`;
+  const mdy = normalized.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+  if (!mdy) return null;
+  const [, month, day, year] = mdy;
+  return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+};
+
+const sourceEvidenceRefs = (refs) =>
+  asArray(refs).filter((ref) =>
+    String(ref).startsWith('source_indynxt_events_session_') ||
+    String(ref).startsWith('source_indy_nxt_') ||
+    String(ref).startsWith('source_track_metadata_')
+  );
+
+const compactEvidence = (items) => {
+  const seen = new Set();
+  const out = [];
+  for (const item of items) {
+    const key = JSON.stringify(item);
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push(item);
+  }
+  return out;
+};
+
+const collectEventDateEvidence = ({ event, eventSessions }) => {
+  const dates = [];
+  const evidence = [];
+  const push = ({ value, sourceRef, sourceField, sourceValue = null, sessionId = null, note = null }) => {
+    const date = normalizeDateOnly(value);
+    if (!date) return;
+    dates.push(date);
+    evidence.push({
+      date,
+      sourceRef,
+      sourceField,
+      sourceValue,
+      sessionId,
+      note
+    });
+  };
+
+  for (const field of ['eventStartDate', 'eventEndDate']) {
+    push({
+      value: event[field],
+      sourceRef: sourceEvidenceRefs(event.provenanceRefs)[0] ?? null,
+      sourceField: `canonical event.${field} originally imported from official event/session date`,
+      sourceValue: event[field] ?? null,
+      note: 'normalized_to_iso_date'
+    });
+  }
+
+  for (const session of eventSessions) {
+    const raw = session.raw ?? {};
+    const trackActivity = raw.raceControlTrackActivityWindow;
+    if (trackActivity) {
+      for (const [key, value] of [
+        ['scheduledStart', trackActivity.scheduledStart ?? session.scheduledStart],
+        ['estimatedGreenFlag', trackActivity.estimatedGreenFlag ?? session.actualStart],
+        ['scheduledEnd', trackActivity.scheduledEnd ?? session.scheduledEnd]
+      ]) {
+        push({
+          value,
+          sourceRef: 'source_indy_nxt_2026_race_control_trackactivity_schedule',
+          sourceField: `trackactivity.session.${key} converted from source UTC`,
+          sourceValue: {
+            sourceStartUtc: trackActivity.sourceStartUtc ?? null,
+            sourceEndUtc: trackActivity.sourceEndUtc ?? null,
+            sourceEstimatedGreenFlagUtc: trackActivity.sourceEstimatedGreenFlagUtc ?? null
+          },
+          sessionId: session.id
+        });
+      }
+    }
+
+    const scheduleWindow = raw.raceControlScheduleWindow;
+    if (scheduleWindow) {
+      for (const [key, value] of [
+        ['scheduledStart', scheduleWindow.scheduledStart ?? session.scheduledStart],
+        ['scheduledEnd', scheduleWindow.scheduledEnd ?? session.scheduledEnd]
+      ]) {
+        push({
+          value,
+          sourceRef: 'source_indy_nxt_2026_race_control_schedule',
+          sourceField: `schedule.broadcast.${key} converted from source UTC`,
+          sourceValue: {
+            sourceStartUtc: scheduleWindow.sourceStartUtc ?? null,
+            sourceEndUtc: scheduleWindow.sourceEndUtc ?? null
+          },
+          sessionId: session.id
+        });
+      }
+    }
+
+    const greenFlag = raw.raceControlScheduleGreenFlagWindow;
+    if (greenFlag) {
+      push({
+        value: greenFlag.scheduledStart ?? session.scheduledStart,
+        sourceRef: 'source_indy_nxt_2026_race_control_schedule',
+        sourceField: 'schedule.race.green_flag converted from source UTC',
+        sourceValue: greenFlag.sourceGreenFlagUtc ?? null,
+        sessionId: session.id
+      });
+    }
+
+    const weekendSchedule = raw.indycarWeekendScheduleWindow;
+    if (weekendSchedule) {
+      push({
+        value: weekendSchedule.scheduledStart ?? session.scheduledStart,
+        sourceRef: `source_indy_nxt_${weekendSchedule.scheduleYear}_weekend_schedule_${weekendSchedule.scheduleKey}`,
+        sourceField: 'official_weekend_schedule_pdf.local_session_start',
+        sourceValue: {
+          sourceName: weekendSchedule.sourceName ?? null,
+          sourceDateHeader: weekendSchedule.sourceDateHeader ?? null,
+          sourceLabel: weekendSchedule.sourceLabel ?? null,
+          sourceScheduledStart: weekendSchedule.sourceScheduledStart ?? null
+        },
+        sessionId: session.id
+      });
+    }
+
+    const apiRefs = asArray(session.provenanceRefs).filter((ref) => String(ref).startsWith('source_indynxt_events_session_'));
+    if (apiRefs.length) {
+      push({
+        value: session.scheduledStart,
+        sourceRef: apiRefs[0],
+        sourceField: 'EventsSessionDetails.SessionDate',
+        sourceValue: session.scheduledStart ?? null,
+        sessionId: session.id
+      });
+    }
+  }
+
+  return {
+    dates: Array.from(new Set(dates)).sort(),
+    evidence: compactEvidence(evidence)
+  };
+};
+
 const main = async () => {
   await mkdir(rawDir, { recursive: true });
   await mkdir(weekendScheduleBaseDir, { recursive: true });
@@ -723,6 +867,7 @@ const main = async () => {
   const events = new Map(asArray(dataset.events).map((row) => [row.id, row]));
   const sourceEvidenceMap = new Map(asArray(dataset.sourceEvidence).map((row) => [row.id, row]));
   const tracksById = new Map(asArray(dataset.tracks).map((row) => [row.id, row]));
+  const resultSessionIds = new Set(asArray(dataset.results).map((row) => row.sessionId).filter(Boolean));
   const eventsById = new Map(events);
   const eventsByOfficialId = new Map(Array.from(events.values()).map((row) => [String(row.officialEventId ?? ''), row]).filter(([id]) => id));
   const scheduleEventsById = new Map(scheduleEvents.map((event) => [event.eventId, event]));
@@ -760,6 +905,7 @@ const main = async () => {
     scheduleOnlyEventsCreated: [],
     scheduleOnlySessionsCreated: [],
     scheduleOnlySessionsUpdated: [],
+    eventDateSpansUpdated: [],
     scheduleSessionsSkipped: [],
     scheduleGreenFlagSessionsSkipped: [],
     feedSessionsWithoutCanonicalMatch: [],
@@ -781,7 +927,8 @@ const main = async () => {
     if (!current) {
       continue;
     }
-    if (current.ingestionState === 'schedule_only') {
+    const hasImportedResultRows = resultSessionIds.has(canonicalSessionId);
+    if (current.ingestionState === 'schedule_only' && !hasImportedResultRows) {
       continue;
     }
 
@@ -798,6 +945,7 @@ const main = async () => {
       scheduledEnd: scheduledEnd ?? current.scheduledEnd ?? null,
       timePrecision: 'local_datetime',
       timeSource: 'official_race_control_trackactivity',
+      ingestionState: hasImportedResultRows ? undefined : current.ingestionState,
       raw: {
         ...(current.raw ?? {}),
         raceControlTrackActivityWindow: {
@@ -834,7 +982,7 @@ const main = async () => {
   const unmatchedFeedSessions = feedSessions.filter((feedSession) => {
     if (!feedSession.sessionId) return false;
     const existing = sessions.get(`session_indy_nxt_2026_${feedSession.sessionId}`);
-    return !existing || existing.ingestionState === 'schedule_only';
+    return !existing || (existing.ingestionState === 'schedule_only' && !resultSessionIds.has(existing.id));
   });
   const unmatchedByEventId = new Map();
   for (const feedSession of unmatchedFeedSessions) {
@@ -1329,6 +1477,60 @@ const main = async () => {
     }
   }
 
+  const sessionsByEventId = new Map();
+  for (const session of sessions.values()) {
+    if (!sessionsByEventId.has(session.eventId)) sessionsByEventId.set(session.eventId, []);
+    sessionsByEventId.get(session.eventId).push(session);
+  }
+
+  for (const event of events.values()) {
+    if (event.seriesId !== 'series_indy_nxt') continue;
+    const eventSessions = sessionsByEventId.get(event.id) ?? [];
+    const { dates, evidence } = collectEventDateEvidence({ event, eventSessions });
+    if (!dates.length) continue;
+
+    const eventStartDate = dates[0];
+    const eventEndDate = dates.at(-1) ?? dates[0];
+    const track = tracksById.get(event.trackId);
+    const timezone = event.timezone ?? track?.timezone ?? null;
+    const sourceRefs = Array.from(new Set([
+      ...(event.provenanceRefs ?? []),
+      ...evidence.map((row) => row.sourceRef).filter(Boolean)
+    ]));
+
+    const sourceRefsChanged = sourceRefs.join('|') !== asArray(event.provenanceRefs).join('|');
+    if (
+      event.eventStartDate === eventStartDate &&
+      event.eventEndDate === eventEndDate &&
+      (event.timezone ?? null) === (timezone ?? null) &&
+      !sourceRefsChanged
+    ) {
+      continue;
+    }
+
+    const next = {
+      ...event,
+      eventStartDate,
+      eventEndDate,
+      timezone: timezone ?? event.timezone ?? null,
+      provenanceRefs: sourceRefs
+    };
+    events.set(event.id, next);
+    eventsById.set(event.id, next);
+    if (next.officialEventId) eventsByOfficialId.set(String(next.officialEventId), next);
+    report.eventDateSpansUpdated.push({
+      eventId: event.id,
+      officialEventId: event.officialEventId ?? null,
+      eventName: event.name,
+      oldEventStartDate: event.eventStartDate ?? null,
+      oldEventEndDate: event.eventEndDate ?? null,
+      eventStartDate,
+      eventEndDate,
+      timezone: timezone ?? event.timezone ?? null,
+      sourceEvidence: evidence
+    });
+  }
+
   const nextDataset = {
     ...dataset,
     updatedAt: retrievedAt,
@@ -1350,6 +1552,7 @@ const main = async () => {
     scheduleGreenFlagSessionsUpdated: report.scheduleGreenFlagSessionsUpdated.length,
     weekendSchedulePdfSessionsUpdated: report.weekendSchedulePdfSessionsUpdated.length,
     weekendSchedulePdfSessionsSkipped: report.weekendSchedulePdfSessionsSkipped.length,
+    eventDateSpansUpdated: report.eventDateSpansUpdated.length,
     scheduleOnlyEventsCreated: report.scheduleOnlyEventsCreated.length,
     scheduleOnlySessionsCreated: report.scheduleOnlySessionsCreated.length,
     scheduleOnlySessionsUpdated: report.scheduleOnlySessionsUpdated.length,

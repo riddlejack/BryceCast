@@ -1,0 +1,50 @@
+{
+  "asOfDate": "2026-07-02",
+  "claimStrength": "post_race_descriptive_only",
+  "displayRules": [
+    "Use these rows as completed Mid-Ohio Sports Car Course race history only.",
+    "Do not blend with future session claims without live/current source rows."
+  ],
+  "generatedAt": "2026-07-02T17:45:39Z",
+  "historicalRaceRows": [
+    {
+      "bestCleanSectionFamilies": "Turn 12C:0.94 n=28; Turn 13:0.94 n=28; Turn 5:0.88 n=28; Turn 2:0.82 n=28",
+      "bestRunningPosition": 18.0,
+      "bestSegment": "restart_window L4-4 gain 0.0",
+      "finishPosition": 18.0,
+      "lapRows": 32,
+      "medianCleanTrackSectionPercentile": 0.5294117647058824,
+      "netLapChartGain": 0.0,
+      "raceLabel": "2024 Grand Prix at Mid-Ohio",
+      "seasonYear": 2024,
+      "sessionId": "session_indy_nxt_2024_6318",
+      "sourceHash": "5d66d442aa62ff829f41a78a998f82218eacb1e92cf10834dc3b4316d03ba7cb",
+      "startPosition": 18.0,
+      "trackName": "Mid-Ohio Sports Car Course",
+      "weakestCleanSectionFamilies": "Turn 1A:0.09 n=28; Turn 1:0.18 n=28; Turn 3:0.29 n=28; Turn 8:0.35 n=28",
+      "worstRunningPosition": 19.0
+    },
+    {
+      "bestCleanSectionFamilies": "Turn 12:0.88 n=29; Turn 2:0.78 n=29; Turn 5:0.69 n=29; Turn 3:0.62 n=29",
+      "bestRunningPosition": 9.0,
+      "bestSegment": "caution_window L4-5 gain 0.0",
+      "finishPosition": 12.0,
+      "lapRows": 33,
+      "medianCleanTrackSectionPercentile": 0.375,
+      "netLapChartGain": -3.0,
+      "raceLabel": "2025 Grand Prix at Mid-Ohio",
+      "seasonYear": 2025,
+      "sessionId": "session_indy_nxt_2025_6452",
+      "sourceHash": "5d66d442aa62ff829f41a78a998f82218eacb1e92cf10834dc3b4316d03ba7cb",
+      "startPosition": 9.0,
+      "trackName": "Mid-Ohio Sports Car Course",
+      "weakestCleanSectionFamilies": "Turn 1A:0.06 n=29; Turn 1:0.19 n=29; Turn 8:0.19 n=29; Turn 11:0.19 n=29",
+      "worstRunningPosition": 12.0
+    }
+  ],
+  "id": "mid-ohio-race-context",
+  "publicPointPrediction": false,
+  "sourceDataset": "data/career/career.dataset.json",
+  "sourceHash": "5d66d442aa62ff829f41a78a998f82218eacb1e92cf10834dc3b4316d03ba7cb",
+  "trackName": "Mid-Ohio Sports Car Course"
+}

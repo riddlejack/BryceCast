@@ -15,7 +15,7 @@ Generated as a second-pass analytics artifact from canonical career data. It rea
 | cohort | races | avgStart | avgFinish | avgGain | avgPaceIndex | avgChaosExposure | avgTeamDelta | issueOrReliabilityLimitedRows | ovalRows | roadRows | streetRows |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | best_8_by_finish | 8 | 8.25 | 5.125 | 3.125 | 0.631 | 0.262 | -3.062 | 0 | 5 | 3 | 0 |
-| worst_8_by_finish | 8 | 11.375 | 19.875 | -8.5 | 0.391 | 0.417 | 5.812 | 5 | 1 | 4 | 3 |
+| worst_8_by_finish | 8 | 10.875 | 20.25 | -9.375 | 0.456 | 0.444 | 6.875 | 5 | 1 | 5 | 2 |
 
 The top outcome cohort combines better finishing conversion, lower team-relative penalty, and more oval representation. The worst cohort clusters around conversion losses, incident/reliability-limited statuses, and team-context drag rather than one single pace pattern.
 
@@ -24,19 +24,19 @@ The top outcome cohort combines better finishing conversion, lower team-relative
 | archetype | races | avgFinish | avgGain | avgPaceIndex | avgChaosExposure | top10Rate | avgTeamDelta |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | baseline_execution | 14 | 10.071 | 0.714 | 0.525 | 0.291 | 0.714 | 0.089 |
-| recovery_drive | 5 | 11 | 6 | 0.372 | 0.5 | 0.6 | -1.833 |
+| recovery_drive | 6 | 10.833 | 5.833 | 0.384 | 0.469 | 0.667 | -1.986 |
 | incident_or_reliability_limited | 5 | 20 | -10.4 | 0.258 | 0.433 | 0 | 6.6 |
 | podium_top5_conversion | 4 | 3.75 | 2.25 | 0.645 | 0.23 | 1 | -3.375 |
 | team_context_outperformed_teammates | 4 | 14.25 | 0.25 | 0.384 | 0.294 | 0 | -2.625 |
 | conversion_loss | 3 | 17.667 | -8.333 | 0.44 | 0.287 | 0 | 5.667 |
-| hidden_pace_bad_result | 1 | 19 | -8 | 0.8 | 0.295 | 0 | 9 |
+| hidden_pace_bad_result | 2 | 20 | -7 | 0.784 | 0.453 | 0 | 7.125 |
 
 ## Track Type Summary
 
 | trackType | races | avgFinish | avgGain | avgPaceIndex | avgChaosExposure | top5Rate | top10Rate |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | oval | 9 | 9.111 | 1.111 | 0.472 | 0.358 | 0.222 | 0.778 |
-| road | 20 | 12.6 | -2.45 | 0.529 | 0.273 | 0.1 | 0.4 |
+| road | 22 | 12.864 | -2.273 | 0.537 | 0.29 | 0.091 | 0.409 |
 | street | 7 | 15.143 | 0.571 | 0.348 | 0.471 | 0 | 0.286 |
 
 ## Best Outcome Races
@@ -58,18 +58,19 @@ The top outcome cohort combines better finishing conversion, lower team-relative
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 2026 INDY NXT by Firestone at World Wide Technology Raceway | oval | Chip Ganassi Racing | 12 | 23 | -11 | 0 | 7.75 | incident_or_reliability_limited |
 | 2026 Indianapolis Grand Prix Race 1 R1 | road | Chip Ganassi Racing | 13 | 22 | -9 | 0.391 | 7.75 | conversion_loss |
+| 2026 Grand Prix at Road America Race 1 R1 | road | Chip Ganassi Racing | 15 | 21 | -6 | 0.767 | 5.25 | hidden_pace_bad_result |
 | 2024 Detroit Grand Prix | street | Andretti Global | 11 | 20 | -9 | 0.05 | 7.75 | incident_or_reliability_limited |
 | 2025 Grand Prix of Portland | road | Chip Ganassi Racing | 5 | 19 | -14 |  | 6.5 | incident_or_reliability_limited |
 | 2024 Grand Prix of St. Petersburg | street | Andretti Global | 8 | 19 | -11 | 0.725 | 4.5 | incident_or_reliability_limited |
 | 2024 Indianapolis Grand Prix Race 2 R2 | road | Andretti Global | 11 | 19 | -8 | 0.8 | 9 | hidden_pace_bad_result |
 | 2025 Grand Prix of Monterey Race 2 R2 | road | Chip Ganassi Racing | 12 | 19 | -7 |  | 6.5 | incident_or_reliability_limited |
-| 2024 Grand Prix at Mid-Ohio | road | Andretti Global | 14 | 18 | -4 | 0.516 | 6.75 | baseline_execution |
 
 ## Hidden Pace Candidates
 
 | raceLabel | finishPosition | positionGain | paceIndex | bestLapRank | medianSectionPercentile | bryceVsTeamAvgFinish | archetype |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | 2024 Indianapolis Grand Prix Race 2 R2 | 19 | -8 | 0.8 | 5 |  | 9 | hidden_pace_bad_result |
+| 2026 Grand Prix at Road America Race 1 R1 | 21 | -6 | 0.767 | 1 | 0.535 | 5.25 | hidden_pace_bad_result |
 
 These are the rows where a normal result table is most likely to miss the story. They need manual review against source caveats before becoming UI copy.
 
@@ -79,25 +80,25 @@ These are the rows where a normal result table is most likely to miss the story.
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | 2026 Detroit Grand Prix | 8 | 6 | 0.807 | 0.333 | 6 | 6 | 0.918 |
 | 2026 INDY NXT by Firestone at World Wide Technology Raceway | 23 | -11 | 0.619 | 0.227 | 7 | 1 | 0.99 |
+| 2026 Grand Prix at Road America Race 1 R1 | 21 | -6 | 0.611 | 0.4 | 5 | 2 | 0.971 |
 | 2025 Grand Prix of Monterey Race 2 R2 | 19 | -7 | 0.576 | 0.429 | 8 | 6 | 0 |
 | 2026 Grand Prix of Arlington | 18 | 5 | 0.551 | 0.333 | 4 | 4 | 0.672 |
 | 2024 INDY NXT by Firestone at Iowa Speedway | 8 | 1 | 0.532 | 0.491 | 5 | 0 | 0.497 |
 | 2024 Detroit Grand Prix | 20 | -9 | 0.506 | 0.289 | 7 | 4 | 0 |
 | 2026 Indianapolis Grand Prix Race 1 R1 | 22 | -9 | 0.481 | 0.172 | 2 | 2 | 0.579 |
-| 2025 Music City Grand Prix | 6 | 2 | 0.424 | 0.185 | 2 | 2 | 0.89 |
 
 Most stable Bryce lap-chart races:
 
 | raceLabel | fieldLapDrivers | bryceNetLapChartGain | bryceLapGainPercentile | bryceVolatility | bryceStabilityPercentile |
 | --- | --- | --- | --- | --- | --- |
-| 2024 Grand Prix of Portland | 17 | 0 | 0.588 | 0 | 1 |
-| 2026 Grand Prix of Alabama Race 2 R2 | 24 | 0 | 0.833 | 0 | 1 |
 | 2024 Detroit Grand Prix | 21 | 0 | 0.429 | 0 | 1 |
+| 2026 Grand Prix of Alabama Race 2 R2 | 24 | 0 | 0.833 | 0 | 1 |
+| 2024 Grand Prix of Portland | 17 | 0 | 0.588 | 0 | 1 |
 | 2026 INDY NXT by Firestone at World Wide Technology Raceway | 24 | 0 | 0.542 | 2 | 0.958 |
 | 2025 Music City Grand Prix | 18 | 0 | 0.444 | 2 | 0.944 |
 | 2024 INDY NXT By Firestone at The Milwaukee Mile | 16 | 3 | 0.938 | 3 | 0.938 |
-| 2025 Grand Prix at Road America | 19 | 1 | 0.842 | 1 | 0.895 |
 | 2025 INDY NXT by Firestone at World Wide Technology Raceway | 19 | 0 | 0.579 | 2 | 0.895 |
+| 2025 Grand Prix at Road America | 19 | 1 | 0.842 | 1 | 0.895 |
 
 Least stable Bryce lap-chart races:
 
@@ -107,8 +108,8 @@ Least stable Bryce lap-chart races:
 | 2024 Grand Prix of Monterey Race 1 R1 | 20 | -8 | 0.1 | 14 | 0.1 |
 | 2025 Grand Prix of Alabama | 20 | -7 | 0.1 | 11 | 0.15 |
 | 2025 Grand Prix of Monterey Race 1 R1 | 17 | -1 | 0.118 | 5 | 0.176 |
-| 2025 Indianapolis Grand Prix Race 1 R1 | 21 | 1 | 0.667 | 11 | 0.19 |
 | 2025 Indianapolis Grand Prix Race 2 R2 | 21 | 5 | 0.905 | 11 | 0.19 |
+| 2025 Indianapolis Grand Prix Race 1 R1 | 21 | 1 | 0.667 | 11 | 0.19 |
 | 2026 Grand Prix of St. Petersburg | 24 | -1 | 0.375 | 9 | 0.208 |
 | 2026 Indianapolis Grand Prix Race 1 R1 | 24 | -8 | 0.167 | 24 | 0.208 |
 
@@ -116,11 +117,11 @@ Least stable Bryce lap-chart races:
 
 | label | n | pearson | interpretation |
 | --- | --- | --- | --- |
-| Best practice rank vs race finish | 30 | 0.262 | Exploratory correlation; lower ranks are better; direction only. |
-| Best practice rank vs race best-lap rank | 29 | 0.563 | Exploratory correlation; lower ranks are better; direction only. |
-| Best qualifying rank vs race start | 34 | 0.736 | Exploratory correlation; lower ranks are better; direction only. |
-| Best qualifying rank vs race finish | 34 | 0.19 | Exploratory correlation; lower ranks are better; direction only. |
-| Average qualifying rank vs race finish | 34 | 0.338 | Exploratory correlation; lower ranks are better; direction only. |
+| Best practice rank vs race finish | 31 | 0.319 | Exploratory correlation; lower ranks are better; direction only. |
+| Best practice rank vs race best-lap rank | 30 | 0.409 | Exploratory correlation; lower ranks are better; direction only. |
+| Best qualifying rank vs race start | 36 | 0.736 | Exploratory correlation; lower ranks are better; direction only. |
+| Best qualifying rank vs race finish | 36 | 0.192 | Exploratory correlation; lower ranks are better; direction only. |
+| Average qualifying rank vs race finish | 36 | 0.342 | Exploratory correlation; lower ranks are better; direction only. |
 
 Practice and qualifying are now represented as an event-level prep funnel. The model should display them as contextual evidence, with session format caveats.
 
@@ -140,21 +141,21 @@ Practice and qualifying are now represented as an event-level prep funnel. The m
 | 2025 | HMD Motorsports | 107 | 11.523 | 0.196 | 0.402 | 0.093 | 1 | 13 |
 | 2025 | Abel Motorsports w/ Miller Vinatieri Motorsports | 14 | 12.071 | 0 | 0.429 | 0.214 | 0 |  |
 | 2025 | Cape Motorsports powered by ECR | 25 | 13 | 0.04 | 0.24 | 0.16 | 0 |  |
-| 2026 | HMD Motorsports | 32 | 9.062 | 0.406 | 0.562 | 0.031 | 0 |  |
-| 2026 | Cape Motorsports powered by ECR | 16 | 9.312 | 0.25 | 0.625 | 0 | 0 |  |
-| 2026 | Andretti Global | 32 | 9.844 | 0.406 | 0.625 | 0.094 | 0 |  |
-| 2026 | Abel Motorsports | 32 | 12.5 | 0.156 | 0.438 | 0.062 | 0 |  |
-| 2026 | Cusick Morgan Motorsports | 16 | 12.688 | 0.062 | 0.375 | 0.062 | 0 |  |
-| 2026 | A.J. Foyt Enterprises | 16 | 14.125 | 0.188 | 0.312 | 0.062 | 0 |  |
-| 2026 | Chip Ganassi Racing | 32 | 16.688 | 0.031 | 0.188 | 0.156 | 8 | 14.5 |
-| 2026 | Juncos Hollinger Racing | 16 | 17.688 | 0 | 0.062 | 0.062 | 0 |  |
+| 2026 | Cape Motorsports powered by ECR | 20 | 8.2 | 0.35 | 0.7 | 0 | 0 |  |
+| 2026 | HMD Motorsports | 40 | 9.05 | 0.4 | 0.6 | 0.025 | 0 |  |
+| 2026 | Andretti Global | 40 | 10.425 | 0.375 | 0.55 | 0.075 | 0 |  |
+| 2026 | Cusick Morgan Motorsports | 20 | 12.3 | 0.05 | 0.4 | 0.05 | 0 |  |
+| 2026 | Abel Motorsports | 40 | 13.075 | 0.15 | 0.425 | 0.1 | 0 |  |
+| 2026 | A.J. Foyt Enterprises | 20 | 14.75 | 0.2 | 0.3 | 0.05 | 0 |  |
+| 2026 | Chip Ganassi Racing | 40 | 16.2 | 0.025 | 0.2 | 0.125 | 10 | 14.7 |
+| 2026 | Juncos Hollinger Racing | 20 | 17.25 | 0 | 0.05 | 0.1 | 0 |  |
 
 Ganassi-specific descriptive rows:
 
 | seasonYear | teamName | raceResultRows | avgFinish | top5Rate | top10Rate | issueLikeStatusRate | bryceRows | bryceAvgFinish |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 2025 | Chip Ganassi Racing | 28 | 11.357 | 0.071 | 0.5 | 0.107 | 13 | 12.154 |
-| 2026 | Chip Ganassi Racing | 32 | 16.688 | 0.031 | 0.188 | 0.156 | 8 | 14.5 |
+| 2026 | Chip Ganassi Racing | 40 | 16.2 | 0.025 | 0.2 | 0.125 | 10 | 14.7 |
 
 Team status rows are official-result status summaries. They are evidence for outcome context, not engineering root-cause attribution.
 
@@ -168,32 +169,32 @@ This is descriptive same-sample context with empirical shrinkage, designed to he
 | Dennis Hauger | 14 | 0.875 | 0.739 | 0.969 | 0.857 | 0.929 | 0.071 |
 | Caio Collet | 28 | 0.768 | 0.708 | 0.859 | 0.75 | 0.857 | 0.107 |
 | Jacob Abel | 14 | 0.822 | 0.705 | 0.893 | 0.786 | 0.857 | 0 |
-| Tymek Kucharczyk | 8 | 0.875 | 0.688 | 0.804 | 0.875 | 1 | 0 |
-| Lochie Hughes | 22 | 0.722 | 0.663 | 0.795 | 0.636 | 0.773 | 0 |
-| Enzo Fittipaldi | 8 | 0.81 | 0.655 | 0.592 | 0.75 | 0.75 | 0 |
-| Nikita Johnson | 11 | 0.742 | 0.64 | 0.704 | 0.364 | 0.818 | 0.091 |
+| Tymek Kucharczyk | 10 | 0.865 | 0.703 | 0.722 | 0.8 | 1 | 0 |
+| Nikita Johnson | 13 | 0.758 | 0.66 | 0.743 | 0.385 | 0.846 | 0.077 |
+| Lochie Hughes | 24 | 0.711 | 0.658 | 0.799 | 0.625 | 0.75 | 0 |
+| Enzo Fittipaldi | 10 | 0.743 | 0.635 | 0.622 | 0.7 | 0.7 | 0 |
 | Nolan Siegel | 5 | 0.77 | 0.604 | 0.85 | 0.8 | 0.8 | 0 |
-| Myles Rowe | 36 | 0.603 | 0.584 | 0.57 | 0.417 | 0.722 | 0.167 |
+| Myles Rowe | 38 | 0.61 | 0.591 | 0.571 | 0.421 | 0.737 | 0.158 |
 | Christian Brooks | 8 | 0.657 | 0.578 | 0.684 | 0.375 | 1 | 0 |
-| Salvador de Alba | 36 | 0.595 | 0.578 | 0.543 | 0.389 | 0.639 | 0.111 |
 | Callum Hedge | 28 | 0.599 | 0.577 | 0.612 | 0.357 | 0.679 | 0.036 |
-| Max Taylor | 14 | 0.616 | 0.574 | 0.714 | 0.5 | 0.714 | 0.143 |
+| Salvador de Alba | 38 | 0.589 | 0.574 | 0.522 | 0.368 | 0.632 | 0.105 |
+| Max Taylor | 16 | 0.59 | 0.56 | 0.696 | 0.438 | 0.625 | 0.125 |
 | Michael d'Orlando | 10 | 0.6 | 0.555 | 0.573 | 0.1 | 0.7 | 0 |
 
 Bryce race results versus rated field context:
 
 | raceLabel | bryceFinish | bryceFinishPercentile | fieldStrengthMean | resultVsFieldStrength | topRatedRivals |
 | --- | --- | --- | --- | --- | --- |
-| 2024 Grand Prix of Monterey Race 2 R2 | 3 | 0.9 | 0.508 | 0.392 | Louis Foster:0.78; Caio Collet:0.71; Jacob Abel:0.70; Myles Rowe:0.58; Christian Brooks:0.58 |
-| 2024 Grand Prix of Portland | 3 | 0.882 | 0.536 | 0.346 | Louis Foster:0.78; Caio Collet:0.71; Jacob Abel:0.70; Myles Rowe:0.58; Christian Brooks:0.58 |
-| 2024 INDY NXT By Firestone at The Milwaukee Mile | 4 | 0.833 | 0.526 | 0.308 | Louis Foster:0.78; Caio Collet:0.71; Jacob Abel:0.70; Myles Rowe:0.58; Christian Brooks:0.58 |
-| 2025 INDY NXT by Firestone at the Milwaukee Mile | 5 | 0.778 | 0.507 | 0.271 | Dennis Hauger:0.74; Caio Collet:0.71; Lochie Hughes:0.66; Myles Rowe:0.58; Salvador de Alba:0.58 |
-| 2026 Grand Prix of Alabama Race 2 R2 | 7 | 0.75 | 0.497 | 0.253 | Tymek Kucharczyk:0.69; Lochie Hughes:0.66; Enzo Fittipaldi:0.65; Nikita Johnson:0.64; Myles Rowe:0.58 |
-| 2025 Music City Grand Prix | 6 | 0.722 | 0.493 | 0.23 | Dennis Hauger:0.74; Caio Collet:0.71; Lochie Hughes:0.66; Myles Rowe:0.58; Salvador de Alba:0.58 |
-| 2026 Detroit Grand Prix | 8 | 0.708 | 0.497 | 0.212 | Tymek Kucharczyk:0.69; Lochie Hughes:0.66; Enzo Fittipaldi:0.65; Nikita Johnson:0.64; Myles Rowe:0.58 |
-| 2026 Grand Prix of Alabama Race 1 R1 | 8 | 0.708 | 0.497 | 0.212 | Tymek Kucharczyk:0.69; Lochie Hughes:0.66; Enzo Fittipaldi:0.65; Nikita Johnson:0.64; Myles Rowe:0.58 |
-| 2024 OUTFRONT Showdown | 6 | 0.722 | 0.533 | 0.189 | Louis Foster:0.78; Caio Collet:0.71; Jacob Abel:0.70; Myles Rowe:0.58; Christian Brooks:0.58 |
-| 2024 Grand Prix at Road America | 8 | 0.667 | 0.513 | 0.154 | Louis Foster:0.78; Caio Collet:0.71; Jacob Abel:0.70; Myles Rowe:0.58; Salvador de Alba:0.58 |
+| 2024 Grand Prix of Monterey Race 2 R2 | 3 | 0.9 | 0.509 | 0.391 | Louis Foster:0.78; Caio Collet:0.71; Jacob Abel:0.70; Myles Rowe:0.59; Christian Brooks:0.58 |
+| 2024 Grand Prix of Portland | 3 | 0.882 | 0.537 | 0.346 | Louis Foster:0.78; Caio Collet:0.71; Jacob Abel:0.70; Myles Rowe:0.59; Christian Brooks:0.58 |
+| 2024 INDY NXT By Firestone at The Milwaukee Mile | 4 | 0.833 | 0.526 | 0.307 | Louis Foster:0.78; Caio Collet:0.71; Jacob Abel:0.70; Myles Rowe:0.59; Christian Brooks:0.58 |
+| 2025 INDY NXT by Firestone at the Milwaukee Mile | 5 | 0.778 | 0.506 | 0.272 | Dennis Hauger:0.74; Caio Collet:0.71; Lochie Hughes:0.66; Myles Rowe:0.59; Callum Hedge:0.58 |
+| 2026 Grand Prix of Alabama Race 2 R2 | 7 | 0.75 | 0.498 | 0.252 | Tymek Kucharczyk:0.70; Nikita Johnson:0.66; Lochie Hughes:0.66; Enzo Fittipaldi:0.64; Myles Rowe:0.59 |
+| 2025 Music City Grand Prix | 6 | 0.722 | 0.492 | 0.23 | Dennis Hauger:0.74; Caio Collet:0.71; Lochie Hughes:0.66; Myles Rowe:0.59; Callum Hedge:0.58 |
+| 2026 Detroit Grand Prix | 8 | 0.708 | 0.498 | 0.211 | Tymek Kucharczyk:0.70; Nikita Johnson:0.66; Lochie Hughes:0.66; Enzo Fittipaldi:0.64; Myles Rowe:0.59 |
+| 2026 Grand Prix of Alabama Race 1 R1 | 8 | 0.708 | 0.498 | 0.211 | Tymek Kucharczyk:0.70; Nikita Johnson:0.66; Lochie Hughes:0.66; Enzo Fittipaldi:0.64; Myles Rowe:0.59 |
+| 2024 OUTFRONT Showdown | 6 | 0.722 | 0.532 | 0.19 | Louis Foster:0.78; Caio Collet:0.71; Jacob Abel:0.70; Myles Rowe:0.59; Christian Brooks:0.58 |
+| 2024 Grand Prix at Road America | 8 | 0.667 | 0.512 | 0.154 | Louis Foster:0.78; Caio Collet:0.71; Jacob Abel:0.70; Myles Rowe:0.59; Callum Hedge:0.58 |
 
 ## Championship Progression
 
@@ -207,6 +208,8 @@ Bryce race results versus rated field context:
 | 2026 | 6 | 2026 Indianapolis Grand Prix Race 2 R2 | 18 | 100 | 14 | Nikita Johnson | 131 |
 | 2026 | 7 | 2026 Detroit Grand Prix | 24 | 124 | 12 | Enzo Fittipaldi | 142 |
 | 2026 | 8 | 2026 INDY NXT by Firestone at World Wide Technology Raceway | 7 | 131 | 14 | Nikita Johnson | 154 |
+| 2026 | 9 | 2026 Grand Prix at Road America Race 1 R1 | 9 | 140 | 16 | Nikita Johnson | 174 |
+| 2026 | 10 | 2026 Grand Prix at Road America Race 2 R2 | 20 | 160 | 17 | Nikita Johnson | 190 |
 
 ## Official Racecraft Badges
 
@@ -257,35 +260,33 @@ Sparse section-result rows needing review:
 
 | eventName | eventStartDate | trackName | trackType | bryceIndyNxtRacesAtTrack | sameTrackAvgFinish | sameTrackAvgGain | trackTypeAvgFinish | trackTypeTop10Rate | weatherState |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Grand Prix at Road America Race 1 | 2026-06-19 | Road America | road | 2 | 8.5 | 0 | 12.6 | 0.4 | future_unavailable_in_historical_dataset |
-| Grand Prix at Road America Race 2 | 2026-06-20 | Road America | road | 2 | 8.5 | 0 | 12.6 | 0.4 | future_unavailable_in_historical_dataset |
-| Grand Prix at Mid-Ohio Race 1 | 2026-07-04 | Mid-Ohio Sports Car Course | road | 2 | 15 | -4.5 | 12.6 | 0.4 | future_unavailable_in_historical_dataset |
-| Grand Prix at Mid-Ohio Race 2 | 2026-07-05 | Mid-Ohio Sports Car Course | road | 2 | 15 | -4.5 | 12.6 | 0.4 | future_unavailable_in_historical_dataset |
+| Grand Prix at Mid-Ohio Race 1 | 2026-07-04 | Mid-Ohio Sports Car Course | road | 2 | 15 | -4.5 | 12.864 | 0.409 | future_unavailable_in_historical_dataset |
+| Grand Prix at Mid-Ohio Race 2 | 2026-07-05 | Mid-Ohio Sports Car Course | road | 2 | 15 | -4.5 | 12.864 | 0.409 | future_unavailable_in_historical_dataset |
 | Music City Grand Prix | 2026-07-18 | Nashville Superspeedway | oval | 2 | 6.5 | 2.5 | 9.111 | 0.778 | future_unavailable_in_historical_dataset |
-| Grand Prix of Portland | 2026-08-09 | Portland International Raceway | road | 2 | 11 | -5.5 | 12.6 | 0.4 | future_unavailable_in_historical_dataset |
+| Grand Prix of Portland | 2026-08-09 | Portland International Raceway | road | 2 | 11 | -5.5 | 12.864 | 0.409 | future_unavailable_in_historical_dataset |
 | INDY NXT by Firestone at Milwaukee Mile | 2026-08-30 | The Milwaukee Mile | oval | 2 | 4.5 | 2 | 9.111 | 0.778 | future_unavailable_in_historical_dataset |
-| Grand Prix of Monterey Race 1 | 2026-09-05 | WeatherTech Raceway Laguna Seca | road | 4 | 12 | -2 | 12.6 | 0.4 | future_unavailable_in_historical_dataset |
-| Grand Prix of Monterey Race 2 | 2026-09-06 | WeatherTech Raceway Laguna Seca | road | 4 | 12 | -2 | 12.6 | 0.4 | future_unavailable_in_historical_dataset |
+| Grand Prix of Monterey Race 1 | 2026-09-05 | WeatherTech Raceway Laguna Seca | road | 4 | 12 | -2 | 12.864 | 0.409 | future_unavailable_in_historical_dataset |
+| Grand Prix of Monterey Race 2 | 2026-09-06 | WeatherTech Raceway Laguna Seca | road | 4 | 12 | -2 | 12.864 | 0.409 | future_unavailable_in_historical_dataset |
 
 ## Source Family Completion Audit
 
 | sourceFamily | sourceRows | analysisStatus | primaryArtifacts | auditConclusion |
 | --- | --- | --- | --- | --- |
-| race_results | 36 | complete | race_debrief_scores.csv | Core result, conversion, points, and status analysis. |
-| full_field_results | 738 | complete | driver_strength_ratings.csv; field_strength_by_race.csv; team_context_by_year.csv | Full-field context, team context, and descriptive opponent strength. |
+| race_results | 38 | complete | race_debrief_scores.csv | Core result, conversion, points, and status analysis. |
+| full_field_results | 786 | complete | driver_strength_ratings.csv; field_strength_by_race.csv; team_context_by_year.csv | Full-field context, team context, and descriptive opponent strength. |
 | practice_results | 49 | complete_source_bounded | prep_session_signals.csv | Practice is represented as rank context; no absolute pace claims. |
-| qualifying_results | 1238 | complete_source_bounded | prep_session_signals.csv | Qualifying is used for start/prep context; group/combined caveats remain. |
-| lap_samples | 29519 | complete_source_bounded | full_field_lap_dynamics_by_driver.csv | Full-field lap movement and volatility analysis with partial-chart caveats. |
-| section_results | 35 | complete_source_bounded | section_results_deep_by_race.csv | Per-lap section percentiles with sparse-row suppression. |
-| top_section_times | 36 | partial | section_results_deep_by_section.csv | Top-section facts were useful earlier; final pass favors per-lap section results. |
-| event_summary_stats | 36 | complete | race_debrief_scores.csv | Cautions, passes, lead-change context folded into debrief scores. |
-| leader_lap_summary | 36 | complete | leader_lap_context.csv | Leader entropy and dominance context. |
-| incidents | 132 | complete | incident_penalty_context.csv | Incident exposure and type summaries. |
-| penalties | 76 | complete | incident_penalty_context.csv | Penalty exposure and type summaries. |
-| racecraft_events | 35 | complete_source_bounded | racecraft_context_by_race.csv | Official most-improved badges only; no inferred overtake log. |
-| weather_observations | 95 | complete_context_only | race_debrief_scores.csv; future_weekend_prep_inputs.csv | Modeled non-official weather used as context, not causality. |
-| future_schedule | 91 | complete_context_only | future_weekend_prep_inputs.csv | Future prep rows exclude forecast claims until current weather source is added. |
-| pit_stop_counts | 36 | complete_low_signal | race_debrief_scores.csv | Pit counts are present but low-signal; no pit sequence/tire/service analysis exists. |
+| qualifying_results | 1334 | complete_source_bounded | prep_session_signals.csv | Qualifying is used for start/prep context; group/combined caveats remain. |
+| lap_samples | 30366 | complete_source_bounded | full_field_lap_dynamics_by_driver.csv | Full-field lap movement and volatility analysis with partial-chart caveats. |
+| section_results | 37 | complete_source_bounded | section_results_deep_by_race.csv | Per-lap section percentiles with sparse-row suppression. |
+| top_section_times | 38 | partial | section_results_deep_by_section.csv | Top-section facts were useful earlier; final pass favors per-lap section results. |
+| event_summary_stats | 38 | complete | race_debrief_scores.csv | Cautions, passes, lead-change context folded into debrief scores. |
+| leader_lap_summary | 37 | complete | leader_lap_context.csv | Leader entropy and dominance context. |
+| incidents | 140 | complete | incident_penalty_context.csv | Incident exposure and type summaries. |
+| penalties | 80 | complete | incident_penalty_context.csv | Penalty exposure and type summaries. |
+| racecraft_events | 37 | complete_source_bounded | racecraft_context_by_race.csv | Official most-improved badges only; no inferred overtake log. |
+| weather_observations | 104 | complete_context_only | race_debrief_scores.csv; future_weekend_prep_inputs.csv | Modeled non-official weather used as context, not causality. |
+| future_schedule | 82 | complete_context_only | future_weekend_prep_inputs.csv | Future prep rows exclude forecast claims until current weather source is added. |
+| pit_stop_counts | 38 | complete_low_signal | race_debrief_scores.csv | Pit counts are present but low-signal; no pit sequence/tire/service analysis exists. |
 | telemetry_or_car_engineering | 0 | unavailable |  | No telemetry or engineering-root-cause data in canonical sources. |
 
 ## Adversarial Review Of The First Pass

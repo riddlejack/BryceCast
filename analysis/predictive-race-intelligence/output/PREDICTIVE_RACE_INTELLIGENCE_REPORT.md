@@ -1,7 +1,7 @@
 # Predictive Race Intelligence Productization Pass
 
-Generated: `2026-06-18T17:52:08Z`
-Repo head: `ce904af`
+Generated: `2026-07-02T17:45:26Z`
+Repo head: `4dd1e2f`
 
 ## Decision
 
@@ -11,28 +11,28 @@ BryceCast should promote a predictive race-intelligence workbench, not a point-f
 
 - Inventory items: `76`.
 - Productization statuses: `{'analyst_only': 5, 'blocked': 4, 'context_pack_ready': 29, 'deferred': 2, 'productized': 36}`.
-- INDY NXT feature rows: `36`.
+- INDY NXT feature rows: `38`.
 - Career prior rows: `68`.
-- Context packs: `{'career_lab': 1, 'live_race_day': 1, 'race_debrief': 36, 'upcoming_event': 9}`.
+- Context packs: `{'career_lab': 1, 'live_race_day': 1, 'race_debrief': 38, 'upcoming_event': 7}`.
 
 ## Predictive Feasibility
 
 - Overall finish-percentile baseline MAE: `0.229`.
-- Best observed finish-percentile MAE: `0.21` from `prep_practice_qualifying_knn5`.
+- Best observed finish-percentile MAE: `0.204` from `prep_practice_qualifying_knn5`.
 - Any model using team outcome, lap, section, incident, penalty, or archetype fields is post-race only and barred from pre-race predictions.
 - Top-10 grouped rates did not beat the base-rate Brier score in the first scorecard, so top-10 should stay as a path/probability-band concept.
 
-## Road America Intelligence
+## Mid-Ohio Sports Car Course Intelligence
 
-- `2024 Grand Prix at Road America`: start P7.0, finish P8.0, gain `-1.0`, finish percentile `0.667`.
-- `2025 Grand Prix at Road America`: start P10.0, finish P9.0, gain `1.0`, finish percentile `0.579`.
+- `2024 Grand Prix at Mid-Ohio`: start P14.0, finish P18.0, gain `-4.0`, finish percentile `0.105`.
+- `2025 Grand Prix at Mid-Ohio`: start P7.0, finish P12.0, gain `-5.0`, finish percentile `0.421`.
 
-The generated Road America packs add top-10 path factors, analog races, prediction bands, and prep-update hooks. They intentionally avoid point predictions.
+The generated upcoming-event packs add top-10 path factors, analog races, prediction bands, and prep-update hooks. They intentionally avoid point predictions.
 
 ## Context Pack Surfaces
 
-- Upcoming event packs: all 9 remaining INDY NXT events in the current future-prep window.
-- Race debrief packs: all 36 analyzable Bryce INDY NXT races.
+- Upcoming event packs: all 7 remaining INDY NXT events in the current future-prep window.
+- Race debrief packs: all 38 analyzable Bryce INDY NXT races.
 - Career Lab pack: series summary, metric-family parity, prior matrix, source-family rules.
 - Live race-day pack: runtime boundary, replay quality, current local proof state, and blocked live proof gates.
 
@@ -48,4 +48,4 @@ The generated Road America packs add top-10 path factors, analog races, predicti
 
 - `analysis/predictive-race-intelligence/output/charts/finish_percentile_model_mae.svg`
 - `analysis/predictive-race-intelligence/output/charts/career_track_type_priors.svg`
-- `analysis/predictive-race-intelligence/output/charts/road_america_indy_nxt_history.svg`
+- `analysis/predictive-race-intelligence/output/charts/upcoming_track_indy_nxt_history.svg`

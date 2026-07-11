@@ -1,7 +1,7 @@
 # Context Event Narrative Layer
 
-Generated: 2026-06-18T17:52:01Z
-Source hash: `da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc`
+Generated: 2026-07-02T17:45:12Z
+Source hash: `5d66d442aa62ff829f41a78a998f82218eacb1e92cf10834dc3b4316d03ba7cb`
 
 ## Source Scope
 
@@ -9,11 +9,11 @@ This lane normalizes canonical non-lap context collections into product-ready ar
 
 | collection | rows |
 | --- | --- |
-| media | 940 |
-| penalty | 82 |
-| weather | 181 |
-| incident | 132 |
-| racecraft | 35 |
+| media | 973 |
+| penalty | 86 |
+| weather | 190 |
+| incident | 140 |
+| racecraft | 37 |
 
 ## What Became Productized
 
@@ -45,10 +45,10 @@ This lane normalizes canonical non-lap context collections into product-ready ar
 
 | sourceType | rows |
 | --- | --- |
-| official_pdf | 711 |
-| official_api | 264 |
+| official_pdf | 732 |
+| official_api | 273 |
 | official_page | 117 |
-| weather_api | 78 |
+| weather_api | 81 |
 | official_html | 16 |
 | official_image | 5 |
 | official_article | 4 |
@@ -59,7 +59,7 @@ This lane normalizes canonical non-lap context collections into product-ready ar
 
 | status | rows |
 | --- | --- |
-| open | 6 |
+| open | 7 |
 | partial | 2 |
 | source_broken_preserved | 1 |
 
@@ -67,10 +67,10 @@ This lane normalizes canonical non-lap context collections into product-ready ar
 
 | metricType | rows |
 | --- | --- |
-| official_top_section_times | 146 |
-| official_section_results | 145 |
-| official_event_summary_race_stats | 36 |
-| official_leader_lap_summary | 36 |
+| official_top_section_times | 153 |
+| official_section_results | 152 |
+| official_event_summary_race_stats | 38 |
+| official_leader_lap_summary | 37 |
 | karting_championship_milestone | 2 |
 | karting_fast_time | 2 |
 | career_award | 1 |
@@ -79,17 +79,17 @@ This lane normalizes canonical non-lap context collections into product-ready ar
 
 ## Weather And Media
 
-- Weather/condition rows: 181.
-- Media index rows: 940.
-- Source-evidence rows: 1199.
-- Source-boundary gap rows: 9.
-- Derived metric rows: 370.
+- Weather/condition rows: 190.
+- Media index rows: 973.
+- Source-evidence rows: 1232.
+- Source-boundary gap rows: 10.
+- Derived metric rows: 387.
 
 ## Series Coverage
 
 | seriesName | seasonYears | totalContextRows | racecraftCount | penaltyCount | incidentCount | weatherCount | mediaCount |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| INDY NXT | 2024; 2025; 2026 | 1020 | 35 | 76 | 132 | 95 | 682 |
+| INDY NXT | 2024; 2025; 2026 | 1076 | 37 | 80 | 140 | 104 | 715 |
 | GB3 Championship | 2021; 2022 | 180 | 0 | 0 | 0 | 39 | 141 |
 | Formula Ford | 2020 | 61 | 0 | 4 | 0 | 46 | 11 |
 | F1600 Championship Series | 2019 | 39 | 0 | 2 | 0 | 0 | 37 |

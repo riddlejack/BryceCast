@@ -8,6 +8,23 @@
   ],
   "bestCleanRaceSectionSessions": [
     {
+      "bestCleanSectionFamilies": "",
+      "bottomQuartileCleanSectionShare": 0.2755102040816326,
+      "cleanRaceLapCount": 7,
+      "cleanSectionComparisonRows": 98,
+      "eventId": "event_indy_nxt_2026_5545",
+      "medianCleanTrackSectionPercentile": 0.9,
+      "raceLabel": "2026 Grand Prix at Road America Race 1",
+      "seasonYear": 2026,
+      "sessionId": "session_indy_nxt_2026_6762",
+      "sourceHash": "5d66d442aa62ff829f41a78a998f82218eacb1e92cf10834dc3b4316d03ba7cb",
+      "sourceState": "official_section_results+official_lap_chart+official_incident_caution_context_clean_lap_filtered+section_only_rows_excluded",
+      "topQuartileCleanSectionShare": 0.6326530612244898,
+      "trackName": "Road America",
+      "trackType": "road",
+      "weakestCleanSectionFamilies": ""
+    },
+    {
       "bestCleanSectionFamilies": "SS1 to T2:0.79 n=86; T3 to SS2:0.79 n=86; T2 to BS:0.75 n=86; BS to T3:0.72 n=86",
       "bottomQuartileCleanSectionShare": 0.12956810631229235,
       "cleanRaceLapCount": 86,
@@ -17,7 +34,7 @@
       "raceLabel": "2024 INDY NXT By Firestone at The Milwaukee Mile",
       "seasonYear": 2024,
       "sessionId": "session_indy_nxt_2024_6322",
-      "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+      "sourceHash": "5d66d442aa62ff829f41a78a998f82218eacb1e92cf10834dc3b4316d03ba7cb",
       "sourceState": "official_section_results+official_lap_chart+official_incident_caution_context_clean_lap_filtered+section_only_rows_excluded",
       "topQuartileCleanSectionShare": 0.43023255813953487,
       "trackName": "The Milwaukee Mile",
@@ -34,7 +51,7 @@
       "raceLabel": "2024 Grand Prix of Portland",
       "seasonYear": 2024,
       "sessionId": "session_indy_nxt_2024_6321",
-      "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+      "sourceHash": "5d66d442aa62ff829f41a78a998f82218eacb1e92cf10834dc3b4316d03ba7cb",
       "sourceState": "official_section_results+official_lap_chart+official_incident_caution_context_clean_lap_filtered+section_only_rows_excluded",
       "topQuartileCleanSectionShare": 0.3977272727272727,
       "trackName": "Portland International Raceway",
@@ -51,7 +68,7 @@
       "raceLabel": "2024 Grand Prix of Monterey Race 2",
       "seasonYear": 2024,
       "sessionId": "session_indy_nxt_2024_6327",
-      "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+      "sourceHash": "5d66d442aa62ff829f41a78a998f82218eacb1e92cf10834dc3b4316d03ba7cb",
       "sourceState": "official_section_results+official_lap_chart+official_incident_caution_context_clean_lap_filtered+section_only_rows_excluded",
       "topQuartileCleanSectionShare": 0.37445887445887444,
       "trackName": "WeatherTech Raceway Laguna Seca",
@@ -68,7 +85,7 @@
       "raceLabel": "2026 Grand Prix of Alabama Race 2",
       "seasonYear": 2026,
       "sessionId": "session_indy_nxt_2026_6752",
-      "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+      "sourceHash": "5d66d442aa62ff829f41a78a998f82218eacb1e92cf10834dc3b4316d03ba7cb",
       "sourceState": "official_section_results+official_lap_chart+official_incident_caution_context_clean_lap_filtered+section_only_rows_excluded",
       "topQuartileCleanSectionShare": 0.3814814814814815,
       "trackName": "Barber Motorsports Park",
@@ -85,7 +102,7 @@
       "raceLabel": "2024 Grand Prix of Alabama",
       "seasonYear": 2024,
       "sessionId": "session_indy_nxt_2024_6314",
-      "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+      "sourceHash": "5d66d442aa62ff829f41a78a998f82218eacb1e92cf10834dc3b4316d03ba7cb",
       "sourceState": "official_section_results+official_lap_chart+official_incident_caution_context_clean_lap_filtered+section_only_rows_excluded",
       "topQuartileCleanSectionShare": 0.3592592592592593,
       "trackName": "Barber Motorsports Park",
@@ -102,7 +119,7 @@
       "raceLabel": "2024 Grand Prix of St. Petersburg",
       "seasonYear": 2024,
       "sessionId": "session_indy_nxt_2024_6324",
-      "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+      "sourceHash": "5d66d442aa62ff829f41a78a998f82218eacb1e92cf10834dc3b4316d03ba7cb",
       "sourceState": "official_section_results+official_lap_chart+official_incident_caution_context_clean_lap_filtered+section_only_rows_excluded",
       "topQuartileCleanSectionShare": 0.3375,
       "trackName": "Streets of St. Petersburg",
@@ -119,29 +136,12 @@
       "raceLabel": "2024 Grand Prix at Road America",
       "seasonYear": 2024,
       "sessionId": "session_indy_nxt_2024_6316",
-      "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+      "sourceHash": "5d66d442aa62ff829f41a78a998f82218eacb1e92cf10834dc3b4316d03ba7cb",
       "sourceState": "official_section_results+official_lap_chart+official_incident_caution_context_clean_lap_filtered+section_only_rows_excluded",
       "topQuartileCleanSectionShare": 0.32142857142857145,
       "trackName": "Road America",
       "trackType": "road",
       "weakestCleanSectionFamilies": "I2 to I3:0.36 n=12; I4A to I5:0.42 n=12; I6 to I7:0.46 n=12; I3 to I3A:0.49 n=12"
-    },
-    {
-      "bestCleanSectionFamilies": "T3 to SS2:0.85 n=83; T1 to SS1:0.65 n=83; SS2 to T4:0.65 n=83; T4 to FS:0.54 n=83",
-      "bottomQuartileCleanSectionShare": 0.16351118760757316,
-      "cleanRaceLapCount": 83,
-      "cleanSectionComparisonRows": 581,
-      "eventId": "event_indy_nxt_2025_5490",
-      "medianCleanTrackSectionPercentile": 0.5882352941176471,
-      "raceLabel": "2025 INDY NXT by Firestone at the Milwaukee Mile",
-      "seasonYear": 2025,
-      "sessionId": "session_indy_nxt_2025_6448",
-      "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
-      "sourceState": "official_section_results+official_lap_chart+official_incident_caution_context_clean_lap_filtered+section_only_rows_excluded",
-      "topQuartileCleanSectionShare": 0.2874354561101549,
-      "trackName": "The Milwaukee Mile",
-      "trackType": "oval",
-      "weakestCleanSectionFamilies": "T2 to BS:0.43 n=83; SS1 to T2:0.50 n=83; BS to T3:0.50 n=83; T4 to FS:0.54 n=83"
     }
   ],
   "bestLapChartSegments": [
@@ -157,7 +157,7 @@
       "segmentType": "green_run",
       "sessionId": "session_indy_nxt_2026_6765",
       "sourceCompleteness": "complete_validated_against_result_lap_counts",
-      "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+      "sourceHash": "5d66d442aa62ff829f41a78a998f82218eacb1e92cf10834dc3b4316d03ba7cb",
       "startLap": 1,
       "startPosition": 22.0,
       "trackName": "Indianapolis Motor Speedway Road Course",
@@ -176,7 +176,7 @@
       "segmentType": "green_run",
       "sessionId": "session_indy_nxt_2024_6323",
       "sourceCompleteness": "complete_validated_against_result_lap_counts",
-      "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+      "sourceHash": "5d66d442aa62ff829f41a78a998f82218eacb1e92cf10834dc3b4316d03ba7cb",
       "startLap": 1,
       "startPosition": 11.0,
       "trackName": "Nashville Superspeedway",
@@ -195,7 +195,7 @@
       "segmentType": "green_run",
       "sessionId": "session_indy_nxt_2025_6444",
       "sourceCompleteness": "complete_validated_against_result_lap_counts",
-      "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+      "sourceHash": "5d66d442aa62ff829f41a78a998f82218eacb1e92cf10834dc3b4316d03ba7cb",
       "startLap": 13,
       "startPosition": 16.0,
       "trackName": "Indianapolis Motor Speedway Road Course",
@@ -214,7 +214,7 @@
       "segmentType": "green_run",
       "sessionId": "session_indy_nxt_2025_6451",
       "sourceCompleteness": "partial_visible_laps_only",
-      "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+      "sourceHash": "5d66d442aa62ff829f41a78a998f82218eacb1e92cf10834dc3b4316d03ba7cb",
       "startLap": 1,
       "startPosition": 14.0,
       "trackName": "Iowa Speedway",
@@ -233,7 +233,7 @@
       "segmentType": "green_run",
       "sessionId": "session_indy_nxt_2024_6314",
       "sourceCompleteness": "complete_validated_against_result_lap_counts",
-      "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+      "sourceHash": "5d66d442aa62ff829f41a78a998f82218eacb1e92cf10834dc3b4316d03ba7cb",
       "startLap": 1,
       "startPosition": 7.0,
       "trackName": "Barber Motorsports Park",
@@ -252,7 +252,7 @@
       "segmentType": "green_run",
       "sessionId": "session_indy_nxt_2024_6320",
       "sourceCompleteness": "partial_visible_laps_only",
-      "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+      "sourceHash": "5d66d442aa62ff829f41a78a998f82218eacb1e92cf10834dc3b4316d03ba7cb",
       "startLap": 61,
       "startPosition": 8.0,
       "trackName": "World Wide Technology Raceway",
@@ -271,7 +271,7 @@
       "segmentType": "green_run",
       "sessionId": "session_indy_nxt_2024_6327",
       "sourceCompleteness": "partial_visible_laps_only",
-      "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+      "sourceHash": "5d66d442aa62ff829f41a78a998f82218eacb1e92cf10834dc3b4316d03ba7cb",
       "startLap": 18,
       "startPosition": 5.0,
       "trackName": "WeatherTech Raceway Laguna Seca",
@@ -290,7 +290,7 @@
       "segmentType": "green_run",
       "sessionId": "session_indy_nxt_2025_6443",
       "sourceCompleteness": "complete_validated_against_result_lap_counts",
-      "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+      "sourceHash": "5d66d442aa62ff829f41a78a998f82218eacb1e92cf10834dc3b4316d03ba7cb",
       "startLap": 6,
       "startPosition": 17.0,
       "trackName": "Indianapolis Motor Speedway Road Course",
@@ -300,12 +300,13 @@
   ],
   "claimStrength": "post_race_descriptive_only",
   "counts": {
-    "raceLapInflectionPoints": 151,
-    "raceLapMicrostates": 1390,
-    "raceLapSegments": 159,
-    "raceSectionLapObservations": 16001,
-    "raceSectionSessionSummaries": 35,
-    "roadAmericaRows": 2
+    "raceLapInflectionPoints": 157,
+    "raceLapMicrostates": 1428,
+    "raceLapSegments": 173,
+    "raceSectionLapObservations": 16660,
+    "raceSectionSessionSummaries": 37,
+    "roadAmericaRows": 4,
+    "upcomingVenueRows": 2
   },
   "displayRules": [
     "Use lap-position microstates as a race story trace, not telemetry pace.",
@@ -313,7 +314,7 @@
     "Treat official_section_results_only rows as raw section comparisons, not clean-lap or caution-aware race shape.",
     "Keep caution/restart segments visually distinct from green-flag movement."
   ],
-  "generatedAt": "2026-06-18T10:49:41Z",
+  "generatedAt": "2026-07-02T17:45:39Z",
   "id": "indy-nxt-race-lap-section-context",
   "largestPositionInflections": [
     {
@@ -325,7 +326,7 @@
       "previousPosition": 7.0,
       "raceLabel": "2024 Grand Prix of Monterey Race 1",
       "sessionId": "session_indy_nxt_2024_6317",
-      "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+      "sourceHash": "5d66d442aa62ff829f41a78a998f82218eacb1e92cf10834dc3b4316d03ba7cb",
       "trigger": "green_flag_loss"
     },
     {
@@ -337,7 +338,7 @@
       "previousPosition": 11.0,
       "raceLabel": "2026 Indianapolis Grand Prix Race 1",
       "sessionId": "session_indy_nxt_2026_6756",
-      "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+      "sourceHash": "5d66d442aa62ff829f41a78a998f82218eacb1e92cf10834dc3b4316d03ba7cb",
       "trigger": "green_flag_loss"
     },
     {
@@ -349,7 +350,7 @@
       "previousPosition": 8.0,
       "raceLabel": "2025 Grand Prix of Alabama",
       "sessionId": "session_indy_nxt_2025_6445",
-      "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+      "sourceHash": "5d66d442aa62ff829f41a78a998f82218eacb1e92cf10834dc3b4316d03ba7cb",
       "trigger": "caution_reorder_loss"
     },
     {
@@ -361,7 +362,7 @@
       "previousPosition": 14.0,
       "raceLabel": "2024 Indianapolis Grand Prix Race 2",
       "sessionId": "session_indy_nxt_2024_6325",
-      "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+      "sourceHash": "5d66d442aa62ff829f41a78a998f82218eacb1e92cf10834dc3b4316d03ba7cb",
       "trigger": "green_flag_loss"
     },
     {
@@ -373,7 +374,31 @@
       "previousPosition": 12.0,
       "raceLabel": "2024 Indianapolis Grand Prix Race 1",
       "sessionId": "session_indy_nxt_2024_6315",
-      "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+      "sourceHash": "5d66d442aa62ff829f41a78a998f82218eacb1e92cf10834dc3b4316d03ba7cb",
+      "trigger": "green_flag_loss"
+    },
+    {
+      "cautionState": "caution",
+      "lapNumber": 9,
+      "magnitude": 5.0,
+      "position": 21.0,
+      "positionDelta": -5.0,
+      "previousPosition": 16.0,
+      "raceLabel": "2026 Grand Prix at Road America Race 1",
+      "sessionId": "session_indy_nxt_2026_6762",
+      "sourceHash": "5d66d442aa62ff829f41a78a998f82218eacb1e92cf10834dc3b4316d03ba7cb",
+      "trigger": "caution_reorder_loss"
+    },
+    {
+      "cautionState": "green",
+      "lapNumber": 8,
+      "magnitude": 4.0,
+      "position": 15.0,
+      "positionDelta": -4.0,
+      "previousPosition": 11.0,
+      "raceLabel": "2026 Grand Prix at Road America Race 2",
+      "sessionId": "session_indy_nxt_2026_6754",
+      "sourceHash": "5d66d442aa62ff829f41a78a998f82218eacb1e92cf10834dc3b4316d03ba7cb",
       "trigger": "green_flag_loss"
     },
     {
@@ -385,7 +410,7 @@
       "previousPosition": 6.0,
       "raceLabel": "2024 Grand Prix at Road America",
       "sessionId": "session_indy_nxt_2024_6316",
-      "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+      "sourceHash": "5d66d442aa62ff829f41a78a998f82218eacb1e92cf10834dc3b4316d03ba7cb",
       "trigger": "green_flag_loss"
     },
     {
@@ -397,7 +422,7 @@
       "previousPosition": 20.0,
       "raceLabel": "2025 Indianapolis Grand Prix Race 2",
       "sessionId": "session_indy_nxt_2025_6443",
-      "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+      "sourceHash": "5d66d442aa62ff829f41a78a998f82218eacb1e92cf10834dc3b4316d03ba7cb",
       "trigger": "caution_reorder_gain"
     },
     {
@@ -409,7 +434,7 @@
       "previousPosition": 15.0,
       "raceLabel": "2025 Indianapolis Grand Prix Race 2",
       "sessionId": "session_indy_nxt_2025_6443",
-      "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+      "sourceHash": "5d66d442aa62ff829f41a78a998f82218eacb1e92cf10834dc3b4316d03ba7cb",
       "trigger": "green_flag_loss"
     },
     {
@@ -421,7 +446,7 @@
       "previousPosition": 12.0,
       "raceLabel": "2025 Indianapolis Grand Prix Race 1",
       "sessionId": "session_indy_nxt_2025_6444",
-      "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+      "sourceHash": "5d66d442aa62ff829f41a78a998f82218eacb1e92cf10834dc3b4316d03ba7cb",
       "trigger": "green_flag_loss"
     },
     {
@@ -433,39 +458,15 @@
       "previousPosition": 7.0,
       "raceLabel": "2026 Grand Prix of Alabama Race 1",
       "sessionId": "session_indy_nxt_2026_6750",
-      "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+      "sourceHash": "5d66d442aa62ff829f41a78a998f82218eacb1e92cf10834dc3b4316d03ba7cb",
       "trigger": "green_flag_loss"
-    },
-    {
-      "cautionState": "caution",
-      "lapNumber": 12,
-      "magnitude": 3.0,
-      "position": 16.0,
-      "positionDelta": -3.0,
-      "previousPosition": 13.0,
-      "raceLabel": "2026 Indianapolis Grand Prix Race 1",
-      "sessionId": "session_indy_nxt_2026_6756",
-      "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
-      "trigger": "caution_reorder_loss"
-    },
-    {
-      "cautionState": "caution",
-      "lapNumber": 13,
-      "magnitude": 3.0,
-      "position": 13.0,
-      "positionDelta": 3.0,
-      "previousPosition": 16.0,
-      "raceLabel": "2026 Indianapolis Grand Prix Race 1",
-      "sessionId": "session_indy_nxt_2026_6756",
-      "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
-      "trigger": "caution_reorder_gain"
     }
   ],
   "publicPointPrediction": false,
   "sectionSourceStateCounts": {
-    "official_section_results+official_lap_chart+official_incident_caution_context": 15800,
-    "official_section_results_only": 201
+    "official_section_results+official_lap_chart+official_incident_caution_context": 16452,
+    "official_section_results_only": 208
   },
   "sourceDataset": "data/career/career.dataset.json",
-  "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc"
+  "sourceHash": "5d66d442aa62ff829f41a78a998f82218eacb1e92cf10834dc3b4316d03ba7cb"
 }

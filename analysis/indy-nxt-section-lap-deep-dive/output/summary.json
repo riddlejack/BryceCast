@@ -10,8 +10,8 @@
       "caveat": "Exploratory association only; no public point prediction and no post-race leakage for upcoming events.",
       "claimStrength": "historical_backtest_only",
       "label": "Practice section median vs race finish percentile",
-      "n": 30,
-      "pearson": 0.265441065105416,
+      "n": 31,
+      "pearson": 0.2660868090325819,
       "x": "practiceMedianTrackSectionPercentile",
       "y": "finishPercentile"
     },
@@ -19,23 +19,29 @@
       "caveat": "Exploratory association only; no public point prediction and no post-race leakage for upcoming events.",
       "claimStrength": "historical_backtest_only",
       "label": "Qualifying section median vs race finish percentile",
-      "n": 35,
-      "pearson": 0.2319829122919612,
+      "n": 37,
+      "pearson": 0.23075358410736885,
       "x": "qualifyingMedianTrackSectionPercentile",
       "y": "finishPercentile"
     }
   ],
   "counts": {
-    "roadAmericaPrepRows": 6,
+    "roadAmericaPrepRows": 9,
     "sectionFamilyRows": 248,
-    "sectionObservations": 21044,
-    "sessionSummaries": 83,
-    "sessionToRaceTransferRows": 36,
-    "topSectionRows": 2678
+    "sectionObservations": 21629,
+    "sessionSummaries": 86,
+    "sessionToRaceTransferRows": 38,
+    "topSectionRows": 2909,
+    "upcomingVenuePrepRows": 6
   },
-  "generatedAt": "2026-06-18T10:49:39Z",
+  "generatedAt": "2026-07-02T17:45:36Z",
   "ok": true,
   "publicPointPrediction": false,
   "sourceDataset": "data/career/career.dataset.json",
-  "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc"
+  "sourceHash": "5d66d442aa62ff829f41a78a998f82218eacb1e92cf10834dc3b4316d03ba7cb",
+  "upcomingVenue": {
+    "artifactSlug": "mid_ohio",
+    "asOfDate": "2026-07-02",
+    "trackName": "Mid-Ohio Sports Car Course"
+  }
 }

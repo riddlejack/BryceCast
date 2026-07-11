@@ -550,6 +550,22 @@ const buildCoverage = ({ dataset, summary, indyReport, indyWindowReport, cancele
               : 'blocked'
         )
       : undefined;
+    const indyLapChartsDiscovered = series.id === 'series_indy_nxt'
+      ? (indyReport?.lapChartsDiscovered ?? comparableRaceSessions.length)
+      : 0;
+    const indyLapChartsFullyParsed = series.id === 'series_indy_nxt'
+      ? (indyReport?.lapChartsFullyParsed ?? 0)
+      : 0;
+    const indyLapChartsPartiallyParsed = series.id === 'series_indy_nxt'
+      ? (indyReport?.lapChartsPartiallyParsed ?? 0)
+      : 0;
+    const indyLapChartFidelityNote = `${indyLapChartsDiscovered} completed race sessions: ${indyLapChartsFullyParsed} charts fully parsed and ${indyLapChartsPartiallyParsed} clean partial visible-sample imports`;
+    const seriesSourceFamilyPriorityExclusions = {
+      ...(sourceFamilyPriorityExclusions[series.id] ?? {})
+    };
+    if (series.id === 'series_indy_nxt') {
+      seriesSourceFamilyPriorityExclusions.lap_samples = `INDY NXT official Race Lap Chart PDFs are imported for all ${indyLapChartFidelityNote}; residual partials preserve explicit missing car-lap or result/chart conflict diagnostics without guessing terminal or conflict laps.`;
+    }
 
     const category = (id, covered, total, extra = {}) => {
       const supported = policy.supported.has(id);
@@ -608,7 +624,7 @@ const buildCoverage = ({ dataset, summary, indyReport, indyWindowReport, cancele
             ? 'partial'
           : undefined,
         notes: series.id === 'series_indy_nxt'
-          ? `${raceLapSampleSessions.length}/${comparableRaceSessions.length} completed race sessions have lap-chart samples; 26 charts fully validate and 10 are clean partial visible-sample imports.`
+          ? `${raceLapSampleSessions.length}/${comparableRaceSessions.length} completed race sessions have lap-chart samples; ${indyLapChartFidelityNote}.`
           : series.id === 'series_formula_ford'
             ? `${lapSampleSessions.length} sessions have lap samples; Formula Ford rows are Bryce-only labeled lap-analysis samples.`
             : `${lapSampleSessions.length} sessions have lap samples.`
@@ -656,7 +672,7 @@ const buildCoverage = ({ dataset, summary, indyReport, indyWindowReport, cancele
         ['partial', 'blocked'].includes(row.status) &&
         policy.supported.has(row.id) &&
         !['derived_benchmarks'].includes(row.id) &&
-        !sourceFamilyPriorityExclusions[series.id]?.[row.id]
+        !seriesSourceFamilyPriorityExclusions[row.id]
       )
       .map((row) => row.id);
 
@@ -669,7 +685,7 @@ const buildCoverage = ({ dataset, summary, indyReport, indyWindowReport, cancele
       policyNote: policy.scopeNote ?? null,
       canceledOfficialSessionIds: sessions.filter((session) => canceledSessionEvidence.has(session.id)).map((session) => session.id),
       openGapIds: openGaps.map((gap) => gap.id),
-      sourceFamilyPriorityExclusions: sourceFamilyPriorityExclusions[series.id] ?? {},
+      sourceFamilyPriorityExclusions: seriesSourceFamilyPriorityExclusions,
       categories,
       priorityGaps
     });

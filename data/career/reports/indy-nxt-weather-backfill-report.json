@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-06-16T18:12:26.512Z",
+  "generatedAt": "2026-07-02T17:23:45.896Z",
   "source": "open_meteo_historical_archive",
-  "archiveCutoffDate": "2026-06-15",
+  "archiveCutoffDate": "2026-07-01",
   "requestedVariables": [
     "temperature_2m",
     "apparent_temperature",
@@ -18,14 +18,14 @@
     "shortwave_radiation",
     "soil_temperature_0_to_7cm"
   ],
-  "eligibleExactWindowSessions": 95,
+  "eligibleExactWindowSessions": 104,
   "skippedDateOnlySessions": 78,
-  "skippedFutureSessions": 16,
-  "joinedSessions": 95,
+  "skippedFutureSessions": 7,
+  "joinedSessions": 104,
   "joinedBySessionType": {
-    "race": 36,
-    "practice": 48,
-    "qualifying": 11
+    "race": 38,
+    "practice": 49,
+    "qualifying": 17
   },
   "skipped": [],
   "joined": [
@@ -820,6 +820,16 @@
       "rawArtifactPath": "data/career/raw/weather/open-meteo/indy-nxt/track_streets_of_arlington/2026-03-15.json"
     },
     {
+      "sessionId": "session_indy_nxt_2026_6754",
+      "sessionType": "race",
+      "trackId": "track_road_america",
+      "sourceSessionStart": "2026-06-21T11:06:00",
+      "joinedLocalHour": "2026-06-21T11:00",
+      "weatherId": "weather_indy_nxt_open_meteo_session_indy_nxt_2026_6754",
+      "confidence": "modeled_medium",
+      "rawArtifactPath": "data/career/raw/weather/open-meteo/indy-nxt/track_road_america/2026-06-21.json"
+    },
+    {
       "sessionId": "session_indy_nxt_2026_6756",
       "sessionType": "race",
       "trackId": "track_indianapolis_motor_speedway_road_course",
@@ -828,6 +838,16 @@
       "weatherId": "weather_indy_nxt_open_meteo_session_indy_nxt_2026_6756",
       "confidence": "modeled_medium",
       "rawArtifactPath": "data/career/raw/weather/open-meteo/indy-nxt/track_indianapolis_motor_speedway_road_course/2026-05-08.json"
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6762",
+      "sessionType": "race",
+      "trackId": "track_road_america",
+      "sourceSessionStart": "2026-06-20T11:36:00",
+      "joinedLocalHour": "2026-06-20T12:00",
+      "weatherId": "weather_indy_nxt_open_meteo_session_indy_nxt_2026_6762",
+      "confidence": "modeled_medium",
+      "rawArtifactPath": "data/career/raw/weather/open-meteo/indy-nxt/track_road_america/2026-06-20.json"
     },
     {
       "sessionId": "session_indy_nxt_2026_6763",
@@ -978,11 +998,81 @@
       "weatherId": "weather_indy_nxt_open_meteo_session_indy_nxt_2026_6864",
       "confidence": "modeled_medium",
       "rawArtifactPath": "data/career/raw/weather/open-meteo/indy-nxt/track_world_wide_technology_raceway/2026-06-06.json"
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6869",
+      "sessionType": "practice",
+      "trackId": "track_road_america",
+      "sourceSessionStart": "2026-06-19T14:00:00",
+      "joinedLocalHour": "2026-06-19T14:00",
+      "weatherId": "weather_indy_nxt_open_meteo_session_indy_nxt_2026_6869",
+      "confidence": "modeled_medium",
+      "rawArtifactPath": "data/career/raw/weather/open-meteo/indy-nxt/track_road_america/2026-06-19.json"
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6870",
+      "sessionType": "qualifying",
+      "trackId": "track_road_america",
+      "sourceSessionStart": "2026-06-20T09:00:00",
+      "joinedLocalHour": "2026-06-20T09:00",
+      "weatherId": "weather_indy_nxt_open_meteo_session_indy_nxt_2026_6870",
+      "confidence": "modeled_medium",
+      "rawArtifactPath": "data/career/raw/weather/open-meteo/indy-nxt/track_road_america/2026-06-20.json"
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6871",
+      "sessionType": "qualifying",
+      "trackId": "track_road_america",
+      "sourceSessionStart": "2026-06-20T09:18:00",
+      "joinedLocalHour": "2026-06-20T09:00",
+      "weatherId": "weather_indy_nxt_open_meteo_session_indy_nxt_2026_6871",
+      "confidence": "modeled_medium",
+      "rawArtifactPath": "data/career/raw/weather/open-meteo/indy-nxt/track_road_america/2026-06-20.json"
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6872",
+      "sessionType": "qualifying",
+      "trackId": "track_road_america",
+      "sourceSessionStart": "2026-06-20T09:30:00",
+      "joinedLocalHour": "2026-06-20T10:00",
+      "weatherId": "weather_indy_nxt_open_meteo_session_indy_nxt_2026_6872",
+      "confidence": "modeled_medium",
+      "rawArtifactPath": "data/career/raw/weather/open-meteo/indy-nxt/track_road_america/2026-06-20.json"
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6873",
+      "sessionType": "qualifying",
+      "trackId": "track_road_america",
+      "sourceSessionStart": "2026-06-20T09:00:00",
+      "joinedLocalHour": "2026-06-20T09:00",
+      "weatherId": "weather_indy_nxt_open_meteo_session_indy_nxt_2026_6873",
+      "confidence": "modeled_medium",
+      "rawArtifactPath": "data/career/raw/weather/open-meteo/indy-nxt/track_road_america/2026-06-20.json"
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6874",
+      "sessionType": "qualifying",
+      "trackId": "track_road_america",
+      "sourceSessionStart": "2026-06-20T09:18:00",
+      "joinedLocalHour": "2026-06-20T09:00",
+      "weatherId": "weather_indy_nxt_open_meteo_session_indy_nxt_2026_6874",
+      "confidence": "modeled_medium",
+      "rawArtifactPath": "data/career/raw/weather/open-meteo/indy-nxt/track_road_america/2026-06-20.json"
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6875",
+      "sessionType": "qualifying",
+      "trackId": "track_road_america",
+      "sourceSessionStart": "2026-06-20T09:30:00",
+      "joinedLocalHour": "2026-06-20T10:00",
+      "weatherId": "weather_indy_nxt_open_meteo_session_indy_nxt_2026_6875",
+      "confidence": "modeled_medium",
+      "rawArtifactPath": "data/career/raw/weather/open-meteo/indy-nxt/track_road_america/2026-06-20.json"
     }
   ],
-  "fetched": 0,
-  "cacheHits": 95,
-  "sourceEvidenceUpserted": 78,
+  "fetched": 3,
+  "cacheHits": 101,
+  "sourceEvidenceUpserted": 81,
   "rawArtifacts": [
     "data/career/raw/weather/open-meteo/indy-nxt/track_barber_motorsports_park/2024-04-26.json",
     "data/career/raw/weather/open-meteo/indy-nxt/track_barber_motorsports_park/2024-04-27.json",
@@ -1025,6 +1115,9 @@
     "data/career/raw/weather/open-meteo/indy-nxt/track_road_america/2025-06-20.json",
     "data/career/raw/weather/open-meteo/indy-nxt/track_road_america/2025-06-21.json",
     "data/career/raw/weather/open-meteo/indy-nxt/track_road_america/2025-06-22.json",
+    "data/career/raw/weather/open-meteo/indy-nxt/track_road_america/2026-06-19.json",
+    "data/career/raw/weather/open-meteo/indy-nxt/track_road_america/2026-06-20.json",
+    "data/career/raw/weather/open-meteo/indy-nxt/track_road_america/2026-06-21.json",
     "data/career/raw/weather/open-meteo/indy-nxt/track_streets_of_arlington/2026-03-13.json",
     "data/career/raw/weather/open-meteo/indy-nxt/track_streets_of_arlington/2026-03-14.json",
     "data/career/raw/weather/open-meteo/indy-nxt/track_streets_of_arlington/2026-03-15.json",

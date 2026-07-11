@@ -41,6 +41,14 @@ const sources = {
   predictiveIndyFeatureMatrix: 'analysis/predictive-race-intelligence/output/indy_nxt_feature_matrix.csv',
   predictiveBuilderScript: 'analysis/predictive-race-intelligence/scripts/build_predictive_race_intelligence.py',
   predictiveValidatorScript: 'analysis/predictive-race-intelligence/scripts/validate_predictive_race_intelligence.py',
+  sectionLapDeepDiveSummary: 'analysis/indy-nxt-section-lap-deep-dive/output/summary.json',
+  sectionLapContextPack: 'analysis/indy-nxt-section-lap-deep-dive/output/context-packs/indy-nxt-section-lap-context.json',
+  sectionLapBuilderScript: 'analysis/indy-nxt-section-lap-deep-dive/scripts/build_indy_nxt_section_lap_deep_dive.py',
+  sectionLapValidatorScript: 'analysis/indy-nxt-section-lap-deep-dive/scripts/validate_indy_nxt_section_lap_deep_dive.py',
+  raceLapSectionSummary: 'analysis/indy-nxt-race-lap-section-enhancement/output/summary.json',
+  raceLapSectionContextPack: 'analysis/indy-nxt-race-lap-section-enhancement/output/context-packs/indy-nxt-race-lap-section-context.json',
+  raceLapSectionBuilderScript: 'analysis/indy-nxt-race-lap-section-enhancement/scripts/build_indy_nxt_race_lap_section_enhancement.py',
+  raceLapSectionValidatorScript: 'analysis/indy-nxt-race-lap-section-enhancement/scripts/validate_indy_nxt_race_lap_section_enhancement.py',
   predictiveRunnerScript: 'scripts/run-predictive-race-intelligence.mjs',
   uiDataPackageBuilderScript: 'scripts/build-ui-data-package.mjs',
   uiDataPackageValidatorScript: 'scripts/validate-ui-data-package.mjs'
@@ -113,6 +121,24 @@ const runContextEventNarrativeLayer = () => {
   }
 };
 
+const runSupplementalContextPacks = () => {
+  const python = analyticsPython();
+  for (const script of [
+    'analysis/indy-nxt-section-lap-deep-dive/scripts/build_indy_nxt_section_lap_deep_dive.py',
+    'analysis/indy-nxt-section-lap-deep-dive/scripts/validate_indy_nxt_section_lap_deep_dive.py',
+    'analysis/indy-nxt-race-lap-section-enhancement/scripts/build_indy_nxt_race_lap_section_enhancement.py',
+    'analysis/indy-nxt-race-lap-section-enhancement/scripts/validate_indy_nxt_race_lap_section_enhancement.py'
+  ]) {
+    const result = spawnSync(python, [script], { cwd: repoRoot, stdio: 'inherit' });
+    if (result.error) {
+      throw new Error(`Failed to run ${script} with ${python}: ${result.error.message}`);
+    }
+    if (result.status !== 0) {
+      throw new Error(`${script} exited ${result.status ?? 'without a status'} using ${python}`);
+    }
+  }
+};
+
 const gitHead = () => {
   try {
     return execSync('git rev-parse --short HEAD', { cwd: repoRoot, encoding: 'utf8' }).trim();
@@ -144,6 +170,22 @@ const sourceKeyFromPath = (relativePath) =>
     .replace(/[^a-zA-Z0-9]+/g, '_')
     .replace(/^_+|_+$/g, '')
     .slice(0, 80) || 'source';
+
+const venueSlug = (trackName) => {
+  const normalized = String(trackName ?? '').toLowerCase();
+  if (normalized.includes('mid-ohio')) return 'mid_ohio';
+  return (
+    normalized
+      .replace(/[^a-z0-9]+/g, '_')
+      .replace(/^_+|_+$/g, '') || 'track'
+  );
+};
+
+const supplementalContextPackRef = (relativePath, role) => ({
+  key: `supplemental:${sourceKeyFromPath(relativePath)}`,
+  role,
+  ...summarizeArtifact(relativePath)
+});
 
 const uiSourceRefFromContextPackRef = (ref) => ({
   key: `context-pack:${sourceKeyFromPath(ref.path)}`,
@@ -647,7 +689,7 @@ const buildPackage = () => {
     return payload;
   };
   const packPairsByType = (type) => packsByType(type).map((packRef) => ({ packRef, pack: payloadForPack(packRef, packRef.id) }));
-  const upcomingPackPairs = packPairsByType('upcoming_event');
+  const upcomingPackPairs = packPairsByType('upcoming_event').sort((left, right) => dateMs(left.pack.eventStartDate) - dateMs(right.pack.eventStartDate) || String(left.pack.eventId).localeCompare(String(right.pack.eventId)));
   const raceDebriefPackPairs = packPairsByType('race_debrief');
   const careerLabContextPack = packsByType('career_lab')[0] ?? null;
   const liveRaceDayContextPack = packsByType('live_race_day')[0] ?? null;
@@ -656,11 +698,19 @@ const buildPackage = () => {
     throw new Error('Missing Career Lab context pack payload');
   }
 
-  const roadAmericaPackPairs = upcomingPackPairs
-    .filter(({ pack }) => pack.track?.name === 'Road America')
-    .sort((left, right) => dateMs(left.pack.eventStartDate) - dateMs(right.pack.eventStartDate));
-  const roadAmericaEvents = roadAmericaPackPairs.map(eventFromUpcomingContextPack);
-  const roadAmericaContextPackRefs = roadAmericaPackPairs.map(({ packRef }) => packRef);
+  const upcomingEvents = upcomingPackPairs.map(eventFromUpcomingContextPack);
+  const upcomingContextPackRefs = upcomingPackPairs.map(({ packRef }) => packRef);
+  const nextUpcomingVenue = upcomingEvents[0]?.trackName ?? null;
+  const nextUpcomingVenueSlug = venueSlug(nextUpcomingVenue);
+  const nextUpcomingVenuePackSlug = nextUpcomingVenueSlug.replaceAll('_', '-');
+  const supplementalPrepSectionRef = supplementalContextPackRef(
+    `analysis/indy-nxt-section-lap-deep-dive/output/context-packs/${nextUpcomingVenuePackSlug}-prep-context.json`,
+    'next_upcoming_venue_prep_section_context'
+  );
+  const supplementalRaceLapSectionRef = supplementalContextPackRef(
+    `analysis/indy-nxt-race-lap-section-enhancement/output/context-packs/${nextUpcomingVenuePackSlug}-race-context.json`,
+    'next_upcoming_venue_race_lap_section_context'
+  );
 
   const latestDebrief = raceDebriefPackPairs
     .slice()
@@ -690,7 +740,11 @@ const buildPackage = () => {
     return acc;
   }, {});
 
-  const sourceInventory = Object.fromEntries(Object.entries(sources).map(([key, relativePath]) => [key, summarizeArtifact(relativePath)]));
+  const sourceInventory = {
+    ...Object.fromEntries(Object.entries(sources).map(([key, relativePath]) => [key, summarizeArtifact(relativePath)])),
+    supplementalPrepSectionContextPack: supplementalPrepSectionRef,
+    supplementalRaceLapSectionContextPack: supplementalRaceLapSectionRef
+  };
 
   return {
     schemaVersion: 'brycecast.uiDataPackage.v1',
@@ -737,17 +791,30 @@ const buildPackage = () => {
       ]
     },
     screens: {
-      roadAmericaPrep: {
-        title: 'Road America Race Weekend Prep',
+      upcomingPrep: {
+        title: 'Upcoming Race Weekend Prep',
         readiness: 'partial',
-        events: roadAmericaEvents,
-        contextPackRefs: roadAmericaContextPackRefs,
-        runtimeApiRequirements: ['/api/readiness', '/api/weather/upcoming', '/api/weather/live?trackId=track_road_america'],
+        nextVenue: nextUpcomingVenue,
+        events: upcomingEvents,
+        contextPackRefs: upcomingContextPackRefs,
+        supplementalContextRefs: {
+          prepSection: supplementalPrepSectionRef,
+          raceLapSection: supplementalRaceLapSectionRef
+        },
+        runtimeApiRequirements: ['/api/readiness', '/api/weather/upcoming', '/api/weather/live'],
         caveats: [
           'Schedule feed timestamps can lack explicit timezone offsets; polished countdowns need runtime normalization.',
           'Weather is NWS current/forecast context, not official INDY NXT session weather or track temperature.'
         ],
-        sourceRefs: [sourceRef('futureWeekendPrep', 'Road America prep inputs from INDY NXT analytics.'), sourceRef('predictiveContextPackManifest', 'Full Road America predictive race-intelligence pack refs.'), sourceRef('manifest', 'UI metric contract and caveats.')]
+        sourceRefs: [
+          sourceRef('futureWeekendPrep', 'Upcoming-event prep inputs from INDY NXT analytics.'),
+          sourceRef('predictiveContextPackManifest', 'Full upcoming-event predictive race-intelligence pack refs.'),
+          sourceRef('sectionLapDeepDiveSummary', 'Practice/qualifying section-lap supplemental context summary.'),
+          sourceRef('raceLapSectionSummary', 'Race lap/section supplemental context summary.'),
+          { key: supplementalPrepSectionRef.key, path: supplementalPrepSectionRef.path, note: 'Current next-venue practice/qualifying section context pack.' },
+          { key: supplementalRaceLapSectionRef.key, path: supplementalRaceLapSectionRef.path, note: 'Current next-venue race lap/section context pack.' },
+          sourceRef('manifest', 'UI metric contract and caveats.')
+        ]
       },
       liveCompanionFixtures: {
         title: 'Live Companion Fixture States',
@@ -880,6 +947,7 @@ const buildPackage = () => {
 fs.mkdirSync(path.dirname(outputPath), { recursive: true });
 runContextEventNarrativeLayer();
 runPredictiveRaceIntelligence();
+runSupplementalContextPacks();
 const dataPackage = buildPackage();
 fs.writeFileSync(outputPath, `${JSON.stringify(dataPackage, null, 2)}\n`);
 console.log(JSON.stringify({ ok: true, wrote: path.relative(repoRoot, outputPath), schemaVersion: dataPackage.schemaVersion }, null, 2));
