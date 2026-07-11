@@ -1,0 +1,77 @@
+[
+  {
+    "url": "https://www.indycar.com/Services/IndyStats.svc/SeasonDropDown?id=b856a4f1-e85c-4fac-8c36-fd58d962227a",
+    "status": 200,
+    "ok": true,
+    "contentType": "text/html",
+    "bytes": 2919,
+    "ms": 1436,
+    "hasBryce": false,
+    "hasRace2": false,
+    "hasIndyStats": false,
+    "ids": [],
+    "snippets": []
+  },
+  {
+    "url": "https://www.indycar.com/Services/IndyStats.svc/EventsSessionDetails?id=6754",
+    "status": 200,
+    "ok": true,
+    "contentType": "text/html",
+    "bytes": 2919,
+    "ms": 1170,
+    "hasBryce": false,
+    "hasRace2": false,
+    "hasIndyStats": false,
+    "ids": [],
+    "snippets": []
+  },
+  {
+    "url": "https://www.indynxt.com/results/indy-nxt/2026/grand-prix-at-road-america-race-2/combined-qualifying---race-2",
+    "status": 200,
+    "ok": true,
+    "contentType": "text/html; charset=utf-8",
+    "bytes": 150782,
+    "ms": 235,
+    "hasBryce": false,
+    "hasRace2": true,
+    "hasIndyStats": false,
+    "ids": [
+      "09341e09-3216-4f89-a45f-db697d72ee13",
+      "5ad6ac0e-0d86-4154-b9b5-d663b091efca"
+    ],
+    "snippets": [
+      "2026 Grand Prix at Road America Race 2 - Combined Qualifying - Race 2 Results",
+      "<meta property=\"og:title\" content=\"2026 Grand Prix at Road America Race 2 - Combined Qualifying - Race 2 Results\">",
+      "<meta property=\"og:url\" content=\"https://www.indynxt.com/results/indy-nxt/2026/grand-prix-at-road-america-race-2/combined-qualifying---race-2?&amp;year=2026\">",
+      "<link rel=\"canonical\" href=\"https://www.indynxt.com/results/indy-nxt/2026/grand-prix-at-road-america-race-2/combined-qualifying---race-2\">",
+      "<li class=\"dropdown-results\" role=\"presentation\">",
+      "<a href=\"/Results\" target=\"\" class=\"nav-link dropdown\" role=\"menuitem\" id=\"main-link-desktop-results\" aria-haspopup=\"true\" aria-expanded=\"false\">",
+      "<span>Results</span>",
+      "<a href=\"/Results\" target=\"\" role=\"menuitem\">"
+    ]
+  },
+  {
+    "url": "https://www.indynxt.com/Drivers/Bryce-Aron",
+    "status": 200,
+    "ok": true,
+    "contentType": "text/html; charset=utf-8",
+    "bytes": 204823,
+    "ms": 123,
+    "hasBryce": true,
+    "hasRace2": true,
+    "hasIndyStats": false,
+    "ids": [
+      "5ad6ac0e-0d86-4154-b9b5-d663b091efca"
+    ],
+    "snippets": [
+      "Bryce Aron",
+      "t\":\"https://schema.org\",\"@type\":\"Person\",\"@id\":\"https://www.indynxt.com/Drivers/Bryce-Aron\",\"name\":\"Bryce Aron\",\"sameAs\":[\"https://www.facebook.com/bryce.aron.23\",\"https://www.instagram.com/bryce.aron\",\"https://www.twitter.com/BryceAron2\"],\"url\"",
+      ":\"https://www.indynxt.com/Drivers/Bryce-Aron\",\"birthDate\":\"0001-01-01\",\"birthPlace\":{\"@type\":\"City\",\"name\":\"Winnetka, Illinois\"},\"familyName\":\"Aron\",\"givenName\":\"Bryce\",\"jobTitle\":\"Driver\"}",
+      "<meta property=\"og:title\" content=\"Bryce Aron\">",
+      "<meta property=\"og:url\" content=\"https://www.indynxt.com/Drivers/Bryce-Aron\">",
+      "g:image\" content=\"https://www.indycar.com/-/media/IndyCar/Drivers/INDY-NXT/Hero/BryceAron.jpg?vs=1&amp;d=20260211T154618Z\">",
+      "<link rel=\"canonical\" href=\"https://www.indynxt.com/Drivers/Bryce-Aron\">",
+      "<li class=\"dropdown-results\" role=\"presentation\">"
+    ]
+  }
+]

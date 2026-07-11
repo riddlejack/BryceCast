@@ -1,0 +1,304 @@
+{
+  "drill": "BryceCast live backend capability probe",
+  "generatedAt": "2026-06-21T16:09:49.604Z",
+  "localDate": "Sun Jun 21 2026 11:09:49 GMT-0500 (Central Daylight Time)",
+  "strict": false,
+  "timeoutMs": 12000,
+  "watch": true,
+  "intervalMs": 15000,
+  "outDir": "analysis/live-drill-2026-06-21",
+  "schedule": {
+    "indynxtRace2": {
+      "officialStart": "2026-06-21T12:00:00-04:00",
+      "centralStart": "2026-06-21T11:00:00-05:00",
+      "approximateGreenCentral": "2026-06-21T11:06:00-05:00",
+      "distance": "18 laps / 72.25 miles",
+      "bryce": {
+        "car": "9",
+        "team": "Chip Ganassi Racing",
+        "start": 15,
+        "radioFrequency": "452.7000"
+      }
+    },
+    "indycarRace": {
+      "officialStart": "2026-06-21T14:00:00-04:00",
+      "centralStart": "2026-06-21T13:00:00-05:00",
+      "approximateGreenCentral": "2026-06-21T13:27:00-05:00",
+      "distance": "55 laps / 220.77 miles"
+    }
+  },
+  "summary": {
+    "pass": 12,
+    "warn": 10,
+    "fail": 0
+  },
+  "sources": [
+    {
+      "id": "indynxt_event_race2",
+      "tier": "required",
+      "status": "pass",
+      "httpStatus": 200,
+      "elapsedMs": 206,
+      "url": "https://www.indynxt.com/Schedule/2026/Road-America-Race2",
+      "finalUrl": "https://www.indynxt.com/Schedule/2026/Road-America-Race2",
+      "contentType": "text/html; charset=utf-8",
+      "missing": [],
+      "notes": []
+    },
+    {
+      "id": "weekend_schedule_pdf_text",
+      "tier": "required",
+      "status": "pass",
+      "httpStatus": 200,
+      "elapsedMs": 35,
+      "url": "https://www.indynxt.com/-/media/Files/2026/NICS/10-RA/indycar-weekendschedule-RA26.pdf",
+      "finalUrl": "https://www.indynxt.com/-/media/Files/2026/NICS/10-RA/indycar-weekendschedule-RA26.pdf",
+      "contentType": "application/pdf",
+      "missing": [],
+      "notes": []
+    },
+    {
+      "id": "indynxt_qualification_groups_pdf_text",
+      "tier": "important",
+      "status": "pass",
+      "httpStatus": 200,
+      "elapsedMs": 129,
+      "url": "https://www.indynxt.com/-/media/Files/2026/INXT/09-10-RA/indynxt-qualgroups-RA26.pdf",
+      "finalUrl": "https://www.indynxt.com/-/media/Files/2026/INXT/09-10-RA/indynxt-qualgroups-RA26.pdf",
+      "contentType": "application/pdf",
+      "missing": [],
+      "notes": []
+    },
+    {
+      "id": "indynxt_pit_assignments_pdf_text",
+      "tier": "important",
+      "status": "pass",
+      "httpStatus": 200,
+      "elapsedMs": 31,
+      "url": "https://www.indynxt.com/-/media/Files/2026/INXT/09-10-RA/indynxt-pitassignments-RA26.pdf",
+      "finalUrl": "https://www.indynxt.com/-/media/Files/2026/INXT/09-10-RA/indynxt-pitassignments-RA26.pdf",
+      "contentType": "application/pdf",
+      "missing": [],
+      "notes": []
+    },
+    {
+      "id": "indynxt_starting_grid_race2",
+      "tier": "required",
+      "status": "pass",
+      "httpStatus": 200,
+      "elapsedMs": 58,
+      "url": "https://www.indynxt.com/Schedule/2026/Road-America-Race2/starting-grid",
+      "finalUrl": "https://www.indynxt.com/Schedule/2026/Road-America-Race2/starting-grid",
+      "contentType": "text/html; charset=utf-8",
+      "missing": [],
+      "notes": []
+    },
+    {
+      "id": "fox_race2_event",
+      "tier": "important",
+      "status": "pass",
+      "httpStatus": 200,
+      "elapsedMs": 92,
+      "url": "https://www.foxsports.com/motor/grand-prix-at-road-america-race-2-indy-nxt-jun-21-2026-racetrax-6072",
+      "finalUrl": "https://www.foxsports.com/motor/grand-prix-at-road-america-race-2-indy-nxt-jun-21-2026-racetrax-6072",
+      "contentType": "text/html;charset=utf-8",
+      "missing": [],
+      "notes": []
+    },
+    {
+      "id": "fox_race2_leaderboard_tab",
+      "tier": "dynamic",
+      "status": "warn",
+      "httpStatus": 200,
+      "elapsedMs": 25,
+      "url": "https://www.foxsports.com/motor/grand-prix-at-road-america-race-2-indy-nxt-jun-21-2026-racetrax-6072?tab=leaderboard",
+      "finalUrl": "https://www.foxsports.com/motor/grand-prix-at-road-america-race-2-indy-nxt-jun-21-2026-racetrax-6072?tab=leaderboard",
+      "contentType": "text/html;charset=utf-8",
+      "missing": [],
+      "notes": [
+        "Reachable shell; capture browser network traffic during live session for payload endpoint."
+      ]
+    },
+    {
+      "id": "indynxt_qualifying_race2_results",
+      "tier": "postsession",
+      "status": "warn",
+      "httpStatus": 200,
+      "elapsedMs": 43,
+      "url": "https://www.indynxt.com/results/indy-nxt/2026/grand-prix-at-road-america-race-2/combined-qualifying---race-2",
+      "finalUrl": "https://www.indynxt.com/results/indy-nxt/2026/grand-prix-at-road-america-race-2/combined-qualifying---race-2",
+      "contentType": "text/html; charset=utf-8",
+      "missing": [
+        "Bryce Aron"
+      ],
+      "notes": [
+        "Post-session report page may be unpopulated or transformed by client code until official results publish."
+      ]
+    },
+    {
+      "id": "indynxt_leaderboard_shell",
+      "tier": "dynamic",
+      "status": "warn",
+      "httpStatus": 200,
+      "elapsedMs": 32,
+      "url": "https://www.indynxt.com/leaderboard",
+      "finalUrl": "https://www.indynxt.com/leaderboard",
+      "contentType": "text/html; charset=utf-8",
+      "missing": [],
+      "notes": [
+        "Reachable shell; capture browser network traffic during live session for payload endpoint."
+      ]
+    },
+    {
+      "id": "leaderboard_direct_shell",
+      "tier": "dynamic",
+      "status": "warn",
+      "httpStatus": 200,
+      "elapsedMs": 218,
+      "url": "https://leaderboard.indycar.com/",
+      "finalUrl": "https://leaderboard.indycar.com/",
+      "contentType": "text/html",
+      "missing": [],
+      "notes": [
+        "Reachable shell; capture browser network traffic during live session for payload endpoint."
+      ]
+    },
+    {
+      "id": "indycar_leaderboard_shell",
+      "tier": "dynamic",
+      "status": "warn",
+      "httpStatus": 200,
+      "elapsedMs": 142,
+      "url": "https://www.indycar.com/leaderboard",
+      "finalUrl": "https://www.indycar.com/leaderboard",
+      "contentType": "text/html; charset=utf-8",
+      "missing": [],
+      "notes": [
+        "Reachable shell; capture browser network traffic during live session for payload endpoint."
+      ]
+    },
+    {
+      "id": "indycar_leaderboard_nxt_hint",
+      "tier": "dynamic",
+      "status": "warn",
+      "httpStatus": 200,
+      "elapsedMs": 48,
+      "url": "https://www.indycar.com/leaderboard?type=false",
+      "finalUrl": "https://www.indycar.com/leaderboard?type=false",
+      "contentType": "text/html; charset=utf-8",
+      "missing": [],
+      "notes": [
+        "Reachable shell; capture browser network traffic during live session for payload endpoint."
+      ]
+    },
+    {
+      "id": "racecontrol_redirect",
+      "tier": "important",
+      "status": "pass",
+      "httpStatus": 200,
+      "elapsedMs": 165,
+      "url": "https://racecontrol.indycar.com/",
+      "finalUrl": "https://www.indycar.com/leaderboard",
+      "contentType": "text/html; charset=utf-8",
+      "missing": [],
+      "notes": [
+        "Legacy RaceControl entrypoint redirects to official leaderboard."
+      ]
+    },
+    {
+      "id": "indycar_radio_home",
+      "tier": "optional",
+      "status": "pass",
+      "httpStatus": 200,
+      "elapsedMs": 347,
+      "url": "https://www.indycarradio.com/",
+      "finalUrl": "https://www.indycar.com/radio",
+      "contentType": "text/html; charset=utf-8",
+      "missing": [],
+      "notes": []
+    },
+    {
+      "id": "indycar_how_to_follow",
+      "tier": "important",
+      "status": "pass",
+      "httpStatus": 200,
+      "elapsedMs": 56,
+      "url": "https://www.indycar.com/how-to-follow",
+      "finalUrl": "https://www.indycar.com/how-to-follow",
+      "contentType": "text/html; charset=utf-8",
+      "missing": [],
+      "notes": []
+    },
+    {
+      "id": "indycar_event_road_america",
+      "tier": "required",
+      "status": "pass",
+      "httpStatus": 200,
+      "elapsedMs": 39,
+      "url": "https://www.indycar.com/Schedule/2026/Road-America",
+      "finalUrl": "https://www.indycar.com/Schedule/2026/Road-America",
+      "contentType": "text/html; charset=utf-8",
+      "missing": [],
+      "notes": []
+    },
+    {
+      "id": "firestone_tire_tracker_index",
+      "tier": "optional",
+      "status": "pass",
+      "httpStatus": 200,
+      "elapsedMs": 442,
+      "url": "https://livetiming.net/firestone/",
+      "finalUrl": "https://livetiming.net/firestone/",
+      "contentType": "text/html",
+      "missing": [],
+      "notes": []
+    },
+    {
+      "id": "nws_track_forecast",
+      "tier": "important",
+      "status": "pass",
+      "httpStatus": 200,
+      "elapsedMs": 103,
+      "url": "https://forecast.weather.gov/MapClick.php?lat=43.7975&lon=-87.9999",
+      "finalUrl": "https://forecast.weather.gov/MapClick.php?lat=43.7975&lon=-87.9999",
+      "contentType": "text/html; charset=UTF-8",
+      "missing": [],
+      "notes": []
+    }
+  ],
+  "firestoneCurrentImageCandidates": [
+    {
+      "url": "https://livetiming.net/firestone/XPEL-Grand-Prix-at-Road-America_Race.png",
+      "status": "warn",
+      "httpStatus": 404,
+      "elapsedMs": 173,
+      "contentType": "text/html",
+      "finalUrl": "https://livetiming.net/firestone/XPEL-Grand-Prix-at-Road-America_Race.png"
+    },
+    {
+      "url": "https://livetiming.net/firestone/XPEL%20Grand%20Prix%20at%20Road%20America_Race.png",
+      "status": "warn",
+      "httpStatus": 404,
+      "elapsedMs": 236,
+      "contentType": "text/html",
+      "finalUrl": "https://livetiming.net/firestone/XPEL%20Grand%20Prix%20at%20Road%20America_Race.png"
+    },
+    {
+      "url": "https://livetiming.net/firestone/Road-America_Race.png",
+      "status": "warn",
+      "httpStatus": 404,
+      "elapsedMs": 458,
+      "contentType": "text/html",
+      "finalUrl": "https://livetiming.net/firestone/Road-America_Race.png"
+    },
+    {
+      "url": "https://livetiming.net/firestone/Road%20America_Race.png",
+      "status": "warn",
+      "httpStatus": 404,
+      "elapsedMs": 362,
+      "contentType": "text/html",
+      "finalUrl": "https://livetiming.net/firestone/Road%20America_Race.png"
+    }
+  ],
+  "exitPolicy": "default mode exits non-zero only on fail"
+}

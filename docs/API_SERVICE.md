@@ -17,6 +17,12 @@ For API-only development:
 npm run serve:api
 ```
 
+## Live Cache Behavior
+
+The live routes are cache-backed by default. `/api/snapshot`, `/api/session`, `/api/bryce`, `/api/timing`, `/api/readiness`, `/api/sources`, and the compatibility Race Control proxy paths serve server-side cached state. When `scripts/live-runner.mjs` has a fresh status heartbeat and recent archive write, the API prefers the runner-owned SQLite/raw snapshot state; otherwise one internal API refresh loop maintains the fallback cache.
+
+Client polling does not trigger direct Race Control fetches. Use `POST /api/refresh` for an explicit operator/debug refresh. Compatibility proxy paths also read cache by default; `?refresh=1` is reserved for operator checks and returns a warning header.
+
 ## Endpoints
 
 | Route | Purpose |

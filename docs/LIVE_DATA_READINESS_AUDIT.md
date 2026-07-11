@@ -2,6 +2,25 @@
 
 Current audit timestamp: June 13, 2026.
 
+## Post-Road America Update
+
+Road America Race 2 live proof happened on June 21, 2026. Read
+`../LIVE_DRILL_CLOSEOUT_2026-06-21.md` and
+`../LIVE_DRILL_PROCESS_EXHAUSTION_RCA_2026-06-21.md` before using this document
+for current readiness decisions.
+
+This June 13 audit remains the endpoint catalog and pre-race pressure-test
+baseline. Its statements that green-flag INDY NXT proof was still required are
+now superseded by the June 21 closeout:
+
+- Race Control source access and 1-second polling worked during Road America
+  Race 2.
+- The upstream sources did not fail under live pressure.
+- The local multi-monitor operator setup failed because macOS hit process
+  creation limits despite low CPU/RAM pressure.
+- The next architecture must use one quiet ingestor/cache-backed API path with
+  a lockfile, heartbeat/status file, and process-budget preflight.
+
 ## Bottom Line
 
 BryceCast now has a repeatable live-source lane for every public live or near-live feed found in the official INDYCAR leaderboard bundle and existing BryceCast source inventory.

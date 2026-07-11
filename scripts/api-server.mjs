@@ -20,6 +20,7 @@ const root = dirname(__dirname);
 const dataDir = join(root, 'data/live');
 const publicDataDir = join(root, 'public/data');
 const sqlitePath = join(dataDir, 'brycecast.sqlite');
+const runnerStatusPath = join(dataDir, 'live-runner-status.json');
 const latestSnapshotPath = join(publicDataDir, 'live-snapshot.json');
 const onboardCatalogPath = join(publicDataDir, 'onboard-catalog.json');
 const historyPath = join(publicDataDir, 'history-bryce.json');
@@ -30,9 +31,12 @@ const raceControlEndpoints = raceSnapshotEndpoints;
 const sourceProbeEndpoints = liveSourceEndpoints;
 const sourceFetchTimeoutMs = 5000;
 const enrichmentCacheTtlMs = 30000;
-const liveTimingPayloadMaxAgeSeconds = 30;
+const apiCacheRefreshMs = Number(process.env.BRYCECAST_API_CACHE_REFRESH_MS ?? 15000);
+const apiRunnerFreshMs = Number(process.env.BRYCECAST_API_RUNNER_FRESH_MS ?? 60000);
 
 const sourceUrlByPath = new Map(sourceProbeEndpoints.map((endpoint) => [endpoint.proxyPath, endpoint.url]));
+const sourceEndpointByPath = new Map(sourceProbeEndpoints.map((endpoint) => [endpoint.proxyPath, endpoint]));
+const sourceEndpointById = new Map(sourceProbeEndpoints.map((endpoint) => [endpoint.id, endpoint]));
 const endpointResultCache = new Map();
 const endpointRefreshes = new Map();
 
@@ -601,10 +605,10 @@ const sourceEndpointSemantics = (result) => {
 
     if (!bryce) {
       return {
-        sourceState: 'stale',
+        sourceState: timingState,
         readinessState: 'wrong_session',
         sourceSummary,
-        note: `${rows.length} timing rows loaded, but no Bryce Aron timing row is present. Treat as wrong-session or stale for BryceCast readiness.`
+        note: `${rows.length} timing rows loaded, but no Bryce Aron timing row is present. Treat as wrong-session for BryceCast readiness.`
       };
     }
 
@@ -817,8 +821,7 @@ const archivedSnapshot = ({ reason, liveResults, fallbackProfile }) => {
   };
 };
 
-const buildRaceSnapshot = async () => {
-  const results = await fetchRaceControl();
+const buildRaceSnapshotFromResults = (results) => {
   const timing = results.find((result) => result.id === 'timing')?.payload?.timing_results;
   const drivers = results.find((result) => result.id === 'drivers_nxt')?.payload?.drivers?.driver ?? [];
   const config = results.find((result) => result.id === 'config')?.payload ?? {};
@@ -873,10 +876,11 @@ const buildRaceSnapshot = async () => {
   };
 };
 
-const buildSourceReport = async () => {
-  const results = await fetchSourceProbes();
+const buildRaceSnapshotFromUpstream = async () => buildRaceSnapshotFromResults(await fetchRaceControl());
+
+const buildSourceReportFromResults = (results, checkedAt = new Date().toISOString()) => {
   return {
-    checkedAt: new Date().toISOString(),
+    checkedAt,
     endpoints: results.map((result) => {
       const semantics = sourceEndpointSemantics(result);
       const freshness = freshnessForResult(result, semantics.sourceState);
@@ -906,6 +910,8 @@ const buildSourceReport = async () => {
     })
   };
 };
+
+const buildSourceReportFromUpstream = async () => buildSourceReportFromResults(await fetchSourceProbes());
 
 const readJsonFile = async (path, fallback = null) => {
   try {
@@ -1277,6 +1283,17 @@ const buildRaceWeekendState = ({ checkedAt, heartbeat, broadcastRoute, sourceSta
   readiness
 });
 
+const timingEndpointMatchesHeartbeat = (timingEndpoint = null, heartbeat = null) => {
+  const summary = timingEndpoint?.sourceSummary;
+  if (!summary || !heartbeat) return true;
+  const checks = [
+    [summary.eventId, heartbeat.EventID],
+    [summary.eventSessionId, heartbeat.EventSessionID]
+  ].filter(([left, right]) => left !== null && left !== undefined && left !== '' && right !== null && right !== undefined && right !== '');
+  if (checks.length === 0) return true;
+  return checks.every(([left, right]) => String(left) === String(right));
+};
+
 const buildBryceLiveState = ({ checkedAt, heartbeat, timingRows, bryce, bryceProfile, broadcastRoute, sourceState, readiness }) => {
   const seriesOk = isIndyNxtTimingHeartbeat(heartbeat);
   const carNine = asArray(timingRows).find((row) => String(row?.no ?? '').trim() === bryceCarNumber) ?? null;
@@ -1314,8 +1331,7 @@ const buildReadinessGates = ({ timingEndpoint, sourceReport, heartbeat, timingRo
       !['available', 'reference_only'].includes(endpoint.readinessState)
   );
   const checkedAgeSeconds = timingEndpoint?.checkedAgeSeconds ?? null;
-  const modifiedAgeSeconds = timingEndpoint?.modifiedAgeSeconds ?? null;
-  const timingPayloadStale = modifiedAgeSeconds !== null && modifiedAgeSeconds > liveTimingPayloadMaxAgeSeconds;
+  const timingFreshnessApplies = timingEndpointMatchesHeartbeat(timingEndpoint, heartbeat);
   return [
     {
       id: 'timing_reachable',
@@ -1334,7 +1350,12 @@ const buildReadinessGates = ({ timingEndpoint, sourceReport, heartbeat, timingRo
     },
     {
       id: 'timing_freshness',
-      state: sourceState === 'live' && !timingPayloadStale && (checkedAgeSeconds === null || checkedAgeSeconds <= 3) ? 'pass' : state === 'stale' ? 'fail' : 'warn',
+      state:
+        sourceState === 'live' && (!timingFreshnessApplies || checkedAgeSeconds === null || checkedAgeSeconds <= 3)
+          ? 'pass'
+          : state === 'stale'
+            ? 'fail'
+            : 'warn',
       summary: `Timing source is ${sourceState}; ${timingEndpoint?.freshnessLabel ?? 'freshness unknown'}.`
     },
     {
@@ -1383,9 +1404,10 @@ export const buildReadinessPayloadFromParts = ({
   const seriesOk = isIndyNxtTimingHeartbeat(heartbeat);
   const activeTiming = isActiveTimingHeartbeat(heartbeat);
   const timingCheckedAgeSeconds = timingEndpoint?.checkedAgeSeconds ?? null;
-  const timingModifiedAgeSeconds = timingEndpoint?.modifiedAgeSeconds ?? null;
-  const timingPayloadStale = timingModifiedAgeSeconds !== null && timingModifiedAgeSeconds > liveTimingPayloadMaxAgeSeconds;
   const sourceStateValue = inputSourceState ?? timingEndpoint?.sourceState ?? (heartbeat ? sourceState(heartbeat) : 'error');
+  const timingFreshnessApplies = timingEndpointMatchesHeartbeat(timingEndpoint, heartbeat);
+  const timingCheckedStale = timingFreshnessApplies && timingCheckedAgeSeconds !== null && timingCheckedAgeSeconds > 10;
+  const timingSourceStale = timingFreshnessApplies && sourceStateValue === 'stale';
   const bryceProfilePending = Boolean(bryce) && !bryceProfile?.radiofrequency;
   const broadcastRoutePending = Boolean(heartbeat && seriesOk) && (!broadcastRoute || broadcastRoute.source === 'unavailable');
   const enrichmentDegraded =
@@ -1410,15 +1432,15 @@ export const buildReadinessPayloadFromParts = ({
   } else if (!seriesOk && heartbeat) {
     state = 'wrong_series';
     reason = describeBryceMiss(heartbeat, timingRowsArray);
-  } else if (sourceStateValue === 'stale' || timingPayloadStale || (timingCheckedAgeSeconds !== null && timingCheckedAgeSeconds > 10)) {
+  } else if (timingSourceStale || timingCheckedStale) {
     state = 'stale';
     reason = 'Timing data is too old for live Bryce display.';
   } else if (sourceStateValue === 'cold') {
     state = 'pre_session';
     reason = 'Timing feed is cold; live Bryce race mode is not active yet.';
   } else if (!bryce && heartbeat && seriesOk && activeTiming) {
-    state = 'blocked';
-    reason = 'Active INDY NXT timing is available, but no guarded Bryce car #9 row is present.';
+    state = 'wrong_series';
+    reason = 'Fresh INDY NXT timing is active, but no guarded Bryce car #9 row is present.';
   } else if (!bryce && heartbeat) {
     state = 'pre_session';
     reason = 'INDY NXT session context exists, but Bryce is not in a fresh live timing row yet.';
@@ -1533,18 +1555,12 @@ const fetchReadinessWeather = async (checkedAt, heartbeat = null) => {
   }
 };
 
-const buildReadinessPayload = async () => {
-  const checkedAt = new Date().toISOString();
-  const [results, sourceReportBase, historyPayload, replay] = await Promise.all([
-    fetchRaceControl(),
-    buildSourceReport(),
-    readJsonFile(historyPath),
-    Promise.resolve(queryReplay({ limit: 5 }))
-  ]);
+const buildReadinessPayloadFromRuntimeParts = async ({ results, sourceReportBase, historyPayload, replay, checkedAt = new Date().toISOString() }) => {
   const sourceReport = {
     ...sourceReportBase,
     local: {
       latestSnapshot: await fileStatus(latestSnapshotPath),
+      runnerStatus: await fileStatus(runnerStatusPath),
       onboardCatalog: await fileStatus(onboardCatalogPath),
       history: await fileStatus(historyPath),
       sqlite: await fileStatus(sqlitePath),
@@ -1581,6 +1597,187 @@ const buildReadinessPayload = async () => {
   });
 };
 
+const buildReadinessPayloadFromUpstream = async () => {
+  const checkedAt = new Date().toISOString();
+  const [results, sourceReportBase, historyPayload, replay] = await Promise.all([
+    fetchRaceControl(),
+    buildSourceReportFromUpstream(),
+    readJsonFile(historyPath),
+    Promise.resolve(queryReplay({ limit: 5 }))
+  ]);
+  return buildReadinessPayloadFromRuntimeParts({
+    checkedAt,
+    results,
+    sourceReportBase,
+    historyPayload,
+    replay
+  });
+};
+
+const apiRuntimeCache = {
+  snapshot: null,
+  sources: null,
+  readiness: null,
+  refreshedAt: null,
+  refreshPromise: null,
+  lastError: null,
+  timer: null,
+  started: false
+};
+
+const resultFromRawPayload = (endpoint, payload, checkedAt) => ({
+  ...endpoint,
+  ok: payload !== undefined && payload !== null,
+  status: payload !== undefined && payload !== null ? 200 : 0,
+  contentType: payload !== undefined && payload !== null ? 'application/json' : null,
+  lastModified: null,
+  etag: null,
+  bytes: payload !== undefined && payload !== null ? Buffer.byteLength(JSON.stringify(payload)) : 0,
+  fetchedAt: checkedAt,
+  payload: payload ?? null,
+  error: payload !== undefined && payload !== null ? null : 'No cached runner payload for endpoint.'
+});
+
+const rawResultsFromSnapshotRecord = (record) => {
+  const raw = record?.raw ?? {};
+  return raceControlEndpoints.map((endpoint) => resultFromRawPayload(endpoint, raw[endpoint.id], record.checkedAt));
+};
+
+const sourceResultsFromSnapshotRecord = (record) => {
+  const raw = record?.raw ?? {};
+  return sourceProbeEndpoints.map((endpoint) => resultFromRawPayload(endpoint, raw[endpoint.id], record.checkedAt));
+};
+
+const readLatestRawSnapshotRecord = () => {
+  try {
+    const db = new DatabaseSync(sqlitePath, { readOnly: true });
+    try {
+      const row = db.prepare('SELECT checked_at, payload_json FROM race_snapshots ORDER BY checked_at DESC LIMIT 1').get();
+      if (!row?.payload_json) return null;
+      const payload = JSON.parse(row.payload_json);
+      return {
+        checkedAt: row.checked_at ?? payload.summary?.checkedAt ?? null,
+        summary: payload.summary ?? null,
+        raw: payload.raw ?? null
+      };
+    } finally {
+      db.close();
+    }
+  } catch {
+    return null;
+  }
+};
+
+const readFreshRunnerRawRecord = async () => {
+  const status = await readJsonFile(runnerStatusPath);
+  const statusAgeSeconds = ageSeconds(status?.updatedAt);
+  if (!status || statusAgeSeconds === null || statusAgeSeconds * 1000 > apiRunnerFreshMs) return null;
+  if (!status.lastSuccessfulWriteAt) return null;
+  const writeAgeSeconds = ageSeconds(status.lastSuccessfulWriteAt);
+  if (writeAgeSeconds === null || writeAgeSeconds * 1000 > apiRunnerFreshMs) return null;
+  const record = readLatestRawSnapshotRecord();
+  if (!record?.raw) return null;
+  const recordAgeSeconds = ageSeconds(record.checkedAt);
+  if (recordAgeSeconds === null || recordAgeSeconds * 1000 > apiRunnerFreshMs) return null;
+  return { ...record, runnerStatus: status };
+};
+
+const buildReadinessPayloadFromRunnerRecord = async (record) => {
+  const results = rawResultsFromSnapshotRecord(record);
+  const sourceReportBase = buildSourceReportFromResults(sourceResultsFromSnapshotRecord(record), record.checkedAt ?? new Date().toISOString());
+  return buildReadinessPayloadFromRuntimeParts({
+    checkedAt: record.checkedAt ?? new Date().toISOString(),
+    results,
+    sourceReportBase,
+    historyPayload: await readJsonFile(historyPath),
+    replay: queryReplay({ limit: 5 })
+  });
+};
+
+const refreshApiRuntimeCache = async ({ reason = 'loop', force = false } = {}) => {
+  if (apiRuntimeCache.refreshPromise && !force) return apiRuntimeCache.refreshPromise;
+  apiRuntimeCache.refreshPromise = (async () => {
+    const refreshedAt = new Date().toISOString();
+    const [snapshotResult, sourcesResult, readinessResult] = await Promise.allSettled([
+      buildRaceSnapshotFromUpstream(),
+      buildSourceReportFromUpstream(),
+      buildReadinessPayloadFromUpstream()
+    ]);
+    if (snapshotResult.status === 'fulfilled') apiRuntimeCache.snapshot = snapshotResult.value;
+    if (sourcesResult.status === 'fulfilled') apiRuntimeCache.sources = sourcesResult.value;
+    if (readinessResult.status === 'fulfilled') apiRuntimeCache.readiness = readinessResult.value;
+    apiRuntimeCache.refreshedAt = refreshedAt;
+    apiRuntimeCache.lastError = [snapshotResult, sourcesResult, readinessResult]
+      .filter((result) => result.status === 'rejected')
+      .map((result) => (result.reason instanceof Error ? result.reason.message : String(result.reason)));
+    if (apiRuntimeCache.lastError.length === 0) apiRuntimeCache.lastError = null;
+    return {
+      checkedAt: refreshedAt,
+      reason,
+      snapshot: snapshotResult.status,
+      sources: sourcesResult.status,
+      readiness: readinessResult.status,
+      errors: apiRuntimeCache.lastError
+    };
+  })().finally(() => {
+    apiRuntimeCache.refreshPromise = null;
+  });
+  return apiRuntimeCache.refreshPromise;
+};
+
+const startApiRuntimeCacheLoop = () => {
+  if (apiRuntimeCache.started) return;
+  apiRuntimeCache.started = true;
+  refreshApiRuntimeCache({ reason: 'startup' }).catch(() => {});
+  apiRuntimeCache.timer = setInterval(() => {
+    refreshApiRuntimeCache({ reason: 'interval' }).catch(() => {});
+  }, apiCacheRefreshMs);
+  apiRuntimeCache.timer.unref?.();
+};
+
+const requireCached = async (key, label) => {
+  if (apiRuntimeCache[key]) return apiRuntimeCache[key];
+  if (apiRuntimeCache.refreshPromise) {
+    await apiRuntimeCache.refreshPromise.catch(() => {});
+    if (apiRuntimeCache[key]) return apiRuntimeCache[key];
+  }
+  const detail = apiRuntimeCache.lastError?.join('; ') ?? 'Cache has not warmed yet.';
+  throw Object.assign(new Error(`${label} cache unavailable. ${detail}`), { statusCode: 503 });
+};
+
+const cachedRaceSnapshot = async () => {
+  const runnerRecord = await readFreshRunnerRawRecord();
+  if (runnerRecord) {
+    try {
+      return buildRaceSnapshotFromResults(rawResultsFromSnapshotRecord(runnerRecord));
+    } catch {}
+  }
+  return requireCached('snapshot', 'Race snapshot');
+};
+
+const cachedReadinessPayload = async () => {
+  const runnerRecord = await readFreshRunnerRawRecord();
+  if (runnerRecord) return buildReadinessPayloadFromRunnerRecord(runnerRecord);
+  return requireCached('readiness', 'Readiness');
+};
+
+const cachedSourceReport = async () => {
+  const runnerRecord = await readFreshRunnerRawRecord();
+  if (runnerRecord) return buildSourceReportFromResults(sourceResultsFromSnapshotRecord(runnerRecord), runnerRecord.checkedAt ?? new Date().toISOString());
+  return requireCached('sources', 'Source report');
+};
+
+const cachedEndpointResult = async (endpoint) => {
+  const cacheEntry = endpointResultCache.get(endpoint.id);
+  if (cacheEntry?.result) return cacheEntry.result;
+  const runnerRecord = await readFreshRunnerRawRecord();
+  if (runnerRecord?.raw && Object.prototype.hasOwnProperty.call(runnerRecord.raw, endpoint.id)) {
+    return resultFromRawPayload(endpoint, runnerRecord.raw[endpoint.id], runnerRecord.checkedAt);
+  }
+  if (apiRuntimeCache.refreshPromise) await apiRuntimeCache.refreshPromise.catch(() => {});
+  return endpointResultCache.get(endpoint.id)?.result ?? null;
+};
+
 const sendJson = (res, statusCode, payload, headers = {}) => {
   res.writeHead(statusCode, { ...jsonHeaders, ...headers });
   res.end(JSON.stringify(payload, null, 2));
@@ -1591,32 +1788,41 @@ const sendError = (res, statusCode, message, detail) => {
 };
 
 const proxyRaceControl = async (req, res, pathname) => {
-  const target = sourceUrlByPath.get(pathname);
-  if (!target) return false;
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), sourceFetchTimeoutMs);
-  try {
-    const response = await fetch(`${target}?t=${Date.now()}`, {
-      signal: controller.signal,
-      headers: { accept: req.headers.accept ?? 'application/json' }
-    });
-    const body = Buffer.from(await response.arrayBuffer());
-    res.writeHead(response.status, {
-      'content-type': response.headers.get('content-type') ?? 'application/json',
+  const endpoint = sourceEndpointByPath.get(pathname);
+  if (!endpoint) return false;
+  const url = new URL(req.url ?? '/', `http://${req.headers.host ?? 'localhost'}`);
+  if (url.searchParams.get('refresh') === '1') {
+    const result = await fetchEndpointAndCache(endpoint);
+    if (!result.ok) {
+      sendError(res, 502, 'Race Control proxy refresh failed', result.error);
+      return true;
+    }
+    res.writeHead(200, {
+      'content-type': result.contentType ?? 'application/json',
       'cache-control': 'no-store',
-      'access-control-allow-origin': '*'
+      'access-control-allow-origin': '*',
+      'x-brycecast-refresh-warning': 'Direct upstream proxy refresh is operator/debug only; app clients should use cached /api routes.'
     });
-    res.end(body);
-  } catch (error) {
-    sendError(
-      res,
-      502,
-      'Race Control proxy failed',
-      error?.name === 'AbortError' ? `Timed out after ${sourceFetchTimeoutMs} ms` : error instanceof Error ? error.message : String(error)
-    );
-  } finally {
-    clearTimeout(timeout);
+    res.end(JSON.stringify(result.payload));
+    return true;
   }
+
+  const cached = await cachedEndpointResult(endpoint);
+  if (!cached) {
+    sendError(res, 503, 'Race Control proxy cache unavailable', 'Use POST /api/refresh for an explicit operator refresh, then retry the cached proxy path.');
+    return true;
+  }
+  if (!cached.ok) {
+    sendError(res, 502, 'Cached Race Control proxy payload is an error', cached.error);
+    return true;
+  }
+  res.writeHead(200, {
+    'content-type': cached.contentType ?? 'application/json',
+    'cache-control': 'no-store',
+    'access-control-allow-origin': '*',
+    'x-brycecast-cache': 'server'
+  });
+  res.end(JSON.stringify(cached.payload));
   return true;
 };
 
@@ -1683,17 +1889,17 @@ const handler = async (req, res) => {
     }
 
     if (pathname === '/api/snapshot' || pathname === '/api/race/snapshot') {
-      sendJson(res, 200, await buildRaceSnapshot());
+      sendJson(res, 200, await cachedRaceSnapshot());
       return;
     }
 
     if (pathname === '/api/readiness') {
-      sendJson(res, 200, await buildReadinessPayload());
+      sendJson(res, 200, await cachedReadinessPayload());
       return;
     }
 
     if (pathname === '/api/session') {
-      const snapshot = await buildRaceSnapshot();
+      const snapshot = await cachedRaceSnapshot();
       sendJson(res, 200, {
         checkedAt: snapshot.updatedAt,
         eventName: snapshot.heartbeat.eventName,
@@ -1714,7 +1920,7 @@ const handler = async (req, res) => {
     }
 
     if (pathname === '/api/bryce') {
-      const snapshot = await buildRaceSnapshot();
+      const snapshot = await cachedRaceSnapshot();
       sendJson(res, 200, {
         checkedAt: snapshot.updatedAt,
         sourceState: snapshot.sourceState,
@@ -1727,7 +1933,7 @@ const handler = async (req, res) => {
     }
 
     if (pathname === '/api/timing') {
-      const snapshot = await buildRaceSnapshot();
+      const snapshot = await cachedRaceSnapshot();
       sendJson(res, 200, {
         checkedAt: snapshot.updatedAt,
         sourceState: snapshot.sourceState,
@@ -1740,11 +1946,12 @@ const handler = async (req, res) => {
     }
 
     if (pathname === '/api/sources') {
-      const report = await buildSourceReport();
+      const report = await cachedSourceReport();
       sendJson(res, 200, {
         ...report,
         local: {
           latestSnapshot: await fileStatus(latestSnapshotPath),
+          runnerStatus: await fileStatus(runnerStatusPath),
           onboardCatalog: await fileStatus(onboardCatalogPath),
           history: await fileStatus(historyPath),
           sqlite: await fileStatus(sqlitePath),
@@ -1824,8 +2031,14 @@ const handler = async (req, res) => {
     }
 
     if (pathname === '/api/refresh' && req.method === 'POST') {
-      const [snapshot, sources] = await Promise.all([buildRaceSnapshot(), buildSourceReport()]);
-      sendJson(res, 200, { checkedAt: new Date().toISOString(), snapshotUpdatedAt: snapshot.updatedAt, sourceCount: sources.endpoints.length });
+      const refreshed = await refreshApiRuntimeCache({ reason: 'admin_refresh', force: true });
+      sendJson(res, 200, {
+        checkedAt: new Date().toISOString(),
+        ...refreshed,
+        snapshotUpdatedAt: apiRuntimeCache.snapshot?.updatedAt ?? null,
+        sourceCount: apiRuntimeCache.sources?.endpoints?.length ?? 0,
+        note: 'Explicit admin refresh completed through the server cache layer.'
+      });
       return;
     }
 
@@ -1838,6 +2051,7 @@ const handler = async (req, res) => {
 };
 
 export const startServer = () => {
+  startApiRuntimeCacheLoop();
   const server = createServer(handler);
 
   server.listen(port, host, () => {

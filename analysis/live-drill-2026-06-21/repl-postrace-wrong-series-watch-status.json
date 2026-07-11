@@ -1,0 +1,41 @@
+{
+  "startedAt": "2026-06-21T17:09:47.475Z",
+  "updatedAt": "2026-06-21T17:14:17.889Z",
+  "count": 19,
+  "wrongSeriesCount": 0,
+  "done": false,
+  "latest": {
+    "checkedAt": "2026-06-21T17:14:17.888Z",
+    "ok": true,
+    "status": 200,
+    "bytes": 23249,
+    "lastModified": "Sun, 21 Jun 2026 16:49:50 GMT",
+    "etag": "0x8DECFB51C34F0F1",
+    "eventId": "5537",
+    "eventSessionId": "6754",
+    "eventName": "INDY NXT by Firestone Grand Prix at Road America",
+    "series": "L",
+    "sessionName": "Race 2",
+    "sessionStatus": "COLD",
+    "flag": "COLD",
+    "lap": "18",
+    "totalLaps": "18",
+    "rowCount": 24,
+    "sourceState": "cold",
+    "bryce": {
+      "no": "9",
+      "driverId": 2143,
+      "rank": 11,
+      "liveRank": 11,
+      "laps": "18",
+      "gap": "0.1027"
+    },
+    "car9": {
+      "no": "9",
+      "driverId": 2143,
+      "firstName": "Bryce",
+      "lastName": "Aron",
+      "rank": 11
+    }
+  }
+}

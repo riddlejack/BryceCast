@@ -1,0 +1,87 @@
+{
+  "updatedAt": "2026-06-21T17:03:38.695Z",
+  "iteration": 12,
+  "latest": {
+    "checkedAt": "2026-06-21T17:03:38.695Z",
+    "eventId": "5537",
+    "eventSessionId": "6754",
+    "eventName": "INDY NXT by Firestone Grand Prix at Road America",
+    "series": "L",
+    "sessionName": "Race 2",
+    "sessionStatus": "COLD",
+    "flag": "COLD",
+    "lap": "18",
+    "totalLaps": "18",
+    "sourceState": "cold",
+    "rowCount": 24,
+    "bryce": {
+      "no": "9",
+      "driverId": 2143,
+      "rank": 11,
+      "liveRank": 11,
+      "laps": "18",
+      "status": "Active",
+      "gap": "0.1027",
+      "liveGap": "0.5305",
+      "lastLapTime": "1:58.7338",
+      "bestLapTime": "1:55.4879",
+      "passes": 11,
+      "passed": 7,
+      "runningDriverPoints": 159,
+      "totalEntrantPoints": 159
+    },
+    "endpoints": [
+      {
+        "id": "timing",
+        "ok": true,
+        "status": 200,
+        "bytes": 23249,
+        "ms": 202,
+        "lastModified": "Sun, 21 Jun 2026 16:49:50 GMT",
+        "etag": "0x8DECFB51C34F0F1",
+        "error": null
+      },
+      {
+        "id": "drivers_nxt",
+        "ok": true,
+        "status": 200,
+        "bytes": 61245,
+        "ms": 207,
+        "lastModified": "Sun, 21 Jun 2026 16:56:58 GMT",
+        "etag": "0x8DECFB61B565742",
+        "error": null
+      },
+      {
+        "id": "config",
+        "ok": true,
+        "status": 200,
+        "bytes": 1936,
+        "ms": 171,
+        "lastModified": "Sun, 21 Jun 2026 15:01:06 GMT",
+        "etag": "0x8DECFA5EBD03A2D",
+        "error": null
+      },
+      {
+        "id": "schedule_nxt",
+        "ok": true,
+        "status": 200,
+        "bytes": 138805,
+        "ms": 240,
+        "lastModified": "Sun, 21 Jun 2026 16:57:50 GMT",
+        "etag": "0x8DECFB63A6EC5FB",
+        "error": null
+      },
+      {
+        "id": "trackactivity_nxt",
+        "ok": true,
+        "status": 200,
+        "bytes": 127438,
+        "ms": 229,
+        "lastModified": "Sun, 21 Jun 2026 16:58:17 GMT",
+        "etag": "0x8DECFB64A7F7D43",
+        "error": null
+      }
+    ],
+    "iteration": 12
+  }
+}

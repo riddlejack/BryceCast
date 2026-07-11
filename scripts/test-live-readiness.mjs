@@ -200,6 +200,73 @@ assert.equal(wrongSeries.bryce.identityGuard.seriesOk, false);
 assert.equal(wrongSeries.points.mode, 'historical_fallback');
 assert.equal(wrongSeries.points.fieldCoverage.totalDriverPointsRows, 1, 'source-present zero point value counts as populated');
 
+const freshLiveNxtNoBryce = buildReadinessPayloadFromParts(
+  baseParts({
+    heartbeat: heartbeat({
+      eventName: 'INDY NXT by Firestone at Milwaukee Mile',
+      EventID: '5540',
+      EventSessionID: '6888',
+      SessionName: 'Test Session 2',
+      SessionType: 'Test',
+      SessionStatus: 'Green',
+      currentFlag: 'GREEN',
+      lapNumber: '0',
+      totalLaps: ''
+    }),
+    timingRows: [timingRow({ no: '10', DriverID: '999', firstName: 'Other', lastName: 'Driver' })],
+    bryce: null,
+    sourceReport: sourceReport('wrong_session')
+  })
+);
+assert.equal(freshLiveNxtNoBryce.state, 'wrong_series', 'fresh live NXT timing without Bryce should be a no-Bryce/wrong-session state, not stale or ready');
+assert.equal(freshLiveNxtNoBryce.bryce.bryce, null);
+assert.equal(freshLiveNxtNoBryce.bryce.identityGuard.seriesOk, true);
+assert.equal(freshLiveNxtNoBryce.points.mode, 'historical_fallback');
+
+const oldRunnerArchiveSourceReport = sourceReport('wrong_session');
+const freshInternalFetchOldRunnerArchive = buildReadinessPayloadFromParts(
+  baseParts({
+    heartbeat: heartbeat({
+      eventName: 'INDY NXT by Firestone at Milwaukee Mile',
+      EventID: '5540',
+      EventSessionID: '6888',
+      SessionName: 'Test Session 2',
+      SessionType: 'Test',
+      SessionStatus: 'Green',
+      currentFlag: 'GREEN',
+      lapNumber: '0',
+      totalLaps: ''
+    }),
+    timingRows: [timingRow({ no: '10', DriverID: '999', firstName: 'Other', lastName: 'Driver' })],
+    bryce: null,
+    sourceReport: {
+      ...oldRunnerArchiveSourceReport,
+      endpoints: oldRunnerArchiveSourceReport.endpoints.map((endpoint) =>
+        endpoint.id === 'timing'
+          ? {
+              ...endpoint,
+              checkedAgeSeconds: 11 * 24 * 60 * 60,
+              modifiedAgeSeconds: 11 * 24 * 60 * 60,
+              freshnessLabel: 'checked 11d ago; modified 11d ago',
+              sourceSummary: {
+                brycePresent: true,
+                eventName: 'Grand Prix at Road America Race 2',
+                eventId: '5537',
+                eventSessionId: '6754',
+                series: 'L',
+                flag: 'COLD'
+              },
+              note: 'Old runner archive metadata fixture.'
+            }
+          : endpoint
+      )
+    }
+  })
+);
+assert.equal(freshInternalFetchOldRunnerArchive.state, 'wrong_series', 'fresh internal timing fetch must not inherit stale state from an old runner archive source probe');
+assert.notEqual(freshInternalFetchOldRunnerArchive.state, 'stale');
+assert.equal(freshInternalFetchOldRunnerArchive.liveTiming.heartbeat.eventSessionId, '6888');
+
 const livePoints = buildPointsProjectionState({
   checkedAt,
   timingRows: [
@@ -261,7 +328,7 @@ const stalePayload = buildReadinessPayloadFromParts(
       ...sourceReport(),
       endpoints: sourceReport().endpoints.map((endpoint) =>
         endpoint.id === 'timing'
-          ? { ...endpoint, checkedAgeSeconds: 0, modifiedAgeSeconds: 3600, freshnessLabel: 'checked 0s ago; modified 1h ago' }
+          ? { ...endpoint, checkedAgeSeconds: 3600, modifiedAgeSeconds: 3600, freshnessLabel: 'checked 1h ago; modified 1h ago' }
           : endpoint
       )
     }
@@ -277,7 +344,7 @@ const sameSeriesNoBryce = buildReadinessPayloadFromParts(
     sourceReport: sourceReport('wrong_session')
   })
 );
-assert.equal(sameSeriesNoBryce.state, 'blocked', 'active INDY NXT timing without Bryce should block live display');
+assert.equal(sameSeriesNoBryce.state, 'wrong_series', 'active INDY NXT timing without Bryce should be a no-Bryce/wrong-session state');
 assert.equal(sameSeriesNoBryce.bryce.identityGuard.seriesOk, true);
 
 const coldSameSeriesNoBryce = buildReadinessPayloadFromParts(
@@ -313,4 +380,4 @@ assert.equal(replayArchiveState(true, 20, 20), 'ready', 'replay readiness should
 assert.equal(replayArchiveState(true, 5, 5), 'tiny');
 assert.equal(replayArchiveState(true, 0, 0), 'empty');
 
-console.log(JSON.stringify({ ok: true, assertions: 54 }, null, 2));
+console.log(JSON.stringify({ ok: true, assertions: 63 }, null, 2));
