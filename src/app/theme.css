@@ -712,6 +712,47 @@ button { font-family: inherit; }
 
 .unavailable svg { margin-top: 2px; flex: none; }
 
+/* ---------- career journey timeline ---------- */
+
+.journey {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-left: 26px;
+}
+
+.journey::before {
+  content: '';
+  position: absolute;
+  left: 7px;
+  top: 10px;
+  bottom: 10px;
+  width: 2px;
+  border-radius: 1px;
+  background: linear-gradient(180deg, rgba(245, 182, 63, 0.05), rgba(245, 182, 63, 0.55) 12%, var(--bryce) 100%);
+}
+
+.journey__chapter { position: relative; }
+
+.journey__chapter::before {
+  content: '';
+  position: absolute;
+  left: -25px;
+  top: 26px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--surface-0);
+  border: 2.5px solid rgba(245, 182, 63, 0.5);
+}
+
+.journey__chapter--current::before {
+  background: var(--bryce);
+  border-color: var(--bryce);
+  box-shadow: 0 0 12px rgba(245, 182, 63, 0.5);
+}
+
 /* ---------- reduced motion ---------- */
 
 @media (prefers-reduced-motion: reduce) {

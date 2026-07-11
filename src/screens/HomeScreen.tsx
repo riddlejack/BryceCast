@@ -250,11 +250,7 @@ const SeasonStrip = ({ season }: { season: ArchiveEntry[] }) => {
           const gained = finish !== null && start !== null && finish < start;
           const top10 = finish !== null && finish <= 10;
           return (
-            <Link
-              key={entry.pack.sessionId}
-              to={`/races/${encodeURIComponent(entry.pack.sessionId)}`}
-              title={displayRaceLabel(entry.pack)}
-            >
+            <Link key={entry.pack.sessionId} to={`/races/${encodeURIComponent(entry.pack.sessionId)}`}>
               <span
                 className="figure"
                 style={{

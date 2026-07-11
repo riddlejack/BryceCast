@@ -111,24 +111,27 @@ export const SlopeChart = ({ start, finish, height = 150 }: { start: number; fin
           strokeWidth={2.5}
           isAnimationActive={false}
           dot={{ r: 5, fill: 'var(--bryce)', stroke: 'var(--surface-1)', strokeWidth: 2 }}
-          label={({ x, y, index }: { x?: number; y?: number; index?: number }) => (
-            <text
-              x={x}
-              y={y}
-              dx={index === 0 ? -12 : 12}
-              dy={4}
-              textAnchor={index === 0 ? 'end' : 'start'}
-              style={{
-                fill: 'var(--ink-primary)',
-                fontFamily: 'Archivo, system-ui, sans-serif',
-                fontWeight: 750,
-                fontSize: 16,
-                fontVariantNumeric: 'tabular-nums'
-              }}
-            >
-              {`P${points[index ?? 0].rank}`}
-            </text>
-          )}
+          label={(props: { x?: number | string; y?: number | string; index?: number }) => {
+            const index = props.index ?? 0;
+            return (
+              <text
+                x={Number(props.x ?? 0)}
+                y={Number(props.y ?? 0)}
+                dx={index === 0 ? -12 : 12}
+                dy={4}
+                textAnchor={index === 0 ? 'end' : 'start'}
+                style={{
+                  fill: 'var(--ink-primary)',
+                  fontFamily: 'Archivo, system-ui, sans-serif',
+                  fontWeight: 750,
+                  fontSize: 16,
+                  fontVariantNumeric: 'tabular-nums'
+                }}
+              >
+                {`P${points[index].rank}`}
+              </text>
+            );
+          }}
         />
       </LineChart>
     </ResponsiveContainer>

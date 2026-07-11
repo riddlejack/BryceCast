@@ -97,7 +97,7 @@ const FollowTheWeekend = () => {
 /* ---------- prior band ---------- */
 
 const PriorBand = ({ event }: { event: UpcomingPrepEvent }) => {
-  const band = ((event.predictionBand as Row)?.finishPercentileBand ?? {}) as Row;
+  const band = ((event.predictionBand as unknown as Row)?.finishPercentileBand ?? {}) as Row;
   const p25 = asNumber(band.p25);
   const median = asNumber(band.median);
   const p75 = asNumber(band.p75);
