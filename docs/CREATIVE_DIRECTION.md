@@ -275,9 +275,24 @@ The list became the index, the chart the spine — per the original seed:
 - **Per-race standout dynamic charts** and a richer battle visualization
   (who/when on the lap axis).
 
+## Jack's Career Lab + race-page review (2026-07-12) — NEXT WORK QUEUE
+
+Full detail in docs/PAGECRAFT_HANDOFF_2026-07-12.md §2. Headlines: add gold
+S/F ticks + corner labels to street-circuit/all track art; make the race-hero
+track shape carry the section data interactively (the big idea); move the
+Explorer above the chapters; scrap and redesign the start→finish scatter
+(percentiles-grouped view is approved); more diverse chart forms over unused
+data (battles career-wide, weather splits, per-lap); light race pages for
+non-INDY NXT dots; vary small-chapter cards (IMSA one-dot strip); scroll-in
+reveals still blocked on Jack's animations repo link — ask again. Then Live,
+then Home.
+
 ## Session bootstrap
 
 New session should read: CLAUDE.md (auto), memory (auto), this file,
-docs/DESIGN_TASTE.md. App runs at localhost:8787 (LaunchAgent) or
-`npm run dev` (5173) + the brycecast-api launch config. Everything is
-committed on codex/brycecast-ui-v2-checkpoint.
+docs/DESIGN_TASTE.md, then **docs/PAGECRAFT_HANDOFF_2026-07-12.md** (state,
+Jack's full feedback log, the working method that earned his trust, gotchas,
+and the queued work). App runs at localhost:8787 (LaunchAgent, serves the
+BUILT bundle — rebuild after changes) or `npm run dev` (5173) + the
+brycecast-api launch config. Everything is committed on
+codex/brycecast-ui-v2-checkpoint.
