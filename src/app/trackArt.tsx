@@ -9,7 +9,8 @@ export const TrackArt = ({
   outline,
   annotation,
   showCornerLabels = true,
-  maxHeight
+  maxHeight,
+  progress
 }: {
   outline: TrackOutline;
   annotation?: { corner: string; note: string } | null;
@@ -17,6 +18,9 @@ export const TrackArt = ({
   /** Cap the rendered height so differently-shaped circuits occupy one
    *  consistent box (the art letterboxes inside it, centered). */
   maxHeight?: number;
+  /** Optional sourced lap progress. Draws a second ink stroke over a quiet
+   * outline; it is race completion, never a car/GPS position. */
+  progress?: number;
 }) => {
   const [ref, measuredWidth] = useMeasuredWidth<HTMLDivElement>();
   const [tip, setTip] = useState<ChartTip | null>(null);
@@ -38,14 +42,39 @@ export const TrackArt = ({
           aria-label={`${outline.name} track outline`}
           style={{ overflow: 'visible', display: 'block' }}
         >
-          <path
-            d={outline.mainPath}
-            fill="none"
-            stroke="var(--ink-primary)"
-            strokeWidth={px(2)}
-            strokeLinejoin="round"
-            strokeLinecap="round"
-          />
+          {progress === undefined ? (
+            <path
+              d={outline.mainPath}
+              fill="none"
+              stroke="var(--ink-primary)"
+              strokeWidth={px(2)}
+              strokeLinejoin="round"
+              strokeLinecap="round"
+            />
+          ) : (
+            <>
+              <path
+                d={outline.mainPath}
+                fill="none"
+                stroke="var(--grid-hairline)"
+                strokeWidth={px(2)}
+                strokeLinejoin="round"
+                strokeLinecap="round"
+              />
+              <path
+                d={outline.mainPath}
+                fill="none"
+                stroke="var(--ink-primary)"
+                strokeWidth={px(2.4)}
+                strokeLinejoin="round"
+                strokeLinecap="round"
+                pathLength={1}
+                strokeDasharray={1}
+                strokeDashoffset={1 - Math.max(0, Math.min(1, progress))}
+                className="track-art__progress"
+              />
+            </>
+          )}
           {outline.startFinish ? (
             <g
               transform={`translate(${outline.startFinish.x} ${outline.startFinish.y}) rotate(${outline.startFinish.angleDeg + 90})`}

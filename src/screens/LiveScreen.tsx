@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { CalendarClock, Flag, Trophy } from 'lucide-react';
+import { CalendarClock } from 'lucide-react';
 import {
   Card,
   Countdown,
@@ -12,9 +12,11 @@ import {
   type Tone
 } from '../app/components';
 import { ChartTipCard, chartFont, useMeasuredWidth, type ChartTip } from '../app/charts';
-import { asNumber, asString, formatGap, formatNumber, trackTypeLabel } from '../app/format';
+import { asNumber, asString, formatGap, formatNumber } from '../app/format';
 import { Link } from '../app/router';
+import { TrackArt } from '../app/trackArt';
 import { useNextSession } from '../app/useNextSession';
+import { trackOutlineFor } from '../assets/tracks';
 import type { LiveReadiness } from '../app/useReadiness';
 import {
   buildLiveBattleFrame,
@@ -94,6 +96,7 @@ interface GapSample {
   checkedAt: string;
   sessionKey: string;
   lap: number | null;
+  rank: number | null;
   ahead: number | null;
   behind: number | null;
   aheadNeighbor: LiveBattleNeighbor | null;
@@ -115,6 +118,7 @@ const useGapSamples = (payload: LiveReadiness | null): GapSample[] => {
       checkedAt: payload.checkedAt,
       sessionKey: `${asString(heartbeat.eventId) ?? 'event'}-${asString(heartbeat.eventSessionId) ?? 'session'}`,
       lap: asNumber(heartbeat.lap),
+      rank,
       ahead: frame?.ahead?.gapSeconds ?? positiveGapSeconds(bryce.gap),
       behind: frame?.behind?.gapSeconds ?? positiveGapSeconds(behind?.gap),
       aheadNeighbor: frame?.ahead ?? null,
@@ -319,38 +323,6 @@ const BattleModule = ({ payload, samples }: { payload: LiveReadiness; samples: G
   </Card>
 );
 
-const Sparkline = ({ values, label }: { values: Array<number | null>; label: string }) => {
-  const [ref, width] = useMeasuredWidth<HTMLDivElement>();
-  const clean = values.map((value, index) => ({ value, index })).filter((point): point is { value: number; index: number } => point.value !== null);
-  const height = 34;
-  const min = Math.min(...clean.map((point) => point.value));
-  const max = Math.max(...clean.map((point) => point.value));
-  const span = Math.max(max - min, 0.1);
-  const x = (index: number) => (index / Math.max(values.length - 1, 1)) * Math.max(width - 2, 1) + 1;
-  const y = (value: number) => 5 + (1 - (value - min) / span) * (height - 10);
-  const path = clean.map((point, index) => `${index === 0 ? 'M' : 'L'}${x(point.index)} ${y(point.value)}`).join(' ');
-  return (
-    <div ref={ref} className={`live-spark${clean.length < 2 ? ' live-spark--empty' : ''}`} aria-label={clean.length < 2 ? `${label}; trend gathering` : undefined}>
-      {width > 0 && clean.length >= 2 ? (
-        <svg width={width} height={height} role="img" aria-label={label}>
-          <path d={path} fill="none" stroke="var(--ink-primary)" strokeWidth={1.7} strokeLinecap="round" strokeLinejoin="round" />
-          <circle cx={x(clean.at(-1)!.index)} cy={y(clean.at(-1)!.value)} r={3.2} fill="var(--bryce)" stroke="var(--surface-1)" strokeWidth={2} />
-        </svg>
-      ) : null}
-    </div>
-  );
-};
-
-const trendDelta = (values: Array<number | null>) => {
-  const clean = values.filter((value): value is number => value !== null);
-  if (clean.length < 2) return null;
-  const delta = clean.at(-1)! - clean[0];
-  if (Math.abs(delta) < 0.05) return { text: '· steady', className: '' };
-  return delta > 0
-    ? { text: `▲ ${delta.toFixed(1)}s`, className: 'stat__delta--up' }
-    : { text: `▽ ${Math.abs(delta).toFixed(1)}s`, className: 'stat__delta--down' };
-};
-
 /* ---------- trust rail ---------- */
 
 const TrustRail = ({ payload, fixtureMode }: { payload: LiveReadiness; fixtureMode: boolean }) => {
@@ -383,57 +355,76 @@ const LiveHero = ({ payload, samples }: { payload: LiveReadiness; samples: GapSa
   const weekend = payload.raceWeekend as Row;
   const heartbeat = heartbeatOf(payload);
   const bryce = liveBryceRowOf(payload);
-  const rows = liveRowsOf(payload);
   const flag = asString(heartbeat.flag ?? weekend.flag);
   const lap = asNumber(heartbeat.lap ?? weekend.lap);
   const totalLaps = asNumber(heartbeat.totalLaps ?? weekend.totalLaps);
   const rank = asNumber(bryce?.rank);
-  const ahead = rank !== null ? rows.find((row) => asNumber(row.rank) === rank - 1) : undefined;
-  const behind = rank !== null ? rows.find((row) => asNumber(row.rank) === rank + 1) : undefined;
-  const aheadValues = samples.map((sample) => sample.ahead);
-  const behindValues = samples.map((sample) => sample.behind);
-  const aheadDelta = trendDelta(aheadValues);
-  const behindDelta = trendDelta(behindValues);
-  const rawTrackType = (asString(weekend.trackType) ?? '').toLowerCase();
-  const typeLabel = rawTrackType === 'rc' ? 'Road course' : rawTrackType === 'sc' ? 'Street circuit' : rawTrackType ? trackTypeLabel(rawTrackType) : null;
+  const outline = trackOutlineFor(asString(heartbeat.trackName ?? weekend.trackName));
+  const progress = lap !== null && totalLaps !== null && totalLaps > 0 ? lap / totalLaps : 0;
+  const pointsWindow = buildOfficialPointsWindow(liveRowsOf(payload));
+  const points = payload.points as Row;
+  const historicalRank = asNumber((points.bryce as Row)?.historicalRank);
+  const standingMove = historicalRank !== null && pointsWindow ? historicalRank - pointsWindow.bryce.projectedStanding : null;
+
+  const recent = samples.filter((sample) => sample.rank !== null && (lap === null || sample.lap === null || sample.lap >= lap - 5));
+  const firstRecent = recent[0];
+  const gained = rank !== null && firstRecent?.rank !== null && firstRecent?.rank !== undefined ? firstRecent.rank - rank : 0;
+  let positionStory: { text: string; up: boolean } | null = null;
+  if (gained > 0 && firstRecent?.lap !== null && firstRecent?.lap !== undefined && lap !== null && lap > firstRecent.lap) {
+    positionStory = { text: `▲ up ${gained} in the last ${Math.min(5, lap - firstRecent.lap)} laps`, up: true };
+  } else if (rank !== null && lap !== null) {
+    let heldFrom = lap;
+    for (let index = recent.length - 1; index >= 0; index -= 1) {
+      if (recent[index].rank !== rank) break;
+      if (recent[index].lap !== null) heldFrom = Math.min(heldFrom, recent[index].lap!);
+    }
+    if (lap - heldFrom >= 1) positionStory = { text: `held P${rank} for ${lap - heldFrom + 1} laps`, up: false };
+  }
 
   return (
     <HeroPanel className="live-hero">
-      <div className="live-hero__head">
+      <div className="live-hero__identity">
         <div>
-          <span className="kicker">{[typeLabel, asString(weekend.trackName)].filter(Boolean).join(' · ') || 'Live companion'}</span>
+          <span className="kicker">{asString(heartbeat.trackName ?? weekend.trackName) ?? 'Live companion'}</span>
           <h1 className="screen-head__title">{asString(weekend.eventName) ?? asString(heartbeat.eventName) ?? 'INDY NXT'}</h1>
         </div>
-        <div className="row row--wrap" style={{ justifyContent: 'flex-end' }}>
-          {flag ? <StatusChip tone={flagTone(flag)} label={`${flag} flag`} live={flag.toUpperCase() === 'GREEN'} /> : null}
-          <span className="live-lap">{lap !== null && totalLaps !== null ? `Lap ${lap} of ${totalLaps}` : asString(heartbeat.sessionName) ?? 'Session live'}</span>
-          <SourcePill title="The race, now" entries={sourceEntries.hero} />
-        </div>
+        <SourcePill title="The race, now" entries={sourceEntries.hero} />
       </div>
-
-      <div className="live-hero__body">
-        <div className="live-position">
-          <Plate size="hero" />
-          <div>
-            <span className="caption">Bryce Aron · running position</span>
-            <div className="live-position__value">{rank !== null ? `P${rank}` : '—'}</div>
+      <div className="hero-race hero-race--week live-hero__body">
+        <div className="live-hero__race-state">
+          <div className="row row--wrap live-hero__flag-lap">
+            {flag ? <StatusChip tone={flagTone(flag)} label={`${flag} flag`} live={flag.toUpperCase() === 'GREEN'} /> : null}
+            <span className="live-lap">{lap !== null && totalLaps !== null ? `Lap ${lap} of ${totalLaps}` : asString(heartbeat.sessionName) ?? 'Session live'}</span>
+          </div>
+          <div className="live-position">
+            <Plate size="hero" />
+            <div>
+              <span className="caption">running position</span>
+              <div className="stat__value stat__value--hero live-position__value">{rank !== null ? `P${rank}` : '—'}</div>
+              {positionStory ? <span className={`stat__delta${positionStory.up ? ' stat__delta--up' : ''}`}>{positionStory.text}</span> : null}
+            </div>
           </div>
         </div>
-        <div className="live-neighbors">
-          <div className="live-neighbor">
-            <div className="live-neighbor__line">
-              <span><strong>{secondsLabel(bryce?.liveGap ?? bryce?.gap)}</strong> to {driverLabel(ahead) ?? 'the car ahead'}</span>
-              {aheadDelta ? <span className={`stat__delta ${aheadDelta.className}`}>{aheadDelta.text}</span> : <span className="caption caption--secondary">gathering trend</span>}
-            </div>
-            <Sparkline values={aheadValues} label="Gap to the car ahead over the latest 30 samples" />
-          </div>
-          <div className="live-neighbor">
-            <div className="live-neighbor__line">
-              <span><strong>{secondsLabel(behind?.liveGap ?? behind?.gap)}</strong> to {driverLabel(behind) ?? 'the car behind'}</span>
-              {behindDelta ? <span className={`stat__delta ${behindDelta.className}`}>{behindDelta.text}</span> : <span className="caption caption--secondary">gathering trend</span>}
-            </div>
-            <Sparkline values={behindValues} label="Gap to the car behind over the latest 30 samples" />
-          </div>
+        <div className="hero-race__art live-hero__art">
+          {outline ? <TrackArt outline={outline} showCornerLabels={false} maxHeight={150} progress={progress} /> : null}
+          <span className="caption caption--secondary live-hero__art-caption">the outline inks in as laps complete</span>
+        </div>
+        <div className="live-hero__jumbotron">
+          <span className="caption">If the race ended now</span>
+          {pointsWindow ? (
+            <>
+              <div className="row live-hero__standing-row">
+                <span className="stat__value stat__value--big">P{pointsWindow.bryce.projectedStanding}</span>
+                {standingMove !== null && standingMove !== 0 ? (
+                  <span className={`stat__delta ${standingMove > 0 ? 'stat__delta--up' : 'stat__delta--down'}`}>{standingMove > 0 ? `▲ ${standingMove}` : `▽ ${Math.abs(standingMove)}`} vs pre-race</span>
+                ) : null}
+              </div>
+              <div className="live-hero__running-points"><strong>{pointsWindow.bryce.runningDriverPoints}</strong> running points</div>
+              <span className="live-points__provisional">provisional · official Race Control feed</span>
+            </>
+          ) : (
+            <Unavailable>Official running points are not published in this state.</Unavailable>
+          )}
         </div>
       </div>
     </HeroPanel>
