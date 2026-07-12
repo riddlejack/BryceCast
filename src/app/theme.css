@@ -819,6 +819,17 @@ button { font-family: inherit; }
   transition: stroke-dashoffset 200ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 
+.live-now-dot {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: live-now 2s ease-in-out infinite;
+}
+
+@keyframes live-now {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.22); opacity: 0.72; }
+}
+
 .live-layout { grid-template-columns: minmax(0, 1fr); align-items: start; }
 
 .live-points__main {
@@ -1014,7 +1025,7 @@ button { font-family: inherit; }
 /* ---------- reduced motion ---------- */
 
 @media (prefers-reduced-motion: reduce) {
-  .live-dot, .skeleton, .drawer, .drawer-backdrop { animation: none; }
+  .live-dot, .live-now-dot, .skeleton, .drawer, .drawer-backdrop { animation: none; }
   .reveal { animation: none; opacity: 1; transform: none; }
   * { transition-duration: 0.01ms !important; }
 }

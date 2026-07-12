@@ -594,9 +594,10 @@ const GapTrend = ({ trace }: { trace: ReplayTrace | null }) => {
           index,
           checkedAt: asString(row.checkedAt),
           gap: positiveGapSeconds(row.diff),
+          lap: asNumber(row.laps),
           flag: (asString(row.flag) ?? '').toUpperCase()
         }))
-        .filter((point): point is { index: number; checkedAt: string; gap: number; flag: string } => point.checkedAt !== null && point.gap !== null),
+        .filter((point): point is { index: number; checkedAt: string; gap: number; lap: number | null; flag: string } => point.checkedAt !== null && point.gap !== null),
     [trace]
   );
   const height = 220;
@@ -605,8 +606,18 @@ const GapTrend = ({ trace }: { trace: ReplayTrace | null }) => {
   const plotHeight = height - margin.top - margin.bottom;
   const maxGap = Math.max(...points.map((point) => point.gap), 1);
   const x = (index: number) => margin.left + (index / Math.max(points.length - 1, 1)) * plotWidth;
-  const y = (gap: number) => margin.top + (gap / maxGap) * plotHeight;
+  const y = (gap: number) => margin.top + (1 - gap / maxGap) * plotHeight;
   const path = points.map((point, index) => `${index === 0 ? 'M' : 'L'}${x(index)} ${y(point.gap)}`).join(' ');
+  const lapBoundaries = useMemo(() => {
+    const boundaries: Array<{ lap: number; index: number }> = [];
+    points.forEach((point, index) => {
+      if (point.lap === null || boundaries.at(-1)?.lap === point.lap) return;
+      boundaries.push({ lap: point.lap, index });
+    });
+    if (boundaries.length <= 7) return boundaries;
+    const stride = Math.ceil(boundaries.length / 6);
+    return boundaries.filter((_, index) => index % stride === 0 || index === boundaries.length - 1);
+  }, [points]);
 
   const cautionBands = useMemo(() => {
     const bands: Array<{ from: number; to: number }> = [];
@@ -634,37 +645,44 @@ const GapTrend = ({ trace }: { trace: ReplayTrace | null }) => {
   };
 
   return (
-    <Card title="Gap to the leader" action={<SourcePill title="Gap to the leader" entries={sourceEntries.trend} />}>
+    <Card title="Distance to the leader" action={<SourcePill title="Distance to the leader" entries={sourceEntries.trend} />}>
       <div ref={ref} className="live-gap-chart">
         {points.length >= 2 ? (
           <>
           <p className="caption caption--secondary" style={{ margin: '0 0 4px' }}>
-            The full session from our 1-second capture · yellow bands are caution periods · gold is now
+            The full session from our 1-second capture · shaded = caution · gold = now
           </p>
             {width > 0 ? (
               <svg ref={svgRef} width={width} height={height} role="img" aria-label="Bryce gap to the leader over the live session" onMouseMove={onMove} onMouseLeave={() => setTip(null)}>
                 {cautionBands.map((band, index) => {
                   const left = x(band.from);
                   const right = x(Math.min(band.to + 1, points.length - 1));
-                  return <rect key={index} x={left} y={margin.top} width={Math.max(right - left, 2)} height={plotHeight} fill="var(--status-warn-dot)" opacity={0.12} />;
+                  return <rect key={index} x={left} y={margin.top} width={Math.max(right - left, 2)} height={plotHeight} fill="var(--status-warn-dot)" opacity={0.1} />;
                 })}
-                {[0, 0.5, 1].map((tick) => (
+                {[maxGap, maxGap / 2, 0].map((tick) => (
                   <g key={tick}>
-                    <line x1={margin.left} x2={width - margin.right} y1={margin.top + tick * plotHeight} y2={margin.top + tick * plotHeight} stroke="var(--grid-hairline)" />
-                    <text x={margin.left - 7} y={margin.top + tick * plotHeight} textAnchor="end" dominantBaseline="middle" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={10.5}>
-                      {(tick * maxGap).toFixed(0)}s
+                    <line x1={margin.left} x2={width - margin.right} y1={y(tick)} y2={y(tick)} stroke="var(--grid-hairline)" />
+                    <text x={margin.left - 7} y={y(tick)} textAnchor="end" dominantBaseline="middle" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={10.5}>
+                      {tick === 0 ? 'leader' : `${tick.toFixed(0)}s`}
                     </text>
                   </g>
                 ))}
-                <path d={path} fill="none" stroke="var(--ink-primary)" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
-                <circle cx={x(points.length - 1)} cy={y(points.at(-1)!.gap)} r={5} fill="var(--bryce)" stroke="var(--surface-1)" strokeWidth={2} />
-                <text x={width - margin.right} y={height - 7} textAnchor="end" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={10.5}>now</text>
+                <path d={path} fill="none" stroke="var(--ink-primary)" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="live-line-append" />
+                <circle cx={x(points.length - 1)} cy={y(points.at(-1)!.gap)} r={5} fill="var(--bryce)" stroke="var(--surface-1)" strokeWidth={2} className="live-now-dot" />
+                {lapBoundaries.length >= 2 ? lapBoundaries.map((boundary) => (
+                  <text key={boundary.index} x={x(boundary.index)} y={height - 7} textAnchor={boundary.index === 0 ? 'start' : boundary.index === points.length - 1 ? 'end' : 'middle'} fill="var(--ink-muted)" fontFamily={chartFont} fontSize={10.5}>L{boundary.lap}</text>
+                )) : (
+                  <>
+                    <text x={margin.left} y={height - 7} fill="var(--ink-muted)" fontFamily={chartFont} fontSize={10.5}>start</text>
+                    <text x={width - margin.right} y={height - 7} textAnchor="end" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={10.5}>now</text>
+                  </>
+                )}
               </svg>
             ) : null}
             {tip ? <ChartTipCard tip={tip} width={width} /> : null}
           </>
         ) : (
-          <Unavailable>The session trace appears after the archive has two sourced gap samples. No pace line is estimated.</Unavailable>
+          <Unavailable>The distance trace appears after the archive has two sourced gap samples. No pace line is estimated.</Unavailable>
         )}
       </div>
     </Card>
