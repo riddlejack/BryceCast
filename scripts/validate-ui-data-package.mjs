@@ -505,6 +505,53 @@ if (!standingsSnapshot || typeof standingsSnapshot.available !== 'boolean') {
   }
 }
 
+/* ---------- race-story packs ---------- */
+
+const raceStoryRefs = dataPackage.screens.raceDebrief.raceStoryRefs;
+if (!Array.isArray(raceStoryRefs) || raceStoryRefs.length !== expectedRaceDebriefSessionIds.size) {
+  fail(`raceDebrief.raceStoryRefs must cover all ${expectedRaceDebriefSessionIds.size} race-debrief sessions.`);
+}
+assertSetEqual(new Set((raceStoryRefs ?? []).map((ref) => ref.sessionId)), expectedRaceDebriefSessionIds, 'Race-story pack sessionId set');
+for (const ref of raceStoryRefs ?? []) {
+  const storyPath = path.join(repoRoot, ref.path);
+  if (!fs.existsSync(storyPath)) {
+    fail(`Race-story pack missing on disk: ${ref.path}`);
+    continue;
+  }
+  const raw = fs.readFileSync(storyPath);
+  if (createHash('sha256').update(raw).digest('hex') !== ref.sha256 || raw.length !== ref.bytes) {
+    fail(`Race-story pack ref is stale for ${ref.path}`);
+  }
+  const story = JSON.parse(raw.toString());
+  if (story.sessionId !== ref.sessionId || story.id !== ref.id || story.type !== 'race_story') {
+    fail(`Race-story pack identity mismatch for ${ref.path}`);
+  }
+  const drivers = story.lapChart?.drivers ?? [];
+  const bryceDrivers = drivers.filter((driver) => driver.isBryce);
+  if (bryceDrivers.length > 1) {
+    fail(`Race-story pack ${ref.sessionId} must not carry duplicate Bryce lap-chart lines.`);
+  }
+  const bryceHasLaps = bryceDrivers.length === 1 && (bryceDrivers[0].laps ?? []).length > 0;
+  if (story.bryce?.inLapChart !== bryceHasLaps) {
+    fail(`Race-story pack ${ref.sessionId} bryce.inLapChart must match the lap-chart contents.`);
+  }
+  if (!bryceHasLaps && story.bryce?.lapsCompleted !== 0) {
+    fail(`Race-story pack ${ref.sessionId} has no Bryce lap line but does not record 0 completed laps.`);
+  }
+  if (drivers.length < 2) {
+    fail(`Race-story pack ${ref.sessionId} lap chart must include the field, not just Bryce.`);
+  }
+  const totalLaps = story.lapChart?.totalLaps ?? 0;
+  for (const moment of story.inflections ?? []) {
+    if (moment.lap < 1 || moment.lap > totalLaps) {
+      fail(`Race-story pack ${ref.sessionId} inflection lap ${moment.lap} is outside 1..${totalLaps}.`);
+    }
+  }
+  if (!Array.isArray(story.caveats) || story.caveats.length === 0) {
+    fail(`Race-story pack ${ref.sessionId} must state caveats.`);
+  }
+}
+
 const fixtureStates = new Set(dataPackage.screens.liveCompanionFixtures.fixtures.map((fixture) => fixture.state));
 for (const state of dataPackage.screens.liveCompanionFixtures.requiredStates) {
   if (!fixtureStates.has(state)) fail(`Live fixture state missing: ${state}`);

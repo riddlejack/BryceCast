@@ -66,6 +66,22 @@ if (standings.available) {
   assert.ok(standings.caveats.length >= 1, 'standings must state unofficial-points caveats');
 }
 
+/* Race-story packs: one per debrief, integrity-loadable, honest Bryce state. */
+const storyRefs = context.dataPackage.screens.raceDebrief.raceStoryRefs;
+const debriefRefs = context.contextPackManifest.packs.filter((pack) => pack.type === 'race_debrief');
+assert.equal(storyRefs.length, debriefRefs.length, 'every race debrief must have a race-story pack');
+{
+  const { loadRaceStory } = await import('../src/data/raceStory');
+  const sample = await loadRaceStory(storyRefs[0].sessionId);
+  assert.ok(sample, 'race-story pack must load with integrity');
+  assert.ok(sample.lapChart.drivers.length >= 2, 'race-story lap chart must include the field');
+  assert.equal(
+    sample.bryce.inLapChart,
+    sample.lapChart.drivers.some((driver) => driver.isBryce && driver.laps.length > 0),
+    'bryce.inLapChart must match the chart contents'
+  );
+}
+
 assert.ok(context.careerLab.contextPack.resultConversionRows >= 100);
 assert.ok(context.careerLab.contextPack.metricFamilyParity.length > 0);
 assert.ok(context.careerLab.deepContextPacks.careerDimension, 'career dimension deep pack must load');

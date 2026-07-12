@@ -29,6 +29,7 @@ const sources = {
   prepSessionSignals: 'analysis/indy-nxt-discovery/output/deep_dive/tables/prep_session_signals.csv',
   fieldStrengthByRace: 'analysis/indy-nxt-discovery/output/deep_dive/tables/field_strength_by_race.csv',
   headToHead: 'analysis/indy-nxt-discovery/output/tables/indy_nxt_head_to_head.csv',
+  raceLapInflectionPoints: 'analysis/indy-nxt-race-lap-section-enhancement/output/race_lap_inflection_points.csv',
   sectionResultsDeepByRace: 'analysis/indy-nxt-discovery/output/deep_dive/tables/section_results_deep_by_race.csv',
   leaderLapContext: 'analysis/indy-nxt-discovery/output/deep_dive/tables/leader_lap_context.csv',
   careerSeriesSummary: 'analysis/career-parity/output/tables/career_series_result_summary.csv',
@@ -388,6 +389,256 @@ const buildNextEventPrep = ({ nextEvent, debriefScores, prepSignals, resultsBySe
       'Practice and group qualifying are rank/context signals; session formats are not fully equivalent across weekends.'
     ]
   };
+};
+
+/* ------------------------------------------------------------------
+   Race-story packs: one JSON per completed race with the full-field
+   lap chart (official lap-chart positions for every car), Bryce's
+   inflection moments, the field-strength read, teammate finishes, and
+   humanized section strengths. Written to analysis/race-story/output/
+   context-packs/ so the UI's context-pack glob and integrity checks
+   pick them up like any other pack.
+   ------------------------------------------------------------------ */
+
+const sectionNameMap = [
+  [/^FS ?- ?PO( \d)?$/i, 'Pit-out straight$1'],
+  [/^FS ?- ?PI$/i, 'Pit-in straight'],
+  [/^FS to SF$/i, 'Run to the line'],
+  [/^BS ?-? ?T(\d)$/i, 'Back straight → T$1'],
+  [/^BS to T(\d)$/i, 'Back straight → T$1'],
+  [/^BS ?(\d)$/i, 'Back straight $1'],
+  [/^SF$/i, 'Start/finish line']
+];
+
+const humanizeSectionName = (raw) => {
+  const name = raw.trim();
+  for (const [pattern, replacement] of sectionNameMap) {
+    if (pattern.test(name)) return name.replace(pattern, replacement);
+  }
+  return name; // official timing-station codes (e.g. "I1 to I2") stay as-is — never invent corner names
+};
+
+const parseSectionFamilies = (value) =>
+  String(value ?? '')
+    .split(';')
+    .map((part) => {
+      const splitAt = part.lastIndexOf(':');
+      if (splitAt === -1) return null;
+      const name = part.slice(0, splitAt).trim();
+      const pct = numberOrNull(part.slice(splitAt + 1));
+      return name && pct !== null ? { name: humanizeSectionName(name), percentile: pct } : null;
+    })
+    .filter(Boolean);
+
+const parseTopRatedRivals = (value) =>
+  String(value ?? '')
+    .split(';')
+    .map((part) => {
+      const splitAt = part.lastIndexOf(':');
+      if (splitAt === -1) return null;
+      const name = part.slice(0, splitAt).trim();
+      const rating = numberOrNull(part.slice(splitAt + 1));
+      return name && rating !== null ? { name, rating } : null;
+    })
+    .filter(Boolean);
+
+const buildRaceStoryPacks = ({ raceDebriefPackPairs, canonicalDataset, canonicalSha256 }) => {
+  const outputDir = path.join(repoRoot, 'analysis/race-story/output/context-packs');
+  fs.mkdirSync(outputDir, { recursive: true });
+
+  const driverNameById = new Map((canonicalDataset.drivers ?? []).map((driver) => [driver.id, driver.displayName]));
+  const lapSamplesBySession = new Map();
+  for (const sample of canonicalDataset.lapSamples ?? []) {
+    if (!String(sample.sessionId).includes('indy_nxt') || !Number.isFinite(sample.position)) continue;
+    if (!lapSamplesBySession.has(sample.sessionId)) lapSamplesBySession.set(sample.sessionId, []);
+    lapSamplesBySession.get(sample.sessionId).push(sample);
+  }
+  const resultsBySessionAll = new Map();
+  for (const result of canonicalDataset.results ?? []) {
+    if (!String(result.sessionId).includes('indy_nxt')) continue;
+    if (!resultsBySessionAll.has(result.sessionId)) resultsBySessionAll.set(result.sessionId, []);
+    resultsBySessionAll.get(result.sessionId).push(result);
+  }
+
+  const inflectionRows = readCsv(sources.raceLapInflectionPoints);
+  const fieldStrengthRows = readCsv(sources.fieldStrengthByRace);
+  const sectionRows = readCsv(sources.sectionResultsDeepByRace);
+  const teamRows = readCsv(sources.teamContextByRace);
+  const progressionRows = readCsv(sources.championshipProgression);
+  const weekendSignalRows = readCsv(sources.prepSessionSignals);
+
+  const fieldStrengthBySession = new Map(fieldStrengthRows.map((row) => [row.sessionId, row]));
+  const seasonDepthRank = (sessionId) => {
+    const row = fieldStrengthBySession.get(sessionId);
+    if (!row) return null;
+    const seasonPrefix = sessionId.replace(/_\d+$/, '');
+    const seasonRows = fieldStrengthRows.filter((candidate) => candidate.sessionId.startsWith(seasonPrefix));
+    const sorted = seasonRows
+      .map((candidate) => ({ sessionId: candidate.sessionId, mean: numberOrNull(candidate.fieldStrengthMean) ?? 0 }))
+      .sort((left, right) => right.mean - left.mean);
+    const index = sorted.findIndex((candidate) => candidate.sessionId === sessionId);
+    return index === -1 ? null : { rank: index + 1, of: sorted.length };
+  };
+
+  const refs = [];
+  for (const { pack } of raceDebriefPackPairs) {
+    const sessionId = pack.sessionId;
+    const samples = lapSamplesBySession.get(sessionId) ?? [];
+    const results = resultsBySessionAll.get(sessionId) ?? [];
+    const resultByDriver = new Map(results.map((result) => [result.driverId, result]));
+    const bryceResult = resultByDriver.get('driver_bryce_aron') ?? null;
+    const bryceTeamId = bryceResult?.teamId ?? null;
+
+    const lapsByDriver = new Map();
+    for (const sample of samples) {
+      if (!lapsByDriver.has(sample.driverId)) lapsByDriver.set(sample.driverId, []);
+      lapsByDriver.get(sample.driverId).push([sample.lapNumber, sample.position]);
+    }
+    const drivers = [...lapsByDriver.entries()]
+      .map(([driverId, laps]) => {
+        const result = resultByDriver.get(driverId) ?? null;
+        return {
+          driverId,
+          driverName: driverNameById.get(driverId) ?? driverId,
+          carNumber: result?.carNumber ?? null,
+          isBryce: driverId === 'driver_bryce_aron',
+          isTeammate: driverId !== 'driver_bryce_aron' && bryceTeamId !== null && result?.teamId === bryceTeamId,
+          finishPosition: numberOrNull(result?.finishPosition),
+          status: result?.status ?? null,
+          laps: laps.sort((left, right) => left[0] - right[0])
+        };
+      })
+      .sort((left, right) => (left.finishPosition ?? 99) - (right.finishPosition ?? 99));
+
+    const inflections = inflectionRows
+      .filter((row) => row.sessionId === sessionId)
+      .map((row) => ({
+        lap: numberOrNull(row.lapNumber),
+        fromPosition: numberOrNull(row.previousPosition),
+        toPosition: numberOrNull(row.position),
+        delta: numberOrNull(row.positionDelta),
+        trigger: row.trigger,
+        cautionState: row.cautionState
+      }))
+      .filter((row) => row.lap !== null && row.toPosition !== null)
+      .sort((left, right) => left.lap - right.lap);
+
+    const strength = fieldStrengthBySession.get(sessionId) ?? null;
+    const depth = seasonDepthRank(sessionId);
+    const weekendRow = weekendSignalRows.find((row) => row.sessionId === sessionId) ?? null;
+    const section = sectionRows.find((row) => row.sessionId === sessionId) ?? null;
+    const team = teamRows.find((row) => row.sessionId === sessionId) ?? null;
+    const progressionIndex = progressionRows.findIndex((row) => row.sessionId === sessionId);
+    const progression = progressionIndex === -1 ? null : progressionRows[progressionIndex];
+    const previousRound =
+      progressionIndex > 0 && progressionRows[progressionIndex - 1].seasonYear === progression?.seasonYear
+        ? progressionRows[progressionIndex - 1]
+        : null;
+
+    const storyPack = {
+      schemaVersion: 'brycecast.raceStory.v1',
+      type: 'race_story',
+      id: `race_story_${sessionId}`,
+      generatedAt: new Date().toISOString(),
+      sourceHash: canonicalSha256,
+      sessionId,
+      raceLabel: pack.raceLabel,
+      seasonYear: numberOrNull(pack.seasonYear),
+      track: pack.track ?? null,
+      lapChart: {
+        totalLaps: Math.max(0, ...samples.map((sample) => sample.lapNumber)),
+        fieldSize: drivers.length,
+        sourceState: 'official_lap_chart',
+        drivers
+      },
+      /* Explicit Bryce state: a race can legitimately have no Bryce lap line
+       * (0 completed laps, e.g. opening-lap contact) — the UI must say so
+       * rather than chart nothing. */
+      bryce: {
+        inLapChart: drivers.some((driver) => driver.isBryce && driver.laps.length > 0),
+        lapsCompleted: numberOrNull(bryceResult?.lapsCompleted),
+        startPosition: numberOrNull(bryceResult?.startPosition),
+        finishPosition: numberOrNull(bryceResult?.finishPosition),
+        status: bryceResult?.status ?? null
+      },
+      inflections,
+      /* The weekend arc: practice → qualifying → start → finish. */
+      weekendSignal: weekendRow
+        ? {
+            bestPracticeRank: numberOrNull(weekendRow.bestPracticeRank),
+            bestQualifyingRank: numberOrNull(weekendRow.bestQualifyingRank),
+            raceStart: numberOrNull(weekendRow.raceStart),
+            raceFinish: numberOrNull(weekendRow.raceFinish),
+            caveat: weekendRow.caveat
+          }
+        : null,
+      fieldStrength: strength
+        ? {
+            ratedRivals: numberOrNull(strength.fieldRatedRivals),
+            mean: numberOrNull(strength.fieldStrengthMean),
+            median: numberOrNull(strength.fieldStrengthMedian),
+            topRated: parseTopRatedRivals(strength.topRatedRivals),
+            bryceFinishPercentile: numberOrNull(strength.bryceFinishPercentile),
+            resultVsFieldStrength: numberOrNull(strength.resultVsFieldStrength),
+            seasonDepthRank: depth,
+            sourceState: strength.sourceState,
+            caveat: strength.caveat
+          }
+        : null,
+      teammates: results
+        .filter((result) => bryceTeamId !== null && result.teamId === bryceTeamId)
+        .map((result) => ({
+          driverName: driverNameById.get(result.driverId) ?? result.driverId,
+          carNumber: result.carNumber ?? null,
+          isBryce: result.driverId === 'driver_bryce_aron',
+          finishPosition: numberOrNull(result.finishPosition),
+          startPosition: numberOrNull(result.startPosition),
+          status: result.status ?? null
+        }))
+        .sort((left, right) => (left.finishPosition ?? 99) - (right.finishPosition ?? 99)),
+      teamContext: team
+        ? { teamName: team.teamName, teamCars: numberOrNull(team.teamCars), teamAverageFinish: numberOrNull(team.teamAverageFinish), statusCaveat: team.statusCaveat }
+        : null,
+      sections: section
+        ? {
+            comparisonRows: numberOrNull(section.sectionComparisonRows),
+            medianPercentile: numberOrNull(section.medianSectionPercentile),
+            best: parseSectionFamilies(section.bestSectionFamilies),
+            weakest: parseSectionFamilies(section.weakestSectionFamilies),
+            sourceState: section.sourceState,
+            caveat: section.caveat
+          }
+        : null,
+      pointsImpact: progression
+        ? {
+            racePoints: numberOrNull(progression.bryceRacePoints),
+            cumulativePoints: numberOrNull(progression.bryceCumulativePoints),
+            standingAfter: numberOrNull(progression.bryceStandingRank),
+            standingBefore: previousRound ? numberOrNull(previousRound.bryceStandingRank) : null,
+            pointsBehindLeader: numberOrNull(progression.pointsBehindLeader),
+            leaderDriver: progression.leaderDriver ?? null
+          }
+        : null,
+      sourceRefs: [
+        { key: 'canonicalDataset', path: sources.canonicalDataset, note: 'Official lap-chart positions and results for every car in the race.' },
+        { key: 'raceLapInflectionPoints', path: sources.raceLapInflectionPoints, note: 'Bryce position inflection moments with lap triggers.' },
+        { key: 'fieldStrengthByRace', path: sources.fieldStrengthByRace, note: 'Descriptive field-strength context and result-vs-expectation.' },
+        { key: 'sectionResultsDeepByRace', path: sources.sectionResultsDeepByRace, note: 'Official section-time percentiles for the weekend.' },
+        { key: 'teamContextByRace', path: sources.teamContextByRace, note: 'Teammate results within the same official session.' },
+        { key: 'championshipProgression', path: sources.championshipProgression, note: 'Points and standing movement across the season.' }
+      ],
+      caveats: [
+        'Lap chart shows official running order at each completed lap; it does not carry lap times or gaps.',
+        'Field strength is same-sample descriptive context, not a prediction.',
+        'Result status is official session status, not engineering root-cause attribution.'
+      ]
+    };
+
+    const outputPath = path.join(outputDir, `${storyPack.id}.json`);
+    fs.writeFileSync(outputPath, `${JSON.stringify(storyPack)}\n`);
+    refs.push({ sessionId, id: storyPack.id, type: 'race_story', ...summarizeArtifact(path.relative(repoRoot, outputPath)) });
+  }
+  return refs;
 };
 
 const readLatestColdRaceCapture = () => {
@@ -885,6 +1136,11 @@ const buildPackage = () => {
     racesRemaining: upcomingEvents.length,
     roundsCompleted: championshipRows.filter((row) => numberOrNull(row.seasonYear) === latestSeasonYear).length
   });
+  const raceStoryRefs = buildRaceStoryPacks({
+    raceDebriefPackPairs,
+    canonicalDataset,
+    canonicalSha256: summarizeArtifact(sources.canonicalDataset).sha256
+  });
   const nextUpcomingVenue = upcomingEvents[0]?.trackName ?? null;
   const nextUpcomingVenueSlug = venueSlug(nextUpcomingVenue);
   const nextUpcomingVenuePackSlug = nextUpcomingVenueSlug.replaceAll('_', '-');
@@ -1039,6 +1295,7 @@ const buildPackage = () => {
           manifestPath: sources.predictiveContextPackManifest
         },
         contextPackRefs: packsByType('race_debrief'),
+        raceStoryRefs,
         chartFamilies: [
           'outcome KPI strip',
           'qualifying-to-finish slope',
@@ -1048,7 +1305,13 @@ const buildPackage = () => {
           'source drawer'
         ],
         caveats: ['Derived archetype labels are review aids until approved for public UI copy.'],
-        sourceRefs: [sourceRef('raceDebriefScores', 'Race debrief seed rows.'), sourceRef('fullFieldLapDynamicsByRace', 'Lap position story rows.'), sourceRef('predictiveContextPackManifest', 'All 36 race-debrief context pack refs.')]
+        sourceRefs: [
+          sourceRef('raceDebriefScores', 'Race debrief seed rows.'),
+          sourceRef('fullFieldLapDynamicsByRace', 'Lap position story rows.'),
+          sourceRef('canonicalDataset', 'Official lap-chart positions for every car, hydrated into race-story packs.'),
+          sourceRef('raceLapInflectionPoints', 'Bryce inflection moments annotated on race-story lap charts.'),
+          sourceRef('predictiveContextPackManifest', 'All race-debrief context pack refs.')
+        ]
       },
       careerLab: {
         title: 'Career Analytics Lab',

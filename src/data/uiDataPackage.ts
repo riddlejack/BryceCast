@@ -196,6 +196,16 @@ export interface UiLiveFixture {
   gates: Array<Record<string, unknown>>;
 }
 
+export interface UiRaceStoryRef {
+  sessionId: string;
+  id: string;
+  type: 'race_story';
+  path: string;
+  bytes: number;
+  modifiedAt: string;
+  sha256: string;
+}
+
 export interface UiDebriefSeed {
   label: string;
   sessionId: string;
@@ -254,6 +264,7 @@ export interface UiDataPackage {
       title: string;
       readiness: string;
       featuredDebriefs: UiDebriefSeed[];
+      raceStoryRefs: UiRaceStoryRef[];
       chartFamilies: string[];
       caveats: string[];
       sourceRefs: UiSourceRef[];

@@ -1,7 +1,8 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { CloudSun, ExternalLink, MapPin, Route, Tv } from 'lucide-react';
 import { trackOutlineFor, type TrackOutline } from '../assets/tracks';
 import { Card, Countdown, HeroPanel, SourcePill, Stat, Unavailable } from '../app/components';
+import { ChartTipCard, chartFont, focusFade, inkConnector, useMeasuredWidth, type ChartTip } from '../app/charts';
 import { asNumber, asString, formatClock, formatDate, formatNumber, shortVenue, trackTypeLabel } from '../app/format';
 import { Link, useRouter } from '../app/router';
 import { useApiJson } from '../app/useApiJson';
@@ -19,29 +20,6 @@ import { loadDebriefArchive } from '../data/debriefArchive';
 
 type Row = Record<string, unknown>;
 
-/* ---------- shared: measured-width SVG charts (crisp text at any size) ---------- */
-
-const useMeasuredWidth = <T extends HTMLElement>() => {
-  const ref = useRef<T | null>(null);
-  const [width, setWidth] = useState(0);
-  useLayoutEffect(() => {
-    const node = ref.current;
-    if (!node) return;
-    const observer = new ResizeObserver((entries) => {
-      const next = entries[0]?.contentRect.width ?? 0;
-      setWidth((previous) => (Math.abs(previous - next) > 0.5 ? next : previous));
-    });
-    observer.observe(node);
-    setWidth(node.getBoundingClientRect().width);
-    return () => observer.disconnect();
-  }, []);
-  return [ref, width] as const;
-};
-
-const chartFont = '-apple-system, system-ui, sans-serif';
-const inkConnector = 'rgba(29, 29, 31, 0.32)';
-const focusFade = 0.22;
-
 /** Compact venue names for chart row labels; falls back to shortVenue. */
 const venueShortNames: Record<string, string> = {
   'World Wide Technology Raceway': 'WWTR',
@@ -51,42 +29,6 @@ const venueShortNames: Record<string, string> = {
 };
 
 const venueShort = (trackName: string): string => venueShortNames[trackName] ?? shortVenue(trackName);
-
-/* ---------- shared: hover tooltip (house style: white card, no delay) ---------- */
-
-interface ChartTip {
-  x: number;
-  y: number;
-  title: string;
-  detail?: string | null;
-  action?: string | null;
-}
-
-const ChartTipCard = ({ tip, width }: { tip: ChartTip; width: number }) => (
-  <div
-    style={{
-      position: 'absolute',
-      left: Math.min(Math.max(tip.x, 90), Math.max(width - 90, 90)),
-      top: tip.y,
-      transform: 'translate(-50%, calc(-100% - 10px))',
-      background: 'var(--surface-0)',
-      border: '1px solid var(--divider)',
-      borderRadius: 8,
-      padding: '6px 10px',
-      fontSize: 12,
-      lineHeight: 1.45,
-      whiteSpace: 'nowrap',
-      boxShadow: '0 6px 20px rgba(0,0,0,0.10)',
-      pointerEvents: 'none',
-      zIndex: 5,
-      fontVariantNumeric: 'tabular-nums'
-    }}
-  >
-    <strong>{tip.title}</strong>
-    {tip.detail ? <span style={{ color: 'var(--ink-secondary)' }}> · {tip.detail}</span> : null}
-    {tip.action ? <div style={{ color: 'var(--link)', fontSize: 11.5 }}>{tip.action}</div> : null}
-  </div>
-);
 
 /** Session ids with a race-debrief page, shared by every module that links out. */
 const useDebriefIds = (): Set<string> => {
@@ -528,7 +470,7 @@ const FridaySignal = ({ prep, trackTypeName, debriefIds }: { prep: UiNextEventPr
           {summary.finishBeatBestPractice} of {summary.weekendCount}
         </strong>{' '}
         clean weekends{summary.medianPositionsBetter !== null ? `, typically by ${summary.medianPositionsBetter} spots` : ''}. If
-        practice looks mid, wait for the race.
+        you liked practice, you’ll love the race.
       </p>
       <FridaySlope prep={prep} debriefIds={debriefIds} />
       <p className="caption caption--secondary" style={{ margin: '6px 0 0' }}>
