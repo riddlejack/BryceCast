@@ -795,6 +795,32 @@ button { font-family: inherit; }
 .live-spark { width: 100%; height: 34px; margin-top: 1px; }
 .live-spark--empty { height: 22px; border-bottom: 1px solid var(--grid-hairline); opacity: 0.65; }
 
+.live-battle__intro {
+  margin: -2px 0 8px;
+  color: var(--ink-secondary);
+  font-size: 13px;
+}
+
+.live-battle__corridor,
+.live-battle__chart {
+  position: relative;
+  width: 100%;
+}
+
+.live-battle__corridor { min-height: 194px; }
+
+.live-battle__divider {
+  height: 1px;
+  margin: 2px 0 8px;
+  background: var(--divider);
+}
+
+.live-battle__caption { margin: -3px 0 0; }
+
+.live-line-append {
+  transition: stroke-dashoffset 200ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
 .live-layout { grid-template-columns: minmax(0, 1fr); align-items: start; }
 
 .live-points__main {

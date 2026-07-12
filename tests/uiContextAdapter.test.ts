@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { buildBryceCastUiContext } from '../src/data/uiContextAdapter';
-import { buildOfficialPointsWindow, headToHeadForCar, headToHeadForLiveDriver } from '../src/data/livePageModel';
+import { buildLiveBattleFrame, buildOfficialPointsWindow, headToHeadForCar, headToHeadForLiveDriver } from '../src/data/livePageModel';
 
 /* Venue-agnostic hydration invariants: counts come from the package itself,
    never from a hardcoded event slice, so schedule roll-forwards don't break CI. */
@@ -88,6 +88,22 @@ const pointsWindow = buildOfficialPointsWindow([
 ]);
 assert.ok(pointsWindow, 'source-backed running points should produce a projected window');
 assert.equal(pointsWindow.bryce.runningDriverPoints, 159, 'Bryce points must match runningDriverPoints exactly');
+
+const battleFrame = buildLiveBattleFrame({
+  liveTiming: {
+    rows: [
+      { no: '10', lastName: 'Koolen', rank: 10, diff: '9.3213', gap: '1.0281' },
+      { no: '9', lastName: 'Aron', rank: 11, diff: '10.1880', gap: '0.8667', bryce: true },
+      { no: '17', lastName: 'de Alba', rank: 12, diff: '11.0020', gap: '0.8140' }
+    ]
+  },
+  bryce: { bryce: { no: '9', lastName: 'Aron', rank: 11, diff: '10.1880', gap: '0.8667', bryce: true } }
+} as never);
+assert.ok(battleFrame, 'sourced leader gaps should create a Bryce-centered battle frame');
+assert.equal(battleFrame.ahead?.surname, 'Koolen');
+assert.equal(battleFrame.ahead?.gapSeconds, 0.8667);
+assert.equal(battleFrame.behind?.surname, 'de Alba');
+assert.ok(Math.abs((battleFrame.cars.find((row) => row.carNo === '10')?.offsetSeconds ?? 0) - 0.8667) < 1e-6);
 assert.equal(pointsWindow.bryce.totalDriverPoints, 0, 'source-present zero totalDriverPoints must stay zero');
 assert.equal(pointsWindow.bryce.projectedStanding, 2, 'standing is the order of Race Control runningDriverPoints');
 assert.equal(pointsWindow.above?.driverName, 'Niels Koolen');

@@ -14,15 +14,16 @@ const arg = (name, fallback) => {
 const base = arg('base', 'http://127.0.0.1:5173');
 const api = arg('api', 'http://127.0.0.1:8788');
 const outDir = arg('out', 'artifacts/live-replay-qa');
+const quick = arg('quick', '0') === '1';
 const session = '5537-6754';
 
 const replayStates = [
-  ['green-flag', '2026-06-21T16:09:30.000Z'],
+  ['green-flag', '2026-06-21T16:15:02.760Z'],
   ['mid-race', '2026-06-21T16:15:02.760Z'],
   ['caution', '2026-06-21T16:20:30.000Z'],
   ['post-checkered-cold', '2026-06-21T17:00:28.958Z']
-];
-const fixtures = ['wrong_series', 'pre_session', 'ready', 'degraded', 'stale', 'blocked'];
+].filter(([state]) => !quick || state !== 'mid-race');
+const fixtures = quick ? [] : ['wrong_series', 'pre_session', 'ready', 'degraded', 'stale', 'blocked'];
 const viewports = [
   ['phone', { width: 390, height: 844 }],
   ['desktop', { width: 1440, height: 900 }]
@@ -52,9 +53,9 @@ try {
       const file = path.join(outDir, `replay-${stateName}--${viewportName}.png`);
       await page.screenshot({ path: file, fullPage: true });
       console.log(file);
-      if (stateName === 'mid-race') {
-        for (const [moduleName, selector] of [['hero', '.live-hero'], ['points', '.live-points']]) {
-          const moduleFile = path.join(outDir, `replay-mid-race-${moduleName}--${viewportName}.png`);
+      if (stateName === 'mid-race' || (quick && stateName === 'green-flag')) {
+        for (const [moduleName, selector] of [['hero', '.live-hero'], ['battle', '.live-battle'], ['points', '.live-points']]) {
+          const moduleFile = path.join(outDir, `replay-${stateName}-${moduleName}--${viewportName}.png`);
           await page.locator(selector).screenshot({ path: moduleFile });
           console.log(moduleFile);
         }
