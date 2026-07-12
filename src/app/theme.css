@@ -439,6 +439,31 @@ button { font-family: inherit; }
 
 .tab--active { color: var(--link); }
 
+/* ---------- race-detail hero: three fixed zones so nothing wanders ---------- */
+
+.hero-race {
+  display: grid;
+  gap: 22px;
+  grid-template-columns: 1fr;
+  align-items: center;
+}
+
+.hero-race__art {
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (min-width: 900px) {
+  .hero-race {
+    grid-template-columns: minmax(0, 5fr) minmax(230px, 3fr) minmax(0, 4fr);
+  }
+}
+
+/* Paired cards whose intro/caption lines should sit on shared baselines. */
+.card--flex { display: flex; flex-direction: column; }
+
 /* ---------- footer ---------- */
 
 .footer { border-top: 1px solid var(--divider); margin-top: 28px; }

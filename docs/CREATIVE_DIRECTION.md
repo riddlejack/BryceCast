@@ -202,6 +202,40 @@ Built in the same session, one notch past Race Week. What's new and binding:
 6. Parked for a future pass (Jack agrees): per-race standout dynamic charts;
    deeper battle visualization (who/when on the lap axis).
 
+## Race detail round 3 (2026-07-11): consistency pass
+
+1. **Race hero is three fixed zones** — result | track box | points. The art
+   letterboxes into a fixed 150px-high center box (TrackArt maxHeight), so
+   the P-number and stats never move race to race; street circuits keep the
+   same rhythm with a calm empty center. `.hero-race` in theme.css.
+2. **Every "day" tile carries a note line** so the row reads level
+   ("none involving Bryce", "steady all race", "during the race hour").
+3. **Paired cards share baselines**: both get a one-line intro at the same
+   y, and bottom captions pin via `.card--flex` + margin-top:auto.
+
+## The magic backlog (fun features queue — build after the core pages)
+
+- **Bryce's car as an SVG mark.** Official 2026 livery: the No. 9 Jaguar
+  Land Rover Chesterfield CGR entry is **black with red trim** (spotter
+  guide "BlackRedTrim"; official render:
+  indynxt-cdn.azureedge.net/-/media/IndyCar/Cars/2026/INDY-NXT/Liveries/9-JaguarRangeRover.png).
+  Suit is black with white/red stripe. A tiny side-profile car SVG in
+  black/white/red could appear in the footer, loading states, or the live
+  page.
+- **Team-brand accents.** Jack floated shifting from gold toward CGR
+  black/white/red. Constraint he named himself: red already means "down"
+  in our status language, so red-as-brand needs care. Possible middle path:
+  keep the gold №9 plate as the mark, add a black/white/red tricolor detail
+  (suit-stripe motif) in exactly one place. Decide with Jack after core
+  pages ship; do not creep it in.
+- **Hover car on track outlines** (Race Week + race heroes): a small dot
+  that follows the cursor around the outline path. Whimsy candidate only
+  if it stays out of the way.
+- **Scroll-assembled charts** (McKinsey-insights style) — still waiting on
+  the animations repo link from Jack.
+- **Per-race standout dynamic charts** and a richer battle visualization
+  (who/when on the lap axis).
+
 ## Session bootstrap
 
 New session should read: CLAUDE.md (auto), memory (auto), this file,

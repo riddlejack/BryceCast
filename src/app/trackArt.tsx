@@ -8,21 +8,27 @@ import { ChartTipCard, chartFont, useMeasuredWidth, type ChartTip } from './char
 export const TrackArt = ({
   outline,
   annotation,
-  showCornerLabels = true
+  showCornerLabels = true,
+  maxHeight
 }: {
   outline: TrackOutline;
   annotation?: { corner: string; note: string } | null;
   showCornerLabels?: boolean;
+  /** Cap the rendered height so differently-shaped circuits occupy one
+   *  consistent box (the art letterboxes inside it, centered). */
+  maxHeight?: number;
 }) => {
-  const [ref, width] = useMeasuredWidth<HTMLDivElement>();
+  const [ref, measuredWidth] = useMeasuredWidth<HTMLDivElement>();
   const [tip, setTip] = useState<ChartTip | null>(null);
   const [, , viewWidth, viewHeight] = outline.viewBox.split(' ').map(Number);
+  const aspect = viewHeight / viewWidth;
+  const width = maxHeight !== undefined ? Math.min(measuredWidth, maxHeight / aspect) : measuredWidth;
   const scale = width > 0 ? width / viewWidth : 1;
   const px = (visual: number) => visual / scale;
   const center = { x: viewWidth / 2, y: viewHeight / 2 };
 
   return (
-    <div ref={ref} style={{ width: '100%', position: 'relative' }}>
+    <div ref={ref} style={{ width: '100%', position: 'relative', display: 'flex', justifyContent: 'center' }}>
       {width > 0 ? (
         <svg
           viewBox={outline.viewBox}
@@ -66,7 +72,12 @@ export const TrackArt = ({
                         fill="transparent"
                         style={{ cursor: 'default' }}
                         onMouseEnter={() =>
-                          setTip({ x: arc.apex.x * scale, y: arc.apex.y * scale, title: `Turn ${annotation.corner}`, detail: annotation.note })
+                          setTip({
+                            x: arc.apex.x * scale + Math.max(0, (measuredWidth - width) / 2),
+                            y: arc.apex.y * scale,
+                            title: `Turn ${annotation.corner}`,
+                            detail: annotation.note
+                          })
                         }
                         onMouseLeave={() => setTip(null)}
                       />
@@ -92,7 +103,7 @@ export const TrackArt = ({
             })}
         </svg>
       ) : null}
-      {tip ? <ChartTipCard tip={tip} width={width} /> : null}
+      {tip ? <ChartTipCard tip={tip} width={measuredWidth} /> : null}
     </div>
   );
 };

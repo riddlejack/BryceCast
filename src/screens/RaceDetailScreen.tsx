@@ -418,6 +418,7 @@ const TheDay = ({ story, pack }: { story: RaceStoryPack; pack: ArchiveEntry['pac
         />
       }
     >
+      {/* Every tile carries a note line so the row reads level (Jack's review). */}
       <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(128px, 1fr))', gap: 16 }}>
         {leader && leaderShare !== null ? (
           <DayTile label={`${leader} led`} value={`${Math.round(leaderShare * 100)}%`} note="of all laps" />
@@ -426,15 +427,33 @@ const TheDay = ({ story, pack }: { story: RaceStoryPack; pack: ArchiveEntry['pac
           <DayTile
             label="Incidents race-wide"
             value={incidents}
-            note={bryceIncidents !== null && bryceIncidents > 0 ? `${bryceIncidents} involving Bryce` : incidents === 0 ? 'a clean one' : null}
+            note={
+              bryceIncidents !== null && bryceIncidents > 0
+                ? `${bryceIncidents} involving Bryce`
+                : incidents === 0
+                  ? 'a clean one'
+                  : 'none involving Bryce'
+            }
           />
         ) : null}
-        {tempF !== null ? <DayTile label="Air temperature" value={`${tempF}°F`} note={weather?.humidityPct !== null ? `${Math.round(weather!.humidityPct!)}% humidity` : null} /> : null}
-        {windMph !== null ? <DayTile label="Wind" value={`${windMph} mph`} note={gustMph !== null && gustMph > windMph + 4 ? `gusts to ${gustMph}` : null} /> : null}
+        {tempF !== null ? (
+          <DayTile
+            label="Air temperature"
+            value={`${tempF}°F`}
+            note={weather?.humidityPct != null ? `${Math.round(weather.humidityPct)}% humidity` : 'race-hour reading'}
+          />
+        ) : null}
+        {windMph !== null ? (
+          <DayTile
+            label="Wind"
+            value={`${windMph} mph`}
+            note={gustMph !== null && gustMph > windMph + 4 ? `gusts to ${gustMph}` : 'steady all race'}
+          />
+        ) : null}
         {rainMm !== null && rainMm > 0 ? (
-          <DayTile label="Rain in the race hour" value={`${formatNumber(rainMm)} mm`} note={sky} />
+          <DayTile label="Rain in the race hour" value={`${formatNumber(rainMm)} mm`} note={sky ?? 'race-hour reading'} />
         ) : sky ? (
-          <DayTile label="Sky" value={sky} />
+          <DayTile label="Sky" value={sky} note="during the race hour" />
         ) : null}
       </div>
     </Card>
@@ -479,6 +498,7 @@ const SectionStory = ({ story }: { story: RaceStoryPack }) => {
   if (sections.best.length === 0 && sections.weakest.length === 0) return null;
   return (
     <Card
+      className="card--flex"
       title="Where the lap time lived"
       action={
         <SourcePill
@@ -494,6 +514,10 @@ const SectionStory = ({ story }: { story: RaceStoryPack }) => {
         />
       }
     >
+      {/* Intro line shares a baseline with the team card's intro (Jack's review). */}
+      <p style={{ margin: '0 0 12px', fontSize: 13.5, color: 'var(--ink-secondary)', minHeight: 20 }}>
+        Section-by-section pace against the whole field.
+      </p>
       <div className="grid grid--2" style={{ gap: 22 }}>
         <div>
           <span className="caption">Strongest stretches</span>
@@ -512,7 +536,7 @@ const SectionStory = ({ story }: { story: RaceStoryPack }) => {
           </div>
         </div>
       </div>
-      <p style={{ margin: '14px 0 0', fontSize: 11.5, color: 'var(--ink-muted)' }}>
+      <p style={{ margin: 0, paddingTop: 14, marginTop: 'auto', fontSize: 11.5, color: 'var(--ink-muted)' }}>
         Percentile of the field beaten in each timing section, from {formatNumber(sections.comparisonRows, 0)} official comparisons
         across the weekend.
       </p>
@@ -606,6 +630,7 @@ const TeamStory = ({ story }: { story: RaceStoryPack }) => {
   const bryceTeamRank = bryceRow ? teammates.filter((teammate) => (teammate.finishPosition ?? 99) < (bryceRow.finishPosition ?? 99)).length + 1 : null;
   return (
     <Card
+      className="card--flex"
       title={
         <>
           <Users size={15} aria-hidden />
@@ -626,7 +651,7 @@ const TeamStory = ({ story }: { story: RaceStoryPack }) => {
         />
       }
     >
-      <p style={{ margin: '0 0 4px', fontSize: 13.5, color: 'var(--ink-secondary)' }}>
+      <p style={{ margin: '0 0 12px', fontSize: 13.5, color: 'var(--ink-secondary)', minHeight: 20 }}>
         {bryceTeamRank !== null ? (
           <>
             <strong style={{ color: 'var(--ink-primary)' }}>{ordinal(bryceTeamRank)}</strong> of {teammates.length}{' '}
@@ -654,6 +679,9 @@ const TeamStory = ({ story }: { story: RaceStoryPack }) => {
             </div>
           ))}
       </div>
+      <p style={{ margin: 0, paddingTop: 14, marginTop: 'auto', fontSize: 11.5, color: 'var(--ink-muted)' }}>
+        Every {story.teamContext?.teamName ?? 'team'} car in this race, start to finish, from official results.
+      </p>
     </Card>
   );
 };
@@ -775,7 +803,7 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
             caveats={pack.caveats}
           />
         </div>
-        <div className="grid grid--split" style={{ alignItems: 'end', gap: 20 }}>
+        <div className="hero-race">
           <div className="stat">
             <span className="stat__value stat__value--hero">{formatPosition(finish)}</span>
             {gain ? (
@@ -798,25 +826,23 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
               </span>
             ) : null}
           </div>
-          <div className="stack" style={{ gap: 18 }}>
-            {outline ? (
-              <div style={{ width: '100%', maxWidth: 200, marginLeft: 'auto' }}>
-                <TrackArt outline={outline} showCornerLabels={false} />
-              </div>
-            ) : null}
-            <div className="row" style={{ gap: 28, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
-              <Stat label="Points scored" value={impact?.racePoints ?? asNumber(pack.outcome.points) ?? '—'} />
-              <Stat label="Season points" value={impact?.cumulativePoints ?? asNumber(pack.outcome.cumulativePoints) ?? '—'} />
-              <Stat
-                label="Standing after"
-                value={
-                  (impact?.standingAfter ?? asNumber(pack.outcome.standingRank)) !== null
-                    ? `P${impact?.standingAfter ?? asNumber(pack.outcome.standingRank)}`
-                    : '—'
-                }
-                delta={standingMove ?? undefined}
-              />
-            </div>
+          {/* Fixed art zone: every venue letterboxes into the same box, so the
+              layout never shifts race to race (street circuits stay calm and empty). */}
+          <div className="hero-race__art">
+            {outline ? <TrackArt outline={outline} showCornerLabels={false} maxHeight={150} /> : null}
+          </div>
+          <div className="row" style={{ gap: 28, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+            <Stat label="Points scored" value={impact?.racePoints ?? asNumber(pack.outcome.points) ?? '—'} />
+            <Stat label="Season points" value={impact?.cumulativePoints ?? asNumber(pack.outcome.cumulativePoints) ?? '—'} />
+            <Stat
+              label="Standing after"
+              value={
+                (impact?.standingAfter ?? asNumber(pack.outcome.standingRank)) !== null
+                  ? `P${impact?.standingAfter ?? asNumber(pack.outcome.standingRank)}`
+                  : '—'
+              }
+              delta={standingMove ?? undefined}
+            />
           </div>
         </div>
       </HeroPanel>
