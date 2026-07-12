@@ -317,7 +317,51 @@ The list became the index, the chart the spine — per the original seed:
    pie chart (no honest part-of-whole earned its place). Laps-led count is
    zero so far — never render a "laps led" stat until it isn't.
 
-## Jack's Career Lab + race-page review (2026-07-12) — WORK QUEUE (v2 items above DONE)
+## Career Lab v2.5 (2026-07-12, same day): color, controls, motion
+
+Jack's review of v2 ("Everything looks great… very impressed") plus his
+"the page is very gray" push produced these house rules:
+
+1. **Chapter tints** (theme.css `--chapter-*`, validated with the dataviz
+   six-checks script): each career era keeps one quiet color everywhere it
+   appears — climb dots, chapter strips, chapter-card title dots, grouped
+   series lanes, light-page context strips. Rendered at ~0.5 opacity at rest,
+   full hue on hover. The current chapter (INDY NXT) stays ink.
+2. **Rivals v2**: diverging record color (ink pole = rival leads → neutral →
+   gold pole = Bryce leads; `recordColor()` in careerExplorer), exaggerated
+   size scale (races^0.72), "Bryce ahead in X of Y" copy everywhere (never a
+   bare "ahead" — ambiguous), gold/gray split record bars, one-time
+   left-to-right dot assembly on first scroll-in (460ms springs, 16ms stagger).
+3. **Explorer controls**: labeled rows (View / Group by / Series / Track) with
+   a segmented control for the view switch (`.segmented` in theme.css) — chips
+   alone read as soup; labels + a hairline between view and filters fixed it.
+4. **Scroll-linked reveals**: `.reveal` upgrades to CSS
+   `animation-timeline: view()` where supported (progress tied to scroll,
+   completes at entry 85%, never re-fires); IO-triggered fallback elsewhere;
+   reduced-motion renders instantly. NOTE: Playwright fullPage captures show
+   view()-timeline elements at progress 0 — QA full pages with
+   `reducedMotion: 'reduce'` in the browser context.
+5. **The climb draws itself in** once on first view (pathLength=1 dash trick,
+   1200ms strong ease-out) — first use of the McKinsey-style assembly moment.
+6. **Race Week hero = `.hero-race--week`** three fixed zones (countdown |
+   track art 190px | history) matching the race-detail rhythm.
+7. **The car exists**: `CarMark` in components.tsx — minimal No. 9 side
+   profile, black/red/white, first placed in the footer. Gold stays the data
+   marker; the tricolor is brand trim only (Jack accepted the pushback
+   implicitly by scoping color asks to charts).
+8. Home title threshold: race week starts 6 days out (Saturday race → Monday).
+
+**McKinsey chart lessons (from Jack's inspo folder, 2026-07-12)** — the
+distillation that guided the above and feeds the next chart work: color is
+spent ONLY where the story lives (everything else gray); sequential color
+depth = time; ghost the other groups in light gray for context; annotate
+named moments directly on lines/curves; era bands can carry per-era summary
+stats in a bottom strip; delta labels ride above dumbbells with the unit
+spelled once; two-scenario fans shade the gap and headline ONE huge number;
+legends may double as annotation; the subject itself can be the chart
+(anatomy diagram with leader lines → our track-shape-as-interface); profile
+small-multiples with era overlays; Sankey ribbons color only the flow that
+matters; an interactive dot map invites exploration (career atlas idea).
 
 Full detail in docs/PAGECRAFT_HANDOFF_2026-07-12.md §2. Headlines: add gold
 S/F ticks + corner labels to street-circuit/all track art; make the race-hero

@@ -2,7 +2,7 @@ import type { ComponentType, ReactNode } from 'react';
 import { CalendarClock, Flag, Home, LineChart, Radio } from 'lucide-react';
 import './theme.css';
 import { Link, RouterProvider, matchPath, useRouter } from './router';
-import { Plate } from './components';
+import { CarMark, Plate } from './components';
 import { useReadiness } from './useReadiness';
 import { HomeScreen } from '../screens/HomeScreen';
 import { LiveScreen } from '../screens/LiveScreen';
@@ -48,7 +48,8 @@ const Shell = ({ children, liveState }: { children: ReactNode; liveState: string
       <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>{children}</div>
       <footer className="footer">
         <div className="footer__inner">
-          <span>
+          <span className="row" style={{ gap: 10 }}>
+            <CarMark height={16} />
             BryceCast · following Bryce Aron, No. 9, Chip Ganassi Racing · built by family, powered by official sources
           </span>
           <span className="row" style={{ gap: 14 }}>

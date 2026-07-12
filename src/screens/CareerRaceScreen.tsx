@@ -5,7 +5,7 @@ import { ChartTipCard, chartFont, useMeasuredWidth, type ChartTip } from '../app
 import { formatDate, formatGain, trackTypeLabel } from '../app/format';
 import { Link, useRouter } from '../app/router';
 import { uiDataPackage } from '../data/uiDataPackage';
-import { raceHref, seriesShort, tipFor, useCareerRows, type CareerRow } from './careerExplorer';
+import { chapterTint, raceHref, tipFor, useCareerRows, type CareerRow } from './careerExplorer';
 
 /* The light race sheet: every non-INDY NXT race in the career table gets a
  * page of its own — the sourced facts, told plainly, with the chapter around
@@ -46,15 +46,16 @@ const ChapterContext = ({ row, chapterRows }: { row: CareerRow; chapterRows: Car
           {chapterRows.map((other, index) => {
             const isThis = other.sessionId === row.sessionId;
             const clean = other.status === 'running';
+            const tint = chapterTint(other.seriesName);
             return (
               <circle
                 key={other.sessionId + index}
                 cx={x(other.percentile)}
                 cy={axisY}
                 r={isThis ? 5.5 : 3.4}
-                fill={clean ? 'var(--ink-primary)' : 'var(--surface-1)'}
-                fillOpacity={isThis ? 1 : clean ? 0.22 : 0.7}
-                stroke={clean ? (isThis ? 'var(--ink-primary)' : 'none') : 'var(--ink-muted)'}
+                fill={clean ? tint : 'var(--surface-1)'}
+                fillOpacity={isThis ? 1 : clean ? 0.25 : 0.7}
+                stroke={clean ? (isThis ? tint : 'none') : tint}
                 strokeWidth={1.2}
                 style={{ cursor: isThis ? 'default' : 'pointer' }}
                 onMouseEnter={() => setTip({ x: x(other.percentile), y: axisY - 8, ...tipFor(other) })}

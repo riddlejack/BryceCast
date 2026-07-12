@@ -46,6 +46,17 @@
   --series-4: #4a3aa7;
   --series-5: #8e2f5d;
 
+  /* Career chapter tints — validated with the dataviz six-checks script
+   * (2026-07-12): lightness band, chroma floor, CVD separation, contrast.
+   * Rendered quiet (≈0.55 opacity) at rest; full hue on hover. The current
+   * chapter (INDY NXT) stays ink — the story arrives at now. */
+  --chapter-f1600: #5581c2;
+  --chapter-ff: #2f9377;
+  --chapter-gb3: #b98a3f;
+  --chapter-euro: #b05a73;
+  --chapter-fro: #6c9455;
+  --chapter-imsa: #2e9ac2;
+
   /* Sequential ramp (blue, magnitude only) */
   --seq-100: #cde2fb;
   --seq-250: #86b6ef;
@@ -463,8 +474,45 @@ button { font-family: inherit; }
   }
 }
 
+/* Race Week variant: same three-zone rhythm, roomier center for the big art. */
+.hero-race--week .hero-race__art { height: 190px; }
+
+@media (min-width: 900px) {
+  .hero-race--week {
+    grid-template-columns: minmax(0, 1fr) 340px minmax(0, 1fr);
+  }
+}
+
 /* Paired cards whose intro/caption lines should sit on shared baselines. */
 .card--flex { display: flex; flex-direction: column; }
+
+/* ---------- segmented control (view switches, Apple-style) ---------- */
+
+.segmented {
+  display: inline-flex;
+  background: var(--surface-2);
+  border-radius: 9px;
+  padding: 2px;
+  gap: 2px;
+}
+
+.segmented__option {
+  border: 0;
+  background: transparent;
+  padding: 5px 12px;
+  border-radius: 7px;
+  font: inherit;
+  font-size: 12.5px;
+  color: var(--ink-secondary);
+  cursor: pointer;
+  transition: background 150ms ease, color 150ms ease;
+}
+
+.segmented__option--active {
+  background: var(--surface-0);
+  color: var(--ink-primary);
+  font-weight: 570;
+}
 
 /* Archive rows: venue mini + date earn their columns only when there's room.
  * (.tower__row.race-row so this template outranks the base tower template.) */
@@ -725,9 +773,36 @@ button { font-family: inherit; }
   transform: none;
 }
 
+/* Where the browser can, tie the reveal to scroll position itself (Jack's
+ * ask): the card fades and settles as it enters, is fully present by the
+ * time it's 85% in, and never re-animates once past. Falls back to the
+ * triggered transition above elsewhere. */
+@supports (animation-timeline: view()) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+    animation: reveal-in linear both;
+    animation-timeline: view();
+    animation-range: entry 5% entry 85%;
+  }
+
+  @keyframes reveal-in {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
 /* ---------- reduced motion ---------- */
 
 @media (prefers-reduced-motion: reduce) {
   .live-dot, .skeleton, .drawer, .drawer-backdrop { animation: none; }
+  .reveal { animation: none; opacity: 1; transform: none; }
   * { transition-duration: 0.01ms !important; }
 }

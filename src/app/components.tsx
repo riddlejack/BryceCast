@@ -207,6 +207,46 @@ export const Unavailable = ({ children }: { children: ReactNode }) => (
   </div>
 );
 
+/* ---------- the car: No. 9 side profile, black with red trim ---------- */
+
+/** Bryce's 2026 machine as a quiet mark — black body, red trim, white 9,
+ *  matching the Jaguar Land Rover Chesterfield CGR livery language. */
+export const CarMark = ({ height = 18 }: { height?: number }) => (
+  <svg
+    width={height * (100 / 24)}
+    height={height}
+    viewBox="0 0 100 24"
+    role="img"
+    aria-label="Bryce Aron's No. 9 car"
+    style={{ flex: 'none' }}
+  >
+    {/* rear wing */}
+    <rect x={5} y={5} width={12} height={2.4} rx={1.2} fill="var(--ink-primary)" />
+    <rect x={15.6} y={3.8} width={1.8} height={8.4} rx={0.9} fill="var(--ink-primary)" />
+    <rect x={10.4} y={7.4} width={1.8} height={4.4} fill="var(--ink-primary)" />
+    {/* engine cover with red trim line */}
+    <rect x={22} y={8.2} width={14} height={3} rx={1.5} fill="var(--ink-primary)" />
+    <rect x={22} y={9.1} width={14} height={1} rx={0.5} fill="#c8102e" />
+    {/* halo over the cockpit */}
+    <path d="M39 11 Q 45 4.6 51 11" fill="none" stroke="var(--ink-primary)" strokeWidth={1.8} />
+    {/* sidepod + floor */}
+    <rect x={28} y={11} width={30} height={5.2} rx={2.4} fill="var(--ink-primary)" />
+    <rect x={6} y={14.6} width={84} height={2.2} rx={1.1} fill="var(--ink-primary)" />
+    {/* nose, tipped in red */}
+    <path d="M56 11 L92 13.6 Q94 14.4 92 15.4 L56 16.2 Z" fill="var(--ink-primary)" />
+    <path d="M85 13.1 L92 13.6 Q94 14.4 92 15.4 L85 15.8 Z" fill="#c8102e" />
+    {/* the 9, in white on the sidepod */}
+    <text x={43} y={15.4} textAnchor="middle" fontSize={5.4} fontWeight={700} fill="#ffffff" fontFamily="-apple-system, system-ui, sans-serif">
+      9
+    </text>
+    {/* wheels last, so they sit over the floor line */}
+    <circle cx={22} cy={17} r={5.4} fill="var(--ink-primary)" />
+    <circle cx={22} cy={17} r={1.9} fill="var(--surface-0)" opacity={0.92} />
+    <circle cx={74} cy={17.4} r={4.9} fill="var(--ink-primary)" />
+    <circle cx={74} cy={17.4} r={1.7} fill="var(--surface-0)" opacity={0.92} />
+  </svg>
+);
+
 /* ---------- scroll-in reveal: one soft settle per element, once ---------- */
 
 export const Reveal = ({ children, delay = 0 }: { children: ReactNode; delay?: number }) => {

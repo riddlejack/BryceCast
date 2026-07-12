@@ -402,7 +402,8 @@ export const HomeScreen = ({ readiness }: { readiness: ReadinessStatus }) => {
   const title = useMemo(() => {
     if (liveish) return 'Bryce is on track.';
     if (days !== null && days === 0) return 'It’s race day.';
-    if (days !== null && days <= 5) return 'Race week.';
+    /* A Saturday first session means race week starts the Monday before — six days out. */
+    if (days !== null && days <= 6) return 'Race week.';
     return 'Between race weekends.';
   }, [liveish, days]);
 

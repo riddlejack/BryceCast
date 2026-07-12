@@ -924,13 +924,10 @@ export const RaceWeekScreen = () => {
       </header>
 
       <HeroPanel tint="bryce">
-        <div className="grid grid--split-rev" style={{ alignItems: 'center', gap: 30 }}>
-          {outline ? (
-            <div style={{ maxWidth: 380, width: '100%', margin: '0 auto' }}>
-              <TrackArt outline={outline} annotation={sectionNote} />
-            </div>
-          ) : null}
-          <div className="stack" style={{ gap: 16 }}>
+        {/* Same three-zone rhythm as the race-detail hero: what's coming | the
+            track, dead-center | what he's done here. Nothing wanders. */}
+        <div className="hero-race hero-race--week">
+          <div>
             {preciseStart ? (
               <HeroBlock
                 label={`First session · ${formatDate(preciseStart, { weekday: 'short', month: 'short', day: 'numeric' })} · ${formatClock(preciseStart)} your time${nextSession?.sessionName ? ` · ${nextSession.sessionName}` : ''}`}
@@ -953,8 +950,13 @@ export const RaceWeekScreen = () => {
                 </div>
               </HeroBlock>
             )}
+          </div>
+          <div className="hero-race__art">
+            {outline ? <TrackArt outline={outline} annotation={sectionNote} maxHeight={190} /> : null}
+          </div>
+          <div className="row" style={{ justifyContent: 'flex-end' }}>
             {hereBefore.length > 0 ? (
-              <HeroBlock divider label="He’s raced here before">
+              <HeroBlock label="He’s raced here before">
                 <div className="row row--wrap" style={{ gap: 24, marginTop: 8 }}>
                   {hereBefore.map((race) => (
                     <Stat
@@ -970,18 +972,21 @@ export const RaceWeekScreen = () => {
                 </div>
               </HeroBlock>
             ) : (
-              <HeroBlock divider label={`${trackTypeName} record`}>
+              <HeroBlock label={`${trackTypeName} record`}>
                 <div className="row" style={{ gap: 24, marginTop: 8 }}>
                   <Stat label={`${trackTypeName} races`} value={formatNumber((primary.trackTypeHistory as Row).raceCount, 0)} />
                   <Stat label="Avg finish" value={formatNumber((primary.trackTypeHistory as Row).avgFinish)} />
                 </div>
               </HeroBlock>
             )}
-            <div className="row" style={{ gap: 7, color: 'var(--ink-muted)', fontSize: 12, borderTop: '1px solid var(--divider)', paddingTop: 14 }}>
-              <Route size={12} aria-hidden />
-              The live companion arms automatically for every session this weekend.
-            </div>
           </div>
+        </div>
+        <div
+          className="row"
+          style={{ gap: 7, color: 'var(--ink-muted)', fontSize: 12, borderTop: '1px solid var(--divider)', paddingTop: 14, marginTop: 18 }}
+        >
+          <Route size={12} aria-hidden />
+          The live companion arms automatically for every session this weekend.
         </div>
       </HeroPanel>
 

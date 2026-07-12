@@ -10,7 +10,8 @@ import {
   DaytonaSourcePill,
   RainDays,
   RivalsCard,
-  TheClimb
+  TheClimb,
+  chapterTint
 } from './careerExplorer';
 
 type Row = Record<string, string | number | null>;
@@ -80,7 +81,14 @@ const ChapterCard = ({
         <div className="row row--between row--wrap" style={{ alignItems: 'flex-start', gap: 10 }}>
           <div>
             <span className="caption" style={current ? { color: 'var(--ink-primary)', fontWeight: 570 } : undefined}>{chapter.years}</span>
-            <h2 className="display" style={{ fontSize: 18, margin: '3px 0 0' }}>
+            <h2 className="display row" style={{ fontSize: 18, margin: '3px 0 0', gap: 8, alignItems: 'center' }}>
+              {!current ? (
+                /* The chapter's climb color, carried onto its card. */
+                <span
+                  aria-hidden
+                  style={{ width: 9, height: 9, borderRadius: '50%', background: chapterTint(chapter.name), opacity: 0.75, flex: 'none' }}
+                />
+              ) : null}
               {chapter.short ?? chapter.name}
             </h2>
           </div>

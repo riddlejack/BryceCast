@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 /* House chart wrappers — mark specs enforced once (dataviz method):
@@ -32,6 +32,33 @@ export const useMeasuredWidth = <T extends HTMLElement>() => {
     return () => observer.disconnect();
   }, []);
   return [ref, width] as const;
+};
+
+/** True once the element has entered the viewport — for one-time chart
+ *  assembly moments (a line drawing in, dots settling into place). */
+export const useInViewOnce = <T extends Element>(threshold = 0.2) => {
+  const ref = useRef<T | null>(null);
+  const [inView, setInView] = useState(false);
+  useEffect(() => {
+    const node = ref.current;
+    if (!node) return;
+    if (typeof IntersectionObserver === 'undefined') {
+      setInView(true);
+      return;
+    }
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          setInView(true);
+          observer.disconnect();
+        }
+      },
+      { threshold }
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [threshold]);
+  return [ref, inView] as const;
 };
 
 /* ---------- house hover tooltip (white card, no delay, mark-anchored) ---------- */

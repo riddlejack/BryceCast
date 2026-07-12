@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { Card, SourcePill, Stat, Unavailable } from '../app/components';
-import { ChartTipCard, chartFont, useMeasuredWidth, type ChartTip } from '../app/charts';
+import { ChartTipCard, chartFont, useInViewOnce, useMeasuredWidth, type ChartTip } from '../app/charts';
 import { asNumber, asString, ordinal } from '../app/format';
 import { Link, useRouter } from '../app/router';
 import { uiDataPackage } from '../data/uiDataPackage';
@@ -45,6 +45,24 @@ const seriesShortNames: Record<string, string> = {
 };
 
 export const seriesShort = (name: string): string => seriesShortNames[name] ?? name;
+
+/* Chapter identity color: one quiet tint per era, ink for the current chapter.
+ * Values live in theme.css and passed the dataviz six-checks validator. */
+const chapterTints: Record<string, string> = {
+  'F1600 Championship Series': 'var(--chapter-f1600)',
+  'Formula Ford': 'var(--chapter-ff)',
+  'GB3 Championship': 'var(--chapter-gb3)',
+  'Euroformula Open': 'var(--chapter-euro)',
+  'Castrol Toyota Formula Regional Oceania Championship': 'var(--chapter-fro)',
+  'IMSA WeatherTech SportsCar Championship': 'var(--chapter-imsa)',
+  'INDY NXT': 'var(--ink-primary)'
+};
+
+export const chapterTint = (seriesName: string): string => chapterTints[seriesName] ?? 'var(--ink-primary)';
+
+const shortToSeriesName = Object.fromEntries(Object.entries(seriesShortNames).map(([full, short]) => [short, full]));
+
+export const chapterTintForShort = (shortName: string): string => chapterTint(shortToSeriesName[shortName] ?? shortName);
 
 /** All 141 career races, chronological, straight from the validated package. */
 export const useCareerRows = (): CareerRow[] => {
@@ -102,6 +120,7 @@ export const tipFor = (row: CareerRow): Omit<ChartTip, 'x' | 'y'> => ({
 export const TheClimb = () => {
   const rows = useCareerRows();
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();
+  const [viewRef, chartSeen] = useInViewOnce<HTMLDivElement>(0.35);
   const svgRef = useRef<SVGSVGElement | null>(null);
   const { navigate } = useRouter();
   const [hovered, setHovered] = useState<number | null>(null);
@@ -196,9 +215,10 @@ export const TheClimb = () => {
       }
     >
       <p className="caption caption--secondary" style={{ margin: '0 0 8px' }}>
-        Every race a dot · higher = more of the field beaten · the line follows his running form · ○ a day that ended early ·
-        click any dot to open its race
+        Every race a dot, every chapter its color · higher = more of the field beaten · the line follows his running form ·
+        ○ a day that ended early · click any dot to open its race
       </p>
+      <div ref={viewRef}>
       <div ref={ref} style={{ width: '100%', position: 'relative' }}>
         {width > 0 ? (
           <svg
@@ -254,21 +274,33 @@ export const TheClimb = () => {
 
             {rows.map((row, index) => {
               const clean = row.status === 'running';
+              const tint = chapterTint(row.seriesName);
               return (
                 <circle
                   key={row.sessionId + index}
                   cx={x(index)}
                   cy={y(row.percentile)}
                   r={hovered === index ? 5 : 3}
-                  fill={clean ? 'var(--ink-primary)' : 'var(--surface-1)'}
-                  fillOpacity={clean ? (hovered === index ? 1 : 0.38) : 1}
-                  stroke={clean ? (hovered === index ? 'var(--ink-primary)' : 'none') : 'var(--ink-muted)'}
+                  fill={clean ? tint : 'var(--surface-1)'}
+                  fillOpacity={clean ? (hovered === index ? 1 : 0.5) : 1}
+                  stroke={clean ? (hovered === index ? tint : 'none') : tint}
                   strokeWidth={1.3}
                   style={{ transition: 'r 120ms ease' }}
                 />
               );
             })}
-            <path d={trendPath} fill="none" stroke="var(--ink-primary)" strokeWidth={2.2} strokeLinejoin="round" />
+            {/* The form line draws itself in the first time the chart is seen. */}
+            <path
+              d={trendPath}
+              fill="none"
+              stroke="var(--ink-primary)"
+              strokeWidth={2.2}
+              strokeLinejoin="round"
+              pathLength={1}
+              strokeDasharray={1}
+              strokeDashoffset={chartSeen ? 0 : 1}
+              style={{ transition: 'stroke-dashoffset 1200ms cubic-bezier(0.23, 1, 0.32, 1) 150ms' }}
+            />
 
             {/* year ticks at each season's first race */}
             {rows.map((row, index) =>
@@ -290,6 +322,7 @@ export const TheClimb = () => {
           </svg>
         ) : null}
         {tip ? <ChartTipCard tip={tip} width={width} /> : null}
+      </div>
       </div>
     </Card>
   );
@@ -322,9 +355,9 @@ export const ChapterStrip = ({ seriesName }: { seriesName: string }) => {
               cx={x(row.percentile)}
               cy={axisY}
               r={3.4}
-              fill={row.status === 'running' ? 'var(--ink-primary)' : 'var(--surface-1)'}
-              fillOpacity={row.status === 'running' ? 0.4 : 1}
-              stroke={row.status === 'running' ? 'none' : 'var(--ink-muted)'}
+              fill={row.status === 'running' ? chapterTint(row.seriesName) : 'var(--surface-1)'}
+              fillOpacity={row.status === 'running' ? 0.5 : 1}
+              stroke={row.status === 'running' ? 'none' : chapterTint(row.seriesName)}
               strokeWidth={1.2}
               style={{ cursor: 'pointer' }}
               onMouseEnter={() => setTip({ x: x(row.percentile), y: axisY - 6, ...tipFor(row) })}
@@ -361,6 +394,43 @@ const FilterChip = ({ label, active, onClick }: { label: string; active: boolean
   >
     {label}
   </button>
+);
+
+/** One labeled row of controls, so each kind of filtering names itself. */
+const ControlRow = ({ label, children }: { label: string; children: ReactNode }) => (
+  <div className="row" style={{ gap: 10, alignItems: 'flex-start' }}>
+    <span className="caption caption--secondary" style={{ width: 62, flex: 'none', paddingTop: 6 }}>
+      {label}
+    </span>
+    <span className="row row--wrap" style={{ gap: 6 }}>
+      {children}
+    </span>
+  </div>
+);
+
+const Segmented = <T extends string>({
+  options,
+  value,
+  onChange
+}: {
+  options: Array<{ value: T; label: string }>;
+  value: T;
+  onChange: (next: T) => void;
+}) => (
+  <div className="segmented" role="tablist">
+    {options.map((option) => (
+      <button
+        key={option.value}
+        type="button"
+        role="tab"
+        aria-selected={option.value === value}
+        className={`segmented__option${option.value === value ? ' segmented__option--active' : ''}`}
+        onClick={() => onChange(option.value)}
+      >
+        {option.label}
+      </button>
+    ))}
+  </div>
 );
 
 /* Start → finish, house-drawn: both axes in grid positions (P1 top-left),
@@ -585,22 +655,26 @@ const GroupedStrips = ({ rows, groupBy }: { rows: CareerRow[]; groupBy: GroupBy 
                 >
                   {group.key}
                 </text>
-                {group.rows.map((row, index) => (
-                  <circle
-                    key={row.sessionId + index}
-                    cx={x(row.percentile)}
-                    cy={rowY}
-                    r={3.6}
-                    fill={row.status === 'running' ? 'var(--ink-primary)' : 'var(--surface-1)'}
-                    fillOpacity={row.status === 'running' ? 0.35 : 1}
-                    stroke={row.status === 'running' ? 'none' : 'var(--ink-muted)'}
-                    strokeWidth={1.2}
-                    style={{ cursor: 'pointer' }}
-                    onMouseEnter={() => setTip({ x: x(row.percentile), y: rowY - 6, ...tipFor(row) })}
-                    onMouseLeave={() => setTip(null)}
-                    onClick={() => navigate(raceHref(row.sessionId))}
-                  />
-                ))}
+                {group.rows.map((row, index) => {
+                  /* Color = chapter identity, so it only paints when lanes ARE series. */
+                  const tint = groupBy === 'series' ? chapterTint(row.seriesName) : 'var(--ink-primary)';
+                  return (
+                    <circle
+                      key={row.sessionId + index}
+                      cx={x(row.percentile)}
+                      cy={rowY}
+                      r={3.6}
+                      fill={row.status === 'running' ? tint : 'var(--surface-1)'}
+                      fillOpacity={row.status === 'running' ? (groupBy === 'series' ? 0.5 : 0.35) : 1}
+                      stroke={row.status === 'running' ? 'none' : tint}
+                      strokeWidth={1.2}
+                      style={{ cursor: 'pointer' }}
+                      onMouseEnter={() => setTip({ x: x(row.percentile), y: rowY - 6, ...tipFor(row) })}
+                      onMouseLeave={() => setTip(null)}
+                      onClick={() => navigate(raceHref(row.sessionId))}
+                    />
+                  );
+                })}
                 <rect x={x(median) - 1.75} y={rowY - 10} width={3.5} height={20} rx={1.75} fill="var(--bryce)" />
                 <text
                   x={width - 6}
@@ -679,31 +753,40 @@ export const CareerExplorer = () => {
         />
       }
     >
-      <div className="row row--wrap" style={{ gap: 6, marginBottom: 10 }}>
-        <FilterChip label="Percentiles, grouped" active={view === 'grouped'} onClick={() => setView('grouped')} />
-        <FilterChip label="Start → finish" active={view === 'conversion'} onClick={() => setView('conversion')} />
+      <div className="stack" style={{ gap: 8, marginBottom: 6 }}>
+        <ControlRow label="View">
+          <Segmented
+            options={[
+              { value: 'grouped', label: 'Percentiles, grouped' },
+              { value: 'conversion', label: 'Start → finish' }
+            ]}
+            value={view}
+            onChange={setView}
+          />
+        </ControlRow>
         {view === 'grouped' ? (
-          <span className="row row--wrap" style={{ gap: 6, marginLeft: 12 }}>
-            <span className="caption caption--secondary">group by</span>
+          <ControlRow label="Group by">
             <FilterChip label="series" active={groupBy === 'series'} onClick={() => setGroupBy('series')} />
             <FilterChip label="season" active={groupBy === 'season'} onClick={() => setGroupBy('season')} />
             <FilterChip label="track type" active={groupBy === 'trackType'} onClick={() => setGroupBy('trackType')} />
             <FilterChip label="conditions" active={groupBy === 'conditions'} onClick={() => setGroupBy('conditions')} />
-          </span>
+          </ControlRow>
         ) : null}
       </div>
 
-      <div className="row row--wrap" style={{ gap: 6, marginBottom: 6 }}>
-        <FilterChip label="All series" active={seriesFilter === null} onClick={() => setSeriesFilter(null)} />
-        {seriesNames.map((name) => (
-          <FilterChip key={name} label={seriesShort(name)} active={seriesFilter === name} onClick={() => setSeriesFilter(seriesFilter === name ? null : name)} />
-        ))}
-      </div>
-      <div className="row row--wrap" style={{ gap: 6, marginBottom: 8 }}>
-        <FilterChip label="All tracks" active={trackFilter === null} onClick={() => setTrackFilter(null)} />
-        {(['road', 'street', 'oval'] as const).map((type) => (
-          <FilterChip key={type} label={type} active={trackFilter === type} onClick={() => setTrackFilter(trackFilter === type ? null : type)} />
-        ))}
+      <div className="stack" style={{ gap: 8, marginBottom: 10, borderTop: '1px solid var(--divider)', paddingTop: 10 }}>
+        <ControlRow label="Series">
+          <FilterChip label="All" active={seriesFilter === null} onClick={() => setSeriesFilter(null)} />
+          {seriesNames.map((name) => (
+            <FilterChip key={name} label={seriesShort(name)} active={seriesFilter === name} onClick={() => setSeriesFilter(seriesFilter === name ? null : name)} />
+          ))}
+        </ControlRow>
+        <ControlRow label="Track">
+          <FilterChip label="All" active={trackFilter === null} onClick={() => setTrackFilter(null)} />
+          {(['road', 'street', 'oval'] as const).map((type) => (
+            <FilterChip key={type} label={type} active={trackFilter === type} onClick={() => setTrackFilter(trackFilter === type ? null : type)} />
+          ))}
+        </ControlRow>
       </div>
 
       {view === 'conversion' ? (
@@ -793,8 +876,21 @@ const layoutBeeswarm = (
   return placed;
 };
 
+/* Diverging record color: ink pole (rival leads) → neutral gray (even) →
+ * gold pole (Bryce leads). Gold keeps its one meaning — Bryce's side. */
+const lerpChannel = (from: number, to: number, t: number) => Math.round(from + (to - from) * t);
+const lerpHex = (from: string, to: string, t: number): string => {
+  const parse = (hex: string) => [parseInt(hex.slice(1, 3), 16), parseInt(hex.slice(3, 5), 16), parseInt(hex.slice(5, 7), 16)];
+  const [r1, g1, b1] = parse(from);
+  const [r2, g2, b2] = parse(to);
+  return `rgb(${lerpChannel(r1, r2, t)}, ${lerpChannel(g1, g2, t)}, ${lerpChannel(b1, b2, t)})`;
+};
+const recordColor = (share: number): string =>
+  share < 0.5 ? lerpHex('#3a3a3f', '#c6c6cb', share * 2) : lerpHex('#c6c6cb', '#e09a2f', (share - 0.5) * 2);
+
 export const RivalsCard = () => {
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();
+  const [swarmRef, swarmSeen] = useInViewOnce<HTMLDivElement>(0.3);
   const [tip, setTip] = useState<ChartTip | null>(null);
   const rivals = uiDataPackage.screens.careerLab.headToHead ?? [];
 
@@ -827,11 +923,18 @@ export const RivalsCard = () => {
         behind: rival.bryceBehind ?? 0,
         teammates: rival.sameTeamRaces ?? 0,
         x: margin.left + share * plotWidth,
-        r: 3.5 + Math.sqrt(races) * 1.35
+        /* Slightly super-root scale so shared history reads at a glance. */
+        r: 3 + Math.pow(races, 0.72) * 0.95
       };
     });
     return layoutBeeswarm(raw, centerY, height - margin.top - margin.bottom);
   }, [charted, width, plotWidth, centerY]);
+
+  /* Assembly order: a left-to-right sweep, so the chart builds along its axis. */
+  const assemblyRank = useMemo(() => {
+    const order = [...dots].sort((left, right) => left.x - right.x).map((dot) => dot.name);
+    return new Map(order.map((name, index) => [name, index]));
+  }, [dots]);
 
   const mostShared = charted[0] ?? null;
   const topRivals = charted.slice(0, 6);
@@ -843,7 +946,7 @@ export const RivalsCard = () => {
     y: dot.y - dot.r,
     title: dot.name,
     detail: [
-      `ahead in ${dot.ahead} of ${dot.races} shared races`,
+      `Bryce ahead in ${dot.ahead} of ${dot.races} shared races`,
       dot.teammates >= 5 ? `teammates for ${dot.teammates} of them` : null
     ]
       .filter(Boolean)
@@ -873,7 +976,7 @@ export const RivalsCard = () => {
         {mostShared ? (
           <>
             {' '}
-            Nobody more than <strong style={{ color: 'var(--ink-primary)' }}>{mostShared.driverName}</strong> — ahead in{' '}
+            Nobody more than <strong style={{ color: 'var(--ink-primary)' }}>{mostShared.driverName}</strong> — Bryce ahead in{' '}
             <strong style={{ color: 'var(--ink-primary)' }}>
               {mostShared.bryceAhead} of {mostShared.racesTogether}
             </strong>
@@ -881,6 +984,7 @@ export const RivalsCard = () => {
           </>
         ) : null}
       </p>
+      <div ref={swarmRef}>
       <div ref={ref} style={{ width: '100%', position: 'relative' }}>
         {width > 0 ? (
           <svg width={width} height={height} role="img" aria-label="Head-to-head record against every regular INDY NXT rival">
@@ -894,28 +998,38 @@ export const RivalsCard = () => {
             <text x={width - margin.right} y={height - 8} textAnchor="end" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={10.5}>
               Bryce usually ahead
             </text>
-            {dots.map((dot) => (
-              <circle
-                key={dot.name}
-                cx={dot.x}
-                cy={dot.y}
-                r={dot.r}
-                fill="var(--ink-primary)"
-                fillOpacity={tip && tip.title === dot.name ? 0.9 : 0.3}
-                stroke={tip && tip.title === dot.name ? 'var(--ink-primary)' : 'none'}
-                strokeWidth={1.2}
-                style={{ transition: 'fill-opacity 150ms ease' }}
-                onMouseEnter={() => setTip(tipForRival(dot))}
-                onMouseLeave={() => setTip(null)}
-              />
-            ))}
+            {dots.map((dot) => {
+              const delay = (assemblyRank.get(dot.name) ?? 0) * 16;
+              return (
+                <circle
+                  key={dot.name}
+                  cx={dot.x}
+                  cy={dot.y}
+                  r={dot.r}
+                  fill={recordColor(dot.share)}
+                  fillOpacity={tip && tip.title === dot.name ? 1 : 0.82}
+                  stroke={tip && tip.title === dot.name ? 'var(--ink-primary)' : 'none'}
+                  strokeWidth={1.2}
+                  style={{
+                    transformBox: 'fill-box',
+                    transformOrigin: 'center',
+                    transform: swarmSeen ? 'scale(1)' : 'scale(0.55)',
+                    opacity: swarmSeen ? 1 : 0,
+                    transition: `transform 460ms cubic-bezier(0.23, 1, 0.32, 1) ${delay}ms, opacity 340ms ease ${delay}ms, fill-opacity 150ms ease`
+                  }}
+                  onMouseEnter={() => setTip(tipForRival(dot))}
+                  onMouseLeave={() => setTip(null)}
+                />
+              );
+            })}
           </svg>
         ) : null}
         {tip ? <ChartTipCard tip={tip} width={width} /> : null}
       </div>
+      </div>
       <p className="caption caption--secondary" style={{ margin: '4px 0 0' }}>
-        Bigger circle = more shared grids · hover for the record
-        {smallSample > 0 ? ` · ${smallSample} more drivers shared fewer than five races` : ''}
+        Bigger circle = more shared grids · deeper gold = Bryce leads the record, deeper ink = the rival does · hover for the
+        record{smallSample > 0 ? ` · ${smallSample} more drivers shared fewer than five races` : ''}
       </p>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))', marginTop: 14, gap: 12 }}>
         {topRivals.map((rival) => {
@@ -931,7 +1045,8 @@ export const RivalsCard = () => {
                 </span>
               </div>
               <div style={{ position: 'relative', height: 6, borderRadius: 3, background: 'var(--surface-2)', overflow: 'hidden' }}>
-                <div style={{ position: 'absolute', inset: 0, width: `${share * 100}%`, background: 'var(--ink-primary)', opacity: 0.75 }} />
+                <div style={{ position: 'absolute', top: 0, bottom: 0, left: 0, width: `${share * 100}%`, background: '#e09a2f' }} />
+                <div style={{ position: 'absolute', top: 0, bottom: 0, left: `${share * 100}%`, right: 0, background: '#6e6e73', opacity: 0.55 }} />
                 <div style={{ position: 'absolute', left: '50%', top: 0, bottom: 0, width: 1.5, background: 'var(--surface-0)' }} />
               </div>
               <div className="caption caption--secondary" style={{ marginTop: 3 }}>
@@ -944,7 +1059,7 @@ export const RivalsCard = () => {
         })}
       </div>
       <p className="caption caption--secondary" style={{ margin: '8px 0 0' }}>
-        Records read Bryce first — ahead–behind across every shared classified finish · the notch is even
+        Records read Bryce first — the gold stretch is his share of the record, the notch is even
       </p>
     </Card>
   );
