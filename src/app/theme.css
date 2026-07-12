@@ -718,6 +718,194 @@ button { font-family: inherit; }
 
 .unavailable svg { margin-top: 2px; flex: none; color: var(--ink-muted); }
 
+/* ---------- Live: race-day glance surface ---------- */
+
+.live-page { gap: 16px; }
+
+.live-trust {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px 18px;
+  min-height: 42px;
+  padding: 8px 2px 10px;
+  border-bottom: 1px solid var(--divider);
+  font-size: 12.5px;
+}
+
+.live-trust__age { color: var(--ink-primary); font-variant-numeric: tabular-nums; }
+.live-trust__source, .live-trust__detail { color: var(--ink-secondary); }
+.live-trust__detail { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.live-hero { display: flex; flex-direction: column; gap: 24px; }
+
+.live-hero__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.live-lap {
+  color: var(--ink-primary);
+  font-size: 14px;
+  font-weight: 580;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.live-hero__body {
+  display: grid;
+  grid-template-columns: minmax(210px, 0.82fr) minmax(0, 1.18fr);
+  align-items: stretch;
+  gap: 30px;
+}
+
+.live-position { display: flex; align-items: center; gap: 16px; min-height: 132px; }
+
+.live-position__value {
+  margin-top: 2px;
+  font-size: clamp(60px, 8vw, 86px);
+  font-weight: 690;
+  line-height: 0.95;
+  letter-spacing: -0.045em;
+}
+
+.live-neighbors { display: grid; align-content: center; }
+
+.live-neighbor {
+  min-width: 0;
+  padding: 12px 0 8px;
+  border-bottom: 1px solid var(--divider);
+}
+
+.live-neighbor:last-child { border-bottom: 0; }
+
+.live-neighbor__line {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  min-width: 0;
+  font-size: 13.5px;
+}
+
+.live-neighbor__line > span:first-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.live-spark { width: 100%; height: 34px; margin-top: 1px; }
+.live-spark--empty { height: 22px; border-bottom: 1px solid var(--grid-hairline); opacity: 0.65; }
+
+.live-layout { grid-template-columns: minmax(0, 1fr); align-items: start; }
+
+.live-points__main {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: end;
+  gap: 24px;
+  padding: 4px 0 18px;
+}
+
+.live-points__standing {
+  margin-top: 3px;
+  font-size: clamp(46px, 7vw, 64px);
+  font-weight: 680;
+  line-height: 1;
+  letter-spacing: -0.035em;
+}
+
+.live-points__score {
+  margin-top: 3px;
+  font-size: clamp(30px, 5vw, 40px);
+  font-weight: 650;
+  line-height: 1;
+  letter-spacing: -0.025em;
+}
+
+.live-points__provisional { display: block; margin-top: 7px; color: var(--ink-secondary); font-size: 12px; }
+
+.live-points__neighbors { border-top: 1px solid var(--divider); }
+
+.live-points__neighbor {
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--divider);
+  font-size: 13px;
+}
+
+.live-points__neighbor:last-child { border-bottom: 0; }
+.live-points__neighbor .caption { grid-column: 2 / -1; margin-top: -8px; }
+
+.live-field { overflow: visible; }
+.live-field .card__header { padding: 16px 18px 0; }
+.live-field__row { position: relative; grid-template-columns: 32px minmax(0, 1fr) auto; }
+
+.live-field__teammate {
+  color: var(--ink-muted);
+  font-size: 10.5px;
+  font-weight: 450;
+}
+
+.live-field__tip {
+  position: absolute;
+  right: 10px;
+  bottom: calc(100% - 3px);
+  z-index: 4;
+  padding: 6px 9px;
+  border: 1px solid var(--divider);
+  border-radius: 8px;
+  background: var(--surface-0);
+  color: var(--ink-secondary);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.10);
+  font-size: 11.5px;
+  font-weight: 450;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(3px);
+  pointer-events: none;
+  transition: opacity 150ms cubic-bezier(0.23, 1, 0.32, 1), transform 150ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .live-field__row:hover .live-field__tip { opacity: 1; transform: none; }
+  .live-field .tower:has(> .live-field__row:hover) .live-field__row { opacity: 0.22; transition: opacity 150ms ease; }
+  .live-field .tower:has(> .live-field__row:hover) .live-field__row:hover { opacity: 1; }
+}
+
+.live-field__row:focus { outline: 2px solid var(--link); outline-offset: -2px; }
+.live-field__row:focus .live-field__tip { opacity: 1; transform: none; }
+
+.live-gap-chart { position: relative; width: 100%; }
+
+.live-race-week-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 20px;
+  color: var(--link);
+  font-size: 13px;
+  font-weight: 550;
+}
+
+@media (min-width: 900px) {
+  .live-layout { grid-template-columns: minmax(0, 7fr) minmax(330px, 5fr); }
+  .live-field { grid-column: 2; }
+}
+
+@media (max-width: 719px) {
+  .live-trust { grid-template-columns: 1fr auto; }
+  .live-trust__detail { grid-column: 1 / -1; white-space: normal; }
+  .live-hero__head { flex-direction: column; }
+  .live-hero__head > .row { justify-content: flex-start !important; }
+  .live-hero__body { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+  .live-position { min-height: 104px; }
+  .live-position__value { font-size: 64px; }
+  .live-points__main { gap: 16px; }
+  .live-field__teammate { display: none; }
+}
+
 /* ---------- career journey timeline ---------- */
 
 .journey {

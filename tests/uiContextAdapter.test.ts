@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { buildBryceCastUiContext } from '../src/data/uiContextAdapter';
+import { buildOfficialPointsWindow, headToHeadForCar, headToHeadForLiveDriver } from '../src/data/livePageModel';
 
 /* Venue-agnostic hydration invariants: counts come from the package itself,
    never from a hardcoded event slice, so schedule roll-forwards don't break CI. */
@@ -65,6 +66,46 @@ if (standings.available) {
   assert.equal(standings.entries.filter((entry) => entry.isBryce).length, 1, 'exactly one guarded Bryce standings entry');
   assert.ok(standings.caveats.length >= 1, 'standings must state unofficial-points caveats');
 }
+
+/* Live page: every trust state remains renderable, and the jumbotron only
+   orders Race Control point fields (no local point arithmetic). */
+const liveFixtures = context.liveCompanion.fixtures;
+assert.deepEqual(
+  [...new Set(liveFixtures.map((fixture) => fixture.state))].sort(),
+  ['blocked', 'degraded', 'pre_session', 'ready', 'stale', 'wrong_series'].sort(),
+  'live fixtures must preserve every product trust state'
+);
+for (const fixture of liveFixtures) {
+  assert.equal(fixture.schemaVersion, 'live-readiness.v1');
+  assert.ok(fixture.reason, `${fixture.state} fixture must explain its state`);
+  assert.ok(fixture.liveTiming && fixture.points && fixture.sources, `${fixture.state} fixture must carry runtime-shaped modules`);
+}
+
+const pointsWindow = buildOfficialPointsWindow([
+  { no: '10', firstName: 'Niels', lastName: 'Koolen', runningDriverPoints: 166, totalDriverPoints: 0 },
+  { no: '9', firstName: 'Bryce', lastName: 'Aron', bryce: true, runningDriverPoints: 159, totalDriverPoints: 0 },
+  { no: '17', firstName: 'Salvador', lastName: 'de Alba', runningDriverPoints: 158, totalDriverPoints: 0 }
+]);
+assert.ok(pointsWindow, 'source-backed running points should produce a projected window');
+assert.equal(pointsWindow.bryce.runningDriverPoints, 159, 'Bryce points must match runningDriverPoints exactly');
+assert.equal(pointsWindow.bryce.totalDriverPoints, 0, 'source-present zero totalDriverPoints must stay zero');
+assert.equal(pointsWindow.bryce.projectedStanding, 2, 'standing is the order of Race Control runningDriverPoints');
+assert.equal(pointsWindow.above?.driverName, 'Niels Koolen');
+assert.equal(pointsWindow.below?.driverName, 'Salvador de Alba');
+if (standings.available) {
+  assert.deepEqual(headToHeadForCar('10', standings), standings.entries.find((entry) => entry.carNo === '10')?.headToHead ?? null);
+}
+const koolenRival = context.dataPackage.screens.careerLab.headToHead.find((rival) => rival.driverName === 'Niels Koolen');
+assert.ok(koolenRival, 'career package must carry Niels Koolen head-to-head context');
+assert.deepEqual(
+  headToHeadForLiveDriver('10', 'Koolen', standings, context.dataPackage.screens.careerLab.headToHead),
+  {
+    racesTogether: koolenRival.racesTogether,
+    bryceAhead: koolenRival.bryceAhead,
+    bryceBehind: koolenRival.bryceBehind
+  },
+  'live tower should fall back to the package-native career join when a captured standings join is unavailable'
+);
 
 /* Race-story packs: one per debrief, integrity-loadable, honest Bryce state. */
 const storyRefs = context.dataPackage.screens.raceDebrief.raceStoryRefs;

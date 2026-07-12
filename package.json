@@ -9,6 +9,8 @@
     "preview": "vite preview --host 0.0.0.0",
     "serve:api": "node scripts/api-server.mjs",
     "serve:app": "node scripts/api-server.mjs --static=dist",
+    "live:replay": "node scripts/live-replay.mjs",
+    "test:live-replay": "node scripts/test-live-replay.mjs",
     "live:runner": "node scripts/live-runner.mjs",
     "live:runner:once": "node scripts/live-runner.mjs --once",
     "live:runner:dry": "node scripts/live-runner.mjs --dry-run --once",

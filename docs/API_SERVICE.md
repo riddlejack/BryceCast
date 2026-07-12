@@ -41,6 +41,7 @@ Client polling does not trigger direct Race Control fetches. Use `POST /api/refr
 | `GET /api/onboard-catalog` | Legacy/latest official INDYCAR LIVE catalog probe. Research only; live POV is unavailable for the active product. |
 | `GET /api/race-log/latest` | Latest persisted local poller snapshot. |
 | `GET /api/replay/bryce?limit=100&sessionKey=...` | SQLite-backed Bryce replay analytics: archive state, sessions, warnings, rank/pass/status summary, and chronological rows. |
+| `GET /api/replay/control?session=...&t0=...&speed=1|2|4` | Debug-only virtual clock over one archived session. Available only with `BRYCECAST_REPLAY=1`; refuses to start while the real runner reports a live session. |
 | `GET /api/pov-proof` | Legacy live #9 POV proof state. Active UI should treat POV as unavailable unless new rights-holder access appears. |
 | `POST /api/pov-proof` | Persist legacy POV proof state. Delayed/replay states must remain failing and live POV remains out of scope. |
 | `GET /api/audio-proof` | Current audio/radio proof state. |
@@ -130,3 +131,30 @@ Replay archive states:
 - `ready`: enough samples exist for a useful rank/status trend.
 
 The endpoint returns derived fields such as `positionDelta`, `netPasses`, `coverageMinutes`, latest status/comment, status events, and warnings for repeated cold/post-race samples. Engineer mode uses this as the replay and post-race analysis surface.
+
+## Live Replay Simulator
+
+Replay mode is a read-only API overlay, not an ingestor. It selects one archived
+`race_snapshots` row at the virtual clock and passes that row through the same
+snapshot, timing, Bryce, source, readiness, and points adapters used by live
+requests. `/api/replay/bryce` is bounded to the same virtual instant, so chart
+history grows with playback. It never writes to SQLite and never starts or
+reconfigures the live runner.
+
+```bash
+npm run build
+npm run live:replay
+```
+
+The convenience command starts the API on `127.0.0.1:8788`, defaults to Road
+America Race 2 (`5537-6754`) at its first green sample, and discovers the sibling
+BryceCast archive when an isolated worktree has no `data/live` directory. Override
+with `BRYCECAST_SQLITE_PATH`, `BRYCECAST_REPLAY_SESSION`,
+`BRYCECAST_REPLAY_T0`, or `BRYCECAST_REPLAY_SPEED`. To use Vite on `:5173`, run it
+with `BRYCECAST_API_PROXY=http://127.0.0.1:8788`.
+
+The control route is absent unless `BRYCECAST_REPLAY=1`. Starting playback checks
+the runner status beside the selected SQLite archive (or
+`BRYCECAST_RUNNER_STATUS_PATH`) and returns HTTP 409 if that runner reports an
+active live session. Replay is intentionally absent from deployed LaunchAgent
+configuration.

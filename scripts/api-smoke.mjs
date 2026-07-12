@@ -8,6 +8,7 @@ const root = dirname(__dirname);
 const port = Number(process.argv.find((arg) => arg.startsWith('--port='))?.split('=')[1] ?? '8799');
 const baseUrl = `http://127.0.0.1:${port}`;
 const distDir = join(root, 'dist');
+const replayMode = process.env.BRYCECAST_REPLAY === '1';
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -98,6 +99,9 @@ child.stderr.on('data', (chunk) => {
 
 try {
   const health = await waitForHealth();
+  if (replayMode) {
+    assert(health.replay?.enabled === true && health.replay?.active === true, 'replay smoke did not start the env-configured virtual clock');
+  }
   const readiness = (await fetchJson('/api/readiness')).json;
   assert(readiness?.schemaVersion === 'live-readiness.v1', '/api/readiness missing schema version');
   assert(
@@ -188,7 +192,10 @@ try {
   assert(sources.endpoints.every((endpoint) => typeof endpoint.readinessState === 'string'), '/api/sources missing readiness state');
   assert(sources?.local?.sqlite, '/api/sources missing local storage status');
 
-  const liveWeather = (await fetchJson('/api/weather/live?trackId=track_road_america')).json;
+  let liveWeather = null;
+  let upcomingWeather = null;
+  if (!replayMode) {
+  liveWeather = (await fetchJson('/api/weather/live?trackId=track_road_america')).json;
   assert(liveWeather?.schemaVersion === 'live-weather.v1', '/api/weather/live missing schema version');
   assert(['live', 'partial'].includes(liveWeather?.sourceState), '/api/weather/live missing live/partial state');
   assert(liveWeather?.track?.id === 'track_road_america', '/api/weather/live returned wrong track');
@@ -206,7 +213,7 @@ try {
   );
   assert(['hit', 'miss', 'joined_inflight'].includes(liveWeather?.cache?.status), '/api/weather/live missing cache status');
 
-  const upcomingWeather = (await fetchJson('/api/weather/upcoming')).json;
+  upcomingWeather = (await fetchJson('/api/weather/upcoming')).json;
   assert(upcomingWeather?.schemaVersion === 'live-weather-upcoming.v1', '/api/weather/upcoming missing schema version');
   assert(Array.isArray(upcomingWeather?.events), '/api/weather/upcoming missing event list');
   assert(upcomingWeather.events.length > 0, '/api/weather/upcoming found no future INDY NXT events');
@@ -219,6 +226,7 @@ try {
     cachedUpcomingWeather.events.every((row) => row.weather?.cache?.status === 'hit'),
     '/api/weather/upcoming did not reuse cached per-track weather on immediate repeat'
   );
+  }
 
   const history = (await fetchJson('/api/history/bryce')).json;
   assert(Array.isArray(history?.points) && history.points.length > 0, '/api/history/bryce missing history points');
@@ -237,8 +245,7 @@ try {
     '/api/readiness',
     ...(liveSnapshotRequired ? ['/api/snapshot', '/api/session', '/api/bryce', '/api/timing'] : []),
     '/api/sources',
-    '/api/weather/live?trackId=track_road_america',
-    '/api/weather/upcoming',
+    ...(!replayMode ? ['/api/weather/live?trackId=track_road_america', '/api/weather/upcoming'] : []),
     '/api/history/bryce',
     '/api/history/bryce?compact=1'
   ];
@@ -278,6 +285,11 @@ try {
   const replayClamp = (await fetchJson('/api/replay/bryce?limit=9999')).json;
   assert(replayClamp?.rows?.length <= 500, '/api/replay/bryce limit clamp failed');
   checkedEndpoints.push('/api/replay/bryce');
+  if (replayMode) {
+    const control = (await fetchJson('/api/replay/control')).json;
+    assert(control?.active === true && control?.sessionKey, '/api/replay/control missing active replay state');
+    checkedEndpoints.push('/api/replay/control');
+  }
 
   const povPayload = { status: 'inconclusive', source: 'INDYCAR App', evidenceRef: 'api-smoke-pov', proofItems: [] };
   await fetchJson('/api/pov-proof', {
@@ -300,6 +312,7 @@ try {
   checkedEndpoints.push('/api/audio-proof');
   await resetProofs();
 
+  if (!replayMode) {
   const raceControl = await fetch(`${baseUrl}/racecontrol/timingscoring-ris.json`, { headers: { accept: 'application/json' } });
   assert(raceControl.ok, '/racecontrol proxy did not return OK');
   checkedEndpoints.push('/racecontrol/timingscoring-ris.json');
@@ -309,6 +322,7 @@ try {
   const nttData = await fetch(`${baseUrl}/ntt-data/INDYCAR_DATA_POLLING/data_polling_blob.json`, { headers: { accept: 'application/json' } });
   assert(nttData.ok, '/ntt-data proxy did not return OK');
   checkedEndpoints.push('/ntt-data/INDYCAR_DATA_POLLING/data_polling_blob.json');
+  }
 
   let rootStatus = null;
   if (await distExists()) {

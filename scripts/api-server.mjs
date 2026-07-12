@@ -6,6 +6,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { DatabaseSync } from 'node:sqlite';
 import { bryceCarNumber, isBryceProfile, isBryceTimingRow, isIndyNxtTimingHeartbeat, liveSourceEndpoints, raceSnapshotEndpoints } from './live-source-endpoints.mjs';
 import { buildPointsProjectionState } from './live-points-state.mjs';
+import { createReplayOverlay } from './lib/replay-overlay.mjs';
 import {
   buildUpcomingIndyNxtWeatherReport,
   fetchCachedLiveWeatherForTrack,
@@ -19,8 +20,8 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = dirname(__dirname);
 const dataDir = join(root, 'data/live');
 const publicDataDir = join(root, 'public/data');
-const sqlitePath = join(dataDir, 'brycecast.sqlite');
-const runnerStatusPath = join(dataDir, 'live-runner-status.json');
+const sqlitePath = resolve(process.env.BRYCECAST_SQLITE_PATH ?? join(dataDir, 'brycecast.sqlite'));
+const runnerStatusPath = resolve(process.env.BRYCECAST_RUNNER_STATUS_PATH ?? join(dirname(sqlitePath), 'live-runner-status.json'));
 const latestSnapshotPath = join(publicDataDir, 'live-snapshot.json');
 const onboardCatalogPath = join(publicDataDir, 'onboard-catalog.json');
 const historyPath = join(publicDataDir, 'history-bryce.json');
@@ -33,6 +34,8 @@ const sourceFetchTimeoutMs = Number(process.env.BRYCECAST_SOURCE_FETCH_TIMEOUT_M
 const enrichmentCacheTtlMs = 30000;
 const apiCacheRefreshMs = Number(process.env.BRYCECAST_API_CACHE_REFRESH_MS ?? 15000);
 const apiRunnerFreshMs = Number(process.env.BRYCECAST_API_RUNNER_FRESH_MS ?? 60000);
+const replayEnabled = process.env.BRYCECAST_REPLAY === '1';
+const replayOverlay = createReplayOverlay({ enabled: replayEnabled, sqlitePath, runnerStatusPath });
 
 const sourceUrlByPath = new Map(sourceProbeEndpoints.map((endpoint) => [endpoint.proxyPath, endpoint.url]));
 const sourceEndpointByPath = new Map(sourceProbeEndpoints.map((endpoint) => [endpoint.proxyPath, endpoint]));
@@ -821,7 +824,7 @@ const archivedSnapshot = ({ reason, liveResults, fallbackProfile }) => {
   };
 };
 
-const buildRaceSnapshotFromResults = (results) => {
+export const buildRaceSnapshotFromResults = (results) => {
   const timing = results.find((result) => result.id === 'timing')?.payload?.timing_results;
   const drivers = results.find((result) => result.id === 'drivers_nxt')?.payload?.drivers?.driver ?? [];
   const config = results.find((result) => result.id === 'config')?.payload ?? {};
@@ -1078,7 +1081,13 @@ const buildReplaySummary = (rows) => {
   };
 };
 
-const queryReplay = ({ limit: limitValue, offset: offsetValue, sessionKey: requestedSessionKey, sample: sampleMode }) => {
+export const queryReplay = ({
+  limit: limitValue,
+  offset: offsetValue,
+  sessionKey: requestedSessionKey,
+  sample: sampleMode,
+  beforeCheckedAt = null
+}) => {
   const limit = Math.min(Math.max(Number(limitValue) || 100, 1), 500);
   const offset = Math.max(Number(offsetValue) || 0, 0);
   const perLap = sampleMode === 'lap';
@@ -1126,6 +1135,7 @@ const queryReplay = ({ limit: limitValue, offset: offsetValue, sessionKey: reque
           FROM bryce_samples b
           LEFT JOIN race_snapshots s ON s.id = b.snapshot_id
           WHERE (? IS NULL OR b.session_key = ?)
+            AND (? IS NULL OR b.checked_at <= ?)
           ${perLap
             ? `AND b.checked_at = (
                  SELECT MAX(b2.checked_at) FROM bryce_samples b2
@@ -1137,7 +1147,7 @@ const queryReplay = ({ limit: limitValue, offset: offsetValue, sessionKey: reque
           OFFSET ?
         `
         )
-        .all(sessionKey, sessionKey, limit, offset);
+        .all(sessionKey, sessionKey, beforeCheckedAt, beforeCheckedAt, limit, offset);
       if (!perLap) rows.reverse();
       const selected = sessionKey ? db.prepare('SELECT COUNT(*) AS count FROM bryce_samples WHERE session_key = ?').get(sessionKey) : total;
       const selectedCount = Number(selected?.count ?? rows.length);
@@ -1562,7 +1572,14 @@ const fetchReadinessWeather = async (checkedAt, heartbeat = null) => {
   }
 };
 
-const buildReadinessPayloadFromRuntimeParts = async ({ results, sourceReportBase, historyPayload, replay, checkedAt = new Date().toISOString() }) => {
+const buildReadinessPayloadFromRuntimeParts = async ({
+  results,
+  sourceReportBase,
+  historyPayload,
+  replay,
+  checkedAt = new Date().toISOString(),
+  weatherOverride
+}) => {
   const sourceReport = {
     ...sourceReportBase,
     local: {
@@ -1584,7 +1601,7 @@ const buildReadinessPayloadFromRuntimeParts = async ({ results, sourceReportBase
   const timingRows = Array.isArray(timing?.Item) ? timing.Item : [];
   const bryce = timingRows.find((row) => isBryceTimingRow(row, heartbeat)) ?? null;
   const bryceProfile = (Array.isArray(drivers) ? drivers.find(isBryceProfile) : null) ?? fallbackBryceProfile(bryce);
-  const weather = await fetchReadinessWeather(checkedAt, heartbeat);
+  const weather = weatherOverride === undefined ? await fetchReadinessWeather(checkedAt, heartbeat) : weatherOverride;
   const broadcastRoute = heartbeat
     ? buildTrackActivityRoute(trackActivity, heartbeat) ?? buildScheduleRoute(schedule, heartbeat) ?? buildConfigRoute(config, heartbeat) ?? buildUnavailableRoute(heartbeat)
     : null;
@@ -1701,6 +1718,42 @@ const buildReadinessPayloadFromRunnerRecord = async (record) => {
   });
 };
 
+const replayWeatherUnavailable = (checkedAt, record) => ({
+  schemaVersion: 'live-weather.v1',
+  checkedAt,
+  sourceState: 'unavailable',
+  track: {
+    id: 'track_road_america',
+    name: record?.summary?.trackName ?? 'Road America'
+  },
+  probes: [],
+  cache: { status: 'replay_not_captured' },
+  warnings: ['Weather was not part of this archived Race Control replay and is not inferred.']
+});
+
+const currentReplayRecord = () => replayOverlay.currentRecord();
+
+const buildReplaySnapshot = (record) => buildRaceSnapshotFromResults(rawResultsFromSnapshotRecord(record));
+
+const buildReplaySourceReport = (record) =>
+  buildSourceReportFromResults(sourceResultsFromSnapshotRecord(record), record.checkedAt ?? new Date().toISOString());
+
+const buildReadinessPayloadFromReplayRecord = async (record) => {
+  const replay = queryReplay({
+    limit: 500,
+    sessionKey: record.sessionKey,
+    beforeCheckedAt: record.archiveCheckedAt
+  });
+  return buildReadinessPayloadFromRuntimeParts({
+    checkedAt: record.checkedAt,
+    results: rawResultsFromSnapshotRecord(record),
+    sourceReportBase: buildReplaySourceReport(record),
+    historyPayload: await readJsonFile(historyPath),
+    replay,
+    weatherOverride: replayWeatherUnavailable(record.checkedAt, record)
+  });
+};
+
 const refreshApiRuntimeCache = async ({ reason = 'loop', force = false } = {}) => {
   if (apiRuntimeCache.refreshPromise && !force) return apiRuntimeCache.refreshPromise;
   apiRuntimeCache.refreshPromise = (async () => {
@@ -1753,6 +1806,8 @@ const requireCached = async (key, label) => {
 };
 
 const cachedRaceSnapshot = async () => {
+  const replayRecord = currentReplayRecord();
+  if (replayRecord) return buildReplaySnapshot(replayRecord);
   const runnerRecord = await readFreshRunnerRawRecord();
   if (runnerRecord) {
     try {
@@ -1763,12 +1818,16 @@ const cachedRaceSnapshot = async () => {
 };
 
 const cachedReadinessPayload = async () => {
+  const replayRecord = currentReplayRecord();
+  if (replayRecord) return buildReadinessPayloadFromReplayRecord(replayRecord);
   const runnerRecord = await readFreshRunnerRawRecord();
   if (runnerRecord) return buildReadinessPayloadFromRunnerRecord(runnerRecord);
   return requireCached('readiness', 'Readiness');
 };
 
 const cachedSourceReport = async () => {
+  const replayRecord = currentReplayRecord();
+  if (replayRecord) return buildReplaySourceReport(replayRecord);
   const runnerRecord = await readFreshRunnerRawRecord();
   if (runnerRecord) return buildSourceReportFromResults(sourceResultsFromSnapshotRecord(runnerRecord), runnerRecord.checkedAt ?? new Date().toISOString());
   return requireCached('sources', 'Source report');
@@ -1889,6 +1948,7 @@ const handler = async (req, res) => {
         ok: true,
         service: 'brycecast-api',
         checkedAt: new Date().toISOString(),
+        replay: replayOverlay.status(),
         staticDir: staticDir ? relative(root, staticDir) : null,
         storage: {
           latestSnapshot: await fileStatus(latestSnapshotPath),
@@ -1899,6 +1959,36 @@ const handler = async (req, res) => {
           audioProof: await fileStatus(audioProofPath)
         }
       });
+      return;
+    }
+
+    if (pathname === '/api/replay/control') {
+      if (!replayEnabled) {
+        sendError(res, 404, 'Replay mode is disabled.');
+        return;
+      }
+      if (req.method !== 'GET') {
+        sendError(res, 405, 'Replay control is GET-only.');
+        return;
+      }
+      if (url.searchParams.get('stop') === '1') {
+        sendJson(res, 200, replayOverlay.stop());
+        return;
+      }
+      const session = url.searchParams.get('session');
+      if (!session) {
+        sendJson(res, 200, replayOverlay.status());
+        return;
+      }
+      sendJson(
+        res,
+        200,
+        replayOverlay.start({
+          session,
+          t0: url.searchParams.get('t0'),
+          speed: url.searchParams.get('speed') ?? 1
+        })
+      );
       return;
     }
 
@@ -2042,7 +2132,18 @@ const handler = async (req, res) => {
     }
 
     if (pathname === '/api/replay/bryce') {
-      sendJson(res, 200, queryReplay({ limit: url.searchParams.get('limit'), offset: url.searchParams.get('offset'), sessionKey: url.searchParams.get('sessionKey'), sample: url.searchParams.get('sample') }));
+      const replayRecord = currentReplayRecord();
+      sendJson(
+        res,
+        200,
+        queryReplay({
+          limit: url.searchParams.get('limit'),
+          offset: url.searchParams.get('offset'),
+          sessionKey: url.searchParams.get('sessionKey') ?? replayRecord?.sessionKey,
+          sample: url.searchParams.get('sample'),
+          beforeCheckedAt: replayRecord?.archiveCheckedAt ?? null
+        })
+      );
       return;
     }
 
@@ -2085,7 +2186,14 @@ const handler = async (req, res) => {
 };
 
 export const startServer = () => {
-  startApiRuntimeCacheLoop();
+  if (replayEnabled && process.env.BRYCECAST_REPLAY_SESSION) {
+    replayOverlay.start({
+      session: process.env.BRYCECAST_REPLAY_SESSION,
+      t0: process.env.BRYCECAST_REPLAY_T0,
+      speed: process.env.BRYCECAST_REPLAY_SPEED ?? 1
+    });
+  }
+  if (!replayEnabled) startApiRuntimeCacheLoop();
   const server = createServer(handler);
 
   server.listen(port, host, () => {
