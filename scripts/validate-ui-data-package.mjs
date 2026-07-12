@@ -560,6 +560,65 @@ if (conversionRows.length === 0 || undatedConversionRows > 0) {
   fail(`careerLab.resultConversion must carry eventStartDate on every row (${undatedConversionRows} missing of ${conversionRows.length}).`);
 }
 
+/* ---------- career weather joins (wet/dry splits) ---------- */
+
+const allowedWetDry = new Set(['dry', 'wet', 'damp', 'drying', null]);
+const badWetDryRows = conversionRows.filter((row) => !allowedWetDry.has(row.wetDry ?? null)).length;
+if (badWetDryRows > 0) {
+  fail(`careerLab.resultConversion carries ${badWetDryRows} rows with an unexpected wetDry value.`);
+}
+const wetJoinedRows = conversionRows.filter((row) => row.wetDry !== null && row.wetDry !== undefined);
+if (wetJoinedRows.length === 0) {
+  fail('careerLab.resultConversion must join at least one sourced weather condition (wetDry).');
+}
+if (wetJoinedRows.some((row) => !row.weatherConfidence)) {
+  fail('Every weather-joined conversion row must carry weatherConfidence.');
+}
+
+/* ---------- career head-to-head ---------- */
+
+const careerHeadToHead = dataPackage.screens.careerLab.headToHead ?? [];
+if (!Array.isArray(careerHeadToHead) || careerHeadToHead.length < 40) {
+  fail(`careerLab.headToHead must carry the full rival table (got ${careerHeadToHead.length ?? 0}).`);
+}
+for (const rival of careerHeadToHead) {
+  const ahead = rival.bryceAhead ?? 0;
+  const behind = rival.bryceBehind ?? 0;
+  if (!rival.driverName || typeof rival.racesTogether !== 'number' || rival.racesTogether <= 0) {
+    fail(`Head-to-head row ${rival.driverName ?? '(unnamed)'} needs driverName and racesTogether.`);
+  }
+  if (ahead + behind > rival.racesTogether) {
+    fail(`Head-to-head row ${rival.driverName}: ahead ${ahead} + behind ${behind} exceeds racesTogether ${rival.racesTogether}.`);
+  }
+  if (!Array.isArray(rival.notableRaces)) {
+    fail(`Head-to-head row ${rival.driverName} must carry a notableRaces array.`);
+  }
+}
+const headToHeadSorted = careerHeadToHead.every(
+  (rival, index) => index === 0 || (careerHeadToHead[index - 1].racesTogether ?? 0) >= (rival.racesTogether ?? 0)
+);
+if (!headToHeadSorted) {
+  fail('careerLab.headToHead must be sorted by racesTogether descending.');
+}
+
+/* ---------- lap position mix (where the laps lived) ---------- */
+
+const lapPositionMix = dataPackage.screens.careerLab.lapPositionMix ?? [];
+if (!Array.isArray(lapPositionMix) || lapPositionMix.length < 2) {
+  fail(`careerLab.lapPositionMix must carry at least two INDY NXT seasons (got ${lapPositionMix.length ?? 0}).`);
+}
+for (const season of lapPositionMix) {
+  const positionLaps = (season.positions ?? []).reduce((sum, entry) => sum + (entry.laps ?? 0), 0);
+  if (typeof season.seasonYear !== 'number' || !(season.totalLaps > 0) || positionLaps !== season.totalLaps) {
+    fail(`Lap position mix ${season.seasonYear}: position counts must sum to totalLaps.`);
+  }
+  for (const share of [season.top5LapShare, season.top10LapShare]) {
+    if (typeof share !== 'number' || share < 0 || share > 1) {
+      fail(`Lap position mix ${season.seasonYear}: lap shares must sit in [0, 1].`);
+    }
+  }
+}
+
 /* ---------- season index (archive spine) ---------- */
 
 const seasonIndex = dataPackage.screens.raceDebrief.seasonIndex;

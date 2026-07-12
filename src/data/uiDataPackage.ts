@@ -6,6 +6,27 @@ export interface UiSourceRef {
   note: string;
 }
 
+export interface UiCareerRival {
+  driverId: string | null;
+  driverName: string;
+  racesTogether: number | null;
+  bryceAhead: number | null;
+  bryceBehind: number | null;
+  headToHeadWinRate: number | null;
+  avgFinishDeltaVsRival: number | null;
+  sameTeamRaces: number | null;
+  notableRaces: Array<{ label: string; finishDelta: number | null }>;
+}
+
+export interface UiSeasonLapMix {
+  seasonYear: number;
+  races: number;
+  totalLaps: number;
+  top5LapShare: number;
+  top10LapShare: number;
+  positions: Array<{ position: number; laps: number }>;
+}
+
 export interface UiChartSpec {
   displayPolicy?: string;
   fields?: string[];
@@ -295,6 +316,8 @@ export interface UiDataPackage {
       parityBySeries: Record<string, Array<Record<string, string | number | null>>>;
       resultConversion: Array<Record<string, string | number | null>>;
       resultConversionSample: Array<Record<string, string | number | null>>;
+      headToHead: UiCareerRival[];
+      lapPositionMix: UiSeasonLapMix[];
       caveats: string[];
       sourceRefs: UiSourceRef[];
     };

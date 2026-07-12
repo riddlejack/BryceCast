@@ -87,4 +87,26 @@ assert.ok(context.careerLab.contextPack.metricFamilyParity.length > 0);
 assert.ok(context.careerLab.deepContextPacks.careerDimension, 'career dimension deep pack must load');
 assert.ok(context.careerLab.deepContextPacks.imsaDaytonaStint, 'IMSA deep pack must load');
 
+/* Career Lab v2 modules: rivals, weather joins, lap texture. */
+const careerScreen = context.dataPackage.screens.careerLab;
+assert.ok(careerScreen.headToHead.length >= 40, 'career head-to-head must carry the full rival table');
+for (const rival of careerScreen.headToHead) {
+  assert.ok(rival.driverName, 'every rival row carries a name');
+  assert.ok(
+    (rival.bryceAhead ?? 0) + (rival.bryceBehind ?? 0) <= (rival.racesTogether ?? 0),
+    `${rival.driverName} record must fit racesTogether`
+  );
+}
+const conversionWithWeather = careerScreen.resultConversion.filter((row) => row.wetDry);
+assert.ok(conversionWithWeather.length > 0, 'weather joins must reach the conversion rows');
+assert.ok(
+  conversionWithWeather.every((row) => ['dry', 'wet', 'damp', 'drying'].includes(String(row.wetDry)) && row.weatherConfidence),
+  'joined weather rows carry a known condition and a confidence label'
+);
+assert.ok(careerScreen.lapPositionMix.length >= 2, 'lap position mix must carry the INDY NXT seasons');
+for (const season of careerScreen.lapPositionMix) {
+  const summed = season.positions.reduce((sum, entry) => sum + entry.laps, 0);
+  assert.equal(summed, season.totalLaps, `lap mix ${season.seasonYear} position counts must sum to totalLaps`);
+}
+
 console.log('ui context adapter hydration tests passed');

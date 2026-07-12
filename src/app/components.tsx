@@ -1,4 +1,4 @@
-import { useEffect, useState, type CSSProperties, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 import { ChevronDown, ChevronUp, Database, Info, X } from 'lucide-react';
 
 /* ---------- status chips (dot + label always; never color alone) ---------- */
@@ -206,6 +206,41 @@ export const Unavailable = ({ children }: { children: ReactNode }) => (
     <span>{children}</span>
   </div>
 );
+
+/* ---------- scroll-in reveal: one soft settle per element, once ---------- */
+
+export const Reveal = ({ children, delay = 0 }: { children: ReactNode; delay?: number }) => {
+  const ref = useRef<HTMLDivElement | null>(null);
+  const [shown, setShown] = useState(false);
+  useEffect(() => {
+    const node = ref.current;
+    if (!node) return;
+    if (typeof IntersectionObserver === 'undefined') {
+      setShown(true);
+      return;
+    }
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          setShown(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.12, rootMargin: '0px 0px -36px' }
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+  return (
+    <div
+      ref={ref}
+      className={`reveal${shown ? ' reveal--in' : ''}`}
+      style={delay ? { transitionDelay: `${delay}ms` } : undefined}
+    >
+      {children}
+    </div>
+  );
+};
 
 /* ---------- source drawer ---------- */
 

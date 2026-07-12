@@ -10,6 +10,7 @@ import { RaceWeekScreen } from '../screens/RaceWeekScreen';
 import { RacesScreen } from '../screens/RacesScreen';
 import { RaceDetailScreen } from '../screens/RaceDetailScreen';
 import { CareerScreen } from '../screens/CareerScreen';
+import { CareerRaceScreen } from '../screens/CareerRaceScreen';
 import { DataScreen } from '../screens/DataScreen';
 
 const navItems: Array<{ to: string; label: string; icon: ComponentType<{ size?: number | string }> }> = [
@@ -84,6 +85,7 @@ const Routes = () => {
   const { route } = useRouter();
   const readiness = useReadiness();
   const raceDetail = matchPath('/races/:sessionId', route.path);
+  const careerRace = matchPath('/career/race/:sessionId', route.path);
 
   let screen: ReactNode;
   if (route.path === '/') screen = <HomeScreen readiness={readiness} />;
@@ -91,6 +93,7 @@ const Routes = () => {
   else if (route.path === '/race-week') screen = <RaceWeekScreen />;
   else if (raceDetail) screen = <RaceDetailScreen sessionId={raceDetail.sessionId} />;
   else if (route.path === '/races') screen = <RacesScreen />;
+  else if (careerRace) screen = <CareerRaceScreen sessionId={careerRace.sessionId} />;
   else if (route.path === '/career') screen = <CareerScreen />;
   else if (route.path === '/data') screen = <DataScreen />;
   else

@@ -1,6 +1,6 @@
 {
-  "asOfDate": "2026-07-11",
-  "generatedAt": "2026-07-12T04:40:40Z",
+  "asOfDate": "2026-07-12",
+  "generatedAt": "2026-07-12T15:52:07Z",
   "items": [
     {
       "availability": "partial",
@@ -1064,7 +1064,7 @@
       "label": "indySummary",
       "productizationStatus": "productized",
       "recommendedAction": "Use as source precedence, caveat, or validation input.",
-      "sha256": "a231348d843430da1bed8bb16ee094ede3792d276603ff58c8e1de9057d67587",
+      "sha256": "12de9c23fce652101d7a71d740d17971155e4feb183e676e0983c2c2759d0c2d",
       "sourcePath": "analysis/indy-nxt-discovery/output/summary.json",
       "surface": "governance"
     },
@@ -1078,7 +1078,7 @@
       "label": "indyDeepSummary",
       "productizationStatus": "productized",
       "recommendedAction": "Use as source precedence, caveat, or validation input.",
-      "sha256": "a51baec8efb889906f5da45b3ec6b124fa7a4b5efde5307be6a99322adf910f0",
+      "sha256": "70f2f2c82b06071ed29bde381d959214d23df51cae032cac24da7472aadbdb91",
       "sourcePath": "analysis/indy-nxt-discovery/output/deep_dive/summary.json",
       "surface": "governance"
     },
@@ -1139,7 +1139,7 @@
       "surface": "governance"
     }
   ],
-  "repoHead": "3e5dabc",
+  "repoHead": "d7f455e",
   "schemaVersion": "brycecast.predictiveRaceIntelligence.inventory.v1",
   "sourceHash": "900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681",
   "sourceRefs": [
@@ -1171,13 +1171,13 @@
       "bytes": 1722,
       "path": "analysis/indy-nxt-discovery/output/summary.json",
       "role": "indySummary",
-      "sha256": "a231348d843430da1bed8bb16ee094ede3792d276603ff58c8e1de9057d67587"
+      "sha256": "12de9c23fce652101d7a71d740d17971155e4feb183e676e0983c2c2759d0c2d"
     },
     {
       "bytes": 1461,
       "path": "analysis/indy-nxt-discovery/output/deep_dive/summary.json",
       "role": "indyDeepSummary",
-      "sha256": "a51baec8efb889906f5da45b3ec6b124fa7a4b5efde5307be6a99322adf910f0"
+      "sha256": "70f2f2c82b06071ed29bde381d959214d23df51cae032cac24da7472aadbdb91"
     },
     {
       "bytes": 362,

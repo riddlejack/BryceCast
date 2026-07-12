@@ -26,6 +26,7 @@ const sources = {
   championshipProgression: 'analysis/indy-nxt-discovery/output/deep_dive/tables/championship_progression.csv',
   sourceFamilyAudit: 'analysis/indy-nxt-discovery/output/deep_dive/tables/indy_nxt_source_family_audit.csv',
   contextEventGapBoundary: 'analysis/context-event-narrative-layer/output/gap_source_boundary_context.csv',
+  contextEventWeatherConditions: 'analysis/context-event-narrative-layer/output/weather_condition_context.csv',
   prepSessionSignals: 'analysis/indy-nxt-discovery/output/deep_dive/tables/prep_session_signals.csv',
   fieldStrengthByRace: 'analysis/indy-nxt-discovery/output/deep_dive/tables/field_strength_by_race.csv',
   headToHead: 'analysis/indy-nxt-discovery/output/tables/indy_nxt_head_to_head.csv',
@@ -722,14 +723,88 @@ const buildSeasonIndex = ({ raceDebriefPackPairs, resultsBySession, progressionR
 
 /** The Career Lab climb needs true chronology; conversion rows carry no
  *  dates, so join each session to its canonical event start date. */
-const enrichConversionRows = (rows, canonicalDataset) => {
+const enrichConversionRows = (rows, canonicalDataset, weatherConditionRows = []) => {
   const sessionById = new Map((canonicalDataset.sessions ?? []).map((session) => [session.id, session]));
   const eventById = new Map((canonicalDataset.events ?? []).map((event) => [event.id, event]));
+  const weatherBySession = new Map(
+    weatherConditionRows
+      .filter((row) => row.sessionId && row.wetDry && row.wetDry !== 'unknown')
+      .map((row) => [row.sessionId, { wetDry: row.wetDry, weatherConfidence: row.confidence ?? null }])
+  );
   return rows.map((row) => {
     const session = sessionById.get(row.sessionId);
     const event = session ? eventById.get(session.eventId) : null;
-    return { ...row, eventStartDate: event?.eventStartDate ?? null };
+    const weather = weatherBySession.get(row.sessionId) ?? null;
+    return {
+      ...row,
+      eventStartDate: event?.eventStartDate ?? null,
+      wetDry: weather?.wetDry ?? null,
+      weatherConfidence: weather?.weatherConfidence ?? null
+    };
   });
+};
+
+/* Career head-to-head: every rival Bryce has shared an INDY NXT grid with,
+ * sorted by races together. notableRaces parse: "label (+15) | label (-10)". */
+const buildCareerHeadToHead = (rows) =>
+  rows
+    .map((row) => ({
+      driverId: row.driverId ?? null,
+      driverName: row.driverName ?? '',
+      racesTogether: numberOrNull(row.racesTogether),
+      bryceAhead: numberOrNull(row.bryceAhead),
+      bryceBehind: numberOrNull(row.bryceBehind),
+      headToHeadWinRate: numberOrNull(row.headToHeadWinRate),
+      avgFinishDeltaVsRival: numberOrNull(row.avgFinishDeltaVsRival),
+      sameTeamRaces: numberOrNull(row.sameTeamRaces),
+      notableRaces: String(row.notableRaces ?? '')
+        .split('|')
+        .map((chunk) => chunk.trim())
+        .filter(Boolean)
+        .map((chunk) => {
+          const match = chunk.match(/^(.*)\(([+-]\d+)\)$/);
+          return match ? { label: match[1].trim(), finishDelta: Number(match[2]) } : { label: chunk, finishDelta: null };
+        })
+    }))
+    .filter((row) => row.driverName && (row.racesTogether ?? 0) > 0)
+    .sort((left, right) => (right.racesTogether ?? 0) - (left.racesTogether ?? 0) || left.driverName.localeCompare(right.driverName));
+
+/* Where the laps lived: Bryce's official running position on every sourced
+ * INDY NXT lap, bucketed per season — the climb visible inside the races,
+ * not just at the flag. */
+const buildLapPositionMix = ({ lapTimelineRows, canonicalDataset }) => {
+  const sessionById = new Map((canonicalDataset.sessions ?? []).map((session) => [session.id, session]));
+  const eventById = new Map((canonicalDataset.events ?? []).map((event) => [event.id, event]));
+  const seasons = new Map();
+  for (const row of lapTimelineRows) {
+    const position = numberOrNull(row.position);
+    if (position === null || position < 1) continue;
+    const session = sessionById.get(row.sessionId);
+    const event = session ? eventById.get(session.eventId) : null;
+    const yearFromEvent = event?.eventStartDate ? Number(String(event.eventStartDate).slice(0, 4)) : null;
+    const yearFromLabel = Number(String(row.raceLabel ?? '').slice(0, 4));
+    const seasonYear = yearFromEvent ?? (Number.isFinite(yearFromLabel) ? yearFromLabel : null);
+    if (!seasonYear) continue;
+    const bucket = seasons.get(seasonYear) ?? { seasonYear, totalLaps: 0, sessionIds: new Set(), counts: new Map() };
+    bucket.totalLaps += 1;
+    bucket.sessionIds.add(row.sessionId);
+    bucket.counts.set(position, (bucket.counts.get(position) ?? 0) + 1);
+    seasons.set(seasonYear, bucket);
+  }
+  return [...seasons.values()]
+    .sort((left, right) => left.seasonYear - right.seasonYear)
+    .map((bucket) => {
+      const positions = [...bucket.counts.entries()].sort((left, right) => left[0] - right[0]).map(([position, laps]) => ({ position, laps }));
+      const lapsInside = (limit) => positions.filter((entry) => entry.position <= limit).reduce((sum, entry) => sum + entry.laps, 0);
+      return {
+        seasonYear: bucket.seasonYear,
+        races: bucket.sessionIds.size,
+        totalLaps: bucket.totalLaps,
+        top5LapShare: lapsInside(5) / bucket.totalLaps,
+        top10LapShare: lapsInside(10) / bucket.totalLaps,
+        positions
+      };
+    });
 };
 
 const readLatestColdRaceCapture = () => {
@@ -1214,6 +1289,9 @@ const buildPackage = () => {
   const debriefScoreRows = readCsv(sources.raceDebriefScores);
   const prepSignalRows = readCsv(sources.prepSessionSignals);
   const headToHeadRows = readCsv(sources.headToHead);
+  const weatherConditionRows = readCsv(sources.contextEventWeatherConditions);
+  const lapTimelineRows = readCsv(sources.indyNxtLapTimeline);
+  const careerConversionEnriched = enrichConversionRows(careerLabPayload.resultConversion ?? [], canonicalDataset, weatherConditionRows);
   const championshipRows = readCsv(sources.championshipProgression);
   const latestSeasonYear = Math.max(...championshipRows.map((row) => numberOrNull(row.seasonYear) ?? 0));
   const nextEventPrep = buildNextEventPrep({
@@ -1429,13 +1507,25 @@ const buildPackage = () => {
         topCareerStories: careerLabPayload.topCareerStories ?? [],
         chartSpecs: careerLabPayload.chartSpecs ?? [],
         resultConversionRows: careerLabPayload.resultConversionRows,
-        resultConversion: enrichConversionRows(careerLabPayload.resultConversion ?? [], canonicalDataset),
-        resultConversionSample: enrichConversionRows(careerLabPayload.resultConversion ?? [], canonicalDataset).slice(0, 25),
+        resultConversion: careerConversionEnriched,
+        resultConversionSample: careerConversionEnriched.slice(0, 25),
+        headToHead: buildCareerHeadToHead(headToHeadRows),
+        lapPositionMix: buildLapPositionMix({ lapTimelineRows, canonicalDataset }),
         caveats: [
           'Career analytics must use metric-family parity states; older series do not expose INDY NXT-grade depth.',
-          'Result-conversion rows are source-bounded historical context, not a universal driver-strength model.'
+          'Result-conversion rows are source-bounded historical context, not a universal driver-strength model.',
+          'Weather joins cover only sessions with a sourced condition report (official series reports or labeled modeled observations); rows without one carry null and are excluded from wet/dry splits.',
+          'Head-to-head records cover INDY NXT grids only and count official classified finishes, not lap-by-lap battles.'
         ],
-        sourceRefs: [sourceRef('careerSeriesSummary', 'Series-level performance rows.'), sourceRef('careerMetricParity', 'Metric parity/source-boundary rows.'), sourceRef('careerResultConversion', 'Cross-series result conversion rows.'), sourceRef('predictiveCareerPriorMatrix', 'Parity-aware career prior matrix.')]
+        sourceRefs: [
+          sourceRef('careerSeriesSummary', 'Series-level performance rows.'),
+          sourceRef('careerMetricParity', 'Metric parity/source-boundary rows.'),
+          sourceRef('careerResultConversion', 'Cross-series result conversion rows.'),
+          sourceRef('predictiveCareerPriorMatrix', 'Parity-aware career prior matrix.'),
+          sourceRef('headToHead', 'INDY NXT head-to-head records vs every rival shared a grid with.'),
+          sourceRef('contextEventWeatherConditions', 'Per-session wet/dry condition reports joined onto career races.'),
+          sourceRef('indyNxtLapTimeline', 'Bryce per-lap official positions across all INDY NXT races.')
+        ]
       },
       sourceOps: {
         title: 'Source Ops Baseline',

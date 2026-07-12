@@ -270,12 +270,54 @@ The list became the index, the chart the spine — per the original seed:
 - **Hover car on track outlines** (Race Week + race heroes): a small dot
   that follows the cursor around the outline path. Whimsy candidate only
   if it stays out of the way.
-- **Scroll-assembled charts** (McKinsey-insights style) — still waiting on
-  the animations repo link from Jack.
+- **Scroll-assembled charts** (McKinsey-insights style) — the animations
+  reference arrived 2026-07-12: Emil Kowalski's skills repo
+  (github.com/emilkowalski/skills — apple-design, animation-vocabulary,
+  emil-design-eng, improve/review-animations). Motion values now binding:
+  strong ease-out `cubic-bezier(0.23,1,0.32,1)`, UI under 300ms, 30–80ms
+  staggers, GPU-only properties, reveals via IntersectionObserver once.
+  First use shipped: Career Lab chapter-card scroll reveals (`Reveal` in
+  src/app/components.tsx + `.reveal` in theme.css — reuse, don't reinvent).
 - **Per-race standout dynamic charts** and a richer battle visualization
   (who/when on the lap axis).
 
-## Jack's Career Lab + race-page review (2026-07-12) — NEXT WORK QUEUE
+## Career Lab v2 shipped (2026-07-12, second session) — new house patterns
+
+1. **The Explorer moved directly under The climb**; the approved
+   percentiles-grouped view now leads, with a **conditions** group-by
+   (dry / wet or mixed / no report — one-dot lanes merged on purpose).
+2. **Start → finish rebuilt as a house SVG** (recharts scatter gone): axes
+   rescale to the filtered rows, near-mono ink dots, gold = a win (keyed),
+   ○ = ended early, nearest-dot hover, every dot clicks through, and the
+   races without a sourced grid position are counted on screen instead of
+   silently dropped (the old F1600/IMSA zero-dot bug).
+3. **The rivals** (new module): beeswarm of every rival with 5+ shared INDY
+   NXT grids — x = share of shared races finished ahead, size = races
+   together, dashed "even" line — plus a top-six record list (Bryce-first
+   ahead–behind split bars, teammate notes). Data: careerLab.headToHead in
+   the ui-data-package (50 rivals). This is the treemap idea's descendant:
+   scan-the-field, size = weight, position = direction, house-legal.
+4. **Rain days** (new module): dry vs wet-or-mixed percentile lanes from
+   per-session sourced condition reports joined onto career rows
+   (careerLab.resultConversion now carries wetDry + weatherConfidence;
+   76 of 141 races covered, said on screen). The honest headline: his wet
+   median beats his dry median.
+5. **Light race sheets for every non-INDY NXT race** at /career/race/:id —
+   hero facts, chapter-context strip with the race in full ink, prev/next,
+   condition line, source drawer. Every career dot everywhere now clicks
+   through (INDY NXT → full debrief, others → sheet). Multi-race rounds
+   disambiguate as "· Race N" (derived from session ids).
+6. **Chapter cards vary by size**: the one-race IMSA chapter dropped its
+   percentile strip for the Daytona story (pack-fed facts: P6 GTP, 780 laps,
+   10 stints, Porsche 963 · JDC Miller); the INDY NXT card carries lap
+   texture (197 top-five laps · 852 top-ten of 1,493 sourced). Scroll-in
+   reveals on all chapter cards (Reveal component, reduced-motion safe).
+7. **Deliberately NOT shipped**: a per-season lap-position trend (reads as
+   decline because 2026 fields are deeper — the field-strength trap), and a
+   pie chart (no honest part-of-whole earned its place). Laps-led count is
+   zero so far — never render a "laps led" stat until it isn't.
+
+## Jack's Career Lab + race-page review (2026-07-12) — WORK QUEUE (v2 items above DONE)
 
 Full detail in docs/PAGECRAFT_HANDOFF_2026-07-12.md §2. Headlines: add gold
 S/F ticks + corner labels to street-circuit/all track art; make the race-hero

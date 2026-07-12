@@ -62,7 +62,7 @@
     }
   ],
   "analogSelectionPolicy": "pre_race_track_match_then_recency_no_outcome_sort",
-  "asOfDate": "2026-07-11",
+  "asOfDate": "2026-07-12",
   "careerPriorContext": [
     {
       "avgFinishPercentile": 0.498,
@@ -178,7 +178,7 @@
   "eventId": "event_indy_nxt_2026_5542",
   "eventName": "Grand Prix of Monterey Race 1",
   "eventStartDate": "2026-09-05",
-  "generatedAt": "2026-07-12T04:40:42Z",
+  "generatedAt": "2026-07-12T15:52:08Z",
   "id": "upcoming_event_indy_nxt_2026_5542_grand_prix_of_monterey_race_1",
   "predictionBand": {
     "calibrationState": "not_calibrated_for_point_probability",
@@ -244,7 +244,7 @@
       "bytes": 8911,
       "path": "analysis/predictive-race-intelligence/output/model_scorecard.json",
       "role": "prediction validation",
-      "sha256": "5eed4f54d634ecc1284751ac155253bbae3ed3c62b5e28844bbd8c8d43d91870"
+      "sha256": "bee92be5e0f71b24708204a54cc3a94a4b3fa35ac14fdb48e2010b8341f0abf8"
     }
   ],
   "top10Path": [

@@ -1,7 +1,17 @@
-import { Card, SourcePill, Stat, Unavailable } from '../app/components';
+import { Card, Reveal, SourcePill, Stat, Unavailable } from '../app/components';
 import { asNumber, asString, formatNumber, formatPct } from '../app/format';
 import { uiDataPackage } from '../data/uiDataPackage';
-import { BestClimbs, CareerBests, CareerExplorer, ChapterStrip, DaytonaStory, TheClimb } from './careerExplorer';
+import {
+  BestClimbs,
+  CareerBests,
+  CareerExplorer,
+  ChapterStrip,
+  DaytonaChapterBody,
+  DaytonaSourcePill,
+  RainDays,
+  RivalsCard,
+  TheClimb
+} from './careerExplorer';
 
 type Row = Record<string, string | number | null>;
 
@@ -13,7 +23,7 @@ const seriesChapters: Array<{ name: string; years: string; short?: string; narra
     name: 'F1600 Championship Series',
     years: '2019',
     short: 'F1600',
-    narrative: 'Where the climb started — a first season in American grassroots open-wheel.'
+    narrative: 'Where the climb started — his first season racing cars, in American grassroots open-wheel.'
   },
   {
     name: 'Formula Ford',
@@ -41,7 +51,8 @@ const seriesChapters: Array<{ name: string; years: string; short?: string; narra
     name: 'IMSA WeatherTech SportsCar Championship',
     years: '2025 · Daytona 24',
     short: 'IMSA',
-    narrative: 'Twenty-four hours at Daytona in a GTP prototype — endurance racing’s deep end.'
+    narrative:
+      'One race, twenty-four hours: the Rolex 24 at Daytona in a GTP prototype — endurance racing’s deep end, shared with three co-drivers through the night.'
   },
   {
     name: 'INDY NXT',
@@ -53,13 +64,16 @@ const seriesChapters: Array<{ name: string; years: string; short?: string; narra
 const ChapterCard = ({
   chapter,
   row,
-  current
+  current,
+  extra
 }: {
   chapter: (typeof seriesChapters)[number];
   row: Row | undefined;
   current: boolean;
+  extra?: string | null;
 }) => {
   const races = row ? asNumber(row.raceRows) : null;
+  const oneRace = chapter.short === 'IMSA';
   return (
     <div className={`journey__chapter${current ? ' journey__chapter--current' : ''}`}>
       <Card className={current ? undefined : 'panel--quiet'}>
@@ -70,23 +84,39 @@ const ChapterCard = ({
               {chapter.short ?? chapter.name}
             </h2>
           </div>
-          {races !== null ? (
-            <span className="chip chip--outline tnum">
-              {formatNumber(races, 0)} {races === 1 ? 'race' : 'races'}
-            </span>
-          ) : null}
+          <span className="row" style={{ gap: 8 }}>
+            {races !== null ? (
+              <span className="chip chip--outline tnum">
+                {formatNumber(races, 0)} {races === 1 ? 'race' : 'races'}
+              </span>
+            ) : null}
+            {oneRace ? <DaytonaSourcePill /> : null}
+          </span>
         </div>
         <p style={{ margin: '8px 0 0', fontSize: 13.5, color: 'var(--ink-secondary)', maxWidth: '58ch' }}>{chapter.narrative}</p>
-        <div style={{ marginTop: 10 }}>
-          <ChapterStrip seriesName={chapter.name} />
-        </div>
-        {row ? (
-          <div className="row" style={{ gap: 26, marginTop: 10, flexWrap: 'wrap' }}>
-            <Stat label="Avg finish" value={formatNumber(row.avgFinish)} />
-            <Stat label="Field beaten (avg)" value={formatPct(row.avgFinishPercentile)} />
-            <Stat label="Top-10 rate" value={formatPct(row.top10RatePct)} />
-          </div>
-        ) : null}
+        {oneRace ? (
+          /* A single dot on a percentile strip says nothing — the one-race
+           * chapter gets told as the race it was. */
+          <DaytonaChapterBody />
+        ) : (
+          <>
+            <div style={{ marginTop: 10 }}>
+              <ChapterStrip seriesName={chapter.name} />
+            </div>
+            {row ? (
+              <div className="row" style={{ gap: 26, marginTop: 10, flexWrap: 'wrap' }}>
+                <Stat label="Avg finish" value={formatNumber(row.avgFinish)} />
+                <Stat label="Field beaten (avg)" value={formatPct(row.avgFinishPercentile)} />
+                <Stat label="Top-10 rate" value={formatPct(row.top10RatePct)} />
+              </div>
+            ) : null}
+            {extra ? (
+              <p className="caption caption--secondary" style={{ margin: '10px 0 0' }}>
+                {extra}
+              </p>
+            ) : null}
+          </>
+        )}
       </Card>
     </div>
   );
@@ -97,6 +127,23 @@ export const CareerScreen = () => {
   const rows = careerLab.seriesSummary as Row[];
   const rowByName = new Map(rows.map((row) => [asString(row.seriesName) ?? '', row]));
   const totalRaces = rows.reduce((sum, row) => sum + (asNumber(row.raceRows) ?? 0), 0);
+
+  /* Lap texture for the current chapter: every sourced INDY NXT lap chart. */
+  const lapTotals = (careerLab.lapPositionMix ?? []).reduce(
+    (acc, season) => {
+      for (const { position, laps } of season.positions) {
+        acc.total += laps;
+        if (position <= 5) acc.top5 += laps;
+        if (position <= 10) acc.top10 += laps;
+      }
+      return acc;
+    },
+    { total: 0, top5: 0, top10: 0 }
+  );
+  const lapLine =
+    lapTotals.total > 0
+      ? `Lap by lap: of ${formatNumber(lapTotals.total, 0)} laps on sourced lap charts, ${formatNumber(lapTotals.top10, 0)} ran inside the top ten — ${formatNumber(lapTotals.top5, 0)} inside the top five.`
+      : null;
 
   return (
     <div className="page stack">
@@ -120,6 +167,16 @@ export const CareerScreen = () => {
 
       <TheClimb />
 
+      <div style={{ marginTop: 10 }}>
+        <span className="kicker">The explorer</span>
+      </div>
+      <CareerExplorer />
+
+      <div style={{ marginTop: 10 }}>
+        <span className="kicker">The rivals</span>
+      </div>
+      <RivalsCard />
+
       {rows.length === 0 ? (
         <Card>
           <Unavailable>Career summary data unavailable.</Unavailable>
@@ -131,24 +188,22 @@ export const CareerScreen = () => {
           </div>
           <div className="journey">
             {seriesChapters.map((chapter, index) => (
-              <ChapterCard
-                key={chapter.name}
-                chapter={chapter}
-                row={rowByName.get(chapter.name)}
-                current={index === seriesChapters.length - 1}
-              />
+              <Reveal key={chapter.name} delay={(index % 2) * 60}>
+                <ChapterCard
+                  chapter={chapter}
+                  row={rowByName.get(chapter.name)}
+                  current={index === seriesChapters.length - 1}
+                  extra={index === seriesChapters.length - 1 ? lapLine : null}
+                />
+              </Reveal>
             ))}
           </div>
         </>
       )}
 
-      <div style={{ marginTop: 10 }}>
-        <span className="kicker">The explorer</span>
-      </div>
-      <CareerExplorer />
       <div className="grid grid--2">
         <BestClimbs />
-        <DaytonaStory />
+        <RainDays />
       </div>
     </div>
   );
