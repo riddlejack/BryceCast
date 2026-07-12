@@ -1,9 +1,9 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { CloudSun, ExternalLink, MapPin, Route, Tv } from 'lucide-react';
 import { trackOutlineFor, type TrackOutline } from '../assets/tracks';
 import { Card, Countdown, HeroPanel, SourcePill, Stat, Unavailable } from '../app/components';
 import { asNumber, asString, formatClock, formatDate, formatNumber, shortVenue, trackTypeLabel } from '../app/format';
-import { Link } from '../app/router';
+import { Link, useRouter } from '../app/router';
 import { useApiJson } from '../app/useApiJson';
 import { normalizedName, useNextSession } from '../app/useNextSession';
 import {
@@ -40,6 +40,7 @@ const useMeasuredWidth = <T extends HTMLElement>() => {
 
 const chartFont = '-apple-system, system-ui, sans-serif';
 const inkConnector = 'rgba(29, 29, 31, 0.32)';
+const focusFade = 0.22;
 
 /** Compact venue names for chart row labels; falls back to shortVenue. */
 const venueShortNames: Record<string, string> = {
@@ -51,17 +52,65 @@ const venueShortNames: Record<string, string> = {
 
 const venueShort = (trackName: string): string => venueShortNames[trackName] ?? shortVenue(trackName);
 
+/* ---------- shared: hover tooltip (house style: white card, no delay) ---------- */
+
+interface ChartTip {
+  x: number;
+  y: number;
+  title: string;
+  detail?: string | null;
+  action?: string | null;
+}
+
+const ChartTipCard = ({ tip, width }: { tip: ChartTip; width: number }) => (
+  <div
+    style={{
+      position: 'absolute',
+      left: Math.min(Math.max(tip.x, 90), Math.max(width - 90, 90)),
+      top: tip.y,
+      transform: 'translate(-50%, calc(-100% - 10px))',
+      background: 'var(--surface-0)',
+      border: '1px solid var(--divider)',
+      borderRadius: 8,
+      padding: '6px 10px',
+      fontSize: 12,
+      lineHeight: 1.45,
+      whiteSpace: 'nowrap',
+      boxShadow: '0 6px 20px rgba(0,0,0,0.10)',
+      pointerEvents: 'none',
+      zIndex: 5,
+      fontVariantNumeric: 'tabular-nums'
+    }}
+  >
+    <strong>{tip.title}</strong>
+    {tip.detail ? <span style={{ color: 'var(--ink-secondary)' }}> · {tip.detail}</span> : null}
+    {tip.action ? <div style={{ color: 'var(--link)', fontSize: 11.5 }}>{tip.action}</div> : null}
+  </div>
+);
+
+/** Session ids with a race-debrief page, shared by every module that links out. */
+const useDebriefIds = (): Set<string> => {
+  const [ids, setIds] = useState<Set<string>>(new Set());
+  useEffect(() => {
+    loadDebriefArchive()
+      .then((archive) => setIds(new Set(archive.map((entry) => entry.pack.sessionId))))
+      .catch(() => setIds(new Set()));
+  }, []);
+  return ids;
+};
+
 /* ---------- hero: the track, drawn from OpenStreetMap geometry ---------- */
 
-const TrackArt = ({ outline, annotateCorner }: { outline: TrackOutline; annotateCorner?: string | null }) => {
+const TrackArt = ({ outline, annotation }: { outline: TrackOutline; annotation?: { corner: string; note: string } | null }) => {
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();
+  const [tip, setTip] = useState<ChartTip | null>(null);
   const [, , viewWidth, viewHeight] = outline.viewBox.split(' ').map(Number);
   const scale = width > 0 ? width / viewWidth : 1;
   const px = (visual: number) => visual / scale;
   const center = { x: viewWidth / 2, y: viewHeight / 2 };
 
   return (
-    <div ref={ref} style={{ width: '100%' }}>
+    <div ref={ref} style={{ width: '100%', position: 'relative' }}>
       {width > 0 ? (
         <svg
           viewBox={outline.viewBox}
@@ -83,34 +132,44 @@ const TrackArt = ({ outline, annotateCorner }: { outline: TrackOutline; annotate
             <g
               transform={`translate(${outline.startFinish.x} ${outline.startFinish.y}) rotate(${outline.startFinish.angleDeg + 90})`}
             >
-              <line
-                x1={-px(9)}
-                x2={px(9)}
-                stroke="var(--bryce)"
-                strokeWidth={px(3.5)}
-                strokeLinecap="round"
-              />
+              <line x1={-px(8)} x2={px(8)} stroke="var(--bryce)" strokeWidth={px(3.5)} strokeLinecap="round" />
             </g>
           ) : null}
           {outline.cornerArcs
             .filter((arc) => arc.label)
             .map((arc) => {
               const away = Math.hypot(arc.apex.x - center.x, arc.apex.y - center.y) || 1;
-              const offsetX = ((arc.apex.x - center.x) / away) * px(22);
-              const offsetY = ((arc.apex.y - center.y) / away) * px(22);
-              const highlighted = annotateCorner != null && arc.label === annotateCorner;
+              const offsetX = ((arc.apex.x - center.x) / away) * px(20);
+              const offsetY = ((arc.apex.y - center.y) / away) * px(20);
+              const annotated = annotation != null && arc.label === annotation.corner;
               return (
                 <g key={arc.label}>
-                  {highlighted ? <circle cx={arc.apex.x} cy={arc.apex.y} r={px(4.5)} fill="var(--bryce)" /> : null}
+                  {annotated ? (
+                    <>
+                      <circle cx={arc.apex.x} cy={arc.apex.y} r={px(4)} fill="var(--bryce)" />
+                      <circle
+                        cx={arc.apex.x}
+                        cy={arc.apex.y}
+                        r={px(13)}
+                        fill="transparent"
+                        style={{ cursor: 'default' }}
+                        onMouseEnter={() =>
+                          setTip({ x: arc.apex.x * scale, y: arc.apex.y * scale, title: `Turn ${annotation.corner}`, detail: annotation.note })
+                        }
+                        onMouseLeave={() => setTip(null)}
+                      />
+                    </>
+                  ) : null}
                   <text
                     x={arc.apex.x + offsetX}
                     y={arc.apex.y + offsetY}
                     textAnchor="middle"
                     dominantBaseline="middle"
-                    fill={highlighted ? 'var(--ink-primary)' : 'var(--ink-muted)'}
+                    fill="var(--ink-muted)"
                     fontFamily={chartFont}
-                    fontSize={px(12)}
-                    fontWeight={highlighted ? 600 : 500}
+                    fontSize={px(11.5)}
+                    fontWeight={500}
+                    style={{ pointerEvents: 'none' }}
                   >
                     {arc.label}
                   </text>
@@ -119,6 +178,7 @@ const TrackArt = ({ outline, annotateCorner }: { outline: TrackOutline; annotate
             })}
         </svg>
       ) : null}
+      {tip ? <ChartTipCard tip={tip} width={width} /> : null}
     </div>
   );
 };
@@ -130,8 +190,11 @@ const positionDomain = (races: UiNextEventPrepRace[]): number => {
   return Math.max(worst + 1, 12);
 };
 
-const ConversionChart = ({ prep }: { prep: UiNextEventPrep }) => {
+const ConversionChart = ({ prep, debriefIds }: { prep: UiNextEventPrep; debriefIds: Set<string> }) => {
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();
+  const { navigate } = useRouter();
+  const [hovered, setHovered] = useState<string | null>(null);
+  const [tip, setTip] = useState<ChartTip | null>(null);
   const races = prep.races;
   const labelWidth = width < 480 ? 86 : 118;
   const rowHeight = 30;
@@ -143,8 +206,13 @@ const ConversionChart = ({ prep }: { prep: UiNextEventPrep }) => {
   const height = axisHeight + races.length * rowHeight + 6;
   const ticks = [1, 5, 10, 15, 20].filter((tick) => tick <= maxPosition);
 
+  const leave = () => {
+    setHovered(null);
+    setTip(null);
+  };
+
   return (
-    <div ref={ref} style={{ width: '100%' }}>
+    <div ref={ref} style={{ width: '100%', position: 'relative' }}>
       {width > 0 ? (
         <svg width={width} height={height} role="img" aria-label="Start to finish, every INDY NXT oval race">
           {ticks.map((tick) => (
@@ -164,27 +232,45 @@ const ConversionChart = ({ prep }: { prep: UiNextEventPrep }) => {
             </g>
           ))}
           {races.map((race, index) => {
-            const y = axisHeight + index * rowHeight + rowHeight / 2;
+            const rowTop = axisHeight + index * rowHeight;
+            const y = rowTop + rowHeight / 2;
             const start = race.startPosition;
             const finish = race.finishPosition;
             if (start === null || finish === null) return null;
             const clean = race.officialStatus === 'running';
+            const linked = debriefIds.has(race.sessionId);
+            const isHovered = hovered === race.sessionId;
             const seasonShort = race.seasonYear !== null ? `’${String(race.seasonYear).slice(2)}` : '';
             const rowLabel = `${seasonShort} ${venueShort(race.trackName)}`;
             return (
-              <g key={race.sessionId}>
-                <title>
-                  {`${race.raceLabel}: started P${start}, finished P${finish}${clean ? '' : ` (${race.officialStatus})`}`}
-                </title>
+              <g
+                key={race.sessionId}
+                style={{ opacity: hovered !== null && !isHovered ? focusFade : 1, transition: 'opacity 150ms ease', cursor: linked ? 'pointer' : 'default' }}
+                onMouseEnter={() => {
+                  setHovered(race.sessionId);
+                  setTip({
+                    x: x(finish),
+                    y: rowTop + 4,
+                    title: rowLabel,
+                    detail: `started P${start} · finished P${finish}${clean ? '' : ` · ${race.officialStatus}`}`,
+                    action: linked ? 'open the race page' : null
+                  });
+                }}
+                onMouseLeave={leave}
+                onClick={() => {
+                  if (linked) navigate(`/races/${encodeURIComponent(race.sessionId)}`);
+                }}
+              >
+                <rect x={0} y={rowTop} width={width} height={rowHeight} fill="transparent" />
                 <text
                   x={labelWidth}
                   y={y}
                   textAnchor="end"
                   dominantBaseline="middle"
-                  fill={race.sameTrack ? 'var(--ink-primary)' : 'var(--ink-secondary)'}
+                  fill={race.sameTrack || isHovered ? 'var(--ink-primary)' : 'var(--ink-secondary)'}
                   fontFamily={chartFont}
                   fontSize={12}
-                  fontWeight={race.sameTrack ? 620 : 460}
+                  fontWeight={race.sameTrack || isHovered ? 620 : 460}
                 >
                   {rowLabel}
                 </text>
@@ -193,7 +279,7 @@ const ConversionChart = ({ prep }: { prep: UiNextEventPrep }) => {
                   x2={x(finish)}
                   y1={y}
                   y2={y}
-                  stroke={clean ? inkConnector : 'var(--hairline)'}
+                  stroke={clean ? (isHovered ? 'var(--ink-primary)' : inkConnector) : 'var(--hairline)'}
                   strokeWidth={2}
                   strokeDasharray={clean ? undefined : '3 4'}
                   strokeLinecap="round"
@@ -239,12 +325,14 @@ const ConversionChart = ({ prep }: { prep: UiNextEventPrep }) => {
           })}
         </svg>
       ) : null}
+      {tip ? <ChartTipCard tip={tip} width={width} /> : null}
     </div>
   );
 };
 
-const OvalStory = ({ prep, trackTypeName }: { prep: UiNextEventPrep; trackTypeName: string }) => {
+const OvalStory = ({ prep, trackTypeName, debriefIds }: { prep: UiNextEventPrep; trackTypeName: string; debriefIds: Set<string> }) => {
   const summary = prep.raceSummary;
+  const anyLinked = prep.races.some((race) => debriefIds.has(race.sessionId));
   const gainText =
     summary.cleanAvgGain !== null && summary.cleanAvgGain > 0 ? `+${formatNumber(summary.cleanAvgGain)}` : formatNumber(summary.cleanAvgGain);
   return (
@@ -274,12 +362,13 @@ const OvalStory = ({ prep, trackTypeName }: { prep: UiNextEventPrep; trackTypeNa
         {summary.nonRunningStatuses.length === 1 ? ' — the exception was a mechanical retirement, not pace' : ''}.
       </p>
       <p className="caption caption--secondary" style={{ margin: '0 0 10px' }}>
-        ○ started · ● finished · gold marks {shortVenue(prep.trackName)}
+        ○ started · ● finished · gold marks {venueShort(prep.trackName)}
       </p>
-      <ConversionChart prep={prep} />
+      <ConversionChart prep={prep} debriefIds={debriefIds} />
       <p style={{ margin: '10px 0 0', fontSize: 12, color: 'var(--ink-secondary)' }}>
         When the car finished: average finish {formatNumber(summary.cleanAvgFinish)}, average gain {gainText}, top-10 in{' '}
-        {summary.cleanTop10Count} of {summary.cleanRaceCount} · mechanical DNF shown dashed, excluded from these averages.
+        {summary.cleanTop10Count} of {summary.cleanRaceCount} · mechanical DNF shown dashed, excluded from these averages
+        {anyLinked ? ' · click a race for its full story' : ''}.
       </p>
     </Card>
   );
@@ -287,8 +376,11 @@ const OvalStory = ({ prep, trackTypeName }: { prep: UiNextEventPrep; trackTypeNa
 
 /* ---------- the Friday signal: best practice rank → race finish ---------- */
 
-const FridaySlope = ({ prep }: { prep: UiNextEventPrep }) => {
+const FridaySlope = ({ prep, debriefIds }: { prep: UiNextEventPrep; debriefIds: Set<string> }) => {
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();
+  const { navigate } = useRouter();
+  const [hovered, setHovered] = useState<string | null>(null);
+  const [tip, setTip] = useState<ChartTip | null>(null);
   const rows = prep.fridaySignal.filter((row) => row.officialStatus === 'running' && row.bestPracticeRank !== null && row.raceFinish !== null);
   if (rows.length < 3) return null;
   const worst = Math.max(...rows.flatMap((row) => [row.bestPracticeRank ?? 1, row.raceFinish ?? 1]));
@@ -311,8 +403,13 @@ const FridaySlope = ({ prep }: { prep: UiNextEventPrep }) => {
     if (current - previous < 14) labelY.set(ordered[index].sessionId, previous + 14);
   }
 
+  const leave = () => {
+    setHovered(null);
+    setTip(null);
+  };
+
   return (
-    <div ref={ref} style={{ width: '100%' }}>
+    <div ref={ref} style={{ width: '100%', position: 'relative' }}>
       {width > 0 ? (
         <svg width={width} height={height} role="img" aria-label="Best practice rank versus race finish on ovals">
           {[leftX, rightX].map((columnX) => (
@@ -342,46 +439,70 @@ const FridaySlope = ({ prep }: { prep: UiNextEventPrep }) => {
           {rows.map((row) => {
             const practice = row.bestPracticeRank as number;
             const finish = row.raceFinish as number;
+            const linked = debriefIds.has(row.sessionId);
+            const isHovered = hovered === row.sessionId;
+            const focused = isHovered || (hovered === null && row.sameTrack);
             const seasonShort = row.seasonYear !== null ? `’${String(row.seasonYear).slice(2)}` : '';
+            const rowLabel = `${seasonShort} ${venueShort(row.trackName)}`;
             return (
-              <g key={row.sessionId}>
-                <title>{`${row.raceLabel}: best practice P${practice} → finished P${finish}`}</title>
-                <line
-                  x1={leftX}
-                  x2={rightX}
-                  y1={y(practice)}
-                  y2={y(finish)}
-                  stroke="var(--ink-primary)"
-                  strokeWidth={row.sameTrack ? 2.2 : 1.6}
-                  strokeOpacity={row.sameTrack ? 1 : 0.34}
-                  strokeLinecap="round"
-                />
-                <circle cx={leftX} cy={y(practice)} r={3.4} fill="var(--surface-1)" stroke="var(--ink-primary)" strokeOpacity={row.sameTrack ? 1 : 0.4} strokeWidth={1.6} />
-                <circle cx={rightX} cy={y(finish)} r={row.sameTrack ? 4.6 : 3.4} fill={row.sameTrack ? 'var(--bryce)' : 'var(--ink-primary)'} fillOpacity={row.sameTrack ? 1 : 0.4} />
-                {row.sameTrack ? (
-                  <text
-                    x={rightX + 12}
-                    y={labelY.get(row.sessionId) ?? y(finish)}
-                    dominantBaseline="middle"
-                    fill="var(--ink-primary)"
-                    fontFamily={chartFont}
-                    fontSize={11.5}
-                    fontWeight={620}
-                    style={{ fontVariantNumeric: 'tabular-nums' }}
-                  >
-                    {seasonShort} · P{finish}
-                  </text>
-                ) : null}
+              <g
+                key={row.sessionId}
+                style={{ cursor: linked ? 'pointer' : 'default' }}
+                onMouseEnter={() => {
+                  setHovered(row.sessionId);
+                  setTip({
+                    x: (leftX + rightX) / 2,
+                    y: Math.min(y(practice), y(finish)),
+                    title: rowLabel,
+                    detail: `best practice P${practice} → finished P${finish}`,
+                    action: linked ? 'open the race page' : null
+                  });
+                }}
+                onMouseLeave={leave}
+                onClick={() => {
+                  if (linked) navigate(`/races/${encodeURIComponent(row.sessionId)}`);
+                }}
+              >
+                <line x1={leftX} x2={rightX} y1={y(practice)} y2={y(finish)} stroke="transparent" strokeWidth={14} />
+                <g style={{ opacity: hovered !== null && !isHovered ? 0.12 : focused ? 1 : 0.34, transition: 'opacity 150ms ease' }}>
+                  <line
+                    x1={leftX}
+                    x2={rightX}
+                    y1={y(practice)}
+                    y2={y(finish)}
+                    stroke="var(--ink-primary)"
+                    strokeWidth={focused ? 2.2 : 1.6}
+                    strokeLinecap="round"
+                    style={{ pointerEvents: 'none' }}
+                  />
+                  <circle cx={leftX} cy={y(practice)} r={3.4} fill="var(--surface-1)" stroke="var(--ink-primary)" strokeWidth={1.6} />
+                  <circle cx={rightX} cy={y(finish)} r={row.sameTrack ? 4.6 : 3.4} fill={row.sameTrack ? 'var(--bryce)' : 'var(--ink-primary)'} />
+                  {row.sameTrack ? (
+                    <text
+                      x={rightX + 12}
+                      y={labelY.get(row.sessionId) ?? y(finish)}
+                      dominantBaseline="middle"
+                      fill="var(--ink-primary)"
+                      fontFamily={chartFont}
+                      fontSize={11.5}
+                      fontWeight={620}
+                      style={{ fontVariantNumeric: 'tabular-nums' }}
+                    >
+                      {seasonShort} · P{finish}
+                    </text>
+                  ) : null}
+                </g>
               </g>
             );
           })}
         </svg>
       ) : null}
+      {tip ? <ChartTipCard tip={tip} width={width} /> : null}
     </div>
   );
 };
 
-const FridaySignal = ({ prep, trackTypeName }: { prep: UiNextEventPrep; trackTypeName: string }) => {
+const FridaySignal = ({ prep, trackTypeName, debriefIds }: { prep: UiNextEventPrep; trackTypeName: string; debriefIds: Set<string> }) => {
   const summary = prep.fridaySummary;
   if (summary.weekendCount < 3) return null;
   return (
@@ -409,18 +530,19 @@ const FridaySignal = ({ prep, trackTypeName }: { prep: UiNextEventPrep; trackTyp
         clean weekends{summary.medianPositionsBetter !== null ? `, typically by ${summary.medianPositionsBetter} spots` : ''}. If
         practice looks mid, wait for the race.
       </p>
-      <FridaySlope prep={prep} />
+      <FridaySlope prep={prep} debriefIds={debriefIds} />
       <p className="caption caption--secondary" style={{ margin: '6px 0 0' }}>
-        Gold dots: {shortVenue(prep.trackName)} weekends. Practice order and race format differ; read as a signal, not a scale.
+        Gold dots: {venueShort(prep.trackName)} weekends. Practice order and race format differ; read as a signal, not a scale.
       </p>
     </Card>
   );
 };
 
-/* ---------- the points picture: the neighborhood around P17 ---------- */
+/* ---------- the points picture: the neighborhood around Bryce ---------- */
 
 const PointsStrip = ({ snapshot }: { snapshot: Extract<UiStandingsSnapshot, { available: true }> }) => {
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();
+  const [tip, setTip] = useState<ChartTip | null>(null);
   const bryceRank = snapshot.bryce.pointsRankInCapture;
   const nearby = snapshot.entries.filter((entry) => Math.abs(entry.pointsRankInCapture - bryceRank) <= 3);
   const minPoints = Math.min(...nearby.map((entry) => entry.points));
@@ -438,16 +560,34 @@ const PointsStrip = ({ snapshot }: { snapshot: Extract<UiStandingsSnapshot, { av
   const endpointRanks = new Set([nearby[0]?.pointsRankInCapture, nearby[nearby.length - 1]?.pointsRankInCapture]);
 
   return (
-    <div ref={ref} style={{ width: '100%' }}>
+    <div ref={ref} style={{ width: '100%', position: 'relative' }}>
       {width > 0 ? (
         <svg width={width} height={height} role="img" aria-label="Championship points around Bryce">
           <line x1={14} x2={width - 14} y1={axisY} y2={axisY} stroke="var(--grid-hairline)" strokeWidth={1.5} />
           {nearby.map((entry) => {
             const pointX = x(entry.points);
             const above = entry.pointsRankInCapture % 2 === 0;
+            const gap = entry.points - snapshot.bryce.points;
+            const gapText = entry.isBryce ? null : gap > 0 ? `+${gap} on Bryce` : `−${Math.abs(gap)} behind Bryce`;
+            const hoverTarget = (
+              <circle
+                cx={pointX}
+                cy={axisY}
+                r={12}
+                fill="transparent"
+                onMouseEnter={() =>
+                  setTip({
+                    x: pointX,
+                    y: axisY - 8,
+                    title: entry.driverName,
+                    detail: `${entry.points} pts${gapText ? ` · ${gapText}` : ''}`
+                  })
+                }
+                onMouseLeave={() => setTip(null)}
+              />
+            );
             return (
               <g key={entry.carNo}>
-                <title>{`${entry.driverName} · ${entry.points} pts`}</title>
                 {entry.isBryce ? (
                   <>
                     <rect x={pointX - 9} y={axisY - 9} width={18} height={18} rx={5} fill="var(--bryce)" />
@@ -483,9 +623,7 @@ const PointsStrip = ({ snapshot }: { snapshot: Extract<UiStandingsSnapshot, { av
                       <text
                         x={pointX}
                         y={above ? axisY - 14 : axisY + 20}
-                        textAnchor={
-                          labelAllRivals ? 'middle' : entry.points < snapshot.bryce.points ? 'start' : 'end'
-                        }
+                        textAnchor={labelAllRivals ? 'middle' : entry.points < snapshot.bryce.points ? 'start' : 'end'}
                         fill="var(--ink-secondary)"
                         fontFamily={chartFont}
                         fontSize={10.5}
@@ -496,16 +634,19 @@ const PointsStrip = ({ snapshot }: { snapshot: Extract<UiStandingsSnapshot, { av
                     ) : null}
                   </>
                 )}
+                {hoverTarget}
               </g>
             );
           })}
         </svg>
       ) : null}
+      {tip ? <ChartTipCard tip={tip} width={width} /> : null}
     </div>
   );
 };
 
 const PointsPicture = ({ snapshot }: { snapshot: UiStandingsSnapshot }) => {
+  const [hoveredCar, setHoveredCar] = useState<string | null>(null);
   if (!snapshot.available) {
     return (
       <Card title="The points picture">
@@ -555,7 +696,17 @@ const PointsPicture = ({ snapshot }: { snapshot: UiStandingsSnapshot }) => {
             <div
               key={entry.carNo}
               className="row row--between"
-              style={{ padding: '7px 0', borderBottom: '1px solid var(--grid-hairline)', fontSize: 13 }}
+              onMouseEnter={() => setHoveredCar(entry.carNo)}
+              onMouseLeave={() => setHoveredCar(null)}
+              style={{
+                padding: '7px 10px',
+                margin: '0 -10px',
+                borderRadius: 8,
+                borderBottom: '1px solid var(--grid-hairline)',
+                fontSize: 13,
+                background: hoveredCar === entry.carNo ? 'var(--surface-0)' : 'transparent',
+                transition: 'background 150ms ease'
+              }}
             >
               <span style={{ fontWeight: 520 }}>{entry.driverName}</span>
               <span className="row" style={{ gap: 14 }}>
@@ -580,145 +731,10 @@ const PointsPicture = ({ snapshot }: { snapshot: UiStandingsSnapshot }) => {
   );
 };
 
-/* ---------- the shape of the weekend (historical prior band) ---------- */
-
-const PriorBand = ({ event }: { event: UpcomingPrepEvent }) => {
-  const band = ((event.predictionBand as unknown as Row)?.finishPercentileBand ?? {}) as Row;
-  const p25 = asNumber(band.p25);
-  const median = asNumber(band.median);
-  const p75 = asNumber(band.p75);
-  const n = asNumber(band.n);
-  if (p25 === null || median === null || p75 === null) return null;
-  const toPct = (value: number) => Math.round(value * 100);
-  const typeName = trackTypeLabel(event.trackType).toLowerCase();
-
-  return (
-    <Card
-      title="The shape of the weekend"
-      action={
-        <SourcePill
-          title="Historical prior band"
-          entries={[
-            {
-              label: 'Career prior matrix · finish percentile band',
-              path: 'analysis/predictive-race-intelligence/output/career_prior_matrix.csv',
-              note: `p25/median/p75 of Bryce's finish percentile across ${formatNumber(n, 0)} ${typeName} races. No model prediction — a source-backed historical range.`
-            }
-          ]}
-          caveats={['History, not a prediction. The band describes past races on this track type, nothing more.']}
-        />
-      }
-    >
-      <p style={{ margin: '0 0 16px', fontSize: 13.5, color: 'var(--ink-secondary)', maxWidth: '64ch' }}>
-        Across {formatNumber(n, 0)} {typeName} races, his typical day landed around the{' '}
-        <strong style={{ color: 'var(--ink-primary)' }}>{toPct(median)}th percentile</strong> of the field — a quarter of days
-        below the {toPct(p25)}th, a quarter above the {toPct(p75)}th.
-      </p>
-      <div style={{ position: 'relative', height: 34, margin: '0 6px' }}>
-        <div style={{ position: 'absolute', top: 14, left: 0, right: 0, height: 6, borderRadius: 3, background: 'var(--surface-2)' }} />
-        <div
-          style={{
-            position: 'absolute',
-            top: 12,
-            left: `${toPct(p25)}%`,
-            width: `${Math.max(toPct(p75) - toPct(p25), 2)}%`,
-            height: 10,
-            borderRadius: 5,
-            background: 'color-mix(in srgb, var(--series-1) 30%, transparent)'
-          }}
-        />
-        <div
-          style={{
-            position: 'absolute',
-            top: 6,
-            left: `calc(${toPct(median)}% - 2px)`,
-            width: 4,
-            height: 22,
-            borderRadius: 2,
-            background: 'var(--bryce)'
-          }}
-        />
-      </div>
-      <div className="row row--between" style={{ marginTop: 4 }}>
-        <span className="caption">Tougher day</span>
-        <span className="caption" style={{ color: 'var(--ink-primary)', fontWeight: 570 }}>
-          median · {toPct(median)}th pctile
-        </span>
-        <span className="caption">Stronger day</span>
-      </div>
-      <p style={{ margin: '14px 0 0', fontSize: 11.5, color: 'var(--ink-muted)' }}>History, not a prediction.</p>
-    </Card>
-  );
-};
-
-/* ---------- what needs to go right (family-readable path factors) ---------- */
-
-const factorFamilyCopy: Array<{ match: RegExp; copy: string }> = [
-  { match: /qualifying|start position/i, copy: 'Where you start matters most — a clean qualifying lap has been the best single predictor of where Bryce finishes.' },
-  { match: /conversion/i, copy: 'Turning pace into positions on this kind of track — his record here sets the baseline for the weekend.' },
-  { match: /same-track/i, copy: 'He’s raced here before, so the notebook is open: restarts, traffic, and where passing actually works.' },
-  { match: /chaos|incident/i, copy: 'Clean laps win weekends — the tough results in the data usually trace back to contact or reliability, not pace.' },
-  { match: /analog/i, copy: 'The most similar past races give a feel for how this one could flow.' }
-];
-
-const familyCopyFor = (factor: string, fallback: string | null): string =>
-  factorFamilyCopy.find((entry) => entry.match.test(factor))?.copy ?? fallback ?? '';
-
-const PathFactors = ({ event }: { event: UpcomingPrepEvent }) => {
-  const factors = Array.isArray(event.top10Path) ? (event.top10Path as unknown as Row[]) : [];
-  if (factors.length === 0) return null;
-  return (
-    <Card
-      title="What needs to go right"
-      action={
-        <SourcePill
-          title="Top-10 path factors"
-          entries={factors.map((factor) => ({
-            label: asString(factor.factor) ?? 'Factor',
-            note: [asString(factor.whyItMatters), asString(factor.actionableRead)].filter(Boolean).join(' — ')
-          }))}
-          caveats={['Path language only — no win or top-10 probability is claimed. The analytical detail behind each factor lives here.']}
-        />
-      }
-    >
-      <div className="stack" style={{ gap: 14 }}>
-        {factors.map((factor, index) => {
-          const title = asString(factor.factor) ?? `Factor ${index + 1}`;
-          const state = asString(factor.currentState);
-          return (
-            <div key={title} className="row" style={{ gap: 12, alignItems: 'flex-start' }}>
-              <span className="figure" style={{ flex: 'none', width: 20, fontSize: 14, color: 'var(--ink-muted)', textAlign: 'right' }}>
-                {index + 1}
-              </span>
-              <div style={{ minWidth: 0 }}>
-                <div style={{ fontWeight: 640, fontSize: 14 }}>{title}</div>
-                <p style={{ margin: '2px 0 0', fontSize: 13, color: 'var(--ink-secondary)' }}>
-                  {familyCopyFor(title, asString(factor.actionableRead))}
-                </p>
-                {state && state.length < 70 ? (
-                  <span className="chip chip--outline" style={{ marginTop: 6 }}>
-                    {state}
-                  </span>
-                ) : null}
-              </div>
-            </div>
-          );
-        })}
-      </div>
-    </Card>
-  );
-};
-
 /* ---------- races that rhyme ---------- */
 
-const AnalogRaces = ({ event }: { event: UpcomingPrepEvent }) => {
+const AnalogRaces = ({ event, debriefIds }: { event: UpcomingPrepEvent; debriefIds: Set<string> }) => {
   const analogs = Array.isArray(event.analogRaces) ? (event.analogRaces as unknown as Row[]) : [];
-  const [availableIds, setAvailableIds] = useState<Set<string>>(new Set());
-  useEffect(() => {
-    loadDebriefArchive()
-      .then((archive) => setAvailableIds(new Set(archive.map((entry) => entry.pack.sessionId))))
-      .catch(() => setAvailableIds(new Set()));
-  }, []);
   if (analogs.length === 0) return null;
   return (
     <Card title="Races that rhyme with this one">
@@ -727,7 +743,7 @@ const AnalogRaces = ({ event }: { event: UpcomingPrepEvent }) => {
           const sessionId = asString(analog.sessionId);
           const label = asString(analog.raceLabel) ?? `Analog ${index + 1}`;
           const kind = asString(analog.analogType) === 'same_track' ? 'same track' : 'same track type';
-          const linked = sessionId !== null && availableIds.has(sessionId);
+          const linked = sessionId !== null && debriefIds.has(sessionId);
           const row = (
             <div className="row row--between" style={{ padding: '9px 12px', borderRadius: 10, background: 'var(--surface-0)' }}>
               <span style={{ fontSize: 13.5, fontWeight: linked ? 600 : 450 }}>{label}</span>
@@ -970,6 +986,15 @@ const groupWeekend = (events: UpcomingPrepEvent[]): Weekend | null => {
   return { primary, races };
 };
 
+/* ---------- hero blocks (quiet vertical rhythm, hairline-divided) ---------- */
+
+const HeroBlock = ({ label, children, divider }: { label?: string; children: ReactNode; divider?: boolean }) => (
+  <div style={divider ? { borderTop: '1px solid var(--divider)', paddingTop: 16 } : undefined}>
+    {label ? <span className="caption">{label}</span> : null}
+    {children}
+  </div>
+);
+
 /* ---------- screen ---------- */
 
 export const RaceWeekScreen = () => {
@@ -980,6 +1005,7 @@ export const RaceWeekScreen = () => {
   const weather = useEventWeather(weekend?.primary.eventId ?? null);
   const nextEventPrep = getNextEventPrep();
   const standings = getStandingsSnapshot();
+  const debriefIds = useDebriefIds();
 
   if (!weekend) {
     return (
@@ -1006,11 +1032,11 @@ export const RaceWeekScreen = () => {
   const later = upcoming.filter((event) => !races.includes(event));
   const hereBefore = eventPrep?.races.filter((race) => race.sameTrack) ?? [];
   /* Verified against the venue prep section pack (2 of 3 Nashville practice
-   * sessions had Turn 3 as the best section family); venue-gated until the
-   * next page session generalizes it from the supplemental pack. */
+   * sessions had Turn 3 as the best section family); venue-gated until a
+   * later session generalizes it from the supplemental pack. */
   const sectionNote =
     primary.trackName === 'Nashville Superspeedway'
-      ? { corner: '3', text: 'Turn 3 was his strongest section in 2 of 3 past Nashville practice sessions.' }
+      ? { corner: '3', note: 'his strongest section in 2 of 3 past Nashville practice sessions' }
       : null;
 
   return (
@@ -1039,72 +1065,60 @@ export const RaceWeekScreen = () => {
       </header>
 
       <HeroPanel tint="bryce">
-        <div className="grid grid--split" style={{ alignItems: 'center', gap: 26 }}>
+        <div className="grid grid--split-rev" style={{ alignItems: 'center', gap: 30 }}>
           {outline ? (
-            <div>
-              <TrackArt outline={outline} annotateCorner={sectionNote?.corner ?? null} />
-              {sectionNote ? (
-                <p className="caption caption--secondary" style={{ margin: '10px 0 0', textAlign: 'center' }}>
-                  {sectionNote.text}
-                </p>
-              ) : null}
+            <div style={{ maxWidth: 380, width: '100%', margin: '0 auto' }}>
+              <TrackArt outline={outline} annotation={sectionNote} />
             </div>
           ) : null}
-          <div className="stack" style={{ gap: 18 }}>
-            <div>
-              {preciseStart ? (
-                <>
-                  <span className="caption">
-                    First session · {formatDate(preciseStart, { weekday: 'short', month: 'short', day: 'numeric' })} ·{' '}
-                    {formatClock(preciseStart)} your time
-                    {nextSession?.sessionName ? ` · ${nextSession.sessionName}` : ''}
+          <div className="stack" style={{ gap: 16 }}>
+            {preciseStart ? (
+              <HeroBlock
+                label={`First session · ${formatDate(preciseStart, { weekday: 'short', month: 'short', day: 'numeric' })} · ${formatClock(preciseStart)} your time${nextSession?.sessionName ? ` · ${nextSession.sessionName}` : ''}`}
+              >
+                <div style={{ marginTop: 8 }}>
+                  <Countdown to={preciseStart} />
+                </div>
+              </HeroBlock>
+            ) : (
+              <HeroBlock
+                label={`${races.length > 1 ? 'Race weekend' : 'Race day'} · ${formatDate(primary.eventStartDate, { weekday: 'long', month: 'long', day: 'numeric' })}`}
+              >
+                <div className="row" style={{ gap: 10, alignItems: 'baseline', marginTop: 6 }}>
+                  <span className="figure" style={{ fontSize: 34, lineHeight: 1.05 }}>
+                    {days ?? '—'}
                   </span>
-                  <div style={{ marginTop: 8 }}>
-                    <Countdown to={preciseStart} />
-                  </div>
-                </>
-              ) : (
-                <>
-                  <span className="caption">
-                    {races.length > 1 ? 'Race weekend' : 'Race day'} ·{' '}
-                    {formatDate(primary.eventStartDate, { weekday: 'long', month: 'long', day: 'numeric' })}
+                  <span style={{ fontSize: 14, color: 'var(--ink-secondary)', fontWeight: 500 }}>
+                    {days === 1 ? 'day to green' : 'days to green'}
                   </span>
-                  <div className="row" style={{ gap: 10, alignItems: 'baseline', marginTop: 6 }}>
-                    <span className="stat__value stat__value--hero">{days ?? '—'}</span>
-                    <span style={{ fontSize: 15, color: 'var(--ink-secondary)', fontWeight: 500 }}>
-                      {days === 1 ? 'day to green' : 'days to green'}
-                    </span>
-                  </div>
-                  <p style={{ margin: '6px 0 0', fontSize: 12, color: 'var(--ink-muted)' }}>
-                    Session times appear here once Race Control publishes the weekend schedule.
-                  </p>
-                </>
-              )}
-            </div>
+                </div>
+              </HeroBlock>
+            )}
             {hereBefore.length > 0 ? (
-              <div>
-                <span className="caption">He’s raced here before</span>
-                <div className="row row--wrap" style={{ gap: 22, marginTop: 8 }}>
+              <HeroBlock divider label="He’s raced here before">
+                <div className="row row--wrap" style={{ gap: 24, marginTop: 8 }}>
                   {hereBefore.map((race) => (
                     <Stat
                       key={race.sessionId}
                       label={String(race.seasonYear ?? '')}
                       value={
-                        <span className="tnum">
+                        <span className="tnum" style={{ fontSize: 21 }}>
                           P{race.startPosition} → P{race.finishPosition}
                         </span>
                       }
                     />
                   ))}
                 </div>
-              </div>
+              </HeroBlock>
             ) : (
-              <div className="row" style={{ gap: 26 }}>
-                <Stat label={`${trackTypeName} races`} value={formatNumber((primary.trackTypeHistory as Row).raceCount, 0)} />
-                <Stat label="Avg finish" value={formatNumber((primary.trackTypeHistory as Row).avgFinish)} />
-              </div>
+              <HeroBlock divider label={`${trackTypeName} record`}>
+                <div className="row" style={{ gap: 24, marginTop: 8 }}>
+                  <Stat label={`${trackTypeName} races`} value={formatNumber((primary.trackTypeHistory as Row).raceCount, 0)} />
+                  <Stat label="Avg finish" value={formatNumber((primary.trackTypeHistory as Row).avgFinish)} />
+                </div>
+              </HeroBlock>
             )}
-            <div className="row" style={{ gap: 7, color: 'var(--ink-muted)', fontSize: 12 }}>
+            <div className="row" style={{ gap: 7, color: 'var(--ink-muted)', fontSize: 12, borderTop: '1px solid var(--divider)', paddingTop: 14 }}>
               <Route size={12} aria-hidden />
               The live companion arms automatically for every session this weekend.
             </div>
@@ -1112,24 +1126,19 @@ export const RaceWeekScreen = () => {
         </div>
       </HeroPanel>
 
-      {eventPrep ? <OvalStory prep={eventPrep} trackTypeName={trackTypeName} /> : null}
+      {eventPrep ? <OvalStory prep={eventPrep} trackTypeName={trackTypeName} debriefIds={debriefIds} /> : null}
 
       <div className="grid grid--2">
-        {eventPrep ? <FridaySignal prep={eventPrep} trackTypeName={trackTypeName} /> : null}
+        {eventPrep ? <FridaySignal prep={eventPrep} trackTypeName={trackTypeName} debriefIds={debriefIds} /> : null}
         <PointsPicture snapshot={standings} />
       </div>
 
-      <div className="grid grid--split">
-        <div className="stack">
-          <PriorBand event={primary} />
-          <PathFactors event={primary} />
-        </div>
-        <div className="stack">
-          <FollowTheWeekend />
-          <WeatherWindow weather={weather} raceDate={primary.eventStartDate} />
-          <AnalogRaces event={primary} />
-        </div>
+      <div className="grid grid--2">
+        <FollowTheWeekend />
+        <WeatherWindow weather={weather} raceDate={primary.eventStartDate} />
       </div>
+
+      <AnalogRaces event={primary} debriefIds={debriefIds} />
 
       <LaterThisSeason events={later} />
     </div>

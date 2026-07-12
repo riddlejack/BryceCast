@@ -122,6 +122,36 @@ positions; true pace traces exist only for 2026 live-captured races).
 6. Show Jack. His reaction is the acceptance gate. Iterate, then next page.
 7. `npm run build` + test:ui-context-adapter before calling any page done.
 
+## Jack's Race Week reaction (2026-07-11) — binding for every page
+
+Verdict: "overall very, very strong… the analysis-as-visuals is exactly it."
+His notes are DIRECTIONAL — Fable's taste decides the execution and reports
+deviations (see memory: jack-feedback-style). What his reaction locked in:
+
+1. **Interactivity is now house chart behavior, not a nice-to-have.** The
+   pattern shipped on Race Week is the standard: hover = focus (subject full
+   ink, everything else fades to ~0.2, 150ms ease), a white tooltip card
+   (no delay, anchored to the mark), and click-through to the race page when
+   a debrief exists ("open the race page" action line in the tooltip).
+   Never let hover behavior obstruct reading; touch devices just get the
+   click-through.
+2. **No hollow text modules.** The prior band ("67th percentile" = "you're
+   doing fine") and the top10Path card (truisms without numbers) were cut.
+   A text module must carry a number that changes what the reader knows.
+   The intended comeback for "what needs to go right": post-qualifying,
+   with his actual start position against the historical conversion rows.
+3. **Track art is a compact signature, not a poster** (~380px max on
+   desktop; the shape isn't intricate enough to earn more). Corner labels
+   stay quiet; the section insight lives in a hover tooltip on the gold
+   corner dot.
+4. **Motion backlog (deferred, needs the animations repo Jack keeps meaning
+   to link):** scroll-assembled charts (McKinsey-insights style) and possibly
+   a track draw-in; a mouse-follows-track car dot was floated — treat as
+   whimsy candidate, only if it stays out of the way. All within
+   DESIGN_TASTE motion rules (fast, crisp, few; reduced-motion respected).
+5. **Desktop first while page content settles.** Keep phone layouts working,
+   but don't dual-optimize until the content of each page is approved.
+
 ## Session bootstrap
 
 New session should read: CLAUDE.md (auto), memory (auto), this file,
