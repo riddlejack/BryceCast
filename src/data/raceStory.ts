@@ -48,6 +48,23 @@ export interface RaceStoryPack {
     status: string | null;
   };
   inflections: RaceStoryInflection[];
+  battles: Array<{
+    driverName: string;
+    carNumber: string | null;
+    isTeammate: boolean;
+    lapsAdjacent: number;
+    swaps: number;
+  }>;
+  weather: {
+    ambientTempC: number | null;
+    windSpeedKph: number | null;
+    windGustKph: number | null;
+    humidityPct: number | null;
+    precipitationMm: number | null;
+    conditionRaw: string | null;
+    source: string | null;
+    caveat: string;
+  } | null;
   weekendSignal: {
     bestPracticeRank: number | null;
     bestQualifyingRank: number | null;

@@ -510,6 +510,38 @@ const buildRaceStoryPacks = ({ raceDebriefPackPairs, canonicalDataset, canonical
       })
       .sort((left, right) => (left.finishPosition ?? 99) - (right.finishPosition ?? 99));
 
+    /* Wheel-to-wheel company: laps spent within one position of Bryce, and
+     * how often the pair traded places. */
+    const bryceLine = drivers.find((driver) => driver.isBryce) ?? null;
+    let battles = [];
+    if (bryceLine && bryceLine.laps.length > 0) {
+      for (const rival of drivers) {
+        if (rival.isBryce) continue;
+        const rivalByLap = new Map(rival.laps);
+        let lapsAdjacent = 0;
+        let swaps = 0;
+        let previousDiff = null;
+        for (const [lap, brycePosition] of bryceLine.laps) {
+          const rivalPosition = rivalByLap.get(lap);
+          if (rivalPosition === undefined) {
+            previousDiff = null;
+            continue;
+          }
+          const diff = brycePosition - rivalPosition;
+          if (Math.abs(diff) <= 1) lapsAdjacent += 1;
+          if (previousDiff !== null && diff !== 0 && previousDiff !== 0 && Math.sign(diff) !== Math.sign(previousDiff)) swaps += 1;
+          previousDiff = diff;
+        }
+        if (lapsAdjacent > 0) {
+          battles.push({ driverName: rival.driverName, carNumber: rival.carNumber, isTeammate: rival.isTeammate, lapsAdjacent, swaps });
+        }
+      }
+      battles.sort((left, right) => right.lapsAdjacent - left.lapsAdjacent || right.swaps - left.swaps);
+      battles = battles.slice(0, 3);
+    }
+
+    const weatherObservation = (canonicalDataset.weatherObservations ?? []).find((observation) => observation.sessionId === sessionId) ?? null;
+
     const inflections = inflectionRows
       .filter((row) => row.sessionId === sessionId)
       .map((row) => ({
@@ -562,6 +594,19 @@ const buildRaceStoryPacks = ({ raceDebriefPackPairs, canonicalDataset, canonical
         status: bryceResult?.status ?? null
       },
       inflections,
+      battles,
+      weather: weatherObservation
+        ? {
+            ambientTempC: numberOrNull(weatherObservation.ambientTempC),
+            windSpeedKph: numberOrNull(weatherObservation.windSpeedKph),
+            windGustKph: numberOrNull(weatherObservation.windGustKph),
+            humidityPct: numberOrNull(weatherObservation.relativeHumidityPct),
+            precipitationMm: numberOrNull(weatherObservation.precipitationMm),
+            conditionRaw: weatherObservation.ambientConditionRaw ?? null,
+            source: weatherObservation.source ?? null,
+            caveat: 'Modeled near-track weather for the race hour (Open-Meteo hourly archive), not official series weather.'
+          }
+        : null,
       /* The weekend arc: practice → qualifying → start → finish. */
       weekendSignal: weekendRow
         ? {

@@ -1,4 +1,13 @@
+import barberMotorsportsPark from './barber-motorsports-park.json';
+import indianapolisMotorSpeedwayRoadCourse from './indianapolis-motor-speedway-road-course.json';
+import iowaSpeedway from './iowa-speedway.json';
+import midOhioSportsCarCourse from './mid-ohio-sports-car-course.json';
 import nashvilleSuperspeedway from './nashville-superspeedway.json';
+import portlandInternationalRaceway from './portland-international-raceway.json';
+import roadAmerica from './road-america.json';
+import theMilwaukeeMile from './the-milwaukee-mile.json';
+import weathertechRacewayLagunaSeca from './weathertech-raceway-laguna-seca.json';
+import worldWideTechnologyRaceway from './world-wide-technology-raceway.json';
 
 /** Outline-only track line art traced from OpenStreetMap geometry
  *  (docs/CREATIVE_DIRECTION.md locked decision 5). Regenerate with
@@ -32,7 +41,18 @@ export interface TrackOutline {
   };
 }
 
-const outlines: TrackOutline[] = [nashvilleSuperspeedway as TrackOutline];
+const outlines: TrackOutline[] = [
+  barberMotorsportsPark,
+  indianapolisMotorSpeedwayRoadCourse,
+  iowaSpeedway,
+  midOhioSportsCarCourse,
+  nashvilleSuperspeedway,
+  portlandInternationalRaceway,
+  roadAmerica,
+  theMilwaukeeMile,
+  weathertechRacewayLagunaSeca,
+  worldWideTechnologyRaceway
+] as TrackOutline[];
 
 const normalized = (name: string) => name.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
 

@@ -314,7 +314,7 @@
     "Treat official_section_results_only rows as raw section comparisons, not clean-lap or caution-aware race shape.",
     "Keep caution/restart segments visually distinct from green-flag movement."
   ],
-  "generatedAt": "2026-07-12T01:38:28Z",
+  "generatedAt": "2026-07-12T03:31:00Z",
   "id": "indy-nxt-race-lap-section-context",
   "largestPositionInflections": [
     {

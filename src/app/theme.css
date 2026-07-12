@@ -284,7 +284,9 @@ button { font-family: inherit; }
 
 .stat__delta { font-size: 12.5px; font-weight: 550; }
 .stat__delta--up { color: var(--status-good); }
-.stat__delta--down { color: var(--ink-secondary); }
+/* Jack (race-detail review): the down arrow is the down arrow — mirror the
+ * green gains in red. Facts, not editorial. */
+.stat__delta--down { color: var(--status-bad); }
 
 /* ---------- countdown: plain numerals, no boxes ---------- */
 

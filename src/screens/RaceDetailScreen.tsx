@@ -1,7 +1,9 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { ArrowLeft, Users } from 'lucide-react';
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { ArrowLeft, Flag, Users } from 'lucide-react';
 import { Card, HeroPanel, SourcePill, Stat, StatusChip, Unavailable } from '../app/components';
 import { ChartTipCard, chartFont, useMeasuredWidth, type ChartTip } from '../app/charts';
+import { TrackArt } from '../app/trackArt';
+import { trackOutlineFor } from '../assets/tracks';
 import { asNumber, asString, formatDate, formatGain, formatNumber, formatPosition, ordinal } from '../app/format';
 import { Link } from '../app/router';
 import { displayRaceLabel, loadDebriefBySessionId, roundIndexOf, type ArchiveEntry } from '../data/debriefArchive';
@@ -103,17 +105,20 @@ const LapChart = ({ story }: { story: RaceStoryPack }) => {
       return;
     }
     setFocusedDriver(best.driver.driverId);
-    const finishText = best.driver.finishPosition !== null ? `finished P${best.driver.finishPosition}` : null;
-    const statusText = best.driver.status && best.driver.status !== 'running' ? best.driver.status : null;
+    const lastLap = best.driver.laps[best.driver.laps.length - 1]?.[0] ?? totalLaps;
+    const statusText =
+      best.driver.status && !['running', 'unknown'].includes(best.driver.status) ? best.driver.status : null;
+    const outcomeText =
+      lastLap < totalLaps
+        ? `out on lap ${lastLap}${statusText ? ` · ${statusText}` : ''}`
+        : best.driver.finishPosition !== null
+          ? `finished P${best.driver.finishPosition}`
+          : null;
     setTip({
       x: x(lap),
       y: y(best.position),
       title: best.driver.driverName,
-      detail: [
-        best.driver.carNumber ? `car ${best.driver.carNumber}` : null,
-        `P${best.position} on lap ${lap}`,
-        statusText ?? finishText
-      ]
+      detail: [best.driver.carNumber ? `car ${best.driver.carNumber}` : null, `P${best.position} on lap ${lap}`, outcomeText]
         .filter(Boolean)
         .join(' · ')
     });
@@ -175,17 +180,33 @@ const LapChart = ({ story }: { story: RaceStoryPack }) => {
             .filter((driver) => !driver.isBryce)
             .map((driver) => {
               const focused = focusedDriver === driver.driverId;
+              const lastLap = driver.laps[driver.laps.length - 1];
+              const retiredEarly = lastLap !== undefined && lastLap[0] < totalLaps;
               return (
-                <polyline
+                <g
                   key={driver.driverId}
-                  points={lineFor(driver)}
-                  fill="none"
-                  stroke={focused ? 'var(--ink-primary)' : driver.isTeammate ? teammateInk : rivalInk}
-                  strokeWidth={focused ? 2 : 1.25}
-                  strokeLinejoin="round"
-                  strokeLinecap="round"
-                  style={{ opacity: focusedDriver !== null && !focused ? 0.45 : 1, transition: 'opacity 150ms ease, stroke 150ms ease' }}
-                />
+                  style={{ opacity: focusedDriver !== null && !focused ? 0.45 : 1, transition: 'opacity 150ms ease' }}
+                >
+                  <polyline
+                    points={lineFor(driver)}
+                    fill="none"
+                    stroke={focused ? 'var(--ink-primary)' : driver.isTeammate ? teammateInk : rivalInk}
+                    strokeWidth={focused ? 2 : 1.25}
+                    strokeLinejoin="round"
+                    strokeLinecap="round"
+                    style={{ transition: 'stroke 150ms ease' }}
+                  />
+                  {retiredEarly ? (
+                    <circle
+                      cx={x(lastLap[0])}
+                      cy={y(lastLap[1])}
+                      r={3}
+                      fill="var(--surface-1)"
+                      stroke={focused ? 'var(--ink-primary)' : 'var(--ink-muted)'}
+                      strokeWidth={1.4}
+                    />
+                  ) : null}
+                </g>
               );
             })}
           {bryce && bryce.laps.length > 0 ? (
@@ -303,7 +324,7 @@ const LapChartCard = ({ story, mover }: { story: RaceStoryPack; mover: { name: s
     >
       <p className="caption caption--secondary" style={{ margin: '0 0 10px' }}>
         Bryce in ink with gold moments{teammateCount > 0 ? ` · ${story.teamContext?.teamName ?? 'team'} cars in darker gray` : ''} · the
-        field in light gray · hover any line
+        field in light gray · ○ marks a day that ended early · hover any line
       </p>
       {hasBryceLine ? (
         <LapChart story={story} />
@@ -318,13 +339,104 @@ const LapChartCard = ({ story, mover }: { story: RaceStoryPack; mover: { name: s
           </p>
         </>
       )}
-      {mover && mover.gain > 0 ? (
-        <p style={{ margin: '10px 0 0', fontSize: 12, color: 'var(--ink-secondary)' }}>
-          {/^bryce/i.test(mover.name)
-            ? `Nobody climbed further up the lap chart than Bryce: ${mover.gain} spots.`
-            : `Biggest climber on the day: ${mover.name}, up ${mover.gain} spots on the lap chart.`}
-        </p>
-      ) : null}
+      {(() => {
+        const bryceLaps = story.lapChart.drivers.find((driver) => driver.isBryce)?.laps.length ?? 0;
+        const battle = story.battles[0];
+        const meaningful = battle && bryceLaps > 0 && battle.lapsAdjacent >= Math.max(6, Math.round(bryceLaps * 0.15));
+        return (
+          <div style={{ marginTop: 10, fontSize: 12, color: 'var(--ink-secondary)', display: 'grid', gap: 3 }}>
+            {meaningful ? (
+              <span>
+                Closest company: {battle.driverName} — within one spot for {battle.lapsAdjacent} laps
+                {battle.swaps >= 2 ? `, trading places ${battle.swaps} times` : ''}.
+              </span>
+            ) : null}
+            {mover && mover.gain > 0 ? (
+              <span>
+                {/^bryce/i.test(mover.name)
+                  ? `Nobody climbed further up the lap chart than Bryce: ${mover.gain} spots.`
+                  : `Biggest climber on the day: ${mover.name}, up ${mover.gain} spots on the lap chart.`}
+              </span>
+            ) : null}
+          </div>
+        );
+      })()}
+    </Card>
+  );
+};
+
+/* ---------- the day: conditions and race character, real numbers ---------- */
+
+const DayTile = ({ label, value, note }: { label: string; value: ReactNode; note?: string | null }) => (
+  <div className="stat">
+    <span className="caption">{label}</span>
+    <span className="tnum" style={{ fontSize: 19, fontWeight: 620, letterSpacing: '-0.01em' }}>
+      {value}
+    </span>
+    {note ? <span style={{ fontSize: 11.5, color: 'var(--ink-muted)' }}>{note}</span> : null}
+  </div>
+);
+
+const TheDay = ({ story, pack }: { story: RaceStoryPack; pack: ArchiveEntry['pack'] }) => {
+  const weather = story.weather;
+  const context = pack.raceContext;
+  const leader = asString(context?.topLeader);
+  const leaderShare = asNumber(context?.topLeaderShare);
+  const incidents = asNumber(context?.sessionIncidentCount);
+  const bryceIncidents = asNumber(context?.bryceIncidentCount);
+  const tempF = weather?.ambientTempC !== null && weather ? Math.round((weather.ambientTempC * 9) / 5 + 32) : null;
+  const windMph = weather?.windSpeedKph !== null && weather ? Math.round(weather.windSpeedKph / 1.609344) : null;
+  const gustMph = weather?.windGustKph !== null && weather ? Math.round(weather.windGustKph / 1.609344) : null;
+  const sky = weather?.conditionRaw ? weather.conditionRaw.replaceAll('_', ' ') : null;
+  const rainMm = weather?.precipitationMm ?? null;
+  if (!weather && !leader && incidents === null) return null;
+
+  return (
+    <Card
+      title={
+        <>
+          <Flag size={15} aria-hidden />
+          The day
+        </>
+      }
+      action={
+        <SourcePill
+          title="Race-day conditions and character"
+          entries={[
+            {
+              label: 'Near-track weather · race hour',
+              path: 'data/career/career.dataset.json',
+              note: weather?.source ?? 'Modeled near-track weather.'
+            },
+            {
+              label: 'Leader and incident context',
+              path: 'analysis/indy-nxt-discovery/output/deep_dive/tables/leader_lap_context.csv',
+              note: 'Leader share from the official leader-lap summary; incident counts from official race reports.'
+            }
+          ]}
+          caveats={weather ? [weather.caveat] : undefined}
+        />
+      }
+    >
+      <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(128px, 1fr))', gap: 16 }}>
+        {leader && leaderShare !== null ? (
+          <DayTile label={`${leader} led`} value={`${Math.round(leaderShare * 100)}%`} note="of all laps" />
+        ) : null}
+        {incidents !== null ? (
+          <DayTile
+            label="Incidents race-wide"
+            value={incidents}
+            note={bryceIncidents !== null && bryceIncidents > 0 ? `${bryceIncidents} involving Bryce` : incidents === 0 ? 'a clean one' : null}
+          />
+        ) : null}
+        {tempF !== null ? <DayTile label="Air temperature" value={`${tempF}°F`} note={weather?.humidityPct !== null ? `${Math.round(weather!.humidityPct!)}% humidity` : null} /> : null}
+        {windMph !== null ? <DayTile label="Wind" value={`${windMph} mph`} note={gustMph !== null && gustMph > windMph + 4 ? `gusts to ${gustMph}` : null} /> : null}
+        {rainMm !== null && rainMm > 0 ? (
+          <DayTile label="Rain in the race hour" value={`${formatNumber(rainMm)} mm`} note={sky} />
+        ) : sky ? (
+          <DayTile label="Sky" value={sky} />
+        ) : null}
+      </div>
     </Card>
   );
 };
@@ -546,7 +658,7 @@ const TeamStory = ({ story }: { story: RaceStoryPack }) => {
   );
 };
 
-/* ---------- weekend arc + weather copy ---------- */
+/* ---------- weekend arc ---------- */
 
 /** "Practice P12 → Qualifying P8 → Grid P8 → Flag P6", stations omitted when unknown. */
 const weekendArc = (story: RaceStoryPack): string | null => {
@@ -560,13 +672,6 @@ const weekendArc = (story: RaceStoryPack): string | null => {
   ].filter((station): station is [string, number] => station[1] !== null);
   if (stations.length < 3) return null;
   return stations.map(([label, rank]) => `${label} P${rank}`).join(' → ');
-};
-
-/** "dry/moderate/medium" → "dry track · moderate temps · medium wind". */
-const weatherCopy = (raw: string): string => {
-  const [track, temps, wind] = raw.split('/');
-  const parts = [track ? `${track} track` : null, temps ? `${temps} temps` : null, wind ? `${wind} wind` : null].filter(Boolean);
-  return parts.length === 3 ? parts.join(' · ') : raw.replaceAll('/', ' · ');
 };
 
 /* ---------- hero verdict (field-strength framing, facts + context only) ---------- */
@@ -629,11 +734,6 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
   const start = asNumber(pack.outcome.startPosition);
   const gain = start !== null && finish !== null ? formatGain(start - finish) : null;
   const fieldSize = story?.lapChart.fieldSize ?? asNumber(pack.lapStory?.fieldLapDrivers);
-  const context = pack.raceContext;
-  const bryceIncidents = asNumber(context?.bryceIncidentCount);
-  const weather = asString(context?.weatherContext);
-  const leader = asString(context?.topLeader);
-  const leaderShare = asNumber(context?.topLeaderShare);
   const eventDate = asString((pack as unknown as Row).eventStartDate);
   const verdict = story ? verdictFor(story) : null;
   const arc = story ? weekendArc(story) : null;
@@ -648,6 +748,7 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
         : { text: `from P${impact.standingBefore}`, direction: 'down' as const }
       : null;
   const bryceStatus = story?.bryce.status ?? null;
+  const outline = trackOutlineFor(asString(pack.track.name));
 
   return (
     <div className="page stack">
@@ -697,40 +798,41 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
               </span>
             ) : null}
           </div>
-          <div className="row" style={{ gap: 28, flexWrap: 'wrap' }}>
-            <Stat label="Points scored" value={impact?.racePoints ?? asNumber(pack.outcome.points) ?? '—'} />
-            <Stat label="Season points" value={impact?.cumulativePoints ?? asNumber(pack.outcome.cumulativePoints) ?? '—'} />
-            <Stat
-              label="Standing after"
-              value={
-                (impact?.standingAfter ?? asNumber(pack.outcome.standingRank)) !== null
-                  ? `P${impact?.standingAfter ?? asNumber(pack.outcome.standingRank)}`
-                  : '—'
-              }
-              delta={standingMove ?? undefined}
-            />
+          <div className="stack" style={{ gap: 18 }}>
+            {outline ? (
+              <div style={{ width: '100%', maxWidth: 200, marginLeft: 'auto' }}>
+                <TrackArt outline={outline} showCornerLabels={false} />
+              </div>
+            ) : null}
+            <div className="row" style={{ gap: 28, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+              <Stat label="Points scored" value={impact?.racePoints ?? asNumber(pack.outcome.points) ?? '—'} />
+              <Stat label="Season points" value={impact?.cumulativePoints ?? asNumber(pack.outcome.cumulativePoints) ?? '—'} />
+              <Stat
+                label="Standing after"
+                value={
+                  (impact?.standingAfter ?? asNumber(pack.outcome.standingRank)) !== null
+                    ? `P${impact?.standingAfter ?? asNumber(pack.outcome.standingRank)}`
+                    : '—'
+                }
+                delta={standingMove ?? undefined}
+              />
+            </div>
           </div>
         </div>
       </HeroPanel>
 
       {story ? <LapChartCard story={story} mover={mover} /> : null}
 
+      {story ? <TheDay story={story} pack={pack} /> : null}
+
       <div className="grid grid--2">
         {story ? <TeamStory story={story} /> : null}
         {story ? <SectionStory story={story} /> : null}
       </div>
 
-      <div className="row row--wrap" style={{ gap: 8 }}>
-        {leader && leaderShare !== null ? <StatusChip tone="neutral" label={`${leader} led ${Math.round(leaderShare * 100)}% of laps`} /> : null}
-        {asNumber(context?.sessionIncidentCount) ? (
-          <StatusChip tone="neutral" label={`${context?.sessionIncidentCount} incidents race-wide`} />
-        ) : null}
-        {bryceIncidents !== null && bryceIncidents > 0 ? (
-          <StatusChip tone="neutral" label={`${bryceIncidents} official incident record${bryceIncidents === 1 ? '' : 's'}`} />
-        ) : null}
-        {weather ? <StatusChip tone="neutral" label={weatherCopy(weather)} /> : null}
-        <StatusChip tone="neutral" label="official results · lap chart · section reports" />
-      </div>
+      <p style={{ margin: 0, fontSize: 11.5, color: 'var(--ink-muted)' }}>
+        Everything on this page comes from official results, the official lap chart, and official section reports.
+      </p>
     </div>
   );
 };

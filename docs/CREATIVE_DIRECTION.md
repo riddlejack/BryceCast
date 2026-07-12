@@ -179,6 +179,29 @@ Built in the same session, one notch past Race Week. What's new and binding:
    src/app/charts.tsx; Friday copy is now Jack's line — "If you liked
    practice, you'll love the race."
 
+## Race detail round 2 (Jack's review, 2026-07-11)
+
+1. **All ten permanent venues now have OSM outlines** (scripts/
+   trace-track-outlines.mjs: bbox discovery, junction-split loop assembly for
+   segmented circuits, kart/motocross/dragstrip exclusion, length-matched
+   selection). Street circuits (St. Pete, Detroit, Arlington) intentionally
+   have no art. Every race page hero carries its venue outline as a quiet
+   ~200px mark; Race Week keeps the big version.
+2. **Retired cars end honestly**: open-circle mark where a line stops early,
+   tooltip says "out on lap N · contact/mechanical" (official status only;
+   'unknown' status says just "out on lap N").
+3. **Red down-deltas** sitewide (Jack: "the down arrow is the down arrow");
+   inflection dots stay gold — the line's slope carries direction, gold means
+   "Bryce's moment."
+4. **"The day" module** replaces the footer chips: leader share, incident
+   count, real air temp/humidity/wind/sky from per-race Open-Meteo
+   observations in the canonical dataset (labeled modeled, near-track).
+5. **Battles are computed, not guessed**: laps within one position of Bryce +
+   position trades, from the full-field lap chart ("Closest company: Josh
+   Pierson — within one spot for 41 laps").
+6. Parked for a future pass (Jack agrees): per-race standout dynamic charts;
+   deeper battle visualization (who/when on the lap axis).
+
 ## Session bootstrap
 
 New session should read: CLAUDE.md (auto), memory (auto), this file,
