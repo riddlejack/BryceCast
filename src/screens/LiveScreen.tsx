@@ -7,6 +7,7 @@ import {
   Plate,
   SourcePill,
   StatusChip,
+  TickerValue,
   Unavailable,
   readinessCopy,
   type Tone
@@ -258,6 +259,24 @@ const BattleChart = ({ samples }: { samples: GapSample[] }) => {
   const x = (index: number) => margin.left + (index / Math.max(samples.length - 1, 1)) * plotWidth;
   const y = (value: number) => margin.top + ((maxGap - value) / (maxGap * 2)) * plotHeight;
   const pathOf = (points: BattleLinePoint[]) => points.map((point, index) => `${index === 0 ? 'M' : 'L'}${x(point.sampleIndex)} ${y(point.value)}`).join(' ');
+  const tailFor = (side: 'ahead' | 'behind') => {
+    if (samples.length < 2) return null;
+    const previous = samples.at(-2)!;
+    const current = samples.at(-1)!;
+    const previousNeighbor = side === 'ahead' ? previous.aheadNeighbor : previous.behindNeighbor;
+    const currentNeighbor = side === 'ahead' ? current.aheadNeighbor : current.behindNeighbor;
+    const previousGap = side === 'ahead' ? previous.ahead : previous.behind;
+    const currentGap = side === 'ahead' ? current.ahead : current.behind;
+    if (!previousNeighbor || !currentNeighbor || previousNeighbor.id !== currentNeighbor.id || previousGap === null || currentGap === null) return null;
+    return {
+      key: `${side}-${current.checkedAt}`,
+      color: side === 'ahead' ? '#5581c2' : '#2f9377',
+      from: side === 'ahead' ? previousGap : -previousGap,
+      to: side === 'ahead' ? currentGap : -currentGap
+    };
+  };
+  const aheadTail = tailFor('ahead');
+  const behindTail = tailFor('behind');
   const elapsed = samples.length >= 2 ? Math.max(0, Date.parse(samples.at(-1)!.checkedAt) - Date.parse(samples[0].checkedAt)) : 0;
   const leftLabel = elapsed >= 60_000 ? `−${Math.max(1, Math.round(elapsed / 60_000))} min` : `−${Math.max(samples.length - 1, 1)}s`;
 
@@ -286,8 +305,16 @@ const BattleChart = ({ samples }: { samples: GapSample[] }) => {
               </g>
             ))}
             <line x1={margin.left} x2={width - margin.right} y1={y(0)} y2={y(0)} stroke="var(--bryce)" strokeWidth={2} strokeDasharray="2 5" />
-            {[...ahead].map((segment, index) => <path key={`ahead-${segment.id}-${index}`} d={pathOf(segment.points)} fill="none" stroke="#5581c2" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="live-line-append" />)}
-            {[...behind].map((segment, index) => <path key={`behind-${segment.id}-${index}`} d={pathOf(segment.points)} fill="none" stroke="#2f9377" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="live-line-append" />)}
+            {[...ahead].map((segment, index) => {
+              const active = segment.points.at(-1)?.sampleIndex === samples.length - 1 && segment.points.length > 1;
+              return <path key={`ahead-${segment.id}-${index}`} d={pathOf(active ? segment.points.slice(0, -1) : segment.points)} fill="none" stroke="#5581c2" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />;
+            })}
+            {[...behind].map((segment, index) => {
+              const active = segment.points.at(-1)?.sampleIndex === samples.length - 1 && segment.points.length > 1;
+              return <path key={`behind-${segment.id}-${index}`} d={pathOf(active ? segment.points.slice(0, -1) : segment.points)} fill="none" stroke="#2f9377" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />;
+            })}
+            {aheadTail ? <line key={aheadTail.key} x1={x(samples.length - 2)} y1={y(aheadTail.from)} x2={x(samples.length - 1)} y2={y(aheadTail.to)} stroke={aheadTail.color} strokeWidth={2} strokeLinecap="round" className="live-line-tail" /> : null}
+            {behindTail ? <line key={behindTail.key} x1={x(samples.length - 2)} y1={y(behindTail.from)} x2={x(samples.length - 1)} y2={y(behindTail.to)} stroke={behindTail.color} strokeWidth={2} strokeLinecap="round" className="live-line-tail" /> : null}
             {ahead.filter((segment) => segment.points.at(-1)?.sampleIndex === samples.length - 1).map((segment) => {
               const point = segment.points.at(-1)!;
               return <text key={segment.id} x={x(point.sampleIndex) + 7} y={y(point.value)} dominantBaseline="middle" fill="var(--ink-secondary)" fontFamily={chartFont} fontSize={10.5}>{segment.surname}</text>;
@@ -394,13 +421,13 @@ const LiveHero = ({ payload, samples }: { payload: LiveReadiness; samples: GapSa
         <div className="live-hero__race-state">
           <div className="row row--wrap live-hero__flag-lap">
             {flag ? <StatusChip tone={flagTone(flag)} label={`${flag} flag`} live={flag.toUpperCase() === 'GREEN'} /> : null}
-            <span className="live-lap">{lap !== null && totalLaps !== null ? `Lap ${lap} of ${totalLaps}` : asString(heartbeat.sessionName) ?? 'Session live'}</span>
+            <TickerValue className="live-lap" value={lap !== null && totalLaps !== null ? `Lap ${lap} of ${totalLaps}` : asString(heartbeat.sessionName) ?? 'Session live'} valueKey={`${lap ?? 'na'}-${totalLaps ?? 'na'}`} />
           </div>
           <div className="live-position">
             <Plate size="hero" />
             <div>
               <span className="caption">running position</span>
-              <div className="stat__value stat__value--hero live-position__value">{rank !== null ? `P${rank}` : '—'}</div>
+              <TickerValue className="stat__value stat__value--hero live-position__value" value={rank !== null ? `P${rank}` : '—'} valueKey={rank ?? 'na'} />
               {positionStory ? <span className={`stat__delta${positionStory.up ? ' stat__delta--up' : ''}`}>{positionStory.text}</span> : null}
             </div>
           </div>
@@ -414,12 +441,12 @@ const LiveHero = ({ payload, samples }: { payload: LiveReadiness; samples: GapSa
           {pointsWindow ? (
             <>
               <div className="row live-hero__standing-row">
-                <span className="stat__value stat__value--big">P{pointsWindow.bryce.projectedStanding}</span>
+                <TickerValue className="stat__value stat__value--big" value={`P${pointsWindow.bryce.projectedStanding}`} valueKey={pointsWindow.bryce.projectedStanding} />
                 {standingMove !== null && standingMove !== 0 ? (
                   <span className={`stat__delta ${standingMove > 0 ? 'stat__delta--up' : 'stat__delta--down'}`}>{standingMove > 0 ? `▲ ${standingMove}` : `▽ ${Math.abs(standingMove)}`} vs pre-race</span>
                 ) : null}
               </div>
-              <div className="live-hero__running-points"><strong>{pointsWindow.bryce.runningDriverPoints}</strong> running points</div>
+              <div className="live-hero__running-points"><TickerValue className="live-hero__points-number" value={pointsWindow.bryce.runningDriverPoints} valueKey={pointsWindow.bryce.runningDriverPoints} /> running points</div>
               <span className="live-points__provisional">provisional · official Race Control feed</span>
             </>
           ) : (
@@ -450,11 +477,11 @@ const PointsJumbotron = ({ payload }: { payload: LiveReadiness }) => {
           <div className="live-points__main">
             <div>
               <span className="caption">Projected championship standing</span>
-              <div className="live-points__standing">P{window.bryce.projectedStanding}</div>
+              <TickerValue className="stat__value stat__value--big live-points__standing" value={`P${window.bryce.projectedStanding}`} valueKey={window.bryce.projectedStanding} />
             </div>
             <div>
               <span className="caption">Race Control running points</span>
-              <div className="live-points__score">{window.bryce.runningDriverPoints}</div>
+              <TickerValue className="stat__value stat__value--big live-points__score" value={window.bryce.runningDriverPoints} valueKey={window.bryce.runningDriverPoints} />
               <span className="live-points__provisional">provisional · official Race Control feed</span>
             </div>
           </div>
@@ -464,7 +491,7 @@ const PointsJumbotron = ({ payload }: { payload: LiveReadiness }) => {
                 <div className="live-points__neighbor" key={row.carNo}>
                   <span className="tower__pos">P{row.projectedStanding}</span>
                   <span>{row.driverName}</span>
-                  <strong>{row.runningDriverPoints}</strong>
+                  <strong><TickerValue value={row.runningDriverPoints} valueKey={row.runningDriverPoints} /></strong>
                   <span className="caption caption--secondary">{index === 0 ? 'one spot up' : 'one spot down'}</span>
                 </div>
               ) : null
@@ -514,6 +541,13 @@ const FieldTower = ({ payload }: { payload: LiveReadiness }) => {
           const status = (asString(row.status) ?? '').toLowerCase();
           const running = !status || ['active', 'running', 'run'].includes(status);
           const honestStatus = running ? null : asString(row.comment) || asString(row.status);
+          const displayGap = honestStatus
+            ? honestStatus
+            : rank === 1
+              ? 'leader'
+              : positiveGapSeconds(row.diff) !== null
+                ? secondsLabel(row.diff)
+                : formatGap(row.diff);
           const headToHead =
             bryceRank !== null && rank !== null && Math.abs(rank - bryceRank) <= 2
               ? headToHeadForLiveDriver(row.no, driverLabel(row), standings, careerRivals)
@@ -533,13 +567,7 @@ const FieldTower = ({ payload }: { payload: LiveReadiness }) => {
                 {teammate ? <span className="live-field__teammate">teammate</span> : null}
               </span>
               <span className="tower__gap">
-                {honestStatus
-                  ? honestStatus
-                  : rank === 1
-                  ? 'leader'
-                  : positiveGapSeconds(row.diff) !== null
-                    ? `${secondsLabel(row.diff)}`
-                    : formatGap(row.diff)}
+                <TickerValue value={displayGap} valueKey={displayGap} />
               </span>
               {battleBracket ? <span className={`live-field__bracket${bryceBracket ? ' live-field__bracket--bryce' : ''}`} aria-label={`${interval!.toFixed(1)} second battle with the car ahead`} /> : null}
               {headToHead && shared > 0 ? (
@@ -622,7 +650,7 @@ const GapTrend = ({ trace }: { trace: ReplayTrace | null }) => {
   const maxGap = Math.max(...points.map((point) => point.gap), 1);
   const x = (index: number) => margin.left + (index / Math.max(points.length - 1, 1)) * plotWidth;
   const y = (gap: number) => margin.top + (1 - gap / maxGap) * plotHeight;
-  const path = points.map((point, index) => `${index === 0 ? 'M' : 'L'}${x(index)} ${y(point.gap)}`).join(' ');
+  const path = points.slice(0, -1).map((point, index) => `${index === 0 ? 'M' : 'L'}${x(index)} ${y(point.gap)}`).join(' ');
   const lapBoundaries = useMemo(() => {
     const boundaries: Array<{ lap: number; index: number }> = [];
     points.forEach((point, index) => {
@@ -683,6 +711,7 @@ const GapTrend = ({ trace }: { trace: ReplayTrace | null }) => {
                   </g>
                 ))}
                 <path d={path} fill="none" stroke="var(--ink-primary)" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="live-line-append" />
+                <line key={points.at(-1)!.checkedAt} x1={x(points.length - 2)} y1={y(points.at(-2)!.gap)} x2={x(points.length - 1)} y2={y(points.at(-1)!.gap)} stroke="var(--ink-primary)" strokeWidth={2} strokeLinecap="round" className="live-line-tail" />
                 <circle cx={x(points.length - 1)} cy={y(points.at(-1)!.gap)} r={5} fill="var(--bryce)" stroke="var(--surface-1)" strokeWidth={2} className="live-now-dot" />
                 {lapBoundaries.length >= 2 ? lapBoundaries.map((boundary) => (
                   <text key={boundary.index} x={x(boundary.index)} y={height - 7} textAnchor={boundary.index === 0 ? 'start' : boundary.index === points.length - 1 ? 'end' : 'middle'} fill="var(--ink-muted)" fontFamily={chartFont} fontSize={10.5}>L{boundary.lap}</text>

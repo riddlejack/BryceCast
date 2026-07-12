@@ -26,6 +26,36 @@ export const StatusChip = ({ tone, label, live }: { tone: Tone; label: string; l
   </span>
 );
 
+/** A compact, layout-stable value swap for live numerals. The outgoing value
+ * moves 8px and fades; reduced-motion collapses this to an instant update. */
+export const TickerValue = ({ value, valueKey, className = '' }: { value: ReactNode; valueKey: string | number; className?: string }) => {
+  const current = useRef({ key: valueKey, value });
+  const [departing, setDeparting] = useState<ReactNode | null>(null);
+  const [animating, setAnimating] = useState(false);
+
+  useEffect(() => {
+    if (current.current.key === valueKey) {
+      current.current.value = value;
+      return;
+    }
+    setDeparting(current.current.value);
+    current.current = { key: valueKey, value };
+    setAnimating(true);
+    const timer = window.setTimeout(() => {
+      setAnimating(false);
+      setDeparting(null);
+    }, 170);
+    return () => window.clearTimeout(timer);
+  }, [value, valueKey]);
+
+  return (
+    <span className={`ticker-value${animating ? ' ticker-value--animating' : ''}${className ? ` ${className}` : ''}`}>
+      {departing !== null ? <span className="ticker-value__old" aria-hidden>{departing}</span> : null}
+      <span className="ticker-value__new">{value}</span>
+    </span>
+  );
+};
+
 /** Family-readable translations of product readiness states. */
 export const readinessCopy: Record<string, { tone: Tone; label: string; detail: string }> = {
   ready: { tone: 'good', label: 'Live', detail: 'Race Control timing is live for Bryce’s session.' },

@@ -260,6 +260,34 @@ button { font-family: inherit; }
   50% { opacity: 0.4; }
 }
 
+/* ---------- live number swaps ---------- */
+
+.ticker-value {
+  display: inline-grid;
+  min-width: 0;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.ticker-value > span { grid-area: 1 / 1; }
+
+.ticker-value--animating .ticker-value__old {
+  animation: ticker-old 150ms cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+
+.ticker-value--animating .ticker-value__new {
+  animation: ticker-new 150ms cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+
+@keyframes ticker-old {
+  to { transform: translateY(-8px); opacity: 0; }
+}
+
+@keyframes ticker-new {
+  from { transform: translateY(8px); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+
 /* ---------- stat tiles ---------- */
 
 .stat { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
@@ -765,6 +793,7 @@ button { font-family: inherit; }
 .live-position { display: flex; align-items: center; gap: 14px; min-height: 116px; }
 
 .live-position__value {
+  display: grid;
   margin-top: 2px;
 }
 
@@ -791,7 +820,7 @@ button { font-family: inherit; }
 
 .live-hero__standing-row { justify-content: flex-end; gap: 10px; margin-top: 6px; }
 .live-hero__running-points { margin-top: 5px; color: var(--ink-secondary); font-size: 13px; }
-.live-hero__running-points strong { color: var(--ink-primary); font-size: 18px; font-variant-numeric: tabular-nums; }
+.live-hero__points-number { color: var(--ink-primary); font-weight: 650; }
 
 .live-battle__intro {
   margin: -2px 0 8px;
@@ -815,8 +844,11 @@ button { font-family: inherit; }
 
 .live-battle__caption { margin: -3px 0 0; }
 
-.live-line-append {
-  transition: stroke-dashoffset 200ms cubic-bezier(0.23, 1, 0.32, 1);
+.live-line-tail { animation: live-line-tail 200ms cubic-bezier(0.23, 1, 0.32, 1) both; }
+
+@keyframes live-line-tail {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .live-now-dot {
@@ -841,19 +873,13 @@ button { font-family: inherit; }
 }
 
 .live-points__standing {
+  display: grid;
   margin-top: 3px;
-  font-size: clamp(46px, 7vw, 64px);
-  font-weight: 680;
-  line-height: 1;
-  letter-spacing: -0.035em;
 }
 
 .live-points__score {
+  display: grid;
   margin-top: 3px;
-  font-size: clamp(30px, 5vw, 40px);
-  font-weight: 650;
-  line-height: 1;
-  letter-spacing: -0.025em;
 }
 
 .live-points__provisional { display: block; margin-top: 7px; color: var(--ink-secondary); font-size: 12px; }
@@ -1050,7 +1076,7 @@ button { font-family: inherit; }
 /* ---------- reduced motion ---------- */
 
 @media (prefers-reduced-motion: reduce) {
-  .live-dot, .live-now-dot, .skeleton, .drawer, .drawer-backdrop { animation: none; }
+  .live-dot, .live-now-dot, .live-line-tail, .ticker-value__old, .ticker-value__new, .skeleton, .drawer, .drawer-backdrop { animation: none; }
   .reveal { animation: none; opacity: 1; transform: none; }
   * { transition-duration: 0.01ms !important; }
 }
