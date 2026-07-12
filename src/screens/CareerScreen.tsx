@@ -1,7 +1,7 @@
 import { Card, SourcePill, Stat, Unavailable } from '../app/components';
 import { asNumber, asString, formatNumber, formatPct } from '../app/format';
 import { uiDataPackage } from '../data/uiDataPackage';
-import { BestClimbs, CareerExplorer, DaytonaStory } from './careerExplorer';
+import { BestClimbs, CareerBests, CareerExplorer, ChapterStrip, DaytonaStory, TheClimb } from './careerExplorer';
 
 type Row = Record<string, string | number | null>;
 
@@ -77,8 +77,11 @@ const ChapterCard = ({
           ) : null}
         </div>
         <p style={{ margin: '8px 0 0', fontSize: 13.5, color: 'var(--ink-secondary)', maxWidth: '58ch' }}>{chapter.narrative}</p>
+        <div style={{ marginTop: 10 }}>
+          <ChapterStrip seriesName={chapter.name} />
+        </div>
         {row ? (
-          <div className="row" style={{ gap: 26, marginTop: 14, flexWrap: 'wrap' }}>
+          <div className="row" style={{ gap: 26, marginTop: 10, flexWrap: 'wrap' }}>
             <Stat label="Avg finish" value={formatNumber(row.avgFinish)} />
             <Stat label="Field beaten (avg)" value={formatPct(row.avgFinishPercentile)} />
             <Stat label="Top-10 rate" value={formatPct(row.top10RatePct)} />
@@ -113,21 +116,30 @@ export const CareerScreen = () => {
         />
       </header>
 
+      <CareerBests />
+
+      <TheClimb />
+
       {rows.length === 0 ? (
         <Card>
           <Unavailable>Career summary data unavailable.</Unavailable>
         </Card>
       ) : (
-        <div className="journey">
-          {seriesChapters.map((chapter, index) => (
-            <ChapterCard
-              key={chapter.name}
-              chapter={chapter}
-              row={rowByName.get(chapter.name)}
-              current={index === seriesChapters.length - 1}
-            />
-          ))}
-        </div>
+        <>
+          <div style={{ marginTop: 10 }}>
+            <span className="kicker">The chapters</span>
+          </div>
+          <div className="journey">
+            {seriesChapters.map((chapter, index) => (
+              <ChapterCard
+                key={chapter.name}
+                chapter={chapter}
+                row={rowByName.get(chapter.name)}
+                current={index === seriesChapters.length - 1}
+              />
+            ))}
+          </div>
+        </>
       )}
 
       <div style={{ marginTop: 10 }}>

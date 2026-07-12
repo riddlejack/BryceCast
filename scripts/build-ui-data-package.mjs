@@ -720,6 +720,18 @@ const buildSeasonIndex = ({ raceDebriefPackPairs, resultsBySession, progressionR
     );
 };
 
+/** The Career Lab climb needs true chronology; conversion rows carry no
+ *  dates, so join each session to its canonical event start date. */
+const enrichConversionRows = (rows, canonicalDataset) => {
+  const sessionById = new Map((canonicalDataset.sessions ?? []).map((session) => [session.id, session]));
+  const eventById = new Map((canonicalDataset.events ?? []).map((event) => [event.id, event]));
+  return rows.map((row) => {
+    const session = sessionById.get(row.sessionId);
+    const event = session ? eventById.get(session.eventId) : null;
+    return { ...row, eventStartDate: event?.eventStartDate ?? null };
+  });
+};
+
 const readLatestColdRaceCapture = () => {
   const dbPath = path.join(repoRoot, 'data/live/brycecast.sqlite');
   if (!fs.existsSync(dbPath)) return { available: false, reason: 'live capture database not present' };
@@ -1417,8 +1429,8 @@ const buildPackage = () => {
         topCareerStories: careerLabPayload.topCareerStories ?? [],
         chartSpecs: careerLabPayload.chartSpecs ?? [],
         resultConversionRows: careerLabPayload.resultConversionRows,
-        resultConversion: careerLabPayload.resultConversion ?? [],
-        resultConversionSample: (careerLabPayload.resultConversion ?? []).slice(0, 25),
+        resultConversion: enrichConversionRows(careerLabPayload.resultConversion ?? [], canonicalDataset),
+        resultConversionSample: enrichConversionRows(careerLabPayload.resultConversion ?? [], canonicalDataset).slice(0, 25),
         caveats: [
           'Career analytics must use metric-family parity states; older series do not expose INDY NXT-grade depth.',
           'Result-conversion rows are source-bounded historical context, not a universal driver-strength model.'

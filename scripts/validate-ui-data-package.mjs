@@ -552,6 +552,14 @@ for (const ref of raceStoryRefs ?? []) {
   }
 }
 
+/* ---------- career conversion rows must carry chronology ---------- */
+
+const conversionRows = dataPackage.screens.careerLab.resultConversion ?? [];
+const undatedConversionRows = conversionRows.filter((row) => !row.eventStartDate).length;
+if (conversionRows.length === 0 || undatedConversionRows > 0) {
+  fail(`careerLab.resultConversion must carry eventStartDate on every row (${undatedConversionRows} missing of ${conversionRows.length}).`);
+}
+
 /* ---------- season index (archive spine) ---------- */
 
 const seasonIndex = dataPackage.screens.raceDebrief.seasonIndex;

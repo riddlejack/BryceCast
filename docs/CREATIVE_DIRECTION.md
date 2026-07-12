@@ -232,6 +232,26 @@ The list became the index, the chart the spine — per the original seed:
 5. Every season card carries a source drawer (debrief packs + championship
    progression) and the honest-status text on non-running rows.
 
+## Career Lab shipped (2026-07-11)
+
+1. **The climb is visible**: all 141 races as percentile dots over seven
+   years, chapter bands per series (labeled only when they fit), a form
+   line (11-race trimmed mean — say "running form" on screen, method in
+   the drawer), year ticks, open circles for early ends, nearest-dot hover,
+   INDY NXT dots open race pages. Conversion rows now carry eventStartDate
+   (package-enriched from canonical events; validator enforces it).
+2. **Chapter cards carry percentile strips** — every era's races as dots on
+   the 0–100 scale with a gold median tick (gold = "Bryce's marker",
+   labeled per chart).
+3. **The explorer is the playground**: two curated views (start→finish
+   scatter; percentile strips grouped by series/season/track type) over
+   shared series/track filters. Curation beats chart-type pickers.
+4. **CareerBests strip**: wins/podiums/top-10s/typical percentile computed
+   from the same rows the charts draw.
+5. Jack's "archive beyond INDY NXT" musing is answered here: the Career Lab
+   holds every race of the career with hover identity; the Races archive
+   stays INDY NXT-deep. Revisit only if he asks again after using both.
+
 ## The magic backlog (fun features queue — build after the core pages)
 
 - **Bryce's car as an SVG mark.** Official 2026 livery: the No. 9 Jaguar

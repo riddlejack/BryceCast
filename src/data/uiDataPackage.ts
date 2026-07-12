@@ -293,7 +293,8 @@ export interface UiDataPackage {
       readiness: string;
       seriesSummary: Array<Record<string, string | number | null>>;
       parityBySeries: Record<string, Array<Record<string, string | number | null>>>;
-      resultConversionSample: Array<Record<string, string>>;
+      resultConversion: Array<Record<string, string | number | null>>;
+      resultConversionSample: Array<Record<string, string | number | null>>;
       caveats: string[];
       sourceRefs: UiSourceRef[];
     };
