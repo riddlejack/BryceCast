@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { CalendarClock } from 'lucide-react';
+import { CalendarClock, ExternalLink, Radio, Tv } from 'lucide-react';
 import {
   Card,
   Countdown,
@@ -94,6 +94,18 @@ const sourceEntries = {
       label: 'Race Control timing feed · Bryce-centered intervals',
       path: '/api/readiness → /api/timing rows[].diff / gap',
       note: 'The corridor subtracts each sourced gap-to-leader from Bryce’s. The chart preserves published neighbor identities and starts a new segment whenever the neighbor changes; no GPS position is inferred.'
+    }
+  ],
+  watch: [
+    {
+      label: 'Session-matched official broadcast route',
+      path: '/api/readiness → raceWeekend.broadcastRoute',
+      note: 'The route is matched by EventSessionID from the official track-activity feed.'
+    },
+    {
+      label: 'Official embed audit',
+      path: 'analysis/live-watch-routes/RESEARCH.md',
+      note: 'No official embeddable full-session INDY NXT stream was found for 2026, so BryceCast deep-links instead.'
     }
   ]
 };
@@ -779,6 +791,42 @@ const WaitingState = ({ payload }: { payload: LiveReadiness }) => {
   );
 };
 
+/* ---------- watch along: official routes, never a proxied broadcast ---------- */
+
+const WatchAlong = ({ payload }: { payload: LiveReadiness }) => {
+  const route = ((payload.raceWeekend as Row)?.broadcastRoute as Row) ?? null;
+  const primary = (route?.primaryVideo as Row) ?? null;
+  const audio = Array.isArray(route?.audio) ? (route.audio as Row[]) : [];
+  const international = Array.isArray(route?.international) ? (route.international as Row[]) : [];
+  const officialRoutes = [primary, ...audio.slice(0, 2), ...international.slice(0, 1)].filter((entry): entry is Row => Boolean(entry && asString(entry.url)));
+
+  return (
+    <Card
+      className="live-watch"
+      title={<><Tv size={15} aria-hidden /> Watch along</>}
+      action={<SourcePill title="Watch along" entries={sourceEntries.watch} caveats={['Broadcast access and picture-in-picture support depend on the viewer’s service, device, and territory.']} />}
+    >
+      {officialRoutes.length > 0 ? (
+        <div className="live-watch__routes">
+          {officialRoutes.map((entry, index) => {
+            const audioRoute = asString(entry.kind) === 'audio';
+            return (
+              <a key={asString(entry.id) ?? `${asString(entry.name)}-${index}`} href={asString(entry.url)!} target="_blank" rel="noreferrer" className="live-watch__route">
+                {audioRoute ? <Radio size={15} aria-hidden /> : <Tv size={15} aria-hidden />}
+                <span>{audioRoute ? 'Listen on' : index === 0 ? 'Watch on' : 'Open'} {asString(entry.name) ?? 'official coverage'}</span>
+                <ExternalLink size={13} aria-hidden />
+              </a>
+            );
+          })}
+        </div>
+      ) : (
+        <Unavailable>The official session feed has not published a watch route for this state. It appears here only after EventSessionID matching.</Unavailable>
+      )}
+      <p className="live-watch__pip">start the broadcast, then pop it out — picture-in-picture sits nicely over this page.</p>
+    </Card>
+  );
+};
+
 /* ---------- screen ---------- */
 
 export const LiveScreen = ({ payload, fixtureMode }: { payload: LiveReadiness | null; fixtureMode: boolean }) => {
@@ -819,6 +867,7 @@ export const LiveScreen = ({ payload, fixtureMode }: { payload: LiveReadiness | 
           </div>
         </>
       )}
+      <WatchAlong payload={payload} />
     </div>
   );
 };

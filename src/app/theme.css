@@ -986,6 +986,31 @@ button { font-family: inherit; }
   font-weight: 550;
 }
 
+.live-watch__routes { display: grid; gap: 1px; border-top: 1px solid var(--divider); }
+
+.live-watch__route {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr) 14px;
+  align-items: center;
+  gap: 9px;
+  min-height: 43px;
+  border-bottom: 1px solid var(--divider);
+  color: var(--ink-primary);
+  font-size: 13px;
+  font-weight: 560;
+  transition: color 150ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.live-watch__route:hover { color: var(--link); }
+.live-watch__route svg:last-child { color: var(--ink-muted); }
+
+.live-watch__pip {
+  margin: 12px 0 0;
+  color: var(--ink-secondary);
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+
 @media (min-width: 900px) {
   .live-layout { grid-template-columns: minmax(0, 7fr) minmax(330px, 5fr); }
   .live-field { grid-column: 2; }

@@ -23,7 +23,18 @@ const replayStates = [
   ['caution', '2026-06-21T16:20:30.000Z'],
   ['post-checkered-cold', '2026-06-21T17:00:28.958Z']
 ].filter(([state]) => !quick || state !== 'mid-race');
-const fixtures = quick ? [] : ['wrong_series', 'pre_session', 'ready', 'degraded', 'stale', 'blocked'];
+const fixtures = quick ? [] : [
+  ['wrong_series', 'base'],
+  ['pre_session', 'base'],
+  ['ready', 'base'],
+  ['degraded', 'base'],
+  ['stale', 'base'],
+  ['blocked', 'base'],
+  ['blocked', 'no_bryce_archive_ready'],
+  ['blocked', 'no_bryce_archive_missing'],
+  ['pre_session', 'replay_empty'],
+  ['pre_session', 'replay_repeated_cold']
+];
 const viewports = [
   ['phone', { width: 390, height: 844 }],
   ['desktop', { width: 1440, height: 900 }]
@@ -68,11 +79,13 @@ try {
         }
       }
     }
-    for (const fixture of fixtures) {
-      await page.goto(`${base}/live?fixture=${fixture}`, { waitUntil: 'load' });
+    for (const [fixture, variant] of fixtures) {
+      const variantQuery = variant === 'base' ? '' : `&variant=${encodeURIComponent(variant)}`;
+      await page.goto(`${base}/live?fixture=${fixture}${variantQuery}`, { waitUntil: 'load' });
       await page.waitForSelector('.live-trust');
       await page.waitForTimeout(900);
-      const file = path.join(outDir, `fixture-${fixture}--${viewportName}.png`);
+      const variantName = variant === 'base' ? '' : `-${variant}`;
+      const file = path.join(outDir, `fixture-${fixture}${variantName}--${viewportName}.png`);
       await page.screenshot({ path: file, fullPage: true });
       console.log(file);
     }
