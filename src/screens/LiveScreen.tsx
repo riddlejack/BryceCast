@@ -36,11 +36,18 @@ type Row = Record<string, unknown>;
 
 const heartbeatOf = (payload: LiveReadiness): Row => ((payload.liveTiming as Row)?.heartbeat as Row) ?? {};
 
+const isCautionFlag = (flag: string | null | undefined) => {
+  const value = (flag ?? '').toUpperCase();
+  return value.includes('YELLOW') || value.includes('CAUTION') || value === 'FCY';
+};
+
+const isRedFlag = (flag: string | null | undefined) => (flag ?? '').toUpperCase().includes('RED');
+
 const flagTone = (flag: string | null): Tone => {
   const value = (flag ?? '').toUpperCase();
   if (value === 'GREEN') return 'good';
-  if (value === 'YELLOW' || value === 'CAUTION') return 'warn';
-  if (value === 'RED') return 'bad';
+  if (isCautionFlag(value)) return 'warn';
+  if (isRedFlag(value)) return 'bad';
   return 'neutral';
 };
 
@@ -340,15 +347,24 @@ const BattleChart = ({ samples }: { samples: GapSample[] }) => {
   );
 };
 
-const BattleModule = ({ payload, samples }: { payload: LiveReadiness; samples: GapSample[] }) => (
-  <Card className="live-battle" title="The battle" action={<SourcePill title="The battle" entries={sourceEntries.battle} />}>
-    <p className="live-battle__intro">Bryce is the reference point. Cars ahead sit right and above; cars behind sit left and below.</p>
-    <BattleCorridor payload={payload} samples={samples} />
-    <div className="live-battle__divider" />
-    <BattleChart samples={samples} />
-    <p className="caption caption--secondary live-battle__caption">blue runs ahead of him, teal behind · lines closing on Bryce’s line mean the gap is shrinking</p>
-  </Card>
-);
+const BattleModule = ({ payload, samples }: { payload: LiveReadiness; samples: GapSample[] }) => {
+  const flag = asString(heartbeatOf(payload).flag ?? (payload.raceWeekend as Row).flag);
+  const mode = isRedFlag(flag)
+    ? 'Session stopped — red flag'
+    : isCautionFlag(flag)
+      ? 'Field bunched under caution — gaps compress until the restart'
+      : null;
+  return (
+    <Card className="live-battle" title="The battle" action={<SourcePill title="The battle" entries={sourceEntries.battle} />}>
+      <p className="live-battle__intro">Bryce is the reference point. Cars ahead sit right and above; cars behind sit left and below.</p>
+      <div className={`live-battle__mode${mode ? ' live-battle__mode--active' : ''}`} aria-live="polite">{mode ?? '\u00a0'}</div>
+      <BattleCorridor payload={payload} samples={samples} />
+      <div className="live-battle__divider" />
+      <BattleChart samples={samples} />
+      <p className="caption caption--secondary live-battle__caption">blue runs ahead of him, teal behind · lines closing on Bryce’s line mean the gap is shrinking</p>
+    </Card>
+  );
+};
 
 /* ---------- trust rail ---------- */
 
@@ -665,7 +681,7 @@ const GapTrend = ({ trace }: { trace: ReplayTrace | null }) => {
   const cautionBands = useMemo(() => {
     const bands: Array<{ from: number; to: number }> = [];
     points.forEach((point, index) => {
-      const caution = point.flag === 'YELLOW' || point.flag === 'CAUTION';
+      const caution = isCautionFlag(point.flag);
       const last = bands.at(-1);
       if (caution && last && last.to === index - 1) last.to = index;
       else if (caution) bands.push({ from: index, to: index });

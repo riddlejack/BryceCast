@@ -828,6 +828,17 @@ button { font-family: inherit; }
   font-size: 13px;
 }
 
+.live-battle__mode {
+  min-height: 24px;
+  margin: 0 0 2px;
+  color: transparent;
+  font-size: 12.5px;
+  line-height: 24px;
+  transition: color 150ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.live-battle__mode--active { color: var(--ink-secondary); }
+
 .live-battle__corridor,
 .live-battle__chart {
   position: relative;
