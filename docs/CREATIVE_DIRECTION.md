@@ -213,6 +213,25 @@ Built in the same session, one notch past Race Week. What's new and binding:
 3. **Paired cards share baselines**: both get a one-line intro at the same
    y, and bottom captions pin via `.card--flex` + margin-top:auto.
 
+## Races archive shipped (2026-07-11)
+
+The list became the index, the chart the spine — per the original seed:
+
+1. **Season spine** per season card: race finishes (ink line + dots, gold =
+   top-5, ○ = ended early) stacked over the championship-standing step line,
+   one shared x-axis with a crosshair hover, combined tooltip, click →
+   race page. Renders synchronously from `raceDebrief.seasonIndex` in the
+   package (no pack loading on this screen).
+2. **Gold means one thing per page**: rows' finish dots were re-unified to
+   top-5 to match the spine key. Never let the same mark mean two things.
+3. **Venue minis** in list rows (letterboxed outline, fixed 44×26 box,
+   empty for street circuits so columns never shift); series prefix dropped
+   from row labels ("Milwaukee Mile", not "INDY NXT by Firestone at the…").
+4. **Responsive rows via CSS classes** (`.tower__row.race-row`): mini + date
+   columns appear ≥640px; phone keeps P · name · delta · pts · arrow.
+5. Every season card carries a source drawer (debrief packs + championship
+   progression) and the honest-status text on non-running rows.
+
 ## The magic backlog (fun features queue — build after the core pages)
 
 - **Bryce's car as an SVG mark.** Official 2026 livery: the No. 9 Jaguar

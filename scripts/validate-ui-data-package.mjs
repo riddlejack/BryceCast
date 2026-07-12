@@ -552,6 +552,22 @@ for (const ref of raceStoryRefs ?? []) {
   }
 }
 
+/* ---------- season index (archive spine) ---------- */
+
+const seasonIndex = dataPackage.screens.raceDebrief.seasonIndex;
+if (!Array.isArray(seasonIndex) || seasonIndex.length !== expectedRaceDebriefSessionIds.size) {
+  fail(`raceDebrief.seasonIndex must carry one row per race-debrief session (${expectedRaceDebriefSessionIds.size}).`);
+}
+assertSetEqual(new Set((seasonIndex ?? []).map((row) => row.sessionId)), expectedRaceDebriefSessionIds, 'Season index sessionId set');
+for (const row of seasonIndex ?? []) {
+  if (typeof row.finishPosition !== 'number' || typeof row.seasonYear !== 'number' || typeof row.roundIndex !== 'number') {
+    fail(`Season index row ${row.sessionId} needs seasonYear, roundIndex, finishPosition.`);
+  }
+  if (!Object.hasOwn(row, 'officialStatus')) {
+    fail(`Season index row ${row.sessionId} must carry officialStatus.`);
+  }
+}
+
 const fixtureStates = new Set(dataPackage.screens.liveCompanionFixtures.fixtures.map((fixture) => fixture.state));
 for (const state of dataPackage.screens.liveCompanionFixtures.requiredStates) {
   if (!fixtureStates.has(state)) fail(`Live fixture state missing: ${state}`);

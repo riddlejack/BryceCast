@@ -206,6 +206,24 @@ export interface UiRaceStoryRef {
   sha256: string;
 }
 
+export interface UiSeasonIndexRow {
+  sessionId: string;
+  raceLabel: string;
+  seasonYear: number | null;
+  roundIndex: number | null;
+  eventStartDate: string | null;
+  trackName: string | null;
+  trackType: string | null;
+  startPosition: number | null;
+  finishPosition: number | null;
+  points: number | null;
+  cumulativePoints: number | null;
+  standingRank: number | null;
+  officialStatus: string | null;
+  pointsBehindLeader: number | null;
+  leaderDriver: string | null;
+}
+
 export interface UiDebriefSeed {
   label: string;
   sessionId: string;
@@ -265,6 +283,7 @@ export interface UiDataPackage {
       readiness: string;
       featuredDebriefs: UiDebriefSeed[];
       raceStoryRefs: UiRaceStoryRef[];
+      seasonIndex: UiSeasonIndexRow[];
       chartFamilies: string[];
       caveats: string[];
       sourceRefs: UiSourceRef[];

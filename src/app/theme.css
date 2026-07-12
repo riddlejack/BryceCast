@@ -464,6 +464,17 @@ button { font-family: inherit; }
 /* Paired cards whose intro/caption lines should sit on shared baselines. */
 .card--flex { display: flex; flex-direction: column; }
 
+/* Archive rows: venue mini + date earn their columns only when there's room.
+ * (.tower__row.race-row so this template outranks the base tower template.) */
+.tower__row.race-row { grid-template-columns: 52px minmax(0, 1fr) auto auto 16px; }
+.race-row__mini, .race-row__date { display: none; }
+
+@media (min-width: 640px) {
+  .tower__row.race-row { grid-template-columns: 52px 50px minmax(0, 1fr) auto auto auto 16px; }
+  .race-row__mini { display: inline-flex; }
+  .race-row__date { display: block; }
+}
+
 /* ---------- footer ---------- */
 
 .footer { border-top: 1px solid var(--divider); margin-top: 28px; }

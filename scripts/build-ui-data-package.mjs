@@ -686,6 +686,40 @@ const buildRaceStoryPacks = ({ raceDebriefPackPairs, canonicalDataset, canonical
   return refs;
 };
 
+/** One synchronous row per completed race for the archive's season spine:
+ *  finish/start/points plus standing and gap-to-leader after each round,
+ *  with official result status so hard days are labeled, never mysterious. */
+const buildSeasonIndex = ({ raceDebriefPackPairs, resultsBySession, progressionRows }) => {
+  const progressionBySession = new Map(progressionRows.map((row) => [row.sessionId, row]));
+  return raceDebriefPackPairs
+    .map(({ pack }) => {
+      const official = resultsBySession.get(pack.sessionId) ?? null;
+      const progression = progressionBySession.get(pack.sessionId) ?? null;
+      const roundIndex = typeof pack.raceOrder === 'number' ? pack.raceOrder : (pack.raceOrder?.roundIndex ?? null);
+      return {
+        sessionId: pack.sessionId,
+        raceLabel: pack.raceLabel,
+        seasonYear: numberOrNull(pack.seasonYear),
+        roundIndex: numberOrNull(roundIndex),
+        eventStartDate: pack.eventStartDate ?? null,
+        trackName: pack.track?.name ?? null,
+        trackType: pack.track?.type ?? null,
+        startPosition: numberOrNull(pack.outcome?.startPosition),
+        finishPosition: numberOrNull(pack.outcome?.finishPosition),
+        points: numberOrNull(pack.outcome?.points),
+        cumulativePoints: numberOrNull(pack.outcome?.cumulativePoints),
+        standingRank: numberOrNull(pack.outcome?.standingRank),
+        officialStatus: official?.status ?? null,
+        pointsBehindLeader: progression ? numberOrNull(progression.pointsBehindLeader) : null,
+        leaderDriver: progression?.leaderDriver ?? null
+      };
+    })
+    .sort(
+      (left, right) =>
+        (left.seasonYear ?? 0) - (right.seasonYear ?? 0) || (left.roundIndex ?? 0) - (right.roundIndex ?? 0)
+    );
+};
+
 const readLatestColdRaceCapture = () => {
   const dbPath = path.join(repoRoot, 'data/live/brycecast.sqlite');
   if (!fs.existsSync(dbPath)) return { available: false, reason: 'live capture database not present' };
@@ -1186,6 +1220,7 @@ const buildPackage = () => {
     canonicalDataset,
     canonicalSha256: summarizeArtifact(sources.canonicalDataset).sha256
   });
+  const seasonIndex = buildSeasonIndex({ raceDebriefPackPairs, resultsBySession, progressionRows: championshipRows });
   const nextUpcomingVenue = upcomingEvents[0]?.trackName ?? null;
   const nextUpcomingVenueSlug = venueSlug(nextUpcomingVenue);
   const nextUpcomingVenuePackSlug = nextUpcomingVenueSlug.replaceAll('_', '-');
@@ -1341,6 +1376,7 @@ const buildPackage = () => {
         },
         contextPackRefs: packsByType('race_debrief'),
         raceStoryRefs,
+        seasonIndex,
         chartFamilies: [
           'outcome KPI strip',
           'qualifying-to-finish slope',

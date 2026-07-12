@@ -64,8 +64,10 @@ export const chronoCompare = (a: RaceDebriefContextPack, b: RaceDebriefContextPa
 };
 
 /** Pack labels repeat the race number ("... Race 1 R1"); trim for display. */
-export const displayRaceLabel = (pack: RaceDebriefContextPack): string =>
-  pack.raceLabel.replace(/^\d{4}\s+/, '').replace(/\s+R(\d)$/, '');
+export const displayRaceLabelText = (raceLabel: string): string =>
+  raceLabel.replace(/^\d{4}\s+/, '').replace(/\s+R(\d)$/, '');
+
+export const displayRaceLabel = (pack: RaceDebriefContextPack): string => displayRaceLabelText(pack.raceLabel);
 
 let archivePromise: Promise<ArchiveEntry[]> | null = null;
 
