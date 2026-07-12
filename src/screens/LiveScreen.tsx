@@ -498,10 +498,22 @@ const FieldTower = ({ payload }: { payload: LiveReadiness }) => {
   return (
     <Card flush className="live-field" title="The field" action={<SourcePill title="The field" entries={sourceEntries.tower} />}>
       <div className="tower" role="table" aria-label="Full live running order">
-        {rows.map((row) => {
+        <div className="tower__row live-field__header" role="row">
+          <span>P</span>
+          <span>driver</span>
+          <span>gap to leader</span>
+        </div>
+        {rows.map((row, index) => {
           const isBryce = row.bryce === true;
           const rank = asNumber(row.rank);
+          const previous = rows[index - 1];
           const teammate = !isBryce && asString(row.team)?.toLowerCase().includes('ganassi');
+          const interval = index > 0 ? positiveGapSeconds(row.gap) : null;
+          const battleBracket = interval !== null && interval <= 1;
+          const bryceBracket = battleBracket && (isBryce || previous?.bryce === true);
+          const status = (asString(row.status) ?? '').toLowerCase();
+          const running = !status || ['active', 'running', 'run'].includes(status);
+          const honestStatus = running ? null : asString(row.comment) || asString(row.status);
           const headToHead =
             bryceRank !== null && rank !== null && Math.abs(rank - bryceRank) <= 2
               ? headToHeadForLiveDriver(row.no, driverLabel(row), standings, careerRivals)
@@ -521,12 +533,15 @@ const FieldTower = ({ payload }: { payload: LiveReadiness }) => {
                 {teammate ? <span className="live-field__teammate">teammate</span> : null}
               </span>
               <span className="tower__gap">
-                {rank === 1
+                {honestStatus
+                  ? honestStatus
+                  : rank === 1
                   ? 'leader'
                   : positiveGapSeconds(row.diff) !== null
                     ? `${secondsLabel(row.diff)}`
                     : formatGap(row.diff)}
               </span>
+              {battleBracket ? <span className={`live-field__bracket${bryceBracket ? ' live-field__bracket--bryce' : ''}`} aria-label={`${interval!.toFixed(1)} second battle with the car ahead`} /> : null}
               {headToHead && shared > 0 ? (
                 <span className="live-field__tip" role="tooltip">
                   Bryce ahead in {headToHead.bryceAhead} of {shared} shared races

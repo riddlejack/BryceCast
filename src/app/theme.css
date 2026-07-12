@@ -877,6 +877,15 @@ button { font-family: inherit; }
 .live-field .card__header { padding: 16px 18px 0; }
 .live-field__row { position: relative; grid-template-columns: 32px minmax(0, 1fr) auto; }
 
+.live-field__header {
+  min-height: 31px;
+  color: var(--ink-muted);
+  font-size: 10.5px;
+  font-weight: 520;
+}
+
+.live-field__header > :last-child { text-align: right; }
+
 .live-field__teammate {
   color: var(--ink-muted);
   font-size: 10.5px;
@@ -903,10 +912,26 @@ button { font-family: inherit; }
   transition: opacity 150ms cubic-bezier(0.23, 1, 0.32, 1), transform 150ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 
+.live-field__bracket {
+  position: absolute;
+  z-index: 2;
+  top: calc(-100% - 1px);
+  right: 5px;
+  width: 7px;
+  height: calc(200% + 2px);
+  border: solid var(--ink-primary);
+  border-width: 2px 2px 2px 0;
+  border-radius: 0 3px 3px 0;
+  pointer-events: none;
+}
+
+.live-field__bracket--bryce { border-color: var(--bryce); }
+
 @media (hover: hover) and (pointer: fine) {
   .live-field__row:hover .live-field__tip { opacity: 1; transform: none; }
-  .live-field .tower:has(> .live-field__row:hover) .live-field__row { opacity: 0.22; transition: opacity 150ms ease; }
+  .live-field .tower:has(> .live-field__row:hover) .live-field__row:not(.live-field__header):not(.tower__row--bryce) { opacity: 0.45; transition: opacity 150ms ease; }
   .live-field .tower:has(> .live-field__row:hover) .live-field__row:hover { opacity: 1; }
+  .live-field .tower:has(> .live-field__row:hover) .tower__row--bryce { opacity: 1; }
 }
 
 .live-field__row:focus { outline: 2px solid var(--link); outline-offset: -2px; }
