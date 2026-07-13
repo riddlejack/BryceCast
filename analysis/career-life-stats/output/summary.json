@@ -1,0 +1,578 @@
+{
+  "countries": 9,
+  "coverageGaps": [
+    "FROC non-race classifications do not expose completed laps.",
+    "F1600 best-lap numbers are lower bounds, not session totals.",
+    "Private tests beyond imported official session results are not covered.",
+    "Actual travel is blocked pending seasonBase and returnHomeFrequency."
+  ],
+  "farthestVenuePair": {
+    "fromTrackName": "Autodromo Internacional do Algarve",
+    "miles": 11997.4,
+    "toTrackName": "Euromarque Motorsport Park"
+  },
+  "generatedAt": "2026-07-11T20:53:51.783Z",
+  "longestLeg": {
+    "fromTrackName": "Autodromo Nazionale Monza",
+    "miles": 11599.1,
+    "toTrackName": "Euromarque Motorsport Park"
+  },
+  "personalRaceMileage": {
+    "confidenceClass": "observed_exact",
+    "coveredRaceRows": 145,
+    "laps": 3019,
+    "metricGrain": "driver_physical_race",
+    "miles": 6924.4,
+    "raceRows": 145
+  },
+  "physicalSessionMileage": {
+    "exact": {
+      "confidenceClass": "observed_exact",
+      "laps": 5883,
+      "miles": 13688.4,
+      "sessions": 319
+    },
+    "excludedAggregateSessions": 30,
+    "floor": {
+      "confidenceClass": "observed_lower_bound",
+      "laps": 6032,
+      "miles": 14048.9
+    },
+    "lowerBound": {
+      "confidenceClass": "observed_lower_bound",
+      "laps": 149,
+      "miles": 360.5,
+      "sessions": 14
+    },
+    "metricGrain": "driver_physical_session",
+    "sessionRows": 349,
+    "unknown": {
+      "confidenceClass": "unknown",
+      "sessions": 16
+    }
+  },
+  "resourceModels": {
+    "fuel": {
+      "confidenceClass": "modeled_range",
+      "rows": 10,
+      "table": "analysis/career-life-stats/output/tables/estimated_fuel_burned.csv"
+    },
+    "tires": {
+      "confidenceClass": "modeled_range",
+      "rows": 10,
+      "table": "analysis/career-life-stats/output/tables/estimated_unique_tires.csv"
+    }
+  },
+  "schemaVersion": "brycecast.careerLifeStats.v2",
+  "sourceRefs": [
+    {
+      "note": "Canonical source facts at result, qualifying-result, session, event, and venue grain.",
+      "path": "data/career/career.dataset.json",
+      "sha256": "900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681"
+    },
+    {
+      "note": "Curated track lengths and coordinates with named sources.",
+      "path": "analysis/career-life-stats/data/venue_facts.csv",
+      "sha256": "878cf8ba950686b43399cead48f7a66699121404ba6fb9546a4c6f261b5e6f10"
+    },
+    {
+      "note": "Al Kamel-derived Bryce driver stints used for Daytona attribution.",
+      "path": "analysis/imsa-daytona-stint-class-pace/output/bryce_imsa_stint_context.csv",
+      "sha256": "5ae946fcf8f81682869ff9b3a45aea0fb4d6ae760f64c06ab111c3653f65a904"
+    },
+    {
+      "note": "Explicit low/base/high fuel and tire model assumptions with source URLs.",
+      "path": "analysis/career-life-stats/data/resource_model_assumptions.csv",
+      "sha256": "5e6f7ecf6d5459788dbccca509ab9791911278647deef848d7a673de97d8cf6f"
+    },
+    {
+      "note": "Source-grain, metric-grain, confidence, travel, and resource-model contracts.",
+      "path": "analysis/career-life-stats/RESEARCH.md",
+      "sha256": "0268ca9a22a0213273448a5e21b3025297cdf8a969e428b7fbef2969182492d4"
+    },
+    {
+      "note": "Deterministic generated career life-stats artifact.",
+      "path": "analysis/career-life-stats/output/tables/miles_raced.csv",
+      "sha256": "27a4f559f732fea5ee97fc29fdb39eed004eda27c527ba57f71978b1e9f1f784"
+    },
+    {
+      "note": "Deterministic generated career life-stats artifact.",
+      "path": "analysis/career-life-stats/output/tables/session_mileage_ledger.csv",
+      "sha256": "8bbcf1501447f1ea2ed14a993802687352532f238aca5439435553b17abaa67e"
+    },
+    {
+      "note": "Deterministic generated career life-stats artifact.",
+      "path": "analysis/career-life-stats/output/tables/excluded_aggregate_sessions.csv",
+      "sha256": "cb807da2848db3ffefe42995a5bbc4401041959b906b9d00ddeadbfea37709df"
+    },
+    {
+      "note": "Deterministic generated career life-stats artifact.",
+      "path": "analysis/career-life-stats/output/tables/travel_legs.csv",
+      "sha256": "b551e847aa67c38ec4fc4363576cb86b7538deeaa59867ed9289b248248d8640"
+    },
+    {
+      "note": "Deterministic generated career life-stats artifact.",
+      "path": "analysis/career-life-stats/output/tables/mileage_breakdowns.csv",
+      "sha256": "d6bfd58fee7bb4a6d48b3312bb7e150bc8c3bb591b4794b717f833af037f19fc"
+    },
+    {
+      "note": "Deterministic generated career life-stats artifact.",
+      "path": "analysis/career-life-stats/output/tables/travel_mode_breakdown.csv",
+      "sha256": "32957ea23e03f22c8275c8a6d170aef6beed73f57aa766882134c74c567c395c"
+    },
+    {
+      "note": "Deterministic generated career life-stats artifact.",
+      "path": "analysis/career-life-stats/output/tables/estimated_fuel_burned.csv",
+      "sha256": "f4b83decebbb418fdc01de394e5035673c31f5bb56e43f8491cf9dd4ac167c16"
+    },
+    {
+      "note": "Deterministic generated career life-stats artifact.",
+      "path": "analysis/career-life-stats/output/tables/estimated_unique_tires.csv",
+      "sha256": "25d13b0b083c13660bf6888bb9d2c2f8977463abc0d662115e2a1b791e8179d1"
+    }
+  ],
+  "travel": {
+    "actualTravel": {
+      "blockedBy": [
+        "seasonBase",
+        "returnHomeFrequency"
+      ],
+      "confidenceClass": "unknown"
+    },
+    "greatCircleMinimum": {
+      "confidenceClass": "observed_exact",
+      "label": "minimum venue-to-venue displacement between consecutive race events",
+      "miles": 54649.3
+    },
+    "routeAdjustedMinimum": {
+      "assumptions": {
+        "driveProxy": "same-country and <=750 great-circle miles; factor 1.12/1.18/1.28",
+        "flightProxy": "all other non-zero legs; factor 1.03/1.08/1.15"
+      },
+      "baseMiles": 60419.3,
+      "confidenceClass": "modeled_range",
+      "highMiles": 64664.1,
+      "lowMiles": 57547.1
+    }
+  },
+  "venueSources": [
+    {
+      "coordsSources": [
+        "Wikipedia circuit profile | https://en.wikipedia.org/wiki/Algarve_International_Circuit"
+      ],
+      "lengthSources": [
+        "Algarve International Circuit official site | https://www.autodromodoalgarve.com/"
+      ],
+      "trackIds": [
+        "track_autodromo_internacional_do_algarve"
+      ],
+      "trackName": "Autodromo Internacional do Algarve"
+    },
+    {
+      "coordsSources": [
+        "Autodromo Nazionale Monza official site | https://www.monzanet.it/"
+      ],
+      "lengthSources": [
+        "Formula 1 official circuit profile | https://www.formula1.com/en/information/italy-autodromo-nazionalemonza.FiJN1jnQlRLeHqOxIt13m"
+      ],
+      "trackIds": [
+        "track_autodromo_nazionale_monza"
+      ],
+      "trackName": "Autodromo Nazionale Monza"
+    },
+    {
+      "coordsSources": [
+        "Just Track It circuit guide | https://justtrackit.net/tracks/barber-motorsports/guide"
+      ],
+      "lengthSources": [
+        "IMSA official circuit or event profile | https://www.imsa.com/nascar-tracks/barber-motorsports-park/"
+      ],
+      "trackIds": [
+        "track_barber_motorsports_park"
+      ],
+      "trackName": "Barber Motorsports Park"
+    },
+    {
+      "coordsSources": [
+        "MotorSport Vision official circuit layout | https://www.brandshatch.co.uk/circuit-information.aspx",
+        "MotorSport Vision official circuit layout | https://www.brandshatch.co.uk/about/circuit-map"
+      ],
+      "lengthSources": [
+        "MotorSport Vision official circuit layout | https://www.brandshatch.co.uk/circuit-information.aspx",
+        "MotorSport Vision official circuit layout | https://www.brandshatch.co.uk/about/circuit-map"
+      ],
+      "trackIds": [
+        "track_brands_hatch_gp",
+        "track_brands_hatch_indy"
+      ],
+      "trackName": "Brands Hatch Circuit"
+    },
+    {
+      "coordsSources": [
+        "RacingCircuits.info circuit profile | https://www.racingcircuits.info/europe/united-kingdom/cadwell-park.html"
+      ],
+      "lengthSources": [
+        "British Racing and Sports Car Club circuit guide | https://brscc.co.uk/circuits/cadwell-park-circuit/"
+      ],
+      "trackIds": [
+        "track_cadwell_park_full"
+      ],
+      "trackName": "Cadwell Park Circuit"
+    },
+    {
+      "coordsSources": [
+        "Wikipedia circuit profile | https://en.wikipedia.org/wiki/Circuit_Paul_Ricard"
+      ],
+      "lengthSources": [
+        "Circuit Paul Ricard official site | https://www.circuitpaulricard.com/"
+      ],
+      "trackIds": [
+        "track_circuit_paul_ricard"
+      ],
+      "trackName": "Circuit Paul Ricard"
+    },
+    {
+      "coordsSources": [
+        "Circuit de Spa-Francorchamps official site | https://www.spa-francorchamps.be/",
+        "Paddock Weather circuit directory | https://www.paddockweather.com/circuits.php?id=79"
+      ],
+      "lengthSources": [
+        "Formula 1 official circuit profile | https://www.formula1.com/en/racing/2026/Belgium",
+        "Formula 1 official circuit profile | https://www.formula1.com/en/information/belgium-circuit-de-spa-francorchamps.3LltuYaAXVRU8iezEsjzGw/"
+      ],
+      "trackIds": [
+        "track_circuit_de_spa_francorchamps",
+        "track_spa_gp"
+      ],
+      "trackName": "Circuit de Spa-Francorchamps"
+    },
+    {
+      "coordsSources": [
+        "IMSA Al Kamel official results | https://imsa.results.alkamelcloud.com/Results/25_2025/02_Daytona%20International%20Speedway/01_IMSA%20WeatherTech%20SportsCar%20Championship/202501251340_Race/24_Hour%2024/03_Results_Race_Official.JSON"
+      ],
+      "lengthSources": [
+        "IMSA official circuit or event profile | https://www.imsa.com/events/2025-rolex-24-at-daytona/"
+      ],
+      "trackIds": [
+        "track_daytona_international_speedway"
+      ],
+      "trackName": "Daytona International Speedway"
+    },
+    {
+      "coordsSources": [
+        "Detroit Grand Prix official site | https://www.detroitgp.com/event-info/fast-facts"
+      ],
+      "lengthSources": [
+        "INDYCAR official circuit profile | https://www.indycar.com/schedule/2025/detroit"
+      ],
+      "trackIds": [
+        "track_streets_of_detroit"
+      ],
+      "trackName": "Detroit Downtown Street Circuit"
+    },
+    {
+      "coordsSources": [
+        "MotorSport Vision official circuit information | https://www.donington-park.co.uk/circuit-information.aspx"
+      ],
+      "lengthSources": [
+        "MotorSport Vision official circuit information | https://www.donington-park.co.uk/circuit-information.aspx"
+      ],
+      "trackIds": [
+        "track_donington_park_gp"
+      ],
+      "trackName": "Donington Park"
+    },
+    {
+      "coordsSources": [
+        "Wikipedia circuit profile | https://en.wikipedia.org/wiki/Euromarque_Motorsport_Park"
+      ],
+      "lengthSources": [
+        "MotorSport New Zealand circuit map | https://motorsport.org.nz/wp-content/uploads/CRO004-Circuit-Maps.pdf"
+      ],
+      "trackIds": [
+        "track_euromarque_motorsport_park"
+      ],
+      "trackName": "Euromarque Motorsport Park"
+    },
+    {
+      "coordsSources": [
+        "Grand Prix of Arlington official site | https://www.gparlington.com/"
+      ],
+      "lengthSources": [
+        "INDYCAR official circuit profile or track map | https://www.indycar.com/-/media/IndyCar/Schedules/TrackMaps/Arlington_TrackMap.jpg"
+      ],
+      "trackIds": [
+        "track_streets_of_arlington"
+      ],
+      "trackName": "Grand Prix of Arlington Street Circuit"
+    },
+    {
+      "coordsSources": [
+        "My Racing Career circuit directory | https://www.myracingcareer.com/test/en/track/ota/"
+      ],
+      "lengthSources": [
+        "MotorSport New Zealand circuit map | https://motorsport.org.nz/wp-content/uploads/CRO004h_Highlands_CRO_Map.pdf"
+      ],
+      "trackIds": [
+        "track_highlands_motorsport_park"
+      ],
+      "trackName": "Highlands Motorsport Park"
+    },
+    {
+      "coordsSources": [
+        "Hungaroring official site | https://hungaroring.hu/"
+      ],
+      "lengthSources": [
+        "Formula 1 official circuit profile | https://www.formula1.com/en/information/hungary-hungaroring-budapest.3Sz0BTKiIf7ov9bnezZ5dU"
+      ],
+      "trackIds": [
+        "track_hungaroring"
+      ],
+      "trackName": "Hungaroring"
+    },
+    {
+      "coordsSources": [
+        "Indianapolis Motor Speedway official site | https://www.indianapolismotorspeedway.com/"
+      ],
+      "lengthSources": [
+        "INDYCAR official circuit profile | https://www.indycar.com/Schedule/2024/Indianapolis"
+      ],
+      "trackIds": [
+        "track_indianapolis_motor_speedway_road_course"
+      ],
+      "trackName": "Indianapolis Motor Speedway Road Course"
+    },
+    {
+      "coordsSources": [
+        "Iowa Speedway official site | https://www.iowaspeedway.com/"
+      ],
+      "lengthSources": [
+        "INDY NXT official test result | https://www.indycar.com/-/media/Files/2025/INXT/00-TESTS/IOWA/indynxt-results-pcomb-p2.pdf"
+      ],
+      "trackIds": [
+        "track_iowa_speedway"
+      ],
+      "trackName": "Iowa Speedway"
+    },
+    {
+      "coordsSources": [
+        "Michelin Raceway Road Atlanta official site | https://www.michelinracewayroadatlanta.com/"
+      ],
+      "lengthSources": [
+        "Michelin Raceway Road Atlanta official site | https://www.michelinracewayroadatlanta.com/"
+      ],
+      "trackIds": [
+        "track_michelin_raceway_road_atlanta"
+      ],
+      "trackName": "Michelin Raceway Road Atlanta"
+    },
+    {
+      "coordsSources": [
+        "Mid-Ohio Sports Car Course official site | https://midohio.com/info-m"
+      ],
+      "lengthSources": [
+        "Mid-Ohio Sports Car Course official site | https://midohio.com/info-m"
+      ],
+      "trackIds": [
+        "track_mid_ohio_sports_car_course"
+      ],
+      "trackName": "Mid-Ohio Sports Car Course"
+    },
+    {
+      "coordsSources": [
+        "Nashville Superspeedway official track facts | https://www.nashvillesuperspeedway.com/media/track-facts/track-facts.html"
+      ],
+      "lengthSources": [
+        "Nashville Superspeedway official track facts | https://www.nashvillesuperspeedway.com/media/track-facts/track-facts.html"
+      ],
+      "trackIds": [
+        "track_nashville_superspeedway"
+      ],
+      "trackName": "Nashville Superspeedway"
+    },
+    {
+      "coordsSources": [
+        "New Jersey Motorsports Park official track map | https://njmp.com/track-map/"
+      ],
+      "lengthSources": [
+        "New Jersey Motorsports Park official track map | https://njmp.com/track-map/"
+      ],
+      "trackIds": [
+        "track_new_jersey_motorsports_park_thunderbolt"
+      ],
+      "trackName": "New Jersey Motorsports Park Thunderbolt Raceway"
+    },
+    {
+      "coordsSources": [
+        "MotorSport Vision official circuit layout | https://www.oultonpark.co.uk/about/circuit-layouts"
+      ],
+      "lengthSources": [
+        "MotorSport Vision official circuit layout | https://www.oultonpark.co.uk/about/circuit-layouts"
+      ],
+      "trackIds": [
+        "track_oulton_park_international"
+      ],
+      "trackName": "Oulton Park"
+    },
+    {
+      "coordsSources": [
+        "MotoAmerica official track map | https://www.motoamericaregistration.com/PDF/TrackMaps/Pitt%20Track%20Map.pdf"
+      ],
+      "lengthSources": [
+        "Pittsburgh International Race Complex official site | https://www.pittrace.com/post/hooked-on-driving"
+      ],
+      "trackIds": [
+        "track_pittsburgh_international_race_complex"
+      ],
+      "trackName": "Pittsburgh International Race Complex"
+    },
+    {
+      "coordsSources": [
+        "Portland International Raceway official site | https://portlandraceway.com/"
+      ],
+      "lengthSources": [
+        "Portland International Raceway official site | https://portlandraceway.com/"
+      ],
+      "trackIds": [
+        "track_portland_international_raceway"
+      ],
+      "trackName": "Portland International Raceway"
+    },
+    {
+      "coordsSources": [
+        "Red Bull Ring official site | https://www.redbullring.com/"
+      ],
+      "lengthSources": [
+        "Formula 1 official circuit profile | https://www.formula1.com/en/information/red-bull-ring-spielberg.1s7EC2bGta7o1thZkVPbbq"
+      ],
+      "trackIds": [
+        "track_red_bull_ring"
+      ],
+      "trackName": "Red Bull Ring"
+    },
+    {
+      "coordsSources": [
+        "Road America official track facts | https://www.roadamerica.com/faq"
+      ],
+      "lengthSources": [
+        "Road America official track facts | https://www.roadamerica.com/faq"
+      ],
+      "trackIds": [
+        "track_road_america"
+      ],
+      "trackName": "Road America"
+    },
+    {
+      "coordsSources": [
+        "Silverstone official circuit site | https://www.silverstone.co.uk/"
+      ],
+      "lengthSources": [
+        "Silverstone official circuit site | https://www.silverstone.co.uk/track-and-testing/exclusive-circuit-hire",
+        "BARC and TSL Timing official 2020 result book | https://www.tsl-timing.com/file/?f=BARC/2020/204121ffn.pdf"
+      ],
+      "trackIds": [
+        "track_silverstone_gp",
+        "track_silverstone_international",
+        "track_silverstone_national"
+      ],
+      "trackName": "Silverstone Circuit"
+    },
+    {
+      "coordsSources": [
+        "MotorSport Vision official circuit layout | https://www.snetterton.co.uk/about/circuit-map"
+      ],
+      "lengthSources": [
+        "MotorSport Vision official circuit layout | https://www.snetterton.co.uk/about/circuit-map"
+      ],
+      "trackIds": [
+        "track_snetterton_300"
+      ],
+      "trackName": "Snetterton Circuit"
+    },
+    {
+      "coordsSources": [
+        "Grand Prix of St. Petersburg official site | https://www.gpstpete.com/"
+      ],
+      "lengthSources": [
+        "IMSA official supplementary regulations | https://www.imsa.com/wp-content/uploads/sites/32/2025/02/19/2025-IMSA-Provisional-Schedule-and-SR-MX-5-ST-Pete-021925.pdf"
+      ],
+      "trackIds": [
+        "track_streets_of_st_petersburg"
+      ],
+      "trackName": "Streets of St. Petersburg"
+    },
+    {
+      "coordsSources": [
+        "Summit Point Motorsports Park official site | https://summitpointmp.com/"
+      ],
+      "lengthSources": [
+        "Summit Point Motorsports Park official site | https://summitpointmp.com/"
+      ],
+      "trackIds": [
+        "track_summit_point_motorsports_park"
+      ],
+      "trackName": "Summit Point Motorsports Park Main Circuit"
+    },
+    {
+      "coordsSources": [
+        "Wisconsin State Fair Park official Milwaukee Mile profile | https://wistatefair.com/wsfp/milwaukee-mile/"
+      ],
+      "lengthSources": [
+        "Wisconsin State Fair Park official Milwaukee Mile profile | https://wistatefair.com/wsfp/milwaukee-mile/"
+      ],
+      "trackIds": [
+        "track_the_milwaukee_mile"
+      ],
+      "trackName": "The Milwaukee Mile"
+    },
+    {
+      "coordsSources": [
+        "Virginia International Raceway official configurations | https://virnow.com/track/configurations/"
+      ],
+      "lengthSources": [
+        "Virginia International Raceway official configurations | https://virnow.com/track/configurations/"
+      ],
+      "trackIds": [
+        "track_virginia_international_raceway"
+      ],
+      "trackName": "Virginia International Raceway"
+    },
+    {
+      "coordsSources": [
+        "TopoZone venue coordinates | https://www.topozone.com/new-york/schuyler-ny/locale/watkins-glen-international/"
+      ],
+      "lengthSources": [
+        "Watkins Glen International official FAQ | https://www.theglen.com/faq/"
+      ],
+      "trackIds": [
+        "track_watkins_glen_international"
+      ],
+      "trackName": "Watkins Glen International"
+    },
+    {
+      "coordsSources": [
+        "WeatherTech Raceway Laguna Seca official site | https://www.weathertechraceway.com/"
+      ],
+      "lengthSources": [
+        "IMSA official circuit profile | https://www.imsa.com/nascar-tracks/weathertech-raceway-laguna-seca/"
+      ],
+      "trackIds": [
+        "track_weathertech_raceway_laguna_seca"
+      ],
+      "trackName": "WeatherTech Raceway Laguna Seca"
+    },
+    {
+      "coordsSources": [
+        "World Wide Technology Raceway official site | https://wwtraceway.com/"
+      ],
+      "lengthSources": [
+        "World Wide Technology Raceway official site | https://wwtraceway.com/"
+      ],
+      "trackIds": [
+        "track_world_wide_technology_raceway"
+      ],
+      "trackName": "World Wide Technology Raceway"
+    }
+  ],
+  "venues": 34
+}

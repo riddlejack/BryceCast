@@ -1,0 +1,91 @@
+dimensionType,dimensionValue,confidenceClass,sessionCount,lapsFloor,milesFloor
+season,2019,observed_exact,21,312,790.932
+season,2019,observed_lower_bound,14,149,360.540
+season,2019,unknown,2,0,0.000
+season,2020,observed_exact,24,303,459.966
+season,2021,observed_exact,38,442,1361.073
+season,2022,observed_exact,76,1068,3238.117
+season,2023,observed_exact,24,335,1071.639
+season,2024,observed_exact,53,1380,2533.759
+season,2024,unknown,14,0,0.000
+season,2025,observed_exact,48,1372,2702.591
+season,2026,observed_exact,35,671,1530.310
+series,series_euroformula_open,observed_exact,24,335,1071.639
+series,series_formula_ford,observed_exact,24,303,459.966
+series,series_froc,observed_exact,6,128,291.040
+series,series_froc,unknown,14,0,0.000
+series,series_frp_f1600,observed_exact,21,312,790.932
+series,series_frp_f1600,observed_lower_bound,14,149,360.540
+series,series_frp_f1600,unknown,2,0,0.000
+series,series_gb3,observed_exact,114,1510,4599.190
+series,series_imsa_weathertech,observed_exact,1,142,505.520
+series,series_indy_nxt,observed_exact,129,3153,5970.100
+session_type,heat,observed_exact,2,23,31.240
+session_type,practice,observed_exact,91,2092,4710.709
+session_type,practice,observed_lower_bound,9,93,221.024
+session_type,practice,unknown,7,0,0.000
+session_type,qualifying,observed_exact,74,649,1656.037
+session_type,qualifying,observed_lower_bound,5,56,139.516
+session_type,qualifying,unknown,6,0,0.000
+session_type,race,observed_exact,145,3019,6924.401
+session_type,test,observed_exact,7,100,366.000
+session_type,test,unknown,3,0,0.000
+venue,Autodromo Internacional do Algarve,observed_exact,4,64,185.024
+venue,Autodromo Nazionale Monza,observed_exact,4,43,154.800
+venue,Barber Motorsports Park,observed_exact,13,292,694.960
+venue,Brands Hatch Circuit,observed_exact,26,375,684.525
+venue,Cadwell Park Circuit,observed_exact,3,27,59.049
+venue,Circuit Paul Ricard,observed_exact,4,52,188.760
+venue,Circuit de Spa-Francorchamps,observed_exact,19,206,896.512
+venue,Daytona International Speedway,observed_exact,1,142,505.520
+venue,Detroit Downtown Street Circuit,observed_exact,12,277,455.665
+venue,Donington Park,observed_exact,28,392,979.216
+venue,Euromarque Motorsport Park,observed_exact,3,65,134.485
+venue,Euromarque Motorsport Park,unknown,6,0,0.000
+venue,Grand Prix of Arlington Street Circuit,observed_exact,4,42,114.660
+venue,Highlands Motorsport Park,observed_exact,3,63,156.555
+venue,Highlands Motorsport Park,unknown,8,0,0.000
+venue,Hungaroring,observed_exact,4,62,168.764
+venue,Indianapolis Motor Speedway Road Course,observed_exact,15,331,807.309
+venue,Iowa Speedway,observed_exact,5,219,195.786
+venue,Michelin Raceway Road Atlanta,observed_exact,3,47,119.380
+venue,Michelin Raceway Road Atlanta,observed_lower_bound,2,18,45.720
+venue,Michelin Raceway Road Atlanta,unknown,1,0,0.000
+venue,Mid-Ohio Sports Car Course,observed_exact,16,341,769.978
+venue,Mid-Ohio Sports Car Course,observed_lower_bound,3,40,90.320
+venue,Nashville Superspeedway,observed_exact,6,259,344.470
+venue,New Jersey Motorsports Park Thunderbolt Raceway,observed_exact,3,57,128.250
+venue,New Jersey Motorsports Park Thunderbolt Raceway,observed_lower_bound,3,37,83.250
+venue,Oulton Park,observed_exact,17,211,568.012
+venue,Pittsburgh International Race Complex,observed_exact,3,42,117.600
+venue,Portland International Raceway,observed_exact,8,163,320.132
+venue,Red Bull Ring,observed_exact,4,73,195.859
+venue,Road America,observed_exact,13,180,728.640
+venue,Silverstone Circuit,observed_exact,33,398,1322.869
+venue,Snetterton Circuit,observed_exact,16,245,727.405
+venue,Streets of St. Petersburg,observed_exact,12,282,507.600
+venue,Summit Point Motorsports Park Main Circuit,observed_exact,3,51,102.000
+venue,Summit Point Motorsports Park Main Circuit,observed_lower_bound,3,29,58.000
+venue,The Milwaukee Mile,observed_exact,6,298,302.470
+venue,Virginia International Raceway,observed_exact,3,38,124.260
+venue,Virginia International Raceway,observed_lower_bound,1,10,32.700
+venue,Watkins Glen International,observed_exact,3,23,77.510
+venue,Watkins Glen International,observed_lower_bound,2,15,50.550
+venue,Watkins Glen International,unknown,1,0,0.000
+venue,WeatherTech Raceway Laguna Seca,observed_exact,13,199,445.362
+venue,World Wide Technology Raceway,observed_exact,9,324,405.000
+country,Austria,observed_exact,4,73,195.859
+country,Belgium,observed_exact,19,206,896.512
+country,France,observed_exact,4,52,188.760
+country,Hungary,observed_exact,4,62,168.764
+country,Italy,observed_exact,4,43,154.800
+country,New Zealand,observed_exact,6,128,291.040
+country,New Zealand,unknown,14,0,0.000
+country,Portugal,observed_exact,4,64,185.024
+country,United Kingdom,observed_exact,123,1648,4341.076
+country,United States,observed_exact,151,3607,7266.552
+country,United States,observed_lower_bound,14,149,360.540
+country,United States,unknown,2,0,0.000
+confidence_class,observed_exact,observed_exact,319,5883,13688.387
+confidence_class,observed_lower_bound,observed_lower_bound,14,149,360.540
+confidence_class,unknown,unknown,16,0,0.000

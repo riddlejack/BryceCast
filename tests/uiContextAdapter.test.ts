@@ -166,4 +166,66 @@ for (const season of careerScreen.lapPositionMix) {
   assert.equal(summed, season.totalLaps, `lap mix ${season.seasonYear} position counts must sum to totalLaps`);
 }
 
+/* The odometer: package-only React consumption with personal attribution,
+   confidence-preserving physical mileage, and bounded travel semantics. */
+const lifeStats = careerScreen.lifeStats;
+assert.equal(lifeStats.schemaVersion, 'brycecast.careerLifeStats.v2');
+assert.equal(lifeStats.personalRaceMileage.raceRows, 145, 'life-stats must use all canonical Bryce race rows');
+assert.equal(lifeStats.personalRaceMileage.coveredRaceRows, 145, 'every canonical Bryce race row has sourced attribution');
+assert.equal(lifeStats.personalRaceMileage.laps, 3019, 'Daytona must use driver-stint laps, not shared-car laps');
+assert.equal(lifeStats.personalRaceMileage.miles, 6924.4, 'personal race mileage must reconcile to the driver-race ledger');
+assert.equal(lifeStats.physicalSessionMileage.floor.confidenceClass, 'observed_lower_bound');
+assert.equal(lifeStats.physicalSessionMileage.exact.confidenceClass, 'observed_exact');
+assert.equal(lifeStats.physicalSessionMileage.unknown.confidenceClass, 'unknown');
+assert.equal(lifeStats.travel.greatCircleMinimum.miles, 54649.3, 'minimum displacement must stay venue-to-venue');
+assert.equal(lifeStats.travel.routeAdjustedMinimum.confidenceClass, 'modeled_range');
+assert.deepEqual(lifeStats.travel.actualTravel.blockedBy, ['seasonBase', 'returnHomeFrequency']);
+assert.deepEqual(
+  new Set(lifeStats.mileageBreakdowns.map((row) => row.dimensionType)),
+  new Set(['season', 'series', 'session_type', 'venue', 'country', 'confidence_class']),
+  'life-stats package must carry every requested visualization breakdown'
+);
+assert.ok(lifeStats.travelModeBreakdown.length >= 2, 'travel-mode proxy breakdown must be packaged');
+assert.equal(lifeStats.fuelEstimateRanges.length, 10, 'fuel ranges must be packaged by series/chassis/year');
+assert.equal(lifeStats.tireEstimateRanges.length, 10, 'tire ranges must be packaged by series/year');
+assert.ok(!JSON.stringify(lifeStats).includes('9137.7'), 'shared-car odometer value must never reach the UI contract');
+assert.equal(lifeStats.venueSources.length, lifeStats.venues, 'SourcePill data must list every physical venue');
+for (const venue of lifeStats.venueSources) {
+  assert.ok(venue.trackName && venue.trackIds.length > 0, 'every venue source row needs an identity');
+  assert.ok(venue.lengthSources.every((source) => source.includes(' | https://')), `${venue.trackName} needs named length sources`);
+  assert.ok(venue.coordsSources.every((source) => source.includes(' | https://')), `${venue.trackName} needs named coordinate sources`);
+}
+
+/* The career atlas: geometry and every venue arrive package-fed, with A2's
+   145-row semantics and click targets already resolved. */
+const atlas = careerScreen.atlas;
+assert.equal(atlas.schemaVersion, 'brycecast.careerAtlas.v3');
+assert.equal(atlas.venueCount, 34, 'atlas must carry every physical A2 venue');
+assert.equal(atlas.raceCount, 145, 'atlas race counts must use all canonical Bryce race rows');
+assert.equal(atlas.venues.length, atlas.venueCount);
+assert.equal(atlas.venues.reduce((sum, venue) => sum + venue.raceCount, 0), 145);
+assert.equal(atlas.naturalEarth.license, 'public_domain');
+assert.equal(atlas.geometry.projection, 'equirectangular_wrapped');
+assert.ok(atlas.geometry.landPath.startsWith('M') && atlas.geometry.ringCount >= 20, 'atlas land path must be built and clipped');
+assert.equal(atlas.globe.projection, 'orthographic');
+assert.equal(atlas.globe.texture.path, 'analysis/career-atlas/output/world_land_texture.png');
+assert.equal(atlas.globe.texture.sourceFeatureCount, 127);
+assert.deepEqual(atlas.globe.zoom, { min: 1, max: 32 });
+assert.deepEqual(atlas.confidenceClasses, ['observed_exact', 'observed_lower_bound', 'modeled_range', 'unknown']);
+for (const venue of atlas.venues) {
+  assert.equal(venue.confidence.coordinates, 'observed_exact');
+  assert.equal(venue.confidence.raceCount, 'observed_exact');
+  assert.ok(venue.trackName && venue.country && venue.region && venue.raceCount > 0 && venue.seriesSpans.length > 0);
+  assert.ok(venue.coordinateSources.every((source) => source.includes(' | https://')), `${venue.trackName} needs coordinate lineage`);
+  assert.ok(/^\/(races|career\/race)\//.test(venue.latestRace.raceHref), `${venue.trackName} needs a latest race page`);
+  assert.ok(venue.projected.x >= 0 && venue.projected.x <= atlas.geometry.canvas.width);
+  assert.ok(venue.projected.y >= 0 && venue.projected.y <= atlas.geometry.canvas.height);
+  for (const span of venue.seriesSpans) {
+    assert.ok(span.raceCount > 0 && span.seriesShort && span.latestRace.sessionId);
+    assert.ok(/^\/(races|career\/race)\//.test(span.latestRace.raceHref), `${venue.trackName} / ${span.seriesShort} needs a filtered race page`);
+  }
+}
+assert.deepEqual(new Set(atlas.venues.map((venue) => venue.region)), new Set(['North America', 'Europe', 'Oceania']));
+assert.ok(!JSON.stringify(atlas).includes('54649.3'), 'minimum displacement must not leak into the venue-only atlas');
+
 console.log('ui context adapter hydration tests passed');

@@ -381,10 +381,11 @@ export const ChapterStrip = ({ seriesName }: { seriesName: string }) => {
 
 /* ---------- the explorer: curated playground over all 141 races ---------- */
 
-const FilterChip = ({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) => (
+export const FilterChip = ({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) => (
   <button
     type="button"
     onClick={onClick}
+    aria-pressed={active}
     className="chip"
     style={
       active
@@ -397,7 +398,7 @@ const FilterChip = ({ label, active, onClick }: { label: string; active: boolean
 );
 
 /** One labeled row of controls, so each kind of filtering names itself. */
-const ControlRow = ({ label, children }: { label: string; children: ReactNode }) => (
+export const ControlRow = ({ label, children }: { label: string; children: ReactNode }) => (
   <div className="row" style={{ gap: 10, alignItems: 'flex-start' }}>
     <span className="caption caption--secondary" style={{ width: 62, flex: 'none', paddingTop: 6 }}>
       {label}

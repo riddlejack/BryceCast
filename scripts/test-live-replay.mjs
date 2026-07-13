@@ -173,6 +173,8 @@ try {
   assert.equal(readiness.schemaVersion, 'live-readiness.v1');
   assert.equal(readiness.liveTiming.rows.find((row) => row.bryce)?.runningDriverPoints, 159);
   assert.equal(readiness.bryce.identityGuard.matchedBy, 'driver_id');
+  assert.equal(readiness.replay.simulation?.active, true, 'replay readiness must identify simulated playback');
+  assert.equal(readiness.replay.simulation?.mode, 'archived_replay', 'replay readiness must remain distinct from official live mode');
   assert.equal((await fetchJson('/api/replay/control')).active, true);
 } finally {
   child.kill('SIGTERM');
@@ -181,5 +183,4 @@ try {
 }
 
 assert.equal(stderr, '', stderr);
-console.log(JSON.stringify({ ok: true, assertions: 13, payloadShape: 'live-compatible' }, null, 2));
-
+console.log(JSON.stringify({ ok: true, assertions: 15, payloadShape: 'live-compatible' }, null, 2));

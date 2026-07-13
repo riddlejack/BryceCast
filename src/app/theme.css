@@ -327,6 +327,14 @@ button { font-family: inherit; }
  * green gains in red. Facts, not editorial. */
 .stat__delta--down { color: var(--status-bad); }
 
+.stat__note {
+  margin-top: 3px;
+  color: var(--ink-muted);
+  font-size: 11.5px;
+  line-height: 1.35;
+  max-width: 24ch;
+}
+
 /* ---------- countdown: plain numerals, no boxes ---------- */
 
 .countdown { display: flex; gap: 22px; }
@@ -1066,6 +1074,173 @@ button { font-family: inherit; }
 .journey__chapter--current::before {
   background: var(--bryce);
   border-color: var(--bryce);
+}
+
+/* ---------- career atlas: a quiet, package-fed venue map ---------- */
+
+.career-atlas { background: var(--surface-0); }
+
+.career-atlas__intro {
+  margin: 0 0 8px;
+  color: var(--ink-secondary);
+  font-size: 13.5px;
+}
+
+.career-atlas__filters {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 9px;
+  padding: 10px 0;
+  border-block: 1px solid var(--divider);
+}
+
+.career-atlas__status {
+  margin: 0 0 8px;
+  color: var(--ink-secondary);
+  font-size: 12.5px;
+  font-variant-numeric: tabular-nums;
+}
+
+.career-atlas__status strong { color: var(--ink-primary); font-weight: 590; }
+
+.career-atlas__map {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid var(--divider);
+  border-radius: 10px;
+  background: var(--surface-0);
+  user-select: none;
+}
+
+.career-atlas__map svg { display: block; }
+
+.career-atlas__globe-canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.career-atlas__map--globe svg {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.career-atlas__venue {
+  transition: fill-opacity 150ms cubic-bezier(0.23, 1, 0.32, 1);
+  outline: none;
+}
+
+.career-atlas__venue:focus-visible {
+  stroke: var(--ink-primary);
+  stroke-width: 2px;
+}
+
+.career-atlas__tip {
+  position: absolute;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 10px;
+  border: 1px solid var(--divider);
+  border-radius: 8px;
+  background: var(--surface-0);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.10);
+  color: var(--ink-secondary);
+  font-size: 12px;
+  line-height: 1.4;
+  pointer-events: none;
+  font-variant-numeric: tabular-nums;
+}
+
+.career-atlas__tip strong { color: var(--ink-primary); }
+.career-atlas__tip-action { color: var(--link); font-size: 11.5px; }
+
+.career-atlas__empty {
+  position: absolute;
+  z-index: 4;
+  inset: 50% auto auto 50%;
+  width: min(340px, calc(100% - 28px));
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.career-atlas__map-hint {
+  position: absolute;
+  left: 9px;
+  bottom: 9px;
+  z-index: 2;
+  padding: 4px 7px;
+  border: 1px solid color-mix(in srgb, var(--divider) 80%, transparent);
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--surface-0) 92%, transparent);
+  color: var(--ink-muted);
+  font-size: 10.5px;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.career-atlas__zoom {
+  position: absolute;
+  right: 9px;
+  bottom: 9px;
+  z-index: 6;
+  display: inline-flex;
+  overflow: hidden;
+  border: 1px solid var(--divider);
+  border-radius: 8px;
+  background: var(--surface-0);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.career-atlas__zoom button {
+  min-width: 42px;
+  height: 42px;
+  padding: 0 10px;
+  border: 0;
+  border-right: 1px solid var(--divider);
+  background: var(--surface-0);
+  color: var(--ink-primary);
+  font: inherit;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.career-atlas__zoom button:last-child { border-right: 0; }
+.career-atlas__zoom button:hover:not(:disabled) { background: var(--surface-2); }
+.career-atlas__zoom button:focus-visible { position: relative; z-index: 1; outline: 2px solid var(--ink-primary); outline-offset: -2px; }
+.career-atlas__zoom button:disabled { color: var(--ink-muted); cursor: default; }
+
+.career-atlas__zoom .career-atlas__zoom-reset {
+  font-size: 11px;
+  font-weight: 570;
+  letter-spacing: 0.01em;
+}
+
+.career-atlas__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px 14px;
+  margin-top: 8px;
+  color: var(--ink-secondary);
+  font-size: 11.5px;
+}
+
+.career-atlas__legend span { display: inline-flex; align-items: center; gap: 5px; }
+.career-atlas__legend i { width: 7px; height: 7px; border-radius: 50%; box-shadow: 0 0 0 1px var(--surface-0); }
+.career-atlas__caption { margin: 8px 0 0; }
+
+@media (max-width: 520px) {
+  .career-atlas__map { margin-inline: -8px; width: calc(100% + 16px); }
+  .career-atlas__legend { gap-inline: 10px; }
+  .career-atlas__map-hint { display: none; }
+  .career-atlas__zoom { right: 7px; bottom: 7px; }
 }
 
 /* ---------- scroll-in reveal (GPU-only, settles once) ---------- */

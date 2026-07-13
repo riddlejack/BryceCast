@@ -1,0 +1,2722 @@
+{
+  "caveats": [
+    "Venue coordinates and race counts are observed_exact from A2 and canonical race rows.",
+    "Best finish is shown only where the canonical result carries a classified finishing position.",
+    "Series and region controls only filter observed venue race rows. Routes, travel-mode filters, mileage layers, and actual-travel claims remain outside this atlas."
+  ],
+  "confidenceClasses": [
+    "observed_exact",
+    "observed_lower_bound",
+    "modeled_range",
+    "unknown"
+  ],
+  "geometry": {
+    "canvas": {
+      "height": 506,
+      "width": 1000
+    },
+    "clippedPointCount": 1887,
+    "crop": {
+      "latMax": 63.14757,
+      "latMin": -54.89607,
+      "lonMax": 390.807127,
+      "lonMin": 157.615773,
+      "paddingLatitudeDegrees": 9.83697,
+      "paddingLongitudeDegrees": 11.554527
+    },
+    "fillRule": "evenodd",
+    "landPath": "M588.9 505.2L588.2 506L561.9 506L553.6 502L547.7 497.2L551.2 498.1L557.3 500.9L563 502.5L565.2 500.5L566.6 497.6L570.5 495.8L573.6 496.3L577.4 501.5L582.9 504.1ZM620.2 491.7L619 493.2L613.2 494.4L611.2 492.9L607.6 494.9L605.4 492.9L610.6 490.4L614.2 491.4L616.8 489.7ZM71.3 447.9L71.3 449.7L66.9 454.9L64.7 456.6L66.3 458.7L63 458.7L59.3 460.3L55.8 467.5L50.2 470.6L46.3 470.5L43.5 469.1L38.9 468.8L38.1 467.2L40.4 464.1L45.8 459.8L48.6 459L55.4 455.1L57.9 452.9L59.8 449.7L61.5 448.6L62.1 446.2L65.1 444.3L67 447.9L70.1 446.1ZM75.6 449.4L74.8 448.3L73.1 447.6L75.5 444.1L74.1 441.8L69.5 440L69.6 438.5L72.7 437L73.4 433.7L73.2 430.9L71.5 428L71.6 427.3L66.2 421.7L64.4 418.7L66 418.4L68.3 420.7L71.7 421.9L72.9 425.7L76 430.2L76.1 427.3L78 428.4L78.7 431.7L82.1 433.1L85 433.4L87.5 431.8L89.6 432.3L88.6 436.1L87.3 438.6L84 438.5L82.9 439.8L83.3 441.6L78.9 447.7ZM40.8 365.7L39.1 366.7L33.7 363.6L28.1 358.3L27.5 356.9L29.4 356.9L31.8 358.4ZM90.5 346.3L89.8 348.5L87.1 349.1L84.8 348.5L84.3 346.7L86 345.2L88 345.7L89 345ZM90.5 343.6L90 342L96 339.6L96 341.7ZM96.3 341.4L96 341.7L96 339.6L96.9 339.4ZM43.9 341.3L42.5 341.8L41 340L41.2 338.8ZM41.4 338.2L40.2 337.6L39.4 337.9L38.7 336.7L38.7 333.4L40.7 334.7ZM20.5 317.1L17.5 317.1L15.9 314.4L19.3 315.6ZM13.9 313L9.6 312.7L8.7 312L9 310.3L11.8 311ZM16.8 312.6L13.6 308.9L12.7 306.3L14.2 306.3L15.7 309.8L17.4 311.8ZM9.9 307.3L2.6 302.5L3.2 302.1L8.7 305.1ZM602.2 227.4L603.5 226.3L603.4 224.6L606.8 224.2L606.6 227.3L603 227.8ZM586.6 192.5L585.5 193.6L579.8 193.8L579.5 191.9L580.1 191.3L583.6 191.3L585.8 191.7ZM532 192.6L532.5 191.6L534.3 191.3L538.1 191.8L540.4 192.8L541.1 194L538.1 194.1L536.8 194.8L534.4 194.1ZM574.9 190.9L573.3 192.6L571.3 191.7L567.9 191.7L567.1 192.5L565.5 192.7L564.8 191.7L563.4 192.3L561.7 195.2L560.6 194.6L560.4 193.3L557.5 192.6L552.9 192.6L550.9 193.4L548.6 192.1L549 190.7L556.1 191.6L557.7 190.7L555.7 188.8L555.8 187.2L553.1 186.5L554 185.3L560.4 186.2L560.9 185.4L564.2 185.5L566.8 186.6L567.9 186.5L568.7 188L571 187.9L570.9 189.2L572.8 189.3ZM200.2 189.6L199.2 189L199.3 187.8L198.6 186.2L199.6 185.1L199.5 183.8L202.2 185L204 187.1ZM195.9 181L196.3 180.6L198.9 181.7L197.1 182.5ZM195.7 179.9L195.5 180.4L193.2 180.2L193.5 179.7ZM191.8 179.3L189.8 179.3L189.1 178.2L190.2 177.6ZM184.6 176.5L184.1 176.9L182.6 176.1L183.5 175.4L184.5 175.5ZM549.8 183.7L549.3 184.7L546.4 185.3L534.4 185.6L537.3 183.2L535.6 182.1L532.8 181.8L531.3 180.5L530.3 178.1L527.9 178.3L523.9 177.1L522.6 176.2L517 175.6L515.5 174.7L517.1 173.7L512.9 173.4L509.8 175.7L508.1 175.7L507.4 176.8L505.3 177.2L503.5 176.8L505.8 175.5L506.7 174L510.8 172.2L515.1 171.3L522.2 171.6L526.2 173.1L527.9 174.7L531.9 174.2L539.7 179.8L543.7 180.6L543.4 181.8L546.5 182ZM535.4 168.8L534.3 169.1L533.3 166.6L531.6 165.3L532.6 162.6L533.9 162.8L535.4 166.4ZM534.2 156.7L529.5 157.4L529.2 155.8L534 155.6ZM536.9 159.8L536.2 159.2L536.2 157L534.3 154.8L537.7 156.7ZM980.6 119.4L980.1 120.6L973.9 121L974 120.3L968.7 119.5L969.5 117.6L971.9 119.1L978.4 119.1L978.3 119.9ZM934.4 106.8L932.9 110.2L933.5 111.5L932.6 113.7L929.4 112.1L921.2 109.5L921.8 107.3L926.8 107.6ZM907.4 94L910 97.1L909.4 102.7L907.4 102.5L905.7 103.9L904 102.8L903.9 97.6L902.9 95.2L905.2 95.4ZM907.5 93.3L905.5 92.4L904.5 89.6L905.4 88L908.2 86.3L908.9 90ZM602 71.6L599.9 73.4L598.3 73.6L592.8 71.8L591.8 70.4L593.4 69.1L594.9 71.1L598 71.7ZM602.8 60.2L600.8 60.3L595.2 58.9L591.2 56.9L592.7 56.5L598.3 57.6L602.7 59.4ZM338.2 62.7L336.1 63.3L329 61.4L327.8 59.9L323.9 58.4L323.1 57.2L318.7 56.4L317.1 54L317.4 53.1L328.6 55.1L332.2 58.6L336.5 60.4ZM642.1 66.9L640.3 70.7L638.4 70.9L635.6 70L636.5 66.5L635.3 66L630.3 69.7L627.8 69.6L630.8 67.5L626.7 66.5L613.7 66.6L613.1 65.4L615.8 63.9L613.9 62.7L617.5 60.1L621.9 53.3L624.6 50.8L628.3 49.4L630.3 49.5L624.3 57.2L627.1 55.7L630 56.6L628.5 58.1L632.3 59.3L634.3 58.3L638.6 59.6L637.2 62.7L640.2 62ZM305.4 47L303.6 47L299.5 43.1L297.3 41.7L296.5 39.8L296.8 38.5L298.8 39L302.9 38.7L301.6 43.6ZM825.1 48.6L828.6 44.1L826.3 39.7L835.4 34.4L839 34.2L843.6 36.8L841.3 39.8L842 42.8L838.8 46.7L831.2 49.2ZM922.3 32.3L919.7 35.8L915.2 33.4L914.6 31.6L920.9 30.2ZM204.6 24.4L210.8 22.2L213.6 22.5L215.5 23.8L207.5 27.5L205.3 26.4ZM874.1 50.8L870.2 53.1L864.5 53L857.2 54.2L855.2 53.4L852.4 55.4L848.4 54.9L845.4 56.5L843.1 55.7L849.4 51.2L853.2 50.2L846.5 49.5L845.3 47.8L849.8 46.5L847.4 44.2L848.2 41.4L854.6 41.8L855.3 39.3L852.3 36.6L847.1 35.8L846.1 34.7L847.7 32.7L846.2 31.6L843.9 33.6L843.7 29.5L841.5 27.3L843.1 22.8L846.4 19.4L855 19.3L850.4 24L859.5 23.4L858.4 26.9L854.5 30.8L858.9 31L863.1 36.5L866 37.2L869.9 43.8L875.1 44.6L874.6 47.4L872.4 48.6ZM157.8 13.9L155.2 14.5L149.8 12.6L154 11.8L157.4 12.2ZM528 4.2L526.3 6.5L524.4 6.1L523.3 4.8L525.1 3.3L526.9 3.4ZM507.7 3L510.9 1L516.8 1L516.7 1.9L511.7 4.2L508.6 4.1ZM143.5 0L140.9 0.7L138.3 0ZM502.3 0L501.1 0.4L500.9 0ZM692.3 364.7L688.8 366.6L687.8 369.1L683.2 369.1L676.4 370.8L673.4 372.7L668.6 373.9L663.6 377.4L659.9 381.6L659.3 384.8L660 387.2L659.2 391.5L658.2 393.6L655.2 396L650.5 403.5L643.8 408.9L641.8 413L639 415.4L637.1 418.1L632.3 420.5L629.1 419.7L626.8 420.1L622.9 418.3L619.9 418.4L617.3 416L617 418.3L622.5 421.9L621.9 424.9L624.6 426.8L624.4 428.9L620.2 434.4L613.9 436.7L605.3 437.6L600.6 437.1L601.5 439.7L600.6 442.9L601.4 445L598.8 446.6L594.4 447.1L590.3 445.6L588.6 446.7L589.2 451L592.1 452.3L594.5 450.9L595.8 453.1L591.8 454.5L588.4 457.1L587.7 461.4L586.7 463.7L582.7 463.7L579.3 465.9L578.1 469.2L582.3 472.3L586.4 473.2L584.9 477L579.9 479.4L577.1 484.5L573.2 486.1L571.4 488.2L572.8 492.6L575.6 495.1L570 494.8L564.1 497.4L563.4 501.4L561.6 501.5L556.7 500.2L546.5 494.7L545.1 492L546.4 489.5L544.2 486.6L543.7 479.3L545.5 475.2L550 471.9L543.5 470.6L547.6 466.9L549 459.7L553.8 461.2L556.1 452.4L553.2 451.2L551.8 456.6L549.1 456L551.9 441.9L553.9 439L552.7 434.8L552.3 430L554.1 429.8L559.7 416L561.5 409.7L560.6 403.2L561.8 399.7L561.3 394.4L563.8 389.2L567.3 362.4L567 355.4L566.1 349.3L561.8 346.9L561.4 345.1L552.9 340.8L545.2 336.1L541.9 333.5L540.2 329.9L540.9 328.7L537.2 323.1L529 306.6L527.2 304.7L525.9 301.5L522.5 298.7L519.5 297L520.9 295.1L518.8 291L520.1 288L523.5 285.3L525.8 282.1L524.9 280.2L523.2 282.2L520.7 280.3L521.5 279.1L520.8 275.2L522.3 274.6L523.1 271.9L524.7 269.1L524.4 267.4L529.7 264.8L529.2 263.4L530.8 263.1L530.6 261L531.6 259.4L533.7 259.1L537.1 254.2L535.6 253.2L536.4 250.7L535.4 246.8L536.3 245.6L535.6 242L532.5 238.5L531.6 236.2L532.6 235L531.5 234.7L530.7 233.3L528.6 232.1L526.7 232.4L525.9 233.9L523.2 235.1L522.8 236L524.8 238.3L523 239.5L521 239.7L520.3 237.2L519.7 237.9L518.3 237.6L517.4 235.9L512.7 235.1L512.6 236.1L509.8 234.5L508.9 233.6L509.2 231.9L504.9 229.5L504.6 228.2L503.5 227.4L503.8 228.7L502.9 229.7L501.9 228.5L500.5 228.1L500 227.2L500.6 224.6L499.3 224L500.3 223.2L491.9 215.3L492.4 214.7L493.1 215.3L493.4 215L492.7 213.7L491.4 213.3L490.9 214.3L488.4 214.3L485.1 213L482.7 212.7L479.3 211.1L476.7 211L472.4 208.4L467.5 203.7L465.3 202.4L461.8 201.2L459.4 201.6L453.8 203.6L435.5 197.1L430.8 193.9L424 192.3L422.3 190.3L417.6 187.9L415.5 185.2L414.5 183.1L415.9 182.7L415.5 181.5L416.5 180.3L416.5 178.9L413.2 173.1L409.4 168.8L405.1 165.5L403 162.8L399.3 161L398.6 160L399.2 157.3L397 156.3L394.5 154.3L393.4 151.3L391.1 150.9L386.6 146.6L386.4 145.2L384.1 142L382.6 138.7L382.7 137.1L379.6 135.4L378.1 135.6L375.7 134.4L375 136.1L376.1 141.4L382.1 147.4L382.7 148.9L383.5 148.8L384.3 151.6L389.2 156.4L390.7 160.4L393.1 164.3L393.4 166.5L395.4 166.7L398.7 170.5L398.6 171.3L396.8 172.9L396 172.9L394.9 170.2L392.1 167.8L386.8 164.6L387 161.5L386.3 159.2L381.3 155.9L380.7 156.5L379.7 155.4L377 154.3L374.5 151.9L376.6 151.8L378.2 150.2L378.3 148.2L375 145.2L372.5 144L367.3 135.1L364.9 129L362.1 126.6L360.1 126.1L359.6 124.8L357.2 124.6L355.7 123.4L351.7 123L350.6 122.3L350.1 120L345.9 115.7L342.4 109.7L342.5 108.7L337.3 103.7L336.7 100.2L334.4 97.9L335.4 94.3L335.2 90.7L333.9 87.4L335.5 83.3L336.6 75.5L335.8 69.8L333.2 64.1L333.7 63.3L339.9 64.8L342.2 68.8L343.3 67.7L342.6 64.2L341.1 60.6L329.2 54.6L321.4 52.8L319 49L319.6 46.4L314.1 44.5L313.4 41.1L308.2 38L308.1 35.8L305.8 34.2L302 32.8L300.8 29.1L295.2 25.6L292.9 21.5L282 21.2L277 19.9L268.1 15.5L256.5 13.1L250.5 13.5L242.1 11.5L237 9.7L232.3 10.6L233.1 13.6L225.8 14.8L222 16.2L217.3 17.1L216.7 14.6L218.6 10.4L223.2 9.1L222 8L216.5 10.4L213.6 13.2L207.4 16.3L210.5 18.4L206.5 21.4L197.6 24.5L196.5 26.4L189.8 28.7L188.5 30.7L183.5 32.5L180.5 32.2L168.6 36.3L161.2 37.5L160.6 36.8L169.4 33.4L174 31.1L179.3 30.6L181.5 28.8L191.5 23.9L192.3 20.7L194.4 18.1L189.5 19.4L188.1 18.7L185.8 20.2L183 18.1L181.8 19.6L180.2 17.5L175.9 19.2L173.3 19.2L172.9 16.6L173.7 15.1L171 13.5L165.4 14.4L158.8 11.3L158.8 8.9L155.5 7.1L157.2 4.6L160.7 2.2L162.2 0L168.6 0.4L169.2 0L478.7 0L478.6 0.8L473.6 1.3L468.4 4.8L463.8 9.6L462.1 13L461.9 18L468.2 18.7L472.1 26L478.1 25.1L486.1 27L490.3 28.6L493.4 30.6L498.8 31.8L503.3 33.6L515.1 34.3L514.4 38L515.7 42.3L518.8 47.1L525.2 51.2L528.5 49.8L530.8 45.4L528.6 38.6L525.6 36.3L532.4 34.3L537.3 31.3L539.7 28.3L539.3 25.5L536.4 21.8L531.2 18.6L536.2 14.1L534.4 10.2L532.9 3.5L535.9 2.6L547.7 4.1L551.2 3L560.5 7L561.8 8.6L569.5 8.9L569.3 12.5L570.8 18L574.7 18.6L577.8 21.2L584 18.8L588.1 14L590.9 12.1L604.6 26.5L602.9 29.2L608.6 31.6L612.4 34.1L619.3 35.2L622 36.5L623.7 40.2L627.1 40.7L628.8 42.3L629.1 47.2L622.9 50.3L615.8 51.8L610.4 55.3L603.2 56L594 55.1L583.1 55.4L579.6 58.5L574.1 60.4L563 70L566.6 69.3L573.5 63.6L582.5 60.1L588.9 59.6L592.7 61.7L588.7 64.6L591.4 72.5L597 74.6L604.1 74L608.4 69.2L608.7 72.3L611.4 73.8L606.1 76.7L596.6 79.2L592.4 80.9L587.6 84L584.3 83.7L584.2 80.1L591.6 76.5L580 77.2L580.7 78.6L576.1 80.7L567.2 83.4L564.7 86.2L564.2 86.9L564.2 89.2L565.6 91.5L567.4 91.6L566.9 90L568.2 91L567.9 92.2L555.4 94L551.8 95.2L558.1 94.4L559.4 95.2L553.4 96.5L550.6 96.5L550.8 96L549.5 97.2L550.7 97.4L549.8 100.5L546.7 103.8L546.3 102.7L544 101.4L544.9 103.7L545.9 104.4L546 106.1L542.2 111.2L541.8 111L543.2 108.1L541 106.4L540.5 102.9L539.6 104.7L540.6 107.4L537.9 106.8L540.7 108.1L540.9 112.2L542.1 112.5L543.1 118.3L540.4 121.5L536 122.7L533.2 125.3L531 125.5L528.9 127.1L528.2 128.5L523.5 131.3L519.1 135.9L518.4 139L519.2 141.9L520.6 145.6L522.5 148.6L522.6 150.5L524.6 155.5L524.3 160L523.2 162.6L521.9 163.2L519.8 162.7L519.1 160.8L517.5 159.8L512.6 151.1L513.5 148.3L512.3 145.9L508.9 142.4L507.2 141.7L502.9 143.6L500.1 141.4L497.4 140.4L492.5 140.9L488.7 140.4L485.5 140.7L483.6 141.3L484.5 142.5L484.4 144.3L485.3 145.1L484.5 145.7L482.9 145.1L481.3 145.9L478.2 145.7L475 143.5L471.2 144L468.1 143L465.4 143.3L461.8 144.3L457.9 147.5L453.7 149.3L451.3 151.4L450.3 153.3L450.3 156.3L450.5 158.3L451.3 159.8L448.9 166.6L448.2 174.5L450.3 178.9L451.1 182.2L454 185.4L455 187.9L456.6 190L461.2 191.1L463 192.9L475.9 189.8L478.6 188L479.7 185.5L480 181.9L480.7 180.7L488.2 178.6L494.6 178.3L495.6 179.2L495.5 181.3L493.2 183.9L492.1 186.5L492.9 187.2L491.2 192.4L490.1 191.3L489.2 191.4L489.2 192L490.1 192L489 199.8L488.2 201L487.4 201.1L486.5 202.6L487.9 203.4L488.3 202.7L490 203.4L490.9 202.7L495.2 203.1L497.2 203L499.1 202.1L501.5 202.6L503.5 202.1L506.1 202.8L510.2 205.2L511.3 206.4L510.7 207.8L511.2 209.3L509.7 212.5L509.9 217.5L509.3 217.9L509.2 220.8L508.3 221.9L508.5 223.1L510.2 226.1L515.4 231.2L515.4 232.1L517.5 232L518.7 233L520.8 232.7L525.2 230.8L526.7 229.5L531.3 230.3L533.2 231L536.2 233.5L538.4 233.7L541.6 230.7L543.4 230.2L544.2 225.2L546.7 223.2L549.4 223.1L549.7 222.2L553.1 222.6L558.1 219.4L560.2 217.4L561.7 217.6L562.8 218.8L561.9 221.2L559.4 221.7L560.8 223.7L560.7 225.9L558.8 228.4L560.4 231.8L562.3 231.5L563.2 228.4L561.9 226.9L561.7 223.7L567 221.9L566.4 219.9L568 218.6L569.5 221.6L572.5 221.6L575.3 224L575.5 225.4L583.9 225L586.3 227L589.6 227.5L592 226.1L592.1 225.1L602.5 224.8L598.9 226L600.3 228L603.8 228.4L607 230.5L607.7 233.9L609.9 233.8L614.4 236.4L617.1 239.2L617.2 241.4L618.8 241.5L622.8 245.1L628 245.9L628.4 245.2L631.9 244.9L636.5 246L641.1 247.5L645.7 251.1L646.4 252.9L647.8 252.7L651.3 262.5L653.6 263.2L653.7 266.2L650.5 269.7L651.8 271L659.4 271.7L659.5 276L662.8 273.2L675.3 277.3L677.4 279.8L676.7 282.2L681.7 280.9L690 283.2L696.4 283L702.8 286.5L708.3 291.4L711.6 292.6L715.2 292.8L716.8 294.1L719 302.2L717.2 309.2L709 318L706.3 322.9L703.1 326.6L702 326.7L700.8 329.8L701.1 337.8L699.5 347.3L698.1 349L697.4 354.7L693 360.3ZM590.1 0L589.1 2L581 0L577.1 0L583.5 3.7L584.1 5.2L572.5 3.5L560.8 0ZM93.3 0.7L93.8 2.5L92.7 3.6L84.7 2.7L72.7 5.9L68.9 6.4L56.1 12.1L54.5 14L48.4 11L37.2 14.4L35.3 12.8L31.1 14.6L25.4 14.1L24 16.9L18.9 21L19 22.8L23.9 23.7L23.3 30L19.4 30.1L17.5 33.7L19.3 35.5L11.8 37.7L10.3 42.6L3.9 43.7L2.6 48L0 49.7L0 22.3L3.2 21.8L18.3 12L26 8.6L29.4 2.6L24.2 2.9L21.6 6.5L10.7 11.2L7.2 5.9L0 6.8L0 0L92.1 0ZM978.4 416.2L975.8 415.6L973.7 416.4L969.1 415.5L964.7 415.8L960.3 417.5L956.6 418.2L954 419.8L952 419.9L950.2 418.4L948.7 418.3L946.9 416.4L946.7 417L946.1 415.9L946.2 413.3L944.8 410.5L946.1 409.7L946 406.4L938 393.2L934.8 389.9L933.1 386.8L929.7 372.9L929 365.5L925.1 360.2L922 352.3L918.5 348.1L917.8 342.2L918.4 338.4L921.5 328.8L926.4 322.3L926.6 316.7L925.3 315.2L923.1 310L924.7 307.4L922.5 300.4L920.3 297.7L920.7 296.8L919 292.3L908.2 279.9L905.6 275.4L908.6 266.4L907.8 265.7L909.9 257.5L908.2 254.7L906.3 254L905.4 252L904.3 251.4L904.3 250.2L899.9 251.8L898.3 251.5L896.6 252.5L893.2 252.4L890.9 249.7L889.5 246.6L886.4 243.8L879.4 243.9L872.4 245.3L859.5 250.5L855.6 249.3L847.9 248.5L842.9 249.3L835.6 252.1L833.7 252L829.3 250L821.7 244.4L818.8 241.6L814.6 239.6L812.4 237.3L811.1 232.5L807.5 228.3L805.4 226.9L804.3 224.1L800.7 221.6L798.9 221.3L798 219.4L796.6 218.5L795.7 214.3L796.2 212.4L794.4 209.1L792.3 207.5L794.2 206.7L796.3 203.7L797.3 201.5L796.9 199.2L798.1 197.1L798.6 193.1L797.7 186.7L798.1 184.6L797 182.5L794.7 180.7L795.1 176.9L796.7 175.7L798.2 173.5L797.9 172L799.4 169L801.7 166.3L803.2 165.6L804.3 163.1L804.4 160.8L806 158.1L808.8 156.6L811.5 152.2L813.8 150.5L817.8 150L821.1 147.1L823.3 146L826.9 142.4L825.8 137L828 131.1L830.8 128.2L838.2 124.5L842.5 117.4L845.6 117.4L848.2 119.2L852.3 118.9L858.6 119.9L862.7 117.6L867.3 116.8L870 115.1L874.2 113.8L888.5 112.7L890.7 113.3L894.7 111.6L899.3 111.6L901.1 112.6L904 112.3L908.7 110.6L911.7 111.1L911.5 113.3L915.2 111.7L915.5 112.5L913.3 114.6L913.3 116.6L914.8 117.7L914.2 121.4L911.4 123.5L912.2 125.9L914.4 125.9L915.5 128L917.2 128.6L922.2 130.1L924 129.7L927.6 130.5L933.3 132.4L935.3 136.2L945.2 138.8L949.7 140.9L951.8 139.8L953.9 137.9L952.9 134.6L954.2 132.5L957.3 130.5L960.3 129.9L966.1 130.8L967.5 132.7L974.8 133.9L975.8 135.4L981.5 135.3L991.9 138.4L996.9 135.8L1000 135.5L1000 113.5L999.2 113.5L998.2 115.2L995.3 115.8L991.1 113.5L986.4 113.5L983.9 109.3L980.8 106.9L982.8 103.6L980.1 101.5L984.9 97.4L991.5 97.3L993.3 94L1000 94.5L1000 71L994.8 76.5L994.9 77.6L992.9 78.6L991.6 78.2L990.4 83.3L988.1 85.1L986.6 88.2L988.5 92.3L992.2 93.7L991.4 94.7L986.3 94.9L980.9 98.6L979.6 96.6L979.6 95.7L974.8 95.2L969.6 96.3L972.6 98.7L970.4 99.4L968 99.4L965.7 97.2L964.9 98.1L965.9 100.7L968 102.7L966.4 103.6L970.9 106.9L971 109.3L967 108.1L968.3 110.3L965.6 110.8L967.2 114.6L964.3 114.6L960.8 112.7L958.5 106.5L954.6 102.1L953.5 99.6L951.1 98.1L950.7 96.1L951.7 91.8L951 91.2L948.9 89.4L940.5 85.5L936.6 84.2L933 81L933.8 80.7L931.9 78.9L931.8 77.5L929 76.8L927.7 78.6L926.5 77.2L926.6 75.7L927.7 75.3L924.2 74.6L920.8 76.2L921 78.3L920.5 79.5L921.9 81.7L925.9 83.8L928.1 87.4L932.8 90.8L936.2 90.8L937.2 91.8L936 92.6L943 95.5L946.7 97.7L947.1 98.5L946.3 100L944 98L940.2 97.3L938.4 100.1L941.5 101.7L941 103.9L939.2 104.2L936.9 107.9L935.1 108.2L936 104.6L937 103.7L934 99L932.2 98.5L930.9 96.6L928.2 95.9L926.3 94.1L923.2 93.9L919.8 91.9L913 86.7L911.6 82.4L906 80.5L904 81.1L901.6 83.1L899.8 83.4L895.9 85.8L887.4 84.7L881.2 86L880.7 88.6L880.9 91.1L876.9 94L871.4 94.9L871 96.3L868.3 98.7L866.7 102.2L868.4 104.6L865.9 106.5L865 109.3L861.7 110.2L858.7 113.5L849.2 113.5L846.5 115L844.8 116.6L842.7 116.2L841.1 114.8L839.9 112.3L835.9 111.7L834.2 112.8L831.9 112.2L829.7 112.6L830.4 109.3L830 106.7L828.1 106.3L827 104.6L827.4 101.8L829.1 100.3L830.3 96L829.1 91.2L829.4 88.1L827.6 86.2L833.7 83.2L849.2 84.6L859.7 84.6L862 82L862.8 73.4L858.3 68.9L855.2 66.8L848.6 65.1L848.2 62L853.8 61.1L861 62.2L859.6 57.3L863.6 59.2L873.6 55.8L874.9 52.3L882.1 50.6L884.3 49.4L888.1 43.1L893.9 41.3L897.5 41.4L898.3 40.5L901.9 40.3L902.7 41.2L905.6 39.1L904.6 37.5L904.5 35.1L902.7 32.7L902.6 28.3L904.5 25.9L908.3 25.6L909.8 24.4L913.3 23.2L913.1 25.4L911.8 26.8L912.4 28L914.7 28.7L913.6 30.3L912.4 29.8L909.3 32.9L910.4 35L910.5 36.7L914.8 37.7L914.8 39.2L919.2 38.4L921.6 37.2L926.4 38.9L928.4 40.3L943.5 35.6L947.7 36.3L948.1 37.3L952.2 37.4L953.2 35.5L959.1 34.1L958.2 30.5L958.3 27.3L960.4 24.6L964.5 23.1L967.9 26.3L971.3 26.2L972.6 20.4L971.1 21L968.4 19.4L968 17L978.8 15.2L983.5 15.9L987.9 15.7L992.8 13.4L988.3 11.3L980.5 11.7L966 14.2L963.5 11.8L959.3 10.4L960.3 6.2L958.2 2.3L960.1 0L948.3 0L944.4 1.7L941.3 7.7L944.4 10.8L948.5 13.1L944.5 18L940.1 19L938.4 26.2L936 30.2L930.8 29.8L928.4 33.2L923.4 33.4L922 29.3L918.4 24.5L915.2 18.4L912.3 15.8L903.8 20.7L898.1 21.7L892.2 19.5L890.7 14.9L889.3 5L893.2 2.3L900.4 0L1000 0L1000 399.6L996.8 404.2L988.9 411.2L985.7 413.1L981.2 414.8L979 415ZM688.3 0L684.3 2L686 5.3L681.9 13.1L675.8 13.3L669.5 9.8L660.9 9.8L656.8 7.5L653.9 3.3L649.3 0Z",
+    "landPathSha256": "079f8987f3872f12df8a84a45e220f3e54954c9a93e089482490e40b8af388ae",
+    "projection": "equirectangular_wrapped",
+    "ringCount": 50,
+    "simplification": {
+      "method": "closed_ring_ramer_douglas_peucker",
+      "tolerancePx": 0.35
+    },
+    "simplifiedPointCount": 1564,
+    "sourceFeatureCount": 127,
+    "sourcePointCount": 5143
+  },
+  "globe": {
+    "defaultCenter": {
+      "latitude": 20.0,
+      "longitude": -35.0
+    },
+    "projection": "orthographic",
+    "texture": {
+      "format": "png_grayscale_land_mask",
+      "height": 512,
+      "path": "analysis/career-atlas/output/world_land_texture.png",
+      "sha256": "a2654b5ebaf6d1b0ed939228cc8583e994722add440d6dfc328581d4b9ff7df0",
+      "sourceFeatureCount": 127,
+      "width": 1024
+    },
+    "zoom": {
+      "max": 32.0,
+      "min": 1.0
+    }
+  },
+  "naturalEarth": {
+    "dataset": "Natural Earth 1:110m land polygons",
+    "downloadPage": "https://www.naturalearthdata.com/downloads/110m-physical-vectors/",
+    "license": "public_domain",
+    "licenseUrl": "https://www.naturalearthdata.com/about/terms-of-use/",
+    "sourceCommit": "ca96624a56bd078437bca8184e78163e5039ad19",
+    "sourceSha256": "9e0729ee253ca7d7a5c4ae9395fb1902264c5377c52e224d13dd85010e2835d9",
+    "sourceUrl": "https://github.com/nvkelso/natural-earth-vector/blob/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_land.geojson"
+  },
+  "raceCount": 145,
+  "schemaVersion": "brycecast.careerAtlas.v3",
+  "sourceRefs": [
+    {
+      "note": "Pinned Natural Earth 110m public-domain land polygons.",
+      "path": "analysis/career-atlas/data/ne_110m_land.geojson",
+      "sha256": "9e0729ee253ca7d7a5c4ae9395fb1902264c5377c52e224d13dd85010e2835d9"
+    },
+    {
+      "note": "Natural Earth source, commit, checksum, and public-domain terms.",
+      "path": "analysis/career-atlas/data/SOURCE.md",
+      "sha256": "dd9fc0c2876483441ea8cf59bb41766df04abbbd434e80016ee4243eafccd4aa"
+    },
+    {
+      "note": "Pinned Pillow 12.2.0 texture-rendering dependency.",
+      "path": "analysis/career-atlas/requirements.txt",
+      "sha256": "e2fe85b176ffadb6e1b3c300a6a40b327305d7d53b5cd3861b250ed1c05c3075"
+    },
+    {
+      "note": "A2 track identity and sourced coordinates for every career venue.",
+      "path": "analysis/career-life-stats/data/venue_facts.csv",
+      "sha256": "878cf8ba950686b43399cead48f7a66699121404ba6fb9546a4c6f261b5e6f10"
+    },
+    {
+      "note": "A2 personally attributable ledger covering all 145 canonical race rows.",
+      "path": "analysis/career-life-stats/output/tables/miles_raced.csv",
+      "sha256": "27a4f559f732fea5ee97fc29fdb39eed004eda27c527ba57f71978b1e9f1f784"
+    },
+    {
+      "note": "A2 metric-grain and confidence-class contracts.",
+      "path": "analysis/career-life-stats/RESEARCH.md",
+      "sha256": "0268ca9a22a0213273448a5e21b3025297cdf8a969e428b7fbef2969182492d4"
+    },
+    {
+      "note": "Canonical race identity, series, date, and classified finish fields.",
+      "path": "data/career/career.dataset.json",
+      "sha256": "900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681"
+    }
+  ],
+  "venueCount": 34,
+  "venues": [
+    {
+      "bestFinish": 4,
+      "confidence": {
+        "bestFinish": "observed_exact",
+        "coordinates": "observed_exact",
+        "latestRace": "observed_exact",
+        "raceCount": "observed_exact",
+        "seriesSpans": "observed_exact"
+      },
+      "coordinateSources": [
+        "Wikipedia circuit profile | https://en.wikipedia.org/wiki/Algarve_International_Circuit"
+      ],
+      "country": "Portugal",
+      "dominantChapter": {
+        "bestFinish": 4,
+        "firstRaceDate": "2023-04-29",
+        "firstYear": 2023,
+        "lastYear": 2023,
+        "latestRace": {
+          "eventId": "event_euroformula_2023_r1_portimao",
+          "raceDate": "2023-04-29",
+          "raceHref": "/career/race/session_euroformula_2023_01-portimao-race-3",
+          "raceLabel": "Euroformula Open 2023 Round 1 - Portimao \u00b7 Race 3",
+          "sessionId": "session_euroformula_2023_01-portimao-race-3"
+        },
+        "latestRaceDate": "2023-04-29",
+        "raceCount": 3,
+        "seriesId": "series_euroformula_open",
+        "seriesName": "Euroformula Open",
+        "seriesShort": "Euroformula"
+      },
+      "firstYear": 2023,
+      "lastYear": 2023,
+      "lat": 37.227,
+      "latestRace": {
+        "eventId": "event_euroformula_2023_r1_portimao",
+        "raceDate": "2023-04-29",
+        "raceHref": "/career/race/session_euroformula_2023_01-portimao-race-3",
+        "raceLabel": "Euroformula Open 2023 Round 1 - Portimao \u00b7 Race 3",
+        "sessionId": "session_euroformula_2023_01-portimao-race-3"
+      },
+      "lon": -8.6267,
+      "projected": {
+        "x": 830.895,
+        "y": 111.11
+      },
+      "raceCount": 3,
+      "region": "Europe",
+      "seriesSpans": [
+        {
+          "bestFinish": 4,
+          "firstRaceDate": "2023-04-29",
+          "firstYear": 2023,
+          "lastYear": 2023,
+          "latestRace": {
+            "eventId": "event_euroformula_2023_r1_portimao",
+            "raceDate": "2023-04-29",
+            "raceHref": "/career/race/session_euroformula_2023_01-portimao-race-3",
+            "raceLabel": "Euroformula Open 2023 Round 1 - Portimao \u00b7 Race 3",
+            "sessionId": "session_euroformula_2023_01-portimao-race-3"
+          },
+          "latestRaceDate": "2023-04-29",
+          "raceCount": 3,
+          "seriesId": "series_euroformula_open",
+          "seriesName": "Euroformula Open",
+          "seriesShort": "Euroformula"
+        }
+      ],
+      "trackIds": [
+        "track_autodromo_internacional_do_algarve"
+      ],
+      "trackName": "Autodromo Internacional do Algarve",
+      "venueId": "venue_autodromo_internacional_do_algarve"
+    },
+    {
+      "bestFinish": 5,
+      "confidence": {
+        "bestFinish": "observed_exact",
+        "coordinates": "observed_exact",
+        "latestRace": "observed_exact",
+        "raceCount": "observed_exact",
+        "seriesSpans": "observed_exact"
+      },
+      "coordinateSources": [
+        "Autodromo Nazionale Monza official site | https://www.monzanet.it/"
+      ],
+      "country": "Italy",
+      "dominantChapter": {
+        "bestFinish": 5,
+        "firstRaceDate": "2023-09-23",
+        "firstYear": 2023,
+        "lastYear": 2023,
+        "latestRace": {
+          "eventId": "event_euroformula_2023_r6_monza",
+          "raceDate": "2023-09-23",
+          "raceHref": "/career/race/session_euroformula_2023_06-monza-race-3",
+          "raceLabel": "Euroformula Open 2023 Round 6 - Monza \u00b7 Race 3",
+          "sessionId": "session_euroformula_2023_06-monza-race-3"
+        },
+        "latestRaceDate": "2023-09-23",
+        "raceCount": 3,
+        "seriesId": "series_euroformula_open",
+        "seriesName": "Euroformula Open",
+        "seriesShort": "Euroformula"
+      },
+      "firstYear": 2023,
+      "lastYear": 2023,
+      "lat": 45.6156,
+      "latestRace": {
+        "eventId": "event_euroformula_2023_r6_monza",
+        "raceDate": "2023-09-23",
+        "raceHref": "/career/race/session_euroformula_2023_06-monza-race-3",
+        "raceLabel": "Euroformula Open 2023 Round 6 - Monza \u00b7 Race 3",
+        "sessionId": "session_euroformula_2023_06-monza-race-3"
+      },
+      "lon": 9.2811,
+      "projected": {
+        "x": 907.689,
+        "y": 75.152
+      },
+      "raceCount": 3,
+      "region": "Europe",
+      "seriesSpans": [
+        {
+          "bestFinish": 5,
+          "firstRaceDate": "2023-09-23",
+          "firstYear": 2023,
+          "lastYear": 2023,
+          "latestRace": {
+            "eventId": "event_euroformula_2023_r6_monza",
+            "raceDate": "2023-09-23",
+            "raceHref": "/career/race/session_euroformula_2023_06-monza-race-3",
+            "raceLabel": "Euroformula Open 2023 Round 6 - Monza \u00b7 Race 3",
+            "sessionId": "session_euroformula_2023_06-monza-race-3"
+          },
+          "latestRaceDate": "2023-09-23",
+          "raceCount": 3,
+          "seriesId": "series_euroformula_open",
+          "seriesName": "Euroformula Open",
+          "seriesShort": "Euroformula"
+        }
+      ],
+      "trackIds": [
+        "track_autodromo_nazionale_monza"
+      ],
+      "trackName": "Autodromo Nazionale Monza",
+      "venueId": "venue_autodromo_nazionale_monza"
+    },
+    {
+      "bestFinish": 7,
+      "confidence": {
+        "bestFinish": "observed_exact",
+        "coordinates": "observed_exact",
+        "latestRace": "observed_exact",
+        "raceCount": "observed_exact",
+        "seriesSpans": "observed_exact"
+      },
+      "coordinateSources": [
+        "Just Track It circuit guide | https://justtrackit.net/tracks/barber-motorsports/guide"
+      ],
+      "country": "United States",
+      "dominantChapter": {
+        "bestFinish": 7,
+        "firstRaceDate": "2024-04-26",
+        "firstYear": 2024,
+        "lastYear": 2026,
+        "latestRace": {
+          "eventId": "event_indy_nxt_2026_5535",
+          "raceDate": "2026-03-28",
+          "raceHref": "/races/session_indy_nxt_2026_6752",
+          "raceLabel": "Grand Prix of Alabama Race 2 \u00b7 Race",
+          "sessionId": "session_indy_nxt_2026_6752"
+        },
+        "latestRaceDate": "2026-03-28",
+        "raceCount": 4,
+        "seriesId": "series_indy_nxt",
+        "seriesName": "INDY NXT",
+        "seriesShort": "INDY NXT"
+      },
+      "firstYear": 2024,
+      "lastYear": 2026,
+      "lat": 33.5325,
+      "latestRace": {
+        "eventId": "event_indy_nxt_2026_5535",
+        "raceDate": "2026-03-28",
+        "raceHref": "/races/session_indy_nxt_2026_6752",
+        "raceLabel": "Grand Prix of Alabama Race 2 \u00b7 Race",
+        "sessionId": "session_indy_nxt_2026_6752"
+      },
+      "lon": -86.6189,
+      "projected": {
+        "x": 496.439,
+        "y": 126.946
+      },
+      "raceCount": 4,
+      "region": "North America",
+      "seriesSpans": [
+        {
+          "bestFinish": 7,
+          "firstRaceDate": "2024-04-26",
+          "firstYear": 2024,
+          "lastYear": 2026,
+          "latestRace": {
+            "eventId": "event_indy_nxt_2026_5535",
+            "raceDate": "2026-03-28",
+            "raceHref": "/races/session_indy_nxt_2026_6752",
+            "raceLabel": "Grand Prix of Alabama Race 2 \u00b7 Race",
+            "sessionId": "session_indy_nxt_2026_6752"
+          },
+          "latestRaceDate": "2026-03-28",
+          "raceCount": 4,
+          "seriesId": "series_indy_nxt",
+          "seriesName": "INDY NXT",
+          "seriesShort": "INDY NXT"
+        }
+      ],
+      "trackIds": [
+        "track_barber_motorsports_park"
+      ],
+      "trackName": "Barber Motorsports Park",
+      "venueId": "venue_barber_motorsports_park"
+    },
+    {
+      "bestFinish": 3,
+      "confidence": {
+        "bestFinish": "observed_exact",
+        "coordinates": "observed_exact",
+        "latestRace": "observed_exact",
+        "raceCount": "observed_exact",
+        "seriesSpans": "observed_exact"
+      },
+      "coordinateSources": [
+        "MotorSport Vision official circuit layout | https://www.brandshatch.co.uk/about/circuit-map",
+        "MotorSport Vision official circuit layout | https://www.brandshatch.co.uk/circuit-information.aspx"
+      ],
+      "country": "United Kingdom",
+      "dominantChapter": {
+        "bestFinish": 3,
+        "firstRaceDate": "2020-09-12",
+        "firstYear": 2020,
+        "lastYear": 2020,
+        "latestRace": {
+          "eventId": "event_formula_ford_2020_formula_ford_festival",
+          "raceDate": "2020-10-24",
+          "raceHref": "/career/race/session_formula_ford_2020_festival_grand_final_race_21",
+          "raceLabel": "BRSCC Formula Ford Festival 2020 \u00b7 GRAND FINAL (RACE 21)",
+          "sessionId": "session_formula_ford_2020_festival_grand_final_race_21"
+        },
+        "latestRaceDate": "2020-10-24",
+        "raceCount": 7,
+        "seriesId": "series_formula_ford",
+        "seriesName": "Formula Ford",
+        "seriesShort": "Formula Ford"
+      },
+      "firstYear": 2020,
+      "lastYear": 2022,
+      "lat": 51.3569,
+      "latestRace": {
+        "eventId": "event_gb3_2022_r7_brands_hatch",
+        "raceDate": "2022-09-10",
+        "raceHref": "/career/race/session_gb3_2022_1099",
+        "raceLabel": "GB3 2022 Round 7 - Brands Hatch \u00b7 Race 3 ",
+        "sessionId": "session_gb3_2022_1099"
+      },
+      "lon": 0.2631,
+      "projected": {
+        "x": 869.017,
+        "y": 50.541
+      },
+      "raceCount": 13,
+      "region": "Europe",
+      "seriesSpans": [
+        {
+          "bestFinish": 3,
+          "firstRaceDate": "2020-09-12",
+          "firstYear": 2020,
+          "lastYear": 2020,
+          "latestRace": {
+            "eventId": "event_formula_ford_2020_formula_ford_festival",
+            "raceDate": "2020-10-24",
+            "raceHref": "/career/race/session_formula_ford_2020_festival_grand_final_race_21",
+            "raceLabel": "BRSCC Formula Ford Festival 2020 \u00b7 GRAND FINAL (RACE 21)",
+            "sessionId": "session_formula_ford_2020_festival_grand_final_race_21"
+          },
+          "latestRaceDate": "2020-10-24",
+          "raceCount": 7,
+          "seriesId": "series_formula_ford",
+          "seriesName": "Formula Ford",
+          "seriesShort": "Formula Ford"
+        },
+        {
+          "bestFinish": 4,
+          "firstRaceDate": "2021-05-22",
+          "firstYear": 2021,
+          "lastYear": 2022,
+          "latestRace": {
+            "eventId": "event_gb3_2022_r7_brands_hatch",
+            "raceDate": "2022-09-10",
+            "raceHref": "/career/race/session_gb3_2022_1099",
+            "raceLabel": "GB3 2022 Round 7 - Brands Hatch \u00b7 Race 3 ",
+            "sessionId": "session_gb3_2022_1099"
+          },
+          "latestRaceDate": "2022-09-10",
+          "raceCount": 6,
+          "seriesId": "series_gb3",
+          "seriesName": "GB3 Championship",
+          "seriesShort": "GB3"
+        }
+      ],
+      "trackIds": [
+        "track_brands_hatch_gp",
+        "track_brands_hatch_indy"
+      ],
+      "trackName": "Brands Hatch Circuit",
+      "venueId": "venue_brands_hatch_circuit"
+    },
+    {
+      "bestFinish": 1,
+      "confidence": {
+        "bestFinish": "observed_exact",
+        "coordinates": "observed_exact",
+        "latestRace": "observed_exact",
+        "raceCount": "observed_exact",
+        "seriesSpans": "observed_exact"
+      },
+      "coordinateSources": [
+        "RacingCircuits.info circuit profile | https://www.racingcircuits.info/europe/united-kingdom/cadwell-park.html"
+      ],
+      "country": "United Kingdom",
+      "dominantChapter": {
+        "bestFinish": 1,
+        "firstRaceDate": "2020-08-22",
+        "firstYear": 2020,
+        "lastYear": 2020,
+        "latestRace": {
+          "eventId": "event_formula_ford_2020_champion_cadwell",
+          "raceDate": "2020-08-22",
+          "raceHref": "/career/race/session_formula_ford_2020_champion_cadwell_race_5",
+          "raceLabel": "The Champion of Cadwell for FF1600 2020 \u00b7 RACE 5",
+          "sessionId": "session_formula_ford_2020_champion_cadwell_race_5"
+        },
+        "latestRaceDate": "2020-08-22",
+        "raceCount": 2,
+        "seriesId": "series_formula_ford",
+        "seriesName": "Formula Ford",
+        "seriesShort": "Formula Ford"
+      },
+      "firstYear": 2020,
+      "lastYear": 2020,
+      "lat": 53.3106,
+      "latestRace": {
+        "eventId": "event_formula_ford_2020_champion_cadwell",
+        "raceDate": "2020-08-22",
+        "raceHref": "/career/race/session_formula_ford_2020_champion_cadwell_race_5",
+        "raceLabel": "The Champion of Cadwell for FF1600 2020 \u00b7 RACE 5",
+        "sessionId": "session_formula_ford_2020_champion_cadwell_race_5"
+      },
+      "lon": -0.0586,
+      "projected": {
+        "x": 867.638,
+        "y": 42.167
+      },
+      "raceCount": 2,
+      "region": "Europe",
+      "seriesSpans": [
+        {
+          "bestFinish": 1,
+          "firstRaceDate": "2020-08-22",
+          "firstYear": 2020,
+          "lastYear": 2020,
+          "latestRace": {
+            "eventId": "event_formula_ford_2020_champion_cadwell",
+            "raceDate": "2020-08-22",
+            "raceHref": "/career/race/session_formula_ford_2020_champion_cadwell_race_5",
+            "raceLabel": "The Champion of Cadwell for FF1600 2020 \u00b7 RACE 5",
+            "sessionId": "session_formula_ford_2020_champion_cadwell_race_5"
+          },
+          "latestRaceDate": "2020-08-22",
+          "raceCount": 2,
+          "seriesId": "series_formula_ford",
+          "seriesName": "Formula Ford",
+          "seriesShort": "Formula Ford"
+        }
+      ],
+      "trackIds": [
+        "track_cadwell_park_full"
+      ],
+      "trackName": "Cadwell Park Circuit",
+      "venueId": "venue_cadwell_park_circuit"
+    },
+    {
+      "bestFinish": 1,
+      "confidence": {
+        "bestFinish": "observed_exact",
+        "coordinates": "observed_exact",
+        "latestRace": "observed_exact",
+        "raceCount": "observed_exact",
+        "seriesSpans": "observed_exact"
+      },
+      "coordinateSources": [
+        "Wikipedia circuit profile | https://en.wikipedia.org/wiki/Circuit_Paul_Ricard"
+      ],
+      "country": "France",
+      "dominantChapter": {
+        "bestFinish": 1,
+        "firstRaceDate": "2023-07-22",
+        "firstYear": 2023,
+        "lastYear": 2023,
+        "latestRace": {
+          "eventId": "event_euroformula_2023_r4_paul_ricard",
+          "raceDate": "2023-07-22",
+          "raceHref": "/career/race/session_euroformula_2023_04-paul_ricard-race-3",
+          "raceLabel": "Euroformula Open 2023 Round 4 - Paul Ricard \u00b7 Race 3",
+          "sessionId": "session_euroformula_2023_04-paul_ricard-race-3"
+        },
+        "latestRaceDate": "2023-07-22",
+        "raceCount": 3,
+        "seriesId": "series_euroformula_open",
+        "seriesName": "Euroformula Open",
+        "seriesShort": "Euroformula"
+      },
+      "firstYear": 2023,
+      "lastYear": 2023,
+      "lat": 43.2506,
+      "latestRace": {
+        "eventId": "event_euroformula_2023_r4_paul_ricard",
+        "raceDate": "2023-07-22",
+        "raceHref": "/career/race/session_euroformula_2023_04-paul_ricard-race-3",
+        "raceLabel": "Euroformula Open 2023 Round 4 - Paul Ricard \u00b7 Race 3",
+        "sessionId": "session_euroformula_2023_04-paul_ricard-race-3"
+      },
+      "lon": 5.7917,
+      "projected": {
+        "x": 892.726,
+        "y": 85.289
+      },
+      "raceCount": 3,
+      "region": "Europe",
+      "seriesSpans": [
+        {
+          "bestFinish": 1,
+          "firstRaceDate": "2023-07-22",
+          "firstYear": 2023,
+          "lastYear": 2023,
+          "latestRace": {
+            "eventId": "event_euroformula_2023_r4_paul_ricard",
+            "raceDate": "2023-07-22",
+            "raceHref": "/career/race/session_euroformula_2023_04-paul_ricard-race-3",
+            "raceLabel": "Euroformula Open 2023 Round 4 - Paul Ricard \u00b7 Race 3",
+            "sessionId": "session_euroformula_2023_04-paul_ricard-race-3"
+          },
+          "latestRaceDate": "2023-07-22",
+          "raceCount": 3,
+          "seriesId": "series_euroformula_open",
+          "seriesName": "Euroformula Open",
+          "seriesShort": "Euroformula"
+        }
+      ],
+      "trackIds": [
+        "track_circuit_paul_ricard"
+      ],
+      "trackName": "Circuit Paul Ricard",
+      "venueId": "venue_circuit_paul_ricard"
+    },
+    {
+      "bestFinish": 1,
+      "confidence": {
+        "bestFinish": "observed_exact",
+        "coordinates": "observed_exact",
+        "latestRace": "observed_exact",
+        "raceCount": "observed_exact",
+        "seriesSpans": "observed_exact"
+      },
+      "coordinateSources": [
+        "Circuit de Spa-Francorchamps official site | https://www.spa-francorchamps.be/",
+        "Paddock Weather circuit directory | https://www.paddockweather.com/circuits.php?id=79"
+      ],
+      "country": "Belgium",
+      "dominantChapter": {
+        "bestFinish": 9,
+        "firstRaceDate": "2021-07-24",
+        "firstYear": 2021,
+        "lastYear": 2022,
+        "latestRace": {
+          "eventId": "event_gb3_2022_r5_spa",
+          "raceDate": "2022-07-23",
+          "raceHref": "/career/race/session_gb3_2022_1365",
+          "raceLabel": "GB3 2022 Round 5 - Spa \u00b7 Race 3",
+          "sessionId": "session_gb3_2022_1365"
+        },
+        "latestRaceDate": "2022-07-23",
+        "raceCount": 6,
+        "seriesId": "series_gb3",
+        "seriesName": "GB3 Championship",
+        "seriesShort": "GB3"
+      },
+      "firstYear": 2021,
+      "lastYear": 2023,
+      "lat": 50.4372,
+      "latestRace": {
+        "eventId": "event_euroformula_2023_r2_spa_francorchamps",
+        "raceDate": "2023-05-27",
+        "raceHref": "/career/race/session_euroformula_2023_02-spa_francorchamps-race-3",
+        "raceLabel": "Euroformula Open 2023 Round 2 - Spa-Francorchamps \u00b7 Race 3",
+        "sessionId": "session_euroformula_2023_02-spa_francorchamps-race-3"
+      },
+      "lon": 5.9714,
+      "projected": {
+        "x": 893.496,
+        "y": 54.484
+      },
+      "raceCount": 9,
+      "region": "Europe",
+      "seriesSpans": [
+        {
+          "bestFinish": 9,
+          "firstRaceDate": "2021-07-24",
+          "firstYear": 2021,
+          "lastYear": 2022,
+          "latestRace": {
+            "eventId": "event_gb3_2022_r5_spa",
+            "raceDate": "2022-07-23",
+            "raceHref": "/career/race/session_gb3_2022_1365",
+            "raceLabel": "GB3 2022 Round 5 - Spa \u00b7 Race 3",
+            "sessionId": "session_gb3_2022_1365"
+          },
+          "latestRaceDate": "2022-07-23",
+          "raceCount": 6,
+          "seriesId": "series_gb3",
+          "seriesName": "GB3 Championship",
+          "seriesShort": "GB3"
+        },
+        {
+          "bestFinish": 1,
+          "firstRaceDate": "2023-05-27",
+          "firstYear": 2023,
+          "lastYear": 2023,
+          "latestRace": {
+            "eventId": "event_euroformula_2023_r2_spa_francorchamps",
+            "raceDate": "2023-05-27",
+            "raceHref": "/career/race/session_euroformula_2023_02-spa_francorchamps-race-3",
+            "raceLabel": "Euroformula Open 2023 Round 2 - Spa-Francorchamps \u00b7 Race 3",
+            "sessionId": "session_euroformula_2023_02-spa_francorchamps-race-3"
+          },
+          "latestRaceDate": "2023-05-27",
+          "raceCount": 3,
+          "seriesId": "series_euroformula_open",
+          "seriesName": "Euroformula Open",
+          "seriesShort": "Euroformula"
+        }
+      ],
+      "trackIds": [
+        "track_circuit_de_spa_francorchamps",
+        "track_spa_gp"
+      ],
+      "trackName": "Circuit de Spa-Francorchamps",
+      "venueId": "venue_circuit_de_spa_francorchamps"
+    },
+    {
+      "bestFinish": 6,
+      "confidence": {
+        "bestFinish": "observed_exact",
+        "coordinates": "observed_exact",
+        "latestRace": "observed_exact",
+        "raceCount": "observed_exact",
+        "seriesSpans": "observed_exact"
+      },
+      "coordinateSources": [
+        "IMSA Al Kamel official results | https://imsa.results.alkamelcloud.com/Results/25_2025/02_Daytona%20International%20Speedway/01_IMSA%20WeatherTech%20SportsCar%20Championship/202501251340_Race/24_Hour%2024/03_Results_Race_Official.JSON"
+      ],
+      "country": "United States",
+      "dominantChapter": {
+        "bestFinish": 6,
+        "firstRaceDate": "2025-01-25",
+        "firstYear": 2025,
+        "lastYear": 2025,
+        "latestRace": {
+          "eventId": "event_imsa_2025_daytona_rolex_24",
+          "raceDate": "2025-01-25",
+          "raceHref": "/career/race/session_imsa_2025_daytona_rolex_24_race",
+          "raceLabel": "Rolex 24 at Daytona \u00b7 Race",
+          "sessionId": "session_imsa_2025_daytona_rolex_24_race"
+        },
+        "latestRaceDate": "2025-01-25",
+        "raceCount": 1,
+        "seriesId": "series_imsa_weathertech",
+        "seriesName": "IMSA WeatherTech SportsCar Championship",
+        "seriesShort": "IMSA"
+      },
+      "firstYear": 2025,
+      "lastYear": 2025,
+      "lat": 29.1852,
+      "latestRace": {
+        "eventId": "event_imsa_2025_daytona_rolex_24",
+        "raceDate": "2025-01-25",
+        "raceHref": "/career/race/session_imsa_2025_daytona_rolex_24_race",
+        "raceLabel": "Rolex 24 at Daytona \u00b7 Race",
+        "sessionId": "session_imsa_2025_daytona_rolex_24_race"
+      },
+      "lon": -81.0705,
+      "projected": {
+        "x": 520.233,
+        "y": 145.581
+      },
+      "raceCount": 1,
+      "region": "North America",
+      "seriesSpans": [
+        {
+          "bestFinish": 6,
+          "firstRaceDate": "2025-01-25",
+          "firstYear": 2025,
+          "lastYear": 2025,
+          "latestRace": {
+            "eventId": "event_imsa_2025_daytona_rolex_24",
+            "raceDate": "2025-01-25",
+            "raceHref": "/career/race/session_imsa_2025_daytona_rolex_24_race",
+            "raceLabel": "Rolex 24 at Daytona \u00b7 Race",
+            "sessionId": "session_imsa_2025_daytona_rolex_24_race"
+          },
+          "latestRaceDate": "2025-01-25",
+          "raceCount": 1,
+          "seriesId": "series_imsa_weathertech",
+          "seriesName": "IMSA WeatherTech SportsCar Championship",
+          "seriesShort": "IMSA"
+        }
+      ],
+      "trackIds": [
+        "track_daytona_international_speedway"
+      ],
+      "trackName": "Daytona International Speedway",
+      "venueId": "venue_daytona_international_speedway"
+    },
+    {
+      "bestFinish": 8,
+      "confidence": {
+        "bestFinish": "observed_exact",
+        "coordinates": "observed_exact",
+        "latestRace": "observed_exact",
+        "raceCount": "observed_exact",
+        "seriesSpans": "observed_exact"
+      },
+      "coordinateSources": [
+        "Detroit Grand Prix official site | https://www.detroitgp.com/event-info/fast-facts"
+      ],
+      "country": "United States",
+      "dominantChapter": {
+        "bestFinish": 8,
+        "firstRaceDate": "2024-05-31",
+        "firstYear": 2024,
+        "lastYear": 2026,
+        "latestRace": {
+          "eventId": "event_indy_nxt_2026_5532",
+          "raceDate": "2026-05-29",
+          "raceHref": "/races/session_indy_nxt_2026_6749",
+          "raceLabel": "Detroit Grand Prix \u00b7 Race",
+          "sessionId": "session_indy_nxt_2026_6749"
+        },
+        "latestRaceDate": "2026-05-29",
+        "raceCount": 3,
+        "seriesId": "series_indy_nxt",
+        "seriesName": "INDY NXT",
+        "seriesShort": "INDY NXT"
+      },
+      "firstYear": 2024,
+      "lastYear": 2026,
+      "lat": 42.3299,
+      "latestRace": {
+        "eventId": "event_indy_nxt_2026_5532",
+        "raceDate": "2026-05-29",
+        "raceHref": "/races/session_indy_nxt_2026_6749",
+        "raceLabel": "Detroit Grand Prix \u00b7 Race",
+        "sessionId": "session_indy_nxt_2026_6749"
+      },
+      "lon": -83.0409,
+      "projected": {
+        "x": 511.783,
+        "y": 89.236
+      },
+      "raceCount": 3,
+      "region": "North America",
+      "seriesSpans": [
+        {
+          "bestFinish": 8,
+          "firstRaceDate": "2024-05-31",
+          "firstYear": 2024,
+          "lastYear": 2026,
+          "latestRace": {
+            "eventId": "event_indy_nxt_2026_5532",
+            "raceDate": "2026-05-29",
+            "raceHref": "/races/session_indy_nxt_2026_6749",
+            "raceLabel": "Detroit Grand Prix \u00b7 Race",
+            "sessionId": "session_indy_nxt_2026_6749"
+          },
+          "latestRaceDate": "2026-05-29",
+          "raceCount": 3,
+          "seriesId": "series_indy_nxt",
+          "seriesName": "INDY NXT",
+          "seriesShort": "INDY NXT"
+        }
+      ],
+      "trackIds": [
+        "track_streets_of_detroit"
+      ],
+      "trackName": "Detroit Downtown Street Circuit",
+      "venueId": "venue_detroit_downtown_street_circuit"
+    },
+    {
+      "bestFinish": 1,
+      "confidence": {
+        "bestFinish": "observed_exact",
+        "coordinates": "observed_exact",
+        "latestRace": "observed_exact",
+        "raceCount": "observed_exact",
+        "seriesSpans": "observed_exact"
+      },
+      "coordinateSources": [
+        "MotorSport Vision official circuit information | https://www.donington-park.co.uk/circuit-information.aspx"
+      ],
+      "country": "United Kingdom",
+      "dominantChapter": {
+        "bestFinish": 1,
+        "firstRaceDate": "2021-07-10",
+        "firstYear": 2021,
+        "lastYear": 2022,
+        "latestRace": {
+          "eventId": "event_gb3_2022_r8_donington_park",
+          "raceDate": "2022-10-15",
+          "raceHref": "/career/race/session_gb3_2022_1105",
+          "raceLabel": "GB3 2022 Round 8 - Donington Park \u00b7 Race 3 ",
+          "sessionId": "session_gb3_2022_1105"
+        },
+        "latestRaceDate": "2022-10-15",
+        "raceCount": 12,
+        "seriesId": "series_gb3",
+        "seriesName": "GB3 Championship",
+        "seriesShort": "GB3"
+      },
+      "firstYear": 2021,
+      "lastYear": 2022,
+      "lat": 52.8306,
+      "latestRace": {
+        "eventId": "event_gb3_2022_r8_donington_park",
+        "raceDate": "2022-10-15",
+        "raceHref": "/career/race/session_gb3_2022_1105",
+        "raceLabel": "GB3 2022 Round 8 - Donington Park \u00b7 Race 3 ",
+        "sessionId": "session_gb3_2022_1105"
+      },
+      "lon": -1.3753,
+      "projected": {
+        "x": 861.991,
+        "y": 44.224
+      },
+      "raceCount": 12,
+      "region": "Europe",
+      "seriesSpans": [
+        {
+          "bestFinish": 1,
+          "firstRaceDate": "2021-07-10",
+          "firstYear": 2021,
+          "lastYear": 2022,
+          "latestRace": {
+            "eventId": "event_gb3_2022_r8_donington_park",
+            "raceDate": "2022-10-15",
+            "raceHref": "/career/race/session_gb3_2022_1105",
+            "raceLabel": "GB3 2022 Round 8 - Donington Park \u00b7 Race 3 ",
+            "sessionId": "session_gb3_2022_1105"
+          },
+          "latestRaceDate": "2022-10-15",
+          "raceCount": 12,
+          "seriesId": "series_gb3",
+          "seriesName": "GB3 Championship",
+          "seriesShort": "GB3"
+        }
+      ],
+      "trackIds": [
+        "track_donington_park_gp"
+      ],
+      "trackName": "Donington Park",
+      "venueId": "venue_donington_park"
+    },
+    {
+      "bestFinish": 4,
+      "confidence": {
+        "bestFinish": "observed_exact",
+        "coordinates": "observed_exact",
+        "latestRace": "observed_exact",
+        "raceCount": "observed_exact",
+        "seriesSpans": "observed_exact"
+      },
+      "coordinateSources": [
+        "Wikipedia circuit profile | https://en.wikipedia.org/wiki/Euromarque_Motorsport_Park"
+      ],
+      "country": "New Zealand",
+      "dominantChapter": {
+        "bestFinish": 4,
+        "firstRaceDate": "2024-02-09",
+        "firstYear": 2024,
+        "lastYear": 2024,
+        "latestRace": {
+          "eventId": "event_froc_2024_r4_euromarque_motorsport_park",
+          "raceDate": "2024-02-09",
+          "raceHref": "/career/race/session_froc_2024_r4_race_3",
+          "raceLabel": "FROC 2024 Round 4 - Euromarque Motorsport Park \u00b7 Race 3",
+          "sessionId": "session_froc_2024_r4_race_3"
+        },
+        "latestRaceDate": "2024-02-09",
+        "raceCount": 3,
+        "seriesId": "series_froc",
+        "seriesName": "Castrol Toyota Formula Regional Oceania Championship",
+        "seriesShort": "FR Oceania"
+      },
+      "firstYear": 2024,
+      "lastYear": 2024,
+      "lat": -43.5311,
+      "latestRace": {
+        "eventId": "event_froc_2024_r4_euromarque_motorsport_park",
+        "raceDate": "2024-02-09",
+        "raceHref": "/career/race/session_froc_2024_r4_race_3",
+        "raceLabel": "FROC 2024 Round 4 - Euromarque Motorsport Park \u00b7 Race 3",
+        "sessionId": "session_froc_2024_r4_race_3"
+      },
+      "lon": 172.4807,
+      "projected": {
+        "x": 63.746,
+        "y": 457.283
+      },
+      "raceCount": 3,
+      "region": "Oceania",
+      "seriesSpans": [
+        {
+          "bestFinish": 4,
+          "firstRaceDate": "2024-02-09",
+          "firstYear": 2024,
+          "lastYear": 2024,
+          "latestRace": {
+            "eventId": "event_froc_2024_r4_euromarque_motorsport_park",
+            "raceDate": "2024-02-09",
+            "raceHref": "/career/race/session_froc_2024_r4_race_3",
+            "raceLabel": "FROC 2024 Round 4 - Euromarque Motorsport Park \u00b7 Race 3",
+            "sessionId": "session_froc_2024_r4_race_3"
+          },
+          "latestRaceDate": "2024-02-09",
+          "raceCount": 3,
+          "seriesId": "series_froc",
+          "seriesName": "Castrol Toyota Formula Regional Oceania Championship",
+          "seriesShort": "FR Oceania"
+        }
+      ],
+      "trackIds": [
+        "track_euromarque_motorsport_park"
+      ],
+      "trackName": "Euromarque Motorsport Park",
+      "venueId": "venue_euromarque_motorsport_park"
+    },
+    {
+      "bestFinish": 18,
+      "confidence": {
+        "bestFinish": "observed_exact",
+        "coordinates": "observed_exact",
+        "latestRace": "observed_exact",
+        "raceCount": "observed_exact",
+        "seriesSpans": "observed_exact"
+      },
+      "coordinateSources": [
+        "Grand Prix of Arlington official site | https://www.gparlington.com/"
+      ],
+      "country": "United States",
+      "dominantChapter": {
+        "bestFinish": 18,
+        "firstRaceDate": "2026-03-13",
+        "firstYear": 2026,
+        "lastYear": 2026,
+        "latestRace": {
+          "eventId": "event_indy_nxt_2026_5536",
+          "raceDate": "2026-03-13",
+          "raceHref": "/races/session_indy_nxt_2026_6753",
+          "raceLabel": "Grand Prix of Arlington \u00b7 Race",
+          "sessionId": "session_indy_nxt_2026_6753"
+        },
+        "latestRaceDate": "2026-03-13",
+        "raceCount": 1,
+        "seriesId": "series_indy_nxt",
+        "seriesName": "INDY NXT",
+        "seriesShort": "INDY NXT"
+      },
+      "firstYear": 2026,
+      "lastYear": 2026,
+      "lat": 32.7473,
+      "latestRace": {
+        "eventId": "event_indy_nxt_2026_5536",
+        "raceDate": "2026-03-13",
+        "raceHref": "/races/session_indy_nxt_2026_6753",
+        "raceLabel": "Grand Prix of Arlington \u00b7 Race",
+        "sessionId": "session_indy_nxt_2026_6753"
+      },
+      "lon": -97.0945,
+      "projected": {
+        "x": 451.516,
+        "y": 130.312
+      },
+      "raceCount": 1,
+      "region": "North America",
+      "seriesSpans": [
+        {
+          "bestFinish": 18,
+          "firstRaceDate": "2026-03-13",
+          "firstYear": 2026,
+          "lastYear": 2026,
+          "latestRace": {
+            "eventId": "event_indy_nxt_2026_5536",
+            "raceDate": "2026-03-13",
+            "raceHref": "/races/session_indy_nxt_2026_6753",
+            "raceLabel": "Grand Prix of Arlington \u00b7 Race",
+            "sessionId": "session_indy_nxt_2026_6753"
+          },
+          "latestRaceDate": "2026-03-13",
+          "raceCount": 1,
+          "seriesId": "series_indy_nxt",
+          "seriesName": "INDY NXT",
+          "seriesShort": "INDY NXT"
+        }
+      ],
+      "trackIds": [
+        "track_streets_of_arlington"
+      ],
+      "trackName": "Grand Prix of Arlington Street Circuit",
+      "venueId": "venue_grand_prix_of_arlington_street_circuit"
+    },
+    {
+      "bestFinish": 1,
+      "confidence": {
+        "bestFinish": "observed_exact",
+        "coordinates": "observed_exact",
+        "latestRace": "observed_exact",
+        "raceCount": "observed_exact",
+        "seriesSpans": "observed_exact"
+      },
+      "coordinateSources": [
+        "My Racing Career circuit directory | https://www.myracingcareer.com/test/en/track/ota/"
+      ],
+      "country": "New Zealand",
+      "dominantChapter": {
+        "bestFinish": 1,
+        "firstRaceDate": "2024-02-16",
+        "firstYear": 2024,
+        "lastYear": 2024,
+        "latestRace": {
+          "eventId": "event_froc_2024_r5_highlands_motorsport_park",
+          "raceDate": "2024-02-16",
+          "raceHref": "/career/race/session_froc_2024_r5_race_3",
+          "raceLabel": "FROC 2024 Round 5 - Highlands Motorsport Park \u00b7 Race 3",
+          "sessionId": "session_froc_2024_r5_race_3"
+        },
+        "latestRaceDate": "2024-02-16",
+        "raceCount": 3,
+        "seriesId": "series_froc",
+        "seriesName": "Castrol Toyota Formula Regional Oceania Championship",
+        "seriesShort": "FR Oceania"
+      },
+      "firstYear": 2024,
+      "lastYear": 2024,
+      "lat": -45.0591,
+      "latestRace": {
+        "eventId": "event_froc_2024_r5_highlands_motorsport_park",
+        "raceDate": "2024-02-16",
+        "raceHref": "/career/race/session_froc_2024_r5_race_3",
+        "raceLabel": "FROC 2024 Round 5 - Highlands Motorsport Park \u00b7 Race 3",
+        "sessionId": "session_froc_2024_r5_race_3"
+      },
+      "lon": 169.1703,
+      "projected": {
+        "x": 49.55,
+        "y": 463.833
+      },
+      "raceCount": 3,
+      "region": "Oceania",
+      "seriesSpans": [
+        {
+          "bestFinish": 1,
+          "firstRaceDate": "2024-02-16",
+          "firstYear": 2024,
+          "lastYear": 2024,
+          "latestRace": {
+            "eventId": "event_froc_2024_r5_highlands_motorsport_park",
+            "raceDate": "2024-02-16",
+            "raceHref": "/career/race/session_froc_2024_r5_race_3",
+            "raceLabel": "FROC 2024 Round 5 - Highlands Motorsport Park \u00b7 Race 3",
+            "sessionId": "session_froc_2024_r5_race_3"
+          },
+          "latestRaceDate": "2024-02-16",
+          "raceCount": 3,
+          "seriesId": "series_froc",
+          "seriesName": "Castrol Toyota Formula Regional Oceania Championship",
+          "seriesShort": "FR Oceania"
+        }
+      ],
+      "trackIds": [
+        "track_highlands_motorsport_park"
+      ],
+      "trackName": "Highlands Motorsport Park",
+      "venueId": "venue_highlands_motorsport_park"
+    },
+    {
+      "bestFinish": 1,
+      "confidence": {
+        "bestFinish": "observed_exact",
+        "coordinates": "observed_exact",
+        "latestRace": "observed_exact",
+        "raceCount": "observed_exact",
+        "seriesSpans": "observed_exact"
+      },
+      "coordinateSources": [
+        "Hungaroring official site | https://hungaroring.hu/"
+      ],
+      "country": "Hungary",
+      "dominantChapter": {
+        "bestFinish": 1,
+        "firstRaceDate": "2023-06-17",
+        "firstYear": 2023,
+        "lastYear": 2023,
+        "latestRace": {
+          "eventId": "event_euroformula_2023_r3_hungaroring",
+          "raceDate": "2023-06-17",
+          "raceHref": "/career/race/session_euroformula_2023_03-hungaroring-race-3",
+          "raceLabel": "Euroformula Open 2023 Round 3 - Hungaroring \u00b7 Race 3",
+          "sessionId": "session_euroformula_2023_03-hungaroring-race-3"
+        },
+        "latestRaceDate": "2023-06-17",
+        "raceCount": 3,
+        "seriesId": "series_euroformula_open",
+        "seriesName": "Euroformula Open",
+        "seriesShort": "Euroformula"
+      },
+      "firstYear": 2023,
+      "lastYear": 2023,
+      "lat": 47.583,
+      "latestRace": {
+        "eventId": "event_euroformula_2023_r3_hungaroring",
+        "raceDate": "2023-06-17",
+        "raceHref": "/career/race/session_euroformula_2023_03-hungaroring-race-3",
+        "raceLabel": "Euroformula Open 2023 Round 3 - Hungaroring \u00b7 Race 3",
+        "sessionId": "session_euroformula_2023_03-hungaroring-race-3"
+      },
+      "lon": 19.2526,
+      "projected": {
+        "x": 950.45,
+        "y": 66.718
+      },
+      "raceCount": 3,
+      "region": "Europe",
+      "seriesSpans": [
+        {
+          "bestFinish": 1,
+          "firstRaceDate": "2023-06-17",
+          "firstYear": 2023,
+          "lastYear": 2023,
+          "latestRace": {
+            "eventId": "event_euroformula_2023_r3_hungaroring",
+            "raceDate": "2023-06-17",
+            "raceHref": "/career/race/session_euroformula_2023_03-hungaroring-race-3",
+            "raceLabel": "Euroformula Open 2023 Round 3 - Hungaroring \u00b7 Race 3",
+            "sessionId": "session_euroformula_2023_03-hungaroring-race-3"
+          },
+          "latestRaceDate": "2023-06-17",
+          "raceCount": 3,
+          "seriesId": "series_euroformula_open",
+          "seriesName": "Euroformula Open",
+          "seriesShort": "Euroformula"
+        }
+      ],
+      "trackIds": [
+        "track_hungaroring"
+      ],
+      "trackName": "Hungaroring",
+      "venueId": "venue_hungaroring"
+    },
+    {
+      "bestFinish": 12,
+      "confidence": {
+        "bestFinish": "observed_exact",
+        "coordinates": "observed_exact",
+        "latestRace": "observed_exact",
+        "raceCount": "observed_exact",
+        "seriesSpans": "observed_exact"
+      },
+      "coordinateSources": [
+        "Indianapolis Motor Speedway official site | https://www.indianapolismotorspeedway.com/"
+      ],
+      "country": "United States",
+      "dominantChapter": {
+        "bestFinish": 12,
+        "firstRaceDate": "2024-05-10",
+        "firstYear": 2024,
+        "lastYear": 2026,
+        "latestRace": {
+          "eventId": "event_indy_nxt_2026_5548",
+          "raceDate": "2026-05-08",
+          "raceHref": "/races/session_indy_nxt_2026_6765",
+          "raceLabel": "Indianapolis Grand Prix Race 2 \u00b7 Race",
+          "sessionId": "session_indy_nxt_2026_6765"
+        },
+        "latestRaceDate": "2026-05-08",
+        "raceCount": 6,
+        "seriesId": "series_indy_nxt",
+        "seriesName": "INDY NXT",
+        "seriesShort": "INDY NXT"
+      },
+      "firstYear": 2024,
+      "lastYear": 2026,
+      "lat": 39.7936,
+      "latestRace": {
+        "eventId": "event_indy_nxt_2026_5548",
+        "raceDate": "2026-05-08",
+        "raceHref": "/races/session_indy_nxt_2026_6765",
+        "raceLabel": "Indianapolis Grand Prix Race 2 \u00b7 Race",
+        "sessionId": "session_indy_nxt_2026_6765"
+      },
+      "lon": -86.2353,
+      "projected": {
+        "x": 498.084,
+        "y": 100.108
+      },
+      "raceCount": 6,
+      "region": "North America",
+      "seriesSpans": [
+        {
+          "bestFinish": 12,
+          "firstRaceDate": "2024-05-10",
+          "firstYear": 2024,
+          "lastYear": 2026,
+          "latestRace": {
+            "eventId": "event_indy_nxt_2026_5548",
+            "raceDate": "2026-05-08",
+            "raceHref": "/races/session_indy_nxt_2026_6765",
+            "raceLabel": "Indianapolis Grand Prix Race 2 \u00b7 Race",
+            "sessionId": "session_indy_nxt_2026_6765"
+          },
+          "latestRaceDate": "2026-05-08",
+          "raceCount": 6,
+          "seriesId": "series_indy_nxt",
+          "seriesName": "INDY NXT",
+          "seriesShort": "INDY NXT"
+        }
+      ],
+      "trackIds": [
+        "track_indianapolis_motor_speedway_road_course"
+      ],
+      "trackName": "Indianapolis Motor Speedway Road Course",
+      "venueId": "venue_indianapolis_motor_speedway_road_course"
+    },
+    {
+      "bestFinish": 8,
+      "confidence": {
+        "bestFinish": "observed_exact",
+        "coordinates": "observed_exact",
+        "latestRace": "observed_exact",
+        "raceCount": "observed_exact",
+        "seriesSpans": "observed_exact"
+      },
+      "coordinateSources": [
+        "Iowa Speedway official site | https://www.iowaspeedway.com/"
+      ],
+      "country": "United States",
+      "dominantChapter": {
+        "bestFinish": 8,
+        "firstRaceDate": "2024-07-12",
+        "firstYear": 2024,
+        "lastYear": 2025,
+        "latestRace": {
+          "eventId": "event_indy_nxt_2025_5493",
+          "raceDate": "2025-07-11",
+          "raceHref": "/races/session_indy_nxt_2025_6451",
+          "raceLabel": "INDY NXT by Firestone at Iowa Speedway \u00b7 Race",
+          "sessionId": "session_indy_nxt_2025_6451"
+        },
+        "latestRaceDate": "2025-07-11",
+        "raceCount": 2,
+        "seriesId": "series_indy_nxt",
+        "seriesName": "INDY NXT",
+        "seriesShort": "INDY NXT"
+      },
+      "firstYear": 2024,
+      "lastYear": 2025,
+      "lat": 41.6779,
+      "latestRace": {
+        "eventId": "event_indy_nxt_2025_5493",
+        "raceDate": "2025-07-11",
+        "raceHref": "/races/session_indy_nxt_2025_6451",
+        "raceLabel": "INDY NXT by Firestone at Iowa Speedway \u00b7 Race",
+        "sessionId": "session_indy_nxt_2025_6451"
+      },
+      "lon": -93.0147,
+      "projected": {
+        "x": 469.012,
+        "y": 92.031
+      },
+      "raceCount": 2,
+      "region": "North America",
+      "seriesSpans": [
+        {
+          "bestFinish": 8,
+          "firstRaceDate": "2024-07-12",
+          "firstYear": 2024,
+          "lastYear": 2025,
+          "latestRace": {
+            "eventId": "event_indy_nxt_2025_5493",
+            "raceDate": "2025-07-11",
+            "raceHref": "/races/session_indy_nxt_2025_6451",
+            "raceLabel": "INDY NXT by Firestone at Iowa Speedway \u00b7 Race",
+            "sessionId": "session_indy_nxt_2025_6451"
+          },
+          "latestRaceDate": "2025-07-11",
+          "raceCount": 2,
+          "seriesId": "series_indy_nxt",
+          "seriesName": "INDY NXT",
+          "seriesShort": "INDY NXT"
+        }
+      ],
+      "trackIds": [
+        "track_iowa_speedway"
+      ],
+      "trackName": "Iowa Speedway",
+      "venueId": "venue_iowa_speedway"
+    },
+    {
+      "bestFinish": 3,
+      "confidence": {
+        "bestFinish": "observed_exact",
+        "coordinates": "observed_exact",
+        "latestRace": "observed_exact",
+        "raceCount": "observed_exact",
+        "seriesSpans": "observed_exact"
+      },
+      "coordinateSources": [
+        "Michelin Raceway Road Atlanta official site | https://www.michelinracewayroadatlanta.com/"
+      ],
+      "country": "United States",
+      "dominantChapter": {
+        "bestFinish": 3,
+        "firstRaceDate": "2019-04-18",
+        "firstYear": 2019,
+        "lastYear": 2019,
+        "latestRace": {
+          "eventId": "event_frp_f1600_2019_r1_road_atlanta",
+          "raceDate": "2019-04-18",
+          "raceHref": "/career/race/session_frp_f1600_2019_r1_06_race_3",
+          "raceLabel": "FRP F1600 2019 Round 1 - Road Atlanta \u00b7 Race 3",
+          "sessionId": "session_frp_f1600_2019_r1_06_race_3"
+        },
+        "latestRaceDate": "2019-04-18",
+        "raceCount": 3,
+        "seriesId": "series_frp_f1600",
+        "seriesName": "F1600 Championship Series",
+        "seriesShort": "F1600"
+      },
+      "firstYear": 2019,
+      "lastYear": 2019,
+      "lat": 34.146667,
+      "latestRace": {
+        "eventId": "event_frp_f1600_2019_r1_road_atlanta",
+        "raceDate": "2019-04-18",
+        "raceHref": "/career/race/session_frp_f1600_2019_r1_06_race_3",
+        "raceLabel": "FRP F1600 2019 Round 1 - Road Atlanta \u00b7 Race 3",
+        "sessionId": "session_frp_f1600_2019_r1_06_race_3"
+      },
+      "lon": -83.817778,
+      "projected": {
+        "x": 508.451,
+        "y": 124.314
+      },
+      "raceCount": 3,
+      "region": "North America",
+      "seriesSpans": [
+        {
+          "bestFinish": 3,
+          "firstRaceDate": "2019-04-18",
+          "firstYear": 2019,
+          "lastYear": 2019,
+          "latestRace": {
+            "eventId": "event_frp_f1600_2019_r1_road_atlanta",
+            "raceDate": "2019-04-18",
+            "raceHref": "/career/race/session_frp_f1600_2019_r1_06_race_3",
+            "raceLabel": "FRP F1600 2019 Round 1 - Road Atlanta \u00b7 Race 3",
+            "sessionId": "session_frp_f1600_2019_r1_06_race_3"
+          },
+          "latestRaceDate": "2019-04-18",
+          "raceCount": 3,
+          "seriesId": "series_frp_f1600",
+          "seriesName": "F1600 Championship Series",
+          "seriesShort": "F1600"
+        }
+      ],
+      "trackIds": [
+        "track_michelin_raceway_road_atlanta"
+      ],
+      "trackName": "Michelin Raceway Road Atlanta",
+      "venueId": "venue_michelin_raceway_road_atlanta"
+    },
+    {
+      "bestFinish": 3,
+      "confidence": {
+        "bestFinish": "observed_exact",
+        "coordinates": "observed_exact",
+        "latestRace": "observed_exact",
+        "raceCount": "observed_exact",
+        "seriesSpans": "observed_exact"
+      },
+      "coordinateSources": [
+        "Mid-Ohio Sports Car Course official site | https://midohio.com/info-m"
+      ],
+      "country": "United States",
+      "dominantChapter": {
+        "bestFinish": 12,
+        "firstRaceDate": "2024-07-05",
+        "firstYear": 2024,
+        "lastYear": 2026,
+        "latestRace": {
+          "eventId": "event_indy_nxt_2026_5543",
+          "raceDate": "2026-07-04",
+          "raceHref": "/races/session_indy_nxt_2026_6760",
+          "raceLabel": "Grand Prix at Mid-Ohio Race 2 \u00b7 Race",
+          "sessionId": "session_indy_nxt_2026_6760"
+        },
+        "latestRaceDate": "2026-07-04",
+        "raceCount": 4,
+        "seriesId": "series_indy_nxt",
+        "seriesName": "INDY NXT",
+        "seriesShort": "INDY NXT"
+      },
+      "firstYear": 2019,
+      "lastYear": 2026,
+      "lat": 40.6893,
+      "latestRace": {
+        "eventId": "event_indy_nxt_2026_5543",
+        "raceDate": "2026-07-04",
+        "raceHref": "/races/session_indy_nxt_2026_6760",
+        "raceLabel": "Grand Prix at Mid-Ohio Race 2 \u00b7 Race",
+        "sessionId": "session_indy_nxt_2026_6760"
+      },
+      "lon": -82.6355,
+      "projected": {
+        "x": 513.521,
+        "y": 96.269
+      },
+      "raceCount": 7,
+      "region": "North America",
+      "seriesSpans": [
+        {
+          "bestFinish": 3,
+          "firstRaceDate": "2019-06-28",
+          "firstYear": 2019,
+          "lastYear": 2019,
+          "latestRace": {
+            "eventId": "event_frp_f1600_2019_r3_mid_ohio_sports_car_course",
+            "raceDate": "2019-06-28",
+            "raceHref": "/career/race/session_frp_f1600_2019_r3_06_race_3",
+            "raceLabel": "FRP F1600 2019 Round 3 - Mid Ohio Sports Car Course \u00b7 Race 3",
+            "sessionId": "session_frp_f1600_2019_r3_06_race_3"
+          },
+          "latestRaceDate": "2019-06-28",
+          "raceCount": 3,
+          "seriesId": "series_frp_f1600",
+          "seriesName": "F1600 Championship Series",
+          "seriesShort": "F1600"
+        },
+        {
+          "bestFinish": 12,
+          "firstRaceDate": "2024-07-05",
+          "firstYear": 2024,
+          "lastYear": 2026,
+          "latestRace": {
+            "eventId": "event_indy_nxt_2026_5543",
+            "raceDate": "2026-07-04",
+            "raceHref": "/races/session_indy_nxt_2026_6760",
+            "raceLabel": "Grand Prix at Mid-Ohio Race 2 \u00b7 Race",
+            "sessionId": "session_indy_nxt_2026_6760"
+          },
+          "latestRaceDate": "2026-07-04",
+          "raceCount": 4,
+          "seriesId": "series_indy_nxt",
+          "seriesName": "INDY NXT",
+          "seriesShort": "INDY NXT"
+        }
+      ],
+      "trackIds": [
+        "track_mid_ohio_sports_car_course"
+      ],
+      "trackName": "Mid-Ohio Sports Car Course",
+      "venueId": "venue_mid_ohio_sports_car_course"
+    },
+    {
+      "bestFinish": 6,
+      "confidence": {
+        "bestFinish": "observed_exact",
+        "coordinates": "observed_exact",
+        "latestRace": "observed_exact",
+        "raceCount": "observed_exact",
+        "seriesSpans": "observed_exact"
+      },
+      "coordinateSources": [
+        "Nashville Superspeedway official track facts | https://www.nashvillesuperspeedway.com/media/track-facts/track-facts.html"
+      ],
+      "country": "United States",
+      "dominantChapter": {
+        "bestFinish": 6,
+        "firstRaceDate": "2024-09-14",
+        "firstYear": 2024,
+        "lastYear": 2025,
+        "latestRace": {
+          "eventId": "event_indy_nxt_2025_5489",
+          "raceDate": "2025-08-30",
+          "raceHref": "/races/session_indy_nxt_2025_6447",
+          "raceLabel": "Music City Grand Prix \u00b7 Race",
+          "sessionId": "session_indy_nxt_2025_6447"
+        },
+        "latestRaceDate": "2025-08-30",
+        "raceCount": 2,
+        "seriesId": "series_indy_nxt",
+        "seriesName": "INDY NXT",
+        "seriesShort": "INDY NXT"
+      },
+      "firstYear": 2024,
+      "lastYear": 2025,
+      "lat": 36.0469,
+      "latestRace": {
+        "eventId": "event_indy_nxt_2025_5489",
+        "raceDate": "2025-08-30",
+        "raceHref": "/races/session_indy_nxt_2025_6447",
+        "raceLabel": "Music City Grand Prix \u00b7 Race",
+        "sessionId": "session_indy_nxt_2025_6447"
+      },
+      "lon": -86.4119,
+      "projected": {
+        "x": 497.327,
+        "y": 116.168
+      },
+      "raceCount": 2,
+      "region": "North America",
+      "seriesSpans": [
+        {
+          "bestFinish": 6,
+          "firstRaceDate": "2024-09-14",
+          "firstYear": 2024,
+          "lastYear": 2025,
+          "latestRace": {
+            "eventId": "event_indy_nxt_2025_5489",
+            "raceDate": "2025-08-30",
+            "raceHref": "/races/session_indy_nxt_2025_6447",
+            "raceLabel": "Music City Grand Prix \u00b7 Race",
+            "sessionId": "session_indy_nxt_2025_6447"
+          },
+          "latestRaceDate": "2025-08-30",
+          "raceCount": 2,
+          "seriesId": "series_indy_nxt",
+          "seriesName": "INDY NXT",
+          "seriesShort": "INDY NXT"
+        }
+      ],
+      "trackIds": [
+        "track_nashville_superspeedway"
+      ],
+      "trackName": "Nashville Superspeedway",
+      "venueId": "venue_nashville_superspeedway"
+    },
+    {
+      "bestFinish": 2,
+      "confidence": {
+        "bestFinish": "observed_exact",
+        "coordinates": "observed_exact",
+        "latestRace": "observed_exact",
+        "raceCount": "observed_exact",
+        "seriesSpans": "observed_exact"
+      },
+      "coordinateSources": [
+        "New Jersey Motorsports Park official track map | https://njmp.com/track-map/"
+      ],
+      "country": "United States",
+      "dominantChapter": {
+        "bestFinish": 2,
+        "firstRaceDate": "2019-09-13",
+        "firstYear": 2019,
+        "lastYear": 2019,
+        "latestRace": {
+          "eventId": "event_frp_f1600_2019_r7_new_jersey_motorsports_park",
+          "raceDate": "2019-09-13",
+          "raceHref": "/career/race/session_frp_f1600_2019_r7_06_race_3",
+          "raceLabel": "FRP F1600 2019 Round 7 - New Jersey Motorsports Park \u00b7 Race 3",
+          "sessionId": "session_frp_f1600_2019_r7_06_race_3"
+        },
+        "latestRaceDate": "2019-09-13",
+        "raceCount": 3,
+        "seriesId": "series_frp_f1600",
+        "seriesName": "F1600 Championship Series",
+        "seriesShort": "F1600"
+      },
+      "firstYear": 2019,
+      "lastYear": 2019,
+      "lat": 39.35897,
+      "latestRace": {
+        "eventId": "event_frp_f1600_2019_r7_new_jersey_motorsports_park",
+        "raceDate": "2019-09-13",
+        "raceHref": "/career/race/session_frp_f1600_2019_r7_06_race_3",
+        "raceLabel": "FRP F1600 2019 Round 7 - New Jersey Motorsports Park \u00b7 Race 3",
+        "sessionId": "session_frp_f1600_2019_r7_06_race_3"
+      },
+      "lon": -75.061628,
+      "projected": {
+        "x": 546.001,
+        "y": 101.971
+      },
+      "raceCount": 3,
+      "region": "North America",
+      "seriesSpans": [
+        {
+          "bestFinish": 2,
+          "firstRaceDate": "2019-09-13",
+          "firstYear": 2019,
+          "lastYear": 2019,
+          "latestRace": {
+            "eventId": "event_frp_f1600_2019_r7_new_jersey_motorsports_park",
+            "raceDate": "2019-09-13",
+            "raceHref": "/career/race/session_frp_f1600_2019_r7_06_race_3",
+            "raceLabel": "FRP F1600 2019 Round 7 - New Jersey Motorsports Park \u00b7 Race 3",
+            "sessionId": "session_frp_f1600_2019_r7_06_race_3"
+          },
+          "latestRaceDate": "2019-09-13",
+          "raceCount": 3,
+          "seriesId": "series_frp_f1600",
+          "seriesName": "F1600 Championship Series",
+          "seriesShort": "F1600"
+        }
+      ],
+      "trackIds": [
+        "track_new_jersey_motorsports_park_thunderbolt"
+      ],
+      "trackName": "New Jersey Motorsports Park Thunderbolt Raceway",
+      "venueId": "venue_new_jersey_motorsports_park_thunderbolt_raceway"
+    },
+    {
+      "bestFinish": 7,
+      "confidence": {
+        "bestFinish": "observed_exact",
+        "coordinates": "observed_exact",
+        "latestRace": "observed_exact",
+        "raceCount": "observed_exact",
+        "seriesSpans": "observed_exact"
+      },
+      "coordinateSources": [
+        "MotorSport Vision official circuit layout | https://www.oultonpark.co.uk/about/circuit-layouts"
+      ],
+      "country": "United Kingdom",
+      "dominantChapter": {
+        "bestFinish": 8,
+        "firstRaceDate": "2021-09-11",
+        "firstYear": 2021,
+        "lastYear": 2022,
+        "latestRace": {
+          "eventId": "event_gb3_2022_r1_oulton_park",
+          "raceDate": "2022-04-15",
+          "raceHref": "/career/race/session_gb3_2022_780",
+          "raceLabel": "GB3 2022 Round 1 - Oulton Park \u00b7 Race 3 ",
+          "sessionId": "session_gb3_2022_780"
+        },
+        "latestRaceDate": "2022-04-15",
+        "raceCount": 6,
+        "seriesId": "series_gb3",
+        "seriesName": "GB3 Championship",
+        "seriesShort": "GB3"
+      },
+      "firstYear": 2020,
+      "lastYear": 2022,
+      "lat": 53.1776,
+      "latestRace": {
+        "eventId": "event_gb3_2022_r1_oulton_park",
+        "raceDate": "2022-04-15",
+        "raceHref": "/career/race/session_gb3_2022_780",
+        "raceLabel": "GB3 2022 Round 1 - Oulton Park \u00b7 Race 3 ",
+        "sessionId": "session_gb3_2022_780"
+      },
+      "lon": -2.614,
+      "projected": {
+        "x": 856.679,
+        "y": 42.737
+      },
+      "raceCount": 8,
+      "region": "Europe",
+      "seriesSpans": [
+        {
+          "bestFinish": 7,
+          "firstRaceDate": "2020-07-18",
+          "firstYear": 2020,
+          "lastYear": 2020,
+          "latestRace": {
+            "eventId": "event_formula_ford_2020_national_oulton_park",
+            "raceDate": "2020-07-18",
+            "raceHref": "/career/race/session_formula_ford_2020_national_oulton_park_race_8",
+            "raceLabel": "BRSCC National FF1600 2020 - Oulton Park \u00b7 RACE 8",
+            "sessionId": "session_formula_ford_2020_national_oulton_park_race_8"
+          },
+          "latestRaceDate": "2020-07-18",
+          "raceCount": 2,
+          "seriesId": "series_formula_ford",
+          "seriesName": "Formula Ford",
+          "seriesShort": "Formula Ford"
+        },
+        {
+          "bestFinish": 8,
+          "firstRaceDate": "2021-09-11",
+          "firstYear": 2021,
+          "lastYear": 2022,
+          "latestRace": {
+            "eventId": "event_gb3_2022_r1_oulton_park",
+            "raceDate": "2022-04-15",
+            "raceHref": "/career/race/session_gb3_2022_780",
+            "raceLabel": "GB3 2022 Round 1 - Oulton Park \u00b7 Race 3 ",
+            "sessionId": "session_gb3_2022_780"
+          },
+          "latestRaceDate": "2022-04-15",
+          "raceCount": 6,
+          "seriesId": "series_gb3",
+          "seriesName": "GB3 Championship",
+          "seriesShort": "GB3"
+        }
+      ],
+      "trackIds": [
+        "track_oulton_park_international"
+      ],
+      "trackName": "Oulton Park",
+      "venueId": "venue_oulton_park"
+    },
+    {
+      "bestFinish": 4,
+      "confidence": {
+        "bestFinish": "observed_exact",
+        "coordinates": "observed_exact",
+        "latestRace": "observed_exact",
+        "raceCount": "observed_exact",
+        "seriesSpans": "observed_exact"
+      },
+      "coordinateSources": [
+        "MotoAmerica official track map | https://www.motoamericaregistration.com/PDF/TrackMaps/Pitt%20Track%20Map.pdf"
+      ],
+      "country": "United States",
+      "dominantChapter": {
+        "bestFinish": 4,
+        "firstRaceDate": "2019-08-02",
+        "firstYear": 2019,
+        "lastYear": 2019,
+        "latestRace": {
+          "eventId": "event_frp_f1600_2019_r5_pittsburgh_international_race_complex",
+          "raceDate": "2019-08-02",
+          "raceHref": "/career/race/session_frp_f1600_2019_r5_04_race_3",
+          "raceLabel": "FRP F1600 2019 Round 5 - Pittsburgh International Race Complex \u00b7 Race 3",
+          "sessionId": "session_frp_f1600_2019_r5_04_race_3"
+        },
+        "latestRaceDate": "2019-08-02",
+        "raceCount": 3,
+        "seriesId": "series_frp_f1600",
+        "seriesName": "F1600 Championship Series",
+        "seriesShort": "F1600"
+      },
+      "firstYear": 2019,
+      "lastYear": 2019,
+      "lat": 40.85,
+      "latestRace": {
+        "eventId": "event_frp_f1600_2019_r5_pittsburgh_international_race_complex",
+        "raceDate": "2019-08-02",
+        "raceHref": "/career/race/session_frp_f1600_2019_r5_04_race_3",
+        "raceLabel": "FRP F1600 2019 Round 5 - Pittsburgh International Race Complex \u00b7 Race 3",
+        "sessionId": "session_frp_f1600_2019_r5_04_race_3"
+      },
+      "lon": -80.3432,
+      "projected": {
+        "x": 523.351,
+        "y": 95.58
+      },
+      "raceCount": 3,
+      "region": "North America",
+      "seriesSpans": [
+        {
+          "bestFinish": 4,
+          "firstRaceDate": "2019-08-02",
+          "firstYear": 2019,
+          "lastYear": 2019,
+          "latestRace": {
+            "eventId": "event_frp_f1600_2019_r5_pittsburgh_international_race_complex",
+            "raceDate": "2019-08-02",
+            "raceHref": "/career/race/session_frp_f1600_2019_r5_04_race_3",
+            "raceLabel": "FRP F1600 2019 Round 5 - Pittsburgh International Race Complex \u00b7 Race 3",
+            "sessionId": "session_frp_f1600_2019_r5_04_race_3"
+          },
+          "latestRaceDate": "2019-08-02",
+          "raceCount": 3,
+          "seriesId": "series_frp_f1600",
+          "seriesName": "F1600 Championship Series",
+          "seriesShort": "F1600"
+        }
+      ],
+      "trackIds": [
+        "track_pittsburgh_international_race_complex"
+      ],
+      "trackName": "Pittsburgh International Race Complex",
+      "venueId": "venue_pittsburgh_international_race_complex"
+    },
+    {
+      "bestFinish": 3,
+      "confidence": {
+        "bestFinish": "observed_exact",
+        "coordinates": "observed_exact",
+        "latestRace": "observed_exact",
+        "raceCount": "observed_exact",
+        "seriesSpans": "observed_exact"
+      },
+      "coordinateSources": [
+        "Portland International Raceway official site | https://portlandraceway.com/"
+      ],
+      "country": "United States",
+      "dominantChapter": {
+        "bestFinish": 3,
+        "firstRaceDate": "2024-08-23",
+        "firstYear": 2024,
+        "lastYear": 2025,
+        "latestRace": {
+          "eventId": "event_indy_nxt_2025_5491",
+          "raceDate": "2025-08-08",
+          "raceHref": "/races/session_indy_nxt_2025_6449",
+          "raceLabel": "Grand Prix of Portland \u00b7 Race",
+          "sessionId": "session_indy_nxt_2025_6449"
+        },
+        "latestRaceDate": "2025-08-08",
+        "raceCount": 2,
+        "seriesId": "series_indy_nxt",
+        "seriesName": "INDY NXT",
+        "seriesShort": "INDY NXT"
+      },
+      "firstYear": 2024,
+      "lastYear": 2025,
+      "lat": 45.5939,
+      "latestRace": {
+        "eventId": "event_indy_nxt_2025_5491",
+        "raceDate": "2025-08-08",
+        "raceHref": "/races/session_indy_nxt_2025_6449",
+        "raceLabel": "Grand Prix of Portland \u00b7 Race",
+        "sessionId": "session_indy_nxt_2025_6449"
+      },
+      "lon": -122.6946,
+      "projected": {
+        "x": 341.735,
+        "y": 75.245
+      },
+      "raceCount": 2,
+      "region": "North America",
+      "seriesSpans": [
+        {
+          "bestFinish": 3,
+          "firstRaceDate": "2024-08-23",
+          "firstYear": 2024,
+          "lastYear": 2025,
+          "latestRace": {
+            "eventId": "event_indy_nxt_2025_5491",
+            "raceDate": "2025-08-08",
+            "raceHref": "/races/session_indy_nxt_2025_6449",
+            "raceLabel": "Grand Prix of Portland \u00b7 Race",
+            "sessionId": "session_indy_nxt_2025_6449"
+          },
+          "latestRaceDate": "2025-08-08",
+          "raceCount": 2,
+          "seriesId": "series_indy_nxt",
+          "seriesName": "INDY NXT",
+          "seriesShort": "INDY NXT"
+        }
+      ],
+      "trackIds": [
+        "track_portland_international_raceway"
+      ],
+      "trackName": "Portland International Raceway",
+      "venueId": "venue_portland_international_raceway"
+    },
+    {
+      "bestFinish": 6,
+      "confidence": {
+        "bestFinish": "observed_exact",
+        "coordinates": "observed_exact",
+        "latestRace": "observed_exact",
+        "raceCount": "observed_exact",
+        "seriesSpans": "observed_exact"
+      },
+      "coordinateSources": [
+        "Red Bull Ring official site | https://www.redbullring.com/"
+      ],
+      "country": "Austria",
+      "dominantChapter": {
+        "bestFinish": 6,
+        "firstRaceDate": "2023-09-09",
+        "firstYear": 2023,
+        "lastYear": 2023,
+        "latestRace": {
+          "eventId": "event_euroformula_2023_r5_red_bull_ring",
+          "raceDate": "2023-09-09",
+          "raceHref": "/career/race/session_euroformula_2023_05-red_bull_ring-race-3",
+          "raceLabel": "Euroformula Open 2023 Round 5 - Red Bull Ring \u00b7 Race 3",
+          "sessionId": "session_euroformula_2023_05-red_bull_ring-race-3"
+        },
+        "latestRaceDate": "2023-09-09",
+        "raceCount": 3,
+        "seriesId": "series_euroformula_open",
+        "seriesName": "Euroformula Open",
+        "seriesShort": "Euroformula"
+      },
+      "firstYear": 2023,
+      "lastYear": 2023,
+      "lat": 47.2197,
+      "latestRace": {
+        "eventId": "event_euroformula_2023_r5_red_bull_ring",
+        "raceDate": "2023-09-09",
+        "raceHref": "/career/race/session_euroformula_2023_05-red_bull_ring-race-3",
+        "raceLabel": "Euroformula Open 2023 Round 5 - Red Bull Ring \u00b7 Race 3",
+        "sessionId": "session_euroformula_2023_05-red_bull_ring-race-3"
+      },
+      "lon": 14.7647,
+      "projected": {
+        "x": 931.205,
+        "y": 68.276
+      },
+      "raceCount": 3,
+      "region": "Europe",
+      "seriesSpans": [
+        {
+          "bestFinish": 6,
+          "firstRaceDate": "2023-09-09",
+          "firstYear": 2023,
+          "lastYear": 2023,
+          "latestRace": {
+            "eventId": "event_euroformula_2023_r5_red_bull_ring",
+            "raceDate": "2023-09-09",
+            "raceHref": "/career/race/session_euroformula_2023_05-red_bull_ring-race-3",
+            "raceLabel": "Euroformula Open 2023 Round 5 - Red Bull Ring \u00b7 Race 3",
+            "sessionId": "session_euroformula_2023_05-red_bull_ring-race-3"
+          },
+          "latestRaceDate": "2023-09-09",
+          "raceCount": 3,
+          "seriesId": "series_euroformula_open",
+          "seriesName": "Euroformula Open",
+          "seriesShort": "Euroformula"
+        }
+      ],
+      "trackIds": [
+        "track_red_bull_ring"
+      ],
+      "trackName": "Red Bull Ring",
+      "venueId": "venue_red_bull_ring"
+    },
+    {
+      "bestFinish": 8,
+      "confidence": {
+        "bestFinish": "observed_exact",
+        "coordinates": "observed_exact",
+        "latestRace": "observed_exact",
+        "raceCount": "observed_exact",
+        "seriesSpans": "observed_exact"
+      },
+      "coordinateSources": [
+        "Road America official track facts | https://www.roadamerica.com/faq"
+      ],
+      "country": "United States",
+      "dominantChapter": {
+        "bestFinish": 8,
+        "firstRaceDate": "2024-06-07",
+        "firstYear": 2024,
+        "lastYear": 2026,
+        "latestRace": {
+          "eventId": "event_indy_nxt_2026_5537",
+          "raceDate": "2026-06-20",
+          "raceHref": "/races/session_indy_nxt_2026_6754",
+          "raceLabel": "Grand Prix at Road America Race 2 \u00b7 Race",
+          "sessionId": "session_indy_nxt_2026_6754"
+        },
+        "latestRaceDate": "2026-06-20",
+        "raceCount": 4,
+        "seriesId": "series_indy_nxt",
+        "seriesName": "INDY NXT",
+        "seriesShort": "INDY NXT"
+      },
+      "firstYear": 2024,
+      "lastYear": 2026,
+      "lat": 43.7971,
+      "latestRace": {
+        "eventId": "event_indy_nxt_2026_5537",
+        "raceDate": "2026-06-20",
+        "raceHref": "/races/session_indy_nxt_2026_6754",
+        "raceLabel": "Grand Prix at Road America Race 2 \u00b7 Race",
+        "sessionId": "session_indy_nxt_2026_6754"
+      },
+      "lon": -87.989,
+      "projected": {
+        "x": 490.564,
+        "y": 82.947
+      },
+      "raceCount": 4,
+      "region": "North America",
+      "seriesSpans": [
+        {
+          "bestFinish": 8,
+          "firstRaceDate": "2024-06-07",
+          "firstYear": 2024,
+          "lastYear": 2026,
+          "latestRace": {
+            "eventId": "event_indy_nxt_2026_5537",
+            "raceDate": "2026-06-20",
+            "raceHref": "/races/session_indy_nxt_2026_6754",
+            "raceLabel": "Grand Prix at Road America Race 2 \u00b7 Race",
+            "sessionId": "session_indy_nxt_2026_6754"
+          },
+          "latestRaceDate": "2026-06-20",
+          "raceCount": 4,
+          "seriesId": "series_indy_nxt",
+          "seriesName": "INDY NXT",
+          "seriesShort": "INDY NXT"
+        }
+      ],
+      "trackIds": [
+        "track_road_america"
+      ],
+      "trackName": "Road America",
+      "venueId": "venue_road_america"
+    },
+    {
+      "bestFinish": 3,
+      "confidence": {
+        "bestFinish": "observed_exact",
+        "coordinates": "observed_exact",
+        "latestRace": "observed_exact",
+        "raceCount": "observed_exact",
+        "seriesSpans": "observed_exact"
+      },
+      "coordinateSources": [
+        "Silverstone official circuit site | https://www.silverstone.co.uk/"
+      ],
+      "country": "United Kingdom",
+      "dominantChapter": {
+        "bestFinish": 3,
+        "firstRaceDate": "2021-06-26",
+        "firstYear": 2021,
+        "lastYear": 2022,
+        "latestRace": {
+          "eventId": "event_gb3_2022_r6_silverstone",
+          "raceDate": "2022-07-30",
+          "raceHref": "/career/race/session_gb3_2022_1096",
+          "raceLabel": "GB3 2022 Round 6 - Silverstone \u00b7 Race 3 ",
+          "sessionId": "session_gb3_2022_1096"
+        },
+        "latestRaceDate": "2022-07-30",
+        "raceCount": 8,
+        "seriesId": "series_gb3",
+        "seriesName": "GB3 Championship",
+        "seriesShort": "GB3"
+      },
+      "firstYear": 2020,
+      "lastYear": 2022,
+      "lat": 52.0786,
+      "latestRace": {
+        "eventId": "event_gb3_2022_r6_silverstone",
+        "raceDate": "2022-07-30",
+        "raceHref": "/career/race/session_gb3_2022_1096",
+        "raceLabel": "GB3 2022 Round 6 - Silverstone \u00b7 Race 3 ",
+        "sessionId": "session_gb3_2022_1096"
+      },
+      "lon": -1.0169,
+      "projected": {
+        "x": 863.528,
+        "y": 47.448
+      },
+      "raceCount": 12,
+      "region": "Europe",
+      "seriesSpans": [
+        {
+          "bestFinish": 3,
+          "firstRaceDate": "2020-10-10",
+          "firstYear": 2020,
+          "lastYear": 2020,
+          "latestRace": {
+            "eventId": "event_formula_ford_2020_walter_hayes_trophy",
+            "raceDate": "2020-10-31",
+            "raceHref": "/career/race/session_formula_ford_2020_wht_grand_final",
+            "raceLabel": "Walter Hayes Trophy 2020 \u00b7 GRAND FINAL",
+            "sessionId": "session_formula_ford_2020_wht_grand_final"
+          },
+          "latestRaceDate": "2020-10-31",
+          "raceCount": 4,
+          "seriesId": "series_formula_ford",
+          "seriesName": "Formula Ford",
+          "seriesShort": "Formula Ford"
+        },
+        {
+          "bestFinish": 3,
+          "firstRaceDate": "2021-06-26",
+          "firstYear": 2021,
+          "lastYear": 2022,
+          "latestRace": {
+            "eventId": "event_gb3_2022_r6_silverstone",
+            "raceDate": "2022-07-30",
+            "raceHref": "/career/race/session_gb3_2022_1096",
+            "raceLabel": "GB3 2022 Round 6 - Silverstone \u00b7 Race 3 ",
+            "sessionId": "session_gb3_2022_1096"
+          },
+          "latestRaceDate": "2022-07-30",
+          "raceCount": 8,
+          "seriesId": "series_gb3",
+          "seriesName": "GB3 Championship",
+          "seriesShort": "GB3"
+        }
+      ],
+      "trackIds": [
+        "track_silverstone_gp",
+        "track_silverstone_international",
+        "track_silverstone_national"
+      ],
+      "trackName": "Silverstone Circuit",
+      "venueId": "venue_silverstone_circuit"
+    },
+    {
+      "bestFinish": 6,
+      "confidence": {
+        "bestFinish": "observed_exact",
+        "coordinates": "observed_exact",
+        "latestRace": "observed_exact",
+        "raceCount": "observed_exact",
+        "seriesSpans": "observed_exact"
+      },
+      "coordinateSources": [
+        "MotorSport Vision official circuit layout | https://www.snetterton.co.uk/about/circuit-map"
+      ],
+      "country": "United Kingdom",
+      "dominantChapter": {
+        "bestFinish": 6,
+        "firstRaceDate": "2021-08-07",
+        "firstYear": 2021,
+        "lastYear": 2022,
+        "latestRace": {
+          "eventId": "event_gb3_2022_r4_snetterton",
+          "raceDate": "2022-06-25",
+          "raceHref": "/career/race/session_gb3_2022_1305",
+          "raceLabel": "GB3 2022 Round 4 - Snetterton \u00b7 Race 3",
+          "sessionId": "session_gb3_2022_1305"
+        },
+        "latestRaceDate": "2022-06-25",
+        "raceCount": 6,
+        "seriesId": "series_gb3",
+        "seriesName": "GB3 Championship",
+        "seriesShort": "GB3"
+      },
+      "firstYear": 2021,
+      "lastYear": 2022,
+      "lat": 52.4631,
+      "latestRace": {
+        "eventId": "event_gb3_2022_r4_snetterton",
+        "raceDate": "2022-06-25",
+        "raceHref": "/career/race/session_gb3_2022_1305",
+        "raceLabel": "GB3 2022 Round 4 - Snetterton \u00b7 Race 3",
+        "sessionId": "session_gb3_2022_1305"
+      },
+      "lon": 0.9479,
+      "projected": {
+        "x": 871.954,
+        "y": 45.8
+      },
+      "raceCount": 6,
+      "region": "Europe",
+      "seriesSpans": [
+        {
+          "bestFinish": 6,
+          "firstRaceDate": "2021-08-07",
+          "firstYear": 2021,
+          "lastYear": 2022,
+          "latestRace": {
+            "eventId": "event_gb3_2022_r4_snetterton",
+            "raceDate": "2022-06-25",
+            "raceHref": "/career/race/session_gb3_2022_1305",
+            "raceLabel": "GB3 2022 Round 4 - Snetterton \u00b7 Race 3",
+            "sessionId": "session_gb3_2022_1305"
+          },
+          "latestRaceDate": "2022-06-25",
+          "raceCount": 6,
+          "seriesId": "series_gb3",
+          "seriesName": "GB3 Championship",
+          "seriesShort": "GB3"
+        }
+      ],
+      "trackIds": [
+        "track_snetterton_300"
+      ],
+      "trackName": "Snetterton Circuit",
+      "venueId": "venue_snetterton_circuit"
+    },
+    {
+      "bestFinish": 13,
+      "confidence": {
+        "bestFinish": "observed_exact",
+        "coordinates": "observed_exact",
+        "latestRace": "observed_exact",
+        "raceCount": "observed_exact",
+        "seriesSpans": "observed_exact"
+      },
+      "coordinateSources": [
+        "Grand Prix of St. Petersburg official site | https://www.gpstpete.com/"
+      ],
+      "country": "United States",
+      "dominantChapter": {
+        "bestFinish": 13,
+        "firstRaceDate": "2024-03-08",
+        "firstYear": 2024,
+        "lastYear": 2026,
+        "latestRace": {
+          "eventId": "event_indy_nxt_2026_5534",
+          "raceDate": "2026-02-27",
+          "raceHref": "/races/session_indy_nxt_2026_6751",
+          "raceLabel": "Grand Prix of St. Petersburg \u00b7 Race",
+          "sessionId": "session_indy_nxt_2026_6751"
+        },
+        "latestRaceDate": "2026-02-27",
+        "raceCount": 3,
+        "seriesId": "series_indy_nxt",
+        "seriesName": "INDY NXT",
+        "seriesShort": "INDY NXT"
+      },
+      "firstYear": 2024,
+      "lastYear": 2026,
+      "lat": 27.7676,
+      "latestRace": {
+        "eventId": "event_indy_nxt_2026_5534",
+        "raceDate": "2026-02-27",
+        "raceHref": "/races/session_indy_nxt_2026_6751",
+        "raceLabel": "Grand Prix of St. Petersburg \u00b7 Race",
+        "sessionId": "session_indy_nxt_2026_6751"
+      },
+      "lon": -82.6321,
+      "projected": {
+        "x": 513.536,
+        "y": 151.658
+      },
+      "raceCount": 3,
+      "region": "North America",
+      "seriesSpans": [
+        {
+          "bestFinish": 13,
+          "firstRaceDate": "2024-03-08",
+          "firstYear": 2024,
+          "lastYear": 2026,
+          "latestRace": {
+            "eventId": "event_indy_nxt_2026_5534",
+            "raceDate": "2026-02-27",
+            "raceHref": "/races/session_indy_nxt_2026_6751",
+            "raceLabel": "Grand Prix of St. Petersburg \u00b7 Race",
+            "sessionId": "session_indy_nxt_2026_6751"
+          },
+          "latestRaceDate": "2026-02-27",
+          "raceCount": 3,
+          "seriesId": "series_indy_nxt",
+          "seriesName": "INDY NXT",
+          "seriesShort": "INDY NXT"
+        }
+      ],
+      "trackIds": [
+        "track_streets_of_st_petersburg"
+      ],
+      "trackName": "Streets of St. Petersburg",
+      "venueId": "venue_streets_of_st_petersburg"
+    },
+    {
+      "bestFinish": 3,
+      "confidence": {
+        "bestFinish": "observed_exact",
+        "coordinates": "observed_exact",
+        "latestRace": "observed_exact",
+        "raceCount": "observed_exact",
+        "seriesSpans": "observed_exact"
+      },
+      "coordinateSources": [
+        "Summit Point Motorsports Park official site | https://summitpointmp.com/"
+      ],
+      "country": "United States",
+      "dominantChapter": {
+        "bestFinish": 3,
+        "firstRaceDate": "2019-08-23",
+        "firstYear": 2019,
+        "lastYear": 2019,
+        "latestRace": {
+          "eventId": "event_frp_f1600_2019_r6_summit_point",
+          "raceDate": "2019-08-23",
+          "raceHref": "/career/race/session_frp_f1600_2019_r6_06_race_3",
+          "raceLabel": "FRP F1600 2019 Round 6 - Summit Point \u00b7 Race 3",
+          "sessionId": "session_frp_f1600_2019_r6_06_race_3"
+        },
+        "latestRaceDate": "2019-08-23",
+        "raceCount": 3,
+        "seriesId": "series_frp_f1600",
+        "seriesName": "F1600 Championship Series",
+        "seriesShort": "F1600"
+      },
+      "firstYear": 2019,
+      "lastYear": 2019,
+      "lat": 39.2344,
+      "latestRace": {
+        "eventId": "event_frp_f1600_2019_r6_summit_point",
+        "raceDate": "2019-08-23",
+        "raceHref": "/career/race/session_frp_f1600_2019_r6_06_race_3",
+        "raceLabel": "FRP F1600 2019 Round 6 - Summit Point \u00b7 Race 3",
+        "sessionId": "session_frp_f1600_2019_r6_06_race_3"
+      },
+      "lon": -77.9753,
+      "projected": {
+        "x": 533.506,
+        "y": 102.505
+      },
+      "raceCount": 3,
+      "region": "North America",
+      "seriesSpans": [
+        {
+          "bestFinish": 3,
+          "firstRaceDate": "2019-08-23",
+          "firstYear": 2019,
+          "lastYear": 2019,
+          "latestRace": {
+            "eventId": "event_frp_f1600_2019_r6_summit_point",
+            "raceDate": "2019-08-23",
+            "raceHref": "/career/race/session_frp_f1600_2019_r6_06_race_3",
+            "raceLabel": "FRP F1600 2019 Round 6 - Summit Point \u00b7 Race 3",
+            "sessionId": "session_frp_f1600_2019_r6_06_race_3"
+          },
+          "latestRaceDate": "2019-08-23",
+          "raceCount": 3,
+          "seriesId": "series_frp_f1600",
+          "seriesName": "F1600 Championship Series",
+          "seriesShort": "F1600"
+        }
+      ],
+      "trackIds": [
+        "track_summit_point_motorsports_park"
+      ],
+      "trackName": "Summit Point Motorsports Park Main Circuit",
+      "venueId": "venue_summit_point_motorsports_park_main_circuit"
+    },
+    {
+      "bestFinish": 4,
+      "confidence": {
+        "bestFinish": "observed_exact",
+        "coordinates": "observed_exact",
+        "latestRace": "observed_exact",
+        "raceCount": "observed_exact",
+        "seriesSpans": "observed_exact"
+      },
+      "coordinateSources": [
+        "Wisconsin State Fair Park official Milwaukee Mile profile | https://wistatefair.com/wsfp/milwaukee-mile/"
+      ],
+      "country": "United States",
+      "dominantChapter": {
+        "bestFinish": 4,
+        "firstRaceDate": "2024-08-30",
+        "firstYear": 2024,
+        "lastYear": 2025,
+        "latestRace": {
+          "eventId": "event_indy_nxt_2025_5490",
+          "raceDate": "2025-08-23",
+          "raceHref": "/races/session_indy_nxt_2025_6448",
+          "raceLabel": "INDY NXT by Firestone at the Milwaukee Mile \u00b7 Race",
+          "sessionId": "session_indy_nxt_2025_6448"
+        },
+        "latestRaceDate": "2025-08-23",
+        "raceCount": 2,
+        "seriesId": "series_indy_nxt",
+        "seriesName": "INDY NXT",
+        "seriesShort": "INDY NXT"
+      },
+      "firstYear": 2024,
+      "lastYear": 2025,
+      "lat": 43.0206,
+      "latestRace": {
+        "eventId": "event_indy_nxt_2025_5490",
+        "raceDate": "2025-08-23",
+        "raceHref": "/races/session_indy_nxt_2025_6448",
+        "raceLabel": "INDY NXT by Firestone at the Milwaukee Mile \u00b7 Race",
+        "sessionId": "session_indy_nxt_2025_6448"
+      },
+      "lon": -88.0105,
+      "projected": {
+        "x": 490.472,
+        "y": 86.275
+      },
+      "raceCount": 2,
+      "region": "North America",
+      "seriesSpans": [
+        {
+          "bestFinish": 4,
+          "firstRaceDate": "2024-08-30",
+          "firstYear": 2024,
+          "lastYear": 2025,
+          "latestRace": {
+            "eventId": "event_indy_nxt_2025_5490",
+            "raceDate": "2025-08-23",
+            "raceHref": "/races/session_indy_nxt_2025_6448",
+            "raceLabel": "INDY NXT by Firestone at the Milwaukee Mile \u00b7 Race",
+            "sessionId": "session_indy_nxt_2025_6448"
+          },
+          "latestRaceDate": "2025-08-23",
+          "raceCount": 2,
+          "seriesId": "series_indy_nxt",
+          "seriesName": "INDY NXT",
+          "seriesShort": "INDY NXT"
+        }
+      ],
+      "trackIds": [
+        "track_the_milwaukee_mile"
+      ],
+      "trackName": "The Milwaukee Mile",
+      "venueId": "venue_the_milwaukee_mile"
+    },
+    {
+      "bestFinish": 3,
+      "confidence": {
+        "bestFinish": "observed_exact",
+        "coordinates": "observed_exact",
+        "latestRace": "observed_exact",
+        "raceCount": "observed_exact",
+        "seriesSpans": "observed_exact"
+      },
+      "coordinateSources": [
+        "Virginia International Raceway official configurations | https://virnow.com/track/configurations/"
+      ],
+      "country": "United States",
+      "dominantChapter": {
+        "bestFinish": 3,
+        "firstRaceDate": "2019-07-26",
+        "firstYear": 2019,
+        "lastYear": 2019,
+        "latestRace": {
+          "eventId": "event_frp_f1600_2019_r4_virginia_international_raceway",
+          "raceDate": "2019-07-26",
+          "raceHref": "/career/race/session_frp_f1600_2019_r4_04_race_3",
+          "raceLabel": "FRP F1600 2019 Round 4 - Virginia International Raceway \u00b7 Race 3",
+          "sessionId": "session_frp_f1600_2019_r4_04_race_3"
+        },
+        "latestRaceDate": "2019-07-26",
+        "raceCount": 3,
+        "seriesId": "series_frp_f1600",
+        "seriesName": "F1600 Championship Series",
+        "seriesShort": "F1600"
+      },
+      "firstYear": 2019,
+      "lastYear": 2019,
+      "lat": 36.5618,
+      "latestRace": {
+        "eventId": "event_frp_f1600_2019_r4_virginia_international_raceway",
+        "raceDate": "2019-07-26",
+        "raceHref": "/career/race/session_frp_f1600_2019_r4_04_race_3",
+        "raceLabel": "FRP F1600 2019 Round 4 - Virginia International Raceway \u00b7 Race 3",
+        "sessionId": "session_frp_f1600_2019_r4_04_race_3"
+      },
+      "lon": -79.2046,
+      "projected": {
+        "x": 528.234,
+        "y": 113.961
+      },
+      "raceCount": 3,
+      "region": "North America",
+      "seriesSpans": [
+        {
+          "bestFinish": 3,
+          "firstRaceDate": "2019-07-26",
+          "firstYear": 2019,
+          "lastYear": 2019,
+          "latestRace": {
+            "eventId": "event_frp_f1600_2019_r4_virginia_international_raceway",
+            "raceDate": "2019-07-26",
+            "raceHref": "/career/race/session_frp_f1600_2019_r4_04_race_3",
+            "raceLabel": "FRP F1600 2019 Round 4 - Virginia International Raceway \u00b7 Race 3",
+            "sessionId": "session_frp_f1600_2019_r4_04_race_3"
+          },
+          "latestRaceDate": "2019-07-26",
+          "raceCount": 3,
+          "seriesId": "series_frp_f1600",
+          "seriesName": "F1600 Championship Series",
+          "seriesShort": "F1600"
+        }
+      ],
+      "trackIds": [
+        "track_virginia_international_raceway"
+      ],
+      "trackName": "Virginia International Raceway",
+      "venueId": "venue_virginia_international_raceway"
+    },
+    {
+      "bestFinish": 5,
+      "confidence": {
+        "bestFinish": "observed_exact",
+        "coordinates": "observed_exact",
+        "latestRace": "observed_exact",
+        "raceCount": "observed_exact",
+        "seriesSpans": "observed_exact"
+      },
+      "coordinateSources": [
+        "TopoZone venue coordinates | https://www.topozone.com/new-york/schuyler-ny/locale/watkins-glen-international/"
+      ],
+      "country": "United States",
+      "dominantChapter": {
+        "bestFinish": 5,
+        "firstRaceDate": "2019-05-10",
+        "firstYear": 2019,
+        "lastYear": 2019,
+        "latestRace": {
+          "eventId": "event_frp_f1600_2019_r2_watkins_glen_international",
+          "raceDate": "2019-05-10",
+          "raceHref": "/career/race/session_frp_f1600_2019_r2_06_race_3",
+          "raceLabel": "FRP F1600 2019 Round 2 - Watkins Glen International \u00b7 Race 3",
+          "sessionId": "session_frp_f1600_2019_r2_06_race_3"
+        },
+        "latestRaceDate": "2019-05-10",
+        "raceCount": 3,
+        "seriesId": "series_frp_f1600",
+        "seriesName": "F1600 Championship Series",
+        "seriesShort": "F1600"
+      },
+      "firstYear": 2019,
+      "lastYear": 2019,
+      "lat": 42.33693,
+      "latestRace": {
+        "eventId": "event_frp_f1600_2019_r2_watkins_glen_international",
+        "raceDate": "2019-05-10",
+        "raceHref": "/career/race/session_frp_f1600_2019_r2_06_race_3",
+        "raceLabel": "FRP F1600 2019 Round 2 - Watkins Glen International \u00b7 Race 3",
+        "sessionId": "session_frp_f1600_2019_r2_06_race_3"
+      },
+      "lon": -76.92721,
+      "projected": {
+        "x": 538.0,
+        "y": 89.206
+      },
+      "raceCount": 3,
+      "region": "North America",
+      "seriesSpans": [
+        {
+          "bestFinish": 5,
+          "firstRaceDate": "2019-05-10",
+          "firstYear": 2019,
+          "lastYear": 2019,
+          "latestRace": {
+            "eventId": "event_frp_f1600_2019_r2_watkins_glen_international",
+            "raceDate": "2019-05-10",
+            "raceHref": "/career/race/session_frp_f1600_2019_r2_06_race_3",
+            "raceLabel": "FRP F1600 2019 Round 2 - Watkins Glen International \u00b7 Race 3",
+            "sessionId": "session_frp_f1600_2019_r2_06_race_3"
+          },
+          "latestRaceDate": "2019-05-10",
+          "raceCount": 3,
+          "seriesId": "series_frp_f1600",
+          "seriesName": "F1600 Championship Series",
+          "seriesShort": "F1600"
+        }
+      ],
+      "trackIds": [
+        "track_watkins_glen_international"
+      ],
+      "trackName": "Watkins Glen International",
+      "venueId": "venue_watkins_glen_international"
+    },
+    {
+      "bestFinish": 3,
+      "confidence": {
+        "bestFinish": "observed_exact",
+        "coordinates": "observed_exact",
+        "latestRace": "observed_exact",
+        "raceCount": "observed_exact",
+        "seriesSpans": "observed_exact"
+      },
+      "coordinateSources": [
+        "WeatherTech Raceway Laguna Seca official site | https://www.weathertechraceway.com/"
+      ],
+      "country": "United States",
+      "dominantChapter": {
+        "bestFinish": 3,
+        "firstRaceDate": "2024-06-21",
+        "firstYear": 2024,
+        "lastYear": 2025,
+        "latestRace": {
+          "eventId": "event_indy_nxt_2025_5492",
+          "raceDate": "2025-07-26",
+          "raceHref": "/races/session_indy_nxt_2025_6450",
+          "raceLabel": "Grand Prix of Monterey Race 2 \u00b7 Race",
+          "sessionId": "session_indy_nxt_2025_6450"
+        },
+        "latestRaceDate": "2025-07-26",
+        "raceCount": 4,
+        "seriesId": "series_indy_nxt",
+        "seriesName": "INDY NXT",
+        "seriesShort": "INDY NXT"
+      },
+      "firstYear": 2024,
+      "lastYear": 2025,
+      "lat": 36.5843,
+      "latestRace": {
+        "eventId": "event_indy_nxt_2025_5492",
+        "raceDate": "2025-07-26",
+        "raceHref": "/races/session_indy_nxt_2025_6450",
+        "raceLabel": "Grand Prix of Monterey Race 2 \u00b7 Race",
+        "sessionId": "session_indy_nxt_2025_6450"
+      },
+      "lon": -121.7539,
+      "projected": {
+        "x": 345.769,
+        "y": 113.865
+      },
+      "raceCount": 4,
+      "region": "North America",
+      "seriesSpans": [
+        {
+          "bestFinish": 3,
+          "firstRaceDate": "2024-06-21",
+          "firstYear": 2024,
+          "lastYear": 2025,
+          "latestRace": {
+            "eventId": "event_indy_nxt_2025_5492",
+            "raceDate": "2025-07-26",
+            "raceHref": "/races/session_indy_nxt_2025_6450",
+            "raceLabel": "Grand Prix of Monterey Race 2 \u00b7 Race",
+            "sessionId": "session_indy_nxt_2025_6450"
+          },
+          "latestRaceDate": "2025-07-26",
+          "raceCount": 4,
+          "seriesId": "series_indy_nxt",
+          "seriesName": "INDY NXT",
+          "seriesShort": "INDY NXT"
+        }
+      ],
+      "trackIds": [
+        "track_weathertech_raceway_laguna_seca"
+      ],
+      "trackName": "WeatherTech Raceway Laguna Seca",
+      "venueId": "venue_weathertech_raceway_laguna_seca"
+    },
+    {
+      "bestFinish": 6,
+      "confidence": {
+        "bestFinish": "observed_exact",
+        "coordinates": "observed_exact",
+        "latestRace": "observed_exact",
+        "raceCount": "observed_exact",
+        "seriesSpans": "observed_exact"
+      },
+      "coordinateSources": [
+        "World Wide Technology Raceway official site | https://wwtraceway.com/"
+      ],
+      "country": "United States",
+      "dominantChapter": {
+        "bestFinish": 6,
+        "firstRaceDate": "2024-08-16",
+        "firstYear": 2024,
+        "lastYear": 2026,
+        "latestRace": {
+          "eventId": "event_indy_nxt_2026_5546",
+          "raceDate": "2026-06-06",
+          "raceHref": "/races/session_indy_nxt_2026_6763",
+          "raceLabel": "INDY NXT by Firestone at World Wide Technology Raceway \u00b7 Race",
+          "sessionId": "session_indy_nxt_2026_6763"
+        },
+        "latestRaceDate": "2026-06-06",
+        "raceCount": 3,
+        "seriesId": "series_indy_nxt",
+        "seriesName": "INDY NXT",
+        "seriesShort": "INDY NXT"
+      },
+      "firstYear": 2024,
+      "lastYear": 2026,
+      "lat": 38.6507,
+      "latestRace": {
+        "eventId": "event_indy_nxt_2026_5546",
+        "raceDate": "2026-06-06",
+        "raceHref": "/races/session_indy_nxt_2026_6763",
+        "raceLabel": "INDY NXT by Firestone at World Wide Technology Raceway \u00b7 Race",
+        "sessionId": "session_indy_nxt_2026_6763"
+      },
+      "lon": -90.1355,
+      "projected": {
+        "x": 481.359,
+        "y": 105.007
+      },
+      "raceCount": 3,
+      "region": "North America",
+      "seriesSpans": [
+        {
+          "bestFinish": 6,
+          "firstRaceDate": "2024-08-16",
+          "firstYear": 2024,
+          "lastYear": 2026,
+          "latestRace": {
+            "eventId": "event_indy_nxt_2026_5546",
+            "raceDate": "2026-06-06",
+            "raceHref": "/races/session_indy_nxt_2026_6763",
+            "raceLabel": "INDY NXT by Firestone at World Wide Technology Raceway \u00b7 Race",
+            "sessionId": "session_indy_nxt_2026_6763"
+          },
+          "latestRaceDate": "2026-06-06",
+          "raceCount": 3,
+          "seriesId": "series_indy_nxt",
+          "seriesName": "INDY NXT",
+          "seriesShort": "INDY NXT"
+        }
+      ],
+      "trackIds": [
+        "track_world_wide_technology_raceway"
+      ],
+      "trackName": "World Wide Technology Raceway",
+      "venueId": "venue_world_wide_technology_raceway"
+    }
+  ]
+}

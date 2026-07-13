@@ -27,6 +27,208 @@ export interface UiSeasonLapMix {
   positions: Array<{ position: number; laps: number }>;
 }
 
+export type UiCareerConfidenceClass = 'observed_exact' | 'observed_lower_bound' | 'modeled_range' | 'unknown';
+
+export interface UiCareerAtlasSeriesSpan {
+  seriesId: string;
+  seriesName: string;
+  seriesShort: string;
+  raceCount: number;
+  firstYear: number;
+  lastYear: number;
+  firstRaceDate: string;
+  latestRaceDate: string;
+  bestFinish: number | null;
+  latestRace: {
+    sessionId: string;
+    eventId: string;
+    raceDate: string;
+    raceLabel: string;
+    raceHref: string;
+  };
+}
+
+export interface UiCareerAtlasVenue {
+  venueId: string;
+  trackName: string;
+  trackIds: string[];
+  country: string;
+  region: 'North America' | 'Europe' | 'Oceania';
+  lat: number;
+  lon: number;
+  projected: { x: number; y: number };
+  raceCount: number;
+  firstYear: number;
+  lastYear: number;
+  bestFinish: number | null;
+  seriesSpans: UiCareerAtlasSeriesSpan[];
+  dominantChapter: UiCareerAtlasSeriesSpan;
+  latestRace: {
+    sessionId: string;
+    eventId: string;
+    raceDate: string;
+    raceLabel: string;
+    raceHref: string;
+  };
+  coordinateSources: string[];
+  confidence: {
+    coordinates: 'observed_exact';
+    raceCount: 'observed_exact';
+    seriesSpans: 'observed_exact';
+    bestFinish: 'observed_exact' | 'unknown';
+    latestRace: 'observed_exact';
+  };
+}
+
+export interface UiCareerAtlas {
+  schemaVersion: 'brycecast.careerAtlas.v3';
+  naturalEarth: {
+    dataset: string;
+    sourceCommit: string;
+    sourceUrl: string;
+    downloadPage: string;
+    license: 'public_domain';
+    licenseUrl: string;
+    sourceSha256: string;
+  };
+  geometry: {
+    projection: 'equirectangular_wrapped';
+    crop: {
+      lonMin: number;
+      lonMax: number;
+      latMin: number;
+      latMax: number;
+      paddingLongitudeDegrees: number;
+      paddingLatitudeDegrees: number;
+    };
+    canvas: { width: number; height: number };
+    simplification: { method: 'closed_ring_ramer_douglas_peucker'; tolerancePx: number };
+    sourceFeatureCount: number;
+    sourcePointCount: number;
+    clippedPointCount: number;
+    simplifiedPointCount: number;
+    ringCount: number;
+    fillRule: 'evenodd';
+    landPath: string;
+    landPathSha256: string;
+  };
+  globe: {
+    projection: 'orthographic';
+    texture: {
+      path: 'analysis/career-atlas/output/world_land_texture.png';
+      width: 1024;
+      height: 512;
+      format: 'png_grayscale_land_mask';
+      sha256: string;
+      sourceFeatureCount: 127;
+    };
+    defaultCenter: { longitude: number; latitude: number };
+    zoom: { min: 1; max: 32 };
+  };
+  venues: UiCareerAtlasVenue[];
+  venueCount: number;
+  raceCount: number;
+  confidenceClasses: UiCareerConfidenceClass[];
+  caveats: string[];
+  sourceRefs: UiSourceRef[];
+}
+
+export interface UiCareerLifeStats {
+  schemaVersion: 'brycecast.careerLifeStats.v2';
+  personalRaceMileage: {
+    raceRows: number;
+    coveredRaceRows: number;
+    laps: number;
+    miles: number;
+    confidenceClass: 'observed_exact';
+    metricGrain: 'driver_physical_race';
+  };
+  physicalSessionMileage: {
+    sessionRows: number;
+    exact: { sessions: number; laps: number; miles: number; confidenceClass: 'observed_exact' };
+    lowerBound: { sessions: number; laps: number; miles: number; confidenceClass: 'observed_lower_bound' };
+    unknown: { sessions: number; confidenceClass: 'unknown' };
+    floor: { laps: number; miles: number; confidenceClass: 'observed_lower_bound' };
+    excludedAggregateSessions: number;
+    metricGrain: 'driver_physical_session';
+  };
+  travel: {
+    greatCircleMinimum: { miles: number; label: string; confidenceClass: 'observed_exact' };
+    routeAdjustedMinimum: {
+      lowMiles: number;
+      baseMiles: number;
+      highMiles: number;
+      confidenceClass: 'modeled_range';
+      assumptions: { driveProxy: string; flightProxy: string };
+    };
+    actualTravel: { confidenceClass: 'unknown'; blockedBy: ['seasonBase', 'returnHomeFrequency'] };
+  };
+  countries: number;
+  venues: number;
+  longestLeg: { fromTrackName: string; toTrackName: string; miles: number } | null;
+  farthestVenuePair: { fromTrackName: string; toTrackName: string; miles: number } | null;
+  coverageGaps: string[];
+  resourceModels: {
+    fuel: { confidenceClass: 'modeled_range'; rows: number; table: string };
+    tires: { confidenceClass: 'modeled_range'; rows: number; table: string };
+  };
+  mileageBreakdowns: Array<{
+    dimensionType: 'season' | 'series' | 'session_type' | 'venue' | 'country' | 'confidence_class';
+    dimensionValue: string;
+    confidenceClass: 'observed_exact' | 'observed_lower_bound' | 'unknown';
+    sessionCount: number;
+    lapsFloor: number;
+    milesFloor: number;
+  }>;
+  travelModeBreakdown: Array<{
+    travelModeProxy: 'same_venue' | 'drive_proxy' | 'flight_proxy';
+    legCount: number;
+    greatCircleMiles: number;
+    routeAdjustedLowMiles: number;
+    routeAdjustedBaseMiles: number;
+    routeAdjustedHighMiles: number;
+    confidenceClass: 'observed_exact' | 'modeled_range';
+  }>;
+  fuelEstimateRanges: Array<{
+    seriesId: string;
+    seriesName: string;
+    seasonYear: number;
+    chassis: string;
+    observedMilesFloor: number;
+    estimatedFuelLowLiters: number;
+    estimatedFuelBaseLiters: number;
+    estimatedFuelHighLiters: number;
+    confidenceClass: 'modeled_range';
+    formula: string;
+    sourceUrl: string;
+    sensitivityDrivers: string;
+  }>;
+  tireEstimateRanges: Array<{
+    seriesId: string;
+    seriesName: string;
+    seasonYear: number;
+    chassis: string;
+    tireSupplier: string;
+    observedSessionsWithLaps: number;
+    unknownLapSessionsExcluded: number;
+    estimatedUniqueTiresLow: number;
+    estimatedUniqueTiresBase: number;
+    estimatedUniqueTiresHigh: number;
+    confidenceClass: 'modeled_range';
+    formula: string;
+    sourceUrl: string;
+    sensitivityDrivers: string;
+  }>;
+  venueSources: Array<{
+    trackName: string;
+    trackIds: string[];
+    lengthSources: string[];
+    coordsSources: string[];
+  }>;
+  caveats: string[];
+  sourceRefs: UiSourceRef[];
+}
+
 export interface UiChartSpec {
   displayPolicy?: string;
   fields?: string[];
@@ -318,6 +520,8 @@ export interface UiDataPackage {
       resultConversionSample: Array<Record<string, string | number | null>>;
       headToHead: UiCareerRival[];
       lapPositionMix: UiSeasonLapMix[];
+      atlas: UiCareerAtlas;
+      lifeStats: UiCareerLifeStats;
       caveats: string[];
       sourceRefs: UiSourceRef[];
     };

@@ -8,6 +8,9 @@ import { analyticsPython, runPredictiveRaceIntelligence } from './run-predictive
 
 const repoRoot = process.cwd();
 const outputPath = path.join(repoRoot, 'analysis/ui-data-package/ui-data-package.json');
+// Narrow package lanes can refresh their own deterministic artifacts without
+// rewriting unrelated generated reports whose timestamps otherwise churn.
+const skipUpstreamRefresh = process.env.BRYCECAST_SKIP_UPSTREAM_REFRESH === '1';
 
 const sources = {
   canonicalDataset: 'data/career/career.dataset.json',
@@ -36,6 +39,24 @@ const sources = {
   careerSeriesSummary: 'analysis/career-parity/output/tables/career_series_result_summary.csv',
   careerMetricParity: 'analysis/career-parity/output/tables/career_metric_family_parity.csv',
   careerResultConversion: 'analysis/career-parity/output/tables/career_result_conversion.csv',
+  careerLifeStatsSummary: 'analysis/career-life-stats/output/summary.json',
+  careerLifeStatsResearch: 'analysis/career-life-stats/RESEARCH.md',
+  careerLifeStatsVenueFacts: 'analysis/career-life-stats/data/venue_facts.csv',
+  careerLifeStatsResourceAssumptions: 'analysis/career-life-stats/data/resource_model_assumptions.csv',
+  careerLifeStatsMilesRaced: 'analysis/career-life-stats/output/tables/miles_raced.csv',
+  careerLifeStatsSessionLedger: 'analysis/career-life-stats/output/tables/session_mileage_ledger.csv',
+  careerLifeStatsMileageBreakdowns: 'analysis/career-life-stats/output/tables/mileage_breakdowns.csv',
+  careerLifeStatsTravelLegs: 'analysis/career-life-stats/output/tables/travel_legs.csv',
+  careerLifeStatsTravelModeBreakdown: 'analysis/career-life-stats/output/tables/travel_mode_breakdown.csv',
+  careerLifeStatsFuelEstimate: 'analysis/career-life-stats/output/tables/estimated_fuel_burned.csv',
+  careerLifeStatsTireEstimate: 'analysis/career-life-stats/output/tables/estimated_unique_tires.csv',
+  careerAtlasOutput: 'analysis/career-atlas/output/atlas.json',
+  careerAtlasGlobeTexture: 'analysis/career-atlas/output/world_land_texture.png',
+  careerAtlasNaturalEarth: 'analysis/career-atlas/data/ne_110m_land.geojson',
+  careerAtlasNaturalEarthSource: 'analysis/career-atlas/data/SOURCE.md',
+  careerAtlasRequirements: 'analysis/career-atlas/requirements.txt',
+  careerAtlasBuilderScript: 'analysis/career-atlas/scripts/build_career_atlas.py',
+  careerAtlasValidatorScript: 'analysis/career-atlas/scripts/validate_career_atlas.py',
   predictiveSummary: 'analysis/predictive-race-intelligence/output/summary.json',
   predictiveInventory: 'analysis/predictive-race-intelligence/output/analytics_inventory_registry.json',
   predictiveModelScorecard: 'analysis/predictive-race-intelligence/output/model_scorecard.json',
@@ -131,6 +152,38 @@ const runSupplementalContextPacks = () => {
     'analysis/indy-nxt-section-lap-deep-dive/scripts/validate_indy_nxt_section_lap_deep_dive.py',
     'analysis/indy-nxt-race-lap-section-enhancement/scripts/build_indy_nxt_race_lap_section_enhancement.py',
     'analysis/indy-nxt-race-lap-section-enhancement/scripts/validate_indy_nxt_race_lap_section_enhancement.py'
+  ]) {
+    const result = spawnSync(python, [script], { cwd: repoRoot, stdio: 'inherit' });
+    if (result.error) {
+      throw new Error(`Failed to run ${script} with ${python}: ${result.error.message}`);
+    }
+    if (result.status !== 0) {
+      throw new Error(`${script} exited ${result.status ?? 'without a status'} using ${python}`);
+    }
+  }
+};
+
+const runCareerLifeStats = () => {
+  const python = analyticsPython();
+  for (const script of [
+    'analysis/career-life-stats/scripts/build_career_life_stats.py',
+    'analysis/career-life-stats/scripts/validate_career_life_stats.py'
+  ]) {
+    const result = spawnSync(python, [script], { cwd: repoRoot, stdio: 'inherit' });
+    if (result.error) {
+      throw new Error(`Failed to run ${script} with ${python}: ${result.error.message}`);
+    }
+    if (result.status !== 0) {
+      throw new Error(`${script} exited ${result.status ?? 'without a status'} using ${python}`);
+    }
+  }
+};
+
+const runCareerAtlas = () => {
+  const python = analyticsPython();
+  for (const script of [
+    'analysis/career-atlas/scripts/build_career_atlas.py',
+    'analysis/career-atlas/scripts/validate_career_atlas.py'
   ]) {
     const result = spawnSync(python, [script], { cwd: repoRoot, stdio: 'inherit' });
     if (result.error) {
@@ -446,6 +499,16 @@ const parseTopRatedRivals = (value) =>
 const buildRaceStoryPacks = ({ raceDebriefPackPairs, canonicalDataset, canonicalSha256 }) => {
   const outputDir = path.join(repoRoot, 'analysis/race-story/output/context-packs');
   fs.mkdirSync(outputDir, { recursive: true });
+  if (skipUpstreamRefresh) {
+    return raceDebriefPackPairs.map(({ pack }) => {
+      const id = `race_story_${pack.sessionId}`;
+      const relativePath = path.relative(repoRoot, path.join(outputDir, `${id}.json`));
+      if (!fs.existsSync(path.join(repoRoot, relativePath))) {
+        throw new Error(`Missing existing race-story pack during narrow package refresh: ${relativePath}`);
+      }
+      return { sessionId: pack.sessionId, id, type: 'race_story', ...summarizeArtifact(relativePath) };
+    });
+  }
 
   const driverNameById = new Map((canonicalDataset.drivers ?? []).map((driver) => [driver.id, driver.displayName]));
   const lapSamplesBySession = new Map();
@@ -1254,6 +1317,12 @@ const buildPackage = () => {
   const predictiveInventory = readJson(sources.predictiveInventory);
   const predictiveModelScorecard = readJson(sources.predictiveModelScorecard);
   const predictiveContextPackManifest = readJson(sources.predictiveContextPackManifest);
+  const careerLifeStats = readJson(sources.careerLifeStatsSummary);
+  const careerLifeStatsMileageBreakdowns = readCsv(sources.careerLifeStatsMileageBreakdowns);
+  const careerLifeStatsTravelModeBreakdown = readCsv(sources.careerLifeStatsTravelModeBreakdown);
+  const careerLifeStatsFuelEstimate = readCsv(sources.careerLifeStatsFuelEstimate);
+  const careerLifeStatsTireEstimate = readCsv(sources.careerLifeStatsTireEstimate);
+  const careerAtlas = readJson(sources.careerAtlasOutput);
   const predictiveChartRefs = (predictiveSummary.charts ?? []).map((chartPath) => summarizeArtifact(chartPath));
 
   const contextPackRefs = predictiveContextPackManifest.packs.map((pack) => ({
@@ -1362,7 +1431,7 @@ const buildPackage = () => {
     generatedAt: new Date().toISOString(),
     sourceHash: sourceInventory.canonicalDataset.sha256,
     asOfDate: predictiveSummary.asOfDate,
-    baselineCommit: gitHead(),
+    baselineCommit: skipUpstreamRefresh ? predictiveSummary.repoHead : gitHead(),
     metricManifestBaselineCommit: manifest.baselineCommit,
     predictiveRaceIntelligenceRepoHead: predictiveSummary.repoHead,
     sourceInventory,
@@ -1511,6 +1580,93 @@ const buildPackage = () => {
         resultConversionSample: careerConversionEnriched.slice(0, 25),
         headToHead: buildCareerHeadToHead(headToHeadRows),
         lapPositionMix: buildLapPositionMix({ lapTimelineRows, canonicalDataset }),
+        atlas: {
+          schemaVersion: careerAtlas.schemaVersion,
+          naturalEarth: careerAtlas.naturalEarth,
+          geometry: careerAtlas.geometry,
+          globe: careerAtlas.globe,
+          venues: careerAtlas.venues,
+          venueCount: careerAtlas.venueCount,
+          raceCount: careerAtlas.raceCount,
+          confidenceClasses: careerAtlas.confidenceClasses,
+          caveats: careerAtlas.caveats,
+          sourceRefs: [
+            sourceRef('careerAtlasOutput', 'Validated, deterministic career atlas geometry and venue module.'),
+            sourceRef('careerAtlasGlobeTexture', 'Deterministic full-world land mask generated from the pinned Natural Earth polygons.'),
+            sourceRef('careerAtlasNaturalEarth', 'Pinned Natural Earth 110m public-domain land polygons.'),
+            sourceRef('careerAtlasNaturalEarthSource', 'Natural Earth source commit, checksum, and public-domain terms.'),
+            sourceRef('careerAtlasRequirements', 'Pinned Pillow dependency for byte-stable full-world texture generation.'),
+            sourceRef('careerLifeStatsVenueFacts', 'A2 track identity and sourced coordinates for every career venue.'),
+            sourceRef('careerLifeStatsMilesRaced', 'A2 personally attributable ledger covering all 145 canonical race rows.'),
+            sourceRef('careerLifeStatsResearch', 'A2 metric-grain and confidence-class contracts.'),
+            sourceRef('canonicalDataset', 'Canonical race identity, series, date, and classified finish fields.'),
+            sourceRef('careerResultConversion', 'Career Lab conversion context; A2 restores four unclassified canonical race rows for atlas counts.'),
+            sourceRef('careerAtlasBuilderScript', 'Deterministic career crop, full-world globe texture, projection, clipping, and simplification.'),
+            sourceRef('careerAtlasValidatorScript', 'Provenance, globe-texture determinism, coordinate coverage, and lineage gates.')
+          ]
+        },
+        lifeStats: {
+          schemaVersion: careerLifeStats.schemaVersion,
+          personalRaceMileage: careerLifeStats.personalRaceMileage,
+          physicalSessionMileage: careerLifeStats.physicalSessionMileage,
+          travel: careerLifeStats.travel,
+          countries: numberOrNull(careerLifeStats.countries),
+          venues: numberOrNull(careerLifeStats.venues),
+          longestLeg: careerLifeStats.longestLeg,
+          farthestVenuePair: careerLifeStats.farthestVenuePair,
+          coverageGaps: careerLifeStats.coverageGaps ?? [],
+          resourceModels: careerLifeStats.resourceModels,
+          mileageBreakdowns: careerLifeStatsMileageBreakdowns.map((row) => ({
+            ...row,
+            sessionCount: numberOrNull(row.sessionCount),
+            lapsFloor: numberOrNull(row.lapsFloor),
+            milesFloor: numberOrNull(row.milesFloor)
+          })),
+          travelModeBreakdown: careerLifeStatsTravelModeBreakdown.map((row) => ({
+            ...row,
+            legCount: numberOrNull(row.legCount),
+            greatCircleMiles: numberOrNull(row.greatCircleMiles),
+            routeAdjustedLowMiles: numberOrNull(row.routeAdjustedLowMiles),
+            routeAdjustedBaseMiles: numberOrNull(row.routeAdjustedBaseMiles),
+            routeAdjustedHighMiles: numberOrNull(row.routeAdjustedHighMiles)
+          })),
+          fuelEstimateRanges: careerLifeStatsFuelEstimate.map((row) => ({
+            ...row,
+            seasonYear: numberOrNull(row.seasonYear),
+            observedMilesFloor: numberOrNull(row.observedMilesFloor),
+            estimatedFuelLowLiters: numberOrNull(row.estimatedFuelLowLiters),
+            estimatedFuelBaseLiters: numberOrNull(row.estimatedFuelBaseLiters),
+            estimatedFuelHighLiters: numberOrNull(row.estimatedFuelHighLiters)
+          })),
+          tireEstimateRanges: careerLifeStatsTireEstimate.map((row) => ({
+            ...row,
+            seasonYear: numberOrNull(row.seasonYear),
+            observedSessionsWithLaps: numberOrNull(row.observedSessionsWithLaps),
+            unknownLapSessionsExcluded: numberOrNull(row.unknownLapSessionsExcluded),
+            estimatedUniqueTiresLow: numberOrNull(row.estimatedUniqueTiresLow),
+            estimatedUniqueTiresBase: numberOrNull(row.estimatedUniqueTiresBase),
+            estimatedUniqueTiresHigh: numberOrNull(row.estimatedUniqueTiresHigh)
+          })),
+          venueSources: careerLifeStats.venueSources ?? [],
+          caveats: [
+            'All 145 canonical race rows count. Daytona uses Bryce’s 142 Al Kamel-derived driver-stint laps, never the shared car’s 780 laps.',
+            'The physical-session number is a floor: exact observations and F1600 lower bounds stay separate; FROC and private-test gaps remain unknown.',
+            'Travel is a minimum venue-to-venue displacement. The route adjustment is a modeled range; actual travel is blocked pending seasonBase and returnHomeFrequency.'
+          ],
+          sourceRefs: [
+            sourceRef('careerLifeStatsSummary', 'Validated Career Life Stats totals and method labels.'),
+            sourceRef('careerLifeStatsResearch', 'Source-grain, metric-grain, confidence, travel, fuel, and tire contracts.'),
+            sourceRef('careerLifeStatsVenueFacts', 'Named, checkable length and coordinate sources for every career venue.'),
+            sourceRef('careerLifeStatsResourceAssumptions', 'Explicit low/base/high model assumptions and primary source URLs.'),
+            sourceRef('careerLifeStatsMilesRaced', 'All 145 race rows at personally attributable driver-race grain.'),
+            sourceRef('careerLifeStatsSessionLedger', 'Deduplicated physical-session ledger with confidence classes.'),
+            sourceRef('careerLifeStatsMileageBreakdowns', 'Visualization-ready mileage dimensions for future UI work.'),
+            sourceRef('careerLifeStatsTravelLegs', 'Chronological travel minimum and route-proxy range by leg.'),
+            sourceRef('careerLifeStatsTravelModeBreakdown', 'Visualization-ready travel-mode proxy totals.'),
+            sourceRef('careerLifeStatsFuelEstimate', 'Modeled low/base/high fuel estimates by series and chassis.'),
+            sourceRef('careerLifeStatsTireEstimate', 'Modeled low/base/high unique-tire estimates by series and year.')
+          ]
+        },
         caveats: [
           'Career analytics must use metric-family parity states; older series do not expose INDY NXT-grade depth.',
           'Result-conversion rows are source-bounded historical context, not a universal driver-strength model.',
@@ -1582,9 +1738,13 @@ const buildPackage = () => {
 };
 
 fs.mkdirSync(path.dirname(outputPath), { recursive: true });
-runContextEventNarrativeLayer();
-runPredictiveRaceIntelligence();
-runSupplementalContextPacks();
+if (!skipUpstreamRefresh) {
+  runContextEventNarrativeLayer();
+  runPredictiveRaceIntelligence();
+  runSupplementalContextPacks();
+}
+runCareerLifeStats();
+runCareerAtlas();
 const dataPackage = buildPackage();
 fs.writeFileSync(outputPath, `${JSON.stringify(dataPackage, null, 2)}\n`);
 console.log(JSON.stringify({ ok: true, wrote: path.relative(repoRoot, outputPath), schemaVersion: dataPackage.schemaVersion }, null, 2));

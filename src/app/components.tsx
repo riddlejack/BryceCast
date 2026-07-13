@@ -85,13 +85,15 @@ export const Stat = ({
   value,
   unit,
   delta,
-  hero
+  hero,
+  note
 }: {
   label: string;
   value: ReactNode;
   unit?: string;
   delta?: { text: string; direction: 'up' | 'down' | 'flat' } | null;
   hero?: boolean;
+  note?: ReactNode;
 }) => (
   <div className="stat">
     <span className="caption">{label}</span>
@@ -100,6 +102,7 @@ export const Stat = ({
       {unit ? <span className="stat__unit">{unit}</span> : null}
     </span>
     {delta ? <span className={`stat__delta ${delta.direction === 'up' ? 'stat__delta--up' : 'stat__delta--down'}`}>{delta.text}</span> : null}
+    {note ? <span className="stat__note">{note}</span> : null}
   </div>
 );
 

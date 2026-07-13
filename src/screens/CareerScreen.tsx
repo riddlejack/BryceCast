@@ -1,6 +1,7 @@
 import { Card, Reveal, SourcePill, Stat, Unavailable } from '../app/components';
 import { asNumber, asString, formatNumber, formatPct } from '../app/format';
 import { uiDataPackage } from '../data/uiDataPackage';
+import { CareerAtlas } from './careerAtlas';
 import {
   BestClimbs,
   CareerBests,
@@ -130,6 +131,92 @@ const ChapterCard = ({
   );
 };
 
+const wholeNumber = new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 });
+
+const splitNamedSource = (source: string): { name: string; url: string } => {
+  const separator = source.indexOf(' | ');
+  if (separator < 0) return { name: source, url: '' };
+  return { name: source.slice(0, separator), url: source.slice(separator + 3) };
+};
+
+const OdometerCard = () => {
+  const lifeStats = uiDataPackage.screens.careerLab.lifeStats;
+  if (!lifeStats) {
+    return (
+      <Card title="The odometer">
+        <Unavailable>Career life stats are unavailable until the sourced venue-and-lap lane is rebuilt.</Unavailable>
+      </Card>
+    );
+  }
+
+  const venueSourceEntries = lifeStats.venueSources.flatMap((venue) => [
+    ...venue.lengthSources.map((source, index) => {
+      const named = splitNamedSource(source);
+      return {
+        label: `${venue.trackName} · length${venue.lengthSources.length > 1 ? ` ${index + 1}` : ''}`,
+        path: named.url,
+        note: named.name
+      };
+    }),
+    ...venue.coordsSources.map((source, index) => {
+      const named = splitNamedSource(source);
+      return {
+        label: `${venue.trackName} · coordinates${venue.coordsSources.length > 1 ? ` ${index + 1}` : ''}`,
+        path: named.url,
+        note: named.name
+      };
+    })
+  ]);
+
+  return (
+    <Card
+      title="The odometer"
+      action={
+        <SourcePill
+          title="The odometer"
+          entries={[
+            ...lifeStats.sourceRefs.map((ref) => ({ label: ref.key, path: ref.path, note: ref.note })),
+            ...venueSourceEntries
+          ]}
+          caveats={lifeStats.caveats}
+        />
+      }
+    >
+      <p style={{ margin: '0 0 16px', color: 'var(--ink-secondary)', fontSize: 13.5 }}>
+        Every sourced mile stays in its confidence class: exact, lower bound, modeled range, or unknown.
+      </p>
+      <div className="grid grid--4">
+        <Stat
+          label="Miles raced"
+          value={wholeNumber.format(lifeStats.personalRaceMileage.miles)}
+          note={`${wholeNumber.format(lifeStats.personalRaceMileage.laps)} personal laps · ${lifeStats.personalRaceMileage.raceRows} races · exact`}
+        />
+        <Stat
+          label="On-track floor"
+          value={`${wholeNumber.format(lifeStats.physicalSessionMileage.floor.miles)}+`}
+          note={`${wholeNumber.format(lifeStats.physicalSessionMileage.floor.laps)} laps · exact + lower bounds`}
+        />
+        <Stat
+          label="Venues · countries"
+          value={`${wholeNumber.format(lifeStats.venues)} · ${wholeNumber.format(lifeStats.countries)}`}
+          note="Physical venues · layouts combined"
+        />
+        <Stat
+          label="Minimum travel"
+          value={wholeNumber.format(lifeStats.travel.greatCircleMinimum.miles)}
+          note="Great-circle displacement · venue to venue"
+        />
+      </div>
+      <p className="caption caption--secondary" style={{ margin: '18px 0 0' }}>
+        Route-adjusted minimum proxy: {wholeNumber.format(lifeStats.travel.routeAdjustedMinimum.lowMiles)}–
+        {wholeNumber.format(lifeStats.travel.routeAdjustedMinimum.highMiles)} miles. Actual travel stays unknown until
+        season bases and return-home frequency are supplied. The on-track floor excludes {lifeStats.physicalSessionMileage.unknown.sessions}{' '}
+        sessions with no lap count.
+      </p>
+    </Card>
+  );
+};
+
 export const CareerScreen = () => {
   const careerLab = uiDataPackage.screens.careerLab;
   const rows = careerLab.seriesSummary as Row[];
@@ -184,6 +271,10 @@ export const CareerScreen = () => {
         <span className="kicker">The rivals</span>
       </div>
       <RivalsCard />
+
+      <OdometerCard />
+
+      <CareerAtlas />
 
       {rows.length === 0 ? (
         <Card>

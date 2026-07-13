@@ -1739,11 +1739,21 @@ const buildReplaySourceReport = (record) =>
   buildSourceReportFromResults(sourceResultsFromSnapshotRecord(record), record.checkedAt ?? new Date().toISOString());
 
 const buildReadinessPayloadFromReplayRecord = async (record) => {
-  const replay = queryReplay({
-    limit: 500,
-    sessionKey: record.sessionKey,
-    beforeCheckedAt: record.archiveCheckedAt
-  });
+  const replay = {
+    ...queryReplay({
+      limit: 500,
+      sessionKey: record.sessionKey,
+      beforeCheckedAt: record.archiveCheckedAt
+    }),
+    simulation: {
+      active: true,
+      mode: 'archived_replay',
+      label: 'Simulated replay',
+      source: 'Archived Race Control capture',
+      sessionKey: record.sessionKey,
+      archiveCheckedAt: record.archiveCheckedAt
+    }
+  };
   return buildReadinessPayloadFromRuntimeParts({
     checkedAt: record.checkedAt,
     results: rawResultsFromSnapshotRecord(record),

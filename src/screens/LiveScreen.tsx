@@ -36,6 +36,16 @@ type Row = Record<string, unknown>;
 
 const heartbeatOf = (payload: LiveReadiness): Row => ((payload.liveTiming as Row)?.heartbeat as Row) ?? {};
 
+const replaySimulationOf = (payload: LiveReadiness): Row | null => {
+  const simulation = (payload.replay as Row | undefined)?.simulation;
+  return simulation && typeof simulation === 'object' && !Array.isArray(simulation) ? (simulation as Row) : null;
+};
+
+const isSimulatedReplayPayload = (payload: LiveReadiness): boolean => replaySimulationOf(payload)?.active === true;
+
+const pointsProvenanceLabel = (payload: LiveReadiness): string =>
+  isSimulatedReplayPayload(payload) ? 'simulated · archived Race Control values' : 'provisional · official Race Control feed';
+
 const isCautionFlag = (flag: string | null | undefined) => {
   const value = (flag ?? '').toUpperCase();
   return value.includes('YELLOW') || value.includes('CAUTION') || value === 'FCY';
@@ -389,17 +399,23 @@ const TrustRail = ({ payload, fixtureMode }: { payload: LiveReadiness; fixtureMo
   const copy = readinessCopy[payload.state] ?? { tone: 'neutral' as Tone, label: payload.state, detail: payload.reason };
   const age = captureAgeSeconds(payload);
   const sourceState = asString((payload.liveTiming as Row)?.sourceState) ?? 'unknown';
+  const replaySimulation = replaySimulationOf(payload);
+  const simulatedReplay = replaySimulation?.active === true;
+  const replayLabel = asString(replaySimulation?.label) ?? 'Simulated replay';
+  const detail = simulatedReplay
+    ? 'Archived Race Control replay — not official live data.'
+    : copy.detail;
   return (
     <section className="live-trust" aria-label="Live data trust state">
       <div className="row row--wrap" style={{ gap: 14 }}>
-        <StatusChip tone={copy.tone} label={copy.label} live={payload.state === 'ready'} />
+        <StatusChip tone={simulatedReplay ? 'neutral' : copy.tone} label={simulatedReplay ? replayLabel : copy.label} live={!simulatedReplay && payload.state === 'ready'} />
         <span className="live-trust__age">
-          {fixtureMode ? `fixture · ${payload.state}` : age === null ? 'data age unknown' : `data ${age}s old`}
+          {fixtureMode ? `fixture · ${payload.state}` : simulatedReplay ? 'archived session · simulated clock' : age === null ? 'data age unknown' : `data ${age}s old`}
         </span>
-        <span className="live-trust__source">source {sourceState}</span>
+        <span className="live-trust__source">source {simulatedReplay ? 'archived Race Control' : sourceState}</span>
       </div>
-      <span className="live-trust__detail">{copy.detail}</span>
-      <SourcePill title="Live trust state" entries={[{ label: 'Product readiness reducer', path: '/api/readiness', note: payload.reason }]} />
+      <span className="live-trust__detail">{detail}</span>
+      <SourcePill title="Live trust state" entries={[{ label: 'Product readiness reducer', path: '/api/readiness', note: simulatedReplay ? detail : payload.reason }]} />
     </section>
   );
 };
@@ -475,7 +491,7 @@ const LiveHero = ({ payload, samples }: { payload: LiveReadiness; samples: GapSa
                 ) : null}
               </div>
               <div className="live-hero__running-points"><TickerValue className="live-hero__points-number" value={pointsWindow.bryce.runningDriverPoints} valueKey={pointsWindow.bryce.runningDriverPoints} /> running points</div>
-              <span className="live-points__provisional">provisional · official Race Control feed</span>
+              <span className="live-points__provisional">{pointsProvenanceLabel(payload)}</span>
             </>
           ) : (
             <Unavailable>Official running points are not published in this state.</Unavailable>
@@ -510,7 +526,7 @@ const PointsJumbotron = ({ payload }: { payload: LiveReadiness }) => {
             <div>
               <span className="caption">Race Control running points</span>
               <TickerValue className="stat__value stat__value--big live-points__score" value={window.bryce.runningDriverPoints} valueKey={window.bryce.runningDriverPoints} />
-              <span className="live-points__provisional">provisional · official Race Control feed</span>
+              <span className="live-points__provisional">{pointsProvenanceLabel(payload)}</span>
             </div>
           </div>
           <div className="live-points__neighbors" aria-label="Projected championship neighbors">

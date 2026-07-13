@@ -1,6 +1,6 @@
 {
-  "asOfDate": "2026-07-12",
-  "generatedAt": "2026-07-12T18:23:59Z",
+  "asOfDate": "2026-07-13",
+  "generatedAt": "2026-07-13T17:24:15Z",
   "items": [
     {
       "availability": "partial",
@@ -1064,7 +1064,7 @@
       "label": "indySummary",
       "productizationStatus": "productized",
       "recommendedAction": "Use as source precedence, caveat, or validation input.",
-      "sha256": "eaa55c3fd1ddb366d47253f3a829d30b8bbd99896647b104e2d81e41bab8d7b3",
+      "sha256": "e99875d8833e089c94674d6bcd357b2774f7baee2aabc7e35d1aa39f20801773",
       "sourcePath": "analysis/indy-nxt-discovery/output/summary.json",
       "surface": "governance"
     },
@@ -1078,7 +1078,7 @@
       "label": "indyDeepSummary",
       "productizationStatus": "productized",
       "recommendedAction": "Use as source precedence, caveat, or validation input.",
-      "sha256": "70f2f2c82b06071ed29bde381d959214d23df51cae032cac24da7472aadbdb91",
+      "sha256": "59a2b7266056d2c70a5fff2ad6a52338619a2600b3efc1968981305654f430bd",
       "sourcePath": "analysis/indy-nxt-discovery/output/deep_dive/summary.json",
       "surface": "governance"
     },
@@ -1126,7 +1126,7 @@
     },
     {
       "availability": "available",
-      "bytes": 1210,
+      "bytes": 1222,
       "caveat": null,
       "confidence": "high",
       "id": "governance:validationReport",
@@ -1134,12 +1134,12 @@
       "label": "validationReport",
       "productizationStatus": "productized",
       "recommendedAction": "Use as source precedence, caveat, or validation input.",
-      "sha256": "7706d8983aa3bfca93266c8ea378c901526dd8b7ede78b5440c4fbdeaf2cae22",
+      "sha256": "c0825c709d943da2d7de688a1930b29d67fb7ef9d7a7c825fbedc55ea2c9002d",
       "sourcePath": "data/career/reports/validation-report.json",
       "surface": "governance"
     }
   ],
-  "repoHead": "b1a518b",
+  "repoHead": "c207d07",
   "schemaVersion": "brycecast.predictiveRaceIntelligence.inventory.v1",
   "sourceHash": "900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681",
   "sourceRefs": [
@@ -1171,13 +1171,13 @@
       "bytes": 1722,
       "path": "analysis/indy-nxt-discovery/output/summary.json",
       "role": "indySummary",
-      "sha256": "eaa55c3fd1ddb366d47253f3a829d30b8bbd99896647b104e2d81e41bab8d7b3"
+      "sha256": "e99875d8833e089c94674d6bcd357b2774f7baee2aabc7e35d1aa39f20801773"
     },
     {
       "bytes": 1461,
       "path": "analysis/indy-nxt-discovery/output/deep_dive/summary.json",
       "role": "indyDeepSummary",
-      "sha256": "70f2f2c82b06071ed29bde381d959214d23df51cae032cac24da7472aadbdb91"
+      "sha256": "59a2b7266056d2c70a5fff2ad6a52338619a2600b3efc1968981305654f430bd"
     },
     {
       "bytes": 362,
@@ -1198,10 +1198,10 @@
       "sha256": "605ddd90e54a5deb67039543bbec89ae5ec9d7380c4843623fc22aba5c6e777b"
     },
     {
-      "bytes": 1210,
+      "bytes": 1222,
       "path": "data/career/reports/validation-report.json",
       "role": "validationReport",
-      "sha256": "7706d8983aa3bfca93266c8ea378c901526dd8b7ede78b5440c4fbdeaf2cae22"
+      "sha256": "c0825c709d943da2d7de688a1930b29d67fb7ef9d7a7c825fbedc55ea2c9002d"
     }
   ],
   "statusCounts": {

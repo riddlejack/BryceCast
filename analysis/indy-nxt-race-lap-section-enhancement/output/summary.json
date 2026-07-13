@@ -15,7 +15,7 @@
     "roadAmericaRows": 4,
     "upcomingVenueRows": 2
   },
-  "generatedAt": "2026-07-12T18:24:22Z",
+  "generatedAt": "2026-07-13T17:24:37Z",
   "ok": true,
   "publicPointPrediction": false,
   "sectionSourceStateCounts": {
@@ -26,7 +26,7 @@
   "sourceHash": "900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681",
   "upcomingVenue": {
     "artifactSlug": "nashville_superspeedway",
-    "asOfDate": "2026-07-12",
+    "asOfDate": "2026-07-13",
     "trackName": "Nashville Superspeedway"
   }
 }

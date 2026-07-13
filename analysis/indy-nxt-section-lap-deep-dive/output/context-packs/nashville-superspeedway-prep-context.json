@@ -1,12 +1,12 @@
 {
-  "asOfDate": "2026-07-12",
+  "asOfDate": "2026-07-13",
   "claimStrength": "descriptive_context_only",
   "displayRules": [
     "Use completed Nashville Superspeedway practice/qualifying section rows as historical context.",
     "Do not update future race-week claims until live/current session rows exist.",
     "Show session type and source caveat with every Nashville Superspeedway prep comparison."
   ],
-  "generatedAt": "2026-07-12T18:24:18Z",
+  "generatedAt": "2026-07-13T17:24:33Z",
   "historicalPrepRows": [
     {
       "bestSectionFamilies": "Turn 3:0.82 n=30; Turn 1 Entry Turn 1 Exit Turn 2 Entry BackStretch BackStretch:0.69 n=30; Turn 4 Entry Turn 4 Exit:0.67 n=29",

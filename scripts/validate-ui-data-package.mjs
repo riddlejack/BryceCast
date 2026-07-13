@@ -619,6 +619,243 @@ for (const season of lapPositionMix) {
   }
 }
 
+/* ---------- Career Lab life stats (The odometer) ---------- */
+
+const lifeStats = dataPackage.screens.careerLab.lifeStats;
+if (lifeStats?.schemaVersion !== 'brycecast.careerLifeStats.v2') {
+  fail('careerLab.lifeStats must carry the validated career-life-stats schema.');
+}
+for (const [key, expectedPath] of Object.entries({
+  careerLifeStatsSummary: 'analysis/career-life-stats/output/summary.json',
+  careerLifeStatsResearch: 'analysis/career-life-stats/RESEARCH.md',
+  careerLifeStatsVenueFacts: 'analysis/career-life-stats/data/venue_facts.csv',
+  careerLifeStatsResourceAssumptions: 'analysis/career-life-stats/data/resource_model_assumptions.csv',
+  careerLifeStatsMilesRaced: 'analysis/career-life-stats/output/tables/miles_raced.csv',
+  careerLifeStatsSessionLedger: 'analysis/career-life-stats/output/tables/session_mileage_ledger.csv',
+  careerLifeStatsMileageBreakdowns: 'analysis/career-life-stats/output/tables/mileage_breakdowns.csv',
+  careerLifeStatsTravelLegs: 'analysis/career-life-stats/output/tables/travel_legs.csv',
+  careerLifeStatsTravelModeBreakdown: 'analysis/career-life-stats/output/tables/travel_mode_breakdown.csv',
+  careerLifeStatsFuelEstimate: 'analysis/career-life-stats/output/tables/estimated_fuel_burned.csv',
+  careerLifeStatsTireEstimate: 'analysis/career-life-stats/output/tables/estimated_unique_tires.csv'
+})) {
+  if (sourceInventory[key]?.path !== expectedPath) {
+    fail(`sourceInventory.${key} must point to ${expectedPath}.`);
+  }
+}
+const lifeStatsSummary = JSON.parse(fs.readFileSync(path.join(repoRoot, sourceInventory.careerLifeStatsSummary.path), 'utf8'));
+for (const field of [
+  'personalRaceMileage',
+  'physicalSessionMileage',
+  'travel',
+  'countries',
+  'venues',
+  'longestLeg',
+  'farthestVenuePair',
+  'coverageGaps',
+  'resourceModels'
+]) {
+  if (JSON.stringify(lifeStats[field]) !== JSON.stringify(lifeStatsSummary[field])) {
+    fail(`careerLab.lifeStats.${field} must mirror the validated summary.`);
+  }
+}
+if (lifeStats.personalRaceMileage.raceRows !== 145 || lifeStats.personalRaceMileage.coveredRaceRows !== 145) {
+  fail('careerLab.lifeStats must cover all 145 canonical Bryce race results.');
+}
+if (lifeStats.personalRaceMileage.laps !== 3019 || lifeStats.personalRaceMileage.miles !== 6924.4) {
+  fail('careerLab.lifeStats must carry personally attributable race laps and mileage.');
+}
+if (
+  lifeStats.physicalSessionMileage.floor.confidenceClass !== 'observed_lower_bound' ||
+  lifeStats.physicalSessionMileage.exact.confidenceClass !== 'observed_exact' ||
+  lifeStats.physicalSessionMileage.unknown.confidenceClass !== 'unknown'
+) {
+  fail('careerLab.lifeStats physical-session aggregates must preserve confidence classes.');
+}
+if (
+  lifeStats.travel.greatCircleMinimum.miles !== 54649.3 ||
+  lifeStats.travel.routeAdjustedMinimum.confidenceClass !== 'modeled_range' ||
+  lifeStats.travel.actualTravel.confidenceClass !== 'unknown'
+) {
+  fail('careerLab.lifeStats travel outputs must distinguish minimum, modeled route proxy, and unknown actual travel.');
+}
+const lifeStatsBreakdownDimensions = new Set((lifeStats.mileageBreakdowns ?? []).map((row) => row.dimensionType));
+for (const dimension of ['season', 'series', 'session_type', 'venue', 'country', 'confidence_class']) {
+  if (!lifeStatsBreakdownDimensions.has(dimension)) {
+    fail(`careerLab.lifeStats mileageBreakdowns is missing ${dimension}.`);
+  }
+}
+if (!(lifeStats.travelModeBreakdown ?? []).every((row) => row.travelModeProxy && row.legCount >= 0)) {
+  fail('careerLab.lifeStats travelModeBreakdown must be visualization-ready.');
+}
+for (const [name, rows, low, base, high] of [
+  ['fuelEstimateRanges', lifeStats.fuelEstimateRanges, 'estimatedFuelLowLiters', 'estimatedFuelBaseLiters', 'estimatedFuelHighLiters'],
+  ['tireEstimateRanges', lifeStats.tireEstimateRanges, 'estimatedUniqueTiresLow', 'estimatedUniqueTiresBase', 'estimatedUniqueTiresHigh']
+]) {
+  if (!Array.isArray(rows) || rows.length !== 10) fail(`careerLab.lifeStats.${name} must carry ten series/year rows.`);
+  for (const row of rows) {
+    if (row.confidenceClass !== 'modeled_range' || !(row[low] <= row[base] && row[base] <= row[high]) || !row.sourceUrl?.startsWith('https://')) {
+      fail(`careerLab.lifeStats.${name} contains an invalid modeled range.`);
+    }
+  }
+}
+if (!Array.isArray(lifeStats.venueSources) || lifeStats.venueSources.length !== lifeStats.venues) {
+  fail('careerLab.lifeStats venueSources must list every physical venue.');
+}
+for (const venue of lifeStats.venueSources) {
+  if (
+    !venue.trackName ||
+    !Array.isArray(venue.trackIds) ||
+    venue.trackIds.length === 0 ||
+    !(venue.lengthSources ?? []).every((source) => source.includes(' | https://')) ||
+    !(venue.coordsSources ?? []).every((source) => source.includes(' | https://'))
+  ) {
+    fail(`careerLab.lifeStats venue source is incomplete for ${venue.trackName ?? '(unnamed)'}.`);
+  }
+}
+const lifeStatSourcePaths = new Set((lifeStats.sourceRefs ?? []).map((ref) => ref.path));
+for (const key of [
+  'careerLifeStatsSummary',
+  'careerLifeStatsResearch',
+  'careerLifeStatsVenueFacts',
+  'careerLifeStatsResourceAssumptions',
+  'careerLifeStatsMilesRaced',
+  'careerLifeStatsSessionLedger',
+  'careerLifeStatsMileageBreakdowns',
+  'careerLifeStatsTravelLegs',
+  'careerLifeStatsTravelModeBreakdown',
+  'careerLifeStatsFuelEstimate',
+  'careerLifeStatsTireEstimate'
+]) {
+  if (!lifeStatSourcePaths.has(sourceInventory[key].path)) {
+    fail(`careerLab.lifeStats sourceRefs must include ${sourceInventory[key].path}.`);
+  }
+}
+if (
+  !(lifeStats.caveats ?? []).some((caveat) => /142 Al Kamel-derived driver-stint laps/.test(caveat)) ||
+  !(lifeStats.caveats ?? []).some((caveat) => /exact observations and F1600 lower bounds stay separate/.test(caveat)) ||
+  !(lifeStats.caveats ?? []).some((caveat) => /actual travel is blocked/.test(caveat))
+) {
+  fail('careerLab.lifeStats must preserve attribution, confidence, and actual-travel caveats.');
+}
+if (JSON.stringify(lifeStats).includes('9137.7') || JSON.stringify(lifeStats).includes('9,137.7')) {
+  fail('careerLab.lifeStats must never expose the shared-car odometer value.');
+}
+
+/* ---------- Career Lab atlas (deterministic land + 145-race venue contract) ---------- */
+
+const atlas = dataPackage.screens.careerLab.atlas;
+if (atlas?.schemaVersion !== 'brycecast.careerAtlas.v3') {
+  fail('careerLab.atlas must carry the validated career-atlas schema.');
+}
+for (const [key, expectedPath] of Object.entries({
+  careerAtlasOutput: 'analysis/career-atlas/output/atlas.json',
+  careerAtlasGlobeTexture: 'analysis/career-atlas/output/world_land_texture.png',
+  careerAtlasNaturalEarth: 'analysis/career-atlas/data/ne_110m_land.geojson',
+  careerAtlasNaturalEarthSource: 'analysis/career-atlas/data/SOURCE.md',
+  careerAtlasRequirements: 'analysis/career-atlas/requirements.txt',
+  careerAtlasBuilderScript: 'analysis/career-atlas/scripts/build_career_atlas.py',
+  careerAtlasValidatorScript: 'analysis/career-atlas/scripts/validate_career_atlas.py'
+})) {
+  if (sourceInventory[key]?.path !== expectedPath) {
+    fail(`sourceInventory.${key} must point to ${expectedPath}.`);
+  }
+}
+const atlasOutput = JSON.parse(fs.readFileSync(path.join(repoRoot, sourceInventory.careerAtlasOutput.path), 'utf8'));
+for (const field of ['schemaVersion', 'naturalEarth', 'geometry', 'globe', 'venues', 'venueCount', 'raceCount', 'confidenceClasses', 'caveats']) {
+  if (JSON.stringify(atlas[field]) !== JSON.stringify(atlasOutput[field])) {
+    fail(`careerLab.atlas.${field} must mirror the validated atlas artifact.`);
+  }
+}
+if (atlas.venueCount !== 34 || atlas.venues.length !== 34 || atlas.raceCount !== 145) {
+  fail('careerLab.atlas must carry all 34 physical venues and all 145 canonical race rows.');
+}
+if (atlas.venues.reduce((sum, venue) => sum + venue.raceCount, 0) !== 145) {
+  fail('careerLab.atlas venue race counts must reconcile to 145.');
+}
+if (atlas.naturalEarth.license !== 'public_domain' || atlas.naturalEarth.sourceSha256 !== sourceInventory.careerAtlasNaturalEarth.sha256) {
+  fail('careerLab.atlas must preserve pinned Natural Earth public-domain provenance.');
+}
+if (
+  atlas.globe?.projection !== 'orthographic' ||
+  atlas.globe?.texture?.path !== sourceInventory.careerAtlasGlobeTexture.path ||
+  atlas.globe?.texture?.sha256 !== sourceInventory.careerAtlasGlobeTexture.sha256 ||
+  atlas.globe?.texture?.width !== 1024 ||
+  atlas.globe?.texture?.height !== 512 ||
+  atlas.globe?.texture?.sourceFeatureCount !== 127 ||
+  atlas.globe?.zoom?.min !== 1 ||
+  atlas.globe?.zoom?.max !== 32
+) {
+  fail('careerLab.atlas full-world orthographic globe contract is invalid.');
+}
+if (
+  atlas.geometry.projection !== 'equirectangular_wrapped' ||
+  atlas.geometry.fillRule !== 'evenodd' ||
+  !atlas.geometry.landPath?.startsWith('M') ||
+  atlas.geometry.landPathSha256 !== createHash('sha256').update(atlas.geometry.landPath).digest('hex')
+) {
+  fail('careerLab.atlas geometry path or projection contract is invalid.');
+}
+if (new Set(atlas.venues.map((venue) => venue.venueId)).size !== atlas.venueCount) {
+  fail('careerLab.atlas venue identifiers must be unique.');
+}
+if (JSON.stringify([...new Set(atlas.venues.map((venue) => venue.region))].sort()) !== JSON.stringify(['Europe', 'North America', 'Oceania'])) {
+  fail('careerLab.atlas must carry the three deterministic career regions used by the UI filter.');
+}
+for (const venue of atlas.venues) {
+  if (
+    !venue.trackName ||
+    !venue.country ||
+    !venue.region ||
+    !(venue.raceCount > 0) ||
+    !Array.isArray(venue.seriesSpans) ||
+    venue.seriesSpans.length === 0 ||
+    venue.seriesSpans.reduce((sum, span) => sum + span.raceCount, 0) !== venue.raceCount ||
+    venue.confidence?.coordinates !== 'observed_exact' ||
+    venue.confidence?.raceCount !== 'observed_exact' ||
+    !/^\/(races|career\/race)\//.test(venue.latestRace?.raceHref ?? '') ||
+    !(venue.coordinateSources ?? []).every((source) => source.includes(' | https://')) ||
+    venue.projected?.x < 0 ||
+    venue.projected?.x > atlas.geometry.canvas.width ||
+    venue.projected?.y < 0 ||
+    venue.projected?.y > atlas.geometry.canvas.height
+  ) {
+    fail(`careerLab.atlas venue contract is incomplete for ${venue.trackName ?? '(unnamed)'}.`);
+  }
+  for (const span of venue.seriesSpans ?? []) {
+    if (
+      !(span.raceCount > 0) ||
+      !span.seriesId ||
+      !span.seriesShort ||
+      !span.latestRace?.sessionId ||
+      !/^\/(races|career\/race)\//.test(span.latestRace?.raceHref ?? '')
+    ) {
+      fail(`careerLab.atlas series-filter contract is incomplete for ${venue.trackName ?? '(unnamed)'}.`);
+    }
+  }
+}
+const atlasSourcePaths = new Set((atlas.sourceRefs ?? []).map((ref) => ref.path));
+for (const key of [
+  'careerAtlasOutput',
+  'careerAtlasGlobeTexture',
+  'careerAtlasNaturalEarth',
+  'careerAtlasNaturalEarthSource',
+  'careerAtlasRequirements',
+  'careerLifeStatsVenueFacts',
+  'careerLifeStatsMilesRaced',
+  'careerLifeStatsResearch',
+  'canonicalDataset',
+  'careerResultConversion',
+  'careerAtlasBuilderScript',
+  'careerAtlasValidatorScript'
+]) {
+  if (!atlasSourcePaths.has(sourceInventory[key].path)) {
+    fail(`careerLab.atlas sourceRefs must include ${sourceInventory[key].path}.`);
+  }
+}
+if (JSON.stringify(atlas).includes('54649.3') || JSON.stringify(atlas).includes('travelMiles')) {
+  fail('careerLab.atlas must remain venue-only; travel displacement and mileage layers are parked.');
+}
+
 /* ---------- season index (archive spine) ---------- */
 
 const seasonIndex = dataPackage.screens.raceDebrief.seasonIndex;
