@@ -1,35 +1,26 @@
 import type { LiveReadinessPayload } from './analyticsContracts';
 import type { UiCareerRival, UiStandingsSnapshot } from './uiDataPackage';
+import {
+  buildCumulativeLiveBattleFrame,
+  numberOrNull,
+  positiveGapSeconds,
+  type LiveBattleFrame,
+  type LiveBattleNeighbor
+} from './liveMotionModel';
+
+export {
+  isFreshCheckedAt,
+  livePosition,
+  positiveGapSeconds,
+  rankChanges,
+  resolveStableLabelLanes,
+  stableDriverId,
+  stableLabelLane,
+  timestampWindowDomain
+} from './liveMotionModel';
+export type { LiveBattleCar, LiveBattleFrame, LiveBattleNeighbor, RankChange } from './liveMotionModel';
 
 export type LiveRow = Record<string, unknown>;
-
-export interface LiveBattleCar {
-  id: string;
-  carNo: string;
-  surname: string;
-  rank: number;
-  /** Signed seconds relative to Bryce: positive is ahead, negative behind. */
-  offsetSeconds: number;
-}
-
-export interface LiveBattleNeighbor {
-  id: string;
-  carNo: string;
-  surname: string;
-  gapSeconds: number;
-}
-
-export interface LiveBattleFrame {
-  cars: LiveBattleCar[];
-  ahead: LiveBattleNeighbor | null;
-  behind: LiveBattleNeighbor | null;
-}
-
-const numberOrNull = (value: unknown): number | null => {
-  if (value === null || value === undefined || value === '') return null;
-  const parsed = Number(value);
-  return Number.isFinite(parsed) ? parsed : null;
-};
 
 export const liveRowsOf = (payload: LiveReadinessPayload): LiveRow[] => {
   const rows = (payload.liveTiming as LiveRow)?.rows;
@@ -41,74 +32,10 @@ export const liveBryceRowOf = (payload: LiveReadinessPayload): LiveRow | null =>
   return bryce && typeof bryce === 'object' ? (bryce as LiveRow) : null;
 };
 
-export const positiveGapSeconds = (value: unknown): number | null => {
-  const parsed = numberOrNull(value);
-  return parsed !== null && parsed >= 0 ? parsed : null;
-};
-
-const driverIdOf = (row: LiveRow) =>
-  String(row.DriverID ?? row.driverId ?? row.no ?? row.name ?? '').trim();
-
-const surnameOf = (row: LiveRow) => {
-  const lastName = String(row.lastName ?? '').trim();
-  if (lastName) return lastName;
-  const name = String(row.name ?? '').trim();
-  return name.split(/\s+/).at(-1) || `Car ${String(row.no ?? '—')}`;
-};
-
-/** Race Control's `diff` is the field's sourced gap-to-leader. Subtracting
- * it from Bryce's `diff` creates a Bryce-centered reference frame without
- * using lap-distance/GPS-like fields. The leader's blank `diff` is 0s. */
-const gapToLeaderSeconds = (row: LiveRow): number | null => {
-  const rank = numberOrNull(row.rank);
-  if (rank === 1) return 0;
-  return positiveGapSeconds(row.diff);
-};
-
 export const buildLiveBattleFrame = (payload: LiveReadinessPayload): LiveBattleFrame | null => {
   const rows = liveRowsOf(payload);
   const bryce = liveBryceRowOf(payload);
-  const bryceRank = numberOrNull(bryce?.rank);
-  const bryceGap = bryce ? gapToLeaderSeconds(bryce) : null;
-  if (!bryce || bryceRank === null || bryceGap === null) return null;
-
-  const cars = rows.flatMap((row) => {
-    if (row.bryce === true) return [];
-    const rank = numberOrNull(row.rank);
-    const gap = gapToLeaderSeconds(row);
-    if (rank === null || gap === null) return [];
-    return [{
-      id: driverIdOf(row),
-      carNo: String(row.no ?? '').trim(),
-      surname: surnameOf(row),
-      rank,
-      offsetSeconds: bryceGap - gap
-    } satisfies LiveBattleCar];
-  });
-
-  const neighbor = (rank: number, side: 'ahead' | 'behind'): LiveBattleNeighbor | null => {
-    const row = rows.find((candidate) => numberOrNull(candidate.rank) === rank);
-    if (!row) return null;
-    const interval = side === 'ahead'
-      ? positiveGapSeconds(bryce.gap)
-      : positiveGapSeconds(row.gap);
-    const fallbackGap = gapToLeaderSeconds(row);
-    const signedFallback = fallbackGap === null ? null : Math.abs(bryceGap - fallbackGap);
-    const gapSeconds = interval ?? signedFallback;
-    if (gapSeconds === null) return null;
-    return {
-      id: driverIdOf(row),
-      carNo: String(row.no ?? '').trim(),
-      surname: surnameOf(row),
-      gapSeconds
-    };
-  };
-
-  return {
-    cars,
-    ahead: bryceRank > 1 ? neighbor(bryceRank - 1, 'ahead') : null,
-    behind: neighbor(bryceRank + 1, 'behind')
-  };
+  return buildCumulativeLiveBattleFrame(rows, bryce);
 };
 
 export interface OfficialPointsStandingRow {

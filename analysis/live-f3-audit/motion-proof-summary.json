@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "live-f3-motion-proof.v1",
+  "api": {
+    "samples": 45,
+    "distinctArchivePayloads": 45,
+    "medianArchiveIntervalSeconds": 1.002,
+    "distinctLiveGapValues": 11,
+    "distinctLapLineGapValues": 4
+  },
+  "desktop": {
+    "frames": 30,
+    "durationSeconds": 29.379,
+    "heroRanks": ["P17", "P18"],
+    "laps": ["Lap 9 of 35"],
+    "trackPathStates": 1,
+    "trackDashOffsetStates": 1,
+    "lapProgressStates": 1,
+    "changedIntervalPairs": 153,
+    "unchangedIntervalPairs": 195,
+    "unchangedTransformViolationsAtOneMicroPixel": 0,
+    "stableLaneViolations": 0,
+    "horizontalOverflowFrames": 0,
+    "stableHistorySegments": 4,
+    "historyFirstCoordinateViolations": 0
+  },
+  "mobile": {
+    "frames": 30,
+    "durationSeconds": 29.361,
+    "labelOverlapFrames": 0,
+    "horizontalOverflowFrames": 0
+  },
+  "reducedMotion": {
+    "mediaMatches": true,
+    "corridorTransitionSeconds": 0.00001,
+    "progressTransitionSeconds": 0.00001,
+    "fieldAnimation": "none"
+  },
+  "consoleErrorsOrWarnings": 0
+}

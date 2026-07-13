@@ -143,6 +143,7 @@ const child = spawn(process.execPath, ['scripts/api-server.mjs', '--host=127.0.0
   stdio: ['ignore', 'pipe', 'pipe'],
   env: {
     ...process.env,
+    NODE_NO_WARNINGS: '1',
     BRYCECAST_REPLAY: '1',
     BRYCECAST_SQLITE_PATH: sqlitePath,
     BRYCECAST_RUNNER_STATUS_PATH: runnerStatusPath
@@ -169,6 +170,7 @@ try {
   const replayTiming = await fetchJson('/api/timing');
   assert.deepEqual(shapeOf(replayTiming), shapeOf(expectedTiming), 'replay /api/timing must preserve the live payload shape');
   assert.deepEqual(replayTiming.rows, expectedTiming.rows, 'replay timing values must be the archived Race Control values, normalized by the live adapter');
+  assert.equal(replayTiming.rows.find((row) => row.bryce)?.driverId, '2143', 'compact timing rows must retain stable driver identity');
   const readiness = await fetchJson('/api/readiness');
   assert.equal(readiness.schemaVersion, 'live-readiness.v1');
   assert.equal(readiness.liveTiming.rows.find((row) => row.bryce)?.runningDriverPoints, 159);
@@ -183,4 +185,4 @@ try {
 }
 
 assert.equal(stderr, '', stderr);
-console.log(JSON.stringify({ ok: true, assertions: 15, payloadShape: 'live-compatible' }, null, 2));
+console.log(JSON.stringify({ ok: true, assertions: 16, payloadShape: 'live-compatible' }, null, 2));

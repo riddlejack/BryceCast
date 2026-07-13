@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { CalendarClock, ExternalLink, Radio, Tv } from 'lucide-react';
 import {
   Card,
@@ -24,9 +24,14 @@ import {
   buildOfficialPointsWindow,
   captureAgeSeconds,
   headToHeadForLiveDriver,
+  livePosition,
   liveBryceRowOf,
   liveRowsOf,
   positiveGapSeconds,
+  rankChanges,
+  resolveStableLabelLanes,
+  stableDriverId,
+  timestampWindowDomain,
   type LiveBattleNeighbor,
   type LiveRow
 } from '../data/livePageModel';
@@ -96,14 +101,14 @@ const sourceEntries = {
     {
       label: 'BryceCast 1-second Race Control archive',
       path: '/api/replay/bryce',
-      note: 'Gap-to-leader and flag states are archived as received. Yellow periods are shaded; no GPS or pace model is inferred.'
+      note: 'Gap-to-leader and flag states are archived as received and plotted on capture timestamps. Yellow periods are shaded; no GPS or pace model is inferred.'
     }
   ],
   battle: [
     {
       label: 'Race Control timing feed · Bryce-centered intervals',
-      path: '/api/readiness → /api/timing rows[].diff / gap',
-      note: 'The corridor subtracts each sourced gap-to-leader from Bryce’s. The chart preserves published neighbor identities and starts a new segment whenever the neighbor changes; no GPS position is inferred.'
+      path: '/api/readiness → /api/timing rows[].liveGap',
+      note: 'The corridor cumulatively walks Race Control’s live interval to the preceding ranked car around Bryce. Missing intervals break the chain; no gap is filled with zero and no GPS position is inferred.'
     }
   ],
   watch: [
@@ -141,16 +146,15 @@ const useGapSamples = (payload: LiveReadiness | null): GapSample[] => {
     const bryce = liveBryceRowOf(payload);
     const heartbeat = heartbeatOf(payload);
     const frame = buildLiveBattleFrame(payload);
-    const rank = asNumber(bryce?.rank);
+    const rank = bryce ? livePosition(bryce) : null;
     if (!bryce || rank === null) return;
-    const behind = rows.find((row) => asNumber(row.rank) === rank + 1);
     const next = {
       checkedAt: payload.checkedAt,
       sessionKey: `${asString(heartbeat.eventId) ?? 'event'}-${asString(heartbeat.eventSessionId) ?? 'session'}`,
       lap: asNumber(heartbeat.lap),
       rank,
-      ahead: frame?.ahead?.gapSeconds ?? positiveGapSeconds(bryce.gap),
-      behind: frame?.behind?.gapSeconds ?? positiveGapSeconds(behind?.gap),
+      ahead: frame?.ahead?.gapSeconds ?? null,
+      behind: frame?.behind?.gapSeconds ?? null,
       aheadNeighbor: frame?.ahead ?? null,
       behindNeighbor: frame?.behind ?? null
     };
@@ -174,12 +178,16 @@ const BattleCorridor = ({ payload, samples }: { payload: LiveReadiness; samples:
   const frame = buildLiveBattleFrame(payload);
   const cars = (frame?.cars ?? [])
     .filter((car) => Math.abs(car.offsetSeconds) <= 4)
-    .sort((left, right) => left.offsetSeconds - right.offsetSeconds);
+    .sort((left, right) => left.id.localeCompare(right.id));
   const margin = { left: 36, right: 36 };
   const plotWidth = Math.max(width - margin.left - margin.right, 120);
   const axisY = 82;
-  const labelLanes = [50, 120, 33, 139, 17, 158];
+  const labelLanes = [17, 34, 51, 67, 116, 133, 150, 167];
   const x = (seconds: number) => margin.left + ((Math.max(-4, Math.min(4, seconds)) + 4) / 8) * plotWidth;
+  const lanesByDriver = resolveStableLabelLanes(
+    cars.map((car) => ({ id: car.id, surname: car.surname, x: x(car.offsetSeconds) })),
+    labelLanes.length
+  );
   const rateDetail = (carId: string, side: 'ahead' | 'behind') => {
     if (samples.length < 10) return null;
     const matches = samples.filter((sample) => (side === 'ahead' ? sample.aheadNeighbor : sample.behindNeighbor)?.id === carId);
@@ -206,22 +214,30 @@ const BattleCorridor = ({ payload, samples }: { payload: LiveReadiness; samples:
                 <text x={x(tick)} y={axisY + 23} textAnchor="middle" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={10.5}>{tick === 0 ? '0' : `${Math.abs(tick)}s`}</text>
               </g>
             ))}
-            {cars.map((car, index) => {
+            {cars.map((car) => {
               const side = car.offsetSeconds > 0 ? 'ahead' : 'behind';
               const close = Math.abs(car.offsetSeconds) <= 1;
-              const labelY = labelLanes[index % labelLanes.length];
+              const labelLane = lanesByDriver.get(car.id) ?? 0;
+              const labelY = labelLanes[labelLane];
               const cx = x(car.offsetSeconds);
               return (
-                <g key={car.id}>
-                  <text x={cx} y={labelY} textAnchor="middle" fill="var(--ink-secondary)" fontFamily={chartFont} fontSize={10}>{car.surname}</text>
-                  <circle cx={cx} cy={axisY} r={close ? 6.5 : 5} fill="var(--ink-primary)" opacity={close ? 1 : 0.8} stroke="var(--surface-1)" strokeWidth={2} />
+                <g
+                  key={car.id}
+                  className="live-battle__car"
+                  data-driver-id={car.id}
+                  data-label-lane={labelLane}
+                  data-offset-seconds={car.offsetSeconds.toFixed(4)}
+                  transform={`translate(${cx} 0)`}
+                >
+                  <text x={0} y={labelY} textAnchor="middle" fill="var(--ink-secondary)" fontFamily={chartFont} fontSize={10}>{car.surname}</text>
+                  <circle cx={0} cy={axisY} r={close ? 6.5 : 5} fill="var(--ink-primary)" opacity={close ? 1 : 0.8} stroke="var(--surface-1)" strokeWidth={2} />
                   <circle
-                    cx={cx}
+                    cx={0}
                     cy={axisY}
                     r={13}
                     fill="transparent"
                     tabIndex={0}
-                    aria-label={`${car.surname}, ${Math.abs(car.offsetSeconds).toFixed(1)} seconds ${side} of Bryce`}
+                    aria-label={`${car.surname}, ${Math.abs(car.offsetSeconds).toFixed(1)} seconds ${side} Bryce`}
                     onMouseEnter={() => setTip({
                       x: cx,
                       y: labelY < axisY ? labelY - 3 : labelY + 3,
@@ -255,6 +271,7 @@ interface BattleLinePoint {
   sampleIndex: number;
   value: number;
   checkedAt: string;
+  checkedAtMs: number;
   neighbor: LiveBattleNeighbor;
 }
 
@@ -269,7 +286,9 @@ const battleSegments = (samples: GapSample[], side: 'ahead' | 'behind') => {
     if (!previous || previous.id !== neighbor.id || previous.points.at(-1)!.sampleIndex !== sampleIndex - 1) {
       segments.push({ id: neighbor.id, surname: neighbor.surname, points: [] });
     }
-    segments.at(-1)!.points.push({ sampleIndex, value: side === 'ahead' ? gap : -gap, checkedAt: sample.checkedAt, neighbor });
+    const checkedAtMs = Date.parse(sample.checkedAt);
+    if (!Number.isFinite(checkedAtMs)) continue;
+    segments.at(-1)!.points.push({ sampleIndex, value: side === 'ahead' ? gap : -gap, checkedAt: sample.checkedAt, checkedAtMs, neighbor });
   }
   return segments;
 };
@@ -284,10 +303,16 @@ const BattleChart = ({ samples }: { samples: GapSample[] }) => {
   const margin = { top: 18, right: 72, bottom: 31, left: 40 };
   const plotWidth = Math.max(width - margin.left - margin.right, 100);
   const plotHeight = height - margin.top - margin.bottom;
-  const maxGap = Math.max(2, Math.ceil(Math.max(...samples.flatMap((sample) => [sample.ahead ?? 0, sample.behind ?? 0]))));
-  const x = (index: number) => margin.left + (index / Math.max(samples.length - 1, 1)) * plotWidth;
+  const domain = useMemo(() => timestampWindowDomain(samples.map((sample) => sample.checkedAt)), [samples]);
+  const maxGap = 4;
+  const x = (checkedAt: string) => {
+    if (!domain) return margin.left;
+    return margin.left + ((Date.parse(checkedAt) - domain.startMs) / (domain.endMs - domain.startMs)) * plotWidth;
+  };
   const y = (value: number) => margin.top + ((maxGap - value) / (maxGap * 2)) * plotHeight;
-  const pathOf = (points: BattleLinePoint[]) => points.map((point, index) => `${index === 0 ? 'M' : 'L'}${x(point.sampleIndex)} ${y(point.value)}`).join(' ');
+  const visiblePoints = (points: BattleLinePoint[]) =>
+    domain ? points.filter((point) => point.checkedAtMs >= domain.startMs && point.checkedAtMs <= domain.endMs) : [];
+  const pathOf = (points: BattleLinePoint[]) => visiblePoints(points).map((point, index) => `${index === 0 ? 'M' : 'L'}${x(point.checkedAt)} ${y(point.value)}`).join(' ');
   const tailFor = (side: 'ahead' | 'behind') => {
     if (samples.length < 2) return null;
     const previous = samples.at(-2)!;
@@ -301,30 +326,32 @@ const BattleChart = ({ samples }: { samples: GapSample[] }) => {
       key: `${side}-${current.checkedAt}`,
       color: side === 'ahead' ? '#5581c2' : '#2f9377',
       from: side === 'ahead' ? previousGap : -previousGap,
-      to: side === 'ahead' ? currentGap : -currentGap
+      to: side === 'ahead' ? currentGap : -currentGap,
+      fromCheckedAt: previous.checkedAt,
+      toCheckedAt: current.checkedAt
     };
   };
   const aheadTail = tailFor('ahead');
   const behindTail = tailFor('behind');
-  const elapsed = samples.length >= 2 ? Math.max(0, Date.parse(samples.at(-1)!.checkedAt) - Date.parse(samples[0].checkedAt)) : 0;
-  const leftLabel = elapsed >= 60_000 ? `−${Math.max(1, Math.round(elapsed / 60_000))} min` : `−${Math.max(samples.length - 1, 1)}s`;
 
   const onMove = (event: React.MouseEvent<SVGSVGElement>) => {
-    if (!svgRef.current || samples.length === 0) return;
+    if (!svgRef.current || samples.length === 0 || !domain) return;
     const bounds = svgRef.current.getBoundingClientRect();
     const cursorX = event.clientX - bounds.left;
-    const sampleIndex = Math.max(0, Math.min(samples.length - 1, Math.round(((cursorX - margin.left) / plotWidth) * (samples.length - 1))));
-    const sample = samples[sampleIndex];
+    const cursorTime = domain.startMs + Math.max(0, Math.min(1, (cursorX - margin.left) / plotWidth)) * (domain.endMs - domain.startMs);
+    const sample = samples.reduce((closest, candidate) =>
+      Math.abs(Date.parse(candidate.checkedAt) - cursorTime) < Math.abs(Date.parse(closest.checkedAt) - cursorTime) ? candidate : closest
+    );
     const details = [
       sample.aheadNeighbor && sample.ahead !== null ? `${sample.aheadNeighbor.surname} +${sample.ahead.toFixed(1)}s ahead` : null,
       sample.behindNeighbor && sample.behind !== null ? `${sample.behindNeighbor.surname} +${sample.behind.toFixed(1)}s behind` : null
     ].filter(Boolean).join(' · ');
-    setTip({ x: x(sampleIndex), y: y(0), title: 'Bryce · 0s', detail: details });
+    setTip({ x: x(sample.checkedAt), y: y(0), title: 'Bryce · 0s', detail: details });
   };
 
   return (
     <div ref={ref} className="live-battle__chart">
-      {width > 0 && samples.length >= 2 ? (
+      {width > 0 && samples.length >= 2 && domain ? (
         <>
           <svg ref={svgRef} width={width} height={height} role="img" aria-label="Gap to the car ahead and behind centered on Bryce over the latest five minutes" onMouseMove={onMove} onMouseLeave={() => setTip(null)}>
             {[maxGap, 0, -maxGap].map((tick) => (
@@ -336,28 +363,28 @@ const BattleChart = ({ samples }: { samples: GapSample[] }) => {
             <line x1={margin.left} x2={width - margin.right} y1={y(0)} y2={y(0)} stroke="var(--bryce)" strokeWidth={2} strokeDasharray="2 5" />
             {[...ahead].map((segment, index) => {
               const active = segment.points.at(-1)?.sampleIndex === samples.length - 1 && segment.points.length > 1;
-              return <path key={`ahead-${segment.id}-${index}`} d={pathOf(active ? segment.points.slice(0, -1) : segment.points)} fill="none" stroke="#5581c2" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />;
+              return <path key={`ahead-${segment.id}-${index}`} data-series="ahead" data-driver-id={segment.id} data-segment-index={index} d={pathOf(active ? segment.points.slice(0, -1) : segment.points)} fill="none" stroke="#5581c2" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />;
             })}
             {[...behind].map((segment, index) => {
               const active = segment.points.at(-1)?.sampleIndex === samples.length - 1 && segment.points.length > 1;
-              return <path key={`behind-${segment.id}-${index}`} d={pathOf(active ? segment.points.slice(0, -1) : segment.points)} fill="none" stroke="#2f9377" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />;
+              return <path key={`behind-${segment.id}-${index}`} data-series="behind" data-driver-id={segment.id} data-segment-index={index} d={pathOf(active ? segment.points.slice(0, -1) : segment.points)} fill="none" stroke="#2f9377" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />;
             })}
-            {aheadTail ? <line key={aheadTail.key} x1={x(samples.length - 2)} y1={y(aheadTail.from)} x2={x(samples.length - 1)} y2={y(aheadTail.to)} stroke={aheadTail.color} strokeWidth={2} strokeLinecap="round" className="live-line-tail" /> : null}
-            {behindTail ? <line key={behindTail.key} x1={x(samples.length - 2)} y1={y(behindTail.from)} x2={x(samples.length - 1)} y2={y(behindTail.to)} stroke={behindTail.color} strokeWidth={2} strokeLinecap="round" className="live-line-tail" /> : null}
+            {aheadTail ? <line key={aheadTail.key} x1={x(aheadTail.fromCheckedAt)} y1={y(aheadTail.from)} x2={x(aheadTail.toCheckedAt)} y2={y(aheadTail.to)} stroke={aheadTail.color} strokeWidth={2} strokeLinecap="round" className="live-line-tail" /> : null}
+            {behindTail ? <line key={behindTail.key} x1={x(behindTail.fromCheckedAt)} y1={y(behindTail.from)} x2={x(behindTail.toCheckedAt)} y2={y(behindTail.to)} stroke={behindTail.color} strokeWidth={2} strokeLinecap="round" className="live-line-tail" /> : null}
             {ahead.filter((segment) => segment.points.at(-1)?.sampleIndex === samples.length - 1).map((segment) => {
               const point = segment.points.at(-1)!;
-              return <text key={segment.id} x={x(point.sampleIndex) + 7} y={y(point.value)} dominantBaseline="middle" fill="var(--ink-secondary)" fontFamily={chartFont} fontSize={10.5}>{segment.surname}</text>;
+              return <text key={segment.id} x={x(point.checkedAt) + 7} y={y(point.value)} dominantBaseline="middle" fill="var(--ink-secondary)" fontFamily={chartFont} fontSize={10.5}>{segment.surname}</text>;
             })}
             {behind.filter((segment) => segment.points.at(-1)?.sampleIndex === samples.length - 1).map((segment) => {
               const point = segment.points.at(-1)!;
-              return <text key={segment.id} x={x(point.sampleIndex) + 7} y={y(point.value)} dominantBaseline="middle" fill="var(--ink-secondary)" fontFamily={chartFont} fontSize={10.5}>{segment.surname}</text>;
+              return <text key={segment.id} x={x(point.checkedAt) + 7} y={y(point.value)} dominantBaseline="middle" fill="var(--ink-secondary)" fontFamily={chartFont} fontSize={10.5}>{segment.surname}</text>;
             })}
             <g transform={`translate(${margin.left + 17} ${y(0)})`}>
               <rect x={-14} y={-10} width={28} height={20} rx={4} fill="var(--bryce)" />
               <text y={1} textAnchor="middle" dominantBaseline="middle" fill="#1d1d1f" fontFamily={chartFont} fontSize={11} fontWeight={750}>№9</text>
               <text x={20} y={1} dominantBaseline="middle" fill="var(--ink-secondary)" fontFamily={chartFont} fontSize={10.5}>Bryce</text>
             </g>
-            <text x={margin.left} y={height - 7} fill="var(--ink-muted)" fontFamily={chartFont} fontSize={10.5}>{leftLabel}</text>
+            <text x={margin.left} y={height - 7} fill="var(--ink-muted)" fontFamily={chartFont} fontSize={10.5}>−5 min</text>
             <text x={width - margin.right} y={height - 7} textAnchor="end" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={10.5}>now</text>
           </svg>
           {tip ? <ChartTipCard tip={tip} width={width} /> : null}
@@ -378,12 +405,12 @@ const BattleModule = ({ payload, samples }: { payload: LiveReadiness; samples: G
       : null;
   return (
     <Card className="live-battle" title="The battle" action={<SourcePill title="The battle" entries={sourceEntries.battle} />}>
-      <p className="live-battle__intro">Bryce is the reference point. Cars ahead sit right and above; cars behind sit left and below.</p>
+      <p className="live-battle__intro">Bryce is the reference point. Positions are cumulative Race Control intervals, not physical track location.</p>
       <div className={`live-battle__mode${mode ? ' live-battle__mode--active' : ''}`} aria-live="polite">{mode ?? '\u00a0'}</div>
       <BattleCorridor payload={payload} samples={samples} />
       <div className="live-battle__divider" />
       <BattleChart samples={samples} />
-      <p className="caption caption--secondary live-battle__caption">blue runs ahead of him, teal behind · lines closing on Bryce’s line mean the gap is shrinking</p>
+      <p className="caption caption--secondary live-battle__caption">blue = interval ahead · teal = interval behind · a missing source interval breaks the line</p>
     </Card>
   );
 };
@@ -429,7 +456,7 @@ const LiveHero = ({ payload, samples }: { payload: LiveReadiness; samples: GapSa
   const flag = asString(heartbeat.flag ?? weekend.flag);
   const lap = asNumber(heartbeat.lap ?? weekend.lap);
   const totalLaps = asNumber(heartbeat.totalLaps ?? weekend.totalLaps);
-  const rank = asNumber(bryce?.rank);
+  const rank = bryce ? livePosition(bryce) : null;
   const outline = trackOutlineFor(asString(heartbeat.trackName ?? weekend.trackName));
   const progress = lap !== null && totalLaps !== null && totalLaps > 0 ? lap / totalLaps : 0;
   const pointsWindow = buildOfficialPointsWindow(liveRowsOf(payload));
@@ -477,8 +504,22 @@ const LiveHero = ({ payload, samples }: { payload: LiveReadiness; samples: GapSa
           </div>
         </div>
         <div className="hero-race__art live-hero__art">
-          {outline ? <TrackArt outline={outline} showCornerLabels={false} maxHeight={150} progress={progress} /> : null}
-          <span className="caption caption--secondary live-hero__art-caption">the outline inks in as laps complete</span>
+          {outline ? <TrackArt outline={outline} showCornerLabels={false} maxHeight={150} /> : null}
+          <span className="caption caption--secondary live-hero__art-caption">full circuit outline · no car-position data</span>
+          <div className="live-lap-progress__meta">
+            <span>Race completion</span>
+            <span>{lap !== null && totalLaps !== null ? `${lap} / ${totalLaps} laps` : 'lap pending'}</span>
+          </div>
+          <div
+            className="live-lap-progress"
+            role="progressbar"
+            aria-label="Race completion by completed lap"
+            aria-valuemin={0}
+            aria-valuemax={totalLaps ?? 0}
+            aria-valuenow={lap ?? 0}
+          >
+            <span style={{ width: `${Math.max(0, Math.min(1, progress)) * 100}%` }} />
+          </div>
         </div>
         <div className="live-hero__jumbotron">
           <span className="caption">If the race ended now</span>
@@ -553,11 +594,70 @@ const PointsJumbotron = ({ payload }: { payload: LiveReadiness }) => {
 
 /* ---------- full field tower ---------- */
 
+const usePrefersReducedMotion = () => {
+  const [reduced, setReduced] = useState(false);
+  useEffect(() => {
+    const media = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const update = () => setReduced(media.matches);
+    update();
+    media.addEventListener('change', update);
+    return () => media.removeEventListener('change', update);
+  }, []);
+  return reduced;
+};
+
+const useFieldRowMotion = (rows: LiveRow[]) => {
+  const nodes = useRef(new Map<string, HTMLDivElement>());
+  const previousTops = useRef(new Map<string, number>());
+  const previousRows = useRef<LiveRow[]>([]);
+  const clearTimer = useRef<number | null>(null);
+  const [changedIds, setChangedIds] = useState<Set<string>>(new Set());
+  const reducedMotion = usePrefersReducedMotion();
+
+  useLayoutEffect(() => {
+    const changes = rankChanges(previousRows.current, rows);
+    const nextTops = new Map<string, number>();
+    nodes.current.forEach((node, id) => nextTops.set(id, node.offsetTop));
+
+    if (previousRows.current.length > 0 && !reducedMotion) {
+      nextTops.forEach((top, id) => {
+        const previousTop = previousTops.current.get(id);
+        const node = nodes.current.get(id);
+        const delta = previousTop === undefined ? 0 : previousTop - top;
+        if (!node || Math.abs(delta) < 1) return;
+        node.animate(
+          [{ transform: `translateY(${delta}px)` }, { transform: 'translateY(0)' }],
+          { duration: 800, easing: 'cubic-bezier(0.23, 1, 0.32, 1)' }
+        );
+      });
+    }
+
+    if (changes.length > 0) {
+      setChangedIds(new Set(changes.map((change) => change.id)));
+      if (clearTimer.current !== null) window.clearTimeout(clearTimer.current);
+      clearTimer.current = window.setTimeout(() => setChangedIds(new Set()), 1_000);
+    }
+    previousTops.current = nextTops;
+    previousRows.current = rows;
+  }, [reducedMotion, rows]);
+
+  useEffect(() => () => {
+    if (clearTimer.current !== null) window.clearTimeout(clearTimer.current);
+  }, []);
+
+  const register = (id: string, node: HTMLDivElement | null) => {
+    if (node) nodes.current.set(id, node);
+    else nodes.current.delete(id);
+  };
+  return { changedIds, register };
+};
+
 const FieldTower = ({ payload }: { payload: LiveReadiness }) => {
-  const rows = useMemo(() => [...liveRowsOf(payload)].sort((left, right) => (asNumber(left.rank) ?? 99) - (asNumber(right.rank) ?? 99)), [payload]);
+  const rows = useMemo(() => [...liveRowsOf(payload)].sort((left, right) => (livePosition(left) ?? 99) - (livePosition(right) ?? 99)), [payload]);
+  const { changedIds, register } = useFieldRowMotion(rows);
   const standings = uiDataPackage.screens.upcomingPrep.standingsSnapshot;
   const careerRivals = uiDataPackage.screens.careerLab.headToHead;
-  const bryceRank = asNumber(rows.find((row) => row.bryce === true)?.rank);
+  const bryceRank = livePosition(rows.find((row) => row.bryce === true) ?? {});
   if (rows.length === 0) {
     return (
       <Card title="The field" action={<SourcePill title="The field" entries={sourceEntries.tower} />}>
@@ -575,11 +675,12 @@ const FieldTower = ({ payload }: { payload: LiveReadiness }) => {
           <span>gap to leader</span>
         </div>
         {rows.map((row, index) => {
+          const rowId = stableDriverId(row);
           const isBryce = row.bryce === true;
-          const rank = asNumber(row.rank);
+          const rank = livePosition(row);
           const previous = rows[index - 1];
           const teammate = !isBryce && asString(row.team)?.toLowerCase().includes('ganassi');
-          const interval = index > 0 ? positiveGapSeconds(row.gap) : null;
+          const interval = index > 0 ? positiveGapSeconds(row.liveGap) : null;
           const battleBracket = interval !== null && interval <= 1;
           const bryceBracket = battleBracket && (isBryce || previous?.bryce === true);
           const status = (asString(row.status) ?? '').toLowerCase();
@@ -599,12 +700,15 @@ const FieldTower = ({ payload }: { payload: LiveReadiness }) => {
           const shared = (headToHead?.bryceAhead ?? 0) + (headToHead?.bryceBehind ?? 0);
           return (
             <div
-              key={`${String(row.no)}-${String(row.rank)}`}
-              className={`tower__row live-field__row${isBryce ? ' tower__row--bryce' : ''}`}
+              key={rowId}
+              ref={(node) => register(rowId, node)}
+              data-driver-id={rowId}
+              data-live-rank={rank ?? ''}
+              className={`tower__row live-field__row${isBryce ? ' tower__row--bryce' : ''}${changedIds.has(rowId) ? ' live-field__row--rank-change' : ''}`}
               role="row"
               tabIndex={headToHead && shared > 0 ? 0 : undefined}
             >
-              <span className="tower__pos">{formatNumber(row.rank, 0)}</span>
+              <span className="tower__pos">{formatNumber(rank, 0)}</span>
               <span className="tower__name">
                 {isBryce ? <Plate size="row" /> : null}
                 {driverLabel(row) ?? '—'}
@@ -680,21 +784,31 @@ const GapTrend = ({ trace }: { trace: ReplayTrace | null }) => {
         .map((row, index) => ({
           index,
           checkedAt: asString(row.checkedAt),
+          checkedAtMs: Date.parse(asString(row.checkedAt) ?? ''),
           gap: positiveGapSeconds(row.diff),
           lap: asNumber(row.laps),
           flag: (asString(row.flag) ?? '').toUpperCase()
         }))
-        .filter((point): point is { index: number; checkedAt: string; gap: number; lap: number | null; flag: string } => point.checkedAt !== null && point.gap !== null),
+        .filter((point): point is { index: number; checkedAt: string; checkedAtMs: number; gap: number; lap: number | null; flag: string } => point.checkedAt !== null && Number.isFinite(point.checkedAtMs) && point.gap !== null),
     [trace]
   );
   const height = 220;
   const margin = { top: 18, right: 24, bottom: 28, left: 38 };
   const plotWidth = Math.max(width - margin.left - margin.right, 80);
   const plotHeight = height - margin.top - margin.bottom;
-  const maxGap = Math.max(...points.map((point) => point.gap), 1);
-  const x = (index: number) => margin.left + (index / Math.max(points.length - 1, 1)) * plotWidth;
+  const sessionDomain = useMemo(() => {
+    if (points.length === 0) return null;
+    const firstMs = points[0].checkedAtMs;
+    const latestMs = points.at(-1)!.checkedAtMs;
+    return { startMs: firstMs, endMs: Math.max(firstMs + 60 * 60 * 1_000, latestMs) };
+  }, [points]);
+  const maxGap = Math.max(10, Math.ceil(Math.max(...points.map((point) => point.gap), 1) / 10) * 10);
+  const x = (checkedAtMs: number) => {
+    if (!sessionDomain) return margin.left;
+    return margin.left + ((checkedAtMs - sessionDomain.startMs) / (sessionDomain.endMs - sessionDomain.startMs)) * plotWidth;
+  };
   const y = (gap: number) => margin.top + (1 - gap / maxGap) * plotHeight;
-  const path = points.slice(0, -1).map((point, index) => `${index === 0 ? 'M' : 'L'}${x(index)} ${y(point.gap)}`).join(' ');
+  const path = points.slice(0, -1).map((point, index) => `${index === 0 ? 'M' : 'L'}${x(point.checkedAtMs)} ${y(point.gap)}`).join(' ');
   const lapBoundaries = useMemo(() => {
     const boundaries: Array<{ lap: number; index: number }> = [];
     points.forEach((point, index) => {
@@ -718,13 +832,13 @@ const GapTrend = ({ trace }: { trace: ReplayTrace | null }) => {
   }, [points]);
 
   const onMove = (event: React.MouseEvent<SVGSVGElement>) => {
-    if (!svgRef.current || points.length === 0) return;
+    if (!svgRef.current || points.length === 0 || !sessionDomain) return;
     const bounds = svgRef.current.getBoundingClientRect();
     const cursorX = event.clientX - bounds.left;
-    const index = Math.max(0, Math.min(points.length - 1, Math.round(((cursorX - margin.left) / plotWidth) * (points.length - 1))));
-    const point = points[index];
+    const cursorTime = sessionDomain.startMs + Math.max(0, Math.min(1, (cursorX - margin.left) / plotWidth)) * (sessionDomain.endMs - sessionDomain.startMs);
+    const point = points.reduce((closest, candidate) => Math.abs(candidate.checkedAtMs - cursorTime) < Math.abs(closest.checkedAtMs - cursorTime) ? candidate : closest);
     setTip({
-      x: x(index),
+      x: x(point.checkedAtMs),
       y: y(point.gap),
       title: `+${point.gap.toFixed(1)}s to leader`,
       detail: `${new Date(point.checkedAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', second: '2-digit' })}${point.flag && point.flag !== 'GREEN' ? ` · ${point.flag.toLowerCase()}` : ''}`
@@ -734,7 +848,7 @@ const GapTrend = ({ trace }: { trace: ReplayTrace | null }) => {
   return (
     <Card title="Distance to the leader" action={<SourcePill title="Distance to the leader" entries={sourceEntries.trend} />}>
       <div ref={ref} className="live-gap-chart">
-        {points.length >= 2 ? (
+        {points.length >= 2 && sessionDomain ? (
           <>
           <p className="caption caption--secondary" style={{ margin: '0 0 4px' }}>
             The full session from our 1-second capture · shaded = caution · gold = now
@@ -742,8 +856,8 @@ const GapTrend = ({ trace }: { trace: ReplayTrace | null }) => {
             {width > 0 ? (
               <svg ref={svgRef} width={width} height={height} role="img" aria-label="Bryce gap to the leader over the live session" onMouseMove={onMove} onMouseLeave={() => setTip(null)}>
                 {cautionBands.map((band, index) => {
-                  const left = x(band.from);
-                  const right = x(Math.min(band.to + 1, points.length - 1));
+                  const left = x(points[band.from].checkedAtMs);
+                  const right = x(points[Math.min(band.to + 1, points.length - 1)].checkedAtMs);
                   return <rect key={index} x={left} y={margin.top} width={Math.max(right - left, 2)} height={plotHeight} fill="var(--status-warn-dot)" opacity={0.1} />;
                 })}
                 {[maxGap, maxGap / 2, 0].map((tick) => (
@@ -755,10 +869,10 @@ const GapTrend = ({ trace }: { trace: ReplayTrace | null }) => {
                   </g>
                 ))}
                 <path d={path} fill="none" stroke="var(--ink-primary)" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="live-line-append" />
-                <line key={points.at(-1)!.checkedAt} x1={x(points.length - 2)} y1={y(points.at(-2)!.gap)} x2={x(points.length - 1)} y2={y(points.at(-1)!.gap)} stroke="var(--ink-primary)" strokeWidth={2} strokeLinecap="round" className="live-line-tail" />
-                <circle cx={x(points.length - 1)} cy={y(points.at(-1)!.gap)} r={5} fill="var(--bryce)" stroke="var(--surface-1)" strokeWidth={2} className="live-now-dot" />
+                <line key={points.at(-1)!.checkedAt} x1={x(points.at(-2)!.checkedAtMs)} y1={y(points.at(-2)!.gap)} x2={x(points.at(-1)!.checkedAtMs)} y2={y(points.at(-1)!.gap)} stroke="var(--ink-primary)" strokeWidth={2} strokeLinecap="round" className="live-line-tail" />
+                <circle cx={x(points.at(-1)!.checkedAtMs)} cy={y(points.at(-1)!.gap)} r={5} fill="var(--bryce)" stroke="var(--surface-1)" strokeWidth={2} className="live-now-dot" />
                 {lapBoundaries.length >= 2 ? lapBoundaries.map((boundary) => (
-                  <text key={boundary.index} x={x(boundary.index)} y={height - 7} textAnchor={boundary.index === 0 ? 'start' : boundary.index === points.length - 1 ? 'end' : 'middle'} fill="var(--ink-muted)" fontFamily={chartFont} fontSize={10.5}>L{boundary.lap}</text>
+                  <text key={boundary.index} x={x(points[boundary.index].checkedAtMs)} y={height - 7} textAnchor={boundary.index === 0 ? 'start' : boundary.index === points.length - 1 ? 'end' : 'middle'} fill="var(--ink-muted)" fontFamily={chartFont} fontSize={10.5}>L{boundary.lap}</text>
                 )) : (
                   <>
                     <text x={margin.left} y={height - 7} fill="var(--ink-muted)" fontFamily={chartFont} fontSize={10.5}>start</text>

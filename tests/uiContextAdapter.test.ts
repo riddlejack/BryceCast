@@ -92,14 +92,14 @@ assert.equal(pointsWindow.bryce.runningDriverPoints, 159, 'Bryce points must mat
 const battleFrame = buildLiveBattleFrame({
   liveTiming: {
     rows: [
-      { no: '10', lastName: 'Koolen', rank: 10, diff: '9.3213', gap: '1.0281' },
-      { no: '9', lastName: 'Aron', rank: 11, diff: '10.1880', gap: '0.8667', bryce: true },
-      { no: '17', lastName: 'de Alba', rank: 12, diff: '11.0020', gap: '0.8140' }
+      { driverId: '10', no: '10', lastName: 'Koolen', rank: 10, liveRank: 10, liveGap: '1.0281' },
+      { driverId: '2143', no: '9', lastName: 'Aron', rank: 11, liveRank: 11, liveGap: '0.8667', bryce: true },
+      { driverId: '17', no: '17', lastName: 'de Alba', rank: 12, liveRank: 12, liveGap: '0.8140' }
     ]
   },
-  bryce: { bryce: { no: '9', lastName: 'Aron', rank: 11, diff: '10.1880', gap: '0.8667', bryce: true } }
+  bryce: { bryce: { driverId: '2143', no: '9', lastName: 'Aron', rank: 11, liveRank: 11, liveGap: '0.8667', bryce: true } }
 } as never);
-assert.ok(battleFrame, 'sourced leader gaps should create a Bryce-centered battle frame');
+assert.ok(battleFrame, 'sourced live intervals should create a Bryce-centered battle frame');
 assert.equal(battleFrame.ahead?.surname, 'Koolen');
 assert.equal(battleFrame.ahead?.gapSeconds, 0.8667);
 assert.equal(battleFrame.behind?.surname, 'de Alba');

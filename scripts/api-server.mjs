@@ -1197,6 +1197,7 @@ export const queryReplay = ({
 };
 
 export const compactTimingRowForReadiness = (row, heartbeat = null) => ({
+  driverId: row?.DriverID === null || row?.DriverID === undefined ? '' : String(row.DriverID),
   no: row?.no ?? '',
   firstName: row?.firstName ?? '',
   lastName: row?.lastName ?? '',

@@ -1,0 +1,6017 @@
+[
+  {
+    "corridor": [
+      {
+        "cx": "471.0321574218749",
+        "cy": "82",
+        "id": "Taylor, 0.2 seconds behind of Bryce",
+        "labelY": "50"
+      },
+      {
+        "cx": "518.8053350097657",
+        "cy": "82",
+        "id": "Nannini, 0.3 seconds ahead of Bryce",
+        "labelY": "120"
+      },
+      {
+        "cx": "573.0254512695311",
+        "cy": "82",
+        "id": "Rowe, 0.7 seconds ahead of Bryce",
+        "labelY": "33"
+      },
+      {
+        "cx": "604.7720841308593",
+        "cy": "82",
+        "id": "Murray, 1.0 seconds ahead of Bryce",
+        "labelY": "139"
+      },
+      {
+        "cx": "682.0558964843749",
+        "cy": "82",
+        "id": "Missig, 1.7 seconds ahead of Bryce",
+        "labelY": "17"
+      },
+      {
+        "cx": "739.9080908691406",
+        "cy": "82",
+        "id": "Koolen, 2.2 seconds ahead of Bryce",
+        "labelY": "158"
+      },
+      {
+        "cx": "794.2530598144531",
+        "cy": "82",
+        "id": "Allaer, 2.7 seconds ahead of Bryce",
+        "labelY": "50"
+      }
+    ],
+    "fieldRows": [
+      {
+        "text": "1Fittipaldileader",
+        "top": 1237
+      },
+      {
+        "text": "2Kucharczyk+1.2s",
+        "top": 1275
+      },
+      {
+        "text": "3Beeton+2.2s",
+        "top": 1313
+      },
+      {
+        "text": "4de Alba+2.6s",
+        "top": 1350
+      },
+      {
+        "text": "5Hughes+3.1s",
+        "top": 1388
+      },
+      {
+        "text": "6de Tullio+3.8s",
+        "top": 1426
+      },
+      {
+        "text": "7Pierson+4.2s",
+        "top": 1464
+      },
+      {
+        "text": "8Johnson+4.5s",
+        "top": 1502
+      },
+      {
+        "text": "9Garcia+4.9s",
+        "top": 1540
+      },
+      {
+        "text": "10Correa+5.5s",
+        "top": 1578
+      },
+      {
+        "text": "11Allaer+6.9s",
+        "top": 1616
+      },
+      {
+        "text": "12Koolenteammate+7.4s",
+        "top": 1653
+      },
+      {
+        "text": "13Missig+7.9s",
+        "top": 1691
+      },
+      {
+        "text": "14Murray+8.5s",
+        "top": 1729
+      },
+      {
+        "text": "15Rowe+8.8sBryce ahead in 13 of 40 shared races",
+        "top": 1767
+      },
+      {
+        "text": "16Nannini+9.3sBryce ahead in 5 of 12 shared races",
+        "top": 1805
+      },
+      {
+        "text": "179Aron+9.6s",
+        "top": 1843
+      },
+      {
+        "text": "18Taylor+9.7sBryce ahead in 7 of 18 shared races",
+        "top": 1881
+      },
+      {
+        "text": "19Roeteammate+1 lapBryce ahead in 23 of 40 shared races",
+        "top": 1918
+      },
+      {
+        "text": "20Koreiba+1.7s+0.7s",
+        "top": 1956
+      },
+      {
+        "text": "21Monteiro+2.0s+1.0s",
+        "top": 1994
+      },
+      {
+        "text": "22Etterteammate+2.9s+1.9s",
+        "top": 2032
+      },
+      {
+        "text": "23Kaminsky+3.2s+2.2s",
+        "top": 2070
+      },
+      {
+        "text": "24Stati+4 laps",
+        "top": 2108
+      }
+    ],
+    "hero": "P16P17",
+    "historyPaths": [
+      "M908.01953125 103.132125",
+      "M908.01953125 123.651"
+    ],
+    "historyTails": [],
+    "lap": "GREEN flagLap 9 of 35",
+    "observedAt": "2026-07-13T18:17:27.469Z",
+    "trackDash": "0.7428571428571429"
+  },
+  {
+    "corridor": [
+      {
+        "cx": "356.0541842773436",
+        "cy": "82",
+        "id": "Monteiro, 1.2 seconds behind of Bryce",
+        "labelY": "50"
+      },
+      {
+        "cx": "390.9334845214842",
+        "cy": "82",
+        "id": "Koreiba, 0.9 seconds behind of Bryce",
+        "labelY": "120"
+      },
+      {
+        "cx": "428.5027926269531",
+        "cy": "82",
+        "id": "Roe, 0.5 seconds behind of Bryce",
+        "labelY": "33"
+      },
+      {
+        "cx": "471.0321574218749",
+        "cy": "82",
+        "id": "Taylor, 0.2 seconds behind of Bryce",
+        "labelY": "139"
+      },
+      {
+        "cx": "518.8053350097657",
+        "cy": "82",
+        "id": "Nannini, 0.3 seconds ahead of Bryce",
+        "labelY": "17"
+      },
+      {
+        "cx": "573.0254512695311",
+        "cy": "82",
+        "id": "Rowe, 0.7 seconds ahead of Bryce",
+        "labelY": "158"
+      },
+      {
+        "cx": "604.7720841308593",
+        "cy": "82",
+        "id": "Murray, 1.0 seconds ahead of Bryce",
+        "labelY": "50"
+      },
+      {
+        "cx": "682.0558964843749",
+        "cy": "82",
+        "id": "Missig, 1.7 seconds ahead of Bryce",
+        "labelY": "120"
+      },
+      {
+        "cx": "739.9080908691406",
+        "cy": "82",
+        "id": "Koolen, 2.2 seconds ahead of Bryce",
+        "labelY": "33"
+      },
+      {
+        "cx": "794.2530598144531",
+        "cy": "82",
+        "id": "Allaer, 2.7 seconds ahead of Bryce",
+        "labelY": "139"
+      }
+    ],
+    "fieldRows": [
+      {
+        "text": "1Fittipaldileader",
+        "top": 1237
+      },
+      {
+        "text": "2Kucharczyk+1.2s",
+        "top": 1275
+      },
+      {
+        "text": "3Beeton+2.2s",
+        "top": 1313
+      },
+      {
+        "text": "4de Alba+2.6s",
+        "top": 1350
+      },
+      {
+        "text": "5Hughes+3.1s",
+        "top": 1388
+      },
+      {
+        "text": "6de Tullio+3.8s",
+        "top": 1426
+      },
+      {
+        "text": "7Pierson+4.2s",
+        "top": 1464
+      },
+      {
+        "text": "8Johnson+4.5s",
+        "top": 1502
+      },
+      {
+        "text": "9Garcia+4.9s",
+        "top": 1540
+      },
+      {
+        "text": "10Correa+5.5s",
+        "top": 1578
+      },
+      {
+        "text": "11Allaer+6.9s",
+        "top": 1616
+      },
+      {
+        "text": "12Koolenteammate+7.4s",
+        "top": 1653
+      },
+      {
+        "text": "13Missig+7.9s",
+        "top": 1691
+      },
+      {
+        "text": "14Murray+8.5s",
+        "top": 1729
+      },
+      {
+        "text": "15Rowe+8.8sBryce ahead in 13 of 40 shared races",
+        "top": 1767
+      },
+      {
+        "text": "16Nannini+9.3sBryce ahead in 5 of 12 shared races",
+        "top": 1805
+      },
+      {
+        "text": "179Aron+9.6s",
+        "top": 1843
+      },
+      {
+        "text": "18Taylor+9.7sBryce ahead in 7 of 18 shared races",
+        "top": 1881
+      },
+      {
+        "text": "19Roeteammate+1 lap+10sBryce ahead in 23 of 40 shared races",
+        "top": 1918
+      },
+      {
+        "text": "20Koreiba+0.7s+10s",
+        "top": 1956
+      },
+      {
+        "text": "21Monteiro+1.0s+11s",
+        "top": 1994
+      },
+      {
+        "text": "22Etterteammate+1.9s+1 lap",
+        "top": 2032
+      },
+      {
+        "text": "23Kaminsky+2.2s+0.3s",
+        "top": 2070
+      },
+      {
+        "text": "24Stati+4 laps",
+        "top": 2108
+      }
+    ],
+    "hero": "P17",
+    "historyPaths": [
+      "M474.009765625 103.132125",
+      "M474.009765625 123.651"
+    ],
+    "historyTails": [
+      {
+        "x1": "474.009765625",
+        "x2": "908.01953125",
+        "y1": "103.132125",
+        "y2": "103.132125"
+      },
+      {
+        "x1": "474.009765625",
+        "x2": "908.01953125",
+        "y1": "123.651",
+        "y2": "123.651"
+      }
+    ],
+    "lap": "GREEN flagLap 9 of 35",
+    "observedAt": "2026-07-13T18:17:28.481Z",
+    "trackDash": "0.7428571428571429"
+  },
+  {
+    "corridor": [
+      {
+        "cx": "269.0432126953124",
+        "cy": "82",
+        "id": "Kaminsky, 1.9 seconds behind of Bryce",
+        "labelY": "50"
+      },
+      {
+        "cx": "356.0541842773436",
+        "cy": "82",
+        "id": "Monteiro, 1.2 seconds behind of Bryce",
+        "labelY": "120"
+      },
+      {
+        "cx": "390.9334845214842",
+        "cy": "82",
+        "id": "Koreiba, 0.9 seconds behind of Bryce",
+        "labelY": "33"
+      },
+      {
+        "cx": "428.5027926269531",
+        "cy": "82",
+        "id": "Roe, 0.5 seconds behind of Bryce",
+        "labelY": "139"
+      },
+      {
+        "cx": "471.0321574218749",
+        "cy": "82",
+        "id": "Taylor, 0.2 seconds behind of Bryce",
+        "labelY": "17"
+      },
+      {
+        "cx": "518.8053350097657",
+        "cy": "82",
+        "id": "Nannini, 0.3 seconds ahead of Bryce",
+        "labelY": "158"
+      },
+      {
+        "cx": "573.0254512695311",
+        "cy": "82",
+        "id": "Rowe, 0.7 seconds ahead of Bryce",
+        "labelY": "50"
+      },
+      {
+        "cx": "604.7720841308593",
+        "cy": "82",
+        "id": "Murray, 1.0 seconds ahead of Bryce",
+        "labelY": "120"
+      },
+      {
+        "cx": "682.0558964843749",
+        "cy": "82",
+        "id": "Missig, 1.7 seconds ahead of Bryce",
+        "labelY": "33"
+      },
+      {
+        "cx": "739.9080908691406",
+        "cy": "82",
+        "id": "Koolen, 2.2 seconds ahead of Bryce",
+        "labelY": "139"
+      },
+      {
+        "cx": "794.2530598144531",
+        "cy": "82",
+        "id": "Allaer, 2.7 seconds ahead of Bryce",
+        "labelY": "17"
+      }
+    ],
+    "fieldRows": [
+      {
+        "text": "1Fittipaldileader",
+        "top": 1237
+      },
+      {
+        "text": "2Kucharczyk+1.2s",
+        "top": 1275
+      },
+      {
+        "text": "3Beeton+2.2s",
+        "top": 1313
+      },
+      {
+        "text": "4de Alba+2.6s",
+        "top": 1350
+      },
+      {
+        "text": "5Hughes+3.1s",
+        "top": 1388
+      },
+      {
+        "text": "6de Tullio+3.8s",
+        "top": 1426
+      },
+      {
+        "text": "7Pierson+4.2s",
+        "top": 1464
+      },
+      {
+        "text": "8Johnson+4.5s",
+        "top": 1502
+      },
+      {
+        "text": "9Garcia+4.9s",
+        "top": 1540
+      },
+      {
+        "text": "10Correa+5.5s",
+        "top": 1578
+      },
+      {
+        "text": "11Allaer+6.9s",
+        "top": 1616
+      },
+      {
+        "text": "12Koolenteammate+7.4s",
+        "top": 1653
+      },
+      {
+        "text": "13Missig+7.9s",
+        "top": 1691
+      },
+      {
+        "text": "14Murray+8.5s",
+        "top": 1729
+      },
+      {
+        "text": "15Rowe+8.8sBryce ahead in 13 of 40 shared races",
+        "top": 1767
+      },
+      {
+        "text": "16Nannini+9.3sBryce ahead in 5 of 12 shared races",
+        "top": 1805
+      },
+      {
+        "text": "179Aron+9.6s",
+        "top": 1843
+      },
+      {
+        "text": "18Taylor+9.7sBryce ahead in 7 of 18 shared races",
+        "top": 1881
+      },
+      {
+        "text": "19Roeteammate+10sBryce ahead in 23 of 40 shared races",
+        "top": 1918
+      },
+      {
+        "text": "20Koreiba+10s",
+        "top": 1956
+      },
+      {
+        "text": "21Monteiro+11s",
+        "top": 1994
+      },
+      {
+        "text": "22Kaminsky+12s",
+        "top": 2032
+      },
+      {
+        "text": "23Etterteammate+1 lap",
+        "top": 2070
+      },
+      {
+        "text": "24Stati+4 laps",
+        "top": 2108
+      }
+    ],
+    "hero": "P17",
+    "historyPaths": [
+      "M329.33984375 103.132125 L618.6796875 103.132125",
+      "M329.33984375 123.651 L618.6796875 123.651"
+    ],
+    "historyTails": [
+      {
+        "x1": "618.6796875",
+        "x2": "908.01953125",
+        "y1": "103.132125",
+        "y2": "103.132125"
+      },
+      {
+        "x1": "618.6796875",
+        "x2": "908.01953125",
+        "y1": "123.651",
+        "y2": "123.651"
+      }
+    ],
+    "lap": "GREEN flagLap 9 of 35",
+    "observedAt": "2026-07-13T18:17:29.494Z",
+    "trackDash": "0.7428571428571429"
+  },
+  {
+    "corridor": [
+      {
+        "cx": "202.14487373046865",
+        "cy": "82",
+        "id": "Etter, 2.5 seconds behind of Bryce",
+        "labelY": "50"
+      },
+      {
+        "cx": "269.0432126953124",
+        "cy": "82",
+        "id": "Kaminsky, 1.9 seconds behind of Bryce",
+        "labelY": "120"
+      },
+      {
+        "cx": "356.0541842773436",
+        "cy": "82",
+        "id": "Monteiro, 1.2 seconds behind of Bryce",
+        "labelY": "33"
+      },
+      {
+        "cx": "390.9334845214842",
+        "cy": "82",
+        "id": "Koreiba, 0.9 seconds behind of Bryce",
+        "labelY": "139"
+      },
+      {
+        "cx": "428.5027926269531",
+        "cy": "82",
+        "id": "Roe, 0.5 seconds behind of Bryce",
+        "labelY": "17"
+      },
+      {
+        "cx": "471.0321574218749",
+        "cy": "82",
+        "id": "Taylor, 0.2 seconds behind of Bryce",
+        "labelY": "158"
+      },
+      {
+        "cx": "518.8053350097657",
+        "cy": "82",
+        "id": "Nannini, 0.3 seconds ahead of Bryce",
+        "labelY": "50"
+      },
+      {
+        "cx": "573.0254512695311",
+        "cy": "82",
+        "id": "Rowe, 0.7 seconds ahead of Bryce",
+        "labelY": "120"
+      },
+      {
+        "cx": "604.7720841308593",
+        "cy": "82",
+        "id": "Murray, 1.0 seconds ahead of Bryce",
+        "labelY": "33"
+      },
+      {
+        "cx": "682.0558964843749",
+        "cy": "82",
+        "id": "Missig, 1.7 seconds ahead of Bryce",
+        "labelY": "139"
+      },
+      {
+        "cx": "739.9080908691406",
+        "cy": "82",
+        "id": "Koolen, 2.2 seconds ahead of Bryce",
+        "labelY": "17"
+      },
+      {
+        "cx": "794.2530598144531",
+        "cy": "82",
+        "id": "Allaer, 2.7 seconds ahead of Bryce",
+        "labelY": "158"
+      }
+    ],
+    "fieldRows": [
+      {
+        "text": "1Fittipaldileader",
+        "top": 1237
+      },
+      {
+        "text": "2Kucharczyk+1.2s",
+        "top": 1275
+      },
+      {
+        "text": "3Beeton+2.2s",
+        "top": 1313
+      },
+      {
+        "text": "4de Alba+2.6s",
+        "top": 1350
+      },
+      {
+        "text": "5Hughes+3.1s",
+        "top": 1388
+      },
+      {
+        "text": "6de Tullio+3.8s",
+        "top": 1426
+      },
+      {
+        "text": "7Pierson+4.2s",
+        "top": 1464
+      },
+      {
+        "text": "8Johnson+4.5s",
+        "top": 1502
+      },
+      {
+        "text": "9Garcia+4.9s",
+        "top": 1540
+      },
+      {
+        "text": "10Correa+5.5s",
+        "top": 1578
+      },
+      {
+        "text": "11Allaer+6.9s",
+        "top": 1616
+      },
+      {
+        "text": "12Koolenteammate+7.4s",
+        "top": 1653
+      },
+      {
+        "text": "13Missig+7.9s",
+        "top": 1691
+      },
+      {
+        "text": "14Murray+8.5s",
+        "top": 1729
+      },
+      {
+        "text": "15Rowe+8.8sBryce ahead in 13 of 40 shared races",
+        "top": 1767
+      },
+      {
+        "text": "16Nannini+9.3sBryce ahead in 5 of 12 shared races",
+        "top": 1805
+      },
+      {
+        "text": "179Aron+9.6s",
+        "top": 1843
+      },
+      {
+        "text": "18Taylor+9.7sBryce ahead in 7 of 18 shared races",
+        "top": 1881
+      },
+      {
+        "text": "19Roeteammate+10sBryce ahead in 23 of 40 shared races",
+        "top": 1918
+      },
+      {
+        "text": "20Koreiba+10s",
+        "top": 1956
+      },
+      {
+        "text": "21Monteiro+11s",
+        "top": 1994
+      },
+      {
+        "text": "22Kaminsky+12s",
+        "top": 2032
+      },
+      {
+        "text": "23Etterteammate+1 lap+12s",
+        "top": 2070
+      },
+      {
+        "text": "24Stati+4 laps",
+        "top": 2108
+      }
+    ],
+    "hero": "P17",
+    "historyPaths": [
+      "M257.0048828125 103.132125 L474.009765625 103.132125 L691.0146484375 103.132125",
+      "M257.0048828125 123.651 L474.009765625 123.651 L691.0146484375 123.651"
+    ],
+    "historyTails": [
+      {
+        "x1": "691.0146484375",
+        "x2": "908.01953125",
+        "y1": "103.132125",
+        "y2": "103.132125"
+      },
+      {
+        "x1": "691.0146484375",
+        "x2": "908.01953125",
+        "y1": "123.651",
+        "y2": "123.651"
+      }
+    ],
+    "lap": "GREEN flagLap 9 of 35",
+    "observedAt": "2026-07-13T18:17:30.506Z",
+    "trackDash": "0.7428571428571429"
+  },
+  {
+    "corridor": [
+      {
+        "cx": "202.14487373046865",
+        "cy": "82",
+        "id": "Etter, 2.5 seconds behind of Bryce",
+        "labelY": "50"
+      },
+      {
+        "cx": "269.0432126953124",
+        "cy": "82",
+        "id": "Kaminsky, 1.9 seconds behind of Bryce",
+        "labelY": "120"
+      },
+      {
+        "cx": "356.0541842773436",
+        "cy": "82",
+        "id": "Monteiro, 1.2 seconds behind of Bryce",
+        "labelY": "33"
+      },
+      {
+        "cx": "390.9334845214842",
+        "cy": "82",
+        "id": "Koreiba, 0.9 seconds behind of Bryce",
+        "labelY": "139"
+      },
+      {
+        "cx": "428.5027926269531",
+        "cy": "82",
+        "id": "Roe, 0.5 seconds behind of Bryce",
+        "labelY": "17"
+      },
+      {
+        "cx": "471.0321574218749",
+        "cy": "82",
+        "id": "Taylor, 0.2 seconds behind of Bryce",
+        "labelY": "158"
+      },
+      {
+        "cx": "518.8053350097657",
+        "cy": "82",
+        "id": "Nannini, 0.3 seconds ahead of Bryce",
+        "labelY": "50"
+      },
+      {
+        "cx": "573.0254512695311",
+        "cy": "82",
+        "id": "Rowe, 0.7 seconds ahead of Bryce",
+        "labelY": "120"
+      },
+      {
+        "cx": "604.7720841308593",
+        "cy": "82",
+        "id": "Murray, 1.0 seconds ahead of Bryce",
+        "labelY": "33"
+      },
+      {
+        "cx": "682.0558964843749",
+        "cy": "82",
+        "id": "Missig, 1.7 seconds ahead of Bryce",
+        "labelY": "139"
+      },
+      {
+        "cx": "739.9080908691406",
+        "cy": "82",
+        "id": "Koolen, 2.2 seconds ahead of Bryce",
+        "labelY": "17"
+      },
+      {
+        "cx": "794.2530598144531",
+        "cy": "82",
+        "id": "Allaer, 2.7 seconds ahead of Bryce",
+        "labelY": "158"
+      }
+    ],
+    "fieldRows": [
+      {
+        "text": "1Fittipaldileader",
+        "top": 1237
+      },
+      {
+        "text": "2Kucharczyk+1.2s",
+        "top": 1275
+      },
+      {
+        "text": "3Beeton+2.2s",
+        "top": 1313
+      },
+      {
+        "text": "4de Alba+2.6s",
+        "top": 1350
+      },
+      {
+        "text": "5Hughes+3.1s",
+        "top": 1388
+      },
+      {
+        "text": "6de Tullio+3.8s",
+        "top": 1426
+      },
+      {
+        "text": "7Pierson+4.2s",
+        "top": 1464
+      },
+      {
+        "text": "8Johnson+4.5s",
+        "top": 1502
+      },
+      {
+        "text": "9Garcia+4.9s",
+        "top": 1540
+      },
+      {
+        "text": "10Correa+5.5s",
+        "top": 1578
+      },
+      {
+        "text": "11Allaer+6.9s",
+        "top": 1616
+      },
+      {
+        "text": "12Koolenteammate+7.4s",
+        "top": 1653
+      },
+      {
+        "text": "13Missig+7.9s",
+        "top": 1691
+      },
+      {
+        "text": "14Murray+8.5s",
+        "top": 1729
+      },
+      {
+        "text": "15Rowe+8.8sBryce ahead in 13 of 40 shared races",
+        "top": 1767
+      },
+      {
+        "text": "16Nannini+9.3sBryce ahead in 5 of 12 shared races",
+        "top": 1805
+      },
+      {
+        "text": "179Aron+9.6s",
+        "top": 1843
+      },
+      {
+        "text": "18Taylor+9.7sBryce ahead in 7 of 18 shared races",
+        "top": 1881
+      },
+      {
+        "text": "19Roeteammate+10sBryce ahead in 23 of 40 shared races",
+        "top": 1918
+      },
+      {
+        "text": "20Koreiba+10s",
+        "top": 1956
+      },
+      {
+        "text": "21Monteiro+11s",
+        "top": 1994
+      },
+      {
+        "text": "22Kaminsky+12s",
+        "top": 2032
+      },
+      {
+        "text": "23Etterteammate+12s",
+        "top": 2070
+      },
+      {
+        "text": "24Stati+4 laps",
+        "top": 2108
+      }
+    ],
+    "hero": "P17",
+    "historyPaths": [
+      "M213.60390625000002 103.132125 L387.20781250000005 103.132125 L560.81171875 103.132125 L734.4156250000001 103.132125",
+      "M213.60390625000002 123.651 L387.20781250000005 123.651 L560.81171875 123.651 L734.4156250000001 123.651"
+    ],
+    "historyTails": [
+      {
+        "x1": "734.4156250000001",
+        "x2": "908.01953125",
+        "y1": "103.132125",
+        "y2": "103.132125"
+      },
+      {
+        "x1": "734.4156250000001",
+        "x2": "908.01953125",
+        "y1": "123.651",
+        "y2": "123.651"
+      }
+    ],
+    "lap": "GREEN flagLap 9 of 35",
+    "observedAt": "2026-07-13T18:17:31.536Z",
+    "trackDash": "0.7428571428571429"
+  },
+  {
+    "corridor": [
+      {
+        "cx": "202.14487373046865",
+        "cy": "82",
+        "id": "Etter, 2.5 seconds behind of Bryce",
+        "labelY": "50"
+      },
+      {
+        "cx": "269.0432126953124",
+        "cy": "82",
+        "id": "Kaminsky, 1.9 seconds behind of Bryce",
+        "labelY": "120"
+      },
+      {
+        "cx": "356.0541842773436",
+        "cy": "82",
+        "id": "Monteiro, 1.2 seconds behind of Bryce",
+        "labelY": "33"
+      },
+      {
+        "cx": "390.9334845214842",
+        "cy": "82",
+        "id": "Koreiba, 0.9 seconds behind of Bryce",
+        "labelY": "139"
+      },
+      {
+        "cx": "428.5027926269531",
+        "cy": "82",
+        "id": "Roe, 0.5 seconds behind of Bryce",
+        "labelY": "17"
+      },
+      {
+        "cx": "471.0321574218749",
+        "cy": "82",
+        "id": "Taylor, 0.2 seconds behind of Bryce",
+        "labelY": "158"
+      },
+      {
+        "cx": "518.8053350097657",
+        "cy": "82",
+        "id": "Nannini, 0.3 seconds ahead of Bryce",
+        "labelY": "50"
+      },
+      {
+        "cx": "573.0254512695311",
+        "cy": "82",
+        "id": "Rowe, 0.7 seconds ahead of Bryce",
+        "labelY": "120"
+      },
+      {
+        "cx": "604.7720841308593",
+        "cy": "82",
+        "id": "Murray, 1.0 seconds ahead of Bryce",
+        "labelY": "33"
+      },
+      {
+        "cx": "682.0558964843749",
+        "cy": "82",
+        "id": "Missig, 1.7 seconds ahead of Bryce",
+        "labelY": "139"
+      },
+      {
+        "cx": "739.9080908691406",
+        "cy": "82",
+        "id": "Koolen, 2.2 seconds ahead of Bryce",
+        "labelY": "17"
+      },
+      {
+        "cx": "794.2530598144531",
+        "cy": "82",
+        "id": "Allaer, 2.7 seconds ahead of Bryce",
+        "labelY": "158"
+      }
+    ],
+    "fieldRows": [
+      {
+        "text": "1Fittipaldileader",
+        "top": 1237
+      },
+      {
+        "text": "2Kucharczyk+1.2s",
+        "top": 1275
+      },
+      {
+        "text": "3Beeton+2.2s",
+        "top": 1313
+      },
+      {
+        "text": "4de Alba+2.6s",
+        "top": 1350
+      },
+      {
+        "text": "5Hughes+3.1s",
+        "top": 1388
+      },
+      {
+        "text": "6de Tullio+3.8s",
+        "top": 1426
+      },
+      {
+        "text": "7Pierson+4.2s",
+        "top": 1464
+      },
+      {
+        "text": "8Johnson+4.5s",
+        "top": 1502
+      },
+      {
+        "text": "9Garcia+4.9s",
+        "top": 1540
+      },
+      {
+        "text": "10Correa+5.5s",
+        "top": 1578
+      },
+      {
+        "text": "11Allaer+6.9s",
+        "top": 1616
+      },
+      {
+        "text": "12Koolenteammate+7.4s",
+        "top": 1653
+      },
+      {
+        "text": "13Missig+7.9s",
+        "top": 1691
+      },
+      {
+        "text": "14Murray+8.5s",
+        "top": 1729
+      },
+      {
+        "text": "15Rowe+8.8sBryce ahead in 13 of 40 shared races",
+        "top": 1767
+      },
+      {
+        "text": "16Nannini+9.3sBryce ahead in 5 of 12 shared races",
+        "top": 1805
+      },
+      {
+        "text": "179Aron+9.6s",
+        "top": 1843
+      },
+      {
+        "text": "18Taylor+9.7sBryce ahead in 7 of 18 shared races",
+        "top": 1881
+      },
+      {
+        "text": "19Roeteammate+10sBryce ahead in 23 of 40 shared races",
+        "top": 1918
+      },
+      {
+        "text": "20Koreiba+10s",
+        "top": 1956
+      },
+      {
+        "text": "21Monteiro+11s",
+        "top": 1994
+      },
+      {
+        "text": "22Kaminsky+12s",
+        "top": 2032
+      },
+      {
+        "text": "23Etterteammate+12s",
+        "top": 2070
+      },
+      {
+        "text": "24Stati+4 laps",
+        "top": 2108
+      }
+    ],
+    "hero": "P17",
+    "historyPaths": [
+      "M213.60390625000002 103.132125 L387.20781250000005 103.132125 L560.81171875 103.132125 L734.4156250000001 103.132125",
+      "M213.60390625000002 123.651 L387.20781250000005 123.651 L560.81171875 123.651 L734.4156250000001 123.651"
+    ],
+    "historyTails": [
+      {
+        "x1": "734.4156250000001",
+        "x2": "908.01953125",
+        "y1": "103.132125",
+        "y2": "103.132125"
+      },
+      {
+        "x1": "734.4156250000001",
+        "x2": "908.01953125",
+        "y1": "123.651",
+        "y2": "123.651"
+      }
+    ],
+    "lap": "GREEN flagLap 9 of 35",
+    "observedAt": "2026-07-13T18:17:32.548Z",
+    "trackDash": "0.7428571428571429"
+  },
+  {
+    "corridor": [
+      {
+        "cx": "202.14487373046865",
+        "cy": "82",
+        "id": "Etter, 2.5 seconds behind of Bryce",
+        "labelY": "50"
+      },
+      {
+        "cx": "269.0432126953124",
+        "cy": "82",
+        "id": "Kaminsky, 1.9 seconds behind of Bryce",
+        "labelY": "120"
+      },
+      {
+        "cx": "356.0541842773436",
+        "cy": "82",
+        "id": "Monteiro, 1.2 seconds behind of Bryce",
+        "labelY": "33"
+      },
+      {
+        "cx": "390.9334845214842",
+        "cy": "82",
+        "id": "Koreiba, 0.9 seconds behind of Bryce",
+        "labelY": "139"
+      },
+      {
+        "cx": "428.5027926269531",
+        "cy": "82",
+        "id": "Roe, 0.5 seconds behind of Bryce",
+        "labelY": "17"
+      },
+      {
+        "cx": "471.0321574218749",
+        "cy": "82",
+        "id": "Taylor, 0.2 seconds behind of Bryce",
+        "labelY": "158"
+      },
+      {
+        "cx": "518.8053350097657",
+        "cy": "82",
+        "id": "Nannini, 0.3 seconds ahead of Bryce",
+        "labelY": "50"
+      },
+      {
+        "cx": "573.0254512695311",
+        "cy": "82",
+        "id": "Rowe, 0.7 seconds ahead of Bryce",
+        "labelY": "120"
+      },
+      {
+        "cx": "604.7720841308593",
+        "cy": "82",
+        "id": "Murray, 1.0 seconds ahead of Bryce",
+        "labelY": "33"
+      },
+      {
+        "cx": "682.0558964843749",
+        "cy": "82",
+        "id": "Missig, 1.7 seconds ahead of Bryce",
+        "labelY": "139"
+      },
+      {
+        "cx": "739.9080908691406",
+        "cy": "82",
+        "id": "Koolen, 2.2 seconds ahead of Bryce",
+        "labelY": "17"
+      },
+      {
+        "cx": "794.2530598144531",
+        "cy": "82",
+        "id": "Allaer, 2.7 seconds ahead of Bryce",
+        "labelY": "158"
+      }
+    ],
+    "fieldRows": [
+      {
+        "text": "1Fittipaldileader",
+        "top": 1237
+      },
+      {
+        "text": "2Kucharczyk+1.2s",
+        "top": 1275
+      },
+      {
+        "text": "3Beeton+2.2s",
+        "top": 1313
+      },
+      {
+        "text": "4de Alba+2.6s",
+        "top": 1350
+      },
+      {
+        "text": "5Hughes+3.1s",
+        "top": 1388
+      },
+      {
+        "text": "6de Tullio+3.8s",
+        "top": 1426
+      },
+      {
+        "text": "7Pierson+4.2s",
+        "top": 1464
+      },
+      {
+        "text": "8Johnson+4.5s",
+        "top": 1502
+      },
+      {
+        "text": "9Garcia+4.9s",
+        "top": 1540
+      },
+      {
+        "text": "10Correa+5.5s",
+        "top": 1578
+      },
+      {
+        "text": "11Allaer+6.9s",
+        "top": 1616
+      },
+      {
+        "text": "12Koolenteammate+7.4s",
+        "top": 1653
+      },
+      {
+        "text": "13Missig+7.9s",
+        "top": 1691
+      },
+      {
+        "text": "14Murray+8.5s",
+        "top": 1729
+      },
+      {
+        "text": "15Rowe+8.8sBryce ahead in 13 of 40 shared races",
+        "top": 1767
+      },
+      {
+        "text": "16Nannini+9.3sBryce ahead in 5 of 12 shared races",
+        "top": 1805
+      },
+      {
+        "text": "179Aron+9.6s",
+        "top": 1843
+      },
+      {
+        "text": "18Taylor+9.7sBryce ahead in 7 of 18 shared races",
+        "top": 1881
+      },
+      {
+        "text": "19Roeteammate+10sBryce ahead in 23 of 40 shared races",
+        "top": 1918
+      },
+      {
+        "text": "20Koreiba+10s",
+        "top": 1956
+      },
+      {
+        "text": "21Monteiro+11s",
+        "top": 1994
+      },
+      {
+        "text": "22Kaminsky+12s",
+        "top": 2032
+      },
+      {
+        "text": "23Etterteammate+12s",
+        "top": 2070
+      },
+      {
+        "text": "24Stati+4 laps",
+        "top": 2108
+      }
+    ],
+    "hero": "P17",
+    "historyPaths": [
+      "M184.669921875 103.132125 L329.33984375 103.132125 L474.009765625 103.132125 L618.6796875 103.132125 L763.349609375 103.132125",
+      "M184.669921875 123.651 L329.33984375 123.651 L474.009765625 123.651 L618.6796875 123.651 L763.349609375 123.651"
+    ],
+    "historyTails": [
+      {
+        "x1": "763.349609375",
+        "x2": "908.01953125",
+        "y1": "103.132125",
+        "y2": "103.132125"
+      },
+      {
+        "x1": "763.349609375",
+        "x2": "908.01953125",
+        "y1": "123.651",
+        "y2": "123.651"
+      }
+    ],
+    "lap": "GREEN flagLap 9 of 35",
+    "observedAt": "2026-07-13T18:17:33.560Z",
+    "trackDash": "0.7428571428571429"
+  },
+  {
+    "corridor": [
+      {
+        "cx": "202.14487373046865",
+        "cy": "82",
+        "id": "Etter, 2.5 seconds behind of Bryce",
+        "labelY": "50"
+      },
+      {
+        "cx": "269.0432126953124",
+        "cy": "82",
+        "id": "Kaminsky, 1.9 seconds behind of Bryce",
+        "labelY": "120"
+      },
+      {
+        "cx": "356.0541842773436",
+        "cy": "82",
+        "id": "Monteiro, 1.2 seconds behind of Bryce",
+        "labelY": "33"
+      },
+      {
+        "cx": "390.9334845214842",
+        "cy": "82",
+        "id": "Koreiba, 0.9 seconds behind of Bryce",
+        "labelY": "139"
+      },
+      {
+        "cx": "428.5027926269531",
+        "cy": "82",
+        "id": "Roe, 0.5 seconds behind of Bryce",
+        "labelY": "17"
+      },
+      {
+        "cx": "471.0321574218749",
+        "cy": "82",
+        "id": "Taylor, 0.2 seconds behind of Bryce",
+        "labelY": "158"
+      },
+      {
+        "cx": "518.8053350097657",
+        "cy": "82",
+        "id": "Nannini, 0.3 seconds ahead of Bryce",
+        "labelY": "50"
+      },
+      {
+        "cx": "573.0254512695311",
+        "cy": "82",
+        "id": "Rowe, 0.7 seconds ahead of Bryce",
+        "labelY": "120"
+      },
+      {
+        "cx": "604.7720841308593",
+        "cy": "82",
+        "id": "Murray, 1.0 seconds ahead of Bryce",
+        "labelY": "33"
+      },
+      {
+        "cx": "682.0558964843749",
+        "cy": "82",
+        "id": "Missig, 1.7 seconds ahead of Bryce",
+        "labelY": "139"
+      },
+      {
+        "cx": "739.9080908691406",
+        "cy": "82",
+        "id": "Koolen, 2.2 seconds ahead of Bryce",
+        "labelY": "17"
+      },
+      {
+        "cx": "794.2530598144531",
+        "cy": "82",
+        "id": "Allaer, 2.7 seconds ahead of Bryce",
+        "labelY": "158"
+      }
+    ],
+    "fieldRows": [
+      {
+        "text": "1Fittipaldileader",
+        "top": 1237
+      },
+      {
+        "text": "2Kucharczyk+1.2s",
+        "top": 1275
+      },
+      {
+        "text": "3Beeton+2.2s",
+        "top": 1313
+      },
+      {
+        "text": "4de Alba+2.6s",
+        "top": 1350
+      },
+      {
+        "text": "5Hughes+3.1s",
+        "top": 1388
+      },
+      {
+        "text": "6de Tullio+3.8s",
+        "top": 1426
+      },
+      {
+        "text": "7Pierson+4.2s",
+        "top": 1464
+      },
+      {
+        "text": "8Johnson+4.5s",
+        "top": 1502
+      },
+      {
+        "text": "9Garcia+4.9s",
+        "top": 1540
+      },
+      {
+        "text": "10Correa+5.5s",
+        "top": 1578
+      },
+      {
+        "text": "11Allaer+6.9s",
+        "top": 1616
+      },
+      {
+        "text": "12Koolenteammate+7.4s",
+        "top": 1653
+      },
+      {
+        "text": "13Missig+7.9s",
+        "top": 1691
+      },
+      {
+        "text": "14Murray+8.5s",
+        "top": 1729
+      },
+      {
+        "text": "15Rowe+8.8sBryce ahead in 13 of 40 shared races",
+        "top": 1767
+      },
+      {
+        "text": "16Nannini+9.3sBryce ahead in 5 of 12 shared races",
+        "top": 1805
+      },
+      {
+        "text": "179Aron+9.6s",
+        "top": 1843
+      },
+      {
+        "text": "18Taylor+9.7sBryce ahead in 7 of 18 shared races",
+        "top": 1881
+      },
+      {
+        "text": "19Roeteammate+10sBryce ahead in 23 of 40 shared races",
+        "top": 1918
+      },
+      {
+        "text": "20Koreiba+10s",
+        "top": 1956
+      },
+      {
+        "text": "21Monteiro+11s",
+        "top": 1994
+      },
+      {
+        "text": "22Kaminsky+12s",
+        "top": 2032
+      },
+      {
+        "text": "23Etterteammate+12s",
+        "top": 2070
+      },
+      {
+        "text": "24Stati+4 laps",
+        "top": 2108
+      }
+    ],
+    "hero": "P17",
+    "historyPaths": [
+      "M164.00279017857142 103.132125 L288.00558035714283 103.132125 L412.0083705357143 103.132125 L536.0111607142857 103.132125 L660.0139508928571 103.132125 L784.0167410714286 103.132125",
+      "M164.00279017857142 123.651 L288.00558035714283 123.651 L412.0083705357143 123.651 L536.0111607142857 123.651 L660.0139508928571 123.651 L784.0167410714286 123.651"
+    ],
+    "historyTails": [
+      {
+        "x1": "784.0167410714286",
+        "x2": "908.01953125",
+        "y1": "103.132125",
+        "y2": "103.132125"
+      },
+      {
+        "x1": "784.0167410714286",
+        "x2": "908.01953125",
+        "y1": "123.651",
+        "y2": "123.651"
+      }
+    ],
+    "lap": "GREEN flagLap 9 of 35",
+    "observedAt": "2026-07-13T18:17:34.574Z",
+    "trackDash": "0.7428571428571429"
+  },
+  {
+    "corridor": [
+      {
+        "cx": "202.14487373046865",
+        "cy": "82",
+        "id": "Etter, 2.5 seconds behind of Bryce",
+        "labelY": "50"
+      },
+      {
+        "cx": "269.0432126953124",
+        "cy": "82",
+        "id": "Kaminsky, 1.9 seconds behind of Bryce",
+        "labelY": "120"
+      },
+      {
+        "cx": "356.0541842773436",
+        "cy": "82",
+        "id": "Monteiro, 1.2 seconds behind of Bryce",
+        "labelY": "33"
+      },
+      {
+        "cx": "390.9334845214842",
+        "cy": "82",
+        "id": "Koreiba, 0.9 seconds behind of Bryce",
+        "labelY": "139"
+      },
+      {
+        "cx": "428.5027926269531",
+        "cy": "82",
+        "id": "Roe, 0.5 seconds behind of Bryce",
+        "labelY": "17"
+      },
+      {
+        "cx": "471.0321574218749",
+        "cy": "82",
+        "id": "Taylor, 0.2 seconds behind of Bryce",
+        "labelY": "158"
+      },
+      {
+        "cx": "518.8053350097657",
+        "cy": "82",
+        "id": "Nannini, 0.3 seconds ahead of Bryce",
+        "labelY": "50"
+      },
+      {
+        "cx": "573.0254512695311",
+        "cy": "82",
+        "id": "Rowe, 0.7 seconds ahead of Bryce",
+        "labelY": "120"
+      },
+      {
+        "cx": "604.7720841308593",
+        "cy": "82",
+        "id": "Murray, 1.0 seconds ahead of Bryce",
+        "labelY": "33"
+      },
+      {
+        "cx": "682.0558964843749",
+        "cy": "82",
+        "id": "Missig, 1.7 seconds ahead of Bryce",
+        "labelY": "139"
+      },
+      {
+        "cx": "739.9080908691406",
+        "cy": "82",
+        "id": "Koolen, 2.2 seconds ahead of Bryce",
+        "labelY": "17"
+      },
+      {
+        "cx": "794.2530598144531",
+        "cy": "82",
+        "id": "Allaer, 2.7 seconds ahead of Bryce",
+        "labelY": "158"
+      }
+    ],
+    "fieldRows": [
+      {
+        "text": "1Fittipaldileader",
+        "top": 1237
+      },
+      {
+        "text": "2Kucharczyk+1.2s",
+        "top": 1275
+      },
+      {
+        "text": "3Beeton+2.2s",
+        "top": 1313
+      },
+      {
+        "text": "4de Alba+2.6s",
+        "top": 1350
+      },
+      {
+        "text": "5Hughes+3.1s",
+        "top": 1388
+      },
+      {
+        "text": "6de Tullio+3.8s",
+        "top": 1426
+      },
+      {
+        "text": "7Pierson+4.2s",
+        "top": 1464
+      },
+      {
+        "text": "8Johnson+4.5s",
+        "top": 1502
+      },
+      {
+        "text": "9Garcia+4.9s",
+        "top": 1540
+      },
+      {
+        "text": "10Correa+5.5s",
+        "top": 1578
+      },
+      {
+        "text": "11Allaer+6.9s",
+        "top": 1616
+      },
+      {
+        "text": "12Koolenteammate+7.4s",
+        "top": 1653
+      },
+      {
+        "text": "13Missig+7.9s",
+        "top": 1691
+      },
+      {
+        "text": "14Murray+8.5s",
+        "top": 1729
+      },
+      {
+        "text": "15Rowe+8.8sBryce ahead in 13 of 40 shared races",
+        "top": 1767
+      },
+      {
+        "text": "16Nannini+9.3sBryce ahead in 5 of 12 shared races",
+        "top": 1805
+      },
+      {
+        "text": "179Aron+9.6s",
+        "top": 1843
+      },
+      {
+        "text": "18Taylor+9.7sBryce ahead in 7 of 18 shared races",
+        "top": 1881
+      },
+      {
+        "text": "19Roeteammate+10sBryce ahead in 23 of 40 shared races",
+        "top": 1918
+      },
+      {
+        "text": "20Koreiba+10s",
+        "top": 1956
+      },
+      {
+        "text": "21Monteiro+11s",
+        "top": 1994
+      },
+      {
+        "text": "22Kaminsky+12s",
+        "top": 2032
+      },
+      {
+        "text": "23Etterteammate+12s",
+        "top": 2070
+      },
+      {
+        "text": "24Stati+4 laps",
+        "top": 2108
+      }
+    ],
+    "hero": "P17",
+    "historyPaths": [
+      "M148.50244140625 103.132125 L257.0048828125 103.132125 L365.50732421875 103.132125 L474.009765625 103.132125 L582.51220703125 103.132125 L691.0146484375 103.132125 L799.51708984375 103.132125",
+      "M148.50244140625 123.651 L257.0048828125 123.651 L365.50732421875 123.651 L474.009765625 123.651 L582.51220703125 123.651 L691.0146484375 123.651 L799.51708984375 123.651"
+    ],
+    "historyTails": [
+      {
+        "x1": "799.51708984375",
+        "x2": "908.01953125",
+        "y1": "103.132125",
+        "y2": "103.132125"
+      },
+      {
+        "x1": "799.51708984375",
+        "x2": "908.01953125",
+        "y1": "123.651",
+        "y2": "123.651"
+      }
+    ],
+    "lap": "GREEN flagLap 9 of 35",
+    "observedAt": "2026-07-13T18:17:35.590Z",
+    "trackDash": "0.7428571428571429"
+  },
+  {
+    "corridor": [
+      {
+        "cx": "202.14487373046865",
+        "cy": "82",
+        "id": "Etter, 2.5 seconds behind of Bryce",
+        "labelY": "50"
+      },
+      {
+        "cx": "269.0432126953124",
+        "cy": "82",
+        "id": "Kaminsky, 1.9 seconds behind of Bryce",
+        "labelY": "120"
+      },
+      {
+        "cx": "356.0541842773436",
+        "cy": "82",
+        "id": "Monteiro, 1.2 seconds behind of Bryce",
+        "labelY": "33"
+      },
+      {
+        "cx": "390.9334845214842",
+        "cy": "82",
+        "id": "Koreiba, 0.9 seconds behind of Bryce",
+        "labelY": "139"
+      },
+      {
+        "cx": "428.5027926269531",
+        "cy": "82",
+        "id": "Roe, 0.5 seconds behind of Bryce",
+        "labelY": "17"
+      },
+      {
+        "cx": "471.0321574218749",
+        "cy": "82",
+        "id": "Taylor, 0.2 seconds behind of Bryce",
+        "labelY": "158"
+      },
+      {
+        "cx": "518.8053350097657",
+        "cy": "82",
+        "id": "Nannini, 0.3 seconds ahead of Bryce",
+        "labelY": "50"
+      },
+      {
+        "cx": "573.0254512695311",
+        "cy": "82",
+        "id": "Rowe, 0.7 seconds ahead of Bryce",
+        "labelY": "120"
+      },
+      {
+        "cx": "604.7720841308593",
+        "cy": "82",
+        "id": "Murray, 1.0 seconds ahead of Bryce",
+        "labelY": "33"
+      },
+      {
+        "cx": "682.0558964843749",
+        "cy": "82",
+        "id": "Missig, 1.7 seconds ahead of Bryce",
+        "labelY": "139"
+      },
+      {
+        "cx": "739.9080908691406",
+        "cy": "82",
+        "id": "Koolen, 2.2 seconds ahead of Bryce",
+        "labelY": "17"
+      },
+      {
+        "cx": "794.2530598144531",
+        "cy": "82",
+        "id": "Allaer, 2.7 seconds ahead of Bryce",
+        "labelY": "158"
+      }
+    ],
+    "fieldRows": [
+      {
+        "text": "1Fittipaldileader",
+        "top": 1237
+      },
+      {
+        "text": "2Kucharczyk+1.2s",
+        "top": 1275
+      },
+      {
+        "text": "3Beeton+2.2s",
+        "top": 1313
+      },
+      {
+        "text": "4de Alba+2.6s",
+        "top": 1350
+      },
+      {
+        "text": "5Hughes+3.1s",
+        "top": 1388
+      },
+      {
+        "text": "6de Tullio+3.8s",
+        "top": 1426
+      },
+      {
+        "text": "7Pierson+4.2s",
+        "top": 1464
+      },
+      {
+        "text": "8Johnson+4.5s",
+        "top": 1502
+      },
+      {
+        "text": "9Garcia+4.9s",
+        "top": 1540
+      },
+      {
+        "text": "10Correa+5.5s",
+        "top": 1578
+      },
+      {
+        "text": "11Allaer+6.9s",
+        "top": 1616
+      },
+      {
+        "text": "12Koolenteammate+7.4s",
+        "top": 1653
+      },
+      {
+        "text": "13Missig+7.9s",
+        "top": 1691
+      },
+      {
+        "text": "14Murray+8.5s",
+        "top": 1729
+      },
+      {
+        "text": "15Rowe+8.8sBryce ahead in 13 of 40 shared races",
+        "top": 1767
+      },
+      {
+        "text": "16Nannini+9.3sBryce ahead in 5 of 12 shared races",
+        "top": 1805
+      },
+      {
+        "text": "179Aron+9.6s",
+        "top": 1843
+      },
+      {
+        "text": "18Taylor+9.7sBryce ahead in 7 of 18 shared races",
+        "top": 1881
+      },
+      {
+        "text": "19Roeteammate+10sBryce ahead in 23 of 40 shared races",
+        "top": 1918
+      },
+      {
+        "text": "20Koreiba+10s",
+        "top": 1956
+      },
+      {
+        "text": "21Monteiro+11s",
+        "top": 1994
+      },
+      {
+        "text": "22Kaminsky+12s",
+        "top": 2032
+      },
+      {
+        "text": "23Etterteammate+12s",
+        "top": 2070
+      },
+      {
+        "text": "24Stati+4 laps",
+        "top": 2108
+      }
+    ],
+    "hero": "P17",
+    "historyPaths": [
+      "M136.44661458333331 103.132125 L232.89322916666666 103.132125 L329.33984375 103.132125 L425.7864583333333 103.132125 L522.2330729166667 103.132125 L618.6796875 103.132125 L715.1263020833334 103.132125 L811.5729166666666 103.132125",
+      "M136.44661458333331 123.651 L232.89322916666666 123.651 L329.33984375 123.651 L425.7864583333333 123.651 L522.2330729166667 123.651 L618.6796875 123.651 L715.1263020833334 123.651 L811.5729166666666 123.651"
+    ],
+    "historyTails": [
+      {
+        "x1": "811.5729166666666",
+        "x2": "908.01953125",
+        "y1": "103.132125",
+        "y2": "103.132125"
+      },
+      {
+        "x1": "811.5729166666666",
+        "x2": "908.01953125",
+        "y1": "123.651",
+        "y2": "123.651"
+      }
+    ],
+    "lap": "GREEN flagLap 9 of 35",
+    "observedAt": "2026-07-13T18:17:36.603Z",
+    "trackDash": "0.7428571428571429"
+  },
+  {
+    "corridor": [
+      {
+        "cx": "202.14487373046865",
+        "cy": "82",
+        "id": "Etter, 2.5 seconds behind of Bryce",
+        "labelY": "50"
+      },
+      {
+        "cx": "269.0432126953124",
+        "cy": "82",
+        "id": "Kaminsky, 1.9 seconds behind of Bryce",
+        "labelY": "120"
+      },
+      {
+        "cx": "356.0541842773436",
+        "cy": "82",
+        "id": "Monteiro, 1.2 seconds behind of Bryce",
+        "labelY": "33"
+      },
+      {
+        "cx": "390.9334845214842",
+        "cy": "82",
+        "id": "Koreiba, 0.9 seconds behind of Bryce",
+        "labelY": "139"
+      },
+      {
+        "cx": "428.5027926269531",
+        "cy": "82",
+        "id": "Roe, 0.5 seconds behind of Bryce",
+        "labelY": "17"
+      },
+      {
+        "cx": "471.0321574218749",
+        "cy": "82",
+        "id": "Taylor, 0.2 seconds behind of Bryce",
+        "labelY": "158"
+      },
+      {
+        "cx": "518.8053350097657",
+        "cy": "82",
+        "id": "Nannini, 0.3 seconds ahead of Bryce",
+        "labelY": "50"
+      },
+      {
+        "cx": "573.0254512695311",
+        "cy": "82",
+        "id": "Rowe, 0.7 seconds ahead of Bryce",
+        "labelY": "120"
+      },
+      {
+        "cx": "604.7720841308593",
+        "cy": "82",
+        "id": "Murray, 1.0 seconds ahead of Bryce",
+        "labelY": "33"
+      },
+      {
+        "cx": "682.0558964843749",
+        "cy": "82",
+        "id": "Missig, 1.7 seconds ahead of Bryce",
+        "labelY": "139"
+      },
+      {
+        "cx": "739.9080908691406",
+        "cy": "82",
+        "id": "Koolen, 2.2 seconds ahead of Bryce",
+        "labelY": "17"
+      },
+      {
+        "cx": "794.2530598144531",
+        "cy": "82",
+        "id": "Allaer, 2.7 seconds ahead of Bryce",
+        "labelY": "158"
+      }
+    ],
+    "fieldRows": [
+      {
+        "text": "1Fittipaldileader",
+        "top": 1237
+      },
+      {
+        "text": "2Kucharczyk+1.2s",
+        "top": 1275
+      },
+      {
+        "text": "3Beeton+2.2s",
+        "top": 1313
+      },
+      {
+        "text": "4de Alba+2.6s",
+        "top": 1350
+      },
+      {
+        "text": "5Hughes+3.1s",
+        "top": 1388
+      },
+      {
+        "text": "6de Tullio+3.8s",
+        "top": 1426
+      },
+      {
+        "text": "7Pierson+4.2s",
+        "top": 1464
+      },
+      {
+        "text": "8Johnson+4.5s",
+        "top": 1502
+      },
+      {
+        "text": "9Garcia+4.9s",
+        "top": 1540
+      },
+      {
+        "text": "10Correa+5.5s",
+        "top": 1578
+      },
+      {
+        "text": "11Allaer+6.9s",
+        "top": 1616
+      },
+      {
+        "text": "12Koolenteammate+7.4s",
+        "top": 1653
+      },
+      {
+        "text": "13Missig+7.9s",
+        "top": 1691
+      },
+      {
+        "text": "14Murray+8.5s",
+        "top": 1729
+      },
+      {
+        "text": "15Rowe+8.8sBryce ahead in 13 of 40 shared races",
+        "top": 1767
+      },
+      {
+        "text": "16Nannini+9.3sBryce ahead in 5 of 12 shared races",
+        "top": 1805
+      },
+      {
+        "text": "179Aron+9.6s",
+        "top": 1843
+      },
+      {
+        "text": "18Taylor+9.7sBryce ahead in 7 of 18 shared races",
+        "top": 1881
+      },
+      {
+        "text": "19Roeteammate+10sBryce ahead in 23 of 40 shared races",
+        "top": 1918
+      },
+      {
+        "text": "20Koreiba+10s",
+        "top": 1956
+      },
+      {
+        "text": "21Monteiro+11s",
+        "top": 1994
+      },
+      {
+        "text": "22Kaminsky+12s",
+        "top": 2032
+      },
+      {
+        "text": "23Etterteammate+12s",
+        "top": 2070
+      },
+      {
+        "text": "24Stati+4 laps",
+        "top": 2108
+      }
+    ],
+    "hero": "P17",
+    "historyPaths": [
+      "M126.80195312500001 103.132125 L213.60390625000002 103.132125 L300.405859375 103.132125 L387.20781250000005 103.132125 L474.009765625 103.132125 L560.81171875 103.132125 L647.6136718749999 103.132125 L734.4156250000001 103.132125 L821.217578125 103.132125",
+      "M126.80195312500001 123.651 L213.60390625000002 123.651 L300.405859375 123.651 L387.20781250000005 123.651 L474.009765625 123.651 L560.81171875 123.651 L647.6136718749999 123.651 L734.4156250000001 123.651 L821.217578125 123.651"
+    ],
+    "historyTails": [
+      {
+        "x1": "821.217578125",
+        "x2": "908.01953125",
+        "y1": "103.132125",
+        "y2": "103.132125"
+      },
+      {
+        "x1": "821.217578125",
+        "x2": "908.01953125",
+        "y1": "123.651",
+        "y2": "123.651"
+      }
+    ],
+    "lap": "GREEN flagLap 9 of 35",
+    "observedAt": "2026-07-13T18:17:37.614Z",
+    "trackDash": "0.7428571428571429"
+  },
+  {
+    "corridor": [
+      {
+        "cx": "202.14487373046865",
+        "cy": "82",
+        "id": "Etter, 2.5 seconds behind of Bryce",
+        "labelY": "50"
+      },
+      {
+        "cx": "269.0432126953124",
+        "cy": "82",
+        "id": "Kaminsky, 1.9 seconds behind of Bryce",
+        "labelY": "120"
+      },
+      {
+        "cx": "356.0541842773436",
+        "cy": "82",
+        "id": "Monteiro, 1.2 seconds behind of Bryce",
+        "labelY": "33"
+      },
+      {
+        "cx": "390.9334845214842",
+        "cy": "82",
+        "id": "Koreiba, 0.9 seconds behind of Bryce",
+        "labelY": "139"
+      },
+      {
+        "cx": "428.5027926269531",
+        "cy": "82",
+        "id": "Roe, 0.5 seconds behind of Bryce",
+        "labelY": "17"
+      },
+      {
+        "cx": "471.0321574218749",
+        "cy": "82",
+        "id": "Taylor, 0.2 seconds behind of Bryce",
+        "labelY": "158"
+      },
+      {
+        "cx": "518.8053350097657",
+        "cy": "82",
+        "id": "Nannini, 0.3 seconds ahead of Bryce",
+        "labelY": "50"
+      },
+      {
+        "cx": "573.0254512695311",
+        "cy": "82",
+        "id": "Rowe, 0.7 seconds ahead of Bryce",
+        "labelY": "120"
+      },
+      {
+        "cx": "604.7720841308593",
+        "cy": "82",
+        "id": "Murray, 1.0 seconds ahead of Bryce",
+        "labelY": "33"
+      },
+      {
+        "cx": "682.0558964843749",
+        "cy": "82",
+        "id": "Missig, 1.7 seconds ahead of Bryce",
+        "labelY": "139"
+      },
+      {
+        "cx": "739.9080908691406",
+        "cy": "82",
+        "id": "Koolen, 2.2 seconds ahead of Bryce",
+        "labelY": "17"
+      },
+      {
+        "cx": "794.2530598144531",
+        "cy": "82",
+        "id": "Allaer, 2.7 seconds ahead of Bryce",
+        "labelY": "158"
+      }
+    ],
+    "fieldRows": [
+      {
+        "text": "1Fittipaldileader",
+        "top": 1237
+      },
+      {
+        "text": "2Kucharczyk+1.2s",
+        "top": 1275
+      },
+      {
+        "text": "3Beeton+2.2s",
+        "top": 1313
+      },
+      {
+        "text": "4de Alba+2.6s",
+        "top": 1350
+      },
+      {
+        "text": "5Hughes+3.1s",
+        "top": 1388
+      },
+      {
+        "text": "6de Tullio+3.8s",
+        "top": 1426
+      },
+      {
+        "text": "7Pierson+4.2s",
+        "top": 1464
+      },
+      {
+        "text": "8Johnson+4.5s",
+        "top": 1502
+      },
+      {
+        "text": "9Garcia+4.9s",
+        "top": 1540
+      },
+      {
+        "text": "10Correa+5.5s",
+        "top": 1578
+      },
+      {
+        "text": "11Allaer+6.9s",
+        "top": 1616
+      },
+      {
+        "text": "12Koolenteammate+7.4s",
+        "top": 1653
+      },
+      {
+        "text": "13Missig+7.9s",
+        "top": 1691
+      },
+      {
+        "text": "14Murray+8.5s",
+        "top": 1729
+      },
+      {
+        "text": "15Rowe+8.8sBryce ahead in 13 of 40 shared races",
+        "top": 1767
+      },
+      {
+        "text": "16Nannini+9.3sBryce ahead in 5 of 12 shared races",
+        "top": 1805
+      },
+      {
+        "text": "179Aron+9.6s",
+        "top": 1843
+      },
+      {
+        "text": "18Taylor+9.7sBryce ahead in 7 of 18 shared races",
+        "top": 1881
+      },
+      {
+        "text": "19Roeteammate+10sBryce ahead in 23 of 40 shared races",
+        "top": 1918
+      },
+      {
+        "text": "20Koreiba+10s",
+        "top": 1956
+      },
+      {
+        "text": "21Monteiro+11s",
+        "top": 1994
+      },
+      {
+        "text": "22Kaminsky+12s",
+        "top": 2032
+      },
+      {
+        "text": "23Etterteammate+12s",
+        "top": 2070
+      },
+      {
+        "text": "24Stati+4 laps",
+        "top": 2108
+      }
+    ],
+    "hero": "P17",
+    "historyPaths": [
+      "M118.91086647727273 103.132125 L197.82173295454547 103.132125 L276.73259943181813 103.132125 L355.64346590909093 103.132125 L434.5543323863636 103.132125 L513.4651988636363 103.132125 L592.3760653409091 103.132125 L671.2869318181819 103.132125 L750.1977982954546 103.132125 L829.1086647727273 103.132125",
+      "M118.91086647727273 123.651 L197.82173295454547 123.651 L276.73259943181813 123.651 L355.64346590909093 123.651 L434.5543323863636 123.651 L513.4651988636363 123.651 L592.3760653409091 123.651 L671.2869318181819 123.651 L750.1977982954546 123.651 L829.1086647727273 123.651"
+    ],
+    "historyTails": [
+      {
+        "x1": "829.1086647727273",
+        "x2": "908.01953125",
+        "y1": "103.132125",
+        "y2": "103.132125"
+      },
+      {
+        "x1": "829.1086647727273",
+        "x2": "908.01953125",
+        "y1": "123.651",
+        "y2": "123.651"
+      }
+    ],
+    "lap": "GREEN flagLap 9 of 35",
+    "observedAt": "2026-07-13T18:17:38.632Z",
+    "trackDash": "0.7428571428571429"
+  },
+  {
+    "corridor": [
+      {
+        "cx": "202.14487373046865",
+        "cy": "82",
+        "id": "Etter, 2.5 seconds behind of Bryce",
+        "labelY": "50"
+      },
+      {
+        "cx": "269.0432126953124",
+        "cy": "82",
+        "id": "Kaminsky, 1.9 seconds behind of Bryce",
+        "labelY": "120"
+      },
+      {
+        "cx": "356.0541842773436",
+        "cy": "82",
+        "id": "Monteiro, 1.2 seconds behind of Bryce",
+        "labelY": "33"
+      },
+      {
+        "cx": "390.9334845214842",
+        "cy": "82",
+        "id": "Koreiba, 0.9 seconds behind of Bryce",
+        "labelY": "139"
+      },
+      {
+        "cx": "428.5027926269531",
+        "cy": "82",
+        "id": "Roe, 0.5 seconds behind of Bryce",
+        "labelY": "17"
+      },
+      {
+        "cx": "471.0321574218749",
+        "cy": "82",
+        "id": "Taylor, 0.2 seconds behind of Bryce",
+        "labelY": "158"
+      },
+      {
+        "cx": "518.8053350097657",
+        "cy": "82",
+        "id": "Nannini, 0.3 seconds ahead of Bryce",
+        "labelY": "50"
+      },
+      {
+        "cx": "573.0254512695311",
+        "cy": "82",
+        "id": "Rowe, 0.7 seconds ahead of Bryce",
+        "labelY": "120"
+      },
+      {
+        "cx": "604.7720841308593",
+        "cy": "82",
+        "id": "Murray, 1.0 seconds ahead of Bryce",
+        "labelY": "33"
+      },
+      {
+        "cx": "682.0558964843749",
+        "cy": "82",
+        "id": "Missig, 1.7 seconds ahead of Bryce",
+        "labelY": "139"
+      },
+      {
+        "cx": "739.9080908691406",
+        "cy": "82",
+        "id": "Koolen, 2.2 seconds ahead of Bryce",
+        "labelY": "17"
+      },
+      {
+        "cx": "794.2530598144531",
+        "cy": "82",
+        "id": "Allaer, 2.7 seconds ahead of Bryce",
+        "labelY": "158"
+      }
+    ],
+    "fieldRows": [
+      {
+        "text": "1Fittipaldileader",
+        "top": 1237
+      },
+      {
+        "text": "2Kucharczyk+1.2s",
+        "top": 1275
+      },
+      {
+        "text": "3Beeton+2.2s",
+        "top": 1313
+      },
+      {
+        "text": "4de Alba+2.6s",
+        "top": 1350
+      },
+      {
+        "text": "5Hughes+3.1s",
+        "top": 1388
+      },
+      {
+        "text": "6de Tullio+3.8s",
+        "top": 1426
+      },
+      {
+        "text": "7Pierson+4.2s",
+        "top": 1464
+      },
+      {
+        "text": "8Johnson+4.5s",
+        "top": 1502
+      },
+      {
+        "text": "9Garcia+4.9s",
+        "top": 1540
+      },
+      {
+        "text": "10Correa+5.5s",
+        "top": 1578
+      },
+      {
+        "text": "11Allaer+6.9s",
+        "top": 1616
+      },
+      {
+        "text": "12Koolenteammate+7.4s",
+        "top": 1653
+      },
+      {
+        "text": "13Missig+7.9s",
+        "top": 1691
+      },
+      {
+        "text": "14Murray+8.5s",
+        "top": 1729
+      },
+      {
+        "text": "15Rowe+8.8sBryce ahead in 13 of 40 shared races",
+        "top": 1767
+      },
+      {
+        "text": "16Nannini+9.3sBryce ahead in 5 of 12 shared races",
+        "top": 1805
+      },
+      {
+        "text": "179Aron+9.6s",
+        "top": 1843
+      },
+      {
+        "text": "18Taylor+9.7sBryce ahead in 7 of 18 shared races",
+        "top": 1881
+      },
+      {
+        "text": "19Roeteammate+10sBryce ahead in 23 of 40 shared races",
+        "top": 1918
+      },
+      {
+        "text": "20Koreiba+10s",
+        "top": 1956
+      },
+      {
+        "text": "21Monteiro+11s",
+        "top": 1994
+      },
+      {
+        "text": "22Kaminsky+12s",
+        "top": 2032
+      },
+      {
+        "text": "23Etterteammate+12s",
+        "top": 2070
+      },
+      {
+        "text": "24Stati+4 laps",
+        "top": 2108
+      }
+    ],
+    "hero": "P17",
+    "historyPaths": [
+      "M112.3349609375 103.132125 L184.669921875 103.132125 L257.0048828125 103.132125 L329.33984375 103.132125 L401.6748046875 103.132125 L474.009765625 103.132125 L546.3447265625 103.132125 L618.6796875 103.132125 L691.0146484375 103.132125 L763.349609375 103.132125 L835.6845703125 103.132125",
+      "M112.3349609375 123.651 L184.669921875 123.651 L257.0048828125 123.651 L329.33984375 123.651 L401.6748046875 123.651 L474.009765625 123.651 L546.3447265625 123.651 L618.6796875 123.651 L691.0146484375 123.651 L763.349609375 123.651 L835.6845703125 123.651"
+    ],
+    "historyTails": [
+      {
+        "x1": "835.6845703125",
+        "x2": "908.01953125",
+        "y1": "103.132125",
+        "y2": "103.132125"
+      },
+      {
+        "x1": "835.6845703125",
+        "x2": "908.01953125",
+        "y1": "123.651",
+        "y2": "123.651"
+      }
+    ],
+    "lap": "GREEN flagLap 9 of 35",
+    "observedAt": "2026-07-13T18:17:39.648Z",
+    "trackDash": "0.7428571428571429"
+  },
+  {
+    "corridor": [
+      {
+        "cx": "202.14487373046865",
+        "cy": "82",
+        "id": "Etter, 2.5 seconds behind of Bryce",
+        "labelY": "50"
+      },
+      {
+        "cx": "269.0432126953124",
+        "cy": "82",
+        "id": "Kaminsky, 1.9 seconds behind of Bryce",
+        "labelY": "120"
+      },
+      {
+        "cx": "356.0541842773436",
+        "cy": "82",
+        "id": "Monteiro, 1.2 seconds behind of Bryce",
+        "labelY": "33"
+      },
+      {
+        "cx": "390.9334845214842",
+        "cy": "82",
+        "id": "Koreiba, 0.9 seconds behind of Bryce",
+        "labelY": "139"
+      },
+      {
+        "cx": "428.5027926269531",
+        "cy": "82",
+        "id": "Roe, 0.5 seconds behind of Bryce",
+        "labelY": "17"
+      },
+      {
+        "cx": "471.0321574218749",
+        "cy": "82",
+        "id": "Taylor, 0.2 seconds behind of Bryce",
+        "labelY": "158"
+      },
+      {
+        "cx": "518.8053350097657",
+        "cy": "82",
+        "id": "Nannini, 0.3 seconds ahead of Bryce",
+        "labelY": "50"
+      },
+      {
+        "cx": "573.0254512695311",
+        "cy": "82",
+        "id": "Rowe, 0.7 seconds ahead of Bryce",
+        "labelY": "120"
+      },
+      {
+        "cx": "604.7720841308593",
+        "cy": "82",
+        "id": "Murray, 1.0 seconds ahead of Bryce",
+        "labelY": "33"
+      },
+      {
+        "cx": "682.0558964843749",
+        "cy": "82",
+        "id": "Missig, 1.7 seconds ahead of Bryce",
+        "labelY": "139"
+      },
+      {
+        "cx": "739.9080908691406",
+        "cy": "82",
+        "id": "Koolen, 2.2 seconds ahead of Bryce",
+        "labelY": "17"
+      },
+      {
+        "cx": "794.2530598144531",
+        "cy": "82",
+        "id": "Allaer, 2.7 seconds ahead of Bryce",
+        "labelY": "158"
+      }
+    ],
+    "fieldRows": [
+      {
+        "text": "1Fittipaldileader",
+        "top": 1237
+      },
+      {
+        "text": "2Kucharczyk+1.2s",
+        "top": 1275
+      },
+      {
+        "text": "3Beeton+2.2s",
+        "top": 1313
+      },
+      {
+        "text": "4de Alba+2.6s",
+        "top": 1350
+      },
+      {
+        "text": "5Hughes+3.1s",
+        "top": 1388
+      },
+      {
+        "text": "6de Tullio+3.8s",
+        "top": 1426
+      },
+      {
+        "text": "7Pierson+4.2s",
+        "top": 1464
+      },
+      {
+        "text": "8Johnson+4.5s",
+        "top": 1502
+      },
+      {
+        "text": "9Garcia+4.9s",
+        "top": 1540
+      },
+      {
+        "text": "10Correa+5.5s",
+        "top": 1578
+      },
+      {
+        "text": "11Allaer+6.9s",
+        "top": 1616
+      },
+      {
+        "text": "12Koolenteammate+7.4s",
+        "top": 1653
+      },
+      {
+        "text": "13Missig+7.9s",
+        "top": 1691
+      },
+      {
+        "text": "14Murray+8.5s",
+        "top": 1729
+      },
+      {
+        "text": "15Rowe+8.8sBryce ahead in 13 of 40 shared races",
+        "top": 1767
+      },
+      {
+        "text": "16Nannini+9.3sBryce ahead in 5 of 12 shared races",
+        "top": 1805
+      },
+      {
+        "text": "179Aron+9.6s",
+        "top": 1843
+      },
+      {
+        "text": "18Taylor+9.7sBryce ahead in 7 of 18 shared races",
+        "top": 1881
+      },
+      {
+        "text": "19Roeteammate+10sBryce ahead in 23 of 40 shared races",
+        "top": 1918
+      },
+      {
+        "text": "20Koreiba+10s",
+        "top": 1956
+      },
+      {
+        "text": "21Monteiro+11s",
+        "top": 1994
+      },
+      {
+        "text": "22Kaminsky+12s",
+        "top": 2032
+      },
+      {
+        "text": "23Etterteammate+12s",
+        "top": 2070
+      },
+      {
+        "text": "24Stati+4 laps",
+        "top": 2108
+      }
+    ],
+    "hero": "P17",
+    "historyPaths": [
+      "M106.77073317307692 103.132125 L173.54146634615384 103.132125 L240.31219951923077 103.132125 L307.0829326923077 103.132125 L373.85366586538464 103.132125 L440.62439903846155 103.132125 L507.39513221153845 103.132125 L574.1658653846154 103.132125 L640.9365985576923 103.132125 L707.7073317307693 103.132125 L774.4780649038462 103.132125 L841.2487980769231 103.132125",
+      "M106.77073317307692 123.651 L173.54146634615384 123.651 L240.31219951923077 123.651 L307.0829326923077 123.651 L373.85366586538464 123.651 L440.62439903846155 123.651 L507.39513221153845 123.651 L574.1658653846154 123.651 L640.9365985576923 123.651 L707.7073317307693 123.651 L774.4780649038462 123.651 L841.2487980769231 123.651"
+    ],
+    "historyTails": [
+      {
+        "x1": "841.2487980769231",
+        "x2": "908.01953125",
+        "y1": "103.132125",
+        "y2": "103.132125"
+      },
+      {
+        "x1": "841.2487980769231",
+        "x2": "908.01953125",
+        "y1": "123.651",
+        "y2": "123.651"
+      }
+    ],
+    "lap": "GREEN flagLap 9 of 35",
+    "observedAt": "2026-07-13T18:17:40.664Z",
+    "trackDash": "0.7428571428571429"
+  },
+  {
+    "corridor": [
+      {
+        "cx": "202.14487373046865",
+        "cy": "82",
+        "id": "Etter, 2.5 seconds behind of Bryce",
+        "labelY": "50"
+      },
+      {
+        "cx": "269.0432126953124",
+        "cy": "82",
+        "id": "Kaminsky, 1.9 seconds behind of Bryce",
+        "labelY": "120"
+      },
+      {
+        "cx": "356.0541842773436",
+        "cy": "82",
+        "id": "Monteiro, 1.2 seconds behind of Bryce",
+        "labelY": "33"
+      },
+      {
+        "cx": "390.9334845214842",
+        "cy": "82",
+        "id": "Koreiba, 0.9 seconds behind of Bryce",
+        "labelY": "139"
+      },
+      {
+        "cx": "428.5027926269531",
+        "cy": "82",
+        "id": "Roe, 0.5 seconds behind of Bryce",
+        "labelY": "17"
+      },
+      {
+        "cx": "471.0321574218749",
+        "cy": "82",
+        "id": "Taylor, 0.2 seconds behind of Bryce",
+        "labelY": "158"
+      },
+      {
+        "cx": "518.8053350097657",
+        "cy": "82",
+        "id": "Nannini, 0.3 seconds ahead of Bryce",
+        "labelY": "50"
+      },
+      {
+        "cx": "573.0254512695311",
+        "cy": "82",
+        "id": "Rowe, 0.7 seconds ahead of Bryce",
+        "labelY": "120"
+      },
+      {
+        "cx": "604.7720841308593",
+        "cy": "82",
+        "id": "Murray, 1.0 seconds ahead of Bryce",
+        "labelY": "33"
+      },
+      {
+        "cx": "682.0558964843749",
+        "cy": "82",
+        "id": "Missig, 1.7 seconds ahead of Bryce",
+        "labelY": "139"
+      },
+      {
+        "cx": "739.9080908691406",
+        "cy": "82",
+        "id": "Koolen, 2.2 seconds ahead of Bryce",
+        "labelY": "17"
+      },
+      {
+        "cx": "794.2530598144531",
+        "cy": "82",
+        "id": "Allaer, 2.7 seconds ahead of Bryce",
+        "labelY": "158"
+      }
+    ],
+    "fieldRows": [
+      {
+        "text": "1Fittipaldileader",
+        "top": 1237
+      },
+      {
+        "text": "2Kucharczyk+1.2s",
+        "top": 1275
+      },
+      {
+        "text": "3Beeton+2.2s",
+        "top": 1313
+      },
+      {
+        "text": "4de Alba+2.6s",
+        "top": 1350
+      },
+      {
+        "text": "5Hughes+3.1s",
+        "top": 1388
+      },
+      {
+        "text": "6de Tullio+3.8s",
+        "top": 1426
+      },
+      {
+        "text": "7Pierson+4.2s",
+        "top": 1464
+      },
+      {
+        "text": "8Johnson+4.5s",
+        "top": 1502
+      },
+      {
+        "text": "9Garcia+4.9s",
+        "top": 1540
+      },
+      {
+        "text": "10Correa+5.5s",
+        "top": 1578
+      },
+      {
+        "text": "11Allaer+6.9s",
+        "top": 1616
+      },
+      {
+        "text": "12Koolenteammate+7.4s",
+        "top": 1653
+      },
+      {
+        "text": "13Missig+7.9s",
+        "top": 1691
+      },
+      {
+        "text": "14Murray+8.5s",
+        "top": 1729
+      },
+      {
+        "text": "15Rowe+8.8sBryce ahead in 13 of 40 shared races",
+        "top": 1767
+      },
+      {
+        "text": "16Nannini+9.3sBryce ahead in 5 of 12 shared races",
+        "top": 1805
+      },
+      {
+        "text": "179Aron+9.6s",
+        "top": 1843
+      },
+      {
+        "text": "18Taylor+9.7sBryce ahead in 7 of 18 shared races",
+        "top": 1881
+      },
+      {
+        "text": "19Roeteammate+10sBryce ahead in 23 of 40 shared races",
+        "top": 1918
+      },
+      {
+        "text": "20Koreiba+10s",
+        "top": 1956
+      },
+      {
+        "text": "21Monteiro+11s",
+        "top": 1994
+      },
+      {
+        "text": "22Kaminsky+12s",
+        "top": 2032
+      },
+      {
+        "text": "23Etterteammate+12s",
+        "top": 2070
+      },
+      {
+        "text": "24Stati+4 laps",
+        "top": 2108
+      }
+    ],
+    "hero": "P17",
+    "historyPaths": [
+      "M102.00139508928571 103.132125 L164.00279017857142 103.132125 L226.00418526785714 103.132125 L288.00558035714283 103.132125 L350.00697544642856 103.132125 L412.0083705357143 103.132125 L474.009765625 103.132125 L536.0111607142857 103.132125 L598.0125558035714 103.132125 L660.0139508928571 103.132125 L722.0153459821429 103.132125 L784.0167410714286 103.132125 L846.0181361607143 103.132125",
+      "M102.00139508928571 123.651 L164.00279017857142 123.651 L226.00418526785714 123.651 L288.00558035714283 123.651 L350.00697544642856 123.651 L412.0083705357143 123.651 L474.009765625 123.651 L536.0111607142857 123.651 L598.0125558035714 123.651 L660.0139508928571 123.651 L722.0153459821429 123.651 L784.0167410714286 123.651 L846.0181361607143 123.651"
+    ],
+    "historyTails": [
+      {
+        "x1": "846.0181361607143",
+        "x2": "908.01953125",
+        "y1": "103.132125",
+        "y2": "103.132125"
+      },
+      {
+        "x1": "846.0181361607143",
+        "x2": "908.01953125",
+        "y1": "123.651",
+        "y2": "123.651"
+      }
+    ],
+    "lap": "GREEN flagLap 9 of 35",
+    "observedAt": "2026-07-13T18:17:41.681Z",
+    "trackDash": "0.7428571428571429"
+  },
+  {
+    "corridor": [
+      {
+        "cx": "202.14487373046865",
+        "cy": "82",
+        "id": "Etter, 2.5 seconds behind of Bryce",
+        "labelY": "50"
+      },
+      {
+        "cx": "269.0432126953124",
+        "cy": "82",
+        "id": "Kaminsky, 1.9 seconds behind of Bryce",
+        "labelY": "120"
+      },
+      {
+        "cx": "356.0541842773436",
+        "cy": "82",
+        "id": "Monteiro, 1.2 seconds behind of Bryce",
+        "labelY": "33"
+      },
+      {
+        "cx": "390.9334845214842",
+        "cy": "82",
+        "id": "Koreiba, 0.9 seconds behind of Bryce",
+        "labelY": "139"
+      },
+      {
+        "cx": "428.5027926269531",
+        "cy": "82",
+        "id": "Roe, 0.5 seconds behind of Bryce",
+        "labelY": "17"
+      },
+      {
+        "cx": "471.0321574218749",
+        "cy": "82",
+        "id": "Taylor, 0.2 seconds behind of Bryce",
+        "labelY": "158"
+      },
+      {
+        "cx": "518.8053350097657",
+        "cy": "82",
+        "id": "Nannini, 0.3 seconds ahead of Bryce",
+        "labelY": "50"
+      },
+      {
+        "cx": "573.0254512695311",
+        "cy": "82",
+        "id": "Rowe, 0.7 seconds ahead of Bryce",
+        "labelY": "120"
+      },
+      {
+        "cx": "604.7720841308593",
+        "cy": "82",
+        "id": "Murray, 1.0 seconds ahead of Bryce",
+        "labelY": "33"
+      },
+      {
+        "cx": "682.0558964843749",
+        "cy": "82",
+        "id": "Missig, 1.7 seconds ahead of Bryce",
+        "labelY": "139"
+      },
+      {
+        "cx": "739.9080908691406",
+        "cy": "82",
+        "id": "Koolen, 2.2 seconds ahead of Bryce",
+        "labelY": "17"
+      },
+      {
+        "cx": "794.2530598144531",
+        "cy": "82",
+        "id": "Allaer, 2.7 seconds ahead of Bryce",
+        "labelY": "158"
+      }
+    ],
+    "fieldRows": [
+      {
+        "text": "1Fittipaldileader",
+        "top": 1237
+      },
+      {
+        "text": "2Kucharczyk+1.2s",
+        "top": 1275
+      },
+      {
+        "text": "3Beeton+2.2s",
+        "top": 1313
+      },
+      {
+        "text": "4de Alba+2.6s",
+        "top": 1350
+      },
+      {
+        "text": "5Hughes+3.1s",
+        "top": 1388
+      },
+      {
+        "text": "6de Tullio+3.8s",
+        "top": 1426
+      },
+      {
+        "text": "7Pierson+4.2s",
+        "top": 1464
+      },
+      {
+        "text": "8Johnson+4.5s",
+        "top": 1502
+      },
+      {
+        "text": "9Garcia+4.9s",
+        "top": 1540
+      },
+      {
+        "text": "10Correa+5.5s",
+        "top": 1578
+      },
+      {
+        "text": "11Allaer+6.9s",
+        "top": 1616
+      },
+      {
+        "text": "12Koolenteammate+7.4s",
+        "top": 1653
+      },
+      {
+        "text": "13Missig+7.9s",
+        "top": 1691
+      },
+      {
+        "text": "14Murray+8.5s",
+        "top": 1729
+      },
+      {
+        "text": "15Rowe+8.8sBryce ahead in 13 of 40 shared races",
+        "top": 1767
+      },
+      {
+        "text": "16Nannini+9.3sBryce ahead in 5 of 12 shared races",
+        "top": 1805
+      },
+      {
+        "text": "179Aron+9.6s",
+        "top": 1843
+      },
+      {
+        "text": "18Taylor+9.7sBryce ahead in 7 of 18 shared races",
+        "top": 1881
+      },
+      {
+        "text": "19Roeteammate+10sBryce ahead in 23 of 40 shared races",
+        "top": 1918
+      },
+      {
+        "text": "20Koreiba+10s",
+        "top": 1956
+      },
+      {
+        "text": "21Monteiro+11s",
+        "top": 1994
+      },
+      {
+        "text": "22Kaminsky+12s",
+        "top": 2032
+      },
+      {
+        "text": "23Etterteammate+12s",
+        "top": 2070
+      },
+      {
+        "text": "24Stati+4 laps",
+        "top": 2108
+      }
+    ],
+    "hero": "P17",
+    "historyPaths": [
+      "M97.86796874999999 103.132125 L155.73593749999998 103.132125 L213.60390625000002 103.132125 L271.47187499999995 103.132125 L329.33984375 103.132125 L387.20781250000005 103.132125 L445.07578125000003 103.132125 L502.94374999999997 103.132125 L560.81171875 103.132125 L618.6796875 103.132125 L676.5476562499999 103.132125 L734.4156250000001 103.132125 L792.28359375 103.132125 L850.1515625000001 103.132125",
+      "M97.86796874999999 123.651 L155.73593749999998 123.651 L213.60390625000002 123.651 L271.47187499999995 123.651 L329.33984375 123.651 L387.20781250000005 123.651 L445.07578125000003 123.651 L502.94374999999997 123.651 L560.81171875 123.651 L618.6796875 123.651 L676.5476562499999 123.651 L734.4156250000001 123.651 L792.28359375 123.651 L850.1515625000001 123.651"
+    ],
+    "historyTails": [
+      {
+        "x1": "850.1515625000001",
+        "x2": "908.01953125",
+        "y1": "103.132125",
+        "y2": "103.132125"
+      },
+      {
+        "x1": "850.1515625000001",
+        "x2": "908.01953125",
+        "y1": "123.651",
+        "y2": "123.651"
+      }
+    ],
+    "lap": "GREEN flagLap 9 of 35",
+    "observedAt": "2026-07-13T18:17:42.696Z",
+    "trackDash": "0.7428571428571429"
+  },
+  {
+    "corridor": [
+      {
+        "cx": "202.14487373046865",
+        "cy": "82",
+        "id": "Etter, 2.5 seconds behind of Bryce",
+        "labelY": "50"
+      },
+      {
+        "cx": "269.0432126953124",
+        "cy": "82",
+        "id": "Kaminsky, 1.9 seconds behind of Bryce",
+        "labelY": "120"
+      },
+      {
+        "cx": "356.0541842773436",
+        "cy": "82",
+        "id": "Monteiro, 1.2 seconds behind of Bryce",
+        "labelY": "33"
+      },
+      {
+        "cx": "390.9334845214842",
+        "cy": "82",
+        "id": "Koreiba, 0.9 seconds behind of Bryce",
+        "labelY": "139"
+      },
+      {
+        "cx": "428.5027926269531",
+        "cy": "82",
+        "id": "Roe, 0.5 seconds behind of Bryce",
+        "labelY": "17"
+      },
+      {
+        "cx": "471.0321574218749",
+        "cy": "82",
+        "id": "Taylor, 0.2 seconds behind of Bryce",
+        "labelY": "158"
+      },
+      {
+        "cx": "518.8053350097657",
+        "cy": "82",
+        "id": "Nannini, 0.3 seconds ahead of Bryce",
+        "labelY": "50"
+      },
+      {
+        "cx": "573.0254512695311",
+        "cy": "82",
+        "id": "Rowe, 0.7 seconds ahead of Bryce",
+        "labelY": "120"
+      },
+      {
+        "cx": "604.7720841308593",
+        "cy": "82",
+        "id": "Murray, 1.0 seconds ahead of Bryce",
+        "labelY": "33"
+      },
+      {
+        "cx": "682.0558964843749",
+        "cy": "82",
+        "id": "Missig, 1.7 seconds ahead of Bryce",
+        "labelY": "139"
+      },
+      {
+        "cx": "739.9080908691406",
+        "cy": "82",
+        "id": "Koolen, 2.2 seconds ahead of Bryce",
+        "labelY": "17"
+      },
+      {
+        "cx": "794.2530598144531",
+        "cy": "82",
+        "id": "Allaer, 2.7 seconds ahead of Bryce",
+        "labelY": "158"
+      }
+    ],
+    "fieldRows": [
+      {
+        "text": "1Fittipaldileader",
+        "top": 1237
+      },
+      {
+        "text": "2Kucharczyk+1.2s",
+        "top": 1275
+      },
+      {
+        "text": "3Beeton+2.2s",
+        "top": 1313
+      },
+      {
+        "text": "4de Alba+2.6s",
+        "top": 1350
+      },
+      {
+        "text": "5Hughes+3.1s",
+        "top": 1388
+      },
+      {
+        "text": "6de Tullio+3.8s",
+        "top": 1426
+      },
+      {
+        "text": "7Pierson+4.2s",
+        "top": 1464
+      },
+      {
+        "text": "8Johnson+4.5s",
+        "top": 1502
+      },
+      {
+        "text": "9Garcia+4.9s",
+        "top": 1540
+      },
+      {
+        "text": "10Correa+5.5s",
+        "top": 1578
+      },
+      {
+        "text": "11Allaer+6.9s",
+        "top": 1616
+      },
+      {
+        "text": "12Koolenteammate+7.4s",
+        "top": 1653
+      },
+      {
+        "text": "13Missig+7.9s",
+        "top": 1691
+      },
+      {
+        "text": "14Murray+8.5s",
+        "top": 1729
+      },
+      {
+        "text": "15Rowe+8.8sBryce ahead in 13 of 40 shared races",
+        "top": 1767
+      },
+      {
+        "text": "16Nannini+9.3sBryce ahead in 5 of 12 shared races",
+        "top": 1805
+      },
+      {
+        "text": "179Aron+9.6s",
+        "top": 1843
+      },
+      {
+        "text": "18Taylor+9.7sBryce ahead in 7 of 18 shared races",
+        "top": 1881
+      },
+      {
+        "text": "19Roeteammate+10sBryce ahead in 23 of 40 shared races",
+        "top": 1918
+      },
+      {
+        "text": "20Koreiba+10s",
+        "top": 1956
+      },
+      {
+        "text": "21Monteiro+11s",
+        "top": 1994
+      },
+      {
+        "text": "22Kaminsky+12s",
+        "top": 2032
+      },
+      {
+        "text": "23Etterteammate+12s",
+        "top": 2070
+      },
+      {
+        "text": "24Stati+4 laps",
+        "top": 2108
+      }
+    ],
+    "hero": "P17",
+    "historyPaths": [
+      "M94.251220703125 103.132125 L148.50244140625 103.132125 L202.753662109375 103.132125 L257.0048828125 103.132125 L311.256103515625 103.132125 L365.50732421875 103.132125 L419.758544921875 103.132125 L474.009765625 103.132125 L528.260986328125 103.132125 L582.51220703125 103.132125 L636.763427734375 103.132125 L691.0146484375 103.132125 L745.265869140625 103.132125 L799.51708984375 103.132125 L853.768310546875 103.132125",
+      "M94.251220703125 123.651 L148.50244140625 123.651 L202.753662109375 123.651 L257.0048828125 123.651 L311.256103515625 123.651 L365.50732421875 123.651 L419.758544921875 123.651 L474.009765625 123.651 L528.260986328125 123.651 L582.51220703125 123.651 L636.763427734375 123.651 L691.0146484375 123.651 L745.265869140625 123.651 L799.51708984375 123.651 L853.768310546875 123.651"
+    ],
+    "historyTails": [
+      {
+        "x1": "853.768310546875",
+        "x2": "908.01953125",
+        "y1": "103.132125",
+        "y2": "103.132125"
+      },
+      {
+        "x1": "853.768310546875",
+        "x2": "908.01953125",
+        "y1": "123.651",
+        "y2": "123.651"
+      }
+    ],
+    "lap": "GREEN flagLap 9 of 35",
+    "observedAt": "2026-07-13T18:17:43.707Z",
+    "trackDash": "0.7428571428571429"
+  },
+  {
+    "corridor": [
+      {
+        "cx": "202.14487373046865",
+        "cy": "82",
+        "id": "Etter, 2.5 seconds behind of Bryce",
+        "labelY": "50"
+      },
+      {
+        "cx": "269.0432126953124",
+        "cy": "82",
+        "id": "Kaminsky, 1.9 seconds behind of Bryce",
+        "labelY": "120"
+      },
+      {
+        "cx": "356.0541842773436",
+        "cy": "82",
+        "id": "Monteiro, 1.2 seconds behind of Bryce",
+        "labelY": "33"
+      },
+      {
+        "cx": "390.9334845214842",
+        "cy": "82",
+        "id": "Koreiba, 0.9 seconds behind of Bryce",
+        "labelY": "139"
+      },
+      {
+        "cx": "428.5027926269531",
+        "cy": "82",
+        "id": "Roe, 0.5 seconds behind of Bryce",
+        "labelY": "17"
+      },
+      {
+        "cx": "471.0321574218749",
+        "cy": "82",
+        "id": "Taylor, 0.2 seconds behind of Bryce",
+        "labelY": "158"
+      },
+      {
+        "cx": "518.8053350097657",
+        "cy": "82",
+        "id": "Nannini, 0.3 seconds ahead of Bryce",
+        "labelY": "50"
+      },
+      {
+        "cx": "573.0254512695311",
+        "cy": "82",
+        "id": "Rowe, 0.7 seconds ahead of Bryce",
+        "labelY": "120"
+      },
+      {
+        "cx": "604.7720841308593",
+        "cy": "82",
+        "id": "Murray, 1.0 seconds ahead of Bryce",
+        "labelY": "33"
+      },
+      {
+        "cx": "682.0558964843749",
+        "cy": "82",
+        "id": "Missig, 1.7 seconds ahead of Bryce",
+        "labelY": "139"
+      },
+      {
+        "cx": "739.9080908691406",
+        "cy": "82",
+        "id": "Koolen, 2.2 seconds ahead of Bryce",
+        "labelY": "17"
+      },
+      {
+        "cx": "794.2530598144531",
+        "cy": "82",
+        "id": "Allaer, 2.7 seconds ahead of Bryce",
+        "labelY": "158"
+      }
+    ],
+    "fieldRows": [
+      {
+        "text": "1Fittipaldileader",
+        "top": 1237
+      },
+      {
+        "text": "2Kucharczyk+1.2s",
+        "top": 1275
+      },
+      {
+        "text": "3Beeton+2.2s",
+        "top": 1313
+      },
+      {
+        "text": "4de Alba+2.6s",
+        "top": 1350
+      },
+      {
+        "text": "5Hughes+3.1s",
+        "top": 1388
+      },
+      {
+        "text": "6de Tullio+3.8s",
+        "top": 1426
+      },
+      {
+        "text": "7Pierson+4.2s",
+        "top": 1464
+      },
+      {
+        "text": "8Johnson+4.5s",
+        "top": 1502
+      },
+      {
+        "text": "9Garcia+4.9s",
+        "top": 1540
+      },
+      {
+        "text": "10Correa+5.5s",
+        "top": 1578
+      },
+      {
+        "text": "11Allaer+6.9s",
+        "top": 1616
+      },
+      {
+        "text": "12Koolenteammate+7.4s",
+        "top": 1653
+      },
+      {
+        "text": "13Missig+7.9s",
+        "top": 1691
+      },
+      {
+        "text": "14Murray+8.5s",
+        "top": 1729
+      },
+      {
+        "text": "15Rowe+8.8sBryce ahead in 13 of 40 shared races",
+        "top": 1767
+      },
+      {
+        "text": "16Nannini+9.3sBryce ahead in 5 of 12 shared races",
+        "top": 1805
+      },
+      {
+        "text": "179Aron+9.6s",
+        "top": 1843
+      },
+      {
+        "text": "18Taylor+9.7sBryce ahead in 7 of 18 shared races",
+        "top": 1881
+      },
+      {
+        "text": "19Roeteammate+10sBryce ahead in 23 of 40 shared races",
+        "top": 1918
+      },
+      {
+        "text": "20Koreiba+10s",
+        "top": 1956
+      },
+      {
+        "text": "21Monteiro+11s",
+        "top": 1994
+      },
+      {
+        "text": "22Kaminsky+12s",
+        "top": 2032
+      },
+      {
+        "text": "23Etterteammate+12s",
+        "top": 2070
+      },
+      {
+        "text": "24Stati+4 laps",
+        "top": 2108
+      }
+    ],
+    "hero": "P17",
+    "historyPaths": [
+      "M91.05997242647058 103.132125 L142.11994485294116 103.132125 L193.17991727941177 103.132125 L244.23988970588235 103.132125 L295.2998621323529 103.132125 L346.35983455882354 103.132125 L397.4198069852941 103.132125 L448.4797794117647 103.132125 L499.5397518382353 103.132125 L550.5997242647059 103.132125 L601.6596966911765 103.132125 L652.7196691176471 103.132125 L703.7796415441176 103.132125 L754.8396139705882 103.132125 L805.8995863970588 103.132125 L856.9595588235294 103.132125",
+      "M91.05997242647058 123.651 L142.11994485294116 123.651 L193.17991727941177 123.651 L244.23988970588235 123.651 L295.2998621323529 123.651 L346.35983455882354 123.651 L397.4198069852941 123.651 L448.4797794117647 123.651 L499.5397518382353 123.651 L550.5997242647059 123.651 L601.6596966911765 123.651 L652.7196691176471 123.651 L703.7796415441176 123.651 L754.8396139705882 123.651 L805.8995863970588 123.651 L856.9595588235294 123.651"
+    ],
+    "historyTails": [
+      {
+        "x1": "856.9595588235294",
+        "x2": "908.01953125",
+        "y1": "103.132125",
+        "y2": "103.132125"
+      },
+      {
+        "x1": "856.9595588235294",
+        "x2": "908.01953125",
+        "y1": "123.651",
+        "y2": "123.651"
+      }
+    ],
+    "lap": "GREEN flagLap 9 of 35",
+    "observedAt": "2026-07-13T18:17:44.725Z",
+    "trackDash": "0.7428571428571429"
+  },
+  {
+    "corridor": [
+      {
+        "cx": "202.14487373046865",
+        "cy": "82",
+        "id": "Etter, 2.5 seconds behind of Bryce",
+        "labelY": "50"
+      },
+      {
+        "cx": "269.0432126953124",
+        "cy": "82",
+        "id": "Kaminsky, 1.9 seconds behind of Bryce",
+        "labelY": "120"
+      },
+      {
+        "cx": "356.0541842773436",
+        "cy": "82",
+        "id": "Monteiro, 1.2 seconds behind of Bryce",
+        "labelY": "33"
+      },
+      {
+        "cx": "390.9334845214842",
+        "cy": "82",
+        "id": "Koreiba, 0.9 seconds behind of Bryce",
+        "labelY": "139"
+      },
+      {
+        "cx": "428.5027926269531",
+        "cy": "82",
+        "id": "Roe, 0.5 seconds behind of Bryce",
+        "labelY": "17"
+      },
+      {
+        "cx": "471.0321574218749",
+        "cy": "82",
+        "id": "Taylor, 0.2 seconds behind of Bryce",
+        "labelY": "158"
+      },
+      {
+        "cx": "518.8053350097657",
+        "cy": "82",
+        "id": "Nannini, 0.3 seconds ahead of Bryce",
+        "labelY": "50"
+      },
+      {
+        "cx": "573.0254512695311",
+        "cy": "82",
+        "id": "Rowe, 0.7 seconds ahead of Bryce",
+        "labelY": "120"
+      },
+      {
+        "cx": "604.7720841308593",
+        "cy": "82",
+        "id": "Murray, 1.0 seconds ahead of Bryce",
+        "labelY": "33"
+      },
+      {
+        "cx": "682.0558964843749",
+        "cy": "82",
+        "id": "Missig, 1.7 seconds ahead of Bryce",
+        "labelY": "139"
+      },
+      {
+        "cx": "739.9080908691406",
+        "cy": "82",
+        "id": "Koolen, 2.2 seconds ahead of Bryce",
+        "labelY": "17"
+      },
+      {
+        "cx": "794.2530598144531",
+        "cy": "82",
+        "id": "Allaer, 2.7 seconds ahead of Bryce",
+        "labelY": "158"
+      }
+    ],
+    "fieldRows": [
+      {
+        "text": "1Fittipaldileader",
+        "top": 1237
+      },
+      {
+        "text": "2Kucharczyk+1.2s",
+        "top": 1275
+      },
+      {
+        "text": "3Beeton+2.2s",
+        "top": 1313
+      },
+      {
+        "text": "4de Alba+2.6s",
+        "top": 1350
+      },
+      {
+        "text": "5Hughes+3.1s",
+        "top": 1388
+      },
+      {
+        "text": "6de Tullio+3.8s",
+        "top": 1426
+      },
+      {
+        "text": "7Pierson+4.2s",
+        "top": 1464
+      },
+      {
+        "text": "8Johnson+4.5s",
+        "top": 1502
+      },
+      {
+        "text": "9Garcia+4.9s",
+        "top": 1540
+      },
+      {
+        "text": "10Correa+5.5s",
+        "top": 1578
+      },
+      {
+        "text": "11Allaer+6.9s",
+        "top": 1616
+      },
+      {
+        "text": "12Koolenteammate+7.4s",
+        "top": 1653
+      },
+      {
+        "text": "13Missig+7.9s",
+        "top": 1691
+      },
+      {
+        "text": "14Murray+8.5s",
+        "top": 1729
+      },
+      {
+        "text": "15Rowe+8.8sBryce ahead in 13 of 40 shared races",
+        "top": 1767
+      },
+      {
+        "text": "16Nannini+9.3sBryce ahead in 5 of 12 shared races",
+        "top": 1805
+      },
+      {
+        "text": "179Aron+9.6s",
+        "top": 1843
+      },
+      {
+        "text": "18Taylor+9.7sBryce ahead in 7 of 18 shared races",
+        "top": 1881
+      },
+      {
+        "text": "19Roeteammate+10sBryce ahead in 23 of 40 shared races",
+        "top": 1918
+      },
+      {
+        "text": "20Koreiba+10s",
+        "top": 1956
+      },
+      {
+        "text": "21Monteiro+11s",
+        "top": 1994
+      },
+      {
+        "text": "22Kaminsky+12s",
+        "top": 2032
+      },
+      {
+        "text": "23Etterteammate+12s",
+        "top": 2070
+      },
+      {
+        "text": "24Stati+4 laps",
+        "top": 2108
+      }
+    ],
+    "hero": "P17",
+    "historyPaths": [
+      "M88.22330729166666 103.132125 L136.44661458333331 103.132125 L184.669921875 103.132125 L232.89322916666666 103.132125 L281.11653645833337 103.132125 L329.33984375 103.132125 L377.5631510416667 103.132125 L425.7864583333333 103.132125 L474.009765625 103.132125 L522.2330729166667 103.132125 L570.4563802083334 103.132125 L618.6796875 103.132125 L666.9029947916666 103.132125 L715.1263020833334 103.132125 L763.349609375 103.132125 L811.5729166666666 103.132125 L859.7962239583333 103.132125",
+      "M88.22330729166666 123.651 L136.44661458333331 123.651 L184.669921875 123.651 L232.89322916666666 123.651 L281.11653645833337 123.651 L329.33984375 123.651 L377.5631510416667 123.651 L425.7864583333333 123.651 L474.009765625 123.651 L522.2330729166667 123.651 L570.4563802083334 123.651 L618.6796875 123.651 L666.9029947916666 123.651 L715.1263020833334 123.651 L763.349609375 123.651 L811.5729166666666 123.651 L859.7962239583333 123.651"
+    ],
+    "historyTails": [
+      {
+        "x1": "859.7962239583333",
+        "x2": "908.01953125",
+        "y1": "103.132125",
+        "y2": "103.132125"
+      },
+      {
+        "x1": "859.7962239583333",
+        "x2": "908.01953125",
+        "y1": "123.651",
+        "y2": "123.651"
+      }
+    ],
+    "lap": "GREEN flagLap 9 of 35",
+    "observedAt": "2026-07-13T18:17:45.737Z",
+    "trackDash": "0.7428571428571429"
+  },
+  {
+    "corridor": [
+      {
+        "cx": "202.14487373046865",
+        "cy": "82",
+        "id": "Etter, 2.5 seconds behind of Bryce",
+        "labelY": "50"
+      },
+      {
+        "cx": "269.0432126953124",
+        "cy": "82",
+        "id": "Kaminsky, 1.9 seconds behind of Bryce",
+        "labelY": "120"
+      },
+      {
+        "cx": "356.0541842773436",
+        "cy": "82",
+        "id": "Monteiro, 1.2 seconds behind of Bryce",
+        "labelY": "33"
+      },
+      {
+        "cx": "390.9334845214842",
+        "cy": "82",
+        "id": "Koreiba, 0.9 seconds behind of Bryce",
+        "labelY": "139"
+      },
+      {
+        "cx": "428.5027926269531",
+        "cy": "82",
+        "id": "Roe, 0.5 seconds behind of Bryce",
+        "labelY": "17"
+      },
+      {
+        "cx": "471.0321574218749",
+        "cy": "82",
+        "id": "Taylor, 0.2 seconds behind of Bryce",
+        "labelY": "158"
+      },
+      {
+        "cx": "518.8053350097657",
+        "cy": "82",
+        "id": "Nannini, 0.3 seconds ahead of Bryce",
+        "labelY": "50"
+      },
+      {
+        "cx": "573.0254512695311",
+        "cy": "82",
+        "id": "Rowe, 0.7 seconds ahead of Bryce",
+        "labelY": "120"
+      },
+      {
+        "cx": "604.7720841308593",
+        "cy": "82",
+        "id": "Murray, 1.0 seconds ahead of Bryce",
+        "labelY": "33"
+      },
+      {
+        "cx": "682.0558964843749",
+        "cy": "82",
+        "id": "Missig, 1.7 seconds ahead of Bryce",
+        "labelY": "139"
+      },
+      {
+        "cx": "739.9080908691406",
+        "cy": "82",
+        "id": "Koolen, 2.2 seconds ahead of Bryce",
+        "labelY": "17"
+      },
+      {
+        "cx": "794.2530598144531",
+        "cy": "82",
+        "id": "Allaer, 2.7 seconds ahead of Bryce",
+        "labelY": "158"
+      }
+    ],
+    "fieldRows": [
+      {
+        "text": "1Fittipaldileader",
+        "top": 1237
+      },
+      {
+        "text": "2Kucharczyk+1.2s",
+        "top": 1275
+      },
+      {
+        "text": "3Beeton+2.2s",
+        "top": 1313
+      },
+      {
+        "text": "4de Alba+2.6s",
+        "top": 1350
+      },
+      {
+        "text": "5Hughes+3.1s",
+        "top": 1388
+      },
+      {
+        "text": "6de Tullio+3.8s",
+        "top": 1426
+      },
+      {
+        "text": "7Pierson+4.2s",
+        "top": 1464
+      },
+      {
+        "text": "8Johnson+4.5s",
+        "top": 1502
+      },
+      {
+        "text": "9Garcia+4.9s",
+        "top": 1540
+      },
+      {
+        "text": "10Correa+5.5s",
+        "top": 1578
+      },
+      {
+        "text": "11Allaer+6.9s",
+        "top": 1616
+      },
+      {
+        "text": "12Koolenteammate+7.4s",
+        "top": 1653
+      },
+      {
+        "text": "13Missig+7.9s",
+        "top": 1691
+      },
+      {
+        "text": "14Murray+8.5s",
+        "top": 1729
+      },
+      {
+        "text": "15Rowe+8.8sBryce ahead in 13 of 40 shared races",
+        "top": 1767
+      },
+      {
+        "text": "16Nannini+9.3sBryce ahead in 5 of 12 shared races",
+        "top": 1805
+      },
+      {
+        "text": "179Aron+9.6s",
+        "top": 1843
+      },
+      {
+        "text": "18Taylor+9.7sBryce ahead in 7 of 18 shared races",
+        "top": 1881
+      },
+      {
+        "text": "19Roeteammate+10sBryce ahead in 23 of 40 shared races",
+        "top": 1918
+      },
+      {
+        "text": "20Koreiba+10s",
+        "top": 1956
+      },
+      {
+        "text": "21Monteiro+11s",
+        "top": 1994
+      },
+      {
+        "text": "22Kaminsky+12s",
+        "top": 2032
+      },
+      {
+        "text": "23Etterteammate+12s",
+        "top": 2070
+      },
+      {
+        "text": "24Stati+4 laps",
+        "top": 2108
+      }
+    ],
+    "hero": "P17",
+    "historyPaths": [
+      "M85.68523848684211 103.132125 L131.37047697368422 103.132125 L177.0557154605263 103.132125 L222.7409539473684 103.132125 L268.4261924342105 103.132125 L314.1114309210526 103.132125 L359.79666940789474 103.132125 L405.4819078947368 103.132125 L451.1671463815789 103.132125 L496.85238486842104 103.132125 L542.5376233552631 103.132125 L588.2228618421052 103.132125 L633.9081003289474 103.132125 L679.5933388157895 103.132125 L725.2785773026316 103.132125 L770.9638157894736 103.132125 L816.6490542763158 103.132125 L862.3342927631578 103.132125",
+      "M85.68523848684211 123.651 L131.37047697368422 123.651 L177.0557154605263 123.651 L222.7409539473684 123.651 L268.4261924342105 123.651 L314.1114309210526 123.651 L359.79666940789474 123.651 L405.4819078947368 123.651 L451.1671463815789 123.651 L496.85238486842104 123.651 L542.5376233552631 123.651 L588.2228618421052 123.651 L633.9081003289474 123.651 L679.5933388157895 123.651 L725.2785773026316 123.651 L770.9638157894736 123.651 L816.6490542763158 123.651 L862.3342927631578 123.651"
+    ],
+    "historyTails": [
+      {
+        "x1": "862.3342927631578",
+        "x2": "908.01953125",
+        "y1": "103.132125",
+        "y2": "103.132125"
+      },
+      {
+        "x1": "862.3342927631578",
+        "x2": "908.01953125",
+        "y1": "123.651",
+        "y2": "123.651"
+      }
+    ],
+    "lap": "GREEN flagLap 9 of 35",
+    "observedAt": "2026-07-13T18:17:46.748Z",
+    "trackDash": "0.7428571428571429"
+  },
+  {
+    "corridor": [
+      {
+        "cx": "202.14487373046865",
+        "cy": "82",
+        "id": "Etter, 2.5 seconds behind of Bryce",
+        "labelY": "50"
+      },
+      {
+        "cx": "269.0432126953124",
+        "cy": "82",
+        "id": "Kaminsky, 1.9 seconds behind of Bryce",
+        "labelY": "120"
+      },
+      {
+        "cx": "356.0541842773436",
+        "cy": "82",
+        "id": "Monteiro, 1.2 seconds behind of Bryce",
+        "labelY": "33"
+      },
+      {
+        "cx": "390.9334845214842",
+        "cy": "82",
+        "id": "Koreiba, 0.9 seconds behind of Bryce",
+        "labelY": "139"
+      },
+      {
+        "cx": "428.5027926269531",
+        "cy": "82",
+        "id": "Roe, 0.5 seconds behind of Bryce",
+        "labelY": "17"
+      },
+      {
+        "cx": "471.0321574218749",
+        "cy": "82",
+        "id": "Taylor, 0.2 seconds behind of Bryce",
+        "labelY": "158"
+      },
+      {
+        "cx": "518.8053350097657",
+        "cy": "82",
+        "id": "Nannini, 0.3 seconds ahead of Bryce",
+        "labelY": "50"
+      },
+      {
+        "cx": "573.0254512695311",
+        "cy": "82",
+        "id": "Rowe, 0.7 seconds ahead of Bryce",
+        "labelY": "120"
+      },
+      {
+        "cx": "604.7720841308593",
+        "cy": "82",
+        "id": "Murray, 1.0 seconds ahead of Bryce",
+        "labelY": "33"
+      },
+      {
+        "cx": "682.0558964843749",
+        "cy": "82",
+        "id": "Missig, 1.7 seconds ahead of Bryce",
+        "labelY": "139"
+      },
+      {
+        "cx": "739.9080908691406",
+        "cy": "82",
+        "id": "Koolen, 2.2 seconds ahead of Bryce",
+        "labelY": "17"
+      },
+      {
+        "cx": "794.2530598144531",
+        "cy": "82",
+        "id": "Allaer, 2.7 seconds ahead of Bryce",
+        "labelY": "158"
+      }
+    ],
+    "fieldRows": [
+      {
+        "text": "1Fittipaldileader",
+        "top": 1237
+      },
+      {
+        "text": "2Kucharczyk+1.2s",
+        "top": 1275
+      },
+      {
+        "text": "3Beeton+2.2s",
+        "top": 1313
+      },
+      {
+        "text": "4de Alba+2.6s",
+        "top": 1350
+      },
+      {
+        "text": "5Hughes+3.1s",
+        "top": 1388
+      },
+      {
+        "text": "6de Tullio+3.8s",
+        "top": 1426
+      },
+      {
+        "text": "7Pierson+4.2s",
+        "top": 1464
+      },
+      {
+        "text": "8Johnson+4.5s",
+        "top": 1502
+      },
+      {
+        "text": "9Garcia+4.9s",
+        "top": 1540
+      },
+      {
+        "text": "10Correa+5.5s",
+        "top": 1578
+      },
+      {
+        "text": "11Allaer+6.9s",
+        "top": 1616
+      },
+      {
+        "text": "12Koolenteammate+7.4s",
+        "top": 1653
+      },
+      {
+        "text": "13Missig+7.9s",
+        "top": 1691
+      },
+      {
+        "text": "14Murray+8.5s",
+        "top": 1729
+      },
+      {
+        "text": "15Rowe+8.8sBryce ahead in 13 of 40 shared races",
+        "top": 1767
+      },
+      {
+        "text": "16Nannini+9.3sBryce ahead in 5 of 12 shared races",
+        "top": 1805
+      },
+      {
+        "text": "179Aron+9.6s",
+        "top": 1843
+      },
+      {
+        "text": "18Taylor+9.7sBryce ahead in 7 of 18 shared races",
+        "top": 1881
+      },
+      {
+        "text": "19Roeteammate+10sBryce ahead in 23 of 40 shared races",
+        "top": 1918
+      },
+      {
+        "text": "20Koreiba+10s",
+        "top": 1956
+      },
+      {
+        "text": "21Monteiro+11s",
+        "top": 1994
+      },
+      {
+        "text": "22Kaminsky+12s",
+        "top": 2032
+      },
+      {
+        "text": "23Etterteammate+12s",
+        "top": 2070
+      },
+      {
+        "text": "24Stati+4 laps",
+        "top": 2108
+      }
+    ],
+    "hero": "P17",
+    "historyPaths": [
+      "M83.4009765625 103.132125 L126.80195312500001 103.132125 L170.2029296875 103.132125 L213.60390625000002 103.132125 L257.0048828125 103.132125 L300.405859375 103.132125 L343.80683593749995 103.132125 L387.20781250000005 103.132125 L430.6087890625 103.132125 L474.009765625 103.132125 L517.4107421875001 103.132125 L560.81171875 103.132125 L604.2126953125 103.132125 L647.6136718749999 103.132125 L691.0146484375 103.132125 L734.4156250000001 103.132125 L777.8166015625 103.132125 L821.217578125 103.132125 L864.6185546874999 103.132125",
+      "M83.4009765625 123.651 L126.80195312500001 123.651 L170.2029296875 123.651 L213.60390625000002 123.651 L257.0048828125 123.651 L300.405859375 123.651 L343.80683593749995 123.651 L387.20781250000005 123.651 L430.6087890625 123.651 L474.009765625 123.651 L517.4107421875001 123.651 L560.81171875 123.651 L604.2126953125 123.651 L647.6136718749999 123.651 L691.0146484375 123.651 L734.4156250000001 123.651 L777.8166015625 123.651 L821.217578125 123.651 L864.6185546874999 123.651"
+    ],
+    "historyTails": [
+      {
+        "x1": "864.6185546874999",
+        "x2": "908.01953125",
+        "y1": "103.132125",
+        "y2": "103.132125"
+      },
+      {
+        "x1": "864.6185546874999",
+        "x2": "908.01953125",
+        "y1": "123.651",
+        "y2": "123.651"
+      }
+    ],
+    "lap": "GREEN flagLap 9 of 35",
+    "observedAt": "2026-07-13T18:17:47.760Z",
+    "trackDash": "0.7428571428571429"
+  },
+  {
+    "corridor": [
+      {
+        "cx": "202.14487373046865",
+        "cy": "82",
+        "id": "Etter, 2.5 seconds behind of Bryce",
+        "labelY": "50"
+      },
+      {
+        "cx": "269.0432126953124",
+        "cy": "82",
+        "id": "Kaminsky, 1.9 seconds behind of Bryce",
+        "labelY": "120"
+      },
+      {
+        "cx": "356.0541842773436",
+        "cy": "82",
+        "id": "Monteiro, 1.2 seconds behind of Bryce",
+        "labelY": "33"
+      },
+      {
+        "cx": "390.9334845214842",
+        "cy": "82",
+        "id": "Koreiba, 0.9 seconds behind of Bryce",
+        "labelY": "139"
+      },
+      {
+        "cx": "428.5027926269531",
+        "cy": "82",
+        "id": "Roe, 0.5 seconds behind of Bryce",
+        "labelY": "17"
+      },
+      {
+        "cx": "471.0321574218749",
+        "cy": "82",
+        "id": "Taylor, 0.2 seconds behind of Bryce",
+        "labelY": "158"
+      },
+      {
+        "cx": "518.8053350097657",
+        "cy": "82",
+        "id": "Nannini, 0.3 seconds ahead of Bryce",
+        "labelY": "50"
+      },
+      {
+        "cx": "573.0254512695311",
+        "cy": "82",
+        "id": "Rowe, 0.7 seconds ahead of Bryce",
+        "labelY": "120"
+      },
+      {
+        "cx": "604.7720841308593",
+        "cy": "82",
+        "id": "Murray, 1.0 seconds ahead of Bryce",
+        "labelY": "33"
+      },
+      {
+        "cx": "682.0558964843749",
+        "cy": "82",
+        "id": "Missig, 1.7 seconds ahead of Bryce",
+        "labelY": "139"
+      },
+      {
+        "cx": "739.9080908691406",
+        "cy": "82",
+        "id": "Koolen, 2.2 seconds ahead of Bryce",
+        "labelY": "17"
+      },
+      {
+        "cx": "794.2530598144531",
+        "cy": "82",
+        "id": "Allaer, 2.7 seconds ahead of Bryce",
+        "labelY": "158"
+      }
+    ],
+    "fieldRows": [
+      {
+        "text": "1Fittipaldileader",
+        "top": 1237
+      },
+      {
+        "text": "2Kucharczyk+1.2s",
+        "top": 1275
+      },
+      {
+        "text": "3Beeton+2.2s",
+        "top": 1313
+      },
+      {
+        "text": "4de Alba+2.6s",
+        "top": 1350
+      },
+      {
+        "text": "5Hughes+3.1s",
+        "top": 1388
+      },
+      {
+        "text": "6de Tullio+3.8s",
+        "top": 1426
+      },
+      {
+        "text": "7Pierson+4.2s",
+        "top": 1464
+      },
+      {
+        "text": "8Johnson+4.5s",
+        "top": 1502
+      },
+      {
+        "text": "9Garcia+4.9s",
+        "top": 1540
+      },
+      {
+        "text": "10Correa+5.5s",
+        "top": 1578
+      },
+      {
+        "text": "11Allaer+6.9s",
+        "top": 1616
+      },
+      {
+        "text": "12Koolenteammate+7.4s",
+        "top": 1653
+      },
+      {
+        "text": "13Missig+7.9s",
+        "top": 1691
+      },
+      {
+        "text": "14Murray+8.5s",
+        "top": 1729
+      },
+      {
+        "text": "15Rowe+8.8sBryce ahead in 13 of 40 shared races",
+        "top": 1767
+      },
+      {
+        "text": "16Nannini+9.3sBryce ahead in 5 of 12 shared races",
+        "top": 1805
+      },
+      {
+        "text": "179Aron+9.6s",
+        "top": 1843
+      },
+      {
+        "text": "18Taylor+9.7sBryce ahead in 7 of 18 shared races",
+        "top": 1881
+      },
+      {
+        "text": "19Roeteammate+10sBryce ahead in 23 of 40 shared races",
+        "top": 1918
+      },
+      {
+        "text": "20Koreiba+10s",
+        "top": 1956
+      },
+      {
+        "text": "21Monteiro+11s",
+        "top": 1994
+      },
+      {
+        "text": "22Kaminsky+12s",
+        "top": 2032
+      },
+      {
+        "text": "23Etterteammate+12s",
+        "top": 2070
+      },
+      {
+        "text": "24Stati+4 laps",
+        "top": 2108
+      }
+    ],
+    "hero": "P17",
+    "historyPaths": [
+      "M81.33426339285714 103.132125 L122.66852678571428 103.132125 L164.00279017857142 103.132125 L205.33705357142856 103.132125 L246.6713169642857 103.132125 L288.00558035714283 103.132125 L329.33984375 103.132125 L370.6741071428571 103.132125 L412.0083705357143 103.132125 L453.3426339285714 103.132125 L494.6768973214286 103.132125 L536.0111607142857 103.132125 L577.3454241071429 103.132125 L618.6796875 103.132125 L660.0139508928571 103.132125 L701.3482142857142 103.132125 L742.6824776785714 103.132125 L784.0167410714286 103.132125 L825.3510044642857 103.132125 L866.6852678571428 103.132125",
+      "M81.33426339285714 123.651 L122.66852678571428 123.651 L164.00279017857142 123.651 L205.33705357142856 123.651 L246.6713169642857 123.651 L288.00558035714283 123.651 L329.33984375 123.651 L370.6741071428571 123.651 L412.0083705357143 123.651 L453.3426339285714 123.651 L494.6768973214286 123.651 L536.0111607142857 123.651 L577.3454241071429 123.651 L618.6796875 123.651 L660.0139508928571 123.651 L701.3482142857142 123.651 L742.6824776785714 123.651 L784.0167410714286 123.651 L825.3510044642857 123.651 L866.6852678571428 123.651"
+    ],
+    "historyTails": [
+      {
+        "x1": "866.6852678571428",
+        "x2": "908.01953125",
+        "y1": "103.132125",
+        "y2": "103.132125"
+      },
+      {
+        "x1": "866.6852678571428",
+        "x2": "908.01953125",
+        "y1": "123.651",
+        "y2": "123.651"
+      }
+    ],
+    "lap": "GREEN flagLap 9 of 35",
+    "observedAt": "2026-07-13T18:17:48.771Z",
+    "trackDash": "0.7428571428571429"
+  },
+  {
+    "corridor": [
+      {
+        "cx": "202.14487373046865",
+        "cy": "82",
+        "id": "Etter, 2.5 seconds behind of Bryce",
+        "labelY": "50"
+      },
+      {
+        "cx": "269.0432126953124",
+        "cy": "82",
+        "id": "Kaminsky, 1.9 seconds behind of Bryce",
+        "labelY": "120"
+      },
+      {
+        "cx": "356.0541842773436",
+        "cy": "82",
+        "id": "Monteiro, 1.2 seconds behind of Bryce",
+        "labelY": "33"
+      },
+      {
+        "cx": "390.9334845214842",
+        "cy": "82",
+        "id": "Koreiba, 0.9 seconds behind of Bryce",
+        "labelY": "139"
+      },
+      {
+        "cx": "428.5027926269531",
+        "cy": "82",
+        "id": "Roe, 0.5 seconds behind of Bryce",
+        "labelY": "17"
+      },
+      {
+        "cx": "471.0321574218749",
+        "cy": "82",
+        "id": "Taylor, 0.2 seconds behind of Bryce",
+        "labelY": "158"
+      },
+      {
+        "cx": "518.8053350097657",
+        "cy": "82",
+        "id": "Nannini, 0.3 seconds ahead of Bryce",
+        "labelY": "50"
+      },
+      {
+        "cx": "573.0254512695311",
+        "cy": "82",
+        "id": "Rowe, 0.7 seconds ahead of Bryce",
+        "labelY": "120"
+      },
+      {
+        "cx": "604.7720841308593",
+        "cy": "82",
+        "id": "Murray, 1.0 seconds ahead of Bryce",
+        "labelY": "33"
+      },
+      {
+        "cx": "682.0558964843749",
+        "cy": "82",
+        "id": "Missig, 1.7 seconds ahead of Bryce",
+        "labelY": "139"
+      },
+      {
+        "cx": "739.9080908691406",
+        "cy": "82",
+        "id": "Koolen, 2.2 seconds ahead of Bryce",
+        "labelY": "17"
+      },
+      {
+        "cx": "794.2530598144531",
+        "cy": "82",
+        "id": "Allaer, 2.7 seconds ahead of Bryce",
+        "labelY": "158"
+      }
+    ],
+    "fieldRows": [
+      {
+        "text": "1Fittipaldileader",
+        "top": 1237
+      },
+      {
+        "text": "2Kucharczyk+1.2s",
+        "top": 1275
+      },
+      {
+        "text": "3Beeton+2.2s",
+        "top": 1313
+      },
+      {
+        "text": "4de Alba+2.6s",
+        "top": 1350
+      },
+      {
+        "text": "5Hughes+3.1s",
+        "top": 1388
+      },
+      {
+        "text": "6de Tullio+3.8s",
+        "top": 1426
+      },
+      {
+        "text": "7Pierson+4.2s",
+        "top": 1464
+      },
+      {
+        "text": "8Johnson+4.5s",
+        "top": 1502
+      },
+      {
+        "text": "9Garcia+4.9s",
+        "top": 1540
+      },
+      {
+        "text": "10Correa+5.5s",
+        "top": 1578
+      },
+      {
+        "text": "11Allaer+6.9s",
+        "top": 1616
+      },
+      {
+        "text": "12Koolenteammate+7.4s",
+        "top": 1653
+      },
+      {
+        "text": "13Missig+7.9s",
+        "top": 1691
+      },
+      {
+        "text": "14Murray+8.5s",
+        "top": 1729
+      },
+      {
+        "text": "15Rowe+8.8sBryce ahead in 13 of 40 shared races",
+        "top": 1767
+      },
+      {
+        "text": "16Nannini+9.3sBryce ahead in 5 of 12 shared races",
+        "top": 1805
+      },
+      {
+        "text": "179Aron+9.6s",
+        "top": 1843
+      },
+      {
+        "text": "18Taylor+9.7sBryce ahead in 7 of 18 shared races",
+        "top": 1881
+      },
+      {
+        "text": "19Roeteammate+10sBryce ahead in 23 of 40 shared races",
+        "top": 1918
+      },
+      {
+        "text": "20Koreiba+10s",
+        "top": 1956
+      },
+      {
+        "text": "21Monteiro+11s",
+        "top": 1994
+      },
+      {
+        "text": "22Kaminsky+12s",
+        "top": 2032
+      },
+      {
+        "text": "23Etterteammate+12s",
+        "top": 2070
+      },
+      {
+        "text": "24Stati+4 laps",
+        "top": 2108
+      }
+    ],
+    "hero": "P17",
+    "historyPaths": [
+      "M79.45543323863637 103.132125 L118.91086647727273 103.132125 L158.36629971590907 103.132125 L197.82173295454547 103.132125 L237.2771661931818 103.132125 L276.73259943181813 103.132125 L316.18803267045456 103.132125 L355.64346590909093 103.132125 L395.0988991477273 103.132125 L434.5543323863636 103.132125 L474.009765625 103.132125 L513.4651988636363 103.132125 L552.9206321022727 103.132125 L592.3760653409091 103.132125 L631.8314985795454 103.132125 L671.2869318181819 103.132125 L710.7423650568181 103.132125 L750.1977982954546 103.132125 L789.6532315340909 103.132125 L829.1086647727273 103.132125 L868.5640980113636 103.132125",
+      "M79.45543323863637 123.651 L118.91086647727273 123.651 L158.36629971590907 123.651 L197.82173295454547 123.651 L237.2771661931818 123.651 L276.73259943181813 123.651 L316.18803267045456 123.651 L355.64346590909093 123.651 L395.0988991477273 123.651 L434.5543323863636 123.651 L474.009765625 123.651 L513.4651988636363 123.651 L552.9206321022727 123.651 L592.3760653409091 123.651 L631.8314985795454 123.651 L671.2869318181819 123.651 L710.7423650568181 123.651 L750.1977982954546 123.651 L789.6532315340909 123.651 L829.1086647727273 123.651 L868.5640980113636 123.651"
+    ],
+    "historyTails": [
+      {
+        "x1": "868.5640980113636",
+        "x2": "908.01953125",
+        "y1": "103.132125",
+        "y2": "103.132125"
+      },
+      {
+        "x1": "868.5640980113636",
+        "x2": "908.01953125",
+        "y1": "123.651",
+        "y2": "123.651"
+      }
+    ],
+    "lap": "GREEN flagLap 9 of 35",
+    "observedAt": "2026-07-13T18:17:49.782Z",
+    "trackDash": "0.7428571428571429"
+  },
+  {
+    "corridor": [
+      {
+        "cx": "202.14487373046865",
+        "cy": "82",
+        "id": "Etter, 2.5 seconds behind of Bryce",
+        "labelY": "50"
+      },
+      {
+        "cx": "269.0432126953124",
+        "cy": "82",
+        "id": "Kaminsky, 1.9 seconds behind of Bryce",
+        "labelY": "120"
+      },
+      {
+        "cx": "356.0541842773436",
+        "cy": "82",
+        "id": "Monteiro, 1.2 seconds behind of Bryce",
+        "labelY": "33"
+      },
+      {
+        "cx": "390.9334845214842",
+        "cy": "82",
+        "id": "Koreiba, 0.9 seconds behind of Bryce",
+        "labelY": "139"
+      },
+      {
+        "cx": "428.5027926269531",
+        "cy": "82",
+        "id": "Roe, 0.5 seconds behind of Bryce",
+        "labelY": "17"
+      },
+      {
+        "cx": "471.0321574218749",
+        "cy": "82",
+        "id": "Taylor, 0.2 seconds behind of Bryce",
+        "labelY": "158"
+      },
+      {
+        "cx": "518.8053350097657",
+        "cy": "82",
+        "id": "Nannini, 0.3 seconds ahead of Bryce",
+        "labelY": "50"
+      },
+      {
+        "cx": "573.0254512695311",
+        "cy": "82",
+        "id": "Rowe, 0.7 seconds ahead of Bryce",
+        "labelY": "120"
+      },
+      {
+        "cx": "604.7720841308593",
+        "cy": "82",
+        "id": "Murray, 1.0 seconds ahead of Bryce",
+        "labelY": "33"
+      },
+      {
+        "cx": "682.0558964843749",
+        "cy": "82",
+        "id": "Missig, 1.7 seconds ahead of Bryce",
+        "labelY": "139"
+      },
+      {
+        "cx": "739.9080908691406",
+        "cy": "82",
+        "id": "Koolen, 2.2 seconds ahead of Bryce",
+        "labelY": "17"
+      },
+      {
+        "cx": "794.2530598144531",
+        "cy": "82",
+        "id": "Allaer, 2.7 seconds ahead of Bryce",
+        "labelY": "158"
+      }
+    ],
+    "fieldRows": [
+      {
+        "text": "1Fittipaldileader",
+        "top": 1237
+      },
+      {
+        "text": "2Kucharczyk+1.2s",
+        "top": 1275
+      },
+      {
+        "text": "3Beeton+2.2s",
+        "top": 1313
+      },
+      {
+        "text": "4de Alba+2.6s",
+        "top": 1350
+      },
+      {
+        "text": "5Hughes+3.1s",
+        "top": 1388
+      },
+      {
+        "text": "6de Tullio+3.8s",
+        "top": 1426
+      },
+      {
+        "text": "7Pierson+4.2s",
+        "top": 1464
+      },
+      {
+        "text": "8Johnson+4.5s",
+        "top": 1502
+      },
+      {
+        "text": "9Garcia+4.9s",
+        "top": 1540
+      },
+      {
+        "text": "10Correa+5.5s",
+        "top": 1578
+      },
+      {
+        "text": "11Allaer+6.9s",
+        "top": 1616
+      },
+      {
+        "text": "12Koolenteammate+7.4s",
+        "top": 1653
+      },
+      {
+        "text": "13Missig+7.9s",
+        "top": 1691
+      },
+      {
+        "text": "14Murray+8.5s",
+        "top": 1729
+      },
+      {
+        "text": "15Rowe+8.8sBryce ahead in 13 of 40 shared races",
+        "top": 1767
+      },
+      {
+        "text": "16Nannini+9.3sBryce ahead in 5 of 12 shared races",
+        "top": 1805
+      },
+      {
+        "text": "179Aron+9.6s",
+        "top": 1843
+      },
+      {
+        "text": "18Taylor+9.7sBryce ahead in 7 of 18 shared races",
+        "top": 1881
+      },
+      {
+        "text": "19Roeteammate+10sBryce ahead in 23 of 40 shared races",
+        "top": 1918
+      },
+      {
+        "text": "20Koreiba+10s",
+        "top": 1956
+      },
+      {
+        "text": "21Monteiro+11s",
+        "top": 1994
+      },
+      {
+        "text": "22Kaminsky+12s",
+        "top": 2032
+      },
+      {
+        "text": "23Etterteammate+12s",
+        "top": 2070
+      },
+      {
+        "text": "24Stati+4 laps",
+        "top": 2108
+      }
+    ],
+    "hero": "P17",
+    "historyPaths": [
+      "M77.73997961956522 103.132125 L115.47995923913044 103.132125 L153.21993885869566 103.132125 L190.95991847826087 103.132125 L228.6998980978261 103.132125 L266.4398777173913 103.132125 L304.17985733695656 103.132125 L341.91983695652175 103.132125 L379.659816576087 103.132125 L417.3997961956522 103.132125 L455.1397758152174 103.132125 L492.8797554347826 103.132125 L530.6197350543478 103.132125 L568.3597146739131 103.132125 L606.0996942934783 103.132125 L643.8396739130435 103.132125 L681.5796535326086 103.132125 L719.319633152174 103.132125 L757.0596127717391 103.132125 L794.7995923913044 103.132125 L832.5395720108695 103.132125 L870.2795516304348 103.132125",
+      "M77.73997961956522 123.651 L115.47995923913044 123.651 L153.21993885869566 123.651 L190.95991847826087 123.651 L228.6998980978261 123.651 L266.4398777173913 123.651 L304.17985733695656 123.651 L341.91983695652175 123.651 L379.659816576087 123.651 L417.3997961956522 123.651 L455.1397758152174 123.651 L492.8797554347826 123.651 L530.6197350543478 123.651 L568.3597146739131 123.651 L606.0996942934783 123.651 L643.8396739130435 123.651 L681.5796535326086 123.651 L719.319633152174 123.651 L757.0596127717391 123.651 L794.7995923913044 123.651 L832.5395720108695 123.651 L870.2795516304348 123.651"
+    ],
+    "historyTails": [
+      {
+        "x1": "870.2795516304348",
+        "x2": "908.01953125",
+        "y1": "103.132125",
+        "y2": "103.132125"
+      },
+      {
+        "x1": "870.2795516304348",
+        "x2": "908.01953125",
+        "y1": "123.651",
+        "y2": "123.651"
+      }
+    ],
+    "lap": "GREEN flagLap 9 of 35",
+    "observedAt": "2026-07-13T18:17:50.794Z",
+    "trackDash": "0.7428571428571429"
+  },
+  {
+    "corridor": [
+      {
+        "cx": "202.14487373046865",
+        "cy": "82",
+        "id": "Etter, 2.5 seconds behind of Bryce",
+        "labelY": "50"
+      },
+      {
+        "cx": "269.0432126953124",
+        "cy": "82",
+        "id": "Kaminsky, 1.9 seconds behind of Bryce",
+        "labelY": "120"
+      },
+      {
+        "cx": "356.0541842773436",
+        "cy": "82",
+        "id": "Monteiro, 1.2 seconds behind of Bryce",
+        "labelY": "33"
+      },
+      {
+        "cx": "390.9334845214842",
+        "cy": "82",
+        "id": "Koreiba, 0.9 seconds behind of Bryce",
+        "labelY": "139"
+      },
+      {
+        "cx": "428.5027926269531",
+        "cy": "82",
+        "id": "Roe, 0.5 seconds behind of Bryce",
+        "labelY": "17"
+      },
+      {
+        "cx": "471.0321574218749",
+        "cy": "82",
+        "id": "Taylor, 0.2 seconds behind of Bryce",
+        "labelY": "158"
+      },
+      {
+        "cx": "518.8053350097657",
+        "cy": "82",
+        "id": "Nannini, 0.3 seconds ahead of Bryce",
+        "labelY": "50"
+      },
+      {
+        "cx": "573.0254512695311",
+        "cy": "82",
+        "id": "Rowe, 0.7 seconds ahead of Bryce",
+        "labelY": "120"
+      },
+      {
+        "cx": "604.7720841308593",
+        "cy": "82",
+        "id": "Murray, 1.0 seconds ahead of Bryce",
+        "labelY": "33"
+      },
+      {
+        "cx": "682.0558964843749",
+        "cy": "82",
+        "id": "Missig, 1.7 seconds ahead of Bryce",
+        "labelY": "139"
+      },
+      {
+        "cx": "739.9080908691406",
+        "cy": "82",
+        "id": "Koolen, 2.2 seconds ahead of Bryce",
+        "labelY": "17"
+      },
+      {
+        "cx": "794.2530598144531",
+        "cy": "82",
+        "id": "Allaer, 2.7 seconds ahead of Bryce",
+        "labelY": "158"
+      }
+    ],
+    "fieldRows": [
+      {
+        "text": "1Fittipaldileader",
+        "top": 1237
+      },
+      {
+        "text": "2Kucharczyk+1.2s",
+        "top": 1275
+      },
+      {
+        "text": "3Beeton+2.2s",
+        "top": 1313
+      },
+      {
+        "text": "4de Alba+2.6s",
+        "top": 1350
+      },
+      {
+        "text": "5Hughes+3.1s",
+        "top": 1388
+      },
+      {
+        "text": "6de Tullio+3.8s",
+        "top": 1426
+      },
+      {
+        "text": "7Pierson+4.2s",
+        "top": 1464
+      },
+      {
+        "text": "8Johnson+4.5s",
+        "top": 1502
+      },
+      {
+        "text": "9Garcia+4.9s",
+        "top": 1540
+      },
+      {
+        "text": "10Correa+5.5s",
+        "top": 1578
+      },
+      {
+        "text": "11Allaer+6.9s",
+        "top": 1616
+      },
+      {
+        "text": "12Koolenteammate+7.4s",
+        "top": 1653
+      },
+      {
+        "text": "13Missig+7.9s",
+        "top": 1691
+      },
+      {
+        "text": "14Murray+8.5s",
+        "top": 1729
+      },
+      {
+        "text": "15Rowe+8.8sBryce ahead in 13 of 40 shared races",
+        "top": 1767
+      },
+      {
+        "text": "16Nannini+9.3sBryce ahead in 5 of 12 shared races",
+        "top": 1805
+      },
+      {
+        "text": "179Aron+9.6s",
+        "top": 1843
+      },
+      {
+        "text": "18Taylor+9.7sBryce ahead in 7 of 18 shared races",
+        "top": 1881
+      },
+      {
+        "text": "19Roeteammate+10sBryce ahead in 23 of 40 shared races",
+        "top": 1918
+      },
+      {
+        "text": "20Koreiba+10s",
+        "top": 1956
+      },
+      {
+        "text": "21Monteiro+11s",
+        "top": 1994
+      },
+      {
+        "text": "22Kaminsky+12s",
+        "top": 2032
+      },
+      {
+        "text": "23Etterteammate+12s",
+        "top": 2070
+      },
+      {
+        "text": "24Stati+4 laps",
+        "top": 2108
+      }
+    ],
+    "hero": "P17",
+    "historyPaths": [
+      "M76.16748046875 103.132125 L112.3349609375 103.132125 L148.50244140625 103.132125 L184.669921875 103.132125 L220.83740234375 103.132125 L257.0048828125 103.132125 L293.17236328125 103.132125 L329.33984375 103.132125 L365.50732421875 103.132125 L401.6748046875 103.132125 L437.84228515625 103.132125 L474.009765625 103.132125 L510.17724609374994 103.132125 L546.3447265625 103.132125 L582.51220703125 103.132125 L618.6796875 103.132125 L654.84716796875 103.132125 L691.0146484375 103.132125 L727.18212890625 103.132125 L763.349609375 103.132125 L799.51708984375 103.132125 L835.6845703125 103.132125 L871.85205078125 103.132125",
+      "M76.16748046875 123.651 L112.3349609375 123.651 L148.50244140625 123.651 L184.669921875 123.651 L220.83740234375 123.651 L257.0048828125 123.651 L293.17236328125 123.651 L329.33984375 123.651 L365.50732421875 123.651 L401.6748046875 123.651 L437.84228515625 123.651 L474.009765625 123.651 L510.17724609374994 123.651 L546.3447265625 123.651 L582.51220703125 123.651 L618.6796875 123.651 L654.84716796875 123.651 L691.0146484375 123.651 L727.18212890625 123.651 L763.349609375 123.651 L799.51708984375 123.651 L835.6845703125 123.651 L871.85205078125 123.651"
+    ],
+    "historyTails": [
+      {
+        "x1": "871.85205078125",
+        "x2": "908.01953125",
+        "y1": "103.132125",
+        "y2": "103.132125"
+      },
+      {
+        "x1": "871.85205078125",
+        "x2": "908.01953125",
+        "y1": "123.651",
+        "y2": "123.651"
+      }
+    ],
+    "lap": "GREEN flagLap 9 of 35",
+    "observedAt": "2026-07-13T18:17:51.805Z",
+    "trackDash": "0.7428571428571429"
+  },
+  {
+    "corridor": [
+      {
+        "cx": "202.14487373046865",
+        "cy": "82",
+        "id": "Etter, 2.5 seconds behind of Bryce",
+        "labelY": "50"
+      },
+      {
+        "cx": "269.0432126953124",
+        "cy": "82",
+        "id": "Kaminsky, 1.9 seconds behind of Bryce",
+        "labelY": "120"
+      },
+      {
+        "cx": "356.0541842773436",
+        "cy": "82",
+        "id": "Monteiro, 1.2 seconds behind of Bryce",
+        "labelY": "33"
+      },
+      {
+        "cx": "390.9334845214842",
+        "cy": "82",
+        "id": "Koreiba, 0.9 seconds behind of Bryce",
+        "labelY": "139"
+      },
+      {
+        "cx": "428.5027926269531",
+        "cy": "82",
+        "id": "Roe, 0.5 seconds behind of Bryce",
+        "labelY": "17"
+      },
+      {
+        "cx": "471.0321574218749",
+        "cy": "82",
+        "id": "Taylor, 0.2 seconds behind of Bryce",
+        "labelY": "158"
+      },
+      {
+        "cx": "518.8053350097657",
+        "cy": "82",
+        "id": "Nannini, 0.3 seconds ahead of Bryce",
+        "labelY": "50"
+      },
+      {
+        "cx": "573.0254512695311",
+        "cy": "82",
+        "id": "Rowe, 0.7 seconds ahead of Bryce",
+        "labelY": "120"
+      },
+      {
+        "cx": "604.7720841308593",
+        "cy": "82",
+        "id": "Murray, 1.0 seconds ahead of Bryce",
+        "labelY": "33"
+      },
+      {
+        "cx": "682.0558964843749",
+        "cy": "82",
+        "id": "Missig, 1.7 seconds ahead of Bryce",
+        "labelY": "139"
+      },
+      {
+        "cx": "739.9080908691406",
+        "cy": "82",
+        "id": "Koolen, 2.2 seconds ahead of Bryce",
+        "labelY": "17"
+      },
+      {
+        "cx": "794.2530598144531",
+        "cy": "82",
+        "id": "Allaer, 2.7 seconds ahead of Bryce",
+        "labelY": "158"
+      }
+    ],
+    "fieldRows": [
+      {
+        "text": "1Fittipaldileader",
+        "top": 1237
+      },
+      {
+        "text": "2Kucharczyk+1.2s",
+        "top": 1275
+      },
+      {
+        "text": "3Beeton+2.2s",
+        "top": 1313
+      },
+      {
+        "text": "4de Alba+2.6s",
+        "top": 1350
+      },
+      {
+        "text": "5Hughes+3.1s",
+        "top": 1388
+      },
+      {
+        "text": "6de Tullio+3.8s",
+        "top": 1426
+      },
+      {
+        "text": "7Pierson+4.2s",
+        "top": 1464
+      },
+      {
+        "text": "8Johnson+4.5s",
+        "top": 1502
+      },
+      {
+        "text": "9Garcia+4.9s",
+        "top": 1540
+      },
+      {
+        "text": "10Correa+5.5s",
+        "top": 1578
+      },
+      {
+        "text": "11Allaer+6.9s",
+        "top": 1616
+      },
+      {
+        "text": "12Koolenteammate+7.4s",
+        "top": 1653
+      },
+      {
+        "text": "13Missig+7.9s",
+        "top": 1691
+      },
+      {
+        "text": "14Murray+8.5s",
+        "top": 1729
+      },
+      {
+        "text": "15Rowe+8.8sBryce ahead in 13 of 40 shared races",
+        "top": 1767
+      },
+      {
+        "text": "16Nannini+9.3sBryce ahead in 5 of 12 shared races",
+        "top": 1805
+      },
+      {
+        "text": "179Aron+9.6s",
+        "top": 1843
+      },
+      {
+        "text": "18Taylor+9.7sBryce ahead in 7 of 18 shared races",
+        "top": 1881
+      },
+      {
+        "text": "19Roeteammate+10sBryce ahead in 23 of 40 shared races",
+        "top": 1918
+      },
+      {
+        "text": "20Koreiba+10s",
+        "top": 1956
+      },
+      {
+        "text": "21Monteiro+11s",
+        "top": 1994
+      },
+      {
+        "text": "22Kaminsky+12s",
+        "top": 2032
+      },
+      {
+        "text": "23Etterteammate+12s",
+        "top": 2070
+      },
+      {
+        "text": "24Stati+4 laps",
+        "top": 2108
+      }
+    ],
+    "hero": "P17",
+    "historyPaths": [
+      "M74.72078125 103.132125 L109.4415625 103.132125 L144.16234375 103.132125 L178.883125 103.132125 L213.60390625000002 103.132125 L248.32468749999998 103.132125 L283.04546875000005 103.132125 L317.76625 103.132125 L352.48703125 103.132125 L387.20781250000005 103.132125 L421.92859375 103.132125 L456.64937499999996 103.132125 L491.37015625000004 103.132125 L526.0909375000001 103.132125 L560.81171875 103.132125 L595.5325 103.132125 L630.25328125 103.132125 L664.9740625 103.132125 L699.69484375 103.132125 L734.4156250000001 103.132125 L769.1364062499999 103.132125 L803.8571875 103.132125 L838.5779687500001 103.132125 L873.2987499999999 103.132125",
+      "M74.72078125 123.651 L109.4415625 123.651 L144.16234375 123.651 L178.883125 123.651 L213.60390625000002 123.651 L248.32468749999998 123.651 L283.04546875000005 123.651 L317.76625 123.651 L352.48703125 123.651 L387.20781250000005 123.651 L421.92859375 123.651 L456.64937499999996 123.651 L491.37015625000004 123.651 L526.0909375000001 123.651 L560.81171875 123.651 L595.5325 123.651 L630.25328125 123.651 L664.9740625 123.651 L699.69484375 123.651 L734.4156250000001 123.651 L769.1364062499999 123.651 L803.8571875 123.651 L838.5779687500001 123.651 L873.2987499999999 123.651"
+    ],
+    "historyTails": [
+      {
+        "x1": "873.2987499999999",
+        "x2": "908.01953125",
+        "y1": "103.132125",
+        "y2": "103.132125"
+      },
+      {
+        "x1": "873.2987499999999",
+        "x2": "908.01953125",
+        "y1": "123.651",
+        "y2": "123.651"
+      }
+    ],
+    "lap": "GREEN flagLap 9 of 35",
+    "observedAt": "2026-07-13T18:17:52.817Z",
+    "trackDash": "0.7428571428571429"
+  },
+  {
+    "corridor": [
+      {
+        "cx": "202.14487373046865",
+        "cy": "82",
+        "id": "Etter, 2.5 seconds behind of Bryce",
+        "labelY": "50"
+      },
+      {
+        "cx": "269.0432126953124",
+        "cy": "82",
+        "id": "Kaminsky, 1.9 seconds behind of Bryce",
+        "labelY": "120"
+      },
+      {
+        "cx": "356.0541842773436",
+        "cy": "82",
+        "id": "Monteiro, 1.2 seconds behind of Bryce",
+        "labelY": "33"
+      },
+      {
+        "cx": "390.9334845214842",
+        "cy": "82",
+        "id": "Koreiba, 0.9 seconds behind of Bryce",
+        "labelY": "139"
+      },
+      {
+        "cx": "428.5027926269531",
+        "cy": "82",
+        "id": "Roe, 0.5 seconds behind of Bryce",
+        "labelY": "17"
+      },
+      {
+        "cx": "471.0321574218749",
+        "cy": "82",
+        "id": "Taylor, 0.2 seconds behind of Bryce",
+        "labelY": "158"
+      },
+      {
+        "cx": "518.8053350097657",
+        "cy": "82",
+        "id": "Nannini, 0.3 seconds ahead of Bryce",
+        "labelY": "50"
+      },
+      {
+        "cx": "573.0254512695311",
+        "cy": "82",
+        "id": "Rowe, 0.7 seconds ahead of Bryce",
+        "labelY": "120"
+      },
+      {
+        "cx": "604.7720841308593",
+        "cy": "82",
+        "id": "Murray, 1.0 seconds ahead of Bryce",
+        "labelY": "33"
+      },
+      {
+        "cx": "682.0558964843749",
+        "cy": "82",
+        "id": "Missig, 1.7 seconds ahead of Bryce",
+        "labelY": "139"
+      },
+      {
+        "cx": "739.9080908691406",
+        "cy": "82",
+        "id": "Koolen, 2.2 seconds ahead of Bryce",
+        "labelY": "17"
+      },
+      {
+        "cx": "794.2530598144531",
+        "cy": "82",
+        "id": "Allaer, 2.7 seconds ahead of Bryce",
+        "labelY": "158"
+      }
+    ],
+    "fieldRows": [
+      {
+        "text": "1Fittipaldileader",
+        "top": 1237
+      },
+      {
+        "text": "2Kucharczyk+1.2s",
+        "top": 1275
+      },
+      {
+        "text": "3Beeton+2.2s",
+        "top": 1313
+      },
+      {
+        "text": "4de Alba+2.6s",
+        "top": 1350
+      },
+      {
+        "text": "5Hughes+3.1s",
+        "top": 1388
+      },
+      {
+        "text": "6de Tullio+3.8s",
+        "top": 1426
+      },
+      {
+        "text": "7Pierson+4.2s",
+        "top": 1464
+      },
+      {
+        "text": "8Johnson+4.5s",
+        "top": 1502
+      },
+      {
+        "text": "9Garcia+4.9s",
+        "top": 1540
+      },
+      {
+        "text": "10Correa+5.5s",
+        "top": 1578
+      },
+      {
+        "text": "11Allaer+6.9s",
+        "top": 1616
+      },
+      {
+        "text": "12Koolenteammate+7.4s",
+        "top": 1653
+      },
+      {
+        "text": "13Missig+7.9s",
+        "top": 1691
+      },
+      {
+        "text": "14Murray+8.5s",
+        "top": 1729
+      },
+      {
+        "text": "15Rowe+8.8sBryce ahead in 13 of 40 shared races",
+        "top": 1767
+      },
+      {
+        "text": "16Nannini+9.3sBryce ahead in 5 of 12 shared races",
+        "top": 1805
+      },
+      {
+        "text": "179Aron+9.6s",
+        "top": 1843
+      },
+      {
+        "text": "18Taylor+9.7sBryce ahead in 7 of 18 shared races",
+        "top": 1881
+      },
+      {
+        "text": "19Roeteammate+10sBryce ahead in 23 of 40 shared races",
+        "top": 1918
+      },
+      {
+        "text": "20Koreiba+10s",
+        "top": 1956
+      },
+      {
+        "text": "21Monteiro+11s",
+        "top": 1994
+      },
+      {
+        "text": "22Kaminsky+12s",
+        "top": 2032
+      },
+      {
+        "text": "23Etterteammate+12s",
+        "top": 2070
+      },
+      {
+        "text": "24Stati+4 laps",
+        "top": 2108
+      }
+    ],
+    "hero": "P17",
+    "historyPaths": [
+      "M73.38536658653845 103.132125 L106.77073317307692 103.132125 L140.1560997596154 103.132125 L173.54146634615384 103.132125 L206.92683293269232 103.132125 L240.31219951923077 103.132125 L273.6975661057692 103.132125 L307.0829326923077 103.132125 L340.46829927884613 103.132125 L373.85366586538464 103.132125 L407.2390324519231 103.132125 L440.62439903846155 103.132125 L474.009765625 103.132125 L507.39513221153845 103.132125 L540.7804987980769 103.132125 L574.1658653846154 103.132125 L607.5512319711538 103.132125 L640.9365985576923 103.132125 L674.3219651442307 103.132125 L707.7073317307693 103.132125 L741.0926983173077 103.132125 L774.4780649038462 103.132125 L807.8634314903846 103.132125 L841.2487980769231 103.132125 L874.6341646634615 103.132125",
+      "M73.38536658653845 123.651 L106.77073317307692 123.651 L140.1560997596154 123.651 L173.54146634615384 123.651 L206.92683293269232 123.651 L240.31219951923077 123.651 L273.6975661057692 123.651 L307.0829326923077 123.651 L340.46829927884613 123.651 L373.85366586538464 123.651 L407.2390324519231 123.651 L440.62439903846155 123.651 L474.009765625 123.651 L507.39513221153845 123.651 L540.7804987980769 123.651 L574.1658653846154 123.651 L607.5512319711538 123.651 L640.9365985576923 123.651 L674.3219651442307 123.651 L707.7073317307693 123.651 L741.0926983173077 123.651 L774.4780649038462 123.651 L807.8634314903846 123.651 L841.2487980769231 123.651 L874.6341646634615 123.651"
+    ],
+    "historyTails": [
+      {
+        "x1": "874.6341646634615",
+        "x2": "908.01953125",
+        "y1": "103.132125",
+        "y2": "103.132125"
+      },
+      {
+        "x1": "874.6341646634615",
+        "x2": "908.01953125",
+        "y1": "123.651",
+        "y2": "123.651"
+      }
+    ],
+    "lap": "GREEN flagLap 9 of 35",
+    "observedAt": "2026-07-13T18:17:53.829Z",
+    "trackDash": "0.7428571428571429"
+  },
+  {
+    "corridor": [
+      {
+        "cx": "202.14487373046865",
+        "cy": "82",
+        "id": "Etter, 2.5 seconds behind of Bryce",
+        "labelY": "50"
+      },
+      {
+        "cx": "269.0432126953124",
+        "cy": "82",
+        "id": "Kaminsky, 1.9 seconds behind of Bryce",
+        "labelY": "120"
+      },
+      {
+        "cx": "356.0541842773436",
+        "cy": "82",
+        "id": "Monteiro, 1.2 seconds behind of Bryce",
+        "labelY": "33"
+      },
+      {
+        "cx": "390.9334845214842",
+        "cy": "82",
+        "id": "Koreiba, 0.9 seconds behind of Bryce",
+        "labelY": "139"
+      },
+      {
+        "cx": "428.5027926269531",
+        "cy": "82",
+        "id": "Roe, 0.5 seconds behind of Bryce",
+        "labelY": "17"
+      },
+      {
+        "cx": "471.0321574218749",
+        "cy": "82",
+        "id": "Taylor, 0.2 seconds behind of Bryce",
+        "labelY": "158"
+      },
+      {
+        "cx": "518.8053350097657",
+        "cy": "82",
+        "id": "Nannini, 0.3 seconds ahead of Bryce",
+        "labelY": "50"
+      },
+      {
+        "cx": "573.0254512695311",
+        "cy": "82",
+        "id": "Rowe, 0.7 seconds ahead of Bryce",
+        "labelY": "120"
+      },
+      {
+        "cx": "604.7720841308593",
+        "cy": "82",
+        "id": "Murray, 1.0 seconds ahead of Bryce",
+        "labelY": "33"
+      },
+      {
+        "cx": "682.0558964843749",
+        "cy": "82",
+        "id": "Missig, 1.7 seconds ahead of Bryce",
+        "labelY": "139"
+      },
+      {
+        "cx": "739.9080908691406",
+        "cy": "82",
+        "id": "Koolen, 2.2 seconds ahead of Bryce",
+        "labelY": "17"
+      },
+      {
+        "cx": "794.2530598144531",
+        "cy": "82",
+        "id": "Allaer, 2.7 seconds ahead of Bryce",
+        "labelY": "158"
+      }
+    ],
+    "fieldRows": [
+      {
+        "text": "1Fittipaldileader",
+        "top": 1237
+      },
+      {
+        "text": "2Kucharczyk+1.2s",
+        "top": 1275
+      },
+      {
+        "text": "3Beeton+2.2s",
+        "top": 1313
+      },
+      {
+        "text": "4de Alba+2.6s",
+        "top": 1350
+      },
+      {
+        "text": "5Hughes+3.1s",
+        "top": 1388
+      },
+      {
+        "text": "6de Tullio+3.8s",
+        "top": 1426
+      },
+      {
+        "text": "7Pierson+4.2s",
+        "top": 1464
+      },
+      {
+        "text": "8Johnson+4.5s",
+        "top": 1502
+      },
+      {
+        "text": "9Garcia+4.9s",
+        "top": 1540
+      },
+      {
+        "text": "10Correa+5.5s",
+        "top": 1578
+      },
+      {
+        "text": "11Allaer+6.9s",
+        "top": 1616
+      },
+      {
+        "text": "12Koolenteammate+7.4s",
+        "top": 1653
+      },
+      {
+        "text": "13Missig+7.9s",
+        "top": 1691
+      },
+      {
+        "text": "14Murray+8.5s",
+        "top": 1729
+      },
+      {
+        "text": "15Rowe+8.8sBryce ahead in 13 of 40 shared races",
+        "top": 1767
+      },
+      {
+        "text": "16Nannini+9.3sBryce ahead in 5 of 12 shared races",
+        "top": 1805
+      },
+      {
+        "text": "179Aron+9.6s",
+        "top": 1843
+      },
+      {
+        "text": "18Taylor+9.7sBryce ahead in 7 of 18 shared races",
+        "top": 1881
+      },
+      {
+        "text": "19Roeteammate+10sBryce ahead in 23 of 40 shared races",
+        "top": 1918
+      },
+      {
+        "text": "20Koreiba+10s",
+        "top": 1956
+      },
+      {
+        "text": "21Monteiro+11s",
+        "top": 1994
+      },
+      {
+        "text": "22Kaminsky+12s",
+        "top": 2032
+      },
+      {
+        "text": "23Etterteammate+12s",
+        "top": 2070
+      },
+      {
+        "text": "24Stati+4 laps",
+        "top": 2108
+      }
+    ],
+    "hero": "P17",
+    "historyPaths": [
+      "M72.14887152777777 103.132125 L104.29774305555556 103.132125 L136.44661458333331 103.132125 L168.59548611111111 103.132125 L200.74435763888889 103.132125 L232.89322916666666 103.132125 L265.04210069444446 103.132125 L297.19097222222223 103.132125 L329.33984375 103.132125 L361.48871527777777 103.132125 L393.63758680555554 103.132125 L425.7864583333333 103.132125 L457.9353298611111 103.132125 L490.08420138888886 103.132125 L522.2330729166667 103.132125 L554.3819444444445 103.132125 L586.5308159722223 103.132125 L618.6796875 103.132125 L650.8285590277778 103.132125 L682.9774305555555 103.132125 L715.1263020833334 103.132125 L747.2751736111111 103.132125 L779.4240451388889 103.132125 L811.5729166666666 103.132125 L843.7217881944445 103.132125 L875.8706597222222 103.132125",
+      "M72.14887152777777 123.651 L104.29774305555556 123.651 L136.44661458333331 123.651 L168.59548611111111 123.651 L200.74435763888889 123.651 L232.89322916666666 123.651 L265.04210069444446 123.651 L297.19097222222223 123.651 L329.33984375 123.651 L361.48871527777777 123.651 L393.63758680555554 123.651 L425.7864583333333 123.651 L457.9353298611111 123.651 L490.08420138888886 123.651 L522.2330729166667 123.651 L554.3819444444445 123.651 L586.5308159722223 123.651 L618.6796875 123.651 L650.8285590277778 123.651 L682.9774305555555 123.651 L715.1263020833334 123.651 L747.2751736111111 123.651 L779.4240451388889 123.651 L811.5729166666666 123.651 L843.7217881944445 123.651 L875.8706597222222 123.651"
+    ],
+    "historyTails": [
+      {
+        "x1": "875.8706597222222",
+        "x2": "908.01953125",
+        "y1": "103.132125",
+        "y2": "103.132125"
+      },
+      {
+        "x1": "875.8706597222222",
+        "x2": "908.01953125",
+        "y1": "123.651",
+        "y2": "123.651"
+      }
+    ],
+    "lap": "GREEN flagLap 9 of 35",
+    "observedAt": "2026-07-13T18:17:54.840Z",
+    "trackDash": "0.7428571428571429"
+  },
+  {
+    "corridor": [
+      {
+        "cx": "202.14487373046865",
+        "cy": "82",
+        "id": "Etter, 2.5 seconds behind of Bryce",
+        "labelY": "50"
+      },
+      {
+        "cx": "269.0432126953124",
+        "cy": "82",
+        "id": "Kaminsky, 1.9 seconds behind of Bryce",
+        "labelY": "120"
+      },
+      {
+        "cx": "356.0541842773436",
+        "cy": "82",
+        "id": "Monteiro, 1.2 seconds behind of Bryce",
+        "labelY": "33"
+      },
+      {
+        "cx": "390.9334845214842",
+        "cy": "82",
+        "id": "Koreiba, 0.9 seconds behind of Bryce",
+        "labelY": "139"
+      },
+      {
+        "cx": "428.5027926269531",
+        "cy": "82",
+        "id": "Roe, 0.5 seconds behind of Bryce",
+        "labelY": "17"
+      },
+      {
+        "cx": "471.0321574218749",
+        "cy": "82",
+        "id": "Taylor, 0.2 seconds behind of Bryce",
+        "labelY": "158"
+      },
+      {
+        "cx": "518.8053350097657",
+        "cy": "82",
+        "id": "Nannini, 0.3 seconds ahead of Bryce",
+        "labelY": "50"
+      },
+      {
+        "cx": "573.0254512695311",
+        "cy": "82",
+        "id": "Rowe, 0.7 seconds ahead of Bryce",
+        "labelY": "120"
+      },
+      {
+        "cx": "604.7720841308593",
+        "cy": "82",
+        "id": "Murray, 1.0 seconds ahead of Bryce",
+        "labelY": "33"
+      },
+      {
+        "cx": "682.0558964843749",
+        "cy": "82",
+        "id": "Missig, 1.7 seconds ahead of Bryce",
+        "labelY": "139"
+      },
+      {
+        "cx": "739.9080908691406",
+        "cy": "82",
+        "id": "Koolen, 2.2 seconds ahead of Bryce",
+        "labelY": "17"
+      },
+      {
+        "cx": "794.2530598144531",
+        "cy": "82",
+        "id": "Allaer, 2.7 seconds ahead of Bryce",
+        "labelY": "158"
+      }
+    ],
+    "fieldRows": [
+      {
+        "text": "1Fittipaldileader",
+        "top": 1237
+      },
+      {
+        "text": "2Kucharczyk+1.2s",
+        "top": 1275
+      },
+      {
+        "text": "3Beeton+2.2s",
+        "top": 1313
+      },
+      {
+        "text": "4de Alba+2.6s",
+        "top": 1350
+      },
+      {
+        "text": "5Hughes+3.1s",
+        "top": 1388
+      },
+      {
+        "text": "6de Tullio+3.8s",
+        "top": 1426
+      },
+      {
+        "text": "7Pierson+4.2s",
+        "top": 1464
+      },
+      {
+        "text": "8Johnson+4.5s",
+        "top": 1502
+      },
+      {
+        "text": "9Garcia+4.9s",
+        "top": 1540
+      },
+      {
+        "text": "10Correa+5.5s",
+        "top": 1578
+      },
+      {
+        "text": "11Allaer+6.9s",
+        "top": 1616
+      },
+      {
+        "text": "12Koolenteammate+7.4s",
+        "top": 1653
+      },
+      {
+        "text": "13Missig+7.9s",
+        "top": 1691
+      },
+      {
+        "text": "14Murray+8.5s",
+        "top": 1729
+      },
+      {
+        "text": "15Rowe+8.8sBryce ahead in 13 of 40 shared races",
+        "top": 1767
+      },
+      {
+        "text": "16Nannini+9.3sBryce ahead in 5 of 12 shared races",
+        "top": 1805
+      },
+      {
+        "text": "179Aron+9.6s",
+        "top": 1843
+      },
+      {
+        "text": "18Taylor+9.7sBryce ahead in 7 of 18 shared races",
+        "top": 1881
+      },
+      {
+        "text": "19Roeteammate+10sBryce ahead in 23 of 40 shared races",
+        "top": 1918
+      },
+      {
+        "text": "20Koreiba+10s",
+        "top": 1956
+      },
+      {
+        "text": "21Monteiro+11s",
+        "top": 1994
+      },
+      {
+        "text": "22Kaminsky+12s",
+        "top": 2032
+      },
+      {
+        "text": "23Etterteammate+12s",
+        "top": 2070
+      },
+      {
+        "text": "24Stati+4 laps",
+        "top": 2108
+      }
+    ],
+    "hero": "P17",
+    "historyPaths": [
+      "M71.00069754464286 103.132125 L102.00139508928571 103.132125 L133.00209263392856 103.132125 L164.00279017857142 103.132125 L195.00348772321428 103.132125 L226.00418526785714 103.132125 L257.0048828125 103.132125 L288.00558035714283 103.132125 L319.0062779017857 103.132125 L350.00697544642856 103.132125 L381.00767299107144 103.132125 L412.0083705357143 103.132125 L443.00906808035717 103.132125 L474.009765625 103.132125 L505.01046316964283 103.132125 L536.0111607142857 103.132125 L567.0118582589286 103.132125 L598.0125558035714 103.132125 L629.0132533482143 103.132125 L660.0139508928571 103.132125 L691.0146484375 103.132125 L722.0153459821429 103.132125 L753.0160435267857 103.132125 L784.0167410714286 103.132125 L815.0174386160714 103.132125 L846.0181361607143 103.132125 L877.0188337053571 103.132125",
+      "M71.00069754464286 123.651 L102.00139508928571 123.651 L133.00209263392856 123.651 L164.00279017857142 123.651 L195.00348772321428 123.651 L226.00418526785714 123.651 L257.0048828125 123.651 L288.00558035714283 123.651 L319.0062779017857 123.651 L350.00697544642856 123.651 L381.00767299107144 123.651 L412.0083705357143 123.651 L443.00906808035717 123.651 L474.009765625 123.651 L505.01046316964283 123.651 L536.0111607142857 123.651 L567.0118582589286 123.651 L598.0125558035714 123.651 L629.0132533482143 123.651 L660.0139508928571 123.651 L691.0146484375 123.651 L722.0153459821429 123.651 L753.0160435267857 123.651 L784.0167410714286 123.651 L815.0174386160714 123.651 L846.0181361607143 123.651 L877.0188337053571 123.651"
+    ],
+    "historyTails": [
+      {
+        "x1": "877.0188337053571",
+        "x2": "908.01953125",
+        "y1": "103.132125",
+        "y2": "103.132125"
+      },
+      {
+        "x1": "877.0188337053571",
+        "x2": "908.01953125",
+        "y1": "123.651",
+        "y2": "123.651"
+      }
+    ],
+    "lap": "GREEN flagLap 9 of 35",
+    "observedAt": "2026-07-13T18:17:55.851Z",
+    "trackDash": "0.7428571428571429"
+  },
+  {
+    "corridor": [
+      {
+        "cx": "202.14487373046865",
+        "cy": "82",
+        "id": "Etter, 2.5 seconds behind of Bryce",
+        "labelY": "50"
+      },
+      {
+        "cx": "269.0432126953124",
+        "cy": "82",
+        "id": "Kaminsky, 1.9 seconds behind of Bryce",
+        "labelY": "120"
+      },
+      {
+        "cx": "356.0541842773436",
+        "cy": "82",
+        "id": "Monteiro, 1.2 seconds behind of Bryce",
+        "labelY": "33"
+      },
+      {
+        "cx": "390.9334845214842",
+        "cy": "82",
+        "id": "Koreiba, 0.9 seconds behind of Bryce",
+        "labelY": "139"
+      },
+      {
+        "cx": "428.5027926269531",
+        "cy": "82",
+        "id": "Roe, 0.5 seconds behind of Bryce",
+        "labelY": "17"
+      },
+      {
+        "cx": "471.0321574218749",
+        "cy": "82",
+        "id": "Taylor, 0.2 seconds behind of Bryce",
+        "labelY": "158"
+      },
+      {
+        "cx": "518.8053350097657",
+        "cy": "82",
+        "id": "Nannini, 0.3 seconds ahead of Bryce",
+        "labelY": "50"
+      },
+      {
+        "cx": "573.0254512695311",
+        "cy": "82",
+        "id": "Rowe, 0.7 seconds ahead of Bryce",
+        "labelY": "120"
+      },
+      {
+        "cx": "604.7720841308593",
+        "cy": "82",
+        "id": "Murray, 1.0 seconds ahead of Bryce",
+        "labelY": "33"
+      },
+      {
+        "cx": "682.0558964843749",
+        "cy": "82",
+        "id": "Missig, 1.7 seconds ahead of Bryce",
+        "labelY": "139"
+      },
+      {
+        "cx": "739.9080908691406",
+        "cy": "82",
+        "id": "Koolen, 2.2 seconds ahead of Bryce",
+        "labelY": "17"
+      },
+      {
+        "cx": "794.2530598144531",
+        "cy": "82",
+        "id": "Allaer, 2.7 seconds ahead of Bryce",
+        "labelY": "158"
+      }
+    ],
+    "fieldRows": [
+      {
+        "text": "1Fittipaldileader",
+        "top": 1237
+      },
+      {
+        "text": "2Kucharczyk+1.2s",
+        "top": 1275
+      },
+      {
+        "text": "3Beeton+2.2s",
+        "top": 1313
+      },
+      {
+        "text": "4de Alba+2.6s",
+        "top": 1350
+      },
+      {
+        "text": "5Hughes+3.1s",
+        "top": 1388
+      },
+      {
+        "text": "6de Tullio+3.8s",
+        "top": 1426
+      },
+      {
+        "text": "7Pierson+4.2s",
+        "top": 1464
+      },
+      {
+        "text": "8Johnson+4.5s",
+        "top": 1502
+      },
+      {
+        "text": "9Garcia+4.9s",
+        "top": 1540
+      },
+      {
+        "text": "10Correa+5.5s",
+        "top": 1578
+      },
+      {
+        "text": "11Allaer+6.9s",
+        "top": 1616
+      },
+      {
+        "text": "12Koolenteammate+7.4s",
+        "top": 1653
+      },
+      {
+        "text": "13Missig+7.9s",
+        "top": 1691
+      },
+      {
+        "text": "14Murray+8.5s",
+        "top": 1729
+      },
+      {
+        "text": "15Rowe+8.8sBryce ahead in 13 of 40 shared races",
+        "top": 1767
+      },
+      {
+        "text": "16Nannini+9.3sBryce ahead in 5 of 12 shared races",
+        "top": 1805
+      },
+      {
+        "text": "179Aron+9.6s",
+        "top": 1843
+      },
+      {
+        "text": "18Taylor+9.7sBryce ahead in 7 of 18 shared races",
+        "top": 1881
+      },
+      {
+        "text": "19Roeteammate+10sBryce ahead in 23 of 40 shared races",
+        "top": 1918
+      },
+      {
+        "text": "20Koreiba+10s",
+        "top": 1956
+      },
+      {
+        "text": "21Monteiro+11s",
+        "top": 1994
+      },
+      {
+        "text": "22Kaminsky+12s",
+        "top": 2032
+      },
+      {
+        "text": "23Etterteammate+12s",
+        "top": 2070
+      },
+      {
+        "text": "24Stati+4 laps",
+        "top": 2108
+      }
+    ],
+    "hero": "P17",
+    "historyPaths": [
+      "M69.93170797413794 103.132125 L99.86341594827587 103.132125 L129.79512392241378 103.132125 L159.72683189655174 103.132125 L189.65853987068965 103.132125 L219.5902478448276 103.132125 L249.52195581896552 103.132125 L279.4536637931035 103.132125 L309.3853717672414 103.132125 L339.3170797413793 103.132125 L369.2487877155172 103.132125 L399.1804956896552 103.132125 L429.1122036637931 103.132125 L459.04391163793105 103.132125 L488.975619612069 103.132125 L518.907327586207 103.132125 L548.8390355603448 103.132125 L578.7707435344828 103.132125 L608.7024515086207 103.132125 L638.6341594827586 103.132125 L668.5658674568965 103.132125 L698.4975754310344 103.132125 L728.4292834051724 103.132125 L758.3609913793103 103.132125 L788.2926993534483 103.132125 L818.2244073275862 103.132125 L848.1561153017241 103.132125 L878.0878232758621 103.132125",
+      "M69.93170797413794 123.651 L99.86341594827587 123.651 L129.79512392241378 123.651 L159.72683189655174 123.651 L189.65853987068965 123.651 L219.5902478448276 123.651 L249.52195581896552 123.651 L279.4536637931035 123.651 L309.3853717672414 123.651 L339.3170797413793 123.651 L369.2487877155172 123.651 L399.1804956896552 123.651 L429.1122036637931 123.651 L459.04391163793105 123.651 L488.975619612069 123.651 L518.907327586207 123.651 L548.8390355603448 123.651 L578.7707435344828 123.651 L608.7024515086207 123.651 L638.6341594827586 123.651 L668.5658674568965 123.651 L698.4975754310344 123.651 L728.4292834051724 123.651 L758.3609913793103 123.651 L788.2926993534483 123.651 L818.2244073275862 123.651 L848.1561153017241 123.651 L878.0878232758621 123.651"
+    ],
+    "historyTails": [
+      {
+        "x1": "878.0878232758621",
+        "x2": "908.01953125",
+        "y1": "103.132125",
+        "y2": "103.132125"
+      },
+      {
+        "x1": "878.0878232758621",
+        "x2": "908.01953125",
+        "y1": "123.651",
+        "y2": "123.651"
+      }
+    ],
+    "lap": "GREEN flagLap 9 of 35",
+    "observedAt": "2026-07-13T18:17:56.864Z",
+    "trackDash": "0.7428571428571429"
+  },
+  {
+    "corridor": [
+      {
+        "cx": "202.14487373046865",
+        "cy": "82",
+        "id": "Etter, 2.5 seconds behind of Bryce",
+        "labelY": "50"
+      },
+      {
+        "cx": "269.0432126953124",
+        "cy": "82",
+        "id": "Kaminsky, 1.9 seconds behind of Bryce",
+        "labelY": "120"
+      },
+      {
+        "cx": "356.0541842773436",
+        "cy": "82",
+        "id": "Monteiro, 1.2 seconds behind of Bryce",
+        "labelY": "33"
+      },
+      {
+        "cx": "390.9334845214842",
+        "cy": "82",
+        "id": "Koreiba, 0.9 seconds behind of Bryce",
+        "labelY": "139"
+      },
+      {
+        "cx": "428.5027926269531",
+        "cy": "82",
+        "id": "Roe, 0.5 seconds behind of Bryce",
+        "labelY": "17"
+      },
+      {
+        "cx": "471.0321574218749",
+        "cy": "82",
+        "id": "Taylor, 0.2 seconds behind of Bryce",
+        "labelY": "158"
+      },
+      {
+        "cx": "518.8053350097657",
+        "cy": "82",
+        "id": "Nannini, 0.3 seconds ahead of Bryce",
+        "labelY": "50"
+      },
+      {
+        "cx": "573.0254512695311",
+        "cy": "82",
+        "id": "Rowe, 0.7 seconds ahead of Bryce",
+        "labelY": "120"
+      },
+      {
+        "cx": "604.7720841308593",
+        "cy": "82",
+        "id": "Murray, 1.0 seconds ahead of Bryce",
+        "labelY": "33"
+      },
+      {
+        "cx": "682.0558964843749",
+        "cy": "82",
+        "id": "Missig, 1.7 seconds ahead of Bryce",
+        "labelY": "139"
+      },
+      {
+        "cx": "739.9080908691406",
+        "cy": "82",
+        "id": "Koolen, 2.2 seconds ahead of Bryce",
+        "labelY": "17"
+      },
+      {
+        "cx": "794.2530598144531",
+        "cy": "82",
+        "id": "Allaer, 2.7 seconds ahead of Bryce",
+        "labelY": "158"
+      }
+    ],
+    "fieldRows": [
+      {
+        "text": "1Fittipaldileader",
+        "top": 1237
+      },
+      {
+        "text": "2Kucharczyk+1.2s",
+        "top": 1275
+      },
+      {
+        "text": "3Beeton+2.2s",
+        "top": 1313
+      },
+      {
+        "text": "4de Alba+2.6s",
+        "top": 1350
+      },
+      {
+        "text": "5Hughes+3.1s",
+        "top": 1388
+      },
+      {
+        "text": "6de Tullio+3.8s",
+        "top": 1426
+      },
+      {
+        "text": "7Pierson+4.2s",
+        "top": 1464
+      },
+      {
+        "text": "8Johnson+4.5s",
+        "top": 1502
+      },
+      {
+        "text": "9Garcia+4.9s",
+        "top": 1540
+      },
+      {
+        "text": "10Correa+5.5s",
+        "top": 1578
+      },
+      {
+        "text": "11Allaer+6.9s",
+        "top": 1616
+      },
+      {
+        "text": "12Koolenteammate+7.4s",
+        "top": 1653
+      },
+      {
+        "text": "13Missig+7.9s",
+        "top": 1691
+      },
+      {
+        "text": "14Murray+8.5s",
+        "top": 1729
+      },
+      {
+        "text": "15Rowe+8.8sBryce ahead in 13 of 40 shared races",
+        "top": 1767
+      },
+      {
+        "text": "16Nannini+9.3sBryce ahead in 5 of 12 shared races",
+        "top": 1805
+      },
+      {
+        "text": "179Aron+9.6s",
+        "top": 1843
+      },
+      {
+        "text": "18Taylor+9.7sBryce ahead in 7 of 18 shared races",
+        "top": 1881
+      },
+      {
+        "text": "19Roeteammate+10sBryce ahead in 23 of 40 shared races",
+        "top": 1918
+      },
+      {
+        "text": "20Koreiba+10s",
+        "top": 1956
+      },
+      {
+        "text": "21Monteiro+11s",
+        "top": 1994
+      },
+      {
+        "text": "22Kaminsky+12s",
+        "top": 2032
+      },
+      {
+        "text": "23Etterteammate+12s",
+        "top": 2070
+      },
+      {
+        "text": "24Stati+4 laps",
+        "top": 2108
+      }
+    ],
+    "hero": "P17",
+    "historyPaths": [
+      "M68.933984375 103.132125 L97.86796874999999 103.132125 L126.80195312500001 103.132125 L155.73593749999998 103.132125 L184.669921875 103.132125 L213.60390625000002 103.132125 L242.53789062500002 103.132125 L271.47187499999995 103.132125 L300.405859375 103.132125 L329.33984375 103.132125 L358.27382812499997 103.132125 L387.20781250000005 103.132125 L416.141796875 103.132125 L445.07578125000003 103.132125 L474.009765625 103.132125 L502.94374999999997 103.132125 L531.877734375 103.132125 L560.81171875 103.132125 L589.745703125 103.132125 L618.6796875 103.132125 L647.6136718749999 103.132125 L676.5476562499999 103.132125 L705.4816406250001 103.132125 L734.4156250000001 103.132125 L763.349609375 103.132125 L792.28359375 103.132125 L821.217578125 103.132125 L850.1515625000001 103.132125 L879.085546875 103.132125",
+      "M68.933984375 123.651 L97.86796874999999 123.651 L126.80195312500001 123.651 L155.73593749999998 123.651 L184.669921875 123.651 L213.60390625000002 123.651 L242.53789062500002 123.651 L271.47187499999995 123.651 L300.405859375 123.651 L329.33984375 123.651 L358.27382812499997 123.651 L387.20781250000005 123.651 L416.141796875 123.651 L445.07578125000003 123.651 L474.009765625 123.651 L502.94374999999997 123.651 L531.877734375 123.651 L560.81171875 123.651 L589.745703125 123.651 L618.6796875 123.651 L647.6136718749999 123.651 L676.5476562499999 123.651 L705.4816406250001 123.651 L734.4156250000001 123.651 L763.349609375 123.651 L792.28359375 123.651 L821.217578125 123.651 L850.1515625000001 123.651 L879.085546875 123.651"
+    ],
+    "historyTails": [
+      {
+        "x1": "879.085546875",
+        "x2": "908.01953125",
+        "y1": "103.132125",
+        "y2": "103.132125"
+      },
+      {
+        "x1": "879.085546875",
+        "x2": "908.01953125",
+        "y1": "123.651",
+        "y2": "123.651"
+      }
+    ],
+    "lap": "GREEN flagLap 9 of 35",
+    "observedAt": "2026-07-13T18:17:57.876Z",
+    "trackDash": "0.7428571428571429"
+  }
+]
