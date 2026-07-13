@@ -1,0 +1,1176 @@
+{
+  "schemaVersion": "brycecast.liveF5ReplayVisualProof.v1",
+  "generatedAt": "2026-07-13T22:07:06.782Z",
+  "base": "http://127.0.0.1:5185",
+  "api": "http://127.0.0.1:8795",
+  "browser": "Google Chrome via playwright-core channel chrome",
+  "fullPageReducedMotion": true,
+  "captures": [
+    {
+      "stateName": "green",
+      "viewportName": "desktop",
+      "file": "analysis/live-f5-audit/screenshots/green--desktop.png",
+      "cameraCount": 1,
+      "overflow": {
+        "innerWidth": 1440,
+        "scrollWidth": 1440
+      },
+      "camera": {
+        "cameraChart": "battle-camera",
+        "sessionKey": "5544-6761",
+        "sourceCheckedAt": "2026-07-04T17:10:31.384Z",
+        "sourceSampleCount": "3",
+        "timeDomainStart": "2026-07-04T17:10:29.368Z",
+        "timeDomainEnd": "2026-07-04T17:15:29.368Z",
+        "cameraDomainLower": "1.1207",
+        "cameraDomainUpper": "13.1207",
+        "cameraTargetCenter": "7.1207",
+        "cameraRenderedCenter": "7.1207",
+        "cameraEasing": "off",
+        "bryceDriverId": "2143",
+        "bryceGapToLeader": "7.1049",
+        "bryceRank": "15",
+        "visibleDriverIds": "2174,2103,2163,2102,2040,2134,2160,2146,2147,2158,2021,2143,2086,2167,1040,2013,1063,2114,2115,990",
+        "leaderChangeBreakCount": "0"
+      },
+      "cautionSpans": 0
+    },
+    {
+      "stateName": "mid-race",
+      "viewportName": "desktop",
+      "file": "analysis/live-f5-audit/screenshots/mid-race--desktop.png",
+      "cameraCount": 1,
+      "overflow": {
+        "innerWidth": 1440,
+        "scrollWidth": 1440
+      },
+      "camera": {
+        "cameraChart": "battle-camera",
+        "sessionKey": "5544-6761",
+        "sourceCheckedAt": "2026-07-04T17:36:42.004Z",
+        "sourceSampleCount": "3",
+        "timeDomainStart": "2026-07-04T17:36:40.004Z",
+        "timeDomainEnd": "2026-07-04T17:41:40.004Z",
+        "cameraDomainLower": "10.0077",
+        "cameraDomainUpper": "22.0077",
+        "cameraTargetCenter": "16.0077",
+        "cameraRenderedCenter": "16.0077",
+        "cameraEasing": "off",
+        "bryceDriverId": "2143",
+        "bryceGapToLeader": "16.0310",
+        "bryceRank": "17",
+        "visibleDriverIds": "2021,2146,1040,2120,2086,2158,2143,2114,990,2115,2013,1063",
+        "leaderChangeBreakCount": "0"
+      },
+      "cautionSpans": 0
+    },
+    {
+      "stateName": "caution",
+      "viewportName": "desktop",
+      "file": "analysis/live-f5-audit/screenshots/caution--desktop.png",
+      "cameraCount": 1,
+      "overflow": {
+        "innerWidth": 1440,
+        "scrollWidth": 1440
+      },
+      "camera": {
+        "cameraChart": "battle-camera",
+        "sessionKey": "5544-6761",
+        "sourceCheckedAt": "2026-07-04T17:39:33.359Z",
+        "sourceSampleCount": "3",
+        "timeDomainStart": "2026-07-04T17:39:31.336Z",
+        "timeDomainEnd": "2026-07-04T17:44:31.336Z",
+        "cameraDomainLower": "4.9206",
+        "cameraDomainUpper": "16.9206",
+        "cameraTargetCenter": "10.9206",
+        "cameraRenderedCenter": "10.9206",
+        "cameraEasing": "off",
+        "bryceDriverId": "2143",
+        "bryceGapToLeader": "10.8488",
+        "bryceRank": "16",
+        "visibleDriverIds": "2102,2134,2040,2021,2146,1040,2120,2086,2158,2143,2114,990,2115,2013,1063",
+        "leaderChangeBreakCount": "0"
+      },
+      "cautionSpans": 1
+    },
+    {
+      "stateName": "cold",
+      "viewportName": "desktop",
+      "file": "analysis/live-f5-audit/screenshots/cold--desktop.png",
+      "cameraCount": 0,
+      "overflow": {
+        "innerWidth": 1440,
+        "scrollWidth": 1440
+      },
+      "camera": null,
+      "cautionSpans": 0
+    },
+    {
+      "stateName": "green",
+      "viewportName": "mobile",
+      "file": "analysis/live-f5-audit/screenshots/green--mobile.png",
+      "cameraCount": 1,
+      "overflow": {
+        "innerWidth": 390,
+        "scrollWidth": 390
+      },
+      "camera": {
+        "cameraChart": "battle-camera",
+        "sessionKey": "5544-6761",
+        "sourceCheckedAt": "2026-07-04T17:10:31.384Z",
+        "sourceSampleCount": "3",
+        "timeDomainStart": "2026-07-04T17:10:29.368Z",
+        "timeDomainEnd": "2026-07-04T17:15:29.368Z",
+        "cameraDomainLower": "1.1207",
+        "cameraDomainUpper": "13.1207",
+        "cameraTargetCenter": "7.1207",
+        "cameraRenderedCenter": "7.1207",
+        "cameraEasing": "off",
+        "bryceDriverId": "2143",
+        "bryceGapToLeader": "7.1049",
+        "bryceRank": "15",
+        "visibleDriverIds": "2174,2103,2163,2102,2040,2134,2160,2146,2147,2158,2021,2143,2086,2167,1040,2013,1063,2114,2115,990",
+        "leaderChangeBreakCount": "0"
+      },
+      "cautionSpans": 0
+    },
+    {
+      "stateName": "mid-race",
+      "viewportName": "mobile",
+      "file": "analysis/live-f5-audit/screenshots/mid-race--mobile.png",
+      "cameraCount": 1,
+      "overflow": {
+        "innerWidth": 390,
+        "scrollWidth": 390
+      },
+      "camera": {
+        "cameraChart": "battle-camera",
+        "sessionKey": "5544-6761",
+        "sourceCheckedAt": "2026-07-04T17:36:42.004Z",
+        "sourceSampleCount": "3",
+        "timeDomainStart": "2026-07-04T17:36:40.004Z",
+        "timeDomainEnd": "2026-07-04T17:41:40.004Z",
+        "cameraDomainLower": "10.0077",
+        "cameraDomainUpper": "22.0077",
+        "cameraTargetCenter": "16.0077",
+        "cameraRenderedCenter": "16.0077",
+        "cameraEasing": "off",
+        "bryceDriverId": "2143",
+        "bryceGapToLeader": "16.0310",
+        "bryceRank": "17",
+        "visibleDriverIds": "2021,2146,1040,2120,2086,2158,2143,2114,990,2115,2013,1063",
+        "leaderChangeBreakCount": "0"
+      },
+      "cautionSpans": 0
+    },
+    {
+      "stateName": "caution",
+      "viewportName": "mobile",
+      "file": "analysis/live-f5-audit/screenshots/caution--mobile.png",
+      "cameraCount": 1,
+      "overflow": {
+        "innerWidth": 390,
+        "scrollWidth": 390
+      },
+      "camera": {
+        "cameraChart": "battle-camera",
+        "sessionKey": "5544-6761",
+        "sourceCheckedAt": "2026-07-04T17:39:33.359Z",
+        "sourceSampleCount": "3",
+        "timeDomainStart": "2026-07-04T17:39:31.336Z",
+        "timeDomainEnd": "2026-07-04T17:44:31.336Z",
+        "cameraDomainLower": "4.9206",
+        "cameraDomainUpper": "16.9206",
+        "cameraTargetCenter": "10.9206",
+        "cameraRenderedCenter": "10.9206",
+        "cameraEasing": "off",
+        "bryceDriverId": "2143",
+        "bryceGapToLeader": "10.8488",
+        "bryceRank": "16",
+        "visibleDriverIds": "2102,2134,2040,2021,2146,1040,2120,2086,2158,2143,2114,990,2115,2013,1063",
+        "leaderChangeBreakCount": "0"
+      },
+      "cautionSpans": 1
+    },
+    {
+      "stateName": "cold",
+      "viewportName": "mobile",
+      "file": "analysis/live-f5-audit/screenshots/cold--mobile.png",
+      "cameraCount": 0,
+      "overflow": {
+        "innerWidth": 390,
+        "scrollWidth": 390
+      },
+      "camera": null,
+      "cautionSpans": 0
+    }
+  ],
+  "overtakeProof": {
+    "before": {
+      "phase": "before",
+      "camera": {
+        "cameraChart": "battle-camera",
+        "sessionKey": "5544-6761",
+        "sourceCheckedAt": "2026-07-04T17:22:04.423Z",
+        "sourceSampleCount": "76",
+        "timeDomainStart": "2026-07-04T17:17:04.423Z",
+        "timeDomainEnd": "2026-07-04T17:22:04.423Z",
+        "cameraDomainLower": "5.4576",
+        "cameraDomainUpper": "17.4576",
+        "cameraTargetCenter": "11.4576",
+        "cameraRenderedCenter": "11.4576",
+        "cameraEasing": "off",
+        "bryceDriverId": "2143",
+        "bryceGapToLeader": "12.3591",
+        "bryceRank": "18",
+        "visibleDriverIds": "2102,2134,2160,2146,2021,2158,1040,2120,2086,2147,2143,1063,2114,2013,990,2115",
+        "leaderChangeBreakCount": "0"
+      },
+      "ladder": [
+        {
+          "ladderLabel": "true",
+          "driverId": "2086",
+          "labelY": "121.00",
+          "gapToBryce": "-0.3797",
+          "text": "Nannini −0.4s"
+        },
+        {
+          "ladderLabel": "true",
+          "driverId": "2147",
+          "labelY": "153.00",
+          "gapToBryce": "-0.3596",
+          "text": "Allaer −0.4sahead now"
+        },
+        {
+          "ladderLabel": "true",
+          "driverId": "2143",
+          "labelY": "185.00",
+          "gapToBryce": "0.0000",
+          "text": "№9"
+        },
+        {
+          "ladderLabel": "true",
+          "driverId": "1063",
+          "labelY": "217.00",
+          "gapToBryce": "0.3597",
+          "text": "Roe +0.4sbehind now"
+        },
+        {
+          "ladderLabel": "true",
+          "driverId": "2114",
+          "labelY": "249.00",
+          "gapToBryce": "0.6401",
+          "text": "Monteiro +0.6s"
+        }
+      ],
+      "corridor": [
+        {
+          "driverId": "1040",
+          "labelLane": "0",
+          "offsetSeconds": "2.0382"
+        },
+        {
+          "driverId": "1063",
+          "labelLane": "1",
+          "offsetSeconds": "-0.3597"
+        },
+        {
+          "driverId": "2013",
+          "labelLane": "5",
+          "offsetSeconds": "-1.2417"
+        },
+        {
+          "driverId": "2021",
+          "labelLane": "2",
+          "offsetSeconds": "3.4283"
+        },
+        {
+          "driverId": "2086",
+          "labelLane": "7",
+          "offsetSeconds": "0.3797"
+        },
+        {
+          "driverId": "2114",
+          "labelLane": "2",
+          "offsetSeconds": "-0.6401"
+        },
+        {
+          "driverId": "2115",
+          "labelLane": "6",
+          "offsetSeconds": "-2.2131"
+        },
+        {
+          "driverId": "2120",
+          "labelLane": "6",
+          "offsetSeconds": "1.2706"
+        },
+        {
+          "driverId": "2147",
+          "labelLane": "3",
+          "offsetSeconds": "0.3596"
+        },
+        {
+          "driverId": "2158",
+          "labelLane": "7",
+          "offsetSeconds": "2.5839"
+        },
+        {
+          "driverId": "2167",
+          "labelLane": "5",
+          "offsetSeconds": "-3.8771"
+        },
+        {
+          "driverId": "990",
+          "labelLane": "3",
+          "offsetSeconds": "-1.6315"
+        }
+      ],
+      "field": [
+        {
+          "driverId": "2065",
+          "liveRank": "1",
+          "text": "1Fittipaldileader"
+        },
+        {
+          "driverId": "2174",
+          "liveRank": "2",
+          "text": "2Kucharczyk+1.1s"
+        },
+        {
+          "driverId": "2162",
+          "liveRank": "3",
+          "text": "3Beeton+2.3s"
+        },
+        {
+          "driverId": "2070",
+          "liveRank": "4",
+          "text": "4de Alba+2.7s"
+        },
+        {
+          "driverId": "2103",
+          "liveRank": "5",
+          "text": "5Hughes+3.3s"
+        },
+        {
+          "driverId": "2163",
+          "liveRank": "6",
+          "text": "6de Tullio+4.2s"
+        },
+        {
+          "driverId": "2040",
+          "liveRank": "7",
+          "text": "7Pierson+4.6s"
+        },
+        {
+          "driverId": "2102",
+          "liveRank": "8",
+          "text": "8Johnson+5.2s"
+        },
+        {
+          "driverId": "2134",
+          "liveRank": "9",
+          "text": "9Garcia+5.5s"
+        },
+        {
+          "driverId": "2160",
+          "liveRank": "10",
+          "text": "10Correa+6.2s"
+        },
+        {
+          "driverId": "2146",
+          "liveRank": "11",
+          "text": "11Koolenteammate+7.9s"
+        },
+        {
+          "driverId": "2021",
+          "liveRank": "12",
+          "text": "12Missig+8.6s"
+        },
+        {
+          "driverId": "2158",
+          "liveRank": "13",
+          "text": "13Murray+9.4s"
+        },
+        {
+          "driverId": "1040",
+          "liveRank": "14",
+          "text": "14Rowe+9.7s"
+        },
+        {
+          "driverId": "2120",
+          "liveRank": "15",
+          "text": "15Taylor+11s"
+        },
+        {
+          "driverId": "2086",
+          "liveRank": "16",
+          "text": "16Nannini+11sBryce ahead in 5 of 12 shared races"
+        },
+        {
+          "driverId": "2147",
+          "liveRank": "17",
+          "text": "17Allaer+11sBryce ahead in 16 of 25 shared races"
+        },
+        {
+          "driverId": "2143",
+          "liveRank": "18",
+          "text": "189Aron+12s"
+        },
+        {
+          "driverId": "1063",
+          "liveRank": "19",
+          "text": "19Roeteammate+12sBryce ahead in 23 of 40 shared races"
+        },
+        {
+          "driverId": "2114",
+          "liveRank": "20",
+          "text": "20Monteiro+13sBryce ahead in 9 of 13 shared races"
+        },
+        {
+          "driverId": "2013",
+          "liveRank": "21",
+          "text": "21Koreiba+13s"
+        },
+        {
+          "driverId": "990",
+          "liveRank": "22",
+          "text": "22Kaminsky+13s"
+        },
+        {
+          "driverId": "2115",
+          "liveRank": "23",
+          "text": "23Etterteammate+14s"
+        },
+        {
+          "driverId": "2167",
+          "liveRank": "24",
+          "text": "24Stati+5 laps"
+        }
+      ],
+      "crossing": [
+        {
+          "bryceCrossing": "true",
+          "rivalId": "1040",
+          "crossingDirection": "behind",
+          "crossingLap": "8"
+        },
+        {
+          "bryceCrossing": "true",
+          "rivalId": "2086",
+          "crossingDirection": "behind",
+          "crossingLap": "8"
+        },
+        {
+          "bryceCrossing": "true",
+          "rivalId": "2120",
+          "crossingDirection": "behind",
+          "crossingLap": "9"
+        },
+        {
+          "bryceCrossing": "true",
+          "rivalId": "2147",
+          "crossingDirection": "ahead_of",
+          "crossingLap": "9"
+        }
+      ],
+      "labels": [
+        {
+          "id": "2086",
+          "top": 984.78125,
+          "bottom": 995.78125,
+          "left": 1088,
+          "right": 1154.734375
+        },
+        {
+          "id": "2147",
+          "top": 1016.8125,
+          "bottom": 1037.890625,
+          "left": 1088,
+          "right": 1148.53125
+        },
+        {
+          "id": "2143",
+          "top": 1046.1875,
+          "bottom": 1064.1875,
+          "left": 1088,
+          "right": 1116
+        },
+        {
+          "id": "1063",
+          "top": 1080.8125,
+          "bottom": 1101.890625,
+          "left": 1088,
+          "right": 1138.125
+        },
+        {
+          "id": "2114",
+          "top": 1112.78125,
+          "bottom": 1123.78125,
+          "left": 1088,
+          "right": 1161.046875
+        }
+      ]
+    },
+    "during": {
+      "phase": "during",
+      "camera": {
+        "cameraChart": "battle-camera",
+        "sessionKey": "5544-6761",
+        "sourceCheckedAt": "2026-07-04T17:22:05.680Z",
+        "sourceSampleCount": "77",
+        "timeDomainStart": "2026-07-04T17:17:05.680Z",
+        "timeDomainEnd": "2026-07-04T17:22:05.680Z",
+        "cameraDomainLower": "6.0919",
+        "cameraDomainUpper": "18.0919",
+        "cameraTargetCenter": "12.0919",
+        "cameraRenderedCenter": "12.0919",
+        "cameraEasing": "off",
+        "bryceDriverId": "2143",
+        "bryceGapToLeader": "12.3741",
+        "bryceRank": "17",
+        "visibleDriverIds": "2134,2160,2146,2021,2158,1040,2120,2086,2143,2147,1063,2114,2013,990,2115",
+        "leaderChangeBreakCount": "0"
+      },
+      "ladder": [
+        {
+          "ladderLabel": "true",
+          "driverId": "2086",
+          "labelY": "121.00",
+          "gapToBryce": "-0.3596",
+          "text": "Nannini −0.4sahead now"
+        },
+        {
+          "ladderLabel": "true",
+          "driverId": "2143",
+          "labelY": "153.00",
+          "gapToBryce": "0.0000",
+          "text": "№9"
+        },
+        {
+          "ladderLabel": "true",
+          "driverId": "2147",
+          "labelY": "185.00",
+          "gapToBryce": "0.0201",
+          "text": "Allaer +0.0sbehind now"
+        },
+        {
+          "ladderLabel": "true",
+          "driverId": "1063",
+          "labelY": "217.00",
+          "gapToBryce": "0.3798",
+          "text": "Roe +0.4s"
+        },
+        {
+          "ladderLabel": "true",
+          "driverId": "2114",
+          "labelY": "249.00",
+          "gapToBryce": "0.6602",
+          "text": "Monteiro +0.7s"
+        }
+      ],
+      "corridor": [
+        {
+          "driverId": "1040",
+          "labelLane": "0",
+          "offsetSeconds": "2.0181"
+        },
+        {
+          "driverId": "1063",
+          "labelLane": "1",
+          "offsetSeconds": "-0.3798"
+        },
+        {
+          "driverId": "2013",
+          "labelLane": "5",
+          "offsetSeconds": "-1.2618"
+        },
+        {
+          "driverId": "2021",
+          "labelLane": "2",
+          "offsetSeconds": "3.4082"
+        },
+        {
+          "driverId": "2086",
+          "labelLane": "7",
+          "offsetSeconds": "0.3596"
+        },
+        {
+          "driverId": "2114",
+          "labelLane": "2",
+          "offsetSeconds": "-0.6602"
+        },
+        {
+          "driverId": "2115",
+          "labelLane": "6",
+          "offsetSeconds": "-2.2390"
+        },
+        {
+          "driverId": "2120",
+          "labelLane": "6",
+          "offsetSeconds": "1.2505"
+        },
+        {
+          "driverId": "2147",
+          "labelLane": "3",
+          "offsetSeconds": "-0.0201"
+        },
+        {
+          "driverId": "2158",
+          "labelLane": "7",
+          "offsetSeconds": "2.5638"
+        },
+        {
+          "driverId": "2167",
+          "labelLane": "5",
+          "offsetSeconds": "-3.9030"
+        },
+        {
+          "driverId": "990",
+          "labelLane": "3",
+          "offsetSeconds": "-1.6865"
+        }
+      ],
+      "field": [
+        {
+          "driverId": "2065",
+          "liveRank": "1",
+          "text": "1Fittipaldileader"
+        },
+        {
+          "driverId": "2174",
+          "liveRank": "2",
+          "text": "2Kucharczyk+1.1s"
+        },
+        {
+          "driverId": "2162",
+          "liveRank": "3",
+          "text": "3Beeton+2.3s"
+        },
+        {
+          "driverId": "2070",
+          "liveRank": "4",
+          "text": "4de Alba+2.7s"
+        },
+        {
+          "driverId": "2103",
+          "liveRank": "5",
+          "text": "5Hughes+3.3s"
+        },
+        {
+          "driverId": "2163",
+          "liveRank": "6",
+          "text": "6de Tullio+4.2s"
+        },
+        {
+          "driverId": "2040",
+          "liveRank": "7",
+          "text": "7Pierson+4.6s"
+        },
+        {
+          "driverId": "2102",
+          "liveRank": "8",
+          "text": "8Johnson+5.2s"
+        },
+        {
+          "driverId": "2134",
+          "liveRank": "9",
+          "text": "9Garcia+5.5s"
+        },
+        {
+          "driverId": "2160",
+          "liveRank": "10",
+          "text": "10Correa+6.2s"
+        },
+        {
+          "driverId": "2146",
+          "liveRank": "11",
+          "text": "11Koolenteammate+7.9s"
+        },
+        {
+          "driverId": "2021",
+          "liveRank": "12",
+          "text": "12Missig+8.6s"
+        },
+        {
+          "driverId": "2158",
+          "liveRank": "13",
+          "text": "13Murray+9.4s"
+        },
+        {
+          "driverId": "1040",
+          "liveRank": "14",
+          "text": "14Rowe+9.7s"
+        },
+        {
+          "driverId": "2120",
+          "liveRank": "15",
+          "text": "15Taylor+11sBryce ahead in 7 of 18 shared races"
+        },
+        {
+          "driverId": "2086",
+          "liveRank": "16",
+          "text": "16Nannini+11sBryce ahead in 5 of 12 shared races"
+        },
+        {
+          "driverId": "2143",
+          "liveRank": "17",
+          "text": "179Aron+12s"
+        },
+        {
+          "driverId": "2147",
+          "liveRank": "18",
+          "text": "18Allaer+11sBryce ahead in 16 of 25 shared races"
+        },
+        {
+          "driverId": "1063",
+          "liveRank": "19",
+          "text": "19Roeteammate+12sBryce ahead in 23 of 40 shared races"
+        },
+        {
+          "driverId": "2114",
+          "liveRank": "20",
+          "text": "20Monteiro+13s"
+        },
+        {
+          "driverId": "2013",
+          "liveRank": "21",
+          "text": "21Koreiba+13s"
+        },
+        {
+          "driverId": "990",
+          "liveRank": "22",
+          "text": "22Kaminsky+13s"
+        },
+        {
+          "driverId": "2115",
+          "liveRank": "23",
+          "text": "23Etterteammate+14s"
+        },
+        {
+          "driverId": "2167",
+          "liveRank": "24",
+          "text": "24Stati+5 laps"
+        }
+      ],
+      "crossing": [
+        {
+          "bryceCrossing": "true",
+          "rivalId": "1040",
+          "crossingDirection": "behind",
+          "crossingLap": "8"
+        },
+        {
+          "bryceCrossing": "true",
+          "rivalId": "2086",
+          "crossingDirection": "behind",
+          "crossingLap": "8"
+        },
+        {
+          "bryceCrossing": "true",
+          "rivalId": "2120",
+          "crossingDirection": "behind",
+          "crossingLap": "9"
+        },
+        {
+          "bryceCrossing": "true",
+          "rivalId": "2147",
+          "crossingDirection": "ahead_of",
+          "crossingLap": "9"
+        },
+        {
+          "bryceCrossing": "true",
+          "rivalId": "2147",
+          "crossingDirection": "ahead_of",
+          "crossingLap": "10"
+        }
+      ],
+      "labels": [
+        {
+          "id": "2086",
+          "top": 658.8125,
+          "bottom": 679.890625,
+          "left": 1088,
+          "right": 1157.125
+        },
+        {
+          "id": "2143",
+          "top": 688.1875,
+          "bottom": 706.1875,
+          "left": 1088,
+          "right": 1116
+        },
+        {
+          "id": "2147",
+          "top": 722.8125,
+          "bottom": 743.890625,
+          "left": 1088,
+          "right": 1148.21875
+        },
+        {
+          "id": "1063",
+          "top": 754.78125,
+          "bottom": 765.78125,
+          "left": 1088,
+          "right": 1136.609375
+        },
+        {
+          "id": "2114",
+          "top": 786.78125,
+          "bottom": 797.78125,
+          "left": 1088,
+          "right": 1160.078125
+        }
+      ]
+    },
+    "after": {
+      "phase": "after",
+      "camera": {
+        "cameraChart": "battle-camera",
+        "sessionKey": "5544-6761",
+        "sourceCheckedAt": "2026-07-04T17:22:06.431Z",
+        "sourceSampleCount": "78",
+        "timeDomainStart": "2026-07-04T17:17:06.431Z",
+        "timeDomainEnd": "2026-07-04T17:22:06.431Z",
+        "cameraDomainLower": "6.2047",
+        "cameraDomainUpper": "18.2047",
+        "cameraTargetCenter": "12.2047",
+        "cameraRenderedCenter": "12.2047",
+        "cameraEasing": "off",
+        "bryceDriverId": "2143",
+        "bryceGapToLeader": "12.3013",
+        "bryceRank": "17",
+        "visibleDriverIds": "2134,2160,2146,2021,2158,1040,2120,2086,2143,2147,1063,2114,2013,990,2115",
+        "leaderChangeBreakCount": "0"
+      },
+      "ladder": [
+        {
+          "ladderLabel": "true",
+          "driverId": "2086",
+          "labelY": "121.00",
+          "gapToBryce": "-0.3596",
+          "text": "Nannini −0.4sahead now"
+        },
+        {
+          "ladderLabel": "true",
+          "driverId": "2143",
+          "labelY": "153.00",
+          "gapToBryce": "0.0000",
+          "text": "№9"
+        },
+        {
+          "ladderLabel": "true",
+          "driverId": "2147",
+          "labelY": "185.00",
+          "gapToBryce": "0.0201",
+          "text": "Allaer +0.0sbehind now"
+        },
+        {
+          "ladderLabel": "true",
+          "driverId": "1063",
+          "labelY": "217.00",
+          "gapToBryce": "0.3798",
+          "text": "Roe +0.4s"
+        },
+        {
+          "ladderLabel": "true",
+          "driverId": "2114",
+          "labelY": "249.00",
+          "gapToBryce": "0.6602",
+          "text": "Monteiro +0.7s"
+        }
+      ],
+      "corridor": [
+        {
+          "driverId": "1040",
+          "labelLane": "0",
+          "offsetSeconds": "2.0181"
+        },
+        {
+          "driverId": "1063",
+          "labelLane": "1",
+          "offsetSeconds": "-0.3798"
+        },
+        {
+          "driverId": "2013",
+          "labelLane": "5",
+          "offsetSeconds": "-1.2618"
+        },
+        {
+          "driverId": "2021",
+          "labelLane": "2",
+          "offsetSeconds": "3.4082"
+        },
+        {
+          "driverId": "2086",
+          "labelLane": "7",
+          "offsetSeconds": "0.3596"
+        },
+        {
+          "driverId": "2114",
+          "labelLane": "2",
+          "offsetSeconds": "-0.6602"
+        },
+        {
+          "driverId": "2115",
+          "labelLane": "6",
+          "offsetSeconds": "-2.2390"
+        },
+        {
+          "driverId": "2120",
+          "labelLane": "6",
+          "offsetSeconds": "1.2505"
+        },
+        {
+          "driverId": "2147",
+          "labelLane": "3",
+          "offsetSeconds": "-0.0201"
+        },
+        {
+          "driverId": "2158",
+          "labelLane": "7",
+          "offsetSeconds": "2.5638"
+        },
+        {
+          "driverId": "2167",
+          "labelLane": "5",
+          "offsetSeconds": "-3.9030"
+        },
+        {
+          "driverId": "990",
+          "labelLane": "3",
+          "offsetSeconds": "-1.6865"
+        }
+      ],
+      "field": [
+        {
+          "driverId": "2065",
+          "liveRank": "1",
+          "text": "1Fittipaldileader"
+        },
+        {
+          "driverId": "2174",
+          "liveRank": "2",
+          "text": "2Kucharczyk+1.1s"
+        },
+        {
+          "driverId": "2162",
+          "liveRank": "3",
+          "text": "3Beeton+2.3s"
+        },
+        {
+          "driverId": "2070",
+          "liveRank": "4",
+          "text": "4de Alba+2.7s"
+        },
+        {
+          "driverId": "2103",
+          "liveRank": "5",
+          "text": "5Hughes+3.3s"
+        },
+        {
+          "driverId": "2163",
+          "liveRank": "6",
+          "text": "6de Tullio+4.2s"
+        },
+        {
+          "driverId": "2040",
+          "liveRank": "7",
+          "text": "7Pierson+4.6s"
+        },
+        {
+          "driverId": "2102",
+          "liveRank": "8",
+          "text": "8Johnson+5.2s"
+        },
+        {
+          "driverId": "2134",
+          "liveRank": "9",
+          "text": "9Garcia+5.5s"
+        },
+        {
+          "driverId": "2160",
+          "liveRank": "10",
+          "text": "10Correa+6.2s"
+        },
+        {
+          "driverId": "2146",
+          "liveRank": "11",
+          "text": "11Koolenteammate+7.9s"
+        },
+        {
+          "driverId": "2021",
+          "liveRank": "12",
+          "text": "12Missig+8.6s"
+        },
+        {
+          "driverId": "2158",
+          "liveRank": "13",
+          "text": "13Murray+9.4s"
+        },
+        {
+          "driverId": "1040",
+          "liveRank": "14",
+          "text": "14Rowe+9.7s"
+        },
+        {
+          "driverId": "2120",
+          "liveRank": "15",
+          "text": "15Taylor+11sBryce ahead in 7 of 18 shared races"
+        },
+        {
+          "driverId": "2086",
+          "liveRank": "16",
+          "text": "16Nannini+11sBryce ahead in 5 of 12 shared races"
+        },
+        {
+          "driverId": "2143",
+          "liveRank": "17",
+          "text": "179Aron+12s"
+        },
+        {
+          "driverId": "2147",
+          "liveRank": "18",
+          "text": "18Allaer+11sBryce ahead in 16 of 25 shared races"
+        },
+        {
+          "driverId": "1063",
+          "liveRank": "19",
+          "text": "19Roeteammate+12sBryce ahead in 23 of 40 shared races"
+        },
+        {
+          "driverId": "2114",
+          "liveRank": "20",
+          "text": "20Monteiro+13s"
+        },
+        {
+          "driverId": "2013",
+          "liveRank": "21",
+          "text": "21Koreiba+13s"
+        },
+        {
+          "driverId": "990",
+          "liveRank": "22",
+          "text": "22Kaminsky+13s"
+        },
+        {
+          "driverId": "2115",
+          "liveRank": "23",
+          "text": "23Etterteammate+14s"
+        },
+        {
+          "driverId": "2167",
+          "liveRank": "24",
+          "text": "24Stati+5 laps"
+        }
+      ],
+      "crossing": [
+        {
+          "bryceCrossing": "true",
+          "rivalId": "1040",
+          "crossingDirection": "behind",
+          "crossingLap": "8"
+        },
+        {
+          "bryceCrossing": "true",
+          "rivalId": "2086",
+          "crossingDirection": "behind",
+          "crossingLap": "8"
+        },
+        {
+          "bryceCrossing": "true",
+          "rivalId": "2120",
+          "crossingDirection": "behind",
+          "crossingLap": "9"
+        },
+        {
+          "bryceCrossing": "true",
+          "rivalId": "2147",
+          "crossingDirection": "ahead_of",
+          "crossingLap": "9"
+        },
+        {
+          "bryceCrossing": "true",
+          "rivalId": "2147",
+          "crossingDirection": "ahead_of",
+          "crossingLap": "10"
+        }
+      ],
+      "labels": [
+        {
+          "id": "2086",
+          "top": 658.8125,
+          "bottom": 679.890625,
+          "left": 1088,
+          "right": 1157.125
+        },
+        {
+          "id": "2143",
+          "top": 688.1875,
+          "bottom": 706.1875,
+          "left": 1088,
+          "right": 1116
+        },
+        {
+          "id": "2147",
+          "top": 722.8125,
+          "bottom": 743.890625,
+          "left": 1088,
+          "right": 1148.21875
+        },
+        {
+          "id": "1063",
+          "top": 754.78125,
+          "bottom": 765.78125,
+          "left": 1088,
+          "right": 1136.609375
+        },
+        {
+          "id": "2114",
+          "top": 786.78125,
+          "bottom": 797.78125,
+          "left": 1088,
+          "right": 1160.078125
+        }
+      ]
+    },
+    "assertions": {
+      "sourceAdvancedInOrder": true,
+      "bryceRankChanged18To17": true,
+      "crossingMarkerAllaerLap10": true,
+      "cameraAndFieldRankAgree": true,
+      "ladderAndFieldIdentityAgree": true,
+      "upperCorridorAndFieldIdentityAgree": true,
+      "noLabelCollision": true,
+      "cameraCenterDeltaAcrossPass": 0.7471000000000014,
+      "noCameraLurch": true
+    }
+  },
+  "sessionChangeProof": {
+    "camera": {
+      "cameraChart": "battle-camera",
+      "sessionKey": "5543-6760",
+      "sourceCheckedAt": "2026-07-05T14:20:03.773Z",
+      "sourceSampleCount": "4",
+      "timeDomainStart": "2026-07-05T14:19:59.749Z",
+      "timeDomainEnd": "2026-07-05T14:24:59.749Z",
+      "cameraDomainLower": "8.9165",
+      "cameraDomainUpper": "20.9165",
+      "cameraTargetCenter": "14.9165",
+      "cameraRenderedCenter": "14.9165",
+      "cameraEasing": "off",
+      "bryceDriverId": "2143",
+      "bryceGapToLeader": "14.9165",
+      "bryceRank": "15",
+      "visibleDriverIds": "2120,2070,2086,2158,2146,2143,2167,2013,1040,2147,1063",
+      "leaderChangeBreakCount": "0"
+    },
+    "assertions": {
+      "activeSessionChanged": true,
+      "newSessionStartsBounded": true,
+      "noCrossSessionCameraEase": true,
+      "noRace1TimestampLeak": true
+    }
+  },
+  "consoleErrors": [],
+  "ok": true
+}

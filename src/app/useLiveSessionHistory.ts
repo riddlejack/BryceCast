@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useLayoutEffect, useMemo, useState } from 'react';
 import {
   appendLiveHistoryPayload,
   createLiveHistoryState,
@@ -17,7 +17,7 @@ export interface LiveSessionHistoryStatus {
  * cannot destroy the session's five-minute chart window. */
 export const useLiveSessionHistory = (payload: LiveReadiness | null): LiveSessionHistoryStatus => {
   const [state, setState] = useState<LiveHistoryState>(createLiveHistoryState);
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!payload) return;
     setState((previous) => appendLiveHistoryPayload(previous, payload));
   }, [payload]);

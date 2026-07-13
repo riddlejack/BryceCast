@@ -1,0 +1,328 @@
+{
+  "schemaVersion": "brycecast.liveF5CameraProof.v1",
+  "generatedAt": "2026-07-13T21:56:22.465Z",
+  "source": {
+    "sqlite": "/Users/example/Documents/Bryce POV access/data/live/brycecast.sqlite",
+    "readOnly": true,
+    "sessions": [
+      "5544-6761",
+      "5543-6760"
+    ]
+  },
+  "semantics": {
+    "y": "cumulative contiguous numeric liveGap seconds from current live-ranked leader; smaller is higher",
+    "x": "trailing five minutes; step-after at source timestamps",
+    "camera": "12 seconds centered on trailing-60-second Bryce median, edge-clamped",
+    "leaderChange": "absolute coordinate retained; line breaks; no continuity offset"
+  },
+  "samplesChecked": 6403,
+  "coordinateChecks": 130056,
+  "arrivalCadence": {
+    "sourcedChanges": 5360,
+    "unchangedArrivals": 1041,
+    "conclusion": "one-second arrival is not treated as one-second value motion"
+  },
+  "leaderChanges": 4,
+  "targetEvidence": [
+    {
+      "checkedAt": "2026-07-04T17:22:04.423Z",
+      "sessionKey": "5544-6761",
+      "lap": 10,
+      "flag": "GREEN",
+      "leaderId": "2065",
+      "bryce": {
+        "id": "2143",
+        "carNo": "9",
+        "name": "Aron",
+        "bryce": true,
+        "value": 12.359099999999998,
+        "rank": 18,
+        "status": null
+      },
+      "around": [
+        {
+          "id": "2086",
+          "carNo": "20",
+          "name": "Nannini",
+          "bryce": false,
+          "value": 11.979399999999998,
+          "rank": 16,
+          "status": null
+        },
+        {
+          "id": "2147",
+          "carNo": "76",
+          "name": "Allaer",
+          "bryce": false,
+          "value": 11.999499999999998,
+          "rank": 17,
+          "status": null
+        },
+        {
+          "id": "2143",
+          "carNo": "9",
+          "name": "Aron",
+          "bryce": true,
+          "value": 12.359099999999998,
+          "rank": 18,
+          "status": null
+        },
+        {
+          "id": "1063",
+          "carNo": "8",
+          "name": "Roe",
+          "bryce": false,
+          "value": 12.718799999999998,
+          "rank": 19,
+          "status": null
+        },
+        {
+          "id": "2114",
+          "carNo": "4",
+          "name": "Monteiro",
+          "bryce": false,
+          "value": 12.999199999999998,
+          "rank": 20,
+          "status": null
+        }
+      ]
+    },
+    {
+      "checkedAt": "2026-07-04T17:22:05.680Z",
+      "sessionKey": "5544-6761",
+      "lap": 10,
+      "flag": "GREEN",
+      "leaderId": "2065",
+      "bryce": {
+        "id": "2143",
+        "carNo": "9",
+        "name": "Aron",
+        "bryce": true,
+        "value": 12.374099999999999,
+        "rank": 17,
+        "status": null
+      },
+      "around": [
+        {
+          "id": "2120",
+          "carNo": "28",
+          "name": "Taylor",
+          "bryce": false,
+          "value": 11.123599999999998,
+          "rank": 15,
+          "status": null
+        },
+        {
+          "id": "2086",
+          "carNo": "20",
+          "name": "Nannini",
+          "bryce": false,
+          "value": 12.014499999999998,
+          "rank": 16,
+          "status": null
+        },
+        {
+          "id": "2143",
+          "carNo": "9",
+          "name": "Aron",
+          "bryce": true,
+          "value": 12.374099999999999,
+          "rank": 17,
+          "status": null
+        },
+        {
+          "id": "2147",
+          "carNo": "76",
+          "name": "Allaer",
+          "bryce": false,
+          "value": 12.394199999999998,
+          "rank": 18,
+          "status": null
+        },
+        {
+          "id": "1063",
+          "carNo": "8",
+          "name": "Roe",
+          "bryce": false,
+          "value": 12.753899999999998,
+          "rank": 19,
+          "status": null
+        }
+      ]
+    }
+  ],
+  "targetCrossing": {
+    "sessionKey": "5544-6761",
+    "id": "2026-07-04T17:22:05.680Z-2147",
+    "rivalId": "2147",
+    "rivalName": "Allaer",
+    "checkedAt": "2026-07-04T17:22:05.680Z",
+    "checkedAtMs": 1783185725680,
+    "value": 12.374099999999999,
+    "lap": 10,
+    "direction": "ahead_of"
+  },
+  "sessions": [
+    {
+      "sessionKey": "5544-6761",
+      "samples": 3317,
+      "drivers": 24,
+      "leaderChangeBreaks": 0,
+      "bryceCrossings": 9,
+      "finalCameraDomain": {
+        "lower": 19.4,
+        "upper": 31.4,
+        "center": 25.4
+      }
+    },
+    {
+      "sessionKey": "5543-6760",
+      "samples": 3086,
+      "drivers": 24,
+      "leaderChangeBreaks": 4,
+      "bryceCrossings": 5,
+      "finalCameraDomain": {
+        "lower": 30.3283,
+        "upper": 42.3283,
+        "center": 36.3283
+      }
+    }
+  ],
+  "crossingCount": 14,
+  "crossingExamples": [
+    {
+      "sessionKey": "5544-6761",
+      "id": "2026-07-04T17:08:32.126Z-2146",
+      "rivalId": "2146",
+      "rivalName": "Koolen",
+      "checkedAt": "2026-07-04T17:08:32.126Z",
+      "checkedAtMs": 1783184912126,
+      "value": 1.4627,
+      "lap": 0,
+      "direction": "behind"
+    },
+    {
+      "sessionKey": "5544-6761",
+      "id": "2026-07-04T17:09:39.183Z-2120",
+      "rivalId": "2120",
+      "rivalName": "Taylor",
+      "checkedAt": "2026-07-04T17:09:39.183Z",
+      "checkedAtMs": 1783184979183,
+      "value": 5.3199,
+      "lap": 1,
+      "direction": "ahead_of"
+    },
+    {
+      "sessionKey": "5544-6761",
+      "id": "2026-07-04T17:09:46.190Z-2158",
+      "rivalId": "2158",
+      "rivalName": "Murray",
+      "checkedAt": "2026-07-04T17:09:46.190Z",
+      "checkedAtMs": 1783184986190,
+      "value": 5.3275,
+      "lap": 1,
+      "direction": "behind"
+    },
+    {
+      "sessionKey": "5544-6761",
+      "id": "2026-07-04T17:10:08.249Z-2021",
+      "rivalId": "2021",
+      "rivalName": "Missig",
+      "checkedAt": "2026-07-04T17:10:08.249Z",
+      "checkedAtMs": 1783185008249,
+      "value": 7.121100000000001,
+      "lap": 1,
+      "direction": "behind"
+    },
+    {
+      "sessionKey": "5544-6761",
+      "id": "2026-07-04T17:19:30.144Z-1040",
+      "rivalId": "1040",
+      "rivalName": "Rowe",
+      "checkedAt": "2026-07-04T17:19:30.144Z",
+      "checkedAtMs": 1783185570144,
+      "value": 7.3641,
+      "lap": 8,
+      "direction": "behind"
+    },
+    {
+      "sessionKey": "5544-6761",
+      "id": "2026-07-04T17:19:37.164Z-2086",
+      "rivalId": "2086",
+      "rivalName": "Nannini",
+      "checkedAt": "2026-07-04T17:19:37.164Z",
+      "checkedAtMs": 1783185577164,
+      "value": 7.279499999999999,
+      "lap": 8,
+      "direction": "behind"
+    },
+    {
+      "sessionKey": "5544-6761",
+      "id": "2026-07-04T17:20:51.301Z-2120",
+      "rivalId": "2120",
+      "rivalName": "Taylor",
+      "checkedAt": "2026-07-04T17:20:51.301Z",
+      "checkedAtMs": 1783185651301,
+      "value": 10.177399999999999,
+      "lap": 9,
+      "direction": "behind"
+    },
+    {
+      "sessionKey": "5544-6761",
+      "id": "2026-07-04T17:21:34.370Z-2147",
+      "rivalId": "2147",
+      "rivalName": "Allaer",
+      "checkedAt": "2026-07-04T17:21:34.370Z",
+      "checkedAtMs": 1783185694370,
+      "value": 11.071200000000001,
+      "lap": 9,
+      "direction": "ahead_of"
+    },
+    {
+      "sessionKey": "5544-6761",
+      "id": "2026-07-04T17:22:05.680Z-2147",
+      "rivalId": "2147",
+      "rivalName": "Allaer",
+      "checkedAt": "2026-07-04T17:22:05.680Z",
+      "checkedAtMs": 1783185725680,
+      "value": 12.374099999999999,
+      "lap": 10,
+      "direction": "ahead_of"
+    },
+    {
+      "sessionKey": "5543-6760",
+      "id": "2026-07-05T14:08:23.501Z-2158",
+      "rivalId": "2158",
+      "rivalName": "Murray",
+      "checkedAt": "2026-07-05T14:08:23.501Z",
+      "checkedAtMs": 1783260503501,
+      "value": 1.5697999999999996,
+      "lap": 0,
+      "direction": "behind"
+    },
+    {
+      "sessionKey": "5543-6760",
+      "id": "2026-07-05T14:09:54.660Z-2021",
+      "rivalId": "2021",
+      "rivalName": "Missig",
+      "checkedAt": "2026-07-05T14:09:54.660Z",
+      "checkedAtMs": 1783260594660,
+      "value": 7.289199999999999,
+      "lap": 1,
+      "direction": "ahead_of"
+    },
+    {
+      "sessionKey": "5543-6760",
+      "id": "2026-07-05T14:29:14.738Z-2070",
+      "rivalId": "2070",
+      "rivalName": "de Alba",
+      "checkedAt": "2026-07-05T14:29:14.738Z",
+      "checkedAtMs": 1783261754738,
+      "value": 21.348300000000002,
+      "lap": 17,
+      "direction": "ahead_of"
+    }
+  ],
+  "violations": [],
+  "ok": true
+}

@@ -922,6 +922,38 @@ button { font-family: inherit; }
 
 .live-battle__caption { margin: -3px 0 0; }
 
+.live-camera {
+  position: relative;
+  width: 100%;
+  min-height: 300px;
+}
+
+.live-camera svg {
+  display: block;
+  max-width: 100%;
+  overflow: visible;
+}
+
+.live-camera__status {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  margin: -3px 0 7px;
+  color: var(--ink-muted);
+  font-size: 10.5px;
+  line-height: 1.4;
+}
+
+.live-camera__status strong {
+  color: var(--status-warn-text);
+  font-weight: 600;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .live-battle__car--motion { transition: none; }
+  .live-camera * { transition: none !important; animation: none !important; }
+}
+
 .live-layout { grid-template-columns: minmax(0, 1fr); align-items: start; }
 
 .live-points__main {

@@ -1,0 +1,312 @@
+{
+  "schemaVersion": "brycecast.liveF4ConsistencyProof.v1",
+  "generatedAt": "2026-07-13T21:58:02.925Z",
+  "sqlite": "/Users/example/Documents/Bryce POV access/data/live/brycecast.sqlite",
+  "readOnly": true,
+  "sessionsRequested": [
+    "5544-6761",
+    "5543-6760"
+  ],
+  "samplesChecked": 6403,
+  "driverRowsChecked": 153672,
+  "battleCarsChecked": 147110,
+  "leaderCoordinatesChecked": 151503,
+  "invariants": {
+    "samePayload": true,
+    "sharedStableDriverIdentity": true,
+    "sharedLiveRankOrder": true,
+    "adjacentLiveGapSemantics": true,
+    "cumulativeBattleOffsets": true,
+    "cumulativeLeaderCoordinates": true
+  },
+  "violations": [],
+  "ok": true,
+  "displayOrderAudit": {
+    "displayOrder": "liveRank with rank fallback",
+    "publishedComparison": "rank",
+    "differingSamples": 1805,
+    "explanation": "A difference is legitimate when Race Control liveRank leads published rank during an asynchronous update; battle and field both retain the same liveRank order from the same payload.",
+    "examples": [
+      {
+        "checkedAt": "2026-07-05T14:07:31.417Z",
+        "sessionKey": "5543-6760",
+        "liveOrder": [
+          {
+            "id": "2163",
+            "liveRank": 1,
+            "rank": 2
+          },
+          {
+            "id": "2065",
+            "liveRank": 2,
+            "rank": 1
+          },
+          {
+            "id": "2162",
+            "liveRank": 3,
+            "rank": 3
+          },
+          {
+            "id": "2174",
+            "liveRank": 4,
+            "rank": 4
+          },
+          {
+            "id": "2102",
+            "liveRank": 5,
+            "rank": 5
+          },
+          {
+            "id": "2040",
+            "liveRank": 6,
+            "rank": 6
+          },
+          {
+            "id": "2134",
+            "liveRank": 7,
+            "rank": 7
+          },
+          {
+            "id": "2070",
+            "liveRank": 8,
+            "rank": 8
+          }
+        ],
+        "publishedRankOrder": [
+          {
+            "id": "2065",
+            "liveRank": 2,
+            "rank": 1
+          },
+          {
+            "id": "2163",
+            "liveRank": 1,
+            "rank": 2
+          },
+          {
+            "id": "2162",
+            "liveRank": 3,
+            "rank": 3
+          },
+          {
+            "id": "2174",
+            "liveRank": 4,
+            "rank": 4
+          },
+          {
+            "id": "2102",
+            "liveRank": 5,
+            "rank": 5
+          },
+          {
+            "id": "2040",
+            "liveRank": 6,
+            "rank": 6
+          },
+          {
+            "id": "2134",
+            "liveRank": 7,
+            "rank": 7
+          },
+          {
+            "id": "2070",
+            "liveRank": 8,
+            "rank": 8
+          }
+        ]
+      },
+      {
+        "checkedAt": "2026-07-05T14:07:32.405Z",
+        "sessionKey": "5543-6760",
+        "liveOrder": [
+          {
+            "id": "2163",
+            "liveRank": 1,
+            "rank": 2
+          },
+          {
+            "id": "2065",
+            "liveRank": 2,
+            "rank": 1
+          },
+          {
+            "id": "2162",
+            "liveRank": 3,
+            "rank": 3
+          },
+          {
+            "id": "2174",
+            "liveRank": 4,
+            "rank": 4
+          },
+          {
+            "id": "2102",
+            "liveRank": 5,
+            "rank": 5
+          },
+          {
+            "id": "2040",
+            "liveRank": 6,
+            "rank": 6
+          },
+          {
+            "id": "2134",
+            "liveRank": 7,
+            "rank": 7
+          },
+          {
+            "id": "2070",
+            "liveRank": 8,
+            "rank": 8
+          }
+        ],
+        "publishedRankOrder": [
+          {
+            "id": "2065",
+            "liveRank": 2,
+            "rank": 1
+          },
+          {
+            "id": "2163",
+            "liveRank": 1,
+            "rank": 2
+          },
+          {
+            "id": "2162",
+            "liveRank": 3,
+            "rank": 3
+          },
+          {
+            "id": "2174",
+            "liveRank": 4,
+            "rank": 4
+          },
+          {
+            "id": "2102",
+            "liveRank": 5,
+            "rank": 5
+          },
+          {
+            "id": "2040",
+            "liveRank": 6,
+            "rank": 6
+          },
+          {
+            "id": "2134",
+            "liveRank": 7,
+            "rank": 7
+          },
+          {
+            "id": "2070",
+            "liveRank": 8,
+            "rank": 8
+          }
+        ]
+      },
+      {
+        "checkedAt": "2026-07-05T14:07:33.415Z",
+        "sessionKey": "5543-6760",
+        "liveOrder": [
+          {
+            "id": "2163",
+            "liveRank": 1,
+            "rank": 2
+          },
+          {
+            "id": "2065",
+            "liveRank": 2,
+            "rank": 1
+          },
+          {
+            "id": "2162",
+            "liveRank": 3,
+            "rank": 3
+          },
+          {
+            "id": "2174",
+            "liveRank": 4,
+            "rank": 4
+          },
+          {
+            "id": "2102",
+            "liveRank": 5,
+            "rank": 5
+          },
+          {
+            "id": "2040",
+            "liveRank": 6,
+            "rank": 6
+          },
+          {
+            "id": "2134",
+            "liveRank": 7,
+            "rank": 7
+          },
+          {
+            "id": "2070",
+            "liveRank": 8,
+            "rank": 8
+          }
+        ],
+        "publishedRankOrder": [
+          {
+            "id": "2065",
+            "liveRank": 2,
+            "rank": 1
+          },
+          {
+            "id": "2163",
+            "liveRank": 1,
+            "rank": 2
+          },
+          {
+            "id": "2162",
+            "liveRank": 3,
+            "rank": 3
+          },
+          {
+            "id": "2174",
+            "liveRank": 4,
+            "rank": 4
+          },
+          {
+            "id": "2102",
+            "liveRank": 5,
+            "rank": 5
+          },
+          {
+            "id": "2040",
+            "liveRank": 6,
+            "rank": 6
+          },
+          {
+            "id": "2134",
+            "liveRank": 7,
+            "rank": 7
+          },
+          {
+            "id": "2070",
+            "liveRank": 8,
+            "rank": 8
+          }
+        ]
+      }
+    ]
+  },
+  "sessions": [
+    {
+      "sessionKey": "5543-6760",
+      "samples": 3086,
+      "driverRows": 74064,
+      "battleCars": 70924,
+      "displayOrderDiffSamples": 836
+    },
+    {
+      "sessionKey": "5544-6761",
+      "samples": 3317,
+      "driverRows": 79608,
+      "battleCars": 76186,
+      "displayOrderDiffSamples": 969
+    }
+  ]
+}

@@ -153,8 +153,8 @@ export const liveHistorySampleFromPayload = (payload: LiveReadinessPayload): Liv
     checkedAt,
     checkedAtMs,
     arrivalCheckedAt: payload.checkedAt,
-    lap: numberOrNull(heartbeat.lap),
-    flag: String(heartbeat.flag ?? ''),
+    lap: numberOrNull(heartbeat.lapNumber ?? heartbeat.lap),
+    flag: String(heartbeat.currentFlag ?? heartbeat.flag ?? ''),
     rows,
     bryceId,
     signature: ''

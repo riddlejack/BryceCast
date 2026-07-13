@@ -16,6 +16,7 @@ import { ChartTipCard, chartFont, useMeasuredWidth, type ChartTip } from '../app
 import { asNumber, asString, formatGap, formatNumber } from '../app/format';
 import { Link } from '../app/router';
 import { TrackArt } from '../app/trackArt';
+import { LiveBattleCamera } from './LiveBattleCamera';
 import { useNextSession } from '../app/useNextSession';
 import { trackOutlineFor } from '../assets/tracks';
 import type { LiveReadiness } from '../app/useReadiness';
@@ -115,7 +116,7 @@ const sourceEntries = {
     {
       label: 'Race Control timing feed · cumulative live-ranked intervals',
       path: '/api/readiness → liveTiming.rows[].liveGap',
-      note: 'The chart sums adjacent intervals from P1 to Bryce on every sourced payload. It shares the session-keyed store and ordering used by the battle and field; missing intervals break the line.'
+      note: 'The chart sums adjacent intervals from P1 to Bryce on every sourced payload. Smaller gaps plot higher. It shares the session-keyed store and ordering used by the battle and field; missing intervals break the line.'
     }
   ],
   battle: [
@@ -125,9 +126,14 @@ const sourceEntries = {
       note: 'The corridor cumulatively walks Race Control’s live interval to the preceding ranked car around Bryce. Missing intervals break the chain; no gap is filled with zero and no GPS position is inferred.'
     },
     {
-      label: 'Race Control timing feed · shared nearby-driver history',
+      label: 'Race Control timing feed · full-field broadcast camera',
       path: '/api/readiness → liveTiming.rows[].liveGap',
-      note: 'The lower chart cumulatively sums adjacent live-ranked intervals from the leader for Bryce and the two initially adjacent drivers. Identities remain fixed and any missing interval breaks the downstream lines.'
+      note: 'The lower chart cumulatively sums contiguous adjacent live-ranked intervals from the current leader for every classified DriverID. A missing or non-running interval breaks downstream lines. Leader changes begin a new absolute segment; no continuity offset or fabricated interpolation is applied.'
+    },
+    {
+      label: 'Session-keyed in-memory history',
+      path: 'AppV3 → useLiveSessionHistory',
+      note: 'The shared history survives route navigation, deduplicates source timestamps, sorts late arrivals, and isolates sessions. A hard browser reload intentionally starts a new in-memory window.'
     }
   ],
   watch: [
@@ -306,9 +312,6 @@ const stepPath = (points: LiveHistoryPoint[], x: (value: number) => number, y: (
     return `${path}H${x(point.checkedAtMs)}V${y(point.value)}`;
   }, '');
 
-const historySeriesColor = (role: 'bryce' | 'initially_ahead' | 'initially_behind') =>
-  role === 'bryce' ? 'var(--bryce)' : role === 'initially_ahead' ? '#5581c2' : '#2f9377';
-
 const timeTickLabel = (value: number, spanMs: number) =>
   new Date(value).toLocaleTimeString([], {
     hour: spanMs > 300_000 ? 'numeric' : undefined,
@@ -316,114 +319,8 @@ const timeTickLabel = (value: number, spanMs: number) =>
     second: spanMs <= 300_000 ? '2-digit' : undefined
   });
 
-const SharedLeaderGapChart = ({ history }: { history: LiveSessionHistory | null }) => {
-  const [ref, width] = useMeasuredWidth<HTMLDivElement>();
-  const svgRef = useRef<SVGSVGElement | null>(null);
-  const [tip, setTip] = useState<ChartTip | null>(null);
-  const series = useMemo(() => sharedLeaderGapSeries(history), [history]);
-  const height = 244;
-  const margin = { top: 17, right: 16, bottom: 31, left: 46 };
-  const plotWidth = Math.max(width - margin.left - margin.right, 100);
-  const plotHeight = height - margin.top - margin.bottom;
-  const timeDomain = useMemo(
-    () => timestampWindowDomain(history?.samples.map((sample) => sample.checkedAt) ?? []),
-    [history]
-  );
-  const visibleSeries = useMemo(
-    () =>
-      series.map((entry) => ({
-        ...entry,
-        points: timeDomain
-          ? entry.points.filter((point) => point.checkedAtMs >= timeDomain.startMs && point.checkedAtMs <= timeDomain.endMs)
-          : []
-      })),
-    [series, timeDomain]
-  );
-  const gapDomain = useMemo(
-    () => dataDrivenGapDomain(visibleSeries.flatMap((entry) => entry.points.map((point) => point.value))),
-    [visibleSeries]
-  );
-  const x = (checkedAtMs: number) =>
-    timeDomain ? margin.left + ((checkedAtMs - timeDomain.startMs) / (timeDomain.endMs - timeDomain.startMs)) * plotWidth : margin.left;
-  const y = (value: number) =>
-    gapDomain ? margin.top + ((gapDomain[1] - value) / (gapDomain[1] - gapDomain[0])) * plotHeight : margin.top + plotHeight / 2;
-  const xTicks = timeDomain ? adaptiveTimeTicks(timeDomain, plotWidth) : [];
-  const yTicks = gapDomain ? adaptiveNumericTicks(gapDomain, plotHeight) : [];
-  const latestSample = history?.samples.at(-1) ?? null;
-
-  const onMove = (event: React.MouseEvent<SVGSVGElement>) => {
-    if (!svgRef.current || !history || history.samples.length === 0 || !timeDomain) return;
-    const bounds = svgRef.current.getBoundingClientRect();
-    const cursorX = event.clientX - bounds.left;
-    const cursorTime = timeDomain.startMs + Math.max(0, Math.min(1, (cursorX - margin.left) / plotWidth)) * (timeDomain.endMs - timeDomain.startMs);
-    const sample = history.samples.reduce((closest, candidate) =>
-      Math.abs(candidate.checkedAtMs - cursorTime) < Math.abs(closest.checkedAtMs - cursorTime) ? candidate : closest
-    );
-    const details = visibleSeries.map((entry) => {
-      const point = entry.points.find((candidate) => candidate.checkedAt === sample.checkedAt);
-      return point?.value === null || point?.value === undefined ? `${entry.name} unavailable` : `${entry.name} +${point.value.toFixed(1)}s`;
-    }).join(' · ');
-    setTip({ x: x(sample.checkedAtMs), y: margin.top + 8, title: timeTickLabel(sample.checkedAtMs, timeDomain.endMs - timeDomain.startMs), detail: details });
-  };
-
-  return (
-    <div ref={ref} className="live-battle__chart">
-      {width > 0 && history && history.samples.length >= 2 && timeDomain && gapDomain ? (
-        <>
-          <div className="live-battle__legend" aria-label="Stable nearby-driver comparison set">
-            {visibleSeries.map((entry) => (
-              <span key={entry.id}><i style={{ background: historySeriesColor(entry.role) }} />{entry.name}{entry.role === 'bryce' ? ' · Bryce' : entry.role === 'initially_ahead' ? ' · adjacent ahead at selection' : ' · adjacent behind at selection'}</span>
-            ))}
-          </div>
-          <svg
-            ref={svgRef}
-            width={width}
-            height={height}
-            role="img"
-            aria-label="Bryce and stable nearby drivers on cumulative live-ranked intervals behind the leader over the latest five minutes"
-            data-session-key={history.sessionKey}
-            data-sample-count={history.samples.length}
-            data-history-first-checked-at={history.samples[0]?.checkedAt ?? ''}
-            data-history-last-checked-at={history.samples.at(-1)?.checkedAt ?? ''}
-            data-time-domain-start={new Date(timeDomain.startMs).toISOString()}
-            data-time-domain-end={new Date(timeDomain.endMs).toISOString()}
-            data-gap-domain-min={gapDomain[0]}
-            data-gap-domain-max={gapDomain[1]}
-            data-missing-point-count={visibleSeries.reduce((total, entry) => total + entry.points.filter((point) => point.value === null).length, 0)}
-            onMouseMove={onMove}
-            onMouseLeave={() => setTip(null)}
-          >
-            {yTicks.map((tick) => (
-              <g key={tick}>
-                <line x1={margin.left} x2={width - margin.right} y1={y(tick)} y2={y(tick)} stroke="var(--grid-hairline)" />
-                <text x={margin.left - 7} y={y(tick)} textAnchor="end" dominantBaseline="middle" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={10.5}>{`${tick.toFixed(tick < 10 ? 1 : 0)}s`}</text>
-              </g>
-            ))}
-            {xTicks.map((tick, index) => (
-              <text key={tick} x={x(tick)} y={height - 7} textAnchor={index === 0 ? 'start' : index === xTicks.length - 1 ? 'end' : 'middle'} fill="var(--ink-muted)" fontFamily={chartFont} fontSize={10.5}>{timeTickLabel(tick, timeDomain.endMs - timeDomain.startMs)}</text>
-            ))}
-            {visibleSeries.flatMap((entry) =>
-              contiguousValueSegments(entry.points).map((segment, index) => (
-                <path key={`${entry.id}-${index}`} data-driver-id={entry.id} data-series-role={entry.role} d={stepPath(segment, x, y)} fill="none" stroke={historySeriesColor(entry.role)} strokeWidth={entry.role === 'bryce' ? 2.5 : 2} strokeLinecap="round" strokeLinejoin="round" />
-              ))
-            )}
-            {visibleSeries.map((entry) => {
-              const point = entry.points.at(-1);
-              return point?.value === null || point?.value === undefined ? null : <circle key={entry.id} cx={x(point.checkedAtMs)} cy={y(point.value)} r={entry.role === 'bryce' ? 4.5 : 3.5} fill={historySeriesColor(entry.role)} stroke="var(--surface-1)" strokeWidth={2} />;
-            })}
-            {latestSample ? <line x1={x(latestSample.checkedAtMs)} x2={x(latestSample.checkedAtMs)} y1={margin.top} y2={margin.top + plotHeight} stroke="var(--axis-baseline)" strokeDasharray="2 4" /> : null}
-          </svg>
-          {tip ? <ChartTipCard tip={tip} width={width} /> : null}
-        </>
-      ) : (
-        <Unavailable>The shared-frame history starts after two sourced samples. Missing driver values break a line instead of being filled.</Unavailable>
-      )}
-    </div>
-  );
-};
-
 const BattleModule = ({ payload, samples, history }: { payload: LiveReadiness; samples: GapSample[]; history: LiveSessionHistory | null }) => {
-  const flag = asString(heartbeatOf(payload).flag ?? (payload.raceWeekend as Row).flag);
+  const flag = asString(heartbeatOf(payload).currentFlag ?? heartbeatOf(payload).flag ?? (payload.raceWeekend as Row).flag);
   const mode = isRedFlag(flag)
     ? 'Session stopped — red flag'
     : isCautionFlag(flag)
@@ -431,13 +328,13 @@ const BattleModule = ({ payload, samples, history }: { payload: LiveReadiness; s
       : null;
   return (
     <Card className="live-battle" title="The battle" action={<SourcePill title="The battle" entries={sourceEntries.battle} />}>
-      <p className="live-battle__intro">Bryce is the reference point. Positions are cumulative Race Control intervals, not physical track location.</p>
+      <p className="live-battle__intro">The approved upper corridor keeps Bryce at zero. The camera below follows his absolute timing gap to the live-ranked leader.</p>
       <div className={`live-battle__mode${mode ? ' live-battle__mode--active' : ''}`} aria-live="polite">{mode ?? '\u00a0'}</div>
       <BattleCorridor payload={payload} samples={samples} history={history} />
       <div className="live-battle__divider" />
-      <p className="live-battle__shared-title">Cumulative live-ranked intervals to leader · latest five-minute window</p>
-      <SharedLeaderGapChart history={history} />
-      <p className="caption caption--secondary live-battle__caption">Adjacent Race Control <code>liveGap</code> values are summed from P1 · identities stay fixed · a missing interval breaks downstream lines</p>
+      <p className="live-battle__shared-title">Broadcast camera · trailing five minutes · 12-second frame</p>
+      <LiveBattleCamera history={history} />
+      <p className="caption caption--secondary live-battle__caption">Contiguous Race Control <code>liveGap</code> intervals are summed from P1 · stable DriverID · step-after at source cadence · missing intervals and leader changes break lines</p>
     </Card>
   );
 };
@@ -759,7 +656,7 @@ const GapTrend = ({ history }: { history: LiveSessionHistory | null }) => {
     return margin.left + ((checkedAtMs - sessionDomain.startMs) / (sessionDomain.endMs - sessionDomain.startMs)) * plotWidth;
   };
   const y = (gap: number) =>
-    gapDomain ? margin.top + ((gapDomain[1] - gap) / (gapDomain[1] - gapDomain[0])) * plotHeight : margin.top + plotHeight / 2;
+    gapDomain ? margin.top + ((gap - gapDomain[0]) / (gapDomain[1] - gapDomain[0])) * plotHeight : margin.top + plotHeight / 2;
   const xTicks = sessionDomain ? adaptiveTimeTicks(sessionDomain, plotWidth) : [];
   const yTicks = gapDomain ? adaptiveNumericTicks(gapDomain, plotHeight) : [];
   const segments = contiguousValueSegments(points);
@@ -823,7 +720,7 @@ const GapTrend = ({ history }: { history: LiveSessionHistory | null }) => {
                 width={width}
                 height={height}
                 role="img"
-                aria-label="Bryce cumulative live-ranked intervals to the leader over the latest five minutes with adaptive time and seconds axes"
+                aria-label="Bryce cumulative live-ranked intervals to the leader over the latest five minutes, with smaller gaps plotted higher"
                 data-time-domain-start={new Date(sessionDomain.startMs).toISOString()}
                 data-time-domain-end={new Date(sessionDomain.endMs).toISOString()}
                 data-gap-domain-min={gapDomain[0]}
