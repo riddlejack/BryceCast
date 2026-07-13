@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "live-f4-route-persistence-proof.v1",
+  "before": {
+    "firstCheckedAt": "2026-07-04T17:20:10.217Z",
+    "lastCheckedAt": "2026-07-04T17:21:54.416Z",
+    "sampleCount": 100,
+    "seriesIds": [
+      "2086",
+      "2120",
+      "2143"
+    ],
+    "sessionKey": "5544-6761"
+  },
+  "after": {
+    "firstCheckedAt": "2026-07-04T17:20:10.217Z",
+    "lastCheckedAt": "2026-07-04T17:22:04.423Z",
+    "sampleCount": 109,
+    "seriesIds": [
+      "2086",
+      "2120",
+      "2143"
+    ],
+    "sessionKey": "5544-6761"
+  },
+  "assertions": {
+    "sameSession": true,
+    "firstSampleRetained": true,
+    "historyDidNotShrink": true,
+    "historyAdvancedOffRoute": true,
+    "identitiesStable": true
+  }
+}

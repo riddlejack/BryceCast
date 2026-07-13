@@ -30,11 +30,25 @@ import {
   positiveGapSeconds,
   rankChanges,
   resolveStableLabelLanes,
+  sortRowsForLiveDisplay,
   stableDriverId,
   timestampWindowDomain,
   type LiveBattleNeighbor,
   type LiveRow
 } from '../data/livePageModel';
+import {
+  adaptiveNumericTicks,
+  adaptiveTimeTicks,
+  battleConnectorGeometry,
+  buildBattleFrameForSample,
+  contiguousValueSegments,
+  dataDrivenGapDomain,
+  sharedLeaderGapSeries,
+  shouldAnimateSampleTransition,
+  sourcedGapToLeaderSeconds,
+  type LiveHistoryPoint,
+  type LiveSessionHistory
+} from '../data/liveHistoryModel';
 import { uiDataPackage } from '../data/uiDataPackage';
 
 type Row = Record<string, unknown>;
@@ -90,7 +104,7 @@ const sourceEntries = {
     }
   ],
   tower: [
-    { label: 'Race Control timing feed', path: '/api/timing', note: 'Every car in the active session, sorted by Race Control rank.' },
+    { label: 'Race Control timing feed', path: '/api/timing', note: 'Every car in the active session, sorted by liveRank with published rank as the explicit fallback.' },
     {
       label: 'INDY NXT head-to-head context',
       path: 'analysis/ui-data-package/ui-data-package.json → upcomingPrep.standingsSnapshot / careerLab.headToHead',
@@ -99,16 +113,21 @@ const sourceEntries = {
   ],
   trend: [
     {
-      label: 'BryceCast 1-second Race Control archive',
-      path: '/api/replay/bryce',
-      note: 'Gap-to-leader and flag states are archived as received and plotted on capture timestamps. Yellow periods are shaded; no GPS or pace model is inferred.'
+      label: 'Race Control timing feed · cumulative live-ranked intervals',
+      path: '/api/readiness → liveTiming.rows[].liveGap',
+      note: 'The chart sums adjacent intervals from P1 to Bryce on every sourced payload. It shares the session-keyed store and ordering used by the battle and field; missing intervals break the line.'
     }
   ],
   battle: [
     {
-      label: 'Race Control timing feed · Bryce-centered intervals',
-      path: '/api/readiness → /api/timing rows[].liveGap',
+      label: 'Race Control timing feed · Bryce-centered corridor',
+      path: '/api/readiness → liveTiming.rows[].liveGap',
       note: 'The corridor cumulatively walks Race Control’s live interval to the preceding ranked car around Bryce. Missing intervals break the chain; no gap is filled with zero and no GPS position is inferred.'
+    },
+    {
+      label: 'Race Control timing feed · shared nearby-driver history',
+      path: '/api/readiness → liveTiming.rows[].liveGap',
+      note: 'The lower chart cumulatively sums adjacent live-ranked intervals from the leader for Bryce and the two initially adjacent drivers. Identities remain fixed and any missing interval breaks the downstream lines.'
     }
   ],
   watch: [
@@ -125,7 +144,7 @@ const sourceEntries = {
   ]
 };
 
-/* ---------- tiny, append-only gap sparklines ---------- */
+/* ---------- one session-keyed history feeds both charts ---------- */
 
 interface GapSample {
   checkedAt: string;
@@ -138,43 +157,46 @@ interface GapSample {
   behindNeighbor: LiveBattleNeighbor | null;
 }
 
-const useGapSamples = (payload: LiveReadiness | null): GapSample[] => {
-  const [samples, setSamples] = useState<GapSample[]>([]);
-  useEffect(() => {
-    if (!payload || !['ready', 'degraded'].includes(payload.state)) return;
-    const rows = liveRowsOf(payload);
-    const bryce = liveBryceRowOf(payload);
-    const heartbeat = heartbeatOf(payload);
-    const frame = buildLiveBattleFrame(payload);
-    const rank = bryce ? livePosition(bryce) : null;
-    if (!bryce || rank === null) return;
-    const next = {
-      checkedAt: payload.checkedAt,
-      sessionKey: `${asString(heartbeat.eventId) ?? 'event'}-${asString(heartbeat.eventSessionId) ?? 'session'}`,
-      lap: asNumber(heartbeat.lap),
-      rank,
+const gapSamplesFromHistory = (history: LiveSessionHistory | null): GapSample[] =>
+  (history?.samples ?? []).map((sample) => {
+    const bryce = sample.rows.find((row) => stableDriverId(row) === sample.bryceId) ?? null;
+    const frame = buildBattleFrameForSample(sample);
+    return {
+      checkedAt: sample.checkedAt,
+      sessionKey: sample.sessionKey,
+      lap: sample.lap,
+      rank: bryce ? livePosition(bryce) : null,
       ahead: frame?.ahead?.gapSeconds ?? null,
       behind: frame?.behind?.gapSeconds ?? null,
       aheadNeighbor: frame?.ahead ?? null,
       behindNeighbor: frame?.behind ?? null
     };
-    setSamples((previous) => {
-      if (previous.at(-1)?.checkedAt === next.checkedAt) return previous;
-      const last = previous.at(-1);
-      const lastTime = last ? Date.parse(last.checkedAt) : Number.NaN;
-      const nextTime = Date.parse(next.checkedAt);
-      const reset = last && (last.sessionKey !== next.sessionKey || (Number.isFinite(lastTime) && Number.isFinite(nextTime) && nextTime < lastTime));
-      return [...(reset ? [] : previous), next].slice(-300);
-    });
-  }, [payload]);
-  return samples;
+  });
+
+const usePrefersReducedMotion = () => {
+  const [reduced, setReduced] = useState(false);
+  useEffect(() => {
+    const media = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const update = () => setReduced(media.matches);
+    update();
+    media.addEventListener('change', update);
+    return () => media.removeEventListener('change', update);
+  }, []);
+  return reduced;
 };
 
 /* ---------- the battle: Bryce-centered spatial reference ---------- */
 
-const BattleCorridor = ({ payload, samples }: { payload: LiveReadiness; samples: GapSample[] }) => {
+const BattleCorridor = ({ payload, samples, history }: { payload: LiveReadiness; samples: GapSample[]; history: LiveSessionHistory | null }) => {
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();
   const [tip, setTip] = useState<ChartTip | null>(null);
+  const reducedMotion = usePrefersReducedMotion();
+  const previousSample = useRef(history?.samples.at(-1) ?? null);
+  const currentSample = history?.samples.at(-1) ?? null;
+  const animateCoordinates = shouldAnimateSampleTransition(previousSample.current, currentSample, reducedMotion);
+  useLayoutEffect(() => {
+    previousSample.current = currentSample;
+  }, [currentSample]);
   const frame = buildLiveBattleFrame(payload);
   const cars = (frame?.cars ?? [])
     .filter((car) => Math.abs(car.offsetSeconds) <= 4)
@@ -220,15 +242,24 @@ const BattleCorridor = ({ payload, samples }: { payload: LiveReadiness; samples:
               const labelLane = lanesByDriver.get(car.id) ?? 0;
               const labelY = labelLanes[labelLane];
               const cx = x(car.offsetSeconds);
+              const connector = battleConnectorGeometry(labelY, axisY, 10, close ? 6.5 : 5);
               return (
                 <g
                   key={car.id}
-                  className="live-battle__car"
+                  className={`live-battle__car${animateCoordinates ? ' live-battle__car--motion' : ''}`}
                   data-driver-id={car.id}
                   data-label-lane={labelLane}
                   data-offset-seconds={car.offsetSeconds.toFixed(4)}
                   transform={`translate(${cx} 0)`}
                 >
+                  <line
+                    className="live-battle__connector"
+                    x1={0}
+                    x2={0}
+                    y1={connector.y1}
+                    y2={connector.y2}
+                    data-connector-driver-id={car.id}
+                  />
                   <text x={0} y={labelY} textAnchor="middle" fill="var(--ink-secondary)" fontFamily={chartFont} fontSize={10}>{car.surname}</text>
                   <circle cx={0} cy={axisY} r={close ? 6.5 : 5} fill="var(--ink-primary)" opacity={close ? 1 : 0.8} stroke="var(--surface-1)" strokeWidth={2} />
                   <circle
@@ -267,136 +298,131 @@ const BattleCorridor = ({ payload, samples }: { payload: LiveReadiness; samples:
   );
 };
 
-interface BattleLinePoint {
-  sampleIndex: number;
-  value: number;
-  checkedAt: string;
-  checkedAtMs: number;
-  neighbor: LiveBattleNeighbor;
-}
+const stepPath = (points: LiveHistoryPoint[], x: (value: number) => number, y: (value: number) => number): string =>
+  points.reduce((path, point, index) => {
+    if (point.value === null) return path;
+    if (index === 0) return `M${x(point.checkedAtMs)} ${y(point.value)}`;
+    const previous = points[index - 1];
+    return `${path}H${x(point.checkedAtMs)}V${y(point.value)}`;
+  }, '');
 
-const battleSegments = (samples: GapSample[], side: 'ahead' | 'behind') => {
-  const segments: Array<{ id: string; surname: string; points: BattleLinePoint[] }> = [];
-  for (let sampleIndex = 0; sampleIndex < samples.length; sampleIndex += 1) {
-    const sample = samples[sampleIndex];
-    const neighbor = side === 'ahead' ? sample.aheadNeighbor : sample.behindNeighbor;
-    const gap = side === 'ahead' ? sample.ahead : sample.behind;
-    if (!neighbor || gap === null) continue;
-    const previous = segments.at(-1);
-    if (!previous || previous.id !== neighbor.id || previous.points.at(-1)!.sampleIndex !== sampleIndex - 1) {
-      segments.push({ id: neighbor.id, surname: neighbor.surname, points: [] });
-    }
-    const checkedAtMs = Date.parse(sample.checkedAt);
-    if (!Number.isFinite(checkedAtMs)) continue;
-    segments.at(-1)!.points.push({ sampleIndex, value: side === 'ahead' ? gap : -gap, checkedAt: sample.checkedAt, checkedAtMs, neighbor });
-  }
-  return segments;
-};
+const historySeriesColor = (role: 'bryce' | 'initially_ahead' | 'initially_behind') =>
+  role === 'bryce' ? 'var(--bryce)' : role === 'initially_ahead' ? '#5581c2' : '#2f9377';
 
-const BattleChart = ({ samples }: { samples: GapSample[] }) => {
+const timeTickLabel = (value: number, spanMs: number) =>
+  new Date(value).toLocaleTimeString([], {
+    hour: spanMs > 300_000 ? 'numeric' : undefined,
+    minute: '2-digit',
+    second: spanMs <= 300_000 ? '2-digit' : undefined
+  });
+
+const SharedLeaderGapChart = ({ history }: { history: LiveSessionHistory | null }) => {
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();
   const svgRef = useRef<SVGSVGElement | null>(null);
   const [tip, setTip] = useState<ChartTip | null>(null);
-  const ahead = useMemo(() => battleSegments(samples, 'ahead'), [samples]);
-  const behind = useMemo(() => battleSegments(samples, 'behind'), [samples]);
+  const series = useMemo(() => sharedLeaderGapSeries(history), [history]);
   const height = 244;
-  const margin = { top: 18, right: 72, bottom: 31, left: 40 };
+  const margin = { top: 17, right: 16, bottom: 31, left: 46 };
   const plotWidth = Math.max(width - margin.left - margin.right, 100);
   const plotHeight = height - margin.top - margin.bottom;
-  const domain = useMemo(() => timestampWindowDomain(samples.map((sample) => sample.checkedAt)), [samples]);
-  const maxGap = 4;
-  const x = (checkedAt: string) => {
-    if (!domain) return margin.left;
-    return margin.left + ((Date.parse(checkedAt) - domain.startMs) / (domain.endMs - domain.startMs)) * plotWidth;
-  };
-  const y = (value: number) => margin.top + ((maxGap - value) / (maxGap * 2)) * plotHeight;
-  const visiblePoints = (points: BattleLinePoint[]) =>
-    domain ? points.filter((point) => point.checkedAtMs >= domain.startMs && point.checkedAtMs <= domain.endMs) : [];
-  const pathOf = (points: BattleLinePoint[]) => visiblePoints(points).map((point, index) => `${index === 0 ? 'M' : 'L'}${x(point.checkedAt)} ${y(point.value)}`).join(' ');
-  const tailFor = (side: 'ahead' | 'behind') => {
-    if (samples.length < 2) return null;
-    const previous = samples.at(-2)!;
-    const current = samples.at(-1)!;
-    const previousNeighbor = side === 'ahead' ? previous.aheadNeighbor : previous.behindNeighbor;
-    const currentNeighbor = side === 'ahead' ? current.aheadNeighbor : current.behindNeighbor;
-    const previousGap = side === 'ahead' ? previous.ahead : previous.behind;
-    const currentGap = side === 'ahead' ? current.ahead : current.behind;
-    if (!previousNeighbor || !currentNeighbor || previousNeighbor.id !== currentNeighbor.id || previousGap === null || currentGap === null) return null;
-    return {
-      key: `${side}-${current.checkedAt}`,
-      color: side === 'ahead' ? '#5581c2' : '#2f9377',
-      from: side === 'ahead' ? previousGap : -previousGap,
-      to: side === 'ahead' ? currentGap : -currentGap,
-      fromCheckedAt: previous.checkedAt,
-      toCheckedAt: current.checkedAt
-    };
-  };
-  const aheadTail = tailFor('ahead');
-  const behindTail = tailFor('behind');
+  const timeDomain = useMemo(
+    () => timestampWindowDomain(history?.samples.map((sample) => sample.checkedAt) ?? []),
+    [history]
+  );
+  const visibleSeries = useMemo(
+    () =>
+      series.map((entry) => ({
+        ...entry,
+        points: timeDomain
+          ? entry.points.filter((point) => point.checkedAtMs >= timeDomain.startMs && point.checkedAtMs <= timeDomain.endMs)
+          : []
+      })),
+    [series, timeDomain]
+  );
+  const gapDomain = useMemo(
+    () => dataDrivenGapDomain(visibleSeries.flatMap((entry) => entry.points.map((point) => point.value))),
+    [visibleSeries]
+  );
+  const x = (checkedAtMs: number) =>
+    timeDomain ? margin.left + ((checkedAtMs - timeDomain.startMs) / (timeDomain.endMs - timeDomain.startMs)) * plotWidth : margin.left;
+  const y = (value: number) =>
+    gapDomain ? margin.top + ((gapDomain[1] - value) / (gapDomain[1] - gapDomain[0])) * plotHeight : margin.top + plotHeight / 2;
+  const xTicks = timeDomain ? adaptiveTimeTicks(timeDomain, plotWidth) : [];
+  const yTicks = gapDomain ? adaptiveNumericTicks(gapDomain, plotHeight) : [];
+  const latestSample = history?.samples.at(-1) ?? null;
 
   const onMove = (event: React.MouseEvent<SVGSVGElement>) => {
-    if (!svgRef.current || samples.length === 0 || !domain) return;
+    if (!svgRef.current || !history || history.samples.length === 0 || !timeDomain) return;
     const bounds = svgRef.current.getBoundingClientRect();
     const cursorX = event.clientX - bounds.left;
-    const cursorTime = domain.startMs + Math.max(0, Math.min(1, (cursorX - margin.left) / plotWidth)) * (domain.endMs - domain.startMs);
-    const sample = samples.reduce((closest, candidate) =>
-      Math.abs(Date.parse(candidate.checkedAt) - cursorTime) < Math.abs(Date.parse(closest.checkedAt) - cursorTime) ? candidate : closest
+    const cursorTime = timeDomain.startMs + Math.max(0, Math.min(1, (cursorX - margin.left) / plotWidth)) * (timeDomain.endMs - timeDomain.startMs);
+    const sample = history.samples.reduce((closest, candidate) =>
+      Math.abs(candidate.checkedAtMs - cursorTime) < Math.abs(closest.checkedAtMs - cursorTime) ? candidate : closest
     );
-    const details = [
-      sample.aheadNeighbor && sample.ahead !== null ? `${sample.aheadNeighbor.surname} +${sample.ahead.toFixed(1)}s ahead` : null,
-      sample.behindNeighbor && sample.behind !== null ? `${sample.behindNeighbor.surname} +${sample.behind.toFixed(1)}s behind` : null
-    ].filter(Boolean).join(' · ');
-    setTip({ x: x(sample.checkedAt), y: y(0), title: 'Bryce · 0s', detail: details });
+    const details = visibleSeries.map((entry) => {
+      const point = entry.points.find((candidate) => candidate.checkedAt === sample.checkedAt);
+      return point?.value === null || point?.value === undefined ? `${entry.name} unavailable` : `${entry.name} +${point.value.toFixed(1)}s`;
+    }).join(' · ');
+    setTip({ x: x(sample.checkedAtMs), y: margin.top + 8, title: timeTickLabel(sample.checkedAtMs, timeDomain.endMs - timeDomain.startMs), detail: details });
   };
 
   return (
     <div ref={ref} className="live-battle__chart">
-      {width > 0 && samples.length >= 2 && domain ? (
+      {width > 0 && history && history.samples.length >= 2 && timeDomain && gapDomain ? (
         <>
-          <svg ref={svgRef} width={width} height={height} role="img" aria-label="Gap to the car ahead and behind centered on Bryce over the latest five minutes" onMouseMove={onMove} onMouseLeave={() => setTip(null)}>
-            {[maxGap, 0, -maxGap].map((tick) => (
+          <div className="live-battle__legend" aria-label="Stable nearby-driver comparison set">
+            {visibleSeries.map((entry) => (
+              <span key={entry.id}><i style={{ background: historySeriesColor(entry.role) }} />{entry.name}{entry.role === 'bryce' ? ' · Bryce' : entry.role === 'initially_ahead' ? ' · adjacent ahead at selection' : ' · adjacent behind at selection'}</span>
+            ))}
+          </div>
+          <svg
+            ref={svgRef}
+            width={width}
+            height={height}
+            role="img"
+            aria-label="Bryce and stable nearby drivers on cumulative live-ranked intervals behind the leader over the latest five minutes"
+            data-session-key={history.sessionKey}
+            data-sample-count={history.samples.length}
+            data-history-first-checked-at={history.samples[0]?.checkedAt ?? ''}
+            data-history-last-checked-at={history.samples.at(-1)?.checkedAt ?? ''}
+            data-time-domain-start={new Date(timeDomain.startMs).toISOString()}
+            data-time-domain-end={new Date(timeDomain.endMs).toISOString()}
+            data-gap-domain-min={gapDomain[0]}
+            data-gap-domain-max={gapDomain[1]}
+            data-missing-point-count={visibleSeries.reduce((total, entry) => total + entry.points.filter((point) => point.value === null).length, 0)}
+            onMouseMove={onMove}
+            onMouseLeave={() => setTip(null)}
+          >
+            {yTicks.map((tick) => (
               <g key={tick}>
-                <line x1={margin.left} x2={width - margin.right} y1={y(tick)} y2={y(tick)} stroke={tick === 0 ? 'var(--axis-baseline)' : 'var(--grid-hairline)'} />
-                <text x={margin.left - 7} y={y(tick)} textAnchor="end" dominantBaseline="middle" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={10.5}>{tick > 0 ? `+${tick}s` : tick < 0 ? `−${Math.abs(tick)}s` : '0'}</text>
+                <line x1={margin.left} x2={width - margin.right} y1={y(tick)} y2={y(tick)} stroke="var(--grid-hairline)" />
+                <text x={margin.left - 7} y={y(tick)} textAnchor="end" dominantBaseline="middle" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={10.5}>{`${tick.toFixed(tick < 10 ? 1 : 0)}s`}</text>
               </g>
             ))}
-            <line x1={margin.left} x2={width - margin.right} y1={y(0)} y2={y(0)} stroke="var(--bryce)" strokeWidth={2} strokeDasharray="2 5" />
-            {[...ahead].map((segment, index) => {
-              const active = segment.points.at(-1)?.sampleIndex === samples.length - 1 && segment.points.length > 1;
-              return <path key={`ahead-${segment.id}-${index}`} data-series="ahead" data-driver-id={segment.id} data-segment-index={index} d={pathOf(active ? segment.points.slice(0, -1) : segment.points)} fill="none" stroke="#5581c2" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />;
+            {xTicks.map((tick, index) => (
+              <text key={tick} x={x(tick)} y={height - 7} textAnchor={index === 0 ? 'start' : index === xTicks.length - 1 ? 'end' : 'middle'} fill="var(--ink-muted)" fontFamily={chartFont} fontSize={10.5}>{timeTickLabel(tick, timeDomain.endMs - timeDomain.startMs)}</text>
+            ))}
+            {visibleSeries.flatMap((entry) =>
+              contiguousValueSegments(entry.points).map((segment, index) => (
+                <path key={`${entry.id}-${index}`} data-driver-id={entry.id} data-series-role={entry.role} d={stepPath(segment, x, y)} fill="none" stroke={historySeriesColor(entry.role)} strokeWidth={entry.role === 'bryce' ? 2.5 : 2} strokeLinecap="round" strokeLinejoin="round" />
+              ))
+            )}
+            {visibleSeries.map((entry) => {
+              const point = entry.points.at(-1);
+              return point?.value === null || point?.value === undefined ? null : <circle key={entry.id} cx={x(point.checkedAtMs)} cy={y(point.value)} r={entry.role === 'bryce' ? 4.5 : 3.5} fill={historySeriesColor(entry.role)} stroke="var(--surface-1)" strokeWidth={2} />;
             })}
-            {[...behind].map((segment, index) => {
-              const active = segment.points.at(-1)?.sampleIndex === samples.length - 1 && segment.points.length > 1;
-              return <path key={`behind-${segment.id}-${index}`} data-series="behind" data-driver-id={segment.id} data-segment-index={index} d={pathOf(active ? segment.points.slice(0, -1) : segment.points)} fill="none" stroke="#2f9377" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />;
-            })}
-            {aheadTail ? <line key={aheadTail.key} x1={x(aheadTail.fromCheckedAt)} y1={y(aheadTail.from)} x2={x(aheadTail.toCheckedAt)} y2={y(aheadTail.to)} stroke={aheadTail.color} strokeWidth={2} strokeLinecap="round" className="live-line-tail" /> : null}
-            {behindTail ? <line key={behindTail.key} x1={x(behindTail.fromCheckedAt)} y1={y(behindTail.from)} x2={x(behindTail.toCheckedAt)} y2={y(behindTail.to)} stroke={behindTail.color} strokeWidth={2} strokeLinecap="round" className="live-line-tail" /> : null}
-            {ahead.filter((segment) => segment.points.at(-1)?.sampleIndex === samples.length - 1).map((segment) => {
-              const point = segment.points.at(-1)!;
-              return <text key={segment.id} x={x(point.checkedAt) + 7} y={y(point.value)} dominantBaseline="middle" fill="var(--ink-secondary)" fontFamily={chartFont} fontSize={10.5}>{segment.surname}</text>;
-            })}
-            {behind.filter((segment) => segment.points.at(-1)?.sampleIndex === samples.length - 1).map((segment) => {
-              const point = segment.points.at(-1)!;
-              return <text key={segment.id} x={x(point.checkedAt) + 7} y={y(point.value)} dominantBaseline="middle" fill="var(--ink-secondary)" fontFamily={chartFont} fontSize={10.5}>{segment.surname}</text>;
-            })}
-            <g transform={`translate(${margin.left + 17} ${y(0)})`}>
-              <rect x={-14} y={-10} width={28} height={20} rx={4} fill="var(--bryce)" />
-              <text y={1} textAnchor="middle" dominantBaseline="middle" fill="#1d1d1f" fontFamily={chartFont} fontSize={11} fontWeight={750}>№9</text>
-              <text x={20} y={1} dominantBaseline="middle" fill="var(--ink-secondary)" fontFamily={chartFont} fontSize={10.5}>Bryce</text>
-            </g>
-            <text x={margin.left} y={height - 7} fill="var(--ink-muted)" fontFamily={chartFont} fontSize={10.5}>−5 min</text>
-            <text x={width - margin.right} y={height - 7} textAnchor="end" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={10.5}>now</text>
+            {latestSample ? <line x1={x(latestSample.checkedAtMs)} x2={x(latestSample.checkedAtMs)} y1={margin.top} y2={margin.top + plotHeight} stroke="var(--axis-baseline)" strokeDasharray="2 4" /> : null}
           </svg>
           {tip ? <ChartTipCard tip={tip} width={width} /> : null}
         </>
       ) : (
-        <Unavailable>The line history starts after two live samples. Neighbor changes will begin a new segment rather than joining two drivers.</Unavailable>
+        <Unavailable>The shared-frame history starts after two sourced samples. Missing driver values break a line instead of being filled.</Unavailable>
       )}
     </div>
   );
 };
 
-const BattleModule = ({ payload, samples }: { payload: LiveReadiness; samples: GapSample[] }) => {
+const BattleModule = ({ payload, samples, history }: { payload: LiveReadiness; samples: GapSample[]; history: LiveSessionHistory | null }) => {
   const flag = asString(heartbeatOf(payload).flag ?? (payload.raceWeekend as Row).flag);
   const mode = isRedFlag(flag)
     ? 'Session stopped — red flag'
@@ -407,10 +433,11 @@ const BattleModule = ({ payload, samples }: { payload: LiveReadiness; samples: G
     <Card className="live-battle" title="The battle" action={<SourcePill title="The battle" entries={sourceEntries.battle} />}>
       <p className="live-battle__intro">Bryce is the reference point. Positions are cumulative Race Control intervals, not physical track location.</p>
       <div className={`live-battle__mode${mode ? ' live-battle__mode--active' : ''}`} aria-live="polite">{mode ?? '\u00a0'}</div>
-      <BattleCorridor payload={payload} samples={samples} />
+      <BattleCorridor payload={payload} samples={samples} history={history} />
       <div className="live-battle__divider" />
-      <BattleChart samples={samples} />
-      <p className="caption caption--secondary live-battle__caption">blue = interval ahead · teal = interval behind · a missing source interval breaks the line</p>
+      <p className="live-battle__shared-title">Cumulative live-ranked intervals to leader · latest five-minute window</p>
+      <SharedLeaderGapChart history={history} />
+      <p className="caption caption--secondary live-battle__caption">Adjacent Race Control <code>liveGap</code> values are summed from P1 · identities stay fixed · a missing interval breaks downstream lines</p>
     </Card>
   );
 };
@@ -594,67 +621,31 @@ const PointsJumbotron = ({ payload }: { payload: LiveReadiness }) => {
 
 /* ---------- full field tower ---------- */
 
-const usePrefersReducedMotion = () => {
-  const [reduced, setReduced] = useState(false);
-  useEffect(() => {
-    const media = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const update = () => setReduced(media.matches);
-    update();
-    media.addEventListener('change', update);
-    return () => media.removeEventListener('change', update);
-  }, []);
-  return reduced;
-};
-
-const useFieldRowMotion = (rows: LiveRow[]) => {
-  const nodes = useRef(new Map<string, HTMLDivElement>());
-  const previousTops = useRef(new Map<string, number>());
+const useFieldRankChanges = (rows: LiveRow[]) => {
   const previousRows = useRef<LiveRow[]>([]);
   const clearTimer = useRef<number | null>(null);
   const [changedIds, setChangedIds] = useState<Set<string>>(new Set());
-  const reducedMotion = usePrefersReducedMotion();
 
   useLayoutEffect(() => {
     const changes = rankChanges(previousRows.current, rows);
-    const nextTops = new Map<string, number>();
-    nodes.current.forEach((node, id) => nextTops.set(id, node.offsetTop));
-
-    if (previousRows.current.length > 0 && !reducedMotion) {
-      nextTops.forEach((top, id) => {
-        const previousTop = previousTops.current.get(id);
-        const node = nodes.current.get(id);
-        const delta = previousTop === undefined ? 0 : previousTop - top;
-        if (!node || Math.abs(delta) < 1) return;
-        node.animate(
-          [{ transform: `translateY(${delta}px)` }, { transform: 'translateY(0)' }],
-          { duration: 800, easing: 'cubic-bezier(0.23, 1, 0.32, 1)' }
-        );
-      });
-    }
-
     if (changes.length > 0) {
       setChangedIds(new Set(changes.map((change) => change.id)));
       if (clearTimer.current !== null) window.clearTimeout(clearTimer.current);
       clearTimer.current = window.setTimeout(() => setChangedIds(new Set()), 1_000);
     }
-    previousTops.current = nextTops;
     previousRows.current = rows;
-  }, [reducedMotion, rows]);
+  }, [rows]);
 
   useEffect(() => () => {
     if (clearTimer.current !== null) window.clearTimeout(clearTimer.current);
   }, []);
 
-  const register = (id: string, node: HTMLDivElement | null) => {
-    if (node) nodes.current.set(id, node);
-    else nodes.current.delete(id);
-  };
-  return { changedIds, register };
+  return changedIds;
 };
 
 const FieldTower = ({ payload }: { payload: LiveReadiness }) => {
-  const rows = useMemo(() => [...liveRowsOf(payload)].sort((left, right) => (livePosition(left) ?? 99) - (livePosition(right) ?? 99)), [payload]);
-  const { changedIds, register } = useFieldRowMotion(rows);
+  const rows = useMemo(() => sortRowsForLiveDisplay(liveRowsOf(payload)) as LiveRow[], [payload]);
+  const changedIds = useFieldRankChanges(rows);
   const standings = uiDataPackage.screens.upcomingPrep.standingsSnapshot;
   const careerRivals = uiDataPackage.screens.careerLab.headToHead;
   const bryceRank = livePosition(rows.find((row) => row.bryce === true) ?? {});
@@ -686,13 +677,16 @@ const FieldTower = ({ payload }: { payload: LiveReadiness }) => {
           const status = (asString(row.status) ?? '').toLowerCase();
           const running = !status || ['active', 'running', 'run'].includes(status);
           const honestStatus = running ? null : asString(row.comment) || asString(row.status);
+          const sourcedLeaderGap = sourcedGapToLeaderSeconds(row);
           const displayGap = honestStatus
             ? honestStatus
             : rank === 1
               ? 'leader'
-              : positiveGapSeconds(row.diff) !== null
-                ? secondsLabel(row.diff)
-                : formatGap(row.diff);
+              : sourcedLeaderGap !== null
+                ? secondsLabel(sourcedLeaderGap)
+                : positiveGapSeconds(row.diff) === 0
+                  ? 'gap pending'
+                  : formatGap(row.diff);
           const headToHead =
             bryceRank !== null && rank !== null && Math.abs(rank - bryceRank) <= 2
               ? headToHeadForLiveDriver(row.no, driverLabel(row), standings, careerRivals)
@@ -701,7 +695,6 @@ const FieldTower = ({ payload }: { payload: LiveReadiness }) => {
           return (
             <div
               key={rowId}
-              ref={(node) => register(rowId, node)}
               data-driver-id={rowId}
               data-live-rank={rank ?? ''}
               className={`tower__row live-field__row${isBryce ? ' tower__row--bryce' : ''}${changedIds.has(rowId) ? ' live-field__row--rank-change' : ''}`}
@@ -731,89 +724,50 @@ const FieldTower = ({ payload }: { payload: LiveReadiness }) => {
   );
 };
 
-/* ---------- full-session gap trend ---------- */
+/* ---------- Bryce distance on the same session-keyed liveGap frame ---------- */
 
-interface ReplayTrace {
-  sessionKey: string | null;
-  rows: LiveRow[];
+interface SessionGapPoint extends LiveHistoryPoint {
+  lap: number | null;
+  flag: string;
 }
 
-const useReplayTrace = (payload: LiveReadiness | null, fixtureMode: boolean): ReplayTrace | null => {
-  const [trace, setTrace] = useState<ReplayTrace | null>(null);
-  const heartbeat = payload ? heartbeatOf(payload) : {};
-  const sessionKey = !fixtureMode && asString(heartbeat.eventId) && asString(heartbeat.eventSessionId)
-    ? `${asString(heartbeat.eventId)}-${asString(heartbeat.eventSessionId)}`
-    : null;
-
-  useEffect(() => {
-    if (fixtureMode || !payload) {
-      const fixtureRows = Array.isArray((payload?.replay as Row)?.rows) ? ((payload?.replay as Row).rows as LiveRow[]) : [];
-      setTrace({ sessionKey: asString((payload?.replay as Row)?.sessionKey), rows: fixtureRows });
-      return;
-    }
-    let cancelled = false;
-    const load = async () => {
-      try {
-        const key = sessionKey ? `&sessionKey=${encodeURIComponent(sessionKey)}` : '';
-        const response = await fetch(`/api/replay/bryce?limit=500${key}`, { headers: { accept: 'application/json' } });
-        if (!response.ok) return;
-        const data = (await response.json()) as Row;
-        if (cancelled || data.available !== true) return;
-        setTrace({ sessionKey: asString(data.sessionKey), rows: Array.isArray(data.rows) ? (data.rows as LiveRow[]) : [] });
-      } catch {
-        // Archive coverage is optional; the module keeps its last good frame.
-      }
-    };
-    void load();
-    const timer = window.setInterval(load, 2_000);
-    return () => {
-      cancelled = true;
-      window.clearInterval(timer);
-    };
-  }, [fixtureMode, payload?.state, sessionKey]);
-  return trace;
+const gapTrendPointsFromHistory = (history: LiveSessionHistory | null): SessionGapPoint[] => {
+  if (!history) return [];
+  const bryceSeries = sharedLeaderGapSeries(history).find((series) => series.role === 'bryce');
+  if (!bryceSeries) return [];
+  return bryceSeries.points.map((point, index) => ({
+    ...point,
+    lap: history.samples[index]?.lap ?? null,
+    flag: history.samples[index]?.flag.toUpperCase() ?? ''
+  }));
 };
 
-const GapTrend = ({ trace }: { trace: ReplayTrace | null }) => {
+const GapTrend = ({ history }: { history: LiveSessionHistory | null }) => {
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();
   const svgRef = useRef<SVGSVGElement | null>(null);
   const [tip, setTip] = useState<ChartTip | null>(null);
-  const points = useMemo(
-    () =>
-      (trace?.rows ?? [])
-        .map((row, index) => ({
-          index,
-          checkedAt: asString(row.checkedAt),
-          checkedAtMs: Date.parse(asString(row.checkedAt) ?? ''),
-          gap: positiveGapSeconds(row.diff),
-          lap: asNumber(row.laps),
-          flag: (asString(row.flag) ?? '').toUpperCase()
-        }))
-        .filter((point): point is { index: number; checkedAt: string; checkedAtMs: number; gap: number; lap: number | null; flag: string } => point.checkedAt !== null && Number.isFinite(point.checkedAtMs) && point.gap !== null),
-    [trace]
-  );
-  const height = 220;
-  const margin = { top: 18, right: 24, bottom: 28, left: 38 };
+  const points = useMemo(() => gapTrendPointsFromHistory(history), [history]);
+  const valuePoints = points.filter((point): point is SessionGapPoint & { value: number } => point.value !== null);
+  const height = 236;
+  const margin = { top: 18, right: 18, bottom: 31, left: 49 };
   const plotWidth = Math.max(width - margin.left - margin.right, 80);
   const plotHeight = height - margin.top - margin.bottom;
-  const sessionDomain = useMemo(() => {
-    if (points.length === 0) return null;
-    const firstMs = points[0].checkedAtMs;
-    const latestMs = points.at(-1)!.checkedAtMs;
-    return { startMs: firstMs, endMs: Math.max(firstMs + 60 * 60 * 1_000, latestMs) };
-  }, [points]);
-  const maxGap = Math.max(10, Math.ceil(Math.max(...points.map((point) => point.gap), 1) / 10) * 10);
+  const sessionDomain = useMemo(() => timestampWindowDomain(points.map((point) => point.checkedAt)), [points]);
+  const gapDomain = useMemo(() => dataDrivenGapDomain(points.map((point) => point.value)), [points]);
   const x = (checkedAtMs: number) => {
     if (!sessionDomain) return margin.left;
     return margin.left + ((checkedAtMs - sessionDomain.startMs) / (sessionDomain.endMs - sessionDomain.startMs)) * plotWidth;
   };
-  const y = (gap: number) => margin.top + (1 - gap / maxGap) * plotHeight;
-  const path = points.slice(0, -1).map((point, index) => `${index === 0 ? 'M' : 'L'}${x(point.checkedAtMs)} ${y(point.gap)}`).join(' ');
+  const y = (gap: number) =>
+    gapDomain ? margin.top + ((gapDomain[1] - gap) / (gapDomain[1] - gapDomain[0])) * plotHeight : margin.top + plotHeight / 2;
+  const xTicks = sessionDomain ? adaptiveTimeTicks(sessionDomain, plotWidth) : [];
+  const yTicks = gapDomain ? adaptiveNumericTicks(gapDomain, plotHeight) : [];
+  const segments = contiguousValueSegments(points);
   const lapBoundaries = useMemo(() => {
-    const boundaries: Array<{ lap: number; index: number }> = [];
-    points.forEach((point, index) => {
+    const boundaries: Array<{ lap: number; checkedAtMs: number }> = [];
+    points.forEach((point) => {
       if (point.lap === null || boundaries.at(-1)?.lap === point.lap) return;
-      boundaries.push({ lap: point.lap, index });
+      boundaries.push({ lap: point.lap, checkedAtMs: point.checkedAtMs });
     });
     if (boundaries.length <= 7) return boundaries;
     const stride = Math.ceil(boundaries.length / 6);
@@ -839,52 +793,76 @@ const GapTrend = ({ trace }: { trace: ReplayTrace | null }) => {
     const point = points.reduce((closest, candidate) => Math.abs(candidate.checkedAtMs - cursorTime) < Math.abs(closest.checkedAtMs - cursorTime) ? candidate : closest);
     setTip({
       x: x(point.checkedAtMs),
-      y: y(point.gap),
-      title: `+${point.gap.toFixed(1)}s to leader`,
+      y: point.value === null ? margin.top + 12 : y(point.value),
+      title: point.value === null ? 'Gap unavailable' : `+${point.value.toFixed(1)}s to leader`,
       detail: `${new Date(point.checkedAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', second: '2-digit' })}${point.flag && point.flag !== 'GREEN' ? ` · ${point.flag.toLowerCase()}` : ''}`
     });
   };
 
+  const latestArrival = history?.samples.at(-1) ?? null;
+  const latestValue = valuePoints.at(-1) ?? null;
+  const spanMs = sessionDomain ? sessionDomain.endMs - sessionDomain.startMs : 0;
+
   return (
     <Card title="Distance to the leader" action={<SourcePill title="Distance to the leader" entries={sourceEntries.trend} />}>
       <div ref={ref} className="live-gap-chart">
-        {points.length >= 2 && sessionDomain ? (
+        {points.length >= 2 && valuePoints.length >= 2 && sessionDomain && gapDomain ? (
           <>
-          <p className="caption caption--secondary" style={{ margin: '0 0 4px' }}>
-            The full session from our 1-second capture · shaded = caution · gold = now
-          </p>
+            <div className="live-gap-chart__status" aria-live="polite">
+              <strong>{latestValue ? `+${latestValue.value.toFixed(2)}s` : 'gap unavailable'}</strong>
+              <span>{latestValue ? `current source ${new Date(latestValue.checkedAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', second: '2-digit' })}` : 'distance sample pending'}</span>
+              <span>{latestArrival ? `latest 1s poll ${new Date(latestArrival.checkedAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', second: '2-digit' })}` : 'live poll pending'}</span>
+              {history ? <span>{history.stats.arrivals} polls · {history.stats.valueChanges} payload changed · {history.stats.unchangedValues} unchanged</span> : null}
+            </div>
+            <p className="caption caption--secondary live-gap-chart__caption">
+              Latest five minutes · cumulative adjacent <code>liveGap</code> from P1 · observed-range Y-axis with honest padding · shaded = caution
+            </p>
             {width > 0 ? (
-              <svg ref={svgRef} width={width} height={height} role="img" aria-label="Bryce gap to the leader over the live session" onMouseMove={onMove} onMouseLeave={() => setTip(null)}>
+              <svg
+                ref={svgRef}
+                width={width}
+                height={height}
+                role="img"
+                aria-label="Bryce cumulative live-ranked intervals to the leader over the latest five minutes with adaptive time and seconds axes"
+                data-time-domain-start={new Date(sessionDomain.startMs).toISOString()}
+                data-time-domain-end={new Date(sessionDomain.endMs).toISOString()}
+                data-gap-domain-min={gapDomain[0]}
+                data-gap-domain-max={gapDomain[1]}
+                data-missing-point-count={points.filter((point) => point.value === null).length}
+                data-sample-count={points.length}
+                data-live-arrival-count={history?.stats.arrivals ?? 0}
+                data-chart-semantics="cumulative-live-gap-from-live-ranked-leader"
+                onMouseMove={onMove}
+                onMouseLeave={() => setTip(null)}
+              >
                 {cautionBands.map((band, index) => {
                   const left = x(points[band.from].checkedAtMs);
-                  const right = x(points[Math.min(band.to + 1, points.length - 1)].checkedAtMs);
+                  const rightIndex = Math.min(band.to + 1, points.length - 1);
+                  const right = x(points[rightIndex].checkedAtMs);
                   return <rect key={index} x={left} y={margin.top} width={Math.max(right - left, 2)} height={plotHeight} fill="var(--status-warn-dot)" opacity={0.1} />;
                 })}
-                {[maxGap, maxGap / 2, 0].map((tick) => (
+                {yTicks.map((tick) => (
                   <g key={tick}>
                     <line x1={margin.left} x2={width - margin.right} y1={y(tick)} y2={y(tick)} stroke="var(--grid-hairline)" />
                     <text x={margin.left - 7} y={y(tick)} textAnchor="end" dominantBaseline="middle" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={10.5}>
-                      {tick === 0 ? 'leader' : `${tick.toFixed(0)}s`}
+                      {`${tick.toFixed(tick < 10 ? 1 : 0)}s`}
                     </text>
                   </g>
                 ))}
-                <path d={path} fill="none" stroke="var(--ink-primary)" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="live-line-append" />
-                <line key={points.at(-1)!.checkedAt} x1={x(points.at(-2)!.checkedAtMs)} y1={y(points.at(-2)!.gap)} x2={x(points.at(-1)!.checkedAtMs)} y2={y(points.at(-1)!.gap)} stroke="var(--ink-primary)" strokeWidth={2} strokeLinecap="round" className="live-line-tail" />
-                <circle cx={x(points.at(-1)!.checkedAtMs)} cy={y(points.at(-1)!.gap)} r={5} fill="var(--bryce)" stroke="var(--surface-1)" strokeWidth={2} className="live-now-dot" />
-                {lapBoundaries.length >= 2 ? lapBoundaries.map((boundary) => (
-                  <text key={boundary.index} x={x(points[boundary.index].checkedAtMs)} y={height - 7} textAnchor={boundary.index === 0 ? 'start' : boundary.index === points.length - 1 ? 'end' : 'middle'} fill="var(--ink-muted)" fontFamily={chartFont} fontSize={10.5}>L{boundary.lap}</text>
-                )) : (
-                  <>
-                    <text x={margin.left} y={height - 7} fill="var(--ink-muted)" fontFamily={chartFont} fontSize={10.5}>start</text>
-                    <text x={width - margin.right} y={height - 7} textAnchor="end" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={10.5}>now</text>
-                  </>
-                )}
+                {segments.map((segment, index) => <path key={index} d={stepPath(segment, x, y)} fill="none" stroke="var(--ink-primary)" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />)}
+                {latestValue ? <circle cx={x(latestValue.checkedAtMs)} cy={y(latestValue.value)} r={5} fill="var(--bryce)" stroke="var(--surface-1)" strokeWidth={2} /> : null}
+                {xTicks.map((tick, index) => (
+                  <text key={tick} x={x(tick)} y={height - 7} textAnchor={index === 0 ? 'start' : index === xTicks.length - 1 ? 'end' : 'middle'} fill="var(--ink-muted)" fontFamily={chartFont} fontSize={10.5}>{timeTickLabel(tick, spanMs)}</text>
+                ))}
+                {lapBoundaries.map((boundary) => (
+                  <text key={`${boundary.lap}-${boundary.checkedAtMs}`} x={x(boundary.checkedAtMs)} y={margin.top + 11} textAnchor="middle" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={9.5}>L{boundary.lap}</text>
+                ))}
               </svg>
             ) : null}
             {tip ? <ChartTipCard tip={tip} width={width} /> : null}
           </>
         ) : (
-          <Unavailable>The distance trace appears after the archive has two sourced gap samples. No pace line is estimated.</Unavailable>
+          <Unavailable>The distance trace appears after two sourced gap-to-leader values. Missing values remain breaks; no pace line is estimated.</Unavailable>
         )}
       </div>
     </Card>
@@ -959,9 +937,8 @@ const WatchAlong = ({ payload }: { payload: LiveReadiness }) => {
 
 /* ---------- screen ---------- */
 
-export const LiveScreen = ({ payload, fixtureMode }: { payload: LiveReadiness | null; fixtureMode: boolean }) => {
-  const samples = useGapSamples(payload);
-  const trace = useReplayTrace(payload, fixtureMode);
+export const LiveScreen = ({ payload, fixtureMode, history }: { payload: LiveReadiness | null; fixtureMode: boolean; history: LiveSessionHistory | null }) => {
+  const samples = useMemo(() => gapSamplesFromHistory(history), [history]);
   if (!payload) {
     return (
       <div className="page stack">
@@ -973,17 +950,28 @@ export const LiveScreen = ({ payload, fixtureMode }: { payload: LiveReadiness | 
   }
 
   const liveish = payload.state === 'ready' || payload.state === 'degraded';
+  const latestHistorySample = history?.samples.at(-1) ?? null;
+  const liveHeartbeat = heartbeatOf(payload);
+  const payloadSessionKey = [asString(liveHeartbeat.eventId), asString(liveHeartbeat.eventSessionId)].filter(Boolean).join('-');
   return (
-    <div className="page stack live-page">
+    <div
+      className="page stack live-page"
+      data-live-payload-session-key={payloadSessionKey}
+      data-live-session-key={history?.sessionKey ?? ''}
+      data-live-source-checked-at={latestHistorySample?.checkedAt ?? ''}
+      data-live-arrival-checked-at={latestHistorySample?.arrivalCheckedAt ?? ''}
+      data-live-history-count={history?.samples.length ?? 0}
+      data-live-history-first-checked-at={history?.samples[0]?.checkedAt ?? ''}
+    >
       <TrustRail payload={payload} fixtureMode={fixtureMode} />
       {liveish ? (
         <>
           <LiveHero payload={payload} samples={samples} />
-          <BattleModule payload={payload} samples={samples} />
+          <BattleModule payload={payload} samples={samples} history={history} />
           <div className="grid live-layout">
             <div className="stack live-layout__main">
               <PointsJumbotron payload={payload} />
-              <GapTrend trace={trace} />
+              <GapTrend history={history} />
             </div>
             <FieldTower payload={payload} />
           </div>
@@ -993,7 +981,7 @@ export const LiveScreen = ({ payload, fixtureMode }: { payload: LiveReadiness | 
           <WaitingState payload={payload} />
           <div className="grid live-layout">
             <PointsJumbotron payload={payload} />
-            <GapTrend trace={trace} />
+            <GapTrend history={history} />
           </div>
         </>
       )}

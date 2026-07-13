@@ -1,0 +1,220 @@
+{
+  "schemaVersion": "live-f4-event-change-proof.v1",
+  "prior": {
+    "firstCheckedAt": "2026-07-04T17:20:10.217Z",
+    "historyCount": 1,
+    "historySessionKey": "5544-6761",
+    "payloadSessionKey": "5544-6761"
+  },
+  "observedFrames": [
+    {
+      "capturedAt": "2026-07-13T19:50:52.757Z",
+      "firstCheckedAt": "2026-07-04T17:20:10.217Z",
+      "historyCount": 1,
+      "historySessionKey": "5544-6761",
+      "motionClasses": 0,
+      "payloadSessionKey": "5544-6761",
+      "sharedSessionKey": null,
+      "sourceCheckedAt": "2026-07-04T17:20:10.217Z"
+    },
+    {
+      "capturedAt": "2026-07-13T19:50:52.794Z",
+      "firstCheckedAt": "2026-07-04T17:20:10.217Z",
+      "historyCount": 1,
+      "historySessionKey": "5544-6761",
+      "motionClasses": 0,
+      "payloadSessionKey": "5544-6761",
+      "sharedSessionKey": null,
+      "sourceCheckedAt": "2026-07-04T17:20:10.217Z"
+    },
+    {
+      "capturedAt": "2026-07-13T19:50:52.831Z",
+      "firstCheckedAt": "2026-07-04T17:20:10.217Z",
+      "historyCount": 1,
+      "historySessionKey": "5544-6761",
+      "motionClasses": 0,
+      "payloadSessionKey": "5544-6761",
+      "sharedSessionKey": null,
+      "sourceCheckedAt": "2026-07-04T17:20:10.217Z"
+    },
+    {
+      "capturedAt": "2026-07-13T19:50:52.867Z",
+      "firstCheckedAt": "2026-07-04T17:20:10.217Z",
+      "historyCount": 1,
+      "historySessionKey": "5544-6761",
+      "motionClasses": 0,
+      "payloadSessionKey": "5544-6761",
+      "sharedSessionKey": null,
+      "sourceCheckedAt": "2026-07-04T17:20:10.217Z"
+    },
+    {
+      "capturedAt": "2026-07-13T19:50:52.904Z",
+      "firstCheckedAt": "2026-07-04T17:20:10.217Z",
+      "historyCount": 1,
+      "historySessionKey": "5544-6761",
+      "motionClasses": 0,
+      "payloadSessionKey": "5544-6761",
+      "sharedSessionKey": null,
+      "sourceCheckedAt": "2026-07-04T17:20:10.217Z"
+    },
+    {
+      "capturedAt": "2026-07-13T19:50:52.941Z",
+      "firstCheckedAt": "2026-07-04T17:20:10.217Z",
+      "historyCount": 1,
+      "historySessionKey": "5544-6761",
+      "motionClasses": 0,
+      "payloadSessionKey": "5544-6761",
+      "sharedSessionKey": null,
+      "sourceCheckedAt": "2026-07-04T17:20:10.217Z"
+    },
+    {
+      "capturedAt": "2026-07-13T19:50:52.977Z",
+      "firstCheckedAt": "2026-07-04T17:20:10.217Z",
+      "historyCount": 1,
+      "historySessionKey": "5544-6761",
+      "motionClasses": 0,
+      "payloadSessionKey": "5544-6761",
+      "sharedSessionKey": null,
+      "sourceCheckedAt": "2026-07-04T17:20:10.217Z"
+    },
+    {
+      "capturedAt": "2026-07-13T19:50:53.013Z",
+      "firstCheckedAt": "2026-07-04T17:20:10.217Z",
+      "historyCount": 1,
+      "historySessionKey": "5544-6761",
+      "motionClasses": 0,
+      "payloadSessionKey": "5544-6761",
+      "sharedSessionKey": null,
+      "sourceCheckedAt": "2026-07-04T17:20:10.217Z"
+    },
+    {
+      "capturedAt": "2026-07-13T19:50:53.049Z",
+      "firstCheckedAt": "2026-07-04T17:20:10.217Z",
+      "historyCount": 1,
+      "historySessionKey": "5544-6761",
+      "motionClasses": 0,
+      "payloadSessionKey": "5544-6761",
+      "sharedSessionKey": null,
+      "sourceCheckedAt": "2026-07-04T17:20:10.217Z"
+    },
+    {
+      "capturedAt": "2026-07-13T19:50:53.084Z",
+      "firstCheckedAt": "2026-07-04T17:20:10.217Z",
+      "historyCount": 1,
+      "historySessionKey": "5544-6761",
+      "motionClasses": 0,
+      "payloadSessionKey": "5544-6761",
+      "sharedSessionKey": null,
+      "sourceCheckedAt": "2026-07-04T17:20:10.217Z"
+    },
+    {
+      "capturedAt": "2026-07-13T19:50:53.119Z",
+      "firstCheckedAt": "2026-07-04T17:20:10.217Z",
+      "historyCount": 1,
+      "historySessionKey": "5544-6761",
+      "motionClasses": 0,
+      "payloadSessionKey": "5544-6761",
+      "sharedSessionKey": null,
+      "sourceCheckedAt": "2026-07-04T17:20:10.217Z"
+    },
+    {
+      "capturedAt": "2026-07-13T19:50:53.155Z",
+      "firstCheckedAt": "2026-07-04T17:20:10.217Z",
+      "historyCount": 1,
+      "historySessionKey": "5544-6761",
+      "motionClasses": 0,
+      "payloadSessionKey": "5544-6761",
+      "sharedSessionKey": null,
+      "sourceCheckedAt": "2026-07-04T17:20:10.217Z"
+    },
+    {
+      "capturedAt": "2026-07-13T19:50:53.191Z",
+      "firstCheckedAt": "2026-07-04T17:20:10.217Z",
+      "historyCount": 1,
+      "historySessionKey": "5544-6761",
+      "motionClasses": 0,
+      "payloadSessionKey": "5544-6761",
+      "sharedSessionKey": null,
+      "sourceCheckedAt": "2026-07-04T17:20:10.217Z"
+    },
+    {
+      "capturedAt": "2026-07-13T19:50:53.226Z",
+      "firstCheckedAt": "2026-07-04T17:20:10.217Z",
+      "historyCount": 1,
+      "historySessionKey": "5544-6761",
+      "motionClasses": 0,
+      "payloadSessionKey": "5544-6761",
+      "sharedSessionKey": null,
+      "sourceCheckedAt": "2026-07-04T17:20:10.217Z"
+    },
+    {
+      "capturedAt": "2026-07-13T19:50:53.262Z",
+      "firstCheckedAt": "2026-07-04T17:20:10.217Z",
+      "historyCount": 1,
+      "historySessionKey": "5544-6761",
+      "motionClasses": 0,
+      "payloadSessionKey": "5544-6761",
+      "sharedSessionKey": null,
+      "sourceCheckedAt": "2026-07-04T17:20:10.217Z"
+    },
+    {
+      "capturedAt": "2026-07-13T19:50:53.297Z",
+      "firstCheckedAt": "2026-07-04T17:20:10.217Z",
+      "historyCount": 1,
+      "historySessionKey": "5544-6761",
+      "motionClasses": 0,
+      "payloadSessionKey": "5544-6761",
+      "sharedSessionKey": null,
+      "sourceCheckedAt": "2026-07-04T17:20:10.217Z"
+    },
+    {
+      "capturedAt": "2026-07-13T19:50:53.332Z",
+      "firstCheckedAt": "2026-07-04T17:20:10.217Z",
+      "historyCount": 1,
+      "historySessionKey": "5544-6761",
+      "motionClasses": 0,
+      "payloadSessionKey": "5544-6761",
+      "sharedSessionKey": null,
+      "sourceCheckedAt": "2026-07-04T17:20:10.217Z"
+    },
+    {
+      "capturedAt": "2026-07-13T19:50:53.369Z",
+      "firstCheckedAt": "2026-07-04T17:20:10.217Z",
+      "historyCount": 1,
+      "historySessionKey": "5544-6761",
+      "motionClasses": 0,
+      "payloadSessionKey": "5544-6761",
+      "sharedSessionKey": null,
+      "sourceCheckedAt": "2026-07-04T17:20:10.217Z"
+    },
+    {
+      "capturedAt": "2026-07-13T19:50:53.409Z",
+      "firstCheckedAt": "2026-07-05T14:38:40.797Z",
+      "historyCount": 1,
+      "historySessionKey": "5543-6760",
+      "motionClasses": 0,
+      "payloadSessionKey": "5543-6760",
+      "sharedSessionKey": null,
+      "sourceCheckedAt": "2026-07-05T14:38:40.797Z"
+    }
+  ],
+  "firstNewSessionFrame": {
+    "capturedAt": "2026-07-13T19:50:53.409Z",
+    "firstCheckedAt": "2026-07-05T14:38:40.797Z",
+    "historyCount": 1,
+    "historySessionKey": "5543-6760",
+    "motionClasses": 0,
+    "payloadSessionKey": "5543-6760",
+    "sharedSessionKey": null,
+    "sourceCheckedAt": "2026-07-05T14:38:40.797Z"
+  },
+  "assertions": {
+    "priorSessionReady": true,
+    "switchedSession": true,
+    "historyNeverFromPrior": true,
+    "cleanNewSessionHistory": true,
+    "newHistoryTimestampIsRace2": true,
+    "noFirstFrameMotion": true,
+    "noMixedChartSession": true
+  }
+}

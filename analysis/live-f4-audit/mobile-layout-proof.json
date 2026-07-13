@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "live-f4-mobile-layout-proof.v1",
+  "battleLabelOverlaps": [],
+  "carCount": 11,
+  "fullDomain": [
+    8.2,
+    13.2
+  ],
+  "fullSemantics": "cumulative-live-gap-from-live-ranked-leader",
+  "fullTicks": [
+    "10s",
+    "12s",
+    "20:10",
+    "21:50",
+    "23:30",
+    "25:10",
+    "L8",
+    "L9"
+  ],
+  "overflowX": 0,
+  "scrollY": 720,
+  "sharedDomain": [
+    7.7,
+    13.3
+  ],
+  "sharedTicks": [
+    "8.0s",
+    "10s",
+    "12s",
+    "20:10",
+    "21:50",
+    "23:30",
+    "25:10"
+  ],
+  "viewport": {
+    "height": 1055,
+    "width": 469
+  }
+}

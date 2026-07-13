@@ -14,6 +14,7 @@ export {
   positiveGapSeconds,
   rankChanges,
   resolveStableLabelLanes,
+  sortRowsForLiveDisplay,
   stableDriverId,
   stableLabelLane,
   timestampWindowDomain

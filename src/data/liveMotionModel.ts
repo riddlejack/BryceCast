@@ -48,6 +48,17 @@ export const stableDriverId = (row: LiveMotionRow): string =>
 export const livePosition = (row: LiveMotionRow): number | null =>
   numberOrNull(row.liveRank) ?? numberOrNull(row.rank);
 
+/** Battle and field views share this exact order. `liveRank` is the primary
+ * display rank; published `rank` remains on every row for audit comparison. */
+export const sortRowsForLiveDisplay = (rows: LiveMotionRow[]): LiveMotionRow[] =>
+  rows
+    .filter((row) => livePosition(row) !== null && stableDriverId(row))
+    .slice()
+    .sort(
+      (left, right) =>
+        livePosition(left)! - livePosition(right)! || stableDriverId(left).localeCompare(stableDriverId(right))
+    );
+
 export const driverSurname = (row: LiveMotionRow): string => {
   const lastName = String(row.lastName ?? '').trim();
   if (lastName) return lastName;
@@ -85,10 +96,7 @@ export const buildCumulativeLiveBattleFrame = (
 ): LiveBattleFrame | null => {
   if (!bryce) return null;
   const bryceId = stableDriverId(bryce);
-  const rows = inputRows
-    .filter((row) => livePosition(row) !== null && stableDriverId(row))
-    .slice()
-    .sort((left, right) => livePosition(left)! - livePosition(right)!);
+  const rows = sortRowsForLiveDisplay(inputRows);
   const bryceIndex = rows.findIndex((row) => row.bryce === true || stableDriverId(row) === bryceId);
   if (bryceIndex < 0) return null;
 

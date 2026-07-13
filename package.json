@@ -12,6 +12,7 @@
     "live:replay": "node scripts/live-replay.mjs",
     "test:live-replay": "node scripts/test-live-replay.mjs",
     "test:live-motion": "node scripts/test-live-motion.mjs",
+    "audit:live-f4:consistency": "node scripts/audit-live-f4-consistency.mjs",
     "live:runner": "node scripts/live-runner.mjs",
     "live:runner:once": "node scripts/live-runner.mjs --once",
     "live:runner:dry": "node scripts/live-runner.mjs --dry-run --once",
