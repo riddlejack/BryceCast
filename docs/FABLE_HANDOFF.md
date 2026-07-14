@@ -1,6 +1,60 @@
 # Fable Handoff For BryceCast
 
-Updated: 2026-07-02.
+Updated: 2026-07-13 21:22 CDT.
+
+## July 13 Night Closeout — Read This First
+
+The current authoritative review build is no longer the older branch described
+later in this historical handoff.
+
+- Worktree: `/Users/example/.codex/worktrees/ac78/Bryce POV access`
+- Branch: `codex/integrate-brief-c-live-f6`
+- Current implementation commit: `581925f62d86e39470fd63acbe6aab18bd41b9fc`
+- Integration parent: `95d280e4dd8b2e2b9ee132bd5c858be636e9befb`
+- State: saved locally and clean; not merged, pushed, or deployed.
+
+This is the cohesive A2 + B + C + F6 site. Brief D is intentionally excluded.
+The final July 13 live-view follow-up gives the nearby running-order lines
+stable neutral solid/dashed/dotted/dash-dot identities, matching right-edge
+swatches, and touch/focus affordances while keeping Bryce as the only gold
+trace. Validation passed for running-order (44 assertions), live motion (56),
+replay (16), TypeScript, production build, and `git diff --check`.
+
+The one inherited exception is
+`npm run analytics:ui-data-package:validate`: the F6 baseline already contains
+a stale generated source-reference hash for unchanged `scripts/api-server.mjs`.
+
+All local BryceCast production/review/replay/monitoring processes were stopped
+for the night. LaunchAgent plist files remain installed but were unloaded only
+for the current login session, so they may load on a future login. The old
+production API on port 8787 was consuming approximately one full CPU core at
+closeout; investigate that before restoring it for an extended run.
+
+Tomorrow's isolated review commands are:
+
+```bash
+cd '/Users/example/.codex/worktrees/ac78/Bryce POV access'
+BRYCECAST_SQLITE_PATH='/Users/example/Documents/Bryce POV access/data/live/brycecast.sqlite' \
+BRYCECAST_RUNNER_STATUS_PATH='/tmp/brycecast-integrated-live-runner-status.json' \
+npm run live:replay -- --port=8795 --host=127.0.0.1
+```
+
+In a second terminal:
+
+```bash
+cd '/Users/example/.codex/worktrees/ac78/Bryce POV access'
+BRYCECAST_API_PROXY=http://127.0.0.1:8795 \
+npm run dev -- --host 127.0.0.1 --port 5181
+```
+
+Then optionally pin the deterministic window with:
+
+```bash
+curl -fsS 'http://127.0.0.1:8795/api/replay/control?session=5544-6761&t0=2026-07-04T17%3A20%3A20.000Z&speed=1'
+```
+
+Open `http://127.0.0.1:5181/live`. Review/promote this branch; preserve the
+unrelated edits in the main checkout and do not integrate Brief D by default.
 
 This is the entry document for dropping Claude Fable 5 into this repo through
 Claude Code and letting it drive the next product/build phase while using Codex

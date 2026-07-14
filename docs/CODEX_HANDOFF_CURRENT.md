@@ -1,6 +1,94 @@
 # BryceCast Current Codex Handoff
 
-Updated: 2026-06-18 06:35 CDT.
+Updated: 2026-07-13 21:22 CDT.
+
+## July 13 Night Closeout — Current Controlling State
+
+This section supersedes older branch/runtime instructions below. The historical
+material remains for provenance.
+
+### Authoritative integrated review branch
+
+- Worktree: `/Users/example/.codex/worktrees/ac78/Bryce POV access`
+- Branch: `codex/integrate-brief-c-live-f6`
+- Current implementation commit: `581925f62d86e39470fd63acbe6aab18bd41b9fc`
+  (`Improve running-order line clarity`)
+- Integration parent: `95d280e4dd8b2e2b9ee132bd5c858be636e9befb`
+  (`Integrate named Career moments with Live F6`)
+- F6 source commit: `a7fcf7e` (`feat(live): chart the running order in rank space`)
+- This branch is saved locally and clean. It has not been merged, pushed, or
+  deployed.
+
+The branch contains the approved A2, B, C, and F6 work in one site. Brief D is
+intentionally excluded and must not be integrated without a separate decision.
+
+- A2: all 145 canonical personal race rows; 3,019 personal race laps and
+  6,924.4 personal race miles; confidence-aware mileage/travel semantics.
+- B: the 34-venue / 145-race career atlas experience. The rejected venue-finder
+  interaction is not present.
+- C: the five named Career moments and their source-backed presentation.
+- F6: the Bryce-centered live corridor plus a running-order history chart in
+  rank space, the separate distance-to-leader view, and the full live field.
+- July 13 follow-up: nearby running-order traces now use stable neutral
+  solid/dashed/dotted/dash-dot identities, matching right-edge swatches, and
+  touch/focus affordances. Bryce remains the only gold trace.
+
+### Validation and known deviation
+
+The integrated branch passed the running-order suite (44 assertions), live
+motion suite (56), replay suite (16), TypeScript, production build, and
+`git diff --check`. The only build output is the existing Vite chunk-size
+advisory.
+
+`npm run analytics:ui-data-package:validate` still has the inherited F6-baseline
+failure: the generated package contains a stale source-reference hash for the
+unchanged `scripts/api-server.mjs`. Do not describe that validator as passing
+until the analytics package is regenerated or the reference is otherwise
+reconciled.
+
+### Runtime closeout and restart
+
+The July 13 review runtime was deliberately made cold before shutdown: the
+5179/5180/5181 Vite previews, 8793/8794/8795/8798 replay APIs, tmux preview,
+production live runner/API, `caffeinate`, and process-pressure guard were
+stopped. The three BryceCast LaunchAgents were unloaded for the current login
+session only; their plist files and configuration were not deleted or disabled.
+They may load again on a future login.
+
+Important: immediately before closeout, the older production API on port 8787
+was using approximately one full CPU core. Investigate that busy process before
+restoring the always-on production LaunchAgent for an extended run.
+
+To review the integrated branch tomorrow without restoring production, run:
+
+```bash
+cd '/Users/example/.codex/worktrees/ac78/Bryce POV access'
+BRYCECAST_SQLITE_PATH='/Users/example/Documents/Bryce POV access/data/live/brycecast.sqlite' \
+BRYCECAST_RUNNER_STATUS_PATH='/tmp/brycecast-integrated-live-runner-status.json' \
+npm run live:replay -- --port=8795 --host=127.0.0.1
+```
+
+In a second terminal:
+
+```bash
+cd '/Users/example/.codex/worktrees/ac78/Bryce POV access'
+BRYCECAST_API_PROXY=http://127.0.0.1:8795 \
+npm run dev -- --host 127.0.0.1 --port 5181
+```
+
+Optional deterministic replay window:
+
+```bash
+curl -fsS 'http://127.0.0.1:8795/api/replay/control?session=5544-6761&t0=2026-07-04T17%3A20%3A20.000Z&speed=1'
+```
+
+Open `http://127.0.0.1:5181/live`.
+
+### Promotion gate
+
+Review and promote from this branch/worktree. The main checkout is not the
+authoritative integrated build and contains unrelated user edits. Preserve
+those edits. Do not merge Brief D as part of this promotion.
 
 ## July 2 Fable / Post-Road America Note
 
