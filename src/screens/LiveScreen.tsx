@@ -336,7 +336,7 @@ const BattleModule = ({ payload, samples, history }: { payload: LiveReadiness; s
       <div className="live-battle__divider" />
       <p className="live-battle__shared-title">The running order</p>
       <LiveRunningOrder history={history} clockCheckedAt={liveSourceCheckedAtOf(payload)} />
-      <p className="caption caption--secondary live-battle__caption">Five minutes of official running position · gold is Bryce · shaded = caution · ○ an overtake involving Bryce</p>
+      <p className="caption caption--secondary live-battle__caption">Five minutes of official running position · gold is Bryce · neutral line patterns stay with each driver · shaded = caution · ○ an overtake involving Bryce</p>
     </Card>
   );
 };

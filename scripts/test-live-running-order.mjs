@@ -11,6 +11,7 @@ import {
   runningOrderDomainFor,
   runningOrderFrameForSample,
   runningOrderGapWords,
+  runningOrderIdentityStyle,
   runningOrderPointSegments,
   runningOrderProximityStyle,
   runningOrderTimeDomain
@@ -26,6 +27,7 @@ const row = (driverId, no, liveRank, liveGap, lastName, extras = {}) => ({
   liveGap,
   lastName,
   firstName: driverId === '2143' ? 'Bryce' : 'Test',
+  startPosition: liveRank,
   status: 'Active',
   bryce: driverId === '2143',
   ...extras
@@ -69,6 +71,15 @@ const frame = runningOrderFrameForSample(history.samples[0]);
 assert.deepEqual(frame.map((entry) => [entry.id, entry.rank]), [
   ['leader', 1], ['rival', 2], ['2143', 3], ['tail', 4], ['deep', 5]
 ], 'the y coordinate is the official integer running rank');
+assert.equal(frame.find((entry) => entry.id === 'rival').startPosition, 2, 'official starting position is retained as a stable visual-identity seed');
+
+assert.deepEqual(runningOrderIdentityStyle('rival', 1), { name: 'solid', dashArray: null });
+assert.deepEqual(runningOrderIdentityStyle('rival', 2), { name: 'long-dash', dashArray: '10 4' });
+assert.deepEqual(runningOrderIdentityStyle('rival', 4), { name: 'dotted', dashArray: '1 4' });
+assert.deepEqual(runningOrderIdentityStyle('rival', null), runningOrderIdentityStyle('rival', null), 'DriverID fallback is deterministic');
+assert.notDeepEqual(runningOrderIdentityStyle('rival', 2), runningOrderIdentityStyle('rival', 3), 'neighboring grid positions receive different neutral rhythms');
+assert.notDeepEqual(runningOrderIdentityStyle('taylor', 10), runningOrderIdentityStyle('roe', 22), 'rotating grid blocks avoid a repeated rhythm for common twelve-place reshuffles');
+assert.equal(fullFieldRunningOrderSeries(history).find((entry) => entry.id === 'rival').startPosition, 2, 'the first sourced grid position keeps the visual identity stable through later rank changes');
 
 const lappedHistory = historyFrom([0, 1, 2, 3], () => field(3, 2, {
   rival: { laps: 9, diff: '1 lap', status: 'Running' },
@@ -143,7 +154,7 @@ assert.deepEqual(cautions, [{ startMs: baseMs, endMs: baseMs + 15_000 }], 'conti
 
 console.log(JSON.stringify({
   ok: true,
-  assertions: 37,
+  assertions: 44,
   model: 'official-rank-space-running-order',
   regressions: ['lapped-upstream-appends', 't+10-now-edge', 't+60-now-edge']
 }, null, 2));

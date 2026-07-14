@@ -5,6 +5,20 @@ export const RUNNING_ORDER_WINDOW_MS = 300_000;
 export const RUNNING_ORDER_LANE_COUNT = 7;
 export const RUNNING_ORDER_HOVER_RADIUS_PX = 14;
 
+export const RUNNING_ORDER_LINE_PATTERNS = [
+  { name: 'solid', dashArray: null },
+  { name: 'long-dash', dashArray: '10 4' },
+  { name: 'short-dash', dashArray: '4 3' },
+  { name: 'dotted', dashArray: '1 4' },
+  { name: 'dash-dot', dashArray: '8 3 1 3' },
+  { name: 'dash-two-dot', dashArray: '8 3 1 3 1 3' }
+] as const;
+
+export interface RunningOrderIdentityStyle {
+  name: (typeof RUNNING_ORDER_LINE_PATTERNS)[number]['name'];
+  dashArray: string | null;
+}
+
 export interface RunningOrderDomain {
   lower: number;
   upper: number;
@@ -26,6 +40,7 @@ export interface RunningOrderFrameValue {
   name: string;
   bryce: boolean;
   rank: number;
+  startPosition: number | null;
   status: string | null;
 }
 
@@ -44,6 +59,7 @@ export interface RunningOrderSeries {
   carNo: string;
   name: string;
   bryce: boolean;
+  startPosition: number | null;
   points: RunningOrderPoint[];
 }
 
@@ -99,6 +115,34 @@ const officialRank = (row: Record<string, unknown>): number | null => {
   return rank !== null && Number.isInteger(rank) && rank >= 1 ? rank : null;
 };
 
+const officialStartPosition = (row: Record<string, unknown>): number | null => {
+  const startPosition = Number(row.startPosition);
+  return Number.isInteger(startPosition) && startPosition >= 1 ? startPosition : null;
+};
+
+const stableStringSeed = (value: string): number => {
+  let hash = 2_166_136_261;
+  for (let index = 0; index < value.length; index += 1) {
+    hash ^= value.charCodeAt(index);
+    hash = Math.imul(hash, 16_777_619);
+  }
+  return hash >>> 0;
+};
+
+/** The visual identity is session-stable and independent of live rank. The
+ * official starting position spreads neighboring cars across distinct neutral
+ * rhythms; DriverID provides a deterministic fallback when it is unavailable. */
+export const runningOrderIdentityStyle = (
+  driverId: string,
+  startPosition: number | null = null
+): RunningOrderIdentityStyle => {
+  const gridIndex = Number(startPosition) - 1;
+  const seed = Number.isInteger(startPosition) && Number(startPosition) >= 1
+    ? gridIndex + Math.floor(gridIndex / RUNNING_ORDER_LINE_PATTERNS.length) * 2
+    : stableStringSeed(driverId);
+  return RUNNING_ORDER_LINE_PATTERNS[seed % RUNNING_ORDER_LINE_PATTERNS.length];
+};
+
 /** Rank stays valid for lapped, pitted, or retired cars as long as Race
  * Control still publishes an official running position. Status never gates
  * this coordinate. */
@@ -113,6 +157,7 @@ export const runningOrderFrameForSample = (sample: LiveHistorySample): RunningOr
       name: driverSurname(row),
       bryce: id === sample.bryceId,
       rank,
+      startPosition: officialStartPosition(row),
       status: statusText(row)
     }];
   }).sort((left, right) => left.rank - right.rank || left.id.localeCompare(right.id));
@@ -142,12 +187,16 @@ export const fullFieldRunningOrderSeries = (history: LiveSessionHistory | null):
   if (!history) return [];
   const frames = history.samples.map(runningOrderFrameForSample);
   const identities = new Map<string, Omit<RunningOrderSeries, 'points'>>();
-  frames.forEach((frame) => frame.forEach((entry) => identities.set(entry.id, {
-    id: entry.id,
-    carNo: entry.carNo,
-    name: entry.name,
-    bryce: entry.bryce
-  })));
+  frames.forEach((frame) => frame.forEach((entry) => {
+    const previous = identities.get(entry.id);
+    identities.set(entry.id, {
+      id: entry.id,
+      carNo: entry.carNo,
+      name: entry.name,
+      bryce: entry.bryce,
+      startPosition: previous?.startPosition ?? entry.startPosition ?? null
+    });
+  }));
   const threshold = runningOrderGapThresholdMs(history);
 
   return [...identities.values()].map((identity) => ({

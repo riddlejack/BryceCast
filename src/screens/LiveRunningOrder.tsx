@@ -13,6 +13,7 @@ import {
   runningOrderDomainFor,
   runningOrderFrameForSample,
   runningOrderGapWords,
+  runningOrderIdentityStyle,
   runningOrderPointSegments,
   runningOrderProximityStyle,
   runningOrderTimeDomain,
@@ -218,6 +219,7 @@ export const LiveRunningOrder = ({
   );
 
   const currentById = new Map(currentFrame.map((entry) => [entry.id, entry]));
+  const identityById = new Map(series.map((entry) => [entry.id, entry]));
   const nearestAhead = currentBryce
     ? currentFrame.filter((entry) => entry.rank < currentBryce.rank).sort((left, right) => right.rank - left.rank || left.id.localeCompare(right.id))[0] ?? null
     : null;
@@ -354,19 +356,23 @@ export const LiveRunningOrder = ({
                   const delta = current && currentBryce ? current.rank - currentBryce.rank : Number.POSITIVE_INFINITY;
                   const atEdge = Boolean(current && (current.rank === targetDomain.lower || current.rank === targetDomain.upper));
                   const style = runningOrderProximityStyle(delta, atEdge);
-                  const opacity = style.opacity * (focusedId && focusedId !== entry.id ? 0.22 : 1);
+                  const identityStyle = runningOrderIdentityStyle(entry.id, entry.startPosition);
+                  const isFocused = focusedId === entry.id;
+                  const opacity = isFocused ? 1 : style.opacity * (focusedId ? 0.22 : 1);
                   return segments.map((segment, index) => (
                     <path
                       key={`${entry.id}-${index}`}
                       data-running-order-series
                       data-driver-id={entry.id}
+                      data-line-pattern={identityStyle.name}
                       data-current-rank={current?.rank ?? ''}
                       data-live-endpoint-x={latestFrameIds.has(entry.id) && segment.at(-1)?.checkedAtMs === latestSample.checkedAtMs ? liveEndpointX?.toFixed(2) : undefined}
                       d={stepPath(segment, x, y)}
                       fill="none"
                       stroke="var(--ink-primary)"
-                      strokeWidth={style.strokeWidth}
+                      strokeWidth={isFocused ? Math.max(style.strokeWidth, 2) : style.strokeWidth}
                       strokeOpacity={opacity}
+                      strokeDasharray={identityStyle.dashArray ?? undefined}
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       style={{ transition: 'stroke-opacity 150ms cubic-bezier(0.23, 1, 0.32, 1)' }}
@@ -427,6 +433,8 @@ export const LiveRunningOrder = ({
                 const rowY = y(entry.rank) + entry.yOffset;
                 const role = entry.id === nearestAhead?.id ? 'ahead' : entry.id === nearestBehind?.id ? 'behind' : null;
                 const color = role === 'ahead' ? '#5581c2' : role === 'behind' ? '#2f9377' : entry.bryce ? 'var(--bryce)' : 'var(--ink-primary)';
+                const identity = identityById.get(entry.id);
+                const identityStyle = runningOrderIdentityStyle(entry.id, identity?.startPosition ?? entry.startPosition);
                 const gap = runningOrderGapWords(latestSample, entry.id, false);
                 const currentTip = tipFor(entry.id, history.samples.length - 1, plotRight + 11, rowY - 8);
                 const ariaGap = entry.bryce ? 'Bryce' : gap === '—' ? 'gap unavailable' : gap;
@@ -438,6 +446,7 @@ export const LiveRunningOrder = ({
                   data-y-offset={entry.yOffset}
                   data-gap-text={gap}
                   data-role={role ?? ''}
+                  data-line-pattern={entry.bryce ? 'bryce' : identityStyle.name}
                   tabIndex={0}
                   aria-label={`${entry.bryce ? 'Bryce Aron, car 9' : entry.name}, P${entry.rank}, ${ariaGap}${role ? `, ${role} now` : ''}`}
                   onFocus={() => { setFocusedId(entry.id); if (currentTip) setTip(currentTip); }}
@@ -452,12 +461,28 @@ export const LiveRunningOrder = ({
                       <text x={15} y={0.5} textAnchor="middle" dominantBaseline="middle" fill="#1d1d1f" fontFamily={chartFont} fontSize={10.5} fontWeight={750}>№9</text>
                     </g>
                   ) : (
-                    <g transform={`translate(${plotRight + 18} ${rowY})`}>
+                    <g transform={`translate(${plotRight + 14} ${rowY})`}>
+                      <line
+                        data-ladder-pattern-swatch
+                        x1={0}
+                        x2={16}
+                        y1={0}
+                        y2={0}
+                        stroke="var(--ink-primary)"
+                        strokeWidth={1.5}
+                        strokeOpacity={0.8}
+                        strokeDasharray={identityStyle.dashArray ?? undefined}
+                        strokeLinecap="round"
+                      />
+                    </g>
+                  )}
+                  {!entry.bryce ? (
+                    <g transform={`translate(${plotRight + 35} ${rowY})`}>
                       <text y={role ? -9 : -4} fill="var(--ink-secondary)" fontFamily={chartFont} fontSize={9.5} fontWeight={role ? 650 : 540}>{entry.name}</text>
                       <text y={role ? 1.5 : 7} fill="var(--ink-muted)" fontFamily={chartFont} fontSize={8.5}>{gap}</text>
                       {role ? <text y={12} fill={color} fontFamily={chartFont} fontSize={8.2} fontWeight={650}>{role} now</text> : null}
                     </g>
-                  )}
+                  ) : null}
                 </g>;
               })}
               </g>
