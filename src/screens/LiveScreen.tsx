@@ -16,7 +16,7 @@ import { ChartTipCard, chartFont, useMeasuredWidth, type ChartTip } from '../app
 import { asNumber, asString, formatGap, formatNumber } from '../app/format';
 import { Link } from '../app/router';
 import { TrackArt } from '../app/trackArt';
-import { LiveBattleCamera } from './LiveBattleCamera';
+import { LiveRunningOrder } from './LiveRunningOrder';
 import { useNextSession } from '../app/useNextSession';
 import { trackOutlineFor } from '../assets/tracks';
 import type { LiveReadiness } from '../app/useReadiness';
@@ -47,6 +47,7 @@ import {
   sharedLeaderGapSeries,
   shouldAnimateSampleTransition,
   sourcedGapToLeaderSeconds,
+  liveSourceCheckedAtOf,
   type LiveHistoryPoint,
   type LiveSessionHistory
 } from '../data/liveHistoryModel';
@@ -94,7 +95,7 @@ const sourceEntries = {
     {
       label: 'Race Control timing feed · car 9 identity guard',
       path: '/api/readiness + /api/timing',
-      note: 'Position, lap, flag, gaps, and neighboring drivers come from the active INDY NXT timing payload. Car 9 must match DriverID 2143 or Bryce Aron.'
+      note: 'Position, lap, flag, gaps, and neighboring drivers come from the active INDY NXT timing payload. Car 9 must match source driver identity 2143 or Bryce Aron.'
     }
   ],
   points: [
@@ -114,7 +115,7 @@ const sourceEntries = {
   ],
   trend: [
     {
-      label: 'Race Control timing feed · cumulative live-ranked intervals',
+      label: 'Race Control timing feed · leader-gap intervals',
       path: '/api/readiness → liveTiming.rows[].liveGap',
       note: 'The chart sums adjacent intervals from P1 to Bryce on every sourced payload. Smaller gaps plot higher. It shares the session-keyed store and ordering used by the battle and field; missing intervals break the line.'
     }
@@ -123,17 +124,17 @@ const sourceEntries = {
     {
       label: 'Race Control timing feed · Bryce-centered corridor',
       path: '/api/readiness → liveTiming.rows[].liveGap',
-      note: 'The corridor cumulatively walks Race Control’s live interval to the preceding ranked car around Bryce. Missing intervals break the chain; no gap is filled with zero and no GPS position is inferred.'
+      note: 'The corridor walks Race Control’s live interval to the preceding ranked car around Bryce. Missing intervals break the chain; no gap is filled with zero and no GPS position is inferred.'
     },
     {
-      label: 'Race Control timing feed · full-field broadcast camera',
-      path: '/api/readiness → liveTiming.rows[].liveGap',
-      note: 'The lower chart cumulatively sums contiguous adjacent live-ranked intervals from the current leader for every classified DriverID. A missing or non-running interval breaks downstream lines. Leader changes begin a new absolute segment; no continuity offset or fabricated interpolation is applied.'
+      label: 'Race Control timing feed · official running order',
+      path: '/api/readiness → liveTiming.rows[].liveRank / rank',
+      note: 'Every lower-chart lane is an official running position. A lapped car keeps its position lane. When Race Control ordering disappears, every line breaks until it returns.'
     },
     {
       label: 'Session-keyed in-memory history',
       path: 'AppV3 → useLiveSessionHistory',
-      note: 'The shared history survives route navigation, deduplicates source timestamps, sorts late arrivals, and isolates sessions. A hard browser reload intentionally starts a new in-memory window.'
+      note: 'The shared history survives route navigation, deduplicates source timestamps, sorts late arrivals, and isolates sessions. The source clock sets both each sample’s horizontal position and the right edge. A hard browser reload starts a new window.'
     }
   ],
   watch: [
@@ -244,6 +245,7 @@ const BattleCorridor = ({ payload, samples, history }: { payload: LiveReadiness;
             ))}
             {cars.map((car) => {
               const side = car.offsetSeconds > 0 ? 'ahead' : 'behind';
+              const sideCopy = side === 'ahead' ? 'ahead of Bryce' : 'behind Bryce';
               const close = Math.abs(car.offsetSeconds) <= 1;
               const labelLane = lanesByDriver.get(car.id) ?? 0;
               const labelY = labelLanes[labelLane];
@@ -274,14 +276,14 @@ const BattleCorridor = ({ payload, samples, history }: { payload: LiveReadiness;
                     r={13}
                     fill="transparent"
                     tabIndex={0}
-                    aria-label={`${car.surname}, ${Math.abs(car.offsetSeconds).toFixed(1)} seconds ${side} Bryce`}
+                    aria-label={`${car.surname}, ${Math.abs(car.offsetSeconds).toFixed(1)} seconds ${sideCopy}`}
                     onMouseEnter={() => setTip({
                       x: cx,
                       y: labelY < axisY ? labelY - 3 : labelY + 3,
                       title: car.surname,
-                      detail: `+${Math.abs(car.offsetSeconds).toFixed(1)}s ${side}${rateDetail(car.id, side) ? ` · ${rateDetail(car.id, side)}` : ''}`
+                      detail: `${Math.abs(car.offsetSeconds).toFixed(1)}s ${sideCopy}${rateDetail(car.id, side) ? ` · ${rateDetail(car.id, side)}` : ''}`
                     })}
-                    onFocus={() => setTip({ x: cx, y: axisY - 19, title: car.surname, detail: `+${Math.abs(car.offsetSeconds).toFixed(1)}s ${side}` })}
+                    onFocus={() => setTip({ x: cx, y: axisY - 19, title: car.surname, detail: `${Math.abs(car.offsetSeconds).toFixed(1)}s ${sideCopy}` })}
                     onMouseLeave={() => setTip(null)}
                     onBlur={() => setTip(null)}
                   />
@@ -328,13 +330,13 @@ const BattleModule = ({ payload, samples, history }: { payload: LiveReadiness; s
       : null;
   return (
     <Card className="live-battle" title="The battle" action={<SourcePill title="The battle" entries={sourceEntries.battle} />}>
-      <p className="live-battle__intro">The approved upper corridor keeps Bryce at zero. The camera below follows his absolute timing gap to the live-ranked leader.</p>
+      <p className="live-battle__intro">The pack around Bryce — every line a car's running position, gold is Bryce.</p>
       <div className={`live-battle__mode${mode ? ' live-battle__mode--active' : ''}`} aria-live="polite">{mode ?? '\u00a0'}</div>
       <BattleCorridor payload={payload} samples={samples} history={history} />
       <div className="live-battle__divider" />
-      <p className="live-battle__shared-title">Broadcast camera · trailing five minutes · 12-second frame</p>
-      <LiveBattleCamera history={history} />
-      <p className="caption caption--secondary live-battle__caption">Contiguous Race Control <code>liveGap</code> intervals are summed from P1 · stable DriverID · step-after at source cadence · missing intervals and leader changes break lines</p>
+      <p className="live-battle__shared-title">The running order</p>
+      <LiveRunningOrder history={history} clockCheckedAt={liveSourceCheckedAtOf(payload)} />
+      <p className="caption caption--secondary live-battle__caption">Five minutes of official running position · gold is Bryce · shaded = caution · ○ an overtake involving Bryce</p>
     </Card>
   );
 };
@@ -712,7 +714,7 @@ const GapTrend = ({ history }: { history: LiveSessionHistory | null }) => {
               {history ? <span>{history.stats.arrivals} polls · {history.stats.valueChanges} payload changed · {history.stats.unchangedValues} unchanged</span> : null}
             </div>
             <p className="caption caption--secondary live-gap-chart__caption">
-              Latest five minutes · cumulative adjacent <code>liveGap</code> from P1 · observed-range Y-axis with honest padding · shaded = caution
+              Latest five minutes · Bryce’s sourced gap to P1 · smaller is higher · shaded = caution
             </p>
             {width > 0 ? (
               <svg
@@ -720,7 +722,7 @@ const GapTrend = ({ history }: { history: LiveSessionHistory | null }) => {
                 width={width}
                 height={height}
                 role="img"
-                aria-label="Bryce cumulative live-ranked intervals to the leader over the latest five minutes, with smaller gaps plotted higher"
+                aria-label="Bryce’s sourced gap to the leader over the latest five minutes, with smaller gaps plotted higher"
                 data-time-domain-start={new Date(sessionDomain.startMs).toISOString()}
                 data-time-domain-end={new Date(sessionDomain.endMs).toISOString()}
                 data-gap-domain-min={gapDomain[0]}
@@ -728,7 +730,7 @@ const GapTrend = ({ history }: { history: LiveSessionHistory | null }) => {
                 data-missing-point-count={points.filter((point) => point.value === null).length}
                 data-sample-count={points.length}
                 data-live-arrival-count={history?.stats.arrivals ?? 0}
-                data-chart-semantics="cumulative-live-gap-from-live-ranked-leader"
+                data-chart-semantics="leader-gap-from-live-ranked-intervals"
                 onMouseMove={onMove}
                 onMouseLeave={() => setTip(null)}
               >

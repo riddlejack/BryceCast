@@ -1,0 +1,410 @@
+{
+  "schemaVersion": "brycecast.liveF6RunningOrderProof.v1",
+  "generatedAt": "2026-07-14T00:07:11.584Z",
+  "source": {
+    "sqlite": "/Users/example/Documents/Bryce POV access/data/live/brycecast.sqlite",
+    "readOnly": true,
+    "sessions": [
+      "5544-6761",
+      "5543-6760"
+    ]
+  },
+  "semantics": {
+    "y": "official integer livePosition rank; P1 at the top; lapped, pitted, or retired status does not erase a published rank",
+    "x": "one source/replay checkedAt clock; grows from first sample to real now until five minutes, then trails five minutes",
+    "path": "step-after at source timestamps; every line breaks together when ordering cadence is missing",
+    "focus": "current Bryce rank plus three whole official lanes above and below",
+    "gaps": "corridor-derived seconds ahead of or behind Bryce; unavailable intervals render as an em dash"
+  },
+  "samplesChecked": 6403,
+  "officialRankChecks": 153672,
+  "lappedUpstreamSamples": 804,
+  "lappedUpstreamAppendProof": [
+    {
+      "sessionKey": "5544-6761",
+      "driverId": "2147",
+      "driverName": "Allaer",
+      "rank": 16,
+      "bryceRank": 18,
+      "startCheckedAt": "2026-07-04T17:21:44.390Z",
+      "endCheckedAt": "2026-07-04T17:21:48.389Z",
+      "firstIndex": 1260,
+      "lastIndex": 1264,
+      "samples": 5
+    },
+    {
+      "sessionKey": "5544-6761",
+      "driverId": "2160",
+      "driverName": "Correa",
+      "rank": 10,
+      "bryceRank": 17,
+      "startCheckedAt": "2026-07-04T17:36:53.250Z",
+      "endCheckedAt": "2026-07-04T17:36:57.036Z",
+      "firstIndex": 2167,
+      "lastIndex": 2171,
+      "samples": 5
+    },
+    {
+      "sessionKey": "5544-6761",
+      "driverId": "2158",
+      "driverName": "Murray",
+      "rank": 15,
+      "bryceRank": 16,
+      "startCheckedAt": "2026-07-04T17:53:18.829Z",
+      "endCheckedAt": "2026-07-04T17:53:22.826Z",
+      "firstIndex": 3151,
+      "lastIndex": 3155,
+      "samples": 5
+    },
+    {
+      "sessionKey": "5543-6760",
+      "driverId": "2162",
+      "driverName": "Beeton",
+      "rank": 2,
+      "bryceRank": 14,
+      "startCheckedAt": "2026-07-05T14:42:22.178Z",
+      "endCheckedAt": "2026-07-05T14:42:33.493Z",
+      "firstIndex": 2976,
+      "lastIndex": 2987,
+      "samples": 12
+    },
+    {
+      "sessionKey": "5543-6760",
+      "driverId": "2162",
+      "driverName": "Beeton",
+      "rank": 2,
+      "bryceRank": 14,
+      "startCheckedAt": "2026-07-05T14:41:11.044Z",
+      "endCheckedAt": "2026-07-05T14:41:21.073Z",
+      "firstIndex": 2905,
+      "lastIndex": 2915,
+      "samples": 11
+    },
+    {
+      "sessionKey": "5543-6760",
+      "driverId": "2162",
+      "driverName": "Beeton",
+      "rank": 2,
+      "bryceRank": 15,
+      "startCheckedAt": "2026-07-05T14:36:29.574Z",
+      "endCheckedAt": "2026-07-05T14:36:38.581Z",
+      "firstIndex": 2624,
+      "lastIndex": 2633,
+      "samples": 10
+    }
+  ],
+  "startupNowEdgeProof": [
+    {
+      "sessionKey": "5544-6761",
+      "state": "t+10s",
+      "requestedElapsedMs": 10000,
+      "observedElapsedMs": 11012,
+      "firstCheckedAt": "2026-07-04T17:07:25.061Z",
+      "nowCheckedAt": "2026-07-04T17:07:36.073Z",
+      "sampleCount": 12,
+      "domain": {
+        "startMs": 1783184845061,
+        "endMs": 1783184856073,
+        "firstSampleMs": 1783184845061,
+        "latestSampleMs": 1783184856073,
+        "growing": true,
+        "waiting": false
+      },
+      "liveEndpointCount": 24,
+      "assertions": {
+        "startsAtFirstSample": true,
+        "endsAtRealNow": true,
+        "noReservedEmptyGulf": true,
+        "stillGrowing": true,
+        "withinOneSourceCadence": true
+      }
+    },
+    {
+      "sessionKey": "5544-6761",
+      "state": "t+60s",
+      "requestedElapsedMs": 60000,
+      "observedElapsedMs": 60049,
+      "firstCheckedAt": "2026-07-04T17:07:25.061Z",
+      "nowCheckedAt": "2026-07-04T17:08:25.110Z",
+      "sampleCount": 61,
+      "domain": {
+        "startMs": 1783184845061,
+        "endMs": 1783184905110,
+        "firstSampleMs": 1783184845061,
+        "latestSampleMs": 1783184905110,
+        "growing": true,
+        "waiting": false
+      },
+      "liveEndpointCount": 24,
+      "assertions": {
+        "startsAtFirstSample": true,
+        "endsAtRealNow": true,
+        "noReservedEmptyGulf": true,
+        "stillGrowing": true,
+        "withinOneSourceCadence": true
+      }
+    },
+    {
+      "sessionKey": "5543-6760",
+      "state": "t+10s",
+      "requestedElapsedMs": 10000,
+      "observedElapsedMs": 10224,
+      "firstCheckedAt": "2026-07-05T14:07:18.377Z",
+      "nowCheckedAt": "2026-07-05T14:07:28.601Z",
+      "sampleCount": 11,
+      "domain": {
+        "startMs": 1783260438377,
+        "endMs": 1783260448601,
+        "firstSampleMs": 1783260438377,
+        "latestSampleMs": 1783260448601,
+        "growing": true,
+        "waiting": false
+      },
+      "liveEndpointCount": 24,
+      "assertions": {
+        "startsAtFirstSample": true,
+        "endsAtRealNow": true,
+        "noReservedEmptyGulf": true,
+        "stillGrowing": true,
+        "withinOneSourceCadence": true
+      }
+    },
+    {
+      "sessionKey": "5543-6760",
+      "state": "t+60s",
+      "requestedElapsedMs": 60000,
+      "observedElapsedMs": 60114,
+      "firstCheckedAt": "2026-07-05T14:07:18.377Z",
+      "nowCheckedAt": "2026-07-05T14:08:18.491Z",
+      "sampleCount": 61,
+      "domain": {
+        "startMs": 1783260438377,
+        "endMs": 1783260498491,
+        "firstSampleMs": 1783260438377,
+        "latestSampleMs": 1783260498491,
+        "growing": true,
+        "waiting": false
+      },
+      "liveEndpointCount": 24,
+      "assertions": {
+        "startsAtFirstSample": true,
+        "endsAtRealNow": true,
+        "noReservedEmptyGulf": true,
+        "stillGrowing": true,
+        "withinOneSourceCadence": true
+      }
+    }
+  ],
+  "targetCrossing": {
+    "sessionKey": "5544-6761",
+    "id": "2026-07-04T17:22:05.680Z-2147",
+    "rivalId": "2147",
+    "rivalName": "Allaer",
+    "checkedAt": "2026-07-04T17:22:05.680Z",
+    "checkedAtMs": 1783185725680,
+    "rank": 17,
+    "lap": 10,
+    "direction": "ahead_of"
+  },
+  "crossingCount": 16,
+  "crossingExamples": [
+    {
+      "sessionKey": "5544-6761",
+      "id": "2026-07-04T17:08:32.126Z-2146",
+      "rivalId": "2146",
+      "rivalName": "Koolen",
+      "checkedAt": "2026-07-04T17:08:32.126Z",
+      "checkedAtMs": 1783184912126,
+      "rank": 14,
+      "lap": 0,
+      "direction": "behind"
+    },
+    {
+      "sessionKey": "5544-6761",
+      "id": "2026-07-04T17:09:39.183Z-2120",
+      "rivalId": "2120",
+      "rivalName": "Taylor",
+      "checkedAt": "2026-07-04T17:09:39.183Z",
+      "checkedAtMs": 1783184979183,
+      "rank": 13,
+      "lap": 1,
+      "direction": "ahead_of"
+    },
+    {
+      "sessionKey": "5544-6761",
+      "id": "2026-07-04T17:09:46.190Z-2158",
+      "rivalId": "2158",
+      "rivalName": "Murray",
+      "checkedAt": "2026-07-04T17:09:46.190Z",
+      "checkedAtMs": 1783184986190,
+      "rank": 14,
+      "lap": 1,
+      "direction": "behind"
+    },
+    {
+      "sessionKey": "5544-6761",
+      "id": "2026-07-04T17:10:08.249Z-2021",
+      "rivalId": "2021",
+      "rivalName": "Missig",
+      "checkedAt": "2026-07-04T17:10:08.249Z",
+      "checkedAtMs": 1783185008249,
+      "rank": 15,
+      "lap": 1,
+      "direction": "behind"
+    },
+    {
+      "sessionKey": "5544-6761",
+      "id": "2026-07-04T17:19:30.144Z-1040",
+      "rivalId": "1040",
+      "rivalName": "Rowe",
+      "checkedAt": "2026-07-04T17:19:30.144Z",
+      "checkedAtMs": 1783185570144,
+      "rank": 16,
+      "lap": 8,
+      "direction": "behind"
+    },
+    {
+      "sessionKey": "5544-6761",
+      "id": "2026-07-04T17:19:37.164Z-2086",
+      "rivalId": "2086",
+      "rivalName": "Nannini",
+      "checkedAt": "2026-07-04T17:19:37.164Z",
+      "checkedAtMs": 1783185577164,
+      "rank": 17,
+      "lap": 8,
+      "direction": "behind"
+    },
+    {
+      "sessionKey": "5544-6761",
+      "id": "2026-07-04T17:20:51.301Z-2120",
+      "rivalId": "2120",
+      "rivalName": "Taylor",
+      "checkedAt": "2026-07-04T17:20:51.301Z",
+      "checkedAtMs": 1783185651301,
+      "rank": 18,
+      "lap": 9,
+      "direction": "behind"
+    },
+    {
+      "sessionKey": "5544-6761",
+      "id": "2026-07-04T17:21:34.370Z-2147",
+      "rivalId": "2147",
+      "rivalName": "Allaer",
+      "checkedAt": "2026-07-04T17:21:34.370Z",
+      "checkedAtMs": 1783185694370,
+      "rank": 17,
+      "lap": 9,
+      "direction": "ahead_of"
+    },
+    {
+      "sessionKey": "5544-6761",
+      "id": "2026-07-04T17:21:38.383Z-2147",
+      "rivalId": "2147",
+      "rivalName": "Allaer",
+      "checkedAt": "2026-07-04T17:21:38.383Z",
+      "checkedAtMs": 1783185698383,
+      "rank": 18,
+      "lap": 10,
+      "direction": "behind"
+    },
+    {
+      "sessionKey": "5544-6761",
+      "id": "2026-07-04T17:22:05.680Z-2147",
+      "rivalId": "2147",
+      "rivalName": "Allaer",
+      "checkedAt": "2026-07-04T17:22:05.680Z",
+      "checkedAtMs": 1783185725680,
+      "rank": 17,
+      "lap": 10,
+      "direction": "ahead_of"
+    },
+    {
+      "sessionKey": "5544-6761",
+      "id": "2026-07-04T17:36:58.041Z-2160",
+      "rivalId": "2160",
+      "rivalName": "Correa",
+      "checkedAt": "2026-07-04T17:36:58.041Z",
+      "checkedAtMs": 1783186618041,
+      "rank": 16,
+      "lap": 21,
+      "direction": "ahead_of"
+    },
+    {
+      "sessionKey": "5543-6760",
+      "id": "2026-07-05T14:08:23.501Z-2158",
+      "rivalId": "2158",
+      "rivalName": "Murray",
+      "checkedAt": "2026-07-05T14:08:23.501Z",
+      "checkedAtMs": 1783260503501,
+      "rank": 16,
+      "lap": 0,
+      "direction": "behind"
+    },
+    {
+      "sessionKey": "5543-6760",
+      "id": "2026-07-05T14:09:54.660Z-2021",
+      "rivalId": "2021",
+      "rivalName": "Missig",
+      "checkedAt": "2026-07-05T14:09:54.660Z",
+      "checkedAtMs": 1783260594660,
+      "rank": 15,
+      "lap": 1,
+      "direction": "ahead_of"
+    },
+    {
+      "sessionKey": "5543-6760",
+      "id": "2026-07-05T14:29:14.738Z-2070",
+      "rivalId": "2070",
+      "rivalName": "de Alba",
+      "checkedAt": "2026-07-05T14:29:14.738Z",
+      "checkedAtMs": 1783261754738,
+      "rank": 14,
+      "lap": 17,
+      "direction": "ahead_of"
+    },
+    {
+      "sessionKey": "5543-6760",
+      "id": "2026-07-05T14:29:16.998Z-2070",
+      "rivalId": "2070",
+      "rivalName": "de Alba",
+      "checkedAt": "2026-07-05T14:29:16.998Z",
+      "checkedAtMs": 1783261756998,
+      "rank": 15,
+      "lap": 17,
+      "direction": "behind"
+    },
+    {
+      "sessionKey": "5543-6760",
+      "id": "2026-07-05T14:38:38.780Z-2158",
+      "rivalId": "2158",
+      "rivalName": "Murray",
+      "checkedAt": "2026-07-05T14:38:38.780Z",
+      "checkedAtMs": 1783262318780,
+      "rank": 14,
+      "lap": 25,
+      "direction": "ahead_of"
+    }
+  ],
+  "sessions": [
+    {
+      "sessionKey": "5544-6761",
+      "samples": 3317,
+      "drivers": 24,
+      "gapThresholdMs": 3003,
+      "lineBreaks": 984,
+      "crossings": 11,
+      "lappedUpstreamSpans": 37
+    },
+    {
+      "sessionKey": "5543-6760",
+      "samples": 3086,
+      "drivers": 24,
+      "gapThresholdMs": 3006,
+      "lineBreaks": 936,
+      "crossings": 5,
+      "lappedUpstreamSpans": 80
+    }
+  ],
+  "violations": [],
+  "ok": true
+}

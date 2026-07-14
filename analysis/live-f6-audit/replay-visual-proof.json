@@ -1,0 +1,3467 @@
+{
+  "schemaVersion": "brycecast.liveF6ReplayVisualProof.v1",
+  "generatedAt": "2026-07-14T00:15:13.645Z",
+  "base": "http://127.0.0.1:5173",
+  "api": "http://127.0.0.1:8795",
+  "browser": "Google Chrome via playwright-core channel chrome",
+  "fullPageReducedMotion": true,
+  "captures": [
+    {
+      "stateName": "green",
+      "viewportName": "desktop",
+      "fullFile": "analysis/live-f6-audit/screenshots/green--desktop.png",
+      "moduleFile": "analysis/live-f6-audit/screenshots/green-running-order--desktop.png",
+      "rendered": {
+        "data": {
+          "runningOrderChart": "true",
+          "sessionKey": "5544-6761",
+          "sourceCheckedAt": "2026-07-04T17:10:30.368Z",
+          "sourceSampleCount": "2",
+          "clockCheckedAt": "2026-07-04T17:10:30.368Z",
+          "timeDomainStart": "2026-07-04T17:10:29.368Z",
+          "timeDomainEnd": "2026-07-04T17:10:30.368Z",
+          "timeDomainSpanMs": "1000",
+          "windowGrowing": "true",
+          "orderingWaiting": "false",
+          "plotLeft": "44",
+          "nowX": "850.00",
+          "latestSampleX": "850.00",
+          "historyTouchesNow": "true",
+          "ladderGutterPx": "130",
+          "laneLower": "12",
+          "laneUpper": "18",
+          "cameraTargetCenter": "15",
+          "cameraRenderedCenter": "15",
+          "cameraOffsetY": "0.00",
+          "cameraEasing": "off",
+          "focusedDriverId": "",
+          "visibleDriverIds": "2147,2158,2021,2143,2086,2167,1040",
+          "lappedUpstreamCount": "0"
+        },
+        "geometry": {
+          "svg": {
+            "left": 230,
+            "right": 1210,
+            "top": 527.1875,
+            "bottom": 845.1875,
+            "width": 980,
+            "height": 318
+          },
+          "circles": [
+            {
+              "left": 1084.5,
+              "right": 1093.5,
+              "top": 551.6875,
+              "bottom": 560.6875,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 1084.5,
+              "right": 1093.5,
+              "top": 592.8541870117188,
+              "bottom": 601.8541870117188,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 1084.5,
+              "right": 1093.5,
+              "top": 634.0208129882812,
+              "bottom": 643.0208129882812,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 1084.5,
+              "right": 1093.5,
+              "top": 675.1875,
+              "bottom": 684.1875,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 1084.5,
+              "right": 1093.5,
+              "top": 716.3541870117188,
+              "bottom": 725.3541870117188,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 1084.5,
+              "right": 1093.5,
+              "top": 757.5208129882812,
+              "bottom": 766.5208129882812,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 1084.5,
+              "right": 1093.5,
+              "top": 798.6875,
+              "bottom": 807.6875,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            }
+          ],
+          "ladderRows": [
+            {
+              "id": "2147",
+              "top": 543.1875,
+              "bottom": 565.1875,
+              "left": 1084.5,
+              "right": 1142.578125,
+              "tabIndex": "0",
+              "ariaLabel": "Allaer, P12, 1.8s ahead"
+            },
+            {
+              "id": "2158",
+              "top": 584.3541870117188,
+              "bottom": 606.3541870117188,
+              "left": 1084.5,
+              "right": 1142.671875,
+              "tabIndex": "0",
+              "ariaLabel": "Murray, P13, 1.4s ahead"
+            },
+            {
+              "id": "2021",
+              "top": 620.5208129882812,
+              "bottom": 652.5208129882812,
+              "left": 1084.5,
+              "right": 1143.875,
+              "tabIndex": "0",
+              "ariaLabel": "Missig, P14, 0.8s ahead, ahead now"
+            },
+            {
+              "id": "2143",
+              "top": 670.6875,
+              "bottom": 688.6875,
+              "left": 1084.5,
+              "right": 1128,
+              "tabIndex": "0",
+              "ariaLabel": "Bryce Aron, car 9, P15, Bryce"
+            },
+            {
+              "id": "2086",
+              "top": 702.8541870117188,
+              "bottom": 734.8541870117188,
+              "left": 1084.5,
+              "right": 1147.046875,
+              "tabIndex": "0",
+              "ariaLabel": "Nannini, P16, 0.4s behind, behind now"
+            },
+            {
+              "id": "2167",
+              "top": 749.0208129882812,
+              "bottom": 771.0208129882812,
+              "left": 1084.5,
+              "right": 1146.90625,
+              "tabIndex": "0",
+              "ariaLabel": "Stati, P17, 0.6s behind"
+            },
+            {
+              "id": "1040",
+              "top": 790.1875,
+              "bottom": 812.1875,
+              "left": 1084.5,
+              "right": 1144.234375,
+              "tabIndex": "0",
+              "ariaLabel": "Rowe, P18, 1.1s behind"
+            }
+          ],
+          "endpoints": [
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850
+          ],
+          "bryceStrokeWidth": "2.5",
+          "roleRows": [
+            {
+              "id": "2021",
+              "role": "ahead",
+              "text": "Missig0.8s aheadahead now",
+              "dotFill": "#5581c2"
+            },
+            {
+              "id": "2086",
+              "role": "behind",
+              "text": "Nannini0.4s behindbehind now",
+              "dotFill": "#2f9377"
+            }
+          ]
+        },
+        "intro": "The pack around Bryce — every line a car's running position, gold is Bryce.",
+        "corridorLabels": [
+          "Rowe, 1.1 seconds behind Bryce",
+          "Roe, 2.1 seconds behind Bryce",
+          "Koreiba, 1.6 seconds behind Bryce",
+          "Missig, 0.8 seconds ahead of Bryce",
+          "Pierson, 3.8 seconds ahead of Bryce",
+          "Nannini, 0.4 seconds behind Bryce",
+          "Monteiro, 2.3 seconds behind Bryce",
+          "Etter, 2.8 seconds behind Bryce",
+          "Garcia, 3.5 seconds ahead of Bryce",
+          "Koolen, 2.2 seconds ahead of Bryce",
+          "Allaer, 1.8 seconds ahead of Bryce",
+          "Murray, 1.4 seconds ahead of Bryce",
+          "Correa, 2.7 seconds ahead of Bryce",
+          "Stati, 0.6 seconds behind Bryce",
+          "Kaminsky, 3.3 seconds behind Bryce"
+        ],
+        "moduleText": "The battle\nsource\n\nThe pack around Bryce — every line a car's running position, gold is Bryce.\n\n \n4s\n3s\n2s\n1s\n0\n1s\n2s\n3s\n4s\nRowe\nRoe\nKoreiba\nMissig\nPierson\nNannini\nMonteiro\nEtter\nGarcia\nKoolen\nAllaer\nMurray\nCorrea\nStati\nKaminsky\n№9\nbehind Bryce\nahead of Bryce\n\nThe running order\n\nP12\nP13\nP14\nP15\nP16\nP17\nP18\nAllaer\n1.8s ahead\nMurray\n1.4s ahead\nMissig\n0.8s ahead\nahead now\n№9\nNannini\n0.4s behind\nbehind now\nStati\n0.6s behind\nRowe\n1.1s behind\n−1s\nnow\nL2\n \nAllaer: P12, 1.8s ahead of Bryce. Murray: P13, 1.4s ahead of Bryce. Missig: P14, 0.8s ahead of Bryce. Bryce Aron, car 9: P15, Bryce. Nannini: P16, 0.4s behind Bryce. Stati: P17, 0.6s behind Bryce. Rowe: P18, 1.1s behind Bryce.\n\nFive minutes of official running position · gold is Bryce · shaded = caution · ○ an overtake involving Bryce",
+        "assertions": {
+          "exactIntro": true,
+          "noBannedModuleCopy": true,
+          "sevenWholeLanes": true,
+          "fixedGutter130": true,
+          "historyTouchesNow": true,
+          "everyLiveEndpointTouchesNow": true,
+          "wholeUnclippedDots": true,
+          "focusableAccessibleLadder": true,
+          "noPermanentLadderOverlap": true,
+          "bryceStroke25": true,
+          "nearestAheadColorAndCopy": true,
+          "nearestBehindColorAndCopy": true,
+          "corridorDotsAreLabeled": true
+        }
+      },
+      "cautionSpans": 0,
+      "overflow": {
+        "innerWidth": 1440,
+        "scrollWidth": 1440
+      },
+      "trustText": "Simulated replay archived session · simulated clock source archived Race Control Archived Race Control replay — not official live data. source"
+    },
+    {
+      "stateName": "caution",
+      "viewportName": "desktop",
+      "fullFile": "analysis/live-f6-audit/screenshots/caution--desktop.png",
+      "moduleFile": "analysis/live-f6-audit/screenshots/caution-running-order--desktop.png",
+      "rendered": {
+        "data": {
+          "runningOrderChart": "true",
+          "sessionKey": "5544-6761",
+          "sourceCheckedAt": "2026-07-04T17:39:32.330Z",
+          "sourceSampleCount": "2",
+          "clockCheckedAt": "2026-07-04T17:39:32.330Z",
+          "timeDomainStart": "2026-07-04T17:39:31.336Z",
+          "timeDomainEnd": "2026-07-04T17:39:32.330Z",
+          "timeDomainSpanMs": "994",
+          "windowGrowing": "true",
+          "orderingWaiting": "false",
+          "plotLeft": "44",
+          "nowX": "850.00",
+          "latestSampleX": "850.00",
+          "historyTouchesNow": "true",
+          "ladderGutterPx": "130",
+          "laneLower": "13",
+          "laneUpper": "19",
+          "cameraTargetCenter": "16",
+          "cameraRenderedCenter": "16",
+          "cameraOffsetY": "0.00",
+          "cameraEasing": "off",
+          "focusedDriverId": "",
+          "visibleDriverIds": "2120,2086,2158,2143,2114,990,2115",
+          "lappedUpstreamCount": "0"
+        },
+        "geometry": {
+          "svg": {
+            "left": 230,
+            "right": 1210,
+            "top": 527.1875,
+            "bottom": 845.1875,
+            "width": 980,
+            "height": 318
+          },
+          "circles": [
+            {
+              "left": 1084.5,
+              "right": 1093.5,
+              "top": 551.6875,
+              "bottom": 560.6875,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 1084.5,
+              "right": 1093.5,
+              "top": 592.8541870117188,
+              "bottom": 601.8541870117188,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 1084.5,
+              "right": 1093.5,
+              "top": 634.0208129882812,
+              "bottom": 643.0208129882812,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 1084.5,
+              "right": 1093.5,
+              "top": 675.1875,
+              "bottom": 684.1875,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 1084.5,
+              "right": 1093.5,
+              "top": 716.3541870117188,
+              "bottom": 725.3541870117188,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 1084.5,
+              "right": 1093.5,
+              "top": 757.5208129882812,
+              "bottom": 766.5208129882812,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 1084.5,
+              "right": 1093.5,
+              "top": 798.6875,
+              "bottom": 807.6875,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            }
+          ],
+          "ladderRows": [
+            {
+              "id": "2120",
+              "top": 543.1875,
+              "bottom": 565.1875,
+              "left": 1084.5,
+              "right": 1143.796875,
+              "tabIndex": "0",
+              "ariaLabel": "Taylor, P13, 2.3s ahead"
+            },
+            {
+              "id": "2086",
+              "top": 584.3541870117188,
+              "bottom": 606.3541870117188,
+              "left": 1084.5,
+              "right": 1142.53125,
+              "tabIndex": "0",
+              "ariaLabel": "Nannini, P14, 1.6s ahead"
+            },
+            {
+              "id": "2158",
+              "top": 620.5208129882812,
+              "bottom": 652.5208129882812,
+              "left": 1084.5,
+              "right": 1143.8125,
+              "tabIndex": "0",
+              "ariaLabel": "Murray, P15, 0.6s ahead, ahead now"
+            },
+            {
+              "id": "2143",
+              "top": 670.6875,
+              "bottom": 688.6875,
+              "left": 1084.5,
+              "right": 1128,
+              "tabIndex": "0",
+              "ariaLabel": "Bryce Aron, car 9, P16, Bryce"
+            },
+            {
+              "id": "2114",
+              "top": 702.8541870117188,
+              "bottom": 734.8541870117188,
+              "left": 1084.5,
+              "right": 1146.921875,
+              "tabIndex": "0",
+              "ariaLabel": "Monteiro, P17, 1.2s behind, behind now"
+            },
+            {
+              "id": "990",
+              "top": 749.0208129882812,
+              "bottom": 771.0208129882812,
+              "left": 1084.5,
+              "right": 1145.671875,
+              "tabIndex": "0",
+              "ariaLabel": "Kaminsky, P18, 1.8s behind"
+            },
+            {
+              "id": "2115",
+              "top": 790.1875,
+              "bottom": 812.1875,
+              "left": 1084.5,
+              "right": 1146.015625,
+              "tabIndex": "0",
+              "ariaLabel": "Etter, P19, 2.7s behind"
+            }
+          ],
+          "endpoints": [
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850
+          ],
+          "bryceStrokeWidth": "2.5",
+          "roleRows": [
+            {
+              "id": "2158",
+              "role": "ahead",
+              "text": "Murray0.6s aheadahead now",
+              "dotFill": "#5581c2"
+            },
+            {
+              "id": "2114",
+              "role": "behind",
+              "text": "Monteiro1.2s behindbehind now",
+              "dotFill": "#2f9377"
+            }
+          ]
+        },
+        "intro": "The pack around Bryce — every line a car's running position, gold is Bryce.",
+        "corridorLabels": [
+          "Rowe, 2.7 seconds ahead of Bryce",
+          "Koreiba, 3.5 seconds behind Bryce",
+          "Nannini, 1.6 seconds ahead of Bryce",
+          "Monteiro, 1.2 seconds behind Bryce",
+          "Etter, 2.7 seconds behind Bryce",
+          "Taylor, 2.3 seconds ahead of Bryce",
+          "Koolen, 3.8 seconds ahead of Bryce",
+          "Murray, 0.6 seconds ahead of Bryce",
+          "Kaminsky, 1.8 seconds behind Bryce"
+        ],
+        "moduleText": "The battle\nsource\n\nThe pack around Bryce — every line a car's running position, gold is Bryce.\n\nField bunched under caution — gaps compress until the restart\n4s\n3s\n2s\n1s\n0\n1s\n2s\n3s\n4s\nRowe\nKoreiba\nNannini\nMonteiro\nEtter\nTaylor\nKoolen\nMurray\nKaminsky\n№9\nbehind Bryce\nahead of Bryce\n\nThe running order\n\nP13\nP14\nP15\nP16\nP17\nP18\nP19\nTaylor\n2.3s ahead\nNannini\n1.6s ahead\nMurray\n0.6s ahead\nahead now\n№9\nMonteiro\n1.2s behind\nbehind now\nKaminsky\n1.8s behind\nEtter\n2.7s behind\nnow\nL22\n \nTaylor: P13, 2.3s ahead of Bryce. Nannini: P14, 1.6s ahead of Bryce. Murray: P15, 0.6s ahead of Bryce. Bryce Aron, car 9: P16, Bryce. Monteiro: P17, 1.2s behind Bryce. Kaminsky: P18, 1.8s behind Bryce. Etter: P19, 2.7s behind Bryce.\n\nFive minutes of official running position · gold is Bryce · shaded = caution · ○ an overtake involving Bryce",
+        "assertions": {
+          "exactIntro": true,
+          "noBannedModuleCopy": true,
+          "sevenWholeLanes": true,
+          "fixedGutter130": true,
+          "historyTouchesNow": true,
+          "everyLiveEndpointTouchesNow": true,
+          "wholeUnclippedDots": true,
+          "focusableAccessibleLadder": true,
+          "noPermanentLadderOverlap": true,
+          "bryceStroke25": true,
+          "nearestAheadColorAndCopy": true,
+          "nearestBehindColorAndCopy": true,
+          "corridorDotsAreLabeled": true
+        }
+      },
+      "cautionSpans": 1,
+      "overflow": {
+        "innerWidth": 1440,
+        "scrollWidth": 1440
+      },
+      "trustText": "Simulated replay archived session · simulated clock source archived Race Control Archived Race Control replay — not official live data. source"
+    },
+    {
+      "stateName": "cold",
+      "viewportName": "desktop",
+      "fullFile": "analysis/live-f6-audit/screenshots/cold--desktop.png",
+      "moduleFile": null,
+      "rendered": null,
+      "cautionSpans": 0,
+      "overflow": {
+        "innerWidth": 1440,
+        "scrollWidth": 1440
+      },
+      "trustText": "Simulated replay archived session · simulated clock source archived Race Control Archived Race Control replay — not official live data. source"
+    },
+    {
+      "stateName": "green",
+      "viewportName": "mobile",
+      "fullFile": "analysis/live-f6-audit/screenshots/green--mobile.png",
+      "moduleFile": "analysis/live-f6-audit/screenshots/green-running-order--mobile.png",
+      "rendered": {
+        "data": {
+          "runningOrderChart": "true",
+          "sessionKey": "5544-6761",
+          "sourceCheckedAt": "2026-07-04T17:10:30.368Z",
+          "sourceSampleCount": "2",
+          "clockCheckedAt": "2026-07-04T17:10:30.368Z",
+          "timeDomainStart": "2026-07-04T17:10:29.368Z",
+          "timeDomainEnd": "2026-07-04T17:10:30.368Z",
+          "timeDomainSpanMs": "1000",
+          "windowGrowing": "true",
+          "orderingWaiting": "false",
+          "plotLeft": "44",
+          "nowX": "176.00",
+          "latestSampleX": "176.00",
+          "historyTouchesNow": "true",
+          "ladderGutterPx": "130",
+          "laneLower": "12",
+          "laneUpper": "18",
+          "cameraTargetCenter": "15",
+          "cameraRenderedCenter": "15",
+          "cameraOffsetY": "0.00",
+          "cameraEasing": "off",
+          "focusedDriverId": "",
+          "visibleDriverIds": "2147,2158,2021,2143,2086,2167,1040",
+          "lappedUpstreamCount": "0"
+        },
+        "geometry": {
+          "svg": {
+            "left": 42,
+            "right": 348,
+            "top": 400.34375,
+            "bottom": 718.34375,
+            "width": 306,
+            "height": 318
+          },
+          "circles": [
+            {
+              "left": 222.5,
+              "right": 231.5,
+              "top": 424.84375,
+              "bottom": 433.84375,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 222.5,
+              "right": 231.5,
+              "top": 466.0104064941406,
+              "bottom": 475.0104064941406,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 222.5,
+              "right": 231.5,
+              "top": 507.1770935058594,
+              "bottom": 516.1770629882812,
+              "width": 9,
+              "height": 8.999969482421875,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 222.5,
+              "right": 231.5,
+              "top": 548.34375,
+              "bottom": 557.34375,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 222.5,
+              "right": 231.5,
+              "top": 589.5104370117188,
+              "bottom": 598.5104370117188,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 222.5,
+              "right": 231.5,
+              "top": 630.6770629882812,
+              "bottom": 639.6770629882812,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 222.5,
+              "right": 231.5,
+              "top": 671.84375,
+              "bottom": 680.84375,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            }
+          ],
+          "ladderRows": [
+            {
+              "id": "2147",
+              "top": 416.34375,
+              "bottom": 438.34375,
+              "left": 222.5,
+              "right": 280.578125,
+              "tabIndex": "0",
+              "ariaLabel": "Allaer, P12, 1.8s ahead"
+            },
+            {
+              "id": "2158",
+              "top": 457.5104064941406,
+              "bottom": 479.5104064941406,
+              "left": 222.5,
+              "right": 280.671875,
+              "tabIndex": "0",
+              "ariaLabel": "Murray, P13, 1.4s ahead"
+            },
+            {
+              "id": "2021",
+              "top": 493.6770935058594,
+              "bottom": 525.6770629882812,
+              "left": 222.5,
+              "right": 281.875,
+              "tabIndex": "0",
+              "ariaLabel": "Missig, P14, 0.8s ahead, ahead now"
+            },
+            {
+              "id": "2143",
+              "top": 543.84375,
+              "bottom": 561.84375,
+              "left": 222.5,
+              "right": 266,
+              "tabIndex": "0",
+              "ariaLabel": "Bryce Aron, car 9, P15, Bryce"
+            },
+            {
+              "id": "2086",
+              "top": 576.0104370117188,
+              "bottom": 608.0104370117188,
+              "left": 222.5,
+              "right": 285.046875,
+              "tabIndex": "0",
+              "ariaLabel": "Nannini, P16, 0.4s behind, behind now"
+            },
+            {
+              "id": "2167",
+              "top": 622.1770629882812,
+              "bottom": 644.1770629882812,
+              "left": 222.5,
+              "right": 284.90625,
+              "tabIndex": "0",
+              "ariaLabel": "Stati, P17, 0.6s behind"
+            },
+            {
+              "id": "1040",
+              "top": 663.34375,
+              "bottom": 685.34375,
+              "left": 222.5,
+              "right": 282.234375,
+              "tabIndex": "0",
+              "ariaLabel": "Rowe, P18, 1.1s behind"
+            }
+          ],
+          "endpoints": [
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176
+          ],
+          "bryceStrokeWidth": "2.5",
+          "roleRows": [
+            {
+              "id": "2021",
+              "role": "ahead",
+              "text": "Missig0.8s aheadahead now",
+              "dotFill": "#5581c2"
+            },
+            {
+              "id": "2086",
+              "role": "behind",
+              "text": "Nannini0.4s behindbehind now",
+              "dotFill": "#2f9377"
+            }
+          ]
+        },
+        "intro": "The pack around Bryce — every line a car's running position, gold is Bryce.",
+        "corridorLabels": [
+          "Rowe, 1.1 seconds behind Bryce",
+          "Roe, 2.1 seconds behind Bryce",
+          "Koreiba, 1.6 seconds behind Bryce",
+          "Missig, 0.8 seconds ahead of Bryce",
+          "Pierson, 3.8 seconds ahead of Bryce",
+          "Nannini, 0.4 seconds behind Bryce",
+          "Monteiro, 2.3 seconds behind Bryce",
+          "Etter, 2.8 seconds behind Bryce",
+          "Garcia, 3.5 seconds ahead of Bryce",
+          "Koolen, 2.2 seconds ahead of Bryce",
+          "Allaer, 1.8 seconds ahead of Bryce",
+          "Murray, 1.4 seconds ahead of Bryce",
+          "Correa, 2.7 seconds ahead of Bryce",
+          "Stati, 0.6 seconds behind Bryce",
+          "Kaminsky, 3.3 seconds behind Bryce"
+        ],
+        "moduleText": "The battle\nsource\n\nThe pack around Bryce — every line a car's running position, gold is Bryce.\n\n \n4s\n3s\n2s\n1s\n0\n1s\n2s\n3s\n4s\nRowe\nRoe\nKoreiba\nMissig\nPierson\nNannini\nMonteiro\nEtter\nGarcia\nKoolen\nAllaer\nMurray\nCorrea\nStati\nKaminsky\n№9\nbehind Bryce\nahead of Bryce\n\nThe running order\n\nP12\nP13\nP14\nP15\nP16\nP17\nP18\nAllaer\n1.8s ahead\nMurray\n1.4s ahead\nMissig\n0.8s ahead\nahead now\n№9\nNannini\n0.4s behind\nbehind now\nStati\n0.6s behind\nRowe\n1.1s behind\n−1s\nnow\nL2\n \nAllaer: P12, 1.8s ahead of Bryce. Murray: P13, 1.4s ahead of Bryce. Missig: P14, 0.8s ahead of Bryce. Bryce Aron, car 9: P15, Bryce. Nannini: P16, 0.4s behind Bryce. Stati: P17, 0.6s behind Bryce. Rowe: P18, 1.1s behind Bryce.\n\nFive minutes of official running position · gold is Bryce · shaded = caution · ○ an overtake involving Bryce",
+        "assertions": {
+          "exactIntro": true,
+          "noBannedModuleCopy": true,
+          "sevenWholeLanes": true,
+          "fixedGutter130": true,
+          "historyTouchesNow": true,
+          "everyLiveEndpointTouchesNow": true,
+          "wholeUnclippedDots": true,
+          "focusableAccessibleLadder": true,
+          "noPermanentLadderOverlap": true,
+          "bryceStroke25": true,
+          "nearestAheadColorAndCopy": true,
+          "nearestBehindColorAndCopy": true,
+          "corridorDotsAreLabeled": true
+        }
+      },
+      "cautionSpans": 0,
+      "overflow": {
+        "innerWidth": 390,
+        "scrollWidth": 390
+      },
+      "trustText": "Simulated replay archived session · simulated clock source archived Race Control Archived Race Control replay — not official live data. source"
+    },
+    {
+      "stateName": "caution",
+      "viewportName": "mobile",
+      "fullFile": "analysis/live-f6-audit/screenshots/caution--mobile.png",
+      "moduleFile": "analysis/live-f6-audit/screenshots/caution-running-order--mobile.png",
+      "rendered": {
+        "data": {
+          "runningOrderChart": "true",
+          "sessionKey": "5544-6761",
+          "sourceCheckedAt": "2026-07-04T17:39:32.330Z",
+          "sourceSampleCount": "2",
+          "clockCheckedAt": "2026-07-04T17:39:32.330Z",
+          "timeDomainStart": "2026-07-04T17:39:31.336Z",
+          "timeDomainEnd": "2026-07-04T17:39:32.330Z",
+          "timeDomainSpanMs": "994",
+          "windowGrowing": "true",
+          "orderingWaiting": "false",
+          "plotLeft": "44",
+          "nowX": "176.00",
+          "latestSampleX": "176.00",
+          "historyTouchesNow": "true",
+          "ladderGutterPx": "130",
+          "laneLower": "13",
+          "laneUpper": "19",
+          "cameraTargetCenter": "16",
+          "cameraRenderedCenter": "16",
+          "cameraOffsetY": "0.00",
+          "cameraEasing": "off",
+          "focusedDriverId": "",
+          "visibleDriverIds": "2120,2086,2158,2143,2114,990,2115",
+          "lappedUpstreamCount": "0"
+        },
+        "geometry": {
+          "svg": {
+            "left": 42,
+            "right": 348,
+            "top": 412.34375,
+            "bottom": 730.34375,
+            "width": 306,
+            "height": 318
+          },
+          "circles": [
+            {
+              "left": 222.5,
+              "right": 231.5,
+              "top": 436.84375,
+              "bottom": 445.84375,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 222.5,
+              "right": 231.5,
+              "top": 478.0104064941406,
+              "bottom": 487.0104064941406,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 222.5,
+              "right": 231.5,
+              "top": 519.1770629882812,
+              "bottom": 528.1770629882812,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 222.5,
+              "right": 231.5,
+              "top": 560.34375,
+              "bottom": 569.34375,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 222.5,
+              "right": 231.5,
+              "top": 601.5104370117188,
+              "bottom": 610.5104370117188,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 222.5,
+              "right": 231.5,
+              "top": 642.6770629882812,
+              "bottom": 651.6770629882812,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 222.5,
+              "right": 231.5,
+              "top": 683.84375,
+              "bottom": 692.84375,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            }
+          ],
+          "ladderRows": [
+            {
+              "id": "2120",
+              "top": 428.34375,
+              "bottom": 450.34375,
+              "left": 222.5,
+              "right": 281.796875,
+              "tabIndex": "0",
+              "ariaLabel": "Taylor, P13, 2.3s ahead"
+            },
+            {
+              "id": "2086",
+              "top": 469.5104064941406,
+              "bottom": 491.5104064941406,
+              "left": 222.5,
+              "right": 280.53125,
+              "tabIndex": "0",
+              "ariaLabel": "Nannini, P14, 1.6s ahead"
+            },
+            {
+              "id": "2158",
+              "top": 505.6770935058594,
+              "bottom": 537.6770629882812,
+              "left": 222.5,
+              "right": 281.8125,
+              "tabIndex": "0",
+              "ariaLabel": "Murray, P15, 0.6s ahead, ahead now"
+            },
+            {
+              "id": "2143",
+              "top": 555.84375,
+              "bottom": 573.84375,
+              "left": 222.5,
+              "right": 266,
+              "tabIndex": "0",
+              "ariaLabel": "Bryce Aron, car 9, P16, Bryce"
+            },
+            {
+              "id": "2114",
+              "top": 588.0104370117188,
+              "bottom": 620.0104370117188,
+              "left": 222.5,
+              "right": 284.921875,
+              "tabIndex": "0",
+              "ariaLabel": "Monteiro, P17, 1.2s behind, behind now"
+            },
+            {
+              "id": "990",
+              "top": 634.1770629882812,
+              "bottom": 656.1770629882812,
+              "left": 222.5,
+              "right": 283.671875,
+              "tabIndex": "0",
+              "ariaLabel": "Kaminsky, P18, 1.8s behind"
+            },
+            {
+              "id": "2115",
+              "top": 675.34375,
+              "bottom": 697.34375,
+              "left": 222.5,
+              "right": 284.015625,
+              "tabIndex": "0",
+              "ariaLabel": "Etter, P19, 2.7s behind"
+            }
+          ],
+          "endpoints": [
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176
+          ],
+          "bryceStrokeWidth": "2.5",
+          "roleRows": [
+            {
+              "id": "2158",
+              "role": "ahead",
+              "text": "Murray0.6s aheadahead now",
+              "dotFill": "#5581c2"
+            },
+            {
+              "id": "2114",
+              "role": "behind",
+              "text": "Monteiro1.2s behindbehind now",
+              "dotFill": "#2f9377"
+            }
+          ]
+        },
+        "intro": "The pack around Bryce — every line a car's running position, gold is Bryce.",
+        "corridorLabels": [
+          "Rowe, 2.7 seconds ahead of Bryce",
+          "Koreiba, 3.5 seconds behind Bryce",
+          "Nannini, 1.6 seconds ahead of Bryce",
+          "Monteiro, 1.2 seconds behind Bryce",
+          "Etter, 2.7 seconds behind Bryce",
+          "Taylor, 2.3 seconds ahead of Bryce",
+          "Koolen, 3.8 seconds ahead of Bryce",
+          "Murray, 0.6 seconds ahead of Bryce",
+          "Kaminsky, 1.8 seconds behind Bryce"
+        ],
+        "moduleText": "The battle\nsource\n\nThe pack around Bryce — every line a car's running position, gold is Bryce.\n\nField bunched under caution — gaps compress until the restart\n4s\n3s\n2s\n1s\n0\n1s\n2s\n3s\n4s\nRowe\nKoreiba\nNannini\nMonteiro\nEtter\nTaylor\nKoolen\nMurray\nKaminsky\n№9\nbehind Bryce\nahead of Bryce\n\nThe running order\n\nP13\nP14\nP15\nP16\nP17\nP18\nP19\nTaylor\n2.3s ahead\nNannini\n1.6s ahead\nMurray\n0.6s ahead\nahead now\n№9\nMonteiro\n1.2s behind\nbehind now\nKaminsky\n1.8s behind\nEtter\n2.7s behind\nnow\nL22\n \nTaylor: P13, 2.3s ahead of Bryce. Nannini: P14, 1.6s ahead of Bryce. Murray: P15, 0.6s ahead of Bryce. Bryce Aron, car 9: P16, Bryce. Monteiro: P17, 1.2s behind Bryce. Kaminsky: P18, 1.8s behind Bryce. Etter: P19, 2.7s behind Bryce.\n\nFive minutes of official running position · gold is Bryce · shaded = caution · ○ an overtake involving Bryce",
+        "assertions": {
+          "exactIntro": true,
+          "noBannedModuleCopy": true,
+          "sevenWholeLanes": true,
+          "fixedGutter130": true,
+          "historyTouchesNow": true,
+          "everyLiveEndpointTouchesNow": true,
+          "wholeUnclippedDots": true,
+          "focusableAccessibleLadder": true,
+          "noPermanentLadderOverlap": true,
+          "bryceStroke25": true,
+          "nearestAheadColorAndCopy": true,
+          "nearestBehindColorAndCopy": true,
+          "corridorDotsAreLabeled": true
+        }
+      },
+      "cautionSpans": 1,
+      "overflow": {
+        "innerWidth": 390,
+        "scrollWidth": 390
+      },
+      "trustText": "Simulated replay archived session · simulated clock source archived Race Control Archived Race Control replay — not official live data. source"
+    },
+    {
+      "stateName": "cold",
+      "viewportName": "mobile",
+      "fullFile": "analysis/live-f6-audit/screenshots/cold--mobile.png",
+      "moduleFile": null,
+      "rendered": null,
+      "cautionSpans": 0,
+      "overflow": {
+        "innerWidth": 390,
+        "scrollWidth": 390
+      },
+      "trustText": "Simulated replay archived session · simulated clock source archived Race Control Archived Race Control replay — not official live data. source"
+    }
+  ],
+  "stateAssertions": {
+    "greenAndCautionAtBothWidths": true,
+    "coldAtBothWidths": true,
+    "cautionShadeVisible": true,
+    "greenShadeAbsent": true,
+    "noHorizontalOverflow": true,
+    "renderedContractPassed": true
+  },
+  "startupProof": [
+    {
+      "stateName": "t+10s",
+      "viewportName": "desktop",
+      "file": "analysis/live-f6-audit/screenshots/startup-tplus10s--desktop.png",
+      "rendered": {
+        "data": {
+          "runningOrderChart": "true",
+          "sessionKey": "5544-6761",
+          "sourceCheckedAt": "2026-07-04T17:07:38.083Z",
+          "sourceSampleCount": "4",
+          "clockCheckedAt": "2026-07-04T17:07:38.083Z",
+          "timeDomainStart": "2026-07-04T17:07:25.061Z",
+          "timeDomainEnd": "2026-07-04T17:07:38.083Z",
+          "timeDomainSpanMs": "13022",
+          "windowGrowing": "true",
+          "orderingWaiting": "false",
+          "plotLeft": "44",
+          "nowX": "850.00",
+          "latestSampleX": "850.00",
+          "historyTouchesNow": "true",
+          "ladderGutterPx": "130",
+          "laneLower": "10",
+          "laneUpper": "16",
+          "cameraTargetCenter": "13",
+          "cameraRenderedCenter": "13",
+          "cameraOffsetY": "0.00",
+          "cameraEasing": "off",
+          "focusedDriverId": "",
+          "visibleDriverIds": "2120,2160,2147,2143,2146,2021,2158",
+          "lappedUpstreamCount": "0"
+        },
+        "geometry": {
+          "svg": {
+            "left": 230,
+            "right": 1210,
+            "top": 870.1875,
+            "bottom": 1188.1875,
+            "width": 980,
+            "height": 318
+          },
+          "circles": [
+            {
+              "left": 1084.5,
+              "right": 1093.5,
+              "top": 894.6875,
+              "bottom": 903.6875,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 1084.5,
+              "right": 1093.5,
+              "top": 935.8541870117188,
+              "bottom": 944.8541870117188,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 1084.5,
+              "right": 1093.5,
+              "top": 977.0208129882812,
+              "bottom": 986.0208129882812,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 1084.5,
+              "right": 1093.5,
+              "top": 1018.1875,
+              "bottom": 1027.1875,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 1084.5,
+              "right": 1093.5,
+              "top": 1059.3541259765625,
+              "bottom": 1068.3541259765625,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 1084.5,
+              "right": 1093.5,
+              "top": 1100.5208740234375,
+              "bottom": 1109.5208740234375,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 1084.5,
+              "right": 1093.5,
+              "top": 1141.6875,
+              "bottom": 1150.6875,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            }
+          ],
+          "ladderRows": [
+            {
+              "id": "2120",
+              "top": 886.1875,
+              "bottom": 908.1875,
+              "left": 1084.5,
+              "right": 1143.734375,
+              "tabIndex": "0",
+              "ariaLabel": "Taylor, P10, 2.0s ahead"
+            },
+            {
+              "id": "2160",
+              "top": 927.3541870117188,
+              "bottom": 949.3541870117188,
+              "left": 1084.5,
+              "right": 1142.53125,
+              "tabIndex": "0",
+              "ariaLabel": "Correa, P11, 1.3s ahead"
+            },
+            {
+              "id": "2147",
+              "top": 963.5208129882812,
+              "bottom": 995.5208129882812,
+              "left": 1084.5,
+              "right": 1143.953125,
+              "tabIndex": "0",
+              "ariaLabel": "Allaer, P12, 0.4s ahead, ahead now"
+            },
+            {
+              "id": "2143",
+              "top": 1013.6875,
+              "bottom": 1031.6875,
+              "left": 1084.5,
+              "right": 1128,
+              "tabIndex": "0",
+              "ariaLabel": "Bryce Aron, car 9, P13, Bryce"
+            },
+            {
+              "id": "2146",
+              "top": 1045.8541259765625,
+              "bottom": 1077.8541259765625,
+              "left": 1084.5,
+              "right": 1146.921875,
+              "tabIndex": "0",
+              "ariaLabel": "Koolen, P14, 0.5s behind, behind now"
+            },
+            {
+              "id": "2021",
+              "top": 1092.0208740234375,
+              "bottom": 1114.0208740234375,
+              "left": 1084.5,
+              "right": 1145.609375,
+              "tabIndex": "0",
+              "ariaLabel": "Missig, P15, 1.3s behind"
+            },
+            {
+              "id": "2158",
+              "top": 1133.1875,
+              "bottom": 1155.1875,
+              "left": 1084.5,
+              "right": 1146.765625,
+              "tabIndex": "0",
+              "ariaLabel": "Murray, P16, 2.2s behind"
+            }
+          ],
+          "endpoints": [
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850
+          ],
+          "bryceStrokeWidth": "2.5",
+          "roleRows": [
+            {
+              "id": "2147",
+              "role": "ahead",
+              "text": "Allaer0.4s aheadahead now",
+              "dotFill": "#5581c2"
+            },
+            {
+              "id": "2146",
+              "role": "behind",
+              "text": "Koolen0.5s behindbehind now",
+              "dotFill": "#2f9377"
+            }
+          ]
+        },
+        "intro": "The pack around Bryce — every line a car's running position, gold is Bryce.",
+        "corridorLabels": [
+          "Koreiba, 2.8 seconds behind Bryce",
+          "Missig, 1.3 seconds behind Bryce",
+          "Pierson, 3.1 seconds ahead of Bryce",
+          "Nannini, 3.5 seconds behind Bryce",
+          "Hughes, 3.8 seconds ahead of Bryce",
+          "Taylor, 2.0 seconds ahead of Bryce",
+          "Garcia, 2.4 seconds ahead of Bryce",
+          "Koolen, 0.5 seconds behind Bryce",
+          "Allaer, 0.4 seconds ahead of Bryce",
+          "Murray, 2.2 seconds behind Bryce",
+          "Correa, 1.3 seconds ahead of Bryce"
+        ],
+        "moduleText": "The battle\nsource\n\nThe pack around Bryce — every line a car's running position, gold is Bryce.\n\nField bunched under caution — gaps compress until the restart\n4s\n3s\n2s\n1s\n0\n1s\n2s\n3s\n4s\nKoreiba\nMissig\nPierson\nNannini\nHughes\nTaylor\nGarcia\nKoolen\nAllaer\nMurray\nCorrea\n№9\nbehind Bryce\nahead of Bryce\n\nThe running order\n\nP10\nP11\nP12\nP13\nP14\nP15\nP16\nTaylor\n2.0s ahead\nCorrea\n1.3s ahead\nAllaer\n0.4s ahead\nahead now\n№9\nKoolen\n0.5s behind\nbehind now\nMissig\n1.3s behind\nMurray\n2.2s behind\n−10s\n−5s\nnow\nL0\n \nTaylor: P10, 2.0s ahead of Bryce. Correa: P11, 1.3s ahead of Bryce. Allaer: P12, 0.4s ahead of Bryce. Bryce Aron, car 9: P13, Bryce. Koolen: P14, 0.5s behind Bryce. Missig: P15, 1.3s behind Bryce. Murray: P16, 2.2s behind Bryce.\n\nFive minutes of official running position · gold is Bryce · shaded = caution · ○ an overtake involving Bryce",
+        "assertions": {
+          "exactIntro": true,
+          "noBannedModuleCopy": true,
+          "sevenWholeLanes": true,
+          "fixedGutter130": true,
+          "historyTouchesNow": true,
+          "everyLiveEndpointTouchesNow": true,
+          "wholeUnclippedDots": true,
+          "focusableAccessibleLadder": true,
+          "noPermanentLadderOverlap": true,
+          "bryceStroke25": true,
+          "nearestAheadColorAndCopy": true,
+          "nearestBehindColorAndCopy": true,
+          "corridorDotsAreLabeled": true
+        }
+      },
+      "observedSpanMs": 13022,
+      "assertions": {
+        "chartIsGrowing": true,
+        "elapsedNotReservedWindow": true,
+        "observedAtOrAfterTarget": true,
+        "newestLineAtRealNow": true
+      }
+    },
+    {
+      "stateName": "t+60s",
+      "viewportName": "desktop",
+      "file": "analysis/live-f6-audit/screenshots/startup-tplus60s--desktop.png",
+      "rendered": {
+        "data": {
+          "runningOrderChart": "true",
+          "sessionKey": "5544-6761",
+          "sourceCheckedAt": "2026-07-04T17:08:28.124Z",
+          "sourceSampleCount": "16",
+          "clockCheckedAt": "2026-07-04T17:08:28.124Z",
+          "timeDomainStart": "2026-07-04T17:07:25.061Z",
+          "timeDomainEnd": "2026-07-04T17:08:28.124Z",
+          "timeDomainSpanMs": "63063",
+          "windowGrowing": "true",
+          "orderingWaiting": "false",
+          "plotLeft": "44",
+          "nowX": "850.00",
+          "latestSampleX": "850.00",
+          "historyTouchesNow": "true",
+          "ladderGutterPx": "130",
+          "laneLower": "10",
+          "laneUpper": "16",
+          "cameraTargetCenter": "13",
+          "cameraRenderedCenter": "13",
+          "cameraOffsetY": "0.00",
+          "cameraEasing": "off",
+          "focusedDriverId": "",
+          "visibleDriverIds": "2120,2160,2147,2143,2146,2158,2021",
+          "lappedUpstreamCount": "0"
+        },
+        "geometry": {
+          "svg": {
+            "left": 230,
+            "right": 1210,
+            "top": 527.1875,
+            "bottom": 845.1875,
+            "width": 980,
+            "height": 318
+          },
+          "circles": [
+            {
+              "left": 1084.5,
+              "right": 1093.5,
+              "top": 551.6875,
+              "bottom": 560.6875,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 1084.5,
+              "right": 1093.5,
+              "top": 592.8541870117188,
+              "bottom": 601.8541870117188,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 1084.5,
+              "right": 1093.5,
+              "top": 634.0208129882812,
+              "bottom": 643.0208129882812,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 1084.5,
+              "right": 1093.5,
+              "top": 675.1875,
+              "bottom": 684.1875,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 1084.5,
+              "right": 1093.5,
+              "top": 716.3541870117188,
+              "bottom": 725.3541870117188,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 1084.5,
+              "right": 1093.5,
+              "top": 757.5208129882812,
+              "bottom": 766.5208129882812,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 1084.5,
+              "right": 1093.5,
+              "top": 798.6875,
+              "bottom": 807.6875,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            }
+          ],
+          "ladderRows": [
+            {
+              "id": "2120",
+              "top": 543.1875,
+              "bottom": 565.1875,
+              "left": 1084.5,
+              "right": 1143.71875,
+              "tabIndex": "0",
+              "ariaLabel": "Taylor, P10, 0.5s ahead"
+            },
+            {
+              "id": "2160",
+              "top": 584.3541870117188,
+              "bottom": 606.3541870117188,
+              "left": 1084.5,
+              "right": 1143.8125,
+              "tabIndex": "0",
+              "ariaLabel": "Correa, P11, 0.3s ahead"
+            },
+            {
+              "id": "2147",
+              "top": 620.5208129882812,
+              "bottom": 652.5208129882812,
+              "left": 1084.5,
+              "right": 1143.625,
+              "tabIndex": "0",
+              "ariaLabel": "Allaer, P12, 0.1s ahead, ahead now"
+            },
+            {
+              "id": "2143",
+              "top": 670.6875,
+              "bottom": 688.6875,
+              "left": 1084.5,
+              "right": 1128,
+              "tabIndex": "0",
+              "ariaLabel": "Bryce Aron, car 9, P13, Bryce"
+            },
+            {
+              "id": "2146",
+              "top": 702.8541870117188,
+              "bottom": 734.8541870117188,
+              "left": 1084.5,
+              "right": 1146.921875,
+              "tabIndex": "0",
+              "ariaLabel": "Koolen, P14, 0.0s behind, behind now"
+            },
+            {
+              "id": "2158",
+              "top": 749.0208129882812,
+              "bottom": 771.0208129882812,
+              "left": 1084.5,
+              "right": 1146.90625,
+              "tabIndex": "0",
+              "ariaLabel": "Murray, P15, 0.3s behind"
+            },
+            {
+              "id": "2021",
+              "top": 790.1875,
+              "bottom": 812.1875,
+              "left": 1084.5,
+              "right": 1146.90625,
+              "tabIndex": "0",
+              "ariaLabel": "Missig, P16, 0.3s behind"
+            }
+          ],
+          "endpoints": [
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850
+          ],
+          "bryceStrokeWidth": "2.5",
+          "roleRows": [
+            {
+              "id": "2147",
+              "role": "ahead",
+              "text": "Allaer0.1s aheadahead now",
+              "dotFill": "#5581c2"
+            },
+            {
+              "id": "2146",
+              "role": "behind",
+              "text": "Koolen0.0s behindbehind now",
+              "dotFill": "#2f9377"
+            }
+          ]
+        },
+        "intro": "The pack around Bryce — every line a car's running position, gold is Bryce.",
+        "corridorLabels": [
+          "Rowe, 1.2 seconds behind Bryce",
+          "Roe, 1.1 seconds behind Bryce",
+          "Koreiba, 0.6 seconds behind Bryce",
+          "Missig, 0.3 seconds behind Bryce",
+          "Pierson, 0.7 seconds ahead of Bryce",
+          "Fittipaldi, 1.3 seconds ahead of Bryce",
+          "de Alba, 1.2 seconds ahead of Bryce",
+          "Nannini, 0.4 seconds behind Bryce",
+          "Johnson, 0.8 seconds ahead of Bryce",
+          "Hughes, 0.8 seconds ahead of Bryce",
+          "Monteiro, 0.9 seconds behind Bryce",
+          "Etter, 1.3 seconds behind Bryce",
+          "Taylor, 0.5 seconds ahead of Bryce",
+          "Garcia, 0.7 seconds ahead of Bryce",
+          "Koolen, 0.0 seconds behind Bryce",
+          "Allaer, 0.1 seconds ahead of Bryce",
+          "Murray, 0.3 seconds behind Bryce",
+          "Correa, 0.3 seconds ahead of Bryce",
+          "Beeton, 1.1 seconds ahead of Bryce",
+          "de Tullio, 1.0 seconds ahead of Bryce",
+          "Stati, 0.8 seconds behind Bryce",
+          "Kucharczyk, 1.1 seconds ahead of Bryce",
+          "Kaminsky, 1.1 seconds behind Bryce"
+        ],
+        "moduleText": "The battle\nsource\n\nThe pack around Bryce — every line a car's running position, gold is Bryce.\n\n \n4s\n3s\n2s\n1s\n0\n1s\n2s\n3s\n4s\nRowe\nRoe\nKoreiba\nMissig\nPierson\nFittipaldi\nde Alba\nNannini\nJohnson\nHughes\nMonteiro\nEtter\nTaylor\nGarcia\nKoolen\nAllaer\nMurray\nCorrea\nBeeton\nde Tullio\nStati\nKucharczyk\nKaminsky\n№9\nbehind Bryce\nahead of Bryce\n\nThe running order\n\nP10\nP11\nP12\nP13\nP14\nP15\nP16\nTaylor\n0.5s ahead\nCorrea\n0.3s ahead\nAllaer\n0.1s ahead\nahead now\n№9\nKoolen\n0.0s behind\nbehind now\nMurray\n0.3s behind\nMissig\n0.3s behind\n−1m\n−45s\n−30s\n−15s\nnow\nL0\n \nTaylor: P10, 0.5s ahead of Bryce. Correa: P11, 0.3s ahead of Bryce. Allaer: P12, 0.1s ahead of Bryce. Bryce Aron, car 9: P13, Bryce. Koolen: P14, 0.0s behind Bryce. Murray: P15, 0.3s behind Bryce. Missig: P16, 0.3s behind Bryce.\n\nFive minutes of official running position · gold is Bryce · shaded = caution · ○ an overtake involving Bryce",
+        "assertions": {
+          "exactIntro": true,
+          "noBannedModuleCopy": true,
+          "sevenWholeLanes": true,
+          "fixedGutter130": true,
+          "historyTouchesNow": true,
+          "everyLiveEndpointTouchesNow": true,
+          "wholeUnclippedDots": true,
+          "focusableAccessibleLadder": true,
+          "noPermanentLadderOverlap": true,
+          "bryceStroke25": true,
+          "nearestAheadColorAndCopy": true,
+          "nearestBehindColorAndCopy": true,
+          "corridorDotsAreLabeled": true
+        }
+      },
+      "observedSpanMs": 63063,
+      "assertions": {
+        "chartIsGrowing": true,
+        "elapsedNotReservedWindow": true,
+        "observedAtOrAfterTarget": true,
+        "newestLineAtRealNow": true
+      }
+    },
+    {
+      "stateName": "t+10s",
+      "viewportName": "mobile",
+      "file": "analysis/live-f6-audit/screenshots/startup-tplus10s--mobile.png",
+      "rendered": {
+        "data": {
+          "runningOrderChart": "true",
+          "sessionKey": "5544-6761",
+          "sourceCheckedAt": "2026-07-04T17:07:38.083Z",
+          "sourceSampleCount": "4",
+          "clockCheckedAt": "2026-07-04T17:07:38.083Z",
+          "timeDomainStart": "2026-07-04T17:07:25.061Z",
+          "timeDomainEnd": "2026-07-04T17:07:38.083Z",
+          "timeDomainSpanMs": "13022",
+          "windowGrowing": "true",
+          "orderingWaiting": "false",
+          "plotLeft": "44",
+          "nowX": "176.00",
+          "latestSampleX": "176.00",
+          "historyTouchesNow": "true",
+          "ladderGutterPx": "130",
+          "laneLower": "10",
+          "laneUpper": "16",
+          "cameraTargetCenter": "13",
+          "cameraRenderedCenter": "13",
+          "cameraOffsetY": "0.00",
+          "cameraEasing": "off",
+          "focusedDriverId": "",
+          "visibleDriverIds": "2120,2160,2147,2143,2146,2021,2158",
+          "lappedUpstreamCount": "0"
+        },
+        "geometry": {
+          "svg": {
+            "left": 42,
+            "right": 348,
+            "top": 1248.34375,
+            "bottom": 1566.34375,
+            "width": 306,
+            "height": 318
+          },
+          "circles": [
+            {
+              "left": 222.5,
+              "right": 231.5,
+              "top": 1272.84375,
+              "bottom": 1281.84375,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 222.5,
+              "right": 231.5,
+              "top": 1314.0103759765625,
+              "bottom": 1323.0103759765625,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 222.5,
+              "right": 231.5,
+              "top": 1355.1771240234375,
+              "bottom": 1364.1771240234375,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 222.5,
+              "right": 231.5,
+              "top": 1396.34375,
+              "bottom": 1405.34375,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 222.5,
+              "right": 231.5,
+              "top": 1437.5103759765625,
+              "bottom": 1446.5103759765625,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 222.5,
+              "right": 231.5,
+              "top": 1478.6771240234375,
+              "bottom": 1487.6771240234375,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 222.5,
+              "right": 231.5,
+              "top": 1519.84375,
+              "bottom": 1528.84375,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            }
+          ],
+          "ladderRows": [
+            {
+              "id": "2120",
+              "top": 1264.34375,
+              "bottom": 1286.34375,
+              "left": 222.5,
+              "right": 281.734375,
+              "tabIndex": "0",
+              "ariaLabel": "Taylor, P10, 2.0s ahead"
+            },
+            {
+              "id": "2160",
+              "top": 1305.5103759765625,
+              "bottom": 1327.5103759765625,
+              "left": 222.5,
+              "right": 280.53125,
+              "tabIndex": "0",
+              "ariaLabel": "Correa, P11, 1.3s ahead"
+            },
+            {
+              "id": "2147",
+              "top": 1341.6771240234375,
+              "bottom": 1373.6771240234375,
+              "left": 222.5,
+              "right": 281.953125,
+              "tabIndex": "0",
+              "ariaLabel": "Allaer, P12, 0.4s ahead, ahead now"
+            },
+            {
+              "id": "2143",
+              "top": 1391.84375,
+              "bottom": 1409.84375,
+              "left": 222.5,
+              "right": 266,
+              "tabIndex": "0",
+              "ariaLabel": "Bryce Aron, car 9, P13, Bryce"
+            },
+            {
+              "id": "2146",
+              "top": 1424.0103759765625,
+              "bottom": 1456.0103759765625,
+              "left": 222.5,
+              "right": 284.921875,
+              "tabIndex": "0",
+              "ariaLabel": "Koolen, P14, 0.5s behind, behind now"
+            },
+            {
+              "id": "2021",
+              "top": 1470.1771240234375,
+              "bottom": 1492.1771240234375,
+              "left": 222.5,
+              "right": 283.609375,
+              "tabIndex": "0",
+              "ariaLabel": "Missig, P15, 1.3s behind"
+            },
+            {
+              "id": "2158",
+              "top": 1511.34375,
+              "bottom": 1533.34375,
+              "left": 222.5,
+              "right": 284.765625,
+              "tabIndex": "0",
+              "ariaLabel": "Murray, P16, 2.2s behind"
+            }
+          ],
+          "endpoints": [
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176
+          ],
+          "bryceStrokeWidth": "2.5",
+          "roleRows": [
+            {
+              "id": "2147",
+              "role": "ahead",
+              "text": "Allaer0.4s aheadahead now",
+              "dotFill": "#5581c2"
+            },
+            {
+              "id": "2146",
+              "role": "behind",
+              "text": "Koolen0.5s behindbehind now",
+              "dotFill": "#2f9377"
+            }
+          ]
+        },
+        "intro": "The pack around Bryce — every line a car's running position, gold is Bryce.",
+        "corridorLabels": [
+          "Koreiba, 2.8 seconds behind Bryce",
+          "Missig, 1.3 seconds behind Bryce",
+          "Pierson, 3.1 seconds ahead of Bryce",
+          "Nannini, 3.5 seconds behind Bryce",
+          "Hughes, 3.8 seconds ahead of Bryce",
+          "Taylor, 2.0 seconds ahead of Bryce",
+          "Garcia, 2.4 seconds ahead of Bryce",
+          "Koolen, 0.5 seconds behind Bryce",
+          "Allaer, 0.4 seconds ahead of Bryce",
+          "Murray, 2.2 seconds behind Bryce",
+          "Correa, 1.3 seconds ahead of Bryce"
+        ],
+        "moduleText": "The battle\nsource\n\nThe pack around Bryce — every line a car's running position, gold is Bryce.\n\nField bunched under caution — gaps compress until the restart\n4s\n3s\n2s\n1s\n0\n1s\n2s\n3s\n4s\nKoreiba\nMissig\nPierson\nNannini\nHughes\nTaylor\nGarcia\nKoolen\nAllaer\nMurray\nCorrea\n№9\nbehind Bryce\nahead of Bryce\n\nThe running order\n\nP10\nP11\nP12\nP13\nP14\nP15\nP16\nTaylor\n2.0s ahead\nCorrea\n1.3s ahead\nAllaer\n0.4s ahead\nahead now\n№9\nKoolen\n0.5s behind\nbehind now\nMissig\n1.3s behind\nMurray\n2.2s behind\n−10s\nnow\nL0\n \nTaylor: P10, 2.0s ahead of Bryce. Correa: P11, 1.3s ahead of Bryce. Allaer: P12, 0.4s ahead of Bryce. Bryce Aron, car 9: P13, Bryce. Koolen: P14, 0.5s behind Bryce. Missig: P15, 1.3s behind Bryce. Murray: P16, 2.2s behind Bryce.\n\nFive minutes of official running position · gold is Bryce · shaded = caution · ○ an overtake involving Bryce",
+        "assertions": {
+          "exactIntro": true,
+          "noBannedModuleCopy": true,
+          "sevenWholeLanes": true,
+          "fixedGutter130": true,
+          "historyTouchesNow": true,
+          "everyLiveEndpointTouchesNow": true,
+          "wholeUnclippedDots": true,
+          "focusableAccessibleLadder": true,
+          "noPermanentLadderOverlap": true,
+          "bryceStroke25": true,
+          "nearestAheadColorAndCopy": true,
+          "nearestBehindColorAndCopy": true,
+          "corridorDotsAreLabeled": true
+        }
+      },
+      "observedSpanMs": 13022,
+      "assertions": {
+        "chartIsGrowing": true,
+        "elapsedNotReservedWindow": true,
+        "observedAtOrAfterTarget": true,
+        "newestLineAtRealNow": true
+      }
+    },
+    {
+      "stateName": "t+60s",
+      "viewportName": "mobile",
+      "file": "analysis/live-f6-audit/screenshots/startup-tplus60s--mobile.png",
+      "rendered": {
+        "data": {
+          "runningOrderChart": "true",
+          "sessionKey": "5544-6761",
+          "sourceCheckedAt": "2026-07-04T17:08:28.124Z",
+          "sourceSampleCount": "16",
+          "clockCheckedAt": "2026-07-04T17:08:28.124Z",
+          "timeDomainStart": "2026-07-04T17:07:25.061Z",
+          "timeDomainEnd": "2026-07-04T17:08:28.124Z",
+          "timeDomainSpanMs": "63063",
+          "windowGrowing": "true",
+          "orderingWaiting": "false",
+          "plotLeft": "44",
+          "nowX": "176.00",
+          "latestSampleX": "176.00",
+          "historyTouchesNow": "true",
+          "ladderGutterPx": "130",
+          "laneLower": "10",
+          "laneUpper": "16",
+          "cameraTargetCenter": "13",
+          "cameraRenderedCenter": "13",
+          "cameraOffsetY": "0.00",
+          "cameraEasing": "off",
+          "focusedDriverId": "",
+          "visibleDriverIds": "2120,2160,2147,2143,2146,2158,2021",
+          "lappedUpstreamCount": "0"
+        },
+        "geometry": {
+          "svg": {
+            "left": 42,
+            "right": 348,
+            "top": 388.34375,
+            "bottom": 706.34375,
+            "width": 306,
+            "height": 318
+          },
+          "circles": [
+            {
+              "left": 222.5,
+              "right": 231.5,
+              "top": 412.84375,
+              "bottom": 421.84375,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 222.5,
+              "right": 231.5,
+              "top": 454.0104064941406,
+              "bottom": 463.0104064941406,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 222.5,
+              "right": 231.5,
+              "top": 495.1770935058594,
+              "bottom": 504.1770935058594,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 222.5,
+              "right": 231.5,
+              "top": 536.34375,
+              "bottom": 545.34375,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 222.5,
+              "right": 231.5,
+              "top": 577.5104370117188,
+              "bottom": 586.5104370117188,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 222.5,
+              "right": 231.5,
+              "top": 618.6770629882812,
+              "bottom": 627.6770629882812,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 222.5,
+              "right": 231.5,
+              "top": 659.84375,
+              "bottom": 668.84375,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            }
+          ],
+          "ladderRows": [
+            {
+              "id": "2120",
+              "top": 404.34375,
+              "bottom": 426.34375,
+              "left": 222.5,
+              "right": 281.71875,
+              "tabIndex": "0",
+              "ariaLabel": "Taylor, P10, 0.5s ahead"
+            },
+            {
+              "id": "2160",
+              "top": 445.5104064941406,
+              "bottom": 467.5104064941406,
+              "left": 222.5,
+              "right": 281.8125,
+              "tabIndex": "0",
+              "ariaLabel": "Correa, P11, 0.3s ahead"
+            },
+            {
+              "id": "2147",
+              "top": 481.6770935058594,
+              "bottom": 513.6770629882812,
+              "left": 222.5,
+              "right": 281.625,
+              "tabIndex": "0",
+              "ariaLabel": "Allaer, P12, 0.1s ahead, ahead now"
+            },
+            {
+              "id": "2143",
+              "top": 531.84375,
+              "bottom": 549.84375,
+              "left": 222.5,
+              "right": 266,
+              "tabIndex": "0",
+              "ariaLabel": "Bryce Aron, car 9, P13, Bryce"
+            },
+            {
+              "id": "2146",
+              "top": 564.0104370117188,
+              "bottom": 596.0104370117188,
+              "left": 222.5,
+              "right": 284.921875,
+              "tabIndex": "0",
+              "ariaLabel": "Koolen, P14, 0.0s behind, behind now"
+            },
+            {
+              "id": "2158",
+              "top": 610.1770629882812,
+              "bottom": 632.1770629882812,
+              "left": 222.5,
+              "right": 284.90625,
+              "tabIndex": "0",
+              "ariaLabel": "Murray, P15, 0.3s behind"
+            },
+            {
+              "id": "2021",
+              "top": 651.34375,
+              "bottom": 673.34375,
+              "left": 222.5,
+              "right": 284.90625,
+              "tabIndex": "0",
+              "ariaLabel": "Missig, P16, 0.3s behind"
+            }
+          ],
+          "endpoints": [
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176,
+            176
+          ],
+          "bryceStrokeWidth": "2.5",
+          "roleRows": [
+            {
+              "id": "2147",
+              "role": "ahead",
+              "text": "Allaer0.1s aheadahead now",
+              "dotFill": "#5581c2"
+            },
+            {
+              "id": "2146",
+              "role": "behind",
+              "text": "Koolen0.0s behindbehind now",
+              "dotFill": "#2f9377"
+            }
+          ]
+        },
+        "intro": "The pack around Bryce — every line a car's running position, gold is Bryce.",
+        "corridorLabels": [
+          "Rowe, 1.2 seconds behind Bryce",
+          "Roe, 1.1 seconds behind Bryce",
+          "Koreiba, 0.6 seconds behind Bryce",
+          "Missig, 0.3 seconds behind Bryce",
+          "Pierson, 0.7 seconds ahead of Bryce",
+          "Fittipaldi, 1.3 seconds ahead of Bryce",
+          "de Alba, 1.2 seconds ahead of Bryce",
+          "Nannini, 0.4 seconds behind Bryce",
+          "Johnson, 0.8 seconds ahead of Bryce",
+          "Hughes, 0.8 seconds ahead of Bryce",
+          "Monteiro, 0.9 seconds behind Bryce",
+          "Etter, 1.3 seconds behind Bryce",
+          "Taylor, 0.5 seconds ahead of Bryce",
+          "Garcia, 0.7 seconds ahead of Bryce",
+          "Koolen, 0.0 seconds behind Bryce",
+          "Allaer, 0.1 seconds ahead of Bryce",
+          "Murray, 0.3 seconds behind Bryce",
+          "Correa, 0.3 seconds ahead of Bryce",
+          "Beeton, 1.1 seconds ahead of Bryce",
+          "de Tullio, 1.0 seconds ahead of Bryce",
+          "Stati, 0.8 seconds behind Bryce",
+          "Kucharczyk, 1.1 seconds ahead of Bryce",
+          "Kaminsky, 1.1 seconds behind Bryce"
+        ],
+        "moduleText": "The battle\nsource\n\nThe pack around Bryce — every line a car's running position, gold is Bryce.\n\n \n4s\n3s\n2s\n1s\n0\n1s\n2s\n3s\n4s\nRowe\nRoe\nKoreiba\nMissig\nPierson\nFittipaldi\nde Alba\nNannini\nJohnson\nHughes\nMonteiro\nEtter\nTaylor\nGarcia\nKoolen\nAllaer\nMurray\nCorrea\nBeeton\nde Tullio\nStati\nKucharczyk\nKaminsky\n№9\nbehind Bryce\nahead of Bryce\n\nThe running order\n\nP10\nP11\nP12\nP13\nP14\nP15\nP16\nTaylor\n0.5s ahead\nCorrea\n0.3s ahead\nAllaer\n0.1s ahead\nahead now\n№9\nKoolen\n0.0s behind\nbehind now\nMurray\n0.3s behind\nMissig\n0.3s behind\n−1m\nnow\nL0\n \nTaylor: P10, 0.5s ahead of Bryce. Correa: P11, 0.3s ahead of Bryce. Allaer: P12, 0.1s ahead of Bryce. Bryce Aron, car 9: P13, Bryce. Koolen: P14, 0.0s behind Bryce. Murray: P15, 0.3s behind Bryce. Missig: P16, 0.3s behind Bryce.\n\nFive minutes of official running position · gold is Bryce · shaded = caution · ○ an overtake involving Bryce",
+        "assertions": {
+          "exactIntro": true,
+          "noBannedModuleCopy": true,
+          "sevenWholeLanes": true,
+          "fixedGutter130": true,
+          "historyTouchesNow": true,
+          "everyLiveEndpointTouchesNow": true,
+          "wholeUnclippedDots": true,
+          "focusableAccessibleLadder": true,
+          "noPermanentLadderOverlap": true,
+          "bryceStroke25": true,
+          "nearestAheadColorAndCopy": true,
+          "nearestBehindColorAndCopy": true,
+          "corridorDotsAreLabeled": true
+        }
+      },
+      "observedSpanMs": 63063,
+      "assertions": {
+        "chartIsGrowing": true,
+        "elapsedNotReservedWindow": true,
+        "observedAtOrAfterTarget": true,
+        "newestLineAtRealNow": true
+      }
+    }
+  ],
+  "lappedProof": {
+    "start": {
+      "data": {
+        "runningOrderChart": "true",
+        "sessionKey": "5544-6761",
+        "sourceCheckedAt": "2026-07-04T17:21:45.388Z",
+        "sourceSampleCount": "2",
+        "clockCheckedAt": "2026-07-04T17:21:45.388Z",
+        "timeDomainStart": "2026-07-04T17:21:44.390Z",
+        "timeDomainEnd": "2026-07-04T17:21:45.388Z",
+        "timeDomainSpanMs": "998",
+        "windowGrowing": "true",
+        "orderingWaiting": "false",
+        "plotLeft": "44",
+        "nowX": "850.00",
+        "latestSampleX": "850.00",
+        "historyTouchesNow": "true",
+        "ladderGutterPx": "130",
+        "laneLower": "15",
+        "laneUpper": "21",
+        "cameraTargetCenter": "18",
+        "cameraRenderedCenter": "18",
+        "cameraOffsetY": "0.00",
+        "cameraEasing": "off",
+        "focusedDriverId": "",
+        "visibleDriverIds": "2120,2147,2086,2143,1063,2114,2013",
+        "lappedUpstreamCount": "1"
+      },
+      "geometry": {
+        "svg": {
+          "left": 230,
+          "right": 1210,
+          "top": 870.1875,
+          "bottom": 1188.1875,
+          "width": 980,
+          "height": 318
+        },
+        "circles": [
+          {
+            "left": 1084.5,
+            "right": 1093.5,
+            "top": 894.6875,
+            "bottom": 903.6875,
+            "width": 9,
+            "height": 9,
+            "withinSvg": true,
+            "round": true
+          },
+          {
+            "left": 1084.5,
+            "right": 1093.5,
+            "top": 935.8541870117188,
+            "bottom": 944.8541870117188,
+            "width": 9,
+            "height": 9,
+            "withinSvg": true,
+            "round": true
+          },
+          {
+            "left": 1084.5,
+            "right": 1093.5,
+            "top": 977.0208129882812,
+            "bottom": 986.0208129882812,
+            "width": 9,
+            "height": 9,
+            "withinSvg": true,
+            "round": true
+          },
+          {
+            "left": 1084.5,
+            "right": 1093.5,
+            "top": 1018.1875,
+            "bottom": 1027.1875,
+            "width": 9,
+            "height": 9,
+            "withinSvg": true,
+            "round": true
+          },
+          {
+            "left": 1084.5,
+            "right": 1093.5,
+            "top": 1059.3541259765625,
+            "bottom": 1068.3541259765625,
+            "width": 9,
+            "height": 9,
+            "withinSvg": true,
+            "round": true
+          },
+          {
+            "left": 1084.5,
+            "right": 1093.5,
+            "top": 1100.5208740234375,
+            "bottom": 1109.5208740234375,
+            "width": 9,
+            "height": 9,
+            "withinSvg": true,
+            "round": true
+          },
+          {
+            "left": 1084.5,
+            "right": 1093.5,
+            "top": 1141.6875,
+            "bottom": 1150.6875,
+            "width": 9,
+            "height": 9,
+            "withinSvg": true,
+            "round": true
+          }
+        ],
+        "ladderRows": [
+          {
+            "id": "2120",
+            "top": 886.1875,
+            "bottom": 908.1875,
+            "left": 1084.5,
+            "right": 1142.46875,
+            "tabIndex": "0",
+            "ariaLabel": "Taylor, P15, 1.0s ahead"
+          },
+          {
+            "id": "2147",
+            "top": 927.3541870117188,
+            "bottom": 949.3541870117188,
+            "left": 1084.5,
+            "right": 1143.8125,
+            "tabIndex": "0",
+            "ariaLabel": "Allaer, P16, 0.9s ahead"
+          },
+          {
+            "id": "2086",
+            "top": 963.5208129882812,
+            "bottom": 995.5208129882812,
+            "left": 1084.5,
+            "right": 1143.953125,
+            "tabIndex": "0",
+            "ariaLabel": "Nannini, P17, 0.4s ahead, ahead now"
+          },
+          {
+            "id": "2143",
+            "top": 1013.6875,
+            "bottom": 1031.6875,
+            "left": 1084.5,
+            "right": 1128,
+            "tabIndex": "0",
+            "ariaLabel": "Bryce Aron, car 9, P18, Bryce"
+          },
+          {
+            "id": "1063",
+            "top": 1045.8541259765625,
+            "bottom": 1077.8541259765625,
+            "left": 1084.5,
+            "right": 1147.046875,
+            "tabIndex": "0",
+            "ariaLabel": "Roe, P19, 0.4s behind, behind now"
+          },
+          {
+            "id": "2114",
+            "top": 1092.0208740234375,
+            "bottom": 1114.0208740234375,
+            "left": 1084.5,
+            "right": 1146.953125,
+            "tabIndex": "0",
+            "ariaLabel": "Monteiro, P20, 0.8s behind"
+          },
+          {
+            "id": "2013",
+            "top": 1133.1875,
+            "bottom": 1155.1875,
+            "left": 1084.5,
+            "right": 1144.234375,
+            "tabIndex": "0",
+            "ariaLabel": "Koreiba, P21, 1.1s behind"
+          }
+        ],
+        "endpoints": [
+          850,
+          850,
+          850,
+          850,
+          850,
+          850,
+          850,
+          850,
+          850,
+          850,
+          850,
+          850,
+          850,
+          850,
+          850,
+          850,
+          850,
+          850,
+          850,
+          850,
+          850,
+          850,
+          850,
+          850
+        ],
+        "bryceStrokeWidth": "2.5",
+        "roleRows": [
+          {
+            "id": "2086",
+            "role": "ahead",
+            "text": "Nannini0.4s aheadahead now",
+            "dotFill": "#5581c2"
+          },
+          {
+            "id": "1063",
+            "role": "behind",
+            "text": "Roe0.4s behindbehind now",
+            "dotFill": "#2f9377"
+          }
+        ]
+      },
+      "intro": "The pack around Bryce — every line a car's running position, gold is Bryce.",
+      "corridorLabels": [
+        "Rowe, 1.9 seconds ahead of Bryce",
+        "Roe, 0.4 seconds behind Bryce",
+        "Koreiba, 1.1 seconds behind Bryce",
+        "Missig, 3.1 seconds ahead of Bryce",
+        "Nannini, 0.4 seconds ahead of Bryce",
+        "Monteiro, 0.8 seconds behind Bryce",
+        "Etter, 2.2 seconds behind Bryce",
+        "Taylor, 1.0 seconds ahead of Bryce",
+        "Koolen, 3.7 seconds ahead of Bryce",
+        "Allaer, 0.9 seconds ahead of Bryce",
+        "Murray, 2.3 seconds ahead of Bryce",
+        "Stati, 3.8 seconds behind Bryce",
+        "Kaminsky, 1.5 seconds behind Bryce"
+      ],
+      "moduleText": "The battle\nsource\n\nThe pack around Bryce — every line a car's running position, gold is Bryce.\n\n \n4s\n3s\n2s\n1s\n0\n1s\n2s\n3s\n4s\nRowe\nRoe\nKoreiba\nMissig\nNannini\nMonteiro\nEtter\nTaylor\nKoolen\nAllaer\nMurray\nStati\nKaminsky\n№9\nbehind Bryce\nahead of Bryce\n\nThe running order\n\nP15\nP16\nP17\nP18\nP19\nP20\nP21\nTaylor\n1.0s ahead\nAllaer\n0.9s ahead\nNannini\n0.4s ahead\nahead now\n№9\nRoe\n0.4s behind\nbehind now\nMonteiro\n0.8s behind\nKoreiba\n1.1s behind\nnow\nL10\n \nTaylor: P15, 1.0s ahead of Bryce. Allaer: P16, 0.9s ahead of Bryce. Nannini: P17, 0.4s ahead of Bryce. Bryce Aron, car 9: P18, Bryce. Roe: P19, 0.4s behind Bryce. Monteiro: P20, 0.8s behind Bryce. Koreiba: P21, 1.1s behind Bryce.\n\nFive minutes of official running position · gold is Bryce · shaded = caution · ○ an overtake involving Bryce",
+      "assertions": {
+        "exactIntro": true,
+        "noBannedModuleCopy": true,
+        "sevenWholeLanes": true,
+        "fixedGutter130": true,
+        "historyTouchesNow": true,
+        "everyLiveEndpointTouchesNow": true,
+        "wholeUnclippedDots": true,
+        "focusableAccessibleLadder": true,
+        "noPermanentLadderOverlap": true,
+        "bryceStroke25": true,
+        "nearestAheadColorAndCopy": true,
+        "nearestBehindColorAndCopy": true,
+        "corridorDotsAreLabeled": true
+      }
+    },
+    "end": {
+      "data": {
+        "runningOrderChart": "true",
+        "sessionKey": "5544-6761",
+        "sourceCheckedAt": "2026-07-04T17:21:47.400Z",
+        "sourceSampleCount": "4",
+        "clockCheckedAt": "2026-07-04T17:21:47.400Z",
+        "timeDomainStart": "2026-07-04T17:21:44.390Z",
+        "timeDomainEnd": "2026-07-04T17:21:47.400Z",
+        "timeDomainSpanMs": "3010",
+        "windowGrowing": "true",
+        "orderingWaiting": "false",
+        "plotLeft": "44",
+        "nowX": "850.00",
+        "latestSampleX": "850.00",
+        "historyTouchesNow": "true",
+        "ladderGutterPx": "130",
+        "laneLower": "15",
+        "laneUpper": "21",
+        "cameraTargetCenter": "18",
+        "cameraRenderedCenter": "18",
+        "cameraOffsetY": "0.00",
+        "cameraEasing": "off",
+        "focusedDriverId": "",
+        "visibleDriverIds": "2120,2147,2086,2143,1063,2114,2013",
+        "lappedUpstreamCount": "1"
+      },
+      "geometry": {
+        "svg": {
+          "left": 230,
+          "right": 1210,
+          "top": 527.1875,
+          "bottom": 845.1875,
+          "width": 980,
+          "height": 318
+        },
+        "circles": [
+          {
+            "left": 1084.5,
+            "right": 1093.5,
+            "top": 551.6875,
+            "bottom": 560.6875,
+            "width": 9,
+            "height": 9,
+            "withinSvg": true,
+            "round": true
+          },
+          {
+            "left": 1084.5,
+            "right": 1093.5,
+            "top": 592.8541870117188,
+            "bottom": 601.8541870117188,
+            "width": 9,
+            "height": 9,
+            "withinSvg": true,
+            "round": true
+          },
+          {
+            "left": 1084.5,
+            "right": 1093.5,
+            "top": 634.0208129882812,
+            "bottom": 643.0208129882812,
+            "width": 9,
+            "height": 9,
+            "withinSvg": true,
+            "round": true
+          },
+          {
+            "left": 1084.5,
+            "right": 1093.5,
+            "top": 675.1875,
+            "bottom": 684.1875,
+            "width": 9,
+            "height": 9,
+            "withinSvg": true,
+            "round": true
+          },
+          {
+            "left": 1084.5,
+            "right": 1093.5,
+            "top": 716.3541870117188,
+            "bottom": 725.3541870117188,
+            "width": 9,
+            "height": 9,
+            "withinSvg": true,
+            "round": true
+          },
+          {
+            "left": 1084.5,
+            "right": 1093.5,
+            "top": 757.5208129882812,
+            "bottom": 766.5208129882812,
+            "width": 9,
+            "height": 9,
+            "withinSvg": true,
+            "round": true
+          },
+          {
+            "left": 1084.5,
+            "right": 1093.5,
+            "top": 798.6875,
+            "bottom": 807.6875,
+            "width": 9,
+            "height": 9,
+            "withinSvg": true,
+            "round": true
+          }
+        ],
+        "ladderRows": [
+          {
+            "id": "2120",
+            "top": 543.1875,
+            "bottom": 565.1875,
+            "left": 1084.5,
+            "right": 1142.46875,
+            "tabIndex": "0",
+            "ariaLabel": "Taylor, P15, 1.0s ahead"
+          },
+          {
+            "id": "2147",
+            "top": 584.3541870117188,
+            "bottom": 606.3541870117188,
+            "left": 1084.5,
+            "right": 1143.875,
+            "tabIndex": "0",
+            "ariaLabel": "Allaer, P16, 0.8s ahead"
+          },
+          {
+            "id": "2086",
+            "top": 620.5208129882812,
+            "bottom": 652.5208129882812,
+            "left": 1084.5,
+            "right": 1143.953125,
+            "tabIndex": "0",
+            "ariaLabel": "Nannini, P17, 0.4s ahead, ahead now"
+          },
+          {
+            "id": "2143",
+            "top": 670.6875,
+            "bottom": 688.6875,
+            "left": 1084.5,
+            "right": 1128,
+            "tabIndex": "0",
+            "ariaLabel": "Bryce Aron, car 9, P18, Bryce"
+          },
+          {
+            "id": "1063",
+            "top": 702.8541870117188,
+            "bottom": 734.8541870117188,
+            "left": 1084.5,
+            "right": 1147.046875,
+            "tabIndex": "0",
+            "ariaLabel": "Roe, P19, 0.4s behind, behind now"
+          },
+          {
+            "id": "2114",
+            "top": 749.0208129882812,
+            "bottom": 771.0208129882812,
+            "left": 1084.5,
+            "right": 1146.90625,
+            "tabIndex": "0",
+            "ariaLabel": "Monteiro, P20, 0.9s behind"
+          },
+          {
+            "id": "2013",
+            "top": 790.1875,
+            "bottom": 812.1875,
+            "left": 1084.5,
+            "right": 1144.234375,
+            "tabIndex": "0",
+            "ariaLabel": "Koreiba, P21, 1.1s behind"
+          }
+        ],
+        "endpoints": [
+          850,
+          850,
+          850,
+          850,
+          850,
+          850,
+          850,
+          850,
+          850,
+          850,
+          850,
+          850,
+          850,
+          850,
+          850,
+          850,
+          850,
+          850,
+          850,
+          850,
+          850,
+          850,
+          850,
+          850
+        ],
+        "bryceStrokeWidth": "2.5",
+        "roleRows": [
+          {
+            "id": "2086",
+            "role": "ahead",
+            "text": "Nannini0.4s aheadahead now",
+            "dotFill": "#5581c2"
+          },
+          {
+            "id": "1063",
+            "role": "behind",
+            "text": "Roe0.4s behindbehind now",
+            "dotFill": "#2f9377"
+          }
+        ]
+      },
+      "intro": "The pack around Bryce — every line a car's running position, gold is Bryce.",
+      "corridorLabels": [
+        "Rowe, 2.0 seconds ahead of Bryce",
+        "Roe, 0.4 seconds behind Bryce",
+        "Koreiba, 1.1 seconds behind Bryce",
+        "Missig, 3.1 seconds ahead of Bryce",
+        "Nannini, 0.4 seconds ahead of Bryce",
+        "Monteiro, 0.9 seconds behind Bryce",
+        "Etter, 2.1 seconds behind Bryce",
+        "Taylor, 1.0 seconds ahead of Bryce",
+        "Koolen, 3.7 seconds ahead of Bryce",
+        "Allaer, 0.8 seconds ahead of Bryce",
+        "Murray, 2.3 seconds ahead of Bryce",
+        "Stati, 3.8 seconds behind Bryce",
+        "Kaminsky, 1.5 seconds behind Bryce"
+      ],
+      "moduleText": "The battle\nsource\n\nThe pack around Bryce — every line a car's running position, gold is Bryce.\n\n \n4s\n3s\n2s\n1s\n0\n1s\n2s\n3s\n4s\nRowe\nRoe\nKoreiba\nMissig\nNannini\nMonteiro\nEtter\nTaylor\nKoolen\nAllaer\nMurray\nStati\nKaminsky\n№9\nbehind Bryce\nahead of Bryce\n\nThe running order\n\nP15\nP16\nP17\nP18\nP19\nP20\nP21\nTaylor\n1.0s ahead\nAllaer\n0.8s ahead\nNannini\n0.4s ahead\nahead now\n№9\nRoe\n0.4s behind\nbehind now\nMonteiro\n0.9s behind\nKoreiba\n1.1s behind\n−3s\n−2s\n−1s\nnow\nL10\n \nTaylor: P15, 1.0s ahead of Bryce. Allaer: P16, 0.8s ahead of Bryce. Nannini: P17, 0.4s ahead of Bryce. Bryce Aron, car 9: P18, Bryce. Roe: P19, 0.4s behind Bryce. Monteiro: P20, 0.9s behind Bryce. Koreiba: P21, 1.1s behind Bryce.\n\nFive minutes of official running position · gold is Bryce · shaded = caution · ○ an overtake involving Bryce",
+      "assertions": {
+        "exactIntro": true,
+        "noBannedModuleCopy": true,
+        "sevenWholeLanes": true,
+        "fixedGutter130": true,
+        "historyTouchesNow": true,
+        "everyLiveEndpointTouchesNow": true,
+        "wholeUnclippedDots": true,
+        "focusableAccessibleLadder": true,
+        "noPermanentLadderOverlap": true,
+        "bryceStroke25": true,
+        "nearestAheadColorAndCopy": true,
+        "nearestBehindColorAndCopy": true,
+        "corridorDotsAreLabeled": true
+      }
+    },
+    "files": [
+      "lapped-upstream-start--desktop.png",
+      "lapped-upstream-end--desktop.png"
+    ],
+    "assertions": {
+      "lappedCarWasUpstreamThroughout": true,
+      "historyContinuedAppending": true,
+      "sourceClockAdvanced": true,
+      "endpointsStillTouchNow": true
+    }
+  },
+  "overtakeProof": {
+    "before": {
+      "phase": "before",
+      "checkedAt": "2026-07-04T17:22:04.423Z",
+      "rendered": {
+        "data": {
+          "runningOrderChart": "true",
+          "sessionKey": "5544-6761",
+          "sourceCheckedAt": "2026-07-04T17:22:04.423Z",
+          "sourceSampleCount": "4",
+          "clockCheckedAt": "2026-07-04T17:22:04.423Z",
+          "timeDomainStart": "2026-07-04T17:22:01.422Z",
+          "timeDomainEnd": "2026-07-04T17:22:04.423Z",
+          "timeDomainSpanMs": "3001",
+          "windowGrowing": "true",
+          "orderingWaiting": "false",
+          "plotLeft": "44",
+          "nowX": "850.00",
+          "latestSampleX": "850.00",
+          "historyTouchesNow": "true",
+          "ladderGutterPx": "130",
+          "laneLower": "15",
+          "laneUpper": "21",
+          "cameraTargetCenter": "18",
+          "cameraRenderedCenter": "18",
+          "cameraOffsetY": "0.00",
+          "cameraEasing": "off",
+          "focusedDriverId": "",
+          "visibleDriverIds": "2120,2086,2147,2143,1063,2114,2013",
+          "lappedUpstreamCount": "0"
+        },
+        "geometry": {
+          "svg": {
+            "left": 230,
+            "right": 1210,
+            "top": 870.1875,
+            "bottom": 1188.1875,
+            "width": 980,
+            "height": 318
+          },
+          "circles": [
+            {
+              "left": 1084.5,
+              "right": 1093.5,
+              "top": 894.6875,
+              "bottom": 903.6875,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 1084.5,
+              "right": 1093.5,
+              "top": 935.8541870117188,
+              "bottom": 944.8541870117188,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 1084.5,
+              "right": 1093.5,
+              "top": 977.0208129882812,
+              "bottom": 986.0208129882812,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 1084.5,
+              "right": 1093.5,
+              "top": 1018.1875,
+              "bottom": 1027.1875,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 1084.5,
+              "right": 1093.5,
+              "top": 1059.3541259765625,
+              "bottom": 1068.3541259765625,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 1084.5,
+              "right": 1093.5,
+              "top": 1100.5208740234375,
+              "bottom": 1109.5208740234375,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 1084.5,
+              "right": 1093.5,
+              "top": 1141.6875,
+              "bottom": 1150.6875,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            }
+          ],
+          "ladderRows": [
+            {
+              "id": "2120",
+              "top": 886.1875,
+              "bottom": 908.1875,
+              "left": 1084.5,
+              "right": 1142.53125,
+              "tabIndex": "0",
+              "ariaLabel": "Taylor, P15, 1.3s ahead"
+            },
+            {
+              "id": "2086",
+              "top": 927.3541870117188,
+              "bottom": 949.3541870117188,
+              "left": 1084.5,
+              "right": 1143.953125,
+              "tabIndex": "0",
+              "ariaLabel": "Nannini, P16, 0.4s ahead"
+            },
+            {
+              "id": "2147",
+              "top": 963.5208129882812,
+              "bottom": 995.5208129882812,
+              "left": 1084.5,
+              "right": 1143.953125,
+              "tabIndex": "0",
+              "ariaLabel": "Allaer, P17, 0.4s ahead, ahead now"
+            },
+            {
+              "id": "2143",
+              "top": 1013.6875,
+              "bottom": 1031.6875,
+              "left": 1084.5,
+              "right": 1128,
+              "tabIndex": "0",
+              "ariaLabel": "Bryce Aron, car 9, P18, Bryce"
+            },
+            {
+              "id": "1063",
+              "top": 1045.8541259765625,
+              "bottom": 1077.8541259765625,
+              "left": 1084.5,
+              "right": 1147.046875,
+              "tabIndex": "0",
+              "ariaLabel": "Roe, P19, 0.4s behind, behind now"
+            },
+            {
+              "id": "2114",
+              "top": 1092.0208740234375,
+              "bottom": 1114.0208740234375,
+              "left": 1084.5,
+              "right": 1146.90625,
+              "tabIndex": "0",
+              "ariaLabel": "Monteiro, P20, 0.6s behind"
+            },
+            {
+              "id": "2013",
+              "top": 1133.1875,
+              "bottom": 1155.1875,
+              "left": 1084.5,
+              "right": 1145.5,
+              "tabIndex": "0",
+              "ariaLabel": "Koreiba, P21, 1.2s behind"
+            }
+          ],
+          "endpoints": [
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850
+          ],
+          "bryceStrokeWidth": "2.5",
+          "roleRows": [
+            {
+              "id": "2147",
+              "role": "ahead",
+              "text": "Allaer0.4s aheadahead now",
+              "dotFill": "#5581c2"
+            },
+            {
+              "id": "1063",
+              "role": "behind",
+              "text": "Roe0.4s behindbehind now",
+              "dotFill": "#2f9377"
+            }
+          ]
+        },
+        "intro": "The pack around Bryce — every line a car's running position, gold is Bryce.",
+        "corridorLabels": [
+          "Rowe, 2.0 seconds ahead of Bryce",
+          "Roe, 0.4 seconds behind Bryce",
+          "Koreiba, 1.2 seconds behind Bryce",
+          "Missig, 3.4 seconds ahead of Bryce",
+          "Nannini, 0.4 seconds ahead of Bryce",
+          "Monteiro, 0.6 seconds behind Bryce",
+          "Etter, 2.2 seconds behind Bryce",
+          "Taylor, 1.3 seconds ahead of Bryce",
+          "Allaer, 0.4 seconds ahead of Bryce",
+          "Murray, 2.6 seconds ahead of Bryce",
+          "Stati, 3.9 seconds behind Bryce",
+          "Kaminsky, 1.6 seconds behind Bryce"
+        ],
+        "moduleText": "The battle\nsource\n\nThe pack around Bryce — every line a car's running position, gold is Bryce.\n\n \n4s\n3s\n2s\n1s\n0\n1s\n2s\n3s\n4s\nRowe\nRoe\nKoreiba\nMissig\nNannini\nMonteiro\nEtter\nTaylor\nAllaer\nMurray\nStati\nKaminsky\n№9\nbehind Bryce\nahead of Bryce\n\nThe running order\n\nP15\nP16\nP17\nP18\nP19\nP20\nP21\nTaylor\n1.3s ahead\nNannini\n0.4s ahead\nAllaer\n0.4s ahead\nahead now\n№9\nRoe\n0.4s behind\nbehind now\nMonteiro\n0.6s behind\nKoreiba\n1.2s behind\n−3s\n−2s\n−1s\nnow\nL10\n \nTaylor: P15, 1.3s ahead of Bryce. Nannini: P16, 0.4s ahead of Bryce. Allaer: P17, 0.4s ahead of Bryce. Bryce Aron, car 9: P18, Bryce. Roe: P19, 0.4s behind Bryce. Monteiro: P20, 0.6s behind Bryce. Koreiba: P21, 1.2s behind Bryce.\n\nFive minutes of official running position · gold is Bryce · shaded = caution · ○ an overtake involving Bryce",
+        "assertions": {
+          "exactIntro": true,
+          "noBannedModuleCopy": true,
+          "sevenWholeLanes": true,
+          "fixedGutter130": true,
+          "historyTouchesNow": true,
+          "everyLiveEndpointTouchesNow": true,
+          "wholeUnclippedDots": true,
+          "focusableAccessibleLadder": true,
+          "noPermanentLadderOverlap": true,
+          "bryceStroke25": true,
+          "nearestAheadColorAndCopy": true,
+          "nearestBehindColorAndCopy": true,
+          "corridorDotsAreLabeled": true
+        }
+      },
+      "fieldRank": "18",
+      "markerData": [],
+      "file": "overtake-before--desktop.png"
+    },
+    "during": {
+      "phase": "during",
+      "checkedAt": "2026-07-04T17:22:05.680Z",
+      "rendered": {
+        "data": {
+          "runningOrderChart": "true",
+          "sessionKey": "5544-6761",
+          "sourceCheckedAt": "2026-07-04T17:22:05.680Z",
+          "sourceSampleCount": "5",
+          "clockCheckedAt": "2026-07-04T17:22:05.680Z",
+          "timeDomainStart": "2026-07-04T17:22:01.422Z",
+          "timeDomainEnd": "2026-07-04T17:22:05.680Z",
+          "timeDomainSpanMs": "4258",
+          "windowGrowing": "true",
+          "orderingWaiting": "false",
+          "plotLeft": "44",
+          "nowX": "850.00",
+          "latestSampleX": "850.00",
+          "historyTouchesNow": "true",
+          "ladderGutterPx": "130",
+          "laneLower": "14",
+          "laneUpper": "20",
+          "cameraTargetCenter": "17",
+          "cameraRenderedCenter": "17",
+          "cameraOffsetY": "0.00",
+          "cameraEasing": "off",
+          "focusedDriverId": "2143",
+          "visibleDriverIds": "1040,2120,2086,2143,2147,1063,2114",
+          "lappedUpstreamCount": "0"
+        },
+        "geometry": {
+          "svg": {
+            "left": 230,
+            "right": 1210,
+            "top": 527.1875,
+            "bottom": 845.1875,
+            "width": 980,
+            "height": 318
+          },
+          "circles": [
+            {
+              "left": 1084.5,
+              "right": 1093.5,
+              "top": 551.6875,
+              "bottom": 560.6875,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 1084.5,
+              "right": 1093.5,
+              "top": 592.8541870117188,
+              "bottom": 601.8541870117188,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 1084.5,
+              "right": 1093.5,
+              "top": 634.0208129882812,
+              "bottom": 643.0208129882812,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 1084.5,
+              "right": 1093.5,
+              "top": 675.1875,
+              "bottom": 684.1875,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 1084.5,
+              "right": 1093.5,
+              "top": 716.3541870117188,
+              "bottom": 725.3541870117188,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 1084.5,
+              "right": 1093.5,
+              "top": 757.5208129882812,
+              "bottom": 766.5208129882812,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 1084.5,
+              "right": 1093.5,
+              "top": 798.6875,
+              "bottom": 807.6875,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            }
+          ],
+          "ladderRows": [
+            {
+              "id": "1040",
+              "top": 543.1875,
+              "bottom": 565.1875,
+              "left": 1084.5,
+              "right": 1143.734375,
+              "tabIndex": "0",
+              "ariaLabel": "Rowe, P14, 2.0s ahead"
+            },
+            {
+              "id": "2120",
+              "top": 584.3541870117188,
+              "bottom": 606.3541870117188,
+              "left": 1084.5,
+              "right": 1142.53125,
+              "tabIndex": "0",
+              "ariaLabel": "Taylor, P15, 1.3s ahead"
+            },
+            {
+              "id": "2086",
+              "top": 620.5208129882812,
+              "bottom": 652.5208129882812,
+              "left": 1084.5,
+              "right": 1143.953125,
+              "tabIndex": "0",
+              "ariaLabel": "Nannini, P16, 0.4s ahead, ahead now"
+            },
+            {
+              "id": "2143",
+              "top": 670.6875,
+              "bottom": 688.6875,
+              "left": 1084.5,
+              "right": 1128,
+              "tabIndex": "0",
+              "ariaLabel": "Bryce Aron, car 9, P17, Bryce"
+            },
+            {
+              "id": "2147",
+              "top": 702.8541870117188,
+              "bottom": 734.8541870117188,
+              "left": 1084.5,
+              "right": 1146.921875,
+              "tabIndex": "0",
+              "ariaLabel": "Allaer, P18, 0.0s behind, behind now"
+            },
+            {
+              "id": "1063",
+              "top": 749.0208129882812,
+              "bottom": 771.0208129882812,
+              "left": 1084.5,
+              "right": 1147.046875,
+              "tabIndex": "0",
+              "ariaLabel": "Roe, P19, 0.4s behind"
+            },
+            {
+              "id": "2114",
+              "top": 790.1875,
+              "bottom": 812.1875,
+              "left": 1084.5,
+              "right": 1146.03125,
+              "tabIndex": "0",
+              "ariaLabel": "Monteiro, P20, 0.7s behind"
+            }
+          ],
+          "endpoints": [
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850
+          ],
+          "bryceStrokeWidth": "2.5",
+          "roleRows": [
+            {
+              "id": "2086",
+              "role": "ahead",
+              "text": "Nannini0.4s aheadahead now",
+              "dotFill": "#5581c2"
+            },
+            {
+              "id": "2147",
+              "role": "behind",
+              "text": "Allaer0.0s behindbehind now",
+              "dotFill": "#2f9377"
+            }
+          ]
+        },
+        "intro": "The pack around Bryce — every line a car's running position, gold is Bryce.",
+        "corridorLabels": [
+          "Rowe, 2.0 seconds ahead of Bryce",
+          "Roe, 0.4 seconds behind Bryce",
+          "Koreiba, 1.3 seconds behind Bryce",
+          "Missig, 3.4 seconds ahead of Bryce",
+          "Nannini, 0.4 seconds ahead of Bryce",
+          "Monteiro, 0.7 seconds behind Bryce",
+          "Etter, 2.2 seconds behind Bryce",
+          "Taylor, 1.3 seconds ahead of Bryce",
+          "Allaer, 0.0 seconds behind Bryce",
+          "Murray, 2.6 seconds ahead of Bryce",
+          "Stati, 3.9 seconds behind Bryce",
+          "Kaminsky, 1.7 seconds behind Bryce"
+        ],
+        "moduleText": "The battle\nsource\n\nThe pack around Bryce — every line a car's running position, gold is Bryce.\n\n \n4s\n3s\n2s\n1s\n0\n1s\n2s\n3s\n4s\nRowe\nRoe\nKoreiba\nMissig\nNannini\nMonteiro\nEtter\nTaylor\nAllaer\nMurray\nStati\nKaminsky\n№9\nbehind Bryce\nahead of Bryce\n\nThe running order\n\nP14\nP15\nP16\nP17\nP18\nP19\nP20\nRowe\n2.0s ahead\nTaylor\n1.3s ahead\nNannini\n0.4s ahead\nahead now\n№9\nAllaer\n0.0s behind\nbehind now\nRoe\n0.4s behind\nMonteiro\n0.7s behind\n−4s\n−3s\n−2s\n−1s\nnow\nL10\n \nRowe: P14, 2.0s ahead of Bryce. Taylor: P15, 1.3s ahead of Bryce. Nannini: P16, 0.4s ahead of Bryce. Bryce Aron, car 9: P17, Bryce. Allaer: P18, 0.0s behind Bryce. Roe: P19, 0.4s behind Bryce. Monteiro: P20, 0.7s behind Bryce.\nahead of Allaer · lap 10\n\nFive minutes of official running position · gold is Bryce · shaded = caution · ○ an overtake involving Bryce",
+        "assertions": {
+          "exactIntro": true,
+          "noBannedModuleCopy": true,
+          "sevenWholeLanes": true,
+          "fixedGutter130": true,
+          "historyTouchesNow": true,
+          "everyLiveEndpointTouchesNow": true,
+          "wholeUnclippedDots": true,
+          "focusableAccessibleLadder": true,
+          "noPermanentLadderOverlap": true,
+          "bryceStroke25": true,
+          "nearestAheadColorAndCopy": true,
+          "nearestBehindColorAndCopy": true,
+          "corridorDotsAreLabeled": true
+        }
+      },
+      "fieldRank": "17",
+      "markerData": [
+        {
+          "bryceCrossing": "true",
+          "rivalId": "2147",
+          "crossingDirection": "ahead_of",
+          "crossingLap": "10",
+          "ariaLabel": "ahead of Allaer, lap 10"
+        }
+      ],
+      "file": "overtake-during--desktop.png"
+    },
+    "after": {
+      "phase": "after",
+      "checkedAt": "2026-07-04T17:22:06.431Z",
+      "rendered": {
+        "data": {
+          "runningOrderChart": "true",
+          "sessionKey": "5544-6761",
+          "sourceCheckedAt": "2026-07-04T17:22:06.431Z",
+          "sourceSampleCount": "6",
+          "clockCheckedAt": "2026-07-04T17:22:06.431Z",
+          "timeDomainStart": "2026-07-04T17:22:01.422Z",
+          "timeDomainEnd": "2026-07-04T17:22:06.431Z",
+          "timeDomainSpanMs": "5009",
+          "windowGrowing": "true",
+          "orderingWaiting": "false",
+          "plotLeft": "44",
+          "nowX": "850.00",
+          "latestSampleX": "850.00",
+          "historyTouchesNow": "true",
+          "ladderGutterPx": "130",
+          "laneLower": "14",
+          "laneUpper": "20",
+          "cameraTargetCenter": "17",
+          "cameraRenderedCenter": "17",
+          "cameraOffsetY": "0.00",
+          "cameraEasing": "off",
+          "focusedDriverId": "2143",
+          "visibleDriverIds": "1040,2120,2086,2143,2147,1063,2114",
+          "lappedUpstreamCount": "0"
+        },
+        "geometry": {
+          "svg": {
+            "left": 230,
+            "right": 1210,
+            "top": 527.1875,
+            "bottom": 845.1875,
+            "width": 980,
+            "height": 318
+          },
+          "circles": [
+            {
+              "left": 1084.5,
+              "right": 1093.5,
+              "top": 551.6875,
+              "bottom": 560.6875,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 1084.5,
+              "right": 1093.5,
+              "top": 592.8541870117188,
+              "bottom": 601.8541870117188,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 1084.5,
+              "right": 1093.5,
+              "top": 634.0208129882812,
+              "bottom": 643.0208129882812,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 1084.5,
+              "right": 1093.5,
+              "top": 675.1875,
+              "bottom": 684.1875,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 1084.5,
+              "right": 1093.5,
+              "top": 716.3541870117188,
+              "bottom": 725.3541870117188,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 1084.5,
+              "right": 1093.5,
+              "top": 757.5208129882812,
+              "bottom": 766.5208129882812,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            },
+            {
+              "left": 1084.5,
+              "right": 1093.5,
+              "top": 798.6875,
+              "bottom": 807.6875,
+              "width": 9,
+              "height": 9,
+              "withinSvg": true,
+              "round": true
+            }
+          ],
+          "ladderRows": [
+            {
+              "id": "1040",
+              "top": 543.1875,
+              "bottom": 565.1875,
+              "left": 1084.5,
+              "right": 1143.734375,
+              "tabIndex": "0",
+              "ariaLabel": "Rowe, P14, 2.0s ahead"
+            },
+            {
+              "id": "2120",
+              "top": 584.3541870117188,
+              "bottom": 606.3541870117188,
+              "left": 1084.5,
+              "right": 1142.53125,
+              "tabIndex": "0",
+              "ariaLabel": "Taylor, P15, 1.3s ahead"
+            },
+            {
+              "id": "2086",
+              "top": 620.5208129882812,
+              "bottom": 652.5208129882812,
+              "left": 1084.5,
+              "right": 1143.953125,
+              "tabIndex": "0",
+              "ariaLabel": "Nannini, P16, 0.4s ahead, ahead now"
+            },
+            {
+              "id": "2143",
+              "top": 670.6875,
+              "bottom": 688.6875,
+              "left": 1084.5,
+              "right": 1128,
+              "tabIndex": "0",
+              "ariaLabel": "Bryce Aron, car 9, P17, Bryce"
+            },
+            {
+              "id": "2147",
+              "top": 702.8541870117188,
+              "bottom": 734.8541870117188,
+              "left": 1084.5,
+              "right": 1146.921875,
+              "tabIndex": "0",
+              "ariaLabel": "Allaer, P18, 0.0s behind, behind now"
+            },
+            {
+              "id": "1063",
+              "top": 749.0208129882812,
+              "bottom": 771.0208129882812,
+              "left": 1084.5,
+              "right": 1147.046875,
+              "tabIndex": "0",
+              "ariaLabel": "Roe, P19, 0.4s behind"
+            },
+            {
+              "id": "2114",
+              "top": 790.1875,
+              "bottom": 812.1875,
+              "left": 1084.5,
+              "right": 1146.03125,
+              "tabIndex": "0",
+              "ariaLabel": "Monteiro, P20, 0.7s behind"
+            }
+          ],
+          "endpoints": [
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850,
+            850
+          ],
+          "bryceStrokeWidth": "2.5",
+          "roleRows": [
+            {
+              "id": "2086",
+              "role": "ahead",
+              "text": "Nannini0.4s aheadahead now",
+              "dotFill": "#5581c2"
+            },
+            {
+              "id": "2147",
+              "role": "behind",
+              "text": "Allaer0.0s behindbehind now",
+              "dotFill": "#2f9377"
+            }
+          ]
+        },
+        "intro": "The pack around Bryce — every line a car's running position, gold is Bryce.",
+        "corridorLabels": [
+          "Rowe, 2.0 seconds ahead of Bryce",
+          "Roe, 0.4 seconds behind Bryce",
+          "Koreiba, 1.3 seconds behind Bryce",
+          "Missig, 3.4 seconds ahead of Bryce",
+          "Nannini, 0.4 seconds ahead of Bryce",
+          "Monteiro, 0.7 seconds behind Bryce",
+          "Etter, 2.2 seconds behind Bryce",
+          "Taylor, 1.3 seconds ahead of Bryce",
+          "Allaer, 0.0 seconds behind Bryce",
+          "Murray, 2.6 seconds ahead of Bryce",
+          "Stati, 3.9 seconds behind Bryce",
+          "Kaminsky, 1.7 seconds behind Bryce"
+        ],
+        "moduleText": "The battle\nsource\n\nThe pack around Bryce — every line a car's running position, gold is Bryce.\n\n \n4s\n3s\n2s\n1s\n0\n1s\n2s\n3s\n4s\nRowe\nRoe\nKoreiba\nMissig\nNannini\nMonteiro\nEtter\nTaylor\nAllaer\nMurray\nStati\nKaminsky\n№9\nbehind Bryce\nahead of Bryce\n\nThe running order\n\nP14\nP15\nP16\nP17\nP18\nP19\nP20\nRowe\n2.0s ahead\nTaylor\n1.3s ahead\nNannini\n0.4s ahead\nahead now\n№9\nAllaer\n0.0s behind\nbehind now\nRoe\n0.4s behind\nMonteiro\n0.7s behind\n−4s\n−2s\nnow\nL10\n \nRowe: P14, 2.0s ahead of Bryce. Taylor: P15, 1.3s ahead of Bryce. Nannini: P16, 0.4s ahead of Bryce. Bryce Aron, car 9: P17, Bryce. Allaer: P18, 0.0s behind Bryce. Roe: P19, 0.4s behind Bryce. Monteiro: P20, 0.7s behind Bryce.\nahead of Allaer · lap 10\n\nFive minutes of official running position · gold is Bryce · shaded = caution · ○ an overtake involving Bryce",
+        "assertions": {
+          "exactIntro": true,
+          "noBannedModuleCopy": true,
+          "sevenWholeLanes": true,
+          "fixedGutter130": true,
+          "historyTouchesNow": true,
+          "everyLiveEndpointTouchesNow": true,
+          "wholeUnclippedDots": true,
+          "focusableAccessibleLadder": true,
+          "noPermanentLadderOverlap": true,
+          "bryceStroke25": true,
+          "nearestAheadColorAndCopy": true,
+          "nearestBehindColorAndCopy": true,
+          "corridorDotsAreLabeled": true
+        }
+      },
+      "fieldRank": "17",
+      "markerData": [
+        {
+          "bryceCrossing": "true",
+          "rivalId": "2147",
+          "crossingDirection": "ahead_of",
+          "crossingLap": "10",
+          "ariaLabel": "ahead of Allaer, lap 10"
+        }
+      ],
+      "file": "overtake-after--desktop.png"
+    },
+    "assertions": {
+      "sourceAdvancedInOrder": true,
+      "bryceRankChanged18To17": true,
+      "exactOpenMarker": true,
+      "rankChartAndFieldAgree": true
+    }
+  },
+  "emptyHoverProof": {
+    "cursor": {
+      "x": 451.32,
+      "y": 576.6875,
+      "focused": ""
+    },
+    "file": "empty-hover-visible-cursor--desktop.png",
+    "focusedDriverId": "",
+    "visibleCursorCount": 1,
+    "assertions": {
+      "foundEmptyPlotSpace": true,
+      "emptySpaceHasNoFocus": true,
+      "cursorIsVisibleInScreenshot": true
+    }
+  },
+  "sourceDrawerProof": {
+    "file": "source-method--desktop.png",
+    "text": "Where this comes from The battle Race Control timing feed · Bryce-centered corridor /api/readiness → liveTiming.rows[].liveGap The corridor walks Race Control’s live interval to the preceding ranked car around Bryce. Missing intervals break the chain; no gap is filled with zero and no GPS position is inferred. Race Control timing feed · official running order /api/readiness → liveTiming.rows[].liveRank / rank Every lower-chart lane is an official running position. A lapped car keeps its position lane. When Race Control ordering disappears, every line breaks until it returns. Session-keyed in-memory history AppV3 → useLiveSessionHistory The shared history survives route navigation, deduplicates source timestamps, sorts late arrivals, and isolates sessions. The source clock sets both each sample’s horizontal position and the right edge. A hard browser reload starts a new window.",
+    "assertions": {
+      "officialRankMethodPresent": true,
+      "lappedPersistencePresent": true,
+      "sharedClockPresent": true,
+      "methodSentencesAbsentFromCard": true
+    }
+  },
+  "motionProof": {
+    "transition": "transform 400ms cubic-bezier(0.23, 1, 0.32, 1)",
+    "reducedMotion": false,
+    "assertions": {
+      "normalMotionEnabled": true,
+      "wholeLaneEase400ms": true
+    }
+  },
+  "consoleErrors": [],
+  "ok": true
+}

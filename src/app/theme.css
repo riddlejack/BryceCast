@@ -949,9 +949,54 @@ button { font-family: inherit; }
   font-weight: 600;
 }
 
+.live-running-order {
+  position: relative;
+  width: 100%;
+  min-height: 318px;
+}
+
+.live-running-order svg {
+  display: block;
+  max-width: 100%;
+  overflow: visible;
+}
+
+.live-running-order__scene,
+.live-running-order__marks,
+.live-running-order__ladder {
+  transform-box: view-box;
+  transform-origin: center;
+}
+
+.live-running-order__status {
+  min-height: 16px;
+  margin: -3px 0 5px;
+  color: var(--ink-muted);
+  font-size: 10.5px;
+  line-height: 1.4;
+}
+
+.live-running-order [tabindex]:focus {
+  outline: 1.5px solid var(--link);
+  outline-offset: 2px;
+}
+
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .live-battle__car--motion { transition: none; }
   .live-camera * { transition: none !important; animation: none !important; }
+  .live-running-order * { transition: none !important; animation: none !important; }
 }
 
 .live-layout { grid-template-columns: minmax(0, 1fr); align-items: start; }
