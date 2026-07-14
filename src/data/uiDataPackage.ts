@@ -18,6 +18,19 @@ export interface UiCareerRival {
   notableRaces: Array<{ label: string; finishDelta: number | null }>;
 }
 
+export type UiCareerMomentKind =
+  | 'first_car_win'
+  | 'first_indy_nxt_race'
+  | 'best_indy_nxt_finish'
+  | 'daytona_24'
+  | 'wwtr_mechanical';
+
+export interface UiCareerMoment {
+  sessionId: string;
+  shortLabel: string;
+  kind: UiCareerMomentKind;
+}
+
 export interface UiSeasonLapMix {
   seasonYear: number;
   races: number;
@@ -518,6 +531,7 @@ export interface UiDataPackage {
       parityBySeries: Record<string, Array<Record<string, string | number | null>>>;
       resultConversion: Array<Record<string, string | number | null>>;
       resultConversionSample: Array<Record<string, string | number | null>>;
+      moments: UiCareerMoment[];
       headToHead: UiCareerRival[];
       lapPositionMix: UiSeasonLapMix[];
       atlas: UiCareerAtlas;

@@ -273,15 +273,49 @@ const incidentPenaltyFromContextPack = (pack) => {
 const coveredByUiFixtures = (contract) => /live-readiness hardening fixtures/i.test(contract);
 const uiFixtureCoverageText = (contract) => contract.replace(/^Remaining\s+/i, 'Static UI fixture coverage: ');
 
+/* Fresh managed worktrees give every checked-out file a new mtime. Preserve
+ * the last generated package's timestamp when path + content hash are stable,
+ * so a narrow package refresh does not manufacture unrelated JSON churn. */
+const previousArtifactByPath = (() => {
+  let previousPackage = null;
+  try {
+    previousPackage = JSON.parse(
+      execSync('git show HEAD:analysis/ui-data-package/ui-data-package.json', {
+        cwd: repoRoot,
+        encoding: 'utf8',
+        maxBuffer: 64 * 1024 * 1024
+      })
+    );
+  } catch {
+    if (fs.existsSync(outputPath)) previousPackage = readJson(path.relative(repoRoot, outputPath));
+  }
+  const artifacts = new Map();
+  const visit = (value) => {
+    if (Array.isArray(value)) {
+      value.forEach(visit);
+      return;
+    }
+    if (!value || typeof value !== 'object') return;
+    if (typeof value.path === 'string' && typeof value.sha256 === 'string' && typeof value.modifiedAt === 'string') {
+      artifacts.set(value.path, value);
+    }
+    Object.values(value).forEach(visit);
+  };
+  visit(previousPackage);
+  return artifacts;
+})();
+
 const summarizeArtifact = (relativePath) => {
   const absolutePath = path.join(repoRoot, relativePath);
   const stat = fs.statSync(absolutePath);
   const bytes = fs.readFileSync(absolutePath);
+  const sha256 = createHash('sha256').update(bytes).digest('hex');
+  const previous = previousArtifactByPath.get(relativePath);
   return {
     path: relativePath,
     bytes: stat.size,
-    modifiedAt: stat.mtime.toISOString(),
-    sha256: createHash('sha256').update(bytes).digest('hex')
+    modifiedAt: previous?.sha256 === sha256 ? previous.modifiedAt : stat.mtime.toISOString(),
+    sha256
   };
 };
 
@@ -805,6 +839,84 @@ const enrichConversionRows = (rows, canonicalDataset, weatherConditionRows = [])
       weatherConfidence: weather?.weatherConfidence ?? null
     };
   });
+};
+
+/* Named climb moments stay source-derived and deterministic: earliest means
+ * event date then session id, while the best INDY NXT result sorts finish
+ * position first and applies the same chronology as its tie-breaker. */
+const careerMomentKindOrder = [
+  'first_car_win',
+  'first_indy_nxt_race',
+  'best_indy_nxt_finish',
+  'daytona_24',
+  'wwtr_mechanical'
+];
+
+const compareCareerMomentChronology = (left, right) =>
+  String(left?.eventStartDate ?? '').localeCompare(String(right?.eventStartDate ?? '')) ||
+  String(left?.sessionId ?? '').localeCompare(String(right?.sessionId ?? ''));
+
+const buildCareerMoments = ({ resultConversion, seasonIndex }) => {
+  const chronologicalRows = resultConversion
+    .filter((row) => row.sessionId && row.eventStartDate)
+    .slice()
+    .sort(compareCareerMomentChronology);
+  const indyNxtRows = chronologicalRows.filter((row) => row.seriesId === 'series_indy_nxt');
+  const firstCarWin = chronologicalRows.find((row) => numberOrNull(row.finishPosition) === 1) ?? null;
+  const firstIndyNxtRace = indyNxtRows[0] ?? null;
+  const bestIndyNxtFinish = indyNxtRows
+    .filter((row) => numberOrNull(row.finishPosition) !== null)
+    .slice()
+    .sort(
+      (left, right) =>
+        numberOrNull(left.finishPosition) - numberOrNull(right.finishPosition) ||
+        compareCareerMomentChronology(left, right)
+    )[0] ?? null;
+  const daytona24 = chronologicalRows.find(
+    (row) =>
+      row.seriesId === 'series_imsa_weathertech' &&
+      /daytona/i.test(`${row.eventName ?? ''} ${row.trackName ?? ''}`) &&
+      /(?:rolex|24)/i.test(`${row.eventName ?? ''} ${row.raceLabel ?? ''}`)
+  ) ?? null;
+  const wwtrMechanical = seasonIndex
+    .filter(
+      (row) =>
+        numberOrNull(row.seasonYear) === 2026 &&
+        String(row.eventStartDate ?? '').startsWith('2026-06') &&
+        row.trackName === 'World Wide Technology Raceway' &&
+        String(row.officialStatus ?? '').toLowerCase() === 'mechanical'
+    )
+    .slice()
+    .sort(
+      (left, right) =>
+        compareCareerMomentChronology(left, right) ||
+        (numberOrNull(left.roundIndex) ?? Number.MAX_SAFE_INTEGER) -
+          (numberOrNull(right.roundIndex) ?? Number.MAX_SAFE_INTEGER)
+    )[0] ?? null;
+
+  const candidates = [
+    firstCarWin ? { kind: 'first_car_win', row: firstCarWin, shortLabel: 'First car win · P1' } : null,
+    firstIndyNxtRace ? { kind: 'first_indy_nxt_race', row: firstIndyNxtRace, shortLabel: 'INDY NXT debut' } : null,
+    bestIndyNxtFinish
+      ? {
+          kind: 'best_indy_nxt_finish',
+          row: bestIndyNxtFinish,
+          shortLabel: `Best INDY NXT · P${numberOrNull(bestIndyNxtFinish.finishPosition)}`
+        }
+      : null,
+    daytona24
+      ? { kind: 'daytona_24', row: daytona24, shortLabel: `Daytona 24 · P${numberOrNull(daytona24.finishPosition)}` }
+      : null,
+    wwtrMechanical ? { kind: 'wwtr_mechanical', row: wwtrMechanical, shortLabel: 'WWTR · mechanical' } : null
+  ].filter(Boolean);
+
+  return candidates
+    .sort(
+      (left, right) =>
+        compareCareerMomentChronology(left.row, right.row) ||
+        careerMomentKindOrder.indexOf(left.kind) - careerMomentKindOrder.indexOf(right.kind)
+    )
+    .map(({ kind, row, shortLabel }) => ({ sessionId: row.sessionId, shortLabel, kind }));
 };
 
 /* Career head-to-head: every rival Bryce has shared an INDY NXT grid with,
@@ -1578,6 +1690,7 @@ const buildPackage = () => {
         resultConversionRows: careerLabPayload.resultConversionRows,
         resultConversion: careerConversionEnriched,
         resultConversionSample: careerConversionEnriched.slice(0, 25),
+        moments: buildCareerMoments({ resultConversion: careerConversionEnriched, seasonIndex }),
         headToHead: buildCareerHeadToHead(headToHeadRows),
         lapPositionMix: buildLapPositionMix({ lapTimelineRows, canonicalDataset }),
         atlas: {

@@ -146,6 +146,25 @@ assert.ok(context.careerLab.deepContextPacks.imsaDaytonaStint, 'IMSA deep pack m
 
 /* Career Lab v2 modules: rivals, weather joins, lap texture. */
 const careerScreen = context.dataPackage.screens.careerLab;
+const careerMoments = careerScreen.moments;
+assert.deepEqual(
+  careerMoments.map((moment) => moment.kind),
+  ['first_car_win', 'first_indy_nxt_race', 'best_indy_nxt_finish', 'daytona_24', 'wwtr_mechanical'],
+  'named climb moments must stay in deterministic career chronology'
+);
+assert.equal(new Set(careerMoments.map((moment) => moment.kind)).size, careerMoments.length, 'moment kinds must be unique');
+assert.ok(
+  careerMoments.every(
+    (moment) =>
+      Array.from(moment.shortLabel).length <= 22 &&
+      careerScreen.resultConversion.some((row) => row.sessionId === moment.sessionId)
+  ),
+  'every named moment must fit the label contract and resolve to a conversion row'
+);
+assert.equal(
+  careerMoments.find((moment) => moment.kind === 'wwtr_mechanical')?.shortLabel,
+  'WWTR · mechanical'
+);
 assert.ok(careerScreen.headToHead.length >= 40, 'career head-to-head must carry the full rival table');
 for (const rival of careerScreen.headToHead) {
   assert.ok(rival.driverName, 'every rival row carries a name');

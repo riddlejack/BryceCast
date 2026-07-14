@@ -560,6 +560,106 @@ if (conversionRows.length === 0 || undatedConversionRows > 0) {
   fail(`careerLab.resultConversion must carry eventStartDate on every row (${undatedConversionRows} missing of ${conversionRows.length}).`);
 }
 
+/* ---------- career named moments: deterministic semantics + referential integrity ---------- */
+
+const careerMomentKindOrder = [
+  'first_car_win',
+  'first_indy_nxt_race',
+  'best_indy_nxt_finish',
+  'daytona_24',
+  'wwtr_mechanical'
+];
+const compareCareerMomentChronology = (left, right) =>
+  String(left?.eventStartDate ?? '').localeCompare(String(right?.eventStartDate ?? '')) ||
+  String(left?.sessionId ?? '').localeCompare(String(right?.sessionId ?? ''));
+const chronologicalConversionRows = conversionRows.slice().sort(compareCareerMomentChronology);
+const conversionBySession = new Map(conversionRows.map((row) => [row.sessionId, row]));
+const indyNxtConversionRows = chronologicalConversionRows.filter((row) => row.seriesId === 'series_indy_nxt');
+const expectedMomentSessions = new Map();
+const firstCarWin = chronologicalConversionRows.find((row) => numberOrZero(row.finishPosition) === 1) ?? null;
+if (firstCarWin) expectedMomentSessions.set('first_car_win', firstCarWin.sessionId);
+const firstIndyNxtRace = indyNxtConversionRows[0] ?? null;
+if (firstIndyNxtRace) expectedMomentSessions.set('first_indy_nxt_race', firstIndyNxtRace.sessionId);
+const bestIndyNxtFinish = indyNxtConversionRows
+  .filter((row) => Number.isFinite(Number(row.finishPosition)))
+  .slice()
+  .sort(
+    (left, right) =>
+      Number(left.finishPosition) - Number(right.finishPosition) || compareCareerMomentChronology(left, right)
+  )[0] ?? null;
+if (bestIndyNxtFinish) expectedMomentSessions.set('best_indy_nxt_finish', bestIndyNxtFinish.sessionId);
+const daytona24 = chronologicalConversionRows.find(
+  (row) =>
+    row.seriesId === 'series_imsa_weathertech' &&
+    /daytona/i.test(`${row.eventName ?? ''} ${row.trackName ?? ''}`) &&
+    /(?:rolex|24)/i.test(`${row.eventName ?? ''} ${row.raceLabel ?? ''}`)
+) ?? null;
+if (daytona24) expectedMomentSessions.set('daytona_24', daytona24.sessionId);
+const wwtrMechanical = (dataPackage.screens.raceDebrief.seasonIndex ?? [])
+  .filter(
+    (row) =>
+      Number(row.seasonYear) === 2026 &&
+      String(row.eventStartDate ?? '').startsWith('2026-06') &&
+      row.trackName === 'World Wide Technology Raceway' &&
+      String(row.officialStatus ?? '').toLowerCase() === 'mechanical'
+  )
+  .slice()
+  .sort(
+    (left, right) =>
+      compareCareerMomentChronology(left, right) ||
+      (Number(left.roundIndex) || Number.MAX_SAFE_INTEGER) - (Number(right.roundIndex) || Number.MAX_SAFE_INTEGER)
+  )[0] ?? null;
+if (wwtrMechanical) expectedMomentSessions.set('wwtr_mechanical', wwtrMechanical.sessionId);
+
+const careerMoments = dataPackage.screens.careerLab.moments ?? [];
+if (!Array.isArray(careerMoments) || careerMoments.length > 6) {
+  fail(`careerLab.moments must contain at most six rows (got ${careerMoments.length ?? 0}).`);
+}
+const momentKinds = new Set();
+const momentSessionKinds = new Set();
+for (const moment of careerMoments) {
+  if (!moment.sessionId || !moment.shortLabel || !careerMomentKindOrder.includes(moment.kind)) {
+    fail('Every careerLab.moments row must carry sessionId, shortLabel, and a supported kind.');
+  }
+  if (Array.from(moment.shortLabel).length > 22) {
+    fail(`Career moment ${moment.kind} label exceeds 22 characters: ${moment.shortLabel}`);
+  }
+  if (!conversionBySession.has(moment.sessionId)) {
+    fail(`Career moment ${moment.kind} references missing resultConversion session ${moment.sessionId}.`);
+  }
+  if (momentKinds.has(moment.kind)) {
+    fail(`careerLab.moments leaks duplicate kind ${moment.kind}.`);
+  }
+  momentKinds.add(moment.kind);
+  const sessionKind = `${moment.sessionId}\u0000${moment.kind}`;
+  if (momentSessionKinds.has(sessionKind)) {
+    fail(`careerLab.moments leaks duplicate session/kind ${moment.sessionId}/${moment.kind}.`);
+  }
+  momentSessionKinds.add(sessionKind);
+}
+for (const [kind, sessionId] of expectedMomentSessions) {
+  const moment = careerMoments.find((candidate) => candidate.kind === kind);
+  if (!moment || moment.sessionId !== sessionId) {
+    fail(`careerLab.moments ${kind} must resolve to ${sessionId}.`);
+  }
+}
+const expectedMomentOrder = careerMoments
+  .slice()
+  .sort(
+    (left, right) =>
+      compareCareerMomentChronology(conversionBySession.get(left.sessionId), conversionBySession.get(right.sessionId)) ||
+      careerMomentKindOrder.indexOf(left.kind) - careerMomentKindOrder.indexOf(right.kind)
+  )
+  .map((moment) => `${moment.sessionId}/${moment.kind}`);
+const actualMomentOrder = careerMoments.map((moment) => `${moment.sessionId}/${moment.kind}`);
+if (JSON.stringify(actualMomentOrder) !== JSON.stringify(expectedMomentOrder)) {
+  fail('careerLab.moments must use stable event-date, session-id, and kind ordering.');
+}
+const wwtrMoment = careerMoments.find((moment) => moment.kind === 'wwtr_mechanical');
+if (wwtrMoment && wwtrMoment.shortLabel !== 'WWTR · mechanical') {
+  fail('careerLab.moments WWTR label must be exactly "WWTR · mechanical".');
+}
+
 /* ---------- career weather joins (wet/dry splits) ---------- */
 
 const allowedWetDry = new Set(['dry', 'wet', 'damp', 'drying', null]);

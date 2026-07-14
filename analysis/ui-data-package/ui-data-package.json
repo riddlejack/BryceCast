@@ -1,6 +1,6 @@
 {
   "schemaVersion": "brycecast.uiDataPackage.v1",
-  "generatedAt": "2026-07-13T17:24:45.881Z",
+  "generatedAt": "2026-07-14T01:01:20.951Z",
   "sourceHash": "900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681",
   "asOfDate": "2026-07-13",
   "baselineCommit": "c207d07",
@@ -375,15 +375,15 @@
     },
     "uiDataPackageBuilderScript": {
       "path": "scripts/build-ui-data-package.mjs",
-      "bytes": 91628,
-      "modifiedAt": "2026-07-13T17:04:23.705Z",
-      "sha256": "3b9b1196c428031716faa149f39fb60d1a45f0aba971939fa991ea0c38a58675"
+      "bytes": 96228,
+      "modifiedAt": "2026-07-14T00:59:28.700Z",
+      "sha256": "50895888c65fef3c238ba3a16d0c2fcd0cde396590276d4e44429aff28110aef"
     },
     "uiDataPackageValidatorScript": {
       "path": "scripts/validate-ui-data-package.mjs",
-      "bytes": 57503,
-      "modifiedAt": "2026-07-13T17:04:23.706Z",
-      "sha256": "f643531b05051351fb7d33a1221aaa19cb54685373cbf03e058ce50b12d8db72"
+      "bytes": 62405,
+      "modifiedAt": "2026-07-14T00:59:28.700Z",
+      "sha256": "a72954537c63cfac7bb8bb4bd9d5aae51cc293a371038457665159792cb9071b"
     },
     "supplementalPrepSectionContextPack": {
       "key": "supplemental:analysis_indy_nxt_section_lap_deep_dive_output_context_packs_nashville_superspee",
@@ -21589,6 +21589,33 @@
           "eventStartDate": "2020-09-26",
           "wetDry": "dry",
           "weatherConfidence": "official"
+        }
+      ],
+      "moments": [
+        {
+          "sessionId": "session_formula_ford_2020_champion_cadwell_race_5",
+          "shortLabel": "First car win · P1",
+          "kind": "first_car_win"
+        },
+        {
+          "sessionId": "session_indy_nxt_2024_6324",
+          "shortLabel": "INDY NXT debut",
+          "kind": "first_indy_nxt_race"
+        },
+        {
+          "sessionId": "session_indy_nxt_2024_6327",
+          "shortLabel": "Best INDY NXT · P3",
+          "kind": "best_indy_nxt_finish"
+        },
+        {
+          "sessionId": "session_imsa_2025_daytona_rolex_24_race",
+          "shortLabel": "Daytona 24 · P6",
+          "kind": "daytona_24"
+        },
+        {
+          "sessionId": "session_indy_nxt_2026_6763",
+          "shortLabel": "WWTR · mechanical",
+          "kind": "wwtr_mechanical"
         }
       ],
       "headToHead": [

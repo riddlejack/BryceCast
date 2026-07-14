@@ -3,7 +3,7 @@ import { Card, SourcePill, Stat, Unavailable } from '../app/components';
 import { ChartTipCard, chartFont, useInViewOnce, useMeasuredWidth, type ChartTip } from '../app/charts';
 import { asNumber, asString, ordinal } from '../app/format';
 import { Link, useRouter } from '../app/router';
-import { uiDataPackage } from '../data/uiDataPackage';
+import { uiDataPackage, type UiCareerMoment } from '../data/uiDataPackage';
 import { packModules } from '../data/packModules';
 
 export interface CareerRow {
@@ -22,6 +22,72 @@ export interface CareerRow {
   date: string;
   wetDry: string | null;
 }
+
+interface ClimbMomentPoint extends UiCareerMoment {
+  cx: number;
+  cy: number;
+}
+
+interface ClimbMomentPlacement extends ClimbMomentPoint {
+  side: 'above' | 'below';
+  labelWidth: number;
+  labelX: number;
+  labelY: number;
+}
+
+const clamp = (value: number, minimum: number, maximum: number) => Math.min(Math.max(value, minimum), maximum);
+
+/** Alternating label lanes carry most of the separation. A forward/backward
+ * sweep then nudges same-lane labels just enough to keep a measured-width
+ * chart collision-free without detaching leaders from their race dots. */
+const layoutClimbMoments = ({
+  moments,
+  width,
+  height,
+  margin
+}: {
+  moments: ClimbMomentPoint[];
+  width: number;
+  height: number;
+  margin: { top: number; right: number; bottom: number; left: number };
+}): ClimbMomentPlacement[] => {
+  const leftEdge = margin.left;
+  const rightEdge = width - margin.right;
+  const gap = 8;
+  const placements = moments.map((moment, index) => {
+    const side = index % 2 === 0 ? 'below' : 'above';
+    const labelWidth = Math.max(54, Array.from(moment.shortLabel).length * 5.9 + 4);
+    return {
+      ...moment,
+      side,
+      labelWidth,
+      labelX: clamp(moment.cx, leftEdge + labelWidth / 2, rightEdge - labelWidth / 2),
+      labelY:
+        side === 'above'
+          ? Math.max(margin.top - 4, moment.cy - 24)
+          : Math.min(height - margin.bottom - 8, moment.cy + 30)
+    } satisfies ClimbMomentPlacement;
+  });
+
+  for (const side of ['above', 'below'] as const) {
+    const lane = placements.filter((placement) => placement.side === side).sort((left, right) => left.cx - right.cx);
+    let cursor = leftEdge;
+    for (const placement of lane) {
+      const half = placement.labelWidth / 2;
+      placement.labelX = Math.max(placement.labelX, cursor + half);
+      cursor = placement.labelX + half + gap;
+    }
+    cursor = rightEdge;
+    for (let index = lane.length - 1; index >= 0; index -= 1) {
+      const placement = lane[index];
+      const half = placement.labelWidth / 2;
+      placement.labelX = Math.min(placement.labelX, cursor - half);
+      cursor = placement.labelX - half - gap;
+    }
+  }
+
+  return placements;
+};
 
 /** INDY NXT races have full debrief pages; every other race gets the light career sheet. */
 export const raceHref = (sessionId: string): string =>
@@ -133,6 +199,11 @@ export const TheClimb = () => {
   const plotHeight = height - margin.top - margin.bottom;
   const x = (index: number) => margin.left + (index / Math.max(n - 1, 1)) * plotWidth;
   const y = (percentile: number) => margin.top + (1 - percentile) * plotHeight;
+  const momentPoints = (uiDataPackage.screens.careerLab.moments ?? []).flatMap((moment) => {
+    const index = rows.findIndex((row) => row.sessionId === moment.sessionId);
+    return index === -1 ? [] : [{ ...moment, cx: x(index), cy: y(rows[index].percentile) }];
+  });
+  const momentPlacements = layoutClimbMoments({ moments: momentPoints, width, height, margin });
 
   /* Chapter bands: consecutive runs of the same series. */
   const bands = useMemo(() => {
@@ -207,7 +278,12 @@ export const TheClimb = () => {
             {
               label: 'Career result conversion · all series',
               path: 'analysis/career-parity/output/tables/career_result_conversion.csv',
-              note: `${n} source-backed races with a finishing percentile — the share of the field beaten, which stays honest as field sizes change between series. The form line is an eleven-race trimmed mean (middle 60% of the window).`
+              note: `${n} source-backed races with a finishing percentile — the share of the field beaten, which stays honest as field sizes change between series. Named moments use deterministic event-date and finish-position rules; the form line is an eleven-race trimmed mean (middle 60% of the window).`
+            },
+            {
+              label: 'Canonical career results · official status',
+              path: 'data/career/career.dataset.json',
+              note: 'The 2026 season index supplies WWTR’s official Mechanical status; every moment resolves back to a career result-conversion session.'
             }
           ]}
           caveats={uiDataPackage.screens.careerLab.caveats}
@@ -215,8 +291,8 @@ export const TheClimb = () => {
       }
     >
       <p className="caption caption--secondary" style={{ margin: '0 0 8px' }}>
-        Every race a dot, every chapter its color · higher = more of the field beaten · the line follows his running form ·
-        ○ a day that ended early · click any dot to open its race
+        Every race a dot, every chapter its color · rings mark named moments · higher = more of the field beaten · the line
+        follows his running form · ○ a day that ended early · click any dot to open its race
       </p>
       <div ref={viewRef}>
       <div ref={ref} style={{ width: '100%', position: 'relative' }}>
@@ -226,7 +302,9 @@ export const TheClimb = () => {
             width={width}
             height={height}
             role="img"
-            aria-label="Finishing percentile across every career race"
+            aria-label={`Finishing percentile across every career race. Named moments: ${momentPoints
+              .map((moment) => moment.shortLabel)
+              .join(', ')}.`}
             onMouseMove={onMove}
             onMouseLeave={clearHover}
             onClick={() => {
@@ -301,6 +379,53 @@ export const TheClimb = () => {
               strokeDashoffset={chartSeen ? 0 : 1}
               style={{ transition: 'stroke-dashoffset 1200ms cubic-bezier(0.23, 1, 0.32, 1) 150ms' }}
             />
+
+            <g className="climb-moments" aria-hidden="true">
+              {momentPlacements.map((moment) => (
+                <g key={`${moment.sessionId}/${moment.kind}`} data-moment-kind={moment.kind} data-session-id={moment.sessionId}>
+                  <circle
+                    className="climb-moment__ring"
+                    cx={moment.cx}
+                    cy={moment.cy}
+                    r={6}
+                    fill="none"
+                    stroke="var(--ink-primary)"
+                    strokeWidth={1.5}
+                    vectorEffect="non-scaling-stroke"
+                  />
+                  {width >= 640 ? (
+                    <g className="climb-moment__annotation">
+                      <line
+                        x1={moment.cx}
+                        y1={moment.cy + (moment.side === 'below' ? 6 : -6)}
+                        x2={moment.labelX}
+                        y2={moment.labelY + (moment.side === 'below' ? -8 : 8)}
+                        stroke="var(--ink-secondary)"
+                        strokeOpacity={0.72}
+                        strokeWidth={1}
+                        strokeLinecap="round"
+                        vectorEffect="non-scaling-stroke"
+                      />
+                      <text
+                        x={moment.labelX}
+                        y={moment.labelY}
+                        textAnchor="middle"
+                        dominantBaseline="middle"
+                        fill="var(--ink-secondary)"
+                        stroke="var(--surface-1)"
+                        strokeWidth={3}
+                        strokeLinejoin="round"
+                        paintOrder="stroke"
+                        fontFamily={chartFont}
+                        fontSize={10.5}
+                      >
+                        {moment.shortLabel}
+                      </text>
+                    </g>
+                  ) : null}
+                </g>
+              ))}
+            </g>
 
             {/* year ticks at each season's first race */}
             {rows.map((row, index) =>

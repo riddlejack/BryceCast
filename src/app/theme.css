@@ -1215,6 +1215,15 @@ button { font-family: inherit; }
   border-color: var(--bryce);
 }
 
+/* Named climb moments are a visual overlay only; nearest-dot hover remains
+   owned by the chart SVG underneath at every viewport. */
+.climb-moments,
+.climb-moments * { pointer-events: none; }
+
+@media (max-width: 639px) {
+  .climb-moment__annotation { display: none; }
+}
+
 /* ---------- career atlas: a quiet, package-fed venue map ---------- */
 
 .career-atlas { background: var(--surface-0); }
