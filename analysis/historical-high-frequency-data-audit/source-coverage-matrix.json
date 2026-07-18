@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "auditedAt": "2026-07-18",
   "evidenceSemantics": {
     "observed": "reproduced in this audit",
@@ -159,10 +159,44 @@
       },
       "identity": "Bryce feed ID 2143 stable in both tested races; full cross-season validation pending",
       "completeness": "all 14 Bryce races inventoried in each of 2024 and 2025; two race payloads validated",
-      "rights": "no model-training/redistribution grant found; INDYCAR ownership and RaceTools license both require clarification",
+      "rights": "user reports direct RaceTools-owner approval for the described private educational use; preserve that approval and underlying-source attribution in project provenance",
       "acquisitionTier": 2,
-      "status": "conditional technical go, bulk/public-use no-go pending rights and decoder validation",
+      "status": "acquisition go for the approved project; import remains conditional on decoder and session-validation gates",
       "confidence": "medium-high"
+    },
+    {
+      "id": "timing71-replay-archive",
+      "name": "Timing71 replay archive",
+      "series": ["INDYCAR", "INDY NXT"],
+      "sourceClass": "third-party normalized replay of live timing",
+      "urls": [
+        "https://archive.timing71.org/",
+        "https://archive.timing71.org/openapi.json",
+        "https://info.timing71.org/reference/state.html",
+        "https://github.com/timing71/chrome/blob/master/src/replay.js"
+      ],
+      "access": "public searchable API and direct replay downloads",
+      "historicalCoverage": "12/12 completed 2026 NXT races through Mid-Ohio; 21/21 completed practice/qualifying session candidates through Nashville qualifying on 2026-07-18",
+      "actualGrain": "latest normalized display state per wall-clock second when recorded; observed timestamp gaps are predominantly 1 second with 2-second gaps",
+      "sampleCount": 5421,
+      "sampleBasis": "Road America Race 2 representative replay; all 35 downloaded candidate ZIPs passed integrity validation",
+      "fields": {
+        "rankOrder": true,
+        "gaps": "timing gaps and intervals, not physical distance",
+        "lapsLapTimes": true,
+        "flags": true,
+        "incidents": "timestamped display messages may exist; completeness and physical incident onset require validation",
+        "weather": "trackData schema empty in representative NXT replay",
+        "timingLoops": "sector timing columns, not validated physical turn occupancy",
+        "trackCoordinates": false,
+        "gps": false
+      },
+      "identity": "stable car number/driver name within clean sessions; no official DriverID or EventSessionID in the replay schema",
+      "completeness": "all 12 completed races have NXT roster, checkered state, and plausible final lap maxima; three require cross-session trimming",
+      "rights": "public replay archive; retain attribution, replay ID, source URL, original timestamp, and transformation version",
+      "acquisitionTier": 2,
+      "status": "2026 acquisition go; import conditional on incremental-frame reduction, NXT roster gating, and official-report comparison",
+      "confidence": "high for race acquisition; medium-high for practice/qualifying completeness before reducer validation"
     },
     {
       "id": "indycar-team-iris-ris-telemetry",
@@ -203,10 +237,10 @@
       "sourceClass": "lawful web archive candidate",
       "urls": ["https://web.archive.org/cdx/search/cdx"],
       "access": "public CDX/replay when available",
-      "historicalCoverage": "no JSON capture returned for tested live timing blob; race-control query timed out",
+      "historicalCoverage": "17 short 2026 timing-blob bursts found around May 24, June 21, and July 5; all inspected bursts were top-series INDYCAR rather than NXT",
       "actualGrain": "sporadic page/object captures if any",
-      "sampleCount": 0,
-      "sampleBasis": "bounded 2026-07-18 CDX test",
+      "sampleCount": 17,
+      "sampleBasis": "2026-07-18 wildcard CDX test and payload inspection",
       "fields": {},
       "identity": "unknown",
       "completeness": "unavailable/unsuitable",

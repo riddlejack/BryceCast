@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "auditDate": "2026-07-18",
   "tests": [
     {
@@ -295,16 +295,53 @@
       "evidenceType": "observed_http",
       "eventSession": "Race Control live JSON URL",
       "date": "2026-07-18",
-      "method": "Wayback CDX query filtered to status 200/application-json from 2024",
+      "method": "Wayback wildcard CDX query plus captured-payload inspection for 2026",
       "url": "https://web.archive.org/cdx/search/cdx",
       "status": 200,
-      "sampleCount": 0,
-      "fields": [],
-      "stableIdentity": false,
+      "sampleCount": 17,
+      "fields": ["short top-series INDYCAR timing snapshots"],
+      "stableIdentity": "official EventSessionID present, but none of the inspected captures is NXT",
       "coordinates": false,
       "weather": false,
-      "completeness": "no capture returned; separate race-control query timed out",
+      "completeness": "one-to-two-second bursts around 2026-05-24, 2026-06-21, and 2026-07-05; all inspected bursts were INDYCAR rather than NXT",
       "result": "unavailable_for_model_backfill"
+    },
+    {
+      "id": "timing71-road-america-race2",
+      "evidenceType": "observed_public_replay_and_local_zip",
+      "eventSession": "2026 Road America Race 2, official session 6754",
+      "date": "2026-07-18",
+      "method": "Timing71 replay API lookup, direct replay download, ZIP reduction, and integrity validation",
+      "url": "https://archive.timing71.org/replays/5aa5070d-23ff-495d-887c-6f83717b2cc9",
+      "status": 200,
+      "responseBytes": 2710311,
+      "sampleCount": 5421,
+      "sampleDefinition": "timestamped full and incremental Timing71 state frames",
+      "actualCadence": "4657 one-second gaps and 763 two-second gaps over a 6183-second span; median 1s, p95 2s, max 2s",
+      "fields": ["ordered car states", "rank", "timing gap and interval", "laps", "sectors", "lap times", "pits", "flags", "messages"],
+      "stableIdentity": "24 stable NXT car-number/driver-name pairs in the clean session; no official DriverID",
+      "coordinates": false,
+      "weather": false,
+      "completeness": "checkered state and plausible max lap 18; full/incremental replay reduction validated structurally",
+      "result": "available_comparable_high_frequency_replay"
+    },
+    {
+      "id": "timing71-hidden-cross-session-races",
+      "evidenceType": "observed_public_replay_and_local_zip",
+      "eventSession": "2026 Barber Race 1, IMS Race 1, and Road America Race 1",
+      "date": "2026-07-18",
+      "method": "all-IndyCar time-window search followed by roster/lap/flag inspection inside INDYCAR-labelled replays",
+      "url": "https://archive.timing71.org/replays",
+      "status": 200,
+      "sampleCount": 16231,
+      "sampleDefinition": "5369, 5430, and 5432 states in three cross-session replay ZIPs",
+      "actualCadence": "each file has median 1s, p95 2s, and max 2s timestamp gaps",
+      "fields": ["complete NXT race segment", "later INDYCAR manifest/session state"],
+      "stableIdentity": "24-car NXT roster inside each validated NXT segment",
+      "coordinates": false,
+      "weather": false,
+      "completeness": "all three NXT segments reach checkered with plausible max laps 35, 29, and 20",
+      "result": "available_after_cross_session_segmentation"
     }
   ]
 }
