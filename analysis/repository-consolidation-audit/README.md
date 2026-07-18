@@ -90,12 +90,17 @@ The reflog-only commits `1a4040b4cd85c2adbdbe9e1aae3ae8a3c4c10ada`, `75494174dfe
 
 | Artifact | Bytes | SHA-256 |
 |---|---:|---|
-| `MANIFEST.md` | 7,352 | `62803c6c734700ae6bce2e614c9c64fa10553496a5e89873c4a848eaf5705c64` |
 | `git/all-current-refs-before.bundle` | 282,945,536 | `17fcec8585eb8478eb26ee98725bdb2b4ae2b9170ae61158ce62e3d31efe63a7` |
 | `git/all-archived-refs-before-cleanup.bundle` | 282,946,862 | `6e53bbab6111e43a4c122de840f8670fc0a90ed4c0076a892eaf13ccb7206f04` |
 | `git/common-git-dir-before.tar` | 631,633,920 | `90ef006008b4b1a2a09a006bfa001d6bf05589283be24e9f3ac9f2518606197b` |
 
-The manifest contains every dirty/untracked/ignored backup artifact, byte size, and SHA-256. The initial bundle verified and cloned; `8b0d422` checked out in the recovery clone; the binary-capable dirty patch passed `git apply --check`; `git fsck --full` passed; all tar archives listed successfully; copied car/F2 files hash-matched their sources.
+The external `MANIFEST.md` contains every dirty/untracked/ignored backup artifact,
+byte size, and SHA-256, plus the final post-consolidation bundle. Its own final
+hash is reported outside the repository to avoid a self-referential manifest
+cycle. The initial bundle verified and cloned; `8b0d422` checked out in the
+recovery clone; the binary-capable dirty patch passed `git apply --check`; `git
+fsck --full` passed; all tar archives listed successfully; copied car/F2 files
+hash-matched their sources.
 
 ## UI-package repair
 
