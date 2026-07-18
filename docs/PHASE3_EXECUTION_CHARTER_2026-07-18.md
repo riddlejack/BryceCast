@@ -329,3 +329,71 @@ has been explicitly attempted and failed). Consequences for the queue:
    The legal stance stands unchanged: no downloads or training against
    third-party archives before written permission. Challenging the
    blocker means trying the untried routes, not ignoring the law.
+
+---
+
+## Addendum 2 (2026-07-18, evening): the data lake changes the ceiling
+
+RaceTools granted permission (2024–25 NXT full weekends + 2008–2023
+INDYCAR/Lights annual archives incl. four telemetry variants + 39
+timing-map archives); Timing71's public archive fills 2026 (12/12 races,
+21/21 practice/quali through Nashville quali). Codex is building the
+content-addressed warehouse (`analysis/historical-data-lake/`). The
+challenge list worked — the coverage-tier law in Addendum 1 is OBSOLETE:
+
+**New coverage truth:** per-second/event-driven full-field timing for every
+Bryce NXT session 2024→present (3 flagged defects with replacement
+requests pending: IMS'25 P1, Mid-Ohio'25 race 7-min gap, Milwaukee'25
+quali gap), plus 2008–2023 INDYCAR/Lights as reference corpus. Our own
+capture remains the only source for future sessions — still sacred.
+
+**Brief consequences:**
+- **Brief I collapses from reconstruction to extraction.** The RaceTools
+  logs carry event-driven timing-loop crossings directly — no chaining
+  needed for 2024–25; Timing71 frames cover 2026. Keep the validation
+  harness (score against our capture + official lap charts) but re-scope
+  the brief: decode → normalize → validate → pass/incident placement.
+  The 39 timing-map archives likely contain PHYSICAL LOOP LOCATIONS —
+  if so, Brief H's section anchors come from data, not curation. Check
+  this first; it may delete H's hardest manual step.
+- **Brief J stage 3 is unblocked for real.** Training power (16 years of
+  cautions across both series, same venues) + labels (millisecond
+  incident messages with turn numbers) + permission = a legitimate
+  discrete-time caution-hazard research project. Calibration harness,
+  abstention, no named-driver blame, experimental label, team-depth
+  layer — all gates stand. Turn-level *descriptive* caution/incident
+  atlases (where yellows historically start, per venue) are buildable
+  immediately with zero modeling risk.
+- **Brief G/H/K unblocked-but-unchanged**: do not wait for the lake.
+  H v2 gets located passes/incidents; K gets a field-baseline
+  ("restart outcomes at this venue across 16 years") when the lake lands.
+- **New brief sketches for the director to shape:**
+  - **L — The Time Machine:** every Bryce race 2024–2026 replayable
+    through the F6 Live page (reducer normalizes historic logs to our
+    capture shape; race pages gain "watch this race unfold"). The single
+    highest-delight feature the lake enables.
+  - **M — Quali & Practice Lab:** run-by-run session timelines,
+    traffic-context on quali laps, theoretical-best composites, track
+    evolution curves, Friday-signal deepening — for every weekend.
+  - **N — The Graduates:** Bryce's NXT metrics vs eventual INDYCAR
+    drivers' junior-series signatures at the same venues (2008–2023
+    Lights data) — computed-before-shown, no-negative-framing, the
+    "road to INDYCAR" made quantitative.
+  - **Pace & field-strength backbone:** hierarchical pace modeling across
+    16 years to put real uncertainty bars under the field-strength
+    framing we already use.
+
+**Guardrail revision task (deliberate, not silent):** several CLAUDE.md
+"unavailable" lanes were absence-based and are now source-backed for
+2024+: pit timing/sequence, per-second historic gaps, trackside weather
+messages, located incidents. Revise the guardrails doc to per-lane
+source-state (available-with-source vs still-absent: GPS, physical
+proximity, tire compounds/telemetry outside the telemetry seasons).
+Prediction guardrails unchanged.
+
+**Provenance tasks:** obtain the short confirming email from RaceTools
+(name, date, approved uses — analysis vs public display of DERIVED
+analytics; raw data never redistributed via the site); Timing71 data
+labeled third-party-normalized per its state format docs; identity
+mapping (no official driver/session IDs in Timing71) needs a validated
+crosswalk before any UI use.
