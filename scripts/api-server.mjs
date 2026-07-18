@@ -35,6 +35,7 @@ const enrichmentCacheTtlMs = 30000;
 const apiCacheRefreshMs = Number(process.env.BRYCECAST_API_CACHE_REFRESH_MS ?? 15000);
 const apiRunnerFreshMs = Number(process.env.BRYCECAST_API_RUNNER_FRESH_MS ?? 60000);
 const replayEnabled = process.env.BRYCECAST_REPLAY === '1';
+const runnerOnlyApi = process.env.BRYCECAST_API_RUNNER_ONLY === '1';
 const replayOverlay = createReplayOverlay({ enabled: replayEnabled, sqlitePath, runnerStatusPath });
 
 const sourceUrlByPath = new Map(sourceProbeEndpoints.map((endpoint) => [endpoint.proxyPath, endpoint.url]));
@@ -1096,7 +1097,7 @@ export const queryReplay = ({
     try {
       const total = db.prepare('SELECT COUNT(*) AS count FROM bryce_samples').get();
       const totalCount = Number(total?.count ?? 0);
-      const latest = db.prepare('SELECT session_key FROM bryce_samples ORDER BY checked_at DESC LIMIT 1').get();
+      const latest = db.prepare('SELECT session_key FROM bryce_samples ORDER BY id DESC LIMIT 1').get();
       const sessionKey = requestedSessionKey || latest?.session_key || null;
       const sampleColumns = new Set(db.prepare('PRAGMA table_info(bryce_samples)').all().map((column) => column.name));
       const sampleColumn = (column) => (sampleColumns.has(column) ? `b.${column}` : `NULL AS ${column}`);
@@ -1677,7 +1678,9 @@ const readLatestRawSnapshotRecord = () => {
   try {
     const db = new DatabaseSync(sqlitePath, { readOnly: true });
     try {
-      const row = db.prepare('SELECT checked_at, payload_json FROM race_snapshots ORDER BY checked_at DESC LIMIT 1').get();
+      // race_snapshots is append-only. Reading by primary-key insertion order avoids
+      // sorting every stored JSON payload on each one-second readiness request.
+      const row = db.prepare('SELECT checked_at, payload_json FROM race_snapshots ORDER BY id DESC LIMIT 1').get();
       if (!row?.payload_json) return null;
       const payload = JSON.parse(row.payload_json);
       return {
@@ -2204,7 +2207,10 @@ export const startServer = () => {
       speed: process.env.BRYCECAST_REPLAY_SPEED ?? 1
     });
   }
-  if (!replayEnabled) startApiRuntimeCacheLoop();
+  // The live runner is the sole upstream ingestor in runner-only mode. API
+  // requests read its status and append-only SQLite cache without starting a
+  // competing Race Control refresh loop.
+  if (!replayEnabled && !runnerOnlyApi) startApiRuntimeCacheLoop();
   const server = createServer(handler);
 
   server.listen(port, host, () => {

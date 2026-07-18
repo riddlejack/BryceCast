@@ -1,6 +1,40 @@
 # BryceCast Current Codex Handoff
 
-Updated: 2026-07-13 21:22 CDT.
+Updated: 2026-07-18 12:00 EDT.
+
+## July 18 Nashville Official-Live Baseline
+
+This section supersedes the July 13 cold-runtime instructions for the current
+race weekend.
+
+- The canonical capture runner is `/Users/example/Documents/Bryce POV access/scripts/live-runner.mjs`, owned by LaunchAgent `com.brycecast.live-runner`.
+- It began Nashville Practice 1 capture at `2026-07-18T15:39:15Z`, about nine minutes after the official session began, and then sustained one successful write per second with no endpoint failures.
+- The authoritative integrated UI remains this worktree/branch. A production build is served locally at `http://127.0.0.1:5181/live` against the canonical runner database and status file.
+- The app process must use `BRYCECAST_API_RUNNER_ONLY=1`; this prevents a second upstream ingestor while preserving real, non-replay trust semantics.
+- The runner-backed archive lookup now uses append-only primary-key order instead of sorting all JSON snapshots by timestamp.
+- Live weather metadata now comes from the compact track metadata plus upcoming-event context packs. The prior path reparsed the 306 MB career dataset on every readiness request and drove the API above 2 GB RSS.
+- Production measurement with one one-second browser client: app/API about 111 MB RSS, runner about 114 MB RSS, combined about 225 MB; 35/35 capture writes succeeded in 35 seconds.
+- Observed archive growth was about 1.3 GB/hour. Storage retention, not compute, is the main Mac mini deployment constraint.
+
+Practice 1 proved the data path and page motion, but the page remains semantically
+race-shaped: practice order is best-lap order, race laps are unavailable, and
+race-completion/championship/battle labels are inappropriate. Do not interpret
+those cards as a validated practice design. The observation-gated practice-mode
+and 8 GB Mac mini ideas are recorded in `docs/LIVE_PRODUCT_IDEAS.md`; do not
+implement them before the July 18-19 weekend review.
+
+For the current local production runtime:
+
+```bash
+cd '/Users/example/.codex/worktrees/ac78/Bryce POV access'
+BRYCECAST_API_RUNNER_ONLY=1 \
+BRYCECAST_SQLITE_PATH='/Users/example/Documents/Bryce POV access/data/live/brycecast.sqlite' \
+BRYCECAST_RUNNER_STATUS_PATH='/Users/example/Documents/Bryce POV access/data/live/live-runner-status.json' \
+npm run serve:app -- --host 127.0.0.1 --port 5181
+```
+
+This is a local production preview, not yet a public internet deployment. The
+existing Mac mini/Cloudflare migration outline remains in `docs/DEPLOY_RUNBOOK.md`.
 
 ## July 13 Night Closeout — Current Controlling State
 

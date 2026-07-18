@@ -6,6 +6,7 @@ import {
   compactTimingRowForReadiness,
   replayArchiveState
 } from './api-server.mjs';
+import { loadTrackMetadata, loadUpcomingIndyNxtEvents } from './live-weather-service.mjs';
 
 const checkedAt = '2026-06-16T18:00:00.000Z';
 
@@ -380,4 +381,17 @@ assert.equal(replayArchiveState(true, 20, 20), 'ready', 'replay readiness should
 assert.equal(replayArchiveState(true, 5, 5), 'tiny');
 assert.equal(replayArchiveState(true, 0, 0), 'empty');
 
-console.log(JSON.stringify({ ok: true, assertions: 63 }, null, 2));
+const weatherCatalogRssBefore = process.memoryUsage().rss;
+const [nashvilleTrack, upcomingEvents] = await Promise.all([
+  loadTrackMetadata('track_nashville_superspeedway'),
+  loadUpcomingIndyNxtEvents({ now: new Date('2026-07-18T12:00:00.000Z') })
+]);
+const weatherCatalogRssDelta = process.memoryUsage().rss - weatherCatalogRssBefore;
+const nashvilleEvent = upcomingEvents.find((event) => event.officialEventId === '5538');
+assert.equal(nashvilleTrack.name, 'Nashville Superspeedway');
+assert.equal(nashvilleTrack.weatherJoinReady, true);
+assert.equal(nashvilleEvent?.track.id, 'track_nashville_superspeedway');
+assert.equal(nashvilleEvent?.eventStartDate, '2026-07-18');
+assert.ok(weatherCatalogRssDelta < 64 * 1024 * 1024, `compact weather catalog used ${weatherCatalogRssDelta} bytes of RSS`);
+
+console.log(JSON.stringify({ ok: true, assertions: 68 }, null, 2));

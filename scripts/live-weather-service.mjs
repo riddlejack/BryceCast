@@ -4,7 +4,8 @@ import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = dirname(__dirname);
-const careerDatasetPath = join(root, 'data/career/career.dataset.json');
+const trackMetadataPath = join(root, 'data/career/raw/track-metadata/track-metadata.v1.json');
+const contextPackManifestPath = join(root, 'analysis/predictive-race-intelligence/output/context-packs/context-pack-manifest.json');
 const userAgent = 'BryceCast live weather readiness audit (local development; contact: brycecast.local)';
 const defaultFetchTimeoutMs = 8000;
 const defaultWeatherCacheTtlMs = 5 * 60 * 1000;
@@ -12,6 +13,8 @@ const defaultUpcomingWeatherConcurrency = 4;
 const defaultUpcomingWeatherTrackDeadlineMs = 12000;
 const weatherCache = new Map();
 const weatherInflight = new Map();
+let trackMetadataPromise = null;
+let upcomingEventPacksPromise = null;
 
 const round = (value, digits = 2) => {
   if (value === null || value === undefined || value === '') return null;
@@ -27,6 +30,45 @@ const asArray = (value) => {
 };
 
 const cloneJson = (value) => JSON.parse(JSON.stringify(value));
+
+const normalizedTrackName = (value = '') => String(value).trim().toLowerCase();
+
+const loadTrackMetadataCatalog = () => {
+  trackMetadataPromise ??= readFile(trackMetadataPath, 'utf8').then((text) => {
+    const payload = JSON.parse(text);
+    return Array.isArray(payload.tracks) ? payload.tracks : [];
+  });
+  return trackMetadataPromise;
+};
+
+const loadUpcomingEventPacks = () => {
+  upcomingEventPacksPromise ??= readFile(contextPackManifestPath, 'utf8')
+    .then((text) => JSON.parse(text))
+    .then((manifest) =>
+      Promise.all(
+        (manifest.packs ?? [])
+          .filter((pack) => pack.type === 'upcoming_event' && pack.path)
+          .map((pack) => readFile(join(root, pack.path), 'utf8').then((text) => JSON.parse(text)))
+      )
+    );
+  return upcomingEventPacksPromise;
+};
+
+const compactWeatherTrack = (track) => ({
+  id: track.id,
+  name: track.name,
+  canonicalName: track.canonicalName ?? track.name,
+  city: track.city ?? null,
+  region: track.region ?? null,
+  country: track.country ?? null,
+  latitude: track.latitude,
+  longitude: track.longitude,
+  timezone: track.timezone ?? null,
+  coordinateSourceUrl: track.coordinateSourceUrl ?? null,
+  metadataSourceUrl: track.metadataSourceUrl ?? track.sourceUrl ?? null,
+  metadataConfidenceTier: track.metadataConfidenceTier ?? track.confidenceTier ?? null,
+  weatherJoinReady: typeof track.latitude === 'number' && typeof track.longitude === 'number'
+});
 
 const cacheKeyForTrack = (track) => `${track.id}:${track.latitude.toFixed(4)},${track.longitude.toFixed(4)}`;
 
@@ -90,72 +132,46 @@ const nwsJson = async (url, { timeoutMs = defaultFetchTimeoutMs } = {}) => {
 };
 
 export const loadTrackMetadata = async (trackId = 'track_road_america') => {
-  const dataset = JSON.parse(await readFile(careerDatasetPath, 'utf8'));
-  const track = dataset.tracks?.find((candidate) => candidate.id === trackId);
+  const tracks = await loadTrackMetadataCatalog();
+  const track = tracks.find((candidate) => candidate.id === trackId);
   if (!track) throw new Error(`Track not found in career dataset: ${trackId}`);
   if (typeof track.latitude !== 'number' || typeof track.longitude !== 'number') {
     throw new Error(`Track lacks numeric coordinates: ${trackId}`);
   }
-  return {
-    id: track.id,
-    name: track.name,
-    canonicalName: track.canonicalName ?? track.name,
-    city: track.city ?? null,
-    region: track.region ?? null,
-    country: track.country ?? null,
-    latitude: track.latitude,
-    longitude: track.longitude,
-    timezone: track.timezone ?? null,
-    coordinateSourceUrl: track.coordinateSourceUrl ?? null,
-    metadataSourceUrl: track.metadataSourceUrl ?? null,
-    metadataConfidenceTier: track.metadataConfidenceTier ?? null,
-    weatherJoinReady: Boolean(track.weatherJoinReady)
-  };
+  return compactWeatherTrack(track);
 };
 
 export const loadUpcomingIndyNxtEvents = async ({ now = new Date() } = {}) => {
-  const dataset = JSON.parse(await readFile(careerDatasetPath, 'utf8'));
-  const tracksById = new Map((dataset.tracks ?? []).map((track) => [track.id, track]));
+  const [tracks, eventPacks] = await Promise.all([loadTrackMetadataCatalog(), loadUpcomingEventPacks()]);
+  const tracksByName = new Map();
+  for (const track of tracks) {
+    tracksByName.set(normalizedTrackName(track.name), track);
+    tracksByName.set(normalizedTrackName(track.canonicalName), track);
+  }
   const todayUtc = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
-  return (dataset.events ?? [])
-    .filter((event) => event.seriesId === 'series_indy_nxt' && event.seasonYear === 2026)
+  return eventPacks
     .filter((event) => {
       const date = Date.parse(event.eventEndDate ?? event.eventStartDate ?? '');
       return Number.isFinite(date) && date >= todayUtc;
     })
     .map((event) => {
-      const track = tracksById.get(event.trackId);
+      const track = tracksByName.get(normalizedTrackName(event.track?.name));
+      const officialEventId = String(event.eventId ?? '').match(/_(\d+)$/)?.[1] ?? null;
       return {
         id: event.id,
-        name: event.name,
-        officialEventId: event.officialEventId ?? null,
+        name: event.eventName ?? event.name,
+        officialEventId,
         eventStartDate: event.eventStartDate ?? null,
-        eventEndDate: event.eventEndDate ?? null,
-        timezone: event.timezone ?? track?.timezone ?? null,
-        status: event.status ?? null,
-        trackId: event.trackId,
-        track: track
-          ? {
-              id: track.id,
-              name: track.name,
-              canonicalName: track.canonicalName ?? track.name,
-              city: track.city ?? null,
-              region: track.region ?? null,
-              country: track.country ?? null,
-              latitude: track.latitude,
-              longitude: track.longitude,
-              timezone: track.timezone ?? null,
-              coordinateSourceUrl: track.coordinateSourceUrl ?? null,
-              metadataSourceUrl: track.metadataSourceUrl ?? null,
-              metadataConfidenceTier: track.metadataConfidenceTier ?? null,
-              weatherJoinReady: Boolean(track.weatherJoinReady)
-            }
-          : null,
-        raw: event.raw ?? null,
-        provenanceRefs: event.provenanceRefs ?? []
+        eventEndDate: event.eventEndDate ?? event.eventStartDate ?? null,
+        timezone: track?.timezone ?? null,
+        status: 'upcoming',
+        trackId: track?.id ?? null,
+        track: track ? compactWeatherTrack(track) : null,
+        raw: null,
+        provenanceRefs: event.sourceRefs ?? []
       };
     })
-    .filter((event) => event.track && typeof event.track.latitude === 'number' && typeof event.track.longitude === 'number')
+    .filter((event) => event.track?.weatherJoinReady)
     .sort((left, right) => Date.parse(left.eventStartDate ?? '') - Date.parse(right.eventStartDate ?? ''));
 };
 
