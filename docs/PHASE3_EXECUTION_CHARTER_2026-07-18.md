@@ -244,7 +244,10 @@ always flagging where execution deviated from the briefs and why.
 ## Addendum (2026-07-18, later): historical high-frequency audit — adopted verdicts
 
 The research at `analysis/historical-high-frequency-data-audit/` (merged to
-master, 3176905) is adopted as controlling. Consequences for the queue:
+master, 3176905) is adopted PROVISIONALLY — its technical characterizations
+stand, but its no-go verdicts are challenged in §6 below (house rule: never
+accept a limitation as final; a blocker is real only after the ideal path
+has been explicitly attempted and failed). Consequences for the queue:
 
 1. **Brief I upgrade — the grain question is half-answered.** The audit's
    source table confirms Section Results PDFs parse to **car / lap / named
@@ -286,3 +289,43 @@ master, 3176905) is adopted as controlling. Consequences for the queue:
 5. **Storage follow-through.** Capture growth ~1.3 GB/hour with 94% duplicate
    enrichment bytes; adopt LIVE_ARCHIVE_V2_PLAN's content-addressed storage
    before the Mac mini migration (post-weekend, with Jack's go).
+
+6. **The challenge list — reopened limitations (assign as cheap probes).**
+   The audit swept public and third-party sources only. Routes it never
+   tried, in priority order:
+   - **The first-party route (the ideal path, untried).** Bryce drives for
+     Chip Ganassi Racing. CGR holds the team-tier timing feed the audit
+     itself says exists ("archived for teams"), and CGR holds BRYCE'S OWN
+     CAR TELEMETRY — GPS, speed, the works. A driver asking his team's
+     timing engineer for exports of his own sessions is a conversation,
+     not a licensing negotiation. This potentially dissolves at once: the
+     2024–25 backfill question, the early-2026 "permanent" gap, the
+     practice/qualifying coverage question, and the "no GPS" limitation
+     for Bryce's own car (which would transform Section Intelligence from
+     loop-grain to true line-and-speed grain for the gold line). Jack +
+     Bryce task, not engineering; the charter's permission-lane draft
+     should be reframed around this channel first, RaceTools second.
+   - **Community archive sweep.** Fans have run INDYCAR timing
+     scrapers/loggers for years (GitHub, community dashboards). Someone
+     may hold complete 2024–26 NXT session logs and be happy to share.
+     One worker-day sweep of GitHub/communities before conceding
+     anything.
+   - **Wayback/Common Crawl spot-check** of the public timing endpoints —
+     low odds for high-frequency history, near-zero cost to check; any
+     recovered mid-race states help validation.
+   - **Auxiliary caution data for Brief J's power problem.** 72 NXT
+     episodes is thin — but INDYCAR (senior series) cautions at the SAME
+     venues, plus pre-2024 NXT/Lights seasons in the official PDF
+     archives, could multiply N via pooling/transfer. Reopens the
+     small-data concession without new rights questions for the official
+     PDF lane.
+   - **`lapDistance` probe.** Zero in audited Bryce records — verify it's
+     zero across all venues/sessions/series before treating the field as
+     dead; if the senior series populates it, ask (via CGR) whether NXT
+     can be enabled.
+   - **Reframe, not limitation:** "event-driven, not synchronous" is
+     BETTER for Brief I, not worse — loop-crossing events are exactly the
+     grain reconstruction wants; the audit undersold its own best find.
+   The legal stance stands unchanged: no downloads or training against
+   third-party archives before written permission. Challenging the
+   blocker means trying the untried routes, not ignoring the law.
