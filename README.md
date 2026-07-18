@@ -82,7 +82,11 @@ Live #9 POV is currently unavailable for this project and must not be presented 
 
 ## Current Shape
 
-This is the current implementation shape, not a requirement for the next UI. The active UI/product lane may replace or restructure these modes as long as the new screens preserve the source-state and live-readiness contracts above.
+The integrated A2 + B + C + F2-F6 website on `master` is the approved product
+baseline. New work should extend or refine it through the existing typed data
+packages, adapters, and live contracts. Replacing its information architecture
+or visual system requires a new explicit product decision; preserving source
+state and live-readiness semantics is mandatory in every case.
 
 - `TV Mode`: shared room-status strip, session-specific broadcast launcher, Bryce focus stack, timing ribbon, compact room layout, reference map, frequency/official-audio tile, and timing notes.
 - `Engineer`: shared room-status strip, timing tower, pace chart, pass delta chart, source health, season pulse, source-backed track-type splits, qualifying-to-finish gains/losses, CGR teammate benchmark, and gated SQLite replay analytics.
@@ -94,7 +98,9 @@ This is the current implementation shape, not a requirement for the next UI. The
 
 The core requirement is now a polished Bryce-centric companion surface for desktop web and iPhone: live timing, source freshness, official broadcast routing, Bryce-focused analytics, alerts, race context, historical benchmarks, and clear unavailable-state handling for POV and isolated radio. Use `docs/LIVE_POV_ACCESS_FINDINGS.md` and `docs/POV_ESCALATION_LADDER.md` only as historical research unless new access appears.
 
-Use `CLAUDE.md` and `docs/FABLE_HANDOFF.md` first when starting the Claude Fable 5 / Codex GPT-5.5 build phase. They record the current lead-agent workflow, Jack's latest product vision, the verified Codex plugin setup, and the post-Road America live-data interpretation.
+Use `CLAUDE.md` and `docs/FABLE_HANDOFF.md` first. Their July 18 controlling
+sections establish `master` and the approved integrated UI as the baseline; old
+frontend-reset language later in those documents is historical provenance.
 
 Use `docs/CODEX_HANDOFF_CURRENT.md` next for current lane boundaries, canonical generated counts, known same-file churn, live/career split, and the ambiguity register. If a contradiction cannot be resolved from source files, generated reports, live checks, tests, or official sources, record it there rather than guessing.
 

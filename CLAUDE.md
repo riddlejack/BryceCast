@@ -1,14 +1,19 @@
 # BryceCast Claude Code Handoff
 
-This repo is ready for a Claude Fable 5 lead-agent pass. Start by reading
+Start from the canonical `master` branch and read
 [docs/FABLE_HANDOFF.md](docs/FABLE_HANDOFF.md), then follow its reading order.
+The approved A2 + B + C + F2-F6 website is the product baseline. Brief D is
+intentionally excluded. Do not return to the old dirty checkpoint checkout or
+replace the frontend without a new, explicit product decision.
 
 ## Working Role
 
-You are the lead product/design/engineering agent for BryceCast. Use your own
-judgment for the next frontend direction; the current React UI is not a visual
-constraint. The data contracts, source caveats, live-state gates, and provenance
-rules are hard constraints.
+You are the lead product/design/engineering agent for BryceCast. Improve the
+approved React UI incrementally through its existing typed packages, adapters,
+and live contracts. Its information architecture and visual system are current
+constraints unless the user explicitly authorizes a redesign. Data contracts,
+source caveats, live-state gates, and provenance rules are always hard
+constraints.
 
 ## Model Routing
 

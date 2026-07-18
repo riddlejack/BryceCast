@@ -1,6 +1,6 @@
 {
   "schemaVersion": "brycecast.uiDataPackage.v1",
-  "generatedAt": "2026-07-14T01:01:20.951Z",
+  "generatedAt": "2026-07-18T18:58:47.587Z",
   "sourceHash": "900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681",
   "asOfDate": "2026-07-13",
   "baselineCommit": "c207d07",
@@ -292,8 +292,8 @@
     "predictiveContextPackManifest": {
       "path": "analysis/predictive-race-intelligence/output/context-packs/context-pack-manifest.json",
       "bytes": 61270,
-      "modifiedAt": "2026-07-13T17:24:22.625Z",
-      "sha256": "2119a81cd54d34037b2c9cd5764930eeb2a945970fd5127cb72acfac1cc734be"
+      "modifiedAt": "2026-07-18T18:58:36.401Z",
+      "sha256": "3c59b139065609a26d74dcdad4cd1bc6d3be0e76f00e79878467ed92294eda9e"
     },
     "predictiveCareerPriorMatrix": {
       "path": "analysis/predictive-race-intelligence/output/career_prior_matrix.csv",
@@ -524,14 +524,14 @@
         "bytes": 2902,
         "id": "live_race_day_context",
         "path": "analysis/predictive-race-intelligence/output/context-packs/live-race-day-context.json",
-        "sha256": "f1af1d6de88dfcf011c2788334d2c34877863e0b419f3d7b0a51a561ac40bdda",
+        "sha256": "5df9a69411f76121fc51d44065f84ae356a72cd95d3b7c4262b74a4375047433",
         "sourceRefs": [
           "docs/LIVE_RACE_DAY_PRODUCT_CONTRACT.md",
           "scripts/api-server.mjs",
           "scripts/live-source-endpoints.mjs"
         ],
         "type": "live_race_day",
-        "modifiedAt": "2026-07-13T17:24:22.390Z"
+        "modifiedAt": "2026-07-18T18:58:29.637Z"
       },
       {
         "bytes": 5740,
@@ -2954,14 +2954,14 @@
         "bytes": 2902,
         "id": "live_race_day_context",
         "path": "analysis/predictive-race-intelligence/output/context-packs/live-race-day-context.json",
-        "sha256": "f1af1d6de88dfcf011c2788334d2c34877863e0b419f3d7b0a51a561ac40bdda",
+        "sha256": "5df9a69411f76121fc51d44065f84ae356a72cd95d3b7c4262b74a4375047433",
         "sourceRefs": [
           "docs/LIVE_RACE_DAY_PRODUCT_CONTRACT.md",
           "scripts/api-server.mjs",
           "scripts/live-source-endpoints.mjs"
         ],
         "type": "live_race_day",
-        "modifiedAt": "2026-07-13T17:24:22.390Z"
+        "modifiedAt": "2026-07-18T18:58:29.637Z"
       },
       "fixtures": [
         {

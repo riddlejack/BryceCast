@@ -24,6 +24,19 @@ npm run analytics:ui-data-package:validate
 npm run analytics:ui-data-package:refresh-validate
 ```
 
+For a narrow upstream-pack repair that has already been regenerated and
+validated through its owning generator, rebuild the aggregate package without
+churning unrelated timestamped packs:
+
+```bash
+BRYCECAST_SKIP_UPSTREAM_REFRESH=1 npm run analytics:ui-data-package
+npm run analytics:ui-data-package:validate
+```
+
+Inspect the full diff. A narrow repair should change only the owning pack, its
+manifest entry, and the aggregate package references; semantic changes in other
+analytics lanes require separate review.
+
 ## Rules
 
 - Do not treat static package values as live timing, live weather, or live points.

@@ -2,6 +2,28 @@
 
 Updated: 2026-07-18 12:00 EDT.
 
+## July 18 Repository Consolidation — Controlling State
+
+The canonical code branch is now `master`, promoted from the independently
+verified integrated A2 + B + C + F2-F6 baseline. Brief D remains intentionally
+excluded. Use `git worktree list` to resolve the canonical worktree; do not use
+the dirty ordinary checkpoint checkout as the frontend source.
+
+The ordinary path `/Users/example/Documents/Bryce POV access` remains the
+active one-second runner and canonical live SQLite archive location. Repository
+organization must not reset that checkout, alter its LaunchAgents, or mutate
+the archive. Its Bryce No. 9 car work is independently preserved at tag
+`brycecast-car-art-recovered-20260718` and was not silently introduced into the
+approved UI.
+
+The prior UI-package validator exception is repaired through the predictive
+pack generator plus the narrow UI-package refresh path. The current
+`scripts/api-server.mjs` reference is 87,266 bytes with SHA-256
+`c15f43bd89f36e6fd2a1b12638159de721128fa8a6bac9ca44e7b462dfb85a78`.
+See `analysis/career-chapter-utilization-audit/` for the source-backed career
+utilization matrix. Older sections below are historical unless this section
+explicitly incorporates them.
+
 ## July 18 Nashville Official-Live Baseline
 
 This section supersedes the July 13 cold-runtime instructions for the current

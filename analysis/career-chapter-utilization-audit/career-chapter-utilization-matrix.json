@@ -1,0 +1,435 @@
+{
+  "schemaVersion": "brycecast.careerChapterUtilizationAudit.v1",
+  "auditDate": "2026-07-18",
+  "auditedCommit": "5599bfc53ac34776f6cd40d582f0fffa60283815",
+  "canonicalDataset": {
+    "path": "data/career/career.dataset.json",
+    "sha256": "900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681",
+    "updatedAt": "2026-07-11T20:53:51.783Z",
+    "counts": {
+      "series": 7,
+      "events": 87,
+      "sessions": 483,
+      "results": 8494,
+      "qualifyingResults": 1739,
+      "lapSamples": 70061
+    },
+    "validation": {
+      "ok": true,
+      "errors": 0,
+      "warnings": 1,
+      "warning": "Nine sessions have neither an exact nor date start."
+    }
+  },
+  "renderedGrains": {
+    "classifiedRaceConversionRows": 141,
+    "physicalRaceAndHeatRows": 145,
+    "explanation": "Result conversion uses classified sessionType=race rows; atlas and life stats include physical race/heat rows plus unclassified DNS/DNF rows."
+  },
+  "productizationFinding": {
+    "deepAdapterPath": "src/data/uiContextAdapter.ts",
+    "deepAdapterRenderedByScreen": false,
+    "visible": [
+      "Cross-series result conversion",
+      "INDY NXT deep analytics",
+      "Partial IMSA Daytona context"
+    ],
+    "generatedButMostlyNotVisible": [
+      "Career dimension context",
+      "Formula Ford lap shape",
+      "Historic non-INDY qualifying and team context"
+    ]
+  },
+  "chapters": [
+    {
+      "id": "f1600_2019",
+      "series": "F1600 / FRP F1600",
+      "seasons": [2019],
+      "confidence": "high for results, points, tracks, and season classification; medium or unavailable for team and event-context claims",
+      "website": {
+        "pagesAndComponents": [
+          "CareerScreen chapter card",
+          "careerExplorer percentile timeline and track grouping",
+          "CareerRaceScreen race sheets",
+          "career atlas",
+          "career life stats"
+        ],
+        "metricsAndStories": [
+          "20 classified races",
+          "average finish",
+          "field beaten",
+          "top-10 rate",
+          "finish percentile",
+          "venue and mileage context"
+        ],
+        "startToFinish": "correctly unavailable"
+      },
+      "backend": {
+        "sessions": 37,
+        "fullFieldRaceRows": 315,
+        "bryceRaceRows": 21,
+        "classifiedBryceRaceRows": 20,
+        "bryceQualifyingClassifications": 6,
+        "laps": 0,
+        "penalties": 2,
+        "penaltyScope": "non-Bryce only",
+        "incidents": 0,
+        "weatherRows": 0,
+        "tracks": 7,
+        "teamContext": "too thin for strong teammate claims",
+        "paceFields": ["best lap", "result gaps where sourced"],
+        "seasonFacts": ["P3", "639 points", "8 podiums"]
+      },
+      "productized": ["generic result conversion", "track context", "atlas", "life stats"],
+      "unused": ["season and points progression", "qualifying context", "event cards", "sparse penalty context"],
+      "limitations": [
+        "No sourced race starts",
+        "No lap samples",
+        "No weather or incidents",
+        "No section pace",
+        "Pittsburgh qualifying official-archive link mismatch",
+        "Insufficient team mapping"
+      ],
+      "opportunities": [
+        {"rank": 1, "name": "Season and points progression", "value": "high", "evidence": "high"},
+        {"rank": 2, "name": "Qualifying and event cards", "value": "medium", "evidence": "high"},
+        {"rank": 3, "name": "Sparse penalty callouts", "value": "low", "evidence": "medium"}
+      ]
+    },
+    {
+      "id": "formula_ford_2020",
+      "series": "Formula Ford",
+      "seasons": [2020],
+      "confidence": "high for results, starts, labeled conditions, and Bryce lap blocks; unavailable for full-field lap-position or causal pace claims",
+      "website": {
+        "pagesAndComponents": [
+          "CareerScreen chapter card",
+          "careerExplorer result and condition groups",
+          "CareerRaceScreen race sheets",
+          "named first-car-win moment",
+          "career atlas and life stats"
+        ],
+        "metricsAndStories": [
+          "15 normal classified race rows",
+          "start-to-finish",
+          "finish percentile",
+          "condition grouping",
+          "first car win"
+        ],
+        "knownOmission": "Two heat results are not in the result-conversion population."
+      },
+      "backend": {
+        "sessions": 46,
+        "fullFieldRaceAndHeatRows": 762,
+        "bryceRaceAndHeatRows": 17,
+        "bryceQualifyingClassifications": 7,
+        "bryceLapSamples": 282,
+        "timedBryceLapSamples": 279,
+        "lapSessions": 24,
+        "penalties": 4,
+        "penaltyScope": "non-Bryce only",
+        "incidents": 0,
+        "weatherOrConditionRows": 46,
+        "tracks": 5,
+        "teamContext": "insufficient team IDs",
+        "paceFields": ["Bryce-only labeled lap blocks", "best lap"]
+      },
+      "productized": [
+        "generic result and condition conversion",
+        "Formula Ford lap-shape context pack, stale dataset hash and not rendered"
+      ],
+      "unused": ["lap-shape event progression", "heat inclusion", "qualifying-to-race context", "condition comparison"],
+      "limitations": [
+        "Lap data is Bryce-only and not a full-field position trace",
+        "No field-relative pace",
+        "Continuation pages held out",
+        "No incidents or sections",
+        "Insufficient team IDs"
+      ],
+      "opportunities": [
+        {"rank": 1, "name": "Lap-shape and event-progression module", "value": "high", "evidence": "high after regeneration"},
+        {"rank": 2, "name": "Explicit heat inclusion", "value": "medium", "evidence": "high"},
+        {"rank": 3, "name": "Qualifying-to-race context", "value": "medium", "evidence": "high"},
+        {"rank": 4, "name": "Condition comparison", "value": "medium", "evidence": "medium"}
+      ]
+    },
+    {
+      "id": "gb3_2021_2022",
+      "series": "GB3",
+      "seasons": [2021, 2022],
+      "confidence": "high for results, 2021 starts, all qualifying sessions, team order, tracks, and 2022 pit counts; medium for cross-source condition comparisons",
+      "website": {
+        "pagesAndComponents": [
+          "CareerScreen chapter card",
+          "careerExplorer season, track, condition, percentile, and start-to-finish views",
+          "CareerRaceScreen race sheets",
+          "career atlas"
+        ],
+        "metricsAndStories": [
+          "42 classified race percentiles",
+          "average finish",
+          "field beaten",
+          "top-10 rate",
+          "20 source-backed 2021 start-to-finish rows",
+          "20 condition-labeled race rows",
+          "six venue profiles"
+        ],
+        "premiseVerdict": "The website shows materially more than finishing position."
+      },
+      "backend": {
+        "sessions": 116,
+        "races": 45,
+        "fullFieldRaceRows": 882,
+        "bryceRaceRows": 44,
+        "classifiedBryceRaceRows": 42,
+        "qualifyingSessions": 22,
+        "qualifyingStorage": {"dedicated2021Rows": 14, "qualifyingSessionResultRows2022": 8},
+        "sourcedBryceStarts2021": 20,
+        "officialConditionRows2021": 39,
+        "bryceRacePitCounts2022": 24,
+        "laps": 0,
+        "penalties": 0,
+        "incidents": 0,
+        "tracks": 6,
+        "teamContext": "full-field Carlin 2021 and Hitech 2022 result-order context",
+        "paceFields": []
+      },
+      "productized": [
+        "generic result conversion",
+        "unique GB3 branch reports preserved but not merged because they use the older June dataset"
+      ],
+      "preservationRef": "refs/archive/20260718T184926Z/heads/codex/gb3-historic-analytics",
+      "unused": [
+        "all 22 qualifying sessions",
+        "within-team result order",
+        "event and season progression",
+        "track profiles",
+        "2021 official categorical conditions",
+        "2022 pit counts with narrow labeling"
+      ],
+      "limitations": [
+        "2021 TSL and 2022 JSON expose different fields",
+        "No lap samples or lap-position chart",
+        "No sector or section pace",
+        "No penalty or incident ledger",
+        "No pit sequence, tire service, telemetry, GPS, setup, or strategy evidence",
+        "No causal weather evidence",
+        "Session 1248 official JSON is now 404"
+      ],
+      "opportunities": [
+        {"rank": 1, "name": "Source-family-aware GB3 module", "value": "highest", "evidence": "high"},
+        {"rank": 2, "name": "Qualifying and event progression", "value": "high", "evidence": "high"},
+        {"rank": 3, "name": "Within-team result order", "value": "high", "evidence": "medium"},
+        {"rank": 4, "name": "Venue and season progression", "value": "high", "evidence": "high"},
+        {"rank": 5, "name": "2021 condition context", "value": "medium", "evidence": "medium"},
+        {"rank": 6, "name": "2022 pit-count-only callout", "value": "low", "evidence": "high"}
+      ]
+    },
+    {
+      "id": "euroformula_open_2023",
+      "series": "Euroformula Open",
+      "seasons": [2023],
+      "confidence": "high for results, starts, qualifying, points, tracks, and season classification; medium for descriptive team order",
+      "website": {
+        "pagesAndComponents": ["CareerScreen chapter card", "careerExplorer percentile and track views", "CareerRaceScreen race sheets"],
+        "metricsAndStories": ["17 classified races", "start-to-finish", "finish percentile", "track grouping"],
+        "notRendered": ["qualifying module", "championship progression", "team module"]
+      },
+      "backend": {
+        "sessions": 28,
+        "fullFieldRaceRows": 178,
+        "bryceRaceRows": 18,
+        "classifiedBryceRaceRows": 17,
+        "qualifyingRows": 61,
+        "bryceQualifyingRows": 6,
+        "laps": 0,
+        "penalties": 0,
+        "incidents": 0,
+        "weatherRows": 0,
+        "raceTeams": 6,
+        "tracks": 7,
+        "paceFields": ["result-level best lap", "speed", "gaps"],
+        "seasonFacts": ["P4", "238 points", "3 wins", "5 podiums"]
+      },
+      "productized": ["generic result and qualifying conversion", "stale-hash dimension pack with team and track context"],
+      "unused": ["championship progression", "qualifying-to-race conversion", "event and venue profiles", "descriptive team order"],
+      "limitations": [
+        "No lap samples",
+        "No weather, penalties, incidents, pits, or sections",
+        "Mutable championship PDF now serves 2026; preserved RFEDA final classification is the stable source"
+      ],
+      "opportunities": [
+        {"rank": 1, "name": "Championship and season progression", "value": "high", "evidence": "high"},
+        {"rank": 2, "name": "Qualifying-to-race conversion", "value": "high", "evidence": "high"},
+        {"rank": 3, "name": "Event and venue profile", "value": "medium", "evidence": "high"},
+        {"rank": 4, "name": "Descriptive team order", "value": "medium", "evidence": "medium"}
+      ]
+    },
+    {
+      "id": "froc_2024",
+      "series": "FROC",
+      "seasons": [2024],
+      "confidence": "high for the six Bryce races, starts, qualifying rows, and tracks; low or unavailable for team and detailed pace context",
+      "website": {
+        "pagesAndComponents": ["CareerScreen chapter card", "careerExplorer percentile/start-to-finish and track views", "CareerRaceScreen race sheets"],
+        "metricsAndStories": ["six Bryce race rows", "finish percentile", "start-to-finish", "track context"],
+        "notRendered": ["qualifying module", "season arc", "weather", "team module"]
+      },
+      "backend": {
+        "sessions": 52,
+        "sessionTypes": {"practice": 15, "qualifying": 11, "race": 15, "test": 11},
+        "fullFieldRaceRows": 246,
+        "bryceRaceRows": 6,
+        "bryceQualifyingClassifications": 5,
+        "laps": 0,
+        "penalties": 0,
+        "incidents": 0,
+        "weatherRows": 0,
+        "tracks": 5,
+        "teamContext": "no reliable team mapping",
+        "paceFields": ["result-level best lap"],
+        "fullFieldStartRows": 229
+      },
+      "productized": ["generic result, start, and track conversion"],
+      "unused": ["six-race campaign story", "qualifying context", "venue and event context", "source-coverage panel"],
+      "limitations": [
+        "No lap samples, weather, penalties, incidents, or sections",
+        "No reliable team mapping",
+        "Nine test sessions lack exact clock time",
+        "Two reverse-grid tails remain held out"
+      ],
+      "opportunities": [
+        {"rank": 1, "name": "Lightweight campaign and qualifying story", "value": "medium", "evidence": "high"},
+        {"rank": 2, "name": "Venue and event context", "value": "medium", "evidence": "high"},
+        {"rank": 3, "name": "Source-coverage panel", "value": "medium", "evidence": "high"}
+      ]
+    },
+    {
+      "id": "imsa_daytona_2025",
+      "series": "IMSA Daytona",
+      "seasons": [2025],
+      "confidence": "high for official result, time-card laps, sectors, pit flags, stints, and dry condition; medium for derived co-driver and class-hour comparisons",
+      "website": {
+        "pagesAndComponents": ["custom Daytona chapter", "careerExplorer", "CareerRaceScreen race sheet"],
+        "metricsAndStories": ["GTP P6", "780 car laps", "10 Bryce stints", "car and team", "best lap", "34 pit stops", "finish percentile", "official condition"]
+      },
+      "backend": {
+        "events": 1,
+        "races": 1,
+        "carDriverResultRows": 236,
+        "cars": 61,
+        "fullFieldTimeCardLaps": 37885,
+        "bryceLaps": 142,
+        "derivedStints": 1680,
+        "penalties": 0,
+        "incidents": 0,
+        "weatherOrConditionRows": 1,
+        "teamContext": "car 85 and co-driver context",
+        "paceFields": ["sector times", "speed trap", "average speed", "pit-in", "pit-out", "elapsed time", "co-driver pace", "class-hour context"]
+      },
+      "productized": ["generic result conversion", "specialized IMSA pack partially rendered but stale-hash and not integrity-checked on direct import"],
+      "unused": ["Bryce stint timeline", "sector and pace profile", "co-driver and car-85 comparison", "class-hour context"],
+      "limitations": [
+        "Sports-car car-driver grain differs from formula results",
+        "No running-position trace",
+        "No telemetry, tire/service detail, or strategy notes",
+        "No penalties or incidents",
+        "No causal pace claims"
+      ],
+      "opportunities": [
+        {"rank": 1, "name": "Bryce stint timeline and sector/pace profile", "value": "high", "evidence": "high after regeneration"},
+        {"rank": 2, "name": "Co-driver and car-85 comparison", "value": "high", "evidence": "medium"},
+        {"rank": 3, "name": "Class-hour context", "value": "medium", "evidence": "medium"}
+      ]
+    },
+    {
+      "id": "indy_nxt_2024_2026",
+      "series": "INDY NXT",
+      "seasons": [2024, 2025, 2026],
+      "confidence": "high for official results, timing, reports, penalties, incidents, and sourced sections; modeled and explicitly non-official for ambient weather",
+      "website": {
+        "pagesAndComponents": [
+          "CareerScreen INDY NXT chapter and rivals",
+          "careerExplorer lap mix and season spine",
+          "40 CareerRaceScreen archive pages",
+          "Race Week track and prep modules",
+          "Live running-order, gap, battle, and readiness modules"
+        ],
+        "metricsAndStories": [
+          "result, start, gain, and status",
+          "practice/qualifying/grid/finish arc",
+          "points and standings",
+          "full-field lap charts",
+          "inflections and battle adjacency",
+          "leader, incident, and modeled weather context",
+          "team order",
+          "section percentiles"
+        ]
+      },
+      "backend": {
+        "sessions": 203,
+        "completedRaces": 40,
+        "fullFieldRaceRows": 834,
+        "bryceQualifyingRows": 69,
+        "lapPositionSamples": 31894,
+        "bryceLapPositionSamples": 1493,
+        "fullyParsedRaceCharts": 30,
+        "partialRaceCharts": 10,
+        "officialReportMetrics": 398,
+        "penalties": 80,
+        "brycePenalties": 3,
+        "incidents": 144,
+        "bryceIncidents": 9,
+        "racecraftSummaries": 39,
+        "modeledWeatherRows": 113,
+        "tracks": 13,
+        "teamContext": "full-field and team-order context",
+        "paceFields": ["lap position", "section time and speed", "best laps", "gaps", "race-lap microstates", "same-sample field strength"]
+      },
+      "productized": ["predictive context", "section context", "race-lap context", "debriefs", "race stories", "UI package", "typed loaders"],
+      "unused": ["broader practice/qualifying section explorer", "explicit penalty and incident timeline", "deeper season comparison"],
+      "limitations": [
+        "Weather is modeled ambient context, not official race-control weather",
+        "Pit counts have no stop sequence",
+        "One section-results PDF is corrupt",
+        "Ten lap charts are clean partials",
+        "Field strength is descriptive, not predictive",
+        "Seventy-eight sessions remain date-only"
+      ],
+      "opportunities": [
+        {"rank": 1, "name": "Practice and qualifying section explorer", "value": "medium", "evidence": "high"},
+        {"rank": 2, "name": "Penalty and incident timeline", "value": "medium", "evidence": "high"},
+        {"rank": 3, "name": "Deeper season comparison", "value": "medium", "evidence": "high"}
+      ]
+    }
+  ],
+  "additionalCanonicalContext": {
+    "isAdditionalSeries": false,
+    "items": [
+      "Badger Kart Club fast times and track record",
+      "Two 2018 karting championship milestones",
+      "2020 Team USA Scholarship award and three related media assets",
+      "One 2019 F1600 season milestone"
+    ],
+    "safeUse": "A sourced before-the-climb timeline, not a karting race-stat chapter."
+  },
+  "staleArtifacts": [
+    {"path": "analysis/data-utilization-audit/output", "embeddedDatasetHashPrefix": "da557a", "decision": "historical only"},
+    {"path": "analysis/career-dimension-context-layer/output", "embeddedDatasetHashPrefix": "da557a", "decision": "regenerate before current use"},
+    {"path": "analysis/formula-ford-lap-shape/output", "embeddedDatasetHashPrefix": "da557a", "decision": "regenerate and inventory before UI use"},
+    {"path": "analysis/imsa-daytona-stint-class-pace/output", "embeddedDatasetHashPrefix": "da557a", "decision": "regenerate and add integrity validation"},
+    {"path": "refs/archive/20260718T184926Z/heads/codex/gb3-historic-analytics", "embeddedDatasetState": "June 8", "decision": "preserve scripts and reports; regenerate, do not merge generated output"}
+  ],
+  "globalOpportunityRanking": [
+    "GB3 source-family-aware deep dive",
+    "Formula Ford lap-shape and condition module",
+    "Cross-series championship and season progression",
+    "Expanded Daytona stint and co-driver story",
+    "Euroformula qualifying and season module",
+    "Normalized historic qualifying layer",
+    "F1600 season and points story",
+    "FROC campaign and qualifying story",
+    "Pre-F1600 milestone timeline",
+    "INDY NXT practice and qualifying section explorer"
+  ]
+}

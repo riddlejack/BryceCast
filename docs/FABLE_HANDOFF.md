@@ -1,8 +1,33 @@
 # Fable Handoff For BryceCast
 
-Updated: 2026-07-13 21:22 CDT.
+Updated: 2026-07-18 15:15 EDT.
 
-## July 13 Night Closeout — Read This First
+## July 18 Canonical Baseline — Controlling Instructions
+
+Repository consolidation supersedes the old July 13 branch and frontend-reset
+instructions below.
+
+- Canonical branch: `master`.
+- Approved baseline: the integrated A2 + B + C + F2-F6 website; Brief D remains
+  intentionally excluded.
+- Pre-consolidation baseline tag:
+  `brycecast-pre-consolidation-20260718T184926Z`.
+- Resolve the current canonical worktree with `git worktree list`; do not assume
+  the former `ac78` feature worktree or the dirty ordinary checkout is the
+  development source.
+- `/Users/example/Documents/Bryce POV access` remains the live runner and
+  canonical archive path. Its checkpoint branch and dirty state are preserved
+  operational state, not the frontend baseline.
+- Extend and refine the approved UI. Do not “disregard,” replace, or restart the
+  frontend unless Jack makes a new explicit product decision.
+- Continue to preserve typed package/adapter seams, source drawers, confidence
+  language, wrong-series guards, stale states, and unavailable states.
+
+The historical verbatim vision and July 13 commands later in this file explain
+how the integrated site was reached; they are provenance, not current execution
+instructions.
+
+## July 13 Night Closeout — Historical Provenance
 
 The current authoritative review build is no longer the older branch described
 later in this historical handoff.

@@ -1,12 +1,20 @@
 # BryceCast Documentation Map
 
-Generated: 2026-06-18
+Updated: 2026-07-18
 
-Use this map before starting UI work. The active product direction is analytics-first: source-backed INDY NXT and career analytics, live race-day readiness, explicit unavailable states, and a web/mobile surface. Legacy POV, isolated-radio, native tvOS, and outreach research remains preserved as evidence, but it is not the active UI direction.
+Use this map before starting UI work. The canonical `master` branch and its
+integrated A2 + B + C + F2-F6 website are the approved baseline. The active
+direction is analytics-first: source-backed INDY NXT and career analytics, live
+race-day readiness, explicit unavailable states, and a web/mobile surface.
+Brief D is excluded. Legacy POV, isolated-radio, native tvOS, frontend-reset,
+and outreach material remains evidence, not current execution direction.
 
 ## Fable Lead-Agent Entry Point
 
-For the next Claude Fable 5 / Codex GPT-5.5 build phase, start with [../CLAUDE.md](../CLAUDE.md) and [FABLE_HANDOFF.md](FABLE_HANDOFF.md). That handoff records Jack's current vision, the verified Claude Code Codex plugin setup, the model-routing workflow, and the post-Road America live-data truth that supersedes older pre-race live-proof caveats.
+Start with [../CLAUDE.md](../CLAUDE.md) and
+[FABLE_HANDOFF.md](FABLE_HANDOFF.md). Their July 18 controlling sections make
+the approved integrated UI the baseline and supersede the old instruction to
+replace the frontend.
 
 ## Active Build Contracts
 
@@ -14,7 +22,7 @@ Read these first for frontend, view-model, and product work:
 
 | Order | Document | Role |
 | ---: | --- | --- |
-| 1 | [FABLE_HANDOFF.md](FABLE_HANDOFF.md) | Fable/Codex operating guide, Jack's current vision, model routing, and post-Road America live proof summary. |
+| 1 | [FABLE_HANDOFF.md](FABLE_HANDOFF.md) | Current canonical-baseline instructions plus historical Fable/Codex provenance. |
 | 2 | [CODEX_HANDOFF_CURRENT.md](CODEX_HANDOFF_CURRENT.md) | Current repo handoff, validation baseline, source families, and known coordination risk. |
 | 3 | [../LIVE_DRILL_CLOSEOUT_2026-06-21.md](../LIVE_DRILL_CLOSEOUT_2026-06-21.md) | Post-Road America live-drill closeout; supersedes pre-race live-proof uncertainty. |
 | 4 | [../LIVE_DRILL_PROCESS_EXHAUSTION_RCA_2026-06-21.md](../LIVE_DRILL_PROCESS_EXHAUSTION_RCA_2026-06-21.md) | Local process-limit RCA and required single-ingestor prevention plan. |
@@ -22,7 +30,7 @@ Read these first for frontend, view-model, and product work:
 | 6 | [../analysis/ui-data-package/README.md](../analysis/ui-data-package/README.md) | Generated UI data package: hydrated screen seeds, context-pack refs, live fixtures, source refs, and validation commands. |
 | 7 | [../analysis/ANALYTICS_UI_ARTIFACT_INDEX.md](../analysis/ANALYTICS_UI_ARTIFACT_INDEX.md) | Current stable analytics artifact index after the June 18 productization sprint. |
 | 8 | [../analysis/predictive-race-intelligence/output/PREDICTIVE_RACE_INTELLIGENCE_REPORT.md](../analysis/predictive-race-intelligence/output/PREDICTIVE_RACE_INTELLIGENCE_REPORT.md) | Predictive race-intelligence decision, feasibility, context packs, and chart artifacts. |
-| 9 | [../analysis/data-utilization-audit/output/DATA_UTILIZATION_AUDIT.md](../analysis/data-utilization-audit/output/DATA_UTILIZATION_AUDIT.md) | Data-utilization audit proving the current generated utilization backlog is closed. |
+| 9 | [../analysis/career-chapter-utilization-audit/README.md](../analysis/career-chapter-utilization-audit/README.md) | July 18 rendered-UI-versus-backend audit. It distinguishes visible use from pack existence and flags stale historic packs. |
 | 10 | [UI_ANALYTICS_PRODUCT_CONTRACT.md](UI_ANALYTICS_PRODUCT_CONTRACT.md) | Controlling UI product contract for screens, metrics, caveats, unavailable states, and source drawers. |
 | 11 | [LIVE_RACE_DAY_PRODUCT_CONTRACT.md](LIVE_RACE_DAY_PRODUCT_CONTRACT.md) | Live timing/readiness/points/weather/replay contract and wrong-series guard rules. |
 | 12 | [READINESS.md](READINESS.md) | Current product readiness brief and the no-POV/no-scanner baseline. |
