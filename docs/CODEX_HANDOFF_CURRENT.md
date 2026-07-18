@@ -15,6 +15,8 @@ race weekend.
 - Live weather metadata now comes from the compact track metadata plus upcoming-event context packs. The prior path reparsed the 306 MB career dataset on every readiness request and drove the API above 2 GB RSS.
 - Production measurement with one one-second browser client: app/API about 111 MB RSS, runner about 114 MB RSS, combined about 225 MB; 35/35 capture writes succeeded in 35 seconds.
 - Observed archive growth was about 1.3 GB/hour. Storage retention, not compute, is the main Mac mini deployment constraint.
+- The July 18 ten-minute Nashville guard automation was deleted after it created 11 duplicate standalone tasks while the self-scheduling LaunchAgent was healthy. Those duplicate tasks were archived; the original `019f75e0-44e7-7fa3-adb2-4ca6202825b9` setup task remains the canonical record. Do not recreate a continuous Codex monitor for this weekend.
+- The post-weekend content-addressed archive redesign is specified in `docs/LIVE_ARCHIVE_V2_PLAN.md`. Keep one-second timing, version enrichment payloads by content hash, migrate through a sidecar database, and do not modify or vacuum the active legacy archive.
 
 Practice 1 proved the data path and page motion, but the page remains semantically
 race-shaped: practice order is best-lap order, race laps are unavailable, and
