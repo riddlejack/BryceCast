@@ -161,10 +161,16 @@ The canonical database remained inode `16776463`, 5,990,891,520 bytes, with 16,5
 
 ## Recovery
 
-1. Clone the final or pre-cleanup bundle into a new directory; never extract over the live repository.
-2. To restore the old trunk, resolve `refs/archive/20260718T184926Z/heads/master` or the pre-cleanup tag.
-3. To restore any retired branch, create a new branch from its same-named `refs/archive/20260718T184926Z/heads/...` ref.
-4. To restore the ordinary dirty checkout, check out `8b0d422dcd593192f78dd775b49dd04be1f1aa17`, apply `dirty/main-checkout/tracked-working-tree.patch`, and extract `dirty/main-checkout/bryce-aron-9.tar` under `src/assets/cars/`.
-5. To recover reflog/detached history, use the explicit `refs/archive/20260718T184926Z/reflog/*` and `detached/*` refs.
-6. Use `git/common-git-dir-before.tar` only in a new empty recovery directory if the exact pre-cleanup administrative state is required.
-7. Verify every restored artifact against `/Users/example/Documents/BryceCast-recovery-backups/2026-07-18T184926Z/MANIFEST.md`.
+1. To restore every namespace, initialize a new directory and fetch the bundle
+   with explicit refspecs: `git init recovered-brycecast`, then
+   `git -C recovered-brycecast fetch /absolute/path/to/all-refs-post-consolidation.bundle 'refs/heads/*:refs/heads/*' 'refs/tags/*:refs/tags/*' 'refs/archive/*:refs/archive/*' 'refs/codex/*:refs/codex/*'`.
+   Never fetch or extract over the live repository. A plain `git clone` restores
+   normal heads/tags and all objects, but does not install the custom archive
+   namespaces.
+2. Set the recovered worktree to the approved trunk with `git -C recovered-brycecast symbolic-ref HEAD refs/heads/master` and `git -C recovered-brycecast reset --hard master`. Use `reset --hard` only inside this new recovery directory.
+3. To restore the old trunk, resolve `refs/archive/20260718T184926Z/heads/master` or the pre-cleanup tag.
+4. To restore any retired branch, create a new branch from its same-named `refs/archive/20260718T184926Z/heads/...` ref.
+5. To restore the ordinary dirty checkout, check out `8b0d422dcd593192f78dd775b49dd04be1f1aa17`, apply `dirty/main-checkout/tracked-working-tree.patch`, and extract `dirty/main-checkout/bryce-aron-9.tar` under `src/assets/cars/`.
+6. To recover reflog/detached history, use the explicit `refs/archive/20260718T184926Z/reflog/*` and `detached/*` refs.
+7. Use `git/common-git-dir-before.tar` only in a new empty recovery directory if the exact pre-cleanup administrative state is required.
+8. Verify every restored artifact against `/Users/example/Documents/BryceCast-recovery-backups/2026-07-18T184926Z/MANIFEST.md`.
