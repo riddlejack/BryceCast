@@ -238,3 +238,51 @@ Begin with Brief G and launch Brief I's grain audit in parallel. Present
 to Jack at every gate with screenshots, leading with what he'd ask first,
 always flagging where execution deviated from the briefs and why.
 ```
+
+---
+
+## Addendum (2026-07-18, later): historical high-frequency audit — adopted verdicts
+
+The research at `analysis/historical-high-frequency-data-audit/` (merged to
+master, 3176905) is adopted as controlling. Consequences for the queue:
+
+1. **Brief I upgrade — the grain question is half-answered.** The audit's
+   source table confirms Section Results PDFs parse to **car / lap / named
+   section time and speed** grain (159 parsed). Step 0 therefore narrows to
+   one question per venue/race: do the named sections CHAIN to tile the full
+   lap (S/F → … → S/F)? Where they tile, cumulative reconstruction derives
+   absolute loop-crossing timestamps and pass placement per the brief; where
+   they are isolated stretches, only relative section comparison is honest.
+   Verify tiling against the venue debug renders and the three existing
+   race_lap_section_context venues first.
+2. **Brief J rescope.** The pairwise corner-collision predictor is DEAD
+   (very-high-confidence no-go: no 2-D position, overlap, heading, or
+   contact labels — tell Bryce the honest version). Stage 3 becomes exactly
+   the audit's defensible concept: experimental full-course-yellow onset
+   within the next lap / next 60 seconds while green, with explicit
+   abstention and no named-driver blame — double-gated on (a) written
+   permission below and (b) a calibration harness; expectations tempered by
+   only 72 official caution episodes; guard the C2 leakage trap (flag time
+   lags physical incident time).
+3. **Permission lane (new, non-engineering).** No downloading, ingesting,
+   or training against RaceTools/INDYCAR archives before written
+   permission. The realistic route is through Bryce/CGR: a driver
+   requesting his own competition timing for private preparation is a
+   different conversation than a fan site's bulk ingest. Draft the request
+   (Fable-level writing task, ties into docs/OUTREACH.md): ask for full
+   2024–25 weekends INCLUDING practice/qualifying, private analytical use +
+   internal model research; public display rights are a separate, later
+   ask. If rights arrive restricted to non-public use, the team-depth layer
+   can become an authenticated view — plan for that split, don't build it
+   preemptively.
+4. **Coverage-tier law.** All second-by-second analytics must respect three
+   permanent tiers: (A) 2024–25 — RaceTools replay logs, rights-gated, 1s
+   heartbeats + event-driven timing, not per-car synchronous; (B) early
+   2026 pre-Mid-Ohio — official per-lap/section grain only, forever; (C)
+   Mid-Ohio 2026 onward — our own capture, the only source, sacred. The
+   audit's source-coverage-matrix.json is the reference; any YoY
+   second-level comparison states its tier on screen per house denominator
+   rules.
+5. **Storage follow-through.** Capture growth ~1.3 GB/hour with 94% duplicate
+   enrichment bytes; adopt LIVE_ARCHIVE_V2_PLAN's content-addressed storage
+   before the Mac mini migration (post-weekend, with Jack's go).
