@@ -1,0 +1,212 @@
+{
+  "schemaVersion": 1,
+  "auditedAt": "2026-07-18",
+  "method": {
+    "2024": "HTTP range-read of the annual ZIP central directory only",
+    "2025": "public IIS directory listing traversal without downloading session payloads"
+  },
+  "summary": {
+    "2024UniqueRaceSessions": 14,
+    "2024SessionZipBytes": 9763471,
+    "2025UniqueRaceSessions": 14,
+    "2025ListedRaceZipObjects": 15,
+    "2025DeduplicatedSessionZipBytes": 10033009,
+    "2025AllRaceLabelledObjectBytes": 11243772,
+    "2025Note": "Indianapolis Race 1 has two dated ZIP objects. The 2025-05-09 object is the clean R1 capture. The later/larger 2025-05-10 object contains 45923 heartbeats and 22 session markers spanning NXT and INDYCAR sessions; treat it as a contaminated intersession/full-day duplicate, not an additional race or replacement.",
+    "2026": "no directory or annual ZIP observed"
+  },
+  "races": [
+    {
+      "season": 2024,
+      "sessionId": 6324,
+      "bytes": 752790,
+      "container": "https://racetools.com/logfiles/IndyCar/IndyCar_2024.zip",
+      "entry": "2024/01 - St Petersburg/INDY NXT by Firestone GP of St Petersburg(St Petersburg Street Circuit)-Race_(R.L)_2024-03-10.zip"
+    },
+    {
+      "season": 2024,
+      "sessionId": 6314,
+      "bytes": 669161,
+      "container": "https://racetools.com/logfiles/IndyCar/IndyCar_2024.zip",
+      "entry": "2024/04 - Barber Motorsports Park/INDY NXT by Firestone Grand Prix of Alabama(Barber Motorsports Park)-Race_(R.L)_2024-04-28.zip",
+      "payloadValidated": true
+    },
+    {
+      "season": 2024,
+      "sessionId": 6315,
+      "bytes": 718268,
+      "container": "https://racetools.com/logfiles/IndyCar/IndyCar_2024.zip",
+      "entry": "2024/05 - Indianapolis GP/INDY NXT by Firestone Indianapolis Grand Prix(Indianapolis Motor Speedway RC)-Race 1_(R1.L)_2024-05-10.zip"
+    },
+    {
+      "season": 2024,
+      "sessionId": 6325,
+      "bytes": 775585,
+      "container": "https://racetools.com/logfiles/IndyCar/IndyCar_2024.zip",
+      "entry": "2024/05 - Indianapolis GP/INDY NXT by Firestone Indianapolis Grand Prix(Indianapolis Motor Speedway RC)-Race 2_(R2.L)_2024-05-11.zip"
+    },
+    {
+      "season": 2024,
+      "sessionId": 6326,
+      "bytes": 979805,
+      "container": "https://racetools.com/logfiles/IndyCar/IndyCar_2024.zip",
+      "entry": "2024/07 - Detroit/INDY NXT by Firestone Detroit Grand Prix(Detroit Street Circuit)-Race_(R.L)_2024-06-02.zip"
+    },
+    {
+      "season": 2024,
+      "sessionId": 6316,
+      "bytes": 618886,
+      "container": "https://racetools.com/logfiles/IndyCar/IndyCar_2024.zip",
+      "entry": "2024/08 - Road America/INDY NXT by Firestone Grand Prix at Road America(Road America)-Race_(R.L)_2024-06-09.zip"
+    },
+    {
+      "season": 2024,
+      "sessionId": 6317,
+      "bytes": 779028,
+      "container": "https://racetools.com/logfiles/IndyCar/IndyCar_2024.zip",
+      "entry": "2024/10 - Laguna Seca/INDY NXT by Firestone GP of Monterey(WeatherTech Raceway Laguna Seca)-Race 1_(R1.L)_2024-06-22.zip"
+    },
+    {
+      "season": 2024,
+      "sessionId": 6327,
+      "bytes": 772678,
+      "container": "https://racetools.com/logfiles/IndyCar/IndyCar_2024.zip",
+      "entry": "2024/10 - Laguna Seca/INDY NXT by Firestone GP of Monterey(WeatherTech Raceway Laguna Seca)-Race 2_(R2.L)_2024-06-23.zip"
+    },
+    {
+      "season": 2024,
+      "sessionId": 6318,
+      "bytes": 676737,
+      "container": "https://racetools.com/logfiles/IndyCar/IndyCar_2024.zip",
+      "entry": "2024/11 - Mid-Ohio/INDY NXT by Firestone Grand Prix at Mid-Ohio(Mid-Ohio Sports Car Course)-Race_(R.L)_2024-07-07.zip"
+    },
+    {
+      "season": 2024,
+      "sessionId": 6319,
+      "bytes": 421090,
+      "container": "https://racetools.com/logfiles/IndyCar/IndyCar_2024.zip",
+      "entry": "2024/12 - Iowa/INDY NXT by Firestone at Iowa Speedway(Iowa Speedway)-Race_(R.L)_2024-07-13.zip"
+    },
+    {
+      "season": 2024,
+      "sessionId": 6320,
+      "bytes": 669014,
+      "container": "https://racetools.com/logfiles/IndyCar/IndyCar_2024.zip",
+      "entry": "2024/14 - Gateway/INDY NXT by Firestone Outfront Showdown(World Wide Technology Raceway)-Race_(R.L)_2024-08-17.zip"
+    },
+    {
+      "season": 2024,
+      "sessionId": 6321,
+      "bytes": 524493,
+      "container": "https://racetools.com/logfiles/IndyCar/IndyCar_2024.zip",
+      "entry": "2024/15 - Portland/INDY NXT by Firestone Grand Prix of Portland(Portland International Raceway)-Race_(R.L)_2024-08-25.zip"
+    },
+    {
+      "season": 2024,
+      "sessionId": 6322,
+      "bytes": 815501,
+      "container": "https://racetools.com/logfiles/IndyCar/IndyCar_2024.zip",
+      "entry": "2024/16 - Milwaukee/INDY NXT by Firestone at Milwaukee Mile(Milwaukee Mile)-Race_(R.L)_2024-08-31.zip"
+    },
+    {
+      "season": 2024,
+      "sessionId": 6323,
+      "bytes": 590435,
+      "container": "https://racetools.com/logfiles/IndyCar/IndyCar_2024.zip",
+      "entry": "2024/17 - Nashville/INDY NXT by Firestone Music City Grand Prix(Nashville Superspeedway)-Race_(R.L)_2024-09-15.zip"
+    },
+    {
+      "season": 2025,
+      "sessionId": 6446,
+      "bytes": 743808,
+      "url": "https://racetools.com/logfiles/IndyCar/2025/01%20-%20St.%20Petersburg/INDY%20NXT%20by%20Firestone%20GP%20of%20St.%20Petersburg(St%20Petersburg%20Street%20Circuit)-Race_(R.L)_2025-03-02.zip"
+    },
+    {
+      "season": 2025,
+      "sessionId": 6445,
+      "bytes": 643073,
+      "url": "https://racetools.com/logfiles/IndyCar/2025/04%20-%20Barber%20Motorsports%20Park/INDY%20NXT%20by%20Firestone%20GP%20of%20Alabama(Barber%20Motorsports%20Park)-Race_(R.L)_2025-05-04.zip",
+      "payloadValidated": true
+    },
+    {
+      "season": 2025,
+      "sessionId": 6444,
+      "bytes": 722591,
+      "url": "https://racetools.com/logfiles/IndyCar/2025/05%20-%20Indianapolis%20GP/INDy%20NXT%20by%20Firestone%20Indianapolis%20Grand%20Prix(Indianapolis%20Motor%20Speedway%20RC)-Race%201_(R1.L)_2025-05-09.zip"
+    },
+    {
+      "season": 2025,
+      "sessionId": 6444,
+      "bytes": 1210763,
+      "url": "https://racetools.com/logfiles/IndyCar/2025/05%20-%20Indianapolis%20GP/INDy%20NXT%20by%20Firestone%20Indianapolis%20Grand%20Prix(Indianapolis%20Motor%20Speedway%20RC)-Race%201_(R1.L)_2025-05-10.zip",
+      "contaminatedDuplicate": true,
+      "excludeFromCanonicalRaceCoverage": true
+    },
+    {
+      "season": 2025,
+      "sessionId": 6443,
+      "bytes": 750637,
+      "url": "https://racetools.com/logfiles/IndyCar/2025/05%20-%20Indianapolis%20GP/INDy%20NXT%20by%20Firestone%20Indianapolis%20Grand%20Prix(Indianapolis%20Motor%20Speedway%20RC)-Race%202_(R2.L)_2025-05-10.zip"
+    },
+    {
+      "season": 2025,
+      "sessionId": 6455,
+      "bytes": 886971,
+      "url": "https://racetools.com/logfiles/IndyCar/2025/07%20-%20Detroit/INDY%20NXT%20by%20Firestone%20Detroit%20Grand%20Prix(Detroit%20Street%20Circuit)-Race_(R.L)_2025-06-01.zip"
+    },
+    {
+      "season": 2025,
+      "sessionId": 6454,
+      "bytes": 819110,
+      "url": "https://racetools.com/logfiles/IndyCar/2025/08%20-%20WWTR/INDY%20NXT%20by%20Firestone(World%20Wide%20Technology%20Raceway)-Race_(R.L)_2025-06-15.zip"
+    },
+    {
+      "season": 2025,
+      "sessionId": 6453,
+      "bytes": 575321,
+      "url": "https://racetools.com/logfiles/IndyCar/2025/09%20-%20Road%20America/INDY%20NXT%20at%20Road%20America(Road%20America)-Race_(R.L)_2025-06-22.zip"
+    },
+    {
+      "season": 2025,
+      "sessionId": 6452,
+      "bytes": 669355,
+      "url": "https://racetools.com/logfiles/IndyCar/2025/10%20-%20Mid-Ohio/INDY%20NXT%20by%20Firestone%20Grand%20Prix%20at%20Mid-Ohio(Mid-Ohio%20Sports%20Car%20Course)-Race_(R.L)_2025-07-06.zip"
+    },
+    {
+      "season": 2025,
+      "sessionId": 6451,
+      "bytes": 687801,
+      "url": "https://racetools.com/logfiles/IndyCar/2025/11%20-%20Iowa/INDY%20NXT%20by%20Firestone%20at%20Iowa(Iowa%20Speedway)-Race_(R.L)_2025-07-12.zip"
+    },
+    {
+      "season": 2025,
+      "sessionId": 6442,
+      "bytes": 709408,
+      "url": "https://racetools.com/logfiles/IndyCar/2025/13%20-%20Laguna%20Seca/INDY%20NXT%20by%20Firestone%20GP%20of%20Monterey%20Doubleheader(WeatherTech%20Raceway%20Laguna%20Seca)-Race%201_(R1.L)_2025-07-26.zip"
+    },
+    {
+      "season": 2025,
+      "sessionId": 6450,
+      "bytes": 749845,
+      "url": "https://racetools.com/logfiles/IndyCar/2025/13%20-%20Laguna%20Seca/INDY%20NXT%20by%20Firestone%20GP%20of%20Monterey%20Doubleheader(WeatherTech%20Raceway%20Laguna%20Seca)-Race%202_(R2.L)_2025-07-27.zip"
+    },
+    {
+      "season": 2025,
+      "sessionId": 6449,
+      "bytes": 582515,
+      "url": "https://racetools.com/logfiles/IndyCar/2025/14%20-%20Portland/INDY%20NXT%20by%20Firestone%20Grand%20Prix%20of%20Portland(Portland%20International%20Raceway)-Race_(R.L)_2025-08-10.zip"
+    },
+    {
+      "season": 2025,
+      "sessionId": 6448,
+      "bytes": 896114,
+      "url": "https://racetools.com/logfiles/IndyCar/2025/15%20-%20Milwaukee/INDY%20NXT%20by%20Firestone%20At%20The%20Milwaukee%20Mile(Milwaukee%20Mile)-Race_(R.L)_2025-08-24.zip"
+    },
+    {
+      "season": 2025,
+      "sessionId": 6447,
+      "bytes": 596460,
+      "url": "https://racetools.com/logfiles/IndyCar/2025/16%20-%20Nashville/INDY%20NXT%20by%20Firestone%20Music%20City%20Grand%20Prix(Nashville%20Superspeedway)-Race_(R.L)_2025-08-31.zip"
+    }
+  ]
+}
