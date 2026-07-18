@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "testedAt": "2026-07-18",
+  "product": "Sportradar Indy Lights Base trial",
+  "credentialPersisted": false,
+  "officialDocumentation": {
+    "overview": "https://developer.sportradar.com/racing/reference/indy-lights-overview",
+    "seasons": "https://developer.sportradar.com/racing/reference/indy-lights-seasons",
+    "stageSchedule": "https://developer.sportradar.com/racing/reference/indy-lights-stage-schedule",
+    "faq": "https://developer.sportradar.com/racing/reference/indycar-faq",
+    "documentedCadence": "Results for practice, qualifying, and race stages are added after the event; the API is not real-time."
+  },
+  "tests": [
+    {
+      "endpoint": "GET /indylights/trial/v2/en/seasons.json",
+      "status": 200,
+      "seasonCount": 8,
+      "targetSeasons": [
+        {"year": 2024, "id": "sr:stage:1158638"},
+        {"year": 2025, "id": "sr:stage:1228673"},
+        {"year": 2026, "id": "sr:stage:1341103"}
+      ]
+    },
+    {
+      "endpoint": "GET /indylights/trial/v2/en/sport_events/sr:stage:1158638/schedule.json",
+      "status": 200,
+      "year": 2024,
+      "stageCounts": {"event": 14, "practice": 20, "qualifying": 14, "qualifying_part": 2, "race": 14}
+    },
+    {
+      "endpoint": "GET /indylights/trial/v2/en/sport_events/sr:stage:1228673/schedule.json",
+      "status": 200,
+      "year": 2025,
+      "stageCounts": {"event": 14, "practice": 19, "qualifying": 14, "qualifying_part": 4, "race": 14}
+    },
+    {
+      "endpoint": "GET /indylights/trial/v2/en/sport_events/sr:stage:1341103/schedule.json",
+      "status": 200,
+      "year": 2026,
+      "fullSeasonStageCounts": {"event": 17, "practice": 17, "qualifying": 17, "qualifying_part": 2, "race": 17},
+      "throughDate": "2026-07-18",
+      "closedRaceStages": 12,
+      "note": "The schedule duplicates some shared doubleheader qualifying stages under separate event parents and can lag same-day closure; do not use raw stage counts as unique physical-session counts without deduplication."
+    },
+    {
+      "endpoint": "GET /indylights/trial/v2/en/sport_events/sr:stage:1341143/summary.json",
+      "status": 200,
+      "sample": "2026 St. Petersburg Practice 1",
+      "competitorCount": 24,
+      "resultFields": ["best_speed", "laps", "position", "status", "gap", "car_number"],
+      "timelineOrSnapshotCollection": false
+    },
+    {
+      "endpoint": "GET /indylights/trial/v2/en/sport_events/sr:stage:1158670/summary.json",
+      "status": 200,
+      "sample": "2024 St. Petersburg Race",
+      "competitorCount": 21,
+      "resultFields": ["points", "speed", "fastest_lap_time", "laps", "position", "grid", "status", "time", "car_number"],
+      "timelineOrSnapshotCollection": false
+    }
+  ],
+  "verdict": {
+    "historicalScheduleAndFinalResults": "usable_as_secondary_crosscheck",
+    "practiceQualifyingAndRaceCoverage": "post_event_aggregate_only",
+    "oneSecondHistory": false,
+    "timingLoopCrossings": false,
+    "vehicleCoordinates": false,
+    "fillsHighFrequencyGaps": false,
+    "paidUpgradeNeededForCurrentBryceCastArchive": false
+  }
+}

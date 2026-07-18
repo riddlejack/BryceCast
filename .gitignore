@@ -2,6 +2,9 @@ node_modules/
 dist/
 artifacts/
 data/live/
+data/historical-data-lake/raw/
+data/historical-data-lake/tmp/
+data/historical-data-lake/*.sqlite
 public/data/live-snapshot.json
 public/data/onboard-catalog.json
 current-ui-*.png
