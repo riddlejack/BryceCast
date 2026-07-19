@@ -293,7 +293,7 @@
       "path": "analysis/predictive-race-intelligence/output/context-packs/context-pack-manifest.json",
       "bytes": 61270,
       "modifiedAt": "2026-07-18T18:58:36.401Z",
-      "sha256": "3c59b139065609a26d74dcdad4cd1bc6d3be0e76f00e79878467ed92294eda9e"
+      "sha256": "ba9f5b9fdf35382f387aa0f9303d22994c7840f493c43bb19cc04f02b86b11ef"
     },
     "predictiveCareerPriorMatrix": {
       "path": "analysis/predictive-race-intelligence/output/career_prior_matrix.csv",
@@ -524,7 +524,7 @@
         "bytes": 2902,
         "id": "live_race_day_context",
         "path": "analysis/predictive-race-intelligence/output/context-packs/live-race-day-context.json",
-        "sha256": "5df9a69411f76121fc51d44065f84ae356a72cd95d3b7c4262b74a4375047433",
+        "sha256": "66cec79af087bf5cd33ca3ae30edf2d85630e19c06e3ef75fd2a242ec035402c",
         "sourceRefs": [
           "docs/LIVE_RACE_DAY_PRODUCT_CONTRACT.md",
           "scripts/api-server.mjs",
@@ -2954,7 +2954,7 @@
         "bytes": 2902,
         "id": "live_race_day_context",
         "path": "analysis/predictive-race-intelligence/output/context-packs/live-race-day-context.json",
-        "sha256": "5df9a69411f76121fc51d44065f84ae356a72cd95d3b7c4262b74a4375047433",
+        "sha256": "66cec79af087bf5cd33ca3ae30edf2d85630e19c06e3ef75fd2a242ec035402c",
         "sourceRefs": [
           "docs/LIVE_RACE_DAY_PRODUCT_CONTRACT.md",
           "scripts/api-server.mjs",

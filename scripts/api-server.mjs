@@ -2006,6 +2006,18 @@ const handler = async (req, res) => {
       return;
     }
 
+    if (pathname === '/api/replay/available') {
+      if (!replayEnabled) {
+        sendError(res, 404, 'Replay mode is disabled.');
+        return;
+      }
+      sendJson(res, 200, {
+        schemaVersion: 'live-replay-available.v1',
+        ...replayOverlay.available()
+      });
+      return;
+    }
+
     if (pathname === '/api/snapshot' || pathname === '/api/race/snapshot') {
       sendJson(res, 200, await cachedRaceSnapshot());
       return;

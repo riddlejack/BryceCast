@@ -83,6 +83,13 @@ for (const checkedAt of ['2026-06-21T16:08:20.000Z', '2026-06-21T16:08:21.000Z']
     VALUES (?, ?, '5537-6754', 6, 6, 15, '12', 'Active', '8.1', '8.1', '800000', '900000', 0, 159, 159)
   `).run(Number(result.lastInsertRowid), checkedAt);
 }
+// Enough green snapshots to cross the "watchable" threshold so the captured-race
+// index marks this session as a real, replayable race for its race page.
+const watchableBaseMs = Date.parse('2026-06-21T16:08:22.000Z');
+for (let index = 0; index < 130; index += 1) {
+  const checkedAt = new Date(watchableBaseMs + index * 1000).toISOString();
+  insertSnapshot.run(checkedAt, JSON.stringify({ summary: { checkedAt, trackName: 'Road America' }, raw }));
+}
 db.close();
 
 await writeFile(runnerStatusPath, JSON.stringify({ phase: 'IDLE', updatedAt: new Date().toISOString() }));
@@ -97,6 +104,27 @@ nowMs += 500;
 assert.equal(overlay.currentRecord().archiveCheckedAt, '2026-06-21T16:08:21.000Z', '2x replay clock should advance one archive second in 500ms');
 assert.equal(runnerReportsLiveSession({ phase: 'LIVE' }), true);
 assert.equal(runnerReportsLiveSession({ phase: 'IDLE', latestBryce: { sourceState: 'cold', flag: 'COLD' } }), false);
+
+// 16x is a Time Machine speed and must advance the archive clock proportionally.
+const fastStart = overlay.start({ session: '5537-6754', t0: '2026-06-21T16:08:20.000Z', speed: 16 });
+assert.equal(fastStart.speed, 16, '16x replay speed must be accepted');
+nowMs += 100;
+assert.equal(overlay.currentRecord().archiveCheckedAt, '2026-06-21T16:08:21.000Z', '16x replay clock should advance ~1.6 archive seconds in 100ms');
+assert.throws(() => overlay.start({ session: '5537-6754', t0: '2026-06-21T16:08:20.000Z', speed: 7 }), /speed must be/, 'invalid replay speed must be rejected');
+overlay.stop();
+
+// The captured-race index maps this archived session to its race page.
+const availableIndex = overlay.available();
+assert.equal(availableIndex.enabled, true, 'available() must report enabled overlay');
+const roadAmerica = availableIndex.sessions.find((session) => session.sessionKey === '5537-6754');
+assert.ok(roadAmerica, 'available() must list the archived Road America race');
+assert.equal(roadAmerica.eventSessionId, '6754', 'available() must carry eventSessionId for the crosswalk');
+assert.equal(roadAmerica.canonicalSessionId, 'session_indy_nxt_2026_6754', 'available() must derive the canonical race-page sessionId');
+assert.equal(roadAmerica.isRace, true, 'available() must classify a Race session');
+assert.equal(roadAmerica.watchable, true, 'a green, well-sampled race capture must be watchable');
+assert.ok(roadAmerica.firstGreenAt, 'available() must report the green-flag timestamp for restart-from-green');
+assert.equal(createReplayOverlay({ enabled: false, sqlitePath, runnerStatusPath }).available().enabled, false, 'disabled overlay must report available() disabled');
+// A restart from the same overlay must still refuse-when-live check on start.
 
 await writeFile(runnerStatusPath, JSON.stringify({ phase: 'LIVE' }));
 assert.throws(
@@ -178,6 +206,13 @@ try {
   assert.equal(readiness.replay.simulation?.active, true, 'replay readiness must identify simulated playback');
   assert.equal(readiness.replay.simulation?.mode, 'archived_replay', 'replay readiness must remain distinct from official live mode');
   assert.equal((await fetchJson('/api/replay/control')).active, true);
+
+  const available = await fetchJson('/api/replay/available');
+  assert.equal(available.schemaVersion, 'live-replay-available.v1', '/api/replay/available missing schema version');
+  assert.equal(available.enabled, true, '/api/replay/available must report the enabled overlay');
+  const roadAmericaRow = available.sessions.find((session) => session.sessionKey === '5537-6754');
+  assert.ok(roadAmericaRow?.watchable, '/api/replay/available must expose the watchable Road America race');
+  assert.equal(roadAmericaRow.canonicalSessionId, 'session_indy_nxt_2026_6754', '/api/replay/available must map to the canonical race-page sessionId');
 } finally {
   child.kill('SIGTERM');
   await new Promise((resolve) => child.once('exit', resolve));
@@ -185,4 +220,4 @@ try {
 }
 
 assert.equal(stderr, '', stderr);
-console.log(JSON.stringify({ ok: true, assertions: 16, payloadShape: 'live-compatible' }, null, 2));
+console.log(JSON.stringify({ ok: true, assertions: 31, payloadShape: 'live-compatible', timeMachine: 'available+16x' }, null, 2));
