@@ -1,6 +1,17 @@
 # BryceCast Current Codex Handoff
 
-Updated: 2026-07-18 12:00 EDT.
+Updated: 2026-07-19 13:30 EDT (post-race).
+
+## July 19 Post-Race — Controlling State
+
+`docs/PHASE3_HANDOFF_2026-07-19.md` is now the controlling state document
+and supersedes the July 18 sections below (kept for provenance). Headlines:
+production hosting moved to the Mac mini (Codex runs there; deploy via
+`npm run deploy:mini` → mini runs `update-mini.sh`); the original family
+URL forwards via a redirect relay on the MacBook; master is `40a75d0`
+(per-client replay); the Music City roll-forward and the mini's bundle
+update are the next session's first actions. All July 12 Global Rules and
+the Phase 3 charter remain binding.
 
 ## July 18 Repository Consolidation — Controlling State
 

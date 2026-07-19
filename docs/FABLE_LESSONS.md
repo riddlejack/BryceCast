@@ -114,6 +114,38 @@ they fight, family wins placement.
     tokens go to gates: first render of anything new, anchor geometry,
     research framing, model outputs.
 
+## Race-day lessons (2026-07-19, the Music City sprint — added at handoff)
+
+11. **Trust, but count.** Two workers reported committed work that was
+    sitting uncommitted in their worktrees. Verify `git log` and watch
+    assertion-count deltas before merging — a no-op merge that still
+    shows green tests is the tell (the count doesn't move).
+12. **Empty string is not null.** RaceTools-derived feeds carry `''`
+    ids; `??` fallbacks treat `''` as present, which erased every rival
+    from the battle corridor. Identity resolvers trip on
+    empty/whitespace, always.
+13. **QA must drive the exact user path.** The replay button was broken
+    while 51 assertions passed, because the harness hand-rolled its own
+    request params. The regression test now sends the button's literal
+    request shape. "End-to-end" means the user's bytes.
+14. **No server-global mutable state on a family site.** One person's
+    replay became everyone's Live page. Stateless per-request design
+    (client owns the clock, params carry intent, absent params = the
+    untouched live path) fixed it and made the live-guard stricter.
+15. **Composition review after module gates.** The full-page pass caught
+    a stale footer source-claim and a race-date off-by-one ("−1 days to
+    green" on race morning) that no module-level gate could see. Review
+    the assembled page as a reader, not as a diff.
+16. **The data votes, again, at the geometry layer.** Measured section
+    lengths (time × speed) beat hand-placed ticks twice (both oval S/F
+    ticks were ~0.12 lap wrong); the wrong-config guard refused a
+    plausible IMS map that was a different 3.41-mi layout. When
+    measurement and curation disagree, measurement wins or nothing ships.
+17. **Infrastructure is a feature.** The family URL surviving the host
+    migration (quick tunnels are process-bound → the old host became a
+    1KB redirect relay) mattered as much as any chart. Design handoffs
+    so the family never has to re-learn a link.
+
 ## Open debts (small, known)
 
 - A2/B/C surfaces (odometer, atlas, moments) shipped without a Fable taste
