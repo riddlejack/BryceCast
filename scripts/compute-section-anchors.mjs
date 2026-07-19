@@ -106,19 +106,27 @@ const readLengths = () => {
  *  official family name. arcInside rows say which loop-to-loop RANGE
  *  [chainStartIndex, chainEndIndex) must contain which detected corner arc. */
 const VENUES = {
+  /* Iowa + Milwaukee (2026-07-19, the SF rescue): their chains now TILE the
+   * whole lap — the SF-crossing frontstretch sections are racing line, not pit
+   * splits — so the chain has ZERO free parameters: the boundary between
+   * '<last> to SF' and 'SF to <first>' IS the S/F line, anchored to the
+   * outline's measured startFinish t. fullTiling chains start with the
+   * 'SF to …' section so boundary 0 sits on the S/F line. */
   'iowa-speedway': {
-    chain: ['T1 to SS1', 'SS1 to T2', 'T2 to BS', 'BS to T3', 'T3 to SS2', 'SS2 to T4'],
+    chain: ['SF to T1', 'T1 to SS1', 'SS1 to T2', 'T2 to BS', 'BS to T3', 'T3 to SS2', 'SS2 to T4', 'T4 to SF'],
+    fullTiling: true,
     arcInside: [
-      [0, 2, 0], // T1..T2 sections contain the turns 1-2 arc
-      [3, 6, 1] // BS..T4 sections contain the turns 3-4 arc
+      [1, 3, 0], // T1..T2 sections contain the turns 1-2 arc
+      [4, 7, 1] // BS..T4 sections contain the turns 3-4 arc
     ]
   },
   'the-milwaukee-mile': {
-    chain: ['T1 to SS1', 'SS1 to T2', 'T2 to BS', 'BS to T3', 'T3 to SS2', 'SS2 to T4', 'T4 to FS'],
+    chain: ['SF to T1', 'T1 to SS1', 'SS1 to T2', 'T2 to BS', 'BS to T3', 'T3 to SS2', 'SS2 to T4', 'T4 to FS', 'FS to SF'],
+    fullTiling: true,
     arcInside: [
-      [0, 1, 0], // T1 section contains the T1 arc
-      [1, 3, 1], // SS1..BS sections contain the T2 arc
-      [3, 6, 2] // BS..T4 sections contain the turns 3-4 arc
+      [1, 2, 0], // T1 section contains the T1 arc
+      [2, 4, 1], // SS1..BS sections contain the T2 arc
+      [4, 7, 2] // BS..T4 sections contain the turns 3-4 arc
     ]
   },
   'world-wide-technology-raceway': {
@@ -184,6 +192,34 @@ const run = (slug) => {
     for (const len of tLens) bounds.push(bounds[bounds.length - 1] + len);
     return bounds; // unwrapped cumulative; wrap() when comparing
   };
+
+  if (venue.fullTiling) {
+    /* Full-tiling chain: the measured lengths must cover the whole lap and the
+     * chain is anchored at the S/F line (boundary 0 = the outline's S/F t) —
+     * no fit, no free parameter. Report the tiling residual and arc margins. */
+    console.log(`  FULL TILING: chain covers ${(chainLen * 100).toFixed(2)}% of the lap (residual ${((1 - chainLen) * 100).toFixed(2)}%)`);
+    const bounds = boundsAt(sf);
+    let minMargin = Infinity;
+    for (const [i0, i1, arcIndex] of venue.arcInside) {
+      const arc = arcs[arcIndex];
+      const lo = bounds[i0];
+      const rangeLen = bounds[i1] - bounds[i0];
+      const relEntry = wrap(arc.entry - lo);
+      const relExit = wrap(arc.exit - lo);
+      const ok = relEntry <= rangeLen && relExit <= rangeLen && relExit >= relEntry;
+      const margin = ok ? Math.min(relEntry, rangeLen - relExit) : -Math.max(relEntry - rangeLen, relExit - rangeLen, 0);
+      minMargin = Math.min(minMargin, margin);
+      console.log(
+        `  arc#${arcIndex} inside sections [${i0},${i1}): ${ok ? 'OK' : 'VIOLATED'} margin ${margin.toFixed(4)}`
+      );
+    }
+    console.log(`  SF-anchored spans (min arc margin ${minMargin.toFixed(4)}):`);
+    venue.chain.forEach((fam, i) => {
+      console.log(`    { sectionName: '${fam}', startT: ${fmt(bounds[i])}, endT: ${fmt(bounds[i + 1])} }`);
+    });
+    console.log(`    chain closes at ${fmt(bounds[venue.chain.length])} vs S/F ${fmt(sf)} (closure error ${Math.abs(wrap(bounds[venue.chain.length] - sf + 0.5) - 0.5).toFixed(4)})`);
+    return;
+  }
   let best = null;
   for (let o = 0; o < 1; o += 0.0005) {
     const bounds = boundsAt(o);
