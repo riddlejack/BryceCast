@@ -15,6 +15,29 @@ import { TrackArt } from '../app/trackArt';
 
 type Row = Record<string, unknown>;
 
+/* ---------- season status join: officialStatus per race, from the package's
+ * season index (the same rows the Races spine reads — no new data path). ---------- */
+
+const seasonStatusBySession: Map<string, string> = (() => {
+  const raceDebrief = uiDataPackage.screens.raceDebrief as unknown as Row;
+  const rows = Array.isArray(raceDebrief.seasonIndex) ? (raceDebrief.seasonIndex as Row[]) : [];
+  const map = new Map<string, string>();
+  for (const row of rows) {
+    const id = asString(row.sessionId);
+    const status = asString(row.officialStatus);
+    if (id && status) map.set(id, status);
+  }
+  return map;
+})();
+
+/** House convention (Races spine): "running" is a clean day; anything else is
+ *  a day that ended early. Missing rows stay clean — never claim an early end
+ *  without a sourced status. */
+const endedEarly = (sessionId: string): boolean => {
+  const status = seasonStatusBySession.get(sessionId);
+  return status !== undefined && status !== 'running';
+};
+
 /* ---------- season standing from packaged history ---------- */
 
 const getSeasonStanding = (): { rank: number | null; points: number | null; top10: number | null; bestFinish: number | null } => {
@@ -167,14 +190,12 @@ const HomeHero = ({
   const lap = asNumber(heartbeat.lap);
   const totalLaps = asNumber(heartbeat.totalLaps);
 
+  /* Between weekends the action still points ahead (director ruling): the
+   * "Last time out" card directly below already owns the look back. */
   const action =
     heroState === 'live' || heroState === 'raceDay'
       ? { to: '/live', label: 'Open the live companion' }
-      : heroState === 'raceWeek'
-      ? { to: '/race-week', label: 'Race week HQ' }
-      : latest
-      ? { to: `/races/${encodeURIComponent(latest.pack.sessionId)}`, label: 'Read the last debrief' }
-      : { to: '/race-week', label: 'See what’s next' };
+      : { to: '/race-week', label: 'Race week HQ' };
 
   const metaLine = (() => {
     if (!venueName) return null;
@@ -319,50 +340,65 @@ const LastTimeOut = ({ latest }: { latest: ArchiveEntry | null }) => {
 const SeasonSparkline = ({ season }: { season: ArchiveEntry[] }) => {
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();
   const points = season
-    .map((entry) => asNumber(entry.pack.outcome.finishPosition))
-    .filter((value): value is number => value !== null);
+    .map((entry) => {
+      const finish = asNumber(entry.pack.outcome.finishPosition);
+      if (finish === null) return null;
+      return { finish, early: endedEarly(entry.pack.sessionId) };
+    })
+    .filter((point): point is { finish: number; early: boolean } => point !== null);
   if (points.length < 2) return null;
 
   const height = 68;
   const padX = 5;
   const padTop = 11;
   const padBottom = 9;
-  const best = Math.min(...points);
-  const worst = Math.max(...points);
-  const yMin = Math.max(1, best - 1);
+  const finishes = points.map((point) => point.finish);
+  const worst = Math.max(...finishes);
+  const yMin = Math.max(1, Math.min(...finishes) - 1);
   const yMax = worst + 1;
   const span = yMax - yMin || 1;
   const plotW = Math.max(0, width - padX * 2);
   const plotH = height - padTop - padBottom;
   const xAt = (index: number) => padX + (points.length === 1 ? plotW / 2 : (plotW * index) / (points.length - 1));
   const yAt = (finish: number) => padTop + (plotH * (finish - yMin)) / span;
-  const linePath = points.map((finish, index) => `${index === 0 ? 'M' : 'L'}${xAt(index).toFixed(1)} ${yAt(finish).toFixed(1)}`).join(' ');
-  const bestIndex = points.indexOf(best);
+  const linePath = points.map((point, index) => `${index === 0 ? 'M' : 'L'}${xAt(index).toFixed(1)} ${yAt(point.finish).toFixed(1)}`).join(' ');
+  /* Season best among clean days only — gold never lands on a day that ended early. */
+  const cleanFinishes = points.filter((point) => !point.early).map((point) => point.finish);
+  const best = cleanFinishes.length > 0 ? Math.min(...cleanFinishes) : null;
+  const bestIndex = best !== null ? points.findIndex((point) => !point.early && point.finish === best) : -1;
 
   return (
-    <Link to="/career" className="season-spark" aria-label={`Every 2026 finish; season best P${best}. Open the Career Lab.`}>
+    <Link to="/career" className="season-spark" aria-label={`Every 2026 finish${best !== null ? `; season best P${best}` : ''}. Open the Career Lab.`}>
       <div ref={ref} style={{ width: '100%' }}>
         {width > 0 ? (
           <svg width={width} height={height} role="img" aria-hidden style={{ display: 'block', overflow: 'visible' }}>
             <path d={linePath} fill="none" stroke="var(--ink-primary)" strokeWidth={2} strokeLinejoin="round" strokeLinecap="round" />
-            {points.map((finish, index) =>
-              index === bestIndex ? null : (
-                <circle key={index} cx={xAt(index)} cy={yAt(finish)} r={2.4} fill="var(--ink-primary)" />
-              )
-            )}
-            <circle cx={xAt(bestIndex)} cy={yAt(best)} r={4} fill="var(--bryce)" />
-            <text
-              x={xAt(bestIndex)}
-              y={yAt(best) - 8}
-              textAnchor="middle"
-              fontFamily={chartFont}
-              fontSize={11}
-              fontWeight={600}
-              fill="var(--ink-primary)"
-              style={{ fontVariantNumeric: 'tabular-nums' }}
-            >
-              P{best}
-            </text>
+            {points.map((point, index) => {
+              if (index === bestIndex) return null;
+              /* The house open circle: a day that ended early, never a filled result. */
+              return point.early ? (
+                <circle key={index} cx={xAt(index)} cy={yAt(point.finish)} r={3} fill="var(--surface-1)" stroke="var(--ink-muted)" strokeWidth={1.5} />
+              ) : (
+                <circle key={index} cx={xAt(index)} cy={yAt(point.finish)} r={2.4} fill="var(--ink-primary)" />
+              );
+            })}
+            {bestIndex >= 0 && best !== null ? (
+              <>
+                <circle cx={xAt(bestIndex)} cy={yAt(best)} r={4} fill="var(--bryce)" />
+                <text
+                  x={xAt(bestIndex)}
+                  y={yAt(best) - 8}
+                  textAnchor="middle"
+                  fontFamily={chartFont}
+                  fontSize={11}
+                  fontWeight={600}
+                  fill="var(--ink-primary)"
+                  style={{ fontVariantNumeric: 'tabular-nums' }}
+                >
+                  P{best}
+                </text>
+              </>
+            ) : null}
           </svg>
         ) : null}
       </div>
@@ -372,6 +408,7 @@ const SeasonSparkline = ({ season }: { season: ArchiveEntry[] }) => {
 
 const SeasonSoFar = ({ season }: { season: ArchiveEntry[] }) => {
   const standing = getSeasonStanding();
+  const hasEarlyEnd = season.some((entry) => endedEarly(entry.pack.sessionId));
   return (
     <Card
       title={
@@ -394,7 +431,9 @@ const SeasonSoFar = ({ season }: { season: ArchiveEntry[] }) => {
       </div>
       {season.length >= 2 ? (
         <div style={{ marginTop: 18 }}>
-          <span className="caption">Every 2026 finish · gold marks his season best</span>
+          <span className="caption">
+            Every 2026 finish · gold marks his season best{hasEarlyEnd ? ' · ○ a day that ended early' : ''}
+          </span>
           <div style={{ marginTop: 8 }}>
             <SeasonSparkline season={season} />
           </div>
