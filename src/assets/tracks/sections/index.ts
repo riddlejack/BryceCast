@@ -3,11 +3,14 @@ import { nashvilleSuperspeedwaySections, nashvilleSuperspeedwayMeasuredSections 
 import { worldWideTechnologyRacewaySections } from './world-wide-technology-raceway';
 import { iowaSpeedwaySections } from './iowa-speedway';
 import { theMilwaukeeMileSections } from './the-milwaukee-mile';
+import { roadAmericaSections } from './road-america';
+import { barberMotorsportsParkSections } from './barber-motorsports-park';
 
-/** Curated oval section anchors, keyed to the OSM track outlines in the parent
- *  directory. Ovals first (Brief E sequencing); road courses arrive in a later
- *  slice. See ./types.ts for the adapter-contract note on measured loop
- *  locations superseding this curation. */
+/** Curated section anchors, keyed to the OSM track outlines in the parent
+ *  directory. Ovals first (Brief E sequencing), then the road courses (Phase 3,
+ *  Group A: Road America, Barber — loop-to-loop families anchored from the data
+ *  lake map catalog's decoded LapDistance). See ./types.ts for the adapter-
+ *  contract note on measured loop locations superseding this curation. */
 
 export type { TrackSectionAnchor, TrackSectionAnchorSet } from './types';
 
@@ -15,7 +18,9 @@ const sets: TrackSectionAnchorSet[] = [
   nashvilleSuperspeedwaySections,
   worldWideTechnologyRacewaySections,
   iowaSpeedwaySections,
-  theMilwaukeeMileSections
+  theMilwaukeeMileSections,
+  roadAmericaSections,
+  barberMotorsportsParkSections
 ];
 
 const bySlug = new Map(sets.map((set) => [set.slug, set]));
