@@ -5,6 +5,8 @@ import { iowaSpeedwaySections } from './iowa-speedway';
 import { theMilwaukeeMileSections } from './the-milwaukee-mile';
 import { roadAmericaSections } from './road-america';
 import { barberMotorsportsParkSections } from './barber-motorsports-park';
+import { portlandInternationalRacewaySections } from './portland-international-raceway';
+import { weathertechRacewayLagunaSecaSections } from './weathertech-raceway-laguna-seca';
 
 /** Curated section anchors, keyed to the OSM track outlines in the parent
  *  directory. Ovals first (Brief E sequencing), then the road courses (Phase 3,
@@ -20,7 +22,9 @@ const sets: TrackSectionAnchorSet[] = [
   iowaSpeedwaySections,
   theMilwaukeeMileSections,
   roadAmericaSections,
-  barberMotorsportsParkSections
+  barberMotorsportsParkSections,
+  portlandInternationalRacewaySections,
+  weathertechRacewayLagunaSecaSections
 ];
 
 const bySlug = new Map(sets.map((set) => [set.slug, set]));

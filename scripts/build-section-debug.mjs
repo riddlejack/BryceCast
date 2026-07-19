@@ -17,7 +17,9 @@ const OVALS = [
   'nashville-superspeedway',
   'world-wide-technology-raceway',
   'iowa-speedway',
-  'the-milwaukee-mile'
+  'the-milwaukee-mile',
+  'portland-international-raceway',
+  'weathertech-raceway-laguna-seca'
 ];
 const DIAG = ['#0066cc', '#e09a2f', '#2f9377', '#b05a73', '#5581c2', '#b98a3f', '#2e9ac2'];
 
