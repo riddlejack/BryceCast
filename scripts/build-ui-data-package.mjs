@@ -11,6 +11,9 @@ const outputPath = path.join(repoRoot, 'analysis/ui-data-package/ui-data-package
 // Narrow package lanes can refresh their own deterministic artifacts without
 // rewriting unrelated generated reports whose timestamps otherwise churn.
 const skipUpstreamRefresh = process.env.BRYCECAST_SKIP_UPSTREAM_REFRESH === '1';
+// Dry-run the as-of pin guard (Finding C) without regenerating anything, so an
+// operator can confirm a run is safely pinned before spending the full rebuild.
+const eventRollCheckOnly = process.argv.includes('--check-event-roll');
 
 const sources = {
   canonicalDataset: 'data/career/career.dataset.json',
@@ -229,6 +232,113 @@ const gitHead = () => {
   } catch {
     return null;
   }
+};
+
+const todayIsoDate = () => new Date().toISOString().slice(0, 10);
+
+/* The committed package as it sits in git HEAD — the authoritative "what we
+ * shipped" baseline for the as-of pin guard, independent of any working-tree
+ * churn. Falls back to the on-disk artifact outside a git checkout. */
+const readCommittedPackage = () => {
+  try {
+    return JSON.parse(
+      execSync('git show HEAD:analysis/ui-data-package/ui-data-package.json', {
+        cwd: repoRoot,
+        encoding: 'utf8',
+        maxBuffer: 64 * 1024 * 1024
+      })
+    );
+  } catch {
+    if (fs.existsSync(outputPath)) return readJson(path.relative(repoRoot, outputPath));
+    return null;
+  }
+};
+
+/* Finding C — as-of pin fail-closed guard.
+ *
+ * The Python analytics lanes resolve their run date from
+ * BRYCECAST_ANALYTICS_AS_OF_DATE, silently falling back to date.today() when it
+ * is absent. An unpinned regeneration on race day would roll the upcoming-event
+ * window forward and delete the current race-week pack the family is watching.
+ *
+ * Before any upstream regeneration, compare the resolved as-of date against the
+ * committed package. Refuse the run when it would change the upcoming-event set,
+ * or when it is unpinned while the committed race-week event is today-or-future.
+ * BRYCECAST_ALLOW_EVENT_ROLL=1 proceeds deliberately (the post-race roll-forward). */
+const assertAsOfPinAllowsBuild = () => {
+  const allowRoll = process.env.BRYCECAST_ALLOW_EVENT_ROLL === '1';
+  const rawEnvDate = process.env.BRYCECAST_ANALYTICS_AS_OF_DATE;
+  const envDate = rawEnvDate && rawEnvDate.trim() ? rawEnvDate.trim() : null;
+  if (envDate && !/^\d{4}-\d{2}-\d{2}$/.test(envDate)) {
+    throw new Error(`BRYCECAST_ANALYTICS_AS_OF_DATE must be YYYY-MM-DD (got "${envDate}").`);
+  }
+  const today = todayIsoDate();
+  const resolvedDate = envDate ?? today;
+
+  const committed = readCommittedPackage();
+  if (!committed) {
+    return { ok: true, resolvedDate, pinned: Boolean(envDate), note: 'no committed package to compare against' };
+  }
+
+  const committedAsOfDate = typeof committed.asOfDate === 'string' ? committed.asOfDate : null;
+  const committedEvents = (committed.screens?.upcomingPrep?.events ?? [])
+    .map((event) => ({
+      eventId: event.eventId ?? null,
+      trackName: event.trackName ?? null,
+      eventStartDate: typeof event.eventStartDate === 'string' ? event.eventStartDate : null
+    }))
+    .filter((event) => event.eventStartDate)
+    .sort((left, right) => left.eventStartDate.localeCompare(right.eventStartDate));
+  const nextEvent = committedEvents[0] ?? null;
+
+  // The committed upcoming set is events with startDate >= committedAsOfDate. At
+  // the resolved date, any with startDate < resolvedDate roll out of the set; a
+  // resolved date earlier than committedAsOfDate would re-add past events. Both
+  // change the set the package would regenerate.
+  const droppedEvents = committedEvents.filter((event) => event.eventStartDate < resolvedDate);
+  const grewEarlier = committedAsOfDate ? resolvedDate < committedAsOfDate : false;
+  const setChanges = droppedEvents.length > 0 || grewEarlier;
+
+  // Fail-closed race-day case: an unpinned run while the committed race-week
+  // event is today-or-future would regenerate — and can delete — the pack the
+  // family is watching, even when the >= set comparison hasn't shifted yet.
+  const unpinnedOnRaceWindow = !envDate && Boolean(nextEvent) && nextEvent.eventStartDate >= today;
+
+  const result = {
+    ok: true,
+    pinned: Boolean(envDate),
+    resolvedDate,
+    committedAsOfDate,
+    nextEvent,
+    droppedEvents,
+    grewEarlier,
+    setChanges,
+    unpinnedOnRaceWindow,
+    allowRoll
+  };
+
+  if ((setChanges || unpinnedOnRaceWindow) && !allowRoll) {
+    const lines = [
+      'Refusing to regenerate the UI data package: the resolved as-of date would roll the upcoming-event set.',
+      `  Committed asOfDate:      ${committedAsOfDate ?? '(none)'}`,
+      `  Resolved as-of date:     ${resolvedDate} ${envDate ? '(pinned)' : '(unpinned → today())'}`,
+      nextEvent
+        ? `  Current race-week event: ${nextEvent.trackName ?? nextEvent.eventId} on ${nextEvent.eventStartDate}`
+        : '  Current race-week event: (none in committed package)'
+    ];
+    if (droppedEvents.length > 0) {
+      lines.push(`  Would drop from upcoming: ${droppedEvents.map((event) => `${event.trackName ?? event.eventId} (${event.eventStartDate})`).join(', ')}`);
+    }
+    if (grewEarlier) lines.push('  Resolved date precedes the committed asOfDate, which would re-add past events.');
+    if (unpinnedOnRaceWindow) lines.push('  Unpinned run while the current race-week event is today-or-future.');
+    lines.push('');
+    lines.push('  Fix one of:');
+    lines.push('    • Pin the run:  BRYCECAST_ANALYTICS_AS_OF_DATE=YYYY-MM-DD (reproduce the committed package)');
+    lines.push('    • Roll on purpose:  BRYCECAST_ALLOW_EVENT_ROLL=1 (deliberate post-race roll-forward)');
+    throw Object.assign(new Error(lines.join('\n')), { asOfGuard: result });
+  }
+
+  return result;
 };
 
 const numberOrNull = (value) => {
@@ -2525,6 +2635,12 @@ const buildPackage = () => {
 };
 
 fs.mkdirSync(path.dirname(outputPath), { recursive: true });
+// Finding C — fail closed before touching any generated artifact.
+const asOfGuard = assertAsOfPinAllowsBuild();
+if (eventRollCheckOnly) {
+  console.log(JSON.stringify({ ok: true, mode: 'check-event-roll', ...asOfGuard }, null, 2));
+  process.exit(0);
+}
 if (!skipUpstreamRefresh) {
   runContextEventNarrativeLayer();
   runPredictiveRaceIntelligence();
