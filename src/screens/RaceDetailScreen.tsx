@@ -897,12 +897,21 @@ const SectionHeatCard = ({
           note: `Bryce's per-lap section times and field percentiles from the official timing loops. Section names follow the track's official timing stations; span lengths are measured from official time × speed (${anchors.confidence}).`
         }
       ];
+  /* Pass-mark provenance rides the SAME drawer as the shades it draws over
+     (mixed-tier honesty): the marks are RaceTools-capture-derived even on
+     pages whose sections are official PDFs, so their source is named where
+     they render — entries and caveats straight from the pass pack. */
+  const passEntries = showMarks && passMarks
+    ? passMarks.sourceRefs.map((ref) => ({ label: ref.key === 'passPlacement' ? 'Pass marks · RaceTools race-weekend capture' : 'Pass-placement validation', path: ref.path, note: ref.note }))
+    : [];
+  const allEntries = [...sourceEntries, ...passEntries];
   const sourceCaveats = [
     measured
       ? 'Section times are the RaceTools race-weekend capture — timing-loop crossings, time-based, not GPS or car position; not official timing.'
       : 'Section times come from official timing loops — they are time-based, not GPS or car position.',
     ...(set ? [set.caveat] : []),
     ...(measured ? ['Sanity-checked: the three published corner sections agree with these measured spans within ~0.10s per lap.'] : []),
+    ...(showMarks && passMarks ? passMarks.caveats : []),
     anchors.note
   ];
   const scopeSummary = !set
@@ -916,7 +925,7 @@ const SectionHeatCard = ({
   return (
     <Card
       title="The track, section by section"
-      action={<SourcePill title="Section signal" entries={sourceEntries} caveats={sourceCaveats} />}
+      action={<SourcePill title="Section signal" entries={allEntries} caveats={sourceCaveats} />}
     >
       <p style={{ margin: '0 0 12px', fontSize: 13.5, color: 'var(--ink-secondary)' }}>
         {hasHeat
@@ -995,7 +1004,8 @@ const SectionHeatCard = ({
       {showMarks ? (
         <p style={{ margin: '10px 0 0', fontSize: 11.5, color: 'var(--ink-muted)' }}>
           <span aria-hidden style={{ marginRight: 6 }}>○</span>
-          a pass involving Bryce — placed between timing loops, {resolvedMarks.length} this race. Hover for the lap and the car.
+          a pass involving Bryce — placed between timing loops · derived from the RaceTools race-weekend capture,{' '}
+          {resolvedMarks.length} this race. Hover for the lap and the car.
         </p>
       ) : null}
       {suppressedCount > 0 && !singleLap && hasHeat ? (
@@ -1701,10 +1711,25 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
           <span className="caption">Result</span>
           <SourcePill
             title={pack.raceLabel}
-            entries={pack.sourceRefs.slice(0, 6).map((ref) => ({
-              label: asString(ref.kind) ?? asString(ref.table) ?? 'Official source table',
-              path: asString(ref.path) ?? undefined
-            }))}
+            entries={[
+              ...pack.sourceRefs.slice(0, 6).map((ref) => ({
+                label: asString(ref.kind) ?? asString(ref.table) ?? 'Official source table',
+                path: asString(ref.path) ?? undefined
+              })),
+              /* The hero shape's heat overlay can draw from the measured lake
+                 pack — when it does, this drawer names that tier too (mixed-
+                 tier honesty: every module that draws a third-party-derived
+                 layer names its source where it draws it). */
+              ...(heroHeat.length > 0 && heroSet?.sourceTier === 'lake_loop_crossings'
+                ? [
+                    {
+                      label: 'Section shading · RaceTools race-weekend capture',
+                      path: sectionLaps?.sourceRefs?.find((ref) => ref.key === 'nashvilleIntervalPack')?.path,
+                      note: "The track shape's section shading comes from the RaceTools race-weekend capture's timing-loop crossings — a third-party capture; not official timing."
+                    }
+                  ]
+                : [])
+            ]}
             caveats={pack.caveats}
           />
         </div>
@@ -1803,9 +1828,14 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
         const tierOf = (visit: SectionLapsPack) => visit.sourceTier ?? 'parsed_pdf_aggregate';
         const packs = [...(sectionLaps ? [sectionLaps] : []), ...visitPacks];
         const hasLake = packs.some((visit) => tierOf(visit) === 'lake_loop_crossings');
+        /* Pass marks are RaceTools-capture-derived wherever they draw — they
+           put the capture in the claim even on official-PDF section pages. */
+        const marksDrawn =
+          passMarks !== null && sectionAnchors !== null && resolvePassMarks(sectionAnchors, passMarks).length > 0;
+        const hasCapture = hasLake || marksDrawn;
         const hasPdfSections =
           packs.some((visit) => tierOf(visit) !== 'lake_loop_crossings') || (!sectionLaps && story?.sections != null);
-        const sources = hasLake
+        const sources = hasCapture
           ? hasPdfSections
             ? 'official results, the official lap chart, official section reports, and the RaceTools race-weekend capture'
             : 'official results, the official lap chart, and the RaceTools race-weekend capture'
