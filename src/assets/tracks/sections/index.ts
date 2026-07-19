@@ -20,6 +20,19 @@ const sets: TrackSectionAnchorSet[] = [
   midOhioSportsCarCourseSections
 ];
 
+/* DELIBERATE HONEST MISSES — Streets of St. Petersburg and Streets of Arlington
+ * are intentionally NOT registered (trackSectionsFor returns null, so their race
+ * pages keep the honest SectionStory fallback with no heat layer). Both carry
+ * official section families, but their outlines are preliminary image traces
+ * with NO geometry to anchor to: startFinish is null, drivingDirection is null,
+ * cornerArcs is empty — the measured-length chain-fit has nothing to pin a span
+ * to. The outlines' own lengths disagree with the measured lap totals (St. Pete
+ * asset 1.12 vs 1.80 mi; Arlington asset 1.70 vs 2.73 mi), so even the scale is
+ * untrusted. An honest miss beats a wrong map. UNLOCK: an S/F tick + driving
+ * direction + corner arcs on a corrected outline, or (best) a richer RaceTools/
+ * CGR map package with real intermediate timing-loop distances — same data-only
+ * swap as everywhere else. (tests/sectionObservations.test.ts pins St. Pete null.) */
+
 const bySlug = new Map(sets.map((set) => [set.slug, set]));
 
 const normalized = (name: string) => name.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
