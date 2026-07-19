@@ -1279,10 +1279,20 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
 
       {outline && sectionAnchors ? <VenueYearsCard outline={outline} anchors={sectionAnchors} visits={visitPacks} /> : null}
 
-      <div className="grid grid--2">
-        {story ? <TeamStory story={story} /> : null}
-        {story ? <SectionStory story={story} /> : null}
-      </div>
+      {/* Where the heat card renders, the section table retires INTO its
+          drawer (director ruling, 2026-07-18): same numbers, richer form.
+          Venues without a heat card keep the table — the handoff is per-page
+          and automatic as venues gain anchors. */}
+      {story ? (
+        outline && sectionAnchors ? (
+          <TeamStory story={story} />
+        ) : (
+          <div className="grid grid--2">
+            <TeamStory story={story} />
+            <SectionStory story={story} />
+          </div>
+        )
+      ) : null}
 
       <p style={{ margin: 0, fontSize: 11.5, color: 'var(--ink-muted)' }}>
         Everything on this page comes from official results, the official lap chart, and official section reports.
