@@ -122,6 +122,16 @@ export const windCardinal = (value: unknown): string | null => {
   return CARDINALS_16[Math.round((((deg % 360) + 360) % 360) / 22.5) % 16];
 };
 
+/** House wind grammar, in one place so every surface agrees. Speed leads, then
+ *  the uppercase cardinal ("7 mph NNE"); the cardinal drops when no direction is
+ *  sourced ("7 mph"). Zero wind renders "calm" with NO direction — a bearing for
+ *  still air is meaningless, and rendering "from the N" at 0 mph was a bug. */
+export const formatWind = (mph: number | null, cardinal: string | null): string => {
+  if (mph === null) return '—';
+  if (mph <= 0) return 'calm';
+  return cardinal ? `${mph} mph ${cardinal}` : `${mph} mph`;
+};
+
 /** Compass-point center bearing for a 16-point cardinal label ("WNW" → 292.5).
  *  NWS forecasts quantize direction to these points, so the center bearing is
  *  the faithful numeric reading — null for anything unrecognized. */
