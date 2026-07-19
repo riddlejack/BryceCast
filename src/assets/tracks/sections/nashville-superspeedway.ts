@@ -41,6 +41,21 @@ export const nashvilleSuperspeedwaySections: TrackSectionAnchorSet = {
       label: 'Turn 4',
       startT: 0.7203,
       endT: 0.8584
+    },
+    {
+      /* The derived remainder: lap time minus the three timed corner sections
+       * is the exact time on the two untimed straights, ranked against the
+       * field the same way. It shades the complement of the measured spans —
+       * the front straight (Turn 4 exit → S/F → Turn 1 entry, wrapping) and the
+       * back straight (Turn 2 exit → Turn 3) — with one combined value on both.
+       * sectionName matches the pack's synthesized 'Untimed remainder' section. */
+      familyId: 'nsh-untimed-remainder',
+      sectionName: 'Untimed remainder',
+      label: 'The straights',
+      kind: 'derived_remainder',
+      startT: 0.8584,
+      endT: 0.1998,
+      additionalSpans: [{ startT: 0.3415, endT: 0.5693 }]
     }
   ]
 };

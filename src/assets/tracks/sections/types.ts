@@ -30,6 +30,19 @@ export interface TrackSectionAnchor {
   /** Fractional end along mainPath, [0,1). If endT < startT the span wraps
    *  through t=0 (crosses the path's M point). */
   endT: number;
+  /** Render kind. Default (undefined) = 'measured', a real timing-loop section
+   *  drawn as a solid coloured span. 'derived_remainder' = the untimed
+   *  stretch(es), shaded from lap time minus the timed sections and drawn in a
+   *  visually distinct (dotted) treatment that can never be mistaken for a
+   *  measured loop. A derived anchor never earns a gold top-section dot. */
+  kind?: 'measured' | 'derived_remainder';
+  /** Extra disjoint spans a derived_remainder covers beyond [startT,endT]
+   *  (e.g. Nashville's front AND back straights). All spans render the SAME
+   *  combined value — the loops can't yet separate the two stretches, so the
+   *  tooltip says "combined untimed stretches". True per-stretch separation
+   *  arrives with the data lake's loop-crossing extraction, at which point each
+   *  stretch becomes its own measured anchor and this field retires. */
+  additionalSpans?: Array<{ startT: number; endT: number }>;
 }
 
 export interface TrackSectionAnchorSet {

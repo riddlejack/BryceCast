@@ -2,6 +2,7 @@ import { useMemo, useRef, useState } from 'react';
 import type { TrackOutline } from '../assets/tracks';
 import type { ResolvedHeatSection } from '../data/sectionObservations';
 import { ChartTipCard, chartFont, inkGoldDiverging, useMeasuredWidth, type ChartTip } from './charts';
+import { ordinal } from './format';
 
 /** The heat-map / section-intelligence layer (Brief H). `resolved` carries the
  *  curated section spans already joined to Bryce's percentile for the scope;
@@ -27,6 +28,11 @@ const parsePoints = (d: string): Pt[] => {
 /** Whether fractional t falls within a span [start,end]; end<start wraps t=0. */
 const spanContains = (start: number, end: number, t: number): boolean =>
   start <= end ? t >= start && t <= end : t >= start || t <= end;
+
+/** Whether t falls within ANY of a section's render spans (one for a measured
+ *  section, several for a derived remainder that covers disjoint stretches). */
+const sectionContainsT = (section: ResolvedHeatSection, t: number): boolean =>
+  section.renderSpans.some((span) => spanContains(span.startT, span.endT, t));
 
 /** Forward arc-length of a span in [0,1], handling the wrap seam. */
 const spanLength = (start: number, end: number): number => ((end - start + 1) % 1) || (end === start ? 0 : 1);
@@ -104,6 +110,21 @@ export const TrackArt = ({
     return { pointAtT, samples };
   }, [outline.mainPath]);
 
+  /** Explicit sub-path polyline for a span, sampled along the real geometry, so
+   *  a derived stretch can draw a dotted line of its own weight (the pathLength
+   *  dash trick only masks the full outline and can't also carry a dot pattern).
+   *  Forward sampling handles the wrap seam. */
+  const spanPolyline = (start: number, end: number): string => {
+    const length = spanLength(start, end);
+    const steps = Math.max(2, Math.round(length * 240));
+    let d = '';
+    for (let i = 0; i <= steps; i += 1) {
+      const point = geometry.pointAtT((start + (length * i) / steps) % 1);
+      d += `${i === 0 ? 'M' : 'L'}${point.x.toFixed(2)} ${point.y.toFixed(2)} `;
+    }
+    return d.trim();
+  };
+
   /** Two dash descriptors so a wrapping span still draws (SVG dashes don't
    *  cross the M/Z seam on their own). pathLength=1 → dash units are fractions. */
   const dashesFor = (start: number, end: number): Array<{ dasharray: string; dashoffset: number }> =>
@@ -117,13 +138,25 @@ export const TrackArt = ({
   const activeFamily =
     hoveredFamily ?? (selectedIndex !== null ? heatSections[selectedIndex]?.familyId ?? null : null);
 
-  const showTipFor = (section: ResolvedHeatSection) => {
-    const mid = geometry.pointAtT(spanMid(section.startT, section.endT));
+  const showTipFor = (section: ResolvedHeatSection, at?: { x: number; y: number }) => {
+    const anchorPt = at ?? geometry.pointAtT(spanMid(section.startT, section.endT));
     const offset = Math.max(0, (measuredWidth - width) / 2);
     const pct = Math.round(section.percentile * 100);
+    if (section.kind === 'derived_remainder') {
+      setTip({
+        x: anchorPt.x * scale + offset,
+        y: anchorPt.y * scale,
+        title: 'The rest of the lap, together',
+        detail: `${ordinal(pct)} percentile this race`,
+        action: section.combined
+          ? 'combined untimed stretches · derived from lap time'
+          : 'derived from lap time minus timed sections'
+      });
+      return;
+    }
     setTip({
-      x: mid.x * scale + offset,
-      y: mid.y * scale,
+      x: anchorPt.x * scale + offset,
+      y: anchorPt.y * scale,
       title: section.label,
       detail: `beat ${pct}% of the field this race`
     });
@@ -170,14 +203,14 @@ export const TrackArt = ({
       if (selectedIndex === null) setTip(null);
       return;
     }
-    const found = heatSections.find((section) => spanContains(section.startT, section.endT, hit.sample.t));
+    const found = heatSections.find((section) => sectionContainsT(section, hit.sample.t));
     if (!found) {
       setHoveredFamily(null);
       showUntimedTip(hit.sample);
       return;
     }
     setHoveredFamily(found.familyId);
-    showTipFor(found);
+    showTipFor(found, hit.sample);
   };
 
   const handleLeave = () => {
@@ -190,7 +223,7 @@ export const TrackArt = ({
   const handleActivate = (event: React.MouseEvent<HTMLDivElement>) => {
     if (!hasHeat) return;
     const hit = nearestSample(event.clientX, event.clientY);
-    if (hit && hit.dist <= px(18) && !heatSections.some((section) => spanContains(section.startT, section.endT, hit.sample.t))) {
+    if (hit && hit.dist <= px(18) && !heatSections.some((section) => sectionContainsT(section, hit.sample.t))) {
       setSelectedIndex(null);
       setHoveredFamily(null);
       showUntimedTip(hit.sample);
@@ -246,13 +279,31 @@ export const TrackArt = ({
               />
               {heatSections.map((section) => {
                 const focused = activeFamily === null || activeFamily === section.familyId;
+                const color = inkGoldDiverging(section.percentile);
+                if (section.kind === 'derived_remainder') {
+                  /* The untimed stretches: a dotted line on the same heat scale
+                     but a deliberately quieter, distinct texture — derived from
+                     lap time, never mistakable for a measured timing loop. */
+                  return section.renderSpans.map((span, index) => (
+                    <path
+                      key={`${section.familyId}-${index}`}
+                      d={spanPolyline(span.startT, span.endT)}
+                      fill="none"
+                      stroke={color}
+                      strokeWidth={px(activeFamily === section.familyId ? 4 : 3)}
+                      strokeLinecap="round"
+                      strokeDasharray={`${px(0.1)} ${px(5)}`}
+                      style={{ opacity: focused ? 0.9 : 0.3, transition: 'opacity 150ms ease-out, stroke-width 150ms ease-out' }}
+                    />
+                  ));
+                }
                 return dashesFor(section.startT, section.endT).map((dash, index) => (
                   <path
                     key={`${section.familyId}-${index}`}
                     d={outline.mainPath}
                     fill="none"
                     pathLength={1}
-                    stroke={inkGoldDiverging(section.percentile)}
+                    stroke={color}
                     strokeWidth={px(activeFamily === section.familyId ? 7.5 : 6)}
                     strokeLinecap="round"
                     strokeDasharray={dash.dasharray}
@@ -306,6 +357,7 @@ export const TrackArt = ({
               on the others (Brief E). */}
           {hasHeat
             ? heatSections.map((section) => {
+                if (section.kind === 'derived_remainder') return null; // no loop dot on a derived stretch
                 const mid = geometry.pointAtT(spanMid(section.startT, section.endT));
                 return section.isTopSection ? (
                   <circle key={`dot-${section.familyId}`} cx={mid.x} cy={mid.y} r={px(4)} fill="var(--bryce)" />
@@ -317,6 +369,7 @@ export const TrackArt = ({
           {/* Official section labels beside each span (Brief H #1). */}
           {hasHeat && sections?.showLabels
             ? heatSections.map((section) => {
+                if (section.kind === 'derived_remainder') return null; // derived stretches stay label-free; the key line names them
                 const mid = geometry.pointAtT(spanMid(section.startT, section.endT));
                 const away = Math.hypot(mid.x - center.x, mid.y - center.y) || 1;
                 const lx = mid.x + ((mid.x - center.x) / away) * px(16);

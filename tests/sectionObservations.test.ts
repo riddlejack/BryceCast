@@ -158,4 +158,61 @@ assert.equal(oneLap.sections[0].clean, false);
 const context = lapContextOf(syntheticPack);
 assert.equal(context.filter((entry) => entry.caution === 'caution').length, 6, 'lap context surfaces caution laps for the scrubber');
 
+// 7. Derived remainder (Brief H coverage fix): a genuine-gap pack carries an
+// 'Untimed remainder' section that rides the same contract, and the Nashville
+// anchor joins it as a derived, combined, never-gold two-span stretch.
+const nashvilleAnchors = trackSectionsFor('Nashville Superspeedway')!;
+const remainderAnchor = nashvilleAnchors.sections.find((s) => s.kind === 'derived_remainder');
+assert.ok(remainderAnchor, 'Nashville ships a derived_remainder anchor');
+assert.equal(remainderAnchor!.sectionName, 'Untimed remainder');
+assert.ok((remainderAnchor!.additionalSpans ?? []).length === 1, 'Nashville remainder spans two disjoint stretches');
+
+const cornerName = 'Turn 3';
+const remainderName = 'Untimed remainder';
+const buildLaps = (percentile: number, seconds: number): SectionLapTuple[] =>
+  Array.from({ length: 20 }, (_, i) => [i + 1, percentile, 5, 18, 1, 'g', seconds, 150] as SectionLapTuple);
+const derivedPack = {
+  schemaVersion: 'brycecast.sectionLaps.v1',
+  type: 'section_laps',
+  id: 'section_laps_derived_test',
+  sessionId: 'session_derived',
+  raceLabel: 'Derived Test',
+  seasonYear: 2026,
+  venueName: 'Nashville Superspeedway',
+  trackType: 'oval',
+  totalLaps: 20,
+  tupleOrder: ['lap', 'fieldPercentile', 'fieldRank', 'fieldComparisonCount', 'clean', 'caution', 'timeSeconds', 'speedMph'],
+  derivedCoverage: 'genuine_gap',
+  sections: [
+    { sectionName: cornerName, kind: 'measured', laps: buildLaps(0.8, 4.0), fieldSeconds: [3.9, 4.0, 4.1, 4.2] },
+    { sectionName: 'Turn 1 Entry Turn 1 Exit Turn 2 Entry BackStretch BackStretch', kind: 'measured', laps: buildLaps(0.6, 4.1), fieldSeconds: [4.0, 4.1] },
+    { sectionName: 'Turn 4 Entry Turn 4 Exit', kind: 'measured', laps: buildLaps(0.9, 3.8), fieldSeconds: [3.8, 3.9] },
+    { sectionName: remainderName, kind: 'derived_remainder', laps: buildLaps(0.4, 15.1), fieldSeconds: [14.9, 15.0, 15.2, 15.4] }
+  ],
+  lapTotals: buildLaps(0.5, 27.0),
+  sourceStateCounts: {},
+  sourceRefs: [],
+  caveats: ['derived test']
+} as unknown as SectionLapsPack;
+
+const derivedSet = sectionObservationsFromLaps(derivedPack, { kind: 'full_race' }, 'median');
+const remainderObs = derivedSet.sections.find((s) => s.sectionName === remainderName)!;
+assert.equal(remainderObs.kind, 'derived_remainder', 'derived section keeps its kind through the contract');
+assert.ok(Math.abs((remainderObs.percentile ?? 0) - 0.4) < 1e-9, 'derived section aggregates like any section');
+assert.ok(Math.abs((remainderObs.fieldMedianSeconds ?? 0) - 15.1) < 1e-9, 'fieldMedianSeconds is the field distribution median');
+assert.deepEqual(remainderObs.fieldSeconds, [14.9, 15.0, 15.2, 15.4], 'field distribution passes through for the drawer');
+
+const derivedResolved = resolveHeatSections(nashvilleAnchors, derivedSet);
+const remainderResolved = derivedResolved.find((r) => r.kind === 'derived_remainder')!;
+assert.ok(remainderResolved, 'derived remainder joins the Nashville anchor');
+assert.equal(remainderResolved.renderSpans.length, 2, 'combined remainder draws both untimed stretches');
+assert.equal(remainderResolved.combined, true, 'two disjoint stretches flag as combined');
+assert.equal(remainderResolved.isTopSection, false, 'the derived remainder is never a gold top section');
+const topNames = derivedResolved.filter((r) => r.isTopSection).map((r) => r.sectionName).sort();
+assert.deepEqual(
+  topNames,
+  ['Turn 3', 'Turn 4 Entry Turn 4 Exit'].sort(),
+  'top-2 gold dots are the strongest MEASURED sections (0.9, 0.8), not the derived remainder'
+);
+
 console.log('section observations contract tests passed');

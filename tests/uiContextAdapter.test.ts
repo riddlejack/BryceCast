@@ -153,7 +153,15 @@ assert.ok(
   assert.ok(nashvilleVisits.length >= 2, 'Nashville must carry at least two section-lap visits (2024, 2025)');
   const nashville = await loadSectionLaps('session_indy_nxt_2024_6323');
   assert.ok(nashville, 'Nashville 2024 section-lap pack must load with integrity');
-  assert.equal(nashville.sections.length, 3, 'Nashville reports three official section families');
+  const measured = nashville!.sections.filter((section) => section.kind !== 'derived_remainder');
+  const derived = nashville!.sections.filter((section) => section.kind === 'derived_remainder');
+  assert.equal(measured.length, 3, 'Nashville reports three official timing sections');
+  assert.equal(derived.length, 1, 'Nashville ships one derived untimed-remainder section (the coverage fix)');
+  assert.equal(nashville!.derivedCoverage, 'genuine_gap', 'Nashville is a genuine untimed gap');
+  assert.ok(
+    (derived[0].fieldSeconds ?? []).length >= 8,
+    'the derived remainder carries a real full-field distribution'
+  );
   const fullRace = sectionObservationsFromLaps(nashville, { kind: 'full_race' }, 'median');
   for (const observation of fullRace.sections) {
     assert.ok((observation.observationCount ?? 0) >= MIN_CLEAN_LAPS, 'full-race scopes must clear the clean-lap floor');
@@ -162,6 +170,12 @@ assert.ok(
       'full-race percentiles must be well-formed'
     );
   }
+  const remainderObs = fullRace.sections.find((observation) => observation.kind === 'derived_remainder');
+  assert.ok(remainderObs, 'the derived remainder flows through the contract as a section');
+  assert.ok(
+    remainderObs!.fieldMedianSeconds !== null && remainderObs!.fieldMedianSeconds !== undefined,
+    'the derived remainder carries a field-median section time for the drawer'
+  );
   const singleLap = sectionObservationsFromLaps(nashville, { kind: 'single_lap', lap: 1 }, 'median');
   assert.ok(
     singleLap.sections.every((observation) => observation.cautionState !== undefined || observation.observationCount === 0),

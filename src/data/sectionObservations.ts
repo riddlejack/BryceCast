@@ -35,6 +35,10 @@ export interface SectionObservation {
   /** EXACT official section-family string — the join key to the curated track
    *  anchor and the label shown on the map. Never invented. */
   sectionName: string;
+  /** 'measured' = a real timing-loop section; 'derived_remainder' = the untimed
+   *  stretch(es) whose pace is lap time minus the timed sections (still a real
+   *  full-field percentile, just derived rather than loop-measured). */
+  kind?: 'measured' | 'derived_remainder';
   /** Bryce's percentile of the field beaten in this section for the scope,
    *  [0,1]. Null when the section exists but carries too few clean laps here
    *  (see observationCount) or no observation at all. */
@@ -47,9 +51,12 @@ export interface SectionObservation {
   lapPercentiles?: Array<{ lap: number; percentile: number }>;
   /** Bryce's representative (median) section time in seconds for the scope. */
   bryceMedianSeconds?: number | null;
-  /** Field-median section time, seconds. Null until a source carries the
-   *  field's own section times (the lake). */
+  /** Field-median section time, seconds, from the field distribution below. */
   fieldMedianSeconds?: number | null;
+  /** Each field car's median clean-lap section time (seconds) across the race —
+   *  the quiet field distribution the drawer draws behind Bryce's marker.
+   *  Null when the source carries only Bryce's own times. */
+  fieldSeconds?: number[] | null;
   /** single_lap scope only: that lap's race-control context. */
   cautionState?: 'green' | 'caution' | 'restart' | 'unknown';
   clean?: boolean;
@@ -172,14 +179,21 @@ export const sectionObservationsFromLaps = (
 ): SectionObservationSet => {
   const [fromLap, toLap] = lapWindowOf(scope, pack.totalLaps);
   const single = scope.kind === 'single_lap';
-  const sections: SectionObservation[] = pack.sections.map(({ sectionName, laps }) => {
+  const sections: SectionObservation[] = pack.sections.map(({ sectionName, laps, kind, fieldSeconds }) => {
+    /* Field distribution is a whole-race per-car spread; it stays constant as
+     * Bryce's scope tick moves across it. Absent for sources without it. */
+    const fieldDistribution = fieldSeconds && fieldSeconds.length > 0 ? fieldSeconds : null;
+    const fieldMedianSeconds = fieldDistribution ? median(fieldDistribution) : null;
     if (single) {
       const row = laps.find((tuple) => tuple[0] === fromLap) ?? null;
       return {
         sectionName,
+        kind: kind ?? 'measured',
         percentile: row ? row[1] : null,
         observationCount: row ? 1 : 0,
         bryceMedianSeconds: row ? row[6] : null,
+        fieldMedianSeconds,
+        fieldSeconds: fieldDistribution,
         cautionState: row ? CAUTION_LABEL[row[5]] ?? 'unknown' : undefined,
         clean: row ? row[4] === 1 : undefined
       };
@@ -191,10 +205,13 @@ export const sectionObservationsFromLaps = (
     const times = inWindow.map((tuple) => tuple[6]).filter((value): value is number => value !== null);
     return {
       sectionName,
+      kind: kind ?? 'measured',
       percentile: pcts.length >= MIN_CLEAN_LAPS ? summarize(pcts, stat) : null,
       observationCount: pcts.length,
       lapPercentiles: inWindow.map((tuple) => ({ lap: tuple[0] as number, percentile: tuple[1] as number })),
-      bryceMedianSeconds: times.length > 0 ? median(times) : null
+      bryceMedianSeconds: times.length > 0 ? median(times) : null,
+      fieldMedianSeconds,
+      fieldSeconds: fieldDistribution
     };
   });
   const allPcts = sections.flatMap((section) => (section.lapPercentiles ?? []).map((point) => point.percentile));
@@ -222,10 +239,21 @@ export interface ResolvedHeatSection {
   familyId: string;
   sectionName: string;
   label: string;
+  /** Primary span (used for the label + dot midpoint). */
   startT: number;
   endT: number;
+  /** Every span this section draws + hit-tests. One for a measured section; two
+   *  or more for a derived remainder that spans disjoint untimed stretches. */
+  renderSpans: Array<{ startT: number; endT: number }>;
   percentile: number;
-  /** True for Bryce's top-2 sections this scope — the gold dots. */
+  /** 'measured' draws a solid coloured span; 'derived_remainder' draws a
+   *  visually distinct dotted span and reads as derived in the tooltip. */
+  kind: 'measured' | 'derived_remainder';
+  /** A derived remainder whose value combines two or more untimed stretches
+   *  (the loops can't separate them yet). Drives the "combined" tooltip note. */
+  combined: boolean;
+  /** True for Bryce's top-2 MEASURED sections this scope — the gold dots. A
+   *  derived remainder is never a top section. */
   isTopSection: boolean;
 }
 
@@ -241,21 +269,28 @@ export const resolveHeatSections = (
     .map((anchor) => {
       const observation = byName.get(anchor.sectionName);
       if (!observation || observation.percentile === null) return null;
+      const kind: 'measured' | 'derived_remainder' = anchor.kind ?? 'measured';
+      const additional = anchor.additionalSpans ?? [];
       return {
         familyId: anchor.familyId,
         sectionName: anchor.sectionName,
         label: anchor.label,
         startT: anchor.startT,
         endT: anchor.endT,
-        percentile: observation.percentile
+        renderSpans: [{ startT: anchor.startT, endT: anchor.endT }, ...additional],
+        percentile: observation.percentile,
+        kind,
+        combined: kind === 'derived_remainder' && additional.length > 0
       };
     })
     .filter((entry): entry is Omit<ResolvedHeatSection, 'isTopSection'> => entry !== null);
 
-  /* Top-2 by percentile become the gold dots (Brief E). Ties break by the
-   * stronger-then-earlier ordering already implied by percentile + anchor. */
+  /* Top-2 by percentile become the gold dots (Brief E) — MEASURED sections
+   * only; the derived remainder is a different treatment and never gold. Ties
+   * break by the stronger-then-earlier ordering implied by percentile + anchor. */
   const topFamilyIds = new Set(
-    [...joined]
+    joined
+      .filter((entry) => entry.kind === 'measured')
       .sort((a, b) => b.percentile - a.percentile)
       .slice(0, 2)
       .map((entry) => entry.familyId)

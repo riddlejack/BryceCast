@@ -35,11 +35,23 @@ export const trackSectionsForSlug = (slug: string | null | undefined): TrackSect
   return bySlug.get(slug) ?? null;
 };
 
-/** Share of the lap covered by timed sections, [0,1] — from the measured span
- *  lengths (wrap-seam safe). Nashville: 0.43; the rest of the lap carries no
- *  timing loops and the UI says so. */
+/** Anchors that are real measured timing-loop sections (excludes the derived
+ *  untimed-remainder anchor, which is not a loop). */
+const measuredAnchors = (set: TrackSectionAnchorSet) =>
+  set.sections.filter((section) => section.kind !== 'derived_remainder');
+
+/** Count of real timed sections (excludes the derived remainder). */
+export const measuredSectionCount = (set: TrackSectionAnchorSet): number => measuredAnchors(set).length;
+
+/** Whether a venue ships a derived untimed-remainder anchor (a genuine gap). */
+export const hasDerivedRemainder = (set: TrackSectionAnchorSet): boolean =>
+  set.sections.some((section) => section.kind === 'derived_remainder');
+
+/** Share of the lap covered by TIMED sections, [0,1] — from the measured span
+ *  lengths (wrap-seam safe), excluding the derived remainder. Nashville: 0.43;
+ *  the rest of the lap carries no timing loops and is derived from lap time. */
 export const timedShareOf = (set: TrackSectionAnchorSet): number =>
-  set.sections.reduce((sum, section) => {
+  measuredAnchors(set).reduce((sum, section) => {
     const length = (section.endT - section.startT + 1) % 1;
     return sum + (length === 0 ? 0 : length);
   }, 0);

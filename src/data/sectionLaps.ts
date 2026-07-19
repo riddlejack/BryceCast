@@ -33,7 +33,20 @@ export interface SectionLapsPack {
   trackType: string | null;
   totalLaps: number;
   tupleOrder: string[];
-  sections: Array<{ sectionName: string; laps: SectionLapTuple[] }>;
+  sections: Array<{
+    sectionName: string;
+    /** 'measured' = a real timing-loop section; 'derived_remainder' = the
+     *  untimed stretch(es) shaded from lap time minus the timed sections. */
+    kind?: 'measured' | 'derived_remainder';
+    laps: SectionLapTuple[];
+    /** Each field car's median clean-lap section time (seconds) for the whole
+     *  race — the quiet field distribution behind Bryce's marker in the drawer.
+     *  Absent when the source carries no field-time distribution. */
+    fieldSeconds?: number[];
+  }>;
+  /** Whether this race carries a genuine untimed stretch worth a derived shade
+   *  ('genuine_gap') or its racing sections tile the lap ('fully_timed'). */
+  derivedCoverage?: 'genuine_gap' | 'fully_timed' | null;
   lapTotals: SectionLapTuple[];
   sourceStateCounts: Record<string, number>;
   sourceRefs: Array<{ key: string; path: string; note: string }>;

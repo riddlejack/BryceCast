@@ -4,7 +4,13 @@ import { Card, HeroPanel, SourcePill, Stat, StatusChip, Unavailable } from '../a
 import { ChartTipCard, chartFont, inkGoldDiverging, useMeasuredWidth, type ChartTip } from '../app/charts';
 import { TrackArt } from '../app/trackArt';
 import { trackOutlineFor, type TrackOutline } from '../assets/tracks';
-import { timedShareOf, trackSectionsFor, type TrackSectionAnchorSet } from '../assets/tracks/sections';
+import {
+  hasDerivedRemainder,
+  measuredSectionCount,
+  timedShareOf,
+  trackSectionsFor,
+  type TrackSectionAnchorSet
+} from '../assets/tracks/sections';
 import {
   MIN_CLEAN_LAPS,
   lapContextOf,
@@ -607,20 +613,38 @@ const SectionSingleLapRow = ({
   </div>
 );
 
-/** One drawer row: official label, summary ordinal, clean-lap count, and the
- *  distribution strip — every clean lap a quiet dot on the 0–100 scale, the
- *  summary statistic a gold tick. The percentile's meaning, shown not told. */
+/** One drawer row: official label, summary ordinal, clean-lap count, and two
+ *  quiet strips — the top one every clean lap as a dot on the 0–100 field-beaten
+ *  scale with the summary statistic a gold tick; the lower one the FIELD's own
+ *  pace this section (each car a faint tick, Bryce's median the gold tick), so
+ *  the percentile's meaning is shown, not told. Faster reads to the right on
+ *  both, matching the map's key. */
 const SectionDistributionRow = ({
   label,
-  observation,
-  stat
+  observation
 }: {
   label: string;
-  observation: { percentile: number | null; observationCount: number | null; lapPercentiles?: Array<{ lap: number; percentile: number }> };
+  observation: {
+    percentile: number | null;
+    observationCount: number | null;
+    lapPercentiles?: Array<{ lap: number; percentile: number }>;
+    bryceMedianSeconds?: number | null;
+    fieldSeconds?: number[] | null;
+    kind?: 'measured' | 'derived_remainder';
+  };
   stat: SectionStat;
 }) => {
   const points = observation.lapPercentiles ?? [];
   const suppressed = observation.percentile === null;
+  const field = observation.fieldSeconds ?? null;
+  const bryceMed = observation.bryceMedianSeconds ?? null;
+  /* Field-pace strip range spans the field plus Bryce, so his tick is always in
+   * frame even when he is the fastest or slowest car. Faster → right. */
+  const paceValues = field && field.length > 0 ? [...field, ...(bryceMed !== null ? [bryceMed] : [])] : [];
+  const lo = paceValues.length > 0 ? Math.min(...paceValues) : 0;
+  const hi = paceValues.length > 0 ? Math.max(...paceValues) : 1;
+  const xOf = (seconds: number) => (hi > lo ? ((hi - seconds) / (hi - lo)) * 100 : 50);
+  const showPace = !suppressed && field !== null && field.length > 0;
   return (
     <div className="row" style={{ gap: 12, alignItems: 'center' }}>
       <span
@@ -629,43 +653,77 @@ const SectionDistributionRow = ({
       >
         {label}
       </span>
-      <span style={{ position: 'relative', flex: 1, height: 22 }}>
-        <span style={{ position: 'absolute', left: 0, right: 0, top: 10, height: 2, borderRadius: 1, background: 'var(--surface-2)' }} />
-        {points.map((point) => (
-          <span
-            key={point.lap}
-            style={{
-              position: 'absolute',
-              top: 8,
-              left: `calc(${point.percentile * 100}% - 3px)`,
-              width: 6,
-              height: 6,
-              borderRadius: '50%',
-              background: 'var(--ink-primary)',
-              opacity: 0.18
-            }}
-          />
-        ))}
-        {observation.percentile !== null ? (
-          <span
-            style={{
-              position: 'absolute',
-              top: 3,
-              left: `calc(${observation.percentile * 100}% - 1.5px)`,
-              width: 3,
-              height: 16,
-              borderRadius: 1.5,
-              background: 'var(--bryce)'
-            }}
-          />
+      <span className="stack" style={{ flex: 1, gap: 3 }}>
+        <span style={{ position: 'relative', display: 'block', height: 22 }}>
+          <span style={{ position: 'absolute', left: 0, right: 0, top: 10, height: 2, borderRadius: 1, background: 'var(--surface-2)' }} />
+          {points.map((point) => (
+            <span
+              key={point.lap}
+              style={{
+                position: 'absolute',
+                top: 8,
+                left: `calc(${point.percentile * 100}% - 3px)`,
+                width: 6,
+                height: 6,
+                borderRadius: '50%',
+                background: 'var(--ink-primary)',
+                opacity: 0.18
+              }}
+            />
+          ))}
+          {observation.percentile !== null ? (
+            <span
+              style={{
+                position: 'absolute',
+                top: 3,
+                left: `calc(${observation.percentile * 100}% - 1.5px)`,
+                width: 3,
+                height: 16,
+                borderRadius: 1.5,
+                background: 'var(--bryce)'
+              }}
+            />
+          ) : null}
+        </span>
+        {showPace ? (
+          <span style={{ position: 'relative', display: 'block', height: 10 }} aria-hidden>
+            <span style={{ position: 'absolute', left: 0, right: 0, top: 5, height: 1, background: 'var(--grid-hairline)' }} />
+            {field!.map((seconds, index) => (
+              <span
+                key={index}
+                style={{
+                  position: 'absolute',
+                  top: 1,
+                  left: `calc(${xOf(seconds)}% - 0.5px)`,
+                  width: 1,
+                  height: 8,
+                  background: 'var(--ink-muted)',
+                  opacity: 0.35
+                }}
+              />
+            ))}
+            {bryceMed !== null ? (
+              <span
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: `calc(${xOf(bryceMed)}% - 1px)`,
+                  width: 2,
+                  height: 10,
+                  borderRadius: 1,
+                  background: 'var(--bryce)'
+                }}
+              />
+            ) : null}
+          </span>
         ) : null}
       </span>
-      <span className="tnum" style={{ fontSize: 12, color: suppressed ? 'var(--ink-muted)' : 'var(--ink-primary)', width: 92, textAlign: 'right' }}>
+      <span className="tnum" style={{ fontSize: 12, color: suppressed ? 'var(--ink-muted)' : 'var(--ink-primary)', width: 96, textAlign: 'right' }}>
         {suppressed
           ? `${observation.observationCount ?? 0} clean ${observation.observationCount === 1 ? 'lap' : 'laps'}`
-          : `${ordinal(Math.round(observation.percentile! * 100))} · ${observation.observationCount ?? 0} ${
-              observation.observationCount === 1 ? 'lap' : 'laps'
-            }`}
+          : `${ordinal(Math.round(observation.percentile! * 100))} · ${
+              showPace ? `vs ${field!.length} cars · ` : ''
+            }${observation.observationCount ?? 0} ${observation.observationCount === 1 ? 'lap' : 'laps'}`}
       </span>
     </div>
   );
@@ -717,13 +775,20 @@ const SectionHeatCard = ({
   const drawerRows = useMemo(() => {
     if (!set) return [];
     const labelFor = new Map(anchors.sections.map((anchor) => [anchor.sectionName, anchor.label]));
-    return [...set.sections]
+    /* The drawer explains exactly what the shape shows: only sections with a
+     * curated anchor (the derived remainder among them where it's anchored). */
+    return set.sections
+      .filter((observation) => labelFor.has(observation.sectionName))
       .map((observation) => ({ observation, label: labelFor.get(observation.sectionName) ?? observation.sectionName }))
       .sort((left, right) => (right.observation.percentile ?? -1) - (left.observation.percentile ?? -1));
   }, [set, anchors]);
 
-  /* Coverage up front (Jack's review): how much of the lap the loops see. */
-  const coverage = `${anchors.sections.length} timed sections · ${Math.round(timedShareOf(anchors) * 100)}% of the lap`;
+  /* Coverage up front (Jack's review): how much of the lap the loops measure,
+   * and that the rest is derived from lap time rather than a blind spot. */
+  const measuredPct = Math.round(timedShareOf(anchors) * 100);
+  const coverage = hasDerivedRemainder(anchors)
+    ? `${measuredSectionCount(anchors)} timed sections · ${measuredPct}% measured · rest derived from lap time`
+    : `${measuredSectionCount(anchors)} timed sections · ${measuredPct}% of the lap`;
   const scopeSummary = !set
     ? null
     : singleLap
@@ -871,8 +936,9 @@ const SectionHeatCard = ({
               ) : null}
               {!singleLap ? (
                 <p style={{ margin: 0, fontSize: 11.5, color: 'var(--ink-muted)' }}>
-                  Each dot is one clean lap — its share of the field beaten in that section. The gold tick is his{' '}
-                  {stat === 'median' ? 'median' : 'average'} lap, the number the map's shade carries.
+                  Top rule: each dot is one clean lap — its share of the field beaten in that section, the gold tick his{' '}
+                  {stat === 'median' ? 'median' : 'average'} lap and the number the map carries. Lower rule: where his pace
+                  sits among the field this section — each faint mark a car, the gold tick Bryce, faster to the right.
                 </p>
               ) : (
                 <p style={{ margin: 0, fontSize: 11.5, color: 'var(--ink-muted)' }}>
@@ -898,7 +964,9 @@ const SectionHeatCard = ({
       ) : null}
       <p style={{ margin: 0, paddingTop: 14, fontSize: 11.5, color: 'var(--ink-muted)' }}>
         {hasHeat
-          ? 'Section times from official timing loops — time-based, not GPS. Stretches without timing loops stay the plain line.'
+          ? hasDerivedRemainder(anchors)
+            ? 'Solid spans are official timing loops — time-based, not GPS. The dotted stretch is derived: lap time minus the timed sections, ranked against the field the same way.'
+            : 'Section times from official timing loops — time-based, not GPS. Stretches without timing loops stay the plain line.'
           : set
             ? `Sections need ${MIN_CLEAN_LAPS} clean laps in a scope to compare honestly.`
             : 'No official section times are on file for this race yet.'}
@@ -978,7 +1046,8 @@ const VenueYearsCard = ({
       <div className="row row--between" style={{ gap: 10, flexWrap: 'wrap', marginBottom: 12 }}>
         <HeatKey />
         <span className="tnum" style={{ fontSize: 11.5, color: 'var(--ink-muted)' }}>
-          {anchors.sections.length} timed sections · {Math.round(timedShareOf(anchors) * 100)}% of the lap
+          {measuredSectionCount(anchors)} timed sections · {Math.round(timedShareOf(anchors) * 100)}% measured
+          {hasDerivedRemainder(anchors) ? ' · rest derived' : ' of the lap'}
         </span>
       </div>
       <div className="row" style={{ gap: 22, flexWrap: 'wrap', alignItems: 'flex-start' }}>
