@@ -550,6 +550,38 @@ for (const ref of raceStoryRefs ?? []) {
   if (!Array.isArray(story.caveats) || story.caveats.length === 0) {
     fail(`Race-story pack ${ref.sessionId} must state caveats.`);
   }
+  const restarts = story.restarts;
+  if (restarts === undefined) {
+    fail(`Race-story pack ${ref.sessionId} must carry a restarts block (or null).`);
+  }
+  if (restarts) {
+    if (restarts.precision !== 'lap-chart') {
+      fail(`Race-story pack ${ref.sessionId} restart precision must be lap-chart in v1.`);
+    }
+    if ((restarts.events ?? []).length !== restarts.detected) {
+      fail(`Race-story pack ${ref.sessionId} restart event count must equal detected.`);
+    }
+    for (const event of restarts.events ?? []) {
+      if (event.restartLap !== event.baselineLap + 1) {
+        fail(`Race-story pack ${ref.sessionId} restart ${event.restartIndex}: restartLap must be baselineLap+1.`);
+      }
+      if (event.windowEndLap !== event.baselineLap + event.windowLaps) {
+        fail(`Race-story pack ${ref.sessionId} restart ${event.restartIndex}: windowEndLap must be baselineLap+windowLaps.`);
+      }
+      if (event.windowEndLap > totalLaps) {
+        fail(`Race-story pack ${ref.sessionId} restart ${event.restartIndex}: window runs past the final lap.`);
+      }
+      if (event.bryce && event.bryce.net !== event.bryce.baselinePosition - event.bryce.endPosition) {
+        fail(`Race-story pack ${ref.sessionId} restart ${event.restartIndex}: bryce net must equal baseline-end.`);
+      }
+    }
+    const countedNet = (restarts.events ?? [])
+      .filter((event) => event.bryce)
+      .reduce((sum, event) => sum + event.bryce.net, 0);
+    if (restarts.bryce.counted && restarts.bryce.net !== countedNet) {
+      fail(`Race-story pack ${ref.sessionId} restart bryce.net must equal the summed event nets.`);
+    }
+  }
 }
 
 /* ---------- career conversion rows must carry chronology ---------- */
@@ -839,6 +871,63 @@ if (
 }
 if (JSON.stringify(lifeStats).includes('9137.7') || JSON.stringify(lifeStats).includes('9,137.7')) {
   fail('careerLab.lifeStats must never expose the shared-car odometer value.');
+}
+
+/* ---------- Career Lab restart report (the Restart Report Card contract) ---------- */
+
+const restartReport = dataPackage.screens.careerLab.restarts;
+if (restartReport?.schemaVersion !== 'brycecast.restartReport.v1') {
+  fail('careerLab.restarts must carry the validated restart-report schema.');
+}
+if (restartReport.precision !== 'lap-chart') {
+  fail('careerLab.restarts v1 precision must be lap-chart.');
+}
+for (const [key, expectedPath] of Object.entries({
+  restartReportSummary: 'analysis/restart-report/output/summary.json',
+  restartReportByRace: 'analysis/restart-report/output/tables/restart_by_race.csv',
+  restartReportByVenue: 'analysis/restart-report/output/tables/restart_by_venue.csv',
+  restartReportBySeason: 'analysis/restart-report/output/tables/restart_by_season.csv',
+  restartReportEvents: 'analysis/restart-report/output/tables/restart_events.csv'
+})) {
+  if (sourceInventory[key]?.path !== expectedPath) {
+    fail(`sourceInventory.${key} must point to ${expectedPath}.`);
+  }
+}
+const restartSummary = JSON.parse(fs.readFileSync(path.join(repoRoot, sourceInventory.restartReportSummary.path), 'utf8'));
+if (JSON.stringify(restartReport.career) !== JSON.stringify(restartSummary.career)) {
+  fail('careerLab.restarts.career must mirror the validated restart-report summary.');
+}
+if (JSON.stringify(restartReport.coverage) !== JSON.stringify(restartSummary.coverage)) {
+  fail('careerLab.restarts.coverage must mirror the validated restart-report summary.');
+}
+const restartByRace = restartReport.byRace ?? [];
+if (restartByRace.some((row) => !((row.restartCount ?? 0) > 0))) {
+  fail('careerLab.restarts.byRace must only carry races that had at least one restart.');
+}
+if (restartByRace.some((row) => !row.sessionId.includes('indy_nxt'))) {
+  fail('careerLab.restarts.byRace must be INDY NXT sessions (click-through via raceHref).');
+}
+const restartCountSum = restartByRace.reduce((sum, row) => sum + (row.restartCount ?? 0), 0);
+if (restartCountSum !== restartReport.career.totalRestarts) {
+  fail(`careerLab.restarts.byRace restart counts (${restartCountSum}) must sum to career totalRestarts (${restartReport.career.totalRestarts}).`);
+}
+const restartGainedSum = restartByRace.reduce((sum, row) => sum + (row.bryceGained ?? 0), 0);
+if (restartGainedSum !== restartReport.career.bryceGained) {
+  fail('careerLab.restarts.byRace gained counts must sum to career bryceGained.');
+}
+for (const scope of ['byVenue', 'bySeason']) {
+  const rows = restartReport[scope] ?? [];
+  if (!Array.isArray(rows) || rows.length === 0) {
+    fail(`careerLab.restarts.${scope} must carry rollup rows.`);
+  }
+  const sum = rows.reduce((total, row) => total + (row.restarts ?? 0), 0);
+  if (sum !== restartReport.career.totalRestarts) {
+    fail(`careerLab.restarts.${scope} restarts must sum to career totalRestarts.`);
+  }
+}
+const restartSourcePaths = new Set((restartReport.sourceRefs ?? []).map((ref) => ref.path));
+if (!restartSourcePaths.has('analysis/restart-report/output/summary.json')) {
+  fail('careerLab.restarts.sourceRefs must cite the restart-report summary.');
 }
 
 /* ---------- Career Lab atlas (deterministic land + 145-race venue contract) ---------- */

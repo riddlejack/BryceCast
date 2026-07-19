@@ -544,6 +544,162 @@ const SectionStory = ({ story }: { story: RaceStoryPack }) => {
   );
 };
 
+/* ---------- the restart report card: green-lap moves against the field ---------- */
+
+const restartCountWord = (value: number): string =>
+  ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'][value] ?? String(value);
+
+const RestartDeltaChip = ({ net }: { net: number }) => {
+  const gain = formatGain(net);
+  if (!gain) return null;
+  return <span className={`stat__delta stat__delta--${gain.direction}`} style={{ fontSize: 12 }}>{gain.text}</span>;
+};
+
+const restartSourcePill = (
+  <SourcePill
+    title="Restarts, green-lap by green-lap"
+    entries={[
+      {
+        label: 'Official caution summary',
+        path: 'data/career/career.dataset.json',
+        note: 'Each restart is the first green lap after an official caution period, from the Results-PDF caution summary.'
+      },
+      {
+        label: 'Official lap chart',
+        path: 'analysis/restart-report/output/tables/restart_events.csv',
+        note: 'Running order at the last caution lap vs two green laps later, for every car — positions only, never lap times.'
+      }
+    ]}
+    caveats={[
+      'Positions can shift for pit cycles as well as passes; this is net movement, not a pass count.',
+      'A window shorter than two laps means a fresh caution or the finish arrived first.'
+    ]}
+  />
+);
+
+const RestartsCard = ({ story }: { story: RaceStoryPack }) => {
+  const restarts = story.restarts;
+  if (!restarts) return null;
+
+  // Honest empty states: no cautions, or the only caution ran to the flag.
+  if (restarts.detected === 0) {
+    const line =
+      restarts.noRestartReason === 'cautions_ended_under_yellow'
+        ? 'The caution flew as the race wound down, so there was no restart to run.'
+        : 'The field ran green flag to flag — no cautions, so no restarts this race.';
+    return (
+      <Card title={<><Flag size={15} aria-hidden />Restarts</>} action={restartSourcePill}>
+        <p style={{ margin: 0, fontSize: 13.5, color: 'var(--ink-secondary)' }}>{line}</p>
+      </Card>
+    );
+  }
+
+  const classified = restarts.events.filter((event) => event.bryce);
+  const detectedWord = restartCountWord(restarts.detected);
+
+  // Bryce's race ended before (or without covering) the restarts: keep the field
+  // fact, give the day dignity, and show no read we cannot stand behind.
+  if (classified.length === 0) {
+    return (
+      <Card title={<><Flag size={15} aria-hidden />Restarts</>} action={restartSourcePill}>
+        <p style={{ margin: 0, fontSize: 13.5, color: 'var(--ink-secondary)' }}>
+          The field took {detectedWord} restart{restarts.detected === 1 ? '' : 's'} this race; Bryce's lap-chart line doesn't
+          reach them, so there's no restart read to show for him here.
+        </p>
+      </Card>
+    );
+  }
+
+  const { bryce } = restarts;
+  const countedWord = restartCountWord(bryce.counted);
+  const heldOrGained = bryce.gained + bryce.held;
+
+  // Headline: superlatives are computed, never asserted; wording stays Bryce-first
+  // and never leans on deficit language on a tougher restart day.
+  let headline: string;
+  if (bryce.soleBestInField) {
+    headline = `No car in the field made up more ground on the restarts than Bryce.`;
+  } else if (bryce.net > 0) {
+    headline = `Bryce gained ${bryce.net} spot${bryce.net === 1 ? '' : 's'} across ${countedWord} restart${bryce.counted === 1 ? '' : 's'}.`;
+  } else if (heldOrGained === bryce.counted) {
+    headline = `Bryce held or gained his spot on every restart — ${countedWord} of ${countedWord}.`;
+  } else if (bryce.gained > 0) {
+    headline = `Bryce moved forward on ${restartCountWord(bryce.gained)} of ${countedWord} restart${bryce.counted === 1 ? '' : 's'}.`;
+  } else if (bryce.held > 0) {
+    headline = `Bryce held station on ${restartCountWord(bryce.held)} of ${countedWord} restart${bryce.counted === 1 ? '' : 's'}.`;
+  } else {
+    headline = `Bryce took the green on ${countedWord} restart${bryce.counted === 1 ? '' : 's'} this race.`;
+  }
+
+  // The per-restart rows below always carry each honest rank; the summary rank
+  // is elevated to a headline only when it reads as a highlight — a deficit is
+  // never headlined (house dignity rule).
+  const showRankLine = bryce.soleBestInField || bryce.net >= 0;
+  const rankLine =
+    showRankLine && bryce.rankInField !== null && bryce.fieldSizeRanked
+      ? bryce.soleBestInField
+        ? `Best of ${bryce.fieldSizeRanked} cars on the restarts.`
+        : `${ordinal(bryce.rankInField)} of ${bryce.fieldSizeRanked} cars for ground made up on the restarts.`
+      : null;
+
+  return (
+    <Card title={<><Flag size={15} aria-hidden />Restarts</>} action={restartSourcePill}>
+      <p style={{ margin: '0 0 4px', fontSize: 15, color: 'var(--ink-primary)', fontWeight: 560 }}>{headline}</p>
+      {rankLine ? (
+        <p style={{ margin: '0 0 16px', fontSize: 13, color: 'var(--ink-secondary)' }}>{rankLine}</p>
+      ) : (
+        <div style={{ height: 12 }} />
+      )}
+
+      <div className="stack" style={{ gap: 0 }}>
+        {classified.map((event, index) => {
+          const before = event.bryce!.baselinePosition;
+          const after = event.bryce!.endPosition;
+          const rank = event.bryce!.rankInField;
+          const size = event.bryce!.fieldSize;
+          return (
+            <div
+              key={event.restartIndex ?? index}
+              className="row"
+              title={event.cautionReasons ? `Restart after: ${event.cautionReasons}` : undefined}
+              style={{
+                gap: 12,
+                alignItems: 'center',
+                padding: '11px 0',
+                borderTop: index === 0 ? 'none' : '1px solid rgba(0,0,0,0.06)'
+              }}
+            >
+              <span className="caption" style={{ flex: '0 0 76px' }}>
+                Lap {event.restartLap}
+                {!event.fullWindow ? ' ·' : ''}
+              </span>
+              <span className="tnum" style={{ flex: 1, fontSize: 14, color: 'var(--ink-primary)' }}>
+                {formatPosition(before)} <span style={{ color: 'var(--ink-muted)' }}>→</span> {formatPosition(after)}
+              </span>
+              <RestartDeltaChip net={event.bryce!.net ?? 0} />
+              {rank !== null && size ? (
+                <span className="tnum" style={{ flex: '0 0 84px', textAlign: 'right', fontSize: 12, color: 'var(--ink-secondary)' }}>
+                  {ordinal(rank)} of {size}
+                </span>
+              ) : (
+                <span style={{ flex: '0 0 84px' }} />
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      <p style={{ margin: '14px 0 0', fontSize: 11.5, color: 'var(--ink-muted)' }}>
+        Running order over the two green laps after each restart, Bryce against the full field
+        {classified.length < restarts.detected
+          ? ` · ${restartCountWord(restarts.detected - classified.length)} later restart${restarts.detected - classified.length === 1 ? '' : 's'} ran after his race`
+          : ''}
+        . Positions, not lap times.
+      </p>
+    </Card>
+  );
+};
+
 /* ---------- inside the team (number-line, same form as the points strip) ---------- */
 
 const TeamStrip = ({ story }: { story: RaceStoryPack }) => {
@@ -850,6 +1006,8 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
       {story ? <LapChartCard story={story} mover={mover} /> : null}
 
       {story ? <TheDay story={story} pack={pack} /> : null}
+
+      {story ? <RestartsCard story={story} /> : null}
 
       <div className="grid grid--2">
         {story ? <TeamStory story={story} /> : null}

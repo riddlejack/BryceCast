@@ -1240,6 +1240,174 @@ const ConditionLane = ({
   );
 };
 
+/* ---------- the restarts: ground made up after every caution, career-wide ---------- */
+
+export const CareerRestarts = () => {
+  const report = uiDataPackage.screens.careerLab.restarts;
+  const [ref, width] = useMeasuredWidth<HTMLDivElement>();
+  const svgRef = useRef<SVGSVGElement | null>(null);
+  const { navigate } = useRouter();
+  const [hovered, setHovered] = useState<number | null>(null);
+  const [tip, setTip] = useState<ChartTip | null>(null);
+
+  const races = useMemo(
+    () => (report.byRace ?? []).filter((row) => (row.bryceRestartsCounted ?? 0) > 0),
+    [report.byRace]
+  );
+  const n = races.length;
+  const career = report.career;
+  const counted = career.bryceRestartsCounted;
+  const heldOrGained = career.bryceGained + career.bryceHeld;
+
+  const height = 260;
+  const margin = { top: 26, right: 18, bottom: 26, left: 40 };
+  const plotWidth = Math.max(width - margin.left - margin.right, 80);
+  const plotHeight = height - margin.top - margin.bottom;
+  const nets = races.map((row) => row.bryceNet ?? 0);
+  const maxNet = Math.max(1, ...nets);
+  const minNet = Math.min(-1, ...nets);
+  const x = (index: number) => margin.left + (index / Math.max(n - 1, 1)) * plotWidth;
+  const y = (net: number) => margin.top + (1 - (net - minNet) / (maxNet - minNet)) * plotHeight;
+
+  const clearHover = () => {
+    setHovered(null);
+    setTip(null);
+  };
+
+  const onMove = (event: React.MouseEvent<SVGSVGElement>) => {
+    const bounds = svgRef.current?.getBoundingClientRect();
+    if (!bounds) return;
+    const mouseX = event.clientX - bounds.left;
+    const mouseY = event.clientY - bounds.top;
+    let best: { index: number; distance: number } | null = null;
+    for (let index = 0; index < n; index += 1) {
+      const distance = Math.hypot(x(index) - mouseX, y(races[index].bryceNet ?? 0) - mouseY);
+      if (!best || distance < best.distance) best = { index, distance };
+    }
+    if (!best || best.distance > 26) {
+      clearHover();
+      return;
+    }
+    setHovered(best.index);
+    const row = races[best.index];
+    const net = row.bryceNet ?? 0;
+    const restartCount = row.bryceRestartsCounted ?? 0;
+    const move = net > 0 ? `up ${net}` : net === 0 ? 'held even' : `back ${Math.abs(net)}`;
+    const rank =
+      row.bryceRankInField !== null && row.fieldSizeRanked
+        ? ` · ${ordinal(row.bryceRankInField)} of ${row.fieldSizeRanked}`
+        : '';
+    setTip({
+      x: x(best.index),
+      y: y(net),
+      title: `${row.raceLabel}${row.seasonYear ? ` · ${row.seasonYear}` : ''}`,
+      detail: `${restartCount} restart${restartCount === 1 ? '' : 's'} · ${move}${rank}`,
+      action: 'open the race'
+    });
+  };
+
+  if (n < 4) return null;
+
+  return (
+    <Card
+      title="The restarts"
+      action={
+        <SourcePill
+          title="Restart record across the career"
+          entries={[
+            {
+              label: 'Restart report · per race and rollups',
+              path: 'analysis/restart-report/output/summary.json',
+              note: `Positions gained over the two green laps after each restart, Bryce against the full field, across ${n} INDY NXT races that had one.`
+            },
+            {
+              label: 'Official caution summaries and lap chart',
+              path: 'data/career/career.dataset.json',
+              note: 'Restarts from the official Results-PDF caution summary; movement from the official lap chart — positions only.'
+            }
+          ]}
+          caveats={report.caveats}
+        />
+      }
+    >
+      <p style={{ margin: '0 0 14px', fontSize: 15, color: 'var(--ink-primary)', fontWeight: 560 }}>
+        Held or gained ground on {heldOrGained} of the {counted} restarts he has run in INDY NXT.
+      </p>
+
+      <div className="grid grid--4" style={{ marginBottom: 18 }}>
+        <Stat label="Restarts run" value={counted} note={`across ${n} races`} />
+        <Stat label="Held or gained" value={`${heldOrGained} of ${counted}`} note="of the restarts he ran" />
+        <Stat
+          label="Ahead of the field"
+          value={`${career.restartsBeatFieldMedian} of ${counted}`}
+          note="beat the field's typical move"
+        />
+        <Stat
+          label="Best in the field"
+          value={career.racesSoleBestInField}
+          note={`race day${career.racesSoleBestInField === 1 ? '' : 's'}`}
+        />
+      </div>
+
+      <p className="caption caption--secondary" style={{ margin: '0 0 8px' }}>
+        Every race with a restart a dot · higher = more ground made up · the line is even, the field's typical restart · gold is
+        Bryce · click a dot to open its race
+      </p>
+      <div ref={ref} style={{ width: '100%', position: 'relative' }}>
+        {width > 0 ? (
+          <svg
+            ref={svgRef}
+            width={width}
+            height={height}
+            role="img"
+            aria-label={`Net positions gained on restarts across ${n} INDY NXT races.`}
+            onMouseMove={onMove}
+            onMouseLeave={clearHover}
+            onClick={() => {
+              if (hovered !== null) navigate(raceHref(races[hovered].sessionId));
+            }}
+            style={{ cursor: hovered !== null ? 'pointer' : 'default' }}
+          >
+            {/* The even line = the field's typical restart outcome (median ≈ 0). */}
+            <line x1={margin.left} x2={width - margin.right} y1={y(0)} y2={y(0)} stroke="var(--ink-primary)" strokeWidth={1} strokeDasharray="2 3" opacity={0.5} />
+            <text x={width - margin.right} y={y(0) - 6} textAnchor="end" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={10.5}>
+              even
+            </text>
+            <text x={4} y={margin.top - 12} textAnchor="start" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={10.5}>
+              ground made up
+            </text>
+
+            {races.map((row, index) => {
+              const net = row.bryceNet ?? 0;
+              const restartCount = row.bryceRestartsCounted ?? 0;
+              const radius = 3.5 + Math.sqrt(restartCount) * 1.5;
+              const focused = hovered === null || hovered === index;
+              return (
+                <circle
+                  key={row.sessionId}
+                  cx={x(index)}
+                  cy={y(net)}
+                  r={hovered === index ? radius + 1.5 : radius}
+                  fill="var(--bryce)"
+                  opacity={focused ? 0.9 : 0.22}
+                  stroke="#fff"
+                  strokeWidth={0.75}
+                />
+              );
+            })}
+          </svg>
+        ) : null}
+        {tip ? <ChartTipCard tip={tip} width={width} /> : null}
+      </div>
+
+      <p style={{ margin: '12px 0 0', fontSize: 11.5, color: 'var(--ink-muted)' }}>
+        Net running-order change over the two green laps after each restart, dot size by how many restarts that race. Positions,
+        not lap times.
+      </p>
+    </Card>
+  );
+};
+
 export const RainDays = () => {
   const rows = useCareerRows();
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();

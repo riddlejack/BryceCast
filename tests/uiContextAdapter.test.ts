@@ -137,6 +137,28 @@ assert.equal(storyRefs.length, debriefRefs.length, 'every race debrief must have
     sample.lapChart.drivers.some((driver) => driver.isBryce && driver.laps.length > 0),
     'bryce.inLapChart must match the chart contents'
   );
+
+  /* Restart Report Card: the per-race block, hand-verified against the official
+   * caution summaries for the 2024 Indianapolis GP Race 1. */
+  const indy = await loadRaceStory('session_indy_nxt_2024_6315');
+  assert.ok(indy?.restarts, 'race-story restart block must load');
+  assert.equal(indy!.restarts!.precision, 'lap-chart', 'v1 restart precision is lap-chart');
+  assert.equal(indy!.restarts!.detected, 2, 'Indy GP R1 had two restarts');
+  assert.equal(indy!.restarts!.events.length, 2, 'restart events must equal detected');
+  const [first, second] = indy!.restarts!.events;
+  assert.equal(first.restartLap, 26, 'first restart lap matches the by-hand check');
+  assert.equal(first.baselineLap, 25, 'baseline is the last caution lap');
+  assert.equal(first.bryce?.net, 1, 'Bryce gained one across the first restart');
+  assert.equal(first.bryce!.net, first.bryce!.baselinePosition! - first.bryce!.endPosition!, 'net equals baseline minus end');
+  assert.equal(second.restartLap, 32, 'second restart lap matches the by-hand check');
+  assert.equal(second.bryce?.net, 0, 'Bryce held station on the second restart');
+  assert.equal(indy!.restarts!.bryce.net, 1, 'race net equals the summed event nets');
+  assert.ok(indy!.restarts!.events.every((event) => event.field.classified >= 2), 'every restart carries a field denominator');
+
+  /* An end-of-race caution must never become a restart: Barber 2024's second
+   * caution ran to the flag, so only one restart is detected. */
+  const barber = await loadRaceStory('session_indy_nxt_2024_6314');
+  assert.equal(barber?.restarts?.detected, 1, 'Barber 2024 caution to the flag yields one restart, not two');
 }
 
 assert.ok(context.careerLab.contextPack.resultConversionRows >= 100);
@@ -246,5 +268,41 @@ for (const venue of atlas.venues) {
 }
 assert.deepEqual(new Set(atlas.venues.map((venue) => venue.region)), new Set(['North America', 'Europe', 'Oceania']));
 assert.ok(!JSON.stringify(atlas).includes('54649.3'), 'minimum displacement must not leak into the venue-only atlas');
+
+/* Restart Report Card: the career through-line + per-venue prior contract. */
+const restarts = careerScreen.restarts;
+assert.equal(restarts.schemaVersion, 'brycecast.restartReport.v1');
+assert.equal(restarts.precision, 'lap-chart', 'v1 is fed by the lap-chart derivation');
+assert.equal(restarts.windowLaps, 2, 'the measured window is the two green laps after each restart');
+assert.ok(restarts.career.totalRestarts > 0, 'career restart total must be populated');
+assert.equal(
+  restarts.byRace.reduce((sum, row) => sum + (row.restartCount ?? 0), 0),
+  restarts.career.totalRestarts,
+  'per-race restart counts must sum to the career total'
+);
+assert.ok(
+  restarts.byRace.every((row) => row.sessionId.includes('indy_nxt')),
+  'the through-line clicks through to INDY NXT race pages'
+);
+assert.ok(
+  restarts.byRace.every((row) => (row.restartCount ?? 0) > 0),
+  'the through-line only carries races that had a restart'
+);
+assert.ok(restarts.byVenue.length > 0, 'a per-venue prior must exist for Race Week');
+assert.equal(
+  restarts.byVenue.reduce((sum, row) => sum + row.restarts, 0),
+  restarts.career.totalRestarts,
+  'per-venue rollup must reconcile to the career total'
+);
+const nashville = restarts.byVenue.find((row) => row.venueSlug === 'nashville_superspeedway');
+assert.ok(nashville && nashville.races > 0, 'Nashville prior must be available for the upcoming Race Week');
+assert.ok(
+  restarts.career.bryceGained + restarts.career.bryceHeld + restarts.career.bryceSlipped === restarts.career.bryceRestartsCounted,
+  'every counted restart is gained, held, or slipped'
+);
+assert.ok(
+  restarts.sourceRefs.some((ref) => ref.path === 'analysis/restart-report/output/summary.json'),
+  'restart report must cite its validated summary'
+);
 
 console.log('ui context adapter hydration tests passed');

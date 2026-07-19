@@ -4,7 +4,7 @@ import { trackOutlineFor } from '../assets/tracks';
 import { Card, Countdown, HeroPanel, SourcePill, Stat, Unavailable } from '../app/components';
 import { ChartTipCard, chartFont, focusFade, inkConnector, useMeasuredWidth, type ChartTip } from '../app/charts';
 import { TrackArt } from '../app/trackArt';
-import { asNumber, asString, formatClock, formatDate, formatNumber, shortVenue, trackTypeLabel } from '../app/format';
+import { asNumber, asString, formatClock, formatDate, formatNumber, ordinal, shortVenue, trackTypeLabel } from '../app/format';
 import { Link, useRouter } from '../app/router';
 import { useApiJson } from '../app/useApiJson';
 import { normalizedName, useNextSession } from '../app/useNextSession';
@@ -16,7 +16,7 @@ import {
   getUpcomingEvents,
   type UpcomingPrepEvent
 } from '../data/upcoming';
-import type { UiNextEventPrep, UiNextEventPrepRace, UiStandingsSnapshot } from '../data/uiDataPackage';
+import { uiDataPackage, type UiNextEventPrep, type UiNextEventPrepRace, type UiStandingsSnapshot } from '../data/uiDataPackage';
 import { loadDebriefArchive } from '../data/debriefArchive';
 
 type Row = Record<string, unknown>;
@@ -228,6 +228,106 @@ const OvalStory = ({ prep, trackTypeName, debriefIds }: { prep: UiNextEventPrep;
         When the car finished: average finish {formatNumber(summary.cleanAvgFinish)}, average gain {gainText}, top-10 in{' '}
         {summary.cleanTop10Count} of {summary.cleanRaceCount} · mechanical DNF shown dashed, excluded from these averages
         {anyLinked ? ' · click a race for its full story' : ''}.
+      </p>
+    </Card>
+  );
+};
+
+/* ---------- his restart record at this venue (the prior) ---------- */
+
+const restartMovePhrase = (net: number): string => (net > 0 ? `up ${net}` : net === 0 ? 'held even' : `back ${Math.abs(net)}`);
+
+const RestartPrior = ({ trackName }: { trackName: string }) => {
+  const report = uiDataPackage.screens.careerLab.restarts;
+  const target = trackName.trim().toLowerCase();
+  const venueRaces = (report.byRace ?? []).filter((row) => row.trackName.trim().toLowerCase() === target);
+  const counted = venueRaces.filter((row) => (row.bryceRestartsCounted ?? 0) > 0);
+  if (counted.length === 0) {
+    if (venueRaces.length === 0) return null; // no restart history at this venue — nothing to claim
+    return (
+      <Card title="His restart record here">
+        <p style={{ margin: 0, fontSize: 13.5, color: 'var(--ink-secondary)' }}>
+          His past {trackName} visits had restarts, but his lap-chart line didn't reach them — no restart read to show here yet.
+        </p>
+      </Card>
+    );
+  }
+
+  const restarts = counted.reduce((sum, row) => sum + (row.restartCount ?? 0), 0);
+  const heldOrGained = counted.reduce((sum, row) => sum + (row.bryceGained ?? 0) + (row.bryceHeld ?? 0), 0);
+  const runCounted = counted.reduce((sum, row) => sum + (row.bryceRestartsCounted ?? 0), 0);
+  const soleBest = counted.some((row) => row.soleBestInField);
+  const visits = counted.length;
+
+  return (
+    <Card
+      title="His restart record here"
+      action={
+        <SourcePill
+          title={`Restarts at ${trackName}`}
+          entries={[
+            {
+              label: 'Restart report · per race',
+              path: 'analysis/restart-report/output/tables/restart_by_race.csv',
+              note: `Green-lap movement after each restart at ${trackName}, Bryce against the full field.`
+            },
+            {
+              label: 'Official caution summaries and lap chart',
+              path: 'data/career/career.dataset.json',
+              note: 'Restarts from the official caution summary; movement from the official lap chart — positions only.'
+            }
+          ]}
+          caveats={report.caveats}
+        />
+      }
+    >
+      <p style={{ margin: '0 0 4px', fontSize: 13.5, color: 'var(--ink-secondary)', maxWidth: '62ch' }}>
+        Across {visits} visit{visits === 1 ? '' : 's'} and {runCounted} restart{runCounted === 1 ? '' : 's'} here, he held or
+        gained ground on {heldOrGained}
+        {soleBest ? ' · best in the field on one of them' : ''}.
+      </p>
+      <div className="stack" style={{ gap: 0, marginTop: 8 }}>
+        {counted.map((row, index) => {
+          const net = row.bryceNet ?? 0;
+          const rankText =
+            row.bryceRankInField !== null && row.fieldSizeRanked
+              ? `${ordinal(row.bryceRankInField)} of ${row.fieldSizeRanked}`
+              : '';
+          const href = `/races/${encodeURIComponent(row.sessionId)}`;
+          return (
+            <Link
+              key={row.sessionId}
+              to={href}
+              className="row"
+              style={{
+                gap: 12,
+                alignItems: 'center',
+                padding: '10px 0',
+                borderTop: index === 0 ? 'none' : '1px solid rgba(0,0,0,0.06)',
+                color: 'inherit',
+                textDecoration: 'none'
+              }}
+            >
+              <span className="tnum caption" style={{ flex: '0 0 46px' }}>
+                {row.seasonYear ?? '—'}
+              </span>
+              <span style={{ flex: 1, fontSize: 13.5, color: 'var(--ink-primary)' }}>
+                {restartMovePhrase(net)} across {row.bryceRestartsCounted} restart{row.bryceRestartsCounted === 1 ? '' : 's'}
+              </span>
+              {rankText ? (
+                <span className="tnum" style={{ flex: '0 0 84px', textAlign: 'right', fontSize: 12, color: 'var(--ink-secondary)' }}>
+                  {rankText}
+                </span>
+              ) : (
+                <span style={{ flex: '0 0 84px' }} />
+              )}
+            </Link>
+          );
+        })}
+      </div>
+      <p style={{ margin: '12px 0 0', fontSize: 11.5, color: 'var(--ink-muted)' }}>
+        Net running order over the two green laps after each restart, against the full field. Positions, not lap times · click a
+        year for its race.
       </p>
     </Card>
   );
@@ -991,6 +1091,8 @@ export const RaceWeekScreen = () => {
       </HeroPanel>
 
       {eventPrep ? <OvalStory prep={eventPrep} trackTypeName={trackTypeName} debriefIds={debriefIds} /> : null}
+
+      <RestartPrior trackName={primary.trackName} />
 
       <div className="grid grid--2">
         {eventPrep ? <FridaySignal prep={eventPrep} trackTypeName={trackTypeName} debriefIds={debriefIds} /> : null}

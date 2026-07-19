@@ -26,6 +26,56 @@ export interface RaceStoryInflection {
   cautionState: string;
 }
 
+/** One restart: the caution period it followed, the green-lap window measured,
+ *  and the full field's movement with Bryce inside it. `precision` marks the
+ *  source grain so per-second data can later refine the same shape unchanged. */
+export interface RestartEvent {
+  restartIndex: number | null;
+  restartLap: number | null;
+  baselineLap: number | null;
+  windowLaps: number | null;
+  windowEndLap: number | null;
+  fullWindow: boolean;
+  cautionReasons: string | null;
+  precision: 'lap-chart';
+  field: {
+    classified: number | null;
+    medianNet: number | null;
+    bestNet: number | null;
+  };
+  bryce: {
+    baselinePosition: number | null;
+    restartPosition: number | null;
+    endPosition: number | null;
+    net: number | null;
+    rankInField: number | null;
+    fieldSize: number | null;
+  } | null;
+}
+
+export interface RaceStoryRestarts {
+  detected: number;
+  cautionPeriods: number;
+  windowLaps: number;
+  precision: 'lap-chart';
+  /** '' | 'no_cautions' | 'cautions_ended_under_yellow' — why there is no restart to show. */
+  noRestartReason: string;
+  bryce: {
+    counted: number;
+    net: number;
+    gained: number;
+    held: number;
+    slipped: number;
+    rankInField: number | null;
+    fieldSizeRanked: number | null;
+    soleBestInField: boolean;
+    coBestInField: boolean;
+  };
+  coverageNote: string;
+  events: RestartEvent[];
+  caveat: string;
+}
+
 export interface RaceStoryPack {
   schemaVersion: string;
   type: 'race_story';
@@ -48,6 +98,7 @@ export interface RaceStoryPack {
     status: string | null;
   };
   inflections: RaceStoryInflection[];
+  restarts: RaceStoryRestarts | null;
   battles: Array<{
     driverName: string;
     carNumber: string | null;
