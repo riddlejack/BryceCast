@@ -15,6 +15,7 @@ import {
   getPrepScreen,
   getStandingsSnapshot,
   getUpcomingEvents,
+  raceDayOf,
   type UpcomingPrepEvent
 } from '../data/upcoming';
 import {
@@ -1253,8 +1254,9 @@ const LaterThisSeason = ({ events }: { events: UpcomingPrepEvent[] }) => {
                 </div>
               </div>
               <span className="row" style={{ gap: 10 }}>
+                {/* The race's own date, so the day count beside it agrees. */}
                 <span style={{ fontSize: 12.5, color: 'var(--ink-secondary)' }}>
-                  {formatDate(event.eventStartDate, { month: 'short', day: 'numeric' })}
+                  {formatDate(raceDayOf(event), { month: 'short', day: 'numeric' })}
                 </span>
                 {days !== null ? <span className="chip chip--outline tnum">{days}d</span> : null}
               </span>
@@ -1413,14 +1415,21 @@ export const RaceWeekScreen = () => {
               </HeroBlock>
             ) : (
               <HeroBlock
-                label={`${races.length > 1 ? 'Race weekend' : 'Race day'} · ${formatDate(primary.eventStartDate, { weekday: 'long', month: 'long', day: 'numeric' })}`}
+                /* Race day is the RACE session's date (raceDayOf), never the
+                   weekend's first practice day; a multi-race weekend keeps its
+                   weekend-start framing. Days-to-green counts to the race. */
+                label={`${
+                  races.length > 1
+                    ? `Race weekend · ${formatDate(primary.eventStartDate, { weekday: 'long', month: 'long', day: 'numeric' })}`
+                    : `Race day · ${formatDate(raceDayOf(primary), { weekday: 'long', month: 'long', day: 'numeric' })}`
+                }`}
               >
                 <div className="row" style={{ gap: 10, alignItems: 'baseline', marginTop: 6 }}>
                   <span className="figure" style={{ fontSize: 34, lineHeight: 1.05 }}>
-                    {days ?? '—'}
+                    {days === 0 ? 'Today' : days ?? '—'}
                   </span>
                   <span style={{ fontSize: 14, color: 'var(--ink-secondary)', fontWeight: 500 }}>
-                    {days === 1 ? 'day to green' : 'days to green'}
+                    {days === 0 ? 'race day' : days === 1 ? 'day to green' : 'days to green'}
                   </span>
                 </div>
               </HeroBlock>
@@ -1480,7 +1489,7 @@ export const RaceWeekScreen = () => {
 
       <div className="grid grid--2">
         <FollowTheWeekend />
-        <WeatherWindow weather={weather} raceDate={primary.eventStartDate} />
+        <WeatherWindow weather={weather} raceDate={raceDayOf(primary)} />
       </div>
 
       <AnalogRaces event={primary} debriefIds={debriefIds} />

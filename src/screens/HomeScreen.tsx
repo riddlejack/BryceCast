@@ -6,7 +6,7 @@ import { Link } from '../app/router';
 import type { ReadinessStatus } from '../app/useReadiness';
 import { normalizedName, useNextSession } from '../app/useNextSession';
 import { uiDataPackage } from '../data/uiDataPackage';
-import { daysUntil, getNextEvent, type UpcomingPrepEvent } from '../data/upcoming';
+import { daysUntil, getNextEvent, raceDayOf, type UpcomingPrepEvent } from '../data/upcoming';
 import { chronoCompare, displayRaceLabel, loadDebriefArchive, type ArchiveEntry } from '../data/debriefArchive';
 
 type Row = Record<string, unknown>;
@@ -163,7 +163,8 @@ const NextRaceHero = ({ readiness }: { readiness: ReadinessStatus }) => {
           {asNumber(nextEvent.cornerCount) !== null && asNumber(nextEvent.cornerCount)! > 0 ? (
             <> · {formatNumber(nextEvent.cornerCount, 0)} corners</>
           ) : null}
-          <> · {formatDate(nextEvent.eventStartDate, { weekday: 'long', month: 'long', day: 'numeric' })}</>
+          {/* The race's own date — the kicker's "Race day"/"In N days" counts to it. */}
+          <> · {formatDate(raceDayOf(nextEvent), { weekday: 'long', month: 'long', day: 'numeric' })}</>
         </div>
 
         <div className="grid grid--split" style={{ marginTop: 20, alignItems: 'end', gap: 20 }}>

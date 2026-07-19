@@ -386,12 +386,18 @@ const debriefCardFromContextPack = ({ pack, packRef, label }) => ({
   sourceRefs: (pack.sourceRefs ?? []).map(uiSourceRefFromContextPackRef)
 });
 
-const eventFromUpcomingContextPack = ({ pack, packRef }) => ({
+const eventFromUpcomingContextPack = ({ pack, packRef, raceDate = null }) => ({
   sourcePayload: 'upcoming_event_context_pack',
   contextPackRef: packRef,
   eventId: pack.eventId,
   eventName: pack.eventName,
   eventStartDate: pack.eventStartDate,
+  /* The RACE session's own local date from the canonical schedule (e.g. a
+     Saturday-practice weekend whose race runs Sunday). eventStartDate is the
+     WEEKEND's first day — "Race day" copy and days-to-green must never be
+     computed from it. Null when the schedule carries no race session yet;
+     consumers fall back to eventStartDate. */
+  raceDate,
   trackName: pack.track?.name ?? null,
   trackType: pack.track?.type ?? null,
   trackLengthMi: numberOrNull(pack.track?.lengthMi),
@@ -2102,10 +2108,26 @@ const buildPackage = () => {
     throw new Error('Missing Career Lab context pack payload');
   }
 
-  const upcomingEvents = upcomingPackPairs.map(eventFromUpcomingContextPack);
   const upcomingContextPackRefs = upcomingPackPairs.map(({ packRef }) => packRef);
 
   const canonicalDataset = readJson(sources.canonicalDataset);
+
+  /* Each event's RACE date: the earliest race session's scheduledStart, kept as
+     the schedule's own LOCAL date string (America/Chicago etc.) — no timezone
+     math here, so no shift can move the day. The un-run race's actualStart is
+     deliberately ignored: the feed's estimatedgreenflag has carried a date
+     inconsistent with its own session window (Nashville 2026: green-flag field
+     said Jul 18 while the window said Jul 19). */
+  const raceDateByEventId = new Map();
+  for (const session of canonicalDataset.sessions ?? []) {
+    if (session.sessionType !== 'race' || !session.scheduledStart) continue;
+    const date = String(session.scheduledStart).slice(0, 10);
+    const existing = raceDateByEventId.get(session.eventId);
+    if (!existing || date < existing) raceDateByEventId.set(session.eventId, date);
+  }
+  const upcomingEvents = upcomingPackPairs.map(({ pack, packRef }) =>
+    eventFromUpcomingContextPack({ pack, packRef, raceDate: raceDateByEventId.get(pack.eventId) ?? null })
+  );
   const resultsBySession = new Map(
     (canonicalDataset.results ?? [])
       .filter((row) => row.driverId === 'driver_bryce_aron')

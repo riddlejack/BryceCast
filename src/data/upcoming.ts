@@ -28,13 +28,21 @@ export const getPrepScreen = (): PrepScreenShape => {
 
 const dayMs = 24 * 60 * 60 * 1000;
 
-/** Events whose start date is today or later (event-local dates, day precision). */
+/** The event's RACE day — the race session's own local date from the canonical
+ *  schedule when it carries one, the weekend start date otherwise. This is the
+ *  date "Race day" copy and days-to-green mean: a Saturday-start weekend whose
+ *  race runs Sunday must never read "race day" on Saturday (or "-1 days" on
+ *  race morning). */
+export const raceDayOf = (event: UpcomingPrepEvent): string => event.raceDate ?? event.eventStartDate;
+
+/** Events still upcoming (event-local dates, day precision): a weekend stays
+ *  here through its RACE day, not just its first day. */
 export const getUpcomingEvents = (now = new Date()): UpcomingPrepEvent[] => {
   const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
   return getPrepScreen()
     .events.filter((event) => {
-      const start = new Date(`${event.eventStartDate}T12:00:00`).getTime();
-      return Number.isFinite(start) && start >= todayStart - dayMs / 2;
+      const raceDay = new Date(`${raceDayOf(event)}T12:00:00`).getTime();
+      return Number.isFinite(raceDay) && raceDay >= todayStart - dayMs / 2;
     })
     .sort((a, b) => a.eventStartDate.localeCompare(b.eventStartDate));
 };
@@ -56,9 +64,11 @@ export const getStandingsSnapshot = (): UiStandingsSnapshot => {
   return prep?.standingsSnapshot ?? { available: false, reason: 'standings snapshot not present in this package build' };
 };
 
-/** Days until the event (0 = today), calendar-date difference, or null. */
+/** Days until the RACE (0 = race day), calendar-date difference, or null.
+ *  Counts to raceDayOf — "days to green" means the race, not the weekend's
+ *  first practice day. */
 export const daysUntil = (event: UpcomingPrepEvent, now = new Date()): number | null => {
-  const match = /^(\d{4})-(\d{2})-(\d{2})/.exec(event.eventStartDate ?? '');
+  const match = /^(\d{4})-(\d{2})-(\d{2})/.exec(raceDayOf(event) ?? '');
   if (!match) return null;
   const eventDay = new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3])).getTime();
   const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();

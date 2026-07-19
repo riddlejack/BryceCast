@@ -401,7 +401,13 @@ export interface UiUpcomingPrepEvent {
   };
   eventId: string;
   eventName: string;
+  /** The WEEKEND's first day (practice/qualifying can run here). Never the
+   *  race date — render race-day copy from raceDate. */
   eventStartDate: string;
+  /** The race session's own local date from the canonical schedule (e.g. the
+   *  Sunday of a Saturday-start weekend). Null when no race session is
+   *  scheduled yet; consumers fall back to eventStartDate. */
+  raceDate?: string | null;
   trackName: string;
   trackType: string;
   trackLengthMi: number | null;
