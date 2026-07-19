@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
-import { ArrowLeft, Flag, Users } from 'lucide-react';
+import { ArrowLeft, Flag, Play, Users } from 'lucide-react';
 import { Card, HeroPanel, SourcePill, Stat, StatusChip, Unavailable } from '../app/components';
 import { ChartTipCard, chartFont, inkGoldDiverging, useMeasuredWidth, type ChartTip } from '../app/charts';
 import { TrackArt } from '../app/trackArt';
@@ -26,12 +26,13 @@ import { loadSectionLaps, sectionLapVisitsFor, type SectionLapsPack } from '../d
 import { uiDataPackage } from '../data/uiDataPackage';
 import { ControlRow, Segmented } from './careerExplorer';
 import { asNumber, asString, formatDate, formatGain, formatNumber, formatPosition, ordinal } from '../app/format';
-import { Link } from '../app/router';
+import { Link, useRouter } from '../app/router';
 import { displayRaceLabel, loadDebriefBySessionId, roundIndexOf, type ArchiveEntry } from '../data/debriefArchive';
 import { loadRaceStory, type RaceStoryPack, type RaceStoryLapDriver } from '../data/raceStory';
 import { getVenueBySessionId } from '../data/venueDossier';
 import { FactDelta, WindSwing } from '../app/weatherGlyphs';
 import type { UiVenueDossierVenue, UiVenueDossierVisit } from '../data/uiDataPackage';
+import { loadReplayAvailable, watchableCaptureForRace, type ReplaySessionInfo } from '../data/replayAvailable';
 
 type Row = Record<string, unknown>;
 
@@ -1469,6 +1470,66 @@ const verdictFor = (story: RaceStoryPack): string | null => {
 
 /* ---------- screen ---------- */
 
+/* ---------- the time machine: watch this race unfold ---------- */
+
+/** Silent unless our own one-second capture of THIS race exists. Where the
+ *  magic is real, it invites you into the Live page in replay mode. */
+const WatchRaceUnfold = ({ sessionId }: { sessionId: string }) => {
+  const { navigate } = useRouter();
+  const [capture, setCapture] = useState<ReplaySessionInfo | null>(null);
+  useEffect(() => {
+    let cancelled = false;
+    setCapture(null);
+    loadReplayAvailable()
+      .then((available) => {
+        if (!cancelled) setCapture(watchableCaptureForRace(available, sessionId));
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [sessionId]);
+
+  if (!capture) return null;
+
+  const date = capture.firstCheckedAt ? formatDate(capture.firstCheckedAt, { month: 'long', day: 'numeric', year: 'numeric' }) : null;
+  const minutes = capture.durationSeconds ? Math.round(capture.durationSeconds / 60) : null;
+  const meta = [date, minutes ? `${minutes} min of capture` : null, capture.totalLaps ? `${capture.totalLaps} laps` : null]
+    .filter(Boolean)
+    .join(' · ');
+  const open = () => navigate(`/live?replay=${encodeURIComponent(capture.sessionKey)}&from=${encodeURIComponent(sessionId)}`);
+
+  return (
+    <section className="race-replay" aria-label="Watch this race unfold">
+      <button type="button" className="race-replay__cta" onClick={open}>
+        <span className="race-replay__play" aria-hidden>
+          <Play size={20} />
+        </span>
+        <span className="race-replay__body">
+          <span className="race-replay__title">Watch this race unfold</span>
+          <span className="race-replay__copy">
+            Every second of this race, replayed as it happened, from our own trackside capture.
+          </span>
+          {meta ? <span className="race-replay__meta tnum">{meta}</span> : null}
+        </span>
+      </button>
+      <div className="race-replay__provenance">
+        <span className="caption caption--secondary">BryceCast capture · 1-second Race Control archive</span>
+        <SourcePill
+          title="Watch this race unfold"
+          entries={[
+            {
+              label: 'BryceCast capture · 1-second Race Control archive',
+              path: '/api/replay/available → data/live/brycecast.sqlite',
+              note: 'BryceCast recorded the official Race Control timing feed once per second through this race. Replay plays those archived rows back through the same live adapters — it is a replay of archived data, never live.'
+            }
+          ]}
+        />
+      </div>
+    </section>
+  );
+};
+
 export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
   const [entry, setEntry] = useState<ArchiveEntry | null | 'loading'>('loading');
   const [story, setStory] = useState<RaceStoryPack | null>(null);
@@ -1640,6 +1701,8 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
           </div>
         </div>
       </HeroPanel>
+
+      <WatchRaceUnfold sessionId={sessionId} />
 
       {story ? <LapChartCard story={story} mover={mover} /> : null}
 

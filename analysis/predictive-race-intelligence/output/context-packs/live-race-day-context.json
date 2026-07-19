@@ -48,10 +48,10 @@
       "sha256": "569bf18e1aae13d9f43aff10291509912c03e1ad1bbb0d9e53325bb4ff26e3ae"
     },
     {
-      "bytes": 87266,
+      "bytes": 87569,
       "path": "scripts/api-server.mjs",
       "role": "runtime API",
-      "sha256": "c15f43bd89f36e6fd2a1b12638159de721128fa8a6bac9ca44e7b462dfb85a78"
+      "sha256": "d81da25c259c57641636299bcae78babe08872043481630bd6f66fd97095f4ca"
     },
     {
       "bytes": 4250,

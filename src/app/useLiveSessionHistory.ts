@@ -1,4 +1,4 @@
-import { useLayoutEffect, useMemo, useState } from 'react';
+import { useCallback, useLayoutEffect, useMemo, useState } from 'react';
 import {
   appendLiveHistoryPayload,
   createLiveHistoryState,
@@ -11,6 +11,8 @@ import type { LiveReadiness } from './useReadiness';
 export interface LiveSessionHistoryStatus {
   state: LiveHistoryState;
   active: LiveSessionHistory | null;
+  /** Clears the accumulated window — used when a replay restarts from green. */
+  reset: () => void;
 }
 
 /** Lives above route selection in AppV3. Navigating away from /live therefore
@@ -22,5 +24,6 @@ export const useLiveSessionHistory = (payload: LiveReadiness | null): LiveSessio
     setState((previous) => appendLiveHistoryPayload(previous, payload));
   }, [payload]);
   const active = useMemo(() => liveSessionHistoryForPayload(state, payload), [payload, state]);
-  return { state, active };
+  const reset = useCallback(() => setState(createLiveHistoryState()), []);
+  return { state, active, reset };
 };

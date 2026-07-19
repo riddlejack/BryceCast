@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { CalendarClock, ExternalLink, Radio, Tv } from 'lucide-react';
+import { CalendarClock, ExternalLink, History, Radio, RotateCcw, Tv, X } from 'lucide-react';
 import {
   Card,
   Countdown,
@@ -20,6 +20,9 @@ import { LiveRunningOrder } from './LiveRunningOrder';
 import { useNextSession } from '../app/useNextSession';
 import { trackOutlineFor } from '../assets/tracks';
 import type { LiveReadiness } from '../app/useReadiness';
+import type { ReplaySession } from '../app/useReplaySession';
+import type { ReplaySessionInfo } from '../data/replayAvailable';
+import { loadRaceStory } from '../data/raceStory';
 import {
   buildLiveBattleFrame,
   buildOfficialPointsWindow,
@@ -375,7 +378,7 @@ const TrustRail = ({ payload, fixtureMode }: { payload: LiveReadiness; fixtureMo
 
 /* ---------- hero: the race, now ---------- */
 
-const LiveHero = ({ payload, samples }: { payload: LiveReadiness; samples: GapSample[] }) => {
+const LiveHero = ({ payload, samples, replayEnded = false }: { payload: LiveReadiness; samples: GapSample[]; replayEnded?: boolean }) => {
   const weekend = payload.raceWeekend as Row;
   const heartbeat = heartbeatOf(payload);
   const bryce = liveBryceRowOf(payload);
@@ -417,7 +420,11 @@ const LiveHero = ({ payload, samples }: { payload: LiveReadiness; samples: GapSa
       <div className="hero-race hero-race--week live-hero__body">
         <div className="live-hero__race-state">
           <div className="row row--wrap live-hero__flag-lap">
-            {flag ? <StatusChip tone={flagTone(flag)} label={`${flag} flag`} live={flag.toUpperCase() === 'GREEN'} /> : null}
+            {replayEnded ? (
+              <StatusChip tone="neutral" label="Race complete · as raced" />
+            ) : flag ? (
+              <StatusChip tone={flagTone(flag)} label={`${flag} flag`} live={flag.toUpperCase() === 'GREEN'} />
+            ) : null}
             <TickerValue className="live-lap" value={lap !== null && totalLaps !== null ? `Lap ${lap} of ${totalLaps}` : asString(heartbeat.sessionName) ?? 'Session live'} valueKey={`${lap ?? 'na'}-${totalLaps ?? 'na'}`} />
           </div>
           <div className="live-position">
@@ -834,27 +841,183 @@ const WatchAlong = ({ payload }: { payload: LiveReadiness }) => {
   );
 };
 
+/* ---------- the time machine: replay control bar + cueing state ---------- */
+
+const durationLabel = (session: ReplaySessionInfo | null): string | null => {
+  if (!session?.durationSeconds) return null;
+  const minutes = Math.round(session.durationSeconds / 60);
+  return `${minutes} min replay`;
+};
+
+/** Unmistakably a replay of archived data — no green live dot, its own quiet
+ *  frame — with speed, restart-from-green, and an exit back to the race page. */
+const ReplayBar = ({ replay, payload }: { replay: ReplaySession; payload: LiveReadiness | null }) => {
+  const heartbeat = payload ? heartbeatOf(payload) : {};
+  const venue = asString(heartbeat.trackName) ?? replay.venue ?? replay.session?.eventName ?? 'archived race';
+  const year = replay.seasonYear ? ` ${replay.seasonYear}` : '';
+  return (
+    <section className="replay-bar" aria-label="Race replay controls" data-replay-speed={replay.speed}>
+      <div className="replay-bar__id">
+        <span className="replay-bar__chip"><History size={13} aria-hidden /> Replay</span>
+        <span className="replay-bar__where">
+          {venue}
+          {year} · <span className="replay-bar__speed-read">{replay.speed}×</span>
+        </span>
+      </div>
+      <div className="replay-bar__controls">
+        <div className="segmented replay-bar__speeds" role="group" aria-label="Replay speed">
+          {replay.speeds.map((speed) => (
+            <button
+              key={speed}
+              type="button"
+              className={`segmented__option${speed === replay.speed ? ' segmented__option--active' : ''}`}
+              onClick={() => replay.setSpeed(speed)}
+              aria-pressed={speed === replay.speed}
+            >
+              {speed}×
+            </button>
+          ))}
+        </div>
+        <button type="button" className="replay-bar__btn" onClick={replay.restart}>
+          <RotateCcw size={13} aria-hidden /> Restart
+        </button>
+        <button type="button" className="replay-bar__btn replay-bar__btn--exit" onClick={replay.exit}>
+          <X size={13} aria-hidden /> Exit replay
+        </button>
+      </div>
+    </section>
+  );
+};
+
+const ReplayCueing = ({ session }: { session: ReplaySessionInfo | null }) => {
+  const duration = durationLabel(session);
+  return (
+    <HeroPanel>
+      <span className="kicker">Cueing up the replay</span>
+      <h1 className="screen-head__title" style={{ marginTop: 8 }}>{session?.eventName ?? 'Archived race'}</h1>
+      <p style={{ margin: '14px 0 0', fontSize: 15, color: 'var(--ink-secondary)', maxWidth: '58ch' }}>
+        Rewinding to the green flag from our own one-second capture{duration ? ` · ${duration}` : ''}. The page below will
+        move exactly as it did on the day.
+      </p>
+    </HeroPanel>
+  );
+};
+
+/* ---------- post-checkered honesty: as-raced order vs official classification ---------- */
+
+/** True once the archived session has run its full distance and gone cold —
+ *  the flag is no longer green or caution and the lap counter has reached the
+ *  total. Presentation-layer only; readiness semantics are untouched. */
+const isPostCheckeredPayload = (payload: LiveReadiness): boolean => {
+  const heartbeat = heartbeatOf(payload);
+  const weekend = payload.raceWeekend as Row;
+  const lap = asNumber(heartbeat.lap ?? weekend.lap);
+  const totalLaps = asNumber(heartbeat.totalLaps ?? weekend.totalLaps);
+  const flag = asString(heartbeat.flag ?? weekend.flag);
+  return (
+    lap !== null && totalLaps !== null && totalLaps > 0 && lap >= totalLaps && !isCautionFlag(flag) && (flag ?? '').toUpperCase() !== 'GREEN'
+  );
+};
+
+const normalizeName = (value: string | null | undefined) =>
+  (value ?? '').toLowerCase().replace(/[.\-]/g, ' ').replace(/\s+/g, ' ').trim();
+
+const lastToken = (value: string) => value.split(' ').filter(Boolean).at(-1) ?? '';
+
+/** Lenient "same winner" test: only a clearly different name trips the note, so
+ *  a name-format difference never invents a stewards story. */
+const winnersLikelySame = (asRaced: string, official: string) => {
+  const a = normalizeName(asRaced);
+  const b = normalizeName(official);
+  if (!a || !b) return true;
+  return a === b || a.includes(b) || b.includes(a) || lastToken(a) === lastToken(b);
+};
+
+/** One quiet line, only when the replay's on-road leader at the flag differs from
+ *  the canonical classification (e.g. Road America 2026 R2, a post-race DQ). The
+ *  house rule: classification comes from canonical results, the replay shows the
+ *  as-raced truth. Not a general stewards feature — just this computed line. */
+const ReplayClassificationNote = ({ payload, canonicalSessionId }: { payload: LiveReadiness; canonicalSessionId: string | null }) => {
+  const [officialWinner, setOfficialWinner] = useState<string | null>(null);
+  useEffect(() => {
+    let cancelled = false;
+    setOfficialWinner(null);
+    if (!canonicalSessionId) return undefined;
+    loadRaceStory(canonicalSessionId)
+      .then((story) => {
+        if (cancelled || !story) return;
+        setOfficialWinner(story.lapChart.drivers.find((driver) => driver.finishPosition === 1)?.driverName ?? null);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [canonicalSessionId]);
+
+  if (!isPostCheckeredPayload(payload) || !officialWinner) return null;
+
+  const rows = sortRowsForLiveDisplay(liveRowsOf(payload)) as LiveRow[];
+  const leader = rows.find((row) => livePosition(row) === 1) ?? rows[0];
+  const asRacedLeader = leader ? driverLabel(leader) : null;
+  if (!asRacedLeader || winnersLikelySame(asRacedLeader, officialWinner)) return null;
+
+  return (
+    <p className="replay-classification" role="note">
+      As raced. The official classification changed after post-race review; the race page carries the final result.
+    </p>
+  );
+};
+
 /* ---------- screen ---------- */
 
-export const LiveScreen = ({ payload, fixtureMode, history }: { payload: LiveReadiness | null; fixtureMode: boolean; history: LiveSessionHistory | null }) => {
+export const LiveScreen = ({
+  payload,
+  fixtureMode,
+  history,
+  replay = null
+}: {
+  payload: LiveReadiness | null;
+  fixtureMode: boolean;
+  history: LiveSessionHistory | null;
+  replay?: ReplaySession | null;
+}) => {
   const samples = useMemo(() => gapSamplesFromHistory(history), [history]);
-  if (!payload) {
+  const replayActive = Boolean(replay && !replay.unavailable);
+  const replaySimulated = payload ? isSimulatedReplayPayload(payload) : false;
+  // Until the virtual clock's first archived payload arrives, hold a calm
+  // cue-up state instead of flashing whatever the live feed happens to say.
+  const cueing = replayActive && !replaySimulated;
+
+  if (!payload || cueing) {
     return (
-      <div className="page stack">
-        <div className="skeleton" style={{ height: 42 }} />
-        <div className="skeleton" style={{ height: 300 }} />
-        <div className="grid live-layout"><div className="skeleton" style={{ height: 340 }} /><div className="skeleton" style={{ height: 540 }} /></div>
+      <div className="page stack live-page" data-replay-active={replayActive ? 'true' : 'false'}>
+        {replayActive && replay ? <ReplayBar replay={replay} payload={payload} /> : null}
+        {replayActive && replay ? (
+          <ReplayCueing session={replay.session} />
+        ) : (
+          <>
+            <div className="skeleton" style={{ height: 42 }} />
+            <div className="skeleton" style={{ height: 300 }} />
+            <div className="grid live-layout"><div className="skeleton" style={{ height: 340 }} /><div className="skeleton" style={{ height: 540 }} /></div>
+          </>
+        )}
       </div>
     );
   }
 
   const liveish = payload.state === 'ready' || payload.state === 'degraded';
+  // Replay-scoped presentation override: a finished-race replay must never read
+  // "pre-session". When the archive has run its distance and gone cold, the race
+  // layout stays up with a "Race complete · as raced" hero. Display-layer only —
+  // readiness semantics and fixture states are untouched.
+  const replayEnded = replayActive && replaySimulated && isPostCheckeredPayload(payload);
   const latestHistorySample = history?.samples.at(-1) ?? null;
   const liveHeartbeat = heartbeatOf(payload);
   const payloadSessionKey = [asString(liveHeartbeat.eventId), asString(liveHeartbeat.eventSessionId)].filter(Boolean).join('-');
   return (
     <div
       className="page stack live-page"
+      data-replay-active={replayActive ? 'true' : 'false'}
       data-live-payload-session-key={payloadSessionKey}
       data-live-session-key={history?.sessionKey ?? ''}
       data-live-source-checked-at={latestHistorySample?.checkedAt ?? ''}
@@ -862,10 +1025,12 @@ export const LiveScreen = ({ payload, fixtureMode, history }: { payload: LiveRea
       data-live-history-count={history?.samples.length ?? 0}
       data-live-history-first-checked-at={history?.samples[0]?.checkedAt ?? ''}
     >
+      {replayActive && replay ? <ReplayBar replay={replay} payload={payload} /> : null}
+      {replayActive && replay ? <ReplayClassificationNote payload={payload} canonicalSessionId={replay.session?.canonicalSessionId ?? null} /> : null}
       <TrustRail payload={payload} fixtureMode={fixtureMode} />
-      {liveish ? (
+      {liveish || replayEnded ? (
         <>
-          <LiveHero payload={payload} samples={samples} />
+          <LiveHero payload={payload} samples={samples} replayEnded={replayEnded} />
           <BattleModule payload={payload} samples={samples} history={history} />
           <div className="grid live-layout">
             <div className="stack live-layout__main">
@@ -884,7 +1049,7 @@ export const LiveScreen = ({ payload, fixtureMode, history }: { payload: LiveRea
           </div>
         </>
       )}
-      <WatchAlong payload={payload} />
+      {replayActive ? null : <WatchAlong payload={payload} />}
     </div>
   );
 };
