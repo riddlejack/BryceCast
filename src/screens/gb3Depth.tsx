@@ -58,8 +58,12 @@ const WithinTeamStrip = ({ pack }: { pack: Gb3DeepDivePack }) => {
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();
   const { navigate } = useRouter();
   const [tip, setTip] = useState<ChartTip | null>(null);
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
 
   const rows = useMemo(() => [...pack.teamContext].sort((a, b) => chronoKey(a) - chronoKey(b)), [pack]);
+  /* Official race status by session, for the two races with no classified
+   * result — the status word renders plainly in the tip, nothing more. */
+  const statusBySession = useMemo(() => new Map(pack.raceResults.map((row) => [row.sessionId, row.status])), [pack]);
   const teams2021 = rows.find((row) => row.seasonYear === 2021)?.teamName ?? 'Carlin';
   const teams2022 = rows.find((row) => row.seasonYear === 2022)?.teamName ?? 'Hitech';
   /* Short forms keep the on-chart season labels from colliding on phone. */
@@ -122,10 +126,14 @@ const WithinTeamStrip = ({ pack }: { pack: Gb3DeepDivePack }) => {
                 no result
               </text>
             ) : null}
-            {/* per-race marks */}
+            {/* per-race marks: gold only where the story lives — the races he
+              * led the team's cars home; the rest in quiet ink. */}
             {rows.map((row, index) => {
               const cx = x(index);
               if (row.bryceWithinTeamRank === null) {
+                /* Official status word, plainly, nothing more. */
+                const status = statusBySession.get(row.sessionId);
+                const statusWord = status === 'dnf' ? 'retired' : status === 'dsq' ? 'disqualified' : 'no classified result';
                 return (
                   <circle
                     key={row.sessionId}
@@ -136,11 +144,12 @@ const WithinTeamStrip = ({ pack }: { pack: Gb3DeepDivePack }) => {
                     stroke="var(--ink-muted)"
                     strokeWidth={1.2}
                     style={{ cursor: 'default' }}
-                    onMouseEnter={() => setTip({ x: cx, y: missY - 8, title: raceLabel(row), detail: 'no classified result' })}
+                    onMouseEnter={() => setTip({ x: cx, y: missY - 8, title: raceLabel(row), detail: statusWord })}
                     onMouseLeave={() => setTip(null)}
                   />
                 );
               }
+              const led = row.bryceWithinTeamRank === 1;
               const cy = laneY[Math.min(row.bryceWithinTeamRank - 1, 2)];
               return (
                 <circle
@@ -148,10 +157,17 @@ const WithinTeamStrip = ({ pack }: { pack: Gb3DeepDivePack }) => {
                   cx={cx}
                   cy={cy}
                   r={3.6}
-                  fill="var(--bryce)"
-                  style={{ cursor: 'pointer' }}
-                  onMouseEnter={() => setTip({ x: cx, y: cy - 8, title: raceLabel(row), detail: rankPhrase(row) })}
-                  onMouseLeave={() => setTip(null)}
+                  fill={led ? 'var(--bryce)' : 'var(--ink-primary)'}
+                  fillOpacity={led || hoveredId === row.sessionId ? 1 : 0.38}
+                  style={{ cursor: 'pointer', transition: 'fill-opacity 150ms ease' }}
+                  onMouseEnter={() => {
+                    setHoveredId(row.sessionId);
+                    setTip({ x: cx, y: cy - 8, title: raceLabel(row), detail: rankPhrase(row) });
+                  }}
+                  onMouseLeave={() => {
+                    setHoveredId(null);
+                    setTip(null);
+                  }}
                   onClick={() => navigate(raceHref(row.sessionId))}
                 />
               );
@@ -161,7 +177,8 @@ const WithinTeamStrip = ({ pack }: { pack: Gb3DeepDivePack }) => {
         {tip ? <ChartTipCard tip={tip} width={width} /> : null}
       </div>
       <p className="gb3-caption">
-        Gold marks Bryce · result order only — where he placed among his own cars, not a read on machinery, setup, or strategy.
+        Gold = races he led the team’s cars home · result order only — where he placed among his own cars, not a read on
+        machinery, setup, or strategy.
         {unclassified > 0 ? ` ${unclassified} of ${rows.length} races have no classified result (shown open).` : ''} Click any
         race to open it.
       </p>
