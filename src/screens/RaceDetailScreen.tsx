@@ -34,7 +34,7 @@ import { loadRaceStory, type RaceStoryPack, type RaceStoryLapDriver } from '../d
 import { getVenueBySessionId } from '../data/venueDossier';
 import { FactDelta } from '../app/weatherGlyphs';
 import type { UiVenueDossierVenue, UiVenueDossierVisit } from '../data/uiDataPackage';
-import { loadReplayAvailable, watchableCaptureForRace, type ReplaySessionInfo } from '../data/replayAvailable';
+import { loadReplayAvailable, watchableCaptureForRace, replayProvenance, type ReplaySessionInfo } from '../data/replayAvailable';
 
 type Row = Record<string, unknown>;
 
@@ -1556,12 +1556,21 @@ const WatchRaceUnfold = ({ sessionId }: { sessionId: string }) => {
 
   if (!capture) return null;
 
+  const prov = replayProvenance(capture);
+  const isOwnCapture = prov.tier === 'brycecast_capture';
   const date = capture.firstCheckedAt ? formatDate(capture.firstCheckedAt, { month: 'long', day: 'numeric', year: 'numeric' }) : null;
   const minutes = capture.durationSeconds ? Math.round(capture.durationSeconds / 60) : null;
-  const meta = [date, minutes ? `${minutes} min of capture` : null, capture.totalLaps ? `${capture.totalLaps} laps` : null]
+  const captureWord = isOwnCapture ? 'capture' : 'replay';
+  const meta = [date, minutes ? `${minutes} min of ${captureWord}` : null, capture.totalLaps ? `${capture.totalLaps} laps` : null]
     .filter(Boolean)
     .join(' · ');
+  const copy = isOwnCapture
+    ? 'Every second of this race, replayed as it happened, from our own trackside capture.'
+    : 'Every second of this race, reconstructed from a third-party timing archive and replayed as it happened.';
   const open = () => navigate(`/live?replay=${encodeURIComponent(capture.sessionKey)}&from=${encodeURIComponent(sessionId)}`);
+  const provPath = isOwnCapture
+    ? '/api/replay/available → data/live/brycecast.sqlite'
+    : '/api/replay/available → analysis/replay-feeds (lake-fed)';
 
   return (
     <section className="race-replay" aria-label="Watch this race unfold">
@@ -1571,23 +1580,22 @@ const WatchRaceUnfold = ({ sessionId }: { sessionId: string }) => {
         </span>
         <span className="race-replay__body">
           <span className="race-replay__title">Watch this race unfold</span>
-          <span className="race-replay__copy">
-            Every second of this race, replayed as it happened, from our own trackside capture.
-          </span>
+          <span className="race-replay__copy">{copy}</span>
           {meta ? <span className="race-replay__meta tnum">{meta}</span> : null}
         </span>
       </button>
       <div className="race-replay__provenance">
-        <span className="caption caption--secondary">BryceCast capture · 1-second Race Control archive</span>
+        <span className="caption caption--secondary">{prov.label}</span>
         <SourcePill
           title="Watch this race unfold"
           entries={[
             {
-              label: 'BryceCast capture · 1-second Race Control archive',
-              path: '/api/replay/available → data/live/brycecast.sqlite',
-              note: 'BryceCast recorded the official Race Control timing feed once per second through this race. Replay plays those archived rows back through the same live adapters — it is a replay of archived data, never live.'
+              label: prov.label,
+              path: provPath,
+              note: prov.detail
             }
           ]}
+          caveats={prov.caveat ? [prov.caveat] : undefined}
         />
       </div>
     </section>

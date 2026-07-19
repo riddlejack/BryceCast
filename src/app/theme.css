@@ -1430,6 +1430,31 @@ button { font-family: inherit; }
 
 .replay-bar__speed-read { color: var(--ink-primary); font-variant-numeric: tabular-nums; }
 
+/* Source-tier chip: keeps the honest distinction between our own capture and a
+   lake-fed replay. A lake tier is tinted so it never reads as our live capture. */
+.replay-bar__tier {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--border-subtle, rgba(0, 0, 0, 0.14));
+  background: var(--surface-0);
+  color: var(--ink-secondary);
+  font-size: 11px;
+  font-weight: 560;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 22ch;
+  flex: none;
+}
+.replay-bar__tier[data-replay-tier='racetools_capture'],
+.replay-bar__tier[data-replay-tier='timing71_normalized'] {
+  border-color: var(--accent-weak, rgba(180, 120, 30, 0.4));
+  color: var(--ink-primary);
+}
+
 .replay-bar__controls { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .replay-bar__speeds { background: var(--surface-0); }
 

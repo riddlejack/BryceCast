@@ -21,7 +21,7 @@ import { useNextSession } from '../app/useNextSession';
 import { trackOutlineFor } from '../assets/tracks';
 import type { LiveReadiness } from '../app/useReadiness';
 import type { ReplaySession } from '../app/useReplaySession';
-import type { ReplaySessionInfo } from '../data/replayAvailable';
+import { replayProvenance, type ReplaySessionInfo } from '../data/replayAvailable';
 import { loadRaceStory } from '../data/raceStory';
 import {
   buildLiveBattleFrame,
@@ -855,6 +855,7 @@ const ReplayBar = ({ replay, payload }: { replay: ReplaySession; payload: LiveRe
   const heartbeat = payload ? heartbeatOf(payload) : {};
   const venue = asString(heartbeat.trackName) ?? replay.venue ?? replay.session?.eventName ?? 'archived race';
   const year = replay.seasonYear ? ` ${replay.seasonYear}` : '';
+  const prov = replayProvenance(replay.session);
   return (
     <section className="replay-bar" aria-label="Race replay controls" data-replay-speed={replay.speed}>
       <div className="replay-bar__id">
@@ -862,6 +863,13 @@ const ReplayBar = ({ replay, payload }: { replay: ReplaySession; payload: LiveRe
         <span className="replay-bar__where">
           {venue}
           {year} · <span className="replay-bar__speed-read">{replay.speed}×</span>
+        </span>
+        <span
+          className="replay-bar__tier"
+          data-replay-tier={prov.tier}
+          title={`${prov.detail}${prov.caveat ? ` — ${prov.caveat}` : ''}`}
+        >
+          {prov.label}
         </span>
       </div>
       <div className="replay-bar__controls">
@@ -901,12 +909,14 @@ const ReplayEndedByLiveNote = () => (
 
 const ReplayCueing = ({ session }: { session: ReplaySessionInfo | null }) => {
   const duration = durationLabel(session);
+  const prov = replayProvenance(session);
+  const from = prov.tier === 'brycecast_capture' ? 'our own one-second capture' : prov.label;
   return (
     <HeroPanel>
       <span className="kicker">Cueing up the replay</span>
       <h1 className="screen-head__title" style={{ marginTop: 8 }}>{session?.eventName ?? 'Archived race'}</h1>
       <p style={{ margin: '14px 0 0', fontSize: 15, color: 'var(--ink-secondary)', maxWidth: '58ch' }}>
-        Rewinding to the green flag from our own one-second capture{duration ? ` · ${duration}` : ''}. The page below will
+        Rewinding to the green flag from {from}{duration ? ` · ${duration}` : ''}. The page below will
         move exactly as it did on the day.
       </p>
     </HeroPanel>
