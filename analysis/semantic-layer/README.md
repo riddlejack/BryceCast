@@ -94,12 +94,14 @@ small while still shipping the complete grain.
   exactly (positions **24/24** and lap counts **24/24**) for **11/12** races — the 12th
   (Road America R2) is a capture-confirmed as-raced vs official divergence
   (post-race DQ of the on-road winner).
-- **Identity crosswalk:** **33/33** sessions fully mapped, zero ambiguous/unmapped
-  (31 strict event scope; the 2 pre-race Nashville 2026 sessions via labelled
-  season fallback). All three audit trap classes covered by explicit tests.
-  Two-source cross-check vs our own capture: identity **100%** on all 9
-  overlapping sessions, laps exact on 201/202 car-results.
-- **GO/NO-GO:** **30 GO / 3 CONDITIONAL / 0 NO-GO** —
+- **Identity crosswalk:** **33/33** sessions fully mapped, zero ambiguous/unmapped,
+  all event-scoped (31 via canonical results; the 2 pre-race Nashville 2026
+  sessions via the capture's official Race Control roster, T4-hard-asserted).
+  All audit trap classes covered by explicit tests. Two-source cross-check vs
+  our own capture: identity **100%** on all 9 overlapping sessions, laps exact
+  on 201/202 car-results.
+- **GO/NO-GO:** **32 GO / 1 CONDITIONAL / 0 NO-GO** (the CONDITIONAL is Road
+  America R2's as-raced vs official-DQ semantics, by design) —
   `output/crosswalk/crosswalk-validation.json`.
 
 See the lane report / commit history for the full tables and named deviations.

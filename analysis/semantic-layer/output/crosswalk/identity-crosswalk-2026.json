@@ -1,6 +1,6 @@
 {
   "artifact": "identity-crosswalk-2026",
-  "generatedAt": "2026-07-19T03:05:59.867Z",
+  "generatedAt": "2026-07-19T05:01:35.426Z",
   "scope": "INDY_NXT 2026, Timing71 replays -> canonical driverIds (event-scoped)",
   "law": "No 2026 lake-derived identity reaches the UI except through this crosswalk; ambiguous/unmapped entries are hard failures, never silent fallbacks.",
   "sessionCount": 33,
@@ -16,17 +16,20 @@
       "canonicalOfficialSessionId": "6766",
       "rosterSize": 24,
       "scopeUsed": "event",
+      "eventAuthority": "canonical_results",
       "counts": {
         "mapped": 24,
         "exact": 24,
         "nameVariant": 0,
         "swapResolved": 0,
+        "eventCaptureConfirmed": 0,
         "seasonScope": 0,
         "ambiguous": 0,
         "unmapped": 0
       },
       "complete": true,
       "strictEventScope": true,
+      "eventScoped": true,
       "mappings": [
         {
           "car": "4",
@@ -256,17 +259,20 @@
       "canonicalOfficialSessionId": "6767",
       "rosterSize": 24,
       "scopeUsed": "event",
+      "eventAuthority": "canonical_results",
       "counts": {
         "mapped": 24,
         "exact": 24,
         "nameVariant": 0,
         "swapResolved": 0,
+        "eventCaptureConfirmed": 0,
         "seasonScope": 0,
         "ambiguous": 0,
         "unmapped": 0
       },
       "complete": true,
       "strictEventScope": true,
+      "eventScoped": true,
       "mappings": [
         {
           "car": "4",
@@ -496,17 +502,20 @@
       "canonicalOfficialSessionId": "6768",
       "rosterSize": 12,
       "scopeUsed": "event",
+      "eventAuthority": "canonical_results",
       "counts": {
         "mapped": 12,
         "exact": 12,
         "nameVariant": 0,
         "swapResolved": 0,
+        "eventCaptureConfirmed": 0,
         "seasonScope": 0,
         "ambiguous": 0,
         "unmapped": 0
       },
       "complete": true,
       "strictEventScope": true,
+      "eventScoped": true,
       "mappings": [
         {
           "car": "4",
@@ -628,17 +637,20 @@
       "canonicalOfficialSessionId": "6751",
       "rosterSize": 24,
       "scopeUsed": "event",
+      "eventAuthority": "canonical_results",
       "counts": {
         "mapped": 24,
         "exact": 24,
         "nameVariant": 0,
         "swapResolved": 0,
+        "eventCaptureConfirmed": 0,
         "seasonScope": 0,
         "ambiguous": 0,
         "unmapped": 0
       },
       "complete": true,
       "strictEventScope": true,
+      "eventScoped": true,
       "mappings": [
         {
           "car": "28",
@@ -868,17 +880,20 @@
       "canonicalOfficialSessionId": "6783",
       "rosterSize": 24,
       "scopeUsed": "event",
+      "eventAuthority": "canonical_results",
       "counts": {
         "mapped": 24,
         "exact": 24,
         "nameVariant": 0,
         "swapResolved": 0,
+        "eventCaptureConfirmed": 0,
         "seasonScope": 0,
         "ambiguous": 0,
         "unmapped": 0
       },
       "complete": true,
       "strictEventScope": true,
+      "eventScoped": true,
       "mappings": [
         {
           "car": "4",
@@ -1108,17 +1123,20 @@
       "canonicalOfficialSessionId": "6784",
       "rosterSize": 24,
       "scopeUsed": "event",
+      "eventAuthority": "canonical_results",
       "counts": {
         "mapped": 24,
         "exact": 24,
         "nameVariant": 0,
         "swapResolved": 0,
+        "eventCaptureConfirmed": 0,
         "seasonScope": 0,
         "ambiguous": 0,
         "unmapped": 0
       },
       "complete": true,
       "strictEventScope": true,
+      "eventScoped": true,
       "mappings": [
         {
           "car": "4",
@@ -1348,17 +1366,20 @@
       "canonicalOfficialSessionId": "6785",
       "rosterSize": 12,
       "scopeUsed": "event",
+      "eventAuthority": "canonical_results",
       "counts": {
         "mapped": 12,
         "exact": 12,
         "nameVariant": 0,
         "swapResolved": 0,
+        "eventCaptureConfirmed": 0,
         "seasonScope": 0,
         "ambiguous": 0,
         "unmapped": 0
       },
       "complete": true,
       "strictEventScope": true,
+      "eventScoped": true,
       "mappings": [
         {
           "car": "4",
@@ -1480,17 +1501,20 @@
       "canonicalOfficialSessionId": "6753",
       "rosterSize": 24,
       "scopeUsed": "event",
+      "eventAuthority": "canonical_results",
       "counts": {
         "mapped": 24,
         "exact": 24,
         "nameVariant": 0,
         "swapResolved": 0,
+        "eventCaptureConfirmed": 0,
         "seasonScope": 0,
         "ambiguous": 0,
         "unmapped": 0
       },
       "complete": true,
       "strictEventScope": true,
+      "eventScoped": true,
       "mappings": [
         {
           "car": "14",
@@ -1720,17 +1744,20 @@
       "canonicalOfficialSessionId": "6804",
       "rosterSize": 24,
       "scopeUsed": "event",
+      "eventAuthority": "canonical_results",
       "counts": {
         "mapped": 24,
         "exact": 24,
         "nameVariant": 0,
         "swapResolved": 0,
+        "eventCaptureConfirmed": 0,
         "seasonScope": 0,
         "ambiguous": 0,
         "unmapped": 0
       },
       "complete": true,
       "strictEventScope": true,
+      "eventScoped": true,
       "mappings": [
         {
           "car": "4",
@@ -1960,17 +1987,20 @@
       "canonicalOfficialSessionId": "6750",
       "rosterSize": 24,
       "scopeUsed": "event",
+      "eventAuthority": "canonical_results",
       "counts": {
         "mapped": 24,
         "exact": 24,
         "nameVariant": 0,
         "swapResolved": 0,
+        "eventCaptureConfirmed": 0,
         "seasonScope": 0,
         "ambiguous": 0,
         "unmapped": 0
       },
       "complete": true,
       "strictEventScope": true,
+      "eventScoped": true,
       "mappings": [
         {
           "car": "14",
@@ -2200,17 +2230,20 @@
       "canonicalOfficialSessionId": "6805",
       "rosterSize": 24,
       "scopeUsed": "event",
+      "eventAuthority": "canonical_results",
       "counts": {
         "mapped": 24,
         "exact": 24,
         "nameVariant": 0,
         "swapResolved": 0,
+        "eventCaptureConfirmed": 0,
         "seasonScope": 0,
         "ambiguous": 0,
         "unmapped": 0
       },
       "complete": true,
       "strictEventScope": true,
+      "eventScoped": true,
       "mappings": [
         {
           "car": "9",
@@ -2440,17 +2473,20 @@
       "canonicalOfficialSessionId": "6752",
       "rosterSize": 24,
       "scopeUsed": "event",
+      "eventAuthority": "canonical_results",
       "counts": {
         "mapped": 24,
         "exact": 24,
         "nameVariant": 0,
         "swapResolved": 0,
+        "eventCaptureConfirmed": 0,
         "seasonScope": 0,
         "ambiguous": 0,
         "unmapped": 0
       },
       "complete": true,
       "strictEventScope": true,
+      "eventScoped": true,
       "mappings": [
         {
           "car": "14",
@@ -2680,17 +2716,20 @@
       "canonicalOfficialSessionId": "6828",
       "rosterSize": 24,
       "scopeUsed": "event",
+      "eventAuthority": "canonical_results",
       "counts": {
         "mapped": 24,
         "exact": 24,
         "nameVariant": 0,
         "swapResolved": 0,
+        "eventCaptureConfirmed": 0,
         "seasonScope": 0,
         "ambiguous": 0,
         "unmapped": 0
       },
       "complete": true,
       "strictEventScope": true,
+      "eventScoped": true,
       "mappings": [
         {
           "car": "4",
@@ -2920,17 +2959,20 @@
       "canonicalOfficialSessionId": "6829",
       "rosterSize": 24,
       "scopeUsed": "event",
+      "eventAuthority": "canonical_results",
       "counts": {
         "mapped": 24,
         "exact": 24,
         "nameVariant": 0,
         "swapResolved": 0,
+        "eventCaptureConfirmed": 0,
         "seasonScope": 0,
         "ambiguous": 0,
         "unmapped": 0
       },
       "complete": true,
       "strictEventScope": true,
+      "eventScoped": true,
       "mappings": [
         {
           "car": "4",
@@ -3160,17 +3202,20 @@
       "canonicalOfficialSessionId": "6756",
       "rosterSize": 24,
       "scopeUsed": "event",
+      "eventAuthority": "canonical_results",
       "counts": {
         "mapped": 24,
         "exact": 24,
         "nameVariant": 0,
         "swapResolved": 0,
+        "eventCaptureConfirmed": 0,
         "seasonScope": 0,
         "ambiguous": 0,
         "unmapped": 0
       },
       "complete": true,
       "strictEventScope": true,
+      "eventScoped": true,
       "mappings": [
         {
           "car": "14",
@@ -3400,17 +3445,20 @@
       "canonicalOfficialSessionId": "6765",
       "rosterSize": 24,
       "scopeUsed": "event",
+      "eventAuthority": "canonical_results",
       "counts": {
         "mapped": 24,
         "exact": 24,
         "nameVariant": 0,
         "swapResolved": 0,
+        "eventCaptureConfirmed": 0,
         "seasonScope": 0,
         "ambiguous": 0,
         "unmapped": 0
       },
       "complete": true,
       "strictEventScope": true,
+      "eventScoped": true,
       "mappings": [
         {
           "car": "28",
@@ -3640,17 +3688,20 @@
       "canonicalOfficialSessionId": "6850",
       "rosterSize": 24,
       "scopeUsed": "event",
+      "eventAuthority": "canonical_results",
       "counts": {
         "mapped": 24,
         "exact": 24,
         "nameVariant": 0,
         "swapResolved": 0,
+        "eventCaptureConfirmed": 0,
         "seasonScope": 0,
         "ambiguous": 0,
         "unmapped": 0
       },
       "complete": true,
       "strictEventScope": true,
+      "eventScoped": true,
       "mappings": [
         {
           "car": "4",
@@ -3880,17 +3931,20 @@
       "canonicalOfficialSessionId": "6851",
       "rosterSize": 24,
       "scopeUsed": "event",
+      "eventAuthority": "canonical_results",
       "counts": {
         "mapped": 24,
         "exact": 24,
         "nameVariant": 0,
         "swapResolved": 0,
+        "eventCaptureConfirmed": 0,
         "seasonScope": 0,
         "ambiguous": 0,
         "unmapped": 0
       },
       "complete": true,
       "strictEventScope": true,
+      "eventScoped": true,
       "mappings": [
         {
           "car": "4",
@@ -4120,17 +4174,20 @@
       "canonicalOfficialSessionId": "6852",
       "rosterSize": 12,
       "scopeUsed": "event",
+      "eventAuthority": "canonical_results",
       "counts": {
         "mapped": 12,
         "exact": 12,
         "nameVariant": 0,
         "swapResolved": 0,
+        "eventCaptureConfirmed": 0,
         "seasonScope": 0,
         "ambiguous": 0,
         "unmapped": 0
       },
       "complete": true,
       "strictEventScope": true,
+      "eventScoped": true,
       "mappings": [
         {
           "car": "9",
@@ -4252,17 +4309,20 @@
       "canonicalOfficialSessionId": "6749",
       "rosterSize": 24,
       "scopeUsed": "event",
+      "eventAuthority": "canonical_results",
       "counts": {
         "mapped": 24,
         "exact": 24,
         "nameVariant": 0,
         "swapResolved": 0,
+        "eventCaptureConfirmed": 0,
         "seasonScope": 0,
         "ambiguous": 0,
         "unmapped": 0
       },
       "complete": true,
       "strictEventScope": true,
+      "eventScoped": true,
       "mappings": [
         {
           "car": "14",
@@ -4492,17 +4552,20 @@
       "canonicalOfficialSessionId": "6863",
       "rosterSize": 24,
       "scopeUsed": "event",
+      "eventAuthority": "canonical_results",
       "counts": {
         "mapped": 24,
         "exact": 24,
         "nameVariant": 0,
         "swapResolved": 0,
+        "eventCaptureConfirmed": 0,
         "seasonScope": 0,
         "ambiguous": 0,
         "unmapped": 0
       },
       "complete": true,
       "strictEventScope": true,
+      "eventScoped": true,
       "mappings": [
         {
           "car": "4",
@@ -4732,17 +4795,20 @@
       "canonicalOfficialSessionId": "6864",
       "rosterSize": 22,
       "scopeUsed": "event",
+      "eventAuthority": "canonical_results",
       "counts": {
         "mapped": 22,
         "exact": 22,
         "nameVariant": 0,
         "swapResolved": 0,
+        "eventCaptureConfirmed": 0,
         "seasonScope": 0,
         "ambiguous": 0,
         "unmapped": 0
       },
       "complete": true,
       "strictEventScope": true,
+      "eventScoped": true,
       "mappings": [
         {
           "car": "29",
@@ -4954,17 +5020,20 @@
       "canonicalOfficialSessionId": "6763",
       "rosterSize": 24,
       "scopeUsed": "event",
+      "eventAuthority": "canonical_results",
       "counts": {
         "mapped": 24,
         "exact": 24,
         "nameVariant": 0,
         "swapResolved": 0,
+        "eventCaptureConfirmed": 0,
         "seasonScope": 0,
         "ambiguous": 0,
         "unmapped": 0
       },
       "complete": true,
       "strictEventScope": true,
+      "eventScoped": true,
       "mappings": [
         {
           "car": "26",
@@ -5194,17 +5263,20 @@
       "canonicalOfficialSessionId": "6869",
       "rosterSize": 24,
       "scopeUsed": "event",
+      "eventAuthority": "canonical_results",
       "counts": {
         "mapped": 24,
         "exact": 24,
         "nameVariant": 0,
         "swapResolved": 0,
+        "eventCaptureConfirmed": 0,
         "seasonScope": 0,
         "ambiguous": 0,
         "unmapped": 0
       },
       "complete": true,
       "strictEventScope": true,
+      "eventScoped": true,
       "mappings": [
         {
           "car": "4",
@@ -5434,17 +5506,20 @@
       "canonicalOfficialSessionId": "6870",
       "rosterSize": 12,
       "scopeUsed": "event",
+      "eventAuthority": "canonical_results",
       "counts": {
         "mapped": 12,
         "exact": 12,
         "nameVariant": 0,
         "swapResolved": 0,
+        "eventCaptureConfirmed": 0,
         "seasonScope": 0,
         "ambiguous": 0,
         "unmapped": 0
       },
       "complete": true,
       "strictEventScope": true,
+      "eventScoped": true,
       "mappings": [
         {
           "car": "9",
@@ -5566,17 +5641,20 @@
       "canonicalOfficialSessionId": "6762",
       "rosterSize": 24,
       "scopeUsed": "event",
+      "eventAuthority": "canonical_results",
       "counts": {
         "mapped": 24,
         "exact": 24,
         "nameVariant": 0,
         "swapResolved": 0,
+        "eventCaptureConfirmed": 0,
         "seasonScope": 0,
         "ambiguous": 0,
         "unmapped": 0
       },
       "complete": true,
       "strictEventScope": true,
+      "eventScoped": true,
       "mappings": [
         {
           "car": "14",
@@ -5806,17 +5884,20 @@
       "canonicalOfficialSessionId": "6754",
       "rosterSize": 24,
       "scopeUsed": "event",
+      "eventAuthority": "canonical_results",
       "counts": {
         "mapped": 24,
         "exact": 24,
         "nameVariant": 0,
         "swapResolved": 0,
+        "eventCaptureConfirmed": 0,
         "seasonScope": 0,
         "ambiguous": 0,
         "unmapped": 0
       },
       "complete": true,
       "strictEventScope": true,
+      "eventScoped": true,
       "mappings": [
         {
           "car": "14",
@@ -6046,17 +6127,20 @@
       "canonicalOfficialSessionId": "6891",
       "rosterSize": 24,
       "scopeUsed": "event",
+      "eventAuthority": "canonical_results",
       "counts": {
         "mapped": 24,
         "exact": 24,
         "nameVariant": 0,
         "swapResolved": 0,
+        "eventCaptureConfirmed": 0,
         "seasonScope": 0,
         "ambiguous": 0,
         "unmapped": 0
       },
       "complete": true,
       "strictEventScope": true,
+      "eventScoped": true,
       "mappings": [
         {
           "car": "4",
@@ -6286,17 +6370,20 @@
       "canonicalOfficialSessionId": "6892",
       "rosterSize": 24,
       "scopeUsed": "event",
+      "eventAuthority": "canonical_results",
       "counts": {
         "mapped": 24,
         "exact": 24,
         "nameVariant": 0,
         "swapResolved": 0,
+        "eventCaptureConfirmed": 0,
         "seasonScope": 0,
         "ambiguous": 0,
         "unmapped": 0
       },
       "complete": true,
       "strictEventScope": true,
+      "eventScoped": true,
       "mappings": [
         {
           "car": "4",
@@ -6526,17 +6613,20 @@
       "canonicalOfficialSessionId": "6761",
       "rosterSize": 24,
       "scopeUsed": "event",
+      "eventAuthority": "canonical_results",
       "counts": {
         "mapped": 24,
         "exact": 24,
         "nameVariant": 0,
         "swapResolved": 0,
+        "eventCaptureConfirmed": 0,
         "seasonScope": 0,
         "ambiguous": 0,
         "unmapped": 0
       },
       "complete": true,
       "strictEventScope": true,
+      "eventScoped": true,
       "mappings": [
         {
           "car": "67",
@@ -6766,17 +6856,20 @@
       "canonicalOfficialSessionId": "6760",
       "rosterSize": 24,
       "scopeUsed": "event",
+      "eventAuthority": "canonical_results",
       "counts": {
         "mapped": 24,
         "exact": 24,
         "nameVariant": 0,
         "swapResolved": 0,
+        "eventCaptureConfirmed": 0,
         "seasonScope": 0,
         "ambiguous": 0,
         "unmapped": 0
       },
       "complete": true,
       "strictEventScope": true,
+      "eventScoped": true,
       "mappings": [
         {
           "car": "67",
@@ -7005,225 +7098,228 @@
       "canonicalSessionId": "session_indy_nxt_2026_6924",
       "canonicalOfficialSessionId": "6924",
       "rosterSize": 23,
-      "scopeUsed": "season_fallback",
+      "scopeUsed": "event_capture",
+      "eventAuthority": "brycecast_capture_official_roster",
       "counts": {
         "mapped": 23,
         "exact": 0,
         "nameVariant": 0,
         "swapResolved": 0,
-        "seasonScope": 23,
+        "eventCaptureConfirmed": 23,
+        "seasonScope": 0,
         "ambiguous": 0,
         "unmapped": 0
       },
       "complete": true,
       "strictEventScope": false,
+      "eventScoped": true,
       "mappings": [
         {
           "car": "4",
           "sourceName": "Nicholas Monteiro",
           "sourceTeam": "AJ Foyt Racing",
           "driverId": "driver_nicholas_monteiro",
-          "status": "mapped_season_scope",
+          "status": "mapped_event_capture_confirmed",
           "rule": "exact",
-          "evidence": "Nicholas Monteiro ~ Nicholas Monteiro (exact; season scope)"
+          "evidence": "Nicholas Monteiro ~ official \"Nicholas Monteiro\" (capture 5538-6924+5538-6923, feedDriverId 2114) ~ Nicholas Monteiro"
         },
         {
           "car": "8",
           "sourceName": "James Roe",
           "sourceTeam": "Chip Ganassi Racing",
           "driverId": "driver_james_roe",
-          "status": "mapped_season_scope",
+          "status": "mapped_event_capture_confirmed",
           "rule": "exact",
-          "evidence": "James Roe ~ James Roe (exact; season scope)"
+          "evidence": "James Roe ~ official \"James Roe\" (capture 5538-6924+5538-6923, feedDriverId 1063) ~ James Roe"
         },
         {
           "car": "9",
           "sourceName": "Bryce Aron",
           "sourceTeam": "Chip Ganassi Racing",
           "driverId": "driver_bryce_aron",
-          "status": "mapped_season_scope",
+          "status": "mapped_event_capture_confirmed",
           "rule": "exact",
-          "evidence": "Bryce Aron ~ Bryce Aron (exact; season scope)"
+          "evidence": "Bryce Aron ~ official \"Bryce Aron\" (capture 5538-6924+5538-6923, feedDriverId 2143) ~ Bryce Aron"
         },
         {
           "car": "10",
           "sourceName": "Niels Koolen",
           "sourceTeam": "Chip Ganassi Racing",
           "driverId": "driver_niels_koolen",
-          "status": "mapped_season_scope",
+          "status": "mapped_event_capture_confirmed",
           "rule": "exact",
-          "evidence": "Niels Koolen ~ Niels Koolen (exact; season scope)"
+          "evidence": "Niels Koolen ~ official \"Niels Koolen\" (capture 5538-6924+5538-6923, feedDriverId 2146) ~ Niels Koolen"
         },
         {
           "car": "11",
           "sourceName": "Carson Etter",
           "sourceTeam": "Chip Ganassi Racing",
           "driverId": "driver_carson_etter",
-          "status": "mapped_season_scope",
+          "status": "mapped_event_capture_confirmed",
           "rule": "exact",
-          "evidence": "Carson Etter ~ Carson Etter (exact; season scope)"
+          "evidence": "Carson Etter ~ official \"Carson Etter\" (capture 5538-6924+5538-6923, feedDriverId 2115) ~ Carson Etter"
         },
         {
           "car": "12",
           "sourceName": "Max Garcia",
           "sourceTeam": "ABEL Motorsports",
           "driverId": "driver_max_garcia",
-          "status": "mapped_season_scope",
+          "status": "mapped_event_capture_confirmed",
           "rule": "exact",
-          "evidence": "Max Garcia ~ Max Garcia (exact; season scope)"
+          "evidence": "Max Garcia ~ official \"Max Garcia\" (capture 5538-6924+5538-6923, feedDriverId 2134) ~ Max Garcia"
         },
         {
           "car": "14",
           "sourceName": "Alessandro de Tullio",
           "sourceTeam": "AJ Foyt Racing",
           "driverId": "driver_alessandro_de_tullio",
-          "status": "mapped_season_scope",
+          "status": "mapped_event_capture_confirmed",
           "rule": "exact",
-          "evidence": "Alessandro de Tullio ~ Alessandro de Tullio (exact; season scope)"
+          "evidence": "Alessandro de Tullio ~ official \"Alessandro de Tullio\" (capture 5538-6924+5538-6923, feedDriverId 2163) ~ Alessandro de Tullio"
         },
         {
           "car": "15",
           "sourceName": "Nicolas Stati",
           "sourceTeam": "Cusick Morgan Motorsports",
           "driverId": "driver_nicolas_stati",
-          "status": "mapped_season_scope",
+          "status": "mapped_event_capture_confirmed",
           "rule": "exact",
-          "evidence": "Nicolas Stati ~ Nicolas Stati (exact; season scope)"
+          "evidence": "Nicolas Stati ~ official \"Nicolas Stati\" (capture 5538-6924+5538-6923, feedDriverId 2167) ~ Nicolas Stati"
         },
         {
           "car": "17",
           "sourceName": "Salvador de Alba",
           "sourceTeam": "HMD Motorsports",
           "driverId": "driver_salvador_de_alba",
-          "status": "mapped_season_scope",
+          "status": "mapped_event_capture_confirmed",
           "rule": "exact",
-          "evidence": "Salvador de Alba ~ Salvador de Alba (exact; season scope)"
+          "evidence": "Salvador de Alba ~ official \"Salvador de Alba\" (capture 5538-6924+5538-6923, feedDriverId 2070) ~ Salvador de Alba"
         },
         {
           "car": "20",
           "sourceName": "Matteo Nannini",
           "sourceTeam": "Cape Motorsports",
           "driverId": "driver_matteo_nannini",
-          "status": "mapped_season_scope",
+          "status": "mapped_event_capture_confirmed",
           "rule": "exact",
-          "evidence": "Matteo Nannini ~ Matteo Nannini (exact; season scope)"
+          "evidence": "Matteo Nannini ~ official \"Matteo Nannini\" (capture 5538-6924+5538-6923, feedDriverId 2086) ~ Matteo Nannini"
         },
         {
           "car": "21",
           "sourceName": "Nikita Johnson",
           "sourceTeam": "Cape Motorsports",
           "driverId": "driver_nikita_johnson",
-          "status": "mapped_season_scope",
+          "status": "mapped_event_capture_confirmed",
           "rule": "exact",
-          "evidence": "Nikita Johnson ~ Nikita Johnson (exact; season scope)"
+          "evidence": "Nikita Johnson ~ official \"Nikita Johnson\" (capture 5538-6924+5538-6923, feedDriverId 2102) ~ Nikita Johnson"
         },
         {
           "car": "26",
           "sourceName": "Lochie Hughes",
           "sourceTeam": "Andretti Global",
           "driverId": "driver_lochie_hughes",
-          "status": "mapped_season_scope",
+          "status": "mapped_event_capture_confirmed",
           "rule": "exact",
-          "evidence": "Lochie Hughes ~ Lochie Hughes (exact; season scope)"
+          "evidence": "Lochie Hughes ~ official \"Lochie Hughes\" (capture 5538-6924+5538-6923, feedDriverId 2103) ~ Lochie Hughes"
         },
         {
           "car": "27",
           "sourceName": "Seb Murray",
           "sourceTeam": "Andretti Global",
           "driverId": "driver_seb_murray",
-          "status": "mapped_season_scope",
+          "status": "mapped_event_capture_confirmed",
           "rule": "exact",
-          "evidence": "Seb Murray ~ Seb Murray (exact; season scope)"
+          "evidence": "Seb Murray ~ official \"Seb Murray\" (capture 5538-6924+5538-6923, feedDriverId 2158) ~ Seb Murray"
         },
         {
           "car": "28",
           "sourceName": "Max Taylor",
           "sourceTeam": "Andretti Global",
           "driverId": "driver_max_taylor",
-          "status": "mapped_season_scope",
+          "status": "mapped_event_capture_confirmed",
           "rule": "exact",
-          "evidence": "Max Taylor ~ Max Taylor (exact; season scope)"
+          "evidence": "Max Taylor ~ official \"Max Taylor\" (capture 5538-6924+5538-6923, feedDriverId 2120) ~ Max Taylor"
         },
         {
           "car": "29",
           "sourceName": "Josh Pierson",
           "sourceTeam": "Andretti Global",
           "driverId": "driver_josh_pierson",
-          "status": "mapped_season_scope",
+          "status": "mapped_event_capture_confirmed",
           "rule": "exact",
-          "evidence": "Josh Pierson ~ Josh Pierson (exact; season scope)"
+          "evidence": "Josh Pierson ~ official \"Josh Pierson\" (capture 5538-6924+5538-6923, feedDriverId 2040) ~ Josh Pierson"
         },
         {
           "car": "45",
           "sourceName": "Jack Beeton",
           "sourceTeam": "HMD Motorsports",
           "driverId": "driver_jack_beeton",
-          "status": "mapped_season_scope",
+          "status": "mapped_event_capture_confirmed",
           "rule": "exact",
-          "evidence": "Jack Beeton ~ Jack Beeton (exact; season scope)"
+          "evidence": "Jack Beeton ~ official \"Jack Beeton\" (capture 5538-6924+5538-6923, feedDriverId 2162) ~ Jack Beeton"
         },
         {
           "car": "48",
           "sourceName": "Jordan Missig",
           "sourceTeam": "ABEL Motorsports",
           "driverId": "driver_jordan_missig",
-          "status": "mapped_season_scope",
+          "status": "mapped_event_capture_confirmed",
           "rule": "exact",
-          "evidence": "Jordan Missig ~ Jordan Missig (exact; season scope)"
+          "evidence": "Jordan Missig ~ official \"Jordan Missig\" (capture 5538-6924+5538-6923, feedDriverId 2021) ~ Jordan Missig"
         },
         {
           "car": "57",
           "sourceName": "Colin Kaminsky",
           "sourceTeam": "ABEL Motorsports",
           "driverId": "driver_colin_kaminsky",
-          "status": "mapped_season_scope",
+          "status": "mapped_event_capture_confirmed",
           "rule": "exact",
-          "evidence": "Colin Kaminsky ~ Colin Kaminsky (exact; season scope)"
+          "evidence": "Colin Kaminsky ~ official \"Colin Kaminsky\" (capture 5538-6924+5538-6923, feedDriverId 990) ~ Colin Kaminsky"
         },
         {
           "car": "67",
           "sourceName": "Enzo Fittipaldi",
           "sourceTeam": "HMD Motorsports",
           "driverId": "driver_enzo_fittipaldi",
-          "status": "mapped_season_scope",
+          "status": "mapped_event_capture_confirmed",
           "rule": "exact",
-          "evidence": "Enzo Fittipaldi ~ Enzo Fittipaldi (exact; season scope)"
+          "evidence": "Enzo Fittipaldi ~ official \"Enzo Fittipaldi\" (capture 5538-6924+5538-6923, feedDriverId 2065) ~ Enzo Fittipaldi"
         },
         {
           "car": "68",
           "sourceName": "JM Correa",
           "sourceTeam": "Cusick Morgan Motorsports",
           "driverId": "driver_jm_correa",
-          "status": "mapped_season_scope",
+          "status": "mapped_event_capture_confirmed",
           "rule": "exact",
-          "evidence": "JM Correa ~ JM Correa (exact; season scope)"
+          "evidence": "JM Correa ~ official \"JM Correa\" (capture 5538-6924+5538-6923, feedDriverId 2160) ~ JM Correa"
         },
         {
           "car": "71",
           "sourceName": "Tymek Kucharczyk",
           "sourceTeam": "HMD Motorsports",
           "driverId": "driver_tymek_kucharczyk",
-          "status": "mapped_season_scope",
+          "status": "mapped_event_capture_confirmed",
           "rule": "exact",
-          "evidence": "Tymek Kucharczyk ~ Tymek Kucharczyk (exact; season scope)"
+          "evidence": "Tymek Kucharczyk ~ official \"Tymek Kucharczyk\" (capture 5538-6924+5538-6923, feedDriverId 2174) ~ Tymek Kucharczyk"
         },
         {
           "car": "75",
           "sourceName": "Alexander Koreiba",
           "sourceTeam": "Juncos Hollinger Racing",
           "driverId": "driver_alexander_koreiba",
-          "status": "mapped_season_scope",
+          "status": "mapped_event_capture_confirmed",
           "rule": "exact",
-          "evidence": "Alexander Koreiba ~ Alexander Koreiba (exact; season scope)"
+          "evidence": "Alexander Koreiba ~ official \"Alexander Koreiba\" (capture 5538-6924+5538-6923, feedDriverId 2013) ~ Alexander Koreiba"
         },
         {
           "car": "99",
           "sourceName": "Myles Rowe",
           "sourceTeam": "ABEL Motorsports",
           "driverId": "driver_myles_rowe",
-          "status": "mapped_season_scope",
+          "status": "mapped_event_capture_confirmed",
           "rule": "exact",
-          "evidence": "Myles Rowe ~ Myles Rowe (exact; season scope)"
+          "evidence": "Myles Rowe ~ official \"Myles Rowe\" (capture 5538-6924+5538-6923, feedDriverId 1040) ~ Myles Rowe"
         }
       ]
     },
@@ -7236,225 +7332,228 @@
       "canonicalSessionId": "session_indy_nxt_2026_6923",
       "canonicalOfficialSessionId": "6923",
       "rosterSize": 23,
-      "scopeUsed": "season_fallback",
+      "scopeUsed": "event_capture",
+      "eventAuthority": "brycecast_capture_official_roster",
       "counts": {
         "mapped": 23,
         "exact": 0,
         "nameVariant": 0,
         "swapResolved": 0,
-        "seasonScope": 23,
+        "eventCaptureConfirmed": 23,
+        "seasonScope": 0,
         "ambiguous": 0,
         "unmapped": 0
       },
       "complete": true,
       "strictEventScope": false,
+      "eventScoped": true,
       "mappings": [
         {
           "car": "57",
           "sourceName": "Colin Kaminsky",
           "sourceTeam": "ABEL Motorsports",
           "driverId": "driver_colin_kaminsky",
-          "status": "mapped_season_scope",
+          "status": "mapped_event_capture_confirmed",
           "rule": "exact",
-          "evidence": "Colin Kaminsky ~ Colin Kaminsky (exact; season scope)"
+          "evidence": "Colin Kaminsky ~ official \"Colin Kaminsky\" (capture 5538-6924+5538-6923, feedDriverId 990) ~ Colin Kaminsky"
         },
         {
           "car": "8",
           "sourceName": "James Roe",
           "sourceTeam": "Chip Ganassi Racing",
           "driverId": "driver_james_roe",
-          "status": "mapped_season_scope",
+          "status": "mapped_event_capture_confirmed",
           "rule": "exact",
-          "evidence": "James Roe ~ James Roe (exact; season scope)"
+          "evidence": "James Roe ~ official \"James Roe\" (capture 5538-6924+5538-6923, feedDriverId 1063) ~ James Roe"
         },
         {
           "car": "15",
           "sourceName": "Nicolas Stati",
           "sourceTeam": "Cusick Morgan Motorsports",
           "driverId": "driver_nicolas_stati",
-          "status": "mapped_season_scope",
+          "status": "mapped_event_capture_confirmed",
           "rule": "exact",
-          "evidence": "Nicolas Stati ~ Nicolas Stati (exact; season scope)"
+          "evidence": "Nicolas Stati ~ official \"Nicolas Stati\" (capture 5538-6924+5538-6923, feedDriverId 2167) ~ Nicolas Stati"
         },
         {
           "car": "11",
           "sourceName": "Carson Etter",
           "sourceTeam": "Chip Ganassi Racing",
           "driverId": "driver_carson_etter",
-          "status": "mapped_season_scope",
+          "status": "mapped_event_capture_confirmed",
           "rule": "exact",
-          "evidence": "Carson Etter ~ Carson Etter (exact; season scope)"
+          "evidence": "Carson Etter ~ official \"Carson Etter\" (capture 5538-6924+5538-6923, feedDriverId 2115) ~ Carson Etter"
         },
         {
           "car": "75",
           "sourceName": "Alexander Koreiba",
           "sourceTeam": "Juncos Hollinger Racing",
           "driverId": "driver_alexander_koreiba",
-          "status": "mapped_season_scope",
+          "status": "mapped_event_capture_confirmed",
           "rule": "exact",
-          "evidence": "Alexander Koreiba ~ Alexander Koreiba (exact; season scope)"
+          "evidence": "Alexander Koreiba ~ official \"Alexander Koreiba\" (capture 5538-6924+5538-6923, feedDriverId 2013) ~ Alexander Koreiba"
         },
         {
           "car": "4",
           "sourceName": "Nicholas Monteiro",
           "sourceTeam": "AJ Foyt Racing",
           "driverId": "driver_nicholas_monteiro",
-          "status": "mapped_season_scope",
+          "status": "mapped_event_capture_confirmed",
           "rule": "exact",
-          "evidence": "Nicholas Monteiro ~ Nicholas Monteiro (exact; season scope)"
+          "evidence": "Nicholas Monteiro ~ official \"Nicholas Monteiro\" (capture 5538-6924+5538-6923, feedDriverId 2114) ~ Nicholas Monteiro"
         },
         {
           "car": "9",
           "sourceName": "Bryce Aron",
           "sourceTeam": "Chip Ganassi Racing",
           "driverId": "driver_bryce_aron",
-          "status": "mapped_season_scope",
+          "status": "mapped_event_capture_confirmed",
           "rule": "exact",
-          "evidence": "Bryce Aron ~ Bryce Aron (exact; season scope)"
+          "evidence": "Bryce Aron ~ official \"Bryce Aron\" (capture 5538-6924+5538-6923, feedDriverId 2143) ~ Bryce Aron"
         },
         {
           "car": "10",
           "sourceName": "Niels Koolen",
           "sourceTeam": "Chip Ganassi Racing",
           "driverId": "driver_niels_koolen",
-          "status": "mapped_season_scope",
+          "status": "mapped_event_capture_confirmed",
           "rule": "exact",
-          "evidence": "Niels Koolen ~ Niels Koolen (exact; season scope)"
+          "evidence": "Niels Koolen ~ official \"Niels Koolen\" (capture 5538-6924+5538-6923, feedDriverId 2146) ~ Niels Koolen"
         },
         {
           "car": "48",
           "sourceName": "Jordan Missig",
           "sourceTeam": "ABEL Motorsports",
           "driverId": "driver_jordan_missig",
-          "status": "mapped_season_scope",
+          "status": "mapped_event_capture_confirmed",
           "rule": "exact",
-          "evidence": "Jordan Missig ~ Jordan Missig (exact; season scope)"
+          "evidence": "Jordan Missig ~ official \"Jordan Missig\" (capture 5538-6924+5538-6923, feedDriverId 2021) ~ Jordan Missig"
         },
         {
           "car": "17",
           "sourceName": "Salvador de Alba",
           "sourceTeam": "HMD Motorsports",
           "driverId": "driver_salvador_de_alba",
-          "status": "mapped_season_scope",
+          "status": "mapped_event_capture_confirmed",
           "rule": "exact",
-          "evidence": "Salvador de Alba ~ Salvador de Alba (exact; season scope)"
+          "evidence": "Salvador de Alba ~ official \"Salvador de Alba\" (capture 5538-6924+5538-6923, feedDriverId 2070) ~ Salvador de Alba"
         },
         {
           "car": "27",
           "sourceName": "Seb Murray",
           "sourceTeam": "Andretti Global",
           "driverId": "driver_seb_murray",
-          "status": "mapped_season_scope",
+          "status": "mapped_event_capture_confirmed",
           "rule": "exact",
-          "evidence": "Seb Murray ~ Seb Murray (exact; season scope)"
+          "evidence": "Seb Murray ~ official \"Seb Murray\" (capture 5538-6924+5538-6923, feedDriverId 2158) ~ Seb Murray"
         },
         {
           "car": "12",
           "sourceName": "Max Garcia",
           "sourceTeam": "ABEL Motorsports",
           "driverId": "driver_max_garcia",
-          "status": "mapped_season_scope",
+          "status": "mapped_event_capture_confirmed",
           "rule": "exact",
-          "evidence": "Max Garcia ~ Max Garcia (exact; season scope)"
+          "evidence": "Max Garcia ~ official \"Max Garcia\" (capture 5538-6924+5538-6923, feedDriverId 2134) ~ Max Garcia"
         },
         {
           "car": "20",
           "sourceName": "Matteo Nannini",
           "sourceTeam": "Cape Motorsports",
           "driverId": "driver_matteo_nannini",
-          "status": "mapped_season_scope",
+          "status": "mapped_event_capture_confirmed",
           "rule": "exact",
-          "evidence": "Matteo Nannini ~ Matteo Nannini (exact; season scope)"
+          "evidence": "Matteo Nannini ~ official \"Matteo Nannini\" (capture 5538-6924+5538-6923, feedDriverId 2086) ~ Matteo Nannini"
         },
         {
           "car": "29",
           "sourceName": "Josh Pierson",
           "sourceTeam": "Andretti Global",
           "driverId": "driver_josh_pierson",
-          "status": "mapped_season_scope",
+          "status": "mapped_event_capture_confirmed",
           "rule": "exact",
-          "evidence": "Josh Pierson ~ Josh Pierson (exact; season scope)"
+          "evidence": "Josh Pierson ~ official \"Josh Pierson\" (capture 5538-6924+5538-6923, feedDriverId 2040) ~ Josh Pierson"
         },
         {
           "car": "68",
           "sourceName": "JM Correa",
           "sourceTeam": "Cusick Morgan Motorsports",
           "driverId": "driver_jm_correa",
-          "status": "mapped_season_scope",
+          "status": "mapped_event_capture_confirmed",
           "rule": "exact",
-          "evidence": "JM Correa ~ JM Correa (exact; season scope)"
+          "evidence": "JM Correa ~ official \"JM Correa\" (capture 5538-6924+5538-6923, feedDriverId 2160) ~ JM Correa"
         },
         {
           "car": "45",
           "sourceName": "Jack Beeton",
           "sourceTeam": "HMD Motorsports",
           "driverId": "driver_jack_beeton",
-          "status": "mapped_season_scope",
+          "status": "mapped_event_capture_confirmed",
           "rule": "exact",
-          "evidence": "Jack Beeton ~ Jack Beeton (exact; season scope)"
+          "evidence": "Jack Beeton ~ official \"Jack Beeton\" (capture 5538-6924+5538-6923, feedDriverId 2162) ~ Jack Beeton"
         },
         {
           "car": "99",
           "sourceName": "Myles Rowe",
           "sourceTeam": "ABEL Motorsports",
           "driverId": "driver_myles_rowe",
-          "status": "mapped_season_scope",
+          "status": "mapped_event_capture_confirmed",
           "rule": "exact",
-          "evidence": "Myles Rowe ~ Myles Rowe (exact; season scope)"
+          "evidence": "Myles Rowe ~ official \"Myles Rowe\" (capture 5538-6924+5538-6923, feedDriverId 1040) ~ Myles Rowe"
         },
         {
           "car": "14",
           "sourceName": "Alessandro de Tullio",
           "sourceTeam": "AJ Foyt Racing",
           "driverId": "driver_alessandro_de_tullio",
-          "status": "mapped_season_scope",
+          "status": "mapped_event_capture_confirmed",
           "rule": "exact",
-          "evidence": "Alessandro de Tullio ~ Alessandro de Tullio (exact; season scope)"
+          "evidence": "Alessandro de Tullio ~ official \"Alessandro de Tullio\" (capture 5538-6924+5538-6923, feedDriverId 2163) ~ Alessandro de Tullio"
         },
         {
           "car": "26",
           "sourceName": "Lochie Hughes",
           "sourceTeam": "Andretti Global",
           "driverId": "driver_lochie_hughes",
-          "status": "mapped_season_scope",
+          "status": "mapped_event_capture_confirmed",
           "rule": "exact",
-          "evidence": "Lochie Hughes ~ Lochie Hughes (exact; season scope)"
+          "evidence": "Lochie Hughes ~ official \"Lochie Hughes\" (capture 5538-6924+5538-6923, feedDriverId 2103) ~ Lochie Hughes"
         },
         {
           "car": "28",
           "sourceName": "Max Taylor",
           "sourceTeam": "Andretti Global",
           "driverId": "driver_max_taylor",
-          "status": "mapped_season_scope",
+          "status": "mapped_event_capture_confirmed",
           "rule": "exact",
-          "evidence": "Max Taylor ~ Max Taylor (exact; season scope)"
+          "evidence": "Max Taylor ~ official \"Max Taylor\" (capture 5538-6924+5538-6923, feedDriverId 2120) ~ Max Taylor"
         },
         {
           "car": "21",
           "sourceName": "Nikita Johnson",
           "sourceTeam": "Cape Motorsports",
           "driverId": "driver_nikita_johnson",
-          "status": "mapped_season_scope",
+          "status": "mapped_event_capture_confirmed",
           "rule": "exact",
-          "evidence": "Nikita Johnson ~ Nikita Johnson (exact; season scope)"
+          "evidence": "Nikita Johnson ~ official \"Nikita Johnson\" (capture 5538-6924+5538-6923, feedDriverId 2102) ~ Nikita Johnson"
         },
         {
           "car": "71",
           "sourceName": "Tymek Kucharczyk",
           "sourceTeam": "HMD Motorsports",
           "driverId": "driver_tymek_kucharczyk",
-          "status": "mapped_season_scope",
+          "status": "mapped_event_capture_confirmed",
           "rule": "exact",
-          "evidence": "Tymek Kucharczyk ~ Tymek Kucharczyk (exact; season scope)"
+          "evidence": "Tymek Kucharczyk ~ official \"Tymek Kucharczyk\" (capture 5538-6924+5538-6923, feedDriverId 2174) ~ Tymek Kucharczyk"
         },
         {
           "car": "67",
           "sourceName": "Enzo Fittipaldi",
           "sourceTeam": "HMD Motorsports",
           "driverId": "driver_enzo_fittipaldi",
-          "status": "mapped_season_scope",
+          "status": "mapped_event_capture_confirmed",
           "rule": "exact",
-          "evidence": "Enzo Fittipaldi ~ Enzo Fittipaldi (exact; season scope)"
+          "evidence": "Enzo Fittipaldi ~ official \"Enzo Fittipaldi\" (capture 5538-6924+5538-6923, feedDriverId 2065) ~ Enzo Fittipaldi"
         }
       ]
     }
