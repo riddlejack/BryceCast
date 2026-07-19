@@ -144,7 +144,7 @@
     "Suppress rows with low comparison counts or show denominator badges.",
     "Keep pit/timing-line sections separate from true track sections."
   ],
-  "generatedAt": "2026-07-19T07:25:24Z",
+  "generatedAt": "2026-07-19T14:59:31Z",
   "id": "indy-nxt-section-lap-context",
   "primaryUseCases": [
     "race_week_prep",
