@@ -1413,6 +1413,47 @@ button { font-family: inherit; }
   border-color: var(--bryce);
 }
 
+/* ---------- GB3 chapter depth layer (one tap down) ---------- */
+
+.gb3-depth { gap: 24px; margin-top: 4px; }
+.gb3-copy {
+  margin: 0 0 10px;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--ink-secondary);
+}
+.gb3-copy strong { color: var(--ink-primary); font-weight: 600; }
+.gb3-caption {
+  margin: 8px 0 0;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--ink-muted);
+}
+
+/* venue tower: quiet, clickable rows with a header line */
+.gb3-venues { padding: 0; }
+.gb3-venues .tower__row { padding-left: 6px; padding-right: 6px; }
+.gb3-venues__head { border-bottom-color: var(--divider); }
+.gb3-venues__head .caption { font-size: 11px; }
+.gb3-venues__chev { color: var(--ink-muted); text-align: right; font-size: 15px; line-height: 1; }
+a.tower__row.gb3-venues__link { transition: background-color 150ms ease; }
+a.tower__row.gb3-venues__link:hover { background: var(--surface-0); }
+a.tower__row.gb3-venues__link:hover .gb3-venues__chev { color: var(--ink-secondary); }
+
+/* 2021 condition proportion bar: one sequential ink ramp, light → dark */
+.gb3-conditions {
+  display: flex;
+  gap: 2px;
+  width: 100%;
+  height: 12px;
+  margin-top: 4px;
+}
+.gb3-conditions__seg {
+  min-width: 3px;
+  height: 100%;
+  border-radius: 3px;
+}
+
 /* Named climb moments are a visual overlay only; nearest-dot hover remains
    owned by the chart SVG underneath at every viewport. */
 .climb-moments,

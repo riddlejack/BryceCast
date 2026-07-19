@@ -33,6 +33,8 @@
     "analytics:career-atlas:validate": "python3 analysis/career-atlas/scripts/validate_career_atlas.py",
     "analytics:restart-report": "python3 analysis/restart-report/scripts/build_restart_report.py",
     "analytics:restart-report:validate": "python3 analysis/restart-report/scripts/validate_restart_report.py",
+    "analytics:gb3-deep-dive": "python3 analysis/gb3-deep-dive/scripts/build_gb3_deep_dive.py",
+    "analytics:gb3-deep-dive:validate": "python3 analysis/gb3-deep-dive/scripts/validate_gb3_deep_dive.py",
     "analytics:predictive-race-intelligence": "node scripts/run-predictive-race-intelligence.mjs",
     "analytics:ui-data-package": "node scripts/build-ui-data-package.mjs",
     "analytics:ui-data-package:validate": "node scripts/validate-ui-data-package.mjs",
