@@ -761,11 +761,15 @@ const AnalogRaces = ({ event, debriefIds }: { event: UpcomingPrepEvent; debriefI
 const WeatherWindow = ({
   weather,
   unavailable,
-  raceDate
+  raceDate,
+  raceSessionId,
+  lastVisit
 }: {
   weather: EventWeather | null;
   unavailable: boolean;
   raceDate: string;
+  raceSessionId: string | null;
+  lastVisit: UiVenueDossierVisit | null;
 }) => {
   // First load in flight: stay quiet. Only render the module once we have a
   // reading or the retries have exhausted into an honest unavailable state.
@@ -773,6 +777,15 @@ const WeatherWindow = ({
   const current = weather?.current ?? null;
   const raceHour = weather?.raceHour ?? [];
   const observedLabel = observedAgoLabel(weather?.observedAt ?? null);
+  // The race-hour line carries the year-over-year context the dropped dossier
+  // forecast column used to hold: the race slot's forecast temperature against
+  // the most recent visit's race-hour reading, as a neutral fact delta.
+  const raceSlot = raceSessionId ? raceHour.find((slot) => slot.sessionId === raceSessionId) ?? null : null;
+  const priorConditions = lastVisit?.conditions ?? null;
+  const priorYear = lastVisit?.seasonYear ?? null;
+  const raceYear = Number(raceDate.slice(0, 4));
+  const priorRaceLabel =
+    priorYear !== null ? (priorYear === raceYear - 1 ? "last year's race" : `${priorYear}'s race`) : 'the last race here';
   const header = (
     <>
       <CloudSun size={15} aria-hidden />
@@ -803,9 +816,11 @@ const WeatherWindow = ({
     <Card className="card--flex" title={header} action={sourcePill}>
       {current && current.tempF !== null ? (
         <>
-          <div className="row row--between" style={{ alignItems: 'baseline', gap: 10 }}>
-            <span className="caption">At the track right now</span>
-            {observedLabel ? <span style={{ fontSize: 11, color: 'var(--ink-muted)' }}>{observedLabel}</span> : null}
+          {/* The timeframe label carries the reading: what it is and how old.
+              No reader should have to wonder which card is "now". */}
+          <div className="caption" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'baseline', gap: 6 }}>
+            <span>At the track right now</span>
+            {observedLabel ? <span style={{ color: 'var(--ink-muted)', fontWeight: 400 }}>· {observedLabel}</span> : null}
           </div>
           {/* One baseline for all four: label + value only. Wind carries its
               direction inside the value ("7 mph NNE", "calm" at 0), so it sits
@@ -826,30 +841,61 @@ const WeatherWindow = ({
       )}
 
       <div style={{ borderTop: '1px solid var(--divider)', margin: '16px 0 0', paddingTop: 14 }}>
-        <span className="caption">His race hour</span>
+        {/* The label carries the hour and the source, so this card reads clearly
+            as the forecast — the future — against the "right now" card above. */}
+        <div className="caption" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'baseline', gap: 6 }}>
+          <span>His race hour</span>
+          {raceSlot ? <span style={{ color: 'var(--ink-muted)', fontWeight: 400 }}>· {raceSlot.when}</span> : null}
+          {raceHour.length > 0 ? <span style={{ color: 'var(--ink-muted)', fontWeight: 400 }}>· NWS forecast</span> : null}
+        </div>
         {raceHour.length > 0 ? (
           <div className="stack" style={{ gap: 4, marginTop: 8 }}>
-            {raceHour.map((slot, index) => (
-              <div
-                key={slot.sessionId}
-                className="row row--between"
-                /* Divide between rows only; the last sits flush so no hairline
-                   dangles into the dead space before the footnote (Jack's review). */
-                style={{ padding: '6px 0', borderBottom: index < raceHour.length - 1 ? '1px solid var(--grid-hairline)' : undefined }}
-              >
-                <div>
-                  <div style={{ fontSize: 13.5, fontWeight: 560 }}>{slot.sessionLabel}</div>
-                  <div style={{ fontSize: 11.5, color: 'var(--ink-muted)' }}>
-                    {slot.when}
-                    {slot.sky ? ` · ${slot.sky.toLowerCase()}` : ''}
+            {raceHour.map((slot, index) => {
+              const isRace = raceSessionId !== null && slot.sessionId === raceSessionId;
+              // The race slot absorbs the dropped forecast column's YoY read:
+              // this year's forecast temp vs the most recent visit's race hour.
+              const tempDelta =
+                isRace && slot.tempF !== null && priorConditions?.ambientTempF != null
+                  ? slot.tempF - priorConditions.ambientTempF
+                  : null;
+              return (
+                <div
+                  key={slot.sessionId}
+                  className="row row--between"
+                  /* Divide between rows only; the last sits flush so no hairline
+                     dangles into the dead space before the footnote (Jack's review).
+                     alignItems flex-start so the wrapping sky sentence and the
+                     stacked reading top-align rather than drift apart on phone. */
+                  style={{ padding: '6px 0', alignItems: 'flex-start', borderBottom: index < raceHour.length - 1 ? '1px solid var(--grid-hairline)' : undefined }}
+                >
+                  {/* The sky sentence takes the flexible width and wraps; the
+                      reading column stays on tidy single lines beside it. */}
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontSize: 13.5, fontWeight: 560 }}>{slot.sessionLabel}</div>
+                    <div style={{ fontSize: 11.5, color: 'var(--ink-muted)' }}>
+                      {slot.when}
+                      {slot.sky ? ` · ${slot.sky.toLowerCase()}` : ''}
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 2, flex: 'none', paddingLeft: 12 }}>
+                    <div className="row" style={{ gap: 12, alignItems: 'baseline' }}>
+                      <span className="tnum" style={{ fontSize: 16, fontWeight: 560, whiteSpace: 'nowrap' }}>{slot.tempText}</span>
+                      {slot.windText ? (
+                        <span style={{ fontSize: 12, color: 'var(--ink-secondary)', whiteSpace: 'nowrap' }}>{slot.windText}</span>
+                      ) : null}
+                    </div>
+                    {tempDelta !== null && tempDelta !== 0 ? (
+                      // Weather is a fact, not a verdict — FactDelta's neutral ink,
+                      // never the green/red result colors.
+                      <span className="row" style={{ gap: 4, alignItems: 'baseline', fontSize: 11, color: 'var(--ink-muted)', whiteSpace: 'nowrap' }}>
+                        <FactDelta delta={tempDelta} unit="°" />
+                        vs {priorRaceLabel}
+                      </span>
+                    ) : null}
                   </div>
                 </div>
-                <div className="row" style={{ gap: 12 }}>
-                  <span className="tnum" style={{ fontSize: 16, fontWeight: 560 }}>{slot.tempText}</span>
-                  {slot.windText ? <span style={{ fontSize: 12, color: 'var(--ink-secondary)' }}>{slot.windText}</span> : null}
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         ) : (
           <p style={{ margin: '8px 0 0', fontSize: 12.5, color: 'var(--ink-secondary)' }}>
@@ -1149,6 +1195,13 @@ export const RaceWeekScreen = () => {
       ? { corner: '3', note: 'his strongest section in 2 of 3 past Nashville practice sessions' }
       : null;
 
+  /* The race session and the most recent visit feed the Weather window's
+   * race-hour line: it identifies the race slot and carries a neutral
+   * year-over-year delta against last year's race hour — the context the
+   * dossier's dropped forecast column used to hold (Jack's review). */
+  const raceSessionId = dossierVenue?.upcoming?.scheduledSessions.find((session) => session.sessionType === 'race')?.sessionId ?? null;
+  const lastVisit = dossierVenue?.visits[dossierVenue.visits.length - 1] ?? null;
+
   /* Current near-track wind, drawn on the hero shape (real-geo outlines only;
    * TrackArt omits it where the outline has no geographic orientation). Framed
    * "now" so it never reads as a contradiction of the race-hour forecast on the
@@ -1270,7 +1323,13 @@ export const RaceWeekScreen = () => {
 
       <div className="grid grid--2">
         <FollowTheWeekend />
-        <WeatherWindow weather={weather} unavailable={weatherUnavailable} raceDate={raceDayOf(primary)} />
+        <WeatherWindow
+          weather={weather}
+          unavailable={weatherUnavailable}
+          raceDate={raceDayOf(primary)}
+          raceSessionId={raceSessionId}
+          lastVisit={lastVisit}
+        />
       </div>
 
       <AnalogRaces event={primary} debriefIds={debriefIds} />
