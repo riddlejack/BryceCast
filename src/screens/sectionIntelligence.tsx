@@ -520,7 +520,15 @@ const VisitShape = ({
   pack: SectionLapsPack;
 }) => {
   const set = useMemo(() => sectionObservationsFromLaps(pack, { kind: 'full_race' }, 'median'), [pack]);
-  const resolved = useMemo(() => resolveHeatSections(anchors, set), [anchors, set]);
+  /* Each visit joins the anchor set matching ITS OWN pack's grain — a lake
+   * loop-crossing year keeps the venue's finer measured tiling even when the
+   * page's own race is PDF-tier (Nashville 2026 beside its 2024/2025 visits).
+   * Without this, mixed-tier venues rendered prior years as bare outlines. */
+  const anchorsForPack = useMemo(
+    () => (pack.sourceTier === 'lake_loop_crossings' ? measuredTrackSectionsFor(pack.venueName) ?? anchors : anchors),
+    [pack, anchors]
+  );
+  const resolved = useMemo(() => resolveHeatSections(anchorsForPack, set), [anchorsForPack, set]);
   /* Orientation, not a second question (director ruling): each year carries its
    * official result as quiet label text from the synchronous season index. */
   const indexRow = uiDataPackage.screens.raceDebrief.seasonIndex.find((row) => row.sessionId === pack.sessionId) ?? null;

@@ -1081,7 +1081,11 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
   const start = asNumber(pack.outcome.startPosition);
   const gain = start !== null && finish !== null ? formatGain(start - finish) : null;
   const fieldSize = story?.lapChart.fieldSize ?? asNumber(pack.lapStory?.fieldLapDrivers);
-  const eventDate = asString((pack as unknown as Row).eventStartDate);
+  /* The race's own date when the pack carries it (raceOrder.sessionStartDate);
+   * eventStartDate is the WEEKEND's first day and can sit a day early. */
+  const eventDate =
+    asString((pack.raceOrder as Row | undefined)?.sessionStartDate) ??
+    asString((pack as unknown as Row).eventStartDate);
   const verdict = story ? verdictFor(story) : null;
   const arc = story ? weekendArc(story) : null;
   const moverName = asString(pack.lapStory?.topLapChartMover);
