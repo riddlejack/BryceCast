@@ -71,5 +71,47 @@ export const createReplayRouter = ({ captureOverlay, lakeFeeds, enabled = false 
     return captureOverlay.currentRecord();
   };
 
-  return { enabled, available, start, stop, status, currentRecord };
+  /**
+   * Stateless, per-request replay resolution — the heart of per-client replay.
+   * Given the replay params a client appended to a live route (`session`, `rt`,
+   * `speed`), decide what that ONE request should be served, holding NO global
+   * state. Precedence, strictest first:
+   *   1. replay disabled            → { kind: 'disabled' } (serve the real feed)
+   *   2. the real runner is live    → { kind: 'live' }     (ignore params, real feed)
+   *   3. session unknown/not watchable → { kind: 'refused', statusCode, reason }
+   *   4. a row resolves at `rt`     → { kind: 'record', record }
+   *   5. `rt` out of the archived span → { kind: 'refused', 400 }
+   *
+   * The live-guard here is per-request and stricter than the old mid-playback
+   * one: a live runner preempts EVERY replaying client on their very next poll.
+   */
+  const resolveReplay = ({ session, rt, speed = 1 }) => {
+    if (!enabled) return { kind: 'disabled' };
+    // Live-guard wins unconditionally: if the real race is on, replay params are
+    // ignored and the request falls through to the real Race Control feed.
+    if (captureOverlay.runnerIsLive?.()) return { kind: 'live' };
+    // Watchable gating from the merged, authoritative index (a lake session
+    // superseded by our own watchable capture reads non-watchable here).
+    const entry = (available().sessions ?? []).find((candidate) => candidate.sessionKey === session);
+    if (!entry) {
+      return { kind: 'refused', statusCode: 404, reason: `Replay session ${session ?? '(missing)'} was not found.` };
+    }
+    if (!entry.watchable) {
+      return {
+        kind: 'refused',
+        statusCode: 422,
+        reason: `Replay refused: ${session} is not a watchable Bryce race capture.`
+      };
+    }
+    const owner = lakeFeeds.has(session) ? lakeFeeds : captureOverlay;
+    const resolved = owner.recordAt({ session, rt, speed });
+    if (resolved?.record) return { kind: 'record', record: resolved.record };
+    return {
+      kind: 'refused',
+      statusCode: 400,
+      reason: `Replay timestamp ${rt ?? '(missing)'} is outside the archived span for ${session}.`
+    };
+  };
+
+  return { enabled, available, start, stop, status, currentRecord, resolveReplay };
 };

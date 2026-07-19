@@ -128,6 +128,74 @@ export const createLakeReplayFeeds = ({
     return rows;
   };
 
+  // Per-session parsed-rows cache so the stateless per-request path never
+  // re-gunzips/re-parses a feed on every 1 Hz poll. Bounded by the number of
+  // watchable lake sessions (~40), each a modest NDJSON of one race.
+  const rowsCache = new Map();
+  const rowsFor = (session) => {
+    const cached = rowsCache.get(session.sessionKey);
+    if (cached) return cached;
+    const rows = loadRows(session);
+    rowsCache.set(session.sessionKey, rows);
+    return rows;
+  };
+
+  /** Binary search: index of the last row at or before `virtualMs`. */
+  const rowIndexAt = (rows, virtualMs) => {
+    let lo = 0;
+    let hi = rows.length - 1;
+    let idx = -1;
+    while (lo <= hi) {
+      const mid = (lo + hi) >> 1;
+      if (rows[mid].ms <= virtualMs) {
+        idx = mid;
+        lo = mid + 1;
+      } else {
+        hi = mid - 1;
+      }
+    }
+    return idx < 0 ? 0 : idx;
+  };
+
+  /** Stateless, per-request row resolve — the per-client replay path. Mirrors
+   *  the sqlite overlay's `recordAt`: owns no global playback, so concurrent
+   *  clients at different `rt` values never interfere. Watchable gating and the
+   *  live-guard run in the router before this is called. */
+  const recordAt = ({ session, rt, speed = 1 }) => {
+    load();
+    if (!enabled) return null;
+    const selected = sessionIndex.get(session);
+    if (!selected) return null;
+    const requestedMs = parseTime(rt);
+    if (requestedMs === null) return { outOfRange: true };
+    const numericSpeed = SPEEDS.has(Number(speed)) ? Number(speed) : 1;
+    const rows = rowsFor(selected);
+    if (!rows.length) return { outOfRange: true };
+    const idx = rowIndexAt(rows, requestedMs);
+    const row = rows[idx];
+    const sourceLagVirtualMs = row.ms !== null ? Math.max(0, requestedMs - row.ms) : 0;
+    return {
+      record: {
+        id: idx,
+        archiveCheckedAt: row.checkedAt,
+        sessionKey: session,
+        summary: row.summary ?? null,
+        raw: row.raw ?? null,
+        checkedAt: new Date(now() - sourceLagVirtualMs / numericSpeed).toISOString(),
+        replay: {
+          active: true,
+          mode: 'per_request',
+          source: 'lake_feeds',
+          sessionKey: session,
+          sourceTier: selected.sourceTier,
+          tierLabel: selected.tierLabel,
+          speed: numericSpeed,
+          virtualNow: new Date(requestedMs).toISOString()
+        }
+      }
+    };
+  };
+
   const controlState = () => {
     load();
     if (!enabled) return { enabled: false, active: false };
@@ -245,5 +313,5 @@ export const createLakeReplayFeeds = ({
     };
   };
 
-  return { enabled, has, available, sessions, start, stop, status: controlState, currentRecord, isActive: () => Boolean(playback) };
+  return { enabled, has, available, sessions, start, stop, status: controlState, currentRecord, recordAt, isActive: () => Boolean(playback) };
 };

@@ -1739,8 +1739,6 @@ const replayWeatherUnavailable = (checkedAt, record) => ({
   warnings: ['Weather was not part of this archived Race Control replay and is not inferred.']
 });
 
-const currentReplayRecord = () => replayOverlay.currentRecord();
-
 const buildReplaySnapshot = (record) => buildRaceSnapshotFromResults(rawResultsFromSnapshotRecord(record));
 
 const buildReplaySourceReport = (record) =>
@@ -1823,8 +1821,12 @@ const requireCached = async (key, label) => {
   throw Object.assign(new Error(`${label} cache unavailable. ${detail}`), { statusCode: 503 });
 };
 
-const cachedRaceSnapshot = async () => {
-  const replayRecord = currentReplayRecord();
+// Per-client replay is stateless: the caller resolves an optional `replayRecord`
+// from THIS request's replay params and passes it in. When it is null — always,
+// for a request with no replay params — these functions run the exact live path
+// they ran before per-client replay existed. No global replay state is consulted
+// here, so a plain client's payload can never be flipped by another viewer.
+const cachedRaceSnapshot = async (replayRecord = null) => {
   if (replayRecord) return buildReplaySnapshot(replayRecord);
   const runnerRecord = await readFreshRunnerRawRecord();
   if (runnerRecord) {
@@ -1835,16 +1837,14 @@ const cachedRaceSnapshot = async () => {
   return requireCached('snapshot', 'Race snapshot');
 };
 
-const cachedReadinessPayload = async () => {
-  const replayRecord = currentReplayRecord();
+const cachedReadinessPayload = async (replayRecord = null) => {
   if (replayRecord) return buildReadinessPayloadFromReplayRecord(replayRecord);
   const runnerRecord = await readFreshRunnerRawRecord();
   if (runnerRecord) return buildReadinessPayloadFromRunnerRecord(runnerRecord);
   return requireCached('readiness', 'Readiness');
 };
 
-const cachedSourceReport = async () => {
-  const replayRecord = currentReplayRecord();
+const cachedSourceReport = async (replayRecord = null) => {
   if (replayRecord) return buildReplaySourceReport(replayRecord);
   const runnerRecord = await readFreshRunnerRawRecord();
   if (runnerRecord) return buildSourceReportFromResults(sourceResultsFromSnapshotRecord(runnerRecord), runnerRecord.checkedAt ?? new Date().toISOString());
@@ -1947,6 +1947,30 @@ const handler = async (req, res) => {
   const url = new URL(req.url ?? '/', `http://${req.headers.host ?? 'localhost'}`);
   const pathname = url.pathname;
 
+  // Per-client replay params. A request WITHOUT `replay`+`rt` never touches the
+  // resolver — `replayRecord()` returns null and every live route runs its
+  // byte-identical live path. When present, the resolver enforces the live-guard
+  // and watchable gating and returns this one request's archived record. The
+  // result is memoized so a route that fans out to several cached builders
+  // resolves once; a refusal throws and becomes the response.
+  const replayParam = url.searchParams.get('replay');
+  const rtParam = url.searchParams.get('rt');
+  const hasReplayParams = Boolean(replayParam && rtParam);
+  let replayResolved = false;
+  let replayRecordValue = null;
+  const replayRecord = () => {
+    if (replayResolved) return replayRecordValue;
+    replayResolved = true;
+    if (!hasReplayParams) return (replayRecordValue = null);
+    const resolution = replayOverlay.resolveReplay({ session: replayParam, rt: rtParam, speed: url.searchParams.get('speed') ?? 1 });
+    if (resolution.kind === 'refused') {
+      throw Object.assign(new Error(resolution.reason), { statusCode: resolution.statusCode });
+    }
+    // 'live' (runner is on) and 'disabled' both fall through to the real feed.
+    replayRecordValue = resolution.kind === 'record' ? resolution.record : null;
+    return replayRecordValue;
+  };
+
   if (req.method === 'OPTIONS') {
     res.writeHead(204, jsonHeaders);
     res.end();
@@ -1985,28 +2009,17 @@ const handler = async (req, res) => {
         sendError(res, 404, 'Replay mode is disabled.');
         return;
       }
-      if (req.method !== 'GET') {
-        sendError(res, 405, 'Replay control is GET-only.');
-        return;
-      }
-      if (url.searchParams.get('stop') === '1') {
-        sendJson(res, 200, replayOverlay.stop());
-        return;
-      }
-      const session = url.searchParams.get('session');
-      if (!session) {
-        sendJson(res, 200, replayOverlay.status());
-        return;
-      }
-      sendJson(
-        res,
-        200,
-        replayOverlay.start({
-          session,
-          t0: url.searchParams.get('t0'),
-          speed: url.searchParams.get('speed') ?? 1
-        })
-      );
+      // Retired. Replay is per-client/stateless now: the Live page owns the
+      // virtual clock and appends ?replay=<sessionKey>&rt=<iso>&speed=<n> to the
+      // live routes. This endpoint flips NO global state — there is no server
+      // path left that can make one viewer's "watch" change another viewer's
+      // Live page. Kept as a 200 so any stale client polling it degrades quietly.
+      sendJson(res, 200, {
+        enabled: true,
+        active: false,
+        retired: true,
+        note: 'Replay is per-request now. Append ?replay=<sessionKey>&rt=<isoVirtualTime>&speed=<1|4|16> to /api/readiness, /api/timing, /api/snapshot, /api/bryce and /api/sources.'
+      });
       return;
     }
 
@@ -2023,12 +2036,12 @@ const handler = async (req, res) => {
     }
 
     if (pathname === '/api/snapshot' || pathname === '/api/race/snapshot') {
-      sendJson(res, 200, await cachedRaceSnapshot());
+      sendJson(res, 200, await cachedRaceSnapshot(replayRecord()));
       return;
     }
 
     if (pathname === '/api/readiness') {
-      sendJson(res, 200, await cachedReadinessPayload());
+      sendJson(res, 200, await cachedReadinessPayload(replayRecord()));
       return;
     }
 
@@ -2053,7 +2066,7 @@ const handler = async (req, res) => {
     }
 
     if (pathname === '/api/session') {
-      const snapshot = await cachedRaceSnapshot();
+      const snapshot = await cachedRaceSnapshot(replayRecord());
       sendJson(res, 200, {
         checkedAt: snapshot.updatedAt,
         eventName: snapshot.heartbeat.eventName,
@@ -2074,7 +2087,7 @@ const handler = async (req, res) => {
     }
 
     if (pathname === '/api/bryce') {
-      const snapshot = await cachedRaceSnapshot();
+      const snapshot = await cachedRaceSnapshot(replayRecord());
       sendJson(res, 200, {
         checkedAt: snapshot.updatedAt,
         sourceState: snapshot.sourceState,
@@ -2087,7 +2100,7 @@ const handler = async (req, res) => {
     }
 
     if (pathname === '/api/timing') {
-      const snapshot = await cachedRaceSnapshot();
+      const snapshot = await cachedRaceSnapshot(replayRecord());
       sendJson(res, 200, {
         checkedAt: snapshot.updatedAt,
         sourceState: snapshot.sourceState,
@@ -2100,7 +2113,7 @@ const handler = async (req, res) => {
     }
 
     if (pathname === '/api/sources') {
-      const report = await cachedSourceReport();
+      const report = await cachedSourceReport(replayRecord());
       sendJson(res, 200, {
         ...report,
         local: {
@@ -2162,16 +2175,19 @@ const handler = async (req, res) => {
     }
 
     if (pathname === '/api/replay/bryce') {
-      const replayRecord = currentReplayRecord();
+      // Per-request: if this call carries replay params, window the archive to
+      // the resolved virtual frame; otherwise it is the plain latest-archive
+      // data view (used by the static local-log view), unchanged.
+      const record = replayRecord();
       sendJson(
         res,
         200,
         queryReplay({
           limit: url.searchParams.get('limit'),
           offset: url.searchParams.get('offset'),
-          sessionKey: url.searchParams.get('sessionKey') ?? replayRecord?.sessionKey,
+          sessionKey: url.searchParams.get('sessionKey') ?? record?.sessionKey,
           sample: url.searchParams.get('sample'),
-          beforeCheckedAt: replayRecord?.archiveCheckedAt ?? null
+          beforeCheckedAt: record?.archiveCheckedAt ?? null
         })
       );
       return;
@@ -2216,13 +2232,9 @@ const handler = async (req, res) => {
 };
 
 export const startServer = () => {
-  if (replayEnabled && process.env.BRYCECAST_REPLAY_SESSION) {
-    replayOverlay.start({
-      session: process.env.BRYCECAST_REPLAY_SESSION,
-      t0: process.env.BRYCECAST_REPLAY_T0,
-      speed: process.env.BRYCECAST_REPLAY_SPEED ?? 1
-    });
-  }
+  // Per-client replay is stateless — there is deliberately no server-side replay
+  // auto-start here anymore. Nothing on the server flips a global replay state,
+  // so a viewer's replay can never leak into another viewer's Live page.
   // The live runner is the sole upstream ingestor in runner-only mode. API
   // requests read its status and append-only SQLite cache without starting a
   // competing Race Control refresh loop.

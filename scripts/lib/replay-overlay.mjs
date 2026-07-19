@@ -338,6 +338,55 @@ export const createReplayOverlay = ({
     }
   };
 
-  return { enabled, sessions, available, start, stop, status: controlState, currentRecord };
+  /** Stateless, per-request row resolve — the per-client replay path. Given a
+   *  session key, a virtual timestamp `rt` (ISO), and the client's playback
+   *  speed, select the latest archived row at or before `rt` and shift its
+   *  archive age into the current wall clock exactly as `currentRecord()` does.
+   *  Owns NO global playback: two concurrent clients can call this at different
+   *  `rt` values and never see each other. Watchable gating and the live-guard
+   *  are enforced by the router before this is called. Returns:
+   *   - `{ record }` when a row resolves,
+   *   - `{ outOfRange: true }` when the session has no row at/before `rt`,
+   *   - `null` when replay is disabled. */
+  const recordAt = ({ session, rt, speed = 1 }) => {
+    if (!enabled) return null;
+    const requestedMs = parseTime(rt);
+    if (requestedMs === null) return { outOfRange: true };
+    const numericSpeed = SPEEDS.has(Number(speed)) ? Number(speed) : 1;
+    const virtualNowIso = new Date(requestedMs).toISOString();
+    const db = openDb();
+    try {
+      const row = db
+        .prepare(
+          `SELECT id, checked_at, session_key, payload_json
+             FROM race_snapshots
+            WHERE session_key = ? AND checked_at <= ?
+            ORDER BY checked_at DESC
+            LIMIT 1`
+        )
+        .get(session, virtualNowIso);
+      const parsed = parseSnapshot(row);
+      if (!parsed) return { outOfRange: true };
+      const archiveMs = parseTime(parsed.archiveCheckedAt);
+      const sourceLagVirtualMs = archiveMs !== null ? Math.max(0, requestedMs - archiveMs) : 0;
+      return {
+        record: {
+          ...parsed,
+          checkedAt: new Date(now() - sourceLagVirtualMs / numericSpeed).toISOString(),
+          replay: {
+            active: true,
+            mode: 'per_request',
+            sessionKey: session,
+            speed: numericSpeed,
+            virtualNow: virtualNowIso
+          }
+        }
+      };
+    } finally {
+      db.close();
+    }
+  };
+
+  return { enabled, sessions, available, start, stop, status: controlState, currentRecord, recordAt, runnerIsLive: runnerReportsLiveNow };
 };
 
