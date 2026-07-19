@@ -1,13 +1,13 @@
 # Career Analytics Parity Pass
 
-Generated from canonical career dataset updated `2026-07-11T20:53:51.783Z`.
+Generated from canonical career dataset updated `2026-07-19T20:49:43.792Z`.
 
 ## Series Result Summary
 
 | seriesName | raceRows | avgFinish | avgGain | avgFinishPercentile | top5Rate | top10Rate | issueLikeStatusRate |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | GB3 Championship | 42 | 10.738 | 0.55 | 0.498 | 0.119 | 0.429 | 0 |
-| INDY NXT | 40 | 12.525 | -0.95 | 0.454 | 0.1 | 0.45 | 0.125 |
+| INDY NXT | 41 | 12.463 | -0.976 | 0.458 | 0.098 | 0.463 | 0.122 |
 | F1600 Championship Series | 20 | 4.75 |  | 0.745 | 0.7 | 0.95 | 0 |
 | Euroformula Open | 17 | 4.176 | -0.588 | 0.631 | 0.706 | 1 | 0 |
 | Formula Ford | 15 | 4.733 | 0.8 | 0.862 | 0.8 | 1 | 0 |
@@ -60,20 +60,20 @@ Generated from canonical career dataset updated `2026-07-11T20:53:51.783Z`.
 | IMSA WeatherTech SportsCar Championship | lap_shape | 142 | source_bounded_partial | Use with coverage badge and denominators. | Lap row grains differ by source family; use within-series first and show coverage denominators. |
 | IMSA WeatherTech SportsCar Championship | team_teammate_context | 235 | source_bounded_partial | Use with coverage badge and denominators. | Full-field results support descriptive team/teammate context, not engineering root-cause attribution. |
 | IMSA WeatherTech SportsCar Championship | section_pace | 0 | unavailable | Show unavailable or omit from comparison charts. | No official section-metric rows currently available for this series. |
-| INDY NXT | result_conversion | 40 | production_safe | Use in Career Analytics Lab. | Use percentiles alongside raw finish because field sizes and formats vary by series. |
-| INDY NXT | qualifying_conversion | 69 | production_safe | Use in Career Analytics Lab. | Qualifying rows exist; display session-format and group caveats where applicable. |
+| INDY NXT | result_conversion | 41 | production_safe | Use in Career Analytics Lab. | Use percentiles alongside raw finish because field sizes and formats vary by series. |
+| INDY NXT | qualifying_conversion | 70 | production_safe | Use in Career Analytics Lab. | Qualifying rows exist; display session-format and group caveats where applicable. |
 | INDY NXT | track_venue_history | 13 | production_safe | Use in Career Analytics Lab. | Venue and track-type coverage comes from canonical event and track metadata. |
-| INDY NXT | weather_context | 113 | source_bounded_partial | Use with coverage badge and denominators. | INDY NXT weather is modeled non-official; context only. |
-| INDY NXT | lap_shape | 1493 | source_bounded_partial | Use with coverage badge and denominators. | Lap row grains differ by source family; use within-series first and show coverage denominators. |
-| INDY NXT | team_teammate_context | 3127 | source_bounded_partial | Use with coverage badge and denominators. | Full-field results support descriptive team/teammate context, not engineering root-cause attribution. |
-| INDY NXT | section_pace | 319 | source_bounded_partial | Use with coverage badge and denominators. | Section metrics are currently INDY NXT-only and need denominator badges for sparse sessions. |
+| INDY NXT | weather_context | 115 | source_bounded_partial | Use with coverage badge and denominators. | INDY NXT weather is modeled non-official; context only. |
+| INDY NXT | lap_shape | 1558 | source_bounded_partial | Use with coverage badge and denominators. | Lap row grains differ by source family; use within-series first and show coverage denominators. |
+| INDY NXT | team_teammate_context | 3193 | source_bounded_partial | Use with coverage badge and denominators. | Full-field results support descriptive team/teammate context, not engineering root-cause attribution. |
+| INDY NXT | section_pace | 325 | source_bounded_partial | Use with coverage badge and denominators. | Section metrics are currently INDY NXT-only and need denominator badges for sparse sessions. |
 
 ## Modeling Priority
 
 | seriesName | raceRows | parityScore | recommendedDepth |
 | --- | --- | --- | --- |
 | GB3 Championship | 42 | 17 | next_deep_dive_candidate |
-| INDY NXT | 40 | 21 | reference_model_complete_for_ui_contract |
+| INDY NXT | 41 | 21 | reference_model_complete_for_ui_contract |
 | Formula Ford | 15 | 13.5 | lap_weather_specialist_pass |
 | Euroformula Open | 17 | 12.7 | result_conversion_pass |
 | IMSA WeatherTech SportsCar Championship | 1 | 12.1 | standalone_daytona_feature |

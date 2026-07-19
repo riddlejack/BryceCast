@@ -66,8 +66,8 @@ def main() -> None:
         row["sessionId"]: row for row in bryce_results
         if sessions[row["sessionId"]]["sessionType"] == "race"
     }
-    if len(canonical_races) != 145 or len(race) != 145:
-        fail(f"Personally attributable race ledger must cover all 145 rows, got {len(race)}")
+    if len(canonical_races) != 146 or len(race) != 146:
+        fail(f"Personally attributable race ledger must cover all 146 rows, got {len(race)}")
     if {row["sessionId"] for row in race} != set(canonical_races):
         fail("Race ledger session set must exactly match canonical Bryce race results")
     stint_laps = sum(int(row["lapCount"]) for row in rows(STINTS) if row["sessionId"] == DAYTONA)
@@ -149,7 +149,7 @@ def main() -> None:
     if not close(exact_miles + lower_miles, physical["floor"]["miles"]):
         fail("Physical-session mileage floor does not reconcile")
     personal = summary["personalRaceMileage"]
-    if personal["laps"] != 3019 or not close(personal["miles"], 6924.4):
+    if personal["laps"] != 3084 or not close(personal["miles"], 7010.9):
         fail("Personally attributable race audit totals changed unexpectedly")
 
     represented_events = {row["eventId"] for row in race}
@@ -165,8 +165,8 @@ def main() -> None:
             factor = float(row[f"routeFactor{suffix}"])
             if not close(float(row[f"routeAdjusted{suffix}Miles"]), distance * factor, 0.11):
                 fail(f"Route proxy formula invalid for {row['fromEventId']} to {row['toEventId']}")
-    if not close(sum(float(row["greatCircleMiles"]) for row in travel), 54649.3):
-        fail("Great-circle minimum displacement must preserve the audited 54,649.3 miles")
+    if not close(sum(float(row["greatCircleMiles"]) for row in travel), 55029.6):
+        fail("Great-circle minimum displacement must preserve the audited 55,029.6 miles")
     if summary["travel"]["actualTravel"]["blockedBy"] != ["seasonBase", "returnHomeFrequency"]:
         fail("Actual travel blockers must remain explicit")
 
@@ -214,7 +214,7 @@ def main() -> None:
 
     print(
         "career life-stats validation passed: "
-        f"145 race rows, 3019 personal race laps, {exact_laps + lower_laps} physical-session floor laps, "
+        f"146 race rows, 3084 personal race laps, {exact_laps + lower_laps} physical-session floor laps, "
         f"{len(unknown)} unknown sessions, {len(excluded)} aggregate qualifying summaries excluded"
     )
 

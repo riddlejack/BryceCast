@@ -1,8 +1,8 @@
 # INDY NXT Section-Lap Deep Dive
 
-Generated: `2026-07-19T14:59:31Z`
+Generated: `2026-07-19T21:03:15Z`
 Source dataset: `data/career/career.dataset.json`
-Source hash: `900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681`
+Source hash: `64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978`
 
 ## Source Scope
 
@@ -10,11 +10,11 @@ This lane uses INDY NXT official `official_section_results` and `official_top_se
 
 ## What Became Productized
 
-- `practice_qualifying_bryce_section_observations.csv`: 22421 Bryce section/lap observations with field-relative percentiles and clean-lap flags.
-- `practice_qualifying_session_summary.csv`: 89 session summaries across practice and qualifying.
-- `practice_qualifying_top_section_times.csv`: 3004 Bryce rows from official Top Section Times.
-- `section_family_strengths.csv`: 248 track/session/section-family aggregates.
-- `session_to_race_transfer.csv`: 40 historical prep-to-race rows.
+- `practice_qualifying_bryce_section_observations.csv`: 22660 Bryce section/lap observations with field-relative percentiles and clean-lap flags.
+- `practice_qualifying_session_summary.csv`: 91 session summaries across practice and qualifying.
+- `practice_qualifying_top_section_times.csv`: 3047 Bryce rows from official Top Section Times.
+- `section_family_strengths.csv`: 250 track/session/section-family aggregates.
+- `session_to_race_transfer.csv`: 41 historical prep-to-race rows.
 - Context packs: `context-packs/indy-nxt-section-lap-context.json`, `context-packs/road-america-prep-context.json`, and the current next-venue prep pack.
 
 ## Practice/Qualifying Section-Lap Findings
@@ -43,8 +43,8 @@ The Top Section Times table is now mined separately from per-lap Section Results
 
 These rows are historical backtests only. They are suitable for analyst features and prep-context language, not public finish forecasts.
 
-- Practice section median vs race finish percentile: n=32, Pearson=0.265, claim=historical_backtest_only.
-- Qualifying section median vs race finish percentile: n=39, Pearson=0.233, claim=historical_backtest_only.
+- Practice section median vs race finish percentile: n=33, Pearson=0.287, claim=historical_backtest_only.
+- Qualifying section median vs race finish percentile: n=40, Pearson=0.243, claim=historical_backtest_only.
 
 ## Road America Context
 
@@ -60,13 +60,14 @@ These rows are historical backtests only. They are suitable for analyst features
 
 ## Upcoming Venue Context
 
-Track: `Nashville Superspeedway`
+Track: `Portland International Raceway`
 
-- 2024 Practice 1: median section percentile 0.714, best Turn 3:0.82 n=30; Turn 1 Entry Turn 1 Exit Turn 2 Entry BackStretch BackStretch:0.69 n=30; Turn 4 Entry Turn 4 Exit:0.67 n=29.
-- 2024 Qualifications: median section percentile 0.625, best n/a.
-- 2024 Practice 2: median section percentile 0.714, best Turn 1 Entry Turn 1 Exit Turn 2 Entry BackStretch BackStretch:0.78 n=33; Turn 3:0.71 n=33; Turn 4 Entry Turn 4 Exit:0.67 n=33.
-- 2025 Qualifications: median section percentile 0.706, best n/a.
-- 2025 Practice: median section percentile 0.625, best Turn 3:0.65 n=43; Turn 1 Entry Turn 1 Exit Turn 2 Entry BackStretch BackStretch:0.62 n=43; Turn 4 Entry Turn 4 Exit:0.50 n=43.
+- 2024 Practice 1: median section percentile 0.667, best Turn 12:0.94 n=19; Turn 8:0.87 n=19; Turn 9:0.80 n=19; Turn 7:0.75 n=19.
+- 2024 Practice 2: median section percentile 0.533, best Turn 8:0.81 n=25; Turn 9:0.75 n=25; Turn 3:0.60 n=25; Turn 7:0.56 n=25.
+- 2024 Qualifications - Group 2: median section percentile 0.5, best Turn 2:0.88 n=8; Turn 9:0.88 n=8; Turn 3:0.81 n=8; Turn 8:0.81 n=8.
+- 2025 Practice 1: median section percentile 0.5, best Turn 1:0.63 n=26; Turn 4:0.61 n=27; Turn 6:0.56 n=27; Turns 10/11:0.50 n=28.
+- 2025 Practice 2: median section percentile 0.611, best Turn 12:0.83 n=20; Turn 8:0.76 n=20; Turn 4:0.72 n=20; Turn 3:0.65 n=20.
+- 2025 Qualifications - Group 2: median section percentile 0.714, best n/a.
 
 ## Caveats
 

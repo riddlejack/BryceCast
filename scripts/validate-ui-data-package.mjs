@@ -845,10 +845,10 @@ for (const field of [
     fail(`careerLab.lifeStats.${field} must mirror the validated summary.`);
   }
 }
-if (lifeStats.personalRaceMileage.raceRows !== 145 || lifeStats.personalRaceMileage.coveredRaceRows !== 145) {
-  fail('careerLab.lifeStats must cover all 145 canonical Bryce race results.');
+if (lifeStats.personalRaceMileage.raceRows !== 146 || lifeStats.personalRaceMileage.coveredRaceRows !== 146) {
+  fail('careerLab.lifeStats must cover all 146 canonical Bryce race results.');
 }
-if (lifeStats.personalRaceMileage.laps !== 3019 || lifeStats.personalRaceMileage.miles !== 6924.4) {
+if (lifeStats.personalRaceMileage.laps !== 3084 || lifeStats.personalRaceMileage.miles !== 7010.9) {
   fail('careerLab.lifeStats must carry personally attributable race laps and mileage.');
 }
 if (
@@ -859,7 +859,7 @@ if (
   fail('careerLab.lifeStats physical-session aggregates must preserve confidence classes.');
 }
 if (
-  lifeStats.travel.greatCircleMinimum.miles !== 54649.3 ||
+  lifeStats.travel.greatCircleMinimum.miles !== 55029.6 ||
   lifeStats.travel.routeAdjustedMinimum.confidenceClass !== 'modeled_range' ||
   lifeStats.travel.actualTravel.confidenceClass !== 'unknown'
 ) {
@@ -1010,11 +1010,11 @@ for (const field of ['schemaVersion', 'naturalEarth', 'geometry', 'globe', 'venu
     fail(`careerLab.atlas.${field} must mirror the validated atlas artifact.`);
   }
 }
-if (atlas.venueCount !== 34 || atlas.venues.length !== 34 || atlas.raceCount !== 145) {
-  fail('careerLab.atlas must carry all 34 physical venues and all 145 canonical race rows.');
+if (atlas.venueCount !== 34 || atlas.venues.length !== 34 || atlas.raceCount !== 146) {
+  fail('careerLab.atlas must carry all 34 physical venues and all 146 canonical race rows.');
 }
-if (atlas.venues.reduce((sum, venue) => sum + venue.raceCount, 0) !== 145) {
-  fail('careerLab.atlas venue race counts must reconcile to 145.');
+if (atlas.venues.reduce((sum, venue) => sum + venue.raceCount, 0) !== 146) {
+  fail('careerLab.atlas venue race counts must reconcile to 146.');
 }
 if (atlas.naturalEarth.license !== 'public_domain' || atlas.naturalEarth.sourceSha256 !== sourceInventory.careerAtlasNaturalEarth.sha256) {
   fail('careerLab.atlas must preserve pinned Natural Earth public-domain provenance.');
@@ -1096,7 +1096,7 @@ for (const key of [
     fail(`careerLab.atlas sourceRefs must include ${sourceInventory[key].path}.`);
   }
 }
-if (JSON.stringify(atlas).includes('54649.3') || JSON.stringify(atlas).includes('travelMiles')) {
+if (JSON.stringify(atlas).includes('55029.6') || JSON.stringify(atlas).includes('travelMiles')) {
   fail('careerLab.atlas must remain venue-only; travel displacement and mileage layers are parked.');
 }
 

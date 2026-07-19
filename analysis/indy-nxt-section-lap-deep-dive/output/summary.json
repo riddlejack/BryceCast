@@ -10,8 +10,8 @@
       "caveat": "Exploratory association only; no public point prediction and no post-race leakage for upcoming events.",
       "claimStrength": "historical_backtest_only",
       "label": "Practice section median vs race finish percentile",
-      "n": 32,
-      "pearson": 0.26532128641486175,
+      "n": 33,
+      "pearson": 0.2868042477438564,
       "x": "practiceMedianTrackSectionPercentile",
       "y": "finishPercentile"
     },
@@ -19,29 +19,29 @@
       "caveat": "Exploratory association only; no public point prediction and no post-race leakage for upcoming events.",
       "claimStrength": "historical_backtest_only",
       "label": "Qualifying section median vs race finish percentile",
-      "n": 39,
-      "pearson": 0.2326142192260736,
+      "n": 40,
+      "pearson": 0.2432380455825847,
       "x": "qualifyingMedianTrackSectionPercentile",
       "y": "finishPercentile"
     }
   ],
   "counts": {
     "roadAmericaPrepRows": 9,
-    "sectionFamilyRows": 248,
-    "sectionObservations": 22421,
-    "sessionSummaries": 89,
-    "sessionToRaceTransferRows": 40,
-    "topSectionRows": 3004,
-    "upcomingVenuePrepRows": 5
+    "sectionFamilyRows": 250,
+    "sectionObservations": 22660,
+    "sessionSummaries": 91,
+    "sessionToRaceTransferRows": 41,
+    "topSectionRows": 3047,
+    "upcomingVenuePrepRows": 6
   },
-  "generatedAt": "2026-07-19T14:59:31Z",
+  "generatedAt": "2026-07-19T21:03:15Z",
   "ok": true,
   "publicPointPrediction": false,
   "sourceDataset": "data/career/career.dataset.json",
-  "sourceHash": "900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681",
+  "sourceHash": "64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978",
   "upcomingVenue": {
-    "artifactSlug": "nashville_superspeedway",
-    "asOfDate": "2026-07-18",
-    "trackName": "Nashville Superspeedway"
+    "artifactSlug": "portland_international_raceway",
+    "asOfDate": "2026-07-19",
+    "trackName": "Portland International Raceway"
   }
 }

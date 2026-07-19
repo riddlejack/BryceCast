@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-11T20:43:23.500Z",
+  "generatedAt": "2026-07-19T20:49:53.633Z",
   "source": "open_meteo_historical_archive",
-  "archiveCutoffDate": "2026-07-10",
+  "archiveCutoffDate": "2026-07-18",
   "requestedVariables": [
     "temperature_2m",
     "apparent_temperature",
@@ -18,14 +18,14 @@
     "shortwave_radiation",
     "soil_temperature_0_to_7cm"
   ],
-  "eligibleExactWindowSessions": 113,
+  "eligibleExactWindowSessions": 115,
   "skippedDateOnlySessions": 78,
-  "skippedFutureSessions": 12,
-  "joinedSessions": 113,
+  "skippedFutureSessions": 20,
+  "joinedSessions": 115,
   "joinedBySessionType": {
     "race": 40,
-    "practice": 50,
-    "qualifying": 23
+    "practice": 51,
+    "qualifying": 24
   },
   "skipped": [],
   "joined": [
@@ -1158,11 +1158,31 @@
       "weatherId": "weather_indy_nxt_open_meteo_session_indy_nxt_2026_6897",
       "confidence": "modeled_medium",
       "rawArtifactPath": "data/career/raw/weather/open-meteo/indy-nxt/track_mid_ohio_sports_car_course/2026-07-04.json"
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6923",
+      "sessionType": "qualifying",
+      "trackId": "track_nashville_superspeedway",
+      "sourceSessionStart": "2026-07-18T15:35:00",
+      "joinedLocalHour": "2026-07-18T16:00",
+      "weatherId": "weather_indy_nxt_open_meteo_session_indy_nxt_2026_6923",
+      "confidence": "modeled_medium",
+      "rawArtifactPath": "data/career/raw/weather/open-meteo/indy-nxt/track_nashville_superspeedway/2026-07-18.json"
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6924",
+      "sessionType": "practice",
+      "trackId": "track_nashville_superspeedway",
+      "sourceSessionStart": "2026-07-18T10:35:00",
+      "joinedLocalHour": "2026-07-18T11:00",
+      "weatherId": "weather_indy_nxt_open_meteo_session_indy_nxt_2026_6924",
+      "confidence": "modeled_medium",
+      "rawArtifactPath": "data/career/raw/weather/open-meteo/indy-nxt/track_nashville_superspeedway/2026-07-18.json"
     }
   ],
-  "fetched": 1,
-  "cacheHits": 112,
-  "sourceEvidenceUpserted": 84,
+  "fetched": 115,
+  "cacheHits": 0,
+  "sourceEvidenceUpserted": 85,
   "rawArtifacts": [
     "data/career/raw/weather/open-meteo/indy-nxt/track_barber_motorsports_park/2024-04-26.json",
     "data/career/raw/weather/open-meteo/indy-nxt/track_barber_motorsports_park/2024-04-27.json",
@@ -1196,6 +1216,7 @@
     "data/career/raw/weather/open-meteo/indy-nxt/track_nashville_superspeedway/2024-09-15.json",
     "data/career/raw/weather/open-meteo/indy-nxt/track_nashville_superspeedway/2025-08-30.json",
     "data/career/raw/weather/open-meteo/indy-nxt/track_nashville_superspeedway/2025-08-31.json",
+    "data/career/raw/weather/open-meteo/indy-nxt/track_nashville_superspeedway/2026-07-18.json",
     "data/career/raw/weather/open-meteo/indy-nxt/track_portland_international_raceway/2024-08-23.json",
     "data/career/raw/weather/open-meteo/indy-nxt/track_portland_international_raceway/2024-08-24.json",
     "data/career/raw/weather/open-meteo/indy-nxt/track_portland_international_raceway/2024-08-25.json",

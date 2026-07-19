@@ -1,5 +1,5 @@
 {
-  "asOfDate": "2026-07-18",
+  "asOfDate": "2026-07-19",
   "careerLabPacks": 1,
   "careerPriorRows": 68,
   "charts": [
@@ -7,48 +7,48 @@
     "analysis/predictive-race-intelligence/output/charts/career_track_type_priors.svg",
     "analysis/predictive-race-intelligence/output/charts/upcoming_track_indy_nxt_history.svg"
   ],
-  "generatedAt": "2026-07-19T14:59:20Z",
-  "indyNxtRaceRows": 40,
+  "generatedAt": "2026-07-19T21:02:58Z",
+  "indyNxtRaceRows": 41,
   "inventoryItems": 76,
   "liveRaceDayPacks": 1,
   "modelRows": 14,
-  "raceDebriefPacks": 40,
-  "repoHead": "d9dc2b9",
+  "raceDebriefPacks": 41,
+  "repoHead": "21c2aa8",
   "schemaVersion": "brycecast.predictiveRaceIntelligence.summary.v1",
-  "sourceHash": "900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681",
-  "upcomingEventPacks": 5,
+  "sourceHash": "64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978",
+  "upcomingEventPacks": 4,
   "upstreamCoverage": {
-    "asOfDate": "2026-07-18",
+    "asOfDate": "2026-07-19",
     "checks": [
       {
         "coverage": "exact_indy_nxt_bryce_race_sessions",
         "field": "sessionId",
         "id": "race_debrief_scores",
-        "rows": 40
+        "rows": 41
       },
       {
         "coverage": "exact_indy_nxt_bryce_race_sessions",
         "field": "sessionId",
         "id": "full_field_lap_dynamics_by_race",
-        "rows": 40
+        "rows": 41
       },
       {
         "coverage": "exact_indy_nxt_bryce_race_sessions",
         "field": "sessionId",
         "id": "incident_penalty_context",
-        "rows": 40
+        "rows": 41
       },
       {
         "coverage": "exact_indy_nxt_bryce_race_sessions",
         "field": "sessionId",
         "id": "team_context_by_race",
-        "rows": 40
+        "rows": 41
       },
       {
         "coverage": "exact_indy_nxt_bryce_race_sessions",
         "field": "sessionId",
         "id": "championship_progression",
-        "rows": 40
+        "rows": 41
       },
       {
         "allowedMissing": [
@@ -57,22 +57,22 @@
         "coverage": "exact_indy_nxt_bryce_race_sessions_minus_source_broken_holdout",
         "field": "sessionId",
         "id": "section_results_deep_by_race",
-        "rows": 39
+        "rows": 40
       },
       {
         "coverage": "exact_future_indy_nxt_events_without_bryce_race_results",
         "field": "eventId",
         "id": "future_weekend_prep_inputs",
-        "rows": 5
+        "rows": 4
       },
       {
         "coverage": "exact_bryce_finished_race_sessions",
         "field": "sessionId",
         "id": "career_result_conversion",
-        "rows": 141
+        "rows": 142
       }
     ],
-    "datasetSourceHash": "900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681",
+    "datasetSourceHash": "64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978",
     "refreshedBy": [
       {
         "bytes": 58341,
@@ -95,28 +95,28 @@
     ],
     "sourceRefs": [
       {
-        "bytes": 1606,
+        "bytes": 1296,
         "path": "analysis/indy-nxt-discovery/output/deep_dive/tables/future_weekend_prep_inputs.csv",
         "role": "future event coverage",
-        "sha256": "bed5edc3b674ccaa1a38d91c9cddd532046f119114f601a71f40b5cb3d355896"
+        "sha256": "3aabd6ff6adc60ac9a5ca1f2471af8803f19b69df25d99b60dbc52076287abf7"
       },
       {
-        "bytes": 19255,
+        "bytes": 19748,
         "path": "analysis/indy-nxt-discovery/output/deep_dive/tables/race_debrief_scores.csv",
         "role": "completed INDY NXT race coverage",
-        "sha256": "3b75fe199977f9b705a93cc2fbbd9d115c02d28aa307fa108cf2e906527e500b"
+        "sha256": "bc7d8ce5d97581bf39ab4af57b0def382e3353437dd9cff25f4f13265c6cecb0"
       },
       {
-        "bytes": 14603,
+        "bytes": 15065,
         "path": "analysis/indy-nxt-discovery/output/deep_dive/tables/section_results_deep_by_race.csv",
         "role": "section coverage with source-broken holdout",
-        "sha256": "2cfe0faef37b8775d944b88fc64479f21ed119a68ebd5423c973a3c328487b45"
+        "sha256": "61ed911b600a6952ebd29687fe81f9fe6543862f01b7d8091fc2a1d2c214605b"
       },
       {
-        "bytes": 36049,
+        "bytes": 36269,
         "path": "analysis/career-parity/output/tables/career_result_conversion.csv",
         "role": "career finished-race coverage",
-        "sha256": "5d0da9cdb880592f16df59e0553113dbb6b09741e216201f029293aa85b39b07"
+        "sha256": "96ac7c27b407d8b15f845051906c38d127927e116d9a6c57dce2b9c3b467f8f1"
       }
     ]
   },

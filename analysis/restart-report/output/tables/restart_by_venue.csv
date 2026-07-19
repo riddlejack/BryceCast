@@ -1,14 +1,14 @@
 venueSlug,trackName,trackType,seasons,races,restarts,bryceRestartsCounted,bryceNet,bryceGained,bryceHeld,bryceSlipped,avgBryceNetPerRestart,fieldAvgNetPerRestart,sourceHash
-barber_motorsports_park,Barber Motorsports Park,road,2024;2025;2026,3,5,5,-2,1,3,1,-0.4,0.0,900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681
-indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,road,2024;2025;2026,4,6,6,4,2,4,0,0.667,0.0,900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681
-iowa_speedway,Iowa Speedway,oval,2024;2025,2,3,3,1,1,2,0,0.333,0.0,900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681
-mid_ohio,Mid-Ohio Sports Car Course,road,2024;2025;2026,3,5,5,1,1,4,0,0.2,0.0,900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681
-nashville_superspeedway,Nashville Superspeedway,oval,2024;2025,2,2,2,0,0,2,0,0.0,0.0,900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681
-portland_international_raceway,Portland International Raceway,road,2024;2025,2,2,1,0,0,1,0,0.0,0.0,900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681
-road_america,Road America,road,2024;2025;2026,3,8,8,-1,3,3,2,-0.125,0.0,900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681
-streets_of_arlington,Streets of Arlington,street,2026,1,2,2,-1,0,1,1,-0.5,0.0,900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681
-streets_of_detroit,Streets of Detroit,street,2024;2025;2026,3,8,4,1,1,3,0,0.25,0.0,900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681
-streets_of_st_petersburg,Streets of St. Petersburg,street,2024;2025;2026,3,9,7,-4,0,4,3,-0.571,0.0,900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681
-the_milwaukee_mile,The Milwaukee Mile,oval,2024;2025,2,2,2,3,2,0,0,1.5,0.0,900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681
-weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,road,2024;2025,4,7,3,0,0,3,0,0.0,0.0,900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681
-world_wide_technology_raceway,World Wide Technology Raceway,oval,2024;2025;2026,2,6,3,2,2,0,1,0.667,0.0,900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681
+barber_motorsports_park,Barber Motorsports Park,road,2024;2025;2026,3,5,5,-2,1,3,1,-0.4,0.0,64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978
+indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,road,2024;2025;2026,4,6,6,4,2,4,0,0.667,0.0,64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978
+iowa_speedway,Iowa Speedway,oval,2024;2025,2,3,3,1,1,2,0,0.333,0.0,64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978
+mid_ohio,Mid-Ohio Sports Car Course,road,2024;2025;2026,3,5,5,1,1,4,0,0.2,0.0,64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978
+nashville_superspeedway,Nashville Superspeedway,oval,2024;2025;2026,3,4,4,-1,0,3,1,-0.25,0.0,64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978
+portland_international_raceway,Portland International Raceway,road,2024;2025,2,2,1,0,0,1,0,0.0,0.0,64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978
+road_america,Road America,road,2024;2025;2026,3,8,8,-1,3,3,2,-0.125,0.0,64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978
+streets_of_arlington,Streets of Arlington,street,2026,1,2,2,-1,0,1,1,-0.5,0.0,64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978
+streets_of_detroit,Streets of Detroit,street,2024;2025;2026,3,8,4,1,1,3,0,0.25,0.0,64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978
+streets_of_st_petersburg,Streets of St. Petersburg,street,2024;2025;2026,3,9,7,-4,0,4,3,-0.571,0.0,64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978
+the_milwaukee_mile,The Milwaukee Mile,oval,2024;2025,2,2,2,3,2,0,0,1.5,0.0,64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978
+weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,road,2024;2025,4,7,3,0,0,3,0,0.0,0.0,64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978
+world_wide_technology_raceway,World Wide Technology Raceway,oval,2024;2025;2026,2,6,3,2,2,0,1,0.667,0.0,64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978

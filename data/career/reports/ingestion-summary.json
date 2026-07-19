@@ -1,10 +1,10 @@
 {
   "schemaVersion": "bryce-career-ingestion-summary.v1",
-  "generatedAt": "2026-07-11T20:53:58.265Z",
+  "generatedAt": "2026-07-19T20:51:06.218Z",
   "datasetPath": "data/career/career.dataset.json",
   "validation": {
     "ok": true,
-    "checkedAt": "2026-07-11T20:53:57.595Z",
+    "checkedAt": "2026-07-19T20:51:05.588Z",
     "errors": [],
     "warnings": [
       {
@@ -22,28 +22,28 @@
     "tracks": 42,
     "seasons": 10,
     "events": 87,
-    "sessions": 483,
-    "results": 8494,
-    "qualifyingResults": 1739,
-    "lapSamples": 70061,
-    "racecraftEvents": 39,
+    "sessions": 493,
+    "results": 8563,
+    "qualifyingResults": 1762,
+    "lapSamples": 71348,
+    "racecraftEvents": 40,
     "penalties": 86,
-    "incidents": 144,
-    "weatherObservations": 199,
-    "mediaAssets": 1010,
+    "incidents": 149,
+    "weatherObservations": 201,
+    "mediaAssets": 1024,
     "broadcastRoutes": 0,
     "notificationRules": 0,
     "notificationEvents": 0,
-    "derivedMetrics": 405,
-    "sourceEvidence": 1266,
+    "derivedMetrics": 413,
+    "sourceEvidence": 1280,
     "gaps": 10
   },
   "readiness": {
     "sessions": {
-      "total": 483,
-      "withScheduledStart": 473,
-      "withExactTimestamp": 395,
-      "withTimezone": 483,
+      "total": 493,
+      "withScheduledStart": 483,
+      "withExactTimestamp": 405,
+      "withTimezone": 493,
       "timezoneCoverage": 1
     },
     "tracks": {
@@ -57,10 +57,10 @@
       "lengthCoverage": 1
     },
     "weather": {
-      "observations": 199,
-      "sessionsCovered": 199,
+      "observations": 201,
+      "sessionsCovered": 201,
       "tracksCovered": 24,
-      "withAmbientTemp": 114,
+      "withAmbientTemp": 116,
       "withTrackTemp": 1,
       "trackTempCoverage": 0.005
     },
@@ -73,17 +73,17 @@
     "analyticsBlockedOrPartial": []
   },
   "sourceEvidence": {
-    "total": 1266,
+    "total": 1280,
     "bySourceType": {
       "archived_official_page": 2,
-      "official_pdf": 754,
+      "official_pdf": 764,
       "official_page": 117,
-      "official_api": 282,
+      "official_api": 285,
       "official_html": 16,
       "official_image": 5,
       "official_article": 4,
       "official_json": 2,
-      "weather_api": 84
+      "weather_api": 85
     }
   },
   "workstreams": [
@@ -405,13 +405,13 @@
     },
     {
       "name": "indy-nxt-import-report.json",
-      "checkedAt": "2026-07-11T20:53:51.783Z",
-      "refresh": false,
-      "fetched": 0,
-      "cached": 198,
-      "sessionsImported": 191,
-      "resultsImported": 3286,
-      "bryceResultsImported": 159,
+      "checkedAt": "2026-07-19T20:42:57.160Z",
+      "refresh": true,
+      "fetched": 201,
+      "cached": 0,
+      "sessionsImported": 194,
+      "resultsImported": 3355,
+      "bryceResultsImported": 162,
       "lapSamplesImported": null,
       "weatherObservationsImported": null,
       "standingsImported": null,

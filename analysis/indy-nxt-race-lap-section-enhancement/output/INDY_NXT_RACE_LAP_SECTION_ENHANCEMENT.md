@@ -1,8 +1,8 @@
 # INDY NXT Race Lap/Section Enhancement
 
-Generated: `2026-07-19T14:59:35Z`
+Generated: `2026-07-19T21:03:20Z`
 Source dataset: `data/career/career.dataset.json`
-Source hash: `900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681`
+Source hash: `64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978`
 
 ## Source Scope
 
@@ -10,15 +10,15 @@ This lane uses official INDY NXT race lap chart rows, official caution/incidents
 
 ## What Became Productized
 
-- `race_lap_microstates.csv`: 1493 Bryce lap-position rows with field percentiles and caution/restart labels.
-- `race_lap_segments.csv`: 184 caution-aware lap segments.
-- `race_lap_inflection_points.csv`: 164 position-movement events.
+- `race_lap_microstates.csv`: 1558 Bryce lap-position rows with field percentiles and caution/restart labels.
+- `race_lap_segments.csv`: 191 caution-aware lap segments.
+- `race_lap_inflection_points.csv`: 170 position-movement events.
 - `race_section_lap_observations.csv`: clean-lap-aware race section observations (Bryce only).
-- `race_section_lap_field_observations.csv.gz`: 422717 FULL-FIELD ranked rows — every car, every lap, every section, plus a synthesized derived-remainder row per car/lap.
+- `race_section_lap_field_observations.csv.gz`: 429209 FULL-FIELD ranked rows — every car, every lap, every section, plus a synthesized derived-remainder row per car/lap.
 - `race_section_field_distribution.json`: per-section field time distributions + Bryce's per-lap derived remainder with real full-field percentiles.
-- `race_section_session_summary.csv`: 39 race section summaries.
+- `race_section_session_summary.csv`: 40 race section summaries.
 - Context packs: `context-packs/indy-nxt-race-lap-section-context.json`, `context-packs/road-america-race-context.json`, and the current next-venue race context pack.
-- Source split: {'official_section_results+official_lap_chart+official_incident_caution_context': 17622, 'official_section_results_only': 219}.
+- Source split: {'official_section_results+official_lap_chart+official_incident_caution_context': 17882, 'official_section_results_only': 222}.
 
 ## Lap Microstates
 
@@ -66,10 +66,9 @@ clamped.
 
 ## Upcoming Venue Race Context
 
-Track: `Nashville Superspeedway`
+Track: `Portland International Raceway`
 
-- 2024 Music City Grand Prix: start 11.0, finish 7.0, best running 6.0, section median 0.5.
-- 2025 Music City Grand Prix: start 6.0, finish 6.0, best running 6.0, section median 0.571.
+- 2024 Grand Prix of Portland: start 3.0, finish 3.0, best running 3.0, section median 0.688.
 
 ## Caveats
 

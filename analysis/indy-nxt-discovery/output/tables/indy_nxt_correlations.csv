@@ -1,12 +1,12 @@
 x,y,label,n,pearson,caution
-startPosition,finishPosition,Lower start vs lower finish,40,0.40598136873841234,exploratory_correlation_not_causal
-qualifyingPosition,finishPosition,Qualifying rank vs finish,38,0.39306292491223815,exploratory_correlation_not_causal
-qualifyingToFinishDelta,finishPosition,Qualifying conversion vs finish,38,-0.6878136300020157,exploratory_correlation_not_causal
-positionGain,finishPosition,Position gain vs finish,40,-0.6800212686177002,exploratory_correlation_not_causal
-bestLapRank,finishPosition,Best-lap rank vs finish,38,0.4552970508721435,exploratory_correlation_not_causal
-cautionShare,positionGain,Caution share vs gain,40,-0.05454640822329661,exploratory_correlation_not_causal
-passesPerLap,positionGain,Race passing density vs gain,40,0.011511688928226476,exploratory_correlation_not_causal
-ambientTempC,finishPosition,Ambient temp vs finish,40,-0.11838771069513909,exploratory_correlation_not_causal
+startPosition,finishPosition,Lower start vs lower finish,41,0.4106238204824112,exploratory_correlation_not_causal
+qualifyingPosition,finishPosition,Qualifying rank vs finish,39,0.3984259411442632,exploratory_correlation_not_causal
+qualifyingToFinishDelta,finishPosition,Qualifying conversion vs finish,39,-0.6843527519295265,exploratory_correlation_not_causal
+positionGain,finishPosition,Position gain vs finish,41,-0.6759262808852599,exploratory_correlation_not_causal
+bestLapRank,finishPosition,Best-lap rank vs finish,39,0.4552968523006019,exploratory_correlation_not_causal
+cautionShare,positionGain,Caution share vs gain,41,-0.055296071184108515,exploratory_correlation_not_causal
+passesPerLap,positionGain,Race passing density vs gain,41,0.012611745464804931,exploratory_correlation_not_causal
+ambientTempC,finishPosition,Ambient temp vs finish,40,-0.11693100023389107,exploratory_correlation_not_causal
 windGustKph,positionGain,Wind gust vs gain,40,-0.1246419789867599,exploratory_correlation_not_causal
 precipitationMm,positionGain,Precipitation vs gain,40,-0.01619593382454059,exploratory_correlation_not_causal
-pitStops,finishPosition,Pit stops vs finish,40,-0.00849249014182025,exploratory_correlation_not_causal
+pitStops,finishPosition,Pit stops vs finish,41,-0.0042901346608600925,exploratory_correlation_not_causal

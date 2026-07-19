@@ -38,7 +38,7 @@
       "type": "small_multiple"
     }
   ],
-  "generatedAt": "2026-07-19T14:59:19Z",
+  "generatedAt": "2026-07-19T21:02:57Z",
   "id": "career_lab_context",
   "metricFamilyParity": [
     {
@@ -468,7 +468,7 @@
       "parityStatus": "production_safe",
       "seriesId": "series_indy_nxt",
       "seriesName": "INDY NXT",
-      "sourceRowsOrSessions": "40",
+      "sourceRowsOrSessions": "41",
       "uiUse": "Use in Career Analytics Lab."
     },
     {
@@ -478,7 +478,7 @@
       "parityStatus": "production_safe",
       "seriesId": "series_indy_nxt",
       "seriesName": "INDY NXT",
-      "sourceRowsOrSessions": "69",
+      "sourceRowsOrSessions": "70",
       "uiUse": "Use in Career Analytics Lab."
     },
     {
@@ -498,7 +498,7 @@
       "parityStatus": "source_bounded_partial",
       "seriesId": "series_indy_nxt",
       "seriesName": "INDY NXT",
-      "sourceRowsOrSessions": "113",
+      "sourceRowsOrSessions": "115",
       "uiUse": "Use with coverage badge and denominators."
     },
     {
@@ -508,7 +508,7 @@
       "parityStatus": "source_bounded_partial",
       "seriesId": "series_indy_nxt",
       "seriesName": "INDY NXT",
-      "sourceRowsOrSessions": "1493",
+      "sourceRowsOrSessions": "1558",
       "uiUse": "Use with coverage badge and denominators."
     },
     {
@@ -518,7 +518,7 @@
       "parityStatus": "source_bounded_partial",
       "seriesId": "series_indy_nxt",
       "seriesName": "INDY NXT",
-      "sourceRowsOrSessions": "3127",
+      "sourceRowsOrSessions": "3193",
       "uiUse": "Use with coverage badge and denominators."
     },
     {
@@ -528,7 +528,7 @@
       "parityStatus": "source_bounded_partial",
       "seriesId": "series_indy_nxt",
       "seriesName": "INDY NXT",
-      "sourceRowsOrSessions": "319",
+      "sourceRowsOrSessions": "325",
       "uiUse": "Use with coverage badge and denominators."
     }
   ],
@@ -2964,6 +2964,24 @@
       "trackType": "road"
     },
     {
+      "eventName": "Music City Grand Prix",
+      "finishPercentile": "0.6087",
+      "finishPosition": "10.0",
+      "points": "20",
+      "positionGain": "-2.0",
+      "raceLabel": "2026 Music City Grand Prix",
+      "seasonYear": "2026",
+      "seriesId": "series_indy_nxt",
+      "seriesName": "INDY NXT",
+      "sessionId": "session_indy_nxt_2026_6755",
+      "sourceState": "official_or_source_backed_result",
+      "startPosition": "8.0",
+      "status": "running",
+      "teamName": "Chip Ganassi Racing",
+      "trackName": "Nashville Superspeedway",
+      "trackType": "oval"
+    },
+    {
       "eventName": "Indianapolis Grand Prix Race 1",
       "finishPercentile": "0.125",
       "finishPosition": "22.0",
@@ -3072,7 +3090,7 @@
       "trackType": "road"
     }
   ],
-  "resultConversionRows": 141,
+  "resultConversionRows": 142,
   "schemaVersion": "brycecast.careerLabContextPack.v1",
   "seriesSummary": [
     {
@@ -3088,16 +3106,16 @@
       "top5Rate": "0.11904761904761904"
     },
     {
-      "avgFinish": "12.525",
-      "avgFinishPercentile": "0.45407",
-      "avgGain": "-0.95",
-      "issueLikeStatusRate": "0.125",
-      "medianFinish": "12.5",
-      "raceRows": "40",
+      "avgFinish": "12.463414634146341",
+      "avgFinishPercentile": "0.45784146341463416",
+      "avgGain": "-0.975609756097561",
+      "issueLikeStatusRate": "0.12195121951219512",
+      "medianFinish": "12.0",
+      "raceRows": "41",
       "seriesId": "series_indy_nxt",
       "seriesName": "INDY NXT",
-      "top10Rate": "0.45",
-      "top5Rate": "0.1"
+      "top10Rate": "0.4634146341463415",
+      "top5Rate": "0.0975609756097561"
     },
     {
       "avgFinish": "4.75",
@@ -3167,31 +3185,31 @@
     "Formula Ford lap/weather context is source-bounded and should be labeled separately.",
     "IMSA Daytona remains a standalone sports-car feature."
   ],
-  "sourceHash": "900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681",
+  "sourceHash": "64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978",
   "sourceRefs": [
     {
-      "bytes": 835,
+      "bytes": 915,
       "path": "analysis/career-parity/output/tables/career_series_result_summary.csv",
       "role": "career summary",
-      "sha256": "dad1bf01ac409cbf56cefad861c23092cb4ae77f15994fe9ec9a7772e91e9031"
+      "sha256": "2a70c2d8016f25ef0a4425c11e517f2d137f5cfb1a133dd3b2a4509666111b34"
     },
     {
       "bytes": 12247,
       "path": "analysis/career-parity/output/tables/career_metric_family_parity.csv",
       "role": "metric parity",
-      "sha256": "c72df4e8627d5a2b35afe96e3a3eb5cdf23e215588c48bc28665a70ad993bcb1"
+      "sha256": "7f1d3e6466d18ba4e0be74ef70341c5b355e11f5c5d47dd303c86f19e0d44f10"
     },
     {
-      "bytes": 36049,
+      "bytes": 36269,
       "path": "analysis/career-parity/output/tables/career_result_conversion.csv",
       "role": "result conversion",
-      "sha256": "5d0da9cdb880592f16df59e0553113dbb6b09741e216201f029293aa85b39b07"
+      "sha256": "96ac7c27b407d8b15f845051906c38d127927e116d9a6c57dce2b9c3b467f8f1"
     },
     {
-      "bytes": 23443,
+      "bytes": 23439,
       "path": "analysis/predictive-race-intelligence/output/career_prior_matrix.csv",
       "role": "career prior matrix chart source",
-      "sha256": "cb228dac9752a89a8cd8a1e9aa0739c4aebf46c2694758beed958f2db16d01a3"
+      "sha256": "b680a804217dd67509abbd0774e735b91d131631a2ba9e9b2ab2fdaf11350215"
     }
   ],
   "topCareerStories": [
@@ -3208,7 +3226,7 @@
       "story": "Track-type prior"
     },
     {
-      "detail": "2024 FROC 2024 Round 5 - Highlands Motorsport Park; 2023 Euroformula Open 2023 Round 2 - Spa-Francorchamps; 2023 Euroformula Open 2023 Round 3 - Hungaroring",
+      "detail": "2024 FROC 2024 Round 5 - Highlands Motorsport Park; 2023 Euroformula Open 2023 Round 4 - Paul Ricard; 2023 Euroformula Open 2023 Round 2 - Spa-Francorchamps",
       "story": "Best finish-percentile races"
     }
   ],

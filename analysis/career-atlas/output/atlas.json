@@ -65,7 +65,7 @@
     "sourceSha256": "9e0729ee253ca7d7a5c4ae9395fb1902264c5377c52e224d13dd85010e2835d9",
     "sourceUrl": "https://github.com/nvkelso/natural-earth-vector/blob/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_land.geojson"
   },
-  "raceCount": 145,
+  "raceCount": 146,
   "schemaVersion": "brycecast.careerAtlas.v3",
   "sourceRefs": [
     {
@@ -89,9 +89,9 @@
       "sha256": "878cf8ba950686b43399cead48f7a66699121404ba6fb9546a4c6f261b5e6f10"
     },
     {
-      "note": "A2 personally attributable ledger covering all 145 canonical race rows.",
+      "note": "A2 personally attributable ledger covering all 146 canonical race rows.",
       "path": "analysis/career-life-stats/output/tables/miles_raced.csv",
-      "sha256": "27a4f559f732fea5ee97fc29fdb39eed004eda27c527ba57f71978b1e9f1f784"
+      "sha256": "aa958b1af6a94752643766307af7618a522df3aa4e6b3e9f996ea58df70ae991"
     },
     {
       "note": "A2 metric-grain and confidence-class contracts.",
@@ -101,7 +101,7 @@
     {
       "note": "Canonical race identity, series, date, and classified finish fields.",
       "path": "data/career/career.dataset.json",
-      "sha256": "900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681"
+      "sha256": "64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978"
     }
   ],
   "venueCount": 34,
@@ -1513,52 +1513,52 @@
         "bestFinish": 6,
         "firstRaceDate": "2024-09-14",
         "firstYear": 2024,
-        "lastYear": 2025,
+        "lastYear": 2026,
         "latestRace": {
-          "eventId": "event_indy_nxt_2025_5489",
-          "raceDate": "2025-08-30",
-          "raceHref": "/races/session_indy_nxt_2025_6447",
+          "eventId": "event_indy_nxt_2026_5538",
+          "raceDate": "2026-07-18",
+          "raceHref": "/races/session_indy_nxt_2026_6755",
           "raceLabel": "Music City Grand Prix \u00b7 Race",
-          "sessionId": "session_indy_nxt_2025_6447"
+          "sessionId": "session_indy_nxt_2026_6755"
         },
-        "latestRaceDate": "2025-08-30",
-        "raceCount": 2,
+        "latestRaceDate": "2026-07-18",
+        "raceCount": 3,
         "seriesId": "series_indy_nxt",
         "seriesName": "INDY NXT",
         "seriesShort": "INDY NXT"
       },
       "firstYear": 2024,
-      "lastYear": 2025,
+      "lastYear": 2026,
       "lat": 36.0469,
       "latestRace": {
-        "eventId": "event_indy_nxt_2025_5489",
-        "raceDate": "2025-08-30",
-        "raceHref": "/races/session_indy_nxt_2025_6447",
+        "eventId": "event_indy_nxt_2026_5538",
+        "raceDate": "2026-07-18",
+        "raceHref": "/races/session_indy_nxt_2026_6755",
         "raceLabel": "Music City Grand Prix \u00b7 Race",
-        "sessionId": "session_indy_nxt_2025_6447"
+        "sessionId": "session_indy_nxt_2026_6755"
       },
       "lon": -86.4119,
       "projected": {
         "x": 497.327,
         "y": 116.168
       },
-      "raceCount": 2,
+      "raceCount": 3,
       "region": "North America",
       "seriesSpans": [
         {
           "bestFinish": 6,
           "firstRaceDate": "2024-09-14",
           "firstYear": 2024,
-          "lastYear": 2025,
+          "lastYear": 2026,
           "latestRace": {
-            "eventId": "event_indy_nxt_2025_5489",
-            "raceDate": "2025-08-30",
-            "raceHref": "/races/session_indy_nxt_2025_6447",
+            "eventId": "event_indy_nxt_2026_5538",
+            "raceDate": "2026-07-18",
+            "raceHref": "/races/session_indy_nxt_2026_6755",
             "raceLabel": "Music City Grand Prix \u00b7 Race",
-            "sessionId": "session_indy_nxt_2025_6447"
+            "sessionId": "session_indy_nxt_2026_6755"
           },
-          "latestRaceDate": "2025-08-30",
-          "raceCount": 2,
+          "latestRaceDate": "2026-07-18",
+          "raceCount": 3,
           "seriesId": "series_indy_nxt",
           "seriesName": "INDY NXT",
           "seriesShort": "INDY NXT"

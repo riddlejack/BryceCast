@@ -182,8 +182,8 @@ def main() -> None:
         if rebuilt_texture.read_bytes() != TEXTURE.read_bytes():
             fail("Full-world globe texture build is not byte-for-byte deterministic")
 
-    if len(ledger) != 145 or len({row["sessionId"] for row in ledger}) != 145:
-        fail("Atlas source ledger must remain the A2 145-race driver ledger")
+    if len(ledger) != 146 or len({row["sessionId"] for row in ledger}) != 146:
+        fail("Atlas source ledger must remain the A2 146-race driver ledger")
     if any(row["confidenceClass"] != "observed_exact" for row in ledger):
         fail("Every atlas race-count row must remain observed_exact")
 
@@ -219,8 +219,8 @@ def main() -> None:
     venues = atlas.get("venues", [])
     if atlas.get("venueCount") != 34 or len(venues) != 34 or set(expected_by_venue) != {row["trackName"] for row in venues}:
         fail("Atlas must carry all 34 physical A2 career venues exactly once")
-    if atlas.get("raceCount") != 145 or sum(row["raceCount"] for row in venues) != 145:
-        fail("Atlas venue counts must reconcile to all 145 canonical races")
+    if atlas.get("raceCount") != 146 or sum(row["raceCount"] for row in venues) != 146:
+        fail("Atlas venue counts must reconcile to all 146 canonical races")
     if len({row["venueId"] for row in venues}) != 34 or any(not row["venueId"].startswith("venue_") for row in venues):
         fail("Atlas venue identities must be unique and deterministic")
 
@@ -303,7 +303,7 @@ def main() -> None:
 
     print(
         "career atlas validation passed: "
-        f"34 sourced venues / 145 canonical races / 127-feature full-world texture / byte-stable rebuild"
+        f"34 sourced venues / 146 canonical races / 127-feature full-world texture / byte-stable rebuild"
     )
 
 

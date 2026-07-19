@@ -312,14 +312,14 @@ for (const season of careerScreen.lapPositionMix) {
    confidence-preserving physical mileage, and bounded travel semantics. */
 const lifeStats = careerScreen.lifeStats;
 assert.equal(lifeStats.schemaVersion, 'brycecast.careerLifeStats.v2');
-assert.equal(lifeStats.personalRaceMileage.raceRows, 145, 'life-stats must use all canonical Bryce race rows');
-assert.equal(lifeStats.personalRaceMileage.coveredRaceRows, 145, 'every canonical Bryce race row has sourced attribution');
-assert.equal(lifeStats.personalRaceMileage.laps, 3019, 'Daytona must use driver-stint laps, not shared-car laps');
-assert.equal(lifeStats.personalRaceMileage.miles, 6924.4, 'personal race mileage must reconcile to the driver-race ledger');
+assert.equal(lifeStats.personalRaceMileage.raceRows, 146, 'life-stats must use all canonical Bryce race rows');
+assert.equal(lifeStats.personalRaceMileage.coveredRaceRows, 146, 'every canonical Bryce race row has sourced attribution');
+assert.equal(lifeStats.personalRaceMileage.laps, 3084, 'Daytona must use driver-stint laps, not shared-car laps');
+assert.equal(lifeStats.personalRaceMileage.miles, 7010.9, 'personal race mileage must reconcile to the driver-race ledger');
 assert.equal(lifeStats.physicalSessionMileage.floor.confidenceClass, 'observed_lower_bound');
 assert.equal(lifeStats.physicalSessionMileage.exact.confidenceClass, 'observed_exact');
 assert.equal(lifeStats.physicalSessionMileage.unknown.confidenceClass, 'unknown');
-assert.equal(lifeStats.travel.greatCircleMinimum.miles, 54649.3, 'minimum displacement must stay venue-to-venue');
+assert.equal(lifeStats.travel.greatCircleMinimum.miles, 55029.6, 'minimum displacement must stay venue-to-venue');
 assert.equal(lifeStats.travel.routeAdjustedMinimum.confidenceClass, 'modeled_range');
 assert.deepEqual(lifeStats.travel.actualTravel.blockedBy, ['seasonBase', 'returnHomeFrequency']);
 assert.deepEqual(
@@ -343,9 +343,9 @@ for (const venue of lifeStats.venueSources) {
 const atlas = careerScreen.atlas;
 assert.equal(atlas.schemaVersion, 'brycecast.careerAtlas.v3');
 assert.equal(atlas.venueCount, 34, 'atlas must carry every physical A2 venue');
-assert.equal(atlas.raceCount, 145, 'atlas race counts must use all canonical Bryce race rows');
+assert.equal(atlas.raceCount, 146, 'atlas race counts must use all canonical Bryce race rows');
 assert.equal(atlas.venues.length, atlas.venueCount);
-assert.equal(atlas.venues.reduce((sum, venue) => sum + venue.raceCount, 0), 145);
+assert.equal(atlas.venues.reduce((sum, venue) => sum + venue.raceCount, 0), 146);
 assert.equal(atlas.naturalEarth.license, 'public_domain');
 assert.equal(atlas.geometry.projection, 'equirectangular_wrapped');
 assert.ok(atlas.geometry.landPath.startsWith('M') && atlas.geometry.ringCount >= 20, 'atlas land path must be built and clipped');
@@ -368,7 +368,7 @@ for (const venue of atlas.venues) {
   }
 }
 assert.deepEqual(new Set(atlas.venues.map((venue) => venue.region)), new Set(['North America', 'Europe', 'Oceania']));
-assert.ok(!JSON.stringify(atlas).includes('54649.3'), 'minimum displacement must not leak into the venue-only atlas');
+assert.ok(!JSON.stringify(atlas).includes('55029.6'), 'minimum displacement must not leak into the venue-only atlas');
 
 /* The venue dossier: this place, other years. Bryce's most explicit ask —
    year-over-year conditions + results per venue, wind only where the shape is

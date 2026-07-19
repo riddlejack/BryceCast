@@ -382,16 +382,16 @@ assert.equal(replayArchiveState(true, 5, 5), 'tiny');
 assert.equal(replayArchiveState(true, 0, 0), 'empty');
 
 const weatherCatalogRssBefore = process.memoryUsage().rss;
-const [nashvilleTrack, upcomingEvents] = await Promise.all([
-  loadTrackMetadata('track_nashville_superspeedway'),
-  loadUpcomingIndyNxtEvents({ now: new Date('2026-07-18T12:00:00.000Z') })
+const [portlandTrack, upcomingEvents] = await Promise.all([
+  loadTrackMetadata('track_portland_international_raceway'),
+  loadUpcomingIndyNxtEvents({ now: new Date('2026-08-01T12:00:00.000Z') })
 ]);
 const weatherCatalogRssDelta = process.memoryUsage().rss - weatherCatalogRssBefore;
-const nashvilleEvent = upcomingEvents.find((event) => event.officialEventId === '5538');
-assert.equal(nashvilleTrack.name, 'Nashville Superspeedway');
-assert.equal(nashvilleTrack.weatherJoinReady, true);
-assert.equal(nashvilleEvent?.track.id, 'track_nashville_superspeedway');
-assert.equal(nashvilleEvent?.eventStartDate, '2026-07-18');
+const portlandEvent = upcomingEvents.find((event) => event.officialEventId === '5547');
+assert.equal(portlandTrack.name, 'Portland International Raceway');
+assert.equal(portlandTrack.weatherJoinReady, true);
+assert.equal(portlandEvent?.track.id, 'track_portland_international_raceway');
+assert.equal(portlandEvent?.eventStartDate, '2026-08-07');
 assert.ok(weatherCatalogRssDelta < 64 * 1024 * 1024, `compact weather catalog used ${weatherCatalogRssDelta} bytes of RSS`);
 
 console.log(JSON.stringify({ ok: true, assertions: 68 }, null, 2));

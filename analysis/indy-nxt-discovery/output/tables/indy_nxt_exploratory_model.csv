@@ -1,11 +1,11 @@
 feature,coefficient,sampleSize,rSquared,interpretation
-model,,36,0.3637042038830236,"Exploratory OLS; finishPosition lower is better; continuous fields are standardized; coefficients are directional, not causal."
-qualifyingPosition,0.8062222982729091,36,0.3637042038830236,Negative coefficient means associated with better finishing position after included controls.
-startPosition,0.9165055489251864,36,0.3637042038830236,Negative coefficient means associated with better finishing position after included controls.
-bestLapRank,1.6747769122371725,36,0.3637042038830236,Negative coefficient means associated with better finishing position after included controls.
-cautionShare,0.940062576732276,36,0.3637042038830236,Negative coefficient means associated with better finishing position after included controls.
-pitStops,0.08543479203339151,36,0.3637042038830236,Negative coefficient means associated with better finishing position after included controls.
-ambientTempC,0.19474269971703503,36,0.3637042038830236,Negative coefficient means associated with better finishing position after included controls.
-windGustKph,0.6017089079024317,36,0.3637042038830236,Negative coefficient means associated with better finishing position after included controls.
-track_road,3.2114574724535125,36,0.3637042038830236,Negative coefficient means associated with better finishing position after included controls.
-track_street,2.164371706169601,36,0.3637042038830236,Negative coefficient means associated with better finishing position after included controls.
+model,,36,0.36371909772795497,"Exploratory OLS; finishPosition lower is better; continuous fields are standardized; coefficients are directional, not causal."
+qualifyingPosition,0.8054254963163899,36,0.36371909772795497,Negative coefficient means associated with better finishing position after included controls.
+startPosition,0.9168995944451163,36,0.36371909772795497,Negative coefficient means associated with better finishing position after included controls.
+bestLapRank,1.6740284584603675,36,0.36371909772795497,Negative coefficient means associated with better finishing position after included controls.
+cautionShare,0.9398466803549403,36,0.36371909772795497,Negative coefficient means associated with better finishing position after included controls.
+pitStops,0.08429711806649672,36,0.36371909772795497,Negative coefficient means associated with better finishing position after included controls.
+ambientTempC,0.19694600442376592,36,0.36371909772795497,Negative coefficient means associated with better finishing position after included controls.
+windGustKph,0.6016811143081159,36,0.36371909772795497,Negative coefficient means associated with better finishing position after included controls.
+track_road,3.2147659660923593,36,0.36371909772795497,Negative coefficient means associated with better finishing position after included controls.
+track_street,2.16921861495863,36,0.36371909772795497,Negative coefficient means associated with better finishing position after included controls.
