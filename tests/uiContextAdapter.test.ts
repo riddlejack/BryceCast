@@ -210,7 +210,7 @@ assert.ok(
   const { loadPassMarks, resolvePassMarks } = await import('../src/data/passMarks');
   const { measuredTrackSectionsFor } = await import('../src/assets/tracks/sections');
   const passMarkRefs = context.dataPackage.screens.raceDebrief.passMarkRefs;
-  assert.ok(Array.isArray(passMarkRefs) && passMarkRefs.length === 25, 'exactly 25 GO races carry a pass-mark pack');
+  assert.ok(Array.isArray(passMarkRefs) && passMarkRefs.length === 26, 'exactly 26 GO races carry a pass-mark pack');
   assert.ok(
     passMarkRefs.every((ref) => storyRefs.some((storyRef) => storyRef.sessionId === ref.sessionId)),
     'every pass-mark pack belongs to a race-debrief session'
