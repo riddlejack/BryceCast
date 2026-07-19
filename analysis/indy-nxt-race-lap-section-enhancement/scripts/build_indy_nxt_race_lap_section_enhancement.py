@@ -177,33 +177,35 @@ def is_bryce(row: dict[str, Any]) -> bool:
     return row.get("driverId") == BRYCE_ID or "aron, bryce" in str(row.get("driverName", "")).lower()
 
 
-def classify_section(name: str) -> str:
-    cleaned = name.strip()
-    if cleaned == "Lap":
-        return "lap_total"
-    upper = cleaned.upper()
-    if re.search(r"(^|[^A-Z])(PI|PO|SF|S/F)([^A-Z]|$)", upper) or "ALT START" in upper:
-        return "pit_or_timing_line"
-    return "track_section"
-
-
 def is_pit_line(name: str) -> bool:
-    """Corrected pit/timing-line test for the derived-remainder lane.
+    """Pit/timing-line test (corrected 2026-07-19, the SF over-match fix).
 
-    ``classify_section`` above (kept unchanged for the legacy observation CSV)
-    treats ANY section referencing SF/S-F as a timing line — but a section like
-    ``SF to T1`` or ``T4 to SF`` or ``FS to SF`` is the RACING-LINE frontstretch
-    measured loop-to-loop, not a pit split. The only genuine pit/timing lines
-    reference pit-in / pit-out (PI/PO) or the alternate start. This corrected
-    test is what the tiling check uses to decide whether a lap's untimed stretch
-    is a GENUINE gap (Nashville's straights) or an artefact of the SF over-match
-    (Iowa/Milwaukee, whose SF/FS sections tile the lap exactly). See
+    The original rule treated ANY section referencing SF/S-F as a timing line —
+    but a section like ``SF to T1`` / ``T4 to SF`` / ``FS to SF`` (ovals) or
+    ``SF to I1`` / ``I15 to SF`` (road courses) is the RACING LINE measured
+    loop-to-loop across the start/finish line, not a pit split. Genuine pit
+    splits always reference pit-in / pit-out (PI/PO) or the alternate start.
+    Classification diff across all 109 distinct section names in the 39 race
+    sessions: exactly 7 names move to track_section (SF to T1, T4 to SF,
+    FS to SF, SF to I1, SF to I1B, I15 to SF, I16 to SF); every PI/PO/Alt
+    split stays pit_or_timing_line. This is also the tiling check's rule for
+    deciding whether an untimed stretch is a GENUINE gap (Nashville's
+    straights) or fully timed (Iowa/Milwaukee, which tile to 0.0000s). See
     INDY_NXT_RACE_LAP_SECTION_ENHANCEMENT.md § Derived Remainder."""
     cleaned = name.strip()
     if cleaned == "Lap":
         return False
     upper = cleaned.upper()
     return bool(re.search(r"(^|[^A-Z])(PI|PO)([^A-Z]|$)", upper)) or "ALT START" in upper
+
+
+def classify_section(name: str) -> str:
+    cleaned = name.strip()
+    if cleaned == "Lap":
+        return "lap_total"
+    if is_pit_line(cleaned):
+        return "pit_or_timing_line"
+    return "track_section"
 
 
 def section_family(name: str) -> str:
@@ -1128,10 +1130,12 @@ because the field's lap totals are present, that remainder ranks against the
 whole field, not just Bryce. The remainder is shipped as a shadeable
 `{DERIVED_SECTION_NAME}` section ONLY where the racing sections leave a genuine
 untimed stretch (>2% of the lap): Nashville's straights carry no loops (~56% of
-the lap). Iowa and Milwaukee tile to 0.00% once their `SF to T1` / `T4 to SF` /
-`FS to SF` frontstretch sections are counted as racing line — the legacy
-`classify_section` regex over-matches `SF` and files them as pit lines, so their
-apparent blindness is a classification artefact, not a real gap. A negative
+the lap). Iowa and Milwaukee tile to 0.00% — their `SF to T1` / `T4 to SF` /
+`FS to SF` frontstretch sections are racing line measured loop-to-loop across
+the start/finish line. (An earlier classification regex over-matched `SF` and
+filed those as pit lines; `classify_section` now delegates to the corrected
+`is_pit_line` rule, which moved exactly 7 of 109 distinct section names to
+track_section and left every PI/PO/Alt pit split untouched.) A negative
 remainder (sections overrunning the lap) marks that lap uncovered; it is never
 clamped.
 
@@ -1197,9 +1201,9 @@ def main() -> int:
         ),
         "note": (
             "The derived remainder (lapTotal minus racing-line sections) is shipped only for sessions whose "
-            "racing sections leave a genuine untimed stretch (>2% of the lap). Iowa and Milwaukee tile to 0.00% "
-            "once the SF/FS frontstretch sections are counted as racing line, so their remainder is a "
-            "classification artefact and is withheld; correctly surfacing those sections is a follow-up anchor task."
+            "racing sections leave a genuine untimed stretch (>2% of the lap). Iowa and Milwaukee tile to 0.00% — "
+            "their SF/FS frontstretch sections are racing line (rescued by the corrected is_pit_line rule) and "
+            "render as measured spans, so no derived treatment applies there."
         ),
     }
 
