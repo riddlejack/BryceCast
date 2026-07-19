@@ -10,6 +10,7 @@ from __future__ import annotations
 import csv
 import json
 import math
+import os
 from collections import Counter, defaultdict
 from dataclasses import dataclass
 from datetime import date
@@ -30,7 +31,19 @@ CHART_DIR = OUT_DIR / "charts"
 
 BRYCE_ID = "driver_bryce_aron"
 INDY_SERIES_ID = "series_indy_nxt"
-RUN_DATE = date.today()
+
+
+def resolve_run_date() -> date:
+    override = os.environ.get("BRYCECAST_ANALYTICS_AS_OF_DATE")
+    if override:
+        try:
+            return date.fromisoformat(override)
+        except ValueError as exc:
+            raise SystemExit("BRYCECAST_ANALYTICS_AS_OF_DATE must be YYYY-MM-DD") from exc
+    return date.today()
+
+
+RUN_DATE = resolve_run_date()
 
 
 def clean_num(value: Any) -> float | None:
