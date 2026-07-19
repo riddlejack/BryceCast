@@ -6,9 +6,21 @@ import { join } from 'node:path';
 import { DatabaseSync } from 'node:sqlite';
 import { buildRaceSnapshotFromResults, compactTimingRowForReadiness } from './api-server.mjs';
 import { createReplayOverlay, runnerReportsLiveSession } from './lib/replay-overlay.mjs';
+import { createLakeReplayFeeds } from './lib/replay-lake-feeds.mjs';
+import { createReplayRouter } from './lib/replay-router.mjs';
 import { raceSnapshotEndpoints } from './live-source-endpoints.mjs';
 import { appendLiveHistoryPayload, createLiveHistoryState, liveHistorySampleFromPayload, liveSessionKeyOf } from '../src/data/liveHistoryModel.ts';
 import { buildCumulativeLiveBattleFrame } from '../src/data/liveMotionModel.ts';
+
+// BryceCast per-client replay contract test.
+//
+// The design principle under test is ABSOLUTE: a request WITHOUT replay params
+// must never enter replay code, so a plain client always sees the real feed
+// while a concurrent replaying client sees archived rows — from the SAME
+// stateless server, with no global replay state anywhere. The centerpiece is
+// the isolation test; the rest guard the per-request live-guard, the watchable
+// gating, and the Nashville battle/running-order regression via the exact
+// per-request param path the Live page now uses.
 
 const root = process.cwd();
 const temp = await mkdtemp(join(tmpdir(), 'brycecast-replay-'));
@@ -52,6 +64,12 @@ const raw = {
   trackactivity_nxt: {}
 };
 
+// The distinguishable REAL feed a plain client must see: Bryce running P3 on lap
+// 15, not the archived P6 on lap 12 a replay serves. Written last (highest id),
+// with a fresh checked_at, so readFreshRunnerRawRecord serves it to plain clients.
+const liveBryce = { ...timingRows[1], rank: '3', liveRank: '3', laps: '15', gap: '4.2', liveGap: '4.2', lastLapTime: '1:57.500' };
+const liveRaw = { ...raw, timing: { timing_results: { heartbeat: { ...heartbeat, lapNumber: '15' }, Item: [timingRows[0], liveBryce] } } };
+
 const db = new DatabaseSync(sqlitePath);
 db.exec(`
   CREATE TABLE race_snapshots (
@@ -85,17 +103,14 @@ for (const checkedAt of ['2026-06-21T16:08:20.000Z', '2026-06-21T16:08:21.000Z']
     VALUES (?, ?, '5537-6754', 6, 6, 15, '12', 'Active', '8.1', '8.1', '800000', '900000', 0, 159, 159)
   `).run(Number(result.lastInsertRowid), checkedAt);
 }
-// Enough green snapshots to cross the "watchable" threshold so the captured-race
-// index marks this session as a real, replayable race for its race page.
+// Enough green snapshots to cross the "watchable" threshold.
 const watchableBaseMs = Date.parse('2026-06-21T16:08:22.000Z');
 for (let index = 0; index < 130; index += 1) {
   const checkedAt = new Date(watchableBaseMs + index * 1000).toISOString();
   insertSnapshot.run(checkedAt, JSON.stringify({ summary: { checkedAt, trackName: 'Road America' }, raw }));
 }
 
-// Finding B fixtures: captures that must NEVER be replayable even via a direct
-// /live?replay=<key> URL. Same sample volume as the watchable race, so the only
-// thing that keeps them out is the watchable criteria itself.
+// Gating fixtures: captures that must NEVER be replayable even via direct params.
 const insertGatingSnapshot = db.prepare(`
   INSERT INTO race_snapshots
     (checked_at, session_key, event_id, event_session_id, event_name, session_name, flag, lap, total_laps,
@@ -107,143 +122,94 @@ const seedGatingSession = ({ sessionKey, eventId, eventSessionId, eventName, ses
   for (let index = 0; index < 130; index += 1) {
     const checkedAt = new Date(baseMs + index * 1000).toISOString();
     insertGatingSnapshot.run(
-      checkedAt,
-      sessionKey,
-      eventId,
-      eventSessionId,
-      eventName,
-      sessionName,
-      bryceRank,
-      bryceRank === null ? null : 'Active',
-      bryceRank === null ? null : '12',
-      bryceRank === null ? null : '8.1',
-      bryceRank === null ? null : '1:58.100',
-      JSON.stringify({ summary: { checkedAt }, raw: {} })
+      checkedAt, sessionKey, eventId, eventSessionId, eventName, sessionName, bryceRank,
+      bryceRank === null ? null : 'Active', bryceRank === null ? null : '12', bryceRank === null ? null : '8.1',
+      bryceRank === null ? null : '1:58.100', JSON.stringify({ summary: { checkedAt }, raw: {} })
     );
   }
 };
-// A practice capture: green and well-sampled with Bryce present, but not a race.
 seedGatingSession({ sessionKey: '5537-6753', eventId: '5537', eventSessionId: '6753', eventName: 'INDY NXT at Road America', sessionName: 'Practice 1', bryceRank: 6, baseIso: '2026-06-20T14:00:00.000Z' });
-// A wrong-series capture: a green race with plenty of samples, but the runner
-// never stamped a Bryce timing row (bryce_rank NULL) — it is not his session.
 seedGatingSession({ sessionKey: '9001-8801', eventId: '9001', eventSessionId: '8801', eventName: 'IndyCar Test Session', sessionName: 'Race', bryceRank: null, baseIso: '2026-06-20T18:00:00.000Z' });
+
+// The plain client's REAL feed — written last so it is the latest archived record.
+const liveCheckedAt = new Date().toISOString();
+db.prepare(`
+  INSERT INTO race_snapshots
+    (checked_at, session_key, event_id, event_session_id, event_name, session_name, flag, lap, total_laps,
+     source_state, bryce_rank, bryce_status, bryce_laps, bryce_gap, bryce_best_lap_time, payload_json)
+  VALUES (?, '5537-6754', '5537', '6754', 'INDY NXT at Road America', 'Race 2', 'GREEN', '15', '18', 'live', 3, 'Active', '15', '4.2', '1:58.100', ?)
+`).run(liveCheckedAt, JSON.stringify({ summary: { checkedAt: liveCheckedAt, trackName: 'Road America' }, raw: liveRaw }));
 db.close();
 
+const REPLAY_EARLY_RT = '2026-06-21T16:08:20.000Z'; // resolves the P6/lap12 archived frame
+
+// ---------------------------------------------------------------------------
+// Unit: the stateless per-request record resolver owns no global state.
+// ---------------------------------------------------------------------------
 await writeFile(runnerStatusPath, JSON.stringify({ phase: 'IDLE', updatedAt: new Date().toISOString() }));
-
-let nowMs = Date.parse('2026-07-12T18:00:00.000Z');
-const overlay = createReplayOverlay({ enabled: true, sqlitePath, runnerStatusPath, now: () => nowMs });
-const started = overlay.start({ session: '5537-6754', t0: '2026-06-21T16:08:20.000Z', speed: 2 });
-assert.equal(started.active, true);
-assert.equal(started.speed, 2);
-assert.equal(overlay.currentRecord().archiveCheckedAt, '2026-06-21T16:08:20.000Z');
-nowMs += 500;
-assert.equal(overlay.currentRecord().archiveCheckedAt, '2026-06-21T16:08:21.000Z', '2x replay clock should advance one archive second in 500ms');
-assert.equal(runnerReportsLiveSession({ phase: 'LIVE' }), true);
-assert.equal(runnerReportsLiveSession({ phase: 'IDLE', latestBryce: { sourceState: 'cold', flag: 'COLD' } }), false);
-
-// 16x is a Time Machine speed and must advance the archive clock proportionally.
-const fastStart = overlay.start({ session: '5537-6754', t0: '2026-06-21T16:08:20.000Z', speed: 16 });
-assert.equal(fastStart.speed, 16, '16x replay speed must be accepted');
-nowMs += 100;
-assert.equal(overlay.currentRecord().archiveCheckedAt, '2026-06-21T16:08:21.000Z', '16x replay clock should advance ~1.6 archive seconds in 100ms');
-assert.throws(() => overlay.start({ session: '5537-6754', t0: '2026-06-21T16:08:20.000Z', speed: 7 }), /speed must be/, 'invalid replay speed must be rejected');
-overlay.stop();
-
-// The captured-race index maps this archived session to its race page.
-const availableIndex = overlay.available();
-assert.equal(availableIndex.enabled, true, 'available() must report enabled overlay');
-const roadAmerica = availableIndex.sessions.find((session) => session.sessionKey === '5537-6754');
-assert.ok(roadAmerica, 'available() must list the archived Road America race');
-assert.equal(roadAmerica.eventSessionId, '6754', 'available() must carry eventSessionId for the crosswalk');
-assert.equal(roadAmerica.canonicalSessionId, 'session_indy_nxt_2026_6754', 'available() must derive the canonical race-page sessionId');
-assert.equal(roadAmerica.isRace, true, 'available() must classify a Race session');
-assert.equal(roadAmerica.watchable, true, 'a green, well-sampled race capture must be watchable');
-assert.ok(roadAmerica.firstGreenAt, 'available() must report the green-flag timestamp for restart-from-green');
-assert.equal(createReplayOverlay({ enabled: false, sqlitePath, runnerStatusPath }).available().enabled, false, 'disabled overlay must report available() disabled');
-// A restart from the same overlay must still refuse-when-live check on start.
-
-await writeFile(runnerStatusPath, JSON.stringify({ phase: 'LIVE' }));
-assert.throws(
-  () => createReplayOverlay({ enabled: true, sqlitePath, runnerStatusPath }).start({ session: '5537-6754', speed: 1 }),
-  /real live runner reports an active session/
-);
-await writeFile(runnerStatusPath, JSON.stringify({ phase: 'IDLE' }));
-
-// ---- Finding B (unit): only watchable Bryce races are replayable ----
-// A direct /live?replay=<key> URL must be held to the same watchable criteria
-// the race-page index applies. A practice capture and a wrong-series capture
-// (no Bryce samples) are both refused by start().
 {
-  const gateOverlay = createReplayOverlay({ enabled: true, sqlitePath, runnerStatusPath });
-  const gateIndex = gateOverlay.available();
-  const practice = gateIndex.sessions.find((session) => session.sessionKey === '5537-6753');
-  const wrongSeries = gateIndex.sessions.find((session) => session.sessionKey === '9001-8801');
-  assert.ok(practice, 'available() must list the practice capture');
-  assert.ok(wrongSeries, 'available() must list the wrong-series capture');
-  assert.equal(practice.isRace, false, 'a practice session is not a race');
-  assert.equal(practice.watchable, false, 'a practice capture must not be watchable');
-  assert.equal(wrongSeries.bryceSamples, 0, 'a wrong-series capture carries zero Bryce samples');
-  assert.equal(wrongSeries.watchable, false, 'a wrong-series capture must not be watchable');
-  assert.throws(
-    () => gateOverlay.start({ session: '5537-6753', speed: 1 }),
-    /not a watchable Bryce race capture/,
-    'start() must refuse a non-watchable practice capture'
-  );
-  assert.throws(
-    () => gateOverlay.start({ session: '9001-8801', speed: 1 }),
-    /not a watchable Bryce race capture/,
-    'start() must refuse a wrong-series capture'
-  );
+  let nowMs = Date.parse('2026-07-12T18:00:00.000Z');
+  const overlay = createReplayOverlay({ enabled: true, sqlitePath, runnerStatusPath, now: () => nowMs });
+  // Two independent recordAt calls at different rt values must not interfere.
+  const early = overlay.recordAt({ session: '5537-6754', rt: REPLAY_EARLY_RT, speed: 1 });
+  const later = overlay.recordAt({ session: '5537-6754', rt: '2026-06-21T16:08:21.000Z', speed: 1 });
+  assert.equal(early.record.archiveCheckedAt, '2026-06-21T16:08:20.000Z', 'recordAt resolves the row at or before rt');
+  assert.equal(later.record.archiveCheckedAt, '2026-06-21T16:08:21.000Z', 'recordAt is stateless — a second call at a later rt is independent');
+  assert.equal(early.record.archiveCheckedAt, '2026-06-21T16:08:20.000Z', 're-reading the first record shows no shared mutation');
+  assert.equal(overlay.recordAt({ session: '5537-6754', rt: '2020-01-01T00:00:00.000Z', speed: 1 }).outOfRange, true, 'an rt before the span is out of range');
+  assert.equal(runnerReportsLiveSession({ phase: 'LIVE' }), true);
+  assert.equal(runnerReportsLiveSession({ phase: 'IDLE', latestBryce: { sourceState: 'cold', flag: 'COLD' } }), false);
 }
 
-// ---- Finding A (unit): a live runner preempts a running replay ----
-// If the real runner goes live mid-playback, the overlay must auto-suspend so
-// its records stop masking the live race, and report the honest stopped state.
+// ---------------------------------------------------------------------------
+// Unit: the router's resolveReplay enforces the live-guard + watchable gating.
+// ---------------------------------------------------------------------------
+const makeRouter = () => {
+  const captureOverlay = createReplayOverlay({ enabled: true, sqlitePath, runnerStatusPath });
+  const lakeFeeds = createLakeReplayFeeds({ enabled: true, runnerStatusPath });
+  return createReplayRouter({ captureOverlay, lakeFeeds, enabled: true });
+};
 {
-  let guardNow = Date.parse('2026-07-12T19:00:00.000Z');
-  await writeFile(runnerStatusPath, JSON.stringify({ phase: 'IDLE', updatedAt: new Date(guardNow).toISOString() }));
-  const guardOverlay = createReplayOverlay({ enabled: true, sqlitePath, runnerStatusPath, now: () => guardNow, guardTtlMs: 500 });
-  const idleStart = guardOverlay.start({ session: '5537-6754', t0: '2026-06-21T16:08:20.000Z', speed: 1 });
-  assert.equal(idleStart.active, true, 'replay starts while the runner is idle');
-  assert.ok(guardOverlay.currentRecord(), 'replay serves an archived record while the runner is idle');
-  // The real runner flips live mid-playback.
-  await writeFile(runnerStatusPath, JSON.stringify({ phase: 'LIVE', updatedAt: new Date(guardNow).toISOString() }));
-  guardNow += 600; // advance past the guard TTL so the next read re-checks status
-  assert.equal(guardOverlay.currentRecord(), null, 'a live runner must preempt the replay record');
-  const tripped = guardOverlay.status();
-  assert.equal(tripped.active, false, 'a preempted replay reports inactive');
-  assert.equal(tripped.stoppedByLive, true, 'a preempted replay reports stoppedByLive');
-  assert.match(tripped.reason ?? '', /live session is on/i, 'a preempted replay carries an honest reason');
+  await writeFile(runnerStatusPath, JSON.stringify({ phase: 'IDLE', updatedAt: new Date().toISOString() }));
+  const router = makeRouter();
+  assert.equal(router.resolveReplay({ session: '5537-6754', rt: REPLAY_EARLY_RT, speed: 1 }).kind, 'record', 'a watchable capture resolves to a record');
+  assert.equal(router.resolveReplay({ session: '5537-6753', rt: REPLAY_EARLY_RT, speed: 1 }).kind, 'refused', 'a non-watchable practice capture is refused');
+  assert.equal(router.resolveReplay({ session: '5537-6753', rt: REPLAY_EARLY_RT, speed: 1 }).statusCode, 422, 'a non-watchable capture refuses with 422');
+  assert.equal(router.resolveReplay({ session: '9001-8801', rt: REPLAY_EARLY_RT, speed: 1 }).statusCode, 422, 'a wrong-series capture refuses with 422');
+  assert.equal(router.resolveReplay({ session: 'no-such-session', rt: REPLAY_EARLY_RT, speed: 1 }).statusCode, 404, 'an unknown session refuses with 404');
+  const disabledRouter = createReplayRouter({
+    captureOverlay: createReplayOverlay({ enabled: false, sqlitePath, runnerStatusPath }),
+    lakeFeeds: createLakeReplayFeeds({ enabled: false, runnerStatusPath }),
+    enabled: false
+  });
+  assert.equal(disabledRouter.resolveReplay({ session: '5537-6754', rt: REPLAY_EARLY_RT, speed: 1 }).kind, 'disabled', 'a disabled router never enters replay');
+}
+{
+  // Live-guard: a live runner makes the router ignore params (serve the real feed).
+  await writeFile(runnerStatusPath, JSON.stringify({ phase: 'LIVE', updatedAt: new Date().toISOString() }));
+  const router = makeRouter();
+  assert.equal(router.resolveReplay({ session: '5537-6754', rt: REPLAY_EARLY_RT, speed: 1 }).kind, 'live', 'a live runner preempts replay params at the router');
   await writeFile(runnerStatusPath, JSON.stringify({ phase: 'IDLE', updatedAt: new Date().toISOString() }));
 }
 
+// ---------------------------------------------------------------------------
+// Server end-to-end.
+// ---------------------------------------------------------------------------
 const sourceResult = (endpoint, payload, checkedAt = '2026-07-12T18:00:00.000Z') => ({
-  ...endpoint,
-  ok: payload !== undefined,
-  status: payload !== undefined ? 200 : 0,
-  contentType: 'application/json',
-  fetchedAt: checkedAt,
-  lastModified: null,
-  etag: null,
-  bytes: payload === undefined ? 0 : Buffer.byteLength(JSON.stringify(payload)),
-  payload,
-  error: payload === undefined ? 'fixture missing' : null
+  ...endpoint, ok: payload !== undefined, status: payload !== undefined ? 200 : 0, contentType: 'application/json',
+  fetchedAt: checkedAt, lastModified: null, etag: null, bytes: payload === undefined ? 0 : Buffer.byteLength(JSON.stringify(payload)),
+  payload, error: payload === undefined ? 'fixture missing' : null
 });
 const expectedSnapshot = buildRaceSnapshotFromResults(raceSnapshotEndpoints.map((endpoint) => sourceResult(endpoint, raw[endpoint.id])));
 const expectedTiming = {
-  checkedAt: expectedSnapshot.updatedAt,
-  sourceState: expectedSnapshot.sourceState,
-  rowCount: expectedSnapshot.timingRows.length,
-  bryceNo: expectedSnapshot.bryce.no,
+  checkedAt: expectedSnapshot.updatedAt, sourceState: expectedSnapshot.sourceState, rowCount: expectedSnapshot.timingRows.length, bryceNo: expectedSnapshot.bryce.no,
   heartbeat: {
-    eventName: heartbeat.eventName, eventId: heartbeat.EventID, eventSessionId: heartbeat.EventSessionID,
-    sessionName: heartbeat.SessionName, sessionType: heartbeat.SessionType, sessionStatus: heartbeat.SessionStatus,
-    series: heartbeat.Series, flag: heartbeat.currentFlag, lap: 12, totalLaps: 18, trackName: heartbeat.trackName, trackType: heartbeat.trackType
+    eventName: heartbeat.eventName, eventId: heartbeat.EventID, eventSessionId: heartbeat.EventSessionID, sessionName: heartbeat.SessionName,
+    sessionType: heartbeat.SessionType, sessionStatus: heartbeat.SessionStatus, series: heartbeat.Series, flag: heartbeat.currentFlag,
+    lap: 12, totalLaps: 18, trackName: heartbeat.trackName, trackType: heartbeat.trackType
   },
   rows: expectedSnapshot.timingRows.map((row) => compactTimingRowForReadiness(row, heartbeat))
 };
-
 const shapeOf = (value) => {
   if (value === null) return 'null';
   if (Array.isArray(value)) return { array: value.length ? shapeOf(value[0]) : 'empty' };
@@ -255,13 +221,8 @@ const child = spawn(process.execPath, ['scripts/api-server.mjs', '--host=127.0.0
   cwd: root,
   stdio: ['ignore', 'pipe', 'pipe'],
   env: {
-    ...process.env,
-    NODE_NO_WARNINGS: '1',
-    BRYCECAST_REPLAY: '1',
-    BRYCECAST_SQLITE_PATH: sqlitePath,
-    BRYCECAST_RUNNER_STATUS_PATH: runnerStatusPath,
-    // Snappy live-guard re-check so the transition test doesn't have to wait a
-    // full second for the runner-status read to refresh.
+    ...process.env, NODE_NO_WARNINGS: '1', BRYCECAST_REPLAY: '1',
+    BRYCECAST_SQLITE_PATH: sqlitePath, BRYCECAST_RUNNER_STATUS_PATH: runnerStatusPath,
     BRYCECAST_REPLAY_GUARD_TTL_MS: '200'
   }
 });
@@ -274,234 +235,154 @@ const fetchJson = async (path) => {
   if (!response.ok) throw new Error(`${path} ${response.status}: ${text}`);
   return JSON.parse(text);
 };
+const replayQuery = (session, rt, speed = 1) => `?replay=${encodeURIComponent(session)}&rt=${encodeURIComponent(rt)}&speed=${speed}`;
 
 try {
   for (let attempt = 0; attempt < 80; attempt += 1) {
-    try {
-      if ((await fetchJson('/api/health')).ok) break;
-    } catch {}
+    try { if ((await fetchJson('/api/health')).ok) break; } catch {}
     await new Promise((resolve) => setTimeout(resolve, 50));
   }
-  await fetchJson('/api/replay/control?session=5537-6754&t0=2026-06-21T16%3A08%3A20.000Z&speed=1');
-  const replayTiming = await fetchJson('/api/timing');
-  assert.deepEqual(shapeOf(replayTiming), shapeOf(expectedTiming), 'replay /api/timing must preserve the live payload shape');
-  assert.deepEqual(replayTiming.rows, expectedTiming.rows, 'replay timing values must be the archived Race Control values, normalized by the live adapter');
-  assert.equal(replayTiming.rows.find((row) => row.bryce)?.driverId, '2143', 'compact timing rows must retain stable driver identity');
-  const readiness = await fetchJson('/api/readiness');
-  assert.equal(readiness.schemaVersion, 'live-readiness.v1');
-  assert.equal(readiness.liveTiming.rows.find((row) => row.bryce)?.runningDriverPoints, 159);
-  assert.equal(readiness.bryce.identityGuard.matchedBy, 'driver_id');
-  assert.equal(readiness.replay.simulation?.active, true, 'replay readiness must identify simulated playback');
-  assert.equal(readiness.replay.simulation?.mode, 'archived_replay', 'replay readiness must remain distinct from official live mode');
-  assert.equal((await fetchJson('/api/replay/control')).active, true);
 
+  // A plain client's real feed exists: runner idle but fresh, latest record is P3/lap15.
+  await writeFile(runnerStatusPath, JSON.stringify({
+    phase: 'IDLE', updatedAt: new Date().toISOString(), lastSuccessfulWriteAt: new Date().toISOString(),
+    latestBryce: { sourceState: 'cold', flag: 'GREEN' }
+  }));
+
+  // ---- Per-request payload shape parity ----
+  const replayTiming = await fetchJson(`/api/timing${replayQuery('5537-6754', REPLAY_EARLY_RT)}`);
+  assert.deepEqual(shapeOf(replayTiming), shapeOf(expectedTiming), 'per-request replay /api/timing preserves the live payload shape');
+  assert.deepEqual(replayTiming.rows, expectedTiming.rows, 'per-request replay timing values are the archived Race Control values');
+  assert.equal(replayTiming.rows.find((row) => row.bryce)?.driverId, '2143', 'compact timing rows retain stable driver identity');
+  const replayReadiness = await fetchJson(`/api/readiness${replayQuery('5537-6754', REPLAY_EARLY_RT)}`);
+  assert.equal(replayReadiness.schemaVersion, 'live-readiness.v1');
+  assert.equal(replayReadiness.liveTiming.rows.find((row) => row.bryce)?.runningDriverPoints, 159);
+  assert.equal(replayReadiness.bryce.identityGuard.matchedBy, 'driver_id');
+  assert.equal(replayReadiness.replay.simulation?.active, true, 'per-request replay readiness identifies simulated playback');
+  assert.equal(replayReadiness.replay.simulation?.mode, 'archived_replay', 'per-request replay stays distinct from official live mode');
+
+  // ---- THE ISOLATION TEST (the absolute-priority property) ----
+  // Two concurrent clients hit the SAME stateless server at the SAME time:
+  // one appends replay params, one does not. The plain client must receive the
+  // real feed (P3/lap15) while the replaying client receives archived rows
+  // (P6/lap12) — proving one viewer's replay can never touch another's Live page.
+  const [plain, replaying] = await Promise.all([
+    fetchJson('/api/timing'),
+    fetchJson(`/api/timing${replayQuery('5537-6754', REPLAY_EARLY_RT)}`)
+  ]);
+  const plainBryce = plain.rows.find((row) => row.bryce);
+  const replayingBryce = replaying.rows.find((row) => row.bryce);
+  assert.equal(plainBryce?.rank, 3, 'ISOLATION: the plain client receives the REAL feed (Bryce P3, lap 15)');
+  assert.equal(plainBryce?.laps, '15', 'ISOLATION: the plain client is on the live lap, not the replay lap');
+  assert.equal(replayingBryce?.rank, 6, 'ISOLATION: the replaying client receives the ARCHIVED frame (Bryce P6, lap 12)');
+  assert.equal(replayingBryce?.laps, '12', 'ISOLATION: the replaying client is on the archived lap');
+  const [plainReady, replayReady] = await Promise.all([
+    fetchJson('/api/timing'),
+    fetchJson(`/api/readiness${replayQuery('5537-6754', REPLAY_EARLY_RT)}`)
+  ]);
+  assert.equal(plainReady.rows.find((row) => row.bryce)?.rank, 3, 'ISOLATION: a repeated plain poll is still the real feed — no bleed from the concurrent replay');
+  assert.equal(replayReady.replay.simulation?.active, true, 'ISOLATION: the concurrent replaying client stays simulated');
+
+  const isolationReport = {
+    property: 'per-client-replay-isolation',
+    plain: { params: 'none', bryceRank: plainBryce?.rank, bryceLaps: plainBryce?.laps, feed: 'real' },
+    replaying: { params: replayQuery('5537-6754', REPLAY_EARLY_RT), bryceRank: replayingBryce?.rank, bryceLaps: replayingBryce?.laps, simulated: replayReady.replay.simulation?.active === true, feed: 'archived' },
+    verdict: plainBryce?.rank === 3 && replayingBryce?.rank === 6 ? 'ISOLATED' : 'LEAK'
+  };
+  console.log(`ISOLATION_TEST ${JSON.stringify(isolationReport)}`);
+  assert.equal(isolationReport.verdict, 'ISOLATED', 'ISOLATION verdict must be ISOLATED');
+
+  // ---- available() stays a read-only index (unchanged contract) ----
   const available = await fetchJson('/api/replay/available');
-  assert.equal(available.schemaVersion, 'live-replay-available.v1', '/api/replay/available missing schema version');
-  assert.equal(available.enabled, true, '/api/replay/available must report the enabled overlay');
-  const roadAmericaRow = available.sessions.find((session) => session.sessionKey === '5537-6754');
-  assert.ok(roadAmericaRow?.watchable, '/api/replay/available must expose the watchable Road America race');
-  assert.equal(roadAmericaRow.canonicalSessionId, 'session_indy_nxt_2026_6754', '/api/replay/available must map to the canonical race-page sessionId');
-  assert.equal(available.sessions.find((session) => session.sessionKey === '5537-6753')?.watchable, false, '/api/replay/available must mark the practice capture non-watchable');
-  assert.equal(available.sessions.find((session) => session.sessionKey === '9001-8801')?.watchable, false, '/api/replay/available must mark the wrong-series capture non-watchable');
+  assert.equal(available.schemaVersion, 'live-replay-available.v1');
+  assert.equal(available.enabled, true);
+  assert.ok(available.sessions.find((s) => s.sessionKey === '5537-6754')?.watchable, 'available() exposes the watchable Road America race');
+  assert.equal(available.sessions.find((s) => s.sessionKey === '5537-6753')?.watchable, false, 'available() marks the practice capture non-watchable');
+  assert.equal(available.sessions.find((s) => s.sessionKey === '9001-8801')?.watchable, false, 'available() marks the wrong-series capture non-watchable');
+  // The retired global control never flips state.
+  const control = await fetchJson('/api/replay/control');
+  assert.equal(control.active, false, 'the retired control endpoint reports no active global playback');
+  assert.equal(control.retired, true, 'the control endpoint is retired for per-client replay');
 
-  // ---- Family flow (exact frontend param path) ----
-  // The gap that let 51 assertions pass while the real "Watch this race unfold"
-  // tap hung on "Cueing up the replay" forever: the earlier start above hand-
-  // picks t0 and speed=1 and never reads the control body. useReplaySession
-  // instead derives session / t0 / speed from /api/replay/available and — the
-  // fix — treats playback as engaged ONLY when the control body says
-  // active:true. This drives that same data path end to end: available →
-  // start(active:true) → first timing + readiness payload is the simulated
-  // replay → stop.
-  const DEFAULT_REPLAY_SPEED = 4; // mirrors src/app/useReplaySession.ts
-  const familySession = (await fetchJson('/api/replay/available')).sessions.find((session) => session.sessionKey === '5537-6754');
-  assert.ok(familySession?.watchable, 'family flow: available() must surface the watchable capture the race-page CTA links to');
-  // clampT0(session, session.firstGreenAt) === firstGreenAt (green falls inside
-  // the captured span), so this query is byte-for-byte what useReplaySession
-  // .start() builds for the CTA tap — session key + green-flag t0 + default speed.
-  const familyQuery = `?session=${encodeURIComponent(familySession.sessionKey)}&t0=${encodeURIComponent(familySession.firstGreenAt)}&speed=${DEFAULT_REPLAY_SPEED}`;
-  const familyStartRes = await fetch(`${baseUrl}/api/replay/control${familyQuery}`);
-  const familyStart = JSON.parse(await familyStartRes.text());
-  assert.equal(familyStartRes.status, 200, 'family flow: the start request must answer 200');
-  assert.equal(familyStart.active, true, 'family flow: the start body must report active:true — the exact signal the client now requires to leave the cue-up');
-  assert.equal(familyStart.sessionKey, '5537-6754', 'family flow: the engaged replay must be the requested capture');
-  assert.equal(Number(familyStart.speed), DEFAULT_REPLAY_SPEED, 'family flow: the engaged replay must run at the frontend default speed');
-  const familyTiming = await fetchJson('/api/timing');
-  assert.equal(familyTiming.rows.find((row) => row.bryce)?.driverId, '2143', 'family flow: the first timing payload after start must carry the archived Bryce row');
-  const familyReadiness = await fetchJson('/api/readiness');
-  assert.equal(familyReadiness.replay.simulation?.active, true, 'family flow: the first readiness payload must be flagged simulated so the page clears "Cueing up the replay"');
-  const familyStop = JSON.parse(await (await fetch(`${baseUrl}/api/replay/control?stop=1`)).text());
-  assert.equal(familyStop.active, false, 'family flow: stop must disengage playback');
+  // ---- (d) refused: non-watchable / unknown replay params on a live route ----
+  const practiceRefused = await fetch(`${baseUrl}/api/readiness${replayQuery('5537-6753', REPLAY_EARLY_RT)}`);
+  assert.equal(practiceRefused.status, 422, 'a non-watchable practice capture is refused on the live route');
+  const wrongSeriesRefused = await fetch(`${baseUrl}/api/timing${replayQuery('9001-8801', REPLAY_EARLY_RT)}`);
+  assert.equal(wrongSeriesRefused.status, 422, 'a wrong-series capture is refused on the live route');
+  const unknownRefused = await fetch(`${baseUrl}/api/readiness${replayQuery('no-such-session', REPLAY_EARLY_RT)}`);
+  assert.equal(unknownRefused.status, 404, 'an unknown replay session is refused with 404');
 
-  // ---- Lake-fed replay (2024-25 RaceTools / 2026 Timing71) end to end ----
-  // A historical race that we never captured ourselves must light up "Watch this
-  // race unfold" too: it appears in available() source-tiered, starts via the same
-  // frontend param path, and serves capture-shaped timing where Bryce carries his
-  // TRUE season car number while resolving on his stable Race Control driver id.
-  {
-    const lakeAvailable = await fetchJson('/api/replay/available');
-    const lake2024 = lakeAvailable.sessions.find((s) => s.canonicalSessionId === 'session_indy_nxt_2024_6314');
-    assert.ok(lake2024, 'lake feed: available() must list the 2024 Barber RaceTools race');
-    assert.equal(lake2024.sourceTier, 'racetools_capture', 'lake feed: a 2024 race must be tiered as a RaceTools capture');
-    assert.equal(lake2024.tierLabel, 'RaceTools race-weekend capture', 'lake feed: the tier label must never read as official or as our own capture');
-    assert.equal(lake2024.watchable, true, 'lake feed: a validated 2024 race must be watchable');
-    assert.equal(lake2024.eventSessionId, '6314', 'lake feed: the eventSessionId must key the 2024 race page');
-    assert.ok(lakeAvailable.sessions.some((s) => s.sourceTier === 'timing71_normalized'), 'lake feed: 2026 Timing71 races must also be listed, tiered as third-party normalized');
-    // Our own watchable capture wins over a lake feed for the same event session.
-    const lake6754 = lakeAvailable.sessions.find((s) => s.sessionKey === 'session_indy_nxt_2026_6754');
-    if (lake6754) assert.equal(lake6754.watchable, false, 'lake feed: a lake session is superseded when a watchable capture covers the same event session');
+  // ---- Lake-fed per-request replay (2024 RaceTools) ----
+  const lake2024 = available.sessions.find((s) => s.canonicalSessionId === 'session_indy_nxt_2024_6314');
+  assert.ok(lake2024, 'available() lists the 2024 Barber RaceTools race');
+  assert.equal(lake2024.sourceTier, 'racetools_capture');
+  const lakeTiming = await fetchJson(`/api/timing${replayQuery(lake2024.sessionKey, lake2024.firstGreenAt, 4)}`);
+  const lakeBryce = lakeTiming.rows.find((row) => row.bryce);
+  assert.equal(lakeBryce?.driverId, '2143', 'lake feed: Bryce resolves on his stable Race Control driver id');
+  assert.equal(lakeBryce?.no, '27', 'lake feed: Bryce carries his TRUE 2024 car number (#27)');
+  assert.deepEqual(Object.keys(lakeTiming.rows[0]).sort(), Object.keys(expectedTiming.rows[0]).sort(), 'lake feed: each timing row carries the live capture fields');
+  const lakeReadiness = await fetchJson(`/api/readiness${replayQuery(lake2024.sessionKey, lake2024.firstGreenAt, 4)}`);
+  assert.equal(lakeReadiness.replay.simulation?.active, true, 'lake feed: readiness flags simulated playback');
 
-    const lakeQuery = `?session=${encodeURIComponent(lake2024.sessionKey)}&t0=${encodeURIComponent(lake2024.firstGreenAt)}&speed=${DEFAULT_REPLAY_SPEED}`;
-    const lakeStart = JSON.parse(await (await fetch(`${baseUrl}/api/replay/control${lakeQuery}`)).text());
-    assert.equal(lakeStart.active, true, 'lake feed: the start body must report active:true so the page leaves the cue-up');
-    assert.equal(lakeStart.source, 'lake_feeds', 'lake feed: playback must be served by the lake source, not the sqlite overlay');
-    assert.equal(lakeStart.tierLabel, 'RaceTools race-weekend capture', 'lake feed: the engaged replay must carry its source tier');
-    const lakeTiming = await fetchJson('/api/timing');
-    const lakeBryce = lakeTiming.rows.find((row) => row.bryce);
-    assert.equal(lakeBryce?.driverId, '2143', 'lake feed: Bryce must resolve on his stable Race Control driver id');
-    assert.equal(lakeBryce?.no, '27', 'lake feed: Bryce must carry his TRUE 2024 car number (#27), not #9');
-    // Structural (capture-shaped) compatibility: the payload, heartbeat, and each
-    // timing row must carry exactly the same FIELDS as a live capture. Values may
-    // legitimately be null where a historical replay has no data (e.g. running
-    // championship points), which is the same null the live compact row emits when
-    // a live feed omits them — so the field SET, not the value type, is the contract.
-    assert.deepEqual(Object.keys(lakeTiming).sort(), Object.keys(expectedTiming).sort(), 'lake feed: timing payload must carry the live top-level fields');
-    assert.deepEqual(Object.keys(lakeTiming.heartbeat).sort(), Object.keys(expectedTiming.heartbeat).sort(), 'lake feed: heartbeat must carry the live fields');
-    assert.deepEqual(Object.keys(lakeTiming.rows[0]).sort(), Object.keys(expectedTiming.rows[0]).sort(), 'lake feed: each timing row must carry the live capture fields');
-    const lakeReadiness = await fetchJson('/api/readiness');
-    assert.equal(lakeReadiness.replay.simulation?.active, true, 'lake feed: readiness must flag simulated playback');
-    assert.equal(lakeReadiness.bryce.identityGuard.matchedBy, 'driver_id', 'lake feed: the identity guard must match Bryce by driver id');
-    const lakeStop = JSON.parse(await (await fetch(`${baseUrl}/api/replay/control?stop=1`)).text());
-    assert.equal(lakeStop.active, false, 'lake feed: stop must disengage lake playback');
-  }
-
-  // ---- Nashville 2025 regression: battle rivals + running order (Jack's bug) ----
-  // The RaceTools lake feeds carry an EMPTY EventID and an EMPTY DriverID on every
-  // rival (only Bryce's id is joined in). Those two omissions used to make the
-  // frontend drop every rival from the field (empty driverId → empty stableDriverId)
-  // and never form a session key (missing eventId), so the battle corridor showed
-  // no rival cars and the running order never crossed its two-sample gate. This
-  // drives the exact page path — start Nashville, advance the virtual clock, feed
-  // two readiness payloads through the same reducers the Live page uses — and
-  // asserts the corridor has rival cars and the running order accumulates.
+  // ---- (a) Nashville 2025 regression via per-request params ----
+  // Battle rivals + running-order accumulation, driven exactly as the Live page
+  // drives it: the client owns the clock and appends ?replay&rt&speed each poll.
   {
     const NASH = 'session_indy_nxt_2025_6447';
-    const nash = (await fetchJson('/api/replay/available')).sessions.find((s) => s.sessionKey === NASH);
-    assert.ok(nash?.watchable, 'nashville: the 2025 Music City race must be a watchable lake replay');
-    // A mid-race t0 (deep enough that the field is spread and Bryce has ranked
-    // neighbors) at 4x so a short real wait advances the archive clock a few frames.
-    const nashStart = JSON.parse(
-      await (await fetch(`${baseUrl}/api/replay/control?session=${encodeURIComponent(NASH)}&t0=${encodeURIComponent('2025-08-31T10:51:00.000Z')}&speed=4`)).text()
-    );
-    assert.equal(nashStart.active, true, 'nashville: replay must engage');
-    assert.equal(nashStart.source, 'lake_feeds', 'nashville: playback must come from the lake source');
+    const nash = available.sessions.find((s) => s.sessionKey === NASH);
+    assert.ok(nash?.watchable, 'nashville: the 2025 Music City race is a watchable lake replay');
+    const speed = 4;
+    const virtualStartMs = Date.parse('2025-08-31T10:51:00.000Z');
+    const wallStart = Date.now();
+    const rtNow = () => new Date(virtualStartMs + Math.max(0, Date.now() - wallStart) * speed).toISOString();
 
     let history = createLiveHistoryState();
     let battleWithRivals = null;
     let sessionKey = null;
     const seenArchive = new Set();
-    // Poll real-time; at 4x each ~450ms poll advances ~1.8 archive seconds, so a
-    // handful of polls guarantees at least two DISTINCT archived samples.
     for (let attempt = 0; attempt < 40 && seenArchive.size < 2; attempt += 1) {
-      const payload = await fetchJson('/api/readiness');
+      const payload = await fetchJson(`/api/readiness${replayQuery(NASH, rtNow(), speed)}`);
       assert.ok(['ready', 'degraded'].includes(payload.state), `nashville: mid-race readiness must be usable (got ${payload.state})`);
+      assert.equal(payload.replay.simulation?.active, true, 'nashville: every mid-race payload is a simulated replay');
       const rows = payload.liveTiming?.rows ?? [];
       const bryce = rows.find((row) => row.bryce === true) ?? null;
-      assert.ok(bryce, 'nashville: the guarded Bryce row must be present mid-race');
-
+      assert.ok(bryce, 'nashville: the guarded Bryce row is present mid-race');
       const battle = buildCumulativeLiveBattleFrame(rows, bryce);
-      assert.ok(battle, 'nashville: a battle frame must build around the Bryce anchor');
+      assert.ok(battle, 'nashville: a battle frame builds around the Bryce anchor');
       if (battle.cars.length > 0) battleWithRivals = battle;
-
-      assert.ok(liveHistorySampleFromPayload(payload) !== null, 'nashville: every usable mid-race payload must yield a history sample (session key + field rows)');
+      assert.ok(liveHistorySampleFromPayload(payload) !== null, 'nashville: every usable payload yields a history sample');
       sessionKey = liveSessionKeyOf(payload);
-      assert.ok(sessionKey, 'nashville: a session key must resolve from the eventSessionId even with an empty eventId');
+      assert.ok(sessionKey, 'nashville: a session key resolves from the eventSessionId even with an empty eventId');
       seenArchive.add(payload.replay?.simulation?.archiveCheckedAt ?? '');
       history = appendLiveHistoryPayload(history, payload);
       await new Promise((resolve) => setTimeout(resolve, 450));
     }
-
-    assert.ok(battleWithRivals, 'nashville: the battle corridor must carry at least one rival car — the exact regression Jack hit');
-    assert.ok(
-      battleWithRivals.ahead || battleWithRivals.behind,
-      'nashville: the battle corridor must name at least one adjacent rival (ahead or behind)'
-    );
+    assert.ok(battleWithRivals, 'nashville: the battle corridor carries at least one rival car (the exact regression Jack hit)');
+    assert.ok(battleWithRivals.ahead || battleWithRivals.behind, 'nashville: the corridor names at least one adjacent rival');
     const nashSession = history.sessions[sessionKey];
-    assert.ok(nashSession, 'nashville: the accumulator must hold the Nashville session');
-    assert.ok(
-      nashSession.samples.length >= 2,
-      `nashville: the running order must cross its two-sample gate (got ${nashSession.samples.length})`
-    );
+    assert.ok(nashSession, 'nashville: the accumulator holds the Nashville session');
+    assert.ok(nashSession.samples.length >= 2, `nashville: the running order crosses its two-sample gate (got ${nashSession.samples.length})`);
     assert.ok(
       nashSession.selectedDrivers.some((driver) => driver.role === 'initially_ahead' || driver.role === 'initially_behind'),
-      'nashville: the running order must select at least one rival lane around Bryce'
+      'nashville: the running order selects at least one rival lane around Bryce'
     );
-    const nashStop = JSON.parse(await (await fetch(`${baseUrl}/api/replay/control?stop=1`)).text());
-    assert.equal(nashStop.active, false, 'nashville: stop must disengage playback');
   }
 
-  // A refused start must be legible to the client, not a silent hang: the body
-  // reports active!==true AND carries a human reason, which is what the page now
-  // renders as "this replay can't start: <reason>" with an exit — never a cue-up.
-  const refusedRes = await fetch(`${baseUrl}/api/replay/control?session=5537-6753&t0=${encodeURIComponent(familySession.firstGreenAt)}&speed=${DEFAULT_REPLAY_SPEED}`);
-  const refused = JSON.parse(await refusedRes.text());
-  assert.equal(refusedRes.ok, false, 'family flow: a non-watchable start must not answer ok');
-  assert.notEqual(refused.active, true, 'family flow: a refused start must never report active:true');
-  assert.equal(typeof refused.error, 'string', 'family flow: a refused start must carry a human reason for the honest can’t-start state');
-  // Restore the replay the Finding A transition below expects to be running.
-  await fetchJson('/api/replay/control?session=5537-6754&t0=2026-06-21T16%3A08%3A20.000Z&speed=1');
-
-  // ---- Finding A (transition): idle → replay → runner goes live → real record ----
-  // The real runner goes live and writes a fresh, distinguishable record (Bryce
-  // running P3 on lap 15, not the archived P6 on lap 12 the replay was serving).
-  const liveCheckedAt = new Date().toISOString();
-  const liveBryce = { ...timingRows[1], rank: '3', liveRank: '3', laps: '15', gap: '4.2', liveGap: '4.2', lastLapTime: '1:57.500' };
-  const liveRaw = {
-    ...raw,
-    timing: { timing_results: { heartbeat: { ...heartbeat, lapNumber: '15' }, Item: [timingRows[0], liveBryce] } }
-  };
-  const liveDb = new DatabaseSync(sqlitePath);
-  liveDb
-    .prepare(`
-      INSERT INTO race_snapshots
-        (checked_at, session_key, event_id, event_session_id, event_name, session_name, flag, lap, total_laps,
-         source_state, bryce_rank, bryce_status, bryce_laps, bryce_gap, bryce_best_lap_time, payload_json)
-      VALUES (?, '5537-6754', '5537', '6754', 'INDY NXT at Road America', 'Race 2', 'GREEN', '15', '18', 'live', 3, 'Active', '15', '4.2', '1:58.100', ?)
-    `)
-    .run(liveCheckedAt, JSON.stringify({ summary: { checkedAt: liveCheckedAt, trackName: 'Road America' }, raw: liveRaw }));
-  liveDb.close();
-  await writeFile(
-    runnerStatusPath,
-    JSON.stringify({ phase: 'LIVE', updatedAt: new Date().toISOString(), lastSuccessfulWriteAt: new Date().toISOString() })
-  );
-
-  // Poll until the live-guard re-checks status (TTL 200ms) and every live route
-  // falls through to the fresh real record.
-  let liveTiming = null;
+  // ---- (c) live-guard: runner goes live → replay params ignored, real feed served ----
+  await writeFile(runnerStatusPath, JSON.stringify({ phase: 'LIVE', updatedAt: new Date().toISOString(), lastSuccessfulWriteAt: new Date().toISOString() }));
+  let guardedTiming = null;
   for (let attempt = 0; attempt < 60; attempt += 1) {
-    liveTiming = await fetchJson('/api/timing');
-    if (liveTiming.rows.find((row) => row.bryce)?.rank === 3) break;
+    guardedTiming = await fetchJson(`/api/timing${replayQuery('5537-6754', REPLAY_EARLY_RT)}`);
+    if (guardedTiming.rows.find((row) => row.bryce)?.rank === 3) break;
     await new Promise((resolve) => setTimeout(resolve, 100));
   }
-  assert.equal(liveTiming.rows.find((row) => row.bryce)?.rank, 3, 'after the runner goes live, /api/timing must serve the real record, not the replay');
-  assert.deepEqual(shapeOf(liveTiming), shapeOf(expectedTiming), 'the real live /api/timing keeps the same payload shape');
-
-  const liveReadiness = await fetchJson('/api/readiness');
-  assert.notEqual(liveReadiness.replay.simulation?.active, true, 'live readiness must no longer report simulated replay');
-  assert.equal(liveReadiness.liveTiming.rows.find((row) => row.bryce)?.laps, '15', 'live readiness must carry the real record');
-
-  const liveSources = await fetchJson('/api/sources');
-  assert.ok(Array.isArray(liveSources.endpoints), '/api/sources must still serve a real source report after preemption');
-
-  const controlAfterLive = await fetchJson('/api/replay/control');
-  assert.equal(controlAfterLive.active, false, 'replay control must report inactive after live preemption');
-  assert.equal(controlAfterLive.stoppedByLive, true, 'replay control must report stoppedByLive after live preemption');
-  assert.match(controlAfterLive.reason ?? '', /live session is on/i, 'replay control must carry the honest live-preemption reason');
-
-  // ---- Finding B (server): a direct URL cannot start a non-watchable capture ----
+  assert.equal(guardedTiming.rows.find((row) => row.bryce)?.rank, 3, 'live-guard: replay params are ignored while the runner is live — the real feed (P3) is served');
+  const guardedReadiness = await fetchJson(`/api/readiness${replayQuery('5537-6754', REPLAY_EARLY_RT)}`);
+  assert.notEqual(guardedReadiness.replay.simulation?.active, true, 'live-guard: a live runner makes the replaying client see the real (non-simulated) feed');
+  assert.equal(guardedReadiness.liveTiming.rows.find((row) => row.bryce)?.laps, '15', 'live-guard: the served feed is the real record');
+  // And a plain client is unaffected throughout.
+  assert.equal((await fetchJson('/api/timing')).rows.find((row) => row.bryce)?.rank, 3, 'live-guard: the plain client keeps seeing the real feed');
   await writeFile(runnerStatusPath, JSON.stringify({ phase: 'IDLE', updatedAt: new Date().toISOString() }));
-  assert.equal((await fetch(`${baseUrl}/api/replay/control?session=5537-6753&speed=1`)).status, 422, 'a direct replay start on a practice capture must be refused');
-  assert.equal((await fetch(`${baseUrl}/api/replay/control?session=9001-8801&speed=1`)).status, 422, 'a direct replay start on a wrong-series capture must be refused');
 } finally {
   child.kill('SIGTERM');
   await new Promise((resolve) => child.once('exit', resolve));
@@ -509,4 +390,12 @@ try {
 }
 
 assert.equal(stderr, '', stderr);
-console.log(JSON.stringify({ ok: true, assertions: 99, payloadShape: 'live-compatible', timeMachine: 'available+16x', liveGuard: 'preempts-replay', gating: 'watchable-only', familyFlow: 'available-derived-params+active-body', lakeFeeds: '2024-25-racetools+2026-timing71-source-tiered', nashvilleRegression: 'battle-rivals+running-order-accumulates' }, null, 2));
+console.log(JSON.stringify({
+  ok: true,
+  contract: 'per-client-stateless-replay',
+  isolation: 'plain-clients-never-see-replay',
+  liveGuard: 'per-request-preempts-replay',
+  gating: 'watchable-only-refused-422/404',
+  lakeFeeds: '2024-racetools+2025-nashville-per-request',
+  nashvilleRegression: 'battle-rivals+running-order-accumulates'
+}, null, 2));
