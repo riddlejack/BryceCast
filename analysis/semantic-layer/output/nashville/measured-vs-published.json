@@ -1,0 +1,91 @@
+{
+  "lane": "analysis/semantic-layer (nashville measured sections)",
+  "generatedAt": "2026-07-19T06:06:09.305Z",
+  "gateMedianAbsS": 0.12,
+  "races": [
+    {
+      "sessionId": "session_indy_nxt_2024_6323",
+      "feedId": "rt_2024_nashville-superspeedway_r_2024-09-15_a",
+      "year": 2024,
+      "bryceCar": "27",
+      "totalLaps": 65,
+      "cleanLapCount": 55,
+      "sectionCount": 8,
+      "lapFractionCovered": 1,
+      "publishedVsMeasured": {
+        "available": true,
+        "mappings": [
+          {
+            "publishedSection": "Turn 1 Entry Turn 1 Exit Turn 2 Entry BackStretch BackStretch",
+            "measuredFineSpan": "S2B",
+            "lapOffset": 2,
+            "n": 63,
+            "medianResidualS": 0.01,
+            "medianAbsResidualS": 0.0984,
+            "maxAbsResidualS": 3.262
+          },
+          {
+            "publishedSection": "Turn 3",
+            "measuredFineSpan": "S4A",
+            "lapOffset": -1,
+            "n": 65,
+            "medianResidualS": 0.0029,
+            "medianAbsResidualS": 0.0875,
+            "maxAbsResidualS": 5.5902
+          },
+          {
+            "publishedSection": "Turn 4 Entry Turn 4 Exit",
+            "measuredFineSpan": "S4B",
+            "lapOffset": 2,
+            "n": 63,
+            "medianResidualS": 0.0139,
+            "medianAbsResidualS": 0.0835,
+            "maxAbsResidualS": 3.8075
+          }
+        ]
+      }
+    },
+    {
+      "sessionId": "session_indy_nxt_2025_6447",
+      "feedId": "rt_2025_nashville-superspeedway_r_2025-08-31_d",
+      "year": 2025,
+      "bryceCar": "9",
+      "totalLaps": 65,
+      "cleanLapCount": 50,
+      "sectionCount": 8,
+      "lapFractionCovered": 1,
+      "publishedVsMeasured": {
+        "available": true,
+        "mappings": [
+          {
+            "publishedSection": "Turn 1 Entry Turn 1 Exit Turn 2 Entry BackStretch BackStretch",
+            "measuredFineSpan": "S2B",
+            "lapOffset": 2,
+            "n": 63,
+            "medianResidualS": 0.0267,
+            "medianAbsResidualS": 0.0909,
+            "maxAbsResidualS": 3.8725
+          },
+          {
+            "publishedSection": "Turn 3",
+            "measuredFineSpan": "S4A",
+            "lapOffset": 2,
+            "n": 63,
+            "medianResidualS": -0.0004,
+            "medianAbsResidualS": 0.0976,
+            "maxAbsResidualS": 4.6076
+          },
+          {
+            "publishedSection": "Turn 4 Entry Turn 4 Exit",
+            "measuredFineSpan": "S4B",
+            "lapOffset": 2,
+            "n": 63,
+            "medianResidualS": 0.0044,
+            "medianAbsResidualS": 0.0572,
+            "maxAbsResidualS": 4.3634
+          }
+        ]
+      }
+    }
+  ]
+}
