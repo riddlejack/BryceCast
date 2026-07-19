@@ -13,6 +13,8 @@ export interface ReplaySessionInfo {
   seasonYear: number | null;
   isRace: boolean;
   samples: number;
+  /** Samples that carried a Bryce timing row (wrong-series / identity guard). */
+  bryceSamples?: number;
   firstCheckedAt: string | null;
   lastCheckedAt: string | null;
   firstGreenAt: string | null;
