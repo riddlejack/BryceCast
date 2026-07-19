@@ -3,6 +3,8 @@ import { nashvilleSuperspeedwaySections, nashvilleSuperspeedwayMeasuredSections 
 import { worldWideTechnologyRacewaySections } from './world-wide-technology-raceway';
 import { iowaSpeedwaySections } from './iowa-speedway';
 import { theMilwaukeeMileSections } from './the-milwaukee-mile';
+import { portlandInternationalRacewaySections } from './portland-international-raceway';
+import { weathertechRacewayLagunaSecaSections } from './weathertech-raceway-laguna-seca';
 
 /** Curated oval section anchors, keyed to the OSM track outlines in the parent
  *  directory. Ovals first (Brief E sequencing); road courses arrive in a later
@@ -15,7 +17,9 @@ const sets: TrackSectionAnchorSet[] = [
   nashvilleSuperspeedwaySections,
   worldWideTechnologyRacewaySections,
   iowaSpeedwaySections,
-  theMilwaukeeMileSections
+  theMilwaukeeMileSections,
+  portlandInternationalRacewaySections,
+  weathertechRacewayLagunaSecaSections
 ];
 
 const bySlug = new Map(sets.map((set) => [set.slug, set]));
