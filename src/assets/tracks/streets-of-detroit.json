@@ -1,1 +1,135 @@
-{"slug":"streets-of-detroit","name":"Streets of Detroit","lengthMi":1.02,"viewBox":"0 0 1000 320","mainPath":"M38.3 24 L962.6 35.6 L973.3 43.6 L976 52.6 L967.1 178.4 L962.6 191.7 L954.6 198.9 L947.4 200.7 L638.7 198 L632.5 203.3 L631.6 206.9 L627.1 277.4 L617.3 291.7 L605.7 296.1 L305.9 291.7 L293.5 283.6 L278.3 257.8 L272.9 253.3 L195.3 252.4 L182.8 242.6 L179.2 231 L179.2 74.9 L175.7 71.3 L35.6 69.5 L29.4 65.9 L24.9 59.7 L24 37.4 L25.8 31.1 L31.1 25.8 L37.4 24.9 Z","pitPath":null,"startFinish":null,"drivingDirection":null,"cornerArcs":[],"source":{"provider":"INDYCAR official track outline","license":"traced shape of a public circuit layout","attribution":"Outline traced from the official INDYCAR track map","wayIds":[],"cachedResponse":"src/assets/tracks/maps/streets-of-detroit.png","imageUrl":"https://www.indycar.com/-/media/IndyCar/Schedules/TrackOutlines/Black/Detroit.png?w=1200"}}
+{
+  "slug": "streets-of-detroit",
+  "name": "Streets of Detroit",
+  "lengthMi": 1.645,
+  "viewBox": "0 0 1000 314",
+  "mainPath": "M784.5 180.4 L945 179 L953.7 178.6 L961.3 175.4 L967.9 159.9 L976 43.1 L972.7 32.4 L966 25.4 L938.7 24.1 L629.1 28.1 L397.8 27.1 L224.8 32.5 L123.7 32.9 L34.2 34.6 L26.4 43.5 L24.5 50 L27.5 61.9 L33.1 64.7 L170.6 69.3 L179.4 72.6 L182 82 L180.9 251.8 L257.3 251.1 L278.5 253.8 L298.4 283.8 L308.3 289.8 L616.8 282.2 L621.6 179.1 Z",
+  "pitPath": null,
+  "startFinish": {
+    "x": 784.5,
+    "y": 180.4,
+    "angleDeg": 0
+  },
+  "drivingDirection": "counterclockwise",
+  "cornerArcs": [
+    {
+      "label": null,
+      "apex": {
+        "x": 972.7,
+        "y": 32.4
+      },
+      "entryQuarter": {
+        "x": 961.3,
+        "y": 175.4
+      },
+      "exitQuarter": {
+        "x": 397.8,
+        "y": 27.1
+      },
+      "turnDeg": 255
+    },
+    {
+      "label": null,
+      "apex": {
+        "x": 938.7,
+        "y": 24.1
+      },
+      "entryQuarter": {
+        "x": 967.9,
+        "y": 159.9
+      },
+      "exitQuarter": {
+        "x": 26.4,
+        "y": 43.5
+      },
+      "turnDeg": 359
+    },
+    {
+      "label": null,
+      "apex": {
+        "x": 179.4,
+        "y": 72.6
+      },
+      "entryQuarter": {
+        "x": 170.6,
+        "y": 69.3
+      },
+      "exitQuarter": {
+        "x": 182,
+        "y": 82
+      },
+      "turnDeg": 88
+    },
+    {
+      "label": null,
+      "apex": {
+        "x": 180.9,
+        "y": 251.8
+      },
+      "entryQuarter": {
+        "x": 180.9,
+        "y": 251.8
+      },
+      "exitQuarter": {
+        "x": 180.9,
+        "y": 251.8
+      },
+      "turnDeg": 91
+    },
+    {
+      "label": null,
+      "apex": {
+        "x": 278.5,
+        "y": 253.8
+      },
+      "entryQuarter": {
+        "x": 257.3,
+        "y": 251.1
+      },
+      "exitQuarter": {
+        "x": 278.5,
+        "y": 253.8
+      },
+      "turnDeg": 57
+    },
+    {
+      "label": null,
+      "apex": {
+        "x": 308.3,
+        "y": 289.8
+      },
+      "entryQuarter": {
+        "x": 298.4,
+        "y": 283.8
+      },
+      "exitQuarter": {
+        "x": 616.8,
+        "y": 282.2
+      },
+      "turnDeg": 144
+    },
+    {
+      "label": null,
+      "apex": {
+        "x": 621.6,
+        "y": 179.1
+      },
+      "entryQuarter": {
+        "x": 621.6,
+        "y": 179.1
+      },
+      "exitQuarter": {
+        "x": 621.6,
+        "y": 179.1
+      },
+      "turnDeg": 88
+    }
+  ],
+  "source": {
+    "provider": "RaceTools static track-map package",
+    "license": "Used by direct permission for private, non-commercial use; raw archive git-ignored (data/historical-data-lake/PERMISSIONS_AND_SOURCE_TERMS.md).",
+    "attribution": "Outline derived from the RaceTools track-map centreline polyline",
+    "wayIds": [],
+    "cachedResponse": "racetools:Detroit Street Circuit @ sha256:d96f8806aec4d93b4ae6de4f89cc83568e8ca41fd11cfa77543e90e9ca5d616b"
+  }
+}

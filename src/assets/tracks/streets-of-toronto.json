@@ -1,0 +1,135 @@
+{
+  "slug": "streets-of-toronto",
+  "name": "Streets of Toronto",
+  "lengthMi": 1.786,
+  "viewBox": "0 0 1000 522",
+  "mainPath": "M257.5 336 L73.1 391.3 L61.1 392.7 L45.3 385.2 L37.6 378.2 L33.2 370.4 L27.6 346.7 L24 317.8 L25.2 297.8 L29.3 284 L40.1 259.2 L52.5 241.5 L63.5 230.3 L96.9 206.9 L192.5 168.9 L252.8 147.7 L342.3 110.9 L411.6 85.4 L451.3 75.4 L715.1 31.5 L781.7 24.2 L797.3 26.3 L805.6 32.2 L807.9 38.9 L804.9 52.8 L777.7 97.1 L773.9 114.8 L774.1 138.1 L781.1 182.4 L786.9 202.8 L801.4 231.9 L807.6 237.1 L816.6 239.9 L842.9 235 L912.3 208.9 L926.9 208.7 L945.6 213.1 L962.7 225.6 L973.7 240.9 L975.3 250.7 L973.6 269 L957.5 310.3 L942.5 341.9 L926.2 369.1 L899.8 402.7 L863.1 443.8 L838 465 L819.1 473 L743.5 494.4 L719.4 498.3 L709.7 498.2 L703.9 495.7 L691.9 479.3 L670.5 404.2 L662.3 388 L650.3 380.2 L635.8 377.7 L618.5 377.7 L595.9 384.5 L581.3 383.6 L569.2 376.9 L551.4 357.9 L535.8 312.5 L525.5 294.5 L518.5 286.5 L495 271.5 L474.5 269.2 L454.8 272.8 Z",
+  "pitPath": null,
+  "startFinish": {
+    "x": 257.5,
+    "y": 336,
+    "angleDeg": 163
+  },
+  "drivingDirection": "clockwise",
+  "cornerArcs": [
+    {
+      "label": null,
+      "apex": {
+        "x": 25.2,
+        "y": 297.8
+      },
+      "entryQuarter": {
+        "x": 37.6,
+        "y": 378.2
+      },
+      "exitQuarter": {
+        "x": 52.5,
+        "y": 241.5
+      },
+      "turnDeg": 177
+    },
+    {
+      "label": null,
+      "apex": {
+        "x": 781.7,
+        "y": 24.2
+      },
+      "entryQuarter": {
+        "x": 451.3,
+        "y": 75.4
+      },
+      "exitQuarter": {
+        "x": 805.6,
+        "y": 32.2
+      },
+      "turnDeg": 144
+    },
+    {
+      "label": null,
+      "apex": {
+        "x": 786.9,
+        "y": 202.8
+      },
+      "entryQuarter": {
+        "x": 774.1,
+        "y": 138.1
+      },
+      "exitQuarter": {
+        "x": 807.6,
+        "y": 237.1
+      },
+      "turnDeg": 142
+    },
+    {
+      "label": null,
+      "apex": {
+        "x": 926.2,
+        "y": 369.1
+      },
+      "entryQuarter": {
+        "x": 973.7,
+        "y": 240.9
+      },
+      "exitQuarter": {
+        "x": 743.5,
+        "y": 494.4
+      },
+      "turnDeg": 275
+    },
+    {
+      "label": null,
+      "apex": {
+        "x": 650.3,
+        "y": 380.2
+      },
+      "entryQuarter": {
+        "x": 662.3,
+        "y": 388
+      },
+      "exitQuarter": {
+        "x": 635.8,
+        "y": 377.7
+      },
+      "turnDeg": 91
+    },
+    {
+      "label": null,
+      "apex": {
+        "x": 569.2,
+        "y": 376.9
+      },
+      "entryQuarter": {
+        "x": 581.3,
+        "y": 383.6
+      },
+      "exitQuarter": {
+        "x": 551.4,
+        "y": 357.9
+      },
+      "turnDeg": 88
+    },
+    {
+      "label": null,
+      "apex": {
+        "x": 495,
+        "y": 271.5
+      },
+      "entryQuarter": {
+        "x": 525.5,
+        "y": 294.5
+      },
+      "exitQuarter": {
+        "x": 474.5,
+        "y": 269.2
+      },
+      "turnDeg": 89
+    }
+  ],
+  "source": {
+    "provider": "RaceTools static track-map package",
+    "license": "Used by direct permission for private, non-commercial use; raw archive git-ignored (data/historical-data-lake/PERMISSIONS_AND_SOURCE_TERMS.md).",
+    "attribution": "Outline derived from the RaceTools track-map centreline polyline",
+    "wayIds": [],
+    "cachedResponse": "racetools:Streets of Toronto @ sha256:7e4f3e84b680b75393d1b721cd5dbcce54b09ca0eaafde5215d5aa96b9926fb7"
+  }
+}

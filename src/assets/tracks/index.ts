@@ -8,6 +8,7 @@ import roadAmerica from './road-america.json';
 import streetsOfArlington from './streets-of-arlington.json';
 import streetsOfDetroit from './streets-of-detroit.json';
 import streetsOfStPetersburg from './streets-of-st-petersburg.json';
+import streetsOfToronto from './streets-of-toronto.json';
 import theMilwaukeeMile from './the-milwaukee-mile.json';
 import weathertechRacewayLagunaSeca from './weathertech-raceway-laguna-seca.json';
 import worldWideTechnologyRaceway from './world-wide-technology-raceway.json';
@@ -60,6 +61,12 @@ const outlines: TrackOutline[] = [
   streetsOfArlington,
   streetsOfDetroit,
   streetsOfStPetersburg,
+  // Toronto is outline-only: INDY NXT last supported the Toronto round in 2019
+  // (pre-Bryce), so the section-observation lane — scoped to Bryce's 2024–2026
+  // career — carries no Toronto rows and there is nothing to anchor. The
+  // RaceTools 2018-era map package still gives a correct outline; sections
+  // remain deferred by design, not omitted by miss.
+  streetsOfToronto,
   theMilwaukeeMile,
   weathertechRacewayLagunaSeca,
   worldWideTechnologyRaceway
@@ -71,7 +78,9 @@ const normalized = (name: string) => name.toLowerCase().replace(/[^a-z0-9]+/g, '
  *  tracks table; map known synonyms onto asset slugs. */
 const aliasSlugs: Record<string, string> = {
   'detroit downtown street circuit': 'streets-of-detroit',
-  'grand prix of arlington street circuit': 'streets-of-arlington'
+  'grand prix of arlington street circuit': 'streets-of-arlington',
+  'honda indy toronto': 'streets-of-toronto',
+  'exhibition place': 'streets-of-toronto'
 };
 
 /** Look up a traced outline by track name; null when we have not traced it yet
@@ -85,4 +94,4 @@ export const trackOutlineFor = (trackName: string | null | undefined): TrackOutl
 };
 
 export const trackOutlineAttribution =
-  'Permanent-circuit outlines traced from OpenStreetMap data © OpenStreetMap contributors (ODbL 1.0); street-circuit outlines traced from official INDYCAR track maps.';
+  'Permanent-circuit outlines traced from OpenStreetMap data © OpenStreetMap contributors (ODbL 1.0); street-circuit outlines derived from RaceTools static track-map centreline polylines, used by direct permission for private, non-commercial use.';
