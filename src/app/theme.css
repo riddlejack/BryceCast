@@ -576,6 +576,82 @@ button { font-family: inherit; }
   }
 }
 
+/* ---------- Home hero: the story of now ----------
+ * The track outline anchors; the headline names the moment; a countdown holds
+ * on race day / week; one labeled action leaves. Phone stacks head → art → foot
+ * (the shape sits in the middle, singing); desktop puts the words left and the
+ * art right, spanning both text rows. */
+.hero-now {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(18px, 3.4vw, 28px);
+}
+
+.hero-now__title {
+  font-weight: 680;
+  font-size: clamp(30px, 6vw, 42px);
+  letter-spacing: -0.02em;
+  line-height: 1.06;
+  margin: 0;
+  text-wrap: balance;
+}
+
+.hero-now__meta {
+  margin: 10px 0 0;
+  color: var(--ink-secondary);
+  font-size: 14.5px;
+  gap: 6px;
+  align-items: center;
+}
+
+.hero-now__art {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 176px;
+}
+
+.hero-now__foot {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.hero-now__action {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 15px;
+  font-weight: 570;
+  color: var(--link);
+  text-decoration: none;
+}
+.hero-now__action:hover { color: var(--link-active); }
+@media (prefers-reduced-motion: no-preference) {
+  .hero-now__action svg { transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1); }
+  .hero-now__action:hover svg { transform: translateX(3px); }
+}
+
+.hero-now__live { width: 100%; }
+
+.season-spark { display: block; color: inherit; text-decoration: none; }
+.season-spark svg { display: block; }
+
+@media (min-width: 760px) {
+  .hero-now {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 360px);
+    grid-template-areas:
+      'head art'
+      'foot art';
+    align-items: center;
+    column-gap: clamp(24px, 4vw, 44px);
+  }
+  .hero-now__head { grid-area: head; align-self: end; }
+  .hero-now__art { grid-area: art; }
+  .hero-now__foot { grid-area: foot; align-self: start; }
+}
+
 /* Paired cards whose intro/caption lines should sit on shared baselines. */
 .card--flex { display: flex; flex-direction: column; }
 

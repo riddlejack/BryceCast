@@ -1,13 +1,17 @@
-import { useEffect, useMemo, useState } from 'react';
-import { ArrowRight, CalendarClock, Flag, MapPin, Radio, Trophy } from 'lucide-react';
-import { Card, Countdown, HeroPanel, Plate, Stat, StatusChip } from '../app/components';
-import { asNumber, asString, formatClock, formatDate, formatGain, formatNumber, formatPct, formatPosition, trackTypeLabel } from '../app/format';
+import { useEffect, useState } from 'react';
+import { ArrowRight, Flag, MapPin, Trophy } from 'lucide-react';
+import { Card, Countdown, HeroPanel, Plate, Reveal, Stat, StatusChip } from '../app/components';
+import { chartFont, useMeasuredWidth } from '../app/charts';
+import { asNumber, asString, formatDate, formatGain, formatNumber, formatPosition, trackTypeLabel, windCardinal } from '../app/format';
 import { Link } from '../app/router';
 import type { ReadinessStatus } from '../app/useReadiness';
 import { normalizedName, useNextSession } from '../app/useNextSession';
 import { uiDataPackage } from '../data/uiDataPackage';
+import { trackOutlineFor } from '../assets/tracks';
+import { getVenueByTrackName } from '../data/venueDossier';
 import { daysUntil, getNextEvent, raceDayOf, type UpcomingPrepEvent } from '../data/upcoming';
 import { chronoCompare, displayRaceLabel, loadDebriefArchive, type ArchiveEntry } from '../data/debriefArchive';
+import { TrackArt } from '../app/trackArt';
 
 type Row = Record<string, unknown>;
 
@@ -23,96 +27,102 @@ const getSeasonStanding = (): { rank: number | null; points: number | null; top1
   };
 };
 
-/* ---------- live hero ---------- */
+/* ---------- near-track "now" wind, for the hero shape ----------
+ * A quiet flourish: only fetched for imminent states, only rendered when the
+ * observation carries a real direction and the venue outline has a geographic
+ * orientation (TrackArt gates that). Silent, honest omission on any failure —
+ * the RaceWeek page owns the full weather module; Home borrows only the arrow. */
 
-const LiveNowHero = ({ readiness }: { readiness: ReadinessStatus }) => {
-  const payload = readiness.payload;
-  if (!payload) return null;
-  const bryce = ((payload.bryce as Row)?.bryce as Row) ?? null;
-  const rank = bryce ? asNumber(bryce.rank) : null;
-  const start = bryce ? asNumber(bryce.startPosition) : null;
-  const gain = start !== null && rank !== null ? formatGain(start - rank) : null;
-  const weekend = payload.raceWeekend as Row;
-  const heartbeat = ((payload.liveTiming as Row)?.heartbeat as Row) ?? {};
-  const lap = asNumber(heartbeat.lap);
-  const totalLaps = asNumber(heartbeat.totalLaps);
-  return (
-    <Link to="/live">
-      <HeroPanel tint="live">
-        <div className="row row--between row--wrap" style={{ alignItems: 'flex-start' }}>
-          <span className="kicker">
-            <StatusChip tone="good" label="Live" live /> {asString(weekend.eventName) ?? 'INDY NXT'}
-          </span>
-          {lap !== null && totalLaps !== null ? (
-            <span className="chip chip--outline figure">Lap {lap}/{totalLaps}</span>
-          ) : null}
-        </div>
-        <div className="row row--between row--wrap" style={{ marginTop: 10, alignItems: 'flex-end', gap: 18 }}>
-          <div className="row" style={{ gap: 16, alignItems: 'center' }}>
-            <Plate size="hero" />
-            <div className="stat">
-              <span className="caption">Bryce Aron · running</span>
-              <span className="stat__value stat__value--hero">
-                {rank !== null ? `P${rank}` : '—'}
-              </span>
-              {gain ? (
-                <span className={`stat__delta ${gain.direction === 'up' ? 'stat__delta--up' : 'stat__delta--down'}`}>
-                  {gain.text} from P{start} start
-                </span>
-              ) : null}
-            </div>
-          </div>
-          <span className="row" style={{ color: 'var(--ink-secondary)', fontSize: 13.5, gap: 6 }}>
-            Open the live companion <ArrowRight size={15} aria-hidden />
-          </span>
-        </div>
-      </HeroPanel>
-    </Link>
-  );
+interface NowWind {
+  bearingDeg: number;
+  label: string;
+}
+
+const readObservationWind = (weatherData: Row | null | undefined): NowWind | null => {
+  const observation = (weatherData?.observation ?? {}) as Row;
+  const deg = asNumber(observation.windDirectionDeg);
+  if (deg === null) return null;
+  const kph = asNumber(observation.windSpeedKph);
+  const mph = kph !== null ? Math.round(kph / 1.609344) : null;
+  const cardinal = windCardinal(deg);
+  /* House wind convention: speed first, uppercase cardinal ("8 mph WNW"). */
+  const label = mph !== null ? `${mph} mph ${cardinal ?? ''}`.trim() : `from the ${cardinal ?? '—'}`;
+  return { bearingDeg: deg, label };
 };
 
-/* ---------- next race hero ---------- */
-
-const TrackForm = ({ event }: { event: UpcomingPrepEvent }) => {
-  const sameTrack = event.sameTrack as Row;
-  const trackType = (event.trackTypeHistory ?? {}) as Row;
-  const raceCount = asNumber(sameTrack.raceCount);
-  const typeCount = asNumber(trackType.raceCount);
-  const typeName = trackTypeLabel(event.trackType).toLowerCase();
-
-  if (raceCount !== null && raceCount > 0) {
-    return (
-      <div>
-        <span className="caption">How Bryce runs at {event.trackName}</span>
-        <div className="row" style={{ gap: 26, marginTop: 8 }}>
-          <Stat label="Races" value={formatNumber(raceCount, 0)} />
-          <Stat label="Avg finish" value={formatNumber(sameTrack.avgFinish)} />
-          <Stat label="Top-10 rate" value={formatPct(sameTrack.top10RatePct)} />
-        </div>
-        <p style={{ margin: '10px 0 0', fontSize: 11.5, color: 'var(--ink-muted)' }}>History, not a prediction.</p>
-      </div>
-    );
-  }
-
-  if (typeCount !== null && typeCount > 0) {
-    return (
-      <div>
-        <span className="caption">First time here · on {typeName}s so far</span>
-        <div className="row" style={{ gap: 26, marginTop: 8 }}>
-          <Stat label={`${typeName} races`} value={formatNumber(typeCount, 0)} />
-          <Stat label="Avg finish" value={formatNumber(trackType.avgFinish)} />
-          <Stat label="Top-10 rate" value={formatPct(trackType.top10RatePct)} />
-        </div>
-        <p style={{ margin: '10px 0 0', fontSize: 11.5, color: 'var(--ink-muted)' }}>History, not a prediction.</p>
-      </div>
-    );
-  }
-
-  return null;
+const useNowWind = (eventId: string | null, venueId: string | null): NowWind | null => {
+  const [wind, setWind] = useState<NowWind | null>(null);
+  useEffect(() => {
+    if (!eventId && !venueId) {
+      setWind(null);
+      return undefined;
+    }
+    let cancelled = false;
+    const run = async () => {
+      try {
+        const response = await fetch('/api/weather/upcoming', { headers: { accept: 'application/json' } });
+        if (response.ok) {
+          const payload = (await response.json()) as Row;
+          const events = Array.isArray(payload.events) ? (payload.events as Row[]) : [];
+          const match = events.find((entry) => asString((entry.event as Row)?.id) === eventId);
+          if (match) {
+            const report = readObservationWind((match.weather ?? {}) as Row);
+            if (!cancelled && report) {
+              setWind(report);
+              return;
+            }
+          }
+        }
+        /* The imminent race rolls off the "upcoming" set on race day itself —
+         * fall back to the venue's live weather by trackId (its venueId). */
+        if (!venueId) return;
+        const live = await fetch(`/api/weather/live?trackId=${encodeURIComponent(venueId)}`, { headers: { accept: 'application/json' } });
+        if (!live.ok) return;
+        const liveData = (await live.json()) as Row;
+        const report = readObservationWind(liveData);
+        if (!cancelled && report) setWind(report);
+      } catch {
+        /* wind is a flourish — omit silently, never block the hero */
+      }
+    };
+    void run();
+    const timer = setInterval(run, 5 * 60_000);
+    return () => {
+      cancelled = true;
+      clearInterval(timer);
+    };
+  }, [eventId, venueId]);
+  return wind;
 };
 
-const NextRaceHero = ({ readiness }: { readiness: ReadinessStatus }) => {
-  const nextEvent = getNextEvent();
+/* ---------- the hero: the story of now ----------
+ * One quiet full-width card. The venue's track outline is the anchor; the
+ * headline names the moment; the meta line places it; a countdown holds on race
+ * day / race week; one clearly-labeled action leaves for the right page. No stat
+ * grids — the numbers live in the cards below and in Career. */
+
+type HeroState = 'live' | 'raceDay' | 'raceWeek' | 'between';
+
+const headlineFor: Record<HeroState, string> = {
+  live: 'Bryce is on track.',
+  raceDay: 'It’s race day.',
+  raceWeek: 'Race week.',
+  between: 'Between race weekends.'
+};
+
+const HomeHero = ({
+  readiness,
+  liveish,
+  nextEvent,
+  days,
+  latest
+}: {
+  readiness: ReadinessStatus;
+  liveish: boolean;
+  nextEvent: UpcomingPrepEvent | null;
+  days: number | null;
+  latest: ArchiveEntry | null;
+}) => {
   const nextSession = useNextSession();
   const [, forceTick] = useState(0);
   useEffect(() => {
@@ -120,191 +130,143 @@ const NextRaceHero = ({ readiness }: { readiness: ReadinessStatus }) => {
     return () => clearInterval(timer);
   }, []);
 
-  if (!nextEvent) {
-    return (
-      <Card title="Next race">
-        <p style={{ margin: 0, color: 'var(--ink-secondary)' }}>
-          The season schedule is being refreshed — the next race returns here shortly.
-        </p>
-      </Card>
-    );
-  }
+  const heroState: HeroState = liveish
+    ? 'live'
+    : days === 0
+    ? 'raceDay'
+    : days !== null && days > 0 && days <= 6
+    ? 'raceWeek'
+    : 'between';
+  const imminent = heroState === 'live' || heroState === 'raceDay' || heroState === 'raceWeek';
 
-  const days = daysUntil(nextEvent);
+  /* The hero centers the venue in play: the next event through race week (or the
+   * one running now); off-season, the place we were last. */
+  const venueEvent = nextEvent;
+  const venueName = venueEvent?.trackName ?? (latest ? asString((latest.pack.track as Row | undefined)?.name) : null);
+  const outline = trackOutlineFor(venueName);
+  const venueRecord = getVenueByTrackName(venueEvent?.trackName ?? null);
+  const wind = useNowWind(
+    imminent ? venueEvent?.eventId ?? null : null,
+    imminent ? venueRecord?.venueId ?? null : null
+  );
+
+  /* A precise session start (from the live-runner schedule) drives the real
+   * countdown; day-precision package data is the fallback. */
   const sessionMatchesEvent =
-    nextSession?.startsAt && normalizedName(nextSession.eventName).includes(normalizedName(nextEvent.eventName).slice(0, 12));
+    venueEvent &&
+    nextSession?.startsAt &&
+    normalizedName(nextSession.eventName).includes(normalizedName(venueEvent.eventName).slice(0, 12));
   const preciseStart = sessionMatchesEvent ? nextSession?.startsAt ?? null : null;
-  const startMs = preciseStart ? new Date(preciseStart).getTime() : null;
-  const hoursAway = startMs !== null ? (startMs - Date.now()) / 3_600_000 : null;
 
-  const state = readiness.payload?.state;
-  const guardState = state === 'wrong_series' || state === 'stale' || state === 'blocked';
-  const nearSession = hoursAway !== null ? hoursAway <= 6 : days !== null && days <= 0;
+  /* Live "now" figures — his position is the countdown's stand-in when he's out. */
+  const bryce = ((readiness.payload?.bryce as Row)?.bryce as Row) ?? null;
+  const liveRank = bryce ? asNumber(bryce.rank) : null;
+  const liveStart = bryce ? asNumber(bryce.startPosition) : null;
+  const liveGain = liveStart !== null && liveRank !== null ? formatGain(liveStart - liveRank) : null;
+  const heartbeat = ((readiness.payload?.liveTiming as Row)?.heartbeat as Row) ?? {};
+  const lap = asNumber(heartbeat.lap);
+  const totalLaps = asNumber(heartbeat.totalLaps);
 
-  const daysChip =
-    days === 0 ? 'Race day' : days === 1 ? 'Tomorrow' : days !== null ? `In ${days} days` : 'Upcoming';
+  const action =
+    heroState === 'live' || heroState === 'raceDay'
+      ? { to: '/live', label: 'Open the live companion' }
+      : heroState === 'raceWeek'
+      ? { to: '/race-week', label: 'Race week HQ' }
+      : latest
+      ? { to: `/races/${encodeURIComponent(latest.pack.sessionId)}`, label: 'Read the last debrief' }
+      : { to: '/race-week', label: 'See what’s next' };
+
+  const metaLine = (() => {
+    if (!venueName) return null;
+    const parts: string[] = [venueName];
+    if (heroState === 'between' && venueEvent) parts[0] = `Next race · ${venueName}`;
+    if (heroState === 'between' && !venueEvent && latest) parts[0] = `Last out · ${venueName}`;
+    return parts.join('');
+  })();
+
+  const raceDate = venueEvent ? raceDayOf(venueEvent) : latest ? asString((latest.pack as unknown as Row).eventStartDate) : null;
 
   return (
-    <Link to="/race-week">
-      <HeroPanel tint="bryce">
-        <span className="kicker">{daysChip} · {trackTypeLabel(nextEvent.trackType)}</span>
-        <h2
-          className="display"
-          style={{ fontSize: 'clamp(28px, 6vw, 40px)', margin: '14px 0 4px', letterSpacing: '-0.025em' }}
-        >
-          {nextEvent.eventName}
-        </h2>
-        <div className="row row--wrap" style={{ color: 'var(--ink-secondary)', fontSize: 13.5, gap: 6 }}>
-          <span className="row" style={{ gap: 5, whiteSpace: 'nowrap' }}>
-            <MapPin size={13} aria-hidden />
-            {nextEvent.trackName}
-          </span>
-          {asNumber(nextEvent.trackLengthMi) !== null ? <> · {formatNumber(nextEvent.trackLengthMi, 3)} mi</> : null}
-          {asNumber(nextEvent.cornerCount) !== null && asNumber(nextEvent.cornerCount)! > 0 ? (
-            <> · {formatNumber(nextEvent.cornerCount, 0)} corners</>
-          ) : null}
-          {/* The race's own date — the kicker's "Race day"/"In N days" counts to it. */}
-          <> · {formatDate(raceDayOf(nextEvent), { weekday: 'long', month: 'long', day: 'numeric' })}</>
+    <HeroPanel tint={heroState === 'live' ? 'live' : 'bryce'}>
+      <div className="hero-now">
+        <div className="hero-now__head">
+          <h1 className="hero-now__title">{headlineFor[heroState]}</h1>
+          {metaLine ? (
+            <p className="hero-now__meta row row--wrap">
+              <span className="row" style={{ gap: 5, whiteSpace: 'nowrap' }}>
+                <MapPin size={13} aria-hidden />
+                {metaLine}
+              </span>
+              {venueEvent ? <> · {trackTypeLabel(venueEvent.trackType)}</> : null}
+              {raceDate ? <> · {formatDate(raceDate, { weekday: 'long', month: 'long', day: 'numeric' })}</> : null}
+            </p>
+          ) : (
+            <p className="hero-now__meta">The schedule returns here as soon as the next event is published.</p>
+          )}
         </div>
 
-        <div className="grid grid--split" style={{ marginTop: 20, alignItems: 'end', gap: 20 }}>
-          <div>
-            {preciseStart ? (
-              <>
-                <span className="caption">First session · {formatDate(preciseStart, { weekday: 'short', month: 'short', day: 'numeric' })} · {formatClock(preciseStart)} your time</span>
+        <div className="hero-now__art">
+          {outline ? <TrackArt outline={outline} maxHeight={200} wind={imminent ? wind : null} /> : null}
+        </div>
+
+        <div className="hero-now__foot">
+          {heroState === 'live' ? (
+            <div className="hero-now__live">
+              <span className="row" style={{ gap: 8 }}>
+                <StatusChip tone="good" label="Live" live />
+                {lap !== null && totalLaps !== null ? (
+                  <span className="caption tnum">Lap {lap}/{totalLaps}</span>
+                ) : null}
+              </span>
+              {liveRank !== null ? (
+                <div className="row" style={{ gap: 12, alignItems: 'baseline', marginTop: 8 }}>
+                  <Plate size="hero" />
+                  <span className="stat__value stat__value--hero">P{liveRank}</span>
+                  {liveGain ? (
+                    <span className={`stat__delta ${liveGain.direction === 'up' ? 'stat__delta--up' : liveGain.direction === 'down' ? 'stat__delta--down' : 'stat__delta--flat'}`}>
+                      {liveGain.text} from P{liveStart}
+                    </span>
+                  ) : null}
+                </div>
+              ) : (
+                <p className="hero-now__meta" style={{ marginTop: 8 }}>Bryce’s session is underway.</p>
+              )}
+            </div>
+          ) : heroState === 'raceDay' || heroState === 'raceWeek' ? (
+            preciseStart ? (
+              <div>
+                <span className="caption">
+                  {heroState === 'raceDay' ? 'Green flag' : 'First session'} ·{' '}
+                  {formatDate(preciseStart, { weekday: 'short', month: 'short', day: 'numeric' })}
+                </span>
                 <div style={{ marginTop: 8 }}>
                   <Countdown to={preciseStart} />
                 </div>
-              </>
-            ) : days !== null && days > 0 ? (
-              <div className="countdown">
-                <div className="countdown__cell">
-                  <span className="countdown__num">{days}</span>
-                  <span className="countdown__label">{days === 1 ? 'day' : 'days'}</span>
-                </div>
               </div>
-            ) : null}
-          </div>
-          <TrackForm event={nextEvent} />
-        </div>
-
-        <div className="row row--between row--wrap" style={{ marginTop: 18 }}>
-          {nearSession ? (
-            <span className="row" style={{ gap: 8 }}>
-              <StatusChip
-                tone={state === 'ready' || state === 'degraded' ? 'good' : 'neutral'}
-                label={state === 'ready' || state === 'degraded' ? 'Live now' : 'Live companion arms at green flag'}
-              />
-            </span>
-          ) : (
-            <span className="row" style={{ gap: 7, color: 'var(--ink-muted)', fontSize: 12 }}>
-              <Radio size={12} aria-hidden />
-              {guardState ? 'Live timing idle — it lights up when cars are on track.' : 'Live companion ready for race day.'}
-            </span>
-          )}
-          <span className="row" style={{ color: 'var(--ink-secondary)', fontSize: 13, gap: 6 }}>
-            Race week HQ <ArrowRight size={14} aria-hidden />
-          </span>
-        </div>
-      </HeroPanel>
-    </Link>
-  );
-};
-
-/* ---------- season so far ---------- */
-
-const SeasonStrip = ({ season }: { season: ArchiveEntry[] }) => {
-  if (season.length === 0) return null;
-  return (
-    <div>
-      <span className="caption">Every 2026 race · start → finish</span>
-      <div className="row row--wrap" style={{ gap: 8, marginTop: 10 }}>
-        {season.map((entry) => {
-          const finish = asNumber(entry.pack.outcome.finishPosition);
-          const start = asNumber(entry.pack.outcome.startPosition);
-          const gained = finish !== null && start !== null && finish < start;
-          const top10 = finish !== null && finish <= 10;
-          return (
-            <Link key={entry.pack.sessionId} to={`/races/${encodeURIComponent(entry.pack.sessionId)}`}>
-              <span
-                className="figure"
-                style={{
-                  display: 'inline-flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  gap: 1,
-                  minWidth: 44,
-                  padding: '7px 9px 5px',
-                  borderRadius: 10,
-                  fontSize: 15,
-                  background: 'var(--surface-0)',
-                  color: 'var(--ink-primary)'
-                }}
-              >
-                <span className="row" style={{ gap: 4 }}>
-                  {formatPosition(finish)}
-                  {top10 ? (
-                    <span aria-label="top ten" style={{ width: 5, height: 5, borderRadius: 2, background: 'var(--bryce)' }} />
-                  ) : null}
+            ) : (
+              <div className="row" style={{ gap: 10, alignItems: 'baseline' }}>
+                <span className="figure" style={{ fontSize: 34, lineHeight: 1.05 }}>{days === 0 ? 'Today' : days ?? '—'}</span>
+                <span style={{ fontSize: 14, color: 'var(--ink-secondary)', fontWeight: 500 }}>
+                  {days === 0 ? 'race day' : days === 1 ? 'day to green' : 'days to green'}
                 </span>
-                <span style={{ fontSize: 9, fontWeight: 650, letterSpacing: '0.06em', color: 'var(--ink-muted)' }}>
-                  {trackShort(entry)}
-                  {gained && start !== null && finish !== null ? (
-                    <span style={{ color: 'var(--status-good)' }}> ▲{start - finish}</span>
-                  ) : null}
-                </span>
-              </span>
-            </Link>
-          );
-        })}
+              </div>
+            )
+          ) : venueEvent && days !== null ? (
+            <span className="caption">
+              {days === 1 ? 'The next weekend is a day away.' : `The next weekend is ${days} days away.`}
+            </span>
+          ) : null}
+
+          <Link to={action.to} className="hero-now__action">
+            {action.label} <ArrowRight size={16} aria-hidden />
+          </Link>
+        </div>
       </div>
-    </div>
+    </HeroPanel>
   );
 };
 
-const trackShort = (entry: ArchiveEntry): string => {
-  const name = (entry.pack.track as Row | undefined)?.name;
-  const text = typeof name === 'string' ? name : '';
-  return text
-    .replace(/^(the\s+)/i, '')
-    .split(/[\s-]+/)
-    .filter((word) => !/^(sports?|car|course|race(way)?|park|street|circuit|of|at|the|mile)$/i.test(word))
-    .map((word) => word[0])
-    .join('')
-    .slice(0, 3)
-    .toUpperCase();
-};
-
-const SeasonSoFar = ({ season }: { season: ArchiveEntry[] }) => {
-  const standing = getSeasonStanding();
-  return (
-    <Card
-      title={
-        <>
-          <Trophy size={15} aria-hidden />
-          2026 season so far
-        </>
-      }
-      action={
-        <Link to="/career" className="navlink" style={{ fontSize: 12.5, padding: '0 2px' }}>
-          Career Lab <ArrowRight size={12} aria-hidden />
-        </Link>
-      }
-    >
-      <div className="row" style={{ gap: 28, flexWrap: 'wrap' }}>
-        <Stat label="Standing" value={standing.rank !== null ? `P${standing.rank}` : '—'} />
-        <Stat label="Points" value={standing.points ?? '—'} />
-        <Stat label="Top 10s" value={standing.top10 ?? '—'} />
-        <Stat label="Best finish" value={standing.bestFinish !== null ? `P${standing.bestFinish}` : '—'} />
-      </div>
-      <div style={{ marginTop: 18 }}>
-        <SeasonStrip season={season} />
-      </div>
-    </Card>
-  );
-};
-
-/* ---------- last time out ---------- */
+/* ---------- last time out (unchanged in spirit — the focused result) ---------- */
 
 const LastTimeOut = ({ latest }: { latest: ArchiveEntry | null }) => {
   if (!latest) return null;
@@ -332,7 +294,7 @@ const LastTimeOut = ({ latest }: { latest: ArchiveEntry | null }) => {
         <div className="row" style={{ alignItems: 'baseline', gap: 12, marginTop: 4 }}>
           <span className="stat__value stat__value--big">{formatPosition(finish)}</span>
           {gain ? (
-            <span className={`stat__delta ${gain.direction === 'up' ? 'stat__delta--up' : 'stat__delta--down'}`}>
+            <span className={`stat__delta ${gain.direction === 'up' ? 'stat__delta--up' : gain.direction === 'down' ? 'stat__delta--down' : 'stat__delta--flat'}`}>
               {gain.text} from {formatPosition(start)} start
             </span>
           ) : null}
@@ -348,7 +310,101 @@ const LastTimeOut = ({ latest }: { latest: ArchiveEntry | null }) => {
   );
 };
 
-/* ---------- career strip ---------- */
+/* ---------- season sparkline: every 2026 finish, one glance ----------
+ * House SVG in pixel space (crisp at any width). Ink line, quiet ink dots, one
+ * gold dot on the season best — gold means one thing here, keyed in the caption.
+ * P1 sits at the top, so an improving run reads as the line rising. The whole
+ * spark clicks through to the Career Lab, where the race-by-race detail lives. */
+
+const SeasonSparkline = ({ season }: { season: ArchiveEntry[] }) => {
+  const [ref, width] = useMeasuredWidth<HTMLDivElement>();
+  const points = season
+    .map((entry) => asNumber(entry.pack.outcome.finishPosition))
+    .filter((value): value is number => value !== null);
+  if (points.length < 2) return null;
+
+  const height = 68;
+  const padX = 5;
+  const padTop = 11;
+  const padBottom = 9;
+  const best = Math.min(...points);
+  const worst = Math.max(...points);
+  const yMin = Math.max(1, best - 1);
+  const yMax = worst + 1;
+  const span = yMax - yMin || 1;
+  const plotW = Math.max(0, width - padX * 2);
+  const plotH = height - padTop - padBottom;
+  const xAt = (index: number) => padX + (points.length === 1 ? plotW / 2 : (plotW * index) / (points.length - 1));
+  const yAt = (finish: number) => padTop + (plotH * (finish - yMin)) / span;
+  const linePath = points.map((finish, index) => `${index === 0 ? 'M' : 'L'}${xAt(index).toFixed(1)} ${yAt(finish).toFixed(1)}`).join(' ');
+  const bestIndex = points.indexOf(best);
+
+  return (
+    <Link to="/career" className="season-spark" aria-label={`Every 2026 finish; season best P${best}. Open the Career Lab.`}>
+      <div ref={ref} style={{ width: '100%' }}>
+        {width > 0 ? (
+          <svg width={width} height={height} role="img" aria-hidden style={{ display: 'block', overflow: 'visible' }}>
+            <path d={linePath} fill="none" stroke="var(--ink-primary)" strokeWidth={2} strokeLinejoin="round" strokeLinecap="round" />
+            {points.map((finish, index) =>
+              index === bestIndex ? null : (
+                <circle key={index} cx={xAt(index)} cy={yAt(finish)} r={2.4} fill="var(--ink-primary)" />
+              )
+            )}
+            <circle cx={xAt(bestIndex)} cy={yAt(best)} r={4} fill="var(--bryce)" />
+            <text
+              x={xAt(bestIndex)}
+              y={yAt(best) - 8}
+              textAnchor="middle"
+              fontFamily={chartFont}
+              fontSize={11}
+              fontWeight={600}
+              fill="var(--ink-primary)"
+              style={{ fontVariantNumeric: 'tabular-nums' }}
+            >
+              P{best}
+            </text>
+          </svg>
+        ) : null}
+      </div>
+    </Link>
+  );
+};
+
+const SeasonSoFar = ({ season }: { season: ArchiveEntry[] }) => {
+  const standing = getSeasonStanding();
+  return (
+    <Card
+      title={
+        <>
+          <Trophy size={15} aria-hidden />
+          2026 season so far
+        </>
+      }
+      action={
+        <Link to="/career" className="navlink" style={{ fontSize: 12.5, padding: '0 2px' }}>
+          Career Lab <ArrowRight size={12} aria-hidden />
+        </Link>
+      }
+    >
+      <div className="row" style={{ gap: 28, flexWrap: 'wrap' }}>
+        <Stat label="Standing" value={standing.rank !== null ? `P${standing.rank}` : '—'} />
+        <Stat label="Points" value={standing.points ?? '—'} />
+        <Stat label="Top 10s" value={standing.top10 ?? '—'} />
+        <Stat label="Best finish" value={standing.bestFinish !== null ? `P${standing.bestFinish}` : '—'} />
+      </div>
+      {season.length >= 2 ? (
+        <div style={{ marginTop: 18 }}>
+          <span className="caption">Every 2026 finish · gold marks his season best</span>
+          <div style={{ marginTop: 8 }}>
+            <SeasonSparkline season={season} />
+          </div>
+        </div>
+      ) : null}
+    </Card>
+  );
+};
+
+/* ---------- the journey (unchanged closing card) ---------- */
 
 const CareerStrip = () => {
   const careerLab = uiDataPackage.screens.careerLab as unknown as Row;
@@ -400,26 +456,20 @@ export const HomeScreen = ({ readiness }: { readiness: ReadinessStatus }) => {
   const nextEvent = getNextEvent();
   const days = nextEvent ? daysUntil(nextEvent) : null;
 
-  const title = useMemo(() => {
-    if (liveish) return 'Bryce is on track.';
-    if (days !== null && days === 0) return 'It’s race day.';
-    /* A Saturday first session means race week starts the Monday before — six days out. */
-    if (days !== null && days <= 6) return 'Race week.';
-    return 'Between race weekends.';
-  }, [liveish, days]);
-
   return (
     <div className="page stack">
-      <header className="screen-head">
-        <span className="kicker">Bryce Aron · No. 9 · Chip Ganassi Racing · INDY NXT</span>
-        <h1 className="screen-head__title">{title}</h1>
-      </header>
-      {liveish ? <LiveNowHero readiness={readiness} /> : <NextRaceHero readiness={readiness} />}
-      <div className="grid grid--split">
-        <SeasonSoFar season={season} />
-        <LastTimeOut latest={latest} />
+      <HomeHero readiness={readiness} liveish={liveish} nextEvent={nextEvent} days={days} latest={latest} />
+      <div className="grid grid--2">
+        <Reveal>
+          <LastTimeOut latest={latest} />
+        </Reveal>
+        <Reveal delay={60}>
+          <SeasonSoFar season={season} />
+        </Reveal>
       </div>
-      <CareerStrip />
+      <Reveal delay={90}>
+        <CareerStrip />
+      </Reveal>
     </div>
   );
 };
