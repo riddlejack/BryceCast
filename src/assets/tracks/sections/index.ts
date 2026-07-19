@@ -72,14 +72,30 @@ export const measuredSectionCount = (set: TrackSectionAnchorSet): number => meas
 export const hasDerivedRemainder = (set: TrackSectionAnchorSet): boolean =>
   set.sections.some((section) => section.kind === 'derived_remainder');
 
-/** Share of the lap covered by TIMED sections, [0,1] — from the measured span
- *  lengths (wrap-seam safe), excluding the derived remainder. Nashville: 0.43;
- *  the rest of the lap carries no timing loops and is derived from lap time. */
-export const timedShareOf = (set: TrackSectionAnchorSet): number =>
-  measuredAnchors(set).reduce((sum, section) => {
+/** Share of the lap covered by TIMED sections, [0,1], excluding the derived
+ *  remainder. When the set carries measured section lengths (miles) and a known
+ *  lap length, coverage is REAL DISTANCE — Σ(measuredLengthMi)/lapLengthMi. This
+ *  is the honest figure on venues whose retraced outline arc-length is not
+ *  proportional to real track distance: pure t-share understates them (WWTR read
+ *  65% by t-share, 74.3% by real distance). It falls back to the span t-lengths
+ *  (wrap-seam safe) only when measured lengths are absent — Nashville's curated
+ *  set reads 0.43, the measured 8-section set tiles ~1.0. */
+export const timedShareOf = (set: TrackSectionAnchorSet): number => {
+  const measured = measuredAnchors(set);
+  if (
+    set.lapLengthMi &&
+    set.lapLengthMi > 0 &&
+    measured.length > 0 &&
+    measured.every((section) => typeof section.measuredLengthMi === 'number')
+  ) {
+    const timedMiles = measured.reduce((sum, section) => sum + (section.measuredLengthMi ?? 0), 0);
+    return timedMiles / set.lapLengthMi;
+  }
+  return measured.reduce((sum, section) => {
     const length = (section.endT - section.startT + 1) % 1;
     return sum + (length === 0 ? 0 : length);
   }, 0);
+};
 
 /** Look up curated section anchors by venue/track name (as the packs name it).
  *  Returns null when the venue has no curated anchors yet — callers must fall

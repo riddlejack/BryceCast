@@ -30,6 +30,16 @@ export interface TrackSectionAnchor {
   /** Fractional end along mainPath, [0,1). If endT < startT the span wraps
    *  through t=0 (crosses the path's M point). */
   endT: number;
+  /** MEASURED physical length of this timing section in miles — official section
+   *  time × average speed (constant per family; from the section packs). Present
+   *  on venues whose retraced outline arc-length is NOT proportional to real
+   *  track distance (distorted ovals, road courses), where the drawn span's
+   *  t-length would misreport coverage. `timedShareOf` sums these against the
+   *  set's `lapLengthMi` so the coverage stat speaks real distance; absent on
+   *  venues whose t-span length is already faithful, which fall back to t-share.
+   *  On a concatenated-name family drawn at a fingerprinted sub-span, this is the
+   *  FULL official family length (what the loops actually measure of the lap). */
+  measuredLengthMi?: number;
   /** Render kind. Default (undefined) = 'measured', a real timing-loop section
    *  drawn as a solid coloured span. 'derived_remainder' = the untimed
    *  stretch(es), shaded from lap time minus the timed sections and drawn in a
@@ -55,6 +65,11 @@ export interface TrackSectionAnchorSet {
   slug: string;
   venueName: string;
   drivingDirection: 'clockwise' | 'counterclockwise';
+  /** Official lap length in miles used as the coverage denominator. Present only
+   *  alongside per-section `measuredLengthMi` (the numerator basis must match the
+   *  denominator's basis — e.g. the timing-map lap, not the outline draw length).
+   *  When present, `timedShareOf` reports Σ(measuredLengthMi)/lapLengthMi. */
+  lapLengthMi?: number;
   /** Curation confidence — the debug overlay is the acceptance gate. */
   confidence: 'anchored' | 'approximate';
   /** Human-readable curation note (shown in the report / source drawer later). */

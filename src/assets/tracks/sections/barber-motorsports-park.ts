@@ -26,17 +26,18 @@ export const barberMotorsportsParkSections: TrackSectionAnchorSet = {
   slug: 'barber-motorsports-park',
   venueName: 'Barber Motorsports Park',
   drivingDirection: 'clockwise',
+  lapLengthMi: 2.30,
   confidence: 'anchored',
   note: 'Nine official turn-named timing sections covering 88.3% of the lap, anchored from the data lake 30-section map package (loop LapDistance re-referenced to S/F; family↔loop join proven by the map length reproducing each measured PDF length). The S/F front stretch and the Turn 16→17 link are not timing sections and stay the base outline.',
   sections: [
-    { familyId: 'bmp-turns-1-3', sectionName: 'Turns 1-3', label: 'Turns 1–3', startLoop: 'I1', endLoop: 'I2', startT: 0.007, endT: 0.1323 },
-    { familyId: 'bmp-turn-4', sectionName: 'Turn 4', label: 'Turn 4', startLoop: 'I2', endLoop: 'I3A', startT: 0.1323, endT: 0.2483 },
-    { familyId: 'bmp-turns-5-6', sectionName: 'Turns 5-6', label: 'Turns 5–6', startLoop: 'I3A', endLoop: 'I3', startT: 0.2483, endT: 0.2966 },
-    { familyId: 'bmp-turn-7', sectionName: 'Turn 7', label: 'Turn 7', startLoop: 'I3', endLoop: 'I4', startT: 0.2966, endT: 0.4219 },
-    { familyId: 'bmp-turns-8-9', sectionName: 'Turns 8-9', label: 'Turns 8–9', startLoop: 'I4', endLoop: 'I5A', startT: 0.4219, endT: 0.5004 },
-    { familyId: 'bmp-turn-10', sectionName: 'Turn 10', label: 'Turn 10', startLoop: 'I5A', endLoop: 'I5', startT: 0.5004, endT: 0.5663 },
-    { familyId: 'bmp-turn-11', sectionName: 'Turn 11', label: 'Turn 11', startLoop: 'I5', endLoop: 'I6', startT: 0.5663, endT: 0.6752 },
-    { familyId: 'bmp-turns-12-16', sectionName: 'Turns 12-13 Turns 14-16', label: 'T12–16', startLoop: 'I6', endLoop: 'I7', startT: 0.6752, endT: 0.7617 },
-    { familyId: 'bmp-turn-17', sectionName: 'Turn 17', label: 'Turn 17', startLoop: 'I8', endLoop: 'SF', startT: 0.8344, endT: 0.963 }
+    { familyId: 'bmp-turns-1-3', sectionName: 'Turns 1-3', label: 'Turns 1–3', startLoop: 'I1', endLoop: 'I2', startT: 0.007, endT: 0.1323, measuredLengthMi: 0.2883 },
+    { familyId: 'bmp-turn-4', sectionName: 'Turn 4', label: 'Turn 4', startLoop: 'I2', endLoop: 'I3A', startT: 0.1323, endT: 0.2483, measuredLengthMi: 0.2667 },
+    { familyId: 'bmp-turns-5-6', sectionName: 'Turns 5-6', label: 'Turns 5–6', startLoop: 'I3A', endLoop: 'I3', startT: 0.2483, endT: 0.2966, measuredLengthMi: 0.1112 },
+    { familyId: 'bmp-turn-7', sectionName: 'Turn 7', label: 'Turn 7', startLoop: 'I3', endLoop: 'I4', startT: 0.2966, endT: 0.4219, measuredLengthMi: 0.2883 },
+    { familyId: 'bmp-turns-8-9', sectionName: 'Turns 8-9', label: 'Turns 8–9', startLoop: 'I4', endLoop: 'I5A', startT: 0.4219, endT: 0.5004, measuredLengthMi: 0.1805 },
+    { familyId: 'bmp-turn-10', sectionName: 'Turn 10', label: 'Turn 10', startLoop: 'I5A', endLoop: 'I5', startT: 0.5004, endT: 0.5663, measuredLengthMi: 0.1515 },
+    { familyId: 'bmp-turn-11', sectionName: 'Turn 11', label: 'Turn 11', startLoop: 'I5', endLoop: 'I6', startT: 0.5663, endT: 0.6752, measuredLengthMi: 0.2506 },
+    { familyId: 'bmp-turns-12-16', sectionName: 'Turns 12-13 Turns 14-16', label: 'T12–16', startLoop: 'I6', endLoop: 'I7', startT: 0.6752, endT: 0.7617, measuredLengthMi: 0.1989 },
+    { familyId: 'bmp-turn-17', sectionName: 'Turn 17', label: 'Turn 17', startLoop: 'I8', endLoop: 'SF', startT: 0.8344, endT: 0.963, measuredLengthMi: 0.2958 }
   ]
 };

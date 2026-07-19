@@ -23,19 +23,20 @@ export const portlandInternationalRacewaySections: TrackSectionAnchorSet = {
   slug: 'portland-international-raceway',
   venueName: 'Portland International Raceway',
   drivingDirection: 'clockwise',
+  lapLengthMi: 1.964,
   confidence: 'anchored',
   note: 'Eleven official timing sections covering 85.4% of the lap; lengths measured from official time × speed, positions arc-anchored to the Turn 1 and Turn 12 control corners bracketing the front straight. The front straight past S/F is not a timing section and stays the base outline.',
   sections: [
-    { familyId: 'por-turn-1', sectionName: 'Turn 1', label: 'Turn 1', startT: 0.4550, endT: 0.5299 },
-    { familyId: 'por-turn-2', sectionName: 'Turn 2', label: 'Turn 2', startT: 0.5299, endT: 0.5552 },
-    { familyId: 'por-turn-3', sectionName: 'Turn 3', label: 'Turn 3', startT: 0.5552, endT: 0.6434 },
-    { familyId: 'por-turn-4', sectionName: 'Turn 4', label: 'Turn 4', startT: 0.6434, endT: 0.7064 },
-    { familyId: 'por-turn-5', sectionName: 'Turn 5', label: 'Turn 5', startT: 0.7064, endT: 0.7660 },
-    { familyId: 'por-turn-6', sectionName: 'Turn 6', label: 'Turn 6', startT: 0.7660, endT: 0.8557 },
-    { familyId: 'por-turn-7', sectionName: 'Turn 7', label: 'Turn 7', startT: 0.8557, endT: 0.9079 },
-    { familyId: 'por-turn-8', sectionName: 'Turn 8', label: 'Turn 8', startT: 0.9079, endT: 0.9769 },
-    { familyId: 'por-turn-9', sectionName: 'Turn 9', label: 'Turn 9', startT: 0.9769, endT: 0.1186 },
-    { familyId: 'por-turns-10-11', sectionName: 'Turns 10/11', label: 'Turns 10–11', startT: 0.1186, endT: 0.2190 },
-    { familyId: 'por-turn-12', sectionName: 'Turn 12', label: 'Turn 12', startT: 0.2190, endT: 0.3093 }
+    { familyId: 'por-turn-1', sectionName: 'Turn 1', label: 'Turn 1', startT: 0.4550, endT: 0.5299, measuredLengthMi: 0.1472 },
+    { familyId: 'por-turn-2', sectionName: 'Turn 2', label: 'Turn 2', startT: 0.5299, endT: 0.5552, measuredLengthMi: 0.0496 },
+    { familyId: 'por-turn-3', sectionName: 'Turn 3', label: 'Turn 3', startT: 0.5552, endT: 0.6434, measuredLengthMi: 0.1733 },
+    { familyId: 'por-turn-4', sectionName: 'Turn 4', label: 'Turn 4', startT: 0.6434, endT: 0.7064, measuredLengthMi: 0.1237 },
+    { familyId: 'por-turn-5', sectionName: 'Turn 5', label: 'Turn 5', startT: 0.7064, endT: 0.7660, measuredLengthMi: 0.1170 },
+    { familyId: 'por-turn-6', sectionName: 'Turn 6', label: 'Turn 6', startT: 0.7660, endT: 0.8557, measuredLengthMi: 0.1761 },
+    { familyId: 'por-turn-7', sectionName: 'Turn 7', label: 'Turn 7', startT: 0.8557, endT: 0.9079, measuredLengthMi: 0.1027 },
+    { familyId: 'por-turn-8', sectionName: 'Turn 8', label: 'Turn 8', startT: 0.9079, endT: 0.9769, measuredLengthMi: 0.1354 },
+    { familyId: 'por-turn-9', sectionName: 'Turn 9', label: 'Turn 9', startT: 0.9769, endT: 0.1186, measuredLengthMi: 0.2784 },
+    { familyId: 'por-turns-10-11', sectionName: 'Turns 10/11', label: 'Turns 10–11', startT: 0.1186, endT: 0.2190, measuredLengthMi: 0.1972 },
+    { familyId: 'por-turn-12', sectionName: 'Turn 12', label: 'Turn 12', startT: 0.2190, endT: 0.3093, measuredLengthMi: 0.1773 }
   ]
 };

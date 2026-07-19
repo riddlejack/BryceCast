@@ -35,14 +35,15 @@ export const worldWideTechnologyRacewaySections: TrackSectionAnchorSet = {
   slug: 'world-wide-technology-raceway',
   venueName: 'World Wide Technology Raceway',
   drivingDirection: 'counterclockwise',
+  lapLengthMi: 1.25,
   confidence: 'anchored',
-  note: 'Six official loop-to-loop sections (74.3% of the lap); the frontstretch around S/F is untimed and stays the base outline. Span positions are anchored to the RaceTools Gateway_2018 map package’s measured timing-loop distances, arc-calibrated onto the retraced outline; span lengths reproduce the official time × speed lengths exactly.',
+  note: 'Six official loop-to-loop sections (74.3% of the lap); the frontstretch around S/F is untimed and stays the base outline. Span positions are anchored to the RaceTools Gateway_2018 map package’s measured timing-loop distances, arc-calibrated onto the retraced outline; span lengths reproduce the official time × speed lengths exactly. Coverage is computed from those measured lengths, not the distorted outline t-spans (which read a false 65%).',
   sections: [
-    { familyId: 'wwt-turn-1', sectionName: 'Turn 1', label: 'Turn 1', startT: 0.3053, endT: 0.3315 },
-    { familyId: 'wwt-turn-2', sectionName: 'Turn 2', label: 'Turn 2', startT: 0.3315, endT: 0.365 },
-    { familyId: 'wwt-bs-t2', sectionName: 'BS - T2', label: 'T2 → back straight', startT: 0.365, endT: 0.5802 },
-    { familyId: 'wwt-bs-t3', sectionName: 'BS - T3', label: 'Back straight → T3', startT: 0.5802, endT: 0.7957 },
-    { familyId: 'wwt-turn-3', sectionName: 'Turn 3', label: 'Turn 3', startT: 0.7957, endT: 0.8633 },
-    { familyId: 'wwt-turn-4', sectionName: 'Turn 4', label: 'Turn 4', startT: 0.8633, endT: 0.9567 }
+    { familyId: 'wwt-turn-1', sectionName: 'Turn 1', label: 'Turn 1', startT: 0.3053, endT: 0.3315, measuredLengthMi: 0.1205 },
+    { familyId: 'wwt-turn-2', sectionName: 'Turn 2', label: 'Turn 2', startT: 0.3315, endT: 0.365, measuredLengthMi: 0.1447 },
+    { familyId: 'wwt-bs-t2', sectionName: 'BS - T2', label: 'T2 → back straight', startT: 0.365, endT: 0.5802, measuredLengthMi: 0.1581 },
+    { familyId: 'wwt-bs-t3', sectionName: 'BS - T3', label: 'Back straight → T3', startT: 0.5802, endT: 0.7957, measuredLengthMi: 0.1583 },
+    { familyId: 'wwt-turn-3', sectionName: 'Turn 3', label: 'Turn 3', startT: 0.7957, endT: 0.8633, measuredLengthMi: 0.1835 },
+    { familyId: 'wwt-turn-4', sectionName: 'Turn 4', label: 'Turn 4', startT: 0.8633, endT: 0.9567, measuredLengthMi: 0.1633 }
   ]
 };
