@@ -9,6 +9,7 @@
     "preview": "vite preview --host 0.0.0.0",
     "serve:api": "node scripts/api-server.mjs",
     "serve:app": "node scripts/api-server.mjs --static=dist",
+    "deploy:mini": "node scripts/deploy-to-mini.mjs",
     "live:replay": "node scripts/live-replay.mjs",
     "test:live-replay": "node scripts/test-live-replay.mjs",
     "test:live-motion": "node scripts/test-live-motion.mjs",
