@@ -1,0 +1,244 @@
+{
+  "proof": "nashville_loop_inventory",
+  "generatedAt": "2026-07-19T02:50:49.474Z",
+  "question": "Does the raw RaceTools feed for the Nashville Superspeedway NXT races emit more loop crossings than the 3 officially-published sections?",
+  "answer": "YES — both feeds carry the full physical loop set (SF, T1, SS1, T2, BS, T3, SS2, T4), tiling the entire lap into fine sub-sections, far more than the 3 published track sections. The semantic-layer tables contain the unpublished intervals; the heat-map blanks can be filled from RaceTools capture.",
+  "races": [
+    {
+      "sessionId": "rt_2024_nashville-superspeedway_r_2024-09-15_a",
+      "year": 2024,
+      "venue": "Nashville Superspeedway",
+      "feed": {
+        "physicalMainlineLoops": [
+          "BS",
+          "SF",
+          "SS1",
+          "SS2",
+          "T1",
+          "T2",
+          "T2T",
+          "T3",
+          "T3T",
+          "T4"
+        ],
+        "physicalMainlineLoopCount": 10,
+        "loopChainOrder": [
+          "SF",
+          "T1",
+          "SS1",
+          "T2",
+          "BS",
+          "T3",
+          "SS2",
+          "T4",
+          "SF"
+        ],
+        "finePartitionSections": [
+          {
+            "name": "S1",
+            "span": "SF->T1",
+            "lengthUnits": 9972
+          },
+          {
+            "name": "S2A",
+            "span": "T1->SS1",
+            "lengthUnits": 11436
+          },
+          {
+            "name": "S2B",
+            "span": "SS1->T2",
+            "lengthUnits": 11940
+          },
+          {
+            "name": "S3A",
+            "span": "T2->BS",
+            "lengthUnits": 8628
+          },
+          {
+            "name": "S3B",
+            "span": "BS->T3",
+            "lengthUnits": 7932
+          },
+          {
+            "name": "S4A",
+            "span": "T3->SS2",
+            "lengthUnits": 12720
+          },
+          {
+            "name": "S4B",
+            "span": "SS2->T4",
+            "lengthUnits": 11640
+          },
+          {
+            "name": "S5",
+            "span": "T4->SF",
+            "lengthUnits": 9684
+          }
+        ],
+        "finePartitionCount": 8,
+        "allMainlineSectionLabels": [
+          "S1",
+          "S2",
+          "S2A",
+          "S2B",
+          "S3",
+          "S3A",
+          "S3B",
+          "S4",
+          "S4A",
+          "S4B",
+          "S5",
+          "T2",
+          "T3"
+        ],
+        "observedSectionCrossingCounts": {
+          "S1": 1117,
+          "S2": 1113,
+          "S2A": 1116,
+          "S2B": 1113,
+          "S3": 1106,
+          "S3A": 1113,
+          "S3B": 1136,
+          "S4": 1117,
+          "S4A": 1120,
+          "S4B": 1117,
+          "S5": 1117,
+          "T2": 1113,
+          "T3": 1136
+        }
+      },
+      "official": {
+        "publishedTrackSectionNames": [
+          "Turn 1 Entry Turn 1 Exit Turn 2 Entry BackStretch BackStretch",
+          "Turn 3",
+          "Turn 4 Entry Turn 4 Exit"
+        ],
+        "publishedTrackSectionCount": 3,
+        "publishedLapFractionMedian": 0.438,
+        "unpublishedLapFractionMedian": 0.562
+      },
+      "feedCarriesMoreThanPublished": true,
+      "intervalRowsEmitted": 8949,
+      "intervalPack": "nashville/rt_2024_nashville-superspeedway_r_2024-09-15_a.intervals.ndjson.gz",
+      "bryceCar": "27"
+    },
+    {
+      "sessionId": "rt_2025_nashville-superspeedway_r_2025-08-31_d",
+      "year": 2025,
+      "venue": "Nashville Superspeedway",
+      "feed": {
+        "physicalMainlineLoops": [
+          "BS",
+          "SF",
+          "SS1",
+          "SS2",
+          "T1",
+          "T2",
+          "T2T",
+          "T3",
+          "T3T",
+          "T4"
+        ],
+        "physicalMainlineLoopCount": 10,
+        "loopChainOrder": [
+          "SF",
+          "T1",
+          "SS1",
+          "T2",
+          "BS",
+          "T3",
+          "SS2",
+          "T4",
+          "SF"
+        ],
+        "finePartitionSections": [
+          {
+            "name": "S1",
+            "span": "SF->T1",
+            "lengthUnits": 9972
+          },
+          {
+            "name": "S2A",
+            "span": "T1->SS1",
+            "lengthUnits": 11436
+          },
+          {
+            "name": "S2B",
+            "span": "SS1->T2",
+            "lengthUnits": 11940
+          },
+          {
+            "name": "S3A",
+            "span": "T2->BS",
+            "lengthUnits": 8628
+          },
+          {
+            "name": "S3B",
+            "span": "BS->T3",
+            "lengthUnits": 7932
+          },
+          {
+            "name": "S4A",
+            "span": "T3->SS2",
+            "lengthUnits": 12720
+          },
+          {
+            "name": "S4B",
+            "span": "SS2->T4",
+            "lengthUnits": 11640
+          },
+          {
+            "name": "S5",
+            "span": "T4->SF",
+            "lengthUnits": 9684
+          }
+        ],
+        "finePartitionCount": 8,
+        "allMainlineSectionLabels": [
+          "S1",
+          "S2",
+          "S2A",
+          "S2B",
+          "S3",
+          "S3A",
+          "S3B",
+          "S4",
+          "S4A",
+          "S4B",
+          "S5",
+          "T2",
+          "T3"
+        ],
+        "observedSectionCrossingCounts": {
+          "S1": 1143,
+          "S2": 1135,
+          "S2A": 1141,
+          "S2B": 1153,
+          "S3": 1145,
+          "S3A": 1151,
+          "S3B": 1150,
+          "S4": 1142,
+          "S4A": 1143,
+          "S4B": 1143,
+          "S5": 1143,
+          "T2": 1153,
+          "T3": 1150
+        }
+      },
+      "official": {
+        "publishedTrackSectionNames": [
+          "Turn 1 Entry Turn 1 Exit Turn 2 Entry BackStretch BackStretch",
+          "Turn 3",
+          "Turn 4 Entry Turn 4 Exit"
+        ],
+        "publishedTrackSectionCount": 3,
+        "publishedLapFractionMedian": 0.439,
+        "unpublishedLapFractionMedian": 0.561
+      },
+      "feedCarriesMoreThanPublished": true,
+      "intervalRowsEmitted": 9167,
+      "intervalPack": "nashville/rt_2025_nashville-superspeedway_r_2025-08-31_d.intervals.ndjson.gz",
+      "bryceCar": "9"
+    }
+  ]
+}

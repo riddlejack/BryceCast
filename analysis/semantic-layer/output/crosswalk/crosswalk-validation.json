@@ -1,0 +1,711 @@
+{
+  "artifact": "crosswalk-validation-2026",
+  "generatedAt": "2026-07-19T03:12:20.406Z",
+  "trapTests": {
+    "failures": [],
+    "notes": [
+      "T1 note: canonical 2026 itself uses the short displayed forms (\"JM Correa\", \"Seb Murray\"), so 2026 real-data matches are exact; the variant rules are proven at unit level and guard the 2024-25 unification in a later slice.",
+      "T2 reused numbers verified: #14, #9, #11, #29, #28, #76, #17, #27",
+      "Race divergence explained: t71_2026_road-america_race_r2_2026-06-21 — Timing71 and the BryceCast capture agree on the as-crossed order (24/24); canonical carries the official post-race reclassification. Classification for UI must come from canonical results; the timing/lap/identity tables remain valid."
+    ]
+  },
+  "raceClassificationChecks": [
+    {
+      "id": "t71_2026_st-petersburg_race_2026-03-01",
+      "matched": true,
+      "canonicalSessionId": "session_indy_nxt_2026_6751",
+      "fieldSize": 24,
+      "winnerMatch": true,
+      "podiumMatch": true,
+      "positionExact": 24,
+      "lapCountExact": 24,
+      "checked": 24
+    },
+    {
+      "id": "t71_2026_arlington_race_2026-03-15",
+      "matched": true,
+      "canonicalSessionId": "session_indy_nxt_2026_6753",
+      "fieldSize": 24,
+      "winnerMatch": true,
+      "podiumMatch": true,
+      "positionExact": 24,
+      "lapCountExact": 24,
+      "checked": 24
+    },
+    {
+      "id": "t71_2026_barber_race_r1_2026-03-28",
+      "matched": true,
+      "canonicalSessionId": "session_indy_nxt_2026_6750",
+      "fieldSize": 24,
+      "winnerMatch": true,
+      "podiumMatch": true,
+      "positionExact": 24,
+      "lapCountExact": 24,
+      "checked": 24
+    },
+    {
+      "id": "t71_2026_barber_race_r2_2026-03-29",
+      "matched": true,
+      "canonicalSessionId": "session_indy_nxt_2026_6752",
+      "fieldSize": 24,
+      "winnerMatch": true,
+      "podiumMatch": true,
+      "positionExact": 24,
+      "lapCountExact": 24,
+      "checked": 24
+    },
+    {
+      "id": "t71_2026_ims_race_r1_2026-05-08",
+      "matched": true,
+      "canonicalSessionId": "session_indy_nxt_2026_6756",
+      "fieldSize": 24,
+      "winnerMatch": true,
+      "podiumMatch": true,
+      "positionExact": 24,
+      "lapCountExact": 24,
+      "checked": 24
+    },
+    {
+      "id": "t71_2026_ims_race_r2_2026-05-09",
+      "matched": true,
+      "canonicalSessionId": "session_indy_nxt_2026_6765",
+      "fieldSize": 24,
+      "winnerMatch": true,
+      "podiumMatch": true,
+      "positionExact": 24,
+      "lapCountExact": 24,
+      "checked": 24
+    },
+    {
+      "id": "t71_2026_detroit_race_2026-05-31",
+      "matched": true,
+      "canonicalSessionId": "session_indy_nxt_2026_6749",
+      "fieldSize": 24,
+      "winnerMatch": true,
+      "podiumMatch": true,
+      "positionExact": 24,
+      "lapCountExact": 24,
+      "checked": 24
+    },
+    {
+      "id": "t71_2026_wwt-raceway_race_2026-06-07",
+      "matched": true,
+      "canonicalSessionId": "session_indy_nxt_2026_6763",
+      "fieldSize": 24,
+      "winnerMatch": true,
+      "podiumMatch": true,
+      "positionExact": 24,
+      "lapCountExact": 24,
+      "checked": 24
+    },
+    {
+      "id": "t71_2026_road-america_race_r1_2026-06-20",
+      "matched": true,
+      "canonicalSessionId": "session_indy_nxt_2026_6762",
+      "fieldSize": 24,
+      "winnerMatch": true,
+      "podiumMatch": true,
+      "positionExact": 24,
+      "lapCountExact": 24,
+      "checked": 24
+    },
+    {
+      "id": "t71_2026_road-america_race_r2_2026-06-21",
+      "matched": true,
+      "canonicalSessionId": "session_indy_nxt_2026_6754",
+      "fieldSize": 24,
+      "winnerMatch": false,
+      "podiumMatch": false,
+      "positionExact": 0,
+      "lapCountExact": 22,
+      "checked": 24,
+      "divergenceClass": "as_raced_vs_official_classification"
+    },
+    {
+      "id": "t71_2026_mid-ohio_race_r1_2026-07-04",
+      "matched": true,
+      "canonicalSessionId": "session_indy_nxt_2026_6761",
+      "fieldSize": 24,
+      "winnerMatch": true,
+      "podiumMatch": true,
+      "positionExact": 24,
+      "lapCountExact": 24,
+      "checked": 24
+    },
+    {
+      "id": "t71_2026_mid-ohio_race_r2_2026-07-05",
+      "matched": true,
+      "canonicalSessionId": "session_indy_nxt_2026_6760",
+      "fieldSize": 24,
+      "winnerMatch": true,
+      "podiumMatch": true,
+      "positionExact": 24,
+      "lapCountExact": 24,
+      "checked": 24
+    }
+  ],
+  "twoSourceCrossChecks": [
+    {
+      "captureSessionKey": "5546-6763",
+      "canonicalSessionId": "session_indy_nxt_2026_6763",
+      "t71SessionId": "t71_2026_wwt-raceway_race_2026-06-07",
+      "sessionType": "race",
+      "captureSnapshots": 6,
+      "thinCapture": true,
+      "identity": {
+        "checked": 24,
+        "agree": 24,
+        "mismatches": []
+      },
+      "laps": {
+        "checked": 24,
+        "exact": 24,
+        "within1": 24
+      },
+      "positions": {
+        "checked": 24,
+        "exact": 24
+      }
+    },
+    {
+      "captureSessionKey": "5537-6754",
+      "canonicalSessionId": "session_indy_nxt_2026_6754",
+      "t71SessionId": "t71_2026_road-america_race_r2_2026-06-21",
+      "sessionType": "race",
+      "captureSnapshots": 1175,
+      "thinCapture": false,
+      "identity": {
+        "checked": 24,
+        "agree": 24,
+        "mismatches": []
+      },
+      "laps": {
+        "checked": 24,
+        "exact": 24,
+        "within1": 24
+      },
+      "positions": {
+        "checked": 24,
+        "exact": 24
+      }
+    },
+    {
+      "captureSessionKey": "5544-6891",
+      "canonicalSessionId": "session_indy_nxt_2026_6891",
+      "t71SessionId": "t71_2026_mid-ohio_practice_p1_2026-07-03",
+      "sessionType": "practice",
+      "captureSnapshots": 3101,
+      "thinCapture": false,
+      "identity": {
+        "checked": 24,
+        "agree": 24,
+        "mismatches": []
+      },
+      "laps": {
+        "checked": 24,
+        "exact": 24,
+        "within1": 24
+      },
+      "positions": {
+        "checked": 0,
+        "exact": 0
+      }
+    },
+    {
+      "captureSessionKey": "5544-6893",
+      "canonicalSessionId": "session_indy_nxt_2026_6893",
+      "t71SessionId": "t71_2026_mid-ohio_qualifying_2026-07-04",
+      "sessionType": "qualifying",
+      "captureSnapshots": 833,
+      "thinCapture": false,
+      "identity": {
+        "checked": 12,
+        "agree": 12,
+        "mismatches": []
+      },
+      "laps": {
+        "checked": 12,
+        "exact": 12,
+        "within1": 12
+      },
+      "positions": {
+        "checked": 0,
+        "exact": 0
+      }
+    },
+    {
+      "captureSessionKey": "5544-6894",
+      "canonicalSessionId": "session_indy_nxt_2026_6894",
+      "t71SessionId": "t71_2026_mid-ohio_qualifying_2026-07-04",
+      "sessionType": "qualifying",
+      "captureSnapshots": 21,
+      "thinCapture": true,
+      "identity": {
+        "checked": 24,
+        "agree": 24,
+        "mismatches": []
+      },
+      "laps": {
+        "checked": 24,
+        "exact": 24,
+        "within1": 24
+      },
+      "positions": {
+        "checked": 0,
+        "exact": 0
+      }
+    },
+    {
+      "captureSessionKey": "5544-6761",
+      "canonicalSessionId": "session_indy_nxt_2026_6761",
+      "t71SessionId": "t71_2026_mid-ohio_race_r1_2026-07-04",
+      "sessionType": "race",
+      "captureSnapshots": 3317,
+      "thinCapture": false,
+      "identity": {
+        "checked": 24,
+        "agree": 24,
+        "mismatches": []
+      },
+      "laps": {
+        "checked": 24,
+        "exact": 24,
+        "within1": 24
+      },
+      "positions": {
+        "checked": 24,
+        "exact": 24
+      }
+    },
+    {
+      "captureSessionKey": "5543-6760",
+      "canonicalSessionId": "session_indy_nxt_2026_6760",
+      "t71SessionId": "t71_2026_mid-ohio_race_r2_2026-07-05",
+      "sessionType": "race",
+      "captureSnapshots": 3086,
+      "thinCapture": false,
+      "identity": {
+        "checked": 24,
+        "agree": 24,
+        "mismatches": []
+      },
+      "laps": {
+        "checked": 24,
+        "exact": 24,
+        "within1": 24
+      },
+      "positions": {
+        "checked": 24,
+        "exact": 24
+      }
+    },
+    {
+      "captureSessionKey": "5538-6924",
+      "canonicalSessionId": "session_indy_nxt_2026_6924",
+      "t71SessionId": "t71_2026_nashville_practice_p1_2026-07-18",
+      "sessionType": "practice",
+      "captureSnapshots": 2783,
+      "thinCapture": false,
+      "identity": {
+        "checked": 23,
+        "agree": 23,
+        "mismatches": []
+      },
+      "laps": {
+        "checked": 23,
+        "exact": 23,
+        "within1": 23
+      },
+      "positions": {
+        "checked": 0,
+        "exact": 0
+      }
+    },
+    {
+      "captureSessionKey": "5538-6923",
+      "canonicalSessionId": "session_indy_nxt_2026_6923",
+      "t71SessionId": "t71_2026_nashville_qualifying_2026-07-18",
+      "sessionType": "qualifying",
+      "captureSnapshots": 4050,
+      "thinCapture": false,
+      "identity": {
+        "checked": 23,
+        "agree": 23,
+        "mismatches": []
+      },
+      "laps": {
+        "checked": 23,
+        "exact": 22,
+        "within1": 22
+      },
+      "positions": {
+        "checked": 0,
+        "exact": 0
+      }
+    }
+  ],
+  "goNoGo": [
+    {
+      "t71SessionId": "t71_2026_st-petersburg_practice_p1_2026-02-27",
+      "sessionType": "practice",
+      "date": "2026-02-27",
+      "venue": "St. Petersburg",
+      "verdict": "GO",
+      "crossCheck": "unavailable",
+      "qualityMasks": [],
+      "reasons": []
+    },
+    {
+      "t71SessionId": "t71_2026_st-petersburg_practice_p2_2026-02-28",
+      "sessionType": "practice",
+      "date": "2026-02-28",
+      "venue": "St. Petersburg",
+      "verdict": "GO",
+      "crossCheck": "unavailable",
+      "qualityMasks": [],
+      "reasons": []
+    },
+    {
+      "t71SessionId": "t71_2026_st-petersburg_qualifying_g2_2026-02-28",
+      "sessionType": "qualifying",
+      "date": "2026-02-28",
+      "venue": "St. Petersburg",
+      "verdict": "GO",
+      "crossCheck": "unavailable",
+      "qualityMasks": [
+        "cross_session_recording_segmented"
+      ],
+      "reasons": []
+    },
+    {
+      "t71SessionId": "t71_2026_st-petersburg_race_2026-03-01",
+      "sessionType": "race",
+      "date": "2026-03-01",
+      "venue": "St. Petersburg",
+      "verdict": "GO",
+      "crossCheck": "unavailable",
+      "qualityMasks": [],
+      "reasons": []
+    },
+    {
+      "t71SessionId": "t71_2026_arlington_practice_p1_2026-03-13",
+      "sessionType": "practice",
+      "date": "2026-03-13",
+      "venue": "Arlington",
+      "verdict": "GO",
+      "crossCheck": "unavailable",
+      "qualityMasks": [],
+      "reasons": []
+    },
+    {
+      "t71SessionId": "t71_2026_arlington_practice_p2_2026-03-14",
+      "sessionType": "practice",
+      "date": "2026-03-14",
+      "venue": "Arlington",
+      "verdict": "GO",
+      "crossCheck": "unavailable",
+      "qualityMasks": [],
+      "reasons": []
+    },
+    {
+      "t71SessionId": "t71_2026_arlington_qualifying_g2_2026-03-14",
+      "sessionType": "qualifying",
+      "date": "2026-03-14",
+      "venue": "Arlington",
+      "verdict": "GO",
+      "crossCheck": "unavailable",
+      "qualityMasks": [
+        "cross_session_recording_segmented"
+      ],
+      "reasons": []
+    },
+    {
+      "t71SessionId": "t71_2026_arlington_race_2026-03-15",
+      "sessionType": "race",
+      "date": "2026-03-15",
+      "venue": "Arlington",
+      "verdict": "GO",
+      "crossCheck": "unavailable",
+      "qualityMasks": [],
+      "reasons": []
+    },
+    {
+      "t71SessionId": "t71_2026_barber_practice_p1_2026-03-27",
+      "sessionType": "practice",
+      "date": "2026-03-27",
+      "venue": "Barber",
+      "verdict": "GO",
+      "crossCheck": "unavailable",
+      "qualityMasks": [],
+      "reasons": []
+    },
+    {
+      "t71SessionId": "t71_2026_barber_race_r1_2026-03-28",
+      "sessionType": "race",
+      "date": "2026-03-28",
+      "venue": "Barber",
+      "verdict": "GO",
+      "crossCheck": "unavailable",
+      "qualityMasks": [
+        "cross_session_recording_segmented"
+      ],
+      "reasons": []
+    },
+    {
+      "t71SessionId": "t71_2026_barber_qualifying_2026-03-28",
+      "sessionType": "qualifying",
+      "date": "2026-03-28",
+      "venue": "Barber",
+      "verdict": "GO",
+      "crossCheck": "unavailable",
+      "qualityMasks": [
+        "cross_session_recording_segmented"
+      ],
+      "reasons": []
+    },
+    {
+      "t71SessionId": "t71_2026_barber_race_r2_2026-03-29",
+      "sessionType": "race",
+      "date": "2026-03-29",
+      "venue": "Barber",
+      "verdict": "GO",
+      "crossCheck": "unavailable",
+      "qualityMasks": [],
+      "reasons": []
+    },
+    {
+      "t71SessionId": "t71_2026_indianapolis-gp_practice_p1_2026-05-08",
+      "sessionType": "practice",
+      "date": "2026-05-08",
+      "venue": "Indianapolis GP",
+      "verdict": "GO",
+      "crossCheck": "unavailable",
+      "qualityMasks": [],
+      "reasons": []
+    },
+    {
+      "t71SessionId": "t71_2026_indianapolis-gp_qualifying_2026-05-08",
+      "sessionType": "qualifying",
+      "date": "2026-05-08",
+      "venue": "Indianapolis GP",
+      "verdict": "GO",
+      "crossCheck": "unavailable",
+      "qualityMasks": [
+        "cross_session_recording_segmented"
+      ],
+      "reasons": []
+    },
+    {
+      "t71SessionId": "t71_2026_ims_race_r1_2026-05-08",
+      "sessionType": "race",
+      "date": "2026-05-08",
+      "venue": "IMS",
+      "verdict": "GO",
+      "crossCheck": "unavailable",
+      "qualityMasks": [
+        "cross_session_recording_segmented"
+      ],
+      "reasons": []
+    },
+    {
+      "t71SessionId": "t71_2026_ims_race_r2_2026-05-09",
+      "sessionType": "race",
+      "date": "2026-05-09",
+      "venue": "IMS",
+      "verdict": "GO",
+      "crossCheck": "unavailable",
+      "qualityMasks": [],
+      "reasons": []
+    },
+    {
+      "t71SessionId": "t71_2026_detroit_practice_p1_2026-05-29",
+      "sessionType": "practice",
+      "date": "2026-05-29",
+      "venue": "Detroit",
+      "verdict": "GO",
+      "crossCheck": "unavailable",
+      "qualityMasks": [],
+      "reasons": []
+    },
+    {
+      "t71SessionId": "t71_2026_detroit_practice_p2_2026-05-30",
+      "sessionType": "practice",
+      "date": "2026-05-30",
+      "venue": "Detroit",
+      "verdict": "GO",
+      "crossCheck": "unavailable",
+      "qualityMasks": [],
+      "reasons": []
+    },
+    {
+      "t71SessionId": "t71_2026_detroit_qualifying_g2_2026-05-30",
+      "sessionType": "qualifying",
+      "date": "2026-05-30",
+      "venue": "Detroit",
+      "verdict": "GO",
+      "crossCheck": "unavailable",
+      "qualityMasks": [
+        "cross_session_recording_segmented"
+      ],
+      "reasons": []
+    },
+    {
+      "t71SessionId": "t71_2026_detroit_race_2026-05-31",
+      "sessionType": "race",
+      "date": "2026-05-31",
+      "venue": "Detroit",
+      "verdict": "GO",
+      "crossCheck": "unavailable",
+      "qualityMasks": [],
+      "reasons": []
+    },
+    {
+      "t71SessionId": "t71_2026_wwt-raceway_practice_p1_2026-06-06",
+      "sessionType": "practice",
+      "date": "2026-06-06",
+      "venue": "WWT Raceway",
+      "verdict": "GO",
+      "crossCheck": "unavailable",
+      "qualityMasks": [],
+      "reasons": []
+    },
+    {
+      "t71SessionId": "t71_2026_wwt-raceway_qualifying_2026-06-06",
+      "sessionType": "qualifying",
+      "date": "2026-06-06",
+      "venue": "WWT Raceway",
+      "verdict": "GO",
+      "crossCheck": "unavailable",
+      "qualityMasks": [
+        "cross_session_recording_segmented"
+      ],
+      "reasons": []
+    },
+    {
+      "t71SessionId": "t71_2026_wwt-raceway_race_2026-06-07",
+      "sessionType": "race",
+      "date": "2026-06-07",
+      "venue": "WWT Raceway",
+      "verdict": "GO",
+      "crossCheck": "partial(thin capture)",
+      "qualityMasks": [],
+      "reasons": []
+    },
+    {
+      "t71SessionId": "t71_2026_road-america_practice_p1_2026-06-19",
+      "sessionType": "practice",
+      "date": "2026-06-19",
+      "venue": "Road America",
+      "verdict": "GO",
+      "crossCheck": "unavailable",
+      "qualityMasks": [],
+      "reasons": []
+    },
+    {
+      "t71SessionId": "t71_2026_road-america_qualifying_g2_2026-06-20",
+      "sessionType": "qualifying",
+      "date": "2026-06-20",
+      "venue": "Road America",
+      "verdict": "GO",
+      "crossCheck": "unavailable",
+      "qualityMasks": [
+        "cross_session_recording_segmented"
+      ],
+      "reasons": []
+    },
+    {
+      "t71SessionId": "t71_2026_road-america_race_r1_2026-06-20",
+      "sessionType": "race",
+      "date": "2026-06-20",
+      "venue": "Road America",
+      "verdict": "GO",
+      "crossCheck": "unavailable",
+      "qualityMasks": [
+        "cross_session_recording_segmented"
+      ],
+      "reasons": []
+    },
+    {
+      "t71SessionId": "t71_2026_road-america_race_r2_2026-06-21",
+      "sessionType": "race",
+      "date": "2026-06-21",
+      "venue": "Road America",
+      "verdict": "CONDITIONAL",
+      "crossCheck": "confirmed",
+      "qualityMasks": [],
+      "reasons": [
+        "as-raced final state diverges from official classification (post-race reclassification; capture-confirmed) — UI must take classification from canonical results, timing/laps/identity tables are valid"
+      ]
+    },
+    {
+      "t71SessionId": "t71_2026_mid-ohio_practice_p1_2026-07-03",
+      "sessionType": "practice",
+      "date": "2026-07-03",
+      "venue": "Mid-Ohio",
+      "verdict": "GO",
+      "crossCheck": "confirmed",
+      "qualityMasks": [],
+      "reasons": []
+    },
+    {
+      "t71SessionId": "t71_2026_mid-ohio_qualifying_2026-07-04",
+      "sessionType": "qualifying",
+      "date": "2026-07-04",
+      "venue": "Mid-Ohio",
+      "verdict": "GO",
+      "crossCheck": "confirmed",
+      "qualityMasks": [
+        "cross_session_recording_segmented"
+      ],
+      "reasons": []
+    },
+    {
+      "t71SessionId": "t71_2026_mid-ohio_race_r1_2026-07-04",
+      "sessionType": "race",
+      "date": "2026-07-04",
+      "venue": "Mid-Ohio",
+      "verdict": "GO",
+      "crossCheck": "confirmed",
+      "qualityMasks": [],
+      "reasons": []
+    },
+    {
+      "t71SessionId": "t71_2026_mid-ohio_race_r2_2026-07-05",
+      "sessionType": "race",
+      "date": "2026-07-05",
+      "venue": "Mid-Ohio",
+      "verdict": "GO",
+      "crossCheck": "confirmed",
+      "qualityMasks": [],
+      "reasons": []
+    },
+    {
+      "t71SessionId": "t71_2026_nashville_practice_p1_2026-07-18",
+      "sessionType": "practice",
+      "date": "2026-07-18",
+      "venue": "Nashville",
+      "verdict": "CONDITIONAL",
+      "crossCheck": "confirmed",
+      "qualityMasks": [],
+      "reasons": [
+        "identity via season-scope fallback; awaits canonical event results (Nashville weekend not yet in canonical)"
+      ]
+    },
+    {
+      "t71SessionId": "t71_2026_nashville_qualifying_2026-07-18",
+      "sessionType": "qualifying",
+      "date": "2026-07-18",
+      "venue": "Nashville",
+      "verdict": "CONDITIONAL",
+      "crossCheck": "confirmed",
+      "qualityMasks": [],
+      "reasons": [
+        "identity via season-scope fallback; awaits canonical event results (Nashville weekend not yet in canonical)"
+      ]
+    }
+  ],
+  "goCount": 30,
+  "conditionalCount": 3,
+  "noGoCount": 0,
+  "hardFailures": []
+}
