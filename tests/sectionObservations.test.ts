@@ -100,7 +100,27 @@ assert.ok(
 
 // 5. lookup + alias + unknown
 assert.equal(trackSectionsFor('Gateway')!.slug, 'world-wide-technology-raceway', 'Gateway alias');
-assert.equal(trackSectionsFor('Streets of St. Petersburg'), null, 'no anchors for road/street venues yet');
+
+// 5b. Street circuits rebuilt from RaceTools map polylines (phase3/outlines-from-maps).
+//     Detroit + Arlington tile from the S/F datum; St. Petersburg is an approximate fit.
+const det = trackSectionsFor('Streets of Detroit');
+assert.ok(det, 'Detroit anchors resolve');
+assert.equal(det!.confidence, 'anchored');
+assert.equal(det!.sections.length, 18, 'Detroit ships the 18 loop-to-loop families');
+assert.ok(Math.abs(timedShareOf(det!) - 1) < 0.02, 'Detroit sections tile the full lap');
+const stp = trackSectionsFor('Streets of St. Petersburg');
+assert.ok(stp, 'St. Petersburg anchors resolve (rebuilt from the map polyline)');
+assert.equal(stp!.confidence, 'approximate', 'St. Petersburg is an honest single-offset fit, not anchored');
+assert.equal(
+  trackSectionsFor('Detroit Downtown Street Circuit')!.slug,
+  'streets-of-detroit',
+  'Detroit pack-name alias resolves'
+);
+assert.equal(
+  trackSectionsFor('Grand Prix of Arlington Street Circuit')!.slug,
+  'streets-of-arlington',
+  'Arlington pack-name alias resolves'
+);
 
 // 6. per-lap producer: scopes, stat toggle, clean-lap floor, single-lap caution.
 // Synthetic 30-lap race, one section: laps 1-20 clean at rising percentiles,

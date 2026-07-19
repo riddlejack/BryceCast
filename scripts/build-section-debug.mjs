@@ -164,3 +164,34 @@ fs.mkdirSync(outDir, { recursive: true });
 const outPath = path.join(outDir, 'section-anchor-debug.html');
 fs.writeFileSync(outPath, html);
 console.log(`wrote ${outPath}`);
+
+/** Street circuits rebuilt from RaceTools map polylines (phase3/outlines-from-
+ *  maps). Only those with a curated sections file render; the acceptance is the
+ *  same — S/F tick on a straight, numbered spans over their named corner arcs,
+ *  derived-remainder spans clearly untimed. */
+const STREETS = ['streets-of-detroit', 'streets-of-arlington', 'streets-of-st-petersburg'].filter((slug) =>
+  fs.existsSync(path.join(repoRoot, `src/assets/tracks/sections/${slug}.ts`))
+);
+if (STREETS.length > 0) {
+  const streetsHtml = `<!doctype html><html><head><meta charset="utf-8"><title>Outlines-from-maps — street section debug</title>
+<style>
+  body{font-family:system-ui;margin:24px;color:#1d1d1f;background:#fafafa}
+  h1{font-size:20px} h2{font-size:15px;margin:24px 0 8px} h2 small{color:#888;font-weight:400}
+  .oval{background:#fff;border:1px solid #eee;border-radius:12px;padding:16px;margin-bottom:20px}
+  .legend{margin-top:10px;font-size:12px;display:grid;gap:4px}
+  .legend-row{display:flex;gap:8px;align-items:center}
+  .swatch{width:14px;height:14px;border-radius:3px;display:inline-block}
+  code{background:#f2f2f4;padding:1px 5px;border-radius:4px}
+  .t{color:#888;margin-left:auto}
+  p.note{font-size:12px;color:#666;max-width:70ch}
+</style></head><body>
+<h1>Street-circuit section anchor debug (outlines rebuilt from RaceTools map polylines)</h1>
+<p class="note">Each outline is derived from the map package centreline at ~1-m resolution, so the gold S/F tick sits on the polyline datum (distance 0) and distance→path-t is exact. Acceptance: numbered spans cover their named corner arcs (red apex dots), boundaries land on straights, and any derived-remainder span reads as untimed. Diagnostic colours only — not the shipped heat ramp.</p>
+${STREETS.map(svgFor).join('')}
+</body></html>`;
+  const streetsDir = path.join(os.homedir(), '.brycecast/reports/outlines-maps');
+  fs.mkdirSync(streetsDir, { recursive: true });
+  const streetsPath = path.join(streetsDir, 'section-anchor-debug.html');
+  fs.writeFileSync(streetsPath, streetsHtml);
+  console.log(`wrote ${streetsPath}`);
+}

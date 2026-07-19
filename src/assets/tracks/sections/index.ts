@@ -8,13 +8,19 @@ import { barberMotorsportsParkSections } from './barber-motorsports-park';
 import { portlandInternationalRacewaySections } from './portland-international-raceway';
 import { weathertechRacewayLagunaSecaSections } from './weathertech-raceway-laguna-seca';
 import { midOhioSportsCarCourseSections } from './mid-ohio-sports-car-course';
+import { streetsOfDetroitSections } from './streets-of-detroit';
+import { streetsOfArlingtonSections } from './streets-of-arlington';
+import { streetsOfStPetersburgSections } from './streets-of-st-petersburg';
 
-/** Curated section anchors, keyed to the OSM track outlines in the parent
- *  directory. Ovals first (Brief E sequencing), then the road courses (Phase 3):
- *  Road America, Barber, Portland, Laguna Seca — loop-to-loop families anchored
- *  from the data lake map catalog's decoded LapDistance; Mid-Ohio chain-fitted
- *  with no lake loop distances. See ./types.ts for the adapter-contract note on
- *  measured loop locations superseding this curation. */
+/** Curated section anchors, keyed to the track outlines in the parent directory.
+ *  Ovals first (Brief E sequencing), then the road courses (Phase 3): Road
+ *  America, Barber, Portland, Laguna Seca — loop-to-loop families anchored from
+ *  the data lake map catalog's decoded LapDistance; Mid-Ohio chain-fitted with no
+ *  lake loop distances. Then the street circuits rebuilt from RaceTools map
+ *  polylines (phase3/outlines-from-maps): Detroit and Arlington tile the lap from
+ *  the S/F datum (anchored); St. Petersburg is an approximate single-offset fit.
+ *  See ./types.ts for the adapter-contract note on measured loop locations
+ *  superseding this curation. */
 
 export type { TrackSectionAnchor, TrackSectionAnchorSet } from './types';
 
@@ -27,21 +33,29 @@ const sets: TrackSectionAnchorSet[] = [
   barberMotorsportsParkSections,
   portlandInternationalRacewaySections,
   weathertechRacewayLagunaSecaSections,
-  midOhioSportsCarCourseSections
+  midOhioSportsCarCourseSections,
+  streetsOfDetroitSections,
+  streetsOfArlingtonSections,
+  streetsOfStPetersburgSections
 ];
 
-/* DELIBERATE HONEST MISSES — Streets of St. Petersburg and Streets of Arlington
- * are intentionally NOT registered (trackSectionsFor returns null, so their race
- * pages keep the honest SectionStory fallback with no heat layer). Both carry
- * official section families, but their outlines are preliminary image traces
- * with NO geometry to anchor to: startFinish is null, drivingDirection is null,
- * cornerArcs is empty — the measured-length chain-fit has nothing to pin a span
- * to. The outlines' own lengths disagree with the measured lap totals (St. Pete
- * asset 1.12 vs 1.80 mi; Arlington asset 1.70 vs 2.73 mi), so even the scale is
- * untrusted. An honest miss beats a wrong map. UNLOCK: an S/F tick + driving
- * direction + corner arcs on a corrected outline, or (best) a richer RaceTools/
- * CGR map package with real intermediate timing-loop distances — same data-only
- * swap as everywhere else. (tests/sectionObservations.test.ts pins St. Pete null.) */
+/* HONEST WITHHOLDING (phase3/outlines-from-maps) — the old image-trace outlines
+ * for these street circuits carried NO geometry to anchor to (null S/F, null
+ * driving direction, empty corner arcs) and wrong lengths (St. Pete asset 1.12
+ * vs 1.80 mi; Arlington asset 1.70 vs 2.73 mi), so they were deliberately left
+ * unregistered. They are now REBUILT from the RaceTools map-package centreline
+ * polylines: real S/F datum, driving direction, corner arcs, and corrected
+ * lengths — exactly the UNLOCK that was named. Detroit and Arlington ship as
+ * 'anchored' (their measured section chains tile the full lap from the S/F
+ * datum). Streets of St. Petersburg is registered but held at 'approximate': the
+ * map package is sectionless (no loop distances), so its 27.5% untimed lap is a
+ * single approximated remainder rather than pinned per stretch. The race page's
+ * `confidence === 'anchored'` gate (RaceDetailScreen / sectionIntelligence) draws
+ * NO heat layer for an approximate set, so St. Pete keeps the honest SectionStory
+ * fallback — the plain rebuilt outline, never invented anchors. It promotes to
+ * 'anchored' the moment measured loop distances arrive through the same contract.
+ * (tests/sectionObservations.test.ts pins Detroit 'anchored' + St. Pete
+ * 'approximate'.) */
 
 const bySlug = new Map(sets.map((set) => [set.slug, set]));
 
@@ -51,7 +65,9 @@ const byVenue = new Map(sets.map((set) => [normalized(set.venueName), set]));
 /** Analytics packs sometimes name venues differently than the outlines; keep in
  *  step with `aliasSlugs` in ../index.ts. */
 const aliasSlugs: Record<string, string> = {
-  gateway: 'world-wide-technology-raceway'
+  gateway: 'world-wide-technology-raceway',
+  'detroit downtown street circuit': 'streets-of-detroit',
+  'grand prix of arlington street circuit': 'streets-of-arlington'
 };
 
 /** Look up curated section anchors by the outline slug. */

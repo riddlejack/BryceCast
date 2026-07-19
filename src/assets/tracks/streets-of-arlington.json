@@ -1,1 +1,215 @@
-{"slug":"streets-of-arlington","name":"Streets of Arlington","lengthMi":1.7,"viewBox":"0 0 1000 400","mainPath":"M510.1 24 L621.3 24 L729.8 51.4 L958.4 50.5 L967.2 54 L976 65.5 L976 149.3 L972.5 166.1 L965.4 183.7 L901.9 303.7 L860.4 369 L851.6 376 L837.5 376 L778.4 340.7 L753.7 331 L733.4 326.6 L528.7 325.7 L520.7 323.1 L514.6 315.2 L514.6 307.2 L536.6 264 L535.7 184.6 L528.7 119.3 L523.4 112.2 L517.2 109.6 L489 111.3 L478.4 104.3 L474.9 93.7 L475.7 60.2 L468.7 52.2 L461.6 52.2 L397.2 69 L277.2 85.8 L189 87.5 L187.2 91.9 L214.6 142.2 L213.7 151.9 L210.2 158.1 L204.9 163.4 L194.3 166.9 L179.3 161.6 L158.1 132.5 L146.6 122.8 L129.9 116.6 L115.8 116.6 L106.1 119.3 L84 134.3 L73.4 154.6 L72.5 165.2 L76.1 182.8 L93.7 210.2 L92.8 218.1 L87.5 224.3 L49.6 238.4 L40.8 241 L31.1 238.4 L24 229.6 L24 109.6 L33.7 89.3 L49.6 76.9 L63.7 73.4 L157.2 63.7 L246.3 64.6 L270.2 62.8 L397.2 45.2 L466 27.5 L509.3 24.9 Z","pitPath":null,"startFinish":null,"drivingDirection":null,"cornerArcs":[],"source":{"provider":"INDYCAR official track outline","license":"traced shape of a public circuit layout","attribution":"Outline traced from the official INDYCAR track map","wayIds":[],"cachedResponse":"src/assets/tracks/maps/streets-of-arlington.png","imageUrl":"https://www.indycar.com/-/media/IndyCar/Schedules/TrackOutlines/Black/Arlington.png?w=1200"}}
+{
+  "slug": "streets-of-arlington",
+  "name": "Streets of Arlington",
+  "lengthMi": 2.73,
+  "viewBox": "0 0 1000 374",
+  "mainPath": "M554.5 237.3 L546.6 180.5 L534.6 130 L527.2 122.2 L516.1 118 L497.3 122 L490.7 121.4 L482.9 116.9 L476.1 102.4 L472.9 72.2 L467.5 64.8 L458 62.5 L380.5 88.6 L323.9 104.5 L234.4 123.1 L179.4 129.6 L174.8 136 L193.7 164.5 L194.3 170.4 L191.9 179.3 L182 186.3 L172.1 186 L144.7 171.7 L124.4 167.2 L102.9 171.4 L91.5 175.9 L76.5 190.8 L71.4 211.8 L73.9 236.1 L79.3 249.5 L89.5 264.3 L91.1 273.4 L83.6 284.1 L67.9 292.4 L50 298.3 L40.4 295.3 L34.9 287.3 L24 177.1 L24.7 165.1 L27.4 158.8 L41.8 144.7 L83.7 133 L258.2 110.7 L386.2 80 L420.2 69.2 L430.2 63.5 L458.4 53.9 L514.8 42.6 L569.8 35.5 L619.3 34.3 L692.2 46.5 L735.6 49.3 L776.9 45.6 L931.1 24.7 L950.3 24.7 L961 31.5 L968.6 46.6 L976 104.8 L969.3 148.6 L962.4 170.6 L938.7 228.7 L894.6 326.1 L888.3 336.1 L876.9 347.2 L866.6 350.3 L855.1 347.5 L811.5 324.2 L787.5 316.8 L761.2 312.3 L707.1 314 L592 328.8 L554.6 332.7 L547.2 331.5 L542.3 328.7 L540.3 322.3 L542 313.5 L554.1 290.3 L556.3 279.5 L558.1 258.8 Z",
+  "pitPath": null,
+  "startFinish": {
+    "x": 554.5,
+    "y": 237.3,
+    "angleDeg": -98
+  },
+  "drivingDirection": "clockwise",
+  "cornerArcs": [
+    {
+      "label": null,
+      "apex": {
+        "x": 546.6,
+        "y": 180.5
+      },
+      "entryQuarter": {
+        "x": 556.3,
+        "y": 279.5
+      },
+      "exitQuarter": {
+        "x": 527.2,
+        "y": 122.2
+      },
+      "turnDeg": 131
+    },
+    {
+      "label": null,
+      "apex": {
+        "x": 527.2,
+        "y": 122.2
+      },
+      "entryQuarter": {
+        "x": 534.6,
+        "y": 130
+      },
+      "exitQuarter": {
+        "x": 516.1,
+        "y": 118
+      },
+      "turnDeg": 94
+    },
+    {
+      "label": null,
+      "apex": {
+        "x": 482.9,
+        "y": 116.9
+      },
+      "entryQuarter": {
+        "x": 490.7,
+        "y": 121.4
+      },
+      "exitQuarter": {
+        "x": 476.1,
+        "y": 102.4
+      },
+      "turnDeg": 96
+    },
+    {
+      "label": null,
+      "apex": {
+        "x": 467.5,
+        "y": 64.8
+      },
+      "entryQuarter": {
+        "x": 472.9,
+        "y": 72.2
+      },
+      "exitQuarter": {
+        "x": 458,
+        "y": 62.5
+      },
+      "turnDeg": 103
+    },
+    {
+      "label": null,
+      "apex": {
+        "x": 174.8,
+        "y": 136
+      },
+      "entryQuarter": {
+        "x": 179.4,
+        "y": 129.6
+      },
+      "exitQuarter": {
+        "x": 174.8,
+        "y": 136
+      },
+      "turnDeg": 117
+    },
+    {
+      "label": null,
+      "apex": {
+        "x": 191.9,
+        "y": 179.3
+      },
+      "entryQuarter": {
+        "x": 194.3,
+        "y": 170.4
+      },
+      "exitQuarter": {
+        "x": 182,
+        "y": 186.3
+      },
+      "turnDeg": 151
+    },
+    {
+      "label": null,
+      "apex": {
+        "x": 76.5,
+        "y": 190.8
+      },
+      "entryQuarter": {
+        "x": 102.9,
+        "y": 171.4
+      },
+      "exitQuarter": {
+        "x": 73.9,
+        "y": 236.1
+      },
+      "turnDeg": 152
+    },
+    {
+      "label": null,
+      "apex": {
+        "x": 40.4,
+        "y": 295.3
+      },
+      "entryQuarter": {
+        "x": 83.6,
+        "y": 284.1
+      },
+      "exitQuarter": {
+        "x": 24,
+        "y": 177.1
+      },
+      "turnDeg": 260
+    },
+    {
+      "label": null,
+      "apex": {
+        "x": 34.9,
+        "y": 287.3
+      },
+      "entryQuarter": {
+        "x": 67.9,
+        "y": 292.4
+      },
+      "exitQuarter": {
+        "x": 27.4,
+        "y": 158.8
+      },
+      "turnDeg": 297
+    },
+    {
+      "label": null,
+      "apex": {
+        "x": 514.8,
+        "y": 42.6
+      },
+      "entryQuarter": {
+        "x": 458.4,
+        "y": 53.9
+      },
+      "exitQuarter": {
+        "x": 569.8,
+        "y": 35.5
+      },
+      "turnDeg": 39
+    },
+    {
+      "label": null,
+      "apex": {
+        "x": 962.4,
+        "y": 170.6
+      },
+      "entryQuarter": {
+        "x": 968.6,
+        "y": 46.6
+      },
+      "exitQuarter": {
+        "x": 888.3,
+        "y": 336.1
+      },
+      "turnDeg": 216
+    },
+    {
+      "label": null,
+      "apex": {
+        "x": 542.3,
+        "y": 328.7
+      },
+      "entryQuarter": {
+        "x": 547.2,
+        "y": 331.5
+      },
+      "exitQuarter": {
+        "x": 540.3,
+        "y": 322.3
+      },
+      "turnDeg": 123
+    }
+  ],
+  "source": {
+    "provider": "RaceTools static track-map package",
+    "license": "Used by direct permission for private, non-commercial use; raw archive git-ignored (data/historical-data-lake/PERMISSIONS_AND_SOURCE_TERMS.md).",
+    "attribution": "Outline derived from the RaceTools track-map centreline polyline",
+    "wayIds": [],
+    "cachedResponse": "racetools:Arlington2026 @ sha256:ba60d0f4e8e2063dfa5ddb9bb3849590293207747667e95d05e87349597bdaa9"
+  }
+}
