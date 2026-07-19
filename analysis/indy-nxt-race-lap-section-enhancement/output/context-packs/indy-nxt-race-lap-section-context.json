@@ -4,6 +4,8 @@
     "race_lap_segments.csv",
     "race_lap_inflection_points.csv",
     "race_section_lap_observations.csv",
+    "race_section_lap_field_observations.csv.gz",
+    "race_section_field_distribution.json",
     "race_section_session_summary.csv"
   ],
   "bestCleanRaceSectionSessions": [
@@ -303,6 +305,7 @@
     "raceLapInflectionPoints": 164,
     "raceLapMicrostates": 1493,
     "raceLapSegments": 184,
+    "raceSectionFieldObservations": 422717,
     "raceSectionLapObservations": 17841,
     "raceSectionSessionSummaries": 39,
     "roadAmericaRows": 4,
@@ -314,7 +317,7 @@
     "Treat official_section_results_only rows as raw section comparisons, not clean-lap or caution-aware race shape.",
     "Keep caution/restart segments visually distinct from green-flag movement."
   ],
-  "generatedAt": "2026-07-19T01:21:11Z",
+  "generatedAt": "2026-07-19T02:26:34Z",
   "id": "indy-nxt-race-lap-section-context",
   "largestPositionInflections": [
     {

@@ -4,7 +4,9 @@
 from __future__ import annotations
 
 import csv
+import gzip
 import hashlib
+import io
 import json
 import math
 import os
@@ -24,6 +26,20 @@ DATASET_PATH = ROOT / "data/career/career.dataset.json"
 
 BRYCE_ID = "driver_bryce_aron"
 INDY_NXT_ID = "series_indy_nxt"
+
+# Derived remainder (the stopwatch trick): per lap, lapTotal minus the sum of
+# the racing-line section times is the exact time spent on everything the loops
+# don't watch. Emitted as this synthetic section so it rides the same contract.
+DERIVED_SECTION_NAME = "Untimed remainder"
+# A lap's remainder counts as a GENUINE untimed stretch (worth deriving a shade
+# for) only when the racing sections leave more than this share of the lap
+# unmeasured. Nashville leaves ~56% (its straights carry no loops); Iowa and
+# Milwaukee leave 0.00% once the SF/FS racing sections are counted correctly, so
+# their remainder is a classification artefact, not a real gap, and is not shipped.
+GENUINE_GAP_MIN_SHARE = 0.02
+# A car needs at least this many clean section observations to contribute a
+# representative time to a section's field distribution (denominator honesty).
+MIN_CAR_CLEAN_OBSERVATIONS = 3
 
 
 def resolve_run_date() -> date:
@@ -141,6 +157,17 @@ def write_csv(path: Path, rows: list[dict[str, Any]], fields: list[str]) -> None
             writer.writerow({field: fmt(row.get(field)) for field in fields})
 
 
+def write_csv_gz(path: Path, rows: list[dict[str, Any]], fields: list[str]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    # mtime=0 keeps the gzip byte-stable across rebuilds of identical rows.
+    with gzip.GzipFile(path, "wb", mtime=0) as raw:
+        with io.TextIOWrapper(raw, encoding="utf-8", newline="") as f:
+            writer = csv.DictWriter(f, fieldnames=fields, extrasaction="ignore", lineterminator="\n")
+            writer.writeheader()
+            for row in rows:
+                writer.writerow({field: fmt(row.get(field)) for field in fields})
+
+
 def write_json(path: Path, payload: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")
@@ -158,6 +185,25 @@ def classify_section(name: str) -> str:
     if re.search(r"(^|[^A-Z])(PI|PO|SF|S/F)([^A-Z]|$)", upper) or "ALT START" in upper:
         return "pit_or_timing_line"
     return "track_section"
+
+
+def is_pit_line(name: str) -> bool:
+    """Corrected pit/timing-line test for the derived-remainder lane.
+
+    ``classify_section`` above (kept unchanged for the legacy observation CSV)
+    treats ANY section referencing SF/S-F as a timing line — but a section like
+    ``SF to T1`` or ``T4 to SF`` or ``FS to SF`` is the RACING-LINE frontstretch
+    measured loop-to-loop, not a pit split. The only genuine pit/timing lines
+    reference pit-in / pit-out (PI/PO) or the alternate start. This corrected
+    test is what the tiling check uses to decide whether a lap's untimed stretch
+    is a GENUINE gap (Nashville's straights) or an artefact of the SF over-match
+    (Iowa/Milwaukee, whose SF/FS sections tile the lap exactly). See
+    INDY_NXT_RACE_LAP_SECTION_ENHANCEMENT.md § Derived Remainder."""
+    cleaned = name.strip()
+    if cleaned == "Lap":
+        return False
+    upper = cleaned.upper()
+    return bool(re.search(r"(^|[^A-Z])(PI|PO)([^A-Z]|$)", upper)) or "ALT START" in upper
 
 
 def section_family(name: str) -> str:
@@ -511,6 +557,293 @@ def build_race_section_observations(
     return observations
 
 
+def car_identity_key(car: dict[str, Any], car_index: int) -> tuple[str, str, str]:
+    """The same per-driver key the ranking uses, so a re-derivation from the
+    full-field table reproduces every stored Bryce rank exactly."""
+    return (
+        str(car.get("driverId") or car.get("driverName") or f"driver_{car_index}"),
+        str(car.get("carNumber") or ""),
+        str(car.get("carId") or ""),
+    )
+
+
+def per_car_clean_flags(lap_totals: dict[int, float], caution_laps: set[int]) -> dict[int, bool]:
+    """Clean green-flag laps for one car, mirroring the Bryce clean filter: a
+    green lap (itself and the lap before out of caution) within 110% of the
+    car's own median green lap."""
+    green = [
+        lap_time
+        for lap_no, lap_time in lap_totals.items()
+        if lap_no > 0 and lap_no not in caution_laps and (lap_no - 1) not in caution_laps
+    ]
+    median_green = median(green)
+    flags: dict[int, bool] = {}
+    for lap_no, lap_time in lap_totals.items():
+        flags[lap_no] = (
+            median_green is not None
+            and lap_no > 0
+            and lap_no not in caution_laps
+            and (lap_no - 1) not in caution_laps
+            and lap_time <= median_green * 1.10
+        )
+    return flags
+
+
+def build_field_and_derived_observations(
+    data: dict[str, Any],
+    idx: dict[str, Any],
+    source_hash: str,
+    microstates: list[dict[str, Any]],
+) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    """Full-field extraction (Brief H, the coverage-blindness fix).
+
+    The legacy lane ranks Bryce against every car's per-lap section time but
+    stores only Bryce's rows. This emits the WHOLE ranked field table (every
+    car, every lap, every section) PLUS a synthesized ``Untimed remainder`` row
+    per car per lap (lapTotal minus the racing-line sections — the stopwatch
+    trick), and a compact per-section field-distribution summary the UI packs
+    consume. Returns (field_rows, field_distribution_by_session)."""
+    race_session_ids = indy_nxt_race_session_ids(data, idx)
+    caution_by_session = caution_laps_by_session(data)
+    caution_state_by_lap = {(row["sessionId"], int(row["lapNumber"])): row["cautionState"] for row in microstates}
+
+    metrics = [
+        metric
+        for metric in data["derivedMetrics"]
+        if metric.get("seriesId") == INDY_NXT_ID
+        and metric.get("metricType") == "official_section_results"
+        and metric.get("sessionId") in race_session_ids
+    ]
+
+    field_rows: list[dict[str, Any]] = []
+    distribution_by_session: dict[str, Any] = {}
+
+    for metric in sorted(metrics, key=lambda row: row.get("sessionId") or ""):
+        session_id = metric["sessionId"]
+        context = event_context(session_id, idx["sessions"], idx["events"], idx["tracks"])
+        caution_laps = caution_by_session.get(session_id, set())
+        cars = metric.get("metrics", {}).get("cars", [])
+
+        # Aggregate every car's page-entries into one clock: key -> lap -> {name: time}.
+        per_car: dict[tuple[str, str, str], dict[int, dict[str, float]]] = defaultdict(lambda: defaultdict(dict))
+        car_meta: dict[tuple[str, str, str], dict[str, Any]] = {}
+        for car_index, car in enumerate(cars):
+            key = car_identity_key(car, car_index)
+            car_meta.setdefault(
+                key,
+                {"driverId": car.get("driverId"), "carNumber": str(car.get("carNumber") or ""), "isBryce": is_bryce(car)},
+            )
+            for lap in car.get("laps", []):
+                lap_no = lap.get("lapNumber")
+                if lap_no is None:
+                    continue
+                lap_no_int = int(lap_no)
+                for section in lap.get("sections", []):
+                    name = section.get("name")
+                    time_seconds = clean_float(section.get("timeSeconds"))
+                    if not name or time_seconds is None:
+                        continue
+                    per_car[key][lap_no_int][name] = time_seconds
+
+        # Stable anonymised car index (carNumber then driverId), so the shipped
+        # distribution never carries a rival's name yet stays traceable here.
+        ordered_keys = sorted(
+            per_car,
+            key=lambda k: (int(car_meta[k]["carNumber"]) if car_meta[k]["carNumber"].isdigit() else 9999, k[0]),
+        )
+        car_ref = {key: f"car_{position:02d}" for position, key in enumerate(ordered_keys)}
+
+        # Racing-line families (SF/FS straights included, pit-in/out excluded).
+        racing_families: set[str] = set()
+        for laps in per_car.values():
+            for sections in laps.values():
+                for name in sections:
+                    if name.strip() != "Lap" and not is_pit_line(name):
+                        racing_families.add(section_family(name))
+
+        # Per car: clean flags + remainder (lapTotal - sum of racing families,
+        # only when the car has the lap total AND every racing family that lap).
+        clean_flags: dict[tuple[str, str, str], dict[int, bool]] = {}
+        remainder_by_lap: dict[int, dict[tuple[str, str, str], float]] = defaultdict(dict)
+        uncovered_laps: dict[tuple[str, str, str], set[int]] = defaultdict(set)
+        for key, laps in per_car.items():
+            lap_totals = {lap_no: sections["Lap"] for lap_no, sections in laps.items() if "Lap" in sections}
+            clean_flags[key] = per_car_clean_flags(lap_totals, caution_laps)
+            for lap_no, sections in laps.items():
+                lap_total = sections.get("Lap")
+                if lap_total is None:
+                    continue
+                by_family = {
+                    section_family(name): time_seconds
+                    for name, time_seconds in sections.items()
+                    if name.strip() != "Lap" and not is_pit_line(name)
+                }
+                if not racing_families or set(by_family) != racing_families:
+                    continue
+                remainder = lap_total - sum(by_family.values())
+                if remainder < 0:  # data error: sections overrun the lap -> lap uncovered, never clamped
+                    uncovered_laps[key].add(lap_no)
+                    continue
+                remainder_by_lap[lap_no][key] = remainder
+
+        # Field time lists per (lap, section) and per lap (remainder) for ranking.
+        field_by_lap_section: dict[tuple[int, str], list[float]] = defaultdict(list)
+        for key, laps in per_car.items():
+            for lap_no, sections in laps.items():
+                for name, time_seconds in sections.items():
+                    field_by_lap_section[(lap_no, name)].append(time_seconds)
+
+        def rank_of(values: list[float], value: float) -> tuple[int | None, float | None]:
+            return comparable_percentile(values, value)
+
+        # Genuine-gap gate: Bryce's median remainder share of his median lap.
+        bryce_key = next((key for key in per_car if car_meta[key]["isBryce"]), None)
+        bryce_lap_totals = (
+            {lap_no: sections["Lap"] for lap_no, sections in per_car[bryce_key].items() if "Lap" in sections}
+            if bryce_key
+            else {}
+        )
+        bryce_remainders = [remainder_by_lap[lap_no][bryce_key] for lap_no in remainder_by_lap if bryce_key in remainder_by_lap[lap_no]] if bryce_key else []
+        median_lap = median(list(bryce_lap_totals.values()))
+        median_remainder = median(bryce_remainders)
+        remainder_share = (median_remainder / median_lap) if (median_remainder is not None and median_lap) else 0.0
+        derived_coverage = "genuine_gap" if remainder_share > GENUINE_GAP_MIN_SHARE else "fully_timed"
+
+        # Emit the full-field rows: every car, every lap, every raw section.
+        for key in ordered_keys:
+            meta = car_meta[key]
+            for lap_no in sorted(per_car[key]):
+                sections = per_car[key][lap_no]
+                caution_state = caution_state_by_lap.get(
+                    (session_id, lap_no), lap_caution_state(lap_no, caution_laps)
+                )
+                is_clean = clean_flags[key].get(lap_no, False)
+                for name in sorted(sections):
+                    if name.strip() == "Lap":
+                        section_type = "lap_total"
+                    elif is_pit_line(name):
+                        section_type = "pit_or_timing_line"
+                    else:
+                        section_type = "track_section"
+                    time_seconds = sections[name]
+                    rank, percentile = rank_of(field_by_lap_section[(lap_no, name)], time_seconds)
+                    field_rows.append(
+                        {
+                            "sessionId": session_id,
+                            "seasonYear": context["seasonYear"],
+                            "trackName": context["trackName"],
+                            "carRef": car_ref[key],
+                            "driverId": meta["driverId"],
+                            "carNumber": meta["carNumber"],
+                            "isBryce": "yes" if meta["isBryce"] else "no",
+                            "lapNumber": lap_no,
+                            "sectionName": name,
+                            "sectionFamily": section_family(name),
+                            "sectionType": section_type,
+                            "timeSeconds": time_seconds,
+                            "cleanRaceLapCandidate": "yes" if is_clean else "no",
+                            "cautionState": caution_state,
+                            "fieldComparisonCount": len(field_by_lap_section[(lap_no, name)]),
+                            "fieldRank": rank,
+                            "fieldPercentile": percentile,
+                            "sourceHash": source_hash,
+                        }
+                    )
+                # Synthesized derived-remainder row for this car/lap.
+                if lap_no in remainder_by_lap and key in remainder_by_lap[lap_no]:
+                    remainder = remainder_by_lap[lap_no][key]
+                    field_remainders = list(remainder_by_lap[lap_no].values())
+                    rank, percentile = rank_of(field_remainders, remainder)
+                    field_rows.append(
+                        {
+                            "sessionId": session_id,
+                            "seasonYear": context["seasonYear"],
+                            "trackName": context["trackName"],
+                            "carRef": car_ref[key],
+                            "driverId": meta["driverId"],
+                            "carNumber": meta["carNumber"],
+                            "isBryce": "yes" if meta["isBryce"] else "no",
+                            "lapNumber": lap_no,
+                            "sectionName": DERIVED_SECTION_NAME,
+                            "sectionFamily": DERIVED_SECTION_NAME,
+                            "sectionType": "derived_remainder",
+                            "timeSeconds": remainder,
+                            "cleanRaceLapCandidate": "yes" if clean_flags[key].get(lap_no, False) else "no",
+                            "cautionState": caution_state_by_lap.get((session_id, lap_no), lap_caution_state(lap_no, caution_laps)),
+                            "fieldComparisonCount": len(field_remainders),
+                            "fieldRank": rank,
+                            "fieldPercentile": percentile,
+                            "sourceHash": source_hash,
+                        }
+                    )
+
+        # Per-section field distribution: each car's median CLEAN section time.
+        families = sorted(racing_families) + [DERIVED_SECTION_NAME]
+        section_distribution: dict[str, Any] = {}
+        for family in families:
+            car_medians: list[float] = []
+            for key in ordered_keys:
+                if family == DERIVED_SECTION_NAME:
+                    values = [
+                        remainder_by_lap[lap_no][key]
+                        for lap_no in remainder_by_lap
+                        if key in remainder_by_lap[lap_no] and clean_flags[key].get(lap_no, False)
+                    ]
+                else:
+                    values = [
+                        time_seconds
+                        for lap_no, sections in per_car[key].items()
+                        if clean_flags[key].get(lap_no, False)
+                        for name, time_seconds in sections.items()
+                        if section_family(name) == family
+                    ]
+                if len(values) >= MIN_CAR_CLEAN_OBSERVATIONS:
+                    car_medians.append(round(float(statistics.median(values)), 4))
+            if car_medians:
+                section_distribution[family] = {
+                    "fieldCarMedians": sorted(car_medians),
+                    "fieldMedianSeconds": round(float(statistics.median(car_medians)), 4),
+                    "fieldCarCount": len(car_medians),
+                }
+
+        # Bryce's per-lap derived remainder, ready to drop into the pack tuples.
+        derived_remainder_rows: list[dict[str, Any]] = []
+        if bryce_key is not None:
+            for lap_no in sorted(remainder_by_lap):
+                if bryce_key not in remainder_by_lap[lap_no]:
+                    continue
+                remainder = remainder_by_lap[lap_no][bryce_key]
+                field_remainders = list(remainder_by_lap[lap_no].values())
+                rank, percentile = rank_of(field_remainders, remainder)
+                derived_remainder_rows.append(
+                    {
+                        "lapNumber": lap_no,
+                        "fieldPercentile": percentile,
+                        "fieldRank": rank,
+                        "fieldComparisonCount": len(field_remainders),
+                        "cleanRaceLapCandidate": "yes" if clean_flags[bryce_key].get(lap_no, False) else "no",
+                        "cautionState": caution_state_by_lap.get(
+                            (session_id, lap_no), lap_caution_state(lap_no, caution_laps)
+                        ),
+                        "timeSeconds": round(remainder, 4),
+                    }
+                )
+
+        distribution_by_session[session_id] = {
+            "trackName": context["trackName"],
+            "seasonYear": context["seasonYear"],
+            "derivedCoverage": derived_coverage,
+            "racingSectionCount": len(racing_families),
+            "medianRemainderSeconds": round(median_remainder, 4) if median_remainder is not None else None,
+            "medianRemainderShareOfLap": round(remainder_share, 4),
+            "uncoveredLapCount": sum(len(laps) for laps in uncovered_laps.values()),
+            "sections": section_distribution,
+            "derivedRemainder": derived_remainder_rows if derived_coverage == "genuine_gap" else [],
+        }
+
+    return field_rows, distribution_by_session
+
+
 def format_section_list(groups: dict[str, list[float]], reverse: bool) -> str:
     ranked = [
         (name, median(values), len(values))
@@ -680,6 +1013,8 @@ def build_context_packs(
             "race_lap_segments.csv",
             "race_lap_inflection_points.csv",
             "race_section_lap_observations.csv",
+            "race_section_lap_field_observations.csv.gz",
+            "race_section_field_distribution.json",
             "race_section_session_summary.csv",
         ],
         "counts": counts,
@@ -763,7 +1098,9 @@ This lane uses official INDY NXT race lap chart rows, official caution/incidents
 - `race_lap_microstates.csv`: {counts['raceLapMicrostates']} Bryce lap-position rows with field percentiles and caution/restart labels.
 - `race_lap_segments.csv`: {counts['raceLapSegments']} caution-aware lap segments.
 - `race_lap_inflection_points.csv`: {counts['raceLapInflectionPoints']} position-movement events.
-- `race_section_lap_observations.csv`: clean-lap-aware race section observations.
+- `race_section_lap_observations.csv`: clean-lap-aware race section observations (Bryce only).
+- `race_section_lap_field_observations.csv.gz`: {counts.get('raceSectionFieldObservations', 0)} FULL-FIELD ranked rows — every car, every lap, every section, plus a synthesized derived-remainder row per car/lap.
+- `race_section_field_distribution.json`: per-section field time distributions + Bryce's per-lap derived remainder with real full-field percentiles.
 - `race_section_session_summary.csv`: {counts['raceSectionSessionSummaries']} race section summaries.
 - Context packs: `context-packs/indy-nxt-race-lap-section-context.json`, `context-packs/road-america-race-context.json`, and the current next-venue race context pack.
 - Source split: {summary.get('sectionSourceStateCounts', {})}.
@@ -781,6 +1118,22 @@ Segments split green runs, caution windows, and restart laps so movement is not 
 Clean-lap race section highlights:
 
 {section_lines}
+
+## Derived Remainder
+
+The official Section Results carry every car's lap total (the `Lap` section) and
+its named section splits. Per lap, `lapTotal - sum(racing-line sections)` is the
+exact time spent on everything the loops don't watch — the stopwatch trick — and
+because the field's lap totals are present, that remainder ranks against the
+whole field, not just Bryce. The remainder is shipped as a shadeable
+`{DERIVED_SECTION_NAME}` section ONLY where the racing sections leave a genuine
+untimed stretch (>2% of the lap): Nashville's straights carry no loops (~56% of
+the lap). Iowa and Milwaukee tile to 0.00% once their `SF to T1` / `T4 to SF` /
+`FS to SF` frontstretch sections are counted as racing line — the legacy
+`classify_section` regex over-matches `SF` and files them as pit lines, so their
+apparent blindness is a classification artefact, not a real gap. A negative
+remainder (sections overrunning the lap) marks that lap uncovered; it is never
+clamped.
 
 ## Road America Context
 
@@ -813,6 +1166,7 @@ def main() -> int:
     segments = build_lap_segments(microstates, source_hash)
     inflections = build_inflections(microstates, source_hash)
     section_observations = build_race_section_observations(data, idx, source_hash, microstates)
+    field_observations, field_distribution = build_field_and_derived_observations(data, idx, source_hash, microstates)
     section_summaries = build_section_session_summary(section_observations, source_hash)
     road_america_rows = build_track_race_rows(microstates, segments, section_summaries, source_hash, "Road America")
     upcoming_track_name = next_upcoming_track_name(data) or "Road America"
@@ -829,6 +1183,25 @@ def main() -> int:
         upcoming_track_name,
         upcoming_rows,
     )
+    # Full-field extraction + derived-remainder coverage (Brief H).
+    summary["counts"]["raceSectionFieldObservations"] = len(field_observations)
+    genuine_gap_sessions = sorted(
+        session_id
+        for session_id, entry in field_distribution.items()
+        if entry.get("derivedCoverage") == "genuine_gap"
+    )
+    summary["derivedRemainderCoverage"] = {
+        "genuineGapSessions": len(genuine_gap_sessions),
+        "fullyTimedSessions": sum(
+            1 for entry in field_distribution.values() if entry.get("derivedCoverage") == "fully_timed"
+        ),
+        "note": (
+            "The derived remainder (lapTotal minus racing-line sections) is shipped only for sessions whose "
+            "racing sections leave a genuine untimed stretch (>2% of the lap). Iowa and Milwaukee tile to 0.00% "
+            "once the SF/FS frontstretch sections are counted as racing line, so their remainder is a "
+            "classification artefact and is withheld; correctly surfacing those sections is a follow-up anchor task."
+        ),
+    }
 
     write_csv(
         OUTPUT_DIR / "race_lap_microstates.csv",
@@ -917,6 +1290,43 @@ def main() -> int:
             "sourceMetricId",
             "sourceHash",
         ],
+    )
+    write_csv_gz(
+        OUTPUT_DIR / "race_section_lap_field_observations.csv.gz",
+        field_observations,
+        [
+            "sessionId",
+            "seasonYear",
+            "trackName",
+            "carRef",
+            "driverId",
+            "carNumber",
+            "isBryce",
+            "lapNumber",
+            "sectionName",
+            "sectionFamily",
+            "sectionType",
+            "timeSeconds",
+            "cleanRaceLapCandidate",
+            "cautionState",
+            "fieldComparisonCount",
+            "fieldRank",
+            "fieldPercentile",
+            "sourceHash",
+        ],
+    )
+    write_json(
+        OUTPUT_DIR / "race_section_field_distribution.json",
+        {
+            "generatedAt": generated_at,
+            "sourceHash": source_hash,
+            "claimStrength": "post_race_descriptive_only",
+            "note": (
+                "Per-section field time distributions (each car's median clean-lap section time) and Bryce's "
+                "per-lap derived remainder with real full-field percentiles. Consumed by build-ui-data-package.mjs."
+            ),
+            "sessions": field_distribution,
+        },
     )
     write_csv(
         OUTPUT_DIR / "race_section_session_summary.csv",

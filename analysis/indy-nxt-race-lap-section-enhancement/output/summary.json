@@ -10,12 +10,18 @@
     "raceLapInflectionPoints": 164,
     "raceLapMicrostates": 1493,
     "raceLapSegments": 184,
+    "raceSectionFieldObservations": 422717,
     "raceSectionLapObservations": 17841,
     "raceSectionSessionSummaries": 39,
     "roadAmericaRows": 4,
     "upcomingVenueRows": 2
   },
-  "generatedAt": "2026-07-19T01:21:11Z",
+  "derivedRemainderCoverage": {
+    "fullyTimedSessions": 11,
+    "genuineGapSessions": 28,
+    "note": "The derived remainder (lapTotal minus racing-line sections) is shipped only for sessions whose racing sections leave a genuine untimed stretch (>2% of the lap). Iowa and Milwaukee tile to 0.00% once the SF/FS frontstretch sections are counted as racing line, so their remainder is a classification artefact and is withheld; correctly surfacing those sections is a follow-up anchor task."
+  },
+  "generatedAt": "2026-07-19T02:26:34Z",
   "ok": true,
   "publicPointPrediction": false,
   "sectionSourceStateCounts": {

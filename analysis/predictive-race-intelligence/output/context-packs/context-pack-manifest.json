@@ -1,6 +1,6 @@
 {
   "asOfDate": "2026-07-18",
-  "generatedAt": "2026-07-19T01:20:57Z",
+  "generatedAt": "2026-07-19T02:26:19Z",
   "packCounts": {
     "career_lab": 1,
     "live_race_day": 1,
@@ -12,7 +12,7 @@
       "bytes": 117166,
       "id": "career_lab_context",
       "path": "analysis/predictive-race-intelligence/output/context-packs/career-lab-context.json",
-      "sha256": "29ef918cec598731ea5692a2db1e63f7d1c27aa1f7965acc4d5a0b33381ab69d",
+      "sha256": "2b88dadc10aff63c7166fa2c81d6236b77ea9e9fa5e46eaed82830ed1698d071",
       "sourceRefs": [
         "analysis/career-parity/output/tables/career_series_result_summary.csv",
         "analysis/career-parity/output/tables/career_metric_family_parity.csv",
@@ -25,7 +25,7 @@
       "bytes": 2902,
       "id": "live_race_day_context",
       "path": "analysis/predictive-race-intelligence/output/context-packs/live-race-day-context.json",
-      "sha256": "fdde0378d78b4e7e4109564e7995a1e72020878b6fe3fda1f056d533b6934f12",
+      "sha256": "6a53e41386c873540ba90d5b13255d58d602fd3ba5944fbe24875a40312923f2",
       "sourceRefs": [
         "docs/LIVE_RACE_DAY_PRODUCT_CONTRACT.md",
         "scripts/api-server.mjs",
@@ -41,7 +41,7 @@
       "roundIndex": 2,
       "seasonYear": 2024,
       "sessionId": "session_indy_nxt_2024_6314",
-      "sha256": "2a2d541c1fb74183e0ebcb405941e2b549c15c9f2c80adb893d43484cfeb8dae",
+      "sha256": "ef6494797e63c694298ab81da212a28a77305d04de6442b39a127c352af574a0",
       "sourceRefs": [
         "analysis/indy-nxt-discovery/output/deep_dive/tables/race_debrief_scores.csv",
         "analysis/indy-nxt-discovery/output/deep_dive/tables/full_field_lap_dynamics_by_race.csv",
@@ -63,7 +63,7 @@
       "roundIndex": 3,
       "seasonYear": 2024,
       "sessionId": "session_indy_nxt_2024_6315",
-      "sha256": "9b2e330e7d6c349d3df77400d5ea471d061ffb768234b19baa9c020ea4542382",
+      "sha256": "d69d3ee85915c9758e1602a46d423c28aea96f564bdcc8e6aa0e11cae9262558",
       "sourceRefs": [
         "analysis/indy-nxt-discovery/output/deep_dive/tables/race_debrief_scores.csv",
         "analysis/indy-nxt-discovery/output/deep_dive/tables/full_field_lap_dynamics_by_race.csv",
@@ -85,7 +85,7 @@
       "roundIndex": 6,
       "seasonYear": 2024,
       "sessionId": "session_indy_nxt_2024_6316",
-      "sha256": "25521450712ed1c91f072023707a59a9805737bd62141a9ff42b6514e257865c",
+      "sha256": "eac810040fe07c7599c3c790c9270310499ce6e35dc2ee1d045fbdf295ecc578",
       "sourceRefs": [
         "analysis/indy-nxt-discovery/output/deep_dive/tables/race_debrief_scores.csv",
         "analysis/indy-nxt-discovery/output/deep_dive/tables/full_field_lap_dynamics_by_race.csv",
@@ -107,7 +107,7 @@
       "roundIndex": 7,
       "seasonYear": 2024,
       "sessionId": "session_indy_nxt_2024_6317",
-      "sha256": "9e13c228582f02bd6a8aa0512e82a0981197d8e9663dfc1a5656530cd05c5e5d",
+      "sha256": "86dc984e0ed0b7593db6e95bb0294cf336b3eaf926816fffd337fb115d29798a",
       "sourceRefs": [
         "analysis/indy-nxt-discovery/output/deep_dive/tables/race_debrief_scores.csv",
         "analysis/indy-nxt-discovery/output/deep_dive/tables/full_field_lap_dynamics_by_race.csv",
@@ -129,7 +129,7 @@
       "roundIndex": 9,
       "seasonYear": 2024,
       "sessionId": "session_indy_nxt_2024_6318",
-      "sha256": "9c72b79d48d786acdebcedf7d2e3b731901fca4bad476d6e537c838da039ad69",
+      "sha256": "4b35f57840d755c5cdb215a7671fb7495a5caa05cd44634dc00ff4118d6e94a5",
       "sourceRefs": [
         "analysis/indy-nxt-discovery/output/deep_dive/tables/race_debrief_scores.csv",
         "analysis/indy-nxt-discovery/output/deep_dive/tables/full_field_lap_dynamics_by_race.csv",
@@ -151,7 +151,7 @@
       "roundIndex": 10,
       "seasonYear": 2024,
       "sessionId": "session_indy_nxt_2024_6319",
-      "sha256": "9f2978dd86d3f0e76291f5821ee13d3262b19e60b481e23fd713c8fe873e450f",
+      "sha256": "29a54361f33a4c17b91d1d30bfa0ed74a4853ff82042d90d646479aec0c7deac",
       "sourceRefs": [
         "analysis/indy-nxt-discovery/output/deep_dive/tables/race_debrief_scores.csv",
         "analysis/indy-nxt-discovery/output/deep_dive/tables/full_field_lap_dynamics_by_race.csv",
@@ -173,7 +173,7 @@
       "roundIndex": 11,
       "seasonYear": 2024,
       "sessionId": "session_indy_nxt_2024_6320",
-      "sha256": "b5e60eb5f3121b797047f20003e8a3f9eb565597d5135d6031c53a1515fefcce",
+      "sha256": "7d486d2e35791e1914f37a93e8bab666a2cf96fd2535987fe09d6dbf4dad0d76",
       "sourceRefs": [
         "analysis/indy-nxt-discovery/output/deep_dive/tables/race_debrief_scores.csv",
         "analysis/indy-nxt-discovery/output/deep_dive/tables/full_field_lap_dynamics_by_race.csv",
@@ -195,7 +195,7 @@
       "roundIndex": 12,
       "seasonYear": 2024,
       "sessionId": "session_indy_nxt_2024_6321",
-      "sha256": "98daea602647c35f8c4733c21be6e5ec03c8d53b51d5b796213acfef00734a69",
+      "sha256": "90c77b70832d3f68aeee5e231fb8402339af13ee589df22098bc4bd34412f86e",
       "sourceRefs": [
         "analysis/indy-nxt-discovery/output/deep_dive/tables/race_debrief_scores.csv",
         "analysis/indy-nxt-discovery/output/deep_dive/tables/full_field_lap_dynamics_by_race.csv",
@@ -217,7 +217,7 @@
       "roundIndex": 13,
       "seasonYear": 2024,
       "sessionId": "session_indy_nxt_2024_6322",
-      "sha256": "1a51cd43b7af253e09e6a15d558ab2ccb6c1a4ad32b74b7b336b134d5d27883d",
+      "sha256": "e75b04072ba10ab28f6c7097fa36bd354579aa517c3810a51b30157c743a688a",
       "sourceRefs": [
         "analysis/indy-nxt-discovery/output/deep_dive/tables/race_debrief_scores.csv",
         "analysis/indy-nxt-discovery/output/deep_dive/tables/full_field_lap_dynamics_by_race.csv",
@@ -239,7 +239,7 @@
       "roundIndex": 14,
       "seasonYear": 2024,
       "sessionId": "session_indy_nxt_2024_6323",
-      "sha256": "15ee163aaf3437b218f0213a3b3d61b41f00d376351d8ac253433ac103d5e44d",
+      "sha256": "d777f15ad53037c4e3048757cb35da3395c217aee962f8e545fe7ca87a06d2a9",
       "sourceRefs": [
         "analysis/indy-nxt-discovery/output/deep_dive/tables/race_debrief_scores.csv",
         "analysis/indy-nxt-discovery/output/deep_dive/tables/full_field_lap_dynamics_by_race.csv",
@@ -261,7 +261,7 @@
       "roundIndex": 1,
       "seasonYear": 2024,
       "sessionId": "session_indy_nxt_2024_6324",
-      "sha256": "a22d0f2538d1adfb67c017ff2514be5e46498ea556aa3c94e932c16a3c4dc8a9",
+      "sha256": "9f198a11dce79d91a80545810b5716d5b342871b1de7bf2e3910b774324585c1",
       "sourceRefs": [
         "analysis/indy-nxt-discovery/output/deep_dive/tables/race_debrief_scores.csv",
         "analysis/indy-nxt-discovery/output/deep_dive/tables/full_field_lap_dynamics_by_race.csv",
@@ -283,7 +283,7 @@
       "roundIndex": 4,
       "seasonYear": 2024,
       "sessionId": "session_indy_nxt_2024_6325",
-      "sha256": "c45ce0785c2997c7b01acc4ddabdf555fc70ae1c370efad44be820e3d3776f73",
+      "sha256": "e0811fecd7048ae250b7b15108a9deaf690bd79979b4694e005912522186489b",
       "sourceRefs": [
         "analysis/indy-nxt-discovery/output/deep_dive/tables/race_debrief_scores.csv",
         "analysis/indy-nxt-discovery/output/deep_dive/tables/full_field_lap_dynamics_by_race.csv",
@@ -305,7 +305,7 @@
       "roundIndex": 5,
       "seasonYear": 2024,
       "sessionId": "session_indy_nxt_2024_6326",
-      "sha256": "493bca668ad238448a7e74d269f01eab351dda2f59d841f93a97bae199758c68",
+      "sha256": "2d9f2cf5dbc2906195cbfcdd5bcb78424275f678289e3e2ede79179385f6941d",
       "sourceRefs": [
         "analysis/indy-nxt-discovery/output/deep_dive/tables/race_debrief_scores.csv",
         "analysis/indy-nxt-discovery/output/deep_dive/tables/full_field_lap_dynamics_by_race.csv",
@@ -327,7 +327,7 @@
       "roundIndex": 8,
       "seasonYear": 2024,
       "sessionId": "session_indy_nxt_2024_6327",
-      "sha256": "a4baa7c191b5133a075985e389a0230274e1c998828ef9176a2e7af1ecccceaf",
+      "sha256": "df6d954b6da02632e30b915192893be994e0ab2f20e926cb8a7f8fed076acaef",
       "sourceRefs": [
         "analysis/indy-nxt-discovery/output/deep_dive/tables/race_debrief_scores.csv",
         "analysis/indy-nxt-discovery/output/deep_dive/tables/full_field_lap_dynamics_by_race.csv",
@@ -349,7 +349,7 @@
       "roundIndex": 10,
       "seasonYear": 2025,
       "sessionId": "session_indy_nxt_2025_6442",
-      "sha256": "8ade432d31f3097adff6523844dc339fcc77a175658d689427dd719bfbf61ead",
+      "sha256": "f1f2ee9183e0ed66e2a67721e3c9b58d17f6c5d68a845b359ec27571619dc361",
       "sourceRefs": [
         "analysis/indy-nxt-discovery/output/deep_dive/tables/race_debrief_scores.csv",
         "analysis/indy-nxt-discovery/output/deep_dive/tables/full_field_lap_dynamics_by_race.csv",
@@ -371,7 +371,7 @@
       "roundIndex": 4,
       "seasonYear": 2025,
       "sessionId": "session_indy_nxt_2025_6443",
-      "sha256": "a4af74f8a2a1a7b8c580e61b0862db746b0f5a0c5d4d5ef1f17b91d177bc8714",
+      "sha256": "cf1b590eaa31a5e75f5c3037c456cd2e69fb6441b872848cdc55fa31c08b424d",
       "sourceRefs": [
         "analysis/indy-nxt-discovery/output/deep_dive/tables/race_debrief_scores.csv",
         "analysis/indy-nxt-discovery/output/deep_dive/tables/full_field_lap_dynamics_by_race.csv",
@@ -393,7 +393,7 @@
       "roundIndex": 3,
       "seasonYear": 2025,
       "sessionId": "session_indy_nxt_2025_6444",
-      "sha256": "2cc7cfb1afbc9f00c18fad6944b6fd9f4a73329c6b8729e5642e721add3c7945",
+      "sha256": "50142798f0543b6ad095eca6c920c519371ffc701ec8b4a172ef804f9324ac5a",
       "sourceRefs": [
         "analysis/indy-nxt-discovery/output/deep_dive/tables/race_debrief_scores.csv",
         "analysis/indy-nxt-discovery/output/deep_dive/tables/full_field_lap_dynamics_by_race.csv",
@@ -415,7 +415,7 @@
       "roundIndex": 2,
       "seasonYear": 2025,
       "sessionId": "session_indy_nxt_2025_6445",
-      "sha256": "c638db9f7e341299c30829c7f9011e04dd4dd8b1c148128162ecc538fd12a5ee",
+      "sha256": "7cef648ccdad3b6e1d23da008d572b466f0d69cf41c001daa5af241fc0bcbe6a",
       "sourceRefs": [
         "analysis/indy-nxt-discovery/output/deep_dive/tables/race_debrief_scores.csv",
         "analysis/indy-nxt-discovery/output/deep_dive/tables/full_field_lap_dynamics_by_race.csv",
@@ -437,7 +437,7 @@
       "roundIndex": 1,
       "seasonYear": 2025,
       "sessionId": "session_indy_nxt_2025_6446",
-      "sha256": "4856870457be35ee8c2f90b9a8b61fa4f9fa5da182d06a6526ea36e382858aa2",
+      "sha256": "71f470dbddedac92b268e70a3e86c466a32b3201bc021503656a823fea1bfa68",
       "sourceRefs": [
         "analysis/indy-nxt-discovery/output/deep_dive/tables/race_debrief_scores.csv",
         "analysis/indy-nxt-discovery/output/deep_dive/tables/full_field_lap_dynamics_by_race.csv",
@@ -459,7 +459,7 @@
       "roundIndex": 14,
       "seasonYear": 2025,
       "sessionId": "session_indy_nxt_2025_6447",
-      "sha256": "30a27dee0ba34d04f8ab1dcd8b9524877c5133feebc1569d7274816d2a5142e7",
+      "sha256": "0359adea1bda74d03dae8910110917695d86fbc13221a3e0b32163368c814403",
       "sourceRefs": [
         "analysis/indy-nxt-discovery/output/deep_dive/tables/race_debrief_scores.csv",
         "analysis/indy-nxt-discovery/output/deep_dive/tables/full_field_lap_dynamics_by_race.csv",
@@ -481,7 +481,7 @@
       "roundIndex": 13,
       "seasonYear": 2025,
       "sessionId": "session_indy_nxt_2025_6448",
-      "sha256": "f888cfcd2023a440dff16bc3f2298ea9ba35d2c6c893fc4897aa06d2ef7b46d3",
+      "sha256": "9e52f993a0b9093302ac5a5fca92eb70744a801dd6154f50dcaa6e9ee5da95a6",
       "sourceRefs": [
         "analysis/indy-nxt-discovery/output/deep_dive/tables/race_debrief_scores.csv",
         "analysis/indy-nxt-discovery/output/deep_dive/tables/full_field_lap_dynamics_by_race.csv",
@@ -503,7 +503,7 @@
       "roundIndex": 12,
       "seasonYear": 2025,
       "sessionId": "session_indy_nxt_2025_6449",
-      "sha256": "d5293c7129aed30e2ce1e81c1214d2b9d4db661744db6a9ebefdcccacb98363c",
+      "sha256": "8ab0401899f43736590de26d5562416bbf3ca8f4a8f4b37020b87c6aad085cd5",
       "sourceRefs": [
         "analysis/indy-nxt-discovery/output/deep_dive/tables/race_debrief_scores.csv",
         "analysis/indy-nxt-discovery/output/deep_dive/tables/full_field_lap_dynamics_by_race.csv",
@@ -525,7 +525,7 @@
       "roundIndex": 11,
       "seasonYear": 2025,
       "sessionId": "session_indy_nxt_2025_6450",
-      "sha256": "8e836c07a5cd86cbdb0c670ff2424ad4133b5a654387983be32e8c769c474913",
+      "sha256": "fad3bd58d1265f41a4c137ca212af1392fb574ba82eeb43b270a37966546b28f",
       "sourceRefs": [
         "analysis/indy-nxt-discovery/output/deep_dive/tables/race_debrief_scores.csv",
         "analysis/indy-nxt-discovery/output/deep_dive/tables/full_field_lap_dynamics_by_race.csv",
@@ -547,7 +547,7 @@
       "roundIndex": 9,
       "seasonYear": 2025,
       "sessionId": "session_indy_nxt_2025_6451",
-      "sha256": "0de560421d4dffcd14a3334c0665c63b06b235dc2d1e335a8dc707e6d3fb8b84",
+      "sha256": "408e74d3be829b70278cd66cef69ff665f0794d4445aea63650ef798a953dc52",
       "sourceRefs": [
         "analysis/indy-nxt-discovery/output/deep_dive/tables/race_debrief_scores.csv",
         "analysis/indy-nxt-discovery/output/deep_dive/tables/full_field_lap_dynamics_by_race.csv",
@@ -569,7 +569,7 @@
       "roundIndex": 8,
       "seasonYear": 2025,
       "sessionId": "session_indy_nxt_2025_6452",
-      "sha256": "057704585b419034ae45e9808e0dafe297ee7fa01d4097f283265b5b8cf1081d",
+      "sha256": "3a5ad3be50200d9b67b7cb83e05df7a4b5c46eaea043a3ec118f5b2030448c32",
       "sourceRefs": [
         "analysis/indy-nxt-discovery/output/deep_dive/tables/race_debrief_scores.csv",
         "analysis/indy-nxt-discovery/output/deep_dive/tables/full_field_lap_dynamics_by_race.csv",
@@ -591,7 +591,7 @@
       "roundIndex": 7,
       "seasonYear": 2025,
       "sessionId": "session_indy_nxt_2025_6453",
-      "sha256": "bd6a5787966802bcb24c8639119c32238a179f4c7d3cdb23d2d50ce03125dd22",
+      "sha256": "3fce0af445d2f3e582c0f8609c418d029de4b06766900c7640c5c1d3376071a3",
       "sourceRefs": [
         "analysis/indy-nxt-discovery/output/deep_dive/tables/race_debrief_scores.csv",
         "analysis/indy-nxt-discovery/output/deep_dive/tables/full_field_lap_dynamics_by_race.csv",
@@ -613,7 +613,7 @@
       "roundIndex": 6,
       "seasonYear": 2025,
       "sessionId": "session_indy_nxt_2025_6454",
-      "sha256": "11e934b827b368ed4db29ec3aa8ce714d89d37a0c7d0fb413cf32523f632be42",
+      "sha256": "e9448b98ad140cfdf6a7f9514326724103ffdb86e70ff0615336152ad77aa1dd",
       "sourceRefs": [
         "analysis/indy-nxt-discovery/output/deep_dive/tables/race_debrief_scores.csv",
         "analysis/indy-nxt-discovery/output/deep_dive/tables/full_field_lap_dynamics_by_race.csv",
@@ -635,7 +635,7 @@
       "roundIndex": 5,
       "seasonYear": 2025,
       "sessionId": "session_indy_nxt_2025_6455",
-      "sha256": "c7badec2740e229031a96af6dd43b7f00d201e9fc12018676c32daee9416a5dd",
+      "sha256": "86c6463aae2987be9f1528d0b37468503060b5bb6b5515da312d29c64b8ba58e",
       "sourceRefs": [
         "analysis/indy-nxt-discovery/output/deep_dive/tables/race_debrief_scores.csv",
         "analysis/indy-nxt-discovery/output/deep_dive/tables/full_field_lap_dynamics_by_race.csv",
@@ -657,7 +657,7 @@
       "roundIndex": 7,
       "seasonYear": 2026,
       "sessionId": "session_indy_nxt_2026_6749",
-      "sha256": "47340a893e8119333d7919c2fc04cb373e967b8f299c1f81ba710d1a01279d75",
+      "sha256": "5d52b3f8a498bedbaa6454e8d4b79c227f35e020f2e248fbc1b1d049b45b0b1f",
       "sourceRefs": [
         "analysis/indy-nxt-discovery/output/deep_dive/tables/race_debrief_scores.csv",
         "analysis/indy-nxt-discovery/output/deep_dive/tables/full_field_lap_dynamics_by_race.csv",
@@ -679,7 +679,7 @@
       "roundIndex": 3,
       "seasonYear": 2026,
       "sessionId": "session_indy_nxt_2026_6750",
-      "sha256": "64ad20d45e31d94212308d1bb154bc3a1550239b213b1b4cdf3eaac5fc542c13",
+      "sha256": "0a24f96c5c16618a58cbcf16889fac52ab63caefa7a56f845e2c8899b129c0f5",
       "sourceRefs": [
         "analysis/indy-nxt-discovery/output/deep_dive/tables/race_debrief_scores.csv",
         "analysis/indy-nxt-discovery/output/deep_dive/tables/full_field_lap_dynamics_by_race.csv",
@@ -701,7 +701,7 @@
       "roundIndex": 1,
       "seasonYear": 2026,
       "sessionId": "session_indy_nxt_2026_6751",
-      "sha256": "f2055220b91fa6e8eaccd74fb65268b61bafaba4d78732b12fcf926ae91e68ea",
+      "sha256": "e6a5756be06079b1e9e2da6f671e691c59958432d33280a320ef3a5cf0a08322",
       "sourceRefs": [
         "analysis/indy-nxt-discovery/output/deep_dive/tables/race_debrief_scores.csv",
         "analysis/indy-nxt-discovery/output/deep_dive/tables/full_field_lap_dynamics_by_race.csv",
@@ -723,7 +723,7 @@
       "roundIndex": 4,
       "seasonYear": 2026,
       "sessionId": "session_indy_nxt_2026_6752",
-      "sha256": "bc3e05933d604b9aadfde63977107b23cff592fd3d65d832bb58252f3d37626a",
+      "sha256": "3856e1374751ab246073f842569b6407f2f237804829105f6b7893768aaf9247",
       "sourceRefs": [
         "analysis/indy-nxt-discovery/output/deep_dive/tables/race_debrief_scores.csv",
         "analysis/indy-nxt-discovery/output/deep_dive/tables/full_field_lap_dynamics_by_race.csv",
@@ -745,7 +745,7 @@
       "roundIndex": 2,
       "seasonYear": 2026,
       "sessionId": "session_indy_nxt_2026_6753",
-      "sha256": "cf65b283b17949e31b40e8a8ae7718ffe8a8f4b3b8880d7ff54df32f6104ae56",
+      "sha256": "8e7421ae9b10ed808f9511fc5304dc71f2da49b5a90e06c0ea6e20a9844e4844",
       "sourceRefs": [
         "analysis/indy-nxt-discovery/output/deep_dive/tables/race_debrief_scores.csv",
         "analysis/indy-nxt-discovery/output/deep_dive/tables/full_field_lap_dynamics_by_race.csv",
@@ -767,7 +767,7 @@
       "roundIndex": 10,
       "seasonYear": 2026,
       "sessionId": "session_indy_nxt_2026_6754",
-      "sha256": "f261b174226ba9de1478f022ba52ff81a6c97658356d1d6874792ff6b3d7f4d9",
+      "sha256": "b59a43d5f999f5f3b7ec59b02732480ba81ba46b0b8b2b81df6e40e2ffc29784",
       "sourceRefs": [
         "analysis/indy-nxt-discovery/output/deep_dive/tables/race_debrief_scores.csv",
         "analysis/indy-nxt-discovery/output/deep_dive/tables/full_field_lap_dynamics_by_race.csv",
@@ -789,7 +789,7 @@
       "roundIndex": 5,
       "seasonYear": 2026,
       "sessionId": "session_indy_nxt_2026_6756",
-      "sha256": "34f16aabaf3568b8e91af89da81d0347d82df357fbc68ed6137dbe1aeedb645d",
+      "sha256": "01749ad8c1ffe376af3dee5e06fd05b8dbe5f3eac7a176ae5be7cddd82c6880a",
       "sourceRefs": [
         "analysis/indy-nxt-discovery/output/deep_dive/tables/race_debrief_scores.csv",
         "analysis/indy-nxt-discovery/output/deep_dive/tables/full_field_lap_dynamics_by_race.csv",
@@ -811,7 +811,7 @@
       "roundIndex": 12,
       "seasonYear": 2026,
       "sessionId": "session_indy_nxt_2026_6760",
-      "sha256": "f4321a721dc6cf04522a8314b2740fb6e4ce4a7626567a86c487e4c50a8f092f",
+      "sha256": "ccab9173e8fc7b621269b5ea1d6f85827a8b21cfad67b7620e1447f5b7b89bf0",
       "sourceRefs": [
         "analysis/indy-nxt-discovery/output/deep_dive/tables/race_debrief_scores.csv",
         "analysis/indy-nxt-discovery/output/deep_dive/tables/full_field_lap_dynamics_by_race.csv",
@@ -833,7 +833,7 @@
       "roundIndex": 11,
       "seasonYear": 2026,
       "sessionId": "session_indy_nxt_2026_6761",
-      "sha256": "a6af79ba7029456166c40b1109b4e842235b4390ff9a1f31bdb548ea1b8794fc",
+      "sha256": "2ac8f7aaed776564a59ebe21824ad68499624f30341e3a49e2f958c7291765c3",
       "sourceRefs": [
         "analysis/indy-nxt-discovery/output/deep_dive/tables/race_debrief_scores.csv",
         "analysis/indy-nxt-discovery/output/deep_dive/tables/full_field_lap_dynamics_by_race.csv",
@@ -855,7 +855,7 @@
       "roundIndex": 9,
       "seasonYear": 2026,
       "sessionId": "session_indy_nxt_2026_6762",
-      "sha256": "e4b9b3c6d74ba1f9cc37de1b3875d21e3493b4477d44afd091e295137e24acf9",
+      "sha256": "509ab2ce6b7c280716dc1dd12a1bfc08002f54d8b7785b7b00c2226acdf56557",
       "sourceRefs": [
         "analysis/indy-nxt-discovery/output/deep_dive/tables/race_debrief_scores.csv",
         "analysis/indy-nxt-discovery/output/deep_dive/tables/full_field_lap_dynamics_by_race.csv",
@@ -877,7 +877,7 @@
       "roundIndex": 8,
       "seasonYear": 2026,
       "sessionId": "session_indy_nxt_2026_6763",
-      "sha256": "28940f9b5b79570cbcea03f3dde302e89b0414ffd9653465f3d5c06d157a0a1d",
+      "sha256": "ff345842699664c67af4a1c31da24f061e9f7f1df74f5b3108a3059aae82530d",
       "sourceRefs": [
         "analysis/indy-nxt-discovery/output/deep_dive/tables/race_debrief_scores.csv",
         "analysis/indy-nxt-discovery/output/deep_dive/tables/full_field_lap_dynamics_by_race.csv",
@@ -899,7 +899,7 @@
       "roundIndex": 6,
       "seasonYear": 2026,
       "sessionId": "session_indy_nxt_2026_6765",
-      "sha256": "264a680c685e023e7b83f5cec97be5ee91b20e584871339215cfd96be13114e1",
+      "sha256": "c0ab08168579430e8c0add29e81ca7ad080aee6cfb9bf6d67e6e215464123590",
       "sourceRefs": [
         "analysis/indy-nxt-discovery/output/deep_dive/tables/race_debrief_scores.csv",
         "analysis/indy-nxt-discovery/output/deep_dive/tables/full_field_lap_dynamics_by_race.csv",
@@ -918,7 +918,7 @@
       "eventId": "event_indy_nxt_2026_5538",
       "id": "upcoming_event_indy_nxt_2026_5538_music_city_grand_prix",
       "path": "analysis/predictive-race-intelligence/output/context-packs/upcoming-events/upcoming_event_indy_nxt_2026_5538_music_city_grand_prix.json",
-      "sha256": "ef834f68bd79569aac68b6ff2767e2c3547b3b1ee543a816bbf214b246cbc246",
+      "sha256": "48f12a2449f73f65e07c729e300436d5d56a612e9f28e8b361e4cfbd3fb57b5b",
       "sourceRefs": [
         "analysis/indy-nxt-discovery/output/deep_dive/tables/future_weekend_prep_inputs.csv",
         "analysis/indy-nxt-discovery/output/deep_dive/tables/race_debrief_scores.csv",
@@ -934,7 +934,7 @@
       "eventId": "event_indy_nxt_2026_5540",
       "id": "upcoming_event_indy_nxt_2026_5540_indy_nxt_by_firestone_at_milwaukee_mile",
       "path": "analysis/predictive-race-intelligence/output/context-packs/upcoming-events/upcoming_event_indy_nxt_2026_5540_indy_nxt_by_firestone_at_milwaukee_mile.json",
-      "sha256": "28aaa382922124a5a786f33cd4c3638973f5a165af17100de8956051522b7734",
+      "sha256": "542a5fe548884119b8f93be9f8dcd6a458245afb4df434c3f9cfbf1e86c2aa0d",
       "sourceRefs": [
         "analysis/indy-nxt-discovery/output/deep_dive/tables/future_weekend_prep_inputs.csv",
         "analysis/indy-nxt-discovery/output/deep_dive/tables/race_debrief_scores.csv",
@@ -950,7 +950,7 @@
       "eventId": "event_indy_nxt_2026_5541",
       "id": "upcoming_event_indy_nxt_2026_5541_grand_prix_of_monterey_race_2",
       "path": "analysis/predictive-race-intelligence/output/context-packs/upcoming-events/upcoming_event_indy_nxt_2026_5541_grand_prix_of_monterey_race_2.json",
-      "sha256": "e0f59931675de6f3b4b6473c55561b739cfead54f273eefad05ffab2a5b01c12",
+      "sha256": "f6ad1ca4a6fd3a478043c92322c2ae95c2f73b4b4108942f6131a5099f00d602",
       "sourceRefs": [
         "analysis/indy-nxt-discovery/output/deep_dive/tables/future_weekend_prep_inputs.csv",
         "analysis/indy-nxt-discovery/output/deep_dive/tables/race_debrief_scores.csv",
@@ -966,7 +966,7 @@
       "eventId": "event_indy_nxt_2026_5542",
       "id": "upcoming_event_indy_nxt_2026_5542_grand_prix_of_monterey_race_1",
       "path": "analysis/predictive-race-intelligence/output/context-packs/upcoming-events/upcoming_event_indy_nxt_2026_5542_grand_prix_of_monterey_race_1.json",
-      "sha256": "cb6dbab0ed0edb8e0ff520cc108f7e358b0f5b990120d073ffcb53366dc77f52",
+      "sha256": "373b2d78a490cb71bd2fed1d3eba85eb4c593cf3902e567d6417b477462325be",
       "sourceRefs": [
         "analysis/indy-nxt-discovery/output/deep_dive/tables/future_weekend_prep_inputs.csv",
         "analysis/indy-nxt-discovery/output/deep_dive/tables/race_debrief_scores.csv",
@@ -982,7 +982,7 @@
       "eventId": "event_indy_nxt_2026_5547",
       "id": "upcoming_event_indy_nxt_2026_5547_grand_prix_of_portland",
       "path": "analysis/predictive-race-intelligence/output/context-packs/upcoming-events/upcoming_event_indy_nxt_2026_5547_grand_prix_of_portland.json",
-      "sha256": "7e7ad9ffd95e546165b551d8e7a3afc25ac6c567682c1343ef27c8135ffd189b",
+      "sha256": "d40d3dc239695e91bff8375c7cedcd7fa3d64539ca2f2ae4a0d79959710deb80",
       "sourceRefs": [
         "analysis/indy-nxt-discovery/output/deep_dive/tables/future_weekend_prep_inputs.csv",
         "analysis/indy-nxt-discovery/output/deep_dive/tables/race_debrief_scores.csv",
@@ -994,7 +994,7 @@
       "type": "upcoming_event"
     }
   ],
-  "repoHead": "e104053",
+  "repoHead": "dbe9be2",
   "schemaVersion": "brycecast.predictiveRaceIntelligence.contextPackManifest.v1",
   "sourceHash": "900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681",
   "sourceRefs": [

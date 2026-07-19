@@ -178,7 +178,7 @@
   "eventId": "event_indy_nxt_2026_5540",
   "eventName": "INDY NXT by Firestone at Milwaukee Mile",
   "eventStartDate": "2026-08-30",
-  "generatedAt": "2026-07-19T01:20:51Z",
+  "generatedAt": "2026-07-19T02:26:14Z",
   "id": "upcoming_event_indy_nxt_2026_5540_indy_nxt_by_firestone_at_milwaukee_mile",
   "predictionBand": {
     "calibrationState": "not_calibrated_for_point_probability",
@@ -244,7 +244,7 @@
       "bytes": 8911,
       "path": "analysis/predictive-race-intelligence/output/model_scorecard.json",
       "role": "prediction validation",
-      "sha256": "c73c0e99819454d93cb3588ebaf153689ad97ca3085cc8336220e4fc7e00ed56"
+      "sha256": "d4f921b3cfb1f2e8f4497f78a768ed5c3bf6e24c50e82fcc8ab603d6bc8a7972"
     }
   ],
   "top10Path": [
