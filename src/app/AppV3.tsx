@@ -5,6 +5,7 @@ import { Link, RouterProvider, matchPath, useRouter } from './router';
 import { CarMark, Plate } from './components';
 import { useReadiness } from './useReadiness';
 import { useLiveSessionHistory } from './useLiveSessionHistory';
+import { useReplaySession } from './useReplaySession';
 import { HomeScreen } from '../screens/HomeScreen';
 import { LiveScreen } from '../screens/LiveScreen';
 import { RaceWeekScreen } from '../screens/RaceWeekScreen';
@@ -87,12 +88,15 @@ const Routes = () => {
   const { route } = useRouter();
   const readiness = useReadiness();
   const liveHistory = useLiveSessionHistory(readiness.payload);
+  const onLive = route.path === '/live';
+  const replayKey = onLive && !readiness.fixtureMode ? route.search.get('replay') : null;
+  const replay = useReplaySession(replayKey, liveHistory.reset);
   const raceDetail = matchPath('/races/:sessionId', route.path);
   const careerRace = matchPath('/career/race/:sessionId', route.path);
 
   let screen: ReactNode;
   if (route.path === '/') screen = <HomeScreen readiness={readiness} />;
-  else if (route.path === '/live') screen = <LiveScreen payload={readiness.payload} fixtureMode={readiness.fixtureMode} history={liveHistory.active} />;
+  else if (route.path === '/live') screen = <LiveScreen payload={readiness.payload} fixtureMode={readiness.fixtureMode} history={liveHistory.active} replay={replay.engaged ? replay : null} />;
   else if (route.path === '/race-week') screen = <RaceWeekScreen />;
   else if (raceDetail) screen = <RaceDetailScreen sessionId={raceDetail.sessionId} />;
   else if (route.path === '/races') screen = <RacesScreen />;
