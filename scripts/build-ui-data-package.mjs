@@ -1755,8 +1755,15 @@ const readLatestColdRaceCapture = () => {
   }
   const query = "SELECT checked_at || '\t' || session_key || '\t' || payload_json FROM race_snapshots WHERE flag='COLD' AND session_name LIKE 'Race%' ORDER BY id DESC LIMIT 1";
   // Open read-only: the archive may be an actively written live database, and
-  // this build must never mutate it.
-  const result = spawnSync('sqlite3', ['-readonly', dbPath, query], { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
+  // this build must never mutate it. Some hosts refuse `-readonly` on this
+  // archive (SQLITE_CANTOPEN 14); the immutable URI is the working read path
+  // there, and is safe because the roll-forward only builds against a settled
+  // post-race archive — never mid-session.
+  let result = spawnSync('sqlite3', ['-readonly', dbPath, query], { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
+  if (result.status !== 0 || !result.stdout.trim()) {
+    const uri = `file:${dbPath.split(path.sep).map(encodeURIComponent).join('/')}?immutable=1`;
+    result = spawnSync('sqlite3', [uri, query], { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
+  }
   if (result.status !== 0 || !result.stdout.trim()) {
     return { available: false, reason: `no COLD race snapshot readable from live capture (${result.stderr?.trim() || 'empty result'})` };
   }
