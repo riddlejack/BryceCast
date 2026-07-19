@@ -397,3 +397,72 @@ analytics; raw data never redistributed via the site); Timing71 data
 labeled third-party-normalized per its state format docs; identity
 mapping (no official driver/session IDs in Timing71) needs a validated
 crosswalk before any UI use.
+
+---
+
+## Addendum 3 (2026-07-18, night): the execution plan — two tracks, waves
+
+Read with `docs/FABLE_LESSONS.md` (the design-judgment inheritance; it is
+the in-repo carrier of the lead session's context — treat it as memory).
+
+**The adapter-contract law.** Every Track-1 feature consumes a typed
+interface sized for the lake (e.g., `sectionObservations`,
+`restartEvents`, `venueDossier`), with v1 fed by today's sources (parsed
+PDFs, canonical results, Open-Meteo/NWS) and v2 swapping in lake-derived
+data with NO UI rework. Workers design the contract first, then the v1
+source. The Timing71 1–2s cadence is a semantic-layer concern (event
+observations with real timestamps), never a UI concern.
+
+**Wave 0 — immediate (race weekend; zero runtime disturbance):**
+- Family-tunnel check (Jack): what does the public link serve on race day?
+- RaceTools provenance email (Jack).
+- Lake adversarial audit (Codex autoreview or Opus-xhigh, READ-ONLY):
+  verify manifests/checksums/coverage of `1e61227`
+  (`codex/historical-high-frequency-audit`), spot-decode sessions against
+  official lap charts, review reducer code. GATE: merge to master only
+  after this passes. Nothing consumes the lake before the gate.
+
+**Wave 1 — Bryce's features, lake-independent (parallel Opus-high
+workers, start now):**
+- Brief G (dossier + weather): G-data slice then G-ui slice.
+- Brief H v1 (heat map): FIRST the timing-map check (do the 49 map
+  packages carry physical loop locations? if yes, anchors come from data
+  and the curation step dies), then labels → heat map → drawer → scopes
+  on existing section data, behind the v2-ready contract. Fable gates:
+  anchor geometry + first heat-map render.
+- Brief K v1 (restart card): one worker, one gate.
+
+**Wave 2 — the platform (Codex lanes, begin after Wave 0 gate):**
+- Semantic layer: normalize all sessions to canonical timing tables
+  (loop crossings, laps, flags, located incidents, pits, weather) with
+  quality masks + Timing71 identity crosswalk; validate against official
+  lap charts AND our own capture where both exist. Rulebook: the
+  `brycecast-semantic-layer` Codex skill.
+- `$P` telemetry decode experiment (2020–23) vs `$S` crossings + static
+  maps — decides segment-risk defensibility and between-loop positioning.
+- Guardrail revision doc once scope is known (small Opus task).
+
+**Wave 3 — lake-powered, in delight order (after Wave 2 validation):**
+1. **L Time Machine** first — reducer → replay adapter → race-page
+   "watch this race unfold" button; its FIRST customer is our own
+   Nashville 2026 capture (the post-race auto-debrief moment).
+2. H v2 (multi-year heat maps, full lap scopes, located passes/incidents
+   via Brief I extraction — I is now decode+validate, not
+   reconstruction).
+3. M Quali/Practice Lab; K v2 (16-year restart baselines); J stage 1
+   (incident atlas = counting) + stage 2 (live compression).
+4. N Graduates + pace/field-strength backbone — research first,
+   Fable-gated on framing before any UI.
+- J stage 3 (caution model): patient research lane; calibration harness,
+  abstention, experimental label, team-depth layer only.
+
+**Delegation topology:** ONE Fable director (taste must not fragment);
+many parallel Opus workers (high for UI, xhigh for adversarial
+review/decode, medium for mechanical chores); Codex owns Track-2 lanes.
+Jack reviews screenshots at gates; Fable-mandatory gates: lake audit
+verdict, H anchor geometry, first heat-map render, Graduates framing,
+any model output, Time Machine merge.
+
+**Owed taste pass:** one screenshot review of the A2/B/C surfaces
+(odometer, atlas, moments) against the DESIGN_TASTE blacklist — they
+shipped during consolidation without a Fable gate.

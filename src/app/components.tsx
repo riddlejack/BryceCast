@@ -101,7 +101,7 @@ export const Stat = ({
       {value}
       {unit ? <span className="stat__unit">{unit}</span> : null}
     </span>
-    {delta ? <span className={`stat__delta ${delta.direction === 'up' ? 'stat__delta--up' : 'stat__delta--down'}`}>{delta.text}</span> : null}
+    {delta ? <span className={`stat__delta ${delta.direction === 'up' ? 'stat__delta--up' : delta.direction === 'down' ? 'stat__delta--down' : 'stat__delta--flat'}`}>{delta.text}</span> : null}
     {note ? <span className="stat__note">{note}</span> : null}
   </div>
 );

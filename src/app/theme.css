@@ -326,6 +326,7 @@ button { font-family: inherit; }
 /* Jack (race-detail review): the down arrow is the down arrow — mirror the
  * green gains in red. Facts, not editorial. */
 .stat__delta--down { color: var(--status-bad); }
+.stat__delta--flat { color: var(--ink-secondary); }
 
 .stat__note {
   margin-top: 3px;
