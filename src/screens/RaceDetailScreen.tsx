@@ -8,6 +8,8 @@ import { asNumber, asString, formatDate, formatGain, formatNumber, formatPositio
 import { Link } from '../app/router';
 import { displayRaceLabel, loadDebriefBySessionId, roundIndexOf, type ArchiveEntry } from '../data/debriefArchive';
 import { loadRaceStory, type RaceStoryPack, type RaceStoryLapDriver } from '../data/raceStory';
+import { getVenueBySessionId, weatherDeltaText } from '../data/venueDossier';
+import type { UiVenueDossierVenue, UiVenueDossierVisit } from '../data/uiDataPackage';
 
 type Row = Record<string, unknown>;
 
@@ -377,7 +379,46 @@ const DayTile = ({ label, value, note }: { label: string; value: ReactNode; note
   </div>
 );
 
-const TheDay = ({ story, pack }: { story: RaceStoryPack; pack: ArchiveEntry['pack'] }) => {
+/** Year-over-year conditions strip: this visit against Bryce's previous race at
+ *  the same venue. Neutral wording — a delta is a fact about the day. Renders
+ *  only when the venue has been visited at least twice. */
+const YoYConditionsStrip = ({ venue, visit }: { venue: UiVenueDossierVenue; visit: UiVenueDossierVisit }) => {
+  const prior = venue.visits.find((candidate) => candidate.sessionId === visit.deltaVsPrior?.priorSessionId) ?? null;
+  const here = visit.conditions;
+  if (!visit.deltaVsPrior || !here) return null;
+  const deltaText = weatherDeltaText(visit.deltaVsPrior);
+  const thisLine = [
+    here.ambientTempF !== null ? `${here.ambientTempF}°F` : null,
+    here.humidityPct !== null ? `${Math.round(here.humidityPct)}% humidity` : null,
+    here.windSpeedMph !== null ? `wind ${here.windSpeedMph} mph${here.windCardinal ? ` ${here.windCardinal}` : ''}` : null
+  ]
+    .filter(Boolean)
+    .join(' · ');
+  const priorHref = prior && prior.conditions ? prior.raceHref : null;
+  return (
+    <div style={{ borderTop: '1px solid var(--grid-hairline)', marginTop: 14, paddingTop: 12 }}>
+      <span className="caption">This place, other years</span>
+      <p style={{ margin: '6px 0 0', fontSize: 13, color: 'var(--ink-secondary)' }}>
+        <span style={{ color: 'var(--ink-primary)', fontWeight: 560 }}>{visit.seasonYear}:</span> {thisLine || 'no near-track reading'}
+        {deltaText && visit.deltaVsPrior ? (
+          <>
+            {' · vs '}
+            {priorHref ? (
+              <Link to={priorHref} className="navlink" style={{ padding: 0 }}>
+                {visit.deltaVsPrior.priorSeasonYear}
+              </Link>
+            ) : (
+              visit.deltaVsPrior.priorSeasonYear
+            )}
+            {`: ${deltaText}`}
+          </>
+        ) : null}
+      </p>
+    </div>
+  );
+};
+
+const TheDay = ({ story, pack, venue, visit }: { story: RaceStoryPack; pack: ArchiveEntry['pack']; venue: UiVenueDossierVenue | null; visit: UiVenueDossierVisit | null }) => {
   const weather = story.weather;
   const context = pack.raceContext;
   const leader = asString(context?.topLeader);
@@ -456,6 +497,7 @@ const TheDay = ({ story, pack }: { story: RaceStoryPack; pack: ArchiveEntry['pac
           <DayTile label="Sky" value={sky} note="during the race hour" />
         ) : null}
       </div>
+      {venue && venue.visits.length >= 2 && visit ? <YoYConditionsStrip venue={venue} visit={visit} /> : null}
     </Card>
   );
 };
@@ -777,6 +819,16 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
       : null;
   const bryceStatus = story?.bryce.status ?? null;
   const outline = trackOutlineFor(asString(pack.track.name));
+  const dossierVenue = getVenueBySessionId(sessionId);
+  const dossierVisit = dossierVenue?.visits.find((visit) => visit.sessionId === sessionId) ?? null;
+  /* Historic race-hour wind, drawn on the hero shape (real-geo outlines only). */
+  const heroWind =
+    dossierVisit?.conditions && dossierVisit.conditions.windDirectionDeg !== null
+      ? {
+          bearingDeg: dossierVisit.conditions.windDirectionDeg,
+          label: `from ${dossierVisit.conditions.windCardinal ?? '—'}${dossierVisit.conditions.windSpeedMph !== null ? ` · ${dossierVisit.conditions.windSpeedMph} mph` : ''}`
+        }
+      : null;
 
   return (
     <div className="page stack">
@@ -829,7 +881,7 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
           {/* Fixed art zone: every venue letterboxes into the same box, so the
               layout never shifts race to race (street circuits stay calm and empty). */}
           <div className="hero-race__art">
-            {outline ? <TrackArt outline={outline} showCornerLabels={false} maxHeight={150} /> : null}
+            {outline ? <TrackArt outline={outline} showCornerLabels={false} maxHeight={150} wind={heroWind} /> : null}
           </div>
           <div className="row" style={{ gap: 28, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
             <Stat label="Points scored" value={impact?.racePoints ?? asNumber(pack.outcome.points) ?? '—'} />
@@ -849,7 +901,7 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
 
       {story ? <LapChartCard story={story} mover={mover} /> : null}
 
-      {story ? <TheDay story={story} pack={pack} /> : null}
+      {story ? <TheDay story={story} pack={pack} venue={dossierVenue} visit={dossierVisit} /> : null}
 
       <div className="grid grid--2">
         {story ? <TeamStory story={story} /> : null}

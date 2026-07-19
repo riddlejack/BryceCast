@@ -10,7 +10,8 @@ export const TrackArt = ({
   annotation,
   showCornerLabels = true,
   maxHeight,
-  progress
+  progress,
+  wind
 }: {
   outline: TrackOutline;
   annotation?: { corner: string; note: string } | null;
@@ -21,6 +22,12 @@ export const TrackArt = ({
   /** Optional sourced lap progress. Draws a second ink stroke over a quiet
    * outline; it is race completion, never a car/GPS position. */
   progress?: number;
+  /** Near-track wind, drawn as a quiet flow arrow beside the shape and turned
+   *  to true north via the outline's geographic orientation. Rendered ONLY for
+   *  real-geo (OSM) outlines that carry northOffsetDeg — image-traced street
+   *  circuits have no orientation, so the wind is honestly omitted there.
+   *  bearingDeg is the compass direction the wind blows FROM (0=N, 90=E). */
+  wind?: { bearingDeg: number; label: string } | null;
 }) => {
   const [ref, measuredWidth] = useMeasuredWidth<HTMLDivElement>();
   const [tip, setTip] = useState<ChartTip | null>(null);
@@ -131,6 +138,28 @@ export const TrackArt = ({
               );
             })}
         </svg>
+      ) : null}
+      {wind && typeof outline.northOffsetDeg === 'number' ? (
+        <div
+          className="track-wind"
+          title={`Near-track wind ${wind.label} (modeled, not official)`}
+          aria-label={`Near-track wind ${wind.label}`}
+        >
+          <svg
+            width={22}
+            height={22}
+            viewBox="0 0 22 22"
+            aria-hidden
+            /* Flow arrow: points the way the air moves across the track
+             * (bearing is the FROM direction, so it blows toward +180),
+             * turned to true north by the outline's geographic offset. */
+            style={{ transform: `rotate(${wind.bearingDeg + 180 + outline.northOffsetDeg}deg)` }}
+          >
+            <line x1={11} y1={17.5} x2={11} y2={5} stroke="var(--ink-secondary)" strokeWidth={1.6} strokeLinecap="round" />
+            <path d="M11 3.2 L15 8.4 L11 6.7 L7 8.4 Z" fill="var(--ink-secondary)" />
+          </svg>
+          <span className="track-wind__label">{wind.label}</span>
+        </div>
       ) : null}
       {tip ? <ChartTipCard tip={tip} width={measuredWidth} /> : null}
     </div>
