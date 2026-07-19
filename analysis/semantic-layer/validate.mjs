@@ -55,6 +55,30 @@ const nash = JSON.parse(await readFile(join(OUT, 'nashville', 'loop-inventory.js
 check('nashville: feed carries more loops than published (both races)', nash.races.length === 2 && nash.races.every((r) => r.feedCarriesMoreThanPublished));
 check('nashville: published fraction ~0.43-0.44', nash.races.every((r) => r.official.publishedLapFractionMedian > 0.4 && r.official.publishedLapFractionMedian < 0.47));
 
+// 5. Slice 2: Timing71 2026 tables + identity crosswalk.
+const t71 = JSON.parse(await readFile(join(OUT, 'timing71-2026-summary.json'), 'utf8'));
+check('t71: 33 validated 2026 sessions', t71.sessionCount === 33, `${t71.sessionCount}`);
+check('t71: every session sourceTier timing71_normalized', t71.sessions.every((s) => s.sourceTier === 'timing71_normalized'));
+check('t71: maxLap matches audit coverage for all 33', t71.sessions.every((s) => s.maxLapMatchesCoverage === true));
+
+const cw = JSON.parse(await readFile(join(OUT, 'crosswalk', 'identity-crosswalk-2026.json'), 'utf8'));
+check('crosswalk: 33/33 sessions complete', cw.completeSessions === 33, `${cw.completeSessions}`);
+check('crosswalk: >=31 sessions strict event scope', cw.sessions.filter((s) => s.strictEventScope).length >= 31);
+check('crosswalk: zero ambiguous mappings anywhere', cw.sessions.every((s) => s.counts.ambiguous === 0));
+
+const cwv = JSON.parse(await readFile(join(OUT, 'crosswalk', 'crosswalk-validation.json'), 'utf8'));
+check('crosswalk validation: no hard failures', cwv.hardFailures.length === 0, JSON.stringify(cwv.hardFailures.slice(0, 3)));
+check('crosswalk validation: zero NO-GO sessions', cwv.noGoCount === 0, `${cwv.noGoCount}`);
+check('crosswalk validation: >=5 two-source cross-checks', cwv.twoSourceCrossChecks.length >= 5);
+check(
+  'crosswalk validation: identity 100% on all non-thin cross-checks',
+  cwv.twoSourceCrossChecks.filter((c) => !c.thinCapture).every((c) => c.identity.agree === c.identity.checked),
+);
+
+const cap = JSON.parse(await readFile(join(OUT, 'cross-check', 'capture-final-states.json'), 'utf8'));
+check('capture extract: present with >=9 NXT sessions', cap.sessions.length >= 9, `${cap.sessions.length}`);
+check('capture extract: sourceTier brycecast_capture', cap.sessions.every((s) => s.sourceTier === 'brycecast_capture'));
+
 // Report.
 const passed = checks.filter((c) => c.ok).length;
 console.log(`\nsemantic-layer validator: ${passed}/${checks.length} checks passed`);

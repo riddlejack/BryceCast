@@ -1,9 +1,15 @@
-# analysis/semantic-layer — slice 1: loop-crossing extraction
+# analysis/semantic-layer — canonical timing tables over the historical lake
 
-The first lane to consume the cleared historical data lake. It normalizes the
-2024–25 INDY NXT **RaceTools captures** into canonical timing tables
-(`loop_crossings`, `laps`, `flags`, `classification`) and validates them along two
-independent axes plus the Nashville loop-inventory proof.
+The first lane to consume the cleared historical data lake.
+
+- **Slice 1** normalizes the 2024–25 INDY NXT **RaceTools captures** into canonical
+  timing tables (`loop_crossings`, `laps`, `flags`, `classification`) and validates
+  them along two independent axes plus the Nashville loop-inventory proof.
+- **Slice 2** normalizes the 33 validated **Timing71 2026 replays** to the same
+  shapes (event-observation grain) and builds the **identity crosswalk** — the
+  correctness gate for any 2026 lake data reaching the UI — validated against the
+  audit's three trap classes plus a two-source cross-check vs BryceCast's own
+  live capture.
 
 Nothing here is user-visible and nothing ships: this lane is upstream of both the
 lake→master merge and any UI. All rows are labelled `sourceTier: racetools_capture`
@@ -30,12 +36,24 @@ of catalog regeneration.
 ## Commands
 
 ```bash
+# slice 1 (RaceTools 2024-25)
 npm run analytics:semantic-layer                 # build all per-session tables
 npm run analytics:semantic-layer:finishing-order # axis (a) vs canonical
 npm run analytics:semantic-layer:section-times   # axis (b) vs official PDFs
 npm run analytics:semantic-layer:nashville       # the Nashville loop-inventory proof
+# slice 2 (Timing71 2026 + crosswalk)
+npm run analytics:semantic-layer:timing71        # build 2026 event-grain tables
+npm run analytics:semantic-layer:crosswalk       # build the identity crosswalk
+npm run analytics:semantic-layer:crosswalk:validate # traps + two-source + GO/NO-GO
+# gate
 npm run analytics:semantic-layer:validate        # lane gate (exits non-zero on failure)
 ```
+
+The capture cross-check input (`output/cross-check/capture-final-states.json`)
+is regenerated with `node analysis/semantic-layer/extract-capture-states.mjs
+--db <APFS clone of data/live/brycecast.sqlite>`; make the clone with `cp -c`
+(instant, copy-on-write, no lock contention) and NEVER read the live runtime
+during a race window.
 
 ## Outputs
 
@@ -71,5 +89,17 @@ small while still shipping the complete grain.
   "Lap" time to **0.0000 s** (median) for **21/25** races; residuals are confined to
   caution/red-flag/pit laps. Nashville's 3 published sub-sections map to feed spans
   within ~0.08–0.10 s median.
+- **Slice 2 — Timing71 2026:** all 33 sessions decode with max-lap agreement
+  **33/33** vs the audit coverage matrix; race classification matches canonical
+  exactly (positions **24/24** and lap counts **24/24**) for **11/12** races — the 12th
+  (Road America R2) is a capture-confirmed as-raced vs official divergence
+  (post-race DQ of the on-road winner).
+- **Identity crosswalk:** **33/33** sessions fully mapped, zero ambiguous/unmapped
+  (31 strict event scope; the 2 pre-race Nashville 2026 sessions via labelled
+  season fallback). All three audit trap classes covered by explicit tests.
+  Two-source cross-check vs our own capture: identity **100%** on all 9
+  overlapping sessions, laps exact on 201/202 car-results.
+- **GO/NO-GO:** **30 GO / 3 CONDITIONAL / 0 NO-GO** —
+  `output/crosswalk/crosswalk-validation.json`.
 
 See the lane report / commit history for the full tables and named deviations.

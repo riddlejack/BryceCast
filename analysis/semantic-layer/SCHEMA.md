@@ -122,29 +122,68 @@ lists them separately; `heartbeat_gap` alone is a valid race and kept.
   (differences of his crossing timestamps) vs parsed official Section Results.
 - **Nashville proof** — `output/nashville/loop-inventory.json` + per-race interval packs.
 
-## Slice 2 — design notes (do NOT build here)
+## Slice 2 — Timing71 2026 event-grain + the identity crosswalk (BUILT)
 
-Slice 2 extends the same table shapes to the **Timing71 2026 replays** and adds the
-**identity crosswalk**. Design intent, not implementation:
+Slice 2 extends the same canonical shapes to the **33 validated 2026 Timing71
+replays** (selected by the audit-validated coverage matrix committed on this
+branch at `data/historical-data-lake/catalog/coverage-2024-through-today.csv`)
+and builds the **identity crosswalk**.
 
-1. **Timing71 rows** carry `sourceTier: timing71_normalized`. Timing71 exposes
-   reconstructed display-state frames (running order, gaps, sectors, laps, pits,
-   flags) at a 1–2 s cadence — an *event-observation* grain with real archive
-   timestamps, never interpolated. Loop-crossing grain is not directly available;
-   the crosswalk maps Timing71 sector/lap observations onto the same `laps`/`flags`
-   tables, with `loop_crossings` left sparse (or absent) for 2026 until/unless a
-   loop-level source appears.
-2. **Identity crosswalk** (the correctness gate for any 2026 UI use, per the ledger):
-   a committed, validated per-`(season, event, session)` map of
-   `(car number, source name string) → canonical driverId`, built from decoded
-   segment rosters. It must be event-scoped (car numbers are reused across seasons —
-   #14 Pierson→de Tullio, #28 Hauger→Taylor), tolerate name-format divergence
-   ("JM Correa" vs "Juan Manuel Correa" vs `driver_juan_manuel_correa`), fail hard on
-   unmatched/ambiguous entries, and be human-reviewed once per season. Silent-failure
-   modes to guard: stale rosters at recording boundaries, mid-season car swaps, and
-   cross-series number collisions inside a single recording (a car #9 that is Bryce in
-   the NXT segment and a different driver in an adjacent INDYCAR segment).
-3. **Unification**: with the crosswalk, `laps`/`flags`/`classification` unify across
-   `racetools_capture` (2024–25 loop-grain) and `timing71_normalized` (2026 event-grain)
-   under one `driverId`, so downstream consumers read one interface with a per-row
-   `sourceTier` (the adapter-contract law: v2 swaps sources with no UI rework).
+### Timing71 2026 tables (`output/sessions-2026/<id>.ndjson.gz` + `output/timing71-2026-summary.json`)
+
+Every row carries `sourceTier: timing71_normalized`. Grain is EVENT OBSERVATION
+at real archive timestamps (`observedAtEpoch`, UTC epoch seconds, 1-2 s cadence,
+no interpolation) — a different clock domain from slice 1's local seconds-of-day.
+
+- `session_meta` / `roster` — identity as displayed by the source (car, name
+  string, team), plus the recording description and quality masks.
+- `lap` — a car's Laps counter incrementing between frames: `{car, lap,
+  endObservedAtEpoch (quantized), lapSeconds (the state's own precise "Last"
+  lap time), positionAtSF (running order at the increment), lapDelta}`.
+- `loop_crossing` — the same events as S/F-only crossings (`sectionLabel: LAP`,
+  `endLoop: SF`, `quantized: true`). No sub-lap loop grain exists in this source.
+- `sector_observation` — S1/S2/S3 completions where the display carries sector
+  values (road-course practice/quali; race displays carry only styling flags).
+- `flag` — `session.flagState` transitions with observed timestamps.
+- `classification` — the final NXT-segment frame's running order (see caveat
+  below: this is the AS-DISPLAYED final state, not official classification).
+
+Additional masks: `cross_session_recording_segmented` (NXT session extracted
+from a recording that also holds an adjacent INDYCAR session; the parser ends
+the segment at the field-wide lap-counter reset — the stale-roster hazard),
+`thin_capture`, `sparse_lap_observation`, `no_bryce_roster_segment`.
+
+### The identity crosswalk (`output/crosswalk/identity-crosswalk-2026.json`)
+
+Per 2026 session: `(car number, source name string) -> canonical driverId`,
+**event-scoped**. The number join proposes candidates; the name check disposes
+(exact / `given_prefix` "Seb~Sebastian" / `given_initials` "JM~Juan Manuel" /
+suffix-tolerant families "de Alba Jr"). Statuses: `mapped_exact`,
+`mapped_name_variant`, `mapped_swap_resolved` (mid-season same-car driver swaps
+— #76 Allaer/Escotto, #15 Stati/Sundaramoorthy — resolved by name),
+`mapped_season_scope` (event has no canonical results yet, e.g. the pre-race
+Nashville 2026 weekend; never a strict UI GO), `ambiguous` / `unmapped` (HARD
+failures — nothing passes silently).
+
+Validation (`validate-crosswalk.mjs`, artifact `crosswalk-validation.json`):
+the three audit trap classes as explicit test cases (same-season name variants;
+season-to-season number reuse #14/#27/#28 plus every other reused number;
+cross-series recordings where #9 is two different drivers), Timing71 final
+order vs canonical for all 12 races, a TWO-SOURCE cross-check vs BryceCast's
+own capture (official Race Control feed, `output/cross-check/`) for every
+overlapping session, and a GO / CONDITIONAL / NO-GO verdict per session.
+
+**Classification caveat (proven by the gate):** Timing71's final state is the
+as-crossed order. Road America R2 2026 diverges from canonical because #14 de
+Tullio was disqualified post-race (canonical P23) after winning on the road —
+both live sources agree 24/24 with each other. UI classification must always
+come from canonical results; the timing/lap/identity tables remain valid.
+
+### Unification (slice 3+, not built)
+
+With the crosswalk, `laps`/`flags`/`classification` unify across
+`racetools_capture` (2024-25 loop grain) and `timing71_normalized` (2026 event
+grain) under one `driverId`, so downstream consumers read one interface with a
+per-row `sourceTier` (the adapter-contract law: v2 swaps sources with no UI
+rework). The variant name rules are the carrier for joining 2024-25 RaceTools
+name strings ("Juan Manuel Correa") to the same driverIds.
