@@ -83,6 +83,27 @@ Observed sample field drift matters. The 2024 derived CSV contains lap/section/T
 
 Archive filenames are not sufficient identity. One 2025 Indianapolis Race 1-labelled ZIP is a 22-session mixed NXT/INDYCAR capture. Ingestion must reject any file whose preamble/session markers do not resolve to exactly the expected event, series, and session window.
 
+## Timing71 candidate replay archive
+
+Provenance label: **third-party normalized replay of live INDYCAR timing**.
+
+| Record/family | Observed/documented cadence | Source or derived | Safe meaning | Validation still required |
+|---|---|---|---|---|
+| timestamped full state (`.json`) | full state every tenth retained observation | normalized source state | complete Timing71 display state at the file's wall-clock second | reconstruct manifest/column semantics and validate session boundary |
+| timestamped incremental frame (`i.json`) | intervening retained observations | delta from prior state | source-observed display-state changes in that second | apply frames in order; never treat an incremental frame as standalone |
+| ordered `cars` array | asynchronous source changes serialized at 1–2-second file cadence | normalized source state | published classification/order and timing values | compare rank, gaps, laps, and final order to official reports |
+| `Gap` / `Int` | asynchronous timing updates | normalized timing field | classification gap/interval proxy | not metres, Euclidean separation, GPS, or continuous closing distance |
+| sector/lap/speed columns | timing-line/lap driven | normalized timing field | displayed sector, lap, and speed values | units, stale-value markers, and cross-session column drift |
+| `session.flagState` | event driven | normalized flag state | displayed flag at the replay timestamp | flag decision time is not necessarily physical incident onset |
+| messages | event driven | normalized display messages | timestamped timing/control context where present | message completeness and exact source lineage |
+| car number and driver name | stable within the validated clean NXT races | display identity | session-local identity and canonical crosswalk input | no official `DriverID`; require roster gate and versioned crosswalk |
+| `trackData` | absent because representative `trackDataSpec` is empty | unavailable | no track/weather data in audited NXT replay | do not infer weather or surface state |
+| GPS/track coordinates | absent | unavailable | none | do not infer turn occupancy, lateral overlap, or physical pair distance |
+
+The recorder deliberately keeps only the latest state when multiple source updates occur in the same wall-clock second. Observed replay cadence is therefore **coalesced near-one-second state**, not every upstream packet. Road America Race 2 had 5,421 states over 6,183 seconds, with median gap one second, p95 two seconds, and maximum two seconds.
+
+Description text is not a reliable session key. Three complete 2026 NXT races are embedded in captures named from later INDYCAR manifests, while two NXT-labelled files are false positives. Import must combine expected time window, NXT roster, flag lifecycle, and lap maximum rather than trusting the filename.
+
 ## Candidate adjacent archives: non-transferable lessons
 
 | Source/series | Useful lesson | Why it cannot be substituted for INDY NXT |

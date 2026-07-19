@@ -1,0 +1,446 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-07-19T02:13:06.758Z",
+  "throughDate": "2026-07-18",
+  "completionDefinition": "Completeness is established by two independent methods. (1) Source-index completeness: every file exposed by the tested RaceTools indexes and Timing71 IndyCar archive for 2024 through the through-date is mirrored. (2) Official-schedule reconciliation: every completed canonical INDY NXT championship-weekend session (practice/qualifying/race, status \"official\") is matched by date and type against a lake high-frequency capture, per catalog/coverage-reconciliation.json. Exactly one canonical session is a documented exception — 2025 Iowa Qualifications (session_indy_nxt_2025_6596, 2025-07-11): it carries zero qualifying results in the canonical dataset, has no official-schedule window or weather observation, and has no RaceTools or Timing71 capture — evidence consistent with a cancelled/converted session, recorded as unmapped-with-evidence rather than assumed present. Neither method proves that an unlisted private test or recording never existed.",
+  "officialScheduleReconciliation": {
+    "source": "catalog/coverage-reconciliation.json",
+    "generatedAt": "2026-07-19T02:13:06.697Z",
+    "method": "Reconcile the lake high-frequency coverage matrix against the canonical career dataset (the official session list). Canonical INDY NXT practice/qualifying/race sessions are collapsed to physical (event, date, type) sessions and matched to a lake capture by exact date and type, with a ±1-day fallback. This is official-schedule reconciliation, not source-index self-consistency.",
+    "pastChampionshipSessions": 129,
+    "matchedCount": 128,
+    "unmatchedCount": 1,
+    "unmappedWithEvidence": [
+      {
+        "date": "2025-07-11",
+        "sessionType": "qualifying",
+        "eventName": "INDY NXT by Firestone at Iowa Speedway",
+        "canonicalSessionIds": [
+          "session_indy_nxt_2025_6596"
+        ],
+        "classification": "evidence_consistent_with_cancellation",
+        "detail": "Canonical marks the session official but it carries zero qualifying/race results, no official-schedule window, and no weather observations, and no lake high-frequency capture exists. Consistent with a cancelled or converted session rather than a missing high-frequency source. Recorded as unmapped-with-evidence."
+      }
+    ]
+  },
+  "acquisition": {
+    "sourceFiles": 1046,
+    "uniqueObjects": 1046,
+    "logicalBytes": 7506746405,
+    "uniqueBytes": 7506746405,
+    "exactDuplicateBytesAvoided": 0,
+    "bySourceYear": {
+      "racetools-annual:2008": {
+        "files": 1,
+        "bytes": 208492983
+      },
+      "racetools-annual:2009": {
+        "files": 1,
+        "bytes": 83595687
+      },
+      "racetools-annual:2010": {
+        "files": 1,
+        "bytes": 98460419
+      },
+      "racetools-annual:2011": {
+        "files": 1,
+        "bytes": 106782539
+      },
+      "racetools-annual:2012": {
+        "files": 1,
+        "bytes": 96489920
+      },
+      "racetools-annual:2013": {
+        "files": 1,
+        "bytes": 95062918
+      },
+      "racetools-annual:2014": {
+        "files": 1,
+        "bytes": 156378536
+      },
+      "racetools-annual:2015": {
+        "files": 1,
+        "bytes": 194400401
+      },
+      "racetools-annual:2016": {
+        "files": 1,
+        "bytes": 210000957
+      },
+      "racetools-annual:2017": {
+        "files": 1,
+        "bytes": 212529195
+      },
+      "racetools-annual:2018": {
+        "files": 1,
+        "bytes": 232797095
+      },
+      "racetools-annual:2019": {
+        "files": 1,
+        "bytes": 461341646
+      },
+      "racetools-annual-telemetry:2020": {
+        "files": 1,
+        "bytes": 541608078
+      },
+      "racetools-annual:2020": {
+        "files": 1,
+        "bytes": 98623019
+      },
+      "racetools-annual-telemetry:2021": {
+        "files": 1,
+        "bytes": 869077649
+      },
+      "racetools-annual:2021": {
+        "files": 1,
+        "bytes": 175545285
+      },
+      "racetools-annual-telemetry:2022": {
+        "files": 1,
+        "bytes": 980195652
+      },
+      "racetools-annual:2022": {
+        "files": 1,
+        "bytes": 165391232
+      },
+      "racetools-annual-telemetry:2023": {
+        "files": 1,
+        "bytes": 1080803471
+      },
+      "racetools-annual:2023": {
+        "files": 1,
+        "bytes": 173947895
+      },
+      "racetools-annual:2024": {
+        "files": 1,
+        "bytes": 187952207
+      },
+      "racetools-indycar-maps:all": {
+        "files": 39,
+        "bytes": 7106263
+      },
+      "racetools-session-2025:2025": {
+        "files": 230,
+        "bytes": 182193929
+      },
+      "racetools-session-2026-root:2026": {
+        "files": 2,
+        "bytes": 2011406
+      },
+      "timing71-analysis:2024": {
+        "files": 138,
+        "bytes": 21886707
+      },
+      "timing71-replay:2024": {
+        "files": 138,
+        "bytes": 261047361
+      },
+      "timing71-analysis:2025": {
+        "files": 134,
+        "bytes": 22858626
+      },
+      "timing71-replay:2025": {
+        "files": 134,
+        "bytes": 264749319
+      },
+      "timing71-analysis:2026": {
+        "files": 105,
+        "bytes": 16370577
+      },
+      "timing71-replay:2026": {
+        "files": 105,
+        "bytes": 299045433
+      }
+    }
+  },
+  "catalog": {
+    "sessions": 5258,
+    "byYearSourceSeriesType": {
+      "2008:RaceTools:unknown:other": 21,
+      "2008:RaceTools:INDYCAR:race": 4,
+      "2008:RaceTools:unknown:practice": 3,
+      "2008:RaceTools:unknown:race": 1,
+      "2008:RaceTools:INDYCAR:practice": 7,
+      "2008:RaceTools:INDY_NXT:practice": 3,
+      "2008:RaceTools:INDYCAR:qualifying": 1,
+      "2008:RaceTools:unknown:qualifying": 5,
+      "2008:RaceTools:INDY_NXT:race": 1,
+      "2009:RaceTools:unknown:other": 23,
+      "2009:RaceTools:unknown:practice": 11,
+      "2009:RaceTools:unknown:qualifying": 5,
+      "2009:RaceTools:unknown:race": 10,
+      "2009:RaceTools:INDYCAR:practice": 9,
+      "2009:RaceTools:INDYCAR:other": 8,
+      "2009:RaceTools:INDYCAR:race": 4,
+      "2009:RaceTools:INDY_NXT:practice": 1,
+      "2009:RaceTools:INDY_NXT:race": 1,
+      "2009:RaceTools:INDYCAR:qualifying": 3,
+      "2009:RaceTools:INDY_NXT:other": 1,
+      "2009:RaceTools:INDY_NXT:qualifying": 1,
+      "2010:RaceTools:unknown:practice": 21,
+      "2010:RaceTools:unknown:other": 25,
+      "2010:RaceTools:unknown:race": 8,
+      "2010:RaceTools:INDYCAR:other": 3,
+      "2010:RaceTools:INDYCAR:race": 4,
+      "2010:RaceTools:unknown:qualifying": 5,
+      "2010:RaceTools:INDY_NXT:practice": 3,
+      "2010:RaceTools:INDY_NXT:qualifying": 1,
+      "2010:RaceTools:INDY_NXT:race": 1,
+      "2010:RaceTools:INDYCAR:practice": 12,
+      "2010:RaceTools:INDYCAR:qualifying": 3,
+      "2011:RaceTools:INDYCAR:practice": 25,
+      "2011:RaceTools:INDY_NXT:practice": 14,
+      "2011:RaceTools:INDYCAR:qualifying": 4,
+      "2011:RaceTools:INDY_NXT:qualifying": 5,
+      "2011:RaceTools:INDYCAR:race": 7,
+      "2011:RaceTools:INDY_NXT:race": 5,
+      "2011:RaceTools:INDY_NXT:other": 1,
+      "2011:RaceTools:INDYCAR:other": 4,
+      "2011:RaceTools:unknown:practice": 36,
+      "2011:RaceTools:unknown:other": 17,
+      "2011:RaceTools:unknown:race": 17,
+      "2011:RaceTools:unknown:qualifying": 12,
+      "2012:RaceTools:unknown:practice": 18,
+      "2012:RaceTools:unknown:other": 5,
+      "2012:RaceTools:INDYCAR:other": 2,
+      "2012:RaceTools:INDYCAR:practice": 45,
+      "2012:RaceTools:INDYCAR:race": 14,
+      "2012:RaceTools:INDY_NXT:practice": 20,
+      "2012:RaceTools:INDY_NXT:qualifying": 10,
+      "2012:RaceTools:INDY_NXT:race": 9,
+      "2012:RaceTools:INDYCAR:qualifying": 10,
+      "2012:RaceTools:unknown:qualifying": 4,
+      "2012:RaceTools:unknown:race": 3,
+      "2012:RaceTools:INDY_NXT:test": 1,
+      "2012:RaceTools:unknown:test": 1,
+      "2013:RaceTools:INDYCAR:race": 39,
+      "2013:RaceTools:INDYCAR:practice": 41,
+      "2013:RaceTools:INDYCAR:qualifying": 13,
+      "2013:RaceTools:INDY_NXT:practice": 23,
+      "2013:RaceTools:INDY_NXT:qualifying": 11,
+      "2013:RaceTools:INDY_NXT:race": 12,
+      "2013:RaceTools:INDYCAR:test": 8,
+      "2013:RaceTools:INDYCAR:other": 1,
+      "2013:RaceTools:INDY_NXT:test": 2,
+      "2014:RaceTools:INDYCAR:other": 6,
+      "2014:RaceTools:INDYCAR:practice": 49,
+      "2014:RaceTools:INDYCAR:race": 18,
+      "2014:RaceTools:INDYCAR:qualifying": 35,
+      "2014:RaceTools:unknown:practice": 26,
+      "2014:RaceTools:unknown:qualifying": 13,
+      "2014:RaceTools:unknown:race": 27,
+      "2014:RaceTools:INDYCAR:test": 8,
+      "2014:RaceTools:unknown:test": 27,
+      "2014:RaceTools:INDY_NXT:test": 13,
+      "2014:RaceTools:INDY_NXT:practice": 17,
+      "2014:RaceTools:INDY_NXT:qualifying": 9,
+      "2014:RaceTools:INDY_NXT:race": 14,
+      "2014:RaceTools:unknown:other": 3,
+      "2015:RaceTools:INDYCAR:other": 7,
+      "2015:RaceTools:INDYCAR:practice": 53,
+      "2015:RaceTools:INDYCAR:race": 16,
+      "2015:RaceTools:INDY_NXT:test": 10,
+      "2015:RaceTools:unknown:test": 33,
+      "2015:RaceTools:INDYCAR:qualifying": 37,
+      "2015:RaceTools:unknown:practice": 42,
+      "2015:RaceTools:unknown:qualifying": 18,
+      "2015:RaceTools:unknown:race": 37,
+      "2015:RaceTools:INDYCAR:test": 7,
+      "2015:RaceTools:INDY_NXT:practice": 25,
+      "2015:RaceTools:INDY_NXT:qualifying": 10,
+      "2015:RaceTools:INDY_NXT:race": 18,
+      "2015:RaceTools:unknown:other": 21,
+      "2016:RaceTools:unknown:other": 6,
+      "2016:RaceTools:INDYCAR:practice": 57,
+      "2016:RaceTools:INDYCAR:qualifying": 36,
+      "2016:RaceTools:INDYCAR:race": 28,
+      "2016:RaceTools:INDYCAR:other": 1,
+      "2016:RaceTools:unknown:practice": 98,
+      "2016:RaceTools:unknown:qualifying": 25,
+      "2016:RaceTools:unknown:race": 34,
+      "2016:RaceTools:INDY_NXT:practice": 39,
+      "2016:RaceTools:INDY_NXT:qualifying": 10,
+      "2016:RaceTools:INDY_NXT:race": 17,
+      "2016:RaceTools:INDY_NXT:other": 1,
+      "2016:RaceTools:unknown:test": 2,
+      "2017:RaceTools:unknown:race": 90,
+      "2017:RaceTools:INDYCAR:practice": 70,
+      "2017:RaceTools:INDYCAR:qualifying": 44,
+      "2017:RaceTools:INDYCAR:race": 22,
+      "2017:RaceTools:INDY_NXT:test": 9,
+      "2017:RaceTools:unknown:test": 28,
+      "2017:RaceTools:unknown:practice": 55,
+      "2017:RaceTools:INDY_NXT:practice": 12,
+      "2017:RaceTools:INDY_NXT:race": 23,
+      "2017:RaceTools:INDY_NXT:qualifying": 3,
+      "2017:RaceTools:unknown:qualifying": 12,
+      "2017:RaceTools:INDYCAR:test": 4,
+      "2018:RaceTools:INDYCAR:practice": 53,
+      "2018:RaceTools:INDYCAR:qualifying": 47,
+      "2018:RaceTools:INDYCAR:race": 16,
+      "2018:RaceTools:unknown:test": 53,
+      "2018:RaceTools:INDYCAR:test": 13,
+      "2018:RaceTools:unknown:race": 101,
+      "2018:RaceTools:INDY_NXT:test": 17,
+      "2018:RaceTools:unknown:practice": 53,
+      "2018:RaceTools:unknown:qualifying": 13,
+      "2018:RaceTools:INDY_NXT:practice": 14,
+      "2018:RaceTools:INDY_NXT:race": 18,
+      "2018:RaceTools:INDY_NXT:qualifying": 2,
+      "2019:RaceTools:unknown:practice": 44,
+      "2019:RaceTools:INDYCAR:practice": 69,
+      "2019:RaceTools:INDYCAR:qualifying": 56,
+      "2019:RaceTools:INDYCAR:race": 25,
+      "2019:RaceTools:INDY_NXT:test": 20,
+      "2019:RaceTools:unknown:test": 58,
+      "2019:RaceTools:unknown:qualifying": 15,
+      "2019:RaceTools:unknown:race": 96,
+      "2019:RaceTools:INDY_NXT:practice": 16,
+      "2019:RaceTools:INDY_NXT:race": 38,
+      "2019:RaceTools:INDY_NXT:qualifying": 2,
+      "2019:RaceTools:INDYCAR:test": 14,
+      "2019:RaceTools:unknown:other": 3,
+      "2020:RaceTools:INDYCAR:practice": 44,
+      "2020:RaceTools:INDYCAR:qualifying": 26,
+      "2020:RaceTools:INDYCAR:race": 54,
+      "2020:RaceTools:unknown:practice": 25,
+      "2020:RaceTools:unknown:race": 67,
+      "2020:RaceTools:unknown:qualifying": 8,
+      "2020:RaceTools:INDYCAR:other": 2,
+      "2020:RaceTools:INDYCAR:test": 5,
+      "2020:RaceTools:INDY_NXT:practice": 1,
+      "2020:RaceTools:INDY_NXT:test": 2,
+      "2020:RaceTools:unknown:test": 46,
+      "2021:RaceTools:INDYCAR:qualifying": 88,
+      "2021:RaceTools:INDYCAR:practice": 86,
+      "2021:RaceTools:INDYCAR:race": 45,
+      "2021:RaceTools:INDYCAR:test": 15,
+      "2021:RaceTools:unknown:race": 72,
+      "2021:RaceTools:INDY_NXT:test": 23,
+      "2021:RaceTools:unknown:test": 51,
+      "2021:RaceTools:unknown:qualifying": 8,
+      "2021:RaceTools:INDY_NXT:practice": 11,
+      "2021:RaceTools:INDY_NXT:race": 38,
+      "2021:RaceTools:INDY_NXT:qualifying": 1,
+      "2021:RaceTools:unknown:practice": 16,
+      "2021:RaceTools:unknown:other": 2,
+      "2022:RaceTools:INDYCAR:qualifying": 102,
+      "2022:RaceTools:INDYCAR:practice": 96,
+      "2022:RaceTools:INDYCAR:race": 33,
+      "2022:RaceTools:unknown:practice": 26,
+      "2022:RaceTools:unknown:qualifying": 14,
+      "2022:RaceTools:unknown:race": 63,
+      "2022:RaceTools:unknown:test": 20,
+      "2022:RaceTools:INDYCAR:test": 11,
+      "2022:RaceTools:INDY_NXT:practice": 20,
+      "2022:RaceTools:INDY_NXT:race": 20,
+      "2022:RaceTools:INDY_NXT:qualifying": 9,
+      "2022:RaceTools:INDY_NXT:test": 13,
+      "2022:RaceTools:unknown:other": 1,
+      "2022:RaceTools:INDYCAR:other": 4,
+      "2023:RaceTools:INDY_NXT:test": 11,
+      "2023:RaceTools:INDYCAR:practice": 112,
+      "2023:RaceTools:unknown:race": 46,
+      "2023:RaceTools:unknown:practice": 12,
+      "2023:RaceTools:INDY_NXT:practice": 24,
+      "2023:RaceTools:unknown:qualifying": 7,
+      "2023:RaceTools:INDY_NXT:qualifying": 13,
+      "2023:RaceTools:INDYCAR:qualifying": 110,
+      "2023:RaceTools:INDYCAR:race": 56,
+      "2023:RaceTools:INDY_NXT:race": 26,
+      "2023:RaceTools:INDYCAR:test": 8,
+      "2023:RaceTools:INDYCAR:other": 3,
+      "2024:RaceTools:INDYCAR:test": 11,
+      "2024:RaceTools:INDYCAR:race": 24,
+      "2024:RaceTools:INDY_NXT:test": 14,
+      "2024:RaceTools:INDYCAR:practice": 65,
+      "2024:RaceTools:INDY_NXT:practice": 20,
+      "2024:Timing71:INDY_NXT:practice": 23,
+      "2024:RaceTools:INDY_NXT:qualifying": 20,
+      "2024:RaceTools:INDYCAR:qualifying": 54,
+      "2024:RaceTools:unknown:qualifying": 1,
+      "2024:RaceTools:INDY_NXT:race": 14,
+      "2024:RaceTools:INDYCAR:other": 1,
+      "2024:Timing71:INDYCAR:practice": 48,
+      "2024:Timing71:INDYCAR:qualifying": 20,
+      "2024:Timing71:INDYCAR:race": 24,
+      "2024:Timing71:INDY_NXT:race": 12,
+      "2024:Timing71:INDY_NXT:qualifying": 10,
+      "2024:Timing71:INDYCAR:other": 1,
+      "2025:RaceTools:INDY_NXT:test": 19,
+      "2025:RaceTools:INDY_NXT:practice": 21,
+      "2025:RaceTools:INDYCAR:practice": 82,
+      "2025:Timing71:INDYCAR:practice": 54,
+      "2025:Timing71:INDY_NXT:practice": 19,
+      "2025:RaceTools:INDY_NXT:qualifying": 20,
+      "2025:RaceTools:INDYCAR:qualifying": 55,
+      "2025:Timing71:INDYCAR:qualifying": 17,
+      "2025:Timing71:INDY_NXT:qualifying": 8,
+      "2025:RaceTools:INDYCAR:race": 18,
+      "2025:RaceTools:INDY_NXT:race": 15,
+      "2025:Timing71:INDYCAR:race": 21,
+      "2025:Timing71:INDY_NXT:race": 14,
+      "2025:Timing71:INDY_NXT:test": 1,
+      "2026:Timing71:INDYCAR:practice": 42,
+      "2026:Timing71:INDY_NXT:practice": 11,
+      "2026:Timing71:INDY_NXT:qualifying": 11,
+      "2026:Timing71:INDYCAR:race": 11,
+      "2026:Timing71:INDY_NXT:race": 13,
+      "2026:Timing71:INDYCAR:qualifying": 13,
+      "2026:RaceTools:INDYCAR:race": 1,
+      "2026:RaceTools:INDY_NXT:race": 1,
+      "2026:Timing71:INDYCAR:test": 4
+    }
+  },
+  "bryceHighFrequencyCoverage": {
+    "raceTools2024And2025SourceCandidates": 143,
+    "raceToolsUsableHighFrequency": 141,
+    "raceToolsCsvOnlyLowerGrain": 1,
+    "raceToolsQuarantinedDuplicate": 1,
+    "raceToolsCandidatesByYearType": {
+      "2024:test": 14,
+      "2024:practice": 20,
+      "2024:qualifying": 20,
+      "2024:race": 14,
+      "2025:test": 19,
+      "2025:practice": 21,
+      "2025:qualifying": 20,
+      "2025:race": 15
+    },
+    "timing71RosterBearingCandidatesNotCoverageClaims": 145,
+    "timing71Canonical2026Sessions": 33,
+    "timing71Canonical2026ByType": {
+      "practice": 12,
+      "qualifying": 9,
+      "race": 12
+    },
+    "timing71Canonical2026Race": 12,
+    "timing71Canonical2026PracticeQualifying": 21,
+    "missingCanonical2026ReplayIds": []
+  },
+  "knownExceptions": [
+    {
+      "source": "RaceTools",
+      "date": "2025-05-10",
+      "issue": "Contaminated IMS Race 1-labelled duplicate contains mixed sessions.",
+      "resolution": "Clean 2025-05-09 Race 1 replay is retained and selected."
+    },
+    {
+      "source": "RaceTools",
+      "date": "2025-05-09",
+      "issue": "IMS Practice 1 raw replay log contains only a session header; its 522-row CSV is lower-grain.",
+      "resolution": "Timing71 replay 1be17234-2d3c-4413-94b1-e3f9a51603c6 contains 2,278 reconstructed Bryce-roster frames for the session."
+    },
+    {
+      "source": "RaceTools",
+      "date": "2026-03-29",
+      "issue": "Published Barber Race 2 NXT ZIP is only 22 bytes and invalid.",
+      "resolution": "Timing71 clean NXT replay supplies the completed historical session."
+    },
+    {
+      "source": "Timing71",
+      "issue": "Some recordings include stale or adjacent INDYCAR session states; two NXT-labelled candidates are false positives.",
+      "resolution": "Coverage requires a decoded Bryce-roster segment; three hidden NXT races in INDYCAR-labelled captures are recovered."
+    }
+  ],
+  "coverageRowCount": 176
+}

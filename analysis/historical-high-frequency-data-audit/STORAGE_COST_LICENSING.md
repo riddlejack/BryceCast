@@ -53,7 +53,18 @@ Inventory plus simple raw-size extrapolation:
 
 Those estimates exclude practices, qualifying, tests, telemetry variants, decoded normalized tables, indexes, and immutable source copies. The complete 2024 RaceTools annual ZIP is 187,952,207 bytes because it contains many INDYCAR and INDY NXT sessions. Even a conservative 10× processing/index expansion remains operationally small.
 
-Do not use the small size as justification for a bulk download. The stop gate is legal/contractual permission.
+The user reports direct RaceTools-owner approval for the described private educational project. Preserve that approval in project provenance; the remaining gate is technical validation and source-honest import.
+
+### Timing71 2026 replay acquisition
+
+The complete bounded 2026 candidate acquisition through Nashville qualifying is 66,286,392 bytes across 71 files:
+
+- 32 NXT-labelled replay ZIPs;
+- three additional cross-session replay ZIPs that recover Barber Race 1, IMS Race 1, and Road America Race 1;
+- 35 analysis JSON files;
+- one API metadata manifest.
+
+All 35 ZIPs pass `unzip -tq`. This is already small enough for local archival and reducer development; it remains outside Git and the production SQLite archive.
 
 ## Licensing and terms matrix
 
@@ -61,7 +72,8 @@ Do not use the small size as justification for a bulk download. The stop gate is
 |---|---|---|---|
 | official public Race Control blob | unauthenticated mutable live object | INDYCAR terms restrict automated copying/network monitoring and public/commercial exploitation | continue only current authorized operational behavior; obtain written scope before expansion |
 | official historical APIs/PDFs | unauthenticated public results endpoints/files | same site terms and rulebook ownership language apply | retain factual lineage; legal review before public redistribution at scale |
-| RaceTools replay ZIPs | unauthenticated directory/ZIP downloads observed | RaceTools software requires a license; no archive reuse/model/redistribution grant found; underlying INDYCAR data ownership separately asserted | bounded proof only; no bulk ingest |
+| RaceTools replay ZIPs | unauthenticated directory/ZIP downloads observed | user reports direct RaceTools-owner approval for the described private educational use; underlying-source attribution remains relevant | acquisition approved for this project; preserve permission record and validate decoder |
+| Timing71 replay ZIPs | public replay API and direct archive downloads | public replay-oriented archive; Timing71 schema/docs are open, underlying timing remains third-party-derived | retain attribution and immutable source metadata; do not redistribute raw replays |
 | INDYCAR/team IRIS/RIS/telemetry | authenticated/credentialed according to vendor docs | INDYCAR owns and controls dissemination; data-sharing route requires approval | request a written license/data-sharing agreement if project proceeds |
 | HH Timing/RaceTools software | paid/licensed product | software license is not necessarily a data/content license | clarify both software and underlying-data permissions |
 | TSL Timing / Al Kamel adjacent archives | public reports or credentialed feeds depending product | series/provider-specific terms | use only for their own series after separate rights review; never assume transfer to NXT |
@@ -73,7 +85,9 @@ The [INDYCAR Terms of Use](https://www.indycar.com/terms-of-use) and [INDY NXT T
 
 This is a technical risk assessment, not legal advice.
 
-## Permission questions that must be answered in writing
+## Permission record and remaining questions
+
+The prior RaceTools-owner stop gate is resolved for the use case as reported by the user. Save a dated note or email confirming the scope if available. The questions below remain useful if BryceCast later becomes public, commercial, redistributes records, or expands beyond the approved educational/private use.
 
 For INDYCAR:
 
@@ -93,13 +107,11 @@ For RaceTools/VFX:
 5. Does RaceTools have authority to grant those rights, or is separate INDYCAR consent mandatory?
 6. May BryceCast retain source ZIP checksums and small evidence excerpts for reproducibility?
 
-## Hard stop
+## Operational stop
 
-Until both ownership layers are resolved, do not:
+Until source-specific reducers and provenance contracts pass validation, do not:
 
-- crawl or bulk-download the RaceTools archive;
-- reverse engineer the complete protocol for production use;
 - add replay files to Git or the canonical SQLite archive;
-- train or publish a model from the files;
 - redistribute raw or normalized records;
-- represent the files as open data.
+- represent normalized Timing71 states as byte-for-byte official Race Control JSON;
+- represent timing gaps or sector values as GPS, physical distance, or turn occupancy.

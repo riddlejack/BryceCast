@@ -7,7 +7,7 @@ Audit date: 2026-07-18
 | Tier | Verdict | Confidence | Controlling reason |
 |---|---|---:|---|
 | A. Exact historical public Race Control JSON backfill | **No-go** | High | The public blob is mutable/live; session query strings are ignored; guessed archive objects are absent. |
-| A2. Comparable source-native high-frequency timing | **Conditional technical go for 2024–2025** | Medium-high | RaceTools replay logs contain exact one-second heartbeats and event-driven official timing-feed messages, but are not identical to BryceCast snapshots. Rights and full decoding remain open. |
+| A2. Comparable high-frequency timing | **Go for acquisition; conditional go for import across 2024–2026** | High | RaceTools covers 2024–2025; Timing71 covers all 12 completed 2026 races with normalized 1–2-second states. Both require source-specific reducers and validation. |
 | B. Turn-level pairwise collision risk | **No-go** | Very high | No validated continuous 2-D position, lateral overlap, heading, pair geometry, or second-level pairwise contact labels. |
 | C. Next-lap caution risk | **Conditional internal research go** | Medium | Existing official lap-range labels align with a lap-level hazard target; only 72 caution episodes limit power. |
 | C2. Next-minute caution risk | **Conditional experiment only** | Medium | Replay logs may supply flag-onset time, but physical incident time can precede the flag and create leakage. |
@@ -21,7 +21,7 @@ The defensible product concept is not “collision prediction.” It is an exper
 2. **A timing gap is not physical proximity.** The current NXT archive contains no validated latitude/longitude, track coordinate, lateral position, heading, or turn occupancy. `lapDistance` remained zero in all audited Bryce records.
 3. **A one-second RaceTools heartbeat is not a one-second measurement for every car.** The replay log preserves a one-second clock/heartbeat plus event-driven timing-line activity. Between-loop track-map movement is projected/interpolated, according to RaceTools documentation.
 4. **Richer historical data does exist—but the official source says it is archived for teams, manufacturers, and officials.** That does not establish public access. The Andretti anecdote is technically plausible because team timing loops and telemetry exist, but it does not identify which feed or model was used.
-5. **A public archive already exists in a different form.** RaceTools exposes replay captures of the official pit-lane timing feed. They are the best technical lead found, not an authorization to bulk ingest or publish INDYCAR-derived data.
+5. **Two public archives solve different season gaps.** RaceTools exposes replay captures of the official pit-lane timing feed for 2024–2025. Timing71 exposes display-oriented replays derived from the live feed for 2026. Neither is byte-for-byte historical Race Control JSON, and neither supplies GPS.
 
 ## Repository reconstruction
 
@@ -112,19 +112,33 @@ Therefore:
 
 The two tested races also preserve control text such as `Yellow Flag at: 10:20:51.384 Off Course: Car 22 in Turn 14`. This is a strong candidate label for **flag announcement/onset**, cause, car, and reported turn. It is not automatically the physical off-course or contact onset; the incident can precede Race Control's flag decision.
 
-### 4. Team/licensed timing products
+### 4. Timing71 replay archive: complete 2026 race coverage found
+
+The [Timing71 replay archive](https://archive.timing71.org/) and its [OpenAPI index](https://archive.timing71.org/openapi.json) expose searchable metadata and direct replay-file URLs. A full 2026 search found 32 NXT-labelled captures plus three relevant cross-session captures. All 35 downloaded ZIPs passed archive integrity validation.
+
+Every completed 2026 race through Mid-Ohio is present. Nine are indexed directly as NXT races; Barber Race 1, IMS Race 1, and Road America Race 1 are hidden inside long recordings whose final manifests name later INDYCAR sessions. Roster, lap-count, flag-state, and time-window inspection recovered those three full NXT race segments. Two misleading NXT-labelled captures were rejected. Exact IDs and boundaries are in `timing71-2026-coverage.json`.
+
+The [recorder implementation](https://github.com/timing71/chrome/blob/master/src/replay.js) coalesces multiple source updates within one wall-clock second, retains the latest, writes a full state every tenth observation, and writes incremental frames otherwise. A representative Road America Race 2 replay contained 5,421 states over 6,183 seconds: 4,657 one-second gaps and 763 two-second gaps, with median one second, p95 two seconds, and maximum two seconds. The [state documentation](https://info.timing71.org/reference/state.html) correctly calls the schema display-oriented.
+
+These replays contain ordered car states, timing gaps, laps, sectors, lap times, pits, flags, and messages. They do not contain validated GPS, physical track coordinates, lateral position, official `DriverID`, or official `EventSessionID`. They are therefore comparable high-frequency timing observations, not exact Race Control JSON snapshots and not physical-position telemetry.
+
+Timing71 also has candidates for all 21 completed 2026 practice and qualifying sessions through Nashville qualifying on July 18. Race completeness is strongly validated by expected NXT rosters, checkered states, and lap maxima; practice/qualifying candidates still need per-session official-lap comparison during import.
+
+### 5. Team/licensed timing products
 
 HH Timing’s current INDYCAR configuration requires credentials supplied by INDYCAR, distinguishes timing history from telemetry, and documents separate telemetry/GPS settings. It can build custom sectors from timing-loop pairs and replay sessions. This strongly supports a paid/authorized route but not a public route. [HH Timing INDYCAR documentation](https://help.hhtiming.com/series-specific-info/indycar/)
 
 RaceTools itself is a licensed analysis product used by teams and supports historical replay. A paid software license would not automatically grant BryceCast rights to republish or train on INDYCAR data; those rights must be stated separately.
 
-### 5. Internet Archive, GitHub, and broadcast reconstruction
+### 6. Internet Archive, GitHub, and broadcast reconstruction
 
 - Wayback CDX returned no successful JSON capture for the tested live blob; a second race-control query timed out. Even successful sporadic captures would be too sparse and selection-biased for a race hazard model.
-- No reproducible GitHub or academic INDY NXT high-frequency archive with primary provenance was found.
+- Exact-endpoint GitHub searches found several live consumers but no repository that persists the per-second Race Control stream. Broader live-timing-archive searches found Timing71, whose public recorder source explains the replay cadence and format.
 - Broadcast timing extraction would be OCR of displayed, delayed, selectively shown values. It cannot recover the full field at one-second cadence and would add synchronization, rights, and label error. It is a last-resort annotation aid, not observed timing data.
 
-### 6. Adjacent series and commercial providers
+Representative exact-endpoint consumers included [ovaltimings](https://github.com/KrishGaur1354/ovaltimings), [MMM-IndyCarTiming](https://github.com/brmfulasha/MMM-IndyCarTiming), and [SportsTickerBackend](https://github.com/MattLD13/SportsTickerBackend). Their public trees implement current-feed display or limited final-state caching, not a downloadable per-second season corpus. [indcartimer](https://github.com/indcartimer/indycar-timing) is a different product path built around Sportradar summaries/simulation rather than archived Race Control state. The negative exact-URL search was still useful: it established that searching only for the Azure blob name was too narrow, which led to the successful replay-ecosystem search.
+
+### 7. Adjacent series and commercial providers
 
 Adjacent Bryce-career sources are useful at their honest grain: MYLAPS covers all 15 FROC 2024 races with epoch-ms lap completion and section records; Euroformula, GB3/TSL, Formula Ford, and FRP sources supply final/lap/sector reports. None supplies transferable INDY NXT one-second data or continuous car coordinates, and each has separate reuse terms.
 
@@ -136,24 +150,24 @@ Commercial leads include Sportradar's INDYCAR/INDY NXT Racing API and Data Sport
 
 The audited canonical matrix contains 40 completed races through the 2026 Mid-Ohio doubleheader:
 
-| Season | Completed races in canonical matrix | Official lower-grain coverage | RaceTools raw replay inventory | Own high-frequency capture | Exact/comparable backfill available now |
+| Season | Completed races in canonical matrix | Official lower-grain coverage | Third-party replay inventory | Own high-frequency capture | Exact/comparable backfill available now |
 |---|---:|---:|---:|---:|---:|
-| 2024 | 14 | 14 | 14 inventoried; Barber validated | 0 | 14 conditional on rights/decoder |
-| 2025 | 14 | 14 | 14 inventoried; Barber validated | 0 | 14 conditional on rights/decoder |
-| 2026 through Mid-Ohio | 12 | 12 | 0 | Mid-Ohio R1/R2 complete; Road America R2 partial | 2 complete + 1 partial; 9 unavailable now |
-| **Total** | **40** | **40** | **28 inventoried** | **2 complete + 1 partial** | **30 complete candidates + 1 partial** |
+| 2024 | 14 | 14 | RaceTools: 14 inventoried; Barber validated | 0 | 14 RaceTools candidates |
+| 2025 | 14 | 14 | RaceTools: 14 inventoried; Barber validated | 0 | 14 RaceTools candidates |
+| 2026 through Mid-Ohio | 12 | 12 | Timing71: 12/12 race candidates validated | Mid-Ohio R1/R2 complete; Road America R2 partial | 12 Timing71 candidates |
+| **Total** | **40** | **40** | **40 race candidates** | **2 complete + 1 partial** | **40/40 comparable high-frequency candidates** |
 
 The official 2026 schedule contains 17 races, so five future races were not historical backfill candidates on the audit date. [Official 2026 INDY NXT schedule](https://www.indycar.com/news/2025/09/09-25-2026-nxt-schedule)
 
-The race-by-race file is `INDY_NXT_CAREER_COVERAGE.csv`. “RaceTools inventoried” means the named session ZIP exists in a public directory/ZIP central directory; it is not a claim that every log has been decoded or licensed.
+The race-by-race file is `INDY_NXT_CAREER_COVERAGE.csv`; the exact Timing71 replay IDs and cross-session boundaries are in `timing71-2026-coverage.json`. “Candidate” means the source replay exists and passed the stated session/completeness checks; it does not mean it has already been reduced into BryceCast's canonical snapshot schema.
 
 ## Prioritized acquisition ladder
 
 1. **Immediately downloadable public data** — continue using official final APIs/PDFs for final, lap, section, caution, and penalty facts. These are not high-frequency.
-2. **Reproducible high-frequency archive** — RaceTools 2024–2025 replay files. Freeze at bounded technical validation until rights are written. Then validate 8–12 races before any season ingest.
-3. **Lawful third-party archives** — only archives with provenance, stable identities, and explicit research/model/redistribution rights. No second INDY NXT candidate met that bar.
+2. **Reproducible high-frequency archives** — RaceTools 2024–2025 raw replay logs and Timing71 2026 normalized replay ZIPs. Retain raw payloads outside Git; import only through source-specific reducers with identity/session gates.
+3. **Lawful third-party archives** — Timing71 is the first reproducible second archive found. Preserve its replay ID, URL, timestamps, original ZIP, and transformation version.
 4. **Paid/licensed provider options** — ask INDYCAR for archived IRIS/RIS timing-loop and telemetry availability, retention, fields, timestamps, 2024–2026 coverage, and model/public-display rights; separately ask RaceTools/VFX what its license and replay-file permissions cover. Do not contact or purchase under this task.
-5. **Future BryceCast capture** — preserve current one-second timing snapshots prospectively, with point-in-time flag onset and content-addressed enrichments. This remains necessary for 2026 unless a licensed archive appears.
+5. **Future BryceCast capture** — preserve current one-second timing snapshots prospectively as first-party evidence and insurance against a Timing71 uploader not recording a future session.
 6. **Appears unobtainable publicly** — exact pre-capture Race Control JSON snapshots, continuous NXT GPS/lateral position, exact pairwise contact geometry, and consistently second-level incident labels.
 
 ## Legal and operational stop gates
@@ -162,7 +176,7 @@ The 2026 INDY NXT rulebook states that official timing/scoring and technical inf
 
 The [INDYCAR Terms of Use](https://www.indycar.com/terms-of-use) and [INDY NXT Terms of Use](https://www.indynxt.com/terms-of-use) restrict service use and prohibit automated copying/network monitoring and public/commercial exploitation without permission. This report is not legal advice, but it creates a hard project gate:
 
-**Do not bulk-download, decode at scale, train a public model, publish derived feeds, or redistribute source-derived data until written permissions cover those acts.** Clarify rights with both INDYCAR and RaceTools/VFX because technical hosting and underlying-data ownership may be separate.
+The user reports direct RaceTools-owner approval for this private educational project. Record that approval in project provenance before a production import. Timing71's archive is intentionally public and replay-oriented, but its normalized files still need attribution and source-state labeling; no raw replay payload should be redistributed from BryceCast.
 
 Additional stop conditions:
 
@@ -175,7 +189,14 @@ Additional stop conditions:
 
 ## Best next experiment
 
-Run an **eight-to-twelve-race labelability and incremental-signal study**, after rights clearance, using the bounded raw-log parser as the seed:
+First run a **two-replay reducer fidelity test**, using one clean Timing71 race and one hidden cross-session race:
+
+1. Reconstruct full states from Timing71 full and incremental frames.
+2. Gate on NXT roster/session semantics and trim cross-session contamination.
+3. Compare ranks, gaps, laps, and flag transitions against official lap charts and caution summaries.
+4. Emit a field-level provenance record that distinguishes observed Timing71 values from derived alignment fields.
+
+That experiment has the highest immediate information gain because it tests the only remaining 2026 acquisition risk: faithful state reduction and session segmentation. If it passes, proceed to an **eight-to-twelve-race labelability and incremental-signal study** across both archive formats:
 
 1. Select road, street, and oval races across 2024 and 2025.
 2. Decode only source-native timestamps, car identities, timing-line crossings, order/gap messages, flag transitions, and weather messages; retain provenance per field.
@@ -184,6 +205,6 @@ Run an **eight-to-twelve-race labelability and incremental-signal study**, after
 5. Compare a race-phase/time-since-green baseline against the same model plus loop-level field compression and closing-rate features.
 6. Hold out entire newest events and at least one track. Require better log loss, Brier score, AUPRC, calibration, at least 30 seconds median lead time, and no more than one false alert per race.
 
-Expected information gain is high because one experiment resolves four uncertainties: whether the replay format is semantically decodable without proprietary software, whether flags and loop crossings align cleanly, whether pre-caution gap compression adds signal beyond naive race-phase priors, and whether physical-incident/flag delay makes the next-minute target unusably leaky.
+The second experiment resolves whether flags and loop crossings align cleanly, whether pre-caution gap compression adds signal beyond naive race-phase priors, and whether physical-incident/flag delay makes the next-minute target unusably leaky.
 
-If the replay format or rights gate fails, stop high-frequency backfill and pursue a next-lap model using official section/lap reports plus future BryceCast capture. If the incremental-signal test fails, ship descriptive caution hotspots and live field-compression context instead of a predictive score.
+If replay reduction or session segmentation fails validation, stop high-frequency import and pursue a next-lap model using official section/lap reports plus future BryceCast capture. If the incremental-signal test fails, ship descriptive caution hotspots and live field-compression context instead of a predictive score.

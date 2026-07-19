@@ -1,0 +1,481 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-07-18T23:24:45.521Z",
+  "maps": [
+    {
+      "sourceFileId": "4a9847bb85e917c59dc1da41",
+      "viewPath": "raw/views/racetools/maps/Arlington.zip",
+      "bytes": 81480,
+      "sha256": "a0f065f2c38c32d341acbc97d46dafd0cb9610a44b79ae936edd398aad352f79",
+      "entries": [
+        "Arlington.csv",
+        "Arlington.ini",
+        "Arlington_Pit.csv"
+      ]
+    },
+    {
+      "sourceFileId": "7d54bb5385990bb2bdad1bf0",
+      "viewPath": "raw/views/racetools/maps/Arlington2026.zip",
+      "bytes": 94081,
+      "sha256": "ba60d0f4e8e2063dfa5ddb9bb3849590293207747667e95d05e87349597bdaa9",
+      "entries": [
+        "Arlington2026_Pit.csv",
+        "Arlington2026.csv",
+        "Arlington2026.ini"
+      ]
+    },
+    {
+      "sourceFileId": "0563810e2a2b474258375eab",
+      "viewPath": "raw/views/racetools/maps/AutobahnCountryClub.zip",
+      "bytes": 69168,
+      "sha256": "09096aea8fdf2321ab263a5a72694f3d43d560fbf02f0c02f6a30022ad9a79d8",
+      "entries": [
+        "AutobahnCountryClub.csv",
+        "AutobahnCountryClub.ini",
+        "AutobahnCountryClub_Pit.csv"
+      ]
+    },
+    {
+      "sourceFileId": "5117fdee1e1d9611cc7671b5",
+      "viewPath": "raw/views/racetools/maps/Barber_I7.zip",
+      "bytes": 90284,
+      "sha256": "1ae9bde46e433fac5bf0dbcf2831a52f3ce96261accc9b29304331cff605f979",
+      "entries": [
+        "Barber_I7.csv",
+        "Barber_I7.ini",
+        "Barber_I7_Pit.csv"
+      ]
+    },
+    {
+      "sourceFileId": "6215b8a3e2cdcd7d80e1b5c1",
+      "viewPath": "raw/views/racetools/maps/Barber_Motorsports_Park.zip",
+      "bytes": 90831,
+      "sha256": "809f49c3c405c02d31b56d3d99761097f7a79a9ebb9ea132ecf85b1ab702ee24",
+      "entries": [
+        "Barber_Motorsports_Park.csv",
+        "Barber_Motorsports_Park.ini",
+        "Barber_Motorsports_Park_Pit.csv"
+      ]
+    },
+    {
+      "sourceFileId": "d713289cff4cd55e5b91b0b6",
+      "viewPath": "raw/views/racetools/maps/BelleIsle_2018.zip",
+      "bytes": 88287,
+      "sha256": "037a3a6e1c9ed3eef9f22a82103c9bde52f0cba0db9d7e500681342b2e2a615e",
+      "entries": [
+        "BelleIsle_2018.csv",
+        "BelleIsle_2018.ini",
+        "BelleIsle_2018_Pit.csv"
+      ]
+    },
+    {
+      "sourceFileId": "8cd9b6afaf067452d1fd7f93",
+      "viewPath": "raw/views/racetools/maps/COTA_IndyCar.zip",
+      "bytes": 125498,
+      "sha256": "b3626202ef15a59147628471d55aa2a2e3e16f0295f13482f21184222b341709",
+      "entries": [
+        "COTA_IndyCar.csv",
+        "COTA_IndyCar.ini",
+        "COTA_IndyCar_Pit.csv"
+      ]
+    },
+    {
+      "sourceFileId": "8c763dc0c28b1c7669ce3b90",
+      "viewPath": "raw/views/racetools/maps/Detroit_2023.zip",
+      "bytes": 63812,
+      "sha256": "d96f8806aec4d93b4ae6de4f89cc83568e8ca41fd11cfa77543e90e9ca5d616b",
+      "entries": [
+        "Detroit_2023.csv",
+        "Detroit_2023.ini",
+        "Detroit_2023_Pit.csv"
+      ]
+    },
+    {
+      "sourceFileId": "3d554f3169ab2f8ab10e756d",
+      "viewPath": "raw/views/racetools/maps/Gateway_2018.zip",
+      "bytes": 43722,
+      "sha256": "d23ad2bc9315fb486c726c64760b039c98ddd81065baf43eba8cacc6ea477d7b",
+      "entries": [
+        "Gateway_2018.csv",
+        "Gateway_2018.ini",
+        "Gateway_2018_Pit.csv"
+      ]
+    },
+    {
+      "sourceFileId": "76b79a4afe462f157faffb62",
+      "viewPath": "raw/views/racetools/maps/Homestead_RoadCourseTest.zip",
+      "bytes": 66636,
+      "sha256": "2de603c3e0a33b24f7f58741679f50c745f68be3ad90a63d60071ef3278658b1",
+      "entries": [
+        "Homestead_RoadCourseTest.csv",
+        "Homestead_RoadCourseTest.ini",
+        "Homestead_RoadCourseTest_Pit.csv"
+      ]
+    },
+    {
+      "sourceFileId": "03b87eae58d4a7260ac21f7a",
+      "viewPath": "raw/views/racetools/maps/Indianapolis_RC_InnerLoop.zip",
+      "bytes": 84746,
+      "sha256": "1353837917036133f2ddb947755fc87f61c0740a979d6a5fc26c0f0c5f88c49d",
+      "entries": [
+        "Indianapolis_RC_InnerLoop.csv",
+        "Indianapolis_RC_InnerLoop.ini",
+        "Indianapolis_RC_InnerLoop_Pit.csv"
+      ]
+    },
+    {
+      "sourceFileId": "b1e2456ef271a3e32e4822c2",
+      "viewPath": "raw/views/racetools/maps/Indianapolis_RC-SL.zip",
+      "bytes": 79139,
+      "sha256": "972de359fcea3202cf66d4a5dbd06e3c4373daa4e86c23a2543c378bbcc4ad3a",
+      "entries": [
+        "Indianapolis_RC_Pit-SL.csv",
+        "Indianapolis_RC-SL.csv",
+        "Indianapolis_RC-SL.ini"
+      ]
+    },
+    {
+      "sourceFileId": "b155a536f69012ce260a082f",
+      "viewPath": "raw/views/racetools/maps/Indianapolis_RC.zip",
+      "bytes": 80489,
+      "sha256": "d65435a58974194860355b7b76cf8bfff83fd4dd97a31bd3f31822c196119171",
+      "entries": [
+        "Indianapolis_RC_Pit.csv",
+        "Indianapolis_RC.csv",
+        "Indianapolis_RC.ini"
+      ]
+    },
+    {
+      "sourceFileId": "23a1dd3f4a80e90b740141be",
+      "viewPath": "raw/views/racetools/maps/Indianapolis.zip",
+      "bytes": 81027,
+      "sha256": "3ecd00fe0301ec3e4485db599427ed5049fb99e2ef242fab2ab95d4113fa6376",
+      "entries": [
+        "Indianapolis.csv",
+        "Indianapolis.ini",
+        "Indianapolis_Pit.csv"
+      ]
+    },
+    {
+      "sourceFileId": "de9e320ee1f3054ac81b2ef0",
+      "viewPath": "raw/views/racetools/maps/IndyCarMaps.zip",
+      "bytes": 3441064,
+      "sha256": "2d094f4c41e3e2945e55c3ca344dffe1400ce1fe14715038b714e497da754236",
+      "entries": [
+        "Barber_I7.zip",
+        "Barber_Motorsports_Park.zip",
+        "BelleIsle_2018.zip",
+        "COTA_IndyCar.zip",
+        "COTA_iRacing.zip",
+        "Gateway_2018.zip",
+        "Indianapolis.zip",
+        "Indianapolis_RC.zip",
+        "Iowa_2018.zip",
+        "LagunaSeca.zip",
+        "LagunaSeca_I11.zip",
+        "LongBeach.zip",
+        "LucasOilRaceway.zip",
+        "Mid-Ohio.zip",
+        "NewJerseyMotorsportsPark.zip",
+        "NewJerseyMotorsportsPark2.zip",
+        "Phoenix.zip",
+        "Pocono_2018.zip",
+        "Portland_2018.zip",
+        "RoadAmerica.zip",
+        "Sebring_Short_2021.zip",
+        "Sonoma_2018.zip",
+        "StPetersburg.zip",
+        "Texas.zip",
+        "Toronto_2018.zip",
+        "WatkinsGlen_2016.zip",
+        "Indianapolis_RC_InnerLoop.zip",
+        "Detroit_2023.zip",
+        "Homestead_RoadCourseTest.zip",
+        "Indianapolis_RC-SL.zip",
+        "RoadAmerica_PQ.zip",
+        "Sebring_Short_SF.zip",
+        "ThermalClub.zip",
+        "MilwaukeeMile_2024.zip",
+        "LagunaSeca_2021.zip",
+        "Mid-Ohio_I6.zip",
+        "Nashville_StreetCourse.zip",
+        "Portland.zip",
+        "Portland_I9.zip",
+        "Nashville_SuperSpeedway.zip"
+      ]
+    },
+    {
+      "sourceFileId": "e8a3a723985cc8763c7ce98d",
+      "viewPath": "raw/views/racetools/maps/IndyNXT_2026.zip",
+      "bytes": 865864,
+      "sha256": "aa3d97ebcf6df65ca4da726d972e065a08aec0b673852e0f11a1ebb6e7101c52",
+      "entries": [
+        "Barber_Motorsports_Park.zip",
+        "Detroit_2023.zip",
+        "Gateway_2018.zip",
+        "Indianapolis_RC.zip",
+        "LagunaSeca_2021.zip",
+        "MiamiInternationalAutodrome_MIALoopExt.zip",
+        "Mid-Ohio.zip",
+        "MilwaukeeMile_2024.zip",
+        "Nashville_SuperSpeedway.zip",
+        "Portland.zip",
+        "RoadAmerica.zip",
+        "StPetersburg.zip"
+      ]
+    },
+    {
+      "sourceFileId": "71f95ba94e090e675b710137",
+      "viewPath": "raw/views/racetools/maps/Iowa_2018.zip",
+      "bytes": 36764,
+      "sha256": "da9295a60969a18c3e568f1ecb12b5ad5fd3d5efbc87b2e7dc9a1324a36abfa4",
+      "entries": [
+        "Iowa_2018.csv",
+        "Iowa_2018.ini",
+        "Iowa_2018_Pit.csv"
+      ]
+    },
+    {
+      "sourceFileId": "77e8956cb6d260a02cd5d729",
+      "viewPath": "raw/views/racetools/maps/LagunaSeca_2021.zip",
+      "bytes": 82230,
+      "sha256": "3d4f2d08792cab12011c964fad3c929e6df400fff1bde41e76370a0042c2293a",
+      "entries": [
+        "LagunaSeca_2021.csv",
+        "LagunaSeca_2021.ini",
+        "LagunaSeca_2021_Pit.csv"
+      ]
+    },
+    {
+      "sourceFileId": "05521d95a66b4484e6d11be0",
+      "viewPath": "raw/views/racetools/maps/LagunaSeca_I10.zip",
+      "bytes": 82183,
+      "sha256": "325ac6b5be7027ab2392a8c4c0fc72733549c881672fed69ffa5501e961130d5",
+      "entries": [
+        "LagunaSeca_I10.ini",
+        "LagunaSeca_I10_Pit.csv",
+        "LagunaSeca_I10.csv"
+      ]
+    },
+    {
+      "sourceFileId": "1fb19b4b43dc8c54d70169a7",
+      "viewPath": "raw/views/racetools/maps/LagunaSeca_I11.zip",
+      "bytes": 83555,
+      "sha256": "b1d1bde4a700ba99b2db8e654eb65811959c2c9e149bb4020469004664b9ee2b",
+      "entries": [
+        "LagunaSeca_I11.csv",
+        "LagunaSeca_I11.ini",
+        "LagunaSeca_I11_Pit.csv"
+      ]
+    },
+    {
+      "sourceFileId": "8a5bc95e23b230a6f9cd7c28",
+      "viewPath": "raw/views/racetools/maps/LongBeach.zip",
+      "bytes": 75251,
+      "sha256": "ea2ae53ca4a49333e92335f99679ed5c1fcee7df6350ce68c90d28cfe6d1ac52",
+      "entries": [
+        "LongBeach.csv",
+        "LongBeach.ini",
+        "LongBeach_Pit.csv"
+      ]
+    },
+    {
+      "sourceFileId": "ee875e3ee23318c2ab955c72",
+      "viewPath": "raw/views/racetools/maps/LucasOilRaceway.zip",
+      "bytes": 26807,
+      "sha256": "77fa1e2d9da8037c869237ae2581bf2fd0ca529a6bc91b6e955b6e273bc681ac",
+      "entries": [
+        "LucasOilRaceway.csv",
+        "LucasOilRaceway.ini",
+        "LucasOilRaceway_Pit.csv"
+      ]
+    },
+    {
+      "sourceFileId": "9d64eedd88b10a76eed64f08",
+      "viewPath": "raw/views/racetools/maps/MiamiInternationalAutodrome_I3.zip",
+      "bytes": 62625,
+      "sha256": "24d928d3a794af7862803cdeca3c69051ff5917880a13457d8468ead78ceebc3",
+      "entries": [
+        "MiamiInternationalAutodrome_I3_Pit.csv",
+        "MiamiInternationalAutodrome_I3.csv",
+        "MiamiInternationalAutodrome_I3.ini"
+      ]
+    },
+    {
+      "sourceFileId": "a022f839d86ab129874fe14c",
+      "viewPath": "raw/views/racetools/maps/MiamiInternationalAutodrome_preliminary.zip",
+      "bytes": 62140,
+      "sha256": "32baa959ef8d9521889410d3b9978bb38989b44b26e95f33ce5a963b019ffab9",
+      "entries": [
+        "MiamiInternationalAutodrome_preliminary_Pit.csv",
+        "MiamiInternationalAutodrome_preliminary.csv",
+        "MiamiInternationalAutodrome_preliminary.ini"
+      ]
+    },
+    {
+      "sourceFileId": "e7476eb10ce072c6678ac3a3",
+      "viewPath": "raw/views/racetools/maps/Mid-Ohio_I10.zip",
+      "bytes": 77481,
+      "sha256": "3c417b0948f9ab4bb52522c8d7db7bb0ec99b9c226528abfe486c0c9512f2975",
+      "entries": [
+        "Mid-Ohio_I10.csv",
+        "Mid-Ohio_I10.ini",
+        "Mid-Ohio_I10_Pit.csv"
+      ]
+    },
+    {
+      "sourceFileId": "2cad6c884c54122a9d7596e8",
+      "viewPath": "raw/views/racetools/maps/Mid-Ohio.zip",
+      "bytes": 75417,
+      "sha256": "574212d0629fbb6a8bf8f615ac5ec63b6cf6c41de6ca18d55d7641a3a6aafc3d",
+      "entries": [
+        "MidOhio.csv",
+        "MidOhio.ini",
+        "MidOhio_Pit.csv"
+      ]
+    },
+    {
+      "sourceFileId": "4e784eed270cb330c51b24ca",
+      "viewPath": "raw/views/racetools/maps/MilwaukeeMile_2024.zip",
+      "bytes": 38434,
+      "sha256": "c6d551d263fffdfab63a803bb45054c1db5094930203a9d13be0f8e3c86b5c06",
+      "entries": [
+        "MilwaukeeMile_2024.csv",
+        "MilwaukeeMile_2024.ini",
+        "MilwaukeeMile_2024_Pit.csv"
+      ]
+    },
+    {
+      "sourceFileId": "deadec3caaad22d2b5d26c67",
+      "viewPath": "raw/views/racetools/maps/Nashville_SuperSpeedway.zip",
+      "bytes": 48191,
+      "sha256": "7ddd776f6803aa9fac1f267909718e763a118ecc78bd2e888702bac2e8b10293",
+      "entries": [
+        "Nashville_SuperSpeedway.csv",
+        "Nashville_SuperSpeedway.ini",
+        "Nashville_SuperSpeedway_Pit.csv"
+      ]
+    },
+    {
+      "sourceFileId": "00484b874761d94e4bebeeaf",
+      "viewPath": "raw/views/racetools/maps/Phoenix_Raceway.zip",
+      "bytes": 40424,
+      "sha256": "ca93d5f445cfa1ca0fec6ee0ee4834b015856d3e1e8c82c6002c46875953eda4",
+      "entries": [
+        "Phoenix_Raceway_Pit.csv",
+        "Phoenix_Raceway.csv",
+        "Phoenix_Raceway.ini"
+      ]
+    },
+    {
+      "sourceFileId": "a4e3d59c9ffea93fe6d41512",
+      "viewPath": "raw/views/racetools/maps/Portland_I9.zip",
+      "bytes": 75891,
+      "sha256": "b7a127de5e9a488be572e7929a773748b43d552285ada81064aeabdb9699c757",
+      "entries": [
+        "Portland_I9.csv",
+        "Portland_I9.ini",
+        "Portland_I9_Pit.csv"
+      ]
+    },
+    {
+      "sourceFileId": "7b86465f5666d2c2e8bd319f",
+      "viewPath": "raw/views/racetools/maps/Portland.zip",
+      "bytes": 79377,
+      "sha256": "7e7f2d492f738e747658beca569a6aa59c877757bc0f491a866ba98303d6bca4",
+      "entries": [
+        "Portland.csv",
+        "Portland.ini",
+        "Portland_Pit.csv"
+      ]
+    },
+    {
+      "sourceFileId": "b66d5247fdf7164019b625a2",
+      "viewPath": "raw/views/racetools/maps/RoadAmerica_PQ.zip",
+      "bytes": 146483,
+      "sha256": "b54ec608641f4f5ced13e09945f2b8815c16a7554c315f8d76bb66aa3891a876",
+      "entries": [
+        "RoadAmerica_PQ.csv",
+        "RoadAmerica_PQ.ini",
+        "RoadAmerica_PQ_Pit.csv"
+      ]
+    },
+    {
+      "sourceFileId": "2c2f3cf24f8c52a3e0c64e96",
+      "viewPath": "raw/views/racetools/maps/RoadAmerica.zip",
+      "bytes": 132253,
+      "sha256": "5d8f962aa8824236410ad9ab3a17a6ce6f83e2650c3dd32ec1d6842092cd7c89",
+      "entries": [
+        "RoadAmerica.csv",
+        "RoadAmerica.ini",
+        "RoadAmerica_Pit.csv"
+      ]
+    },
+    {
+      "sourceFileId": "4aaab18118323c0caed50585",
+      "viewPath": "raw/views/racetools/maps/Sebring_Short_2021.zip",
+      "bytes": 66795,
+      "sha256": "618c7a95878638cebd5cb6417f8c0f7be551a15250d5f60987418616bc5a8ade",
+      "entries": [
+        "Sebring_Short_2021.csv",
+        "Sebring_Short_2021.ini",
+        "Sebring_Short_2021_Pit.csv"
+      ]
+    },
+    {
+      "sourceFileId": "3f1c78790f99888584b036da",
+      "viewPath": "raw/views/racetools/maps/Sebring_Short_SF.zip",
+      "bytes": 62343,
+      "sha256": "5188b3cc88b708494d2dfd9c20f69dbe93b228bb1e65929b2443260ab7faab5c",
+      "entries": [
+        "Sebring_Short_SF.csv",
+        "Sebring_Short_SF.ini",
+        "Sebring_Short_SF_Pit.csv"
+      ]
+    },
+    {
+      "sourceFileId": "27b653d9f242a405e9975100",
+      "viewPath": "raw/views/racetools/maps/StPetersburg.zip",
+      "bytes": 65046,
+      "sha256": "275f704650e6f27f1dc0f8ae7febe2ec705fa835fe9353c8e1c2dcb74ed94ccb",
+      "entries": [
+        "StPetersburg.csv",
+        "StPetersburg.ini",
+        "StPetersburg_Pit.csv"
+      ]
+    },
+    {
+      "sourceFileId": "8e2eec98b92f2bf693b78c7b",
+      "viewPath": "raw/views/racetools/maps/Texas.zip",
+      "bytes": 53629,
+      "sha256": "e9813131046ee9e09d8833d2ec8791ee0d73b07e819adc261f53fb1b609a6e5b",
+      "entries": [
+        "Texas_2019.csv",
+        "Texas_2019_Pit.csv",
+        "Texas_2019_Pit.ini"
+      ]
+    },
+    {
+      "sourceFileId": "a6a62acd78399a0c24b0ee2d",
+      "viewPath": "raw/views/racetools/maps/ThermalClub.zip",
+      "bytes": 117135,
+      "sha256": "e0758bcfadf7f6fd7f4d8484edfd4ebcd6c17a75e12246450df08e188f64d767",
+      "entries": [
+        "ThermalClub.csv",
+        "ThermalClub.ini",
+        "ThermalClub_Pit.csv"
+      ]
+    },
+    {
+      "sourceFileId": "378f1033b5f901b99bac1194",
+      "viewPath": "raw/views/racetools/maps/Toronto_2018.zip",
+      "bytes": 69681,
+      "sha256": "7e4f3e84b680b75393d1b721cd5dbcce54b09ca0eaafde5215d5aa96b9926fb7",
+      "entries": [
+        "Toronto_2018.csv",
+        "Toronto_2018.ini",
+        "Toronto_2018_Pit.csv"
+      ]
+    }
+  ]
+}

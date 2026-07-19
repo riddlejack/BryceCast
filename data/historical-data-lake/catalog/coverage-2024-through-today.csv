@@ -1,0 +1,177 @@
+year,date,source,sessionId,replayId,series,sessionType,event,sessionLabel,sourceQuality,decodedQuality,heartbeatCount,heartbeatMedianGapSeconds,namedSectionRecordCount,cleanSegmentFrameCount,cleanSegmentMaxLap,cleanSegmentHasCheckered
+2024,2024-01-15,RaceTools,a48b80a9a8f77fd9c4f90a8a,,INDY_NXT,test,INDY NXT Private Test - Sebring,Test Session 1,inventory_validated,usable,8983,1,0,,,
+2024,2024-01-16,RaceTools,92d582e11a8556fd6e931d68,,INDY_NXT,test,INDY NXT Private Test - Sebring,Test Session 2,inventory_validated,usable,64720,1,0,,,
+2024,2024-01-17,RaceTools,822993fb1fdc59cc15e70d4d,,INDY_NXT,test,INDY NXT Private Test - Sebring,Test Session 3,inventory_validated,usable,68041,1,0,,,
+2024,2024-02-06,RaceTools,df5a0fd188d6654c6453e2aa,,INDY_NXT,test,Private Test INDY NXT - Laguna Seca,Test Session 1,inventory_validated,usable,64723,1,0,,,
+2024,2024-03-08,RaceTools,c53814df14bae88eebbe6b1f,,INDY_NXT,practice,INDY NXT by Firestone GP of St Petersburg,Practice 1,inventory_validated,usable,3077,1,8300,,,
+2024,2024-03-09,RaceTools,27778bf9b991f0776dd62877,,INDY_NXT,practice,INDY NXT by Firestone GP of St Petersburg,Practice 2,inventory_validated,usable,4628,1,11012,,,
+2024,2024-03-09,RaceTools,ab0e16fb5eed2101a3cca858,,INDY_NXT,qualifying,INDY NXT by Firestone GP of St Petersburg,Qualifications - Group 1,inventory_validated,usable,1475,1,2165,,,
+2024,2024-03-09,RaceTools,ccddd7da3dfa55c5aaff86f6,,INDY_NXT,qualifying,INDY NXT by Firestone GP of St Petersburg,Qualifications - Group 2,inventory_validated,usable,1660,1,2102,,,
+2024,2024-03-10,RaceTools,717d30276c2849474246ae36,,INDY_NXT,race,INDY NXT by Firestone GP of St Petersburg,Race,inventory_validated,usable,3811,1,17011,,,
+2024,2024-04-26,RaceTools,81af52ed48f65ce49d5ab775,,INDY_NXT,practice,Grand Prix of Alabama,Practice 1,inventory_validated,usable,3183,1,8637,,,
+2024,2024-04-27,RaceTools,e1fc25b2d676e1451facf01b,,INDY_NXT,practice,INDY NXT by Firestone Grand Prix of Alabama,Practice 2,inventory_validated,usable,4197,1,9378,,,
+2024,2024-04-27,RaceTools,c41a6e068990f4dee12d2884,,INDY_NXT,qualifying,INDY NXT by Firestone Grand Prix of Alabama,Qualifications - Group 1,inventory_validated,usable,1549,1,2080,,,
+2024,2024-04-27,RaceTools,d9ac71e6b0409cf83399d336,,INDY_NXT,qualifying,INDY NXT by Firestone Grand Prix of Alabama,Qualifications - Group 2,inventory_validated,usable,1064,1,2061,,,
+2024,2024-04-28,RaceTools,17e39d66bba1ad6ce595d411,,INDY_NXT,race,INDY NXT by Firestone Grand Prix of Alabama,Race,inventory_validated,usable,3320,1,14671,,,
+2024,2024-05-10,RaceTools,0690b698c5be5a9dbd2ea231,,INDY_NXT,practice,INDY NXT by Firestone Indianapolis Grand Prix,Practice 1,inventory_validated,usable,3476,1,13432,,,
+2024,2024-05-10,RaceTools,ef1009c12320d10e63bbc6fe,,INDY_NXT,qualifying,INDY NXT by Firestone Indianapolis Grand Prix,Qualifications - Group 1,inventory_validated,usable,1722,1,2377,,,
+2024,2024-05-10,RaceTools,0717f659d92a6749d2153860,,INDY_NXT,qualifying,INDY NXT by Firestone Indianapolis Grand Prix,Qualifications - Group 2,inventory_validated,usable,936,1,2619,,,
+2024,2024-05-10,RaceTools,8587ed4166de82b369751b5d,,INDY_NXT,race,INDY NXT by Firestone Indianapolis Grand Prix,Race 1,inventory_validated,usable,3696,1,16921,,,
+2024,2024-05-11,RaceTools,4f8a08373f32cdf80c5bba56,,INDY_NXT,race,INDY NXT by Firestone Indianapolis Grand Prix,Race 2,inventory_validated,usable,3369,1,18034,,,
+2024,2024-05-31,RaceTools,6c2803441f8bf4fd0ddcb849,,INDY_NXT,practice,INDY NXT by Firestone Detroit Grand Prix,Practice 1,inventory_validated,usable,3254,1,13240,,,
+2024,2024-06-01,RaceTools,8170f329956aeca1eeffa457,,INDY_NXT,practice,INDY NXT by Firestone Detroit Grand Prix,Practice 2,inventory_validated,usable,3158,1,13851,,,
+2024,2024-06-01,RaceTools,97e535286ae823c030887530,,INDY_NXT,qualifying,INDY NXT by Firestone Detroit Grand Prix,Qualifications - Group 1,inventory_validated,usable,1480,1,2217,,,
+2024,2024-06-01,RaceTools,dbb8087f687d9ca870d8e454,,INDY_NXT,qualifying,INDY NXT by Firestone Detroit Grand Prix,Qualifications - Group 2,inventory_validated,usable,1086,1,2582,,,
+2024,2024-06-02,RaceTools,18e0d8143c937f3eaadab837,,INDY_NXT,race,INDY NXT by Firestone Detroit Grand Prix,Race,inventory_validated,usable,3992,1,22912,,,
+2024,2024-06-07,RaceTools,3d0fb9772d2c2cad7ff55c26,,INDY_NXT,practice,INDY NXT by Firestone Grand Prix at Road America,Practice 1,inventory_validated,usable,3386,1,10517,,,
+2024,2024-06-08,RaceTools,aa0550cf4ccd6fef53e77c4e,,INDY_NXT,practice,INDY NXT by Firestone Grand Prix at Road America,Practice 2,inventory_validated,usable,3283,1,10285,,,
+2024,2024-06-08,RaceTools,97fa3fdd9a2224abae5780a3,,INDY_NXT,qualifying,INDY NXT by Firestone Grand Prix at Road America,Qualifications - Group 1,inventory_validated,usable,2008,1,2587,,,
+2024,2024-06-08,RaceTools,96d1ada5b46bc9bd3932608f,,INDY_NXT,qualifying,INDY NXT by Firestone Grand Prix at Road America,Qualifications - Group 2,inventory_validated,usable,1120,1,1921,,,
+2024,2024-06-09,RaceTools,0fb13696d0260969604c05f3,,INDY_NXT,race,INDY NXT by Firestone Grand Prix at Road America,Race,inventory_validated,usable,3483,1,14308,,,
+2024,2024-06-12,RaceTools,b5140b1af199a3bc6dab6cf2,,INDY_NXT,test,INDY NXT by Firestone Milwaukee Open Test,Test Session 1,inventory_validated,usable,9357,1,24995,,,
+2024,2024-06-12,RaceTools,4a92460e320469d6dbae362b,,INDY_NXT,test,INDY NXT by Firestone Milwaukee Open Test,Test Session 2,inventory_validated,usable,9372,1,20650,,,
+2024,2024-06-21,RaceTools,6b6d2cd2cdcae9fd0c8c85ac,,INDY_NXT,practice,INDY NXT by Firestone GP of Monterey,Practice 1,inventory_validated,usable,1957,1,9227,,,
+2024,2024-06-21,RaceTools,7cfbc64af6cca3eea3be225c,,INDY_NXT,practice,INDY NXT by Firestone GP of Monterey,Practice 2,inventory_validated,usable,1963,1,9291,,,
+2024,2024-06-22,RaceTools,d7a0fbb6c872ae1f0cb76259,,INDY_NXT,qualifying,INDY NXT by Firestone GP of Monterey,Qualifications - Group 1,inventory_validated,usable,1585,1,2893,,,
+2024,2024-06-22,RaceTools,8f963133054f8531c4ddc928,,INDY_NXT,qualifying,INDY NXT by Firestone GP of Monterey,Qualifications - Group 2,inventory_validated,usable,1038,1,2780,,,
+2024,2024-06-22,RaceTools,be9fcb2a0853f340d1cae6d0,,INDY_NXT,race,INDY NXT by Firestone GP of Monterey,Race 1,inventory_validated,usable,3633,1,19385,,,
+2024,2024-06-23,RaceTools,0223b105eb53fbb0aa9682fd,,INDY_NXT,race,INDY NXT by Firestone GP of Monterey,Race 2,inventory_validated,usable,3422,1,19273,,,
+2024,2024-06-28,RaceTools,2d41f0d2425f4050a1b41571,,INDY_NXT,test,Private Test - Iowa Speedway,Test Session 1,inventory_validated,usable,21947,1,0,,,
+2024,2024-07-05,RaceTools,1700a1eeb48ab3fa29443351,,INDY_NXT,practice,INDY NXT by Firestone Grand Prix at Mid-Ohio,Practice 1,inventory_validated,usable,3246,1,11474,,,
+2024,2024-07-06,RaceTools,24a279472274853ca0723e52,,INDY_NXT,practice,INDY NXT by Firestone Grand Prix at Mid-Ohio,Practice 2,inventory_validated,usable,3167,1,9301,,,
+2024,2024-07-06,RaceTools,ce53accb534711946c66afa2,,INDY_NXT,qualifying,INDY NXT by Firestone Grand Prix at Mid-Ohio,Qualifications - Group 1,inventory_validated,usable,1503,1,2171,,,
+2024,2024-07-06,RaceTools,6e13fdbb7f956192f44204fa,,INDY_NXT,qualifying,INDY NXT by Firestone Grand Prix at Mid-Ohio,Qualifications - Group 2,inventory_validated,usable,1030,1,2438,,,
+2024,2024-07-07,RaceTools,e39710f2d9209b4f89de78d7,,INDY_NXT,race,INDY NXT by Firestone Grand Prix at Mid-Ohio,Race,inventory_validated,usable,3538,1,14812,,,
+2024,2024-07-12,RaceTools,c3b4333cde0966c09f9a61f9,,INDY_NXT,practice,INDY NXT by Firestone at Iowa Speedway,Practice 1,inventory_validated,usable,4819,1,12295,,,
+2024,2024-07-12,RaceTools,e2a2450abc7e3b0c7544352a,,INDY_NXT,qualifying,INDY NXT by Firestone at Iowa Speedway,Qualifications,inventory_validated,usable,2321,1,1039,,,
+2024,2024-07-13,RaceTools,b4494d32f331ed2fa58ecb3a,,INDY_NXT,race,INDY NXT by Firestone at Iowa Speedway,Race,inventory_validated,usable,2425,1,11598,,,
+2024,2024-08-16,RaceTools,07b464883e919afef7277f84,,INDY_NXT,practice,INDY NXT by Firestone Outfront Showdown,Practice 1,inventory_validated,usable,3007,1,14272,,,
+2024,2024-08-16,RaceTools,72799ccfba7fe20300f53d72,,INDY_NXT,qualifying,INDY NXT by Firestone Outfront Showdown,Qualifications,inventory_validated,usable,2931,1,1169,,,
+2024,2024-08-17,RaceTools,e069e33635af5bc343e32229,,INDY_NXT,race,INDY NXT by Firestone Outfront Showdown,Race,inventory_validated,usable,3422,1,16257,,,
+2024,2024-08-23,RaceTools,9d8c1620835f2106b3cb8b2d,,INDY_NXT,practice,INDY NXT by Firestone Grand Prix of Portland,Practice 1,inventory_validated,usable,3153,1,7713,,,
+2024,2024-08-24,RaceTools,7bdf11c5447de5741068dac4,,INDY_NXT,practice,INDY NXT by Firestone Grand Prix of Portland,Practice 2,inventory_validated,usable,3149,1,9408,,,
+2024,2024-08-24,RaceTools,e30c5fa7a4f2c0472de72047,,INDY_NXT,qualifying,INDY NXT by Firestone Grand Prix of Portland,Qualifications - Group 1,inventory_validated,usable,1502,1,1855,,,
+2024,2024-08-24,RaceTools,8a3b879e2dc7d5c8a8ff97f2,,INDY_NXT,qualifying,INDY NXT by Firestone Grand Prix of Portland,Qualifications - Group 2,inventory_validated,usable,1019,1,1968,,,
+2024,2024-08-25,RaceTools,e52378edd33db00ab812224e,,INDY_NXT,race,INDY NXT by Firestone Grand Prix of Portland,Race,inventory_validated,usable,3225,1,11497,,,
+2024,2024-08-30,RaceTools,74af768c2efdba989cea38d2,,INDY_NXT,practice,INDY NXT by Firestone Milwaukee 100,Practice 1,inventory_validated,usable,3066,1,12878,,,
+2024,2024-08-31,RaceTools,d716ebaad6575496f679e5d9,,INDY_NXT,qualifying,INDY NXT by Firestone at Milwaukee Mile,Qualifications,inventory_validated,usable,2862,1,1264,,,
+2024,2024-08-31,RaceTools,f0f28d68d9eef60ad01c97f6,,INDY_NXT,race,INDY NXT by Firestone at Milwaukee Mile,Race,inventory_validated,usable,3014,1,22583,,,
+2024,2024-09-14,RaceTools,a8501b3076acbf9556295a19,,INDY_NXT,practice,INDY NXT by Firestone Music Grand Prix,Practice 1,inventory_validated,usable,2156,1,6860,,,
+2024,2024-09-14,RaceTools,564dbe1e2aea2b79502830d1,,INDY_NXT,practice,INDY NXT by Firestone Music Grand Prix,Practice 2,inventory_validated,usable,2194,1,9055,,,
+2024,2024-09-14,RaceTools,b5f7f0ad34444de5ef37509b,,INDY_NXT,qualifying,INDY NXT by Firestone Music Grand Prix,Qualifications,inventory_validated,usable,6537,1,602,,,
+2024,2024-09-15,RaceTools,336a570fcf32e760b0cb4453,,INDY_NXT,race,INDY NXT by Firestone Music City Grand Prix,Race,inventory_validated,usable,2672,1,14687,,,
+2024,2024-10-18,RaceTools,aa7b66a732b2246f15a1cf9c,,INDY_NXT,test,Chris Griffis Memorial Test,Test Session 1,inventory_validated,usable,9372,1,2414,,,
+2024,2024-10-18,RaceTools,b85c0696ad6e7e02a5901526,,INDY_NXT,test,Chris Griffis Memorial Test,Test Session 2,inventory_validated,usable,11113,1,3757,,,
+2024,2024-10-22,RaceTools,5f838eff739954db210d8f11,,INDY_NXT,test,Chris Griffis Memorial Test,Test Session 2,inventory_validated,usable,325080,1,0,,,
+2024,2024-10-25,RaceTools,7e5018a6f0a98a6b8b343196,,INDY_NXT,test,Chris Griffis Memorial Test,Test Session 2,inventory_validated,usable,259083,1,0,,,
+2024,2024-10-26,RaceTools,fc4e0f816eb78633bf3935dc,,INDY_NXT,test,Chris Griffis Memorial Test,Test Session 2,inventory_validated,usable,86399,1,0,,,
+2024,2024-10-28,RaceTools,93625380d82803ce683e71fe,,INDY_NXT,test,INDY NXT Private Test - Barber,Test Session 1,inventory_validated,usable,52800,1,0,,,
+2024,2024-12-09,RaceTools,fd0ad56d5b34151f9d7ff59f,,INDY_NXT,test,INDY NXT Private Test - NOLA,Test Session 1,inventory_validated,usable,28744,1,0,,,
+2025,2025-01-15,RaceTools,28f0aeb7e3e1b5991324d456,,INDY_NXT,test,INDY NXT Group Test - Sebring,Test Session 1,inventory_validated,usable,12932,1,2507,,,
+2025,2025-01-15,RaceTools,9e0c2904ad0f6770c577f7cf,,INDY_NXT,test,INDY NXT Group Test - Sebring,Test Session 2,inventory_validated,usable,13111,1,3095,,,
+2025,2025-01-16,RaceTools,95d4be62cd709c2f612d07a1,,INDY_NXT,test,INDY NXT Group Test - Sebring,Test Session 3,inventory_validated,usable,9922,1,2599,,,
+2025,2025-01-16,RaceTools,e1291721238bea5f9ce8250e,,INDY_NXT,test,INDY NXT Group Test - Sebring,Test Session 4,inventory_validated,usable,8916,1,2433,,,
+2025,2025-02-05,RaceTools,be42d349276a7fb4a3b15e67,,INDY_NXT,test,Private Test - Laguna Seca,Private Test,inventory_validated,usable,76472,1,352559,,,
+2025,2025-02-05,RaceTools,d4f7695ee7323e34df826183,,INDY_NXT,test,Private Test - Laguna Seca,Test Session 1,inventory_validated,usable,24957,1,120074,,,
+2025,2025-02-05,RaceTools,f197c174f14386c28f14dda5,,INDY_NXT,test,Private Test - Laguna Seca,Test Session 2,inventory_validated,usable,16194,1,496116,,,
+2025,2025-02-06,RaceTools,02ce23822db7613f8317a188,,INDY_NXT,test,Private Test - Laguna Seca,Test Session 3,inventory_validated,usable,17612,1,49625,,,
+2025,2025-02-06,RaceTools,94c3ea1452e9c68a03bacbc6,,INDY_NXT,test,Private Test - Laguna Seca,Test Session 4,inventory_validated,usable,18256,1,552241,,,
+2025,2025-02-28,RaceTools,e3bfd59479a4c4e67e8aceed,,INDY_NXT,practice,INDY NXT by Firestone GP of St. Petersburg,Practice 1,inventory_validated,usable,3034,1,9992,,,
+2025,2025-03-01,RaceTools,7845e2c99ecc90bf5db0a71b,,INDY_NXT,practice,INDY NXT by Firestone GP of St. Petersburg,Practice 2,inventory_validated,usable,3792,1,12724,,,
+2025,2025-03-01,RaceTools,acb7c09c0fa9f07aa30b51ff,,INDY_NXT,qualifying,INDY NXT by Firestone GP of St. Petersburg,Qualifications - Group 1,inventory_validated,usable,1489,1,2068,,,
+2025,2025-03-01,RaceTools,ea0abcef0d08a6366427774c,,INDY_NXT,qualifying,INDY NXT by Firestone GP of St. Petersburg,Qualifications - Group 2,inventory_validated,usable,937,1,2503,,,
+2025,2025-03-02,RaceTools,8a65104bcc48b0b5ac550094,,INDY_NXT,race,INDY NXT by Firestone GP of St. Petersburg,Race,inventory_validated,usable,4260,1,16014,,,
+2025,2025-04-01,RaceTools,073c6a2ea50d2445c35d71ce,,INDY_NXT,test,Private Test - Nashville,Test Session 2,inventory_validated,usable,15031,1,3673,,,
+2025,2025-04-22,RaceTools,a4dbde41de5164638617b590,,INDY_NXT,test,Private Test - Mid Ohio,Test Session 1,inventory_validated,usable,12815,1,0,,,
+2025,2025-04-22,RaceTools,dc98d5fee4d6ee3348d70411,,INDY_NXT,test,Private Test - Mid Ohio,Test Session 2,inventory_validated,usable,16245,1,0,,,
+2025,2025-05-02,RaceTools,a9b947218b1f63b9900b2803,,INDY_NXT,practice,INDY NXT by Firestone GP of Alabama,Practice 1,inventory_validated,usable,3146,1,8435,,,
+2025,2025-05-03,RaceTools,27cce86369c938b52d201390,,INDY_NXT,practice,INDY NXT by Firestone GP of Alabama,Practice 2,inventory_validated,usable,3187,1,8657,,,
+2025,2025-05-03,RaceTools,cb316f96b61cdb7e7da0ec99,,INDY_NXT,qualifying,INDY NXT by Firestone GP of Alabama,Qualifications - Group 1,inventory_validated,usable,1640,1,1753,,,
+2025,2025-05-03,RaceTools,1fc001d8b98f8d14feb762fc,,INDY_NXT,qualifying,INDY NXT by Firestone GP of Alabama,Qualifications - Group 2,inventory_validated,usable,962,1,1402,,,
+2025,2025-05-04,RaceTools,9b41ccb970c3e29f4eb5c231,,INDY_NXT,race,INDY NXT by Firestone GP of Alabama,Race,inventory_validated,usable,3667,1,13415,,,
+2025,2025-05-09,RaceTools,10b7b08b5505fd895cdc3afe,,INDY_NXT,practice,INDy NXT by Firestone Indianapolis Grand Prix,Practice 1,inventory_validated,no_heartbeat,0,,0,,,
+2025,2025-05-09,RaceTools,58bc38d8c5290242a999957e,,INDY_NXT,qualifying,INDy NXT by Firestone Indianapolis Grand Prix,Qualifications - Group 1,inventory_validated,usable,1511,1,2447,,,
+2025,2025-05-09,RaceTools,38696b00aa3bd59bf3f0a5aa,,INDY_NXT,qualifying,INDy NXT by Firestone Indianapolis Grand Prix,Qualifications - Group 2,inventory_validated,usable,1158,1,2696,,,
+2025,2025-05-09,RaceTools,ab8ce10a55515c816a005fb9,,INDY_NXT,race,INDy NXT by Firestone Indianapolis Grand Prix,Race 1,inventory_validated,usable,3732,1,16910,,,
+2025,2025-05-10,RaceTools,078ab29164a8a45006881e79,,INDY_NXT,race,INDy NXT by Firestone Indianapolis Grand Prix,Race 1,quarantined_mixed_session,mixed_session_requires_segmentation,45923,1,15079,,,
+2025,2025-05-10,RaceTools,ea725038fd64ca73948ac2b8,,INDY_NXT,race,INDy NXT by Firestone Indianapolis Grand Prix,Race 2,inventory_validated,usable,3717,1,17587,,,
+2025,2025-05-30,RaceTools,b17fb47dd795ab0ed3014677,,INDY_NXT,practice,INDY NXT by Firestone Detroit Grand Prix,Practice 1,inventory_validated,usable,3344,1,11149,,,
+2025,2025-05-31,RaceTools,1840ab6de7e9f39744faae0d,,INDY_NXT,practice,INDY NXT by Firestone Detroit Grand Prix,Practice 2,inventory_validated,usable,3409,1,14674,,,
+2025,2025-05-31,RaceTools,2a2b4df8e730ea962c2aec9f,,INDY_NXT,qualifying,INDY NXT by Firestone Detroit Grand Prix,Qualifications - Group 1,inventory_validated,usable,1382,1,2616,,,
+2025,2025-05-31,RaceTools,e45b2ee3d40e6d45e67dee11,,INDY_NXT,qualifying,INDY NXT by Firestone Detroit Grand Prix,Qualifications - Group 2,inventory_validated,usable,1209,1,2129,,,
+2025,2025-06-01,RaceTools,fa94d9227639d8fe9b1e3f8f,,INDY_NXT,race,INDY NXT by Firestone Detroit Grand Prix,Race,inventory_validated,usable,4626,1,20201,,,
+2025,2025-06-09,RaceTools,f866e6039e9e87add5435131,,INDY_NXT,test,Iowa Speedway Group Test,Test Session 1,inventory_validated,usable,15527,1,0,,,
+2025,2025-06-09,RaceTools,dd669e41d2f1c6e243241b07,,INDY_NXT,test,Iowa Speedway Group Test,Test Session 2,inventory_validated,usable,12394,1,0,,,
+2025,2025-06-14,RaceTools,d4768da1bbd678ec680e2585,,INDY_NXT,practice,INDY NXT by Firestone,Practice 1,inventory_validated,usable,3144,1,13875,,,
+2025,2025-06-14,RaceTools,43a17c86985700707af283e8,,INDY_NXT,qualifying,INDY NXT by Firestone,Qualifications,inventory_validated,usable,3507,1,1332,,,
+2025,2025-06-15,RaceTools,f54bb9deeef8d350fcb42181,,INDY_NXT,race,INDY NXT by Firestone,Race,inventory_validated,usable,2894,1,21859,,,
+2025,2025-06-20,RaceTools,9a1719276687df653ab95054,,INDY_NXT,practice,INDY NXT at Road America,Practice 1,inventory_validated,usable,3258,1,9933,,,
+2025,2025-06-21,RaceTools,13f6183a3814a5e9fe7e9baf,,INDY_NXT,practice,INDY NXT at Road America,Practice 2,inventory_validated,usable,3282,1,11169,,,
+2025,2025-06-21,RaceTools,6425fa22863283dc2c760a1a,,INDY_NXT,qualifying,INDY NXT at Road America,Qualifications - Group 1,inventory_validated,usable,1663,1,2610,,,
+2025,2025-06-21,RaceTools,61c02f0a9245f8158f54557c,,INDY_NXT,qualifying,INDY NXT at Road America,Qualifications - Group 2,inventory_validated,usable,1333,1,2786,,,
+2025,2025-06-22,RaceTools,0cfb072581c7ab507dd53cec,,INDY_NXT,race,INDY NXT at Road America,Race,inventory_validated,usable,2868,1,13812,,,
+2025,2025-06-24,RaceTools,a0f6793ef5be2bff43579234,,INDY_NXT,test,Private Test - Milwaukee,Test Session 1,inventory_validated,usable,23713,1,0,,,
+2025,2025-06-24,RaceTools,f4915ea15f39cd0f6cf919bd,,INDY_NXT,test,Private Test - Milwaukee,Test Session 2,inventory_validated,usable,11233,1,0,,,
+2025,2025-07-04,RaceTools,ec40838f60fe8e8571dc51d5,,INDY_NXT,practice,INDY NXT by Firestone Grand Prix at Mid-Ohio,Practice 1,inventory_validated,usable,5399,1,10787,,,
+2025,2025-07-05,RaceTools,13f12b05c3e2c284e73b370d,,INDY_NXT,practice,INDY NXT by Firestone Grand Prix at Mid-Ohio,Practice 2,inventory_validated,usable,3137,1,10025,,,
+2025,2025-07-05,RaceTools,ba170f04571ab6d550da604f,,INDY_NXT,qualifying,INDY NXT by Firestone Grand Prix at Mid-Ohio,Qualifications - Group 1,inventory_validated,usable,1466,1,2193,,,
+2025,2025-07-05,RaceTools,cce6624823b85971e9932374,,INDY_NXT,qualifying,INDY NXT by Firestone Grand Prix at Mid-Ohio,Qualifications - Group 2,inventory_validated,usable,964,1,2481,,,
+2025,2025-07-06,RaceTools,2eaf9933962fd26abb2b33b6,,INDY_NXT,race,INDY NXT by Firestone Grand Prix at Mid-Ohio,Race,inventory_validated,usable,5071,1,13534,,,
+2025,2025-07-11,RaceTools,848f296ead47bf1065a8f0c5,,INDY_NXT,practice,INDY NXT by Firestone at Iowa,Practice 1,inventory_validated,usable,2703,1,12879,,,
+2025,2025-07-12,RaceTools,f311ce2486daa7339023b3c6,,INDY_NXT,practice,INDY NXT by Firestone at Iowa,Practice 1,inventory_validated,usable,82183,1,0,,,
+2025,2025-07-12,RaceTools,6bd18483d5b5b32d85af5de1,,INDY_NXT,race,INDY NXT by Firestone at Iowa,Race,inventory_validated,usable,2480,1,17830,,,
+2025,2025-07-25,RaceTools,485df12d65c5db37315ce285,,INDY_NXT,practice,INDY NXT by Firestone GP of Monterey Doubleheader,Practice 1,inventory_validated,usable,2150,1,8442,,,
+2025,2025-07-25,RaceTools,cb90aff4d6014f5bf9884dfe,,INDY_NXT,practice,INDY NXT by Firestone GP of Monterey Doubleheader,Practice 2,inventory_validated,usable,2041,1,6285,,,
+2025,2025-07-26,RaceTools,8ace22f995296ed1756cfa99,,INDY_NXT,practice,INDY NXT by Firestone GP of Monterey Doubleheader,Practice 2,inventory_validated,usable,76510,1,0,,,
+2025,2025-07-26,RaceTools,5dc4afbad127acbb5bbd9697,,INDY_NXT,qualifying,INDY NXT by Firestone GP of Monterey Doubleheader,Qualifications - Group 1,inventory_validated,usable,1073,1,2594,,,
+2025,2025-07-26,RaceTools,051883232a60f89897d9c826,,INDY_NXT,qualifying,INDY NXT by Firestone GP of Monterey Doubleheader,Qualifications - Group 2,inventory_validated,usable,1013,1,2916,,,
+2025,2025-07-26,RaceTools,2b07104a31cbb7c9a542c60f,,INDY_NXT,race,INDY NXT by Firestone GP of Monterey Doubleheader,Race 1,inventory_validated,usable,3576,1,16728,,,
+2025,2025-07-27,RaceTools,49b1a648fc9b5f3edd3d089b,,INDY_NXT,race,INDY NXT by Firestone GP of Monterey Doubleheader,Race 2,inventory_validated,usable,4164,1,16839,,,
+2025,2025-08-08,RaceTools,14adf244f7cdff6a2a60c308,,INDY_NXT,practice,INDY NXT by Firestone Grand Prix of Portland,Practice 1,inventory_validated,usable,3159,1,11221,,,
+2025,2025-08-09,RaceTools,706e420695baf97be5e8f6fc,,INDY_NXT,practice,INDY NXT by Firestone Grand Prix of Portland,Practice 2,inventory_validated,usable,3046,1,8331,,,
+2025,2025-08-09,RaceTools,160dc3426b527e52825a3687,,INDY_NXT,qualifying,INDY NXT by Firestone Grand Prix of Portland,Qualifications - Group 1,inventory_validated,usable,1485,1,2081,,,
+2025,2025-08-09,RaceTools,b8184400d0181a32fb358201,,INDY_NXT,qualifying,INDY NXT by Firestone Grand Prix of Portland,Qualifications - Group 2,inventory_validated,usable,934,1,1456,,,
+2025,2025-08-10,RaceTools,0d00f47f366ed73bfa6c7a78,,INDY_NXT,qualifying,INDY NXT by Firestone Grand Prix of Portland,Qualifications - Group 2,inventory_validated,usable,44893,1,0,,,
+2025,2025-08-10,RaceTools,312575847f54228b2fe3201f,,INDY_NXT,race,INDY NXT by Firestone Grand Prix of Portland,Race,inventory_validated,usable,2985,1,12809,,,
+2025,2025-08-23,RaceTools,4f082f122092754e039d7473,,INDY_NXT,practice,INDY NXT by Firestone At The Milwaukee Mile,Practice 1,inventory_validated,usable,2756,1,13645,,,
+2025,2025-08-23,RaceTools,deb2e394c315f9f9239bcaf5,,INDY_NXT,qualifying,INDY NXT by Firestone At The Milwaukee Mile,Qualifications,inventory_validated,usable,2372,1,1294,,,
+2025,2025-08-24,RaceTools,70719978e3d871717cca0581,,INDY_NXT,race,INDY NXT by Firestone At The Milwaukee Mile,Race,inventory_validated,usable,3238,1,24660,,,
+2025,2025-08-30,RaceTools,d4e9f053add334e219a09976,,INDY_NXT,practice,INDY NXT by Firestone Music City Grand Prix,Practice 1,inventory_validated,usable,2200,1,9639,,,
+2025,2025-08-30,RaceTools,9a4c48f601db3b7de8bc5d3a,,INDY_NXT,qualifying,INDY NXT by Firestone Music City Grand Prix,Qualifications,inventory_validated,usable,3165,1,1152,,,
+2025,2025-08-31,RaceTools,9cacb5684d9d6fc2dfb79f7d,,INDY_NXT,race,INDY NXT by Firestone Music City Grand Prix,Race,inventory_validated,usable,2792,1,14964,,,
+2025,2025-10-08,RaceTools,224b5597cce5653d6b35f17b,,INDY_NXT,test,INDY NXT GearBox Test - Autobahn,Test Session 1,inventory_validated,usable,23074,1,0,,,
+2025,2025-10-27,RaceTools,765f616872da85cf34375b7f,,INDY_NXT,test,Indy RC - Griffis Test,Test Session 1,inventory_validated,usable,9328,1,2878,,,
+2025,2025-10-27,RaceTools,adc09a542e1143b8075778a3,,INDY_NXT,test,Indy RC - Griffis Test,Test Session 2,inventory_validated,usable,11215,1,3799,,,
+2026,2026-02-27,Timing71,e1d4eeff935d968c160afd80,23c82ccd-0826-45b4-aeaf-7f8eaf0d3533,INDY_NXT,practice,St. Petersburg,INDY NXT by Firestone GP of St Petersburg - Practice 1,inventory_validated,usable,,,,2105,32,true
+2026,2026-02-28,Timing71,c640645605f3ece153e3fa7f,0e6cefe7-ff6f-49fd-890a-a81d98e41964,INDY_NXT,practice,St. Petersburg,INDY NXT by Firestone GP of St Petersburg - Practice 2,inventory_validated,usable,,,,1913,28,true
+2026,2026-02-28,Timing71,32e3dc0df26b8dea1575af48,060afe99-f6ad-4ce1-b796-7d44e6e4972c,INDY_NXT,qualifying,St. Petersburg,INDY NXT by Firestone GP of St Petersburg - Qualifications - Group 2,inventory_validated,usable,,,,502,6,false
+2026,2026-03-01,Timing71,17994c2abb9656a875edad43,a3fdd8d2-ac20-4398-ba8b-6e78fa1c1b1a,INDY_NXT,race,St. Petersburg,INDY NXT by Firestone GP of St Petersburg - Race,inventory_validated,usable,,,,3742,42,true
+2026,2026-03-13,Timing71,b6355c9241f9d4ce7dd429e0,196e71f4-e854-4607-b106-13b2b0a3cefe,INDY_NXT,practice,Arlington,INDYNXT by Firestone Grand Prix of Arlington - Practice 1,inventory_validated,usable,,,,3056,22,true
+2026,2026-03-14,Timing71,cca82610a4f56c605e899320,31717f23-1e00-474b-8407-9c25757e2625,INDY_NXT,practice,Arlington,INDYNXT by Firestone Grand Prix of Arlington - Practice 2,inventory_validated,usable,,,,2370,16,false
+2026,2026-03-14,Timing71,afe86d58c9f699ea5d45773a,4d23a3cb-3c4d-457d-8224-604a1eab2f0d,INDY_NXT,qualifying,Arlington,INDYNXT by Firestone Grand Prix of Arlington - Qualifications - Group 2,inventory_validated,usable,,,,1225,8,true
+2026,2026-03-15,Timing71,f4678280b3be1b45b6bddb82,a1cfa8d9-ce92-4424-95b9-e1cec62a7bc3,INDY_NXT,race,Arlington,INDYNXT by Firestone Grand Prix of Arlington - Race,inventory_validated,usable,,,,2265,15,true
+2026,2026-03-27,Timing71,cf422d56ee280650b6495455,47f9c991-4945-413d-8838-799febc303ec,INDY_NXT,practice,Barber,INDY NXT by Firestone Grand Prix of Alabama - Practice 1,inventory_validated,usable,,,,2832,30,true
+2026,2026-03-28,Timing71,8afd1d46c62046b1e1235085,1522fa4d-cb20-46fa-8e97-3769480327b8,INDY_NXT,race,Barber Race 1,Children's of Alabama Indy Grand Prix - Qualifications - Segment 1 / Group 1,usable_after_segmentation,usable,,,,4335,35,true
+2026,2026-03-28,Timing71,d5df9b1eb59c3d3560128451,81fbebf1-31f7-4d68-9ce4-774785371154,INDY_NXT,qualifying,Barber,INDY NXT by Firestone Grand Prix of Alabama - Qualifications,inventory_validated,usable,,,,1164,9,true
+2026,2026-03-29,Timing71,6bbb1027d9611e77c9d3723c,d364ad8e-831f-493e-8549-30e6a05231cb,INDY_NXT,race,Barber Race 2,INDY NXT by Firestone Grand Prix of Alabama - Race 2,inventory_validated,usable,,,,5419,30,true
+2026,2026-05-08,Timing71,c1235b6c2049bb2d1e38f4bf,97d1fd58-0a0e-49b7-a415-74da97b9b94c,INDY_NXT,practice,Indianapolis GP,INDY NXT by Firestone Indianapolis Grand Prix - Practice 1,inventory_validated,usable,,,,3066,29,true
+2026,2026-05-08,Timing71,98c04dd8c25d4e0430c0b7e8,11667e2a-abf4-4086-97b9-9be913ce0fd4,INDY_NXT,qualifying,Indianapolis GP,INDY NXT by Firestone Indianapolis Grand Prix - Qualifications,inventory_validated,usable,,,,1235,8,true
+2026,2026-05-08,Timing71,1b0b3415c9f49e5007d6aed6,323a79f6-8cba-4cd6-bbc0-e1ed1650ae64,INDY_NXT,race,IMS Race 1,SONSIO GRAND PRIX - Qualifications - Segment 1 / Group 1,usable_after_segmentation,usable,,,,4626,29,true
+2026,2026-05-09,Timing71,6f36423218b759a512962736,e17a3b10-889c-40d5-aba7-3c5648d13216,INDY_NXT,race,IMS Race 2,INDY NXT by Firestone Indianapolis Grand Prix - Race 2,inventory_validated,usable,,,,3067,30,true
+2026,2026-05-29,Timing71,09b823246b1aa032a2fe1f93,f66821a2-af0c-454f-a6d1-8e05bb9dbed6,INDY_NXT,practice,Detroit,INDY NXT by Firestone Detroit Grand Prix - Practice 1,inventory_validated,usable,,,,3043,29,true
+2026,2026-05-30,Timing71,332e9abb6c709da41b46dc1d,79b44eca-5c97-4f44-b555-2c461eb84240,INDY_NXT,practice,Detroit,INDY NXT by Firestone Detroit Grand Prix - Practice 2,inventory_validated,usable,,,,3073,33,true
+2026,2026-05-30,Timing71,2c1cd59dd97d558ad66d24c0,47f71e87-e239-4710-95be-e39085ed53ea,INDY_NXT,qualifying,Detroit,INDY NXT by Firestone Detroit Grand Prix - Qualifications - Group 2,inventory_validated,usable,,,,1391,10,true
+2026,2026-05-31,Timing71,698e4c5024d5df0fdf0e40b0,4b5590b2-499f-424d-9898-e250a0c1a129,INDY_NXT,race,Detroit,INDY NXT by Firestone Detroit Grand Prix - Race,inventory_validated,usable,,,,5441,42,true
+2026,2026-06-06,Timing71,0384279560636a395b6793b9,59e0b35d-22ff-4403-9084-61f7b86e2f9e,INDY_NXT,practice,WWT Raceway,INDY NXT by Firestone at WWT Raceway - Practice 1,inventory_validated,usable,,,,3302,72,true
+2026,2026-06-06,Timing71,220639261c5d6c20787ab5e3,7955b89c-7029-4a9f-bea0-769925a47c36,INDY_NXT,qualifying,WWT Raceway,INDY NXT by Firestone at WWT Raceway - Qualifications,inventory_validated,usable,,,,1271,2,true
+2026,2026-06-07,Timing71,3ef7e581624a35fa4bfeb40c,d8efcb85-3eed-4410-b514-714b64f3eb85,INDY_NXT,race,WWT Raceway,INDY NXT by Firestone at WWT Raceway - Race,inventory_validated,usable,,,,3644,75,true
+2026,2026-06-19,Timing71,c5a401468fea801b4d74650e,6c13b476-3c1f-4ca5-9a8a-b190a1cea0fd,INDY_NXT,practice,Road America,INDY NXT by Firestone Grand Prix at Road America - Practice 1,inventory_validated,usable,,,,3032,19,true
+2026,2026-06-20,Timing71,614b9852e156feea699787c7,3a11cff2-1f80-41b4-b332-66cab2af1e44,INDY_NXT,qualifying,Road America,INDY NXT by Firestone Grand Prix at Road America - Qualifications - Group 2,inventory_validated,usable,,,,1148,7,true
+2026,2026-06-20,Timing71,895b195c8a24be8cc442d457,089a8c49-ab69-4f6e-a4e4-c01793d07075,INDY_NXT,race,Road America Race 1,XPEL Grand Prix at Road America - Qualifications - Segment 1 / Group 1,usable_after_segmentation,usable,,,,4329,20,true
+2026,2026-06-21,Timing71,8e5dff5ffbae3d9197efa606,5aa5070d-23ff-495d-887c-6f83717b2cc9,INDY_NXT,race,Road America Race 2,INDY NXT by Firestone Grand Prix at Road America - Race 2,inventory_validated,usable,,,,5421,18,true
+2026,2026-07-03,Timing71,31a2235993d98ff2524249e1,2c825388-353f-4223-8513-d372184d1363,INDY_NXT,practice,Mid-Ohio,INDY NXT by Firestone Grand Prix at Mid-Ohio - Practice 1,inventory_validated,usable,,,,3031,29,true
+2026,2026-07-04,Timing71,894275a1357cb2bd1f47fd96,edfdc884-b347-476f-b354-e77144abcc59,INDY_NXT,qualifying,Mid-Ohio,INDY NXT by Firestone Grand Prix at Mid-Ohio - Qualifications,inventory_validated,usable,,,,1411,9,true
+2026,2026-07-04,Timing71,c91620938d02711b74e9cb25,88bfc2e9-33d3-44f5-b3ca-98900e65d95e,INDY_NXT,race,Mid-Ohio Race 1,INDY NXT by Firestone Grand Prix at Mid-Ohio - Race 1,inventory_validated,usable,,,,3554,35,true
+2026,2026-07-05,Timing71,4cd5bb1023e6c384226f820c,ed6dcdbd-befc-4136-95c6-e300f761f0ac,INDY_NXT,race,Mid-Ohio Race 2,INDY NXT by Firestone Grand Prix at Mid-Ohio - Race 2,inventory_validated,usable,,,,3303,30,true
+2026,2026-07-18,Timing71,97556535efffd163e342f6a4,d2d29656-7449-49a2-a444-7b3346bbbce9,INDY_NXT,practice,Nashville,INDY NXT by Firestone Music City Grand Prix - Practice 1,inventory_validated,usable,,,,3307,83,true
+2026,2026-07-18,Timing71,0b366064009531922e92a076,d416a374-49d4-4946-a748-ae589db49a8e,INDY_NXT,qualifying,Nashville,INDY NXT by Firestone Music City Grand Prix - Qualifications,inventory_validated,usable,,,,2066,2,false
