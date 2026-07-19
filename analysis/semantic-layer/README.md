@@ -83,8 +83,15 @@ small while still shipping the complete grain.
   sections (which cover ~43.8% of the lap). The tables contain the unpublished ~56%;
   the heat-map blanks can be filled from RaceTools capture. ~9k interval rows/race.
 - **Axis (a):** winner + podium derived from crossings match canonical **28/28**;
-  full finishing order exact **11/28**; lap counts within-1 **~93%**; feed-classification
-  cross-check **27/28**.
+  full finishing order exact **19/28**; lap counts cars-exact **513/538** (~95%),
+  within-1 **533/538**; feed-classification cross-check **27/28**. The exact-order
+  and lap-count gains come from the **pit-lane lap-numbering alignment**: a lap
+  completed through the pit lane crosses the pit start/finish line (`SFP`, distance
+  0), not the mainline S/F, so counting only mainline crossings dropped a lap per
+  pit stop. The `laps` table now counts both S/F-plane crossings (with the same
+  3 s de-dup); `isLapBoundary` on the emitted crossing rows stays mainline-only so
+  the finishing-order derivation is unchanged. Residual lap-count drift is confined
+  to caution/red-flag laps race control resolves with its own yellow-lap accounting.
 - **Axis (b):** derived full-lap section times reproduce the official PDF per-lap
   "Lap" time to **0.0000 s** (median) for **21/25** races; residuals are confined to
   caution/red-flag/pit laps. Nashville's 3 published sub-sections map to feed spans

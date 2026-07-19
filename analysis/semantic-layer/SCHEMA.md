@@ -42,14 +42,21 @@ index over all sessions is `output/loop-crossings-summary.json`.
 
 ### `geometry` (one row/pack)
 Static timing geometry decoded from the feed's `$T`/`$U` records.
-`venue, trackType, lapBoundarySection, lapBoundarySections[], sectionCount, sections[], loopDistances{}`.
+`venue, trackType, lapBoundarySection, lapBoundarySections[], pitLapBoundarySections[], sectionCount, sections[], loopDistances{}`.
 - `sections[]`: `{name, startLoop, endLoop, lengthUnits}` — each named section spans
   `startLoop → endLoop`; the `$S` crossing for a section is emitted when the car
   crosses its **end loop**.
 - `lapBoundarySections`: mainline sections whose end loop is the S/F line
   (usually one; venues with an alternate S/F line — e.g. St Petersburg — have two).
+- `pitLapBoundarySections`: pit-lane sections whose end loop is the pit start/finish
+  line (`SFP`, cumulative distance 0 — the pit-lane twin of the mainline S/F). A car
+  that completes a lap **through the pit lane** crosses `SFP` instead of the mainline
+  S/F; these sections count toward lap NUMBERING (the `laps` table) so a pit stop no
+  longer drops the car's lap by one. They do **not** set `isLapBoundary` on the
+  crossing rows — that flag stays mainline-only so finishing-order derivation is
+  unchanged. Empty `[]` at venues with no distinct pit S/F loop.
 - `loopDistances{}`: cumulative distance (feed units, ~1/12 ft) of each loop
-  around the lap; the S/F loop is at 0.
+  around the lap; the S/F loop (and its pit twin `SFP`) is at 0.
 
 ### `loop_crossings` — `loop_crossing` records (the grain)
 One row per `$S` named section/timing-loop crossing.
@@ -57,7 +64,7 @@ One row per `$S` named section/timing-loop crossing.
 | field | meaning |
 | --- | --- |
 | `car` | car number (feed) |
-| `lapIndex` | per-car lap index (increments at each S/F-line crossing; 1-based) |
+| `lapIndex` | per-car lap index (increments at each S/F-plane crossing — mainline S/F or pit-lane `SFP`; 1-based) |
 | `sectionLabel` | feed section label (e.g. `S1`, `S2A`, `I3`, `T2`) |
 | `endLoop` / `startLoop` | the physical loops this section spans (from geometry) |
 | `timeOfDaySeconds` | crossing time at the end loop, local seconds-of-day (÷10,000 tick) |
@@ -79,10 +86,12 @@ Per car, per completed racing lap, derived from S/F-line crossings.
 | `positionAtSF` | running position stamped on the S/F crossing that closed the lap |
 | `isFirstRacingLap` | lap 1, measured from the start-line instant (may be partial) |
 
-Lap counting excludes formation, start-line, and cool-down crossings; the checkered
-lap is detected as the cool-down participation cliff. Absolute counts can differ
-from official `lapsCompleted` by ±1 on start/cool-down/timed/red-flag procedure the
-official system resolves with pit/timed logic; order is unaffected (see below).
+Lap counting includes laps completed through the pit lane (a `SFP` pit-S/F crossing,
+see `pitLapBoundarySections`) and excludes formation, start-line, and cool-down
+crossings; the checkered lap is detected as the cool-down participation cliff.
+Residual counts can still differ from official `lapsCompleted` by ±1 on
+caution/red-flag procedure the official system resolves with its own yellow-lap
+accounting; order is largely unaffected (see below).
 
 ### `flags` — `flag` records
 Green/yellow/red/checkered intervals from `$A`/`$M` messages (precise local clock +

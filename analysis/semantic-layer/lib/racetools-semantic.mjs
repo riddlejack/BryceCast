@@ -108,7 +108,35 @@ function parseGeometry(lines) {
   }
   const lapBoundarySection = lapBoundarySections[0] ?? null; // primary, for display
 
-  return {venue, trackType, sections, loopDistances, lapLengthUnits, lapBoundarySection, lapBoundarySections};
+  // PIT-LANE lap-boundary sections (the lap-numbering alignment). A car that
+  // completes a lap THROUGH the pit lane crosses the pit start/finish line
+  // ("SFP" — a loop at cumulative distance 0, the pit-lane twin of the main S/F)
+  // instead of the mainline S/F loop. The official timing system counts that
+  // crossing as a completed lap; if we count only mainline S/F crossings, every
+  // pit stop drops the car's lap number by one from that lap onward, so its
+  // running order runs a lap behind the official lap chart for the rest of the
+  // race (see analysis/track-position accuracy: this is the sole cause of the
+  // Iowa/Portland pass-placement CONDITIONAL verdicts). These sections feed the
+  // lap COUNTER only — they are NOT flagged isLapBoundary on the emitted crossing
+  // rows, so finishing-order derivation (which reads mainline-S/F crossings and
+  // relies on the winner pulling off before its cool-down lap) is untouched.
+  const distOf = (loop) => loopDistances.get(loop) ?? loopDistances.get(`${loop}*`) ?? null;
+  const isPitSfLoop = (loop) => /^SFP\*?$/i.test(loop || '') && distOf(loop) === 0;
+  const pitLapBoundarySections = [];
+  for (const sec of sections.values()) {
+    if (isPitSfLoop(sec.endLoop)) pitLapBoundarySections.push(sec.name);
+  }
+
+  return {
+    venue,
+    trackType,
+    sections,
+    loopDistances,
+    lapLengthUnits,
+    lapBoundarySection,
+    lapBoundarySections,
+    pitLapBoundarySections,
+  };
 }
 
 // Ordered flag transitions from $A/$M free text (precise local clock + reason).
@@ -200,6 +228,9 @@ function parseClassification(lines) {
 // Per-car, per-lap loop crossings and the derived laps table.
 function parseCrossingsAndLaps(lines, geometry, flags) {
   const boundarySet = new Set(geometry.lapBoundarySections ?? [geometry.lapBoundarySection].filter(Boolean));
+  // Pit-lane S/F sections: a lap completed through the pit lane (crossing SFP,
+  // distance 0) instead of the mainline S/F. Counted for lap NUMBERING only.
+  const pitBoundarySet = new Set(geometry.pitLapBoundarySections ?? []);
   const crossings = []; // one row per $S section-end loop crossing
   const perCar = new Map(); // car -> {lapCounter, lastSfTod, laps:[]}
   const identities = new Map();
@@ -237,12 +268,18 @@ function parseCrossingsAndLaps(lines, geometry, flags) {
     const section = geometry.sections.get(label) || null;
     const endLoop = section ? section.endLoop : null;
 
-    // Maintain a per-car lap index that increments on each S/F-line crossing.
+    // Maintain a per-car lap index that increments on each S/F-line crossing —
+    // the MAINLINE S/F line, or the PIT-LANE S/F line (SFP) when the car
+    // completes its lap through the pit. Both sit at cumulative distance 0 (the
+    // same start/finish plane) and a car crosses exactly one of them per lap, so
+    // the shared 3 s de-duplication below prevents any double count.
     const car_ = ensureCar(perCar, car);
-    const isBoundary = boundarySet.has(label);
-    if (isBoundary) {
-      // De-duplicate an alternate-S/F crossing that lands within 3 s of another
-      // boundary crossing (same physical lap completion via a different loop).
+    const isBoundary = boundarySet.has(label); // mainline S/F (flagged on the row)
+    const isPitLapCompletion = pitBoundarySet.has(label); // pit-lane S/F (counter only)
+    if (isBoundary || isPitLapCompletion) {
+      // De-duplicate a second S/F-plane crossing that lands within 3 s of another
+      // (an alternate mainline S/F loop, or a pit S/F crossing that coincides
+      // with a mainline one — same physical lap completion via a different loop).
       const last = car_.sfCrossings[car_.sfCrossings.length - 1];
       if (!last || Math.abs(tod - last.tod) > 3) car_.sfCrossings.push({tod, durTicks, position: hex(f[5])});
     }
@@ -501,6 +538,7 @@ export function parseRaceToolsSession(logText, session) {
       trackType: geometry.trackType,
       lapBoundarySection: geometry.lapBoundarySection,
       lapBoundarySections: geometry.lapBoundarySections,
+      pitLapBoundarySections: geometry.pitLapBoundarySections,
       sectionCount: geometry.sections.size,
       sections: [...geometry.sections.values()],
       loopDistances: Object.fromEntries(geometry.loopDistances),

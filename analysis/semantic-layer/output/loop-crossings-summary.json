@@ -1,7 +1,7 @@
 {
   "lane": "analysis/semantic-layer",
   "slice": "slice-1-loop-crossings",
-  "generatedAt": "2026-07-19T02:50:47.942Z",
+  "generatedAt": "2026-07-19T23:14:05.627Z",
   "sourceTier": "racetools_capture",
   "lakeDataRoot": "/Users/example/.codex/worktrees/a534/Bryce POV access/data/historical-data-lake",
   "provenanceNote": "Derived from immutable RaceTools captures (raw/ only). Local time-of-day is the authoritative crossing clock; feed heartbeat epochs are date anchors with UNVALIDATED timezone. Not an official BryceCast fact.",
@@ -241,7 +241,7 @@
       ],
       "distinctLoopCount": 14,
       "crossingCount": 8300,
-      "lapRowCount": 388,
+      "lapRowCount": 465,
       "carCount": 21,
       "heartbeat": {
         "count": 3077,
@@ -257,7 +257,7 @@
       "flagEventCount": 23,
       "greenTod": 49801.004,
       "hasCheckered": true,
-      "maxDerivedLaps": 25,
+      "maxDerivedLaps": 29,
       "qualityMasks": [],
       "pack": "sessions/rt_2024_st-petersburg-street-circuit_p1_2024-03-08_a.ndjson.gz"
     },
@@ -323,7 +323,7 @@
       ],
       "distinctLoopCount": 14,
       "crossingCount": 11012,
-      "lapRowCount": 464,
+      "lapRowCount": 536,
       "carCount": 21,
       "heartbeat": {
         "count": 4628,
@@ -340,7 +340,7 @@
       "flagEventCount": 21,
       "greenTod": 30300.266,
       "hasCheckered": true,
-      "maxDerivedLaps": 28,
+      "maxDerivedLaps": 31,
       "qualityMasks": [],
       "pack": "sessions/rt_2024_st-petersburg-street-circuit_p2_2024-03-09_a.ndjson.gz"
     },
@@ -406,7 +406,7 @@
       ],
       "distinctLoopCount": 14,
       "crossingCount": 2165,
-      "lapRowCount": 94,
+      "lapRowCount": 102,
       "carCount": 10,
       "heartbeat": {
         "count": 1475,
@@ -422,7 +422,7 @@
       "flagEventCount": 9,
       "greenTod": 47762.236,
       "hasCheckered": true,
-      "maxDerivedLaps": 10,
+      "maxDerivedLaps": 11,
       "qualityMasks": [],
       "pack": "sessions/rt_2024_st-petersburg-street-circuit_qa_2024-03-09_a.ndjson.gz"
     },
@@ -488,7 +488,7 @@
       ],
       "distinctLoopCount": 14,
       "crossingCount": 2102,
-      "lapRowCount": 77,
+      "lapRowCount": 91,
       "carCount": 21,
       "heartbeat": {
         "count": 1660,
@@ -504,7 +504,7 @@
       "flagEventCount": 13,
       "greenTod": 48859.018,
       "hasCheckered": true,
-      "maxDerivedLaps": 8,
+      "maxDerivedLaps": 9,
       "qualityMasks": [],
       "pack": "sessions/rt_2024_st-petersburg-street-circuit_qb_2024-03-09_a.ndjson.gz"
     },
@@ -570,7 +570,7 @@
       ],
       "distinctLoopCount": 14,
       "crossingCount": 17011,
-      "lapRowCount": 846,
+      "lapRowCount": 851,
       "carCount": 21,
       "heartbeat": {
         "count": 3811,
@@ -654,7 +654,7 @@
       ],
       "distinctLoopCount": 15,
       "crossingCount": 8637,
-      "lapRowCount": 362,
+      "lapRowCount": 426,
       "carCount": 21,
       "heartbeat": {
         "count": 3183,
@@ -670,7 +670,7 @@
       "flagEventCount": 22,
       "greenTod": 48681.57,
       "hasCheckered": true,
-      "maxDerivedLaps": 22,
+      "maxDerivedLaps": 24,
       "qualityMasks": [],
       "pack": "sessions/rt_2024_barber-motorsports-park_p1_2024-04-26_a.ndjson.gz"
     },
@@ -738,7 +738,7 @@
       ],
       "distinctLoopCount": 15,
       "crossingCount": 9378,
-      "lapRowCount": 382,
+      "lapRowCount": 451,
       "carCount": 21,
       "heartbeat": {
         "count": 4197,
@@ -754,7 +754,7 @@
       "flagEventCount": 22,
       "greenTod": 36378.751,
       "hasCheckered": true,
-      "maxDerivedLaps": 22,
+      "maxDerivedLaps": 25,
       "qualityMasks": [],
       "pack": "sessions/rt_2024_barber-motorsports-park_p2_2024-04-27_a.ndjson.gz"
     },
@@ -980,7 +980,7 @@
       ],
       "distinctLoopCount": 15,
       "crossingCount": 14671,
-      "lapRowCount": 728,
+      "lapRowCount": 729,
       "carCount": 21,
       "heartbeat": {
         "count": 3320,
@@ -1071,7 +1071,7 @@
       ],
       "distinctLoopCount": 17,
       "crossingCount": 13432,
-      "lapRowCount": 506,
+      "lapRowCount": 564,
       "carCount": 21,
       "heartbeat": {
         "count": 3476,
@@ -1087,7 +1087,7 @@
       "flagEventCount": 15,
       "greenTod": 39900.354,
       "hasCheckered": true,
-      "maxDerivedLaps": 28,
+      "maxDerivedLaps": 31,
       "qualityMasks": [],
       "pack": "sessions/rt_2024_indianapolis-motor-speedway-rc_p1_2024-05-10_a.ndjson.gz"
     },
@@ -1159,7 +1159,7 @@
       ],
       "distinctLoopCount": 16,
       "crossingCount": 2377,
-      "lapRowCount": 85,
+      "lapRowCount": 89,
       "carCount": 10,
       "heartbeat": {
         "count": 1722,
@@ -1175,7 +1175,7 @@
       "flagEventCount": 9,
       "greenTod": 52293.148,
       "hasCheckered": true,
-      "maxDerivedLaps": 9,
+      "maxDerivedLaps": 10,
       "qualityMasks": [],
       "pack": "sessions/rt_2024_indianapolis-motor-speedway-rc_qa_2024-05-10_a.ndjson.gz"
     },
@@ -1247,7 +1247,7 @@
       ],
       "distinctLoopCount": 16,
       "crossingCount": 2619,
-      "lapRowCount": 94,
+      "lapRowCount": 95,
       "carCount": 21,
       "heartbeat": {
         "count": 936,
@@ -1338,7 +1338,7 @@
       ],
       "distinctLoopCount": 17,
       "crossingCount": 16921,
-      "lapRowCount": 680,
+      "lapRowCount": 692,
       "carCount": 21,
       "heartbeat": {
         "count": 3696,
@@ -1429,7 +1429,7 @@
       ],
       "distinctLoopCount": 17,
       "crossingCount": 18034,
-      "lapRowCount": 734,
+      "lapRowCount": 735,
       "carCount": 21,
       "heartbeat": {
         "count": 3369,
@@ -1526,7 +1526,7 @@
       ],
       "distinctLoopCount": 22,
       "crossingCount": 13240,
-      "lapRowCount": 431,
+      "lapRowCount": 479,
       "carCount": 21,
       "heartbeat": {
         "count": 3254,
@@ -1542,7 +1542,7 @@
       "flagEventCount": 17,
       "greenTod": 50056.576,
       "hasCheckered": true,
-      "maxDerivedLaps": 27,
+      "maxDerivedLaps": 29,
       "qualityMasks": [],
       "pack": "sessions/rt_2024_detroit-street-circuit_p1_2024-05-31_a.ndjson.gz"
     },
@@ -1623,7 +1623,7 @@
       ],
       "distinctLoopCount": 22,
       "crossingCount": 13851,
-      "lapRowCount": 462,
+      "lapRowCount": 509,
       "carCount": 21,
       "heartbeat": {
         "count": 3158,
@@ -1639,7 +1639,7 @@
       "flagEventCount": 22,
       "greenTod": 28877.838,
       "hasCheckered": true,
-      "maxDerivedLaps": 27,
+      "maxDerivedLaps": 28,
       "qualityMasks": [],
       "pack": "sessions/rt_2024_detroit-street-circuit_p2_2024-06-01_a.ndjson.gz"
     },
@@ -1720,7 +1720,7 @@
       ],
       "distinctLoopCount": 22,
       "crossingCount": 2217,
-      "lapRowCount": 59,
+      "lapRowCount": 68,
       "carCount": 10,
       "heartbeat": {
         "count": 1480,
@@ -1736,7 +1736,7 @@
       "flagEventCount": 12,
       "greenTod": 40872.251,
       "hasCheckered": true,
-      "maxDerivedLaps": 6,
+      "maxDerivedLaps": 7,
       "qualityMasks": [],
       "pack": "sessions/rt_2024_detroit-street-circuit_qa_2024-06-01_a.ndjson.gz"
     },
@@ -1817,7 +1817,7 @@
       ],
       "distinctLoopCount": 22,
       "crossingCount": 2582,
-      "lapRowCount": 72,
+      "lapRowCount": 81,
       "carCount": 21,
       "heartbeat": {
         "count": 1086,
@@ -1833,7 +1833,7 @@
       "flagEventCount": 12,
       "greenTod": 41958.731,
       "hasCheckered": true,
-      "maxDerivedLaps": 7,
+      "maxDerivedLaps": 8,
       "qualityMasks": [],
       "pack": "sessions/rt_2024_detroit-street-circuit_qb_2024-06-01_a.ndjson.gz"
     },
@@ -1914,7 +1914,7 @@
       ],
       "distinctLoopCount": 22,
       "crossingCount": 22912,
-      "lapRowCount": 862,
+      "lapRowCount": 867,
       "carCount": 21,
       "heartbeat": {
         "count": 3992,
@@ -2550,7 +2550,7 @@
       ],
       "distinctLoopCount": 13,
       "crossingCount": 24995,
-      "lapRowCount": 1386,
+      "lapRowCount": 1535,
       "carCount": 20,
       "heartbeat": {
         "count": 9357,
@@ -2567,7 +2567,7 @@
       "flagEventCount": 6,
       "greenTod": 32400.387,
       "hasCheckered": true,
-      "maxDerivedLaps": 118,
+      "maxDerivedLaps": 127,
       "qualityMasks": [],
       "pack": "sessions/rt_2024_milwaukee-mile_p1_2024-06-12_a.ndjson.gz"
     },
@@ -2630,7 +2630,7 @@
       ],
       "distinctLoopCount": 13,
       "crossingCount": 20650,
-      "lapRowCount": 1152,
+      "lapRowCount": 1268,
       "carCount": 20,
       "heartbeat": {
         "count": 9372,
@@ -2646,7 +2646,7 @@
       "flagEventCount": 8,
       "greenTod": 45001.022,
       "hasCheckered": true,
-      "maxDerivedLaps": 97,
+      "maxDerivedLaps": 109,
       "qualityMasks": [],
       "pack": "sessions/rt_2024_milwaukee-mile_p2_2024-06-12_a.ndjson.gz"
     },
@@ -2728,7 +2728,7 @@
       ],
       "distinctLoopCount": 21,
       "crossingCount": 9227,
-      "lapRowCount": 293,
+      "lapRowCount": 310,
       "carCount": 20,
       "heartbeat": {
         "count": 1957,
@@ -2826,7 +2826,7 @@
       ],
       "distinctLoopCount": 21,
       "crossingCount": 9291,
-      "lapRowCount": 285,
+      "lapRowCount": 306,
       "carCount": 20,
       "heartbeat": {
         "count": 1963,
@@ -2842,7 +2842,7 @@
       "flagEventCount": 19,
       "greenTod": 56475.655,
       "hasCheckered": true,
-      "maxDerivedLaps": 15,
+      "maxDerivedLaps": 16,
       "qualityMasks": [],
       "pack": "sessions/rt_2024_weathertech-raceway-laguna-seca_p2_2024-06-21_a.ndjson.gz"
     },
@@ -3019,7 +3019,7 @@
       ],
       "distinctLoopCount": 21,
       "crossingCount": 2780,
-      "lapRowCount": 84,
+      "lapRowCount": 85,
       "carCount": 20,
       "heartbeat": {
         "count": 1038,
@@ -3117,7 +3117,7 @@
       ],
       "distinctLoopCount": 21,
       "crossingCount": 19385,
-      "lapRowCount": 672,
+      "lapRowCount": 675,
       "carCount": 20,
       "heartbeat": {
         "count": 3633,
@@ -3215,7 +3215,7 @@
       ],
       "distinctLoopCount": 21,
       "crossingCount": 19273,
-      "lapRowCount": 663,
+      "lapRowCount": 669,
       "carCount": 20,
       "heartbeat": {
         "count": 3422,
@@ -3349,7 +3349,7 @@
       ],
       "distinctLoopCount": 21,
       "crossingCount": 11474,
-      "lapRowCount": 420,
+      "lapRowCount": 486,
       "carCount": 19,
       "heartbeat": {
         "count": 3246,
@@ -3365,7 +3365,7 @@
       "flagEventCount": 22,
       "greenTod": 50774.097,
       "hasCheckered": true,
-      "maxDerivedLaps": 25,
+      "maxDerivedLaps": 27,
       "qualityMasks": [],
       "pack": "sessions/rt_2024_mid-ohio-sports-car-course_p1_2024-07-05_a.ndjson.gz"
     },
@@ -3442,7 +3442,7 @@
       ],
       "distinctLoopCount": 21,
       "crossingCount": 9301,
-      "lapRowCount": 325,
+      "lapRowCount": 386,
       "carCount": 19,
       "heartbeat": {
         "count": 3167,
@@ -3458,7 +3458,7 @@
       "flagEventCount": 5,
       "greenTod": 34872.146,
       "hasCheckered": true,
-      "maxDerivedLaps": 21,
+      "maxDerivedLaps": 25,
       "qualityMasks": [],
       "pack": "sessions/rt_2024_mid-ohio-sports-car-course_p2_2024-07-06_a.ndjson.gz"
     },
@@ -3534,7 +3534,7 @@
       ],
       "distinctLoopCount": 21,
       "crossingCount": 2171,
-      "lapRowCount": 81,
+      "lapRowCount": 86,
       "carCount": 9,
       "heartbeat": {
         "count": 1503,
@@ -3550,7 +3550,7 @@
       "flagEventCount": 1,
       "greenTod": 50772.35,
       "hasCheckered": true,
-      "maxDerivedLaps": 9,
+      "maxDerivedLaps": 10,
       "qualityMasks": [],
       "pack": "sessions/rt_2024_mid-ohio-sports-car-course_qa_2024-07-06_a.ndjson.gz"
     },
@@ -3626,7 +3626,7 @@
       ],
       "distinctLoopCount": 21,
       "crossingCount": 2438,
-      "lapRowCount": 90,
+      "lapRowCount": 95,
       "carCount": 19,
       "heartbeat": {
         "count": 1030,
@@ -3642,7 +3642,7 @@
       "flagEventCount": 1,
       "greenTod": 51848.616,
       "hasCheckered": true,
-      "maxDerivedLaps": 9,
+      "maxDerivedLaps": 10,
       "qualityMasks": [],
       "pack": "sessions/rt_2024_mid-ohio-sports-car-course_qb_2024-07-06_a.ndjson.gz"
     },
@@ -3719,7 +3719,7 @@
       ],
       "distinctLoopCount": 21,
       "crossingCount": 14812,
-      "lapRowCount": 624,
+      "lapRowCount": 629,
       "carCount": 19,
       "heartbeat": {
         "count": 3538,
@@ -3793,7 +3793,7 @@
       ],
       "distinctLoopCount": 12,
       "crossingCount": 12295,
-      "lapRowCount": 918,
+      "lapRowCount": 1017,
       "carCount": 18,
       "heartbeat": {
         "count": 4819,
@@ -3809,7 +3809,7 @@
       "flagEventCount": 8,
       "greenTod": 46800.396,
       "hasCheckered": true,
-      "maxDerivedLaps": 80,
+      "maxDerivedLaps": 85,
       "qualityMasks": [],
       "pack": "sessions/rt_2024_iowa-speedway_p1_2024-07-12_a.ndjson.gz"
     },
@@ -3936,7 +3936,7 @@
       ],
       "distinctLoopCount": 12,
       "crossingCount": 11598,
-      "lapRowCount": 889,
+      "lapRowCount": 890,
       "carCount": 18,
       "heartbeat": {
         "count": 2425,
@@ -4012,7 +4012,7 @@
       ],
       "distinctLoopCount": 11,
       "crossingCount": 14272,
-      "lapRowCount": 873,
+      "lapRowCount": 933,
       "carCount": 18,
       "heartbeat": {
         "count": 3007,
@@ -4028,7 +4028,7 @@
       "flagEventCount": 10,
       "greenTod": 51300.423,
       "hasCheckered": true,
-      "maxDerivedLaps": 61,
+      "maxDerivedLaps": 63,
       "qualityMasks": [],
       "pack": "sessions/rt_2024_world-wide-technology-raceway_p1_2024-08-16_a.ndjson.gz"
     },
@@ -4159,7 +4159,7 @@
       ],
       "distinctLoopCount": 11,
       "crossingCount": 16257,
-      "lapRowCount": 1020,
+      "lapRowCount": 1025,
       "carCount": 18,
       "heartbeat": {
         "count": 3422,
@@ -4243,7 +4243,7 @@
       ],
       "distinctLoopCount": 16,
       "crossingCount": 7713,
-      "lapRowCount": 303,
+      "lapRowCount": 357,
       "carCount": 17,
       "heartbeat": {
         "count": 3153,
@@ -4259,7 +4259,7 @@
       "flagEventCount": 20,
       "greenTod": 49568.145,
       "hasCheckered": true,
-      "maxDerivedLaps": 22,
+      "maxDerivedLaps": 25,
       "qualityMasks": [],
       "pack": "sessions/rt_2024_portland-international-raceway_p1_2024-08-23_a.ndjson.gz"
     },
@@ -4327,7 +4327,7 @@
       ],
       "distinctLoopCount": 16,
       "crossingCount": 9408,
-      "lapRowCount": 415,
+      "lapRowCount": 458,
       "carCount": 17,
       "heartbeat": {
         "count": 3149,
@@ -4343,7 +4343,7 @@
       "flagEventCount": 9,
       "greenTod": 40865.997,
       "hasCheckered": true,
-      "maxDerivedLaps": 27,
+      "maxDerivedLaps": 30,
       "qualityMasks": [],
       "pack": "sessions/rt_2024_portland-international-raceway_p2_2024-08-24_a.ndjson.gz"
     },
@@ -4492,7 +4492,7 @@
       ],
       "distinctLoopCount": 16,
       "crossingCount": 1968,
-      "lapRowCount": 84,
+      "lapRowCount": 85,
       "carCount": 17,
       "heartbeat": {
         "count": 1019,
@@ -4576,7 +4576,7 @@
       ],
       "distinctLoopCount": 16,
       "crossingCount": 11497,
-      "lapRowCount": 562,
+      "lapRowCount": 565,
       "carCount": 17,
       "heartbeat": {
         "count": 3225,
@@ -4655,7 +4655,7 @@
       ],
       "distinctLoopCount": 13,
       "crossingCount": 12878,
-      "lapRowCount": 696,
+      "lapRowCount": 772,
       "carCount": 18,
       "heartbeat": {
         "count": 3066,
@@ -4671,7 +4671,7 @@
       "flagEventCount": 15,
       "greenTod": 48600.324,
       "hasCheckered": true,
-      "maxDerivedLaps": 54,
+      "maxDerivedLaps": 57,
       "qualityMasks": [],
       "pack": "sessions/rt_2024_milwaukee-mile_p1_2024-08-30_a.ndjson.gz"
     },
@@ -4808,7 +4808,7 @@
       ],
       "distinctLoopCount": 13,
       "crossingCount": 22583,
-      "lapRowCount": 1356,
+      "lapRowCount": 1358,
       "carCount": 18,
       "heartbeat": {
         "count": 3014,
@@ -4882,7 +4882,7 @@
       ],
       "distinctLoopCount": 11,
       "crossingCount": 6860,
-      "lapRowCount": 468,
+      "lapRowCount": 520,
       "carCount": 18,
       "heartbeat": {
         "count": 2156,
@@ -4898,7 +4898,7 @@
       "flagEventCount": 8,
       "greenTod": 32400.5,
       "hasCheckered": true,
-      "maxDerivedLaps": 35,
+      "maxDerivedLaps": 38,
       "qualityMasks": [],
       "pack": "sessions/rt_2024_nashville-superspeedway_p1_2024-09-14_a.ndjson.gz"
     },
@@ -4956,7 +4956,7 @@
       ],
       "distinctLoopCount": 11,
       "crossingCount": 9055,
-      "lapRowCount": 625,
+      "lapRowCount": 692,
       "carCount": 18,
       "heartbeat": {
         "count": 2194,
@@ -4972,7 +4972,7 @@
       "flagEventCount": 14,
       "greenTod": 43200.481,
       "hasCheckered": true,
-      "maxDerivedLaps": 42,
+      "maxDerivedLaps": 45,
       "qualityMasks": [],
       "pack": "sessions/rt_2024_nashville-superspeedway_p2_2024-09-14_a.ndjson.gz"
     },
@@ -5101,7 +5101,7 @@
       ],
       "distinctLoopCount": 11,
       "crossingCount": 14687,
-      "lapRowCount": 1064,
+      "lapRowCount": 1078,
       "carCount": 18,
       "heartbeat": {
         "count": 2672,
@@ -5152,7 +5152,7 @@
       ],
       "distinctLoopCount": 4,
       "crossingCount": 2414,
-      "lapRowCount": 524,
+      "lapRowCount": 621,
       "carCount": 22,
       "heartbeat": {
         "count": 9372,
@@ -5168,7 +5168,7 @@
       "flagEventCount": 0,
       "greenTod": null,
       "hasCheckered": true,
-      "maxDerivedLaps": 32,
+      "maxDerivedLaps": 38,
       "qualityMasks": [],
       "pack": "sessions/rt_2024_indianapolis-motor-speedway-rc_p1_2024-10-18_a.ndjson.gz"
     },
@@ -5203,7 +5203,7 @@
       ],
       "distinctLoopCount": 4,
       "crossingCount": 3757,
-      "lapRowCount": 831,
+      "lapRowCount": 967,
       "carCount": 22,
       "heartbeat": {
         "count": 11113,
@@ -5219,7 +5219,7 @@
       "flagEventCount": 0,
       "greenTod": null,
       "hasCheckered": true,
-      "maxDerivedLaps": 46,
+      "maxDerivedLaps": 54,
       "qualityMasks": [],
       "pack": "sessions/rt_2024_indianapolis-motor-speedway-rc_p2_2024-10-18_a.ndjson.gz"
     },
@@ -5922,7 +5922,7 @@
       ],
       "distinctLoopCount": 14,
       "crossingCount": 9992,
-      "lapRowCount": 412,
+      "lapRowCount": 481,
       "carCount": 21,
       "heartbeat": {
         "count": 3034,
@@ -5938,7 +5938,7 @@
       "flagEventCount": 6,
       "greenTod": 50465.105,
       "hasCheckered": true,
-      "maxDerivedLaps": 24,
+      "maxDerivedLaps": 28,
       "qualityMasks": [],
       "pack": "sessions/rt_2025_st-petersburg-street-circuit_p1_2025-02-28_d.ndjson.gz"
     },
@@ -6006,7 +6006,7 @@
       ],
       "distinctLoopCount": 14,
       "crossingCount": 12724,
-      "lapRowCount": 576,
+      "lapRowCount": 627,
       "carCount": 21,
       "heartbeat": {
         "count": 3792,
@@ -6022,7 +6022,7 @@
       "flagEventCount": 2,
       "greenTod": 33838.414,
       "hasCheckered": true,
-      "maxDerivedLaps": 30,
+      "maxDerivedLaps": 32,
       "qualityMasks": [],
       "pack": "sessions/rt_2025_st-petersburg-street-circuit_p2_2025-03-01_d.ndjson.gz"
     },
@@ -6087,7 +6087,7 @@
       ],
       "distinctLoopCount": 13,
       "crossingCount": 2068,
-      "lapRowCount": 90,
+      "lapRowCount": 97,
       "carCount": 10,
       "heartbeat": {
         "count": 1489,
@@ -6103,7 +6103,7 @@
       "flagEventCount": 2,
       "greenTod": 48784.043,
       "hasCheckered": true,
-      "maxDerivedLaps": 10,
+      "maxDerivedLaps": 11,
       "qualityMasks": [],
       "pack": "sessions/rt_2025_st-petersburg-street-circuit_qa_2025-03-01_d.ndjson.gz"
     },
@@ -6252,7 +6252,7 @@
       ],
       "distinctLoopCount": 14,
       "crossingCount": 16014,
-      "lapRowCount": 793,
+      "lapRowCount": 800,
       "carCount": 21,
       "heartbeat": {
         "count": 4260,
@@ -6467,7 +6467,7 @@
       ],
       "distinctLoopCount": 16,
       "crossingCount": 8435,
-      "lapRowCount": 354,
+      "lapRowCount": 404,
       "carCount": 20,
       "heartbeat": {
         "count": 3146,
@@ -6483,7 +6483,7 @@
       "flagEventCount": 4,
       "greenTod": 48677.672,
       "hasCheckered": true,
-      "maxDerivedLaps": 24,
+      "maxDerivedLaps": 23,
       "qualityMasks": [],
       "pack": "sessions/rt_2025_barber-motorsports-park_p1_2025-05-02_d.ndjson.gz"
     },
@@ -6554,7 +6554,7 @@
       ],
       "distinctLoopCount": 16,
       "crossingCount": 8657,
-      "lapRowCount": 379,
+      "lapRowCount": 420,
       "carCount": 20,
       "heartbeat": {
         "count": 3187,
@@ -6570,7 +6570,7 @@
       "flagEventCount": 20,
       "greenTod": 33081.865,
       "hasCheckered": true,
-      "maxDerivedLaps": 27,
+      "maxDerivedLaps": 28,
       "qualityMasks": [],
       "pack": "sessions/rt_2025_barber-motorsports-park_p2_2025-05-03_d.ndjson.gz"
     },
@@ -6638,7 +6638,7 @@
       ],
       "distinctLoopCount": 15,
       "crossingCount": 1753,
-      "lapRowCount": 67,
+      "lapRowCount": 68,
       "carCount": 10,
       "heartbeat": {
         "count": 1640,
@@ -6725,7 +6725,7 @@
       ],
       "distinctLoopCount": 16,
       "crossingCount": 1402,
-      "lapRowCount": 41,
+      "lapRowCount": 61,
       "carCount": 20,
       "heartbeat": {
         "count": 962,
@@ -6741,7 +6741,7 @@
       "flagEventCount": 11,
       "greenTod": 46275.925,
       "hasCheckered": true,
-      "maxDerivedLaps": 5,
+      "maxDerivedLaps": 7,
       "qualityMasks": [],
       "pack": "sessions/rt_2025_barber-motorsports-park_qb_2025-05-03_d.ndjson.gz"
     },
@@ -6812,7 +6812,7 @@
       ],
       "distinctLoopCount": 16,
       "crossingCount": 13415,
-      "lapRowCount": 659,
+      "lapRowCount": 662,
       "carCount": 20,
       "heartbeat": {
         "count": 3667,
@@ -6941,7 +6941,7 @@
       ],
       "distinctLoopCount": 16,
       "crossingCount": 2447,
-      "lapRowCount": 87,
+      "lapRowCount": 89,
       "carCount": 10,
       "heartbeat": {
         "count": 1511,
@@ -7031,7 +7031,7 @@
       ],
       "distinctLoopCount": 16,
       "crossingCount": 2696,
-      "lapRowCount": 96,
+      "lapRowCount": 97,
       "carCount": 21,
       "heartbeat": {
         "count": 1158,
@@ -7124,7 +7124,7 @@
       ],
       "distinctLoopCount": 17,
       "crossingCount": 16910,
-      "lapRowCount": 688,
+      "lapRowCount": 691,
       "carCount": 21,
       "heartbeat": {
         "count": 3732,
@@ -7217,7 +7217,7 @@
       ],
       "distinctLoopCount": 17,
       "crossingCount": 15079,
-      "lapRowCount": 520,
+      "lapRowCount": 635,
       "carCount": 37,
       "heartbeat": {
         "count": 45923,
@@ -7245,7 +7245,7 @@
       "flagEventCount": 27,
       "greenTod": 24287.508,
       "hasCheckered": true,
-      "maxDerivedLaps": 28,
+      "maxDerivedLaps": 37,
       "qualityMasks": [
         "full_day_capture",
         "heartbeat_gap"
@@ -7325,7 +7325,7 @@
       ],
       "distinctLoopCount": 17,
       "crossingCount": 17587,
-      "lapRowCount": 715,
+      "lapRowCount": 718,
       "carCount": 21,
       "heartbeat": {
         "count": 3717,
@@ -7424,7 +7424,7 @@
       ],
       "distinctLoopCount": 22,
       "crossingCount": 11149,
-      "lapRowCount": 353,
+      "lapRowCount": 412,
       "carCount": 20,
       "heartbeat": {
         "count": 3344,
@@ -7440,7 +7440,7 @@
       "flagEventCount": 19,
       "greenTod": 50655.43,
       "hasCheckered": true,
-      "maxDerivedLaps": 24,
+      "maxDerivedLaps": 26,
       "qualityMasks": [],
       "pack": "sessions/rt_2025_detroit-street-circuit_p1_2025-05-30_d.ndjson.gz"
     },
@@ -7523,7 +7523,7 @@
       ],
       "distinctLoopCount": 22,
       "crossingCount": 14674,
-      "lapRowCount": 471,
+      "lapRowCount": 540,
       "carCount": 20,
       "heartbeat": {
         "count": 3409,
@@ -7539,7 +7539,7 @@
       "flagEventCount": 22,
       "greenTod": 29057.156,
       "hasCheckered": true,
-      "maxDerivedLaps": 28,
+      "maxDerivedLaps": 31,
       "qualityMasks": [],
       "pack": "sessions/rt_2025_detroit-street-circuit_p2_2025-05-31_d.ndjson.gz"
     },
@@ -7720,7 +7720,7 @@
       ],
       "distinctLoopCount": 22,
       "crossingCount": 2129,
-      "lapRowCount": 55,
+      "lapRowCount": 65,
       "carCount": 20,
       "heartbeat": {
         "count": 1209,
@@ -7736,7 +7736,7 @@
       "flagEventCount": 12,
       "greenTod": 42733.949,
       "hasCheckered": true,
-      "maxDerivedLaps": 6,
+      "maxDerivedLaps": 7,
       "qualityMasks": [],
       "pack": "sessions/rt_2025_detroit-street-circuit_qb_2025-05-31_d.ndjson.gz"
     },
@@ -7819,7 +7819,7 @@
       ],
       "distinctLoopCount": 22,
       "crossingCount": 20201,
-      "lapRowCount": 715,
+      "lapRowCount": 749,
       "carCount": 20,
       "heartbeat": {
         "count": 4626,
@@ -7835,7 +7835,7 @@
       "flagEventCount": 9,
       "greenTod": 38121.561,
       "hasCheckered": true,
-      "maxDerivedLaps": 44,
+      "maxDerivedLaps": 45,
       "qualityMasks": [],
       "pack": "sessions/rt_2025_detroit-street-circuit_r_2025-06-01_d.ndjson.gz"
     },
@@ -7973,7 +7973,7 @@
       ],
       "distinctLoopCount": 11,
       "crossingCount": 13875,
-      "lapRowCount": 846,
+      "lapRowCount": 930,
       "carCount": 19,
       "heartbeat": {
         "count": 3144,
@@ -7989,7 +7989,7 @@
       "flagEventCount": 19,
       "greenTod": 51360.448,
       "hasCheckered": true,
-      "maxDerivedLaps": 58,
+      "maxDerivedLaps": 63,
       "qualityMasks": [],
       "pack": "sessions/rt_2025_world-wide-technology-raceway_p1_2025-06-14_d.ndjson.gz"
     },
@@ -8119,7 +8119,7 @@
       ],
       "distinctLoopCount": 11,
       "crossingCount": 21859,
-      "lapRowCount": 1371,
+      "lapRowCount": 1372,
       "carCount": 19,
       "heartbeat": {
         "count": 2894,
@@ -8859,7 +8859,7 @@
       ],
       "distinctLoopCount": 21,
       "crossingCount": 10787,
-      "lapRowCount": 397,
+      "lapRowCount": 457,
       "carCount": 19,
       "heartbeat": {
         "count": 5399,
@@ -8875,7 +8875,7 @@
       "flagEventCount": 15,
       "greenTod": 54364.608,
       "hasCheckered": true,
-      "maxDerivedLaps": 26,
+      "maxDerivedLaps": 29,
       "qualityMasks": [],
       "pack": "sessions/rt_2025_mid-ohio-sports-car-course_p1_2025-07-04_d.ndjson.gz"
     },
@@ -8954,7 +8954,7 @@
       ],
       "distinctLoopCount": 21,
       "crossingCount": 10025,
-      "lapRowCount": 356,
+      "lapRowCount": 422,
       "carCount": 19,
       "heartbeat": {
         "count": 3137,
@@ -8970,7 +8970,7 @@
       "flagEventCount": 23,
       "greenTod": 30978.731,
       "hasCheckered": true,
-      "maxDerivedLaps": 22,
+      "maxDerivedLaps": 26,
       "qualityMasks": [],
       "pack": "sessions/rt_2025_mid-ohio-sports-car-course_p2_2025-07-05_d.ndjson.gz"
     },
@@ -9048,7 +9048,7 @@
       ],
       "distinctLoopCount": 21,
       "crossingCount": 2193,
-      "lapRowCount": 81,
+      "lapRowCount": 86,
       "carCount": 9,
       "heartbeat": {
         "count": 1466,
@@ -9064,7 +9064,7 @@
       "flagEventCount": 10,
       "greenTod": 48673.043,
       "hasCheckered": true,
-      "maxDerivedLaps": 9,
+      "maxDerivedLaps": 10,
       "qualityMasks": [],
       "pack": "sessions/rt_2025_mid-ohio-sports-car-course_qa_2025-07-05_d.ndjson.gz"
     },
@@ -9142,7 +9142,7 @@
       ],
       "distinctLoopCount": 21,
       "crossingCount": 2481,
-      "lapRowCount": 90,
+      "lapRowCount": 97,
       "carCount": 19,
       "heartbeat": {
         "count": 964,
@@ -9158,7 +9158,7 @@
       "flagEventCount": 11,
       "greenTod": 49661.897,
       "hasCheckered": true,
-      "maxDerivedLaps": 9,
+      "maxDerivedLaps": 10,
       "qualityMasks": [],
       "pack": "sessions/rt_2025_mid-ohio-sports-car-course_qb_2025-07-05_d.ndjson.gz"
     },
@@ -9237,7 +9237,7 @@
       ],
       "distinctLoopCount": 21,
       "crossingCount": 13534,
-      "lapRowCount": 549,
+      "lapRowCount": 567,
       "carCount": 19,
       "heartbeat": {
         "count": 5071,
@@ -9253,7 +9253,7 @@
       "flagEventCount": 6,
       "greenTod": 38133.646,
       "hasCheckered": true,
-      "maxDerivedLaps": 32,
+      "maxDerivedLaps": 33,
       "qualityMasks": [
         "heartbeat_gap"
       ],
@@ -9313,7 +9313,7 @@
       ],
       "distinctLoopCount": 12,
       "crossingCount": 12879,
-      "lapRowCount": 998,
+      "lapRowCount": 1050,
       "carCount": 20,
       "heartbeat": {
         "count": 2703,
@@ -9329,7 +9329,7 @@
       "flagEventCount": 5,
       "greenTod": 48600.776,
       "hasCheckered": true,
-      "maxDerivedLaps": 76,
+      "maxDerivedLaps": 78,
       "qualityMasks": [],
       "pack": "sessions/rt_2025_iowa-speedway_p1_2025-07-11_d.ndjson.gz"
     },
@@ -9431,7 +9431,7 @@
       ],
       "distinctLoopCount": 12,
       "crossingCount": 17830,
-      "lapRowCount": 1408,
+      "lapRowCount": 1411,
       "carCount": 19,
       "heartbeat": {
         "count": 2480,
@@ -9531,7 +9531,7 @@
       ],
       "distinctLoopCount": 21,
       "crossingCount": 8442,
-      "lapRowCount": 258,
+      "lapRowCount": 279,
       "carCount": 19,
       "heartbeat": {
         "count": 2150,
@@ -9631,7 +9631,7 @@
       ],
       "distinctLoopCount": 21,
       "crossingCount": 6285,
-      "lapRowCount": 162,
+      "lapRowCount": 200,
       "carCount": 19,
       "heartbeat": {
         "count": 2041,
@@ -9647,7 +9647,7 @@
       "flagEventCount": 21,
       "greenTod": 56477.703,
       "hasCheckered": true,
-      "maxDerivedLaps": 10,
+      "maxDerivedLaps": 12,
       "qualityMasks": [],
       "pack": "sessions/rt_2025_weathertech-raceway-laguna-seca_p2_2025-07-25_d.ndjson.gz"
     },
@@ -9973,7 +9973,7 @@
       ],
       "distinctLoopCount": 21,
       "crossingCount": 16728,
-      "lapRowCount": 569,
+      "lapRowCount": 575,
       "carCount": 19,
       "heartbeat": {
         "count": 3576,
@@ -10073,7 +10073,7 @@
       ],
       "distinctLoopCount": 21,
       "crossingCount": 16839,
-      "lapRowCount": 565,
+      "lapRowCount": 577,
       "carCount": 19,
       "heartbeat": {
         "count": 4164,
@@ -10159,7 +10159,7 @@
       ],
       "distinctLoopCount": 16,
       "crossingCount": 11221,
-      "lapRowCount": 506,
+      "lapRowCount": 552,
       "carCount": 19,
       "heartbeat": {
         "count": 3159,
@@ -10175,7 +10175,7 @@
       "flagEventCount": 19,
       "greenTod": 47163.138,
       "hasCheckered": true,
-      "maxDerivedLaps": 32,
+      "maxDerivedLaps": 34,
       "qualityMasks": [],
       "pack": "sessions/rt_2025_portland-international-raceway_p1_2025-08-08_d.ndjson.gz"
     },
@@ -10245,7 +10245,7 @@
       ],
       "distinctLoopCount": 16,
       "crossingCount": 8331,
-      "lapRowCount": 353,
+      "lapRowCount": 394,
       "carCount": 19,
       "heartbeat": {
         "count": 3046,
@@ -10261,7 +10261,7 @@
       "flagEventCount": 2,
       "greenTod": 48751.055,
       "hasCheckered": true,
-      "maxDerivedLaps": 23,
+      "maxDerivedLaps": 24,
       "qualityMasks": [],
       "pack": "sessions/rt_2025_portland-international-raceway_p2_2025-08-09_d.ndjson.gz"
     },
@@ -10414,7 +10414,7 @@
       ],
       "distinctLoopCount": 16,
       "crossingCount": 1456,
-      "lapRowCount": 44,
+      "lapRowCount": 54,
       "carCount": 19,
       "heartbeat": {
         "count": 934,
@@ -10430,7 +10430,7 @@
       "flagEventCount": 12,
       "greenTod": 64053.109,
       "hasCheckered": true,
-      "maxDerivedLaps": 5,
+      "maxDerivedLaps": 6,
       "qualityMasks": [],
       "pack": "sessions/rt_2025_portland-international-raceway_qb_2025-08-09_d.ndjson.gz"
     },
@@ -10551,7 +10551,7 @@
       ],
       "distinctLoopCount": 16,
       "crossingCount": 12809,
-      "lapRowCount": 624,
+      "lapRowCount": 627,
       "carCount": 19,
       "heartbeat": {
         "count": 2985,
@@ -10630,7 +10630,7 @@
       ],
       "distinctLoopCount": 13,
       "crossingCount": 13645,
-      "lapRowCount": 806,
+      "lapRowCount": 909,
       "carCount": 18,
       "heartbeat": {
         "count": 2756,
@@ -10646,7 +10646,7 @@
       "flagEventCount": 21,
       "greenTod": 29850.293,
       "hasCheckered": true,
-      "maxDerivedLaps": 65,
+      "maxDerivedLaps": 70,
       "qualityMasks": [],
       "pack": "sessions/rt_2025_milwaukee-mile_p1_2025-08-23_d.ndjson.gz"
     },
@@ -10782,7 +10782,7 @@
       ],
       "distinctLoopCount": 12,
       "crossingCount": 24660,
-      "lapRowCount": 1480,
+      "lapRowCount": 1483,
       "carCount": 18,
       "heartbeat": {
         "count": 3238,
@@ -10856,7 +10856,7 @@
       ],
       "distinctLoopCount": 11,
       "crossingCount": 9639,
-      "lapRowCount": 681,
+      "lapRowCount": 752,
       "carCount": 18,
       "heartbeat": {
         "count": 2200,
@@ -10872,7 +10872,7 @@
       "flagEventCount": 4,
       "greenTod": 50700.171,
       "hasCheckered": true,
-      "maxDerivedLaps": 53,
+      "maxDerivedLaps": 56,
       "qualityMasks": [],
       "pack": "sessions/rt_2025_nashville-superspeedway_p1_2025-08-30_d.ndjson.gz"
     },
@@ -10999,7 +10999,7 @@
       ],
       "distinctLoopCount": 11,
       "crossingCount": 14964,
-      "lapRowCount": 1089,
+      "lapRowCount": 1094,
       "carCount": 18,
       "heartbeat": {
         "count": 2792,
