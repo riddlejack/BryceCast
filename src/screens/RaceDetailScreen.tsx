@@ -1671,8 +1671,10 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
       : null;
   const bryceStatus = story?.bryce.status ?? null;
   const outline = trackOutlineFor(asString(pack.track.name));
-  /* Anchored venues only: approximate curations (e.g. WWTR, held for measured
-   * loop locations from the lake) render no heat layer and keep SectionStory. */
+  /* Anchored venues only: any curation still held at 'approximate' (a venue
+   * whose span placement isn't yet visually verified) renders no heat layer and
+   * keeps SectionStory. WWTR was promoted once its lake-map loop locations were
+   * wired; road/street venues without verifiable geometry stay unregistered. */
   const sectionAnchorsAny = trackSectionsFor(asString(pack.track.name));
   const pdfAnchors = sectionAnchorsAny && sectionAnchorsAny.confidence === 'anchored' ? sectionAnchorsAny : null;
   /* When THIS race carries measured loop-crossing data, the heat map upgrades to

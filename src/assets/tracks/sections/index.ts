@@ -7,12 +7,14 @@ import { roadAmericaSections } from './road-america';
 import { barberMotorsportsParkSections } from './barber-motorsports-park';
 import { portlandInternationalRacewaySections } from './portland-international-raceway';
 import { weathertechRacewayLagunaSecaSections } from './weathertech-raceway-laguna-seca';
+import { midOhioSportsCarCourseSections } from './mid-ohio-sports-car-course';
 
 /** Curated section anchors, keyed to the OSM track outlines in the parent
- *  directory. Ovals first (Brief E sequencing), then the road courses (Phase 3,
- *  Group A: Road America, Barber — loop-to-loop families anchored from the data
- *  lake map catalog's decoded LapDistance). See ./types.ts for the adapter-
- *  contract note on measured loop locations superseding this curation. */
+ *  directory. Ovals first (Brief E sequencing), then the road courses (Phase 3):
+ *  Road America, Barber, Portland, Laguna Seca — loop-to-loop families anchored
+ *  from the data lake map catalog's decoded LapDistance; Mid-Ohio chain-fitted
+ *  with no lake loop distances. See ./types.ts for the adapter-contract note on
+ *  measured loop locations superseding this curation. */
 
 export type { TrackSectionAnchor, TrackSectionAnchorSet } from './types';
 
@@ -24,8 +26,22 @@ const sets: TrackSectionAnchorSet[] = [
   roadAmericaSections,
   barberMotorsportsParkSections,
   portlandInternationalRacewaySections,
-  weathertechRacewayLagunaSecaSections
+  weathertechRacewayLagunaSecaSections,
+  midOhioSportsCarCourseSections
 ];
+
+/* DELIBERATE HONEST MISSES — Streets of St. Petersburg and Streets of Arlington
+ * are intentionally NOT registered (trackSectionsFor returns null, so their race
+ * pages keep the honest SectionStory fallback with no heat layer). Both carry
+ * official section families, but their outlines are preliminary image traces
+ * with NO geometry to anchor to: startFinish is null, drivingDirection is null,
+ * cornerArcs is empty — the measured-length chain-fit has nothing to pin a span
+ * to. The outlines' own lengths disagree with the measured lap totals (St. Pete
+ * asset 1.12 vs 1.80 mi; Arlington asset 1.70 vs 2.73 mi), so even the scale is
+ * untrusted. An honest miss beats a wrong map. UNLOCK: an S/F tick + driving
+ * direction + corner arcs on a corrected outline, or (best) a richer RaceTools/
+ * CGR map package with real intermediate timing-loop distances — same data-only
+ * swap as everywhere else. (tests/sectionObservations.test.ts pins St. Pete null.) */
 
 const bySlug = new Map(sets.map((set) => [set.slug, set]));
 
