@@ -236,6 +236,32 @@ assert.ok(
   assert.equal(iowa, null, 'CONDITIONAL races carry no pass-mark pack');
 }
 
+/* GB3 deep-dive pack: inventory-registered, hash-verified, fails closed on
+   tamper (the raceStory integrity contract). */
+{
+  const { loadGb3DeepDive, gb3DeepDiveRef } = await import('../src/data/gb3DeepDive');
+  const { packRawModules } = await import('../src/data/packModules');
+  const ref = gb3DeepDiveRef();
+  assert.ok(ref, 'the GB3 pack is registered in the package source inventory');
+  assert.equal(ref!.id, 'gb3-deep-dive-context');
+  assert.ok(/^[0-9a-f]{64}$/.test(ref!.sha256), 'the inventory ref carries a real sha256');
+  const key = `../../${ref!.path}`;
+  const originalRaw = packRawModules[key];
+  assert.ok(originalRaw, 'the GB3 pack resolves through the context-pack glob');
+  // Tamper: one flipped byte in the raw pack must fail the load CLOSED.
+  packRawModules[key] = async () => {
+    const text = (await originalRaw()) as string;
+    return text.replace('"raceRows"', '"raceRowsX"');
+  };
+  await assert.rejects(loadGb3DeepDive(), /integrity mismatch/, 'a tampered GB3 pack is rejected, never rendered');
+  // Restore: the failed load was not cached, so a clean load verifies again.
+  packRawModules[key] = originalRaw;
+  const gb3 = await loadGb3DeepDive();
+  assert.ok(gb3, 'the untampered GB3 pack loads');
+  assert.equal(gb3!.id, ref!.id, 'the loaded pack id matches the inventory ref');
+  assert.ok(gb3!.raceResults.length >= 40, 'the pack carries the two GB3 seasons of races');
+}
+
 assert.ok(context.careerLab.contextPack.resultConversionRows >= 100);
 assert.ok(context.careerLab.contextPack.metricFamilyParity.length > 0);
 assert.ok(context.careerLab.deepContextPacks.careerDimension, 'career dimension deep pack must load');

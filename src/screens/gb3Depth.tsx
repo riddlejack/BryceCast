@@ -14,7 +14,7 @@ import { ChartTipCard, chartFont, focusFade, useMeasuredWidth, type ChartTip } f
 import { SourcePill } from '../app/components';
 import { ordinal } from '../app/format';
 import { Link, useRouter } from '../app/router';
-import { useGb3DeepDive, GB3_PACK_PATH, type Gb3DeepDivePack, type Gb3RaceResult, type Gb3TeamContext } from '../data/gb3DeepDive';
+import { useGb3DeepDive, gb3DeepDiveRef, type Gb3DeepDivePack, type Gb3RaceResult, type Gb3TeamContext } from '../data/gb3DeepDive';
 import { chapterTint, raceHref } from './careerExplorer';
 
 const GB3_TINT = chapterTint('GB3 Championship');
@@ -99,7 +99,7 @@ const WithinTeamStrip = ({ pack }: { pack: Gb3DeepDivePack }) => {
       <SectionHead title="Within the team" />
       <p className="gb3-copy">
         Where Bryce placed among his own team’s classified cars, race by race — {teams2021} through 2021, {teams2022} through
-        2022. He finished ahead of every teammate in {ledCount} {ledCount === 1 ? 'race' : 'races'}.
+        2022. He led the team’s cars home in {ledCount} of {classified} classified races.
       </p>
       <div ref={ref} style={{ width: '100%', position: 'relative' }}>
         {width > 0 ? (
@@ -447,8 +447,8 @@ const Gb3SourcePill = ({ pack }: { pack: Gb3DeepDivePack }) => {
       entries={[
         {
           label: 'GB3 deep-dive context pack',
-          path: GB3_PACK_PATH,
-          note: 'Source-bounded GB3 result conversion, team finishing order, venue profiles, 2021 grids, and 2021 conditions.'
+          path: gb3DeepDiveRef()?.path,
+          note: 'Source-bounded GB3 result conversion, team finishing order, venue profiles, 2021 grids, and 2021 conditions. Integrity-verified (sha256) against the package source inventory at load.'
         },
         {
           label: '2021 · TSL official PDFs',
@@ -475,6 +475,15 @@ const Gb3SourcePill = ({ pack }: { pack: Gb3DeepDivePack }) => {
 
 export const Gb3DepthLayer = () => {
   const pack = useGb3DeepDive();
+  if (pack === 'failed') {
+    /* Fail closed: a pack that does not match its registered hash renders
+       nothing but this honest line — never unverified numbers. */
+    return (
+      <p className="gb3-caption" style={{ margin: 0 }}>
+        The GB3 records failed their integrity check against the source inventory, so they are not shown.
+      </p>
+    );
+  }
   if (!pack) {
     return <p className="gb3-caption" style={{ margin: 0 }}>Opening the GB3 records…</p>;
   }

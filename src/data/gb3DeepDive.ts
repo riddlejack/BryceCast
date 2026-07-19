@@ -6,17 +6,16 @@
  *  and 2021 official condition strings — split by two source families that do
  *  not cover the same fields (2021 TSL PDFs vs 2022 GB3 JSON).
  *
- *  It rides the vite context-pack glob (src/data/packModules.ts) exactly like
- *  the IMSA Daytona chapter pack — page-scale detail that would bloat the main
- *  ui-data-package, loaded lazily only when the GB3 depth layer opens. The pack
- *  path already matches `analysis/**\/output/context-packs/**\/*.json`, so no
- *  build-ui-data-package registration is required. */
+ *  It rides the vite context-pack glob (src/data/packModules.ts) and loads
+ *  lazily only when the GB3 depth layer opens — but integrity is NOT optional:
+ *  the pack is registered in the ui-data-package source inventory
+ *  (screens.careerLab.gb3DeepDiveRef) and this loader verifies raw-byte
+ *  sha256 + pack id against that ref before returning anything, failing
+ *  closed on mismatch (the raceStory loader pattern). */
 
 import { useEffect, useState } from 'react';
-import { packModules } from './packModules';
-
-export const GB3_PACK_PATH = 'analysis/gb3-deep-dive/output/context-packs/gb3-deep-dive-context.json';
-const GB3_PACK_KEY = `../../${GB3_PACK_PATH}`;
+import { packModules, packRawModules } from './packModules';
+import { uiDataPackage } from './uiDataPackage';
 
 export type Gb3SourceFamily = '2021 TSL official PDFs' | '2022 GB3 official JSON';
 export type Gb3WetDry = 'dry' | 'wet' | 'damp' | 'drying';
@@ -106,31 +105,66 @@ export interface Gb3DeepDivePack {
   weatherContext: Gb3Weather[];
 }
 
-let cached: Gb3DeepDivePack | null = null;
+/** The inventory-backed integrity ref for the GB3 pack (id + path + sha256).
+ *  Null when the package predates the GB3 module — the loader then returns
+ *  null rather than loading an unverifiable pack. */
+export const gb3DeepDiveRef = () => uiDataPackage.screens.careerLab.gb3DeepDiveRef ?? null;
 
-/** Load the GB3 pack once (module-level cache; the file is static). */
-export const loadGb3DeepDive = async (): Promise<Gb3DeepDivePack | null> => {
-  if (cached) return cached;
-  const loader = packModules[GB3_PACK_KEY];
-  if (!loader) return null;
-  const module = (await loader()) as { default: Gb3DeepDivePack };
-  cached = module.default;
+const sha256Hex = async (value: string): Promise<string> => {
+  const bytes = new TextEncoder().encode(value);
+  const digest = await globalThis.crypto.subtle.digest('SHA-256', bytes);
+  return Array.from(new Uint8Array(digest))
+    .map((byte) => byte.toString(16).padStart(2, '0'))
+    .join('');
+};
+
+const load = async (): Promise<Gb3DeepDivePack | null> => {
+  const ref = gb3DeepDiveRef();
+  if (!ref) return null;
+  const key = `../../${ref.path}`;
+  const jsonLoader = packModules[key];
+  const rawLoader = packRawModules[key];
+  if (!jsonLoader || !rawLoader) return null;
+  const pack = ((await jsonLoader()) as { default: Gb3DeepDivePack }).default;
+  const rawText = (await rawLoader()) as string;
+  if ((await sha256Hex(rawText)) !== ref.sha256 || pack.id !== ref.id) {
+    throw new Error(`GB3 deep-dive pack integrity mismatch: ${ref.path}`);
+  }
+  return pack;
+};
+
+let cached: Promise<Gb3DeepDivePack | null> | null = null;
+
+/** Load the GB3 pack once, hash-verified against the source-inventory ref.
+ *  Fails closed (throws) on a tampered pack; a failed load is NOT cached, so a
+ *  later attempt re-verifies rather than replaying the rejection. */
+export const loadGb3DeepDive = (): Promise<Gb3DeepDivePack | null> => {
+  if (!cached) {
+    cached = load().catch((error) => {
+      cached = null;
+      throw error;
+    });
+  }
   return cached;
 };
 
 /** Lazy hook for the GB3 depth layer — the pack only loads when a card renders
- *  this, so the closed chapter card costs nothing. */
-export const useGb3DeepDive = (): Gb3DeepDivePack | null => {
-  const [pack, setPack] = useState<Gb3DeepDivePack | null>(cached);
+ *  this, so the closed chapter card costs nothing. An integrity failure leaves
+ *  the layer honestly empty (fail closed, never render unverified numbers). */
+export const useGb3DeepDive = (): Gb3DeepDivePack | null | 'failed' => {
+  const [pack, setPack] = useState<Gb3DeepDivePack | null | 'failed'>(null);
   useEffect(() => {
-    if (pack) return;
     let alive = true;
-    loadGb3DeepDive().then((loaded) => {
-      if (alive) setPack(loaded);
-    });
+    loadGb3DeepDive()
+      .then((loaded) => {
+        if (alive) setPack(loaded);
+      })
+      .catch(() => {
+        if (alive) setPack('failed');
+      });
     return () => {
       alive = false;
     };
-  }, [pack]);
+  }, []);
   return pack;
 };

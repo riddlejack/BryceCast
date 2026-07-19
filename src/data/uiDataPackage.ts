@@ -765,6 +765,16 @@ export interface UiDataPackage {
     careerLab: {
       title: string;
       readiness: string;
+      /** Integrity ref for the GB3 depth-layer pack — the loader verifies
+       *  sha256 + id against this and fails closed (the raceStory pattern). */
+      gb3DeepDiveRef?: {
+        id: string;
+        type: 'gb3_deep_dive';
+        path: string;
+        bytes: number;
+        modifiedAt: string;
+        sha256: string;
+      } | null;
       seriesSummary: Array<Record<string, string | number | null>>;
       parityBySeries: Record<string, Array<Record<string, string | number | null>>>;
       resultConversion: Array<Record<string, string | number | null>>;

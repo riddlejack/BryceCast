@@ -2342,6 +2342,15 @@ const buildPackage = () => {
         readiness: 'available',
         sourcePayload: 'career_lab_context_pack',
         contextPackRef: careerLabContextPack,
+        /* GB3 depth-layer pack, integrity-registered (the raceStory pattern):
+           the UI loader verifies sha256 + id against THIS ref at load time and
+           fails closed; the source drawer cites the inventory-backed path. */
+        gb3DeepDiveRef: (() => {
+          const relativePath = 'analysis/gb3-deep-dive/output/context-packs/gb3-deep-dive-context.json';
+          if (!fs.existsSync(path.join(repoRoot, relativePath))) return null;
+          const payload = readJson(relativePath);
+          return { id: payload.id, type: 'gb3_deep_dive', ...summarizeArtifact(relativePath) };
+        })(),
         careerPriorMatrixPath: sources.predictiveCareerPriorMatrix,
         seriesSummary: (careerLabPayload.seriesSummary ?? []).map((row) => ({
           seriesId: row.seriesId,
