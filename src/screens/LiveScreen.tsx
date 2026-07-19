@@ -324,7 +324,7 @@ const timeTickLabel = (value: number, spanMs: number) =>
     second: spanMs <= 300_000 ? '2-digit' : undefined
   });
 
-const BattleModule = ({ payload, samples, history }: { payload: LiveReadiness; samples: GapSample[]; history: LiveSessionHistory | null }) => {
+const BattleModule = ({ payload, samples, history, replayEnded = false }: { payload: LiveReadiness; samples: GapSample[]; history: LiveSessionHistory | null; replayEnded?: boolean }) => {
   const flag = asString(heartbeatOf(payload).currentFlag ?? heartbeatOf(payload).flag ?? (payload.raceWeekend as Row).flag);
   const mode = isRedFlag(flag)
     ? 'Session stopped — red flag'
@@ -338,7 +338,7 @@ const BattleModule = ({ payload, samples, history }: { payload: LiveReadiness; s
       <BattleCorridor payload={payload} samples={samples} history={history} />
       <div className="live-battle__divider" />
       <p className="live-battle__shared-title">The running order</p>
-      <LiveRunningOrder history={history} clockCheckedAt={liveSourceCheckedAtOf(payload)} />
+      <LiveRunningOrder history={history} clockCheckedAt={liveSourceCheckedAtOf(payload)} replayEnded={replayEnded} />
       <p className="caption caption--secondary live-battle__caption">Five minutes of official running position · gold is Bryce · neutral line patterns stay with each driver · shaded = caution · ○ an overtake involving Bryce</p>
     </Card>
   );
@@ -1077,7 +1077,7 @@ export const LiveScreen = ({
       {liveish || replayEnded ? (
         <>
           <LiveHero payload={payload} samples={samples} replayEnded={replayEnded} />
-          <BattleModule payload={payload} samples={samples} history={history} />
+          <BattleModule payload={payload} samples={samples} history={history} replayEnded={replayEnded} />
           <div className="grid live-layout">
             <div className="stack live-layout__main">
               <PointsJumbotron payload={payload} />

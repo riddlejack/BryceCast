@@ -168,10 +168,16 @@ const isLappedUpstream = (row: Record<string, unknown>, bryceRank: number, bryce
 
 export const LiveRunningOrder = ({
   history,
-  clockCheckedAt
+  clockCheckedAt,
+  replayEnded = false
 }: {
   history: LiveSessionHistory | null;
   clockCheckedAt?: string | null;
+  /** True only when a simulated replay has run its distance and gone cold. The
+   *  time axis still shows a gap past the last sample, but nothing more is
+   *  coming — so the status reads "end of the capture", never "waiting on live
+   *  timing…" (the same defect the pre-session/ended hero already retired). */
+  replayEnded?: boolean;
 }) => {
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();
   const svgRef = useRef<SVGSVGElement | null>(null);
@@ -498,7 +504,13 @@ export const LiveRunningOrder = ({
             ))}
           </svg>
           <div className="live-running-order__status" aria-live="polite">
-            {timeDomain.waiting ? <span>waiting on live timing…</span> : <span aria-hidden>&nbsp;</span>}
+            {replayEnded ? (
+              <span>end of the capture</span>
+            ) : timeDomain.waiting ? (
+              <span>waiting on live timing…</span>
+            ) : (
+              <span aria-hidden>&nbsp;</span>
+            )}
           </div>
           <div className="sr-only" aria-label="Current running order near Bryce">
             {ladder.map((entry) => <span key={entry.id}>{entry.bryce ? 'Bryce Aron, car 9' : entry.name}: P{entry.rank}, {entry.bryce ? 'Bryce' : runningOrderGapWords(latestSample, entry.id)}. </span>)}
