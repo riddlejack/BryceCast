@@ -1,0 +1,821 @@
+{
+  "lane": "analysis/track-position",
+  "slice": "pass-placement-2024-25",
+  "generatedAt": "2026-07-19T05:34:20.992Z",
+  "sourceTier": "racetools_capture",
+  "inputLane": "analysis/semantic-layer (loop-crossing tables)",
+  "raceCount": 28,
+  "excludedCaptures": [
+    {
+      "id": "rt_2025_indianapolis-motor-speedway-rc_r1_2025-05-10_d",
+      "date": "2025-05-10",
+      "venue": "Indianapolis Motor Speedway RC",
+      "qualityMasks": [
+        "full_day_capture",
+        "heartbeat_gap"
+      ],
+      "error": null
+    }
+  ],
+  "provenanceNote": "Green-flag on-track passes are the headline class; pit-cycle and caution reshuffles are labelled separately, never mixed. Placement language is always \"between the <A> and <B> loops\"; the interval labels use the official loop names from the crossings tables.",
+  "races": [
+    {
+      "feedSessionId": "rt_2024_st-petersburg-street-circuit_r_2024-03-10_a",
+      "canonicalSessionId": "session_indy_nxt_2024_6324",
+      "year": 2024,
+      "date": "2024-03-10",
+      "venue": "St Petersburg Street Circuit",
+      "sessionCode": "R",
+      "bryceCar": "27",
+      "bryceDriver": "Bryce Aron",
+      "fieldSize": 21,
+      "maxLap": 45,
+      "mainlineGateCount": 11,
+      "passTotals": {
+        "start_lap": 41,
+        "on_track_green": 43,
+        "pit_cycle": 16,
+        "caution": 3
+      },
+      "totalPasses": 103,
+      "bryce": {
+        "totalInvolving": 5,
+        "greenGains": 2,
+        "greenLosses": 1,
+        "allGains": 3,
+        "allLosses": 2
+      },
+      "incidentCandidates": 0,
+      "pack": "races/rt_2024_st-petersburg-street-circuit_r_2024-03-10_a.passes.ndjson.gz"
+    },
+    {
+      "feedSessionId": "rt_2024_barber-motorsports-park_r_2024-04-28_a",
+      "canonicalSessionId": "session_indy_nxt_2024_6314",
+      "year": 2024,
+      "date": "2024-04-28",
+      "venue": "Barber Motorsports Park",
+      "sessionCode": "R",
+      "bryceCar": "27",
+      "bryceDriver": "Bryce Aron",
+      "fieldSize": 21,
+      "maxLap": 35,
+      "mainlineGateCount": 12,
+      "passTotals": {
+        "start_lap": 9,
+        "on_track_green": 46,
+        "caution": 7,
+        "pit_cycle": 1
+      },
+      "totalPasses": 63,
+      "bryce": {
+        "totalInvolving": 5,
+        "greenGains": 2,
+        "greenLosses": 2,
+        "allGains": 2,
+        "allLosses": 3
+      },
+      "incidentCandidates": 0,
+      "pack": "races/rt_2024_barber-motorsports-park_r_2024-04-28_a.passes.ndjson.gz"
+    },
+    {
+      "feedSessionId": "rt_2024_indianapolis-motor-speedway-rc_r1_2024-05-10_a",
+      "canonicalSessionId": "session_indy_nxt_2024_6315",
+      "year": 2024,
+      "date": "2024-05-10",
+      "venue": "Indianapolis Motor Speedway RC",
+      "sessionCode": "R1",
+      "bryceCar": "27",
+      "bryceDriver": "Bryce Aron",
+      "fieldSize": 21,
+      "maxLap": 35,
+      "mainlineGateCount": 13,
+      "passTotals": {
+        "start_lap": 83,
+        "on_track_green": 33,
+        "pit_cycle": 76,
+        "caution": 32
+      },
+      "totalPasses": 224,
+      "bryce": {
+        "totalInvolving": 23,
+        "greenGains": 2,
+        "greenLosses": 0,
+        "allGains": 14,
+        "allLosses": 9
+      },
+      "incidentCandidates": 1,
+      "pack": "races/rt_2024_indianapolis-motor-speedway-rc_r1_2024-05-10_a.passes.ndjson.gz"
+    },
+    {
+      "feedSessionId": "rt_2024_indianapolis-motor-speedway-rc_r2_2024-05-11_a",
+      "canonicalSessionId": "session_indy_nxt_2024_6325",
+      "year": 2024,
+      "date": "2024-05-11",
+      "venue": "Indianapolis Motor Speedway RC",
+      "sessionCode": "R2",
+      "bryceCar": "27",
+      "bryceDriver": "Bryce Aron",
+      "fieldSize": 21,
+      "maxLap": 35,
+      "mainlineGateCount": 13,
+      "passTotals": {
+        "start_lap": 58,
+        "on_track_green": 63,
+        "pit_cycle": 7
+      },
+      "totalPasses": 128,
+      "bryce": {
+        "totalInvolving": 19,
+        "greenGains": 3,
+        "greenLosses": 1,
+        "allGains": 6,
+        "allLosses": 13
+      },
+      "incidentCandidates": 0,
+      "pack": "races/rt_2024_indianapolis-motor-speedway-rc_r2_2024-05-11_a.passes.ndjson.gz"
+    },
+    {
+      "feedSessionId": "rt_2024_detroit-street-circuit_r_2024-06-02_a",
+      "canonicalSessionId": "session_indy_nxt_2024_6326",
+      "year": 2024,
+      "date": "2024-06-02",
+      "venue": "Detroit Street Circuit",
+      "sessionCode": "R",
+      "bryceCar": "27",
+      "bryceDriver": "Bryce Aron",
+      "fieldSize": 21,
+      "maxLap": 45,
+      "mainlineGateCount": 19,
+      "passTotals": {
+        "start_lap": 273,
+        "on_track_green": 60,
+        "caution": 22,
+        "pit_cycle": 19
+      },
+      "totalPasses": 374,
+      "bryce": {
+        "totalInvolving": 20,
+        "greenGains": 0,
+        "greenLosses": 1,
+        "allGains": 9,
+        "allLosses": 11
+      },
+      "incidentCandidates": 2,
+      "pack": "races/rt_2024_detroit-street-circuit_r_2024-06-02_a.passes.ndjson.gz"
+    },
+    {
+      "feedSessionId": "rt_2024_road-america_r_2024-06-09_a",
+      "canonicalSessionId": "session_indy_nxt_2024_6316",
+      "year": 2024,
+      "date": "2024-06-09",
+      "venue": "Road America",
+      "sessionCode": "R",
+      "bryceCar": "27",
+      "bryceDriver": "Bryce Aron",
+      "fieldSize": 21,
+      "maxLap": 19,
+      "mainlineGateCount": 23,
+      "passTotals": {
+        "start_lap": 46,
+        "on_track_green": 77,
+        "caution": 18,
+        "pit_cycle": 33
+      },
+      "totalPasses": 174,
+      "bryce": {
+        "totalInvolving": 11,
+        "greenGains": 2,
+        "greenLosses": 5,
+        "allGains": 5,
+        "allLosses": 6
+      },
+      "incidentCandidates": 2,
+      "pack": "races/rt_2024_road-america_r_2024-06-09_a.passes.ndjson.gz"
+    },
+    {
+      "feedSessionId": "rt_2024_weathertech-raceway-laguna-seca_r1_2024-06-22_a",
+      "canonicalSessionId": "session_indy_nxt_2024_6317",
+      "year": 2024,
+      "date": "2024-06-22",
+      "venue": "WeatherTech Raceway Laguna Seca",
+      "sessionCode": "R1",
+      "bryceCar": "27",
+      "bryceDriver": "Bryce Aron",
+      "fieldSize": 20,
+      "maxLap": 35,
+      "mainlineGateCount": 18,
+      "passTotals": {
+        "start_lap": 20,
+        "pit_cycle": 19,
+        "on_track_green": 30
+      },
+      "totalPasses": 69,
+      "bryce": {
+        "totalInvolving": 16,
+        "greenGains": 2,
+        "greenLosses": 10,
+        "allGains": 5,
+        "allLosses": 11
+      },
+      "incidentCandidates": 1,
+      "pack": "races/rt_2024_weathertech-raceway-laguna-seca_r1_2024-06-22_a.passes.ndjson.gz"
+    },
+    {
+      "feedSessionId": "rt_2024_weathertech-raceway-laguna-seca_r2_2024-06-23_a",
+      "canonicalSessionId": "session_indy_nxt_2024_6327",
+      "year": 2024,
+      "date": "2024-06-23",
+      "venue": "WeatherTech Raceway Laguna Seca",
+      "sessionCode": "R2",
+      "bryceCar": "27",
+      "bryceDriver": "Bryce Aron",
+      "fieldSize": 20,
+      "maxLap": 35,
+      "mainlineGateCount": 18,
+      "passTotals": {
+        "start_lap": 17,
+        "on_track_green": 38,
+        "pit_cycle": 21,
+        "caution": 6
+      },
+      "totalPasses": 82,
+      "bryce": {
+        "totalInvolving": 2,
+        "greenGains": 1,
+        "greenLosses": 0,
+        "allGains": 1,
+        "allLosses": 1
+      },
+      "incidentCandidates": 1,
+      "pack": "races/rt_2024_weathertech-raceway-laguna-seca_r2_2024-06-23_a.passes.ndjson.gz"
+    },
+    {
+      "feedSessionId": "rt_2024_mid-ohio-sports-car-course_r_2024-07-07_a",
+      "canonicalSessionId": "session_indy_nxt_2024_6318",
+      "year": 2024,
+      "date": "2024-07-07",
+      "venue": "Mid-Ohio Sports Car Course",
+      "sessionCode": "R",
+      "bryceCar": "27",
+      "bryceDriver": "Bryce Aron",
+      "fieldSize": 19,
+      "maxLap": 35,
+      "mainlineGateCount": 18,
+      "passTotals": {
+        "start_lap": 209,
+        "caution": 8,
+        "on_track_green": 9,
+        "pit_cycle": 16
+      },
+      "totalPasses": 242,
+      "bryce": {
+        "totalInvolving": 44,
+        "greenGains": 0,
+        "greenLosses": 0,
+        "allGains": 20,
+        "allLosses": 24
+      },
+      "incidentCandidates": 4,
+      "pack": "races/rt_2024_mid-ohio-sports-car-course_r_2024-07-07_a.passes.ndjson.gz"
+    },
+    {
+      "feedSessionId": "rt_2024_iowa-speedway_r_2024-07-13_a",
+      "canonicalSessionId": "session_indy_nxt_2024_6319",
+      "year": 2024,
+      "date": "2024-07-13",
+      "venue": "Iowa Speedway",
+      "sessionCode": "R",
+      "bryceCar": "27",
+      "bryceDriver": "Bryce Aron",
+      "fieldSize": 18,
+      "maxLap": 55,
+      "mainlineGateCount": 9,
+      "passTotals": {
+        "start_lap": 15,
+        "on_track_green": 61,
+        "pit_cycle": 5,
+        "caution": 1
+      },
+      "totalPasses": 82,
+      "bryce": {
+        "totalInvolving": 9,
+        "greenGains": 3,
+        "greenLosses": 4,
+        "allGains": 4,
+        "allLosses": 5
+      },
+      "incidentCandidates": 0,
+      "pack": "races/rt_2024_iowa-speedway_r_2024-07-13_a.passes.ndjson.gz"
+    },
+    {
+      "feedSessionId": "rt_2024_world-wide-technology-raceway_r_2024-08-17_a",
+      "canonicalSessionId": "session_indy_nxt_2024_6320",
+      "year": 2024,
+      "date": "2024-08-17",
+      "venue": "World Wide Technology Raceway",
+      "sessionCode": "R",
+      "bryceCar": "27",
+      "bryceDriver": "Bryce Aron",
+      "fieldSize": 18,
+      "maxLap": 75,
+      "mainlineGateCount": 8,
+      "passTotals": {
+        "start_lap": 32,
+        "caution": 31,
+        "on_track_green": 56
+      },
+      "totalPasses": 119,
+      "bryce": {
+        "totalInvolving": 19,
+        "greenGains": 5,
+        "greenLosses": 2,
+        "allGains": 13,
+        "allLosses": 6
+      },
+      "incidentCandidates": 1,
+      "pack": "races/rt_2024_world-wide-technology-raceway_r_2024-08-17_a.passes.ndjson.gz"
+    },
+    {
+      "feedSessionId": "rt_2024_portland-international-raceway_r_2024-08-25_a",
+      "canonicalSessionId": "session_indy_nxt_2024_6321",
+      "year": 2024,
+      "date": "2024-08-25",
+      "venue": "Portland International Raceway",
+      "sessionCode": "R",
+      "bryceCar": "27",
+      "bryceDriver": "Bryce Aron",
+      "fieldSize": 17,
+      "maxLap": 35,
+      "mainlineGateCount": 13,
+      "passTotals": {
+        "start_lap": 32,
+        "on_track_green": 28,
+        "pit_cycle": 2
+      },
+      "totalPasses": 62,
+      "bryce": {
+        "totalInvolving": 5,
+        "greenGains": 0,
+        "greenLosses": 0,
+        "allGains": 1,
+        "allLosses": 4
+      },
+      "incidentCandidates": 1,
+      "pack": "races/rt_2024_portland-international-raceway_r_2024-08-25_a.passes.ndjson.gz"
+    },
+    {
+      "feedSessionId": "rt_2024_milwaukee-mile_r_2024-08-31_a",
+      "canonicalSessionId": "session_indy_nxt_2024_6322",
+      "year": 2024,
+      "date": "2024-08-31",
+      "venue": "Milwaukee Mile",
+      "sessionCode": "R",
+      "bryceCar": "27",
+      "bryceDriver": "Bryce Aron",
+      "fieldSize": 16,
+      "maxLap": 90,
+      "mainlineGateCount": 10,
+      "passTotals": {
+        "start_lap": 20,
+        "on_track_green": 40,
+        "pit_cycle": 2,
+        "caution": 8
+      },
+      "totalPasses": 70,
+      "bryce": {
+        "totalInvolving": 7,
+        "greenGains": 4,
+        "greenLosses": 1,
+        "allGains": 5,
+        "allLosses": 2
+      },
+      "incidentCandidates": 1,
+      "pack": "races/rt_2024_milwaukee-mile_r_2024-08-31_a.passes.ndjson.gz"
+    },
+    {
+      "feedSessionId": "rt_2024_nashville-superspeedway_r_2024-09-15_a",
+      "canonicalSessionId": "session_indy_nxt_2024_6323",
+      "year": 2024,
+      "date": "2024-09-15",
+      "venue": "Nashville Superspeedway",
+      "sessionCode": "R",
+      "bryceCar": "27",
+      "bryceDriver": "Bryce Aron",
+      "fieldSize": 18,
+      "maxLap": 65,
+      "mainlineGateCount": 8,
+      "passTotals": {
+        "start_lap": 63,
+        "on_track_green": 84,
+        "pit_cycle": 27
+      },
+      "totalPasses": 174,
+      "bryce": {
+        "totalInvolving": 21,
+        "greenGains": 7,
+        "greenLosses": 5,
+        "allGains": 12,
+        "allLosses": 9
+      },
+      "incidentCandidates": 1,
+      "pack": "races/rt_2024_nashville-superspeedway_r_2024-09-15_a.passes.ndjson.gz"
+    },
+    {
+      "feedSessionId": "rt_2025_st-petersburg-street-circuit_r_2025-03-02_d",
+      "canonicalSessionId": "session_indy_nxt_2025_6446",
+      "year": 2025,
+      "date": "2025-03-02",
+      "venue": "St Petersburg Street Circuit",
+      "sessionCode": "R",
+      "bryceCar": "39",
+      "bryceDriver": "Bryce Aron",
+      "fieldSize": 21,
+      "maxLap": 44,
+      "mainlineGateCount": 11,
+      "passTotals": {
+        "start_lap": 28,
+        "on_track_green": 14,
+        "pit_cycle": 5
+      },
+      "totalPasses": 47,
+      "bryce": {
+        "totalInvolving": 8,
+        "greenGains": 0,
+        "greenLosses": 0,
+        "allGains": 3,
+        "allLosses": 5
+      },
+      "incidentCandidates": 2,
+      "pack": "races/rt_2025_st-petersburg-street-circuit_r_2025-03-02_d.passes.ndjson.gz"
+    },
+    {
+      "feedSessionId": "rt_2025_barber-motorsports-park_r_2025-05-04_d",
+      "canonicalSessionId": "session_indy_nxt_2025_6445",
+      "year": 2025,
+      "date": "2025-05-04",
+      "venue": "Barber Motorsports Park",
+      "sessionCode": "R",
+      "bryceCar": "9",
+      "bryceDriver": "Bryce Aron",
+      "fieldSize": 20,
+      "maxLap": 35,
+      "mainlineGateCount": 12,
+      "passTotals": {
+        "start_lap": 54,
+        "on_track_green": 34,
+        "caution": 27
+      },
+      "totalPasses": 115,
+      "bryce": {
+        "totalInvolving": 23,
+        "greenGains": 3,
+        "greenLosses": 2,
+        "allGains": 11,
+        "allLosses": 12
+      },
+      "incidentCandidates": 1,
+      "pack": "races/rt_2025_barber-motorsports-park_r_2025-05-04_d.passes.ndjson.gz"
+    },
+    {
+      "feedSessionId": "rt_2025_indianapolis-motor-speedway-rc_r1_2025-05-09_d",
+      "canonicalSessionId": "session_indy_nxt_2025_6444",
+      "year": 2025,
+      "date": "2025-05-09",
+      "venue": "Indianapolis Motor Speedway RC",
+      "sessionCode": "R1",
+      "bryceCar": "9",
+      "bryceDriver": "Bryce Aron",
+      "fieldSize": 21,
+      "maxLap": 35,
+      "mainlineGateCount": 13,
+      "passTotals": {
+        "start_lap": 40,
+        "on_track_green": 43,
+        "pit_cycle": 3,
+        "caution": 12
+      },
+      "totalPasses": 98,
+      "bryce": {
+        "totalInvolving": 15,
+        "greenGains": 3,
+        "greenLosses": 6,
+        "allGains": 7,
+        "allLosses": 8
+      },
+      "incidentCandidates": 0,
+      "pack": "races/rt_2025_indianapolis-motor-speedway-rc_r1_2025-05-09_d.passes.ndjson.gz"
+    },
+    {
+      "feedSessionId": "rt_2025_indianapolis-motor-speedway-rc_r2_2025-05-10_d",
+      "canonicalSessionId": "session_indy_nxt_2025_6443",
+      "year": 2025,
+      "date": "2025-05-10",
+      "venue": "Indianapolis Motor Speedway RC",
+      "sessionCode": "R2",
+      "bryceCar": "9",
+      "bryceDriver": "Bryce Aron",
+      "fieldSize": 21,
+      "maxLap": 35,
+      "mainlineGateCount": 13,
+      "passTotals": {
+        "start_lap": 32,
+        "on_track_green": 52,
+        "caution": 10,
+        "pit_cycle": 5
+      },
+      "totalPasses": 99,
+      "bryce": {
+        "totalInvolving": 16,
+        "greenGains": 5,
+        "greenLosses": 4,
+        "allGains": 9,
+        "allLosses": 7
+      },
+      "incidentCandidates": 2,
+      "pack": "races/rt_2025_indianapolis-motor-speedway-rc_r2_2025-05-10_d.passes.ndjson.gz"
+    },
+    {
+      "feedSessionId": "rt_2025_detroit-street-circuit_r_2025-06-01_d",
+      "canonicalSessionId": "session_indy_nxt_2025_6455",
+      "year": 2025,
+      "date": "2025-06-01",
+      "venue": "Detroit Street Circuit",
+      "sessionCode": "R",
+      "bryceCar": "9",
+      "bryceDriver": "Bryce Aron",
+      "fieldSize": 20,
+      "maxLap": 44,
+      "mainlineGateCount": 19,
+      "passTotals": {
+        "start_lap": 234,
+        "pit_cycle": 37,
+        "on_track_green": 14
+      },
+      "totalPasses": 285,
+      "bryce": {
+        "totalInvolving": 37,
+        "greenGains": 0,
+        "greenLosses": 3,
+        "allGains": 20,
+        "allLosses": 17
+      },
+      "incidentCandidates": 0,
+      "pack": "races/rt_2025_detroit-street-circuit_r_2025-06-01_d.passes.ndjson.gz"
+    },
+    {
+      "feedSessionId": "rt_2025_world-wide-technology-raceway_r_2025-06-15_d",
+      "canonicalSessionId": "session_indy_nxt_2025_6454",
+      "year": 2025,
+      "date": "2025-06-15",
+      "venue": "World Wide Technology Raceway",
+      "sessionCode": "R",
+      "bryceCar": "9",
+      "bryceDriver": "Bryce Aron",
+      "fieldSize": 19,
+      "maxLap": 75,
+      "mainlineGateCount": 8,
+      "passTotals": {
+        "start_lap": 31,
+        "on_track_green": 54
+      },
+      "totalPasses": 85,
+      "bryce": {
+        "totalInvolving": 8,
+        "greenGains": 1,
+        "greenLosses": 1,
+        "allGains": 3,
+        "allLosses": 5
+      },
+      "incidentCandidates": 0,
+      "pack": "races/rt_2025_world-wide-technology-raceway_r_2025-06-15_d.passes.ndjson.gz"
+    },
+    {
+      "feedSessionId": "rt_2025_road-america_r_2025-06-22_d",
+      "canonicalSessionId": "session_indy_nxt_2025_6453",
+      "year": 2025,
+      "date": "2025-06-22",
+      "venue": "Road America",
+      "sessionCode": "R",
+      "bryceCar": "9",
+      "bryceDriver": "Bryce Aron",
+      "fieldSize": 19,
+      "maxLap": 20,
+      "mainlineGateCount": 23,
+      "passTotals": {
+        "start_lap": 24,
+        "on_track_green": 27,
+        "pit_cycle": 8
+      },
+      "totalPasses": 59,
+      "bryce": {
+        "totalInvolving": 3,
+        "greenGains": 1,
+        "greenLosses": 0,
+        "allGains": 2,
+        "allLosses": 1
+      },
+      "incidentCandidates": 0,
+      "pack": "races/rt_2025_road-america_r_2025-06-22_d.passes.ndjson.gz"
+    },
+    {
+      "feedSessionId": "rt_2025_mid-ohio-sports-car-course_r_2025-07-06_d",
+      "canonicalSessionId": "session_indy_nxt_2025_6452",
+      "year": 2025,
+      "date": "2025-07-06",
+      "venue": "Mid-Ohio Sports Car Course",
+      "sessionCode": "R",
+      "bryceCar": "9",
+      "bryceDriver": "Bryce Aron",
+      "fieldSize": 19,
+      "maxLap": 32,
+      "mainlineGateCount": 18,
+      "passTotals": {
+        "start_lap": 243,
+        "on_track_green": 18,
+        "pit_cycle": 2
+      },
+      "totalPasses": 263,
+      "bryce": {
+        "totalInvolving": 19,
+        "greenGains": 0,
+        "greenLosses": 3,
+        "allGains": 7,
+        "allLosses": 12
+      },
+      "incidentCandidates": 0,
+      "pack": "races/rt_2025_mid-ohio-sports-car-course_r_2025-07-06_d.passes.ndjson.gz"
+    },
+    {
+      "feedSessionId": "rt_2025_iowa-speedway_r_2025-07-12_d",
+      "canonicalSessionId": "session_indy_nxt_2025_6451",
+      "year": 2025,
+      "date": "2025-07-12",
+      "venue": "Iowa Speedway",
+      "sessionCode": "R",
+      "bryceCar": "9",
+      "bryceDriver": "Bryce Aron",
+      "fieldSize": 19,
+      "maxLap": 75,
+      "mainlineGateCount": 9,
+      "passTotals": {
+        "start_lap": 17,
+        "on_track_green": 33,
+        "pit_cycle": 17,
+        "caution": 52
+      },
+      "totalPasses": 119,
+      "bryce": {
+        "totalInvolving": 14,
+        "greenGains": 4,
+        "greenLosses": 2,
+        "allGains": 8,
+        "allLosses": 6
+      },
+      "incidentCandidates": 4,
+      "pack": "races/rt_2025_iowa-speedway_r_2025-07-12_d.passes.ndjson.gz"
+    },
+    {
+      "feedSessionId": "rt_2025_weathertech-raceway-laguna-seca_r1_2025-07-26_d",
+      "canonicalSessionId": "session_indy_nxt_2025_6442",
+      "year": 2025,
+      "date": "2025-07-26",
+      "venue": "WeatherTech Raceway Laguna Seca",
+      "sessionCode": "R1",
+      "bryceCar": "9",
+      "bryceDriver": "Bryce Aron",
+      "fieldSize": 19,
+      "maxLap": 35,
+      "mainlineGateCount": 18,
+      "passTotals": {
+        "start_lap": 64,
+        "pit_cycle": 2,
+        "on_track_green": 11
+      },
+      "totalPasses": 77,
+      "bryce": {
+        "totalInvolving": 13,
+        "greenGains": 2,
+        "greenLosses": 3,
+        "allGains": 8,
+        "allLosses": 5
+      },
+      "incidentCandidates": 2,
+      "pack": "races/rt_2025_weathertech-raceway-laguna-seca_r1_2025-07-26_d.passes.ndjson.gz"
+    },
+    {
+      "feedSessionId": "rt_2025_weathertech-raceway-laguna-seca_r2_2025-07-27_d",
+      "canonicalSessionId": "session_indy_nxt_2025_6450",
+      "year": 2025,
+      "date": "2025-07-27",
+      "venue": "WeatherTech Raceway Laguna Seca",
+      "sessionCode": "R2",
+      "bryceCar": "9",
+      "bryceDriver": "Bryce Aron",
+      "fieldSize": 19,
+      "maxLap": 35,
+      "mainlineGateCount": 18,
+      "passTotals": {
+        "start_lap": 20,
+        "on_track_green": 15,
+        "pit_cycle": 33,
+        "caution": 10
+      },
+      "totalPasses": 78,
+      "bryce": {
+        "totalInvolving": 0,
+        "greenGains": 0,
+        "greenLosses": 0,
+        "allGains": 0,
+        "allLosses": 0
+      },
+      "incidentCandidates": 6,
+      "pack": "races/rt_2025_weathertech-raceway-laguna-seca_r2_2025-07-27_d.passes.ndjson.gz"
+    },
+    {
+      "feedSessionId": "rt_2025_portland-international-raceway_r_2025-08-10_d",
+      "canonicalSessionId": "session_indy_nxt_2025_6449",
+      "year": 2025,
+      "date": "2025-08-10",
+      "venue": "Portland International Raceway",
+      "sessionCode": "R",
+      "bryceCar": "9",
+      "bryceDriver": "Bryce Aron",
+      "fieldSize": 19,
+      "maxLap": 35,
+      "mainlineGateCount": 13,
+      "passTotals": {
+        "start_lap": 48,
+        "caution": 2,
+        "on_track_green": 20,
+        "pit_cycle": 8
+      },
+      "totalPasses": 78,
+      "bryce": {
+        "totalInvolving": 0,
+        "greenGains": 0,
+        "greenLosses": 0,
+        "allGains": 0,
+        "allLosses": 0
+      },
+      "incidentCandidates": 0,
+      "pack": "races/rt_2025_portland-international-raceway_r_2025-08-10_d.passes.ndjson.gz"
+    },
+    {
+      "feedSessionId": "rt_2025_milwaukee-mile_r_2025-08-24_d",
+      "canonicalSessionId": "session_indy_nxt_2025_6448",
+      "year": 2025,
+      "date": "2025-08-24",
+      "venue": "Milwaukee Mile",
+      "sessionCode": "R",
+      "bryceCar": "9",
+      "bryceDriver": "Bryce Aron",
+      "fieldSize": 18,
+      "maxLap": 90,
+      "mainlineGateCount": 10,
+      "passTotals": {
+        "start_lap": 18,
+        "on_track_green": 49,
+        "caution": 2
+      },
+      "totalPasses": 69,
+      "bryce": {
+        "totalInvolving": 15,
+        "greenGains": 6,
+        "greenLosses": 5,
+        "allGains": 8,
+        "allLosses": 7
+      },
+      "incidentCandidates": 0,
+      "pack": "races/rt_2025_milwaukee-mile_r_2025-08-24_d.passes.ndjson.gz"
+    },
+    {
+      "feedSessionId": "rt_2025_nashville-superspeedway_r_2025-08-31_d",
+      "canonicalSessionId": "session_indy_nxt_2025_6447",
+      "year": 2025,
+      "date": "2025-08-31",
+      "venue": "Nashville Superspeedway",
+      "sessionCode": "R",
+      "bryceCar": "9",
+      "bryceDriver": "Bryce Aron",
+      "fieldSize": 18,
+      "maxLap": 65,
+      "mainlineGateCount": 8,
+      "passTotals": {
+        "start_lap": 16,
+        "on_track_green": 57,
+        "pit_cycle": 12,
+        "caution": 1
+      },
+      "totalPasses": 86,
+      "bryce": {
+        "totalInvolving": 4,
+        "greenGains": 1,
+        "greenLosses": 1,
+        "allGains": 3,
+        "allLosses": 1
+      },
+      "incidentCandidates": 0,
+      "pack": "races/rt_2025_nashville-superspeedway_r_2025-08-31_d.passes.ndjson.gz"
+    }
+  ]
+}
