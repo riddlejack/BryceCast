@@ -1795,10 +1795,10 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
 
       {story ? <LapChartCard story={story} mover={mover} /> : null}
 
-      {story ? <TheDay story={story} pack={pack} venue={dossierVenue} visit={dossierVisit} /> : null}
-
-      {story ? <RestartsCard story={story} /> : null}
-
+      {/* Deeper analysis rides above the summary stats (Jack's directive,
+          2026-07-19): once the race has been watched and read lap by lap, the
+          track section-by-section — and its year-over-year shapes card, kept
+          adjacent — come before The Day and Restarts settle the context. */}
       {outline && sectionAnchors ? (
         <SectionHeatCard
           outline={outline}
@@ -1810,6 +1810,10 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
       ) : null}
 
       {outline && sectionAnchors ? <VenueYearsCard outline={outline} anchors={sectionAnchors} visits={visitPacks} /> : null}
+
+      {story ? <TheDay story={story} pack={pack} venue={dossierVenue} visit={dossierVisit} /> : null}
+
+      {story ? <RestartsCard story={story} /> : null}
 
       {/* Where the heat card renders, the section table retires INTO its
           drawer (director ruling, 2026-07-18): same numbers, richer form.
