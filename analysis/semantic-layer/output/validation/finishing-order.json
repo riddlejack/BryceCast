@@ -1,16 +1,16 @@
 {
   "axis": "a_finishing_order_vs_canonical",
-  "generatedAt": "2026-07-19T03:05:10.962Z",
+  "generatedAt": "2026-07-19T23:14:15.140Z",
   "method": "Order derived from loop-crossing tables only: (racing laps completed desc, final S/F crossing time asc). Compared to canonical career.dataset.json finishing order and lap counts.",
   "raceCount": 28,
   "winnerMatchCount": 28,
   "podiumMatchCount": 28,
-  "fullOrderExactCount": 11,
-  "lapCountExactSessions": 0,
-  "lapCountWithin1Sessions": 12,
-  "lapCarsExact": 393,
-  "lapCarsWithin1": 499,
-  "lapCarsChecked": 536,
+  "fullOrderExactCount": 19,
+  "lapCountExactSessions": 22,
+  "lapCountWithin1Sessions": 26,
+  "lapCarsExact": 513,
+  "lapCarsWithin1": 533,
+  "lapCarsChecked": 538,
   "feedClassificationExactSessions": 27,
   "excludedDefectiveCaptures": [
     {
@@ -50,41 +50,10 @@
       ],
       "exactPositionMatches": 21,
       "positionsMatchFraction": 1,
-      "lapCountMatches": 16,
+      "lapCountMatches": 21,
       "lapCountWithin1": 21,
       "lapCountChecked": 21,
-      "lapCountMismatches": [
-        {
-          "car": "76",
-          "derived": 41,
-          "canonical": 42,
-          "status": "running"
-        },
-        {
-          "car": "29",
-          "derived": 40,
-          "canonical": 41,
-          "status": "running"
-        },
-        {
-          "car": "21",
-          "derived": 37,
-          "canonical": 38,
-          "status": "running"
-        },
-        {
-          "car": "28",
-          "derived": 20,
-          "canonical": 21,
-          "status": "running"
-        },
-        {
-          "car": "33",
-          "derived": 11,
-          "canonical": 12,
-          "status": "mechanical"
-        }
-      ],
+      "lapCountMismatches": [],
       "feedClassificationVsCanonical": {
         "checked": 21,
         "positionMatches": 21,
@@ -116,17 +85,10 @@
       ],
       "exactPositionMatches": 21,
       "positionsMatchFraction": 1,
-      "lapCountMatches": 20,
+      "lapCountMatches": 21,
       "lapCountWithin1": 21,
       "lapCountChecked": 21,
-      "lapCountMismatches": [
-        {
-          "car": "22",
-          "derived": 31,
-          "canonical": 32,
-          "status": "running"
-        }
-      ],
+      "lapCountMismatches": [],
       "feedClassificationVsCanonical": {
         "checked": 21,
         "positionMatches": 21,
@@ -156,61 +118,12 @@
         "39",
         "28"
       ],
-      "exactPositionMatches": 12,
-      "positionsMatchFraction": 0.571,
-      "lapCountMatches": 13,
-      "lapCountWithin1": 18,
+      "exactPositionMatches": 21,
+      "positionsMatchFraction": 1,
+      "lapCountMatches": 21,
+      "lapCountWithin1": 21,
       "lapCountChecked": 21,
-      "lapCountMismatches": [
-        {
-          "car": "26",
-          "derived": 34,
-          "canonical": 35,
-          "status": "running"
-        },
-        {
-          "car": "27",
-          "derived": 33,
-          "canonical": 34,
-          "status": "running"
-        },
-        {
-          "car": "29",
-          "derived": 32,
-          "canonical": 34,
-          "status": "running"
-        },
-        {
-          "car": "40",
-          "derived": 33,
-          "canonical": 34,
-          "status": "running"
-        },
-        {
-          "car": "76",
-          "derived": 32,
-          "canonical": 33,
-          "status": "running"
-        },
-        {
-          "car": "21",
-          "derived": 32,
-          "canonical": 33,
-          "status": "running"
-        },
-        {
-          "car": "18",
-          "derived": 29,
-          "canonical": 32,
-          "status": "running"
-        },
-        {
-          "car": "22",
-          "derived": 29,
-          "canonical": 31,
-          "status": "running"
-        }
-      ],
+      "lapCountMismatches": [],
       "feedClassificationVsCanonical": {
         "checked": 21,
         "positionMatches": 21,
@@ -240,19 +153,12 @@
         "51",
         "18"
       ],
-      "exactPositionMatches": 18,
-      "positionsMatchFraction": 0.857,
-      "lapCountMatches": 20,
+      "exactPositionMatches": 21,
+      "positionsMatchFraction": 1,
+      "lapCountMatches": 21,
       "lapCountWithin1": 21,
       "lapCountChecked": 21,
-      "lapCountMismatches": [
-        {
-          "car": "27",
-          "derived": 34,
-          "canonical": 35,
-          "status": "running"
-        }
-      ],
+      "lapCountMismatches": [],
       "feedClassificationVsCanonical": {
         "checked": 21,
         "positionMatches": 21,
@@ -282,40 +188,16 @@
         "18",
         "17"
       ],
-      "exactPositionMatches": 13,
-      "positionsMatchFraction": 0.619,
-      "lapCountMatches": 15,
-      "lapCountWithin1": 19,
+      "exactPositionMatches": 16,
+      "positionsMatchFraction": 0.762,
+      "lapCountMatches": 19,
+      "lapCountWithin1": 20,
       "lapCountChecked": 21,
       "lapCountMismatches": [
-        {
-          "car": "28",
-          "derived": 44,
-          "canonical": 45,
-          "status": "running"
-        },
-        {
-          "car": "33",
-          "derived": 43,
-          "canonical": 44,
-          "status": "running"
-        },
-        {
-          "car": "22",
-          "derived": 43,
-          "canonical": 44,
-          "status": "running"
-        },
         {
           "car": "39",
           "derived": 42,
           "canonical": 41,
-          "status": "running"
-        },
-        {
-          "car": "76",
-          "derived": 36,
-          "canonical": 38,
           "status": "running"
         },
         {
@@ -498,31 +380,12 @@
         "18",
         "51"
       ],
-      "exactPositionMatches": 15,
-      "positionsMatchFraction": 0.75,
-      "lapCountMatches": 17,
+      "exactPositionMatches": 20,
+      "positionsMatchFraction": 1,
+      "lapCountMatches": 20,
       "lapCountWithin1": 20,
       "lapCountChecked": 20,
-      "lapCountMismatches": [
-        {
-          "car": "10",
-          "derived": 34,
-          "canonical": 35,
-          "status": "running"
-        },
-        {
-          "car": "33",
-          "derived": 32,
-          "canonical": 33,
-          "status": "running"
-        },
-        {
-          "car": "11",
-          "derived": 14,
-          "canonical": 15,
-          "status": "mechanical"
-        }
-      ],
+      "lapCountMismatches": [],
       "feedClassificationVsCanonical": {
         "checked": 20,
         "positionMatches": 20,
@@ -552,43 +415,12 @@
         "18",
         "27"
       ],
-      "exactPositionMatches": 14,
-      "positionsMatchFraction": 0.7,
-      "lapCountMatches": 15,
-      "lapCountWithin1": 19,
+      "exactPositionMatches": 20,
+      "positionsMatchFraction": 1,
+      "lapCountMatches": 20,
+      "lapCountWithin1": 20,
       "lapCountChecked": 20,
-      "lapCountMismatches": [
-        {
-          "car": "51",
-          "derived": 34,
-          "canonical": 35,
-          "status": "running"
-        },
-        {
-          "car": "99",
-          "derived": 32,
-          "canonical": 33,
-          "status": "running"
-        },
-        {
-          "car": "10",
-          "derived": 26,
-          "canonical": 27,
-          "status": "contact"
-        },
-        {
-          "car": "29",
-          "derived": 24,
-          "canonical": 25,
-          "status": "mechanical"
-        },
-        {
-          "car": "23",
-          "derived": 23,
-          "canonical": 25,
-          "status": "running"
-        }
-      ],
+      "lapCountMismatches": [],
       "feedClassificationVsCanonical": {
         "checked": 20,
         "positionMatches": 20,
@@ -620,41 +452,10 @@
       ],
       "exactPositionMatches": 19,
       "positionsMatchFraction": 1,
-      "lapCountMatches": 14,
+      "lapCountMatches": 19,
       "lapCountWithin1": 19,
       "lapCountChecked": 19,
-      "lapCountMismatches": [
-        {
-          "car": "22",
-          "derived": 34,
-          "canonical": 35,
-          "status": "running"
-        },
-        {
-          "car": "29",
-          "derived": 33,
-          "canonical": 34,
-          "status": "running"
-        },
-        {
-          "car": "2",
-          "derived": 33,
-          "canonical": 34,
-          "status": "running"
-        },
-        {
-          "car": "27",
-          "derived": 31,
-          "canonical": 32,
-          "status": "running"
-        },
-        {
-          "car": "99",
-          "derived": 5,
-          "canonical": 6,
-          "status": "mechanical"
-        }
-      ],
+      "lapCountMismatches": [],
       "feedClassificationVsCanonical": {
         "checked": 19,
         "positionMatches": 19,
@@ -686,7 +487,7 @@
       ],
       "exactPositionMatches": 13,
       "positionsMatchFraction": 0.722,
-      "lapCountMatches": 16,
+      "lapCountMatches": 17,
       "lapCountWithin1": 18,
       "lapCountChecked": 18,
       "lapCountMismatches": [
@@ -694,12 +495,6 @@
           "car": "23",
           "derived": 54,
           "canonical": 55,
-          "status": "running"
-        },
-        {
-          "car": "51",
-          "derived": 51,
-          "canonical": 52,
           "status": "running"
         }
       ],
@@ -732,25 +527,12 @@
         "51",
         "22"
       ],
-      "exactPositionMatches": 15,
-      "positionsMatchFraction": 0.833,
-      "lapCountMatches": 15,
-      "lapCountWithin1": 16,
-      "lapCountChecked": 17,
-      "lapCountMismatches": [
-        {
-          "car": "18",
-          "derived": 30,
-          "canonical": 33,
-          "status": "contact"
-        },
-        {
-          "car": "55",
-          "derived": 30,
-          "canonical": 31,
-          "status": "unknown"
-        }
-      ],
+      "exactPositionMatches": 18,
+      "positionsMatchFraction": 1,
+      "lapCountMatches": 18,
+      "lapCountWithin1": 18,
+      "lapCountChecked": 18,
+      "lapCountMismatches": [],
       "feedClassificationVsCanonical": {
         "checked": 18,
         "positionMatches": 18,
@@ -782,29 +564,10 @@
       ],
       "exactPositionMatches": 17,
       "positionsMatchFraction": 1,
-      "lapCountMatches": 14,
+      "lapCountMatches": 17,
       "lapCountWithin1": 17,
       "lapCountChecked": 17,
-      "lapCountMismatches": [
-        {
-          "car": "40",
-          "derived": 34,
-          "canonical": 35,
-          "status": "running"
-        },
-        {
-          "car": "29",
-          "derived": 31,
-          "canonical": 32,
-          "status": "running"
-        },
-        {
-          "car": "76",
-          "derived": 7,
-          "canonical": 8,
-          "status": "contact"
-        }
-      ],
+      "lapCountMismatches": [],
       "feedClassificationVsCanonical": {
         "checked": 17,
         "positionMatches": 17,
@@ -836,17 +599,10 @@
       ],
       "exactPositionMatches": 12,
       "positionsMatchFraction": 0.667,
-      "lapCountMatches": 15,
-      "lapCountWithin1": 15,
+      "lapCountMatches": 16,
+      "lapCountWithin1": 16,
       "lapCountChecked": 16,
-      "lapCountMismatches": [
-        {
-          "car": "40",
-          "derived": 12,
-          "canonical": 14,
-          "status": "mechanical"
-        }
-      ],
+      "lapCountMismatches": [],
       "feedClassificationVsCanonical": {
         "checked": 18,
         "positionMatches": 14,
@@ -878,65 +634,10 @@
       ],
       "exactPositionMatches": 18,
       "positionsMatchFraction": 1,
-      "lapCountMatches": 9,
-      "lapCountWithin1": 15,
+      "lapCountMatches": 18,
+      "lapCountWithin1": 18,
       "lapCountChecked": 18,
-      "lapCountMismatches": [
-        {
-          "car": "14",
-          "derived": 63,
-          "canonical": 64,
-          "status": "running"
-        },
-        {
-          "car": "7",
-          "derived": 63,
-          "canonical": 64,
-          "status": "running"
-        },
-        {
-          "car": "23",
-          "derived": 63,
-          "canonical": 64,
-          "status": "running"
-        },
-        {
-          "car": "10",
-          "derived": 62,
-          "canonical": 63,
-          "status": "running"
-        },
-        {
-          "car": "99",
-          "derived": 59,
-          "canonical": 62,
-          "status": "running"
-        },
-        {
-          "car": "40",
-          "derived": 56,
-          "canonical": 59,
-          "status": "running"
-        },
-        {
-          "car": "17",
-          "derived": 52,
-          "canonical": 54,
-          "status": "running"
-        },
-        {
-          "car": "28",
-          "derived": 50,
-          "canonical": 51,
-          "status": "contact"
-        },
-        {
-          "car": "55",
-          "derived": 11,
-          "canonical": 12,
-          "status": "unknown"
-        }
-      ],
+      "lapCountMismatches": [],
       "feedClassificationVsCanonical": {
         "checked": 18,
         "positionMatches": 18,
@@ -966,29 +667,17 @@
         "26",
         "76"
       ],
-      "exactPositionMatches": 18,
-      "positionsMatchFraction": 0.857,
-      "lapCountMatches": 17,
-      "lapCountWithin1": 18,
-      "lapCountChecked": 20,
+      "exactPositionMatches": 21,
+      "positionsMatchFraction": 1,
+      "lapCountMatches": 20,
+      "lapCountWithin1": 21,
+      "lapCountChecked": 21,
       "lapCountMismatches": [
         {
-          "car": "16",
-          "derived": 40,
-          "canonical": 42,
+          "car": "30",
+          "derived": 34,
+          "canonical": 33,
           "status": "running"
-        },
-        {
-          "car": "2",
-          "derived": 39,
-          "canonical": 41,
-          "status": "running"
-        },
-        {
-          "car": "29",
-          "derived": 4,
-          "canonical": 5,
-          "status": "contact"
         }
       ],
       "feedClassificationVsCanonical": {
@@ -1022,23 +711,10 @@
       ],
       "exactPositionMatches": 20,
       "positionsMatchFraction": 1,
-      "lapCountMatches": 18,
-      "lapCountWithin1": 19,
+      "lapCountMatches": 20,
+      "lapCountWithin1": 20,
       "lapCountChecked": 20,
-      "lapCountMismatches": [
-        {
-          "car": "76",
-          "derived": 25,
-          "canonical": 27,
-          "status": "mechanical"
-        },
-        {
-          "car": "11",
-          "derived": 6,
-          "canonical": 7,
-          "status": "mechanical"
-        }
-      ],
+      "lapCountMismatches": [],
       "feedClassificationVsCanonical": {
         "checked": 20,
         "positionMatches": 20,
@@ -1068,25 +744,12 @@
         "76",
         "99"
       ],
-      "exactPositionMatches": 19,
-      "positionsMatchFraction": 0.905,
-      "lapCountMatches": 19,
-      "lapCountWithin1": 20,
+      "exactPositionMatches": 21,
+      "positionsMatchFraction": 1,
+      "lapCountMatches": 21,
+      "lapCountWithin1": 21,
       "lapCountChecked": 21,
-      "lapCountMismatches": [
-        {
-          "car": "10",
-          "derived": 29,
-          "canonical": 31,
-          "status": "running"
-        },
-        {
-          "car": "29",
-          "derived": 28,
-          "canonical": 29,
-          "status": "contact"
-        }
-      ],
+      "lapCountMismatches": [],
       "feedClassificationVsCanonical": {
         "checked": 21,
         "positionMatches": 21,
@@ -1118,23 +781,10 @@
       ],
       "exactPositionMatches": 21,
       "positionsMatchFraction": 1,
-      "lapCountMatches": 19,
-      "lapCountWithin1": 20,
+      "lapCountMatches": 21,
+      "lapCountWithin1": 21,
       "lapCountChecked": 21,
-      "lapCountMismatches": [
-        {
-          "car": "40",
-          "derived": 33,
-          "canonical": 34,
-          "status": "running"
-        },
-        {
-          "car": "11",
-          "derived": 29,
-          "canonical": 31,
-          "status": "running"
-        }
-      ],
+      "lapCountMismatches": [],
       "feedClassificationVsCanonical": {
         "checked": 21,
         "positionMatches": 21,
@@ -1164,121 +814,12 @@
         "76",
         "39"
       ],
-      "exactPositionMatches": 10,
-      "positionsMatchFraction": 0.5,
-      "lapCountMatches": 0,
-      "lapCountWithin1": 7,
+      "exactPositionMatches": 18,
+      "positionsMatchFraction": 0.9,
+      "lapCountMatches": 18,
+      "lapCountWithin1": 18,
       "lapCountChecked": 18,
-      "lapCountMismatches": [
-        {
-          "car": "28",
-          "derived": 44,
-          "canonical": 45,
-          "status": "running"
-        },
-        {
-          "car": "76",
-          "derived": 44,
-          "canonical": 45,
-          "status": "running"
-        },
-        {
-          "car": "39",
-          "derived": 44,
-          "canonical": 45,
-          "status": "running"
-        },
-        {
-          "car": "14",
-          "derived": 44,
-          "canonical": 45,
-          "status": "running"
-        },
-        {
-          "car": "26",
-          "derived": 43,
-          "canonical": 45,
-          "status": "running"
-        },
-        {
-          "car": "2",
-          "derived": 44,
-          "canonical": 45,
-          "status": "running"
-        },
-        {
-          "car": "40",
-          "derived": 43,
-          "canonical": 44,
-          "status": "contact"
-        },
-        {
-          "car": "27",
-          "derived": 42,
-          "canonical": 44,
-          "status": "contact"
-        },
-        {
-          "car": "10",
-          "derived": 42,
-          "canonical": 44,
-          "status": "running"
-        },
-        {
-          "car": "9",
-          "derived": 42,
-          "canonical": 44,
-          "status": "running"
-        },
-        {
-          "car": "17",
-          "derived": 41,
-          "canonical": 44,
-          "status": "running"
-        },
-        {
-          "car": "48",
-          "derived": 42,
-          "canonical": 44,
-          "status": "running"
-        },
-        {
-          "car": "29",
-          "derived": 43,
-          "canonical": 44,
-          "status": "running"
-        },
-        {
-          "car": "30",
-          "derived": 40,
-          "canonical": 43,
-          "status": "running"
-        },
-        {
-          "car": "11",
-          "derived": 39,
-          "canonical": 41,
-          "status": "running"
-        },
-        {
-          "car": "38",
-          "derived": 38,
-          "canonical": 40,
-          "status": "running"
-        },
-        {
-          "car": "16",
-          "derived": 35,
-          "canonical": 38,
-          "status": "running"
-        },
-        {
-          "car": "99",
-          "derived": 5,
-          "canonical": 9,
-          "status": "contact"
-        }
-      ],
+      "lapCountMismatches": [],
       "feedClassificationVsCanonical": {
         "checked": 20,
         "positionMatches": 20,
@@ -1310,17 +851,10 @@
       ],
       "exactPositionMatches": 19,
       "positionsMatchFraction": 1,
-      "lapCountMatches": 18,
+      "lapCountMatches": 19,
       "lapCountWithin1": 19,
       "lapCountChecked": 19,
-      "lapCountMismatches": [
-        {
-          "car": "40",
-          "derived": 33,
-          "canonical": 34,
-          "status": "unknown"
-        }
-      ],
+      "lapCountMismatches": [],
       "feedClassificationVsCanonical": {
         "checked": 19,
         "positionMatches": 19,
@@ -1394,115 +928,12 @@
         "76",
         "26"
       ],
-      "exactPositionMatches": 17,
-      "positionsMatchFraction": 0.895,
-      "lapCountMatches": 2,
-      "lapCountWithin1": 18,
+      "exactPositionMatches": 19,
+      "positionsMatchFraction": 1,
+      "lapCountMatches": 19,
+      "lapCountWithin1": 19,
       "lapCountChecked": 19,
-      "lapCountMismatches": [
-        {
-          "car": "28",
-          "derived": 32,
-          "canonical": 33,
-          "status": "running"
-        },
-        {
-          "car": "76",
-          "derived": 32,
-          "canonical": 33,
-          "status": "running"
-        },
-        {
-          "car": "26",
-          "derived": 32,
-          "canonical": 33,
-          "status": "running"
-        },
-        {
-          "car": "27",
-          "derived": 32,
-          "canonical": 33,
-          "status": "running"
-        },
-        {
-          "car": "14",
-          "derived": 32,
-          "canonical": 33,
-          "status": "running"
-        },
-        {
-          "car": "17",
-          "derived": 32,
-          "canonical": 33,
-          "status": "running"
-        },
-        {
-          "car": "48",
-          "derived": 32,
-          "canonical": 33,
-          "status": "running"
-        },
-        {
-          "car": "39",
-          "derived": 32,
-          "canonical": 33,
-          "status": "running"
-        },
-        {
-          "car": "24",
-          "derived": 32,
-          "canonical": 33,
-          "status": "running"
-        },
-        {
-          "car": "99",
-          "derived": 32,
-          "canonical": 33,
-          "status": "running"
-        },
-        {
-          "car": "40",
-          "derived": 32,
-          "canonical": 33,
-          "status": "running"
-        },
-        {
-          "car": "9",
-          "derived": 32,
-          "canonical": 33,
-          "status": "running"
-        },
-        {
-          "car": "29",
-          "derived": 32,
-          "canonical": 33,
-          "status": "running"
-        },
-        {
-          "car": "10",
-          "derived": 32,
-          "canonical": 33,
-          "status": "running"
-        },
-        {
-          "car": "16",
-          "derived": 32,
-          "canonical": 33,
-          "status": "running"
-        },
-        {
-          "car": "11",
-          "derived": 31,
-          "canonical": 33,
-          "status": "running"
-        },
-        {
-          "car": "38",
-          "derived": 32,
-          "canonical": 33,
-          "status": "running"
-        }
-      ],
+      "lapCountMismatches": [],
       "feedClassificationVsCanonical": {
         "checked": 19,
         "positionMatches": 19,
@@ -1532,18 +963,12 @@
         "28",
         "27"
       ],
-      "exactPositionMatches": 12,
-      "positionsMatchFraction": 0.632,
-      "lapCountMatches": 14,
+      "exactPositionMatches": 13,
+      "positionsMatchFraction": 0.684,
+      "lapCountMatches": 17,
       "lapCountWithin1": 19,
       "lapCountChecked": 19,
       "lapCountMismatches": [
-        {
-          "car": "14",
-          "derived": 73,
-          "canonical": 74,
-          "status": "running"
-        },
         {
           "car": "39",
           "derived": 73,
@@ -1554,18 +979,6 @@
           "car": "3",
           "derived": 73,
           "canonical": 74,
-          "status": "running"
-        },
-        {
-          "car": "26",
-          "derived": 73,
-          "canonical": 74,
-          "status": "running"
-        },
-        {
-          "car": "11",
-          "derived": 71,
-          "canonical": 72,
           "status": "running"
         }
       ],
@@ -1598,43 +1011,12 @@
         "28",
         "14"
       ],
-      "exactPositionMatches": 14,
-      "positionsMatchFraction": 0.737,
-      "lapCountMatches": 12,
-      "lapCountWithin1": 16,
+      "exactPositionMatches": 17,
+      "positionsMatchFraction": 0.895,
+      "lapCountMatches": 17,
+      "lapCountWithin1": 17,
       "lapCountChecked": 17,
-      "lapCountMismatches": [
-        {
-          "car": "10",
-          "derived": 34,
-          "canonical": 35,
-          "status": "running"
-        },
-        {
-          "car": "29",
-          "derived": 33,
-          "canonical": 34,
-          "status": "running"
-        },
-        {
-          "car": "39",
-          "derived": 32,
-          "canonical": 34,
-          "status": "running"
-        },
-        {
-          "car": "18",
-          "derived": 31,
-          "canonical": 32,
-          "status": "running"
-        },
-        {
-          "car": "2",
-          "derived": 20,
-          "canonical": 21,
-          "status": "mechanical"
-        }
-      ],
+      "lapCountMismatches": [],
       "feedClassificationVsCanonical": {
         "checked": 19,
         "positionMatches": 19,
@@ -1664,61 +1046,12 @@
         "14",
         "17"
       ],
-      "exactPositionMatches": 12,
-      "positionsMatchFraction": 0.632,
-      "lapCountMatches": 10,
-      "lapCountWithin1": 15,
+      "exactPositionMatches": 18,
+      "positionsMatchFraction": 0.947,
+      "lapCountMatches": 18,
+      "lapCountWithin1": 18,
       "lapCountChecked": 18,
-      "lapCountMismatches": [
-        {
-          "car": "99",
-          "derived": 34,
-          "canonical": 35,
-          "status": "running"
-        },
-        {
-          "car": "27",
-          "derived": 34,
-          "canonical": 35,
-          "status": "running"
-        },
-        {
-          "car": "38",
-          "derived": 33,
-          "canonical": 34,
-          "status": "running"
-        },
-        {
-          "car": "16",
-          "derived": 31,
-          "canonical": 34,
-          "status": "running"
-        },
-        {
-          "car": "29",
-          "derived": 32,
-          "canonical": 33,
-          "status": "running"
-        },
-        {
-          "car": "11",
-          "derived": 32,
-          "canonical": 33,
-          "status": "running"
-        },
-        {
-          "car": "26",
-          "derived": 30,
-          "canonical": 32,
-          "status": "running"
-        },
-        {
-          "car": "30",
-          "derived": 12,
-          "canonical": 14,
-          "status": "contact"
-        }
-      ],
+      "lapCountMismatches": [],
       "feedClassificationVsCanonical": {
         "checked": 19,
         "positionMatches": 19,
@@ -1748,31 +1081,12 @@
         "76",
         "99"
       ],
-      "exactPositionMatches": 9,
-      "positionsMatchFraction": 0.474,
-      "lapCountMatches": 15,
+      "exactPositionMatches": 18,
+      "positionsMatchFraction": 0.947,
+      "lapCountMatches": 18,
       "lapCountWithin1": 18,
       "lapCountChecked": 18,
-      "lapCountMismatches": [
-        {
-          "car": "39",
-          "derived": 34,
-          "canonical": 35,
-          "status": "running"
-        },
-        {
-          "car": "26",
-          "derived": 34,
-          "canonical": 35,
-          "status": "running"
-        },
-        {
-          "car": "29",
-          "derived": 32,
-          "canonical": 33,
-          "status": "running"
-        }
-      ],
+      "lapCountMismatches": [],
       "feedClassificationVsCanonical": {
         "checked": 19,
         "positionMatches": 19,
@@ -1804,29 +1118,10 @@
       ],
       "exactPositionMatches": 18,
       "positionsMatchFraction": 1,
-      "lapCountMatches": 15,
+      "lapCountMatches": 18,
       "lapCountWithin1": 18,
       "lapCountChecked": 18,
-      "lapCountMismatches": [
-        {
-          "car": "24",
-          "derived": 76,
-          "canonical": 77,
-          "status": "contact"
-        },
-        {
-          "car": "2",
-          "derived": 63,
-          "canonical": 64,
-          "status": "unknown"
-        },
-        {
-          "car": "16",
-          "derived": 38,
-          "canonical": 39,
-          "status": "unknown"
-        }
-      ],
+      "lapCountMismatches": [],
       "feedClassificationVsCanonical": {
         "checked": 18,
         "positionMatches": 18,
@@ -1858,35 +1153,10 @@
       ],
       "exactPositionMatches": 18,
       "positionsMatchFraction": 1,
-      "lapCountMatches": 14,
-      "lapCountWithin1": 17,
+      "lapCountMatches": 18,
+      "lapCountWithin1": 18,
       "lapCountChecked": 18,
-      "lapCountMismatches": [
-        {
-          "car": "3",
-          "derived": 62,
-          "canonical": 63,
-          "status": "running"
-        },
-        {
-          "car": "40",
-          "derived": 54,
-          "canonical": 55,
-          "status": "unknown"
-        },
-        {
-          "car": "24",
-          "derived": 50,
-          "canonical": 51,
-          "status": "unknown"
-        },
-        {
-          "car": "16",
-          "derived": 47,
-          "canonical": 49,
-          "status": "running"
-        }
-      ],
+      "lapCountMismatches": [],
       "feedClassificationVsCanonical": {
         "checked": 18,
         "positionMatches": 18,

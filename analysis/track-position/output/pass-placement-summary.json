@@ -1,7 +1,7 @@
 {
   "lane": "analysis/track-position",
   "slice": "pass-placement-2024-25",
-  "generatedAt": "2026-07-19T05:34:20.992Z",
+  "generatedAt": "2026-07-19T23:14:27.767Z",
   "sourceTier": "racetools_capture",
   "inputLane": "analysis/semantic-layer (loop-crossing tables)",
   "raceCount": 28,
@@ -34,10 +34,10 @@
       "passTotals": {
         "start_lap": 41,
         "on_track_green": 43,
-        "pit_cycle": 16,
+        "pit_cycle": 6,
         "caution": 3
       },
-      "totalPasses": 103,
+      "totalPasses": 93,
       "bryce": {
         "totalInvolving": 5,
         "greenGains": 2,
@@ -63,10 +63,9 @@
       "passTotals": {
         "start_lap": 9,
         "on_track_green": 46,
-        "caution": 7,
-        "pit_cycle": 1
+        "caution": 7
       },
-      "totalPasses": 63,
+      "totalPasses": 62,
       "bryce": {
         "totalInvolving": 5,
         "greenGains": 2,
@@ -90,20 +89,20 @@
       "maxLap": 35,
       "mainlineGateCount": 13,
       "passTotals": {
-        "start_lap": 83,
-        "on_track_green": 33,
-        "pit_cycle": 76,
-        "caution": 32
+        "start_lap": 78,
+        "on_track_green": 40,
+        "pit_cycle": 29,
+        "caution": 40
       },
-      "totalPasses": 224,
+      "totalPasses": 187,
       "bryce": {
-        "totalInvolving": 23,
-        "greenGains": 2,
-        "greenLosses": 0,
-        "allGains": 14,
-        "allLosses": 9
+        "totalInvolving": 17,
+        "greenGains": 3,
+        "greenLosses": 1,
+        "allGains": 11,
+        "allLosses": 6
       },
-      "incidentCandidates": 1,
+      "incidentCandidates": 2,
       "pack": "races/rt_2024_indianapolis-motor-speedway-rc_r1_2024-05-10_a.passes.ndjson.gz"
     },
     {
@@ -120,16 +119,15 @@
       "mainlineGateCount": 13,
       "passTotals": {
         "start_lap": 58,
-        "on_track_green": 63,
-        "pit_cycle": 7
+        "on_track_green": 64
       },
-      "totalPasses": 128,
+      "totalPasses": 122,
       "bryce": {
-        "totalInvolving": 19,
-        "greenGains": 3,
+        "totalInvolving": 13,
+        "greenGains": 4,
         "greenLosses": 1,
-        "allGains": 6,
-        "allLosses": 13
+        "allGains": 7,
+        "allLosses": 6
       },
       "incidentCandidates": 0,
       "pack": "races/rt_2024_indianapolis-motor-speedway-rc_r2_2024-05-11_a.passes.ndjson.gz"
@@ -149,10 +147,10 @@
       "passTotals": {
         "start_lap": 273,
         "on_track_green": 60,
-        "caution": 22,
-        "pit_cycle": 19
+        "caution": 23,
+        "pit_cycle": 14
       },
-      "totalPasses": 374,
+      "totalPasses": 370,
       "bryce": {
         "totalInvolving": 20,
         "greenGains": 0,
@@ -206,16 +204,16 @@
       "mainlineGateCount": 18,
       "passTotals": {
         "start_lap": 20,
-        "pit_cycle": 19,
-        "on_track_green": 30
+        "pit_cycle": 17,
+        "on_track_green": 34
       },
-      "totalPasses": 69,
+      "totalPasses": 71,
       "bryce": {
-        "totalInvolving": 16,
+        "totalInvolving": 17,
         "greenGains": 2,
-        "greenLosses": 10,
+        "greenLosses": 11,
         "allGains": 5,
-        "allLosses": 11
+        "allLosses": 12
       },
       "incidentCandidates": 1,
       "pack": "races/rt_2024_weathertech-raceway-laguna-seca_r1_2024-06-22_a.passes.ndjson.gz"
@@ -234,16 +232,16 @@
       "mainlineGateCount": 18,
       "passTotals": {
         "start_lap": 17,
-        "on_track_green": 38,
-        "pit_cycle": 21,
+        "on_track_green": 39,
+        "pit_cycle": 10,
         "caution": 6
       },
-      "totalPasses": 82,
+      "totalPasses": 72,
       "bryce": {
-        "totalInvolving": 2,
+        "totalInvolving": 3,
         "greenGains": 1,
         "greenLosses": 0,
-        "allGains": 1,
+        "allGains": 2,
         "allLosses": 1
       },
       "incidentCandidates": 1,
@@ -262,18 +260,18 @@
       "maxLap": 35,
       "mainlineGateCount": 18,
       "passTotals": {
-        "start_lap": 209,
+        "start_lap": 189,
         "caution": 8,
         "on_track_green": 9,
-        "pit_cycle": 16
+        "pit_cycle": 11
       },
-      "totalPasses": 242,
+      "totalPasses": 217,
       "bryce": {
-        "totalInvolving": 44,
+        "totalInvolving": 23,
         "greenGains": 0,
         "greenLosses": 0,
-        "allGains": 20,
-        "allLosses": 24
+        "allGains": 1,
+        "allLosses": 22
       },
       "incidentCandidates": 4,
       "pack": "races/rt_2024_mid-ohio-sports-car-course_r_2024-07-07_a.passes.ndjson.gz"
@@ -293,10 +291,10 @@
       "passTotals": {
         "start_lap": 15,
         "on_track_green": 61,
-        "pit_cycle": 5,
+        "pit_cycle": 4,
         "caution": 1
       },
-      "totalPasses": 82,
+      "totalPasses": 81,
       "bryce": {
         "totalInvolving": 9,
         "greenGains": 3,
@@ -320,19 +318,19 @@
       "maxLap": 75,
       "mainlineGateCount": 8,
       "passTotals": {
-        "start_lap": 32,
+        "start_lap": 49,
         "caution": 31,
         "on_track_green": 56
       },
-      "totalPasses": 119,
+      "totalPasses": 136,
       "bryce": {
-        "totalInvolving": 19,
+        "totalInvolving": 20,
         "greenGains": 5,
         "greenLosses": 2,
         "allGains": 13,
-        "allLosses": 6
+        "allLosses": 7
       },
-      "incidentCandidates": 1,
+      "incidentCandidates": 0,
       "pack": "races/rt_2024_world-wide-technology-raceway_r_2024-08-17_a.passes.ndjson.gz"
     },
     {
@@ -360,7 +358,7 @@
         "allGains": 1,
         "allLosses": 4
       },
-      "incidentCandidates": 1,
+      "incidentCandidates": 2,
       "pack": "races/rt_2024_portland-international-raceway_r_2024-08-25_a.passes.ndjson.gz"
     },
     {
@@ -407,17 +405,18 @@
       "passTotals": {
         "start_lap": 63,
         "on_track_green": 84,
-        "pit_cycle": 27
+        "pit_cycle": 9,
+        "caution": 1
       },
-      "totalPasses": 174,
+      "totalPasses": 157,
       "bryce": {
-        "totalInvolving": 21,
+        "totalInvolving": 20,
         "greenGains": 7,
         "greenLosses": 5,
-        "allGains": 12,
+        "allGains": 11,
         "allLosses": 9
       },
-      "incidentCandidates": 1,
+      "incidentCandidates": 0,
       "pack": "races/rt_2024_nashville-superspeedway_r_2024-09-15_a.passes.ndjson.gz"
     },
     {
@@ -433,17 +432,17 @@
       "maxLap": 44,
       "mainlineGateCount": 11,
       "passTotals": {
-        "start_lap": 28,
-        "on_track_green": 14,
-        "pit_cycle": 5
+        "start_lap": 37,
+        "on_track_green": 16,
+        "pit_cycle": 1
       },
-      "totalPasses": 47,
+      "totalPasses": 54,
       "bryce": {
-        "totalInvolving": 8,
+        "totalInvolving": 10,
         "greenGains": 0,
-        "greenLosses": 0,
-        "allGains": 3,
-        "allLosses": 5
+        "greenLosses": 1,
+        "allGains": 4,
+        "allLosses": 6
       },
       "incidentCandidates": 2,
       "pack": "races/rt_2025_st-petersburg-street-circuit_r_2025-03-02_d.passes.ndjson.gz"
@@ -491,10 +490,10 @@
       "passTotals": {
         "start_lap": 40,
         "on_track_green": 43,
-        "pit_cycle": 3,
-        "caution": 12
+        "caution": 12,
+        "pit_cycle": 1
       },
-      "totalPasses": 98,
+      "totalPasses": 96,
       "bryce": {
         "totalInvolving": 15,
         "greenGains": 3,
@@ -502,7 +501,7 @@
         "allGains": 7,
         "allLosses": 8
       },
-      "incidentCandidates": 0,
+      "incidentCandidates": 1,
       "pack": "races/rt_2025_indianapolis-motor-speedway-rc_r1_2025-05-09_d.passes.ndjson.gz"
     },
     {
@@ -544,22 +543,22 @@
       "bryceCar": "9",
       "bryceDriver": "Bryce Aron",
       "fieldSize": 20,
-      "maxLap": 44,
+      "maxLap": 45,
       "mainlineGateCount": 19,
       "passTotals": {
-        "start_lap": 234,
-        "pit_cycle": 37,
-        "on_track_green": 14
+        "start_lap": 92,
+        "on_track_green": 23,
+        "pit_cycle": 8
       },
-      "totalPasses": 285,
+      "totalPasses": 123,
       "bryce": {
-        "totalInvolving": 37,
-        "greenGains": 0,
-        "greenLosses": 3,
-        "allGains": 20,
-        "allLosses": 17
+        "totalInvolving": 18,
+        "greenGains": 1,
+        "greenLosses": 5,
+        "allGains": 10,
+        "allLosses": 8
       },
-      "incidentCandidates": 0,
+      "incidentCandidates": 1,
       "pack": "races/rt_2025_detroit-street-circuit_r_2025-06-01_d.passes.ndjson.gz"
     },
     {
@@ -627,14 +626,13 @@
       "bryceCar": "9",
       "bryceDriver": "Bryce Aron",
       "fieldSize": 19,
-      "maxLap": 32,
+      "maxLap": 33,
       "mainlineGateCount": 18,
       "passTotals": {
         "start_lap": 243,
-        "on_track_green": 18,
-        "pit_cycle": 2
+        "on_track_green": 19
       },
-      "totalPasses": 263,
+      "totalPasses": 262,
       "bryce": {
         "totalInvolving": 19,
         "greenGains": 0,
@@ -659,16 +657,16 @@
       "mainlineGateCount": 9,
       "passTotals": {
         "start_lap": 17,
-        "on_track_green": 33,
-        "pit_cycle": 17,
-        "caution": 52
+        "on_track_green": 38,
+        "pit_cycle": 4,
+        "caution": 58
       },
-      "totalPasses": 119,
+      "totalPasses": 117,
       "bryce": {
-        "totalInvolving": 14,
+        "totalInvolving": 13,
         "greenGains": 4,
         "greenLosses": 2,
-        "allGains": 8,
+        "allGains": 7,
         "allLosses": 6
       },
       "incidentCandidates": 4,
@@ -687,11 +685,10 @@
       "maxLap": 35,
       "mainlineGateCount": 18,
       "passTotals": {
-        "start_lap": 64,
-        "pit_cycle": 2,
-        "on_track_green": 11
+        "start_lap": 56,
+        "on_track_green": 14
       },
-      "totalPasses": 77,
+      "totalPasses": 70,
       "bryce": {
         "totalInvolving": 13,
         "greenGains": 2,
@@ -717,10 +714,10 @@
       "passTotals": {
         "start_lap": 20,
         "on_track_green": 15,
-        "pit_cycle": 33,
-        "caution": 10
+        "pit_cycle": 19,
+        "caution": 13
       },
-      "totalPasses": 78,
+      "totalPasses": 67,
       "bryce": {
         "totalInvolving": 0,
         "greenGains": 0,
@@ -744,12 +741,12 @@
       "maxLap": 35,
       "mainlineGateCount": 13,
       "passTotals": {
-        "start_lap": 48,
+        "start_lap": 38,
         "caution": 2,
-        "on_track_green": 20,
+        "on_track_green": 34,
         "pit_cycle": 8
       },
-      "totalPasses": 78,
+      "totalPasses": 82,
       "bryce": {
         "totalInvolving": 0,
         "greenGains": 0,
@@ -775,9 +772,10 @@
       "passTotals": {
         "start_lap": 18,
         "on_track_green": 49,
+        "pit_cycle": 5,
         "caution": 2
       },
-      "totalPasses": 69,
+      "totalPasses": 74,
       "bryce": {
         "totalInvolving": 15,
         "greenGains": 6,
@@ -802,11 +800,11 @@
       "mainlineGateCount": 8,
       "passTotals": {
         "start_lap": 16,
-        "on_track_green": 57,
-        "pit_cycle": 12,
+        "on_track_green": 58,
+        "pit_cycle": 8,
         "caution": 1
       },
-      "totalPasses": 86,
+      "totalPasses": 83,
       "bryce": {
         "totalInvolving": 4,
         "greenGains": 1,

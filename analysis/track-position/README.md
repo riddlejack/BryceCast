@@ -83,16 +83,31 @@ Three axes, then a **GO / CONDITIONAL / NO-GO** verdict per race and overall:
 
 ## Headline results (28 clean races)
 
-- **Verdict: 25 GO · 3 CONDITIONAL · 0 NO-GO.** The 3 conditionals are
-  lapping-heavy ovals / an early-caution race (Iowa 2024, Iowa 2025, Portland
-  2025) where pairwise concordance is 92.8–96.5% — the running order agrees, but
-  exact per-lap rank is limited by inherited lap-count drift.
+- **Verdict: 26 GO · 2 CONDITIONAL · 0 NO-GO.** The 2 conditionals are
+  lapping-heavy ovals (Iowa 2024, Iowa 2025) where pairwise concordance is
+  95.8–96.5% — the running order agrees, but exact per-lap rank is limited by
+  inherited **caution/red-flag** lap-count drift on a handful of cars (Iowa 2024
+  #23; Iowa 2025 #3, #39), which race control resolves with its own yellow-lap
+  bookkeeping that raw crossings cannot replicate. Portland 2025 was promoted to
+  GO by the semantic layer's pit-lane lap-numbering alignment (see below); its
+  concordance rose from 92.83% to 100.00%.
+- **Pit-lane lap-numbering alignment (upstream fix).** The semantic layer now
+  counts a lap completed **through the pit lane** — a crossing of the pit
+  start/finish line (`SFP`, cumulative distance 0, the pit twin of the mainline
+  S/F) — toward each car's lap number, not just mainline S/F crossings. A car
+  that pits otherwise drops one lap in the count from that stop onward and runs a
+  lap behind the official lap chart for the rest of the race; this was the sole
+  cause of Portland 2025's CONDITIONAL and a large share of the drift elsewhere.
+  The alignment corrects 119 car lap-counts across the 28 races (axis (a)
+  cars-exact rose 11→19 races full-order-exact; lap-count cars-exact to
+  513/538), with zero verdict regressions.
 - **Stable-set closure: 100.00%** (17,966 green car-laps) — the ledger balances.
-- **Strict field closure: 99.00%** (18,884 green car-laps) — the ~1% residual is
-  field-attrition, confirmed by the stable-set 100%.
-- **Pairwise concordance vs the official lap chart: 99.16% mean** (≥98% on 26/28,
-  ≥96% on all).
-- **Incidents located: 20/45** — a descriptive-only signal (many official
+- **Strict field closure: 98.27%** (18,884 green car-laps) — the ~1.7% residual
+  is field-attrition (now including correctly-counted pit re-entries), confirmed
+  by the stable-set 100%.
+- **Pairwise concordance vs the official lap chart: 99.65% mean** (≥98% on 26/28,
+  ≥95.8% on all).
+- **Incidents located: 21/45** — a descriptive-only signal (many official
   incidents are minor offs with no lasting slowdown).
 
 The one contaminated capture (2025-05-10 IMS R1, a `full_day_capture`

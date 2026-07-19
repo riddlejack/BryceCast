@@ -1,6 +1,6 @@
 {
   "axis": "b_section_times_vs_official_pdf",
-  "generatedAt": "2026-07-19T02:50:49.196Z",
+  "generatedAt": "2026-07-19T23:14:15.627Z",
   "method": "Bryce's section times computed as differences of his loop-crossing timestamps, compared per lap to parsed official Section Results. Full-lap uses the S/F->S/F boundary; Nashville sub-sections are mapped to the best-matching feed span.",
   "summary": {
     "fullLapRaces": 25,
@@ -50,16 +50,16 @@
       "venue": "Indianapolis Motor Speedway RC",
       "bryceCar": "27",
       "officialSessionId": "session_indy_nxt_2024_6315",
-      "lapOffset": -1,
+      "lapOffset": 0,
       "residualStats": {
-        "n": 32,
+        "n": 33,
         "medianResidual": 0,
-        "meanResidual": 2.5962,
+        "meanResidual": 0,
         "medianAbsResidual": 0,
-        "p95AbsResidual": 45.9958,
-        "maxAbsResidual": 124.6041,
-        "within_0p05s": 28,
-        "within_0p2s": 28
+        "p95AbsResidual": 0,
+        "maxAbsResidual": 0,
+        "within_0p05s": 33,
+        "within_0p2s": 33
       }
     },
     {
@@ -71,13 +71,13 @@
       "lapOffset": 0,
       "residualStats": {
         "n": 33,
-        "medianResidual": -1.1576,
-        "meanResidual": -5.2454,
-        "medianAbsResidual": 1.2389,
-        "p95AbsResidual": 33.5166,
-        "maxAbsResidual": 66.9808,
-        "within_0p05s": 0,
-        "within_0p2s": 4
+        "medianResidual": -1.2442,
+        "meanResidual": -7.5922,
+        "medianAbsResidual": 1.2442,
+        "p95AbsResidual": 29.955,
+        "maxAbsResidual": 33.5933,
+        "within_0p05s": 3,
+        "within_0p2s": 7
       }
     },
     {
@@ -140,16 +140,16 @@
       "venue": "Mid-Ohio Sports Car Course",
       "bryceCar": "27",
       "officialSessionId": "session_indy_nxt_2024_6318",
-      "lapOffset": -1,
+      "lapOffset": 0,
       "residualStats": {
-        "n": 30,
+        "n": 31,
         "medianResidual": 0,
         "meanResidual": 0,
         "medianAbsResidual": 0,
         "p95AbsResidual": 0,
         "maxAbsResidual": 0,
-        "within_0p05s": 30,
-        "within_0p2s": 30
+        "within_0p05s": 31,
+        "within_0p2s": 31
       }
     },
     {
@@ -320,16 +320,16 @@
       "venue": "Detroit Street Circuit",
       "bryceCar": "9",
       "officialSessionId": "session_indy_nxt_2025_6455",
-      "lapOffset": -1,
+      "lapOffset": 0,
       "residualStats": {
-        "n": 41,
+        "n": 43,
         "medianResidual": 0,
-        "meanResidual": 1.8084,
+        "meanResidual": 0,
         "medianAbsResidual": 0,
         "p95AbsResidual": 0,
-        "maxAbsResidual": 87.9003,
-        "within_0p05s": 39,
-        "within_0p2s": 39
+        "maxAbsResidual": 0,
+        "within_0p05s": 43,
+        "within_0p2s": 43
       }
     },
     {
@@ -374,16 +374,16 @@
       "venue": "Mid-Ohio Sports Car Course",
       "bryceCar": "9",
       "officialSessionId": "session_indy_nxt_2025_6452",
-      "lapOffset": -1,
+      "lapOffset": 0,
       "residualStats": {
-        "n": 31,
+        "n": 32,
         "medianResidual": 0,
-        "meanResidual": 2.444,
+        "meanResidual": 0,
         "medianAbsResidual": 0,
-        "p95AbsResidual": 29.3632,
-        "maxAbsResidual": 105.9271,
-        "within_0p05s": 28,
-        "within_0p2s": 28
+        "p95AbsResidual": 0,
+        "maxAbsResidual": 0,
+        "within_0p05s": 32,
+        "within_0p2s": 32
       }
     },
     {
