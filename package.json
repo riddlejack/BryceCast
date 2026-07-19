@@ -31,6 +31,8 @@
     "analytics:career-life-stats:validate": "python3 analysis/career-life-stats/scripts/validate_career_life_stats.py",
     "analytics:career-atlas": "python3 analysis/career-atlas/scripts/build_career_atlas.py",
     "analytics:career-atlas:validate": "python3 analysis/career-atlas/scripts/validate_career_atlas.py",
+    "analytics:restart-report": "python3 analysis/restart-report/scripts/build_restart_report.py",
+    "analytics:restart-report:validate": "python3 analysis/restart-report/scripts/validate_restart_report.py",
     "analytics:predictive-race-intelligence": "node scripts/run-predictive-race-intelligence.mjs",
     "analytics:ui-data-package": "node scripts/build-ui-data-package.mjs",
     "analytics:ui-data-package:validate": "node scripts/validate-ui-data-package.mjs",

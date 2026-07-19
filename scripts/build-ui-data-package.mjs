@@ -59,6 +59,14 @@ const sources = {
   careerAtlasRequirements: 'analysis/career-atlas/requirements.txt',
   careerAtlasBuilderScript: 'analysis/career-atlas/scripts/build_career_atlas.py',
   careerAtlasValidatorScript: 'analysis/career-atlas/scripts/validate_career_atlas.py',
+  restartReportSummary: 'analysis/restart-report/output/summary.json',
+  restartReportEvents: 'analysis/restart-report/output/tables/restart_events.csv',
+  restartReportByRace: 'analysis/restart-report/output/tables/restart_by_race.csv',
+  restartReportByVenue: 'analysis/restart-report/output/tables/restart_by_venue.csv',
+  restartReportBySeason: 'analysis/restart-report/output/tables/restart_by_season.csv',
+  restartReportDriverDeltas: 'analysis/restart-report/output/tables/restart_driver_deltas.csv',
+  restartReportBuilderScript: 'analysis/restart-report/scripts/build_restart_report.py',
+  restartReportValidatorScript: 'analysis/restart-report/scripts/validate_restart_report.py',
   predictiveSummary: 'analysis/predictive-race-intelligence/output/summary.json',
   predictiveInventory: 'analysis/predictive-race-intelligence/output/analytics_inventory_registry.json',
   predictiveModelScorecard: 'analysis/predictive-race-intelligence/output/model_scorecard.json',
@@ -188,6 +196,22 @@ const runCareerAtlas = () => {
   for (const script of [
     'analysis/career-atlas/scripts/build_career_atlas.py',
     'analysis/career-atlas/scripts/validate_career_atlas.py'
+  ]) {
+    const result = spawnSync(python, [script], { cwd: repoRoot, stdio: 'inherit' });
+    if (result.error) {
+      throw new Error(`Failed to run ${script} with ${python}: ${result.error.message}`);
+    }
+    if (result.status !== 0) {
+      throw new Error(`${script} exited ${result.status ?? 'without a status'} using ${python}`);
+    }
+  }
+};
+
+const runRestartReport = () => {
+  const python = analyticsPython();
+  for (const script of [
+    'analysis/restart-report/scripts/build_restart_report.py',
+    'analysis/restart-report/scripts/validate_restart_report.py'
   ]) {
     const result = spawnSync(python, [script], { cwd: repoRoot, stdio: 'inherit' });
     if (result.error) {
@@ -534,6 +558,66 @@ const parseTopRatedRivals = (value) =>
     })
     .filter(Boolean);
 
+/** The per-race restart card: each restart's window plus Bryce against the
+ *  full field, sized so per-second data can later refine the same shape. */
+const buildRaceStoryRestartBlock = ({ events, raceRow }) => {
+  if (!raceRow) return null;
+  const cautionPeriods = numberOrNull(raceRow.cautionPeriods) ?? 0;
+  const detected = numberOrNull(raceRow.restartCount) ?? 0;
+  const noRestartReason = cautionPeriods === 0 ? 'no_cautions' : detected === 0 ? 'cautions_ended_under_yellow' : '';
+  const eventBlocks = (events ?? [])
+    .slice()
+    .sort((left, right) => (numberOrNull(left.restartIndex) ?? 0) - (numberOrNull(right.restartIndex) ?? 0))
+    .map((row) => ({
+      restartIndex: numberOrNull(row.restartIndex),
+      restartLap: numberOrNull(row.restartLap),
+      baselineLap: numberOrNull(row.baselineLap),
+      windowLaps: numberOrNull(row.windowLaps),
+      windowEndLap: numberOrNull(row.windowEndLap),
+      fullWindow: row.fullWindow === 'true',
+      cautionReasons: row.cautionReasons || null,
+      precision: 'lap-chart',
+      field: {
+        classified: numberOrNull(row.fieldClassified),
+        medianNet: numberOrNull(row.fieldNetMedian),
+        bestNet: numberOrNull(row.fieldNetBest)
+      },
+      bryce:
+        row.bryceClassified === 'true'
+          ? {
+              baselinePosition: numberOrNull(row.bryceBaselinePosition),
+              restartPosition: numberOrNull(row.bryceRestartPosition),
+              endPosition: numberOrNull(row.bryceEndPosition),
+              net: numberOrNull(row.bryceNet),
+              rankInField: numberOrNull(row.bryceRankInField),
+              fieldSize: numberOrNull(row.bryceFieldSizeRanked)
+            }
+          : null
+    }));
+  return {
+    detected,
+    cautionPeriods,
+    windowLaps: 2,
+    precision: 'lap-chart',
+    noRestartReason,
+    bryce: {
+      counted: numberOrNull(raceRow.bryceRestartsCounted) ?? 0,
+      net: numberOrNull(raceRow.bryceNet) ?? 0,
+      gained: numberOrNull(raceRow.bryceGained) ?? 0,
+      held: numberOrNull(raceRow.bryceHeld) ?? 0,
+      slipped: numberOrNull(raceRow.bryceSlipped) ?? 0,
+      rankInField: numberOrNull(raceRow.bryceRankInField),
+      fieldSizeRanked: numberOrNull(raceRow.fieldSizeRanked),
+      soleBestInField: raceRow.soleBestInField === 'true',
+      coBestInField: raceRow.coBestInField === 'true'
+    },
+    coverageNote: raceRow.coverageNote || '',
+    events: eventBlocks,
+    caveat:
+      'Restart movement is running order over the green laps after each restart, from the official lap chart — positions only, never lap times.'
+  };
+};
+
 const buildRaceStoryPacks = ({ raceDebriefPackPairs, canonicalDataset, canonicalSha256 }) => {
   const outputDir = path.join(repoRoot, 'analysis/race-story/output/context-packs');
   fs.mkdirSync(outputDir, { recursive: true });
@@ -563,6 +647,14 @@ const buildRaceStoryPacks = ({ raceDebriefPackPairs, canonicalDataset, canonical
   }
 
   const inflectionRows = readCsv(sources.raceLapInflectionPoints);
+  const restartEventRows = readCsv(sources.restartReportEvents);
+  const restartRaceRows = readCsv(sources.restartReportByRace);
+  const restartEventsBySession = new Map();
+  for (const row of restartEventRows) {
+    if (!restartEventsBySession.has(row.sessionId)) restartEventsBySession.set(row.sessionId, []);
+    restartEventsBySession.get(row.sessionId).push(row);
+  }
+  const restartRaceBySession = new Map(restartRaceRows.map((row) => [row.sessionId, row]));
   const fieldStrengthRows = readCsv(sources.fieldStrengthByRace);
   const sectionRows = readCsv(sources.sectionResultsDeepByRace);
   const teamRows = readCsv(sources.teamContextByRace);
@@ -697,6 +789,10 @@ const buildRaceStoryPacks = ({ raceDebriefPackPairs, canonicalDataset, canonical
       },
       inflections,
       battles,
+      restarts: buildRaceStoryRestartBlock({
+        events: restartEventsBySession.get(sessionId),
+        raceRow: restartRaceBySession.get(sessionId)
+      }),
       weather: weatherObservation
         ? {
             ambientTempC: numberOrNull(weatherObservation.ambientTempC),
@@ -772,7 +868,8 @@ const buildRaceStoryPacks = ({ raceDebriefPackPairs, canonicalDataset, canonical
         { key: 'fieldStrengthByRace', path: sources.fieldStrengthByRace, note: 'Descriptive field-strength context and result-vs-expectation.' },
         { key: 'sectionResultsDeepByRace', path: sources.sectionResultsDeepByRace, note: 'Official section-time percentiles for the weekend.' },
         { key: 'teamContextByRace', path: sources.teamContextByRace, note: 'Teammate results within the same official session.' },
-        { key: 'championshipProgression', path: sources.championshipProgression, note: 'Points and standing movement across the season.' }
+        { key: 'championshipProgression', path: sources.championshipProgression, note: 'Points and standing movement across the season.' },
+        { key: 'restartReportEvents', path: sources.restartReportEvents, note: 'Positions gained over the green laps after each official restart, Bryce vs the full field.' }
       ],
       caveats: [
         'Lap chart shows official running order at each completed lap; it does not carry lap times or gaps.',
@@ -1104,6 +1201,64 @@ const buildCareerHeadToHead = (rows) =>
     }))
     .filter((row) => row.driverName && (row.racesTogether ?? 0) > 0)
     .sort((left, right) => (right.racesTogether ?? 0) - (left.racesTogether ?? 0) || left.driverName.localeCompare(right.driverName));
+
+/* The restart through-line: career, per-season, and per-venue restart movement
+ * against the field, plus a per-race spine for the Career Lab and a per-venue
+ * prior for Race Week. Sized for the lake (precision swaps lap-chart→per-second
+ * with no UI rework). */
+const buildRestartReport = ({ summary, byRaceRows, seasonIndex }) => {
+  const seasonRowBySession = new Map((seasonIndex ?? []).map((row) => [row.sessionId, row]));
+  const stripHash = ({ sourceHash, ...rest }) => rest;
+  const byRace = (byRaceRows ?? [])
+    .filter((row) => (numberOrNull(row.restartCount) ?? 0) > 0)
+    .map((row) => {
+      const seasonRow = seasonRowBySession.get(row.sessionId) ?? null;
+      return {
+        sessionId: row.sessionId,
+        seasonYear: numberOrNull(row.seasonYear),
+        raceLabel: row.raceLabel,
+        trackName: row.trackName,
+        trackType: row.trackType,
+        venueSlug: row.venueSlug,
+        eventStartDate: seasonRow?.eventStartDate ?? null,
+        roundIndex: seasonRow ? numberOrNull(seasonRow.roundIndex) : null,
+        restartCount: numberOrNull(row.restartCount),
+        bryceRestartsCounted: numberOrNull(row.bryceRestartsCounted),
+        bryceNet: numberOrNull(row.bryceNet),
+        bryceGained: numberOrNull(row.bryceGained),
+        bryceHeld: numberOrNull(row.bryceHeld),
+        bryceSlipped: numberOrNull(row.bryceSlipped),
+        bryceRankInField: numberOrNull(row.bryceRankInField),
+        fieldSizeRanked: numberOrNull(row.fieldSizeRanked),
+        fieldMedianNet: numberOrNull(row.fieldMedianNet),
+        bryceBeatFieldTypical: row.bryceBeatFieldTypical === 'true',
+        soleBestInField: row.soleBestInField === 'true',
+        coBestInField: row.coBestInField === 'true',
+        coverageNote: row.coverageNote || ''
+      };
+    })
+    .sort((left, right) => dateMs(left.eventStartDate) - dateMs(right.eventStartDate) || String(left.sessionId).localeCompare(String(right.sessionId)));
+  return {
+    schemaVersion: summary.schemaVersion,
+    precision: summary.method?.precision ?? 'lap-chart',
+    windowLaps: numberOrNull(summary.windowLaps),
+    coverage: summary.coverage,
+    career: summary.career,
+    byRace,
+    byVenue: (summary.byVenue ?? []).map(stripHash),
+    bySeason: (summary.bySeason ?? []).map(stripHash),
+    handVerification: summary.handVerification ?? [],
+    caveats: summary.caveats ?? [],
+    sourceRefs: [
+      sourceRef('restartReportSummary', 'Validated restart-report totals, coverage, and hand-verification.'),
+      sourceRef('restartReportByRace', 'Per-race restart movement with the field rank.'),
+      sourceRef('restartReportByVenue', 'Per-venue restart rollup for the Race Week prior.'),
+      sourceRef('restartReportBySeason', 'Per-season restart rollup.'),
+      sourceRef('restartReportEvents', 'One row per restart, Bryce against the full field.'),
+      sourceRef('canonicalDataset', 'Official Results-PDF caution summaries and official lap-chart positions.')
+    ]
+  };
+};
 
 /* Where the laps lived: Bryce's official running position on every sourced
  * INDY NXT lap, bucketed per season — the climb visible inside the races,
@@ -1848,6 +2003,8 @@ const buildPackage = () => {
   const careerLifeStatsFuelEstimate = readCsv(sources.careerLifeStatsFuelEstimate);
   const careerLifeStatsTireEstimate = readCsv(sources.careerLifeStatsTireEstimate);
   const careerAtlas = readJson(sources.careerAtlasOutput);
+  const restartReportSummary = readJson(sources.restartReportSummary);
+  const restartByRaceRows = readCsv(sources.restartReportByRace);
   const predictiveChartRefs = (predictiveSummary.charts ?? []).map((chartPath) => summarizeArtifact(chartPath));
 
   const contextPackRefs = predictiveContextPackManifest.packs.map((pack) => ({
@@ -2110,6 +2267,7 @@ const buildPackage = () => {
         moments: buildCareerMoments({ resultConversion: careerConversionEnriched, seasonIndex }),
         headToHead: buildCareerHeadToHead(headToHeadRows),
         lapPositionMix: buildLapPositionMix({ lapTimelineRows, canonicalDataset }),
+        restarts: buildRestartReport({ summary: restartReportSummary, byRaceRows: restartByRaceRows, seasonIndex }),
         atlas: {
           schemaVersion: careerAtlas.schemaVersion,
           naturalEarth: careerAtlas.naturalEarth,
@@ -2276,6 +2434,7 @@ if (!skipUpstreamRefresh) {
 }
 runCareerLifeStats();
 runCareerAtlas();
+runRestartReport();
 const dataPackage = buildPackage();
 fs.writeFileSync(outputPath, `${JSON.stringify(dataPackage, null, 2)}\n`);
 console.log(JSON.stringify({ ok: true, wrote: path.relative(repoRoot, outputPath), schemaVersion: dataPackage.schemaVersion }, null, 2));

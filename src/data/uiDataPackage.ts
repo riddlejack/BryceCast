@@ -146,6 +146,103 @@ export interface UiCareerAtlas {
   sourceRefs: UiSourceRef[];
 }
 
+export interface UiRestartCareer {
+  totalRestarts: number;
+  bryceRestartsCounted: number;
+  bryceGained: number;
+  bryceHeld: number;
+  bryceSlipped: number;
+  bryceNet: number;
+  avgBryceNetPerRestart: number | null;
+  fieldAvgNetPerRestart: number | null;
+  restartsBeatFieldMedian: number;
+  racesSoleBestInField: number;
+  racesWithRestarts: number;
+}
+
+export interface UiRestartByRace {
+  sessionId: string;
+  seasonYear: number | null;
+  raceLabel: string;
+  trackName: string;
+  trackType: string;
+  venueSlug: string;
+  eventStartDate: string | null;
+  roundIndex: number | null;
+  restartCount: number | null;
+  bryceRestartsCounted: number | null;
+  bryceNet: number | null;
+  bryceGained: number | null;
+  bryceHeld: number | null;
+  bryceSlipped: number | null;
+  bryceRankInField: number | null;
+  fieldSizeRanked: number | null;
+  /** Median of every classified driver's summed restart movement this race. */
+  fieldMedianNet: number | null;
+  /** True when Bryce's day net strictly beat that median — the gold-day flag. */
+  bryceBeatFieldTypical: boolean;
+  soleBestInField: boolean;
+  coBestInField: boolean;
+  coverageNote: string;
+}
+
+export interface UiRestartByVenue {
+  venueSlug: string;
+  trackName: string;
+  trackType: string;
+  seasons: string;
+  races: number;
+  restarts: number;
+  bryceRestartsCounted: number;
+  bryceNet: number;
+  bryceGained: number;
+  bryceHeld: number;
+  bryceSlipped: number;
+  avgBryceNetPerRestart: number | null;
+  fieldAvgNetPerRestart: number | null;
+}
+
+export interface UiRestartBySeason {
+  seasonYear: number | null;
+  races: number;
+  restarts: number;
+  bryceRestartsCounted: number;
+  bryceNet: number;
+  bryceGained: number;
+  bryceHeld: number;
+  bryceSlipped: number;
+  avgBryceNetPerRestart: number | null;
+  fieldAvgNetPerRestart: number | null;
+}
+
+/** The Restart Report Card contract: v1 fed by the lap-chart derivation
+ *  (`precision: 'lap-chart'`); per-second lake data later swaps `precision`
+ *  and refines the windows with no UI rework. */
+export interface UiRestartReport {
+  schemaVersion: 'brycecast.restartReport.v1';
+  precision: 'lap-chart';
+  windowLaps: number | null;
+  coverage: {
+    indyNxtRaceSessions: number;
+    sessionsWithLapChart: number;
+    racesWithRestarts: number;
+    racesNoCaution: number;
+    endOfRaceCautionsExcluded: number;
+    racesUncovered: number;
+  };
+  career: UiRestartCareer;
+  byRace: UiRestartByRace[];
+  byVenue: UiRestartByVenue[];
+  bySeason: UiRestartBySeason[];
+  handVerification: Array<{
+    sessionId: string;
+    raceLabel: string;
+    restarts: Array<Record<string, number | string | null>>;
+  }>;
+  caveats: string[];
+  sourceRefs: UiSourceRef[];
+}
+
 export interface UiCareerLifeStats {
   schemaVersion: 'brycecast.careerLifeStats.v2';
   personalRaceMileage: {
@@ -656,6 +753,7 @@ export interface UiDataPackage {
       moments: UiCareerMoment[];
       headToHead: UiCareerRival[];
       lapPositionMix: UiSeasonLapMix[];
+      restarts: UiRestartReport;
       atlas: UiCareerAtlas;
       lifeStats: UiCareerLifeStats;
       caveats: string[];

@@ -6,6 +6,7 @@ import {
   BestClimbs,
   CareerBests,
   CareerExplorer,
+  CareerRestarts,
   ChapterStrip,
   DaytonaChapterBody,
   DaytonaSourcePill,
@@ -271,6 +272,11 @@ export const CareerScreen = () => {
         <span className="kicker">The rivals</span>
       </div>
       <RivalsCard />
+
+      <div style={{ marginTop: 10 }}>
+        <span className="kicker">The restarts</span>
+      </div>
+      <CareerRestarts />
 
       <OdometerCard />
 
