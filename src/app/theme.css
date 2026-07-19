@@ -1377,6 +1377,77 @@ button { font-family: inherit; }
   border-top: 1px solid var(--divider);
 }
 
+/* Prior-year replays — the year toggle. Quiet links into the SAME replay
+   experience, never a new surface. A divider sets them off from the race's own
+   replay above; --sole drops it when there's no current-race replay to divide
+   from (the venue's earlier years are then the whole module). */
+.race-replay__years {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 14px;
+  border-top: 1px solid var(--divider);
+}
+
+.race-replay__years--sole { padding-top: 0; border-top: none; }
+
+.race-replay__years-lead {
+  font-size: 12.5px;
+  font-weight: 500;
+  letter-spacing: 0;
+  color: var(--ink-secondary);
+}
+
+.race-replay__year {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 14px;
+}
+
+.race-replay__year-link {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  flex: 1 1 260px;
+  min-width: 0;
+  padding: 4px;
+  margin: -4px;
+  border: 0;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  border-radius: var(--radius-tile);
+  transition: background 150ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.race-replay__year-link:hover { background: var(--surface-2); }
+
+.race-replay__year-play {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--surface-0);
+  color: var(--ink-primary);
+  box-shadow: inset 0 0 0 1px var(--hairline);
+  transition: color 150ms cubic-bezier(0.23, 1, 0.32, 1), box-shadow 150ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.race-replay__year-play svg { margin-left: 2px; } /* optically centre the triangle */
+.race-replay__year-link:hover .race-replay__year-play { color: var(--link); box-shadow: inset 0 0 0 1px var(--link); }
+
+.race-replay__year-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.race-replay__year-title { font-size: 14.5px; font-weight: 560; color: var(--ink-primary); letter-spacing: -0.01em; }
+.race-replay__year-meta { font-size: 11.5px; color: var(--ink-muted); }
+
+.race-replay__year-prov { display: inline-flex; align-items: center; gap: 10px; flex: 0 0 auto; }
+.race-replay__year-prov .caption { font-size: 11.5px; }
+
 /* ---------- the time machine: Live-page replay bar ---------- */
 
 .replay-bar {

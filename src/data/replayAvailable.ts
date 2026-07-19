@@ -117,6 +117,52 @@ export const captureBySessionKey = (
   sessionKey: string
 ): ReplaySessionInfo | null => available?.sessions.find((session) => session.sessionKey === sessionKey) ?? null;
 
+/** A candidate venue visit for the prior-year join — the minimum a venue-dossier
+ *  visit carries. Kept structural so both the race page and Race Week can pass
+ *  their `UiVenueDossierVisit` rows without importing the package type here. */
+export interface VenueVisitRef {
+  sessionId: string;
+  seasonYear: number;
+  raceLabel: string;
+}
+
+/** A watchable replay of a DIFFERENT year at the same venue, ready to link. */
+export interface PriorYearReplay {
+  seasonYear: number;
+  sessionId: string;
+  raceLabel: string;
+  capture: ReplaySessionInfo;
+}
+
+/** Prior-year replays at a venue, joined STRICTLY by venue identity: each
+ *  candidate visit's own canonical sessionId is resolved through
+ *  {@link watchableCaptureForRace}. This never matches on event name — event
+ *  names drift year to year ("Music City" ⇄ "at Milwaukee Mile"), and
+ *  RaceTools-derived feeds carry empty-string ids, so a name join is unsafe.
+ *  Visits whose sessionId is empty or whitespace are dropped before resolving
+ *  (empty string is not a present id); only visits strictly BEFORE `beforeYear`
+ *  qualify, so a race page never offers its own year or the same weekend's other
+ *  race. Returns most-recent year first. */
+export const priorYearReplaysAtVenue = (
+  available: ReplayAvailable | null,
+  visits: VenueVisitRef[],
+  beforeYear: number | null | undefined
+): PriorYearReplay[] => {
+  if (!available || !Number.isFinite(beforeYear)) return [];
+  const cutoff = beforeYear as number;
+  return visits
+    .filter((visit) => typeof visit.sessionId === 'string' && visit.sessionId.trim() !== '')
+    .filter((visit) => Number.isFinite(visit.seasonYear) && visit.seasonYear < cutoff)
+    .map((visit): PriorYearReplay | null => {
+      const capture = watchableCaptureForRace(available, visit.sessionId);
+      return capture && capture.watchable
+        ? { seasonYear: visit.seasonYear, sessionId: visit.sessionId, raceLabel: visit.raceLabel, capture }
+        : null;
+    })
+    .filter((entry): entry is PriorYearReplay => entry !== null)
+    .sort((left, right) => right.seasonYear - left.seasonYear);
+};
+
 /** Short venue label for the replay chip, preferring the live payload's track
  *  name and falling back to the event name with known series chrome stripped. */
 export const shortVenueFromEventName = (eventName: string | null | undefined): string | null => {

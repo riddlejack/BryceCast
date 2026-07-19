@@ -28,7 +28,9 @@ import {
   type UiVenueDossierVisit
 } from '../data/uiDataPackage';
 import { getVenueByTrackName, getVenueDossier } from '../data/venueDossier';
+import { priorYearReplaysAtVenue, replayProvenance } from '../data/replayAvailable';
 import { loadDebriefArchive } from '../data/debriefArchive';
+import { ReplayAffordance, priorYearTitle, useReplayCatalog } from './replayAffordance';
 import { VenueSectionSuite, useVenueSectionData } from './sectionIntelligence';
 
 type Row = Record<string, unknown>;
@@ -1036,6 +1038,48 @@ const VenueDossierModule = ({
   );
 };
 
+/* ---------- watch last year's race (the year toggle, at the venue's home) ----------
+ *  The venue's analytical home earns the same time machine the race pages carry:
+ *  a quiet invitation to watch the most recent past race HERE unfold, plus any
+ *  earlier watchable years. Joins STRICTLY by venue identity — this venue's own
+ *  dossier visits, each resolved through watchableCaptureForRace — never by event
+ *  name. Renders nothing at a venue with no prior watchable capture. */
+const RaceWeekReplay = ({ venue, upcomingYear }: { venue: UiVenueDossierVenue; upcomingYear: number | null }) => {
+  const available = useReplayCatalog();
+  const priors = priorYearReplaysAtVenue(available, venue.visits, upcomingYear ?? new Date().getUTCFullYear() + 1);
+  if (priors.length === 0) return null;
+  const [primary, ...older] = priors;
+  const isOwn = replayProvenance(primary.capture).tier === 'brycecast_capture';
+  // "Last year's race" only when the most recent prior IS the year before this
+  // weekend and it isn't a doubleheader; otherwise name the year, so the copy is
+  // never loose about which race it opens.
+  const isLastYear = upcomingYear !== null && primary.seasonYear === upcomingYear - 1 && primary.raceLabel.trim() === String(primary.seasonYear);
+  const racePhrase = isLastYear ? 'last year’s race here' : `the ${primary.seasonYear} race here`;
+  const primaryTitle = isLastYear ? 'Watch last year’s race unfold' : priorYearTitle(primary.seasonYear, primary.raceLabel);
+  const primaryCopy = isOwn
+    ? `Every second of ${racePhrase}, replayed as it happened, from our own trackside capture.`
+    : `Every second of ${racePhrase}, reconstructed from a third-party timing archive and replayed as it happened.`;
+  return (
+    <section className="race-replay" aria-label="Watch a past race at this venue unfold">
+      <ReplayAffordance capture={primary.capture} fromSessionId={primary.sessionId} title={primaryTitle} copy={primaryCopy} />
+      {older.length > 0 ? (
+        <div className="race-replay__years">
+          <span className="race-replay__years-lead">Watch an earlier year here</span>
+          {older.map((prior) => (
+            <ReplayAffordance
+              key={prior.sessionId}
+              capture={prior.capture}
+              fromSessionId={prior.sessionId}
+              title={priorYearTitle(prior.seasonYear, prior.raceLabel)}
+              variant="compact"
+            />
+          ))}
+        </div>
+      ) : null}
+    </section>
+  );
+};
+
 /* ---------- follow the weekend ---------- */
 
 const FollowTheWeekend = () => {
@@ -1331,6 +1375,10 @@ export const RaceWeekScreen = () => {
           The live companion arms automatically for every session this weekend.
         </div>
       </HeroPanel>
+
+      {dossierVenue ? (
+        <RaceWeekReplay venue={dossierVenue} upcomingYear={primary.eventStartDate ? Number(primary.eventStartDate.slice(0, 4)) : null} />
+      ) : null}
 
       {dossierVenue && dossierVenue.visits.length > 0 ? (
         <VenueDossierModule venue={dossierVenue} debriefIds={debriefIds} />
