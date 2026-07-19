@@ -913,6 +913,25 @@ const ReplayCueing = ({ session }: { session: ReplaySessionInfo | null }) => {
   );
 };
 
+/** Honest dead-end when a replay cannot start — an unwatchable/unknown capture,
+ *  the overlay disabled, the service unreachable, or the server refusing. It
+ *  always carries the reason and an exit back to the race, so a family tap can
+ *  never sit forever on "Cueing up the replay." */
+const ReplayRefused = ({ replay }: { replay: ReplaySession }) => (
+  <HeroPanel>
+    <span className="kicker">This replay can’t start</span>
+    <h1 className="screen-head__title" style={{ marginTop: 8 }}>{replay.session?.eventName ?? 'Archived race'}</h1>
+    <p style={{ margin: '14px 0 0', fontSize: 15, color: 'var(--ink-secondary)', maxWidth: '58ch' }}>
+      {replay.refusedReason ?? 'The replay service did not start playback.'}
+    </p>
+    <div style={{ marginTop: 18 }}>
+      <button type="button" className="replay-bar__btn replay-bar__btn--exit" onClick={replay.exit}>
+        <X size={13} aria-hidden /> Back to the race
+      </button>
+    </div>
+  </HeroPanel>
+);
+
 /* ---------- post-checkered honesty: as-raced order vs official classification ---------- */
 
 /** True once the archived session has run its full distance and gone cold —
@@ -995,11 +1014,23 @@ export const LiveScreen = ({
   // A replay that a live session preempted is no longer "active": the page drops
   // the replay chrome and cueing and renders the real feed with an honest note.
   const replayEndedByLive = Boolean(replay?.endedByLive);
-  const replayActive = Boolean(replay && !replay.unavailable && !replayEndedByLive);
+  // A replay the overlay could not engage (refusal, unwatchable/unknown capture,
+  // service unreachable) is rendered as an honest, exitable dead-end — never a
+  // cue-up that never clears, and never a silent fall-through to the live feed.
+  const replayRefused = Boolean(replay?.refusedReason) && !replayEndedByLive;
+  const replayActive = Boolean(replay && !replay.unavailable && !replayRefused && !replayEndedByLive);
   const replaySimulated = payload ? isSimulatedReplayPayload(payload) : false;
   // Until the virtual clock's first archived payload arrives, hold a calm
   // cue-up state instead of flashing whatever the live feed happens to say.
   const cueing = replayActive && !replaySimulated;
+
+  if (replayRefused && replay) {
+    return (
+      <div className="page stack live-page" data-replay-active="false">
+        <ReplayRefused replay={replay} />
+      </div>
+    );
+  }
 
   if (!payload || cueing) {
     return (

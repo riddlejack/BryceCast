@@ -24,6 +24,11 @@ export interface ReplaySession {
   unavailable: boolean;
   /** A live session preempted the replay mid-playback (server live-guard). */
   endedByLive: boolean;
+  /** Human-readable reason the replay could not start (server refusal, an
+   *  unreachable service, or a session that isn't watchable). Set whenever the
+   *  overlay could not engage playback, so the page renders an honest
+   *  "this replay can't start: <reason>" state instead of an eternal cue-up. */
+  refusedReason: string | null;
   session: ReplaySessionInfo | null;
   speed: number;
   speeds: readonly number[];
@@ -41,6 +46,7 @@ const inactive: ReplaySession = {
   started: false,
   unavailable: false,
   endedByLive: false,
+  refusedReason: null,
   session: null,
   speed: DEFAULT_REPLAY_SPEED,
   speeds: REPLAY_SPEEDS,
@@ -52,7 +58,9 @@ const inactive: ReplaySession = {
   exit: () => {}
 };
 
-const control = async (query: string): Promise<{ ok: boolean; status: number; data: Record<string, unknown> | null }> => {
+type ControlResult = { ok: boolean; status: number; data: Record<string, unknown> | null };
+
+const control = async (query: string): Promise<ControlResult> => {
   try {
     const response = await fetch(apiUrl(`/api/replay/control${query}`), { headers: { accept: 'application/json' } });
     const data = (await response.json().catch(() => null)) as Record<string, unknown> | null;
@@ -60,6 +68,22 @@ const control = async (query: string): Promise<{ ok: boolean; status: number; da
   } catch {
     return { ok: false, status: 0, data: null };
   }
+};
+
+/** The server signals a genuinely-engaged replay with `active: true` in the
+ *  control body — an HTTP 200 alone is not enough (the status branch and any
+ *  future refusal-as-status answer 200 with `active: false`). Treating only the
+ *  body as truth is what stops a non-start from becoming an eternal cue-up. */
+const controlEngaged = (result: ControlResult): boolean => result.ok && result.data?.active === true;
+
+/** A human-readable reason a start did not engage, preferring the server's own
+ *  refusal message so the page can say exactly why. */
+const refusalReason = (result: ControlResult): string => {
+  const data = result.data;
+  if (typeof data?.error === 'string' && data.error) return data.error;
+  if (typeof data?.reason === 'string' && data.reason) return data.reason;
+  if (result.status === 0) return 'The replay service could not be reached.';
+  return 'The replay service did not start playback.';
 };
 
 const clampT0 = (session: ReplaySessionInfo, iso: string | null): string => {
@@ -120,18 +144,46 @@ export const useReplaySession = (replayKey: string | null, onRestart?: () => voi
       // Hold a direct /live?replay=<key> URL to the same watchable bar the
       // race-page CTA applies; a non-watchable or wrong-series key stays out.
       if (!available || !session || !session.watchable) {
-        setState({ ...inactive, engaged: true, unavailable: true, returnHref });
+        setState({
+          ...inactive,
+          engaged: true,
+          unavailable: true,
+          refusedReason: !available
+            ? 'Replay isn’t available here.'
+            : !session
+              ? 'That race isn’t in the replay archive.'
+              : 'That capture isn’t a watchable Bryce race.',
+          returnHref
+        });
         return;
       }
       sessionRef.current = session;
       const started = await start(session, session.firstGreenAt, DEFAULT_REPLAY_SPEED);
       if (cancelled) return;
+      // Engaged only when the server confirms `active: true`. A refusal (or any
+      // 200 that did not actually start playback) resolves to an honest,
+      // exitable "can't start" state — never a cue-up that never clears.
+      if (!controlEngaged(started)) {
+        setState({
+          ...inactive,
+          engaged: true,
+          starting: false,
+          unavailable: true,
+          refusedReason: refusalReason(started),
+          session,
+          venue: shortVenueFromEventName(session.eventName),
+          seasonYear: session.seasonYear,
+          returnHref
+        });
+        return;
+      }
       setState((previous) => ({
         ...previous,
         engaged: true,
         starting: false,
-        started: started.ok,
-        unavailable: !started.ok,
+        started: true,
+        unavailable: false,
+        refusedReason: null,
         session,
         speed: DEFAULT_REPLAY_SPEED,
         venue: shortVenueFromEventName(session.eventName),
@@ -176,7 +228,7 @@ export const useReplaySession = (replayKey: string | null, onRestart?: () => voi
         const status = await control('');
         const virtualNow = typeof status.data?.virtualNow === 'string' ? (status.data.virtualNow as string) : session.firstGreenAt;
         const result = await start(session, virtualNow, next);
-        if (result.ok) {
+        if (controlEngaged(result)) {
           speedRef.current = next;
           setState((previous) => ({ ...previous, speed: next, started: true }));
         }
@@ -190,7 +242,7 @@ export const useReplaySession = (replayKey: string | null, onRestart?: () => voi
     if (!session) return;
     void (async () => {
       const result = await start(session, session.firstGreenAt, speedRef.current);
-      if (result.ok) {
+      if (controlEngaged(result)) {
         onRestartRef.current?.();
         setState((previous) => ({ ...previous, started: true }));
       }
