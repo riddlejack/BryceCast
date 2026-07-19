@@ -51,6 +51,8 @@
     "analytics:semantic-layer:timing71": "node analysis/semantic-layer/build-timing71-2026.mjs",
     "analytics:semantic-layer:crosswalk": "node analysis/semantic-layer/build-identity-crosswalk.mjs",
     "analytics:semantic-layer:crosswalk:validate": "node analysis/semantic-layer/validate-crosswalk.mjs",
+    "analytics:replay-feeds": "node analysis/replay-feeds/build-replay-feeds.mjs",
+    "analytics:replay-feeds:validate": "node analysis/replay-feeds/validate-replay-feeds.mjs",
     "analytics:track-position": "node analysis/track-position/build-pass-placement.mjs",
     "analytics:track-position:validate": "node analysis/track-position/validate-pass-placement.mjs",
     "analytics:track-position:pass-marks": "node analysis/track-position/build-pass-marks.mjs",
