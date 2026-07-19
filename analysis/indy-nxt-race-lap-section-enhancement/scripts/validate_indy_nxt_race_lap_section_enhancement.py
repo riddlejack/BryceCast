@@ -4,7 +4,9 @@
 from __future__ import annotations
 
 import csv
+import gzip
 import hashlib
+import io
 import json
 import os
 import re
@@ -48,6 +50,8 @@ REQUIRED_FILES = [
     "race_lap_segments.csv",
     "race_lap_inflection_points.csv",
     "race_section_lap_observations.csv",
+    "race_section_lap_field_observations.csv.gz",
+    "race_section_field_distribution.json",
     "race_section_session_summary.csv",
     "road_america_race_lap_section_context.csv",
     "summary.json",
@@ -55,6 +59,17 @@ REQUIRED_FILES = [
     "context-packs/indy-nxt-race-lap-section-context.json",
     "context-packs/road-america-race-context.json",
 ]
+
+DERIVED_SECTION_NAME = "Untimed remainder"
+
+
+def comparable_rank(field_times: list[float], value: float) -> tuple[int | None, float | None]:
+    """Re-derivation of the ranking used by the builder — must reproduce the
+    stored fieldRank/fieldPercentile exactly, or a mismatch is a finding."""
+    if len(field_times) < 8:
+        return None, None
+    rank = 1 + sum(1 for other in field_times if other < value)
+    return rank, 1 - ((rank - 1) / (len(field_times) - 1))
 
 
 def slug(value: str) -> str:
@@ -437,6 +452,126 @@ def validate_race_context_csv(expected_hash: str, path: Path, track_name: str, l
     return rows
 
 
+def read_csv_gz(path: Path) -> list[dict[str, str]]:
+    require_file(path)
+    with gzip.GzipFile(path, "rb") as raw:
+        with io.TextIOWrapper(raw, encoding="utf-8", newline="") as f:
+            return list(csv.DictReader(f))
+
+
+def validate_field_table_and_derived(expected_hash: str) -> None:
+    """The coverage-blindness fix's credibility step. Re-derives Bryce's stored
+    fieldRank/fieldPercentile from the FULL-FIELD table (not from the same
+    stored numbers) and asserts an exact match against the legacy observation
+    CSV — any mismatch means the full-field extraction disagrees with the lane
+    it replaces, which stops the build. Also checks the derived remainder is
+    honest: negatives dropped (never clamped), ranks suppressed below 8."""
+    field_rows = read_csv_gz(OUTPUT_DIR / "race_section_lap_field_observations.csv.gz")
+    require_fields(
+        field_rows,
+        {
+            "sessionId",
+            "driverId",
+            "isBryce",
+            "lapNumber",
+            "sectionName",
+            "sectionType",
+            "timeSeconds",
+            "fieldComparisonCount",
+            "fieldRank",
+            "fieldPercentile",
+            "sourceHash",
+        },
+        "race_section_lap_field_observations.csv.gz",
+    )
+
+    # Field time lists per (session, lap, section) from the raw (non-derived) rows.
+    field_times: dict[tuple[str, int, str], list[float]] = {}
+    remainder_times: dict[tuple[str, int], list[float]] = {}
+    for row in field_rows:
+        if row["sourceHash"] != expected_hash:
+            fail("field observation sourceHash does not match canonical dataset")
+        lap_number = parse_int(row["lapNumber"], "field table", "lapNumber")
+        time_value = parse_float(row["timeSeconds"], "field table", "timeSeconds")
+        if lap_number is None or time_value is None:
+            continue
+        if row["sectionType"] == "derived_remainder":
+            remainder_times.setdefault((row["sessionId"], lap_number), []).append(time_value)
+            if time_value < 0:
+                fail(f"derived remainder must never be negative in the table (uncovered laps are dropped): {row['sessionId']} L{lap_number}")
+        else:
+            field_times.setdefault((row["sessionId"], lap_number, row["sectionName"]), []).append(time_value)
+
+    # 1. Re-derive Bryce's legacy observation ranks from the full-field table.
+    observations = read_csv(OUTPUT_DIR / "race_section_lap_observations.csv")
+    checked = 0
+    for row in observations:
+        lap_number = parse_int(row["lapNumber"], "observations", "lapNumber")
+        time_value = parse_float(row["timeSeconds"], "observations", "timeSeconds")
+        if lap_number is None or time_value is None:
+            continue
+        times = field_times.get((row["sessionId"], lap_number, row["sectionName"]))
+        if times is None:
+            fail(f"full-field table missing a section the observation CSV carries: {row['sessionId']} L{lap_number} {row['sectionName']!r}")
+        count = len(times)
+        rank, percentile = comparable_rank(times, time_value)
+        csv_count = parse_int(row["fieldComparisonCount"], "observations", "fieldComparisonCount") or 0
+        csv_rank = parse_int(row["fieldRank"], "observations", "fieldRank")
+        csv_pct = parse_float(row["fieldPercentile"], "observations", "fieldPercentile")
+        if count != csv_count:
+            fail(f"field comparison count re-derivation mismatch at {row['sessionId']} L{lap_number} {row['sectionName']!r}: table {count} vs observation {csv_count}")
+        if rank != csv_rank:
+            fail(f"field rank re-derivation mismatch at {row['sessionId']} L{lap_number} {row['sectionName']!r}: table {rank} vs observation {csv_rank}")
+        # The observation CSV stores percentile rounded to 4 decimals; re-derive
+        # to the same precision so the comparison is exact, not float-noisy.
+        if (percentile is None) != (csv_pct is None) or (
+            percentile is not None and csv_pct is not None and round(percentile, 4) != round(csv_pct, 4)
+        ):
+            fail(f"field percentile re-derivation mismatch at {row['sessionId']} L{lap_number} {row['sectionName']!r}: table {percentile} vs observation {csv_pct}")
+        checked += 1
+    if checked < len(observations) * 0.99:
+        fail(f"re-derivation covered too few observation rows: {checked}/{len(observations)}")
+
+    # 2. Derived-remainder rank honesty in the table (suppression below 8).
+    for row in field_rows:
+        if row["sectionType"] != "derived_remainder":
+            continue
+        lap_number = parse_int(row["lapNumber"], "field table", "lapNumber")
+        count = parse_int(row["fieldComparisonCount"], "field table", "fieldComparisonCount") or 0
+        rank = parse_int(row["fieldRank"], "field table", "fieldRank")
+        pct = parse_float(row["fieldPercentile"], "field table", "fieldPercentile")
+        if count != len(remainder_times.get((row["sessionId"], lap_number), [])):
+            fail(f"derived remainder field count inconsistent at {row['sessionId']} L{lap_number}")
+        if count < 8 and (rank is not None or pct is not None):
+            fail(f"derived remainder rank/percentile must be suppressed below denominator 8 at {row['sessionId']} L{lap_number}")
+        if pct is not None and not 0 <= pct <= 1:
+            fail(f"derived remainder percentile out of range: {pct}")
+
+    # 3. The shipped distribution: coverage gate + derived rows match the table.
+    distribution = load_json(OUTPUT_DIR / "race_section_field_distribution.json")
+    if distribution.get("sourceHash") != expected_hash:
+        fail("race_section_field_distribution.json sourceHash does not match canonical dataset")
+    sessions = distribution.get("sessions", {})
+    if not sessions:
+        fail("race_section_field_distribution.json has no sessions")
+    nashville = [entry for entry in sessions.values() if "Nashville" in (entry.get("trackName") or "")]
+    if not nashville or any(entry.get("derivedCoverage") != "genuine_gap" for entry in nashville):
+        fail("Nashville must be a genuine untimed gap in the derived-coverage gate")
+    for label in ("Iowa", "Milwaukee"):
+        matches = [entry for entry in sessions.values() if label in (entry.get("trackName") or "")]
+        if matches and any(entry.get("derivedCoverage") != "fully_timed" for entry in matches):
+            fail(f"{label} is fully tiled by racing sections and must not ship a derived remainder")
+    for session_id, entry in sessions.items():
+        for row in entry.get("derivedRemainder", []):
+            table = remainder_times.get((session_id, int(row["lapNumber"])))
+            if table is None:
+                fail(f"distribution derived row has no table backing: {session_id} L{row['lapNumber']}")
+            if int(row["fieldComparisonCount"]) != len(table):
+                fail(f"distribution derived count disagrees with the table: {session_id} L{row['lapNumber']}")
+            if float(row["timeSeconds"]) < 0:
+                fail(f"distribution derived remainder negative: {session_id} L{row['lapNumber']}")
+
+
 def validate_context_and_report(expected_hash: str, next_track_name: str) -> None:
     summary = load_json(OUTPUT_DIR / "summary.json")
     if summary.get("ok") is not True:
@@ -514,6 +649,7 @@ def main() -> int:
         validate_microstates(expected_hash, counts)
         validate_segments_and_inflections(expected_hash, counts)
         validate_sections(expected_hash, counts)
+        validate_field_table_and_derived(expected_hash)
         validate_context_and_report(expected_hash, next_track_name)
     except AssertionError as exc:
         print(json.dumps({"ok": False, "error": str(exc)}, indent=2))

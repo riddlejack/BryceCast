@@ -10,12 +10,18 @@
     "raceLapInflectionPoints": 164,
     "raceLapMicrostates": 1493,
     "raceLapSegments": 184,
+    "raceSectionFieldObservations": 422717,
     "raceSectionLapObservations": 17841,
     "raceSectionSessionSummaries": 39,
     "roadAmericaRows": 4,
     "upcomingVenueRows": 2
   },
-  "generatedAt": "2026-07-13T17:24:37Z",
+  "derivedRemainderCoverage": {
+    "fullyTimedSessions": 11,
+    "genuineGapSessions": 28,
+    "note": "The derived remainder (lapTotal minus racing-line sections) is shipped only for sessions whose racing sections leave a genuine untimed stretch (>2% of the lap). Iowa and Milwaukee tile to 0.00% \u2014 their SF/FS frontstretch sections are racing line (rescued by the corrected is_pit_line rule) and render as measured spans, so no derived treatment applies there."
+  },
+  "generatedAt": "2026-07-19T02:52:23Z",
   "ok": true,
   "publicPointPrediction": false,
   "sectionSourceStateCounts": {
@@ -26,7 +32,7 @@
   "sourceHash": "900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681",
   "upcomingVenue": {
     "artifactSlug": "nashville_superspeedway",
-    "asOfDate": "2026-07-13",
+    "asOfDate": "2026-07-18",
     "trackName": "Nashville Superspeedway"
   }
 }

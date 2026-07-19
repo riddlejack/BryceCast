@@ -1,6 +1,6 @@
 # INDY NXT Race Lap/Section Enhancement
 
-Generated: `2026-07-13T17:24:37Z`
+Generated: `2026-07-19T02:52:23Z`
 Source dataset: `data/career/career.dataset.json`
 Source hash: `900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681`
 
@@ -13,7 +13,9 @@ This lane uses official INDY NXT race lap chart rows, official caution/incidents
 - `race_lap_microstates.csv`: 1493 Bryce lap-position rows with field percentiles and caution/restart labels.
 - `race_lap_segments.csv`: 184 caution-aware lap segments.
 - `race_lap_inflection_points.csv`: 164 position-movement events.
-- `race_section_lap_observations.csv`: clean-lap-aware race section observations.
+- `race_section_lap_observations.csv`: clean-lap-aware race section observations (Bryce only).
+- `race_section_lap_field_observations.csv.gz`: 422717 FULL-FIELD ranked rows — every car, every lap, every section, plus a synthesized derived-remainder row per car/lap.
+- `race_section_field_distribution.json`: per-section field time distributions + Bryce's per-lap derived remainder with real full-field percentiles.
 - `race_section_session_summary.csv`: 39 race section summaries.
 - Context packs: `context-packs/indy-nxt-race-lap-section-context.json`, `context-packs/road-america-race-context.json`, and the current next-venue race context pack.
 - Source split: {'official_section_results+official_lap_chart+official_incident_caution_context': 17622, 'official_section_results_only': 219}.
@@ -30,19 +32,37 @@ Segments split green runs, caution windows, and restart laps so movement is not 
 
 Clean-lap race section highlights:
 
-- 2026 Grand Prix at Road America Race 1: clean section median 0.9, best n/a.
-- 2024 INDY NXT By Firestone at The Milwaukee Mile: clean section median 0.714, best SS1 to T2:0.79 n=86; T3 to SS2:0.79 n=86; T2 to BS:0.75 n=86; BS to T3:0.72 n=86.
+- 2026 Grand Prix at Road America Race 1: clean section median 0.75, best n/a.
 - 2024 Grand Prix of Portland: clean section median 0.688, best Turn 2:0.90 n=32; Turn 3:0.87 n=32; Turn 12:0.81 n=32; Turn 6:0.80 n=32.
 - 2024 Grand Prix of Monterey Race 2: clean section median 0.684, best Turn 3:0.89 n=33; Turn 4:0.84 n=33; Turn 2:0.79 n=33; Turn 4A:0.74 n=33.
 - 2026 Grand Prix of Alabama Race 2: clean section median 0.674, best Turns 1-3:0.96 n=30; Turn 10:0.86 n=30; Turns 5-6:0.82 n=30; Turn 4:0.73 n=30.
-- 2024 Grand Prix of Alabama: clean section median 0.641, best Turn 17:0.93 n=30; Turns 1-3:0.79 n=30; Turns 5-6:0.72 n=30; Turns 12-13 Turns 14-16:0.70 n=30.
+- 2024 INDY NXT By Firestone at The Milwaukee Mile: clean section median 0.643, best SS1 to T2:0.79 n=86; T3 to SS2:0.79 n=86; T2 to BS:0.75 n=86; BS to T3:0.72 n=86.
+- 2025 INDY NXT by Firestone at the Milwaukee Mile: clean section median 0.643, best SF to T1:0.88 n=83; T3 to SS2:0.85 n=83; FS to SF:0.71 n=83; T1 to SS1:0.65 n=83.
+
+## Derived Remainder
+
+The official Section Results carry every car's lap total (the `Lap` section) and
+its named section splits. Per lap, `lapTotal - sum(racing-line sections)` is the
+exact time spent on everything the loops don't watch — the stopwatch trick — and
+because the field's lap totals are present, that remainder ranks against the
+whole field, not just Bryce. The remainder is shipped as a shadeable
+`Untimed remainder` section ONLY where the racing sections leave a genuine
+untimed stretch (>2% of the lap): Nashville's straights carry no loops (~56% of
+the lap). Iowa and Milwaukee tile to 0.00% — their `SF to T1` / `T4 to SF` /
+`FS to SF` frontstretch sections are racing line measured loop-to-loop across
+the start/finish line. (An earlier classification regex over-matched `SF` and
+filed those as pit lines; `classify_section` now delegates to the corrected
+`is_pit_line` rule, which moved exactly 7 of 109 distinct section names to
+track_section and left every PI/PO/Alt pit split untouched.) A negative
+remainder (sections overrunning the lap) marks that lap uncovered; it is never
+clamped.
 
 ## Road America Context
 
 - 2024 Grand Prix at Road America: start 6.0, finish 8.0, best running 5.0, section median 0.6.
 - 2025 Grand Prix at Road America: start 10.0, finish 9.0, best running 9.0, section median 0.444.
-- 2026 Grand Prix at Road America Race 2: start 12.0, finish 11.0, best running 11.0, section median 0.478.
-- 2026 Grand Prix at Road America Race 1: start 16.0, finish 21.0, best running 16.0, section median 0.9.
+- 2026 Grand Prix at Road America Race 2: start 12.0, finish 11.0, best running 11.0, section median 0.522.
+- 2026 Grand Prix at Road America Race 1: start 16.0, finish 21.0, best running 16.0, section median 0.75.
 
 ## Upcoming Venue Race Context
 

@@ -34,6 +34,8 @@ const sources = {
   fieldStrengthByRace: 'analysis/indy-nxt-discovery/output/deep_dive/tables/field_strength_by_race.csv',
   headToHead: 'analysis/indy-nxt-discovery/output/tables/indy_nxt_head_to_head.csv',
   raceLapInflectionPoints: 'analysis/indy-nxt-race-lap-section-enhancement/output/race_lap_inflection_points.csv',
+  raceSectionLapObservations: 'analysis/indy-nxt-race-lap-section-enhancement/output/race_section_lap_observations.csv',
+  raceSectionFieldDistribution: 'analysis/indy-nxt-race-lap-section-enhancement/output/race_section_field_distribution.json',
   sectionResultsDeepByRace: 'analysis/indy-nxt-discovery/output/deep_dive/tables/section_results_deep_by_race.csv',
   leaderLapContext: 'analysis/indy-nxt-discovery/output/deep_dive/tables/leader_lap_context.csv',
   careerSeriesSummary: 'analysis/career-parity/output/tables/career_series_result_summary.csv',
@@ -784,6 +786,163 @@ const buildRaceStoryPacks = ({ raceDebriefPackPairs, canonicalDataset, canonical
   return refs;
 };
 
+/* ------------------------------------------------------------------
+   Section-lap packs (Brief H — Section Intelligence). One pack per race
+   carrying Bryce's per-lap, per-section observations from the official
+   Section Results parse, so the heat map's lap scopes and the "why" drawer
+   read numbers directly traceable to the observation table. Written to
+   analysis/race-story/output/context-packs/ like race-story packs.
+   ------------------------------------------------------------------ */
+
+const SECTION_LAP_TUPLE_ORDER = [
+  'lap',
+  'fieldPercentile',
+  'fieldRank',
+  'fieldComparisonCount',
+  'clean',
+  'caution',
+  'timeSeconds',
+  'speedMph'
+];
+
+const buildSectionLapPacks = ({ raceDebriefPackPairs }) => {
+  const outputDir = path.join(repoRoot, 'analysis/race-story/output/context-packs');
+  fs.mkdirSync(outputDir, { recursive: true });
+  const observationRows = readCsv(sources.raceSectionLapObservations);
+  const rowsBySession = new Map();
+  for (const row of observationRows) {
+    if (!rowsBySession.has(row.sessionId)) rowsBySession.set(row.sessionId, []);
+    rowsBySession.get(row.sessionId).push(row);
+  }
+  /* Full-field extraction (Brief H coverage fix): per-section field time
+     distributions and Bryce's per-lap DERIVED remainder with real full-field
+     percentiles, from race_section_field_distribution.json. The derived
+     remainder rides the same section shape so the drawer, scopes, and YoY
+     inherit it; it ships only where the racing sections leave a genuine untimed
+     stretch (Nashville's straights) — never where they tile the lap. */
+  const fieldDistribution = readJson(sources.raceSectionFieldDistribution).sessions ?? {};
+  const debriefSessionIds = new Set(raceDebriefPackPairs.map(({ pack }) => pack.sessionId));
+  const refs = [];
+  const cautionCode = { green: 'g', caution: 'c', restart_lap: 'r' };
+  for (const [sessionId, rows] of rowsBySession) {
+    if (!debriefSessionIds.has(sessionId)) continue; // race sessions only
+    const id = `section_laps_${sessionId}`;
+    const relativePath = path.relative(repoRoot, path.join(outputDir, `${id}.json`));
+    const first = rows[0];
+    const venueName = first.trackName;
+    const seasonYear = numberOrNull(first.seasonYear);
+    if (skipUpstreamRefresh) {
+      if (!fs.existsSync(path.join(repoRoot, relativePath))) {
+        throw new Error(`Missing existing section-lap pack during narrow package refresh: ${relativePath}`);
+      }
+      refs.push({ sessionId, id, type: 'section_laps', venueName, seasonYear, ...summarizeArtifact(relativePath) });
+      continue;
+    }
+    const tuple = (row) => [
+      numberOrNull(row.lapNumber),
+      numberOrNull(row.fieldPercentile),
+      numberOrNull(row.fieldRank),
+      numberOrNull(row.fieldComparisonCount),
+      row.cleanRaceLapCandidate === 'yes' ? 1 : 0,
+      cautionCode[row.cautionState] ?? 'u',
+      numberOrNull(row.timeSeconds),
+      numberOrNull(row.speedMph)
+    ];
+    const byFamily = new Map();
+    const lapTotals = [];
+    for (const row of rows) {
+      if (row.sectionType === 'lap_total') {
+        lapTotals.push(tuple(row));
+      } else if (row.sectionType === 'track_section') {
+        if (!byFamily.has(row.sectionFamily)) byFamily.set(row.sectionFamily, []);
+        byFamily.get(row.sectionFamily).push(tuple(row));
+      }
+      // pit_or_timing_line rows are not lap-shape sections; excluded deliberately.
+    }
+    if (byFamily.size === 0) continue;
+    const bySort = (left, right) => (left[0] ?? 0) - (right[0] ?? 0);
+
+    /* Field distribution + derived remainder for this race. */
+    const distribution = fieldDistribution[sessionId] ?? null;
+    const fieldSecondsFor = (family) => distribution?.sections?.[family]?.fieldCarMedians ?? null;
+    const measuredSections = [...byFamily.entries()].map(([sectionName, laps]) => {
+      const fieldSeconds = fieldSecondsFor(sectionName);
+      return {
+        sectionName,
+        kind: 'measured',
+        laps: laps.sort(bySort),
+        ...(fieldSeconds ? { fieldSeconds } : {})
+      };
+    });
+    /* The derived "Untimed remainder" section: Bryce's per-lap lap-time-minus-
+       timed-sections, ranked against the field's remainders. Shipped only for
+       a genuine untimed gap; the field distribution comes from the same lane. */
+    const derivedRemainderTuple = (row) => [
+      numberOrNull(row.lapNumber),
+      numberOrNull(row.fieldPercentile),
+      numberOrNull(row.fieldRank),
+      numberOrNull(row.fieldComparisonCount),
+      row.cleanRaceLapCandidate === 'yes' ? 1 : 0,
+      cautionCode[row.cautionState] ?? 'u',
+      numberOrNull(row.timeSeconds),
+      null
+    ];
+    const derivedSections =
+      distribution && distribution.derivedCoverage === 'genuine_gap' && (distribution.derivedRemainder ?? []).length > 0
+        ? [
+            {
+              sectionName: 'Untimed remainder',
+              kind: 'derived_remainder',
+              laps: distribution.derivedRemainder.map(derivedRemainderTuple).sort(bySort),
+              ...(fieldSecondsFor('Untimed remainder') ? { fieldSeconds: fieldSecondsFor('Untimed remainder') } : {})
+            }
+          ]
+        : [];
+    const pack = {
+      schemaVersion: 'brycecast.sectionLaps.v1',
+      type: 'section_laps',
+      id,
+      generatedAt: new Date().toISOString(),
+      sourceHash: first.sourceHash,
+      sessionId,
+      raceLabel: first.raceLabel,
+      seasonYear,
+      venueName,
+      trackType: first.trackType,
+      totalLaps: Math.max(0, ...rows.map((row) => numberOrNull(row.lapNumber) ?? 0)),
+      tupleOrder: SECTION_LAP_TUPLE_ORDER,
+      sections: [...measuredSections, ...derivedSections],
+      derivedCoverage: distribution?.derivedCoverage ?? null,
+      lapTotals: lapTotals.sort(bySort),
+      sourceStateCounts: rows.reduce((counts, row) => {
+        counts[row.sourceState] = (counts[row.sourceState] ?? 0) + 1;
+        return counts;
+      }, {}),
+      sourceRefs: [
+        {
+          key: 'raceSectionLapObservations',
+          path: sources.raceSectionLapObservations,
+          note: "Bryce's per-lap section times, speeds, and field percentiles from official Section Results reports."
+        },
+        {
+          key: 'raceSectionFieldDistribution',
+          path: sources.raceSectionFieldDistribution,
+          note: "Full-field per-section time distributions and Bryce's per-lap derived remainder (lap time minus timed sections) with real full-field percentiles."
+        }
+      ],
+      caveats: [
+        'Section times come from official timing loops — time-based, not GPS or car position.',
+        'Field percentile compares source-visible cars on the same lap; clean flags follow the lap-chart caution context.',
+        'The untimed remainder is lap time minus the timed sections — the exact time on stretches with no loops, ranked against the field the same way.',
+        'Aggregates should use clean green-flag laps and label their denominators on screen.'
+      ]
+    };
+    fs.writeFileSync(path.join(repoRoot, relativePath), `${JSON.stringify(pack)}\n`);
+    refs.push({ sessionId, id, type: 'section_laps', venueName, seasonYear, ...summarizeArtifact(relativePath) });
+  }
+  return refs.sort((left, right) => left.sessionId.localeCompare(right.sessionId));
+};
+
 /** One synchronous row per completed race for the archive's season spine:
  *  finish/start/points plus standing and gap-to-leader after each round,
  *  with official result status so hard days are labeled, never mysterious. */
@@ -1491,6 +1650,7 @@ const buildPackage = () => {
     canonicalDataset,
     canonicalSha256: summarizeArtifact(sources.canonicalDataset).sha256
   });
+  const sectionLapRefs = buildSectionLapPacks({ raceDebriefPackPairs });
   const seasonIndex = buildSeasonIndex({ raceDebriefPackPairs, resultsBySession, progressionRows: championshipRows });
   const nextUpcomingVenue = upcomingEvents[0]?.trackName ?? null;
   const nextUpcomingVenueSlug = venueSlug(nextUpcomingVenue);
@@ -1647,6 +1807,7 @@ const buildPackage = () => {
         },
         contextPackRefs: packsByType('race_debrief'),
         raceStoryRefs,
+        sectionLapRefs,
         seasonIndex,
         chartFamilies: [
           'outcome KPI strip',
@@ -1662,6 +1823,8 @@ const buildPackage = () => {
           sourceRef('fullFieldLapDynamicsByRace', 'Lap position story rows.'),
           sourceRef('canonicalDataset', 'Official lap-chart positions for every car, hydrated into race-story packs.'),
           sourceRef('raceLapInflectionPoints', 'Bryce inflection moments annotated on race-story lap charts.'),
+          sourceRef('raceSectionLapObservations', 'Per-lap section observations behind the track heat map and its drawer.'),
+          sourceRef('raceSectionFieldDistribution', 'Full-field section distributions and the derived untimed-remainder percentiles behind the heat map.'),
           sourceRef('predictiveContextPackManifest', 'All race-debrief context pack refs.')
         ]
       },

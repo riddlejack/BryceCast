@@ -534,16 +534,19 @@ export const ControlRow = ({ label, children }: { label: string; children: React
   </div>
 );
 
-const Segmented = <T extends string>({
+export const Segmented = <T extends string>({
   options,
   value,
-  onChange
+  onChange,
+  wrap = false
 }: {
   options: Array<{ value: T; label: string }>;
   value: T;
   onChange: (next: T) => void;
+  /** Let a long option set flow onto a second line on narrow screens. */
+  wrap?: boolean;
 }) => (
-  <div className="segmented" role="tablist">
+  <div className={`segmented${wrap ? ' segmented--wrap' : ''}`} role="tablist">
     {options.map((option) => (
       <button
         key={option.value}
