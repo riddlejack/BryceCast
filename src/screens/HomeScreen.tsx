@@ -2,6 +2,10 @@ import { useEffect, useMemo, useState } from 'react';
 import { ArrowRight, CalendarClock, Flag, MapPin, Radio, Trophy } from 'lucide-react';
 import { Card, Countdown, HeroPanel, Plate, Stat, StatusChip } from '../app/components';
 import { asNumber, asString, formatClock, formatDate, formatGain, formatNumber, formatPct, formatPosition, trackTypeLabel } from '../app/format';
+import { TrackArt } from '../app/trackArt';
+import { trackOutlineFor } from '../assets/tracks';
+import { currentWindPill, useEventWeather } from '../app/useEventWeather';
+import { getVenueByTrackName } from '../data/venueDossier';
 import { Link } from '../app/router';
 import type { ReadinessStatus } from '../app/useReadiness';
 import { normalizedName, useNextSession } from '../app/useNextSession';
@@ -120,6 +124,14 @@ const NextRaceHero = ({ readiness }: { readiness: ReadinessStatus }) => {
     return () => clearInterval(timer);
   }, []);
 
+  /* Same near-track weather hook the Race Week hero and weather window read, so
+   * the landing-page wind pill never disagrees with them (Jack's review). Only
+   * the current reading is needed here — no race-hour sessions. */
+  const venueId = getVenueByTrackName(nextEvent?.trackName)?.venueId ?? null;
+  const { weather } = useEventWeather(nextEvent?.eventId ?? null, venueId, []);
+  const heroWind = currentWindPill(weather?.current ?? null, 'now');
+  const outline = nextEvent ? trackOutlineFor(nextEvent.trackName) : null;
+
   if (!nextEvent) {
     return (
       <Card title="Next race">
@@ -170,20 +182,30 @@ const NextRaceHero = ({ readiness }: { readiness: ReadinessStatus }) => {
         <div className="grid grid--split" style={{ marginTop: 20, alignItems: 'end', gap: 20 }}>
           <div>
             {preciseStart ? (
-              <>
-                <span className="caption">First session · {formatDate(preciseStart, { weekday: 'short', month: 'short', day: 'numeric' })} · {formatClock(preciseStart)} your time</span>
+              <span className="caption">First session · {formatDate(preciseStart, { weekday: 'short', month: 'short', day: 'numeric' })} · {formatClock(preciseStart)} your time</span>
+            ) : null}
+            {/* The countdown with the venue outline beside it — the landing page
+                gets the track shape like Race Week, compact, with the "now" wind
+                pill (calm carries no arrow). No corner labels at this size. */}
+            <div className="home-hero-track">
+              {preciseStart ? (
                 <div style={{ marginTop: 8 }}>
                   <Countdown to={preciseStart} />
                 </div>
-              </>
-            ) : days !== null && days > 0 ? (
-              <div className="countdown">
-                <div className="countdown__cell">
-                  <span className="countdown__num">{days}</span>
-                  <span className="countdown__label">{days === 1 ? 'day' : 'days'}</span>
+              ) : days !== null && days > 0 ? (
+                <div className="countdown">
+                  <div className="countdown__cell">
+                    <span className="countdown__num">{days}</span>
+                    <span className="countdown__label">{days === 1 ? 'day' : 'days'}</span>
+                  </div>
                 </div>
-              </div>
-            ) : null}
+              ) : null}
+              {outline ? (
+                <div className="home-hero-track__art">
+                  <TrackArt outline={outline} maxHeight={92} showCornerLabels={false} wind={heroWind} />
+                </div>
+              ) : null}
+            </div>
           </div>
           <TrackForm event={nextEvent} />
         </div>
