@@ -15,15 +15,15 @@
   "causalAttribution": false,
   "claimStrength": "source_bounded_dimension_context_not_rating_or_forecast",
   "conversionSourceStateCounts": {
-    "same_event_driver_race_result_one_to_one": 1240,
+    "same_event_driver_race_result_one_to_one": 1432,
     "same_event_multi_race_result_ambiguous": 307
   },
   "counts": {
     "carRows": 472,
     "driverRows": 555,
-    "qualifyingRows": 1547,
-    "qualifyingSessionRows": 108,
-    "resultRows": 8158,
+    "qualifyingRows": 1739,
+    "qualifyingSessionRows": 120,
+    "resultRows": 8494,
     "teamEraRows": 90,
     "teamRows": 75,
     "trackAnalogRows": 210,
@@ -35,10 +35,10 @@
     "shared_race_field": 475,
     "teammate_overlap": 23
   },
-  "generatedAt": "2026-06-18T10:49:58Z",
+  "generatedAt": "2026-07-19T05:01:04Z",
   "ok": true,
   "publicPointPrediction": false,
-  "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+  "sourceHash": "900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681",
   "trackArchetypeCounts": {
     "oval_short_low_corner_count": 4,
     "road_long_high_corner_count": 7,

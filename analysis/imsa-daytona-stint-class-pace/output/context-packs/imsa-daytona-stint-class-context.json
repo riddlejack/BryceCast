@@ -31,7 +31,7 @@
       "pitInLapCount": 1,
       "pitOutLapCount": 0,
       "sessionId": "session_imsa_2025_daytona_rolex_24_race",
-      "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+      "sourceHash": "900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681",
       "sourceState": "official_alkamel_time_cards_bryce_stint_context",
       "startLap": 172,
       "startSessionHour": 5,
@@ -41,7 +41,7 @@
       "validNonPitLapCount": 17
     },
     {
-      "best20LapAverageSeconds": 101.01769999999999,
+      "best20LapAverageSeconds": 101.0177,
       "bestValidLapSeconds": 100.049,
       "bryceMedianMinusCar85CoDriverMedianSeconds": 1.8654999999999973,
       "carId": "car_imsa_2025_jdc_miller_motorsports_85",
@@ -63,7 +63,7 @@
       "pitInLapCount": 1,
       "pitOutLapCount": 0,
       "sessionId": "session_imsa_2025_daytona_rolex_24_race",
-      "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+      "sourceHash": "900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681",
       "sourceState": "official_alkamel_time_cards_bryce_stint_context",
       "startLap": 191,
       "startSessionHour": 5,
@@ -95,7 +95,7 @@
       "pitInLapCount": 1,
       "pitOutLapCount": 0,
       "sessionId": "session_imsa_2025_daytona_rolex_24_race",
-      "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+      "sourceHash": "900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681",
       "sourceState": "official_alkamel_time_cards_bryce_stint_context",
       "startLap": 388,
       "startSessionHour": 12,
@@ -127,7 +127,7 @@
       "pitInLapCount": 1,
       "pitOutLapCount": 0,
       "sessionId": "session_imsa_2025_daytona_rolex_24_race",
-      "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+      "sourceHash": "900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681",
       "sourceState": "official_alkamel_time_cards_bryce_stint_context",
       "startLap": 397,
       "startSessionHour": 12,
@@ -159,7 +159,7 @@
       "pitInLapCount": 1,
       "pitOutLapCount": 0,
       "sessionId": "session_imsa_2025_daytona_rolex_24_race",
-      "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+      "sourceHash": "900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681",
       "sourceState": "official_alkamel_time_cards_bryce_stint_context",
       "startLap": 400,
       "startSessionHour": 12,
@@ -191,7 +191,7 @@
       "pitInLapCount": 1,
       "pitOutLapCount": 0,
       "sessionId": "session_imsa_2025_daytona_rolex_24_race",
-      "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+      "sourceHash": "900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681",
       "sourceState": "official_alkamel_time_cards_bryce_stint_context",
       "startLap": 408,
       "startSessionHour": 12,
@@ -223,7 +223,7 @@
       "pitInLapCount": 1,
       "pitOutLapCount": 0,
       "sessionId": "session_imsa_2025_daytona_rolex_24_race",
-      "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+      "sourceHash": "900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681",
       "sourceState": "official_alkamel_time_cards_bryce_stint_context",
       "startLap": 427,
       "startSessionHour": 13,
@@ -255,7 +255,7 @@
       "pitInLapCount": 1,
       "pitOutLapCount": 0,
       "sessionId": "session_imsa_2025_daytona_rolex_24_race",
-      "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+      "sourceHash": "900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681",
       "sourceState": "official_alkamel_time_cards_bryce_stint_context",
       "startLap": 599,
       "startSessionHour": 18,
@@ -287,7 +287,7 @@
       "pitInLapCount": 1,
       "pitOutLapCount": 0,
       "sessionId": "session_imsa_2025_daytona_rolex_24_race",
-      "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+      "sourceHash": "900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681",
       "sourceState": "official_alkamel_time_cards_bryce_stint_context",
       "startLap": 601,
       "startSessionHour": 18,
@@ -319,7 +319,7 @@
       "pitInLapCount": 1,
       "pitOutLapCount": 0,
       "sessionId": "session_imsa_2025_daytona_rolex_24_race",
-      "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+      "sourceHash": "900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681",
       "sourceState": "official_alkamel_time_cards_bryce_stint_context",
       "startLap": 603,
       "startSessionHour": 18,
@@ -331,7 +331,7 @@
   ],
   "car85CodriverPace": [
     {
-      "best20LapAverageSeconds": 98.14994999999999,
+      "best20LapAverageSeconds": 98.14995,
       "bestValidLapSeconds": 96.406,
       "car85Best20Rank": 1,
       "car85MedianDeltaToBestSeconds": 0.0,
@@ -358,7 +358,7 @@
       "medianSector3Seconds": 28.9,
       "medianValidNonPitLapSeconds": 99.244,
       "role": "co-driver",
-      "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+      "sourceHash": "900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681",
       "sourceState": "official_alkamel_time_cards_car85_codriver_summary",
       "stintCount": 9,
       "teamId": "team_jdc_miller_motorsports",
@@ -368,7 +368,7 @@
       "vehicle": "Porsche 963"
     },
     {
-      "best20LapAverageSeconds": 98.58449999999999,
+      "best20LapAverageSeconds": 98.5845,
       "bestValidLapSeconds": 97.256,
       "car85Best20Rank": 2,
       "car85MedianDeltaToBestSeconds": 0.09499999999999886,
@@ -395,7 +395,7 @@
       "medianSector3Seconds": 28.813499999999998,
       "medianValidNonPitLapSeconds": 99.339,
       "role": "co-driver",
-      "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+      "sourceHash": "900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681",
       "sourceState": "official_alkamel_time_cards_car85_codriver_summary",
       "stintCount": 8,
       "teamId": "team_jdc_miller_motorsports",
@@ -405,7 +405,7 @@
       "vehicle": "Porsche 963"
     },
     {
-      "best20LapAverageSeconds": 98.98479999999998,
+      "best20LapAverageSeconds": 98.98479999999999,
       "bestValidLapSeconds": 97.491,
       "car85Best20Rank": 3,
       "car85MedianDeltaToBestSeconds": 0.23150000000001114,
@@ -432,7 +432,7 @@
       "medianSector3Seconds": 28.957,
       "medianValidNonPitLapSeconds": 99.47550000000001,
       "role": "co-driver",
-      "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+      "sourceHash": "900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681",
       "sourceState": "official_alkamel_time_cards_car85_codriver_summary",
       "stintCount": 8,
       "teamId": "team_jdc_miller_motorsports",
@@ -469,7 +469,7 @@
       "medianSector3Seconds": 29.1735,
       "medianValidNonPitLapSeconds": 101.01650000000001,
       "role": "Bryce",
-      "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+      "sourceHash": "900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681",
       "sourceState": "official_alkamel_time_cards_car85_codriver_summary",
       "stintCount": 10,
       "teamId": "team_jdc_miller_motorsports",
@@ -507,7 +507,7 @@
     "Use class-hour deltas before cross-class comparison because IMSA classes have different performance envelopes.",
     "Rows labeled validNonPitLap exclude Al Kamel invalid and pit laps but do not prove green-flag traffic-free conditions."
   ],
-  "generatedAt": "2026-06-18T10:49:44Z",
+  "generatedAt": "2026-07-19T05:00:56Z",
   "gtpClassHoursDuringBryceStints": [
     {
       "bestLapSeconds": 96.914,
@@ -521,7 +521,7 @@
       "p75LapSeconds": 110.149,
       "sessionHour": 5,
       "sessionId": "session_imsa_2025_daytona_rolex_24_race",
-      "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+      "sourceHash": "900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681",
       "sourceState": "official_alkamel_time_cards_hourly_class_pace",
       "validNonPitLapCount": 277
     },
@@ -537,7 +537,7 @@
       "p75LapSeconds": 100.05425,
       "sessionHour": 6,
       "sessionId": "session_imsa_2025_daytona_rolex_24_race",
-      "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+      "sourceHash": "900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681",
       "sourceState": "official_alkamel_time_cards_hourly_class_pace",
       "validNonPitLapCount": 370
     },
@@ -553,7 +553,7 @@
       "p75LapSeconds": 165.6805,
       "sessionHour": 12,
       "sessionId": "session_imsa_2025_daytona_rolex_24_race",
-      "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+      "sourceHash": "900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681",
       "sourceState": "official_alkamel_time_cards_hourly_class_pace",
       "validNonPitLapCount": 227
     },
@@ -569,7 +569,7 @@
       "p75LapSeconds": 100.35499999999999,
       "sessionHour": 13,
       "sessionId": "session_imsa_2025_daytona_rolex_24_race",
-      "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+      "sourceHash": "900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681",
       "sourceState": "official_alkamel_time_cards_hourly_class_pace",
       "validNonPitLapCount": 249
     },
@@ -585,7 +585,7 @@
       "p75LapSeconds": 100.0865,
       "sessionHour": 14,
       "sessionId": "session_imsa_2025_daytona_rolex_24_race",
-      "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+      "sourceHash": "900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681",
       "sourceState": "official_alkamel_time_cards_hourly_class_pace",
       "validNonPitLapCount": 266
     },
@@ -601,7 +601,7 @@
       "p75LapSeconds": 174.621,
       "sessionHour": 18,
       "sessionId": "session_imsa_2025_daytona_rolex_24_race",
-      "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+      "sourceHash": "900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681",
       "sourceState": "official_alkamel_time_cards_hourly_class_pace",
       "validNonPitLapCount": 205
     },
@@ -617,7 +617,7 @@
       "p75LapSeconds": 99.0175,
       "sessionHour": 19,
       "sessionId": "session_imsa_2025_daytona_rolex_24_race",
-      "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc",
+      "sourceHash": "900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681",
       "sourceState": "official_alkamel_time_cards_hourly_class_pace",
       "validNonPitLapCount": 299
     }
@@ -634,5 +634,5 @@
   "positionTraceAvailable": false,
   "publicPointPrediction": false,
   "sourceDataset": "data/career/career.dataset.json",
-  "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc"
+  "sourceHash": "900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681"
 }
