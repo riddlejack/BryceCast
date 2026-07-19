@@ -1,0 +1,153 @@
+#!/usr/bin/env node
+// THE IDENTITY CROSSWALK — the correctness gate for any 2026 lake data
+// reaching the UI (permissions-ledger obligation; audit Task 6).
+//
+// For every 2026 Timing71 session: map (car number, source name string) ->
+// canonical driverId, EVENT-SCOPED (car numbers are reused across seasons and
+// can be shared across an event only by mid-season swaps). The number join
+// proposes candidates; the NAME check disposes:
+//   - one candidate + name match (exact or variant rule) -> mapped
+//   - several candidates (same car, different drivers across the season):
+//     the unique name-matching candidate wins -> mapped (swap-resolved)
+//   - no candidate, or name irreconcilable -> unmapped / ambiguous (HARD:
+//     these fail the validator; nothing silently passes)
+// Every mapping carries its evidence (rule fired, canonical name, scope used).
+
+import {mkdir, writeFile, readFile} from 'node:fs/promises';
+import {dirname, join} from 'node:path';
+import {fileURLToPath} from 'node:url';
+import {loadCanonicalIdentityContext, matchDriverName, normVenue} from './lib/canonical.mjs';
+
+const LANE_DIR = dirname(fileURLToPath(import.meta.url));
+const OUT = join(LANE_DIR, 'output', 'crosswalk');
+
+const t71 = JSON.parse(await readFile(join(LANE_DIR, 'output', 'timing71-2026-summary.json'), 'utf8'));
+const {gunzipSync} = await import('node:zlib');
+async function loadRoster(pack) {
+  const text = gunzipSync(await readFile(join(LANE_DIR, 'output', pack))).toString('utf8');
+  for (const line of text.split('\n')) {
+    if (!line) continue;
+    const row = JSON.parse(line);
+    if (row.record === 'roster') return row.cars;
+  }
+  return [];
+}
+
+const ctx = await loadCanonicalIdentityContext();
+
+// Match each T71 session to its canonical event (entrant scope) and, for races,
+// its canonical session (results scope). Doubleheaders pair by race number.
+function raceNumberOf(session) {
+  return Number(/Race (\d)/i.exec(session.event)?.[1] ?? /Race (\d)/i.exec(session.sessionLabel)?.[1]) || null;
+}
+function matchCanonicalSession(session) {
+  const vk = normVenue(session.venue);
+  const cands = ctx.sessions.filter((c) => c.year === 2026 && c.venueKey === vk);
+  const rn = raceNumberOf(session);
+  if (session.sessionType === 'race') {
+    const races = cands.filter((c) => c.sessionType === 'race');
+    if (rn !== null) return races.find((c) => c.raceNumber === rn) ?? null;
+    if (races.length === 1) return races[0];
+    return races.find((c) => c.date === session.date) ?? null;
+  }
+  // Non-race: nearest same-type by date, else any session of the event.
+  const sameType = cands.filter((c) => c.sessionType === session.sessionType);
+  const pool = sameType.length ? sameType : cands;
+  pool.sort((a, b) => Math.abs(Date.parse(a.date) - Date.parse(session.date)) - Math.abs(Date.parse(b.date) - Date.parse(session.date)));
+  return pool[0] ?? null;
+}
+
+const sessionsOut = [];
+for (const session of t71.sessions) {
+  const can = matchCanonicalSession(session);
+  const eventEntrants = can ? ctx.entrantsByEvent.get(can.eventId) : null;
+  // A future/current event with no canonical results yet (e.g. Nashville 2026
+  // pre-race) has an empty event scope. Fall back to SEASON scope + name check,
+  // clearly labelled — season-scope sessions are never a strict UI GO until
+  // canonical carries the event's results.
+  const eventScopeAvailable = !!eventEntrants && eventEntrants.size > 0;
+  const seasonEntrants = ctx.entrantsByYear.get(2026) ?? new Map();
+  const scopeUsed = eventScopeAvailable ? 'event' : 'season_fallback';
+  const roster = await loadRoster(session.pack);
+  const mappings = [];
+  for (const entry of roster) {
+    const candidates = [...((eventScopeAvailable ? eventEntrants : seasonEntrants).get(entry.car) ?? [])];
+    let status;
+    let driverId = null;
+    let rule = null;
+    let evidence = null;
+    if (candidates.length === 0) {
+      status = 'unmapped';
+      evidence = 'no canonical entrant with this car number in event scope';
+    } else {
+      const matches = candidates
+        .map((id) => ({id, res: matchDriverName(entry.driver, ctx.drivers.get(id) ?? {})}))
+        .filter((m) => m.res.match);
+      if (matches.length === 1) {
+        driverId = matches[0].id;
+        rule = matches[0].res.rule;
+        status =
+          scopeUsed === 'season_fallback'
+            ? 'mapped_season_scope'
+            : candidates.length > 1
+              ? 'mapped_swap_resolved'
+              : rule === 'exact'
+                ? 'mapped_exact'
+                : 'mapped_name_variant';
+        evidence = `${entry.driver} ~ ${ctx.drivers.get(driverId)?.displayName} (${rule}${scopeUsed === 'season_fallback' ? '; season scope' : ''})`;
+      } else if (matches.length === 0) {
+        status = 'ambiguous';
+        evidence = `name "${entry.driver}" matches none of: ${candidates.map((id) => ctx.drivers.get(id)?.displayName).join(', ')}`;
+      } else {
+        status = 'ambiguous';
+        evidence = `name "${entry.driver}" matches multiple: ${matches.map((m) => ctx.drivers.get(m.id)?.displayName).join(', ')}`;
+      }
+    }
+    mappings.push({car: entry.car, sourceName: entry.driver, sourceTeam: entry.team, driverId, status, rule, evidence});
+  }
+  const counts = {
+    mapped: mappings.filter((m) => m.status.startsWith('mapped')).length,
+    exact: mappings.filter((m) => m.status === 'mapped_exact').length,
+    nameVariant: mappings.filter((m) => m.status === 'mapped_name_variant').length,
+    swapResolved: mappings.filter((m) => m.status === 'mapped_swap_resolved').length,
+    seasonScope: mappings.filter((m) => m.status === 'mapped_season_scope').length,
+    ambiguous: mappings.filter((m) => m.status === 'ambiguous').length,
+    unmapped: mappings.filter((m) => m.status === 'unmapped').length,
+  };
+  sessionsOut.push({
+    t71SessionId: session.id,
+    sessionType: session.sessionType,
+    date: session.date,
+    venue: session.venue,
+    canonicalEventId: can?.eventId ?? null,
+    canonicalSessionId: can?.sessionId ?? null,
+    canonicalOfficialSessionId: can?.officialSessionId ?? null,
+    rosterSize: mappings.length,
+    scopeUsed,
+    counts,
+    complete: counts.ambiguous === 0 && counts.unmapped === 0 && mappings.length > 0,
+    strictEventScope: scopeUsed === 'event',
+    mappings,
+  });
+}
+
+const out = {
+  artifact: 'identity-crosswalk-2026',
+  generatedAt: new Date().toISOString(),
+  scope: 'INDY_NXT 2026, Timing71 replays -> canonical driverIds (event-scoped)',
+  law: 'No 2026 lake-derived identity reaches the UI except through this crosswalk; ambiguous/unmapped entries are hard failures, never silent fallbacks.',
+  sessionCount: sessionsOut.length,
+  completeSessions: sessionsOut.filter((s) => s.complete).length,
+  sessions: sessionsOut,
+};
+await mkdir(OUT, {recursive: true});
+await writeFile(join(OUT, 'identity-crosswalk-2026.json'), `${JSON.stringify(out, null, 2)}\n`);
+
+console.log(`Crosswalk: ${out.completeSessions}/${out.sessionCount} sessions fully mapped.`);
+for (const s of sessionsOut) {
+  const flag = s.complete ? 'OK ' : 'FAIL';
+  console.log(`  ${flag} ${s.t71SessionId} roster=${s.rosterSize} exact=${s.counts.exact} variant=${s.counts.nameVariant} swap=${s.counts.swapResolved} season=${s.counts.seasonScope} ambiguous=${s.counts.ambiguous} unmapped=${s.counts.unmapped}`);
+  for (const m of s.mappings.filter((m) => m.status === 'ambiguous' || m.status === 'unmapped')) {
+    console.log(`       ${m.status}: #${m.car} "${m.sourceName}" — ${m.evidence}`);
+  }
+}
