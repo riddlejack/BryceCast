@@ -1,6 +1,6 @@
 {
   "schemaVersion": "brycecast.uiDataPackage.v1",
-  "generatedAt": "2026-07-18T18:58:47.587Z",
+  "generatedAt": "2026-07-19T00:40:44.525Z",
   "sourceHash": "900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681",
   "asOfDate": "2026-07-13",
   "baselineCommit": "c207d07",
@@ -373,17 +373,29 @@
       "modifiedAt": "2026-07-13T17:02:56.108Z",
       "sha256": "aae961d2ed9e6a93ee21b40d2d60e753dcbaf32baaffd20e615fdc114a10fac0"
     },
+    "trackOutlineIndex": {
+      "path": "src/assets/tracks/index.ts",
+      "bytes": 3688,
+      "modifiedAt": "2026-07-19T00:29:56.303Z",
+      "sha256": "018b0fafa52e60cc57f435e783cc23fd55121cb7c2d7c511511d6a110524f15a"
+    },
+    "trackOutlineBuilderScript": {
+      "path": "scripts/build-track-outline.mjs",
+      "bytes": 8830,
+      "modifiedAt": "2026-07-19T00:29:14.277Z",
+      "sha256": "0be4ef4ea184808b36bfc0dade98654e349094c02f86738d2d1fc637c97c02d9"
+    },
     "uiDataPackageBuilderScript": {
       "path": "scripts/build-ui-data-package.mjs",
-      "bytes": 96228,
-      "modifiedAt": "2026-07-14T00:59:28.700Z",
-      "sha256": "50895888c65fef3c238ba3a16d0c2fcd0cde396590276d4e44429aff28110aef"
+      "bytes": 108707,
+      "modifiedAt": "2026-07-19T00:37:31.526Z",
+      "sha256": "f5e2654cf62851138d4eefbec5ce41aecbf169ffacf39510e2a81e99022ea8e1"
     },
     "uiDataPackageValidatorScript": {
       "path": "scripts/validate-ui-data-package.mjs",
-      "bytes": 62405,
-      "modifiedAt": "2026-07-14T00:59:28.700Z",
-      "sha256": "a72954537c63cfac7bb8bb4bd9d5aae51cc293a371038457665159792cb9071b"
+      "bytes": 67266,
+      "modifiedAt": "2026-07-19T00:36:29.758Z",
+      "sha256": "7073c486113963dcbae0019f902d00e0ad623da1a3067516de1c2729b9695a21"
     },
     "supplementalPrepSectionContextPack": {
       "key": "supplemental:analysis_indy_nxt_section_lap_deep_dive_output_context_packs_nashville_superspee",
@@ -16452,8 +16464,8 @@
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2024_6314.json",
           "bytes": 13759,
-          "modifiedAt": "2026-07-13T17:24:45.705Z",
-          "sha256": "a5edaf9ee73ea9e7f7da8787ee7e54f6656370d3d807beb79494f200193fdbd0"
+          "modifiedAt": "2026-07-19T00:34:22.388Z",
+          "sha256": "55fc877e5c24589538c1e538d50cc8a0cf0252436ec8c2993e0b76b34d0967c0"
         },
         {
           "sessionId": "session_indy_nxt_2024_6315",
@@ -16461,8 +16473,8 @@
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2024_6315.json",
           "bytes": 14173,
-          "modifiedAt": "2026-07-13T17:24:45.706Z",
-          "sha256": "50cd5946590ad1d9c6aca7c62137e7e6ce8995321ca0c6e6cdc774f5877a43f4"
+          "modifiedAt": "2026-07-19T00:34:22.389Z",
+          "sha256": "1f01588e717333584c2f165eb3859969e50f0616410fb9648064ecb578f2515e"
         },
         {
           "sessionId": "session_indy_nxt_2024_6316",
@@ -16470,8 +16482,8 @@
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2024_6316.json",
           "bytes": 11579,
-          "modifiedAt": "2026-07-13T17:24:45.706Z",
-          "sha256": "37d3cb8a3752ccbf6e83a51b090c72aac55482805b3fbc10c323cb1bf51921b4"
+          "modifiedAt": "2026-07-19T00:34:22.390Z",
+          "sha256": "df19287f3617749f19ce361bb4983a72bd0bb98c27d98e5afe2401b47fdb101e"
         },
         {
           "sessionId": "session_indy_nxt_2024_6317",
@@ -16479,8 +16491,8 @@
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2024_6317.json",
           "bytes": 13320,
-          "modifiedAt": "2026-07-13T17:24:45.707Z",
-          "sha256": "ecb7b133abe4a93aa6422e7d86e5ab1f32dd15737ac10cdf76e64f45634e4544"
+          "modifiedAt": "2026-07-19T00:34:22.391Z",
+          "sha256": "e3782498887c7abace42c8047c3d86376851d24f0d47060f58e88a8edb58879d"
         },
         {
           "sessionId": "session_indy_nxt_2024_6318",
@@ -16488,8 +16500,8 @@
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2024_6318.json",
           "bytes": 12595,
-          "modifiedAt": "2026-07-13T17:24:45.707Z",
-          "sha256": "7a38f46657a949bd34d84e4bd34b9834ecc5ea822b2b2242f92988f87f5f13e2"
+          "modifiedAt": "2026-07-19T00:34:22.392Z",
+          "sha256": "48534cfdcf78727d8437ec4d8e30fa499ec4850eb93b67ec68f2cd620ee5429b"
         },
         {
           "sessionId": "session_indy_nxt_2024_6319",
@@ -16497,8 +16509,8 @@
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2024_6319.json",
           "bytes": 14755,
-          "modifiedAt": "2026-07-13T17:24:45.707Z",
-          "sha256": "273888c44c5c668de03f2898d8e4f5272e709c57a4fbbcbb998de00fcac8b95f"
+          "modifiedAt": "2026-07-19T00:34:22.393Z",
+          "sha256": "002b085fdff01e2828c6e3301a20d94defd36377498399a271e5833807783d7c"
         },
         {
           "sessionId": "session_indy_nxt_2024_6320",
@@ -16506,8 +16518,8 @@
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2024_6320.json",
           "bytes": 15703,
-          "modifiedAt": "2026-07-13T17:24:45.708Z",
-          "sha256": "02eec0729f74fcf590755943b6a77d92ba316a534434226d68eb0b7482eef4f6"
+          "modifiedAt": "2026-07-19T00:34:22.394Z",
+          "sha256": "d9769ff671b208a6d05320a8799f3ce9446234e8f3fc9debbd37424b5d0117a8"
         },
         {
           "sessionId": "session_indy_nxt_2024_6321",
@@ -16515,8 +16527,8 @@
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2024_6321.json",
           "bytes": 11520,
-          "modifiedAt": "2026-07-13T17:24:45.708Z",
-          "sha256": "28c0956bbb81b389be549386b3855750087e0b84aeab58ae7f7c1c64674b8eab"
+          "modifiedAt": "2026-07-19T00:34:22.395Z",
+          "sha256": "0e120a8bce1eb9ec4781937fe9454bff69b09033ab9552816f76a09e0c156384"
         },
         {
           "sessionId": "session_indy_nxt_2024_6322",
@@ -16524,8 +16536,8 @@
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2024_6322.json",
           "bytes": 17587,
-          "modifiedAt": "2026-07-13T17:24:45.709Z",
-          "sha256": "67a251ec4701092400131833c37b2dc19557f99ec5617f2ed8ac406ff59e68e2"
+          "modifiedAt": "2026-07-19T00:34:22.396Z",
+          "sha256": "e0f88e9c77f160b6e7b6c18527f2b44e41fec6c735cb67f53850b303c67e7495"
         },
         {
           "sessionId": "session_indy_nxt_2024_6323",
@@ -16533,8 +16545,8 @@
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2024_6323.json",
           "bytes": 16544,
-          "modifiedAt": "2026-07-13T17:24:45.709Z",
-          "sha256": "7ceccefbb9da58e4c78aba177460dd93c732680dcb88f7b30f32c70efce90355"
+          "modifiedAt": "2026-07-19T00:34:22.396Z",
+          "sha256": "68a8426a1bfb63aaa35cd4f88d947efc1343f119866a20f84ab6a4c0350a341f"
         },
         {
           "sessionId": "session_indy_nxt_2024_6324",
@@ -16542,8 +16554,8 @@
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2024_6324.json",
           "bytes": 14686,
-          "modifiedAt": "2026-07-13T17:24:45.709Z",
-          "sha256": "7e0e131f041c58b3e3b5097465bab3f961199d53321b4832fbfcadf3559400c9"
+          "modifiedAt": "2026-07-19T00:34:22.397Z",
+          "sha256": "470eb88b5d9da78855079824d802a57b7ab17be5e6f8144cefb2168dcfeb313c"
         },
         {
           "sessionId": "session_indy_nxt_2024_6325",
@@ -16551,8 +16563,8 @@
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2024_6325.json",
           "bytes": 13441,
-          "modifiedAt": "2026-07-13T17:24:45.710Z",
-          "sha256": "18b63fd5b44dfea9e01f179444b6c4b35ed8d43f8089926a26bef8bc372e95de"
+          "modifiedAt": "2026-07-19T00:34:22.397Z",
+          "sha256": "4c89343c303b9c1b47632daedce73cacda3eeaa45f1a96a3012d6b3d3be9797f"
         },
         {
           "sessionId": "session_indy_nxt_2024_6326",
@@ -16560,8 +16572,8 @@
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2024_6326.json",
           "bytes": 14289,
-          "modifiedAt": "2026-07-13T17:24:45.710Z",
-          "sha256": "4cabb64b4de33322fbf3adb5912d7f7ab485d0399b4b774dcd1cf62d01c7aa02"
+          "modifiedAt": "2026-07-19T00:34:22.398Z",
+          "sha256": "349b55d30ac8b3b0678c9e465b88c0c6e0401ead7d94f593e2e2bc3f754c95df"
         },
         {
           "sessionId": "session_indy_nxt_2024_6327",
@@ -16569,8 +16581,8 @@
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2024_6327.json",
           "bytes": 12959,
-          "modifiedAt": "2026-07-13T17:24:45.711Z",
-          "sha256": "1121ba365f44b3e06a2744ac7b6e8629529330ccf878eece70fe35f9bf003f00"
+          "modifiedAt": "2026-07-19T00:34:22.398Z",
+          "sha256": "0ae4cf0a5ffd9806bc4c1901e0d6fa5835635582c918df8e1de4c4948481fb80"
         },
         {
           "sessionId": "session_indy_nxt_2025_6442",
@@ -16578,8 +16590,8 @@
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2025_6442.json",
           "bytes": 11792,
-          "modifiedAt": "2026-07-13T17:24:45.711Z",
-          "sha256": "82b33fa8066f604226dfdc24f6f261e7f9735e0180a0bc4565920f9f6ac1315c"
+          "modifiedAt": "2026-07-19T00:34:22.399Z",
+          "sha256": "45886f5c12e816897ba2bd917931fda499915855f8c054b5273acd56ac479984"
         },
         {
           "sessionId": "session_indy_nxt_2025_6443",
@@ -16587,8 +16599,8 @@
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2025_6443.json",
           "bytes": 13946,
-          "modifiedAt": "2026-07-13T17:24:45.711Z",
-          "sha256": "023b0367c27f08dac2e726866bcdab05df84dd3af0b6b1dbb5e4f0c94920ac2c"
+          "modifiedAt": "2026-07-19T00:34:22.400Z",
+          "sha256": "e7543b012fc1ed35d8198ea24b3e4227f934e7e3516852afedbe2423d071a5d4"
         },
         {
           "sessionId": "session_indy_nxt_2025_6444",
@@ -16596,8 +16608,8 @@
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2025_6444.json",
           "bytes": 13708,
-          "modifiedAt": "2026-07-13T17:24:45.712Z",
-          "sha256": "e77f3e90ee676464ce31eca49a1dde1e9e749542429f04a3f0acbb5fa578ebd4"
+          "modifiedAt": "2026-07-19T00:34:22.401Z",
+          "sha256": "bd7c47961dd571116bc113ece6adfc6ee0adfd8a068017b483e68d27750e441e"
         },
         {
           "sessionId": "session_indy_nxt_2025_6445",
@@ -16605,8 +16617,8 @@
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2025_6445.json",
           "bytes": 12963,
-          "modifiedAt": "2026-07-13T17:24:45.712Z",
-          "sha256": "4b2f5001d6d79c47790e54b3083f5383bee11b32bc470d2549c5458815d6833a"
+          "modifiedAt": "2026-07-19T00:34:22.402Z",
+          "sha256": "44410182081829e1126932940be417ba0c605426b538c5016c8643834223c2d2"
         },
         {
           "sessionId": "session_indy_nxt_2025_6446",
@@ -16614,8 +16626,8 @@
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2025_6446.json",
           "bytes": 14975,
-          "modifiedAt": "2026-07-13T17:24:45.712Z",
-          "sha256": "f85286e90918ca7ea3e8aab12cd47c09990bf583dd1eaa99d0e259015114dcc5"
+          "modifiedAt": "2026-07-19T00:34:22.403Z",
+          "sha256": "0ccee65979a8dbcde603196d785771bb87e6dc066b62be9a23c51a23b187e110"
         },
         {
           "sessionId": "session_indy_nxt_2025_6447",
@@ -16623,8 +16635,8 @@
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2025_6447.json",
           "bytes": 15675,
-          "modifiedAt": "2026-07-13T17:24:45.713Z",
-          "sha256": "0d9af8fc1a83baaa0c5be5da4bf68af1a25c3f07eb6c0ea4a0b1069b0224f93c"
+          "modifiedAt": "2026-07-19T00:34:22.404Z",
+          "sha256": "abbc84577729f2cfd0ea680854cdb665572addb652d48397e81a8996f5ee9b40"
         },
         {
           "sessionId": "session_indy_nxt_2025_6448",
@@ -16632,8 +16644,8 @@
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2025_6448.json",
           "bytes": 18946,
-          "modifiedAt": "2026-07-13T17:24:45.713Z",
-          "sha256": "f9c5e45665f208da43db0191f826edd605c10537a3fdb7bf52d825b78d9f3dfe"
+          "modifiedAt": "2026-07-19T00:34:22.405Z",
+          "sha256": "e35e9d32308e8bd651bd92360d0ac55ffc17823ffeb35b0140a70191fb5f820c"
         },
         {
           "sessionId": "session_indy_nxt_2025_6449",
@@ -16641,8 +16653,8 @@
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2025_6449.json",
           "bytes": 11697,
-          "modifiedAt": "2026-07-13T17:24:45.713Z",
-          "sha256": "514f826ce764f55098e62b908d3099881a6d49c5c1e7329aa9a1e4554234b414"
+          "modifiedAt": "2026-07-19T00:34:22.405Z",
+          "sha256": "c90c56602d385cd47729690ed4b7cb4e80f52f1e3ab0e0ca5f8f829701a97ef0"
         },
         {
           "sessionId": "session_indy_nxt_2025_6450",
@@ -16650,8 +16662,8 @@
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2025_6450.json",
           "bytes": 11244,
-          "modifiedAt": "2026-07-13T17:24:45.714Z",
-          "sha256": "7f63cfc61f64815a059aa0061396d86c6149994358604fe9527f7a204e415153"
+          "modifiedAt": "2026-07-19T00:34:22.406Z",
+          "sha256": "0fbfda64460684a5b9520fae6ca2d788d342e3c683f0ac17dcea1d27ea09cf8c"
         },
         {
           "sessionId": "session_indy_nxt_2025_6451",
@@ -16659,8 +16671,8 @@
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2025_6451.json",
           "bytes": 18798,
-          "modifiedAt": "2026-07-13T17:24:45.714Z",
-          "sha256": "9c7e23c1c89e8dd1143de48898105ae6b71c0346158c6f88506180640808213f"
+          "modifiedAt": "2026-07-19T00:34:22.407Z",
+          "sha256": "0dcc2b551e70250f6f121aef2462f875b34c06b151f75dc7c5d7f5aaa084b1ac"
         },
         {
           "sessionId": "session_indy_nxt_2025_6452",
@@ -16668,8 +16680,8 @@
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2025_6452.json",
           "bytes": 11852,
-          "modifiedAt": "2026-07-13T17:24:45.714Z",
-          "sha256": "18815d5b5dcf740e748e2342b1e7c421c39235eb3a5ac9f01e03c589c1cb45e4"
+          "modifiedAt": "2026-07-19T00:34:22.407Z",
+          "sha256": "cfd1eb1538ea02dd0477b63c327051ab537ac5f3651c69fa28ae1aa6fb97929d"
         },
         {
           "sessionId": "session_indy_nxt_2025_6453",
@@ -16677,8 +16689,8 @@
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2025_6453.json",
           "bytes": 10358,
-          "modifiedAt": "2026-07-13T17:24:45.715Z",
-          "sha256": "32762b362e7a3ae61329d9921e0a0641dfa7a663aadf7f4b2a7ddcd0f87e8043"
+          "modifiedAt": "2026-07-19T00:34:22.408Z",
+          "sha256": "d9d793c3f47dde4d28867d0d90d84d04ae9c6f4762dfe2bde6a10cd44e7a9436"
         },
         {
           "sessionId": "session_indy_nxt_2025_6454",
@@ -16686,8 +16698,8 @@
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2025_6454.json",
           "bytes": 17983,
-          "modifiedAt": "2026-07-13T17:24:45.716Z",
-          "sha256": "9983b40e3fc2ac3fc83a82275944a0ba58b57db2365bb83957938546d66e2d93"
+          "modifiedAt": "2026-07-19T00:34:22.409Z",
+          "sha256": "08998fccc5619339e47603d65a868e2df550d75b88b1245bad7f48bb8fe1ff37"
         },
         {
           "sessionId": "session_indy_nxt_2025_6455",
@@ -16695,8 +16707,8 @@
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2025_6455.json",
           "bytes": 13681,
-          "modifiedAt": "2026-07-13T17:24:45.716Z",
-          "sha256": "b181308db54e3e7c3b2eff4d6151ec818a506a429970171d26baaf85b7367d64"
+          "modifiedAt": "2026-07-19T00:34:22.410Z",
+          "sha256": "75a1aaf7f08c1dc071d7ed029dd2b45a41e232a09f3ee638e191f20e35888905"
         },
         {
           "sessionId": "session_indy_nxt_2026_6749",
@@ -16704,8 +16716,8 @@
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2026_6749.json",
           "bytes": 16405,
-          "modifiedAt": "2026-07-13T17:24:45.716Z",
-          "sha256": "1b4ce7af39ffd8d3d5aa582986b45560806ae06002a2aaf6e575d4bae30e5582"
+          "modifiedAt": "2026-07-19T00:34:22.411Z",
+          "sha256": "b1b63715b3bda762218c310a2166e58c49d901a47fd005ec1b99ae99e29da3d8"
         },
         {
           "sessionId": "session_indy_nxt_2026_6750",
@@ -16713,8 +16725,8 @@
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2026_6750.json",
           "bytes": 14709,
-          "modifiedAt": "2026-07-13T17:24:45.717Z",
-          "sha256": "2f572247a52e795731f0b8c743d47a6971f66da4a78c80b439370590f0dece4a"
+          "modifiedAt": "2026-07-19T00:34:22.412Z",
+          "sha256": "5b7ce49d4da2b7872edda5fa8764c3f9a13045440daca2ad54ab1b8ca106426a"
         },
         {
           "sessionId": "session_indy_nxt_2026_6751",
@@ -16722,8 +16734,8 @@
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2026_6751.json",
           "bytes": 16180,
-          "modifiedAt": "2026-07-13T17:24:45.717Z",
-          "sha256": "fed154b9770acb97e75ff0ca01b34a8e03e9b4eb8aa2130cc7d8b5a9a1f96117"
+          "modifiedAt": "2026-07-19T00:34:22.413Z",
+          "sha256": "053975f7fbf88e38705fae1b863caa4ff0cd45b73186773b532053a1ad46433b"
         },
         {
           "sessionId": "session_indy_nxt_2026_6752",
@@ -16731,8 +16743,8 @@
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2026_6752.json",
           "bytes": 13625,
-          "modifiedAt": "2026-07-13T17:24:45.718Z",
-          "sha256": "c13de6437909d01007c6159ec41da311c628181f6ccf2f35e1cfd5ef062936b5"
+          "modifiedAt": "2026-07-19T00:34:22.413Z",
+          "sha256": "413b27ebf11773049942beccde2c9b1e2ed46e730616d597b328c4a5b8052c55"
         },
         {
           "sessionId": "session_indy_nxt_2026_6753",
@@ -16740,8 +16752,8 @@
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2026_6753.json",
           "bytes": 11409,
-          "modifiedAt": "2026-07-13T17:24:45.718Z",
-          "sha256": "d11960713482bf63ee7ecd672315eefa5685c493dc1b6d602204684816082918"
+          "modifiedAt": "2026-07-19T00:34:22.414Z",
+          "sha256": "3ba8d6eb320ed0e7de7e4391c33c4bc716780cae92ccd752681e4a24599e16c8"
         },
         {
           "sessionId": "session_indy_nxt_2026_6754",
@@ -16749,8 +16761,8 @@
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2026_6754.json",
           "bytes": 12135,
-          "modifiedAt": "2026-07-13T17:24:45.718Z",
-          "sha256": "13bd099b42e55faff88f6da17ca6ae2b437dd3a32780dc8b453cd11c227a26f1"
+          "modifiedAt": "2026-07-19T00:34:22.414Z",
+          "sha256": "2e14dce2d4437d0eb2e2b4711b4ce4f9dc2101a8ae114a2cd45d94c65dc5897d"
         },
         {
           "sessionId": "session_indy_nxt_2026_6756",
@@ -16758,8 +16770,8 @@
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2026_6756.json",
           "bytes": 14572,
-          "modifiedAt": "2026-07-13T17:24:45.718Z",
-          "sha256": "661711004dbe43041f6226afd2139a2957b7ba16ab09b65f792bb8970c283cac"
+          "modifiedAt": "2026-07-19T00:34:22.415Z",
+          "sha256": "ee2db3b457ba191cbf4efe89bb3b87c538d3b4a5e5c2957c93df6059a9426036"
         },
         {
           "sessionId": "session_indy_nxt_2026_6760",
@@ -16767,8 +16779,8 @@
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2026_6760.json",
           "bytes": 14152,
-          "modifiedAt": "2026-07-13T17:24:45.719Z",
-          "sha256": "5955df85c22b34377cd0eeb17a71c685140eb0c32f97189d149411db0cb8543d"
+          "modifiedAt": "2026-07-19T00:34:22.415Z",
+          "sha256": "d10246c48e335a6e5b6d51432814be5b76b594196626e0afbfcd8e54779b097e"
         },
         {
           "sessionId": "session_indy_nxt_2026_6761",
@@ -16776,8 +16788,8 @@
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2026_6761.json",
           "bytes": 15137,
-          "modifiedAt": "2026-07-13T17:24:45.719Z",
-          "sha256": "dd3c4b57bc77f879a22d421d769f30e6e6c3339b3a5c2012fabd838eef574bbb"
+          "modifiedAt": "2026-07-19T00:34:22.416Z",
+          "sha256": "0741f763f412eb126b72f25a72f243c15920fe6a4b33d548ddef55573cfcf0c7"
         },
         {
           "sessionId": "session_indy_nxt_2026_6762",
@@ -16785,8 +16797,8 @@
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2026_6762.json",
           "bytes": 11703,
-          "modifiedAt": "2026-07-13T17:24:45.720Z",
-          "sha256": "e348c8a146e23fa8aa29b5444ab2906c3611ebc6dc00cc2a6d53c35aa82e849d"
+          "modifiedAt": "2026-07-19T00:34:22.416Z",
+          "sha256": "f53dab671bebac53b02467da98700c373ee4d35cb9a21481857b6cd6ce29482b"
         },
         {
           "sessionId": "session_indy_nxt_2026_6763",
@@ -16794,8 +16806,8 @@
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2026_6763.json",
           "bytes": 21054,
-          "modifiedAt": "2026-07-13T17:24:45.720Z",
-          "sha256": "c47874c478632ef1ac695c64d203af548b21aa5246fcb4c6c3959cb9a272a894"
+          "modifiedAt": "2026-07-19T00:34:22.417Z",
+          "sha256": "ffe2eb6937e83dabd4beb9418204334dc2a6b71e799997296895929af33508a5"
         },
         {
           "sessionId": "session_indy_nxt_2026_6765",
@@ -16803,8 +16815,8 @@
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2026_6765.json",
           "bytes": 14369,
-          "modifiedAt": "2026-07-13T17:24:45.721Z",
-          "sha256": "81882f65465a4e5a8ab2c401850fb554e1ce014dc677627102710bf5e82e6fe7"
+          "modifiedAt": "2026-07-19T00:34:22.418Z",
+          "sha256": "81d5eaebf73509c5ad014ee0e38490fc614e3f8aa2840c42515b7befde5cdc72"
         }
       ],
       "seasonIndex": [
@@ -27509,6 +27521,2189 @@
           "key": "indyNxtLapTimeline",
           "path": "analysis/indy-nxt-discovery/output/tables/indy_nxt_lap_timeline.csv",
           "note": "Bryce per-lap official positions across all INDY NXT races."
+        }
+      ]
+    },
+    "venueDossier": {
+      "schemaVersion": "brycecast.venueDossier.v1",
+      "title": "This place, other years",
+      "readiness": "available",
+      "venues": [
+        {
+          "venueId": "track_barber_motorsports_park",
+          "trackName": "Barber Motorsports Park",
+          "trackSlug": "barber-motorsports-park",
+          "trackType": "road",
+          "drivingDirection": "clockwise",
+          "lengthMi": 2.38,
+          "cornerCount": 16,
+          "geo": {
+            "oriented": true,
+            "northOffsetDeg": 217.94,
+            "note": "Outline traced from OpenStreetMap geometry; the wind bearing can be drawn to true north on the shape."
+          },
+          "visits": [
+            {
+              "sessionId": "session_indy_nxt_2024_6314",
+              "seasonYear": 2024,
+              "raceInYearIndex": null,
+              "raceLabel": "2024",
+              "raceHref": "/races/session_indy_nxt_2024_6314",
+              "eventStartDate": "2024-04-26",
+              "result": {
+                "startPosition": 7,
+                "finishPosition": 8,
+                "gain": -1,
+                "finishPercentile": 0.6667,
+                "fieldSize": 21,
+                "officialStatus": "running",
+                "points": 24
+              },
+              "conditions": {
+                "observedAt": "2024-04-28T10:00",
+                "ambientTempC": 21.4,
+                "ambientTempF": 71,
+                "apparentTempC": 20.2,
+                "humidityPct": 68,
+                "windSpeedKph": 20.1,
+                "windSpeedMph": 12,
+                "windGustKph": 46.1,
+                "windGustMph": 29,
+                "windDirectionDeg": 151,
+                "windCardinal": "SSE",
+                "sky": "overcast",
+                "wetDry": "dry",
+                "source": "Open-Meteo Historical Weather API hourly archive",
+                "sourceType": "modeled_reanalysis",
+                "official": false,
+                "confidence": "modeled_medium",
+                "caveat": "Modeled near-track weather for the race hour (Open-Meteo hourly archive), not official series weather or track temperature."
+              },
+              "deltaVsPrior": null
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6445",
+              "seasonYear": 2025,
+              "raceInYearIndex": null,
+              "raceLabel": "2025",
+              "raceHref": "/races/session_indy_nxt_2025_6445",
+              "eventStartDate": "2025-05-02",
+              "result": {
+                "startPosition": 6,
+                "finishPosition": 15,
+                "gain": -9,
+                "finishPercentile": 0.3,
+                "fieldSize": 20,
+                "officialStatus": "running",
+                "points": 15
+              },
+              "conditions": {
+                "observedAt": "2025-05-04T11:00",
+                "ambientTempC": 16.9,
+                "ambientTempF": 62,
+                "apparentTempC": 16,
+                "humidityPct": 58,
+                "windSpeedKph": 13.5,
+                "windSpeedMph": 8,
+                "windGustKph": 32.4,
+                "windGustMph": 20,
+                "windDirectionDeg": 279,
+                "windCardinal": "W",
+                "sky": "mainly clear",
+                "wetDry": "dry",
+                "source": "Open-Meteo Historical Weather API hourly archive",
+                "sourceType": "modeled_reanalysis",
+                "official": false,
+                "confidence": "modeled_medium",
+                "caveat": "Modeled near-track weather for the race hour (Open-Meteo hourly archive), not official series weather or track temperature."
+              },
+              "deltaVsPrior": {
+                "priorSeasonYear": 2024,
+                "priorSessionId": "session_indy_nxt_2024_6314",
+                "priorRaceLabel": "2024",
+                "finishDelta": -7,
+                "gridDelta": 1,
+                "tempDeltaF": -9,
+                "humidityDeltaPct": -10,
+                "windSpeedDeltaMph": -4,
+                "windDirectionFrom": "SSE",
+                "windDirectionTo": "W",
+                "windSwung": true
+              }
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6750",
+              "seasonYear": 2026,
+              "raceInYearIndex": 1,
+              "raceLabel": "2026 · Race 1",
+              "raceHref": "/races/session_indy_nxt_2026_6750",
+              "eventStartDate": "2026-03-27",
+              "result": {
+                "startPosition": 5,
+                "finishPosition": 8,
+                "gain": -3,
+                "finishPercentile": 0.7083,
+                "fieldSize": 24,
+                "officialStatus": "running",
+                "points": 24
+              },
+              "conditions": {
+                "observedAt": "2026-03-28T12:00",
+                "ambientTempC": 14.5,
+                "ambientTempF": 58,
+                "apparentTempC": 11,
+                "humidityPct": 29,
+                "windSpeedKph": 17.4,
+                "windSpeedMph": 11,
+                "windGustKph": 41.8,
+                "windGustMph": 26,
+                "windDirectionDeg": 35,
+                "windCardinal": "NE",
+                "sky": "clear sky",
+                "wetDry": "dry",
+                "source": "Open-Meteo Historical Weather API hourly archive",
+                "sourceType": "modeled_reanalysis",
+                "official": false,
+                "confidence": "modeled_medium",
+                "caveat": "Modeled near-track weather for the race hour (Open-Meteo hourly archive), not official series weather or track temperature."
+              },
+              "deltaVsPrior": {
+                "priorSeasonYear": 2025,
+                "priorSessionId": "session_indy_nxt_2025_6445",
+                "priorRaceLabel": "2025",
+                "finishDelta": 7,
+                "gridDelta": 1,
+                "tempDeltaF": -4,
+                "humidityDeltaPct": -29,
+                "windSpeedDeltaMph": 3,
+                "windDirectionFrom": "W",
+                "windDirectionTo": "NE",
+                "windSwung": true
+              }
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6752",
+              "seasonYear": 2026,
+              "raceInYearIndex": 2,
+              "raceLabel": "2026 · Race 2",
+              "raceHref": "/races/session_indy_nxt_2026_6752",
+              "eventStartDate": "2026-03-28",
+              "result": {
+                "startPosition": 11,
+                "finishPosition": 7,
+                "gain": 4,
+                "finishPercentile": 0.75,
+                "fieldSize": 24,
+                "officialStatus": "running",
+                "points": 26
+              },
+              "conditions": {
+                "observedAt": "2026-03-29T10:00",
+                "ambientTempC": 14.4,
+                "ambientTempF": 58,
+                "apparentTempC": 9.8,
+                "humidityPct": 44,
+                "windSpeedKph": 19.3,
+                "windSpeedMph": 12,
+                "windGustKph": 43.9,
+                "windGustMph": 27,
+                "windDirectionDeg": 123,
+                "windCardinal": "ESE",
+                "sky": "clear sky",
+                "wetDry": "dry",
+                "source": "Open-Meteo Historical Weather API hourly archive",
+                "sourceType": "modeled_reanalysis",
+                "official": false,
+                "confidence": "modeled_medium",
+                "caveat": "Modeled near-track weather for the race hour (Open-Meteo hourly archive), not official series weather or track temperature."
+              },
+              "deltaVsPrior": {
+                "priorSeasonYear": 2026,
+                "priorSessionId": "session_indy_nxt_2026_6750",
+                "priorRaceLabel": "2026 · Race 1",
+                "finishDelta": 1,
+                "gridDelta": -6,
+                "tempDeltaF": 0,
+                "humidityDeltaPct": 15,
+                "windSpeedDeltaMph": 1,
+                "windDirectionFrom": "NE",
+                "windDirectionTo": "ESE",
+                "windSwung": true
+              }
+            }
+          ],
+          "visitYears": [
+            2024,
+            2025,
+            2026
+          ],
+          "upcoming": null
+        },
+        {
+          "venueId": "track_indianapolis_motor_speedway_road_course",
+          "trackName": "Indianapolis Motor Speedway Road Course",
+          "trackSlug": "indianapolis-motor-speedway-road-course",
+          "trackType": "road",
+          "drivingDirection": "clockwise",
+          "lengthMi": 2.439,
+          "cornerCount": 14,
+          "geo": {
+            "oriented": true,
+            "northOffsetDeg": 101.38,
+            "note": "Outline traced from OpenStreetMap geometry; the wind bearing can be drawn to true north on the shape."
+          },
+          "visits": [
+            {
+              "sessionId": "session_indy_nxt_2024_6315",
+              "seasonYear": 2024,
+              "raceInYearIndex": 1,
+              "raceLabel": "2024 · Race 1",
+              "raceHref": "/races/session_indy_nxt_2024_6315",
+              "eventStartDate": "2024-05-10",
+              "result": {
+                "startPosition": 11,
+                "finishPosition": 14,
+                "gain": -3,
+                "finishPercentile": 0.381,
+                "fieldSize": 21,
+                "officialStatus": "running",
+                "points": 16
+              },
+              "conditions": {
+                "observedAt": "2024-05-10T18:00",
+                "ambientTempC": 17.5,
+                "ambientTempF": 64,
+                "apparentTempC": 14.7,
+                "humidityPct": 49,
+                "windSpeedKph": 13.3,
+                "windSpeedMph": 8,
+                "windGustKph": 29.2,
+                "windGustMph": 18,
+                "windDirectionDeg": 303,
+                "windCardinal": "WNW",
+                "sky": "overcast",
+                "wetDry": "dry",
+                "source": "Open-Meteo Historical Weather API hourly archive",
+                "sourceType": "modeled_reanalysis",
+                "official": false,
+                "confidence": "modeled_medium",
+                "caveat": "Modeled near-track weather for the race hour (Open-Meteo hourly archive), not official series weather or track temperature."
+              },
+              "deltaVsPrior": null
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6325",
+              "seasonYear": 2024,
+              "raceInYearIndex": 2,
+              "raceLabel": "2024 · Race 2",
+              "raceHref": "/races/session_indy_nxt_2024_6325",
+              "eventStartDate": "2024-05-10",
+              "result": {
+                "startPosition": 11,
+                "finishPosition": 19,
+                "gain": -8,
+                "finishPercentile": 0.1429,
+                "fieldSize": 21,
+                "officialStatus": "running",
+                "points": 11
+              },
+              "conditions": {
+                "observedAt": "2024-05-11T13:00",
+                "ambientTempC": 18.5,
+                "ambientTempF": 65,
+                "apparentTempC": 15,
+                "humidityPct": 42,
+                "windSpeedKph": 26.4,
+                "windSpeedMph": 16,
+                "windGustKph": 55.1,
+                "windGustMph": 34,
+                "windDirectionDeg": 302,
+                "windCardinal": "WNW",
+                "sky": "clear sky",
+                "wetDry": "dry",
+                "source": "Open-Meteo Historical Weather API hourly archive",
+                "sourceType": "modeled_reanalysis",
+                "official": false,
+                "confidence": "modeled_medium",
+                "caveat": "Modeled near-track weather for the race hour (Open-Meteo hourly archive), not official series weather or track temperature."
+              },
+              "deltaVsPrior": {
+                "priorSeasonYear": 2024,
+                "priorSessionId": "session_indy_nxt_2024_6315",
+                "priorRaceLabel": "2024 · Race 1",
+                "finishDelta": -5,
+                "gridDelta": 0,
+                "tempDeltaF": 1,
+                "humidityDeltaPct": -7,
+                "windSpeedDeltaMph": 8,
+                "windDirectionFrom": "WNW",
+                "windDirectionTo": "WNW",
+                "windSwung": false
+              }
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6444",
+              "seasonYear": 2025,
+              "raceInYearIndex": 1,
+              "raceLabel": "2025 · Race 1",
+              "raceHref": "/races/session_indy_nxt_2025_6444",
+              "eventStartDate": "2025-05-09",
+              "result": {
+                "startPosition": 18,
+                "finishPosition": 15,
+                "gain": 3,
+                "finishPercentile": 0.3333,
+                "fieldSize": 21,
+                "officialStatus": "running",
+                "points": 15
+              },
+              "conditions": {
+                "observedAt": "2025-05-09T19:00",
+                "ambientTempC": 17.1,
+                "ambientTempF": 63,
+                "apparentTempC": 14.6,
+                "humidityPct": 44,
+                "windSpeedKph": 9,
+                "windSpeedMph": 6,
+                "windGustKph": 22,
+                "windGustMph": 14,
+                "windDirectionDeg": 30,
+                "windCardinal": "NNE",
+                "sky": "clear sky",
+                "wetDry": "dry",
+                "source": "Open-Meteo Historical Weather API hourly archive",
+                "sourceType": "modeled_reanalysis",
+                "official": false,
+                "confidence": "modeled_medium",
+                "caveat": "Modeled near-track weather for the race hour (Open-Meteo hourly archive), not official series weather or track temperature."
+              },
+              "deltaVsPrior": {
+                "priorSeasonYear": 2024,
+                "priorSessionId": "session_indy_nxt_2024_6325",
+                "priorRaceLabel": "2024 · Race 2",
+                "finishDelta": 4,
+                "gridDelta": -7,
+                "tempDeltaF": -2,
+                "humidityDeltaPct": 2,
+                "windSpeedDeltaMph": -10,
+                "windDirectionFrom": "WNW",
+                "windDirectionTo": "NNE",
+                "windSwung": true
+              }
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6443",
+              "seasonYear": 2025,
+              "raceInYearIndex": 2,
+              "raceLabel": "2025 · Race 2",
+              "raceHref": "/races/session_indy_nxt_2025_6443",
+              "eventStartDate": "2025-05-09",
+              "result": {
+                "startPosition": 18,
+                "finishPosition": 15,
+                "gain": 3,
+                "finishPercentile": 0.3333,
+                "fieldSize": 21,
+                "officialStatus": "running",
+                "points": 15
+              },
+              "conditions": {
+                "observedAt": "2025-05-10T13:00",
+                "ambientTempC": 20.1,
+                "ambientTempF": 68,
+                "apparentTempC": 21.1,
+                "humidityPct": 40,
+                "windSpeedKph": 3.6,
+                "windSpeedMph": 2,
+                "windGustKph": 15.5,
+                "windGustMph": 10,
+                "windDirectionDeg": 9,
+                "windCardinal": "N",
+                "sky": "clear sky",
+                "wetDry": "dry",
+                "source": "Open-Meteo Historical Weather API hourly archive",
+                "sourceType": "modeled_reanalysis",
+                "official": false,
+                "confidence": "modeled_medium",
+                "caveat": "Modeled near-track weather for the race hour (Open-Meteo hourly archive), not official series weather or track temperature."
+              },
+              "deltaVsPrior": {
+                "priorSeasonYear": 2025,
+                "priorSessionId": "session_indy_nxt_2025_6444",
+                "priorRaceLabel": "2025 · Race 1",
+                "finishDelta": 0,
+                "gridDelta": 0,
+                "tempDeltaF": 5,
+                "humidityDeltaPct": -4,
+                "windSpeedDeltaMph": -4,
+                "windDirectionFrom": "NNE",
+                "windDirectionTo": "N",
+                "windSwung": false
+              }
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6756",
+              "seasonYear": 2026,
+              "raceInYearIndex": 1,
+              "raceLabel": "2026 · Race 1",
+              "raceHref": "/races/session_indy_nxt_2026_6756",
+              "eventStartDate": "2026-05-08",
+              "result": {
+                "startPosition": 13,
+                "finishPosition": 22,
+                "gain": -9,
+                "finishPercentile": 0.125,
+                "fieldSize": 24,
+                "officialStatus": "running",
+                "points": 8
+              },
+              "conditions": {
+                "observedAt": "2026-05-08T16:00",
+                "ambientTempC": 16.6,
+                "ambientTempF": 62,
+                "apparentTempC": 14.9,
+                "humidityPct": 64,
+                "windSpeedKph": 12.2,
+                "windSpeedMph": 8,
+                "windGustKph": 42.8,
+                "windGustMph": 27,
+                "windDirectionDeg": 253,
+                "windCardinal": "WSW",
+                "sky": "light drizzle",
+                "wetDry": "wet",
+                "source": "Open-Meteo Historical Weather API hourly archive",
+                "sourceType": "modeled_reanalysis",
+                "official": false,
+                "confidence": "modeled_medium",
+                "caveat": "Modeled near-track weather for the race hour (Open-Meteo hourly archive), not official series weather or track temperature."
+              },
+              "deltaVsPrior": {
+                "priorSeasonYear": 2025,
+                "priorSessionId": "session_indy_nxt_2025_6443",
+                "priorRaceLabel": "2025 · Race 2",
+                "finishDelta": -7,
+                "gridDelta": 5,
+                "tempDeltaF": -6,
+                "humidityDeltaPct": 24,
+                "windSpeedDeltaMph": 6,
+                "windDirectionFrom": "N",
+                "windDirectionTo": "WSW",
+                "windSwung": true
+              }
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6765",
+              "seasonYear": 2026,
+              "raceInYearIndex": 2,
+              "raceLabel": "2026 · Race 2",
+              "raceHref": "/races/session_indy_nxt_2026_6765",
+              "eventStartDate": "2026-05-08",
+              "result": {
+                "startPosition": 14,
+                "finishPosition": 12,
+                "gain": 2,
+                "finishPercentile": 0.5417,
+                "fieldSize": 24,
+                "officialStatus": "running",
+                "points": 18
+              },
+              "conditions": {
+                "observedAt": "2026-05-09T15:00",
+                "ambientTempC": 21.2,
+                "ambientTempF": 70,
+                "apparentTempC": 21.5,
+                "humidityPct": 61,
+                "windSpeedKph": 17.7,
+                "windSpeedMph": 11,
+                "windGustKph": 47.2,
+                "windGustMph": 29,
+                "windDirectionDeg": 228,
+                "windCardinal": "SW",
+                "sky": "clear sky",
+                "wetDry": "dry",
+                "source": "Open-Meteo Historical Weather API hourly archive",
+                "sourceType": "modeled_reanalysis",
+                "official": false,
+                "confidence": "modeled_medium",
+                "caveat": "Modeled near-track weather for the race hour (Open-Meteo hourly archive), not official series weather or track temperature."
+              },
+              "deltaVsPrior": {
+                "priorSeasonYear": 2026,
+                "priorSessionId": "session_indy_nxt_2026_6756",
+                "priorRaceLabel": "2026 · Race 1",
+                "finishDelta": 10,
+                "gridDelta": -1,
+                "tempDeltaF": 8,
+                "humidityDeltaPct": -3,
+                "windSpeedDeltaMph": 3,
+                "windDirectionFrom": "WSW",
+                "windDirectionTo": "SW",
+                "windSwung": false
+              }
+            }
+          ],
+          "visitYears": [
+            2024,
+            2025,
+            2026
+          ],
+          "upcoming": null
+        },
+        {
+          "venueId": "track_iowa_speedway",
+          "trackName": "Iowa Speedway",
+          "trackSlug": "iowa-speedway",
+          "trackType": "oval",
+          "drivingDirection": "counterclockwise",
+          "lengthMi": 0.894,
+          "cornerCount": 4,
+          "geo": {
+            "oriented": true,
+            "northOffsetDeg": 312.39,
+            "note": "Outline traced from OpenStreetMap geometry; the wind bearing can be drawn to true north on the shape."
+          },
+          "visits": [
+            {
+              "sessionId": "session_indy_nxt_2024_6319",
+              "seasonYear": 2024,
+              "raceInYearIndex": null,
+              "raceLabel": "2024",
+              "raceHref": "/races/session_indy_nxt_2024_6319",
+              "eventStartDate": "2024-07-12",
+              "result": {
+                "startPosition": 9,
+                "finishPosition": 8,
+                "gain": 1,
+                "finishPercentile": 0.6111,
+                "fieldSize": 18,
+                "officialStatus": "running",
+                "points": 24
+              },
+              "conditions": {
+                "observedAt": "2024-07-13T13:00",
+                "ambientTempC": 30.1,
+                "ambientTempF": 86,
+                "apparentTempC": 36,
+                "humidityPct": 67,
+                "windSpeedKph": 11.7,
+                "windSpeedMph": 7,
+                "windGustKph": 30.2,
+                "windGustMph": 19,
+                "windDirectionDeg": 198,
+                "windCardinal": "SSW",
+                "sky": "overcast",
+                "wetDry": "dry",
+                "source": "Open-Meteo Historical Weather API hourly archive",
+                "sourceType": "modeled_reanalysis",
+                "official": false,
+                "confidence": "modeled_medium",
+                "caveat": "Modeled near-track weather for the race hour (Open-Meteo hourly archive), not official series weather or track temperature."
+              },
+              "deltaVsPrior": null
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6451",
+              "seasonYear": 2025,
+              "raceInYearIndex": null,
+              "raceLabel": "2025",
+              "raceHref": "/races/session_indy_nxt_2025_6451",
+              "eventStartDate": "2025-07-11",
+              "result": {
+                "startPosition": 11,
+                "finishPosition": 9,
+                "gain": 2,
+                "finishPercentile": 0.5789,
+                "fieldSize": 19,
+                "officialStatus": "running",
+                "points": 22
+              },
+              "conditions": {
+                "observedAt": "2025-07-12T11:00",
+                "ambientTempC": 24.4,
+                "ambientTempF": 76,
+                "apparentTempC": 26.7,
+                "humidityPct": 77,
+                "windSpeedKph": 12.9,
+                "windSpeedMph": 8,
+                "windGustKph": 29.9,
+                "windGustMph": 19,
+                "windDirectionDeg": 325,
+                "windCardinal": "NW",
+                "sky": "mainly clear",
+                "wetDry": "dry",
+                "source": "Open-Meteo Historical Weather API hourly archive",
+                "sourceType": "modeled_reanalysis",
+                "official": false,
+                "confidence": "modeled_medium",
+                "caveat": "Modeled near-track weather for the race hour (Open-Meteo hourly archive), not official series weather or track temperature."
+              },
+              "deltaVsPrior": {
+                "priorSeasonYear": 2024,
+                "priorSessionId": "session_indy_nxt_2024_6319",
+                "priorRaceLabel": "2024",
+                "finishDelta": -1,
+                "gridDelta": -2,
+                "tempDeltaF": -10,
+                "humidityDeltaPct": 10,
+                "windSpeedDeltaMph": 1,
+                "windDirectionFrom": "SSW",
+                "windDirectionTo": "NW",
+                "windSwung": true
+              }
+            }
+          ],
+          "visitYears": [
+            2024,
+            2025
+          ],
+          "upcoming": null
+        },
+        {
+          "venueId": "track_mid_ohio_sports_car_course",
+          "trackName": "Mid-Ohio Sports Car Course",
+          "trackSlug": "mid-ohio-sports-car-course",
+          "trackType": "road",
+          "drivingDirection": "clockwise",
+          "lengthMi": 2.258,
+          "cornerCount": 13,
+          "geo": {
+            "oriented": true,
+            "northOffsetDeg": 240.7,
+            "note": "Outline traced from OpenStreetMap geometry; the wind bearing can be drawn to true north on the shape."
+          },
+          "visits": [
+            {
+              "sessionId": "session_indy_nxt_2024_6318",
+              "seasonYear": 2024,
+              "raceInYearIndex": null,
+              "raceLabel": "2024",
+              "raceHref": "/races/session_indy_nxt_2024_6318",
+              "eventStartDate": "2024-07-05",
+              "result": {
+                "startPosition": 14,
+                "finishPosition": 18,
+                "gain": -4,
+                "finishPercentile": 0.1053,
+                "fieldSize": 19,
+                "officialStatus": "running",
+                "points": 12
+              },
+              "conditions": {
+                "observedAt": "2024-07-07T11:00",
+                "ambientTempC": 25.1,
+                "ambientTempF": 77,
+                "apparentTempC": 27.3,
+                "humidityPct": 54,
+                "windSpeedKph": 3.5,
+                "windSpeedMph": 2,
+                "windGustKph": 13.7,
+                "windGustMph": 9,
+                "windDirectionDeg": 246,
+                "windCardinal": "WSW",
+                "sky": "clear sky",
+                "wetDry": "dry",
+                "source": "Open-Meteo Historical Weather API hourly archive",
+                "sourceType": "modeled_reanalysis",
+                "official": false,
+                "confidence": "modeled_medium",
+                "caveat": "Modeled near-track weather for the race hour (Open-Meteo hourly archive), not official series weather or track temperature."
+              },
+              "deltaVsPrior": null
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6452",
+              "seasonYear": 2025,
+              "raceInYearIndex": null,
+              "raceLabel": "2025",
+              "raceHref": "/races/session_indy_nxt_2025_6452",
+              "eventStartDate": "2025-07-04",
+              "result": {
+                "startPosition": 7,
+                "finishPosition": 12,
+                "gain": -5,
+                "finishPercentile": 0.4211,
+                "fieldSize": 19,
+                "officialStatus": "running",
+                "points": 18
+              },
+              "conditions": {
+                "observedAt": "2025-07-06T11:00",
+                "ambientTempC": 28.1,
+                "ambientTempF": 83,
+                "apparentTempC": 30.8,
+                "humidityPct": 63,
+                "windSpeedKph": 14.7,
+                "windSpeedMph": 9,
+                "windGustKph": 31,
+                "windGustMph": 19,
+                "windDirectionDeg": 200,
+                "windCardinal": "SSW",
+                "sky": "clear sky",
+                "wetDry": "dry",
+                "source": "Open-Meteo Historical Weather API hourly archive",
+                "sourceType": "modeled_reanalysis",
+                "official": false,
+                "confidence": "modeled_medium",
+                "caveat": "Modeled near-track weather for the race hour (Open-Meteo hourly archive), not official series weather or track temperature."
+              },
+              "deltaVsPrior": {
+                "priorSeasonYear": 2024,
+                "priorSessionId": "session_indy_nxt_2024_6318",
+                "priorRaceLabel": "2024",
+                "finishDelta": 6,
+                "gridDelta": 7,
+                "tempDeltaF": 6,
+                "humidityDeltaPct": 9,
+                "windSpeedDeltaMph": 7,
+                "windDirectionFrom": "WSW",
+                "windDirectionTo": "SSW",
+                "windSwung": true
+              }
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6761",
+              "seasonYear": 2026,
+              "raceInYearIndex": 1,
+              "raceLabel": "2026 · Race 1",
+              "raceHref": "/races/session_indy_nxt_2026_6761",
+              "eventStartDate": "2026-07-03",
+              "result": {
+                "startPosition": 13,
+                "finishPosition": 16,
+                "gain": -3,
+                "finishPercentile": 0.375,
+                "fieldSize": 24,
+                "officialStatus": "running",
+                "points": 14
+              },
+              "conditions": {
+                "observedAt": "2026-07-04T13:00",
+                "ambientTempC": 28.9,
+                "ambientTempF": 84,
+                "apparentTempC": 33.5,
+                "humidityPct": 67,
+                "windSpeedKph": 14.8,
+                "windSpeedMph": 9,
+                "windGustKph": 35.6,
+                "windGustMph": 22,
+                "windDirectionDeg": 260,
+                "windCardinal": "W",
+                "sky": "mainly clear",
+                "wetDry": "dry",
+                "source": "Open-Meteo Historical Weather API hourly archive",
+                "sourceType": "modeled_reanalysis",
+                "official": false,
+                "confidence": "modeled_medium",
+                "caveat": "Modeled near-track weather for the race hour (Open-Meteo hourly archive), not official series weather or track temperature."
+              },
+              "deltaVsPrior": {
+                "priorSeasonYear": 2025,
+                "priorSessionId": "session_indy_nxt_2025_6452",
+                "priorRaceLabel": "2025",
+                "finishDelta": -4,
+                "gridDelta": -6,
+                "tempDeltaF": 1,
+                "humidityDeltaPct": 4,
+                "windSpeedDeltaMph": 0,
+                "windDirectionFrom": "SSW",
+                "windDirectionTo": "W",
+                "windSwung": true
+              }
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6760",
+              "seasonYear": 2026,
+              "raceInYearIndex": 2,
+              "raceLabel": "2026 · Race 2",
+              "raceHref": "/races/session_indy_nxt_2026_6760",
+              "eventStartDate": "2026-07-04",
+              "result": {
+                "startPosition": 15,
+                "finishPosition": 14,
+                "gain": 1,
+                "finishPercentile": 0.4583,
+                "fieldSize": 24,
+                "officialStatus": "running",
+                "points": 16
+              },
+              "conditions": {
+                "observedAt": "2026-07-05T10:00",
+                "ambientTempC": 21.3,
+                "ambientTempF": 70,
+                "apparentTempC": 24.8,
+                "humidityPct": 98,
+                "windSpeedKph": 5.6,
+                "windSpeedMph": 3,
+                "windGustKph": 16.9,
+                "windGustMph": 11,
+                "windDirectionDeg": 138,
+                "windCardinal": "SE",
+                "sky": "moderate rain",
+                "wetDry": "wet",
+                "source": "Open-Meteo Historical Weather API hourly archive",
+                "sourceType": "modeled_reanalysis",
+                "official": false,
+                "confidence": "modeled_medium",
+                "caveat": "Modeled near-track weather for the race hour (Open-Meteo hourly archive), not official series weather or track temperature."
+              },
+              "deltaVsPrior": {
+                "priorSeasonYear": 2026,
+                "priorSessionId": "session_indy_nxt_2026_6761",
+                "priorRaceLabel": "2026 · Race 1",
+                "finishDelta": 2,
+                "gridDelta": -2,
+                "tempDeltaF": -14,
+                "humidityDeltaPct": 31,
+                "windSpeedDeltaMph": -6,
+                "windDirectionFrom": "W",
+                "windDirectionTo": "SE",
+                "windSwung": true
+              }
+            }
+          ],
+          "visitYears": [
+            2024,
+            2025,
+            2026
+          ],
+          "upcoming": null
+        },
+        {
+          "venueId": "track_nashville_superspeedway",
+          "trackName": "Nashville Superspeedway",
+          "trackSlug": "nashville-superspeedway",
+          "trackType": "oval",
+          "drivingDirection": "counterclockwise",
+          "lengthMi": 1.33,
+          "cornerCount": 4,
+          "geo": {
+            "oriented": true,
+            "northOffsetDeg": 257.91,
+            "note": "Outline traced from OpenStreetMap geometry; the wind bearing can be drawn to true north on the shape."
+          },
+          "visits": [
+            {
+              "sessionId": "session_indy_nxt_2024_6323",
+              "seasonYear": 2024,
+              "raceInYearIndex": null,
+              "raceLabel": "2024",
+              "raceHref": "/races/session_indy_nxt_2024_6323",
+              "eventStartDate": "2024-09-14",
+              "result": {
+                "startPosition": 10,
+                "finishPosition": 7,
+                "gain": 3,
+                "finishPercentile": 0.6667,
+                "fieldSize": 18,
+                "officialStatus": "running",
+                "points": 26
+              },
+              "conditions": {
+                "observedAt": "2024-09-15T11:00",
+                "ambientTempC": 27.6,
+                "ambientTempF": 82,
+                "apparentTempC": 28.6,
+                "humidityPct": 54,
+                "windSpeedKph": 14.6,
+                "windSpeedMph": 9,
+                "windGustKph": 37.1,
+                "windGustMph": 23,
+                "windDirectionDeg": 128,
+                "windCardinal": "SE",
+                "sky": "mainly clear",
+                "wetDry": "dry",
+                "source": "Open-Meteo Historical Weather API hourly archive",
+                "sourceType": "modeled_reanalysis",
+                "official": false,
+                "confidence": "modeled_medium",
+                "caveat": "Modeled near-track weather for the race hour (Open-Meteo hourly archive), not official series weather or track temperature."
+              },
+              "deltaVsPrior": null
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6447",
+              "seasonYear": 2025,
+              "raceInYearIndex": null,
+              "raceLabel": "2025",
+              "raceHref": "/races/session_indy_nxt_2025_6447",
+              "eventStartDate": "2025-08-30",
+              "result": {
+                "startPosition": 8,
+                "finishPosition": 6,
+                "gain": 2,
+                "finishPercentile": 0.7222,
+                "fieldSize": 18,
+                "officialStatus": "running",
+                "points": 28
+              },
+              "conditions": {
+                "observedAt": "2025-08-31T11:00",
+                "ambientTempC": 24.5,
+                "ambientTempF": 76,
+                "apparentTempC": 25,
+                "humidityPct": 51,
+                "windSpeedKph": 9.5,
+                "windSpeedMph": 6,
+                "windGustKph": 24.5,
+                "windGustMph": 15,
+                "windDirectionDeg": 15,
+                "windCardinal": "NNE",
+                "sky": "overcast",
+                "wetDry": "dry",
+                "source": "Open-Meteo Historical Weather API hourly archive",
+                "sourceType": "modeled_reanalysis",
+                "official": false,
+                "confidence": "modeled_medium",
+                "caveat": "Modeled near-track weather for the race hour (Open-Meteo hourly archive), not official series weather or track temperature."
+              },
+              "deltaVsPrior": {
+                "priorSeasonYear": 2024,
+                "priorSessionId": "session_indy_nxt_2024_6323",
+                "priorRaceLabel": "2024",
+                "finishDelta": 1,
+                "gridDelta": 2,
+                "tempDeltaF": -6,
+                "humidityDeltaPct": -3,
+                "windSpeedDeltaMph": -3,
+                "windDirectionFrom": "SE",
+                "windDirectionTo": "NNE",
+                "windSwung": true
+              }
+            }
+          ],
+          "visitYears": [
+            2024,
+            2025
+          ],
+          "upcoming": {
+            "eventId": "event_indy_nxt_2026_5538",
+            "eventName": "Music City Grand Prix",
+            "eventStartDate": "2026-07-18",
+            "scheduledSessions": [
+              {
+                "sessionId": "session_indy_nxt_2026_6924",
+                "sessionType": "practice",
+                "sessionName": "Practice",
+                "scheduledStart": "2026-07-18T10:30:00",
+                "timezone": "America/Chicago",
+                "status": "scheduled"
+              },
+              {
+                "sessionId": "session_indy_nxt_2026_6923",
+                "sessionType": "qualifying",
+                "sessionName": "Qualifying",
+                "scheduledStart": "2026-07-18T15:30:00",
+                "timezone": "America/Chicago",
+                "status": "scheduled"
+              },
+              {
+                "sessionId": "session_indy_nxt_2026_6755",
+                "sessionType": "race",
+                "sessionName": "Race",
+                "scheduledStart": "2026-07-19T12:00:00",
+                "timezone": "America/Chicago",
+                "status": "scheduled"
+              }
+            ]
+          }
+        },
+        {
+          "venueId": "track_portland_international_raceway",
+          "trackName": "Portland International Raceway",
+          "trackSlug": "portland-international-raceway",
+          "trackType": "road",
+          "drivingDirection": "clockwise",
+          "lengthMi": 1.964,
+          "cornerCount": 12,
+          "geo": {
+            "oriented": true,
+            "northOffsetDeg": 336.05,
+            "note": "Outline traced from OpenStreetMap geometry; the wind bearing can be drawn to true north on the shape."
+          },
+          "visits": [
+            {
+              "sessionId": "session_indy_nxt_2024_6321",
+              "seasonYear": 2024,
+              "raceInYearIndex": null,
+              "raceLabel": "2024",
+              "raceHref": "/races/session_indy_nxt_2024_6321",
+              "eventStartDate": "2024-08-23",
+              "result": {
+                "startPosition": 6,
+                "finishPosition": 3,
+                "gain": 3,
+                "finishPercentile": 0.8824,
+                "fieldSize": 17,
+                "officialStatus": "running",
+                "points": 35
+              },
+              "conditions": {
+                "observedAt": "2024-08-25T10:00",
+                "ambientTempC": 18.2,
+                "ambientTempF": 65,
+                "apparentTempC": 18.3,
+                "humidityPct": 69,
+                "windSpeedKph": 4.5,
+                "windSpeedMph": 3,
+                "windGustKph": 16.2,
+                "windGustMph": 10,
+                "windDirectionDeg": 14,
+                "windCardinal": "NNE",
+                "sky": "clear sky",
+                "wetDry": "dry",
+                "source": "Open-Meteo Historical Weather API hourly archive",
+                "sourceType": "modeled_reanalysis",
+                "official": false,
+                "confidence": "modeled_medium",
+                "caveat": "Modeled near-track weather for the race hour (Open-Meteo hourly archive), not official series weather or track temperature."
+              },
+              "deltaVsPrior": null
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6449",
+              "seasonYear": 2025,
+              "raceInYearIndex": null,
+              "raceLabel": "2025",
+              "raceHref": "/races/session_indy_nxt_2025_6449",
+              "eventStartDate": "2025-08-08",
+              "result": {
+                "startPosition": 5,
+                "finishPosition": 19,
+                "gain": -14,
+                "finishPercentile": 0.0526,
+                "fieldSize": 19,
+                "officialStatus": "contact",
+                "points": 11
+              },
+              "conditions": {
+                "observedAt": "2025-08-10T10:00",
+                "ambientTempC": 23.8,
+                "ambientTempF": 75,
+                "apparentTempC": 23.6,
+                "humidityPct": 53,
+                "windSpeedKph": 9.4,
+                "windSpeedMph": 6,
+                "windGustKph": 25.6,
+                "windGustMph": 16,
+                "windDirectionDeg": 5,
+                "windCardinal": "N",
+                "sky": "clear sky",
+                "wetDry": "dry",
+                "source": "Open-Meteo Historical Weather API hourly archive",
+                "sourceType": "modeled_reanalysis",
+                "official": false,
+                "confidence": "modeled_medium",
+                "caveat": "Modeled near-track weather for the race hour (Open-Meteo hourly archive), not official series weather or track temperature."
+              },
+              "deltaVsPrior": {
+                "priorSeasonYear": 2024,
+                "priorSessionId": "session_indy_nxt_2024_6321",
+                "priorRaceLabel": "2024",
+                "finishDelta": -16,
+                "gridDelta": 1,
+                "tempDeltaF": 10,
+                "humidityDeltaPct": -16,
+                "windSpeedDeltaMph": 3,
+                "windDirectionFrom": "NNE",
+                "windDirectionTo": "N",
+                "windSwung": false
+              }
+            }
+          ],
+          "visitYears": [
+            2024,
+            2025
+          ],
+          "upcoming": null
+        },
+        {
+          "venueId": "track_road_america",
+          "trackName": "Road America",
+          "trackSlug": "road-america",
+          "trackType": "road",
+          "drivingDirection": "clockwise",
+          "lengthMi": 4.048,
+          "cornerCount": 14,
+          "geo": {
+            "oriented": true,
+            "northOffsetDeg": 76.14,
+            "note": "Outline traced from OpenStreetMap geometry; the wind bearing can be drawn to true north on the shape."
+          },
+          "visits": [
+            {
+              "sessionId": "session_indy_nxt_2024_6316",
+              "seasonYear": 2024,
+              "raceInYearIndex": null,
+              "raceLabel": "2024",
+              "raceHref": "/races/session_indy_nxt_2024_6316",
+              "eventStartDate": "2024-06-07",
+              "result": {
+                "startPosition": 7,
+                "finishPosition": 8,
+                "gain": -1,
+                "finishPercentile": 0.6667,
+                "fieldSize": 21,
+                "officialStatus": "running",
+                "points": 24
+              },
+              "conditions": {
+                "observedAt": "2024-06-09T12:00",
+                "ambientTempC": 21.5,
+                "ambientTempF": 71,
+                "apparentTempC": 17.6,
+                "humidityPct": 39,
+                "windSpeedKph": 28,
+                "windSpeedMph": 17,
+                "windGustKph": 56.5,
+                "windGustMph": 35,
+                "windDirectionDeg": 298,
+                "windCardinal": "WNW",
+                "sky": "mainly clear",
+                "wetDry": "dry",
+                "source": "Open-Meteo Historical Weather API hourly archive",
+                "sourceType": "modeled_reanalysis",
+                "official": false,
+                "confidence": "modeled_medium",
+                "caveat": "Modeled near-track weather for the race hour (Open-Meteo hourly archive), not official series weather or track temperature."
+              },
+              "deltaVsPrior": null
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6453",
+              "seasonYear": 2025,
+              "raceInYearIndex": null,
+              "raceLabel": "2025",
+              "raceHref": "/races/session_indy_nxt_2025_6453",
+              "eventStartDate": "2025-06-20",
+              "result": {
+                "startPosition": 10,
+                "finishPosition": 9,
+                "gain": 1,
+                "finishPercentile": 0.5789,
+                "fieldSize": 19,
+                "officialStatus": "running",
+                "points": 22
+              },
+              "conditions": {
+                "observedAt": "2025-06-22T10:00",
+                "ambientTempC": 30,
+                "ambientTempF": 86,
+                "apparentTempC": 32.9,
+                "humidityPct": 67,
+                "windSpeedKph": 22,
+                "windSpeedMph": 14,
+                "windGustKph": 41.8,
+                "windGustMph": 26,
+                "windDirectionDeg": 230,
+                "windCardinal": "SW",
+                "sky": "clear sky",
+                "wetDry": "dry",
+                "source": "Open-Meteo Historical Weather API hourly archive",
+                "sourceType": "modeled_reanalysis",
+                "official": false,
+                "confidence": "modeled_medium",
+                "caveat": "Modeled near-track weather for the race hour (Open-Meteo hourly archive), not official series weather or track temperature."
+              },
+              "deltaVsPrior": {
+                "priorSeasonYear": 2024,
+                "priorSessionId": "session_indy_nxt_2024_6316",
+                "priorRaceLabel": "2024",
+                "finishDelta": -1,
+                "gridDelta": -3,
+                "tempDeltaF": 15,
+                "humidityDeltaPct": 28,
+                "windSpeedDeltaMph": -3,
+                "windDirectionFrom": "WNW",
+                "windDirectionTo": "SW",
+                "windSwung": true
+              }
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6762",
+              "seasonYear": 2026,
+              "raceInYearIndex": 1,
+              "raceLabel": "2026 · Race 1",
+              "raceHref": "/races/session_indy_nxt_2026_6762",
+              "eventStartDate": "2026-06-19",
+              "result": {
+                "startPosition": 15,
+                "finishPosition": 21,
+                "gain": -6,
+                "finishPercentile": 0.1667,
+                "fieldSize": 24,
+                "officialStatus": "running",
+                "points": 9
+              },
+              "conditions": {
+                "observedAt": "2026-06-20T12:00",
+                "ambientTempC": 20.2,
+                "ambientTempF": 68,
+                "apparentTempC": 18.6,
+                "humidityPct": 55,
+                "windSpeedKph": 19.6,
+                "windSpeedMph": 12,
+                "windGustKph": 42.1,
+                "windGustMph": 26,
+                "windDirectionDeg": 300,
+                "windCardinal": "WNW",
+                "sky": "partly cloudy",
+                "wetDry": "dry",
+                "source": "Open-Meteo Historical Weather API hourly archive",
+                "sourceType": "modeled_reanalysis",
+                "official": false,
+                "confidence": "modeled_medium",
+                "caveat": "Modeled near-track weather for the race hour (Open-Meteo hourly archive), not official series weather or track temperature."
+              },
+              "deltaVsPrior": {
+                "priorSeasonYear": 2025,
+                "priorSessionId": "session_indy_nxt_2025_6453",
+                "priorRaceLabel": "2025",
+                "finishDelta": -12,
+                "gridDelta": -5,
+                "tempDeltaF": -18,
+                "humidityDeltaPct": -12,
+                "windSpeedDeltaMph": -2,
+                "windDirectionFrom": "SW",
+                "windDirectionTo": "WNW",
+                "windSwung": true
+              }
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6754",
+              "seasonYear": 2026,
+              "raceInYearIndex": 2,
+              "raceLabel": "2026 · Race 2",
+              "raceHref": "/races/session_indy_nxt_2026_6754",
+              "eventStartDate": "2026-06-20",
+              "result": {
+                "startPosition": 15,
+                "finishPosition": 10,
+                "gain": 5,
+                "finishPercentile": 0.625,
+                "fieldSize": 24,
+                "officialStatus": "running",
+                "points": 20
+              },
+              "conditions": {
+                "observedAt": "2026-06-21T11:00",
+                "ambientTempC": 21.6,
+                "ambientTempF": 71,
+                "apparentTempC": 21.7,
+                "humidityPct": 54,
+                "windSpeedKph": 9.8,
+                "windSpeedMph": 6,
+                "windGustKph": 24.8,
+                "windGustMph": 15,
+                "windDirectionDeg": 121,
+                "windCardinal": "ESE",
+                "sky": "overcast",
+                "wetDry": "dry",
+                "source": "Open-Meteo Historical Weather API hourly archive",
+                "sourceType": "modeled_reanalysis",
+                "official": false,
+                "confidence": "modeled_medium",
+                "caveat": "Modeled near-track weather for the race hour (Open-Meteo hourly archive), not official series weather or track temperature."
+              },
+              "deltaVsPrior": {
+                "priorSeasonYear": 2026,
+                "priorSessionId": "session_indy_nxt_2026_6762",
+                "priorRaceLabel": "2026 · Race 1",
+                "finishDelta": 11,
+                "gridDelta": 0,
+                "tempDeltaF": 3,
+                "humidityDeltaPct": -1,
+                "windSpeedDeltaMph": -6,
+                "windDirectionFrom": "WNW",
+                "windDirectionTo": "ESE",
+                "windSwung": true
+              }
+            }
+          ],
+          "visitYears": [
+            2024,
+            2025,
+            2026
+          ],
+          "upcoming": null
+        },
+        {
+          "venueId": "track_streets_of_arlington",
+          "trackName": "Streets of Arlington",
+          "trackSlug": "streets-of-arlington",
+          "trackType": "street",
+          "drivingDirection": "counterclockwise",
+          "lengthMi": 2.73,
+          "cornerCount": 14,
+          "geo": {
+            "oriented": false,
+            "northOffsetDeg": null,
+            "note": "Outline traced from an official track map without geographic orientation; wind is honestly omitted on the shape."
+          },
+          "visits": [
+            {
+              "sessionId": "session_indy_nxt_2026_6753",
+              "seasonYear": 2026,
+              "raceInYearIndex": null,
+              "raceLabel": "2026",
+              "raceHref": "/races/session_indy_nxt_2026_6753",
+              "eventStartDate": "2026-03-13",
+              "result": {
+                "startPosition": 23,
+                "finishPosition": 18,
+                "gain": 5,
+                "finishPercentile": 0.2917,
+                "fieldSize": 24,
+                "officialStatus": "running",
+                "points": 12
+              },
+              "conditions": {
+                "observedAt": "2026-03-15T10:00",
+                "ambientTempC": 21.6,
+                "ambientTempF": 71,
+                "apparentTempC": 21.4,
+                "humidityPct": 78,
+                "windSpeedKph": 20.1,
+                "windSpeedMph": 12,
+                "windGustKph": 44.6,
+                "windGustMph": 28,
+                "windDirectionDeg": 189,
+                "windCardinal": "S",
+                "sky": "clear sky",
+                "wetDry": "dry",
+                "source": "Open-Meteo Historical Weather API hourly archive",
+                "sourceType": "modeled_reanalysis",
+                "official": false,
+                "confidence": "modeled_medium",
+                "caveat": "Modeled near-track weather for the race hour (Open-Meteo hourly archive), not official series weather or track temperature."
+              },
+              "deltaVsPrior": null
+            }
+          ],
+          "visitYears": [
+            2026
+          ],
+          "upcoming": null
+        },
+        {
+          "venueId": "track_streets_of_detroit",
+          "trackName": "Streets of Detroit",
+          "trackSlug": "streets-of-detroit",
+          "trackType": "street",
+          "drivingDirection": "counterclockwise",
+          "lengthMi": 1.645,
+          "cornerCount": 9,
+          "geo": {
+            "oriented": false,
+            "northOffsetDeg": null,
+            "note": "Outline traced from an official track map without geographic orientation; wind is honestly omitted on the shape."
+          },
+          "visits": [
+            {
+              "sessionId": "session_indy_nxt_2024_6326",
+              "seasonYear": 2024,
+              "raceInYearIndex": null,
+              "raceLabel": "2024",
+              "raceHref": "/races/session_indy_nxt_2024_6326",
+              "eventStartDate": "2024-05-31",
+              "result": {
+                "startPosition": 11,
+                "finishPosition": 20,
+                "gain": -9,
+                "finishPercentile": 0.0952,
+                "fieldSize": 21,
+                "officialStatus": "contact",
+                "points": 10
+              },
+              "conditions": {
+                "observedAt": "2024-06-02T10:00",
+                "ambientTempC": 19,
+                "ambientTempF": 66,
+                "apparentTempC": 19.4,
+                "humidityPct": 88,
+                "windSpeedKph": 14,
+                "windSpeedMph": 9,
+                "windGustKph": 28.4,
+                "windGustMph": 18,
+                "windDirectionDeg": 226,
+                "windCardinal": "SW",
+                "sky": "light drizzle",
+                "wetDry": "wet",
+                "source": "Open-Meteo Historical Weather API hourly archive",
+                "sourceType": "modeled_reanalysis",
+                "official": false,
+                "confidence": "modeled_medium",
+                "caveat": "Modeled near-track weather for the race hour (Open-Meteo hourly archive), not official series weather or track temperature."
+              },
+              "deltaVsPrior": null
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6455",
+              "seasonYear": 2025,
+              "raceInYearIndex": null,
+              "raceLabel": "2025",
+              "raceHref": "/races/session_indy_nxt_2025_6455",
+              "eventStartDate": "2025-05-30",
+              "result": {
+                "startPosition": 15,
+                "finishPosition": 10,
+                "gain": 5,
+                "finishPercentile": 0.55,
+                "fieldSize": 20,
+                "officialStatus": "running",
+                "points": 20
+              },
+              "conditions": {
+                "observedAt": "2025-06-01T11:00",
+                "ambientTempC": 16,
+                "ambientTempF": 61,
+                "apparentTempC": 13.2,
+                "humidityPct": 34,
+                "windSpeedKph": 12.3,
+                "windSpeedMph": 8,
+                "windGustKph": 33.1,
+                "windGustMph": 21,
+                "windDirectionDeg": 301,
+                "windCardinal": "WNW",
+                "sky": "clear sky",
+                "wetDry": "dry",
+                "source": "Open-Meteo Historical Weather API hourly archive",
+                "sourceType": "modeled_reanalysis",
+                "official": false,
+                "confidence": "modeled_medium",
+                "caveat": "Modeled near-track weather for the race hour (Open-Meteo hourly archive), not official series weather or track temperature."
+              },
+              "deltaVsPrior": {
+                "priorSeasonYear": 2024,
+                "priorSessionId": "session_indy_nxt_2024_6326",
+                "priorRaceLabel": "2024",
+                "finishDelta": 10,
+                "gridDelta": -4,
+                "tempDeltaF": -5,
+                "humidityDeltaPct": -54,
+                "windSpeedDeltaMph": -1,
+                "windDirectionFrom": "SW",
+                "windDirectionTo": "WNW",
+                "windSwung": true
+              }
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6749",
+              "seasonYear": 2026,
+              "raceInYearIndex": null,
+              "raceLabel": "2026",
+              "raceHref": "/races/session_indy_nxt_2026_6749",
+              "eventStartDate": "2026-05-29",
+              "result": {
+                "startPosition": 14,
+                "finishPosition": 8,
+                "gain": 6,
+                "finishPercentile": 0.7083,
+                "fieldSize": 24,
+                "officialStatus": "running",
+                "points": 24
+              },
+              "conditions": {
+                "observedAt": "2026-05-31T11:00",
+                "ambientTempC": 19.3,
+                "ambientTempF": 67,
+                "apparentTempC": 18.4,
+                "humidityPct": 41,
+                "windSpeedKph": 7.2,
+                "windSpeedMph": 4,
+                "windGustKph": 25.9,
+                "windGustMph": 16,
+                "windDirectionDeg": 91,
+                "windCardinal": "E",
+                "sky": "clear sky",
+                "wetDry": "dry",
+                "source": "Open-Meteo Historical Weather API hourly archive",
+                "sourceType": "modeled_reanalysis",
+                "official": false,
+                "confidence": "modeled_medium",
+                "caveat": "Modeled near-track weather for the race hour (Open-Meteo hourly archive), not official series weather or track temperature."
+              },
+              "deltaVsPrior": {
+                "priorSeasonYear": 2025,
+                "priorSessionId": "session_indy_nxt_2025_6455",
+                "priorRaceLabel": "2025",
+                "finishDelta": 2,
+                "gridDelta": 1,
+                "tempDeltaF": 6,
+                "humidityDeltaPct": 7,
+                "windSpeedDeltaMph": -4,
+                "windDirectionFrom": "WNW",
+                "windDirectionTo": "E",
+                "windSwung": true
+              }
+            }
+          ],
+          "visitYears": [
+            2024,
+            2025,
+            2026
+          ],
+          "upcoming": null
+        },
+        {
+          "venueId": "track_streets_of_st_petersburg",
+          "trackName": "Streets of St. Petersburg",
+          "trackSlug": "streets-of-st-petersburg",
+          "trackType": "street",
+          "drivingDirection": "clockwise",
+          "lengthMi": 1.8,
+          "cornerCount": 14,
+          "geo": {
+            "oriented": false,
+            "northOffsetDeg": null,
+            "note": "Outline traced from an official track map without geographic orientation; wind is honestly omitted on the shape."
+          },
+          "visits": [
+            {
+              "sessionId": "session_indy_nxt_2024_6324",
+              "seasonYear": 2024,
+              "raceInYearIndex": null,
+              "raceLabel": "2024",
+              "raceHref": "/races/session_indy_nxt_2024_6324",
+              "eventStartDate": "2024-03-08",
+              "result": {
+                "startPosition": 8,
+                "finishPosition": 19,
+                "gain": -11,
+                "finishPercentile": 0.1429,
+                "fieldSize": 21,
+                "officialStatus": "contact",
+                "points": 11
+              },
+              "conditions": {
+                "observedAt": "2024-03-10T10:00",
+                "ambientTempC": 19.9,
+                "ambientTempF": 68,
+                "apparentTempC": 18.6,
+                "humidityPct": 80,
+                "windSpeedKph": 24.2,
+                "windSpeedMph": 15,
+                "windGustKph": 44.3,
+                "windGustMph": 28,
+                "windDirectionDeg": 342,
+                "windCardinal": "NNW",
+                "sky": "mainly clear",
+                "wetDry": "dry",
+                "source": "Open-Meteo Historical Weather API hourly archive",
+                "sourceType": "modeled_reanalysis",
+                "official": false,
+                "confidence": "modeled_medium",
+                "caveat": "Modeled near-track weather for the race hour (Open-Meteo hourly archive), not official series weather or track temperature."
+              },
+              "deltaVsPrior": null
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6446",
+              "seasonYear": 2025,
+              "raceInYearIndex": null,
+              "raceLabel": "2025",
+              "raceHref": "/races/session_indy_nxt_2025_6446",
+              "eventStartDate": "2025-02-28",
+              "result": {
+                "startPosition": 20,
+                "finishPosition": 13,
+                "gain": 7,
+                "finishPercentile": 0.4286,
+                "fieldSize": 21,
+                "officialStatus": "running",
+                "points": 17
+              },
+              "conditions": {
+                "observedAt": "2025-03-02T10:00",
+                "ambientTempC": 18.7,
+                "ambientTempF": 66,
+                "apparentTempC": 18.9,
+                "humidityPct": 83,
+                "windSpeedKph": 12.3,
+                "windSpeedMph": 8,
+                "windGustKph": 26.3,
+                "windGustMph": 16,
+                "windDirectionDeg": 339,
+                "windCardinal": "NNW",
+                "sky": "clear sky",
+                "wetDry": "dry",
+                "source": "Open-Meteo Historical Weather API hourly archive",
+                "sourceType": "modeled_reanalysis",
+                "official": false,
+                "confidence": "modeled_medium",
+                "caveat": "Modeled near-track weather for the race hour (Open-Meteo hourly archive), not official series weather or track temperature."
+              },
+              "deltaVsPrior": {
+                "priorSeasonYear": 2024,
+                "priorSessionId": "session_indy_nxt_2024_6324",
+                "priorRaceLabel": "2024",
+                "finishDelta": 6,
+                "gridDelta": -12,
+                "tempDeltaF": -2,
+                "humidityDeltaPct": 3,
+                "windSpeedDeltaMph": -7,
+                "windDirectionFrom": "NNW",
+                "windDirectionTo": "NNW",
+                "windSwung": false
+              }
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6751",
+              "seasonYear": 2026,
+              "raceInYearIndex": null,
+              "raceLabel": "2026",
+              "raceHref": "/races/session_indy_nxt_2026_6751",
+              "eventStartDate": "2026-02-27",
+              "result": {
+                "startPosition": 19,
+                "finishPosition": 18,
+                "gain": 1,
+                "finishPercentile": 0.2917,
+                "fieldSize": 24,
+                "officialStatus": "running",
+                "points": 12
+              },
+              "conditions": {
+                "observedAt": "2026-03-01T10:00",
+                "ambientTempC": 17.6,
+                "ambientTempF": 64,
+                "apparentTempC": 16.8,
+                "humidityPct": 89,
+                "windSpeedKph": 19,
+                "windSpeedMph": 12,
+                "windGustKph": 38.2,
+                "windGustMph": 24,
+                "windDirectionDeg": 47,
+                "windCardinal": "NE",
+                "sky": "overcast",
+                "wetDry": "dry",
+                "source": "Open-Meteo Historical Weather API hourly archive",
+                "sourceType": "modeled_reanalysis",
+                "official": false,
+                "confidence": "modeled_medium",
+                "caveat": "Modeled near-track weather for the race hour (Open-Meteo hourly archive), not official series weather or track temperature."
+              },
+              "deltaVsPrior": {
+                "priorSeasonYear": 2025,
+                "priorSessionId": "session_indy_nxt_2025_6446",
+                "priorRaceLabel": "2025",
+                "finishDelta": -5,
+                "gridDelta": 1,
+                "tempDeltaF": -2,
+                "humidityDeltaPct": 6,
+                "windSpeedDeltaMph": 4,
+                "windDirectionFrom": "NNW",
+                "windDirectionTo": "NE",
+                "windSwung": true
+              }
+            }
+          ],
+          "visitYears": [
+            2024,
+            2025,
+            2026
+          ],
+          "upcoming": null
+        },
+        {
+          "venueId": "track_the_milwaukee_mile",
+          "trackName": "The Milwaukee Mile",
+          "trackSlug": "the-milwaukee-mile",
+          "trackType": "oval",
+          "drivingDirection": "counterclockwise",
+          "lengthMi": 1.015,
+          "cornerCount": 4,
+          "geo": {
+            "oriented": true,
+            "northOffsetDeg": 270.95,
+            "note": "Outline traced from OpenStreetMap geometry; the wind bearing can be drawn to true north on the shape."
+          },
+          "visits": [
+            {
+              "sessionId": "session_indy_nxt_2024_6322",
+              "seasonYear": 2024,
+              "raceInYearIndex": null,
+              "raceLabel": "2024",
+              "raceHref": "/races/session_indy_nxt_2024_6322",
+              "eventStartDate": "2024-08-30",
+              "result": {
+                "startPosition": 7,
+                "finishPosition": 4,
+                "gain": 3,
+                "finishPercentile": 0.8333,
+                "fieldSize": 18,
+                "officialStatus": "running",
+                "points": 32
+              },
+              "conditions": {
+                "observedAt": "2024-08-31T15:00",
+                "ambientTempC": 28.5,
+                "ambientTempF": 83,
+                "apparentTempC": 29,
+                "humidityPct": 41,
+                "windSpeedKph": 13.4,
+                "windSpeedMph": 8,
+                "windGustKph": 29.5,
+                "windGustMph": 18,
+                "windDirectionDeg": 264,
+                "windCardinal": "W",
+                "sky": "clear sky",
+                "wetDry": "dry",
+                "source": "Open-Meteo Historical Weather API hourly archive",
+                "sourceType": "modeled_reanalysis",
+                "official": false,
+                "confidence": "modeled_medium",
+                "caveat": "Modeled near-track weather for the race hour (Open-Meteo hourly archive), not official series weather or track temperature."
+              },
+              "deltaVsPrior": null
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6448",
+              "seasonYear": 2025,
+              "raceInYearIndex": null,
+              "raceLabel": "2025",
+              "raceHref": "/races/session_indy_nxt_2025_6448",
+              "eventStartDate": "2025-08-23",
+              "result": {
+                "startPosition": 6,
+                "finishPosition": 5,
+                "gain": 1,
+                "finishPercentile": 0.7778,
+                "fieldSize": 18,
+                "officialStatus": "running",
+                "points": 30
+              },
+              "conditions": {
+                "observedAt": "2025-08-24T11:00",
+                "ambientTempC": 19.6,
+                "ambientTempF": 67,
+                "apparentTempC": 17.7,
+                "humidityPct": 58,
+                "windSpeedKph": 18.2,
+                "windSpeedMph": 11,
+                "windGustKph": 41.4,
+                "windGustMph": 26,
+                "windDirectionDeg": 293,
+                "windCardinal": "WNW",
+                "sky": "mainly clear",
+                "wetDry": "dry",
+                "source": "Open-Meteo Historical Weather API hourly archive",
+                "sourceType": "modeled_reanalysis",
+                "official": false,
+                "confidence": "modeled_medium",
+                "caveat": "Modeled near-track weather for the race hour (Open-Meteo hourly archive), not official series weather or track temperature."
+              },
+              "deltaVsPrior": {
+                "priorSeasonYear": 2024,
+                "priorSessionId": "session_indy_nxt_2024_6322",
+                "priorRaceLabel": "2024",
+                "finishDelta": -1,
+                "gridDelta": 1,
+                "tempDeltaF": -16,
+                "humidityDeltaPct": 17,
+                "windSpeedDeltaMph": 3,
+                "windDirectionFrom": "W",
+                "windDirectionTo": "WNW",
+                "windSwung": false
+              }
+            }
+          ],
+          "visitYears": [
+            2024,
+            2025
+          ],
+          "upcoming": null
+        },
+        {
+          "venueId": "track_weathertech_raceway_laguna_seca",
+          "trackName": "WeatherTech Raceway Laguna Seca",
+          "trackSlug": "weathertech-raceway-laguna-seca",
+          "trackType": "road",
+          "drivingDirection": "counterclockwise",
+          "lengthMi": 2.238,
+          "cornerCount": 11,
+          "geo": {
+            "oriented": true,
+            "northOffsetDeg": 267.4,
+            "note": "Outline traced from OpenStreetMap geometry; the wind bearing can be drawn to true north on the shape."
+          },
+          "visits": [
+            {
+              "sessionId": "session_indy_nxt_2024_6317",
+              "seasonYear": 2024,
+              "raceInYearIndex": 1,
+              "raceLabel": "2024 · Race 1",
+              "raceHref": "/races/session_indy_nxt_2024_6317",
+              "eventStartDate": "2024-06-21",
+              "result": {
+                "startPosition": 9,
+                "finishPosition": 16,
+                "gain": -7,
+                "finishPercentile": 0.25,
+                "fieldSize": 20,
+                "officialStatus": "running",
+                "points": 14
+              },
+              "conditions": {
+                "observedAt": "2024-06-22T12:00",
+                "ambientTempC": 22.3,
+                "ambientTempF": 72,
+                "apparentTempC": 23.2,
+                "humidityPct": 52,
+                "windSpeedKph": 11.2,
+                "windSpeedMph": 7,
+                "windGustKph": 29.5,
+                "windGustMph": 18,
+                "windDirectionDeg": 291,
+                "windCardinal": "WNW",
+                "sky": "mainly clear",
+                "wetDry": "dry",
+                "source": "Open-Meteo Historical Weather API hourly archive",
+                "sourceType": "modeled_reanalysis",
+                "official": false,
+                "confidence": "modeled_medium",
+                "caveat": "Modeled near-track weather for the race hour (Open-Meteo hourly archive), not official series weather or track temperature."
+              },
+              "deltaVsPrior": null
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6327",
+              "seasonYear": 2024,
+              "raceInYearIndex": 2,
+              "raceLabel": "2024 · Race 2",
+              "raceHref": "/races/session_indy_nxt_2024_6327",
+              "eventStartDate": "2024-06-22",
+              "result": {
+                "startPosition": 5,
+                "finishPosition": 3,
+                "gain": 2,
+                "finishPercentile": 0.9,
+                "fieldSize": 20,
+                "officialStatus": "running",
+                "points": 35
+              },
+              "conditions": {
+                "observedAt": "2024-06-23T13:00",
+                "ambientTempC": 20.7,
+                "ambientTempF": 69,
+                "apparentTempC": 21.3,
+                "humidityPct": 56,
+                "windSpeedKph": 12.9,
+                "windSpeedMph": 8,
+                "windGustKph": 33.1,
+                "windGustMph": 21,
+                "windDirectionDeg": 293,
+                "windCardinal": "WNW",
+                "sky": "clear sky",
+                "wetDry": "dry",
+                "source": "Open-Meteo Historical Weather API hourly archive",
+                "sourceType": "modeled_reanalysis",
+                "official": false,
+                "confidence": "modeled_medium",
+                "caveat": "Modeled near-track weather for the race hour (Open-Meteo hourly archive), not official series weather or track temperature."
+              },
+              "deltaVsPrior": {
+                "priorSeasonYear": 2024,
+                "priorSessionId": "session_indy_nxt_2024_6317",
+                "priorRaceLabel": "2024 · Race 1",
+                "finishDelta": 13,
+                "gridDelta": 4,
+                "tempDeltaF": -3,
+                "humidityDeltaPct": 4,
+                "windSpeedDeltaMph": 1,
+                "windDirectionFrom": "WNW",
+                "windDirectionTo": "WNW",
+                "windSwung": false
+              }
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6442",
+              "seasonYear": 2025,
+              "raceInYearIndex": 1,
+              "raceLabel": "2025 · Race 1",
+              "raceHref": "/races/session_indy_nxt_2025_6442",
+              "eventStartDate": "2025-07-25",
+              "result": {
+                "startPosition": 14,
+                "finishPosition": 10,
+                "gain": 4,
+                "finishPercentile": 0.5263,
+                "fieldSize": 19,
+                "officialStatus": "running",
+                "points": 20
+              },
+              "conditions": {
+                "observedAt": "2025-07-26T14:00",
+                "ambientTempC": 17.5,
+                "ambientTempF": 64,
+                "apparentTempC": 16.9,
+                "humidityPct": 65,
+                "windSpeedKph": 15.9,
+                "windSpeedMph": 10,
+                "windGustKph": 38.9,
+                "windGustMph": 24,
+                "windDirectionDeg": 276,
+                "windCardinal": "W",
+                "sky": "overcast",
+                "wetDry": "dry",
+                "source": "Open-Meteo Historical Weather API hourly archive",
+                "sourceType": "modeled_reanalysis",
+                "official": false,
+                "confidence": "modeled_medium",
+                "caveat": "Modeled near-track weather for the race hour (Open-Meteo hourly archive), not official series weather or track temperature."
+              },
+              "deltaVsPrior": {
+                "priorSeasonYear": 2024,
+                "priorSessionId": "session_indy_nxt_2024_6327",
+                "priorRaceLabel": "2024 · Race 2",
+                "finishDelta": -7,
+                "gridDelta": -9,
+                "tempDeltaF": -5,
+                "humidityDeltaPct": 9,
+                "windSpeedDeltaMph": 2,
+                "windDirectionFrom": "WNW",
+                "windDirectionTo": "W",
+                "windSwung": false
+              }
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6450",
+              "seasonYear": 2025,
+              "raceInYearIndex": 2,
+              "raceLabel": "2025 · Race 2",
+              "raceHref": "/races/session_indy_nxt_2025_6450",
+              "eventStartDate": "2025-07-26",
+              "result": {
+                "startPosition": 12,
+                "finishPosition": 19,
+                "gain": -7,
+                "finishPercentile": 0.0526,
+                "fieldSize": 19,
+                "officialStatus": "contact",
+                "points": 11
+              },
+              "conditions": {
+                "observedAt": "2025-07-27T16:00",
+                "ambientTempC": 17.5,
+                "ambientTempF": 64,
+                "apparentTempC": 16.7,
+                "humidityPct": 65,
+                "windSpeedKph": 16.3,
+                "windSpeedMph": 10,
+                "windGustKph": 39.6,
+                "windGustMph": 25,
+                "windDirectionDeg": 275,
+                "windCardinal": "W",
+                "sky": "mainly clear",
+                "wetDry": "dry",
+                "source": "Open-Meteo Historical Weather API hourly archive",
+                "sourceType": "modeled_reanalysis",
+                "official": false,
+                "confidence": "modeled_medium",
+                "caveat": "Modeled near-track weather for the race hour (Open-Meteo hourly archive), not official series weather or track temperature."
+              },
+              "deltaVsPrior": {
+                "priorSeasonYear": 2025,
+                "priorSessionId": "session_indy_nxt_2025_6442",
+                "priorRaceLabel": "2025 · Race 1",
+                "finishDelta": -9,
+                "gridDelta": 2,
+                "tempDeltaF": 0,
+                "humidityDeltaPct": 0,
+                "windSpeedDeltaMph": 0,
+                "windDirectionFrom": "W",
+                "windDirectionTo": "W",
+                "windSwung": false
+              }
+            }
+          ],
+          "visitYears": [
+            2024,
+            2025
+          ],
+          "upcoming": null
+        },
+        {
+          "venueId": "track_world_wide_technology_raceway",
+          "trackName": "World Wide Technology Raceway",
+          "trackSlug": "world-wide-technology-raceway",
+          "trackType": "oval",
+          "drivingDirection": "counterclockwise",
+          "lengthMi": 1.25,
+          "cornerCount": 4,
+          "geo": {
+            "oriented": true,
+            "northOffsetDeg": 104.66,
+            "note": "Outline traced from OpenStreetMap geometry; the wind bearing can be drawn to true north on the shape."
+          },
+          "visits": [
+            {
+              "sessionId": "session_indy_nxt_2024_6320",
+              "seasonYear": 2024,
+              "raceInYearIndex": null,
+              "raceLabel": "2024",
+              "raceHref": "/races/session_indy_nxt_2024_6320",
+              "eventStartDate": "2024-08-16",
+              "result": {
+                "startPosition": 13,
+                "finishPosition": 6,
+                "gain": 7,
+                "finishPercentile": 0.7222,
+                "fieldSize": 18,
+                "officialStatus": "running",
+                "points": 28
+              },
+              "conditions": {
+                "observedAt": "2024-08-17T15:00",
+                "ambientTempC": 30.9,
+                "ambientTempF": 88,
+                "apparentTempC": 31.7,
+                "humidityPct": 46,
+                "windSpeedKph": 22.5,
+                "windSpeedMph": 14,
+                "windGustKph": 48.2,
+                "windGustMph": 30,
+                "windDirectionDeg": 305,
+                "windCardinal": "NW",
+                "sky": "clear sky",
+                "wetDry": "dry",
+                "source": "Open-Meteo Historical Weather API hourly archive",
+                "sourceType": "modeled_reanalysis",
+                "official": false,
+                "confidence": "modeled_medium",
+                "caveat": "Modeled near-track weather for the race hour (Open-Meteo hourly archive), not official series weather or track temperature."
+              },
+              "deltaVsPrior": null
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6454",
+              "seasonYear": 2025,
+              "raceInYearIndex": null,
+              "raceLabel": "2025",
+              "raceHref": "/races/session_indy_nxt_2025_6454",
+              "eventStartDate": "2025-06-14",
+              "result": {
+                "startPosition": 16,
+                "finishPosition": 14,
+                "gain": 2,
+                "finishPercentile": 0.3158,
+                "fieldSize": 19,
+                "officialStatus": "running",
+                "points": 16
+              },
+              "conditions": {
+                "observedAt": "2025-06-15T16:00",
+                "ambientTempC": 27.2,
+                "ambientTempF": 81,
+                "apparentTempC": 29.7,
+                "humidityPct": 63,
+                "windSpeedKph": 9.5,
+                "windSpeedMph": 6,
+                "windGustKph": 23.4,
+                "windGustMph": 15,
+                "windDirectionDeg": 22,
+                "windCardinal": "NNE",
+                "sky": "overcast",
+                "wetDry": "dry",
+                "source": "Open-Meteo Historical Weather API hourly archive",
+                "sourceType": "modeled_reanalysis",
+                "official": false,
+                "confidence": "modeled_medium",
+                "caveat": "Modeled near-track weather for the race hour (Open-Meteo hourly archive), not official series weather or track temperature."
+              },
+              "deltaVsPrior": {
+                "priorSeasonYear": 2024,
+                "priorSessionId": "session_indy_nxt_2024_6320",
+                "priorRaceLabel": "2024",
+                "finishDelta": -8,
+                "gridDelta": -3,
+                "tempDeltaF": -7,
+                "humidityDeltaPct": 17,
+                "windSpeedDeltaMph": -8,
+                "windDirectionFrom": "NW",
+                "windDirectionTo": "NNE",
+                "windSwung": true
+              }
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6763",
+              "seasonYear": 2026,
+              "raceInYearIndex": null,
+              "raceLabel": "2026",
+              "raceHref": "/races/session_indy_nxt_2026_6763",
+              "eventStartDate": "2026-06-06",
+              "result": {
+                "startPosition": 12,
+                "finishPosition": 23,
+                "gain": -11,
+                "finishPercentile": 0.0833,
+                "fieldSize": 24,
+                "officialStatus": "mechanical",
+                "points": 7
+              },
+              "conditions": {
+                "observedAt": "2026-06-07T17:00",
+                "ambientTempC": 30.1,
+                "ambientTempF": 86,
+                "apparentTempC": 32.4,
+                "humidityPct": 54,
+                "windSpeedKph": 10,
+                "windSpeedMph": 6,
+                "windGustKph": 32.4,
+                "windGustMph": 20,
+                "windDirectionDeg": 157,
+                "windCardinal": "SSE",
+                "sky": "light drizzle",
+                "wetDry": "wet",
+                "source": "Open-Meteo Historical Weather API hourly archive",
+                "sourceType": "modeled_reanalysis",
+                "official": false,
+                "confidence": "modeled_medium",
+                "caveat": "Modeled near-track weather for the race hour (Open-Meteo hourly archive), not official series weather or track temperature."
+              },
+              "deltaVsPrior": {
+                "priorSeasonYear": 2025,
+                "priorSessionId": "session_indy_nxt_2025_6454",
+                "priorRaceLabel": "2025",
+                "finishDelta": -9,
+                "gridDelta": 4,
+                "tempDeltaF": 5,
+                "humidityDeltaPct": -9,
+                "windSpeedDeltaMph": 0,
+                "windDirectionFrom": "NNE",
+                "windDirectionTo": "SSE",
+                "windSwung": true
+              }
+            }
+          ],
+          "visitYears": [
+            2024,
+            2025,
+            2026
+          ],
+          "upcoming": null
+        }
+      ],
+      "venueCount": 13,
+      "caveats": [
+        "Conditions are modeled near-track weather joined to the race hour (Open-Meteo hourly archive) — never official INDY NXT session weather or track temperature.",
+        "Deltas compare each visit to Bryce’s previous INDY NXT race at the same venue; a weather delta is a fact about the day, not a verdict on the drive.",
+        "This weekend’s forecast and current conditions come from the runtime weather routes, not this static package."
+      ],
+      "sourceRefs": [
+        {
+          "key": "canonicalDataset",
+          "path": "data/career/career.dataset.json",
+          "note": "Official INDY NXT results (grid, finish, field size, status) and per-race modeled weather observations, by venue and year."
+        },
+        {
+          "key": "trackOutlineIndex",
+          "path": "src/assets/tracks/index.ts",
+          "note": "OpenStreetMap-traced outlines (ODbL) carry the north offset used to draw the wind bearing on real-geo venues; street circuits omit it."
+        },
+        {
+          "key": "api-weather-upcoming",
+          "path": "/api/weather/upcoming",
+          "note": "Runtime NWS current conditions + hourly forecast for the race-week venue (near-track, not official)."
         }
       ]
     },

@@ -34,6 +34,11 @@ export interface TrackOutline {
   pitPath: string | null;
   startFinish: { x: number; y: number; angleDeg: number } | null;
   drivingDirection: 'clockwise' | 'counterclockwise' | null;
+  /** SVG angle of true north, clockwise from straight up (SVG −y). Present
+   *  only for real-geo (OSM) tracings; a compass bearing B draws on the shape
+   *  at angleFromUp = B + northOffsetDeg. Image-traced street circuits omit it
+   *  (no geographic orientation), so wind-on-shape must render nothing there. */
+  northOffsetDeg?: number;
   cornerArcs: TrackCornerArc[];
   source: {
     provider: string;

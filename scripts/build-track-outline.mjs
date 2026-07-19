@@ -95,11 +95,18 @@ const rotateBy = (angle) => ({ x, y }) => ({
   x: mainCenter.x + (x - mainCenter.x) * Math.cos(angle) - (y - mainCenter.y) * Math.sin(angle),
   y: mainCenter.y + (x - mainCenter.x) * Math.sin(angle) + (y - mainCenter.y) * Math.cos(angle)
 });
+/* Track the total rotation applied so the SVG can be re-registered to true
+ * north later (the wind bearing needs it). The projection above is north-up
+ * (east = +x, north = −y); the fit step below is a positive uniform scale +
+ * translate, so it preserves direction. North therefore ends up rotated by
+ * exactly this angle in SVG space. */
+let totalRotation = rotation;
 main = main.map(rotateBy(rotation));
 pit = pit.map(rotateBy(rotation));
 if (pit.length > 0 && main[rawSfIndex].y < mainCenter.y) {
   main = main.map(rotateBy(Math.PI));
   pit = pit.map(rotateBy(Math.PI));
+  totalRotation += Math.PI;
 }
 
 /* ---------- fit into a 1000-wide viewBox with padding ---------- */
@@ -183,6 +190,17 @@ const arcs = runs
     };
   });
 
+/* ---------- geographic orientation: where true north points in the SVG ----------
+ * northOffsetDeg is the SVG angle of true north, measured clockwise from
+ * straight up (SVG −y). A compass bearing B (0°=N, 90°=E) draws on the shape
+ * at angleFromUp = B + northOffsetDeg. This is only meaningful for real-geo
+ * (OSM) tracings; image-traced street circuits omit it. */
+const normalizeDeg = (deg) => {
+  const wrapped = deg % 360;
+  return wrapped < 0 ? wrapped + 360 : wrapped;
+};
+const northOffsetDeg = Math.round(normalizeDeg((totalRotation * 180) / Math.PI) * 100) / 100;
+
 const asset = {
   slug,
   name: trackName,
@@ -192,6 +210,7 @@ const asset = {
   pitPath: pit.length > 0 ? toPath(pit, false) : null,
   startFinish,
   drivingDirection: totalTurn < 0 ? 'counterclockwise' : 'clockwise',
+  northOffsetDeg,
   cornerArcs: arcs,
   source: {
     provider: 'OpenStreetMap',

@@ -43,7 +43,7 @@ const percentValue = (value) => {
   return Number.isFinite(parsed) ? Math.round(parsed * 1000) / 10 : null;
 };
 
-const requiredScreens = ['upcomingPrep', 'liveCompanionFixtures', 'raceDebrief', 'careerLab', 'sourceOps'];
+const requiredScreens = ['upcomingPrep', 'liveCompanionFixtures', 'raceDebrief', 'careerLab', 'venueDossier', 'sourceOps'];
 const sourceInventory = dataPackage.sourceInventory ?? {};
 
 if (Object.keys(sourceInventory).length === 0) {
@@ -1231,6 +1231,110 @@ for (const [gapId, expectedGap] of expectedGapById) {
   if (row.description !== expectedGap.description) {
     fail(`Source Ops gapBoundary row ${gapId} description does not match ingestion summary.`);
   }
+}
+
+/* ---------- venue dossier: this place, other years ---------- */
+
+const venueDossier = dataPackage.screens.venueDossier;
+if (venueDossier?.schemaVersion !== 'brycecast.venueDossier.v1') {
+  fail('venueDossier must carry the brycecast.venueDossier.v1 schema.');
+}
+if (!Array.isArray(venueDossier.venues) || venueDossier.venues.length < 1) {
+  fail('venueDossier must carry at least one venue.');
+}
+if (venueDossier.venueCount !== venueDossier.venues.length) {
+  fail('venueDossier.venueCount must match the venues array length.');
+}
+
+/* The dossier's INDY NXT venue set must equal the venues where Bryce ran an
+ * INDY NXT race — no invented venue, no dropped one. */
+const dossierBryceVenueTracks = new Set();
+{
+  const indexes = canonicalIndexes(canonicalDataset);
+  for (const sessionId of expectedRaceDebriefSessionIds) {
+    const session = indexes.sessions.get(sessionId);
+    const event = session ? indexes.events.get(session.eventId) : null;
+    if (event?.trackId) dossierBryceVenueTracks.add(event.trackId);
+  }
+}
+assertSetEqual(
+  new Set(venueDossier.venues.map((venue) => venue.venueId)),
+  dossierBryceVenueTracks,
+  'venueDossier venue set (Bryce INDY NXT race venues)'
+);
+
+const dossierWetDry = new Set(['dry', 'wet', 'damp', 'drying', null, undefined]);
+let dossierOrientedVenues = 0;
+let dossierWeatherVisits = 0;
+for (const venue of venueDossier.venues) {
+  if (!venue.trackName || !venue.venueId) {
+    fail('Every venueDossier venue needs a venueId and trackName.');
+  }
+  if (typeof venue.geo?.oriented !== 'boolean') {
+    fail(`venueDossier ${venue.trackName} must declare geo.oriented.`);
+  }
+  if (venue.geo.oriented) {
+    dossierOrientedVenues += 1;
+    if (typeof venue.geo.northOffsetDeg !== 'number' || venue.geo.northOffsetDeg < 0 || venue.geo.northOffsetDeg >= 360) {
+      fail(`venueDossier ${venue.trackName} is oriented but carries an invalid northOffsetDeg.`);
+    }
+    if (!venue.trackSlug) {
+      fail(`venueDossier ${venue.trackName} is oriented but has no trackSlug.`);
+    }
+  } else if (venue.geo.northOffsetDeg !== null) {
+    fail(`venueDossier ${venue.trackName} is not oriented and must carry a null northOffsetDeg (never a guessed bearing).`);
+  }
+  if (!Array.isArray(venue.visits) || venue.visits.length < 1) {
+    fail(`venueDossier ${venue.trackName} must carry at least one visit.`);
+  }
+  const visitYears = venue.visits.map((visit) => visit.seasonYear);
+  for (let index = 1; index < venue.visits.length; index += 1) {
+    if (String(venue.visits[index - 1].eventStartDate ?? '') > String(venue.visits[index].eventStartDate ?? '')) {
+      fail(`venueDossier ${venue.trackName} visits must be chronological.`);
+    }
+  }
+  for (const visit of venue.visits) {
+    if (!visit.sessionId || !expectedRaceDebriefSessionIds.has(visit.sessionId)) {
+      fail(`venueDossier ${venue.trackName} visit references an unknown INDY NXT session ${visit.sessionId}.`);
+    }
+    if (visit.raceHref !== `/races/${visit.sessionId}`) {
+      fail(`venueDossier ${venue.trackName} visit raceHref must click through to its race page.`);
+    }
+    if (visit.conditions) {
+      dossierWeatherVisits += 1;
+      if (visit.conditions.official !== false) {
+        fail('venueDossier conditions must never be marked official (weather is near-track, modeled).');
+      }
+      if (!dossierWetDry.has(visit.conditions.wetDry ?? null)) {
+        fail(`venueDossier ${venue.trackName} visit carries an unexpected wetDry value.`);
+      }
+      const dirDeg = visit.conditions.windDirectionDeg;
+      if (dirDeg !== null && (typeof dirDeg !== 'number' || dirDeg < 0 || dirDeg >= 360)) {
+        fail(`venueDossier ${venue.trackName} visit carries an invalid windDirectionDeg.`);
+      }
+    }
+    if (visit.deltaVsPrior && !venue.visits.some((candidate) => candidate.sessionId === visit.deltaVsPrior.priorSessionId)) {
+      fail(`venueDossier ${venue.trackName} delta references a prior session outside the venue.`);
+    }
+  }
+  if (JSON.stringify(venue.visitYears) !== JSON.stringify([...new Set(visitYears)].sort((a, b) => a - b))) {
+    fail(`venueDossier ${venue.trackName} visitYears must be the sorted unique set of visit seasons.`);
+  }
+  if (venue.upcoming) {
+    if (!Array.isArray(venue.upcoming.scheduledSessions) || venue.upcoming.scheduledSessions.length < 1) {
+      fail(`venueDossier ${venue.trackName} upcoming block must carry scheduled sessions.`);
+    }
+  }
+}
+if (dossierOrientedVenues < 1) {
+  fail('venueDossier must orient at least one OSM-traced venue for wind-on-shape.');
+}
+if (dossierWeatherVisits < 1) {
+  fail('venueDossier must join near-track conditions to at least one visit.');
+}
+const dossierUpcomingCount = venueDossier.venues.filter((venue) => venue.upcoming).length;
+if (dossierUpcomingCount > 1) {
+  fail('venueDossier must mark at most one upcoming race-week venue.');
 }
 
 if (dataPackage.screens.sourceOps.predictiveRaceIntelligence?.contextPackManifestPath !== sourceInventory.predictiveContextPackManifest.path) {
