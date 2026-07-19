@@ -178,7 +178,7 @@
   "eventId": "event_indy_nxt_2026_5542",
   "eventName": "Grand Prix of Monterey Race 1",
   "eventStartDate": "2026-09-05",
-  "generatedAt": "2026-07-19T02:52:03Z",
+  "generatedAt": "2026-07-19T05:29:25Z",
   "id": "upcoming_event_indy_nxt_2026_5542_grand_prix_of_monterey_race_1",
   "predictionBand": {
     "calibrationState": "not_calibrated_for_point_probability",
@@ -244,7 +244,7 @@
       "bytes": 8911,
       "path": "analysis/predictive-race-intelligence/output/model_scorecard.json",
       "role": "prediction validation",
-      "sha256": "134eeb1cc099fc97f524caaec90604dfcafef7d2510369fdbb6c3446d90c348f"
+      "sha256": "7385159824ee0c8968e6b728a832f2237c8aa817c08e36f78c6bc57bfa956e36"
     }
   ],
   "top10Path": [

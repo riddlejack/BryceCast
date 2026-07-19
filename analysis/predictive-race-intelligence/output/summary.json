@@ -7,13 +7,13 @@
     "analysis/predictive-race-intelligence/output/charts/career_track_type_priors.svg",
     "analysis/predictive-race-intelligence/output/charts/upcoming_track_indy_nxt_history.svg"
   ],
-  "generatedAt": "2026-07-19T02:52:08Z",
+  "generatedAt": "2026-07-19T05:29:31Z",
   "indyNxtRaceRows": 40,
   "inventoryItems": 76,
   "liveRaceDayPacks": 1,
   "modelRows": 14,
   "raceDebriefPacks": 40,
-  "repoHead": "b08b563",
+  "repoHead": "5a54f08",
   "schemaVersion": "brycecast.predictiveRaceIntelligence.summary.v1",
   "sourceHash": "900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681",
   "upcomingEventPacks": 5,
@@ -81,10 +81,10 @@
         "sha256": "007e59ee5f46298ec7d5d5ece4623092c2371749c0e2a674c951fc3f1418397e"
       },
       {
-        "bytes": 85577,
+        "bytes": 85920,
         "path": "analysis/indy-nxt-discovery/deep_indy_nxt_analytics.py",
         "role": "upstream analysis script refreshed before predictive build",
-        "sha256": "0d45d8243d41d32513883ddc7906987fb1a2070e6e3364c9d9ccb69a51a0c145"
+        "sha256": "762b88556ecd765957673df8fd323ff04188d77d1dcf1a0e484fb8d12317c0d7"
       },
       {
         "bytes": 18039,

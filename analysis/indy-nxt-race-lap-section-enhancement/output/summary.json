@@ -21,7 +21,7 @@
     "genuineGapSessions": 28,
     "note": "The derived remainder (lapTotal minus racing-line sections) is shipped only for sessions whose racing sections leave a genuine untimed stretch (>2% of the lap). Iowa and Milwaukee tile to 0.00% \u2014 their SF/FS frontstretch sections are racing line (rescued by the corrected is_pit_line rule) and render as measured spans, so no derived treatment applies there."
   },
-  "generatedAt": "2026-07-19T02:52:23Z",
+  "generatedAt": "2026-07-19T05:29:47Z",
   "ok": true,
   "publicPointPrediction": false,
   "sectionSourceStateCounts": {
