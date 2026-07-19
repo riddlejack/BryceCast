@@ -41,9 +41,18 @@ export const positiveGapSeconds = (value: unknown): number | null => {
 };
 
 /** Stable for a session even while rank changes. The compact API exposes the
- * Race Control DriverID as driverId; car number is the guarded fallback. */
-export const stableDriverId = (row: LiveMotionRow): string =>
-  String(row.driverId ?? row.DriverID ?? row.no ?? row.name ?? '').trim();
+ * Race Control DriverID as driverId; car number is the guarded fallback. The
+ * RaceTools lake feeds carry an EMPTY driverId for every rival (only Bryce's is
+ * joined in), so the fallback must trip on an empty/whitespace string — not just
+ * null/undefined — or every rival collapses to '' and is dropped from the field.
+ * A car number of '0' is a real identity and must survive. */
+export const stableDriverId = (row: LiveMotionRow): string => {
+  for (const candidate of [row.driverId, row.DriverID, row.no, row.name]) {
+    const text = String(candidate ?? '').trim();
+    if (text) return text;
+  }
+  return '';
+};
 
 export const livePosition = (row: LiveMotionRow): number | null =>
   numberOrNull(row.liveRank) ?? numberOrNull(row.rank);

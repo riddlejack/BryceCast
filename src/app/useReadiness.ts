@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { uiDataPackage, type UiLiveFixture } from '../data/uiDataPackage';
 import { useRouter } from './router';
 
@@ -11,6 +11,11 @@ export interface ReadinessStatus {
   fixtureMode: boolean;
   error: string | null;
   checkedAt: number | null;
+  /** Forces an immediate poll, cancelling the scheduled one. A cold pre-race
+   *  page sits on a 15s pre_session cadence (60s after a failed fetch); when a
+   *  replay engages server-side in ~30ms the page must not wait out that gap on
+   *  the cue card, so the replay hook nudges an immediate refetch. */
+  refresh: () => void;
 }
 
 /** Poll cadence per product contract: 1s live, gentle otherwise, backoff on failure. */
@@ -35,9 +40,10 @@ export const useReadiness = (): ReadinessStatus => {
   const fixtureState = route.search.get('fixture');
   const fixtureVariant = route.search.get('variant') ?? 'base';
 
-  const [status, setStatus] = useState<ReadinessStatus>({ payload: null, fixtureMode: false, error: null, checkedAt: null });
+  const [status, setStatus] = useState<ReadinessStatus>({ payload: null, fixtureMode: false, error: null, checkedAt: null, refresh: () => {} });
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const failuresRef = useRef(0);
+  const nudgeRef = useRef<() => void>(() => {});
 
   useEffect(() => {
     if (fixtureState) {
@@ -45,7 +51,8 @@ export const useReadiness = (): ReadinessStatus => {
         uiDataPackage.screens.liveCompanionFixtures.fixtures.find(
           (candidate) => candidate.state === fixtureState && (candidate.variant ?? 'base') === fixtureVariant
         ) ?? null;
-      setStatus({ payload: fixture, fixtureMode: true, error: fixture ? null : `No fixture for state ${fixtureState}`, checkedAt: Date.now() });
+      nudgeRef.current = () => {};
+      setStatus({ payload: fixture, fixtureMode: true, error: fixture ? null : `No fixture for state ${fixtureState}`, checkedAt: Date.now(), refresh: () => {} });
       return undefined;
     }
 
@@ -58,15 +65,24 @@ export const useReadiness = (): ReadinessStatus => {
         const payload = (await response.json()) as LiveReadiness;
         if (cancelled) return;
         failuresRef.current = 0;
-        setStatus({ payload, fixtureMode: false, error: null, checkedAt: Date.now() });
+        setStatus({ payload, fixtureMode: false, error: null, checkedAt: Date.now(), refresh: nudgeRef.current });
         timerRef.current = setTimeout(tick, cadenceFor(payload.state, 0));
       } catch (error) {
         if (cancelled) return;
         failuresRef.current += 1;
-        setStatus((previous) => ({ ...previous, error: error instanceof Error ? error.message : String(error), checkedAt: Date.now() }));
+        setStatus((previous) => ({ ...previous, error: error instanceof Error ? error.message : String(error), checkedAt: Date.now(), refresh: nudgeRef.current }));
         timerRef.current = setTimeout(tick, cadenceFor(undefined, failuresRef.current));
       }
     };
+
+    // An immediate poll that cancels the scheduled one — idempotent enough that a
+    // spurious call just refreshes readiness a beat early.
+    nudgeRef.current = () => {
+      if (cancelled) return;
+      if (timerRef.current) clearTimeout(timerRef.current);
+      void tick();
+    };
+    setStatus((previous) => ({ ...previous, refresh: nudgeRef.current }));
 
     void tick();
 
@@ -76,5 +92,6 @@ export const useReadiness = (): ReadinessStatus => {
     };
   }, [fixtureState, fixtureVariant]);
 
-  return status;
+  const refresh = useCallback(() => nudgeRef.current(), []);
+  return { ...status, refresh };
 };

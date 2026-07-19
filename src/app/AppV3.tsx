@@ -1,4 +1,5 @@
 import type { ComponentType, ReactNode } from 'react';
+import { useEffect, useRef } from 'react';
 import { CalendarClock, Flag, Home, LineChart, Radio } from 'lucide-react';
 import './theme.css';
 import { Link, RouterProvider, matchPath, useRouter } from './router';
@@ -91,6 +92,15 @@ const Routes = () => {
   const onLive = route.path === '/live';
   const replayKey = onLive && !readiness.fixtureMode ? route.search.get('replay') : null;
   const replay = useReplaySession(replayKey, liveHistory.reset);
+  // The moment a replay engages server-side (started flips true after control
+  // answers active:true), pull readiness immediately. Without this the cold
+  // pre-race page waits out its slow pre_session/backoff cadence on the cue card
+  // before the first simulated frame arrives.
+  const startedRef = useRef(false);
+  useEffect(() => {
+    if (replay.started && !startedRef.current) readiness.refresh();
+    startedRef.current = replay.started;
+  }, [replay.started, readiness.refresh]);
   const raceDetail = matchPath('/races/:sessionId', route.path);
   const careerRace = matchPath('/career/race/:sessionId', route.path);
 

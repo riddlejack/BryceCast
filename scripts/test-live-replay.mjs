@@ -7,6 +7,8 @@ import { DatabaseSync } from 'node:sqlite';
 import { buildRaceSnapshotFromResults, compactTimingRowForReadiness } from './api-server.mjs';
 import { createReplayOverlay, runnerReportsLiveSession } from './lib/replay-overlay.mjs';
 import { raceSnapshotEndpoints } from './live-source-endpoints.mjs';
+import { appendLiveHistoryPayload, createLiveHistoryState, liveHistorySampleFromPayload, liveSessionKeyOf } from '../src/data/liveHistoryModel.ts';
+import { buildCumulativeLiveBattleFrame } from '../src/data/liveMotionModel.ts';
 
 const root = process.cwd();
 const temp = await mkdtemp(join(tmpdir(), 'brycecast-replay-'));
@@ -373,6 +375,71 @@ try {
     assert.equal(lakeStop.active, false, 'lake feed: stop must disengage lake playback');
   }
 
+  // ---- Nashville 2025 regression: battle rivals + running order (Jack's bug) ----
+  // The RaceTools lake feeds carry an EMPTY EventID and an EMPTY DriverID on every
+  // rival (only Bryce's id is joined in). Those two omissions used to make the
+  // frontend drop every rival from the field (empty driverId → empty stableDriverId)
+  // and never form a session key (missing eventId), so the battle corridor showed
+  // no rival cars and the running order never crossed its two-sample gate. This
+  // drives the exact page path — start Nashville, advance the virtual clock, feed
+  // two readiness payloads through the same reducers the Live page uses — and
+  // asserts the corridor has rival cars and the running order accumulates.
+  {
+    const NASH = 'session_indy_nxt_2025_6447';
+    const nash = (await fetchJson('/api/replay/available')).sessions.find((s) => s.sessionKey === NASH);
+    assert.ok(nash?.watchable, 'nashville: the 2025 Music City race must be a watchable lake replay');
+    // A mid-race t0 (deep enough that the field is spread and Bryce has ranked
+    // neighbors) at 4x so a short real wait advances the archive clock a few frames.
+    const nashStart = JSON.parse(
+      await (await fetch(`${baseUrl}/api/replay/control?session=${encodeURIComponent(NASH)}&t0=${encodeURIComponent('2025-08-31T10:51:00.000Z')}&speed=4`)).text()
+    );
+    assert.equal(nashStart.active, true, 'nashville: replay must engage');
+    assert.equal(nashStart.source, 'lake_feeds', 'nashville: playback must come from the lake source');
+
+    let history = createLiveHistoryState();
+    let battleWithRivals = null;
+    let sessionKey = null;
+    const seenArchive = new Set();
+    // Poll real-time; at 4x each ~450ms poll advances ~1.8 archive seconds, so a
+    // handful of polls guarantees at least two DISTINCT archived samples.
+    for (let attempt = 0; attempt < 40 && seenArchive.size < 2; attempt += 1) {
+      const payload = await fetchJson('/api/readiness');
+      assert.ok(['ready', 'degraded'].includes(payload.state), `nashville: mid-race readiness must be usable (got ${payload.state})`);
+      const rows = payload.liveTiming?.rows ?? [];
+      const bryce = rows.find((row) => row.bryce === true) ?? null;
+      assert.ok(bryce, 'nashville: the guarded Bryce row must be present mid-race');
+
+      const battle = buildCumulativeLiveBattleFrame(rows, bryce);
+      assert.ok(battle, 'nashville: a battle frame must build around the Bryce anchor');
+      if (battle.cars.length > 0) battleWithRivals = battle;
+
+      assert.ok(liveHistorySampleFromPayload(payload) !== null, 'nashville: every usable mid-race payload must yield a history sample (session key + field rows)');
+      sessionKey = liveSessionKeyOf(payload);
+      assert.ok(sessionKey, 'nashville: a session key must resolve from the eventSessionId even with an empty eventId');
+      seenArchive.add(payload.replay?.simulation?.archiveCheckedAt ?? '');
+      history = appendLiveHistoryPayload(history, payload);
+      await new Promise((resolve) => setTimeout(resolve, 450));
+    }
+
+    assert.ok(battleWithRivals, 'nashville: the battle corridor must carry at least one rival car — the exact regression Jack hit');
+    assert.ok(
+      battleWithRivals.ahead || battleWithRivals.behind,
+      'nashville: the battle corridor must name at least one adjacent rival (ahead or behind)'
+    );
+    const nashSession = history.sessions[sessionKey];
+    assert.ok(nashSession, 'nashville: the accumulator must hold the Nashville session');
+    assert.ok(
+      nashSession.samples.length >= 2,
+      `nashville: the running order must cross its two-sample gate (got ${nashSession.samples.length})`
+    );
+    assert.ok(
+      nashSession.selectedDrivers.some((driver) => driver.role === 'initially_ahead' || driver.role === 'initially_behind'),
+      'nashville: the running order must select at least one rival lane around Bryce'
+    );
+    const nashStop = JSON.parse(await (await fetch(`${baseUrl}/api/replay/control?stop=1`)).text());
+    assert.equal(nashStop.active, false, 'nashville: stop must disengage playback');
+  }
+
   // A refused start must be legible to the client, not a silent hang: the body
   // reports active!==true AND carries a human reason, which is what the page now
   // renders as "this replay can't start: <reason>" with an exit — never a cue-up.
@@ -442,4 +509,4 @@ try {
 }
 
 assert.equal(stderr, '', stderr);
-console.log(JSON.stringify({ ok: true, assertions: 85, payloadShape: 'live-compatible', timeMachine: 'available+16x', liveGuard: 'preempts-replay', gating: 'watchable-only', familyFlow: 'available-derived-params+active-body', lakeFeeds: '2024-25-racetools+2026-timing71-source-tiered' }, null, 2));
+console.log(JSON.stringify({ ok: true, assertions: 99, payloadShape: 'live-compatible', timeMachine: 'available+16x', liveGuard: 'preempts-replay', gating: 'watchable-only', familyFlow: 'available-derived-params+active-body', lakeFeeds: '2024-25-racetools+2026-timing71-source-tiered', nashvilleRegression: 'battle-rivals+running-order-accumulates' }, null, 2));

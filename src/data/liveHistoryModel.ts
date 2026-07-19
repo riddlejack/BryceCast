@@ -95,7 +95,14 @@ export const liveSessionKeyOf = (payload: LiveReadinessPayload | null): string |
   const weekend = recordOf(payload.raceWeekend);
   const eventId = stringOrNull(heartbeat.eventId ?? weekend.eventId);
   const eventSessionId = stringOrNull(heartbeat.eventSessionId ?? weekend.eventSessionId);
-  return eventId && eventSessionId ? `${eventId}-${eventSessionId}` : null;
+  // The eventSessionId is globally unique in Race Control and alone identifies a
+  // session. Live feeds carry both ids, but the RaceTools lake replays omit the
+  // eventId — requiring both left every lake replay session-key-less, so history
+  // never accumulated and the running order never crossed its two-sample gate.
+  // Fall back to a replay's own canonical session key as a last resort.
+  if (eventSessionId) return eventId ? `${eventId}-${eventSessionId}` : eventSessionId;
+  const simulation = recordOf(recordOf(payload.replay).simulation);
+  return simulation.active === true ? stringOrNull(simulation.sessionKey) : null;
 };
 
 /** Replay shifts payload.checkedAt to wall time for freshness. History must use
