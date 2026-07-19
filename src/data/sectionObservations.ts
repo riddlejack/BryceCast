@@ -215,6 +215,12 @@ export const sectionObservationsFromLaps = (
     };
   });
   const allPcts = sections.flatMap((section) => (section.lapPercentiles ?? []).map((point) => point.percentile));
+  /* The pack's own source tier flows straight into the set (adapter-contract
+   * law): a measured lake pack and a parsed-PDF pack fill this identical shape,
+   * so every consumer keeps working — only the tier label and source copy
+   * differ downstream. `parsed_pdf_aggregate` stays the default/fallback. */
+  const tier: SectionSourceTier = pack.sourceTier ?? 'parsed_pdf_aggregate';
+  const measured = tier === 'lake_loop_crossings';
   return {
     sessionId: pack.sessionId,
     venueName: pack.venueName,
@@ -226,8 +232,8 @@ export const sectionObservationsFromLaps = (
       ? sections.reduce((count, section) => count + (section.observationCount ?? 0), 0)
       : allPcts.length,
     medianPercentile: allPcts.length > 0 ? median(allPcts) : null,
-    sourceState: 'official_section_results_per_lap',
-    sourceTier: 'parsed_pdf_aggregate',
+    sourceState: measured ? 'racetools_capture_loop_crossings_per_lap' : 'official_section_results_per_lap',
+    sourceTier: tier,
     caveat: single
       ? 'one lap is one lap — a snapshot, not a trend; caution laps are labeled'
       : `clean green-flag laps only; sections under ${MIN_CLEAN_LAPS} clean laps in this scope are not compared`

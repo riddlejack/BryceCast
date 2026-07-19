@@ -43,6 +43,12 @@ export interface TrackSectionAnchor {
    *  arrives with the data lake's loop-crossing extraction, at which point each
    *  stretch becomes its own measured anchor and this field retires. */
   additionalSpans?: Array<{ startT: number; endT: number }>;
+  /** The physical timing loops this span runs between, from the semantic
+   *  layer's decoded loop inventory (measured lake anchors only). This is the
+   *  join key for pass placement: a pass bracketed to `[startLoop → endLoop]`
+   *  renders its quiet mark at this span. Absent on curated-PDF anchors. */
+  startLoop?: string;
+  endLoop?: string;
 }
 
 export interface TrackSectionAnchorSet {

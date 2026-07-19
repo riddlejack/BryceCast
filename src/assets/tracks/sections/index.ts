@@ -1,5 +1,5 @@
-import type { TrackSectionAnchorSet } from './types';
-import { nashvilleSuperspeedwaySections } from './nashville-superspeedway';
+import type { TrackSectionAnchor, TrackSectionAnchorSet } from './types';
+import { nashvilleSuperspeedwaySections, nashvilleSuperspeedwayMeasuredSections } from './nashville-superspeedway';
 import { worldWideTechnologyRacewaySections } from './world-wide-technology-raceway';
 import { iowaSpeedwaySections } from './iowa-speedway';
 import { theMilwaukeeMileSections } from './the-milwaukee-mile';
@@ -65,4 +65,40 @@ export const trackSectionsFor = (trackName: string | null | undefined): TrackSec
   const aliasSlug = aliasSlugs[target];
   if (aliasSlug) return bySlug.get(aliasSlug) ?? null;
   return byVenue.get(target) ?? null;
+};
+
+/** MEASURED loop-crossing anchor sets, keyed by venue — the finer, whole-lap
+ *  tiling that supersedes the curated-PDF set on pages carrying lake loop data.
+ *  Only venues wired for the lake appear here (Nashville, this slice). */
+const measuredSets: TrackSectionAnchorSet[] = [nashvilleSuperspeedwayMeasuredSections];
+const measuredByVenue = new Map(measuredSets.map((set) => [normalized(set.venueName), set]));
+
+/** The measured anchor set for a venue, or null if none is wired. A race page
+ *  uses this ONLY when its loaded section pack is `lake_loop_crossings`; every
+ *  other race keeps the curated-PDF `trackSectionsFor` set as the fallback. */
+export const measuredTrackSectionsFor = (trackName: string | null | undefined): TrackSectionAnchorSet | null => {
+  if (!trackName) return null;
+  return measuredByVenue.get(normalized(trackName)) ?? null;
+};
+
+/** Resolve a pass's bracketed loop interval `[fromLoop → toLoop]` to the anchor
+ *  span it happened on, for the active section set. Matches either an explicit
+ *  loop-tagged measured anchor (`startLoop`/`endLoop`) or a curated chain whose
+ *  section name reads "<from> to <to>" (Milwaukee/Iowa). Returns null when the
+ *  interval doesn't correspond to a drawn span (it draws no mark). */
+export const passSpanAnchor = (
+  set: TrackSectionAnchorSet,
+  fromLoop: string,
+  toLoop: string
+): TrackSectionAnchor | null => {
+  const from = fromLoop.trim().toUpperCase();
+  const to = toLoop.trim().toUpperCase();
+  return (
+    set.sections.find(
+      (section) =>
+        section.startLoop?.toUpperCase() === from && section.endLoop?.toUpperCase() === to
+    ) ??
+    set.sections.find((section) => normalized(section.sectionName) === normalized(`${from} to ${to}`)) ??
+    null
+  );
 };

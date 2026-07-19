@@ -1,5 +1,6 @@
 import { uiDataPackage, type UiSectionLapRef } from './uiDataPackage';
 import { packModules, packRawModules } from './packModules';
+import type { SectionSourceTier } from './sectionObservations';
 
 /** Section-lap packs (Brief H — Section Intelligence): Bryce's per-lap,
  *  per-section observations from official Section Results, one pack per race.
@@ -33,6 +34,12 @@ export interface SectionLapsPack {
   trackType: string | null;
   totalLaps: number;
   tupleOrder: string[];
+  /** Which source fed this pack. Absent/`parsed_pdf_aggregate` = the official
+   *  Section Results parse (v1, the fallback path). `lake_loop_crossings` = the
+   *  RaceTools race-weekend capture's timing-loop crossings (the measured
+   *  upgrade: fine sub-sections tiling the whole lap). The producer reads this
+   *  to label the tier in the set it emits — same contract, richer source. */
+  sourceTier?: SectionSourceTier;
   sections: Array<{
     sectionName: string;
     /** 'measured' = a real timing-loop section; 'derived_remainder' = the

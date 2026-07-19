@@ -7,6 +7,7 @@ import { trackOutlineFor, type TrackOutline } from '../assets/tracks';
 import {
   hasDerivedRemainder,
   measuredSectionCount,
+  measuredTrackSectionsFor,
   timedShareOf,
   trackSectionsFor,
   type TrackSectionAnchorSet
@@ -23,6 +24,7 @@ import {
   type SectionObservationSet
 } from '../data/sectionObservations';
 import { loadSectionLaps, sectionLapVisitsFor, type SectionLapsPack } from '../data/sectionLaps';
+import { loadPassMarks, resolvePassMarks, type PassMarksPack } from '../data/passMarks';
 import { uiDataPackage } from '../data/uiDataPackage';
 import { ControlRow, Segmented } from './careerExplorer';
 import { asNumber, asString, formatDate, formatGain, formatNumber, formatPosition, ordinal } from '../app/format';
@@ -823,12 +825,14 @@ const SectionHeatCard = ({
   outline,
   anchors,
   laps,
-  fallbackSet
+  fallbackSet,
+  passMarks
 }: {
   outline: TrackOutline;
   anchors: TrackSectionAnchorSet;
   laps: SectionLapsPack | null;
   fallbackSet: SectionObservationSet | null;
+  passMarks: PassMarksPack | null;
 }) => {
   const [scopeKey, setScopeKey] = useState('full');
   const [scrubLap, setScrubLap] = useState(1);
@@ -849,6 +853,10 @@ const SectionHeatCard = ({
   }, [laps, scope, stat, fallbackSet]);
   const heatSections = useMemo(() => (set ? resolveHeatSections(anchors, set) : []), [anchors, set]);
   const hasHeat = heatSections.length > 0;
+  /* Pass marks are race-wide (scope-independent): each green Bryce pass joined
+   * to the span it happened on, for the active anchor set. */
+  const resolvedMarks = useMemo(() => (passMarks ? resolvePassMarks(anchors, passMarks) : []), [passMarks, anchors]);
+  const showMarks = hasHeat && resolvedMarks.length > 0;
   const suppressedCount = set ? set.sections.filter((section) => section.percentile === null).length : 0;
   const singleLap = scope.kind === 'single_lap';
   const scrubContext = singleLap ? lapContext.find((entry) => entry.lap === scrubLap) ?? null : null;
@@ -869,6 +877,34 @@ const SectionHeatCard = ({
   const coverage = hasDerivedRemainder(anchors)
     ? `${measuredSectionCount(anchors)} timed sections · ${measuredPct}% measured · rest derived from lap time`
     : `${measuredSectionCount(anchors)} timed sections · ${measuredPct}% of the lap`;
+  /* Source-tier switch (adapter-contract law): a measured lake pack names the
+     RaceTools capture per the permissions ledger — never "official timing" —
+     while the fallback PDF path keeps the official Section Results copy. */
+  const measured = set?.sourceTier === 'lake_loop_crossings';
+  const intervalPath = laps?.sourceRefs?.find((ref) => ref.key === 'nashvilleIntervalPack')?.path ?? null;
+  const sourceEntries = measured
+    ? [
+        {
+          label: 'RaceTools race-weekend capture · timing-loop crossings',
+          path: intervalPath ?? 'analysis/semantic-layer/output/nashville/',
+          note: `Bryce's per-lap section times and full-field percentiles, differenced from the RaceTools race-weekend capture's timing-loop crossings — ${measuredSectionCount(anchors)} sub-sections tiling the whole lap. A third-party capture; not official timing.`
+        }
+      ]
+    : [
+        {
+          label: 'Official Section Results, lap by lap',
+          path: 'analysis/indy-nxt-race-lap-section-enhancement/output/race_section_lap_observations.csv',
+          note: `Bryce's per-lap section times and field percentiles from the official timing loops. Section names follow the track's official timing stations; span lengths are measured from official time × speed (${anchors.confidence}).`
+        }
+      ];
+  const sourceCaveats = [
+    measured
+      ? 'Section times are the RaceTools race-weekend capture — timing-loop crossings, time-based, not GPS or car position; not official timing.'
+      : 'Section times come from official timing loops — they are time-based, not GPS or car position.',
+    ...(set ? [set.caveat] : []),
+    ...(measured ? ['Sanity-checked: the three published corner sections agree with these measured spans within ~0.10s per lap.'] : []),
+    anchors.note
+  ];
   const scopeSummary = !set
     ? null
     : singleLap
@@ -880,23 +916,7 @@ const SectionHeatCard = ({
   return (
     <Card
       title="The track, section by section"
-      action={
-        <SourcePill
-          title="Section signal"
-          entries={[
-            {
-              label: 'Official Section Results, lap by lap',
-              path: 'analysis/indy-nxt-race-lap-section-enhancement/output/race_section_lap_observations.csv',
-              note: `Bryce's per-lap section times and field percentiles from the official timing loops. Section names follow the track's official timing stations; span lengths are measured from official time × speed (${anchors.confidence}).`
-            }
-          ]}
-          caveats={[
-            'Section times come from official timing loops — they are time-based, not GPS or car position.',
-            ...(set ? [set.caveat] : []),
-            anchors.note
-          ]}
-        />
-      }
+      action={<SourcePill title="Section signal" entries={sourceEntries} caveats={sourceCaveats} />}
     >
       <p style={{ margin: '0 0 12px', fontSize: 13.5, color: 'var(--ink-secondary)' }}>
         {hasHeat
@@ -970,7 +990,14 @@ const SectionHeatCard = ({
         showCornerLabels={false}
         maxHeight={300}
         sections={hasHeat ? { resolved: heatSections, showLabels: true } : null}
+        passMarks={showMarks ? resolvedMarks : null}
       />
+      {showMarks ? (
+        <p style={{ margin: '10px 0 0', fontSize: 11.5, color: 'var(--ink-muted)' }}>
+          <span aria-hidden style={{ marginRight: 6 }}>○</span>
+          a pass involving Bryce — placed between timing loops, {resolvedMarks.length} this race. Hover for the lap and the car.
+        </p>
+      ) : null}
       {suppressedCount > 0 && !singleLap && hasHeat ? (
         <p style={{ margin: '10px 0 0', fontSize: 11.5, color: 'var(--ink-muted)' }}>
           {suppressedCount === 1 ? 'One stretch stays uncoloured' : `${suppressedCount} stretches stay uncoloured`} — under{' '}
@@ -1038,15 +1065,26 @@ const SectionHeatCard = ({
                 Clean green-flag laps only — caution and restart laps are excluded from the shades. Loop timing measures
                 time, not car position.
               </p>
+              {passMarks ? (
+                <p style={{ margin: 0, fontSize: 11.5, color: 'var(--ink-muted)' }}>
+                  The open circles are green, on-track passes involving Bryce. Pass placement validated{' '}
+                  {passMarks.pairwiseConcordancePct}% against the official lap chart.
+                  {passMarks.reshuffleCounts.pit_cycle + passMarks.reshuffleCounts.caution > 0
+                    ? ` Pit-cycle and caution reshuffles (${passMarks.reshuffleCounts.pit_cycle} + ${passMarks.reshuffleCounts.caution}) are counted, not drawn.`
+                    : ''}
+                </p>
+              ) : null}
             </div>
           ) : null}
         </div>
       ) : null}
       <p style={{ margin: 0, paddingTop: 14, fontSize: 11.5, color: 'var(--ink-muted)' }}>
         {hasHeat
-          ? hasDerivedRemainder(anchors)
-            ? 'Solid spans are official timing loops — time-based, not GPS. The dotted stretch is derived: lap time minus the timed sections, ranked against the field the same way.'
-            : 'Section times from official timing loops — time-based, not GPS. Stretches without timing loops stay the plain line.'
+          ? measured
+            ? `${measuredSectionCount(anchors)} timing-loop sub-sections from the RaceTools race-weekend capture, tiling the whole lap — time-based, not GPS, and not official timing.`
+            : hasDerivedRemainder(anchors)
+              ? 'Solid spans are official timing loops — time-based, not GPS. The dotted stretch is derived: lap time minus the timed sections, ranked against the field the same way.'
+              : 'Section times from official timing loops — time-based, not GPS. Stretches without timing loops stay the plain line.'
           : set
             ? `Sections need ${MIN_CLEAN_LAPS} clean laps in a scope to compare honestly.`
             : 'No official section times are on file for this race yet.'}
@@ -1103,6 +1141,7 @@ const VenueYearsCard = ({
   visits: SectionLapsPack[];
 }) => {
   if (visits.length < 2) return null;
+  const measured = visits.every((visit) => visit.sourceTier === 'lake_loop_crossings');
   return (
     <Card
       title="This place, other years"
@@ -1110,11 +1149,17 @@ const VenueYearsCard = ({
         <SourcePill
           title="Same venue, every visit"
           entries={[
-            {
-              label: 'Official Section Results, lap by lap',
-              path: 'analysis/indy-nxt-race-lap-section-enhancement/output/race_section_lap_observations.csv',
-              note: 'Each year aggregates its own race on the same scale: median clean-lap percentile per section.'
-            }
+            measured
+              ? {
+                  label: 'RaceTools race-weekend capture · timing-loop crossings',
+                  path: 'analysis/semantic-layer/output/nashville/',
+                  note: `Each year aggregates its own race on the same ${measuredSectionCount(anchors)}-section scale: median clean-lap percentile per timing-loop sub-section. A third-party capture; not official timing.`
+                }
+              : {
+                  label: 'Official Section Results, lap by lap',
+                  path: 'analysis/indy-nxt-race-lap-section-enhancement/output/race_section_lap_observations.csv',
+                  note: 'Each year aggregates its own race on the same scale: median clean-lap percentile per section.'
+                }
           ]}
           caveats={['Different years can carry different field sizes and caution patterns; each shape states its own denominator.']}
         />
@@ -1126,8 +1171,10 @@ const VenueYearsCard = ({
       <div className="row row--between" style={{ gap: 10, flexWrap: 'wrap', marginBottom: 12 }}>
         <HeatKey />
         <span className="tnum" style={{ fontSize: 11.5, color: 'var(--ink-muted)' }}>
-          {measuredSectionCount(anchors)} timed sections · {Math.round(timedShareOf(anchors) * 100)}% measured
-          {hasDerivedRemainder(anchors) ? ' · rest derived' : ' of the lap'}
+          {measuredSectionCount(anchors)} timed sections ·{' '}
+          {hasDerivedRemainder(anchors)
+            ? `${Math.round(timedShareOf(anchors) * 100)}% measured · rest derived`
+            : `${Math.round(timedShareOf(anchors) * 100)}% of the lap`}
         </span>
       </div>
       <div className="row" style={{ gap: 22, flexWrap: 'wrap', alignItems: 'flex-start' }}>
@@ -1535,12 +1582,17 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
   const [story, setStory] = useState<RaceStoryPack | null>(null);
   const [sectionLaps, setSectionLaps] = useState<SectionLapsPack | null>(null);
   const [visitPacks, setVisitPacks] = useState<SectionLapsPack[]>([]);
+  const [passMarks, setPassMarks] = useState<PassMarksPack | null>(null);
 
   useEffect(() => {
     setEntry('loading');
     setStory(null);
     setSectionLaps(null);
     setVisitPacks([]);
+    setPassMarks(null);
+    loadPassMarks(sessionId)
+      .then((pack) => setPassMarks(pack))
+      .catch(() => setPassMarks(null));
     loadDebriefBySessionId(sessionId)
       .then((found) => setEntry(found))
       .catch(() => setEntry(null));
@@ -1605,7 +1657,13 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
   /* Anchored venues only: approximate curations (e.g. WWTR, held for measured
    * loop locations from the lake) render no heat layer and keep SectionStory. */
   const sectionAnchorsAny = trackSectionsFor(asString(pack.track.name));
-  const sectionAnchors = sectionAnchorsAny && sectionAnchorsAny.confidence === 'anchored' ? sectionAnchorsAny : null;
+  const pdfAnchors = sectionAnchorsAny && sectionAnchorsAny.confidence === 'anchored' ? sectionAnchorsAny : null;
+  /* When THIS race carries measured loop-crossing data, the heat map upgrades to
+   * the venue's finer 8-section tiling (Nashville 2024/2025); every other race
+   * keeps the curated-PDF set. Both flow through the identical contract. */
+  const measuredAnchors =
+    sectionLaps?.sourceTier === 'lake_loop_crossings' ? measuredTrackSectionsFor(asString(pack.track.name)) : null;
+  const sectionAnchors = measuredAnchors ?? pdfAnchors;
   const fallbackSet = story ? sectionObservationsFromRaceStory(story) : null;
   const heroSet = sectionLaps ? sectionObservationsFromLaps(sectionLaps) : fallbackSet;
   const heroHeat = sectionAnchors && heroSet ? resolveHeatSections(sectionAnchors, heroSet) : [];
@@ -1711,7 +1769,13 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
       {story ? <RestartsCard story={story} /> : null}
 
       {outline && sectionAnchors ? (
-        <SectionHeatCard outline={outline} anchors={sectionAnchors} laps={sectionLaps} fallbackSet={fallbackSet} />
+        <SectionHeatCard
+          outline={outline}
+          anchors={sectionAnchors}
+          laps={sectionLaps}
+          fallbackSet={fallbackSet}
+          passMarks={passMarks}
+        />
       ) : null}
 
       {outline && sectionAnchors ? <VenueYearsCard outline={outline} anchors={sectionAnchors} visits={visitPacks} /> : null}

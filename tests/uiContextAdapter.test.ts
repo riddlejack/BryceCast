@@ -173,18 +173,23 @@ assert.ok(
   const { sectionObservationsFromLaps, MIN_CLEAN_LAPS } = await import('../src/data/sectionObservations');
   const nashvilleVisits = sectionLapVisitsFor('Nashville Superspeedway');
   assert.ok(nashvilleVisits.length >= 2, 'Nashville must carry at least two section-lap visits (2024, 2025)');
+  /* Heat-map v2: Nashville 2024/2025 now load the MEASURED loop-crossing pack —
+     eight fine sub-sections tiling the whole lap, sourceTier lake_loop_crossings,
+     the derived remainder retired here. The PDF path stays the fallback. */
   const nashville = await loadSectionLaps('session_indy_nxt_2024_6323');
   assert.ok(nashville, 'Nashville 2024 section-lap pack must load with integrity');
+  assert.equal(nashville!.sourceTier, 'lake_loop_crossings', 'Nashville 2024 is fed by the measured lake pack');
   const measured = nashville!.sections.filter((section) => section.kind !== 'derived_remainder');
   const derived = nashville!.sections.filter((section) => section.kind === 'derived_remainder');
-  assert.equal(measured.length, 3, 'Nashville reports three official timing sections');
-  assert.equal(derived.length, 1, 'Nashville ships one derived untimed-remainder section (the coverage fix)');
-  assert.equal(nashville!.derivedCoverage, 'genuine_gap', 'Nashville is a genuine untimed gap');
+  assert.equal(measured.length, 8, 'Nashville reports eight measured timing-loop sub-sections');
+  assert.equal(derived.length, 0, 'the derived remainder retires where the loops tile the whole lap');
+  assert.equal(nashville!.derivedCoverage, 'fully_timed', 'Nashville measured coverage is fully timed');
   assert.ok(
-    (derived[0].fieldSeconds ?? []).length >= 8,
-    'the derived remainder carries a real full-field distribution'
+    measured.every((section) => (section.fieldSeconds ?? []).length >= 8),
+    'every measured section carries a real full-field distribution'
   );
   const fullRace = sectionObservationsFromLaps(nashville, { kind: 'full_race' }, 'median');
+  assert.equal(fullRace.sourceTier, 'lake_loop_crossings', 'the emitted set names the measured tier');
   for (const observation of fullRace.sections) {
     assert.ok((observation.observationCount ?? 0) >= MIN_CLEAN_LAPS, 'full-race scopes must clear the clean-lap floor');
     assert.ok(
@@ -192,17 +197,43 @@ assert.ok(
       'full-race percentiles must be well-formed'
     );
   }
-  const remainderObs = fullRace.sections.find((observation) => observation.kind === 'derived_remainder');
-  assert.ok(remainderObs, 'the derived remainder flows through the contract as a section');
-  assert.ok(
-    remainderObs!.fieldMedianSeconds !== null && remainderObs!.fieldMedianSeconds !== undefined,
-    'the derived remainder carries a field-median section time for the drawer'
-  );
   const singleLap = sectionObservationsFromLaps(nashville, { kind: 'single_lap', lap: 1 }, 'median');
   assert.ok(
     singleLap.sections.every((observation) => observation.cautionState !== undefined || observation.observationCount === 0),
     'single-lap observations must carry their caution context'
   );
+}
+
+/* Pass marks (heat-map v2 item 7): GO races carry a pack; each green Bryce pass
+   resolves to a drawn span on the venue's anchors; CONDITIONAL races carry none. */
+{
+  const { loadPassMarks, resolvePassMarks } = await import('../src/data/passMarks');
+  const { measuredTrackSectionsFor } = await import('../src/assets/tracks/sections');
+  const passMarkRefs = context.dataPackage.screens.raceDebrief.passMarkRefs;
+  assert.ok(Array.isArray(passMarkRefs) && passMarkRefs.length === 25, 'exactly 25 GO races carry a pass-mark pack');
+  assert.ok(
+    passMarkRefs.every((ref) => storyRefs.some((storyRef) => storyRef.sessionId === ref.sessionId)),
+    'every pass-mark pack belongs to a race-debrief session'
+  );
+  const nashPasses = await loadPassMarks('session_indy_nxt_2025_6447');
+  assert.ok(nashPasses, 'Nashville 2025 pass-mark pack loads with integrity');
+  assert.equal(nashPasses!.verdict, 'GO', 'only GO races ship pass marks');
+  assert.ok(nashPasses!.pairwiseConcordancePct >= 96, 'the pack carries the lap-chart concordance for the drawer');
+  assert.ok(nashPasses!.greenPasses.length > 0, 'Nashville 2025 has green Bryce passes to draw');
+  assert.ok(
+    nashPasses!.greenPasses.every((pass) => (pass.direction === 'gain' || pass.direction === 'loss') && pass.otherName.length > 0),
+    'every pass carries a direction and a named other car'
+  );
+  const measuredNash = measuredTrackSectionsFor('Nashville Superspeedway')!;
+  const resolved = resolvePassMarks(measuredNash, nashPasses!);
+  assert.ok(resolved.length > 0, 'green passes resolve to drawn spans on the measured anchors');
+  assert.ok(
+    resolved.every((mark) => mark.startT >= 0 && mark.startT < 1 && mark.endT >= 0 && mark.endT < 1),
+    'each pass mark lands on a well-formed span'
+  );
+  // A CONDITIONAL race (Iowa 2024) is excluded — no pack, no marks, no mention.
+  const iowa = await loadPassMarks('session_indy_nxt_2024_6319');
+  assert.equal(iowa, null, 'CONDITIONAL races carry no pass-mark pack');
 }
 
 assert.ok(context.careerLab.contextPack.resultConversionRows >= 100);

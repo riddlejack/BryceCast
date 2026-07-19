@@ -51,6 +51,7 @@ export const TrackArt = ({
   maxHeight,
   progress,
   sections = null,
+  passMarks = null,
   wind
 }: {
   outline: TrackOutline;
@@ -64,6 +65,17 @@ export const TrackArt = ({
   progress?: number;
   /** Optional Section Intelligence heat-map layer. */
   sections?: TrackSectionsLayer | null;
+  /** Optional pass marks (heat-map v2): each green Bryce pass as a quiet open
+   *  circle at its bracketed interval's span midpoint, hover for lap/direction/
+   *  the other car. Placed between timing loops — never a precise track spot. */
+  passMarks?: Array<{
+    id: string;
+    startT: number;
+    endT: number;
+    lap: number;
+    direction: 'gain' | 'loss';
+    otherName: string;
+  }> | null;
   /** Near-track wind, drawn as a quiet flow arrow beside the shape and turned
    *  to true north via the outline's geographic orientation. Rendered ONLY for
    *  real-geo (OSM) outlines that carry northOffsetDeg — image-traced street
@@ -77,6 +89,9 @@ export const TrackArt = ({
   /* Active section by family id: hover (mouse) or the touch-cycle selection. */
   const [hoveredFamily, setHoveredFamily] = useState<string | null>(null);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  /* A pass mark owns the tip while hovered, so the section nearest-point hover
+   * doesn't fight it (same pattern as the lap chart's inflection dots). */
+  const markTipActive = useRef(false);
   const [, , viewWidth, viewHeight] = outline.viewBox.split(' ').map(Number);
   const aspect = viewHeight / viewWidth;
   const width = maxHeight !== undefined ? Math.min(measuredWidth, maxHeight / aspect) : measuredWidth;
@@ -201,7 +216,43 @@ export const TrackArt = ({
     });
   };
 
+  /* Pass marks distributed along their spans: one green Bryce pass = one open
+   * circle; several on the same span fan out evenly so none hide behind another. */
+  const placedMarks = useMemo(() => {
+    const bySpan = new Map<string, NonNullable<typeof passMarks>>();
+    for (const mark of passMarks ?? []) {
+      const key = `${mark.startT}-${mark.endT}`;
+      if (!bySpan.has(key)) bySpan.set(key, []);
+      bySpan.get(key)!.push(mark);
+    }
+    const out: Array<{ id: string; x: number; y: number; lap: number; direction: 'gain' | 'loss'; otherName: string }> = [];
+    for (const group of bySpan.values()) {
+      const count = group.length;
+      group.forEach((mark, index) => {
+        const length = spanLength(mark.startT, mark.endT);
+        const t = (mark.startT + length * ((index + 1) / (count + 1))) % 1;
+        const point = geometry.pointAtT(t);
+        out.push({ id: mark.id, x: point.x, y: point.y, lap: mark.lap, direction: mark.direction, otherName: mark.otherName });
+      });
+    }
+    return out;
+  }, [passMarks, geometry]);
+
+  const showPassTip = (mark: { x: number; y: number; lap: number; direction: 'gain' | 'loss'; otherName: string }) => {
+    markTipActive.current = true;
+    setHoveredFamily(null);
+    setTip({
+      x: mark.x * scale + Math.max(0, (measuredWidth - width) / 2),
+      y: mark.y * scale,
+      title: `Lap ${mark.lap}`,
+      /* Spatial words, Bryce-first, no signed numbers. */
+      detail: mark.direction === 'gain' ? `past ${mark.otherName}` : `${mark.otherName} by him`,
+      action: 'a pass involving Bryce · placed between timing loops'
+    });
+  };
+
   const handleMove = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (markTipActive.current) return;
     if (!hasHeat || event.pointerType === 'touch') return;
     const hit = nearestSample(event.clientX, event.clientY);
     if (!hit) return;
@@ -404,6 +455,35 @@ export const TrackArt = ({
                 );
               })
             : null}
+          {/* Pass marks (heat-map v2): quiet open circles on the spans where a
+              green Bryce pass happened; hover reads lap · direction · other car. */}
+          {placedMarks.map((mark) => (
+            <g key={`pass-${mark.id}`}>
+              <circle
+                cx={mark.x}
+                cy={mark.y}
+                r={px(3.6)}
+                fill="var(--surface-1)"
+                stroke="var(--ink-secondary)"
+                strokeWidth={px(1.5)}
+                style={{ pointerEvents: 'none' }}
+              />
+              <circle
+                cx={mark.x}
+                cy={mark.y}
+                r={px(11)}
+                fill="transparent"
+                data-pass-mark={mark.id}
+                aria-label={`Lap ${mark.lap}: a pass involving Bryce, ${mark.direction === 'gain' ? `past ${mark.otherName}` : `${mark.otherName} by him`}`}
+                style={{ cursor: 'pointer' }}
+                onMouseEnter={() => showPassTip(mark)}
+                onMouseLeave={() => {
+                  markTipActive.current = false;
+                  setTip(null);
+                }}
+              />
+            </g>
+          ))}
           {outline.cornerArcs
             .filter((arc) => arc.label)
             .map((arc) => {

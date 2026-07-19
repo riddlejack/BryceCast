@@ -1,6 +1,6 @@
 {
   "asOfDate": "2026-07-18",
-  "generatedAt": "2026-07-19T05:29:24Z",
+  "generatedAt": "2026-07-19T06:19:46Z",
   "items": [
     {
       "availability": "partial",
@@ -1064,7 +1064,7 @@
       "label": "indySummary",
       "productizationStatus": "productized",
       "recommendedAction": "Use as source precedence, caveat, or validation input.",
-      "sha256": "5e3f4158616cfebef6ca0c9819de5f2c6c473c5a2222bf5fad83bb4c9136526f",
+      "sha256": "bc1432b8299dc6dcef4a1437e5af6a7a75c800e74d1d324e78131029ca7a73ac",
       "sourcePath": "analysis/indy-nxt-discovery/output/summary.json",
       "surface": "governance"
     },
@@ -1139,7 +1139,7 @@
       "surface": "governance"
     }
   ],
-  "repoHead": "5a54f08",
+  "repoHead": "0db922b",
   "schemaVersion": "brycecast.predictiveRaceIntelligence.inventory.v1",
   "sourceHash": "900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681",
   "sourceRefs": [
@@ -1171,7 +1171,7 @@
       "bytes": 1722,
       "path": "analysis/indy-nxt-discovery/output/summary.json",
       "role": "indySummary",
-      "sha256": "5e3f4158616cfebef6ca0c9819de5f2c6c473c5a2222bf5fad83bb4c9136526f"
+      "sha256": "bc1432b8299dc6dcef4a1437e5af6a7a75c800e74d1d324e78131029ca7a73ac"
     },
     {
       "bytes": 1461,

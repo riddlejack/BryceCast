@@ -904,6 +904,26 @@ const SECTION_LAP_TUPLE_ORDER = [
   'speedMph'
 ];
 
+/** Races whose section-lap ref points at the MEASURED loop-crossing pack
+ *  (sourceTier: lake_loop_crossings) produced by the semantic layer, rather
+ *  than the parsed-PDF pack. See buildSectionLapPacks for the override. */
+const MEASURED_SECTION_PACKS = [
+  {
+    sessionId: 'session_indy_nxt_2024_6323',
+    id: 'section_laps_measured_session_indy_nxt_2024_6323',
+    venueName: 'Nashville Superspeedway',
+    seasonYear: 2024,
+    path: 'analysis/semantic-layer/output/context-packs/section_laps_measured_session_indy_nxt_2024_6323.json'
+  },
+  {
+    sessionId: 'session_indy_nxt_2025_6447',
+    id: 'section_laps_measured_session_indy_nxt_2025_6447',
+    venueName: 'Nashville Superspeedway',
+    seasonYear: 2025,
+    path: 'analysis/semantic-layer/output/context-packs/section_laps_measured_session_indy_nxt_2025_6447.json'
+  }
+];
+
 const buildSectionLapPacks = ({ raceDebriefPackPairs }) => {
   const outputDir = path.join(repoRoot, 'analysis/race-story/output/context-packs');
   fs.mkdirSync(outputDir, { recursive: true });
@@ -1038,6 +1058,55 @@ const buildSectionLapPacks = ({ raceDebriefPackPairs }) => {
     };
     fs.writeFileSync(path.join(repoRoot, relativePath), `${JSON.stringify(pack)}\n`);
     refs.push({ sessionId, id, type: 'section_laps', venueName, seasonYear, ...summarizeArtifact(relativePath) });
+  }
+
+  /* Measured lake upgrade (heat-map v2): where the semantic layer produced 8
+     timing-loop sub-sections for a race, its ref points at the MEASURED pack
+     instead of the PDF one. The measured packs are produced upstream by
+     analysis/semantic-layer/build-nashville-measured-sections.mjs from the
+     committed interval packs (no lake read here); this only re-registers the
+     ref (path/sha256) so a full refresh stays idempotent. The PDF pack above
+     still exists as the fallback for races without loop data. */
+  for (const measured of MEASURED_SECTION_PACKS) {
+    if (!fs.existsSync(path.join(repoRoot, measured.path))) continue;
+    const ref = {
+      sessionId: measured.sessionId,
+      id: measured.id,
+      type: 'section_laps',
+      venueName: measured.venueName,
+      seasonYear: measured.seasonYear,
+      ...summarizeArtifact(measured.path)
+    };
+    const existing = refs.findIndex((entry) => entry.sessionId === measured.sessionId);
+    if (existing >= 0) refs[existing] = ref;
+    else refs.push(ref);
+  }
+  return refs.sort((left, right) => left.sessionId.localeCompare(right.sessionId));
+};
+
+/* ------------------------------------------------------------------
+   Pass-mark packs (heat-map v2, item 7). Registers the per-race pass-mark
+   packs (produced upstream by analysis/track-position/build-pass-marks.mjs
+   from the committed pass-placement lane — GO races only) for the debrief
+   sessions that have one. The UI draws each green Bryce pass at its between-
+   loop interval on the heat map. No pack ⇒ no marks (CONDITIONAL/NO-GO races,
+   and races the lane never covered).
+   ------------------------------------------------------------------ */
+const buildPassMarkRefs = ({ raceDebriefPackPairs }) => {
+  const refs = [];
+  for (const { pack } of raceDebriefPackPairs) {
+    const id = `pass_marks_${pack.sessionId}`;
+    const relativePath = `analysis/track-position/output/context-packs/${id}.json`;
+    if (!fs.existsSync(path.join(repoRoot, relativePath))) continue; // no GO pack for this race
+    const packJson = readJson(relativePath);
+    refs.push({
+      sessionId: pack.sessionId,
+      id,
+      type: 'pass_marks',
+      venueName: packJson.venueName ?? pack.track?.name ?? null,
+      seasonYear: packJson.seasonYear ?? pack.seasonYear ?? null,
+      ...summarizeArtifact(relativePath)
+    });
   }
   return refs.sort((left, right) => left.sessionId.localeCompare(right.sessionId));
 };
@@ -1691,6 +1760,11 @@ const summarizeFixtureHeartbeat = (heartbeat) => ({
 });
 
 const compactFixtureTimingRow = (row, heartbeat) => ({
+  /* Mirror the compact live API: every Race Control row carries its stable
+     DriverID as driverId (the field the UI keys on). Omitting it forced the
+     tower/battle keys onto car number, where a filler car sharing Bryce's #9
+     collided — the duplicate-key warning. Faithful fixtures carry it too. */
+  driverId: String(row?.DriverID ?? '').trim(),
   no: row?.no ?? '',
   firstName: row?.firstName ?? '',
   lastName: row?.lastName ?? '',
@@ -2062,6 +2136,7 @@ const buildPackage = () => {
     canonicalSha256: summarizeArtifact(sources.canonicalDataset).sha256
   });
   const sectionLapRefs = buildSectionLapPacks({ raceDebriefPackPairs });
+  const passMarkRefs = buildPassMarkRefs({ raceDebriefPackPairs });
   const seasonIndex = buildSeasonIndex({ raceDebriefPackPairs, resultsBySession, progressionRows: championshipRows });
   const nextUpcomingVenue = upcomingEvents[0]?.trackName ?? null;
   const nextUpcomingVenueSlug = venueSlug(nextUpcomingVenue);
@@ -2219,6 +2294,7 @@ const buildPackage = () => {
         contextPackRefs: packsByType('race_debrief'),
         raceStoryRefs,
         sectionLapRefs,
+        passMarkRefs,
         seasonIndex,
         chartFamilies: [
           'outcome KPI strip',

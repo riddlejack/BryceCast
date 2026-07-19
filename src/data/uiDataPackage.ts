@@ -554,6 +554,18 @@ export interface UiSectionLapRef {
   sha256: string;
 }
 
+export interface UiPassMarkRef {
+  sessionId: string;
+  id: string;
+  type: 'pass_marks';
+  venueName: string;
+  seasonYear: number | null;
+  path: string;
+  bytes: number;
+  modifiedAt: string;
+  sha256: string;
+}
+
 export interface UiSeasonIndexRow {
   sessionId: string;
   raceLabel: string;
@@ -738,6 +750,7 @@ export interface UiDataPackage {
       featuredDebriefs: UiDebriefSeed[];
       raceStoryRefs: UiRaceStoryRef[];
       sectionLapRefs: UiSectionLapRef[];
+      passMarkRefs: UiPassMarkRef[];
       seasonIndex: UiSeasonIndexRow[];
       chartFamilies: string[];
       caveats: string[];

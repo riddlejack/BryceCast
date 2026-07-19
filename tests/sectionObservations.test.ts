@@ -9,7 +9,12 @@ import {
   sectionObservationsFromLaps,
   sectionObservationsFromRaceStory
 } from '../src/data/sectionObservations';
-import { trackSectionsFor } from '../src/assets/tracks/sections';
+import {
+  measuredTrackSectionsFor,
+  passSpanAnchor,
+  timedShareOf,
+  trackSectionsFor
+} from '../src/assets/tracks/sections';
 
 /** Guards the Section Intelligence adapter-contract (Brief H). The v1 producer
  *  transforms a race-story pack; a future lake producer must fill the same
@@ -214,5 +219,70 @@ assert.deepEqual(
   ['Turn 3', 'Turn 4 Entry Turn 4 Exit'].sort(),
   'top-2 gold dots are the strongest MEASURED sections (0.9, 0.8), not the derived remainder'
 );
+
+// 8. Measured lake tier (heat-map v2): a pack tagged `lake_loop_crossings`
+// flows through the SAME contract, but the emitted set names the measured tier.
+// The v1 PDF path is untouched (default tier stays parsed_pdf_aggregate).
+const pdfSet = sectionObservationsFromLaps(syntheticPack, { kind: 'full_race' }, 'median');
+assert.equal(pdfSet.sourceTier, 'parsed_pdf_aggregate', 'PDF pack default tier unchanged');
+assert.equal(pdfSet.sourceState, 'official_section_results_per_lap');
+const lakePack = { ...syntheticPack, sourceTier: 'lake_loop_crossings' } as SectionLapsPack;
+const lakeSet = sectionObservationsFromLaps(lakePack, { kind: 'full_race' }, 'median');
+assert.equal(lakeSet.sourceTier, 'lake_loop_crossings', 'lake pack tier flows into the set');
+assert.equal(lakeSet.sourceState, 'racetools_capture_loop_crossings_per_lap', 'measured source state names the capture');
+assert.equal(lakeSet.sections[0].percentile, pdfSet.sections[0].percentile, 'same numbers — only the tier label differs');
+
+// 9. Measured Nashville 8-section anchors: a distinct set from the 3-section
+// fallback (which trackSectionsFor still returns), tiling ~100% of the lap with
+// no derived remainder, and top-2 gold among the eight measured spans.
+const measuredNash = measuredTrackSectionsFor('Nashville Superspeedway');
+assert.ok(measuredNash, 'Nashville ships a measured 8-section set');
+assert.equal(measuredNash!.sections.length, 8, 'eight measured sub-sections');
+assert.ok(measuredNash!.sections.every((s) => s.kind !== 'derived_remainder'), 'no derived remainder in the measured set');
+assert.ok(Math.abs(timedShareOf(measuredNash!) - 1) < 0.01, 'the eight sections tile ~100% of the lap');
+// The fallback set trackSectionsFor returns is UNCHANGED (still 3 + derived).
+const pdfNash = trackSectionsFor('Nashville Superspeedway')!;
+assert.equal(pdfNash.sections.length, 4, 'the PDF fallback set is untouched (3 + derived remainder)');
+assert.ok(pdfNash.sections.some((s) => s.kind === 'derived_remainder'), 'PDF set keeps its derived remainder');
+
+const measuredLaps = (percentile: number): SectionLapTuple[] =>
+  Array.from({ length: 12 }, (_, i) => [i + 1, percentile, 5, 18, 1, 'g', 4 + percentile, 150] as SectionLapTuple);
+const measuredPack = {
+  schemaVersion: 'brycecast.sectionLaps.v1',
+  type: 'section_laps',
+  id: 'section_laps_measured_test',
+  sessionId: 'session_measured',
+  raceLabel: 'Measured Test',
+  seasonYear: 2025,
+  venueName: 'Nashville Superspeedway',
+  trackType: 'oval',
+  totalLaps: 12,
+  tupleOrder: ['lap', 'fieldPercentile', 'fieldRank', 'fieldComparisonCount', 'clean', 'caution', 'timeSeconds', 'speedMph'],
+  sourceTier: 'lake_loop_crossings',
+  derivedCoverage: 'fully_timed',
+  sections: measuredNash!.sections.map((anchor, i) => ({
+    sectionName: anchor.sectionName,
+    kind: 'measured' as const,
+    laps: measuredLaps(0.2 + i * 0.08)
+  })),
+  lapTotals: measuredLaps(0.5),
+  sourceStateCounts: {},
+  sourceRefs: [{ key: 'nashvilleIntervalPack', path: 'analysis/semantic-layer/output/nashville/x.intervals.ndjson.gz', note: 'x' }],
+  caveats: ['measured test']
+} as unknown as SectionLapsPack;
+const measuredSet = sectionObservationsFromLaps(measuredPack, { kind: 'full_race' }, 'median');
+const measuredResolved = resolveHeatSections(measuredNash!, measuredSet);
+assert.equal(measuredResolved.length, 8, 'all eight measured sections join the anchors');
+assert.equal(measuredResolved.filter((r) => r.isTopSection).length, 2, 'exactly two gold top sections among the eight');
+assert.ok(measuredResolved.every((r) => r.kind === 'measured'), 'every drawn span is measured — no derived treatment');
+
+// 10. Pass placement join: a bracketed loop interval resolves to its span.
+const s2b = passSpanAnchor(measuredNash!, 'SS1', 'T2');
+assert.ok(s2b, 'a pass between SS1 and T2 resolves to a span');
+assert.equal(s2b!.sectionName, 'S2B', 'SS1->T2 is the compound (S2B) span');
+assert.equal(passSpanAnchor(measuredNash!, 'SF', 'T4'), null, 'a non-adjacent/undrawn interval resolves to no mark');
+// Milwaukee's curated chain resolves passes by its "A to B" section names.
+const milPass = passSpanAnchor(trackSectionsFor('The Milwaukee Mile')!, 'SF', 'T1');
+assert.ok(milPass, 'Milwaukee resolves a pass interval from its chain section names');
 
 console.log('section observations contract tests passed');
