@@ -15,7 +15,14 @@ export const isBryceTimingRow = (row, heartbeat) => {
   const last = String(row?.lastName ?? '').toLowerCase();
   const driverId = String(row?.DriverID ?? '');
   const carNumber = String(row?.no ?? '').trim();
-  return carNumber === bryceCarNumber && ((first === 'bryce' && last === 'aron') || driverId === bryceRcDriverId);
+  // Bryce's Race Control driver id is definitive on its own inside an INDY NXT
+  // feed — it appears in no other row. Resolving by it (not only #9) lets
+  // historical replays carry his TRUE season car number (#27 in 2024, #39 at
+  // St Pete 2025) while still being found. Our own #9 live captures still match
+  // (driver id first, name+number as the fallback), and the wrong-series guard —
+  // the INDY NXT heartbeat gate above — is unchanged.
+  if (driverId === bryceRcDriverId) return true;
+  return carNumber === bryceCarNumber && first === 'bryce' && last === 'aron';
 };
 
 export const isBryceProfile = (driver) => {

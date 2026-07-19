@@ -21,7 +21,61 @@ export interface ReplaySessionInfo {
   durationSeconds: number | null;
   totalLaps: number | null;
   watchable: boolean;
+  /** Provenance tier of the feed: our own 1s capture, or a lake-fed replay. */
+  sourceTier?: ReplaySourceTier;
+  /** Human label for the tier — never reads "official" or masks a lake source. */
+  tierLabel?: string;
+  /** Set on a lake session when the as-raced order diverges from canonical
+   *  (a post-race DQ); carries the honesty line at the checker. */
+  asRaced?: string | null;
+  /** A lake session suppressed because our own watchable capture covers it. */
+  supersededByCapture?: boolean;
 }
+
+export type ReplaySourceTier = 'brycecast_capture' | 'racetools_capture' | 'timing71_normalized';
+
+export interface ReplayProvenance {
+  tier: ReplaySourceTier;
+  label: string;
+  detail: string;
+  caveat: string | null;
+}
+
+/** The trust-rail descriptor for a replay session's source tier. Keeps the honest
+ *  distinction: our own Race Control capture vs a third-party normalized replay —
+ *  never "official", never confusable with live. */
+export const replayProvenance = (session: ReplaySessionInfo | null): ReplayProvenance => {
+  const tier = session?.sourceTier ?? 'brycecast_capture';
+  const label =
+    session?.tierLabel ??
+    (tier === 'racetools_capture'
+      ? 'RaceTools race-weekend capture'
+      : tier === 'timing71_normalized'
+        ? 'third-party normalized (Timing71)'
+        : 'BryceCast 1-second Race Control capture');
+  if (tier === 'racetools_capture') {
+    return {
+      tier,
+      label,
+      detail: 'Reconstructed from a RaceTools race-weekend timing capture — a third-party capture of the series timing feed, normalized into a second-by-second replay.',
+      caveat: session?.asRaced ? 'Shown as-raced; the official result is the reference.' : 'A third-party capture; not official timing, and not our own live capture.'
+    };
+  }
+  if (tier === 'timing71_normalized') {
+    return {
+      tier,
+      label,
+      detail: 'Reconstructed from Timing71 normalized timing states — third-party normalized observations of the 2026 season, replayed second by second.',
+      caveat: session?.asRaced ? 'Shown as-raced; a post-race change means the official result differs.' : 'Third-party normalized data; not official timing, and not our own live capture.'
+    };
+  }
+  return {
+    tier,
+    label,
+    detail: 'BryceCast recorded the official Race Control timing feed once per second during the session. This replays that archive — never live.',
+    caveat: null
+  };
+};
 
 export interface ReplayAvailable {
   schemaVersion?: string;
