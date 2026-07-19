@@ -1,6 +1,6 @@
 {
   "schemaVersion": "brycecast.uiDataPackage.v1",
-  "generatedAt": "2026-07-19T07:25:45.005Z",
+  "generatedAt": "2026-07-19T13:36:15.170Z",
   "sourceHash": "900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681",
   "asOfDate": "2026-07-18",
   "baselineCommit": "8ea1225",
@@ -286,8 +286,8 @@
     "restartReportSummary": {
       "path": "analysis/restart-report/output/summary.json",
       "bytes": 10646,
-      "modifiedAt": "2026-07-19T07:25:42.746Z",
-      "sha256": "901f5e13816670ee130cafed13c58c93edddbfbd5e3f0a5580007ffcef92e996"
+      "modifiedAt": "2026-07-19T13:36:12.823Z",
+      "sha256": "2f8b873a35746cbf42b06b9344f104617292f318898b002e4ee9fd2e500e42dd"
     },
     "restartReportEvents": {
       "path": "analysis/restart-report/output/tables/restart_events.csv",
@@ -447,9 +447,9 @@
     },
     "uiDataPackageBuilderScript": {
       "path": "scripts/build-ui-data-package.mjs",
-      "bytes": 135645,
-      "modifiedAt": "2026-07-19T07:24:44.458Z",
-      "sha256": "0c51446ba287a64fa8fdea8d57674fceabcef2aec671ae5dd2b46eb64891b226"
+      "bytes": 136719,
+      "modifiedAt": "2026-07-19T13:26:52.096Z",
+      "sha256": "ff146e0b23c2da13263d8e189d80db122b70b6d728c497968d1c04d20dc7038d"
     },
     "uiDataPackageValidatorScript": {
       "path": "scripts/validate-ui-data-package.mjs",
@@ -2835,8 +2835,340 @@
         ]
       },
       "standingsSnapshot": {
-        "available": false,
-        "reason": "live capture database not present"
+        "available": true,
+        "capturedAt": "2026-07-05T14:53:17.698Z",
+        "capturePath": "data/live/brycecast.sqlite",
+        "sessionKey": "5543-6760",
+        "eventName": "INDY NXT by Firestone Grand Prix at Mid-Ohio",
+        "sessionName": "Race 2",
+        "seriesGuard": {
+          "series": "L",
+          "sessionType": "R",
+          "ok": true
+        },
+        "roundsCompleted": 12,
+        "racesRemaining": 5,
+        "bryce": {
+          "carNo": "9",
+          "points": 190,
+          "pointsRankInCapture": 17
+        },
+        "entries": [
+          {
+            "carNo": "67",
+            "driverName": "Enzo Fittipaldi",
+            "teamName": "HMD Motorsports",
+            "points": 431,
+            "isBryce": false,
+            "headToHead": {
+              "racesTogether": 12,
+              "bryceAhead": 1,
+              "bryceBehind": 11
+            },
+            "pointsRankInCapture": 1
+          },
+          {
+            "carNo": "71",
+            "driverName": "Tymek Kucharczyk",
+            "teamName": "HMD Motorsports",
+            "points": 414,
+            "isBryce": false,
+            "headToHead": {
+              "racesTogether": 12,
+              "bryceAhead": 0,
+              "bryceBehind": 12
+            },
+            "pointsRankInCapture": 2
+          },
+          {
+            "carNo": "21",
+            "driverName": "Nikita Johnson",
+            "teamName": "Cape Motorsports",
+            "points": 411,
+            "isBryce": false,
+            "headToHead": {
+              "racesTogether": 15,
+              "bryceAhead": 1,
+              "bryceBehind": 14
+            },
+            "pointsRankInCapture": 3
+          },
+          {
+            "carNo": "28",
+            "driverName": "Max Taylor",
+            "teamName": "Andretti Global",
+            "points": 331,
+            "isBryce": false,
+            "headToHead": {
+              "racesTogether": 18,
+              "bryceAhead": 7,
+              "bryceBehind": 11
+            },
+            "pointsRankInCapture": 4
+          },
+          {
+            "carNo": "26",
+            "driverName": "Lochie Hughes",
+            "teamName": "Andretti Global",
+            "points": 319,
+            "isBryce": false,
+            "headToHead": {
+              "racesTogether": 26,
+              "bryceAhead": 5,
+              "bryceBehind": 21
+            },
+            "pointsRankInCapture": 5
+          },
+          {
+            "carNo": "14",
+            "driverName": "Alessandro de Tullio",
+            "teamName": "AJ Foyt Racing",
+            "points": 302,
+            "isBryce": false,
+            "headToHead": {
+              "racesTogether": 12,
+              "bryceAhead": 3,
+              "bryceBehind": 9
+            },
+            "pointsRankInCapture": 6
+          },
+          {
+            "carNo": "99",
+            "driverName": "Myles Rowe",
+            "teamName": "ABEL Motorsports",
+            "points": 300,
+            "isBryce": false,
+            "headToHead": {
+              "racesTogether": 40,
+              "bryceAhead": 13,
+              "bryceBehind": 27
+            },
+            "pointsRankInCapture": 7
+          },
+          {
+            "carNo": "45",
+            "driverName": "Jack Beeton",
+            "teamName": "HMD Motorsports",
+            "points": 275,
+            "isBryce": false,
+            "headToHead": {
+              "racesTogether": 12,
+              "bryceAhead": 4,
+              "bryceBehind": 8
+            },
+            "pointsRankInCapture": 8
+          },
+          {
+            "carNo": "68",
+            "driverName": "JM Correa",
+            "teamName": "Cusick Morgan Motorsports",
+            "points": 264,
+            "isBryce": false,
+            "headToHead": {
+              "racesTogether": 21,
+              "bryceAhead": 7,
+              "bryceBehind": 14
+            },
+            "pointsRankInCapture": 9
+          },
+          {
+            "carNo": "29",
+            "driverName": "Josh Pierson",
+            "teamName": "Andretti Global",
+            "points": 254,
+            "isBryce": false,
+            "headToHead": {
+              "racesTogether": 40,
+              "bryceAhead": 16,
+              "bryceBehind": 24
+            },
+            "pointsRankInCapture": 10
+          },
+          {
+            "carNo": "20",
+            "driverName": "Matteo Nannini",
+            "teamName": "Cape Motorsports",
+            "points": 243,
+            "isBryce": false,
+            "headToHead": {
+              "racesTogether": 12,
+              "bryceAhead": 5,
+              "bryceBehind": 7
+            },
+            "pointsRankInCapture": 11
+          },
+          {
+            "carNo": "12",
+            "driverName": "Max Garcia",
+            "teamName": "ABEL Motorsports",
+            "points": 232,
+            "isBryce": false,
+            "headToHead": {
+              "racesTogether": 12,
+              "bryceAhead": 3,
+              "bryceBehind": 9
+            },
+            "pointsRankInCapture": 12
+          },
+          {
+            "carNo": "27",
+            "driverName": "Seb Murray",
+            "teamName": "Andretti Global",
+            "points": 228,
+            "isBryce": false,
+            "headToHead": {
+              "racesTogether": 25,
+              "bryceAhead": 11,
+              "bryceBehind": 14
+            },
+            "pointsRankInCapture": 13
+          },
+          {
+            "carNo": "17",
+            "driverName": "Salvador de Alba",
+            "teamName": "HMD Motorsports",
+            "points": 216,
+            "isBryce": false,
+            "headToHead": {
+              "racesTogether": 40,
+              "bryceAhead": 9,
+              "bryceBehind": 31
+            },
+            "pointsRankInCapture": 14
+          },
+          {
+            "carNo": "48",
+            "driverName": "Jordan Missig",
+            "teamName": "ABEL Motorsports",
+            "points": 208,
+            "isBryce": false,
+            "headToHead": {
+              "racesTogether": 31,
+              "bryceAhead": 14,
+              "bryceBehind": 17
+            },
+            "pointsRankInCapture": 15
+          },
+          {
+            "carNo": "10",
+            "driverName": "Niels Koolen",
+            "teamName": "Chip Ganassi Racing",
+            "points": 202,
+            "isBryce": false,
+            "headToHead": {
+              "racesTogether": 35,
+              "bryceAhead": 18,
+              "bryceBehind": 17
+            },
+            "pointsRankInCapture": 16
+          },
+          {
+            "carNo": "9",
+            "driverName": "Bryce Aron",
+            "teamName": "Chip Ganassi Racing",
+            "points": 190,
+            "isBryce": true,
+            "headToHead": null,
+            "pointsRankInCapture": 17
+          },
+          {
+            "carNo": "15",
+            "driverName": "Nicolas Stati",
+            "teamName": "Cusick Morgan Motorsports",
+            "points": 160,
+            "isBryce": false,
+            "headToHead": {
+              "racesTogether": 11,
+              "bryceAhead": 7,
+              "bryceBehind": 4
+            },
+            "pointsRankInCapture": 18
+          },
+          {
+            "carNo": "57",
+            "driverName": "Colin Kaminsky",
+            "teamName": "ABEL Motorsports",
+            "points": 149,
+            "isBryce": false,
+            "headToHead": {
+              "racesTogether": 12,
+              "bryceAhead": 8,
+              "bryceBehind": 4
+            },
+            "pointsRankInCapture": 19
+          },
+          {
+            "carNo": "8",
+            "driverName": "James Roe",
+            "teamName": "Chip Ganassi Racing",
+            "points": 146,
+            "isBryce": false,
+            "headToHead": {
+              "racesTogether": 40,
+              "bryceAhead": 23,
+              "bryceBehind": 17
+            },
+            "pointsRankInCapture": 20
+          },
+          {
+            "carNo": "75",
+            "driverName": "Alexander Koreiba",
+            "teamName": "Juncos Hollinger Racing",
+            "points": 133,
+            "isBryce": false,
+            "headToHead": {
+              "racesTogether": 12,
+              "bryceAhead": 10,
+              "bryceBehind": 2
+            },
+            "pointsRankInCapture": 21
+          },
+          {
+            "carNo": "11",
+            "driverName": "Carson Etter",
+            "teamName": "Chip Ganassi Racing",
+            "points": 131,
+            "isBryce": false,
+            "headToHead": {
+              "racesTogether": 12,
+              "bryceAhead": 9,
+              "bryceBehind": 3
+            },
+            "pointsRankInCapture": 22
+          },
+          {
+            "carNo": "4",
+            "driverName": "Nicholas Monteiro",
+            "teamName": "AJ Foyt Racing",
+            "points": 126,
+            "isBryce": false,
+            "headToHead": {
+              "racesTogether": 13,
+              "bryceAhead": 9,
+              "bryceBehind": 4
+            },
+            "pointsRankInCapture": 23
+          },
+          {
+            "carNo": "76",
+            "driverName": "Nolan Allaer",
+            "teamName": "Juncos Hollinger Racing",
+            "points": 18,
+            "isBryce": false,
+            "headToHead": {
+              "racesTogether": 25,
+              "bryceAhead": 16,
+              "bryceBehind": 9
+            },
+            "pointsRankInCapture": 24
+          }
+        ],
+        "sourceState": "race_control_capture_cold_unofficial",
+        "caveats": [
+          "Points come from our Race Control capture at the end of the last completed race; official standings can differ after post-race penalties or adjustments.",
+          "Only cars in that session appear; part-season drivers who missed it are not listed.",
+          "Career head-to-head counts every shared INDY NXT race since 2024, not just this season."
+        ]
       },
       "contextPackRefs": [
         {
