@@ -247,4 +247,66 @@ for (const venue of atlas.venues) {
 assert.deepEqual(new Set(atlas.venues.map((venue) => venue.region)), new Set(['North America', 'Europe', 'Oceania']));
 assert.ok(!JSON.stringify(atlas).includes('54649.3'), 'minimum displacement must not leak into the venue-only atlas');
 
+/* GB3 depth pack: the source-bounded contracts the chapter depth layer relies
+   on. Loads through the same pack-module glob the UI uses. */
+{
+  const { loadGb3DeepDive } = await import('../src/data/gb3DeepDive');
+  const gb3 = await loadGb3DeepDive();
+  assert.ok(gb3, 'GB3 deep-dive pack must load through the context-pack glob');
+
+  /* No pace substrate: the UI must never build lap-trace/section modules. */
+  assert.equal(gb3.lapShapeAvailable, false, 'GB3 has no lap shape');
+  assert.equal(gb3.sectionPaceAvailable, false, 'GB3 has no section pace');
+  assert.equal(gb3.counts.lapSampleRows, 0, 'GB3 exposes zero lap samples');
+  assert.equal(gb3.counts.sectionMetricRows, 0, 'GB3 exposes zero section metrics');
+
+  /* Two source families, and every result carries a family tag. */
+  assert.deepEqual(
+    new Set(gb3.sourceFamilies),
+    new Set(['2021 TSL official PDFs', '2022 GB3 official JSON']),
+    'GB3 must stay split across its two source families'
+  );
+  assert.equal(gb3.raceResults.length, 44, 'GB3 carries all 44 Bryce race rows');
+  assert.equal(gb3.teamContext.length, 44, 'team context spans every GB3 race');
+  assert.equal(gb3.trackProfile.length, 6, 'GB3 profiles six venues');
+
+  /* Grid-to-finish is 2021-only: 2021 rows carry a start, 2022 rows never do. */
+  const r2021 = gb3.raceResults.filter((row) => row.seasonYear === 2021);
+  const r2022 = gb3.raceResults.filter((row) => row.seasonYear === 2022);
+  assert.ok(r2021.length > 0 && r2022.length > 0, 'GB3 spans both seasons');
+  assert.ok(
+    r2021.every((row) => row.startPosition !== null),
+    'every 2021 race must carry a source-backed grid start'
+  );
+  assert.ok(
+    r2022.every((row) => row.startPosition === null),
+    '2022 must never expose an inferred start — grid data is 2021-only'
+  );
+
+  /* Two races have no classified result; they render open, never invented. */
+  const unclassified = gb3.raceResults.filter((row) => row.finishPosition === null);
+  assert.equal(unclassified.length, 2, 'GB3 has exactly two unclassified races');
+  assert.ok(
+    gb3.raceResults
+      .filter((row) => row.finishPosition !== null)
+      .every((row) => row.finishPercentile !== null),
+    'every classified GB3 finish carries a field-share percentile'
+  );
+
+  /* Conditions are 2021-only official labels. */
+  assert.ok(gb3.weatherContext.length > 0, 'GB3 carries 2021 condition context');
+  assert.ok(
+    gb3.weatherContext.every((row) => row.seasonYear === 2021),
+    'GB3 conditions are 2021-only'
+  );
+
+  /* Team context is finishing order in {1,2,3} or null (unclassified). */
+  assert.ok(
+    gb3.teamContext.every(
+      (row) => row.bryceWithinTeamRank === null || [1, 2, 3].includes(row.bryceWithinTeamRank)
+    ),
+    'within-team rank is a small result-order integer or absent'
+  );
+}
+
 console.log('ui context adapter hydration tests passed');

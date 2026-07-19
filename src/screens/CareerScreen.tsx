@@ -1,7 +1,9 @@
-import { Card, Reveal, SourcePill, Stat, Unavailable } from '../app/components';
+import { useState, type ReactNode } from 'react';
+import { Card, GhostButton, Reveal, SourcePill, Stat, Unavailable } from '../app/components';
 import { asNumber, asString, formatNumber, formatPct } from '../app/format';
 import { uiDataPackage } from '../data/uiDataPackage';
 import { CareerAtlas } from './careerAtlas';
+import { Gb3DepthLayer } from './gb3Depth';
 import {
   BestClimbs,
   CareerBests,
@@ -67,15 +69,18 @@ const ChapterCard = ({
   chapter,
   row,
   current,
-  extra
+  extra,
+  depth
 }: {
   chapter: (typeof seriesChapters)[number];
   row: Row | undefined;
   current: boolean;
   extra?: string | null;
+  depth?: { title: string; render: () => ReactNode };
 }) => {
   const races = row ? asNumber(row.raceRows) : null;
   const oneRace = chapter.short === 'IMSA';
+  const [expanded, setExpanded] = useState(false);
   return (
     <div className={`journey__chapter${current ? ' journey__chapter--current' : ''}`}>
       <Card className={current ? undefined : 'panel--quiet'}>
@@ -123,6 +128,18 @@ const ChapterCard = ({
               <p className="caption caption--secondary" style={{ margin: '10px 0 0' }}>
                 {extra}
               </p>
+            ) : null}
+            {depth ? (
+              <div style={{ marginTop: 12 }}>
+                <GhostButton expanded={expanded} onClick={() => setExpanded((value) => !value)}>
+                  {expanded ? 'Show less' : depth.title}
+                </GhostButton>
+                {expanded ? (
+                  <Reveal>
+                    <div style={{ paddingTop: 4 }}>{depth.render()}</div>
+                  </Reveal>
+                ) : null}
+              </div>
             ) : null}
           </>
         )}
@@ -293,6 +310,11 @@ export const CareerScreen = () => {
                   row={rowByName.get(chapter.name)}
                   current={index === seriesChapters.length - 1}
                   extra={index === seriesChapters.length - 1 ? lapLine : null}
+                  depth={
+                    chapter.short === 'GB3'
+                      ? { title: 'The GB3 years, in depth', render: () => <Gb3DepthLayer /> }
+                      : undefined
+                  }
                 />
               </Reveal>
             ))}
