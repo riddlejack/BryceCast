@@ -7,6 +7,8 @@ import { DatabaseSync } from 'node:sqlite';
 import { bryceCarNumber, isBryceProfile, isBryceTimingRow, isIndyNxtTimingHeartbeat, liveSourceEndpoints, raceSnapshotEndpoints } from './live-source-endpoints.mjs';
 import { buildPointsProjectionState } from './live-points-state.mjs';
 import { createReplayOverlay } from './lib/replay-overlay.mjs';
+import { createLakeReplayFeeds } from './lib/replay-lake-feeds.mjs';
+import { createReplayRouter } from './lib/replay-router.mjs';
 import {
   buildUpcomingIndyNxtWeatherReport,
   fetchCachedLiveWeatherForTrack,
@@ -36,7 +38,9 @@ const apiCacheRefreshMs = Number(process.env.BRYCECAST_API_CACHE_REFRESH_MS ?? 1
 const apiRunnerFreshMs = Number(process.env.BRYCECAST_API_RUNNER_FRESH_MS ?? 60000);
 const replayEnabled = process.env.BRYCECAST_REPLAY === '1';
 const runnerOnlyApi = process.env.BRYCECAST_API_RUNNER_ONLY === '1';
-const replayOverlay = createReplayOverlay({ enabled: replayEnabled, sqlitePath, runnerStatusPath });
+const captureReplayOverlay = createReplayOverlay({ enabled: replayEnabled, sqlitePath, runnerStatusPath });
+const lakeReplayFeeds = createLakeReplayFeeds({ enabled: replayEnabled, runnerStatusPath });
+const replayOverlay = createReplayRouter({ captureOverlay: captureReplayOverlay, lakeFeeds: lakeReplayFeeds, enabled: replayEnabled });
 
 const sourceUrlByPath = new Map(sourceProbeEndpoints.map((endpoint) => [endpoint.proxyPath, endpoint.url]));
 const sourceEndpointByPath = new Map(sourceProbeEndpoints.map((endpoint) => [endpoint.proxyPath, endpoint]));

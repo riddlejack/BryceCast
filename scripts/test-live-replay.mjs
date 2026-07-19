@@ -331,6 +331,48 @@ try {
   const familyStop = JSON.parse(await (await fetch(`${baseUrl}/api/replay/control?stop=1`)).text());
   assert.equal(familyStop.active, false, 'family flow: stop must disengage playback');
 
+  // ---- Lake-fed replay (2024-25 RaceTools / 2026 Timing71) end to end ----
+  // A historical race that we never captured ourselves must light up "Watch this
+  // race unfold" too: it appears in available() source-tiered, starts via the same
+  // frontend param path, and serves capture-shaped timing where Bryce carries his
+  // TRUE season car number while resolving on his stable Race Control driver id.
+  {
+    const lakeAvailable = await fetchJson('/api/replay/available');
+    const lake2024 = lakeAvailable.sessions.find((s) => s.canonicalSessionId === 'session_indy_nxt_2024_6314');
+    assert.ok(lake2024, 'lake feed: available() must list the 2024 Barber RaceTools race');
+    assert.equal(lake2024.sourceTier, 'racetools_capture', 'lake feed: a 2024 race must be tiered as a RaceTools capture');
+    assert.equal(lake2024.tierLabel, 'RaceTools race-weekend capture', 'lake feed: the tier label must never read as official or as our own capture');
+    assert.equal(lake2024.watchable, true, 'lake feed: a validated 2024 race must be watchable');
+    assert.equal(lake2024.eventSessionId, '6314', 'lake feed: the eventSessionId must key the 2024 race page');
+    assert.ok(lakeAvailable.sessions.some((s) => s.sourceTier === 'timing71_normalized'), 'lake feed: 2026 Timing71 races must also be listed, tiered as third-party normalized');
+    // Our own watchable capture wins over a lake feed for the same event session.
+    const lake6754 = lakeAvailable.sessions.find((s) => s.sessionKey === 'session_indy_nxt_2026_6754');
+    if (lake6754) assert.equal(lake6754.watchable, false, 'lake feed: a lake session is superseded when a watchable capture covers the same event session');
+
+    const lakeQuery = `?session=${encodeURIComponent(lake2024.sessionKey)}&t0=${encodeURIComponent(lake2024.firstGreenAt)}&speed=${DEFAULT_REPLAY_SPEED}`;
+    const lakeStart = JSON.parse(await (await fetch(`${baseUrl}/api/replay/control${lakeQuery}`)).text());
+    assert.equal(lakeStart.active, true, 'lake feed: the start body must report active:true so the page leaves the cue-up');
+    assert.equal(lakeStart.source, 'lake_feeds', 'lake feed: playback must be served by the lake source, not the sqlite overlay');
+    assert.equal(lakeStart.tierLabel, 'RaceTools race-weekend capture', 'lake feed: the engaged replay must carry its source tier');
+    const lakeTiming = await fetchJson('/api/timing');
+    const lakeBryce = lakeTiming.rows.find((row) => row.bryce);
+    assert.equal(lakeBryce?.driverId, '2143', 'lake feed: Bryce must resolve on his stable Race Control driver id');
+    assert.equal(lakeBryce?.no, '27', 'lake feed: Bryce must carry his TRUE 2024 car number (#27), not #9');
+    // Structural (capture-shaped) compatibility: the payload, heartbeat, and each
+    // timing row must carry exactly the same FIELDS as a live capture. Values may
+    // legitimately be null where a historical replay has no data (e.g. running
+    // championship points), which is the same null the live compact row emits when
+    // a live feed omits them — so the field SET, not the value type, is the contract.
+    assert.deepEqual(Object.keys(lakeTiming).sort(), Object.keys(expectedTiming).sort(), 'lake feed: timing payload must carry the live top-level fields');
+    assert.deepEqual(Object.keys(lakeTiming.heartbeat).sort(), Object.keys(expectedTiming.heartbeat).sort(), 'lake feed: heartbeat must carry the live fields');
+    assert.deepEqual(Object.keys(lakeTiming.rows[0]).sort(), Object.keys(expectedTiming.rows[0]).sort(), 'lake feed: each timing row must carry the live capture fields');
+    const lakeReadiness = await fetchJson('/api/readiness');
+    assert.equal(lakeReadiness.replay.simulation?.active, true, 'lake feed: readiness must flag simulated playback');
+    assert.equal(lakeReadiness.bryce.identityGuard.matchedBy, 'driver_id', 'lake feed: the identity guard must match Bryce by driver id');
+    const lakeStop = JSON.parse(await (await fetch(`${baseUrl}/api/replay/control?stop=1`)).text());
+    assert.equal(lakeStop.active, false, 'lake feed: stop must disengage lake playback');
+  }
+
   // A refused start must be legible to the client, not a silent hang: the body
   // reports active!==true AND carries a human reason, which is what the page now
   // renders as "this replay can't start: <reason>" with an exit — never a cue-up.
@@ -400,4 +442,4 @@ try {
 }
 
 assert.equal(stderr, '', stderr);
-console.log(JSON.stringify({ ok: true, assertions: 69, payloadShape: 'live-compatible', timeMachine: 'available+16x', liveGuard: 'preempts-replay', gating: 'watchable-only', familyFlow: 'available-derived-params+active-body' }, null, 2));
+console.log(JSON.stringify({ ok: true, assertions: 85, payloadShape: 'live-compatible', timeMachine: 'available+16x', liveGuard: 'preempts-replay', gating: 'watchable-only', familyFlow: 'available-derived-params+active-body', lakeFeeds: '2024-25-racetools+2026-timing71-source-tiered' }, null, 2));
