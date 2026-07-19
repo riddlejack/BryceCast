@@ -1350,8 +1350,9 @@ export const CareerRestarts = () => {
       </div>
 
       <p className="caption caption--secondary" style={{ margin: '0 0 8px' }}>
-        Every race with a restart a dot · higher = more ground made up · the line is even, the field's typical restart · gold is
-        Bryce · click a dot to open its race
+        Every race with a restart a dot · higher = more ground made up · the dashed line is the field's typical restart · gold =
+        days he out-restarted the field's typical move
+        {races.some((row) => row.soleBestInField) ? ' · a ring marks a best-in-field day' : ''} · click a dot to open its race
       </p>
       <div ref={ref} style={{ width: '100%', position: 'relative' }}>
         {width > 0 ? (
@@ -1382,17 +1383,34 @@ export const CareerRestarts = () => {
               const restartCount = row.bryceRestartsCounted ?? 0;
               const radius = 3.5 + Math.sqrt(restartCount) * 1.5;
               const focused = hovered === null || hovered === index;
+              /* Color budget: ink is the default; gold is spent only on the days
+               * he out-restarted the field's typical move (computed in the lane,
+               * keyed in the caption). The one best-in-field day gets a ring. */
+              const gold = row.bryceBeatFieldTypical;
               return (
-                <circle
-                  key={row.sessionId}
-                  cx={x(index)}
-                  cy={y(net)}
-                  r={hovered === index ? radius + 1.5 : radius}
-                  fill="var(--bryce)"
-                  opacity={focused ? 0.9 : 0.22}
-                  stroke="#fff"
-                  strokeWidth={0.75}
-                />
+                <g key={row.sessionId}>
+                  <circle
+                    cx={x(index)}
+                    cy={y(net)}
+                    r={hovered === index ? radius + 1.5 : radius}
+                    fill={gold ? 'var(--bryce)' : 'var(--ink-primary)'}
+                    opacity={focused ? (gold ? 0.92 : 0.55) : 0.22}
+                    stroke="#fff"
+                    strokeWidth={0.75}
+                  />
+                  {row.soleBestInField ? (
+                    <circle
+                      cx={x(index)}
+                      cy={y(net)}
+                      r={(hovered === index ? radius + 1.5 : radius) + 3.5}
+                      fill="none"
+                      stroke="var(--ink-primary)"
+                      strokeWidth={1.5}
+                      opacity={focused ? 0.85 : 0.22}
+                      pointerEvents="none"
+                    />
+                  ) : null}
+                </g>
               );
             })}
           </svg>

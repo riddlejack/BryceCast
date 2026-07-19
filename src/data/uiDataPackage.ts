@@ -177,6 +177,10 @@ export interface UiRestartByRace {
   bryceSlipped: number | null;
   bryceRankInField: number | null;
   fieldSizeRanked: number | null;
+  /** Median of every classified driver's summed restart movement this race. */
+  fieldMedianNet: number | null;
+  /** True when Bryce's day net strictly beat that median — the gold-day flag. */
+  bryceBeatFieldTypical: boolean;
   soleBestInField: boolean;
   coBestInField: boolean;
   coverageNote: string;

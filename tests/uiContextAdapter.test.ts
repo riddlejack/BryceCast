@@ -300,6 +300,21 @@ assert.ok(
   restarts.career.bryceGained + restarts.career.bryceHeld + restarts.career.bryceSlipped === restarts.career.bryceRestartsCounted,
   'every counted restart is gained, held, or slipped'
 );
+/* The gold-day flag (career chart color budget) is computed in the lane, never
+ * in the UI: gold requires the day net to strictly beat the field's median. */
+for (const row of restarts.byRace) {
+  assert.equal(typeof row.bryceBeatFieldTypical, 'boolean', `${row.sessionId} must carry the gold-day flag`);
+  if (row.bryceBeatFieldTypical) {
+    assert.ok(
+      row.fieldMedianNet !== null && (row.bryceNet ?? -99) > row.fieldMedianNet,
+      `${row.sessionId} gold-day flag must mean net above the field median`
+    );
+  }
+}
+assert.ok(
+  restarts.byRace.some((row) => row.bryceBeatFieldTypical),
+  'at least one gold day exists for the career chart key'
+);
 assert.ok(
   restarts.sourceRefs.some((ref) => ref.path === 'analysis/restart-report/output/summary.json'),
   'restart report must cite its validated summary'

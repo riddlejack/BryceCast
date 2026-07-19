@@ -237,6 +237,22 @@ const OvalStory = ({ prep, trackTypeName, debriefIds }: { prep: UiNextEventPrep;
 
 const restartMovePhrase = (net: number): string => (net > 0 ? `up ${net}` : net === 0 ? 'held even' : `back ${Math.abs(net)}`);
 
+const restartCountWord = (value: number): string =>
+  ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'][value] ?? String(value);
+
+/** "both times" / "every time" / "on three of five" — generalizes across venues
+ *  without special-casing; a day with nothing to headline states the counts and
+ *  lets the honest rows below carry the detail. */
+const restartRecordPhrase = ({ gained, held, counted }: { gained: number; held: number; counted: number }): string => {
+  const all = counted === 1 ? '' : counted === 2 ? ' both times' : ' every time';
+  if (gained === counted) return `he gained ground${all || ' on it'}`;
+  if (held === counted) return `he held his spot${all || ' on it'}`;
+  const heldOrGained = gained + held;
+  if (heldOrGained === counted) return `he held or gained ground${all || ' on it'}`;
+  if (heldOrGained > 0) return `he held or gained ground on ${restartCountWord(heldOrGained)} of them`;
+  return 'each one reads below, race by race';
+};
+
 const RestartPrior = ({ trackName }: { trackName: string }) => {
   const report = uiDataPackage.screens.careerLab.restarts;
   const target = trackName.trim().toLowerCase();
@@ -253,11 +269,13 @@ const RestartPrior = ({ trackName }: { trackName: string }) => {
     );
   }
 
-  const restarts = counted.reduce((sum, row) => sum + (row.restartCount ?? 0), 0);
-  const heldOrGained = counted.reduce((sum, row) => sum + (row.bryceGained ?? 0) + (row.bryceHeld ?? 0), 0);
+  const gained = counted.reduce((sum, row) => sum + (row.bryceGained ?? 0), 0);
+  const held = counted.reduce((sum, row) => sum + (row.bryceHeld ?? 0), 0);
   const runCounted = counted.reduce((sum, row) => sum + (row.bryceRestartsCounted ?? 0), 0);
   const soleBest = counted.some((row) => row.soleBestInField);
   const visits = counted.length;
+  const introLead = `${restartCountWord(visits)} visit${visits === 1 ? '' : 's'}, ${restartCountWord(runCounted)} restart${runCounted === 1 ? '' : 's'} here`;
+  const intro = `${introLead.charAt(0).toUpperCase()}${introLead.slice(1)} — ${restartRecordPhrase({ gained, held, counted: runCounted })}`;
 
   return (
     <Card
@@ -282,9 +300,8 @@ const RestartPrior = ({ trackName }: { trackName: string }) => {
       }
     >
       <p style={{ margin: '0 0 4px', fontSize: 13.5, color: 'var(--ink-secondary)', maxWidth: '62ch' }}>
-        Across {visits} visit{visits === 1 ? '' : 's'} and {runCounted} restart{runCounted === 1 ? '' : 's'} here, he held or
-        gained ground on {heldOrGained}
-        {soleBest ? ' · best in the field on one of them' : ''}.
+        {intro}
+        {soleBest ? ' · best in the field on one of those days' : ''}.
       </p>
       <div className="stack" style={{ gap: 0, marginTop: 8 }}>
         {counted.map((row, index) => {

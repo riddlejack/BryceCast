@@ -1069,6 +1069,8 @@ const buildRestartReport = ({ summary, byRaceRows, seasonIndex }) => {
         bryceSlipped: numberOrNull(row.bryceSlipped),
         bryceRankInField: numberOrNull(row.bryceRankInField),
         fieldSizeRanked: numberOrNull(row.fieldSizeRanked),
+        fieldMedianNet: numberOrNull(row.fieldMedianNet),
+        bryceBeatFieldTypical: row.bryceBeatFieldTypical === 'true',
         soleBestInField: row.soleBestInField === 'true',
         coBestInField: row.coBestInField === 'true',
         coverageNote: row.coverageNote || ''

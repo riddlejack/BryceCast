@@ -474,6 +474,14 @@ def main() -> None:
             for row in field_rows_for(driver_delta_rows, session_id, restart["restartIndex"]):
                 driver_totals[row["driverId"]] += row["net"]
 
+        # The field's typical day: median of every classified driver's summed
+        # restart movement this race. "Beat the field's typical move" at day
+        # grain = Bryce's day net strictly above that median.
+        field_median_net = median([float(total) for total in driver_totals.values()])
+        bryce_beat_field_typical = (
+            bryce_counted > 0 and field_median_net is not None and bryce_net_total > field_median_net
+        )
+
         sole_best = "false"
         co_best = "false"
         bryce_rank_race = None
@@ -522,6 +530,8 @@ def main() -> None:
                 "bryceSlipped": bryce_slipped,
                 "bryceRankInField": bryce_rank_race,
                 "fieldSizeRanked": field_size_ranked,
+                "fieldMedianNet": round1(field_median_net),
+                "bryceBeatFieldTypical": "true" if bryce_beat_field_typical else "false",
                 "soleBestInField": sole_best,
                 "coBestInField": co_best,
                 "coverageNote": coverage_note,
@@ -588,8 +598,8 @@ def main() -> None:
         [
             "sessionId", "seasonYear", "raceLabel", "trackName", "trackType", "venueSlug",
             "restartCount", "cautionPeriods", "bryceRestartsCounted", "bryceNet", "bryceGained",
-            "bryceHeld", "bryceSlipped", "bryceRankInField", "fieldSizeRanked", "soleBestInField",
-            "coBestInField", "coverageNote", "sourceHash",
+            "bryceHeld", "bryceSlipped", "bryceRankInField", "fieldSizeRanked", "fieldMedianNet",
+            "bryceBeatFieldTypical", "soleBestInField", "coBestInField", "coverageNote", "sourceHash",
         ],
     )
     write_csv(

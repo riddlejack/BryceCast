@@ -1,6 +1,6 @@
 {
   "schemaVersion": "brycecast.uiDataPackage.v1",
-  "generatedAt": "2026-07-19T01:00:08.188Z",
+  "generatedAt": "2026-07-19T01:07:15.179Z",
   "sourceHash": "900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681",
   "asOfDate": "2026-07-13",
   "baselineCommit": "c207d07",
@@ -274,8 +274,8 @@
     "restartReportSummary": {
       "path": "analysis/restart-report/output/summary.json",
       "bytes": 10646,
-      "modifiedAt": "2026-07-19T01:00:06.074Z",
-      "sha256": "847fc4444d76dfb7217adb41f2cd37cf6e529efa03f76a2d484476f161175ae4"
+      "modifiedAt": "2026-07-19T01:07:13.253Z",
+      "sha256": "288ecba613a9c167caaeddb802909dc2982b0139fee91a38f978e5b2eeb20024"
     },
     "restartReportEvents": {
       "path": "analysis/restart-report/output/tables/restart_events.csv",
@@ -285,9 +285,9 @@
     },
     "restartReportByRace": {
       "path": "analysis/restart-report/output/tables/restart_by_race.csv",
-      "bytes": 8981,
-      "modifiedAt": "2026-07-19T01:00:06.074Z",
-      "sha256": "8fa59c9c17044ebffe82f587bdf2f1927a952e519be4c714891a5e6f23a1303b"
+      "bytes": 9392,
+      "modifiedAt": "2026-07-19T01:07:13.252Z",
+      "sha256": "18832bf5483b44d5409b3950a0424cda27d200b7dcf48e5a5f519dbd03df2825"
     },
     "restartReportByVenue": {
       "path": "analysis/restart-report/output/tables/restart_by_venue.csv",
@@ -309,15 +309,15 @@
     },
     "restartReportBuilderScript": {
       "path": "analysis/restart-report/scripts/build_restart_report.py",
-      "bytes": 31873,
-      "modifiedAt": "2026-07-19T00:30:38.769Z",
-      "sha256": "63a877893657df5532ee0f1dda0610e6201d0c58beb578fcbc6b4f45577d7fa4"
+      "bytes": 32519,
+      "modifiedAt": "2026-07-19T01:05:20.635Z",
+      "sha256": "0ddce0097679ee4ef0ef0659de1457c792a198587cbf44d0b8160cba36302887"
     },
     "restartReportValidatorScript": {
       "path": "analysis/restart-report/scripts/validate_restart_report.py",
-      "bytes": 13543,
-      "modifiedAt": "2026-07-19T00:32:40.590Z",
-      "sha256": "12f6eb8b5f0a878bb772393cf0394963f8de7c270bd5339bea546ad04be90aeb"
+      "bytes": 14502,
+      "modifiedAt": "2026-07-19T01:05:36.640Z",
+      "sha256": "0d386ea24177789335844db2b769a991d54a069794fd86dc6f16dae9d6a469ba"
     },
     "predictiveSummary": {
       "path": "analysis/predictive-race-intelligence/output/summary.json",
@@ -423,9 +423,9 @@
     },
     "uiDataPackageBuilderScript": {
       "path": "scripts/build-ui-data-package.mjs",
-      "bytes": 104016,
-      "modifiedAt": "2026-07-19T00:37:03.490Z",
-      "sha256": "3db4cddde64cc5697e62274f0b73b78fbe70113f9afc5238460ce4cb82404ff9"
+      "bytes": 104143,
+      "modifiedAt": "2026-07-19T01:06:06.209Z",
+      "sha256": "86ea12309601f7b7436260122fe02c855d6e01eb38ea79285b175728b85517ea"
     },
     "uiDataPackageValidatorScript": {
       "path": "scripts/validate-ui-data-package.mjs",
@@ -23185,6 +23185,8 @@
             "bryceSlipped": 0,
             "bryceRankInField": null,
             "fieldSizeRanked": 18,
+            "fieldMedianNet": 0,
+            "bryceBeatFieldTypical": false,
             "soleBestInField": false,
             "coBestInField": false,
             "coverageNote": "bryce_partial_restart_coverage"
@@ -23206,6 +23208,8 @@
             "bryceSlipped": 0,
             "bryceRankInField": 6,
             "fieldSizeRanked": 21,
+            "fieldMedianNet": 0,
+            "bryceBeatFieldTypical": false,
             "soleBestInField": false,
             "coBestInField": false,
             "coverageNote": ""
@@ -23227,6 +23231,8 @@
             "bryceSlipped": 0,
             "bryceRankInField": 6,
             "fieldSizeRanked": 20,
+            "fieldMedianNet": 0,
+            "bryceBeatFieldTypical": true,
             "soleBestInField": false,
             "coBestInField": false,
             "coverageNote": ""
@@ -23248,6 +23254,8 @@
             "bryceSlipped": 0,
             "bryceRankInField": null,
             "fieldSizeRanked": 19,
+            "fieldMedianNet": 0,
+            "bryceBeatFieldTypical": false,
             "soleBestInField": false,
             "coBestInField": false,
             "coverageNote": "bryce_partial_restart_coverage"
@@ -23269,6 +23277,8 @@
             "bryceSlipped": 1,
             "bryceRankInField": 6,
             "fieldSizeRanked": 21,
+            "fieldMedianNet": 1,
+            "bryceBeatFieldTypical": false,
             "soleBestInField": false,
             "coBestInField": false,
             "coverageNote": ""
@@ -23290,6 +23300,8 @@
             "bryceSlipped": 0,
             "bryceRankInField": 4,
             "fieldSizeRanked": 20,
+            "fieldMedianNet": 0,
+            "bryceBeatFieldTypical": false,
             "soleBestInField": false,
             "coBestInField": false,
             "coverageNote": ""
@@ -23311,6 +23323,8 @@
             "bryceSlipped": 0,
             "bryceRankInField": 5,
             "fieldSizeRanked": 20,
+            "fieldMedianNet": 0,
+            "bryceBeatFieldTypical": false,
             "soleBestInField": false,
             "coBestInField": false,
             "coverageNote": ""
@@ -23332,6 +23346,8 @@
             "bryceSlipped": 0,
             "bryceRankInField": 1,
             "fieldSizeRanked": 19,
+            "fieldMedianNet": 0,
+            "bryceBeatFieldTypical": true,
             "soleBestInField": false,
             "coBestInField": true,
             "coverageNote": ""
@@ -23353,6 +23369,8 @@
             "bryceSlipped": 0,
             "bryceRankInField": 4,
             "fieldSizeRanked": 16,
+            "fieldMedianNet": 0,
+            "bryceBeatFieldTypical": true,
             "soleBestInField": false,
             "coBestInField": false,
             "coverageNote": ""
@@ -23374,6 +23392,8 @@
             "bryceSlipped": 1,
             "bryceRankInField": 2,
             "fieldSizeRanked": 16,
+            "fieldMedianNet": 0,
+            "bryceBeatFieldTypical": true,
             "soleBestInField": false,
             "coBestInField": false,
             "coverageNote": ""
@@ -23395,6 +23415,8 @@
             "bryceSlipped": 0,
             "bryceRankInField": 3,
             "fieldSizeRanked": 16,
+            "fieldMedianNet": 0,
+            "bryceBeatFieldTypical": false,
             "soleBestInField": false,
             "coBestInField": false,
             "coverageNote": ""
@@ -23416,6 +23438,8 @@
             "bryceSlipped": 0,
             "bryceRankInField": 1,
             "fieldSizeRanked": 15,
+            "fieldMedianNet": 0,
+            "bryceBeatFieldTypical": true,
             "soleBestInField": false,
             "coBestInField": true,
             "coverageNote": ""
@@ -23437,6 +23461,8 @@
             "bryceSlipped": 0,
             "bryceRankInField": 2,
             "fieldSizeRanked": 15,
+            "fieldMedianNet": 0,
+            "bryceBeatFieldTypical": false,
             "soleBestInField": false,
             "coBestInField": false,
             "coverageNote": ""
@@ -23458,6 +23484,8 @@
             "bryceSlipped": 0,
             "bryceRankInField": 6,
             "fieldSizeRanked": 20,
+            "fieldMedianNet": 0,
+            "bryceBeatFieldTypical": false,
             "soleBestInField": false,
             "coBestInField": false,
             "coverageNote": ""
@@ -23479,6 +23507,8 @@
             "bryceSlipped": 0,
             "bryceRankInField": 5,
             "fieldSizeRanked": 20,
+            "fieldMedianNet": 0,
+            "bryceBeatFieldTypical": false,
             "soleBestInField": false,
             "coBestInField": false,
             "coverageNote": ""
@@ -23500,6 +23530,8 @@
             "bryceSlipped": 0,
             "bryceRankInField": 7,
             "fieldSizeRanked": 21,
+            "fieldMedianNet": 0,
+            "bryceBeatFieldTypical": false,
             "soleBestInField": false,
             "coBestInField": false,
             "coverageNote": ""
@@ -23521,6 +23553,8 @@
             "bryceSlipped": 0,
             "bryceRankInField": 5,
             "fieldSizeRanked": 20,
+            "fieldMedianNet": 0,
+            "bryceBeatFieldTypical": false,
             "soleBestInField": false,
             "coBestInField": false,
             "coverageNote": ""
@@ -23542,6 +23576,8 @@
             "bryceSlipped": 0,
             "bryceRankInField": 2,
             "fieldSizeRanked": 18,
+            "fieldMedianNet": 0,
+            "bryceBeatFieldTypical": true,
             "soleBestInField": false,
             "coBestInField": false,
             "coverageNote": "bryce_partial_restart_coverage"
@@ -23563,6 +23599,8 @@
             "bryceSlipped": 0,
             "bryceRankInField": 2,
             "fieldSizeRanked": 17,
+            "fieldMedianNet": 0,
+            "bryceBeatFieldTypical": false,
             "soleBestInField": false,
             "coBestInField": false,
             "coverageNote": ""
@@ -23584,6 +23622,8 @@
             "bryceSlipped": 0,
             "bryceRankInField": 8,
             "fieldSizeRanked": 19,
+            "fieldMedianNet": 0,
+            "bryceBeatFieldTypical": false,
             "soleBestInField": false,
             "coBestInField": false,
             "coverageNote": ""
@@ -23605,6 +23645,8 @@
             "bryceSlipped": 0,
             "bryceRankInField": 4,
             "fieldSizeRanked": 17,
+            "fieldMedianNet": 0,
+            "bryceBeatFieldTypical": false,
             "soleBestInField": false,
             "coBestInField": false,
             "coverageNote": ""
@@ -23626,6 +23668,8 @@
             "bryceSlipped": 0,
             "bryceRankInField": null,
             "fieldSizeRanked": 18,
+            "fieldMedianNet": 0,
+            "bryceBeatFieldTypical": false,
             "soleBestInField": false,
             "coBestInField": false,
             "coverageNote": "bryce_absent_from_lap_chart"
@@ -23647,6 +23691,8 @@
             "bryceSlipped": 0,
             "bryceRankInField": null,
             "fieldSizeRanked": 18,
+            "fieldMedianNet": 0,
+            "bryceBeatFieldTypical": false,
             "soleBestInField": false,
             "coBestInField": false,
             "coverageNote": "bryce_absent_from_lap_chart"
@@ -23668,6 +23714,8 @@
             "bryceSlipped": 0,
             "bryceRankInField": 1,
             "fieldSizeRanked": 16,
+            "fieldMedianNet": 0,
+            "bryceBeatFieldTypical": true,
             "soleBestInField": true,
             "coBestInField": true,
             "coverageNote": ""
@@ -23689,6 +23737,8 @@
             "bryceSlipped": 0,
             "bryceRankInField": 7,
             "fieldSizeRanked": 17,
+            "fieldMedianNet": 0,
+            "bryceBeatFieldTypical": false,
             "soleBestInField": false,
             "coBestInField": false,
             "coverageNote": ""
@@ -23710,6 +23760,8 @@
             "bryceSlipped": 3,
             "bryceRankInField": 24,
             "fieldSizeRanked": 24,
+            "fieldMedianNet": 0,
+            "bryceBeatFieldTypical": false,
             "soleBestInField": false,
             "coBestInField": false,
             "coverageNote": ""
@@ -23731,6 +23783,8 @@
             "bryceSlipped": 1,
             "bryceRankInField": 18,
             "fieldSizeRanked": 23,
+            "fieldMedianNet": 0,
+            "bryceBeatFieldTypical": false,
             "soleBestInField": false,
             "coBestInField": false,
             "coverageNote": ""
@@ -23752,6 +23806,8 @@
             "bryceSlipped": 1,
             "bryceRankInField": 20,
             "fieldSizeRanked": 23,
+            "fieldMedianNet": 0,
+            "bryceBeatFieldTypical": false,
             "soleBestInField": false,
             "coBestInField": false,
             "coverageNote": ""
@@ -23773,6 +23829,8 @@
             "bryceSlipped": 0,
             "bryceRankInField": 3,
             "fieldSizeRanked": 24,
+            "fieldMedianNet": 1,
+            "bryceBeatFieldTypical": true,
             "soleBestInField": false,
             "coBestInField": false,
             "coverageNote": ""
@@ -23794,6 +23852,8 @@
             "bryceSlipped": 0,
             "bryceRankInField": 7,
             "fieldSizeRanked": 24,
+            "fieldMedianNet": 0,
+            "bryceBeatFieldTypical": false,
             "soleBestInField": false,
             "coBestInField": false,
             "coverageNote": ""
@@ -23815,6 +23875,8 @@
             "bryceSlipped": 0,
             "bryceRankInField": null,
             "fieldSizeRanked": 22,
+            "fieldMedianNet": 0,
+            "bryceBeatFieldTypical": false,
             "soleBestInField": false,
             "coBestInField": false,
             "coverageNote": "bryce_partial_restart_coverage"
@@ -23836,6 +23898,8 @@
             "bryceSlipped": 0,
             "bryceRankInField": 7,
             "fieldSizeRanked": 23,
+            "fieldMedianNet": 0,
+            "bryceBeatFieldTypical": false,
             "soleBestInField": false,
             "coBestInField": false,
             "coverageNote": ""
@@ -23857,6 +23921,8 @@
             "bryceSlipped": 1,
             "bryceRankInField": 21,
             "fieldSizeRanked": 24,
+            "fieldMedianNet": 0,
+            "bryceBeatFieldTypical": false,
             "soleBestInField": false,
             "coBestInField": false,
             "coverageNote": ""
@@ -23878,6 +23944,8 @@
             "bryceSlipped": 0,
             "bryceRankInField": 5,
             "fieldSizeRanked": 24,
+            "fieldMedianNet": 0,
+            "bryceBeatFieldTypical": false,
             "soleBestInField": false,
             "coBestInField": false,
             "coverageNote": ""

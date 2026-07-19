@@ -245,6 +245,20 @@ def main() -> None:
             fail(f"{sid}: bryceSlipped mismatch")
         if race["soleBestInField"] == "true" and race["coBestInField"] != "true":
             fail(f"{sid}: soleBestInField implies coBestInField")
+        # Day-level "beat the field's typical move": re-derive the field's
+        # median summed net from the driver deltas and compare.
+        totals: dict[str, float] = defaultdict(float)
+        for delta in delta_rows:
+            if delta["sessionId"] == sid:
+                totals[delta["driverId"]] += as_int(delta["net"]) or 0
+        if totals:
+            field_median = float(statistics.median(totals.values()))
+            expected_beat = (as_int(race["bryceRestartsCounted"]) or 0) > 0 and (as_int(race["bryceNet"]) or 0) > field_median
+            if (race["bryceBeatFieldTypical"] == "true") != expected_beat:
+                fail(f"{sid}: bryceBeatFieldTypical disagrees with the re-derived field median")
+            stated = race.get("fieldMedianNet")
+            if stated not in (None, "", "None") and abs(float(stated) - field_median) > 0.051:
+                fail(f"{sid}: fieldMedianNet disagrees with the re-derived field median")
 
     # ---- rollup consistency ----------------------------------------------- #
     for scope_rows, key in ((venue_rows, "venueSlug"), (season_rows, "seasonYear")):
