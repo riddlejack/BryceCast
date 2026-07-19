@@ -1,9 +1,16 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { ArrowLeft, Flag, Users } from 'lucide-react';
 import { Card, HeroPanel, SourcePill, Stat, StatusChip, Unavailable } from '../app/components';
-import { ChartTipCard, chartFont, useMeasuredWidth, type ChartTip } from '../app/charts';
+import { ChartTipCard, chartFont, inkGoldDiverging, useMeasuredWidth, type ChartTip } from '../app/charts';
 import { TrackArt } from '../app/trackArt';
-import { trackOutlineFor } from '../assets/tracks';
+import { trackOutlineFor, type TrackOutline } from '../assets/tracks';
+import { trackSectionsFor, type TrackSectionAnchorSet } from '../assets/tracks/sections';
+import {
+  resolveHeatSections,
+  sectionObservationsFromRaceStory,
+  type ResolvedHeatSection,
+  type SectionObservationSet
+} from '../data/sectionObservations';
 import { asNumber, asString, formatDate, formatGain, formatNumber, formatPosition, ordinal } from '../app/format';
 import { Link } from '../app/router';
 import { displayRaceLabel, loadDebriefBySessionId, roundIndexOf, type ArchiveEntry } from '../data/debriefArchive';
@@ -544,6 +551,85 @@ const SectionStory = ({ story }: { story: RaceStoryPack }) => {
   );
 };
 
+/* ---------- the track, section by section (the shape as the interface) ---------- */
+
+/** The house ink↔gold key rendered as a short swatch strip. Keyed on screen so
+ *  gold's one meaning here (a stronger stretch) is never ambiguous. */
+const HeatKey = () => {
+  const stops = [0, 0.2, 0.4, 0.5, 0.6, 0.8, 1];
+  return (
+    <div className="row" style={{ gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
+      <span style={{ fontSize: 11.5, color: 'var(--ink-muted)' }}>Tougher</span>
+      <span style={{ display: 'flex', borderRadius: 3, overflow: 'hidden' }}>
+        {stops.map((stop) => (
+          <span key={stop} style={{ width: 20, height: 8, background: inkGoldDiverging(stop) }} />
+        ))}
+      </span>
+      <span style={{ fontSize: 11.5, color: 'var(--ink-muted)' }}>Stronger</span>
+      <span style={{ fontSize: 11.5, color: 'var(--ink-secondary)' }}>
+        deeper gold = stronger stretch, deeper ink = tougher
+      </span>
+    </div>
+  );
+};
+
+const SectionHeatCard = ({
+  outline,
+  anchors,
+  set,
+  heatSections
+}: {
+  outline: TrackOutline;
+  anchors: TrackSectionAnchorSet;
+  set: SectionObservationSet | null;
+  heatSections: ResolvedHeatSection[];
+}) => {
+  const hasHeat = heatSections.length > 0;
+  return (
+    <Card
+      title="The track, section by section"
+      action={
+        <SourcePill
+          title="Section signal"
+          entries={[
+            {
+              label: 'Official Section Results reports',
+              path: 'analysis/indy-nxt-discovery/output/deep_dive/tables/section_results_deep_by_race.csv',
+              note: `Percentile of Bryce's section times vs the field. Section names follow the track's official timing stations; span positions are curated from the outline (${anchors.confidence}).`
+            }
+          ]}
+          caveats={[
+            'Section times come from official timing loops — they are time-based, not GPS or car position.',
+            ...(set ? [set.caveat] : [])
+          ]}
+        />
+      }
+    >
+      <p style={{ margin: '0 0 12px', fontSize: 13.5, color: 'var(--ink-secondary)' }}>
+        {hasHeat
+          ? 'Hover the shape to read Bryce’s pace stretch by stretch — the gold dots mark his two strongest.'
+          : 'The venue shape, with the start/finish line marked.'}
+      </p>
+      {hasHeat ? (
+        <div style={{ marginBottom: 12 }}>
+          <HeatKey />
+        </div>
+      ) : null}
+      <TrackArt
+        outline={outline}
+        showCornerLabels={false}
+        maxHeight={300}
+        sections={hasHeat ? { resolved: heatSections, showLabels: true } : null}
+      />
+      <p style={{ margin: 0, paddingTop: 14, fontSize: 11.5, color: 'var(--ink-muted)' }}>
+        {hasHeat
+          ? 'Section times from official timing loops — time-based, not GPS. The start/finish straight is not a timing section, so it stays the plain line.'
+          : 'No official section times are on file for this race yet.'}
+      </p>
+    </Card>
+  );
+};
+
 /* ---------- inside the team (number-line, same form as the points strip) ---------- */
 
 const TeamStrip = ({ story }: { story: RaceStoryPack }) => {
@@ -777,6 +863,11 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
       : null;
   const bryceStatus = story?.bryce.status ?? null;
   const outline = trackOutlineFor(asString(pack.track.name));
+  const sectionAnchors = trackSectionsFor(asString(pack.track.name));
+  const sectionSet = story ? sectionObservationsFromRaceStory(story) : null;
+  const heatSections =
+    sectionAnchors && sectionSet ? resolveHeatSections(sectionAnchors, sectionSet) : [];
+  const heroSectionsLayer = heatSections.length > 0 ? { resolved: heatSections, showLabels: false } : null;
 
   return (
     <div className="page stack">
@@ -829,7 +920,9 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
           {/* Fixed art zone: every venue letterboxes into the same box, so the
               layout never shifts race to race (street circuits stay calm and empty). */}
           <div className="hero-race__art">
-            {outline ? <TrackArt outline={outline} showCornerLabels={false} maxHeight={150} /> : null}
+            {outline ? (
+              <TrackArt outline={outline} showCornerLabels={false} maxHeight={150} sections={heroSectionsLayer} />
+            ) : null}
           </div>
           <div className="row" style={{ gap: 28, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
             <Stat label="Points scored" value={impact?.racePoints ?? asNumber(pack.outcome.points) ?? '—'} />
@@ -850,6 +943,10 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
       {story ? <LapChartCard story={story} mover={mover} /> : null}
 
       {story ? <TheDay story={story} pack={pack} /> : null}
+
+      {outline && sectionAnchors ? (
+        <SectionHeatCard outline={outline} anchors={sectionAnchors} set={sectionSet} heatSections={heatSections} />
+      ) : null}
 
       <div className="grid grid--2">
         {story ? <TeamStory story={story} /> : null}

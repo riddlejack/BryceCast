@@ -15,6 +15,25 @@ export const inkConnector = 'rgba(29, 29, 31, 0.32)';
 /** Opacity for de-focused rows/lines while a sibling is hovered. */
 export const focusFade = 0.22;
 
+const lerpChannel = (from: number, to: number, t: number) => Math.round(from + (to - from) * t);
+const lerpHex = (from: string, to: string, t: number): string => {
+  const [r1, g1, b1] = [1, 3, 5].map((index) => parseInt(from.slice(index, index + 2), 16));
+  const [r2, g2, b2] = [1, 3, 5].map((index) => parseInt(to.slice(index, index + 2), 16));
+  return `rgb(${lerpChannel(r1, r2, t)}, ${lerpChannel(g1, g2, t)}, ${lerpChannel(b1, b2, t)})`;
+};
+
+/** The house diverging ramp (dataviz method): deep ink ↔ neutral ↔ Bryce gold.
+ *  ONE meaning per use, keyed in a caption — deeper gold = stronger, deeper ink
+ *  = tougher. Never red-to-green (red is reserved for status-down). Mirrors the
+ *  rivals `recordColor()`; shared here so the heat map and the rivals swarm read
+ *  as one scale. `t` in [0,1] (e.g. a percentile of the field beaten). */
+export const inkGoldDiverging = (t: number): string => {
+  const clamped = Math.max(0, Math.min(1, t));
+  return clamped < 0.5
+    ? lerpHex('#3a3a3f', '#c6c6cb', clamped * 2)
+    : lerpHex('#c6c6cb', '#e09a2f', (clamped - 0.5) * 2);
+};
+
 /** Measure a container so SVG charts render in pixel space (crisp text at any
  *  size). Returns [ref, width]. */
 export const useMeasuredWidth = <T extends HTMLElement>() => {
