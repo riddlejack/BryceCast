@@ -64,11 +64,20 @@ check('t71: maxLap matches audit coverage for all 33', t71.sessions.every((s) =>
 const cw = JSON.parse(await readFile(join(OUT, 'crosswalk', 'identity-crosswalk-2026.json'), 'utf8'));
 check('crosswalk: 33/33 sessions complete', cw.completeSessions === 33, `${cw.completeSessions}`);
 check('crosswalk: >=31 sessions strict event scope', cw.sessions.filter((s) => s.strictEventScope).length >= 31);
+check('crosswalk: every session event-scoped (canonical or capture authority)', cw.sessions.every((s) => s.eventScoped));
+check('crosswalk: zero season-fallback sessions remain', cw.sessions.every((s) => s.scopeUsed !== 'season_fallback'));
+check(
+  'crosswalk: capture-authority sessions fully capture-confirmed',
+  cw.sessions
+    .filter((s) => s.scopeUsed === 'event_capture')
+    .every((s) => s.mappings.every((m) => m.status === 'mapped_event_capture_confirmed')),
+);
 check('crosswalk: zero ambiguous mappings anywhere', cw.sessions.every((s) => s.counts.ambiguous === 0));
 
 const cwv = JSON.parse(await readFile(join(OUT, 'crosswalk', 'crosswalk-validation.json'), 'utf8'));
 check('crosswalk validation: no hard failures', cwv.hardFailures.length === 0, JSON.stringify(cwv.hardFailures.slice(0, 3)));
 check('crosswalk validation: zero NO-GO sessions', cwv.noGoCount === 0, `${cwv.noGoCount}`);
+check('crosswalk validation: GO=32, CONDITIONAL=1 (Road America R2 semantics only)', cwv.goCount === 32 && cwv.conditionalCount === 1, `GO=${cwv.goCount} COND=${cwv.conditionalCount}`);
 check('crosswalk validation: >=5 two-source cross-checks', cwv.twoSourceCrossChecks.length >= 5);
 check(
   'crosswalk validation: identity 100% on all non-thin cross-checks',

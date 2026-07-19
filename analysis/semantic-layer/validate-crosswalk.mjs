@@ -122,6 +122,60 @@ async function loadPackRecords(pack, record) {
   }
 }
 
+// T4: capture-confirmed event scope (the Nashville 2026 clearance). For every
+// session whose identity authority is the capture's official roster, EVERY
+// Timing71 (car#, name) must close the chain against that roster exactly:
+// capture holds the car with a single unconflicted official name + stable feed
+// DriverID, the Timing71 name matches it, and the crosswalk driverId's
+// canonical name matches it too. Any mismatch fails the gate.
+{
+  const captureSessions = crosswalk.sessions.filter((s) => s.scopeUsed === 'event_capture');
+  assertThat('T4: exactly the 2 Nashville sessions use capture authority', captureSessions.length === 2, captureSessions.map((s) => s.t71SessionId).join(','));
+  // Rebuild the official roster independently from the committed extract.
+  const officialByEventSession = new Map(capture.sessions.map((c) => [String(c.officialEventSessionId), c]));
+  const nashvilleCaps = ['6924', '6923'].map((id) => officialByEventSession.get(id)).filter(Boolean);
+  assertThat('T4: capture extract holds both Nashville sessions (6924 P1, 6923 Quali)', nashvilleCaps.length === 2);
+  const officialRoster = new Map(); // car -> {name, ids:Set}
+  for (const cap of nashvilleCaps) {
+    for (const row of cap.finalField) {
+      const name = `${row.firstName ?? ''} ${row.lastName ?? ''}`.trim();
+      const cur = officialRoster.get(row.car);
+      if (!cur) officialRoster.set(row.car, {name, ids: new Set([row.officialDriverId])});
+      else {
+        cur.ids.add(row.officialDriverId);
+        assertThat(`T4: capture name stable for #${row.car}`, cur.name === name, `${cur.name} vs ${name}`);
+      }
+    }
+  }
+  // Feed DriverID must be stable per car and injective across cars.
+  const seenIds = new Map();
+  for (const [car, r] of officialRoster) {
+    assertThat(`T4: single feed DriverID for #${car}`, r.ids.size === 1, [...r.ids].join('/'));
+    const id = [...r.ids][0];
+    assertThat(`T4: feed DriverID ${id} unique to #${car}`, !seenIds.has(id) || seenIds.get(id) === car, `also #${seenIds.get(id)}`);
+    seenIds.set(id, car);
+  }
+  for (const s of captureSessions) {
+    assertThat(`T4: ${s.t71SessionId} authority recorded`, s.eventAuthority === 'brycecast_capture_official_roster');
+    for (const m of s.mappings) {
+      assertThat(`T4: ${s.t71SessionId} #${m.car} status is capture-confirmed`, m.status === 'mapped_event_capture_confirmed', m.status);
+      const off = officialRoster.get(m.car);
+      assertThat(`T4: ${s.t71SessionId} #${m.car} present in official roster`, !!off);
+      if (!off) continue;
+      assertThat(`T4: ${s.t71SessionId} #${m.car} T71 name ~ official name`, matchDriverName(m.sourceName, splitAsDriver(off.name)).match, `"${m.sourceName}" vs "${off.name}"`);
+      const canonDriver = m.driverId ? ctx.drivers.get(m.driverId) : null;
+      assertThat(`T4: ${s.t71SessionId} #${m.car} crosswalk driver ~ official name`, !!canonDriver && matchDriverName(off.name, canonDriver).match, `${m.driverId} vs "${off.name}"`);
+    }
+    const nine = s.mappings.find((m) => m.car === '9');
+    assertThat(`T4: ${s.t71SessionId} #9 -> driver_bryce_aron`, nine?.driverId === 'driver_bryce_aron', nine?.driverId);
+  }
+  notes.push('T4: Nashville 2026 P1 + Quali identities are event-scoped via the capture official roster (23 cars each, chain closed three ways per car, feed DriverIDs stable and injective).');
+}
+function splitAsDriver(name) {
+  const parts = String(name).trim().split(/\s+/);
+  return {displayName: name, givenName: parts.slice(0, -1).join(' '), familyName: parts.slice(-1).join(' ')};
+}
+
 async function canonicalResultsFor(sessionId) {
   if (!sessionId) return null;
   const path = process.env.BRYCECAST_CAREER_DATASET || '/Users/example/.codex/worktrees/ac78/Bryce POV access/data/career/career.dataset.json';
@@ -293,9 +347,14 @@ for (const s of t71Summary.sessions) {
       reasons.push('decoded winner disagrees with canonical and is not capture-confirmed');
     }
   }
-  if (verdict === 'GO' && !cw.strictEventScope) {
+  if (verdict === 'GO' && cw.scopeUsed === 'season_fallback') {
     verdict = 'CONDITIONAL';
-    reasons.push('identity via season-scope fallback; awaits canonical event results (Nashville weekend not yet in canonical)');
+    reasons.push('identity via season-scope fallback; awaits canonical event results');
+  }
+  if (verdict === 'GO' && cw.scopeUsed === 'event_capture') {
+    reasons.push(
+      'identity event-scoped via BryceCast capture official Race Control roster (T4-validated); canonical event results land post-weekend',
+    );
   }
   if (verdict === 'GO' && s.qualityMasks.includes('no_checkered_flag_detected')) {
     reasons.push('note: no checkered state observed (audit F7 watch item)');

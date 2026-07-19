@@ -161,8 +161,13 @@ Per 2026 session: `(car number, source name string) -> canonical driverId`,
 suffix-tolerant families "de Alba Jr"). Statuses: `mapped_exact`,
 `mapped_name_variant`, `mapped_swap_resolved` (mid-season same-car driver swaps
 — #76 Allaer/Escotto, #15 Stati/Sundaramoorthy — resolved by name),
-`mapped_season_scope` (event has no canonical results yet, e.g. the pre-race
-Nashville 2026 weekend; never a strict UI GO), `ambiguous` / `unmapped` (HARD
+`mapped_event_capture_confirmed` (event has no canonical results yet but
+BryceCast's OWN capture holds the event's official Race Control roster — the
+Nashville 2026 pre-race weekend; the chain must close three ways per car:
+Timing71 name ~ capture official name ~ canonical driver, with stable and
+injective feed DriverIDs, hard-asserted by T4 in `validate-crosswalk.mjs`),
+`mapped_season_scope` (residual fallback when neither canonical results nor a
+capture roster exist; never a strict UI GO), `ambiguous` / `unmapped` (HARD
 failures — nothing passes silently).
 
 Validation (`validate-crosswalk.mjs`, artifact `crosswalk-validation.json`):

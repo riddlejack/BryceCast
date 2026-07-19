@@ -1,11 +1,12 @@
 {
   "artifact": "crosswalk-validation-2026",
-  "generatedAt": "2026-07-19T03:12:20.406Z",
+  "generatedAt": "2026-07-19T05:02:57.099Z",
   "trapTests": {
     "failures": [],
     "notes": [
       "T1 note: canonical 2026 itself uses the short displayed forms (\"JM Correa\", \"Seb Murray\"), so 2026 real-data matches are exact; the variant rules are proven at unit level and guard the 2024-25 unification in a later slice.",
       "T2 reused numbers verified: #14, #9, #11, #29, #28, #76, #17, #27",
+      "T4: Nashville 2026 P1 + Quali identities are event-scoped via the capture official roster (23 cars each, chain closed three ways per car, feed DriverIDs stable and injective).",
       "Race divergence explained: t71_2026_road-america_race_r2_2026-06-21 — Timing71 and the BryceCast capture agree on the as-crossed order (24/24); canonical carries the official post-race reclassification. Classification for UI must come from canonical results; the timing/lap/identity tables remain valid."
     ]
   },
@@ -684,11 +685,11 @@
       "sessionType": "practice",
       "date": "2026-07-18",
       "venue": "Nashville",
-      "verdict": "CONDITIONAL",
+      "verdict": "GO",
       "crossCheck": "confirmed",
       "qualityMasks": [],
       "reasons": [
-        "identity via season-scope fallback; awaits canonical event results (Nashville weekend not yet in canonical)"
+        "identity event-scoped via BryceCast capture official Race Control roster (T4-validated); canonical event results land post-weekend"
       ]
     },
     {
@@ -696,16 +697,16 @@
       "sessionType": "qualifying",
       "date": "2026-07-18",
       "venue": "Nashville",
-      "verdict": "CONDITIONAL",
+      "verdict": "GO",
       "crossCheck": "confirmed",
       "qualityMasks": [],
       "reasons": [
-        "identity via season-scope fallback; awaits canonical event results (Nashville weekend not yet in canonical)"
+        "identity event-scoped via BryceCast capture official Race Control roster (T4-validated); canonical event results land post-weekend"
       ]
     }
   ],
-  "goCount": 30,
-  "conditionalCount": 3,
+  "goCount": 32,
+  "conditionalCount": 1,
   "noGoCount": 0,
   "hardFailures": []
 }

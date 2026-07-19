@@ -35,6 +35,41 @@ async function loadRoster(pack) {
 
 const ctx = await loadCanonicalIdentityContext();
 
+// Official event rosters from BryceCast's own capture (committed extract of the
+// official Race Control feed). For an event whose canonical results have not
+// landed yet (the pre-race Nashville 2026 weekend), this roster IS event-scoped
+// ground truth: car number -> official name (+ a feed DriverID used as a
+// stability check; it is a Race Control id-space, not canonical's).
+const capture = JSON.parse(await readFile(join(LANE_DIR, 'output', 'cross-check', 'capture-final-states.json'), 'utf8'));
+const officialToCanonical = new Map(ctx.sessions.filter((s) => s.officialSessionId).map((s) => [String(s.officialSessionId), s]));
+const captureRosterByEvent = new Map(); // eventId -> Map(car -> {name, officialDriverIds:Set, sessions:[], conflict})
+for (const cap of capture.sessions) {
+  if (!cap.officialEventSessionId) continue;
+  const canS = officialToCanonical.get(String(cap.officialEventSessionId));
+  if (!canS) continue;
+  let roster = captureRosterByEvent.get(canS.eventId);
+  if (!roster) {
+    roster = new Map();
+    captureRosterByEvent.set(canS.eventId, roster);
+  }
+  for (const row of cap.finalField) {
+    const name = `${row.firstName ?? ''} ${row.lastName ?? ''}`.trim();
+    if (!row.car || !name) continue;
+    const cur = roster.get(row.car);
+    if (!cur) roster.set(row.car, {name, officialDriverIds: new Set([row.officialDriverId]), sessions: [cap.sessionKey], conflict: false});
+    else {
+      cur.officialDriverIds.add(row.officialDriverId);
+      cur.sessions.push(cap.sessionKey);
+      if (cur.name !== name) cur.conflict = true; // same car, different official names within the event
+    }
+  }
+}
+
+function pseudoDriverFromName(name) {
+  const parts = String(name).trim().split(/\s+/);
+  return {displayName: name, givenName: parts.slice(0, -1).join(' '), familyName: parts.slice(-1).join(' ')};
+}
+
 // Match each T71 session to its canonical event (entrant scope) and, for races,
 // its canonical session (results scope). Doubleheaders pair by race number.
 function raceNumberOf(session) {
@@ -62,12 +97,17 @@ for (const session of t71.sessions) {
   const can = matchCanonicalSession(session);
   const eventEntrants = can ? ctx.entrantsByEvent.get(can.eventId) : null;
   // A future/current event with no canonical results yet (e.g. Nashville 2026
-  // pre-race) has an empty event scope. Fall back to SEASON scope + name check,
-  // clearly labelled — season-scope sessions are never a strict UI GO until
-  // canonical carries the event's results.
+  // pre-race) has an empty event scope. If our OWN capture holds the event's
+  // official roster, that roster is the event-scoped authority
+  // ('event_capture'): a Timing71 identity maps only when the capture's
+  // official name for the same car confirms it. Only when neither canonical
+  // results nor a capture roster exist does the labelled season fallback apply
+  // (never a strict UI GO).
   const eventScopeAvailable = !!eventEntrants && eventEntrants.size > 0;
+  const captureRoster = can ? captureRosterByEvent.get(can.eventId) : null;
+  const captureScopeAvailable = !eventScopeAvailable && !!captureRoster && captureRoster.size > 0;
   const seasonEntrants = ctx.entrantsByYear.get(2026) ?? new Map();
-  const scopeUsed = eventScopeAvailable ? 'event' : 'season_fallback';
+  const scopeUsed = eventScopeAvailable ? 'event' : captureScopeAvailable ? 'event_capture' : 'season_fallback';
   const roster = await loadRoster(session.pack);
   const mappings = [];
   for (const entry of roster) {
@@ -79,6 +119,33 @@ for (const session of t71.sessions) {
     if (candidates.length === 0) {
       status = 'unmapped';
       evidence = 'no canonical entrant with this car number in event scope';
+    } else if (scopeUsed === 'event_capture') {
+      // Authority = the capture's official event roster. The chain must close
+      // three ways for the same car: Timing71 name ~ capture official name,
+      // capture official name ~ canonical driver, Timing71 name ~ canonical
+      // driver. Anything less is ambiguous (a hard failure downstream).
+      const capEntry = captureRoster.get(entry.car);
+      if (!capEntry) {
+        status = 'ambiguous';
+        evidence = `car #${entry.car} not present in the capture's official event roster`;
+      } else if (capEntry.conflict) {
+        status = 'ambiguous';
+        evidence = `capture roster holds conflicting official names for car #${entry.car}`;
+      } else {
+        const t71VsCapture = matchDriverName(entry.driver, pseudoDriverFromName(capEntry.name));
+        const matches = candidates
+          .map((id) => ({id, drv: ctx.drivers.get(id) ?? {}}))
+          .filter((m) => matchDriverName(capEntry.name, m.drv).match && matchDriverName(entry.driver, m.drv).match);
+        if (t71VsCapture.match && matches.length === 1) {
+          driverId = matches[0].id;
+          rule = t71VsCapture.rule;
+          status = 'mapped_event_capture_confirmed';
+          evidence = `${entry.driver} ~ official "${capEntry.name}" (capture ${capEntry.sessions.join('+')}, feedDriverId ${[...capEntry.officialDriverIds].join('/')}) ~ ${ctx.drivers.get(driverId)?.displayName}`;
+        } else {
+          status = 'ambiguous';
+          evidence = `capture official name "${capEntry.name}" does not close the chain for "${entry.driver}" (canonical matches: ${matches.map((m) => m.drv.displayName).join(', ') || 'none'})`;
+        }
+      }
     } else {
       const matches = candidates
         .map((id) => ({id, res: matchDriverName(entry.driver, ctx.drivers.get(id) ?? {})}))
@@ -110,6 +177,7 @@ for (const session of t71.sessions) {
     exact: mappings.filter((m) => m.status === 'mapped_exact').length,
     nameVariant: mappings.filter((m) => m.status === 'mapped_name_variant').length,
     swapResolved: mappings.filter((m) => m.status === 'mapped_swap_resolved').length,
+    eventCaptureConfirmed: mappings.filter((m) => m.status === 'mapped_event_capture_confirmed').length,
     seasonScope: mappings.filter((m) => m.status === 'mapped_season_scope').length,
     ambiguous: mappings.filter((m) => m.status === 'ambiguous').length,
     unmapped: mappings.filter((m) => m.status === 'unmapped').length,
@@ -124,9 +192,16 @@ for (const session of t71.sessions) {
     canonicalOfficialSessionId: can?.officialSessionId ?? null,
     rosterSize: mappings.length,
     scopeUsed,
+    eventAuthority:
+      scopeUsed === 'event'
+        ? 'canonical_results'
+        : scopeUsed === 'event_capture'
+          ? 'brycecast_capture_official_roster'
+          : 'season_index_only',
     counts,
     complete: counts.ambiguous === 0 && counts.unmapped === 0 && mappings.length > 0,
     strictEventScope: scopeUsed === 'event',
+    eventScoped: scopeUsed === 'event' || scopeUsed === 'event_capture',
     mappings,
   });
 }
@@ -146,7 +221,7 @@ await writeFile(join(OUT, 'identity-crosswalk-2026.json'), `${JSON.stringify(out
 console.log(`Crosswalk: ${out.completeSessions}/${out.sessionCount} sessions fully mapped.`);
 for (const s of sessionsOut) {
   const flag = s.complete ? 'OK ' : 'FAIL';
-  console.log(`  ${flag} ${s.t71SessionId} roster=${s.rosterSize} exact=${s.counts.exact} variant=${s.counts.nameVariant} swap=${s.counts.swapResolved} season=${s.counts.seasonScope} ambiguous=${s.counts.ambiguous} unmapped=${s.counts.unmapped}`);
+  console.log(`  ${flag} ${s.t71SessionId} roster=${s.rosterSize} exact=${s.counts.exact} variant=${s.counts.nameVariant} swap=${s.counts.swapResolved} evcap=${s.counts.eventCaptureConfirmed} season=${s.counts.seasonScope} ambiguous=${s.counts.ambiguous} unmapped=${s.counts.unmapped}`);
   for (const m of s.mappings.filter((m) => m.status === 'ambiguous' || m.status === 'unmapped')) {
     console.log(`       ${m.status}: #${m.car} "${m.sourceName}" — ${m.evidence}`);
   }
