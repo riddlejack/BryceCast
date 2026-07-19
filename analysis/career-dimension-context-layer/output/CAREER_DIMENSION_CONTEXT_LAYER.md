@@ -1,11 +1,11 @@
 # Career Dimension Context Layer
 
-Generated: 2026-06-18T10:49:58Z
-Source hash: `da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc`
+Generated: 2026-07-19T05:01:04Z
+Source hash: `900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681`
 
 ## Source Scope
 
-This lane covers 8158 result rows, 1547 qualifying rows, 75 team rows, 42 tracks, 555 drivers, and 472 cars from the canonical dataset.
+This lane covers 8494 result rows, 1739 qualifying rows, 75 team rows, 42 tracks, 555 drivers, and 472 cars from the canonical dataset.
 
 ## What Became Productized
 
@@ -18,9 +18,9 @@ This lane covers 8158 result rows, 1547 qualifying rows, 75 team rows, 42 tracks
 
 ## Qualifying Conversion
 
-- One-to-one same-event race-result joins: 1240 of 1547 qualifying rows.
+- One-to-one same-event race-result joins: 1432 of 1739 qualifying rows.
 - Ambiguous multi-race same-event joins: 307 qualifying rows.
-- Full-field result context rows: 8158.
+- Full-field result context rows: 8494.
 
 | seriesName | seasonYear | eventName | sessionName | fieldSize | sameEventRaceJoinRows | bryceBestQualifyingPosition |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -32,23 +32,23 @@ This lane covers 8158 result rows, 1547 qualifying rows, 75 team rows, 42 tracks
 | INDY NXT | 2026 | Indianapolis Grand Prix Race 2 | Combined Qualifying - Race 2 | 24 | 24 | 14 |
 | INDY NXT | 2026 | Detroit Grand Prix | Combined Qualifying | 24 | 24 | 14 |
 | INDY NXT | 2026 | INDY NXT by Firestone at World Wide Technology Raceway | Qualifying | 24 | 24 | 12 |
-| INDY NXT | 2024 | Grand Prix of St. Petersburg | Combined Qualifications | 21 | 21 | 8 |
-| INDY NXT | 2025 | Indianapolis Grand Prix Race 2 | Combined Qualifications - Race 2 | 21 | 21 | 18 |
-| INDY NXT | 2025 | Indianapolis Grand Prix Race 1 | Combined Qualifications - Race 1 | 21 | 21 | 18 |
-| INDY NXT | 2024 | Grand Prix of Alabama | Combined Qualifications | 20 | 20 | 7 |
+| INDY NXT | 2026 | Grand Prix at Road America Race 1 | Combined Qualifying - Race 1 | 24 | 24 | 15 |
+| INDY NXT | 2026 | Grand Prix at Road America Race 2 | Combined Qualifying - Race 2 | 24 | 24 | 15 |
+| INDY NXT | 2026 | Grand Prix at Mid-Ohio Race 1 | Combined Qualifying - Race 1 | 24 | 24 | 13 |
+| INDY NXT | 2026 | Grand Prix at Mid-Ohio Race 2 | Combined Qualifying - Race 2 | 24 | 24 | 15 |
 
 ## Team And Entrant Context
 
 | teamName | observedSeriesIds | seasonYears | carCount | driverCount | qualifyingRows | resultRows | bryceObserved |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| HMD Motorsports | series_indy_nxt | 2024;2025;2026 | 23 | 28 | 449 | 1086 | no |
-| Andretti Global | series_indy_nxt | 2024;2025;2026 | 12 | 10 | 241 | 576 | no |
-| Abel Motorsports | series_indy_nxt | 2024;2025;2026 | 11 | 9 | 189 | 450 | no |
+| HMD Motorsports | series_indy_nxt | 2024;2025;2026 | 23 | 28 | 481 | 1142 | no |
+| Andretti Global | series_indy_nxt | 2024;2025;2026 | 12 | 10 | 273 | 632 | no |
+| Abel Motorsports | series_indy_nxt | 2024;2025;2026 | 11 | 9 | 221 | 506 | no |
 | Elite Motorsport | series_gb3 | 2021;2022 | 8 | 6 | 40 | 316 | no |
 | Fortec Motorsports | series_gb3 | 2021;2022 | 8 | 9 | 38 | 316 | no |
+| Chip Ganassi Racing | series_indy_nxt | 2025;2026 | 6 | 5 | 136 | 294 | no |
+| Cape Motorsports powered by ECR | series_indy_nxt | 2024;2025;2026 | 6 | 6 | 112 | 270 | no |
 | Douglas Motorsport | series_gb3 | 2021;2022 | 5 | 6 | 22 | 268 | no |
-| Cape Motorsports powered by ECR | series_indy_nxt | 2024;2025;2026 | 6 | 6 | 96 | 242 | no |
-| Chip Ganassi Racing | series_indy_nxt | 2025;2026 | 6 | 5 | 104 | 238 | no |
 | Rodin Carlin | series_gb3 | 2022 | 3 | 3 | 0 | 228 | no |
 | Hitech Pulse-Eight | series_gb3 | 2022 | 3 | 3 | 0 | 227 | no |
 | Arden VRD | series_gb3 | 2022 | 3 | 3 | 0 | 201 | no |
@@ -66,8 +66,8 @@ This lane covers 8158 result rows, 1547 qualifying rows, 75 team rows, 42 tracks
 | Douglas Motorsport | GB3 Championship | 2022 | 3 | 3 | 0 | 208 | 0 |
 | Elite Motorsport | GB3 Championship | 2022 | 4 | 4 | 0 | 204 | 0 |
 | Arden VRD | GB3 Championship | 2022 | 3 | 3 | 0 | 201 | 0 |
-| Abel Motorsports | INDY NXT | 2025 | 3 | 3 | 67 | 166 | 0 |
-| Chris Dittmann Racing | GB3 Championship | 2022 | 4 | 4 | 0 | 161 | 0 |
+| Abel Motorsports | INDY NXT | 2026 | 4 | 4 | 92 | 184 | 0 |
+| Andretti Global | INDY NXT | 2026 | 4 | 4 | 92 | 184 | 0 |
 
 ## Track Archetypes
 
@@ -91,7 +91,7 @@ This lane covers 8158 result rows, 1547 qualifying rows, 75 team rows, 42 tracks
 | Albert Costa | shared_race_field | series_imsa_weathertech | 1 | 1 | 0 | 1 | 0 |
 | Alec Udell | shared_race_field | series_imsa_weathertech | 1 | 1 | 0 | 1 | 0 |
 | Alessandro Pier Guidi | shared_race_field | series_imsa_weathertech | 1 | 1 | 0 | 1 | 0 |
-| Alessandro de Tullio | shared_race_field | series_indy_nxt | 1 | 32 | 15 | 8 | 0 |
+| Alessandro de Tullio | shared_race_field | series_indy_nxt | 1 | 46 | 23 | 12 | 0 |
 | Alessio Picariello | shared_race_field | series_imsa_weathertech | 1 | 1 | 0 | 1 | 0 |
 | Alessio Rovera | shared_race_field | series_imsa_weathertech | 1 | 1 | 0 | 1 | 0 |
 | Alex Connor | shared_race_field | series_gb3 | 2 | 88 | 6 | 32 | 0 |

@@ -1,8 +1,8 @@
 # IMSA Daytona Stint/Class Pace
 
-Generated: `2026-06-18T10:49:44Z`
+Generated: `2026-07-19T05:00:56Z`
 Source dataset: `data/career/career.dataset.json`
-Source hash: `da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc`
+Source hash: `900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681`
 
 ## Source Scope
 
@@ -22,7 +22,7 @@ This lane uses the official IMSA/Al Kamel Daytona time-card lap table, canonical
 Car 85 context: JDC Miller MotorSports Porsche 963, GTP, finished overall P6 / class P6 with 780 laps and 34 pit stops.
 
 - Gianmaria Bruni: median 99.244s, best 20-lap avg 98.15s, valid non-pit laps 221.
-- Tijmen van der Helm: median 99.339s, best 20-lap avg 98.584s, valid non-pit laps 180.
+- Tijmen van der Helm: median 99.339s, best 20-lap avg 98.585s, valid non-pit laps 180.
 - Pascal Wehrlein: median 99.476s, best 20-lap avg 98.985s, valid non-pit laps 188.
 - Bryce Aron: median 101.017s, best 20-lap avg 99.033s, valid non-pit laps 122.
 

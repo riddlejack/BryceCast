@@ -26,7 +26,7 @@
     "lapObservations": 37885,
     "stints": 1680
   },
-  "generatedAt": "2026-06-18T10:49:44Z",
+  "generatedAt": "2026-07-19T05:00:56Z",
   "officialWeather": {
     "ambientTempC": 17.5,
     "confidence": "official",
@@ -39,5 +39,5 @@
   "positionTraceAvailable": false,
   "publicPointPrediction": false,
   "sourceDataset": "data/career/career.dataset.json",
-  "sourceHash": "da557a1af2c2d83acf33ad62680a7a78f908f9fa26babf66f711beddd4d5cabc"
+  "sourceHash": "900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681"
 }
