@@ -578,6 +578,9 @@ export interface UiSeasonIndexRow {
   seasonYear: number | null;
   roundIndex: number | null;
   eventStartDate: string | null;
+  /** The race's own day; eventStartDate is the weekend's first day and differs
+   *  on most races. Reader-facing dates prefer this. */
+  raceDate: string | null;
   trackName: string | null;
   trackType: string | null;
   startPosition: number | null;

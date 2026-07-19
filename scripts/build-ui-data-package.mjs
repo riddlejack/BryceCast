@@ -1243,6 +1243,10 @@ const buildSeasonIndex = ({ raceDebriefPackPairs, resultsBySession, progressionR
         seasonYear: numberOrNull(pack.seasonYear),
         roundIndex: numberOrNull(roundIndex),
         eventStartDate: pack.eventStartDate ?? null,
+        /* The race's own day. eventStartDate is the WEEKEND's first day and
+         * differs from the session date on 38 of 41 races — anything reader-
+         * facing should prefer raceDate. */
+        raceDate: pack.raceOrder?.sessionStartDate ?? pack.eventStartDate ?? null,
         trackName: pack.track?.name ?? null,
         trackType: pack.track?.type ?? null,
         startPosition: numberOrNull(pack.outcome?.startPosition),

@@ -144,7 +144,12 @@ const HomeHero = ({
     return parts.join('');
   })();
 
-  const raceDate = venueEvent ? raceDayOf(venueEvent) : latest ? asString((latest.pack as unknown as Row).eventStartDate) : null;
+  const raceDate = venueEvent
+    ? raceDayOf(venueEvent)
+    : latest
+      ? (asString((latest.pack.raceOrder as Row | undefined)?.sessionStartDate) ??
+        asString((latest.pack as unknown as Row).eventStartDate))
+      : null;
 
   return (
     <HeroPanel tint={heroState === 'live' ? 'live' : 'bryce'}>

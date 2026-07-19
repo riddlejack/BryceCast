@@ -280,7 +280,7 @@ const RaceRow = ({ row }: { row: UiSeasonIndexRow }) => {
       </span>
       <span className="tower__gap tnum">{row.points !== null ? `${row.points} pts` : ''}</span>
       <span className="tower__gap race-row__date" style={{ fontSize: 11.5, minWidth: 52 }}>
-        {row.eventStartDate ? formatDate(row.eventStartDate, { month: 'short', day: 'numeric' }) : ''}
+        {(row.raceDate ?? row.eventStartDate) ? formatDate(row.raceDate ?? row.eventStartDate!, { month: 'short', day: 'numeric' }) : ''}
       </span>
       <ArrowRight size={13} style={{ color: 'var(--ink-muted)' }} aria-hidden />
     </Link>
