@@ -378,7 +378,7 @@ const TrustRail = ({ payload, fixtureMode }: { payload: LiveReadiness; fixtureMo
 
 /* ---------- hero: the race, now ---------- */
 
-const LiveHero = ({ payload, samples }: { payload: LiveReadiness; samples: GapSample[] }) => {
+const LiveHero = ({ payload, samples, replayEnded = false }: { payload: LiveReadiness; samples: GapSample[]; replayEnded?: boolean }) => {
   const weekend = payload.raceWeekend as Row;
   const heartbeat = heartbeatOf(payload);
   const bryce = liveBryceRowOf(payload);
@@ -420,7 +420,11 @@ const LiveHero = ({ payload, samples }: { payload: LiveReadiness; samples: GapSa
       <div className="hero-race hero-race--week live-hero__body">
         <div className="live-hero__race-state">
           <div className="row row--wrap live-hero__flag-lap">
-            {flag ? <StatusChip tone={flagTone(flag)} label={`${flag} flag`} live={flag.toUpperCase() === 'GREEN'} /> : null}
+            {replayEnded ? (
+              <StatusChip tone="neutral" label="Race complete · as raced" />
+            ) : flag ? (
+              <StatusChip tone={flagTone(flag)} label={`${flag} flag`} live={flag.toUpperCase() === 'GREEN'} />
+            ) : null}
             <TickerValue className="live-lap" value={lap !== null && totalLaps !== null ? `Lap ${lap} of ${totalLaps}` : asString(heartbeat.sessionName) ?? 'Session live'} valueKey={`${lap ?? 'na'}-${totalLaps ?? 'na'}`} />
           </div>
           <div className="live-position">
@@ -901,6 +905,20 @@ const ReplayCueing = ({ session }: { session: ReplaySessionInfo | null }) => {
 
 /* ---------- post-checkered honesty: as-raced order vs official classification ---------- */
 
+/** True once the archived session has run its full distance and gone cold —
+ *  the flag is no longer green or caution and the lap counter has reached the
+ *  total. Presentation-layer only; readiness semantics are untouched. */
+const isPostCheckeredPayload = (payload: LiveReadiness): boolean => {
+  const heartbeat = heartbeatOf(payload);
+  const weekend = payload.raceWeekend as Row;
+  const lap = asNumber(heartbeat.lap ?? weekend.lap);
+  const totalLaps = asNumber(heartbeat.totalLaps ?? weekend.totalLaps);
+  const flag = asString(heartbeat.flag ?? weekend.flag);
+  return (
+    lap !== null && totalLaps !== null && totalLaps > 0 && lap >= totalLaps && !isCautionFlag(flag) && (flag ?? '').toUpperCase() !== 'GREEN'
+  );
+};
+
 const normalizeName = (value: string | null | undefined) =>
   (value ?? '').toLowerCase().replace(/[.\-]/g, ' ').replace(/\s+/g, ' ').trim();
 
@@ -936,14 +954,7 @@ const ReplayClassificationNote = ({ payload, canonicalSessionId }: { payload: Li
     };
   }, [canonicalSessionId]);
 
-  const heartbeat = heartbeatOf(payload);
-  const weekend = payload.raceWeekend as Row;
-  const lap = asNumber(heartbeat.lap ?? weekend.lap);
-  const totalLaps = asNumber(heartbeat.totalLaps ?? weekend.totalLaps);
-  const flag = asString(heartbeat.flag ?? weekend.flag);
-  const postCheckered =
-    lap !== null && totalLaps !== null && totalLaps > 0 && lap >= totalLaps && !isCautionFlag(flag) && (flag ?? '').toUpperCase() !== 'GREEN';
-  if (!postCheckered || !officialWinner) return null;
+  if (!isPostCheckeredPayload(payload) || !officialWinner) return null;
 
   const rows = sortRowsForLiveDisplay(liveRowsOf(payload)) as LiveRow[];
   const leader = rows.find((row) => livePosition(row) === 1) ?? rows[0];
@@ -995,6 +1006,11 @@ export const LiveScreen = ({
   }
 
   const liveish = payload.state === 'ready' || payload.state === 'degraded';
+  // Replay-scoped presentation override: a finished-race replay must never read
+  // "pre-session". When the archive has run its distance and gone cold, the race
+  // layout stays up with a "Race complete · as raced" hero. Display-layer only —
+  // readiness semantics and fixture states are untouched.
+  const replayEnded = replayActive && replaySimulated && isPostCheckeredPayload(payload);
   const latestHistorySample = history?.samples.at(-1) ?? null;
   const liveHeartbeat = heartbeatOf(payload);
   const payloadSessionKey = [asString(liveHeartbeat.eventId), asString(liveHeartbeat.eventSessionId)].filter(Boolean).join('-');
@@ -1012,9 +1028,9 @@ export const LiveScreen = ({
       {replayActive && replay ? <ReplayBar replay={replay} payload={payload} /> : null}
       {replayActive && replay ? <ReplayClassificationNote payload={payload} canonicalSessionId={replay.session?.canonicalSessionId ?? null} /> : null}
       <TrustRail payload={payload} fixtureMode={fixtureMode} />
-      {liveish ? (
+      {liveish || replayEnded ? (
         <>
-          <LiveHero payload={payload} samples={samples} />
+          <LiveHero payload={payload} samples={samples} replayEnded={replayEnded} />
           <BattleModule payload={payload} samples={samples} history={history} />
           <div className="grid live-layout">
             <div className="stack live-layout__main">

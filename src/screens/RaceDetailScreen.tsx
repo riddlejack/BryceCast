@@ -758,7 +758,7 @@ const WatchRaceUnfold = ({ sessionId }: { sessionId: string }) => {
         <span className="race-replay__body">
           <span className="race-replay__title">Watch this race unfold</span>
           <span className="race-replay__copy">
-            Every second of this race, replayed as it happened — from our own trackside capture.
+            Every second of this race, replayed as it happened, from our own trackside capture.
           </span>
           {meta ? <span className="race-replay__meta tnum">{meta}</span> : null}
         </span>
