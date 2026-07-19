@@ -435,9 +435,9 @@
     },
     "trackOutlineIndex": {
       "path": "src/assets/tracks/index.ts",
-      "bytes": 3688,
-      "modifiedAt": "2026-07-19T04:59:28.094Z",
-      "sha256": "018b0fafa52e60cc57f435e783cc23fd55121cb7c2d7c511511d6a110524f15a"
+      "bytes": 4305,
+      "modifiedAt": "2026-07-19T14:46:56.443Z",
+      "sha256": "ae5bd91055c4dcac8a7c8d2af8bd762e99e83a41e891d0878390af4733fd68eb"
     },
     "trackOutlineBuilderScript": {
       "path": "scripts/build-track-outline.mjs",
