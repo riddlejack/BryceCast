@@ -80,8 +80,12 @@ export const TrackArt = ({
    *  to true north via the outline's geographic orientation. Rendered ONLY for
    *  real-geo (OSM) outlines that carry northOffsetDeg — image-traced street
    *  circuits have no orientation, so the wind is honestly omitted there.
-   *  bearingDeg is the compass direction the wind blows FROM (0=N, 90=E). */
-  wind?: { bearingDeg: number; label: string } | null;
+   *  bearingDeg is the compass direction the wind blows FROM (0=N, 90=E), or
+   *  null for calm/no-direction — then no arrow and no north tick draw, just the
+   *  label (e.g. "calm"). `frame` is a one-word timeframe shown before the value
+   *  ("now · 7 mph NNE") so a live pill never reads as a contradiction of a
+   *  forecast elsewhere on the page. */
+  wind?: { bearingDeg: number | null; label: string; frame?: string } | null;
 }) => {
   const [ref, measuredWidth] = useMeasuredWidth<HTMLDivElement>();
   const [tip, setTip] = useState<ChartTip | null>(null);
@@ -539,27 +543,34 @@ export const TrackArt = ({
           <div
             className="track-wind"
             style={{ left: artInset }}
-            title={`Near-track wind ${wind.label} (modeled, not official)`}
-            aria-label={`Near-track wind ${wind.label}`}
+            title={`Near-track wind${wind.frame ? ` (${wind.frame})` : ''} ${wind.label} (modeled, not official)`}
+            aria-label={`Near-track wind${wind.frame ? ` ${wind.frame}` : ''} ${wind.label}`}
           >
-            <svg
-              width={22}
-              height={22}
-              viewBox="0 0 22 22"
-              aria-hidden
-              /* Flow arrow: points the way the air moves across the track
-               * (bearing is the FROM direction, so it blows toward +180),
-               * turned to true north by the outline's geographic offset. */
-              style={{ transform: `rotate(${wind.bearingDeg + 180 + outline.northOffsetDeg}deg)` }}
-            >
-              <line x1={11} y1={17.5} x2={11} y2={5} stroke="var(--ink-secondary)" strokeWidth={1.6} strokeLinecap="round" />
-              <path d="M11 3.2 L15 8.4 L11 6.7 L7 8.4 Z" fill="var(--ink-secondary)" />
-            </svg>
+            {wind.frame ? <span className="track-wind__frame">{wind.frame}</span> : null}
+            {/* Calm (or no sourced direction) draws no arrow — a bearing for
+             * still air is meaningless; the label just reads "calm". */}
+            {wind.bearingDeg !== null ? (
+              <svg
+                width={22}
+                height={22}
+                viewBox="0 0 22 22"
+                aria-hidden
+                /* Flow arrow: points the way the air moves across the track
+                 * (bearing is the FROM direction, so it blows toward +180),
+                 * turned to true north by the outline's geographic offset. */
+                style={{ transform: `rotate(${wind.bearingDeg + 180 + outline.northOffsetDeg}deg)` }}
+              >
+                <line x1={11} y1={17.5} x2={11} y2={5} stroke="var(--ink-secondary)" strokeWidth={1.6} strokeLinecap="round" />
+                <path d="M11 3.2 L15 8.4 L11 6.7 L7 8.4 Z" fill="var(--ink-secondary)" />
+              </svg>
+            ) : null}
             <span className="track-wind__label">{wind.label}</span>
           </div>
           {/* True-north reference: a hairline tick + upright "N" in tertiary
            * ink, rotated by the same geographic offset as the arrow, so the
-           * wind direction is read against north — not screen-up. */}
+           * wind direction is read against north — not screen-up. Drops with the
+           * arrow when the wind is calm (nothing to orient). */}
+          {wind.bearingDeg !== null ? (
           <div className="track-north" style={{ right: artInset }} aria-hidden>
             <svg width={30} height={30} viewBox="0 0 30 30" style={{ overflow: 'visible', display: 'block' }}>
               <line
@@ -585,6 +596,7 @@ export const TrackArt = ({
               </text>
             </svg>
           </div>
+          ) : null}
         </>
       ) : null}
       {tip ? <ChartTipCard tip={tip} width={measuredWidth} /> : null}

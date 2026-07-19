@@ -27,12 +27,12 @@ import { loadSectionLaps, sectionLapVisitsFor, type SectionLapsPack } from '../d
 import { loadPassMarks, resolvePassMarks, type PassMarksPack } from '../data/passMarks';
 import { uiDataPackage } from '../data/uiDataPackage';
 import { ControlRow, Segmented } from './careerExplorer';
-import { asNumber, asString, formatDate, formatGain, formatNumber, formatPosition, ordinal } from '../app/format';
+import { asNumber, asString, formatDate, formatGain, formatNumber, formatPosition, formatWind, ordinal } from '../app/format';
 import { Link, useRouter } from '../app/router';
 import { displayRaceLabel, loadDebriefBySessionId, roundIndexOf, type ArchiveEntry } from '../data/debriefArchive';
 import { loadRaceStory, type RaceStoryPack, type RaceStoryLapDriver } from '../data/raceStory';
 import { getVenueBySessionId } from '../data/venueDossier';
-import { FactDelta, WindSwing } from '../app/weatherGlyphs';
+import { FactDelta } from '../app/weatherGlyphs';
 import type { UiVenueDossierVenue, UiVenueDossierVisit } from '../data/uiDataPackage';
 import { loadReplayAvailable, watchableCaptureForRace, type ReplaySessionInfo } from '../data/replayAvailable';
 
@@ -327,6 +327,13 @@ const LapChart = ({ story }: { story: RaceStoryPack }) => {
 const LapChartCard = ({ story, mover }: { story: RaceStoryPack; mover: { name: string; gain: number } | null }) => {
   const hasBryceLine = story.bryce.inLapChart;
   const teammateCount = story.lapChart.drivers.filter((driver) => driver.isTeammate).length;
+  /* Zero-lap day (lap-1 contact): with no Bryce line to draw, the legend itself
+   * must lead with WHY, or the empty ink reads as "Bryce is missing" (Jack's
+   * review). The reason is the official status the hero already carries; the lap
+   * is the first one he never completed. */
+  const bryceStatus = asString(story.bryce.status);
+  const endedOnLap = (story.bryce.lapsCompleted ?? 0) + 1;
+  const zeroLapReason = bryceStatus ? `${bryceStatus.charAt(0).toUpperCase()}${bryceStatus.slice(1)}` : 'A first-lap incident';
   return (
     <Card
       title="The race, lap by lap"
@@ -349,22 +356,25 @@ const LapChartCard = ({ story, mover }: { story: RaceStoryPack; mover: { name: s
         />
       }
     >
-      <p className="caption caption--secondary" style={{ margin: '0 0 10px' }}>
-        Bryce in ink with gold moments{teammateCount > 0 ? ` · ${story.teamContext?.teamName ?? 'team'} cars in darker gray` : ''} · the
-        field in light gray · ○ marks a day that ended early · hover any line
-      </p>
+      {hasBryceLine ? (
+        <p className="caption caption--secondary" style={{ margin: '0 0 10px' }}>
+          Bryce in ink with gold moments{teammateCount > 0 ? ` · ${story.teamContext?.teamName ?? 'team'} cars in darker gray` : ''} · the
+          field in light gray · ○ marks a day that ended early · hover any line
+        </p>
+      ) : (
+        /* Fact first: the legend explains the missing ink so it never reads as
+           "Bryce is missing." The hero already carries the official status. */
+        <p className="caption caption--secondary" style={{ margin: '0 0 10px' }}>
+          {zeroLapReason} ended Bryce’s race on lap {endedOnLap} — the chart shows the rest of the field’s day. ○ marks a car that
+          ended early · hover any line
+        </p>
+      )}
       {hasBryceLine ? (
         <LapChart story={story} />
       ) : (
-        <>
-          <div style={{ opacity: 0.55 }}>
-            <LapChart story={story} />
-          </div>
-          <p style={{ margin: '10px 0 0', fontSize: 13, color: 'var(--ink-secondary)' }}>
-            Contact on the opening lap ended Bryce’s race before a lap went in the books — the chart shows how the rest of the
-            field’s day unfolded.
-          </p>
-        </>
+        <div style={{ opacity: 0.55 }}>
+          <LapChart story={story} />
+        </div>
       )}
       {(() => {
         const bryceLaps = story.lapChart.drivers.find((driver) => driver.isBryce)?.laps.length ?? 0;
@@ -413,8 +423,6 @@ const YoYConditionsStrip = ({ venue, visit }: { venue: UiVenueDossierVenue; visi
   const here = visit.conditions;
   const d = visit.deltaVsPrior;
   if (!d || !here) return null;
-  const fromDeg = prior?.conditions?.windDirectionDeg ?? null;
-  const toDeg = here.windDirectionDeg ?? null;
 
   const segments: ReactNode[] = [];
   if (here.ambientTempF !== null) {
@@ -436,11 +444,10 @@ const YoYConditionsStrip = ({ venue, visit }: { venue: UiVenueDossierVenue; visi
   if (here.windSpeedMph !== null) {
     segments.push(
       <span key="wind" className="row" style={{ gap: 4, alignItems: 'center' }}>
-        <span className="tnum">
-          {here.windSpeedMph} mph{here.windCardinal ? ` ${here.windCardinal}` : ''}
-        </span>
+        {/* Value + speed delta only; the from→to reads across the year labels,
+            so the swing mini-arrows are gone (Jack's review). Calm at 0 mph. */}
+        <span className="tnum">{formatWind(here.windSpeedMph, here.windCardinal)}</span>
         <FactDelta delta={d.windSpeedDeltaMph} unit=" mph" />
-        {fromDeg !== null && toDeg !== null ? <WindSwing fromDeg={fromDeg} toDeg={toDeg} /> : null}
       </span>
     );
   }
@@ -548,8 +555,8 @@ const TheDay = ({ story, pack, venue, visit }: { story: RaceStoryPack; pack: Arc
         {windMph !== null ? (
           <DayTile
             label="Wind"
-            value={`${windMph} mph`}
-            note={gustMph !== null && gustMph > windMph + 4 ? `gusts to ${gustMph}` : 'steady all race'}
+            value={formatWind(windMph, null)}
+            note={windMph <= 0 ? 'still air' : gustMph !== null && gustMph > windMph + 4 ? `gusts to ${gustMph}` : 'steady all race'}
           />
         ) : null}
         {rainMm !== null && rainMm > 0 ? (
@@ -1680,16 +1687,13 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
   const heroSectionsLayer = heroHeat.length > 0 ? { resolved: heroHeat, showLabels: false } : null;
   const dossierVenue = getVenueBySessionId(sessionId);
   const dossierVisit = dossierVenue?.visits.find((visit) => visit.sessionId === sessionId) ?? null;
-  /* Historic race-hour wind, drawn on the hero shape (real-geo outlines only). */
+  /* Historic race-hour wind, drawn on the hero shape (real-geo outlines only).
+   * Calm (0 mph) carries no bearing — the pill draws no arrow and reads "calm". */
   const heroWind =
-    dossierVisit?.conditions && dossierVisit.conditions.windDirectionDeg !== null
+    dossierVisit?.conditions && dossierVisit.conditions.windSpeedMph !== null
       ? {
-          bearingDeg: dossierVisit.conditions.windDirectionDeg,
-          /* House wind convention: speed first, uppercase cardinal. */
-          label:
-            dossierVisit.conditions.windSpeedMph !== null
-              ? `${dossierVisit.conditions.windSpeedMph} mph ${dossierVisit.conditions.windCardinal ?? ''}`.trim()
-              : `from the ${dossierVisit.conditions.windCardinal ?? '—'}`
+          bearingDeg: dossierVisit.conditions.windSpeedMph <= 0 ? null : dossierVisit.conditions.windDirectionDeg,
+          label: formatWind(dossierVisit.conditions.windSpeedMph, dossierVisit.conditions.windCardinal)
         }
       : null;
 

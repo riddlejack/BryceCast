@@ -302,6 +302,46 @@ try {
   assert.equal(available.sessions.find((session) => session.sessionKey === '5537-6753')?.watchable, false, '/api/replay/available must mark the practice capture non-watchable');
   assert.equal(available.sessions.find((session) => session.sessionKey === '9001-8801')?.watchable, false, '/api/replay/available must mark the wrong-series capture non-watchable');
 
+  // ---- Family flow (exact frontend param path) ----
+  // The gap that let 51 assertions pass while the real "Watch this race unfold"
+  // tap hung on "Cueing up the replay" forever: the earlier start above hand-
+  // picks t0 and speed=1 and never reads the control body. useReplaySession
+  // instead derives session / t0 / speed from /api/replay/available and — the
+  // fix — treats playback as engaged ONLY when the control body says
+  // active:true. This drives that same data path end to end: available →
+  // start(active:true) → first timing + readiness payload is the simulated
+  // replay → stop.
+  const DEFAULT_REPLAY_SPEED = 4; // mirrors src/app/useReplaySession.ts
+  const familySession = (await fetchJson('/api/replay/available')).sessions.find((session) => session.sessionKey === '5537-6754');
+  assert.ok(familySession?.watchable, 'family flow: available() must surface the watchable capture the race-page CTA links to');
+  // clampT0(session, session.firstGreenAt) === firstGreenAt (green falls inside
+  // the captured span), so this query is byte-for-byte what useReplaySession
+  // .start() builds for the CTA tap — session key + green-flag t0 + default speed.
+  const familyQuery = `?session=${encodeURIComponent(familySession.sessionKey)}&t0=${encodeURIComponent(familySession.firstGreenAt)}&speed=${DEFAULT_REPLAY_SPEED}`;
+  const familyStartRes = await fetch(`${baseUrl}/api/replay/control${familyQuery}`);
+  const familyStart = JSON.parse(await familyStartRes.text());
+  assert.equal(familyStartRes.status, 200, 'family flow: the start request must answer 200');
+  assert.equal(familyStart.active, true, 'family flow: the start body must report active:true — the exact signal the client now requires to leave the cue-up');
+  assert.equal(familyStart.sessionKey, '5537-6754', 'family flow: the engaged replay must be the requested capture');
+  assert.equal(Number(familyStart.speed), DEFAULT_REPLAY_SPEED, 'family flow: the engaged replay must run at the frontend default speed');
+  const familyTiming = await fetchJson('/api/timing');
+  assert.equal(familyTiming.rows.find((row) => row.bryce)?.driverId, '2143', 'family flow: the first timing payload after start must carry the archived Bryce row');
+  const familyReadiness = await fetchJson('/api/readiness');
+  assert.equal(familyReadiness.replay.simulation?.active, true, 'family flow: the first readiness payload must be flagged simulated so the page clears "Cueing up the replay"');
+  const familyStop = JSON.parse(await (await fetch(`${baseUrl}/api/replay/control?stop=1`)).text());
+  assert.equal(familyStop.active, false, 'family flow: stop must disengage playback');
+
+  // A refused start must be legible to the client, not a silent hang: the body
+  // reports active!==true AND carries a human reason, which is what the page now
+  // renders as "this replay can't start: <reason>" with an exit — never a cue-up.
+  const refusedRes = await fetch(`${baseUrl}/api/replay/control?session=5537-6753&t0=${encodeURIComponent(familySession.firstGreenAt)}&speed=${DEFAULT_REPLAY_SPEED}`);
+  const refused = JSON.parse(await refusedRes.text());
+  assert.equal(refusedRes.ok, false, 'family flow: a non-watchable start must not answer ok');
+  assert.notEqual(refused.active, true, 'family flow: a refused start must never report active:true');
+  assert.equal(typeof refused.error, 'string', 'family flow: a refused start must carry a human reason for the honest can’t-start state');
+  // Restore the replay the Finding A transition below expects to be running.
+  await fetchJson('/api/replay/control?session=5537-6754&t0=2026-06-21T16%3A08%3A20.000Z&speed=1');
+
   // ---- Finding A (transition): idle → replay → runner goes live → real record ----
   // The real runner goes live and writes a fresh, distinguishable record (Bryce
   // running P3 on lap 15, not the archived P6 on lap 12 the replay was serving).
@@ -360,4 +400,4 @@ try {
 }
 
 assert.equal(stderr, '', stderr);
-console.log(JSON.stringify({ ok: true, assertions: 51, payloadShape: 'live-compatible', timeMachine: 'available+16x', liveGuard: 'preempts-replay', gating: 'watchable-only' }, null, 2));
+console.log(JSON.stringify({ ok: true, assertions: 69, payloadShape: 'live-compatible', timeMachine: 'available+16x', liveGuard: 'preempts-replay', gating: 'watchable-only', familyFlow: 'available-derived-params+active-body' }, null, 2));

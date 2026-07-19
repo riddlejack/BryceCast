@@ -1736,10 +1736,27 @@ const buildVenueDossier = ({ canonicalDataset, asOfDate }) => {
 };
 
 const readLatestColdRaceCapture = () => {
-  const dbPath = path.join(repoRoot, 'data/live/brycecast.sqlite');
-  if (!fs.existsSync(dbPath)) return { available: false, reason: 'live capture database not present' };
+  // The live capture archive lives outside any worktree checkout. Resolve it
+  // from BRYCECAST_SQLITE_PATH when the build runs somewhere the default
+  // repo-relative copy does not exist (every overnight worktree regeneration),
+  // so the standings snapshot reads the same archive the runtime serves.
+  const dbPath = path.resolve(process.env.BRYCECAST_SQLITE_PATH ?? path.join(repoRoot, 'data/live/brycecast.sqlite'));
+  if (!fs.existsSync(dbPath)) {
+    // Loud, non-fatal guard (Finding: Race Week points picture went blank).
+    // A worktree build with no archive would otherwise silently bake
+    // standingsSnapshot.available=false into the shipped package. Warn on
+    // stderr so this can never pass unnoticed again.
+    console.error(
+      `[build-ui-data-package] WARNING: live capture sqlite not found at ${dbPath}. ` +
+        'standingsSnapshot will ship as unavailable — set BRYCECAST_SQLITE_PATH to the ' +
+        'real archive to bake the points picture. (Finding: Race Week points picture blank.)'
+    );
+    return { available: false, reason: 'live capture database not present' };
+  }
   const query = "SELECT checked_at || '\t' || session_key || '\t' || payload_json FROM race_snapshots WHERE flag='COLD' AND session_name LIKE 'Race%' ORDER BY id DESC LIMIT 1";
-  const result = spawnSync('sqlite3', [dbPath, query], { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
+  // Open read-only: the archive may be an actively written live database, and
+  // this build must never mutate it.
+  const result = spawnSync('sqlite3', ['-readonly', dbPath, query], { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
   if (result.status !== 0 || !result.stdout.trim()) {
     return { available: false, reason: `no COLD race snapshot readable from live capture (${result.stderr?.trim() || 'empty result'})` };
   }

@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import { ArrowRight, Flag, MapPin, Trophy } from 'lucide-react';
 import { Card, Countdown, HeroPanel, Plate, Reveal, Stat, StatusChip } from '../app/components';
 import { chartFont, useMeasuredWidth } from '../app/charts';
-import { asNumber, asString, formatDate, formatGain, formatNumber, formatPosition, trackTypeLabel, windCardinal } from '../app/format';
+import { asNumber, asString, formatDate, formatGain, formatNumber, formatPosition, trackTypeLabel } from '../app/format';
+import { currentWindPill, useEventWeather } from '../app/useEventWeather';
 import { Link } from '../app/router';
 import type { ReadinessStatus } from '../app/useReadiness';
 import { normalizedName, useNextSession } from '../app/useNextSession';
@@ -48,74 +49,6 @@ const getSeasonStanding = (): { rank: number | null; points: number | null; top1
     top10: asNumber(standing.top10),
     bestFinish: asNumber(standing.bestFinish)
   };
-};
-
-/* ---------- near-track "now" wind, for the hero shape ----------
- * A quiet flourish: only fetched for imminent states, only rendered when the
- * observation carries a real direction and the venue outline has a geographic
- * orientation (TrackArt gates that). Silent, honest omission on any failure —
- * the RaceWeek page owns the full weather module; Home borrows only the arrow. */
-
-interface NowWind {
-  bearingDeg: number;
-  label: string;
-}
-
-const readObservationWind = (weatherData: Row | null | undefined): NowWind | null => {
-  const observation = (weatherData?.observation ?? {}) as Row;
-  const deg = asNumber(observation.windDirectionDeg);
-  if (deg === null) return null;
-  const kph = asNumber(observation.windSpeedKph);
-  const mph = kph !== null ? Math.round(kph / 1.609344) : null;
-  const cardinal = windCardinal(deg);
-  /* House wind convention: speed first, uppercase cardinal ("8 mph WNW"). */
-  const label = mph !== null ? `${mph} mph ${cardinal ?? ''}`.trim() : `from the ${cardinal ?? '—'}`;
-  return { bearingDeg: deg, label };
-};
-
-const useNowWind = (eventId: string | null, venueId: string | null): NowWind | null => {
-  const [wind, setWind] = useState<NowWind | null>(null);
-  useEffect(() => {
-    if (!eventId && !venueId) {
-      setWind(null);
-      return undefined;
-    }
-    let cancelled = false;
-    const run = async () => {
-      try {
-        const response = await fetch('/api/weather/upcoming', { headers: { accept: 'application/json' } });
-        if (response.ok) {
-          const payload = (await response.json()) as Row;
-          const events = Array.isArray(payload.events) ? (payload.events as Row[]) : [];
-          const match = events.find((entry) => asString((entry.event as Row)?.id) === eventId);
-          if (match) {
-            const report = readObservationWind((match.weather ?? {}) as Row);
-            if (!cancelled && report) {
-              setWind(report);
-              return;
-            }
-          }
-        }
-        /* The imminent race rolls off the "upcoming" set on race day itself —
-         * fall back to the venue's live weather by trackId (its venueId). */
-        if (!venueId) return;
-        const live = await fetch(`/api/weather/live?trackId=${encodeURIComponent(venueId)}`, { headers: { accept: 'application/json' } });
-        if (!live.ok) return;
-        const liveData = (await live.json()) as Row;
-        const report = readObservationWind(liveData);
-        if (!cancelled && report) setWind(report);
-      } catch {
-        /* wind is a flourish — omit silently, never block the hero */
-      }
-    };
-    void run();
-    const timer = setInterval(run, 5 * 60_000);
-    return () => {
-      cancelled = true;
-      clearInterval(timer);
-    };
-  }, [eventId, venueId]);
-  return wind;
 };
 
 /* ---------- the hero: the story of now ----------
@@ -167,11 +100,17 @@ const HomeHero = ({
   const venueEvent = nextEvent;
   const venueName = venueEvent?.trackName ?? (latest ? asString((latest.pack.track as Row | undefined)?.name) : null);
   const outline = trackOutlineFor(venueName);
+  /* Same near-track weather hook the Race Week hero and weather window read, so
+   * the "now" wind pill can never disagree between pages (one source of truth).
+   * Only the current reading is needed here — no race-hour sessions. Calm air
+   * reads "now · calm" with no arrow; imminent states only. */
   const venueRecord = getVenueByTrackName(venueEvent?.trackName ?? null);
-  const wind = useNowWind(
+  const { weather } = useEventWeather(
     imminent ? venueEvent?.eventId ?? null : null,
-    imminent ? venueRecord?.venueId ?? null : null
+    imminent ? venueRecord?.venueId ?? null : null,
+    []
   );
+  const wind = currentWindPill(weather?.current ?? null, 'now');
 
   /* A precise session start (from the live-runner schedule) drives the real
    * countdown; day-precision package data is the fallback. */
