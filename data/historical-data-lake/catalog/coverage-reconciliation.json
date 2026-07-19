@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-07-19T02:13:06.697Z",
+  "throughDate": "2026-07-18",
+  "method": "Reconcile the lake high-frequency coverage matrix against the canonical career dataset (the official session list). Canonical INDY NXT practice/qualifying/race sessions are collapsed to physical (event, date, type) sessions and matched to a lake capture by exact date and type, with a ±1-day fallback. This is official-schedule reconciliation, not source-index self-consistency.",
+  "canonical": {
+    "path": "data/career/career.dataset.json",
+    "seriesId": "series_indy_nxt",
+    "schemaVersion": "bryce-career.v1",
+    "updatedAt": "2026-07-11T20:53:51.783Z"
+  },
+  "dateToleranceDays": 1,
+  "physicalSessionCounts": {
+    "totalChampionship": 137,
+    "pastChampionshipThroughDate": 129,
+    "futureAfterThroughDate": 8
+  },
+  "matchedCount": 128,
+  "unmatchedCount": 1,
+  "unmatched": [
+    {
+      "eventId": "event_indy_nxt_2025_5493",
+      "eventName": "INDY NXT by Firestone at Iowa Speedway",
+      "trackId": "track_iowa_speedway",
+      "date": "2025-07-11",
+      "sessionType": "qualifying",
+      "canonicalSessions": [
+        {
+          "id": "session_indy_nxt_2025_6596",
+          "sessionName": "Qualifications",
+          "status": "official",
+          "scheduledStart": "7/11/2025",
+          "hasOfficialScheduleWindow": false,
+          "weatherObservationRefCount": 0,
+          "qualifyingResultCount": 0,
+          "resultCount": 0
+        }
+      ],
+      "evidence": {
+        "classification": "evidence_consistent_with_cancellation",
+        "detail": "Canonical marks the session official but it carries zero qualifying/race results, no official-schedule window, and no weather observations, and no lake high-frequency capture exists. Consistent with a cancelled or converted session rather than a missing high-frequency source. Recorded as unmapped-with-evidence."
+      }
+    }
+  ],
+  "lakeOnlyChampionshipDateTypes": 0,
+  "lakeOnlyNote": "Lake date/type buckets with no canonical championship session — expected superset (private tests, extra oval practices). Not coverage gaps."
+}

@@ -198,11 +198,47 @@ export function analyzeRaceToolsReplay(zipBytes, expectedSeries = null, expected
     if (line.includes('Yellow Flag at:')) yellowReasonMessageCount += 1;
   }
 
-  const validHeartbeats = heartbeats.filter((row) => row.epoch !== null);
+  // Heartbeat epochs are feed-supplied Unix seconds. A corrupt/merged log line
+  // (e.g. a `$H¦N$L¦N¦...` collision) can parse field[5] into an absurd epoch — an
+  // epoch of 0x39 (=57) next to real ~1.71e9 epochs poisons the max-gap metric with
+  // a ~1,709,974,043 s "gap". Sanitize by bounding epochs to a wide but plausible
+  // Unix-second window before deriving any timing statistic. Line collisions
+  // produce small hex values (near-zero epochs), and a multi-year "gap" only ever
+  // arises from one such near-zero point sitting beside a real one, so an absolute
+  // bound removes the artefact at its source. It is deliberately NOT a
+  // session-relative window: some legitimate captures concatenate two real test
+  // days weeks apart, and those genuine clusters must survive and surface as gaps
+  // rather than be silently deleted.
+  const EPOCH_MIN_SECONDS = 1_104_537_600; // 2005-01-01T00:00:00Z (archive starts in 2008)
+  const EPOCH_MAX_SECONDS = 2_051_222_400; // 2035-01-01T00:00:00Z
+  const parsedHeartbeats = heartbeats.filter((row) => row.epoch !== null);
+  const excludedHeartbeats = parsedHeartbeats.filter(
+    (row) => row.epoch < EPOCH_MIN_SECONDS || row.epoch > EPOCH_MAX_SECONDS,
+  );
+  const validHeartbeats = parsedHeartbeats.filter(
+    (row) => row.epoch >= EPOCH_MIN_SECONDS && row.epoch <= EPOCH_MAX_SECONDS,
+  );
   const heartbeatGaps = [];
+  const heartbeatGapEvents = [];
   for (let index = 1; index < validHeartbeats.length; index += 1) {
-    heartbeatGaps.push(validHeartbeats[index].epoch - validHeartbeats[index - 1].epoch);
+    const gap = validHeartbeats[index].epoch - validHeartbeats[index - 1].epoch;
+    heartbeatGaps.push(gap);
+    if (gap > 1) {
+      heartbeatGapEvents.push({
+        gapSeconds: gap,
+        fromFeedTimestamp: new Date(validHeartbeats[index - 1].epoch * 1000).toISOString(),
+        toFeedTimestamp: new Date(validHeartbeats[index].epoch * 1000).toISOString(),
+      });
+    }
   }
+  // A genuine in-session heartbeat dropout is a coverage signal, not a corrupt
+  // metric. Surface the material ones (>= 120 s) sorted by size so the session
+  // analyzer can lift them into the catalog `issues` array.
+  const SIGNIFICANT_HEARTBEAT_GAP_SECONDS = 120;
+  const significantHeartbeatGaps = heartbeatGapEvents
+    .filter((event) => event.gapSeconds >= SIGNIFICANT_HEARTBEAT_GAP_SECONDS)
+    .sort((left, right) => right.gapSeconds - left.gapSeconds)
+    .slice(0, 10);
   const heartbeatSeries = [...new Set(validHeartbeats.map((row) => row.seriesCode).filter(Boolean))];
   const observedSeries = new Set(
     [...sessionStates.values()]
@@ -229,6 +265,18 @@ export function analyzeRaceToolsReplay(zipBytes, expectedSeries = null, expected
     qualityStatus = 'no_heartbeat';
     qualityReasons.push('no parseable $H heartbeat records');
   }
+  const sanitizedMaxGapSeconds = maximum(heartbeatGaps);
+  const heartbeatGapWarning =
+    significantHeartbeatGaps.length > 0
+      ? {
+          maxGapSeconds: sanitizedMaxGapSeconds,
+          significantGapCount: significantHeartbeatGaps.length,
+          thresholdSeconds: SIGNIFICANT_HEARTBEAT_GAP_SECONDS,
+          gaps: significantHeartbeatGaps,
+          note:
+            'Genuine in-session heartbeat gap after epoch sanitization. Does not by itself make the session unusable; consumers should confirm whether the gap is pre-green/benign before treating it as missing race data.',
+        }
+      : null;
 
   const csvLines = csvBytes ? csvBytes.toString('utf8').split(/\r?\n/).filter(Boolean) : [];
   return {
@@ -256,6 +304,16 @@ export function analyzeRaceToolsReplay(zipBytes, expectedSeries = null, expected
         validHeartbeats.length === 0 ? null : validHeartbeats.at(-1).epoch - validHeartbeats[0].epoch,
       heartbeatGapMedianSeconds: median(heartbeatGaps),
       heartbeatGapMaxSeconds: maximum(heartbeatGaps),
+      heartbeatEpochSanitization: {
+        parsedHeartbeatCount: parsedHeartbeats.length,
+        plausibleHeartbeatCount: validHeartbeats.length,
+        excludedImplausibleHeartbeatCount: excludedHeartbeats.length,
+        boundsSeconds: {epochMin: EPOCH_MIN_SECONDS, epochMax: EPOCH_MAX_SECONDS},
+        excludedEpochSamples: excludedHeartbeats.slice(0, 5).map((row) => row.epoch),
+        note:
+          'heartbeatGapMaxSeconds and span are computed after dropping feed epochs outside the plausible Unix-second window (line-collision artefacts). A large surviving gap is genuine (e.g. a capture concatenating two real test days) and is reported in significantHeartbeatGaps rather than deleted.',
+      },
+      significantHeartbeatGaps,
       exactConsecutiveOneSecondHeartbeat: heartbeatGaps.length > 0 && heartbeatGaps.every((value) => value === 1),
       messageTypeCounts,
       flagMessageCount,
@@ -293,7 +351,7 @@ export function analyzeRaceToolsReplay(zipBytes, expectedSeries = null, expected
       rowCountExcludingHeader: Math.max(0, csvLines.length - 1),
       header: csvLines[0] ?? null,
     },
-    quality: {status: qualityStatus, reasons: qualityReasons},
+    quality: {status: qualityStatus, reasons: qualityReasons, heartbeatGapWarning},
   };
 }
 

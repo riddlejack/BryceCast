@@ -1,0 +1,651 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-07-19T02:13:06.802Z",
+  "definition": {
+    "verified_fetch": "Streamed directly from the source URL; first acquisition defines truth.",
+    "reused_download_verified_size": "Reused a local file whose byte size matched the source-index expectedBytes.",
+    "reused_download_basename_only": "Reused a local file matched on basename alone (expectedBytes was null); no server-side size or hash reference existed. Re-verify against source on the next sync."
+  },
+  "objectCount": 1046,
+  "byGrade": {
+    "verified_fetch": 745,
+    "reused_download_verified_size": 231,
+    "reused_download_basename_only": 70
+  },
+  "reverifyOnNextSync": {
+    "count": 70,
+    "note": "These objects re-hash correctly locally and passed structural validation, but their provenance is basename-only. Compare their SHA-256 against a fresh source fetch at the next sync.",
+    "objects": [
+      {
+        "id": "71770741980d87250c009c63",
+        "sourceId": "timing71-analysis",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-02-27%2017-27%20IndyCar%20-%20INDY%20NXT%20by%20Firestone%20GP%20of%20St%20Petersburg%20-%20Practice%201.json",
+        "bytes": 149387,
+        "sha256": "0580f6578dc0be92326194d11c348d277236a5eadc56524431bac8c27fb8047e",
+        "objectPath": "raw/objects/sha256/05/0580f6578dc0be92326194d11c348d277236a5eadc56524431bac8c27fb8047e.json"
+      },
+      {
+        "id": "9060d8cbe3a4d537806c7f19",
+        "sourceId": "timing71-replay",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-02-27%2017-27%20IndyCar%20-%20INDY%20NXT%20by%20Firestone%20GP%20of%20St%20Petersburg%20-%20Practice%201.zip",
+        "bytes": 1411521,
+        "sha256": "cc80b950338372032e3224154117f27020db4039343bbc205d44bf5058580964",
+        "objectPath": "raw/objects/sha256/cc/cc80b950338372032e3224154117f27020db4039343bbc205d44bf5058580964.zip"
+      },
+      {
+        "id": "2e82e913d7fa18d65fd4abc5",
+        "sourceId": "timing71-analysis",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-02-28%2013-32%20IndyCar%20-%20INDY%20NXT%20by%20Firestone%20GP%20of%20St%20Petersburg%20-%20Practice%202.json",
+        "bytes": 83510,
+        "sha256": "74827bb637c480fc460ae0d815fa07e95c3eeaceff562a026e2d9e4c5fea165e",
+        "objectPath": "raw/objects/sha256/74/74827bb637c480fc460ae0d815fa07e95c3eeaceff562a026e2d9e4c5fea165e.json"
+      },
+      {
+        "id": "370c07c4810c772e0b36a138",
+        "sourceId": "timing71-replay",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-02-28%2013-32%20IndyCar%20-%20INDY%20NXT%20by%20Firestone%20GP%20of%20St%20Petersburg%20-%20Practice%202.zip",
+        "bytes": 1013957,
+        "sha256": "11999f74cba1df3634930be286863b0ed09a9c749c8ae0f325e5a10ad5ba6b85",
+        "objectPath": "raw/objects/sha256/11/11999f74cba1df3634930be286863b0ed09a9c749c8ae0f325e5a10ad5ba6b85.zip"
+      },
+      {
+        "id": "4af979647529b2defe8931e4",
+        "sourceId": "timing71-analysis",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-02-28%2020-42%20IndyCar%20-%20INDY%20NXT%20by%20Firestone%20GP%20of%20St%20Petersburg%20-%20Qualifications%20-%20Group%202.json",
+        "bytes": 65634,
+        "sha256": "0044c1e11dfa54bba082a8153f8b4c792c3e5f480f6ac29c68dbf9a5d9749e99",
+        "objectPath": "raw/objects/sha256/00/0044c1e11dfa54bba082a8153f8b4c792c3e5f480f6ac29c68dbf9a5d9749e99.json"
+      },
+      {
+        "id": "6a154c9296a9a8a69e2c82ec",
+        "sourceId": "timing71-replay",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-02-28%2020-42%20IndyCar%20-%20INDY%20NXT%20by%20Firestone%20GP%20of%20St%20Petersburg%20-%20Qualifications%20-%20Group%202.zip",
+        "bytes": 784516,
+        "sha256": "f422f15271da05253c437efb881ddb3427061d106b689dce9c511151303445fd",
+        "objectPath": "raw/objects/sha256/f4/f422f15271da05253c437efb881ddb3427061d106b689dce9c511151303445fd.zip"
+      },
+      {
+        "id": "7c3b3af32f6d172ef2fd4703",
+        "sourceId": "timing71-analysis",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-03-01%2015-03%20IndyCar%20-%20INDY%20NXT%20by%20Firestone%20GP%20of%20St%20Petersburg%20-%20Race.json",
+        "bytes": 148223,
+        "sha256": "71220390f5318f7bb7a47646f0e8fcf62819e0380e1f9d6782d75e5e80dc6992",
+        "objectPath": "raw/objects/sha256/71/71220390f5318f7bb7a47646f0e8fcf62819e0380e1f9d6782d75e5e80dc6992.json"
+      },
+      {
+        "id": "e3dda4abf03273c056ce980e",
+        "sourceId": "timing71-replay",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-03-01%2015-03%20IndyCar%20-%20INDY%20NXT%20by%20Firestone%20GP%20of%20St%20Petersburg%20-%20Race.zip",
+        "bytes": 1937628,
+        "sha256": "312325908f3587cd4ff1da4bf232503620236049d56fd901cd034e3e03ecc693",
+        "objectPath": "raw/objects/sha256/31/312325908f3587cd4ff1da4bf232503620236049d56fd901cd034e3e03ecc693.zip"
+      },
+      {
+        "id": "5370f8f9e4c584a86558b9a9",
+        "sourceId": "timing71-analysis",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-03-13%2018-57%20IndyCar%20-%20INDYNXT%20by%20Firestone%20Grand%20Prix%20of%20Arlington%20-%20Practice%201.json",
+        "bytes": 126916,
+        "sha256": "89d3ac8e1e28f10be54013a233c34614c01aa23aca5bdfaffa74d3defc27beeb",
+        "objectPath": "raw/objects/sha256/89/89d3ac8e1e28f10be54013a233c34614c01aa23aca5bdfaffa74d3defc27beeb.json"
+      },
+      {
+        "id": "05cd43d194a1c5543aeda7e2",
+        "sourceId": "timing71-replay",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-03-13%2018-57%20IndyCar%20-%20INDYNXT%20by%20Firestone%20Grand%20Prix%20of%20Arlington%20-%20Practice%201.zip",
+        "bytes": 1927128,
+        "sha256": "c57164b2b4da9fbd63f6d3d699f729861b3f6c96248fa30c0db31660fc57a27b",
+        "objectPath": "raw/objects/sha256/c5/c57164b2b4da9fbd63f6d3d699f729861b3f6c96248fa30c0db31660fc57a27b.zip"
+      },
+      {
+        "id": "7a7eea51541df90a57d77e72",
+        "sourceId": "timing71-analysis",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-03-14%2015-12%20IndyCar%20-%20INDYNXT%20by%20Firestone%20Grand%20Prix%20of%20Arlington%20-%20Practice%202.json",
+        "bytes": 101612,
+        "sha256": "54bbf4e7ce13aab1dd29c098d281a5548fe4a6b92ebf4f820113303c9f9cc1ea",
+        "objectPath": "raw/objects/sha256/54/54bbf4e7ce13aab1dd29c098d281a5548fe4a6b92ebf4f820113303c9f9cc1ea.json"
+      },
+      {
+        "id": "70c8f1cc646a79482b81f194",
+        "sourceId": "timing71-replay",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-03-14%2015-12%20IndyCar%20-%20INDYNXT%20by%20Firestone%20Grand%20Prix%20of%20Arlington%20-%20Practice%202.zip",
+        "bytes": 1708385,
+        "sha256": "57659a3f8e1d9a1b5104bc1825b08cb031c3ba4651a6a7dcbdeacd1e4762d5b3",
+        "objectPath": "raw/objects/sha256/57/57659a3f8e1d9a1b5104bc1825b08cb031c3ba4651a6a7dcbdeacd1e4762d5b3.zip"
+      },
+      {
+        "id": "e24fac4ef99d91c6642158ea",
+        "sourceId": "timing71-analysis",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-03-14%2020-27%20IndyCar%20-%20INDYNXT%20by%20Firestone%20Grand%20Prix%20of%20Arlington%20-%20Qualifications%20-%20Group%202.json",
+        "bytes": 59603,
+        "sha256": "b4bb5886141fb48924b44a817252427c1291e1de06c5680c8e765ee530174365",
+        "objectPath": "raw/objects/sha256/b4/b4bb5886141fb48924b44a817252427c1291e1de06c5680c8e765ee530174365.json"
+      },
+      {
+        "id": "d2bc4ad2c9c0b6fb21942bba",
+        "sourceId": "timing71-replay",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-03-14%2020-27%20IndyCar%20-%20INDYNXT%20by%20Firestone%20Grand%20Prix%20of%20Arlington%20-%20Qualifications%20-%20Group%202.zip",
+        "bytes": 1016479,
+        "sha256": "95abf3293925f8978cb3c871d554d57aad965657858aae13f5d34745ed664e4b",
+        "objectPath": "raw/objects/sha256/95/95abf3293925f8978cb3c871d554d57aad965657858aae13f5d34745ed664e4b.zip"
+      },
+      {
+        "id": "11955d18b47611bc91fac037",
+        "sourceId": "timing71-analysis",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-03-15%2014-42%20IndyCar%20-%20INDYNXT%20by%20Firestone%20Grand%20Prix%20of%20Arlington%20-%20Race.json",
+        "bytes": 74647,
+        "sha256": "d9f2ec63e527af6256b7d588c9027da731a919fe250773eff0a8423cdb0d5a64",
+        "objectPath": "raw/objects/sha256/d9/d9f2ec63e527af6256b7d588c9027da731a919fe250773eff0a8423cdb0d5a64.json"
+      },
+      {
+        "id": "a64ead578f3f61a1745f021c",
+        "sourceId": "timing71-replay",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-03-15%2014-42%20IndyCar%20-%20INDYNXT%20by%20Firestone%20Grand%20Prix%20of%20Arlington%20-%20Race.zip",
+        "bytes": 1157163,
+        "sha256": "15bc41fbc89c9c419b1ebdae089b8761b0198e4478ba86a9d4b9cc8e93c73f4b",
+        "objectPath": "raw/objects/sha256/15/15bc41fbc89c9c419b1ebdae089b8761b0198e4478ba86a9d4b9cc8e93c73f4b.zip"
+      },
+      {
+        "id": "f34bcda17601a64d4a558a99",
+        "sourceId": "timing71-analysis",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-03-27%2018-27%20IndyCar%20-%20INDY%20NXT%20by%20Firestone%20Grand%20Prix%20of%20Alabama%20-%20Practice%201.json",
+        "bytes": 150552,
+        "sha256": "c74331d265a59efaed9a6aea2850300314da98f326778c21a7d208403ff468c3",
+        "objectPath": "raw/objects/sha256/c7/c74331d265a59efaed9a6aea2850300314da98f326778c21a7d208403ff468c3.json"
+      },
+      {
+        "id": "74b80638e1f157b4bf52ffb3",
+        "sourceId": "timing71-replay",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-03-27%2018-27%20IndyCar%20-%20INDY%20NXT%20by%20Firestone%20Grand%20Prix%20of%20Alabama%20-%20Practice%201.zip",
+        "bytes": 1984497,
+        "sha256": "23fb8b15bb64b6056d4bd4a9d9c41d27b4f0b90c9287b489032216f6809e4656",
+        "objectPath": "raw/objects/sha256/23/23fb8b15bb64b6056d4bd4a9d9c41d27b4f0b90c9287b489032216f6809e4656.zip"
+      },
+      {
+        "id": "67a4664c0ebd4bb5becd3d4d",
+        "sourceId": "timing71-analysis",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-03-28%2013-57%20IndyCar%20-%20INDY%20NXT%20by%20Firestone%20Grand%20Prix%20of%20Alabama%20-%20Qualifications.json",
+        "bytes": 72070,
+        "sha256": "7e80eada5f9960ecace315eb495493e4eb5421181ee175ba781b8e204511f3b9",
+        "objectPath": "raw/objects/sha256/7e/7e80eada5f9960ecace315eb495493e4eb5421181ee175ba781b8e204511f3b9.json"
+      },
+      {
+        "id": "8fae342618e52b06bf50b1ba",
+        "sourceId": "timing71-replay",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-03-28%2013-57%20IndyCar%20-%20INDY%20NXT%20by%20Firestone%20Grand%20Prix%20of%20Alabama%20-%20Qualifications.zip",
+        "bytes": 1139308,
+        "sha256": "fd818f855beb40d72c0a4e053170b0ae0ab35e4b440d28da66e2cae0a393c4c3",
+        "objectPath": "raw/objects/sha256/fd/fd818f855beb40d72c0a4e053170b0ae0ab35e4b440d28da66e2cae0a393c4c3.zip"
+      },
+      {
+        "id": "5f9360bca29d1a88362c2a66",
+        "sourceId": "timing71-analysis",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-03-28%2017-03%20IndyCar%20-%20Children's%20of%20Alabama%20Indy%20Grand%20Prix%20-%20Qualifications%20-%20Segment%201%20_%20Group%201.json",
+        "bytes": 138901,
+        "sha256": "ceaf2812930222c71b374baf664edd2e314b05a91ec3cfcb7a27cf361957d3b4",
+        "objectPath": "raw/objects/sha256/ce/ceaf2812930222c71b374baf664edd2e314b05a91ec3cfcb7a27cf361957d3b4.json"
+      },
+      {
+        "id": "5c34085d001e9c582dc5b3ca",
+        "sourceId": "timing71-replay",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-03-28%2017-03%20IndyCar%20-%20Children's%20of%20Alabama%20Indy%20Grand%20Prix%20-%20Qualifications%20-%20Segment%201%20_%20Group%201.zip",
+        "bytes": 2735619,
+        "sha256": "7110d64d5000044ddf3572f34a666e78693e708647cc78a13076c524425baa64",
+        "objectPath": "raw/objects/sha256/71/7110d64d5000044ddf3572f34a666e78693e708647cc78a13076c524425baa64.zip"
+      },
+      {
+        "id": "39e9de1876972d89baf7c09d",
+        "sourceId": "timing71-analysis",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-03-29%2015-03%20IndyCar%20-%20INDY%20NXT%20by%20Firestone%20Grand%20Prix%20of%20Alabama%20-%20Race%202.json",
+        "bytes": 123883,
+        "sha256": "3a3547f6730aa0a6d191d295c14a2b75d34bd887c0f7c4276bee096c89391625",
+        "objectPath": "raw/objects/sha256/3a/3a3547f6730aa0a6d191d295c14a2b75d34bd887c0f7c4276bee096c89391625.json"
+      },
+      {
+        "id": "3ccf7855db08e9187c4e6452",
+        "sourceId": "timing71-replay",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-03-29%2015-03%20IndyCar%20-%20INDY%20NXT%20by%20Firestone%20Grand%20Prix%20of%20Alabama%20-%20Race%202.zip",
+        "bytes": 2722838,
+        "sha256": "ebbf106b6dee1b13e14ca2d923bbafd9fab264a7aa2034bfb8cb280ef6c1ebf9",
+        "objectPath": "raw/objects/sha256/eb/ebbf106b6dee1b13e14ca2d923bbafd9fab264a7aa2034bfb8cb280ef6c1ebf9.zip"
+      },
+      {
+        "id": "03717a0315d393c3c18ca709",
+        "sourceId": "timing71-analysis",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-05-08%2011-57%20IndyCar%20-%20INDY%20NXT%20by%20Firestone%20Indianapolis%20Grand%20Prix%20-%20Practice%201.json",
+        "bytes": 138858,
+        "sha256": "f66e3da6ac874441de6a70375d7c74ca992ad2d28d97b8c02e38d5eb4a628567",
+        "objectPath": "raw/objects/sha256/f6/f66e3da6ac874441de6a70375d7c74ca992ad2d28d97b8c02e38d5eb4a628567.json"
+      },
+      {
+        "id": "0075e0f97dc18e8e664bba25",
+        "sourceId": "timing71-replay",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-05-08%2011-57%20IndyCar%20-%20INDY%20NXT%20by%20Firestone%20Indianapolis%20Grand%20Prix%20-%20Practice%201.zip",
+        "bytes": 1960135,
+        "sha256": "f138fd73c30eb20309ea0998d07522fcd91407b19fa65b43a3b156a118df2c62",
+        "objectPath": "raw/objects/sha256/f1/f138fd73c30eb20309ea0998d07522fcd91407b19fa65b43a3b156a118df2c62.zip"
+      },
+      {
+        "id": "b3ee0f98e52a2e42a3d97835",
+        "sourceId": "timing71-analysis",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-05-08%2015-57%20IndyCar%20-%20INDY%20NXT%20by%20Firestone%20Indianapolis%20Grand%20Prix%20-%20Qualifications.json",
+        "bytes": 59598,
+        "sha256": "2d0195f838db1e1355d4d586949aa06f54ce7a65e5e920adde064136be408421",
+        "objectPath": "raw/objects/sha256/2d/2d0195f838db1e1355d4d586949aa06f54ce7a65e5e920adde064136be408421.json"
+      },
+      {
+        "id": "101665ec23f5f5af115523f7",
+        "sourceId": "timing71-replay",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-05-08%2015-57%20IndyCar%20-%20INDY%20NXT%20by%20Firestone%20Indianapolis%20Grand%20Prix%20-%20Qualifications.zip",
+        "bytes": 1111661,
+        "sha256": "c034a83bef9504468ff736dca055813b68c2a2baefd02869b77608f5ab24b460",
+        "objectPath": "raw/objects/sha256/c0/c034a83bef9504468ff736dca055813b68c2a2baefd02869b77608f5ab24b460.zip"
+      },
+      {
+        "id": "ad789906d1813fc2484059b2",
+        "sourceId": "timing71-analysis",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-05-08%2020-03%20IndyCar%20-%20SONSIO%20GRAND%20PRIX%20-%20Qualifications%20-%20Segment%201%20_%20Group%201.json",
+        "bytes": 110467,
+        "sha256": "4925c4107347d739b5970abc9c977e65f635dc235adc1280e7619fe61618f107",
+        "objectPath": "raw/objects/sha256/49/4925c4107347d739b5970abc9c977e65f635dc235adc1280e7619fe61618f107.json"
+      },
+      {
+        "id": "2f167e42d4b71e4e3f9d6cb4",
+        "sourceId": "timing71-replay",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-05-08%2020-03%20IndyCar%20-%20SONSIO%20GRAND%20PRIX%20-%20Qualifications%20-%20Segment%201%20_%20Group%201.zip",
+        "bytes": 2758689,
+        "sha256": "3143c8c8cfc894419297e7439fc82e0b59fc247ebb7dc232aeed92a0381a7ed3",
+        "objectPath": "raw/objects/sha256/31/3143c8c8cfc894419297e7439fc82e0b59fc247ebb7dc232aeed92a0381a7ed3.zip"
+      },
+      {
+        "id": "042664ead1848749fc5db822",
+        "sourceId": "timing71-analysis",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-05-09%2018-33%20IndyCar%20-%20INDY%20NXT%20by%20Firestone%20Indianapolis%20Grand%20Prix%20-%20Race%202.json",
+        "bytes": 110398,
+        "sha256": "5cd79f31cb9babfdc14307960261ba39d3a5507e6c27487532d6a161bedb5ab2",
+        "objectPath": "raw/objects/sha256/5c/5cd79f31cb9babfdc14307960261ba39d3a5507e6c27487532d6a161bedb5ab2.json"
+      },
+      {
+        "id": "d79f248aef612f3b0f67b6c8",
+        "sourceId": "timing71-replay",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-05-09%2018-33%20IndyCar%20-%20INDY%20NXT%20by%20Firestone%20Indianapolis%20Grand%20Prix%20-%20Race%202.zip",
+        "bytes": 1612964,
+        "sha256": "9b53695ae82bee92aa18e8eee18be60ca0e4555077156ec64db660bf3c6ef303",
+        "objectPath": "raw/objects/sha256/9b/9b53695ae82bee92aa18e8eee18be60ca0e4555077156ec64db660bf3c6ef303.zip"
+      },
+      {
+        "id": "d0e95dcb3a75925c0bef1a09",
+        "sourceId": "timing71-analysis",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-05-29%2017-57%20IndyCar%20-%20INDY%20NXT%20by%20Firestone%20Detroit%20Grand%20Prix%20-%20Practice%201.json",
+        "bytes": 149121,
+        "sha256": "0c006799e80855b67cf803d93dc7689b36df992a2ff4e7b8723a44a2060cfd56",
+        "objectPath": "raw/objects/sha256/0c/0c006799e80855b67cf803d93dc7689b36df992a2ff4e7b8723a44a2060cfd56.json"
+      },
+      {
+        "id": "596de8acf0998339607b2ea0",
+        "sourceId": "timing71-replay",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-05-29%2017-57%20IndyCar%20-%20INDY%20NXT%20by%20Firestone%20Detroit%20Grand%20Prix%20-%20Practice%201.zip",
+        "bytes": 1902443,
+        "sha256": "3960e5df2ddf4064c2fa89e5dc73218496d5301a7fd94736f702e4888fa11e5c",
+        "objectPath": "raw/objects/sha256/39/3960e5df2ddf4064c2fa89e5dc73218496d5301a7fd94736f702e4888fa11e5c.zip"
+      },
+      {
+        "id": "fccc9b8a2ee53cf1441e29a7",
+        "sourceId": "timing71-analysis",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-05-30%2011-57%20IndyCar%20-%20INDY%20NXT%20by%20Firestone%20Detroit%20Grand%20Prix%20-%20Practice%202.json",
+        "bytes": 153561,
+        "sha256": "70c0c614f4718c421eb5ac5ec76272b45c1060ceef911c5fc2067324686f7625",
+        "objectPath": "raw/objects/sha256/70/70c0c614f4718c421eb5ac5ec76272b45c1060ceef911c5fc2067324686f7625.json"
+      },
+      {
+        "id": "fff8997bd8ef2ea996201d40",
+        "sourceId": "timing71-replay",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-05-30%2011-57%20IndyCar%20-%20INDY%20NXT%20by%20Firestone%20Detroit%20Grand%20Prix%20-%20Practice%202.zip",
+        "bytes": 2122759,
+        "sha256": "2c2aa8ccdd729f3aba0febde4556ee2866451116f5b0f9c0cd0b490af4e1c9cb",
+        "objectPath": "raw/objects/sha256/2c/2c2aa8ccdd729f3aba0febde4556ee2866451116f5b0f9c0cd0b490af4e1c9cb.zip"
+      },
+      {
+        "id": "374697d8749949fac5259ee3",
+        "sourceId": "timing71-analysis",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-05-30%2015-57%20IndyCar%20-%20INDY%20NXT%20by%20Firestone%20Detroit%20Grand%20Prix%20-%20Qualifications%20-%20Group%202.json",
+        "bytes": 67169,
+        "sha256": "7a84477d147f7e80a5f5d397930d95936785c0b92b421e88b375269dce972dc2",
+        "objectPath": "raw/objects/sha256/7a/7a84477d147f7e80a5f5d397930d95936785c0b92b421e88b375269dce972dc2.json"
+      },
+      {
+        "id": "50fbf2e8d6a62294aad39c54",
+        "sourceId": "timing71-replay",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-05-30%2015-57%20IndyCar%20-%20INDY%20NXT%20by%20Firestone%20Detroit%20Grand%20Prix%20-%20Qualifications%20-%20Group%202.zip",
+        "bytes": 1119425,
+        "sha256": "14a62f8c8cd0bf7d0a356fb02f539890704afbded7a94c70081f7468f6442309",
+        "objectPath": "raw/objects/sha256/14/14a62f8c8cd0bf7d0a356fb02f539890704afbded7a94c70081f7468f6442309.zip"
+      },
+      {
+        "id": "586d60852fb226d07da95166",
+        "sourceId": "timing71-analysis",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-05-31%2014-33%20IndyCar%20-%20INDY%20NXT%20by%20Firestone%20Detroit%20Grand%20Prix%20-%20Race.json",
+        "bytes": 163485,
+        "sha256": "838bb18eed5d8963d99d38aa30b01beb1a430f4cbf1da44b5fb47835b0e7347c",
+        "objectPath": "raw/objects/sha256/83/838bb18eed5d8963d99d38aa30b01beb1a430f4cbf1da44b5fb47835b0e7347c.json"
+      },
+      {
+        "id": "fe043862dd26b74ce3017c76",
+        "sourceId": "timing71-replay",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-05-31%2014-33%20IndyCar%20-%20INDY%20NXT%20by%20Firestone%20Detroit%20Grand%20Prix%20-%20Race.zip",
+        "bytes": 2863670,
+        "sha256": "da2a24d1a5bfc591b552698cb576f7d41f2f6dffcd9cdc413e271629a9729ce1",
+        "objectPath": "raw/objects/sha256/da/da2a24d1a5bfc591b552698cb576f7d41f2f6dffcd9cdc413e271629a9729ce1.zip"
+      },
+      {
+        "id": "05c01c9978f6e1b197d35b32",
+        "sourceId": "timing71-analysis",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-06-06%2019-02%20IndyCar%20-%20INDY%20NXT%20by%20Firestone%20at%20WWT%20Raceway%20-%20Practice%201.json",
+        "bytes": 231264,
+        "sha256": "3c818db3cf5af113b04b66d5633ecf7a5e832d67f2cce370db8fa79149dfb68b",
+        "objectPath": "raw/objects/sha256/3c/3c818db3cf5af113b04b66d5633ecf7a5e832d67f2cce370db8fa79149dfb68b.json"
+      },
+      {
+        "id": "406e43143beb026a3f8df2a7",
+        "sourceId": "timing71-replay",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-06-06%2019-02%20IndyCar%20-%20INDY%20NXT%20by%20Firestone%20at%20WWT%20Raceway%20-%20Practice%201.zip",
+        "bytes": 1968173,
+        "sha256": "d7c336c577e7294c838f84346fbf575dc8aacd7b83b5f82b4e9dda60b5da1b7b",
+        "objectPath": "raw/objects/sha256/d7/d7c336c577e7294c838f84346fbf575dc8aacd7b83b5f82b4e9dda60b5da1b7b.zip"
+      },
+      {
+        "id": "ad9ce8ae16285c0e21a24ad5",
+        "sourceId": "timing71-analysis",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-06-06%2020-32%20IndyCar%20-%20INDY%20NXT%20by%20Firestone%20at%20WWT%20Raceway%20-%20Qualifications.json",
+        "bytes": 28184,
+        "sha256": "3184a592b776e0f1302b4fccf4d30417859eb69aaaccce96fde19bc556aabc19",
+        "objectPath": "raw/objects/sha256/31/3184a592b776e0f1302b4fccf4d30417859eb69aaaccce96fde19bc556aabc19.json"
+      },
+      {
+        "id": "778942930c713b898ecf35b1",
+        "sourceId": "timing71-replay",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-06-06%2020-32%20IndyCar%20-%20INDY%20NXT%20by%20Firestone%20at%20WWT%20Raceway%20-%20Qualifications.zip",
+        "bytes": 1778553,
+        "sha256": "722c6de71cfe807d56ce234e7c262f4fe954a639c9548fe0aa8a65cb8d7aa8c1",
+        "objectPath": "raw/objects/sha256/72/722c6de71cfe807d56ce234e7c262f4fe954a639c9548fe0aa8a65cb8d7aa8c1.zip"
+      },
+      {
+        "id": "c88eb001406bed28532cb56c",
+        "sourceId": "timing71-analysis",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-06-06%2022-02%20IndyCar%20-%20INDY%20NXT%20by%20Firestone%20at%20WWT%20Raceway%20-%20Qualifications.json",
+        "bytes": 28850,
+        "sha256": "ec81ec840bde13b174108ea5038e8db1d9713ca7b0169faa8cd7d17ebd45ce20",
+        "objectPath": "raw/objects/sha256/ec/ec81ec840bde13b174108ea5038e8db1d9713ca7b0169faa8cd7d17ebd45ce20.json"
+      },
+      {
+        "id": "35d60b4ca95369d11afd76e5",
+        "sourceId": "timing71-replay",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-06-06%2022-02%20IndyCar%20-%20INDY%20NXT%20by%20Firestone%20at%20WWT%20Raceway%20-%20Qualifications.zip",
+        "bytes": 1032933,
+        "sha256": "da64fa07c2099733bf7839b82533ee5bdc856b26cae490af31a678ca15a227bf",
+        "objectPath": "raw/objects/sha256/da/da64fa07c2099733bf7839b82533ee5bdc856b26cae490af31a678ca15a227bf.zip"
+      },
+      {
+        "id": "443d0a4a307b54263f6b566e",
+        "sourceId": "timing71-analysis",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-06-07%2021-32%20IndyCar%20-%20INDY%20NXT%20by%20Firestone%20at%20WWT%20Raceway%20-%20Race.json",
+        "bytes": 219697,
+        "sha256": "a7f4debf063de6efecd7babceb4757691077652e2c1262632c6736f7bfad3336",
+        "objectPath": "raw/objects/sha256/a7/a7f4debf063de6efecd7babceb4757691077652e2c1262632c6736f7bfad3336.json"
+      },
+      {
+        "id": "1cc41be8fab5c624eb1d6b60",
+        "sourceId": "timing71-replay",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-06-07%2021-32%20IndyCar%20-%20INDY%20NXT%20by%20Firestone%20at%20WWT%20Raceway%20-%20Race.zip",
+        "bytes": 1952719,
+        "sha256": "6876a96893a8494681461d4ed3248dfd57821f9abff25f3005b92f2c77c47db7",
+        "objectPath": "raw/objects/sha256/68/6876a96893a8494681461d4ed3248dfd57821f9abff25f3005b92f2c77c47db7.zip"
+      },
+      {
+        "id": "c00c0746075976c1f8441e4d",
+        "sourceId": "timing71-analysis",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-06-19%2018-57%20IndyCar%20-%20INDY%20NXT%20by%20Firestone%20Grand%20Prix%20at%20Road%20America%20-%20Practice%201.json",
+        "bytes": 105504,
+        "sha256": "2e051501ae0dc0a0d42bd3231e9b5c0f0a8dd5eb0a85b41a0bdfe301476ae8eb",
+        "objectPath": "raw/objects/sha256/2e/2e051501ae0dc0a0d42bd3231e9b5c0f0a8dd5eb0a85b41a0bdfe301476ae8eb.json"
+      },
+      {
+        "id": "0aaaae71ddbf9dd962f17a3d",
+        "sourceId": "timing71-replay",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-06-19%2018-57%20IndyCar%20-%20INDY%20NXT%20by%20Firestone%20Grand%20Prix%20at%20Road%20America%20-%20Practice%201.zip",
+        "bytes": 1882136,
+        "sha256": "69677bd8c7d73997e5a9c847070254f63942a1c93dd0e8e03615f7a2039dec6c",
+        "objectPath": "raw/objects/sha256/69/69677bd8c7d73997e5a9c847070254f63942a1c93dd0e8e03615f7a2039dec6c.zip"
+      },
+      {
+        "id": "2e392e26eecc37049dbc098f",
+        "sourceId": "timing71-analysis",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-06-20%2013-57%20IndyCar%20-%20INDY%20NXT%20by%20Firestone%20Grand%20Prix%20at%20Road%20America%20-%20Qualifications%20-%20Group%202.json",
+        "bytes": 52917,
+        "sha256": "d267d2904f99312ddc8e85fc69de237d90632dda30c02a16c3b0f1f6485efc8f",
+        "objectPath": "raw/objects/sha256/d2/d267d2904f99312ddc8e85fc69de237d90632dda30c02a16c3b0f1f6485efc8f.json"
+      },
+      {
+        "id": "833e354f881750549537721b",
+        "sourceId": "timing71-replay",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-06-20%2013-57%20IndyCar%20-%20INDY%20NXT%20by%20Firestone%20Grand%20Prix%20at%20Road%20America%20-%20Qualifications%20-%20Group%202.zip",
+        "bytes": 1064743,
+        "sha256": "5d28a962cb61f7e9f58d355d2ec1750a3c19b3353c0f593f8852bf95e6cd6883",
+        "objectPath": "raw/objects/sha256/5d/5d28a962cb61f7e9f58d355d2ec1750a3c19b3353c0f593f8852bf95e6cd6883.zip"
+      },
+      {
+        "id": "e6c665af444031ff51cfa650",
+        "sourceId": "timing71-analysis",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-06-20%2014-57%20IndyCar%20-%20INDY%20NXT%20by%20Firestone%20Grand%20Prix%20at%20Road%20America%20-%20Race%201.json",
+        "bytes": 124886,
+        "sha256": "4b27fd5c333e0c7f2b540f955d2e1e6e45fea8625b86bf0d74b8636b9f9e2e39",
+        "objectPath": "raw/objects/sha256/4b/4b27fd5c333e0c7f2b540f955d2e1e6e45fea8625b86bf0d74b8636b9f9e2e39.json"
+      },
+      {
+        "id": "5d66d68946b5d4f61806ed91",
+        "sourceId": "timing71-replay",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-06-20%2014-57%20IndyCar%20-%20INDY%20NXT%20by%20Firestone%20Grand%20Prix%20at%20Road%20America%20-%20Race%201.zip",
+        "bytes": 2989266,
+        "sha256": "3d1ef17d2a8b073436eeae33a9412036c81c1bae13503060ee2cd0362ce52c87",
+        "objectPath": "raw/objects/sha256/3d/3d1ef17d2a8b073436eeae33a9412036c81c1bae13503060ee2cd0362ce52c87.zip"
+      },
+      {
+        "id": "e58a494d2c4a8706638f591b",
+        "sourceId": "timing71-analysis",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-06-20%2016-33%20IndyCar%20-%20XPEL%20Grand%20Prix%20at%20Road%20America%20-%20Qualifications%20-%20Segment%201%20_%20Group%201.json",
+        "bytes": 100947,
+        "sha256": "9730f7e1735e6744dc91f0200311ac89fbbfe2e8628758fa11942ab1a04db693",
+        "objectPath": "raw/objects/sha256/97/9730f7e1735e6744dc91f0200311ac89fbbfe2e8628758fa11942ab1a04db693.json"
+      },
+      {
+        "id": "f0556add0c2869501ad56a14",
+        "sourceId": "timing71-replay",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-06-20%2016-33%20IndyCar%20-%20XPEL%20Grand%20Prix%20at%20Road%20America%20-%20Qualifications%20-%20Segment%201%20_%20Group%201.zip",
+        "bytes": 2638359,
+        "sha256": "a60209344b7b4e9385d56bfe3de7bb73dc4377af3646e6c4df876b014b2263d3",
+        "objectPath": "raw/objects/sha256/a6/a60209344b7b4e9385d56bfe3de7bb73dc4377af3646e6c4df876b014b2263d3.zip"
+      },
+      {
+        "id": "dcc1986f9ce7faf9fa1e877a",
+        "sourceId": "timing71-analysis",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-06-21%2016-03%20IndyCar%20-%20INDY%20NXT%20by%20Firestone%20Grand%20Prix%20at%20Road%20America%20-%20Race%202.json",
+        "bytes": 76031,
+        "sha256": "a90497800fcc3eee8f7a3f56bcf391e757ab71994428ee7d37463041528fbff7",
+        "objectPath": "raw/objects/sha256/a9/a90497800fcc3eee8f7a3f56bcf391e757ab71994428ee7d37463041528fbff7.json"
+      },
+      {
+        "id": "512eeb9ba4826d017906628c",
+        "sourceId": "timing71-replay",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-06-21%2016-03%20IndyCar%20-%20INDY%20NXT%20by%20Firestone%20Grand%20Prix%20at%20Road%20America%20-%20Race%202.zip",
+        "bytes": 2710311,
+        "sha256": "f1dc271f33dc7ca34e7357b6fbd794abcbd8f98a6068e4f564bf654249d73eaa",
+        "objectPath": "raw/objects/sha256/f1/f1dc271f33dc7ca34e7357b6fbd794abcbd8f98a6068e4f564bf654249d73eaa.zip"
+      },
+      {
+        "id": "383051a181d8d2bfaf221b3b",
+        "sourceId": "timing71-analysis",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-07-03%2017-57%20IndyCar%20-%20INDY%20NXT%20by%20Firestone%20Grand%20Prix%20at%20Mid-Ohio%20-%20Practice%201.json",
+        "bytes": 141230,
+        "sha256": "aefbe8feb9cbe62ddd3f230397ff8ff1ba761ac9524b024feb49b258463c4f00",
+        "objectPath": "raw/objects/sha256/ae/aefbe8feb9cbe62ddd3f230397ff8ff1ba761ac9524b024feb49b258463c4f00.json"
+      },
+      {
+        "id": "bc54587416c02a1e768fea1d",
+        "sourceId": "timing71-replay",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-07-03%2017-57%20IndyCar%20-%20INDY%20NXT%20by%20Firestone%20Grand%20Prix%20at%20Mid-Ohio%20-%20Practice%201.zip",
+        "bytes": 1687567,
+        "sha256": "c0804896cb94e5474d000a11a81d05cbffd56fdc55851b3c8c552463b14f0094",
+        "objectPath": "raw/objects/sha256/c0/c0804896cb94e5474d000a11a81d05cbffd56fdc55851b3c8c552463b14f0094.zip"
+      },
+      {
+        "id": "024935bfae16703da9db116c",
+        "sourceId": "timing71-analysis",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-07-04%2012-57%20IndyCar%20-%20INDY%20NXT%20by%20Firestone%20Grand%20Prix%20at%20Mid-Ohio%20-%20Qualifications.json",
+        "bytes": 67251,
+        "sha256": "391c24f80ab4d229812ef2681718dc68db6645ca24b341e1b62d9e1821241d98",
+        "objectPath": "raw/objects/sha256/39/391c24f80ab4d229812ef2681718dc68db6645ca24b341e1b62d9e1821241d98.json"
+      },
+      {
+        "id": "eb177e8e5cb0329e263db227",
+        "sourceId": "timing71-replay",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-07-04%2012-57%20IndyCar%20-%20INDY%20NXT%20by%20Firestone%20Grand%20Prix%20at%20Mid-Ohio%20-%20Qualifications.zip",
+        "bytes": 1130302,
+        "sha256": "399fb0c19b10efa7ccf12ee7c748ae2d74da0ad7ccaca389fe67da1776279f23",
+        "objectPath": "raw/objects/sha256/39/399fb0c19b10efa7ccf12ee7c748ae2d74da0ad7ccaca389fe67da1776279f23.zip"
+      },
+      {
+        "id": "6beec3d7e9e7183c7a52bf10",
+        "sourceId": "timing71-analysis",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-07-04%2017-05%20IndyCar%20-%20INDY%20NXT%20by%20Firestone%20Grand%20Prix%20at%20Mid-Ohio%20-%20Race%201.json",
+        "bytes": 130706,
+        "sha256": "aa2d632130f9034cc39e247cdd94b7ac02edb1238fa896b02801866645e8dfd8",
+        "objectPath": "raw/objects/sha256/aa/aa2d632130f9034cc39e247cdd94b7ac02edb1238fa896b02801866645e8dfd8.json"
+      },
+      {
+        "id": "e8652df3ebbabf44fcffce82",
+        "sourceId": "timing71-replay",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-07-04%2017-05%20IndyCar%20-%20INDY%20NXT%20by%20Firestone%20Grand%20Prix%20at%20Mid-Ohio%20-%20Race%201.zip",
+        "bytes": 1891284,
+        "sha256": "e75c02f3ba90ea5c646774eee29a693004551bb6ac4ac3ca69b913f4daf29a65",
+        "objectPath": "raw/objects/sha256/e7/e75c02f3ba90ea5c646774eee29a693004551bb6ac4ac3ca69b913f4daf29a65.zip"
+      },
+      {
+        "id": "47341d01e37d0ad9b473efe7",
+        "sourceId": "timing71-analysis",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-07-05%2014-05%20IndyCar%20-%20INDY%20NXT%20by%20Firestone%20Grand%20Prix%20at%20Mid-Ohio%20-%20Race%202.json",
+        "bytes": 137214,
+        "sha256": "4d92b81a083a61cded4870fba87e3d2eb895c041cca41c481a6c928041897cd9",
+        "objectPath": "raw/objects/sha256/4d/4d92b81a083a61cded4870fba87e3d2eb895c041cca41c481a6c928041897cd9.json"
+      },
+      {
+        "id": "a4a4081f3057968885507dd9",
+        "sourceId": "timing71-replay",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-07-05%2014-05%20IndyCar%20-%20INDY%20NXT%20by%20Firestone%20Grand%20Prix%20at%20Mid-Ohio%20-%20Race%202.zip",
+        "bytes": 1739477,
+        "sha256": "35d522bb622392c2a5c72fb066a75f091cb1b9f96bcbef34ca4a952e8c50c635",
+        "objectPath": "raw/objects/sha256/35/35d522bb622392c2a5c72fb066a75f091cb1b9f96bcbef34ca4a952e8c50c635.zip"
+      },
+      {
+        "id": "9ce05f26cd26761d52edc9a3",
+        "sourceId": "timing71-analysis",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-07-18%2015-32%20IndyCar%20-%20INDY%20NXT%20by%20Firestone%20Music%20City%20Grand%20Prix%20-%20Practice%201.json",
+        "bytes": 232655,
+        "sha256": "ff4da5b51948365ecd1eecf19db1dbfe87d836fab7fa8ce8d2820986f579a050",
+        "objectPath": "raw/objects/sha256/ff/ff4da5b51948365ecd1eecf19db1dbfe87d836fab7fa8ce8d2820986f579a050.json"
+      },
+      {
+        "id": "77e6b6c8c56c2660494dd771",
+        "sourceId": "timing71-replay",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-07-18%2015-32%20IndyCar%20-%20INDY%20NXT%20by%20Firestone%20Music%20City%20Grand%20Prix%20-%20Practice%201.zip",
+        "bytes": 1870953,
+        "sha256": "6a5f552b6703500444256e5f78c33fd25e2a8d045479fd03b0124118719dad2e",
+        "objectPath": "raw/objects/sha256/6a/6a5f552b6703500444256e5f78c33fd25e2a8d045479fd03b0124118719dad2e.zip"
+      },
+      {
+        "id": "454455168928df82db8c16c0",
+        "sourceId": "timing71-analysis",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-07-18%2020-32%20IndyCar%20-%20INDY%20NXT%20by%20Firestone%20Music%20City%20Grand%20Prix%20-%20Qualifications.json",
+        "bytes": 27016,
+        "sha256": "c9119574f8f422fe1e90a329420bd32c637b0f3b1bb8111c442439c66456e9f9",
+        "objectPath": "raw/objects/sha256/c9/c9119574f8f422fe1e90a329420bd32c637b0f3b1bb8111c442439c66456e9f9.json"
+      },
+      {
+        "id": "1f07fad760e5685aa5e7baff",
+        "sourceId": "timing71-replay",
+        "year": 2026,
+        "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-07-18%2020-32%20IndyCar%20-%20INDY%20NXT%20by%20Firestone%20Music%20City%20Grand%20Prix%20-%20Qualifications.zip",
+        "bytes": 989837,
+        "sha256": "3cdf9f459e889ce063defab34278b4e1dca15cd0a28949c007987e28ce5c1ab3",
+        "objectPath": "raw/objects/sha256/3c/3cdf9f459e889ce063defab34278b4e1dca15cd0a28949c007987e28ce5c1ab3.zip"
+      }
+    ]
+  }
+}

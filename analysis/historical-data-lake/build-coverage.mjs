@@ -63,6 +63,7 @@ const raceToolsQuality = await optionalJson(join(options.dataRoot, 'catalog/race
 const timing71Canonical2026 = await optionalJson(
   join(REPO_ROOT, 'analysis/historical-high-frequency-data-audit/timing71-2026-coverage.json'),
 );
+const reconciliation = await optionalJson(join(options.dataRoot, 'catalog/coverage-reconciliation.json'));
 const timingById = new Map((timingQuality?.sessions ?? []).map((row) => [row.sessionId, row]));
 const raceToolsById = new Map((raceToolsQuality?.sessions ?? []).map((row) => [row.sessionId, row]));
 
@@ -188,7 +189,37 @@ const summary = {
   generatedAt: new Date().toISOString(),
   throughDate: options.throughDate,
   completionDefinition:
-    'All files exposed by the tested RaceTools indexes and Timing71 IndyCar archive for 2024 through the through-date are mirrored. This is source-index completeness, not proof that an unlisted private capture never existed.',
+    'Completeness is established by two independent methods. (1) Source-index completeness: every file exposed by the ' +
+    'tested RaceTools indexes and Timing71 IndyCar archive for 2024 through the through-date is mirrored. (2) ' +
+    'Official-schedule reconciliation: every completed canonical INDY NXT championship-weekend session ' +
+    '(practice/qualifying/race, status "official") is matched by date and type against a lake high-frequency capture, per ' +
+    'catalog/coverage-reconciliation.json. Exactly one canonical session is a documented exception — 2025 Iowa ' +
+    'Qualifications (session_indy_nxt_2025_6596, 2025-07-11): it carries zero qualifying results in the canonical dataset, ' +
+    'has no official-schedule window or weather observation, and has no RaceTools or Timing71 capture — evidence consistent ' +
+    'with a cancelled/converted session, recorded as unmapped-with-evidence rather than assumed present. Neither method ' +
+    'proves that an unlisted private test or recording never existed.',
+  officialScheduleReconciliation: reconciliation
+    ? {
+        source: 'catalog/coverage-reconciliation.json',
+        generatedAt: reconciliation.generatedAt,
+        method: reconciliation.method,
+        pastChampionshipSessions: reconciliation.physicalSessionCounts?.pastChampionshipThroughDate ?? null,
+        matchedCount: reconciliation.matchedCount,
+        unmatchedCount: reconciliation.unmatchedCount,
+        unmappedWithEvidence: (reconciliation.unmatched ?? []).map((physical) => ({
+          date: physical.date,
+          sessionType: physical.sessionType,
+          eventName: physical.eventName,
+          canonicalSessionIds: physical.canonicalSessions.map((session) => session.id),
+          classification: physical.evidence?.classification ?? null,
+          detail: physical.evidence?.detail ?? null,
+        })),
+      }
+    : {
+        source: 'catalog/coverage-reconciliation.json',
+        status: 'not_generated',
+        note: 'Run `node analysis/historical-data-lake/reconcile-coverage.mjs` before build-coverage to populate the official-schedule reconciliation.',
+      },
   acquisition: {
     sourceFiles: manifest.files.length,
     uniqueObjects: uniqueObjects.size,

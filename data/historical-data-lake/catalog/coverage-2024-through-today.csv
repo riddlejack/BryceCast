@@ -4,7 +4,7 @@ year,date,source,sessionId,replayId,series,sessionType,event,sessionLabel,source
 2024,2024-01-17,RaceTools,822993fb1fdc59cc15e70d4d,,INDY_NXT,test,INDY NXT Private Test - Sebring,Test Session 3,inventory_validated,usable,68041,1,0,,,
 2024,2024-02-06,RaceTools,df5a0fd188d6654c6453e2aa,,INDY_NXT,test,Private Test INDY NXT - Laguna Seca,Test Session 1,inventory_validated,usable,64723,1,0,,,
 2024,2024-03-08,RaceTools,c53814df14bae88eebbe6b1f,,INDY_NXT,practice,INDY NXT by Firestone GP of St Petersburg,Practice 1,inventory_validated,usable,3077,1,8300,,,
-2024,2024-03-09,RaceTools,27778bf9b991f0776dd62877,,INDY_NXT,practice,INDY NXT by Firestone GP of St Petersburg,Practice 2,inventory_validated,usable,4629,1,11012,,,
+2024,2024-03-09,RaceTools,27778bf9b991f0776dd62877,,INDY_NXT,practice,INDY NXT by Firestone GP of St Petersburg,Practice 2,inventory_validated,usable,4628,1,11012,,,
 2024,2024-03-09,RaceTools,ab0e16fb5eed2101a3cca858,,INDY_NXT,qualifying,INDY NXT by Firestone GP of St Petersburg,Qualifications - Group 1,inventory_validated,usable,1475,1,2165,,,
 2024,2024-03-09,RaceTools,ccddd7da3dfa55c5aaff86f6,,INDY_NXT,qualifying,INDY NXT by Firestone GP of St Petersburg,Qualifications - Group 2,inventory_validated,usable,1660,1,2102,,,
 2024,2024-03-10,RaceTools,717d30276c2849474246ae36,,INDY_NXT,race,INDY NXT by Firestone GP of St Petersburg,Race,inventory_validated,usable,3811,1,17011,,,

@@ -1,8 +1,28 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-18T23:43:49.483Z",
+  "generatedAt": "2026-07-19T02:13:06.758Z",
   "throughDate": "2026-07-18",
-  "completionDefinition": "All files exposed by the tested RaceTools indexes and Timing71 IndyCar archive for 2024 through the through-date are mirrored. This is source-index completeness, not proof that an unlisted private capture never existed.",
+  "completionDefinition": "Completeness is established by two independent methods. (1) Source-index completeness: every file exposed by the tested RaceTools indexes and Timing71 IndyCar archive for 2024 through the through-date is mirrored. (2) Official-schedule reconciliation: every completed canonical INDY NXT championship-weekend session (practice/qualifying/race, status \"official\") is matched by date and type against a lake high-frequency capture, per catalog/coverage-reconciliation.json. Exactly one canonical session is a documented exception — 2025 Iowa Qualifications (session_indy_nxt_2025_6596, 2025-07-11): it carries zero qualifying results in the canonical dataset, has no official-schedule window or weather observation, and has no RaceTools or Timing71 capture — evidence consistent with a cancelled/converted session, recorded as unmapped-with-evidence rather than assumed present. Neither method proves that an unlisted private test or recording never existed.",
+  "officialScheduleReconciliation": {
+    "source": "catalog/coverage-reconciliation.json",
+    "generatedAt": "2026-07-19T02:13:06.697Z",
+    "method": "Reconcile the lake high-frequency coverage matrix against the canonical career dataset (the official session list). Canonical INDY NXT practice/qualifying/race sessions are collapsed to physical (event, date, type) sessions and matched to a lake capture by exact date and type, with a ±1-day fallback. This is official-schedule reconciliation, not source-index self-consistency.",
+    "pastChampionshipSessions": 129,
+    "matchedCount": 128,
+    "unmatchedCount": 1,
+    "unmappedWithEvidence": [
+      {
+        "date": "2025-07-11",
+        "sessionType": "qualifying",
+        "eventName": "INDY NXT by Firestone at Iowa Speedway",
+        "canonicalSessionIds": [
+          "session_indy_nxt_2025_6596"
+        ],
+        "classification": "evidence_consistent_with_cancellation",
+        "detail": "Canonical marks the session official but it carries zero qualifying/race results, no official-schedule window, and no weather observations, and no lake high-frequency capture exists. Consistent with a cancelled or converted session rather than a missing high-frequency source. Recorded as unmapped-with-evidence."
+      }
+    ]
+  },
   "acquisition": {
     "sourceFiles": 1046,
     "uniqueObjects": 1046,

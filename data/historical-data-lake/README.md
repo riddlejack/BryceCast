@@ -24,12 +24,44 @@ That is a second hardlink, not a second 7.51 GB payload copy.
 
 No file in this data lake is automatically an official BryceCast fact. RaceTools files are third-party captures of the official pit-lane timing feed; Timing71 files are normalized display-state replays. Canonical consumers must preserve source, grain, identity, and derivation metadata.
 
+## Consumer guards
+
+These are hard rules for anything reading the lake. They exist because the raw
+sources lie in specific, verified ways.
+
+- **Track maps: join by INI `Track.Name` + package SHA-256, never by archive
+  filename.** RaceTools filenames are unreliable — standalone `Mid-Ohio.zip`
+  contains Streets of Toronto, `Arlington.zip` contains Phoenix Raceway,
+  `IndyCarMaps.zip/Portland_2018.zip` contains Gateway. The confirmed cases are
+  annotated in `catalog/track-map-definitions.json` (`filenameMismatches`, and a
+  `filenameMismatch` field on each map row).
+- **Track maps: `[GPS]` origins are untrusted for geographic projection.** The
+  trusted spatial frame is the local polyline + `LapDistance` distance-along-track.
+  At least one package has correct local geometry but a wrong-venue `[GPS]` origin
+  (Toronto coordinates on a non-Toronto map). See `gpsOriginGuard` and the per-origin
+  `trust` field.
+- **Track maps: check `venueSectionStatus.sectionAnchorable` before a per-section
+  join.** Several venues (Nashville Superspeedway, Milwaukee Mile, St. Petersburg,
+  Arlington, Miami, Thermal) have no anchorable section map; Mid-Ohio has only 2.
+- **Coverage: the completeness claim is reconciled against the official session
+  list**, not just the source indexes. See `catalog/coverage-reconciliation.json`;
+  the one documented gap is 2025 Iowa Qualifications (evidence consistent with a
+  cancelled session).
+- **Provenance: prefer `provenanceGrade: "verified_fetch"`.** The 70
+  `reused_download_basename_only` objects (all Timing71) were matched on basename
+  alone and are listed in `catalog/provenance-grades.json` for hash re-verification
+  at the next sync.
+- **Heartbeat gaps:** `heartbeatGapMax` is computed after dropping implausible feed
+  epochs. Genuine in-session gaps are surfaced in the RaceTools quality catalog
+  `issues` array (`category: "heartbeat_gap"`), some with benign annotations.
+
 ## Commands
 
 ```bash
 node analysis/historical-data-lake/archive-sync.mjs plan
 node analysis/historical-data-lake/archive-sync.mjs acquire --concurrency 2
 node analysis/historical-data-lake/archive-sync.mjs status
+node analysis/historical-data-lake/archive-sync.mjs grade
 node analysis/historical-data-lake/archive-sync.mjs normalize
 node analysis/historical-data-lake/build-catalog.mjs validate --deep --concurrency 2
 node analysis/historical-data-lake/build-catalog.mjs build
@@ -37,6 +69,7 @@ node analysis/historical-data-lake/analyze-racetools-sessions.mjs --scope bryce 
 node analysis/historical-data-lake/analyze-racetools-sessions.mjs --scope all --concurrency 2
 node analysis/historical-data-lake/analyze-timing71-sessions.mjs --series INDY_NXT --concurrency 2
 node analysis/historical-data-lake/analyze-track-maps.mjs
+node analysis/historical-data-lake/reconcile-coverage.mjs --through-date 2026-07-18
 node analysis/historical-data-lake/build-coverage.mjs --through-date 2026-07-18
 node analysis/historical-data-lake/session-tool.mjs list --year 2025 --series INDY_NXT
 node analysis/historical-data-lake/session-tool.mjs info SESSION_ID

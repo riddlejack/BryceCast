@@ -1,10 +1,477 @@
 {
-  "schemaVersion": 1,
-  "generatedAt": "2026-07-18T23:25:28.511Z",
+  "schemaVersion": 2,
+  "generatedAt": "2026-07-19T02:10:29.364Z",
   "grain": "one row per RaceTools static track-map package",
   "sourceArchiveCount": 39,
   "mapDefinitionCount": 89,
   "uniquePackageCount": 49,
+  "consumerGuard": "Join map packages to sessions/venues by INI Track.Name + package SHA-256, NEVER by archive filename. RaceTools filenames are unreliable (see filenameMismatches). Query venueSectionStatus.sectionAnchorable to know whether a venue can be section-anchored from lake maps before attempting a per-section join. The trusted spatial frame is the local polyline + LapDistance distance-along-track; map [GPS] origins are untrusted for geographic projection until per-venue validated (see gpsOriginGuard).",
+  "gpsOriginGuard": "Map-package [GPS] origins (SF_Latitude/SF_Longitude and scales) are untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) confirmed at least one package with correct local geometry but a wrong-venue [GPS] origin (Toronto 43.6339,-79.4122 on a non-Toronto map), the same class as the F2 filename mislabels. Anchor sections by distance-along-track (LapDistance) on the local polyline, not by projecting the [GPS] origin.",
+  "filenameMismatchCount": 7,
+  "filenameMismatches": [
+    {
+      "packageSha256": "a0f065f2c38c32d341acbc97d46dafd0cb9610a44b79ae936edd398aad352f79",
+      "archiveLabel": "Arlington.zip",
+      "archiveFilenameSuggests": "Arlington",
+      "iniTrackName": "Phoenix Raceway",
+      "source": "audit_confirmed",
+      "note": "RaceTools archive filename does not describe its contents; join by INI Track.Name + SHA-256.",
+      "sections": 24
+    },
+    {
+      "packageSha256": "037a3a6e1c9ed3eef9f22a82103c9bde52f0cba0db9d7e500681342b2e2a615e",
+      "archiveLabel": "BelleIsle_2018.zip",
+      "archiveFilenameSuggests": "BelleIsle_2018",
+      "iniTrackName": "Detroit",
+      "source": "heuristic_no_shared_venue_token",
+      "note": "Archive filename shares no venue token with the INI Track.Name; verify before trusting the filename.",
+      "sections": 37
+    },
+    {
+      "packageSha256": "037a3a6e1c9ed3eef9f22a82103c9bde52f0cba0db9d7e500681342b2e2a615e",
+      "archiveLabel": "IndyCarMaps.zip/BelleIsle_2018.zip",
+      "archiveFilenameSuggests": "BelleIsle_2018",
+      "iniTrackName": "Detroit",
+      "source": "heuristic_no_shared_venue_token",
+      "note": "Archive filename shares no venue token with the INI Track.Name; verify before trusting the filename.",
+      "sections": 37
+    },
+    {
+      "packageSha256": "574212d0629fbb6a8bf8f615ac5ec63b6cf6c41de6ca18d55d7641a3a6aafc3d",
+      "archiveLabel": "IndyCarMaps.zip/Mid-Ohio.zip",
+      "archiveFilenameSuggests": "Mid-Ohio",
+      "iniTrackName": "Streets of Toronto",
+      "source": "audit_confirmed",
+      "note": "RaceTools archive filename does not describe its contents; join by INI Track.Name + SHA-256.",
+      "sections": 36
+    },
+    {
+      "packageSha256": "2b519df75417b50c34775a5a68ee009591e3b7bc51483a221ba858baae503678",
+      "archiveLabel": "IndyCarMaps.zip/Portland_2018.zip",
+      "archiveFilenameSuggests": "Portland_2018",
+      "iniTrackName": "Gateway Motorsports Park",
+      "source": "audit_confirmed",
+      "note": "RaceTools archive filename does not describe its contents; join by INI Track.Name + SHA-256.",
+      "sections": 25
+    },
+    {
+      "packageSha256": "574212d0629fbb6a8bf8f615ac5ec63b6cf6c41de6ca18d55d7641a3a6aafc3d",
+      "archiveLabel": "IndyNXT_2026.zip/Mid-Ohio.zip",
+      "archiveFilenameSuggests": "Mid-Ohio",
+      "iniTrackName": "Streets of Toronto",
+      "source": "audit_confirmed",
+      "note": "RaceTools archive filename does not describe its contents; join by INI Track.Name + SHA-256.",
+      "sections": 36
+    },
+    {
+      "packageSha256": "574212d0629fbb6a8bf8f615ac5ec63b6cf6c41de6ca18d55d7641a3a6aafc3d",
+      "archiveLabel": "Mid-Ohio.zip",
+      "archiveFilenameSuggests": "Mid-Ohio",
+      "iniTrackName": "Streets of Toronto",
+      "source": "audit_confirmed",
+      "note": "RaceTools archive filename does not describe its contents; join by INI Track.Name + SHA-256.",
+      "sections": 36
+    }
+  ],
+  "sectionAnchorMinSections": 10,
+  "venueSectionStatus": [
+    {
+      "venueName": "Road America",
+      "iniTrackNameResolved": true,
+      "maxSections": 45,
+      "packageCount": 5,
+      "hasGpsOrigin": true,
+      "hasGpsScales": true,
+      "sectionAnchorable": true
+    },
+    {
+      "venueName": "Detroit",
+      "iniTrackNameResolved": true,
+      "maxSections": 37,
+      "packageCount": 2,
+      "hasGpsOrigin": true,
+      "hasGpsScales": true,
+      "sectionAnchorable": true
+    },
+    {
+      "venueName": "Streets of Long Beach",
+      "iniTrackNameResolved": true,
+      "maxSections": 37,
+      "packageCount": 2,
+      "hasGpsOrigin": true,
+      "hasGpsScales": true,
+      "sectionAnchorable": true
+    },
+    {
+      "venueName": "Streets of Toronto",
+      "iniTrackNameResolved": true,
+      "maxSections": 37,
+      "packageCount": 5,
+      "hasGpsOrigin": true,
+      "hasGpsScales": true,
+      "sectionAnchorable": true
+    },
+    {
+      "venueName": "Indianapolis_RC",
+      "iniTrackNameResolved": false,
+      "maxSections": 35,
+      "packageCount": 3,
+      "hasGpsOrigin": true,
+      "hasGpsScales": true,
+      "sectionAnchorable": true
+    },
+    {
+      "venueName": "Detroit Street Circuit",
+      "iniTrackNameResolved": true,
+      "maxSections": 34,
+      "packageCount": 3,
+      "hasGpsOrigin": true,
+      "hasGpsScales": true,
+      "sectionAnchorable": true
+    },
+    {
+      "venueName": "Portland International Raceway",
+      "iniTrackNameResolved": true,
+      "maxSections": 34,
+      "packageCount": 3,
+      "hasGpsOrigin": true,
+      "hasGpsScales": true,
+      "sectionAnchorable": true
+    },
+    {
+      "venueName": "Indianapolis Motor Speedway",
+      "iniTrackNameResolved": true,
+      "maxSections": 33,
+      "packageCount": 2,
+      "hasGpsOrigin": true,
+      "hasGpsScales": true,
+      "sectionAnchorable": true
+    },
+    {
+      "venueName": "Nashville Street Circuit",
+      "iniTrackNameResolved": true,
+      "maxSections": 33,
+      "packageCount": 1,
+      "hasGpsOrigin": true,
+      "hasGpsScales": true,
+      "sectionAnchorable": true
+    },
+    {
+      "venueName": "WeatherTech Raceway Laguna Seca",
+      "iniTrackNameResolved": true,
+      "maxSections": 33,
+      "packageCount": 3,
+      "hasGpsOrigin": true,
+      "hasGpsScales": true,
+      "sectionAnchorable": true
+    },
+    {
+      "venueName": "Barber Motorsports Park",
+      "iniTrackNameResolved": true,
+      "maxSections": 30,
+      "packageCount": 3,
+      "hasGpsOrigin": true,
+      "hasGpsScales": true,
+      "sectionAnchorable": true
+    },
+    {
+      "venueName": "Gateway Motorsports Park",
+      "iniTrackNameResolved": true,
+      "maxSections": 26,
+      "packageCount": 4,
+      "hasGpsOrigin": true,
+      "hasGpsScales": true,
+      "sectionAnchorable": true
+    },
+    {
+      "venueName": "Sonoma Raceway",
+      "iniTrackNameResolved": true,
+      "maxSections": 25,
+      "packageCount": 1,
+      "hasGpsOrigin": true,
+      "hasGpsScales": true,
+      "sectionAnchorable": true
+    },
+    {
+      "venueName": "Phoenix Raceway",
+      "iniTrackNameResolved": true,
+      "maxSections": 24,
+      "packageCount": 1,
+      "hasGpsOrigin": true,
+      "hasGpsScales": true,
+      "sectionAnchorable": true
+    },
+    {
+      "venueName": "Iowa Speedway",
+      "iniTrackNameResolved": true,
+      "maxSections": 23,
+      "packageCount": 2,
+      "hasGpsOrigin": true,
+      "hasGpsScales": true,
+      "sectionAnchorable": true
+    },
+    {
+      "venueName": "Pocono Raceway",
+      "iniTrackNameResolved": true,
+      "maxSections": 23,
+      "packageCount": 1,
+      "hasGpsOrigin": true,
+      "hasGpsScales": true,
+      "sectionAnchorable": true
+    },
+    {
+      "venueName": "Texas Motor Speedway",
+      "iniTrackNameResolved": true,
+      "maxSections": 23,
+      "packageCount": 2,
+      "hasGpsOrigin": true,
+      "hasGpsScales": true,
+      "sectionAnchorable": true
+    },
+    {
+      "venueName": "Indianapolis Road Course",
+      "iniTrackNameResolved": true,
+      "maxSections": 4,
+      "packageCount": 2,
+      "hasGpsOrigin": true,
+      "hasGpsScales": true,
+      "sectionAnchorable": false
+    },
+    {
+      "venueName": "Barber_I7",
+      "iniTrackNameResolved": false,
+      "maxSections": 2,
+      "packageCount": 2,
+      "hasGpsOrigin": true,
+      "hasGpsScales": true,
+      "sectionAnchorable": false
+    },
+    {
+      "venueName": "Homestead-Miami Speedway RC",
+      "iniTrackNameResolved": true,
+      "maxSections": 2,
+      "packageCount": 2,
+      "hasGpsOrigin": true,
+      "hasGpsScales": true,
+      "sectionAnchorable": false
+    },
+    {
+      "venueName": "Lucas Oil Raceway",
+      "iniTrackNameResolved": true,
+      "maxSections": 2,
+      "packageCount": 2,
+      "hasGpsOrigin": true,
+      "hasGpsScales": true,
+      "sectionAnchorable": false
+    },
+    {
+      "venueName": "Mid-Ohio Sports Car Course",
+      "iniTrackNameResolved": true,
+      "maxSections": 2,
+      "packageCount": 2,
+      "hasGpsOrigin": true,
+      "hasGpsScales": true,
+      "sectionAnchorable": false
+    },
+    {
+      "venueName": "WeatherTech Raceway Laguna Sec",
+      "iniTrackNameResolved": true,
+      "maxSections": 2,
+      "packageCount": 3,
+      "hasGpsOrigin": true,
+      "hasGpsScales": true,
+      "sectionAnchorable": false
+    },
+    {
+      "venueName": "Arlington2026",
+      "iniTrackNameResolved": false,
+      "maxSections": 0,
+      "packageCount": 1,
+      "hasGpsOrigin": true,
+      "hasGpsScales": false,
+      "sectionAnchorable": false
+    },
+    {
+      "venueName": "AutobahnCountryClub",
+      "iniTrackNameResolved": false,
+      "maxSections": 0,
+      "packageCount": 1,
+      "hasGpsOrigin": true,
+      "hasGpsScales": false,
+      "sectionAnchorable": false
+    },
+    {
+      "venueName": "COTA_IndyCar",
+      "iniTrackNameResolved": false,
+      "maxSections": 0,
+      "packageCount": 2,
+      "hasGpsOrigin": true,
+      "hasGpsScales": true,
+      "sectionAnchorable": false
+    },
+    {
+      "venueName": "COTA_iRacing",
+      "iniTrackNameResolved": false,
+      "maxSections": 0,
+      "packageCount": 1,
+      "hasGpsOrigin": false,
+      "hasGpsScales": false,
+      "sectionAnchorable": false
+    },
+    {
+      "venueName": "Indianapolis_RC_InnerLoop",
+      "iniTrackNameResolved": false,
+      "maxSections": 0,
+      "packageCount": 2,
+      "hasGpsOrigin": true,
+      "hasGpsScales": true,
+      "sectionAnchorable": false
+    },
+    {
+      "venueName": "LagunaSeca_I10",
+      "iniTrackNameResolved": false,
+      "maxSections": 0,
+      "packageCount": 1,
+      "hasGpsOrigin": true,
+      "hasGpsScales": false,
+      "sectionAnchorable": false
+    },
+    {
+      "venueName": "MiamiInternationalAutodrome_I3",
+      "iniTrackNameResolved": false,
+      "maxSections": 0,
+      "packageCount": 1,
+      "hasGpsOrigin": true,
+      "hasGpsScales": false,
+      "sectionAnchorable": false
+    },
+    {
+      "venueName": "MiamiInternationalAutodrome_MIALoopExt",
+      "iniTrackNameResolved": false,
+      "maxSections": 0,
+      "packageCount": 1,
+      "hasGpsOrigin": true,
+      "hasGpsScales": false,
+      "sectionAnchorable": false
+    },
+    {
+      "venueName": "MiamiInternationalAutodrome_preliminary",
+      "iniTrackNameResolved": false,
+      "maxSections": 0,
+      "packageCount": 1,
+      "hasGpsOrigin": true,
+      "hasGpsScales": false,
+      "sectionAnchorable": false
+    },
+    {
+      "venueName": "MilwaukeeMile_2024",
+      "iniTrackNameResolved": false,
+      "maxSections": 0,
+      "packageCount": 3,
+      "hasGpsOrigin": false,
+      "hasGpsScales": false,
+      "sectionAnchorable": false
+    },
+    {
+      "venueName": "Nashville_SuperSpeedway",
+      "iniTrackNameResolved": false,
+      "maxSections": 0,
+      "packageCount": 3,
+      "hasGpsOrigin": true,
+      "hasGpsScales": false,
+      "sectionAnchorable": false
+    },
+    {
+      "venueName": "NewJerseyMotorsportsPark",
+      "iniTrackNameResolved": false,
+      "maxSections": 0,
+      "packageCount": 1,
+      "hasGpsOrigin": true,
+      "hasGpsScales": false,
+      "sectionAnchorable": false
+    },
+    {
+      "venueName": "NewJerseyMotorsportsPark2",
+      "iniTrackNameResolved": false,
+      "maxSections": 0,
+      "packageCount": 1,
+      "hasGpsOrigin": true,
+      "hasGpsScales": false,
+      "sectionAnchorable": false
+    },
+    {
+      "venueName": "Phoenix",
+      "iniTrackNameResolved": false,
+      "maxSections": 0,
+      "packageCount": 1,
+      "hasGpsOrigin": false,
+      "hasGpsScales": false,
+      "sectionAnchorable": false
+    },
+    {
+      "venueName": "Phoenix_Raceway",
+      "iniTrackNameResolved": false,
+      "maxSections": 0,
+      "packageCount": 1,
+      "hasGpsOrigin": true,
+      "hasGpsScales": false,
+      "sectionAnchorable": false
+    },
+    {
+      "venueName": "Portland_I9",
+      "iniTrackNameResolved": false,
+      "maxSections": 0,
+      "packageCount": 2,
+      "hasGpsOrigin": true,
+      "hasGpsScales": true,
+      "sectionAnchorable": false
+    },
+    {
+      "venueName": "Sebring_Short_2021",
+      "iniTrackNameResolved": false,
+      "maxSections": 0,
+      "packageCount": 2,
+      "hasGpsOrigin": false,
+      "hasGpsScales": false,
+      "sectionAnchorable": false
+    },
+    {
+      "venueName": "Sebring_Short_SF",
+      "iniTrackNameResolved": false,
+      "maxSections": 0,
+      "packageCount": 2,
+      "hasGpsOrigin": false,
+      "hasGpsScales": false,
+      "sectionAnchorable": false
+    },
+    {
+      "venueName": "StPetersburg",
+      "iniTrackNameResolved": false,
+      "maxSections": 0,
+      "packageCount": 3,
+      "hasGpsOrigin": true,
+      "hasGpsScales": true,
+      "sectionAnchorable": false
+    },
+    {
+      "venueName": "ThermalClub",
+      "iniTrackNameResolved": false,
+      "maxSections": 0,
+      "packageCount": 2,
+      "hasGpsOrigin": true,
+      "hasGpsScales": true,
+      "sectionAnchorable": false
+    },
+    {
+      "venueName": "WatkinsGlen_2016",
+      "iniTrackNameResolved": false,
+      "maxSections": 0,
+      "packageCount": 1,
+      "hasGpsOrigin": false,
+      "hasGpsScales": false,
+      "sectionAnchorable": false
+    }
+  ],
   "maps": [
     {
       "sourceFileId": "5117fdee1e1d9611cc7671b5",
@@ -16,6 +483,7 @@
       "trackCsvEntry": "Barber_I7.csv",
       "pitCsvEntry": "Barber_I7_Pit.csv",
       "name": "",
+      "iniTrackName": "",
       "venueType": "",
       "lengthMiles": 2.2898,
       "controlLine": "I7",
@@ -29,9 +497,11 @@
           "longitude": -121.756667,
           "latitudeScale": 111320,
           "longitudeScale": 89385.2993359941,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [
         {
@@ -51,7 +521,8 @@
           "length": null
         }
       ],
-      "duplicateOf": null
+      "duplicateOf": null,
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "8cd9b6afaf067452d1fd7f93",
@@ -63,6 +534,7 @@
       "trackCsvEntry": "COTA_IndyCar.csv",
       "pitCsvEntry": "COTA_IndyCar_Pit.csv",
       "name": "",
+      "iniTrackName": "",
       "venueType": "",
       "lengthMiles": 0,
       "controlLine": "SF",
@@ -76,12 +548,15 @@
           "longitude": -97.63964,
           "latitudeScale": 112300,
           "longitudeScale": 95600,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [],
-      "duplicateOf": null
+      "duplicateOf": null,
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "03b87eae58d4a7260ac21f7a",
@@ -93,6 +568,7 @@
       "trackCsvEntry": "Indianapolis_RC_InnerLoop.csv",
       "pitCsvEntry": "Indianapolis_RC_InnerLoop_Pit.csv",
       "name": "",
+      "iniTrackName": "",
       "venueType": "",
       "lengthMiles": 2.7502,
       "controlLine": "SF",
@@ -106,12 +582,15 @@
           "longitude": -86.23891,
           "latitudeScale": 112300,
           "longitudeScale": 85533.8279361454,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [],
-      "duplicateOf": null
+      "duplicateOf": null,
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "b155a536f69012ce260a082f",
@@ -123,6 +602,7 @@
       "trackCsvEntry": "Indianapolis_RC.csv",
       "pitCsvEntry": "Indianapolis_RC_Pit.csv",
       "name": "",
+      "iniTrackName": "",
       "venueType": "RC",
       "lengthMiles": 3.41,
       "controlLine": "SF",
@@ -136,9 +616,11 @@
           "longitude": -86.238911,
           "latitudeScale": 112300,
           "longitudeScale": 86100,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [
         {
@@ -422,7 +904,8 @@
           "length": 0.158522727272727
         }
       ],
-      "duplicateOf": null
+      "duplicateOf": null,
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "de9e320ee1f3054ac81b2ef0",
@@ -434,6 +917,7 @@
       "trackCsvEntry": "Barber_I7.csv",
       "pitCsvEntry": "Barber_I7_Pit.csv",
       "name": "",
+      "iniTrackName": "",
       "venueType": "",
       "lengthMiles": 2.2898,
       "controlLine": "I7",
@@ -447,9 +931,11 @@
           "longitude": -121.756667,
           "latitudeScale": 111320,
           "longitudeScale": 89385.2993359941,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [
         {
@@ -472,7 +958,8 @@
       "duplicateOf": {
         "sourceFileId": "5117fdee1e1d9611cc7671b5",
         "nestedEntry": null
-      }
+      },
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "de9e320ee1f3054ac81b2ef0",
@@ -484,6 +971,7 @@
       "trackCsvEntry": "COTA_IndyCar.csv",
       "pitCsvEntry": "COTA_IndyCar_Pit.csv",
       "name": "",
+      "iniTrackName": "",
       "venueType": "",
       "lengthMiles": 0,
       "controlLine": "SF",
@@ -497,15 +985,18 @@
           "longitude": -97.63964,
           "latitudeScale": 112300,
           "longitudeScale": 95600,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [],
       "duplicateOf": {
         "sourceFileId": "8cd9b6afaf067452d1fd7f93",
         "nestedEntry": null
-      }
+      },
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "de9e320ee1f3054ac81b2ef0",
@@ -517,6 +1008,7 @@
       "trackCsvEntry": "Indianapolis_RC.csv",
       "pitCsvEntry": "Indianapolis_RC_Pit.csv",
       "name": "",
+      "iniTrackName": "",
       "venueType": "RC",
       "lengthMiles": 3.41,
       "controlLine": "SF",
@@ -530,9 +1022,11 @@
           "longitude": -86.238911,
           "latitudeScale": 112300,
           "longitudeScale": 86100,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [
         {
@@ -819,7 +1313,8 @@
       "duplicateOf": {
         "sourceFileId": "b155a536f69012ce260a082f",
         "nestedEntry": null
-      }
+      },
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "de9e320ee1f3054ac81b2ef0",
@@ -831,6 +1326,7 @@
       "trackCsvEntry": "NewJerseyMotorsportsPark.csv",
       "pitCsvEntry": "NewJerseyMotorsportsPark_Pit.csv",
       "name": "",
+      "iniTrackName": "",
       "venueType": "",
       "lengthMiles": 2.2506,
       "controlLine": "SF",
@@ -844,12 +1340,15 @@
           "longitude": -75.07362,
           "latitudeScale": null,
           "longitudeScale": null,
-          "rotationAdjustment": null
+          "rotationAdjustment": null,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [],
-      "duplicateOf": null
+      "duplicateOf": null,
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "de9e320ee1f3054ac81b2ef0",
@@ -861,6 +1360,7 @@
       "trackCsvEntry": "NewJerseyMotorsportsPark2.csv",
       "pitCsvEntry": "NewJerseyMotorsportsPark2_Pit.csv",
       "name": "",
+      "iniTrackName": "",
       "venueType": "",
       "lengthMiles": 2.2506,
       "controlLine": "SF",
@@ -874,12 +1374,15 @@
           "longitude": -75.07362,
           "latitudeScale": null,
           "longitudeScale": null,
-          "rotationAdjustment": null
+          "rotationAdjustment": null,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [],
-      "duplicateOf": null
+      "duplicateOf": null,
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "de9e320ee1f3054ac81b2ef0",
@@ -891,6 +1394,7 @@
       "trackCsvEntry": "Phoenix.csv",
       "pitCsvEntry": "Phoenix_Pit.csv",
       "name": "",
+      "iniTrackName": "",
       "venueType": "",
       "lengthMiles": 0,
       "controlLine": "SF",
@@ -900,10 +1404,11 @@
         "pitPointCount": 1613,
         "hasTrackPolyline": true,
         "geographicReferenceOrigin": null,
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [],
-      "duplicateOf": null
+      "duplicateOf": null,
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "de9e320ee1f3054ac81b2ef0",
@@ -915,6 +1420,7 @@
       "trackCsvEntry": "StPetersburg.csv",
       "pitCsvEntry": "StPetersburg_Pit.csv",
       "name": "",
+      "iniTrackName": "",
       "venueType": "",
       "lengthMiles": 0,
       "controlLine": "SF",
@@ -928,12 +1434,15 @@
           "longitude": -82.629476,
           "latitudeScale": 112300,
           "longitudeScale": 86300,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [],
-      "duplicateOf": null
+      "duplicateOf": null,
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "de9e320ee1f3054ac81b2ef0",
@@ -945,6 +1454,7 @@
       "trackCsvEntry": "WatkinsGlen_2016.csv",
       "pitCsvEntry": "WatkinsGlen_2016_Pit.csv",
       "name": "",
+      "iniTrackName": "",
       "venueType": "",
       "lengthMiles": 0,
       "controlLine": "SF",
@@ -954,10 +1464,11 @@
         "pitPointCount": 5420,
         "hasTrackPolyline": true,
         "geographicReferenceOrigin": null,
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [],
-      "duplicateOf": null
+      "duplicateOf": null,
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "de9e320ee1f3054ac81b2ef0",
@@ -969,6 +1480,7 @@
       "trackCsvEntry": "Indianapolis_RC_InnerLoop.csv",
       "pitCsvEntry": "Indianapolis_RC_InnerLoop_Pit.csv",
       "name": "",
+      "iniTrackName": "",
       "venueType": "",
       "lengthMiles": 2.7502,
       "controlLine": "SF",
@@ -982,15 +1494,18 @@
           "longitude": -86.23891,
           "latitudeScale": 112300,
           "longitudeScale": 85533.8279361454,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [],
       "duplicateOf": {
         "sourceFileId": "03b87eae58d4a7260ac21f7a",
         "nestedEntry": null
-      }
+      },
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "de9e320ee1f3054ac81b2ef0",
@@ -1002,6 +1517,7 @@
       "trackCsvEntry": "ThermalClub.csv",
       "pitCsvEntry": "ThermalClub_Pit.csv",
       "name": "",
+      "iniTrackName": "",
       "venueType": "",
       "lengthMiles": 2.8975,
       "controlLine": "SF",
@@ -1015,12 +1531,15 @@
           "longitude": -116.1518899,
           "latitudeScale": 111320,
           "longitudeScale": 92719.617752153,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [],
-      "duplicateOf": null
+      "duplicateOf": null,
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "de9e320ee1f3054ac81b2ef0",
@@ -1032,6 +1551,7 @@
       "trackCsvEntry": "Portland_I9.csv",
       "pitCsvEntry": "Portland_I9_Pit.csv",
       "name": "",
+      "iniTrackName": "",
       "venueType": "",
       "lengthMiles": 1.9654,
       "controlLine": "I9",
@@ -1045,12 +1565,15 @@
           "longitude": -122.694309,
           "latitudeScale": 111320,
           "longitudeScale": 77893.3691299418,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [],
-      "duplicateOf": null
+      "duplicateOf": null,
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "e8a3a723985cc8763c7ce98d",
@@ -1062,6 +1585,7 @@
       "trackCsvEntry": "Indianapolis_RC.csv",
       "pitCsvEntry": "Indianapolis_RC_Pit.csv",
       "name": "",
+      "iniTrackName": "",
       "venueType": "RC",
       "lengthMiles": 3.41,
       "controlLine": "SF",
@@ -1075,9 +1599,11 @@
           "longitude": -86.238911,
           "latitudeScale": 112300,
           "longitudeScale": 86100,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [
         {
@@ -1364,7 +1890,8 @@
       "duplicateOf": {
         "sourceFileId": "b155a536f69012ce260a082f",
         "nestedEntry": null
-      }
+      },
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "e8a3a723985cc8763c7ce98d",
@@ -1376,6 +1903,7 @@
       "trackCsvEntry": "StPetersburg.csv",
       "pitCsvEntry": "StPetersburg_Pit.csv",
       "name": "",
+      "iniTrackName": "",
       "venueType": "",
       "lengthMiles": 0,
       "controlLine": "SF",
@@ -1389,15 +1917,18 @@
           "longitude": -82.629476,
           "latitudeScale": 112300,
           "longitudeScale": 86300,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [],
       "duplicateOf": {
         "sourceFileId": "de9e320ee1f3054ac81b2ef0",
         "nestedEntry": "StPetersburg.zip"
-      }
+      },
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "a4e3d59c9ffea93fe6d41512",
@@ -1409,6 +1940,7 @@
       "trackCsvEntry": "Portland_I9.csv",
       "pitCsvEntry": "Portland_I9_Pit.csv",
       "name": "",
+      "iniTrackName": "",
       "venueType": "",
       "lengthMiles": 1.9654,
       "controlLine": "I9",
@@ -1422,15 +1954,18 @@
           "longitude": -122.694309,
           "latitudeScale": 111320,
           "longitudeScale": 77893.3691299418,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [],
       "duplicateOf": {
         "sourceFileId": "de9e320ee1f3054ac81b2ef0",
         "nestedEntry": "Portland_I9.zip"
-      }
+      },
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "27b653d9f242a405e9975100",
@@ -1442,6 +1977,7 @@
       "trackCsvEntry": "StPetersburg.csv",
       "pitCsvEntry": "StPetersburg_Pit.csv",
       "name": "",
+      "iniTrackName": "",
       "venueType": "",
       "lengthMiles": 0,
       "controlLine": "SF",
@@ -1455,15 +1991,18 @@
           "longitude": -82.629476,
           "latitudeScale": 112300,
           "longitudeScale": 86300,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [],
       "duplicateOf": {
         "sourceFileId": "de9e320ee1f3054ac81b2ef0",
         "nestedEntry": "StPetersburg.zip"
-      }
+      },
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "a6a62acd78399a0c24b0ee2d",
@@ -1475,6 +2014,7 @@
       "trackCsvEntry": "ThermalClub.csv",
       "pitCsvEntry": "ThermalClub_Pit.csv",
       "name": "",
+      "iniTrackName": "",
       "venueType": "",
       "lengthMiles": 2.8975,
       "controlLine": "SF",
@@ -1488,15 +2028,18 @@
           "longitude": -116.1518899,
           "latitudeScale": 111320,
           "longitudeScale": 92719.617752153,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [],
       "duplicateOf": {
         "sourceFileId": "de9e320ee1f3054ac81b2ef0",
         "nestedEntry": "ThermalClub.zip"
-      }
+      },
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "7d54bb5385990bb2bdad1bf0",
@@ -1508,6 +2051,7 @@
       "trackCsvEntry": "Arlington2026.csv",
       "pitCsvEntry": "Arlington2026_Pit.csv",
       "name": "Arlington2026",
+      "iniTrackName": null,
       "venueType": null,
       "lengthMiles": null,
       "controlLine": "SF",
@@ -1521,12 +2065,15 @@
           "longitude": 0,
           "latitudeScale": null,
           "longitudeScale": null,
-          "rotationAdjustment": null
+          "rotationAdjustment": null,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [],
-      "duplicateOf": null
+      "duplicateOf": null,
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "0563810e2a2b474258375eab",
@@ -1538,6 +2085,7 @@
       "trackCsvEntry": "AutobahnCountryClub.csv",
       "pitCsvEntry": "AutobahnCountryClub_Pit.csv",
       "name": "AutobahnCountryClub",
+      "iniTrackName": null,
       "venueType": null,
       "lengthMiles": null,
       "controlLine": "SF",
@@ -1551,12 +2099,15 @@
           "longitude": -88.126911,
           "latitudeScale": null,
           "longitudeScale": null,
-          "rotationAdjustment": null
+          "rotationAdjustment": null,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [],
-      "duplicateOf": null
+      "duplicateOf": null,
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "6215b8a3e2cdcd7d80e1b5c1",
@@ -1568,6 +2119,7 @@
       "trackCsvEntry": "Barber_Motorsports_Park.csv",
       "pitCsvEntry": "Barber_Motorsports_Park_Pit.csv",
       "name": "Barber Motorsports Park",
+      "iniTrackName": "Barber Motorsports Park",
       "venueType": "RC",
       "lengthMiles": 2.3,
       "controlLine": "SF",
@@ -1581,9 +2133,11 @@
           "longitude": -86.619677,
           "latitudeScale": 108300,
           "longitudeScale": 90300,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [
         {
@@ -1827,7 +2381,8 @@
           "length": 1
         }
       ],
-      "duplicateOf": null
+      "duplicateOf": null,
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "de9e320ee1f3054ac81b2ef0",
@@ -1839,6 +2394,7 @@
       "trackCsvEntry": "Barber_Motorsports_Park.csv",
       "pitCsvEntry": "Barber_Motorsports_Park_Pit.csv",
       "name": "Barber Motorsports Park",
+      "iniTrackName": "Barber Motorsports Park",
       "venueType": "RC",
       "lengthMiles": 2.3,
       "controlLine": "SF",
@@ -1852,9 +2408,11 @@
           "longitude": -86.619677,
           "latitudeScale": 108300,
           "longitudeScale": 90300,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [
         {
@@ -2101,7 +2659,8 @@
       "duplicateOf": {
         "sourceFileId": "6215b8a3e2cdcd7d80e1b5c1",
         "nestedEntry": null
-      }
+      },
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "e8a3a723985cc8763c7ce98d",
@@ -2113,6 +2672,7 @@
       "trackCsvEntry": "Barber_Motorsports_Park.csv",
       "pitCsvEntry": "Barber_Motorsports_Park_Pit.csv",
       "name": "Barber Motorsports Park",
+      "iniTrackName": "Barber Motorsports Park",
       "venueType": "RC",
       "lengthMiles": 2.3,
       "controlLine": "SF",
@@ -2126,9 +2686,11 @@
           "longitude": -86.619677,
           "latitudeScale": 108300,
           "longitudeScale": 90300,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [
         {
@@ -2375,7 +2937,8 @@
       "duplicateOf": {
         "sourceFileId": "6215b8a3e2cdcd7d80e1b5c1",
         "nestedEntry": null
-      }
+      },
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "de9e320ee1f3054ac81b2ef0",
@@ -2387,6 +2950,7 @@
       "trackCsvEntry": "COTA_iRacing.csv",
       "pitCsvEntry": "COTA_iRacing_Pit.csv",
       "name": "COTA_iRacing",
+      "iniTrackName": null,
       "venueType": null,
       "lengthMiles": null,
       "controlLine": "SF",
@@ -2396,10 +2960,11 @@
         "pitPointCount": 5504,
         "hasTrackPolyline": true,
         "geographicReferenceOrigin": null,
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [],
-      "duplicateOf": null
+      "duplicateOf": null,
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "d713289cff4cd55e5b91b0b6",
@@ -2411,6 +2976,7 @@
       "trackCsvEntry": "BelleIsle_2018.csv",
       "pitCsvEntry": "BelleIsle_2018_Pit.csv",
       "name": "Detroit",
+      "iniTrackName": "Detroit",
       "venueType": "Detroit",
       "lengthMiles": 2.35,
       "controlLine": "SF",
@@ -2424,9 +2990,11 @@
           "longitude": -82.99861111,
           "latitudeScale": 111800,
           "longitudeScale": 82800,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [
         {
@@ -2726,7 +3294,14 @@
           "length": 1
         }
       ],
-      "duplicateOf": null
+      "duplicateOf": null,
+      "filenameMismatch": {
+        "archiveLabel": "BelleIsle_2018.zip",
+        "archiveFilenameSuggests": "BelleIsle_2018",
+        "iniTrackName": "Detroit",
+        "source": "heuristic_no_shared_venue_token",
+        "note": "Archive filename shares no venue token with the INI Track.Name; verify before trusting the filename."
+      }
     },
     {
       "sourceFileId": "de9e320ee1f3054ac81b2ef0",
@@ -2738,6 +3313,7 @@
       "trackCsvEntry": "BelleIsle_2018.csv",
       "pitCsvEntry": "BelleIsle_2018_Pit.csv",
       "name": "Detroit",
+      "iniTrackName": "Detroit",
       "venueType": "Detroit",
       "lengthMiles": 2.35,
       "controlLine": "SF",
@@ -2751,9 +3327,11 @@
           "longitude": -82.99861111,
           "latitudeScale": 111800,
           "longitudeScale": 82800,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [
         {
@@ -3056,6 +3634,13 @@
       "duplicateOf": {
         "sourceFileId": "d713289cff4cd55e5b91b0b6",
         "nestedEntry": null
+      },
+      "filenameMismatch": {
+        "archiveLabel": "IndyCarMaps.zip/BelleIsle_2018.zip",
+        "archiveFilenameSuggests": "BelleIsle_2018",
+        "iniTrackName": "Detroit",
+        "source": "heuristic_no_shared_venue_token",
+        "note": "Archive filename shares no venue token with the INI Track.Name; verify before trusting the filename."
       }
     },
     {
@@ -3068,6 +3653,7 @@
       "trackCsvEntry": "Detroit_2023.csv",
       "pitCsvEntry": "Detroit_2023_Pit.csv",
       "name": "Detroit Street Circuit",
+      "iniTrackName": "Detroit Street Circuit",
       "venueType": "SC",
       "lengthMiles": 1.54621212121212,
       "controlLine": "T1",
@@ -3081,9 +3667,11 @@
           "longitude": -122.694309,
           "latitudeScale": 111320,
           "longitudeScale": 77893.3691299418,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [
         {
@@ -3359,7 +3947,8 @@
           "length": 1.62481060606061
         }
       ],
-      "duplicateOf": null
+      "duplicateOf": null,
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "de9e320ee1f3054ac81b2ef0",
@@ -3371,6 +3960,7 @@
       "trackCsvEntry": "Detroit_2023.csv",
       "pitCsvEntry": "Detroit_2023_Pit.csv",
       "name": "Detroit Street Circuit",
+      "iniTrackName": "Detroit Street Circuit",
       "venueType": "SC",
       "lengthMiles": 1.54621212121212,
       "controlLine": "T1",
@@ -3384,9 +3974,11 @@
           "longitude": -122.694309,
           "latitudeScale": 111320,
           "longitudeScale": 77893.3691299418,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [
         {
@@ -3665,7 +4257,8 @@
       "duplicateOf": {
         "sourceFileId": "8c763dc0c28b1c7669ce3b90",
         "nestedEntry": null
-      }
+      },
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "e8a3a723985cc8763c7ce98d",
@@ -3677,6 +4270,7 @@
       "trackCsvEntry": "Detroit_2023.csv",
       "pitCsvEntry": "Detroit_2023_Pit.csv",
       "name": "Detroit Street Circuit",
+      "iniTrackName": "Detroit Street Circuit",
       "venueType": "SC",
       "lengthMiles": 1.54621212121212,
       "controlLine": "T1",
@@ -3690,9 +4284,11 @@
           "longitude": -122.694309,
           "latitudeScale": 111320,
           "longitudeScale": 77893.3691299418,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [
         {
@@ -3971,7 +4567,8 @@
       "duplicateOf": {
         "sourceFileId": "8c763dc0c28b1c7669ce3b90",
         "nestedEntry": null
-      }
+      },
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "3d554f3169ab2f8ab10e756d",
@@ -3983,6 +4580,7 @@
       "trackCsvEntry": "Gateway_2018.csv",
       "pitCsvEntry": "Gateway_2018_Pit.csv",
       "name": "Gateway Motorsports Park",
+      "iniTrackName": "Gateway Motorsports Park",
       "venueType": "O",
       "lengthMiles": 1.25,
       "controlLine": null,
@@ -3996,9 +4594,11 @@
           "longitude": -90.1369555555556,
           "latitudeScale": 112300,
           "longitudeScale": 86300,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [
         {
@@ -4210,7 +4810,8 @@
           "length": 1
         }
       ],
-      "duplicateOf": null
+      "duplicateOf": null,
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "de9e320ee1f3054ac81b2ef0",
@@ -4222,6 +4823,7 @@
       "trackCsvEntry": "Gateway_2018.csv",
       "pitCsvEntry": "Gateway_2018_Pit.csv",
       "name": "Gateway Motorsports Park",
+      "iniTrackName": "Gateway Motorsports Park",
       "venueType": "O",
       "lengthMiles": 1.25,
       "controlLine": null,
@@ -4235,9 +4837,11 @@
           "longitude": -90.1369555555556,
           "latitudeScale": 112300,
           "longitudeScale": 86300,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [
         {
@@ -4452,7 +5056,8 @@
       "duplicateOf": {
         "sourceFileId": "3d554f3169ab2f8ab10e756d",
         "nestedEntry": null
-      }
+      },
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "de9e320ee1f3054ac81b2ef0",
@@ -4464,6 +5069,7 @@
       "trackCsvEntry": "Portland_2018.csv",
       "pitCsvEntry": "Portland_2018_Pit.csv",
       "name": "Gateway Motorsports Park",
+      "iniTrackName": "Gateway Motorsports Park",
       "venueType": "O",
       "lengthMiles": 1.25,
       "controlLine": "SF",
@@ -4477,9 +5083,11 @@
           "longitude": -122.694519,
           "latitudeScale": 112300,
           "longitudeScale": 86300,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [
         {
@@ -4683,7 +5291,14 @@
           "length": 0.297537878787879
         }
       ],
-      "duplicateOf": null
+      "duplicateOf": null,
+      "filenameMismatch": {
+        "archiveLabel": "IndyCarMaps.zip/Portland_2018.zip",
+        "archiveFilenameSuggests": "Portland_2018",
+        "iniTrackName": "Gateway Motorsports Park",
+        "source": "audit_confirmed",
+        "note": "RaceTools archive filename does not describe its contents; join by INI Track.Name + SHA-256."
+      }
     },
     {
       "sourceFileId": "e8a3a723985cc8763c7ce98d",
@@ -4695,6 +5310,7 @@
       "trackCsvEntry": "Gateway_2018.csv",
       "pitCsvEntry": "Gateway_2018_Pit.csv",
       "name": "Gateway Motorsports Park",
+      "iniTrackName": "Gateway Motorsports Park",
       "venueType": "O",
       "lengthMiles": 1.25,
       "controlLine": null,
@@ -4708,9 +5324,11 @@
           "longitude": -90.1369555555556,
           "latitudeScale": 112300,
           "longitudeScale": 86300,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [
         {
@@ -4925,7 +5543,8 @@
       "duplicateOf": {
         "sourceFileId": "3d554f3169ab2f8ab10e756d",
         "nestedEntry": null
-      }
+      },
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "76b79a4afe462f157faffb62",
@@ -4937,6 +5556,7 @@
       "trackCsvEntry": "Homestead_RoadCourseTest.csv",
       "pitCsvEntry": "Homestead_RoadCourseTest_Pit.csv",
       "name": "Homestead-Miami Speedway RC",
+      "iniTrackName": "Homestead-Miami Speedway RC",
       "venueType": "RC",
       "lengthMiles": 2.21,
       "controlLine": "SF",
@@ -4950,9 +5570,11 @@
           "longitude": -86.23891,
           "latitudeScale": 111320,
           "longitudeScale": 85533.8279361454,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [
         {
@@ -4972,7 +5594,8 @@
           "length": null
         }
       ],
-      "duplicateOf": null
+      "duplicateOf": null,
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "de9e320ee1f3054ac81b2ef0",
@@ -4984,6 +5607,7 @@
       "trackCsvEntry": "Homestead_RoadCourseTest.csv",
       "pitCsvEntry": "Homestead_RoadCourseTest_Pit.csv",
       "name": "Homestead-Miami Speedway RC",
+      "iniTrackName": "Homestead-Miami Speedway RC",
       "venueType": "RC",
       "lengthMiles": 2.21,
       "controlLine": "SF",
@@ -4997,9 +5621,11 @@
           "longitude": -86.23891,
           "latitudeScale": 111320,
           "longitudeScale": 85533.8279361454,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [
         {
@@ -5022,7 +5648,8 @@
       "duplicateOf": {
         "sourceFileId": "76b79a4afe462f157faffb62",
         "nestedEntry": null
-      }
+      },
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "23a1dd3f4a80e90b740141be",
@@ -5034,6 +5661,7 @@
       "trackCsvEntry": "Indianapolis.csv",
       "pitCsvEntry": "Indianapolis_Pit.csv",
       "name": "Indianapolis Motor Speedway",
+      "iniTrackName": "Indianapolis Motor Speedway",
       "venueType": "I",
       "lengthMiles": 2.5,
       "controlLine": "SF",
@@ -5047,9 +5675,11 @@
           "longitude": -86.238905,
           "latitudeScale": 112300,
           "longitudeScale": 86300,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [
         {
@@ -5317,7 +5947,8 @@
           "length": 0.387689393939394
         }
       ],
-      "duplicateOf": null
+      "duplicateOf": null,
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "de9e320ee1f3054ac81b2ef0",
@@ -5329,6 +5960,7 @@
       "trackCsvEntry": "Indianapolis.csv",
       "pitCsvEntry": "Indianapolis_Pit.csv",
       "name": "Indianapolis Motor Speedway",
+      "iniTrackName": "Indianapolis Motor Speedway",
       "venueType": "I",
       "lengthMiles": 2.5,
       "controlLine": "SF",
@@ -5342,9 +5974,11 @@
           "longitude": -86.238905,
           "latitudeScale": 112300,
           "longitudeScale": 86300,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [
         {
@@ -5615,7 +6249,8 @@
       "duplicateOf": {
         "sourceFileId": "23a1dd3f4a80e90b740141be",
         "nestedEntry": null
-      }
+      },
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "b1e2456ef271a3e32e4822c2",
@@ -5627,6 +6262,7 @@
       "trackCsvEntry": "Indianapolis_RC_Pit-SL.csv",
       "pitCsvEntry": null,
       "name": "Indianapolis Road Course",
+      "iniTrackName": "Indianapolis Road Course",
       "venueType": "Indianapolis Road Course",
       "lengthMiles": 1.964,
       "controlLine": "SF",
@@ -5640,9 +6276,11 @@
           "longitude": -86.23891,
           "latitudeScale": 112300,
           "longitudeScale": 85533.8279361454,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [
         {
@@ -5678,7 +6316,8 @@
           "length": 1.90186237373737
         }
       ],
-      "duplicateOf": null
+      "duplicateOf": null,
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "de9e320ee1f3054ac81b2ef0",
@@ -5690,6 +6329,7 @@
       "trackCsvEntry": "Indianapolis_RC_Pit-SL.csv",
       "pitCsvEntry": null,
       "name": "Indianapolis Road Course",
+      "iniTrackName": "Indianapolis Road Course",
       "venueType": "Indianapolis Road Course",
       "lengthMiles": 1.964,
       "controlLine": "SF",
@@ -5703,9 +6343,11 @@
           "longitude": -86.23891,
           "latitudeScale": 112300,
           "longitudeScale": 85533.8279361454,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [
         {
@@ -5744,7 +6386,8 @@
       "duplicateOf": {
         "sourceFileId": "b1e2456ef271a3e32e4822c2",
         "nestedEntry": null
-      }
+      },
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "de9e320ee1f3054ac81b2ef0",
@@ -5756,6 +6399,7 @@
       "trackCsvEntry": "Iowa_2018.csv",
       "pitCsvEntry": "Iowa_2018_Pit.csv",
       "name": "Iowa Speedway",
+      "iniTrackName": "Iowa Speedway",
       "venueType": "O",
       "lengthMiles": 0.893655303030303,
       "controlLine": null,
@@ -5769,9 +6413,11 @@
           "longitude": -93.014786111,
           "latitudeScale": 111800,
           "longitudeScale": 82800,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [
         {
@@ -5959,7 +6605,8 @@
           "length": 1
         }
       ],
-      "duplicateOf": null
+      "duplicateOf": null,
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "71f95ba94e090e675b710137",
@@ -5971,6 +6618,7 @@
       "trackCsvEntry": "Iowa_2018.csv",
       "pitCsvEntry": "Iowa_2018_Pit.csv",
       "name": "Iowa Speedway",
+      "iniTrackName": "Iowa Speedway",
       "venueType": "O",
       "lengthMiles": 0.893655303030303,
       "controlLine": null,
@@ -5984,9 +6632,11 @@
           "longitude": -93.014786111,
           "latitudeScale": 111800,
           "longitudeScale": 82800,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [
         {
@@ -6177,7 +6827,8 @@
       "duplicateOf": {
         "sourceFileId": "de9e320ee1f3054ac81b2ef0",
         "nestedEntry": "Iowa_2018.zip"
-      }
+      },
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "05521d95a66b4484e6d11be0",
@@ -6189,6 +6840,7 @@
       "trackCsvEntry": "LagunaSeca_I10.csv",
       "pitCsvEntry": "LagunaSeca_I10_Pit.csv",
       "name": "LagunaSeca_I10",
+      "iniTrackName": null,
       "venueType": null,
       "lengthMiles": null,
       "controlLine": "I10",
@@ -6202,12 +6854,15 @@
           "longitude": 0,
           "latitudeScale": null,
           "longitudeScale": null,
-          "rotationAdjustment": null
+          "rotationAdjustment": null,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [],
-      "duplicateOf": null
+      "duplicateOf": null,
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "de9e320ee1f3054ac81b2ef0",
@@ -6219,6 +6874,7 @@
       "trackCsvEntry": "LucasOilRaceway.csv",
       "pitCsvEntry": "LucasOilRaceway_Pit.csv",
       "name": "Lucas Oil Raceway",
+      "iniTrackName": "Lucas Oil Raceway",
       "venueType": "O",
       "lengthMiles": 0.686,
       "controlLine": "SF",
@@ -6232,9 +6888,11 @@
           "longitude": -86.341828,
           "latitudeScale": 111320,
           "longitudeScale": 85509.7266709937,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [
         {
@@ -6254,7 +6912,8 @@
           "length": null
         }
       ],
-      "duplicateOf": null
+      "duplicateOf": null,
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "ee875e3ee23318c2ab955c72",
@@ -6266,6 +6925,7 @@
       "trackCsvEntry": "LucasOilRaceway.csv",
       "pitCsvEntry": "LucasOilRaceway_Pit.csv",
       "name": "Lucas Oil Raceway",
+      "iniTrackName": "Lucas Oil Raceway",
       "venueType": "O",
       "lengthMiles": 0.686,
       "controlLine": "SF",
@@ -6279,9 +6939,11 @@
           "longitude": -86.341828,
           "latitudeScale": 111320,
           "longitudeScale": 85509.7266709937,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [
         {
@@ -6304,7 +6966,8 @@
       "duplicateOf": {
         "sourceFileId": "de9e320ee1f3054ac81b2ef0",
         "nestedEntry": "LucasOilRaceway.zip"
-      }
+      },
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "9d64eedd88b10a76eed64f08",
@@ -6316,6 +6979,7 @@
       "trackCsvEntry": "MiamiInternationalAutodrome_I3.csv",
       "pitCsvEntry": "MiamiInternationalAutodrome_I3_Pit.csv",
       "name": "MiamiInternationalAutodrome_I3",
+      "iniTrackName": null,
       "venueType": null,
       "lengthMiles": null,
       "controlLine": "I3",
@@ -6329,12 +6993,15 @@
           "longitude": 0,
           "latitudeScale": null,
           "longitudeScale": null,
-          "rotationAdjustment": null
+          "rotationAdjustment": null,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [],
-      "duplicateOf": null
+      "duplicateOf": null,
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "e8a3a723985cc8763c7ce98d",
@@ -6346,6 +7013,7 @@
       "trackCsvEntry": "MiamiInternationalAutodrome_MIALoopExt.csv",
       "pitCsvEntry": "MiamiInternationalAutodrome_MIALoopExt_Pit.csv",
       "name": "MiamiInternationalAutodrome_MIALoopExt",
+      "iniTrackName": null,
       "venueType": null,
       "lengthMiles": null,
       "controlLine": "SF",
@@ -6359,12 +7027,15 @@
           "longitude": -80.237387,
           "latitudeScale": null,
           "longitudeScale": null,
-          "rotationAdjustment": null
+          "rotationAdjustment": null,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [],
-      "duplicateOf": null
+      "duplicateOf": null,
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "a022f839d86ab129874fe14c",
@@ -6376,6 +7047,7 @@
       "trackCsvEntry": "MiamiInternationalAutodrome_preliminary.csv",
       "pitCsvEntry": "MiamiInternationalAutodrome_preliminary_Pit.csv",
       "name": "MiamiInternationalAutodrome_preliminary",
+      "iniTrackName": null,
       "venueType": null,
       "lengthMiles": null,
       "controlLine": "SF",
@@ -6389,12 +7061,15 @@
           "longitude": 0,
           "latitudeScale": null,
           "longitudeScale": null,
-          "rotationAdjustment": null
+          "rotationAdjustment": null,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [],
-      "duplicateOf": null
+      "duplicateOf": null,
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "de9e320ee1f3054ac81b2ef0",
@@ -6406,6 +7081,7 @@
       "trackCsvEntry": "Mid-Ohio_I6.csv",
       "pitCsvEntry": "Mid-Ohio_I6_Pit.csv",
       "name": "Mid-Ohio Sports Car Course",
+      "iniTrackName": "Mid-Ohio Sports Car Course",
       "venueType": "RC",
       "lengthMiles": 2.258,
       "controlLine": "I6",
@@ -6419,9 +7095,11 @@
           "longitude": -75.51176666666,
           "latitudeScale": 111320,
           "longitudeScale": 83947.1845507568,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [
         {
@@ -6441,7 +7119,8 @@
           "length": null
         }
       ],
-      "duplicateOf": null
+      "duplicateOf": null,
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "e7476eb10ce072c6678ac3a3",
@@ -6453,6 +7132,7 @@
       "trackCsvEntry": "Mid-Ohio_I10.csv",
       "pitCsvEntry": "Mid-Ohio_I10_Pit.csv",
       "name": "Mid-Ohio Sports Car Course",
+      "iniTrackName": "Mid-Ohio Sports Car Course",
       "venueType": "RC",
       "lengthMiles": 2.258,
       "controlLine": "I10",
@@ -6466,9 +7146,11 @@
           "longitude": -75.51176666666,
           "latitudeScale": 111320,
           "longitudeScale": 83947.1845507568,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [
         {
@@ -6488,7 +7170,8 @@
           "length": null
         }
       ],
-      "duplicateOf": null
+      "duplicateOf": null,
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "de9e320ee1f3054ac81b2ef0",
@@ -6500,6 +7183,7 @@
       "trackCsvEntry": "MilwaukeeMile_2024.csv",
       "pitCsvEntry": "MilwaukeeMile_2024_Pit.csv",
       "name": "MilwaukeeMile_2024",
+      "iniTrackName": null,
       "venueType": null,
       "lengthMiles": null,
       "controlLine": "SF",
@@ -6509,10 +7193,11 @@
         "pitPointCount": 1635,
         "hasTrackPolyline": true,
         "geographicReferenceOrigin": null,
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [],
-      "duplicateOf": null
+      "duplicateOf": null,
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "e8a3a723985cc8763c7ce98d",
@@ -6524,6 +7209,7 @@
       "trackCsvEntry": "MilwaukeeMile_2024.csv",
       "pitCsvEntry": "MilwaukeeMile_2024_Pit.csv",
       "name": "MilwaukeeMile_2024",
+      "iniTrackName": null,
       "venueType": null,
       "lengthMiles": null,
       "controlLine": "SF",
@@ -6533,13 +7219,14 @@
         "pitPointCount": 1635,
         "hasTrackPolyline": true,
         "geographicReferenceOrigin": null,
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [],
       "duplicateOf": {
         "sourceFileId": "de9e320ee1f3054ac81b2ef0",
         "nestedEntry": "MilwaukeeMile_2024.zip"
-      }
+      },
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "4e784eed270cb330c51b24ca",
@@ -6551,6 +7238,7 @@
       "trackCsvEntry": "MilwaukeeMile_2024.csv",
       "pitCsvEntry": "MilwaukeeMile_2024_Pit.csv",
       "name": "MilwaukeeMile_2024",
+      "iniTrackName": null,
       "venueType": null,
       "lengthMiles": null,
       "controlLine": "SF",
@@ -6560,13 +7248,14 @@
         "pitPointCount": 1635,
         "hasTrackPolyline": true,
         "geographicReferenceOrigin": null,
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [],
       "duplicateOf": {
         "sourceFileId": "de9e320ee1f3054ac81b2ef0",
         "nestedEntry": "MilwaukeeMile_2024.zip"
-      }
+      },
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "de9e320ee1f3054ac81b2ef0",
@@ -6578,6 +7267,7 @@
       "trackCsvEntry": "Nashville_StreetCourse.csv",
       "pitCsvEntry": "Nashville_StreetCourse_Pit.csv",
       "name": "Nashville Street Circuit",
+      "iniTrackName": "Nashville Street Circuit",
       "venueType": "SC",
       "lengthMiles": 2.09526515151515,
       "controlLine": "SF",
@@ -6591,9 +7281,11 @@
           "longitude": -86.769864,
           "latitudeScale": 111320,
           "longitudeScale": 89868.6305817974,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [
         {
@@ -6861,7 +7553,8 @@
           "length": 0.0240530303030303
         }
       ],
-      "duplicateOf": null
+      "duplicateOf": null,
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "de9e320ee1f3054ac81b2ef0",
@@ -6873,6 +7566,7 @@
       "trackCsvEntry": "Nashville_SuperSpeedway.csv",
       "pitCsvEntry": "Nashville_SuperSpeedway_Pit.csv",
       "name": "Nashville_SuperSpeedway",
+      "iniTrackName": null,
       "venueType": null,
       "lengthMiles": null,
       "controlLine": "SF",
@@ -6886,12 +7580,15 @@
           "longitude": -86.4096878,
           "latitudeScale": null,
           "longitudeScale": null,
-          "rotationAdjustment": null
+          "rotationAdjustment": null,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [],
-      "duplicateOf": null
+      "duplicateOf": null,
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "e8a3a723985cc8763c7ce98d",
@@ -6903,6 +7600,7 @@
       "trackCsvEntry": "Nashville_SuperSpeedway.csv",
       "pitCsvEntry": "Nashville_SuperSpeedway_Pit.csv",
       "name": "Nashville_SuperSpeedway",
+      "iniTrackName": null,
       "venueType": null,
       "lengthMiles": null,
       "controlLine": "SF",
@@ -6916,15 +7614,18 @@
           "longitude": -86.4096878,
           "latitudeScale": null,
           "longitudeScale": null,
-          "rotationAdjustment": null
+          "rotationAdjustment": null,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [],
       "duplicateOf": {
         "sourceFileId": "de9e320ee1f3054ac81b2ef0",
         "nestedEntry": "Nashville_SuperSpeedway.zip"
-      }
+      },
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "deadec3caaad22d2b5d26c67",
@@ -6936,6 +7637,7 @@
       "trackCsvEntry": "Nashville_SuperSpeedway.csv",
       "pitCsvEntry": "Nashville_SuperSpeedway_Pit.csv",
       "name": "Nashville_SuperSpeedway",
+      "iniTrackName": null,
       "venueType": null,
       "lengthMiles": null,
       "controlLine": "SF",
@@ -6949,15 +7651,18 @@
           "longitude": -86.4096878,
           "latitudeScale": null,
           "longitudeScale": null,
-          "rotationAdjustment": null
+          "rotationAdjustment": null,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [],
       "duplicateOf": {
         "sourceFileId": "de9e320ee1f3054ac81b2ef0",
         "nestedEntry": "Nashville_SuperSpeedway.zip"
-      }
+      },
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "4a9847bb85e917c59dc1da41",
@@ -6969,6 +7674,7 @@
       "trackCsvEntry": "Arlington.csv",
       "pitCsvEntry": "Arlington_Pit.csv",
       "name": "Phoenix Raceway",
+      "iniTrackName": "Phoenix Raceway",
       "venueType": "PIR",
       "lengthMiles": 1,
       "controlLine": "SF",
@@ -6982,9 +7688,11 @@
           "longitude": 0,
           "latitudeScale": 111320,
           "longitudeScale": 111320,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [
         {
@@ -7180,7 +7888,14 @@
           "length": 0.266477
         }
       ],
-      "duplicateOf": null
+      "duplicateOf": null,
+      "filenameMismatch": {
+        "archiveLabel": "Arlington.zip",
+        "archiveFilenameSuggests": "Arlington",
+        "iniTrackName": "Phoenix Raceway",
+        "source": "audit_confirmed",
+        "note": "RaceTools archive filename does not describe its contents; join by INI Track.Name + SHA-256."
+      }
     },
     {
       "sourceFileId": "00484b874761d94e4bebeeaf",
@@ -7192,6 +7907,7 @@
       "trackCsvEntry": "Phoenix_Raceway.csv",
       "pitCsvEntry": "Phoenix_Raceway_Pit.csv",
       "name": "Phoenix_Raceway",
+      "iniTrackName": null,
       "venueType": null,
       "lengthMiles": null,
       "controlLine": "SF",
@@ -7205,12 +7921,15 @@
           "longitude": -112.3096185,
           "latitudeScale": null,
           "longitudeScale": null,
-          "rotationAdjustment": null
+          "rotationAdjustment": null,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [],
-      "duplicateOf": null
+      "duplicateOf": null,
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "de9e320ee1f3054ac81b2ef0",
@@ -7222,6 +7941,7 @@
       "trackCsvEntry": "Pocono_2018.csv",
       "pitCsvEntry": "Pocono_2018_Pit.csv",
       "name": "Pocono Raceway",
+      "iniTrackName": "Pocono Raceway",
       "venueType": "O",
       "lengthMiles": 2.50833333333333,
       "controlLine": null,
@@ -7235,9 +7955,11 @@
           "longitude": -75.51176666666,
           "latitudeScale": 110300,
           "longitudeScale": 82400,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [
         {
@@ -7425,7 +8147,8 @@
           "length": 1
         }
       ],
-      "duplicateOf": null
+      "duplicateOf": null,
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "de9e320ee1f3054ac81b2ef0",
@@ -7437,6 +8160,7 @@
       "trackCsvEntry": "Portland.csv",
       "pitCsvEntry": "Portland_Pit.csv",
       "name": "Portland International Raceway",
+      "iniTrackName": "Portland International Raceway",
       "venueType": "RC",
       "lengthMiles": 1.96401515151515,
       "controlLine": "SF",
@@ -7450,9 +8174,11 @@
           "longitude": -122.694309,
           "latitudeScale": 112300,
           "longitudeScale": 77893.3691299418,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [
         {
@@ -7728,7 +8454,8 @@
           "length": 0.203787878787879
         }
       ],
-      "duplicateOf": null
+      "duplicateOf": null,
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "e8a3a723985cc8763c7ce98d",
@@ -7740,6 +8467,7 @@
       "trackCsvEntry": "Portland.csv",
       "pitCsvEntry": "Portland_Pit.csv",
       "name": "Portland International Raceway",
+      "iniTrackName": "Portland International Raceway",
       "venueType": "RC",
       "lengthMiles": 1.96401515151515,
       "controlLine": "SF",
@@ -7753,9 +8481,11 @@
           "longitude": -122.694309,
           "latitudeScale": 112300,
           "longitudeScale": 77893.3691299418,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [
         {
@@ -8034,7 +8764,8 @@
       "duplicateOf": {
         "sourceFileId": "de9e320ee1f3054ac81b2ef0",
         "nestedEntry": "Portland.zip"
-      }
+      },
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "7b86465f5666d2c2e8bd319f",
@@ -8046,6 +8777,7 @@
       "trackCsvEntry": "Portland.csv",
       "pitCsvEntry": "Portland_Pit.csv",
       "name": "Portland International Raceway",
+      "iniTrackName": "Portland International Raceway",
       "venueType": "RC",
       "lengthMiles": 1.96401515151515,
       "controlLine": "SF",
@@ -8059,9 +8791,11 @@
           "longitude": -122.694309,
           "latitudeScale": 112300,
           "longitudeScale": 77893.3691299418,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [
         {
@@ -8340,7 +9074,8 @@
       "duplicateOf": {
         "sourceFileId": "de9e320ee1f3054ac81b2ef0",
         "nestedEntry": "Portland.zip"
-      }
+      },
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "de9e320ee1f3054ac81b2ef0",
@@ -8352,6 +9087,7 @@
       "trackCsvEntry": "RoadAmerica.csv",
       "pitCsvEntry": "RoadAmerica_Pit.csv",
       "name": "Road America",
+      "iniTrackName": "Road America",
       "venueType": "RC",
       "lengthMiles": 4.01382575757576,
       "controlLine": "SF",
@@ -8365,9 +9101,11 @@
           "longitude": -87.989625,
           "latitudeScale": 112300,
           "longitudeScale": 79000,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [
         {
@@ -8619,7 +9357,8 @@
           "length": 0.422727272727273
         }
       ],
-      "duplicateOf": null
+      "duplicateOf": null,
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "de9e320ee1f3054ac81b2ef0",
@@ -8631,6 +9370,7 @@
       "trackCsvEntry": "RoadAmerica_PQ.csv",
       "pitCsvEntry": "RoadAmerica_PQ_Pit.csv",
       "name": "Road America",
+      "iniTrackName": "Road America",
       "venueType": "RC",
       "lengthMiles": 4.014,
       "controlLine": "I13A",
@@ -8644,9 +9384,11 @@
           "longitude": -79.4122233333332,
           "latitudeScale": 111320,
           "longitudeScale": 80569.3553246634,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [
         {
@@ -9010,7 +9752,8 @@
           "length": 0.172727
         }
       ],
-      "duplicateOf": null
+      "duplicateOf": null,
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "e8a3a723985cc8763c7ce98d",
@@ -9022,6 +9765,7 @@
       "trackCsvEntry": "RoadAmerica.csv",
       "pitCsvEntry": "RoadAmerica_Pit.csv",
       "name": "Road America",
+      "iniTrackName": "Road America",
       "venueType": "RC",
       "lengthMiles": 4.01382575757576,
       "controlLine": "SF",
@@ -9035,9 +9779,11 @@
           "longitude": -87.989625,
           "latitudeScale": 112300,
           "longitudeScale": 79000,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [
         {
@@ -9292,7 +10038,8 @@
       "duplicateOf": {
         "sourceFileId": "de9e320ee1f3054ac81b2ef0",
         "nestedEntry": "RoadAmerica.zip"
-      }
+      },
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "b66d5247fdf7164019b625a2",
@@ -9304,6 +10051,7 @@
       "trackCsvEntry": "RoadAmerica_PQ.csv",
       "pitCsvEntry": "RoadAmerica_PQ_Pit.csv",
       "name": "Road America",
+      "iniTrackName": "Road America",
       "venueType": "RC",
       "lengthMiles": 4.014,
       "controlLine": "I13A",
@@ -9317,9 +10065,11 @@
           "longitude": -79.4122233333332,
           "latitudeScale": 111320,
           "longitudeScale": 80569.3553246634,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [
         {
@@ -9686,7 +10436,8 @@
       "duplicateOf": {
         "sourceFileId": "de9e320ee1f3054ac81b2ef0",
         "nestedEntry": "RoadAmerica_PQ.zip"
-      }
+      },
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "2c2f3cf24f8c52a3e0c64e96",
@@ -9698,6 +10449,7 @@
       "trackCsvEntry": "RoadAmerica.csv",
       "pitCsvEntry": "RoadAmerica_Pit.csv",
       "name": "Road America",
+      "iniTrackName": "Road America",
       "venueType": "RC",
       "lengthMiles": 4.01382575757576,
       "controlLine": "SF",
@@ -9711,9 +10463,11 @@
           "longitude": -87.989625,
           "latitudeScale": 112300,
           "longitudeScale": 79000,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [
         {
@@ -9968,7 +10722,8 @@
       "duplicateOf": {
         "sourceFileId": "de9e320ee1f3054ac81b2ef0",
         "nestedEntry": "RoadAmerica.zip"
-      }
+      },
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "de9e320ee1f3054ac81b2ef0",
@@ -9980,6 +10735,7 @@
       "trackCsvEntry": "Sebring_Short_2021.csv",
       "pitCsvEntry": "Sebring_Short_2021_Pit.csv",
       "name": "Sebring_Short_2021",
+      "iniTrackName": null,
       "venueType": null,
       "lengthMiles": null,
       "controlLine": "SF",
@@ -9989,10 +10745,11 @@
         "pitPointCount": 2696,
         "hasTrackPolyline": true,
         "geographicReferenceOrigin": null,
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [],
-      "duplicateOf": null
+      "duplicateOf": null,
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "4aaab18118323c0caed50585",
@@ -10004,6 +10761,7 @@
       "trackCsvEntry": "Sebring_Short_2021.csv",
       "pitCsvEntry": "Sebring_Short_2021_Pit.csv",
       "name": "Sebring_Short_2021",
+      "iniTrackName": null,
       "venueType": null,
       "lengthMiles": null,
       "controlLine": "SF",
@@ -10013,13 +10771,14 @@
         "pitPointCount": 2696,
         "hasTrackPolyline": true,
         "geographicReferenceOrigin": null,
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [],
       "duplicateOf": {
         "sourceFileId": "de9e320ee1f3054ac81b2ef0",
         "nestedEntry": "Sebring_Short_2021.zip"
-      }
+      },
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "de9e320ee1f3054ac81b2ef0",
@@ -10031,6 +10790,7 @@
       "trackCsvEntry": "Sebring_Short_SF.csv",
       "pitCsvEntry": "Sebring_Short_SF_Pit.csv",
       "name": "Sebring_Short_SF",
+      "iniTrackName": null,
       "venueType": null,
       "lengthMiles": null,
       "controlLine": "SF",
@@ -10040,10 +10800,11 @@
         "pitPointCount": 2687,
         "hasTrackPolyline": true,
         "geographicReferenceOrigin": null,
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [],
-      "duplicateOf": null
+      "duplicateOf": null,
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "3f1c78790f99888584b036da",
@@ -10055,6 +10816,7 @@
       "trackCsvEntry": "Sebring_Short_SF.csv",
       "pitCsvEntry": "Sebring_Short_SF_Pit.csv",
       "name": "Sebring_Short_SF",
+      "iniTrackName": null,
       "venueType": null,
       "lengthMiles": null,
       "controlLine": "SF",
@@ -10064,13 +10826,14 @@
         "pitPointCount": 2687,
         "hasTrackPolyline": true,
         "geographicReferenceOrigin": null,
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [],
       "duplicateOf": {
         "sourceFileId": "de9e320ee1f3054ac81b2ef0",
         "nestedEntry": "Sebring_Short_SF.zip"
-      }
+      },
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "de9e320ee1f3054ac81b2ef0",
@@ -10082,6 +10845,7 @@
       "trackCsvEntry": "Sonoma_2018.csv",
       "pitCsvEntry": "Sonoma_2018_Pit.csv",
       "name": "Sonoma Raceway",
+      "iniTrackName": "Sonoma Raceway",
       "venueType": "RC",
       "lengthMiles": 2.38484848484848,
       "controlLine": "SF",
@@ -10095,9 +10859,11 @@
           "longitude": -79.4122233333332,
           "latitudeScale": 112300,
           "longitudeScale": 86300,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [
         {
@@ -10301,7 +11067,8 @@
           "length": 0.375473484848485
         }
       ],
-      "duplicateOf": null
+      "duplicateOf": null,
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "de9e320ee1f3054ac81b2ef0",
@@ -10313,6 +11080,7 @@
       "trackCsvEntry": "LongBeach.csv",
       "pitCsvEntry": "LongBeach_Pit.csv",
       "name": "Streets of Long Beach",
+      "iniTrackName": "Streets of Long Beach",
       "venueType": "SC",
       "lengthMiles": 1.96856060606061,
       "controlLine": "SF",
@@ -10326,9 +11094,11 @@
           "longitude": -118.187225,
           "latitudeScale": 112300,
           "longitudeScale": 93300,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [
         {
@@ -10628,7 +11398,8 @@
           "length": 1
         }
       ],
-      "duplicateOf": null
+      "duplicateOf": null,
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "8a5bc95e23b230a6f9cd7c28",
@@ -10640,6 +11411,7 @@
       "trackCsvEntry": "LongBeach.csv",
       "pitCsvEntry": "LongBeach_Pit.csv",
       "name": "Streets of Long Beach",
+      "iniTrackName": "Streets of Long Beach",
       "venueType": "SC",
       "lengthMiles": 1.96856060606061,
       "controlLine": "SF",
@@ -10653,9 +11425,11 @@
           "longitude": -118.187225,
           "latitudeScale": 112300,
           "longitudeScale": 93300,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [
         {
@@ -10958,7 +11732,8 @@
       "duplicateOf": {
         "sourceFileId": "de9e320ee1f3054ac81b2ef0",
         "nestedEntry": "LongBeach.zip"
-      }
+      },
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "de9e320ee1f3054ac81b2ef0",
@@ -10970,6 +11745,7 @@
       "trackCsvEntry": "MidOhio.csv",
       "pitCsvEntry": "MidOhio_Pit.csv",
       "name": "Streets of Toronto",
+      "iniTrackName": "Streets of Toronto",
       "venueType": "SC",
       "lengthMiles": 1.78560606060606,
       "controlLine": "SF",
@@ -10983,9 +11759,11 @@
           "longitude": -82.6352694444444,
           "latitudeScale": 112300,
           "longitudeScale": 84408.8019183801,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [
         {
@@ -11277,7 +12055,14 @@
           "length": 0.192613636363636
         }
       ],
-      "duplicateOf": null
+      "duplicateOf": null,
+      "filenameMismatch": {
+        "archiveLabel": "IndyCarMaps.zip/Mid-Ohio.zip",
+        "archiveFilenameSuggests": "Mid-Ohio",
+        "iniTrackName": "Streets of Toronto",
+        "source": "audit_confirmed",
+        "note": "RaceTools archive filename does not describe its contents; join by INI Track.Name + SHA-256."
+      }
     },
     {
       "sourceFileId": "de9e320ee1f3054ac81b2ef0",
@@ -11289,6 +12074,7 @@
       "trackCsvEntry": "Toronto_2018.csv",
       "pitCsvEntry": "Toronto_2018_Pit.csv",
       "name": "Streets of Toronto",
+      "iniTrackName": "Streets of Toronto",
       "venueType": "SC",
       "lengthMiles": 1.786,
       "controlLine": "SF",
@@ -11302,9 +12088,11 @@
           "longitude": -79.4122233333332,
           "latitudeScale": 112300,
           "longitudeScale": 80569.3553246634,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [
         {
@@ -11604,7 +12392,8 @@
           "length": 0.0227272727272727
         }
       ],
-      "duplicateOf": null
+      "duplicateOf": null,
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "e8a3a723985cc8763c7ce98d",
@@ -11616,6 +12405,7 @@
       "trackCsvEntry": "MidOhio.csv",
       "pitCsvEntry": "MidOhio_Pit.csv",
       "name": "Streets of Toronto",
+      "iniTrackName": "Streets of Toronto",
       "venueType": "SC",
       "lengthMiles": 1.78560606060606,
       "controlLine": "SF",
@@ -11629,9 +12419,11 @@
           "longitude": -82.6352694444444,
           "latitudeScale": 112300,
           "longitudeScale": 84408.8019183801,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [
         {
@@ -11926,6 +12718,13 @@
       "duplicateOf": {
         "sourceFileId": "de9e320ee1f3054ac81b2ef0",
         "nestedEntry": "Mid-Ohio.zip"
+      },
+      "filenameMismatch": {
+        "archiveLabel": "IndyNXT_2026.zip/Mid-Ohio.zip",
+        "archiveFilenameSuggests": "Mid-Ohio",
+        "iniTrackName": "Streets of Toronto",
+        "source": "audit_confirmed",
+        "note": "RaceTools archive filename does not describe its contents; join by INI Track.Name + SHA-256."
       }
     },
     {
@@ -11938,6 +12737,7 @@
       "trackCsvEntry": "MidOhio.csv",
       "pitCsvEntry": "MidOhio_Pit.csv",
       "name": "Streets of Toronto",
+      "iniTrackName": "Streets of Toronto",
       "venueType": "SC",
       "lengthMiles": 1.78560606060606,
       "controlLine": "SF",
@@ -11951,9 +12751,11 @@
           "longitude": -82.6352694444444,
           "latitudeScale": 112300,
           "longitudeScale": 84408.8019183801,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [
         {
@@ -12248,6 +13050,13 @@
       "duplicateOf": {
         "sourceFileId": "de9e320ee1f3054ac81b2ef0",
         "nestedEntry": "Mid-Ohio.zip"
+      },
+      "filenameMismatch": {
+        "archiveLabel": "Mid-Ohio.zip",
+        "archiveFilenameSuggests": "Mid-Ohio",
+        "iniTrackName": "Streets of Toronto",
+        "source": "audit_confirmed",
+        "note": "RaceTools archive filename does not describe its contents; join by INI Track.Name + SHA-256."
       }
     },
     {
@@ -12260,6 +13069,7 @@
       "trackCsvEntry": "Toronto_2018.csv",
       "pitCsvEntry": "Toronto_2018_Pit.csv",
       "name": "Streets of Toronto",
+      "iniTrackName": "Streets of Toronto",
       "venueType": "SC",
       "lengthMiles": 1.786,
       "controlLine": "SF",
@@ -12273,9 +13083,11 @@
           "longitude": -79.4122233333332,
           "latitudeScale": 112300,
           "longitudeScale": 80569.3553246634,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [
         {
@@ -12578,7 +13390,8 @@
       "duplicateOf": {
         "sourceFileId": "de9e320ee1f3054ac81b2ef0",
         "nestedEntry": "Toronto_2018.zip"
-      }
+      },
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "de9e320ee1f3054ac81b2ef0",
@@ -12590,6 +13403,7 @@
       "trackCsvEntry": "Texas_2019.csv",
       "pitCsvEntry": "Texas_2019_Pit.csv",
       "name": "Texas Motor Speedway",
+      "iniTrackName": "Texas Motor Speedway",
       "venueType": "O",
       "lengthMiles": 1.44,
       "controlLine": null,
@@ -12603,9 +13417,11 @@
           "longitude": -97.284346,
           "latitudeScale": 112300,
           "longitudeScale": 86300,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [
         {
@@ -12793,7 +13609,8 @@
           "length": 0.250284090909091
         }
       ],
-      "duplicateOf": null
+      "duplicateOf": null,
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "8e2eec98b92f2bf693b78c7b",
@@ -12805,6 +13622,7 @@
       "trackCsvEntry": "Texas_2019.csv",
       "pitCsvEntry": "Texas_2019_Pit.csv",
       "name": "Texas Motor Speedway",
+      "iniTrackName": "Texas Motor Speedway",
       "venueType": "O",
       "lengthMiles": 1.44,
       "controlLine": null,
@@ -12818,9 +13636,11 @@
           "longitude": -97.284346,
           "latitudeScale": 112300,
           "longitudeScale": 86300,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [
         {
@@ -13011,7 +13831,8 @@
       "duplicateOf": {
         "sourceFileId": "de9e320ee1f3054ac81b2ef0",
         "nestedEntry": "Texas.zip"
-      }
+      },
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "de9e320ee1f3054ac81b2ef0",
@@ -13023,6 +13844,7 @@
       "trackCsvEntry": "LagunaSeca.csv",
       "pitCsvEntry": "LagunaSeca_Pit.csv",
       "name": "WeatherTech Raceway Laguna Sec",
+      "iniTrackName": "WeatherTech Raceway Laguna Sec",
       "venueType": "RC",
       "lengthMiles": 2.23806818181818,
       "controlLine": "SF",
@@ -13036,12 +13858,15 @@
           "longitude": -121.756667,
           "latitudeScale": 111320,
           "longitudeScale": 89385.2993359941,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [],
-      "duplicateOf": null
+      "duplicateOf": null,
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "de9e320ee1f3054ac81b2ef0",
@@ -13053,6 +13878,7 @@
       "trackCsvEntry": "LagunaSeca_I11.csv",
       "pitCsvEntry": "LagunaSeca_I11_Pit.csv",
       "name": "WeatherTech Raceway Laguna Sec",
+      "iniTrackName": "WeatherTech Raceway Laguna Sec",
       "venueType": "RC",
       "lengthMiles": 2.238,
       "controlLine": "I11",
@@ -13066,9 +13892,11 @@
           "longitude": -121.756667,
           "latitudeScale": 111320,
           "longitudeScale": 89385.2993359941,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [
         {
@@ -13088,7 +13916,8 @@
           "length": null
         }
       ],
-      "duplicateOf": null
+      "duplicateOf": null,
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "1fb19b4b43dc8c54d70169a7",
@@ -13100,6 +13929,7 @@
       "trackCsvEntry": "LagunaSeca_I11.csv",
       "pitCsvEntry": "LagunaSeca_I11_Pit.csv",
       "name": "WeatherTech Raceway Laguna Sec",
+      "iniTrackName": "WeatherTech Raceway Laguna Sec",
       "venueType": "RC",
       "lengthMiles": 2.238,
       "controlLine": "I11",
@@ -13113,9 +13943,11 @@
           "longitude": -121.756667,
           "latitudeScale": 111320,
           "longitudeScale": 89385.2993359941,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [
         {
@@ -13138,7 +13970,8 @@
       "duplicateOf": {
         "sourceFileId": "de9e320ee1f3054ac81b2ef0",
         "nestedEntry": "LagunaSeca_I11.zip"
-      }
+      },
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "de9e320ee1f3054ac81b2ef0",
@@ -13150,6 +13983,7 @@
       "trackCsvEntry": "LagunaSeca_2021.csv",
       "pitCsvEntry": "LagunaSeca_2021_Pit.csv",
       "name": "WeatherTech Raceway Laguna Seca",
+      "iniTrackName": "WeatherTech Raceway Laguna Seca",
       "venueType": "RC",
       "lengthMiles": 2.238,
       "controlLine": "SF",
@@ -13163,9 +13997,11 @@
           "longitude": -121.756845,
           "latitudeScale": 111320,
           "longitudeScale": 89385.5726320986,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [
         {
@@ -13433,7 +14269,8 @@
           "length": 0.0229166666666667
         }
       ],
-      "duplicateOf": null
+      "duplicateOf": null,
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "e8a3a723985cc8763c7ce98d",
@@ -13445,6 +14282,7 @@
       "trackCsvEntry": "LagunaSeca_2021.csv",
       "pitCsvEntry": "LagunaSeca_2021_Pit.csv",
       "name": "WeatherTech Raceway Laguna Seca",
+      "iniTrackName": "WeatherTech Raceway Laguna Seca",
       "venueType": "RC",
       "lengthMiles": 2.238,
       "controlLine": "SF",
@@ -13458,9 +14296,11 @@
           "longitude": -121.756845,
           "latitudeScale": 111320,
           "longitudeScale": 89385.5726320986,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [
         {
@@ -13731,7 +14571,8 @@
       "duplicateOf": {
         "sourceFileId": "de9e320ee1f3054ac81b2ef0",
         "nestedEntry": "LagunaSeca_2021.zip"
-      }
+      },
+      "filenameMismatch": null
     },
     {
       "sourceFileId": "77e8956cb6d260a02cd5d729",
@@ -13743,6 +14584,7 @@
       "trackCsvEntry": "LagunaSeca_2021.csv",
       "pitCsvEntry": "LagunaSeca_2021_Pit.csv",
       "name": "WeatherTech Raceway Laguna Seca",
+      "iniTrackName": "WeatherTech Raceway Laguna Seca",
       "venueType": "RC",
       "lengthMiles": 2.238,
       "controlLine": "SF",
@@ -13756,9 +14598,11 @@
           "longitude": -121.756845,
           "latitudeScale": 111320,
           "longitudeScale": 89385.5726320986,
-          "rotationAdjustment": 0
+          "rotationAdjustment": 0,
+          "trust": "untrusted_until_per_venue_validated",
+          "note": "The [GPS] origin is untrusted for geographic projection until validated against real-world geography per venue. The $P telemetry probe (2026-07-19) found at least one package whose local geometry is correct but whose [GPS] origin carries the wrong venue coordinates (Toronto 43.6339,-79.4122 on a non-Toronto map), consistent with the F2 filename mislabels. Use the local polyline + LapDistance distance-along-track as the trusted frame."
         },
-        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS."
+        "semantics": "Static track/pit polyline and reference origin. This is not an observation of any car position and must not be labeled vehicle GPS. The trusted frame is the local polyline + LapDistance distance-along-track; the [GPS] origin is untrusted for geographic projection until per-venue validated (see geographicReferenceOrigin.note)."
       },
       "timingSections": [
         {
@@ -14029,7 +14873,8 @@
       "duplicateOf": {
         "sourceFileId": "de9e320ee1f3054ac81b2ef0",
         "nestedEntry": "LagunaSeca_2021.zip"
-      }
+      },
+      "filenameMismatch": null
     }
   ],
   "semanticWarning": "Map coordinates are static track geometry. Named timing sections can be joined to raw timing-loop events only after label validation; neither source is continuous car GPS."

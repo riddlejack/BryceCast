@@ -10,8 +10,9 @@ source object exposed by the tested RaceTools and Timing71 indexes that is
 material to this project, plus the full public RaceTools INDYCAR history offered
 for model research.
 
-For Bryce's INDY NXT career, no completed championship-weekend session from
-2024 through the cutoff is left without a high-frequency source:
+For Bryce's INDY NXT career, every completed championship-weekend session from
+2024 through the cutoff has a high-frequency source, with exactly one documented
+exception (2025 Iowa Qualifications, below):
 
 - all 68 RaceTools INDY NXT source captures from 2024 are usable;
 - 2025 has 73 usable RaceTools captures, one lower-grain CSV-only practice, and
@@ -23,9 +24,33 @@ For Bryce's INDY NXT career, no completed championship-weekend session from
 - the Nashville race on 2026-07-19 and the rest of the season are future data,
   not historical gaps.
 
-The completeness claim is deliberately bounded: it means every completed
-championship-weekend session and every file visible in the tested public source
-indexes is accounted for. It cannot prove that an unlisted private test or
+### How the completeness claim is verified
+
+The claim is established two independent ways, so it does not survive by luck:
+
+1. **Source-index completeness** — every file exposed by the tested RaceTools
+   indexes and Timing71 IndyCar archive for 2024 through the cutoff is mirrored.
+2. **Official-schedule reconciliation** — every completed canonical INDY NXT
+   championship-weekend session (practice/qualifying/race, status "official") in
+   `data/career/career.dataset.json` is collapsed to a physical (event, date,
+   type) session and matched by date and type against a lake high-frequency
+   capture. The check is repeatable:
+   `node analysis/historical-data-lake/reconcile-coverage.mjs`, output at
+   `catalog/coverage-reconciliation.json`. Of 129 past championship physical
+   sessions, 128 match a lake capture.
+
+**The one exception — 2025 Iowa Qualifications** (`session_indy_nxt_2025_6596`,
+2025-07-11): the canonical dataset marks it "official" but it carries **zero
+qualifying results** (every other 2025 quali session has 9–21), has **no
+official-schedule window** and **no weather observation**, and has **no RaceTools
+or Timing71 capture** (two same-day "Practice 1" recordings exist instead). All
+evidence is consistent with a cancelled or converted session; it is recorded as
+unmapped-with-evidence rather than assumed present.
+
+The completeness claim is therefore bounded and stated by method: every file
+visible in the tested public source indexes is mirrored, and every completed
+canonical championship session is reconciled to a lake capture except the Iowa
+qualifying session above. It cannot prove that an unlisted private test or
 private recording never existed. No publicly indexed 2026 NXT test replay was
 found.
 
@@ -65,6 +90,23 @@ immutable object path, and human-readable view path for every payload. The
 archive manager is resumable: it validates existing hashes and fetches only
 missing objects. It also checks matching browser downloads before making a
 network request.
+
+Each manifest row also carries a **`provenanceGrade`** so the weakest objects are
+queryable for re-verification at the next sync:
+
+- `verified_fetch` (745 objects) — streamed directly from the source URL;
+- `reused_download_verified_size` (231) — reused a local file whose byte size
+  matched the source-index `expectedBytes`;
+- `reused_download_basename_only` (70, all Timing71) — reused a local file matched
+  on basename alone, because the Timing71 index exposes no `expectedBytes`; no
+  server-side size or hash reference existed at acquisition.
+
+All 70 basename-only objects re-hash correctly locally and passed structural
+validation, but their provenance is "whatever was on this Mac", not "verified
+fetch from source". They are listed in `catalog/provenance-grades.json` under
+`reverifyOnNextSync` and should have their SHA-256 compared against a fresh source
+fetch at the next sync. Run `node analysis/historical-data-lake/archive-sync.mjs
+grade` (no network) to refresh the grades and summary.
 
 ## Validation outcome
 
@@ -148,6 +190,19 @@ A representative 2024 Barber NXT race contains:
 - 704 `$S` records for Bryce's car;
 - flag/control messages, timing-point labels, order, lap, and weather families.
 
+Heartbeat epochs are sanitized before any timing metric is derived. A corrupt or
+merged log line can parse the epoch field into an absurd value (e.g. `0x39` = 57
+next to real ~1.71e9 epochs, which produced a spurious 1,709,974,043-second "gap"
+for 2024 St. Petersburg Practice 2). The analyzer drops feed epochs outside a
+plausible Unix-second window before computing gaps and spans; `heartbeatGapMax`,
+span, and count are reported after that removal, with the excluded epochs recorded
+in `heartbeatEpochSanitization`. Genuine in-session gaps (e.g. Milwaukee 2025
+qualifying, 635 s) are surfaced in the per-scope quality catalog's `issues` array
+(`category: "heartbeat_gap"`), and known-benign gaps are annotated (the Mid-Ohio
+2025 race 436 s gap is pre-green — before lap 1 completes — so no race data is
+missing). A large surviving gap in a raw research file is genuine (e.g. a capture
+concatenating two real test days) and is flagged rather than deleted.
+
 The `$S` time ticks support 0.0001-second relative resolution with strong format
 evidence, consistent with INDYCAR's description of timing-loop crossings. The
 timezone/epoch meaning is not yet fully validated. These are precise crossing
@@ -188,6 +243,34 @@ packages; 40 definitions are exact logical duplicates. They include track/pit
 polylines, control-line labels, lap-distance anchors, and sometimes a geographic
 reference origin. These are static geometry. They do not show where a car was
 at a historical instant and must never be described as vehicle GPS.
+
+**Consumer guard (required).** Join map packages to sessions and venues by INI
+`Track.Name` **+ package SHA-256**, never by archive filename. RaceTools archive
+filenames are unreliable: standalone `Mid-Ohio.zip` contains **Streets of
+Toronto**, `Arlington.zip` contains **Phoenix Raceway**, and
+`IndyCarMaps.zip/Portland_2018.zip` contains **Gateway**. The seven confirmed and
+heuristically-flagged cases are annotated in
+`catalog/track-map-definitions.json` under `filenameMismatches`, and each map row
+carries a `filenameMismatch` field.
+
+**`[GPS]` origins are untrusted for projection.** The trusted spatial frame is the
+local polyline + `LapDistance` distance-along-track. Map `[GPS]` origins
+(`SF_Latitude/SF_Longitude` and scales) require per-venue validation against
+real-world geography before use: the `$P` telemetry probe (2026-07-19) confirmed
+at least one package whose local geometry is correct but whose `[GPS]` origin
+carries the wrong venue's coordinates (Toronto 43.6339, -79.4122 on a non-Toronto
+map), the same class as the filename mislabels. See `gpsOriginGuard` in the
+catalog and the `trust` field on every `geographicReferenceOrigin`.
+
+**Per-venue section status.** `catalog/track-map-definitions.json` →
+`venueSectionStatus` records, per INI `Track.Name`, the maximum section count,
+GPS origin/scale availability, and a `sectionAnchorable` flag (max sections ≥ 10)
+so a consumer can ask "can this venue be section-anchored from lake maps?" without
+re-parsing archives. Venues with **no anchorable section map** include Nashville
+Superspeedway (the 2026-07-19 race), Milwaukee Mile, St. Petersburg, Arlington,
+Miami, and Thermal; Mid-Ohio has only 2 loop sections despite its timing feed
+emitting far more section labels (its full 36-section package exists only under
+the mislabeled "Streets of Toronto" name).
 
 ### Sportradar
 
@@ -325,6 +408,10 @@ experiment becomes defensible—still not a true 2-D collision model.
   candidates
 - `data/historical-data-lake/catalog/coverage-summary.json`: completion decision
   and exceptions
+- `data/historical-data-lake/catalog/coverage-reconciliation.json`:
+  official-schedule reconciliation against the canonical dataset (Iowa exception)
+- `data/historical-data-lake/catalog/provenance-grades.json`: per-object
+  provenance grade and the basename-only objects to re-verify on the next sync
 - `data/historical-data-lake/catalog/coverage-2024-through-today.csv`: row-level
   coverage matrix
 - `data/historical-data-lake/catalog/racetools-session-quality-nxt.json`: all
@@ -332,7 +419,8 @@ experiment becomes defensible—still not a true 2-D collision model.
 - `data/historical-data-lake/catalog/timing71-session-quality-all.json`: all
   Timing71 decoder results
 - `data/historical-data-lake/catalog/track-map-definitions.json`: static map and
-  timing-section definitions
+  timing-section definitions, filename-mismatch annotations, `[GPS]`-origin trust
+  guard, and per-venue section-anchor status
 - `data/historical-data-lake/catalog/sportradar-access-test.json`: credential-free
   access-test record
 - `analysis/historical-high-frequency-data-audit/FEASIBILITY_REPORT.md`: original

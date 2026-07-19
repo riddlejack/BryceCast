@@ -59,6 +59,8 @@ function compactRaceToolsAnalysis(analysis) {
       heartbeatSpanSeconds: replay.heartbeatSpanSeconds,
       heartbeatGapMedianSeconds: replay.heartbeatGapMedianSeconds,
       heartbeatGapMaxSeconds: replay.heartbeatGapMaxSeconds,
+      heartbeatEpochSanitization: replay.heartbeatEpochSanitization,
+      significantHeartbeatGaps: replay.significantHeartbeatGaps,
       exactConsecutiveOneSecondHeartbeat: replay.exactConsecutiveOneSecondHeartbeat,
       messageTypeCounts: replay.messageTypeCounts,
       flagMessageCount: replay.flagMessageCount,
@@ -131,15 +133,63 @@ await runWithConcurrency(sessions, options.concurrency, async (session, index) =
   }
 });
 
+// Curated benign annotations for genuine heartbeat gaps that the Wave 0 audit
+// verified are not missing race data (e.g. a pre-green recorder dropout). Keyed
+// by robust identity match rather than a volatile session id.
+function benignGapAnnotation(row) {
+  const haystack = `${row.event ?? ''} ${row.track ?? ''} ${row.sessionLabel ?? ''}`.toLowerCase();
+  if (row.year === 2025 && row.sessionType === 'race' && /mid.?ohio/.test(haystack)) {
+    return {
+      benign: true,
+      classification: 'pre_green_recorder_gap',
+      reason:
+        'Wave 0 audit: the single ~436 s heartbeat gap falls before lap 1 completes (pre-green). No race data is missing.',
+    };
+  }
+  return null;
+}
+
 const statusCounts = {};
-const errors = [];
+const issues = [];
+let qualityIssueCount = 0;
+let heartbeatGapIssueCount = 0;
 for (const row of results) {
   const status = row.error ? 'analysis_error' : row.analysis.quality.status;
   statusCounts[status] = (statusCounts[status] ?? 0) + 1;
   if (row.error || status !== 'usable') {
-    errors.push({sessionId: row.sessionId, year: row.year, sessionLabel: row.sessionLabel, status, error: row.error, reasons: row.analysis?.quality.reasons ?? []});
+    qualityIssueCount += 1;
+    issues.push({
+      category: 'quality',
+      sessionId: row.sessionId,
+      year: row.year,
+      sessionType: row.sessionType,
+      event: row.event,
+      sessionLabel: row.sessionLabel,
+      status,
+      error: row.error,
+      reasons: row.analysis?.quality.reasons ?? [],
+    });
+  }
+  const gapWarning = row.analysis?.quality?.heartbeatGapWarning ?? null;
+  if (gapWarning) {
+    heartbeatGapIssueCount += 1;
+    issues.push({
+      category: 'heartbeat_gap',
+      sessionId: row.sessionId,
+      year: row.year,
+      sessionType: row.sessionType,
+      event: row.event,
+      sessionLabel: row.sessionLabel,
+      status,
+      maxGapSeconds: gapWarning.maxGapSeconds,
+      significantGapCount: gapWarning.significantGapCount,
+      thresholdSeconds: gapWarning.thresholdSeconds,
+      gaps: gapWarning.gaps,
+      annotation: benignGapAnnotation(row),
+    });
   }
 }
+const errors = issues;
 const report = {
   schemaVersion: 2,
   generatedAt: new Date().toISOString(),
@@ -153,8 +203,10 @@ const report = {
   scope: options.scope,
   sessionCount: results.length,
   statusCounts,
-  issueCount: errors.length,
-  issues: errors,
+  issueCount: issues.length,
+  qualityIssueCount,
+  heartbeatGapIssueCount,
+  issues,
   sessions: results,
 };
 const suffix = options.scope === 'all' ? 'all' : options.scope;

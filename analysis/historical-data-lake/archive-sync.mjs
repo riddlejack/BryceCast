@@ -41,6 +41,7 @@ function usage() {
   node archive-sync.mjs plan [--data-root PATH]
   node archive-sync.mjs acquire [--data-root PATH] [--concurrency N]
   node archive-sync.mjs status [--data-root PATH]
+  node archive-sync.mjs grade [--data-root PATH]
   node archive-sync.mjs normalize [--data-root PATH]
 
 The raw data root is Git-ignored. Source manifests and later catalog outputs are
@@ -335,6 +336,25 @@ function urlKey(url) {
   return createHash('sha256').update(url).digest('hex');
 }
 
+// Provenance grade classifies how strongly an object's bytes are tied to the
+// source of record, so the weakest objects are queryable for re-verification at
+// the next sync (Wave 0 audit condition 4). First acquisition defines truth for
+// this archive; there is no server-side hash to compare against afterwards.
+//   verified_fetch                 -> streamed directly from the source URL.
+//   reused_download_verified_size  -> reused a local file whose size matched the
+//                                     source-index expectedBytes.
+//   reused_download_basename_only  -> reused a local file matched on basename
+//                                     alone (expectedBytes was null; no size or
+//                                     hash reference existed at acquisition).
+function provenanceGrade({acquisitionMethod, expectedBytes}) {
+  if (acquisitionMethod === 'reused_existing_local_download') {
+    return expectedBytes === null || expectedBytes === undefined
+      ? 'reused_download_basename_only'
+      : 'reused_download_verified_size';
+  }
+  return 'verified_fetch';
+}
+
 async function chooseReuseFile(source, index) {
   const candidates = index.get(canonicalDownloadedName(decodedBasename(source.url))) ?? [];
   for (const candidate of candidates) {
@@ -415,6 +435,7 @@ async function acquireOne({source, dataRoot, reuseIndex}) {
     objectPath: objectRelativePath.split(sep).join('/'),
     viewPath: viewRelativePath.split(sep).join('/'),
     acquisitionMethod,
+    provenanceGrade: provenanceGrade({acquisitionMethod, expectedBytes: source.expectedBytes}),
     reusedFrom: reusePath ? basename(reusePath) : null,
     acquiredAt: new Date().toISOString(),
   };
@@ -430,6 +451,7 @@ async function loadManifest(path) {
 function portableManifestRow(row) {
   return {
     ...row,
+    provenanceGrade: row.provenanceGrade ?? provenanceGrade(row),
     reusedFrom: row.reusedFrom ? basename(row.reusedFrom) : null,
   };
 }
@@ -515,6 +537,51 @@ async function commandAcquire(options) {
 }
 
 
+async function commandGrade(options) {
+  // No network. Backfills/refreshes the provenanceGrade field on every manifest
+  // row and writes a queryable summary so the weakest objects (basename-only
+  // reuse) can be targeted for hash re-verification at the next real sync.
+  const manifestPath = join(options.dataRoot, 'manifests/source-files.json');
+  const manifest = await loadManifest(manifestPath);
+  const files = manifest.files.map(portableManifestRow);
+  await atomicWriteJson(manifestPath, {...manifest, files});
+
+  const byGrade = {};
+  for (const file of files) byGrade[file.provenanceGrade] = (byGrade[file.provenanceGrade] ?? 0) + 1;
+  const reverify = files
+    .filter((file) => file.provenanceGrade === 'reused_download_basename_only')
+    .map((file) => ({
+      id: file.id,
+      sourceId: file.sourceId,
+      year: file.year,
+      url: file.url,
+      bytes: file.bytes,
+      sha256: file.sha256,
+      objectPath: file.objectPath,
+    }))
+    .sort((left, right) => left.url.localeCompare(right.url));
+  const summary = {
+    schemaVersion: 1,
+    generatedAt: new Date().toISOString(),
+    definition: {
+      verified_fetch: 'Streamed directly from the source URL; first acquisition defines truth.',
+      reused_download_verified_size:
+        'Reused a local file whose byte size matched the source-index expectedBytes.',
+      reused_download_basename_only:
+        'Reused a local file matched on basename alone (expectedBytes was null); no server-side size or hash reference existed. Re-verify against source on the next sync.',
+    },
+    objectCount: files.length,
+    byGrade,
+    reverifyOnNextSync: {
+      count: reverify.length,
+      note: 'These objects re-hash correctly locally and passed structural validation, but their provenance is basename-only. Compare their SHA-256 against a fresh source fetch at the next sync.',
+      objects: reverify,
+    },
+  };
+  await atomicWriteJson(join(options.dataRoot, 'catalog/provenance-grades.json'), summary);
+  process.stdout.write(stableJson({objectCount: files.length, byGrade, reverifyOnNextSync: reverify.length}));
+}
+
 async function commandNormalize(options) {
   const manifestPath = join(options.dataRoot, 'manifests/source-files.json');
   const manifest = await loadManifest(manifestPath);
@@ -562,6 +629,7 @@ if (options.help) {
 if (command === 'plan') await commandPlan(options);
 else if (command === 'acquire') await commandAcquire(options);
 else if (command === 'status') await commandStatus(options);
+else if (command === 'grade') await commandGrade(options);
 else if (command === 'normalize') await commandNormalize(options);
 else {
   process.stderr.write(`${usage()}\n`);
