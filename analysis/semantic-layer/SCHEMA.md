@@ -76,6 +76,7 @@ Per car, per completed racing lap, derived from S/F-line crossings.
 | `startTimeOfDaySeconds` / `endTimeOfDaySeconds` | S/F crossing bounds (local) |
 | `lapSeconds` | full lap time = S/F→S/F crossing delta (matches official "Lap") |
 | `sfSectionSeconds` | the feed's own duration for the final S/F section (audit aid) |
+| `positionAtSF` | running position stamped on the S/F crossing that closed the lap |
 | `isFirstRacingLap` | lap 1, measured from the start-line instant (may be partial) |
 
 Lap counting excludes formation, start-line, and cool-down crossings; the checkered

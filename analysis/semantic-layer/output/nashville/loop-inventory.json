@@ -1,6 +1,6 @@
 {
   "proof": "nashville_loop_inventory",
-  "generatedAt": "2026-07-19T02:43:10.518Z",
+  "generatedAt": "2026-07-19T02:50:49.474Z",
   "question": "Does the raw RaceTools feed for the Nashville Superspeedway NXT races emit more loop crossings than the 3 officially-published sections?",
   "answer": "YES — both feeds carry the full physical loop set (SF, T1, SS1, T2, BS, T3, SS2, T4), tiling the entire lap into fine sub-sections, far more than the 3 published track sections. The semantic-layer tables contain the unpublished intervals; the heat-map blanks can be filled from RaceTools capture.",
   "races": [

@@ -1,6 +1,6 @@
 {
   "axis": "a_finishing_order_vs_canonical",
-  "generatedAt": "2026-07-19T02:40:31.980Z",
+  "generatedAt": "2026-07-19T02:50:48.786Z",
   "method": "Order derived from loop-crossing tables only: (racing laps completed desc, final S/F crossing time asc). Compared to canonical career.dataset.json finishing order and lap counts.",
   "raceCount": 28,
   "winnerMatchCount": 28,

@@ -1,6 +1,6 @@
 {
   "axis": "b_section_times_vs_official_pdf",
-  "generatedAt": "2026-07-19T02:45:16.460Z",
+  "generatedAt": "2026-07-19T02:50:49.196Z",
   "method": "Bryce's section times computed as differences of his loop-crossing timestamps, compared per lap to parsed official Section Results. Full-lap uses the S/F->S/F boundary; Nashville sub-sections are mapped to the best-matching feed span.",
   "summary": {
     "fullLapRaces": 25,

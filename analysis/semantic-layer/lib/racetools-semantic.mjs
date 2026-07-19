@@ -244,7 +244,7 @@ function parseCrossingsAndLaps(lines, geometry, flags) {
       // De-duplicate an alternate-S/F crossing that lands within 3 s of another
       // boundary crossing (same physical lap completion via a different loop).
       const last = car_.sfCrossings[car_.sfCrossings.length - 1];
-      if (!last || Math.abs(tod - last.tod) > 3) car_.sfCrossings.push({tod, durTicks});
+      if (!last || Math.abs(tod - last.tod) > 3) car_.sfCrossings.push({tod, durTicks, position: hex(f[5])});
     }
     const lapIndex = car_.sfCrossings.length + 1; // crossings observed BEFORE this one + 1
 
@@ -312,6 +312,7 @@ function parseCrossingsAndLaps(lines, geometry, flags) {
         lapSeconds: prevTod === null ? null : round(c.tod - prevTod, 4),
         // The feed's own duration for the final S/F section, kept for auditing.
         sfSectionSeconds: c.durTicks === null ? null : round(c.durTicks / TICKS_PER_SECOND, 4),
+        positionAtSF: c.position ?? null,
         isFirstRacingLap: i === 0,
       });
       prevTod = c.tod;
