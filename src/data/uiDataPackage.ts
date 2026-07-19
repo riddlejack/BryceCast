@@ -495,6 +495,112 @@ export interface UiDebriefSeed {
   sourceRefs: UiSourceRef[];
 }
 
+/* ---------- venue dossier: this place, other years ---------- */
+
+/** Per-visit near-track conditions. Source-agnostic by design (adapter-contract
+ *  law): v1 is Open-Meteo modeled reanalysis; v2 can slot in lake-derived
+ *  trackside messages by changing `source`/`sourceType`/`confidence` with no UI
+ *  rework. `official` stays false — weather is never presented as official
+ *  series weather or track temperature. */
+export interface UiVenueDossierConditions {
+  observedAt: string | null;
+  ambientTempC: number | null;
+  ambientTempF: number | null;
+  apparentTempC: number | null;
+  humidityPct: number | null;
+  windSpeedKph: number | null;
+  windSpeedMph: number | null;
+  windGustKph: number | null;
+  windGustMph: number | null;
+  windDirectionDeg: number | null;
+  windCardinal: string | null;
+  sky: string | null;
+  wetDry: string | null;
+  source: string;
+  sourceType: 'modeled_reanalysis' | 'observed_station' | 'trackside_official';
+  official: false;
+  confidence: string;
+  caveat: string;
+}
+
+/** A visit measured against Bryce's previous INDY NXT race at the same venue.
+ *  A delta is a fact about the day, never a verdict on the drive. */
+export interface UiVenueDossierDelta {
+  priorSeasonYear: number;
+  priorSessionId: string;
+  priorRaceLabel: string;
+  finishDelta: number | null;
+  gridDelta: number | null;
+  tempDeltaF: number | null;
+  humidityDeltaPct: number | null;
+  windSpeedDeltaMph: number | null;
+  windDirectionFrom: string | null;
+  windDirectionTo: string | null;
+  windSwung: boolean;
+}
+
+export interface UiVenueDossierVisit {
+  sessionId: string;
+  seasonYear: number;
+  raceInYearIndex: number | null;
+  raceLabel: string;
+  raceHref: string;
+  eventStartDate: string | null;
+  result: {
+    startPosition: number | null;
+    finishPosition: number | null;
+    gain: number | null;
+    finishPercentile: number | null;
+    fieldSize: number | null;
+    officialStatus: string | null;
+    points: number | null;
+  };
+  conditions: UiVenueDossierConditions | null;
+  deltaVsPrior: UiVenueDossierDelta | null;
+}
+
+export interface UiVenueDossierScheduledSession {
+  sessionId: string;
+  sessionType: string;
+  sessionName: string | null;
+  scheduledStart: string | null;
+  timezone: string | null;
+  status: string | null;
+}
+
+export interface UiVenueDossierVenue {
+  venueId: string;
+  trackName: string;
+  trackSlug: string | null;
+  trackType: string | null;
+  drivingDirection: string | null;
+  lengthMi: number | null;
+  cornerCount: number | null;
+  geo: {
+    oriented: boolean;
+    northOffsetDeg: number | null;
+    note: string;
+  };
+  visits: UiVenueDossierVisit[];
+  visitYears: number[];
+  upcoming: {
+    eventId: string;
+    eventName: string;
+    eventStartDate: string | null;
+    scheduledSessions: UiVenueDossierScheduledSession[];
+  } | null;
+}
+
+export interface UiVenueDossier {
+  schemaVersion: 'brycecast.venueDossier.v1';
+  title: string;
+  readiness: string;
+  venues: UiVenueDossierVenue[];
+  venueCount: number;
+  caveats: string[];
+  sourceRefs: UiSourceRef[];
+}
+
 export interface UiDataPackageArtifacts {
   stableArtifacts: Array<Record<string, string>>;
   exploratoryOrDeferred: Array<Record<string, string>>;
@@ -555,6 +661,7 @@ export interface UiDataPackage {
       caveats: string[];
       sourceRefs: UiSourceRef[];
     };
+    venueDossier: UiVenueDossier;
     sourceOps: {
       title: string;
       validation: Record<string, unknown>;

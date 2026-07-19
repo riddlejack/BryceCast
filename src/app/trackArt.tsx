@@ -50,7 +50,8 @@ export const TrackArt = ({
   showCornerLabels = true,
   maxHeight,
   progress,
-  sections = null
+  sections = null,
+  wind
 }: {
   outline: TrackOutline;
   annotation?: { corner: string; note: string } | null;
@@ -63,6 +64,12 @@ export const TrackArt = ({
   progress?: number;
   /** Optional Section Intelligence heat-map layer. */
   sections?: TrackSectionsLayer | null;
+  /** Near-track wind, drawn as a quiet flow arrow beside the shape and turned
+   *  to true north via the outline's geographic orientation. Rendered ONLY for
+   *  real-geo (OSM) outlines that carry northOffsetDeg — image-traced street
+   *  circuits have no orientation, so the wind is honestly omitted there.
+   *  bearingDeg is the compass direction the wind blows FROM (0=N, 90=E). */
+  wind?: { bearingDeg: number; label: string } | null;
 }) => {
   const [ref, measuredWidth] = useMeasuredWidth<HTMLDivElement>();
   const [tip, setTip] = useState<ChartTip | null>(null);
@@ -234,6 +241,11 @@ export const TrackArt = ({
     setHoveredFamily(null);
     showTipFor(heatSections[next]);
   };
+  /* The svg is centered in the (possibly wider) container; pin the wind pill
+   * and north tick to the art itself, not the container edges. */
+  const artInset = Math.max(0, (measuredWidth - width) / 2);
+  /* Screen direction of true north (angle-from-up = northOffsetDeg). */
+  const northRad = typeof outline.northOffsetDeg === 'number' ? (outline.northOffsetDeg * Math.PI) / 180 : null;
 
   return (
     <div
@@ -441,6 +453,59 @@ export const TrackArt = ({
               );
             })}
         </svg>
+      ) : null}
+      {wind && typeof outline.northOffsetDeg === 'number' && northRad !== null ? (
+        <>
+          <div
+            className="track-wind"
+            style={{ left: artInset }}
+            title={`Near-track wind ${wind.label} (modeled, not official)`}
+            aria-label={`Near-track wind ${wind.label}`}
+          >
+            <svg
+              width={22}
+              height={22}
+              viewBox="0 0 22 22"
+              aria-hidden
+              /* Flow arrow: points the way the air moves across the track
+               * (bearing is the FROM direction, so it blows toward +180),
+               * turned to true north by the outline's geographic offset. */
+              style={{ transform: `rotate(${wind.bearingDeg + 180 + outline.northOffsetDeg}deg)` }}
+            >
+              <line x1={11} y1={17.5} x2={11} y2={5} stroke="var(--ink-secondary)" strokeWidth={1.6} strokeLinecap="round" />
+              <path d="M11 3.2 L15 8.4 L11 6.7 L7 8.4 Z" fill="var(--ink-secondary)" />
+            </svg>
+            <span className="track-wind__label">{wind.label}</span>
+          </div>
+          {/* True-north reference: a hairline tick + upright "N" in tertiary
+           * ink, rotated by the same geographic offset as the arrow, so the
+           * wind direction is read against north — not screen-up. */}
+          <div className="track-north" style={{ right: artInset }} aria-hidden>
+            <svg width={30} height={30} viewBox="0 0 30 30" style={{ overflow: 'visible', display: 'block' }}>
+              <line
+                x1={15 + Math.sin(northRad) * 3.5}
+                y1={15 - Math.cos(northRad) * 3.5}
+                x2={15 + Math.sin(northRad) * 9.5}
+                y2={15 - Math.cos(northRad) * 9.5}
+                stroke="var(--ink-muted)"
+                strokeWidth={1.2}
+                strokeLinecap="round"
+              />
+              <text
+                x={15 + Math.sin(northRad) * 14}
+                y={15 - Math.cos(northRad) * 14}
+                textAnchor="middle"
+                dominantBaseline="central"
+                fill="var(--ink-muted)"
+                fontFamily={chartFont}
+                fontSize={8}
+                fontWeight={500}
+              >
+                N
+              </text>
+            </svg>
+          </div>
+        </>
       ) : null}
       {tip ? <ChartTipCard tip={tip} width={measuredWidth} /> : null}
     </div>

@@ -291,4 +291,56 @@ for (const venue of atlas.venues) {
 assert.deepEqual(new Set(atlas.venues.map((venue) => venue.region)), new Set(['North America', 'Europe', 'Oceania']));
 assert.ok(!JSON.stringify(atlas).includes('54649.3'), 'minimum displacement must not leak into the venue-only atlas');
 
+/* The venue dossier: this place, other years. Bryce's most explicit ask —
+   year-over-year conditions + results per venue, wind only where the shape is
+   geo-registered, and every condition honestly non-official. */
+const venueDossier = context.dataPackage.screens.venueDossier;
+assert.equal(venueDossier.schemaVersion, 'brycecast.venueDossier.v1');
+assert.ok(venueDossier.venues.length >= 1, 'venue dossier must carry venues');
+assert.equal(venueDossier.venueCount, venueDossier.venues.length);
+assert.ok(
+  venueDossier.venues.filter((venue) => venue.upcoming).length <= 1,
+  'at most one venue may be flagged as the upcoming race-week venue'
+);
+let dossierWeatherVisits = 0;
+let dossierOrientedVenues = 0;
+for (const venue of venueDossier.venues) {
+  assert.ok(venue.venueId && venue.trackName, 'every dossier venue carries an identity');
+  assert.equal(typeof venue.geo.oriented, 'boolean');
+  if (venue.geo.oriented) {
+    dossierOrientedVenues += 1;
+    assert.ok(
+      typeof venue.geo.northOffsetDeg === 'number' && venue.geo.northOffsetDeg >= 0 && venue.geo.northOffsetDeg < 360,
+      `${venue.trackName} oriented venue must carry a real north offset for the wind bearing`
+    );
+    assert.ok(venue.trackSlug, `${venue.trackName} oriented venue must carry a trackSlug`);
+  } else {
+    assert.equal(venue.geo.northOffsetDeg, null, `${venue.trackName} un-oriented venue must never guess a bearing`);
+  }
+  assert.ok(venue.visits.length >= 1, `${venue.trackName} must carry at least one visit`);
+  assert.deepEqual(
+    venue.visitYears,
+    [...new Set(venue.visits.map((visit) => visit.seasonYear))].sort((a, b) => a - b),
+    `${venue.trackName} visitYears must be the sorted unique visit seasons`
+  );
+  for (const visit of venue.visits) {
+    assert.equal(visit.raceHref, `/races/${visit.sessionId}`, 'every visit clicks through to its race page');
+    if (visit.conditions) {
+      dossierWeatherVisits += 1;
+      assert.equal(visit.conditions.official, false, 'dossier conditions are never official');
+      assert.ok(visit.conditions.source, 'dossier conditions name their source');
+    }
+    if (visit.deltaVsPrior) {
+      assert.ok(
+        venue.visits.some((candidate) => candidate.sessionId === visit.deltaVsPrior?.priorSessionId),
+        'a visit delta compares against a prior visit at the same venue'
+      );
+    }
+  }
+}
+assert.ok(dossierOrientedVenues >= 1, 'at least one OSM-traced venue must be geo-oriented for wind-on-shape');
+assert.ok(dossierWeatherVisits >= 1, 'near-track conditions must join at least one visit');
+const multiVisitVenue = venueDossier.venues.find((venue) => venue.visits.length >= 2 && venue.visits.some((visit) => visit.deltaVsPrior));
+assert.ok(multiVisitVenue, 'at least one venue must carry a year-over-year delta');
+
 console.log('ui context adapter hydration tests passed');

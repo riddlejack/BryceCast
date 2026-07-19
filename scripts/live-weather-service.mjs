@@ -389,7 +389,10 @@ export const fetchLiveWeatherForTrack = async (track) => {
   }
 
   const observation = observationProbe?.ok ? normalizeObservation(observationProbe.json) : null;
-  const forecastHourly = asArray(hourlyProbe?.json?.properties?.periods).slice(0, 12).map(normalizeForecastPeriod);
+  /* Keep two days of hourly periods so the Race Week strip can reach the
+   * scheduled session windows ("his race hour") during race-week crunch,
+   * without bloating the polled payload the way the full 156-hour range would. */
+  const forecastHourly = asArray(hourlyProbe?.json?.properties?.periods).slice(0, 48).map(normalizeForecastPeriod);
   const forecast = asArray(forecastProbe?.json?.properties?.periods).slice(0, 8).map(normalizeForecastPeriod);
   const alerts = asArray(alertsProbe?.json?.features).map(normalizeAlert);
 

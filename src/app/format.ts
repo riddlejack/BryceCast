@@ -113,6 +113,25 @@ export const shortVenue = (value: unknown): string => {
   return text.replace(/\s+(Sports Car Course|Motorsports Park|International Raceway|International Race Complex|Superspeedway|Raceway|Circuit|Mile)$/i, '');
 };
 
+/** 16-point compass label for a bearing in degrees (0 = N, 90 = E). Null when
+ *  no direction is sourced — never a guessed cardinal. */
+const CARDINALS_16 = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'];
+export const windCardinal = (value: unknown): string | null => {
+  const deg = asNumber(value);
+  if (deg === null) return null;
+  return CARDINALS_16[Math.round((((deg % 360) + 360) % 360) / 22.5) % 16];
+};
+
+/** Compass-point center bearing for a 16-point cardinal label ("WNW" → 292.5).
+ *  NWS forecasts quantize direction to these points, so the center bearing is
+ *  the faithful numeric reading — null for anything unrecognized. */
+export const cardinalToDeg = (value: unknown): number | null => {
+  const text = asString(value);
+  if (!text) return null;
+  const index = CARDINALS_16.indexOf(text.toUpperCase());
+  return index === -1 ? null : index * 22.5;
+};
+
 export const trackTypeLabel = (value: unknown): string => {
   const text = (asString(value) ?? '').toLowerCase();
   if (text === 'r' || text === 'road') return 'Road course';

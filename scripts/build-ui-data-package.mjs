@@ -76,6 +76,8 @@ const sources = {
   raceLapSectionBuilderScript: 'analysis/indy-nxt-race-lap-section-enhancement/scripts/build_indy_nxt_race_lap_section_enhancement.py',
   raceLapSectionValidatorScript: 'analysis/indy-nxt-race-lap-section-enhancement/scripts/validate_indy_nxt_race_lap_section_enhancement.py',
   predictiveRunnerScript: 'scripts/run-predictive-race-intelligence.mjs',
+  trackOutlineIndex: 'src/assets/tracks/index.ts',
+  trackOutlineBuilderScript: 'scripts/build-track-outline.mjs',
   uiDataPackageBuilderScript: 'scripts/build-ui-data-package.mjs',
   uiDataPackageValidatorScript: 'scripts/validate-ui-data-package.mjs'
 };
@@ -1141,6 +1143,258 @@ const buildLapPositionMix = ({ lapTimelineRows, canonicalDataset }) => {
     });
 };
 
+/* ---------- venue dossier: this place, other years ----------
+ * Bryce's most explicit ask: year-over-year conditions + results at each
+ * venue. One source-agnostic contract sized for the future data lake — v1 is
+ * fed by canonical results + Open-Meteo modeled weather; v2 can swap trackside
+ * lake messages into `conditions` with zero UI rework (adapter-contract law).
+ * The runtime forecast / current-now for the race-week venue stays on the
+ * weather API; this static module carries the historic visits + venue geo. */
+
+const CARDINALS_16 = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'];
+const windCardinal = (deg) => {
+  if (deg == null || !Number.isFinite(deg)) return null;
+  const index = Math.round((((deg % 360) + 360) % 360) / 22.5) % 16;
+  return CARDINALS_16[index];
+};
+const celsiusToF = (celsius) => (celsius == null ? null : Math.round((celsius * 9) / 5 + 32));
+const kphToMph = (kph) => (kph == null ? null : Math.round(kph / 1.609344));
+const humanizeSky = (raw) => (raw ? String(raw).replaceAll('_', ' ') : null);
+/** Smallest signed angle from bearing a to bearing b, in (−180, 180]. */
+const bearingDelta = (a, b) => {
+  if (a == null || b == null) return null;
+  return ((b - a + 540) % 360) - 180;
+};
+
+const normalizeVenueName = (name) => String(name ?? '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+
+const loadTrackOutlineIndex = () => {
+  const dir = path.join(repoRoot, 'src/assets/tracks');
+  return fs
+    .readdirSync(dir)
+    .filter((file) => file.endsWith('.json'))
+    .map((file) => readJson(path.join('src/assets/tracks', file)))
+    .filter((asset) => asset && asset.slug)
+    .map((asset) => ({
+      slug: asset.slug,
+      normalized: normalizeVenueName(asset.name),
+      northOffsetDeg: typeof asset.northOffsetDeg === 'number' ? asset.northOffsetDeg : null,
+      provider: asset.source?.provider ?? null
+    }));
+};
+
+const buildVenueDossier = ({ canonicalDataset, asOfDate }) => {
+  const eventsById = new Map((canonicalDataset.events ?? []).map((row) => [row.id, row]));
+  const tracksById = new Map((canonicalDataset.tracks ?? []).map((row) => [row.id, row]));
+  const weatherBySession = new Map((canonicalDataset.weatherObservations ?? []).map((row) => [row.sessionId, row]));
+  const bryceResultBySession = new Map(
+    (canonicalDataset.results ?? [])
+      .filter((row) => row.driverId === 'driver_bryce_aron')
+      .map((row) => [row.sessionId, row])
+  );
+  const outlineIndex = loadTrackOutlineIndex();
+  const outlineFor = (trackName) => {
+    const norm = normalizeVenueName(trackName);
+    return outlineIndex.find((outline) => outline.normalized === norm) ?? null;
+  };
+
+  /* INDY NXT race sessions Bryce actually ran (carries a Bryce result). */
+  const raceEntries = (canonicalDataset.sessions ?? [])
+    .filter((session) => session.sessionType === 'race')
+    .filter((session) => eventsById.get(session.eventId)?.seriesId === 'series_indy_nxt')
+    .filter((session) => bryceResultBySession.has(session.id))
+    .map((session) => ({ session, event: eventsById.get(session.eventId) }))
+    .filter((entry) => entry.event?.trackId);
+
+  /* Next upcoming INDY NXT event → its scheduled session windows, attached to
+   * that venue so the UI can slice the runtime hourly forecast to "his race
+   * hour" without re-deriving the schedule. */
+  const nextEvent = (canonicalDataset.events ?? [])
+    .filter((event) => event.seriesId === 'series_indy_nxt' && (event.eventStartDate ?? '') >= asOfDate)
+    .sort((left, right) => String(left.eventStartDate).localeCompare(String(right.eventStartDate)))[0] ?? null;
+  const upcomingByTrack = new Map();
+  if (nextEvent) {
+    const scheduledSessions = (canonicalDataset.sessions ?? [])
+      .filter((session) => session.eventId === nextEvent.id)
+      .map((session) => ({
+        sessionId: session.id,
+        sessionType: session.sessionType,
+        sessionName: session.sessionName ?? null,
+        /* Future sessions carry the published schedule; prefer scheduledStart
+         * (a not-yet-run session's actualStart can be a stale placeholder). */
+        scheduledStart: session.scheduledStart ?? session.actualStart ?? null,
+        timezone: session.timezone ?? tracksById.get(nextEvent.trackId)?.timezone ?? null,
+        status: session.status ?? null
+      }))
+      .sort((left, right) => String(left.scheduledStart).localeCompare(String(right.scheduledStart)));
+    upcomingByTrack.set(nextEvent.trackId, {
+      eventId: nextEvent.id,
+      eventName: nextEvent.name,
+      eventStartDate: nextEvent.eventStartDate ?? null,
+      scheduledSessions
+    });
+  }
+
+  const conditionsFrom = (observation) => {
+    if (!observation) return null;
+    const tempC = numberOrNull(observation.ambientTempC);
+    const windKph = numberOrNull(observation.windSpeedKph);
+    const gustKph = numberOrNull(observation.windGustKph);
+    const dirDeg = numberOrNull(observation.windDirectionDeg);
+    return {
+      observedAt: observation.observedAt ?? null,
+      ambientTempC: tempC,
+      ambientTempF: celsiusToF(tempC),
+      apparentTempC: numberOrNull(observation.apparentTempC),
+      humidityPct: numberOrNull(observation.relativeHumidityPct),
+      windSpeedKph: windKph,
+      windSpeedMph: kphToMph(windKph),
+      windGustKph: gustKph,
+      windGustMph: kphToMph(gustKph),
+      windDirectionDeg: dirDeg,
+      windCardinal: windCardinal(dirDeg),
+      sky: humanizeSky(observation.ambientConditionRaw),
+      wetDry: observation.wetDry ?? null,
+      source: observation.source ?? 'Open-Meteo Historical Weather API hourly archive',
+      sourceType: 'modeled_reanalysis',
+      official: false,
+      confidence: observation.confidence ?? 'modeled_medium',
+      caveat: 'Modeled near-track weather for the race hour (Open-Meteo hourly archive), not official series weather or track temperature.'
+    };
+  };
+
+  const byTrack = new Map();
+  for (const entry of raceEntries) {
+    const trackId = entry.event.trackId;
+    if (!byTrack.has(trackId)) byTrack.set(trackId, []);
+    byTrack.get(trackId).push(entry);
+  }
+
+  const venues = [];
+  for (const [trackId, entries] of byTrack) {
+    const track = tracksById.get(trackId);
+    const outline = outlineFor(track?.name);
+    entries.sort(
+      (left, right) =>
+        String(left.event.eventStartDate ?? '').localeCompare(String(right.event.eventStartDate ?? '')) ||
+        String(left.session.scheduledStart ?? '').localeCompare(String(right.session.scheduledStart ?? ''))
+    );
+    const yearCounts = new Map();
+    for (const { event } of entries) yearCounts.set(event.seasonYear, (yearCounts.get(event.seasonYear) ?? 0) + 1);
+    const yearSeen = new Map();
+
+    const visits = entries.map(({ session, event }) => {
+      const result = bryceResultBySession.get(session.id) ?? {};
+      const start = numberOrNull(result.startPosition);
+      const finish = numberOrNull(result.finishPosition);
+      const seenN = (yearSeen.get(event.seasonYear) ?? 0) + 1;
+      yearSeen.set(event.seasonYear, seenN);
+      const raceInYearIndex = (yearCounts.get(event.seasonYear) ?? 0) > 1 ? seenN : null;
+      return {
+        sessionId: session.id,
+        seasonYear: event.seasonYear,
+        raceInYearIndex,
+        raceLabel: raceInYearIndex ? `${event.seasonYear} · Race ${raceInYearIndex}` : String(event.seasonYear),
+        eventStartDate: event.eventStartDate ?? null,
+        start,
+        finish,
+        gain: start != null && finish != null ? start - finish : null,
+        result,
+        conditions: conditionsFrom(weatherBySession.get(session.id))
+      };
+    });
+
+    const dossierVisits = visits.map((visit, index) => {
+      const prior = index > 0 ? visits[index - 1] : null;
+      let deltaVsPrior = null;
+      if (prior) {
+        const tempThis = visit.conditions?.ambientTempF ?? null;
+        const tempPrior = prior.conditions?.ambientTempF ?? null;
+        const windThis = visit.conditions?.windSpeedMph ?? null;
+        const windPrior = prior.conditions?.windSpeedMph ?? null;
+        const humidityThis = visit.conditions?.humidityPct ?? null;
+        const humidityPrior = prior.conditions?.humidityPct ?? null;
+        const directionDelta = bearingDelta(prior.conditions?.windDirectionDeg ?? null, visit.conditions?.windDirectionDeg ?? null);
+        deltaVsPrior = {
+          priorSeasonYear: prior.seasonYear,
+          priorSessionId: prior.sessionId,
+          priorRaceLabel: prior.raceLabel,
+          finishDelta: prior.finish != null && visit.finish != null ? prior.finish - visit.finish : null,
+          gridDelta: prior.start != null && visit.start != null ? prior.start - visit.start : null,
+          tempDeltaF: tempThis != null && tempPrior != null ? tempThis - tempPrior : null,
+          humidityDeltaPct: humidityThis != null && humidityPrior != null ? Math.round(humidityThis - humidityPrior) : null,
+          windSpeedDeltaMph: windThis != null && windPrior != null ? windThis - windPrior : null,
+          windDirectionFrom: prior.conditions?.windCardinal ?? null,
+          windDirectionTo: visit.conditions?.windCardinal ?? null,
+          windSwung: directionDelta != null ? Math.abs(directionDelta) > 45 : false
+        };
+      }
+      return {
+        sessionId: visit.sessionId,
+        seasonYear: visit.seasonYear,
+        raceInYearIndex: visit.raceInYearIndex,
+        raceLabel: visit.raceLabel,
+        raceHref: `/races/${visit.sessionId}`,
+        eventStartDate: visit.eventStartDate,
+        result: {
+          startPosition: visit.start,
+          finishPosition: visit.finish,
+          gain: visit.gain,
+          finishPercentile: numberOrNull(visit.result.finishPercentile),
+          fieldSize: numberOrNull(visit.result.fieldSize),
+          officialStatus: visit.result.status ?? null,
+          points: numberOrNull(visit.result.points)
+        },
+        conditions: visit.conditions,
+        deltaVsPrior
+      };
+    });
+
+    venues.push({
+      venueId: trackId,
+      trackName: track?.name ?? trackId,
+      trackSlug: outline?.slug ?? null,
+      trackType: track?.trackType ?? null,
+      drivingDirection: track?.direction ?? null,
+      lengthMi: numberOrNull(track?.lengthMi),
+      cornerCount: numberOrNull(track?.cornerCount),
+      geo: {
+        oriented: outline?.northOffsetDeg != null,
+        northOffsetDeg: outline?.northOffsetDeg ?? null,
+        note:
+          outline?.northOffsetDeg != null
+            ? 'Outline traced from OpenStreetMap geometry; the wind bearing can be drawn to true north on the shape.'
+            : outline
+              ? 'Outline traced from an official track map without geographic orientation; wind is honestly omitted on the shape.'
+              : 'No outline traced for this venue yet.'
+      },
+      visits: dossierVisits,
+      visitYears: [...new Set(dossierVisits.map((visit) => visit.seasonYear))].sort((left, right) => left - right),
+      upcoming: upcomingByTrack.get(trackId) ?? null
+    });
+  }
+
+  venues.sort((left, right) => left.trackName.localeCompare(right.trackName));
+
+  return {
+    schemaVersion: 'brycecast.venueDossier.v1',
+    title: 'This place, other years',
+    readiness: 'available',
+    venues,
+    venueCount: venues.length,
+    caveats: [
+      'Conditions are modeled near-track weather joined to the race hour (Open-Meteo hourly archive) — never official INDY NXT session weather or track temperature.',
+      'Deltas compare each visit to Bryce’s previous INDY NXT race at the same venue; a weather delta is a fact about the day, not a verdict on the drive.',
+      'This weekend’s forecast and current conditions come from the runtime weather routes, not this static package.'
+    ],
+    sourceRefs: [
+      sourceRef('canonicalDataset', 'Official INDY NXT results (grid, finish, field size, status) and per-race modeled weather observations, by venue and year.'),
+      sourceRef('trackOutlineIndex', 'OpenStreetMap-traced outlines (ODbL) carry the north offset used to draw the wind bearing on real-geo venues; street circuits omit it.'),
+      { key: 'api-weather-upcoming', path: '/api/weather/upcoming', note: 'Runtime NWS current conditions + hourly forecast for the race-week venue (near-track, not official).' }
+    ]
+  };
+};
+
 const readLatestColdRaceCapture = () => {
   const dbPath = path.join(repoRoot, 'data/live/brycecast.sqlite');
   if (!fs.existsSync(dbPath)) return { available: false, reason: 'live capture database not present' };
@@ -1959,6 +2213,7 @@ const buildPackage = () => {
           sourceRef('indyNxtLapTimeline', 'Bryce per-lap official positions across all INDY NXT races.')
         ]
       },
+      venueDossier: buildVenueDossier({ canonicalDataset, asOfDate: predictiveSummary.asOfDate }),
       sourceOps: {
         title: 'Source Ops Baseline',
         predictiveRaceIntelligence: {

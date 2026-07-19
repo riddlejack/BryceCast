@@ -4,7 +4,8 @@ import { trackOutlineFor } from '../assets/tracks';
 import { Card, Countdown, HeroPanel, SourcePill, Stat, Unavailable } from '../app/components';
 import { ChartTipCard, chartFont, focusFade, inkConnector, useMeasuredWidth, type ChartTip } from '../app/charts';
 import { TrackArt } from '../app/trackArt';
-import { asNumber, asString, formatClock, formatDate, formatNumber, shortVenue, trackTypeLabel } from '../app/format';
+import { asNumber, asString, cardinalToDeg, formatClock, formatDate, formatGain, formatNumber, shortVenue, trackTypeLabel, windCardinal } from '../app/format';
+import { FactDelta, WindSwing } from '../app/weatherGlyphs';
 import { Link, useRouter } from '../app/router';
 import { useApiJson } from '../app/useApiJson';
 import { normalizedName, useNextSession } from '../app/useNextSession';
@@ -16,7 +17,15 @@ import {
   getUpcomingEvents,
   type UpcomingPrepEvent
 } from '../data/upcoming';
-import type { UiNextEventPrep, UiNextEventPrepRace, UiStandingsSnapshot } from '../data/uiDataPackage';
+import type {
+  UiNextEventPrep,
+  UiNextEventPrepRace,
+  UiStandingsSnapshot,
+  UiVenueDossierScheduledSession,
+  UiVenueDossierVenue,
+  UiVenueDossierVisit
+} from '../data/uiDataPackage';
+import { getVenueByTrackName, getVenueDossier } from '../data/venueDossier';
 import { loadDebriefArchive } from '../data/debriefArchive';
 
 type Row = Record<string, unknown>;
@@ -625,58 +634,131 @@ const AnalogRaces = ({ event, debriefIds }: { event: UpcomingPrepEvent; debriefI
   );
 };
 
-/* ---------- weather window ---------- */
+/* ---------- weather window: current-now + the race-hour strip ---------- */
+
+interface CurrentConditions {
+  tempF: number | null;
+  humidityPct: number | null;
+  windMph: number | null;
+  windDirectionDeg: number | null;
+  windCardinal: string | null;
+  sky: string | null;
+}
+
+interface RaceHourSlot {
+  sessionId: string;
+  sessionLabel: string;
+  when: string;
+  tempText: string;
+  /** Numeric reads for delta math; null when the NWS unit isn't Fahrenheit or
+   *  the wind speed is a range ("5 to 10 mph" carries no single number). */
+  tempF: number | null;
+  humidityPct: number | null;
+  windMph: number | null;
+  windDirCardinal: string | null;
+  sky: string | null;
+  windText: string | null;
+}
 
 interface EventWeather {
-  observationText: string | null;
-  temperatureF: number | null;
-  periods: Array<{ name: string; temperature: string; forecast: string; wind: string | null }>;
+  current: CurrentConditions | null;
+  raceHour: RaceHourSlot[];
   readinessNote: string | null;
 }
 
-const useEventWeather = (eventId: string | null): EventWeather | null => {
+const sessionLabelFor = (session: UiVenueDossierScheduledSession): string =>
+  asString(session.sessionName) ?? session.sessionType.charAt(0).toUpperCase() + session.sessionType.slice(1);
+
+/** Turn one weather report (observation + forecastHourly) into the current-now
+ *  block plus the race-hour strip. NWS hourly periods carry the venue's local
+ *  wall clock with an offset; a scheduled session start is the same local wall
+ *  clock without one, so the race hour is the period whose local date+hour
+ *  matches. */
+const readWeatherReport = (
+  weatherData: Row,
+  scheduledSessions: UiVenueDossierScheduledSession[],
+  readinessNote: string | null
+): EventWeather => {
+  const observation = (weatherData.observation ?? {}) as Row;
+  const temperatureC = asNumber(observation.temperatureC);
+  const windSpeedKph = asNumber(observation.windSpeedKph);
+  const current: CurrentConditions = {
+    tempF: temperatureC !== null ? Math.round((temperatureC * 9) / 5 + 32) : null,
+    humidityPct: asNumber(observation.relativeHumidityPct),
+    windMph: windSpeedKph !== null ? Math.round(windSpeedKph / 1.609344) : null,
+    windDirectionDeg: asNumber(observation.windDirectionDeg),
+    windCardinal: windCardinal(observation.windDirectionDeg),
+    sky: asString(observation.textDescription)
+  };
+  const hourly = Array.isArray(weatherData.forecastHourly) ? (weatherData.forecastHourly as Row[]) : [];
+  const raceHour: RaceHourSlot[] = [];
+  for (const session of scheduledSessions) {
+    const start = asString(session.scheduledStart);
+    if (!start) continue;
+    const targetHour = start.slice(0, 13); // YYYY-MM-DDTHH
+    const period = hourly.find((row) => (asString(row.startTime) ?? '').slice(0, 13) === targetHour);
+    if (!period) continue;
+    const windText = asString(period.windSpeed);
+    const windDir = asString(period.windDirection);
+    const tempUnit = asString(period.temperatureUnit) ?? 'F';
+    const singleMph = windText?.match(/^(\d+)\s*mph$/i);
+    raceHour.push({
+      sessionId: session.sessionId,
+      sessionLabel: sessionLabelFor(session),
+      when: formatDate(start, { weekday: 'short', hour: 'numeric' }),
+      tempText: `${formatNumber(period.temperature, 0)}°${tempUnit}`,
+      tempF: tempUnit === 'F' ? asNumber(period.temperature) : null,
+      humidityPct: asNumber(period.relativeHumidityPct),
+      windMph: singleMph ? Number(singleMph[1]) : null,
+      windDirCardinal: windDir,
+      sky: asString(period.shortForecast),
+      /* House wind convention: speed first, uppercase cardinal ("5 mph WNW"). */
+      windText: windText ? `${windText}${windDir ? ` ${windDir}` : ''}` : null
+    });
+  }
+  return { current, raceHour, readinessNote };
+};
+
+/** Current-now + race-hour forecast for the race-week venue. Prefers the
+ *  upcoming-events feed, but falls back to the venue's live weather by trackId —
+ *  the imminent race rolls off the "upcoming" set exactly when the family most
+ *  wants its forecast, so the race-week venue must never go dark. */
+const useEventWeather = (
+  eventId: string | null,
+  trackId: string | null,
+  scheduledSessions: UiVenueDossierScheduledSession[]
+): EventWeather | null => {
   const [weather, setWeather] = useState<EventWeather | null>(null);
+  const sessionKey = scheduledSessions.map((session) => `${session.sessionId}@${session.scheduledStart}`).join('|');
   useEffect(() => {
-    if (!eventId) return;
+    if (!eventId && !trackId) return;
     let cancelled = false;
     const load = async () => {
       try {
         const response = await fetch('/api/weather/upcoming', { headers: { accept: 'application/json' } });
-        if (!response.ok) return;
-        const payload = (await response.json()) as Row;
-        const events = Array.isArray(payload.events) ? (payload.events as Row[]) : [];
-        const match = events.find((entry) => asString((entry.event as Row)?.id) === eventId);
-        if (!match || cancelled) return;
-        const weatherData = (match.weather ?? {}) as Row;
-        const observation = (weatherData.observation ?? {}) as Row;
-        const temperatureC = asNumber(observation.temperatureC);
-        const readiness = (match.forecastReadiness ?? {}) as Row;
-        const eventRow = (match.event ?? {}) as Row;
-        const eventDates = new Set(
-          [asString(eventRow.eventStartDate), asString(eventRow.eventEndDate)].filter((value): value is string => value !== null)
-        );
-        const forecast = Array.isArray(weatherData.forecast) ? (weatherData.forecast as Row[]) : [];
-        const periods = forecast
-          .filter((period) => {
-            // Match by the period's actual date (NWS startTime carries the local
-            // offset) — weekday names would hit the wrong week for events 6+ days out.
-            const startTime = asString(period.startTime);
-            const isDaytime = period.isDaytime !== false;
-            return isDaytime && startTime !== null && eventDates.has(startTime.slice(0, 10));
-          })
-          .slice(0, 3)
-          .map((period) => ({
-            name: asString(period.name) ?? '',
-            temperature: `${formatNumber(period.temperature, 0)}°${asString(period.temperatureUnit) ?? 'F'}`,
-            forecast: asString(period.shortForecast) ?? '',
-            wind: asString(period.windSpeed)
-          }));
-        setWeather({
-          observationText: asString(observation.textDescription),
-          temperatureF: temperatureC !== null ? Math.round((temperatureC * 9) / 5 + 32) : null,
-          periods,
-          readinessNote: asString(readiness.note)
-        });
+        if (response.ok) {
+          const payload = (await response.json()) as Row;
+          const events = Array.isArray(payload.events) ? (payload.events as Row[]) : [];
+          const match = events.find((entry) => asString((entry.event as Row)?.id) === eventId);
+          if (match) {
+            if (cancelled) return;
+            setWeather(
+              readWeatherReport(
+                (match.weather ?? {}) as Row,
+                scheduledSessions,
+                asString((match.forecastReadiness as Row)?.note)
+              )
+            );
+            return;
+          }
+        }
+        /* Fallback: the venue isn't in the upcoming set (it's the current race).
+         * Pull its live weather straight by trackId. */
+        if (!trackId) return;
+        const live = await fetch(`/api/weather/live?trackId=${encodeURIComponent(trackId)}`, { headers: { accept: 'application/json' } });
+        if (!live.ok || cancelled) return;
+        const liveData = (await live.json()) as Row;
+        setWeather(readWeatherReport(liveData, scheduledSessions, null));
       } catch {
         /* weather optional */
       }
@@ -685,14 +767,16 @@ const useEventWeather = (eventId: string | null): EventWeather | null => {
     return () => {
       cancelled = true;
     };
-  }, [eventId]);
+  }, [eventId, trackId, sessionKey]);
   return weather;
 };
 
 const WeatherWindow = ({ weather, raceDate }: { weather: EventWeather | null; raceDate: string }) => {
   if (!weather) return null;
+  const { current, raceHour } = weather;
   return (
     <Card
+      className="card--flex"
       title={
         <>
           <CloudSun size={15} aria-hidden />
@@ -709,36 +793,274 @@ const WeatherWindow = ({ weather, raceDate }: { weather: EventWeather | null; ra
               note: 'Ambient near-track weather. Not official INDY NXT weather and not track temperature.'
             }
           ]}
+          caveats={['NWS is the nearest station and grid forecast, not a sensor at the track surface.']}
         />
       }
     >
-      {weather.periods.length > 0 ? (
-        <div className="grid grid--3">
-          {weather.periods.map((period) => (
-            <div key={period.name} className="stat">
-              <span className="caption">{period.name}</span>
-              <span className="stat__value" style={{ fontSize: 22 }}>
-                {period.temperature}
-              </span>
-              <span style={{ fontSize: 12, color: 'var(--ink-secondary)' }}>{period.forecast}</span>
-              {period.wind ? <span style={{ fontSize: 11.5, color: 'var(--ink-muted)' }}>wind {period.wind}</span> : null}
-            </div>
-          ))}
-        </div>
+      {current && current.tempF !== null ? (
+        <>
+          <span className="caption">At the track right now</span>
+          <div className="row row--wrap" style={{ gap: 22, marginTop: 8 }}>
+            <Stat label="Air" value={<span className="tnum">{current.tempF}°F</span>} />
+            {current.humidityPct !== null ? (
+              <Stat label="Humidity" value={<span className="tnum">{Math.round(current.humidityPct)}%</span>} />
+            ) : null}
+            {current.windMph !== null ? (
+              <Stat
+                label="Wind"
+                value={<span className="tnum">{current.windMph} mph</span>}
+                note={current.windCardinal ? `from the ${current.windCardinal}` : 'near-track'}
+              />
+            ) : null}
+            {current.sky ? <Stat label="Sky" value={<span style={{ fontSize: 17 }}>{current.sky.toLowerCase()}</span>} /> : null}
+          </div>
+        </>
       ) : (
-        <Unavailable>
-          Race-day forecast appears here once the NWS window reaches {formatDate(raceDate, { month: 'long', day: 'numeric' })} —
-          usually about a week out.
-        </Unavailable>
+        <Unavailable>Current near-track conditions appear here once the weather service reaches the venue.</Unavailable>
       )}
-      {weather.temperatureF !== null ? (
-        <p style={{ margin: '12px 0 0', fontSize: 12, color: 'var(--ink-secondary)' }}>
-          At the track right now: {weather.temperatureF}°F
-          {weather.observationText ? `, ${weather.observationText.toLowerCase()}` : ''}.
-        </p>
-      ) : null}
-      <p style={{ margin: '8px 0 0', fontSize: 11.5, color: 'var(--ink-muted)' }}>
+
+      <div style={{ borderTop: '1px solid var(--divider)', margin: '16px 0 0', paddingTop: 14 }}>
+        <span className="caption">His race hour</span>
+        {raceHour.length > 0 ? (
+          <div className="stack" style={{ gap: 4, marginTop: 8 }}>
+            {raceHour.map((slot) => (
+              <div key={slot.sessionId} className="row row--between" style={{ padding: '6px 0', borderBottom: '1px solid var(--grid-hairline)' }}>
+                <div>
+                  <div style={{ fontSize: 13.5, fontWeight: 560 }}>{slot.sessionLabel}</div>
+                  <div style={{ fontSize: 11.5, color: 'var(--ink-muted)' }}>
+                    {slot.when}
+                    {slot.sky ? ` · ${slot.sky.toLowerCase()}` : ''}
+                  </div>
+                </div>
+                <div className="row" style={{ gap: 12 }}>
+                  <span className="tnum" style={{ fontSize: 16, fontWeight: 560 }}>{slot.tempText}</span>
+                  {slot.windText ? <span style={{ fontSize: 12, color: 'var(--ink-secondary)' }}>{slot.windText}</span> : null}
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p style={{ margin: '8px 0 0', fontSize: 12.5, color: 'var(--ink-secondary)' }}>
+            The hourly forecast reaches his sessions closer to {formatDate(raceDate, { month: 'long', day: 'numeric' })} — it fills in within a
+            day or two of green.
+          </p>
+        )}
+      </div>
+
+      <p className="card__footnote" style={{ marginTop: 'auto', paddingTop: 12, fontSize: 11.5, color: 'var(--ink-muted)' }}>
         Near-track weather · NWS · not official series weather.
+      </p>
+    </Card>
+  );
+};
+
+/* ---------- this place, other years (the venue dossier) ---------- */
+
+/** One condition row: label left; value + optional delta right. Weather
+ *  deltas ride the row itself (Jack's review) in neutral ink — the FactDelta
+ *  grammar, never the verdict colors. */
+const ConditionLine = ({ label, value, delta }: { label: string; value: ReactNode; delta?: ReactNode }) => (
+  <div className="row row--between" style={{ fontSize: 12.5, padding: '3px 0' }}>
+    <span style={{ color: 'var(--ink-muted)' }}>{label}</span>
+    <span className="row" style={{ gap: 6, alignItems: 'center', minWidth: 0 }}>
+      <span style={{ color: 'var(--ink-secondary)', fontVariantNumeric: 'tabular-nums' }}>{value}</span>
+      {delta ?? null}
+    </span>
+  </div>
+);
+
+interface DossierForecast {
+  tempText: string;
+  tempF: number | null;
+  humidityPct: number | null;
+  windMph: number | null;
+  windDirCardinal: string | null;
+  sky: string | null;
+  windText: string | null;
+}
+
+/** Wind-row delta: speed change + a from→to swing visual when the direction
+ *  moved at least one compass point. */
+const WindRowDelta = ({
+  speedDelta,
+  fromDeg,
+  toDeg
+}: {
+  speedDelta: number | null;
+  fromDeg: number | null;
+  toDeg: number | null;
+}) => (
+  <span className="row" style={{ gap: 5, alignItems: 'center', flex: 'none' }}>
+    <FactDelta delta={speedDelta} unit=" mph" />
+    {fromDeg !== null && toDeg !== null ? <WindSwing fromDeg={fromDeg} toDeg={toDeg} /> : null}
+  </span>
+);
+
+const VisitColumn = ({
+  visit,
+  prior,
+  debriefIds
+}: {
+  visit: UiVenueDossierVisit;
+  prior: UiVenueDossierVisit | null;
+  debriefIds: Set<string>;
+}) => {
+  const c = visit.conditions;
+  const d = visit.deltaVsPrior;
+  const finishDelta = d ? formatGain(d.finishDelta) : null;
+  const clickable = debriefIds.has(visit.sessionId);
+  const fromDeg = prior?.conditions?.windDirectionDeg ?? null;
+  const toDeg = c?.windDirectionDeg ?? null;
+  const inner = (
+    <>
+      <div className="row row--between" style={{ alignItems: 'baseline' }}>
+        <span className="caption" style={{ fontSize: 12.5 }}>{visit.raceLabel}</span>
+        {visit.result.fieldSize !== null ? (
+          <span style={{ fontSize: 11, color: 'var(--ink-muted)' }}>{visit.result.fieldSize}-car field</span>
+        ) : null}
+      </div>
+      <div className="row" style={{ gap: 8, alignItems: 'baseline', marginTop: 4 }}>
+        <span className="tnum" style={{ fontSize: 21, fontWeight: 620 }}>
+          P{visit.result.startPosition ?? '—'} → P{visit.result.finishPosition ?? '—'}
+        </span>
+        {finishDelta && d ? (
+          <span className={`stat__delta ${finishDelta.direction === 'up' ? 'stat__delta--up' : finishDelta.direction === 'down' ? 'stat__delta--down' : 'stat__delta--flat'}`}>
+            {finishDelta.text}
+          </span>
+        ) : null}
+      </div>
+      <div style={{ marginTop: 8, borderTop: '1px solid var(--grid-hairline)', paddingTop: 6 }}>
+        {c ? (
+          <>
+            <ConditionLine
+              label="Air"
+              value={c.ambientTempF !== null ? `${c.ambientTempF}°F` : '—'}
+              delta={<FactDelta delta={d?.tempDeltaF} unit="°" />}
+            />
+            <ConditionLine
+              label="Humidity"
+              value={c.humidityPct !== null ? `${Math.round(c.humidityPct)}%` : '—'}
+              delta={<FactDelta delta={d?.humidityDeltaPct} />}
+            />
+            <ConditionLine
+              label="Wind"
+              value={c.windSpeedMph !== null ? `${c.windSpeedMph} mph${c.windCardinal ? ` ${c.windCardinal}` : ''}` : '—'}
+              delta={d ? <WindRowDelta speedDelta={d.windSpeedDeltaMph} fromDeg={fromDeg} toDeg={toDeg} /> : undefined}
+            />
+            <ConditionLine label="Sky" value={c.sky ?? '—'} />
+          </>
+        ) : (
+          <div style={{ fontSize: 12, color: 'var(--ink-muted)' }}>No near-track weather on file for this visit.</div>
+        )}
+      </div>
+    </>
+  );
+  return clickable ? (
+    <Link to={visit.raceHref} className="dossier-col dossier-col--link">
+      {inner}
+    </Link>
+  ) : (
+    <div className="dossier-col">{inner}</div>
+  );
+};
+
+/** This weekend's forecast, carrying the same per-row delta grammar vs the
+ *  most recent visit — all three columns speak one language. */
+const ForecastColumn = ({
+  forecast,
+  lastVisit,
+  eventLabel
+}: {
+  forecast: DossierForecast | null;
+  lastVisit: UiVenueDossierVisit | null;
+  eventLabel: string;
+}) => {
+  const prior = lastVisit?.conditions ?? null;
+  const tempDelta = forecast?.tempF != null && prior?.ambientTempF != null ? forecast.tempF - prior.ambientTempF : null;
+  const humidityDelta =
+    forecast?.humidityPct != null && prior?.humidityPct != null ? Math.round(forecast.humidityPct - prior.humidityPct) : null;
+  const windDelta = forecast?.windMph != null && prior?.windSpeedMph != null ? forecast.windMph - prior.windSpeedMph : null;
+  const fromDeg = prior?.windDirectionDeg ?? null;
+  const toDeg = cardinalToDeg(forecast?.windDirCardinal ?? null);
+  return (
+    <div className="dossier-col dossier-col--forecast">
+      <span className="caption" style={{ fontSize: 12.5 }}>{eventLabel}</span>
+      {forecast ? (
+        <>
+          <div className="row" style={{ gap: 8, alignItems: 'baseline', marginTop: 4 }}>
+            <span className="tnum" style={{ fontSize: 21, fontWeight: 620 }}>{forecast.tempText}</span>
+            <FactDelta delta={tempDelta} unit="°" />
+          </div>
+          <div style={{ marginTop: 8, borderTop: '1px solid var(--grid-hairline)', paddingTop: 6 }}>
+            {forecast.humidityPct !== null ? (
+              <ConditionLine
+                label="Humidity"
+                value={`${Math.round(forecast.humidityPct)}%`}
+                delta={<FactDelta delta={humidityDelta} />}
+              />
+            ) : null}
+            <ConditionLine
+              label="Wind"
+              value={forecast.windText ?? '—'}
+              delta={<WindRowDelta speedDelta={windDelta} fromDeg={fromDeg} toDeg={toDeg} />}
+            />
+            {/* NWS ships Title Case; the dossier speaks sentence case like the
+                historic cards ("mainly clear", "overcast"). */}
+            <ConditionLine label="Sky" value={forecast.sky ? forecast.sky.toLowerCase() : '—'} />
+          </div>
+          <p style={{ margin: '8px 0 0', fontSize: 11.5, color: 'var(--ink-muted)' }}>NWS forecast · near-track</p>
+        </>
+      ) : (
+        <p style={{ margin: '8px 0 0', fontSize: 12, color: 'var(--ink-secondary)' }}>
+          The forecast fills in within a day or two of green.
+        </p>
+      )}
+    </div>
+  );
+};
+
+const VenueDossierModule = ({
+  venue,
+  forecast,
+  debriefIds
+}: {
+  venue: UiVenueDossierVenue;
+  forecast: DossierForecast | null;
+  debriefIds: Set<string>;
+}) => {
+  if (venue.visits.length === 0) return null;
+  return (
+    <Card
+      title="This place, other years"
+      action={
+        <SourcePill
+          title="This place, other years"
+          entries={[
+            { label: 'Official INDY NXT results by venue and year', path: 'data/career/career.dataset.json', note: 'Grid, finish, gain, field size, and official status for every past visit.' },
+            { label: 'Near-track weather (modeled)', path: 'data/career/career.dataset.json', note: 'Open-Meteo hourly archive joined to the race hour. Not official series weather or track temperature.' },
+            { label: 'This weekend’s forecast', path: '/api/weather/upcoming', note: 'NWS near-track forecast for the scheduled race hour. Not official.' }
+          ]}
+          caveats={getVenueDossier().caveats}
+        />
+      }
+    >
+      <p style={{ margin: '0 0 12px', fontSize: 13, color: 'var(--ink-secondary)' }}>
+        What the day gave him here before — the result and the weather, year by year, next to this weekend’s forecast.
+      </p>
+      <div className="dossier-grid">
+        {venue.visits.map((visit, index) => (
+          <VisitColumn
+            key={visit.sessionId}
+            visit={visit}
+            prior={index > 0 ? venue.visits[index - 1] : null}
+            debriefIds={debriefIds}
+          />
+        ))}
+        <ForecastColumn forecast={forecast} lastVisit={venue.visits[venue.visits.length - 1] ?? null} eventLabel="This weekend" />
+      </div>
+      <p style={{ margin: '12px 0 0', fontSize: 11.5, color: 'var(--ink-muted)' }}>
+        ▲▽ compare each column with the visit before it. A weather delta is a fact about the day, not a verdict on the drive.
+        Conditions are modeled near-track, never official series weather.
       </p>
     </Card>
   );
@@ -861,7 +1183,12 @@ export const RaceWeekScreen = () => {
   const upcoming = getUpcomingEvents();
   const weekend = useMemo(() => groupWeekend(upcoming), [upcoming]);
   const nextSession = useNextSession();
-  const weather = useEventWeather(weekend?.primary.eventId ?? null);
+  const dossierVenue = weekend ? getVenueByTrackName(weekend.primary.trackName) : null;
+  const weather = useEventWeather(
+    weekend?.primary.eventId ?? null,
+    dossierVenue?.venueId ?? null,
+    dossierVenue?.upcoming?.scheduledSessions ?? []
+  );
   const nextEventPrep = getNextEventPrep();
   const standings = getStandingsSnapshot();
   const debriefIds = useDebriefIds();
@@ -896,6 +1223,36 @@ export const RaceWeekScreen = () => {
   const sectionNote =
     primary.trackName === 'Nashville Superspeedway'
       ? { corner: '3', note: 'his strongest section in 2 of 3 past Nashville practice sessions' }
+      : null;
+
+  /* Forecast column for the dossier: this weekend's race-hour slot, if the NWS
+   * window has reached it yet (otherwise the column shows an honest wait). */
+  const raceSessionId = dossierVenue?.upcoming?.scheduledSessions.find((session) => session.sessionType === 'race')?.sessionId ?? null;
+  const raceSlot = weather?.raceHour.find((slot) => slot.sessionId === raceSessionId) ?? null;
+  const dossierForecast = raceSlot
+    ? {
+        tempText: raceSlot.tempText,
+        tempF: raceSlot.tempF,
+        humidityPct: raceSlot.humidityPct,
+        windMph: raceSlot.windMph,
+        windDirCardinal: raceSlot.windDirCardinal,
+        sky: raceSlot.sky,
+        windText: raceSlot.windText
+      }
+    : null;
+
+  /* Current near-track wind, drawn on the hero shape (real-geo outlines only;
+   * TrackArt omits it where the outline has no geographic orientation). */
+  const heroWind =
+    weather?.current && weather.current.windDirectionDeg !== null
+      ? {
+          bearingDeg: weather.current.windDirectionDeg,
+          /* House wind convention: speed first, uppercase cardinal. */
+          label:
+            weather.current.windMph !== null
+              ? `${weather.current.windMph} mph ${weather.current.windCardinal ?? ''}`.trim()
+              : `from the ${weather.current.windCardinal ?? '—'}`
+        }
       : null;
 
   return (
@@ -952,7 +1309,7 @@ export const RaceWeekScreen = () => {
             )}
           </div>
           <div className="hero-race__art">
-            {outline ? <TrackArt outline={outline} annotation={sectionNote} maxHeight={190} /> : null}
+            {outline ? <TrackArt outline={outline} annotation={sectionNote} maxHeight={190} wind={heroWind} /> : null}
           </div>
           <div className="row" style={{ justifyContent: 'flex-end' }}>
             {hereBefore.length > 0 ? (
@@ -989,6 +1346,10 @@ export const RaceWeekScreen = () => {
           The live companion arms automatically for every session this weekend.
         </div>
       </HeroPanel>
+
+      {dossierVenue && dossierVenue.visits.length > 0 ? (
+        <VenueDossierModule venue={dossierVenue} forecast={dossierForecast} debriefIds={debriefIds} />
+      ) : null}
 
       {eventPrep ? <OvalStory prep={eventPrep} trackTypeName={trackTypeName} debriefIds={debriefIds} /> : null}
 

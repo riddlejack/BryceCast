@@ -11,6 +11,7 @@
     "angleDeg": 21
   },
   "drivingDirection": "counterclockwise",
+  "northOffsetDeg": 257.91,
   "cornerArcs": [
     {
       "label": "1·2",
