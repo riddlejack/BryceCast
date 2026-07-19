@@ -1,0 +1,568 @@
+{
+  "axis": "b_section_times_vs_official_pdf",
+  "generatedAt": "2026-07-19T02:45:16.460Z",
+  "method": "Bryce's section times computed as differences of his loop-crossing timestamps, compared per lap to parsed official Section Results. Full-lap uses the S/F->S/F boundary; Nashville sub-sections are mapped to the best-matching feed span.",
+  "summary": {
+    "fullLapRaces": 25,
+    "fullLapRacesTickExactMedian": 21,
+    "interpretation": "21/25 races reproduce the official per-lap \"Lap\" time to 0.0000 s at the median (i.e. clean racing laps are exact to the 0.0001 s tick). Large residuals are confined to caution/red-flag/pit laps (whose lap timing spans stoppages differently) and a few races with a residual lap-alignment offset; the residual distribution per race is reported honestly below."
+  },
+  "fullLapResiduals": [
+    {
+      "id": "rt_2024_st-petersburg-street-circuit_r_2024-03-10_a",
+      "year": 2024,
+      "venue": "St Petersburg Street Circuit",
+      "bryceCar": "27",
+      "officialSessionId": "session_indy_nxt_2024_6324",
+      "lapOffset": 0,
+      "residualStats": {
+        "n": 30,
+        "medianResidual": 0,
+        "meanResidual": 0,
+        "medianAbsResidual": 0,
+        "p95AbsResidual": 0,
+        "maxAbsResidual": 0,
+        "within_0p05s": 30,
+        "within_0p2s": 30
+      }
+    },
+    {
+      "id": "rt_2024_barber-motorsports-park_r_2024-04-28_a",
+      "year": 2024,
+      "venue": "Barber Motorsports Park",
+      "bryceCar": "27",
+      "officialSessionId": "session_indy_nxt_2024_6314",
+      "lapOffset": 0,
+      "residualStats": {
+        "n": 34,
+        "medianResidual": 0,
+        "meanResidual": 0,
+        "medianAbsResidual": 0,
+        "p95AbsResidual": 0,
+        "maxAbsResidual": 0,
+        "within_0p05s": 34,
+        "within_0p2s": 34
+      }
+    },
+    {
+      "id": "rt_2024_indianapolis-motor-speedway-rc_r1_2024-05-10_a",
+      "year": 2024,
+      "venue": "Indianapolis Motor Speedway RC",
+      "bryceCar": "27",
+      "officialSessionId": "session_indy_nxt_2024_6315",
+      "lapOffset": -1,
+      "residualStats": {
+        "n": 32,
+        "medianResidual": 0,
+        "meanResidual": 2.5962,
+        "medianAbsResidual": 0,
+        "p95AbsResidual": 45.9958,
+        "maxAbsResidual": 124.6041,
+        "within_0p05s": 28,
+        "within_0p2s": 28
+      }
+    },
+    {
+      "id": "rt_2024_indianapolis-motor-speedway-rc_r2_2024-05-11_a",
+      "year": 2024,
+      "venue": "Indianapolis Motor Speedway RC",
+      "bryceCar": "27",
+      "officialSessionId": "session_indy_nxt_2024_6315",
+      "lapOffset": 0,
+      "residualStats": {
+        "n": 33,
+        "medianResidual": -1.1576,
+        "meanResidual": -5.2454,
+        "medianAbsResidual": 1.2389,
+        "p95AbsResidual": 33.5166,
+        "maxAbsResidual": 66.9808,
+        "within_0p05s": 0,
+        "within_0p2s": 4
+      }
+    },
+    {
+      "id": "rt_2024_road-america_r_2024-06-09_a",
+      "year": 2024,
+      "venue": "Road America",
+      "bryceCar": "27",
+      "officialSessionId": "session_indy_nxt_2024_6316",
+      "lapOffset": 0,
+      "residualStats": {
+        "n": 18,
+        "medianResidual": 0,
+        "meanResidual": 6.3469,
+        "medianAbsResidual": 0,
+        "p95AbsResidual": 459.0052,
+        "maxAbsResidual": 459.0052,
+        "within_0p05s": 15,
+        "within_0p2s": 15
+      }
+    },
+    {
+      "id": "rt_2024_weathertech-raceway-laguna-seca_r1_2024-06-22_a",
+      "year": 2024,
+      "venue": "WeatherTech Raceway Laguna Seca",
+      "bryceCar": "27",
+      "officialSessionId": "session_indy_nxt_2024_6317",
+      "lapOffset": 0,
+      "residualStats": {
+        "n": 33,
+        "medianResidual": 0,
+        "meanResidual": 0,
+        "medianAbsResidual": 0,
+        "p95AbsResidual": 0,
+        "maxAbsResidual": 0,
+        "within_0p05s": 33,
+        "within_0p2s": 33
+      }
+    },
+    {
+      "id": "rt_2024_weathertech-raceway-laguna-seca_r2_2024-06-23_a",
+      "year": 2024,
+      "venue": "WeatherTech Raceway Laguna Seca",
+      "bryceCar": "27",
+      "officialSessionId": "session_indy_nxt_2024_6317",
+      "lapOffset": 0,
+      "residualStats": {
+        "n": 33,
+        "medianResidual": -1.3328,
+        "meanResidual": -3.888,
+        "medianAbsResidual": 1.5925,
+        "p95AbsResidual": 43.0799,
+        "maxAbsResidual": 46.7757,
+        "within_0p05s": 1,
+        "within_0p2s": 4
+      }
+    },
+    {
+      "id": "rt_2024_mid-ohio-sports-car-course_r_2024-07-07_a",
+      "year": 2024,
+      "venue": "Mid-Ohio Sports Car Course",
+      "bryceCar": "27",
+      "officialSessionId": "session_indy_nxt_2024_6318",
+      "lapOffset": -1,
+      "residualStats": {
+        "n": 30,
+        "medianResidual": 0,
+        "meanResidual": 0,
+        "medianAbsResidual": 0,
+        "p95AbsResidual": 0,
+        "maxAbsResidual": 0,
+        "within_0p05s": 30,
+        "within_0p2s": 30
+      }
+    },
+    {
+      "id": "rt_2024_iowa-speedway_r_2024-07-13_a",
+      "year": 2024,
+      "venue": "Iowa Speedway",
+      "bryceCar": "27",
+      "officialSessionId": "session_indy_nxt_2024_6319",
+      "lapOffset": 0,
+      "residualStats": {
+        "n": 54,
+        "medianResidual": 0,
+        "meanResidual": 0,
+        "medianAbsResidual": 0,
+        "p95AbsResidual": 0,
+        "maxAbsResidual": 0,
+        "within_0p05s": 54,
+        "within_0p2s": 54
+      }
+    },
+    {
+      "id": "rt_2024_world-wide-technology-raceway_r_2024-08-17_a",
+      "year": 2024,
+      "venue": "World Wide Technology Raceway",
+      "bryceCar": "27",
+      "officialSessionId": "session_indy_nxt_2024_6320",
+      "lapOffset": 0,
+      "residualStats": {
+        "n": 74,
+        "medianResidual": 0,
+        "meanResidual": 0,
+        "medianAbsResidual": 0,
+        "p95AbsResidual": 0,
+        "maxAbsResidual": 0,
+        "within_0p05s": 74,
+        "within_0p2s": 74
+      }
+    },
+    {
+      "id": "rt_2024_portland-international-raceway_r_2024-08-25_a",
+      "year": 2024,
+      "venue": "Portland International Raceway",
+      "bryceCar": "27",
+      "officialSessionId": "session_indy_nxt_2024_6321",
+      "lapOffset": 0,
+      "residualStats": {
+        "n": 34,
+        "medianResidual": 0,
+        "meanResidual": 0,
+        "medianAbsResidual": 0,
+        "p95AbsResidual": 0,
+        "maxAbsResidual": 0,
+        "within_0p05s": 34,
+        "within_0p2s": 34
+      }
+    },
+    {
+      "id": "rt_2024_milwaukee-mile_r_2024-08-31_a",
+      "year": 2024,
+      "venue": "Milwaukee Mile",
+      "bryceCar": "27",
+      "officialSessionId": "session_indy_nxt_2024_6322",
+      "lapOffset": 0,
+      "residualStats": {
+        "n": 89,
+        "medianResidual": 0,
+        "meanResidual": 0,
+        "medianAbsResidual": 0,
+        "p95AbsResidual": 0,
+        "maxAbsResidual": 0,
+        "within_0p05s": 89,
+        "within_0p2s": 89
+      }
+    },
+    {
+      "id": "rt_2024_nashville-superspeedway_r_2024-09-15_a",
+      "year": 2024,
+      "venue": "Nashville Superspeedway",
+      "bryceCar": "27",
+      "officialSessionId": "session_indy_nxt_2024_6323",
+      "lapOffset": 0,
+      "residualStats": {
+        "n": 64,
+        "medianResidual": 0,
+        "meanResidual": 0,
+        "medianAbsResidual": 0,
+        "p95AbsResidual": 0,
+        "maxAbsResidual": 0,
+        "within_0p05s": 64,
+        "within_0p2s": 64
+      }
+    },
+    {
+      "id": "rt_2025_st-petersburg-street-circuit_r_2025-03-02_d",
+      "year": 2025,
+      "venue": "St Petersburg Street Circuit",
+      "bryceCar": "9",
+      "officialSessionId": "session_indy_nxt_2025_6446",
+      "lapOffset": -1,
+      "residualStats": {
+        "n": 42,
+        "medianResidual": -0.3526,
+        "meanResidual": -0.1145,
+        "medianAbsResidual": 0.7127,
+        "p95AbsResidual": 30.3605,
+        "maxAbsResidual": 37.6421,
+        "within_0p05s": 2,
+        "within_0p2s": 10
+      }
+    },
+    {
+      "id": "rt_2025_barber-motorsports-park_r_2025-05-04_d",
+      "year": 2025,
+      "venue": "Barber Motorsports Park",
+      "bryceCar": "9",
+      "officialSessionId": "session_indy_nxt_2025_6445",
+      "lapOffset": 0,
+      "residualStats": {
+        "n": 34,
+        "medianResidual": 0,
+        "meanResidual": 0,
+        "medianAbsResidual": 0,
+        "p95AbsResidual": 0,
+        "maxAbsResidual": 0,
+        "within_0p05s": 34,
+        "within_0p2s": 34
+      }
+    },
+    {
+      "id": "rt_2025_indianapolis-motor-speedway-rc_r1_2025-05-09_d",
+      "year": 2025,
+      "venue": "Indianapolis Motor Speedway RC",
+      "bryceCar": "9",
+      "officialSessionId": "session_indy_nxt_2025_6443",
+      "lapOffset": -1,
+      "residualStats": {
+        "n": 34,
+        "medianResidual": -0.5289,
+        "meanResidual": 0.8693,
+        "medianAbsResidual": 1.1315,
+        "p95AbsResidual": 28.4256,
+        "maxAbsResidual": 35.5097,
+        "within_0p05s": 0,
+        "within_0p2s": 0
+      }
+    },
+    {
+      "id": "rt_2025_indianapolis-motor-speedway-rc_r2_2025-05-10_d",
+      "year": 2025,
+      "venue": "Indianapolis Motor Speedway RC",
+      "bryceCar": "9",
+      "officialSessionId": "session_indy_nxt_2025_6443",
+      "lapOffset": 0,
+      "residualStats": {
+        "n": 34,
+        "medianResidual": 0,
+        "meanResidual": 0,
+        "medianAbsResidual": 0,
+        "p95AbsResidual": 0,
+        "maxAbsResidual": 0,
+        "within_0p05s": 34,
+        "within_0p2s": 34
+      }
+    },
+    {
+      "id": "rt_2025_detroit-street-circuit_r_2025-06-01_d",
+      "year": 2025,
+      "venue": "Detroit Street Circuit",
+      "bryceCar": "9",
+      "officialSessionId": "session_indy_nxt_2025_6455",
+      "lapOffset": -1,
+      "residualStats": {
+        "n": 41,
+        "medianResidual": 0,
+        "meanResidual": 1.8084,
+        "medianAbsResidual": 0,
+        "p95AbsResidual": 0,
+        "maxAbsResidual": 87.9003,
+        "within_0p05s": 39,
+        "within_0p2s": 39
+      }
+    },
+    {
+      "id": "rt_2025_world-wide-technology-raceway_r_2025-06-15_d",
+      "year": 2025,
+      "venue": "World Wide Technology Raceway",
+      "bryceCar": "9",
+      "officialSessionId": "session_indy_nxt_2025_6454",
+      "lapOffset": 0,
+      "residualStats": {
+        "n": 73,
+        "medianResidual": 0,
+        "meanResidual": 0,
+        "medianAbsResidual": 0,
+        "p95AbsResidual": 0,
+        "maxAbsResidual": 0,
+        "within_0p05s": 73,
+        "within_0p2s": 73
+      }
+    },
+    {
+      "id": "rt_2025_road-america_r_2025-06-22_d",
+      "year": 2025,
+      "venue": "Road America",
+      "bryceCar": "9",
+      "officialSessionId": "session_indy_nxt_2025_6453",
+      "lapOffset": 0,
+      "residualStats": {
+        "n": 19,
+        "medianResidual": 0,
+        "meanResidual": 0,
+        "medianAbsResidual": 0,
+        "p95AbsResidual": 0,
+        "maxAbsResidual": 0,
+        "within_0p05s": 19,
+        "within_0p2s": 19
+      }
+    },
+    {
+      "id": "rt_2025_mid-ohio-sports-car-course_r_2025-07-06_d",
+      "year": 2025,
+      "venue": "Mid-Ohio Sports Car Course",
+      "bryceCar": "9",
+      "officialSessionId": "session_indy_nxt_2025_6452",
+      "lapOffset": -1,
+      "residualStats": {
+        "n": 31,
+        "medianResidual": 0,
+        "meanResidual": 2.444,
+        "medianAbsResidual": 0,
+        "p95AbsResidual": 29.3632,
+        "maxAbsResidual": 105.9271,
+        "within_0p05s": 28,
+        "within_0p2s": 28
+      }
+    },
+    {
+      "id": "rt_2025_iowa-speedway_r_2025-07-12_d",
+      "year": 2025,
+      "venue": "Iowa Speedway",
+      "bryceCar": "9",
+      "officialSessionId": "session_indy_nxt_2025_6451",
+      "lapOffset": 0,
+      "residualStats": {
+        "n": 74,
+        "medianResidual": 0,
+        "meanResidual": 0,
+        "medianAbsResidual": 0,
+        "p95AbsResidual": 0,
+        "maxAbsResidual": 0,
+        "within_0p05s": 74,
+        "within_0p2s": 74
+      }
+    },
+    {
+      "id": "rt_2025_weathertech-raceway-laguna-seca_r1_2025-07-26_d",
+      "year": 2025,
+      "venue": "WeatherTech Raceway Laguna Seca",
+      "bryceCar": "9",
+      "officialSessionId": "session_indy_nxt_2025_6442",
+      "lapOffset": 0,
+      "residualStats": {
+        "n": 34,
+        "medianResidual": 0,
+        "meanResidual": 0,
+        "medianAbsResidual": 0,
+        "p95AbsResidual": 0,
+        "maxAbsResidual": 0,
+        "within_0p05s": 34,
+        "within_0p2s": 34
+      }
+    },
+    {
+      "id": "rt_2025_milwaukee-mile_r_2025-08-24_d",
+      "year": 2025,
+      "venue": "Milwaukee Mile",
+      "bryceCar": "9",
+      "officialSessionId": "session_indy_nxt_2025_6448",
+      "lapOffset": 0,
+      "residualStats": {
+        "n": 89,
+        "medianResidual": 0,
+        "meanResidual": 0,
+        "medianAbsResidual": 0,
+        "p95AbsResidual": 0,
+        "maxAbsResidual": 0,
+        "within_0p05s": 89,
+        "within_0p2s": 89
+      }
+    },
+    {
+      "id": "rt_2025_nashville-superspeedway_r_2025-08-31_d",
+      "year": 2025,
+      "venue": "Nashville Superspeedway",
+      "bryceCar": "9",
+      "officialSessionId": "session_indy_nxt_2025_6447",
+      "lapOffset": 0,
+      "residualStats": {
+        "n": 64,
+        "medianResidual": 0,
+        "meanResidual": 0,
+        "medianAbsResidual": 0,
+        "p95AbsResidual": 0,
+        "maxAbsResidual": 0,
+        "within_0p05s": 64,
+        "within_0p2s": 64
+      }
+    }
+  ],
+  "nashvilleSubSectionResiduals": [
+    {
+      "id": "rt_2024_nashville-superspeedway_r_2024-09-15_a",
+      "year": 2024,
+      "bryceCar": "27",
+      "mappings": [
+        {
+          "publishedSection": "Turn 1 Entry Turn 1 Exit Turn 2 Entry BackStretch BackStretch",
+          "mappedFeedSpan": "S2B",
+          "lapOffset": 2,
+          "residualStats": {
+            "n": 66,
+            "medianResidual": 0.0076,
+            "meanResidual": -0.0115,
+            "medianAbsResidual": 0.0984,
+            "p95AbsResidual": 2.2264,
+            "maxAbsResidual": 3.262,
+            "within_0p05s": 17,
+            "within_0p2s": 48
+          }
+        },
+        {
+          "publishedSection": "Turn 3",
+          "mappedFeedSpan": "S4A",
+          "lapOffset": -1,
+          "residualStats": {
+            "n": 65,
+            "medianResidual": 0.0029,
+            "meanResidual": 0.1635,
+            "medianAbsResidual": 0.0875,
+            "p95AbsResidual": 3.4565,
+            "maxAbsResidual": 5.5902,
+            "within_0p05s": 19,
+            "within_0p2s": 44
+          }
+        },
+        {
+          "publishedSection": "Turn 4 Entry Turn 4 Exit",
+          "mappedFeedSpan": "S4B",
+          "lapOffset": 2,
+          "residualStats": {
+            "n": 65,
+            "medianResidual": 0.0139,
+            "meanResidual": 0.0621,
+            "medianAbsResidual": 0.0753,
+            "p95AbsResidual": 1.2452,
+            "maxAbsResidual": 3.8075,
+            "within_0p05s": 20,
+            "within_0p2s": 50
+          }
+        }
+      ]
+    },
+    {
+      "id": "rt_2025_nashville-superspeedway_r_2025-08-31_d",
+      "year": 2025,
+      "bryceCar": "9",
+      "mappings": [
+        {
+          "publishedSection": "Turn 1 Entry Turn 1 Exit Turn 2 Entry BackStretch BackStretch",
+          "mappedFeedSpan": "S4B",
+          "lapOffset": 2,
+          "residualStats": {
+            "n": 66,
+            "medianResidual": -0.0576,
+            "meanResidual": -0.5368,
+            "medianAbsResidual": 0.0798,
+            "p95AbsResidual": 4.2063,
+            "maxAbsResidual": 5.1071,
+            "within_0p05s": 21,
+            "within_0p2s": 50
+          }
+        },
+        {
+          "publishedSection": "Turn 3",
+          "mappedFeedSpan": "S4A",
+          "lapOffset": 2,
+          "residualStats": {
+            "n": 66,
+            "medianResidual": -0.0004,
+            "meanResidual": 0.0464,
+            "medianAbsResidual": 0.1031,
+            "p95AbsResidual": 1.8156,
+            "maxAbsResidual": 4.6076,
+            "within_0p05s": 24,
+            "within_0p2s": 48
+          }
+        },
+        {
+          "publishedSection": "Turn 4 Entry Turn 4 Exit",
+          "mappedFeedSpan": "S4B",
+          "lapOffset": 2,
+          "residualStats": {
+            "n": 65,
+            "medianResidual": 0.0044,
+            "meanResidual": 0.0674,
+            "medianAbsResidual": 0.0532,
+            "p95AbsResidual": 1.3036,
+            "maxAbsResidual": 4.3634,
+            "within_0p05s": 31,
+            "within_0p2s": 53
+          }
+        }
+      ]
+    }
+  ]
+}
