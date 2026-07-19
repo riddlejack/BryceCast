@@ -504,11 +504,12 @@ button { font-family: inherit; }
 }
 
 /* Near-track wind, beside the shape: a quiet flow arrow + cardinal label,
- * turned to true north (real-geo outlines only). Never loud, never a verdict. */
+ * turned to true north (real-geo outlines only). Never loud, never a verdict.
+ * Sits just above the art box so it never crowds a corner label; horizontal
+ * inset is set inline to hug the letterboxed art, not the container. */
 .track-wind {
   position: absolute;
-  top: 2px;
-  left: 2px;
+  top: -8px;
   display: flex;
   align-items: center;
   gap: 5px;
@@ -526,6 +527,14 @@ button { font-family: inherit; }
 }
 @media (prefers-reduced-motion: no-preference) {
   .track-wind svg { transition: transform 220ms cubic-bezier(0.23, 1, 0.32, 1); }
+}
+
+/* True-north reference tick: renders with the wind layer so the arrow is read
+ * against north, not screen-up. Tertiary ink, bottom-right of the art. */
+.track-north {
+  position: absolute;
+  bottom: 0;
+  pointer-events: none;
 }
 
 /* The venue dossier: this place, other years. White tiles on the gray card

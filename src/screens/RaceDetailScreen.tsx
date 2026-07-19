@@ -826,7 +826,11 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
     dossierVisit?.conditions && dossierVisit.conditions.windDirectionDeg !== null
       ? {
           bearingDeg: dossierVisit.conditions.windDirectionDeg,
-          label: `from ${dossierVisit.conditions.windCardinal ?? '—'}${dossierVisit.conditions.windSpeedMph !== null ? ` · ${dossierVisit.conditions.windSpeedMph} mph` : ''}`
+          /* House wind convention: speed first, uppercase cardinal. */
+          label:
+            dossierVisit.conditions.windSpeedMph !== null
+              ? `${dossierVisit.conditions.windSpeedMph} mph ${dossierVisit.conditions.windCardinal ?? ''}`.trim()
+              : `from the ${dossierVisit.conditions.windCardinal ?? '—'}`
         }
       : null;
 

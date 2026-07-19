@@ -699,7 +699,8 @@ const readWeatherReport = (
       when: formatDate(start, { weekday: 'short', hour: 'numeric' }),
       tempText: `${formatNumber(period.temperature, 0)}°${asString(period.temperatureUnit) ?? 'F'}`,
       sky: asString(period.shortForecast),
-      windText: windText ? `${windDir ? `${windDir} ` : ''}${windText}` : null
+      /* House wind convention: speed first, uppercase cardinal ("5 mph WNW"). */
+      windText: windText ? `${windText}${windDir ? ` ${windDir}` : ''}` : null
     });
   }
   return { current, raceHour, readinessNote };
@@ -820,7 +821,7 @@ const WeatherWindow = ({ weather, raceDate }: { weather: EventWeather | null; ra
                 </div>
                 <div className="row" style={{ gap: 12 }}>
                   <span className="tnum" style={{ fontSize: 16, fontWeight: 560 }}>{slot.tempText}</span>
-                  {slot.windText ? <span style={{ fontSize: 12, color: 'var(--ink-secondary)' }}>{slot.windText.toLowerCase()}</span> : null}
+                  {slot.windText ? <span style={{ fontSize: 12, color: 'var(--ink-secondary)' }}>{slot.windText}</span> : null}
                 </div>
               </div>
             ))}
@@ -918,7 +919,9 @@ const ForecastColumn = ({ forecast, eventLabel }: { forecast: DossierForecast | 
           {forecast.tempText}
         </div>
         <div style={{ marginTop: 8, borderTop: '1px solid var(--grid-hairline)', paddingTop: 6 }}>
-          <ConditionLine label="Sky" value={forecast.sky ?? '—'} />
+          {/* NWS ships Title Case; the dossier speaks sentence case like the
+              historic cards ("mainly clear", "overcast"). */}
+          <ConditionLine label="Sky" value={forecast.sky ? forecast.sky.toLowerCase() : '—'} />
           <ConditionLine label="Wind" value={forecast.windText ?? '—'} />
         </div>
         <p style={{ margin: '8px 0 0', fontSize: 11.5, color: 'var(--ink-muted)' }}>NWS forecast · near-track</p>
@@ -1143,7 +1146,11 @@ export const RaceWeekScreen = () => {
     weather?.current && weather.current.windDirectionDeg !== null
       ? {
           bearingDeg: weather.current.windDirectionDeg,
-          label: `from ${weather.current.windCardinal ?? '—'}${weather.current.windMph !== null ? ` · ${weather.current.windMph} mph` : ''}`
+          /* House wind convention: speed first, uppercase cardinal. */
+          label:
+            weather.current.windMph !== null
+              ? `${weather.current.windMph} mph ${weather.current.windCardinal ?? ''}`.trim()
+              : `from the ${weather.current.windCardinal ?? '—'}`
         }
       : null;
 
