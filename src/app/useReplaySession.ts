@@ -22,6 +22,8 @@ export interface ReplaySession {
   started: boolean;
   /** Replay is not possible here (mode disabled, or session not found). */
   unavailable: boolean;
+  /** A live session preempted the replay mid-playback (server live-guard). */
+  endedByLive: boolean;
   session: ReplaySessionInfo | null;
   speed: number;
   speeds: readonly number[];
@@ -38,6 +40,7 @@ const inactive: ReplaySession = {
   starting: false,
   started: false,
   unavailable: false,
+  endedByLive: false,
   session: null,
   speed: DEFAULT_REPLAY_SPEED,
   speeds: REPLAY_SPEEDS,
@@ -114,7 +117,9 @@ export const useReplaySession = (replayKey: string | null, onRestart?: () => voi
           : session?.canonicalSessionId
             ? `/races/${encodeURIComponent(session.canonicalSessionId)}`
             : '/races';
-      if (!available || !session) {
+      // Hold a direct /live?replay=<key> URL to the same watchable bar the
+      // race-page CTA applies; a non-watchable or wrong-series key stays out.
+      if (!available || !session || !session.watchable) {
         setState({ ...inactive, engaged: true, unavailable: true, returnHref });
         return;
       }
@@ -141,6 +146,26 @@ export const useReplaySession = (replayKey: string | null, onRestart?: () => voi
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [replayKey, fromParam, start]);
+
+  // While a replay is running, watch for the server live-guard preempting it:
+  // if the real runner goes live, the overlay auto-stops and reports it, and the
+  // page must drop the replay chrome and tell the family the race is live now.
+  useEffect(() => {
+    if (!state.started || state.endedByLive) return undefined;
+    let cancelled = false;
+    const poll = window.setInterval(async () => {
+      const status = await control('');
+      if (cancelled) return;
+      if (status.data?.stoppedByLive === true) {
+        window.clearInterval(poll);
+        setState((previous) => ({ ...previous, started: false, endedByLive: true }));
+      }
+    }, 5000);
+    return () => {
+      cancelled = true;
+      window.clearInterval(poll);
+    };
+  }, [state.started, state.endedByLive]);
 
   const setSpeed = useCallback(
     (next: number) => {

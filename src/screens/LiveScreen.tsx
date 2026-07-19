@@ -889,6 +889,16 @@ const ReplayBar = ({ replay, payload }: { replay: ReplaySession; payload: LiveRe
   );
 };
 
+/** Honest hand-off when the server live-guard preempts a running replay: the
+ *  real Race Control feed is live now, so we say so plainly and let the live
+ *  page below render reality. */
+const ReplayEndedByLiveNote = () => (
+  <section className="replay-ended-note" role="status">
+    <span className="replay-bar__chip"><History size={13} aria-hidden /> Replay ended</span>
+    <span>A live session is on — this is the real Race Control feed now.</span>
+  </section>
+);
+
 const ReplayCueing = ({ session }: { session: ReplaySessionInfo | null }) => {
   const duration = durationLabel(session);
   return (
@@ -982,7 +992,10 @@ export const LiveScreen = ({
   replay?: ReplaySession | null;
 }) => {
   const samples = useMemo(() => gapSamplesFromHistory(history), [history]);
-  const replayActive = Boolean(replay && !replay.unavailable);
+  // A replay that a live session preempted is no longer "active": the page drops
+  // the replay chrome and cueing and renders the real feed with an honest note.
+  const replayEndedByLive = Boolean(replay?.endedByLive);
+  const replayActive = Boolean(replay && !replay.unavailable && !replayEndedByLive);
   const replaySimulated = payload ? isSimulatedReplayPayload(payload) : false;
   // Until the virtual clock's first archived payload arrives, hold a calm
   // cue-up state instead of flashing whatever the live feed happens to say.
@@ -991,6 +1004,7 @@ export const LiveScreen = ({
   if (!payload || cueing) {
     return (
       <div className="page stack live-page" data-replay-active={replayActive ? 'true' : 'false'}>
+        {replayEndedByLive ? <ReplayEndedByLiveNote /> : null}
         {replayActive && replay ? <ReplayBar replay={replay} payload={payload} /> : null}
         {replayActive && replay ? (
           <ReplayCueing session={replay.session} />
@@ -1025,6 +1039,7 @@ export const LiveScreen = ({
       data-live-history-count={history?.samples.length ?? 0}
       data-live-history-first-checked-at={history?.samples[0]?.checkedAt ?? ''}
     >
+      {replayEndedByLive ? <ReplayEndedByLiveNote /> : null}
       {replayActive && replay ? <ReplayBar replay={replay} payload={payload} /> : null}
       {replayActive && replay ? <ReplayClassificationNote payload={payload} canonicalSessionId={replay.session?.canonicalSessionId ?? null} /> : null}
       <TrustRail payload={payload} fixtureMode={fixtureMode} />

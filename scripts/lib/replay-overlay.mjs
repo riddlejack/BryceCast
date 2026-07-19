@@ -64,12 +64,47 @@ export const createReplayOverlay = ({
   enabled = false,
   sqlitePath,
   runnerStatusPath,
-  now = () => Date.now()
+  now = () => Date.now(),
+  // How long a single runner-status read is trusted before the live-guard
+  // re-reads it. The API already polls runner status on a coarse cadence; this
+  // throttles the per-read guard so live routes never turn into a stat storm.
+  guardTtlMs = Number(process.env.BRYCECAST_REPLAY_GUARD_TTL_MS ?? 1000)
 } = {}) => {
   let playback = null;
   let availableCache = null;
+  // Throttled cache of the last runner-status read used by the live-guard, plus
+  // a record of the moment a live runner preempted playback so the control
+  // route can tell the frontend "replay ended — a live session is on".
+  let runnerStatusGuard = null;
+  let liveGuardTrip = null;
 
   const openDb = () => new DatabaseSync(sqlitePath, { readOnly: true });
+
+  /** Throttled read of the real runner's live state. */
+  const runnerReportsLiveNow = () => {
+    const nowMs = now();
+    if (runnerStatusGuard && nowMs - runnerStatusGuard.checkedAtMs < guardTtlMs) {
+      return runnerStatusGuard.live;
+    }
+    const live = runnerReportsLiveSession(readJson(runnerStatusPath));
+    runnerStatusGuard = { checkedAtMs: nowMs, live };
+    return live;
+  };
+
+  /** A read-only replay must never mask a live race. Once the real runner goes
+   *  live, auto-suspend the overlay so every live route falls through to the
+   *  real Race Control record; record the trip so the control route stays
+   *  honest. Returns true when this call preempted playback. */
+  const enforceRunnerLiveGuard = () => {
+    if (!playback) return false;
+    if (!runnerReportsLiveNow()) return false;
+    liveGuardTrip = {
+      at: new Date(now()).toISOString(),
+      reason: 'Replay ended — a live session is on. Serving the real Race Control feed.'
+    };
+    playback = null;
+    return true;
+  };
 
   const sessions = () => {
     if (!enabled) return [];
@@ -111,6 +146,7 @@ export const createReplayOverlay = ({
           .prepare(
             `SELECT session_key AS sessionKey,
                     COUNT(*) AS samples,
+                    SUM(CASE WHEN bryce_rank IS NOT NULL THEN 1 ELSE 0 END) AS bryceSamples,
                     MIN(checked_at) AS firstCheckedAt,
                     MAX(checked_at) AS lastCheckedAt,
                     MIN(event_id) AS eventId,
@@ -132,6 +168,11 @@ export const createReplayOverlay = ({
     const sessionsList = rows
       .map((row) => {
         const samples = Number(row.samples ?? 0);
+        // Samples that actually carried a Bryce timing row. The runner only
+        // stamps bryce_rank when Bryce is present in the correct INDY NXT feed,
+        // so this doubles as a wrong-series guard: a capture that latched a
+        // different series never accumulates Bryce samples.
+        const bryceSamples = Number(row.bryceSamples ?? 0);
         const eventSessionId = row.eventSessionId ? String(row.eventSessionId) : null;
         const seasonYear = seasonYearFrom(row.firstCheckedAt);
         const firstMs = parseTime(row.firstCheckedAt);
@@ -148,12 +189,18 @@ export const createReplayOverlay = ({
           seasonYear,
           isRace,
           samples,
+          bryceSamples,
           firstCheckedAt: row.firstCheckedAt ?? null,
           lastCheckedAt: row.lastCheckedAt ?? null,
           firstGreenAt: row.firstGreenAt ?? null,
           durationSeconds: firstMs !== null && lastMs !== null ? Math.round((lastMs - firstMs) / 1000) : null,
           totalLaps: Number.isFinite(totalLaps) ? totalLaps : null,
-          watchable: isRace && Boolean(row.firstGreenAt) && samples >= MIN_WATCHABLE_SAMPLES && Boolean(eventSessionId)
+          watchable:
+            isRace &&
+            Boolean(row.firstGreenAt) &&
+            samples >= MIN_WATCHABLE_SAMPLES &&
+            bryceSamples >= MIN_WATCHABLE_SAMPLES &&
+            Boolean(eventSessionId)
         };
       })
       .sort((left, right) => (parseTime(right.firstCheckedAt) ?? 0) - (parseTime(left.firstCheckedAt) ?? 0));
@@ -164,7 +211,18 @@ export const createReplayOverlay = ({
 
   const controlState = () => {
     if (!enabled) return { enabled: false, active: false };
-    if (!playback) return { enabled: true, active: false, sqlitePath, sessions: sessions() };
+    if (!playback) {
+      return {
+        enabled: true,
+        active: false,
+        // Surfaced only when a live runner preempted playback, so the frontend
+        // can render an honest "replay ended — a live session is on" state
+        // rather than a stale, misleading replay chrome.
+        ...(liveGuardTrip ? { stoppedByLive: true, stoppedByLiveAt: liveGuardTrip.at, reason: liveGuardTrip.reason } : {}),
+        sqlitePath,
+        sessions: sessions()
+      };
+    }
     const elapsedRealMs = Math.max(0, now() - playback.startedAtRealMs);
     const virtualNowMs = playback.t0Ms + elapsedRealMs * playback.speed;
     return {
@@ -187,13 +245,34 @@ export const createReplayOverlay = ({
     if (runnerReportsLiveSession(runnerStatus)) {
       throw Object.assign(new Error('Replay refused: the real live runner reports an active session.'), { statusCode: 409 });
     }
+    // The runner is not live right now: prime the throttled guard so the first
+    // read doesn't immediately re-stat, and clear any prior live-trip state.
+    runnerStatusGuard = { checkedAtMs: now(), live: false };
+    liveGuardTrip = null;
 
     const numericSpeed = Number(speed);
     if (!SPEEDS.has(numericSpeed)) {
       throw Object.assign(new Error('Replay speed must be 1, 2, or 4.'), { statusCode: 400 });
     }
-    const selected = sessions().find((candidate) => candidate.sessionKey === session);
+    // Resolve against the captured-race index so a direct /live?replay=<key>
+    // URL is held to the same watchable criteria (race-type, green-flag
+    // completeness, sample floor, Bryce/series presence) the race-page CTA
+    // applies. A non-watchable practice or wrong-series capture is refused.
+    const selected = available().sessions.find((candidate) => candidate.sessionKey === session);
     if (!selected) throw Object.assign(new Error(`Replay session ${session ?? '(missing)'} was not found.`), { statusCode: 404 });
+    if (!selected.watchable) {
+      const reasons = [];
+      if (!selected.isRace) reasons.push('not a race session');
+      if (!selected.eventSessionId) reasons.push('no INDY NXT event session id');
+      if (!selected.firstGreenAt) reasons.push('never went green');
+      if ((selected.bryceSamples ?? 0) < MIN_WATCHABLE_SAMPLES) {
+        reasons.push(`fewer than ${MIN_WATCHABLE_SAMPLES} Bryce timing samples`);
+      }
+      throw Object.assign(
+        new Error(`Replay refused: ${session} is not a watchable Bryce race capture (${reasons.join('; ') || 'fails the watchable index criteria'}).`),
+        { statusCode: 422 }
+      );
+    }
     const firstMs = parseTime(selected.firstCheckedAt);
     const lastMs = parseTime(selected.lastCheckedAt);
     const requestedMs = t0 ? parseTime(t0) : firstMs;
@@ -220,11 +299,15 @@ export const createReplayOverlay = ({
 
   const stop = () => {
     playback = null;
+    liveGuardTrip = null;
     return controlState();
   };
 
   const currentRecord = () => {
     if (!enabled || !playback) return null;
+    // Fresh real-runner records take unconditional precedence: if the runner
+    // has gone live since playback started, yield so live routes serve reality.
+    if (enforceRunnerLiveGuard()) return null;
     const state = controlState();
     const db = openDb();
     try {
