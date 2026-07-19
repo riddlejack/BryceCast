@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type ReactNode } from 'react';
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { CloudSun, ExternalLink, MapPin, Route, Tv } from 'lucide-react';
 import { trackOutlineFor } from '../assets/tracks';
 import { Card, Countdown, HeroPanel, SourcePill, Stat, Unavailable } from '../app/components';
@@ -783,6 +783,8 @@ interface EventWeather {
   current: CurrentConditions | null;
   raceHour: RaceHourSlot[];
   readinessNote: string | null;
+  /** NWS observation timestamp — how old the "at the track right now" read is. */
+  observedAt: string | null;
 }
 
 const sessionLabelFor = (session: UiVenueDossierScheduledSession): string =>
@@ -835,24 +837,51 @@ const readWeatherReport = (
       windText: windText ? `${windText}${windDir ? ` ${windDir}` : ''}` : null
     });
   }
-  return { current, raceHour, readinessNote };
+  return { current, raceHour, readinessNote, observedAt: asString(observation.timestamp) ?? null };
+};
+
+/** Quiet freshness label for the current observation. "right now" is only
+ *  honest with the age of the read shown next to it. */
+const observedAgoLabel = (iso: string | null, now = Date.now()): string | null => {
+  if (!iso) return null;
+  const at = Date.parse(iso);
+  if (!Number.isFinite(at)) return null;
+  const minutes = Math.max(0, Math.round((now - at) / 60000));
+  if (minutes < 1) return 'observed just now';
+  if (minutes < 60) return `observed ${minutes} min ago`;
+  const hours = Math.round(minutes / 60);
+  return `observed ${hours}h ago`;
 };
 
 /** Current-now + race-hour forecast for the race-week venue. Prefers the
  *  upcoming-events feed, but falls back to the venue's live weather by trackId —
  *  the imminent race rolls off the "upcoming" set exactly when the family most
  *  wants its forecast, so the race-week venue must never go dark. */
+/** The server caches near-track weather for 5 minutes; the page polls on that
+ *  cadence so "at the track right now" stays honest, with a short capped retry
+ *  on a failed poll and a persistent-unavailable state after retries run out. */
+const WEATHER_POLL_MS = 5 * 60 * 1000;
+const WEATHER_RETRY_MS = 20 * 1000;
+const WEATHER_MAX_RETRIES = 3;
+
 const useEventWeather = (
   eventId: string | null,
   trackId: string | null,
   scheduledSessions: UiVenueDossierScheduledSession[]
-): EventWeather | null => {
+): { weather: EventWeather | null; unavailable: boolean } => {
   const [weather, setWeather] = useState<EventWeather | null>(null);
+  const [unavailable, setUnavailable] = useState(false);
+  const weatherRef = useRef<EventWeather | null>(null);
   const sessionKey = scheduledSessions.map((session) => `${session.sessionId}@${session.scheduledStart}`).join('|');
   useEffect(() => {
-    if (!eventId && !trackId) return;
+    if (!eventId && !trackId) return undefined;
     let cancelled = false;
-    const load = async () => {
+    let pollTimer: ReturnType<typeof setInterval> | undefined;
+    let retryTimer: ReturnType<typeof setTimeout> | undefined;
+
+    /** One fetch pass. Returns a report, or null when no near-track weather
+     *  could be reached (network error, no matching event, no live fallback). */
+    const fetchOnce = async (): Promise<EventWeather | null> => {
       try {
         const response = await fetch('/api/weather/upcoming', { headers: { accept: 'application/json' } });
         if (response.ok) {
@@ -860,65 +889,104 @@ const useEventWeather = (
           const events = Array.isArray(payload.events) ? (payload.events as Row[]) : [];
           const match = events.find((entry) => asString((entry.event as Row)?.id) === eventId);
           if (match) {
-            if (cancelled) return;
-            setWeather(
-              readWeatherReport(
-                (match.weather ?? {}) as Row,
-                scheduledSessions,
-                asString((match.forecastReadiness as Row)?.note)
-              )
+            return readWeatherReport(
+              (match.weather ?? {}) as Row,
+              scheduledSessions,
+              asString((match.forecastReadiness as Row)?.note)
             );
-            return;
           }
         }
         /* Fallback: the venue isn't in the upcoming set (it's the current race).
          * Pull its live weather straight by trackId. */
-        if (!trackId) return;
+        if (!trackId) return null;
         const live = await fetch(`/api/weather/live?trackId=${encodeURIComponent(trackId)}`, { headers: { accept: 'application/json' } });
-        if (!live.ok || cancelled) return;
+        if (!live.ok) return null;
         const liveData = (await live.json()) as Row;
-        setWeather(readWeatherReport(liveData, scheduledSessions, null));
+        return readWeatherReport(liveData, scheduledSessions, null);
       } catch {
-        /* weather optional */
+        return null;
       }
     };
-    void load();
+
+    const attempt = async (retriesLeft: number) => {
+      const report = await fetchOnce();
+      if (cancelled) return;
+      if (report) {
+        weatherRef.current = report;
+        setWeather(report);
+        setUnavailable(false);
+        return;
+      }
+      if (retriesLeft > 0) {
+        retryTimer = setTimeout(() => void attempt(retriesLeft - 1), WEATHER_RETRY_MS);
+        return;
+      }
+      // Retries exhausted: only surface the unavailable state when we have never
+      // shown weather. If we have a prior read, keep it — its age keeps climbing
+      // honestly rather than blanking the module on a transient outage.
+      if (!weatherRef.current) setUnavailable(true);
+    };
+
+    void attempt(WEATHER_MAX_RETRIES);
+    pollTimer = setInterval(() => void attempt(WEATHER_MAX_RETRIES), WEATHER_POLL_MS);
     return () => {
       cancelled = true;
+      if (pollTimer) clearInterval(pollTimer);
+      if (retryTimer) clearTimeout(retryTimer);
     };
   }, [eventId, trackId, sessionKey]);
-  return weather;
+  return { weather, unavailable };
 };
 
-const WeatherWindow = ({ weather, raceDate }: { weather: EventWeather | null; raceDate: string }) => {
-  if (!weather) return null;
-  const { current, raceHour } = weather;
+const WeatherWindow = ({
+  weather,
+  unavailable,
+  raceDate
+}: {
+  weather: EventWeather | null;
+  unavailable: boolean;
+  raceDate: string;
+}) => {
+  // First load in flight: stay quiet. Only render the module once we have a
+  // reading or the retries have exhausted into an honest unavailable state.
+  if (!weather && !unavailable) return null;
+  const current = weather?.current ?? null;
+  const raceHour = weather?.raceHour ?? [];
+  const observedLabel = observedAgoLabel(weather?.observedAt ?? null);
+  const header = (
+    <>
+      <CloudSun size={15} aria-hidden />
+      Weather window
+    </>
+  );
+  const sourcePill = (
+    <SourcePill
+      title="Weather window"
+      entries={[
+        {
+          label: 'National Weather Service forecast + nearest station observation',
+          path: '/api/weather/upcoming',
+          note: 'Ambient near-track weather. Not official INDY NXT weather and not track temperature.'
+        }
+      ]}
+      caveats={['NWS is the nearest station and grid forecast, not a sensor at the track surface.']}
+    />
+  );
+  if (!weather) {
+    return (
+      <Card className="card--flex" title={header} action={sourcePill}>
+        <Unavailable>Weather is unavailable right now — the near-track feed didn&apos;t answer. It refreshes on the next check.</Unavailable>
+      </Card>
+    );
+  }
   return (
-    <Card
-      className="card--flex"
-      title={
-        <>
-          <CloudSun size={15} aria-hidden />
-          Weather window
-        </>
-      }
-      action={
-        <SourcePill
-          title="Weather window"
-          entries={[
-            {
-              label: 'National Weather Service forecast + nearest station observation',
-              path: '/api/weather/upcoming',
-              note: 'Ambient near-track weather. Not official INDY NXT weather and not track temperature.'
-            }
-          ]}
-          caveats={['NWS is the nearest station and grid forecast, not a sensor at the track surface.']}
-        />
-      }
-    >
+    <Card className="card--flex" title={header} action={sourcePill}>
       {current && current.tempF !== null ? (
         <>
-          <span className="caption">At the track right now</span>
+          <div className="row row--between" style={{ alignItems: 'baseline', gap: 10 }}>
+            <span className="caption">At the track right now</span>
+            {observedLabel ? <span style={{ fontSize: 11, color: 'var(--ink-muted)' }}>{observedLabel}</span> : null}
+          </div>
           <div className="row row--wrap" style={{ gap: 22, marginTop: 8 }}>
             <Stat label="Air" value={<span className="tnum">{current.tempF}°F</span>} />
             {current.humidityPct !== null ? (
@@ -1304,7 +1372,7 @@ export const RaceWeekScreen = () => {
   const weekend = useMemo(() => groupWeekend(upcoming), [upcoming]);
   const nextSession = useNextSession();
   const dossierVenue = weekend ? getVenueByTrackName(weekend.primary.trackName) : null;
-  const weather = useEventWeather(
+  const { weather, unavailable: weatherUnavailable } = useEventWeather(
     weekend?.primary.eventId ?? null,
     dossierVenue?.venueId ?? null,
     dossierVenue?.upcoming?.scheduledSessions ?? []
@@ -1489,7 +1557,7 @@ export const RaceWeekScreen = () => {
 
       <div className="grid grid--2">
         <FollowTheWeekend />
-        <WeatherWindow weather={weather} raceDate={raceDayOf(primary)} />
+        <WeatherWindow weather={weather} unavailable={weatherUnavailable} raceDate={raceDayOf(primary)} />
       </div>
 
       <AnalogRaces event={primary} debriefIds={debriefIds} />
