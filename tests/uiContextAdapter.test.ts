@@ -139,6 +139,36 @@ assert.equal(storyRefs.length, debriefRefs.length, 'every race debrief must have
   );
 }
 
+/* Section-lap packs (Brief H): integrity-loadable, venue-indexed, scoped honestly. */
+const sectionLapRefs = context.dataPackage.screens.raceDebrief.sectionLapRefs;
+assert.ok(Array.isArray(sectionLapRefs) && sectionLapRefs.length > 0, 'sectionLapRefs must exist');
+assert.ok(
+  sectionLapRefs.every((ref) => storyRefs.some((storyRef) => storyRef.sessionId === ref.sessionId)),
+  'every section-lap pack belongs to a race-debrief session'
+);
+{
+  const { loadSectionLaps, sectionLapVisitsFor } = await import('../src/data/sectionLaps');
+  const { sectionObservationsFromLaps, MIN_CLEAN_LAPS } = await import('../src/data/sectionObservations');
+  const nashvilleVisits = sectionLapVisitsFor('Nashville Superspeedway');
+  assert.ok(nashvilleVisits.length >= 2, 'Nashville must carry at least two section-lap visits (2024, 2025)');
+  const nashville = await loadSectionLaps('session_indy_nxt_2024_6323');
+  assert.ok(nashville, 'Nashville 2024 section-lap pack must load with integrity');
+  assert.equal(nashville.sections.length, 3, 'Nashville reports three official section families');
+  const fullRace = sectionObservationsFromLaps(nashville, { kind: 'full_race' }, 'median');
+  for (const observation of fullRace.sections) {
+    assert.ok((observation.observationCount ?? 0) >= MIN_CLEAN_LAPS, 'full-race scopes must clear the clean-lap floor');
+    assert.ok(
+      observation.percentile !== null && observation.percentile >= 0 && observation.percentile <= 1,
+      'full-race percentiles must be well-formed'
+    );
+  }
+  const singleLap = sectionObservationsFromLaps(nashville, { kind: 'single_lap', lap: 1 }, 'median');
+  assert.ok(
+    singleLap.sections.every((observation) => observation.cautionState !== undefined || observation.observationCount === 0),
+    'single-lap observations must carry their caution context'
+  );
+}
+
 assert.ok(context.careerLab.contextPack.resultConversionRows >= 100);
 assert.ok(context.careerLab.contextPack.metricFamilyParity.length > 0);
 assert.ok(context.careerLab.deepContextPacks.careerDimension, 'career dimension deep pack must load');

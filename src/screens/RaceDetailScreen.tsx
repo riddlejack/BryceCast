@@ -6,11 +6,18 @@ import { TrackArt } from '../app/trackArt';
 import { trackOutlineFor, type TrackOutline } from '../assets/tracks';
 import { trackSectionsFor, type TrackSectionAnchorSet } from '../assets/tracks/sections';
 import {
+  MIN_CLEAN_LAPS,
+  lapContextOf,
+  lapScopesFor,
   resolveHeatSections,
+  sectionObservationsFromLaps,
   sectionObservationsFromRaceStory,
-  type ResolvedHeatSection,
+  type SectionScope,
+  type SectionStat,
   type SectionObservationSet
 } from '../data/sectionObservations';
+import { loadSectionLaps, sectionLapVisitsFor, type SectionLapsPack } from '../data/sectionLaps';
+import { ControlRow, Segmented } from './careerExplorer';
 import { asNumber, asString, formatDate, formatGain, formatNumber, formatPosition, ordinal } from '../app/format';
 import { Link } from '../app/router';
 import { displayRaceLabel, loadDebriefBySessionId, roundIndexOf, type ArchiveEntry } from '../data/debriefArchive';
@@ -573,18 +580,129 @@ const HeatKey = () => {
   );
 };
 
+/** One drawer row: official label, summary ordinal, clean-lap count, and the
+ *  distribution strip — every clean lap a quiet dot on the 0–100 scale, the
+ *  summary statistic a gold tick. The percentile's meaning, shown not told. */
+const SectionDistributionRow = ({
+  label,
+  observation,
+  stat
+}: {
+  label: string;
+  observation: { percentile: number | null; observationCount: number | null; lapPercentiles?: Array<{ lap: number; percentile: number }> };
+  stat: SectionStat;
+}) => {
+  const points = observation.lapPercentiles ?? [];
+  const suppressed = observation.percentile === null;
+  return (
+    <div className="row" style={{ gap: 12, alignItems: 'center' }}>
+      <span
+        title={label}
+        style={{ fontSize: 12.5, color: 'var(--ink-secondary)', flex: '0 0 32%', minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
+      >
+        {label}
+      </span>
+      <span style={{ position: 'relative', flex: 1, height: 22 }}>
+        <span style={{ position: 'absolute', left: 0, right: 0, top: 10, height: 2, borderRadius: 1, background: 'var(--surface-2)' }} />
+        {points.map((point) => (
+          <span
+            key={point.lap}
+            style={{
+              position: 'absolute',
+              top: 8,
+              left: `calc(${point.percentile * 100}% - 3px)`,
+              width: 6,
+              height: 6,
+              borderRadius: '50%',
+              background: 'var(--ink-primary)',
+              opacity: 0.18
+            }}
+          />
+        ))}
+        {observation.percentile !== null ? (
+          <span
+            style={{
+              position: 'absolute',
+              top: 3,
+              left: `calc(${observation.percentile * 100}% - 1.5px)`,
+              width: 3,
+              height: 16,
+              borderRadius: 1.5,
+              background: 'var(--bryce)'
+            }}
+          />
+        ) : null}
+      </span>
+      <span className="tnum" style={{ fontSize: 12, color: suppressed ? 'var(--ink-muted)' : 'var(--ink-primary)', width: 92, textAlign: 'right' }}>
+        {suppressed
+          ? `${observation.observationCount ?? 0} clean ${observation.observationCount === 1 ? 'lap' : 'laps'}`
+          : `${ordinal(Math.round(observation.percentile! * 100))} · ${observation.observationCount ?? 0} ${
+              observation.observationCount === 1 ? 'lap' : 'laps'
+            }`}
+      </span>
+    </div>
+  );
+};
+
+const cautionCopy: Record<string, string> = {
+  green: 'green flag',
+  caution: 'under caution',
+  restart: 'restart lap',
+  unknown: 'no flag report'
+};
+
+const scopeKeyOf = (scope: SectionScope): string =>
+  scope.kind === 'full_race' ? 'full' : scope.kind === 'lap_window' ? scope.label : 'lap';
+
 const SectionHeatCard = ({
   outline,
   anchors,
-  set,
-  heatSections
+  laps,
+  fallbackSet
 }: {
   outline: TrackOutline;
   anchors: TrackSectionAnchorSet;
-  set: SectionObservationSet | null;
-  heatSections: ResolvedHeatSection[];
+  laps: SectionLapsPack | null;
+  fallbackSet: SectionObservationSet | null;
 }) => {
+  const [scopeKey, setScopeKey] = useState('full');
+  const [scrubLap, setScrubLap] = useState(1);
+  const [stat, setStat] = useState<SectionStat>('median');
+  const [numbersOpen, setNumbersOpen] = useState(false);
+
+  const scopes = useMemo(() => (laps ? lapScopesFor(laps.totalLaps) : []), [laps]);
+  const lapContext = useMemo(() => (laps ? lapContextOf(laps) : []), [laps]);
+  const scope: SectionScope = useMemo(() => {
+    if (!laps || scopeKey === 'full') return { kind: 'full_race' };
+    if (scopeKey === 'lap') return { kind: 'single_lap', lap: scrubLap };
+    return scopes.find((entry) => entry.kind === 'lap_window' && entry.label === scopeKey) ?? { kind: 'full_race' };
+  }, [laps, scopeKey, scrubLap, scopes]);
+
+  const set = useMemo(() => {
+    if (laps) return sectionObservationsFromLaps(laps, scope, stat);
+    return fallbackSet;
+  }, [laps, scope, stat, fallbackSet]);
+  const heatSections = useMemo(() => (set ? resolveHeatSections(anchors, set) : []), [anchors, set]);
   const hasHeat = heatSections.length > 0;
+  const suppressedCount = set ? set.sections.filter((section) => section.percentile === null).length : 0;
+  const singleLap = scope.kind === 'single_lap';
+  const scrubContext = singleLap ? lapContext.find((entry) => entry.lap === scrubLap) ?? null : null;
+  const drawerRows = useMemo(() => {
+    if (!set) return [];
+    const labelFor = new Map(anchors.sections.map((anchor) => [anchor.sectionName, anchor.label]));
+    return [...set.sections]
+      .map((observation) => ({ observation, label: labelFor.get(observation.sectionName) ?? observation.sectionName }))
+      .sort((left, right) => (right.observation.percentile ?? -1) - (left.observation.percentile ?? -1));
+  }, [set, anchors]);
+
+  const scopeSummary = !set
+    ? null
+    : singleLap
+      ? `Lap ${scrubLap} of ${laps?.totalLaps ?? '—'} · ${scrubContext ? cautionCopy[scrubContext.caution] : 'no flag report'}`
+      : scope.kind === 'lap_window'
+        ? `${scope.label} · laps ${scope.fromLap}–${scope.toLap} · ${set.comparisonRows ?? 0} clean-lap comparisons`
+        : `Full race · ${set.comparisonRows ?? 0} clean-lap comparisons`;
+
   return (
     <Card
       title="The track, section by section"
@@ -593,14 +711,15 @@ const SectionHeatCard = ({
           title="Section signal"
           entries={[
             {
-              label: 'Official Section Results reports',
-              path: 'analysis/indy-nxt-discovery/output/deep_dive/tables/section_results_deep_by_race.csv',
-              note: `Percentile of Bryce's section times vs the field. Section names follow the track's official timing stations; span positions are curated from the outline (${anchors.confidence}).`
+              label: 'Official Section Results, lap by lap',
+              path: 'analysis/indy-nxt-race-lap-section-enhancement/output/race_section_lap_observations.csv',
+              note: `Bryce's per-lap section times and field percentiles from the official timing loops. Section names follow the track's official timing stations; span lengths are measured from official time × speed (${anchors.confidence}).`
             }
           ]}
           caveats={[
             'Section times come from official timing loops — they are time-based, not GPS or car position.',
-            ...(set ? [set.caveat] : [])
+            ...(set ? [set.caveat] : []),
+            anchors.note
           ]}
         />
       }
@@ -608,11 +727,68 @@ const SectionHeatCard = ({
       <p style={{ margin: '0 0 12px', fontSize: 13.5, color: 'var(--ink-secondary)' }}>
         {hasHeat
           ? 'Hover the shape to read Bryce’s pace stretch by stretch — the gold dots mark his two strongest.'
-          : 'The venue shape, with the start/finish line marked.'}
+          : set
+            ? 'Too few clean laps in this scope to compare sections.'
+            : 'The venue shape, with the start/finish line marked.'}
       </p>
+      {laps ? (
+        <div className="stack" style={{ gap: 10, marginBottom: 12 }}>
+          <ControlRow label="Scope">
+            <Segmented
+              wrap
+              options={[
+                { value: 'full', label: 'Full race' },
+                ...scopes
+                  .filter((entry): entry is Extract<SectionScope, { kind: 'lap_window' }> => entry.kind === 'lap_window')
+                  .map((entry) => ({ value: entry.label, label: entry.label })),
+                { value: 'lap', label: 'One lap' }
+              ]}
+              value={scopeKey}
+              onChange={setScopeKey}
+            />
+          </ControlRow>
+          {singleLap ? (
+            <ControlRow label="Lap">
+              <span className="stack" style={{ gap: 4, minWidth: 220, flex: 1, maxWidth: 380 }}>
+                <input
+                  type="range"
+                  min={1}
+                  max={laps.totalLaps}
+                  value={scrubLap}
+                  onChange={(event) => setScrubLap(Number(event.target.value))}
+                  aria-label={`Lap ${scrubLap} of ${laps.totalLaps}`}
+                  style={{ width: '100%' }}
+                />
+                <span style={{ position: 'relative', display: 'block', height: 4 }} aria-hidden>
+                  {lapContext
+                    .filter((entry) => entry.caution !== 'green')
+                    .map((entry) => (
+                      <span
+                        key={entry.lap}
+                        style={{
+                          position: 'absolute',
+                          left: `${((entry.lap - 1) / Math.max(laps.totalLaps - 1, 1)) * 100}%`,
+                          width: 2,
+                          height: 4,
+                          background: 'var(--ink-muted)',
+                          opacity: 0.6
+                        }}
+                      />
+                    ))}
+                </span>
+              </span>
+            </ControlRow>
+          ) : null}
+        </div>
+      ) : null}
       {hasHeat ? (
-        <div style={{ marginBottom: 12 }}>
+        <div className="row row--between" style={{ gap: 10, flexWrap: 'wrap', marginBottom: 12 }}>
           <HeatKey />
+          {scopeSummary ? (
+            <span className="tnum" style={{ fontSize: 11.5, color: 'var(--ink-muted)' }}>
+              {scopeSummary}
+            </span>
+          ) : null}
         </div>
       ) : null}
       <TrackArt
@@ -621,11 +797,147 @@ const SectionHeatCard = ({
         maxHeight={300}
         sections={hasHeat ? { resolved: heatSections, showLabels: true } : null}
       />
+      {suppressedCount > 0 && !singleLap && hasHeat ? (
+        <p style={{ margin: '10px 0 0', fontSize: 11.5, color: 'var(--ink-muted)' }}>
+          {suppressedCount === 1 ? 'One stretch stays uncoloured' : `${suppressedCount} stretches stay uncoloured`} — under{' '}
+          {MIN_CLEAN_LAPS} clean laps in this scope.
+        </p>
+      ) : null}
+      {singleLap && scrubContext && scrubContext.caution !== 'green' ? (
+        <p style={{ margin: '10px 0 0', fontSize: 11.5, color: 'var(--ink-muted)' }}>
+          Lap {scrubLap} ran {cautionCopy[scrubContext.caution]} — one lap is a snapshot, not a trend.
+        </p>
+      ) : null}
+      {laps && set ? (
+        <div style={{ marginTop: 14, borderTop: '1px solid var(--divider)', paddingTop: 12 }}>
+          <button
+            type="button"
+            onClick={() => setNumbersOpen((open) => !open)}
+            aria-expanded={numbersOpen}
+            style={{
+              background: 'none',
+              border: 'none',
+              padding: 0,
+              font: 'inherit',
+              fontSize: 13,
+              color: 'var(--link)',
+              cursor: 'pointer'
+            }}
+          >
+            {numbersOpen ? 'Hide the numbers' : 'The numbers behind the shades'}
+          </button>
+          {numbersOpen ? (
+            <div className="stack" style={{ gap: 12, marginTop: 12 }}>
+              {!singleLap ? (
+                <ControlRow label="Stat">
+                  <Segmented
+                    options={[
+                      { value: 'median', label: 'Median lap' },
+                      { value: 'mean', label: 'Average lap' }
+                    ]}
+                    value={stat}
+                    onChange={setStat}
+                  />
+                </ControlRow>
+              ) : null}
+              {!singleLap ? (
+                <p style={{ margin: 0, fontSize: 11.5, color: 'var(--ink-muted)' }}>
+                  Each dot is one clean lap — its share of the field beaten in that section. The gold tick is his{' '}
+                  {stat === 'median' ? 'median' : 'average'} lap, the number the map's shade carries.
+                </p>
+              ) : (
+                <p style={{ margin: 0, fontSize: 11.5, color: 'var(--ink-muted)' }}>
+                  One lap's field share per section, exactly as timed — {scrubContext ? cautionCopy[scrubContext.caution] : 'no flag report'}.
+                </p>
+              )}
+              <div className="stack" style={{ gap: 10 }}>
+                {drawerRows.map(({ observation, label }) => (
+                  <SectionDistributionRow key={observation.sectionName} label={label} observation={observation} stat={stat} />
+                ))}
+              </div>
+              <p style={{ margin: 0, fontSize: 11.5, color: 'var(--ink-muted)' }}>
+                Clean green-flag laps only — caution and restart laps are excluded from the shades. Loop timing measures
+                time, not car position.
+              </p>
+            </div>
+          ) : null}
+        </div>
+      ) : null}
       <p style={{ margin: 0, paddingTop: 14, fontSize: 11.5, color: 'var(--ink-muted)' }}>
         {hasHeat
-          ? 'Section times from official timing loops — time-based, not GPS. The start/finish straight is not a timing section, so it stays the plain line.'
-          : 'No official section times are on file for this race yet.'}
+          ? 'Section times from official timing loops — time-based, not GPS. Stretches without timing loops stay the plain line.'
+          : set
+            ? `Sections need ${MIN_CLEAN_LAPS} clean laps in a scope to compare honestly.`
+            : 'No official section times are on file for this race yet.'}
       </p>
+    </Card>
+  );
+};
+
+/* ---------- this place, other years (YoY shapes, same scale, same key) ---------- */
+
+const VisitShape = ({
+  outline,
+  anchors,
+  pack
+}: {
+  outline: TrackOutline;
+  anchors: TrackSectionAnchorSet;
+  pack: SectionLapsPack;
+}) => {
+  const set = useMemo(() => sectionObservationsFromLaps(pack, { kind: 'full_race' }, 'median'), [pack]);
+  const resolved = useMemo(() => resolveHeatSections(anchors, set), [anchors, set]);
+  return (
+    <div className="stack" style={{ gap: 6, flex: '1 1 240px', minWidth: 220, maxWidth: 420 }}>
+      <TrackArt outline={outline} showCornerLabels={false} maxHeight={170} sections={resolved.length > 0 ? { resolved } : null} />
+      <div className="row row--between" style={{ alignItems: 'baseline' }}>
+        <span style={{ fontSize: 13, fontWeight: 600 }}>{pack.seasonYear ?? '—'}</span>
+        <span className="tnum" style={{ fontSize: 11.5, color: 'var(--ink-muted)' }}>
+          {set.comparisonRows ?? 0} clean-lap comparisons
+        </span>
+      </div>
+    </div>
+  );
+};
+
+const VenueYearsCard = ({
+  outline,
+  anchors,
+  visits
+}: {
+  outline: TrackOutline;
+  anchors: TrackSectionAnchorSet;
+  visits: SectionLapsPack[];
+}) => {
+  if (visits.length < 2) return null;
+  return (
+    <Card
+      title="This place, other years"
+      action={
+        <SourcePill
+          title="Same venue, every visit"
+          entries={[
+            {
+              label: 'Official Section Results, lap by lap',
+              path: 'analysis/indy-nxt-race-lap-section-enhancement/output/race_section_lap_observations.csv',
+              note: 'Each year aggregates its own race on the same scale: median clean-lap percentile per section.'
+            }
+          ]}
+          caveats={['Different years can carry different field sizes and caution patterns; each shape states its own denominator.']}
+        />
+      }
+    >
+      <p style={{ margin: '0 0 12px', fontSize: 13.5, color: 'var(--ink-secondary)' }}>
+        The same shape, one per visit — same scale, same key as above.
+      </p>
+      <div style={{ marginBottom: 12 }}>
+        <HeatKey />
+      </div>
+      <div className="row" style={{ gap: 22, flexWrap: 'wrap', alignItems: 'flex-start' }}>
+        {visits.map((pack) => (
+          <VisitShape key={pack.sessionId} outline={outline} anchors={anchors} pack={pack} />
+        ))}
+      </div>
     </Card>
   );
 };
@@ -808,16 +1120,30 @@ const verdictFor = (story: RaceStoryPack): string | null => {
 export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
   const [entry, setEntry] = useState<ArchiveEntry | null | 'loading'>('loading');
   const [story, setStory] = useState<RaceStoryPack | null>(null);
+  const [sectionLaps, setSectionLaps] = useState<SectionLapsPack | null>(null);
+  const [visitPacks, setVisitPacks] = useState<SectionLapsPack[]>([]);
 
   useEffect(() => {
     setEntry('loading');
     setStory(null);
+    setSectionLaps(null);
+    setVisitPacks([]);
     loadDebriefBySessionId(sessionId)
       .then((found) => setEntry(found))
       .catch(() => setEntry(null));
     loadRaceStory(sessionId)
       .then((pack) => setStory(pack))
       .catch(() => setStory(null));
+    loadSectionLaps(sessionId)
+      .then(async (pack) => {
+        setSectionLaps(pack);
+        if (!pack) return;
+        const visitRefs = sectionLapVisitsFor(pack.venueName);
+        if (visitRefs.length < 2) return;
+        const loaded = await Promise.all(visitRefs.map((ref) => loadSectionLaps(ref.sessionId).catch(() => null)));
+        setVisitPacks(loaded.filter((visit): visit is SectionLapsPack => visit !== null));
+      })
+      .catch(() => setSectionLaps(null));
   }, [sessionId]);
 
   if (entry === 'loading') {
@@ -863,11 +1189,14 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
       : null;
   const bryceStatus = story?.bryce.status ?? null;
   const outline = trackOutlineFor(asString(pack.track.name));
-  const sectionAnchors = trackSectionsFor(asString(pack.track.name));
-  const sectionSet = story ? sectionObservationsFromRaceStory(story) : null;
-  const heatSections =
-    sectionAnchors && sectionSet ? resolveHeatSections(sectionAnchors, sectionSet) : [];
-  const heroSectionsLayer = heatSections.length > 0 ? { resolved: heatSections, showLabels: false } : null;
+  /* Anchored venues only: approximate curations (e.g. WWTR, held for measured
+   * loop locations from the lake) render no heat layer and keep SectionStory. */
+  const sectionAnchorsAny = trackSectionsFor(asString(pack.track.name));
+  const sectionAnchors = sectionAnchorsAny && sectionAnchorsAny.confidence === 'anchored' ? sectionAnchorsAny : null;
+  const fallbackSet = story ? sectionObservationsFromRaceStory(story) : null;
+  const heroSet = sectionLaps ? sectionObservationsFromLaps(sectionLaps) : fallbackSet;
+  const heroHeat = sectionAnchors && heroSet ? resolveHeatSections(sectionAnchors, heroSet) : [];
+  const heroSectionsLayer = heroHeat.length > 0 ? { resolved: heroHeat, showLabels: false } : null;
 
   return (
     <div className="page stack">
@@ -945,8 +1274,10 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
       {story ? <TheDay story={story} pack={pack} /> : null}
 
       {outline && sectionAnchors ? (
-        <SectionHeatCard outline={outline} anchors={sectionAnchors} set={sectionSet} heatSections={heatSections} />
+        <SectionHeatCard outline={outline} anchors={sectionAnchors} laps={sectionLaps} fallbackSet={fallbackSet} />
       ) : null}
+
+      {outline && sectionAnchors ? <VenueYearsCard outline={outline} anchors={sectionAnchors} visits={visitPacks} /> : null}
 
       <div className="grid grid--2">
         {story ? <TeamStory story={story} /> : null}

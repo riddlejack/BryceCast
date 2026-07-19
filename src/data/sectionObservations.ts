@@ -1,4 +1,5 @@
 import type { RaceStoryPack } from './raceStory';
+import type { SectionLapsPack, SectionLapTuple } from './sectionLaps';
 import type { TrackSectionAnchorSet } from '../assets/tracks/sections';
 
 /** Section Intelligence contract (Brief H, adapter-contract law).
@@ -27,20 +28,31 @@ export type SectionScope =
 /** Where a set's numbers came from — surfaced in source drawers / YoY labels. */
 export type SectionSourceTier = 'parsed_pdf_aggregate' | 'lake_loop_crossings';
 
+/** How a set's per-section summary statistic is computed over its laps. */
+export type SectionStat = 'median' | 'mean';
+
 export interface SectionObservation {
   /** EXACT official section-family string — the join key to the curated track
    *  anchor and the label shown on the map. Never invented. */
   sectionName: string;
   /** Bryce's percentile of the field beaten in this section for the scope,
-   *  [0,1]. Null when the section exists but carries no observation here. */
+   *  [0,1]. Null when the section exists but carries too few clean laps here
+   *  (see observationCount) or no observation at all. */
   percentile: number | null;
-  /** Clean-lap comparisons behind this section's percentile. Null in v1 (the
-   *  race-story pack carries only a set-level count); the lake fills it. */
+  /** Clean-lap comparisons behind this section's percentile. Null when the
+   *  source carries only a set-level count (race-story aggregate). */
   observationCount: number | null;
-  /** Bryce's representative section time, seconds. Null in v1; lake fills it. */
+  /** Per-lap clean-lap percentiles inside the scope — the drawer's
+   *  distribution strip (the percentile's meaning, shown not told). */
+  lapPercentiles?: Array<{ lap: number; percentile: number }>;
+  /** Bryce's representative (median) section time in seconds for the scope. */
   bryceMedianSeconds?: number | null;
-  /** Field-median section time, seconds. Null in v1; lake fills it. */
+  /** Field-median section time, seconds. Null until a source carries the
+   *  field's own section times (the lake). */
   fieldMedianSeconds?: number | null;
+  /** single_lap scope only: that lap's race-control context. */
+  cautionState?: 'green' | 'caution' | 'restart' | 'unknown';
+  clean?: boolean;
 }
 
 export interface SectionObservationSet {
@@ -48,8 +60,10 @@ export interface SectionObservationSet {
   venueName: string;
   seasonYear: number | null;
   scope: SectionScope;
+  /** The summary statistic behind each section's percentile. */
+  stat: SectionStat;
   sections: SectionObservation[];
-  /** Set-level count of clean-lap section comparisons (the v1 denominator). */
+  /** Set-level count of clean-lap section comparisons (the denominator). */
   comparisonRows: number | null;
   medianPercentile: number | null;
   sourceState: string;
@@ -81,12 +95,125 @@ export const sectionObservationsFromRaceStory = (story: RaceStoryPack): SectionO
     venueName: story.track?.name ?? '',
     seasonYear: story.seasonYear,
     scope: { kind: 'full_race' },
+    stat: 'median',
     sections,
     comparisonRows: s.comparisonRows,
     medianPercentile: s.medianPercentile,
     sourceState: s.sourceState,
     sourceTier: 'parsed_pdf_aggregate',
     caveat: s.caveat
+  };
+};
+
+/* ---------- per-lap producer (the traceable substrate) ---------- */
+
+/** Below this many clean laps a scoped section percentile is suppressed —
+ *  shown as "too few clean laps", never as a confident colour. Labeled on
+ *  screen wherever it bites. */
+export const MIN_CLEAN_LAPS = 8;
+
+const median = (values: number[]): number => {
+  const sorted = [...values].sort((a, b) => a - b);
+  const mid = Math.floor(sorted.length / 2);
+  return sorted.length % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
+};
+
+const summarize = (values: number[], stat: SectionStat): number =>
+  stat === 'mean' ? values.reduce((a, b) => a + b, 0) / values.length : median(values);
+
+const CAUTION_LABEL: Record<string, 'green' | 'caution' | 'restart' | 'unknown'> = {
+  g: 'green',
+  c: 'caution',
+  r: 'restart',
+  u: 'unknown'
+};
+
+const lapWindowOf = (scope: SectionScope, totalLaps: number): [number, number] =>
+  scope.kind === 'full_race'
+    ? [1, totalLaps]
+    : scope.kind === 'lap_window'
+      ? [scope.fromLap, scope.toLap]
+      : [scope.lap, scope.lap];
+
+/** The standard scope menu for a race: full race + thirds by lap count.
+ *  (The single-lap scrubber is a UI control, not a menu entry.) */
+export const lapScopesFor = (totalLaps: number): SectionScope[] => {
+  if (totalLaps < 9) return [{ kind: 'full_race' }];
+  const firstEnd = Math.floor(totalLaps / 3);
+  const middleEnd = Math.floor((2 * totalLaps) / 3);
+  return [
+    { kind: 'full_race' },
+    { kind: 'lap_window', label: 'Opening third', fromLap: 1, toLap: firstEnd },
+    { kind: 'lap_window', label: 'Middle third', fromLap: firstEnd + 1, toLap: middleEnd },
+    { kind: 'lap_window', label: 'Closing third', fromLap: middleEnd + 1, toLap: totalLaps }
+  ];
+};
+
+/** Per-lap race-control context for the scrubber (caution ticks, clean flags),
+ *  from the pack's lap-total rows. */
+export const lapContextOf = (
+  pack: SectionLapsPack
+): Array<{ lap: number; caution: 'green' | 'caution' | 'restart' | 'unknown'; clean: boolean }> =>
+  pack.lapTotals
+    .filter((tuple): tuple is SectionLapTuple => Array.isArray(tuple) && tuple[0] !== null)
+    .map((tuple) => ({
+      lap: tuple[0] as number,
+      caution: CAUTION_LABEL[tuple[5]] ?? 'unknown',
+      clean: tuple[4] === 1
+    }));
+
+/** Produce the contract from a per-lap pack for a scope + statistic. Aggregate
+ *  scopes use clean green-flag laps only and suppress below MIN_CLEAN_LAPS;
+ *  the single-lap scope reports that lap as-is with its caution context. */
+export const sectionObservationsFromLaps = (
+  pack: SectionLapsPack,
+  scope: SectionScope = { kind: 'full_race' },
+  stat: SectionStat = 'median'
+): SectionObservationSet => {
+  const [fromLap, toLap] = lapWindowOf(scope, pack.totalLaps);
+  const single = scope.kind === 'single_lap';
+  const sections: SectionObservation[] = pack.sections.map(({ sectionName, laps }) => {
+    if (single) {
+      const row = laps.find((tuple) => tuple[0] === fromLap) ?? null;
+      return {
+        sectionName,
+        percentile: row ? row[1] : null,
+        observationCount: row ? 1 : 0,
+        bryceMedianSeconds: row ? row[6] : null,
+        cautionState: row ? CAUTION_LABEL[row[5]] ?? 'unknown' : undefined,
+        clean: row ? row[4] === 1 : undefined
+      };
+    }
+    const inWindow = laps.filter(
+      (tuple) => tuple[0] !== null && tuple[0] >= fromLap && tuple[0] <= toLap && tuple[4] === 1 && tuple[1] !== null
+    );
+    const pcts = inWindow.map((tuple) => tuple[1] as number);
+    const times = inWindow.map((tuple) => tuple[6]).filter((value): value is number => value !== null);
+    return {
+      sectionName,
+      percentile: pcts.length >= MIN_CLEAN_LAPS ? summarize(pcts, stat) : null,
+      observationCount: pcts.length,
+      lapPercentiles: inWindow.map((tuple) => ({ lap: tuple[0] as number, percentile: tuple[1] as number })),
+      bryceMedianSeconds: times.length > 0 ? median(times) : null
+    };
+  });
+  const allPcts = sections.flatMap((section) => (section.lapPercentiles ?? []).map((point) => point.percentile));
+  return {
+    sessionId: pack.sessionId,
+    venueName: pack.venueName,
+    seasonYear: pack.seasonYear,
+    scope,
+    stat,
+    sections,
+    comparisonRows: single
+      ? sections.reduce((count, section) => count + (section.observationCount ?? 0), 0)
+      : allPcts.length,
+    medianPercentile: allPcts.length > 0 ? median(allPcts) : null,
+    sourceState: 'official_section_results_per_lap',
+    sourceTier: 'parsed_pdf_aggregate',
+    caveat: single
+      ? 'one lap is one lap — a snapshot, not a trend; caution laps are labeled'
+      : `clean green-flag laps only; sections under ${MIN_CLEAN_LAPS} clean laps in this scope are not compared`
   };
 };
 

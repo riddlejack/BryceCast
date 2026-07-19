@@ -552,6 +552,61 @@ for (const ref of raceStoryRefs ?? []) {
   }
 }
 
+/* ---------- section-lap packs (Brief H: heat map + drawer traceability) ---------- */
+
+const sectionLapRefs = dataPackage.screens.raceDebrief.sectionLapRefs;
+if (!Array.isArray(sectionLapRefs) || sectionLapRefs.length === 0) {
+  fail('raceDebrief.sectionLapRefs must exist (sessions with official per-lap section observations).');
+}
+for (const ref of sectionLapRefs ?? []) {
+  if (!expectedRaceDebriefSessionIds.has(ref.sessionId)) {
+    fail(`Section-lap ref ${ref.sessionId} is not a race-debrief session.`);
+  }
+  const packPath = path.join(repoRoot, ref.path);
+  if (!fs.existsSync(packPath)) {
+    fail(`Section-lap pack missing on disk: ${ref.path}`);
+    continue;
+  }
+  const raw = fs.readFileSync(packPath);
+  if (createHash('sha256').update(raw).digest('hex') !== ref.sha256 || raw.length !== ref.bytes) {
+    fail(`Section-lap pack ref is stale for ${ref.path}`);
+  }
+  const pack = JSON.parse(raw.toString());
+  if (pack.sessionId !== ref.sessionId || pack.id !== ref.id || pack.type !== 'section_laps') {
+    fail(`Section-lap pack identity mismatch for ${ref.path}`);
+  }
+  if (pack.venueName !== ref.venueName || pack.seasonYear !== ref.seasonYear) {
+    fail(`Section-lap ref venue/season must mirror the pack for ${ref.path}`);
+  }
+  if (!Array.isArray(pack.sections) || pack.sections.length === 0) {
+    fail(`Section-lap pack ${ref.sessionId} must carry at least one section family.`);
+  }
+  const tupleLength = (pack.tupleOrder ?? []).length;
+  if (tupleLength < 8) {
+    fail(`Section-lap pack ${ref.sessionId} must declare its tuple order.`);
+  }
+  for (const section of pack.sections ?? []) {
+    for (const lapTuple of section.laps ?? []) {
+      if (!Array.isArray(lapTuple) || lapTuple.length !== tupleLength) {
+        fail(`Section-lap pack ${ref.sessionId} "${section.sectionName}" has a malformed lap tuple.`);
+        break;
+      }
+      const [lap, pct] = lapTuple;
+      if (lap !== null && (lap < 1 || lap > (pack.totalLaps ?? 0))) {
+        fail(`Section-lap pack ${ref.sessionId} "${section.sectionName}" lap ${lap} outside 1..${pack.totalLaps}.`);
+        break;
+      }
+      if (pct !== null && (pct < 0 || pct > 1)) {
+        fail(`Section-lap pack ${ref.sessionId} "${section.sectionName}" percentile ${pct} outside [0,1].`);
+        break;
+      }
+    }
+  }
+  if (!Array.isArray(pack.caveats) || pack.caveats.length === 0) {
+    fail(`Section-lap pack ${ref.sessionId} must state caveats.`);
+  }
+}
+
 /* ---------- career conversion rows must carry chronology ---------- */
 
 const conversionRows = dataPackage.screens.careerLab.resultConversion ?? [];

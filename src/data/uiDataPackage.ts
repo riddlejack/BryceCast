@@ -442,6 +442,21 @@ export interface UiRaceStoryRef {
   sha256: string;
 }
 
+/** Per-race per-lap section observation pack ref (Brief H — Section
+ *  Intelligence). venueName/seasonYear ride on the ref so venue-level views
+ *  (YoY shapes) can find sibling visits without loading every pack. */
+export interface UiSectionLapRef {
+  sessionId: string;
+  id: string;
+  type: 'section_laps';
+  venueName: string;
+  seasonYear: number | null;
+  path: string;
+  bytes: number;
+  modifiedAt: string;
+  sha256: string;
+}
+
 export interface UiSeasonIndexRow {
   sessionId: string;
   raceLabel: string;
@@ -519,6 +534,7 @@ export interface UiDataPackage {
       readiness: string;
       featuredDebriefs: UiDebriefSeed[];
       raceStoryRefs: UiRaceStoryRef[];
+      sectionLapRefs: UiSectionLapRef[];
       seasonIndex: UiSeasonIndexRow[];
       chartFamilies: string[];
       caveats: string[];

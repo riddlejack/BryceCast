@@ -533,6 +533,10 @@ button { font-family: inherit; }
   gap: 2px;
 }
 
+/* Long option sets (the heat map's five lap scopes) flow onto a second line
+ * on narrow screens instead of overflowing the card. */
+.segmented--wrap { flex-wrap: wrap; max-width: 100%; }
+
 .segmented__option {
   border: 0;
   background: transparent;

@@ -1,6 +1,6 @@
 # INDY NXT Race Lap/Section Enhancement
 
-Generated: `2026-07-13T17:24:37Z`
+Generated: `2026-07-19T01:21:11Z`
 Source dataset: `data/career/career.dataset.json`
 Source hash: `900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681`
 

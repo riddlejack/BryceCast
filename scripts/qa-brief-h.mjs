@@ -78,6 +78,48 @@ try {
   await settle(page, 250);
   await card.screenshot({ path: join(outDir, 'nashville-hover-1440.png') });
   if (!hovered) notes.push('hover: tooltip not detected by text sweep — inspect nashville-hover-1440.png');
+  await page.mouse.move(10, 10);
+  await settle(page, 200);
+
+  /* ---- 3b. the "why" drawer open (median, then average) ---- */
+  await card.locator('text=The numbers behind the shades').click();
+  await settle(page, 300);
+  const drawerRows = await card.locator('text=/clean laps|laps$/').count();
+  notes.push(`drawer visible rows signal: ${drawerRows}`);
+  await card.screenshot({ path: join(outDir, 'nashville-drawer-1440.png') });
+  await card.locator('.segmented__option', { hasText: 'Average lap' }).click();
+  await settle(page, 300);
+  await card.screenshot({ path: join(outDir, 'nashville-drawer-average-1440.png') });
+  await card.locator('.segmented__option', { hasText: 'Median lap' }).click();
+  await settle(page, 200);
+
+  /* ---- 3c. lap scopes: closing third, then the one-lap scrubber ---- */
+  await card.locator('.segmented__option', { hasText: 'Closing third' }).click();
+  await settle(page, 300);
+  await card.screenshot({ path: join(outDir, 'nashville-scope-closing-1440.png') });
+  await card.locator('.segmented__option', { hasText: 'One lap' }).click();
+  await settle(page, 300);
+  // drive the scrubber to a caution lap if one exists (Nashville 2024 cautions ~L52+)
+  const slider = card.locator('input[type="range"]');
+  await slider.evaluate((el) => {
+    const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set;
+    setter.call(el, '55');
+    el.dispatchEvent(new Event('input', { bubbles: true }));
+  });
+  await settle(page, 300);
+  await card.screenshot({ path: join(outDir, 'nashville-scrubber-lap55-1440.png') });
+  await card.locator('.segmented__option', { hasText: 'Full race' }).click();
+  await settle(page, 200);
+
+  /* ---- 3d. YoY: this place, other years ---- */
+  const yoy = page.locator('.card', { hasText: 'This place, other years' });
+  const yoyCount = await yoy.count();
+  notes.push(`YoY card present: ${yoyCount > 0 ? 'yes' : 'NO'}`);
+  if (yoyCount > 0) {
+    await yoy.scrollIntoViewIfNeeded();
+    await settle(page, 300);
+    await yoy.screenshot({ path: join(outDir, 'nashville-yoy-1440.png') });
+  }
 
   /* ---- 4. road course fallback (no curated anchors → no heat card) ---- */
   await page.goto(`${base}/races/${ROAD}`, { waitUntil: 'load' });
@@ -103,6 +145,22 @@ try {
   await mcard.scrollIntoViewIfNeeded();
   await settle(mp, 300);
   await mcard.screenshot({ path: join(outDir, 'nashville-heatcard-390.png') });
+  await mcard.locator('text=The numbers behind the shades').click();
+  await settle(mp, 300);
+  await mcard.screenshot({ path: join(outDir, 'nashville-drawer-390.png') });
+  const myoy = mp.locator('.card', { hasText: 'This place, other years' });
+  if ((await myoy.count()) > 0) {
+    await myoy.scrollIntoViewIfNeeded();
+    await settle(mp, 300);
+    await myoy.screenshot({ path: join(outDir, 'nashville-yoy-390.png') });
+  }
+  const overflowAfter = await mp.evaluate(() => ({
+    scrollWidth: document.documentElement.scrollWidth,
+    clientWidth: document.documentElement.clientWidth
+  }));
+  if (overflowAfter.scrollWidth > overflowAfter.clientWidth + 1) {
+    notes.push(`PHONE OVERFLOW after drawer/yoy ${overflowAfter.scrollWidth}>${overflowAfter.clientWidth}`);
+  }
   await phone.close();
 
   console.log(JSON.stringify({ ok: true, hovered, overflow, consoleIssues: issues, notes, outDir }, null, 2));
