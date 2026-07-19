@@ -29,6 +29,7 @@ import {
 } from '../data/uiDataPackage';
 import { getVenueByTrackName, getVenueDossier } from '../data/venueDossier';
 import { loadDebriefArchive } from '../data/debriefArchive';
+import { VenueSectionSuite, useVenueSectionData } from './sectionIntelligence';
 
 type Row = Record<string, unknown>;
 
@@ -1162,6 +1163,10 @@ export const RaceWeekScreen = () => {
   const nextEventPrep = getNextEventPrep();
   const standings = getStandingsSnapshot();
   const debriefIds = useDebriefIds();
+  /* The venue's section intelligence — its anchored sections + available packs,
+   * loaded once here and shared by the hero shading and the section suite. Keyed
+   * by the upcoming venue, so it is standing practice for every race week. */
+  const venueSections = useVenueSectionData(weekend?.primary.trackName ?? null);
 
   if (!weekend) {
     return (
@@ -1269,8 +1274,27 @@ export const RaceWeekScreen = () => {
               </HeroBlock>
             )}
           </div>
-          <div className="hero-race__art">
-            {outline ? <TrackArt outline={outline} annotation={sectionNote} maxHeight={190} wind={heroWind} /> : null}
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <div className="hero-race__art" style={{ width: '100%' }}>
+              {outline ? (
+                <TrackArt
+                  outline={outline}
+                  /* The most-recent visit's pace lights the shape quietly (the
+                     compact no-labels mode the race hero uses). When present it
+                     carries the venue read, so the single Turn-note annotation
+                     steps aside; unshaded venues keep the annotation. */
+                  annotation={venueSections.heroHeat.length > 0 ? null : sectionNote}
+                  sections={venueSections.heroHeat.length > 0 ? { resolved: venueSections.heroHeat, showLabels: false } : null}
+                  maxHeight={190}
+                  wind={heroWind}
+                />
+              ) : null}
+            </div>
+            {outline && venueSections.heroHeat.length > 0 && venueSections.mostRecent?.seasonYear ? (
+              <p className="caption caption--secondary" style={{ margin: '8px 0 0', textAlign: 'center' }}>
+                shaded by his {venueSections.mostRecent.seasonYear} pace here
+              </p>
+            ) : null}
           </div>
           <div className="row" style={{ justifyContent: 'flex-end' }}>
             {hereBefore.length > 0 ? (
@@ -1311,6 +1335,13 @@ export const RaceWeekScreen = () => {
       {dossierVenue && dossierVenue.visits.length > 0 ? (
         <VenueDossierModule venue={dossierVenue} debriefIds={debriefIds} />
       ) : null}
+
+      {/* The venue's full analytical home: the section heat map for the upcoming
+          track (defaulting to the most recent visit, a quiet year toggle when
+          there is more than one) and its year-over-year shapes — the depth the
+          team reads without leaving Race Week. Renders nothing at a venue with
+          no anchored sections. */}
+      {outline ? <VenueSectionSuite outline={outline} data={venueSections} /> : null}
 
       {eventPrep ? <OvalStory prep={eventPrep} trackTypeName={trackTypeName} debriefIds={debriefIds} /> : null}
 
