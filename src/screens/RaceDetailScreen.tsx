@@ -1795,9 +1795,27 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
         )
       ) : null}
 
-      <p style={{ margin: 0, fontSize: 11.5, color: 'var(--ink-muted)' }}>
-        Everything on this page comes from official results, the official lap chart, and official section reports.
-      </p>
+      {/* The footer claim follows the sections actually rendered (the drawer's
+          tier label, restated in one sentence): a measured lake page names the
+          RaceTools capture; official section reports stay in the claim only
+          where they are the rendered source; a mixed page names both. */}
+      {(() => {
+        const tierOf = (visit: SectionLapsPack) => visit.sourceTier ?? 'parsed_pdf_aggregate';
+        const packs = [...(sectionLaps ? [sectionLaps] : []), ...visitPacks];
+        const hasLake = packs.some((visit) => tierOf(visit) === 'lake_loop_crossings');
+        const hasPdfSections =
+          packs.some((visit) => tierOf(visit) !== 'lake_loop_crossings') || (!sectionLaps && story?.sections != null);
+        const sources = hasLake
+          ? hasPdfSections
+            ? 'official results, the official lap chart, official section reports, and the RaceTools race-weekend capture'
+            : 'official results, the official lap chart, and the RaceTools race-weekend capture'
+          : 'official results, the official lap chart, and official section reports';
+        return (
+          <p style={{ margin: 0, fontSize: 11.5, color: 'var(--ink-muted)' }}>
+            Everything on this page comes from {sources}.
+          </p>
+        );
+      })()}
     </div>
   );
 };
