@@ -466,3 +466,32 @@ any model output, Time Machine merge.
 **Owed taste pass:** one screenshot review of the A2/B/C surfaces
 (odometer, atlas, moments) against the DESIGN_TASTE blacklist — they
 shipped during consolidation without a Fable gate.
+
+---
+
+## Addendum 4 (2026-07-18, late night): the lake is CLEARED FOR USE —
+## the Wave 0 gate was integrity, never rights
+
+Jack's directive, recorded verbatim in intent: the backend we set up is
+legally and ethically cleared, and it should be USED. See
+`docs/DATA_PERMISSIONS.md` — the authorization ledger. RaceTools use is
+granted (verbal 2026-07-18; the confirming email is documentation
+hardening, not a precondition). Timing71 is a public archive consumed
+under its published interface. Do not re-derive permission doubt from
+the audit gate's wording.
+
+**Gate reinterpretation (supersedes Wave 0's "nothing consumes the
+lake" sentence):**
+1. **Development against the lake starts NOW, on branches**: reducers,
+   semantic-layer tables, adapter v2 sources, the unblinding lanes,
+   Time Machine plumbing, decode experiments. Do not serialize behind
+   the audit conditions.
+2. The audit's four conditions gate exactly two things: the MERGE of
+   the lake branch into master, and any USER-VISIBLE number derived
+   from lake data. Build freely; ship after conditions close.
+3. The Timing71 identity crosswalk remains a CORRECTNESS gate for 2026
+   lake data reaching the UI (not a permission matter).
+4. Every lake-derived surface labels its source tier per the ledger
+   ("official timing documents" vs "RaceTools capture" vs "third-party
+   normalized (Timing71)" vs "BryceCast capture") in its source drawer.
+5. The raw archive never ships: derived analytics only, per ledger.
