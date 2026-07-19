@@ -35,10 +35,19 @@ const cadenceFor = (state: string | undefined, failures: number): number => {
   }
 };
 
-export const useReadiness = (): ReadinessStatus => {
+/**
+ * @param getReplayParams When the Live page is driving a per-client replay, this
+ *   returns `?replay=<sessionKey>&rt=<isoVirtualTime>&speed=<n>` for the current
+ *   virtual frame; otherwise `''`. It is appended to every readiness poll, so
+ *   the replay lives entirely in THIS client's requests — a plain client (no
+ *   params) always receives the real feed. Read at poll time so `rt` is current.
+ */
+export const useReadiness = (getReplayParams?: () => string): ReadinessStatus => {
   const { route } = useRouter();
   const fixtureState = route.search.get('fixture');
   const fixtureVariant = route.search.get('variant') ?? 'base';
+  const replayParamsRef = useRef<() => string>(() => '');
+  replayParamsRef.current = getReplayParams ?? (() => '');
 
   const [status, setStatus] = useState<ReadinessStatus>({ payload: null, fixtureMode: false, error: null, checkedAt: null, refresh: () => {} });
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -60,7 +69,7 @@ export const useReadiness = (): ReadinessStatus => {
 
     const tick = async () => {
       try {
-        const response = await fetch('/api/readiness', { headers: { accept: 'application/json' } });
+        const response = await fetch(`/api/readiness${replayParamsRef.current()}`, { headers: { accept: 'application/json' } });
         if (!response.ok) throw new Error(`readiness ${response.status}`);
         const payload = (await response.json()) as LiveReadiness;
         if (cancelled) return;

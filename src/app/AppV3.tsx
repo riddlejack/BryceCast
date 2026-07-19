@@ -87,11 +87,18 @@ const Shell = ({ children, liveState }: { children: ReactNode; liveState: string
 
 const Routes = () => {
   const { route } = useRouter();
-  const readiness = useReadiness();
-  const liveHistory = useLiveSessionHistory(readiness.payload);
   const onLive = route.path === '/live';
-  const replayKey = onLive && !readiness.fixtureMode ? route.search.get('replay') : null;
-  const replay = useReplaySession(replayKey, liveHistory.reset);
+  const fixtureMode = Boolean(route.search.get('fixture'));
+  const replayKey = onLive && !fixtureMode ? route.search.get('replay') : null;
+  // The replay clock is created first so readiness can append this client's
+  // replay params to its own polls. A restart must clear the live-history chart
+  // window; that reset lives on the history hook (created after readiness), so
+  // it is wired back through a ref to break the cycle.
+  const resetHistoryRef = useRef<() => void>(() => {});
+  const replay = useReplaySession(replayKey, () => resetHistoryRef.current());
+  const readiness = useReadiness(replay.getReplayParams);
+  const liveHistory = useLiveSessionHistory(readiness.payload);
+  resetHistoryRef.current = liveHistory.reset;
   // The moment a replay engages server-side (started flips true after control
   // answers active:true), pull readiness immediately. Without this the cold
   // pre-race page waits out its slow pre_session/backoff cadence on the cue card

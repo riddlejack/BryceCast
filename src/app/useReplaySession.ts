@@ -16,7 +16,7 @@ const DEFAULT_REPLAY_SPEED = 4;
 export interface ReplaySession {
   /** A resolvable replay is being driven from the URL. */
   engaged: boolean;
-  /** Resolving the archive / issuing the first control call. */
+  /** Resolving the archive (client-side availability check). */
   starting: boolean;
   /** The virtual clock has been started at least once. */
   started: boolean;
@@ -24,10 +24,10 @@ export interface ReplaySession {
   unavailable: boolean;
   /** A live session preempted the replay mid-playback (server live-guard). */
   endedByLive: boolean;
-  /** Human-readable reason the replay could not start (server refusal, an
-   *  unreachable service, or a session that isn't watchable). Set whenever the
-   *  overlay could not engage playback, so the page renders an honest
-   *  "this replay can't start: <reason>" state instead of an eternal cue-up. */
+  /** Human-readable reason the replay could not start (unwatchable/unknown
+   *  capture, or the replay service being unavailable). Set whenever the overlay
+   *  could not engage playback, so the page renders an honest "this replay can't
+   *  start: <reason>" state instead of an eternal cue-up. */
   refusedReason: string | null;
   session: ReplaySessionInfo | null;
   speed: number;
@@ -38,9 +38,27 @@ export interface ReplaySession {
   setSpeed: (speed: number) => void;
   restart: () => void;
   exit: () => void;
+  /** The query string this client must append to every live-route poll while
+   *  replaying — `?replay=<sessionKey>&rt=<isoVirtualTime>&speed=<n>` — or `''`
+   *  when no replay is engaged. Read live off the local virtual clock, so it is
+   *  correct at poll time (not render time). This is the ENTIRE server contract:
+   *  the client owns the clock, the server stays stateless per request. */
+  getReplayParams: () => string;
 }
 
-const inactive: ReplaySession = {
+interface ReplayClock {
+  sessionKey: string;
+  /** Virtual time the clock started from (the green flag), in ms. */
+  virtualStartMs: number;
+  /** Wall-clock ms when this segment started (reset on restart / speed change). */
+  startedAtWallMs: number;
+  speed: number;
+  /** Archived span bounds, so the virtual clock never runs past the capture. */
+  firstCheckedMs: number;
+  lastCheckedMs: number;
+}
+
+const inactive: Omit<ReplaySession, 'setSpeed' | 'restart' | 'exit' | 'getReplayParams'> = {
   engaged: false,
   starting: false,
   started: false,
@@ -52,38 +70,7 @@ const inactive: ReplaySession = {
   speeds: REPLAY_SPEEDS,
   venue: null,
   seasonYear: null,
-  returnHref: '/races',
-  setSpeed: () => {},
-  restart: () => {},
-  exit: () => {}
-};
-
-type ControlResult = { ok: boolean; status: number; data: Record<string, unknown> | null };
-
-const control = async (query: string): Promise<ControlResult> => {
-  try {
-    const response = await fetch(apiUrl(`/api/replay/control${query}`), { headers: { accept: 'application/json' } });
-    const data = (await response.json().catch(() => null)) as Record<string, unknown> | null;
-    return { ok: response.ok, status: response.status, data };
-  } catch {
-    return { ok: false, status: 0, data: null };
-  }
-};
-
-/** The server signals a genuinely-engaged replay with `active: true` in the
- *  control body — an HTTP 200 alone is not enough (the status branch and any
- *  future refusal-as-status answer 200 with `active: false`). Treating only the
- *  body as truth is what stops a non-start from becoming an eternal cue-up. */
-const controlEngaged = (result: ControlResult): boolean => result.ok && result.data?.active === true;
-
-/** A human-readable reason a start did not engage, preferring the server's own
- *  refusal message so the page can say exactly why. */
-const refusalReason = (result: ControlResult): string => {
-  const data = result.data;
-  if (typeof data?.error === 'string' && data.error) return data.error;
-  if (typeof data?.reason === 'string' && data.reason) return data.reason;
-  if (result.status === 0) return 'The replay service could not be reached.';
-  return 'The replay service did not start playback.';
+  returnHref: '/races'
 };
 
 const clampT0 = (session: ReplaySessionInfo, iso: string | null): string => {
@@ -97,38 +84,52 @@ const clampT0 = (session: ReplaySessionInfo, iso: string | null): string => {
   return iso;
 };
 
+/** The current virtual timestamp of a clock, clamped into the archived span. At
+ *  the end of the capture it pins to the last frame — the post-checkered
+ *  "Race complete · as raced" state, which stays simulated (never live). */
+const virtualNowMsOf = (clock: ReplayClock): number => {
+  const elapsedReal = Math.max(0, Date.now() - clock.startedAtWallMs);
+  const raw = clock.virtualStartMs + elapsedReal * clock.speed;
+  return Math.min(clock.lastCheckedMs, Math.max(clock.firstCheckedMs, raw));
+};
+
 /**
- * Drives the read-only replay overlay from `/live?replay=<sessionKey>`. It
- * resolves the capture, starts the virtual clock at the green flag, and exposes
- * speed / restart / exit. `onRestart` clears the client-side chart window so a
- * restart genuinely replays from green. Passing `replayKey = null` (off /live,
- * or no param) leaves the overlay stopped.
+ * Drives a per-CLIENT replay from `/live?replay=<sessionKey>`. The client owns
+ * the virtual clock entirely: it resolves the capture from `/api/replay/available`,
+ * starts the clock at the green flag, and thereafter appends `?replay&rt&speed`
+ * to its own live-route polls via {@link ReplaySession.getReplayParams}. There
+ * are NO start/stop control calls, so one viewer's replay never touches the
+ * server's global state or any other viewer's Live page. `onRestart` clears the
+ * client-side chart window so a restart genuinely replays from green.
  */
 export const useReplaySession = (replayKey: string | null, onRestart?: () => void): ReplaySession => {
   const { navigate, route } = useRouter();
   const fromParam = route.search.get('from');
-  const [state, setState] = useState<ReplaySession>(inactive);
+  const [state, setState] = useState(inactive);
   const sessionRef = useRef<ReplaySessionInfo | null>(null);
+  const clockRef = useRef<ReplayClock | null>(null);
   const speedRef = useRef<number>(DEFAULT_REPLAY_SPEED);
   const onRestartRef = useRef(onRestart);
   onRestartRef.current = onRestart;
 
-  const start = useCallback(async (session: ReplaySessionInfo, t0: string | null, speed: number) => {
-    const query = `?session=${encodeURIComponent(session.sessionKey)}&t0=${encodeURIComponent(clampT0(session, t0))}&speed=${speed}`;
-    return control(query);
+  const getReplayParams = useCallback((): string => {
+    const clock = clockRef.current;
+    if (!clock) return '';
+    const rt = new Date(virtualNowMsOf(clock)).toISOString();
+    return `?replay=${encodeURIComponent(clock.sessionKey)}&rt=${encodeURIComponent(rt)}&speed=${clock.speed}`;
   }, []);
 
   useEffect(() => {
     if (!replayKey) {
-      // Not on /live with a replay param: make sure any playback is stopped.
       sessionRef.current = null;
+      clockRef.current = null;
       setState(inactive);
-      void control('?stop=1');
       return undefined;
     }
 
     let cancelled = false;
     speedRef.current = DEFAULT_REPLAY_SPEED;
+    clockRef.current = null;
     setState({ ...inactive, engaged: true, starting: true });
 
     void (async () => {
@@ -144,6 +145,7 @@ export const useReplaySession = (replayKey: string | null, onRestart?: () => voi
       // Hold a direct /live?replay=<key> URL to the same watchable bar the
       // race-page CTA applies; a non-watchable or wrong-series key stays out.
       if (!available || !session || !session.watchable) {
+        clockRef.current = null;
         setState({
           ...inactive,
           engaged: true,
@@ -158,102 +160,101 @@ export const useReplaySession = (replayKey: string | null, onRestart?: () => voi
         return;
       }
       sessionRef.current = session;
-      const started = await start(session, session.firstGreenAt, DEFAULT_REPLAY_SPEED);
-      if (cancelled) return;
-      // Engaged only when the server confirms `active: true`. A refusal (or any
-      // 200 that did not actually start playback) resolves to an honest,
-      // exitable "can't start" state — never a cue-up that never clears.
-      if (!controlEngaged(started)) {
-        setState({
-          ...inactive,
-          engaged: true,
-          starting: false,
-          unavailable: true,
-          refusedReason: refusalReason(started),
-          session,
-          venue: shortVenueFromEventName(session.eventName),
-          seasonYear: session.seasonYear,
-          returnHref
-        });
-        return;
-      }
-      setState((previous) => ({
-        ...previous,
+      // Start the local virtual clock at the green flag. No server round-trip —
+      // the cue-up clears as soon as the first archived frame arrives from the
+      // client's own next readiness poll.
+      const virtualStartMs = Date.parse(clampT0(session, session.firstGreenAt));
+      const firstCheckedMs = Date.parse(session.firstCheckedAt ?? '');
+      const lastCheckedMs = Date.parse(session.lastCheckedAt ?? '');
+      const safeStart = Number.isFinite(virtualStartMs) ? virtualStartMs : Date.now();
+      clockRef.current = {
+        sessionKey: session.sessionKey,
+        virtualStartMs: safeStart,
+        startedAtWallMs: Date.now(),
+        speed: DEFAULT_REPLAY_SPEED,
+        firstCheckedMs: Number.isFinite(firstCheckedMs) ? firstCheckedMs : safeStart,
+        lastCheckedMs: Number.isFinite(lastCheckedMs) ? lastCheckedMs : safeStart
+      };
+      setState({
+        ...inactive,
         engaged: true,
         starting: false,
         started: true,
-        unavailable: false,
-        refusedReason: null,
         session,
         speed: DEFAULT_REPLAY_SPEED,
         venue: shortVenueFromEventName(session.eventName),
         seasonYear: session.seasonYear,
         returnHref
-      }));
+      });
     })();
 
     return () => {
       cancelled = true;
-      void control('?stop=1');
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [replayKey, fromParam, start]);
+  }, [replayKey, fromParam]);
 
-  // While a replay is running, watch for the server live-guard preempting it:
-  // if the real runner goes live, the overlay auto-stops and reports it, and the
-  // page must drop the replay chrome and tell the family the race is live now.
+  // Live-guard watch: while replaying, poll readiness with THIS client's own
+  // replay params. If the server answers with a non-simulated payload, the real
+  // runner has gone live — the server's per-request live-guard ignored our
+  // params and served reality. Drop the clock (stop sending params so the main
+  // poll takes over the live feed) and surface the honest handoff.
   useEffect(() => {
     if (!state.started || state.endedByLive) return undefined;
     let cancelled = false;
     const poll = window.setInterval(async () => {
-      const status = await control('');
-      if (cancelled) return;
-      if (status.data?.stoppedByLive === true) {
-        window.clearInterval(poll);
-        setState((previous) => ({ ...previous, started: false, endedByLive: true }));
+      const params = getReplayParams();
+      if (!params) return;
+      try {
+        const response = await fetch(apiUrl(`/api/readiness${params}`), { headers: { accept: 'application/json' } });
+        if (!response.ok || cancelled) return;
+        const data = (await response.json().catch(() => null)) as { replay?: { simulation?: { active?: boolean } } } | null;
+        if (cancelled) return;
+        const simulated = data?.replay?.simulation?.active === true;
+        if (!simulated) {
+          window.clearInterval(poll);
+          clockRef.current = null;
+          setState((previous) => ({ ...previous, started: false, endedByLive: true }));
+        }
+      } catch {
+        // A transient failure is not a live-guard trip; keep replaying.
       }
     }, 5000);
     return () => {
       cancelled = true;
       window.clearInterval(poll);
     };
-  }, [state.started, state.endedByLive]);
+  }, [state.started, state.endedByLive, getReplayParams]);
 
-  const setSpeed = useCallback(
-    (next: number) => {
-      const session = sessionRef.current;
-      if (!session || next === speedRef.current || !REPLAY_SPEEDS.includes(next as (typeof REPLAY_SPEEDS)[number])) return;
-      void (async () => {
-        // Continue from the current virtual position at the new speed.
-        const status = await control('');
-        const virtualNow = typeof status.data?.virtualNow === 'string' ? (status.data.virtualNow as string) : session.firstGreenAt;
-        const result = await start(session, virtualNow, next);
-        if (controlEngaged(result)) {
-          speedRef.current = next;
-          setState((previous) => ({ ...previous, speed: next, started: true }));
-        }
-      })();
-    },
-    [start]
-  );
+  const setSpeed = useCallback((next: number) => {
+    const clock = clockRef.current;
+    if (!clock || next === clock.speed || !REPLAY_SPEEDS.includes(next as (typeof REPLAY_SPEEDS)[number])) return;
+    // Continue from the current virtual position at the new speed — purely local,
+    // so the change is instant with no server round-trip.
+    clockRef.current = { ...clock, virtualStartMs: virtualNowMsOf(clock), startedAtWallMs: Date.now(), speed: next };
+    speedRef.current = next;
+    setState((previous) => ({ ...previous, speed: next, started: true }));
+  }, []);
 
   const restart = useCallback(() => {
+    const clock = clockRef.current;
     const session = sessionRef.current;
-    if (!session) return;
-    void (async () => {
-      const result = await start(session, session.firstGreenAt, speedRef.current);
-      if (controlEngaged(result)) {
-        onRestartRef.current?.();
-        setState((previous) => ({ ...previous, started: true }));
-      }
-    })();
-  }, [start]);
+    if (!clock || !session) return;
+    const virtualStartMs = Date.parse(clampT0(session, session.firstGreenAt));
+    clockRef.current = {
+      ...clock,
+      virtualStartMs: Number.isFinite(virtualStartMs) ? virtualStartMs : clock.firstCheckedMs,
+      startedAtWallMs: Date.now()
+    };
+    onRestartRef.current?.();
+    setState((previous) => ({ ...previous, started: true, endedByLive: false }));
+  }, []);
 
   const exit = useCallback(() => {
     const href = state.returnHref;
-    void control('?stop=1');
+    clockRef.current = null;
     navigate(href);
   }, [navigate, state.returnHref]);
 
-  return { ...state, setSpeed, restart, exit };
+  return { ...state, setSpeed, restart, exit, getReplayParams };
 };
