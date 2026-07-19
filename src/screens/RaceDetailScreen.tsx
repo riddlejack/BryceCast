@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
-import { ArrowLeft, Flag, Play, Users } from 'lucide-react';
+import { ArrowLeft, Flag, Users } from 'lucide-react';
 import { Card, HeroPanel, SourcePill, Stat, StatusChip, Unavailable } from '../app/components';
 import { ChartTipCard, chartFont, useMeasuredWidth, type ChartTip } from '../app/charts';
 import { TrackArt } from '../app/trackArt';
@@ -15,13 +15,14 @@ import { loadPassMarks, resolvePassMarks, type PassMarksPack } from '../data/pas
 import { uiDataPackage } from '../data/uiDataPackage';
 import { SectionHeatCard, VenueYearsCard } from './sectionIntelligence';
 import { asNumber, asString, formatDate, formatGain, formatNumber, formatPosition, formatWind, ordinal } from '../app/format';
-import { Link, useRouter } from '../app/router';
+import { Link } from '../app/router';
 import { displayRaceLabel, loadDebriefBySessionId, roundIndexOf, type ArchiveEntry } from '../data/debriefArchive';
 import { loadRaceStory, type RaceStoryPack, type RaceStoryLapDriver } from '../data/raceStory';
-import { getVenueBySessionId } from '../data/venueDossier';
+import { getVenueBySessionId, pastVisits } from '../data/venueDossier';
 import { FactDelta } from '../app/weatherGlyphs';
 import type { UiVenueDossierVenue, UiVenueDossierVisit } from '../data/uiDataPackage';
-import { loadReplayAvailable, watchableCaptureForRace, replayProvenance, type ReplaySessionInfo } from '../data/replayAvailable';
+import { watchableCaptureForRace, replayProvenance, priorYearReplaysAtVenue } from '../data/replayAvailable';
+import { ReplayAffordance, priorYearTitle, useReplayCatalog } from './replayAffordance';
 
 type Row = Record<string, unknown>;
 
@@ -974,68 +975,46 @@ const verdictFor = (story: RaceStoryPack): string | null => {
 
 /* ---------- the time machine: watch this race unfold ---------- */
 
-/** Silent unless our own one-second capture of THIS race exists. Where the
- *  magic is real, it invites you into the Live page in replay mode. */
+/** Silent unless our own/lake capture of THIS race exists, or the venue has a
+ *  watchable capture from an EARLIER year. Where the magic is real, it invites
+ *  you into the Live page in replay mode: this race's own replay first, then a
+ *  quiet "watch an earlier year here" for each prior visit-year at this venue.
+ *  Prior years join STRICTLY by venue identity — the venue-dossier visits for
+ *  this race's venue, each resolved through watchableCaptureForRace — never by
+ *  event name, which drifts year to year. */
 const WatchRaceUnfold = ({ sessionId }: { sessionId: string }) => {
-  const { navigate } = useRouter();
-  const [capture, setCapture] = useState<ReplaySessionInfo | null>(null);
-  useEffect(() => {
-    let cancelled = false;
-    setCapture(null);
-    loadReplayAvailable()
-      .then((available) => {
-        if (!cancelled) setCapture(watchableCaptureForRace(available, sessionId));
-      })
-      .catch(() => {});
-    return () => {
-      cancelled = true;
-    };
-  }, [sessionId]);
+  const available = useReplayCatalog();
+  const venue = getVenueBySessionId(sessionId);
+  const currentVisit = venue?.visits.find((visit) => visit.sessionId === sessionId) ?? null;
+  const currentCapture = available ? watchableCaptureForRace(available, sessionId) : null;
+  const priors = priorYearReplaysAtVenue(available, pastVisits(venue, sessionId), currentVisit?.seasonYear);
 
-  if (!capture) return null;
+  if (!currentCapture && priors.length === 0) return null;
 
-  const prov = replayProvenance(capture);
-  const isOwnCapture = prov.tier === 'brycecast_capture';
-  const date = capture.firstCheckedAt ? formatDate(capture.firstCheckedAt, { month: 'long', day: 'numeric', year: 'numeric' }) : null;
-  const minutes = capture.durationSeconds ? Math.round(capture.durationSeconds / 60) : null;
-  const captureWord = isOwnCapture ? 'capture' : 'replay';
-  const meta = [date, minutes ? `${minutes} min of ${captureWord}` : null, capture.totalLaps ? `${capture.totalLaps} laps` : null]
-    .filter(Boolean)
-    .join(' · ');
-  const copy = isOwnCapture
+  const isOwnCapture = currentCapture ? replayProvenance(currentCapture).tier === 'brycecast_capture' : false;
+  const currentCopy = isOwnCapture
     ? 'Every second of this race, replayed as it happened, from our own trackside capture.'
     : 'Every second of this race, reconstructed from a third-party timing archive and replayed as it happened.';
-  const open = () => navigate(`/live?replay=${encodeURIComponent(capture.sessionKey)}&from=${encodeURIComponent(sessionId)}`);
-  const provPath = isOwnCapture
-    ? '/api/replay/available → data/live/brycecast.sqlite'
-    : '/api/replay/available → analysis/replay-feeds (lake-fed)';
 
   return (
     <section className="race-replay" aria-label="Watch this race unfold">
-      <button type="button" className="race-replay__cta" onClick={open}>
-        <span className="race-replay__play" aria-hidden>
-          <Play size={20} />
-        </span>
-        <span className="race-replay__body">
-          <span className="race-replay__title">Watch this race unfold</span>
-          <span className="race-replay__copy">{copy}</span>
-          {meta ? <span className="race-replay__meta tnum">{meta}</span> : null}
-        </span>
-      </button>
-      <div className="race-replay__provenance">
-        <span className="caption caption--secondary">{prov.label}</span>
-        <SourcePill
-          title="Watch this race unfold"
-          entries={[
-            {
-              label: prov.label,
-              path: provPath,
-              note: prov.detail
-            }
-          ]}
-          caveats={prov.caveat ? [prov.caveat] : undefined}
-        />
-      </div>
+      {currentCapture ? (
+        <ReplayAffordance capture={currentCapture} fromSessionId={sessionId} title="Watch this race unfold" copy={currentCopy} />
+      ) : null}
+      {priors.length > 0 ? (
+        <div className={`race-replay__years${currentCapture ? '' : ' race-replay__years--sole'}`}>
+          <span className="race-replay__years-lead">Watch an earlier year here</span>
+          {priors.map((prior) => (
+            <ReplayAffordance
+              key={prior.sessionId}
+              capture={prior.capture}
+              fromSessionId={prior.sessionId}
+              title={priorYearTitle(prior.seasonYear, prior.raceLabel)}
+              variant="compact"
+            />
+          ))}
+        </div>
+      ) : null}
     </section>
   );
 };
