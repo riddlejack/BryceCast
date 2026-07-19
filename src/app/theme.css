@@ -519,6 +519,18 @@ button { font-family: inherit; }
   pointer-events: none;
 }
 .track-wind svg { flex: none; opacity: 0.8; }
+/* One-word timeframe ("now") before the value, quiet, with a hairline middot so
+ * the pill reads "now · 7 mph NNE" and never contradicts a forecast nearby. */
+.track-wind__frame {
+  font-size: 11px;
+  color: var(--ink-muted);
+  white-space: nowrap;
+}
+.track-wind__frame::after {
+  content: '·';
+  margin: 0 3px 0 4px;
+  color: var(--ink-muted);
+}
 .track-wind__label {
   font-size: 11px;
   color: var(--ink-secondary);
@@ -567,6 +579,21 @@ button { font-family: inherit; }
   }
 }
 
+/* Home race-day hero: the countdown with the venue outline beside it. Wraps on
+ * a narrow phone so neither the numbers nor the shape ever crowd. */
+.home-hero-track {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  flex-wrap: wrap;
+}
+.home-hero-track__art {
+  flex: 0 0 auto;
+  width: 150px;
+  /* Room above the outline for the "now · …" wind pill (top: -8 on the art). */
+  padding-top: 12px;
+}
+
 /* Race Week variant: same three-zone rhythm, roomier center for the big art. */
 .hero-race--week .hero-race__art { height: 190px; }
 
@@ -578,6 +605,17 @@ button { font-family: inherit; }
 
 /* Paired cards whose intro/caption lines should sit on shared baselines. */
 .card--flex { display: flex; flex-direction: column; }
+
+/* Weather-window conditions: an even grid so the four reads fill the card width
+ * (no dead space on the right) and share one baseline — every stat is now
+ * label + value only, so Wind sits level with Air/Humidity/Sky (Jack's review).
+ * Two columns keep "7 mph NNE" and the sky word roomy at every width. */
+.weather-stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 18px;
+  margin-top: 10px;
+}
 
 /* ---------- segmented control (view switches, Apple-style) ---------- */
 
