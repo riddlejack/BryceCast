@@ -122,6 +122,16 @@ export const windCardinal = (value: unknown): string | null => {
   return CARDINALS_16[Math.round((((deg % 360) + 360) % 360) / 22.5) % 16];
 };
 
+/** Compass-point center bearing for a 16-point cardinal label ("WNW" → 292.5).
+ *  NWS forecasts quantize direction to these points, so the center bearing is
+ *  the faithful numeric reading — null for anything unrecognized. */
+export const cardinalToDeg = (value: unknown): number | null => {
+  const text = asString(value);
+  if (!text) return null;
+  const index = CARDINALS_16.indexOf(text.toUpperCase());
+  return index === -1 ? null : index * 22.5;
+};
+
 export const trackTypeLabel = (value: unknown): string => {
   const text = (asString(value) ?? '').toLowerCase();
   if (text === 'r' || text === 'road') return 'Road course';

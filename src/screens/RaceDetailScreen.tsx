@@ -8,7 +8,8 @@ import { asNumber, asString, formatDate, formatGain, formatNumber, formatPositio
 import { Link } from '../app/router';
 import { displayRaceLabel, loadDebriefBySessionId, roundIndexOf, type ArchiveEntry } from '../data/debriefArchive';
 import { loadRaceStory, type RaceStoryPack, type RaceStoryLapDriver } from '../data/raceStory';
-import { getVenueBySessionId, weatherDeltaText } from '../data/venueDossier';
+import { getVenueBySessionId } from '../data/venueDossier';
+import { FactDelta, WindSwing } from '../app/weatherGlyphs';
 import type { UiVenueDossierVenue, UiVenueDossierVisit } from '../data/uiDataPackage';
 
 type Row = Record<string, unknown>;
@@ -379,41 +380,77 @@ const DayTile = ({ label, value, note }: { label: string; value: ReactNode; note
   </div>
 );
 
-/** Year-over-year conditions strip: this visit against Bryce's previous race at
- *  the same venue. Neutral wording — a delta is a fact about the day. Renders
+/** Year-over-year conditions strip: this visit against Bryce's previous race
+ *  at the same venue, in the dossier's per-value glyph grammar — neutral-ink
+ *  ▲▽ deltas beside each reading, plus the wind-swing mini-visual. Renders
  *  only when the venue has been visited at least twice. */
 const YoYConditionsStrip = ({ venue, visit }: { venue: UiVenueDossierVenue; visit: UiVenueDossierVisit }) => {
   const prior = venue.visits.find((candidate) => candidate.sessionId === visit.deltaVsPrior?.priorSessionId) ?? null;
   const here = visit.conditions;
-  if (!visit.deltaVsPrior || !here) return null;
-  const deltaText = weatherDeltaText(visit.deltaVsPrior);
-  const thisLine = [
-    here.ambientTempF !== null ? `${here.ambientTempF}°F` : null,
-    here.humidityPct !== null ? `${Math.round(here.humidityPct)}% humidity` : null,
-    here.windSpeedMph !== null ? `wind ${here.windSpeedMph} mph${here.windCardinal ? ` ${here.windCardinal}` : ''}` : null
-  ]
-    .filter(Boolean)
-    .join(' · ');
-  const priorHref = prior && prior.conditions ? prior.raceHref : null;
+  const d = visit.deltaVsPrior;
+  if (!d || !here) return null;
+  const fromDeg = prior?.conditions?.windDirectionDeg ?? null;
+  const toDeg = here.windDirectionDeg ?? null;
+
+  const segments: ReactNode[] = [];
+  if (here.ambientTempF !== null) {
+    segments.push(
+      <span key="temp" className="row" style={{ gap: 4, alignItems: 'center' }}>
+        <span className="tnum">{here.ambientTempF}°F</span>
+        <FactDelta delta={d.tempDeltaF} unit="°" />
+      </span>
+    );
+  }
+  if (here.humidityPct !== null) {
+    segments.push(
+      <span key="humidity" className="row" style={{ gap: 4, alignItems: 'center' }}>
+        <span className="tnum">{Math.round(here.humidityPct)}%</span>
+        <FactDelta delta={d.humidityDeltaPct} />
+      </span>
+    );
+  }
+  if (here.windSpeedMph !== null) {
+    segments.push(
+      <span key="wind" className="row" style={{ gap: 4, alignItems: 'center' }}>
+        <span className="tnum">
+          {here.windSpeedMph} mph{here.windCardinal ? ` ${here.windCardinal}` : ''}
+        </span>
+        <FactDelta delta={d.windSpeedDeltaMph} unit=" mph" />
+        {fromDeg !== null && toDeg !== null ? <WindSwing fromDeg={fromDeg} toDeg={toDeg} /> : null}
+      </span>
+    );
+  }
+  segments.push(
+    <span key="vs" style={{ color: 'var(--ink-muted)' }}>
+      vs{' '}
+      {prior ? (
+        <Link to={prior.raceHref} className="navlink" style={{ padding: 0 }}>
+          {d.priorSeasonYear}
+        </Link>
+      ) : (
+        d.priorSeasonYear
+      )}
+    </span>
+  );
+
   return (
     <div style={{ borderTop: '1px solid var(--grid-hairline)', marginTop: 14, paddingTop: 12 }}>
       <span className="caption">This place, other years</span>
-      <p style={{ margin: '6px 0 0', fontSize: 13, color: 'var(--ink-secondary)' }}>
-        <span style={{ color: 'var(--ink-primary)', fontWeight: 560 }}>{visit.seasonYear}:</span> {thisLine || 'no near-track reading'}
-        {deltaText && visit.deltaVsPrior ? (
-          <>
-            {' · vs '}
-            {priorHref ? (
-              <Link to={priorHref} className="navlink" style={{ padding: 0 }}>
-                {visit.deltaVsPrior.priorSeasonYear}
-              </Link>
-            ) : (
-              visit.deltaVsPrior.priorSeasonYear
-            )}
-            {`: ${deltaText}`}
-          </>
-        ) : null}
-      </p>
+      <div className="row row--wrap" style={{ gap: 10, marginTop: 6, fontSize: 13, color: 'var(--ink-secondary)', alignItems: 'center' }}>
+        <span style={{ color: 'var(--ink-primary)', fontWeight: 560 }}>{visit.seasonYear}:</span>
+        {segments.length > 1
+          ? segments.flatMap((segment, index) =>
+              index > 0
+                ? [
+                    <span key={`dot-${index}`} aria-hidden style={{ color: 'var(--ink-muted)' }}>
+                      ·
+                    </span>,
+                    segment
+                  ]
+                : [segment]
+            )
+          : 'no near-track reading on file'}
+      </div>
     </div>
   );
 };

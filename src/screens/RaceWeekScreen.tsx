@@ -4,7 +4,8 @@ import { trackOutlineFor } from '../assets/tracks';
 import { Card, Countdown, HeroPanel, SourcePill, Stat, Unavailable } from '../app/components';
 import { ChartTipCard, chartFont, focusFade, inkConnector, useMeasuredWidth, type ChartTip } from '../app/charts';
 import { TrackArt } from '../app/trackArt';
-import { asNumber, asString, formatClock, formatDate, formatGain, formatNumber, shortVenue, trackTypeLabel, windCardinal } from '../app/format';
+import { asNumber, asString, cardinalToDeg, formatClock, formatDate, formatGain, formatNumber, shortVenue, trackTypeLabel, windCardinal } from '../app/format';
+import { FactDelta, WindSwing } from '../app/weatherGlyphs';
 import { Link, useRouter } from '../app/router';
 import { useApiJson } from '../app/useApiJson';
 import { normalizedName, useNextSession } from '../app/useNextSession';
@@ -24,7 +25,7 @@ import type {
   UiVenueDossierVenue,
   UiVenueDossierVisit
 } from '../data/uiDataPackage';
-import { getVenueByTrackName, getVenueDossier, weatherDeltaText } from '../data/venueDossier';
+import { getVenueByTrackName, getVenueDossier } from '../data/venueDossier';
 import { loadDebriefArchive } from '../data/debriefArchive';
 
 type Row = Record<string, unknown>;
@@ -649,6 +650,12 @@ interface RaceHourSlot {
   sessionLabel: string;
   when: string;
   tempText: string;
+  /** Numeric reads for delta math; null when the NWS unit isn't Fahrenheit or
+   *  the wind speed is a range ("5 to 10 mph" carries no single number). */
+  tempF: number | null;
+  humidityPct: number | null;
+  windMph: number | null;
+  windDirCardinal: string | null;
   sky: string | null;
   windText: string | null;
 }
@@ -693,11 +700,17 @@ const readWeatherReport = (
     if (!period) continue;
     const windText = asString(period.windSpeed);
     const windDir = asString(period.windDirection);
+    const tempUnit = asString(period.temperatureUnit) ?? 'F';
+    const singleMph = windText?.match(/^(\d+)\s*mph$/i);
     raceHour.push({
       sessionId: session.sessionId,
       sessionLabel: sessionLabelFor(session),
       when: formatDate(start, { weekday: 'short', hour: 'numeric' }),
-      tempText: `${formatNumber(period.temperature, 0)}°${asString(period.temperatureUnit) ?? 'F'}`,
+      tempText: `${formatNumber(period.temperature, 0)}°${tempUnit}`,
+      tempF: tempUnit === 'F' ? asNumber(period.temperature) : null,
+      humidityPct: asNumber(period.relativeHumidityPct),
+      windMph: singleMph ? Number(singleMph[1]) : null,
+      windDirCardinal: windDir,
       sky: asString(period.shortForecast),
       /* House wind convention: speed first, uppercase cardinal ("5 mph WNW"). */
       windText: windText ? `${windText}${windDir ? ` ${windDir}` : ''}` : null
@@ -843,24 +856,61 @@ const WeatherWindow = ({ weather, raceDate }: { weather: EventWeather | null; ra
 
 /* ---------- this place, other years (the venue dossier) ---------- */
 
-const ConditionLine = ({ label, value }: { label: string; value: ReactNode }) => (
+/** One condition row: label left; value + optional delta right. Weather
+ *  deltas ride the row itself (Jack's review) in neutral ink — the FactDelta
+ *  grammar, never the verdict colors. */
+const ConditionLine = ({ label, value, delta }: { label: string; value: ReactNode; delta?: ReactNode }) => (
   <div className="row row--between" style={{ fontSize: 12.5, padding: '3px 0' }}>
     <span style={{ color: 'var(--ink-muted)' }}>{label}</span>
-    <span style={{ color: 'var(--ink-secondary)', fontVariantNumeric: 'tabular-nums' }}>{value}</span>
+    <span className="row" style={{ gap: 6, alignItems: 'center', minWidth: 0 }}>
+      <span style={{ color: 'var(--ink-secondary)', fontVariantNumeric: 'tabular-nums' }}>{value}</span>
+      {delta ?? null}
+    </span>
   </div>
 );
 
 interface DossierForecast {
   tempText: string;
+  tempF: number | null;
+  humidityPct: number | null;
+  windMph: number | null;
+  windDirCardinal: string | null;
   sky: string | null;
   windText: string | null;
 }
 
-const VisitColumn = ({ visit, debriefIds }: { visit: UiVenueDossierVisit; debriefIds: Set<string> }) => {
+/** Wind-row delta: speed change + a from→to swing visual when the direction
+ *  moved at least one compass point. */
+const WindRowDelta = ({
+  speedDelta,
+  fromDeg,
+  toDeg
+}: {
+  speedDelta: number | null;
+  fromDeg: number | null;
+  toDeg: number | null;
+}) => (
+  <span className="row" style={{ gap: 5, alignItems: 'center', flex: 'none' }}>
+    <FactDelta delta={speedDelta} unit=" mph" />
+    {fromDeg !== null && toDeg !== null ? <WindSwing fromDeg={fromDeg} toDeg={toDeg} /> : null}
+  </span>
+);
+
+const VisitColumn = ({
+  visit,
+  prior,
+  debriefIds
+}: {
+  visit: UiVenueDossierVisit;
+  prior: UiVenueDossierVisit | null;
+  debriefIds: Set<string>;
+}) => {
   const c = visit.conditions;
-  const finishDelta = visit.deltaVsPrior ? formatGain(visit.deltaVsPrior.finishDelta) : null;
-  const wxDelta = weatherDeltaText(visit.deltaVsPrior);
+  const d = visit.deltaVsPrior;
+  const finishDelta = d ? formatGain(d.finishDelta) : null;
   const clickable = debriefIds.has(visit.sessionId);
+  const fromDeg = prior?.conditions?.windDirectionDeg ?? null;
+  const toDeg = c?.windDirectionDeg ?? null;
   const inner = (
     <>
       <div className="row row--between" style={{ alignItems: 'baseline' }}>
@@ -873,7 +923,7 @@ const VisitColumn = ({ visit, debriefIds }: { visit: UiVenueDossierVisit; debrie
         <span className="tnum" style={{ fontSize: 21, fontWeight: 620 }}>
           P{visit.result.startPosition ?? '—'} → P{visit.result.finishPosition ?? '—'}
         </span>
-        {finishDelta && visit.deltaVsPrior ? (
+        {finishDelta && d ? (
           <span className={`stat__delta ${finishDelta.direction === 'up' ? 'stat__delta--up' : finishDelta.direction === 'down' ? 'stat__delta--down' : 'stat__delta--flat'}`}>
             {finishDelta.text}
           </span>
@@ -882,11 +932,20 @@ const VisitColumn = ({ visit, debriefIds }: { visit: UiVenueDossierVisit; debrie
       <div style={{ marginTop: 8, borderTop: '1px solid var(--grid-hairline)', paddingTop: 6 }}>
         {c ? (
           <>
-            <ConditionLine label="Air" value={c.ambientTempF !== null ? `${c.ambientTempF}°F` : '—'} />
-            <ConditionLine label="Humidity" value={c.humidityPct !== null ? `${Math.round(c.humidityPct)}%` : '—'} />
+            <ConditionLine
+              label="Air"
+              value={c.ambientTempF !== null ? `${c.ambientTempF}°F` : '—'}
+              delta={<FactDelta delta={d?.tempDeltaF} unit="°" />}
+            />
+            <ConditionLine
+              label="Humidity"
+              value={c.humidityPct !== null ? `${Math.round(c.humidityPct)}%` : '—'}
+              delta={<FactDelta delta={d?.humidityDeltaPct} />}
+            />
             <ConditionLine
               label="Wind"
               value={c.windSpeedMph !== null ? `${c.windSpeedMph} mph${c.windCardinal ? ` ${c.windCardinal}` : ''}` : '—'}
+              delta={d ? <WindRowDelta speedDelta={d.windSpeedDeltaMph} fromDeg={fromDeg} toDeg={toDeg} /> : undefined}
             />
             <ConditionLine label="Sky" value={c.sky ?? '—'} />
           </>
@@ -894,11 +953,6 @@ const VisitColumn = ({ visit, debriefIds }: { visit: UiVenueDossierVisit; debrie
           <div style={{ fontSize: 12, color: 'var(--ink-muted)' }}>No near-track weather on file for this visit.</div>
         )}
       </div>
-      {wxDelta && visit.deltaVsPrior ? (
-        <p style={{ margin: '8px 0 0', fontSize: 11.5, color: 'var(--ink-muted)' }}>
-          vs {visit.deltaVsPrior.priorSeasonYear}: {wxDelta}
-        </p>
-      ) : null}
     </>
   );
   return clickable ? (
@@ -910,29 +964,60 @@ const VisitColumn = ({ visit, debriefIds }: { visit: UiVenueDossierVisit; debrie
   );
 };
 
-const ForecastColumn = ({ forecast, eventLabel }: { forecast: DossierForecast | null; eventLabel: string }) => (
-  <div className="dossier-col dossier-col--forecast">
-    <span className="caption" style={{ fontSize: 12.5 }}>{eventLabel}</span>
-    {forecast ? (
-      <>
-        <div style={{ marginTop: 4, fontSize: 21, fontWeight: 620 }} className="tnum">
-          {forecast.tempText}
-        </div>
-        <div style={{ marginTop: 8, borderTop: '1px solid var(--grid-hairline)', paddingTop: 6 }}>
-          {/* NWS ships Title Case; the dossier speaks sentence case like the
-              historic cards ("mainly clear", "overcast"). */}
-          <ConditionLine label="Sky" value={forecast.sky ? forecast.sky.toLowerCase() : '—'} />
-          <ConditionLine label="Wind" value={forecast.windText ?? '—'} />
-        </div>
-        <p style={{ margin: '8px 0 0', fontSize: 11.5, color: 'var(--ink-muted)' }}>NWS forecast · near-track</p>
-      </>
-    ) : (
-      <p style={{ margin: '8px 0 0', fontSize: 12, color: 'var(--ink-secondary)' }}>
-        The forecast fills in within a day or two of green.
-      </p>
-    )}
-  </div>
-);
+/** This weekend's forecast, carrying the same per-row delta grammar vs the
+ *  most recent visit — all three columns speak one language. */
+const ForecastColumn = ({
+  forecast,
+  lastVisit,
+  eventLabel
+}: {
+  forecast: DossierForecast | null;
+  lastVisit: UiVenueDossierVisit | null;
+  eventLabel: string;
+}) => {
+  const prior = lastVisit?.conditions ?? null;
+  const tempDelta = forecast?.tempF != null && prior?.ambientTempF != null ? forecast.tempF - prior.ambientTempF : null;
+  const humidityDelta =
+    forecast?.humidityPct != null && prior?.humidityPct != null ? Math.round(forecast.humidityPct - prior.humidityPct) : null;
+  const windDelta = forecast?.windMph != null && prior?.windSpeedMph != null ? forecast.windMph - prior.windSpeedMph : null;
+  const fromDeg = prior?.windDirectionDeg ?? null;
+  const toDeg = cardinalToDeg(forecast?.windDirCardinal ?? null);
+  return (
+    <div className="dossier-col dossier-col--forecast">
+      <span className="caption" style={{ fontSize: 12.5 }}>{eventLabel}</span>
+      {forecast ? (
+        <>
+          <div className="row" style={{ gap: 8, alignItems: 'baseline', marginTop: 4 }}>
+            <span className="tnum" style={{ fontSize: 21, fontWeight: 620 }}>{forecast.tempText}</span>
+            <FactDelta delta={tempDelta} unit="°" />
+          </div>
+          <div style={{ marginTop: 8, borderTop: '1px solid var(--grid-hairline)', paddingTop: 6 }}>
+            {forecast.humidityPct !== null ? (
+              <ConditionLine
+                label="Humidity"
+                value={`${Math.round(forecast.humidityPct)}%`}
+                delta={<FactDelta delta={humidityDelta} />}
+              />
+            ) : null}
+            <ConditionLine
+              label="Wind"
+              value={forecast.windText ?? '—'}
+              delta={<WindRowDelta speedDelta={windDelta} fromDeg={fromDeg} toDeg={toDeg} />}
+            />
+            {/* NWS ships Title Case; the dossier speaks sentence case like the
+                historic cards ("mainly clear", "overcast"). */}
+            <ConditionLine label="Sky" value={forecast.sky ? forecast.sky.toLowerCase() : '—'} />
+          </div>
+          <p style={{ margin: '8px 0 0', fontSize: 11.5, color: 'var(--ink-muted)' }}>NWS forecast · near-track</p>
+        </>
+      ) : (
+        <p style={{ margin: '8px 0 0', fontSize: 12, color: 'var(--ink-secondary)' }}>
+          The forecast fills in within a day or two of green.
+        </p>
+      )}
+    </div>
+  );
+};
 
 const VenueDossierModule = ({
   venue,
@@ -963,13 +1048,19 @@ const VenueDossierModule = ({
         What the day gave him here before — the result and the weather, year by year, next to this weekend’s forecast.
       </p>
       <div className="dossier-grid">
-        {venue.visits.map((visit) => (
-          <VisitColumn key={visit.sessionId} visit={visit} debriefIds={debriefIds} />
+        {venue.visits.map((visit, index) => (
+          <VisitColumn
+            key={visit.sessionId}
+            visit={visit}
+            prior={index > 0 ? venue.visits[index - 1] : null}
+            debriefIds={debriefIds}
+          />
         ))}
-        <ForecastColumn forecast={forecast} eventLabel="This weekend" />
+        <ForecastColumn forecast={forecast} lastVisit={venue.visits[venue.visits.length - 1] ?? null} eventLabel="This weekend" />
       </div>
       <p style={{ margin: '12px 0 0', fontSize: 11.5, color: 'var(--ink-muted)' }}>
-        A weather delta is a fact about the day, not a verdict on the drive. Conditions are modeled near-track — never official series weather.
+        ▲▽ compare each column with the visit before it. A weather delta is a fact about the day, not a verdict on the drive.
+        Conditions are modeled near-track, never official series weather.
       </p>
     </Card>
   );
@@ -1138,7 +1229,17 @@ export const RaceWeekScreen = () => {
    * window has reached it yet (otherwise the column shows an honest wait). */
   const raceSessionId = dossierVenue?.upcoming?.scheduledSessions.find((session) => session.sessionType === 'race')?.sessionId ?? null;
   const raceSlot = weather?.raceHour.find((slot) => slot.sessionId === raceSessionId) ?? null;
-  const dossierForecast = raceSlot ? { tempText: raceSlot.tempText, sky: raceSlot.sky, windText: raceSlot.windText } : null;
+  const dossierForecast = raceSlot
+    ? {
+        tempText: raceSlot.tempText,
+        tempF: raceSlot.tempF,
+        humidityPct: raceSlot.humidityPct,
+        windMph: raceSlot.windMph,
+        windDirCardinal: raceSlot.windDirCardinal,
+        sky: raceSlot.sky,
+        windText: raceSlot.windText
+      }
+    : null;
 
   /* Current near-track wind, drawn on the hero shape (real-geo outlines only;
    * TrackArt omits it where the outline has no geographic orientation). */
