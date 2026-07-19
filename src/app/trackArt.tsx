@@ -129,13 +129,14 @@ export const TrackArt = ({
     });
   };
 
-  const handleMove = (event: React.PointerEvent<HTMLDivElement>) => {
-    if (!hasHeat || event.pointerType === 'touch') return;
+  /** Nearest path sample to a client-space pointer position, with distance in
+   *  viewBox units — shared by hover and tap so both honor the same hit radius. */
+  const nearestSample = (clientX: number, clientY: number) => {
     const svg = svgRef.current;
-    if (!svg) return;
+    if (!svg) return null;
     const rect = svg.getBoundingClientRect();
-    const vx = ((event.clientX - rect.left) / rect.width) * viewWidth;
-    const vy = ((event.clientY - rect.top) / rect.height) * viewHeight;
+    const vx = ((clientX - rect.left) / rect.width) * viewWidth;
+    const vy = ((clientY - rect.top) / rect.height) * viewHeight;
     let best = geometry.samples[0];
     let bestDist = Infinity;
     for (const sample of geometry.samples) {
@@ -145,16 +146,34 @@ export const TrackArt = ({
         best = sample;
       }
     }
-    const hitRadius = px(18);
-    if (Math.sqrt(bestDist) > hitRadius) {
+    return { sample: best, dist: Math.sqrt(bestDist) };
+  };
+
+  /** The honest-explanation tip for stretches without timing loops (Jack's
+   *  review: the gaps must explain themselves, not just the caption). */
+  const showUntimedTip = (sample: { x: number; y: number }) => {
+    const offset = Math.max(0, (measuredWidth - width) / 2);
+    setTip({
+      x: sample.x * scale + offset,
+      y: sample.y * scale,
+      title: 'No timing loops on this stretch',
+      detail: 'officially untimed'
+    });
+  };
+
+  const handleMove = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (!hasHeat || event.pointerType === 'touch') return;
+    const hit = nearestSample(event.clientX, event.clientY);
+    if (!hit) return;
+    if (hit.dist > px(18)) {
       setHoveredFamily(null);
       if (selectedIndex === null) setTip(null);
       return;
     }
-    const found = heatSections.find((section) => spanContains(section.startT, section.endT, best.t));
+    const found = heatSections.find((section) => spanContains(section.startT, section.endT, hit.sample.t));
     if (!found) {
       setHoveredFamily(null);
-      if (selectedIndex === null) setTip(null);
+      showUntimedTip(hit.sample);
       return;
     }
     setHoveredFamily(found.familyId);
@@ -166,9 +185,17 @@ export const TrackArt = ({
     if (selectedIndex === null) setTip(null);
   };
 
-  /* Touch / click: cycle through sections (Brief E). */
-  const handleActivate = () => {
+  /* Touch / click: a tap ON an untimed stretch explains it; anywhere else
+   * cycles through the timed sections (Brief E). */
+  const handleActivate = (event: React.MouseEvent<HTMLDivElement>) => {
     if (!hasHeat) return;
+    const hit = nearestSample(event.clientX, event.clientY);
+    if (hit && hit.dist <= px(18) && !heatSections.some((section) => spanContains(section.startT, section.endT, hit.sample.t))) {
+      setSelectedIndex(null);
+      setHoveredFamily(null);
+      showUntimedTip(hit.sample);
+      return;
+    }
     const next = selectedIndex === null ? 0 : (selectedIndex + 1) % heatSections.length;
     setSelectedIndex(next);
     setHoveredFamily(null);

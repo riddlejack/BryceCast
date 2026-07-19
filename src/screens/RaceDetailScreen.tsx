@@ -4,7 +4,7 @@ import { Card, HeroPanel, SourcePill, Stat, StatusChip, Unavailable } from '../a
 import { ChartTipCard, chartFont, inkGoldDiverging, useMeasuredWidth, type ChartTip } from '../app/charts';
 import { TrackArt } from '../app/trackArt';
 import { trackOutlineFor, type TrackOutline } from '../assets/tracks';
-import { trackSectionsFor, type TrackSectionAnchorSet } from '../assets/tracks/sections';
+import { timedShareOf, trackSectionsFor, type TrackSectionAnchorSet } from '../assets/tracks/sections';
 import {
   MIN_CLEAN_LAPS,
   lapContextOf,
@@ -17,6 +17,7 @@ import {
   type SectionObservationSet
 } from '../data/sectionObservations';
 import { loadSectionLaps, sectionLapVisitsFor, type SectionLapsPack } from '../data/sectionLaps';
+import { uiDataPackage } from '../data/uiDataPackage';
 import { ControlRow, Segmented } from './careerExplorer';
 import { asNumber, asString, formatDate, formatGain, formatNumber, formatPosition, ordinal } from '../app/format';
 import { Link } from '../app/router';
@@ -580,6 +581,32 @@ const HeatKey = () => {
   );
 };
 
+/** Single-lap drawer row: a one-dot strip would imply a distribution that
+ *  isn't there (director ruling), so one lap gets its plain value instead. */
+const SectionSingleLapRow = ({
+  label,
+  observation
+}: {
+  label: string;
+  observation: { percentile: number | null; cautionState?: 'green' | 'caution' | 'restart' | 'unknown' };
+}) => (
+  <div className="row row--between" style={{ gap: 12 }}>
+    <span
+      title={label}
+      style={{ fontSize: 12.5, color: 'var(--ink-secondary)', minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
+    >
+      {label}
+    </span>
+    <span className="tnum" style={{ fontSize: 12, color: observation.percentile === null ? 'var(--ink-muted)' : 'var(--ink-primary)', textAlign: 'right' }}>
+      {observation.percentile === null
+        ? 'no timing row for this lap'
+        : `this lap: ${ordinal(Math.round(observation.percentile * 100))} percentile${
+            observation.cautionState && observation.cautionState !== 'green' ? ` · ${cautionCopy[observation.cautionState]}` : ''
+          }`}
+    </span>
+  </div>
+);
+
 /** One drawer row: official label, summary ordinal, clean-lap count, and the
  *  distribution strip — every clean lap a quiet dot on the 0–100 scale, the
  *  summary statistic a gold tick. The percentile's meaning, shown not told. */
@@ -695,13 +722,15 @@ const SectionHeatCard = ({
       .sort((left, right) => (right.observation.percentile ?? -1) - (left.observation.percentile ?? -1));
   }, [set, anchors]);
 
+  /* Coverage up front (Jack's review): how much of the lap the loops see. */
+  const coverage = `${anchors.sections.length} timed sections · ${Math.round(timedShareOf(anchors) * 100)}% of the lap`;
   const scopeSummary = !set
     ? null
     : singleLap
-      ? `Lap ${scrubLap} of ${laps?.totalLaps ?? '—'} · ${scrubContext ? cautionCopy[scrubContext.caution] : 'no flag report'}`
+      ? `${coverage} · Lap ${scrubLap} of ${laps?.totalLaps ?? '—'} · ${scrubContext ? cautionCopy[scrubContext.caution] : 'no flag report'}`
       : scope.kind === 'lap_window'
-        ? `${scope.label} · laps ${scope.fromLap}–${scope.toLap} · ${set.comparisonRows ?? 0} clean-lap comparisons`
-        : `Full race · ${set.comparisonRows ?? 0} clean-lap comparisons`;
+        ? `${coverage} · ${scope.label} · laps ${scope.fromLap}–${scope.toLap} · ${set.comparisonRows ?? 0} clean-lap comparisons`
+        : `${coverage} · ${set.comparisonRows ?? 0} clean-lap comparisons`;
 
   return (
     <Card
@@ -851,9 +880,13 @@ const SectionHeatCard = ({
                 </p>
               )}
               <div className="stack" style={{ gap: 10 }}>
-                {drawerRows.map(({ observation, label }) => (
-                  <SectionDistributionRow key={observation.sectionName} label={label} observation={observation} stat={stat} />
-                ))}
+                {drawerRows.map(({ observation, label }) =>
+                  singleLap ? (
+                    <SectionSingleLapRow key={observation.sectionName} label={label} observation={observation} />
+                  ) : (
+                    <SectionDistributionRow key={observation.sectionName} label={label} observation={observation} stat={stat} />
+                  )
+                )}
               </div>
               <p style={{ margin: 0, fontSize: 11.5, color: 'var(--ink-muted)' }}>
                 Clean green-flag laps only — caution and restart laps are excluded from the shades. Loop timing measures
@@ -887,11 +920,23 @@ const VisitShape = ({
 }) => {
   const set = useMemo(() => sectionObservationsFromLaps(pack, { kind: 'full_race' }, 'median'), [pack]);
   const resolved = useMemo(() => resolveHeatSections(anchors, set), [anchors, set]);
+  /* Orientation, not a second question (director ruling): each year carries its
+   * official result as quiet label text from the synchronous season index. */
+  const indexRow = uiDataPackage.screens.raceDebrief.seasonIndex.find((row) => row.sessionId === pack.sessionId) ?? null;
+  const resultLabel =
+    indexRow && indexRow.finishPosition !== null
+      ? indexRow.startPosition !== null
+        ? `P${indexRow.finishPosition} from P${indexRow.startPosition}`
+        : `P${indexRow.finishPosition}`
+      : null;
   return (
     <div className="stack" style={{ gap: 6, flex: '1 1 240px', minWidth: 220, maxWidth: 420 }}>
       <TrackArt outline={outline} showCornerLabels={false} maxHeight={170} sections={resolved.length > 0 ? { resolved } : null} />
       <div className="row row--between" style={{ alignItems: 'baseline' }}>
-        <span style={{ fontSize: 13, fontWeight: 600 }}>{pack.seasonYear ?? '—'}</span>
+        <span style={{ fontSize: 13 }}>
+          <strong style={{ fontWeight: 600 }}>{pack.seasonYear ?? '—'}</strong>
+          {resultLabel ? <span className="tnum" style={{ color: 'var(--ink-secondary)' }}> · {resultLabel}</span> : null}
+        </span>
         <span className="tnum" style={{ fontSize: 11.5, color: 'var(--ink-muted)' }}>
           {set.comparisonRows ?? 0} clean-lap comparisons
         </span>
@@ -930,8 +975,11 @@ const VenueYearsCard = ({
       <p style={{ margin: '0 0 12px', fontSize: 13.5, color: 'var(--ink-secondary)' }}>
         The same shape, one per visit — same scale, same key as above.
       </p>
-      <div style={{ marginBottom: 12 }}>
+      <div className="row row--between" style={{ gap: 10, flexWrap: 'wrap', marginBottom: 12 }}>
         <HeatKey />
+        <span className="tnum" style={{ fontSize: 11.5, color: 'var(--ink-muted)' }}>
+          {anchors.sections.length} timed sections · {Math.round(timedShareOf(anchors) * 100)}% of the lap
+        </span>
       </div>
       <div className="row" style={{ gap: 22, flexWrap: 'wrap', alignItems: 'flex-start' }}>
         {visits.map((pack) => (
