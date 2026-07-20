@@ -15,8 +15,10 @@ import { streetsOfStPetersburgSections } from './streets-of-st-petersburg';
 /** Curated section anchors, keyed to the track outlines in the parent directory.
  *  Ovals first (Brief E sequencing), then the road courses (Phase 3): Road
  *  America, Barber, Portland, Laguna Seca — loop-to-loop families anchored from
- *  the data lake map catalog's decoded LapDistance; Mid-Ohio chain-fitted with no
- *  lake loop distances. Then the street circuits rebuilt from RaceTools map
+ *  the data lake map catalog's decoded LapDistance; Mid-Ohio and Milwaukee pinned
+ *  from the FEED's decoded loop distances (their maps are loop-poor; the feed
+ *  geometry.loopDistances carries the intermediate loops — see those files). Then
+ *  the street circuits rebuilt from RaceTools map
  *  polylines (phase3/outlines-from-maps): Detroit and Arlington tile the lap from
  *  the S/F datum (anchored); St. Petersburg is an approximate single-offset fit.
  *  See ./types.ts for the adapter-contract note on measured loop locations
