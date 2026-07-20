@@ -92,3 +92,21 @@ through the weekend. **Jack runs this** — it publishes the app.
 - Quick-tunnel URLs are ephemeral and unauthenticated by design.
 - The app has no auth gate; do not post the durable URL anywhere public beyond
   the family/friends circle.
+
+## Production truth as of 2026-07-19 (supersedes the options above)
+
+- **Family URL: https://brycecast.com** (+ www) — named Cloudflare tunnel
+  `brycecast` on the Mac mini, `cloudflared tunnel run brycecast` under
+  `com.brycecast.cloudflared`. Domain on Jack's Cloudflare account,
+  auto-renews yearly (~$10.46). Quick-tunnel URLs are retired; the
+  MacBook relay (`~/.brycecast/redirect-server.mjs`) forwards the old
+  family quick-tunnel link to brycecast.com and can itself retire once
+  nobody uses the old link.
+- **Deploy is two commands from the MacBook, no human on the mini:**
+  ```bash
+  npm run deploy:mini        # bundle -> iCloud kit
+  ssh operator@your-host.local 'bash ~/mini-kit/update-mini.sh'
+  ```
+  update-mini.sh waits for iCloud sync, hard-resets to the bundle,
+  rebuilds, restarts ONLY the app-server. Runner + tunnel (and therefore
+  the family URL) are never interrupted.
