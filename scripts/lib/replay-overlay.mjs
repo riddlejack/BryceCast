@@ -45,9 +45,41 @@ export const runnerReportsLiveSession = (status) => {
   return sourceState === 'live' && ['GREEN', 'YELLOW', 'CAUTION', 'RED'].includes(flag);
 };
 
-const parseSnapshot = (row) => {
+const parseSnapshot = (row, db = null) => {
   if (!row?.payload_json) return null;
-  const payload = JSON.parse(row.payload_json);
+  let payload;
+  try {
+    payload = JSON.parse(row.payload_json);
+  } catch {
+    return null;
+  }
+  // A deduped poll stores a `snapshot-dedup.v1` marker instead of the duplicate
+  // raw payload. Resolve it to the full snapshot it references, but keep the
+  // marker's OWN checked_at so the source-lag math below is byte-identical to a
+  // full archive that stored the duplicate outright. Unresolvable → no record.
+  if (payload?.dedup && !payload.raw) {
+    const refId = payload.dedup.ofSnapshotId;
+    if (db && refId != null) {
+      const ref = db.prepare('SELECT payload_json FROM race_snapshots WHERE id = ?').get(Number(refId));
+      if (ref?.payload_json) {
+        try {
+          const full = JSON.parse(ref.payload_json);
+          if (full?.raw) {
+            return {
+              id: Number(row.id),
+              archiveCheckedAt: row.checked_at,
+              sessionKey: row.session_key,
+              summary: full.summary ?? null,
+              raw: full.raw ?? null
+            };
+          }
+        } catch {
+          // fall through to null
+        }
+      }
+    }
+    return null;
+  }
   return {
     id: Number(row.id),
     archiveCheckedAt: row.checked_at,
@@ -320,7 +352,7 @@ export const createReplayOverlay = ({
             LIMIT 1`
         )
         .get(playback.sessionKey, state.virtualNow);
-      const parsed = parseSnapshot(row);
+      const parsed = parseSnapshot(row, db);
       if (!parsed) return null;
       const archiveMs = parseTime(parsed.archiveCheckedAt);
       const virtualMs = parseTime(state.virtualNow);
@@ -365,7 +397,7 @@ export const createReplayOverlay = ({
             LIMIT 1`
         )
         .get(session, virtualNowIso);
-      const parsed = parseSnapshot(row);
+      const parsed = parseSnapshot(row, db);
       if (!parsed) return { outOfRange: true };
       const archiveMs = parseTime(parsed.archiveCheckedAt);
       const sourceLagVirtualMs = archiveMs !== null ? Math.max(0, requestedMs - archiveMs) : 0;

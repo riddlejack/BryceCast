@@ -9,6 +9,7 @@ import {
   fetchEndpoint as defaultFetchEndpoint,
   liveStoragePaths,
   pendingEndpointResult,
+  snapshotDedupKey,
   sourceState,
   writeStorage
 } from './race-poller-core.mjs';
@@ -338,6 +339,11 @@ export const createLiveRunner = (options = {}) => {
     staleLockMs: options.staleLockMs ?? 60_000,
     raw: options.raw ?? true,
     dryRun: options.dryRun ?? false,
+    // Snapshot dedup (LIVE phase only): when the upstream timing blob returns a
+    // byte-identical payload, record the poll for cadence/heartbeat continuity but
+    // do not re-store the duplicate raw bytes. Default ON; `BRYCECAST_SNAPSHOT_DEDUP=0`
+    // (or an explicit `snapshotDedup: false`) is the kill switch.
+    snapshotDedup: options.snapshotDedup ?? process.env.BRYCECAST_SNAPSHOT_DEDUP !== '0',
     sleepCapMs: options.sleepCapMs ?? Infinity,
     pid: options.pid ?? process.pid
   };
@@ -362,8 +368,17 @@ export const createLiveRunner = (options = {}) => {
     rowCounts: {
       snapshots: 0,
       bryceSamples: 0,
-      rawTimingPayloads: 0
+      rawTimingPayloads: 0,
+      dedupedSnapshots: 0
     },
+    // Baseline for the LIVE-phase snapshot dedup: the key + row id of the last
+    // FULL timing snapshot stored this run. Cleared when leaving LIVE and whenever
+    // a non-dedupable (degraded/error) frame is stored, so a marker is only ever
+    // emitted between two byte-identical good frames in the same session.
+    lastTimingDedup: null,
+    // Sticky early-warning for INDYCAR enabling a live track map / GPS socket for
+    // INDY NXT. Populated from tsconfig `track_map.wss_uri` during ARMED/LIVE.
+    trackMapWatch: null,
     endpointFailureCounts: {},
     lastSuccessfulWriteAt: null,
     latestBryce: {
@@ -384,6 +399,9 @@ export const createLiveRunner = (options = {}) => {
     if (state.phase === to) return;
     const from = state.phase;
     state.phase = to;
+    // Dedup only runs inside a single LIVE phase; drop the baseline on the way out
+    // so a later session can never dedup against a stale key.
+    if (from === PHASES.LIVE && to !== PHASES.LIVE) state.lastTimingDedup = null;
     await logEvent({ type: 'phase_transition', from, to, ...extra });
   };
 
@@ -468,12 +486,55 @@ export const createLiveRunner = (options = {}) => {
     state.rowCounts.rawTimingPayloads += 1;
   };
 
+  // A timing frame can be deduped only if it actually carries a resolvable running
+  // order — the same condition the archive readers use to turn a payload into a
+  // frame. A degraded/error poll (no heartbeat or empty Item) is never deduped, so
+  // markers only ever stand between two byte-identical good frames.
+  const timingFrameIsDedupable = (timingResult) => {
+    const timing = timingResult?.payload?.timing_results;
+    return Boolean(timingResult?.ok && timing?.heartbeat && Array.isArray(timing?.Item) && timing.Item.length > 0);
+  };
+
+  const resolveDedup = (timingResult, sessionKey) => {
+    const dedupable = timingFrameIsDedupable(timingResult);
+    // Dedup is a LIVE-phase optimization only: COOLDOWN must keep full-fidelity
+    // final-state captures, and IDLE/ARMED never store a duplicate flood.
+    const enabled = config.snapshotDedup && state.phase === PHASES.LIVE;
+    if (!dedupable) return { enabled, dedupable: false, deduped: false, key: null, ofSnapshotId: null };
+    const key = snapshotDedupKey(timingResult);
+    const prev = state.lastTimingDedup;
+    const deduped = enabled && Boolean(prev && prev.key === key && prev.sessionKey === sessionKey);
+    return { enabled, dedupable: true, deduped, key, ofSnapshotId: deduped ? prev.snapshotId : null };
+  };
+
+  const updateDedupBaseline = (dedup, snapshotId, sessionKey) => {
+    if (!dedup.dedupable || !dedup.key) {
+      state.lastTimingDedup = null;
+      return;
+    }
+    if (dedup.deduped) {
+      // Keep pointing markers at the original full snapshot of this run.
+      state.lastTimingDedup = { key: dedup.key, snapshotId: dedup.ofSnapshotId ?? state.lastTimingDedup?.snapshotId ?? snapshotId, sessionKey };
+    } else {
+      state.lastTimingDedup = { key: dedup.key, snapshotId, sessionKey };
+    }
+  };
+
   const persistSummary = async (summary, results, timingResult, { raw = false } = {}) => {
-    await writeStorage(summary, results, { root, dryRun: config.dryRun });
+    const dedup = resolveDedup(timingResult, summary.sessionKey);
+    const { snapshotId } = await writeStorage(summary, results, {
+      root,
+      dryRun: config.dryRun,
+      dedup: dedup.deduped ? { ofSnapshotId: dedup.ofSnapshotId, key: dedup.key } : null
+    });
     state.rowCounts.snapshots += 1;
+    if (dedup.deduped) state.rowCounts.dedupedSnapshots += 1;
     if (summary.bryce) state.rowCounts.bryceSamples += 1;
     state.lastSuccessfulWriteAt = summary.checkedAt;
-    if (raw) await writeRawTiming(summary, timingResult);
+    // A deduped poll's raw capture would be a byte-identical duplicate of the
+    // prior one, so it is skipped too (the other half of the byte win).
+    if (raw && !dedup.deduped) await writeRawTiming(summary, timingResult);
+    updateDedupBaseline(dedup, snapshotId, summary.sessionKey);
   };
 
   const updateLatestBryce = (summary) => {
@@ -483,6 +544,76 @@ export const createLiveRunner = (options = {}) => {
       flag: summary.flag || null,
       sourceState: summary.sourceState ?? null
     };
+  };
+
+  // tsconfig track_map watcher (ARMED/LIVE only). INDYCAR ships a live GPS track
+  // map over a WebSocket for its own top series; for INDY NXT the `config`
+  // (tsconfig.json) feed carries `track_map.show=false` and an EMPTY
+  // `track_map.wss_uri` today (verified by probe). If that URI ever goes
+  // non-empty while an NXT session is armed or live, it is the earliest signal
+  // INDYCAR has enabled a live map / GPS socket for NXT. This LOGS LOUDLY (event
+  // + stderr + a sticky runner-status field) so an operator sees it immediately.
+  // It implements NO WebSocket client and adds NO poller — it only reads the
+  // tsconfig payload the runner already fetches each enrichment cycle. Building
+  // the actual GPS client is the M-tier follow-on, INDYCAR-only today.
+  const checkTrackMapWatch = async () => {
+    const configResult = state.enrichmentCache.get('config');
+    if (!configResult?.ok) return;
+    const trackMap = configResult.payload?.track_map ?? null;
+    const wssUri = String(trackMap?.wss_uri ?? '').trim();
+    const wssKey = String(trackMap?.wss_key ?? '').trim();
+    const show = trackMap?.show === true;
+    const active = wssUri.length > 0;
+    const previouslyActive = state.trackMapWatch?.active === true;
+    const at = iso(nowMs());
+    if (active) {
+      const session = state.currentSession
+        ? { eventId: state.currentSession.eventId, eventSessionId: state.currentSession.eventSessionId, name: state.currentSession.name }
+        : null;
+      if (!previouslyActive) {
+        // LOW→HIGH edge: fire the loud alert exactly once per edge.
+        await logEvent({
+          type: 'track_map_wss_enabled',
+          level: 'alert',
+          phase: state.phase,
+          wssUri,
+          wssKey: wssKey ? 'present' : '',
+          show,
+          session
+        });
+        console.error(
+          JSON.stringify({
+            level: 'ALERT',
+            at,
+            event: 'track_map_wss_enabled',
+            phase: state.phase,
+            message:
+              'INDYCAR tsconfig track_map.wss_uri is NON-EMPTY during an INDY NXT ARMED/LIVE session — a live GPS/track-map socket may now be available for NXT. BryceCast implements NO WebSocket client (that is the M-tier follow-on); this is the S-tier early-warning only.',
+            wssUri,
+            wssKeyPresent: wssKey.length > 0,
+            show,
+            session
+          })
+        );
+      }
+      state.trackMapWatch = {
+        active: true,
+        wssUri,
+        wssKeyPresent: wssKey.length > 0,
+        show,
+        firstSeenAt: state.trackMapWatch?.firstSeenAt ?? at,
+        lastSeenAt: at
+      };
+    } else {
+      state.trackMapWatch = {
+        active: false,
+        wssUri: '',
+        wssKeyPresent: false,
+        show,
+        firstSeenAt: state.trackMapWatch?.firstSeenAt ?? null,
+        lastCheckedAt: at
+      };
+    }
   };
 
   const writeStatus = async () => {
@@ -516,6 +647,7 @@ export const createLiveRunner = (options = {}) => {
       endpointFailureCounts: { ...state.endpointFailureCounts },
       lastSuccessfulWriteAt: state.lastSuccessfulWriteAt,
       latestBryce: { ...state.latestBryce },
+      trackMapWatch: state.trackMapWatch,
       processBudget: state.processBudget
     };
     await writeAtomicJson(paths.statusPath, payload, { dryRun: config.dryRun });
@@ -610,6 +742,10 @@ export const createLiveRunner = (options = {}) => {
     else if (state.phase === PHASES.ARMED) await handleArmed();
     else if (state.phase === PHASES.LIVE) await handleLive();
     else if (state.phase === PHASES.COOLDOWN) await handleCooldown();
+    // The tsconfig track_map early-warning reads the config the enrichment cycle
+    // already fetched — ARMED/LIVE only, no extra request. Phase is read after the
+    // handler so a fresh IDLE→LIVE or ARMED→LIVE transition is covered this tick.
+    if (state.phase === PHASES.ARMED || state.phase === PHASES.LIVE) await checkTrackMapWatch();
     state.iteration += 1;
     return writeStatus();
   };

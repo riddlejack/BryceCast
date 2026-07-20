@@ -1,4 +1,5 @@
 import { appendFile, mkdir, writeFile } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
 import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { DatabaseSync } from 'node:sqlite';
@@ -112,6 +113,27 @@ export const pendingEndpointResult = (endpoint, note, fetchedAt = new Date().toI
   payload: null,
   error: note
 });
+
+// A content fingerprint for one fetched endpoint result, used by the live runner
+// to detect an UNCHANGED upstream blob and skip re-storing the duplicate snapshot
+// bytes (heartbeat continuity is still recorded). The real INDYCAR blob
+// (indycar.blob.core.windows.net racecontrol family, Azure BlockBlob) returns a
+// strong `ETag` that is content-derived and stable across our cache-bust query
+// string — verified by probe — so it is the primary key. `Last-Modified` (paired
+// with byte length to defend against a same-second content change) is the
+// documented fallback, and a SHA-1 of the parsed payload is the last resort when
+// the upstream sends neither validator. ETag can never collide across differing
+// content by HTTP contract, so a marker is only ever emitted for a truly
+// byte-identical payload.
+export const snapshotDedupKey = (result) => {
+  if (!result) return null;
+  const etag = result.etag ? String(result.etag).trim() : '';
+  if (etag) return `etag:${etag}`;
+  const lastModified = result.lastModified ? String(result.lastModified).trim() : '';
+  if (lastModified) return `lm:${lastModified}|${result.bytes ?? 0}`;
+  const hash = createHash('sha1').update(JSON.stringify(result.payload ?? null)).digest('hex');
+  return `sha1:${hash}`;
+};
 
 export const buildSummary = (results, { root = defaultRoot } = {}) => {
   const paths = liveStoragePaths(root);
@@ -319,9 +341,9 @@ export const openDb = (root = defaultRoot) => {
   return db;
 };
 
-export const writeStorage = async (summary, results, { root = defaultRoot, dryRun = false } = {}) => {
+export const writeStorage = async (summary, results, { root = defaultRoot, dryRun = false, dedup = null } = {}) => {
   if (dryRun) {
-    return { wrote: false, snapshotId: null };
+    return { wrote: false, snapshotId: null, deduped: false };
   }
 
   const paths = liveStoragePaths(root);
@@ -353,10 +375,27 @@ export const writeStorage = async (summary, results, { root = defaultRoot, dryRu
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
 
-    const rawPayload = {
-      summary,
-      raw: Object.fromEntries(results.map((result) => [result.id, result.payload]))
-    };
+    // On a deduped poll the upstream timing payload was byte-identical to the
+    // last full snapshot in this run, so the large raw payload is NOT re-stored.
+    // The row still lands (with its own checked_at and the cheap compact columns)
+    // so the archive keeps an unbroken poll cadence — a held position never reads
+    // as a feed gap — and it carries a back-reference to the full snapshot the
+    // archive readers resolve it to. Everything else (probes, bryce_samples, the
+    // JSONL summary, the latest-snapshot files) is written as normal.
+    const payloadJson = dedup
+      ? JSON.stringify({
+          schemaVersion: 'snapshot-dedup.v1',
+          dedup: {
+            ofSnapshotId: dedup.ofSnapshotId ?? null,
+            key: dedup.key ?? null,
+            checkedAt: summary.checkedAt,
+            reason: 'unchanged-upstream-timing-payload'
+          }
+        })
+      : JSON.stringify({
+          summary,
+          raw: Object.fromEntries(results.map((result) => [result.id, result.payload]))
+        });
     const snapshotResult = insertSnapshot.run(
       summary.checkedAt,
       summary.sessionKey,
@@ -373,7 +412,7 @@ export const writeStorage = async (summary, results, { root = defaultRoot, dryRu
       summary.bryce?.laps ?? null,
       summary.bryce?.gap ?? null,
       summary.bryce?.bestLapTime ?? null,
-      JSON.stringify(rawPayload)
+      payloadJson
     );
     snapshotId = Number(snapshotResult.lastInsertRowid);
 
@@ -426,5 +465,5 @@ export const writeStorage = async (summary, results, { root = defaultRoot, dryRu
   await appendFile(paths.jsonlPath, line);
   await writeFile(paths.latestPath, JSON.stringify(summary, null, 2));
   await writeFile(paths.publicLatestPath, JSON.stringify(summary, null, 2));
-  return { wrote: true, snapshotId };
+  return { wrote: true, snapshotId, deduped: Boolean(dedup) };
 };

@@ -1974,7 +1974,11 @@ const rankSeriesFrameFromRaw = (checkedAt, raw) => {
   };
 };
 
-// One archived sqlite snapshot (payload_json string) → a compact frame.
+// One archived sqlite snapshot (payload_json string) → a compact frame. A deduped
+// poll stores a `snapshot-dedup.v1` marker instead of the duplicate raw payload
+// (the runner's LIVE-phase dedup); it resolves to a `{ dedup: true }` sentinel the
+// fold expands into a carry-forward of the last observed order, so a deduped
+// archive folds to the exact same breakpoints/cadence as a full one.
 const rankSeriesFrameFromSnapshot = (checkedAt, payloadJson) => {
   let payload;
   try {
@@ -1982,6 +1986,7 @@ const rankSeriesFrameFromSnapshot = (checkedAt, payloadJson) => {
   } catch {
     return null;
   }
+  if (payload?.dedup && !payload.raw) return { dedup: true, checkedAt };
   return rankSeriesFrameFromRaw(checkedAt, payload?.raw);
 };
 
@@ -1997,6 +2002,27 @@ const rankSeriesFrameFromSnapshot = (checkedAt, payloadJson) => {
 //     `gapBefore = true`, even if the order never changed across the outage.
 // Shared by both ingest paths.
 const foldRankSeriesFrame = (entry, frame, checkedAt) => {
+  if (frame && frame.dedup === true) {
+    // A deduped poll: the upstream timing payload was byte-identical to the last
+    // stored snapshot, so no full payload was re-stored. Carry the last observed
+    // running order forward at THIS poll's clock. That advances the cadence exactly
+    // as a stored duplicate would (a long held position never registers as a false
+    // archive gap) while keeping the signature unchanged (no spurious breakpoint),
+    // so the fold state is identical to the full archive. A marker before any full
+    // frame (no prior state to carry) is simply skipped.
+    if (!entry.lastRawEnriched) return;
+    const carried = entry.lastRawEnriched;
+    frame = {
+      checkedAt: checkedAt ?? carried.checkedAt,
+      lap: carried.lap,
+      flag: carried.flag,
+      eventId: '',
+      eventSessionId: '',
+      rows: carried.rows,
+      bryceId: entry.bryceId ?? '',
+      signature: carried.signature
+    };
+  }
   if (!frame) return;
   const enriched = {
     checkedAt: checkedAt ?? frame.checkedAt,
