@@ -270,10 +270,19 @@ const RaceRow = ({ row }: { row: UiSeasonIndexRow }) => {
         {topFive ? <span aria-label="top five" style={{ width: 5, height: 5, borderRadius: 2, background: 'var(--bryce)' }} /> : null}
       </span>
       <MiniTrack trackName={row.trackName} />
-      <span className="tower__name" style={{ whiteSpace: 'normal' }}>
-        {shortLabel}
+      {/* Name + status stack vertically (#24): the shared .tower__name is a
+          centered flex row, so we flip it to a left-aligned column here. Status
+          then sits on its own line under the race name — a long venue never
+          truncates it to "mechanic", and it no longer steals the title column. */}
+      <span
+        className="tower__name"
+        style={{ whiteSpace: 'normal', flexDirection: 'column', alignItems: 'flex-start', gap: 2 }}
+      >
+        <span>{shortLabel}</span>
         {!clean && row.officialStatus && row.officialStatus !== 'unknown' ? (
-          <span className="tower__team"> {row.officialStatus}</span>
+          <span className="tower__team">
+            {row.officialStatus.charAt(0).toUpperCase() + row.officialStatus.slice(1)}
+          </span>
         ) : null}
       </span>
       <span className={`stat__delta ${gain?.direction === 'up' ? 'stat__delta--up' : 'stat__delta--down'}`} style={{ textAlign: 'right' }}>

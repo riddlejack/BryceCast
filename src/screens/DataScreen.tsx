@@ -1,4 +1,4 @@
-import { Card, ScreenHead, StatusChip, Unavailable } from '../app/components';
+import { Card, ScreenHead, SourcePill, StatusChip, Unavailable } from '../app/components';
 import { trackOutlineAttribution } from '../assets/tracks';
 import { asNumber, asString, formatNumber } from '../app/format';
 import { useApiJson } from '../app/useApiJson';
@@ -26,6 +26,29 @@ const sourceClasses: Array<{ name: string; detail: string }> = [
       'Outside captures shared with permission: RaceTools race-weekend geometry for street-circuit shapes, and Timing71 timing for 2026 replays. Always named where they appear.'
   }
 ];
+
+/* Human headings for the source-family table (#12): the family-facing surface
+ * reads in plain words; the raw schema identifiers move into a technical drawer. */
+const familyLabels: Record<string, string> = {
+  race_results: 'Race results',
+  full_field_results: 'Full-field results',
+  practice_results: 'Practice results',
+  qualifying_results: 'Qualifying results',
+  lap_samples: 'Lap samples',
+  section_results: 'Section results',
+  top_section_times: 'Top section times',
+  event_summary_stats: 'Event summary stats',
+  leader_lap_summary: 'Leader lap summary',
+  incidents: 'Incidents',
+  penalties: 'Penalties',
+  racecraft_events: 'Racecraft events',
+  weather_observations: 'Weather observations',
+  future_schedule: 'Future schedule',
+  pit_stop_counts: 'Pit stop counts',
+  telemetry_or_car_engineering: 'Telemetry / car engineering'
+};
+const humanFamily = (id: string): string =>
+  familyLabels[id] ?? id.replace(/_/g, ' ').replace(/^./, (character) => character.toUpperCase());
 
 /** Live recorder console: the single-ingestor's own status file, via the API. */
 const RecorderConsole = () => {
@@ -116,9 +139,31 @@ export const DataScreen = () => {
         </div>
       </Card>
 
-      <Card title="Source families" flush>
+      <Card
+        title="Source families"
+        flush
+        action={
+          Array.isArray(audit) && audit.length > 0 ? (
+            <SourcePill
+              title="Source families · technical identifiers"
+              entries={audit.map((row) => ({
+                label: humanFamily(row.sourceFamily ?? row.family ?? '—'),
+                path: row.sourceFamily ?? row.family ?? undefined,
+                note: row.primaryArtifacts || undefined
+              }))}
+            />
+          ) : undefined
+        }
+      >
         {Array.isArray(audit) && audit.length > 0 ? (
           <div className="tower">
+            <div
+              className="tower__row"
+              style={{ gridTemplateColumns: '1fr auto', paddingTop: 4, paddingBottom: 4 }}
+            >
+              <span className="caption">Source family</span>
+              <span className="caption">Records</span>
+            </div>
             {audit.map((row, index) => {
               const conclusion = row.auditConclusion ?? row.analysisStatus ?? '';
               /* Read the class straight from the family's own conclusion so the
@@ -129,10 +174,11 @@ export const DataScreen = () => {
                 : /racetools|timing71|third.party|permission/i.test(conclusion)
                   ? 'permissioned third-party'
                   : 'official';
+              const records = asNumber(row.sourceRows);
               return (
                 <div key={index} className="tower__row" style={{ gridTemplateColumns: '1fr auto' }}>
                   <span className="tower__name" style={{ whiteSpace: 'normal' }}>
-                    {row.sourceFamily ?? row.family ?? '—'}
+                    {humanFamily(row.sourceFamily ?? row.family ?? '—')}
                     <span
                       style={{
                         marginLeft: 8,
@@ -145,7 +191,9 @@ export const DataScreen = () => {
                     </span>
                     <span className="tower__team"> {conclusion}</span>
                   </span>
-                  <span className="tower__gap mono" style={{ fontSize: 12 }}>{row.sourceRows ?? ''}</span>
+                  <span className="tower__gap tnum" style={{ fontSize: 12.5 }}>
+                    {records !== null ? formatNumber(records, 0) : '—'}
+                  </span>
                 </div>
               );
             })}

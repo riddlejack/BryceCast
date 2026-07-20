@@ -516,9 +516,23 @@ const FridaySlope = ({ prep, debriefIds }: { prep: UiNextEventPrep; debriefIds: 
   );
 };
 
+/* Family copy over signed numbers (#25). Builder convention (build-ui-data-
+ * package.mjs): medianPositionsBetter = bestPracticeRank - raceFinish, so
+ * POSITIVE means race day finished better than Friday. The copy claims
+ * "better" only when the sign says so; a negative median is stated as the
+ * field sharpening on race day — a fact about the day, not a verdict. */
+const smallCountWords = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
+const placesPhrase = (medianPositionsBetter: number | null): string | null => {
+  if (medianPositionsBetter === null || medianPositionsBetter <= 0) return null;
+  const places = Math.round(medianPositionsBetter);
+  const word = places <= 10 ? smallCountWords[places] : String(places);
+  return `${word} ${places === 1 ? 'place' : 'places'}`;
+};
+
 const FridaySignal = ({ prep, trackTypeName, debriefIds }: { prep: UiNextEventPrep; trackTypeName: string; debriefIds: Set<string> }) => {
   const summary = prep.fridaySummary;
   if (summary.weekendCount < 3) return null;
+  const betterBy = placesPhrase(summary.medianPositionsBetter);
   return (
     <Card
       title="The Friday signal"
@@ -537,12 +551,14 @@ const FridaySignal = ({ prep, trackTypeName, debriefIds }: { prep: UiNextEventPr
       }
     >
       <p style={{ margin: '0 0 6px', fontSize: 13.5, color: 'var(--ink-secondary)', maxWidth: '58ch' }}>
-        On {trackTypeName.toLowerCase()}s, race day has beaten Friday. His finish improved on his best practice rank in{' '}
+        On {trackTypeName.toLowerCase()}s, his race finish beat his best practice rank in{' '}
         <strong style={{ color: 'var(--ink-primary)' }}>
           {summary.finishBeatBestPractice} of {summary.weekendCount}
         </strong>{' '}
-        clean weekends{summary.medianPositionsBetter !== null ? `, typically by ${summary.medianPositionsBetter} spots` : ''}. If
-        you liked practice, you’ll love the race.
+        clean weekends{betterBy ? `, typically finishing ${betterBy} better` : ''}.
+        {betterBy || summary.finishBeatBestPractice * 2 > summary.weekendCount
+          ? ' If you liked practice, you’ll love the race.'
+          : ' Race day runs deeper than Friday — the whole field sharpens when it counts.'}
       </p>
       <FridaySlope prep={prep} debriefIds={debriefIds} />
       <p className="caption caption--secondary" style={{ margin: '6px 0 0' }}>
@@ -1341,6 +1357,14 @@ export const RaceWeekScreen = () => {
                 </div>
               </HeroBlock>
             )}
+            {/* Weather rides here as a quiet caption beside the countdown (#27),
+                never a pill on the track line — the geometry stays clean and the
+                full reading lives in the Weather window below. */}
+            {heroWind ? (
+              <p className="caption caption--secondary" style={{ margin: '10px 0 0' }}>
+                At the track {heroWind.frame ?? 'now'} · {heroWind.label}
+              </p>
+            ) : null}
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <div className="hero-race__art" style={{ width: '100%' }}>
@@ -1354,7 +1378,6 @@ export const RaceWeekScreen = () => {
                   annotation={venueSections.heroHeat.length > 0 ? null : sectionNote}
                   sections={venueSections.heroHeat.length > 0 ? { resolved: venueSections.heroHeat, showLabels: false } : null}
                   maxHeight={190}
-                  wind={heroWind}
                 />
               ) : null}
             </div>

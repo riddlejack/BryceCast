@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { Card, SourcePill, Stat, Unavailable } from '../app/components';
-import { ChartTipCard, chartFont, useInViewOnce, useMeasuredWidth, useReducedMotion, type ChartTip } from '../app/charts';
+import { ChartTipCard, chartFont, useCoarsePointer, useInViewOnce, useMeasuredWidth, useReducedMotion, type ChartTip } from '../app/charts';
 import { asNumber, asString, ordinal } from '../app/format';
 import { Link, useRouter } from '../app/router';
 import { uiDataPackage, type UiCareerMoment } from '../data/uiDataPackage';
@@ -835,6 +835,7 @@ const GroupedStrips = ({ rows, groupBy }: { rows: CareerRow[]; groupBy: GroupBy 
 
 export const CareerExplorer = () => {
   const rows = useCareerRows();
+  const coarse = useCoarsePointer();
   const [view, setView] = useState<'grouped' | 'conversion'>('grouped');
   const [groupBy, setGroupBy] = useState<GroupBy>('series');
   const [seriesFilter, setSeriesFilter] = useState<string | null>(null);
@@ -962,7 +963,7 @@ export const CareerExplorer = () => {
           </p>
           <GroupedStrips rows={filtered} groupBy={groupBy} />
           <p className="caption caption--secondary" style={{ margin: '6px 0 0' }}>
-            ○ a day that ended early · hover any dot · click any dot to open its race
+            ○ a day that ended early · {coarse ? 'tap any dot to open its race' : 'hover any dot · click any dot to open its race'}
             {groupBy === 'conditions' ? ' · condition lanes cover races with a sourced report' : ''}
           </p>
         </>
@@ -1027,6 +1028,7 @@ export const RivalsCard = () => {
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();
   const [swarmRef, swarmSeen] = useInViewOnce<HTMLDivElement>(0.3);
   const reducedMotion = useReducedMotion();
+  const coarse = useCoarsePointer();
   /* The dots' entrance animation gates their opacity on the in-view observer.
    * Under reduced motion — including every static/QA screenshot, which sets
    * prefers-reduced-motion — that observer may never fire, leaving 43 promised
@@ -1173,7 +1175,7 @@ export const RivalsCard = () => {
       </div>
       </div>
       <p className="caption caption--secondary" style={{ margin: '4px 0 0' }}>
-        Bigger circle = more shared grids · deeper gold = Bryce leads the record, deeper ink = the rival does · hover for the
+        Bigger circle = more shared grids · deeper gold = Bryce leads the record, deeper ink = the rival does · {coarse ? 'tap' : 'hover'} for the
         record{smallSample > 0 ? ` · ${smallSample} more drivers shared fewer than five races` : ''}
       </p>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))', marginTop: 14, gap: 12 }}>
