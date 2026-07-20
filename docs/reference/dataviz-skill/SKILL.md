@@ -47,10 +47,12 @@ beside this file are the full rulebook; this page is the procedure.
 - Surfaces: white page, `#f5f5f7` cards. Ink `#1d1d1f`/`#6e6e73`/`#86868b`.
 - **Gold (`--bryce`) = Bryce's marker, one meaning per chart, always keyed
   in a caption.** Never gold as text/background/border.
-- Chapter tints (validated 2026-07-12): `--chapter-f1600 #5581c2`,
-  `--chapter-ff #2f9377`, `--chapter-gb3 #b98a3f`, `--chapter-euro #b05a73`,
+- Chapter tints (revalidated 2026-07-20, all-pairs deutan-safe): `--chapter-f1600 #5581c2`,
+  `--chapter-ff #2f9377`, `--chapter-gb3 #b98a3f`, `--chapter-euro #992f52`,
   `--chapter-fro #6c9455`, `--chapter-imsa #2e9ac2`; INDY NXT stays ink.
-  Rendered ~0.5 opacity at rest, full hue on hover.
+  Rendered ~0.5 opacity at rest, full hue on hover. (Euro deepened from
+  #b05a73: it failed the all-pairs CVD check against `--chapter-ff` at deutan
+  ΔE 2.8; #992f52 clears it at ΔE 14.4.)
 - Rivals diverging: ink `#3a3a3f` ↔ neutral `#c6c6cb` ↔ gold `#e09a2f`
   (`recordColor()` in src/screens/careerExplorer.tsx).
 - Status: darkened Apple semantic green/orange/red, dot+words, never alone.

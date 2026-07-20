@@ -71,6 +71,13 @@ const sources = {
   restartReportDriverDeltas: 'analysis/restart-report/output/tables/restart_driver_deltas.csv',
   restartReportBuilderScript: 'analysis/restart-report/scripts/build_restart_report.py',
   restartReportValidatorScript: 'analysis/restart-report/scripts/validate_restart_report.py',
+  qualifyingLayerSummary: 'analysis/qualifying-layer/output/summary.json',
+  qualifyingLayerSessions: 'analysis/qualifying-layer/output/tables/quali_sessions.csv',
+  qualifyingLayerConversion: 'analysis/qualifying-layer/output/tables/quali_race_conversion.csv',
+  qualifyingLayerBySeriesSeason: 'analysis/qualifying-layer/output/tables/quali_by_series_season.csv',
+  qualifyingLayerExcluded: 'analysis/qualifying-layer/output/tables/excluded_races.csv',
+  qualifyingLayerBuilderScript: 'analysis/qualifying-layer/scripts/build_qualifying_layer.py',
+  qualifyingLayerValidatorScript: 'analysis/qualifying-layer/scripts/validate_qualifying_layer.py',
   cautionAtlasSummary: 'analysis/caution-atlas/output/summary.json',
   cautionAtlasEvents: 'analysis/caution-atlas/output/tables/caution_events.csv',
   cautionAtlasByRace: 'analysis/caution-atlas/output/tables/caution_by_race.csv',
@@ -238,6 +245,22 @@ const runCautionAtlas = () => {
   for (const script of [
     'analysis/caution-atlas/scripts/build_caution_atlas.py',
     'analysis/caution-atlas/scripts/validate_caution_atlas.py'
+  ]) {
+    const result = spawnSync(python, [script], { cwd: repoRoot, stdio: 'inherit' });
+    if (result.error) {
+      throw new Error(`Failed to run ${script} with ${python}: ${result.error.message}`);
+    }
+    if (result.status !== 0) {
+      throw new Error(`${script} exited ${result.status ?? 'without a status'} using ${python}`);
+    }
+  }
+};
+
+const runQualifyingLayer = () => {
+  const python = analyticsPython();
+  for (const script of [
+    'analysis/qualifying-layer/scripts/build_qualifying_layer.py',
+    'analysis/qualifying-layer/scripts/validate_qualifying_layer.py'
   ]) {
     const result = spawnSync(python, [script], { cwd: repoRoot, stdio: 'inherit' });
     if (result.error) {
@@ -1801,6 +1824,147 @@ const buildRestartReport = ({ summary, byRaceRows, seasonIndex }) => {
   };
 };
 
+/* The qualifying layer: one qualifying model across every series. The per-season
+ * rollup carries where Bryce qualified (average/best rank, field-size
+ * denominator) and — where the source has a grid column — how that grid slot
+ * converted to the flag (ahead / held / behind, with denominators). Source
+ * family is preserved on every row; the two families are never blended within a
+ * session. Sized small for Brief M (per-series rollup + career, no per-race
+ * spine on the wire). */
+const buildQualifyingLayer = ({ summary, conversionRows, sessionRows }) => {
+  const bySeriesSeason = (summary.bySeriesSeason ?? []).map((row) => ({
+    seriesId: row.seriesId,
+    seriesName: row.seriesName,
+    seasonYear: numberOrNull(row.seasonYear),
+    sourceFamily: row.sourceFamily,
+    qualifyingSessions: numberOrNull(row.qualifyingSessions),
+    gridSettingSessions: numberOrNull(row.gridSettingSessions),
+    avgQualiRank: numberOrNull(row.avgQualiRank),
+    bestQualiRank: numberOrNull(row.bestQualiRank),
+    avgQualiFieldSize: numberOrNull(row.avgQualiFieldSize),
+    conversionRaces: numberOrNull(row.conversionRaces),
+    finishedAhead: numberOrNull(row.finishedAhead),
+    held: numberOrNull(row.held),
+    finishedBehind: numberOrNull(row.finishedBehind),
+    avgQualiRankConverted: numberOrNull(row.avgQualiRankConverted),
+    avgFinishConverted: numberOrNull(row.avgFinishConverted)
+  }));
+  // A per-series roll-up (families summed) for the headline lanes, career-ordered
+  // by first season so the module reads oldest → newest like the rest of the page.
+  const bySeriesMap = new Map();
+  for (const row of bySeriesSeason) {
+    const entry = bySeriesMap.get(row.seriesId) ?? {
+      seriesId: row.seriesId,
+      seriesName: row.seriesName,
+      firstSeason: row.seasonYear,
+      sourceFamilies: new Set(),
+      conversionRaces: 0,
+      finishedAhead: 0,
+      held: 0,
+      finishedBehind: 0,
+      qualifyingSessions: 0,
+      _rankWeighted: 0,
+      _rankCount: 0,
+      _fieldWeighted: 0,
+      _fieldCount: 0,
+      bestQualiRank: null
+    };
+    entry.sourceFamilies.add(row.sourceFamily);
+    entry.conversionRaces += row.conversionRaces ?? 0;
+    entry.finishedAhead += row.finishedAhead ?? 0;
+    entry.held += row.held ?? 0;
+    entry.finishedBehind += row.finishedBehind ?? 0;
+    entry.qualifyingSessions += row.qualifyingSessions ?? 0;
+    if (row.avgQualiRank != null && row.gridSettingSessions) {
+      entry._rankWeighted += row.avgQualiRank * row.gridSettingSessions;
+      entry._rankCount += row.gridSettingSessions;
+    }
+    if (row.avgQualiFieldSize != null && row.gridSettingSessions) {
+      entry._fieldWeighted += row.avgQualiFieldSize * row.gridSettingSessions;
+      entry._fieldCount += row.gridSettingSessions;
+    }
+    if (row.bestQualiRank != null) {
+      entry.bestQualiRank = entry.bestQualiRank == null ? row.bestQualiRank : Math.min(entry.bestQualiRank, row.bestQualiRank);
+    }
+    if (row.seasonYear != null && (entry.firstSeason == null || row.seasonYear < entry.firstSeason)) {
+      entry.firstSeason = row.seasonYear;
+    }
+    bySeriesMap.set(row.seriesId, entry);
+  }
+  const bySeries = [...bySeriesMap.values()]
+    .map((entry) => ({
+      seriesId: entry.seriesId,
+      seriesName: entry.seriesName,
+      firstSeason: entry.firstSeason,
+      sourceFamilies: [...entry.sourceFamilies],
+      qualifyingSessions: entry.qualifyingSessions,
+      avgQualiRank: entry._rankCount ? Number((entry._rankWeighted / entry._rankCount).toFixed(1)) : null,
+      bestQualiRank: entry.bestQualiRank,
+      avgQualiFieldSize: entry._fieldCount ? Number((entry._fieldWeighted / entry._fieldCount).toFixed(1)) : null,
+      conversionRaces: entry.conversionRaces,
+      finishedAhead: entry.finishedAhead,
+      held: entry.held,
+      finishedBehind: entry.finishedBehind
+    }))
+    .sort((left, right) => (left.firstSeason ?? 0) - (right.firstSeason ?? 0) || String(left.seriesId).localeCompare(String(right.seriesId)));
+  // Best qualifying, with the context the stat tile needs: how often that grid
+  // slot was reached, in which series/season, and against what field sizes.
+  // The per-race spine never rides the wire, so this is condensed from the
+  // qualifying inventory here rather than hard-coded in the view.
+  const bestQualifying = (() => {
+    const ranked = (sessionRows ?? [])
+      .map((row) => ({
+        rank: numberOrNull(row.qualiRank),
+        field: numberOrNull(row.qualiFieldSize),
+        seriesName: row.seriesName,
+        seasonYear: numberOrNull(row.seasonYear)
+      }))
+      .filter((row) => row.rank != null);
+    if (ranked.length === 0) return null;
+    const rank = Math.min(...ranked.map((row) => row.rank));
+    const at = ranked.filter((row) => row.rank === rank);
+    const seriesNames = [...new Set(at.map((row) => row.seriesName).filter(Boolean))];
+    const seasons = [...new Set(at.map((row) => row.seasonYear).filter((year) => year != null))].sort((a, b) => a - b);
+    const fieldSizes = at.map((row) => row.field).filter((size) => size != null).sort((a, b) => a - b);
+    return {
+      rank,
+      occurrences: at.length,
+      seriesName: seriesNames.length === 1 ? seriesNames[0] : null,
+      seasonYear: seasons.length === 1 ? seasons[0] : null,
+      fieldSizes
+    };
+  })();
+  return {
+    schemaVersion: summary.schemaVersion,
+    coverage: summary.coverage,
+    career: summary.career,
+    bestQualifying,
+    sourceFamilyMap: summary.sourceFamilyMap ?? [],
+    bySeries,
+    bySeriesSeason,
+    conversionSample: (conversionRows ?? []).slice(0, 25).map((row) => ({
+      raceSessionId: row.raceSessionId,
+      seriesName: row.seriesName,
+      seasonYear: numberOrNull(row.seasonYear),
+      eventName: row.eventName,
+      raceLabel: row.raceLabel,
+      sourceFamily: row.sourceFamily,
+      qualiRank: numberOrNull(row.qualiRank),
+      qualiFieldSize: numberOrNull(row.qualiFieldSize),
+      finish: numberOrNull(row.finish),
+      conversionOutcome: row.conversionOutcome
+    })),
+    caveats: summary.caveats ?? [],
+    sourceRefs: [
+      sourceRef('qualifyingLayerSummary', 'Validated qualifying-layer coverage, source-family map, and career conversion totals.'),
+      sourceRef('qualifyingLayerBySeriesSeason', 'Per-series/season qualifying and conversion rollup with labeled denominators.'),
+      sourceRef('qualifyingLayerConversion', 'One row per grid-confirmed qualifying-to-flag conversion.'),
+      sourceRef('qualifyingLayerSessions', 'The normalized per-session qualifying inventory with source family and field-size denominator.'),
+      sourceRef('canonicalDataset', 'Canonical qualifyingResults, qualifying-session results, and race grids.')
+    ]
+  };
+};
+
 /* The caution atlas: a descriptive, per-venue count of full-course cautions —
  * how many fell per race (median + range), where in the race they fell, the
  * official causes (counted, never editorialized), and how long they ran. Feeds
@@ -2663,6 +2827,9 @@ const buildPackage = () => {
   const careerAtlas = readJson(sources.careerAtlasOutput);
   const restartReportSummary = readJson(sources.restartReportSummary);
   const restartByRaceRows = readCsv(sources.restartReportByRace);
+  const qualifyingLayerSummary = readJson(sources.qualifyingLayerSummary);
+  const qualifyingLayerConversionRows = readCsv(sources.qualifyingLayerConversion);
+  const qualifyingLayerSessionRows = readCsv(sources.qualifyingLayerSessions);
   const cautionAtlasSummary = readJson(sources.cautionAtlasSummary);
   const cautionAtlasEventRows = readCsv(sources.cautionAtlasEvents);
   const cautionAtlasByRaceRows = readCsv(sources.cautionAtlasByRace);
@@ -2962,6 +3129,7 @@ const buildPackage = () => {
           resultConversionSessionIds: new Set(careerConversionEnriched.map((row) => row.sessionId))
         }),
         restarts: buildRestartReport({ summary: restartReportSummary, byRaceRows: restartByRaceRows, seasonIndex }),
+        qualifyingLayer: buildQualifyingLayer({ summary: qualifyingLayerSummary, conversionRows: qualifyingLayerConversionRows, sessionRows: qualifyingLayerSessionRows }),
         cautionAtlas: buildCautionAtlas({
           summary: cautionAtlasSummary,
           eventRows: cautionAtlasEventRows,
@@ -3151,6 +3319,7 @@ runCareerLifeStats();
 runCareerAtlas();
 runRestartReport();
 runCautionAtlas();
+runQualifyingLayer();
 const dataPackage = buildPackage();
 fs.writeFileSync(outputPath, `${JSON.stringify(dataPackage, null, 2)}\n`);
 console.log(JSON.stringify({ ok: true, wrote: path.relative(repoRoot, outputPath), schemaVersion: dataPackage.schemaVersion }, null, 2));

@@ -508,6 +508,52 @@ assert.ok(
   'restart report must cite its validated summary'
 );
 
+/* The qualifying layer: one qualifying model across every series, with the
+   source-family discipline preserved on the wire and every conversion figure
+   carrying a labeled denominator. */
+const qualifying = careerScreen.qualifyingLayer;
+assert.equal(qualifying.schemaVersion, 'brycecast.qualifyingLayer.v1');
+assert.ok(qualifying.career.qualifyingAppearances > 0, 'career qualifying appearances must be populated');
+assert.equal(
+  qualifying.career.finishedAhead + qualifying.career.held + qualifying.career.finishedBehind,
+  qualifying.career.conversionRaces,
+  'conversion outcomes must partition the conversion races (a labeled denominator)'
+);
+assert.ok(
+  qualifying.bySeries.length > 0 && qualifying.bySeries.length <= 7,
+  'a per-series rollup must exist and cover at most the seven canonical chapters'
+);
+for (const family of qualifying.bySeries.flatMap((row) => row.sourceFamilies)) {
+  assert.ok(
+    family === 'official_qualifying' || family === 'qualifying_session_result',
+    'every series must carry one of the two known source families'
+  );
+}
+assert.equal(
+  qualifying.bySeries.reduce((sum, row) => sum + row.conversionRaces, 0),
+  qualifying.career.conversionRaces,
+  'per-series conversion races must sum to the career total'
+);
+/* Source-family exclusivity survives to the UI: no season straddles both
+   families in the shipped map — the audit's core discipline. */
+for (const entry of qualifying.sourceFamilyMap) {
+  assert.equal(
+    Object.keys(entry.families).length,
+    1,
+    `season ${entry.seriesId} ${entry.seasonYear} must resolve to exactly one source family`
+  );
+}
+/* GB3 2021 carries both families in the raw data but must resolve to the
+   dedicated qualifyingResults family in the layer. */
+const gb32021 = qualifying.sourceFamilyMap.find(
+  (entry) => entry.seriesId === 'series_gb3' && entry.seasonYear === 2021
+);
+assert.equal(gb32021?.primaryFamily, 'official_qualifying', 'GB3 2021 must read from the dedicated qualifying source');
+assert.ok(
+  qualifying.sourceRefs.some((ref) => ref.path === 'analysis/qualifying-layer/output/summary.json'),
+  'qualifying layer must cite its validated summary'
+);
+
 /* GB3 depth pack: the source-bounded contracts the chapter depth layer relies
    on. Loads through the same pack-module glob the UI uses. */
 {

@@ -12,6 +12,7 @@ import {
   CareerBests,
   CareerExplorer,
   CareerRestarts,
+  QualiConversion,
   ChapterStrip,
   DaytonaChapterBody,
   DaytonaSourcePill,
@@ -395,6 +396,7 @@ export const CareerScreen = ({ readiness }: { readiness?: ReadinessStatus }) => 
       </div>
       <CareerRestarts />
 
+      <QualiConversion />
       <TheCampaigns />
 
       <OdometerCard live={readiness?.payload ?? null} />

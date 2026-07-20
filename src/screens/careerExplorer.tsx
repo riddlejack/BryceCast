@@ -1457,6 +1457,228 @@ export const CareerRestarts = () => {
   );
 };
 
+/* ---------- the qualifying: where he started, and how the grid slot converted ---------- */
+
+const QUALI_FAMILY_LABEL: Record<string, string> = {
+  official_qualifying: 'official qualifying sheet',
+  qualifying_session_result: 'qualifying-session result'
+};
+
+export const QualiConversion = () => {
+  const layer = uiDataPackage.screens.careerLab.qualifyingLayer;
+  const [ref, width] = useMeasuredWidth<HTMLDivElement>();
+  const svgRef = useRef<SVGSVGElement | null>(null);
+  const [hovered, setHovered] = useState<number | null>(null);
+  const [tip, setTip] = useState<ChartTip | null>(null);
+
+  const career = layer.career;
+  // Series that carry a grid column and so a real conversion, career-ordered.
+  const rows = useMemo(() => (layer.bySeries ?? []).filter((row) => row.conversionRaces > 0), [layer.bySeries]);
+
+  // The full partition, on the surface rather than in a conditional footer:
+  // how many races connect qualifying to the flag, and the four reasons the
+  // rest do not. All counts come from the validated coverage totals.
+  const coverage = layer.coverage;
+  const excluded = coverage.excludedReasons;
+  const exclusionLine = `${coverage.conversionRaces} of ${coverage.bryceRaces} races connect qualifying to the flag. The other ${coverage.excludedRaces}: ${excluded.no_grid_column} have no sourced grid, ${excluded.reverse_grid_no_quali_match} use a reverse grid, ${excluded.no_qualifying_in_event} have no qualifying result, and ${excluded.no_finish} have no classified finish.`;
+
+  // Best qualifying, with its context (series, year, how often, field sizes),
+  // read from the extended contract rather than hard-coded in the view.
+  const bestQuali = layer.bestQualifying;
+  const OCCURRENCE_WORDS: Record<number, string> = { 1: 'Once', 2: 'Twice', 3: 'Three times', 4: 'Four times', 5: 'Five times' };
+  const bestQualiNote = bestQuali
+    ? [
+        `${OCCURRENCE_WORDS[bestQuali.occurrences] ?? `${bestQuali.occurrences}×`}${
+          bestQuali.seriesName ? ` in ${bestQuali.seriesName}${bestQuali.seasonYear ? ` ${bestQuali.seasonYear}` : ''}` : ''
+        }`,
+        bestQuali.fieldSizes.length ? `fields of ${bestQuali.fieldSizes.join(' and ')}` : null
+      ]
+        .filter(Boolean)
+        .join(' · ')
+    : 'his sharpest qualifying';
+
+  const n = rows.length;
+  const height = 44 + n * 40;
+  const compact = width < 560;
+  const margin = { top: 34, right: compact ? 12 : 20, bottom: 12, left: compact ? 106 : 132 };
+  const rightLabelWidth = compact ? 46 : 58;
+  const plotLeft = margin.left;
+  const plotRight = Math.max(width - margin.right - rightLabelWidth, plotLeft + 80);
+  const centerX = (plotLeft + plotRight) / 2;
+  const halfSpan = (plotRight - plotLeft) / 2 - 10;
+  const maxCount = Math.max(1, ...rows.map((row) => Math.max(row.finishedAhead, row.finishedBehind)));
+  const scale = halfSpan / maxCount;
+  const rowY = (index: number) => margin.top + index * 40 + 12;
+  const barH = 15;
+
+  const clearHover = () => {
+    setHovered(null);
+    setTip(null);
+  };
+
+  const onMove = (event: React.MouseEvent<SVGSVGElement>) => {
+    const bounds = svgRef.current?.getBoundingClientRect();
+    if (!bounds) return;
+    const mouseX = event.clientX - bounds.left;
+    const mouseY = event.clientY - bounds.top;
+    let best: { index: number; distance: number } | null = null;
+    for (let index = 0; index < n; index += 1) {
+      const distance = Math.abs(rowY(index) - mouseY);
+      if (!best || distance < best.distance) best = { index, distance };
+    }
+    if (!best || best.distance > 22) {
+      clearHover();
+      return;
+    }
+    const row = rows[best.index];
+    // Gate on the row's horizontal bar bounds too (plus a small transparent hit
+    // pad), so the tooltip fires only over a lane's actual marks — not the empty
+    // gutter beside a short bar.
+    const HIT_PAD = 16;
+    const leftBound = centerX - row.finishedBehind * scale - HIT_PAD;
+    const rightBound = centerX + row.finishedAhead * scale + HIT_PAD;
+    if (mouseX < leftBound || mouseX > rightBound) {
+      clearHover();
+      return;
+    }
+    setHovered(best.index);
+    const start =
+      row.avgQualiRank != null
+        ? `typically started P${Math.round(row.avgQualiRank)}${row.avgQualiFieldSize != null ? ` of ${Math.round(row.avgQualiFieldSize)}` : ''}`
+        : 'grid slot recorded';
+    setTip({
+      x: centerX,
+      y: rowY(best.index) - 6,
+      title: `${row.seriesName}${row.firstSeason ? ` · from ${row.firstSeason}` : ''}`,
+      detail: `${start} · made up ground in ${row.finishedAhead}, held ${row.held}, gave ground ${row.finishedBehind} of ${row.conversionRaces}`
+    });
+  };
+
+  if (career.conversionRaces < 4 || n === 0) return null;
+
+  return (
+    <Card
+      title="Qualifying to the flag"
+      action={
+        <SourcePill
+          title="One qualifying model, every series"
+          entries={[
+            {
+              label: 'Qualifying layer · per series and conversion',
+              path: 'analysis/qualifying-layer/output/summary.json',
+              note: `Where Bryce qualified across ${layer.coverage.seriesWithQualifying} series and, where the source carries a grid column, how that grid slot converted to the flag — ${career.conversionRaces} races.`
+            },
+            {
+              label: 'Two qualifying source families, never blended',
+              path: 'analysis/qualifying-layer/output/tables/quali_sessions.csv',
+              note: 'The dedicated qualifying sheet where it exists, the qualifying-session result where it does not — one family per session, its field size the denominator.'
+            }
+          ]}
+          caveats={layer.caveats}
+        />
+      }
+    >
+      <p style={{ margin: '0 0 6px', fontSize: 15, color: 'var(--ink-primary)', fontWeight: 560 }}>
+        Made up ground from his grid slot in {career.finishedAhead} of the {career.conversionRaces} races where qualifying set his start
+        {career.held > 0 ? `, and held it in ${career.held} more` : ''}.
+      </p>
+      <p className="caption caption--secondary" style={{ margin: '0 0 6px' }}>
+        {exclusionLine}
+      </p>
+      <p style={{ margin: '0 0 14px', fontSize: 12, color: 'var(--ink-muted)' }}>
+        Each qualifying result uses one official source&mdash;the qualifying sheet when available, otherwise the session result.
+      </p>
+
+      <div className="grid grid--4" style={{ marginBottom: 18 }}>
+        <Stat label="Qualifying sessions" value={career.qualifyingAppearances} note={`across ${layer.coverage.seriesWithQualifying} series`} />
+        <Stat label="Best qualifying" value={career.bestQualiRank != null ? `P${career.bestQualiRank}` : '—'} note={bestQualiNote} />
+        <Stat label="Made up ground" value={`${career.finishedAhead} of ${career.conversionRaces}`} note="from his grid slot" />
+        <Stat label="Held the slot" value={`${career.held} of ${career.conversionRaces}`} note="finished where he started" />
+      </div>
+
+      <p className="caption caption--secondary" style={{ margin: '0 0 8px' }}>
+        One lane per chapter · the bar leans right for races he finished ahead of his grid slot, left for ground given back · length
+        by how many races · the count at each end, the chapter total on the right
+      </p>
+      <div ref={ref} style={{ width: '100%', position: 'relative' }}>
+        {width > 0 ? (
+          <svg
+            ref={svgRef}
+            width={width}
+            height={height}
+            role="img"
+            aria-label={`Qualifying-to-flag conversion by chapter: races finished ahead of the grid slot lean right, races behind lean left.`}
+            onMouseMove={onMove}
+            onMouseLeave={clearHover}
+          >
+            {/* The grid slot: the vertical anchor every bar diverges from. */}
+            <line x1={centerX} x2={centerX} y1={margin.top - 12} y2={height - margin.bottom} stroke="var(--ink-primary)" strokeWidth={1} strokeDasharray="2 3" opacity={0.5} />
+            <text x={centerX} y={margin.top - 18} textAnchor="middle" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={10.5}>
+              grid slot
+            </text>
+            {/* The directional end-labels need room; on a phone the plot is too
+                narrow, so they drop and the caption carries the direction. */}
+            {width >= 560 ? (
+              <>
+                <text x={plotRight} y={margin.top - 18} textAnchor="end" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={10.5}>
+                  made up ground →
+                </text>
+                <text x={plotLeft} y={margin.top - 18} textAnchor="start" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={10.5}>
+                  ← gave ground
+                </text>
+              </>
+            ) : null}
+
+            {rows.map((row, index) => {
+              const tint = chapterTint(row.seriesName);
+              const focused = hovered === null || hovered === index;
+              const y = rowY(index);
+              const aheadW = row.finishedAhead * scale;
+              const behindW = row.finishedBehind * scale;
+              return (
+                <g key={row.seriesId} opacity={focused ? 1 : 0.35} style={{ transition: 'opacity 150ms ease' }}>
+                  {/* series identity: tint dot + short name */}
+                  <circle cx={12} cy={y} r={4} fill={tint} />
+                  <text x={24} y={y + 3.5} textAnchor="start" fill="var(--ink-primary)" fontFamily={chartFont} fontSize={12}>
+                    {seriesShort(row.seriesName)}
+                  </text>
+                  {/* gave ground: left, solid neutral ink-muted (magnitude by length,
+                      not a second hue) — reads at 390px where 0.16 ink washed out */}
+                  {row.finishedBehind > 0 ? (
+                    <rect x={centerX - behindW} y={y - barH / 2} width={behindW} height={barH} rx={2} fill="var(--ink-muted)" />
+                  ) : null}
+                  {/* made up ground: right, chapter tint */}
+                  {row.finishedAhead > 0 ? (
+                    <rect x={centerX} y={y - barH / 2} width={aheadW} height={barH} rx={2} fill={tint} opacity={0.85} />
+                  ) : null}
+                  {/* held: a quiet notch straddling the grid slot */}
+                  {row.held > 0 ? (
+                    <rect x={centerX - 1.5} y={y - barH / 2 - 3} width={3} height={barH + 6} rx={1.5} fill="var(--ink-primary)" opacity={0.55} />
+                  ) : null}
+                  {row.finishedAhead > 0 ? (
+                    <text x={centerX + aheadW + 5} y={y + 3.5} textAnchor="start" fill="var(--ink-secondary)" fontFamily={chartFont} fontSize={11}>
+                      {row.finishedAhead}
+                    </text>
+                  ) : null}
+                  {row.finishedBehind > 0 ? (
+                    <text x={centerX - behindW - 5} y={y + 3.5} textAnchor="end" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={11}>
+                      {row.finishedBehind}
+                    </text>
+                  ) : null}
+                  <text x={width - margin.right} y={y + 3.5} textAnchor="end" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={11}>
+                    of {row.conversionRaces}
+                  </text>
+                </g>
+              );
+            })}
+          </svg>
+        ) : null}
+        {tip ? <ChartTipCard tip={tip} width={width} /> : null}
+      </div>
+    </Card>
+  );
+};
+
 export const RainDays = () => {
   const rows = useCareerRows();
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();
