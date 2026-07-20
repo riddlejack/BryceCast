@@ -572,16 +572,20 @@ button { font-family: inherit; }
 
 /* The venue dossier: this place, other years. White tiles on the gray card
  * so each visit reads as its own column (one level, not nested cards). */
+/* This place, other years: a flat stack of divided rows on the card's own
+ * surface — no card-in-a-card (DESIGN_TASTE blacklist #16). Each year reads
+ * top-to-bottom against the visit before it. */
 .dossier-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 10px;
+  display: flex;
+  flex-direction: column;
 }
 .dossier-col {
-  background: var(--surface-0);
-  border-radius: 14px;
-  padding: 12px 13px;
+  padding: 12px 10px;
+  margin: 0 -10px;
+  border-radius: 8px;
+  border-bottom: 1px solid var(--divider);
 }
+.dossier-col:last-child { border-bottom: none; }
 .dossier-col--link {
   display: block;
   color: inherit;
@@ -1549,7 +1553,10 @@ button { font-family: inherit; }
   color: var(--ink-secondary);
 }
 
-.replay-bar__id { display: flex; align-items: center; gap: 10px; min-width: 0; }
+/* Identity row over provenance row — neither competes for width, so neither
+   truncates (finding #21). */
+.replay-bar__id { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; min-width: 0; }
+.replay-bar__identity { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 10px; min-width: 0; }
 
 .replay-bar__chip {
   display: inline-flex;
@@ -1569,9 +1576,7 @@ button { font-family: inherit; }
   font-size: 13px;
   font-weight: 550;
   color: var(--ink-secondary);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  white-space: normal;
 }
 
 .replay-bar__speed-read { color: var(--ink-primary); font-variant-numeric: tabular-nums; }
@@ -1589,10 +1594,7 @@ button { font-family: inherit; }
   font-size: 11px;
   font-weight: 560;
   letter-spacing: 0.01em;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 22ch;
+  white-space: normal;
   flex: none;
 }
 .replay-bar__tier[data-replay-tier='racetools_capture'],
