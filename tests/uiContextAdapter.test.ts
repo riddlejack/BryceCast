@@ -263,10 +263,59 @@ assert.ok(
   assert.ok(gb3!.raceResults.length >= 40, 'the pack carries the two GB3 seasons of races');
 }
 
+/* Formula Ford lap-shape pack: same centralized fail-closed loader, same
+   inventory-ref contract, rejects a tampered pack. */
+{
+  const { loadFormulaFordLapShape, formulaFordLapShapeRef } = await import('../src/data/formulaFordLapShape');
+  const { packRawModules } = await import('../src/data/packModules');
+  const ref = formulaFordLapShapeRef();
+  assert.ok(ref, 'the Formula Ford pack is registered in the package source inventory');
+  assert.equal(ref!.id, 'formula-ford-lap-shape-context');
+  assert.ok(/^[0-9a-f]{64}$/.test(ref!.sha256), 'the inventory ref carries a real sha256');
+  const key = `../../${ref!.path}`;
+  const originalRaw = packRawModules[key];
+  assert.ok(originalRaw, 'the Formula Ford pack resolves through the context-pack glob');
+  packRawModules[key] = async () => {
+    const text = (await originalRaw()) as string;
+    return text.replace('"displayRules"', '"displayRulesX"');
+  };
+  await assert.rejects(loadFormulaFordLapShape(), /integrity mismatch/, 'a tampered Formula Ford pack is rejected, never rendered');
+  packRawModules[key] = originalRaw;
+  const ff = await loadFormulaFordLapShape();
+  assert.ok(ff, 'the untampered Formula Ford pack loads');
+  assert.equal(ff!.id, ref!.id, 'the loaded pack id matches the inventory ref');
+  assert.ok(ff!.conditionContext.length >= 1, 'the pack carries condition-split lap shape');
+}
+
+/* IMSA Daytona stint pack: closes the audit-flagged unchecked direct import —
+   same centralized fail-closed loader, rejects a tampered pack. */
+{
+  const { loadImsaDaytonaStint, imsaStintRef } = await import('../src/data/imsaDaytonaStint');
+  const { packRawModules } = await import('../src/data/packModules');
+  const ref = imsaStintRef();
+  assert.ok(ref, 'the IMSA pack is registered in the package source inventory');
+  assert.equal(ref!.id, 'imsa-daytona-stint-class-context');
+  assert.ok(/^[0-9a-f]{64}$/.test(ref!.sha256), 'the inventory ref carries a real sha256');
+  const key = `../../${ref!.path}`;
+  const originalRaw = packRawModules[key];
+  assert.ok(originalRaw, 'the IMSA pack resolves through the context-pack glob');
+  packRawModules[key] = async () => {
+    const text = (await originalRaw()) as string;
+    return text.replace('"displayRules"', '"displayRulesX"');
+  };
+  await assert.rejects(loadImsaDaytonaStint(), /integrity mismatch/, 'a tampered IMSA pack is rejected, never rendered');
+  packRawModules[key] = originalRaw;
+  const imsa = await loadImsaDaytonaStint();
+  assert.ok(imsa, 'the untampered IMSA pack loads');
+  assert.equal(imsa!.id, ref!.id, 'the loaded pack id matches the inventory ref');
+  assert.ok(imsa!.bryceStintContext.length >= 1, 'the pack carries Bryce stint context');
+}
+
 assert.ok(context.careerLab.contextPack.resultConversionRows >= 100);
 assert.ok(context.careerLab.contextPack.metricFamilyParity.length > 0);
 assert.ok(context.careerLab.deepContextPacks.careerDimension, 'career dimension deep pack must load');
-assert.ok(context.careerLab.deepContextPacks.imsaDaytonaStint, 'IMSA deep pack must load');
+// IMSA and Formula Ford are no longer soft-loaded through the adapter — they
+// load only via their verified screen loaders, proven fail-closed above.
 
 /* Career Lab v2 modules: rivals, weather joins, lap texture. */
 const careerScreen = context.dataPackage.screens.careerLab;

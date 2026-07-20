@@ -280,7 +280,7 @@ export const EuroformulaDepthLayer = () => {
     <div className="euro-depth stack">
       <div className="row row--between row--wrap" style={{ alignItems: 'baseline', gap: 8 }}>
         <p className="euro-copy" style={{ margin: 0, maxWidth: '58ch' }}>
-          A full European campaign in continental single-seaters — front-running pace across six circuits. Here is how his
+          A full European campaign in continental single-seaters — front-running results across six circuits. Here is how his
           weekends converted, and where he was strongest.
         </p>
         <EuroSourcePill conversionRaces={euroSummary?.conversionRaces ?? 7} />

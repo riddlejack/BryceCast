@@ -52,7 +52,7 @@ const seriesChapters: Array<{ name: string; years: string; short?: string; narra
   {
     name: 'Euroformula Open',
     years: '2023',
-    narrative: 'Continental single-seaters — front-running pace across a full European campaign.'
+    narrative: 'Continental single-seaters — front-running results across a full European campaign.'
   },
   {
     name: 'Castrol Toyota Formula Regional Oceania Championship',

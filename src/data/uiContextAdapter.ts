@@ -225,8 +225,6 @@ export interface HydratedBryceCastUiContext {
     deepContextPacks: {
       careerDimension: SupplementalContextPack | null;
       contextEventNarrative: SupplementalContextPack | null;
-      formulaFordLapShape: SupplementalContextPack | null;
-      imsaDaytonaStint: SupplementalContextPack | null;
     };
     sourceRefs: UiSourceRef[];
     title: string;
@@ -350,7 +348,12 @@ export const buildBryceCastUiContext = async (): Promise<HydratedBryceCastUiCont
   const checkedContextPackRefs: ContextPackRef[] = [livePackRef, ...prepEventRefs, ...debriefSeeds.map((seed) => seed.contextPackRef), careerLab.contextPackRef];
   const supplementalChecked: string[] = [];
 
-  const [liveContextPack, hydratedPrepEvents, hydratedDebriefs, careerContextPack, sectionContext, raceLapContext, careerDimension, contextEventNarrative, formulaFordLapShape, imsaDaytonaStint] =
+  // The GB3, Formula Ford, and IMSA depth packs are NOT loaded here: each is
+  // registered in the source inventory (screens.careerLab.*Ref) and loaded only
+  // through its verified screen loader (gb3DeepDive / formulaFordLapShape /
+  // imsaDaytonaStint), which hash-verifies against that ref and fails closed. An
+  // unverified soft-load here was the audit-flagged integrity leak; it is gone.
+  const [liveContextPack, hydratedPrepEvents, hydratedDebriefs, careerContextPack, sectionContext, raceLapContext, careerDimension, contextEventNarrative] =
     await Promise.all([
       getContextPack<LiveRaceDayContextPack>(livePackRef, 'live race-day'),
       Promise.all(
@@ -369,9 +372,7 @@ export const buildBryceCastUiContext = async (): Promise<HydratedBryceCastUiCont
       loadSupplementalPack(undefined, inventory.supplementalPrepSectionContextPack, supplementalChecked),
       loadSupplementalPack(undefined, inventory.supplementalRaceLapSectionContextPack, supplementalChecked),
       loadSupplementalPack('analysis/career-dimension-context-layer/output/context-packs/career-dimension-context.json', undefined, supplementalChecked),
-      loadSupplementalPack('analysis/context-event-narrative-layer/output/context-packs/context-event-narrative-context.json', undefined, supplementalChecked),
-      loadSupplementalPack('analysis/formula-ford-lap-shape/output/context-packs/formula-ford-lap-shape-context.json', undefined, supplementalChecked),
-      loadSupplementalPack('analysis/imsa-daytona-stint-class-pace/output/context-packs/imsa-daytona-stint-class-context.json', undefined, supplementalChecked)
+      loadSupplementalPack('analysis/context-event-narrative-layer/output/context-packs/context-event-narrative-context.json', undefined, supplementalChecked)
     ]);
 
   return {
@@ -407,9 +408,7 @@ export const buildBryceCastUiContext = async (): Promise<HydratedBryceCastUiCont
       contextPack: careerContextPack,
       deepContextPacks: {
         careerDimension,
-        contextEventNarrative,
-        formulaFordLapShape,
-        imsaDaytonaStint
+        contextEventNarrative
       },
       sourceRefs: careerLab.sourceRefs,
       title: careerLab.title

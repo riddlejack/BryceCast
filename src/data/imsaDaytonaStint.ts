@@ -10,8 +10,7 @@
  *  verified by raw-byte sha256 + id before anything renders, failing closed on
  *  mismatch (the GB3 / raceStory pattern). */
 
-import { useEffect, useState } from 'react';
-import { packModules, packRawModules } from './packModules';
+import { createSupplementalPackModule } from './supplementalPackLoader';
 import { uiDataPackage } from './uiDataPackage';
 
 /** One of Bryce's stints, derived from pit-in/out laps on the official time
@@ -73,59 +72,13 @@ export interface ImsaDaytonaStintPack {
 /** Inventory-backed integrity ref. Null when the package predates the module. */
 export const imsaStintRef = () => uiDataPackage.screens.careerLab.imsaStintRef ?? null;
 
-const sha256Hex = async (value: string): Promise<string> => {
-  const bytes = new TextEncoder().encode(value);
-  const digest = await globalThis.crypto.subtle.digest('SHA-256', bytes);
-  return Array.from(new Uint8Array(digest))
-    .map((byte) => byte.toString(16).padStart(2, '0'))
-    .join('');
-};
+const imsaModule = createSupplementalPackModule<ImsaDaytonaStintPack>(imsaStintRef, 'IMSA Daytona stint pack');
 
-const load = async (): Promise<ImsaDaytonaStintPack | null> => {
-  const ref = imsaStintRef();
-  if (!ref) return null;
-  const key = `../../${ref.path}`;
-  const jsonLoader = packModules[key];
-  const rawLoader = packRawModules[key];
-  if (!jsonLoader || !rawLoader) return null;
-  const pack = ((await jsonLoader()) as { default: ImsaDaytonaStintPack }).default;
-  const rawText = (await rawLoader()) as string;
-  if ((await sha256Hex(rawText)) !== ref.sha256 || pack.id !== ref.id) {
-    throw new Error(`IMSA Daytona stint pack integrity mismatch: ${ref.path}`);
-  }
-  return pack;
-};
-
-let cached: Promise<ImsaDaytonaStintPack | null> | null = null;
-
-/** Load the pack once, hash-verified against the source-inventory ref. Fails
- *  closed (throws) on a tampered pack; a failed load is NOT cached. */
-export const loadImsaDaytonaStint = (): Promise<ImsaDaytonaStintPack | null> => {
-  if (!cached) {
-    cached = load().catch((error) => {
-      cached = null;
-      throw error;
-    });
-  }
-  return cached;
-};
+/** Load the pack once, hash-verified against the source-inventory ref through
+ *  the one centralized supplemental-pack loader. Fails closed on a tampered
+ *  pack; a failed load is NOT cached. */
+export const loadImsaDaytonaStint = imsaModule.load;
 
 /** Lazy hook — an integrity failure surfaces as 'failed' so the chapter can
  *  fail closed rather than render unverified numbers. */
-export const useImsaDaytonaStint = (): ImsaDaytonaStintPack | null | 'failed' => {
-  const [pack, setPack] = useState<ImsaDaytonaStintPack | null | 'failed'>(null);
-  useEffect(() => {
-    let alive = true;
-    loadImsaDaytonaStint()
-      .then((loaded) => {
-        if (alive) setPack(loaded);
-      })
-      .catch(() => {
-        if (alive) setPack('failed');
-      });
-    return () => {
-      alive = false;
-    };
-  }, []);
-  return pack;
-};
+export const useImsaDaytonaStint = imsaModule.useSupplementalPack;

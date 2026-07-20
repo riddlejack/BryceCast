@@ -1,6 +1,6 @@
 {
   "schemaVersion": "brycecast.uiDataPackage.v1",
-  "generatedAt": "2026-07-20T11:37:35.914Z",
+  "generatedAt": "2026-07-20T16:23:51.830Z",
   "sourceHash": "64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978",
   "asOfDate": "2026-07-19",
   "baselineCommit": "dbc879e",
@@ -286,8 +286,8 @@
     "restartReportSummary": {
       "path": "analysis/restart-report/output/summary.json",
       "bytes": 17440,
-      "modifiedAt": "2026-07-20T11:37:17.921Z",
-      "sha256": "e43b8208849be6e303324100b41d5e710c5946db6a34c1de259ccd2b3235b837"
+      "modifiedAt": "2026-07-20T16:23:45.346Z",
+      "sha256": "e8e8d81e184f0b62a588f2adc0cc9e892d899dcee854e52b32d055a44119c052"
     },
     "restartReportEvents": {
       "path": "analysis/restart-report/output/tables/restart_events.csv",
@@ -340,8 +340,8 @@
     "qualifyingLayerSummary": {
       "path": "analysis/qualifying-layer/output/summary.json",
       "bytes": 10286,
-      "modifiedAt": "2026-07-20T11:37:30.081Z",
-      "sha256": "ffea8bc0b8bd8260f5f9fd161e1a876f98db13e98a64327d7e3d9f52cb3d456e"
+      "modifiedAt": "2026-07-20T16:23:49.644Z",
+      "sha256": "195077d3001fd8ec7f05ee5e1aaea9f5fe7d1d4c1e9516ada8db1a1c8f82d8ba"
     },
     "qualifyingLayerSessions": {
       "path": "analysis/qualifying-layer/output/tables/quali_sessions.csv",
@@ -382,8 +382,8 @@
     "cautionAtlasSummary": {
       "path": "analysis/caution-atlas/output/summary.json",
       "bytes": 12386,
-      "modifiedAt": "2026-07-20T11:37:22.030Z",
-      "sha256": "5d91f191cb9e614802929eed05801678735fa8a73f509d05c9ca091847d2b742"
+      "modifiedAt": "2026-07-20T16:23:47.410Z",
+      "sha256": "18adb543f01738fe9247c55a4b2e22242de5115865b18f420a4e8090dd7c7632"
     },
     "cautionAtlasEvents": {
       "path": "analysis/caution-atlas/output/tables/caution_events.csv",
@@ -537,9 +537,9 @@
     },
     "uiDataPackageValidatorScript": {
       "path": "scripts/validate-ui-data-package.mjs",
-      "bytes": 88159,
-      "modifiedAt": "2026-07-20T10:55:14.490Z",
-      "sha256": "1584923d4695243ab55344ec1982b5717b8ddab8fc4736735d83981c5e4dd375"
+      "bytes": 89861,
+      "modifiedAt": "2026-07-20T16:16:37.206Z",
+      "sha256": "e8e00064354a372afa269869524622b17e6f9428d88c6a08529f2f330a1d8c52"
     },
     "supplementalPrepSectionContextPack": {
       "key": "supplemental:analysis_indy_nxt_section_lap_deep_dive_output_context_packs_portland_internatio",

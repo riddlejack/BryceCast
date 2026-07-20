@@ -489,46 +489,81 @@ const SeasonArc = ({ pack }: { pack: Gb3DeepDivePack }) => {
       ...events.flatMap((row) => [row.bestFinish ?? 1, row.bestQualifyingPosition ?? 1])
     ) + 1;
 
-  const height = 236;
   const top = 36;
   const bottom = 26;
-  const plotH = height - top - bottom;
   const gutter = 34;
   const plotL = gutter;
   const plotR = Math.max(width - 12, plotL + 80);
-  const laneGap = 26; // gap around the season divider
+  const laneGap = 26; // gap around the season divider (wide layout only)
   const divX = plotL + ((rows2021.length) / events.length) * (plotR - plotL);
-  const y = (pos: number) => top + ((pos - 1) / (maxPos - 1)) * plotH;
 
-  /* Evenly spaced round slots inside each season's own band. */
-  const bandX = (lane: 'a' | 'b', index: number, count: number) => {
-    const bandL = lane === 'a' ? plotL : divX + laneGap / 2;
-    const bandR = lane === 'a' ? divX - laneGap / 2 : plotR;
-    return bandL + ((index + 0.5) / count) * (bandR - bandL);
-  };
+  // ≥8px-diameter marks everywhere (r≥4) so the qualifying open mark is not a
+  // 6px speck; podium finishes get a touch more.
+  const MARK_R = 4;
+  const PODIUM_R = 4.8;
+
+  // On a phone the two seasons cannot share one 15-round plot without their 24px
+  // hit targets overlapping, so they stack as small multiples — each season gets
+  // the full width, spreading its 7–8 rounds to ≥40px apart. Wide screens keep
+  // the side-by-side bands split by the season divider.
+  const phone = width > 0 && width < 560;
+  const deskHeight = 236;
+  const deskPlotH = deskHeight - top - bottom;
+  const phoneHeaderH = 20;
+  const phonePanelH = 148;
+  const phoneLabelH = 18;
+  const phoneBlock = phoneHeaderH + phonePanelH + phoneLabelH;
+  const phoneBlockGap = 26;
+  const phoneTopPad = 8;
+  const height = phone ? phoneTopPad + phoneBlock * 2 + phoneBlockGap + bottom : deskHeight;
+
+  interface SeasonPanel {
+    rows: Gb3EventSummary[];
+    season: string;
+    xL: number;
+    xR: number;
+    yTop: number;
+    panelH: number;
+    headerAnchor: 'start' | 'middle';
+    headerY: number;
+    labelY: number;
+  }
+
+  const phonePanelTop = (blockIndex: number) => phoneTopPad + blockIndex * (phoneBlock + phoneBlockGap);
+  const panels: SeasonPanel[] = phone
+    ? [
+        { rows: rows2021, season: '2021 · Carlin', xL: plotL, xR: plotR, yTop: phonePanelTop(0) + phoneHeaderH, panelH: phonePanelH, headerAnchor: 'start', headerY: phonePanelTop(0) + 13, labelY: phonePanelTop(0) + phoneHeaderH + phonePanelH + 13 },
+        { rows: rows2022, season: '2022 · Hitech', xL: plotL, xR: plotR, yTop: phonePanelTop(1) + phoneHeaderH, panelH: phonePanelH, headerAnchor: 'start', headerY: phonePanelTop(1) + 13, labelY: phonePanelTop(1) + phoneHeaderH + phonePanelH + 13 }
+      ]
+    : [
+        { rows: rows2021, season: '2021 · Carlin', xL: plotL, xR: divX - laneGap / 2, yTop: top, panelH: deskPlotH, headerAnchor: 'middle', headerY: 16, labelY: deskHeight - 8 },
+        { rows: rows2022, season: '2022 · Hitech', xL: divX + laneGap / 2, xR: plotR, yTop: top, panelH: deskPlotH, headerAnchor: 'middle', headerY: 16, labelY: deskHeight - 8 }
+      ];
+
+  const yOf = (panel: SeasonPanel, pos: number) => panel.yTop + ((pos - 1) / (maxPos - 1)) * panel.panelH;
+  const xOf = (panel: SeasonPanel, index: number, count: number) => panel.xL + ((index + 0.5) / count) * (panel.xR - panel.xL);
 
   const yTicks = [1, 5, 10, maxPos - 1 > 14 ? 20 : 14].filter((tick, i, arr) => arr.indexOf(tick) === i && tick < maxPos);
 
   const podium = (row: Gb3EventSummary) => (row.bestFinish ?? 99) <= 3;
 
-  const renderLane = (rows: Gb3EventSummary[], lane: 'a' | 'b') => {
-    const count = rows.length;
-    // finish arc polyline points
-    const finishPts = rows
+  const renderPanel = (panel: SeasonPanel) => {
+    const count = panel.rows.length;
+    const finishPts = panel.rows
       .filter((row) => row.bestFinish !== null)
-      .map((row, i) => {
-        const idx = rows.indexOf(row);
-        return `${bandX(lane, idx, count).toFixed(1)},${y(row.bestFinish as number).toFixed(1)}`;
-      })
+      .map((row) => `${xOf(panel, panel.rows.indexOf(row), count).toFixed(1)},${yOf(panel, row.bestFinish as number).toFixed(1)}`)
       .join(' ');
     return (
-      <g key={lane}>
+      <g key={panel.season}>
+        <text x={panel.headerAnchor === 'middle' ? (panel.xL + panel.xR) / 2 : panel.xL} y={panel.headerY} textAnchor={panel.headerAnchor} fill="var(--ink-secondary)" fontFamily={chartFont} fontSize={10.5}>
+          {panel.season}
+        </text>
         <polyline points={finishPts} fill="none" stroke="var(--chapter-gb3)" strokeWidth={1.6} strokeOpacity={0.55} strokeLinejoin="round" />
-        {rows.map((row, index) => {
+        {panel.rows.map((row, index) => {
           const key = `${row.seasonYear}-${roundOf(row.eventName)}`;
-          const cx = bandX(lane, index, count);
-          const qy = row.bestQualifyingPosition !== null ? y(row.bestQualifyingPosition) : null;
-          const fy = row.bestFinish !== null ? y(row.bestFinish) : null;
+          const cx = xOf(panel, index, count);
+          const qy = row.bestQualifyingPosition !== null ? yOf(panel, row.bestQualifyingPosition) : null;
+          const fy = row.bestFinish !== null ? yOf(panel, row.bestFinish) : null;
           const focused = hoveredKey === null || hoveredKey === key;
           const race = bestRaceByEvent.get(row.eventName);
           const gap = gapByEvent.get(row.eventName);
@@ -538,7 +573,7 @@ const SeasonArc = ({ pack }: { pack: Gb3DeepDivePack }) => {
             setHoveredKey(key);
             setTip({
               x: cx,
-              y: (fy ?? qy ?? top) - 8,
+              y: (fy ?? qy ?? panel.yTop) - 8,
               title: `${row.seasonYear} R${roundOf(row.eventName)} · ${row.trackName}`,
               detail: `${q} · ${f} · ${row.raceRows} ${row.raceRows === 1 ? 'race' : 'races'}`,
               action: race ? 'Open the round’s best race' : undefined
@@ -554,20 +589,20 @@ const SeasonArc = ({ pack }: { pack: Gb3DeepDivePack }) => {
               {qy !== null && fy !== null ? (
                 <line x1={cx} y1={qy} x2={cx} y2={fy} stroke="var(--ink-muted)" strokeWidth={1} strokeOpacity={0.4} />
               ) : null}
-              {/* qualifying: open mark */}
+              {/* qualifying: open mark (≥8px) */}
               {qy !== null ? (
-                <circle cx={cx} cy={qy} r={3} fill="var(--surface-0)" stroke="var(--ink-muted)" strokeWidth={1.2} />
+                <circle cx={cx} cy={qy} r={MARK_R} fill="var(--surface-0)" stroke="var(--ink-muted)" strokeWidth={1.4} />
               ) : null}
               {/* best finish: filled mark, chapter tint for a podium round */}
               {fy !== null ? (
-                <circle cx={cx} cy={fy} r={podium(row) ? 4.4 : 3.6} fill={podium(row) ? 'var(--chapter-gb3)' : 'var(--ink-primary)'} />
+                <circle cx={cx} cy={fy} r={podium(row) ? PODIUM_R : MARK_R} fill={podium(row) ? 'var(--chapter-gb3)' : 'var(--ink-primary)'} />
               ) : null}
-              {/* generous hit target */}
+              {/* generous hit target — ≥24px wide and non-overlapping within a panel */}
               <rect
                 x={cx - 12}
-                y={top - 6}
+                y={panel.yTop - 6}
                 width={24}
-                height={plotH + 12}
+                height={panel.panelH + 12}
                 fill="transparent"
                 style={{ cursor: race ? 'pointer' : 'default' }}
                 onMouseEnter={showTip}
@@ -575,7 +610,7 @@ const SeasonArc = ({ pack }: { pack: Gb3DeepDivePack }) => {
                 onClick={() => race && navigate(raceHref(race.sessionId))}
               />
               {/* round label */}
-              <text x={cx} y={height - 8} textAnchor="middle" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={9.5}>
+              <text x={cx} y={panel.labelY} textAnchor="middle" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={9.5}>
                 R{roundOf(row.eventName)}
               </text>
             </g>
@@ -595,29 +630,29 @@ const SeasonArc = ({ pack }: { pack: Gb3DeepDivePack }) => {
       </p>
       <div ref={ref} style={{ width: '100%', position: 'relative' }}>
         {width > 0 ? (
-          <svg width={width} height={height} role="img" aria-label="Bryce's qualifying and best finish for every GB3 round, 2021 and 2022">
-            {/* y grid + labels */}
-            {yTicks.map((tick) => (
-              <g key={tick}>
-                <line x1={plotL} x2={plotR} y1={y(tick)} y2={y(tick)} stroke="var(--grid-hairline)" strokeWidth={1} />
-                <text x={gutter - 8} y={y(tick) + 3.2} textAnchor="end" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={9.5}>
-                  P{tick}
+          <svg width={width} height={height} role="img" aria-label="Bryce's qualifying and best finish for every GB3 round, 2021 and 2022, stacked by season on phones">
+            {/* y grid + P-labels: once across the shared band on wide screens,
+                per stacked panel on phones */}
+            {(phone ? panels : [panels[0]]).map((panel) =>
+              yTicks.map((tick) => (
+                <g key={`grid-${panel.season}-${tick}`}>
+                  <line x1={panel.xL} x2={phone ? panel.xR : plotR} y1={yOf(panel, tick)} y2={yOf(panel, tick)} stroke="var(--grid-hairline)" strokeWidth={1} />
+                  <text x={gutter - 8} y={yOf(panel, tick) + 3.2} textAnchor="end" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={9.5}>
+                    P{tick}
+                  </text>
+                </g>
+              ))
+            )}
+            {/* season divider only when the seasons sit side by side */}
+            {!phone ? (
+              <>
+                <line x1={divX} x2={divX} y1={top - 10} y2={height - bottom + 8} stroke="var(--divider)" strokeWidth={1} strokeDasharray="2 3" />
+                <text x={plotL} y={28} textAnchor="start" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={9.5}>
+                  P1 at the top
                 </text>
-              </g>
-            ))}
-            {/* season divider + headers */}
-            <line x1={divX} x2={divX} y1={top - 10} y2={height - bottom + 8} stroke="var(--divider)" strokeWidth={1} strokeDasharray="2 3" />
-            <text x={(plotL + divX) / 2} y={16} textAnchor="middle" fill="var(--ink-secondary)" fontFamily={chartFont} fontSize={10.5}>
-              2021 · Carlin
-            </text>
-            <text x={(divX + plotR) / 2} y={16} textAnchor="middle" fill="var(--ink-secondary)" fontFamily={chartFont} fontSize={10.5}>
-              2022 · Hitech
-            </text>
-            <text x={plotL} y={28} textAnchor="start" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={9.5}>
-              P1 at the top
-            </text>
-            {renderLane(rows2021, 'a')}
-            {renderLane(rows2022, 'b')}
+              </>
+            ) : null}
+            {panels.map(renderPanel)}
           </svg>
         ) : null}
         {tip ? <ChartTipCard tip={tip} width={width} /> : null}

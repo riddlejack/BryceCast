@@ -76,10 +76,11 @@ const LapShapeByCondition = ({ pack }: { pack: FormulaFordLapShapePack }) => {
         ))}
       </div>
       <p className="ff-caption">
-        Bars show his median gap from lap to session best — shorter is a tighter, more repeatable rhythm. The dry weekends held
-        the steadiest; the changing days (a single damp race, the drying ones) naturally spread wider as the surface came to him.
-        These are Bryce’s laps only, not a field comparison, and absolute pace isn’t compared across conditions because they fall
-        at different circuits. Read from {totalRaces} races and {totalLaps} timed laps.
+        Bars show his median gap from lap to session best — shorter is a tighter, more repeatable rhythm. The dry races show the
+        smallest gaps; the single damp race and the two drying races show larger ones, on those small samples. That is the
+        observed distribution, not an adaptation claim. These are Bryce’s laps only, not a field comparison, and absolute pace
+        isn’t compared across conditions because they fall at different circuits. Read from {totalRaces} races and {totalLaps}
+        timed laps.
       </p>
     </div>
   );

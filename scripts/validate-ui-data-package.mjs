@@ -240,6 +240,38 @@ const validateChartRef = (chartRef, label) => {
   }
 };
 
+/* The three career depth-pack integrity refs (GB3, Formula Ford, IMSA Daytona)
+ * are loaded ONLY through their verified screen loaders, which fail closed on a
+ * sha256/byte/id mismatch. This is the other end of that contract: every ref
+ * must be present, typed correctly, byte/sha-current against its file on disk,
+ * and its id must match the pack it points to — so the fail-closed loader can
+ * never be handed a stale or wrong ref. */
+const validateDepthPackRef = (ref, expectedType, expectedId, label) => {
+  if (!ref) {
+    fail(`${label} integrity ref is missing — the depth-pack integrity chain must be complete.`);
+    return;
+  }
+  if (ref.type !== expectedType) {
+    fail(`${label} integrity ref must carry type "${expectedType}" (got "${ref.type}").`);
+  }
+  if (ref.id !== expectedId) {
+    fail(`${label} integrity ref must carry id "${expectedId}" (got "${ref.id}").`);
+  }
+  validateEmbeddedSourceRef(ref, `${label} integrity ref`);
+  const packPath = path.join(repoRoot, ref.path);
+  if (fs.existsSync(packPath)) {
+    const pack = JSON.parse(fs.readFileSync(packPath, 'utf8'));
+    if (pack.id !== ref.id) {
+      fail(`${label} ref id "${ref.id}" does not match the pack's own id "${pack.id}".`);
+    }
+  }
+};
+
+const depthRefCareerLab = dataPackage.screens?.careerLab ?? {};
+validateDepthPackRef(depthRefCareerLab.gb3DeepDiveRef, 'gb3_deep_dive', 'gb3-deep-dive-context', 'GB3 deep-dive');
+validateDepthPackRef(depthRefCareerLab.formulaFordLapShapeRef, 'formula_ford_lap_shape', 'formula-ford-lap-shape-context', 'Formula Ford lap-shape');
+validateDepthPackRef(depthRefCareerLab.imsaStintRef, 'imsa_daytona_stint', 'imsa-daytona-stint-class-context', 'IMSA Daytona stint');
+
 for (const screen of requiredScreens) {
   if (!dataPackage.screens?.[screen]) fail(`UI data package missing screen ${screen}`);
   if (!Array.isArray(dataPackage.screens[screen].sourceRefs) || dataPackage.screens[screen].sourceRefs.length === 0) {
