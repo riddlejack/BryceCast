@@ -70,6 +70,7 @@ import {
   type LiveSessionKind
 } from '../data/liveSessionModel';
 import { uiDataPackage } from '../data/uiDataPackage';
+import { canonicalLiveRaceSessionId, replayDeepLinkQuery } from '../data/liveRaceShellModel';
 
 type Row = Record<string, unknown>;
 
@@ -1538,6 +1539,24 @@ export const LiveScreen = ({
       {liveish || replayEnded ? (
         <>
           <LiveHero payload={payload} samples={samples} replayEnded={replayEnded} sessionKind={sessionKind} />
+          {(() => {
+            /* Cross-links, never duplication (Brief R-c): /live answers "what is
+             * happening right now?"; the race's own page holds the accumulating
+             * record. One quiet link — races only, and mid-replay it carries the
+             * virtual clock so the replayed race gets its replayed race page. */
+            const storySoFarId = replayActive
+              ? replay?.session?.canonicalSessionId ?? null
+              : canonicalLiveRaceSessionId(payload);
+            if (!storySoFarId) return null;
+            const query = replayActive && replay ? replayDeepLinkQuery(replay.getReplayParams()) : '';
+            return (
+              <p className="caption caption--secondary" style={{ margin: '-8px 0 0' }}>
+                <Link to={`/races/${encodeURIComponent(storySoFarId)}${query}`}>
+                  This race&rsquo;s page — the story so far →
+                </Link>
+              </p>
+            );
+          })()}
           <BattleModule payload={payload} samples={samples} history={history} replayEnded={replayEnded} sessionKind={sessionKind} />
           {raceShaped ? (
             <div className="grid live-layout">
@@ -1546,6 +1565,7 @@ export const LiveScreen = ({
                 <GapTrend history={history} />
               </div>
               <FieldTower payload={payload} sessionKind={sessionKind} />
+
             </div>
           ) : (
             /* Outside a race the championship projection and the leader-gap trend
