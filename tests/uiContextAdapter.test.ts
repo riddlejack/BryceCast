@@ -309,6 +309,40 @@ for (const season of careerScreen.lapPositionMix) {
   assert.equal(summed, season.totalLaps, `lap mix ${season.seasonYear} position counts must sum to totalLaps`);
 }
 
+/* The campaigns: every championship season as a points arc. Arcs accumulate the
+   sourced race points in order; a season whose earned points differ from its
+   official total must say so; the current campaign is the in-progress arc. */
+const seasonCampaigns = careerScreen.seasonCampaigns;
+assert.equal(seasonCampaigns.schemaVersion, 'brycecast.careerSeasonCampaigns.v1');
+const arcCampaigns = seasonCampaigns.campaigns.filter((campaign) => campaign.renderMode === 'arc');
+assert.ok(arcCampaigns.length >= 2, 'at least two real points arcs must render');
+for (const campaign of arcCampaigns) {
+  let running = 0;
+  for (const race of campaign.races) {
+    running += race.racePoints;
+    assert.equal(race.cumulativePoints, running, `${campaign.seriesShort} ${campaign.seasonYear} cumulative points must be the running sum`);
+    if (race.hasRacePage) {
+      assert.ok(
+        careerScreen.resultConversion.some((row) => row.sessionId === race.sessionId),
+        `${campaign.seriesShort} ${campaign.seasonYear} clickable race ${race.sessionId} must resolve to a race page`
+      );
+    }
+  }
+  assert.equal(campaign.earnedPoints, running, `${campaign.seriesShort} ${campaign.seasonYear} earned points equal the final cumulative`);
+  if (campaign.reconciles === false) {
+    assert.ok(
+      typeof campaign.reconciliationNote === 'string' && campaign.reconciliationNote.length > 0,
+      `${campaign.seriesShort} ${campaign.seasonYear} must reconcile earned vs official points in words`
+    );
+  }
+}
+const f1600 = arcCampaigns.find((campaign) => campaign.seasonYear === 2019);
+assert.ok(f1600 && f1600.reconciles === false && f1600.earnedPoints === 656 && f1600.officialSeasonPoints === 639, 'F1600 2019 surfaces both the 656 earned and the official 639');
+const currentCampaigns = seasonCampaigns.campaigns.filter((campaign) => campaign.isCurrent);
+assert.equal(currentCampaigns.length, 1, 'exactly one current campaign');
+assert.ok(currentCampaigns[0].inProgress && currentCampaigns[0].renderMode === 'arc', 'the current campaign is the in-progress arc');
+assert.ok(seasonCampaigns.excluded.every((row) => row.reason.length > 0), 'every excluded season names its reason');
+
 /* The odometer: package-only React consumption with personal attribution,
    confidence-preserving physical mileage, and bounded travel semantics. */
 const lifeStats = careerScreen.lifeStats;

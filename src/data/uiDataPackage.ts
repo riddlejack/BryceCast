@@ -40,6 +40,75 @@ export interface UiSeasonLapMix {
   positions: Array<{ position: number; laps: number }>;
 }
 
+/* ---------- the campaigns: every championship season as a points arc ---------- */
+
+/** One scored race inside a campaign arc. Cumulative points climb in the order
+ *  the points were banked; standing is sourced per round for INDY NXT only. */
+export interface UiSeasonCampaignRace {
+  raceIndex: number;
+  sessionId: string;
+  raceLabel: string;
+  roundIndex: number | null;
+  raceDate: string | null;
+  racePoints: number;
+  cumulativePoints: number;
+  finishPosition: number | null;
+  startPosition: number | null;
+  standingRank: number | null;
+  pointsBehindLeader: number | null;
+  leaderDriver: string | null;
+  status: string | null;
+  /** True when the race has its own race page, so the mark can navigate. */
+  hasRacePage: boolean;
+  raceHref: string;
+}
+
+/** One championship season told as a points arc. `renderMode` records how much
+ *  the data supports: a real round-by-round arc, an official-total-only
+ *  endpoint, or (in `excluded`) no sourced points at all. */
+export interface UiSeasonCampaign {
+  seasonYear: number | null;
+  seriesId: string;
+  seriesName: string;
+  seriesShort: string;
+  renderMode: 'arc' | 'endpoint';
+  isCurrent: boolean;
+  inProgress: boolean;
+  races: UiSeasonCampaignRace[];
+  /** Sum of banked race points (the arc's terminus). Null for endpoint mode. */
+  earnedPoints: number | null;
+  officialSeasonPoints: number | null;
+  officialStandingRank: number | null;
+  raceCount: number;
+  roundCount: number | null;
+  startsOfficial: number | null;
+  /** True when banked points equal the official total; null when unknowable. */
+  reconciles: boolean | null;
+  /** Present (and required) when banked points differ from the official total. */
+  reconciliationNote: string | null;
+  note: string;
+  sourceState: string;
+  provenanceRefs: string[];
+}
+
+export interface UiSeasonCampaignExclusion {
+  seriesId: string;
+  seriesName: string;
+  seriesShort: string;
+  seasonYear: number | null;
+  raceCount: number;
+  reason: string;
+}
+
+export interface UiSeasonCampaigns {
+  schemaVersion: string;
+  question: string;
+  campaigns: UiSeasonCampaign[];
+  excluded: UiSeasonCampaignExclusion[];
+  caveats: string[];
+  sourceRefs: UiSourceRef[];
+}
+
 export type UiCareerConfidenceClass = 'observed_exact' | 'observed_lower_bound' | 'modeled_range' | 'unknown';
 
 export interface UiCareerAtlasSeriesSpan {
@@ -923,6 +992,7 @@ export interface UiDataPackage {
       moments: UiCareerMoment[];
       headToHead: UiCareerRival[];
       lapPositionMix: UiSeasonLapMix[];
+      seasonCampaigns: UiSeasonCampaigns;
       restarts: UiRestartReport;
       cautionAtlas: UiCautionAtlas;
       atlas: UiCareerAtlas;
