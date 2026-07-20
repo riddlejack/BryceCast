@@ -30,6 +30,7 @@ import {
   type UiVenueDossierVisit
 } from '../data/uiDataPackage';
 import { getVenueByTrackName, getVenueDossier } from '../data/venueDossier';
+import { causeFacts, causeMajority, orderedCauses } from '../data/cautionCause';
 import { priorYearReplaysAtVenue, replayProvenance } from '../data/replayAvailable';
 import { loadDebriefArchive } from '../data/debriefArchive';
 import { ReplayAffordance, priorYearTitle, useReplayCatalog } from './replayAffordance';
@@ -429,22 +430,30 @@ const cautionThirdPhrase = (venue: UiCautionByVenue): string | null => {
 };
 
 const cautionCausePhrase = (venue: UiCautionByVenue): string | null => {
-  const cats = venue.categories ?? [];
+  const ordered = orderedCauses(venue.categories ?? []);
   const total = venue.cautions ?? 0;
-  if (cats.length === 0 || total === 0) return null;
-  const top = cats[0];
-  if (cats.length === 1) {
+  if (ordered.length === 0 || total === 0) return null;
+  if (ordered.length === 1) {
     const lead = total === 1 ? 'The one' : total === 2 ? 'Both' : 'Every one';
-    return `${lead} for ${top.category.toLowerCase()}.`;
+    return `${lead} for ${ordered[0].category.toLowerCase()}.`;
   }
-  const others = cats.slice(1).map((entry) => entry.category.toLowerCase());
-  const othersStr = others.length === 1 ? others[0] : `${others.slice(0, -1).join(', ')} and ${others[others.length - 1]}`;
-  return `Mostly ${top.category.toLowerCase()} (${top.count} of ${total}) — also ${othersStr}.`;
+  // "Most" only when a single cause is strictly more than half of all cautions;
+  // a tie (2 contact · 2 mechanical) or a bare plurality just states the counts,
+  // never a verdict (design review).
+  const majority = causeMajority(ordered);
+  if (majority) {
+    return `Mostly ${majority.category.toLowerCase()} — ${majority.count} of ${total}.`;
+  }
+  return `${causeFacts(ordered)}.`;
 };
 
 /** The strip: a race-distance axis (start → finish) with each caution a dot at
  *  the lap it flew, stacked where two land together. Third dividers guide the
- *  eye; all ink, no gold. Hover a dot for its year, cause, and lap. */
+ *  eye; all ink, no gold. Every dot is keyboard-focusable with an accessible
+ *  label and a ≥24px target, and Enter/Space opens its race; the chronological
+ *  list below carries the same year/lap/cause facts with no pointer required. */
+type CautionMark = { event: UiCautionEvent; index: number; px: number; y: number };
+
 const CautionStrip = ({
   events,
   debriefIds
@@ -454,26 +463,27 @@ const CautionStrip = ({
 }) => {
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();
   const { navigate } = useRouter();
-  const [hovered, setHovered] = useState<number | null>(null);
+  const [active, setActive] = useState<number | null>(null);
   const [tip, setTip] = useState<ChartTip | null>(null);
 
-  const placed = events.filter((event) => event.lapFraction !== null);
-  if (placed.length === 0) return null;
+  if (events.length === 0) return null;
 
   const padX = 18;
   const axisY = 46;
   const levelGap = 11;
   const dotR = 4;
+  const hitR = 12; // ≥24px focus/touch target (design-review a11y minimum)
   const plotLeft = padX;
   const plotRight = Math.max(width - padX, plotLeft + 1);
   const x = (fraction: number) => plotLeft + Math.min(1, Math.max(0, fraction)) * (plotRight - plotLeft);
 
-  // Stack coincident cautions upward so every dot stays hoverable.
-  const ordered = placed
+  // Stack coincident cautions upward so every dot stays reachable.
+  const placed = events.filter((event) => event.lapFraction !== null);
+  const orderedMarks = placed
     .map((event, index) => ({ event, index, px: x(event.lapFraction as number) }))
     .sort((a, b) => a.px - b.px);
   const levelLastPx: number[] = [];
-  const marks = ordered.map((entry) => {
+  const marks: CautionMark[] = orderedMarks.map((entry) => {
     let level = 0;
     while (level < levelLastPx.length && entry.px - levelLastPx[level] < dotR * 2 + 3) level += 1;
     levelLastPx[level] = entry.px;
@@ -483,14 +493,39 @@ const CautionStrip = ({
   const height = axisY + 26;
   const topPad = axisY - topLevel * levelGap - dotR - 4;
 
-  const leave = () => {
-    setHovered(null);
+  // The chronological record, always visible — no hover or pointer required.
+  const listed = events
+    .filter((event) => event.startLap !== null)
+    .slice()
+    .sort((a, b) => (a.seasonYear ?? 0) - (b.seasonYear ?? 0) || (a.startLap ?? 0) - (b.startLap ?? 0));
+
+  const clear = () => {
+    setActive(null);
     setTip(null);
   };
 
+  const focusMark = (mark: CautionMark) => {
+    const { event } = mark;
+    const seasonShort = event.seasonYear !== null ? `’${String(event.seasonYear).slice(2)}` : '';
+    setActive(mark.index);
+    setTip({
+      x: mark.px,
+      y: mark.y - dotR,
+      title: `${seasonShort} · ${event.category}`.trim(),
+      detail: event.totalRaceLaps ? `lap ${event.startLap} of ${event.totalRaceLaps}` : `lap ${event.startLap}`,
+      action: debriefIds.has(event.sessionId) ? 'open the race page' : null
+    });
+  };
+
+  const openMark = (mark: CautionMark) => {
+    if (debriefIds.has(mark.event.sessionId)) navigate(`/races/${encodeURIComponent(mark.event.sessionId)}`);
+  };
+
+  const rowStyle = { fontSize: 12, color: 'var(--ink-secondary)', fontVariantNumeric: 'tabular-nums' as const };
+
   return (
     <div ref={ref} style={{ width: '100%', position: 'relative', marginTop: 4 }}>
-      {width > 0 ? (
+      {width > 0 && marks.length > 0 ? (
         <svg width={width} height={height} role="img" aria-label="Where full-course cautions fall across the race here">
           {/* Third dividers + labels: opening | middle | final. */}
           {[1 / 3, 2 / 3].map((fraction) => (
@@ -513,34 +548,47 @@ const CautionStrip = ({
           {marks.map((mark) => {
             const event = mark.event;
             const linked = debriefIds.has(event.sessionId);
-            const isHovered = hovered === mark.index;
-            const seasonShort = event.seasonYear !== null ? `’${String(event.seasonYear).slice(2)}` : '';
+            const isActive = active === mark.index;
+            const label = `${event.seasonYear ?? ''} caution: ${event.category.toLowerCase()}, lap ${event.startLap}${
+              event.totalRaceLaps ? ` of ${event.totalRaceLaps}` : ''
+            }${linked ? ', opens the race page' : ''}`.trim();
             return (
               <g
                 key={`${event.sessionId}-${event.startLap}-${mark.index}`}
-                style={{ cursor: linked ? 'pointer' : 'default' }}
-                onMouseEnter={() => {
-                  setHovered(mark.index);
-                  setTip({
-                    x: mark.px,
-                    y: mark.y - dotR,
-                    title: `${seasonShort} · ${event.category}`,
-                    detail: event.totalRaceLaps ? `lap ${event.startLap} of ${event.totalRaceLaps}` : `lap ${event.startLap}`,
-                    action: linked ? 'open the race page' : null
-                  });
-                }}
-                onMouseLeave={leave}
-                onClick={() => {
-                  if (linked) navigate(`/races/${encodeURIComponent(event.sessionId)}`);
+                tabIndex={0}
+                role={linked ? 'link' : 'img'}
+                aria-label={label}
+                style={{ cursor: linked ? 'pointer' : 'default', outline: 'none' }}
+                onMouseEnter={() => focusMark(mark)}
+                onMouseLeave={clear}
+                onFocus={() => focusMark(mark)}
+                onBlur={clear}
+                onClick={() => openMark(mark)}
+                onKeyDown={(keyEvent) => {
+                  if (keyEvent.key === 'Enter' || keyEvent.key === ' ') {
+                    keyEvent.preventDefault();
+                    openMark(mark);
+                  }
                 }}
               >
-                <circle cx={mark.px} cy={mark.y} r={dotR + 6} fill="transparent" />
+                <circle cx={mark.px} cy={mark.y} r={hitR} fill="transparent" />
+                {isActive ? (
+                  <circle
+                    cx={mark.px}
+                    cy={mark.y}
+                    r={dotR + 4}
+                    fill="none"
+                    stroke="var(--ink-primary)"
+                    strokeWidth={1.5}
+                    style={{ pointerEvents: 'none' }}
+                  />
+                ) : null}
                 <circle
                   cx={mark.px}
                   cy={mark.y}
-                  r={isHovered ? dotR + 1 : dotR}
+                  r={isActive ? dotR + 1 : dotR}
                   fill="var(--ink-primary)"
-                  style={{ opacity: hovered !== null && !isHovered ? 0.22 : 1, transition: 'opacity 150ms ease', pointerEvents: 'none' }}
+                  style={{ opacity: active !== null && !isActive ? 0.22 : 1, transition: 'opacity 150ms ease', pointerEvents: 'none' }}
                 />
               </g>
             );
@@ -548,6 +596,25 @@ const CautionStrip = ({
         </svg>
       ) : null}
       {tip ? <ChartTipCard tip={tip} width={width} /> : null}
+      {/* Non-hover event list: year · lap · cause for every caution, reachable
+          by keyboard and screen reader with no chart interaction. */}
+      <ul aria-label="Every full-course caution here, by year and lap" style={{ listStyle: 'none', margin: '10px 0 0', padding: 0, display: 'grid', gap: 3 }}>
+        {listed.map((event, index) => {
+          const linked = debriefIds.has(event.sessionId);
+          const text = `${event.seasonYear ?? '—'} · lap ${event.startLap}${event.totalRaceLaps ? ` of ${event.totalRaceLaps}` : ''} · ${event.category.toLowerCase()}`;
+          return (
+            <li key={`${event.sessionId}-${event.startLap}-${index}`}>
+              {linked ? (
+                <Link to={`/races/${encodeURIComponent(event.sessionId)}`} className="navlink" style={{ ...rowStyle, padding: 0, textDecoration: 'none' }}>
+                  {text}
+                </Link>
+              ) : (
+                <span style={rowStyle}>{text}</span>
+              )}
+            </li>
+          );
+        })}
+      </ul>
     </div>
   );
 };

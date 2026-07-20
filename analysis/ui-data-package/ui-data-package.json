@@ -1,6 +1,6 @@
 {
   "schemaVersion": "brycecast.uiDataPackage.v1",
-  "generatedAt": "2026-07-20T08:06:26.421Z",
+  "generatedAt": "2026-07-20T08:54:42.107Z",
   "sourceHash": "64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978",
   "asOfDate": "2026-07-19",
   "baselineCommit": "c282d65",
@@ -286,8 +286,8 @@
     "restartReportSummary": {
       "path": "analysis/restart-report/output/summary.json",
       "bytes": 10657,
-      "modifiedAt": "2026-07-20T08:06:19.833Z",
-      "sha256": "8cb6b46d3af03c0cfd9de268def0222607d577f7e055670ade394c0a78fc0769"
+      "modifiedAt": "2026-07-20T08:54:35.529Z",
+      "sha256": "6c5c252ed7f8ae68be57a3605e43ad1d88a1e6928411e259b9c82f06aec855e2"
     },
     "restartReportEvents": {
       "path": "analysis/restart-report/output/tables/restart_events.csv",
@@ -334,8 +334,8 @@
     "cautionAtlasSummary": {
       "path": "analysis/caution-atlas/output/summary.json",
       "bytes": 12386,
-      "modifiedAt": "2026-07-20T08:06:23.135Z",
-      "sha256": "3129113c613514d7815db824a07309ab2a3a43a2b254f122889fc05354f387c4"
+      "modifiedAt": "2026-07-20T08:54:38.781Z",
+      "sha256": "ecb5a360a5e193682c98155a00845deaedb7e66acca20f2d8a9682f5277a1207"
     },
     "cautionAtlasEvents": {
       "path": "analysis/caution-atlas/output/tables/caution_events.csv",
@@ -357,15 +357,15 @@
     },
     "cautionAtlasBuilderScript": {
       "path": "analysis/caution-atlas/scripts/build_caution_atlas.py",
-      "bytes": 23922,
-      "modifiedAt": "2026-07-20T07:45:57.972Z",
-      "sha256": "d8a623a3e89a0e3a0e09b3616e3bb6f7add698c0e732f6a4861ed749ee1db908"
+      "bytes": 25649,
+      "modifiedAt": "2026-07-20T08:50:06.287Z",
+      "sha256": "4791daed63eec0ca508a3af20c2fbc29c4ba1f822f74742638bbb1750fad0437"
     },
     "cautionAtlasValidatorScript": {
       "path": "analysis/caution-atlas/scripts/validate_caution_atlas.py",
-      "bytes": 15778,
-      "modifiedAt": "2026-07-20T07:47:23.405Z",
-      "sha256": "69d382cabf171e05f5ce8968894947abac0e8d2d8a7dd98fd05abfd82dde7d89"
+      "bytes": 30495,
+      "modifiedAt": "2026-07-20T08:53:31.189Z",
+      "sha256": "69a8423bc37b6c7b8394da7bdd557dbe8a727ec5f4f52c6a0562eeb58037195f"
     },
     "predictiveSummary": {
       "path": "analysis/predictive-race-intelligence/output/summary.json",

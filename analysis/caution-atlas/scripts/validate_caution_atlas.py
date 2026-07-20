@@ -35,14 +35,22 @@ HAND_VERIFIED_SESSIONS = ("session_indy_nxt_2024_6323", "session_indy_nxt_2026_6
 NASHVILLE_VENUE_SLUG = "nashville_superspeedway"
 NASHVILLE_EXPECTED = {"races": 3, "medianPerRace": 1.0, "minPerRace": 1, "maxPerRace": 2}
 
-CATEGORY_KEYWORDS = (
+UI_DATA_PACKAGE_PATH = ROOT / "analysis/ui-data-package/ui-data-package.json"
+
+# Independent re-implementation of the build's cause parsing (fail closed on an
+# ambiguous or unmapped official label; no priority order).
+CAUSE_KEYWORDS = (
     ("Contact", ("contact",)),
     ("Off course", ("off course", "off-course")),
     ("Spin", ("spin",)),
     ("Debris", ("debris",)),
     ("Mechanical", ("mechanical",)),
-    ("Conditions", ("condition",)),
+    ("Conditions", ("conditions", "condition")),
 )
+
+
+class CautionCauseError(ValueError):
+    """A caution reason whose official label maps to no cause, or to more than one."""
 
 
 def fail(message: str) -> None:
@@ -110,12 +118,48 @@ def venue_slug(track_name: str) -> str:
     return out or "venue"
 
 
+def cause_label_region(reason: str) -> str:
+    """The official label: reason text before the first ':', ';', or spaced ' - '
+    delimiter (the spaced hyphen leaves an 'off-course' hyphen intact)."""
+    text = " ".join((reason or "").split())
+    cut = len(text)
+    for delim in (":", ";"):
+        pos = text.find(delim)
+        if pos != -1:
+            cut = min(cut, pos)
+    spaced_hyphen = text.find(" - ")
+    if spaced_hyphen != -1:
+        cut = min(cut, spaced_hyphen)
+    return text[:cut].strip()
+
+
 def categorize(reason: str) -> str:
-    text = (reason or "").lower()
-    for label, keywords in CATEGORY_KEYWORDS:
-        if any(keyword in text for keyword in keywords):
-            return label
-    return "Other"
+    region = cause_label_region(reason).lower()
+    matched: list[str] = []
+    for label, keywords in CAUSE_KEYWORDS:
+        if label not in matched and any(keyword in region for keyword in keywords):
+            matched.append(label)
+    if len(matched) == 1:
+        return matched[0]
+    if not matched:
+        raise CautionCauseError(f"unrecognized caution cause label {region!r} (from reason {reason!r})")
+    raise CautionCauseError(f"ambiguous caution cause label {region!r} maps to {matched} (from reason {reason!r})")
+
+
+def normalize_categories(value: Any) -> dict[str, int]:
+    """Both the CSV 'Contact:3;Debris:1' string and the package
+    [{'category','count'}] list collapse to {category: count} for comparison."""
+    out: dict[str, int] = {}
+    if isinstance(value, str):
+        for part in value.split(";"):
+            if not part:
+                continue
+            label, _, count = part.partition(":")
+            out[label] = (as_int(count) or 0)
+    elif isinstance(value, list):
+        for entry in value:
+            out[entry.get("category")] = as_int(entry.get("count")) or 0
+    return {k: v for k, v in out.items() if v}
 
 
 def third_of(start_lap: int | None, total_laps: int) -> str:
@@ -179,13 +223,20 @@ def rederive(data: dict[str, Any]) -> dict[str, Any]:
             end = start
         if start is None or end is None or start <= 0 or end <= 0:
             continue
+        total = totals.get(sid, 0)
+        ran_to_flag = total > 0 and end >= total
         cautions[sid].append(
             {
                 "startLap": start,
                 "endLap": end,
+                "durationLaps": end - start + 1,
+                "totalRaceLaps": total,
+                "lapFraction": round(start / total, 4) if total > 0 else None,
+                "restartLap": None if ran_to_flag else end + 1,
+                "ranToFlag": ran_to_flag,
                 "reason": (raw.get("reason") or "").strip() or "Caution",
-                "third": third_of(start, totals.get(sid, 0)),
-                "category": categorize(raw.get("reason") or ""),
+                "third": third_of(start, total),
+                "category": categorize((raw.get("reason") or "").strip() or "Caution"),
             }
         )
 
@@ -198,8 +249,216 @@ def rederive(data: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def rederive_venue_rollups(truth: dict[str, Any]) -> dict[str, dict[str, Any]]:
+    """Every rendered per-venue aggregate — counts, median/mean/range, thirds,
+    dominant third, ran-to-flag, median duration, and the category rollup —
+    recomputed from the canonical re-derivation, independently of the build."""
+    buckets: dict[str, dict[str, Any]] = {}
+    for sid, meta in truth["runSessions"].items():
+        bucket = buckets.setdefault(meta["venueSlug"], {"counts": [], "events": []})
+        evs = truth["cautions"].get(sid, [])
+        bucket["counts"].append(len(evs))
+        bucket["events"].extend(evs)
+    out: dict[str, dict[str, Any]] = {}
+    for slug, bucket in buckets.items():
+        counts = bucket["counts"]
+        evs = bucket["events"]
+        thirds = {k: sum(1 for e in evs if e["third"] == k) for k in ("opening", "middle", "final", "unknown")}
+        placed = {k: thirds[k] for k in ("opening", "middle", "final")}
+        top = max(placed.values()) if placed else 0
+        leaders = [k for k, v in placed.items() if v == top and v > 0]
+        durations = [e["durationLaps"] for e in evs]
+        categories: dict[str, int] = defaultdict(int)
+        for e in evs:
+            categories[e["category"]] += 1
+        out[slug] = {
+            "races": len(counts),
+            "cautions": len(evs),
+            "medianPerRace": round(float(statistics.median(counts)), 3) if counts else None,
+            "minPerRace": min(counts) if counts else 0,
+            "maxPerRace": max(counts) if counts else 0,
+            "meanPerRace": round(float(statistics.fmean(counts)), 3) if counts else None,
+            "openingThird": thirds["opening"],
+            "middleThird": thirds["middle"],
+            "finalThird": thirds["final"],
+            "unknownThird": thirds["unknown"],
+            "dominantThird": leaders[0] if len(leaders) == 1 else "",
+            "ranToFlagCount": sum(1 for e in evs if e["ranToFlag"]),
+            "medianDurationLaps": round(float(statistics.median(durations)), 3) if durations else None,
+            "categories": dict(categories),
+        }
+    return out
+
+
+def rederive_race_rollups(truth: dict[str, Any]) -> dict[str, dict[str, Any]]:
+    """Per-race aggregates the UI reads: caution/laps totals, thirds, ran-to-flag,
+    median duration, and the category rollup, from the canonical re-derivation."""
+    out: dict[str, dict[str, Any]] = {}
+    for sid in truth["runSessions"]:
+        evs = truth["cautions"].get(sid, [])
+        durations = [e["durationLaps"] for e in evs]
+        categories: dict[str, int] = defaultdict(int)
+        for e in evs:
+            categories[e["category"]] += 1
+        out[sid] = {
+            "cautionCount": len(evs),
+            "cautionLapsTotal": sum(durations),
+            "openingThird": sum(1 for e in evs if e["third"] == "opening"),
+            "middleThird": sum(1 for e in evs if e["third"] == "middle"),
+            "finalThird": sum(1 for e in evs if e["third"] == "final"),
+            "ranToFlagCount": sum(1 for e in evs if e["ranToFlag"]),
+            "medianDurationLaps": round(float(statistics.median(durations)), 3) if durations else None,
+            "categories": dict(categories),
+        }
+    return out
+
+
+def nums_equal(left: Any, right: Any) -> bool:
+    lf, rf = as_float(left), as_float(right)
+    if lf is None or rf is None:
+        return lf is None and rf is None
+    return abs(lf - rf) <= 0.0011
+
+
+def check_cause_parsing() -> None:
+    """Fixtures pinning the fail-closed cause parser: real labels map, and an
+    ambiguous or unmapped label raises rather than guessing by priority."""
+    ok_cases = [
+        ("Contact: Cars 14 and 26 in Turn 3", "Contact"),
+        ("Off Course: Car 68 in Turn 12", "Off course"),
+        ("Off course Cars 2, 28, 27 and 48.", "Off course"),
+        ("Spin: Car 5", "Spin"),
+        ("Debris", "Debris"),
+        ("Mechanical: Car 15 Between Turn 2 and 3", "Mechanical"),
+        ("Conditions", "Conditions"),
+    ]
+    for reason, expected in ok_cases:
+        got = categorize(reason)
+        if got != expected:
+            fail(f"cause fixture {reason!r} expected {expected}, got {got}")
+    fail_cases = [
+        "Contact and Spin: Cars 4 and 5",  # ambiguous — two causes in the label
+        "Incident: Car 9",                 # unmapped — no known cause word
+        "Red flag - track blocked",        # unmapped
+        "Caution",                         # unmapped — a bare caution with no stated cause
+    ]
+    for reason in fail_cases:
+        try:
+            got = categorize(reason)
+        except CautionCauseError:
+            continue
+        fail(f"cause fixture {reason!r} should have failed closed but returned {got}")
+
+
+def check_venue_rollups(venue_rows: list[dict[str, str]], truth: dict[str, Any]) -> None:
+    """Independently re-derive and deep-compare EVERY rendered venue aggregate."""
+    expected = rederive_venue_rollups(truth)
+    if {v["venueSlug"] for v in venue_rows} != set(expected):
+        fail("caution_by_venue venues disagree with the re-derived set")
+    for venue in venue_rows:
+        slug = venue["venueSlug"]
+        want = expected[slug]
+        for col, key in (
+            ("races", "races"), ("cautions", "cautions"),
+            ("minPerRace", "minPerRace"), ("maxPerRace", "maxPerRace"),
+            ("openingThird", "openingThird"), ("middleThird", "middleThird"),
+            ("finalThird", "finalThird"), ("unknownThird", "unknownThird"),
+            ("ranToFlagCount", "ranToFlagCount"),
+        ):
+            if as_int(venue[col]) != want[key]:
+                fail(f"venue {slug}: {col} {venue[col]} != re-derived {want[key]}")
+        for col, key in (
+            ("medianPerRace", "medianPerRace"), ("meanPerRace", "meanPerRace"),
+            ("medianDurationLaps", "medianDurationLaps"),
+        ):
+            if not nums_equal(venue[col], want[key]):
+                fail(f"venue {slug}: {col} {venue[col]} != re-derived {want[key]}")
+        if (venue["dominantThird"] or "") != want["dominantThird"]:
+            fail(f"venue {slug}: dominantThird {venue['dominantThird']!r} != re-derived {want['dominantThird']!r}")
+        if normalize_categories(venue["categories"]) != want["categories"]:
+            fail(f"venue {slug}: category rollup {venue['categories']!r} != re-derived {want['categories']}")
+
+
+def check_race_rollups(race_rows: list[dict[str, str]], truth: dict[str, Any]) -> None:
+    """Independently re-derive and deep-compare per-race median duration and the
+    category rollup (the count/laps/thirds columns are checked separately)."""
+    expected = rederive_race_rollups(truth)
+    for race in race_rows:
+        sid = race["sessionId"]
+        want = expected.get(sid)
+        if want is None:
+            fail(f"caution_by_race carries {sid} with no re-derived counterpart")
+        if not nums_equal(race["medianDurationLaps"], want["medianDurationLaps"]):
+            fail(f"{sid}: medianDurationLaps {race['medianDurationLaps']} != re-derived {want['medianDurationLaps']}")
+        if normalize_categories(race["categories"]) != want["categories"]:
+            fail(f"{sid}: category rollup {race['categories']!r} != re-derived {want['categories']}")
+
+
+def check_ui_package(event_rows: list[dict[str, str]], race_rows: list[dict[str, str]], venue_rows: list[dict[str, str]]) -> None:
+    """Deep-compare the normalized caution rows the UI actually reads — the
+    embedded ui-data-package cautionAtlas — against the lane tables, so a value
+    can never drift between the CSV and the package the React app hydrates."""
+    if not UI_DATA_PACKAGE_PATH.exists():
+        fail("ui-data-package.json is missing — rebuild the UI data package before validating")
+    package = json.loads(UI_DATA_PACKAGE_PATH.read_text())
+    try:
+        atlas = package["screens"]["careerLab"]["cautionAtlas"]
+    except (KeyError, TypeError):
+        fail("ui-data-package has no screens.careerLab.cautionAtlas")
+
+    # events: 1:1 with the CSV, same order, every rendered field normalized equal.
+    pkg_events = atlas["events"]
+    if len(pkg_events) != len(event_rows):
+        fail(f"package events {len(pkg_events)} != caution_events rows {len(event_rows)}")
+    for csv_row, pkg in zip(event_rows, pkg_events):
+        for col, key in (("sessionId", "sessionId"), ("trackName", "trackName"), ("venueSlug", "venueSlug"), ("third", "third"), ("category", "category")):
+            if str(csv_row[col]) != str(pkg.get(key)):
+                fail(f"package event {pkg.get('sessionId')}: {key} {pkg.get(key)!r} != CSV {csv_row[col]!r}")
+        for col, key in (("seasonYear", "seasonYear"), ("startLap", "startLap"), ("endLap", "endLap"), ("durationLaps", "durationLaps"), ("totalRaceLaps", "totalRaceLaps"), ("restartLap", "restartLap")):
+            if as_int(csv_row[col]) != (as_int(pkg.get(key)) if pkg.get(key) is not None else None):
+                fail(f"package event {pkg.get('sessionId')}: {key} {pkg.get(key)!r} != CSV {csv_row[col]!r}")
+        if not nums_equal(csv_row["lapFraction"], pkg.get("lapFraction")):
+            fail(f"package event {pkg.get('sessionId')}: lapFraction {pkg.get('lapFraction')} != CSV {csv_row['lapFraction']}")
+        if (csv_row["ranToFlag"] == "true") != bool(pkg.get("ranToFlag")):
+            fail(f"package event {pkg.get('sessionId')}: ranToFlag {pkg.get('ranToFlag')} != CSV {csv_row['ranToFlag']}")
+
+    # byRace: package carries only cautionCount>0 races; deep-compare by session.
+    pkg_by_race = {row["sessionId"]: row for row in atlas["byRace"]}
+    csv_by_race = {row["sessionId"]: row for row in race_rows if (as_int(row["cautionCount"]) or 0) > 0}
+    if set(pkg_by_race) != set(csv_by_race):
+        fail("package byRace session set != caution_by_race (cautionCount>0) set")
+    for sid, csv_row in csv_by_race.items():
+        pkg = pkg_by_race[sid]
+        for col, key in (("totalRaceLaps", "totalRaceLaps"), ("cautionCount", "cautionCount"), ("cautionLapsTotal", "cautionLapsTotal"), ("openingThird", "opening"), ("middleThird", "middle"), ("finalThird", "final"), ("ranToFlagCount", "ranToFlagCount")):
+            if as_int(csv_row[col]) != as_int(pkg.get(key)):
+                fail(f"package byRace {sid}: {key} {pkg.get(key)!r} != CSV {csv_row[col]!r}")
+        if not nums_equal(csv_row["medianDurationLaps"], pkg.get("medianDurationLaps")):
+            fail(f"package byRace {sid}: medianDurationLaps {pkg.get('medianDurationLaps')} != CSV {csv_row['medianDurationLaps']}")
+        if normalize_categories(csv_row["categories"]) != normalize_categories(pkg.get("categories")):
+            fail(f"package byRace {sid}: categories != CSV")
+
+    # byVenue: deep-compare every rendered field, including the category rollup.
+    pkg_by_venue = {row["venueSlug"]: row for row in atlas["byVenue"]}
+    csv_by_venue = {row["venueSlug"]: row for row in venue_rows}
+    if set(pkg_by_venue) != set(csv_by_venue):
+        fail("package byVenue venue set != caution_by_venue set")
+    for slug, csv_row in csv_by_venue.items():
+        pkg = pkg_by_venue[slug]
+        for col, key in (("races", "races"), ("cautions", "cautions"), ("minPerRace", "minPerRace"), ("maxPerRace", "maxPerRace"), ("openingThird", "opening"), ("middleThird", "middle"), ("finalThird", "final"), ("ranToFlagCount", "ranToFlagCount")):
+            if as_int(csv_row[col]) != as_int(pkg.get(key)):
+                fail(f"package byVenue {slug}: {key} {pkg.get(key)!r} != CSV {csv_row[col]!r}")
+        for col, key in (("medianPerRace", "medianPerRace"), ("meanPerRace", "meanPerRace"), ("medianDurationLaps", "medianDurationLaps")):
+            if not nums_equal(csv_row[col], pkg.get(key)):
+                fail(f"package byVenue {slug}: {key} {pkg.get(key)!r} != CSV {csv_row[col]!r}")
+        if (csv_row["dominantThird"] or "") != (pkg.get("dominantThird") or ""):
+            fail(f"package byVenue {slug}: dominantThird {pkg.get('dominantThird')!r} != CSV {csv_row['dominantThird']!r}")
+        if normalize_categories(csv_row["categories"]) != normalize_categories(pkg.get("categories")):
+            fail(f"package byVenue {slug}: categories != CSV")
+
+
 def main() -> None:
     data = json.loads(DATASET_PATH.read_text())
+    check_cause_parsing()
     truth = rederive(data)
 
     summary = json.loads((OUTPUT / "summary.json").read_text())
@@ -312,6 +571,13 @@ def main() -> None:
     third_total = sum(summary["totals"]["byThird"].values())
     if third_total != truth["totalCautions"]:
         fail("totals.byThird must sum to the total caution count")
+
+    # ---- every rendered aggregate, re-derived independently ---------------- #
+    check_venue_rollups(venue_rows, truth)
+    check_race_rollups(race_rows, truth)
+
+    # ---- the rows the UI actually reads, deep-compared through the package -- #
+    check_ui_package(event_rows, race_rows, venue_rows)
 
     # ---- Nashville reconciliation (the handoff's claim) ------------------- #
     nashville = next((v for v in venue_rows if v["venueSlug"] == NASHVILLE_VENUE_SLUG), None)

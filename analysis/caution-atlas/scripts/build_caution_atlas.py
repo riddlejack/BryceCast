@@ -20,9 +20,13 @@ Grain and gating (documented so the UI never has to guess):
     (the leader's last charted lap). opening = first third, middle = second,
     final = last. A race with no lap chart contributes its caution count but its
     cautions are marked third 'unknown' and excluded from the thirds tallies.
-  - The cause category is a faithful grouping of the official reason text by its
-    leading keyword (Contact, Off course, Spin, Debris, Mechanical, Conditions).
-    The raw reason is preserved beside it; the grouping only counts, never judges.
+  - The cause category is read from the OFFICIAL LABEL — the reason text before
+    the delimiter (':', ';', or a spaced ' - ') that separates the label from the
+    incident detail — and mapped by its cause keywords (Contact, Off course,
+    Spin, Debris, Mechanical, Conditions). Only the label region is scanned, so
+    detail text never sways the cause. A label that carries two causes
+    (ambiguous) or none (unmapped) FAILS CLOSED rather than being resolved by a
+    priority order. The raw reason is preserved beside the category.
   - A caution whose end lap is the final lap ran to the flag: no restart. Every
     other caution's restart lap is end lap + 1.
 
@@ -56,18 +60,23 @@ INDY_NXT_ID = "series_indy_nxt"
 # multi-caution road course. Both are re-derived by the validator.
 HAND_VERIFIED_SESSIONS = ("session_indy_nxt_2024_6323", "session_indy_nxt_2026_6749")
 
-# Cause grouping: leading-keyword scan of the official reason text, in priority
-# order. Contact leads because a car that makes contact and then spins or runs
-# off is recorded by the more specific cause. This only groups the official
-# label; it never adds a cause the summary did not state.
-CATEGORY_KEYWORDS = (
+# Cause mapping: keywords are matched only within the OFFICIAL LABEL region (the
+# text before the label/detail delimiter), never across the whole reason. There
+# is no priority order — a label that matches two causes is ambiguous and fails
+# closed, because "Off course beats Spin" is not a defensible universal call.
+CAUSE_KEYWORDS = (
     ("Contact", ("contact",)),
     ("Off course", ("off course", "off-course")),
     ("Spin", ("spin",)),
     ("Debris", ("debris",)),
     ("Mechanical", ("mechanical",)),
-    ("Conditions", ("condition",)),
+    ("Conditions", ("conditions", "condition")),
 )
+
+
+class CautionCauseError(ValueError):
+    """A caution reason whose official label maps to no cause, or to more than
+    one. The lane fails closed rather than guess the cause by a priority order."""
 
 
 def resolve_as_of_date() -> date:
@@ -150,12 +159,39 @@ def round1(value: float | None) -> float | None:
     return round(value + 0.0, 3)
 
 
+def cause_label_region(reason: str) -> str:
+    """The official label: the reason text up to the first delimiter that
+    separates the label from the incident detail. ':' and ';' always delimit;
+    a SPACED hyphen ' - ' delimits too, so an 'off-course' hyphen stays intact."""
+    text = " ".join((reason or "").split())
+    cut = len(text)
+    for delim in (":", ";"):
+        pos = text.find(delim)
+        if pos != -1:
+            cut = min(cut, pos)
+    spaced_hyphen = text.find(" - ")
+    if spaced_hyphen != -1:
+        cut = min(cut, spaced_hyphen)
+    return text[:cut].strip()
+
+
 def categorize(reason: str) -> str:
-    text = (reason or "").lower()
-    for label, keywords in CATEGORY_KEYWORDS:
-        if any(keyword in text for keyword in keywords):
-            return label
-    return "Other"
+    """Map a caution reason to its official cause, failing closed on an ambiguous
+    or unmapped label rather than choosing by priority."""
+    region = cause_label_region(reason).lower()
+    matched: list[str] = []
+    for label, keywords in CAUSE_KEYWORDS:
+        if label not in matched and any(keyword in region for keyword in keywords):
+            matched.append(label)
+    if len(matched) == 1:
+        return matched[0]
+    if not matched:
+        raise CautionCauseError(
+            f"unrecognized caution cause label {region!r} (from reason {reason!r}); extend CAUSE_KEYWORDS or fix the source"
+        )
+    raise CautionCauseError(
+        f"ambiguous caution cause label {region!r} maps to {matched} (from reason {reason!r}); fail closed rather than guess"
+    )
 
 
 def third_of(start_lap: int | None, total_laps: int) -> str:
