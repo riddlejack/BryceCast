@@ -14,7 +14,8 @@ import { loadSectionLaps, sectionLapVisitsFor, type SectionLapsPack } from '../d
 import { loadPassMarks, resolvePassMarks, type PassMarksPack } from '../data/passMarks';
 import { uiDataPackage } from '../data/uiDataPackage';
 import { SectionHeatCard, VenueYearsCard, validPriorComparison } from './sectionIntelligence';
-import { asNumber, asString, formatDate, formatGain, formatNumber, formatPosition, formatWind, ordinal } from '../app/format';
+import { asNumber, asString, formatDate, formatGain, formatNumber, formatPosition, formatWind, ordinal, shortVenue } from '../app/format';
+import { restartBaselineSentence, restartThinVenueNote } from '../data/restartBaseline';
 import { Link } from '../app/router';
 import { displayRaceLabel, loadDebriefBySessionId, roundIndexOf, type ArchiveEntry } from '../data/debriefArchive';
 import { loadRaceStory, type RaceStoryPack, type RaceStoryLapDriver } from '../data/raceStory';
@@ -694,16 +695,18 @@ const RestartBaselineLine = ({ sessionId }: { sessionId: string }) => {
   const field = report.fieldBaseline;
   if (!field) return null;
   const venueSlug = (report.byRace ?? []).find((row) => row.sessionId === sessionId)?.venueSlug ?? null;
-  const venue = venueSlug
-    ? (report.venueBaselines ?? []).find((row) => row.stable && row.venueSlug === venueSlug)
-    : undefined;
-  const source = venue ?? field;
-  if (source.typicalFieldMove === null) return null;
-  const here = venue ? ' here' : ' across INDY NXT';
+  const venueRow = venueSlug ? (report.venueBaselines ?? []).find((row) => row.venueSlug === venueSlug) ?? null : null;
+  const stableVenue = venueRow && venueRow.stable ? venueRow : null;
+  const sentence = restartBaselineSentence(stableVenue ?? field, stableVenue ? 'venue' : 'series');
+  if (!sentence) return null;
+  const thin =
+    !stableVenue && venueRow && venueRow.restarts > 0
+      ? restartThinVenueNote(shortVenue(venueRow.trackName), venueRow.restarts)
+      : null;
   return (
     <p style={{ margin: '12px 0 0', fontSize: 11.5, color: 'var(--ink-muted)' }}>
-      Typical field movement on restarts{here}: ±{source.typicalFieldMove.toFixed(1)} places · across{' '}
-      {source.restarts} restart{source.restarts === 1 ? '' : 's'} since {source.spanFirstSeason ?? '2024'}
+      {sentence}
+      {thin ? ` · ${thin}` : ''}
     </p>
   );
 };

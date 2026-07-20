@@ -23,6 +23,7 @@ LANE = ROOT / "analysis/restart-report"
 OUTPUT = LANE / "output"
 TABLES = OUTPUT / "tables"
 DATASET_PATH = ROOT / "data/career/career.dataset.json"
+UI_DATA_PACKAGE_PATH = ROOT / "analysis/ui-data-package/ui-data-package.json"
 
 BRYCE_ID = "driver_bryce_aron"
 INDY_NXT_ID = "series_indy_nxt"
@@ -58,6 +59,102 @@ def as_int(value: Any) -> int | None:
         return int(float(value))
     except (TypeError, ValueError):
         return None
+
+
+def as_float(value: Any) -> float | None:
+    if value in (None, "", "None"):
+        return None
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return None
+
+
+def as_bool(value: Any) -> bool:
+    if isinstance(value, bool):
+        return value
+    return str(value).strip().lower() == "true"
+
+
+# The venue-baseline row, normalized for a three-way summary/CSV/package compare:
+# every rendered field, sourceHash the only thing stripped, `stable` a boolean.
+BASELINE_COMPARE_KEYS = (
+    "venueSlug", "trackName", "trackType", "seasons",
+    "spanFirstSeason", "spanLastSeason", "restarts", "driverObservations",
+    "meanAbsoluteFieldMove", "medianFieldMove", "stable",
+)
+
+
+def normalize_baseline_row(row: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "venueSlug": str(row.get("venueSlug")),
+        "trackName": str(row.get("trackName")),
+        "trackType": str(row.get("trackType")),
+        "seasons": str(row.get("seasons")),
+        "spanFirstSeason": as_int(row.get("spanFirstSeason")),
+        "spanLastSeason": as_int(row.get("spanLastSeason")),
+        "restarts": as_int(row.get("restarts")),
+        "driverObservations": as_int(row.get("driverObservations")),
+        "meanAbsoluteFieldMove": as_float(row.get("meanAbsoluteFieldMove")),
+        "medianFieldMove": as_float(row.get("medianFieldMove")),
+        "stable": as_bool(row.get("stable")),
+    }
+
+
+def baseline_rows_differ(left: dict[str, Any], right: dict[str, Any]) -> list[str]:
+    """The keys on which two normalized baseline rows disagree (float-tolerant)."""
+    diffs: list[str] = []
+    for key in BASELINE_COMPARE_KEYS:
+        lv, rv = left.get(key), right.get(key)
+        if isinstance(lv, float) or isinstance(rv, float):
+            if lv is None or rv is None:
+                if lv is not rv:
+                    diffs.append(key)
+            elif abs(lv - rv) > 1e-9:
+                diffs.append(key)
+        elif lv != rv:
+            diffs.append(key)
+    return diffs
+
+
+def check_venue_baseline_surfaces(baseline_rows: list[dict[str, str]], summary: dict[str, Any]) -> None:
+    """Deep-compare every venue baseline row across the three surfaces a value can
+    drift between — the CSV table, the summary block, and the UI package the app
+    hydrates. sourceHash is the only field stripped; stable is a boolean."""
+    csv_by = {r["venueSlug"]: normalize_baseline_row(r) for r in baseline_rows}
+    summary_by = {r["venueSlug"]: normalize_baseline_row(r) for r in summary.get("venueBaselines", [])}
+    if not UI_DATA_PACKAGE_PATH.exists():
+        fail("ui-data-package.json is missing — rebuild the UI data package before validating")
+    package = json.loads(UI_DATA_PACKAGE_PATH.read_text())
+    try:
+        pkg_rows = package["screens"]["careerLab"]["restarts"]["venueBaselines"]
+    except (KeyError, TypeError):
+        fail("ui-data-package has no screens.careerLab.restarts.venueBaselines")
+    package_by = {r["venueSlug"]: normalize_baseline_row(r) for r in pkg_rows}
+    if set(csv_by) != set(summary_by):
+        fail("venue baseline venues differ between the CSV table and the summary block")
+    if set(csv_by) != set(package_by):
+        fail("venue baseline venues differ between the CSV table and the UI package")
+    for slug, csv_row in csv_by.items():
+        d_summary = baseline_rows_differ(csv_row, summary_by[slug])
+        if d_summary:
+            fail(f"venue {slug}: summary baseline differs from the CSV on {d_summary}")
+        d_package = baseline_rows_differ(csv_row, package_by[slug])
+        if d_package:
+            fail(f"venue {slug}: UI-package baseline differs from the CSV on {d_package}")
+
+
+def check_mutation_detected(baseline_rows: list[dict[str, str]]) -> None:
+    """A change to ONLY meanAbsoluteFieldMove must be caught as exactly that field
+    — proof the deep-compare is not blind to the headline figure."""
+    if not baseline_rows:
+        return
+    base = normalize_baseline_row(baseline_rows[0])
+    mutated = dict(base)
+    mutated["meanAbsoluteFieldMove"] = round((base["meanAbsoluteFieldMove"] or 0.0) + 0.5, 3)
+    diffs = baseline_rows_differ(base, mutated)
+    if diffs != ["meanAbsoluteFieldMove"]:
+        fail(f"mutation guard: a meanAbsoluteFieldMove-only change should be detected as exactly that, got {diffs}")
 
 
 def dataset_hash() -> str:
@@ -326,7 +423,7 @@ def main() -> None:
             fail(f"baseline {slug}: restarts {row['restarts']} != re-derived {restarts}")
         if as_int(row["driverObservations"]) != len(magnitudes):
             fail(f"baseline {slug}: driverObservations != re-derived {len(magnitudes)}")
-        approx(row["typicalFieldMove"], statistics.fmean(magnitudes), f"{slug} typicalFieldMove")
+        approx(row["meanAbsoluteFieldMove"], statistics.fmean(magnitudes), f"{slug} meanAbsoluteFieldMove")
         approx(row["medianFieldMove"], float(statistics.median(magnitudes)), f"{slug} medianFieldMove")
         expected_stable = restarts >= MIN_BASELINE_RESTARTS
         if (row["stable"] == "true") != expected_stable:
@@ -345,12 +442,22 @@ def main() -> None:
         fail("fieldBaseline restarts mismatch")
     if field_baseline.get("driverObservations") != len(all_abs):
         fail("fieldBaseline driverObservations mismatch")
-    approx(field_baseline.get("typicalFieldMove"), statistics.fmean(all_abs), "career typicalFieldMove")
+    approx(field_baseline.get("meanAbsoluteFieldMove"), statistics.fmean(all_abs), "career meanAbsoluteFieldMove")
+    approx(field_baseline.get("medianFieldMove"), float(statistics.median(all_abs)), "career medianFieldMove")
     if all_seasons and field_baseline.get("spanFirstSeason") != min(all_seasons):
         fail("fieldBaseline spanFirstSeason mismatch")
-    # The emitted venueBaselines block in the summary must equal the CSV rows.
+    if all_seasons and field_baseline.get("spanLastSeason") != max(all_seasons):
+        fail("fieldBaseline spanLastSeason mismatch")
+    if field_baseline.get("minStableRestarts") != MIN_BASELINE_RESTARTS:
+        fail(f"fieldBaseline minStableRestarts must be the {MIN_BASELINE_RESTARTS}-restart stability threshold")
+
+    # The emitted venueBaselines must match the CSV row-for-row, and so must the
+    # UI package the app reads — deep-compared across all three surfaces; plus a
+    # mutation guard proving the comparator catches a meanAbsoluteFieldMove flip.
     if len(summary.get("venueBaselines", [])) != len(baseline_rows):
         fail("summary venueBaselines count must equal the restart_venue_baseline table")
+    check_venue_baseline_surfaces(baseline_rows, summary)
+    check_mutation_detected(baseline_rows)
 
     # ---- career + coverage ------------------------------------------------ #
     career = summary["career"]
@@ -387,7 +494,7 @@ def main() -> None:
         f"restart-report validation OK — {len(event_rows)} restarts, "
         f"{career['bryceRestartsCounted']} with a Bryce line, career net {career['bryceNet']:+d}, "
         f"2 races hand-verified; field baseline re-derived across {len(baseline_rows)} venues "
-        f"(±{field_baseline['typicalFieldMove']} places / {field_baseline['restarts']} restarts)."
+        f"(avg {field_baseline['meanAbsoluteFieldMove']} places / {field_baseline['restarts']} restarts)."
     )
 
 

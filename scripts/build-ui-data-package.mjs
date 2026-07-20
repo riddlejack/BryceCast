@@ -1455,7 +1455,7 @@ const buildRestartReport = ({ summary, byRaceRows, seasonIndex }) => {
       sourceRef('restartReportByRace', 'Per-race restart movement with the field rank.'),
       sourceRef('restartReportByVenue', 'Per-venue restart rollup for the Race Week prior.'),
       sourceRef('restartReportBySeason', 'Per-season restart rollup.'),
-      sourceRef('restartReportVenueBaseline', 'Per-venue field baseline: the typical restart place-swing across the field.'),
+      sourceRef('restartReportVenueBaseline', 'Per-venue field baseline: the average restart place-swing across the field.'),
       sourceRef('restartReportEvents', 'One row per restart, Bryce against the full field.'),
       sourceRef('canonicalDataset', 'Official Results-PDF caution summaries and official lap-chart positions.')
     ]

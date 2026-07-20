@@ -5,6 +5,7 @@ import { Card, Countdown, HeroPanel, SourcePill, Stat, Unavailable } from '../ap
 import { ChartTipCard, chartFont, focusFade, inkConnector, useMeasuredWidth, type ChartTip } from '../app/charts';
 import { TrackArt } from '../app/trackArt';
 import { asNumber, asString, formatClock, formatDate, formatGain, formatNumber, formatWind, ordinal, shortVenue, trackTypeLabel } from '../app/format';
+import { restartBaselineSentence, restartThinVenueNote } from '../data/restartBaseline';
 import { FactDelta } from '../app/weatherGlyphs';
 import { currentWindPill, observedAgoLabel, useEventWeather, type EventWeather } from '../app/useEventWeather';
 import { Link, useRouter } from '../app/router';
@@ -287,16 +288,18 @@ const RestartBaselineLine = ({ trackName }: { trackName: string }) => {
   const field = report.fieldBaseline;
   if (!field) return null;
   const target = trackName.trim().toLowerCase();
-  const venue = (report.venueBaselines ?? []).find(
-    (row) => row.stable && row.trackName.trim().toLowerCase() === target
-  );
-  const source = venue ?? field;
-  if (source.typicalFieldMove === null) return null;
-  const here = venue ? ' here' : ' across INDY NXT';
+  const venueRow = (report.venueBaselines ?? []).find((row) => row.trackName.trim().toLowerCase() === target) ?? null;
+  const stableVenue = venueRow && venueRow.stable ? venueRow : null;
+  const sentence = restartBaselineSentence(stableVenue ?? field, stableVenue ? 'venue' : 'series');
+  if (!sentence) return null;
+  // A venue with some — but too few — covered restarts says why it reads the
+  // series-wide norm instead of "here" (design review: honest thin-venue label).
+  const thin =
+    !stableVenue && venueRow && venueRow.restarts > 0 ? restartThinVenueNote(venueShort(trackName), venueRow.restarts) : null;
   return (
     <p style={{ margin: '10px 0 0', fontSize: 12, color: 'var(--ink-muted)' }}>
-      Typical field movement on restarts{here}: ±{source.typicalFieldMove.toFixed(1)} places · across{' '}
-      {source.restarts} restart{source.restarts === 1 ? '' : 's'} since {source.spanFirstSeason ?? '2024'}
+      {sentence}
+      {thin ? ` · ${thin}` : ''}
     </p>
   );
 };

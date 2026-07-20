@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { Card, SourcePill, Stat, Unavailable } from '../app/components';
 import { ChartTipCard, chartFont, useCoarsePointer, useInViewOnce, useMeasuredWidth, useReducedMotion, type ChartTip } from '../app/charts';
 import { asNumber, asString, ordinal } from '../app/format';
+import { restartBaselineSentence } from '../data/restartBaseline';
 import { Link, useRouter } from '../app/router';
 import { uiDataPackage, type UiCareerMoment } from '../data/uiDataPackage';
 import { packModules } from '../data/packModules';
@@ -1354,10 +1355,9 @@ export const CareerRestarts = () => {
       <p style={{ margin: '0 0 6px', fontSize: 15, color: 'var(--ink-primary)', fontWeight: 560 }}>
         Held or gained ground on {heldOrGained} of the {counted} restarts he has run in INDY NXT.
       </p>
-      {report.fieldBaseline && report.fieldBaseline.typicalFieldMove !== null ? (
+      {report.fieldBaseline && restartBaselineSentence(report.fieldBaseline, 'series') ? (
         <p style={{ margin: '0 0 14px', fontSize: 12, color: 'var(--ink-muted)' }}>
-          Typical field movement on restarts: ±{report.fieldBaseline.typicalFieldMove.toFixed(1)} places · across{' '}
-          {report.fieldBaseline.restarts} restarts since {report.fieldBaseline.spanFirstSeason ?? '2024'}
+          {restartBaselineSentence(report.fieldBaseline, 'series')}
         </p>
       ) : (
         <div style={{ height: 8 }} />

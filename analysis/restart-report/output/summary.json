@@ -282,17 +282,17 @@
   "fieldBaseline": {
     "coverageTier": "official_timing_documents",
     "driverObservations": 1297,
+    "meanAbsoluteFieldMove": 0.66,
     "medianFieldMove": 0.0,
     "minStableRestarts": 3,
-    "note": "Mean absolute running-order change per classified car per restart \u2014 the typical size of a place swing on an INDY NXT restart, from the official lap chart. Positions only, never lap times.",
+    "note": "Mean absolute running-order change per classified car per restart \u2014 the average size of a place swing on an INDY NXT restart, from the official lap chart. Positions only, never lap times.",
     "precision": "lap-chart",
     "restarts": 67,
     "scope": "indy_nxt",
     "spanFirstSeason": 2024,
-    "spanLastSeason": 2026,
-    "typicalFieldMove": 0.66
+    "spanLastSeason": 2026
   },
-  "generatedAt": "2026-07-20T07:54:15Z",
+  "generatedAt": "2026-07-20T09:13:44Z",
   "handVerification": [
     {
       "raceLabel": "Grand Prix of Alabama",
@@ -355,6 +355,7 @@
   "venueBaselines": [
     {
       "driverObservations": 180,
+      "meanAbsoluteFieldMove": 0.322,
       "medianFieldMove": 0.0,
       "restarts": 9,
       "seasons": "2024;2025;2026",
@@ -364,11 +365,11 @@
       "stable": "true",
       "trackName": "Streets of St. Petersburg",
       "trackType": "street",
-      "typicalFieldMove": 0.322,
       "venueSlug": "streets_of_st_petersburg"
     },
     {
       "driverObservations": 168,
+      "meanAbsoluteFieldMove": 0.845,
       "medianFieldMove": 0.0,
       "restarts": 8,
       "seasons": "2024;2026",
@@ -378,11 +379,11 @@
       "stable": "true",
       "trackName": "Road America",
       "trackType": "road",
-      "typicalFieldMove": 0.845,
       "venueSlug": "road_america"
     },
     {
       "driverObservations": 149,
+      "meanAbsoluteFieldMove": 0.604,
       "medianFieldMove": 0.0,
       "restarts": 8,
       "seasons": "2024;2025;2026",
@@ -392,11 +393,11 @@
       "stable": "true",
       "trackName": "Streets of Detroit",
       "trackType": "street",
-      "typicalFieldMove": 0.604,
       "venueSlug": "streets_of_detroit"
     },
     {
       "driverObservations": 123,
+      "meanAbsoluteFieldMove": 0.472,
       "medianFieldMove": 0.0,
       "restarts": 7,
       "seasons": "2024;2025",
@@ -406,11 +407,11 @@
       "stable": "true",
       "trackName": "WeatherTech Raceway Laguna Seca",
       "trackType": "road",
-      "typicalFieldMove": 0.472,
       "venueSlug": "weathertech_raceway_laguna_seca"
     },
     {
       "driverObservations": 120,
+      "meanAbsoluteFieldMove": 1.117,
       "medianFieldMove": 1.0,
       "restarts": 6,
       "seasons": "2024;2025;2026",
@@ -420,11 +421,11 @@
       "stable": "true",
       "trackName": "Indianapolis Motor Speedway Road Course",
       "trackType": "road",
-      "typicalFieldMove": 1.117,
       "venueSlug": "indianapolis_motor_speedway_road_course"
     },
     {
       "driverObservations": 107,
+      "meanAbsoluteFieldMove": 0.636,
       "medianFieldMove": 0.0,
       "restarts": 6,
       "seasons": "2024;2026",
@@ -434,11 +435,11 @@
       "stable": "true",
       "trackName": "World Wide Technology Raceway",
       "trackType": "oval",
-      "typicalFieldMove": 0.636,
       "venueSlug": "world_wide_technology_raceway"
     },
     {
       "driverObservations": 106,
+      "meanAbsoluteFieldMove": 0.698,
       "medianFieldMove": 0.0,
       "restarts": 5,
       "seasons": "2024;2025;2026",
@@ -448,11 +449,11 @@
       "stable": "true",
       "trackName": "Barber Motorsports Park",
       "trackType": "road",
-      "typicalFieldMove": 0.698,
       "venueSlug": "barber_motorsports_park"
     },
     {
       "driverObservations": 106,
+      "meanAbsoluteFieldMove": 0.283,
       "medianFieldMove": 0.0,
       "restarts": 5,
       "seasons": "2024;2025;2026",
@@ -462,11 +463,11 @@
       "stable": "true",
       "trackName": "Mid-Ohio Sports Car Course",
       "trackType": "road",
-      "typicalFieldMove": 0.283,
       "venueSlug": "mid_ohio"
     },
     {
       "driverObservations": 74,
+      "meanAbsoluteFieldMove": 0.541,
       "medianFieldMove": 0.0,
       "restarts": 4,
       "seasons": "2024;2025;2026",
@@ -476,11 +477,11 @@
       "stable": "true",
       "trackName": "Nashville Superspeedway",
       "trackType": "oval",
-      "typicalFieldMove": 0.541,
       "venueSlug": "nashville_superspeedway"
     },
     {
       "driverObservations": 54,
+      "meanAbsoluteFieldMove": 0.704,
       "medianFieldMove": 0.0,
       "restarts": 3,
       "seasons": "2024;2025",
@@ -490,11 +491,11 @@
       "stable": "true",
       "trackName": "Iowa Speedway",
       "trackType": "oval",
-      "typicalFieldMove": 0.704,
       "venueSlug": "iowa_speedway"
     },
     {
       "driverObservations": 34,
+      "meanAbsoluteFieldMove": 1.353,
       "medianFieldMove": 0.0,
       "restarts": 2,
       "seasons": "2024;2025",
@@ -504,11 +505,11 @@
       "stable": "false",
       "trackName": "Portland International Raceway",
       "trackType": "road",
-      "typicalFieldMove": 1.353,
       "venueSlug": "portland_international_raceway"
     },
     {
       "driverObservations": 45,
+      "meanAbsoluteFieldMove": 1.244,
       "medianFieldMove": 0.0,
       "restarts": 2,
       "seasons": "2026",
@@ -518,11 +519,11 @@
       "stable": "false",
       "trackName": "Streets of Arlington",
       "trackType": "street",
-      "typicalFieldMove": 1.244,
       "venueSlug": "streets_of_arlington"
     },
     {
       "driverObservations": 31,
+      "meanAbsoluteFieldMove": 0.71,
       "medianFieldMove": 1.0,
       "restarts": 2,
       "seasons": "2024;2025",
@@ -532,7 +533,6 @@
       "stable": "false",
       "trackName": "The Milwaukee Mile",
       "trackType": "oval",
-      "typicalFieldMove": 0.71,
       "venueSlug": "the_milwaukee_mile"
     }
   ],

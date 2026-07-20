@@ -217,7 +217,7 @@ export interface UiRestartBySeason {
 
 /** The restart field baseline (Brief K v2): how far the whole field typically
  *  moves on a restart at one venue, so Bryce's figure reads against a norm.
- *  `typicalFieldMove` is the mean absolute place change per car per restart.
+ *  `meanAbsoluteFieldMove` is the mean absolute place change per car per restart.
  *  v1 covers INDY NXT 2024→present (the first slice); the same shape later
  *  extends to an earlier `spanFirstSeason` from the lake with no UI rework. */
 export interface UiRestartVenueBaseline {
@@ -229,7 +229,7 @@ export interface UiRestartVenueBaseline {
   spanLastSeason: number | null;
   restarts: number;
   driverObservations: number;
-  typicalFieldMove: number | null;
+  meanAbsoluteFieldMove: number | null;
   medianFieldMove: number | null;
   /** True once the venue has ≥ 3 restarts — enough to read as a norm, not one day. */
   stable: boolean;
@@ -244,7 +244,7 @@ export interface UiRestartFieldBaseline {
   spanLastSeason: number | null;
   restarts: number;
   driverObservations: number;
-  typicalFieldMove: number | null;
+  meanAbsoluteFieldMove: number | null;
   medianFieldMove: number | null;
   minStableRestarts: number;
   note: string;

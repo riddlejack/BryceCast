@@ -631,7 +631,7 @@ def main() -> None:
         venue_baseline_rows,
         [
             "venueSlug", "trackName", "trackType", "seasons", "spanFirstSeason", "spanLastSeason",
-            "restarts", "driverObservations", "typicalFieldMove", "medianFieldMove", "stable", "sourceHash",
+            "restarts", "driverObservations", "meanAbsoluteFieldMove", "medianFieldMove", "stable", "sourceHash",
         ],
     )
     write_csv(
@@ -685,7 +685,7 @@ def main() -> None:
         f"({sessions_with_chart}/{len(race_sessions)} sessions charted, "
         f"{races_no_caution} caution-free, {end_of_race_cautions} ended under caution, "
         f"{len(uncovered_rows)} uncovered rows); "
-        f"field baseline ±{field_baseline['typicalFieldMove']} places across "
+        f"field baseline: the average car moved {field_baseline['meanAbsoluteFieldMove']} places across "
         f"{field_baseline['restarts']} restarts / {len(venue_baseline_rows)} venues "
         f"since {field_baseline['spanFirstSeason']}."
     )
@@ -841,7 +841,7 @@ def build_field_baselines(
                 "spanLastSeason": seasons[-1] if seasons else None,
                 "restarts": restarts,
                 "driverObservations": len(bucket["abs"]),
-                "typicalFieldMove": round1(mean(bucket["abs"])),
+                "meanAbsoluteFieldMove": round1(mean(bucket["abs"])),
                 "medianFieldMove": round1(median(bucket["abs"])),
                 "stable": "true" if restarts >= MIN_BASELINE_RESTARTS else "false",
                 "sourceHash": source_hash,
@@ -858,12 +858,12 @@ def build_field_baselines(
         "spanLastSeason": seasons[-1] if seasons else None,
         "restarts": len(all_restarts),
         "driverObservations": len(all_abs),
-        "typicalFieldMove": round1(mean(all_abs)),
+        "meanAbsoluteFieldMove": round1(mean(all_abs)),
         "medianFieldMove": round1(median(all_abs)),
         "minStableRestarts": MIN_BASELINE_RESTARTS,
         "note": (
             "Mean absolute running-order change per classified car per restart — "
-            "the typical size of a place swing on an INDY NXT restart, from the "
+            "the average size of a place swing on an INDY NXT restart, from the "
             "official lap chart. Positions only, never lap times."
         ),
     }

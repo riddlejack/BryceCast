@@ -1,4 +1,4 @@
-venueSlug,trackName,trackType,seasons,spanFirstSeason,spanLastSeason,restarts,driverObservations,typicalFieldMove,medianFieldMove,stable,sourceHash
+venueSlug,trackName,trackType,seasons,spanFirstSeason,spanLastSeason,restarts,driverObservations,meanAbsoluteFieldMove,medianFieldMove,stable,sourceHash
 streets_of_st_petersburg,Streets of St. Petersburg,street,2024;2025;2026,2024,2026,9,180,0.322,0.0,true,64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978
 road_america,Road America,road,2024;2026,2024,2026,8,168,0.845,0.0,true,64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978
 streets_of_detroit,Streets of Detroit,street,2024;2025;2026,2024,2026,8,149,0.604,0.0,true,64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978
