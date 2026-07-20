@@ -7,6 +7,7 @@ import { liveBryceRowOf } from '../data/livePageModel';
 import type { LiveReadiness, ReadinessStatus } from '../app/useReadiness';
 import { CareerAtlas } from './careerAtlas';
 import { Gb3DepthLayer } from './gb3Depth';
+import { F1600SeasonStory, FrocCampaignStory, OriginTimeline } from './smallSeriesStories';
 import {
   BestClimbs,
   CareerBests,
@@ -70,6 +71,21 @@ const seriesChapters: Array<{ name: string; years: string; short?: string; narra
     narrative: 'The road to INDYCAR — the current chapter, one step from the top.'
   }
 ];
+
+/* Which chapters carry a depth layer one tap down. GB3 has the longest junior
+ * chapter; F1600 and FROC each get a story sized to their records. */
+const chapterDepth = (short?: string): { title: string; render: () => ReactNode } | undefined => {
+  switch (short) {
+    case 'GB3':
+      return { title: 'The GB3 years, in depth', render: () => <Gb3DepthLayer /> };
+    case 'F1600':
+      return { title: 'The F1600 season, in depth', render: () => <F1600SeasonStory /> };
+    case 'FR Oceania':
+      return { title: 'The FR Oceania campaign, in depth', render: () => <FrocCampaignStory /> };
+    default:
+      return undefined;
+  }
+};
 
 const ChapterCard = ({
   chapter,
@@ -403,6 +419,8 @@ export const CareerScreen = ({ readiness }: { readiness?: ReadinessStatus }) => 
 
       <CareerAtlas />
 
+      <OriginTimeline />
+
       {rows.length === 0 ? (
         <Card>
           <Unavailable>Career summary data unavailable.</Unavailable>
@@ -420,11 +438,7 @@ export const CareerScreen = ({ readiness }: { readiness?: ReadinessStatus }) => 
                   row={rowByName.get(chapter.name)}
                   current={index === seriesChapters.length - 1}
                   extra={index === seriesChapters.length - 1 ? lapLine : null}
-                  depth={
-                    chapter.short === 'GB3'
-                      ? { title: 'The GB3 years, in depth', render: () => <Gb3DepthLayer /> }
-                      : undefined
-                  }
+                  depth={chapterDepth(chapter.short)}
                 />
               </Reveal>
             ))}

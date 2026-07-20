@@ -1765,6 +1765,182 @@ a.tower__row.gb3-venues__link:hover .gb3-venues__chev { color: var(--ink-seconda
   border-radius: 3px;
 }
 
+/* ---------- small-series stories (F1600 events, FROC campaign, the origin) ---------- */
+
+.ss-depth { gap: 22px; margin-top: 4px; }
+.ss-copy {
+  margin: 0 0 8px;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--ink-secondary);
+}
+.ss-copy strong { color: var(--ink-primary); font-weight: 600; }
+.ss-caption {
+  margin: 10px 0 0;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--ink-muted);
+}
+.ss-muted { color: var(--ink-muted); }
+
+/* event tower: one weekend per divided row — venue, qualifying, the races */
+.ss-events { margin-top: 2px; }
+.ss-event {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 18px;
+  padding: 11px 2px;
+  border-top: 1px solid var(--divider);
+}
+.ss-events .ss-event:first-child { border-top: none; }
+.ss-event__head {
+  flex: 1 1 200px;
+  min-width: 0;
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+}
+.ss-event__round {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-muted);
+  font-variant-numeric: tabular-nums;
+  flex: none;
+}
+.ss-event__venue {
+  font-size: 14px;
+  color: var(--ink-primary);
+  min-width: 0;
+}
+.ss-event__quali {
+  flex: 0 1 auto;
+  font-size: 12.5px;
+  color: var(--ink-secondary);
+  font-variant-numeric: tabular-nums;
+}
+.ss-event__quali strong { color: var(--ink-primary); font-weight: 600; }
+.ss-races {
+  flex: 0 0 auto;
+  display: flex;
+  gap: 5px;
+  margin-left: auto;
+}
+.ss-race {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  min-width: 34px;
+  padding: 4px 7px;
+  border-radius: 8px;
+  color: var(--ink-primary);
+  text-decoration: none;
+  font-variant-numeric: tabular-nums;
+}
+.ss-race--wide { min-width: 66px; }
+.ss-race__pos { font-size: 13px; font-weight: 560; white-space: nowrap; }
+.ss-race__mark {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: transparent;
+}
+a.ss-race--link { cursor: pointer; transition: background-color 150ms ease; }
+a.ss-race--link:hover { background: var(--surface-0); }
+
+/* FROC rounds ribbon: the whole championship, the two he ran filled in */
+.ss-ribbon {
+  display: flex;
+  gap: 6px;
+  width: 100%;
+}
+.ss-ribbon__seg {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 9px 10px;
+  border-radius: 10px;
+  background: var(--surface-2);
+}
+.ss-ribbon__seg--run {
+  background: color-mix(in srgb, var(--chapter-fro) 15%, var(--surface-0));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--chapter-fro) 40%, transparent);
+  color: var(--ink-primary);
+}
+.ss-ribbon__round {
+  font-size: 11px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-muted);
+}
+.ss-ribbon__venue {
+  font-size: 13px;
+  font-weight: 560;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ss-ribbon__note { font-size: 11px; margin-top: 1px; color: var(--ink-secondary); }
+.ss-ribbon__seg--run .ss-ribbon__note { color: var(--ink-secondary); }
+
+/* the origin timeline: a quiet vertical rail of sourced context facts */
+.ss-timeline {
+  margin-top: 14px;
+  display: grid;
+  gap: 20px;
+  border-left: 1px solid var(--divider);
+  padding-left: 20px;
+}
+.ss-timeline__node { position: relative; }
+.ss-timeline__year {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  color: var(--ink-primary);
+  font-variant-numeric: tabular-nums;
+  margin-bottom: 8px;
+}
+.ss-timeline__dot {
+  position: absolute;
+  left: -25.5px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--ink-primary);
+  border: 2px solid var(--surface-1);
+}
+.ss-timeline__facts { display: grid; gap: 12px; }
+.ss-timeline__label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink-primary);
+}
+.ss-timeline__detail {
+  margin: 3px 0 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ink-secondary);
+  max-width: 60ch;
+}
+.ss-timeline__source {
+  display: inline-block;
+  margin-top: 4px;
+  font-size: 11.5px;
+  color: var(--ink-muted);
+}
+
+@media (max-width: 559px) {
+  .ss-races { margin-left: 0; }
+  .ss-ribbon { flex-wrap: wrap; }
+  .ss-ribbon__seg { flex: 1 1 44%; }
+}
+
 /* Named climb moments are a visual overlay only; nearest-dot hover remains
    owned by the chart SVG underneath at every viewport. */
 .climb-moments,

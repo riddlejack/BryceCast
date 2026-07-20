@@ -109,6 +109,160 @@ export interface UiSeasonCampaigns {
   sourceRefs: UiSourceRef[];
 }
 
+/* ---------- small-series stories (F1600 events, FROC campaign, the origin) ----------
+ *
+ *  Three Career-chapter modules sized to what their records hold. The points
+ *  arc for F1600 lives in the campaigns; here F1600 gets its event-by-event and
+ *  qualifying view. FROC is a two-round guest campaign with its honest
+ *  rounds-run denominator. The origin is a sourced context timeline, not a
+ *  statistical chapter. */
+
+export interface UiF1600EventRace {
+  raceNumber: number | null;
+  sessionId: string;
+  finishPosition: number | null;
+  status: string | null;
+  isPodium: boolean;
+  hasRacePage: boolean;
+  raceHref: string;
+}
+
+export interface UiF1600Event {
+  roundIndex: number | null;
+  eventName: string | null;
+  trackName: string;
+  eventDate: string | null;
+  /** F1600 records where he qualified, but no grid column, so nothing is
+   *  differenced from it. Null for the one round with a sourcing mismatch. */
+  qualifying: { rank: number | null; fieldSize: number | null; bestLapTime: string | null } | null;
+  races: UiF1600EventRace[];
+}
+
+export interface UiF1600SeasonStory {
+  seriesId: string;
+  seriesName: string;
+  seriesShort: string;
+  seasonYear: number;
+  totals: {
+    raceCount: number;
+    classifiedRaces: number;
+    dnsRaces: number;
+    podiums: number;
+    bestFinish: number | null;
+    bestFinishCount: number;
+    bestQualiRank: number | null;
+    qualifyingSessions: number;
+    roundCount: number;
+    roundsWithQualifying: number;
+    /** Always 0 for F1600 — the season carries no sourced grid positions. */
+    startsSourced: number;
+  };
+  events: UiF1600Event[];
+  caveats: string[];
+  sourceRefs: UiSourceRef[];
+}
+
+export interface UiFrocEventRace {
+  raceNumber: number | null;
+  sessionId: string;
+  finishPosition: number | null;
+  startPosition: number | null;
+  positionGain: number | null;
+  status: string | null;
+  isWin: boolean;
+  isPodium: boolean;
+  hasRacePage: boolean;
+  raceHref: string;
+}
+
+export interface UiFrocQualifying {
+  sessionName: string | null;
+  rank: number | null;
+  fieldSize: number | null;
+  bestLapTime: string | null;
+  isReverseGrid: boolean;
+}
+
+export interface UiFrocEvent {
+  roundIndex: number | null;
+  eventName: string | null;
+  trackName: string;
+  eventDate: string | null;
+  qualifying: UiFrocQualifying[];
+  races: UiFrocEventRace[];
+}
+
+export interface UiFrocRoundRef {
+  roundIndex: number | null;
+  eventName: string | null;
+  trackName: string;
+  eventDate: string | null;
+}
+
+export interface UiFrocCampaignStory {
+  seriesId: string;
+  seriesName: string;
+  seriesShort: string;
+  seasonYear: number;
+  coverage: {
+    roundsInSeries: number;
+    roundsRun: number;
+    racesInSeason: number;
+    racesRun: number;
+    startsSourced: number;
+  };
+  totals: {
+    wins: number;
+    podiums: number;
+    bestFinish: number | null;
+    gainedRaces: number;
+    qualifyingSessions: number;
+    bestQualiRank: number | null;
+  };
+  events: UiFrocEvent[];
+  /** The rounds of the championship Bryce did not contest — named, not hidden. */
+  absentRounds: UiFrocRoundRef[];
+  caveats: string[];
+  sourceRefs: UiSourceRef[];
+}
+
+export type UiOriginMilestoneKind =
+  | 'karting_fast_time'
+  | 'karting_track_record'
+  | 'karting_championship_milestone'
+  | 'career_award';
+
+export interface UiOriginMilestone {
+  id: string;
+  year: number | null;
+  date: string | null;
+  kind: UiOriginMilestoneKind;
+  label: string;
+  detail: string;
+  /** A short badge (a lap time, "Champion", "Runner-up", "Scholarship"). */
+  figure: string | null;
+  sourceId: string | null;
+  sourceName: string | null;
+  sourceUrl: string | null;
+}
+
+export interface UiOriginMilestones {
+  schemaVersion: 'brycecast.originMilestones.v1';
+  /** The year the sourced race-by-race record begins (F1600, 2019). */
+  recordStartsYear: number;
+  items: UiOriginMilestone[];
+  sources: Array<{ sourceId: string; sourceName: string; sourceUrl: string | null }>;
+  caveats: string[];
+  sourceRefs: UiSourceRef[];
+}
+
+export interface UiSmallSeriesStories {
+  schemaVersion: 'brycecast.smallSeriesStories.v1';
+  f1600: UiF1600SeasonStory | null;
+  froc: UiFrocCampaignStory | null;
+  origin: UiOriginMilestones;
+}
+
 export type UiCareerConfidenceClass = 'observed_exact' | 'observed_lower_bound' | 'modeled_range' | 'unknown';
 
 export interface UiCareerAtlasSeriesSpan {
@@ -1084,6 +1238,7 @@ export interface UiDataPackage {
       headToHead: UiCareerRival[];
       lapPositionMix: UiSeasonLapMix[];
       seasonCampaigns: UiSeasonCampaigns;
+      smallSeriesStories: UiSmallSeriesStories;
       restarts: UiRestartReport;
       qualifyingLayer: UiQualifyingLayer;
       cautionAtlas: UiCautionAtlas;

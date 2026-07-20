@@ -914,6 +914,95 @@ for (const exclusion of seasonCampaigns.excluded ?? []) {
   }
 }
 
+/* ---------- small-series stories (F1600, FROC, the origin) ----------
+   Guards the honest denominators and the sourced-only rule: every clickable
+   race resolves to a real page, FROC's rounds-run denominator never exceeds the
+   championship, F1600 never claims a grid it doesn't source, and every origin
+   milestone carries a source. */
+
+const conversionSessionIdSet = new Set(conversionRows.map((row) => row.sessionId));
+const smallSeries = dataPackage.screens.careerLab.smallSeriesStories;
+if (smallSeries?.schemaVersion !== 'brycecast.smallSeriesStories.v1') {
+  fail('careerLab.smallSeriesStories must carry the validated small-series schema.');
+} else {
+  const assertClickable = (races, label) => {
+    for (const race of races ?? []) {
+      if (race.hasRacePage && !conversionSessionIdSet.has(race.sessionId)) {
+        fail(`${label} clickable race ${race.sessionId} must resolve to a career race page.`);
+      }
+    }
+  };
+
+  const f1600 = smallSeries.f1600;
+  if (!f1600 || !Array.isArray(f1600.events) || f1600.events.length === 0) {
+    fail('careerLab.smallSeriesStories.f1600 must carry its event-by-event season.');
+  } else {
+    if (f1600.totals.startsSourced !== 0) {
+      fail(`F1600 records no sourced grid positions; startsSourced must be 0 (got ${f1600.totals.startsSourced}).`);
+    }
+    if (f1600.totals.roundsWithQualifying > f1600.totals.roundCount) {
+      fail('F1600 rounds-with-qualifying cannot exceed the round count.');
+    }
+    const f1600Races = f1600.events.flatMap((event) => event.races ?? []);
+    if (f1600Races.length !== f1600.totals.raceCount) {
+      fail(`F1600 event races (${f1600Races.length}) must equal totals.raceCount (${f1600.totals.raceCount}).`);
+    }
+    assertClickable(f1600Races, 'F1600');
+    if (!Array.isArray(f1600.caveats) || f1600.caveats.length === 0 || !Array.isArray(f1600.sourceRefs) || f1600.sourceRefs.length === 0) {
+      fail('careerLab.smallSeriesStories.f1600 must carry caveats and source refs.');
+    }
+  }
+
+  const froc = smallSeries.froc;
+  if (!froc || !Array.isArray(froc.events) || froc.events.length === 0) {
+    fail('careerLab.smallSeriesStories.froc must carry the rounds Bryce ran.');
+  } else {
+    if (froc.coverage.roundsRun > froc.coverage.roundsInSeries) {
+      fail('FROC rounds-run cannot exceed rounds in the championship.');
+    }
+    if (froc.coverage.racesRun > froc.coverage.racesInSeason) {
+      fail('FROC races-run cannot exceed the championship race count.');
+    }
+    if ((froc.absentRounds?.length ?? 0) !== froc.coverage.roundsInSeries - froc.coverage.roundsRun) {
+      fail('FROC absentRounds must account for every round he did not contest.');
+    }
+    const frocRaces = froc.events.flatMap((event) => event.races ?? []);
+    if (frocRaces.length !== froc.coverage.racesRun) {
+      fail(`FROC event races (${frocRaces.length}) must equal coverage.racesRun (${froc.coverage.racesRun}).`);
+    }
+    assertClickable(frocRaces, 'FROC');
+    if (!Array.isArray(froc.caveats) || froc.caveats.length === 0 || !Array.isArray(froc.sourceRefs) || froc.sourceRefs.length === 0) {
+      fail('careerLab.smallSeriesStories.froc must carry caveats and source refs.');
+    }
+  }
+
+  const origin = smallSeries.origin;
+  if (origin?.schemaVersion !== 'brycecast.originMilestones.v1' || !Array.isArray(origin.items) || origin.items.length === 0) {
+    fail('careerLab.smallSeriesStories.origin must carry the sourced milestone timeline.');
+  } else {
+    for (const item of origin.items) {
+      if (!item.sourceId || !item.sourceName || !item.sourceUrl) {
+        fail(`Origin milestone ${item.id ?? '(unknown)'} must carry a named, linked source.`);
+      }
+      if (item.year !== null && item.year >= origin.recordStartsYear) {
+        // The 2020 scholarship post-dates the record start; that is expected and
+        // fine. This guard only catches an accidental duplicate of a season that
+        // belongs to a real chapter (2019 F1600) leaking into the origin.
+        if (item.year === 2019) {
+          fail('Origin timeline must not duplicate the 2019 F1600 season milestone; it is its own chapter.');
+        }
+      }
+    }
+    const originYears = origin.items.map((item) => item.year ?? 0);
+    if (originYears.some((year, index) => index > 0 && originYears[index - 1] > year)) {
+      fail('Origin milestone timeline must be in chronological order.');
+    }
+    if (!Array.isArray(origin.caveats) || origin.caveats.length === 0) {
+      fail('careerLab.smallSeriesStories.origin must carry caveats.');
+    }
+  }
+}
+
 /* ---------- Career Lab life stats (The odometer) ---------- */
 
 const lifeStats = dataPackage.screens.careerLab.lifeStats;

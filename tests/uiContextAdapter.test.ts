@@ -343,6 +343,54 @@ assert.equal(currentCampaigns.length, 1, 'exactly one current campaign');
 assert.ok(currentCampaigns[0].inProgress && currentCampaigns[0].renderMode === 'arc', 'the current campaign is the in-progress arc');
 assert.ok(seasonCampaigns.excluded.every((row) => row.reason.length > 0), 'every excluded season names its reason');
 
+/* Small-series stories: the three Career-chapter modules the points arc can't
+   tell — F1600 events, FROC's guest campaign, and the sourced origin timeline.
+   Each is honest to its denominators and sources. */
+const conversionSessionIds = new Set(careerScreen.resultConversion.map((row) => row.sessionId));
+const smallSeries = careerScreen.smallSeriesStories;
+assert.equal(smallSeries.schemaVersion, 'brycecast.smallSeriesStories.v1');
+
+const f1600Story = smallSeries.f1600!;
+assert.ok(f1600Story && f1600Story.events.length === 7, 'F1600 season carries all seven event rounds');
+assert.equal(f1600Story.totals.raceCount, 21, 'F1600 covers the full 21-race season');
+assert.equal(f1600Story.totals.podiums, 8, 'F1600 season records eight sourced podiums');
+assert.equal(f1600Story.totals.startsSourced, 0, 'F1600 never claims a grid it does not source');
+assert.ok(f1600Story.totals.roundsWithQualifying <= f1600Story.totals.roundCount, 'F1600 qualifying rounds cannot exceed the rounds');
+const f1600Races = f1600Story.events.flatMap((event) => event.races);
+assert.equal(f1600Races.length, f1600Story.totals.raceCount, 'F1600 event races equal the season race count');
+for (const race of f1600Races) {
+  if (race.hasRacePage) {
+    assert.ok(conversionSessionIds.has(race.sessionId), `F1600 clickable race ${race.sessionId} must resolve to a race page`);
+  }
+}
+
+const frocStory = smallSeries.froc!;
+assert.ok(frocStory && frocStory.events.length === 2, 'FROC surfaces the two rounds Bryce contested');
+assert.equal(frocStory.coverage.roundsInSeries, 5, 'FROC championship had five rounds');
+assert.equal(frocStory.coverage.roundsRun, 2, 'Bryce ran two of the five rounds');
+assert.equal(frocStory.coverage.racesRun, 6, 'FROC guest campaign is six races');
+assert.ok(frocStory.coverage.roundsRun < frocStory.coverage.roundsInSeries, 'FROC rounds-run must be an honest partial');
+assert.equal(frocStory.absentRounds.length, frocStory.coverage.roundsInSeries - frocStory.coverage.roundsRun, 'every uncontested round is named');
+assert.equal(frocStory.totals.wins, 1, 'FROC records the Highlands win');
+const frocRaces = frocStory.events.flatMap((event) => event.races);
+assert.equal(frocRaces.length, frocStory.coverage.racesRun, 'FROC event races equal the races-run denominator');
+for (const race of frocRaces) {
+  if (race.hasRacePage) {
+    assert.ok(conversionSessionIds.has(race.sessionId), `FROC clickable race ${race.sessionId} must resolve to a race page`);
+  }
+}
+
+const origin = smallSeries.origin;
+assert.equal(origin.schemaVersion, 'brycecast.originMilestones.v1');
+assert.equal(origin.recordStartsYear, 2019, 'the origin knows where the sourced record begins');
+assert.ok(origin.items.length === 6, 'the origin timeline carries all six sourced milestones');
+assert.ok(!origin.items.some((item) => item.year === 2019), 'the origin never duplicates the 2019 F1600 chapter');
+for (const item of origin.items) {
+  assert.ok(item.sourceId && item.sourceName && item.sourceUrl, `origin milestone ${item.id} must carry a named, linked source`);
+}
+const originYears = origin.items.map((item) => item.year ?? 0);
+assert.deepEqual(originYears, [...originYears].sort((a, b) => a - b), 'the origin timeline is chronological');
+
 /* The odometer: package-only React consumption with personal attribution,
    confidence-preserving physical mileage, and bounded travel semantics. */
 const lifeStats = careerScreen.lifeStats;
