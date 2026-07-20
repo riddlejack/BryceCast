@@ -1805,6 +1805,20 @@ a.tower__row.gb3-venues__link:hover .gb3-venues__chev { color: var(--ink-seconda
 .imsa-roster__fill { position: absolute; inset: 0 auto 0 0; border-radius: 4px; background: var(--chapter-imsa); opacity: 0.6; }
 .imsa-roster__meta { text-align: right; font-size: 12.5px; color: var(--ink-secondary); font-variant-numeric: tabular-nums; white-space: nowrap; }
 
+/* Euroformula depth — quali→race conversion + venue profile, quiet grammar. */
+.euro-depth { gap: 20px; margin-top: 6px; }
+.euro-copy { margin: 0 0 8px; font-size: 13.5px; line-height: 1.5; color: var(--ink-secondary); }
+.euro-copy strong { color: var(--ink-primary); font-weight: 600; }
+.euro-caption { margin: 8px 0 0; font-size: 12px; line-height: 1.45; color: var(--ink-muted); }
+.euro-venues { padding: 0; }
+.euro-venues .tower__row { padding-left: 6px; padding-right: 6px; }
+.euro-venues__head { border-bottom-color: var(--divider); }
+.euro-venues__head .caption { font-size: 11px; }
+.euro-venues__chev { color: var(--ink-muted); text-align: right; font-size: 15px; line-height: 1; }
+a.tower__row.euro-venues__link { transition: background-color 150ms ease; }
+a.tower__row.euro-venues__link:hover { background: var(--surface-0); }
+a.tower__row.euro-venues__link:hover .euro-venues__chev { color: var(--ink-secondary); }
+
 /* Named climb moments are a visual overlay only; nearest-dot hover remains
    owned by the chart SVG underneath at every viewport. */
 .climb-moments,

@@ -1,11 +1,11 @@
 # Career Dimension Context Layer
 
-Generated: 2026-07-19T05:01:04Z
-Source hash: `900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681`
+Generated: 2026-07-20T11:41:32Z
+Source hash: `64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978`
 
 ## Source Scope
 
-This lane covers 8494 result rows, 1739 qualifying rows, 75 team rows, 42 tracks, 555 drivers, and 472 cars from the canonical dataset.
+This lane covers 8563 result rows, 1762 qualifying rows, 75 team rows, 42 tracks, 555 drivers, and 472 cars from the canonical dataset.
 
 ## What Became Productized
 
@@ -18,9 +18,9 @@ This lane covers 8494 result rows, 1739 qualifying rows, 75 team rows, 42 tracks
 
 ## Qualifying Conversion
 
-- One-to-one same-event race-result joins: 1432 of 1739 qualifying rows.
+- One-to-one same-event race-result joins: 1455 of 1762 qualifying rows.
 - Ambiguous multi-race same-event joins: 307 qualifying rows.
-- Full-field result context rows: 8494.
+- Full-field result context rows: 8563.
 
 | seriesName | seasonYear | eventName | sessionName | fieldSize | sameEventRaceJoinRows | bryceBestQualifyingPosition |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -41,13 +41,13 @@ This lane covers 8494 result rows, 1739 qualifying rows, 75 team rows, 42 tracks
 
 | teamName | observedSeriesIds | seasonYears | carCount | driverCount | qualifyingRows | resultRows | bryceObserved |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| HMD Motorsports | series_indy_nxt | 2024;2025;2026 | 23 | 28 | 481 | 1142 | no |
-| Andretti Global | series_indy_nxt | 2024;2025;2026 | 12 | 10 | 273 | 632 | no |
-| Abel Motorsports | series_indy_nxt | 2024;2025;2026 | 11 | 9 | 221 | 506 | no |
+| HMD Motorsports | series_indy_nxt | 2024;2025;2026 | 23 | 28 | 485 | 1154 | no |
+| Andretti Global | series_indy_nxt | 2024;2025;2026 | 12 | 10 | 277 | 644 | no |
+| Abel Motorsports | series_indy_nxt | 2024;2025;2026 | 11 | 9 | 225 | 518 | no |
 | Elite Motorsport | series_gb3 | 2021;2022 | 8 | 6 | 40 | 316 | no |
 | Fortec Motorsports | series_gb3 | 2021;2022 | 8 | 9 | 38 | 316 | no |
-| Chip Ganassi Racing | series_indy_nxt | 2025;2026 | 6 | 5 | 136 | 294 | no |
-| Cape Motorsports powered by ECR | series_indy_nxt | 2024;2025;2026 | 6 | 6 | 112 | 270 | no |
+| Chip Ganassi Racing | series_indy_nxt | 2025;2026 | 6 | 5 | 140 | 306 | no |
+| Cape Motorsports powered by ECR | series_indy_nxt | 2024;2025;2026 | 6 | 6 | 114 | 276 | no |
 | Douglas Motorsport | series_gb3 | 2021;2022 | 5 | 6 | 22 | 268 | no |
 | Rodin Carlin | series_gb3 | 2022 | 3 | 3 | 0 | 228 | no |
 | Hitech Pulse-Eight | series_gb3 | 2022 | 3 | 3 | 0 | 227 | no |
@@ -66,8 +66,8 @@ This lane covers 8494 result rows, 1739 qualifying rows, 75 team rows, 42 tracks
 | Douglas Motorsport | GB3 Championship | 2022 | 3 | 3 | 0 | 208 | 0 |
 | Elite Motorsport | GB3 Championship | 2022 | 4 | 4 | 0 | 204 | 0 |
 | Arden VRD | GB3 Championship | 2022 | 3 | 3 | 0 | 201 | 0 |
-| Abel Motorsports | INDY NXT | 2026 | 4 | 4 | 92 | 184 | 0 |
-| Andretti Global | INDY NXT | 2026 | 4 | 4 | 92 | 184 | 0 |
+| Abel Motorsports | INDY NXT | 2026 | 4 | 4 | 96 | 196 | 0 |
+| Andretti Global | INDY NXT | 2026 | 4 | 4 | 96 | 196 | 0 |
 
 ## Track Archetypes
 
@@ -91,7 +91,7 @@ This lane covers 8494 result rows, 1739 qualifying rows, 75 team rows, 42 tracks
 | Albert Costa | shared_race_field | series_imsa_weathertech | 1 | 1 | 0 | 1 | 0 |
 | Alec Udell | shared_race_field | series_imsa_weathertech | 1 | 1 | 0 | 1 | 0 |
 | Alessandro Pier Guidi | shared_race_field | series_imsa_weathertech | 1 | 1 | 0 | 1 | 0 |
-| Alessandro de Tullio | shared_race_field | series_indy_nxt | 1 | 46 | 23 | 12 | 0 |
+| Alessandro de Tullio | shared_race_field | series_indy_nxt | 1 | 49 | 24 | 13 | 0 |
 | Alessio Picariello | shared_race_field | series_imsa_weathertech | 1 | 1 | 0 | 1 | 0 |
 | Alessio Rovera | shared_race_field | series_imsa_weathertech | 1 | 1 | 0 | 1 | 0 |
 | Alex Connor | shared_race_field | series_gb3 | 2 | 88 | 6 | 32 | 0 |

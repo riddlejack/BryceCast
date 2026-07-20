@@ -9,6 +9,7 @@ import { CareerAtlas } from './careerAtlas';
 import { Gb3DepthLayer } from './gb3Depth';
 import { FormulaFordDepthLayer } from './formulaFordDepth';
 import { DaytonaDepthLayer } from './daytonaDepth';
+import { EuroformulaDepthLayer } from './euroformulaDepth';
 import {
   BestClimbs,
   CareerBests,
@@ -431,7 +432,9 @@ export const CareerScreen = ({ readiness }: { readiness?: ReadinessStatus }) => 
                         ? { title: 'Formula Ford lap shape', render: () => <FormulaFordDepthLayer /> }
                         : chapter.short === 'IMSA'
                           ? { title: 'The 24 hours, in depth', render: () => <DaytonaDepthLayer /> }
-                          : undefined
+                          : chapter.name === 'Euroformula Open'
+                            ? { title: 'The 2023 season, in depth', render: () => <EuroformulaDepthLayer /> }
+                            : undefined
                   }
                 />
               </Reveal>
