@@ -13,6 +13,7 @@ import {
 import { loadSectionLaps, sectionLapVisitsFor, type SectionLapsPack } from '../data/sectionLaps';
 import { loadPassMarks, resolvePassMarks, type PassMarksPack } from '../data/passMarks';
 import { uiDataPackage } from '../data/uiDataPackage';
+import { causeClause } from '../data/cautionCause';
 import { SectionHeatCard, VenueYearsCard, validPriorComparison } from './sectionIntelligence';
 import { asNumber, asString, formatDate, formatGain, formatNumber, formatPosition, formatWind, ordinal } from '../app/format';
 import { Link } from '../app/router';
@@ -490,12 +491,33 @@ const TheDay = ({ story, pack, venue, visit }: { story: RaceStoryPack; pack: Arc
   const leaderShare = asNumber(context?.topLeaderShare);
   const incidents = asNumber(context?.sessionIncidentCount);
   const bryceIncidents = asNumber(context?.bryceIncidentCount);
+  const cautions = story.cautions;
+  /* The caution tile's note: counted facts, and the two things the big "2"
+     hides — that those cautions are a SUBSET of the race-wide incidents, and
+     that the yellow laps are a fraction of the whole race (design review). Both
+     denominators render when we have them; the cause clause never turns a tie
+     into a verdict ("1 contact, 1 debris", not "mostly contact"). */
+  const cautionTileNote = (() => {
+    if (!cautions || cautions.count <= 0) return null;
+    const causes = causeClause(cautions.categories, ', ');
+    const total = cautions.totalRaceLaps;
+    const clauses = [
+      incidents !== null && incidents >= cautions.count
+        ? `${cautions.count} of ${incidents} recorded incident${incidents === 1 ? '' : 's'} brought out a full-course caution`
+        : `${cautions.count} full-course caution${cautions.count === 1 ? '' : 's'}`,
+      total !== null
+        ? `${cautions.lapsUnderYellow} of ${total} laps under yellow`
+        : `${cautions.lapsUnderYellow} lap${cautions.lapsUnderYellow === 1 ? '' : 's'} under yellow`,
+      causes
+    ].filter(Boolean);
+    return clauses.join(' · ');
+  })();
   const tempF = weather?.ambientTempC !== null && weather ? Math.round((weather.ambientTempC * 9) / 5 + 32) : null;
   const windMph = weather?.windSpeedKph !== null && weather ? Math.round(weather.windSpeedKph / 1.609344) : null;
   const gustMph = weather?.windGustKph !== null && weather ? Math.round(weather.windGustKph / 1.609344) : null;
   const sky = weather?.conditionRaw ? weather.conditionRaw.replaceAll('_', ' ') : null;
   const rainMm = weather?.precipitationMm ?? null;
-  if (!weather && !leader && incidents === null) return null;
+  if (!weather && !leader && incidents === null && !(cautions && cautions.count > 0)) return null;
 
   return (
     <Card
@@ -518,7 +540,16 @@ const TheDay = ({ story, pack, venue, visit }: { story: RaceStoryPack; pack: Arc
               label: 'Leader and incident context',
               path: 'analysis/indy-nxt-discovery/output/deep_dive/tables/leader_lap_context.csv',
               note: 'Leader share from the official leader-lap summary; incident counts from official race reports.'
-            }
+            },
+            ...(cautions && cautions.count > 0
+              ? [
+                  {
+                    label: 'Full-course cautions',
+                    path: 'analysis/caution-atlas/output/tables/caution_by_race.csv',
+                    note: 'Caution count, laps under yellow, and official causes from the Results-PDF caution summary — counts only.'
+                  }
+                ]
+              : [])
           ]}
           caveats={weather ? [weather.caveat] : undefined}
         />
@@ -541,6 +572,9 @@ const TheDay = ({ story, pack, venue, visit }: { story: RaceStoryPack; pack: Arc
                   : 'none involving Bryce'
             }
           />
+        ) : null}
+        {cautions && cautions.count > 0 ? (
+          <DayTile label="Full-course cautions" value={cautions.count} note={cautionTileNote} />
         ) : null}
         {tempF !== null ? (
           <DayTile

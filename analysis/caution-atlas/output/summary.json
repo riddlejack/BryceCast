@@ -1,0 +1,510 @@
+{
+  "asOfDate": "2026-07-19",
+  "byVenue": [
+    {
+      "categories": [
+        {
+          "category": "Contact",
+          "count": 2
+        },
+        {
+          "category": "Off course",
+          "count": 2
+        },
+        {
+          "category": "Debris",
+          "count": 1
+        },
+        {
+          "category": "Spin",
+          "count": 1
+        }
+      ],
+      "cautions": 6,
+      "dominantThird": "opening",
+      "final": 2,
+      "maxPerRace": 2,
+      "meanPerRace": 1.5,
+      "medianDurationLaps": 2.0,
+      "medianPerRace": 2.0,
+      "middle": 0,
+      "minPerRace": 0,
+      "opening": 4,
+      "races": 4,
+      "ranToFlagCount": 1,
+      "seasons": "2024;2025;2026",
+      "trackName": "Barber Motorsports Park",
+      "trackType": "road",
+      "unknown": 0,
+      "venueSlug": "barber_motorsports_park"
+    },
+    {
+      "categories": [
+        {
+          "category": "Contact",
+          "count": 4
+        },
+        {
+          "category": "Conditions",
+          "count": 1
+        },
+        {
+          "category": "Off course",
+          "count": 1
+        },
+        {
+          "category": "Spin",
+          "count": 1
+        }
+      ],
+      "cautions": 7,
+      "dominantThird": "final",
+      "final": 3,
+      "maxPerRace": 2,
+      "meanPerRace": 1.167,
+      "medianDurationLaps": 2.0,
+      "medianPerRace": 1.5,
+      "middle": 2,
+      "minPerRace": 0,
+      "opening": 2,
+      "races": 6,
+      "ranToFlagCount": 1,
+      "seasons": "2024;2025;2026",
+      "trackName": "Indianapolis Motor Speedway Road Course",
+      "trackType": "road",
+      "unknown": 0,
+      "venueSlug": "indianapolis_motor_speedway_road_course"
+    },
+    {
+      "categories": [
+        {
+          "category": "Spin",
+          "count": 3
+        },
+        {
+          "category": "Contact",
+          "count": 2
+        }
+      ],
+      "cautions": 5,
+      "dominantThird": "middle",
+      "final": 1,
+      "maxPerRace": 3,
+      "meanPerRace": 2.5,
+      "medianDurationLaps": 3.0,
+      "medianPerRace": 2.5,
+      "middle": 3,
+      "minPerRace": 2,
+      "opening": 1,
+      "races": 2,
+      "ranToFlagCount": 1,
+      "seasons": "2024;2025",
+      "trackName": "Iowa Speedway",
+      "trackType": "oval",
+      "unknown": 0,
+      "venueSlug": "iowa_speedway"
+    },
+    {
+      "categories": [
+        {
+          "category": "Contact",
+          "count": 2
+        },
+        {
+          "category": "Mechanical",
+          "count": 2
+        },
+        {
+          "category": "Off course",
+          "count": 1
+        }
+      ],
+      "cautions": 5,
+      "dominantThird": "opening",
+      "final": 0,
+      "maxPerRace": 3,
+      "meanPerRace": 1.25,
+      "medianDurationLaps": 2.0,
+      "medianPerRace": 1.0,
+      "middle": 2,
+      "minPerRace": 0,
+      "opening": 3,
+      "races": 4,
+      "ranToFlagCount": 0,
+      "seasons": "2024;2025;2026",
+      "trackName": "Mid-Ohio Sports Car Course",
+      "trackType": "road",
+      "unknown": 0,
+      "venueSlug": "mid_ohio"
+    },
+    {
+      "categories": [
+        {
+          "category": "Contact",
+          "count": 3
+        },
+        {
+          "category": "Debris",
+          "count": 1
+        }
+      ],
+      "cautions": 4,
+      "dominantThird": "opening",
+      "final": 1,
+      "maxPerRace": 2,
+      "meanPerRace": 1.333,
+      "medianDurationLaps": 7.5,
+      "medianPerRace": 1.0,
+      "middle": 1,
+      "minPerRace": 1,
+      "opening": 2,
+      "races": 3,
+      "ranToFlagCount": 0,
+      "seasons": "2024;2025;2026",
+      "trackName": "Nashville Superspeedway",
+      "trackType": "oval",
+      "unknown": 0,
+      "venueSlug": "nashville_superspeedway"
+    },
+    {
+      "categories": [
+        {
+          "category": "Contact",
+          "count": 2
+        }
+      ],
+      "cautions": 2,
+      "dominantThird": "opening",
+      "final": 0,
+      "maxPerRace": 1,
+      "meanPerRace": 1.0,
+      "medianDurationLaps": 2.5,
+      "medianPerRace": 1.0,
+      "middle": 0,
+      "minPerRace": 1,
+      "opening": 2,
+      "races": 2,
+      "ranToFlagCount": 0,
+      "seasons": "2024;2025",
+      "trackName": "Portland International Raceway",
+      "trackType": "road",
+      "unknown": 0,
+      "venueSlug": "portland_international_raceway"
+    },
+    {
+      "categories": [
+        {
+          "category": "Contact",
+          "count": 6
+        },
+        {
+          "category": "Off course",
+          "count": 2
+        }
+      ],
+      "cautions": 8,
+      "dominantThird": "opening",
+      "final": 2,
+      "maxPerRace": 3,
+      "meanPerRace": 2.0,
+      "medianDurationLaps": 2.0,
+      "medianPerRace": 2.5,
+      "middle": 2,
+      "minPerRace": 0,
+      "opening": 4,
+      "races": 4,
+      "ranToFlagCount": 0,
+      "seasons": "2024;2025;2026",
+      "trackName": "Road America",
+      "trackType": "road",
+      "unknown": 0,
+      "venueSlug": "road_america"
+    },
+    {
+      "categories": [
+        {
+          "category": "Contact",
+          "count": 2
+        }
+      ],
+      "cautions": 2,
+      "dominantThird": "",
+      "final": 1,
+      "maxPerRace": 2,
+      "meanPerRace": 2.0,
+      "medianDurationLaps": 2.5,
+      "medianPerRace": 2.0,
+      "middle": 0,
+      "minPerRace": 2,
+      "opening": 1,
+      "races": 1,
+      "ranToFlagCount": 0,
+      "seasons": "2026",
+      "trackName": "Streets of Arlington",
+      "trackType": "street",
+      "unknown": 0,
+      "venueSlug": "streets_of_arlington"
+    },
+    {
+      "categories": [
+        {
+          "category": "Contact",
+          "count": 7
+        },
+        {
+          "category": "Debris",
+          "count": 1
+        },
+        {
+          "category": "Off course",
+          "count": 1
+        },
+        {
+          "category": "Spin",
+          "count": 1
+        }
+      ],
+      "cautions": 10,
+      "dominantThird": "final",
+      "final": 5,
+      "maxPerRace": 4,
+      "meanPerRace": 3.333,
+      "medianDurationLaps": 3.0,
+      "medianPerRace": 4.0,
+      "middle": 2,
+      "minPerRace": 2,
+      "opening": 3,
+      "races": 3,
+      "ranToFlagCount": 2,
+      "seasons": "2024;2025;2026",
+      "trackName": "Streets of Detroit",
+      "trackType": "street",
+      "unknown": 0,
+      "venueSlug": "streets_of_detroit"
+    },
+    {
+      "categories": [
+        {
+          "category": "Contact",
+          "count": 9
+        },
+        {
+          "category": "Debris",
+          "count": 1
+        }
+      ],
+      "cautions": 10,
+      "dominantThird": "opening",
+      "final": 3,
+      "maxPerRace": 4,
+      "meanPerRace": 3.333,
+      "medianDurationLaps": 3.0,
+      "medianPerRace": 4.0,
+      "middle": 3,
+      "minPerRace": 2,
+      "opening": 4,
+      "races": 3,
+      "ranToFlagCount": 1,
+      "seasons": "2024;2025;2026",
+      "trackName": "Streets of St. Petersburg",
+      "trackType": "street",
+      "unknown": 0,
+      "venueSlug": "streets_of_st_petersburg"
+    },
+    {
+      "categories": [
+        {
+          "category": "Contact",
+          "count": 1
+        },
+        {
+          "category": "Spin",
+          "count": 1
+        }
+      ],
+      "cautions": 2,
+      "dominantThird": "",
+      "final": 0,
+      "maxPerRace": 1,
+      "meanPerRace": 1.0,
+      "medianDurationLaps": 4.5,
+      "medianPerRace": 1.0,
+      "middle": 1,
+      "minPerRace": 1,
+      "opening": 1,
+      "races": 2,
+      "ranToFlagCount": 0,
+      "seasons": "2024;2025",
+      "trackName": "The Milwaukee Mile",
+      "trackType": "oval",
+      "unknown": 0,
+      "venueSlug": "the_milwaukee_mile"
+    },
+    {
+      "categories": [
+        {
+          "category": "Contact",
+          "count": 6
+        },
+        {
+          "category": "Off course",
+          "count": 1
+        }
+      ],
+      "cautions": 7,
+      "dominantThird": "",
+      "final": 1,
+      "maxPerRace": 4,
+      "meanPerRace": 1.75,
+      "medianDurationLaps": 3.0,
+      "medianPerRace": 1.0,
+      "middle": 3,
+      "minPerRace": 1,
+      "opening": 3,
+      "races": 4,
+      "ranToFlagCount": 0,
+      "seasons": "2024;2025",
+      "trackName": "WeatherTech Raceway Laguna Seca",
+      "trackType": "road",
+      "unknown": 0,
+      "venueSlug": "weathertech_raceway_laguna_seca"
+    },
+    {
+      "categories": [
+        {
+          "category": "Contact",
+          "count": 5
+        },
+        {
+          "category": "Debris",
+          "count": 1
+        }
+      ],
+      "cautions": 6,
+      "dominantThird": "",
+      "final": 3,
+      "maxPerRace": 3,
+      "meanPerRace": 2.0,
+      "medianDurationLaps": 6.5,
+      "medianPerRace": 3.0,
+      "middle": 0,
+      "minPerRace": 0,
+      "opening": 3,
+      "races": 3,
+      "ranToFlagCount": 0,
+      "seasons": "2024;2025;2026",
+      "trackName": "World Wide Technology Raceway",
+      "trackType": "oval",
+      "unknown": 0,
+      "venueSlug": "world_wide_technology_raceway"
+    }
+  ],
+  "caveats": [
+    "Counts of official caution episodes only \u2014 no lap times, no positions, no probabilities.",
+    "Which-third is the lap the caution flew over the race distance run; a race with no lap chart is counted but not placed in a third.",
+    "Cause categories group the official reason text; the raw reason is preserved and never editorialized.",
+    "Future and not-yet-official races are excluded so a venue's rate reflects only races actually run."
+  ],
+  "coverage": {
+    "indyNxtRaceSessions": 45,
+    "racesCautionFree": 6,
+    "racesConsidered": 41,
+    "racesWithCaution": 35,
+    "racesWithoutChart": 0,
+    "totalCautions": 74
+  },
+  "datasetSha256": "64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978",
+  "generatedAt": "2026-07-20T08:54:38Z",
+  "handVerification": [
+    {
+      "cautionCount": 1,
+      "cautions": [
+        {
+          "category": "Contact",
+          "cautionNumber": 1,
+          "endLap": 57,
+          "reason": "Contact: Cars 28 and 40 in Turn 2",
+          "startLap": 52,
+          "third": "final"
+        }
+      ],
+      "raceLabel": "Music City Grand Prix",
+      "sessionId": "session_indy_nxt_2024_6323",
+      "totalRaceLaps": 65,
+      "trackName": "Nashville Superspeedway"
+    },
+    {
+      "cautionCount": 4,
+      "cautions": [
+        {
+          "category": "Contact",
+          "cautionNumber": 1,
+          "endLap": 7,
+          "reason": "Contact: Cars 14 and 26 in Turn 3",
+          "startLap": 1,
+          "third": "opening"
+        },
+        {
+          "category": "Debris",
+          "cautionNumber": 2,
+          "endLap": 27,
+          "reason": "Debris",
+          "startLap": 26,
+          "third": "middle"
+        },
+        {
+          "category": "Contact",
+          "cautionNumber": 3,
+          "endLap": 33,
+          "reason": "Contact: Car 10 in Turn 8",
+          "startLap": 31,
+          "third": "final"
+        },
+        {
+          "category": "Contact",
+          "cautionNumber": 4,
+          "endLap": 42,
+          "reason": "Contact: Car 28 in Turn 1",
+          "startLap": 40,
+          "third": "final"
+        }
+      ],
+      "raceLabel": "Detroit Grand Prix",
+      "sessionId": "session_indy_nxt_2026_6749",
+      "totalRaceLaps": 42,
+      "trackName": "Streets of Detroit"
+    }
+  ],
+  "method": {
+    "category": "A grouping of the official reason text by its leading keyword; the raw reason is preserved and never editorialized.",
+    "precision": "official-report",
+    "restart": "A caution ending on the final lap ran to the flag (no restart); every other caution's restart lap is its end lap + 1.",
+    "source": "Official INDY NXT Results-PDF caution summaries (incidents) and official lap-chart distance in data/career/career.dataset.json.",
+    "thirds": "The caution's start lap over the race distance run (the leader's last charted lap): opening/middle/final third.",
+    "unit": "official caution episode"
+  },
+  "schemaVersion": "brycecast.cautionAtlas.v1",
+  "sources": [
+    {
+      "note": "Official Results-PDF caution summaries (incidents) and official lap-chart distance.",
+      "path": "data/career/career.dataset.json"
+    }
+  ],
+  "totals": {
+    "byCategory": {
+      "Conditions": 1,
+      "Contact": 51,
+      "Debris": 5,
+      "Mechanical": 2,
+      "Off course": 8,
+      "Spin": 7
+    },
+    "byThird": {
+      "final": 22,
+      "middle": 19,
+      "opening": 33,
+      "unknown": 0
+    },
+    "cautions": 74
+  }
+}

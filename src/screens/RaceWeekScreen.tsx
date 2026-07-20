@@ -21,6 +21,8 @@ import {
 } from '../data/upcoming';
 import {
   uiDataPackage,
+  type UiCautionByVenue,
+  type UiCautionEvent,
   type UiNextEventPrep,
   type UiNextEventPrepRace,
   type UiStandingsSnapshot,
@@ -28,6 +30,7 @@ import {
   type UiVenueDossierVisit
 } from '../data/uiDataPackage';
 import { getVenueByTrackName, getVenueDossier } from '../data/venueDossier';
+import { causeFacts, causeMajority, orderedCauses } from '../data/cautionCause';
 import { priorYearReplaysAtVenue, replayProvenance } from '../data/replayAvailable';
 import { loadDebriefArchive } from '../data/debriefArchive';
 import { ReplayAffordance, priorYearTitle, useReplayCatalog } from './replayAffordance';
@@ -383,6 +386,302 @@ const RestartPrior = ({ trackName }: { trackName: string }) => {
       <p style={{ margin: '12px 0 0', fontSize: 11.5, color: 'var(--ink-muted)' }}>
         Net running order over the two green laps after each restart, against the full field. Positions, not lap times · click a
         year for its race.
+      </p>
+    </Card>
+  );
+};
+
+/* ---------- the caution atlas prior: where the yellows fall here ----------
+ *  Brief J stage 1. A quiet, all-ink count of full-course cautions at the
+ *  upcoming venue — how many per race, where in the race they fall, and the
+ *  official cause on record. Descriptive only: no probabilities, no verdicts.
+ *  Gold is absent by design — a caution is not a Bryce moment. */
+
+const fmtCount = (value: number): string => (Number.isInteger(value) ? String(value) : value.toFixed(1));
+
+const thirdWord: Record<string, string> = { opening: 'opening', middle: 'middle', final: 'final' };
+
+/** "1 per race, both visits" / "2 per race median · 1–4 across his 4 visits". */
+const cautionRatePhrase = (venue: UiCautionByVenue): string => {
+  const races = venue.races ?? 0;
+  const median = venue.medianPerRace ?? 0;
+  const min = venue.minPerRace ?? 0;
+  const max = venue.maxPerRace ?? 0;
+  if (races === 1) {
+    return `${fmtCount(venue.cautions ?? 0)} caution${(venue.cautions ?? 0) === 1 ? '' : 's'} his one visit here`;
+  }
+  if (min === max) {
+    const spread = races === 2 ? 'both visits' : `all ${restartCountWord(races)} visits`;
+    return `${fmtCount(min)} per race, ${spread}`;
+  }
+  return `${fmtCount(median)} per race median · ${min}–${max} across his ${restartCountWord(races)} visits`;
+};
+
+/** Only when a single third clearly leads; ties let the strip speak. */
+const cautionThirdPhrase = (venue: UiCautionByVenue): string | null => {
+  const dominant = venue.dominantThird;
+  if (!dominant || !thirdWord[dominant]) return null;
+  const total = venue.cautions ?? 0;
+  const inThird = (venue[dominant as 'opening' | 'middle' | 'final'] ?? 0) as number;
+  if (total === 0 || inThird === 0) return null;
+  if (inThird === total) return `Every one fell in the ${thirdWord[dominant]} third.`;
+  if (inThird > total / 2) return `Most fell in the ${thirdWord[dominant]} third — ${restartCountWord(inThird)} of ${restartCountWord(total)}.`;
+  return `The ${thirdWord[dominant]} third has seen the most — ${restartCountWord(inThird)} of ${restartCountWord(total)}.`;
+};
+
+const cautionCausePhrase = (venue: UiCautionByVenue): string | null => {
+  const ordered = orderedCauses(venue.categories ?? []);
+  const total = venue.cautions ?? 0;
+  if (ordered.length === 0 || total === 0) return null;
+  if (ordered.length === 1) {
+    const lead = total === 1 ? 'The one' : total === 2 ? 'Both' : 'Every one';
+    return `${lead} for ${ordered[0].category.toLowerCase()}.`;
+  }
+  // "Most" only when a single cause is strictly more than half of all cautions;
+  // a tie (2 contact · 2 mechanical) or a bare plurality just states the counts,
+  // never a verdict (design review).
+  const majority = causeMajority(ordered);
+  if (majority) {
+    return `Mostly ${majority.category.toLowerCase()} — ${majority.count} of ${total}.`;
+  }
+  return `${causeFacts(ordered)}.`;
+};
+
+/** The strip: a race-distance axis (start → finish) with each caution a dot at
+ *  the lap it flew, stacked where two land together. Third dividers guide the
+ *  eye; all ink, no gold. Every dot is keyboard-focusable with an accessible
+ *  label and a ≥24px target, and Enter/Space opens its race; the chronological
+ *  list below carries the same year/lap/cause facts with no pointer required. */
+type CautionMark = { event: UiCautionEvent; index: number; px: number; y: number };
+
+const CautionStrip = ({
+  events,
+  debriefIds
+}: {
+  events: UiCautionEvent[];
+  debriefIds: Set<string>;
+}) => {
+  const [ref, width] = useMeasuredWidth<HTMLDivElement>();
+  const { navigate } = useRouter();
+  const [active, setActive] = useState<number | null>(null);
+  const [tip, setTip] = useState<ChartTip | null>(null);
+
+  if (events.length === 0) return null;
+
+  const padX = 18;
+  const axisY = 46;
+  const levelGap = 11;
+  const dotR = 4;
+  const hitR = 12; // ≥24px focus/touch target (design-review a11y minimum)
+  const plotLeft = padX;
+  const plotRight = Math.max(width - padX, plotLeft + 1);
+  const x = (fraction: number) => plotLeft + Math.min(1, Math.max(0, fraction)) * (plotRight - plotLeft);
+
+  // Stack coincident cautions upward so every dot stays reachable.
+  const placed = events.filter((event) => event.lapFraction !== null);
+  const orderedMarks = placed
+    .map((event, index) => ({ event, index, px: x(event.lapFraction as number) }))
+    .sort((a, b) => a.px - b.px);
+  const levelLastPx: number[] = [];
+  const marks: CautionMark[] = orderedMarks.map((entry) => {
+    let level = 0;
+    while (level < levelLastPx.length && entry.px - levelLastPx[level] < dotR * 2 + 3) level += 1;
+    levelLastPx[level] = entry.px;
+    return { ...entry, y: axisY - level * levelGap };
+  });
+  const topLevel = Math.max(0, ...marks.map((mark) => Math.round((axisY - mark.y) / levelGap)));
+  const height = axisY + 26;
+  const topPad = axisY - topLevel * levelGap - dotR - 4;
+
+  // The chronological record, always visible — no hover or pointer required.
+  const listed = events
+    .filter((event) => event.startLap !== null)
+    .slice()
+    .sort((a, b) => (a.seasonYear ?? 0) - (b.seasonYear ?? 0) || (a.startLap ?? 0) - (b.startLap ?? 0));
+
+  const clear = () => {
+    setActive(null);
+    setTip(null);
+  };
+
+  const focusMark = (mark: CautionMark) => {
+    const { event } = mark;
+    const seasonShort = event.seasonYear !== null ? `’${String(event.seasonYear).slice(2)}` : '';
+    setActive(mark.index);
+    setTip({
+      x: mark.px,
+      y: mark.y - dotR,
+      title: `${seasonShort} · ${event.category}`.trim(),
+      detail: event.totalRaceLaps ? `lap ${event.startLap} of ${event.totalRaceLaps}` : `lap ${event.startLap}`,
+      action: debriefIds.has(event.sessionId) ? 'open the race page' : null
+    });
+  };
+
+  const openMark = (mark: CautionMark) => {
+    if (debriefIds.has(mark.event.sessionId)) navigate(`/races/${encodeURIComponent(mark.event.sessionId)}`);
+  };
+
+  const rowStyle = { fontSize: 12, color: 'var(--ink-secondary)', fontVariantNumeric: 'tabular-nums' as const };
+
+  return (
+    <div ref={ref} style={{ width: '100%', position: 'relative', marginTop: 4 }}>
+      {width > 0 && marks.length > 0 ? (
+        <svg width={width} height={height} role="img" aria-label="Where full-course cautions fall across the race here">
+          {/* Third dividers + labels: opening | middle | final. */}
+          {[1 / 3, 2 / 3].map((fraction) => (
+            <line key={fraction} x1={x(fraction)} x2={x(fraction)} y1={Math.max(topPad, 12)} y2={axisY + 6} stroke="var(--grid-hairline)" />
+          ))}
+          <line x1={plotLeft} x2={plotRight} y1={axisY} y2={axisY} stroke="var(--grid-hairline)" />
+          {(['opening', 'middle', 'final'] as const).map((band, index) => (
+            <text
+              key={band}
+              x={x((index + 0.5) / 3)}
+              y={axisY + 19}
+              textAnchor="middle"
+              fill="var(--ink-muted)"
+              fontFamily={chartFont}
+              fontSize={10.5}
+            >
+              {band} third
+            </text>
+          ))}
+          {marks.map((mark) => {
+            const event = mark.event;
+            const linked = debriefIds.has(event.sessionId);
+            const isActive = active === mark.index;
+            const label = `${event.seasonYear ?? ''} caution: ${event.category.toLowerCase()}, lap ${event.startLap}${
+              event.totalRaceLaps ? ` of ${event.totalRaceLaps}` : ''
+            }${linked ? ', opens the race page' : ''}`.trim();
+            return (
+              <g
+                key={`${event.sessionId}-${event.startLap}-${mark.index}`}
+                tabIndex={0}
+                role={linked ? 'link' : 'img'}
+                aria-label={label}
+                style={{ cursor: linked ? 'pointer' : 'default', outline: 'none' }}
+                onMouseEnter={() => focusMark(mark)}
+                onMouseLeave={clear}
+                onFocus={() => focusMark(mark)}
+                onBlur={clear}
+                onClick={() => openMark(mark)}
+                onKeyDown={(keyEvent) => {
+                  if (keyEvent.key === 'Enter' || keyEvent.key === ' ') {
+                    keyEvent.preventDefault();
+                    openMark(mark);
+                  }
+                }}
+              >
+                <circle cx={mark.px} cy={mark.y} r={hitR} fill="transparent" />
+                {isActive ? (
+                  <circle
+                    cx={mark.px}
+                    cy={mark.y}
+                    r={dotR + 4}
+                    fill="none"
+                    stroke="var(--ink-primary)"
+                    strokeWidth={1.5}
+                    style={{ pointerEvents: 'none' }}
+                  />
+                ) : null}
+                <circle
+                  cx={mark.px}
+                  cy={mark.y}
+                  r={isActive ? dotR + 1 : dotR}
+                  fill="var(--ink-primary)"
+                  style={{ opacity: active !== null && !isActive ? 0.22 : 1, transition: 'opacity 150ms ease', pointerEvents: 'none' }}
+                />
+              </g>
+            );
+          })}
+        </svg>
+      ) : null}
+      {tip ? <ChartTipCard tip={tip} width={width} /> : null}
+      {/* Non-hover event list: year · lap · cause for every caution, reachable
+          by keyboard and screen reader with no chart interaction. */}
+      <ul aria-label="Every full-course caution here, by year and lap" style={{ listStyle: 'none', margin: '10px 0 0', padding: 0, display: 'grid', gap: 3 }}>
+        {listed.map((event, index) => {
+          const linked = debriefIds.has(event.sessionId);
+          const text = `${event.seasonYear ?? '—'} · lap ${event.startLap}${event.totalRaceLaps ? ` of ${event.totalRaceLaps}` : ''} · ${event.category.toLowerCase()}`;
+          return (
+            <li key={`${event.sessionId}-${event.startLap}-${index}`}>
+              {linked ? (
+                <Link to={`/races/${encodeURIComponent(event.sessionId)}`} className="navlink" style={{ ...rowStyle, padding: 0, textDecoration: 'none' }}>
+                  {text}
+                </Link>
+              ) : (
+                <span style={rowStyle}>{text}</span>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  );
+};
+
+const CautionPrior = ({ trackName }: { trackName: string }) => {
+  const atlas = uiDataPackage.screens.careerLab.cautionAtlas;
+  const debriefIds = useDebriefIds();
+  const target = trackName.trim().toLowerCase();
+  const venue = (atlas.byVenue ?? []).find((row) => row.trackName.trim().toLowerCase() === target) ?? null;
+  if (!venue || (venue.races ?? 0) === 0) return null; // no history here — nothing to count
+
+  const sourcePill = (
+    <SourcePill
+      title={`Cautions at ${trackName}`}
+      entries={[
+        {
+          label: 'Official caution summaries',
+          path: 'data/career/career.dataset.json',
+          note: `Full-course cautions at ${trackName} from the official INDY NXT Results-PDF caution summaries — start/end lap and cause.`
+        },
+        {
+          label: 'Caution atlas · per venue',
+          path: 'analysis/caution-atlas/output/tables/caution_by_venue.csv',
+          note: 'Counts per race, thirds of the race, and cause groupings — validated, descriptive counting only.'
+        }
+      ]}
+      caveats={atlas.caveats}
+    />
+  );
+
+  const cautions = venue.cautions ?? 0;
+  const races = venue.races ?? 0;
+
+  // Honest, warm empty state: a clean record here is good news, said plainly.
+  if (cautions === 0) {
+    return (
+      <Card title="Cautions here" action={sourcePill}>
+        <p style={{ margin: 0, fontSize: 13.5, color: 'var(--ink-secondary)' }}>
+          His {restartCountWord(races)} {trackName} race{races === 1 ? '' : 's'} ran clean — no full-course cautions on the books here.
+        </p>
+      </Card>
+    );
+  }
+
+  const venueEvents = (atlas.events ?? []).filter((event) => event.trackName.trim().toLowerCase() === target);
+  const thirdLine = cautionThirdPhrase(venue);
+  const causeLine = cautionCausePhrase(venue);
+  const durationLaps = venue.medianDurationLaps;
+
+  return (
+    <Card title="Cautions here" action={sourcePill}>
+      <p style={{ margin: '0 0 4px', fontSize: 15, color: 'var(--ink-primary)', fontWeight: 560 }}>
+        {`Cautions at ${venueShort(trackName)}: ${cautionRatePhrase(venue)}`}
+      </p>
+      <p style={{ margin: '0 0 12px', fontSize: 13, color: 'var(--ink-secondary)' }}>
+        {`Across his ${restartCountWord(races)} visit${races === 1 ? '' : 's'} · ${cautions} caution${cautions === 1 ? '' : 's'} on the books`}
+        {thirdLine ? ` · ${thirdLine.replace(/\.$/, '')}.` : '.'}
+      </p>
+
+      <CautionStrip events={venueEvents} debriefIds={debriefIds} />
+
+      {causeLine ? (
+        <p style={{ margin: '10px 0 0', fontSize: 13, color: 'var(--ink-secondary)' }}>{causeLine}</p>
+      ) : null}
+      <p style={{ margin: '10px 0 0', fontSize: 11.5, color: 'var(--ink-muted)' }}>
+        Each mark a full-course caution, placed by the lap it flew · official Results-PDF caution summary
+        {durationLaps !== null ? ` · they’ve run about ${fmtCount(durationLaps)} lap${durationLaps === 1 ? '' : 's'} before the green` : ''}.
       </p>
     </Card>
   );
@@ -1459,6 +1758,8 @@ export const RaceWeekScreen = () => {
       {eventPrep ? <OvalStory prep={eventPrep} trackTypeName={trackTypeName} debriefIds={debriefIds} /> : null}
 
       <RestartPrior trackName={primary.trackName} />
+
+      <CautionPrior trackName={primary.trackName} />
 
       <div className="grid grid--2">
         {eventPrep ? <FridaySignal prep={eventPrep} trackTypeName={trackTypeName} debriefIds={debriefIds} /> : null}

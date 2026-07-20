@@ -1,6 +1,6 @@
 {
   "schemaVersion": "brycecast.uiDataPackage.v1",
-  "generatedAt": "2026-07-20T05:51:06.719Z",
+  "generatedAt": "2026-07-20T08:54:42.107Z",
   "sourceHash": "64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978",
   "asOfDate": "2026-07-19",
   "baselineCommit": "c282d65",
@@ -286,8 +286,8 @@
     "restartReportSummary": {
       "path": "analysis/restart-report/output/summary.json",
       "bytes": 10657,
-      "modifiedAt": "2026-07-20T05:51:03.375Z",
-      "sha256": "0526344bc5f14c7543e807a4ff32fa9bb7476b7fbfa0b63816c1374b2c862ec2"
+      "modifiedAt": "2026-07-20T08:54:35.529Z",
+      "sha256": "6c5c252ed7f8ae68be57a3605e43ad1d88a1e6928411e259b9c82f06aec855e2"
     },
     "restartReportEvents": {
       "path": "analysis/restart-report/output/tables/restart_events.csv",
@@ -330,6 +330,42 @@
       "bytes": 14502,
       "modifiedAt": "2026-07-19T05:03:07.422Z",
       "sha256": "0d386ea24177789335844db2b769a991d54a069794fd86dc6f16dae9d6a469ba"
+    },
+    "cautionAtlasSummary": {
+      "path": "analysis/caution-atlas/output/summary.json",
+      "bytes": 12386,
+      "modifiedAt": "2026-07-20T08:54:38.781Z",
+      "sha256": "ecb5a360a5e193682c98155a00845deaedb7e66acca20f2d8a9682f5277a1207"
+    },
+    "cautionAtlasEvents": {
+      "path": "analysis/caution-atlas/output/tables/caution_events.csv",
+      "bytes": 18762,
+      "modifiedAt": "2026-07-20T08:06:23.133Z",
+      "sha256": "a43abeacc7c492d4948f3aaf3e8138e46841a908ae1dd980ea956870b1b74480"
+    },
+    "cautionAtlasByRace": {
+      "path": "analysis/caution-atlas/output/tables/caution_by_race.csv",
+      "bytes": 9499,
+      "modifiedAt": "2026-07-20T08:06:23.134Z",
+      "sha256": "73100a0543074c207e57094a20e6828d22d9cbff72bee20270c765f102f227ce"
+    },
+    "cautionAtlasByVenue": {
+      "path": "analysis/caution-atlas/output/tables/caution_by_venue.csv",
+      "bytes": 2709,
+      "modifiedAt": "2026-07-20T08:06:23.134Z",
+      "sha256": "590ce33c660ed9f0fd995ceaaedbdf51b1935fc7d8aaf46d8c189e56a6ad559a"
+    },
+    "cautionAtlasBuilderScript": {
+      "path": "analysis/caution-atlas/scripts/build_caution_atlas.py",
+      "bytes": 25649,
+      "modifiedAt": "2026-07-20T08:50:06.287Z",
+      "sha256": "4791daed63eec0ca508a3af20c2fbc29c4ba1f822f74742638bbb1750fad0437"
+    },
+    "cautionAtlasValidatorScript": {
+      "path": "analysis/caution-atlas/scripts/validate_caution_atlas.py",
+      "bytes": 30495,
+      "modifiedAt": "2026-07-20T08:53:31.189Z",
+      "sha256": "69a8423bc37b6c7b8394da7bdd557dbe8a727ec5f4f52c6a0562eeb58037195f"
     },
     "predictiveSummary": {
       "path": "analysis/predictive-race-intelligence/output/summary.json",
@@ -447,15 +483,15 @@
     },
     "uiDataPackageBuilderScript": {
       "path": "scripts/build-ui-data-package.mjs",
-      "bytes": 138109,
-      "modifiedAt": "2026-07-20T05:03:26.575Z",
-      "sha256": "aaf62f07e0d25626eccbe5815cdb55b6b4d8b49a7e7d79c8fa11ee5644b41a08"
+      "bytes": 146439,
+      "modifiedAt": "2026-07-20T07:49:50.492Z",
+      "sha256": "6b2d71af44a61a8ac60fe1b689a4201f3c63f89bf3115e8c1ea0c0dc5e342308"
     },
     "uiDataPackageValidatorScript": {
       "path": "scripts/validate-ui-data-package.mjs",
-      "bytes": 74429,
-      "modifiedAt": "2026-07-19T20:57:42.286Z",
-      "sha256": "2d6aa3d7df656a9601bca25ba1b085add16289c15d6bee267ca87526d497804e"
+      "bytes": 79690,
+      "modifiedAt": "2026-07-20T07:51:12.279Z",
+      "sha256": "8511364a2d70ce07f32e22dcf2c376722742d08dde8ab9728c25ad71c6ee4e68"
     },
     "supplementalPrepSectionContextPack": {
       "key": "supplemental:analysis_indy_nxt_section_lap_deep_dive_output_context_packs_portland_internatio",
@@ -17195,369 +17231,369 @@
           "id": "race_story_session_indy_nxt_2024_6314",
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2024_6314.json",
-          "bytes": 14715,
-          "modifiedAt": "2026-07-20T05:51:06.273Z",
-          "sha256": "6255a71c6d390d92dda58af6896f49475e71ac0f95a9838a9dc874fd5ae2e3b7"
+          "bytes": 15570,
+          "modifiedAt": "2026-07-20T07:52:48.482Z",
+          "sha256": "37594f511b51988bc33fd7b18061131f77ab085551346e1e92b4e74171dcc25c"
         },
         {
           "sessionId": "session_indy_nxt_2024_6315",
           "id": "race_story_session_indy_nxt_2024_6315",
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2024_6315.json",
-          "bytes": 15466,
-          "modifiedAt": "2026-07-20T05:51:06.274Z",
-          "sha256": "6e58b73dc9a732cab7bee05710e6427f2821e430124724bc11aca54de7e1273f"
+          "bytes": 16328,
+          "modifiedAt": "2026-07-20T07:52:48.483Z",
+          "sha256": "a686f1f1f49c8eacbe1e701460dff49f46fe6c801432eb35d9a81d61dba52352"
         },
         {
           "sessionId": "session_indy_nxt_2024_6316",
           "id": "race_story_session_indy_nxt_2024_6316",
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2024_6316.json",
-          "bytes": 13210,
-          "modifiedAt": "2026-07-20T05:51:06.274Z",
-          "sha256": "3377017413c272d5299fb338b7a9163c9b8dba7288f6b60cc627e1e6d61f0263"
+          "bytes": 14205,
+          "modifiedAt": "2026-07-20T07:52:48.484Z",
+          "sha256": "940ece0d7e6d0e0bd10ef01e9cb0fb34904090428f3a8b33371243c599838739"
         },
         {
           "sessionId": "session_indy_nxt_2024_6317",
           "id": "race_story_session_indy_nxt_2024_6317",
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2024_6317.json",
-          "bytes": 14271,
-          "modifiedAt": "2026-07-20T05:51:06.275Z",
-          "sha256": "ea8f96e24b60a8eb6676a565e681a04e9711bb30bc88f5efb7fa72351495088d"
+          "bytes": 14958,
+          "modifiedAt": "2026-07-20T07:52:48.484Z",
+          "sha256": "a9b6beb185ca9499c9679e2f307fb9f414de31a360fdac29be83e7b9fcb9e614"
         },
         {
           "sessionId": "session_indy_nxt_2024_6318",
           "id": "race_story_session_indy_nxt_2024_6318",
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2024_6318.json",
-          "bytes": 13566,
-          "modifiedAt": "2026-07-20T05:51:06.275Z",
-          "sha256": "2c321784788ab9f20163e606eb34894e9c1f3d9a1f6a947a886106cdf62d4bd1"
+          "bytes": 14253,
+          "modifiedAt": "2026-07-20T07:52:48.485Z",
+          "sha256": "173752f2e4998c40c31a21cce5e80ccb1c6f7a9ec8633caca8237e3c17da9d85"
         },
         {
           "sessionId": "session_indy_nxt_2024_6319",
           "id": "race_story_session_indy_nxt_2024_6319",
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2024_6319.json",
-          "bytes": 15718,
-          "modifiedAt": "2026-07-20T05:51:06.276Z",
-          "sha256": "93b429ce2595844c07e6a3d2f03297b0a1f95373e3764794572c8aea252edaac"
+          "bytes": 16545,
+          "modifiedAt": "2026-07-20T07:52:48.486Z",
+          "sha256": "cca04545d29ae6a92336423e854fd98015100c2fc04f87a760e2d473bf24fa61"
         },
         {
           "sessionId": "session_indy_nxt_2024_6320",
           "id": "race_story_session_indy_nxt_2024_6320",
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2024_6320.json",
-          "bytes": 17337,
-          "modifiedAt": "2026-07-20T05:51:06.277Z",
-          "sha256": "1de9c43e642448a5ac634910f1bf8d68d87f2aaf1abb22e94ff0ab7a26a7bb67"
+          "bytes": 18294,
+          "modifiedAt": "2026-07-20T07:52:48.486Z",
+          "sha256": "5e647634859f8d6de822493e8f9026ff97205c4f13a900803bcb73fcf2947cbb"
         },
         {
           "sessionId": "session_indy_nxt_2024_6321",
           "id": "race_story_session_indy_nxt_2024_6321",
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2024_6321.json",
-          "bytes": 12484,
-          "modifiedAt": "2026-07-20T05:51:06.278Z",
-          "sha256": "90e5958cc4c4469906e87b9dea53723eba4715199b524e2e409951b93f47eb4c"
+          "bytes": 13172,
+          "modifiedAt": "2026-07-20T07:52:48.487Z",
+          "sha256": "3c6265b2a7fdb804cc40ebc01ecadbae1b0b3e40543a162641cb65fa2e34ff18"
         },
         {
           "sessionId": "session_indy_nxt_2024_6322",
           "id": "race_story_session_indy_nxt_2024_6322",
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2024_6322.json",
-          "bytes": 18538,
-          "modifiedAt": "2026-07-20T05:51:06.279Z",
-          "sha256": "58d2eefcd0d28b8f8ac4b81c7b2e98364825f22c022d39a8a4618c8b2a322ca1"
+          "bytes": 19222,
+          "modifiedAt": "2026-07-20T07:52:48.488Z",
+          "sha256": "51f1a90a7719ec95061a44dd812ac75414bc252972134f95d3d63c6c535e615a"
         },
         {
           "sessionId": "session_indy_nxt_2024_6323",
           "id": "race_story_session_indy_nxt_2024_6323",
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2024_6323.json",
-          "bytes": 17508,
-          "modifiedAt": "2026-07-20T05:51:06.279Z",
-          "sha256": "db1ef28cfd3e4bb2638e259e461e4cfa7d1216601ebc50657e789db96b07067d"
+          "bytes": 18196,
+          "modifiedAt": "2026-07-20T07:52:48.488Z",
+          "sha256": "bf3c8a45e53e11581f33c7a5d100988ad2dd380cd4c9ead94d6466dd2405c151"
         },
         {
           "sessionId": "session_indy_nxt_2024_6324",
           "id": "race_story_session_indy_nxt_2024_6324",
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2024_6324.json",
-          "bytes": 15829,
-          "modifiedAt": "2026-07-20T05:51:06.280Z",
-          "sha256": "d391d3122f619917ed1a86983a22a09c32878e055fcfd642b3909d2119357e5f"
+          "bytes": 16651,
+          "modifiedAt": "2026-07-20T07:52:48.489Z",
+          "sha256": "f1d6568555a6c2abb3317e75eb5044ac4e9773dadcb14dddaaf5180a62356a09"
         },
         {
           "sessionId": "session_indy_nxt_2024_6325",
           "id": "race_story_session_indy_nxt_2024_6325",
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2024_6325.json",
-          "bytes": 14079,
-          "modifiedAt": "2026-07-20T05:51:06.280Z",
-          "sha256": "e181f671f5fadbad9da059b84f5507b1d8a2458743b2d083238cf133faf77007"
+          "bytes": 14602,
+          "modifiedAt": "2026-07-20T07:52:48.489Z",
+          "sha256": "5c70770e8cd5e94b1248e633b151bf5ed68ab5f0f86971cdfae17ff3a760f834"
         },
         {
           "sessionId": "session_indy_nxt_2024_6326",
           "id": "race_story_session_indy_nxt_2024_6326",
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2024_6326.json",
-          "bytes": 15655,
-          "modifiedAt": "2026-07-20T05:51:06.281Z",
-          "sha256": "1a2e56bbf5f29cb73e75b544baaee3ee338ba4d384258977ef2c8bf2c7ac17be"
+          "bytes": 16813,
+          "modifiedAt": "2026-07-20T07:52:48.490Z",
+          "sha256": "2da168735f49015c5f4b1b56491f5d50de4340b51a17a95941aa6d7eb4541979"
         },
         {
           "sessionId": "session_indy_nxt_2024_6327",
           "id": "race_story_session_indy_nxt_2024_6327",
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2024_6327.json",
-          "bytes": 13922,
-          "modifiedAt": "2026-07-20T05:51:06.281Z",
-          "sha256": "3688a6c9f512cc838e4cf0d654f61bdb096652c682d5ea80aec29c0d04f2d7f7"
+          "bytes": 14611,
+          "modifiedAt": "2026-07-20T07:52:48.490Z",
+          "sha256": "27d4ddddd266d59a2a21a09a326ac797b37469cfa5133fd635ae827843cefacb"
         },
         {
           "sessionId": "session_indy_nxt_2025_6442",
           "id": "race_story_session_indy_nxt_2025_6442",
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2025_6442.json",
-          "bytes": 12754,
-          "modifiedAt": "2026-07-20T05:51:06.282Z",
-          "sha256": "547b953fcb1d7d01c77d260a277cef9e0cb68353a86c57b6cf4b840a1c704938"
+          "bytes": 13447,
+          "modifiedAt": "2026-07-20T07:52:48.491Z",
+          "sha256": "7d0573086bd6fc377eb3ddf895eb14cf3d67d2202c3efc53b360fc30b9a9d13f"
         },
         {
           "sessionId": "session_indy_nxt_2025_6443",
           "id": "race_story_session_indy_nxt_2025_6443",
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2025_6443.json",
-          "bytes": 14909,
-          "modifiedAt": "2026-07-20T05:51:06.283Z",
-          "sha256": "812b519a86ddb674ef4c1461de54097eeeaf23e0569db9ca23303bf01157fb77"
+          "bytes": 15596,
+          "modifiedAt": "2026-07-20T07:52:48.492Z",
+          "sha256": "59bf273b2edca7c73c84ed0a6346f8909c87c8e8374e295707dbf3a7c6b9125b"
         },
         {
           "sessionId": "session_indy_nxt_2025_6444",
           "id": "race_story_session_indy_nxt_2025_6444",
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2025_6444.json",
-          "bytes": 15016,
-          "modifiedAt": "2026-07-20T05:51:06.283Z",
-          "sha256": "2eec7d4d0ac6c27e7b30589aa458201a4119bd3803992a3a2689fba14ecf942d"
+          "bytes": 15840,
+          "modifiedAt": "2026-07-20T07:52:48.492Z",
+          "sha256": "362ef21fc779589908878ff19b8917fae273611ff1b8598b4bac0ad0f711f9c4"
         },
         {
           "sessionId": "session_indy_nxt_2025_6445",
           "id": "race_story_session_indy_nxt_2025_6445",
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2025_6445.json",
-          "bytes": 14242,
-          "modifiedAt": "2026-07-20T05:51:06.284Z",
-          "sha256": "5fcc6bdda52e4738af99a654029012fcaf297073d0974517823b75c6caa27a74"
+          "bytes": 15102,
+          "modifiedAt": "2026-07-20T07:52:48.493Z",
+          "sha256": "14db019f14ba46f1418b67b030dfdb9bf4344cd0cbf6a6d41ed7374094b7bbbc"
         },
         {
           "sessionId": "session_indy_nxt_2025_6446",
           "id": "race_story_session_indy_nxt_2025_6446",
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2025_6446.json",
-          "bytes": 16609,
-          "modifiedAt": "2026-07-20T05:51:06.285Z",
-          "sha256": "ca258fc4a25338e2311053d9e770f0c2f47bc20891093019a2234f840a2a6e65"
+          "bytes": 17703,
+          "modifiedAt": "2026-07-20T07:52:48.493Z",
+          "sha256": "4d0fb6534d24290c81638ca58db8d0dce2aaa886f830250aa57b39a033527b31"
         },
         {
           "sessionId": "session_indy_nxt_2025_6447",
           "id": "race_story_session_indy_nxt_2025_6447",
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2025_6447.json",
-          "bytes": 16628,
-          "modifiedAt": "2026-07-20T05:51:06.285Z",
-          "sha256": "6d345b8cce0e95ed0d9d3e2e4fd6daa5cf134fdc7d9a09c86efd6068303965c2"
+          "bytes": 17319,
+          "modifiedAt": "2026-07-20T07:52:48.494Z",
+          "sha256": "8471b96fdea3452d85be06b80096dcd228a8d34f4ce9cebfa9631dd3fa5c3436"
         },
         {
           "sessionId": "session_indy_nxt_2025_6448",
           "id": "race_story_session_indy_nxt_2025_6448",
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2025_6448.json",
-          "bytes": 19899,
-          "modifiedAt": "2026-07-20T05:51:06.286Z",
-          "sha256": "21f4785acd6663bfe1ca540534dc8becc6c054ad130ee4b8f32289ba6588f592"
+          "bytes": 20588,
+          "modifiedAt": "2026-07-20T07:52:48.495Z",
+          "sha256": "b0fc9ba737476547453e34b25db1d89755e77d2586aafc746488f6802d9b22b6"
         },
         {
           "sessionId": "session_indy_nxt_2025_6449",
           "id": "race_story_session_indy_nxt_2025_6449",
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2025_6449.json",
-          "bytes": 12583,
-          "modifiedAt": "2026-07-20T05:51:06.286Z",
-          "sha256": "12343803e7c15b3e18ff94cf41342bac3e9c8281dd57c031f6214e15ad4f3ab0"
+          "bytes": 13270,
+          "modifiedAt": "2026-07-20T07:52:48.495Z",
+          "sha256": "c02132b6beff7ecd6efbcbc408e7aef9f3996bf6b4ccad5cd4338df5f7dfe931"
         },
         {
           "sessionId": "session_indy_nxt_2025_6450",
           "id": "race_story_session_indy_nxt_2025_6450",
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2025_6450.json",
-          "bytes": 12889,
-          "modifiedAt": "2026-07-20T05:51:06.287Z",
-          "sha256": "158650203ec4da278dd55314d1f1646b6d47aa999a519f997433a91834f21472"
+          "bytes": 13981,
+          "modifiedAt": "2026-07-20T07:52:48.495Z",
+          "sha256": "fad6ba8ce79245d681c12c155ed888c4dd7e1cfa6131fe05b7745f8fd59f08d5"
         },
         {
           "sessionId": "session_indy_nxt_2025_6451",
           "id": "race_story_session_indy_nxt_2025_6451",
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2025_6451.json",
-          "bytes": 20116,
-          "modifiedAt": "2026-07-20T05:51:06.287Z",
-          "sha256": "224a53cec676e0dcbe843e44de5a8103bc7dda7dd838fb0f7760474161dca86c"
+          "bytes": 21064,
+          "modifiedAt": "2026-07-20T07:52:48.496Z",
+          "sha256": "27f1e99e7385df234757a23b6ef4fcf9ea796de1214cc784d3f412cb58bfd833"
         },
         {
           "sessionId": "session_indy_nxt_2025_6452",
           "id": "race_story_session_indy_nxt_2025_6452",
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2025_6452.json",
-          "bytes": 12807,
-          "modifiedAt": "2026-07-20T05:51:06.288Z",
-          "sha256": "dbe91af0d08927c22cc795dc89b0e8ec87685c1ad2e8ccf23d064fc028446946"
+          "bytes": 13494,
+          "modifiedAt": "2026-07-20T07:52:48.497Z",
+          "sha256": "c564cc324d7bc05531cf221eea436208ef3bab003993299a3d021a7b4dd3a86d"
         },
         {
           "sessionId": "session_indy_nxt_2025_6453",
           "id": "race_story_session_indy_nxt_2025_6453",
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2025_6453.json",
-          "bytes": 10999,
-          "modifiedAt": "2026-07-20T05:51:06.288Z",
-          "sha256": "2a4ff0b7309e4d6b223211ea7a1fcfca5821c92dc5a4f346349aa91e561fd60a"
+          "bytes": 11522,
+          "modifiedAt": "2026-07-20T07:52:48.497Z",
+          "sha256": "eba06ca53c5e00657d2422958a0b2a624e6f4a5e573dd4374f301a262b2f78e3"
         },
         {
           "sessionId": "session_indy_nxt_2025_6454",
           "id": "race_story_session_indy_nxt_2025_6454",
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2025_6454.json",
-          "bytes": 18620,
-          "modifiedAt": "2026-07-20T05:51:06.289Z",
-          "sha256": "b83e356fdbec273cb5784b872078c5878ebb581b6180a096cde226f875b4dd88"
+          "bytes": 19143,
+          "modifiedAt": "2026-07-20T07:52:48.498Z",
+          "sha256": "13326a565883fc6d07ce534208d1ce8b366305347d3087d793fdb25ed2af89ab"
         },
         {
           "sessionId": "session_indy_nxt_2025_6455",
           "id": "race_story_session_indy_nxt_2025_6455",
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2025_6455.json",
-          "bytes": 14911,
-          "modifiedAt": "2026-07-20T05:51:06.290Z",
-          "sha256": "693d9654827b1a27ca15d4acc1f043177e9dfa1963b64aad956c10a1f8cc7efd"
+          "bytes": 15732,
+          "modifiedAt": "2026-07-20T07:52:48.498Z",
+          "sha256": "4bf537b1269d23a81d7d3db14b739752adf06d6731bfe583cc59dba30eb7a3ca"
         },
         {
           "sessionId": "session_indy_nxt_2026_6749",
           "id": "race_story_session_indy_nxt_2026_6749",
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2026_6749.json",
-          "bytes": 18004,
-          "modifiedAt": "2026-07-20T05:51:06.290Z",
-          "sha256": "9b3db96d8cce6796fc0d9b308cf989bbf81dbb2e00c10d6485598a069d7594b5"
+          "bytes": 19127,
+          "modifiedAt": "2026-07-20T07:52:48.499Z",
+          "sha256": "4d722ccc144cdc25aea237b68bf915d8be30f64031a3969a9e059cef776a2f76"
         },
         {
           "sessionId": "session_indy_nxt_2026_6750",
           "id": "race_story_session_indy_nxt_2026_6750",
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2026_6750.json",
-          "bytes": 16015,
-          "modifiedAt": "2026-07-20T05:51:06.291Z",
-          "sha256": "4d2d8dc31e7af0c4e1c083e47541e73655378be874bf64494667f1f82d813d98"
+          "bytes": 16836,
+          "modifiedAt": "2026-07-20T07:52:48.500Z",
+          "sha256": "65f6d882c940dab2a921ca0963dc6c8145db38909e16f65e7e5f35c51ff0244a"
         },
         {
           "sessionId": "session_indy_nxt_2026_6751",
           "id": "race_story_session_indy_nxt_2026_6751",
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2026_6751.json",
-          "bytes": 18132,
-          "modifiedAt": "2026-07-20T05:51:06.292Z",
-          "sha256": "c2666381d8708cf7ae24ef3a58d14776ec447e9137dcda9c029175c7b05c082d"
+          "bytes": 19254,
+          "modifiedAt": "2026-07-20T07:52:48.501Z",
+          "sha256": "4bad1e2023672496e142714be7c29995c76d8d24c838c159abf88ecea4d1f630"
         },
         {
           "sessionId": "session_indy_nxt_2026_6752",
           "id": "race_story_session_indy_nxt_2026_6752",
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2026_6752.json",
-          "bytes": 14261,
-          "modifiedAt": "2026-07-20T05:51:06.293Z",
-          "sha256": "b84310e538dffb675c0a15bd58fb3da57d81bf1eb19453cbfcc5bfce3f0e80ac"
+          "bytes": 14784,
+          "modifiedAt": "2026-07-20T07:52:48.501Z",
+          "sha256": "95bf5cf9bd88c04578f112508259cc3a3fb7db29558de64247a796a608fcabbb"
         },
         {
           "sessionId": "session_indy_nxt_2026_6753",
           "id": "race_story_session_indy_nxt_2026_6753",
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2026_6753.json",
-          "bytes": 12706,
-          "modifiedAt": "2026-07-20T05:51:06.293Z",
-          "sha256": "6773709c65ac952b7ba61ae02579136cb64673303598337c23a90713b4793097"
+          "bytes": 13527,
+          "modifiedAt": "2026-07-20T07:52:48.502Z",
+          "sha256": "b34458a25a2e4d2a32a0501544ca38b925f39b2838c26ccfe2073172448d5583"
         },
         {
           "sessionId": "session_indy_nxt_2026_6754",
           "id": "race_story_session_indy_nxt_2026_6754",
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2026_6754.json",
-          "bytes": 13427,
-          "modifiedAt": "2026-07-20T05:51:06.293Z",
-          "sha256": "88728c031ed76119441abd8dc55dfe5f973dff3d337f9a5b1b0b2f814bc8e4a8"
+          "bytes": 14287,
+          "modifiedAt": "2026-07-20T07:52:48.502Z",
+          "sha256": "c94aafef4b5d0cc3e8b03f16b56cd39566d60b39cbf7bddd6e4b3e94eb015cbe"
         },
         {
           "sessionId": "session_indy_nxt_2026_6755",
           "id": "race_story_session_indy_nxt_2026_6755",
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2026_6755.json",
-          "bytes": 19679,
-          "modifiedAt": "2026-07-20T05:51:06.294Z",
-          "sha256": "8903bee0211b3d8d6a614c410dff322349f7bb7427d3834952064b3bc87a00c0"
+          "bytes": 20536,
+          "modifiedAt": "2026-07-20T07:52:48.503Z",
+          "sha256": "667e558ff53f80d84adc96e20c9780c3019ec1b6d2e281674ee687d7ebd28f33"
         },
         {
           "sessionId": "session_indy_nxt_2026_6756",
           "id": "race_story_session_indy_nxt_2026_6756",
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2026_6756.json",
-          "bytes": 15512,
-          "modifiedAt": "2026-07-20T05:51:06.295Z",
-          "sha256": "aeb662c9bc8f93e0207e18669dd36fef882bbb03d1c0cf8bbb6e1208ae0c8e3d"
+          "bytes": 16369,
+          "modifiedAt": "2026-07-20T07:52:48.503Z",
+          "sha256": "10bb5fb67fa73b69866b608303dfccdfa0f1163a56d17cd2e92e6c426e5c117e"
         },
         {
           "sessionId": "session_indy_nxt_2026_6760",
           "id": "race_story_session_indy_nxt_2026_6760",
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2026_6760.json",
-          "bytes": 14789,
-          "modifiedAt": "2026-07-20T05:51:06.295Z",
-          "sha256": "81fcaa07d6570c81fb45c97d768fc99931962809fbae91802ce8e3a779b52156"
+          "bytes": 15312,
+          "modifiedAt": "2026-07-20T07:52:48.504Z",
+          "sha256": "30a09b723d4e1a7a79534897b06a6a43a9ff7e01c531cd599a74e837a421c7ec"
         },
         {
           "sessionId": "session_indy_nxt_2026_6761",
           "id": "race_story_session_indy_nxt_2026_6761",
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2026_6761.json",
-          "bytes": 16777,
-          "modifiedAt": "2026-07-20T05:51:06.296Z",
-          "sha256": "d67dd48323436f3ff6367f57bb8de511cfe146b6feef928cfd407404d4087267"
+          "bytes": 17782,
+          "modifiedAt": "2026-07-20T07:52:48.504Z",
+          "sha256": "b36b7800df27f2e496caa8d3200b2f927719792da259fcf7f978e69b1b06a2a9"
         },
         {
           "sessionId": "session_indy_nxt_2026_6762",
           "id": "race_story_session_indy_nxt_2026_6762",
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2026_6762.json",
-          "bytes": 13364,
-          "modifiedAt": "2026-07-20T05:51:06.296Z",
-          "sha256": "c50d470140b1560cba9477b19fb262e05aa5e6ebf2393fe3b86e59c0e1981a80"
+          "bytes": 14318,
+          "modifiedAt": "2026-07-20T07:52:48.505Z",
+          "sha256": "1e5c27523180d8a8dd924b8f082423c271521f4ee0e6fd98e90a74a0e2199866"
         },
         {
           "sessionId": "session_indy_nxt_2026_6763",
           "id": "race_story_session_indy_nxt_2026_6763",
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2026_6763.json",
-          "bytes": 22411,
-          "modifiedAt": "2026-07-20T05:51:06.297Z",
-          "sha256": "7d496957ae2b5731f63e4272ee9f06763fab402516db1b385000d2baf084ddb4"
+          "bytes": 23400,
+          "modifiedAt": "2026-07-20T07:52:48.505Z",
+          "sha256": "76ea4c18267d42ec2cdcae976828e57094c8da85ab10ca7d87bc104e7c32fbae"
         },
         {
           "sessionId": "session_indy_nxt_2026_6765",
           "id": "race_story_session_indy_nxt_2026_6765",
           "type": "race_story",
           "path": "analysis/race-story/output/context-packs/race_story_session_indy_nxt_2026_6765.json",
-          "bytes": 15007,
-          "modifiedAt": "2026-07-20T05:51:06.298Z",
-          "sha256": "40209f2ef7d89da47e0c309e36cc5b45579e2669b2564aca5dee8b13a6e5f193"
+          "bytes": 15530,
+          "modifiedAt": "2026-07-20T07:52:48.506Z",
+          "sha256": "3a6a4f062ce0440728a959e3e824d443095e9a7c70beb510ee25eb6f6fe8a76f"
         }
       ],
       "sectionLapRefs": [
@@ -25829,6 +25865,2427 @@
             "key": "canonicalDataset",
             "path": "data/career/career.dataset.json",
             "note": "Official Results-PDF caution summaries and official lap-chart positions."
+          }
+        ]
+      },
+      "cautionAtlas": {
+        "schemaVersion": "brycecast.cautionAtlas.v1",
+        "precision": "official-report",
+        "asOfDate": "2026-07-19",
+        "coverage": {
+          "indyNxtRaceSessions": 45,
+          "racesCautionFree": 6,
+          "racesConsidered": 41,
+          "racesWithCaution": 35,
+          "racesWithoutChart": 0,
+          "totalCautions": 74
+        },
+        "totals": {
+          "byCategory": {
+            "Conditions": 1,
+            "Contact": 51,
+            "Debris": 5,
+            "Mechanical": 2,
+            "Off course": 8,
+            "Spin": 7
+          },
+          "byThird": {
+            "final": 22,
+            "middle": 19,
+            "opening": 33,
+            "unknown": 0
+          },
+          "cautions": 74
+        },
+        "byVenue": [
+          {
+            "venueSlug": "barber_motorsports_park",
+            "trackName": "Barber Motorsports Park",
+            "trackType": "road",
+            "seasons": "2024;2025;2026",
+            "races": 4,
+            "cautions": 6,
+            "medianPerRace": 2,
+            "minPerRace": 0,
+            "maxPerRace": 2,
+            "meanPerRace": 1.5,
+            "opening": 4,
+            "middle": 0,
+            "final": 2,
+            "dominantThird": "opening",
+            "ranToFlagCount": 1,
+            "medianDurationLaps": 2,
+            "categories": [
+              {
+                "category": "Contact",
+                "count": 2
+              },
+              {
+                "category": "Off course",
+                "count": 2
+              },
+              {
+                "category": "Debris",
+                "count": 1
+              },
+              {
+                "category": "Spin",
+                "count": 1
+              }
+            ]
+          },
+          {
+            "venueSlug": "indianapolis_motor_speedway_road_course",
+            "trackName": "Indianapolis Motor Speedway Road Course",
+            "trackType": "road",
+            "seasons": "2024;2025;2026",
+            "races": 6,
+            "cautions": 7,
+            "medianPerRace": 1.5,
+            "minPerRace": 0,
+            "maxPerRace": 2,
+            "meanPerRace": 1.167,
+            "opening": 2,
+            "middle": 2,
+            "final": 3,
+            "dominantThird": "final",
+            "ranToFlagCount": 1,
+            "medianDurationLaps": 2,
+            "categories": [
+              {
+                "category": "Contact",
+                "count": 4
+              },
+              {
+                "category": "Conditions",
+                "count": 1
+              },
+              {
+                "category": "Off course",
+                "count": 1
+              },
+              {
+                "category": "Spin",
+                "count": 1
+              }
+            ]
+          },
+          {
+            "venueSlug": "iowa_speedway",
+            "trackName": "Iowa Speedway",
+            "trackType": "oval",
+            "seasons": "2024;2025",
+            "races": 2,
+            "cautions": 5,
+            "medianPerRace": 2.5,
+            "minPerRace": 2,
+            "maxPerRace": 3,
+            "meanPerRace": 2.5,
+            "opening": 1,
+            "middle": 3,
+            "final": 1,
+            "dominantThird": "middle",
+            "ranToFlagCount": 1,
+            "medianDurationLaps": 3,
+            "categories": [
+              {
+                "category": "Spin",
+                "count": 3
+              },
+              {
+                "category": "Contact",
+                "count": 2
+              }
+            ]
+          },
+          {
+            "venueSlug": "mid_ohio",
+            "trackName": "Mid-Ohio Sports Car Course",
+            "trackType": "road",
+            "seasons": "2024;2025;2026",
+            "races": 4,
+            "cautions": 5,
+            "medianPerRace": 1,
+            "minPerRace": 0,
+            "maxPerRace": 3,
+            "meanPerRace": 1.25,
+            "opening": 3,
+            "middle": 2,
+            "final": 0,
+            "dominantThird": "opening",
+            "ranToFlagCount": 0,
+            "medianDurationLaps": 2,
+            "categories": [
+              {
+                "category": "Contact",
+                "count": 2
+              },
+              {
+                "category": "Mechanical",
+                "count": 2
+              },
+              {
+                "category": "Off course",
+                "count": 1
+              }
+            ]
+          },
+          {
+            "venueSlug": "nashville_superspeedway",
+            "trackName": "Nashville Superspeedway",
+            "trackType": "oval",
+            "seasons": "2024;2025;2026",
+            "races": 3,
+            "cautions": 4,
+            "medianPerRace": 1,
+            "minPerRace": 1,
+            "maxPerRace": 2,
+            "meanPerRace": 1.333,
+            "opening": 2,
+            "middle": 1,
+            "final": 1,
+            "dominantThird": "opening",
+            "ranToFlagCount": 0,
+            "medianDurationLaps": 7.5,
+            "categories": [
+              {
+                "category": "Contact",
+                "count": 3
+              },
+              {
+                "category": "Debris",
+                "count": 1
+              }
+            ]
+          },
+          {
+            "venueSlug": "portland_international_raceway",
+            "trackName": "Portland International Raceway",
+            "trackType": "road",
+            "seasons": "2024;2025",
+            "races": 2,
+            "cautions": 2,
+            "medianPerRace": 1,
+            "minPerRace": 1,
+            "maxPerRace": 1,
+            "meanPerRace": 1,
+            "opening": 2,
+            "middle": 0,
+            "final": 0,
+            "dominantThird": "opening",
+            "ranToFlagCount": 0,
+            "medianDurationLaps": 2.5,
+            "categories": [
+              {
+                "category": "Contact",
+                "count": 2
+              }
+            ]
+          },
+          {
+            "venueSlug": "road_america",
+            "trackName": "Road America",
+            "trackType": "road",
+            "seasons": "2024;2025;2026",
+            "races": 4,
+            "cautions": 8,
+            "medianPerRace": 2.5,
+            "minPerRace": 0,
+            "maxPerRace": 3,
+            "meanPerRace": 2,
+            "opening": 4,
+            "middle": 2,
+            "final": 2,
+            "dominantThird": "opening",
+            "ranToFlagCount": 0,
+            "medianDurationLaps": 2,
+            "categories": [
+              {
+                "category": "Contact",
+                "count": 6
+              },
+              {
+                "category": "Off course",
+                "count": 2
+              }
+            ]
+          },
+          {
+            "venueSlug": "streets_of_arlington",
+            "trackName": "Streets of Arlington",
+            "trackType": "street",
+            "seasons": "2026",
+            "races": 1,
+            "cautions": 2,
+            "medianPerRace": 2,
+            "minPerRace": 2,
+            "maxPerRace": 2,
+            "meanPerRace": 2,
+            "opening": 1,
+            "middle": 0,
+            "final": 1,
+            "dominantThird": "",
+            "ranToFlagCount": 0,
+            "medianDurationLaps": 2.5,
+            "categories": [
+              {
+                "category": "Contact",
+                "count": 2
+              }
+            ]
+          },
+          {
+            "venueSlug": "streets_of_detroit",
+            "trackName": "Streets of Detroit",
+            "trackType": "street",
+            "seasons": "2024;2025;2026",
+            "races": 3,
+            "cautions": 10,
+            "medianPerRace": 4,
+            "minPerRace": 2,
+            "maxPerRace": 4,
+            "meanPerRace": 3.333,
+            "opening": 3,
+            "middle": 2,
+            "final": 5,
+            "dominantThird": "final",
+            "ranToFlagCount": 2,
+            "medianDurationLaps": 3,
+            "categories": [
+              {
+                "category": "Contact",
+                "count": 7
+              },
+              {
+                "category": "Debris",
+                "count": 1
+              },
+              {
+                "category": "Off course",
+                "count": 1
+              },
+              {
+                "category": "Spin",
+                "count": 1
+              }
+            ]
+          },
+          {
+            "venueSlug": "streets_of_st_petersburg",
+            "trackName": "Streets of St. Petersburg",
+            "trackType": "street",
+            "seasons": "2024;2025;2026",
+            "races": 3,
+            "cautions": 10,
+            "medianPerRace": 4,
+            "minPerRace": 2,
+            "maxPerRace": 4,
+            "meanPerRace": 3.333,
+            "opening": 4,
+            "middle": 3,
+            "final": 3,
+            "dominantThird": "opening",
+            "ranToFlagCount": 1,
+            "medianDurationLaps": 3,
+            "categories": [
+              {
+                "category": "Contact",
+                "count": 9
+              },
+              {
+                "category": "Debris",
+                "count": 1
+              }
+            ]
+          },
+          {
+            "venueSlug": "the_milwaukee_mile",
+            "trackName": "The Milwaukee Mile",
+            "trackType": "oval",
+            "seasons": "2024;2025",
+            "races": 2,
+            "cautions": 2,
+            "medianPerRace": 1,
+            "minPerRace": 1,
+            "maxPerRace": 1,
+            "meanPerRace": 1,
+            "opening": 1,
+            "middle": 1,
+            "final": 0,
+            "dominantThird": "",
+            "ranToFlagCount": 0,
+            "medianDurationLaps": 4.5,
+            "categories": [
+              {
+                "category": "Contact",
+                "count": 1
+              },
+              {
+                "category": "Spin",
+                "count": 1
+              }
+            ]
+          },
+          {
+            "venueSlug": "weathertech_raceway_laguna_seca",
+            "trackName": "WeatherTech Raceway Laguna Seca",
+            "trackType": "road",
+            "seasons": "2024;2025",
+            "races": 4,
+            "cautions": 7,
+            "medianPerRace": 1,
+            "minPerRace": 1,
+            "maxPerRace": 4,
+            "meanPerRace": 1.75,
+            "opening": 3,
+            "middle": 3,
+            "final": 1,
+            "dominantThird": "",
+            "ranToFlagCount": 0,
+            "medianDurationLaps": 3,
+            "categories": [
+              {
+                "category": "Contact",
+                "count": 6
+              },
+              {
+                "category": "Off course",
+                "count": 1
+              }
+            ]
+          },
+          {
+            "venueSlug": "world_wide_technology_raceway",
+            "trackName": "World Wide Technology Raceway",
+            "trackType": "oval",
+            "seasons": "2024;2025;2026",
+            "races": 3,
+            "cautions": 6,
+            "medianPerRace": 3,
+            "minPerRace": 0,
+            "maxPerRace": 3,
+            "meanPerRace": 2,
+            "opening": 3,
+            "middle": 0,
+            "final": 3,
+            "dominantThird": "",
+            "ranToFlagCount": 0,
+            "medianDurationLaps": 6.5,
+            "categories": [
+              {
+                "category": "Contact",
+                "count": 5
+              },
+              {
+                "category": "Debris",
+                "count": 1
+              }
+            ]
+          }
+        ],
+        "byRace": [
+          {
+            "sessionId": "session_indy_nxt_2024_6324",
+            "seasonYear": 2024,
+            "raceLabel": "Grand Prix of St. Petersburg",
+            "trackName": "Streets of St. Petersburg",
+            "trackType": "street",
+            "venueSlug": "streets_of_st_petersburg",
+            "eventStartDate": "2024-03-08",
+            "totalRaceLaps": 45,
+            "cautionCount": 2,
+            "cautionLapsTotal": 5,
+            "opening": 0,
+            "middle": 0,
+            "final": 2,
+            "ranToFlagCount": 0,
+            "medianDurationLaps": 2.5,
+            "categories": [
+              {
+                "category": "Contact",
+                "count": 2
+              }
+            ]
+          },
+          {
+            "sessionId": "session_indy_nxt_2024_6314",
+            "seasonYear": 2024,
+            "raceLabel": "Grand Prix of Alabama",
+            "trackName": "Barber Motorsports Park",
+            "trackType": "road",
+            "venueSlug": "barber_motorsports_park",
+            "eventStartDate": "2024-04-26",
+            "totalRaceLaps": 35,
+            "cautionCount": 2,
+            "cautionLapsTotal": 3,
+            "opening": 1,
+            "middle": 0,
+            "final": 1,
+            "ranToFlagCount": 1,
+            "medianDurationLaps": 1.5,
+            "categories": [
+              {
+                "category": "Off course",
+                "count": 1
+              },
+              {
+                "category": "Spin",
+                "count": 1
+              }
+            ]
+          },
+          {
+            "sessionId": "session_indy_nxt_2024_6315",
+            "seasonYear": 2024,
+            "raceLabel": "Indianapolis Grand Prix Race 1",
+            "trackName": "Indianapolis Motor Speedway Road Course",
+            "trackType": "road",
+            "venueSlug": "indianapolis_motor_speedway_road_course",
+            "eventStartDate": "2024-05-10",
+            "totalRaceLaps": 35,
+            "cautionCount": 2,
+            "cautionLapsTotal": 7,
+            "opening": 0,
+            "middle": 1,
+            "final": 1,
+            "ranToFlagCount": 0,
+            "medianDurationLaps": 3.5,
+            "categories": [
+              {
+                "category": "Contact",
+                "count": 1
+              },
+              {
+                "category": "Off course",
+                "count": 1
+              }
+            ]
+          },
+          {
+            "sessionId": "session_indy_nxt_2024_6326",
+            "seasonYear": 2024,
+            "raceLabel": "Detroit Grand Prix",
+            "trackName": "Streets of Detroit",
+            "trackType": "street",
+            "venueSlug": "streets_of_detroit",
+            "eventStartDate": "2024-05-31",
+            "totalRaceLaps": 45,
+            "cautionCount": 4,
+            "cautionLapsTotal": 14,
+            "opening": 1,
+            "middle": 1,
+            "final": 2,
+            "ranToFlagCount": 1,
+            "medianDurationLaps": 3,
+            "categories": [
+              {
+                "category": "Contact",
+                "count": 2
+              },
+              {
+                "category": "Off course",
+                "count": 1
+              },
+              {
+                "category": "Spin",
+                "count": 1
+              }
+            ]
+          },
+          {
+            "sessionId": "session_indy_nxt_2024_6316",
+            "seasonYear": 2024,
+            "raceLabel": "Grand Prix at Road America",
+            "trackName": "Road America",
+            "trackType": "road",
+            "venueSlug": "road_america",
+            "eventStartDate": "2024-06-07",
+            "totalRaceLaps": 20,
+            "cautionCount": 3,
+            "cautionLapsTotal": 4,
+            "opening": 1,
+            "middle": 1,
+            "final": 1,
+            "ranToFlagCount": 0,
+            "medianDurationLaps": 1,
+            "categories": [
+              {
+                "category": "Contact",
+                "count": 2
+              },
+              {
+                "category": "Off course",
+                "count": 1
+              }
+            ]
+          },
+          {
+            "sessionId": "session_indy_nxt_2024_6317",
+            "seasonYear": 2024,
+            "raceLabel": "Grand Prix of Monterey Race 1",
+            "trackName": "WeatherTech Raceway Laguna Seca",
+            "trackType": "road",
+            "venueSlug": "weathertech_raceway_laguna_seca",
+            "eventStartDate": "2024-06-21",
+            "totalRaceLaps": 35,
+            "cautionCount": 1,
+            "cautionLapsTotal": 2,
+            "opening": 1,
+            "middle": 0,
+            "final": 0,
+            "ranToFlagCount": 0,
+            "medianDurationLaps": 2,
+            "categories": [
+              {
+                "category": "Contact",
+                "count": 1
+              }
+            ]
+          },
+          {
+            "sessionId": "session_indy_nxt_2024_6327",
+            "seasonYear": 2024,
+            "raceLabel": "Grand Prix of Monterey Race 2",
+            "trackName": "WeatherTech Raceway Laguna Seca",
+            "trackType": "road",
+            "venueSlug": "weathertech_raceway_laguna_seca",
+            "eventStartDate": "2024-06-22",
+            "totalRaceLaps": 35,
+            "cautionCount": 1,
+            "cautionLapsTotal": 1,
+            "opening": 0,
+            "middle": 1,
+            "final": 0,
+            "ranToFlagCount": 0,
+            "medianDurationLaps": 1,
+            "categories": [
+              {
+                "category": "Contact",
+                "count": 1
+              }
+            ]
+          },
+          {
+            "sessionId": "session_indy_nxt_2024_6318",
+            "seasonYear": 2024,
+            "raceLabel": "Grand Prix at Mid-Ohio",
+            "trackName": "Mid-Ohio Sports Car Course",
+            "trackType": "road",
+            "venueSlug": "mid_ohio",
+            "eventStartDate": "2024-07-05",
+            "totalRaceLaps": 35,
+            "cautionCount": 1,
+            "cautionLapsTotal": 3,
+            "opening": 1,
+            "middle": 0,
+            "final": 0,
+            "ranToFlagCount": 0,
+            "medianDurationLaps": 3,
+            "categories": [
+              {
+                "category": "Contact",
+                "count": 1
+              }
+            ]
+          },
+          {
+            "sessionId": "session_indy_nxt_2024_6319",
+            "seasonYear": 2024,
+            "raceLabel": "INDY NXT by Firestone at Iowa Speedway",
+            "trackName": "Iowa Speedway",
+            "trackType": "oval",
+            "venueSlug": "iowa_speedway",
+            "eventStartDate": "2024-07-12",
+            "totalRaceLaps": 55,
+            "cautionCount": 2,
+            "cautionLapsTotal": 28,
+            "opening": 1,
+            "middle": 0,
+            "final": 1,
+            "ranToFlagCount": 1,
+            "medianDurationLaps": 14,
+            "categories": [
+              {
+                "category": "Contact",
+                "count": 2
+              }
+            ]
+          },
+          {
+            "sessionId": "session_indy_nxt_2024_6320",
+            "seasonYear": 2024,
+            "raceLabel": "OUTFRONT Showdown",
+            "trackName": "World Wide Technology Raceway",
+            "trackType": "oval",
+            "venueSlug": "world_wide_technology_raceway",
+            "eventStartDate": "2024-08-16",
+            "totalRaceLaps": 75,
+            "cautionCount": 3,
+            "cautionLapsTotal": 19,
+            "opening": 2,
+            "middle": 0,
+            "final": 1,
+            "ranToFlagCount": 0,
+            "medianDurationLaps": 7,
+            "categories": [
+              {
+                "category": "Contact",
+                "count": 3
+              }
+            ]
+          },
+          {
+            "sessionId": "session_indy_nxt_2024_6321",
+            "seasonYear": 2024,
+            "raceLabel": "Grand Prix of Portland",
+            "trackName": "Portland International Raceway",
+            "trackType": "road",
+            "venueSlug": "portland_international_raceway",
+            "eventStartDate": "2024-08-23",
+            "totalRaceLaps": 35,
+            "cautionCount": 1,
+            "cautionLapsTotal": 2,
+            "opening": 1,
+            "middle": 0,
+            "final": 0,
+            "ranToFlagCount": 0,
+            "medianDurationLaps": 2,
+            "categories": [
+              {
+                "category": "Contact",
+                "count": 1
+              }
+            ]
+          },
+          {
+            "sessionId": "session_indy_nxt_2024_6322",
+            "seasonYear": 2024,
+            "raceLabel": "INDY NXT By Firestone at The Milwaukee Mile",
+            "trackName": "The Milwaukee Mile",
+            "trackType": "oval",
+            "venueSlug": "the_milwaukee_mile",
+            "eventStartDate": "2024-08-30",
+            "totalRaceLaps": 90,
+            "cautionCount": 1,
+            "cautionLapsTotal": 3,
+            "opening": 1,
+            "middle": 0,
+            "final": 0,
+            "ranToFlagCount": 0,
+            "medianDurationLaps": 3,
+            "categories": [
+              {
+                "category": "Spin",
+                "count": 1
+              }
+            ]
+          },
+          {
+            "sessionId": "session_indy_nxt_2024_6323",
+            "seasonYear": 2024,
+            "raceLabel": "Music City Grand Prix",
+            "trackName": "Nashville Superspeedway",
+            "trackType": "oval",
+            "venueSlug": "nashville_superspeedway",
+            "eventStartDate": "2024-09-14",
+            "totalRaceLaps": 65,
+            "cautionCount": 1,
+            "cautionLapsTotal": 6,
+            "opening": 0,
+            "middle": 0,
+            "final": 1,
+            "ranToFlagCount": 0,
+            "medianDurationLaps": 6,
+            "categories": [
+              {
+                "category": "Contact",
+                "count": 1
+              }
+            ]
+          },
+          {
+            "sessionId": "session_indy_nxt_2025_6446",
+            "seasonYear": 2025,
+            "raceLabel": "Grand Prix of St. Petersburg",
+            "trackName": "Streets of St. Petersburg",
+            "trackType": "street",
+            "venueSlug": "streets_of_st_petersburg",
+            "eventStartDate": "2025-02-28",
+            "totalRaceLaps": 44,
+            "cautionCount": 4,
+            "cautionLapsTotal": 11,
+            "opening": 2,
+            "middle": 1,
+            "final": 1,
+            "ranToFlagCount": 1,
+            "medianDurationLaps": 3,
+            "categories": [
+              {
+                "category": "Contact",
+                "count": 4
+              }
+            ]
+          },
+          {
+            "sessionId": "session_indy_nxt_2025_6445",
+            "seasonYear": 2025,
+            "raceLabel": "Grand Prix of Alabama",
+            "trackName": "Barber Motorsports Park",
+            "trackType": "road",
+            "venueSlug": "barber_motorsports_park",
+            "eventStartDate": "2025-05-02",
+            "totalRaceLaps": 35,
+            "cautionCount": 2,
+            "cautionLapsTotal": 5,
+            "opening": 2,
+            "middle": 0,
+            "final": 0,
+            "ranToFlagCount": 0,
+            "medianDurationLaps": 2.5,
+            "categories": [
+              {
+                "category": "Debris",
+                "count": 1
+              },
+              {
+                "category": "Off course",
+                "count": 1
+              }
+            ]
+          },
+          {
+            "sessionId": "session_indy_nxt_2025_6443",
+            "seasonYear": 2025,
+            "raceLabel": "Indianapolis Grand Prix Race 2",
+            "trackName": "Indianapolis Motor Speedway Road Course",
+            "trackType": "road",
+            "venueSlug": "indianapolis_motor_speedway_road_course",
+            "eventStartDate": "2025-05-09",
+            "totalRaceLaps": 35,
+            "cautionCount": 1,
+            "cautionLapsTotal": 2,
+            "opening": 1,
+            "middle": 0,
+            "final": 0,
+            "ranToFlagCount": 0,
+            "medianDurationLaps": 2,
+            "categories": [
+              {
+                "category": "Contact",
+                "count": 1
+              }
+            ]
+          },
+          {
+            "sessionId": "session_indy_nxt_2025_6444",
+            "seasonYear": 2025,
+            "raceLabel": "Indianapolis Grand Prix Race 1",
+            "trackName": "Indianapolis Motor Speedway Road Course",
+            "trackType": "road",
+            "venueSlug": "indianapolis_motor_speedway_road_course",
+            "eventStartDate": "2025-05-09",
+            "totalRaceLaps": 35,
+            "cautionCount": 2,
+            "cautionLapsTotal": 4,
+            "opening": 1,
+            "middle": 0,
+            "final": 1,
+            "ranToFlagCount": 0,
+            "medianDurationLaps": 2,
+            "categories": [
+              {
+                "category": "Contact",
+                "count": 2
+              }
+            ]
+          },
+          {
+            "sessionId": "session_indy_nxt_2025_6455",
+            "seasonYear": 2025,
+            "raceLabel": "Detroit Grand Prix",
+            "trackName": "Streets of Detroit",
+            "trackType": "street",
+            "venueSlug": "streets_of_detroit",
+            "eventStartDate": "2025-05-30",
+            "totalRaceLaps": 45,
+            "cautionCount": 2,
+            "cautionLapsTotal": 5,
+            "opening": 1,
+            "middle": 0,
+            "final": 1,
+            "ranToFlagCount": 0,
+            "medianDurationLaps": 2.5,
+            "categories": [
+              {
+                "category": "Contact",
+                "count": 2
+              }
+            ]
+          },
+          {
+            "sessionId": "session_indy_nxt_2025_6452",
+            "seasonYear": 2025,
+            "raceLabel": "Grand Prix at Mid-Ohio",
+            "trackName": "Mid-Ohio Sports Car Course",
+            "trackType": "road",
+            "venueSlug": "mid_ohio",
+            "eventStartDate": "2025-07-04",
+            "totalRaceLaps": 33,
+            "cautionCount": 1,
+            "cautionLapsTotal": 2,
+            "opening": 1,
+            "middle": 0,
+            "final": 0,
+            "ranToFlagCount": 0,
+            "medianDurationLaps": 2,
+            "categories": [
+              {
+                "category": "Contact",
+                "count": 1
+              }
+            ]
+          },
+          {
+            "sessionId": "session_indy_nxt_2025_6451",
+            "seasonYear": 2025,
+            "raceLabel": "INDY NXT by Firestone at Iowa Speedway",
+            "trackName": "Iowa Speedway",
+            "trackType": "oval",
+            "venueSlug": "iowa_speedway",
+            "eventStartDate": "2025-07-11",
+            "totalRaceLaps": 75,
+            "cautionCount": 3,
+            "cautionLapsTotal": 10,
+            "opening": 0,
+            "middle": 3,
+            "final": 0,
+            "ranToFlagCount": 0,
+            "medianDurationLaps": 3,
+            "categories": [
+              {
+                "category": "Spin",
+                "count": 3
+              }
+            ]
+          },
+          {
+            "sessionId": "session_indy_nxt_2025_6442",
+            "seasonYear": 2025,
+            "raceLabel": "Grand Prix of Monterey Race 1",
+            "trackName": "WeatherTech Raceway Laguna Seca",
+            "trackType": "road",
+            "venueSlug": "weathertech_raceway_laguna_seca",
+            "eventStartDate": "2025-07-25",
+            "totalRaceLaps": 35,
+            "cautionCount": 1,
+            "cautionLapsTotal": 4,
+            "opening": 1,
+            "middle": 0,
+            "final": 0,
+            "ranToFlagCount": 0,
+            "medianDurationLaps": 4,
+            "categories": [
+              {
+                "category": "Off course",
+                "count": 1
+              }
+            ]
+          },
+          {
+            "sessionId": "session_indy_nxt_2025_6450",
+            "seasonYear": 2025,
+            "raceLabel": "Grand Prix of Monterey Race 2",
+            "trackName": "WeatherTech Raceway Laguna Seca",
+            "trackType": "road",
+            "venueSlug": "weathertech_raceway_laguna_seca",
+            "eventStartDate": "2025-07-26",
+            "totalRaceLaps": 35,
+            "cautionCount": 4,
+            "cautionLapsTotal": 15,
+            "opening": 1,
+            "middle": 2,
+            "final": 1,
+            "ranToFlagCount": 0,
+            "medianDurationLaps": 3.5,
+            "categories": [
+              {
+                "category": "Contact",
+                "count": 4
+              }
+            ]
+          },
+          {
+            "sessionId": "session_indy_nxt_2025_6449",
+            "seasonYear": 2025,
+            "raceLabel": "Grand Prix of Portland",
+            "trackName": "Portland International Raceway",
+            "trackType": "road",
+            "venueSlug": "portland_international_raceway",
+            "eventStartDate": "2025-08-08",
+            "totalRaceLaps": 35,
+            "cautionCount": 1,
+            "cautionLapsTotal": 3,
+            "opening": 1,
+            "middle": 0,
+            "final": 0,
+            "ranToFlagCount": 0,
+            "medianDurationLaps": 3,
+            "categories": [
+              {
+                "category": "Contact",
+                "count": 1
+              }
+            ]
+          },
+          {
+            "sessionId": "session_indy_nxt_2025_6448",
+            "seasonYear": 2025,
+            "raceLabel": "INDY NXT by Firestone at the Milwaukee Mile",
+            "trackName": "The Milwaukee Mile",
+            "trackType": "oval",
+            "venueSlug": "the_milwaukee_mile",
+            "eventStartDate": "2025-08-23",
+            "totalRaceLaps": 90,
+            "cautionCount": 1,
+            "cautionLapsTotal": 6,
+            "opening": 0,
+            "middle": 1,
+            "final": 0,
+            "ranToFlagCount": 0,
+            "medianDurationLaps": 6,
+            "categories": [
+              {
+                "category": "Contact",
+                "count": 1
+              }
+            ]
+          },
+          {
+            "sessionId": "session_indy_nxt_2025_6447",
+            "seasonYear": 2025,
+            "raceLabel": "Music City Grand Prix",
+            "trackName": "Nashville Superspeedway",
+            "trackType": "oval",
+            "venueSlug": "nashville_superspeedway",
+            "eventStartDate": "2025-08-30",
+            "totalRaceLaps": 65,
+            "cautionCount": 1,
+            "cautionLapsTotal": 12,
+            "opening": 0,
+            "middle": 1,
+            "final": 0,
+            "ranToFlagCount": 0,
+            "medianDurationLaps": 12,
+            "categories": [
+              {
+                "category": "Contact",
+                "count": 1
+              }
+            ]
+          },
+          {
+            "sessionId": "session_indy_nxt_2026_6751",
+            "seasonYear": 2026,
+            "raceLabel": "Grand Prix of St. Petersburg",
+            "trackName": "Streets of St. Petersburg",
+            "trackType": "street",
+            "venueSlug": "streets_of_st_petersburg",
+            "eventStartDate": "2026-02-27",
+            "totalRaceLaps": 42,
+            "cautionCount": 4,
+            "cautionLapsTotal": 12,
+            "opening": 2,
+            "middle": 2,
+            "final": 0,
+            "ranToFlagCount": 0,
+            "medianDurationLaps": 3,
+            "categories": [
+              {
+                "category": "Contact",
+                "count": 3
+              },
+              {
+                "category": "Debris",
+                "count": 1
+              }
+            ]
+          },
+          {
+            "sessionId": "session_indy_nxt_2026_6753",
+            "seasonYear": 2026,
+            "raceLabel": "Grand Prix of Arlington",
+            "trackName": "Streets of Arlington",
+            "trackType": "street",
+            "venueSlug": "streets_of_arlington",
+            "eventStartDate": "2026-03-13",
+            "totalRaceLaps": 15,
+            "cautionCount": 2,
+            "cautionLapsTotal": 5,
+            "opening": 1,
+            "middle": 0,
+            "final": 1,
+            "ranToFlagCount": 0,
+            "medianDurationLaps": 2.5,
+            "categories": [
+              {
+                "category": "Contact",
+                "count": 2
+              }
+            ]
+          },
+          {
+            "sessionId": "session_indy_nxt_2026_6750",
+            "seasonYear": 2026,
+            "raceLabel": "Grand Prix of Alabama Race 1",
+            "trackName": "Barber Motorsports Park",
+            "trackType": "road",
+            "venueSlug": "barber_motorsports_park",
+            "eventStartDate": "2026-03-27",
+            "totalRaceLaps": 35,
+            "cautionCount": 2,
+            "cautionLapsTotal": 5,
+            "opening": 1,
+            "middle": 0,
+            "final": 1,
+            "ranToFlagCount": 0,
+            "medianDurationLaps": 2.5,
+            "categories": [
+              {
+                "category": "Contact",
+                "count": 2
+              }
+            ]
+          },
+          {
+            "sessionId": "session_indy_nxt_2026_6756",
+            "seasonYear": 2026,
+            "raceLabel": "Indianapolis Grand Prix Race 1",
+            "trackName": "Indianapolis Motor Speedway Road Course",
+            "trackType": "road",
+            "venueSlug": "indianapolis_motor_speedway_road_course",
+            "eventStartDate": "2026-05-08",
+            "totalRaceLaps": 29,
+            "cautionCount": 2,
+            "cautionLapsTotal": 6,
+            "opening": 0,
+            "middle": 1,
+            "final": 1,
+            "ranToFlagCount": 1,
+            "medianDurationLaps": 3,
+            "categories": [
+              {
+                "category": "Conditions",
+                "count": 1
+              },
+              {
+                "category": "Spin",
+                "count": 1
+              }
+            ]
+          },
+          {
+            "sessionId": "session_indy_nxt_2026_6749",
+            "seasonYear": 2026,
+            "raceLabel": "Detroit Grand Prix",
+            "trackName": "Streets of Detroit",
+            "trackType": "street",
+            "venueSlug": "streets_of_detroit",
+            "eventStartDate": "2026-05-29",
+            "totalRaceLaps": 42,
+            "cautionCount": 4,
+            "cautionLapsTotal": 15,
+            "opening": 1,
+            "middle": 1,
+            "final": 2,
+            "ranToFlagCount": 1,
+            "medianDurationLaps": 3,
+            "categories": [
+              {
+                "category": "Contact",
+                "count": 3
+              },
+              {
+                "category": "Debris",
+                "count": 1
+              }
+            ]
+          },
+          {
+            "sessionId": "session_indy_nxt_2026_6763",
+            "seasonYear": 2026,
+            "raceLabel": "INDY NXT by Firestone at World Wide Technology Raceway",
+            "trackName": "World Wide Technology Raceway",
+            "trackType": "oval",
+            "venueSlug": "world_wide_technology_raceway",
+            "eventStartDate": "2026-06-06",
+            "totalRaceLaps": 75,
+            "cautionCount": 3,
+            "cautionLapsTotal": 17,
+            "opening": 1,
+            "middle": 0,
+            "final": 2,
+            "ranToFlagCount": 0,
+            "medianDurationLaps": 6,
+            "categories": [
+              {
+                "category": "Contact",
+                "count": 2
+              },
+              {
+                "category": "Debris",
+                "count": 1
+              }
+            ]
+          },
+          {
+            "sessionId": "session_indy_nxt_2026_6762",
+            "seasonYear": 2026,
+            "raceLabel": "Grand Prix at Road America Race 1",
+            "trackName": "Road America",
+            "trackType": "road",
+            "venueSlug": "road_america",
+            "eventStartDate": "2026-06-19",
+            "totalRaceLaps": 20,
+            "cautionCount": 3,
+            "cautionLapsTotal": 8,
+            "opening": 2,
+            "middle": 1,
+            "final": 0,
+            "ranToFlagCount": 0,
+            "medianDurationLaps": 3,
+            "categories": [
+              {
+                "category": "Contact",
+                "count": 3
+              }
+            ]
+          },
+          {
+            "sessionId": "session_indy_nxt_2026_6754",
+            "seasonYear": 2026,
+            "raceLabel": "Grand Prix at Road America Race 2",
+            "trackName": "Road America",
+            "trackType": "road",
+            "venueSlug": "road_america",
+            "eventStartDate": "2026-06-20",
+            "totalRaceLaps": 18,
+            "cautionCount": 2,
+            "cautionLapsTotal": 3,
+            "opening": 1,
+            "middle": 0,
+            "final": 1,
+            "ranToFlagCount": 0,
+            "medianDurationLaps": 1.5,
+            "categories": [
+              {
+                "category": "Contact",
+                "count": 1
+              },
+              {
+                "category": "Off course",
+                "count": 1
+              }
+            ]
+          },
+          {
+            "sessionId": "session_indy_nxt_2026_6761",
+            "seasonYear": 2026,
+            "raceLabel": "Grand Prix at Mid-Ohio Race 1",
+            "trackName": "Mid-Ohio Sports Car Course",
+            "trackType": "road",
+            "venueSlug": "mid_ohio",
+            "eventStartDate": "2026-07-03",
+            "totalRaceLaps": 35,
+            "cautionCount": 3,
+            "cautionLapsTotal": 6,
+            "opening": 1,
+            "middle": 2,
+            "final": 0,
+            "ranToFlagCount": 0,
+            "medianDurationLaps": 2,
+            "categories": [
+              {
+                "category": "Mechanical",
+                "count": 2
+              },
+              {
+                "category": "Off course",
+                "count": 1
+              }
+            ]
+          },
+          {
+            "sessionId": "session_indy_nxt_2026_6755",
+            "seasonYear": 2026,
+            "raceLabel": "Music City Grand Prix",
+            "trackName": "Nashville Superspeedway",
+            "trackType": "oval",
+            "venueSlug": "nashville_superspeedway",
+            "eventStartDate": "2026-07-18",
+            "totalRaceLaps": 65,
+            "cautionCount": 2,
+            "cautionLapsTotal": 11,
+            "opening": 2,
+            "middle": 0,
+            "final": 0,
+            "ranToFlagCount": 0,
+            "medianDurationLaps": 5.5,
+            "categories": [
+              {
+                "category": "Contact",
+                "count": 1
+              },
+              {
+                "category": "Debris",
+                "count": 1
+              }
+            ]
+          }
+        ],
+        "events": [
+          {
+            "sessionId": "session_indy_nxt_2024_6324",
+            "seasonYear": 2024,
+            "trackName": "Streets of St. Petersburg",
+            "venueSlug": "streets_of_st_petersburg",
+            "startLap": 32,
+            "endLap": 35,
+            "durationLaps": 4,
+            "totalRaceLaps": 45,
+            "lapFraction": 0.7111,
+            "third": "final",
+            "restartLap": 36,
+            "ranToFlag": false,
+            "category": "Contact"
+          },
+          {
+            "sessionId": "session_indy_nxt_2024_6324",
+            "seasonYear": 2024,
+            "trackName": "Streets of St. Petersburg",
+            "venueSlug": "streets_of_st_petersburg",
+            "startLap": 37,
+            "endLap": 37,
+            "durationLaps": 1,
+            "totalRaceLaps": 45,
+            "lapFraction": 0.8222,
+            "third": "final",
+            "restartLap": 38,
+            "ranToFlag": false,
+            "category": "Contact"
+          },
+          {
+            "sessionId": "session_indy_nxt_2024_6314",
+            "seasonYear": 2024,
+            "trackName": "Barber Motorsports Park",
+            "venueSlug": "barber_motorsports_park",
+            "startLap": 5,
+            "endLap": 5,
+            "durationLaps": 1,
+            "totalRaceLaps": 35,
+            "lapFraction": 0.1429,
+            "third": "opening",
+            "restartLap": 6,
+            "ranToFlag": false,
+            "category": "Off course"
+          },
+          {
+            "sessionId": "session_indy_nxt_2024_6314",
+            "seasonYear": 2024,
+            "trackName": "Barber Motorsports Park",
+            "venueSlug": "barber_motorsports_park",
+            "startLap": 34,
+            "endLap": 35,
+            "durationLaps": 2,
+            "totalRaceLaps": 35,
+            "lapFraction": 0.9714,
+            "third": "final",
+            "restartLap": null,
+            "ranToFlag": true,
+            "category": "Spin"
+          },
+          {
+            "sessionId": "session_indy_nxt_2024_6315",
+            "seasonYear": 2024,
+            "trackName": "Indianapolis Motor Speedway Road Course",
+            "venueSlug": "indianapolis_motor_speedway_road_course",
+            "startLap": 21,
+            "endLap": 25,
+            "durationLaps": 5,
+            "totalRaceLaps": 35,
+            "lapFraction": 0.6,
+            "third": "middle",
+            "restartLap": 26,
+            "ranToFlag": false,
+            "category": "Off course"
+          },
+          {
+            "sessionId": "session_indy_nxt_2024_6315",
+            "seasonYear": 2024,
+            "trackName": "Indianapolis Motor Speedway Road Course",
+            "venueSlug": "indianapolis_motor_speedway_road_course",
+            "startLap": 30,
+            "endLap": 31,
+            "durationLaps": 2,
+            "totalRaceLaps": 35,
+            "lapFraction": 0.8571,
+            "third": "final",
+            "restartLap": 32,
+            "ranToFlag": false,
+            "category": "Contact"
+          },
+          {
+            "sessionId": "session_indy_nxt_2024_6326",
+            "seasonYear": 2024,
+            "trackName": "Streets of Detroit",
+            "venueSlug": "streets_of_detroit",
+            "startLap": 3,
+            "endLap": 8,
+            "durationLaps": 6,
+            "totalRaceLaps": 45,
+            "lapFraction": 0.0667,
+            "third": "opening",
+            "restartLap": 9,
+            "ranToFlag": false,
+            "category": "Contact"
+          },
+          {
+            "sessionId": "session_indy_nxt_2024_6326",
+            "seasonYear": 2024,
+            "trackName": "Streets of Detroit",
+            "venueSlug": "streets_of_detroit",
+            "startLap": 25,
+            "endLap": 26,
+            "durationLaps": 2,
+            "totalRaceLaps": 45,
+            "lapFraction": 0.5556,
+            "third": "middle",
+            "restartLap": 27,
+            "ranToFlag": false,
+            "category": "Off course"
+          },
+          {
+            "sessionId": "session_indy_nxt_2024_6326",
+            "seasonYear": 2024,
+            "trackName": "Streets of Detroit",
+            "venueSlug": "streets_of_detroit",
+            "startLap": 39,
+            "endLap": 40,
+            "durationLaps": 2,
+            "totalRaceLaps": 45,
+            "lapFraction": 0.8667,
+            "third": "final",
+            "restartLap": 41,
+            "ranToFlag": false,
+            "category": "Spin"
+          },
+          {
+            "sessionId": "session_indy_nxt_2024_6326",
+            "seasonYear": 2024,
+            "trackName": "Streets of Detroit",
+            "venueSlug": "streets_of_detroit",
+            "startLap": 42,
+            "endLap": 45,
+            "durationLaps": 4,
+            "totalRaceLaps": 45,
+            "lapFraction": 0.9333,
+            "third": "final",
+            "restartLap": null,
+            "ranToFlag": true,
+            "category": "Contact"
+          },
+          {
+            "sessionId": "session_indy_nxt_2024_6316",
+            "seasonYear": 2024,
+            "trackName": "Road America",
+            "venueSlug": "road_america",
+            "startLap": 3,
+            "endLap": 4,
+            "durationLaps": 2,
+            "totalRaceLaps": 20,
+            "lapFraction": 0.15,
+            "third": "opening",
+            "restartLap": 5,
+            "ranToFlag": false,
+            "category": "Contact"
+          },
+          {
+            "sessionId": "session_indy_nxt_2024_6316",
+            "seasonYear": 2024,
+            "trackName": "Road America",
+            "venueSlug": "road_america",
+            "startLap": 10,
+            "endLap": 10,
+            "durationLaps": 1,
+            "totalRaceLaps": 20,
+            "lapFraction": 0.5,
+            "third": "middle",
+            "restartLap": 11,
+            "ranToFlag": false,
+            "category": "Off course"
+          },
+          {
+            "sessionId": "session_indy_nxt_2024_6316",
+            "seasonYear": 2024,
+            "trackName": "Road America",
+            "venueSlug": "road_america",
+            "startLap": 16,
+            "endLap": 16,
+            "durationLaps": 1,
+            "totalRaceLaps": 20,
+            "lapFraction": 0.8,
+            "third": "final",
+            "restartLap": 17,
+            "ranToFlag": false,
+            "category": "Contact"
+          },
+          {
+            "sessionId": "session_indy_nxt_2024_6317",
+            "seasonYear": 2024,
+            "trackName": "WeatherTech Raceway Laguna Seca",
+            "venueSlug": "weathertech_raceway_laguna_seca",
+            "startLap": 6,
+            "endLap": 7,
+            "durationLaps": 2,
+            "totalRaceLaps": 35,
+            "lapFraction": 0.1714,
+            "third": "opening",
+            "restartLap": 8,
+            "ranToFlag": false,
+            "category": "Contact"
+          },
+          {
+            "sessionId": "session_indy_nxt_2024_6327",
+            "seasonYear": 2024,
+            "trackName": "WeatherTech Raceway Laguna Seca",
+            "venueSlug": "weathertech_raceway_laguna_seca",
+            "startLap": 16,
+            "endLap": 16,
+            "durationLaps": 1,
+            "totalRaceLaps": 35,
+            "lapFraction": 0.4571,
+            "third": "middle",
+            "restartLap": 17,
+            "ranToFlag": false,
+            "category": "Contact"
+          },
+          {
+            "sessionId": "session_indy_nxt_2024_6318",
+            "seasonYear": 2024,
+            "trackName": "Mid-Ohio Sports Car Course",
+            "venueSlug": "mid_ohio",
+            "startLap": 1,
+            "endLap": 3,
+            "durationLaps": 3,
+            "totalRaceLaps": 35,
+            "lapFraction": 0.0286,
+            "third": "opening",
+            "restartLap": 4,
+            "ranToFlag": false,
+            "category": "Contact"
+          },
+          {
+            "sessionId": "session_indy_nxt_2024_6319",
+            "seasonYear": 2024,
+            "trackName": "Iowa Speedway",
+            "venueSlug": "iowa_speedway",
+            "startLap": 13,
+            "endLap": 38,
+            "durationLaps": 26,
+            "totalRaceLaps": 55,
+            "lapFraction": 0.2364,
+            "third": "opening",
+            "restartLap": 39,
+            "ranToFlag": false,
+            "category": "Contact"
+          },
+          {
+            "sessionId": "session_indy_nxt_2024_6319",
+            "seasonYear": 2024,
+            "trackName": "Iowa Speedway",
+            "venueSlug": "iowa_speedway",
+            "startLap": 54,
+            "endLap": 55,
+            "durationLaps": 2,
+            "totalRaceLaps": 55,
+            "lapFraction": 0.9818,
+            "third": "final",
+            "restartLap": null,
+            "ranToFlag": true,
+            "category": "Contact"
+          },
+          {
+            "sessionId": "session_indy_nxt_2024_6320",
+            "seasonYear": 2024,
+            "trackName": "World Wide Technology Raceway",
+            "venueSlug": "world_wide_technology_raceway",
+            "startLap": 2,
+            "endLap": 5,
+            "durationLaps": 4,
+            "totalRaceLaps": 75,
+            "lapFraction": 0.0267,
+            "third": "opening",
+            "restartLap": 6,
+            "ranToFlag": false,
+            "category": "Contact"
+          },
+          {
+            "sessionId": "session_indy_nxt_2024_6320",
+            "seasonYear": 2024,
+            "trackName": "World Wide Technology Raceway",
+            "venueSlug": "world_wide_technology_raceway",
+            "startLap": 8,
+            "endLap": 15,
+            "durationLaps": 8,
+            "totalRaceLaps": 75,
+            "lapFraction": 0.1067,
+            "third": "opening",
+            "restartLap": 16,
+            "ranToFlag": false,
+            "category": "Contact"
+          },
+          {
+            "sessionId": "session_indy_nxt_2024_6320",
+            "seasonYear": 2024,
+            "trackName": "World Wide Technology Raceway",
+            "venueSlug": "world_wide_technology_raceway",
+            "startLap": 53,
+            "endLap": 59,
+            "durationLaps": 7,
+            "totalRaceLaps": 75,
+            "lapFraction": 0.7067,
+            "third": "final",
+            "restartLap": 60,
+            "ranToFlag": false,
+            "category": "Contact"
+          },
+          {
+            "sessionId": "session_indy_nxt_2024_6321",
+            "seasonYear": 2024,
+            "trackName": "Portland International Raceway",
+            "venueSlug": "portland_international_raceway",
+            "startLap": 8,
+            "endLap": 9,
+            "durationLaps": 2,
+            "totalRaceLaps": 35,
+            "lapFraction": 0.2286,
+            "third": "opening",
+            "restartLap": 10,
+            "ranToFlag": false,
+            "category": "Contact"
+          },
+          {
+            "sessionId": "session_indy_nxt_2024_6322",
+            "seasonYear": 2024,
+            "trackName": "The Milwaukee Mile",
+            "venueSlug": "the_milwaukee_mile",
+            "startLap": 30,
+            "endLap": 32,
+            "durationLaps": 3,
+            "totalRaceLaps": 90,
+            "lapFraction": 0.3333,
+            "third": "opening",
+            "restartLap": 33,
+            "ranToFlag": false,
+            "category": "Spin"
+          },
+          {
+            "sessionId": "session_indy_nxt_2024_6323",
+            "seasonYear": 2024,
+            "trackName": "Nashville Superspeedway",
+            "venueSlug": "nashville_superspeedway",
+            "startLap": 52,
+            "endLap": 57,
+            "durationLaps": 6,
+            "totalRaceLaps": 65,
+            "lapFraction": 0.8,
+            "third": "final",
+            "restartLap": 58,
+            "ranToFlag": false,
+            "category": "Contact"
+          },
+          {
+            "sessionId": "session_indy_nxt_2025_6446",
+            "seasonYear": 2025,
+            "trackName": "Streets of St. Petersburg",
+            "venueSlug": "streets_of_st_petersburg",
+            "startLap": 1,
+            "endLap": 1,
+            "durationLaps": 1,
+            "totalRaceLaps": 44,
+            "lapFraction": 0.0227,
+            "third": "opening",
+            "restartLap": 2,
+            "ranToFlag": false,
+            "category": "Contact"
+          },
+          {
+            "sessionId": "session_indy_nxt_2025_6446",
+            "seasonYear": 2025,
+            "trackName": "Streets of St. Petersburg",
+            "venueSlug": "streets_of_st_petersburg",
+            "startLap": 10,
+            "endLap": 13,
+            "durationLaps": 4,
+            "totalRaceLaps": 44,
+            "lapFraction": 0.2273,
+            "third": "opening",
+            "restartLap": 14,
+            "ranToFlag": false,
+            "category": "Contact"
+          },
+          {
+            "sessionId": "session_indy_nxt_2025_6446",
+            "seasonYear": 2025,
+            "trackName": "Streets of St. Petersburg",
+            "venueSlug": "streets_of_st_petersburg",
+            "startLap": 22,
+            "endLap": 24,
+            "durationLaps": 3,
+            "totalRaceLaps": 44,
+            "lapFraction": 0.5,
+            "third": "middle",
+            "restartLap": 25,
+            "ranToFlag": false,
+            "category": "Contact"
+          },
+          {
+            "sessionId": "session_indy_nxt_2025_6446",
+            "seasonYear": 2025,
+            "trackName": "Streets of St. Petersburg",
+            "venueSlug": "streets_of_st_petersburg",
+            "startLap": 42,
+            "endLap": 44,
+            "durationLaps": 3,
+            "totalRaceLaps": 44,
+            "lapFraction": 0.9545,
+            "third": "final",
+            "restartLap": null,
+            "ranToFlag": true,
+            "category": "Contact"
+          },
+          {
+            "sessionId": "session_indy_nxt_2025_6445",
+            "seasonYear": 2025,
+            "trackName": "Barber Motorsports Park",
+            "venueSlug": "barber_motorsports_park",
+            "startLap": 1,
+            "endLap": 3,
+            "durationLaps": 3,
+            "totalRaceLaps": 35,
+            "lapFraction": 0.0286,
+            "third": "opening",
+            "restartLap": 4,
+            "ranToFlag": false,
+            "category": "Off course"
+          },
+          {
+            "sessionId": "session_indy_nxt_2025_6445",
+            "seasonYear": 2025,
+            "trackName": "Barber Motorsports Park",
+            "venueSlug": "barber_motorsports_park",
+            "startLap": 11,
+            "endLap": 12,
+            "durationLaps": 2,
+            "totalRaceLaps": 35,
+            "lapFraction": 0.3143,
+            "third": "opening",
+            "restartLap": 13,
+            "ranToFlag": false,
+            "category": "Debris"
+          },
+          {
+            "sessionId": "session_indy_nxt_2025_6443",
+            "seasonYear": 2025,
+            "trackName": "Indianapolis Motor Speedway Road Course",
+            "venueSlug": "indianapolis_motor_speedway_road_course",
+            "startLap": 3,
+            "endLap": 4,
+            "durationLaps": 2,
+            "totalRaceLaps": 35,
+            "lapFraction": 0.0857,
+            "third": "opening",
+            "restartLap": 5,
+            "ranToFlag": false,
+            "category": "Contact"
+          },
+          {
+            "sessionId": "session_indy_nxt_2025_6444",
+            "seasonYear": 2025,
+            "trackName": "Indianapolis Motor Speedway Road Course",
+            "venueSlug": "indianapolis_motor_speedway_road_course",
+            "startLap": 10,
+            "endLap": 11,
+            "durationLaps": 2,
+            "totalRaceLaps": 35,
+            "lapFraction": 0.2857,
+            "third": "opening",
+            "restartLap": 12,
+            "ranToFlag": false,
+            "category": "Contact"
+          },
+          {
+            "sessionId": "session_indy_nxt_2025_6444",
+            "seasonYear": 2025,
+            "trackName": "Indianapolis Motor Speedway Road Course",
+            "venueSlug": "indianapolis_motor_speedway_road_course",
+            "startLap": 29,
+            "endLap": 30,
+            "durationLaps": 2,
+            "totalRaceLaps": 35,
+            "lapFraction": 0.8286,
+            "third": "final",
+            "restartLap": 31,
+            "ranToFlag": false,
+            "category": "Contact"
+          },
+          {
+            "sessionId": "session_indy_nxt_2025_6455",
+            "seasonYear": 2025,
+            "trackName": "Streets of Detroit",
+            "venueSlug": "streets_of_detroit",
+            "startLap": 1,
+            "endLap": 2,
+            "durationLaps": 2,
+            "totalRaceLaps": 45,
+            "lapFraction": 0.0222,
+            "third": "opening",
+            "restartLap": 3,
+            "ranToFlag": false,
+            "category": "Contact"
+          },
+          {
+            "sessionId": "session_indy_nxt_2025_6455",
+            "seasonYear": 2025,
+            "trackName": "Streets of Detroit",
+            "venueSlug": "streets_of_detroit",
+            "startLap": 41,
+            "endLap": 43,
+            "durationLaps": 3,
+            "totalRaceLaps": 45,
+            "lapFraction": 0.9111,
+            "third": "final",
+            "restartLap": 44,
+            "ranToFlag": false,
+            "category": "Contact"
+          },
+          {
+            "sessionId": "session_indy_nxt_2025_6452",
+            "seasonYear": 2025,
+            "trackName": "Mid-Ohio Sports Car Course",
+            "venueSlug": "mid_ohio",
+            "startLap": 4,
+            "endLap": 5,
+            "durationLaps": 2,
+            "totalRaceLaps": 33,
+            "lapFraction": 0.1212,
+            "third": "opening",
+            "restartLap": 6,
+            "ranToFlag": false,
+            "category": "Contact"
+          },
+          {
+            "sessionId": "session_indy_nxt_2025_6451",
+            "seasonYear": 2025,
+            "trackName": "Iowa Speedway",
+            "venueSlug": "iowa_speedway",
+            "startLap": 26,
+            "endLap": 28,
+            "durationLaps": 3,
+            "totalRaceLaps": 75,
+            "lapFraction": 0.3467,
+            "third": "middle",
+            "restartLap": 29,
+            "ranToFlag": false,
+            "category": "Spin"
+          },
+          {
+            "sessionId": "session_indy_nxt_2025_6451",
+            "seasonYear": 2025,
+            "trackName": "Iowa Speedway",
+            "venueSlug": "iowa_speedway",
+            "startLap": 29,
+            "endLap": 32,
+            "durationLaps": 4,
+            "totalRaceLaps": 75,
+            "lapFraction": 0.3867,
+            "third": "middle",
+            "restartLap": 33,
+            "ranToFlag": false,
+            "category": "Spin"
+          },
+          {
+            "sessionId": "session_indy_nxt_2025_6451",
+            "seasonYear": 2025,
+            "trackName": "Iowa Speedway",
+            "venueSlug": "iowa_speedway",
+            "startLap": 34,
+            "endLap": 36,
+            "durationLaps": 3,
+            "totalRaceLaps": 75,
+            "lapFraction": 0.4533,
+            "third": "middle",
+            "restartLap": 37,
+            "ranToFlag": false,
+            "category": "Spin"
+          },
+          {
+            "sessionId": "session_indy_nxt_2025_6442",
+            "seasonYear": 2025,
+            "trackName": "WeatherTech Raceway Laguna Seca",
+            "venueSlug": "weathertech_raceway_laguna_seca",
+            "startLap": 1,
+            "endLap": 4,
+            "durationLaps": 4,
+            "totalRaceLaps": 35,
+            "lapFraction": 0.0286,
+            "third": "opening",
+            "restartLap": 5,
+            "ranToFlag": false,
+            "category": "Off course"
+          },
+          {
+            "sessionId": "session_indy_nxt_2025_6450",
+            "seasonYear": 2025,
+            "trackName": "WeatherTech Raceway Laguna Seca",
+            "venueSlug": "weathertech_raceway_laguna_seca",
+            "startLap": 1,
+            "endLap": 5,
+            "durationLaps": 5,
+            "totalRaceLaps": 35,
+            "lapFraction": 0.0286,
+            "third": "opening",
+            "restartLap": 6,
+            "ranToFlag": false,
+            "category": "Contact"
+          },
+          {
+            "sessionId": "session_indy_nxt_2025_6450",
+            "seasonYear": 2025,
+            "trackName": "WeatherTech Raceway Laguna Seca",
+            "venueSlug": "weathertech_raceway_laguna_seca",
+            "startLap": 18,
+            "endLap": 21,
+            "durationLaps": 4,
+            "totalRaceLaps": 35,
+            "lapFraction": 0.5143,
+            "third": "middle",
+            "restartLap": 22,
+            "ranToFlag": false,
+            "category": "Contact"
+          },
+          {
+            "sessionId": "session_indy_nxt_2025_6450",
+            "seasonYear": 2025,
+            "trackName": "WeatherTech Raceway Laguna Seca",
+            "venueSlug": "weathertech_raceway_laguna_seca",
+            "startLap": 23,
+            "endLap": 25,
+            "durationLaps": 3,
+            "totalRaceLaps": 35,
+            "lapFraction": 0.6571,
+            "third": "middle",
+            "restartLap": 26,
+            "ranToFlag": false,
+            "category": "Contact"
+          },
+          {
+            "sessionId": "session_indy_nxt_2025_6450",
+            "seasonYear": 2025,
+            "trackName": "WeatherTech Raceway Laguna Seca",
+            "venueSlug": "weathertech_raceway_laguna_seca",
+            "startLap": 27,
+            "endLap": 29,
+            "durationLaps": 3,
+            "totalRaceLaps": 35,
+            "lapFraction": 0.7714,
+            "third": "final",
+            "restartLap": 30,
+            "ranToFlag": false,
+            "category": "Contact"
+          },
+          {
+            "sessionId": "session_indy_nxt_2025_6449",
+            "seasonYear": 2025,
+            "trackName": "Portland International Raceway",
+            "venueSlug": "portland_international_raceway",
+            "startLap": 1,
+            "endLap": 3,
+            "durationLaps": 3,
+            "totalRaceLaps": 35,
+            "lapFraction": 0.0286,
+            "third": "opening",
+            "restartLap": 4,
+            "ranToFlag": false,
+            "category": "Contact"
+          },
+          {
+            "sessionId": "session_indy_nxt_2025_6448",
+            "seasonYear": 2025,
+            "trackName": "The Milwaukee Mile",
+            "venueSlug": "the_milwaukee_mile",
+            "startLap": 47,
+            "endLap": 52,
+            "durationLaps": 6,
+            "totalRaceLaps": 90,
+            "lapFraction": 0.5222,
+            "third": "middle",
+            "restartLap": 53,
+            "ranToFlag": false,
+            "category": "Contact"
+          },
+          {
+            "sessionId": "session_indy_nxt_2025_6447",
+            "seasonYear": 2025,
+            "trackName": "Nashville Superspeedway",
+            "venueSlug": "nashville_superspeedway",
+            "startLap": 32,
+            "endLap": 43,
+            "durationLaps": 12,
+            "totalRaceLaps": 65,
+            "lapFraction": 0.4923,
+            "third": "middle",
+            "restartLap": 44,
+            "ranToFlag": false,
+            "category": "Contact"
+          },
+          {
+            "sessionId": "session_indy_nxt_2026_6751",
+            "seasonYear": 2026,
+            "trackName": "Streets of St. Petersburg",
+            "venueSlug": "streets_of_st_petersburg",
+            "startLap": 1,
+            "endLap": 2,
+            "durationLaps": 2,
+            "totalRaceLaps": 42,
+            "lapFraction": 0.0238,
+            "third": "opening",
+            "restartLap": 3,
+            "ranToFlag": false,
+            "category": "Debris"
+          },
+          {
+            "sessionId": "session_indy_nxt_2026_6751",
+            "seasonYear": 2026,
+            "trackName": "Streets of St. Petersburg",
+            "venueSlug": "streets_of_st_petersburg",
+            "startLap": 6,
+            "endLap": 8,
+            "durationLaps": 3,
+            "totalRaceLaps": 42,
+            "lapFraction": 0.1429,
+            "third": "opening",
+            "restartLap": 9,
+            "ranToFlag": false,
+            "category": "Contact"
+          },
+          {
+            "sessionId": "session_indy_nxt_2026_6751",
+            "seasonYear": 2026,
+            "trackName": "Streets of St. Petersburg",
+            "venueSlug": "streets_of_st_petersburg",
+            "startLap": 17,
+            "endLap": 19,
+            "durationLaps": 3,
+            "totalRaceLaps": 42,
+            "lapFraction": 0.4048,
+            "third": "middle",
+            "restartLap": 20,
+            "ranToFlag": false,
+            "category": "Contact"
+          },
+          {
+            "sessionId": "session_indy_nxt_2026_6751",
+            "seasonYear": 2026,
+            "trackName": "Streets of St. Petersburg",
+            "venueSlug": "streets_of_st_petersburg",
+            "startLap": 21,
+            "endLap": 24,
+            "durationLaps": 4,
+            "totalRaceLaps": 42,
+            "lapFraction": 0.5,
+            "third": "middle",
+            "restartLap": 25,
+            "ranToFlag": false,
+            "category": "Contact"
+          },
+          {
+            "sessionId": "session_indy_nxt_2026_6753",
+            "seasonYear": 2026,
+            "trackName": "Streets of Arlington",
+            "venueSlug": "streets_of_arlington",
+            "startLap": 1,
+            "endLap": 4,
+            "durationLaps": 4,
+            "totalRaceLaps": 15,
+            "lapFraction": 0.0667,
+            "third": "opening",
+            "restartLap": 5,
+            "ranToFlag": false,
+            "category": "Contact"
+          },
+          {
+            "sessionId": "session_indy_nxt_2026_6753",
+            "seasonYear": 2026,
+            "trackName": "Streets of Arlington",
+            "venueSlug": "streets_of_arlington",
+            "startLap": 11,
+            "endLap": 11,
+            "durationLaps": 1,
+            "totalRaceLaps": 15,
+            "lapFraction": 0.7333,
+            "third": "final",
+            "restartLap": 12,
+            "ranToFlag": false,
+            "category": "Contact"
+          },
+          {
+            "sessionId": "session_indy_nxt_2026_6750",
+            "seasonYear": 2026,
+            "trackName": "Barber Motorsports Park",
+            "venueSlug": "barber_motorsports_park",
+            "startLap": 1,
+            "endLap": 3,
+            "durationLaps": 3,
+            "totalRaceLaps": 35,
+            "lapFraction": 0.0286,
+            "third": "opening",
+            "restartLap": 4,
+            "ranToFlag": false,
+            "category": "Contact"
+          },
+          {
+            "sessionId": "session_indy_nxt_2026_6750",
+            "seasonYear": 2026,
+            "trackName": "Barber Motorsports Park",
+            "venueSlug": "barber_motorsports_park",
+            "startLap": 28,
+            "endLap": 29,
+            "durationLaps": 2,
+            "totalRaceLaps": 35,
+            "lapFraction": 0.8,
+            "third": "final",
+            "restartLap": 30,
+            "ranToFlag": false,
+            "category": "Contact"
+          },
+          {
+            "sessionId": "session_indy_nxt_2026_6756",
+            "seasonYear": 2026,
+            "trackName": "Indianapolis Motor Speedway Road Course",
+            "venueSlug": "indianapolis_motor_speedway_road_course",
+            "startLap": 11,
+            "endLap": 15,
+            "durationLaps": 5,
+            "totalRaceLaps": 29,
+            "lapFraction": 0.3793,
+            "third": "middle",
+            "restartLap": 16,
+            "ranToFlag": false,
+            "category": "Conditions"
+          },
+          {
+            "sessionId": "session_indy_nxt_2026_6756",
+            "seasonYear": 2026,
+            "trackName": "Indianapolis Motor Speedway Road Course",
+            "venueSlug": "indianapolis_motor_speedway_road_course",
+            "startLap": 29,
+            "endLap": 29,
+            "durationLaps": 1,
+            "totalRaceLaps": 29,
+            "lapFraction": 1,
+            "third": "final",
+            "restartLap": null,
+            "ranToFlag": true,
+            "category": "Spin"
+          },
+          {
+            "sessionId": "session_indy_nxt_2026_6749",
+            "seasonYear": 2026,
+            "trackName": "Streets of Detroit",
+            "venueSlug": "streets_of_detroit",
+            "startLap": 1,
+            "endLap": 7,
+            "durationLaps": 7,
+            "totalRaceLaps": 42,
+            "lapFraction": 0.0238,
+            "third": "opening",
+            "restartLap": 8,
+            "ranToFlag": false,
+            "category": "Contact"
+          },
+          {
+            "sessionId": "session_indy_nxt_2026_6749",
+            "seasonYear": 2026,
+            "trackName": "Streets of Detroit",
+            "venueSlug": "streets_of_detroit",
+            "startLap": 26,
+            "endLap": 27,
+            "durationLaps": 2,
+            "totalRaceLaps": 42,
+            "lapFraction": 0.619,
+            "third": "middle",
+            "restartLap": 28,
+            "ranToFlag": false,
+            "category": "Debris"
+          },
+          {
+            "sessionId": "session_indy_nxt_2026_6749",
+            "seasonYear": 2026,
+            "trackName": "Streets of Detroit",
+            "venueSlug": "streets_of_detroit",
+            "startLap": 31,
+            "endLap": 33,
+            "durationLaps": 3,
+            "totalRaceLaps": 42,
+            "lapFraction": 0.7381,
+            "third": "final",
+            "restartLap": 34,
+            "ranToFlag": false,
+            "category": "Contact"
+          },
+          {
+            "sessionId": "session_indy_nxt_2026_6749",
+            "seasonYear": 2026,
+            "trackName": "Streets of Detroit",
+            "venueSlug": "streets_of_detroit",
+            "startLap": 40,
+            "endLap": 42,
+            "durationLaps": 3,
+            "totalRaceLaps": 42,
+            "lapFraction": 0.9524,
+            "third": "final",
+            "restartLap": null,
+            "ranToFlag": true,
+            "category": "Contact"
+          },
+          {
+            "sessionId": "session_indy_nxt_2026_6763",
+            "seasonYear": 2026,
+            "trackName": "World Wide Technology Raceway",
+            "venueSlug": "world_wide_technology_raceway",
+            "startLap": 5,
+            "endLap": 11,
+            "durationLaps": 7,
+            "totalRaceLaps": 75,
+            "lapFraction": 0.0667,
+            "third": "opening",
+            "restartLap": 12,
+            "ranToFlag": false,
+            "category": "Contact"
+          },
+          {
+            "sessionId": "session_indy_nxt_2026_6763",
+            "seasonYear": 2026,
+            "trackName": "World Wide Technology Raceway",
+            "venueSlug": "world_wide_technology_raceway",
+            "startLap": 54,
+            "endLap": 57,
+            "durationLaps": 4,
+            "totalRaceLaps": 75,
+            "lapFraction": 0.72,
+            "third": "final",
+            "restartLap": 58,
+            "ranToFlag": false,
+            "category": "Debris"
+          },
+          {
+            "sessionId": "session_indy_nxt_2026_6763",
+            "seasonYear": 2026,
+            "trackName": "World Wide Technology Raceway",
+            "venueSlug": "world_wide_technology_raceway",
+            "startLap": 61,
+            "endLap": 66,
+            "durationLaps": 6,
+            "totalRaceLaps": 75,
+            "lapFraction": 0.8133,
+            "third": "final",
+            "restartLap": 67,
+            "ranToFlag": false,
+            "category": "Contact"
+          },
+          {
+            "sessionId": "session_indy_nxt_2026_6762",
+            "seasonYear": 2026,
+            "trackName": "Road America",
+            "venueSlug": "road_america",
+            "startLap": 1,
+            "endLap": 3,
+            "durationLaps": 3,
+            "totalRaceLaps": 20,
+            "lapFraction": 0.05,
+            "third": "opening",
+            "restartLap": 4,
+            "ranToFlag": false,
+            "category": "Contact"
+          },
+          {
+            "sessionId": "session_indy_nxt_2026_6762",
+            "seasonYear": 2026,
+            "trackName": "Road America",
+            "venueSlug": "road_america",
+            "startLap": 5,
+            "endLap": 7,
+            "durationLaps": 3,
+            "totalRaceLaps": 20,
+            "lapFraction": 0.25,
+            "third": "opening",
+            "restartLap": 8,
+            "ranToFlag": false,
+            "category": "Contact"
+          },
+          {
+            "sessionId": "session_indy_nxt_2026_6762",
+            "seasonYear": 2026,
+            "trackName": "Road America",
+            "venueSlug": "road_america",
+            "startLap": 9,
+            "endLap": 10,
+            "durationLaps": 2,
+            "totalRaceLaps": 20,
+            "lapFraction": 0.45,
+            "third": "middle",
+            "restartLap": 11,
+            "ranToFlag": false,
+            "category": "Contact"
+          },
+          {
+            "sessionId": "session_indy_nxt_2026_6754",
+            "seasonYear": 2026,
+            "trackName": "Road America",
+            "venueSlug": "road_america",
+            "startLap": 6,
+            "endLap": 6,
+            "durationLaps": 1,
+            "totalRaceLaps": 18,
+            "lapFraction": 0.3333,
+            "third": "opening",
+            "restartLap": 7,
+            "ranToFlag": false,
+            "category": "Off course"
+          },
+          {
+            "sessionId": "session_indy_nxt_2026_6754",
+            "seasonYear": 2026,
+            "trackName": "Road America",
+            "venueSlug": "road_america",
+            "startLap": 15,
+            "endLap": 16,
+            "durationLaps": 2,
+            "totalRaceLaps": 18,
+            "lapFraction": 0.8333,
+            "third": "final",
+            "restartLap": 17,
+            "ranToFlag": false,
+            "category": "Contact"
+          },
+          {
+            "sessionId": "session_indy_nxt_2026_6761",
+            "seasonYear": 2026,
+            "trackName": "Mid-Ohio Sports Car Course",
+            "venueSlug": "mid_ohio",
+            "startLap": 5,
+            "endLap": 6,
+            "durationLaps": 2,
+            "totalRaceLaps": 35,
+            "lapFraction": 0.1429,
+            "third": "opening",
+            "restartLap": 7,
+            "ranToFlag": false,
+            "category": "Mechanical"
+          },
+          {
+            "sessionId": "session_indy_nxt_2026_6761",
+            "seasonYear": 2026,
+            "trackName": "Mid-Ohio Sports Car Course",
+            "venueSlug": "mid_ohio",
+            "startLap": 12,
+            "endLap": 13,
+            "durationLaps": 2,
+            "totalRaceLaps": 35,
+            "lapFraction": 0.3429,
+            "third": "middle",
+            "restartLap": 14,
+            "ranToFlag": false,
+            "category": "Mechanical"
+          },
+          {
+            "sessionId": "session_indy_nxt_2026_6761",
+            "seasonYear": 2026,
+            "trackName": "Mid-Ohio Sports Car Course",
+            "venueSlug": "mid_ohio",
+            "startLap": 22,
+            "endLap": 23,
+            "durationLaps": 2,
+            "totalRaceLaps": 35,
+            "lapFraction": 0.6286,
+            "third": "middle",
+            "restartLap": 24,
+            "ranToFlag": false,
+            "category": "Off course"
+          },
+          {
+            "sessionId": "session_indy_nxt_2026_6755",
+            "seasonYear": 2026,
+            "trackName": "Nashville Superspeedway",
+            "venueSlug": "nashville_superspeedway",
+            "startLap": 5,
+            "endLap": 13,
+            "durationLaps": 9,
+            "totalRaceLaps": 65,
+            "lapFraction": 0.0769,
+            "third": "opening",
+            "restartLap": 14,
+            "ranToFlag": false,
+            "category": "Contact"
+          },
+          {
+            "sessionId": "session_indy_nxt_2026_6755",
+            "seasonYear": 2026,
+            "trackName": "Nashville Superspeedway",
+            "venueSlug": "nashville_superspeedway",
+            "startLap": 18,
+            "endLap": 19,
+            "durationLaps": 2,
+            "totalRaceLaps": 65,
+            "lapFraction": 0.2769,
+            "third": "opening",
+            "restartLap": 20,
+            "ranToFlag": false,
+            "category": "Debris"
+          }
+        ],
+        "thirdsDefinition": "Opening / middle / final third by the lap each caution flew, over the race distance run.",
+        "caveats": [
+          "Counts of official caution episodes only — no lap times, no positions, no probabilities.",
+          "Which-third is the lap the caution flew over the race distance run; a race with no lap chart is counted but not placed in a third.",
+          "Cause categories group the official reason text; the raw reason is preserved and never editorialized.",
+          "Future and not-yet-official races are excluded so a venue's rate reflects only races actually run."
+        ],
+        "sourceRefs": [
+          {
+            "key": "cautionAtlasSummary",
+            "path": "analysis/caution-atlas/output/summary.json",
+            "note": "Validated caution-atlas coverage, totals, per-venue rollup, and hand-verification."
+          },
+          {
+            "key": "cautionAtlasByVenue",
+            "path": "analysis/caution-atlas/output/tables/caution_by_venue.csv",
+            "note": "Per-venue caution rollup for the Race Week module."
+          },
+          {
+            "key": "cautionAtlasByRace",
+            "path": "analysis/caution-atlas/output/tables/caution_by_race.csv",
+            "note": "Per-race caution counts, thirds, and official causes."
+          },
+          {
+            "key": "cautionAtlasEvents",
+            "path": "analysis/caution-atlas/output/tables/caution_events.csv",
+            "note": "One row per official caution episode, placed by the lap it flew."
+          },
+          {
+            "key": "canonicalDataset",
+            "path": "data/career/career.dataset.json",
+            "note": "Official Results-PDF caution summaries and official lap-chart distance."
           }
         ]
       },

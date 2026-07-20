@@ -76,6 +76,33 @@ export interface RaceStoryRestarts {
   caveat: string;
 }
 
+export interface RaceStoryCautionEvent {
+  cautionNumber: number | null;
+  startLap: number | null;
+  endLap: number | null;
+  durationLaps: number | null;
+  restartLap: number | null;
+  ranToFlag: boolean;
+  /** 'opening' | 'middle' | 'final' | 'unknown' — which third of the race it fell in. */
+  third: string;
+  /** Grouped official cause: Contact | Off course | Spin | Debris | Mechanical | Conditions. */
+  category: string;
+}
+
+/** The per-race caution line for "The day": counts of official caution episodes,
+ *  never lap times or positions. `precision: 'official-report'` today; a
+ *  per-second source could later refine the same shape with no UI rework. */
+export interface RaceStoryCautions {
+  precision: 'official-report';
+  count: number;
+  lapsUnderYellow: number;
+  totalRaceLaps: number | null;
+  thirds: { opening: number; middle: number; final: number };
+  categories: Array<{ category: string; count: number }>;
+  events: RaceStoryCautionEvent[];
+  caveat: string;
+}
+
 export interface RaceStoryPack {
   schemaVersion: string;
   type: 'race_story';
@@ -99,6 +126,7 @@ export interface RaceStoryPack {
   };
   inflections: RaceStoryInflection[];
   restarts: RaceStoryRestarts | null;
+  cautions: RaceStoryCautions | null;
   battles: Array<{
     driverName: string;
     carNumber: string | null;

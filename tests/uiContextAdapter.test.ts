@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { buildBryceCastUiContext } from '../src/data/uiContextAdapter';
 import { buildLiveBattleFrame, buildOfficialPointsWindow, headToHeadForCar, headToHeadForLiveDriver } from '../src/data/livePageModel';
+import { causeClause, causeFacts, causeMajority } from '../src/data/cautionCause';
 
 /* Venue-agnostic hydration invariants: counts come from the package itself,
    never from a hardcoded event slice, so schedule roll-forwards don't break CI. */
@@ -533,6 +534,43 @@ assert.ok(
     ),
     'within-team rank is a small result-order integer or absent'
   );
+}
+
+/* Caution cause copy (design-review law): render counted facts, and say "most"
+   ONLY when a single category is strictly more than half. Both cases asserted. */
+{
+  // Tie — never a verdict. Nashville 2026: one contact, one debris.
+  const tie = [
+    { category: 'Contact', count: 1 },
+    { category: 'Debris', count: 1 }
+  ];
+  assert.equal(causeMajority(tie), null, 'a 1–1 tie has no majority cause');
+  assert.equal(causeFacts(tie), '1 contact · 1 debris', 'tie renders counted facts');
+  assert.equal(causeClause(tie, ', '), '1 contact, 1 debris', 'tile clause joins ties with a comma');
+
+  // Bare plurality — also not a majority. Mid-Ohio: 2 contact, 2 mechanical, 1 off course.
+  const plurality = [
+    { category: 'Off course', count: 1 },
+    { category: 'Mechanical', count: 2 },
+    { category: 'Contact', count: 2 }
+  ];
+  assert.equal(causeMajority(plurality), null, 'a 2–2 lead is not strictly over half');
+  assert.equal(
+    causeFacts(plurality),
+    '2 contact · 2 mechanical · 1 off course',
+    'plurality renders counted facts, ordered by count then name'
+  );
+
+  // Strict majority — the one case "most" is earned. 3 of 4 is over half.
+  const majority = [
+    { category: 'Contact', count: 3 },
+    { category: 'Debris', count: 1 }
+  ];
+  assert.deepEqual(causeMajority(majority), { category: 'Contact', count: 3 }, '3 of 4 is a strict majority');
+  assert.equal(causeClause(majority), 'mostly contact', 'a strict majority earns "mostly"');
+
+  // Single category renders bare, never "mostly".
+  assert.equal(causeClause([{ category: 'Contact', count: 2 }]), 'contact', 'a lone cause renders bare');
 }
 
 console.log('ui context adapter hydration tests passed');

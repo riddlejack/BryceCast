@@ -70,6 +70,12 @@ const sources = {
   restartReportDriverDeltas: 'analysis/restart-report/output/tables/restart_driver_deltas.csv',
   restartReportBuilderScript: 'analysis/restart-report/scripts/build_restart_report.py',
   restartReportValidatorScript: 'analysis/restart-report/scripts/validate_restart_report.py',
+  cautionAtlasSummary: 'analysis/caution-atlas/output/summary.json',
+  cautionAtlasEvents: 'analysis/caution-atlas/output/tables/caution_events.csv',
+  cautionAtlasByRace: 'analysis/caution-atlas/output/tables/caution_by_race.csv',
+  cautionAtlasByVenue: 'analysis/caution-atlas/output/tables/caution_by_venue.csv',
+  cautionAtlasBuilderScript: 'analysis/caution-atlas/scripts/build_caution_atlas.py',
+  cautionAtlasValidatorScript: 'analysis/caution-atlas/scripts/validate_caution_atlas.py',
   predictiveSummary: 'analysis/predictive-race-intelligence/output/summary.json',
   predictiveInventory: 'analysis/predictive-race-intelligence/output/analytics_inventory_registry.json',
   predictiveModelScorecard: 'analysis/predictive-race-intelligence/output/model_scorecard.json',
@@ -215,6 +221,22 @@ const runRestartReport = () => {
   for (const script of [
     'analysis/restart-report/scripts/build_restart_report.py',
     'analysis/restart-report/scripts/validate_restart_report.py'
+  ]) {
+    const result = spawnSync(python, [script], { cwd: repoRoot, stdio: 'inherit' });
+    if (result.error) {
+      throw new Error(`Failed to run ${script} with ${python}: ${result.error.message}`);
+    }
+    if (result.status !== 0) {
+      throw new Error(`${script} exited ${result.status ?? 'without a status'} using ${python}`);
+    }
+  }
+};
+
+const runCautionAtlas = () => {
+  const python = analyticsPython();
+  for (const script of [
+    'analysis/caution-atlas/scripts/build_caution_atlas.py',
+    'analysis/caution-atlas/scripts/validate_caution_atlas.py'
   ]) {
     const result = spawnSync(python, [script], { cwd: repoRoot, stdio: 'inherit' });
     if (result.error) {
@@ -734,6 +756,52 @@ const buildRaceStoryRestartBlock = ({ events, raceRow }) => {
   };
 };
 
+/** The per-race caution line for "The day": how many yellows flew and how many
+ *  laps ran under caution, plus each episode's official cause and the third of
+ *  the race it fell in — descriptive counting, from the official caution
+ *  summary. Null when the race isn't in the atlas (not yet run / no summary). */
+const parseCategoriesString = (value) =>
+  String(value || '')
+    .split(';')
+    .filter(Boolean)
+    .map((part) => {
+      const [category, count] = part.split(':');
+      return { category, count: numberOrNull(count) ?? 0 };
+    });
+
+const buildRaceStoryCautionBlock = ({ events, raceRow }) => {
+  if (!raceRow) return null;
+  const count = numberOrNull(raceRow.cautionCount) ?? 0;
+  const eventBlocks = (events ?? [])
+    .slice()
+    .sort((left, right) => (numberOrNull(left.startLap) ?? 0) - (numberOrNull(right.startLap) ?? 0))
+    .map((row) => ({
+      cautionNumber: numberOrNull(row.cautionNumber),
+      startLap: numberOrNull(row.startLap),
+      endLap: numberOrNull(row.endLap),
+      durationLaps: numberOrNull(row.durationLaps),
+      restartLap: numberOrNull(row.restartLap),
+      ranToFlag: row.ranToFlag === 'true',
+      third: row.third,
+      category: row.category
+    }));
+  return {
+    precision: 'official-report',
+    count,
+    lapsUnderYellow: numberOrNull(raceRow.cautionLapsTotal) ?? 0,
+    totalRaceLaps: numberOrNull(raceRow.totalRaceLaps),
+    thirds: {
+      opening: numberOrNull(raceRow.openingThird) ?? 0,
+      middle: numberOrNull(raceRow.middleThird) ?? 0,
+      final: numberOrNull(raceRow.finalThird) ?? 0
+    },
+    categories: parseCategoriesString(raceRow.categories),
+    events: eventBlocks,
+    caveat:
+      'Full-course cautions from the official Results-PDF caution summary — counts of official caution episodes, not lap times or positions.'
+  };
+};
+
 const buildRaceStoryPacks = ({ raceDebriefPackPairs, canonicalDataset, canonicalSha256 }) => {
   const outputDir = path.join(repoRoot, 'analysis/race-story/output/context-packs');
   fs.mkdirSync(outputDir, { recursive: true });
@@ -771,6 +839,14 @@ const buildRaceStoryPacks = ({ raceDebriefPackPairs, canonicalDataset, canonical
     restartEventsBySession.get(row.sessionId).push(row);
   }
   const restartRaceBySession = new Map(restartRaceRows.map((row) => [row.sessionId, row]));
+  const cautionEventRows = readCsv(sources.cautionAtlasEvents);
+  const cautionRaceRows = readCsv(sources.cautionAtlasByRace);
+  const cautionEventsBySession = new Map();
+  for (const row of cautionEventRows) {
+    if (!cautionEventsBySession.has(row.sessionId)) cautionEventsBySession.set(row.sessionId, []);
+    cautionEventsBySession.get(row.sessionId).push(row);
+  }
+  const cautionRaceBySession = new Map(cautionRaceRows.map((row) => [row.sessionId, row]));
   const fieldStrengthRows = readCsv(sources.fieldStrengthByRace);
   const sectionRows = readCsv(sources.sectionResultsDeepByRace);
   const teamRows = readCsv(sources.teamContextByRace);
@@ -909,6 +985,10 @@ const buildRaceStoryPacks = ({ raceDebriefPackPairs, canonicalDataset, canonical
         events: restartEventsBySession.get(sessionId),
         raceRow: restartRaceBySession.get(sessionId)
       }),
+      cautions: buildRaceStoryCautionBlock({
+        events: cautionEventsBySession.get(sessionId),
+        raceRow: cautionRaceBySession.get(sessionId)
+      }),
       weather: weatherObservation
         ? {
             ambientTempC: numberOrNull(weatherObservation.ambientTempC),
@@ -985,7 +1065,8 @@ const buildRaceStoryPacks = ({ raceDebriefPackPairs, canonicalDataset, canonical
         { key: 'sectionResultsDeepByRace', path: sources.sectionResultsDeepByRace, note: 'Official section-time percentiles for the weekend.' },
         { key: 'teamContextByRace', path: sources.teamContextByRace, note: 'Teammate results within the same official session.' },
         { key: 'championshipProgression', path: sources.championshipProgression, note: 'Points and standing movement across the season.' },
-        { key: 'restartReportEvents', path: sources.restartReportEvents, note: 'Positions gained over the green laps after each official restart, Bryce vs the full field.' }
+        { key: 'restartReportEvents', path: sources.restartReportEvents, note: 'Positions gained over the green laps after each official restart, Bryce vs the full field.' },
+        { key: 'cautionAtlasByRace', path: sources.cautionAtlasByRace, note: 'Full-course cautions this race — count, laps under yellow, and official causes, from the caution summary.' }
       ],
       caveats: [
         'Lap chart shows official running order at each completed lap; it does not carry lap times or gaps.',
@@ -1445,6 +1526,93 @@ const buildRestartReport = ({ summary, byRaceRows, seasonIndex }) => {
       sourceRef('restartReportBySeason', 'Per-season restart rollup.'),
       sourceRef('restartReportEvents', 'One row per restart, Bryce against the full field.'),
       sourceRef('canonicalDataset', 'Official Results-PDF caution summaries and official lap-chart positions.')
+    ]
+  };
+};
+
+/* The caution atlas: a descriptive, per-venue count of full-course cautions —
+ * how many fell per race (median + range), where in the race they fell, the
+ * official causes (counted, never editorialized), and how long they ran. Feeds
+ * the Race Week "Cautions at this venue" module. Counting only, no modeling:
+ * gold is absent by design (a caution is not a Bryce moment). */
+const buildCautionAtlas = ({ summary, eventRows, byRaceRows, byVenueRows, seasonIndex }) => {
+  const seasonRowBySession = new Map((seasonIndex ?? []).map((row) => [row.sessionId, row]));
+  const events = (eventRows ?? []).map((row) => ({
+    sessionId: row.sessionId,
+    seasonYear: numberOrNull(row.seasonYear),
+    trackName: row.trackName,
+    venueSlug: row.venueSlug,
+    startLap: numberOrNull(row.startLap),
+    endLap: numberOrNull(row.endLap),
+    durationLaps: numberOrNull(row.durationLaps),
+    totalRaceLaps: numberOrNull(row.totalRaceLaps),
+    lapFraction: numberOrNull(row.lapFraction),
+    third: row.third,
+    restartLap: numberOrNull(row.restartLap),
+    ranToFlag: row.ranToFlag === 'true',
+    category: row.category
+  }));
+  const byRace = (byRaceRows ?? [])
+    .filter((row) => (numberOrNull(row.cautionCount) ?? 0) > 0)
+    .map((row) => {
+      const seasonRow = seasonRowBySession.get(row.sessionId) ?? null;
+      return {
+        sessionId: row.sessionId,
+        seasonYear: numberOrNull(row.seasonYear),
+        raceLabel: row.raceLabel,
+        trackName: row.trackName,
+        trackType: row.trackType,
+        venueSlug: row.venueSlug,
+        eventStartDate: row.eventStartDate || seasonRow?.eventStartDate || null,
+        totalRaceLaps: numberOrNull(row.totalRaceLaps),
+        cautionCount: numberOrNull(row.cautionCount),
+        cautionLapsTotal: numberOrNull(row.cautionLapsTotal),
+        opening: numberOrNull(row.openingThird),
+        middle: numberOrNull(row.middleThird),
+        final: numberOrNull(row.finalThird),
+        ranToFlagCount: numberOrNull(row.ranToFlagCount),
+        medianDurationLaps: numberOrNull(row.medianDurationLaps),
+        categories: parseCategoriesString(row.categories)
+      };
+    })
+    .sort((left, right) => dateMs(left.eventStartDate) - dateMs(right.eventStartDate) || String(left.sessionId).localeCompare(String(right.sessionId)));
+  const byVenue = (byVenueRows ?? []).map((row) => ({
+    venueSlug: row.venueSlug,
+    trackName: row.trackName,
+    trackType: row.trackType,
+    seasons: row.seasons,
+    races: numberOrNull(row.races),
+    cautions: numberOrNull(row.cautions),
+    medianPerRace: numberOrNull(row.medianPerRace),
+    minPerRace: numberOrNull(row.minPerRace),
+    maxPerRace: numberOrNull(row.maxPerRace),
+    meanPerRace: numberOrNull(row.meanPerRace),
+    opening: numberOrNull(row.openingThird),
+    middle: numberOrNull(row.middleThird),
+    final: numberOrNull(row.finalThird),
+    dominantThird: row.dominantThird || '',
+    ranToFlagCount: numberOrNull(row.ranToFlagCount),
+    medianDurationLaps: numberOrNull(row.medianDurationLaps),
+    categories: parseCategoriesString(row.categories)
+  }));
+  return {
+    schemaVersion: summary.schemaVersion,
+    precision: summary.method?.precision ?? 'official-report',
+    asOfDate: summary.asOfDate ?? null,
+    coverage: summary.coverage,
+    totals: summary.totals,
+    byVenue,
+    byRace,
+    events,
+    thirdsDefinition:
+      'Opening / middle / final third by the lap each caution flew, over the race distance run.',
+    caveats: summary.caveats ?? [],
+    sourceRefs: [
+      sourceRef('cautionAtlasSummary', 'Validated caution-atlas coverage, totals, per-venue rollup, and hand-verification.'),
+      sourceRef('cautionAtlasByVenue', 'Per-venue caution rollup for the Race Week module.'),
+      sourceRef('cautionAtlasByRace', 'Per-race caution counts, thirds, and official causes.'),
+      sourceRef('cautionAtlasEvents', 'One row per official caution episode, placed by the lap it flew.'),
+      sourceRef('canonicalDataset', 'Official Results-PDF caution summaries and official lap-chart distance.')
     ]
   };
 };
@@ -2224,6 +2392,10 @@ const buildPackage = () => {
   const careerAtlas = readJson(sources.careerAtlasOutput);
   const restartReportSummary = readJson(sources.restartReportSummary);
   const restartByRaceRows = readCsv(sources.restartReportByRace);
+  const cautionAtlasSummary = readJson(sources.cautionAtlasSummary);
+  const cautionAtlasEventRows = readCsv(sources.cautionAtlasEvents);
+  const cautionAtlasByRaceRows = readCsv(sources.cautionAtlasByRace);
+  const cautionAtlasByVenueRows = readCsv(sources.cautionAtlasByVenue);
   const predictiveChartRefs = (predictiveSummary.charts ?? []).map((chartPath) => summarizeArtifact(chartPath));
 
   const contextPackRefs = predictiveContextPackManifest.packs.map((pack) => ({
@@ -2514,6 +2686,13 @@ const buildPackage = () => {
         headToHead: buildCareerHeadToHead(headToHeadRows),
         lapPositionMix: buildLapPositionMix({ lapTimelineRows, canonicalDataset }),
         restarts: buildRestartReport({ summary: restartReportSummary, byRaceRows: restartByRaceRows, seasonIndex }),
+        cautionAtlas: buildCautionAtlas({
+          summary: cautionAtlasSummary,
+          eventRows: cautionAtlasEventRows,
+          byRaceRows: cautionAtlasByRaceRows,
+          byVenueRows: cautionAtlasByVenueRows,
+          seasonIndex
+        }),
         atlas: {
           schemaVersion: careerAtlas.schemaVersion,
           naturalEarth: careerAtlas.naturalEarth,
@@ -2695,6 +2874,7 @@ if (!skipUpstreamRefresh) {
 runCareerLifeStats();
 runCareerAtlas();
 runRestartReport();
+runCautionAtlas();
 const dataPackage = buildPackage();
 fs.writeFileSync(outputPath, `${JSON.stringify(dataPackage, null, 2)}\n`);
 console.log(JSON.stringify({ ok: true, wrote: path.relative(repoRoot, outputPath), schemaVersion: dataPackage.schemaVersion }, null, 2));
