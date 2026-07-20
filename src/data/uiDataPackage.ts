@@ -341,6 +341,13 @@ export interface UiQualifyingLayer {
     avgQualiRankConverted: number | null;
     avgFinishConverted: number | null;
   };
+  bestQualifying: {
+    rank: number;
+    occurrences: number;
+    seriesName: string | null;
+    seasonYear: number | null;
+    fieldSizes: number[];
+  } | null;
   sourceFamilyMap: Array<{
     seriesId: string;
     seriesName: string;

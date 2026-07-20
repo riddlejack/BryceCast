@@ -1474,12 +1474,28 @@ export const QualiConversion = () => {
   const career = layer.career;
   // Series that carry a grid column and so a real conversion, career-ordered.
   const rows = useMemo(() => (layer.bySeries ?? []).filter((row) => row.conversionRaces > 0), [layer.bySeries]);
-  // Series where qualifying is recorded but the source has no grid column: honest
-  // absence, named rather than hidden.
-  const recordedOnly = useMemo(
-    () => (layer.bySeries ?? []).filter((row) => row.conversionRaces === 0),
-    [layer.bySeries]
-  );
+
+  // The full partition, on the surface rather than in a conditional footer:
+  // how many races connect qualifying to the flag, and the four reasons the
+  // rest do not. All counts come from the validated coverage totals.
+  const coverage = layer.coverage;
+  const excluded = coverage.excludedReasons;
+  const exclusionLine = `${coverage.conversionRaces} of ${coverage.bryceRaces} races connect qualifying to the flag. The other ${coverage.excludedRaces}: ${excluded.no_grid_column} have no sourced grid, ${excluded.reverse_grid_no_quali_match} use a reverse grid, ${excluded.no_qualifying_in_event} have no qualifying result, and ${excluded.no_finish} have no classified finish.`;
+
+  // Best qualifying, with its context (series, year, how often, field sizes),
+  // read from the extended contract rather than hard-coded in the view.
+  const bestQuali = layer.bestQualifying;
+  const OCCURRENCE_WORDS: Record<number, string> = { 1: 'Once', 2: 'Twice', 3: 'Three times', 4: 'Four times', 5: 'Five times' };
+  const bestQualiNote = bestQuali
+    ? [
+        `${OCCURRENCE_WORDS[bestQuali.occurrences] ?? `${bestQuali.occurrences}×`}${
+          bestQuali.seriesName ? ` in ${bestQuali.seriesName}${bestQuali.seasonYear ? ` ${bestQuali.seasonYear}` : ''}` : ''
+        }`,
+        bestQuali.fieldSizes.length ? `fields of ${bestQuali.fieldSizes.join(' and ')}` : null
+      ]
+        .filter(Boolean)
+        .join(' · ')
+    : 'his sharpest qualifying';
 
   const n = rows.length;
   const height = 44 + n * 40;
@@ -1503,6 +1519,7 @@ export const QualiConversion = () => {
   const onMove = (event: React.MouseEvent<SVGSVGElement>) => {
     const bounds = svgRef.current?.getBoundingClientRect();
     if (!bounds) return;
+    const mouseX = event.clientX - bounds.left;
     const mouseY = event.clientY - bounds.top;
     let best: { index: number; distance: number } | null = null;
     for (let index = 0; index < n; index += 1) {
@@ -1513,8 +1530,18 @@ export const QualiConversion = () => {
       clearHover();
       return;
     }
-    setHovered(best.index);
     const row = rows[best.index];
+    // Gate on the row's horizontal bar bounds too (plus a small transparent hit
+    // pad), so the tooltip fires only over a lane's actual marks — not the empty
+    // gutter beside a short bar.
+    const HIT_PAD = 16;
+    const leftBound = centerX - row.finishedBehind * scale - HIT_PAD;
+    const rightBound = centerX + row.finishedAhead * scale + HIT_PAD;
+    if (mouseX < leftBound || mouseX > rightBound) {
+      clearHover();
+      return;
+    }
+    setHovered(best.index);
     const start =
       row.avgQualiRank != null
         ? `typically started P${Math.round(row.avgQualiRank)}${row.avgQualiFieldSize != null ? ` of ${Math.round(row.avgQualiFieldSize)}` : ''}`
@@ -1555,21 +1582,23 @@ export const QualiConversion = () => {
         Made up ground from his grid slot in {career.finishedAhead} of the {career.conversionRaces} races where qualifying set his start
         {career.held > 0 ? `, and held it in ${career.held} more` : ''}.
       </p>
+      <p className="caption caption--secondary" style={{ margin: '0 0 6px' }}>
+        {exclusionLine}
+      </p>
       <p style={{ margin: '0 0 14px', fontSize: 12, color: 'var(--ink-muted)' }}>
-        Qualifying is read from two sources — the official qualifying sheet where it exists, the session result where it does not —
-        and the two are never mixed within a weekend.
+        Each qualifying result uses one official source&mdash;the qualifying sheet when available, otherwise the session result.
       </p>
 
       <div className="grid grid--4" style={{ marginBottom: 18 }}>
         <Stat label="Qualifying sessions" value={career.qualifyingAppearances} note={`across ${layer.coverage.seriesWithQualifying} series`} />
-        <Stat label="Best start" value={career.bestQualiRank != null ? `P${career.bestQualiRank}` : '—'} note="his sharpest qualifying" />
+        <Stat label="Best qualifying" value={career.bestQualiRank != null ? `P${career.bestQualiRank}` : '—'} note={bestQualiNote} />
         <Stat label="Made up ground" value={`${career.finishedAhead} of ${career.conversionRaces}`} note="from his grid slot" />
         <Stat label="Held the slot" value={`${career.held} of ${career.conversionRaces}`} note="finished where he started" />
       </div>
 
       <p className="caption caption--secondary" style={{ margin: '0 0 8px' }}>
         One lane per chapter · the bar leans right for races he finished ahead of his grid slot, left for ground given back · length
-        by how many races · the count at each end, the weekend total on the right
+        by how many races · the count at each end, the chapter total on the right
       </p>
       <div ref={ref} style={{ width: '100%', position: 'relative' }}>
         {width > 0 ? (
@@ -1613,9 +1642,10 @@ export const QualiConversion = () => {
                   <text x={24} y={y + 3.5} textAnchor="start" fill="var(--ink-primary)" fontFamily={chartFont} fontSize={12}>
                     {seriesShort(row.seriesName)}
                   </text>
-                  {/* gave ground: left, faint ink (magnitude by length, not a second hue) */}
+                  {/* gave ground: left, solid neutral ink-muted (magnitude by length,
+                      not a second hue) — reads at 390px where 0.16 ink washed out */}
                   {row.finishedBehind > 0 ? (
-                    <rect x={centerX - behindW} y={y - barH / 2} width={behindW} height={barH} rx={2} fill="var(--ink-primary)" opacity={0.16} />
+                    <rect x={centerX - behindW} y={y - barH / 2} width={behindW} height={barH} rx={2} fill="var(--ink-muted)" />
                   ) : null}
                   {/* made up ground: right, chapter tint */}
                   {row.finishedAhead > 0 ? (
@@ -1645,17 +1675,6 @@ export const QualiConversion = () => {
         ) : null}
         {tip ? <ChartTipCard tip={tip} width={width} /> : null}
       </div>
-
-      {recordedOnly.length > 0 ? (
-        <p style={{ margin: '12px 0 0', fontSize: 11.5, color: 'var(--ink-muted)' }}>
-          {recordedOnly.map((row) => seriesShort(row.seriesName)).join(' and ')} qualifying is recorded too, but its source carries no
-          grid column — so those weekends stay out of the conversion rather than being estimated.
-        </p>
-      ) : (
-        <p style={{ margin: '12px 0 0', fontSize: 11.5, color: 'var(--ink-muted)' }}>
-          A race counts here only where the grid was set by qualifying; reverse-grid races start from a prior result and are left out.
-        </p>
-      )}
     </Card>
   );
 };

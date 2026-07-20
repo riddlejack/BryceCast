@@ -531,9 +531,9 @@
     },
     "uiDataPackageBuilderScript": {
       "path": "scripts/build-ui-data-package.mjs",
-      "bytes": 154091,
-      "modifiedAt": "2026-07-20T09:47:48.913Z",
-      "sha256": "4c8bc11a09f4bbc2917a7b6bd65410cd6490fff81f1fc50f74901680546afc7a"
+      "bytes": 155556,
+      "modifiedAt": "2026-07-20T10:43:15.779Z",
+      "sha256": "e90a716eaeb36fff6da9e54f9c2531711f5b9629c0de1e4ea0e7ab99253a466d"
     },
     "uiDataPackageValidatorScript": {
       "path": "scripts/validate-ui-data-package.mjs",
@@ -26137,6 +26137,16 @@
           "gridSettingSessions": 77,
           "held": 5,
           "qualifyingAppearances": 115
+        },
+        "bestQualifying": {
+          "rank": 1,
+          "occurrences": 2,
+          "seriesName": "Formula Ford",
+          "seasonYear": 2020,
+          "fieldSizes": [
+            16,
+            22
+          ]
         },
         "sourceFamilyMap": [
           {

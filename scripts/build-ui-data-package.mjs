@@ -1573,7 +1573,7 @@ const buildRestartReport = ({ summary, byRaceRows, seasonIndex }) => {
  * family is preserved on every row; the two families are never blended within a
  * session. Sized small for Brief M (per-series rollup + career, no per-race
  * spine on the wire). */
-const buildQualifyingLayer = ({ summary, conversionRows }) => {
+const buildQualifyingLayer = ({ summary, conversionRows, sessionRows }) => {
   const bySeriesSeason = (summary.bySeriesSeason ?? []).map((row) => ({
     seriesId: row.seriesId,
     seriesName: row.seriesName,
@@ -1649,10 +1649,38 @@ const buildQualifyingLayer = ({ summary, conversionRows }) => {
       finishedBehind: entry.finishedBehind
     }))
     .sort((left, right) => (left.firstSeason ?? 0) - (right.firstSeason ?? 0) || String(left.seriesId).localeCompare(String(right.seriesId)));
+  // Best qualifying, with the context the stat tile needs: how often that grid
+  // slot was reached, in which series/season, and against what field sizes.
+  // The per-race spine never rides the wire, so this is condensed from the
+  // qualifying inventory here rather than hard-coded in the view.
+  const bestQualifying = (() => {
+    const ranked = (sessionRows ?? [])
+      .map((row) => ({
+        rank: numberOrNull(row.qualiRank),
+        field: numberOrNull(row.qualiFieldSize),
+        seriesName: row.seriesName,
+        seasonYear: numberOrNull(row.seasonYear)
+      }))
+      .filter((row) => row.rank != null);
+    if (ranked.length === 0) return null;
+    const rank = Math.min(...ranked.map((row) => row.rank));
+    const at = ranked.filter((row) => row.rank === rank);
+    const seriesNames = [...new Set(at.map((row) => row.seriesName).filter(Boolean))];
+    const seasons = [...new Set(at.map((row) => row.seasonYear).filter((year) => year != null))].sort((a, b) => a - b);
+    const fieldSizes = at.map((row) => row.field).filter((size) => size != null).sort((a, b) => a - b);
+    return {
+      rank,
+      occurrences: at.length,
+      seriesName: seriesNames.length === 1 ? seriesNames[0] : null,
+      seasonYear: seasons.length === 1 ? seasons[0] : null,
+      fieldSizes
+    };
+  })();
   return {
     schemaVersion: summary.schemaVersion,
     coverage: summary.coverage,
     career: summary.career,
+    bestQualifying,
     sourceFamilyMap: summary.sourceFamilyMap ?? [],
     bySeries,
     bySeriesSeason,
@@ -2543,6 +2571,7 @@ const buildPackage = () => {
   const restartByRaceRows = readCsv(sources.restartReportByRace);
   const qualifyingLayerSummary = readJson(sources.qualifyingLayerSummary);
   const qualifyingLayerConversionRows = readCsv(sources.qualifyingLayerConversion);
+  const qualifyingLayerSessionRows = readCsv(sources.qualifyingLayerSessions);
   const cautionAtlasSummary = readJson(sources.cautionAtlasSummary);
   const cautionAtlasEventRows = readCsv(sources.cautionAtlasEvents);
   const cautionAtlasByRaceRows = readCsv(sources.cautionAtlasByRace);
@@ -2837,7 +2866,7 @@ const buildPackage = () => {
         headToHead: buildCareerHeadToHead(headToHeadRows),
         lapPositionMix: buildLapPositionMix({ lapTimelineRows, canonicalDataset }),
         restarts: buildRestartReport({ summary: restartReportSummary, byRaceRows: restartByRaceRows, seasonIndex }),
-        qualifyingLayer: buildQualifyingLayer({ summary: qualifyingLayerSummary, conversionRows: qualifyingLayerConversionRows }),
+        qualifyingLayer: buildQualifyingLayer({ summary: qualifyingLayerSummary, conversionRows: qualifyingLayerConversionRows, sessionRows: qualifyingLayerSessionRows }),
         cautionAtlas: buildCautionAtlas({
           summary: cautionAtlasSummary,
           eventRows: cautionAtlasEventRows,

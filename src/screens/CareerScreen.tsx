@@ -395,9 +395,6 @@ export const CareerScreen = ({ readiness }: { readiness?: ReadinessStatus }) => 
       </div>
       <CareerRestarts />
 
-      <div style={{ marginTop: 10 }}>
-        <span className="kicker">The qualifying</span>
-      </div>
       <QualiConversion />
 
       <OdometerCard live={readiness?.payload ?? null} />
