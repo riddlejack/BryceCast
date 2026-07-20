@@ -1,0 +1,4 @@
+# postrace:roll writes timestamped run reports here (JSON + human markdown).
+# They are ephemeral run logs — keep the directory tracked, ignore the reports.
+postrace-roll-*.json
+postrace-roll-*.md
