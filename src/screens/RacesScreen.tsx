@@ -347,6 +347,9 @@ const UpcomingRaceRow = ({ round }: { round: PlaceholderRound }) => (
   </div>
 );
 
+/* The remaining-season block no longer carries its own source control: its
+ * schedule entry and caveats fold into the season card's one SourcePill (see
+ * RacesScreen), so a single card keeps a single source drawer. */
 const RemainingSeason = ({ season, rounds }: { season: number; rounds: PlaceholderRound[] }) => (
   <div className="race-upcoming">
     <div className="race-upcoming__head">
@@ -354,20 +357,6 @@ const RemainingSeason = ({ season, rounds }: { season: number; rounds: Placehold
         The rest of {season} — {rounds.length} round{rounds.length === 1 ? '' : 's'} still to run. Each opens once it&rsquo;s been
         raced.
       </p>
-      <SourcePill
-        title={`Remaining ${season} rounds`}
-        entries={[
-          {
-            label: 'Remaining rounds · official schedule',
-            path: 'analysis/predictive-race-intelligence/output/context-packs/upcoming-events/',
-            note: 'Venue, date, and running order for the rounds still to come, from the upcoming-event context packs.'
-          }
-        ]}
-        caveats={[
-          'Round numbers continue from the last completed round; the season total is that round plus the rounds still scheduled.',
-          'These rounds have not been raced, so no result is shown and the row does not open yet.'
-        ]}
-      />
     </div>
     <div className="tower race-upcoming__list" style={{ margin: '4px -12px 0' }}>
       {rounds.map((round) => (
@@ -444,9 +433,28 @@ export const RacesScreen = () => {
                       label: 'Championship progression',
                       path: 'analysis/indy-nxt-discovery/output/deep_dive/tables/championship_progression.csv',
                       note: 'Standing after each round from official points progression.'
-                    }
+                    },
+                    // Folded in from the former remaining-season pill: the same
+                    // card now speaks with one source control.
+                    ...(remaining.length > 0
+                      ? [
+                          {
+                            label: 'Remaining rounds · official schedule',
+                            path: 'analysis/predictive-race-intelligence/output/context-packs/upcoming-events/',
+                            note: 'Venue, date, and running order for the rounds still to come, from the upcoming-event context packs.'
+                          }
+                        ]
+                      : [])
                   ]}
-                  caveats={['Standing is recorded after each round; mid-season rows shift as the season goes on.']}
+                  caveats={[
+                    'Standing is recorded after each round; mid-season rows shift as the season goes on.',
+                    ...(remaining.length > 0
+                      ? [
+                          'Round numbers continue from the last completed round; the season total is that round plus the rounds still scheduled.',
+                          'These rounds have not been raced, so no result is shown and the row does not open yet.'
+                        ]
+                      : [])
+                  ]}
                 />
               </span>
             }
