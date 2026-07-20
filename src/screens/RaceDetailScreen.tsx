@@ -15,7 +15,8 @@ import { loadPassMarks, resolvePassMarks, type PassMarksPack } from '../data/pas
 import { uiDataPackage } from '../data/uiDataPackage';
 import { causeClause } from '../data/cautionCause';
 import { SectionHeatCard, VenueYearsCard, validPriorComparison } from './sectionIntelligence';
-import { asNumber, asString, formatDate, formatGain, formatNumber, formatPosition, formatWind, ordinal } from '../app/format';
+import { asNumber, asString, formatDate, formatGain, formatNumber, formatPosition, formatWind, ordinal, shortVenue } from '../app/format';
+import { restartBaselineSentence, restartThinVenueNote } from '../data/restartBaseline';
 import { Link } from '../app/router';
 import { displayRaceLabel, loadDebriefBySessionId, roundIndexOf, type ArchiveEntry } from '../data/debriefArchive';
 import { loadRaceStory, type RaceStoryPack, type RaceStoryLapDriver } from '../data/raceStory';
@@ -718,6 +719,32 @@ const restartSourcePill = (
   />
 );
 
+/** The quiet field-baseline line (Brief K v2): the typical restart place-swing
+ *  across the whole field at this venue — the norm Bryce's figures read against.
+ *  Falls back to the series-wide baseline when the venue's sample is thin, and
+ *  always states its denominator. Venue resolved from the validated restart
+ *  report by this race's session id. */
+const RestartBaselineLine = ({ sessionId }: { sessionId: string }) => {
+  const report = uiDataPackage.screens.careerLab.restarts;
+  const field = report.fieldBaseline;
+  if (!field) return null;
+  const venueSlug = (report.byRace ?? []).find((row) => row.sessionId === sessionId)?.venueSlug ?? null;
+  const venueRow = venueSlug ? (report.venueBaselines ?? []).find((row) => row.venueSlug === venueSlug) ?? null : null;
+  const stableVenue = venueRow && venueRow.stable ? venueRow : null;
+  const sentence = restartBaselineSentence(stableVenue ?? field, stableVenue ? 'venue' : 'series');
+  if (!sentence) return null;
+  const thin =
+    !stableVenue && venueRow && venueRow.restarts > 0
+      ? restartThinVenueNote(shortVenue(venueRow.trackName), venueRow.restarts)
+      : null;
+  return (
+    <p style={{ margin: '12px 0 0', fontSize: 11.5, color: 'var(--ink-muted)' }}>
+      {sentence}
+      {thin ? ` · ${thin}` : ''}
+    </p>
+  );
+};
+
 const RestartsCard = ({ story }: { story: RaceStoryPack }) => {
   const restarts = story.restarts;
   if (!restarts) return null;
@@ -747,6 +774,7 @@ const RestartsCard = ({ story }: { story: RaceStoryPack }) => {
           The field took {detectedWord} restart{restarts.detected === 1 ? '' : 's'} this race; Bryce's lap-chart line doesn't
           reach them, so there's no restart read to show for him here.
         </p>
+        <RestartBaselineLine sessionId={story.sessionId} />
       </Card>
     );
   }
@@ -829,6 +857,8 @@ const RestartsCard = ({ story }: { story: RaceStoryPack }) => {
           );
         })}
       </div>
+
+      <RestartBaselineLine sessionId={story.sessionId} />
 
       <p style={{ margin: '14px 0 0', fontSize: 11.5, color: 'var(--ink-muted)' }}>
         Running order over the two green laps after each restart, Bryce against the full field

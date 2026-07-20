@@ -5,6 +5,7 @@ import { Card, Countdown, HeroPanel, SourcePill, Stat, Unavailable } from '../ap
 import { ChartTipCard, chartFont, focusFade, inkConnector, useMeasuredWidth, type ChartTip } from '../app/charts';
 import { TrackArt } from '../app/trackArt';
 import { asNumber, asString, formatClock, formatDate, formatGain, formatNumber, formatWind, ordinal, shortVenue, trackTypeLabel } from '../app/format';
+import { restartBaselineSentence, restartThinVenueNote } from '../data/restartBaseline';
 import { FactDelta } from '../app/weatherGlyphs';
 import { currentWindPill, observedAgoLabel, useEventWeather, type EventWeather } from '../app/useEventWeather';
 import { Link, useRouter } from '../app/router';
@@ -281,6 +282,31 @@ const restartMovePhrase = (net: number): string => (net > 0 ? `up ${net}` : net 
 const restartCountWord = (value: number): string =>
   ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'][value] ?? String(value);
 
+/** The quiet field-baseline line (Brief K v2): the typical restart place-swing
+ *  across the whole field at this venue, so Bryce's numbers read against a norm.
+ *  Falls back to the series-wide baseline when the venue's sample is too thin to
+ *  headline (< 3 restarts), and states its own denominator per house law. */
+const RestartBaselineLine = ({ trackName }: { trackName: string }) => {
+  const report = uiDataPackage.screens.careerLab.restarts;
+  const field = report.fieldBaseline;
+  if (!field) return null;
+  const target = trackName.trim().toLowerCase();
+  const venueRow = (report.venueBaselines ?? []).find((row) => row.trackName.trim().toLowerCase() === target) ?? null;
+  const stableVenue = venueRow && venueRow.stable ? venueRow : null;
+  const sentence = restartBaselineSentence(stableVenue ?? field, stableVenue ? 'venue' : 'series');
+  if (!sentence) return null;
+  // A venue with some — but too few — covered restarts says why it reads the
+  // series-wide norm instead of "here" (design review: honest thin-venue label).
+  const thin =
+    !stableVenue && venueRow && venueRow.restarts > 0 ? restartThinVenueNote(venueShort(trackName), venueRow.restarts) : null;
+  return (
+    <p style={{ margin: '10px 0 0', fontSize: 12, color: 'var(--ink-muted)' }}>
+      {sentence}
+      {thin ? ` · ${thin}` : ''}
+    </p>
+  );
+};
+
 /** "both times" / "every time" / "on three of five" — generalizes across venues
  *  without special-casing; a day with nothing to headline states the counts and
  *  lets the honest rows below carry the detail. */
@@ -344,6 +370,7 @@ const RestartPrior = ({ trackName }: { trackName: string }) => {
         {intro}
         {soleBest ? ' · best in the field on one of those days' : ''}.
       </p>
+      <RestartBaselineLine trackName={trackName} />
       <div className="stack" style={{ gap: 0, marginTop: 8 }}>
         {counted.map((row, index) => {
           const net = row.bryceNet ?? 0;
