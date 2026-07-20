@@ -1204,7 +1204,11 @@ export interface UiDataPackage {
   generatedAt: string;
   asOfDate: string;
   baselineCommit: string;
-  sourceInventory: Record<string, { path: string; bytes: number; modifiedAt: string; sha256: string }>;
+  sourceInventory: Record<string, { path: string; bytes: number; modifiedAt: string; sha256: string }> & {
+    /** Quali & Practice Lab run-by-run pack (Brief M), integrity-registered
+     *  (id + type + raw-byte sha256). Null when the package predates the lane. */
+    qualiLabContextPack?: { id: string; type: string; path: string; bytes: number; modifiedAt: string; sha256: string } | null;
+  };
   packageRules: string[];
   screens: {
     upcomingPrep: {

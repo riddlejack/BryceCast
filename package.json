@@ -52,6 +52,8 @@
     "analytics:gb3-deep-dive:validate": "python3 analysis/gb3-deep-dive/scripts/validate_gb3_deep_dive.py",
     "analytics:qualifying-layer": "python3 analysis/qualifying-layer/scripts/build_qualifying_layer.py",
     "analytics:qualifying-layer:validate": "python3 analysis/qualifying-layer/scripts/validate_qualifying_layer.py",
+    "analytics:quali-lab": "node analysis/quali-lab/scripts/build_quali_lab.mjs",
+    "analytics:quali-lab:validate": "node analysis/quali-lab/scripts/validate_quali_lab.mjs",
     "analytics:predictive-race-intelligence": "node scripts/run-predictive-race-intelligence.mjs",
     "analytics:ui-data-package": "node scripts/build-ui-data-package.mjs",
     "analytics:ui-data-package:validate": "node scripts/validate-ui-data-package.mjs",

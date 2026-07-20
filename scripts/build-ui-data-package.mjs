@@ -3378,7 +3378,16 @@ const buildPackage = () => {
   const sourceInventory = {
     ...Object.fromEntries(Object.entries(sources).map(([key, relativePath]) => [key, summarizeArtifact(relativePath)])),
     supplementalPrepSectionContextPack: supplementalPrepSectionRef,
-    supplementalRaceLapSectionContextPack: supplementalRaceLapSectionRef
+    supplementalRaceLapSectionContextPack: supplementalRaceLapSectionRef,
+    /* Quali & Practice Lab run-by-run pack (Brief M), integrity-registered like
+       the GB3 pack: the UI loader verifies raw-byte sha256 + id against THIS ref
+       at load time and fails closed. Null when the package predates the lane. */
+    qualiLabContextPack: (() => {
+      const relativePath = 'analysis/quali-lab/output/context-packs/quali-lab-context.json';
+      if (!fs.existsSync(path.join(repoRoot, relativePath))) return null;
+      const payload = readJson(relativePath);
+      return { id: payload.id, type: payload.type, ...summarizeArtifact(relativePath) };
+    })()
   };
 
   return {
