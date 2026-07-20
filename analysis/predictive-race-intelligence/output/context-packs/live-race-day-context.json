@@ -21,7 +21,7 @@
     "teamRadioAudio": false,
     "tireStrategy": false
   },
-  "generatedAt": "2026-07-20T05:24:17Z",
+  "generatedAt": "2026-07-20T05:50:19Z",
   "id": "live_race_day_context",
   "replayQuality": {
     "archiveState": "runtime_only",
@@ -48,10 +48,10 @@
       "sha256": "569bf18e1aae13d9f43aff10291509912c03e1ad1bbb0d9e53325bb4ff26e3ae"
     },
     {
-      "bytes": 105419,
+      "bytes": 106504,
       "path": "scripts/api-server.mjs",
       "role": "runtime API",
-      "sha256": "f302f8564e46857a41a5a5ca4366251a5f2015a8609f67f887d212ccc025ebd3"
+      "sha256": "130bb8cb782de3e68e3eaebc53a1e402f43500429e0ecc6223567bc21f3faf0c"
     },
     {
       "bytes": 4720,
