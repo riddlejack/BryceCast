@@ -26,7 +26,8 @@ import { loadSectionLaps, sectionLapVisitsFor, type SectionLapsPack } from '../d
 import { loadPassMarks, resolvePassMarks, type PassMarksPack } from '../data/passMarks';
 import { loadRaceStory } from '../data/raceStory';
 import { uiDataPackage } from '../data/uiDataPackage';
-import { ControlRow, Segmented } from './careerExplorer';
+import { ControlRow, Segmented, raceHref } from './careerExplorer';
+import { Link } from '../app/router';
 import { ordinal } from '../app/format';
 
 /* ============================================================================
@@ -223,7 +224,8 @@ export const SectionHeatCard = ({
   title = 'The track, section by section',
   orientationClause,
   visitControl,
-  visitLapsCompleted
+  visitLapsCompleted,
+  priorComparison
 }: {
   outline: TrackOutline;
   anchors: TrackSectionAnchorSet;
@@ -241,6 +243,10 @@ export const SectionHeatCard = ({
    *  it's zero — an opening-lap ending — the empty state states why with dignity
    *  instead of the generic too-few-clean-laps line. Absent on race pages. */
   visitLapsCompleted?: number | null;
+  /** When this race has NO valid comparison scope at all, the card collapses to
+   *  one dignified sentence and links here — a prior year that actually renders
+   *  (finding #16). Null hides the link; the sentence still stands. */
+  priorComparison?: { href: string; label: string } | null;
 }) => {
   const [scopeKey, setScopeKey] = useState('full');
   const [scrubLap, setScrubLap] = useState(1);
@@ -265,6 +271,15 @@ export const SectionHeatCard = ({
   }, [laps, scope, stat, fallbackSet]);
   const heatSections = useMemo(() => (set ? resolveHeatSections(anchors, set) : []), [anchors, set]);
   const hasHeat = heatSections.length > 0;
+  /* Does this race have ANY valid comparison scope? Resolve the full-race default
+   * independently of the selected scope — the full race carries the most clean
+   * laps, so if it can't shade, no narrower window can either. When it can't, the
+   * whole card collapses instead of showing a hollow outline + dead controls
+   * (finding #16). */
+  const noValidScope = useMemo(() => {
+    const fullSet = laps ? sectionObservationsFromLaps(laps, { kind: 'full_race' }, stat) : fallbackSet;
+    return !fullSet || resolveHeatSections(anchors, fullSet).length === 0;
+  }, [laps, stat, fallbackSet, anchors]);
   /* Pass marks are race-wide (scope-independent): each green Bryce pass joined
    * to the span it happened on, for the active anchor set. */
   const resolvedMarks = useMemo(() => (passMarks ? resolvePassMarks(anchors, passMarks) : []), [passMarks, anchors]);
@@ -335,6 +350,31 @@ export const SectionHeatCard = ({
       : scope.kind === 'lap_window'
         ? `${scope.label} · laps ${scope.fromLap}–${scope.toLap} · ${set.comparisonRows ?? 0} clean-lap comparisons`
         : `${set.comparisonRows ?? 0} clean-lap comparisons`;
+
+  /* No valid scope: one dignified sentence, no hollow outline, no dead controls
+   * (finding #16). The year toggle stays (it's navigation, not a scope control),
+   * and a prior year that actually renders is one tap away. */
+  if (noValidScope) {
+    const dignified =
+      visitLapsCompleted === 0
+        ? `His ${laps?.seasonYear ?? ''} visit ended on the opening lap — no clean laps to compare.`.replace(/\s{2,}/g, ' ')
+        : set
+          ? 'Too few clean laps here to compare sections.'
+          : 'No official section times are on file for this race yet.';
+    return (
+      <Card title={title} action={<SourcePill title="Section signal" entries={allEntries} caveats={sourceCaveats} />}>
+        {visitControl ? <div style={{ marginBottom: 12 }}>{visitControl}</div> : null}
+        <p style={{ margin: 0, fontSize: 13.5, color: 'var(--ink-secondary)' }}>{dignified}</p>
+        {priorComparison ? (
+          <p style={{ margin: '10px 0 0', fontSize: 13 }}>
+            <Link to={priorComparison.href} className="navlink" style={{ padding: 0 }}>
+              See {priorComparison.label} →
+            </Link>
+          </p>
+        ) : null}
+      </Card>
+    );
+  }
 
   return (
     <Card
@@ -528,31 +568,66 @@ export const SectionHeatCard = ({
   );
 };
 
-/* ---------- this place, other years (YoY shapes, same scale, same key) ---------- */
+/* ---------- this place, other years (YoY shapes, same key) ---------- */
+
+/** Each visit resolves against ITS OWN grain: a measured (lake) pack keeps the
+ *  venue's finer tiling; a PDF-tier pack keeps the venue's coarser PDF anchors —
+ *  never a finer set it can't match. This is what lets Nashville's 2026 3-section
+ *  PDF shape render beside its 8-loop measured years instead of a bare outline
+ *  that still claimed its clean-lap count (finding #17). */
+const anchorsForVisit = (pack: SectionLapsPack, fallback: TrackSectionAnchorSet): TrackSectionAnchorSet => {
+  if (pack.sourceTier === 'lake_loop_crossings') return measuredTrackSectionsFor(pack.venueName) ?? fallback;
+  const pdf = trackSectionsFor(pack.venueName);
+  return pdf && pdf.confidence === 'anchored' ? pdf : fallback;
+};
+
+/** The most recent OTHER visit at this venue whose section shape actually renders
+ *  — the honest destination for a collapsed hollow heat card (finding #16). */
+export const validPriorComparison = (
+  visits: SectionLapsPack[],
+  currentSessionId: string | null,
+  anchors: TrackSectionAnchorSet
+): { href: string; label: string } | null => {
+  const others = visits
+    .filter((visit) => visit.sessionId !== currentSessionId)
+    .sort((left, right) => (right.seasonYear ?? 0) - (left.seasonYear ?? 0));
+  for (const visit of others) {
+    const set = sectionObservationsFromLaps(visit, { kind: 'full_race' }, 'median');
+    if (resolveHeatSections(anchorsForVisit(visit, anchors), set).length > 0) {
+      const row = uiDataPackage.screens.raceDebrief.seasonIndex.find((entry) => entry.sessionId === visit.sessionId);
+      const raceNo = row?.raceLabel?.match(/Race (\d)/)?.[1];
+      return {
+        href: raceHref(visit.sessionId),
+        label: `his ${visit.seasonYear ?? 'earlier'}${raceNo ? ` Race ${raceNo}` : ''} race here`
+      };
+    }
+  }
+  return null;
+};
 
 const VisitShape = ({
   outline,
   anchors,
   pack,
-  lapsCompleted
+  lapsCompleted,
+  label,
+  grainNote
 }: {
   outline: TrackOutline;
+  /** Pre-resolved to THIS visit's own grain by the parent. */
   anchors: TrackSectionAnchorSet;
   pack: SectionLapsPack;
   /** Canonical laps Bryce completed this visit; zero means the caption states an
    *  opening-lap ending instead of a bare "0 clean-lap comparisons". */
   lapsCompleted?: number | null;
+  /** Disambiguated year label — "2026 · Race 1" on a double-header, else the year. */
+  label?: string;
+  /** When the venue's visits carry mixed grains, each shape states its own section
+   *  count so no reader assumes one scale across all the years. */
+  grainNote?: string | null;
 }) => {
   const set = useMemo(() => sectionObservationsFromLaps(pack, { kind: 'full_race' }, 'median'), [pack]);
-  /* Each visit joins the anchor set matching ITS OWN pack's grain — a lake
-   * loop-crossing year keeps the venue's finer measured tiling even when the
-   * page's own race is PDF-tier (Nashville 2026 beside its 2024/2025 visits).
-   * Without this, mixed-tier venues rendered prior years as bare outlines. */
-  const anchorsForPack = useMemo(
-    () => (pack.sourceTier === 'lake_loop_crossings' ? measuredTrackSectionsFor(pack.venueName) ?? anchors : anchors),
-    [pack, anchors]
-  );
-  const resolved = useMemo(() => resolveHeatSections(anchorsForPack, set), [anchorsForPack, set]);
+  const resolved = useMemo(() => resolveHeatSections(anchors, set), [anchors, set]);
   /* Orientation, not a second question (director ruling): each year carries its
    * official result as quiet label text from the synchronous season index. */
   const indexRow = uiDataPackage.screens.raceDebrief.seasonIndex.find((row) => row.sessionId === pack.sessionId) ?? null;
@@ -567,13 +642,18 @@ const VisitShape = ({
       <TrackArt outline={outline} showCornerLabels={false} maxHeight={170} sections={resolved.length > 0 ? { resolved } : null} />
       <div className="row row--between" style={{ alignItems: 'baseline' }}>
         <span style={{ fontSize: 13 }}>
-          <strong style={{ fontWeight: 600 }}>{pack.seasonYear ?? '—'}</strong>
+          <strong style={{ fontWeight: 600 }}>{label ?? (pack.seasonYear !== null ? String(pack.seasonYear) : '—')}</strong>
           {resultLabel ? <span className="tnum" style={{ color: 'var(--ink-secondary)' }}> · {resultLabel}</span> : null}
         </span>
         <span className="tnum" style={{ fontSize: 11.5, color: 'var(--ink-muted)' }}>
-          {lapsCompleted === 0 ? 'ended on the opening lap' : `${set.comparisonRows ?? 0} clean-lap comparisons`}
+          {lapsCompleted === 0
+            ? 'ended on the opening lap'
+            : resolved.length === 0
+              ? 'too few clean laps per section'
+              : `${set.comparisonRows ?? 0} clean-lap comparisons`}
         </span>
       </div>
+      {grainNote ? <span className="caption caption--secondary" style={{ fontSize: 11 }}>{grainNote}</span> : null}
     </div>
   );
 };
@@ -599,6 +679,45 @@ export const VenueYearsCard = ({
 }) => {
   if (visits.length < 2) return null;
   const measured = visits.every((visit) => visit.sourceTier === 'lake_loop_crossings');
+
+  /* Per-visit labels: a double-header year ("2026 · Race 1" / "2026 · Race 2")
+   * never renders two bare "2026" shapes (finding #18). Prefer the official race
+   * number from the label; fall back to chronological order (visits oldest-first). */
+  const visitLabels = (() => {
+    const yearCounts = new Map<number, number>();
+    for (const visit of visits) {
+      if (visit.seasonYear !== null) yearCounts.set(visit.seasonYear, (yearCounts.get(visit.seasonYear) ?? 0) + 1);
+    }
+    const seen = new Map<number, number>();
+    const out = new Map<string, string>();
+    for (const visit of visits) {
+      const year = visit.seasonYear;
+      if (year === null) {
+        out.set(visit.sessionId, '—');
+        continue;
+      }
+      if ((yearCounts.get(year) ?? 0) <= 1) {
+        out.set(visit.sessionId, String(year));
+        continue;
+      }
+      const raceMatch = /race\s*(\d+)/i.exec(visit.raceLabel ?? '');
+      if (raceMatch) {
+        out.set(visit.sessionId, `${year} · Race ${raceMatch[1]}`);
+        continue;
+      }
+      const next = (seen.get(year) ?? 0) + 1;
+      seen.set(year, next);
+      out.set(visit.sessionId, `${year} · Race ${next}`);
+    }
+    return out;
+  })();
+
+  /* Each visit draws at its own grain; when those grains differ across the years
+   * the card can't honestly claim one scale, so each shape states its own count
+   * and the copy drops the "same scale" promise (finding #17). */
+  const visitAnchors = new Map(visits.map((visit) => [visit.sessionId, anchorsForVisit(visit, anchors)]));
+  const mixedGrain = new Set([...visitAnchors.values()].map((set) => measuredSectionCount(set))).size > 1;
+
   return (
     <Card
       title={title}
@@ -615,35 +734,50 @@ export const VenueYearsCard = ({
               : {
                   label: 'Official Section Results, lap by lap',
                   path: 'analysis/indy-nxt-race-lap-section-enhancement/output/race_section_lap_observations.csv',
-                  note: 'Each year aggregates its own race on the same scale: median clean-lap percentile per section.'
+                  note: mixedGrain
+                    ? 'Each year aggregates its own race: median clean-lap percentile per section, drawn at the finest grain that year’s timing carried.'
+                    : 'Each year aggregates its own race on the same scale: median clean-lap percentile per section.'
                 }
           ]}
-          caveats={['Different years can carry different field sizes and caution patterns; each shape states its own denominator.']}
+          caveats={[
+            mixedGrain
+              ? 'Different years can carry different field sizes, caution patterns, and section grains; each shape states its own denominator and section count.'
+              : 'Different years can carry different field sizes and caution patterns; each shape states its own denominator.'
+          ]}
         />
       }
     >
       <p style={{ margin: '0 0 12px', fontSize: 13.5, color: 'var(--ink-secondary)' }}>
-        The same shape, one per visit — same scale, same key as above.
+        {mixedGrain
+          ? 'The same shape, one per visit — same key as above; each drawn at the finest grain its own timing carried.'
+          : 'The same shape, one per visit — same scale, same key as above.'}
       </p>
       <div className="row row--between" style={{ gap: 10, flexWrap: 'wrap', marginBottom: 12 }}>
         <HeatKey />
-        <span className="tnum" style={{ fontSize: 11.5, color: 'var(--ink-muted)' }}>
-          {measuredSectionCount(anchors)} timed sections ·{' '}
-          {hasDerivedRemainder(anchors)
-            ? `${Math.round(timedShareOf(anchors) * 100)}% measured · rest derived`
-            : `${Math.round(timedShareOf(anchors) * 100)}% of the lap`}
-        </span>
+        {mixedGrain ? null : (
+          <span className="tnum" style={{ fontSize: 11.5, color: 'var(--ink-muted)' }}>
+            {measuredSectionCount(anchors)} timed sections ·{' '}
+            {hasDerivedRemainder(anchors)
+              ? `${Math.round(timedShareOf(anchors) * 100)}% measured · rest derived`
+              : `${Math.round(timedShareOf(anchors) * 100)}% of the lap`}
+          </span>
+        )}
       </div>
       <div className="row" style={{ gap: 22, flexWrap: 'wrap', alignItems: 'flex-start' }}>
-        {visits.map((pack) => (
-          <VisitShape
-            key={pack.sessionId}
-            outline={outline}
-            anchors={anchors}
-            pack={pack}
-            lapsCompleted={lapsCompletedBySession?.get(pack.sessionId) ?? null}
-          />
-        ))}
+        {visits.map((pack) => {
+          const packAnchors = visitAnchors.get(pack.sessionId) ?? anchors;
+          return (
+            <VisitShape
+              key={pack.sessionId}
+              outline={outline}
+              anchors={packAnchors}
+              pack={pack}
+              lapsCompleted={lapsCompletedBySession?.get(pack.sessionId) ?? null}
+              label={visitLabels.get(pack.sessionId)}
+              grainNote={mixedGrain ? `${measuredSectionCount(packAnchors)} timed sections` : null}
+            />
+          );
+        })}
       </div>
     </Card>
   );
@@ -814,6 +948,7 @@ export const VenueSectionSuite = ({
         fallbackSet={null}
         passMarks={passMarks}
         visitLapsCompleted={lapsCompletedBySession.get(selected.sessionId) ?? null}
+        priorComparison={validPriorComparison(visits, selected.sessionId, anchors)}
       />
       <VenueYearsCard
         title="The track, year over year"

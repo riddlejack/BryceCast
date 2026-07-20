@@ -126,8 +126,9 @@ const WithinTeamStrip = ({ pack }: { pack: Gb3DeepDivePack }) => {
                 no result
               </text>
             ) : null}
-            {/* per-race marks: gold only where the story lives — the races he
-              * led the team's cars home; the rest in quiet ink. */}
+            {/* per-race marks: the GB3 chapter color marks the races he led the
+              * team's cars home; the rest in quiet ink. Brand gold stays reserved
+              * for Bryce/the current chapter — GB3 speaks in its own era hue. */}
             {rows.map((row, index) => {
               const cx = x(index);
               if (row.bryceWithinTeamRank === null) {
@@ -157,7 +158,7 @@ const WithinTeamStrip = ({ pack }: { pack: Gb3DeepDivePack }) => {
                   cx={cx}
                   cy={cy}
                   r={3.6}
-                  fill={led ? 'var(--bryce)' : 'var(--ink-primary)'}
+                  fill={led ? 'var(--chapter-gb3)' : 'var(--ink-primary)'}
                   fillOpacity={led || hoveredId === row.sessionId ? 1 : 0.38}
                   style={{ cursor: 'pointer', transition: 'fill-opacity 150ms ease' }}
                   onMouseEnter={() => {
@@ -177,7 +178,7 @@ const WithinTeamStrip = ({ pack }: { pack: Gb3DeepDivePack }) => {
         {tip ? <ChartTipCard tip={tip} width={width} /> : null}
       </div>
       <p className="gb3-caption">
-        Gold = races he led the team’s cars home · result order only — where he placed among his own cars, not a read on
+        Amber = races he led the team’s cars home · result order only — where he placed among his own cars, not a read on
         machinery, setup, or strategy.
         {unclassified > 0 ? ` ${unclassified} of ${rows.length} races have no classified result (shown open).` : ''} Click any
         race to open it.
@@ -212,7 +213,7 @@ const QualifyingToRace = ({ pack }: { pack: Gb3DeepDivePack }) => {
   const leftX = 94;
   const rightX = Math.max(width - 94, leftX + 60);
   const y = (position: number) => top + ((position - 1) / (maxPos - 1)) * plotH;
-  const gainColor = (row: Gb3RaceResult) => ((row.positionGain ?? 0) > 0 ? 'var(--bryce)' : 'var(--ink-muted)');
+  const gainColor = (row: Gb3RaceResult) => ((row.positionGain ?? 0) > 0 ? 'var(--chapter-gb3)' : 'var(--ink-muted)');
 
   const tipFor = (row: Gb3RaceResult): ChartTip => {
     const gain = row.positionGain ?? 0;
@@ -291,7 +292,7 @@ const QualifyingToRace = ({ pack }: { pack: Gb3DeepDivePack }) => {
         {tip ? <ChartTipCard tip={tip} width={width} /> : null}
       </div>
       <p className="gb3-caption">
-        Each line is one race, grid to flag · gold marks a race he gained ground · P1 sits at the top. Grid data is unavailable
+        Each line is one race, grid to flag · amber marks a race he gained ground · P1 sits at the top. Grid data is unavailable
         for 2022’s official feed, so 2022 starts aren’t shown. Click a line to open the race.
       </p>
     </div>

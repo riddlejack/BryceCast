@@ -66,7 +66,7 @@ const ChapterContext = ({ row, chapterRows }: { row: CareerRow; chapterRows: Car
               />
             );
           })}
-          <rect x={x(median) - 1.75} y={axisY - 9} width={3.5} height={18} rx={1.75} fill="var(--bryce)" />
+          <rect x={x(median) - 1.75} y={axisY - 9} width={3.5} height={18} rx={1.75} fill="var(--ink-primary)" />
           <text x={10} y={height - 2} fill="var(--ink-muted)" fontFamily={chartFont} fontSize={9.5}>
             tougher days
           </text>
@@ -189,7 +189,7 @@ export const CareerRaceScreen = ({ sessionId }: { sessionId: string }) => {
         </p>
         <ChapterContext row={row} chapterRows={chapterRows} />
         <p className="caption caption--secondary" style={{ margin: '4px 0 0' }}>
-          Gold tick marks the chapter median · ○ a day that ended early · click any other dot to open its race
+          The ink tick marks the chapter median · ○ a day that ended early · click any other dot to open its race
         </p>
         <div className="row row--between row--wrap" style={{ marginTop: 12, gap: 8 }}>
           {previous ? (

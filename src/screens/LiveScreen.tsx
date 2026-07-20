@@ -950,8 +950,14 @@ const GapTrend = ({ history }: { history: LiveSessionHistory | null }) => {
 const WaitingState = ({ payload }: { payload: LiveReadiness }) => {
   const copy = readinessCopy[payload.state];
   const nextSession = useNextSession();
-  const heartbeat = heartbeatOf(payload);
-  const onTrackNow = payload.state === 'wrong_series' ? asString(heartbeat.eventName) : null;
+  /* Name the actual series on track (from the primary timing endpoint), never the
+   * event/location — "Detroit" is a place, not a series. Unknown → drop the claim
+   * rather than mislabel it (finding #22). */
+  const timingEndpoints = ((payload.sources as Record<string, unknown> | undefined)?.endpoints as Array<Row> | undefined) ?? [];
+  const seriesOnTrack =
+    payload.state === 'wrong_series'
+      ? asString(timingEndpoints.find((endpoint) => asString(endpoint.role) === 'primary_timing')?.series)
+      : null;
   return (
     <HeroPanel>
       <div className="row row--between" style={{ alignItems: 'flex-start' }}>
@@ -962,7 +968,7 @@ const WaitingState = ({ payload }: { payload: LiveReadiness }) => {
         <SourcePill title="Live waiting state" entries={[{ label: 'Product readiness reducer', path: '/api/readiness', note: payload.reason }]} />
       </div>
       <p style={{ margin: '14px 0 0', fontSize: 15, color: 'var(--ink-secondary)', maxWidth: '62ch' }}>
-        {copy?.detail ?? payload.reason}{onTrackNow ? ` Race Control is currently showing ${onTrackNow}.` : ''}
+        {copy?.detail ?? payload.reason}{seriesOnTrack ? ` The ${seriesOnTrack} is on track now.` : ''}
       </p>
       {nextSession?.startsAt && new Date(nextSession.startsAt).getTime() > Date.now() ? (
         <div style={{ marginTop: 20 }}>
@@ -1128,11 +1134,16 @@ const ReplayBar = ({ replay, payload }: { replay: ReplaySession; payload: LiveRe
   return (
     <section className="replay-bar" aria-label="Race replay controls" data-replay-speed={replay.speed}>
       <div className="replay-bar__id">
-        <span className="replay-bar__chip"><History size={13} aria-hidden /> Replay</span>
-        <span className="replay-bar__where">
-          {venue}
-          {year} · <span className="replay-bar__speed-read">{replay.speed}×</span>
-        </span>
+        {/* Identity and provenance sit on their own rows so neither truncates —
+            "Detroit 2026 · 4×" and "third-party normalized (Timing71)" both read
+            in full at every width (finding #21). */}
+        <div className="replay-bar__identity">
+          <span className="replay-bar__chip"><History size={13} aria-hidden /> Replay</span>
+          <span className="replay-bar__where">
+            {venue}
+            {year} · <span className="replay-bar__speed-read">{replay.speed}×</span>
+          </span>
+        </div>
         <span
           className="replay-bar__tier"
           data-replay-tier={prov.tier}
@@ -1369,13 +1380,11 @@ export const LiveScreen = ({
           </div>
         </>
       ) : (
-        <>
-          <WaitingState payload={payload} />
-          <div className="grid live-layout">
-            <PointsJumbotron payload={payload} />
-            <GapTrend history={history} />
-          </div>
-        </>
+        /* Bryce's session isn't active: no live outcome or gap to project, so the
+         * two projection modules collapse into the single protected-state card
+         * (finding #22). Exit replay (the bar above, during a replay) and Race
+         * Week (inside the card) are the prioritized ways out. */
+        <WaitingState payload={payload} />
       )}
       {replayActive ? null : <WatchAlong payload={payload} />}
     </div>

@@ -496,7 +496,7 @@ export const ChapterStrip = ({ seriesName }: { seriesName: string }) => {
               onClick={() => navigate(raceHref(row.sessionId))}
             />
           ))}
-          <rect x={x(median) - 1.75} y={axisY - 9} width={3.5} height={18} rx={1.75} fill="var(--bryce)" />
+          <rect x={x(median) - 1.75} y={axisY - 9} width={3.5} height={18} rx={1.75} fill="var(--ink-primary)" />
           <text x={8} y={height - 1} fill="var(--ink-muted)" fontFamily={chartFont} fontSize={9.5}>
             tougher days
           </text>
@@ -810,7 +810,7 @@ const GroupedStrips = ({ rows, groupBy }: { rows: CareerRow[]; groupBy: GroupBy 
                     />
                   );
                 })}
-                <rect x={x(median) - 1.75} y={rowY - 10} width={3.5} height={20} rx={1.75} fill="var(--bryce)" />
+                <rect x={x(median) - 1.75} y={rowY - 10} width={3.5} height={20} rx={1.75} fill="var(--ink-primary)" />
                 <text
                   x={width - 6}
                   y={rowY}
@@ -959,7 +959,7 @@ export const CareerExplorer = () => {
                 · typical day beat <strong style={{ color: 'var(--ink-primary)' }}>{medianPct}%</strong> of the field
               </>
             ) : null}
-            . Gold ticks mark each group’s median.
+            . Ink ticks mark each group’s median.
           </p>
           <GroupedStrips rows={filtered} groupBy={groupBy} />
           <p className="caption caption--secondary" style={{ margin: '6px 0 0' }}>
@@ -1256,7 +1256,7 @@ const ConditionLane = ({
           onClick={() => navigate(raceHref(row.sessionId))}
         />
       ))}
-      <rect x={x(median) - 1.75} y={axisY - 9} width={3.5} height={18} rx={1.75} fill="var(--bryce)" />
+      <rect x={x(median) - 1.75} y={axisY - 9} width={3.5} height={18} rx={1.75} fill="var(--ink-primary)" />
     </svg>
   );
 };
@@ -1371,8 +1371,8 @@ export const CareerRestarts = () => {
       </div>
 
       <p className="caption caption--secondary" style={{ margin: '0 0 8px' }}>
-        Every race with a restart a dot · higher = more ground made up · the dashed line is the field's typical restart · gold =
-        days he out-restarted the field's typical move
+        Every race with a restart a dot · higher = more ground made up · the dashed line is the field's typical restart · the
+        fuller dots are days he out-restarted the field's typical move
         {races.some((row) => row.soleBestInField) ? ' · a ring marks a best-in-field day' : ''} · click a dot to open its race
       </p>
       <div ref={ref} style={{ width: '100%', position: 'relative' }}>
@@ -1404,18 +1404,20 @@ export const CareerRestarts = () => {
               const restartCount = row.bryceRestartsCounted ?? 0;
               const radius = 3.5 + Math.sqrt(restartCount) * 1.5;
               const focused = hovered === null || hovered === index;
-              /* Color budget: ink is the default; gold is spent only on the days
-               * he out-restarted the field's typical move (computed in the lane,
-               * keyed in the caption). The one best-in-field day gets a ring. */
-              const gold = row.bryceBeatFieldTypical;
+              /* Color budget: this is all Bryce, so it stays in one ink. Polarity
+               * — the days he out-restarted the field's typical move — is carried
+               * in weight, not hue: those dots sit fuller, the rest recede. Gold is
+               * reserved for Bryce's marker elsewhere; here it would be a second
+               * meaning. The one best-in-field day gets a ring. */
+              const beatTypical = row.bryceBeatFieldTypical;
               return (
                 <g key={row.sessionId}>
                   <circle
                     cx={x(index)}
                     cy={y(net)}
                     r={hovered === index ? radius + 1.5 : radius}
-                    fill={gold ? 'var(--bryce)' : 'var(--ink-primary)'}
-                    opacity={focused ? (gold ? 0.92 : 0.55) : 0.22}
+                    fill="var(--ink-primary)"
+                    opacity={focused ? (beatTypical ? 0.92 : 0.4) : 0.2}
                     stroke="#fff"
                     strokeWidth={0.75}
                   />
@@ -1512,7 +1514,7 @@ export const RainDays = () => {
         ) : null}
       </div>
       <p className="caption caption--secondary" style={{ margin: 'auto 0 0', paddingTop: 10 }}>
-        Gold ticks mark each lane’s median · ○ a day that ended early · click any dot to open its race
+        Ink ticks mark each lane’s median · ○ a day that ended early · click any dot to open its race
       </p>
     </Card>
   );

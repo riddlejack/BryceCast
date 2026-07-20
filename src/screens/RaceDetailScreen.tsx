@@ -13,7 +13,7 @@ import {
 import { loadSectionLaps, sectionLapVisitsFor, type SectionLapsPack } from '../data/sectionLaps';
 import { loadPassMarks, resolvePassMarks, type PassMarksPack } from '../data/passMarks';
 import { uiDataPackage } from '../data/uiDataPackage';
-import { SectionHeatCard, VenueYearsCard } from './sectionIntelligence';
+import { SectionHeatCard, VenueYearsCard, validPriorComparison } from './sectionIntelligence';
 import { asNumber, asString, formatDate, formatGain, formatNumber, formatPosition, formatWind, ordinal } from '../app/format';
 import { Link } from '../app/router';
 import { displayRaceLabel, loadDebriefBySessionId, roundIndexOf, type ArchiveEntry } from '../data/debriefArchive';
@@ -21,7 +21,7 @@ import { loadRaceStory, type RaceStoryPack, type RaceStoryLapDriver } from '../d
 import { getVenueBySessionId, pastVisits } from '../data/venueDossier';
 import { FactDelta } from '../app/weatherGlyphs';
 import type { UiVenueDossierVenue, UiVenueDossierVisit } from '../data/uiDataPackage';
-import { watchableCaptureForRace, replayProvenance, priorYearReplaysAtVenue } from '../data/replayAvailable';
+import { watchableCaptureForRace, replayProvenance, priorYearReplaysAtVenue, type ReplaySessionInfo } from '../data/replayAvailable';
 import { ReplayAffordance, priorYearTitle, useReplayCatalog } from './replayAffordance';
 
 type Row = Record<string, unknown>;
@@ -1062,6 +1062,10 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
       .catch(() => setSectionLaps(null));
   }, [sessionId]);
 
+  /* The footer source line must name the feeds the visible replay cards cite, so
+   * the catalog is read here — before any early return — and threaded down. */
+  const replayCatalog = useReplayCatalog();
+
   if (entry === 'loading') {
     return (
       <div className="page stack">
@@ -1251,6 +1255,7 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
           laps={sectionLaps}
           fallbackSet={fallbackSet}
           passMarks={passMarks}
+          priorComparison={validPriorComparison(visitPacks, sessionId, sectionAnchors)}
         />
       ) : null}
 
@@ -1275,10 +1280,12 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
         )
       ) : null}
 
-      {/* The footer claim follows the sections actually rendered (the drawer's
-          tier label, restated in one sentence): a measured lake page names the
-          RaceTools capture; official section reports stay in the claim only
-          where they are the rendered source; a mixed page names both. */}
+      {/* The footer claim is built from the sources the page's VISIBLE modules
+          actually cite (finding #19): official results + lap chart always; section
+          reports when PDF sections render; the RaceTools capture when a measured
+          page, pass marks, or a RaceTools replay card show; Timing71 when a
+          Timing71-normalized replay card shows; our own capture when its replay
+          shows. No claim of "all official" over a third-party feed. */}
       {(() => {
         const tierOf = (visit: SectionLapsPack) => visit.sourceTier ?? 'parsed_pdf_aggregate';
         const packs = [...(sectionLaps ? [sectionLaps] : []), ...visitPacks];
@@ -1287,14 +1294,39 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
            put the capture in the claim even on official-PDF section pages. */
         const marksDrawn =
           passMarks !== null && sectionAnchors !== null && resolvePassMarks(sectionAnchors, passMarks).length > 0;
-        const hasCapture = hasLake || marksDrawn;
         const hasPdfSections =
           packs.some((visit) => tierOf(visit) !== 'lake_loop_crossings') || (!sectionLaps && story?.sections != null);
-        const sources = hasCapture
-          ? hasPdfSections
-            ? 'official results, the official lap chart, official section reports, and the RaceTools race-weekend capture'
-            : 'official results, the official lap chart, and the RaceTools race-weekend capture'
-          : 'official results, the official lap chart, and official section reports';
+
+        /* Replay cards on this page (WatchRaceUnfold: this race + prior years at
+           this venue) cite their own feeds — mirror exactly what renders there. */
+        const replayVenue = getVenueBySessionId(sessionId);
+        const currentVisit = replayVenue?.visits.find((visit) => visit.sessionId === sessionId) ?? null;
+        const currentCapture = replayCatalog ? watchableCaptureForRace(replayCatalog, sessionId) : null;
+        const priorReplays = replayCatalog
+          ? priorYearReplaysAtVenue(replayCatalog, pastVisits(replayVenue, sessionId), currentVisit?.seasonYear)
+          : [];
+        const replaySessions = [currentCapture, ...priorReplays.map((prior) => prior.capture)].filter(
+          (session): session is ReplaySessionInfo => session !== null
+        );
+        const replayTiers = new Set(replaySessions.map((session) => replayProvenance(session).tier));
+
+        const hasRaceTools = hasLake || marksDrawn || replayTiers.has('racetools_capture');
+        const hasTiming71 = replayTiers.has('timing71_normalized');
+        const hasOwnCapture = replayTiers.has('brycecast_capture');
+
+        const parts = ['official results', 'the official lap chart'];
+        if (hasPdfSections) parts.push('official section reports');
+        if (hasOwnCapture) parts.push('our own trackside replay capture');
+        if (hasRaceTools) parts.push('the RaceTools race-weekend capture');
+        if (hasTiming71) parts.push('Timing71 normalized timing');
+        if (story?.weather) parts.push('modeled near-track weather (Open-Meteo)');
+        const sources =
+          parts.length === 1
+            ? parts[0]
+            : parts.length === 2
+              ? `${parts[0]} and ${parts[1]}`
+              : `${parts.slice(0, -1).join(', ')}, and ${parts[parts.length - 1]}`;
+
         return (
           <p style={{ margin: 0, fontSize: 11.5, color: 'var(--ink-muted)' }}>
             Everything on this page comes from {sources}.

@@ -717,15 +717,27 @@ const PointsPicture = ({ snapshot }: { snapshot: UiStandingsSnapshot }) => {
       <PointsStrip snapshot={snapshot} />
       <div className="stack" style={{ gap: 0, marginTop: 6 }}>
         {rivals.map((entry) => {
+          /* Points proximity is this module's one question: spatial words, never
+           * a bare signed number (editorial law). Bryce is the reference the whole
+           * card is anchored to. */
           const gap = entry.points - snapshot.bryce.points;
+          const gapText =
+            gap === 0
+              ? 'level on points'
+              : `${Math.abs(gap)} ${Math.abs(gap) === 1 ? 'point' : 'points'} ${gap > 0 ? 'ahead' : 'behind'}`;
+          /* Career head-to-head is context, not the headline — it reads Bryce-first
+           * with its own labeled denominator, one quiet line down. */
+          const h2h = entry.headToHead;
+          const sharedRaces =
+            h2h?.racesTogether ??
+            (h2h && h2h.bryceAhead !== null && h2h.bryceBehind !== null ? h2h.bryceAhead + h2h.bryceBehind : null);
           const record =
-            entry.headToHead && entry.headToHead.bryceAhead !== null && entry.headToHead.bryceBehind !== null
-              ? `${entry.headToHead.bryceAhead}–${entry.headToHead.bryceBehind}`
+            h2h && h2h.bryceAhead !== null && sharedRaces !== null && sharedRaces > 0
+              ? `Bryce ahead in ${h2h.bryceAhead} of their ${sharedRaces} shared races`
               : null;
           return (
             <div
               key={entry.carNo}
-              className="row row--between"
               onMouseEnter={() => setHoveredCar(entry.carNo)}
               onMouseLeave={() => setHoveredCar(null)}
               style={{
@@ -738,17 +750,17 @@ const PointsPicture = ({ snapshot }: { snapshot: UiStandingsSnapshot }) => {
                 transition: 'background 150ms ease'
               }}
             >
-              <span style={{ fontWeight: 520 }}>{entry.driverName}</span>
-              <span className="row" style={{ gap: 14 }}>
-                {record ? (
-                  <span className="tnum" style={{ color: 'var(--ink-muted)', fontSize: 12 }}>
-                    head-to-head {record}
-                  </span>
-                ) : null}
-                <span className="tnum" style={{ color: 'var(--ink-secondary)', minWidth: 38, textAlign: 'right' }}>
-                  {gap > 0 ? `+${gap}` : `−${Math.abs(gap)}`}
+              <div className="row row--between" style={{ gap: 10 }}>
+                <span style={{ fontWeight: 520 }}>{entry.driverName}</span>
+                <span className="tnum" style={{ color: 'var(--ink-secondary)', whiteSpace: 'nowrap' }}>
+                  {gapText}
                 </span>
-              </span>
+              </div>
+              {record ? (
+                <div className="caption caption--secondary" style={{ marginTop: 2 }}>
+                  {record}
+                </div>
+              ) : null}
             </div>
           );
         })}
@@ -768,17 +780,23 @@ const AnalogRaces = ({ event, debriefIds }: { event: UpcomingPrepEvent; debriefI
   if (analogs.length === 0) return null;
   return (
     <Card title="Races that rhyme with this one">
-      <div className="stack" style={{ gap: 8 }}>
+      {/* Divided rows on the card's own surface — no card-in-a-card (DESIGN_TASTE
+          blacklist #16). The match kind is quiet trailing text, not a pill. */}
+      <div className="stack" style={{ gap: 0 }}>
         {analogs.slice(0, 5).map((analog, index) => {
           const sessionId = asString(analog.sessionId);
           const label = asString(analog.raceLabel) ?? `Analog ${index + 1}`;
           const kind = asString(analog.analogType) === 'same_track' ? 'same track' : 'same track type';
           const linked = sessionId !== null && debriefIds.has(sessionId);
+          const last = index === Math.min(analogs.length, 5) - 1;
           const row = (
-            <div className="row row--between" style={{ padding: '9px 12px', borderRadius: 10, background: 'var(--surface-0)' }}>
+            <div
+              className="row row--between"
+              style={{ padding: '10px 0', gap: 10, borderBottom: last ? 'none' : '1px solid var(--divider)' }}
+            >
               <span style={{ fontSize: 13.5, fontWeight: linked ? 600 : 450 }}>{label}</span>
-              <span className="row" style={{ gap: 8 }}>
-                <span className="chip chip--outline">{kind}</span>
+              <span className="row" style={{ gap: 12, whiteSpace: 'nowrap' }}>
+                <span className="caption caption--secondary">{kind}</span>
                 {linked ? <span style={{ color: 'var(--ink-secondary)', fontSize: 12 }}>debrief →</span> : null}
               </span>
             </div>
@@ -1071,7 +1089,7 @@ const VenueDossierModule = ({
         ))}
       </div>
       <p style={{ margin: '12px 0 0', fontSize: 11.5, color: 'var(--ink-muted)' }}>
-        ▲▽ compare each column with the visit before it. A weather delta is a fact about the day, not a verdict on the drive.
+        ▲▽ compare each year against the visit before it. A weather delta is a fact about the day, not a verdict on the drive.
         Conditions are modeled near-track, never official series weather.
       </p>
     </Card>
