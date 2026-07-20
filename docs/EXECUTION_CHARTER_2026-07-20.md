@@ -86,3 +86,10 @@ task board; the director re-sequences freely as gates and data dictate.
 - NXT's public feed carries no loop/section/GPS data (recon 2026-07-19,
   authoritative). Loop grain comes from RaceTools post-session logs
   (permissioned) or licensed feeds only. Don't rebuild this conclusion.
+
+## Run-state addendum (close of session, 2026-07-20 ~13:00)
+
+The run COMPLETED. master `cd71611` live on brycecast.com. All board
+tasks closed except: #34 (verification-gated), #47/#48 (blocked on ML
+Goal 3), #49 (gated on a Portland-practice gap sample), GitHub
+lean-mirror (Jack decision). Full record: docs/SESSION_HANDOFF_2026-07-20.md.

@@ -159,3 +159,38 @@ they fight, family wins placement.
 - `formatGain` flat deltas rendered in the down/red class until
   2026-07-18; fixed with `.stat__delta--flat` — pattern note: `Stat`'s
   delta class must handle all three directions.
+
+## The full-vision run (2026-07-20) — lessons 18–25
+
+18. **Pipes eat exit codes.** `npm run x | tail` reports tail's success,
+    not the command's. Twice this run a "green" baseline hid failures.
+    Run validators bare, echo `$?`, never through a pipe.
+19. **Never chain a commit behind a merge.** `git merge && git add -A &&
+    git commit` once committed conflict markers to master. Check the
+    merge's exit, resolve, and only then commit.
+20. **Generated artifacts merge by regeneration, not resolution.** For
+    package/summary conflicts: take either side, bootstrap the on-disk
+    package with every lane's blocks (the mid-build validators check the
+    PREVIOUS package — the chicken-and-egg), then run the pinned rebuild.
+21. **iCloud deploys race.** A too-fast mini update applies the STALE
+    bundle silently. The fix is a mini-side until-loop on `git bundle
+    list-heads` matching the tip — proof, not timing.
+22. **Codex plugin jobs never notify; Opus agents always do.** Poll the
+    companion CLI directly in Bash. And a crash can leave a job record
+    "running" forever, or "done" with only a preamble — verify the
+    payload, cancel and relaunch wedged reviews.
+23. **Workers stall by narrating.** When a final message is a progress
+    note, don't resume-loop more than once — inspect the worktree and
+    land the work directly. Post-crash, transcripts + worktrees survive:
+    resume agents by id and count their commits before believing them.
+24. **The dual-review pipeline earns its tokens.** The 5.6-sol pass
+    caught, among others: a career-total double-count, a sign-inverted
+    "improved" claim, a false off-air state, an incomplete integrity
+    chain, a fake combined-quali sheet, and the corridor's gap-basis
+    bug. Build → independent review → fix round → director gate is the
+    standing shape for anything family-visible.
+25. **Rule on framing before anyone computes.** The Graduates memo
+    pattern: a read-only framing study with the survivorship problem
+    addressed head-on, ONE gate question, and the ruling recorded on the
+    task board — before a single number is derived. "Descriptive company,
+    never forecast" is the house answer to comparison features.
