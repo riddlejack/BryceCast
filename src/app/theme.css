@@ -1149,6 +1149,92 @@ button { font-family: inherit; }
 
 .live-battle__caption { margin: -3px 0 0; }
 
+/* Best-lap deltas — the practice/qualifying comparison. Quiet house rows: the
+   session best, Bryce measured against it, and same-team cars measured against
+   Bryce. A row divide, never a card-in-card. */
+.best-lap-deltas { margin: 2px 0 6px; }
+
+.best-lap-deltas__row {
+  display: grid;
+  grid-template-columns: 40px 1fr auto auto;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 2px;
+  border-top: 1px solid var(--divider);
+  font-variant-numeric: tabular-nums;
+}
+
+.best-lap-deltas__row:first-child { border-top: none; }
+
+.best-lap-deltas__row--bryce {
+  margin: 2px -10px 0;
+  padding: 10px 12px;
+  border-top: none;
+  border-radius: 12px;
+  background: var(--surface-1, #fff);
+}
+
+.best-lap-deltas__pos {
+  display: flex;
+  align-items: center;
+  color: var(--ink-muted);
+  font-size: 12px;
+  font-weight: 580;
+}
+
+.best-lap-deltas__name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  color: var(--ink-primary);
+  font-size: 14px;
+  font-weight: 560;
+}
+
+.best-lap-deltas__tag {
+  color: var(--ink-muted);
+  font-size: 10.5px;
+  font-weight: 500;
+}
+
+.best-lap-deltas__time {
+  color: var(--ink-primary);
+  font-size: 14px;
+  font-weight: 620;
+  white-space: nowrap;
+}
+
+.best-lap-deltas__delta {
+  justify-self: end;
+  color: var(--ink-secondary);
+  font-size: 12px;
+  font-weight: 550;
+  white-space: nowrap;
+}
+
+.best-lap-deltas__delta--flat { color: var(--ink-muted); }
+.best-lap-deltas__delta--up { color: var(--status-good); }
+
+.best-lap-deltas__currency { margin: 8px 0 0; }
+
+/* Phone: the four-column row (pos · name+tag · time · delta) collides on narrow
+   screens — the "teammate" tag rides into the lap time. Drop to a two-row grid:
+   pos · name · time on top, the delta on its own line right-aligned beneath. */
+@media (max-width: 560px) {
+  .best-lap-deltas__row {
+    grid-template-columns: 34px 1fr auto;
+    grid-template-areas:
+      "pos name time"
+      "pos delta delta";
+    gap: 2px 10px;
+  }
+  .best-lap-deltas__pos { grid-area: pos; align-self: start; padding-top: 1px; }
+  .best-lap-deltas__name { grid-area: name; }
+  .best-lap-deltas__time { grid-area: time; }
+  .best-lap-deltas__delta { grid-area: delta; justify-self: end; }
+}
+
 .live-camera {
   position: relative;
   width: 100%;

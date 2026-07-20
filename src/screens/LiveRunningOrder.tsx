@@ -2,17 +2,18 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { ChartTipCard, chartFont, useMeasuredWidth, type ChartTip } from '../app/charts';
 import { Unavailable } from '../app/components';
 import type { LiveHistorySample, LiveSessionHistory } from '../data/liveHistoryModel';
+import { sessionOrderWording, type SessionOrderWording } from '../data/liveSessionModel';
 import {
   RUNNING_ORDER_LANE_COUNT,
   detectBryceRunningOrderCrossings,
   fullFieldRunningOrderSeries,
   lastRunningOrderChange,
   nearestRunningOrderSegment,
+  orderGapWords,
   resolveRunningOrderLadder,
   runningOrderCautionSpans,
   runningOrderDomainFor,
   runningOrderFrameForSample,
-  runningOrderGapWords,
   runningOrderIdentityStyle,
   runningOrderPointSegments,
   runningOrderProximityStyle,
@@ -184,7 +185,8 @@ const isLappedUpstream = (row: Record<string, unknown>, bryceRank: number, bryce
 export const LiveRunningOrder = ({
   history,
   clockCheckedAt,
-  replayEnded = false
+  replayEnded = false,
+  wording = sessionOrderWording('race')
 }: {
   history: LiveSessionHistory | null;
   clockCheckedAt?: string | null;
@@ -193,7 +195,14 @@ export const LiveRunningOrder = ({
    *  coming — so the status reads "end of the capture", never "waiting on live
    *  timing…" (the same defect the pre-session/ended hero already retired). */
   replayEnded?: boolean;
+  /** Session-aware currency and wording. Race: running order with sourced
+   *  on-track intervals. Practice / qualifying: the same lanes read as best-lap
+   *  order, gaps are best-lap gaps, and no wording implies an on-track
+   *  interval. Defaults to race so existing race callers are unchanged. */
+  wording?: SessionOrderWording;
 }) => {
+  const orderLabel = wording.rankLabel;
+  const orderMode = wording.currency === 'bestLap' ? 'bestLap' : 'race';
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();
   const svgRef = useRef<SVGSVGElement | null>(null);
   const [tip, setTip] = useState<ChartTip | null>(null);
@@ -268,16 +277,16 @@ export const LiveRunningOrder = ({
     const entry = runningOrderFrameForSample(sample).find((candidate) => candidate.id === driverId);
     const identity = series.find((candidate) => candidate.id === driverId);
     if (!entry || !identity) return null;
-    const gap = runningOrderGapWords(sample, driverId);
-    const change = lastRunningOrderChange(history, driverId, sampleIndex);
+    const gap = orderGapWords(sample, driverId, wording.currency);
+    const change = lastRunningOrderChange(history, driverId, sampleIndex, orderMode);
     return {
       x: tipX,
       y: tipY,
       title: identity.bryce ? `${identity.name} · №9` : identity.name,
       detail: [
         `P${entry.rank}`,
-        gap === '—' ? 'gap to Bryce unavailable' : gap,
-        change ? `${change.text}${change.lap === null ? '' : `, lap ${change.lap}`}` : 'position unchanged in this view'
+        gap === '—' ? wording.gapUnavailable : gap,
+        change ? `${change.text}${change.lap === null ? '' : `, lap ${change.lap}`}` : wording.unchanged
       ].join(' · ')
     };
   };
@@ -321,8 +330,9 @@ export const LiveRunningOrder = ({
             width={width}
             height={height}
             role="img"
-            aria-label="Official running position for the cars around Bryce over the trailing five minutes"
+            aria-label={`Official ${orderLabel} for the cars around Bryce over the trailing five minutes`}
             data-running-order-chart="true"
+            data-order-label={orderLabel}
             data-session-key={history.sessionKey}
             data-source-checked-at={latestSample.checkedAt}
             data-source-sample-count={history.samples.length}
@@ -456,9 +466,12 @@ export const LiveRunningOrder = ({
                 const color = role === 'ahead' ? '#5581c2' : role === 'behind' ? '#2f9377' : entry.bryce ? 'var(--bryce)' : 'var(--ink-primary)';
                 const identity = identityById.get(entry.id);
                 const identityStyle = runningOrderIdentityStyle(entry.id, identity?.startPosition ?? entry.startPosition);
-                const gap = runningOrderGapWords(latestSample, entry.id, false);
+                const gap = orderGapWords(latestSample, entry.id, wording.currency, false);
                 const currentTip = tipFor(entry.id, history.samples.length - 1, plotRight + 11, rowY - 8);
-                const ariaGap = entry.bryce ? 'Bryce' : gap === '—' ? 'gap unavailable' : gap;
+                const ariaGap = entry.bryce ? 'Bryce' : gap === '—' ? wording.ladderGapUnavailable : gap;
+                // "now" would imply an on-track moment; in best-lap order the
+                // adjacency is a best-lap standing, so drop it there.
+                const roleWord = role ? (wording.currency === 'bestLap' ? role : `${role} now`) : null;
                 return <g
                   key={entry.id}
                   data-ladder-row
@@ -469,7 +482,7 @@ export const LiveRunningOrder = ({
                   data-role={role ?? ''}
                   data-line-pattern={entry.bryce ? 'bryce' : identityStyle.name}
                   tabIndex={0}
-                  aria-label={`${entry.bryce ? 'Bryce Aron, car 9' : entry.name}, P${entry.rank}, ${ariaGap}${role ? `, ${role} now` : ''}`}
+                  aria-label={`${entry.bryce ? 'Bryce Aron, car 9' : entry.name}, P${entry.rank}, ${ariaGap}${roleWord ? `, ${roleWord}` : ''}`}
                   onFocus={() => { setFocusedId(entry.id); if (currentTip) setTip(currentTip); }}
                   onBlur={clearFocus}
                   onMouseEnter={() => { setFocusedId(entry.id); if (currentTip) setTip(currentTip); }}
@@ -501,7 +514,7 @@ export const LiveRunningOrder = ({
                     <g transform={`translate(${plotRight + 35} ${rowY})`}>
                       <text y={role ? -9 : -4} fill="var(--ink-secondary)" fontFamily={chartFont} fontSize={9.5} fontWeight={role ? 650 : 540}>{entry.name}</text>
                       <text y={role ? 1.5 : 7} fill="var(--ink-muted)" fontFamily={chartFont} fontSize={8.5}>{gap}</text>
-                      {role ? <text y={12} fill={color} fontFamily={chartFont} fontSize={8.2} fontWeight={650}>{role} now</text> : null}
+                      {role ? <text y={12} fill={color} fontFamily={chartFont} fontSize={8.2} fontWeight={650}>{roleWord}</text> : null}
                     </g>
                   ) : null}
                 </g>;
@@ -527,13 +540,13 @@ export const LiveRunningOrder = ({
               <span aria-hidden>&nbsp;</span>
             )}
           </div>
-          <div className="sr-only" aria-label="Current running order near Bryce">
-            {ladder.map((entry) => <span key={entry.id}>{entry.bryce ? 'Bryce Aron, car 9' : entry.name}: P{entry.rank}, {entry.bryce ? 'Bryce' : runningOrderGapWords(latestSample, entry.id)}. </span>)}
+          <div className="sr-only" aria-label={`Current ${orderLabel} near Bryce`}>
+            {ladder.map((entry) => <span key={entry.id}>{entry.bryce ? 'Bryce Aron, car 9' : entry.name}: P{entry.rank}, {entry.bryce ? 'Bryce' : orderGapWords(latestSample, entry.id, wording.currency)}. </span>)}
           </div>
           {tip ? <ChartTipCard tip={tip} width={width} /> : null}
         </>
       ) : (
-        <Unavailable>The running order appears after two official timing samples.</Unavailable>
+        <Unavailable>{wording.emptyState}</Unavailable>
       )}
     </div>
   );
