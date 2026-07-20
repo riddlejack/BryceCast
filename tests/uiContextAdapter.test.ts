@@ -383,13 +383,35 @@ for (const race of frocRaces) {
 const origin = smallSeries.origin;
 assert.equal(origin.schemaVersion, 'brycecast.originMilestones.v1');
 assert.equal(origin.recordStartsYear, 2019, 'the origin knows where the sourced record begins');
-assert.ok(origin.items.length === 6, 'the origin timeline carries all six sourced milestones');
+assert.ok(origin.items.length === 5, 'the origin timeline carries the five pre-record karting milestones (2016–2018)');
 assert.ok(!origin.items.some((item) => item.year === 2019), 'the origin never duplicates the 2019 F1600 chapter');
+assert.ok(
+  !origin.items.some((item) => item.year !== null && item.year >= 2019),
+  'the pre-record karting timeline ends in 2018 — the 2020 scholarship is not here'
+);
 for (const item of origin.items) {
   assert.ok(item.sourceId && item.sourceName && item.sourceUrl, `origin milestone ${item.id} must carry a named, linked source`);
 }
 const originYears = origin.items.map((item) => item.year ?? 0);
 assert.deepEqual(originYears, [...originYears].sort((a, b) => a - b), 'the origin timeline is chronological');
+// Per-source provenance: only web-archive captures read as archived, so the UI
+// never mislabels a direct official page (e.g. the Team USA blog) as an archive.
+for (const source of origin.sources) {
+  assert.equal(
+    source.archived,
+    (source.sourceUrl ?? '').includes('web.archive.org'),
+    `origin source ${source.sourceId} carries honest archived provenance`
+  );
+}
+
+// The Formula Ford bridge: the 2020 Team USA Scholarship is told on its own
+// chapter, not the pre-record karting timeline, and cites a direct official page.
+const bridge = smallSeries.formulaFordBridge;
+assert.ok(bridge, 'the Formula Ford bridge is present');
+assert.equal(bridge!.schemaVersion, 'brycecast.formulaFordBridge.v1');
+assert.equal(bridge!.year, 2020, 'the scholarship funded the 2020 Formula Ford move');
+assert.equal(bridge!.scholarship.kind, 'career_award', 'the bridge carries the scholarship award, not a race result');
+assert.ok(bridge!.sources.length >= 1 && bridge!.sources.every((source) => !source.archived), 'the scholarship cites a direct official page, not an archive');
 
 /* The odometer: package-only React consumption with personal attribution,
    confidence-preserving physical mileage, and bounded travel semantics. */

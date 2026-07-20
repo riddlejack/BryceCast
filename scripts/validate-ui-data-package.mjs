@@ -984,13 +984,11 @@ if (smallSeries?.schemaVersion !== 'brycecast.smallSeriesStories.v1') {
       if (!item.sourceId || !item.sourceName || !item.sourceUrl) {
         fail(`Origin milestone ${item.id ?? '(unknown)'} must carry a named, linked source.`);
       }
+      // "Before the record" is pre-record karting only (2016–2018). The 2019
+      // F1600 season is its own chapter and the 2020 scholarship is the Formula
+      // Ford bridge — neither may leak into this timeline.
       if (item.year !== null && item.year >= origin.recordStartsYear) {
-        // The 2020 scholarship post-dates the record start; that is expected and
-        // fine. This guard only catches an accidental duplicate of a season that
-        // belongs to a real chapter (2019 F1600) leaking into the origin.
-        if (item.year === 2019) {
-          fail('Origin timeline must not duplicate the 2019 F1600 season milestone; it is its own chapter.');
-        }
+        fail(`Origin timeline must stay pre-record (before ${origin.recordStartsYear}); milestone ${item.id} is dated ${item.year}.`);
       }
     }
     const originYears = origin.items.map((item) => item.year ?? 0);
@@ -999,6 +997,31 @@ if (smallSeries?.schemaVersion !== 'brycecast.smallSeriesStories.v1') {
     }
     if (!Array.isArray(origin.caveats) || origin.caveats.length === 0) {
       fail('careerLab.smallSeriesStories.origin must carry caveats.');
+    }
+    // Per-source provenance must be explicit and honest: archived only for a
+    // web-archive capture, so the UI never mislabels a direct official page.
+    for (const source of origin.sources ?? []) {
+      const expectArchived = (source.sourceUrl ?? '').includes('web.archive.org');
+      if (source.archived !== expectArchived) {
+        fail(`Origin source ${source.sourceId ?? '(unknown)'} archived flag must match its URL provenance.`);
+      }
+    }
+  }
+
+  // The Formula Ford bridge carries the 2020 scholarship as sourced context on
+  // its own chapter — a named award (never a result), citing a direct page.
+  const bridge = smallSeries.formulaFordBridge;
+  if (bridge) {
+    if (bridge.schemaVersion !== 'brycecast.formulaFordBridge.v1' || !bridge.scholarship) {
+      fail('careerLab.smallSeriesStories.formulaFordBridge must carry the scholarship milestone.');
+    } else if (bridge.scholarship.kind !== 'career_award') {
+      fail('The Formula Ford bridge must carry the Team USA Scholarship award, not a race result.');
+    }
+    for (const source of bridge.sources ?? []) {
+      const expectArchived = (source.sourceUrl ?? '').includes('web.archive.org');
+      if (source.archived !== expectArchived) {
+        fail(`Formula Ford bridge source ${source.sourceId ?? '(unknown)'} archived flag must match its URL provenance.`);
+      }
     }
   }
 }

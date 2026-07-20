@@ -1,6 +1,6 @@
 {
   "schemaVersion": "brycecast.uiDataPackage.v1",
-  "generatedAt": "2026-07-20T11:22:41.828Z",
+  "generatedAt": "2026-07-20T16:04:19.474Z",
   "sourceHash": "64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978",
   "asOfDate": "2026-07-19",
   "baselineCommit": "dbc879e",
@@ -286,8 +286,8 @@
     "restartReportSummary": {
       "path": "analysis/restart-report/output/summary.json",
       "bytes": 17440,
-      "modifiedAt": "2026-07-20T11:22:19.945Z",
-      "sha256": "d76596fd7132535ebcad2b31f0790b641174b78eb070dbd0fdb94a965d05d7ba"
+      "modifiedAt": "2026-07-20T16:04:13.022Z",
+      "sha256": "bb272a03d064c5ac0555b75e7dcd02236bbe8e815d40a7d07918fa8a2f2cc3fd"
     },
     "restartReportEvents": {
       "path": "analysis/restart-report/output/tables/restart_events.csv",
@@ -340,8 +340,8 @@
     "qualifyingLayerSummary": {
       "path": "analysis/qualifying-layer/output/summary.json",
       "bytes": 10286,
-      "modifiedAt": "2026-07-20T11:22:34.895Z",
-      "sha256": "0a27cfa7cbd858fe9d6c6b003460da10b9c0ff88ed3fd4db1e8e3a3aff9649f4"
+      "modifiedAt": "2026-07-20T16:04:17.350Z",
+      "sha256": "96c38554f940f3ff9f60be09a1902d896509c787f4f17355bd81ee80e9d78802"
     },
     "qualifyingLayerSessions": {
       "path": "analysis/qualifying-layer/output/tables/quali_sessions.csv",
@@ -382,8 +382,8 @@
     "cautionAtlasSummary": {
       "path": "analysis/caution-atlas/output/summary.json",
       "bytes": 12386,
-      "modifiedAt": "2026-07-20T11:22:27.349Z",
-      "sha256": "a92d892f68d50ad4f5abcfed9a082c949da0b83ea36884b890594b54fbeec77b"
+      "modifiedAt": "2026-07-20T16:04:15.101Z",
+      "sha256": "cdaef20432a43f0cc1e5d5262c0574454ae0f866b3317d29fd52d6e7f8ed4fb7"
     },
     "cautionAtlasEvents": {
       "path": "analysis/caution-atlas/output/tables/caution_events.csv",
@@ -531,15 +531,15 @@
     },
     "uiDataPackageBuilderScript": {
       "path": "scripts/build-ui-data-package.mjs",
-      "bytes": 186885,
-      "modifiedAt": "2026-07-20T11:20:22.179Z",
-      "sha256": "c65f675ea2ba9f0af7af5642d4ae72837f774e8ebe2779eacbcee53e2a96d40d"
+      "bytes": 189071,
+      "modifiedAt": "2026-07-20T15:54:06.694Z",
+      "sha256": "f9d706367c2b3beed99b47584c4a3a4880eb2df01d7ac6aa4218d1564b38115b"
     },
     "uiDataPackageValidatorScript": {
       "path": "scripts/validate-ui-data-package.mjs",
-      "bytes": 92701,
-      "modifiedAt": "2026-07-20T11:21:52.084Z",
-      "sha256": "2dbd99b546dbd78b071429edb4d24b0aa273bc5e62ee4a5c9525e8ebc4a20619"
+      "bytes": 94031,
+      "modifiedAt": "2026-07-20T16:03:46.843Z",
+      "sha256": "f8b15d832fbd8ec1b3e26c478027b662241028a77cd1cd932a63103ec7468acd"
     },
     "supplementalPrepSectionContextPack": {
       "key": "supplemental:analysis_indy_nxt_section_lap_deep_dive_output_context_packs_portland_internatio",
@@ -26795,7 +26795,7 @@
           "caveats": [
             "Every finish and podium is an official F1600 classification; the season finished P3 in the championship across 21 races.",
             "F1600 2019 carries no sourced grid positions, so there is no grid-to-finish conversion and no pace trace — qualifying is shown only as where he lined up, with nothing differenced from it.",
-            "Qualifying is sourced for six of the seven rounds; Round 5 at Pittsburgh has an official-archive link mismatch, so its grid slot is left blank rather than guessed.",
+            "Qualifying is sourced for six of the seven rounds; Round 5 at Pittsburgh has an official-archive link mismatch, so its qualifying slot is left blank rather than guessed.",
             "One of the 21 races is a did-not-start; it is shown as such and left out of the classified-finish counts."
           ],
           "sourceRefs": [
@@ -27062,52 +27062,71 @@
               "sourceId": "source_team_usa_2020_bryce_aron_blog",
               "sourceName": "Team USA Scholarship Bryce Aron driver blog",
               "sourceUrl": "https://teamusascholarship.org/?p=5362"
-            },
-            {
-              "id": "metric_team_usa_2020_scholarship_selection",
-              "year": 2020,
-              "date": null,
-              "kind": "career_award",
-              "label": "Team USA Scholarship",
-              "detail": "A 2020 Team USA Scholarship winner, alongside Jackson Lee and Simon Sikes — the award that funded a UK Formula Ford campaign, from the Formula Ford Festival to the Walter Hayes Trophy.",
-              "figure": "Scholarship",
-              "sourceId": "source_team_usa_2020_winners_announcement",
-              "sourceName": "Team USA Scholarship 2020 winners announcement",
-              "sourceUrl": "https://teamusascholarship.org/?p=5355"
             }
           ],
           "sources": [
             {
               "sourceId": "source_badger_kart_club_2016_fast_times_track_records",
               "sourceName": "Badger Kart Club 2016 fast times and track records",
-              "sourceUrl": "https://web.archive.org/web/20251112122951/https://badgerkartclub.com/2016-fast-times-and-track-records"
+              "sourceUrl": "https://web.archive.org/web/20251112122951/https://badgerkartclub.com/2016-fast-times-and-track-records",
+              "archived": true
             },
             {
               "sourceId": "source_badger_kart_club_2017_fast_times_track_records",
               "sourceName": "Badger Kart Club 2017 fast times and track records",
-              "sourceUrl": "https://web.archive.org/web/20251112102610/https://badgerkartclub.com/2017-fast-times-and-track-records"
+              "sourceUrl": "https://web.archive.org/web/20251112102610/https://badgerkartclub.com/2017-fast-times-and-track-records",
+              "archived": true
             },
             {
               "sourceId": "source_team_usa_2020_bryce_aron_blog",
               "sourceName": "Team USA Scholarship Bryce Aron driver blog",
-              "sourceUrl": "https://teamusascholarship.org/?p=5362"
-            },
-            {
-              "sourceId": "source_team_usa_2020_winners_announcement",
-              "sourceName": "Team USA Scholarship 2020 winners announcement",
-              "sourceUrl": "https://teamusascholarship.org/?p=5355"
+              "sourceUrl": "https://teamusascholarship.org/?p=5362",
+              "archived": false
             }
           ],
           "caveats": [
-            "These are context, not a scoreboard. The sourced race-by-race record starts with F1600 in 2019; what survives from around it is shown as-is.",
-            "Every fact carries its own source. Karting lap times are single fast-time or track-record entries from the club's own boards — no season standings or race-by-race karting results are claimed.",
-            "The Team USA Scholarship is a named award, not a result; it funded the 2020 UK Formula Ford move."
+            "These are context, not a scoreboard. The sourced race-by-race record starts with F1600 in 2019; the karting years that survive around it (2016–2018) are shown as-is.",
+            "Every fact carries its own source. Karting lap times are single fast-time or track-record entries from the club's own boards — no season standings or race-by-race karting results are claimed."
           ],
           "sourceRefs": [
             {
               "key": "canonicalDataset",
               "path": "data/career/career.dataset.json",
               "note": "Structured career milestones and their linked archived-source evidence."
+            }
+          ]
+        },
+        "formulaFordBridge": {
+          "schemaVersion": "brycecast.formulaFordBridge.v1",
+          "year": 2020,
+          "scholarship": {
+            "id": "metric_team_usa_2020_scholarship_selection",
+            "year": 2020,
+            "date": null,
+            "kind": "career_award",
+            "label": "Team USA Scholarship",
+            "detail": "A 2020 Team USA Scholarship winner, alongside Jackson Lee and Simon Sikes — the award that funded a UK Formula Ford campaign, from the Formula Ford Festival to the Walter Hayes Trophy.",
+            "figure": "Scholarship",
+            "sourceId": "source_team_usa_2020_winners_announcement",
+            "sourceName": "Team USA Scholarship 2020 winners announcement",
+            "sourceUrl": "https://teamusascholarship.org/?p=5355"
+          },
+          "sources": [
+            {
+              "sourceId": "source_team_usa_2020_winners_announcement",
+              "sourceName": "Team USA Scholarship 2020 winners announcement",
+              "sourceUrl": "https://teamusascholarship.org/?p=5355",
+              "archived": false
+            }
+          ],
+          "caveats": [
+            "The Team USA Scholarship is a named award, not a result; it funded the 2020 UK Formula Ford move."
+          ],
+          "sourceRefs": [
+            {
+              "key": "canonicalDataset",
+              "path": "data/career/career.dataset.json",
+              "note": "Structured career-award milestone and its linked archived-source evidence."
             }
           ]
         }

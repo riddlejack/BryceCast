@@ -1776,7 +1776,7 @@ const buildF1600SeasonStory = ({ canonicalDataset, qualiSessionRows, resultConve
     caveats: [
       'Every finish and podium is an official F1600 classification; the season finished P3 in the championship across 21 races.',
       'F1600 2019 carries no sourced grid positions, so there is no grid-to-finish conversion and no pace trace — qualifying is shown only as where he lined up, with nothing differenced from it.',
-      'Qualifying is sourced for six of the seven rounds; Round 5 at Pittsburgh has an official-archive link mismatch, so its grid slot is left blank rather than guessed.',
+      'Qualifying is sourced for six of the seven rounds; Round 5 at Pittsburgh has an official-archive link mismatch, so its qualifying slot is left blank rather than guessed.',
       'One of the 21 races is a did-not-start; it is shown as such and left out of the classified-finish counts.'
     ],
     sourceRefs: [
@@ -1898,71 +1898,71 @@ const buildFrocCampaignStory = ({ canonicalDataset, qualiSessionRows, resultConv
   };
 };
 
-/* The origin timeline draws only these sourced, structured milestones — karting
- * fast-times/records and the Team USA Scholarship. The 2019 F1600 context
- * milestone is deliberately excluded: that season is its own chapter. */
+/* The origin timeline draws only these sourced, structured KARTING milestones —
+ * fast-times, records, and the club championships. Everything here predates the
+ * 2019 F1600 record (2016–2018). The 2019 F1600 season is its own chapter, and
+ * the 2020 Team USA Scholarship is the Formula Ford bridge below, not a
+ * pre-record karting fact. */
 const ORIGIN_MILESTONE_ORDER = [
   'metric_badger_kart_club_2016_yamaha_junior_fast_time',
   'metric_badger_kart_club_2017_classic_tag_junior_fast_time',
   'metric_badger_kart_club_2017_bus_stop_tag_junior_track_record',
   'metric_team_usa_2020_bkc_tag_jr_champion',
-  'metric_team_usa_2020_yamaha_kt100_runner_up',
-  'metric_team_usa_2020_scholarship_selection'
+  'metric_team_usa_2020_yamaha_kt100_runner_up'
 ];
 
-/** The origin story — a quiet, sourced timeline of the karting years and the
- *  scholarship that carried the climb abroad. Every display string is composed
- *  from the structured milestone metrics; no figure is invented. */
-const buildOriginMilestones = ({ canonicalDataset }) => {
-  const metricById = new Map((canonicalDataset.derivedMetrics ?? []).map((metric) => [metric.id, metric]));
-  const sourceById = new Map((canonicalDataset.sourceEvidence ?? []).map((source) => [source.id, source]));
-  const items = [];
-  const usedSourceIds = new Set();
+/* The Team USA Scholarship funded the 2020 UK Formula Ford move — it belongs to
+ * that chapter's bridge, not the "Before the record" karting timeline that ends
+ * in 2018. */
+const FORMULA_FORD_BRIDGE_MILESTONE = 'metric_team_usa_2020_scholarship_selection';
 
-  for (const id of ORIGIN_MILESTONE_ORDER) {
-    const metric = metricById.get(id);
-    if (!metric) continue;
-    const facts = metric.metrics ?? {};
-    const sourceId = (metric.provenanceRefs ?? [])[0] ?? null;
-    const source = sourceId ? sourceById.get(sourceId) : null;
-    let year = null;
-    let date = null;
-    let label = '';
-    let detail = '';
-    let figure = null;
+/** Compose one display milestone from a structured metric. Every string is
+ *  derived from the metric's own facts; no figure is invented. Returns null when
+ *  the metric is absent or of an unhandled type. */
+const buildCareerMilestoneItem = (id, metricById, sourceById) => {
+  const metric = metricById.get(id);
+  if (!metric) return null;
+  const facts = metric.metrics ?? {};
+  const sourceId = (metric.provenanceRefs ?? [])[0] ?? null;
+  const source = sourceId ? sourceById.get(sourceId) : null;
+  let year = null;
+  let date = null;
+  let label = '';
+  let detail = '';
+  let figure = null;
 
-    if (metric.metricType === 'karting_fast_time') {
-      date = facts.date ?? null;
-      year = date ? Number(date.slice(0, 4)) : numberOrNull(facts.year);
-      figure = facts.lapTime ? `${facts.lapTime}s` : null;
-      label = `Badger Kart Club — ${facts.className}`;
-      detail = `A ${facts.lapTime}-second fast time${facts.configuration ? ` on the ${facts.configuration}` : ''}, entered on the club's ${facts.recordTable ?? 'record'} board.`;
-    } else if (metric.metricType === 'karting_track_record') {
-      date = facts.date ?? null;
-      year = date ? Number(date.slice(0, 4)) : numberOrNull(facts.year);
-      figure = facts.lapTime ? `${facts.lapTime}s` : null;
-      label = 'Badger Kart Club — a track record';
-      detail = `A ${facts.lapTime}-second ${facts.className} track record on the ${facts.configuration} layout.`;
-    } else if (metric.metricType === 'karting_championship_milestone') {
-      year = numberOrNull(facts.year);
-      const champion = facts.position === 1;
-      figure = champion ? 'Champion' : facts.position === 2 ? 'Runner-up' : `P${facts.position}`;
-      label = facts.championship;
-      detail = champion ? `Club karting champion, ${facts.year}.` : `Championship runner-up, ${facts.year}.`;
-    } else if (metric.metricType === 'career_award') {
-      year = numberOrNull(facts.year);
-      figure = 'Scholarship';
-      label = 'Team USA Scholarship';
-      const coWinners = Array.isArray(facts.coWinners) ? facts.coWinners : [];
-      const planned = Array.isArray(facts.plannedEventFamilies) ? facts.plannedEventFamilies : [];
-      const bookends = planned.length >= 2 ? `, from the ${planned[0]} to the ${planned[1]}` : '';
-      detail = `A ${facts.year} ${facts.award}${coWinners.length ? `, alongside ${coWinners.join(' and ')}` : ''} — the award that funded a UK Formula Ford campaign${bookends}.`;
-    } else {
-      continue;
-    }
+  if (metric.metricType === 'karting_fast_time') {
+    date = facts.date ?? null;
+    year = date ? Number(date.slice(0, 4)) : numberOrNull(facts.year);
+    figure = facts.lapTime ? `${facts.lapTime}s` : null;
+    label = `Badger Kart Club — ${facts.className}`;
+    detail = `A ${facts.lapTime}-second fast time${facts.configuration ? ` on the ${facts.configuration}` : ''}, entered on the club's ${facts.recordTable ?? 'record'} board.`;
+  } else if (metric.metricType === 'karting_track_record') {
+    date = facts.date ?? null;
+    year = date ? Number(date.slice(0, 4)) : numberOrNull(facts.year);
+    figure = facts.lapTime ? `${facts.lapTime}s` : null;
+    label = 'Badger Kart Club — a track record';
+    detail = `A ${facts.lapTime}-second ${facts.className} track record on the ${facts.configuration} layout.`;
+  } else if (metric.metricType === 'karting_championship_milestone') {
+    year = numberOrNull(facts.year);
+    const champion = facts.position === 1;
+    figure = champion ? 'Champion' : facts.position === 2 ? 'Runner-up' : `P${facts.position}`;
+    label = facts.championship;
+    detail = champion ? `Club karting champion, ${facts.year}.` : `Championship runner-up, ${facts.year}.`;
+  } else if (metric.metricType === 'career_award') {
+    year = numberOrNull(facts.year);
+    figure = 'Scholarship';
+    label = 'Team USA Scholarship';
+    const coWinners = Array.isArray(facts.coWinners) ? facts.coWinners : [];
+    const planned = Array.isArray(facts.plannedEventFamilies) ? facts.plannedEventFamilies : [];
+    const bookends = planned.length >= 2 ? `, from the ${planned[0]} to the ${planned[1]}` : '';
+    detail = `A ${facts.year} ${facts.award}${coWinners.length ? `, alongside ${coWinners.join(' and ')}` : ''} — the award that funded a UK Formula Ford campaign${bookends}.`;
+  } else {
+    return null;
+  }
 
-    if (sourceId) usedSourceIds.add(sourceId);
-    items.push({
+  return {
+    item: {
       id,
       year,
       date,
@@ -1973,7 +1973,36 @@ const buildOriginMilestones = ({ canonicalDataset }) => {
       sourceId,
       sourceName: source?.sourceName ?? null,
       sourceUrl: source?.url ?? null
-    });
+    },
+    sourceId
+  };
+};
+
+const sourceSummaryFor = (sourceId, sourceById) => {
+  const source = sourceById.get(sourceId);
+  const url = source?.url ?? null;
+  // Explicit provenance so the UI never mislabels a direct official page (e.g. a
+  // Team USA Scholarship URL) as an archived Wayback capture. Web-archive URLs
+  // are the only archived captures here.
+  const archived = Boolean(url && url.includes('web.archive.org'));
+  return { sourceId, sourceName: source?.sourceName ?? sourceId, sourceUrl: url, archived };
+};
+
+/** The origin story — a quiet, sourced timeline of the karting years that came
+ *  before the record (2016–2018). The scholarship that carried the climb abroad
+ *  now lives on the Formula Ford chapter, so this timeline stays entirely
+ *  pre-record. */
+const buildOriginMilestones = ({ canonicalDataset }) => {
+  const metricById = new Map((canonicalDataset.derivedMetrics ?? []).map((metric) => [metric.id, metric]));
+  const sourceById = new Map((canonicalDataset.sourceEvidence ?? []).map((source) => [source.id, source]));
+  const items = [];
+  const usedSourceIds = new Set();
+
+  for (const id of ORIGIN_MILESTONE_ORDER) {
+    const built = buildCareerMilestoneItem(id, metricById, sourceById);
+    if (!built) continue;
+    if (built.sourceId) usedSourceIds.add(built.sourceId);
+    items.push(built.item);
   }
 
   items.sort(
@@ -1981,10 +2010,7 @@ const buildOriginMilestones = ({ canonicalDataset }) => {
       (a.date && b.date ? a.date.localeCompare(b.date) : (a.year ?? 0) - (b.year ?? 0)) || a.id.localeCompare(b.id)
   );
 
-  const sources = [...usedSourceIds].sort().map((sourceId) => {
-    const source = sourceById.get(sourceId);
-    return { sourceId, sourceName: source?.sourceName ?? sourceId, sourceUrl: source?.url ?? null };
-  });
+  const sources = [...usedSourceIds].sort().map((sourceId) => sourceSummaryFor(sourceId, sourceById));
 
   return {
     schemaVersion: 'brycecast.originMilestones.v1',
@@ -1992,11 +2018,28 @@ const buildOriginMilestones = ({ canonicalDataset }) => {
     items,
     sources,
     caveats: [
-      'These are context, not a scoreboard. The sourced race-by-race record starts with F1600 in 2019; what survives from around it is shown as-is.',
-      "Every fact carries its own source. Karting lap times are single fast-time or track-record entries from the club's own boards — no season standings or race-by-race karting results are claimed.",
-      'The Team USA Scholarship is a named award, not a result; it funded the 2020 UK Formula Ford move.'
+      'These are context, not a scoreboard. The sourced race-by-race record starts with F1600 in 2019; the karting years that survive around it (2016–2018) are shown as-is.',
+      "Every fact carries its own source. Karting lap times are single fast-time or track-record entries from the club's own boards — no season standings or race-by-race karting results are claimed."
     ],
     sourceRefs: [sourceRef('canonicalDataset', 'Structured career milestones and their linked archived-source evidence.')]
+  };
+};
+
+/** The Formula Ford bridge — the 2020 Team USA Scholarship, told as the award
+ *  that funded the UK Formula Ford move. Sourced context on that chapter, not a
+ *  result. Returns null if the milestone is absent. */
+const buildFormulaFordBridge = ({ canonicalDataset }) => {
+  const metricById = new Map((canonicalDataset.derivedMetrics ?? []).map((metric) => [metric.id, metric]));
+  const sourceById = new Map((canonicalDataset.sourceEvidence ?? []).map((source) => [source.id, source]));
+  const built = buildCareerMilestoneItem(FORMULA_FORD_BRIDGE_MILESTONE, metricById, sourceById);
+  if (!built) return null;
+  return {
+    schemaVersion: 'brycecast.formulaFordBridge.v1',
+    year: built.item.year,
+    scholarship: built.item,
+    sources: built.sourceId ? [sourceSummaryFor(built.sourceId, sourceById)] : [],
+    caveats: ['The Team USA Scholarship is a named award, not a result; it funded the 2020 UK Formula Ford move.'],
+    sourceRefs: [sourceRef('canonicalDataset', 'Structured career-award milestone and its linked archived-source evidence.')]
   };
 };
 
@@ -2007,7 +2050,8 @@ const buildSmallSeriesStories = ({ canonicalDataset, qualiSessionRows, resultCon
   schemaVersion: 'brycecast.smallSeriesStories.v1',
   f1600: buildF1600SeasonStory({ canonicalDataset, qualiSessionRows, resultConversionSessionIds }),
   froc: buildFrocCampaignStory({ canonicalDataset, qualiSessionRows, resultConversionSessionIds }),
-  origin: buildOriginMilestones({ canonicalDataset })
+  origin: buildOriginMilestones({ canonicalDataset }),
+  formulaFordBridge: buildFormulaFordBridge({ canonicalDataset })
 });
 
 /** The Career Lab climb needs true chronology; conversion rows carry no

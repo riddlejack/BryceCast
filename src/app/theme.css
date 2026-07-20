@@ -1864,6 +1864,11 @@ a.ss-race--link:hover { background: var(--surface-0); }
   padding: 9px 10px;
   border-radius: 10px;
   background: var(--surface-2);
+  /* A darker local ink for the ribbon's small (11px) text. --ink-muted (~3.1:1)
+     and --ink-secondary on the tint (~4.3:1) both fail AA at this size; #55555a
+     clears 4.5:1 on BOTH the surface-2 unselected fill and the chapter-fro run
+     tint while still reading quieter than the ink-primary venue. */
+  --ss-ribbon-ink: #55555a;
 }
 .ss-ribbon__seg--run {
   background: color-mix(in srgb, var(--chapter-fro) 15%, var(--surface-0));
@@ -1874,7 +1879,7 @@ a.ss-race--link:hover { background: var(--surface-0); }
   font-size: 11px;
   font-weight: 600;
   font-variant-numeric: tabular-nums;
-  color: var(--ink-muted);
+  color: var(--ss-ribbon-ink);
 }
 .ss-ribbon__venue {
   font-size: 13px;
@@ -1883,8 +1888,27 @@ a.ss-race--link:hover { background: var(--surface-0); }
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.ss-ribbon__note { font-size: 11px; margin-top: 1px; color: var(--ink-secondary); }
-.ss-ribbon__seg--run .ss-ribbon__note { color: var(--ink-secondary); }
+.ss-ribbon__note { font-size: 11px; margin-top: 1px; color: var(--ss-ribbon-ink); }
+
+/* the Formula Ford bridge: the 2020 scholarship, quiet sourced context on its
+   chapter (moved off the pre-record karting timeline) */
+.ss-bridge {
+  display: grid;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 12px;
+  background: var(--surface-1);
+}
+.ss-bridge__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.ss-bridge__context {
+  font-size: 12px;
+  color: var(--ink-secondary);
+}
 
 /* the origin timeline: a quiet vertical rail of sourced context facts */
 .ss-timeline {

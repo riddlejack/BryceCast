@@ -2,9 +2,40 @@
  *  F1600 (depth), FR Oceania (depth), and the origin timeline (prologue card).
  *  Usage: node scripts/qa-small-series.mjs [--base=http://127.0.0.1:5299] [--out=$HOME/.brycecast/reports/small-series]
  */
-import { mkdir } from 'node:fs/promises';
+import { mkdir, rm } from 'node:fs/promises';
 import path from 'node:path';
 import { chromium } from 'playwright-core';
+
+/* The career page is ~10k CSS px (1440) to ~14k (390). At deviceScaleFactor 2
+ * that is ~20k–27k device px, past Chromium's ~16384 tall-surface texture limit,
+ * so a single fullPage screenshot silently repeats the top of the page. Capture
+ * it as contiguous vertical tiles whose device height stays under the limit
+ * (6000 CSS px × 2 = 12000 device px) so every pixel is a real, once-only
+ * render. */
+const TILE_CSS_HEIGHT = 6000;
+
+const captureFullPageTiled = async (page, viewport, outDir, viewportName) => {
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.waitForTimeout(150);
+  const fullHeight = await page.evaluate(() => document.documentElement.scrollHeight);
+  const tileCount = Math.max(1, Math.ceil(fullHeight / TILE_CSS_HEIGHT));
+  // Clear any stale single-shot or prior-run tiles for this width.
+  for (let index = 0; index <= 12; index += 1) {
+    await rm(path.join(outDir, index === 0 ? `career-full--${viewportName}.png` : `career-full--${viewportName}-tile${index}.png`), { force: true });
+  }
+  const written = [];
+  for (let index = 0; index < tileCount; index += 1) {
+    const top = index * TILE_CSS_HEIGHT;
+    const tileHeight = Math.min(TILE_CSS_HEIGHT, fullHeight - top);
+    await page.setViewportSize({ width: viewport.width, height: tileHeight });
+    await page.evaluate((y) => window.scrollTo(0, y), top);
+    await page.waitForTimeout(200);
+    const file = path.join(outDir, tileCount === 1 ? `career-full--${viewportName}.png` : `career-full--${viewportName}-tile${index + 1}.png`);
+    await page.screenshot({ path: file }); // viewport-only: exactly [top, top+tileHeight]
+    written.push(file);
+  }
+  return written;
+};
 
 const arg = (name, fallback) => {
   const found = process.argv.find((value) => value.startsWith(`--${name}=`));
@@ -78,10 +109,10 @@ try {
     await frocCard.screenshot({ path: frocFile });
     console.log(frocFile);
 
-    // Full career page for composition context.
-    const fullFile = path.join(outDir, `career-full--${viewportName}.png`);
-    await page.screenshot({ path: fullFile, fullPage: true });
-    console.log(fullFile);
+    // Full career page for composition context — tiled to stay under Chromium's
+    // tall-surface limit (a single fullPage shot repeats the page otherwise).
+    const fullTiles = await captureFullPageTiled(page, viewport, outDir, viewportName);
+    for (const file of fullTiles) console.log(file);
 
     await context.close();
   }

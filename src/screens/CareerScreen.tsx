@@ -7,7 +7,7 @@ import { liveBryceRowOf } from '../data/livePageModel';
 import type { LiveReadiness, ReadinessStatus } from '../app/useReadiness';
 import { CareerAtlas } from './careerAtlas';
 import { Gb3DepthLayer } from './gb3Depth';
-import { F1600SeasonStory, FrocCampaignStory, OriginTimeline } from './smallSeriesStories';
+import { F1600SeasonStory, FormulaFordBridge, FrocCampaignStory, OriginTimeline } from './smallSeriesStories';
 import {
   BestClimbs,
   CareerBests,
@@ -92,16 +92,27 @@ const ChapterCard = ({
   row,
   current,
   extra,
+  bridge,
   depth
 }: {
   chapter: (typeof seriesChapters)[number];
   row: Row | undefined;
   current: boolean;
   extra?: string | null;
+  /** A sourced context block below the stats (e.g. the Formula Ford scholarship
+   *  bridge). Rendered quietly, one tap already open. */
+  bridge?: ReactNode;
   depth?: { title: string; render: () => ReactNode };
 }) => {
   const races = row ? asNumber(row.raceRows) : null;
   const oneRace = chapter.short === 'IMSA';
+  // F1600 ran 21 races but classified 20 (one DNS). The generic raceRows badge
+  // counts only classified races, which contradicts the depth story's "21
+  // races". Read the honest split straight from that story so the badge and the
+  // narrative one tap down agree.
+  const f1600Totals = chapter.short === 'F1600'
+    ? uiDataPackage.screens.careerLab.smallSeriesStories.f1600?.totals ?? null
+    : null;
   const [expanded, setExpanded] = useState(false);
   return (
     <div className={`journey__chapter${current ? ' journey__chapter--current' : ''}`}>
@@ -121,7 +132,11 @@ const ChapterCard = ({
             </h2>
           </div>
           <span className="row" style={{ gap: 8 }}>
-            {races !== null ? (
+            {f1600Totals ? (
+              <span className="chip chip--outline tnum">
+                {f1600Totals.classifiedRaces} classified / {f1600Totals.raceCount} entered
+              </span>
+            ) : races !== null ? (
               <span className="chip chip--outline tnum">
                 {formatNumber(races, 0)} {races === 1 ? 'race' : 'races'}
               </span>
@@ -151,6 +166,7 @@ const ChapterCard = ({
                 {extra}
               </p>
             ) : null}
+            {bridge ? <div style={{ marginTop: 12 }}>{bridge}</div> : null}
             {depth ? (
               <div style={{ marginTop: 12 }}>
                 <GhostButton expanded={expanded} onClick={() => setExpanded((value) => !value)}>
@@ -438,6 +454,7 @@ export const CareerScreen = ({ readiness }: { readiness?: ReadinessStatus }) => 
                   row={rowByName.get(chapter.name)}
                   current={index === seriesChapters.length - 1}
                   extra={index === seriesChapters.length - 1 ? lapLine : null}
+                  bridge={chapter.name === 'Formula Ford' ? <FormulaFordBridge /> : undefined}
                   depth={chapterDepth(chapter.short)}
                 />
               </Reveal>

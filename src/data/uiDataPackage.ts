@@ -246,12 +246,32 @@ export interface UiOriginMilestone {
   sourceUrl: string | null;
 }
 
+/** A cited source, carrying explicit provenance: `archived` is true only for a
+ *  web-archive capture, so the UI never mislabels a direct official page. */
+export interface UiCitedSource {
+  sourceId: string;
+  sourceName: string;
+  sourceUrl: string | null;
+  archived: boolean;
+}
+
 export interface UiOriginMilestones {
   schemaVersion: 'brycecast.originMilestones.v1';
   /** The year the sourced race-by-race record begins (F1600, 2019). */
   recordStartsYear: number;
   items: UiOriginMilestone[];
-  sources: Array<{ sourceId: string; sourceName: string; sourceUrl: string | null }>;
+  sources: UiCitedSource[];
+  caveats: string[];
+  sourceRefs: UiSourceRef[];
+}
+
+/** The 2020 Team USA Scholarship, told on the Formula Ford chapter as the award
+ *  that funded the UK move — sourced context, not a pre-record karting fact. */
+export interface UiFormulaFordBridge {
+  schemaVersion: 'brycecast.formulaFordBridge.v1';
+  year: number | null;
+  scholarship: UiOriginMilestone;
+  sources: UiCitedSource[];
   caveats: string[];
   sourceRefs: UiSourceRef[];
 }
@@ -261,6 +281,7 @@ export interface UiSmallSeriesStories {
   f1600: UiF1600SeasonStory | null;
   froc: UiFrocCampaignStory | null;
   origin: UiOriginMilestones;
+  formulaFordBridge: UiFormulaFordBridge | null;
 }
 
 export type UiCareerConfidenceClass = 'observed_exact' | 'observed_lower_bound' | 'modeled_range' | 'unknown';

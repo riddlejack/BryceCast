@@ -21,8 +21,10 @@ import { ordinal } from '../app/format';
 import { Link } from '../app/router';
 import { uiDataPackage } from '../data/uiDataPackage';
 import type {
+  UiCitedSource,
   UiF1600Event,
   UiF1600SeasonStory,
+  UiFormulaFordBridge,
   UiFrocCampaignStory,
   UiFrocEvent,
   UiOriginMilestone,
@@ -37,6 +39,18 @@ const FROC_TINT = chapterTint('Castrol Toyota Formula Regional Oceania Champions
 /* Shared source-drawer plumbing: the package sourceRefs become drawer entries. */
 const refEntries = (refs: UiSourceRef[]): SourceEntry[] =>
   refs.map((ref) => ({ label: ref.key, path: ref.path, note: ref.note }));
+
+/* A cited source's drawer note, keyed to its explicit provenance: only a
+ * web-archive capture reads "Archived"; a direct official page says so plainly.
+ * Fixes the origin drawer labeling every URL — including live Team USA
+ * Scholarship pages — as an archive. */
+const citedSourceEntry = (source: UiCitedSource): SourceEntry => ({
+  label: source.sourceName,
+  path: source.sourceUrl ?? undefined,
+  note: source.archived
+    ? 'Archived official page — stored as a source URL only.'
+    : 'Direct official page — stored as a source URL only.'
+});
 
 const posLabel = (position: number | null, status: string | null): string => {
   if (position !== null) return `P${position}`;
@@ -66,7 +80,7 @@ const F1600EventRow = ({ event }: { event: UiF1600Event }) => {
             {quali.fieldSize !== null ? <span className="ss-muted"> of {quali.fieldSize}</span> : null}
           </>
         ) : (
-          <span className="ss-muted">grid not sourced</span>
+          <span className="ss-muted">qualifying not sourced</span>
         )}
       </div>
       <div className="ss-races">
@@ -294,7 +308,7 @@ export const OriginTimeline = () => {
   }, [origin.items]);
 
   const sourceEntries: SourceEntry[] = [
-    ...origin.sources.map((source) => ({ label: source.sourceName, path: source.sourceUrl ?? undefined, note: 'Archived official page — stored as a source URL only.' })),
+    ...origin.sources.map(citedSourceEntry),
     ...refEntries(origin.sourceRefs)
   ];
 
@@ -309,9 +323,8 @@ export const OriginTimeline = () => {
   return (
     <Card title="Before the record" action={<SourcePill title="Before the record" entries={sourceEntries} caveats={origin.caveats} />}>
       <p className="ss-copy" style={{ maxWidth: '62ch' }}>
-        The measured career starts with F1600 in {origin.recordStartsYear}. What survives from around it — the karting years
-        that came before, and the scholarship that carried the climb to Europe — is context, not a scoreboard. Every fact here
-        is sourced; none is a race result.
+        The measured career starts with F1600 in {origin.recordStartsYear}. What survives from before it — the karting years,
+        2016 through 2018 — is context, not a scoreboard. Every fact here is sourced; none is a race result.
       </p>
       <div className="ss-timeline">
         {byYear.map((group) => (
@@ -331,5 +344,32 @@ export const OriginTimeline = () => {
         ))}
       </div>
     </Card>
+  );
+};
+
+/* ---------- The Formula Ford bridge: the 2020 Team USA Scholarship ---------- */
+
+/** The scholarship that funded the 2020 UK move, told on the Formula Ford
+ *  chapter it belongs to (not the pre-record karting timeline). A quiet sourced
+ *  line — a named award, never a result. Renders nothing if the source is
+ *  absent. */
+export const FormulaFordBridge = () => {
+  const bridge: UiFormulaFordBridge | null =
+    uiDataPackage.screens.careerLab.smallSeriesStories.formulaFordBridge;
+  if (!bridge) return null;
+  const sourceEntries: SourceEntry[] = [
+    ...bridge.sources.map(citedSourceEntry),
+    ...refEntries(bridge.sourceRefs)
+  ];
+  return (
+    <div className="ss-bridge">
+      <div className="ss-bridge__head">
+        <span className="ss-bridge__context">
+          The scholarship that carried the climb abroad{bridge.year !== null ? ` · ${bridge.year}` : ''}
+        </span>
+        <SourcePill title="The Team USA Scholarship" entries={sourceEntries} caveats={bridge.caveats} />
+      </div>
+      <MilestoneFact item={bridge.scholarship} />
+    </div>
   );
 };
