@@ -80,6 +80,26 @@ export const useInViewOnce = <T extends Element>(threshold = 0.2) => {
   return [ref, inView] as const;
 };
 
+/** True when the viewer (or a static/QA capture) asks for reduced motion. Charts
+ *  that gate their MARKS behind an in-view entrance animation must OR this in, so
+ *  the final, fully-rendered state is the fallback — otherwise a reduced-motion
+ *  reader or a headless screenshot sees an empty plot (the rivals-swarm bug). */
+export const useReducedMotion = (): boolean => {
+  const [reduced, setReduced] = useState(() => {
+    if (typeof window === 'undefined' || !window.matchMedia) return false;
+    return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  });
+  useEffect(() => {
+    if (typeof window === 'undefined' || !window.matchMedia) return undefined;
+    const media = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const update = () => setReduced(media.matches);
+    update();
+    media.addEventListener('change', update);
+    return () => media.removeEventListener('change', update);
+  }, []);
+  return reduced;
+};
+
 /* ---------- house hover tooltip (white card, no delay, mark-anchored) ---------- */
 
 export interface ChartTip {

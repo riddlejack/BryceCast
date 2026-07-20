@@ -67,7 +67,14 @@ const LapChart = ({ story }: { story: RaceStoryPack }) => {
 
   const { totalLaps, fieldSize, drivers } = story.lapChart;
   const height = Math.max(280, Math.min(420, Math.round(width * 0.34)));
-  const margin = { top: 16, right: width < 560 ? 74 : 120, bottom: 30, left: 36 };
+  /* The end labels ("Bryce P10") live in the right gutter. On phones they used
+   * to left-anchor past the plot's edge and the SVG clip ate their last digit —
+   * P10 read "P1", P21 read "P2". The fix reserves a wider phone gutter INSIDE
+   * the clip and right-anchors the full label to a fixed inset from the SVG
+   * edge, so no digit can ever fall outside the viewport (FABLE_LESSONS #8). */
+  const phone = width < 560;
+  const endLabelEdgePad = 8;
+  const margin = { top: 16, right: phone ? 88 : 120, bottom: 30, left: 36 };
   const plotWidth = Math.max(width - margin.left - margin.right, 80);
   const plotHeight = height - margin.top - margin.bottom;
   const x = (lap: number) => margin.left + ((lap - 1) / Math.max(totalLaps - 1, 1)) * plotWidth;
@@ -243,8 +250,9 @@ const LapChart = ({ story }: { story: RaceStoryPack }) => {
                 strokeWidth={1.5}
               />
               <text
-                x={x(totalLaps) + 20}
+                x={phone ? width - endLabelEdgePad : x(totalLaps) + 20}
                 y={y(bryce.laps[bryce.laps.length - 1][1])}
+                textAnchor={phone ? 'end' : 'start'}
                 dominantBaseline="middle"
                 fill="var(--ink-primary)"
                 fontFamily={chartFont}

@@ -332,7 +332,20 @@ export const CareerScreen = ({ readiness }: { readiness?: ReadinessStatus }) => 
   const careerLab = uiDataPackage.screens.careerLab;
   const rows = careerLab.seriesSummary as Row[];
   const rowByName = new Map(rows.map((row) => [asString(row.seriesName) ?? '', row]));
-  const totalRaces = rows.reduce((sum, row) => sum + (asNumber(row.raceRows) ?? 0), 0);
+  /* Two deliberate, different denominators (FABLE_LESSONS editorial law):
+   *  · ledgerRaces (146) — every race Bryce personally drove, across all series;
+   *    the canonical career count the odometer and the atlas map also carry.
+   *  · resultRaces (142) — the subset that carries a sourced finishing result,
+   *    which is what the per-series averages and percentiles are computed on.
+   *  The four-race gap is a DNS and three unclassified races: real starts with
+   *  no finishing position to rank. The hero leads with the canonical 146 so the
+   *  page's headline race count matches everywhere, and names the 142 for what
+   *  it is rather than letting two unlabeled totals contradict each other. */
+  const resultRaces = rows.reduce((sum, row) => sum + (asNumber(row.raceRows) ?? 0), 0);
+  const ledgerRaces =
+    asNumber(careerLab.lifeStats?.personalRaceMileage?.raceRows) ??
+    asNumber((careerLab.atlas as { raceCount?: number } | undefined)?.raceCount) ??
+    resultRaces;
 
   /* Lap texture for the current chapter: every sourced INDY NXT lap chart. */
   const lapTotals = (careerLab.lapPositionMix ?? []).reduce(
@@ -358,8 +371,9 @@ export const CareerScreen = ({ readiness }: { readiness?: ReadinessStatus }) => 
           <span className="kicker">Career Lab</span>
           <h1 className="screen-head__title">The climb.</h1>
           <p className="screen-head__sub">
-            {seriesChapters.length} series, eight seasons, {formatNumber(totalRaces, 0)} source-backed races. Percentiles
-            matter more than raw finishes — field sizes changed a lot along the way.
+            {seriesChapters.length} series, eight seasons, {formatNumber(ledgerRaces, 0)} races —{' '}
+            {formatNumber(resultRaces, 0)} of them with a sourced finishing result. Percentiles matter more than raw
+            finishes; field sizes changed a lot along the way.
           </p>
         </div>
         <SourcePill

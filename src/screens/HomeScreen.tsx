@@ -392,7 +392,14 @@ const SeasonSoFar = ({ season }: { season: ArchiveEntry[] }) => {
 const CareerStrip = () => {
   const careerLab = uiDataPackage.screens.careerLab as unknown as Row;
   const rows = Array.isArray(careerLab.seriesSummary) ? (careerLab.seriesSummary as Row[]) : [];
-  const totalRaces = rows.reduce((sum, row) => sum + (asNumber(row.raceRows) ?? 0), 0);
+  /* The canonical career race count is the personally-attributable ledger (146,
+   * every race driven), the same number the Career hero, odometer, and atlas
+   * carry — not the 142-race finishing-result subset the per-series summary
+   * sums. Keeping this teaser on the ledger count avoids a click-through
+   * contradiction (142 here, 146 there). */
+  const lifeStats = (careerLab.lifeStats ?? null) as { personalRaceMileage?: { raceRows?: number } } | null;
+  const atlas = (careerLab.atlas ?? null) as { raceCount?: number } | null;
+  const ledgerRaces = asNumber(lifeStats?.personalRaceMileage?.raceRows) ?? asNumber(atlas?.raceCount) ?? null;
   return (
     <Link to="/career">
       <section className="panel panel--quiet">
@@ -400,13 +407,13 @@ const CareerStrip = () => {
           <div>
             <span className="kicker">The journey</span>
             <p style={{ margin: '8px 0 0', fontSize: 14.5, color: 'var(--ink-secondary)', maxWidth: '52ch' }}>
-              Karting to F1600 to INDY NXT — {rows.length || 'seven'} series and {totalRaces || 'a career of'} source-backed
-              races, with every climb charted in the Career Lab.
+              Karting to F1600 to INDY NXT — {rows.length || 'seven'} series and {ledgerRaces || 'a career of'} races,
+              with every climb charted in the Career Lab.
             </p>
           </div>
           <span className="row" style={{ gap: 22 }}>
             <Stat label="Series" value={rows.length || '—'} />
-            <Stat label="Races" value={totalRaces || '—'} />
+            <Stat label="Races" value={ledgerRaces ?? '—'} />
             <ArrowRight size={16} style={{ color: 'var(--ink-secondary)' }} aria-hidden />
           </span>
         </div>
