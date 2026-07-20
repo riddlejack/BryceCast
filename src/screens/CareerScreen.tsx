@@ -12,6 +12,7 @@ import {
   CareerBests,
   CareerExplorer,
   CareerRestarts,
+  QualiConversion,
   ChapterStrip,
   DaytonaChapterBody,
   DaytonaSourcePill,
@@ -393,6 +394,11 @@ export const CareerScreen = ({ readiness }: { readiness?: ReadinessStatus }) => 
         <span className="kicker">The restarts</span>
       </div>
       <CareerRestarts />
+
+      <div style={{ marginTop: 10 }}>
+        <span className="kicker">The qualifying</span>
+      </div>
+      <QualiConversion />
 
       <OdometerCard live={readiness?.payload ?? null} />
 

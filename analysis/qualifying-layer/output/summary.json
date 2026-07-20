@@ -1,0 +1,305 @@
+{
+  "bySeriesSeason": [
+    {
+      "avgFinishConverted": null,
+      "avgQualiFieldSize": 15.5,
+      "avgQualiRank": 4.5,
+      "avgQualiRankConverted": null,
+      "bestQualiRank": 3,
+      "conversionRaces": 0,
+      "finishedAhead": 0,
+      "finishedBehind": 0,
+      "gridSettingSessions": 6,
+      "held": 0,
+      "qualifyingSessions": 6,
+      "seasonYear": 2019,
+      "seriesId": "series_frp_f1600",
+      "seriesName": "F1600 Championship Series",
+      "sourceFamily": "qualifying_session_result",
+      "sourceHash": "64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978"
+    },
+    {
+      "avgFinishConverted": 5.8,
+      "avgQualiFieldSize": 24.429,
+      "avgQualiRank": 4.857,
+      "avgQualiRankConverted": 5.0,
+      "bestQualiRank": 1,
+      "conversionRaces": 5,
+      "finishedAhead": 2,
+      "finishedBehind": 3,
+      "gridSettingSessions": 7,
+      "held": 0,
+      "qualifyingSessions": 7,
+      "seasonYear": 2020,
+      "seriesId": "series_formula_ford",
+      "seriesName": "Formula Ford",
+      "sourceFamily": "qualifying_session_result",
+      "sourceHash": "64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978"
+    },
+    {
+      "avgFinishConverted": 10.0,
+      "avgQualiFieldSize": 17.714,
+      "avgQualiRank": 12.143,
+      "avgQualiRankConverted": 11.538,
+      "bestQualiRank": 10,
+      "conversionRaces": 13,
+      "finishedAhead": 7,
+      "finishedBehind": 4,
+      "gridSettingSessions": 7,
+      "held": 2,
+      "qualifyingSessions": 14,
+      "seasonYear": 2021,
+      "seriesId": "series_gb3",
+      "seriesName": "GB3 Championship",
+      "sourceFamily": "official_qualifying",
+      "sourceHash": "64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978"
+    },
+    {
+      "avgFinishConverted": null,
+      "avgQualiFieldSize": 21.286,
+      "avgQualiRank": 12.714,
+      "avgQualiRankConverted": null,
+      "bestQualiRank": 3,
+      "conversionRaces": 0,
+      "finishedAhead": 0,
+      "finishedBehind": 0,
+      "gridSettingSessions": 7,
+      "held": 0,
+      "qualifyingSessions": 7,
+      "seasonYear": 2022,
+      "seriesId": "series_gb3",
+      "seriesName": "GB3 Championship",
+      "sourceFamily": "qualifying_session_result",
+      "sourceHash": "64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978"
+    },
+    {
+      "avgFinishConverted": 4.857,
+      "avgQualiFieldSize": 8.833,
+      "avgQualiRank": 4.833,
+      "avgQualiRankConverted": 5.143,
+      "bestQualiRank": 3,
+      "conversionRaces": 7,
+      "finishedAhead": 3,
+      "finishedBehind": 2,
+      "gridSettingSessions": 6,
+      "held": 2,
+      "qualifyingSessions": 6,
+      "seasonYear": 2023,
+      "seriesId": "series_euroformula_open",
+      "seriesName": "Euroformula Open",
+      "sourceFamily": "official_qualifying",
+      "sourceHash": "64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978"
+    },
+    {
+      "avgFinishConverted": 6.5,
+      "avgQualiFieldSize": 14.0,
+      "avgQualiRank": 6.2,
+      "avgQualiRankConverted": 6.0,
+      "bestQualiRank": 3,
+      "conversionRaces": 4,
+      "finishedAhead": 1,
+      "finishedBehind": 2,
+      "gridSettingSessions": 5,
+      "held": 1,
+      "qualifyingSessions": 5,
+      "seasonYear": 2024,
+      "seriesId": "series_froc",
+      "seriesName": "Castrol Toyota Formula Regional Oceania Championship",
+      "sourceFamily": "qualifying_session_result",
+      "sourceHash": "64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978"
+    },
+    {
+      "avgFinishConverted": 11.917,
+      "avgQualiFieldSize": 19.0,
+      "avgQualiRank": 9.154,
+      "avgQualiRankConverted": 9.333,
+      "bestQualiRank": 5,
+      "conversionRaces": 12,
+      "finishedAhead": 4,
+      "finishedBehind": 8,
+      "gridSettingSessions": 13,
+      "held": 0,
+      "qualifyingSessions": 23,
+      "seasonYear": 2024,
+      "seriesId": "series_indy_nxt",
+      "seriesName": "INDY NXT",
+      "sourceFamily": "official_qualifying",
+      "sourceHash": "64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978"
+    },
+    {
+      "avgFinishConverted": 12.182,
+      "avgQualiFieldSize": 17.923,
+      "avgQualiRank": 10.923,
+      "avgQualiRankConverted": 11.727,
+      "bestQualiRank": 3,
+      "conversionRaces": 11,
+      "finishedAhead": 8,
+      "finishedBehind": 3,
+      "gridSettingSessions": 13,
+      "held": 0,
+      "qualifyingSessions": 23,
+      "seasonYear": 2025,
+      "seriesId": "series_indy_nxt",
+      "seriesName": "INDY NXT",
+      "sourceFamily": "official_qualifying",
+      "sourceHash": "64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978"
+    },
+    {
+      "avgFinishConverted": 14.385,
+      "avgQualiFieldSize": 23.923,
+      "avgQualiRank": 13.615,
+      "avgQualiRankConverted": 13.615,
+      "bestQualiRank": 5,
+      "conversionRaces": 13,
+      "finishedAhead": 7,
+      "finishedBehind": 6,
+      "gridSettingSessions": 13,
+      "held": 0,
+      "qualifyingSessions": 24,
+      "seasonYear": 2026,
+      "seriesId": "series_indy_nxt",
+      "seriesName": "INDY NXT",
+      "sourceFamily": "official_qualifying",
+      "sourceHash": "64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978"
+    }
+  ],
+  "career": {
+    "avgFinishConverted": 10.508,
+    "avgQualiRank": 9.519,
+    "avgQualiRankConverted": 10.046,
+    "bestQualiRank": 1,
+    "conversionRaces": 65,
+    "finishedAhead": 32,
+    "finishedBehind": 28,
+    "gridSettingSessions": 77,
+    "held": 5,
+    "qualifyingAppearances": 115
+  },
+  "caveats": [
+    "Source families are never blended within a session: qualifyingResults wins per session, and the results rows for that same session are not mixed in.",
+    "Conversion is computed only where the race carries a grid column and that grid matches a qualifying rank in the same event (grid_confirmed). Reverse-grid races are excluded, not estimated.",
+    "F1600 2019 and GB3 2022 sources carry no grid column: Bryce's qualifying position is recorded in the inventory, but no conversion figure is invented for them.",
+    "Group qualifying sessions are recorded but marked group_component; the merged 'combined' classification is the grid-setting session for INDY NXT weekends.",
+    "Qualifying best-lap times and gaps are carried as context strings; the layer never differences them into a pace or margin claim."
+  ],
+  "coverage": {
+    "appearancesByFamily": {
+      "official_qualifying": 90,
+      "qualifying_session_result": 25
+    },
+    "bryceRaces": 146,
+    "conversionRaces": 65,
+    "excludedRaces": 81,
+    "excludedReasons": {
+      "no_finish": 4,
+      "no_grid_column": 37,
+      "no_qualifying_in_event": 8,
+      "reverse_grid_no_quali_match": 32
+    },
+    "qualifyingAppearances": 115,
+    "seriesWithConversion": 5,
+    "seriesWithQualifying": 6
+  },
+  "datasetSha256": "64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978",
+  "generatedAt": "2026-07-20T09:54:39Z",
+  "method": {
+    "currency": "grid positions and place counts; qualifying lap times are context strings, never differenced into a pace claim.",
+    "linkage": "A qualifying set a race's grid when Bryce's race grid equals his qualifying rank in the same event; that race is the grid_confirmed conversion. Reverse-grid races carry no matching rank and are recorded as excluded, never estimated. Where a source has no grid column, the qualifying position is recorded but conversion is left unconfirmed.",
+    "sourceFamilies": {
+      "official_qualifying": "Dedicated qualifyingResults classification (position, best lap, gap to pole).",
+      "qualifying_session_result": "Result rows for a qualifying session, used only where the dedicated qualifyingResults table is not populated."
+    },
+    "sourceFamilyDiscipline": "Each qualifying session is read from exactly one family; qualifyingResults wins per session and the results rows for that same session are never blended in."
+  },
+  "runDate": "2026-07-19",
+  "schemaVersion": "brycecast.qualifyingLayer.v1",
+  "sourceFamilyMap": [
+    {
+      "families": {
+        "qualifying_session_result": 6
+      },
+      "primaryFamily": "qualifying_session_result",
+      "seasonYear": 2019,
+      "seriesId": "series_frp_f1600",
+      "seriesName": "F1600 Championship Series"
+    },
+    {
+      "families": {
+        "qualifying_session_result": 7
+      },
+      "primaryFamily": "qualifying_session_result",
+      "seasonYear": 2020,
+      "seriesId": "series_formula_ford",
+      "seriesName": "Formula Ford"
+    },
+    {
+      "families": {
+        "official_qualifying": 14
+      },
+      "primaryFamily": "official_qualifying",
+      "seasonYear": 2021,
+      "seriesId": "series_gb3",
+      "seriesName": "GB3 Championship"
+    },
+    {
+      "families": {
+        "qualifying_session_result": 7
+      },
+      "primaryFamily": "qualifying_session_result",
+      "seasonYear": 2022,
+      "seriesId": "series_gb3",
+      "seriesName": "GB3 Championship"
+    },
+    {
+      "families": {
+        "official_qualifying": 6
+      },
+      "primaryFamily": "official_qualifying",
+      "seasonYear": 2023,
+      "seriesId": "series_euroformula_open",
+      "seriesName": "Euroformula Open"
+    },
+    {
+      "families": {
+        "qualifying_session_result": 5
+      },
+      "primaryFamily": "qualifying_session_result",
+      "seasonYear": 2024,
+      "seriesId": "series_froc",
+      "seriesName": "Castrol Toyota Formula Regional Oceania Championship"
+    },
+    {
+      "families": {
+        "official_qualifying": 23
+      },
+      "primaryFamily": "official_qualifying",
+      "seasonYear": 2024,
+      "seriesId": "series_indy_nxt",
+      "seriesName": "INDY NXT"
+    },
+    {
+      "families": {
+        "official_qualifying": 23
+      },
+      "primaryFamily": "official_qualifying",
+      "seasonYear": 2025,
+      "seriesId": "series_indy_nxt",
+      "seriesName": "INDY NXT"
+    },
+    {
+      "families": {
+        "official_qualifying": 24
+      },
+      "primaryFamily": "official_qualifying",
+      "seasonYear": 2026,
+      "seriesId": "series_indy_nxt",
+      "seriesName": "INDY NXT"
+    }
+  ],
+  "sources": [
+    {
+      "note": "Canonical qualifyingResults, qualifying-session results, and race results with grid columns.",
+      "path": "data/career/career.dataset.json"
+    }
+  ]
+}

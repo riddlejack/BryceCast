@@ -282,6 +282,90 @@ export interface UiRestartReport {
   sourceRefs: UiSourceRef[];
 }
 
+export type UiQualiSourceFamily = 'official_qualifying' | 'qualifying_session_result';
+
+export interface UiQualifyingLayerBySeries {
+  seriesId: string;
+  seriesName: string;
+  firstSeason: number | null;
+  sourceFamilies: UiQualiSourceFamily[];
+  qualifyingSessions: number;
+  avgQualiRank: number | null;
+  bestQualiRank: number | null;
+  avgQualiFieldSize: number | null;
+  conversionRaces: number;
+  finishedAhead: number;
+  held: number;
+  finishedBehind: number;
+}
+
+export interface UiQualifyingLayerBySeriesSeason {
+  seriesId: string;
+  seriesName: string;
+  seasonYear: number | null;
+  sourceFamily: UiQualiSourceFamily;
+  qualifyingSessions: number;
+  gridSettingSessions: number;
+  avgQualiRank: number | null;
+  bestQualiRank: number | null;
+  avgQualiFieldSize: number | null;
+  conversionRaces: number;
+  finishedAhead: number;
+  held: number;
+  finishedBehind: number;
+  avgQualiRankConverted: number | null;
+  avgFinishConverted: number | null;
+}
+
+export interface UiQualifyingLayer {
+  schemaVersion: 'brycecast.qualifyingLayer.v1';
+  coverage: {
+    bryceRaces: number;
+    qualifyingAppearances: number;
+    seriesWithQualifying: number;
+    seriesWithConversion: number;
+    conversionRaces: number;
+    excludedRaces: number;
+    excludedReasons: Record<string, number>;
+    appearancesByFamily: Record<string, number>;
+  };
+  career: {
+    qualifyingAppearances: number;
+    gridSettingSessions: number;
+    avgQualiRank: number | null;
+    bestQualiRank: number | null;
+    conversionRaces: number;
+    finishedAhead: number;
+    held: number;
+    finishedBehind: number;
+    avgQualiRankConverted: number | null;
+    avgFinishConverted: number | null;
+  };
+  sourceFamilyMap: Array<{
+    seriesId: string;
+    seriesName: string;
+    seasonYear: number | null;
+    families: Record<string, number>;
+    primaryFamily: UiQualiSourceFamily;
+  }>;
+  bySeries: UiQualifyingLayerBySeries[];
+  bySeriesSeason: UiQualifyingLayerBySeriesSeason[];
+  conversionSample: Array<{
+    raceSessionId: string;
+    seriesName: string;
+    seasonYear: number | null;
+    eventName: string;
+    raceLabel: string;
+    sourceFamily: UiQualiSourceFamily;
+    qualiRank: number | null;
+    qualiFieldSize: number | null;
+    finish: number | null;
+    conversionOutcome: 'ahead' | 'held' | 'behind';
+  }>;
+  caveats: string[];
+  sourceRefs: UiSourceRef[];
+}
+
 export interface UiCautionCategory {
   category: string;
   count: number;
@@ -924,6 +1008,7 @@ export interface UiDataPackage {
       headToHead: UiCareerRival[];
       lapPositionMix: UiSeasonLapMix[];
       restarts: UiRestartReport;
+      qualifyingLayer: UiQualifyingLayer;
       cautionAtlas: UiCautionAtlas;
       atlas: UiCareerAtlas;
       lifeStats: UiCareerLifeStats;

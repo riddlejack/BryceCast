@@ -1018,6 +1018,61 @@ if (!restartSourcePaths.has('analysis/restart-report/output/summary.json')) {
   fail('careerLab.restarts.sourceRefs must cite the restart-report summary.');
 }
 
+/* ---------- Career Lab qualifying layer (backlog #6 — one qualifying model) ---------- */
+
+const qualifyingLayer = dataPackage.screens.careerLab.qualifyingLayer;
+if (qualifyingLayer?.schemaVersion !== 'brycecast.qualifyingLayer.v1') {
+  fail('careerLab.qualifyingLayer must carry the validated qualifying-layer schema.');
+}
+for (const [key, expectedPath] of Object.entries({
+  qualifyingLayerSummary: 'analysis/qualifying-layer/output/summary.json',
+  qualifyingLayerSessions: 'analysis/qualifying-layer/output/tables/quali_sessions.csv',
+  qualifyingLayerConversion: 'analysis/qualifying-layer/output/tables/quali_race_conversion.csv',
+  qualifyingLayerBySeriesSeason: 'analysis/qualifying-layer/output/tables/quali_by_series_season.csv'
+})) {
+  if (sourceInventory[key]?.path !== expectedPath) {
+    fail(`sourceInventory.${key} must point to ${expectedPath}.`);
+  }
+}
+const qualifyingSummary = JSON.parse(fs.readFileSync(path.join(repoRoot, sourceInventory.qualifyingLayerSummary.path), 'utf8'));
+if (JSON.stringify(qualifyingLayer.career) !== JSON.stringify(qualifyingSummary.career)) {
+  fail('careerLab.qualifyingLayer.career must mirror the validated qualifying-layer summary.');
+}
+if (JSON.stringify(qualifyingLayer.coverage) !== JSON.stringify(qualifyingSummary.coverage)) {
+  fail('careerLab.qualifyingLayer.coverage must mirror the validated qualifying-layer summary.');
+}
+const qualiCareer = qualifyingLayer.career;
+if (qualiCareer.finishedAhead + qualiCareer.held + qualiCareer.finishedBehind !== qualiCareer.conversionRaces) {
+  fail('careerLab.qualifyingLayer conversion outcomes must partition the conversion races (a labeled denominator).');
+}
+// Source-family exclusivity — the audit's core discipline: no season may straddle
+// both families, so every rendered season must resolve to exactly one.
+for (const entry of qualifyingLayer.sourceFamilyMap ?? []) {
+  if (Object.keys(entry.families ?? {}).length !== 1) {
+    fail(`careerLab.qualifyingLayer season ${entry.seriesId} ${entry.seasonYear} must resolve to exactly one source family.`);
+  }
+  if (entry.primaryFamily !== 'official_qualifying' && entry.primaryFamily !== 'qualifying_session_result') {
+    fail(`careerLab.qualifyingLayer season ${entry.seriesId} ${entry.seasonYear} carries an unknown source family.`);
+  }
+}
+const qualiBySeries = qualifyingLayer.bySeries ?? [];
+if (qualiBySeries.length === 0 || qualiBySeries.length > 7) {
+  fail('careerLab.qualifyingLayer.bySeries must cover at least one and at most the seven canonical chapters.');
+}
+const qualiConversionSum = qualiBySeries.reduce((sum, row) => sum + (row.conversionRaces ?? 0), 0);
+if (qualiConversionSum !== qualiCareer.conversionRaces) {
+  fail(`careerLab.qualifyingLayer.bySeries conversion races (${qualiConversionSum}) must sum to career conversionRaces (${qualiCareer.conversionRaces}).`);
+}
+for (const family of qualiBySeries.flatMap((row) => row.sourceFamilies ?? [])) {
+  if (family !== 'official_qualifying' && family !== 'qualifying_session_result') {
+    fail(`careerLab.qualifyingLayer.bySeries carries an unknown source family ${family}.`);
+  }
+}
+const qualiSourcePaths = new Set((qualifyingLayer.sourceRefs ?? []).map((ref) => ref.path));
+if (!qualiSourcePaths.has('analysis/qualifying-layer/output/summary.json')) {
+  fail('careerLab.qualifyingLayer.sourceRefs must cite the qualifying-layer summary.');
+}
+
 /* ---------- Career Lab caution atlas (Brief J stage 1 — descriptive counting) ---------- */
 
 const cautionAtlas = dataPackage.screens.careerLab.cautionAtlas;

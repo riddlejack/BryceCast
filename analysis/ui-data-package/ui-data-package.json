@@ -1,6 +1,6 @@
 {
   "schemaVersion": "brycecast.uiDataPackage.v1",
-  "generatedAt": "2026-07-20T09:26:32.537Z",
+  "generatedAt": "2026-07-20T09:54:43.255Z",
   "sourceHash": "64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978",
   "asOfDate": "2026-07-19",
   "baselineCommit": "d987e85",
@@ -286,8 +286,8 @@
     "restartReportSummary": {
       "path": "analysis/restart-report/output/summary.json",
       "bytes": 17440,
-      "modifiedAt": "2026-07-20T09:26:25.914Z",
-      "sha256": "fb081ab2dd13ae3670a9b14bb6d1bc40ada0a0846408026cb60c787e757e9377"
+      "modifiedAt": "2026-07-20T09:54:33.148Z",
+      "sha256": "227fea17417445e99f900e3e97f1226a15a0e1e40133dfe10e9486295f23ce9b"
     },
     "restartReportEvents": {
       "path": "analysis/restart-report/output/tables/restart_events.csv",
@@ -337,11 +337,53 @@
       "modifiedAt": "2026-07-20T09:11:00.225Z",
       "sha256": "10e154f47e3616e0891c9ef8071674bd069b4f21589b9c4a22c58a8d48548f90"
     },
+    "qualifyingLayerSummary": {
+      "path": "analysis/qualifying-layer/output/summary.json",
+      "bytes": 10286,
+      "modifiedAt": "2026-07-20T09:54:39.971Z",
+      "sha256": "0f1c93c3776091ab63bcae50d70ed953768434293593c7d4b5694a96f167b70c"
+    },
+    "qualifyingLayerSessions": {
+      "path": "analysis/qualifying-layer/output/tables/quali_sessions.csv",
+      "bytes": 42333,
+      "modifiedAt": "2026-07-20T09:54:39.969Z",
+      "sha256": "97a2e42c38e784fc1754a6bb8409aa2d58809de537d7f808e3a3c7c6f19a2519"
+    },
+    "qualifyingLayerConversion": {
+      "path": "analysis/qualifying-layer/output/tables/quali_race_conversion.csv",
+      "bytes": 19519,
+      "modifiedAt": "2026-07-20T09:54:39.970Z",
+      "sha256": "47002ce2727754ef1584207f623eafc6ee31c36955d719d67022cd02506c4d50"
+    },
+    "qualifyingLayerBySeriesSeason": {
+      "path": "analysis/qualifying-layer/output/tables/quali_by_series_season.csv",
+      "bytes": 1710,
+      "modifiedAt": "2026-07-20T09:54:39.970Z",
+      "sha256": "ff85f345b50bb7aae6d169f3c111617bbaa62f522a52082b6942492f55176c02"
+    },
+    "qualifyingLayerExcluded": {
+      "path": "analysis/qualifying-layer/output/tables/excluded_races.csv",
+      "bytes": 19593,
+      "modifiedAt": "2026-07-20T09:54:39.970Z",
+      "sha256": "fe13f408a6b8a85ed308362d3f178f4088eb8ceb79ade9eaa10bc58e206c982e"
+    },
+    "qualifyingLayerBuilderScript": {
+      "path": "analysis/qualifying-layer/scripts/build_qualifying_layer.py",
+      "bytes": 31506,
+      "modifiedAt": "2026-07-20T09:45:04.863Z",
+      "sha256": "785a0b8623d57f3c24c537a9749fd98271d3153f5b56d5a8fab9a7cf714eed8c"
+    },
+    "qualifyingLayerValidatorScript": {
+      "path": "analysis/qualifying-layer/scripts/validate_qualifying_layer.py",
+      "bytes": 17283,
+      "modifiedAt": "2026-07-20T09:45:11.565Z",
+      "sha256": "436102c6a4b311e8d73a1c79b6ae5c295fb6508ec1b626ccc8626fd7887f55ef"
+    },
     "cautionAtlasSummary": {
       "path": "analysis/caution-atlas/output/summary.json",
       "bytes": 12386,
-      "modifiedAt": "2026-07-20T09:26:29.199Z",
-      "sha256": "da89410b77e7fd72939e4d0642cfdf06f39ee2b8998d98e8effa1aeec2836446"
+      "modifiedAt": "2026-07-20T09:54:36.480Z",
+      "sha256": "32f6f8fe5c9ab0111bb25c1f955aff64548a76a599c50a48b0b392893821f125"
     },
     "cautionAtlasEvents": {
       "path": "analysis/caution-atlas/output/tables/caution_events.csv",
@@ -489,15 +531,15 @@
     },
     "uiDataPackageBuilderScript": {
       "path": "scripts/build-ui-data-package.mjs",
-      "bytes": 147181,
-      "modifiedAt": "2026-07-20T09:22:54.953Z",
-      "sha256": "2139908c5e5fd7938ce9e4d86735ecdac75d787c16a94cec03db0102f03ed913"
+      "bytes": 154091,
+      "modifiedAt": "2026-07-20T09:47:48.913Z",
+      "sha256": "4c8bc11a09f4bbc2917a7b6bd65410cd6490fff81f1fc50f74901680546afc7a"
     },
     "uiDataPackageValidatorScript": {
       "path": "scripts/validate-ui-data-package.mjs",
-      "bytes": 81020,
-      "modifiedAt": "2026-07-20T09:23:27.889Z",
-      "sha256": "60831e92ae3d699c517c1286a507b1ae7ca3e00e42fe58b565ddd06b0bd35171"
+      "bytes": 84395,
+      "modifiedAt": "2026-07-20T09:54:04.692Z",
+      "sha256": "7f077bde13892dedc418dbbf11fb70087b155c9238994eea1afa2a973b37f084"
     },
     "supplementalPrepSectionContextPack": {
       "key": "supplemental:analysis_indy_nxt_section_lap_deep_dive_output_context_packs_portland_internatio",
@@ -26061,6 +26103,712 @@
             "key": "canonicalDataset",
             "path": "data/career/career.dataset.json",
             "note": "Official Results-PDF caution summaries and official lap-chart positions."
+          }
+        ]
+      },
+      "qualifyingLayer": {
+        "schemaVersion": "brycecast.qualifyingLayer.v1",
+        "coverage": {
+          "appearancesByFamily": {
+            "official_qualifying": 90,
+            "qualifying_session_result": 25
+          },
+          "bryceRaces": 146,
+          "conversionRaces": 65,
+          "excludedRaces": 81,
+          "excludedReasons": {
+            "no_finish": 4,
+            "no_grid_column": 37,
+            "no_qualifying_in_event": 8,
+            "reverse_grid_no_quali_match": 32
+          },
+          "qualifyingAppearances": 115,
+          "seriesWithConversion": 5,
+          "seriesWithQualifying": 6
+        },
+        "career": {
+          "avgFinishConverted": 10.508,
+          "avgQualiRank": 9.519,
+          "avgQualiRankConverted": 10.046,
+          "bestQualiRank": 1,
+          "conversionRaces": 65,
+          "finishedAhead": 32,
+          "finishedBehind": 28,
+          "gridSettingSessions": 77,
+          "held": 5,
+          "qualifyingAppearances": 115
+        },
+        "sourceFamilyMap": [
+          {
+            "families": {
+              "qualifying_session_result": 6
+            },
+            "primaryFamily": "qualifying_session_result",
+            "seasonYear": 2019,
+            "seriesId": "series_frp_f1600",
+            "seriesName": "F1600 Championship Series"
+          },
+          {
+            "families": {
+              "qualifying_session_result": 7
+            },
+            "primaryFamily": "qualifying_session_result",
+            "seasonYear": 2020,
+            "seriesId": "series_formula_ford",
+            "seriesName": "Formula Ford"
+          },
+          {
+            "families": {
+              "official_qualifying": 14
+            },
+            "primaryFamily": "official_qualifying",
+            "seasonYear": 2021,
+            "seriesId": "series_gb3",
+            "seriesName": "GB3 Championship"
+          },
+          {
+            "families": {
+              "qualifying_session_result": 7
+            },
+            "primaryFamily": "qualifying_session_result",
+            "seasonYear": 2022,
+            "seriesId": "series_gb3",
+            "seriesName": "GB3 Championship"
+          },
+          {
+            "families": {
+              "official_qualifying": 6
+            },
+            "primaryFamily": "official_qualifying",
+            "seasonYear": 2023,
+            "seriesId": "series_euroformula_open",
+            "seriesName": "Euroformula Open"
+          },
+          {
+            "families": {
+              "qualifying_session_result": 5
+            },
+            "primaryFamily": "qualifying_session_result",
+            "seasonYear": 2024,
+            "seriesId": "series_froc",
+            "seriesName": "Castrol Toyota Formula Regional Oceania Championship"
+          },
+          {
+            "families": {
+              "official_qualifying": 23
+            },
+            "primaryFamily": "official_qualifying",
+            "seasonYear": 2024,
+            "seriesId": "series_indy_nxt",
+            "seriesName": "INDY NXT"
+          },
+          {
+            "families": {
+              "official_qualifying": 23
+            },
+            "primaryFamily": "official_qualifying",
+            "seasonYear": 2025,
+            "seriesId": "series_indy_nxt",
+            "seriesName": "INDY NXT"
+          },
+          {
+            "families": {
+              "official_qualifying": 24
+            },
+            "primaryFamily": "official_qualifying",
+            "seasonYear": 2026,
+            "seriesId": "series_indy_nxt",
+            "seriesName": "INDY NXT"
+          }
+        ],
+        "bySeries": [
+          {
+            "seriesId": "series_frp_f1600",
+            "seriesName": "F1600 Championship Series",
+            "firstSeason": 2019,
+            "sourceFamilies": [
+              "qualifying_session_result"
+            ],
+            "qualifyingSessions": 6,
+            "avgQualiRank": 4.5,
+            "bestQualiRank": 3,
+            "avgQualiFieldSize": 15.5,
+            "conversionRaces": 0,
+            "finishedAhead": 0,
+            "held": 0,
+            "finishedBehind": 0
+          },
+          {
+            "seriesId": "series_formula_ford",
+            "seriesName": "Formula Ford",
+            "firstSeason": 2020,
+            "sourceFamilies": [
+              "qualifying_session_result"
+            ],
+            "qualifyingSessions": 7,
+            "avgQualiRank": 4.9,
+            "bestQualiRank": 1,
+            "avgQualiFieldSize": 24.4,
+            "conversionRaces": 5,
+            "finishedAhead": 2,
+            "held": 0,
+            "finishedBehind": 3
+          },
+          {
+            "seriesId": "series_gb3",
+            "seriesName": "GB3 Championship",
+            "firstSeason": 2021,
+            "sourceFamilies": [
+              "official_qualifying",
+              "qualifying_session_result"
+            ],
+            "qualifyingSessions": 21,
+            "avgQualiRank": 12.4,
+            "bestQualiRank": 3,
+            "avgQualiFieldSize": 19.5,
+            "conversionRaces": 13,
+            "finishedAhead": 7,
+            "held": 2,
+            "finishedBehind": 4
+          },
+          {
+            "seriesId": "series_euroformula_open",
+            "seriesName": "Euroformula Open",
+            "firstSeason": 2023,
+            "sourceFamilies": [
+              "official_qualifying"
+            ],
+            "qualifyingSessions": 6,
+            "avgQualiRank": 4.8,
+            "bestQualiRank": 3,
+            "avgQualiFieldSize": 8.8,
+            "conversionRaces": 7,
+            "finishedAhead": 3,
+            "held": 2,
+            "finishedBehind": 2
+          },
+          {
+            "seriesId": "series_froc",
+            "seriesName": "Castrol Toyota Formula Regional Oceania Championship",
+            "firstSeason": 2024,
+            "sourceFamilies": [
+              "qualifying_session_result"
+            ],
+            "qualifyingSessions": 5,
+            "avgQualiRank": 6.2,
+            "bestQualiRank": 3,
+            "avgQualiFieldSize": 14,
+            "conversionRaces": 4,
+            "finishedAhead": 1,
+            "held": 1,
+            "finishedBehind": 2
+          },
+          {
+            "seriesId": "series_indy_nxt",
+            "seriesName": "INDY NXT",
+            "firstSeason": 2024,
+            "sourceFamilies": [
+              "official_qualifying"
+            ],
+            "qualifyingSessions": 70,
+            "avgQualiRank": 11.2,
+            "bestQualiRank": 3,
+            "avgQualiFieldSize": 20.3,
+            "conversionRaces": 36,
+            "finishedAhead": 19,
+            "held": 0,
+            "finishedBehind": 17
+          }
+        ],
+        "bySeriesSeason": [
+          {
+            "seriesId": "series_frp_f1600",
+            "seriesName": "F1600 Championship Series",
+            "seasonYear": 2019,
+            "sourceFamily": "qualifying_session_result",
+            "qualifyingSessions": 6,
+            "gridSettingSessions": 6,
+            "avgQualiRank": 4.5,
+            "bestQualiRank": 3,
+            "avgQualiFieldSize": 15.5,
+            "conversionRaces": 0,
+            "finishedAhead": 0,
+            "held": 0,
+            "finishedBehind": 0,
+            "avgQualiRankConverted": null,
+            "avgFinishConverted": null
+          },
+          {
+            "seriesId": "series_formula_ford",
+            "seriesName": "Formula Ford",
+            "seasonYear": 2020,
+            "sourceFamily": "qualifying_session_result",
+            "qualifyingSessions": 7,
+            "gridSettingSessions": 7,
+            "avgQualiRank": 4.857,
+            "bestQualiRank": 1,
+            "avgQualiFieldSize": 24.429,
+            "conversionRaces": 5,
+            "finishedAhead": 2,
+            "held": 0,
+            "finishedBehind": 3,
+            "avgQualiRankConverted": 5,
+            "avgFinishConverted": 5.8
+          },
+          {
+            "seriesId": "series_gb3",
+            "seriesName": "GB3 Championship",
+            "seasonYear": 2021,
+            "sourceFamily": "official_qualifying",
+            "qualifyingSessions": 14,
+            "gridSettingSessions": 7,
+            "avgQualiRank": 12.143,
+            "bestQualiRank": 10,
+            "avgQualiFieldSize": 17.714,
+            "conversionRaces": 13,
+            "finishedAhead": 7,
+            "held": 2,
+            "finishedBehind": 4,
+            "avgQualiRankConverted": 11.538,
+            "avgFinishConverted": 10
+          },
+          {
+            "seriesId": "series_gb3",
+            "seriesName": "GB3 Championship",
+            "seasonYear": 2022,
+            "sourceFamily": "qualifying_session_result",
+            "qualifyingSessions": 7,
+            "gridSettingSessions": 7,
+            "avgQualiRank": 12.714,
+            "bestQualiRank": 3,
+            "avgQualiFieldSize": 21.286,
+            "conversionRaces": 0,
+            "finishedAhead": 0,
+            "held": 0,
+            "finishedBehind": 0,
+            "avgQualiRankConverted": null,
+            "avgFinishConverted": null
+          },
+          {
+            "seriesId": "series_euroformula_open",
+            "seriesName": "Euroformula Open",
+            "seasonYear": 2023,
+            "sourceFamily": "official_qualifying",
+            "qualifyingSessions": 6,
+            "gridSettingSessions": 6,
+            "avgQualiRank": 4.833,
+            "bestQualiRank": 3,
+            "avgQualiFieldSize": 8.833,
+            "conversionRaces": 7,
+            "finishedAhead": 3,
+            "held": 2,
+            "finishedBehind": 2,
+            "avgQualiRankConverted": 5.143,
+            "avgFinishConverted": 4.857
+          },
+          {
+            "seriesId": "series_froc",
+            "seriesName": "Castrol Toyota Formula Regional Oceania Championship",
+            "seasonYear": 2024,
+            "sourceFamily": "qualifying_session_result",
+            "qualifyingSessions": 5,
+            "gridSettingSessions": 5,
+            "avgQualiRank": 6.2,
+            "bestQualiRank": 3,
+            "avgQualiFieldSize": 14,
+            "conversionRaces": 4,
+            "finishedAhead": 1,
+            "held": 1,
+            "finishedBehind": 2,
+            "avgQualiRankConverted": 6,
+            "avgFinishConverted": 6.5
+          },
+          {
+            "seriesId": "series_indy_nxt",
+            "seriesName": "INDY NXT",
+            "seasonYear": 2024,
+            "sourceFamily": "official_qualifying",
+            "qualifyingSessions": 23,
+            "gridSettingSessions": 13,
+            "avgQualiRank": 9.154,
+            "bestQualiRank": 5,
+            "avgQualiFieldSize": 19,
+            "conversionRaces": 12,
+            "finishedAhead": 4,
+            "held": 0,
+            "finishedBehind": 8,
+            "avgQualiRankConverted": 9.333,
+            "avgFinishConverted": 11.917
+          },
+          {
+            "seriesId": "series_indy_nxt",
+            "seriesName": "INDY NXT",
+            "seasonYear": 2025,
+            "sourceFamily": "official_qualifying",
+            "qualifyingSessions": 23,
+            "gridSettingSessions": 13,
+            "avgQualiRank": 10.923,
+            "bestQualiRank": 3,
+            "avgQualiFieldSize": 17.923,
+            "conversionRaces": 11,
+            "finishedAhead": 8,
+            "held": 0,
+            "finishedBehind": 3,
+            "avgQualiRankConverted": 11.727,
+            "avgFinishConverted": 12.182
+          },
+          {
+            "seriesId": "series_indy_nxt",
+            "seriesName": "INDY NXT",
+            "seasonYear": 2026,
+            "sourceFamily": "official_qualifying",
+            "qualifyingSessions": 24,
+            "gridSettingSessions": 13,
+            "avgQualiRank": 13.615,
+            "bestQualiRank": 5,
+            "avgQualiFieldSize": 23.923,
+            "conversionRaces": 13,
+            "finishedAhead": 7,
+            "held": 0,
+            "finishedBehind": 6,
+            "avgQualiRankConverted": 13.615,
+            "avgFinishConverted": 14.385
+          }
+        ],
+        "conversionSample": [
+          {
+            "raceSessionId": "session_formula_ford_2020_national_oulton_park_race_1",
+            "seriesName": "Formula Ford",
+            "seasonYear": 2020,
+            "eventName": "BRSCC National FF1600 2020 - Oulton Park",
+            "raceLabel": "RACE 1",
+            "sourceFamily": "qualifying_session_result",
+            "qualiRank": 12,
+            "qualiFieldSize": 35,
+            "finish": 9,
+            "conversionOutcome": "ahead"
+          },
+          {
+            "raceSessionId": "session_formula_ford_2020_champion_cadwell_race_2",
+            "seriesName": "Formula Ford",
+            "seasonYear": 2020,
+            "eventName": "The Champion of Cadwell for FF1600 2020",
+            "raceLabel": "RACE 2",
+            "sourceFamily": "qualifying_session_result",
+            "qualiRank": 1,
+            "qualiFieldSize": 16,
+            "finish": 3,
+            "conversionOutcome": "behind"
+          },
+          {
+            "raceSessionId": "session_formula_ford_2020_champion_brands_race_5",
+            "seriesName": "Formula Ford",
+            "seasonYear": 2020,
+            "eventName": "Champion of Brands 2020",
+            "raceLabel": "RACE 5",
+            "sourceFamily": "qualifying_session_result",
+            "qualiRank": 5,
+            "qualiFieldSize": 26,
+            "finish": 3,
+            "conversionOutcome": "ahead"
+          },
+          {
+            "raceSessionId": "session_formula_ford_2020_national_brands_hatch_race_2",
+            "seriesName": "Formula Ford",
+            "seasonYear": 2020,
+            "eventName": "BRSCC National FF1600 2020 - Brands Hatch",
+            "raceLabel": "RACE 2",
+            "sourceFamily": "qualifying_session_result",
+            "qualiRank": 1,
+            "qualiFieldSize": 22,
+            "finish": 5,
+            "conversionOutcome": "behind"
+          },
+          {
+            "raceSessionId": "session_formula_ford_2020_national_silverstone_race_3",
+            "seriesName": "Formula Ford",
+            "seasonYear": 2020,
+            "eventName": "BRSCC National FF1600 2020 - Silverstone International",
+            "raceLabel": "RACE 3",
+            "sourceFamily": "qualifying_session_result",
+            "qualiRank": 6,
+            "qualiFieldSize": 29,
+            "finish": 9,
+            "conversionOutcome": "behind"
+          },
+          {
+            "raceSessionId": "session_gb3_2021_212005_race_1_result",
+            "seriesName": "GB3 Championship",
+            "seasonYear": 2021,
+            "eventName": "GB3 2021 Round 1 - Brands Hatch",
+            "raceLabel": "Race 1 Result",
+            "sourceFamily": "official_qualifying",
+            "qualiRank": 12,
+            "qualiFieldSize": 19,
+            "finish": 10,
+            "conversionOutcome": "ahead"
+          },
+          {
+            "raceSessionId": "session_gb3_2021_212505_race_2_result",
+            "seriesName": "GB3 Championship",
+            "seasonYear": 2021,
+            "eventName": "GB3 2021 Round 2 - Silverstone",
+            "raceLabel": "Race 2 Result",
+            "sourceFamily": "official_qualifying",
+            "qualiRank": 11,
+            "qualiFieldSize": 16,
+            "finish": 11,
+            "conversionOutcome": "held"
+          },
+          {
+            "raceSessionId": "session_gb3_2021_212705_race_1_result",
+            "seriesName": "GB3 Championship",
+            "seasonYear": 2021,
+            "eventName": "GB3 2021 Round 3 - Donington Park",
+            "raceLabel": "Race 1 Result",
+            "sourceFamily": "official_qualifying",
+            "qualiRank": 12,
+            "qualiFieldSize": 17,
+            "finish": 13,
+            "conversionOutcome": "behind"
+          },
+          {
+            "raceSessionId": "session_gb3_2021_212705_race_2_result",
+            "seriesName": "GB3 Championship",
+            "seasonYear": 2021,
+            "eventName": "GB3 2021 Round 3 - Donington Park",
+            "raceLabel": "Race 2 Result",
+            "sourceFamily": "official_qualifying",
+            "qualiRank": 12,
+            "qualiFieldSize": 17,
+            "finish": 11,
+            "conversionOutcome": "ahead"
+          },
+          {
+            "raceSessionId": "session_gb3_2021_212905_race_1_result",
+            "seriesName": "GB3 Championship",
+            "seasonYear": 2021,
+            "eventName": "GB3 2021 Round 4 - Spa-Francorchamps",
+            "raceLabel": "Race 1 Result",
+            "sourceFamily": "official_qualifying",
+            "qualiRank": 9,
+            "qualiFieldSize": 16,
+            "finish": 10,
+            "conversionOutcome": "behind"
+          },
+          {
+            "raceSessionId": "session_gb3_2021_212905_race_2_result",
+            "seriesName": "GB3 Championship",
+            "seasonYear": 2021,
+            "eventName": "GB3 2021 Round 4 - Spa-Francorchamps",
+            "raceLabel": "Race 2 Result",
+            "sourceFamily": "official_qualifying",
+            "qualiRank": 9,
+            "qualiFieldSize": 16,
+            "finish": 11,
+            "conversionOutcome": "behind"
+          },
+          {
+            "raceSessionId": "session_gb3_2021_213105_race_1_result",
+            "seriesName": "GB3 Championship",
+            "seasonYear": 2021,
+            "eventName": "GB3 2021 Round 5 - Snetterton",
+            "raceLabel": "Race 1 Result",
+            "sourceFamily": "official_qualifying",
+            "qualiRank": 12,
+            "qualiFieldSize": 18,
+            "finish": 11,
+            "conversionOutcome": "ahead"
+          },
+          {
+            "raceSessionId": "session_gb3_2021_213105_race_2_result",
+            "seriesName": "GB3 Championship",
+            "seasonYear": 2021,
+            "eventName": "GB3 2021 Round 5 - Snetterton",
+            "raceLabel": "Race 2 Result",
+            "sourceFamily": "official_qualifying",
+            "qualiRank": 6,
+            "qualiFieldSize": 18,
+            "finish": 6,
+            "conversionOutcome": "held"
+          },
+          {
+            "raceSessionId": "session_gb3_2021_213105_race_3_result",
+            "seriesName": "GB3 Championship",
+            "seasonYear": 2021,
+            "eventName": "GB3 2021 Round 5 - Snetterton",
+            "raceLabel": "Race 3 Result",
+            "sourceFamily": "official_qualifying",
+            "qualiRank": 12,
+            "qualiFieldSize": 18,
+            "finish": 13,
+            "conversionOutcome": "behind"
+          },
+          {
+            "raceSessionId": "session_gb3_2021_213605_race_1_result",
+            "seriesName": "GB3 Championship",
+            "seasonYear": 2021,
+            "eventName": "GB3 2021 Round 6 - Oulton Park",
+            "raceLabel": "Race 1 Result",
+            "sourceFamily": "official_qualifying",
+            "qualiRank": 15,
+            "qualiFieldSize": 17,
+            "finish": 14,
+            "conversionOutcome": "ahead"
+          },
+          {
+            "raceSessionId": "session_gb3_2021_213605_race_2_result",
+            "seriesName": "GB3 Championship",
+            "seasonYear": 2021,
+            "eventName": "GB3 2021 Round 6 - Oulton Park",
+            "raceLabel": "Race 2 Result",
+            "sourceFamily": "official_qualifying",
+            "qualiRank": 15,
+            "qualiFieldSize": 17,
+            "finish": 8,
+            "conversionOutcome": "ahead"
+          },
+          {
+            "raceSessionId": "session_gb3_2021_214105_race_1_result",
+            "seriesName": "GB3 Championship",
+            "seasonYear": 2021,
+            "eventName": "GB3 2021 Round 7 - Donington Park",
+            "raceLabel": "Race 1 Result",
+            "sourceFamily": "official_qualifying",
+            "qualiRank": 12,
+            "qualiFieldSize": 21,
+            "finish": 6,
+            "conversionOutcome": "ahead"
+          },
+          {
+            "raceSessionId": "session_gb3_2021_214105_race_2_result",
+            "seriesName": "GB3 Championship",
+            "seasonYear": 2021,
+            "eventName": "GB3 2021 Round 7 - Donington Park",
+            "raceLabel": "Race 2 Result",
+            "sourceFamily": "official_qualifying",
+            "qualiRank": 13,
+            "qualiFieldSize": 21,
+            "finish": 6,
+            "conversionOutcome": "ahead"
+          },
+          {
+            "raceSessionId": "session_euroformula_2023_01-portimao-race-1",
+            "seriesName": "Euroformula Open",
+            "seasonYear": 2023,
+            "eventName": "Euroformula Open 2023 Round 1 - Portimao",
+            "raceLabel": "Race 1",
+            "sourceFamily": "official_qualifying",
+            "qualiRank": 5,
+            "qualiFieldSize": 10,
+            "finish": 5,
+            "conversionOutcome": "held"
+          },
+          {
+            "raceSessionId": "session_euroformula_2023_02-spa_francorchamps-race-1",
+            "seriesName": "Euroformula Open",
+            "seasonYear": 2023,
+            "eventName": "Euroformula Open 2023 Round 2 - Spa-Francorchamps",
+            "raceLabel": "Race 1",
+            "sourceFamily": "official_qualifying",
+            "qualiRank": 5,
+            "qualiFieldSize": 10,
+            "finish": 3,
+            "conversionOutcome": "ahead"
+          },
+          {
+            "raceSessionId": "session_euroformula_2023_03-hungaroring-race-1",
+            "seriesName": "Euroformula Open",
+            "seasonYear": 2023,
+            "eventName": "Euroformula Open 2023 Round 3 - Hungaroring",
+            "raceLabel": "Race 1",
+            "sourceFamily": "official_qualifying",
+            "qualiRank": 7,
+            "qualiFieldSize": 10,
+            "finish": 6,
+            "conversionOutcome": "ahead"
+          },
+          {
+            "raceSessionId": "session_euroformula_2023_03-hungaroring-race-3",
+            "seriesName": "Euroformula Open",
+            "seasonYear": 2023,
+            "eventName": "Euroformula Open 2023 Round 3 - Hungaroring",
+            "raceLabel": "Race 3",
+            "sourceFamily": "official_qualifying",
+            "qualiRank": 7,
+            "qualiFieldSize": 10,
+            "finish": 4,
+            "conversionOutcome": "ahead"
+          },
+          {
+            "raceSessionId": "session_euroformula_2023_04-paul_ricard-race-1",
+            "seriesName": "Euroformula Open",
+            "seasonYear": 2023,
+            "eventName": "Euroformula Open 2023 Round 4 - Paul Ricard",
+            "raceLabel": "Race 1",
+            "sourceFamily": "official_qualifying",
+            "qualiRank": 3,
+            "qualiFieldSize": 7,
+            "finish": 3,
+            "conversionOutcome": "held"
+          },
+          {
+            "raceSessionId": "session_euroformula_2023_05-red_bull_ring-race-1",
+            "seriesName": "Euroformula Open",
+            "seasonYear": 2023,
+            "eventName": "Euroformula Open 2023 Round 5 - Red Bull Ring",
+            "raceLabel": "Race 1",
+            "sourceFamily": "official_qualifying",
+            "qualiRank": 5,
+            "qualiFieldSize": 9,
+            "finish": 6,
+            "conversionOutcome": "behind"
+          },
+          {
+            "raceSessionId": "session_euroformula_2023_06-monza-race-1",
+            "seriesName": "Euroformula Open",
+            "seasonYear": 2023,
+            "eventName": "Euroformula Open 2023 Round 6 - Monza",
+            "raceLabel": "Race 1",
+            "sourceFamily": "official_qualifying",
+            "qualiRank": 4,
+            "qualiFieldSize": 7,
+            "finish": 7,
+            "conversionOutcome": "behind"
+          }
+        ],
+        "caveats": [
+          "Source families are never blended within a session: qualifyingResults wins per session, and the results rows for that same session are not mixed in.",
+          "Conversion is computed only where the race carries a grid column and that grid matches a qualifying rank in the same event (grid_confirmed). Reverse-grid races are excluded, not estimated.",
+          "F1600 2019 and GB3 2022 sources carry no grid column: Bryce's qualifying position is recorded in the inventory, but no conversion figure is invented for them.",
+          "Group qualifying sessions are recorded but marked group_component; the merged 'combined' classification is the grid-setting session for INDY NXT weekends.",
+          "Qualifying best-lap times and gaps are carried as context strings; the layer never differences them into a pace or margin claim."
+        ],
+        "sourceRefs": [
+          {
+            "key": "qualifyingLayerSummary",
+            "path": "analysis/qualifying-layer/output/summary.json",
+            "note": "Validated qualifying-layer coverage, source-family map, and career conversion totals."
+          },
+          {
+            "key": "qualifyingLayerBySeriesSeason",
+            "path": "analysis/qualifying-layer/output/tables/quali_by_series_season.csv",
+            "note": "Per-series/season qualifying and conversion rollup with labeled denominators."
+          },
+          {
+            "key": "qualifyingLayerConversion",
+            "path": "analysis/qualifying-layer/output/tables/quali_race_conversion.csv",
+            "note": "One row per grid-confirmed qualifying-to-flag conversion."
+          },
+          {
+            "key": "qualifyingLayerSessions",
+            "path": "analysis/qualifying-layer/output/tables/quali_sessions.csv",
+            "note": "The normalized per-session qualifying inventory with source family and field-size denominator."
+          },
+          {
+            "key": "canonicalDataset",
+            "path": "data/career/career.dataset.json",
+            "note": "Canonical qualifyingResults, qualifying-session results, and race grids."
           }
         ]
       },
