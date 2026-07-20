@@ -178,7 +178,7 @@
   "eventId": "event_indy_nxt_2026_5547",
   "eventName": "Grand Prix of Portland",
   "eventStartDate": "2026-08-07",
-  "generatedAt": "2026-07-20T09:25:33Z",
+  "generatedAt": "2026-07-20T10:55:53Z",
   "id": "upcoming_event_indy_nxt_2026_5547_grand_prix_of_portland",
   "predictionBand": {
     "calibrationState": "not_calibrated_for_point_probability",
@@ -244,7 +244,7 @@
       "bytes": 8923,
       "path": "analysis/predictive-race-intelligence/output/model_scorecard.json",
       "role": "prediction validation",
-      "sha256": "556582aa54c6310597ea5530e23f7156da82ccea7f9fa2bf45903a59af25c4b5"
+      "sha256": "96fa3c77221c3abf51b0246fb1abd644d6351b2837206e41a98ec584e977fcd7"
     }
   ],
   "top10Path": [
