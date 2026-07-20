@@ -1,6 +1,6 @@
 # Context Event Narrative Layer
 
-Generated: 2026-07-19T23:55:07Z
+Generated: 2026-07-20T05:23:56Z
 Source hash: `64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978`
 
 ## Source Scope
