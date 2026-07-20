@@ -24,9 +24,13 @@ import type { ReplaySession } from '../app/useReplaySession';
 import { replayProvenance, type ReplaySessionInfo } from '../data/replayAvailable';
 import { loadRaceStory } from '../data/raceStory';
 import {
+  advanceBattleAxis,
+  battleAxisExtentSeconds,
+  BATTLE_AXIS_LADDER,
   buildLiveBattleFrame,
   buildOfficialPointsWindow,
   captureAgeSeconds,
+  createBattleAxisState,
   headToHeadForLiveDriver,
   livePosition,
   liveBryceRowOf,
@@ -37,6 +41,7 @@ import {
   sortRowsForLiveDisplay,
   stableDriverId,
   timestampWindowDomain,
+  type BattleAxisState,
   type LiveBattleNeighbor,
   type LiveRow
 } from '../data/livePageModel';
@@ -127,7 +132,7 @@ const sourceEntries = {
     {
       label: 'Race Control timing feed · Bryce-centered corridor',
       path: '/api/readiness → liveTiming.rows[].liveGap',
-      note: 'The corridor walks Race Control’s live interval to the preceding ranked car around Bryce. Missing intervals break the chain; no gap is filled with zero and no GPS position is inferred.'
+      note: 'The corridor walks Race Control’s live interval to the preceding ranked car around Bryce. Missing intervals break the chain; no gap is filled with zero and no GPS position is inferred. The frame width steps along a fixed ladder (±1s to ±8s) to fit the nearest cars, and only rescales when the pack meaningfully compresses or spreads.'
     },
     {
       label: 'Race Control timing feed · official running order',
@@ -197,6 +202,18 @@ const usePrefersReducedMotion = () => {
 
 /* ---------- the battle: Bryce-centered spatial reference ---------- */
 
+/** Brief P: one eased rescale ≤300ms, strong ease-out, GPU-only transforms. */
+const AXIS_RESCALE_TRANSITION_MS = 250;
+
+interface AxisTransitionLogEntry {
+  at: string;
+  evalIndex: number;
+  from: number;
+  to: number;
+  occupancy: number | null;
+  breach: 'low' | 'high';
+}
+
 const BattleCorridor = ({ payload, samples, history }: { payload: LiveReadiness; samples: GapSample[]; history: LiveSessionHistory | null }) => {
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();
   const [tip, setTip] = useState<ChartTip | null>(null);
@@ -208,16 +225,77 @@ const BattleCorridor = ({ payload, samples, history }: { payload: LiveReadiness;
     previousSample.current = currentSample;
   }, [currentSample]);
   const frame = buildLiveBattleFrame(payload);
-  const cars = (frame?.cars ?? [])
-    .filter((car) => Math.abs(car.offsetSeconds) <= 4)
+  const frameCars = frame?.cars ?? [];
+
+  /* The breathing axis (Brief P). One evaluation per sourced poll: the frame
+   * width walks the quantized ladder (±1s, ±2s, ±4s, ±8s) to fit the nearest
+   * cars, rescaling only on a hysteresis breach (<55% / >90% occupancy). All
+   * ladder law lives in liveMotionModel; this component only holds the state
+   * and renders the step. */
+  const pollKey = liveSourceCheckedAtOf(payload);
+  const sessionKey = history?.sessionKey ?? null;
+  const axisRef = useRef<{ sessionKey: string | null; state: BattleAxisState } | null>(null);
+  const axisLog = useRef<AxisTransitionLogEntry[]>([]);
+  const breachCount = useRef(0);
+  const evalCount = useRef(0);
+  const lastPollKey = useRef<string | null>(null);
+  const [axisStep, setAxisStep] = useState<number>(() => createBattleAxisState(null).step);
+  const [rescaleStamp, setRescaleStamp] = useState<number | null>(null);
+
+  useLayoutEffect(() => {
+    if (!pollKey || pollKey === lastPollKey.current) return;
+    lastPollKey.current = pollKey;
+    const rawExtent = battleAxisExtentSeconds(frameCars);
+    if (!axisRef.current || axisRef.current.sessionKey !== sessionKey) {
+      // A fresh session snaps straight to the best fit — no motion on arrival.
+      axisRef.current = { sessionKey, state: createBattleAxisState(rawExtent) };
+      axisLog.current = [];
+      breachCount.current = 0;
+      evalCount.current = 0;
+      setAxisStep(axisRef.current.state.step);
+      setRescaleStamp(null);
+      return;
+    }
+    evalCount.current += 1;
+    const from = axisRef.current.state.step;
+    const { state, decision } = advanceBattleAxis(axisRef.current.state, rawExtent);
+    axisRef.current = { sessionKey, state };
+    if (decision.breach) breachCount.current += 1;
+    if (decision.changed && decision.breach) {
+      axisLog.current = [
+        ...axisLog.current,
+        { at: pollKey, evalIndex: evalCount.current, from, to: decision.step, occupancy: decision.occupancy, breach: decision.breach }
+      ].slice(-80);
+      setAxisStep(decision.step);
+      if (!reducedMotion) setRescaleStamp(Date.now());
+    }
+    // frameCars is derived from the same payload as pollKey; the poll guard owns the cadence.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pollKey, sessionKey, reducedMotion]);
+
+  useEffect(() => {
+    if (rescaleStamp === null) return undefined;
+    const timer = window.setTimeout(() => setRescaleStamp(null), AXIS_RESCALE_TRANSITION_MS + 60);
+    return () => window.clearTimeout(timer);
+  }, [rescaleStamp]);
+  const rescaling = rescaleStamp !== null && !reducedMotion;
+
+  const step = axisStep;
+  const maxLadderStep = BATTLE_AXIS_LADDER[BATTLE_AXIS_LADDER.length - 1];
+  const renderExtent = battleAxisExtentSeconds(frameCars);
+  const cars = frameCars
+    .filter((car) => Math.abs(car.offsetSeconds) <= maxLadderStep)
     .sort((left, right) => left.id.localeCompare(right.id));
   const margin = { left: 36, right: 36 };
   const plotWidth = Math.max(width - margin.left - margin.right, 120);
   const axisY = 82;
   const labelLanes = [17, 34, 51, 67, 116, 133, 150, 167];
-  const x = (seconds: number) => margin.left + ((Math.max(-4, Math.min(4, seconds)) + 4) / 8) * plotWidth;
+  const x = (seconds: number) => margin.left + ((Math.max(-step, Math.min(step, seconds)) + step) / (2 * step)) * plotWidth;
+  const carInFrame = (offsetSeconds: number) => Math.abs(offsetSeconds) <= step;
+  const axisTicks = step >= 1 ? [-step, -step / 2, 0, step / 2, step] : [-step, 0, step];
+  const tickLabel = (tick: number) => (tick === 0 ? '0' : `${Math.abs(tick) < 1 ? Math.abs(tick).toFixed(1) : Math.abs(tick)}s`);
   const lanesByDriver = resolveStableLabelLanes(
-    cars.map((car) => ({ id: car.id, surname: car.surname, x: x(car.offsetSeconds) })),
+    cars.filter((car) => carInFrame(car.offsetSeconds)).map((car) => ({ id: car.id, surname: car.surname, x: x(car.offsetSeconds) })),
     labelLanes.length
   );
   const rateDetail = (carId: string, side: 'ahead' | 'behind') => {
@@ -235,18 +313,36 @@ const BattleCorridor = ({ payload, samples, history }: { payload: LiveReadiness;
   };
 
   return (
-    <div ref={ref} className="live-battle__corridor">
+    <div ref={ref} className={`live-battle__corridor${rescaling ? ' live-battle__corridor--rescale' : ''}`}>
       {width > 0 && frame ? (
         <>
-          <svg width={width} height={194} role="img" aria-label="Cars within four seconds of Bryce on a Bryce-centered seconds axis">
+          <svg
+            width={width}
+            height={194}
+            role="img"
+            aria-label={`Cars within ${step} second${step === 1 ? '' : 's'} of Bryce on a Bryce-centered seconds axis`}
+            data-battle-corridor
+            data-session-key={sessionKey ?? ''}
+            data-axis-ladder={BATTLE_AXIS_LADDER.join(',')}
+            data-axis-step={step}
+            data-axis-extent={renderExtent?.toFixed(4) ?? ''}
+            data-axis-occupancy={renderExtent === null ? '' : (renderExtent / step).toFixed(4)}
+            data-axis-eval-count={evalCount.current}
+            data-axis-breach-count={breachCount.current}
+            data-axis-transition-count={axisLog.current.length}
+            data-axis-transitions={JSON.stringify(axisLog.current)}
+            data-axis-motion={reducedMotion ? 'off' : rescaling ? 'rescale' : animateCoordinates ? 'drift' : 'static'}
+            data-axis-poll-checked-at={pollKey ?? ''}
+          >
             <line x1={margin.left} x2={width - margin.right} y1={axisY} y2={axisY} stroke="var(--axis-baseline)" />
-            {[-4, -3, -2, -1, 0, 1, 2, 3, 4].map((tick) => (
-              <g key={tick}>
-                <line x1={x(tick)} x2={x(tick)} y1={axisY - (tick === 0 ? 9 : 5)} y2={axisY + (tick === 0 ? 9 : 5)} stroke={tick === 0 ? 'var(--bryce)' : 'var(--axis-baseline)'} />
-                <text x={x(tick)} y={axisY + 23} textAnchor="middle" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={10.5}>{tick === 0 ? '0' : `${Math.abs(tick)}s`}</text>
+            {axisTicks.map((tick) => (
+              <g key={tick} className="live-battle__tick" transform={`translate(${x(tick)} 0)`} data-axis-tick={tick}>
+                <line x1={0} x2={0} y1={axisY - (tick === 0 ? 9 : 5)} y2={axisY + (tick === 0 ? 9 : 5)} stroke={tick === 0 ? 'var(--bryce)' : 'var(--axis-baseline)'} />
+                <text x={0} y={axisY + 23} textAnchor="middle" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={10.5}>{tickLabel(tick)}</text>
               </g>
             ))}
             {cars.map((car) => {
+              const visible = carInFrame(car.offsetSeconds);
               const side = car.offsetSeconds > 0 ? 'ahead' : 'behind';
               const sideCopy = side === 'ahead' ? 'ahead of Bryce' : 'behind Bryce';
               const close = Math.abs(car.offsetSeconds) <= 1;
@@ -261,6 +357,10 @@ const BattleCorridor = ({ payload, samples, history }: { payload: LiveReadiness;
                   data-driver-id={car.id}
                   data-label-lane={labelLane}
                   data-offset-seconds={car.offsetSeconds.toFixed(4)}
+                  data-in-frame={visible ? 'true' : 'false'}
+                  opacity={visible ? 1 : 0}
+                  aria-hidden={visible ? undefined : true}
+                  pointerEvents={visible ? undefined : 'none'}
                   transform={`translate(${cx} 0)`}
                 >
                   <line
@@ -278,7 +378,7 @@ const BattleCorridor = ({ payload, samples, history }: { payload: LiveReadiness;
                     cy={axisY}
                     r={13}
                     fill="transparent"
-                    tabIndex={0}
+                    tabIndex={visible ? 0 : -1}
                     aria-label={`${car.surname}, ${Math.abs(car.offsetSeconds).toFixed(1)} seconds ${sideCopy}`}
                     onMouseEnter={() => setTip({
                       x: cx,
@@ -293,11 +393,16 @@ const BattleCorridor = ({ payload, samples, history }: { payload: LiveReadiness;
                 </g>
               );
             })}
-            <g transform={`translate(${x(0)} ${axisY})`}>
+            {/* The protagonist marker never moves (his frame) and never fades —
+                no opacity, no focus-dim class, ever (lesson 7). */}
+            <g transform={`translate(${x(0)} ${axisY})`} data-protagonist="bryce">
               <rect x={-15} y={-11} width={30} height={22} rx={4} fill="var(--bryce)" />
               <text y={1} textAnchor="middle" dominantBaseline="middle" fill="#1d1d1f" fontFamily={chartFont} fontSize={12} fontWeight={750}>№9</text>
             </g>
             <text x={margin.left} y={188} textAnchor="start" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={10.5}>behind Bryce</text>
+            <text x={margin.left + plotWidth / 2} y={188} textAnchor="middle" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={10.5} data-axis-frame-note>
+              {width < 520 ? `seconds · ±${step}s` : `gaps in seconds · frame ±${step}s`}
+            </text>
             <text x={width - margin.right} y={188} textAnchor="end" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={10.5}>ahead of Bryce</text>
           </svg>
           {tip ? <ChartTipCard tip={tip} width={width} /> : null}

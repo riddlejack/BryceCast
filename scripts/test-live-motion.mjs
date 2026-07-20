@@ -1,7 +1,14 @@
 import assert from 'node:assert/strict';
 import {
+  advanceBattleAxis,
+  BATTLE_AXIS_LADDER,
+  BATTLE_AXIS_REVERSAL_PERSISTENCE,
+  battleAxisExtentSeconds,
+  battleAxisFitStep,
   buildCumulativeLiveBattleFrame,
+  createBattleAxisState,
   isFreshCheckedAt,
+  nextBattleAxisStep,
   positiveGapSeconds,
   rankChanges,
   resolveStableLabelLanes,
@@ -172,4 +179,56 @@ assert.equal(shouldAnimateSampleTransition(changedSample, historyState.sessions[
 
 assert.deepEqual(sortRowsForLiveDisplay([rows[4], rows[0], rows[2]]).map((candidate) => candidate.driverId), ['100', '2143', '104']);
 
-console.log(JSON.stringify({ ok: true, assertions: 56, model: 'session-keyed-live-history' }, null, 2));
+/* ---------- Brief P: the battle axis breathes ---------- */
+
+assert.deepEqual([...BATTLE_AXIS_LADDER], [1, 2, 4, 8], 'the quantized ladder is the spec: ±1s, ±2s, ±4s, ±8s');
+
+const offsets = (values) => values.map((offsetSeconds) => ({ offsetSeconds }));
+assert.equal(battleAxisExtentSeconds(offsets([0.4, -0.7])), 0.7, 'extent is the widest nearest-car offset');
+assert.equal(battleAxisExtentSeconds(offsets([0.4, 1.1, 6.9, -0.7])), 1.1, 'a third car ahead does not vote — only the nearest two per side');
+assert.equal(battleAxisExtentSeconds(offsets([12, -0.5])), 0.5, 'a car beyond the top rung can never render, so it never holds the frame wide');
+assert.equal(battleAxisExtentSeconds(offsets([9.5, -8.5])), null, 'nothing fittable means no content vote');
+assert.equal(battleAxisExtentSeconds([]), null, 'no rivals, no vote');
+
+assert.equal(battleAxisFitStep(0.7), 1, 'a 0.7s pack fits the ±1s rung at 70%');
+assert.equal(battleAxisFitStep(0.85), 2, 'over 80% of a rung climbs to the next — landings stay inside the up-trigger');
+assert.equal(battleAxisFitStep(3.1), 4);
+assert.equal(battleAxisFitStep(7.9), 8, 'the top rung takes whatever remains');
+assert.equal(battleAxisFitStep(null), 4, 'no content defaults to the familiar ±4s');
+
+assert.equal(nextBattleAxisStep(4, 2.4).breach, null, 'occupancy 60% sits inside the hysteresis band — no rescale');
+assert.equal(nextBattleAxisStep(4, 2.4).changed, false);
+assert.equal(nextBattleAxisStep(4, 3.7).breach, 'high', 'occupancy above 90% breaches high');
+assert.equal(nextBattleAxisStep(4, 3.7).step, 8, 'a high breach climbs exactly one rung');
+assert.equal(nextBattleAxisStep(8, 1.2).step, 4, 'a low breach descends exactly one rung, even when the fit target is further down');
+assert.equal(nextBattleAxisStep(8, 3.8).changed, false, 'a low breach whose content cannot fit the lower rung holds — the anti-wobble guard');
+assert.equal(nextBattleAxisStep(8, 3.8).breach, 'low', 'the held breach is still reported for the transition log');
+assert.equal(nextBattleAxisStep(1, 0.2).changed, false, 'the ladder floor holds the tightest frame');
+assert.equal(nextBattleAxisStep(8, 60).changed, false, 'the ladder ceiling holds the widest frame');
+assert.equal(nextBattleAxisStep(4, null).changed, false, 'absence of content never rescales');
+
+// The wobble trap that breaks naive threshold-following: content sitting just
+// past a rung boundary. Up-breach at ±2s must NOT be followed by a down-move
+// at ±4s for the same content.
+const wobbleTrap = nextBattleAxisStep(2, 1.81);
+assert.equal(wobbleTrap.step, 4, 'occupancy 90.5% climbs to ±4s');
+assert.equal(nextBattleAxisStep(4, 1.81).changed, false, 'the same content at ±4s (45%) breaches low but holds — no oscillation');
+
+// The stateful reducer: median smoothing plus breach persistence.
+let axisState = createBattleAxisState(0.6);
+assert.equal(axisState.step, 1, 'a fresh axis snaps to the best fit without motion');
+let advanced = advanceBattleAxis(axisState, 7.5);
+assert.equal(advanced.decision.changed, false, 'one spiky sample cannot move the frame (median of recent polls)');
+advanced = advanceBattleAxis(advanced.state, 7.5);
+advanced = advanceBattleAxis(advanced.state, 7.5);
+assert.equal(advanced.decision.changed, false, 'two polls of sustained breach are still short of persistence');
+advanced = advanceBattleAxis(advanced.state, 7.5);
+assert.equal(advanced.decision.changed, true, 'sustained breach moves the frame after the persistence window');
+assert.equal(advanced.decision.step, 2, 'and only one rung per move');
+const upState = advanced.state;
+assert.equal(upState.lastMove, 'up');
+let reversal = advanceBattleAxis(upState, 0.2);
+for (let index = 0; index < BATTLE_AXIS_REVERSAL_PERSISTENCE - 2; index += 1) reversal = advanceBattleAxis(reversal.state, 0.2);
+assert.equal(reversal.decision.changed, false, 'reversing the last move needs long evidence — no A→B→A across consecutive polls, by construction');
+
+console.log(JSON.stringify({ ok: true, assertions: 86, model: 'session-keyed-live-history' }, null, 2));

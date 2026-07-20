@@ -1042,10 +1042,30 @@ button { font-family: inherit; }
 
 .live-battle__car {
   transform-box: view-box;
+  transition: opacity 150ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 .live-battle__car--motion {
-  transition: transform 900ms linear;
+  transition: transform 900ms linear, opacity 150ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* Brief P: axis ticks are GPU-translated groups; a fresh tick fades in. */
+.live-battle__tick {
+  transform-box: view-box;
+  animation: live-battle-tick-in 150ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@keyframes live-battle-tick-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* A ladder rescale eases cars AND ticks together with one strong ease-out
+   under 300ms, so axis labels ride the same transition as the content —
+   never a stale ruler mid-ease. Transform and opacity only (GPU). */
+.live-battle__corridor--rescale .live-battle__car,
+.live-battle__corridor--rescale .live-battle__tick {
+  transition: transform 250ms cubic-bezier(0.23, 1, 0.32, 1), opacity 250ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 .live-battle__connector {
@@ -1155,6 +1175,10 @@ button { font-family: inherit; }
 
 @media (prefers-reduced-motion: reduce) {
   .live-battle__car--motion { transition: none; }
+  .live-battle__car,
+  .live-battle__corridor--rescale .live-battle__car,
+  .live-battle__corridor--rescale .live-battle__tick { transition: none; }
+  .live-battle__tick { animation: none; }
   .live-camera * { transition: none !important; animation: none !important; }
   .live-running-order * { transition: none !important; animation: none !important; }
 }

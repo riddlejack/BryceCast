@@ -9,6 +9,11 @@ import {
 } from './liveMotionModel';
 
 export {
+  advanceBattleAxis,
+  battleAxisExtentSeconds,
+  battleAxisFitStep,
+  BATTLE_AXIS_LADDER,
+  createBattleAxisState,
   isFreshCheckedAt,
   livePosition,
   positiveGapSeconds,
@@ -19,7 +24,7 @@ export {
   stableLabelLane,
   timestampWindowDomain
 } from './liveMotionModel';
-export type { LiveBattleCar, LiveBattleFrame, LiveBattleNeighbor, RankChange } from './liveMotionModel';
+export type { BattleAxisState, LiveBattleCar, LiveBattleFrame, LiveBattleNeighbor, RankChange } from './liveMotionModel';
 
 export type LiveRow = Record<string, unknown>;
 
