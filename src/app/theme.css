@@ -1086,6 +1086,13 @@ a.tower__row.race-row--live:hover { background: var(--surface-0); }
 
 .live-battle__mode--active { color: var(--ink-secondary); }
 
+/* Brief J stage 2: the field-compression fact, one quiet line under the
+   corridor. Tabular numerals keep the counts from jittering width per poll. */
+.live-battle__compression {
+  margin: 4px 0 8px;
+  font-variant-numeric: tabular-nums;
+}
+
 .live-battle__corridor,
 .live-battle__chart {
   position: relative;
