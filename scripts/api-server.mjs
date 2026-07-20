@@ -2217,7 +2217,7 @@ const proxyRaceControl = async (req, res, pathname) => {
   return true;
 };
 
-const sendStatic = async (res, pathname) => {
+const sendStatic = async (res, pathname, acceptsHtml = false) => {
   if (!staticDir) return false;
   const requested = pathname === '/' ? '/index.html' : pathname;
   const normalizedPath = normalize(decodeURIComponent(requested)).replace(/^(\.\.[/\\])+/, '');
@@ -2226,7 +2226,17 @@ const sendStatic = async (res, pathname) => {
   try {
     const info = await stat(candidate);
     if (info.isDirectory()) {
-      candidate = join(candidate, 'index.html');
+      // A client-side route can share a name with a built asset directory — the
+      // canonical case is `/data`, a SPA screen, colliding with `dist/data/`
+      // (the JSON assets Vite copies from `public/data/`). A browser
+      // hard-navigation to that route accepts text/html, so serve the SPA shell
+      // and let the client router render the page — exactly as a soft nav would.
+      // A non-HTML request to the bare directory gets no listing (returns false
+      // → 404), preserving "no directory listing". Real files UNDER the
+      // directory (`/data/history-bryce.json`) never reach this branch: they
+      // stat as files below and stream with their own mime type.
+      if (!acceptsHtml) return false;
+      candidate = join(staticDir, 'index.html');
     }
   } catch {
     candidate = join(staticDir, 'index.html');
@@ -2545,7 +2555,11 @@ const handler = async (req, res) => {
       return;
     }
 
-    if (await sendStatic(res, pathname)) return;
+    // A hard-navigation from a browser accepts text/html; that gate lets a SPA
+    // route that collides with an asset directory (e.g. `/data`) fall through to
+    // the app shell instead of 404-ing, while data fetches (accept JSON) don't.
+    const acceptsHtml = (req.headers.accept ?? '').includes('text/html');
+    if (await sendStatic(res, pathname, acceptsHtml)) return;
     sendError(res, 404, 'Route not found', pathname);
   } catch (error) {
     const statusCode = Number(error?.statusCode) || 500;
