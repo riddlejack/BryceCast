@@ -215,6 +215,41 @@ export interface UiRestartBySeason {
   fieldAvgNetPerRestart: number | null;
 }
 
+/** The restart field baseline (Brief K v2): how far the whole field typically
+ *  moves on a restart at one venue, so Bryce's figure reads against a norm.
+ *  `typicalFieldMove` is the mean absolute place change per car per restart.
+ *  v1 covers INDY NXT 2024→present (the first slice); the same shape later
+ *  extends to an earlier `spanFirstSeason` from the lake with no UI rework. */
+export interface UiRestartVenueBaseline {
+  venueSlug: string;
+  trackName: string;
+  trackType: string;
+  seasons: string;
+  spanFirstSeason: number | null;
+  spanLastSeason: number | null;
+  restarts: number;
+  driverObservations: number;
+  typicalFieldMove: number | null;
+  medianFieldMove: number | null;
+  /** True once the venue has ≥ 3 restarts — enough to read as a norm, not one day. */
+  stable: boolean;
+}
+
+/** The series-wide field baseline across every covered restart. */
+export interface UiRestartFieldBaseline {
+  scope: string;
+  precision: 'lap-chart';
+  coverageTier: string;
+  spanFirstSeason: number | null;
+  spanLastSeason: number | null;
+  restarts: number;
+  driverObservations: number;
+  typicalFieldMove: number | null;
+  medianFieldMove: number | null;
+  minStableRestarts: number;
+  note: string;
+}
+
 /** The Restart Report Card contract: v1 fed by the lap-chart derivation
  *  (`precision: 'lap-chart'`); per-second lake data later swaps `precision`
  *  and refines the windows with no UI rework. */
@@ -231,6 +266,10 @@ export interface UiRestartReport {
     racesUncovered: number;
   };
   career: UiRestartCareer;
+  /** Brief K v2, additive: series-wide and per-venue field baselines. Optional so
+   *  v1 consumers are untouched; absent only on packages built before K v2. */
+  fieldBaseline?: UiRestartFieldBaseline;
+  venueBaselines?: UiRestartVenueBaseline[];
   byRace: UiRestartByRace[];
   byVenue: UiRestartByVenue[];
   bySeason: UiRestartBySeason[];

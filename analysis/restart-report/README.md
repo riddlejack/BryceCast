@@ -47,8 +47,30 @@ Two races were checked by hand against the official caution summaries:
 - `output/tables/restart_by_race.csv` — per-race aggregate with the field rank.
 - `output/tables/restart_by_venue.csv` — per-venue rollup.
 - `output/tables/restart_by_season.csv` — per-season rollup.
+- `output/tables/restart_venue_baseline.csv` — the field baseline per venue (Brief K v2).
 - `output/tables/uncovered_races.csv` — races excluded from clean detection, with the reason.
-- `output/summary.json` — coverage, career totals, and the hand-verification block.
+- `output/summary.json` — coverage, career totals, the field baseline, and the hand-verification block.
+
+## The field baseline (Brief K v2)
+
+A quiet denominator for Bryce's numbers: how far the **whole field** typically
+moves on a restart at each venue. `typicalFieldMove` is the mean absolute net
+running-order change per classified car per restart — the average size of a place
+swing on a restart here, in either direction — derived from the same validated
+driver deltas, never estimated. Every row carries its restart count,
+car-observation count, and season span, and venues with fewer than three restarts
+are flagged `stable=false` so a thin sample is never headlined as a norm.
+
+Coverage today is INDY NXT 2024→present — the field-baseline **first slice**. The
+UI states its own denominator on screen ("across N restarts since YYYY"). The
+2008–2023 INDYCAR/Lights corpus in the historical data lake is a **raw research
+pool**, not a decoded lap-chart source: the compact quality index holds validation
+statistics only (not reconstructed per-lap running order or a caution-lap index),
+older captures still need session segmentation and series validation, and there is
+no in-repo official-results anchor to validate pre-2024 restarts against. A 16-year
+extraction is therefore a dedicated decode lane, not part of this pass. The
+`spanFirstSeason` field is sized so that extraction later extends the same rows to
+an earlier span and larger counts with no UI rework.
 
 ## Commands
 

@@ -278,6 +278,29 @@ const restartMovePhrase = (net: number): string => (net > 0 ? `up ${net}` : net 
 const restartCountWord = (value: number): string =>
   ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'][value] ?? String(value);
 
+/** The quiet field-baseline line (Brief K v2): the typical restart place-swing
+ *  across the whole field at this venue, so Bryce's numbers read against a norm.
+ *  Falls back to the series-wide baseline when the venue's sample is too thin to
+ *  headline (< 3 restarts), and states its own denominator per house law. */
+const RestartBaselineLine = ({ trackName }: { trackName: string }) => {
+  const report = uiDataPackage.screens.careerLab.restarts;
+  const field = report.fieldBaseline;
+  if (!field) return null;
+  const target = trackName.trim().toLowerCase();
+  const venue = (report.venueBaselines ?? []).find(
+    (row) => row.stable && row.trackName.trim().toLowerCase() === target
+  );
+  const source = venue ?? field;
+  if (source.typicalFieldMove === null) return null;
+  const here = venue ? ' here' : ' across INDY NXT';
+  return (
+    <p style={{ margin: '10px 0 0', fontSize: 12, color: 'var(--ink-muted)' }}>
+      Typical field movement on restarts{here}: ±{source.typicalFieldMove.toFixed(1)} places · across{' '}
+      {source.restarts} restart{source.restarts === 1 ? '' : 's'} since {source.spanFirstSeason ?? '2024'}
+    </p>
+  );
+};
+
 /** "both times" / "every time" / "on three of five" — generalizes across venues
  *  without special-casing; a day with nothing to headline states the counts and
  *  lets the honest rows below carry the detail. */
@@ -341,6 +364,7 @@ const RestartPrior = ({ trackName }: { trackName: string }) => {
         {intro}
         {soleBest ? ' · best in the field on one of those days' : ''}.
       </p>
+      <RestartBaselineLine trackName={trackName} />
       <div className="stack" style={{ gap: 0, marginTop: 8 }}>
         {counted.map((row, index) => {
           const net = row.bryceNet ?? 0;

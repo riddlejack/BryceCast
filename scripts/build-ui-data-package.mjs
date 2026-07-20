@@ -67,6 +67,7 @@ const sources = {
   restartReportByRace: 'analysis/restart-report/output/tables/restart_by_race.csv',
   restartReportByVenue: 'analysis/restart-report/output/tables/restart_by_venue.csv',
   restartReportBySeason: 'analysis/restart-report/output/tables/restart_by_season.csv',
+  restartReportVenueBaseline: 'analysis/restart-report/output/tables/restart_venue_baseline.csv',
   restartReportDriverDeltas: 'analysis/restart-report/output/tables/restart_driver_deltas.csv',
   restartReportBuilderScript: 'analysis/restart-report/scripts/build_restart_report.py',
   restartReportValidatorScript: 'analysis/restart-report/scripts/validate_restart_report.py',
@@ -1433,6 +1434,17 @@ const buildRestartReport = ({ summary, byRaceRows, seasonIndex }) => {
     windowLaps: numberOrNull(summary.windowLaps),
     coverage: summary.coverage,
     career: summary.career,
+    // Brief K v2, additive: the field baseline (series-wide + per-venue). Absent
+    // on pre-K-v2 summaries; the optional contract fields stay undefined then.
+    ...(summary.fieldBaseline ? { fieldBaseline: summary.fieldBaseline } : {}),
+    ...(summary.venueBaselines
+      ? {
+          venueBaselines: summary.venueBaselines.map((row) => {
+            const { sourceHash, stable, ...rest } = row;
+            return { ...rest, stable: stable === 'true' || stable === true };
+          })
+        }
+      : {}),
     byRace,
     byVenue: (summary.byVenue ?? []).map(stripHash),
     bySeason: (summary.bySeason ?? []).map(stripHash),
@@ -1443,6 +1455,7 @@ const buildRestartReport = ({ summary, byRaceRows, seasonIndex }) => {
       sourceRef('restartReportByRace', 'Per-race restart movement with the field rank.'),
       sourceRef('restartReportByVenue', 'Per-venue restart rollup for the Race Week prior.'),
       sourceRef('restartReportBySeason', 'Per-season restart rollup.'),
+      sourceRef('restartReportVenueBaseline', 'Per-venue field baseline: the typical restart place-swing across the field.'),
       sourceRef('restartReportEvents', 'One row per restart, Bryce against the full field.'),
       sourceRef('canonicalDataset', 'Official Results-PDF caution summaries and official lap-chart positions.')
     ]

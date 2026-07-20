@@ -684,6 +684,30 @@ const restartSourcePill = (
   />
 );
 
+/** The quiet field-baseline line (Brief K v2): the typical restart place-swing
+ *  across the whole field at this venue — the norm Bryce's figures read against.
+ *  Falls back to the series-wide baseline when the venue's sample is thin, and
+ *  always states its denominator. Venue resolved from the validated restart
+ *  report by this race's session id. */
+const RestartBaselineLine = ({ sessionId }: { sessionId: string }) => {
+  const report = uiDataPackage.screens.careerLab.restarts;
+  const field = report.fieldBaseline;
+  if (!field) return null;
+  const venueSlug = (report.byRace ?? []).find((row) => row.sessionId === sessionId)?.venueSlug ?? null;
+  const venue = venueSlug
+    ? (report.venueBaselines ?? []).find((row) => row.stable && row.venueSlug === venueSlug)
+    : undefined;
+  const source = venue ?? field;
+  if (source.typicalFieldMove === null) return null;
+  const here = venue ? ' here' : ' across INDY NXT';
+  return (
+    <p style={{ margin: '12px 0 0', fontSize: 11.5, color: 'var(--ink-muted)' }}>
+      Typical field movement on restarts{here}: ±{source.typicalFieldMove.toFixed(1)} places · across{' '}
+      {source.restarts} restart{source.restarts === 1 ? '' : 's'} since {source.spanFirstSeason ?? '2024'}
+    </p>
+  );
+};
+
 const RestartsCard = ({ story }: { story: RaceStoryPack }) => {
   const restarts = story.restarts;
   if (!restarts) return null;
@@ -713,6 +737,7 @@ const RestartsCard = ({ story }: { story: RaceStoryPack }) => {
           The field took {detectedWord} restart{restarts.detected === 1 ? '' : 's'} this race; Bryce's lap-chart line doesn't
           reach them, so there's no restart read to show for him here.
         </p>
+        <RestartBaselineLine sessionId={story.sessionId} />
       </Card>
     );
   }
@@ -795,6 +820,8 @@ const RestartsCard = ({ story }: { story: RaceStoryPack }) => {
           );
         })}
       </div>
+
+      <RestartBaselineLine sessionId={story.sessionId} />
 
       <p style={{ margin: '14px 0 0', fontSize: 11.5, color: 'var(--ink-muted)' }}>
         Running order over the two green laps after each restart, Bryce against the full field

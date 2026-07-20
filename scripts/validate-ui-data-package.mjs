@@ -985,6 +985,31 @@ if (!restartSourcePaths.has('analysis/restart-report/output/summary.json')) {
   fail('careerLab.restarts.sourceRefs must cite the restart-report summary.');
 }
 
+/* Brief K v2 — the field baseline mirrors the validated summary and stays honest. */
+if (restartSummary.fieldBaseline) {
+  if (JSON.stringify(restartReport.fieldBaseline) !== JSON.stringify(restartSummary.fieldBaseline)) {
+    fail('careerLab.restarts.fieldBaseline must mirror the validated restart-report summary.');
+  }
+  if (restartReport.fieldBaseline.precision !== 'lap-chart') {
+    fail('careerLab.restarts.fieldBaseline v1 precision must be lap-chart.');
+  }
+  const venueBaselines = restartReport.venueBaselines ?? [];
+  if (venueBaselines.length !== (restartSummary.venueBaselines ?? []).length) {
+    fail('careerLab.restarts.venueBaselines count must equal the validated summary.');
+  }
+  for (const row of venueBaselines) {
+    if (!(row.restarts > 0) || !(row.driverObservations > 0)) {
+      fail(`careerLab.restarts.venueBaselines ${row.venueSlug} must carry its denominators.`);
+    }
+    if (row.stable !== (row.restarts >= restartSummary.fieldBaseline.minStableRestarts)) {
+      fail(`careerLab.restarts.venueBaselines ${row.venueSlug} stable flag disagrees with the threshold.`);
+    }
+  }
+  if (!restartSourcePaths.has('analysis/restart-report/output/tables/restart_venue_baseline.csv')) {
+    fail('careerLab.restarts.sourceRefs must cite the venue-baseline table when the baseline is present.');
+  }
+}
+
 /* ---------- Career Lab atlas (deterministic land + 145-race venue contract) ---------- */
 
 const atlas = dataPackage.screens.careerLab.atlas;

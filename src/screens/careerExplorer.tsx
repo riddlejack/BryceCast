@@ -1351,9 +1351,17 @@ export const CareerRestarts = () => {
         />
       }
     >
-      <p style={{ margin: '0 0 14px', fontSize: 15, color: 'var(--ink-primary)', fontWeight: 560 }}>
+      <p style={{ margin: '0 0 6px', fontSize: 15, color: 'var(--ink-primary)', fontWeight: 560 }}>
         Held or gained ground on {heldOrGained} of the {counted} restarts he has run in INDY NXT.
       </p>
+      {report.fieldBaseline && report.fieldBaseline.typicalFieldMove !== null ? (
+        <p style={{ margin: '0 0 14px', fontSize: 12, color: 'var(--ink-muted)' }}>
+          Typical field movement on restarts: ±{report.fieldBaseline.typicalFieldMove.toFixed(1)} places · across{' '}
+          {report.fieldBaseline.restarts} restarts since {report.fieldBaseline.spanFirstSeason ?? '2024'}
+        </p>
+      ) : (
+        <div style={{ height: 8 }} />
+      )}
 
       <div className="grid grid--4" style={{ marginBottom: 18 }}>
         <Stat label="Restarts run" value={counted} note={`across ${n} races`} />

@@ -27,6 +27,7 @@ DATASET_PATH = ROOT / "data/career/career.dataset.json"
 BRYCE_ID = "driver_bryce_aron"
 INDY_NXT_ID = "series_indy_nxt"
 WINDOW_LAPS = 2
+MIN_BASELINE_RESTARTS = 3
 
 EXPECTED_HAND_VERIFIED = {
     "session_indy_nxt_2024_6314": [
@@ -271,6 +272,86 @@ def main() -> None:
             if as_int(scope["bryceGained"]) != sum(as_int(r["bryceGained"]) for r in member):
                 fail(f"rollup {key}={scope[key]}: bryceGained mismatch")
 
+    # ---- field baseline (Brief K v2) -------------------------------------- #
+    # Re-derive the venue field baseline straight from the driver deltas joined to
+    # each restart's venue/season, independently of the build, and check every
+    # emitted figure and denominator.
+    baseline_rows = rows(TABLES / "restart_venue_baseline.csv")
+    event_ctx = {
+        (e["sessionId"], e["restartIndex"]): {
+            "venueSlug": e["venueSlug"],
+            "season": as_int(e["seasonYear"]),
+        }
+        for e in event_rows
+    }
+    venue_abs: dict[str, list[int]] = defaultdict(list)
+    venue_restarts: dict[str, set[tuple[str, str]]] = defaultdict(set)
+    venue_seasons: dict[str, set[int]] = defaultdict(set)
+    all_abs: list[int] = []
+    all_restarts: set[tuple[str, str]] = set()
+    all_seasons: set[int] = set()
+    for delta in delta_rows:
+        key = (delta["sessionId"], delta["restartIndex"])
+        info = event_ctx.get(key)
+        if info is None:
+            fail(f"driver delta {key} has no matching restart event for baseline")
+        net = as_int(delta["net"])
+        if net is None:
+            continue
+        magnitude = abs(net)
+        slug = info["venueSlug"]
+        venue_abs[slug].append(magnitude)
+        venue_restarts[slug].add(key)
+        all_abs.append(magnitude)
+        all_restarts.add(key)
+        if info["season"] is not None:
+            venue_seasons[slug].add(info["season"])
+            all_seasons.add(info["season"])
+
+    def approx(stated: Any, expected: float, label: str) -> None:
+        if stated in (None, "", "None"):
+            fail(f"baseline {label}: missing value")
+        if abs(float(stated) - expected) > 0.051:
+            fail(f"baseline {label}: stated {stated} != re-derived {expected:.3f}")
+
+    if len(baseline_rows) != len(venue_abs):
+        fail(f"restart_venue_baseline row count {len(baseline_rows)} != re-derived {len(venue_abs)}")
+    for row in baseline_rows:
+        slug = row["venueSlug"]
+        if slug not in venue_abs:
+            fail(f"baseline venue {slug} not present in the driver deltas")
+        magnitudes = venue_abs[slug]
+        restarts = len(venue_restarts[slug])
+        if as_int(row["restarts"]) != restarts:
+            fail(f"baseline {slug}: restarts {row['restarts']} != re-derived {restarts}")
+        if as_int(row["driverObservations"]) != len(magnitudes):
+            fail(f"baseline {slug}: driverObservations != re-derived {len(magnitudes)}")
+        approx(row["typicalFieldMove"], statistics.fmean(magnitudes), f"{slug} typicalFieldMove")
+        approx(row["medianFieldMove"], float(statistics.median(magnitudes)), f"{slug} medianFieldMove")
+        expected_stable = restarts >= MIN_BASELINE_RESTARTS
+        if (row["stable"] == "true") != expected_stable:
+            fail(f"baseline {slug}: stable flag disagrees with the {MIN_BASELINE_RESTARTS}-restart threshold")
+        seasons = sorted(venue_seasons[slug])
+        if seasons:
+            if as_int(row["spanFirstSeason"]) != seasons[0] or as_int(row["spanLastSeason"]) != seasons[-1]:
+                fail(f"baseline {slug}: season span disagrees with the re-derived deltas")
+
+    field_baseline = summary.get("fieldBaseline")
+    if not field_baseline:
+        fail("summary must carry a fieldBaseline block")
+    if field_baseline.get("precision") != "lap-chart":
+        fail("fieldBaseline precision must be lap-chart in v1")
+    if field_baseline.get("restarts") != len(all_restarts):
+        fail("fieldBaseline restarts mismatch")
+    if field_baseline.get("driverObservations") != len(all_abs):
+        fail("fieldBaseline driverObservations mismatch")
+    approx(field_baseline.get("typicalFieldMove"), statistics.fmean(all_abs), "career typicalFieldMove")
+    if all_seasons and field_baseline.get("spanFirstSeason") != min(all_seasons):
+        fail("fieldBaseline spanFirstSeason mismatch")
+    # The emitted venueBaselines block in the summary must equal the CSV rows.
+    if len(summary.get("venueBaselines", [])) != len(baseline_rows):
+        fail("summary venueBaselines count must equal the restart_venue_baseline table")
+
     # ---- career + coverage ------------------------------------------------ #
     career = summary["career"]
     all_bryce = [as_int(e["bryceNet"]) for e in event_rows if e["bryceClassified"] == "true"]
@@ -305,7 +386,8 @@ def main() -> None:
     print(
         f"restart-report validation OK — {len(event_rows)} restarts, "
         f"{career['bryceRestartsCounted']} with a Bryce line, career net {career['bryceNet']:+d}, "
-        f"2 races hand-verified."
+        f"2 races hand-verified; field baseline re-derived across {len(baseline_rows)} venues "
+        f"(±{field_baseline['typicalFieldMove']} places / {field_baseline['restarts']} restarts)."
     )
 
 

@@ -50,6 +50,12 @@ BRYCE_ID = "driver_bryce_aron"
 INDY_NXT_ID = "series_indy_nxt"
 WINDOW_LAPS = 2
 
+# The field baseline (Brief K v2) needs enough restarts at a venue before a
+# "typical movement here" figure reads as a norm rather than one noisy day. Below
+# this, the venue row is emitted with its denominator but flagged not-stable so
+# the UI can fall back to the series-wide baseline instead of headlining a thin N.
+MIN_BASELINE_RESTARTS = 3
+
 # Two races verified against the official Results-PDF caution summaries by hand;
 # the values below are reproduced in the report and re-derived by the validator.
 HAND_VERIFIED_SESSIONS = ("session_indy_nxt_2024_6314", "session_indy_nxt_2024_6315")
@@ -571,6 +577,7 @@ def main() -> None:
     }
 
     hand_verification = build_hand_verification(event_rows)
+    venue_baseline_rows, field_baseline = build_field_baselines(event_rows, driver_delta_rows, source_hash)
 
     write_csv(
         TABLES / "restart_events.csv",
@@ -620,6 +627,14 @@ def main() -> None:
         ],
     )
     write_csv(
+        TABLES / "restart_venue_baseline.csv",
+        venue_baseline_rows,
+        [
+            "venueSlug", "trackName", "trackType", "seasons", "spanFirstSeason", "spanLastSeason",
+            "restarts", "driverObservations", "typicalFieldMove", "medianFieldMove", "stable", "sourceHash",
+        ],
+    )
+    write_csv(
         TABLES / "uncovered_races.csv",
         uncovered_rows,
         ["sessionId", "seasonYear", "raceLabel", "trackName", "reason", "note"],
@@ -647,6 +662,8 @@ def main() -> None:
             "racesUncovered": len(uncovered_rows),
         },
         "career": career,
+        "fieldBaseline": field_baseline,
+        "venueBaselines": venue_baseline_rows,
         "byVenue": venue_rows,
         "bySeason": season_rows,
         "handVerification": hand_verification,
@@ -658,6 +675,7 @@ def main() -> None:
             "A restart's window is the two green laps after it; where a fresh caution or the finish arrives first, the window is shorter and the row says so.",
             "Position changes in the window can include pit cycles under green; the measure is descriptive net movement, not a count of on-track passes.",
             "Caution laps come from official Results-PDF caution summaries; races without an official lap chart are marked uncovered, never estimated.",
+            "The field baseline is the mean absolute place change per car per restart at a venue, INDY NXT since the first covered season; each figure carries its restart and car-observation count, and thin venues (< 3 restarts) are flagged unstable rather than headlined.",
         ],
     }
     write_json(OUTPUT / "summary.json", summary)
@@ -666,7 +684,10 @@ def main() -> None:
         f"restart-report: {len(event_rows)} restarts across {races_with_restarts} races "
         f"({sessions_with_chart}/{len(race_sessions)} sessions charted, "
         f"{races_no_caution} caution-free, {end_of_race_cautions} ended under caution, "
-        f"{len(uncovered_rows)} uncovered rows)."
+        f"{len(uncovered_rows)} uncovered rows); "
+        f"field baseline ±{field_baseline['typicalFieldMove']} places across "
+        f"{field_baseline['restarts']} restarts / {len(venue_baseline_rows)} venues "
+        f"since {field_baseline['spanFirstSeason']}."
     )
 
 
@@ -737,6 +758,116 @@ def rollup(
     else:
         out.sort(key=lambda row: str(row["venueSlug"]))
     return out
+
+
+def build_field_baselines(
+    event_rows: list[dict[str, Any]],
+    driver_delta_rows: list[dict[str, Any]],
+    source_hash: str,
+) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    """The venue field baseline (Brief K v2): how far the *whole field* typically
+    moves on a restart at each venue, so Bryce's own figure reads against a norm.
+
+    "Typical field movement" is the mean absolute net running-order change per
+    classified car per restart — the average size of a place swing on a restart
+    here, in either direction. It is derived from the same validated driver
+    deltas as Bryce's v1 figures (never estimated), and every row carries its
+    denominator: how many restarts and car-observations, and the season span.
+
+    v1 covers INDY NXT 2024→present (the field-baseline first slice). The
+    contract is sized so a later 16-year lake extraction extends the same rows to
+    an earlier `spanFirstSeason` and larger counts with no UI rework.
+    """
+    # (sessionId, restartIndex) -> venue/season context from the event rows.
+    ctx: dict[tuple[str, str], dict[str, Any]] = {}
+    for row in event_rows:
+        ctx[(row["sessionId"], str(row["restartIndex"]))] = {
+            "venueSlug": row["venueSlug"],
+            "trackName": row["trackName"],
+            "trackType": row["trackType"],
+            "seasonYear": row["seasonYear"],
+        }
+
+    per_venue: dict[str, dict[str, Any]] = {}
+    all_abs: list[float] = []
+    all_restarts: set[tuple[str, str]] = set()
+    all_seasons: set[int] = set()
+
+    def touch(bucket: dict[str, Any], net_abs: float, restart_key: tuple[str, str], season: int | None) -> None:
+        bucket["abs"].append(net_abs)
+        bucket["restarts"].add(restart_key)
+        if season is not None:
+            bucket["seasons"].add(season)
+
+    for row in driver_delta_rows:
+        key = (row["sessionId"], str(row["restartIndex"]))
+        info = ctx.get(key)
+        if info is None:
+            continue
+        net = clean_int(row["net"])
+        if net is None:
+            continue
+        net_abs = float(abs(net))
+        season = clean_int(info["seasonYear"])
+        venue = info["venueSlug"]
+        bucket = per_venue.setdefault(
+            venue,
+            {
+                "venueSlug": venue,
+                "trackName": info["trackName"],
+                "trackType": info["trackType"],
+                "abs": [],
+                "restarts": set(),
+                "seasons": set(),
+            },
+        )
+        touch(bucket, net_abs, key, season)
+        all_abs.append(net_abs)
+        all_restarts.add(key)
+        if season is not None:
+            all_seasons.add(season)
+
+    venue_rows: list[dict[str, Any]] = []
+    for bucket in per_venue.values():
+        restarts = len(bucket["restarts"])
+        seasons = sorted(bucket["seasons"])
+        venue_rows.append(
+            {
+                "venueSlug": bucket["venueSlug"],
+                "trackName": bucket["trackName"],
+                "trackType": bucket["trackType"],
+                "seasons": ";".join(str(s) for s in seasons),
+                "spanFirstSeason": seasons[0] if seasons else None,
+                "spanLastSeason": seasons[-1] if seasons else None,
+                "restarts": restarts,
+                "driverObservations": len(bucket["abs"]),
+                "typicalFieldMove": round1(mean(bucket["abs"])),
+                "medianFieldMove": round1(median(bucket["abs"])),
+                "stable": "true" if restarts >= MIN_BASELINE_RESTARTS else "false",
+                "sourceHash": source_hash,
+            }
+        )
+    venue_rows.sort(key=lambda row: (-row["restarts"], str(row["venueSlug"])))
+
+    seasons = sorted(all_seasons)
+    field_baseline = {
+        "scope": "indy_nxt",
+        "precision": "lap-chart",
+        "coverageTier": "official_timing_documents",
+        "spanFirstSeason": seasons[0] if seasons else None,
+        "spanLastSeason": seasons[-1] if seasons else None,
+        "restarts": len(all_restarts),
+        "driverObservations": len(all_abs),
+        "typicalFieldMove": round1(mean(all_abs)),
+        "medianFieldMove": round1(median(all_abs)),
+        "minStableRestarts": MIN_BASELINE_RESTARTS,
+        "note": (
+            "Mean absolute running-order change per classified car per restart — "
+            "the typical size of a place swing on an INDY NXT restart, from the "
+            "official lap chart. Positions only, never lap times."
+        ),
+    }
+    return venue_rows, field_baseline
 
 
 def build_hand_verification(event_rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
