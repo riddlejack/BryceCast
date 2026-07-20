@@ -97,7 +97,7 @@ const Routes = () => {
   const resetHistoryRef = useRef<() => void>(() => {});
   const replay = useReplaySession(replayKey, () => resetHistoryRef.current());
   const readiness = useReadiness(replay.getReplayParams);
-  const liveHistory = useLiveSessionHistory(readiness.payload);
+  const liveHistory = useLiveSessionHistory(readiness.payload, replay.getReplayParams);
   resetHistoryRef.current = liveHistory.reset;
   // The moment a replay engages server-side (started flips true after control
   // answers active:true), pull readiness immediately. Without this the cold

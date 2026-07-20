@@ -140,6 +140,17 @@ export const createLakeReplayFeeds = ({
     return rows;
   };
 
+  /** Read-only accessor: the full chronologically-sorted rows for a session
+   *  (`[{ ms, checkedAt, summary, raw }]`, or `[]` if unknown), from the same
+   *  per-session cache the replay path uses. Lets the running-order history
+   *  endpoint (Brief O) build its rank-change breakpoints for the 40 lake-fed
+   *  replays the sqlite archive never held — without re-gunzipping per request. */
+  const seriesRowsFor = (sessionKey) => {
+    load();
+    const selected = sessionIndex.get(sessionKey);
+    return selected ? rowsFor(selected) : [];
+  };
+
   /** Binary search: index of the last row at or before `virtualMs`. */
   const rowIndexAt = (rows, virtualMs) => {
     let lo = 0;
@@ -313,5 +324,5 @@ export const createLakeReplayFeeds = ({
     };
   };
 
-  return { enabled, has, available, sessions, start, stop, status: controlState, currentRecord, recordAt, isActive: () => Boolean(playback) };
+  return { enabled, has, available, sessions, seriesRowsFor, start, stop, status: controlState, currentRecord, recordAt, isActive: () => Boolean(playback) };
 };

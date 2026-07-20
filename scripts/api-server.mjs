@@ -1,7 +1,7 @@
 import { createReadStream } from 'node:fs';
 import { access, mkdir, readFile, stat, writeFile } from 'node:fs/promises';
 import { createServer } from 'node:http';
-import { dirname, extname, join, normalize, relative, resolve } from 'node:path';
+import { dirname, extname, join, normalize, relative, resolve, sep } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { DatabaseSync } from 'node:sqlite';
 import { bryceCarNumber, isBryceProfile, isBryceTimingRow, isIndyNxtTimingHeartbeat, liveSourceEndpoints, raceSnapshotEndpoints } from './live-source-endpoints.mjs';
@@ -1862,6 +1862,248 @@ const cachedEndpointResult = async (endpoint) => {
   return endpointResultCache.get(endpoint.id)?.result ?? null;
 };
 
+// ---------------------------------------------------------------------------
+// Running-order rank-series history (Brief O — "the server remembers the race")
+//
+// A mid-race joiner's rank chart is blank until their own client accumulates a
+// window of polls. This endpoint hands every joiner the session-so-far: a
+// per-car running-order series read from the capture archive, DOWNSAMPLED to
+// running-order breakpoints (a frame only when the field's order or the flag
+// changes — never a raw 1s sample). The client seeds its chart from one fetch,
+// then appends its own polls.
+//
+// The cache-backed law: N viewers must cost CONSTANT archive reads. The
+// expensive parse (JSON payloads → compact rows → breakpoints) is memoized per
+// session and only ever reads the snapshots it has not seen yet (append-only
+// `id`), refreshed at most once per RANK_SERIES_REFRESH_MS bucket. Every request
+// then WINDOWS the already-cached breakpoint list to its own (virtual) now in
+// memory — so a hundred replay clients at a hundred different virtual clocks
+// share one archive computation. This is a derived-data cache (like
+// endpointResultCache), NOT playback state: nothing here is per-client mutable,
+// so one viewer's window can never change another's.
+const RANK_SERIES_SCHEMA_VERSION = 'live-rank-series.v1';
+const RANK_SERIES_REFRESH_MS = Number(process.env.BRYCECAST_RANK_SERIES_REFRESH_MS ?? 5000);
+const RANK_SERIES_MAX_SESSIONS = 4;
+// The running-order chart windows to five minutes and the client caps at 300
+// samples; a few hundred breakpoints covers a full race with headroom.
+const RANK_SERIES_MAX_FRAMES = 400;
+
+const rankSeriesCache = new Map();
+
+// Read-only archive access with the immutable-URI fallback used across the
+// project (build-ui-data-package.mjs): some hosts refuse `-readonly` on an
+// actively-written archive (SQLITE_CANTOPEN 14). Both modes guarantee no writes.
+const openArchiveReadOnly = () => {
+  try {
+    return new DatabaseSync(sqlitePath, { readOnly: true });
+  } catch {
+    const uri = `file:${sqlitePath.split(sep).map(encodeURIComponent).join('/')}?immutable=1`;
+    return new DatabaseSync(uri, { readOnly: true });
+  }
+};
+
+const latestArchivedSessionKey = () => {
+  try {
+    const db = openArchiveReadOnly();
+    try {
+      return db.prepare('SELECT session_key FROM race_snapshots ORDER BY id DESC LIMIT 1').get()?.session_key ?? null;
+    } finally {
+      db.close();
+    }
+  } catch {
+    return null;
+  }
+};
+
+// One raw Race Control payload's timing_results → a compact running-order frame.
+// The rows are compacted through the SAME reducer the live/readiness routes use,
+// so a seeded sample is byte-shape-identical to an appended live one. Both the
+// sqlite-snapshot path and the lake-feed path funnel through this one core.
+const rankSeriesFrameFromRaw = (checkedAt, raw) => {
+  const timing = raw?.timing?.timing_results;
+  const heartbeat = timing?.heartbeat ?? null;
+  const items = Array.isArray(timing?.Item) ? timing.Item : [];
+  if (!heartbeat || items.length === 0) return null;
+  const rows = items
+    .slice()
+    .sort((left, right) => Number(left?.rank ?? 999) - Number(right?.rank ?? 999))
+    .map((row) => compactTimingRowForReadiness(row, heartbeat));
+  const bryce = rows.find((row) => row.bryce === true) ?? null;
+  const flag = String(heartbeat.currentFlag ?? heartbeat.flag ?? '');
+  // The breakpoint signature is the running ORDER plus the flag — nothing else.
+  // Lap ticks and gaps ride along on each emitted frame but never trigger one,
+  // so the series stays a rank-change series (not a raw 1s stream). Ids fall back
+  // to car number when empty/whitespace (the '' RaceTools lesson) so a lake feed
+  // whose rival DriverIDs are '' never collapses two cars onto one rank line.
+  const order = rows
+    .map((row) => `${(row.driverId || row.no || '').toString().trim()}:${row.liveRank ?? row.rank ?? ''}`)
+    .join(',');
+  return {
+    checkedAt,
+    lap: safeNumber(heartbeat.lapNumber ?? heartbeat.lap),
+    flag,
+    eventId: String(heartbeat.EventID ?? '').trim(),
+    eventSessionId: String(heartbeat.EventSessionID ?? '').trim(),
+    rows,
+    bryceId: bryce ? String(bryce.driverId || bryce.no || '').trim() : '',
+    signature: `${order}|${flag}`
+  };
+};
+
+// One archived sqlite snapshot (payload_json string) → a compact frame.
+const rankSeriesFrameFromSnapshot = (checkedAt, payloadJson) => {
+  let payload;
+  try {
+    payload = JSON.parse(payloadJson);
+  } catch {
+    return null;
+  }
+  return rankSeriesFrameFromRaw(checkedAt, payload?.raw);
+};
+
+// Fold one built frame into a session entry: track the newest frame and the
+// resolved identities, and append a breakpoint ONLY when the running order or
+// the flag changes (never a raw 1s sample). Shared by both ingest paths.
+const foldRankSeriesFrame = (entry, frame, checkedAt) => {
+  if (!frame) return;
+  const enriched = {
+    checkedAt: checkedAt ?? frame.checkedAt,
+    checkedAtMs: Date.parse(checkedAt ?? frame.checkedAt),
+    lap: frame.lap,
+    flag: frame.flag,
+    rows: frame.rows,
+    signature: frame.signature
+  };
+  entry.currentFrame = enriched;
+  if (frame.bryceId && !entry.bryceId) entry.bryceId = frame.bryceId;
+  if (!entry.clientSessionKey && (frame.eventId || frame.eventSessionId)) {
+    entry.clientSessionKey = frame.eventId ? `${frame.eventId}-${frame.eventSessionId}` : frame.eventSessionId;
+  }
+  if (entry.lastSignature === null || enriched.signature !== entry.lastSignature) {
+    entry.breakpoints.push(enriched);
+    entry.lastSignature = enriched.signature;
+  }
+};
+
+// Incremental, session-keyed cache. Reads only rows past the last one folded in
+// (`lastId` = the sqlite max id, or the lake row count), so a live session grows
+// cheaply and a completed (replay) session is parsed exactly once for its whole
+// lifetime on the server. Own-capture + live sessions live in the sqlite archive;
+// the 40 RaceTools/Timing71 replays live as gzipped NDJSON lake feeds — the same
+// per-request resolver reaches both, so `?replay=` windows either identically.
+const computeRankSeriesEntry = (sessionKey) => {
+  const nowMs = Date.now();
+  let entry = rankSeriesCache.get(sessionKey);
+  if (entry && nowMs - entry.refreshedAt < RANK_SERIES_REFRESH_MS) return entry;
+  if (!entry) {
+    entry = {
+      sessionKey,
+      lastId: 0,
+      breakpoints: [],
+      lastSignature: null,
+      currentFrame: null,
+      clientSessionKey: null,
+      bryceId: null,
+      refreshedAt: 0,
+      error: null
+    };
+  }
+  try {
+    if (lakeReplayFeeds.has(sessionKey)) {
+      // Lake-fed replay: a completed, immutable feed. The lake module caches the
+      // gunzipped rows; we fold only rows past the index already processed, so a
+      // re-read after the refresh bucket expires is O(1).
+      const rows = lakeReplayFeeds.seriesRowsFor(sessionKey);
+      for (let index = entry.lastId; index < rows.length; index += 1) {
+        foldRankSeriesFrame(entry, rankSeriesFrameFromRaw(rows[index].checkedAt, rows[index].raw), rows[index].checkedAt);
+      }
+      entry.lastId = rows.length;
+    } else {
+      const db = openArchiveReadOnly();
+      try {
+        const rows = db
+          .prepare(
+            `SELECT id, checked_at, payload_json
+               FROM race_snapshots
+              WHERE session_key = ? AND id > ?
+              ORDER BY id ASC`
+          )
+          .all(sessionKey, entry.lastId);
+        for (const row of rows) {
+          entry.lastId = Number(row.id);
+          foldRankSeriesFrame(entry, rankSeriesFrameFromSnapshot(row.checked_at, row.payload_json), row.checked_at);
+        }
+      } finally {
+        db.close();
+      }
+    }
+    entry.error = null;
+  } catch (error) {
+    entry.error = error instanceof Error ? error.message : String(error);
+  }
+  entry.refreshedAt = nowMs;
+  rankSeriesCache.set(sessionKey, entry);
+  if (rankSeriesCache.size > RANK_SERIES_MAX_SESSIONS) {
+    const stale = [...rankSeriesCache.entries()]
+      .filter(([key]) => key !== sessionKey)
+      .sort((left, right) => left[1].refreshedAt - right[1].refreshedAt)[0];
+    if (stale) rankSeriesCache.delete(stale[0]);
+  }
+  return entry;
+};
+
+const buildRankSeriesResponse = ({ sessionKey, clientSessionKeyHint = null, upperBoundCheckedAt = null, virtualNow = null, mode }) => {
+  const base = {
+    schemaVersion: RANK_SERIES_SCHEMA_VERSION,
+    available: false,
+    mode,
+    sessionKey: sessionKey ?? null,
+    clientSessionKey: clientSessionKeyHint,
+    checkedAt: new Date().toISOString(),
+    bryceId: null,
+    breakpointCount: 0,
+    frameCount: 0,
+    window: null,
+    frames: [],
+    warnings: []
+  };
+  if (!sessionKey) {
+    return { ...base, warnings: ['No session resolved for the rank-series history.'] };
+  }
+  const entry = computeRankSeriesEntry(sessionKey);
+  const upperMs = upperBoundCheckedAt ? Date.parse(upperBoundCheckedAt) : entry.currentFrame ? entry.currentFrame.checkedAtMs : null;
+  const withinUpper = upperMs === null ? entry.breakpoints : entry.breakpoints.filter((point) => point.checkedAtMs <= upperMs);
+  const stateAtUpper = withinUpper.at(-1) ?? null;
+  const lastCheckedAt = upperBoundCheckedAt ?? entry.currentFrame?.checkedAt ?? stateAtUpper?.checkedAt ?? null;
+  let frames = withinUpper.map((point) => ({ checkedAt: point.checkedAt, lap: point.lap, flag: point.flag, rows: point.rows }));
+  // The newest frame must touch "now": a synthetic frame at the (virtual) clock
+  // carrying the state as-of that clock, so the seeded line reaches the right
+  // edge with no reserved empty span (the F5 startup-window gate).
+  if (stateAtUpper && lastCheckedAt && stateAtUpper.checkedAt !== lastCheckedAt) {
+    frames.push({ checkedAt: lastCheckedAt, lap: stateAtUpper.lap, flag: stateAtUpper.flag, rows: stateAtUpper.rows });
+  }
+  if (frames.length > RANK_SERIES_MAX_FRAMES) frames = frames.slice(frames.length - RANK_SERIES_MAX_FRAMES);
+  const firstCheckedAt = frames[0]?.checkedAt ?? null;
+  const coverageSeconds =
+    firstCheckedAt && lastCheckedAt ? Math.max(0, Math.round((Date.parse(lastCheckedAt) - Date.parse(firstCheckedAt)) / 1000)) : 0;
+  return {
+    ...base,
+    available: frames.length > 0,
+    clientSessionKey: entry.clientSessionKey ?? clientSessionKeyHint,
+    bryceId: entry.bryceId,
+    breakpointCount: withinUpper.length,
+    frameCount: frames.length,
+    window: { firstCheckedAt, lastCheckedAt, virtualNow, coverageSeconds },
+    frames,
+    cache: {
+      refreshBucketMs: RANK_SERIES_REFRESH_MS,
+      refreshedAt: new Date(entry.refreshedAt).toISOString(),
+      totalBreakpoints: entry.breakpoints.length
+    },
+    warnings: entry.error ? [`Rank-series archive read degraded: ${entry.error}`] : []
+  };
+};
+
 const sendJson = (res, statusCode, payload, headers = {}) => {
   res.writeHead(statusCode, { ...jsonHeaders, ...headers });
   res.end(JSON.stringify(payload, null, 2));
@@ -2171,6 +2413,28 @@ const handler = async (req, res) => {
       }
       const headers = { 'x-brycecast-schema-version': historySchemaVersion };
       sendJson(res, 200, url.searchParams.get('compact') === '1' ? compactHistory(payload) : withHistoryMeta(payload), headers);
+      return;
+    }
+
+    if (pathname === '/api/history/rank-series') {
+      // Per-request: this route reuses the handler's ONE replay resolver. A call
+      // that carries replay params gets its history windowed to the resolved
+      // virtual now, through the exact same resolveReplay path the live routes
+      // use; a call without them (absent params = untouched live behavior) reads
+      // the active session up to the latest archived sample. The live-guard wins
+      // unconditionally inside replayRecord(): a live runner ignores the params.
+      const record = replayRecord();
+      const mode = record ? 'replay' : 'live';
+      const requestedSession = String(url.searchParams.get('session') ?? '').trim() || null;
+      const sessionKey = record ? record.sessionKey ?? null : requestedSession ?? latestArchivedSessionKey();
+      const payload = buildRankSeriesResponse({
+        sessionKey,
+        clientSessionKeyHint: requestedSession,
+        upperBoundCheckedAt: record?.archiveCheckedAt ?? null,
+        virtualNow: record?.replay?.virtualNow ?? null,
+        mode
+      });
+      sendJson(res, 200, payload, { 'x-brycecast-schema-version': RANK_SERIES_SCHEMA_VERSION });
       return;
     }
 
