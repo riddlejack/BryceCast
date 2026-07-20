@@ -19,6 +19,7 @@
     "audit:live-f5:camera": "node scripts/audit-live-f5-camera.mjs",
     "audit:live-f6:running-order": "node scripts/audit-live-f6-running-order.mjs",
     "qa:live-f6:running-order": "node scripts/qa-live-f6-running-order.mjs",
+    "qa:live-battle-axis": "node scripts/qa-live-battle-axis.mjs",
     "live:runner": "node scripts/live-runner.mjs",
     "live:runner:once": "node scripts/live-runner.mjs --once",
     "live:runner:dry": "node scripts/live-runner.mjs --dry-run --once",

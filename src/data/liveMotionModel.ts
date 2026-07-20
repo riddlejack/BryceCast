@@ -137,6 +137,160 @@ export const buildCumulativeLiveBattleFrame = (
   return { cars, ahead, behind, sourceField: 'liveGap' };
 };
 
+/* ---------- Brief P: the battle axis breathes ---------- */
+
+/** Quantized half-frame widths for the corridor, in seconds. The axis only ever
+ * shows ±1s, ±2s, ±4s, or ±8s — a ladder, not a continuous fit, so the frame
+ * reads as a camera choosing a lens rather than a chart squirming. */
+export const BATTLE_AXIS_LADDER: readonly number[] = [1, 2, 4, 8];
+/** Rescale triggers. The frame rescales ONLY when the corridor content occupies
+ * less than 55% or more than 90% of the half-frame (spec thresholds). */
+export const BATTLE_AXIS_LOW_OCCUPANCY = 0.55;
+export const BATTLE_AXIS_HIGH_OCCUPANCY = 0.9;
+/** On a breach the ladder moves toward the smallest step that holds the content
+ * at or under 80% — strictly inside the 90% up-trigger, so no step ever lands
+ * in an immediately re-breaching state. This is the anti-wobble guard: content
+ * sitting exactly on a trigger boundary re-breaches, retargets to the step it
+ * is already on, and holds. */
+export const BATTLE_AXIS_FIT_OCCUPANCY = 0.8;
+/** The corridor frames the N nearest cars per side; further cars do not vote. */
+export const BATTLE_AXIS_NEAREST_PER_SIDE = 2;
+/** Before any content has voted (fresh mount, no comparable rivals yet). */
+export const BATTLE_AXIS_DEFAULT_STEP = 4;
+
+export interface BattleAxisDecision {
+  /** The half-frame width in seconds after this evaluation. */
+  step: number;
+  /** Content extent ÷ the step held BEFORE this evaluation; null without content. */
+  occupancy: number | null;
+  /** Which spec threshold tripped, if any. A breach may still hold the step
+   * when the current rung is already the best ladder fit. */
+  breach: 'low' | 'high' | null;
+  changed: boolean;
+}
+
+/** Content extent: the widest |offset| among the nearest cars per side that
+ * could ever fit the ladder's top rung. Cars beyond the top rung can never
+ * render, so they never vote — a lone 12s-away leader must not hold the frame
+ * at ±8s while a 0.5s battle sits at Bryce's gearbox. */
+export const battleAxisExtentSeconds = (
+  cars: Array<{ offsetSeconds: number }>,
+  perSide = BATTLE_AXIS_NEAREST_PER_SIDE,
+  maxStep = BATTLE_AXIS_LADDER[BATTLE_AXIS_LADDER.length - 1]
+): number | null => {
+  const fittable = cars.filter((car) => Number.isFinite(car.offsetSeconds) && Math.abs(car.offsetSeconds) <= maxStep);
+  const ahead = fittable.filter((car) => car.offsetSeconds > 0).sort((a, b) => a.offsetSeconds - b.offsetSeconds).slice(0, perSide);
+  const behind = fittable.filter((car) => car.offsetSeconds < 0).sort((a, b) => b.offsetSeconds - a.offsetSeconds).slice(0, perSide);
+  const voters = [...ahead, ...behind];
+  if (voters.length === 0) return null;
+  return Math.max(...voters.map((car) => Math.abs(car.offsetSeconds)));
+};
+
+/** The smallest ladder step holding the extent at or under the fit occupancy;
+ * the top rung when nothing smaller fits. */
+export const battleAxisFitStep = (extent: number | null): number => {
+  if (extent === null) return BATTLE_AXIS_DEFAULT_STEP;
+  return BATTLE_AXIS_LADDER.find((step) => extent <= step * BATTLE_AXIS_FIT_OCCUPANCY) ?? BATTLE_AXIS_LADDER[BATTLE_AXIS_LADDER.length - 1];
+};
+
+/** One ladder evaluation per sourced poll. Hysteresis: inside [55%, 90%]
+ * occupancy the step NEVER moves. On a breach the step moves at most ONE rung
+ * toward the fit target per evaluation, so a caution bunching walks the frame
+ * down 8→4→2→1 across polls instead of lurching, and a restart walks it back
+ * up. No content (extent null) holds the step — absence never rescales. */
+export const nextBattleAxisStep = (currentStep: number, extent: number | null): BattleAxisDecision => {
+  const ladder = BATTLE_AXIS_LADDER;
+  const currentIndex = ladder.indexOf(currentStep);
+  const safeIndex = currentIndex >= 0 ? currentIndex : ladder.indexOf(BATTLE_AXIS_DEFAULT_STEP);
+  const step = ladder[safeIndex];
+  if (extent === null) return { step, occupancy: null, breach: null, changed: false };
+  const occupancy = extent / step;
+  const breach = occupancy > BATTLE_AXIS_HIGH_OCCUPANCY ? 'high' : occupancy < BATTLE_AXIS_LOW_OCCUPANCY ? 'low' : null;
+  if (!breach) return { step, occupancy, breach: null, changed: false };
+  const targetIndex = ladder.indexOf(battleAxisFitStep(extent));
+  if (targetIndex === safeIndex) return { step, occupancy, breach, changed: false };
+  const nextIndex = safeIndex + Math.sign(targetIndex - safeIndex);
+  return { step: ladder[nextIndex], occupancy, breach, changed: true };
+};
+
+/** Short median over the raw per-poll extents (the camera's rollingMedian
+ * pattern at chart grain): a single noisy interval sample cannot move the
+ * frame. Five sourced polls ≈ five seconds live. */
+export const BATTLE_AXIS_EXTENT_MEDIAN_WINDOW = 5;
+/** A breach must hold the SAME direction for this many consecutive sourced
+ * polls before the ladder moves — time-domain hysteresis on top of the
+ * occupancy bands. */
+export const BATTLE_AXIS_BREACH_PERSISTENCE = 3;
+/** Reversing the PREVIOUS move needs much longer evidence than continuing it.
+ * Measured against all 40 lake race feeds: with this guard a rescale can never
+ * undo itself across consecutive polls — the no-wobble property holds by
+ * construction (a reversal needs 12 straight opposing polls). */
+export const BATTLE_AXIS_REVERSAL_PERSISTENCE = 12;
+
+export const battleAxisSmoothedExtent = (recentExtents: Array<number | null>): number | null => {
+  const finite = recentExtents.filter((value): value is number => value !== null && Number.isFinite(value)).sort((a, b) => a - b);
+  if (finite.length === 0) return null;
+  return finite[Math.floor((finite.length - 1) / 2)];
+};
+
+export interface BattleAxisState {
+  step: number;
+  /** Raw extents of the last few sourced polls (median input). */
+  recentExtents: Array<number | null>;
+  /** Direction of the breach streak currently being accumulated. */
+  pending: 'up' | 'down' | null;
+  pendingCount: number;
+  /** Direction of the last executed rescale, for the reversal guard. */
+  lastMove: 'up' | 'down' | null;
+}
+
+export interface BattleAxisAdvance {
+  state: BattleAxisState;
+  decision: BattleAxisDecision;
+  /** The smoothed extent this evaluation acted on. */
+  extent: number | null;
+}
+
+/** A fresh axis snaps straight to the best ladder fit — no motion on mount. */
+export const createBattleAxisState = (rawExtent: number | null = null): BattleAxisState => ({
+  step: battleAxisFitStep(rawExtent),
+  recentExtents: rawExtent === null ? [] : [rawExtent],
+  pending: null,
+  pendingCount: 0,
+  lastMove: null
+});
+
+/** The per-poll reducer. Deterministic and side-effect free: feed it one raw
+ * extent per sourced payload and it yields the next axis state plus the
+ * decision that produced it (occupancy, breach, whether the step moved). */
+export const advanceBattleAxis = (state: BattleAxisState, rawExtent: number | null): BattleAxisAdvance => {
+  const recentExtents = [...state.recentExtents, rawExtent].slice(-BATTLE_AXIS_EXTENT_MEDIAN_WINDOW);
+  const extent = battleAxisSmoothedExtent(recentExtents);
+  const evaluation = nextBattleAxisStep(state.step, extent);
+  const move = evaluation.changed ? (evaluation.step > state.step ? 'up' : 'down') : null;
+  if (!move) {
+    return {
+      state: { ...state, recentExtents, pending: null, pendingCount: 0 },
+      decision: { ...evaluation, step: state.step, changed: false },
+      extent
+    };
+  }
+  const pendingCount = move === state.pending ? state.pendingCount + 1 : 1;
+  const needed = state.lastMove && move !== state.lastMove ? BATTLE_AXIS_REVERSAL_PERSISTENCE : BATTLE_AXIS_BREACH_PERSISTENCE;
+  if (pendingCount < needed) {
+    return {
+      state: { ...state, recentExtents, pending: move, pendingCount },
+      decision: { ...evaluation, step: state.step, changed: false },
+      extent
+    };
+  }
+  return {
+    state: { step: evaluation.step, recentExtents, pending: null, pendingCount: 0, lastMove: move },
+    decision: evaluation,
+    extent
+  };
+};
+
 /** Deterministic lane assignment prevents label swaps when offsets re-sort. */
 export const stableLabelLane = (driverId: string, laneCount: number): number => {
   let hash = 2166136261;
