@@ -1,0 +1,4016 @@
+{
+  "id": "quali_lab_run_by_run",
+  "type": "quali_lab",
+  "schemaVersion": "1.0.0",
+  "generatedAt": "2026-07-20T14:00:13.959Z",
+  "question": "How did his qualifying build?",
+  "sourceHash": "64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978",
+  "sourceTiers": [
+    {
+      "tier": "racetools_capture",
+      "label": "RaceTools race-weekend capture",
+      "note": "third-party capture of the timing feed; not official timing"
+    },
+    {
+      "tier": "timing71_normalized",
+      "label": "third-party normalized (Timing71)",
+      "note": "third-party normalized display-state replay; 2026 rows gated by the validated identity crosswalk"
+    }
+  ],
+  "rankSource": "canonical official qualifying classification (qualifyingResults)",
+  "method": [
+    "The run-by-run build (laps, best-lap staircase, session-best evolution) comes only from the semantic layer.",
+    "The final rank (on-track group rank + combined grid position) comes only from the canonical official qualifying classification.",
+    "Doubleheader qualifying is attributed to the race whose official best lap matches the captured best flying lap.",
+    "2026 sessions are gated on a validated Timing71 identity crosswalk (GO); non-GO sessions are excluded and named."
+  ],
+  "caveats": [
+    "Third-party derived analytics, never official timing; source tier is labelled on every session.",
+    "Lap times are the capture’s own values; session-start and red-flag crossing-clock artifacts are dropped from the run and counted.",
+    "On-track group rank and combined grid position are two different denominators, each labelled where shown."
+  ],
+  "coverage": {
+    "coveredSessions": 31,
+    "excludedSessions": 5,
+    "bySeasonSource": {
+      "2024:racetools": 11,
+      "2025:racetools": 11,
+      "2026:timing71": 9
+    }
+  },
+  "sessions": [
+    {
+      "id": "rt_2024_st-petersburg-street-circuit_qb_2024-03-09_a",
+      "source": "racetools",
+      "sourceTier": "racetools_capture",
+      "sourceTierLabel": "RaceTools race-weekend capture",
+      "seasonYear": 2024,
+      "date": "2024-03-09",
+      "venueName": "St Petersburg Street Circuit",
+      "trackId": "track_streets_of_st_petersburg",
+      "sessionLabel": "Qualifications - Group 2",
+      "eventId": "event_indy_nxt_2024_5480",
+      "raceSessionIds": [
+        "session_indy_nxt_2024_6324"
+      ],
+      "isOval": false,
+      "crosswalkVerdict": null,
+      "crosswalkCrossCheck": null,
+      "qualityMasks": [],
+      "laps": [
+        {
+          "seq": 1,
+          "lapIndex": 1,
+          "seconds": 92.0871,
+          "kind": "support",
+          "isPersonalBest": true,
+          "runningBestSeconds": 92.0871
+        },
+        {
+          "seq": 2,
+          "lapIndex": 2,
+          "seconds": 66.5824,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 66.5824
+        },
+        {
+          "seq": 3,
+          "lapIndex": 3,
+          "seconds": 65.6142,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 65.6142
+        },
+        {
+          "seq": 4,
+          "lapIndex": 4,
+          "seconds": 65.131,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 65.131
+        },
+        {
+          "seq": 5,
+          "lapIndex": 5,
+          "seconds": 64.9813,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 64.9813
+        },
+        {
+          "seq": 6,
+          "lapIndex": 7,
+          "seconds": 89.287,
+          "kind": "support",
+          "isPersonalBest": false,
+          "runningBestSeconds": 64.9813
+        },
+        {
+          "seq": 7,
+          "lapIndex": 8,
+          "seconds": 65.9304,
+          "kind": "flying",
+          "isPersonalBest": false,
+          "runningBestSeconds": 64.9813
+        }
+      ],
+      "lapCount": 7,
+      "droppedNoiseLaps": 1,
+      "bryceBestSeconds": 64.9813,
+      "bryceBestSeq": 5,
+      "sessionBestSeconds": 64.6587,
+      "sessionBestByBryce": false,
+      "sessionBestMoves": 4,
+      "sessionBestSteps": [
+        {
+          "seconds": 65.9569,
+          "byBryce": false
+        },
+        {
+          "seconds": 65.9179,
+          "byBryce": false
+        },
+        {
+          "seconds": 64.7282,
+          "byBryce": false
+        },
+        {
+          "seconds": 64.6587,
+          "byBryce": false
+        }
+      ],
+      "gapToSessionBestSeconds": 0.3226,
+      "lapHolderCount": 11,
+      "onTrackGroupRank": 4,
+      "groupFieldSize": 11,
+      "groupSegment": "Qualifications - Group 2",
+      "combinedGridPosition": 8,
+      "combinedFieldSize": 21,
+      "gridGapToPoleSeconds": null,
+      "onTrackGapToPoleSeconds": 0.3058,
+      "officialBestLapSeconds": 64.8883,
+      "capturedBestVsOfficialSeconds": 0.093,
+      "doubleheaderRaceLabel": null,
+      "rankAttribution": "single",
+      "rankSource": "canonical_official_qualifying",
+      "semanticClassificationPosition": 4,
+      "positionCrossCheck": "match",
+      "trafficContext": null,
+      "theoreticalBestSeconds": null,
+      "trackEvolutionCurve": null
+    },
+    {
+      "id": "rt_2024_barber-motorsports-park_qb_2024-04-27_a",
+      "source": "racetools",
+      "sourceTier": "racetools_capture",
+      "sourceTierLabel": "RaceTools race-weekend capture",
+      "seasonYear": 2024,
+      "date": "2024-04-27",
+      "venueName": "Barber Motorsports Park",
+      "trackId": "track_barber_motorsports_park",
+      "sessionLabel": "Qualifications - Group 2",
+      "eventId": "event_indy_nxt_2024_5470",
+      "raceSessionIds": [
+        "session_indy_nxt_2024_6314"
+      ],
+      "isOval": false,
+      "crosswalkVerdict": null,
+      "crosswalkCrossCheck": null,
+      "qualityMasks": [],
+      "laps": [
+        {
+          "seq": 1,
+          "lapIndex": 1,
+          "seconds": 108.5174,
+          "kind": "support",
+          "isPersonalBest": true,
+          "runningBestSeconds": 108.5174
+        },
+        {
+          "seq": 2,
+          "lapIndex": 2,
+          "seconds": 77.5706,
+          "kind": "support",
+          "isPersonalBest": true,
+          "runningBestSeconds": 77.5706
+        },
+        {
+          "seq": 3,
+          "lapIndex": 3,
+          "seconds": 72.0967,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 72.0967
+        },
+        {
+          "seq": 4,
+          "lapIndex": 4,
+          "seconds": 72.1921,
+          "kind": "flying",
+          "isPersonalBest": false,
+          "runningBestSeconds": 72.0967
+        },
+        {
+          "seq": 5,
+          "lapIndex": 5,
+          "seconds": 71.862,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 71.862
+        },
+        {
+          "seq": 6,
+          "lapIndex": 6,
+          "seconds": 71.7766,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 71.7766
+        },
+        {
+          "seq": 7,
+          "lapIndex": 7,
+          "seconds": 72.5989,
+          "kind": "flying",
+          "isPersonalBest": false,
+          "runningBestSeconds": 71.7766
+        },
+        {
+          "seq": 8,
+          "lapIndex": 8,
+          "seconds": 75.4442,
+          "kind": "flying",
+          "isPersonalBest": false,
+          "runningBestSeconds": 71.7766
+        },
+        {
+          "seq": 9,
+          "lapIndex": 9,
+          "seconds": 71.6959,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 71.6959
+        }
+      ],
+      "lapCount": 9,
+      "droppedNoiseLaps": 0,
+      "bryceBestSeconds": 71.6959,
+      "bryceBestSeq": 9,
+      "sessionBestSeconds": 71.4975,
+      "sessionBestByBryce": false,
+      "sessionBestMoves": 3,
+      "sessionBestSteps": [
+        {
+          "seconds": 72.1101,
+          "byBryce": false
+        },
+        {
+          "seconds": 71.5875,
+          "byBryce": false
+        },
+        {
+          "seconds": 71.4975,
+          "byBryce": false
+        }
+      ],
+      "gapToSessionBestSeconds": 0.1984,
+      "lapHolderCount": 10,
+      "onTrackGroupRank": 4,
+      "groupFieldSize": 11,
+      "groupSegment": "Qualifications - Group 2",
+      "combinedGridPosition": 7,
+      "combinedFieldSize": 20,
+      "gridGapToPoleSeconds": null,
+      "onTrackGapToPoleSeconds": 0.4369,
+      "officialBestLapSeconds": 71.7876,
+      "capturedBestVsOfficialSeconds": -0.0917,
+      "doubleheaderRaceLabel": null,
+      "rankAttribution": "single",
+      "rankSource": "canonical_official_qualifying",
+      "semanticClassificationPosition": 4,
+      "positionCrossCheck": "match",
+      "trafficContext": null,
+      "theoreticalBestSeconds": null,
+      "trackEvolutionCurve": null
+    },
+    {
+      "id": "rt_2024_indianapolis-motor-speedway-rc_qb_2024-05-10_a",
+      "source": "racetools",
+      "sourceTier": "racetools_capture",
+      "sourceTierLabel": "RaceTools race-weekend capture",
+      "seasonYear": 2024,
+      "date": "2024-05-10",
+      "venueName": "Indianapolis Motor Speedway RC",
+      "trackId": "track_indianapolis_motor_speedway_road_course",
+      "sessionLabel": "Qualifications - Group 2",
+      "eventId": "event_indy_nxt_2024_5471",
+      "raceSessionIds": [
+        "session_indy_nxt_2024_6315"
+      ],
+      "isOval": false,
+      "crosswalkVerdict": null,
+      "crosswalkCrossCheck": null,
+      "qualityMasks": [],
+      "laps": [
+        {
+          "seq": 1,
+          "lapIndex": 2,
+          "seconds": 76.4133,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 76.4133
+        },
+        {
+          "seq": 2,
+          "lapIndex": 3,
+          "seconds": 75.5949,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 75.5949
+        },
+        {
+          "seq": 3,
+          "lapIndex": 4,
+          "seconds": 82.0992,
+          "kind": "support",
+          "isPersonalBest": false,
+          "runningBestSeconds": 75.5949
+        },
+        {
+          "seq": 4,
+          "lapIndex": 5,
+          "seconds": 75.4982,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 75.4982
+        },
+        {
+          "seq": 5,
+          "lapIndex": 6,
+          "seconds": 75.6515,
+          "kind": "flying",
+          "isPersonalBest": false,
+          "runningBestSeconds": 75.4982
+        },
+        {
+          "seq": 6,
+          "lapIndex": 7,
+          "seconds": 75.503,
+          "kind": "flying",
+          "isPersonalBest": false,
+          "runningBestSeconds": 75.4982
+        },
+        {
+          "seq": 7,
+          "lapIndex": 8,
+          "seconds": 76.0864,
+          "kind": "flying",
+          "isPersonalBest": false,
+          "runningBestSeconds": 75.4982
+        },
+        {
+          "seq": 8,
+          "lapIndex": 9,
+          "seconds": 75.5426,
+          "kind": "flying",
+          "isPersonalBest": false,
+          "runningBestSeconds": 75.4982
+        }
+      ],
+      "lapCount": 8,
+      "droppedNoiseLaps": 1,
+      "bryceBestSeconds": 75.4982,
+      "bryceBestSeq": 4,
+      "sessionBestSeconds": 74.8681,
+      "sessionBestByBryce": false,
+      "sessionBestMoves": 4,
+      "sessionBestSteps": [
+        {
+          "seconds": 75.609,
+          "byBryce": false
+        },
+        {
+          "seconds": 75.4632,
+          "byBryce": false
+        },
+        {
+          "seconds": 75.2105,
+          "byBryce": false
+        },
+        {
+          "seconds": 74.8681,
+          "byBryce": false
+        }
+      ],
+      "gapToSessionBestSeconds": 0.6301,
+      "lapHolderCount": 11,
+      "onTrackGroupRank": 6,
+      "groupFieldSize": 11,
+      "groupSegment": "Qualifications - Race 1 Group 2",
+      "combinedGridPosition": 11,
+      "combinedFieldSize": 20,
+      "gridGapToPoleSeconds": null,
+      "onTrackGapToPoleSeconds": 0.5581,
+      "officialBestLapSeconds": 75.4939,
+      "capturedBestVsOfficialSeconds": 0.0043,
+      "doubleheaderRaceLabel": "Race 1",
+      "rankAttribution": "doubleheader_bestlap",
+      "rankSource": "canonical_official_qualifying",
+      "semanticClassificationPosition": 6,
+      "positionCrossCheck": "match",
+      "trafficContext": null,
+      "theoreticalBestSeconds": null,
+      "trackEvolutionCurve": null
+    },
+    {
+      "id": "rt_2024_detroit-street-circuit_qb_2024-06-01_a",
+      "source": "racetools",
+      "sourceTier": "racetools_capture",
+      "sourceTierLabel": "RaceTools race-weekend capture",
+      "seasonYear": 2024,
+      "date": "2024-06-01",
+      "venueName": "Detroit Street Circuit",
+      "trackId": "track_streets_of_detroit",
+      "sessionLabel": "Qualifications - Group 2",
+      "eventId": "event_indy_nxt_2024_5482",
+      "raceSessionIds": [
+        "session_indy_nxt_2024_6326"
+      ],
+      "isOval": false,
+      "crosswalkVerdict": null,
+      "crosswalkCrossCheck": null,
+      "qualityMasks": [],
+      "laps": [
+        {
+          "seq": 1,
+          "lapIndex": 1,
+          "seconds": 82.3451,
+          "kind": "support",
+          "isPersonalBest": true,
+          "runningBestSeconds": 82.3451
+        },
+        {
+          "seq": 2,
+          "lapIndex": 2,
+          "seconds": 70.0333,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 70.0333
+        },
+        {
+          "seq": 3,
+          "lapIndex": 3,
+          "seconds": 69.2203,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 69.2203
+        },
+        {
+          "seq": 4,
+          "lapIndex": 4,
+          "seconds": 68.6296,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 68.6296
+        },
+        {
+          "seq": 5,
+          "lapIndex": 5,
+          "seconds": 66.9449,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 66.9449
+        },
+        {
+          "seq": 6,
+          "lapIndex": 6,
+          "seconds": 67.8241,
+          "kind": "flying",
+          "isPersonalBest": false,
+          "runningBestSeconds": 66.9449
+        },
+        {
+          "seq": 7,
+          "lapIndex": 8,
+          "seconds": 78.1855,
+          "kind": "support",
+          "isPersonalBest": false,
+          "runningBestSeconds": 66.9449
+        }
+      ],
+      "lapCount": 7,
+      "droppedNoiseLaps": 1,
+      "bryceBestSeconds": 66.9449,
+      "bryceBestSeq": 5,
+      "sessionBestSeconds": 64.8702,
+      "sessionBestByBryce": false,
+      "sessionBestMoves": 7,
+      "sessionBestSteps": [
+        {
+          "seconds": 67.8513,
+          "byBryce": false
+        },
+        {
+          "seconds": 67.0385,
+          "byBryce": false
+        },
+        {
+          "seconds": 66.2683,
+          "byBryce": false
+        },
+        {
+          "seconds": 66.1503,
+          "byBryce": false
+        },
+        {
+          "seconds": 65.6452,
+          "byBryce": false
+        },
+        {
+          "seconds": 65.3977,
+          "byBryce": false
+        },
+        {
+          "seconds": 64.8702,
+          "byBryce": false
+        }
+      ],
+      "gapToSessionBestSeconds": 2.0747,
+      "lapHolderCount": 11,
+      "onTrackGroupRank": 6,
+      "groupFieldSize": 11,
+      "groupSegment": "Qualifications - Group 2",
+      "combinedGridPosition": 11,
+      "combinedFieldSize": 20,
+      "gridGapToPoleSeconds": null,
+      "onTrackGapToPoleSeconds": 1.0255,
+      "officialBestLapSeconds": 66.1334,
+      "capturedBestVsOfficialSeconds": 0.8115,
+      "doubleheaderRaceLabel": null,
+      "rankAttribution": "single",
+      "rankSource": "canonical_official_qualifying",
+      "semanticClassificationPosition": 6,
+      "positionCrossCheck": "match",
+      "trafficContext": null,
+      "theoreticalBestSeconds": null,
+      "trackEvolutionCurve": null
+    },
+    {
+      "id": "rt_2024_road-america_qb_2024-06-08_a",
+      "source": "racetools",
+      "sourceTier": "racetools_capture",
+      "sourceTierLabel": "RaceTools race-weekend capture",
+      "seasonYear": 2024,
+      "date": "2024-06-08",
+      "venueName": "Road America",
+      "trackId": "track_road_america",
+      "sessionLabel": "Qualifications - Group 2",
+      "eventId": "event_indy_nxt_2024_5472",
+      "raceSessionIds": [
+        "session_indy_nxt_2024_6316"
+      ],
+      "isOval": false,
+      "crosswalkVerdict": null,
+      "crosswalkCrossCheck": null,
+      "qualityMasks": [],
+      "laps": [
+        {
+          "seq": 1,
+          "lapIndex": 1,
+          "seconds": 116.7003,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 116.7003
+        },
+        {
+          "seq": 2,
+          "lapIndex": 3,
+          "seconds": 111.9698,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 111.9698
+        }
+      ],
+      "lapCount": 2,
+      "droppedNoiseLaps": 1,
+      "bryceBestSeconds": 111.9698,
+      "bryceBestSeq": 2,
+      "sessionBestSeconds": 111.7752,
+      "sessionBestByBryce": false,
+      "sessionBestMoves": 4,
+      "sessionBestSteps": [
+        {
+          "seconds": 446.9042,
+          "byBryce": false
+        },
+        {
+          "seconds": 113.1485,
+          "byBryce": false
+        },
+        {
+          "seconds": 111.855,
+          "byBryce": false
+        },
+        {
+          "seconds": 111.7752,
+          "byBryce": false
+        }
+      ],
+      "gapToSessionBestSeconds": 0.1946,
+      "lapHolderCount": 10,
+      "onTrackGroupRank": 4,
+      "groupFieldSize": 11,
+      "groupSegment": "Qualifications - Group 2",
+      "combinedGridPosition": 7,
+      "combinedFieldSize": 20,
+      "gridGapToPoleSeconds": null,
+      "onTrackGapToPoleSeconds": 0.7163,
+      "officialBestLapSeconds": 111.7496,
+      "capturedBestVsOfficialSeconds": 0.2202,
+      "doubleheaderRaceLabel": null,
+      "rankAttribution": "single",
+      "rankSource": "canonical_official_qualifying",
+      "semanticClassificationPosition": 4,
+      "positionCrossCheck": "match",
+      "trafficContext": null,
+      "theoreticalBestSeconds": null,
+      "trackEvolutionCurve": null
+    },
+    {
+      "id": "rt_2024_weathertech-raceway-laguna-seca_qb_2024-06-22_a",
+      "source": "racetools",
+      "sourceTier": "racetools_capture",
+      "sourceTierLabel": "RaceTools race-weekend capture",
+      "seasonYear": 2024,
+      "date": "2024-06-22",
+      "venueName": "WeatherTech Raceway Laguna Seca",
+      "trackId": "track_weathertech_raceway_laguna_seca",
+      "sessionLabel": "Qualifications - Group 2",
+      "eventId": "event_indy_nxt_2024_5473",
+      "raceSessionIds": [
+        "session_indy_nxt_2024_6317"
+      ],
+      "isOval": false,
+      "crosswalkVerdict": null,
+      "crosswalkCrossCheck": null,
+      "qualityMasks": [],
+      "laps": [
+        {
+          "seq": 1,
+          "lapIndex": 1,
+          "seconds": 133.6761,
+          "kind": "support",
+          "isPersonalBest": true,
+          "runningBestSeconds": 133.6761
+        },
+        {
+          "seq": 2,
+          "lapIndex": 2,
+          "seconds": 74.9762,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 74.9762
+        },
+        {
+          "seq": 3,
+          "lapIndex": 3,
+          "seconds": 74.2532,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 74.2532
+        },
+        {
+          "seq": 4,
+          "lapIndex": 4,
+          "seconds": 74.2203,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 74.2203
+        },
+        {
+          "seq": 5,
+          "lapIndex": 5,
+          "seconds": 74.3264,
+          "kind": "flying",
+          "isPersonalBest": false,
+          "runningBestSeconds": 74.2203
+        },
+        {
+          "seq": 6,
+          "lapIndex": 6,
+          "seconds": 74.9184,
+          "kind": "flying",
+          "isPersonalBest": false,
+          "runningBestSeconds": 74.2203
+        },
+        {
+          "seq": 7,
+          "lapIndex": 7,
+          "seconds": 81.4805,
+          "kind": "support",
+          "isPersonalBest": false,
+          "runningBestSeconds": 74.2203
+        },
+        {
+          "seq": 8,
+          "lapIndex": 8,
+          "seconds": 73.5482,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 73.5482
+        },
+        {
+          "seq": 9,
+          "lapIndex": 9,
+          "seconds": 73.2822,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 73.2822
+        }
+      ],
+      "lapCount": 9,
+      "droppedNoiseLaps": 0,
+      "bryceBestSeconds": 73.2822,
+      "bryceBestSeq": 9,
+      "sessionBestSeconds": 72.4374,
+      "sessionBestByBryce": false,
+      "sessionBestMoves": 3,
+      "sessionBestSteps": [
+        {
+          "seconds": 73.3058,
+          "byBryce": false
+        },
+        {
+          "seconds": 72.5055,
+          "byBryce": false
+        },
+        {
+          "seconds": 72.4374,
+          "byBryce": false
+        }
+      ],
+      "gapToSessionBestSeconds": 0.8448,
+      "lapHolderCount": 10,
+      "onTrackGroupRank": 5,
+      "groupFieldSize": 10,
+      "groupSegment": "Qualifications - Race 1 Group 2",
+      "combinedGridPosition": 9,
+      "combinedFieldSize": 19,
+      "gridGapToPoleSeconds": null,
+      "onTrackGapToPoleSeconds": 1.223,
+      "officialBestLapSeconds": 73.399,
+      "capturedBestVsOfficialSeconds": -0.1168,
+      "doubleheaderRaceLabel": "Race 1",
+      "rankAttribution": "doubleheader_bestlap",
+      "rankSource": "canonical_official_qualifying",
+      "semanticClassificationPosition": 5,
+      "positionCrossCheck": "match",
+      "trafficContext": null,
+      "theoreticalBestSeconds": null,
+      "trackEvolutionCurve": null
+    },
+    {
+      "id": "rt_2024_mid-ohio-sports-car-course_qa_2024-07-06_a",
+      "source": "racetools",
+      "sourceTier": "racetools_capture",
+      "sourceTierLabel": "RaceTools race-weekend capture",
+      "seasonYear": 2024,
+      "date": "2024-07-06",
+      "venueName": "Mid-Ohio Sports Car Course",
+      "trackId": "track_mid_ohio_sports_car_course",
+      "sessionLabel": "Qualifications - Group 1",
+      "eventId": "event_indy_nxt_2024_5474",
+      "raceSessionIds": [
+        "session_indy_nxt_2024_6318"
+      ],
+      "isOval": false,
+      "crosswalkVerdict": null,
+      "crosswalkCrossCheck": null,
+      "qualityMasks": [],
+      "laps": [
+        {
+          "seq": 1,
+          "lapIndex": 1,
+          "seconds": 112.1198,
+          "kind": "support",
+          "isPersonalBest": true,
+          "runningBestSeconds": 112.1198
+        },
+        {
+          "seq": 2,
+          "lapIndex": 2,
+          "seconds": 76.5419,
+          "kind": "support",
+          "isPersonalBest": true,
+          "runningBestSeconds": 76.5419
+        },
+        {
+          "seq": 3,
+          "lapIndex": 3,
+          "seconds": 72.2067,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 72.2067
+        },
+        {
+          "seq": 4,
+          "lapIndex": 4,
+          "seconds": 71.3778,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 71.3778
+        },
+        {
+          "seq": 5,
+          "lapIndex": 5,
+          "seconds": 71.3452,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 71.3452
+        },
+        {
+          "seq": 6,
+          "lapIndex": 6,
+          "seconds": 71.059,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 71.059
+        },
+        {
+          "seq": 7,
+          "lapIndex": 7,
+          "seconds": 72.3122,
+          "kind": "flying",
+          "isPersonalBest": false,
+          "runningBestSeconds": 71.059
+        },
+        {
+          "seq": 8,
+          "lapIndex": 8,
+          "seconds": 71.428,
+          "kind": "flying",
+          "isPersonalBest": false,
+          "runningBestSeconds": 71.059
+        },
+        {
+          "seq": 9,
+          "lapIndex": 9,
+          "seconds": 71.8031,
+          "kind": "flying",
+          "isPersonalBest": false,
+          "runningBestSeconds": 71.059
+        },
+        {
+          "seq": 10,
+          "lapIndex": 10,
+          "seconds": 84.3229,
+          "kind": "support",
+          "isPersonalBest": false,
+          "runningBestSeconds": 71.059
+        }
+      ],
+      "lapCount": 10,
+      "droppedNoiseLaps": 0,
+      "bryceBestSeconds": 71.059,
+      "bryceBestSeq": 6,
+      "sessionBestSeconds": 70.2894,
+      "sessionBestByBryce": false,
+      "sessionBestMoves": 7,
+      "sessionBestSteps": [
+        {
+          "seconds": 75.1893,
+          "byBryce": false
+        },
+        {
+          "seconds": 72.1951,
+          "byBryce": false
+        },
+        {
+          "seconds": 71.413,
+          "byBryce": false
+        },
+        {
+          "seconds": 70.9604,
+          "byBryce": false
+        },
+        {
+          "seconds": 70.8371,
+          "byBryce": false
+        },
+        {
+          "seconds": 70.562,
+          "byBryce": false
+        },
+        {
+          "seconds": 70.2894,
+          "byBryce": false
+        }
+      ],
+      "gapToSessionBestSeconds": 0.7696,
+      "lapHolderCount": 9,
+      "onTrackGroupRank": 7,
+      "groupFieldSize": 9,
+      "groupSegment": "Qualifications - Group 1",
+      "combinedGridPosition": 14,
+      "combinedFieldSize": 18,
+      "gridGapToPoleSeconds": null,
+      "onTrackGapToPoleSeconds": 0.821,
+      "officialBestLapSeconds": 71.12819999999999,
+      "capturedBestVsOfficialSeconds": -0.0692,
+      "doubleheaderRaceLabel": null,
+      "rankAttribution": "single",
+      "rankSource": "canonical_official_qualifying",
+      "semanticClassificationPosition": 7,
+      "positionCrossCheck": "match",
+      "trafficContext": null,
+      "theoreticalBestSeconds": null,
+      "trackEvolutionCurve": null
+    },
+    {
+      "id": "rt_2024_iowa-speedway_qc_2024-07-12_a",
+      "source": "racetools",
+      "sourceTier": "racetools_capture",
+      "sourceTierLabel": "RaceTools race-weekend capture",
+      "seasonYear": 2024,
+      "date": "2024-07-12",
+      "venueName": "Iowa Speedway",
+      "trackId": "track_iowa_speedway",
+      "sessionLabel": "Qualifications",
+      "eventId": "event_indy_nxt_2024_5475",
+      "raceSessionIds": [
+        "session_indy_nxt_2024_6319"
+      ],
+      "isOval": true,
+      "crosswalkVerdict": null,
+      "crosswalkCrossCheck": null,
+      "qualityMasks": [],
+      "laps": [
+        {
+          "seq": 1,
+          "lapIndex": 2,
+          "seconds": 19.3929,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 19.3929
+        },
+        {
+          "seq": 2,
+          "lapIndex": 3,
+          "seconds": 19.1419,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 19.1419
+        },
+        {
+          "seq": 3,
+          "lapIndex": 4,
+          "seconds": 19.1459,
+          "kind": "flying",
+          "isPersonalBest": false,
+          "runningBestSeconds": 19.1419
+        }
+      ],
+      "lapCount": 3,
+      "droppedNoiseLaps": 1,
+      "bryceBestSeconds": 19.1419,
+      "bryceBestSeq": 2,
+      "sessionBestSeconds": 18.8114,
+      "sessionBestByBryce": false,
+      "sessionBestMoves": 10,
+      "sessionBestSteps": [
+        {
+          "seconds": 21.4834,
+          "byBryce": false
+        },
+        {
+          "seconds": 20.5866,
+          "byBryce": false
+        },
+        {
+          "seconds": 20.536,
+          "byBryce": false
+        },
+        {
+          "seconds": 19.5854,
+          "byBryce": false
+        },
+        {
+          "seconds": 19.378,
+          "byBryce": false
+        },
+        {
+          "seconds": 19.1419,
+          "byBryce": true
+        },
+        {
+          "seconds": 19.0495,
+          "byBryce": false
+        },
+        {
+          "seconds": 19.0271,
+          "byBryce": false
+        },
+        {
+          "seconds": 18.9134,
+          "byBryce": false
+        },
+        {
+          "seconds": 18.8114,
+          "byBryce": false
+        }
+      ],
+      "gapToSessionBestSeconds": 0.3305,
+      "lapHolderCount": 18,
+      "onTrackGroupRank": 9,
+      "groupFieldSize": 18,
+      "groupSegment": "Qualifications",
+      "combinedGridPosition": 9,
+      "combinedFieldSize": 18,
+      "gridGapToPoleSeconds": null,
+      "onTrackGapToPoleSeconds": null,
+      "officialBestLapSeconds": null,
+      "capturedBestVsOfficialSeconds": null,
+      "doubleheaderRaceLabel": null,
+      "rankAttribution": "single",
+      "rankSource": "canonical_official_qualifying",
+      "semanticClassificationPosition": 9,
+      "positionCrossCheck": "match",
+      "trafficContext": null,
+      "theoreticalBestSeconds": null,
+      "trackEvolutionCurve": null
+    },
+    {
+      "id": "rt_2024_world-wide-technology-raceway_qc_2024-08-16_a",
+      "source": "racetools",
+      "sourceTier": "racetools_capture",
+      "sourceTierLabel": "RaceTools race-weekend capture",
+      "seasonYear": 2024,
+      "date": "2024-08-16",
+      "venueName": "World Wide Technology Raceway",
+      "trackId": "track_world_wide_technology_raceway",
+      "sessionLabel": "Qualifications",
+      "eventId": "event_indy_nxt_2024_5476",
+      "raceSessionIds": [
+        "session_indy_nxt_2024_6320"
+      ],
+      "isOval": true,
+      "crosswalkVerdict": null,
+      "crosswalkCrossCheck": null,
+      "qualityMasks": [],
+      "laps": [
+        {
+          "seq": 1,
+          "lapIndex": 2,
+          "seconds": 28.1396,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 28.1396
+        },
+        {
+          "seq": 2,
+          "lapIndex": 3,
+          "seconds": 27.886,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 27.886
+        },
+        {
+          "seq": 3,
+          "lapIndex": 4,
+          "seconds": 27.8159,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 27.8159
+        }
+      ],
+      "lapCount": 3,
+      "droppedNoiseLaps": 1,
+      "bryceBestSeconds": 27.8159,
+      "bryceBestSeq": 3,
+      "sessionBestSeconds": 27.3986,
+      "sessionBestByBryce": false,
+      "sessionBestMoves": 15,
+      "sessionBestSteps": [
+        {
+          "seconds": 30.7147,
+          "byBryce": false
+        },
+        {
+          "seconds": 29.9097,
+          "byBryce": false
+        },
+        {
+          "seconds": 29.2413,
+          "byBryce": false
+        },
+        {
+          "seconds": 28.9335,
+          "byBryce": false
+        },
+        {
+          "seconds": 28.489,
+          "byBryce": false
+        },
+        {
+          "seconds": 28.297,
+          "byBryce": false
+        },
+        {
+          "seconds": 28.1396,
+          "byBryce": true
+        },
+        {
+          "seconds": 27.886,
+          "byBryce": true
+        },
+        {
+          "seconds": 27.8159,
+          "byBryce": true
+        },
+        {
+          "seconds": 27.6867,
+          "byBryce": false
+        },
+        {
+          "seconds": 27.5819,
+          "byBryce": false
+        },
+        {
+          "seconds": 27.4802,
+          "byBryce": false
+        },
+        {
+          "seconds": 27.4505,
+          "byBryce": false
+        },
+        {
+          "seconds": 27.443,
+          "byBryce": false
+        },
+        {
+          "seconds": 27.3986,
+          "byBryce": false
+        }
+      ],
+      "gapToSessionBestSeconds": 0.4173,
+      "lapHolderCount": 16,
+      "onTrackGroupRank": 13,
+      "groupFieldSize": 18,
+      "groupSegment": "Qualifications",
+      "combinedGridPosition": 13,
+      "combinedFieldSize": 18,
+      "gridGapToPoleSeconds": null,
+      "onTrackGapToPoleSeconds": null,
+      "officialBestLapSeconds": null,
+      "capturedBestVsOfficialSeconds": null,
+      "doubleheaderRaceLabel": null,
+      "rankAttribution": "single",
+      "rankSource": "canonical_official_qualifying",
+      "semanticClassificationPosition": 13,
+      "positionCrossCheck": "match",
+      "trafficContext": null,
+      "theoreticalBestSeconds": null,
+      "trackEvolutionCurve": null
+    },
+    {
+      "id": "rt_2024_portland-international-raceway_qb_2024-08-24_a",
+      "source": "racetools",
+      "sourceTier": "racetools_capture",
+      "sourceTierLabel": "RaceTools race-weekend capture",
+      "seasonYear": 2024,
+      "date": "2024-08-24",
+      "venueName": "Portland International Raceway",
+      "trackId": "track_portland_international_raceway",
+      "sessionLabel": "Qualifications - Group 2",
+      "eventId": "event_indy_nxt_2024_5477",
+      "raceSessionIds": [
+        "session_indy_nxt_2024_6321"
+      ],
+      "isOval": false,
+      "crosswalkVerdict": null,
+      "crosswalkCrossCheck": null,
+      "qualityMasks": [],
+      "laps": [
+        {
+          "seq": 1,
+          "lapIndex": 1,
+          "seconds": 71.4584,
+          "kind": "support",
+          "isPersonalBest": true,
+          "runningBestSeconds": 71.4584
+        },
+        {
+          "seq": 2,
+          "lapIndex": 2,
+          "seconds": 65.9748,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 65.9748
+        },
+        {
+          "seq": 3,
+          "lapIndex": 3,
+          "seconds": 64.0944,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 64.0944
+        },
+        {
+          "seq": 4,
+          "lapIndex": 4,
+          "seconds": 63.1059,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 63.1059
+        },
+        {
+          "seq": 5,
+          "lapIndex": 5,
+          "seconds": 63.2681,
+          "kind": "flying",
+          "isPersonalBest": false,
+          "runningBestSeconds": 63.1059
+        },
+        {
+          "seq": 6,
+          "lapIndex": 6,
+          "seconds": 63.1404,
+          "kind": "flying",
+          "isPersonalBest": false,
+          "runningBestSeconds": 63.1059
+        },
+        {
+          "seq": 7,
+          "lapIndex": 7,
+          "seconds": 62.8618,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 62.8618
+        },
+        {
+          "seq": 8,
+          "lapIndex": 8,
+          "seconds": 63.9219,
+          "kind": "flying",
+          "isPersonalBest": false,
+          "runningBestSeconds": 62.8618
+        },
+        {
+          "seq": 9,
+          "lapIndex": 9,
+          "seconds": 64.3448,
+          "kind": "flying",
+          "isPersonalBest": false,
+          "runningBestSeconds": 62.8618
+        },
+        {
+          "seq": 10,
+          "lapIndex": 10,
+          "seconds": 62.8293,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 62.8293
+        }
+      ],
+      "lapCount": 10,
+      "droppedNoiseLaps": 0,
+      "bryceBestSeconds": 62.8293,
+      "bryceBestSeq": 10,
+      "sessionBestSeconds": 62.218,
+      "sessionBestByBryce": false,
+      "sessionBestMoves": 4,
+      "sessionBestSteps": [
+        {
+          "seconds": 63.3245,
+          "byBryce": false
+        },
+        {
+          "seconds": 62.6548,
+          "byBryce": false
+        },
+        {
+          "seconds": 62.4752,
+          "byBryce": false
+        },
+        {
+          "seconds": 62.218,
+          "byBryce": false
+        }
+      ],
+      "gapToSessionBestSeconds": 0.6113,
+      "lapHolderCount": 9,
+      "onTrackGroupRank": 4,
+      "groupFieldSize": 9,
+      "groupSegment": "Qualifications - Group 2",
+      "combinedGridPosition": 7,
+      "combinedFieldSize": 16,
+      "gridGapToPoleSeconds": null,
+      "onTrackGapToPoleSeconds": 0.5638,
+      "officialBestLapSeconds": 62.7034,
+      "capturedBestVsOfficialSeconds": 0.1259,
+      "doubleheaderRaceLabel": null,
+      "rankAttribution": "single",
+      "rankSource": "canonical_official_qualifying",
+      "semanticClassificationPosition": 4,
+      "positionCrossCheck": "match",
+      "trafficContext": null,
+      "theoreticalBestSeconds": null,
+      "trackEvolutionCurve": null
+    },
+    {
+      "id": "rt_2024_milwaukee-mile_qc_2024-08-31_a",
+      "source": "racetools",
+      "sourceTier": "racetools_capture",
+      "sourceTierLabel": "RaceTools race-weekend capture",
+      "seasonYear": 2024,
+      "date": "2024-08-31",
+      "venueName": "Milwaukee Mile",
+      "trackId": "track_the_milwaukee_mile",
+      "sessionLabel": "Qualifications",
+      "eventId": "event_indy_nxt_2024_5478",
+      "raceSessionIds": [
+        "session_indy_nxt_2024_6322"
+      ],
+      "isOval": true,
+      "crosswalkVerdict": null,
+      "crosswalkCrossCheck": null,
+      "qualityMasks": [],
+      "laps": [
+        {
+          "seq": 1,
+          "lapIndex": 2,
+          "seconds": 24.7788,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 24.7788
+        },
+        {
+          "seq": 2,
+          "lapIndex": 3,
+          "seconds": 24.533,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 24.533
+        },
+        {
+          "seq": 3,
+          "lapIndex": 4,
+          "seconds": 24.2884,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 24.2884
+        }
+      ],
+      "lapCount": 3,
+      "droppedNoiseLaps": 1,
+      "bryceBestSeconds": 24.2884,
+      "bryceBestSeq": 3,
+      "sessionBestSeconds": 24.1403,
+      "sessionBestByBryce": false,
+      "sessionBestMoves": 8,
+      "sessionBestSteps": [
+        {
+          "seconds": 26.0564,
+          "byBryce": false
+        },
+        {
+          "seconds": 25.0619,
+          "byBryce": false
+        },
+        {
+          "seconds": 24.7854,
+          "byBryce": false
+        },
+        {
+          "seconds": 24.5592,
+          "byBryce": false
+        },
+        {
+          "seconds": 24.533,
+          "byBryce": true
+        },
+        {
+          "seconds": 24.2884,
+          "byBryce": true
+        },
+        {
+          "seconds": 24.1474,
+          "byBryce": false
+        },
+        {
+          "seconds": 24.1403,
+          "byBryce": false
+        }
+      ],
+      "gapToSessionBestSeconds": 0.1481,
+      "lapHolderCount": 16,
+      "onTrackGroupRank": 7,
+      "groupFieldSize": 18,
+      "groupSegment": "Qualifications",
+      "combinedGridPosition": 7,
+      "combinedFieldSize": 18,
+      "gridGapToPoleSeconds": null,
+      "onTrackGapToPoleSeconds": null,
+      "officialBestLapSeconds": null,
+      "capturedBestVsOfficialSeconds": null,
+      "doubleheaderRaceLabel": null,
+      "rankAttribution": "single",
+      "rankSource": "canonical_official_qualifying",
+      "semanticClassificationPosition": 7,
+      "positionCrossCheck": "match",
+      "trafficContext": null,
+      "theoreticalBestSeconds": null,
+      "trackEvolutionCurve": null
+    },
+    {
+      "id": "rt_2025_st-petersburg-street-circuit_qb_2025-03-01_d",
+      "source": "racetools",
+      "sourceTier": "racetools_capture",
+      "sourceTierLabel": "RaceTools race-weekend capture",
+      "seasonYear": 2025,
+      "date": "2025-03-01",
+      "venueName": "St Petersburg Street Circuit",
+      "trackId": "track_streets_of_st_petersburg",
+      "sessionLabel": "Qualifications - Group 2",
+      "eventId": "event_indy_nxt_2025_5488",
+      "raceSessionIds": [
+        "session_indy_nxt_2025_6446"
+      ],
+      "isOval": false,
+      "crosswalkVerdict": null,
+      "crosswalkCrossCheck": null,
+      "qualityMasks": [],
+      "laps": [
+        {
+          "seq": 1,
+          "lapIndex": 1,
+          "seconds": 100.7674,
+          "kind": "support",
+          "isPersonalBest": true,
+          "runningBestSeconds": 100.7674
+        },
+        {
+          "seq": 2,
+          "lapIndex": 2,
+          "seconds": 67.327,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 67.327
+        },
+        {
+          "seq": 3,
+          "lapIndex": 3,
+          "seconds": 66.1933,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 66.1933
+        },
+        {
+          "seq": 4,
+          "lapIndex": 4,
+          "seconds": 66.0259,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 66.0259
+        },
+        {
+          "seq": 5,
+          "lapIndex": 5,
+          "seconds": 65.3653,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 65.3653
+        },
+        {
+          "seq": 6,
+          "lapIndex": 6,
+          "seconds": 65.5287,
+          "kind": "flying",
+          "isPersonalBest": false,
+          "runningBestSeconds": 65.3653
+        },
+        {
+          "seq": 7,
+          "lapIndex": 7,
+          "seconds": 65.7304,
+          "kind": "flying",
+          "isPersonalBest": false,
+          "runningBestSeconds": 65.3653
+        },
+        {
+          "seq": 8,
+          "lapIndex": 8,
+          "seconds": 65.4609,
+          "kind": "flying",
+          "isPersonalBest": false,
+          "runningBestSeconds": 65.3653
+        },
+        {
+          "seq": 9,
+          "lapIndex": 9,
+          "seconds": 65.1138,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 65.1138
+        },
+        {
+          "seq": 10,
+          "lapIndex": 10,
+          "seconds": 65.0363,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 65.0363
+        }
+      ],
+      "lapCount": 10,
+      "droppedNoiseLaps": 0,
+      "bryceBestSeconds": 65.0363,
+      "bryceBestSeq": 10,
+      "sessionBestSeconds": 64.0642,
+      "sessionBestByBryce": false,
+      "sessionBestMoves": 9,
+      "sessionBestSteps": [
+        {
+          "seconds": 66.555,
+          "byBryce": false
+        },
+        {
+          "seconds": 65.1987,
+          "byBryce": false
+        },
+        {
+          "seconds": 65.0593,
+          "byBryce": false
+        },
+        {
+          "seconds": 64.5358,
+          "byBryce": false
+        },
+        {
+          "seconds": 64.3303,
+          "byBryce": false
+        },
+        {
+          "seconds": 64.2769,
+          "byBryce": false
+        },
+        {
+          "seconds": 64.2744,
+          "byBryce": false
+        },
+        {
+          "seconds": 64.1405,
+          "byBryce": false
+        },
+        {
+          "seconds": 64.0642,
+          "byBryce": false
+        }
+      ],
+      "gapToSessionBestSeconds": 0.9721,
+      "lapHolderCount": 11,
+      "onTrackGroupRank": 10,
+      "groupFieldSize": 11,
+      "groupSegment": "Qualifications - Group 2",
+      "combinedGridPosition": 10,
+      "combinedFieldSize": 11,
+      "gridGapToPoleSeconds": 1.0355,
+      "onTrackGapToPoleSeconds": 1.0355,
+      "officialBestLapSeconds": 65.0564,
+      "capturedBestVsOfficialSeconds": -0.0201,
+      "doubleheaderRaceLabel": null,
+      "rankAttribution": "single",
+      "rankSource": "canonical_official_qualifying",
+      "semanticClassificationPosition": 10,
+      "positionCrossCheck": "match",
+      "trafficContext": null,
+      "theoreticalBestSeconds": null,
+      "trackEvolutionCurve": null
+    },
+    {
+      "id": "rt_2025_barber-motorsports-park_qa_2025-05-03_d",
+      "source": "racetools",
+      "sourceTier": "racetools_capture",
+      "sourceTierLabel": "RaceTools race-weekend capture",
+      "seasonYear": 2025,
+      "date": "2025-05-03",
+      "venueName": "Barber Motorsports Park",
+      "trackId": "track_barber_motorsports_park",
+      "sessionLabel": "Qualifications - Group 1",
+      "eventId": "event_indy_nxt_2025_5487",
+      "raceSessionIds": [
+        "session_indy_nxt_2025_6445"
+      ],
+      "isOval": false,
+      "crosswalkVerdict": null,
+      "crosswalkCrossCheck": null,
+      "qualityMasks": [],
+      "laps": [
+        {
+          "seq": 1,
+          "lapIndex": 1,
+          "seconds": 90.2638,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 90.2638
+        },
+        {
+          "seq": 2,
+          "lapIndex": 2,
+          "seconds": 87.0741,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 87.0741
+        },
+        {
+          "seq": 3,
+          "lapIndex": 3,
+          "seconds": 86.4021,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 86.4021
+        },
+        {
+          "seq": 4,
+          "lapIndex": 4,
+          "seconds": 87.3923,
+          "kind": "flying",
+          "isPersonalBest": false,
+          "runningBestSeconds": 86.4021
+        },
+        {
+          "seq": 5,
+          "lapIndex": 5,
+          "seconds": 86.7782,
+          "kind": "flying",
+          "isPersonalBest": false,
+          "runningBestSeconds": 86.4021
+        },
+        {
+          "seq": 6,
+          "lapIndex": 6,
+          "seconds": 85.9451,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 85.9451
+        },
+        {
+          "seq": 7,
+          "lapIndex": 7,
+          "seconds": 87.9383,
+          "kind": "flying",
+          "isPersonalBest": false,
+          "runningBestSeconds": 85.9451
+        }
+      ],
+      "lapCount": 7,
+      "droppedNoiseLaps": 0,
+      "bryceBestSeconds": 85.9451,
+      "bryceBestSeq": 6,
+      "sessionBestSeconds": 84.9048,
+      "sessionBestByBryce": false,
+      "sessionBestMoves": 3,
+      "sessionBestSteps": [
+        {
+          "seconds": 86.0679,
+          "byBryce": false
+        },
+        {
+          "seconds": 85.446,
+          "byBryce": false
+        },
+        {
+          "seconds": 84.9048,
+          "byBryce": false
+        }
+      ],
+      "gapToSessionBestSeconds": 1.0403,
+      "lapHolderCount": 10,
+      "onTrackGroupRank": 3,
+      "groupFieldSize": 10,
+      "groupSegment": "Qualifications - Group 1",
+      "combinedGridPosition": 3,
+      "combinedFieldSize": 10,
+      "gridGapToPoleSeconds": 0.7529,
+      "onTrackGapToPoleSeconds": 0.7529,
+      "officialBestLapSeconds": 85.5923,
+      "capturedBestVsOfficialSeconds": 0.3528,
+      "doubleheaderRaceLabel": null,
+      "rankAttribution": "single",
+      "rankSource": "canonical_official_qualifying",
+      "semanticClassificationPosition": 3,
+      "positionCrossCheck": "match",
+      "trafficContext": null,
+      "theoreticalBestSeconds": null,
+      "trackEvolutionCurve": null
+    },
+    {
+      "id": "rt_2025_indianapolis-motor-speedway-rc_qb_2025-05-09_d",
+      "source": "racetools",
+      "sourceTier": "racetools_capture",
+      "sourceTierLabel": "RaceTools race-weekend capture",
+      "seasonYear": 2025,
+      "date": "2025-05-09",
+      "venueName": "Indianapolis Motor Speedway RC",
+      "trackId": "track_indianapolis_motor_speedway_road_course",
+      "sessionLabel": "Qualifications - Group 2",
+      "eventId": "event_indy_nxt_2025_5486",
+      "raceSessionIds": [
+        "session_indy_nxt_2025_6444"
+      ],
+      "isOval": false,
+      "crosswalkVerdict": null,
+      "crosswalkCrossCheck": null,
+      "qualityMasks": [],
+      "laps": [
+        {
+          "seq": 1,
+          "lapIndex": 1,
+          "seconds": 85.1868,
+          "kind": "support",
+          "isPersonalBest": true,
+          "runningBestSeconds": 85.1868
+        },
+        {
+          "seq": 2,
+          "lapIndex": 2,
+          "seconds": 79.0975,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 79.0975
+        },
+        {
+          "seq": 3,
+          "lapIndex": 3,
+          "seconds": 76.2713,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 76.2713
+        },
+        {
+          "seq": 4,
+          "lapIndex": 4,
+          "seconds": 75.8485,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 75.8485
+        },
+        {
+          "seq": 5,
+          "lapIndex": 5,
+          "seconds": 76.2956,
+          "kind": "flying",
+          "isPersonalBest": false,
+          "runningBestSeconds": 75.8485
+        },
+        {
+          "seq": 6,
+          "lapIndex": 6,
+          "seconds": 76.6262,
+          "kind": "flying",
+          "isPersonalBest": false,
+          "runningBestSeconds": 75.8485
+        },
+        {
+          "seq": 7,
+          "lapIndex": 7,
+          "seconds": 75.993,
+          "kind": "flying",
+          "isPersonalBest": false,
+          "runningBestSeconds": 75.8485
+        },
+        {
+          "seq": 8,
+          "lapIndex": 8,
+          "seconds": 76.1231,
+          "kind": "flying",
+          "isPersonalBest": false,
+          "runningBestSeconds": 75.8485
+        },
+        {
+          "seq": 9,
+          "lapIndex": 9,
+          "seconds": 75.8373,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 75.8373
+        }
+      ],
+      "lapCount": 9,
+      "droppedNoiseLaps": 0,
+      "bryceBestSeconds": 75.8373,
+      "bryceBestSeq": 9,
+      "sessionBestSeconds": 74.9928,
+      "sessionBestByBryce": false,
+      "sessionBestMoves": 4,
+      "sessionBestSteps": [
+        {
+          "seconds": 75.3338,
+          "byBryce": false
+        },
+        {
+          "seconds": 75.2863,
+          "byBryce": false
+        },
+        {
+          "seconds": 75.1913,
+          "byBryce": false
+        },
+        {
+          "seconds": 74.9928,
+          "byBryce": false
+        }
+      ],
+      "gapToSessionBestSeconds": 0.8445,
+      "lapHolderCount": 11,
+      "onTrackGroupRank": 9,
+      "groupFieldSize": 11,
+      "groupSegment": "Qualifications - Race 1 Group 2",
+      "combinedGridPosition": 18,
+      "combinedFieldSize": 21,
+      "gridGapToPoleSeconds": null,
+      "onTrackGapToPoleSeconds": 0.8276,
+      "officialBestLapSeconds": 75.8365,
+      "capturedBestVsOfficialSeconds": 0.0008,
+      "doubleheaderRaceLabel": "Race 1",
+      "rankAttribution": "doubleheader_bestlap",
+      "rankSource": "canonical_official_qualifying",
+      "semanticClassificationPosition": 9,
+      "positionCrossCheck": "match",
+      "trafficContext": null,
+      "theoreticalBestSeconds": null,
+      "trackEvolutionCurve": null
+    },
+    {
+      "id": "rt_2025_detroit-street-circuit_qb_2025-05-31_d",
+      "source": "racetools",
+      "sourceTier": "racetools_capture",
+      "sourceTierLabel": "RaceTools race-weekend capture",
+      "seasonYear": 2025,
+      "date": "2025-05-31",
+      "venueName": "Detroit Street Circuit",
+      "trackId": "track_streets_of_detroit",
+      "sessionLabel": "Qualifications - Group 2",
+      "eventId": "event_indy_nxt_2025_5497",
+      "raceSessionIds": [
+        "session_indy_nxt_2025_6455"
+      ],
+      "isOval": false,
+      "crosswalkVerdict": null,
+      "crosswalkCrossCheck": null,
+      "qualityMasks": [],
+      "laps": [
+        {
+          "seq": 1,
+          "lapIndex": 1,
+          "seconds": 117.414,
+          "kind": "support",
+          "isPersonalBest": true,
+          "runningBestSeconds": 117.414
+        },
+        {
+          "seq": 2,
+          "lapIndex": 2,
+          "seconds": 69.5788,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 69.5788
+        },
+        {
+          "seq": 3,
+          "lapIndex": 4,
+          "seconds": 84.7618,
+          "kind": "support",
+          "isPersonalBest": false,
+          "runningBestSeconds": 69.5788
+        },
+        {
+          "seq": 4,
+          "lapIndex": 5,
+          "seconds": 68.6411,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 68.6411
+        },
+        {
+          "seq": 5,
+          "lapIndex": 6,
+          "seconds": 67.6191,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 67.6191
+        }
+      ],
+      "lapCount": 5,
+      "droppedNoiseLaps": 1,
+      "bryceBestSeconds": 67.6191,
+      "bryceBestSeq": 5,
+      "sessionBestSeconds": 65.2514,
+      "sessionBestByBryce": false,
+      "sessionBestMoves": 3,
+      "sessionBestSteps": [
+        {
+          "seconds": 67.0468,
+          "byBryce": false
+        },
+        {
+          "seconds": 65.8354,
+          "byBryce": false
+        },
+        {
+          "seconds": 65.2514,
+          "byBryce": false
+        }
+      ],
+      "gapToSessionBestSeconds": 2.3677,
+      "lapHolderCount": 10,
+      "onTrackGroupRank": 8,
+      "groupFieldSize": 10,
+      "groupSegment": "Qualifications - Group 2",
+      "combinedGridPosition": 15,
+      "combinedFieldSize": 20,
+      "gridGapToPoleSeconds": null,
+      "onTrackGapToPoleSeconds": 2.793,
+      "officialBestLapSeconds": 67.7826,
+      "capturedBestVsOfficialSeconds": -0.1635,
+      "doubleheaderRaceLabel": null,
+      "rankAttribution": "single",
+      "rankSource": "canonical_official_qualifying",
+      "semanticClassificationPosition": 8,
+      "positionCrossCheck": "match",
+      "trafficContext": null,
+      "theoreticalBestSeconds": null,
+      "trackEvolutionCurve": null
+    },
+    {
+      "id": "rt_2025_world-wide-technology-raceway_qc_2025-06-14_d",
+      "source": "racetools",
+      "sourceTier": "racetools_capture",
+      "sourceTierLabel": "RaceTools race-weekend capture",
+      "seasonYear": 2025,
+      "date": "2025-06-14",
+      "venueName": "World Wide Technology Raceway",
+      "trackId": "track_world_wide_technology_raceway",
+      "sessionLabel": "Qualifications",
+      "eventId": "event_indy_nxt_2025_5496",
+      "raceSessionIds": [
+        "session_indy_nxt_2025_6454"
+      ],
+      "isOval": true,
+      "crosswalkVerdict": null,
+      "crosswalkCrossCheck": null,
+      "qualityMasks": [],
+      "laps": [
+        {
+          "seq": 1,
+          "lapIndex": 2,
+          "seconds": 28.5361,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 28.5361
+        },
+        {
+          "seq": 2,
+          "lapIndex": 3,
+          "seconds": 28.0617,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 28.0617
+        },
+        {
+          "seq": 3,
+          "lapIndex": 4,
+          "seconds": 28.0902,
+          "kind": "flying",
+          "isPersonalBest": false,
+          "runningBestSeconds": 28.0617
+        }
+      ],
+      "lapCount": 3,
+      "droppedNoiseLaps": 1,
+      "bryceBestSeconds": 28.0617,
+      "bryceBestSeq": 2,
+      "sessionBestSeconds": 27.0529,
+      "sessionBestByBryce": false,
+      "sessionBestMoves": 9,
+      "sessionBestSteps": [
+        {
+          "seconds": 27.6294,
+          "byBryce": false
+        },
+        {
+          "seconds": 27.5471,
+          "byBryce": false
+        },
+        {
+          "seconds": 27.5115,
+          "byBryce": false
+        },
+        {
+          "seconds": 27.4858,
+          "byBryce": false
+        },
+        {
+          "seconds": 27.4848,
+          "byBryce": false
+        },
+        {
+          "seconds": 27.3955,
+          "byBryce": false
+        },
+        {
+          "seconds": 27.3176,
+          "byBryce": false
+        },
+        {
+          "seconds": 27.0853,
+          "byBryce": false
+        },
+        {
+          "seconds": 27.0529,
+          "byBryce": false
+        }
+      ],
+      "gapToSessionBestSeconds": 1.0088,
+      "lapHolderCount": 18,
+      "onTrackGroupRank": 16,
+      "groupFieldSize": 19,
+      "groupSegment": "Qualifications",
+      "combinedGridPosition": 16,
+      "combinedFieldSize": 19,
+      "gridGapToPoleSeconds": null,
+      "onTrackGapToPoleSeconds": null,
+      "officialBestLapSeconds": null,
+      "capturedBestVsOfficialSeconds": null,
+      "doubleheaderRaceLabel": null,
+      "rankAttribution": "single",
+      "rankSource": "canonical_official_qualifying",
+      "semanticClassificationPosition": 16,
+      "positionCrossCheck": "match",
+      "trafficContext": null,
+      "theoreticalBestSeconds": null,
+      "trackEvolutionCurve": null
+    },
+    {
+      "id": "rt_2025_road-america_qb_2025-06-21_d",
+      "source": "racetools",
+      "sourceTier": "racetools_capture",
+      "sourceTierLabel": "RaceTools race-weekend capture",
+      "seasonYear": 2025,
+      "date": "2025-06-21",
+      "venueName": "Road America",
+      "trackId": "track_road_america",
+      "sessionLabel": "Qualifications - Group 2",
+      "eventId": "event_indy_nxt_2025_5495",
+      "raceSessionIds": [
+        "session_indy_nxt_2025_6453"
+      ],
+      "isOval": false,
+      "crosswalkVerdict": null,
+      "crosswalkCrossCheck": null,
+      "qualityMasks": [],
+      "laps": [
+        {
+          "seq": 1,
+          "lapIndex": 1,
+          "seconds": 119.5773,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 119.5773
+        },
+        {
+          "seq": 2,
+          "lapIndex": 2,
+          "seconds": 114.3137,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 114.3137
+        },
+        {
+          "seq": 3,
+          "lapIndex": 3,
+          "seconds": 113.4705,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 113.4705
+        },
+        {
+          "seq": 4,
+          "lapIndex": 4,
+          "seconds": 121.2818,
+          "kind": "support",
+          "isPersonalBest": false,
+          "runningBestSeconds": 113.4705
+        }
+      ],
+      "lapCount": 4,
+      "droppedNoiseLaps": 1,
+      "bryceBestSeconds": 113.4705,
+      "bryceBestSeq": 3,
+      "sessionBestSeconds": 112.4184,
+      "sessionBestByBryce": false,
+      "sessionBestMoves": 2,
+      "sessionBestSteps": [
+        {
+          "seconds": 112.5842,
+          "byBryce": false
+        },
+        {
+          "seconds": 112.4184,
+          "byBryce": false
+        }
+      ],
+      "gapToSessionBestSeconds": 1.0521,
+      "lapHolderCount": 10,
+      "onTrackGroupRank": 5,
+      "groupFieldSize": 10,
+      "groupSegment": "Qualifications - Group 2",
+      "combinedGridPosition": 10,
+      "combinedFieldSize": 19,
+      "gridGapToPoleSeconds": null,
+      "onTrackGapToPoleSeconds": 0.8865,
+      "officialBestLapSeconds": 113.4344,
+      "capturedBestVsOfficialSeconds": 0.0361,
+      "doubleheaderRaceLabel": null,
+      "rankAttribution": "single",
+      "rankSource": "canonical_official_qualifying",
+      "semanticClassificationPosition": 5,
+      "positionCrossCheck": "match",
+      "trafficContext": null,
+      "theoreticalBestSeconds": null,
+      "trackEvolutionCurve": null
+    },
+    {
+      "id": "rt_2025_mid-ohio-sports-car-course_qa_2025-07-05_d",
+      "source": "racetools",
+      "sourceTier": "racetools_capture",
+      "sourceTierLabel": "RaceTools race-weekend capture",
+      "seasonYear": 2025,
+      "date": "2025-07-05",
+      "venueName": "Mid-Ohio Sports Car Course",
+      "trackId": "track_mid_ohio_sports_car_course",
+      "sessionLabel": "Qualifications - Group 1",
+      "eventId": "event_indy_nxt_2025_5494",
+      "raceSessionIds": [
+        "session_indy_nxt_2025_6452"
+      ],
+      "isOval": false,
+      "crosswalkVerdict": null,
+      "crosswalkCrossCheck": null,
+      "qualityMasks": [],
+      "laps": [
+        {
+          "seq": 1,
+          "lapIndex": 1,
+          "seconds": 134.9938,
+          "kind": "support",
+          "isPersonalBest": true,
+          "runningBestSeconds": 134.9938
+        },
+        {
+          "seq": 2,
+          "lapIndex": 2,
+          "seconds": 72.4593,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 72.4593
+        },
+        {
+          "seq": 3,
+          "lapIndex": 3,
+          "seconds": 71.7999,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 71.7999
+        },
+        {
+          "seq": 4,
+          "lapIndex": 4,
+          "seconds": 71.2944,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 71.2944
+        },
+        {
+          "seq": 5,
+          "lapIndex": 5,
+          "seconds": 70.8934,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 70.8934
+        },
+        {
+          "seq": 6,
+          "lapIndex": 6,
+          "seconds": 70.8129,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 70.8129
+        },
+        {
+          "seq": 7,
+          "lapIndex": 7,
+          "seconds": 70.5559,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 70.5559
+        },
+        {
+          "seq": 8,
+          "lapIndex": 8,
+          "seconds": 70.3203,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 70.3203
+        },
+        {
+          "seq": 9,
+          "lapIndex": 9,
+          "seconds": 70.43,
+          "kind": "flying",
+          "isPersonalBest": false,
+          "runningBestSeconds": 70.3203
+        }
+      ],
+      "lapCount": 9,
+      "droppedNoiseLaps": 0,
+      "bryceBestSeconds": 70.3203,
+      "bryceBestSeq": 8,
+      "sessionBestSeconds": 69.7986,
+      "sessionBestByBryce": false,
+      "sessionBestMoves": 6,
+      "sessionBestSteps": [
+        {
+          "seconds": 79.5962,
+          "byBryce": false
+        },
+        {
+          "seconds": 72.3917,
+          "byBryce": false
+        },
+        {
+          "seconds": 71.3524,
+          "byBryce": false
+        },
+        {
+          "seconds": 70.398,
+          "byBryce": false
+        },
+        {
+          "seconds": 69.9767,
+          "byBryce": false
+        },
+        {
+          "seconds": 69.7986,
+          "byBryce": false
+        }
+      ],
+      "gapToSessionBestSeconds": 0.5217,
+      "lapHolderCount": 9,
+      "onTrackGroupRank": 4,
+      "groupFieldSize": 9,
+      "groupSegment": "Qualifications - Group 1",
+      "combinedGridPosition": 7,
+      "combinedFieldSize": 19,
+      "gridGapToPoleSeconds": null,
+      "onTrackGapToPoleSeconds": 0.649,
+      "officialBestLapSeconds": 70.3921,
+      "capturedBestVsOfficialSeconds": -0.0718,
+      "doubleheaderRaceLabel": null,
+      "rankAttribution": "single",
+      "rankSource": "canonical_official_qualifying",
+      "semanticClassificationPosition": 4,
+      "positionCrossCheck": "match",
+      "trafficContext": null,
+      "theoreticalBestSeconds": null,
+      "trackEvolutionCurve": null
+    },
+    {
+      "id": "rt_2025_weathertech-raceway-laguna-seca_qa_2025-07-26_d",
+      "source": "racetools",
+      "sourceTier": "racetools_capture",
+      "sourceTierLabel": "RaceTools race-weekend capture",
+      "seasonYear": 2025,
+      "date": "2025-07-26",
+      "venueName": "WeatherTech Raceway Laguna Seca",
+      "trackId": "track_weathertech_raceway_laguna_seca",
+      "sessionLabel": "Qualifications - Group 1",
+      "eventId": "event_indy_nxt_2025_5484",
+      "raceSessionIds": [
+        "session_indy_nxt_2025_6442"
+      ],
+      "isOval": false,
+      "crosswalkVerdict": null,
+      "crosswalkCrossCheck": null,
+      "qualityMasks": [],
+      "laps": [
+        {
+          "seq": 1,
+          "lapIndex": 1,
+          "seconds": 85.725,
+          "kind": "support",
+          "isPersonalBest": true,
+          "runningBestSeconds": 85.725
+        },
+        {
+          "seq": 2,
+          "lapIndex": 2,
+          "seconds": 77.4776,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 77.4776
+        },
+        {
+          "seq": 3,
+          "lapIndex": 3,
+          "seconds": 75.4915,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 75.4915
+        },
+        {
+          "seq": 4,
+          "lapIndex": 4,
+          "seconds": 74.8212,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 74.8212
+        },
+        {
+          "seq": 5,
+          "lapIndex": 5,
+          "seconds": 74.5713,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 74.5713
+        },
+        {
+          "seq": 6,
+          "lapIndex": 6,
+          "seconds": 74.1298,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 74.1298
+        },
+        {
+          "seq": 7,
+          "lapIndex": 7,
+          "seconds": 74.2135,
+          "kind": "flying",
+          "isPersonalBest": false,
+          "runningBestSeconds": 74.1298
+        },
+        {
+          "seq": 8,
+          "lapIndex": 8,
+          "seconds": 74.3329,
+          "kind": "flying",
+          "isPersonalBest": false,
+          "runningBestSeconds": 74.1298
+        },
+        {
+          "seq": 9,
+          "lapIndex": 9,
+          "seconds": 74.3398,
+          "kind": "flying",
+          "isPersonalBest": false,
+          "runningBestSeconds": 74.1298
+        }
+      ],
+      "lapCount": 9,
+      "droppedNoiseLaps": 0,
+      "bryceBestSeconds": 74.1298,
+      "bryceBestSeq": 6,
+      "sessionBestSeconds": 73.3076,
+      "sessionBestByBryce": false,
+      "sessionBestMoves": 8,
+      "sessionBestSteps": [
+        {
+          "seconds": 77.4776,
+          "byBryce": true
+        },
+        {
+          "seconds": 74.8892,
+          "byBryce": false
+        },
+        {
+          "seconds": 74.4605,
+          "byBryce": false
+        },
+        {
+          "seconds": 73.9732,
+          "byBryce": false
+        },
+        {
+          "seconds": 73.9142,
+          "byBryce": false
+        },
+        {
+          "seconds": 73.9007,
+          "byBryce": false
+        },
+        {
+          "seconds": 73.6811,
+          "byBryce": false
+        },
+        {
+          "seconds": 73.3076,
+          "byBryce": false
+        }
+      ],
+      "gapToSessionBestSeconds": 0.8222,
+      "lapHolderCount": 9,
+      "onTrackGroupRank": 7,
+      "groupFieldSize": 9,
+      "groupSegment": "Qualifications - Race 1 Group 1",
+      "combinedGridPosition": 14,
+      "combinedFieldSize": 19,
+      "gridGapToPoleSeconds": null,
+      "onTrackGapToPoleSeconds": 0.7849,
+      "officialBestLapSeconds": 74.1124,
+      "capturedBestVsOfficialSeconds": 0.0174,
+      "doubleheaderRaceLabel": "Race 1",
+      "rankAttribution": "doubleheader_bestlap",
+      "rankSource": "canonical_official_qualifying",
+      "semanticClassificationPosition": 7,
+      "positionCrossCheck": "match",
+      "trafficContext": null,
+      "theoreticalBestSeconds": null,
+      "trackEvolutionCurve": null
+    },
+    {
+      "id": "rt_2025_portland-international-raceway_qb_2025-08-09_d",
+      "source": "racetools",
+      "sourceTier": "racetools_capture",
+      "sourceTierLabel": "RaceTools race-weekend capture",
+      "seasonYear": 2025,
+      "date": "2025-08-09",
+      "venueName": "Portland International Raceway",
+      "trackId": "track_portland_international_raceway",
+      "sessionLabel": "Qualifications - Group 2",
+      "eventId": "event_indy_nxt_2025_5491",
+      "raceSessionIds": [
+        "session_indy_nxt_2025_6449"
+      ],
+      "isOval": false,
+      "crosswalkVerdict": null,
+      "crosswalkCrossCheck": null,
+      "qualityMasks": [],
+      "laps": [
+        {
+          "seq": 1,
+          "lapIndex": 2,
+          "seconds": 81.4065,
+          "kind": "support",
+          "isPersonalBest": true,
+          "runningBestSeconds": 81.4065
+        },
+        {
+          "seq": 2,
+          "lapIndex": 3,
+          "seconds": 67.9841,
+          "kind": "support",
+          "isPersonalBest": true,
+          "runningBestSeconds": 67.9841
+        },
+        {
+          "seq": 3,
+          "lapIndex": 4,
+          "seconds": 64.3885,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 64.3885
+        },
+        {
+          "seq": 4,
+          "lapIndex": 5,
+          "seconds": 63.9981,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 63.9981
+        },
+        {
+          "seq": 5,
+          "lapIndex": 6,
+          "seconds": 63.6417,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 63.6417
+        }
+      ],
+      "lapCount": 5,
+      "droppedNoiseLaps": 1,
+      "bryceBestSeconds": 63.6417,
+      "bryceBestSeq": 5,
+      "sessionBestSeconds": 63.5237,
+      "sessionBestByBryce": false,
+      "sessionBestMoves": 9,
+      "sessionBestSteps": [
+        {
+          "seconds": 249.4974,
+          "byBryce": false
+        },
+        {
+          "seconds": 73.2994,
+          "byBryce": false
+        },
+        {
+          "seconds": 64.8465,
+          "byBryce": false
+        },
+        {
+          "seconds": 64.5706,
+          "byBryce": false
+        },
+        {
+          "seconds": 64.4672,
+          "byBryce": false
+        },
+        {
+          "seconds": 63.9037,
+          "byBryce": false
+        },
+        {
+          "seconds": 63.8226,
+          "byBryce": false
+        },
+        {
+          "seconds": 63.6563,
+          "byBryce": false
+        },
+        {
+          "seconds": 63.5237,
+          "byBryce": false
+        }
+      ],
+      "gapToSessionBestSeconds": 0.118,
+      "lapHolderCount": 9,
+      "onTrackGroupRank": 3,
+      "groupFieldSize": 10,
+      "groupSegment": "Qualifications - Group 2",
+      "combinedGridPosition": 5,
+      "combinedFieldSize": 19,
+      "gridGapToPoleSeconds": null,
+      "onTrackGapToPoleSeconds": 0.4689,
+      "officialBestLapSeconds": 63.8284,
+      "capturedBestVsOfficialSeconds": -0.1867,
+      "doubleheaderRaceLabel": null,
+      "rankAttribution": "single",
+      "rankSource": "canonical_official_qualifying",
+      "semanticClassificationPosition": 3,
+      "positionCrossCheck": "match",
+      "trafficContext": null,
+      "theoreticalBestSeconds": null,
+      "trackEvolutionCurve": null
+    },
+    {
+      "id": "rt_2025_milwaukee-mile_qc_2025-08-23_d",
+      "source": "racetools",
+      "sourceTier": "racetools_capture",
+      "sourceTierLabel": "RaceTools race-weekend capture",
+      "seasonYear": 2025,
+      "date": "2025-08-23",
+      "venueName": "Milwaukee Mile",
+      "trackId": "track_the_milwaukee_mile",
+      "sessionLabel": "Qualifications",
+      "eventId": "event_indy_nxt_2025_5490",
+      "raceSessionIds": [
+        "session_indy_nxt_2025_6448"
+      ],
+      "isOval": true,
+      "crosswalkVerdict": null,
+      "crosswalkCrossCheck": null,
+      "qualityMasks": [
+        "heartbeat_gap"
+      ],
+      "laps": [
+        {
+          "seq": 1,
+          "lapIndex": 2,
+          "seconds": 24.5065,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 24.5065
+        },
+        {
+          "seq": 2,
+          "lapIndex": 3,
+          "seconds": 24.1794,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 24.1794
+        },
+        {
+          "seq": 3,
+          "lapIndex": 4,
+          "seconds": 24.2655,
+          "kind": "flying",
+          "isPersonalBest": false,
+          "runningBestSeconds": 24.1794
+        }
+      ],
+      "lapCount": 3,
+      "droppedNoiseLaps": 1,
+      "bryceBestSeconds": 24.1794,
+      "bryceBestSeq": 2,
+      "sessionBestSeconds": 23.7623,
+      "sessionBestByBryce": false,
+      "sessionBestMoves": 8,
+      "sessionBestSteps": [
+        {
+          "seconds": 24.9635,
+          "byBryce": false
+        },
+        {
+          "seconds": 24.3521,
+          "byBryce": false
+        },
+        {
+          "seconds": 24.254,
+          "byBryce": false
+        },
+        {
+          "seconds": 24.2496,
+          "byBryce": false
+        },
+        {
+          "seconds": 24.1794,
+          "byBryce": true
+        },
+        {
+          "seconds": 24.0515,
+          "byBryce": false
+        },
+        {
+          "seconds": 23.8008,
+          "byBryce": false
+        },
+        {
+          "seconds": 23.7623,
+          "byBryce": false
+        }
+      ],
+      "gapToSessionBestSeconds": 0.4171,
+      "lapHolderCount": 17,
+      "onTrackGroupRank": 6,
+      "groupFieldSize": 18,
+      "groupSegment": "Qualifications",
+      "combinedGridPosition": 6,
+      "combinedFieldSize": 18,
+      "gridGapToPoleSeconds": null,
+      "onTrackGapToPoleSeconds": null,
+      "officialBestLapSeconds": null,
+      "capturedBestVsOfficialSeconds": null,
+      "doubleheaderRaceLabel": null,
+      "rankAttribution": "single",
+      "rankSource": "canonical_official_qualifying",
+      "semanticClassificationPosition": 6,
+      "positionCrossCheck": "match",
+      "trafficContext": null,
+      "theoreticalBestSeconds": null,
+      "trackEvolutionCurve": null
+    },
+    {
+      "id": "rt_2025_nashville-superspeedway_qc_2025-08-30_d",
+      "source": "racetools",
+      "sourceTier": "racetools_capture",
+      "sourceTierLabel": "RaceTools race-weekend capture",
+      "seasonYear": 2025,
+      "date": "2025-08-30",
+      "venueName": "Nashville Superspeedway",
+      "trackId": "track_nashville_superspeedway",
+      "sessionLabel": "Qualifications",
+      "eventId": "event_indy_nxt_2025_5489",
+      "raceSessionIds": [
+        "session_indy_nxt_2025_6447"
+      ],
+      "isOval": true,
+      "crosswalkVerdict": null,
+      "crosswalkCrossCheck": null,
+      "qualityMasks": [],
+      "laps": [
+        {
+          "seq": 1,
+          "lapIndex": 2,
+          "seconds": 26.3709,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 26.3709
+        },
+        {
+          "seq": 2,
+          "lapIndex": 3,
+          "seconds": 26.2664,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 26.2664
+        },
+        {
+          "seq": 3,
+          "lapIndex": 4,
+          "seconds": 26.2599,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 26.2599
+        }
+      ],
+      "lapCount": 3,
+      "droppedNoiseLaps": 1,
+      "bryceBestSeconds": 26.2599,
+      "bryceBestSeq": 3,
+      "sessionBestSeconds": 25.9462,
+      "sessionBestByBryce": false,
+      "sessionBestMoves": 9,
+      "sessionBestSteps": [
+        {
+          "seconds": 26.7851,
+          "byBryce": false
+        },
+        {
+          "seconds": 26.7173,
+          "byBryce": false
+        },
+        {
+          "seconds": 26.318,
+          "byBryce": false
+        },
+        {
+          "seconds": 26.3085,
+          "byBryce": false
+        },
+        {
+          "seconds": 26.2171,
+          "byBryce": false
+        },
+        {
+          "seconds": 26.1995,
+          "byBryce": false
+        },
+        {
+          "seconds": 26.057,
+          "byBryce": false
+        },
+        {
+          "seconds": 25.9644,
+          "byBryce": false
+        },
+        {
+          "seconds": 25.9462,
+          "byBryce": false
+        }
+      ],
+      "gapToSessionBestSeconds": 0.3137,
+      "lapHolderCount": 18,
+      "onTrackGroupRank": 8,
+      "groupFieldSize": 18,
+      "groupSegment": "Qualifications",
+      "combinedGridPosition": 8,
+      "combinedFieldSize": 18,
+      "gridGapToPoleSeconds": null,
+      "onTrackGapToPoleSeconds": null,
+      "officialBestLapSeconds": null,
+      "capturedBestVsOfficialSeconds": null,
+      "doubleheaderRaceLabel": null,
+      "rankAttribution": "single",
+      "rankSource": "canonical_official_qualifying",
+      "semanticClassificationPosition": 12,
+      "positionCrossCheck": "mismatch",
+      "trafficContext": null,
+      "theoreticalBestSeconds": null,
+      "trackEvolutionCurve": null
+    },
+    {
+      "id": "t71_2026_st-petersburg_qualifying_g2_2026-02-28",
+      "source": "timing71",
+      "sourceTier": "timing71_normalized",
+      "sourceTierLabel": "third-party normalized (Timing71)",
+      "seasonYear": 2026,
+      "date": "2026-02-28",
+      "venueName": "St. Petersburg",
+      "trackId": "track_streets_of_st_petersburg",
+      "sessionLabel": "INDY NXT by Firestone GP of St Petersburg - Qualifications - Group 2",
+      "eventId": "event_indy_nxt_2026_5534",
+      "raceSessionIds": [
+        "session_indy_nxt_2026_6751"
+      ],
+      "isOval": false,
+      "crosswalkVerdict": "GO",
+      "crosswalkCrossCheck": "unavailable",
+      "qualityMasks": [
+        "cross_session_recording_segmented"
+      ],
+      "laps": [
+        {
+          "seq": 1,
+          "lapIndex": 1,
+          "seconds": 80.753,
+          "kind": "support",
+          "isPersonalBest": true,
+          "runningBestSeconds": 80.753
+        },
+        {
+          "seq": 2,
+          "lapIndex": 2,
+          "seconds": 69.4009,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 69.4009
+        },
+        {
+          "seq": 3,
+          "lapIndex": 3,
+          "seconds": 67.158,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 67.158
+        },
+        {
+          "seq": 4,
+          "lapIndex": 4,
+          "seconds": 66.7167,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 66.7167
+        },
+        {
+          "seq": 5,
+          "lapIndex": 5,
+          "seconds": 66.4398,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 66.4398
+        },
+        {
+          "seq": 6,
+          "lapIndex": 6,
+          "seconds": 71.3071,
+          "kind": "support",
+          "isPersonalBest": false,
+          "runningBestSeconds": 66.4398
+        }
+      ],
+      "lapCount": 6,
+      "droppedNoiseLaps": 0,
+      "bryceBestSeconds": 66.4398,
+      "bryceBestSeq": 5,
+      "sessionBestSeconds": 64.9993,
+      "sessionBestByBryce": false,
+      "sessionBestMoves": 10,
+      "sessionBestSteps": [
+        {
+          "seconds": 77.3258,
+          "byBryce": false
+        },
+        {
+          "seconds": 76.5976,
+          "byBryce": false
+        },
+        {
+          "seconds": 73.3941,
+          "byBryce": false
+        },
+        {
+          "seconds": 69.5191,
+          "byBryce": false
+        },
+        {
+          "seconds": 66.7154,
+          "byBryce": false
+        },
+        {
+          "seconds": 66.6478,
+          "byBryce": false
+        },
+        {
+          "seconds": 66.6334,
+          "byBryce": false
+        },
+        {
+          "seconds": 65.8144,
+          "byBryce": false
+        },
+        {
+          "seconds": 65.4337,
+          "byBryce": false
+        },
+        {
+          "seconds": 64.9993,
+          "byBryce": false
+        }
+      ],
+      "gapToSessionBestSeconds": 1.4405,
+      "lapHolderCount": 12,
+      "onTrackGroupRank": 10,
+      "groupFieldSize": 12,
+      "groupSegment": "Qualifications - Group 2",
+      "combinedGridPosition": 19,
+      "combinedFieldSize": 24,
+      "gridGapToPoleSeconds": null,
+      "onTrackGapToPoleSeconds": 1.2795,
+      "officialBestLapSeconds": 66.1682,
+      "capturedBestVsOfficialSeconds": 0.2716,
+      "doubleheaderRaceLabel": null,
+      "rankAttribution": "single",
+      "rankSource": "canonical_official_qualifying",
+      "semanticClassificationPosition": 11,
+      "positionCrossCheck": "na",
+      "trafficContext": null,
+      "theoreticalBestSeconds": null,
+      "trackEvolutionCurve": null
+    },
+    {
+      "id": "t71_2026_arlington_qualifying_g2_2026-03-14",
+      "source": "timing71",
+      "sourceTier": "timing71_normalized",
+      "sourceTierLabel": "third-party normalized (Timing71)",
+      "seasonYear": 2026,
+      "date": "2026-03-14",
+      "venueName": "Arlington",
+      "trackId": "track_streets_of_arlington",
+      "sessionLabel": "INDYNXT by Firestone Grand Prix of Arlington - Qualifications - Group 2",
+      "eventId": "event_indy_nxt_2026_5536",
+      "raceSessionIds": [
+        "session_indy_nxt_2026_6753"
+      ],
+      "isOval": false,
+      "crosswalkVerdict": "GO",
+      "crosswalkCrossCheck": "unavailable",
+      "qualityMasks": [
+        "cross_session_recording_segmented"
+      ],
+      "laps": [
+        {
+          "seq": 1,
+          "lapIndex": 1,
+          "seconds": 110.3537,
+          "kind": "support",
+          "isPersonalBest": true,
+          "runningBestSeconds": 110.3537
+        },
+        {
+          "seq": 2,
+          "lapIndex": 2,
+          "seconds": 104.5427,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 104.5427
+        },
+        {
+          "seq": 3,
+          "lapIndex": 3,
+          "seconds": 103.4642,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 103.4642
+        },
+        {
+          "seq": 4,
+          "lapIndex": 4,
+          "seconds": 103.4022,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 103.4022
+        },
+        {
+          "seq": 5,
+          "lapIndex": 5,
+          "seconds": 104.0457,
+          "kind": "flying",
+          "isPersonalBest": false,
+          "runningBestSeconds": 103.4022
+        },
+        {
+          "seq": 6,
+          "lapIndex": 6,
+          "seconds": 102.5353,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 102.5353
+        },
+        {
+          "seq": 7,
+          "lapIndex": 7,
+          "seconds": 102.0142,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 102.0142
+        }
+      ],
+      "lapCount": 7,
+      "droppedNoiseLaps": 0,
+      "bryceBestSeconds": 102.0142,
+      "bryceBestSeq": 7,
+      "sessionBestSeconds": 98.8841,
+      "sessionBestByBryce": false,
+      "sessionBestMoves": 13,
+      "sessionBestSteps": [
+        {
+          "seconds": 102.2263,
+          "byBryce": false
+        },
+        {
+          "seconds": 100.9985,
+          "byBryce": false
+        },
+        {
+          "seconds": 100.5779,
+          "byBryce": false
+        },
+        {
+          "seconds": 100.4712,
+          "byBryce": false
+        },
+        {
+          "seconds": 100.4635,
+          "byBryce": false
+        },
+        {
+          "seconds": 99.8294,
+          "byBryce": false
+        },
+        {
+          "seconds": 99.8088,
+          "byBryce": false
+        },
+        {
+          "seconds": 99.6521,
+          "byBryce": false
+        },
+        {
+          "seconds": 99.5692,
+          "byBryce": false
+        },
+        {
+          "seconds": 99.4406,
+          "byBryce": false
+        },
+        {
+          "seconds": 99.3742,
+          "byBryce": false
+        },
+        {
+          "seconds": 99.2294,
+          "byBryce": false
+        },
+        {
+          "seconds": 98.8841,
+          "byBryce": false
+        }
+      ],
+      "gapToSessionBestSeconds": 3.1301,
+      "lapHolderCount": 12,
+      "onTrackGroupRank": 12,
+      "groupFieldSize": 12,
+      "groupSegment": "Qualifications - Group 1",
+      "combinedGridPosition": 23,
+      "combinedFieldSize": 24,
+      "gridGapToPoleSeconds": null,
+      "onTrackGapToPoleSeconds": 3.1301,
+      "officialBestLapSeconds": 102.0142,
+      "capturedBestVsOfficialSeconds": 0,
+      "doubleheaderRaceLabel": null,
+      "rankAttribution": "single",
+      "rankSource": "canonical_official_qualifying",
+      "semanticClassificationPosition": 12,
+      "positionCrossCheck": "na",
+      "trafficContext": null,
+      "theoreticalBestSeconds": null,
+      "trackEvolutionCurve": null
+    },
+    {
+      "id": "t71_2026_barber_qualifying_2026-03-28",
+      "source": "timing71",
+      "sourceTier": "timing71_normalized",
+      "sourceTierLabel": "third-party normalized (Timing71)",
+      "seasonYear": 2026,
+      "date": "2026-03-28",
+      "venueName": "Barber",
+      "trackId": "track_barber_motorsports_park",
+      "sessionLabel": "INDY NXT by Firestone Grand Prix of Alabama - Qualifications",
+      "eventId": "event_indy_nxt_2026_5533",
+      "raceSessionIds": [
+        "session_indy_nxt_2026_6750"
+      ],
+      "isOval": false,
+      "crosswalkVerdict": "GO",
+      "crosswalkCrossCheck": "unavailable",
+      "qualityMasks": [
+        "cross_session_recording_segmented"
+      ],
+      "laps": [
+        {
+          "seq": 1,
+          "lapIndex": 1,
+          "seconds": 82.6647,
+          "kind": "support",
+          "isPersonalBest": true,
+          "runningBestSeconds": 82.6647
+        },
+        {
+          "seq": 2,
+          "lapIndex": 2,
+          "seconds": 81.5467,
+          "kind": "support",
+          "isPersonalBest": true,
+          "runningBestSeconds": 81.5467
+        },
+        {
+          "seq": 3,
+          "lapIndex": 3,
+          "seconds": 72.4533,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 72.4533
+        },
+        {
+          "seq": 4,
+          "lapIndex": 4,
+          "seconds": 71.4205,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 71.4205
+        },
+        {
+          "seq": 5,
+          "lapIndex": 5,
+          "seconds": 75.3297,
+          "kind": "support",
+          "isPersonalBest": false,
+          "runningBestSeconds": 71.4205
+        },
+        {
+          "seq": 6,
+          "lapIndex": 6,
+          "seconds": 70.9027,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 70.9027
+        },
+        {
+          "seq": 7,
+          "lapIndex": 7,
+          "seconds": 70.8634,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 70.8634
+        },
+        {
+          "seq": 8,
+          "lapIndex": 8,
+          "seconds": 70.6418,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 70.6418
+        }
+      ],
+      "lapCount": 8,
+      "droppedNoiseLaps": 0,
+      "bryceBestSeconds": 70.6418,
+      "bryceBestSeq": 8,
+      "sessionBestSeconds": 70.3176,
+      "sessionBestByBryce": false,
+      "sessionBestMoves": 12,
+      "sessionBestSteps": [
+        {
+          "seconds": 79.2018,
+          "byBryce": false
+        },
+        {
+          "seconds": 75.0974,
+          "byBryce": false
+        },
+        {
+          "seconds": 73.8097,
+          "byBryce": false
+        },
+        {
+          "seconds": 73.198,
+          "byBryce": false
+        },
+        {
+          "seconds": 72.538,
+          "byBryce": false
+        },
+        {
+          "seconds": 71.7361,
+          "byBryce": false
+        },
+        {
+          "seconds": 71.4764,
+          "byBryce": false
+        },
+        {
+          "seconds": 70.9008,
+          "byBryce": false
+        },
+        {
+          "seconds": 70.6277,
+          "byBryce": false
+        },
+        {
+          "seconds": 70.4514,
+          "byBryce": false
+        },
+        {
+          "seconds": 70.3885,
+          "byBryce": false
+        },
+        {
+          "seconds": 70.3176,
+          "byBryce": false
+        }
+      ],
+      "gapToSessionBestSeconds": 0.3242,
+      "lapHolderCount": 12,
+      "onTrackGroupRank": 3,
+      "groupFieldSize": 12,
+      "groupSegment": "Qualifying - Race 1 Group 2",
+      "combinedGridPosition": 5,
+      "combinedFieldSize": 24,
+      "gridGapToPoleSeconds": null,
+      "onTrackGapToPoleSeconds": 0.3242,
+      "officialBestLapSeconds": 70.6418,
+      "capturedBestVsOfficialSeconds": 0,
+      "doubleheaderRaceLabel": "Race 1",
+      "rankAttribution": "single",
+      "rankSource": "canonical_official_qualifying",
+      "semanticClassificationPosition": 5,
+      "positionCrossCheck": "na",
+      "trafficContext": null,
+      "theoreticalBestSeconds": null,
+      "trackEvolutionCurve": null
+    },
+    {
+      "id": "t71_2026_indianapolis-gp_qualifying_2026-05-08",
+      "source": "timing71",
+      "sourceTier": "timing71_normalized",
+      "sourceTierLabel": "third-party normalized (Timing71)",
+      "seasonYear": 2026,
+      "date": "2026-05-08",
+      "venueName": "Indianapolis GP",
+      "trackId": "track_indianapolis_motor_speedway_road_course",
+      "sessionLabel": "INDY NXT by Firestone Indianapolis Grand Prix - Qualifications",
+      "eventId": "event_indy_nxt_2026_5539",
+      "raceSessionIds": [
+        "session_indy_nxt_2026_6756"
+      ],
+      "isOval": false,
+      "crosswalkVerdict": "GO",
+      "crosswalkCrossCheck": "unavailable",
+      "qualityMasks": [
+        "cross_session_recording_segmented"
+      ],
+      "laps": [
+        {
+          "seq": 1,
+          "lapIndex": 1,
+          "seconds": 90.7071,
+          "kind": "support",
+          "isPersonalBest": true,
+          "runningBestSeconds": 90.7071
+        },
+        {
+          "seq": 2,
+          "lapIndex": 2,
+          "seconds": 76.8069,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 76.8069
+        },
+        {
+          "seq": 3,
+          "lapIndex": 3,
+          "seconds": 76.3739,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 76.3739
+        },
+        {
+          "seq": 4,
+          "lapIndex": 4,
+          "seconds": 76.1298,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 76.1298
+        },
+        {
+          "seq": 5,
+          "lapIndex": 5,
+          "seconds": 75.6915,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 75.6915
+        },
+        {
+          "seq": 6,
+          "lapIndex": 6,
+          "seconds": 77.7099,
+          "kind": "flying",
+          "isPersonalBest": false,
+          "runningBestSeconds": 75.6915
+        },
+        {
+          "seq": 7,
+          "lapIndex": 7,
+          "seconds": 75.9591,
+          "kind": "flying",
+          "isPersonalBest": false,
+          "runningBestSeconds": 75.6915
+        },
+        {
+          "seq": 8,
+          "lapIndex": 8,
+          "seconds": 76.0288,
+          "kind": "flying",
+          "isPersonalBest": false,
+          "runningBestSeconds": 75.6915
+        }
+      ],
+      "lapCount": 8,
+      "droppedNoiseLaps": 0,
+      "bryceBestSeconds": 75.6915,
+      "bryceBestSeq": 5,
+      "sessionBestSeconds": 75.0846,
+      "sessionBestByBryce": false,
+      "sessionBestMoves": 4,
+      "sessionBestSteps": [
+        {
+          "seconds": 79.1723,
+          "byBryce": false
+        },
+        {
+          "seconds": 78.5683,
+          "byBryce": false
+        },
+        {
+          "seconds": 75.7319,
+          "byBryce": false
+        },
+        {
+          "seconds": 75.0846,
+          "byBryce": false
+        }
+      ],
+      "gapToSessionBestSeconds": 0.6069,
+      "lapHolderCount": 12,
+      "onTrackGroupRank": 7,
+      "groupFieldSize": 12,
+      "groupSegment": "Qualifying - Race 1 Group 1",
+      "combinedGridPosition": 13,
+      "combinedFieldSize": 24,
+      "gridGapToPoleSeconds": null,
+      "onTrackGapToPoleSeconds": 0.6069,
+      "officialBestLapSeconds": 75.6915,
+      "capturedBestVsOfficialSeconds": 0,
+      "doubleheaderRaceLabel": "Race 1",
+      "rankAttribution": "single",
+      "rankSource": "canonical_official_qualifying",
+      "semanticClassificationPosition": 13,
+      "positionCrossCheck": "na",
+      "trafficContext": null,
+      "theoreticalBestSeconds": null,
+      "trackEvolutionCurve": null
+    },
+    {
+      "id": "t71_2026_detroit_qualifying_g2_2026-05-30",
+      "source": "timing71",
+      "sourceTier": "timing71_normalized",
+      "sourceTierLabel": "third-party normalized (Timing71)",
+      "seasonYear": 2026,
+      "date": "2026-05-30",
+      "venueName": "Detroit",
+      "trackId": "track_streets_of_detroit",
+      "sessionLabel": "INDY NXT by Firestone Detroit Grand Prix - Qualifications - Group 2",
+      "eventId": "event_indy_nxt_2026_5532",
+      "raceSessionIds": [
+        "session_indy_nxt_2026_6749"
+      ],
+      "isOval": false,
+      "crosswalkVerdict": "GO",
+      "crosswalkCrossCheck": "unavailable",
+      "qualityMasks": [
+        "cross_session_recording_segmented"
+      ],
+      "laps": [
+        {
+          "seq": 1,
+          "lapIndex": 1,
+          "seconds": 73.2945,
+          "kind": "support",
+          "isPersonalBest": true,
+          "runningBestSeconds": 73.2945
+        },
+        {
+          "seq": 2,
+          "lapIndex": 2,
+          "seconds": 80.1658,
+          "kind": "support",
+          "isPersonalBest": false,
+          "runningBestSeconds": 73.2945
+        },
+        {
+          "seq": 3,
+          "lapIndex": 3,
+          "seconds": 68.7748,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 68.7748
+        },
+        {
+          "seq": 4,
+          "lapIndex": 4,
+          "seconds": 67.4881,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 67.4881
+        },
+        {
+          "seq": 5,
+          "lapIndex": 5,
+          "seconds": 67.033,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 67.033
+        },
+        {
+          "seq": 6,
+          "lapIndex": 7,
+          "seconds": 78.0028,
+          "kind": "support",
+          "isPersonalBest": false,
+          "runningBestSeconds": 67.033
+        },
+        {
+          "seq": 7,
+          "lapIndex": 8,
+          "seconds": 68.065,
+          "kind": "flying",
+          "isPersonalBest": false,
+          "runningBestSeconds": 67.033
+        },
+        {
+          "seq": 8,
+          "lapIndex": 9,
+          "seconds": 66.4965,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 66.4965
+        }
+      ],
+      "lapCount": 8,
+      "droppedNoiseLaps": 1,
+      "bryceBestSeconds": 66.4965,
+      "bryceBestSeq": 8,
+      "sessionBestSeconds": 65.605,
+      "sessionBestByBryce": false,
+      "sessionBestMoves": 10,
+      "sessionBestSteps": [
+        {
+          "seconds": 69.6825,
+          "byBryce": false
+        },
+        {
+          "seconds": 67.8815,
+          "byBryce": false
+        },
+        {
+          "seconds": 67.8736,
+          "byBryce": false
+        },
+        {
+          "seconds": 67.3013,
+          "byBryce": false
+        },
+        {
+          "seconds": 67.0073,
+          "byBryce": false
+        },
+        {
+          "seconds": 66.7631,
+          "byBryce": false
+        },
+        {
+          "seconds": 66.6786,
+          "byBryce": false
+        },
+        {
+          "seconds": 66.2744,
+          "byBryce": false
+        },
+        {
+          "seconds": 65.884,
+          "byBryce": false
+        },
+        {
+          "seconds": 65.605,
+          "byBryce": false
+        }
+      ],
+      "gapToSessionBestSeconds": 0.8915,
+      "lapHolderCount": 12,
+      "onTrackGroupRank": 7,
+      "groupFieldSize": 12,
+      "groupSegment": "Qualifying - Group 2",
+      "combinedGridPosition": 14,
+      "combinedFieldSize": 24,
+      "gridGapToPoleSeconds": null,
+      "onTrackGapToPoleSeconds": 0.8915,
+      "officialBestLapSeconds": 66.4965,
+      "capturedBestVsOfficialSeconds": 0,
+      "doubleheaderRaceLabel": null,
+      "rankAttribution": "single",
+      "rankSource": "canonical_official_qualifying",
+      "semanticClassificationPosition": 7,
+      "positionCrossCheck": "na",
+      "trafficContext": null,
+      "theoreticalBestSeconds": null,
+      "trackEvolutionCurve": null
+    },
+    {
+      "id": "t71_2026_wwt-raceway_qualifying_2026-06-06",
+      "source": "timing71",
+      "sourceTier": "timing71_normalized",
+      "sourceTierLabel": "third-party normalized (Timing71)",
+      "seasonYear": 2026,
+      "date": "2026-06-06",
+      "venueName": "WWT Raceway",
+      "trackId": "track_world_wide_technology_raceway",
+      "sessionLabel": "INDY NXT by Firestone at WWT Raceway - Qualifications",
+      "eventId": "event_indy_nxt_2026_5546",
+      "raceSessionIds": [
+        "session_indy_nxt_2026_6763"
+      ],
+      "isOval": false,
+      "crosswalkVerdict": "GO",
+      "crosswalkCrossCheck": "unavailable",
+      "qualityMasks": [
+        "cross_session_recording_segmented"
+      ],
+      "laps": [
+        {
+          "seq": 1,
+          "lapIndex": 1,
+          "seconds": 28.0083,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 28.0083
+        },
+        {
+          "seq": 2,
+          "lapIndex": 2,
+          "seconds": 27.8855,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 27.8855
+        }
+      ],
+      "lapCount": 2,
+      "droppedNoiseLaps": 0,
+      "bryceBestSeconds": 27.8855,
+      "bryceBestSeq": 2,
+      "sessionBestSeconds": 27.5709,
+      "sessionBestByBryce": false,
+      "sessionBestMoves": 5,
+      "sessionBestSteps": [
+        {
+          "seconds": 28.0083,
+          "byBryce": true
+        },
+        {
+          "seconds": 27.8855,
+          "byBryce": true
+        },
+        {
+          "seconds": 27.7942,
+          "byBryce": false
+        },
+        {
+          "seconds": 27.6299,
+          "byBryce": false
+        },
+        {
+          "seconds": 27.5709,
+          "byBryce": false
+        }
+      ],
+      "gapToSessionBestSeconds": 0.3146,
+      "lapHolderCount": 14,
+      "onTrackGroupRank": 12,
+      "groupFieldSize": 24,
+      "groupSegment": "Qualifying",
+      "combinedGridPosition": 12,
+      "combinedFieldSize": 24,
+      "gridGapToPoleSeconds": null,
+      "onTrackGapToPoleSeconds": null,
+      "officialBestLapSeconds": null,
+      "capturedBestVsOfficialSeconds": null,
+      "doubleheaderRaceLabel": null,
+      "rankAttribution": "single",
+      "rankSource": "canonical_official_qualifying",
+      "semanticClassificationPosition": 10,
+      "positionCrossCheck": "na",
+      "trafficContext": null,
+      "theoreticalBestSeconds": null,
+      "trackEvolutionCurve": null
+    },
+    {
+      "id": "t71_2026_road-america_qualifying_g2_2026-06-20",
+      "source": "timing71",
+      "sourceTier": "timing71_normalized",
+      "sourceTierLabel": "third-party normalized (Timing71)",
+      "seasonYear": 2026,
+      "date": "2026-06-20",
+      "venueName": "Road America",
+      "trackId": "track_road_america",
+      "sessionLabel": "INDY NXT by Firestone Grand Prix at Road America - Qualifications - Group 2",
+      "eventId": "event_indy_nxt_2026_5545",
+      "raceSessionIds": [
+        "session_indy_nxt_2026_6762"
+      ],
+      "isOval": false,
+      "crosswalkVerdict": "GO",
+      "crosswalkCrossCheck": "unavailable",
+      "qualityMasks": [
+        "cross_session_recording_segmented"
+      ],
+      "laps": [
+        {
+          "seq": 1,
+          "lapIndex": 1,
+          "seconds": 115.1915,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 115.1915
+        },
+        {
+          "seq": 2,
+          "lapIndex": 2,
+          "seconds": 117.1863,
+          "kind": "flying",
+          "isPersonalBest": false,
+          "runningBestSeconds": 115.1915
+        },
+        {
+          "seq": 3,
+          "lapIndex": 3,
+          "seconds": 112.7258,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 112.7258
+        },
+        {
+          "seq": 4,
+          "lapIndex": 4,
+          "seconds": 112.0909,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 112.0909
+        },
+        {
+          "seq": 5,
+          "lapIndex": 5,
+          "seconds": 112.1082,
+          "kind": "flying",
+          "isPersonalBest": false,
+          "runningBestSeconds": 112.0909
+        },
+        {
+          "seq": 6,
+          "lapIndex": 6,
+          "seconds": 112.0735,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 112.0735
+        },
+        {
+          "seq": 7,
+          "lapIndex": 7,
+          "seconds": 112.059,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 112.059
+        }
+      ],
+      "lapCount": 7,
+      "droppedNoiseLaps": 0,
+      "bryceBestSeconds": 112.059,
+      "bryceBestSeq": 7,
+      "sessionBestSeconds": 110.9975,
+      "sessionBestByBryce": false,
+      "sessionBestMoves": 8,
+      "sessionBestSteps": [
+        {
+          "seconds": 114.4384,
+          "byBryce": false
+        },
+        {
+          "seconds": 114.0649,
+          "byBryce": false
+        },
+        {
+          "seconds": 112.1103,
+          "byBryce": false
+        },
+        {
+          "seconds": 111.7418,
+          "byBryce": false
+        },
+        {
+          "seconds": 111.6347,
+          "byBryce": false
+        },
+        {
+          "seconds": 111.2263,
+          "byBryce": false
+        },
+        {
+          "seconds": 111.0477,
+          "byBryce": false
+        },
+        {
+          "seconds": 110.9975,
+          "byBryce": false
+        }
+      ],
+      "gapToSessionBestSeconds": 1.0615,
+      "lapHolderCount": 12,
+      "onTrackGroupRank": 8,
+      "groupFieldSize": 12,
+      "groupSegment": "Qualifying - Race 1 Group 2",
+      "combinedGridPosition": 15,
+      "combinedFieldSize": 24,
+      "gridGapToPoleSeconds": null,
+      "onTrackGapToPoleSeconds": 1.0615,
+      "officialBestLapSeconds": 112.059,
+      "capturedBestVsOfficialSeconds": 0,
+      "doubleheaderRaceLabel": "Race 1",
+      "rankAttribution": "single",
+      "rankSource": "canonical_official_qualifying",
+      "semanticClassificationPosition": 8,
+      "positionCrossCheck": "na",
+      "trafficContext": null,
+      "theoreticalBestSeconds": null,
+      "trackEvolutionCurve": null
+    },
+    {
+      "id": "t71_2026_mid-ohio_qualifying_2026-07-04",
+      "source": "timing71",
+      "sourceTier": "timing71_normalized",
+      "sourceTierLabel": "third-party normalized (Timing71)",
+      "seasonYear": 2026,
+      "date": "2026-07-04",
+      "venueName": "Mid-Ohio",
+      "trackId": "track_mid_ohio_sports_car_course",
+      "sessionLabel": "INDY NXT by Firestone Grand Prix at Mid-Ohio - Qualifications",
+      "eventId": "event_indy_nxt_2026_5544",
+      "raceSessionIds": [
+        "session_indy_nxt_2026_6761"
+      ],
+      "isOval": false,
+      "crosswalkVerdict": "GO",
+      "crosswalkCrossCheck": "confirmed",
+      "qualityMasks": [
+        "cross_session_recording_segmented"
+      ],
+      "laps": [
+        {
+          "seq": 1,
+          "lapIndex": 1,
+          "seconds": 78.0148,
+          "kind": "support",
+          "isPersonalBest": true,
+          "runningBestSeconds": 78.0148
+        },
+        {
+          "seq": 2,
+          "lapIndex": 2,
+          "seconds": 72.6111,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 72.6111
+        },
+        {
+          "seq": 3,
+          "lapIndex": 3,
+          "seconds": 71.1626,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 71.1626
+        },
+        {
+          "seq": 4,
+          "lapIndex": 4,
+          "seconds": 70.6313,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 70.6313
+        },
+        {
+          "seq": 5,
+          "lapIndex": 5,
+          "seconds": 70.405,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 70.405
+        },
+        {
+          "seq": 6,
+          "lapIndex": 6,
+          "seconds": 70.1228,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 70.1228
+        },
+        {
+          "seq": 7,
+          "lapIndex": 7,
+          "seconds": 69.9957,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 69.9957
+        },
+        {
+          "seq": 8,
+          "lapIndex": 8,
+          "seconds": 70.2117,
+          "kind": "flying",
+          "isPersonalBest": false,
+          "runningBestSeconds": 69.9957
+        }
+      ],
+      "lapCount": 8,
+      "droppedNoiseLaps": 0,
+      "bryceBestSeconds": 69.9957,
+      "bryceBestSeq": 7,
+      "sessionBestSeconds": 69.369,
+      "sessionBestByBryce": false,
+      "sessionBestMoves": 14,
+      "sessionBestSteps": [
+        {
+          "seconds": 78.4683,
+          "byBryce": false
+        },
+        {
+          "seconds": 78.0148,
+          "byBryce": true
+        },
+        {
+          "seconds": 73.6204,
+          "byBryce": false
+        },
+        {
+          "seconds": 72.2646,
+          "byBryce": false
+        },
+        {
+          "seconds": 71.9167,
+          "byBryce": false
+        },
+        {
+          "seconds": 71.6923,
+          "byBryce": false
+        },
+        {
+          "seconds": 70.9626,
+          "byBryce": false
+        },
+        {
+          "seconds": 70.3764,
+          "byBryce": false
+        },
+        {
+          "seconds": 70.2358,
+          "byBryce": false
+        },
+        {
+          "seconds": 69.7385,
+          "byBryce": false
+        },
+        {
+          "seconds": 69.6013,
+          "byBryce": false
+        },
+        {
+          "seconds": 69.5264,
+          "byBryce": false
+        },
+        {
+          "seconds": 69.4946,
+          "byBryce": false
+        },
+        {
+          "seconds": 69.369,
+          "byBryce": false
+        }
+      ],
+      "gapToSessionBestSeconds": 0.6267,
+      "lapHolderCount": 12,
+      "onTrackGroupRank": 7,
+      "groupFieldSize": 12,
+      "groupSegment": "Qualifying - Race 1 Group 2",
+      "combinedGridPosition": 13,
+      "combinedFieldSize": 24,
+      "gridGapToPoleSeconds": null,
+      "onTrackGapToPoleSeconds": 0.6267,
+      "officialBestLapSeconds": 69.9957,
+      "capturedBestVsOfficialSeconds": 0,
+      "doubleheaderRaceLabel": "Race 1",
+      "rankAttribution": "single",
+      "rankSource": "canonical_official_qualifying",
+      "semanticClassificationPosition": 13,
+      "positionCrossCheck": "na",
+      "trafficContext": null,
+      "theoreticalBestSeconds": null,
+      "trackEvolutionCurve": null
+    },
+    {
+      "id": "t71_2026_nashville_qualifying_2026-07-18",
+      "source": "timing71",
+      "sourceTier": "timing71_normalized",
+      "sourceTierLabel": "third-party normalized (Timing71)",
+      "seasonYear": 2026,
+      "date": "2026-07-18",
+      "venueName": "Nashville",
+      "trackId": "track_nashville_superspeedway",
+      "sessionLabel": "INDY NXT by Firestone Music City Grand Prix - Qualifications",
+      "eventId": "event_indy_nxt_2026_5538",
+      "raceSessionIds": [
+        "session_indy_nxt_2026_6755"
+      ],
+      "isOval": true,
+      "crosswalkVerdict": "GO",
+      "crosswalkCrossCheck": "confirmed",
+      "qualityMasks": [],
+      "laps": [
+        {
+          "seq": 1,
+          "lapIndex": 1,
+          "seconds": 26.6078,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 26.6078
+        },
+        {
+          "seq": 2,
+          "lapIndex": 2,
+          "seconds": 26.5805,
+          "kind": "flying",
+          "isPersonalBest": true,
+          "runningBestSeconds": 26.5805
+        }
+      ],
+      "lapCount": 2,
+      "droppedNoiseLaps": 0,
+      "bryceBestSeconds": 26.5805,
+      "bryceBestSeq": 2,
+      "sessionBestSeconds": 26.3597,
+      "sessionBestByBryce": false,
+      "sessionBestMoves": 6,
+      "sessionBestSteps": [
+        {
+          "seconds": 26.6078,
+          "byBryce": true
+        },
+        {
+          "seconds": 26.5805,
+          "byBryce": true
+        },
+        {
+          "seconds": 26.4729,
+          "byBryce": false
+        },
+        {
+          "seconds": 26.4636,
+          "byBryce": false
+        },
+        {
+          "seconds": 26.3944,
+          "byBryce": false
+        },
+        {
+          "seconds": 26.3597,
+          "byBryce": false
+        }
+      ],
+      "gapToSessionBestSeconds": 0.2208,
+      "lapHolderCount": 16,
+      "onTrackGroupRank": 8,
+      "groupFieldSize": 23,
+      "groupSegment": "Qualifying",
+      "combinedGridPosition": 8,
+      "combinedFieldSize": 23,
+      "gridGapToPoleSeconds": null,
+      "onTrackGapToPoleSeconds": null,
+      "officialBestLapSeconds": null,
+      "capturedBestVsOfficialSeconds": null,
+      "doubleheaderRaceLabel": null,
+      "rankAttribution": "single",
+      "rankSource": "canonical_official_qualifying",
+      "semanticClassificationPosition": 8,
+      "positionCrossCheck": "na",
+      "trafficContext": null,
+      "theoreticalBestSeconds": null,
+      "trackEvolutionCurve": null
+    }
+  ]
+}

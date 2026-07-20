@@ -25,6 +25,7 @@ import { FactDelta } from '../app/weatherGlyphs';
 import type { UiVenueDossierVenue, UiVenueDossierVisit } from '../data/uiDataPackage';
 import { watchableCaptureForRace, replayProvenance, priorYearReplaysAtVenue, type ReplaySessionInfo } from '../data/replayAvailable';
 import { ReplayAffordance, priorYearTitle, useReplayCatalog } from './replayAffordance';
+import { QualifyingRunByRunCard } from './qualifyingRunByRun';
 
 type Row = Record<string, unknown>;
 
@@ -1305,6 +1306,11 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
       </HeroPanel>
 
       <WatchRaceUnfold sessionId={sessionId} />
+
+      {/* Weekend arc, chronological: qualifying (Friday signal) before the race
+          it set the grid for. Renders only where the weekend's qualifying is a
+          covered semantic-layer session (Brief M). */}
+      <QualifyingRunByRunCard raceSessionId={sessionId} />
 
       {story ? <LapChartCard story={story} mover={mover} /> : null}
 

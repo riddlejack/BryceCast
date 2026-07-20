@@ -1,6 +1,6 @@
 {
   "schemaVersion": "brycecast.uiDataPackage.v1",
-  "generatedAt": "2026-07-20T10:56:56.029Z",
+  "generatedAt": "2026-07-20T14:12:05.628Z",
   "sourceHash": "64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978",
   "asOfDate": "2026-07-19",
   "baselineCommit": "dbc879e",
@@ -286,8 +286,8 @@
     "restartReportSummary": {
       "path": "analysis/restart-report/output/summary.json",
       "bytes": 17440,
-      "modifiedAt": "2026-07-20T10:56:45.671Z",
-      "sha256": "d34c5644c0dada39bf6d74268b2d5c8fd709228399e335717e3d486c587f09cf"
+      "modifiedAt": "2026-07-20T14:11:56.244Z",
+      "sha256": "ee4747a32654dbd8ea437265246129671565663619156cdd88f0ee6332dc1e60"
     },
     "restartReportEvents": {
       "path": "analysis/restart-report/output/tables/restart_events.csv",
@@ -340,8 +340,8 @@
     "qualifyingLayerSummary": {
       "path": "analysis/qualifying-layer/output/summary.json",
       "bytes": 10286,
-      "modifiedAt": "2026-07-20T10:56:52.605Z",
-      "sha256": "917771b87813d1eecf00fcab9c98a8da9c4cdd2dbe067597d8ee6e5b1f0b3178"
+      "modifiedAt": "2026-07-20T14:12:02.452Z",
+      "sha256": "d5f26864e2b86f840b5b2e368ee4f420c4f73071500fd0dd04e037f8c3dd7adc"
     },
     "qualifyingLayerSessions": {
       "path": "analysis/qualifying-layer/output/tables/quali_sessions.csv",
@@ -382,8 +382,8 @@
     "cautionAtlasSummary": {
       "path": "analysis/caution-atlas/output/summary.json",
       "bytes": 12386,
-      "modifiedAt": "2026-07-20T10:56:49.047Z",
-      "sha256": "66410bb138a997d7c6072b70424ddd2fab4de39bbc0bbb2ce466d9d34e0e654f"
+      "modifiedAt": "2026-07-20T14:11:59.265Z",
+      "sha256": "480a00d1cfb0330c6405251b866f984acefbf58a73141008421691a4bcd9b3fa"
     },
     "cautionAtlasEvents": {
       "path": "analysis/caution-atlas/output/tables/caution_events.csv",
@@ -531,9 +531,9 @@
     },
     "uiDataPackageBuilderScript": {
       "path": "scripts/build-ui-data-package.mjs",
-      "bytes": 168500,
-      "modifiedAt": "2026-07-20T10:55:14.490Z",
-      "sha256": "e73497a6c3363cbca968a40c7b0993bf05accd68d53105cd1785e2d25b2afb0b"
+      "bytes": 169091,
+      "modifiedAt": "2026-07-20T14:03:10.652Z",
+      "sha256": "ce2e0ea21b70f797c758a3b081c2079afb1bfcd27805b73fb6320dfeeb3d47c2"
     },
     "uiDataPackageValidatorScript": {
       "path": "scripts/validate-ui-data-package.mjs",
@@ -556,6 +556,14 @@
       "bytes": 1391,
       "modifiedAt": "2026-07-20T10:56:31.961Z",
       "sha256": "f924ef448e47c51c415faec6d5f1169a2c21eba0f688513e64b89ed1a04a438d"
+    },
+    "qualiLabContextPack": {
+      "id": "quali_lab_run_by_run",
+      "type": "quali_lab",
+      "path": "analysis/quali-lab/output/context-packs/quali-lab-context.json",
+      "bytes": 108580,
+      "modifiedAt": "2026-07-20T14:00:13.960Z",
+      "sha256": "481efc0198c1e87fac761df385ac911b1518606d03cf53b00206f771225a751e"
     }
   },
   "packageRules": [
