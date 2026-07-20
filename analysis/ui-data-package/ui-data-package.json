@@ -1,6 +1,6 @@
 {
   "schemaVersion": "brycecast.uiDataPackage.v1",
-  "generatedAt": "2026-07-20T11:21:57.875Z",
+  "generatedAt": "2026-07-20T11:29:11.666Z",
   "sourceHash": "64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978",
   "asOfDate": "2026-07-19",
   "baselineCommit": "dbc879e",
@@ -286,8 +286,8 @@
     "restartReportSummary": {
       "path": "analysis/restart-report/output/summary.json",
       "bytes": 17440,
-      "modifiedAt": "2026-07-20T11:21:37.913Z",
-      "sha256": "78b70b965cd8024d7fae280134a811021c0f7cc787003da7d79d5bbeb80d1c98"
+      "modifiedAt": "2026-07-20T11:29:01.422Z",
+      "sha256": "2006ead968beab4fdbc5f24fa52c05bc03479c36e26bb5ef10ebb4577c5a3bbe"
     },
     "restartReportEvents": {
       "path": "analysis/restart-report/output/tables/restart_events.csv",
@@ -340,8 +340,8 @@
     "qualifyingLayerSummary": {
       "path": "analysis/qualifying-layer/output/summary.json",
       "bytes": 10286,
-      "modifiedAt": "2026-07-20T11:21:52.192Z",
-      "sha256": "64015faa856d41c7ace092b3ea45fdf23a3fcc20a5c1cb9dec0eaa470ba5cc65"
+      "modifiedAt": "2026-07-20T11:29:08.279Z",
+      "sha256": "647ffe883d50204ab6d8ba144e4aa3588d346ca3421018946c250b8dccc384a4"
     },
     "qualifyingLayerSessions": {
       "path": "analysis/qualifying-layer/output/tables/quali_sessions.csv",
@@ -382,8 +382,8 @@
     "cautionAtlasSummary": {
       "path": "analysis/caution-atlas/output/summary.json",
       "bytes": 12386,
-      "modifiedAt": "2026-07-20T11:21:44.878Z",
-      "sha256": "7e6c54972f3a915fc166e23280b393b873e5fab62a86a580b7648e40fcd17c1d"
+      "modifiedAt": "2026-07-20T11:29:04.716Z",
+      "sha256": "1273ba8cb8b3191a66de066df4a26cdbaacdb0d8514694d011ece1d1e01e6fcf"
     },
     "cautionAtlasEvents": {
       "path": "analysis/caution-atlas/output/tables/caution_events.csv",
@@ -531,9 +531,9 @@
     },
     "uiDataPackageBuilderScript": {
       "path": "scripts/build-ui-data-package.mjs",
-      "bytes": 168500,
-      "modifiedAt": "2026-07-20T10:55:14.490Z",
-      "sha256": "e73497a6c3363cbca968a40c7b0993bf05accd68d53105cd1785e2d25b2afb0b"
+      "bytes": 169057,
+      "modifiedAt": "2026-07-20T11:26:41.026Z",
+      "sha256": "3c3ced75dab558f6fc612e502bc63cc4b3194a4233e39e97ab8bcdb019060424"
     },
     "uiDataPackageValidatorScript": {
       "path": "scripts/validate-ui-data-package.mjs",
@@ -19188,6 +19188,14 @@
         "bytes": 175299,
         "modifiedAt": "2026-07-20T11:09:19.506Z",
         "sha256": "5bab860ad1ecded90ac520a15500de3be109497616be7d2bad655d339f4467ba"
+      },
+      "formulaFordLapShapeRef": {
+        "id": "formula-ford-lap-shape-context",
+        "type": "formula_ford_lap_shape",
+        "path": "analysis/formula-ford-lap-shape/output/context-packs/formula-ford-lap-shape-context.json",
+        "bytes": 33104,
+        "modifiedAt": "2026-07-20T11:25:41.533Z",
+        "sha256": "8082ee53a53465551b29dba6abd951731394ca86270ce69f6b19ac0232295c50"
       },
       "careerPriorMatrixPath": "analysis/predictive-race-intelligence/output/career_prior_matrix.csv",
       "seriesSummary": [

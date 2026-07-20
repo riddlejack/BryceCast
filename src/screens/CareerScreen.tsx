@@ -7,6 +7,7 @@ import { liveBryceRowOf } from '../data/livePageModel';
 import type { LiveReadiness, ReadinessStatus } from '../app/useReadiness';
 import { CareerAtlas } from './careerAtlas';
 import { Gb3DepthLayer } from './gb3Depth';
+import { FormulaFordDepthLayer } from './formulaFordDepth';
 import {
   BestClimbs,
   CareerBests,
@@ -423,7 +424,9 @@ export const CareerScreen = ({ readiness }: { readiness?: ReadinessStatus }) => 
                   depth={
                     chapter.short === 'GB3'
                       ? { title: 'The GB3 years, in depth', render: () => <Gb3DepthLayer /> }
-                      : undefined
+                      : chapter.name === 'Formula Ford'
+                        ? { title: 'Formula Ford lap shape', render: () => <FormulaFordDepthLayer /> }
+                        : undefined
                   }
                 />
               </Reveal>

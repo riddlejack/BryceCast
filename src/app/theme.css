@@ -1765,6 +1765,24 @@ a.tower__row.gb3-venues__link:hover .gb3-venues__chev { color: var(--ink-seconda
   border-radius: 3px;
 }
 
+/* Formula Ford lap-shape depth module — same quiet grammar as the GB3 layer. */
+.ff-depth { gap: 18px; margin-top: 4px; }
+.ff-copy { margin: 0 0 10px; font-size: 13.5px; line-height: 1.5; color: var(--ink-secondary); }
+.ff-copy strong { color: var(--ink-primary); font-weight: 600; }
+.ff-caption { margin: 10px 0 0; font-size: 12px; line-height: 1.45; color: var(--ink-muted); }
+.ff-shape { display: flex; flex-direction: column; gap: 12px; margin-top: 4px; }
+.ff-shape__row {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+}
+.ff-shape__label { font-size: 13px; color: var(--ink-primary); }
+.ff-shape__track { position: relative; height: 10px; border-radius: 5px; background: var(--surface-1); overflow: hidden; }
+.ff-shape__fill { position: absolute; inset: 0 auto 0 0; border-radius: 5px; background: var(--chapter-ff); opacity: 0.55; }
+.ff-shape__meta { text-align: right; font-size: 12px; color: var(--ink-secondary); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.ff-shape__meta small { display: block; color: var(--ink-muted); font-size: 11px; }
+
 /* Named climb moments are a visual overlay only; nearest-dot hover remains
    owned by the chart SVG underneath at every viewport. */
 .climb-moments,

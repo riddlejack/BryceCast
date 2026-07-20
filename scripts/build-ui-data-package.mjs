@@ -3100,6 +3100,14 @@ const buildPackage = () => {
           const payload = readJson(relativePath);
           return { id: payload.id, type: 'gb3_deep_dive', ...summarizeArtifact(relativePath) };
         })(),
+        /* Formula Ford lap-shape pack, integrity-registered like the GB3 ref:
+           the UI loader verifies sha256 + id and fails closed. */
+        formulaFordLapShapeRef: (() => {
+          const relativePath = 'analysis/formula-ford-lap-shape/output/context-packs/formula-ford-lap-shape-context.json';
+          if (!fs.existsSync(path.join(repoRoot, relativePath))) return null;
+          const payload = readJson(relativePath);
+          return { id: payload.id, type: 'formula_ford_lap_shape', ...summarizeArtifact(relativePath) };
+        })(),
         careerPriorMatrixPath: sources.predictiveCareerPriorMatrix,
         seriesSummary: (careerLabPayload.seriesSummary ?? []).map((row) => ({
           seriesId: row.seriesId,
