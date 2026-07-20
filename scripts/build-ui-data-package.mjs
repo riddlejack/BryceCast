@@ -1347,6 +1347,264 @@ const buildSeasonIndex = ({ raceDebriefPackPairs, resultsBySession, progressionR
     );
 };
 
+/* ---------- the campaigns: every championship season as a points arc ---------- */
+
+/** One short name per series, mirroring the Career Lab chapter vocabulary so the
+ *  campaign panels and the chapter cards read with the same words. */
+const CAMPAIGN_SHORT_NAMES = {
+  'F1600 Championship Series': 'F1600',
+  'Formula Ford': 'Formula Ford',
+  'GB3 Championship': 'GB3',
+  'Euroformula Open': 'Euroformula',
+  'Castrol Toyota Formula Regional Oceania Championship': 'FR Oceania',
+  'IMSA WeatherTech SportsCar Championship': 'IMSA',
+  'INDY NXT': 'INDY NXT'
+};
+const campaignShort = (seriesName) => CAMPAIGN_SHORT_NAMES[seriesName] ?? seriesName;
+
+/* Seasons Bryce contested that carry no sourced championship points tally get an
+ * honest, named exclusion rather than an invented arc — each is told in its own
+ * chapter on the page. Keyed by seriesId|year. */
+const CAMPAIGN_EXCLUSION_REASONS = {
+  'series_formula_ford|2020':
+    'The 2020 Formula Ford year was a run of invitational meetings; the sourced data carries no single championship points tally.',
+  'series_froc|2024': 'The six FR Oceania races have no season championship points total in the sourced data.',
+  'series_imsa_weathertech|2025':
+    'The Rolex 24 at Daytona is one endurance race, not a points campaign — it has its own chapter.'
+};
+
+/** INDY NXT races carry a full debrief page; every other race gets the light
+ *  career sheet. Mirrors the UI raceHref so a click resolves the same way. */
+const campaignRaceHref = (sessionId) =>
+  String(sessionId ?? '').includes('indy_nxt')
+    ? `/races/${encodeURIComponent(sessionId)}`
+    : `/career/race/${encodeURIComponent(sessionId)}`;
+
+/** The whole career as points arcs: one championship season per campaign, each
+ *  accumulating Bryce's official race points in the order they were scored.
+ *
+ *  The data votes on how each season renders (never invented, always sourced):
+ *   - arc      — official results carry per-race points, so the climb is real.
+ *                INDY NXT seasons prefer the reconciled championship-progression
+ *                table (it also carries standing and the leader gap per round);
+ *                earlier series sum canonical per-race points chronologically.
+ *   - endpoint — only the official season total and final classification are
+ *                sourced; the round-by-round climb is not, so no arc is drawn.
+ *   - excluded — no championship points tally exists at all; named honestly.
+ *
+ *  Where a season's summed race points differ from its official championship
+ *  total (a series' own drop-scores rule), both sourced numbers are surfaced
+ *  and the panel carries a reconciliation note — the number is never silently
+ *  reconciled or hidden. */
+const buildSeasonCampaigns = ({ canonicalDataset, progressionRows, resultConversionSessionIds }) => {
+  const seriesById = new Map((canonicalDataset.series ?? []).map((series) => [series.id, series]));
+  const trackById = new Map((canonicalDataset.tracks ?? []).map((track) => [track.id, track]));
+  const sessionById = new Map((canonicalDataset.sessions ?? []).map((session) => [session.id, session]));
+  const eventById = new Map((canonicalDataset.events ?? []).map((event) => [event.id, event]));
+  const raceSessionIds = new Set(
+    (canonicalDataset.sessions ?? []).filter((session) => session.sessionType === 'race').map((session) => session.id)
+  );
+  const hasRacePage = (sessionId) => resultConversionSessionIds.has(sessionId);
+
+  // Bryce's race results grouped by seriesId|year, chronological within a season.
+  const raceResultsBySeason = new Map();
+  for (const result of canonicalDataset.results ?? []) {
+    if (result.driverId !== 'driver_bryce_aron' || !raceSessionIds.has(result.sessionId)) continue;
+    const session = sessionById.get(result.sessionId);
+    const event = session ? eventById.get(session.eventId) : null;
+    if (!event) continue;
+    const key = `${event.seriesId}|${event.seasonYear}`;
+    const list = raceResultsBySeason.get(key) ?? [];
+    list.push({ result, session, event });
+    raceResultsBySeason.set(key, list);
+  }
+  const orderRaces = (rows) =>
+    rows.slice().sort(
+      (left, right) =>
+        String(left.event.eventStartDate ?? '').localeCompare(String(right.event.eventStartDate ?? '')) ||
+        (numberOrNull(left.event.round) ?? 0) - (numberOrNull(right.event.round) ?? 0) ||
+        (numberOrNull(left.session.raceNumber) ?? 0) - (numberOrNull(right.session.raceNumber) ?? 0) ||
+        String(left.session.scheduledStart ?? '').localeCompare(String(right.session.scheduledStart ?? '')) ||
+        String(left.result.sessionId).localeCompare(String(right.result.sessionId))
+    );
+
+  // INDY NXT: the reconciled progression table, grouped by season year.
+  const progressionBySeason = new Map();
+  for (const row of progressionRows) {
+    const year = numberOrNull(row.seasonYear);
+    if (year === null) continue;
+    const list = progressionBySeason.get(year) ?? [];
+    list.push(row);
+    progressionBySeason.set(year, list);
+  }
+
+  const latestIndyYear = Math.max(
+    0,
+    ...(canonicalDataset.seasons ?? [])
+      .filter((season) => season.driverId === 'driver_bryce_aron' && season.seriesId === 'series_indy_nxt')
+      .map((season) => numberOrNull(season.year) ?? 0)
+  );
+
+  const bryceSeasons = (canonicalDataset.seasons ?? [])
+    .filter((season) => season.driverId === 'driver_bryce_aron')
+    .slice()
+    .sort(
+      (left, right) =>
+        (numberOrNull(left.year) ?? 0) - (numberOrNull(right.year) ?? 0) ||
+        String(seriesById.get(left.seriesId)?.name ?? '').localeCompare(String(seriesById.get(right.seriesId)?.name ?? ''))
+    );
+
+  const campaigns = [];
+  const excluded = [];
+
+  for (const season of bryceSeasons) {
+    const seriesName = seriesById.get(season.seriesId)?.name ?? season.seriesId;
+    const year = numberOrNull(season.year);
+    const key = `${season.seriesId}|${year}`;
+    const officialSeasonPoints = numberOrNull(season.points);
+    const officialStandingRank = numberOrNull(season.championshipPosition);
+    const isIndy = season.seriesId === 'series_indy_nxt';
+    const races = orderRaces(raceResultsBySeason.get(key) ?? []);
+    const hasPerRacePoints = races.some((row) => numberOrNull(row.result.points) !== null);
+
+    // No sourced championship points anywhere → an honest, named exclusion.
+    if (!hasPerRacePoints && officialSeasonPoints === null) {
+      excluded.push({
+        seriesId: season.seriesId,
+        seriesName,
+        seriesShort: campaignShort(seriesName),
+        seasonYear: year,
+        raceCount: races.length,
+        reason: CAMPAIGN_EXCLUSION_REASONS[key] ?? 'No sourced championship points total exists for this season.'
+      });
+      continue;
+    }
+
+    const provenanceRefs = Array.isArray(season.provenanceRefs) ? season.provenanceRefs : [];
+
+    // Endpoint-only: the season total is sourced but the round-by-round climb is
+    // not. No arc is invented; the final classification is shown as-is.
+    if (!hasPerRacePoints) {
+      campaigns.push({
+        seasonYear: year,
+        seriesId: season.seriesId,
+        seriesName,
+        seriesShort: campaignShort(seriesName),
+        renderMode: 'endpoint',
+        isCurrent: false,
+        inProgress: false,
+        races: [],
+        earnedPoints: null,
+        officialSeasonPoints,
+        officialStandingRank,
+        raceCount: races.length,
+        roundCount: new Set(races.map((row) => numberOrNull(row.event.round)).filter((round) => round !== null)).size || null,
+        startsOfficial: numberOrNull(season.starts),
+        reconciles: null,
+        reconciliationNote: null,
+        note: 'Round-by-round points are not sourced for this season; the official final classification is shown.',
+        sourceState: 'official_final_classification_only',
+        provenanceRefs
+      });
+      continue;
+    }
+
+    // Arc: a real, sourced accumulation. INDY prefers the reconciled progression
+    // rows; earlier series sum canonical per-race points chronologically.
+    const progression = isIndy ? progressionBySeason.get(year) ?? [] : [];
+    const progressionBySession = new Map(progression.map((row) => [row.sessionId, row]));
+    let cumulative = 0;
+    const raceRows = races.map((row, index) => {
+      const racePoints = numberOrNull(row.result.points) ?? 0;
+      cumulative += racePoints;
+      const prog = progressionBySession.get(row.result.sessionId) ?? null;
+      const track = trackById.get(row.event.trackId) ?? null;
+      const raceNumber = numberOrNull(row.session.raceNumber);
+      const trackLabel = track?.name ?? row.event.name ?? 'Race';
+      const raceLabel = prog?.raceLabel
+        ? String(prog.raceLabel).replace(/^\d{4}\s+/, '')
+        : `${trackLabel}${raceNumber !== null ? ` · R${raceNumber}` : ''}`;
+      return {
+        raceIndex: index + 1,
+        sessionId: row.result.sessionId,
+        raceLabel,
+        roundIndex: isIndy && prog ? numberOrNull(prog.roundIndex) : numberOrNull(row.event.round),
+        raceDate: String(row.session.scheduledStart ?? row.event.eventStartDate ?? '').slice(0, 10) || null,
+        racePoints,
+        cumulativePoints: cumulative,
+        finishPosition: numberOrNull(row.result.finishPosition),
+        startPosition: numberOrNull(row.result.startPosition),
+        // Standing per round is sourced for INDY only (the progression table).
+        standingRank: isIndy && prog ? numberOrNull(prog.bryceStandingRank) : null,
+        pointsBehindLeader: isIndy && prog ? numberOrNull(prog.pointsBehindLeader) : null,
+        leaderDriver: isIndy && prog ? prog.leaderDriver ?? null : null,
+        status: row.result.status ?? null,
+        hasRacePage: hasRacePage(row.result.sessionId),
+        raceHref: campaignRaceHref(row.result.sessionId)
+      };
+    });
+
+    const earnedPoints = cumulative;
+    const reconciles = officialSeasonPoints !== null ? earnedPoints === officialSeasonPoints : null;
+    const inProgress = isIndy && year === latestIndyYear;
+    const isCurrent = inProgress;
+    const roundCount =
+      new Set(races.map((row) => numberOrNull(row.event.round)).filter((round) => round !== null)).size || null;
+    const reconciliationNote =
+      reconciles === false && officialSeasonPoints !== null
+        ? `Race points add to ${earnedPoints} in the order they were scored; the official ${campaignShort(
+            seriesName
+          )} championship total is ${officialSeasonPoints}${
+            officialStandingRank !== null ? ` (P${officialStandingRank})` : ''
+          }.`
+        : null;
+
+    campaigns.push({
+      seasonYear: year,
+      seriesId: season.seriesId,
+      seriesName,
+      seriesShort: campaignShort(seriesName),
+      renderMode: 'arc',
+      isCurrent,
+      inProgress,
+      races: raceRows,
+      earnedPoints,
+      officialSeasonPoints,
+      officialStandingRank,
+      raceCount: raceRows.length,
+      roundCount,
+      startsOfficial: numberOrNull(season.starts),
+      reconciles,
+      reconciliationNote,
+      note: isIndy
+        ? inProgress
+          ? `Points banked through ${raceRows.length} of the season's rounds — the campaign is still running.`
+          : 'Points banked round by round, reconciled to the official championship progression.'
+        : 'Points banked race by race across the season.',
+      sourceState: isIndy ? 'official_results_points_progression' : 'canonical_per_race_points',
+      provenanceRefs
+    });
+  }
+
+  return {
+    schemaVersion: 'brycecast.careerSeasonCampaigns.v1',
+    question: 'How did each championship campaign accumulate?',
+    campaigns,
+    excluded,
+    caveats: [
+      'Each arc adds up Bryce’s official race points in the order they were scored; the line ends where the season ended.',
+      'Round-by-round points are sourced only where the official results carry per-race points. Seasons with only an official season total show that final classification instead; seasons with no sourced points sit in their own chapters.',
+      'Points systems and field sizes differ series to series, so campaigns are shown side by side and never on one shared scale.',
+      'A season whose summed race points differ from its official championship total carries both sourced numbers and a note — the difference is a series’ own scoring rule, never a correction here.'
+    ],
+    sourceRefs: [
+      sourceRef('canonicalDataset', 'Official per-race points, season totals, and final championship classifications.'),
+      sourceRef('championshipProgression', 'Reconciled INDY NXT cumulative points and standing after each round.'),
+      sourceRef('careerResultConversion', 'Which races carry a career race page for click-through.')
+    ]
+  };
+};
+
 /** The Career Lab climb needs true chronology; conversion rows carry no
  *  dates, so join each session to its canonical event start date. */
 const enrichConversionRows = (rows, canonicalDataset, weatherConditionRows = []) => {
@@ -2698,6 +2956,11 @@ const buildPackage = () => {
         moments: buildCareerMoments({ resultConversion: careerConversionEnriched, seasonIndex }),
         headToHead: buildCareerHeadToHead(headToHeadRows),
         lapPositionMix: buildLapPositionMix({ lapTimelineRows, canonicalDataset }),
+        seasonCampaigns: buildSeasonCampaigns({
+          canonicalDataset,
+          progressionRows: championshipRows,
+          resultConversionSessionIds: new Set(careerConversionEnriched.map((row) => row.sessionId))
+        }),
         restarts: buildRestartReport({ summary: restartReportSummary, byRaceRows: restartByRaceRows, seasonIndex }),
         cautionAtlas: buildCautionAtlas({
           summary: cautionAtlasSummary,

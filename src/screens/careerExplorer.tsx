@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { Card, SourcePill, Stat, Unavailable } from '../app/components';
-import { ChartTipCard, chartFont, useCoarsePointer, useInViewOnce, useMeasuredWidth, useReducedMotion, type ChartTip } from '../app/charts';
+import { ChartTipCard, chartFont, focusFade, useCoarsePointer, useInViewOnce, useMeasuredWidth, useReducedMotion, type ChartTip } from '../app/charts';
 import { asNumber, asString, ordinal } from '../app/format';
 import { restartBaselineSentence } from '../data/restartBaseline';
 import { Link, useRouter } from '../app/router';
-import { uiDataPackage, type UiCareerMoment } from '../data/uiDataPackage';
+import { uiDataPackage, type UiCareerMoment, type UiSeasonCampaign } from '../data/uiDataPackage';
 import { packModules } from '../data/packModules';
 
 export interface CareerRow {
@@ -1633,5 +1633,318 @@ export const CareerBests = () => {
       <Stat label="Top-10s" value={topTens} />
       <Stat label="Typical day" value={`${ordinal(Math.round([...rows].sort((a, b) => a.percentile - b.percentile)[Math.floor(rows.length / 2)].percentile * 100))} pctile`} />
     </div>
+  );
+};
+
+/* ---------- the campaigns: every championship season as a points arc ---------- */
+
+/** One campaign's cumulative-points arc. Small-multiple by design: its own y
+ *  scale (points don't compare across series), so the panel answers a single
+ *  question — how this one season's points accumulated. Ink/chapter-tint line,
+ *  gold reserved for the current campaign's now-point, per the house chart
+ *  grammar. */
+const CampaignArc = ({ campaign }: { campaign: UiSeasonCampaign }) => {
+  const [ref, width] = useMeasuredWidth<HTMLDivElement>();
+  const svgRef = useRef<SVGSVGElement | null>(null);
+  const { navigate } = useRouter();
+  const coarsePointer = useCoarsePointer();
+  const [hovered, setHovered] = useState<number | null>(null);
+  const [tip, setTip] = useState<ChartTip | null>(null);
+
+  const races = campaign.races;
+  const n = races.length;
+  const tint = chapterTint(campaign.seriesName);
+  const maxCum = Math.max(campaign.earnedPoints ?? 1, 1);
+
+  const height = 172;
+  const margin = { top: 16, right: 46, bottom: 22, left: 32 };
+  const plotWidth = Math.max(width - margin.left - margin.right, 60);
+  const plotHeight = height - margin.top - margin.bottom;
+  const x = (index: number) => margin.left + (n <= 1 ? 0.5 : index / (n - 1)) * plotWidth;
+  const y = (points: number) => margin.top + (1 - points / maxCum) * plotHeight;
+
+  const linePoints = races.map((race, index) => `${x(index)},${y(race.cumulativePoints)}`).join(' ');
+  const areaPath =
+    n > 0
+      ? `M${x(0)} ${y(0)} ${races.map((race, index) => `L${x(index)} ${y(race.cumulativePoints)}`).join(' ')} L${x(n - 1)} ${y(0)} Z`
+      : '';
+
+  const clearHover = () => {
+    setHovered(null);
+    setTip(null);
+  };
+
+  const tipFor = (index: number): ChartTip => {
+    const race = races[index];
+    const detail = [
+      race.roundIndex !== null ? `Round ${race.roundIndex}` : `Race ${race.raceIndex}`,
+      race.finishPosition !== null
+        ? `P${race.finishPosition}`
+        : race.status && race.status !== 'running'
+          ? race.status
+          : null,
+      `+${race.racePoints} pts`,
+      `${race.cumulativePoints} total`,
+      race.standingRank !== null ? `P${race.standingRank} in points` : null
+    ]
+      .filter(Boolean)
+      .join(' · ');
+    return {
+      x: x(index),
+      y: y(race.cumulativePoints),
+      title: race.raceLabel,
+      detail,
+      action: race.hasRacePage ? 'open the race page' : null
+    };
+  };
+
+  const onMove = (event: React.MouseEvent<SVGSVGElement>) => {
+    const bounds = svgRef.current?.getBoundingClientRect();
+    if (!bounds || n === 0) return;
+    const mouseX = event.clientX - bounds.left;
+    if (mouseX < margin.left - 14 || mouseX > width - margin.right + 14) {
+      clearHover();
+      return;
+    }
+    const index = Math.min(n - 1, Math.max(0, Math.round(((mouseX - margin.left) / plotWidth) * (n - 1))));
+    setHovered(index);
+    setTip(tipFor(index));
+  };
+
+  const openHovered = () => {
+    if (hovered === null) return;
+    const race = races[hovered];
+    if (race.hasRacePage) navigate(raceHref(race.sessionId));
+  };
+
+  return (
+    <div ref={ref} style={{ width: '100%', position: 'relative' }}>
+      {width > 0 ? (
+        <svg
+          ref={svgRef}
+          width={width}
+          height={height}
+          role="img"
+          aria-label={`${campaign.seriesShort} ${campaign.seasonYear} championship points, race by race`}
+          onMouseMove={coarsePointer ? undefined : onMove}
+          onMouseLeave={clearHover}
+          onClick={openHovered}
+          style={{ cursor: hovered !== null && races[hovered].hasRacePage ? 'pointer' : 'default', display: 'block' }}
+        >
+          {/* Baseline + ceiling: the two numbers that bound the climb. */}
+          {[0, maxCum].map((tick) => (
+            <g key={`grid${tick}`}>
+              <line x1={margin.left} x2={width - margin.right} y1={y(tick)} y2={y(tick)} stroke="var(--grid-hairline)" />
+              <text
+                x={margin.left - 7}
+                y={y(tick)}
+                textAnchor="end"
+                dominantBaseline="middle"
+                fill="var(--ink-muted)"
+                fontFamily={chartFont}
+                fontSize={10}
+                style={{ fontVariantNumeric: 'tabular-nums' }}
+              >
+                {tick}
+              </text>
+            </g>
+          ))}
+
+          {hovered !== null ? (
+            <line
+              x1={x(hovered)}
+              x2={x(hovered)}
+              y1={margin.top - 4}
+              y2={height - margin.bottom + 2}
+              stroke="var(--axis-baseline)"
+              strokeDasharray="3 3"
+            />
+          ) : null}
+
+          {/* A whisper-quiet fill grounds the climb; the line carries it. */}
+          <path d={areaPath} fill={tint} opacity={0.06} />
+          <polyline points={linePoints} fill="none" stroke={tint} strokeWidth={2} strokeLinejoin="round" strokeLinecap="round" />
+
+          {races.map((race, index) => {
+            const isLast = index === n - 1;
+            const focused = hovered === index;
+            // Simplify the interior marks: the 2px line carries the shape, and
+            // only the 8px endpoint marker (plus any hover-focused point) is
+            // drawn — so dense 20+ race arcs stay legible at 390px while every
+            // rendered mark clears the ≥8px marker minimum.
+            if (!isLast && !focused) return null;
+            const isNow = campaign.isCurrent && isLast;
+            const dim = hovered !== null && !focused;
+            const markFill = isNow ? 'var(--bryce)' : tint;
+            return (
+              <circle
+                key={race.sessionId}
+                cx={x(index)}
+                cy={y(race.cumulativePoints)}
+                r={focused ? 4.6 : 4}
+                fill={markFill}
+                stroke="var(--surface-0)"
+                strokeWidth={1}
+                opacity={dim ? focusFade : 1}
+                style={{ transition: 'r 150ms ease, opacity 150ms ease' }}
+              />
+            );
+          })}
+
+          {/* Endpoint label: the final tally in the right gutter, always shown —
+              the one number that survives when the panel is too narrow for
+              anything else. */}
+          {n > 0 ? (
+            <text
+              x={width - margin.right + 5}
+              y={y(races[n - 1].cumulativePoints)}
+              textAnchor="start"
+              dominantBaseline="middle"
+              fill="var(--ink-secondary)"
+              fontFamily={chartFont}
+              fontSize={11.5}
+              fontWeight={600}
+              style={{ fontVariantNumeric: 'tabular-nums' }}
+            >
+              {campaign.earnedPoints}
+            </text>
+          ) : null}
+
+          {/* Bookend race indices: kept at every width — at 390px they are the
+              cue for how many races the arc spans. */}
+          {n > 1 ? (
+            <>
+              <text x={x(0)} y={height - 7} textAnchor="middle" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={9.5}>
+                R1
+              </text>
+              <text x={x(n - 1)} y={height - 7} textAnchor="middle" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={9.5}>
+                R{n}
+              </text>
+            </>
+          ) : null}
+        </svg>
+      ) : null}
+      {tip ? <ChartTipCard tip={tip} width={width} /> : null}
+    </div>
+  );
+};
+
+/** One campaign panel: the family-legible headline (series, year, official
+ *  final classification) over the arc, with the sourced denominator and any
+ *  reconciliation note underneath. Endpoint-only seasons share this exact
+ *  shell — same header, a "Final standing only" body in place of the arc — so
+ *  they read as equal chapters in the chronological run, never a footnote. */
+const CampaignPanel = ({ campaign }: { campaign: UiSeasonCampaign }) => {
+  const tint = chapterTint(campaign.seriesName);
+  const isEndpoint = campaign.renderMode === 'endpoint';
+  const rankLabel = campaign.officialStandingRank !== null ? `P${campaign.officialStandingRank}` : null;
+  const officialFigure = [rankLabel, campaign.officialSeasonPoints !== null ? `${campaign.officialSeasonPoints} pts` : null]
+    .filter(Boolean)
+    .join(' · ');
+  const officialLabel = officialFigure ? `Official: ${officialFigure}` : null;
+  const denominator = [
+    `${campaign.raceCount} ${campaign.raceCount === 1 ? 'race' : 'races'}`,
+    campaign.roundCount && campaign.roundCount > 1 && campaign.roundCount < campaign.raceCount
+      ? `${campaign.roundCount} rounds`
+      : null
+  ]
+    .filter(Boolean)
+    .join(' · ');
+  // The race-by-race source can sum to more than the official season table
+  // (a series' own scoring rule, never a correction here). Surface both, name
+  // the endpoint number the "race-source sum", and state the gap plainly.
+  const raceSourceSum = campaign.earnedPoints;
+  const reconciles =
+    !isEndpoint &&
+    raceSourceSum !== null &&
+    campaign.officialSeasonPoints !== null &&
+    raceSourceSum !== campaign.officialSeasonPoints;
+  const difference = reconciles
+    ? Math.abs((raceSourceSum as number) - (campaign.officialSeasonPoints as number))
+    : 0;
+
+  return (
+    <div className={`campaign-panel${campaign.isCurrent ? ' campaign-panel--current' : ''}`}>
+      <div className="row row--between" style={{ alignItems: 'baseline', gap: 10 }}>
+        <span className="row" style={{ gap: 7, alignItems: 'center', minWidth: 0 }}>
+          <span aria-hidden style={{ width: 8, height: 8, borderRadius: '50%', background: tint, flex: 'none' }} />
+          <span className="display" style={{ fontSize: 15, fontWeight: 600 }}>
+            {campaign.seriesShort} <span style={{ color: 'var(--ink-muted)', fontWeight: 500 }}>{campaign.seasonYear}</span>
+          </span>
+        </span>
+        {officialLabel ? <span className="figure tnum" style={{ fontSize: 13, color: 'var(--ink-secondary)', flex: 'none' }}>{officialLabel}</span> : null}
+      </div>
+      {isEndpoint ? (
+        <div className="campaign-panel__final">
+          <span className="chip chip--outline">Final standing only</span>
+          <p className="caption caption--secondary" style={{ margin: '8px 0 0' }}>
+            The round-by-round points aren&rsquo;t in the sourced data, so no arc is drawn; only the official final
+            classification is carried.
+          </p>
+        </div>
+      ) : (
+        <div style={{ marginTop: 6 }}>
+          <CampaignArc campaign={campaign} />
+        </div>
+      )}
+      <p className="caption caption--secondary" style={{ margin: isEndpoint ? '10px 0 0' : '2px 0 0' }}>
+        {denominator}
+        {campaign.inProgress ? ' · season in progress' : ''}
+      </p>
+      {reconciles ? (
+        <>
+          <p className="caption caption--secondary tnum" style={{ margin: '4px 0 0' }}>
+            {raceSourceSum} · race-source sum
+          </p>
+          <p className="caption caption--secondary" style={{ margin: '3px 0 0' }}>
+            The race-by-race source adds to {raceSourceSum}. The official season table records{' '}
+            {campaign.officialSeasonPoints}; the sourced data does not explain the {difference}-point difference.
+          </p>
+        </>
+      ) : null}
+    </div>
+  );
+};
+
+/** The campaigns: the whole career as points arcs, one championship season at a
+ *  time, in chronological order. Each panel answers one question — how that
+ *  campaign's points accumulated — and endpoint-only seasons keep their place
+ *  in the run rather than dropping beneath it. */
+export const TheCampaigns = () => {
+  const data = uiDataPackage.screens.careerLab.seasonCampaigns;
+  if (!data || data.campaigns.length === 0) {
+    return (
+      <Card title="The campaigns">
+        <Unavailable>Season championship progression is unavailable until the campaigns lane is built.</Unavailable>
+      </Card>
+    );
+  }
+
+  const hasCurrent = data.campaigns.some((campaign) => campaign.isCurrent);
+
+  return (
+    <Card
+      title="The campaigns"
+      action={<SourcePill title="The campaigns" entries={data.sourceRefs.map((ref) => ({ label: ref.key, path: ref.path, note: ref.note }))} caveats={data.caveats} />}
+    >
+      <p style={{ margin: '0 0 4px', color: 'var(--ink-secondary)', fontSize: 13.5, maxWidth: '62ch' }}>
+        Every championship campaign in the order it was raced — points banked as they were scored, or the official final
+        standing where the round-by-round points aren&rsquo;t sourced.{' '}
+        {hasCurrent ? 'Gold marks where the current season stands right now. ' : ''}Each season keeps its own scale;
+        points don&rsquo;t compare across series.
+      </p>
+      <div className="grid grid--2" style={{ marginTop: 12 }}>
+        {data.campaigns.map((campaign) => (
+          <CampaignPanel key={`${campaign.seriesId}-${campaign.seasonYear}`} campaign={campaign} />
+        ))}
+      </div>
+
+      {data.excluded.length > 0 ? (
+        <p className="caption caption--secondary" style={{ margin: '16px 0 0' }}>
+          {data.excluded.map((row) => `${row.seriesShort} ${row.seasonYear}`).join(', ')} aren&rsquo;t points campaigns in the
+          sourced data, so they&rsquo;re told in their own chapters.
+        </p>
+      ) : null}
+    </Card>
   );
 };

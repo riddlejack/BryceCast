@@ -839,6 +839,81 @@ for (const season of lapPositionMix) {
   }
 }
 
+/* ---------- the campaigns: points arcs must be honest and referentially sound ---------- */
+
+const seasonCampaigns = dataPackage.screens.careerLab.seasonCampaigns;
+if (seasonCampaigns?.schemaVersion !== 'brycecast.careerSeasonCampaigns.v1') {
+  fail('careerLab.seasonCampaigns must carry the validated season-campaigns schema.');
+}
+if (!Array.isArray(seasonCampaigns.campaigns) || seasonCampaigns.campaigns.length < 2) {
+  fail(`careerLab.seasonCampaigns.campaigns must carry at least two championship seasons (got ${seasonCampaigns.campaigns?.length ?? 0}).`);
+}
+if (!Array.isArray(seasonCampaigns.sourceRefs) || seasonCampaigns.sourceRefs.length === 0 || !Array.isArray(seasonCampaigns.caveats) || seasonCampaigns.caveats.length === 0) {
+  fail('careerLab.seasonCampaigns must carry source refs and caveats for its drawer.');
+}
+const conversionSessionIds = new Set(conversionRows.map((row) => row.sessionId));
+let arcCount = 0;
+let currentCount = 0;
+for (const campaign of seasonCampaigns.campaigns) {
+  const tag = `campaign ${campaign.seriesShort} ${campaign.seasonYear}`;
+  if (campaign.renderMode !== 'arc' && campaign.renderMode !== 'endpoint') {
+    fail(`${tag}: renderMode must be arc or endpoint.`);
+  }
+  if (campaign.isCurrent) currentCount += 1;
+  if (campaign.renderMode === 'endpoint') {
+    if ((campaign.races ?? []).length !== 0 || campaign.earnedPoints !== null) {
+      fail(`${tag}: an endpoint season must draw no arc (no races, no earned points).`);
+    }
+    if (typeof campaign.officialSeasonPoints !== 'number') {
+      fail(`${tag}: an endpoint season must carry a sourced official season total.`);
+    }
+    continue;
+  }
+  // Arc mode: the accumulation must be real and internally consistent.
+  arcCount += 1;
+  const races = campaign.races ?? [];
+  if (races.length === 0) {
+    fail(`${tag}: an arc season must carry at least one scored race.`);
+  }
+  let running = 0;
+  for (const race of races) {
+    if (typeof race.racePoints !== 'number' || race.racePoints < 0) {
+      fail(`${tag}: every race must carry non-negative sourced points.`);
+    }
+    running += race.racePoints;
+    if (race.cumulativePoints !== running) {
+      fail(`${tag}: cumulative points must equal the running sum of race points.`);
+    }
+    if (race.hasRacePage && !conversionSessionIds.has(race.sessionId)) {
+      fail(`${tag}: race ${race.sessionId} claims a race page but is absent from resultConversion.`);
+    }
+  }
+  if (campaign.earnedPoints !== running) {
+    fail(`${tag}: earnedPoints must equal the final cumulative total.`);
+  }
+  if (campaign.reconciles === true && campaign.earnedPoints !== campaign.officialSeasonPoints) {
+    fail(`${tag}: reconciles=true requires earned points to equal the official total.`);
+  }
+  if (campaign.reconciles === false && !(typeof campaign.reconciliationNote === 'string' && campaign.reconciliationNote.length > 0)) {
+    fail(`${tag}: a season whose earned points differ from its official total must carry a reconciliation note.`);
+  }
+}
+if (arcCount < 2) {
+  fail(`careerLab.seasonCampaigns must carry at least two real points arcs (got ${arcCount}).`);
+}
+if (currentCount > 1) {
+  fail(`careerLab.seasonCampaigns must mark at most one current campaign (got ${currentCount}).`);
+}
+const currentCampaign = seasonCampaigns.campaigns.find((campaign) => campaign.isCurrent);
+if (currentCampaign && (currentCampaign.renderMode !== 'arc' || !currentCampaign.inProgress)) {
+  fail('careerLab.seasonCampaigns current campaign must be an in-progress arc.');
+}
+for (const exclusion of seasonCampaigns.excluded ?? []) {
+  if (!exclusion.reason || typeof exclusion.reason !== 'string') {
+    fail(`careerLab.seasonCampaigns excluded ${exclusion.seriesShort} ${exclusion.seasonYear} must name a reason.`);
+  }
+}
+
 /* ---------- Career Lab life stats (The odometer) ---------- */
 
 const lifeStats = dataPackage.screens.careerLab.lifeStats;

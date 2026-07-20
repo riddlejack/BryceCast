@@ -17,6 +17,7 @@ import {
   DaytonaSourcePill,
   RainDays,
   RivalsCard,
+  TheCampaigns,
   TheClimb,
   chapterTint
 } from './careerExplorer';
@@ -393,6 +394,8 @@ export const CareerScreen = ({ readiness }: { readiness?: ReadinessStatus }) => 
         <span className="kicker">The restarts</span>
       </div>
       <CareerRestarts />
+
+      <TheCampaigns />
 
       <OdometerCard live={readiness?.payload ?? null} />
 
