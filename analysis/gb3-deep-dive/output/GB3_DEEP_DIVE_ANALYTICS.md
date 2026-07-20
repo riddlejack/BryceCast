@@ -115,7 +115,7 @@
 
 - Source authority: `data/career/career.dataset.json`, `data/career/reports/ingestion-summary.json`, and `data/career/reports/validation-report.json` control this pass.
 - Validation state: `validationOk=True`, errors=0, warnings=1, openGaps=10.
-- Current canonical counts: events=87, sessions=483, results=8494, qualifyingResults=1739, lapSamples=70061, weatherObservations=199, sourceEvidence=1266.
+- Current canonical counts: events=87, sessions=493, results=8563, qualifyingResults=1762, lapSamples=71348, weatherObservations=201, sourceEvidence=1280.
 - GB3 2022 has an open source gap for session 1248 JSON returning 404. Treat row-level missingness there as source-broken rather than model-inferable.
 - No GB3 telemetry, setup notes, tire data, pit sequence, lap-position samples, or section metrics exist in the canonical dataset.
 

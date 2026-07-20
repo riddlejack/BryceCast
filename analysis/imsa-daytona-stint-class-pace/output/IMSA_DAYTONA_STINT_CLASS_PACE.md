@@ -1,8 +1,8 @@
 # IMSA Daytona Stint/Class Pace
 
-Generated: `2026-07-19T05:00:56Z`
+Generated: `2026-07-20T11:31:34Z`
 Source dataset: `data/career/career.dataset.json`
-Source hash: `900ddfcb701b1977f16e33501302742c328980f5ffcccd190d2e433bba0b5681`
+Source hash: `64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978`
 
 ## Source Scope
 

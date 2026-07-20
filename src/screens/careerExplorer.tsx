@@ -5,7 +5,7 @@ import { asNumber, asString, ordinal } from '../app/format';
 import { restartBaselineSentence } from '../data/restartBaseline';
 import { Link, useRouter } from '../app/router';
 import { uiDataPackage, type UiCareerMoment, type UiSeasonCampaign } from '../data/uiDataPackage';
-import { packModules } from '../data/packModules';
+import { useImsaDaytonaStint } from '../data/imsaDaytonaStint';
 
 export interface CareerRow {
   raceLabel: string;
@@ -1750,22 +1750,6 @@ export const RainDays = () => {
   );
 };
 
-interface ImsaPack {
-  car85Result?: Record<string, unknown>;
-  bryceStintContext?: Array<Record<string, unknown>>;
-  counts?: Record<string, number>;
-}
-
-export const useImsaPack = (): ImsaPack | null => {
-  const [pack, setPack] = useState<ImsaPack | null>(null);
-  useEffect(() => {
-    const loader = packModules['../../analysis/imsa-daytona-stint-class-pace/output/context-packs/imsa-daytona-stint-class-context.json'];
-    if (!loader) return;
-    loader().then((module) => setPack((module as { default: ImsaPack }).default));
-  }, []);
-  return pack;
-};
-
 export const DaytonaSourcePill = () => (
   <SourcePill
     title="Rolex 24 at Daytona 2025"
@@ -1773,32 +1757,34 @@ export const DaytonaSourcePill = () => (
       {
         label: 'Official IMSA / Al Kamel time cards',
         path: 'analysis/imsa-daytona-stint-class-pace/output/context-packs/imsa-daytona-stint-class-context.json',
-        note: '37,885 official lap rows across the field; stint boundaries derived from pit in/out laps.'
+        note: '37,885 official lap rows across the field; stint boundaries derived from pit in/out laps. Integrity-verified (sha256) against the package source inventory at load.'
       }
     ]}
   />
 );
 
 /** The one-race chapter told as the race it was: 24 hours at Daytona in a GTP
- *  prototype. Replaces the percentile strip — one dot on a strip says nothing. */
+ *  prototype. Replaces the percentile strip — one dot on a strip says nothing.
+ *  Reads the integrity-verified stint pack so its numbers fail closed on a
+ *  tampered artifact rather than rendering unchecked. */
 export const DaytonaChapterBody = () => {
-  const pack = useImsaPack();
-  if (!pack?.car85Result) return null;
+  const pack = useImsaDaytonaStint();
+  if (pack === 'failed' || !pack?.car85Result) return null;
   const result = pack.car85Result;
   const stints = pack.counts?.bryceStints ?? null;
   return (
     <>
       <div className="row" style={{ gap: 26, marginTop: 12, flexWrap: 'wrap' }}>
-        <Stat label="GTP class finish" value={`P${asNumber(result.classFinishPosition) ?? '—'}`} />
-        <Stat label="Laps completed" value={asNumber(result.lapsCompleted) ?? '—'} />
+        <Stat label="GTP class finish" value={`P${result.classFinishPosition ?? '—'}`} />
+        <Stat label="Laps completed" value={result.lapsCompleted ?? '—'} />
         <Stat label="Bryce stints" value={stints ?? '—'} />
       </div>
       <div className="row row--wrap" style={{ marginTop: 12, gap: 8 }}>
         <span className="chip chip--outline">
-          car #85 · {String(result.vehicle ?? 'GTP car')} · {String(result.teamName ?? '')}
+          car #85 · {result.vehicle ?? 'GTP car'} · {result.teamName ?? ''}
         </span>
-        <span className="chip chip--outline tnum">best lap {String(result.bestLapTime ?? '—')}</span>
-        <span className="chip chip--outline">{asNumber(result.pitStops) ?? '—'} pit stops</span>
+        <span className="chip chip--outline tnum">best lap {result.bestLapTime ?? '—'}</span>
+        <span className="chip chip--outline">{result.pitStops ?? '—'} pit stops</span>
       </div>
     </>
   );

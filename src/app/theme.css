@@ -1851,6 +1851,60 @@ a.tower__row.gb3-venues__link:hover .gb3-venues__chev { color: var(--ink-seconda
   border-radius: 3px;
 }
 
+/* Formula Ford lap-shape depth module — same quiet grammar as the GB3 layer. */
+.ff-depth { gap: 18px; margin-top: 4px; }
+.ff-copy { margin: 0 0 10px; font-size: 13.5px; line-height: 1.5; color: var(--ink-secondary); }
+.ff-copy strong { color: var(--ink-primary); font-weight: 600; }
+.ff-caption { margin: 10px 0 0; font-size: 12px; line-height: 1.45; color: var(--ink-muted); }
+.ff-shape { display: flex; flex-direction: column; gap: 12px; margin-top: 4px; }
+.ff-shape__row {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+}
+.ff-shape__label { font-size: 13px; color: var(--ink-primary); }
+.ff-shape__track { position: relative; height: 10px; border-radius: 5px; background: var(--surface-1); overflow: hidden; }
+.ff-shape__fill { position: absolute; inset: 0 auto 0 0; border-radius: 5px; background: var(--chapter-ff); opacity: 0.55; }
+.ff-shape__meta { text-align: right; font-size: 12px; color: var(--ink-secondary); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.ff-shape__meta small { display: block; color: var(--ink-muted); font-size: 11px; }
+
+/* IMSA Daytona depth — stint timeline + co-driver roster, same quiet grammar. */
+.imsa-depth { gap: 20px; margin-top: 6px; }
+.imsa-copy { margin: 0 0 8px; font-size: 13.5px; line-height: 1.5; color: var(--ink-secondary); }
+.imsa-copy strong { color: var(--ink-primary); font-weight: 600; }
+.imsa-caption { margin: 8px 0 0; font-size: 12px; line-height: 1.45; color: var(--ink-muted); }
+.imsa-roster { display: flex; flex-direction: column; gap: 2px; margin-top: 4px; }
+.imsa-roster__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(64px, 1.5fr) auto;
+  align-items: center;
+  gap: 14px;
+  padding: 7px 8px;
+  border-radius: 8px;
+}
+.imsa-roster__row--bryce { background: var(--surface-0); }
+.imsa-roster__name { display: flex; align-items: center; gap: 8px; min-width: 0; font-size: 13.5px; color: var(--ink-primary); }
+.imsa-roster__name span.tnum { color: var(--ink-muted); font-size: 12px; }
+.imsa-roster__track { position: relative; height: 8px; border-radius: 4px; background: var(--surface-1); overflow: hidden; }
+.imsa-roster__row--bryce .imsa-roster__track { background: color-mix(in srgb, var(--chapter-imsa) 14%, var(--surface-1)); }
+.imsa-roster__fill { position: absolute; inset: 0 auto 0 0; border-radius: 4px; background: var(--chapter-imsa); opacity: 0.6; }
+.imsa-roster__meta { text-align: right; font-size: 12.5px; color: var(--ink-secondary); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/* Euroformula depth — quali→race conversion + venue profile, quiet grammar. */
+.euro-depth { gap: 20px; margin-top: 6px; }
+.euro-copy { margin: 0 0 8px; font-size: 13.5px; line-height: 1.5; color: var(--ink-secondary); }
+.euro-copy strong { color: var(--ink-primary); font-weight: 600; }
+.euro-caption { margin: 8px 0 0; font-size: 12px; line-height: 1.45; color: var(--ink-muted); }
+.euro-venues { padding: 0; }
+.euro-venues .tower__row { padding-left: 6px; padding-right: 6px; }
+.euro-venues__head { border-bottom-color: var(--divider); }
+.euro-venues__head .caption { font-size: 11px; }
+.euro-venues__chev { color: var(--ink-muted); text-align: right; font-size: 15px; line-height: 1; }
+a.tower__row.euro-venues__link { transition: background-color 150ms ease; }
+a.tower__row.euro-venues__link:hover { background: var(--surface-0); }
+a.tower__row.euro-venues__link:hover .euro-venues__chev { color: var(--ink-secondary); }
+
 /* Named climb moments are a visual overlay only; nearest-dot hover remains
    owned by the chart SVG underneath at every viewport. */
 .climb-moments,

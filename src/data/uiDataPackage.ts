@@ -1076,6 +1076,27 @@ export interface UiDataPackage {
         modifiedAt: string;
         sha256: string;
       } | null;
+      /** Integrity ref for the Formula Ford lap-shape pack — same fail-closed
+       *  loader contract as the GB3 ref. */
+      formulaFordLapShapeRef?: {
+        id: string;
+        type: 'formula_ford_lap_shape';
+        path: string;
+        bytes: number;
+        modifiedAt: string;
+        sha256: string;
+      } | null;
+      /** Integrity ref for the IMSA Daytona stint/co-driver pack — same
+       *  fail-closed loader contract, closing the audit-flagged unchecked
+       *  direct import. */
+      imsaStintRef?: {
+        id: string;
+        type: 'imsa_daytona_stint';
+        path: string;
+        bytes: number;
+        modifiedAt: string;
+        sha256: string;
+      } | null;
       seriesSummary: Array<Record<string, string | number | null>>;
       parityBySeries: Record<string, Array<Record<string, string | number | null>>>;
       resultConversion: Array<Record<string, string | number | null>>;
