@@ -73,6 +73,17 @@ const inactive: Omit<ReplaySession, 'setSpeed' | 'restart' | 'exit' | 'getReplay
   returnHref: '/races'
 };
 
+/** The initial playback rate a deep-link may seed via `?speed=`. "Clamped to the
+ *  legal set" means: only the three offered rates (1|4|16) are honored; anything
+ *  absent, unparseable, or off-set falls back to the loved default (4×) rather
+ *  than snapping to a neighbor — a typo'd rate never surprises the family with a
+ *  16× skim. Read ONCE at engage time, exactly like `?t0=`; the client owns the
+ *  clock afterward, so every later change goes through {@link ReplaySession.setSpeed}. */
+const clampSpeed = (raw: string | null): number => {
+  const value = Number(raw);
+  return REPLAY_SPEEDS.includes(value as (typeof REPLAY_SPEEDS)[number]) ? value : DEFAULT_REPLAY_SPEED;
+};
+
 const clampT0 = (session: ReplaySessionInfo, iso: string | null): string => {
   const green = session.firstGreenAt ?? session.firstCheckedAt ?? new Date().toISOString();
   if (!iso) return green;
@@ -111,6 +122,14 @@ export const useReplaySession = (replayKey: string | null, onRestart?: () => voi
   // O seeds). Absent — the race-page replay button flow — the clock still starts
   // at green. Restart always returns to green regardless.
   const t0Param = route.search.get('t0');
+  // Optional deep-link seed for the initial playback rate: `/live?replay=<key>&t0=<iso>&speed=1`
+  // opens the replay paused-in-time at t0 and running at 1× ("as it happened"),
+  // the shape a "watch the pass" share link uses. Absent — the default 4×. Only
+  // `t0` and `speed` are honored as deep-link inputs: `rt` (the live virtual-now)
+  // was superseded by `t0` for the clock SEED — the client derives `rt` off its
+  // own clock for each poll (see getReplayParams) and never reads it from the URL,
+  // so there is no `rt` deep-link param to add.
+  const speedParam = route.search.get('speed');
   const [state, setState] = useState(inactive);
   const sessionRef = useRef<ReplaySessionInfo | null>(null);
   const clockRef = useRef<ReplayClock | null>(null);
@@ -134,9 +153,12 @@ export const useReplaySession = (replayKey: string | null, onRestart?: () => voi
     }
 
     let cancelled = false;
-    speedRef.current = DEFAULT_REPLAY_SPEED;
+    // Seed the initial playback rate from `?speed=` (or the default). The client
+    // owns the clock after this seed — `setSpeed` drives every later change.
+    const seededSpeed = clampSpeed(speedParam);
+    speedRef.current = seededSpeed;
     clockRef.current = null;
-    setState({ ...inactive, engaged: true, starting: true });
+    setState({ ...inactive, engaged: true, starting: true, speed: seededSpeed });
 
     void (async () => {
       const available = await loadReplayAvailable();
@@ -178,7 +200,7 @@ export const useReplaySession = (replayKey: string | null, onRestart?: () => voi
         sessionKey: session.sessionKey,
         virtualStartMs: safeStart,
         startedAtWallMs: Date.now(),
-        speed: DEFAULT_REPLAY_SPEED,
+        speed: seededSpeed,
         firstCheckedMs: Number.isFinite(firstCheckedMs) ? firstCheckedMs : safeStart,
         lastCheckedMs: Number.isFinite(lastCheckedMs) ? lastCheckedMs : safeStart
       };
@@ -188,7 +210,7 @@ export const useReplaySession = (replayKey: string | null, onRestart?: () => voi
         starting: false,
         started: true,
         session,
-        speed: DEFAULT_REPLAY_SPEED,
+        speed: seededSpeed,
         venue: shortVenueFromEventName(session.eventName),
         seasonYear: session.seasonYear,
         returnHref
@@ -199,7 +221,7 @@ export const useReplaySession = (replayKey: string | null, onRestart?: () => voi
       cancelled = true;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [replayKey, fromParam, t0Param]);
+  }, [replayKey, fromParam, t0Param, speedParam]);
 
   // Live-guard watch: while replaying, poll readiness with THIS client's own
   // replay params. If the server answers with a non-simulated payload, the real
