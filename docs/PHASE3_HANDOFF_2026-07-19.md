@@ -207,3 +207,23 @@ Music City roll-forward has run. Then execute the post-race pipeline
 gates per the charter. Jack's brain dump (§5) becomes properly scoped
 briefs — data gates before promises, taste gates before renders.
 ```
+
+---
+
+## RECONCILIATION NOTE (2026-07-20, the full-vision run — read before trusting state claims above)
+
+This handoff's state claims are historical. As of 2026-07-20: the family
+URL is **https://brycecast.com** (named tunnel; quick tunnels + the
+MacBook relay retired as primary); deploys are two commands over SSH
+(docs/DEPLOY_RUNBOOK.md production-truth section); §3's two branches and
+§4's pipeline items 1–6 are ALL merged/shipped; §5's brain dump became
+Briefs O–T (docs/PHASE3_BRIEFS_O_T_2026-07-19.md) and shipped through
+the 2026-07-20 execution charter run. The July-18 charter's body text is
+superseded by its own Addenda 1–4 wherever they disagree (I =
+extraction not reconstruction; H anchors increasingly data-derived —
+see the timing-map probe verdict in the task board; J3 unblocked but
+REWRITTEN as docs/ML_RESEARCH_PLAN_2026-07-20.md). The atlas's "2 per
+race median at Nashville" example above is WRONG — the counted answer
+is 1 (validator-pinned). Whimsy parking lot (unbuilt, deliberate):
+hover car-dot on outlines; further team-tricolor placements (decide
+with Jack; red already means down).
