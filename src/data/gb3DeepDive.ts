@@ -89,6 +89,49 @@ export interface Gb3SourceFamilyReadiness {
   caveat: string;
 }
 
+/** One qualifying appearance — 2021 from dedicated TSL PDF classifications,
+ *  2022 read from the qualifying-session result rows (the JSON feed carries no
+ *  dedicated qualifying table). `gapToPole` is the official seconds behind pole
+ *  as a display string; `position` is the qualifying grid slot. */
+export interface Gb3QualifyingContext {
+  seasonYear: number;
+  sessionId: string;
+  eventId: string;
+  eventName: string;
+  sessionName: string;
+  sessionSegment: string;
+  position: number | null;
+  gapToPole: string | null;
+  bestLapTime: string | null;
+  fieldSize: number | null;
+  sourceState: string;
+  sourceTable: string;
+  confidence: string;
+  caveat: string;
+}
+
+/** One event (round) rolled up: best qualifying slot and best race finish plus
+ *  the share of the field beaten, so a season can be read round by round without
+ *  blending the two source families. */
+export interface Gb3EventSummary {
+  seasonYear: number;
+  eventName: string;
+  trackName: string;
+  sourceFamily: Gb3SourceFamily;
+  sourceState: string;
+  raceRows: number;
+  avgFinish: number | null;
+  bestFinish: number | null;
+  avgFinishPercentile: number | null;
+  avgPositionGainWhenStartKnown: number | null;
+  bestQualifyingPosition: number | null;
+  top5Count: number;
+  top10Count: number;
+  points: number | null;
+  weatherDrySessions: number;
+  weatherWetSessions: number;
+}
+
 export interface Gb3DeepDivePack {
   id: string;
   generatedAt: string;
@@ -103,6 +146,8 @@ export interface Gb3DeepDivePack {
   teamContext: Gb3TeamContext[];
   trackProfile: Gb3TrackProfile[];
   weatherContext: Gb3Weather[];
+  qualifyingContext: Gb3QualifyingContext[];
+  eventSummary: Gb3EventSummary[];
 }
 
 /** The inventory-backed integrity ref for the GB3 pack (id + path + sha256).

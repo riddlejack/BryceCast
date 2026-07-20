@@ -14,7 +14,7 @@ import { ChartTipCard, chartFont, focusFade, useMeasuredWidth, type ChartTip } f
 import { SourcePill } from '../app/components';
 import { ordinal } from '../app/format';
 import { Link, useRouter } from '../app/router';
-import { useGb3DeepDive, gb3DeepDiveRef, type Gb3DeepDivePack, type Gb3RaceResult, type Gb3TeamContext } from '../data/gb3DeepDive';
+import { useGb3DeepDive, gb3DeepDiveRef, type Gb3DeepDivePack, type Gb3RaceResult, type Gb3TeamContext, type Gb3EventSummary } from '../data/gb3DeepDive';
 import { chapterTint, raceHref } from './careerExplorer';
 
 const GB3_TINT = chapterTint('GB3 Championship');
@@ -437,6 +437,200 @@ const ConditionsBar = ({ pack }: { pack: Gb3DeepDivePack }) => {
   );
 };
 
+/* ---------- 0 · The season arc: qualifying and best finish, round by round ---------- */
+
+/* Both campaigns read left to right, split by the season divider so the two
+ * source families never blend. Each round shows where he qualified (open mark)
+ * and his best race result (filled mark); the filled marks connect into the
+ * season's finishing arc. Qualifying is official grid slot for 2021 and the
+ * qualifying-session order for 2022, with the gap to pole in the tip. */
+const SeasonArc = ({ pack }: { pack: Gb3DeepDivePack }) => {
+  const [ref, width] = useMeasuredWidth<HTMLDivElement>();
+  const { navigate } = useRouter();
+  const [tip, setTip] = useState<ChartTip | null>(null);
+  const [hoveredKey, setHoveredKey] = useState<string | null>(null);
+
+  const events = useMemo(
+    () => [...pack.eventSummary].sort((a, b) => a.seasonYear * 100 + roundOf(a.eventName) - (b.seasonYear * 100 + roundOf(b.eventName))),
+    [pack]
+  );
+  const rows2021 = useMemo(() => events.filter((row) => row.seasonYear === 2021), [events]);
+  const rows2022 = useMemo(() => events.filter((row) => row.seasonYear === 2022), [events]);
+
+  /* Primary qualifying gap-to-pole per event (the first "Qualifying" segment),
+     for the tip only — never a headline number. */
+  const gapByEvent = useMemo(() => {
+    const map = new Map<string, string>();
+    for (const row of pack.qualifyingContext) {
+      if (row.gapToPole === null) continue;
+      const isPrimary = /(^|[^d])qualifying$/i.test(row.sessionSegment.trim()) || !map.has(row.eventName);
+      if (isPrimary || !map.has(row.eventName)) map.set(row.eventName, row.gapToPole);
+    }
+    return map;
+  }, [pack]);
+
+  /* Best classified race per event → the light race sheet each round opens. */
+  const bestRaceByEvent = useMemo(() => {
+    const map = new Map<string, Gb3RaceResult>();
+    for (const row of pack.raceResults) {
+      if (row.finishPosition === null) continue;
+      const held = map.get(row.eventName);
+      if (!held || row.finishPosition < (held.finishPosition ?? Infinity)) map.set(row.eventName, row);
+    }
+    return map;
+  }, [pack]);
+
+  const wins = events.filter((row) => row.bestFinish === 1).length;
+  const podiumRounds = events.filter((row) => (row.bestFinish ?? 99) <= 3).length;
+
+  const maxPos =
+    Math.max(
+      14,
+      ...events.flatMap((row) => [row.bestFinish ?? 1, row.bestQualifyingPosition ?? 1])
+    ) + 1;
+
+  const height = 236;
+  const top = 36;
+  const bottom = 26;
+  const plotH = height - top - bottom;
+  const gutter = 34;
+  const plotL = gutter;
+  const plotR = Math.max(width - 12, plotL + 80);
+  const laneGap = 26; // gap around the season divider
+  const divX = plotL + ((rows2021.length) / events.length) * (plotR - plotL);
+  const y = (pos: number) => top + ((pos - 1) / (maxPos - 1)) * plotH;
+
+  /* Evenly spaced round slots inside each season's own band. */
+  const bandX = (lane: 'a' | 'b', index: number, count: number) => {
+    const bandL = lane === 'a' ? plotL : divX + laneGap / 2;
+    const bandR = lane === 'a' ? divX - laneGap / 2 : plotR;
+    return bandL + ((index + 0.5) / count) * (bandR - bandL);
+  };
+
+  const yTicks = [1, 5, 10, maxPos - 1 > 14 ? 20 : 14].filter((tick, i, arr) => arr.indexOf(tick) === i && tick < maxPos);
+
+  const podium = (row: Gb3EventSummary) => (row.bestFinish ?? 99) <= 3;
+
+  const renderLane = (rows: Gb3EventSummary[], lane: 'a' | 'b') => {
+    const count = rows.length;
+    // finish arc polyline points
+    const finishPts = rows
+      .filter((row) => row.bestFinish !== null)
+      .map((row, i) => {
+        const idx = rows.indexOf(row);
+        return `${bandX(lane, idx, count).toFixed(1)},${y(row.bestFinish as number).toFixed(1)}`;
+      })
+      .join(' ');
+    return (
+      <g key={lane}>
+        <polyline points={finishPts} fill="none" stroke="var(--chapter-gb3)" strokeWidth={1.6} strokeOpacity={0.55} strokeLinejoin="round" />
+        {rows.map((row, index) => {
+          const key = `${row.seasonYear}-${roundOf(row.eventName)}`;
+          const cx = bandX(lane, index, count);
+          const qy = row.bestQualifyingPosition !== null ? y(row.bestQualifyingPosition) : null;
+          const fy = row.bestFinish !== null ? y(row.bestFinish) : null;
+          const focused = hoveredKey === null || hoveredKey === key;
+          const race = bestRaceByEvent.get(row.eventName);
+          const gap = gapByEvent.get(row.eventName);
+          const showTip = () => {
+            const q = row.bestQualifyingPosition !== null ? `qualified P${row.bestQualifyingPosition}${gap ? ` · ${gap}s off pole` : ''}` : 'qualifying unavailable';
+            const f = row.bestFinish !== null ? `best finish P${row.bestFinish}` : 'no classified finish';
+            setHoveredKey(key);
+            setTip({
+              x: cx,
+              y: (fy ?? qy ?? top) - 8,
+              title: `${row.seasonYear} R${roundOf(row.eventName)} · ${row.trackName}`,
+              detail: `${q} · ${f} · ${row.raceRows} ${row.raceRows === 1 ? 'race' : 'races'}`,
+              action: race ? 'Open the round’s best race' : undefined
+            });
+          };
+          const clear = () => {
+            setHoveredKey(null);
+            setTip(null);
+          };
+          return (
+            <g key={key} style={{ opacity: focused ? 1 : focusFade, transition: 'opacity 150ms ease' }}>
+              {/* quali→finish connector for the round */}
+              {qy !== null && fy !== null ? (
+                <line x1={cx} y1={qy} x2={cx} y2={fy} stroke="var(--ink-muted)" strokeWidth={1} strokeOpacity={0.4} />
+              ) : null}
+              {/* qualifying: open mark */}
+              {qy !== null ? (
+                <circle cx={cx} cy={qy} r={3} fill="var(--surface-0)" stroke="var(--ink-muted)" strokeWidth={1.2} />
+              ) : null}
+              {/* best finish: filled mark, chapter tint for a podium round */}
+              {fy !== null ? (
+                <circle cx={cx} cy={fy} r={podium(row) ? 4.4 : 3.6} fill={podium(row) ? 'var(--chapter-gb3)' : 'var(--ink-primary)'} />
+              ) : null}
+              {/* generous hit target */}
+              <rect
+                x={cx - 12}
+                y={top - 6}
+                width={24}
+                height={plotH + 12}
+                fill="transparent"
+                style={{ cursor: race ? 'pointer' : 'default' }}
+                onMouseEnter={showTip}
+                onMouseLeave={clear}
+                onClick={() => race && navigate(raceHref(race.sessionId))}
+              />
+              {/* round label */}
+              <text x={cx} y={height - 8} textAnchor="middle" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={9.5}>
+                R{roundOf(row.eventName)}
+              </text>
+            </g>
+          );
+        })}
+      </g>
+    );
+  };
+
+  return (
+    <div>
+      <SectionHead title="The season, round by round" />
+      <p className="gb3-copy">
+        Two campaigns end to end — where he qualified and the best he took from each round. Across the two seasons he reached the
+        podium in <strong>{podiumRounds}</strong> of <strong>{events.length}</strong> rounds, with his first GB3 win coming at
+        Donington in 2022{wins > 1 ? ` (one of ${wins})` : ''}.
+      </p>
+      <div ref={ref} style={{ width: '100%', position: 'relative' }}>
+        {width > 0 ? (
+          <svg width={width} height={height} role="img" aria-label="Bryce's qualifying and best finish for every GB3 round, 2021 and 2022">
+            {/* y grid + labels */}
+            {yTicks.map((tick) => (
+              <g key={tick}>
+                <line x1={plotL} x2={plotR} y1={y(tick)} y2={y(tick)} stroke="var(--grid-hairline)" strokeWidth={1} />
+                <text x={gutter - 8} y={y(tick) + 3.2} textAnchor="end" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={9.5}>
+                  P{tick}
+                </text>
+              </g>
+            ))}
+            {/* season divider + headers */}
+            <line x1={divX} x2={divX} y1={top - 10} y2={height - bottom + 8} stroke="var(--divider)" strokeWidth={1} strokeDasharray="2 3" />
+            <text x={(plotL + divX) / 2} y={16} textAnchor="middle" fill="var(--ink-secondary)" fontFamily={chartFont} fontSize={10.5}>
+              2021 · Carlin
+            </text>
+            <text x={(divX + plotR) / 2} y={16} textAnchor="middle" fill="var(--ink-secondary)" fontFamily={chartFont} fontSize={10.5}>
+              2022 · Hitech
+            </text>
+            <text x={plotL} y={28} textAnchor="start" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={9.5}>
+              P1 at the top
+            </text>
+            {renderLane(rows2021, 'a')}
+            {renderLane(rows2022, 'b')}
+          </svg>
+        ) : null}
+        {tip ? <ChartTipCard tip={tip} width={width} /> : null}
+      </div>
+      <p className="gb3-caption">
+        Open marks = qualifying, filled = the round’s best finish; the amber line follows his best finish through each season, and
+        amber dots mark podium rounds. 2021 qualifying is official TSL grid; 2022 reads the qualifying-session order (no dedicated
+        grid feed), so the two seasons stay side by side, never merged. Click a round to open its best race.
+      </p>
+    </div>
+  );
+};
+
 /* ---------- source honesty ---------- */
 
 const Gb3SourcePill = ({ pack }: { pack: Gb3DeepDivePack }) => {
@@ -463,7 +657,8 @@ const Gb3SourcePill = ({ pack }: { pack: Gb3DeepDivePack }) => {
       caveats={[
         'The two seasons come from different sources that cover different fields, so detail stays split by season.',
         'Every finish travels with the share of the field it beat and its race count — fields ran 16 to 23 cars.',
-        'Grid positions are official for 2021 only; 2022 carries no starts, so start-to-finish is 2021-only.',
+        'Grid positions are official for 2021 only; 2022 carries no race starts, so start-to-finish is 2021-only.',
+        'Qualifying is the official TSL grid for 2021 and the qualifying-session result order for 2022 (the JSON feed has no dedicated qualifying table); the season arc keeps them side by side, never merged.',
         'Condition strings are official 2021 session labels — context, never a cause of a result.',
         'Team context is finishing order within Bryce’s own cars, not a read on machinery, setup, or strategy.',
         'GB3’s records hold no lap traces or section timing, so there are no pace-trace charts here.'
@@ -497,6 +692,7 @@ export const Gb3DepthLayer = () => {
         </p>
         <Gb3SourcePill pack={pack} />
       </div>
+      <SeasonArc pack={pack} />
       <WithinTeamStrip pack={pack} />
       <QualifyingToRace pack={pack} />
       <VenueRows pack={pack} />

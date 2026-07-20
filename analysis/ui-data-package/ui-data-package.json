@@ -1,6 +1,6 @@
 {
   "schemaVersion": "brycecast.uiDataPackage.v1",
-  "generatedAt": "2026-07-20T10:56:56.029Z",
+  "generatedAt": "2026-07-20T11:21:57.875Z",
   "sourceHash": "64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978",
   "asOfDate": "2026-07-19",
   "baselineCommit": "dbc879e",
@@ -286,8 +286,8 @@
     "restartReportSummary": {
       "path": "analysis/restart-report/output/summary.json",
       "bytes": 17440,
-      "modifiedAt": "2026-07-20T10:56:45.671Z",
-      "sha256": "d34c5644c0dada39bf6d74268b2d5c8fd709228399e335717e3d486c587f09cf"
+      "modifiedAt": "2026-07-20T11:21:37.913Z",
+      "sha256": "78b70b965cd8024d7fae280134a811021c0f7cc787003da7d79d5bbeb80d1c98"
     },
     "restartReportEvents": {
       "path": "analysis/restart-report/output/tables/restart_events.csv",
@@ -340,8 +340,8 @@
     "qualifyingLayerSummary": {
       "path": "analysis/qualifying-layer/output/summary.json",
       "bytes": 10286,
-      "modifiedAt": "2026-07-20T10:56:52.605Z",
-      "sha256": "917771b87813d1eecf00fcab9c98a8da9c4cdd2dbe067597d8ee6e5b1f0b3178"
+      "modifiedAt": "2026-07-20T11:21:52.192Z",
+      "sha256": "64015faa856d41c7ace092b3ea45fdf23a3fcc20a5c1cb9dec0eaa470ba5cc65"
     },
     "qualifyingLayerSessions": {
       "path": "analysis/qualifying-layer/output/tables/quali_sessions.csv",
@@ -382,8 +382,8 @@
     "cautionAtlasSummary": {
       "path": "analysis/caution-atlas/output/summary.json",
       "bytes": 12386,
-      "modifiedAt": "2026-07-20T10:56:49.047Z",
-      "sha256": "66410bb138a997d7c6072b70424ddd2fab4de39bbc0bbb2ce466d9d34e0e654f"
+      "modifiedAt": "2026-07-20T11:21:44.878Z",
+      "sha256": "7e6c54972f3a915fc166e23280b393b873e5fab62a86a580b7648e40fcd17c1d"
     },
     "cautionAtlasEvents": {
       "path": "analysis/caution-atlas/output/tables/caution_events.csv",
@@ -19186,8 +19186,8 @@
         "type": "gb3_deep_dive",
         "path": "analysis/gb3-deep-dive/output/context-packs/gb3-deep-dive-context.json",
         "bytes": 175299,
-        "modifiedAt": "2026-07-19T06:31:47.423Z",
-        "sha256": "22b5262bb5d14e7d2624ffe6e4854f04c59f3f56d10c430e3d7dbcd386d27ccf"
+        "modifiedAt": "2026-07-20T11:09:19.506Z",
+        "sha256": "5bab860ad1ecded90ac520a15500de3be109497616be7d2bad655d339f4467ba"
       },
       "careerPriorMatrixPath": "analysis/predictive-race-intelligence/output/career_prior_matrix.csv",
       "seriesSummary": [
