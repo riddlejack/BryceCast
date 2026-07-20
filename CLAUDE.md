@@ -45,8 +45,20 @@ to read, exact requested output, validation commands, and what not to change.
 - BryceCast is a Bryce Aron INDY NXT / career analytics and live companion app.
 - Live #9 POV and isolated team radio audio are unavailable unless a later
   permissioned source proves otherwise.
-- Do not invent unproven live GPS, official weather, pit sequence, tire/overtake
-  strategy, or calibrated finish/top-10 prediction claims.
+- Data-availability guardrails are PER-LANE source-state (revised 2026-07-20
+  per the lake + DATA_PERMISSIONS; deliberate revision, not a loosening):
+  - **Source-backed for 2024+ (usable, with source tier labeled on screen):**
+    pit stop counts/laps and pit-lane S/F crossings, historic per-second/
+    event-driven timing, trackside weather/incident messages, located
+    incidents (between named timing loops), timing-loop section times.
+  - **Still absent (never invent):** GPS/car position between loops (the
+    `lapDistance` field is confirmed dead; CGR telemetry is the only route),
+    instantaneous speed (payload speeds are per-lap averages), tire
+    compounds/strategy outside the 2020–23 telemetry-variant seasons,
+    physical proximity/contact detection, official series weather.
+  - **Unchanged and absolute:** no calibrated finish/top-10 prediction or
+    probability claims without the full calibration-gate chain
+    (docs/ML_RESEARCH_PLAN_2026-07-20.md) plus Fable + Jack sign-off.
 - Use `analysis/ui-data-package/ui-data-package.json`, referenced context packs,
   and runtime `/api/*` routes through typed adapters. Do not parse raw CSVs in
   React components when a UI package/context pack exists.
