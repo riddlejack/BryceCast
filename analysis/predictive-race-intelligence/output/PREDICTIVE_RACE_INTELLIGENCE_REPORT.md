@@ -1,7 +1,7 @@
 # Predictive Race Intelligence Productization Pass
 
-Generated: `2026-07-20T05:50:20Z`
-Repo head: `c282d65`
+Generated: `2026-07-20T09:25:42Z`
+Repo head: `d987e85`
 
 ## Decision
 
