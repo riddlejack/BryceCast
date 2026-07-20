@@ -10,6 +10,7 @@ import { Gb3DepthLayer } from './gb3Depth';
 import { FormulaFordDepthLayer } from './formulaFordDepth';
 import { DaytonaDepthLayer } from './daytonaDepth';
 import { EuroformulaDepthLayer } from './euroformulaDepth';
+import { F1600SeasonStory, FormulaFordBridge, FrocCampaignStory, OriginTimeline } from './smallSeriesStories';
 import {
   BestClimbs,
   CareerBests,
@@ -74,21 +75,51 @@ const seriesChapters: Array<{ name: string; years: string; short?: string; narra
   }
 ];
 
+/* Which chapters carry a depth layer one tap down. GB3 has the longest junior
+ * chapter; F1600 and FROC each get a story sized to their records. */
+const chapterDepth = (short?: string, name?: string): { title: string; render: () => ReactNode } | undefined => {
+  if (name === 'Formula Ford') return { title: 'Formula Ford lap shape', render: () => <FormulaFordDepthLayer /> };
+  if (name === 'Euroformula Open') return { title: 'The 2023 season, in depth', render: () => <EuroformulaDepthLayer /> };
+  switch (short) {
+    case 'GB3':
+      return { title: 'The GB3 years, in depth', render: () => <Gb3DepthLayer /> };
+    case 'IMSA':
+      return { title: 'The 24 hours, in depth', render: () => <DaytonaDepthLayer /> };
+    case 'F1600':
+      return { title: 'The F1600 season, in depth', render: () => <F1600SeasonStory /> };
+    case 'FR Oceania':
+      return { title: 'The FR Oceania campaign, in depth', render: () => <FrocCampaignStory /> };
+    default:
+      return undefined;
+  }
+};
+
 const ChapterCard = ({
   chapter,
   row,
   current,
   extra,
+  bridge,
   depth
 }: {
   chapter: (typeof seriesChapters)[number];
   row: Row | undefined;
   current: boolean;
   extra?: string | null;
+  /** A sourced context block below the stats (e.g. the Formula Ford scholarship
+   *  bridge). Rendered quietly, one tap already open. */
+  bridge?: ReactNode;
   depth?: { title: string; render: () => ReactNode };
 }) => {
   const races = row ? asNumber(row.raceRows) : null;
   const oneRace = chapter.short === 'IMSA';
+  // F1600 ran 21 races but classified 20 (one DNS). The generic raceRows badge
+  // counts only classified races, which contradicts the depth story's "21
+  // races". Read the honest split straight from that story so the badge and the
+  // narrative one tap down agree.
+  const f1600Totals = chapter.short === 'F1600'
+    ? uiDataPackage.screens.careerLab.smallSeriesStories.f1600?.totals ?? null
+    : null;
   const [expanded, setExpanded] = useState(false);
   return (
     <div className={`journey__chapter${current ? ' journey__chapter--current' : ''}`}>
@@ -108,7 +139,11 @@ const ChapterCard = ({
             </h2>
           </div>
           <span className="row" style={{ gap: 8 }}>
-            {races !== null ? (
+            {f1600Totals ? (
+              <span className="chip chip--outline tnum">
+                {f1600Totals.classifiedRaces} classified / {f1600Totals.raceCount} entered
+              </span>
+            ) : races !== null ? (
               <span className="chip chip--outline tnum">
                 {formatNumber(races, 0)} {races === 1 ? 'race' : 'races'}
               </span>
@@ -137,6 +172,19 @@ const ChapterCard = ({
               <p className="caption caption--secondary" style={{ margin: '10px 0 0' }}>
                 {extra}
               </p>
+            ) : null}
+            {bridge ? <div style={{ marginTop: 12 }}>{bridge}</div> : null}
+            {depth ? (
+              <div style={{ marginTop: 12 }}>
+                <GhostButton expanded={expanded} onClick={() => setExpanded((value) => !value)}>
+                  {expanded ? 'Show less' : depth.title}
+                </GhostButton>
+                {expanded ? (
+                  <Reveal>
+                    <div style={{ paddingTop: 4 }}>{depth.render()}</div>
+                  </Reveal>
+                ) : null}
+              </div>
             ) : null}
           </>
         )}
@@ -408,6 +456,8 @@ export const CareerScreen = ({ readiness }: { readiness?: ReadinessStatus }) => 
 
       <CareerAtlas />
 
+      <OriginTimeline />
+
       {rows.length === 0 ? (
         <Card>
           <Unavailable>Career summary data unavailable.</Unavailable>
@@ -425,17 +475,8 @@ export const CareerScreen = ({ readiness }: { readiness?: ReadinessStatus }) => 
                   row={rowByName.get(chapter.name)}
                   current={index === seriesChapters.length - 1}
                   extra={index === seriesChapters.length - 1 ? lapLine : null}
-                  depth={
-                    chapter.short === 'GB3'
-                      ? { title: 'The GB3 years, in depth', render: () => <Gb3DepthLayer /> }
-                      : chapter.name === 'Formula Ford'
-                        ? { title: 'Formula Ford lap shape', render: () => <FormulaFordDepthLayer /> }
-                        : chapter.short === 'IMSA'
-                          ? { title: 'The 24 hours, in depth', render: () => <DaytonaDepthLayer /> }
-                          : chapter.name === 'Euroformula Open'
-                            ? { title: 'The 2023 season, in depth', render: () => <EuroformulaDepthLayer /> }
-                            : undefined
-                  }
+                  bridge={chapter.name === 'Formula Ford' ? <FormulaFordBridge /> : undefined}
+                  depth={chapterDepth(chapter.short, chapter.name)}
                 />
               </Reveal>
             ))}

@@ -1,6 +1,6 @@
 {
   "schemaVersion": "brycecast.uiDataPackage.v1",
-  "generatedAt": "2026-07-20T16:23:51.830Z",
+  "generatedAt": "2026-07-20T16:04:19.474Z",
   "sourceHash": "64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978",
   "asOfDate": "2026-07-19",
   "baselineCommit": "dbc879e",
@@ -178,8 +178,8 @@
     "careerLifeStatsSummary": {
       "path": "analysis/career-life-stats/output/summary.json",
       "bytes": 20389,
-      "modifiedAt": "2026-07-20T11:37:09.666Z",
-      "sha256": "5e3f7648a15788acc0edc146c1c0514a55bd31b33d6c85e594c888280c84375e"
+      "modifiedAt": "2026-07-19T21:03:33.032Z",
+      "sha256": "844ec2ab8892e8c4a812a0d37b18e05654154aa7d0f8026b33b094291261d82c"
     },
     "careerLifeStatsResearch": {
       "path": "analysis/career-life-stats/RESEARCH.md",
@@ -286,8 +286,8 @@
     "restartReportSummary": {
       "path": "analysis/restart-report/output/summary.json",
       "bytes": 17440,
-      "modifiedAt": "2026-07-20T16:23:45.346Z",
-      "sha256": "e8e8d81e184f0b62a588f2adc0cc9e892d899dcee854e52b32d055a44119c052"
+      "modifiedAt": "2026-07-20T16:04:13.022Z",
+      "sha256": "bb272a03d064c5ac0555b75e7dcd02236bbe8e815d40a7d07918fa8a2f2cc3fd"
     },
     "restartReportEvents": {
       "path": "analysis/restart-report/output/tables/restart_events.csv",
@@ -340,8 +340,8 @@
     "qualifyingLayerSummary": {
       "path": "analysis/qualifying-layer/output/summary.json",
       "bytes": 10286,
-      "modifiedAt": "2026-07-20T16:23:49.644Z",
-      "sha256": "195077d3001fd8ec7f05ee5e1aaea9f5fe7d1d4c1e9516ada8db1a1c8f82d8ba"
+      "modifiedAt": "2026-07-20T16:04:17.350Z",
+      "sha256": "96c38554f940f3ff9f60be09a1902d896509c787f4f17355bd81ee80e9d78802"
     },
     "qualifyingLayerSessions": {
       "path": "analysis/qualifying-layer/output/tables/quali_sessions.csv",
@@ -382,8 +382,8 @@
     "cautionAtlasSummary": {
       "path": "analysis/caution-atlas/output/summary.json",
       "bytes": 12386,
-      "modifiedAt": "2026-07-20T16:23:47.410Z",
-      "sha256": "18adb543f01738fe9247c55a4b2e22242de5115865b18f420a4e8090dd7c7632"
+      "modifiedAt": "2026-07-20T16:04:15.101Z",
+      "sha256": "cdaef20432a43f0cc1e5d5262c0574454ae0f866b3317d29fd52d6e7f8ed4fb7"
     },
     "cautionAtlasEvents": {
       "path": "analysis/caution-atlas/output/tables/caution_events.csv",
@@ -531,15 +531,15 @@
     },
     "uiDataPackageBuilderScript": {
       "path": "scripts/build-ui-data-package.mjs",
-      "bytes": 169665,
-      "modifiedAt": "2026-07-20T11:34:05.775Z",
-      "sha256": "04d73dcef5addaa1bdfbf21d68f73150b700891b5b01f3cafc29137e4d98aab4"
+      "bytes": 189071,
+      "modifiedAt": "2026-07-20T15:54:06.694Z",
+      "sha256": "f9d706367c2b3beed99b47584c4a3a4880eb2df01d7ac6aa4218d1564b38115b"
     },
     "uiDataPackageValidatorScript": {
       "path": "scripts/validate-ui-data-package.mjs",
-      "bytes": 89861,
-      "modifiedAt": "2026-07-20T16:16:37.206Z",
-      "sha256": "e8e00064354a372afa269869524622b17e6f9428d88c6a08529f2f330a1d8c52"
+      "bytes": 94031,
+      "modifiedAt": "2026-07-20T16:03:46.843Z",
+      "sha256": "f8b15d832fbd8ec1b3e26c478027b662241028a77cd1cd932a63103ec7468acd"
     },
     "supplementalPrepSectionContextPack": {
       "key": "supplemental:analysis_indy_nxt_section_lap_deep_dive_output_context_packs_portland_internatio",
@@ -19186,24 +19186,8 @@
         "type": "gb3_deep_dive",
         "path": "analysis/gb3-deep-dive/output/context-packs/gb3-deep-dive-context.json",
         "bytes": 175299,
-        "modifiedAt": "2026-07-20T11:09:19.506Z",
-        "sha256": "5bab860ad1ecded90ac520a15500de3be109497616be7d2bad655d339f4467ba"
-      },
-      "formulaFordLapShapeRef": {
-        "id": "formula-ford-lap-shape-context",
-        "type": "formula_ford_lap_shape",
-        "path": "analysis/formula-ford-lap-shape/output/context-packs/formula-ford-lap-shape-context.json",
-        "bytes": 33104,
-        "modifiedAt": "2026-07-20T11:25:41.533Z",
-        "sha256": "8082ee53a53465551b29dba6abd951731394ca86270ce69f6b19ac0232295c50"
-      },
-      "imsaStintRef": {
-        "id": "imsa-daytona-stint-class-context",
-        "type": "imsa_daytona_stint",
-        "path": "analysis/imsa-daytona-stint-class-pace/output/context-packs/imsa-daytona-stint-class-context.json",
-        "bytes": 24058,
-        "modifiedAt": "2026-07-20T11:31:43.295Z",
-        "sha256": "45036751164a2c54372313e43b759efba8e1e9fd8e7bea40fdedb5157a1026c7"
+        "modifiedAt": "2026-07-19T06:31:47.423Z",
+        "sha256": "22b5262bb5d14e7d2624ffe6e4854f04c59f3f56d10c430e3d7dbcd386d27ccf"
       },
       "careerPriorMatrixPath": "analysis/predictive-race-intelligence/output/career_prior_matrix.csv",
       "seriesSummary": [
@@ -26509,6 +26493,643 @@
             "note": "Which races carry a career race page for click-through."
           }
         ]
+      },
+      "smallSeriesStories": {
+        "schemaVersion": "brycecast.smallSeriesStories.v1",
+        "f1600": {
+          "seriesId": "series_frp_f1600",
+          "seriesName": "F1600 Championship Series",
+          "seriesShort": "F1600",
+          "seasonYear": 2019,
+          "totals": {
+            "raceCount": 21,
+            "classifiedRaces": 20,
+            "dnsRaces": 1,
+            "podiums": 8,
+            "bestFinish": 2,
+            "bestFinishCount": 1,
+            "bestQualiRank": 3,
+            "qualifyingSessions": 6,
+            "roundCount": 7,
+            "roundsWithQualifying": 6,
+            "startsSourced": 0
+          },
+          "events": [
+            {
+              "roundIndex": 1,
+              "eventName": "FRP F1600 2019 Round 1 - Road Atlanta",
+              "trackName": "Michelin Raceway Road Atlanta",
+              "eventDate": "2019-04-18",
+              "qualifying": {
+                "rank": 3,
+                "fieldSize": 18,
+                "bestLapTime": "1:31.837"
+              },
+              "races": [
+                {
+                  "raceNumber": 1,
+                  "sessionId": "session_frp_f1600_2019_r1_04_race_1",
+                  "finishPosition": 6,
+                  "status": "running",
+                  "isPodium": false,
+                  "hasRacePage": true,
+                  "raceHref": "/career/race/session_frp_f1600_2019_r1_04_race_1"
+                },
+                {
+                  "raceNumber": 2,
+                  "sessionId": "session_frp_f1600_2019_r1_05_race_2",
+                  "finishPosition": 4,
+                  "status": "running",
+                  "isPodium": false,
+                  "hasRacePage": true,
+                  "raceHref": "/career/race/session_frp_f1600_2019_r1_05_race_2"
+                },
+                {
+                  "raceNumber": 3,
+                  "sessionId": "session_frp_f1600_2019_r1_06_race_3",
+                  "finishPosition": 3,
+                  "status": "running",
+                  "isPodium": true,
+                  "hasRacePage": true,
+                  "raceHref": "/career/race/session_frp_f1600_2019_r1_06_race_3"
+                }
+              ]
+            },
+            {
+              "roundIndex": 2,
+              "eventName": "FRP F1600 2019 Round 2 - Watkins Glen International",
+              "trackName": "Watkins Glen International",
+              "eventDate": "2019-05-10",
+              "qualifying": {
+                "rank": 8,
+                "fieldSize": 13,
+                "bestLapTime": "2:01.250"
+              },
+              "races": [
+                {
+                  "raceNumber": 1,
+                  "sessionId": "session_frp_f1600_2019_r2_04_race_1",
+                  "finishPosition": 5,
+                  "status": "running",
+                  "isPodium": false,
+                  "hasRacePage": true,
+                  "raceHref": "/career/race/session_frp_f1600_2019_r2_04_race_1"
+                },
+                {
+                  "raceNumber": 2,
+                  "sessionId": "session_frp_f1600_2019_r2_05_race_2",
+                  "finishPosition": 12,
+                  "status": "running",
+                  "isPodium": false,
+                  "hasRacePage": true,
+                  "raceHref": "/career/race/session_frp_f1600_2019_r2_05_race_2"
+                },
+                {
+                  "raceNumber": 3,
+                  "sessionId": "session_frp_f1600_2019_r2_06_race_3",
+                  "finishPosition": null,
+                  "status": "dns",
+                  "isPodium": false,
+                  "hasRacePage": false,
+                  "raceHref": "/career/race/session_frp_f1600_2019_r2_06_race_3"
+                }
+              ]
+            },
+            {
+              "roundIndex": 3,
+              "eventName": "FRP F1600 2019 Round 3 - Mid Ohio Sports Car Course",
+              "trackName": "Mid-Ohio Sports Car Course",
+              "eventDate": "2019-06-28",
+              "qualifying": {
+                "rank": 7,
+                "fieldSize": 20,
+                "bestLapTime": "1:32.017"
+              },
+              "races": [
+                {
+                  "raceNumber": 1,
+                  "sessionId": "session_frp_f1600_2019_r3_04_race_1",
+                  "finishPosition": 7,
+                  "status": "running",
+                  "isPodium": false,
+                  "hasRacePage": true,
+                  "raceHref": "/career/race/session_frp_f1600_2019_r3_04_race_1"
+                },
+                {
+                  "raceNumber": 2,
+                  "sessionId": "session_frp_f1600_2019_r3_05_race_2",
+                  "finishPosition": 10,
+                  "status": "running",
+                  "isPodium": false,
+                  "hasRacePage": true,
+                  "raceHref": "/career/race/session_frp_f1600_2019_r3_05_race_2"
+                },
+                {
+                  "raceNumber": 3,
+                  "sessionId": "session_frp_f1600_2019_r3_06_race_3",
+                  "finishPosition": 3,
+                  "status": "running",
+                  "isPodium": true,
+                  "hasRacePage": true,
+                  "raceHref": "/career/race/session_frp_f1600_2019_r3_06_race_3"
+                }
+              ]
+            },
+            {
+              "roundIndex": 4,
+              "eventName": "FRP F1600 2019 Round 4 - Virginia International Raceway",
+              "trackName": "Virginia International Raceway",
+              "eventDate": "2019-07-26",
+              "qualifying": {
+                "rank": 3,
+                "fieldSize": 16,
+                "bestLapTime": "1:59.230"
+              },
+              "races": [
+                {
+                  "raceNumber": 1,
+                  "sessionId": "session_frp_f1600_2019_r4_02_race_1",
+                  "finishPosition": 6,
+                  "status": "running",
+                  "isPodium": false,
+                  "hasRacePage": true,
+                  "raceHref": "/career/race/session_frp_f1600_2019_r4_02_race_1"
+                },
+                {
+                  "raceNumber": 2,
+                  "sessionId": "session_frp_f1600_2019_r4_03_race_2",
+                  "finishPosition": 4,
+                  "status": "running",
+                  "isPodium": false,
+                  "hasRacePage": true,
+                  "raceHref": "/career/race/session_frp_f1600_2019_r4_03_race_2"
+                },
+                {
+                  "raceNumber": 3,
+                  "sessionId": "session_frp_f1600_2019_r4_04_race_3",
+                  "finishPosition": 3,
+                  "status": "running",
+                  "isPodium": true,
+                  "hasRacePage": true,
+                  "raceHref": "/career/race/session_frp_f1600_2019_r4_04_race_3"
+                }
+              ]
+            },
+            {
+              "roundIndex": 5,
+              "eventName": "FRP F1600 2019 Round 5 - Pittsburgh International Race Complex",
+              "trackName": "Pittsburgh International Race Complex",
+              "eventDate": "2019-08-02",
+              "qualifying": null,
+              "races": [
+                {
+                  "raceNumber": 1,
+                  "sessionId": "session_frp_f1600_2019_r5_02_race_1",
+                  "finishPosition": 6,
+                  "status": "running",
+                  "isPodium": false,
+                  "hasRacePage": true,
+                  "raceHref": "/career/race/session_frp_f1600_2019_r5_02_race_1"
+                },
+                {
+                  "raceNumber": 2,
+                  "sessionId": "session_frp_f1600_2019_r5_03_race_2",
+                  "finishPosition": 4,
+                  "status": "running",
+                  "isPodium": false,
+                  "hasRacePage": true,
+                  "raceHref": "/career/race/session_frp_f1600_2019_r5_03_race_2"
+                },
+                {
+                  "raceNumber": 3,
+                  "sessionId": "session_frp_f1600_2019_r5_04_race_3",
+                  "finishPosition": 4,
+                  "status": "running",
+                  "isPodium": false,
+                  "hasRacePage": true,
+                  "raceHref": "/career/race/session_frp_f1600_2019_r5_04_race_3"
+                }
+              ]
+            },
+            {
+              "roundIndex": 6,
+              "eventName": "FRP F1600 2019 Round 6 - Summit Point",
+              "trackName": "Summit Point Motorsports Park",
+              "eventDate": "2019-08-23",
+              "qualifying": {
+                "rank": 3,
+                "fieldSize": 11,
+                "bestLapTime": "1:29.457"
+              },
+              "races": [
+                {
+                  "raceNumber": 1,
+                  "sessionId": "session_frp_f1600_2019_r6_04_race_1",
+                  "finishPosition": 3,
+                  "status": "running",
+                  "isPodium": true,
+                  "hasRacePage": true,
+                  "raceHref": "/career/race/session_frp_f1600_2019_r6_04_race_1"
+                },
+                {
+                  "raceNumber": 2,
+                  "sessionId": "session_frp_f1600_2019_r6_05_race_2",
+                  "finishPosition": 3,
+                  "status": "running",
+                  "isPodium": true,
+                  "hasRacePage": true,
+                  "raceHref": "/career/race/session_frp_f1600_2019_r6_05_race_2"
+                },
+                {
+                  "raceNumber": 3,
+                  "sessionId": "session_frp_f1600_2019_r6_06_race_3",
+                  "finishPosition": 4,
+                  "status": "running",
+                  "isPodium": false,
+                  "hasRacePage": true,
+                  "raceHref": "/career/race/session_frp_f1600_2019_r6_06_race_3"
+                }
+              ]
+            },
+            {
+              "roundIndex": 7,
+              "eventName": "FRP F1600 2019 Round 7 - New Jersey Motorsports Park",
+              "trackName": "New Jersey Motorsports Park Thunderbolt",
+              "eventDate": "2019-09-13",
+              "qualifying": {
+                "rank": 3,
+                "fieldSize": 15,
+                "bestLapTime": "1:23.148"
+              },
+              "races": [
+                {
+                  "raceNumber": 1,
+                  "sessionId": "session_frp_f1600_2019_r7_04_race_1",
+                  "finishPosition": 3,
+                  "status": "running",
+                  "isPodium": true,
+                  "hasRacePage": true,
+                  "raceHref": "/career/race/session_frp_f1600_2019_r7_04_race_1"
+                },
+                {
+                  "raceNumber": 2,
+                  "sessionId": "session_frp_f1600_2019_r7_05_race_2",
+                  "finishPosition": 2,
+                  "status": "running",
+                  "isPodium": true,
+                  "hasRacePage": true,
+                  "raceHref": "/career/race/session_frp_f1600_2019_r7_05_race_2"
+                },
+                {
+                  "raceNumber": 3,
+                  "sessionId": "session_frp_f1600_2019_r7_06_race_3",
+                  "finishPosition": 3,
+                  "status": "running",
+                  "isPodium": true,
+                  "hasRacePage": true,
+                  "raceHref": "/career/race/session_frp_f1600_2019_r7_06_race_3"
+                }
+              ]
+            }
+          ],
+          "caveats": [
+            "Every finish and podium is an official F1600 classification; the season finished P3 in the championship across 21 races.",
+            "F1600 2019 carries no sourced grid positions, so there is no grid-to-finish conversion and no pace trace — qualifying is shown only as where he lined up, with nothing differenced from it.",
+            "Qualifying is sourced for six of the seven rounds; Round 5 at Pittsburgh has an official-archive link mismatch, so its qualifying slot is left blank rather than guessed.",
+            "One of the 21 races is a did-not-start; it is shown as such and left out of the classified-finish counts."
+          ],
+          "sourceRefs": [
+            {
+              "key": "canonicalDataset",
+              "path": "data/career/career.dataset.json",
+              "note": "Official F1600 2019 per-race finishes, event rounds, and did-not-start status."
+            },
+            {
+              "key": "qualifyingLayerSessions",
+              "path": "analysis/qualifying-layer/output/tables/quali_sessions.csv",
+              "note": "Official F1600 2019 qualifying classifications by round, with field-size denominators."
+            }
+          ]
+        },
+        "froc": {
+          "seriesId": "series_froc",
+          "seriesName": "Castrol Toyota Formula Regional Oceania Championship",
+          "seriesShort": "FR Oceania",
+          "seasonYear": 2024,
+          "coverage": {
+            "roundsInSeries": 5,
+            "roundsRun": 2,
+            "racesInSeason": 15,
+            "racesRun": 6,
+            "startsSourced": 6
+          },
+          "totals": {
+            "wins": 1,
+            "podiums": 1,
+            "bestFinish": 1,
+            "gainedRaces": 1,
+            "qualifyingSessions": 5,
+            "bestQualiRank": 3
+          },
+          "events": [
+            {
+              "roundIndex": 4,
+              "eventName": "FROC 2024 Round 4 - Euromarque Motorsport Park",
+              "trackName": "Euromarque Motorsport Park",
+              "eventDate": "2024-02-09",
+              "qualifying": [
+                {
+                  "sessionName": "Qualifying 1",
+                  "rank": 7,
+                  "fieldSize": 15,
+                  "bestLapTime": "01:18.048",
+                  "isReverseGrid": false
+                },
+                {
+                  "sessionName": "Qualifying 2",
+                  "rank": 3,
+                  "fieldSize": 16,
+                  "bestLapTime": "01:17.142",
+                  "isReverseGrid": false
+                }
+              ],
+              "races": [
+                {
+                  "raceNumber": 10,
+                  "sessionId": "session_froc_2024_r4_race_1",
+                  "finishPosition": 9,
+                  "startPosition": 7,
+                  "positionGain": -2,
+                  "status": "running",
+                  "isWin": false,
+                  "isPodium": false,
+                  "hasRacePage": true,
+                  "raceHref": "/career/race/session_froc_2024_r4_race_1"
+                },
+                {
+                  "raceNumber": 11,
+                  "sessionId": "session_froc_2024_r4_race_2",
+                  "finishPosition": 10,
+                  "startPosition": 9,
+                  "positionGain": -1,
+                  "status": "running",
+                  "isWin": false,
+                  "isPodium": false,
+                  "hasRacePage": true,
+                  "raceHref": "/career/race/session_froc_2024_r4_race_2"
+                },
+                {
+                  "raceNumber": 12,
+                  "sessionId": "session_froc_2024_r4_race_3",
+                  "finishPosition": 4,
+                  "startPosition": 3,
+                  "positionGain": -1,
+                  "status": "running",
+                  "isWin": false,
+                  "isPodium": false,
+                  "hasRacePage": true,
+                  "raceHref": "/career/race/session_froc_2024_r4_race_3"
+                }
+              ]
+            },
+            {
+              "roundIndex": 5,
+              "eventName": "FROC 2024 Round 5 - Highlands Motorsport Park",
+              "trackName": "Highlands Motorsport Park",
+              "eventDate": "2024-02-16",
+              "qualifying": [
+                {
+                  "sessionName": "Qualifying 1",
+                  "rank": 8,
+                  "fieldSize": 18,
+                  "bestLapTime": "01:28.616",
+                  "isReverseGrid": false
+                },
+                {
+                  "sessionName": "Qualifying 2",
+                  "rank": 7,
+                  "fieldSize": 13,
+                  "bestLapTime": "01:28.590",
+                  "isReverseGrid": true
+                },
+                {
+                  "sessionName": "Qualifying 3",
+                  "rank": 6,
+                  "fieldSize": 8,
+                  "bestLapTime": "01:28.078",
+                  "isReverseGrid": false
+                }
+              ],
+              "races": [
+                {
+                  "raceNumber": 13,
+                  "sessionId": "session_froc_2024_r5_race_1",
+                  "finishPosition": 7,
+                  "startPosition": 8,
+                  "positionGain": 1,
+                  "status": "running",
+                  "isWin": false,
+                  "isPodium": false,
+                  "hasRacePage": true,
+                  "raceHref": "/career/race/session_froc_2024_r5_race_1"
+                },
+                {
+                  "raceNumber": 14,
+                  "sessionId": "session_froc_2024_r5_race_2",
+                  "finishPosition": 1,
+                  "startPosition": 1,
+                  "positionGain": 0,
+                  "status": "running",
+                  "isWin": true,
+                  "isPodium": true,
+                  "hasRacePage": true,
+                  "raceHref": "/career/race/session_froc_2024_r5_race_2"
+                },
+                {
+                  "raceNumber": 15,
+                  "sessionId": "session_froc_2024_r5_race_3",
+                  "finishPosition": 6,
+                  "startPosition": 6,
+                  "positionGain": 0,
+                  "status": "running",
+                  "isWin": false,
+                  "isPodium": false,
+                  "hasRacePage": true,
+                  "raceHref": "/career/race/session_froc_2024_r5_race_3"
+                }
+              ]
+            }
+          ],
+          "absentRounds": [
+            {
+              "roundIndex": 1,
+              "eventName": "FROC 2024 Round 1 - Taupo International Motorsport Park",
+              "trackName": "Taupo International Motorsport Park",
+              "eventDate": "2024-01-19"
+            },
+            {
+              "roundIndex": 2,
+              "eventName": "FROC 2024 Round 2 - Manfeild - Circuit Chris Amon",
+              "trackName": "Manfeild - Circuit Chris Amon",
+              "eventDate": "2024-01-26"
+            },
+            {
+              "roundIndex": 3,
+              "eventName": "FROC 2024 Round 3 - Hampton Downs Motorsport Park",
+              "trackName": "Hampton Downs Motorsport Park",
+              "eventDate": "2024-02-02"
+            }
+          ],
+          "caveats": [
+            "Bryce contested two of the championship's five rounds — Rounds 4 and 5 — so this is six races, a guest campaign rather than a full season.",
+            "Every FROC finish and start is official; position change is the plain difference between the two, never a pace claim.",
+            "Qualifying is sourced for both rounds he ran; one Round 5 session set a reverse grid and is labeled as such.",
+            "The championship's test sessions have no official exact clock time, so they sit outside this view; the six races are the sourced subject."
+          ],
+          "sourceRefs": [
+            {
+              "key": "canonicalDataset",
+              "path": "data/career/career.dataset.json",
+              "note": "Official FROC 2024 per-race finishes, starts, and the full five-round championship calendar."
+            },
+            {
+              "key": "qualifyingLayerSessions",
+              "path": "analysis/qualifying-layer/output/tables/quali_sessions.csv",
+              "note": "Official FROC 2024 qualifying classifications with field sizes and grid-linkage tiers."
+            }
+          ]
+        },
+        "origin": {
+          "schemaVersion": "brycecast.originMilestones.v1",
+          "recordStartsYear": 2019,
+          "items": [
+            {
+              "id": "metric_badger_kart_club_2016_yamaha_junior_fast_time",
+              "year": 2016,
+              "date": "2016-08-06",
+              "kind": "karting_fast_time",
+              "label": "Badger Kart Club — Yamaha Junior",
+              "detail": "A 40.536-second fast time, entered on the club's 2016 Fast Times board.",
+              "figure": "40.536s",
+              "sourceId": "source_badger_kart_club_2016_fast_times_track_records",
+              "sourceName": "Badger Kart Club 2016 fast times and track records",
+              "sourceUrl": "https://web.archive.org/web/20251112122951/https://badgerkartclub.com/2016-fast-times-and-track-records"
+            },
+            {
+              "id": "metric_badger_kart_club_2017_classic_tag_junior_fast_time",
+              "year": 2017,
+              "date": "2017-06-11",
+              "kind": "karting_fast_time",
+              "label": "Badger Kart Club — TaG Junior",
+              "detail": "A 38.938-second fast time on the Classic Track, entered on the club's 2017 Fast Times board.",
+              "figure": "38.938s",
+              "sourceId": "source_badger_kart_club_2017_fast_times_track_records",
+              "sourceName": "Badger Kart Club 2017 fast times and track records",
+              "sourceUrl": "https://web.archive.org/web/20251112102610/https://badgerkartclub.com/2017-fast-times-and-track-records"
+            },
+            {
+              "id": "metric_badger_kart_club_2017_bus_stop_tag_junior_track_record",
+              "year": 2017,
+              "date": "2017-10-09",
+              "kind": "karting_track_record",
+              "label": "Badger Kart Club — a track record",
+              "detail": "A 39.070-second TaG Junior track record on the Bus Stop layout.",
+              "figure": "39.070s",
+              "sourceId": "source_badger_kart_club_2017_fast_times_track_records",
+              "sourceName": "Badger Kart Club 2017 fast times and track records",
+              "sourceUrl": "https://web.archive.org/web/20251112102610/https://badgerkartclub.com/2017-fast-times-and-track-records"
+            },
+            {
+              "id": "metric_team_usa_2020_bkc_tag_jr_champion",
+              "year": 2018,
+              "date": null,
+              "kind": "karting_championship_milestone",
+              "label": "BKC TaG Jr. Championship",
+              "detail": "Club karting champion, 2018.",
+              "figure": "Champion",
+              "sourceId": "source_team_usa_2020_bryce_aron_blog",
+              "sourceName": "Team USA Scholarship Bryce Aron driver blog",
+              "sourceUrl": "https://teamusascholarship.org/?p=5362"
+            },
+            {
+              "id": "metric_team_usa_2020_yamaha_kt100_runner_up",
+              "year": 2018,
+              "date": null,
+              "kind": "karting_championship_milestone",
+              "label": "Yamaha KT100 championship",
+              "detail": "Championship runner-up, 2018.",
+              "figure": "Runner-up",
+              "sourceId": "source_team_usa_2020_bryce_aron_blog",
+              "sourceName": "Team USA Scholarship Bryce Aron driver blog",
+              "sourceUrl": "https://teamusascholarship.org/?p=5362"
+            }
+          ],
+          "sources": [
+            {
+              "sourceId": "source_badger_kart_club_2016_fast_times_track_records",
+              "sourceName": "Badger Kart Club 2016 fast times and track records",
+              "sourceUrl": "https://web.archive.org/web/20251112122951/https://badgerkartclub.com/2016-fast-times-and-track-records",
+              "archived": true
+            },
+            {
+              "sourceId": "source_badger_kart_club_2017_fast_times_track_records",
+              "sourceName": "Badger Kart Club 2017 fast times and track records",
+              "sourceUrl": "https://web.archive.org/web/20251112102610/https://badgerkartclub.com/2017-fast-times-and-track-records",
+              "archived": true
+            },
+            {
+              "sourceId": "source_team_usa_2020_bryce_aron_blog",
+              "sourceName": "Team USA Scholarship Bryce Aron driver blog",
+              "sourceUrl": "https://teamusascholarship.org/?p=5362",
+              "archived": false
+            }
+          ],
+          "caveats": [
+            "These are context, not a scoreboard. The sourced race-by-race record starts with F1600 in 2019; the karting years that survive around it (2016–2018) are shown as-is.",
+            "Every fact carries its own source. Karting lap times are single fast-time or track-record entries from the club's own boards — no season standings or race-by-race karting results are claimed."
+          ],
+          "sourceRefs": [
+            {
+              "key": "canonicalDataset",
+              "path": "data/career/career.dataset.json",
+              "note": "Structured career milestones and their linked archived-source evidence."
+            }
+          ]
+        },
+        "formulaFordBridge": {
+          "schemaVersion": "brycecast.formulaFordBridge.v1",
+          "year": 2020,
+          "scholarship": {
+            "id": "metric_team_usa_2020_scholarship_selection",
+            "year": 2020,
+            "date": null,
+            "kind": "career_award",
+            "label": "Team USA Scholarship",
+            "detail": "A 2020 Team USA Scholarship winner, alongside Jackson Lee and Simon Sikes — the award that funded a UK Formula Ford campaign, from the Formula Ford Festival to the Walter Hayes Trophy.",
+            "figure": "Scholarship",
+            "sourceId": "source_team_usa_2020_winners_announcement",
+            "sourceName": "Team USA Scholarship 2020 winners announcement",
+            "sourceUrl": "https://teamusascholarship.org/?p=5355"
+          },
+          "sources": [
+            {
+              "sourceId": "source_team_usa_2020_winners_announcement",
+              "sourceName": "Team USA Scholarship 2020 winners announcement",
+              "sourceUrl": "https://teamusascholarship.org/?p=5355",
+              "archived": false
+            }
+          ],
+          "caveats": [
+            "The Team USA Scholarship is a named award, not a result; it funded the 2020 UK Formula Ford move."
+          ],
+          "sourceRefs": [
+            {
+              "key": "canonicalDataset",
+              "path": "data/career/career.dataset.json",
+              "note": "Structured career-award milestone and its linked archived-source evidence."
+            }
+          ]
+        }
       },
       "restarts": {
         "schemaVersion": "brycecast.restartReport.v1",

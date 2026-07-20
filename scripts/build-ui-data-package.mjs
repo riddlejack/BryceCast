@@ -1628,6 +1628,432 @@ const buildSeasonCampaigns = ({ canonicalDataset, progressionRows, resultConvers
   };
 };
 
+/* ---------- small-series stories: the chapters the points arc can't tell ----------
+ *
+ *  Three complementary Career-chapter modules, each sized to what its records
+ *  actually hold — never padded, never invented:
+ *   - F1600 2019: the points arc already renders in The Campaigns, so this is the
+ *     event-by-event and qualifying view instead. F1600 carries no sourced grid
+ *     positions, so there is deliberately no grid-to-finish conversion here.
+ *   - FROC 2024: a two-round guest campaign inside a five-round championship. The
+ *     honest denominator (rounds run vs rounds in the series) is on the surface.
+ *   - The origin: karting fast-times/records and the Team USA Scholarship, told
+ *     as sourced context milestones — not an eighth statistical chapter. */
+
+/** Bryce's race results for one series, joined to their event/round/track and
+ *  ordered chronologically. Mirrors the campaigns join, but keeps start/status
+ *  so the small-series views can be honest about what each series records. */
+const smallSeriesRaceRows = ({ canonicalDataset, seriesId, resultConversionSessionIds }) => {
+  const trackById = new Map((canonicalDataset.tracks ?? []).map((track) => [track.id, track]));
+  const sessionById = new Map((canonicalDataset.sessions ?? []).map((session) => [session.id, session]));
+  const eventById = new Map((canonicalDataset.events ?? []).map((event) => [event.id, event]));
+  const raceSessionIds = new Set(
+    (canonicalDataset.sessions ?? []).filter((session) => session.sessionType === 'race').map((session) => session.id)
+  );
+  const rows = [];
+  for (const result of canonicalDataset.results ?? []) {
+    if (result.driverId !== 'driver_bryce_aron' || !raceSessionIds.has(result.sessionId)) continue;
+    const session = sessionById.get(result.sessionId);
+    const event = session ? eventById.get(session.eventId) : null;
+    if (!event || event.seriesId !== seriesId) continue;
+    const track = trackById.get(event.trackId) ?? null;
+    rows.push({
+      sessionId: result.sessionId,
+      eventId: event.id,
+      eventName: event.name ?? null,
+      trackName: track?.name ?? event.name ?? 'Race',
+      roundIndex: numberOrNull(event.round),
+      raceNumber: numberOrNull(session.raceNumber),
+      eventDate: String(event.eventStartDate ?? '').slice(0, 10) || null,
+      finishPosition: numberOrNull(result.finishPosition),
+      startPosition: numberOrNull(result.startPosition),
+      status: result.status ?? null,
+      hasRacePage: resultConversionSessionIds.has(result.sessionId),
+      raceHref: campaignRaceHref(result.sessionId)
+    });
+  }
+  return rows.sort(
+    (a, b) =>
+      String(a.eventDate ?? '').localeCompare(String(b.eventDate ?? '')) ||
+      (a.roundIndex ?? 0) - (b.roundIndex ?? 0) ||
+      (a.raceNumber ?? 0) - (b.raceNumber ?? 0) ||
+      String(a.sessionId).localeCompare(String(b.sessionId))
+  );
+};
+
+/** Per-round qualifying rows for one series, from the validated qualifying-layer
+ *  session inventory (one source family per session, its field size the
+ *  denominator). No grid conversion is differenced here. */
+const smallSeriesQualiByRound = ({ qualiSessionRows, seriesId }) => {
+  const byRound = new Map();
+  for (const row of qualiSessionRows) {
+    if (row.seriesId !== seriesId) continue;
+    const round = numberOrNull(row.roundIndex);
+    const list = byRound.get(round) ?? [];
+    list.push({
+      sessionId: row.sessionId,
+      sessionName: row.sessionName || null,
+      rank: numberOrNull(row.qualiRank),
+      fieldSize: numberOrNull(row.qualiFieldSize),
+      bestLapTime: row.bestLapTime || null,
+      linkageTier: row.linkageTier || null
+    });
+    byRound.set(round, list);
+  }
+  return byRound;
+};
+
+const bestOf = (values) =>
+  values.reduce((best, value) => (value === null ? best : best === null ? value : Math.min(best, value)), null);
+
+/** F1600 2019, event by event — the complement to The Campaigns' points arc.
+ *  Qualifying where he lined up, then each round's races as finishes. */
+const buildF1600SeasonStory = ({ canonicalDataset, qualiSessionRows, resultConversionSessionIds }) => {
+  const seriesId = 'series_frp_f1600';
+  const seriesName = 'F1600 Championship Series';
+  const races = smallSeriesRaceRows({ canonicalDataset, seriesId, resultConversionSessionIds });
+  if (races.length === 0) return null;
+  const qualiByRound = smallSeriesQualiByRound({ qualiSessionRows, seriesId });
+
+  const eventsMap = new Map();
+  for (const race of races) {
+    const key = race.roundIndex ?? race.eventId;
+    const event = eventsMap.get(key) ?? {
+      roundIndex: race.roundIndex,
+      eventName: race.eventName,
+      trackName: race.trackName,
+      eventDate: race.eventDate,
+      races: []
+    };
+    event.races.push({
+      raceNumber: race.raceNumber,
+      sessionId: race.sessionId,
+      finishPosition: race.finishPosition,
+      status: race.status,
+      isPodium: race.finishPosition !== null && race.finishPosition <= 3,
+      hasRacePage: race.hasRacePage,
+      raceHref: race.raceHref
+    });
+    eventsMap.set(key, event);
+  }
+  const events = [...eventsMap.values()]
+    .map((event) => {
+      const quali = (qualiByRound.get(event.roundIndex) ?? [])[0] ?? null;
+      return {
+        roundIndex: event.roundIndex,
+        eventName: event.eventName,
+        trackName: event.trackName,
+        eventDate: event.eventDate,
+        qualifying: quali ? { rank: quali.rank, fieldSize: quali.fieldSize, bestLapTime: quali.bestLapTime } : null,
+        races: event.races.sort((a, b) => (a.raceNumber ?? 0) - (b.raceNumber ?? 0))
+      };
+    })
+    .sort((a, b) => (a.roundIndex ?? 0) - (b.roundIndex ?? 0));
+
+  const classified = races.filter((race) => race.finishPosition !== null);
+  const bestFinish = bestOf(classified.map((race) => race.finishPosition));
+  const qualiRows = [...qualiByRound.values()].flat();
+
+  return {
+    seriesId,
+    seriesName,
+    seriesShort: campaignShort(seriesName),
+    seasonYear: 2019,
+    totals: {
+      raceCount: races.length,
+      classifiedRaces: classified.length,
+      dnsRaces: races.length - classified.length,
+      podiums: classified.filter((race) => race.finishPosition <= 3).length,
+      bestFinish,
+      bestFinishCount: bestFinish === null ? 0 : classified.filter((race) => race.finishPosition === bestFinish).length,
+      bestQualiRank: bestOf(qualiRows.map((row) => row.rank)),
+      qualifyingSessions: qualiRows.length,
+      roundCount: events.length,
+      roundsWithQualifying: [...qualiByRound.keys()].filter((round) => round !== null).length,
+      startsSourced: races.filter((race) => race.startPosition !== null).length
+    },
+    events,
+    caveats: [
+      'Every finish and podium is an official F1600 classification; the season finished P3 in the championship across 21 races.',
+      'F1600 2019 carries no sourced grid positions, so there is no grid-to-finish conversion and no pace trace — qualifying is shown only as where he lined up, with nothing differenced from it.',
+      'Qualifying is sourced for six of the seven rounds; Round 5 at Pittsburgh has an official-archive link mismatch, so its qualifying slot is left blank rather than guessed.',
+      'One of the 21 races is a did-not-start; it is shown as such and left out of the classified-finish counts.'
+    ],
+    sourceRefs: [
+      sourceRef('canonicalDataset', 'Official F1600 2019 per-race finishes, event rounds, and did-not-start status.'),
+      sourceRef('qualifyingLayerSessions', 'Official F1600 2019 qualifying classifications by round, with field-size denominators.')
+    ]
+  };
+};
+
+/** FROC 2024 — Bryce's two-round guest campaign inside a five-round
+ *  championship. The rounds-run denominator and the rounds he did not contest
+ *  are on the surface; FROC records starts, so position change is shown. */
+const buildFrocCampaignStory = ({ canonicalDataset, qualiSessionRows, resultConversionSessionIds }) => {
+  const seriesId = 'series_froc';
+  const seriesName = 'Castrol Toyota Formula Regional Oceania Championship';
+  const races = smallSeriesRaceRows({ canonicalDataset, seriesId, resultConversionSessionIds });
+  if (races.length === 0) return null;
+  const qualiByRound = smallSeriesQualiByRound({ qualiSessionRows, seriesId });
+
+  const trackById = new Map((canonicalDataset.tracks ?? []).map((track) => [track.id, track]));
+  const eventById = new Map((canonicalDataset.events ?? []).map((event) => [event.id, event]));
+  const allRounds = (canonicalDataset.events ?? [])
+    .filter((event) => event.seriesId === seriesId)
+    .map((event) => ({
+      roundIndex: numberOrNull(event.round),
+      eventName: event.name ?? null,
+      trackName: trackById.get(event.trackId)?.name ?? event.name ?? 'Round',
+      eventDate: String(event.eventStartDate ?? '').slice(0, 10) || null
+    }))
+    .sort((a, b) => (a.roundIndex ?? 0) - (b.roundIndex ?? 0));
+
+  const seasonRaceSessions = (canonicalDataset.sessions ?? []).filter((session) => {
+    if (session.sessionType !== 'race') return false;
+    const event = eventById.get(session.eventId);
+    return event && event.seriesId === seriesId;
+  }).length;
+
+  const roundsRun = new Set(races.map((race) => race.roundIndex).filter((round) => round !== null));
+
+  const eventsMap = new Map();
+  for (const race of races) {
+    const key = race.roundIndex ?? race.eventId;
+    const event = eventsMap.get(key) ?? {
+      roundIndex: race.roundIndex,
+      eventName: race.eventName,
+      trackName: race.trackName,
+      eventDate: race.eventDate,
+      races: []
+    };
+    event.races.push({
+      raceNumber: race.raceNumber,
+      sessionId: race.sessionId,
+      finishPosition: race.finishPosition,
+      startPosition: race.startPosition,
+      positionGain:
+        race.startPosition !== null && race.finishPosition !== null ? race.startPosition - race.finishPosition : null,
+      status: race.status,
+      isWin: race.finishPosition === 1,
+      isPodium: race.finishPosition !== null && race.finishPosition <= 3,
+      hasRacePage: race.hasRacePage,
+      raceHref: race.raceHref
+    });
+    eventsMap.set(key, event);
+  }
+  const events = [...eventsMap.values()]
+    .map((event) => ({
+      roundIndex: event.roundIndex,
+      eventName: event.eventName,
+      trackName: event.trackName,
+      eventDate: event.eventDate,
+      qualifying: (qualiByRound.get(event.roundIndex) ?? []).map((row) => ({
+        sessionName: row.sessionName,
+        rank: row.rank,
+        fieldSize: row.fieldSize,
+        bestLapTime: row.bestLapTime,
+        isReverseGrid: row.linkageTier === 'unlinked_reverse_grid'
+      })),
+      races: event.races.sort((a, b) => (a.raceNumber ?? 0) - (b.raceNumber ?? 0))
+    }))
+    .sort((a, b) => (a.roundIndex ?? 0) - (b.roundIndex ?? 0));
+
+  const classified = races.filter((race) => race.finishPosition !== null);
+  const qualiRows = [...qualiByRound.values()].flat();
+
+  return {
+    seriesId,
+    seriesName,
+    seriesShort: campaignShort(seriesName),
+    seasonYear: 2024,
+    coverage: {
+      roundsInSeries: allRounds.length,
+      roundsRun: roundsRun.size,
+      racesInSeason: seasonRaceSessions,
+      racesRun: races.length,
+      startsSourced: races.filter((race) => race.startPosition !== null).length
+    },
+    totals: {
+      wins: classified.filter((race) => race.finishPosition === 1).length,
+      podiums: classified.filter((race) => race.finishPosition <= 3).length,
+      bestFinish: bestOf(classified.map((race) => race.finishPosition)),
+      gainedRaces: races.filter(
+        (race) => race.startPosition !== null && race.finishPosition !== null && race.finishPosition < race.startPosition
+      ).length,
+      qualifyingSessions: qualiRows.length,
+      bestQualiRank: bestOf(qualiRows.map((row) => row.rank))
+    },
+    events,
+    absentRounds: allRounds.filter((round) => !roundsRun.has(round.roundIndex)),
+    caveats: [
+      "Bryce contested two of the championship's five rounds — Rounds 4 and 5 — so this is six races, a guest campaign rather than a full season.",
+      'Every FROC finish and start is official; position change is the plain difference between the two, never a pace claim.',
+      'Qualifying is sourced for both rounds he ran; one Round 5 session set a reverse grid and is labeled as such.',
+      "The championship's test sessions have no official exact clock time, so they sit outside this view; the six races are the sourced subject."
+    ],
+    sourceRefs: [
+      sourceRef('canonicalDataset', 'Official FROC 2024 per-race finishes, starts, and the full five-round championship calendar.'),
+      sourceRef('qualifyingLayerSessions', 'Official FROC 2024 qualifying classifications with field sizes and grid-linkage tiers.')
+    ]
+  };
+};
+
+/* The origin timeline draws only these sourced, structured KARTING milestones —
+ * fast-times, records, and the club championships. Everything here predates the
+ * 2019 F1600 record (2016–2018). The 2019 F1600 season is its own chapter, and
+ * the 2020 Team USA Scholarship is the Formula Ford bridge below, not a
+ * pre-record karting fact. */
+const ORIGIN_MILESTONE_ORDER = [
+  'metric_badger_kart_club_2016_yamaha_junior_fast_time',
+  'metric_badger_kart_club_2017_classic_tag_junior_fast_time',
+  'metric_badger_kart_club_2017_bus_stop_tag_junior_track_record',
+  'metric_team_usa_2020_bkc_tag_jr_champion',
+  'metric_team_usa_2020_yamaha_kt100_runner_up'
+];
+
+/* The Team USA Scholarship funded the 2020 UK Formula Ford move — it belongs to
+ * that chapter's bridge, not the "Before the record" karting timeline that ends
+ * in 2018. */
+const FORMULA_FORD_BRIDGE_MILESTONE = 'metric_team_usa_2020_scholarship_selection';
+
+/** Compose one display milestone from a structured metric. Every string is
+ *  derived from the metric's own facts; no figure is invented. Returns null when
+ *  the metric is absent or of an unhandled type. */
+const buildCareerMilestoneItem = (id, metricById, sourceById) => {
+  const metric = metricById.get(id);
+  if (!metric) return null;
+  const facts = metric.metrics ?? {};
+  const sourceId = (metric.provenanceRefs ?? [])[0] ?? null;
+  const source = sourceId ? sourceById.get(sourceId) : null;
+  let year = null;
+  let date = null;
+  let label = '';
+  let detail = '';
+  let figure = null;
+
+  if (metric.metricType === 'karting_fast_time') {
+    date = facts.date ?? null;
+    year = date ? Number(date.slice(0, 4)) : numberOrNull(facts.year);
+    figure = facts.lapTime ? `${facts.lapTime}s` : null;
+    label = `Badger Kart Club — ${facts.className}`;
+    detail = `A ${facts.lapTime}-second fast time${facts.configuration ? ` on the ${facts.configuration}` : ''}, entered on the club's ${facts.recordTable ?? 'record'} board.`;
+  } else if (metric.metricType === 'karting_track_record') {
+    date = facts.date ?? null;
+    year = date ? Number(date.slice(0, 4)) : numberOrNull(facts.year);
+    figure = facts.lapTime ? `${facts.lapTime}s` : null;
+    label = 'Badger Kart Club — a track record';
+    detail = `A ${facts.lapTime}-second ${facts.className} track record on the ${facts.configuration} layout.`;
+  } else if (metric.metricType === 'karting_championship_milestone') {
+    year = numberOrNull(facts.year);
+    const champion = facts.position === 1;
+    figure = champion ? 'Champion' : facts.position === 2 ? 'Runner-up' : `P${facts.position}`;
+    label = facts.championship;
+    detail = champion ? `Club karting champion, ${facts.year}.` : `Championship runner-up, ${facts.year}.`;
+  } else if (metric.metricType === 'career_award') {
+    year = numberOrNull(facts.year);
+    figure = 'Scholarship';
+    label = 'Team USA Scholarship';
+    const coWinners = Array.isArray(facts.coWinners) ? facts.coWinners : [];
+    const planned = Array.isArray(facts.plannedEventFamilies) ? facts.plannedEventFamilies : [];
+    const bookends = planned.length >= 2 ? `, from the ${planned[0]} to the ${planned[1]}` : '';
+    detail = `A ${facts.year} ${facts.award}${coWinners.length ? `, alongside ${coWinners.join(' and ')}` : ''} — the award that funded a UK Formula Ford campaign${bookends}.`;
+  } else {
+    return null;
+  }
+
+  return {
+    item: {
+      id,
+      year,
+      date,
+      kind: metric.metricType,
+      label,
+      detail,
+      figure,
+      sourceId,
+      sourceName: source?.sourceName ?? null,
+      sourceUrl: source?.url ?? null
+    },
+    sourceId
+  };
+};
+
+const sourceSummaryFor = (sourceId, sourceById) => {
+  const source = sourceById.get(sourceId);
+  const url = source?.url ?? null;
+  // Explicit provenance so the UI never mislabels a direct official page (e.g. a
+  // Team USA Scholarship URL) as an archived Wayback capture. Web-archive URLs
+  // are the only archived captures here.
+  const archived = Boolean(url && url.includes('web.archive.org'));
+  return { sourceId, sourceName: source?.sourceName ?? sourceId, sourceUrl: url, archived };
+};
+
+/** The origin story — a quiet, sourced timeline of the karting years that came
+ *  before the record (2016–2018). The scholarship that carried the climb abroad
+ *  now lives on the Formula Ford chapter, so this timeline stays entirely
+ *  pre-record. */
+const buildOriginMilestones = ({ canonicalDataset }) => {
+  const metricById = new Map((canonicalDataset.derivedMetrics ?? []).map((metric) => [metric.id, metric]));
+  const sourceById = new Map((canonicalDataset.sourceEvidence ?? []).map((source) => [source.id, source]));
+  const items = [];
+  const usedSourceIds = new Set();
+
+  for (const id of ORIGIN_MILESTONE_ORDER) {
+    const built = buildCareerMilestoneItem(id, metricById, sourceById);
+    if (!built) continue;
+    if (built.sourceId) usedSourceIds.add(built.sourceId);
+    items.push(built.item);
+  }
+
+  items.sort(
+    (a, b) =>
+      (a.date && b.date ? a.date.localeCompare(b.date) : (a.year ?? 0) - (b.year ?? 0)) || a.id.localeCompare(b.id)
+  );
+
+  const sources = [...usedSourceIds].sort().map((sourceId) => sourceSummaryFor(sourceId, sourceById));
+
+  return {
+    schemaVersion: 'brycecast.originMilestones.v1',
+    recordStartsYear: 2019,
+    items,
+    sources,
+    caveats: [
+      'These are context, not a scoreboard. The sourced race-by-race record starts with F1600 in 2019; the karting years that survive around it (2016–2018) are shown as-is.',
+      "Every fact carries its own source. Karting lap times are single fast-time or track-record entries from the club's own boards — no season standings or race-by-race karting results are claimed."
+    ],
+    sourceRefs: [sourceRef('canonicalDataset', 'Structured career milestones and their linked archived-source evidence.')]
+  };
+};
+
+/** The Formula Ford bridge — the 2020 Team USA Scholarship, told as the award
+ *  that funded the UK Formula Ford move. Sourced context on that chapter, not a
+ *  result. Returns null if the milestone is absent. */
+const buildFormulaFordBridge = ({ canonicalDataset }) => {
+  const metricById = new Map((canonicalDataset.derivedMetrics ?? []).map((metric) => [metric.id, metric]));
+  const sourceById = new Map((canonicalDataset.sourceEvidence ?? []).map((source) => [source.id, source]));
+  const built = buildCareerMilestoneItem(FORMULA_FORD_BRIDGE_MILESTONE, metricById, sourceById);
+  if (!built) return null;
+  return {
+    schemaVersion: 'brycecast.formulaFordBridge.v1',
+    year: built.item.year,
+    scholarship: built.item,
+    sources: built.sourceId ? [sourceSummaryFor(built.sourceId, sourceById)] : [],
+    caveats: ['The Team USA Scholarship is a named award, not a result; it funded the 2020 UK Formula Ford move.'],
+    sourceRefs: [sourceRef('canonicalDataset', 'Structured career-award milestone and its linked archived-source evidence.')]
+  };
+};
+
+/** The three small-series Career-chapter stories, packaged together. Any story
+ *  whose source data disappears returns null and the module renders its honest
+ *  unavailable state. */
+const buildSmallSeriesStories = ({ canonicalDataset, qualiSessionRows, resultConversionSessionIds }) => ({
+  schemaVersion: 'brycecast.smallSeriesStories.v1',
+  f1600: buildF1600SeasonStory({ canonicalDataset, qualiSessionRows, resultConversionSessionIds }),
+  froc: buildFrocCampaignStory({ canonicalDataset, qualiSessionRows, resultConversionSessionIds }),
+  origin: buildOriginMilestones({ canonicalDataset }),
+  formulaFordBridge: buildFormulaFordBridge({ canonicalDataset })
+});
+
 /** The Career Lab climb needs true chronology; conversion rows carry no
  *  dates, so join each session to its canonical event start date. */
 const enrichConversionRows = (rows, canonicalDataset, weatherConditionRows = []) => {
@@ -3143,6 +3569,11 @@ const buildPackage = () => {
         seasonCampaigns: buildSeasonCampaigns({
           canonicalDataset,
           progressionRows: championshipRows,
+          resultConversionSessionIds: new Set(careerConversionEnriched.map((row) => row.sessionId))
+        }),
+        smallSeriesStories: buildSmallSeriesStories({
+          canonicalDataset,
+          qualiSessionRows: qualifyingLayerSessionRows,
           resultConversionSessionIds: new Set(careerConversionEnriched.map((row) => row.sessionId))
         }),
         restarts: buildRestartReport({ summary: restartReportSummary, byRaceRows: restartByRaceRows, seasonIndex }),

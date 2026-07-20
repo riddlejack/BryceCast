@@ -946,6 +946,118 @@ for (const exclusion of seasonCampaigns.excluded ?? []) {
   }
 }
 
+/* ---------- small-series stories (F1600, FROC, the origin) ----------
+   Guards the honest denominators and the sourced-only rule: every clickable
+   race resolves to a real page, FROC's rounds-run denominator never exceeds the
+   championship, F1600 never claims a grid it doesn't source, and every origin
+   milestone carries a source. */
+
+const conversionSessionIdSet = new Set(conversionRows.map((row) => row.sessionId));
+const smallSeries = dataPackage.screens.careerLab.smallSeriesStories;
+if (smallSeries?.schemaVersion !== 'brycecast.smallSeriesStories.v1') {
+  fail('careerLab.smallSeriesStories must carry the validated small-series schema.');
+} else {
+  const assertClickable = (races, label) => {
+    for (const race of races ?? []) {
+      if (race.hasRacePage && !conversionSessionIdSet.has(race.sessionId)) {
+        fail(`${label} clickable race ${race.sessionId} must resolve to a career race page.`);
+      }
+    }
+  };
+
+  const f1600 = smallSeries.f1600;
+  if (!f1600 || !Array.isArray(f1600.events) || f1600.events.length === 0) {
+    fail('careerLab.smallSeriesStories.f1600 must carry its event-by-event season.');
+  } else {
+    if (f1600.totals.startsSourced !== 0) {
+      fail(`F1600 records no sourced grid positions; startsSourced must be 0 (got ${f1600.totals.startsSourced}).`);
+    }
+    if (f1600.totals.roundsWithQualifying > f1600.totals.roundCount) {
+      fail('F1600 rounds-with-qualifying cannot exceed the round count.');
+    }
+    const f1600Races = f1600.events.flatMap((event) => event.races ?? []);
+    if (f1600Races.length !== f1600.totals.raceCount) {
+      fail(`F1600 event races (${f1600Races.length}) must equal totals.raceCount (${f1600.totals.raceCount}).`);
+    }
+    assertClickable(f1600Races, 'F1600');
+    if (!Array.isArray(f1600.caveats) || f1600.caveats.length === 0 || !Array.isArray(f1600.sourceRefs) || f1600.sourceRefs.length === 0) {
+      fail('careerLab.smallSeriesStories.f1600 must carry caveats and source refs.');
+    }
+  }
+
+  const froc = smallSeries.froc;
+  if (!froc || !Array.isArray(froc.events) || froc.events.length === 0) {
+    fail('careerLab.smallSeriesStories.froc must carry the rounds Bryce ran.');
+  } else {
+    if (froc.coverage.roundsRun > froc.coverage.roundsInSeries) {
+      fail('FROC rounds-run cannot exceed rounds in the championship.');
+    }
+    if (froc.coverage.racesRun > froc.coverage.racesInSeason) {
+      fail('FROC races-run cannot exceed the championship race count.');
+    }
+    if ((froc.absentRounds?.length ?? 0) !== froc.coverage.roundsInSeries - froc.coverage.roundsRun) {
+      fail('FROC absentRounds must account for every round he did not contest.');
+    }
+    const frocRaces = froc.events.flatMap((event) => event.races ?? []);
+    if (frocRaces.length !== froc.coverage.racesRun) {
+      fail(`FROC event races (${frocRaces.length}) must equal coverage.racesRun (${froc.coverage.racesRun}).`);
+    }
+    assertClickable(frocRaces, 'FROC');
+    if (!Array.isArray(froc.caveats) || froc.caveats.length === 0 || !Array.isArray(froc.sourceRefs) || froc.sourceRefs.length === 0) {
+      fail('careerLab.smallSeriesStories.froc must carry caveats and source refs.');
+    }
+  }
+
+  const origin = smallSeries.origin;
+  if (origin?.schemaVersion !== 'brycecast.originMilestones.v1' || !Array.isArray(origin.items) || origin.items.length === 0) {
+    fail('careerLab.smallSeriesStories.origin must carry the sourced milestone timeline.');
+  } else {
+    for (const item of origin.items) {
+      if (!item.sourceId || !item.sourceName || !item.sourceUrl) {
+        fail(`Origin milestone ${item.id ?? '(unknown)'} must carry a named, linked source.`);
+      }
+      // "Before the record" is pre-record karting only (2016–2018). The 2019
+      // F1600 season is its own chapter and the 2020 scholarship is the Formula
+      // Ford bridge — neither may leak into this timeline.
+      if (item.year !== null && item.year >= origin.recordStartsYear) {
+        fail(`Origin timeline must stay pre-record (before ${origin.recordStartsYear}); milestone ${item.id} is dated ${item.year}.`);
+      }
+    }
+    const originYears = origin.items.map((item) => item.year ?? 0);
+    if (originYears.some((year, index) => index > 0 && originYears[index - 1] > year)) {
+      fail('Origin milestone timeline must be in chronological order.');
+    }
+    if (!Array.isArray(origin.caveats) || origin.caveats.length === 0) {
+      fail('careerLab.smallSeriesStories.origin must carry caveats.');
+    }
+    // Per-source provenance must be explicit and honest: archived only for a
+    // web-archive capture, so the UI never mislabels a direct official page.
+    for (const source of origin.sources ?? []) {
+      const expectArchived = (source.sourceUrl ?? '').includes('web.archive.org');
+      if (source.archived !== expectArchived) {
+        fail(`Origin source ${source.sourceId ?? '(unknown)'} archived flag must match its URL provenance.`);
+      }
+    }
+  }
+
+  // The Formula Ford bridge carries the 2020 scholarship as sourced context on
+  // its own chapter — a named award (never a result), citing a direct page.
+  const bridge = smallSeries.formulaFordBridge;
+  if (bridge) {
+    if (bridge.schemaVersion !== 'brycecast.formulaFordBridge.v1' || !bridge.scholarship) {
+      fail('careerLab.smallSeriesStories.formulaFordBridge must carry the scholarship milestone.');
+    } else if (bridge.scholarship.kind !== 'career_award') {
+      fail('The Formula Ford bridge must carry the Team USA Scholarship award, not a race result.');
+    }
+    for (const source of bridge.sources ?? []) {
+      const expectArchived = (source.sourceUrl ?? '').includes('web.archive.org');
+      if (source.archived !== expectArchived) {
+        fail(`Formula Ford bridge source ${source.sourceId ?? '(unknown)'} archived flag must match its URL provenance.`);
+      }
+    }
+  }
+}
+
 /* ---------- Career Lab life stats (The odometer) ---------- */
 
 const lifeStats = dataPackage.screens.careerLab.lifeStats;
