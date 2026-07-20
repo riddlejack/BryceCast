@@ -7,6 +7,7 @@ import { formatDate, formatGain, formatNumber, formatPosition } from '../app/for
 import { Link, useRouter } from '../app/router';
 import { displayRaceLabelText } from '../data/debriefArchive';
 import { getSeasonIndex } from '../data/seasons';
+import { getUpcomingEvents, raceDayOf, type UpcomingPrepEvent } from '../data/upcoming';
 import type { UiSeasonIndexRow } from '../data/uiDataPackage';
 
 /** Archive labels drop the series prefix — everything here is INDY NXT. */
@@ -15,7 +16,7 @@ const archiveLabel = (raceLabel: string): string =>
 
 /* ---------- tiny venue mark: letterboxed outline, no measurement needed ---------- */
 
-const MiniTrack = ({ trackName }: { trackName: string | null }) => {
+const MiniTrack = ({ trackName, muted = false }: { trackName: string | null; muted?: boolean }) => {
   const outline = trackOutlineFor(trackName);
   return (
     <span className="race-row__mini" style={{ width: 44, height: 26, alignItems: 'center', justifyContent: 'center', flex: 'none' }}>
@@ -24,7 +25,7 @@ const MiniTrack = ({ trackName }: { trackName: string | null }) => {
           <path
             d={outline.mainPath}
             fill="none"
-            stroke="var(--ink-secondary)"
+            stroke={muted ? 'var(--ink-muted)' : 'var(--ink-secondary)'}
             strokeWidth={1.2}
             vectorEffect="non-scaling-stroke"
             strokeLinejoin="round"
@@ -297,6 +298,74 @@ const seasonSummary = (rows: UiSeasonIndexRow[]): string => {
   return parts.join(' · ');
 };
 
+/* ---------- remaining season: placeholder rounds, listed but not yet raced ---------- */
+
+interface PlaceholderRound {
+  eventId: string;
+  trackName: string;
+  raceDate: string;
+  round: number;
+  seasonTotal: number;
+  label: string;
+}
+
+/** The rounds still to run this season — derived only from the typed adapters,
+ *  never invented. The round number continues from the last completed round;
+ *  the season total is that round plus the events the schedule still carries.
+ *  (Verified 2026-07-19: 13 completed rounds + 4 upcoming = a 17-race season,
+ *  matching the canonical INDY NXT schedule feed.) */
+const remainingRoundsFor = (completed: UiSeasonIndexRow[], upcoming: UpcomingPrepEvent[]): PlaceholderRound[] => {
+  if (upcoming.length === 0 || completed.length === 0) return [];
+  const lastRun = Math.max(...completed.map((row) => row.roundIndex ?? 0));
+  const seasonTotal = lastRun + upcoming.length;
+  return upcoming.map((event, index) => ({
+    eventId: event.eventId,
+    trackName: event.trackName,
+    raceDate: raceDayOf(event),
+    round: lastRun + index + 1,
+    seasonTotal,
+    label: archiveLabel(event.eventName)
+  }));
+};
+
+/* One placeholder row: the archive's grammar (outline mini in its fixed box,
+ * series prefix trimmed, date) but quieter and honestly non-interactive — no
+ * result numerals, no chevron, no link. It becomes a real, clickable row only
+ * once the race has run and its results land in the package. */
+const UpcomingRaceRow = ({ round }: { round: PlaceholderRound }) => (
+  <div className="tower__row race-row--upcoming" aria-disabled="true">
+    <MiniTrack trackName={round.trackName} muted />
+    <span className="tower__name" style={{ whiteSpace: 'normal' }}>
+      {round.label}
+      <span className="tower__team">
+        race {round.round} of {round.seasonTotal}
+      </span>
+    </span>
+    <span className="tower__gap tnum" style={{ fontSize: 11.5, color: 'var(--ink-muted)', minWidth: 52 }}>
+      {round.raceDate ? formatDate(round.raceDate, { month: 'short', day: 'numeric' }) : ''}
+    </span>
+  </div>
+);
+
+/* The remaining-season block no longer carries its own source control: its
+ * schedule entry and caveats fold into the season card's one SourcePill (see
+ * RacesScreen), so a single card keeps a single source drawer. */
+const RemainingSeason = ({ season, rounds }: { season: number; rounds: PlaceholderRound[] }) => (
+  <div className="race-upcoming">
+    <div className="race-upcoming__head">
+      <p className="caption caption--secondary" style={{ margin: 0 }}>
+        The rest of {season} — {rounds.length} round{rounds.length === 1 ? '' : 's'} still to run. Each opens once it&rsquo;s been
+        raced.
+      </p>
+    </div>
+    <div className="tower race-upcoming__list" style={{ margin: '4px -12px 0' }}>
+      {rounds.map((round) => (
+        <UpcomingRaceRow key={round.eventId} round={round} />
+      ))}
+    </div>
+  </div>
+);
+
 export const RacesScreen = () => {
   const index = getSeasonIndex();
 
@@ -311,6 +380,21 @@ export const RacesScreen = () => {
     // rows arrive chronological; seasons newest-first, spine ascending, list newest-first
     return [...bySeason.entries()].sort((a, b) => b[0] - a[0]);
   }, [index]);
+
+  // Upcoming events grouped by season year (soonest first — the adapter sorts
+  // ascending by weekend start). Only seasons with a completed card below get
+  // their remaining rounds shown; the source is the package's upcoming events.
+  const upcomingBySeason = useMemo(() => {
+    const bySeason = new Map<number, UpcomingPrepEvent[]>();
+    for (const event of getUpcomingEvents()) {
+      const year = Number(event.eventStartDate.slice(0, 4));
+      if (!Number.isFinite(year)) continue;
+      const list = bySeason.get(year) ?? [];
+      list.push(event);
+      bySeason.set(year, list);
+    }
+    return bySeason;
+  }, []);
 
   return (
     <div className="page stack">
@@ -328,7 +412,9 @@ export const RacesScreen = () => {
           <Unavailable>No completed races in the package yet.</Unavailable>
         </Card>
       ) : (
-        seasons.map(([season, rows]) => (
+        seasons.map(([season, rows]) => {
+          const remaining = remainingRoundsFor(rows, upcomingBySeason.get(season) ?? []);
+          return (
           <Card
             key={season}
             title={`${season} season`}
@@ -347,13 +433,33 @@ export const RacesScreen = () => {
                       label: 'Championship progression',
                       path: 'analysis/indy-nxt-discovery/output/deep_dive/tables/championship_progression.csv',
                       note: 'Standing after each round from official points progression.'
-                    }
+                    },
+                    // Folded in from the former remaining-season pill: the same
+                    // card now speaks with one source control.
+                    ...(remaining.length > 0
+                      ? [
+                          {
+                            label: 'Remaining rounds · official schedule',
+                            path: 'analysis/predictive-race-intelligence/output/context-packs/upcoming-events/',
+                            note: 'Venue, date, and running order for the rounds still to come, from the upcoming-event context packs.'
+                          }
+                        ]
+                      : [])
                   ]}
-                  caveats={['Standing is recorded after each round; mid-season rows shift as the season goes on.']}
+                  caveats={[
+                    'Standing is recorded after each round; mid-season rows shift as the season goes on.',
+                    ...(remaining.length > 0
+                      ? [
+                          'Round numbers continue from the last completed round; the season total is that round plus the rounds still scheduled.',
+                          'These rounds have not been raced, so no result is shown and the row does not open yet.'
+                        ]
+                      : [])
+                  ]}
                 />
               </span>
             }
           >
+            {remaining.length > 0 ? <RemainingSeason season={season} rounds={remaining} /> : null}
             <p className="caption caption--secondary" style={{ margin: '0 0 8px' }}>
               Gold marks a top-5 finish · ○ a day that ended early · the quiet line is his championship position · click any
               round
@@ -365,7 +471,8 @@ export const RacesScreen = () => {
               ))}
             </div>
           </Card>
-        ))
+          );
+        })
       )}
     </div>
   );
