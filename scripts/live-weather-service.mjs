@@ -517,9 +517,10 @@ export const buildUpcomingIndyNxtWeatherReport = async ({
   forceRefresh = false,
   ttlMs = defaultWeatherCacheTtlMs,
   concurrency = defaultUpcomingWeatherConcurrency,
-  trackDeadlineMs = defaultUpcomingWeatherTrackDeadlineMs
+  trackDeadlineMs = defaultUpcomingWeatherTrackDeadlineMs,
+  now = new Date()
 } = {}) => {
-  const events = await loadUpcomingIndyNxtEvents();
+  const events = await loadUpcomingIndyNxtEvents({ now });
   const weatherByTrackId = new Map();
 
   const tracks = [];
@@ -544,17 +545,36 @@ export const buildUpcomingIndyNxtWeatherReport = async ({
   });
   await Promise.all(workers);
 
+  /* An empty upcoming set is an honest reality, not a live feed: once the
+   * season's last dated INDY NXT event has passed (or between weekends when no
+   * dated event lies ahead), there is nothing to forecast. `[].every()` is
+   * vacuously true, so the old expression mislabelled that empty state as
+   * 'live' — reporting live weather while carrying zero events and zero probes.
+   * Report it as 'unavailable' with a reason so the state stays honest at any
+   * wall-clock time. */
+  const trackWeather = [...weatherByTrackId.values()];
+  const sourceState =
+    trackWeather.length === 0
+      ? 'unavailable'
+      : trackWeather.every((weather) => weather.sourceState === 'live')
+        ? 'live'
+        : 'partial';
+
   return {
     schemaVersion: 'live-weather-upcoming.v1',
     checkedAt: new Date().toISOString(),
-    sourceState: [...weatherByTrackId.values()].every((weather) => weather.sourceState === 'live') ? 'live' : 'partial',
+    sourceState,
+    reason:
+      trackWeather.length === 0
+        ? 'No upcoming INDY NXT events remain in the schedule window; between-weekends state with nothing to forecast.'
+        : null,
     concurrency: workerCount,
     trackDeadlineMs,
     series: 'INDY NXT',
     eventCount: events.length,
     events: events.map((event) => ({
       event,
-      forecastReadiness: eventForecastReadiness(event),
+      forecastReadiness: eventForecastReadiness(event, { now }),
       weather: weatherByTrackId.get(event.track.id)
     }))
   };

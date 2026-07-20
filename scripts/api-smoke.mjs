@@ -197,11 +197,19 @@ try {
   if (!replayMode) {
   liveWeather = (await fetchJson('/api/weather/live?trackId=track_road_america')).json;
   assert(liveWeather?.schemaVersion === 'live-weather.v1', '/api/weather/live missing schema version');
-  assert(['live', 'partial'].includes(liveWeather?.sourceState), '/api/weather/live missing live/partial state');
+  // NWS reachability is a live-world fact, not a code invariant. `error` (NWS
+  // unreachable, rate-limited, or timed out) is an honest state that can occur
+  // at any wall-clock moment, so it must not be reported as a smoke failure.
+  // We validate that whatever state is reported is a recognized, internally
+  // coherent, honestly-provenanced one — never that the sky must be online.
+  assert(
+    ['live', 'partial', 'error'].includes(liveWeather?.sourceState),
+    `/api/weather/live returned unrecognized sourceState: ${liveWeather?.sourceState}`
+  );
   assert(liveWeather?.track?.id === 'track_road_america', '/api/weather/live returned wrong track');
   assert(
-    liveWeather.sourceState === 'partial' || liveWeather?.station?.id,
-    '/api/weather/live missing station id for live weather response'
+    liveWeather.sourceState !== 'live' || liveWeather?.station?.id,
+    '/api/weather/live missing station id for a live weather response'
   );
   assert(
     liveWeather.sourceState !== 'live' || (liveWeather.observation?.timestamp && liveWeather.observation?.station),
@@ -209,23 +217,43 @@ try {
   );
   assert(
     liveWeather.sourceState === 'live' || liveWeather.probes?.some((probe) => !probe.ok),
-    '/api/weather/live partial response did not include a failed probe'
+    '/api/weather/live non-live response did not include a failed probe'
+  );
+  assert(
+    liveWeather.sourceState !== 'error' || (liveWeather.error && liveWeather.probes?.some((probe) => !probe.ok)),
+    '/api/weather/live error state did not carry an error reason and a failed probe'
   );
   assert(['hit', 'miss', 'joined_inflight'].includes(liveWeather?.cache?.status), '/api/weather/live missing cache status');
 
   upcomingWeather = (await fetchJson('/api/weather/upcoming')).json;
   assert(upcomingWeather?.schemaVersion === 'live-weather-upcoming.v1', '/api/weather/upcoming missing schema version');
   assert(Array.isArray(upcomingWeather?.events), '/api/weather/upcoming missing event list');
-  assert(upcomingWeather.events.length > 0, '/api/weather/upcoming found no future INDY NXT events');
   assert(
-    upcomingWeather.events.every((row) => row.forecastReadiness?.status && row.weather?.track?.id),
-    '/api/weather/upcoming missing readiness or weather payloads'
+    ['live', 'partial', 'unavailable'].includes(upcomingWeather?.sourceState),
+    `/api/weather/upcoming returned unrecognized sourceState: ${upcomingWeather?.sourceState}`
   );
-  const cachedUpcomingWeather = (await fetchJson('/api/weather/upcoming')).json;
-  assert(
-    cachedUpcomingWeather.events.every((row) => row.weather?.cache?.status === 'hit'),
-    '/api/weather/upcoming did not reuse cached per-track weather on immediate repeat'
-  );
+  // An empty upcoming set is an honest reality once the season's last dated
+  // INDY NXT event has passed (or between weekends when nothing dated lies
+  // ahead). Demanding future events would fail the smoke on a correct answer,
+  // so tolerate the empty state — but require it to report itself honestly as
+  // 'unavailable' rather than a false 'live'. When events exist, fully validate
+  // their shape and per-track caching as before.
+  if (upcomingWeather.events.length === 0) {
+    assert(
+      upcomingWeather.sourceState === 'unavailable',
+      '/api/weather/upcoming reported weather while carrying no events'
+    );
+  } else {
+    assert(
+      upcomingWeather.events.every((row) => row.forecastReadiness?.status && row.weather?.track?.id),
+      '/api/weather/upcoming missing readiness or weather payloads'
+    );
+    const cachedUpcomingWeather = (await fetchJson('/api/weather/upcoming')).json;
+    assert(
+      cachedUpcomingWeather.events.every((row) => row.weather?.cache?.status === 'hit'),
+      '/api/weather/upcoming did not reuse cached per-track weather on immediate repeat'
+    );
+  }
   }
 
   const history = (await fetchJson('/api/history/bryce')).json;
