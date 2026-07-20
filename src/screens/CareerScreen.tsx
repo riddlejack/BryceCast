@@ -1,7 +1,10 @@
 import { useState, type ReactNode } from 'react';
-import { Card, GhostButton, Reveal, SourcePill, Stat, Unavailable } from '../app/components';
+import { Card, GhostButton, Reveal, SourcePill, Stat, TickerValue, Unavailable } from '../app/components';
 import { asNumber, asString, formatNumber, formatPct } from '../app/format';
 import { uiDataPackage } from '../data/uiDataPackage';
+import { getVenueByTrackName } from '../data/venueDossier';
+import { liveBryceRowOf } from '../data/livePageModel';
+import type { LiveReadiness, ReadinessStatus } from '../app/useReadiness';
 import { CareerAtlas } from './careerAtlas';
 import { Gb3DepthLayer } from './gb3Depth';
 import {
@@ -157,7 +160,30 @@ const splitNamedSource = (source: string): { name: string; url: string } => {
   return { name: source.slice(0, separator), url: source.slice(separator + 3) };
 };
 
-const OdometerCard = () => {
+/** During a live (or replayed) session the odometer counts today's laps as
+ *  they run — Bryce's completed laps × the canonical venue length. It never
+ *  touches the exact sourced career figure above it; the roll-forward reconciles
+ *  the official number after the flag, and this provisional line disappears when
+ *  no session is live. Absent a live session, the card renders exactly as
+ *  before. */
+const liveOdometerIncrement = (live: LiveReadiness | null) => {
+  if (!live) return null;
+  if (live.state !== 'ready' && live.state !== 'degraded') return null;
+  const heartbeat = (live.liveTiming as Record<string, unknown> | undefined)?.heartbeat as
+    | Record<string, unknown>
+    | undefined;
+  const trackName = asString(heartbeat?.trackName);
+  if (!trackName) return null;
+  const venue = getVenueByTrackName(trackName);
+  const lengthMi = venue?.lengthMi ?? null;
+  if (lengthMi === null || lengthMi <= 0) return null;
+  const bryce = liveBryceRowOf(live);
+  const laps = asNumber(bryce?.laps) ?? asNumber(heartbeat?.lap);
+  if (laps === null || laps <= 0) return null;
+  return { laps, lengthMi, trackName, todayMiles: laps * lengthMi };
+};
+
+const OdometerCard = ({ live }: { live: LiveReadiness | null }) => {
   const lifeStats = uiDataPackage.screens.careerLab.lifeStats;
   if (!lifeStats) {
     return (
@@ -166,6 +192,9 @@ const OdometerCard = () => {
       </Card>
     );
   }
+
+  const liveToday = liveOdometerIncrement(live);
+  const provisionalTotalMiles = liveToday ? lifeStats.personalRaceMileage.miles + liveToday.todayMiles : null;
 
   const venueSourceEntries = lifeStats.venueSources.flatMap((venue) => [
     ...venue.lengthSources.map((source, index) => {
@@ -225,6 +254,21 @@ const OdometerCard = () => {
           note="Great-circle displacement · venue to venue"
         />
       </div>
+      {liveToday && provisionalTotalMiles !== null ? (
+        <div className="odometer-live">
+          <span className="caption">Provisional total, live</span>
+          <TickerValue
+            className="odometer-live__value"
+            value={`${wholeNumber.format(provisionalTotalMiles)} mi`}
+            valueKey={liveToday.laps}
+          />
+          <p className="caption caption--secondary odometer-live__note">
+            +{wholeNumber.format(liveToday.todayMiles)} mi today · {wholeNumber.format(liveToday.laps)}{' '}
+            {liveToday.laps === 1 ? 'lap' : 'laps'} × {liveToday.lengthMi.toFixed(2)} mi at {liveToday.trackName}.
+            Counting today’s laps as they run — official after the flag.
+          </p>
+        </div>
+      ) : null}
       <p className="caption caption--secondary" style={{ margin: '18px 0 0' }}>
         Route-adjusted minimum proxy: {wholeNumber.format(lifeStats.travel.routeAdjustedMinimum.lowMiles)}–
         {wholeNumber.format(lifeStats.travel.routeAdjustedMinimum.highMiles)} miles. Actual travel stays unknown until
@@ -235,7 +279,7 @@ const OdometerCard = () => {
   );
 };
 
-export const CareerScreen = () => {
+export const CareerScreen = ({ readiness }: { readiness?: ReadinessStatus }) => {
   const careerLab = uiDataPackage.screens.careerLab;
   const rows = careerLab.seriesSummary as Row[];
   const rowByName = new Map(rows.map((row) => [asString(row.seriesName) ?? '', row]));
@@ -295,7 +339,7 @@ export const CareerScreen = () => {
       </div>
       <CareerRestarts />
 
-      <OdometerCard />
+      <OdometerCard live={readiness?.payload ?? null} />
 
       <CareerAtlas />
 

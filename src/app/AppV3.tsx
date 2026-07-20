@@ -89,7 +89,11 @@ const Routes = () => {
   const { route } = useRouter();
   const onLive = route.path === '/live';
   const fixtureMode = Boolean(route.search.get('fixture'));
-  const replayKey = onLive && !fixtureMode ? route.search.get('replay') : null;
+  // The replay is a client-wide virtual clock, not a Live-page-only overlay: the
+  // Career odometer (Brief Q) also reads the live feed, so a `?replay=` URL must
+  // engage on `/career` too. Other surfaces stay on the real feed (no param).
+  const replayCapableRoute = onLive || route.path === '/career';
+  const replayKey = replayCapableRoute && !fixtureMode ? route.search.get('replay') : null;
   // The replay clock is created first so readiness can append this client's
   // replay params to its own polls. A restart must clear the live-history chart
   // window; that reset lives on the history hook (created after readiness), so
@@ -118,7 +122,7 @@ const Routes = () => {
   else if (raceDetail) screen = <RaceDetailScreen sessionId={raceDetail.sessionId} />;
   else if (route.path === '/races') screen = <RacesScreen />;
   else if (careerRace) screen = <CareerRaceScreen sessionId={careerRace.sessionId} />;
-  else if (route.path === '/career') screen = <CareerScreen />;
+  else if (route.path === '/career') screen = <CareerScreen readiness={readiness} />;
   else if (route.path === '/data') screen = <DataScreen />;
   else
     screen = (
