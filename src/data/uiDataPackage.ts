@@ -253,6 +253,12 @@ export interface UiCareerLifeStats {
     confidenceClass: 'observed_exact';
     metricGrain: 'driver_physical_race';
   };
+  /* Every session id already summed into `personalRaceMileage.miles`. A live or
+   * replayed session whose id is in this set is ALREADY counted — the odometer
+   * must not add its provisional mileage a second time (the 7,053 double-count).
+   * Sits at the lifeStats root (not inside personalRaceMileage, which the data
+   * validator pins to the summary.json shape). */
+  coveredSessionIds: string[];
   physicalSessionMileage: {
     sessionRows: number;
     exact: { sessions: number; laps: number; miles: number; confidenceClass: 'observed_exact' };

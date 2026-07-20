@@ -521,6 +521,7 @@ const LiveHero = ({ payload, samples, replayEnded = false }: { payload: LiveRead
   const bryceHoldsFastest =
     bryceLastSpeed !== null && (fieldFastest === null || fieldFastest.speed <= bryceLastSpeed + 0.05);
   const fastestName = fieldFastest ? driverLabel(fieldFastest.row) : null;
+  const underCaution = isCautionFlag(flag);
 
   const recent = samples.filter((sample) => sample.rank !== null && (lap === null || sample.lap === null || sample.lap >= lap - 5));
   const firstRecent = recent[0];
@@ -566,22 +567,39 @@ const LiveHero = ({ payload, samples, replayEnded = false }: { payload: LiveRead
           </div>
           {bryceLastSpeed !== null ? (
             <p className="live-hero__speed caption caption--secondary">
-              Last lap{' '}
-              <TickerValue
-                className="live-hero__speed-value"
-                value={`${bryceLastSpeed.toFixed(1)} mph`}
-                valueKey={`${lap ?? 'na'}-${bryceLastSpeed}`}
-              />
-              {bryceHoldsFastest ? (
-                <> · fastest last lap in the field</>
-              ) : (
+              {underCaution ? (
+                /* Under yellow the field runs to a controlled caution pace, so
+                 * the drop is real but a cross-car comparison would pit laps
+                 * that aren't the same caution lap against each other. Keep
+                 * Bryce's own last lap; omit the field comparison. */
                 <>
-                  {' · '}fastest in the field{fastestName ? ` (${fastestName})` : ''} ran{' '}
+                  Last lap under caution ·{' '}
                   <TickerValue
                     className="live-hero__speed-value"
-                    value={`${fieldFastest!.speed.toFixed(1)}`}
-                    valueKey={`${lap ?? 'na'}-${fieldFastest!.speed}`}
+                    value={`${bryceLastSpeed.toFixed(1)} mph`}
+                    valueKey={`${lap ?? 'na'}-${bryceLastSpeed}`}
                   />
+                </>
+              ) : (
+                <>
+                  Last lap{' '}
+                  <TickerValue
+                    className="live-hero__speed-value"
+                    value={`${bryceLastSpeed.toFixed(1)} mph`}
+                    valueKey={`${lap ?? 'na'}-${bryceLastSpeed}`}
+                  />
+                  {bryceHoldsFastest ? (
+                    <> · fastest last lap in the field</>
+                  ) : (
+                    <>
+                      {' · '}fastest in the field{fastestName ? ` (${fastestName})` : ''} ran{' '}
+                      <TickerValue
+                        className="live-hero__speed-value"
+                        value={`${fieldFastest!.speed.toFixed(1)} mph`}
+                        valueKey={`${lap ?? 'na'}-${fieldFastest!.speed}`}
+                      />
+                    </>
+                  )}
                 </>
               )}
             </p>

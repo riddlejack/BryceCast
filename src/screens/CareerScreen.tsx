@@ -160,13 +160,21 @@ const splitNamedSource = (source: string): { name: string; url: string } => {
   return { name: source.slice(0, separator), url: source.slice(separator + 3) };
 };
 
-/** During a live (or replayed) session the odometer counts today's laps as
- *  they run — Bryce's completed laps × the canonical venue length. It never
- *  touches the exact sourced career figure above it; the roll-forward reconciles
- *  the official number after the flag, and this provisional line disappears when
- *  no session is live. Absent a live session, the card renders exactly as
- *  before. */
-const liveOdometerIncrement = (live: LiveReadiness | null) => {
+/** During a live (or replayed) session the odometer counts today's on-track
+ *  laps as they run — Bryce's completed laps × the canonical venue length. It
+ *  never touches the exact sourced career figure above it.
+ *
+ *  Two guards keep the number honest:
+ *  - Laps come only from `bryce.laps`. There is NO heartbeat-lap fallback: the
+ *    session leader's lap counter overcounts the moment Bryce is lapped or his
+ *    row is missing, so absent `bryce.laps` we render no provisional mileage.
+ *  - `covered` is true when the active session is already summed into the exact
+ *    career total (its event-session id is in the ledger). A covered session's
+ *    laps are shown as a replay preview only and are NEVER added to the total —
+ *    that double-count is what produced the false 7,053.
+ *
+ *  Absent a live session the card renders exactly as before. */
+const liveOdometerIncrement = (live: LiveReadiness | null, coveredEventSessionIds: Set<string>) => {
   if (!live) return null;
   if (live.state !== 'ready' && live.state !== 'degraded') return null;
   const heartbeat = (live.liveTiming as Record<string, unknown> | undefined)?.heartbeat as
@@ -178,9 +186,12 @@ const liveOdometerIncrement = (live: LiveReadiness | null) => {
   const lengthMi = venue?.lengthMi ?? null;
   if (lengthMi === null || lengthMi <= 0) return null;
   const bryce = liveBryceRowOf(live);
-  const laps = asNumber(bryce?.laps) ?? asNumber(heartbeat?.lap);
+  const laps = asNumber(bryce?.laps);
   if (laps === null || laps <= 0) return null;
-  return { laps, lengthMi, trackName, todayMiles: laps * lengthMi };
+  const rawSessionId = heartbeat?.eventSessionId;
+  const activeSessionId = rawSessionId == null ? '' : String(rawSessionId).trim();
+  const covered = activeSessionId.length > 0 && coveredEventSessionIds.has(activeSessionId);
+  return { laps, lengthMi, trackName, todayMiles: laps * lengthMi, activeSessionId, covered };
 };
 
 const OdometerCard = ({ live }: { live: LiveReadiness | null }) => {
@@ -193,8 +204,20 @@ const OdometerCard = ({ live }: { live: LiveReadiness | null }) => {
     );
   }
 
-  const liveToday = liveOdometerIncrement(live);
-  const provisionalTotalMiles = liveToday ? lifeStats.personalRaceMileage.miles + liveToday.todayMiles : null;
+  /* The ledger stores full session ids (session_indy_nxt_2026_6755); the live
+   * feed reports the bare event-session id (6755). Match on the trailing token
+   * so a replay of an already-counted race dedups against the exact total. */
+  const coveredEventSessionIds = new Set(
+    (lifeStats.coveredSessionIds ?? [])
+      .map((id) => id.slice(id.lastIndexOf('_') + 1))
+      .filter(Boolean)
+  );
+  const liveToday = liveOdometerIncrement(live, coveredEventSessionIds);
+  // Only fold today's laps into the exact career figure when the session is NOT
+  // already counted; a covered replay leaves the total untouched.
+  const provisionalTotalMiles =
+    liveToday && !liveToday.covered ? lifeStats.personalRaceMileage.miles + liveToday.todayMiles : null;
+  const routeAdjusted = lifeStats.travel.routeAdjustedMinimum;
 
   const venueSourceEntries = lifeStats.venueSources.flatMap((venue) => [
     ...venue.lengthSources.map((source, index) => {
@@ -225,7 +248,13 @@ const OdometerCard = ({ live }: { live: LiveReadiness | null }) => {
             ...lifeStats.sourceRefs.map((ref) => ({ label: ref.key, path: ref.path, note: ref.note })),
             ...venueSourceEntries
           ]}
-          caveats={lifeStats.caveats}
+          caveats={[
+            ...lifeStats.caveats,
+            `Route-adjusted minimum proxy: ${wholeNumber.format(routeAdjusted.lowMiles)}–${wholeNumber.format(
+              routeAdjusted.highMiles
+            )} miles. Actual travel stays unknown until season bases and return-home frequency are supplied.`,
+            `Route adjustment assumptions — drive legs: ${routeAdjusted.assumptions.driveProxy}; flight legs: ${routeAdjusted.assumptions.flightProxy}.`
+          ]}
         />
       }
     >
@@ -251,29 +280,49 @@ const OdometerCard = ({ live }: { live: LiveReadiness | null }) => {
         <Stat
           label="Minimum travel"
           value={wholeNumber.format(lifeStats.travel.greatCircleMinimum.miles)}
-          note="Great-circle displacement · venue to venue"
+          note={
+            <>
+              Great-circle displacement · venue to venue
+              <span style={{ display: 'block', marginTop: 2 }}>Routes don’t run straight, so the real number is larger.</span>
+            </>
+          }
         />
       </div>
-      {liveToday && provisionalTotalMiles !== null ? (
-        <div className="odometer-live">
-          <span className="caption">Provisional total, live</span>
+      {liveToday && liveToday.covered ? (
+        /* Already in the exact total above — preview the replay's laps, add
+         * nothing. This is the guard against the false 7,053. */
+        <div className="odometer-live odometer-live--preview">
+          <span className="caption">Replay preview</span>
           <TickerValue
             className="odometer-live__value"
-            value={`${wholeNumber.format(provisionalTotalMiles)} mi`}
+            value={`+${wholeNumber.format(liveToday.todayMiles)} mi`}
             valueKey={liveToday.laps}
           />
           <p className="caption caption--secondary odometer-live__note">
-            +{wholeNumber.format(liveToday.todayMiles)} mi today · {wholeNumber.format(liveToday.laps)}{' '}
+            {wholeNumber.format(liveToday.laps)} {liveToday.laps === 1 ? 'lap' : 'laps'} ×{' '}
+            {liveToday.lengthMi.toFixed(2)} mi at {liveToday.trackName}. This session already counts in the total above —
+            replaying it adds nothing.
+          </p>
+        </div>
+      ) : liveToday && provisionalTotalMiles !== null ? (
+        /* A session not yet in the ledger (a live race in progress). Today's
+         * laps lead; the total including today stays subordinate. */
+        <div className="odometer-live">
+          <span className="caption">Today, provisional</span>
+          <TickerValue
+            className="odometer-live__value"
+            value={`+${wholeNumber.format(liveToday.todayMiles)} mi today`}
+            valueKey={liveToday.laps}
+          />
+          <p className="caption caption--secondary odometer-live__note">
+            {wholeNumber.format(provisionalTotalMiles)} mi including today · {wholeNumber.format(liveToday.laps)}{' '}
             {liveToday.laps === 1 ? 'lap' : 'laps'} × {liveToday.lengthMi.toFixed(2)} mi at {liveToday.trackName}.
-            Counting today’s laps as they run — official after the flag.
+            Reconciled with official results after the flag.
           </p>
         </div>
       ) : null}
       <p className="caption caption--secondary" style={{ margin: '18px 0 0' }}>
-        Route-adjusted minimum proxy: {wholeNumber.format(lifeStats.travel.routeAdjustedMinimum.lowMiles)}–
-        {wholeNumber.format(lifeStats.travel.routeAdjustedMinimum.highMiles)} miles. Actual travel stays unknown until
-        season bases and return-home frequency are supplied. The on-track floor excludes {lifeStats.physicalSessionMileage.unknown.sessions}{' '}
-        sessions with no lap count.
+        The on-track floor excludes {lifeStats.physicalSessionMileage.unknown.sessions} sessions with no lap count.
       </p>
     </Card>
   );
