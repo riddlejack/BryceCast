@@ -490,12 +490,20 @@ const TheDay = ({ story, pack, venue, visit }: { story: RaceStoryPack; pack: Arc
   const leaderShare = asNumber(context?.topLeaderShare);
   const incidents = asNumber(context?.sessionIncidentCount);
   const bryceIncidents = asNumber(context?.bryceIncidentCount);
+  const cautions = story.cautions;
+  // A short, counted cause note for the caution tile — never editorialized.
+  const cautionCauseNote = (() => {
+    const cats = cautions?.categories ?? [];
+    if (cats.length === 0) return null;
+    if (cats.length === 1) return cats[0].category.toLowerCase();
+    return `mostly ${cats[0].category.toLowerCase()}`;
+  })();
   const tempF = weather?.ambientTempC !== null && weather ? Math.round((weather.ambientTempC * 9) / 5 + 32) : null;
   const windMph = weather?.windSpeedKph !== null && weather ? Math.round(weather.windSpeedKph / 1.609344) : null;
   const gustMph = weather?.windGustKph !== null && weather ? Math.round(weather.windGustKph / 1.609344) : null;
   const sky = weather?.conditionRaw ? weather.conditionRaw.replaceAll('_', ' ') : null;
   const rainMm = weather?.precipitationMm ?? null;
-  if (!weather && !leader && incidents === null) return null;
+  if (!weather && !leader && incidents === null && !(cautions && cautions.count > 0)) return null;
 
   return (
     <Card
@@ -518,7 +526,16 @@ const TheDay = ({ story, pack, venue, visit }: { story: RaceStoryPack; pack: Arc
               label: 'Leader and incident context',
               path: 'analysis/indy-nxt-discovery/output/deep_dive/tables/leader_lap_context.csv',
               note: 'Leader share from the official leader-lap summary; incident counts from official race reports.'
-            }
+            },
+            ...(cautions && cautions.count > 0
+              ? [
+                  {
+                    label: 'Full-course cautions',
+                    path: 'analysis/caution-atlas/output/tables/caution_by_race.csv',
+                    note: 'Caution count, laps under yellow, and official causes from the Results-PDF caution summary — counts only.'
+                  }
+                ]
+              : [])
           ]}
           caveats={weather ? [weather.caveat] : undefined}
         />
@@ -540,6 +557,13 @@ const TheDay = ({ story, pack, venue, visit }: { story: RaceStoryPack; pack: Arc
                   ? 'a clean one'
                   : 'none involving Bryce'
             }
+          />
+        ) : null}
+        {cautions && cautions.count > 0 ? (
+          <DayTile
+            label="Full-course cautions"
+            value={cautions.count}
+            note={`${cautions.lapsUnderYellow} lap${cautions.lapsUnderYellow === 1 ? '' : 's'} under yellow${cautionCauseNote ? ` · ${cautionCauseNote}` : ''}`}
           />
         ) : null}
         {tempF !== null ? (

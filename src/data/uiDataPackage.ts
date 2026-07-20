@@ -243,6 +243,99 @@ export interface UiRestartReport {
   sourceRefs: UiSourceRef[];
 }
 
+export interface UiCautionCategory {
+  category: string;
+  count: number;
+}
+
+export interface UiCautionEvent {
+  sessionId: string;
+  seasonYear: number | null;
+  trackName: string;
+  venueSlug: string;
+  startLap: number | null;
+  endLap: number | null;
+  durationLaps: number | null;
+  totalRaceLaps: number | null;
+  /** Start lap over the race distance run, 0..1 — the strip chart's x position. */
+  lapFraction: number | null;
+  /** 'opening' | 'middle' | 'final' | 'unknown'. */
+  third: string;
+  restartLap: number | null;
+  ranToFlag: boolean;
+  category: string;
+}
+
+export interface UiCautionByVenue {
+  venueSlug: string;
+  trackName: string;
+  trackType: string;
+  /** Semicolon-joined seasons visited, e.g. "2024;2025;2026". */
+  seasons: string;
+  races: number | null;
+  cautions: number | null;
+  medianPerRace: number | null;
+  minPerRace: number | null;
+  maxPerRace: number | null;
+  meanPerRace: number | null;
+  opening: number | null;
+  middle: number | null;
+  final: number | null;
+  /** 'opening' | 'middle' | 'final' | '' when tied — the strict modal third. */
+  dominantThird: string;
+  ranToFlagCount: number | null;
+  medianDurationLaps: number | null;
+  categories: UiCautionCategory[];
+}
+
+export interface UiCautionByRace {
+  sessionId: string;
+  seasonYear: number | null;
+  raceLabel: string;
+  trackName: string;
+  trackType: string;
+  venueSlug: string;
+  eventStartDate: string | null;
+  totalRaceLaps: number | null;
+  cautionCount: number | null;
+  cautionLapsTotal: number | null;
+  opening: number | null;
+  middle: number | null;
+  final: number | null;
+  ranToFlagCount: number | null;
+  medianDurationLaps: number | null;
+  categories: UiCautionCategory[];
+}
+
+/** The Caution Atlas contract: a descriptive per-venue count of full-course
+ *  cautions (`precision: 'official-report'`). Counting only — no probabilities,
+ *  no predictions. A per-second source could later refine placement with no UI
+ *  rework. Gold is absent by design: a caution is not a Bryce moment. */
+export interface UiCautionAtlas {
+  schemaVersion: 'brycecast.cautionAtlas.v1';
+  precision: 'official-report';
+  asOfDate: string | null;
+  coverage: {
+    indyNxtRaceSessions: number;
+    racesConsidered: number;
+    racesWithCaution: number;
+    racesCautionFree: number;
+    racesWithoutChart: number;
+    totalCautions: number;
+  };
+  totals: {
+    cautions: number;
+    byCategory: Record<string, number>;
+    byThird: { opening: number; middle: number; final: number; unknown: number };
+  };
+  byVenue: UiCautionByVenue[];
+  byRace: UiCautionByRace[];
+  events: UiCautionEvent[];
+  thirdsDefinition: string;
+  caveats: string[];
+  sourceRefs: UiSourceRef[];
+}
+
 export interface UiCareerLifeStats {
   schemaVersion: 'brycecast.careerLifeStats.v2';
   personalRaceMileage: {
@@ -792,6 +885,7 @@ export interface UiDataPackage {
       headToHead: UiCareerRival[];
       lapPositionMix: UiSeasonLapMix[];
       restarts: UiRestartReport;
+      cautionAtlas: UiCautionAtlas;
       atlas: UiCareerAtlas;
       lifeStats: UiCareerLifeStats;
       caveats: string[];

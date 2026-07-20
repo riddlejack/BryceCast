@@ -582,6 +582,39 @@ for (const ref of raceStoryRefs ?? []) {
       fail(`Race-story pack ${ref.sessionId} restart bryce.net must equal the summed event nets.`);
     }
   }
+  const cautions = story.cautions;
+  if (cautions === undefined) {
+    fail(`Race-story pack ${ref.sessionId} must carry a cautions block (or null).`);
+  }
+  if (cautions) {
+    if (cautions.precision !== 'official-report') {
+      fail(`Race-story pack ${ref.sessionId} caution precision must be official-report in v1.`);
+    }
+    if ((cautions.events ?? []).length !== cautions.count) {
+      fail(`Race-story pack ${ref.sessionId} caution event count must equal count.`);
+    }
+    const thirdSum = cautions.thirds.opening + cautions.thirds.middle + cautions.thirds.final;
+    if (thirdSum > cautions.count) {
+      fail(`Race-story pack ${ref.sessionId} caution thirds cannot exceed the caution count.`);
+    }
+    let lapsUnderYellow = 0;
+    for (const event of cautions.events ?? []) {
+      if (event.durationLaps !== event.endLap - event.startLap + 1) {
+        fail(`Race-story pack ${ref.sessionId} caution ${event.cautionNumber}: durationLaps must equal end-start+1.`);
+      }
+      if (event.ranToFlag ? event.restartLap !== null : event.restartLap !== event.endLap + 1) {
+        fail(`Race-story pack ${ref.sessionId} caution ${event.cautionNumber}: restart lap inconsistent with ranToFlag.`);
+      }
+      lapsUnderYellow += event.durationLaps;
+    }
+    if (cautions.count > 0 && cautions.lapsUnderYellow !== lapsUnderYellow) {
+      fail(`Race-story pack ${ref.sessionId} caution lapsUnderYellow must equal the summed episode durations.`);
+    }
+    const categorySum = (cautions.categories ?? []).reduce((sum, entry) => sum + (entry.count ?? 0), 0);
+    if (cautions.count > 0 && categorySum !== cautions.count) {
+      fail(`Race-story pack ${ref.sessionId} caution categories must sum to the caution count.`);
+    }
+  }
 }
 
 /* ---------- section-lap packs (Brief H: heat map + drawer traceability) ---------- */
@@ -983,6 +1016,67 @@ for (const scope of ['byVenue', 'bySeason']) {
 const restartSourcePaths = new Set((restartReport.sourceRefs ?? []).map((ref) => ref.path));
 if (!restartSourcePaths.has('analysis/restart-report/output/summary.json')) {
   fail('careerLab.restarts.sourceRefs must cite the restart-report summary.');
+}
+
+/* ---------- Career Lab caution atlas (Brief J stage 1 — descriptive counting) ---------- */
+
+const cautionAtlas = dataPackage.screens.careerLab.cautionAtlas;
+if (cautionAtlas?.schemaVersion !== 'brycecast.cautionAtlas.v1') {
+  fail('careerLab.cautionAtlas must carry the validated caution-atlas schema.');
+}
+if (cautionAtlas.precision !== 'official-report') {
+  fail('careerLab.cautionAtlas v1 precision must be official-report.');
+}
+for (const [key, expectedPath] of Object.entries({
+  cautionAtlasSummary: 'analysis/caution-atlas/output/summary.json',
+  cautionAtlasByRace: 'analysis/caution-atlas/output/tables/caution_by_race.csv',
+  cautionAtlasByVenue: 'analysis/caution-atlas/output/tables/caution_by_venue.csv',
+  cautionAtlasEvents: 'analysis/caution-atlas/output/tables/caution_events.csv'
+})) {
+  if (sourceInventory[key]?.path !== expectedPath) {
+    fail(`sourceInventory.${key} must point to ${expectedPath}.`);
+  }
+}
+const cautionSummary = JSON.parse(fs.readFileSync(path.join(repoRoot, sourceInventory.cautionAtlasSummary.path), 'utf8'));
+if (JSON.stringify(cautionAtlas.coverage) !== JSON.stringify(cautionSummary.coverage)) {
+  fail('careerLab.cautionAtlas.coverage must mirror the validated caution-atlas summary.');
+}
+if (JSON.stringify(cautionAtlas.totals) !== JSON.stringify(cautionSummary.totals)) {
+  fail('careerLab.cautionAtlas.totals must mirror the validated caution-atlas summary.');
+}
+const cautionTotal = cautionAtlas.coverage.totalCautions;
+if ((cautionAtlas.events ?? []).length !== cautionTotal) {
+  fail(`careerLab.cautionAtlas.events (${(cautionAtlas.events ?? []).length}) must equal totalCautions (${cautionTotal}).`);
+}
+const cautionVenueSum = (cautionAtlas.byVenue ?? []).reduce((sum, row) => sum + (row.cautions ?? 0), 0);
+if (cautionVenueSum !== cautionTotal) {
+  fail(`careerLab.cautionAtlas.byVenue cautions (${cautionVenueSum}) must sum to totalCautions (${cautionTotal}).`);
+}
+if ((cautionAtlas.byVenue ?? []).some((row) => !(row.races >= 1))) {
+  fail('careerLab.cautionAtlas.byVenue must carry at least one race per venue.');
+}
+if ((cautionAtlas.byRace ?? []).some((row) => !((row.cautionCount ?? 0) > 0))) {
+  fail('careerLab.cautionAtlas.byRace must only carry races that had at least one caution.');
+}
+if ((cautionAtlas.byRace ?? []).some((row) => !row.sessionId.includes('indy_nxt'))) {
+  fail('careerLab.cautionAtlas.byRace must be INDY NXT sessions (click-through via raceHref).');
+}
+const cautionByThird = cautionAtlas.totals.byThird;
+if (cautionByThird.opening + cautionByThird.middle + cautionByThird.final + cautionByThird.unknown !== cautionTotal) {
+  fail('careerLab.cautionAtlas.totals.byThird must sum to totalCautions.');
+}
+// The Nashville reconciliation: the number the handoff quoted as "2 per race
+// median" is 1 — pin it so the UI can never quietly ship the wrong figure.
+const nashvilleCaution = (cautionAtlas.byVenue ?? []).find((row) => row.venueSlug === 'nashville_superspeedway');
+if (!nashvilleCaution) {
+  fail('careerLab.cautionAtlas.byVenue must include Nashville for the handoff reconciliation.');
+}
+if (nashvilleCaution.medianPerRace !== 1) {
+  fail(`careerLab.cautionAtlas Nashville median must be 1 per race (not the handoff's 2); got ${nashvilleCaution.medianPerRace}.`);
+}
+const cautionSourcePaths = new Set((cautionAtlas.sourceRefs ?? []).map((ref) => ref.path));
+if (!cautionSourcePaths.has('analysis/caution-atlas/output/summary.json')) {
+  fail('careerLab.cautionAtlas.sourceRefs must cite the caution-atlas summary.');
 }
 
 /* ---------- Career Lab atlas (deterministic land + 145-race venue contract) ---------- */
