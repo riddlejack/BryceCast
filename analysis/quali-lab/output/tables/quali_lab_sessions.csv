@@ -10,8 +10,8 @@ rt_2024_iowa-speedway_qc_2024-07-12_a,2024,2024-07-12,Iowa Speedway,racetools,ra
 rt_2024_world-wide-technology-raceway_qc_2024-08-16_a,2024,2024-08-16,World Wide Technology Raceway,racetools,racetools_capture,3,27.8159,27.3986,0.4173,13,18,13,18,,single,match,
 rt_2024_portland-international-raceway_qb_2024-08-24_a,2024,2024-08-24,Portland International Raceway,racetools,racetools_capture,10,62.8293,62.218,0.6113,4,9,7,16,,single,match,
 rt_2024_milwaukee-mile_qc_2024-08-31_a,2024,2024-08-31,Milwaukee Mile,racetools,racetools_capture,3,24.2884,24.1403,0.1481,7,18,7,18,,single,match,
-rt_2025_st-petersburg-street-circuit_qb_2025-03-01_d,2025,2025-03-01,St Petersburg Street Circuit,racetools,racetools_capture,10,65.0363,64.0642,0.9721,10,11,10,11,,single,match,
-rt_2025_barber-motorsports-park_qa_2025-05-03_d,2025,2025-05-03,Barber Motorsports Park,racetools,racetools_capture,7,85.9451,84.9048,1.0403,3,10,3,10,,single,match,
+rt_2025_st-petersburg-street-circuit_qb_2025-03-01_d,2025,2025-03-01,St Petersburg Street Circuit,racetools,racetools_capture,10,65.0363,64.0642,0.9721,10,11,,,,single,match,
+rt_2025_barber-motorsports-park_qa_2025-05-03_d,2025,2025-05-03,Barber Motorsports Park,racetools,racetools_capture,7,85.9451,84.9048,1.0403,3,10,,,,single,match,
 rt_2025_indianapolis-motor-speedway-rc_qb_2025-05-09_d,2025,2025-05-09,Indianapolis Motor Speedway RC,racetools,racetools_capture,9,75.8373,74.9928,0.8445,9,11,18,21,Race 1,doubleheader_bestlap,match,
 rt_2025_detroit-street-circuit_qb_2025-05-31_d,2025,2025-05-31,Detroit Street Circuit,racetools,racetools_capture,5,67.6191,65.2514,2.3677,8,10,15,20,,single,match,
 rt_2025_world-wide-technology-raceway_qc_2025-06-14_d,2025,2025-06-14,World Wide Technology Raceway,racetools,racetools_capture,3,28.0617,27.0529,1.0088,16,19,16,19,,single,match,
@@ -26,7 +26,7 @@ t71_2026_arlington_qualifying_g2_2026-03-14,2026,2026-03-14,Arlington,timing71,t
 t71_2026_barber_qualifying_2026-03-28,2026,2026-03-28,Barber,timing71,timing71_normalized,8,70.6418,70.3176,0.3242,3,12,5,24,Race 1,single,na,GO
 t71_2026_indianapolis-gp_qualifying_2026-05-08,2026,2026-05-08,Indianapolis GP,timing71,timing71_normalized,8,75.6915,75.0846,0.6069,7,12,13,24,Race 1,single,na,GO
 t71_2026_detroit_qualifying_g2_2026-05-30,2026,2026-05-30,Detroit,timing71,timing71_normalized,8,66.4965,65.605,0.8915,7,12,14,24,,single,na,GO
-t71_2026_wwt-raceway_qualifying_2026-06-06,2026,2026-06-06,WWT Raceway,timing71,timing71_normalized,2,27.8855,27.5709,0.3146,12,24,12,24,,single,na,GO
+t71_2026_wwt-raceway_qualifying_2026-06-06,2026,2026-06-06,WWT Raceway,timing71,timing71_normalized,2,27.8855,27.5709,0.3146,12,24,,,,single,na,GO
 t71_2026_road-america_qualifying_g2_2026-06-20,2026,2026-06-20,Road America,timing71,timing71_normalized,7,112.059,110.9975,1.0615,8,12,15,24,Race 1,single,na,GO
 t71_2026_mid-ohio_qualifying_2026-07-04,2026,2026-07-04,Mid-Ohio,timing71,timing71_normalized,8,69.9957,69.369,0.6267,7,12,13,24,Race 1,single,na,GO
 t71_2026_nashville_qualifying_2026-07-18,2026,2026-07-18,Nashville,timing71,timing71_normalized,2,26.5805,26.3597,0.2208,8,23,8,23,,single,na,GO

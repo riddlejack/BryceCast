@@ -1,12 +1,17 @@
 /** "His qualifying, run by run" — the Race Detail weekend-arc module (Brief M,
  *  first slice). One question: how did his qualifying build? Bryce's laps in
- *  session order, his best-lap staircase (gold), where the session's fastest lap
- *  settled (the benchmark line), and where his qualifying landed — with both
- *  denominators and the source tier on screen.
+ *  session order, his best-lap staircase, where the fastest lap of his group (or
+ *  the session, on ovals) settled — the benchmark line — and where his
+ *  qualifying landed, with both denominators and the source tier on screen.
  *
- *  The build is the RaceTools / Timing71 capture (semantic layer); the rank and
- *  the headline best lap are the canonical official qualifying classification.
- *  Two substrates, each labelled where it draws. */
+ *  Chart colour follows the house standard: a single-series INK line, gold ONLY
+ *  as the marker on his fastest lap (the terminal/current best). The build is the
+ *  RaceTools / Timing71 capture (semantic layer); the rank and the headline best
+ *  lap are the canonical official qualifying classification. Two substrates, each
+ *  labelled where it draws.
+ *
+ *  The resolution is hoisted into RaceDetailScreen (so the page footer can name
+ *  this module's source tier) and passed in; this file only renders it. */
 
 import { useState } from 'react';
 import { Card, SourcePill } from '../app/components';
@@ -15,12 +20,24 @@ import {
   formatLapTime,
   gridOutcomeSentence,
   groupRankSentence,
-  useQualiLabForRace,
-  type QualiLabSession
+  type QualiLabCoverage,
+  type QualiLabResolution,
+  type QualiLabSession,
+  type QualiPairedNote
 } from '../data/qualiLab';
 
 const GOLD = '#f5b63f';
 const INK = '#1d1d1f';
+
+/** The lap sequence of his fastest lap — the one gold marker (terminal best).
+ *  Falls back to the last lap that reaches the running-best floor. */
+const bestLapSeq = (session: QualiLabSession): number | null => {
+  if (session.bryceBestSeq) return session.bryceBestSeq;
+  for (let i = session.laps.length - 1; i >= 0; i -= 1) {
+    if (Math.abs(session.laps[i].runningBestSeconds - session.bryceBestSeconds) < 1e-9) return session.laps[i].seq;
+  }
+  return null;
+};
 
 const RunByRunChart = ({ session, height = 208 }: { session: QualiLabSession; height?: number }) => {
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();
@@ -42,8 +59,8 @@ const RunByRunChart = ({ session, height = 208 }: { session: QualiLabSession; he
   /* The domain is the competitive (flying-lap) band, so the fine improvements
    * that ARE the build stay legible; out-/in-laps sit slower than the band and
    * clamp to the bottom edge as hollow marks (their true time is in the
-   * tooltip). The session's fastest lap is folded in so its benchmark line
-   * always sits in view just above his flyers. */
+   * tooltip). The benchmark lap is folded in so its line always sits in view
+   * just above his flyers. */
   const flyers = laps.filter((lap) => lap.kind === 'flying').map((lap) => lap.seconds);
   const band = flyers.length >= 2 ? flyers : laps.map((lap) => lap.seconds);
   const fastest = Math.min(...band, session.sessionBestSeconds);
@@ -60,6 +77,7 @@ const RunByRunChart = ({ session, height = 208 }: { session: QualiLabSession; he
     padT + (Math.max(0, Math.min(1, (seconds - yTop) / span)) * plotH);
 
   const benchmarkY = yOf(session.sessionBestSeconds);
+  const goldSeq = bestLapSeq(session);
 
   // running-best staircase (step-after): drops at each personal best
   const stair: string[] = [];
@@ -76,6 +94,25 @@ const RunByRunChart = ({ session, height = 208 }: { session: QualiLabSession; he
 
   const yLabels = [yTop + span * 0.02, yTop + span * 0.5, yBottom];
 
+  // benchmark label: his group's fastest (road split) vs the session's (oval)
+  const benchLabel = session.sessionBestByBryce
+    ? session.benchmarkScope === 'group'
+      ? 'his group best'
+      : 'his session best'
+    : session.benchmarkScope === 'group'
+      ? `group best ${formatLapTime(session.sessionBestSeconds)}`
+      : `session best ${formatLapTime(session.sessionBestSeconds)}`;
+
+  const showLap = (lap: (typeof laps)[number], x: number, y: number, clamped: boolean, flying: boolean) =>
+    setTip({
+      x,
+      y,
+      title: `${formatLapTime(lap.seconds)}`,
+      detail: `${lap.isPersonalBest ? 'new best · ' : ''}lap ${lap.seq} of ${laps.length}${
+        clamped ? ' · out-lap' : flying ? '' : ' · slower lap'
+      }`
+    });
+
   return (
     <div ref={ref} style={{ position: 'relative', width: '100%' }}>
       <svg
@@ -86,6 +123,7 @@ const RunByRunChart = ({ session, height = 208 }: { session: QualiLabSession; he
         aria-label={`Bryce's ${session.venueName} ${session.seasonYear} qualifying laps in session order, fastest lap ${formatLapTime(session.bryceBestSeconds)}`}
         style={{ fontFamily: chartFont, display: 'block' }}
         onMouseLeave={() => setTip(null)}
+        onClick={() => setTip(null)}
       >
         {/* y gridlines + lap-time labels */}
         {yLabels.map((value, index) => {
@@ -100,20 +138,21 @@ const RunByRunChart = ({ session, height = 208 }: { session: QualiLabSession; he
           );
         })}
 
-        {/* the session's fastest lap — the benchmark he's building toward */}
+        {/* the benchmark he's building toward — his group's / the session's fastest */}
         <line x1={padL} x2={width - padR} y1={benchmarkY} y2={benchmarkY} stroke={INK} strokeWidth={1} strokeDasharray="2 3" opacity={0.5} />
         <text x={width - padR} y={benchmarkY - 5} textAnchor="end" fontSize={10.5} fill="var(--ink-secondary)" style={{ fontVariantNumeric: 'tabular-nums' }}>
-          {session.sessionBestByBryce ? 'his session best' : `session best ${formatLapTime(session.sessionBestSeconds)}`}
+          {benchLabel}
         </text>
 
-        {/* running-best staircase (gold) */}
+        {/* running-best staircase — single-series ink line (house chart standard) */}
         <path
           d={stair.join(' ')}
           fill="none"
-          stroke={GOLD}
+          stroke={INK}
           strokeWidth={2}
           strokeLinejoin="round"
           strokeLinecap="round"
+          opacity={0.9}
           style={reduced ? undefined : { strokeDasharray: 1200, strokeDashoffset: 0 }}
         />
 
@@ -126,38 +165,45 @@ const RunByRunChart = ({ session, height = 208 }: { session: QualiLabSession; he
           {laps.length === 2 ? 'nd' : laps.length === 3 ? 'rd' : 'th'} lap
         </text>
 
-        {/* the laps */}
+        {/* the laps: ink marks; gold ONLY on his fastest lap (terminal best) */}
         {laps.map((lap) => {
           const clamped = lap.seconds > yBottom; // out-/in-lap slower than the band
           const x = xOf(lap.seq);
           const y = yOf(lap.seconds);
           const flying = lap.kind === 'flying';
+          const isBest = lap.seq === goldSeq;
           return (
             <g key={lap.seq}>
-              {/* generous invisible hit target */}
+              {/* generous invisible hit target — hover, tap, and keyboard focus */}
               <circle
                 cx={x}
                 cy={y}
                 r={12}
                 fill="transparent"
-                onMouseEnter={() =>
-                  setTip({
-                    x,
-                    y,
-                    title: `${formatLapTime(lap.seconds)}`,
-                    detail: `${lap.isPersonalBest ? 'new best · ' : ''}lap ${lap.seq} of ${laps.length}${
-                      clamped ? ' · out-lap' : flying ? '' : ' · slower lap'
-                    }`
-                  })
-                }
+                tabIndex={0}
+                role="button"
+                aria-label={`Lap ${lap.seq} of ${laps.length}: ${formatLapTime(lap.seconds)}${lap.isPersonalBest ? ', new best' : ''}`}
+                style={{ cursor: 'pointer', outline: 'none' }}
+                onMouseEnter={() => showLap(lap, x, y, clamped, flying)}
+                onFocus={() => showLap(lap, x, y, clamped, flying)}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  showLap(lap, x, y, clamped, flying);
+                }}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    showLap(lap, x, y, clamped, flying);
+                  }
+                }}
               />
               <circle
                 cx={x}
                 cy={y}
-                r={lap.isPersonalBest ? 4.2 : 3.2}
-                fill={flying ? GOLD : 'var(--surface-0)'}
-                stroke={flying ? GOLD : 'var(--hairline)'}
-                strokeWidth={flying ? 0 : 1.4}
+                r={isBest ? 4.6 : lap.isPersonalBest ? 3.6 : 3}
+                fill={isBest ? GOLD : flying ? INK : 'var(--surface-0)'}
+                stroke={isBest ? GOLD : flying ? INK : 'var(--hairline)'}
+                strokeWidth={isBest || flying ? 0 : 1.4}
                 opacity={clamped ? 0.5 : 1}
               />
             </g>
@@ -169,7 +215,7 @@ const RunByRunChart = ({ session, height = 208 }: { session: QualiLabSession; he
   );
 };
 
-const QualiModule = ({ session }: { session: QualiLabSession }) => {
+const QualiModule = ({ session, coverage }: { session: QualiLabSession; coverage: QualiLabCoverage }) => {
   const coarse = useCoarsePointer();
   const grid = gridOutcomeSentence(session);
   /* Ovals run one group, so the grid and the "in the session" rank are the same
@@ -185,24 +231,55 @@ const QualiModule = ({ session }: { session: QualiLabSession }) => {
       ? `His fastest lap came on the ${session.bryceBestSeq}${session.bryceBestSeq === 2 ? 'nd' : session.bryceBestSeq === 3 ? 'rd' : 'th'} of ${session.laps.length}.`
       : null;
 
-  /* Substrate honesty: the headline best lap is the official classification;
-   * when the capture missed his single fastest lap, the run's floor sits a
-   * touch slower than that, so say it rather than let the chart quietly disagree. */
+  /* The headline best lap is the official classification where one exists; the
+   * eight oval qualifying rows carry no official single-lap best, so the value
+   * shown is his fastest CAPTURED lap and is labelled as such (never dressed up
+   * as official). */
+  const hasOfficialBest = session.officialBestLapSeconds !== null;
+  const hasGrid = session.combinedGridPosition !== null;
+  const bestValue = session.officialBestLapSeconds ?? session.bryceBestSeconds;
+  const bestLabel = hasOfficialBest ? 'his best lap' : 'captured best lap';
+
+  /* Substrate honesty: when the capture's best lap sits a touch slower than the
+   * official best, the run's floor and the headline disagree — disclose it
+   * whenever the two render as DIFFERENT times (rounding tolerance), not only
+   * beyond an arbitrary 0.15s. Sub-millisecond gaps that round to the same
+   * displayed time need no sentence. */
   const gap = session.capturedBestVsOfficialSeconds;
   const captureGap =
-    gap !== null && gap > 0.15 && session.officialBestLapSeconds !== null
+    gap !== null &&
+    gap > 0 &&
+    hasOfficialBest &&
+    formatLapTime(session.officialBestLapSeconds) !== formatLapTime(session.bryceBestSeconds)
       ? `His official best was ${formatLapTime(session.officialBestLapSeconds)}; the capture holds his laps down to ${formatLapTime(session.bryceBestSeconds)}.`
       : null;
+
+  const rankNote = !hasOfficialBest
+    ? 'The grid position and rank come from the official qualifying classification in the canonical dataset; this oval qualifying carries no official single-lap best, so the best lap shown is his fastest captured lap.'
+    : !hasGrid
+      ? 'His group rank and headline best lap come from the official qualifying classification in the canonical dataset; the combined grid for this weekend is not in that data, so only his group result is shown.'
+      : 'The grid position, group rank, and headline best lap come from the official qualifying classification in the canonical dataset.';
+
+  const benchmarkSourceWord = session.benchmarkScope === 'group' ? 'the fastest lap in his qualifying group' : "the session's fastest lap";
+
+  const totalSessions = coverage.coveredSessions + coverage.excludedSessions;
+  const coverageNote = `The lab covers ${coverage.coveredSessions} of ${totalSessions} INDY NXT qualifying sessions across 2024–2026. The other ${coverage.excludedSessions} are set aside: ${coverage.exclusions
+    .map((exclusion) => `${exclusion.venueName} ${exclusion.seasonYear} (${exclusion.note})`)
+    .join('; ')}.`;
 
   const is2026 = session.source === 'timing71';
   const entries = [
     {
       label: `Run-by-run laps · ${session.sourceTierLabel}`,
-      note: `Bryce's laps in session order and the session's fastest lap come from the ${session.sourceTierLabel} — a third-party capture, not official timing.`
+      note: `Bryce's laps in session order and ${benchmarkSourceWord} come from the ${session.sourceTierLabel} — a third-party capture, not official timing.`
     },
     {
       label: 'Qualifying result · official qualifying classification',
-      note: 'The grid position, group rank, and headline best lap come from the official qualifying classification in the canonical dataset.'
+      note: rankNote
+    },
+    {
+      label: `Coverage · ${coverage.coveredSessions} of ${totalSessions} qualifying sessions`,
+      note: coverageNote
     },
     ...(is2026
       ? [
@@ -233,9 +310,9 @@ const QualiModule = ({ session }: { session: QualiLabSession }) => {
           ) : null}
           <div>
             <div className="tnum" style={{ fontSize: 20, fontWeight: 640, letterSpacing: '-0.01em' }}>
-              {formatLapTime(session.officialBestLapSeconds ?? session.bryceBestSeconds)}
+              {formatLapTime(bestValue)}
             </div>
-            <div style={{ fontSize: 12.5, color: 'var(--ink-secondary)', marginTop: 2 }}>his best lap</div>
+            <div style={{ fontSize: 12.5, color: 'var(--ink-secondary)', marginTop: 2 }}>{bestLabel}</div>
           </div>
         </div>
 
@@ -244,11 +321,15 @@ const QualiModule = ({ session }: { session: QualiLabSession }) => {
         <p style={{ margin: 0, fontSize: 12.5, color: 'var(--ink-secondary)', lineHeight: 1.5 }}>
           {bestLine ? `${bestLine} ` : ''}
           {session.sessionBestByBryce
-            ? 'His best was the session’s fastest lap.'
-            : `The session’s fastest lap was ${formatLapTime(session.sessionBestSeconds)}.`}
+            ? session.benchmarkScope === 'group'
+              ? 'His best was his group’s fastest lap.'
+              : 'His best was the session’s fastest lap.'
+            : session.benchmarkScope === 'group'
+              ? `His group’s fastest lap was ${formatLapTime(session.sessionBestSeconds)}.`
+              : `The session’s fastest lap was ${formatLapTime(session.sessionBestSeconds)}.`}
           {captureGap ? ` ${captureGap}` : ''}{' '}
           <span style={{ color: 'var(--ink-muted)' }}>
-            {coarse ? 'Tap' : 'Hover'} a lap for its time. Laps in session order; the gold line is his best so far. {session.sourceTierLabel}.
+            {coarse ? 'Tap' : 'Hover'} a lap for its time. Laps in session order; the line is his best lap so far, the gold dot his fastest. {session.sourceTierLabel}.
           </span>
         </p>
       </div>
@@ -256,10 +337,26 @@ const QualiModule = ({ session }: { session: QualiLabSession }) => {
   );
 };
 
-/** Renders the module for a race page when its weekend's qualifying is covered;
- *  renders nothing otherwise (honest absence — no placeholder). */
-export const QualifyingRunByRunCard = ({ raceSessionId }: { raceSessionId: string }) => {
-  const session = useQualiLabForRace(raceSessionId);
-  if (!session || session === 'failed') return null;
-  return <QualiModule session={session} />;
+/** Race-2 doubleheader page whose own qualifying was not captured: a quiet note
+ *  in the weekend-arc slot instead of silence — no rank claim, never Race-1's. */
+const QualiPairedNoteCard = ({ note }: { note: QualiPairedNote }) => (
+  <Card title="His qualifying, run by run">
+    <div style={{ padding: '0 18px 16px' }}>
+      <p style={{ margin: 0, fontSize: 13, color: 'var(--ink-secondary)', lineHeight: 1.55 }}>
+        This is {note.notedRaceLabel ?? 'the second race'} of the {note.venueName} {note.seasonYear} doubleheader. Only{' '}
+        {note.capturedRaceLabel ?? 'the first race'}’s qualifying run was captured, and it set a different grid, so there’s
+        no separate run-by-run to show for {note.notedRaceLabel ?? 'this race'}.
+      </p>
+    </div>
+  </Card>
+);
+
+/** Renders the module for a race page from the resolution hoisted in
+ *  RaceDetailScreen: the covered qualifying module, a quiet Race-2 note, or
+ *  nothing (honest absence — no placeholder). */
+export const QualifyingRunByRunCard = ({ resolution }: { resolution: QualiLabResolution | null | 'failed' }) => {
+  if (!resolution || resolution === 'failed') return null;
+  if (resolution.session) return <QualiModule session={resolution.session} coverage={resolution.coverage} />;
+  if (resolution.pairedNote) return <QualiPairedNoteCard note={resolution.pairedNote} />;
+  return null;
 };

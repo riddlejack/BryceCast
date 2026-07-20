@@ -192,7 +192,11 @@ const buildRun = (records, bryceCar, timeField) => {
       seconds: round4(lap.lapSeconds),
       kind: lap.lapSeconds <= bryceBest * FLYING_BAND ? 'flying' : 'support',
       isPersonalBest: isPB,
-      runningBestSeconds: round4(runningBest)
+      runningBestSeconds: round4(runningBest),
+      /* v2 (full Quali & Practice Lab): typed traffic context for THIS lap —
+       * car ahead, gap, clear-air flag — filled by a lake-grain producer with
+       * no UI rework (adapter-contract law). Null in v1. */
+      trafficObservation: null
     });
   }
   const noiseLaps = bryceLaps.length - run.length;
@@ -233,10 +237,16 @@ const buildRun = (records, bryceCar, timeField) => {
 /* ------------------------------------------------------------------ */
 
 /** Resolve Bryce's official qualifying outcome for a capture. Group/single row
- *  gives the on-track session rank; the Combined row gives the grid position.
- *  Doubleheaders (two group rows in the year/track) are attributed to the race
- *  whose group best-lap matches Bryce's captured best flying lap. */
-const resolveRank = (canon, { eventId, year, trackId, bryceBestSeconds }) => {
+ *  gives the on-track session rank; a genuine Combined row gives the grid
+ *  position. Doubleheaders (two group rows in the year/track) are attributed to
+ *  the race whose group best-lap matches Bryce's captured best flying lap.
+ *
+ *  `isOval` is the ACTUAL track format (passed from the caller, not inferred
+ *  here): the group→grid fallback fires only on verified ovals, where there is
+ *  no combined stage and the single on-track group IS the grid. On road/street
+ *  a group is never presented as a grid — the grid comes only from a combined
+ *  session that genuinely merged the groups. */
+const resolveRank = (canon, { eventId, year, trackId, isOval, bryceBestSeconds }) => {
   let events = [];
   if (eventId && canon.byEvent.has(eventId)) {
     events = [eventId];
@@ -264,12 +274,23 @@ const resolveRank = (canon, { eventId, year, trackId, bryceBestSeconds }) => {
     attribution = 'doubleheader_bestlap';
   }
 
-  // combined grid row = combined in the attributed group's event; oval single
-  // events carry no combined row (the single row IS grid-setting)
+  // Grid-setting row. A Combined session only sets the grid when it GENUINELY
+  // merges the groups — its field is larger than the attributed group's. A
+  // "combined" no larger than a single group is a duplicate/mislabel (Barber
+  // 2025's "Combined" is a 10-row copy of Group 1) and is NOT a grid. On a
+  // verified oval there is no combined stage: the single on-track group IS the
+  // grid. On road/street with no genuine combined, the grid is left null rather
+  // than passing a group off as one (St. Pete 2025 had two groups but no
+  // combined session — its grid is simply not in the canonical data).
   const eventRows = canon.byEvent.get(group.eventId);
   const combined = eventRows.find((r) => r.isCombined) || null;
-  const isOvalSingle = !combined && eventRows.filter((r) => !r.isCombined).length === 1;
-  const gridRow = combined || (isOvalSingle ? group : null);
+  const combinedMergesField =
+    combined !== null &&
+    combined.fieldSize !== null &&
+    group.fieldSize !== null &&
+    combined.fieldSize > group.fieldSize;
+  const ovalSingle = isOval && !combined && eventRows.filter((r) => !r.isCombined).length === 1;
+  const gridRow = combinedMergesField ? combined : ovalSingle ? group : null;
 
   return {
     eventId: group.eventId,
@@ -301,10 +322,14 @@ const assembleSession = (records, opts, canon) => {
   if (!built) return { excluded: true, reason: 'no_bryce_laps', id: meta.id, meta };
 
   const trackId = VENUE_TO_TRACK[meta.venue] || null;
+  /* Actual track format, resolved once and passed into rank resolution: the
+   * group→grid fallback is permitted only where this is true. */
+  const isOval = /oval|superspeedway|milwaukee|iowa|world-wide|world wide/i.test(`${meta.venue} ${trackId}`);
   const rank = resolveRank(canon, {
     eventId: canonicalEventId,
     year: meta.year,
     trackId,
+    isOval,
     bryceBestSeconds: built.bryceBestSeconds
   });
   if (!rank) {
@@ -341,9 +366,12 @@ const assembleSession = (records, opts, canon) => {
       venueName: meta.venue,
       trackId,
       sessionLabel: meta.sessionLabel ?? null,
+      /* Weekend contract holds practice and qualifying alike; this first slice
+       * builds qualifying only, a practice producer fills the same shape. */
+      sessionType: 'qualifying',
       eventId: rank.eventId,
       raceSessionIds,
-      isOval: /oval|superspeedway|milwaukee|iowa|world-wide|world wide/i.test(`${meta.venue} ${trackId}`),
+      isOval,
       // crosswalk gate provenance (2026 only; null for 2024-25)
       crosswalkVerdict: crosswalk ? crosswalk.verdict : null,
       crosswalkCrossCheck: crosswalk ? crosswalk.crossCheck : null,
@@ -356,6 +384,12 @@ const assembleSession = (records, opts, canon) => {
       bryceBestSeq: built.bryceBestSeq,
       sessionBestSeconds: built.sessionBestSeconds,
       sessionBestByBryce: built.sessionBestByBryce,
+      /* The benchmark line is the fastest lap IN THE CAPTURE. On road/street the
+       * capture is one qualifying group (lap holders ≈ group size, half the
+       * combined field), so it is the GROUP best, not the session best; ovals
+       * run one group as the whole field, so it is the session best. Labelled
+       * accordingly on screen so a split-quali benchmark never over-claims. */
+      benchmarkScope: isOval ? 'session' : 'group',
       sessionBestMoves: built.sessionBestMoves,
       sessionBestSteps: built.sessionBestSteps,
       gapToSessionBestSeconds: built.gapToSessionBestSeconds,
@@ -383,11 +417,16 @@ const assembleSession = (records, opts, canon) => {
       // validation echoes
       semanticClassificationPosition: semanticPosition,
       positionCrossCheck,
+      /* Doubleheader pairing (filled in main's post-pass): the uncaptured
+       * sibling races of this weekend, so a Race-2 page shows a quiet note
+       * instead of silence and never reuses Race-1's ranks. */
+      pairedUncapturedRaces: [],
       // v2 fields (full Quali & Practice Lab) — filled by a lake producer later,
-      // consumed through the same contract with no UI rework (adapter-contract law)
-      trafficContext: null,
-      theoreticalBestSeconds: null,
-      trackEvolutionCurve: null
+      // consumed through the same contract with no UI rework (adapter-contract law):
+      //   theoreticalBest — { seconds, components[{segment,seconds,sourceLapSeq}], sourceLapSeqs, scope }
+      //   trackEvolution  — ordered observations [{ order, referenceSeconds, scope, coverage }]
+      theoreticalBest: null,
+      trackEvolution: null
     }
   };
 };
@@ -465,6 +504,46 @@ const main = () => {
 
   covered.sort((a, b) => (a.seasonYear - b.seasonYear) || a.date.localeCompare(b.date));
 
+  /* Doubleheader pairing post-pass. A covered Race-1 qualifying weekend also has
+   * a Race-2 race whose OWN qualifying we did not capture; the canonical dataset
+   * models Race 1 and Race 2 as sibling events at the same track/year. Carry the
+   * uncaptured sibling race session ids so the Race-2 page can show a quiet note
+   * (never reusing Race-1's ranks). Any sibling race that IS covered by another
+   * session is skipped — it needs no note. */
+  const coveredRaceIds = new Set(covered.flatMap((s) => s.raceSessionIds));
+  const raceLabelOf = (name) => (/race 2/i.test(name) ? 'Race 2' : /race 1/i.test(name) ? 'Race 1' : null);
+  for (const s of covered) {
+    const myEvent = canon.eventById.get(s.eventId);
+    if (!myEvent) continue;
+    const siblings = [...canon.eventById.values()].filter(
+      (e) => e.trackId === myEvent.trackId && e.seasonYear === myEvent.seasonYear && e.id !== myEvent.id
+    );
+    const paired = [];
+    for (const sib of siblings) {
+      for (const rid of canon.raceSessionsByEvent.get(sib.id) || []) {
+        if (coveredRaceIds.has(rid)) continue;
+        paired.push({ raceSessionId: rid, raceLabel: raceLabelOf(sib.name), eventName: sib.name });
+      }
+    }
+    s.pairedUncapturedRaces = paired;
+  }
+
+  /* Family-legible exclusion notes for the coverage drawer: every set-aside
+   * session is named with the reason it was set aside. */
+  const exclusionNote = (e) => {
+    if (e.reason === 'no_bryce_laps') return 'the second qualifying group — Bryce ran in the other group, so this capture holds none of his laps';
+    if (e.reason === 'no_canonical_qualifying_classification') return 'no official qualifying result in the canonical dataset to verify a rank against';
+    if (e.reason === 'crosswalk_not_go') return 'the 2026 identity crosswalk did not validate GO';
+    if (e.reason === 'bryce_not_in_crosswalk') return 'no validated 2026 identity mapping for Bryce';
+    return e.detail || e.reason;
+  };
+  const exclusions = excluded.map((e) => ({
+    seasonYear: e.seasonYear,
+    venueName: e.venueName,
+    reason: e.reason,
+    note: exclusionNote(e)
+  }));
+
   const bySeasonSource = {};
   for (const s of covered) {
     const k = `${s.seasonYear}:${s.source}`;
@@ -497,7 +576,8 @@ const main = () => {
     coverage: {
       coveredSessions: covered.length,
       excludedSessions: excluded.length,
-      bySeasonSource
+      bySeasonSource,
+      exclusions
     },
     sessions: covered
   };

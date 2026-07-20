@@ -103,14 +103,22 @@ for (const s of pack.sessions) {
     }
   }
 
-  // validation axis: captured best flying lap vs canonical official best (road)
+  // validation axis: captured best flying lap vs canonical official best (road).
+  // Branch on SIGN: a positive residual (captured slower than official) is a
+  // capture miss of his fastest lap; a negative residual (captured FASTER than
+  // official) is a capture/official disagreement — the capture found a lap the
+  // official classification does not, which needs separate adjudication, not the
+  // "capture missed his fastest lap" story. Magnitude alone gates the fatal.
   if (!s.isOval && s.officialBestLapSeconds !== null && s.bryceBestSeconds !== null) {
-    const resid = Math.abs(s.bryceBestSeconds - s.officialBestLapSeconds);
+    const signed = s.bryceBestSeconds - s.officialBestLapSeconds;
+    const resid = Math.abs(signed);
     residualMax = Math.max(residualMax, resid);
     if (resid > ROAD_BEST_FATAL_S)
       fail(`${tag}: captured best ${s.bryceBestSeconds} vs official ${s.officialBestLapSeconds} residual ${resid.toFixed(4)}s > ${ROAD_BEST_FATAL_S}s (partial artifact / wrong join)`);
-    else if (resid > ROAD_BEST_ADVISORY_S)
-      warn(`${tag}: captured best ${s.bryceBestSeconds} vs official ${s.officialBestLapSeconds} gap ${resid.toFixed(4)}s (capture missed his fastest lap — UI headlines official)`);
+    else if (signed > ROAD_BEST_ADVISORY_S)
+      warn(`${tag}: captured best ${s.bryceBestSeconds} is ${resid.toFixed(4)}s slower than official ${s.officialBestLapSeconds} — capture missed his fastest lap (UI headlines official)`);
+    else if (signed < -ROAD_BEST_ADVISORY_S)
+      warn(`${tag}: captured best ${s.bryceBestSeconds} is ${resid.toFixed(4)}s FASTER than official ${s.officialBestLapSeconds} — capture/official disagreement, needs separate adjudication`);
   }
 }
 

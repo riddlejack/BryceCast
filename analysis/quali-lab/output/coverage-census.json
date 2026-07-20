@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-20T14:00:13.959Z",
+  "generatedAt": "2026-07-20T17:33:46.201Z",
   "sourceHash": "64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978",
   "covered": [
     {
@@ -188,8 +188,8 @@
       "lapCount": 10,
       "onTrackGroupRank": 10,
       "groupFieldSize": 11,
-      "combinedGridPosition": 10,
-      "combinedFieldSize": 11,
+      "combinedGridPosition": null,
+      "combinedFieldSize": null,
       "rankAttribution": "single",
       "positionCrossCheck": "match",
       "crosswalkVerdict": null
@@ -204,8 +204,8 @@
       "lapCount": 7,
       "onTrackGroupRank": 3,
       "groupFieldSize": 10,
-      "combinedGridPosition": 3,
-      "combinedFieldSize": 10,
+      "combinedGridPosition": null,
+      "combinedFieldSize": null,
       "rankAttribution": "single",
       "positionCrossCheck": "match",
       "crosswalkVerdict": null
@@ -444,8 +444,8 @@
       "lapCount": 2,
       "onTrackGroupRank": 12,
       "groupFieldSize": 24,
-      "combinedGridPosition": 12,
-      "combinedFieldSize": 24,
+      "combinedGridPosition": null,
+      "combinedFieldSize": null,
       "rankAttribution": "single",
       "positionCrossCheck": "na",
       "crosswalkVerdict": "GO"

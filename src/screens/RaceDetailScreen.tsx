@@ -26,6 +26,7 @@ import type { UiVenueDossierVenue, UiVenueDossierVisit } from '../data/uiDataPac
 import { watchableCaptureForRace, replayProvenance, priorYearReplaysAtVenue, type ReplaySessionInfo } from '../data/replayAvailable';
 import { ReplayAffordance, priorYearTitle, useReplayCatalog } from './replayAffordance';
 import { QualifyingRunByRunCard } from './qualifyingRunByRun';
+import { useQualiLabForRace } from '../data/qualiLab';
 
 type Row = Record<string, unknown>;
 
@@ -1131,6 +1132,11 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
    * the catalog is read here — before any early return — and threaded down. */
   const replayCatalog = useReplayCatalog();
 
+  /* The qualifying resolution is hoisted here (not read inside the card) so the
+   * footer provenance can include the Quali module's own source tier when it
+   * renders. Read before any early return. */
+  const qualiResolution = useQualiLabForRace(sessionId);
+
   if (entry === 'loading') {
     return (
       <div className="page stack">
@@ -1308,9 +1314,9 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
       <WatchRaceUnfold sessionId={sessionId} />
 
       {/* Weekend arc, chronological: qualifying (Friday signal) before the race
-          it set the grid for. Renders only where the weekend's qualifying is a
-          covered semantic-layer session (Brief M). */}
-      <QualifyingRunByRunCard raceSessionId={sessionId} />
+          it set the grid for. Renders the covered module, a quiet Race-2 note,
+          or nothing (Brief M). Resolution hoisted above for footer provenance. */}
+      <QualifyingRunByRunCard resolution={qualiResolution} />
 
       {story ? <LapChartCard story={story} mover={mover} /> : null}
 
@@ -1380,8 +1386,13 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
         );
         const replayTiers = new Set(replaySessions.map((session) => replayProvenance(session).tier));
 
-        const hasRaceTools = hasLake || marksDrawn || replayTiers.has('racetools_capture');
-        const hasTiming71 = replayTiers.has('timing71_normalized');
+        /* The Quali module draws from its own capture tier when it renders; the
+           quiet Race-2 note makes no data claim, so only a rendered session
+           counts toward the footer. */
+        const qualiTier = qualiResolution && qualiResolution !== 'failed' ? qualiResolution.session?.sourceTier ?? null : null;
+
+        const hasRaceTools = hasLake || marksDrawn || replayTiers.has('racetools_capture') || qualiTier === 'racetools_capture';
+        const hasTiming71 = replayTiers.has('timing71_normalized') || qualiTier === 'timing71_normalized';
         const hasOwnCapture = replayTiers.has('brycecast_capture');
 
         const parts = ['official results', 'the official lap chart'];
