@@ -2216,6 +2216,7 @@ const buildPackage = () => {
   const predictiveModelScorecard = readJson(sources.predictiveModelScorecard);
   const predictiveContextPackManifest = readJson(sources.predictiveContextPackManifest);
   const careerLifeStats = readJson(sources.careerLifeStatsSummary);
+  const careerLifeStatsMilesRaced = readCsv(sources.careerLifeStatsMilesRaced);
   const careerLifeStatsMileageBreakdowns = readCsv(sources.careerLifeStatsMileageBreakdowns);
   const careerLifeStatsTravelModeBreakdown = readCsv(sources.careerLifeStatsTravelModeBreakdown);
   const careerLifeStatsFuelEstimate = readCsv(sources.careerLifeStatsFuelEstimate);
@@ -2541,6 +2542,14 @@ const buildPackage = () => {
         lifeStats: {
           schemaVersion: careerLifeStats.schemaVersion,
           personalRaceMileage: careerLifeStats.personalRaceMileage,
+          // Every race row already summed into the exact career mileage. The
+          // odometer dedups a live/replayed session against this set so an
+          // already-counted race (e.g. Nashville) never gets its provisional
+          // laps added a second time. Kept at the lifeStats root because the
+          // validator pins personalRaceMileage to the summary.json shape.
+          coveredSessionIds: careerLifeStatsMilesRaced
+            .map((row) => String(row.sessionId ?? '').trim())
+            .filter(Boolean),
           physicalSessionMileage: careerLifeStats.physicalSessionMileage,
           travel: careerLifeStats.travel,
           countries: numberOrNull(careerLifeStats.countries),

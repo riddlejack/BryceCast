@@ -98,12 +98,30 @@ const secondsLabel = (value: unknown) => {
   return seconds === null ? 'gap pending' : `+${seconds.toFixed(seconds < 10 ? 1 : 0)}s`;
 };
 
+/* The fastest last-lap average in the field, for the hero speed line. Speeds
+ * are per-lap averages from official timing — apples-to-apples against Bryce's
+ * own last lap, never a claim of instantaneous velocity. */
+const fastestLastSpeedInField = (rows: LiveRow[]): { speed: number; row: LiveRow } | null => {
+  let best: { speed: number; row: LiveRow } | null = null;
+  for (const row of rows) {
+    const speed = asNumber(row.lastSpeed);
+    if (speed === null || speed <= 0) continue;
+    if (!best || speed > best.speed) best = { speed, row };
+  }
+  return best;
+};
+
 const sourceEntries = {
   hero: [
     {
       label: 'Race Control timing feed · car 9 identity guard',
       path: '/api/readiness + /api/timing',
       note: 'Position, lap, flag, gaps, and neighboring drivers come from the active INDY NXT timing payload. Car 9 must match source driver identity 2143 or Bryce Aron.'
+    },
+    {
+      label: 'Lap average speed · official timing',
+      path: '/api/readiness → liveTiming.rows[].lastSpeed / bestSpeed',
+      note: 'Per-lap average speeds published by official timing, updating once per completed lap. These are lap averages, not instantaneous velocity — BryceCast shows no speedometer dial.'
     }
   ],
   points: [
@@ -498,6 +516,13 @@ const LiveHero = ({ payload, samples, replayEnded = false }: { payload: LiveRead
   const historicalRank = asNumber((points.bryce as Row)?.historicalRank);
   const standingMove = historicalRank !== null && pointsWindow ? historicalRank - pointsWindow.bryce.projectedStanding : null;
 
+  const bryceLastSpeed = bryce ? asNumber(bryce.lastSpeed) : null;
+  const fieldFastest = fastestLastSpeedInField(liveRowsOf(payload));
+  const bryceHoldsFastest =
+    bryceLastSpeed !== null && (fieldFastest === null || fieldFastest.speed <= bryceLastSpeed + 0.05);
+  const fastestName = fieldFastest ? driverLabel(fieldFastest.row) : null;
+  const underCaution = isCautionFlag(flag);
+
   const recent = samples.filter((sample) => sample.rank !== null && (lap === null || sample.lap === null || sample.lap >= lap - 5));
   const firstRecent = recent[0];
   const gained = rank !== null && firstRecent?.rank !== null && firstRecent?.rank !== undefined ? firstRecent.rank - rank : 0;
@@ -540,6 +565,45 @@ const LiveHero = ({ payload, samples, replayEnded = false }: { payload: LiveRead
               {positionStory ? <span className={`stat__delta${positionStory.up ? ' stat__delta--up' : ''}`}>{positionStory.text}</span> : null}
             </div>
           </div>
+          {bryceLastSpeed !== null ? (
+            <p className="live-hero__speed caption caption--secondary">
+              {underCaution ? (
+                /* Under yellow the field runs to a controlled caution pace, so
+                 * the drop is real but a cross-car comparison would pit laps
+                 * that aren't the same caution lap against each other. Keep
+                 * Bryce's own last lap; omit the field comparison. */
+                <>
+                  Last lap under caution ·{' '}
+                  <TickerValue
+                    className="live-hero__speed-value"
+                    value={`${bryceLastSpeed.toFixed(1)} mph`}
+                    valueKey={`${lap ?? 'na'}-${bryceLastSpeed}`}
+                  />
+                </>
+              ) : (
+                <>
+                  Last lap{' '}
+                  <TickerValue
+                    className="live-hero__speed-value"
+                    value={`${bryceLastSpeed.toFixed(1)} mph`}
+                    valueKey={`${lap ?? 'na'}-${bryceLastSpeed}`}
+                  />
+                  {bryceHoldsFastest ? (
+                    <> · fastest last lap in the field</>
+                  ) : (
+                    <>
+                      {' · '}fastest in the field{fastestName ? ` (${fastestName})` : ''} ran{' '}
+                      <TickerValue
+                        className="live-hero__speed-value"
+                        value={`${fieldFastest!.speed.toFixed(1)} mph`}
+                        valueKey={`${lap ?? 'na'}-${fieldFastest!.speed}`}
+                      />
+                    </>
+                  )}
+                </>
+              )}
+            </p>
+          ) : null}
         </div>
         <div className="hero-race__art live-hero__art">
           {outline ? <TrackArt outline={outline} showCornerLabels={false} maxHeight={150} /> : null}

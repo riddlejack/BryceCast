@@ -1,7 +1,10 @@
 import { useState, type ReactNode } from 'react';
-import { Card, GhostButton, Reveal, SourcePill, Stat, Unavailable } from '../app/components';
+import { Card, GhostButton, Reveal, SourcePill, Stat, TickerValue, Unavailable } from '../app/components';
 import { asNumber, asString, formatNumber, formatPct } from '../app/format';
 import { uiDataPackage } from '../data/uiDataPackage';
+import { getVenueByTrackName } from '../data/venueDossier';
+import { liveBryceRowOf } from '../data/livePageModel';
+import type { LiveReadiness, ReadinessStatus } from '../app/useReadiness';
 import { CareerAtlas } from './careerAtlas';
 import { Gb3DepthLayer } from './gb3Depth';
 import {
@@ -157,7 +160,41 @@ const splitNamedSource = (source: string): { name: string; url: string } => {
   return { name: source.slice(0, separator), url: source.slice(separator + 3) };
 };
 
-const OdometerCard = () => {
+/** During a live (or replayed) session the odometer counts today's on-track
+ *  laps as they run — Bryce's completed laps × the canonical venue length. It
+ *  never touches the exact sourced career figure above it.
+ *
+ *  Two guards keep the number honest:
+ *  - Laps come only from `bryce.laps`. There is NO heartbeat-lap fallback: the
+ *    session leader's lap counter overcounts the moment Bryce is lapped or his
+ *    row is missing, so absent `bryce.laps` we render no provisional mileage.
+ *  - `covered` is true when the active session is already summed into the exact
+ *    career total (its event-session id is in the ledger). A covered session's
+ *    laps are shown as a replay preview only and are NEVER added to the total —
+ *    that double-count is what produced the false 7,053.
+ *
+ *  Absent a live session the card renders exactly as before. */
+const liveOdometerIncrement = (live: LiveReadiness | null, coveredEventSessionIds: Set<string>) => {
+  if (!live) return null;
+  if (live.state !== 'ready' && live.state !== 'degraded') return null;
+  const heartbeat = (live.liveTiming as Record<string, unknown> | undefined)?.heartbeat as
+    | Record<string, unknown>
+    | undefined;
+  const trackName = asString(heartbeat?.trackName);
+  if (!trackName) return null;
+  const venue = getVenueByTrackName(trackName);
+  const lengthMi = venue?.lengthMi ?? null;
+  if (lengthMi === null || lengthMi <= 0) return null;
+  const bryce = liveBryceRowOf(live);
+  const laps = asNumber(bryce?.laps);
+  if (laps === null || laps <= 0) return null;
+  const rawSessionId = heartbeat?.eventSessionId;
+  const activeSessionId = rawSessionId == null ? '' : String(rawSessionId).trim();
+  const covered = activeSessionId.length > 0 && coveredEventSessionIds.has(activeSessionId);
+  return { laps, lengthMi, trackName, todayMiles: laps * lengthMi, activeSessionId, covered };
+};
+
+const OdometerCard = ({ live }: { live: LiveReadiness | null }) => {
   const lifeStats = uiDataPackage.screens.careerLab.lifeStats;
   if (!lifeStats) {
     return (
@@ -166,6 +203,21 @@ const OdometerCard = () => {
       </Card>
     );
   }
+
+  /* The ledger stores full session ids (session_indy_nxt_2026_6755); the live
+   * feed reports the bare event-session id (6755). Match on the trailing token
+   * so a replay of an already-counted race dedups against the exact total. */
+  const coveredEventSessionIds = new Set(
+    (lifeStats.coveredSessionIds ?? [])
+      .map((id) => id.slice(id.lastIndexOf('_') + 1))
+      .filter(Boolean)
+  );
+  const liveToday = liveOdometerIncrement(live, coveredEventSessionIds);
+  // Only fold today's laps into the exact career figure when the session is NOT
+  // already counted; a covered replay leaves the total untouched.
+  const provisionalTotalMiles =
+    liveToday && !liveToday.covered ? lifeStats.personalRaceMileage.miles + liveToday.todayMiles : null;
+  const routeAdjusted = lifeStats.travel.routeAdjustedMinimum;
 
   const venueSourceEntries = lifeStats.venueSources.flatMap((venue) => [
     ...venue.lengthSources.map((source, index) => {
@@ -196,7 +248,13 @@ const OdometerCard = () => {
             ...lifeStats.sourceRefs.map((ref) => ({ label: ref.key, path: ref.path, note: ref.note })),
             ...venueSourceEntries
           ]}
-          caveats={lifeStats.caveats}
+          caveats={[
+            ...lifeStats.caveats,
+            `Route-adjusted minimum proxy: ${wholeNumber.format(routeAdjusted.lowMiles)}–${wholeNumber.format(
+              routeAdjusted.highMiles
+            )} miles. Actual travel stays unknown until season bases and return-home frequency are supplied.`,
+            `Route adjustment assumptions — drive legs: ${routeAdjusted.assumptions.driveProxy}; flight legs: ${routeAdjusted.assumptions.flightProxy}.`
+          ]}
         />
       }
     >
@@ -222,20 +280,55 @@ const OdometerCard = () => {
         <Stat
           label="Minimum travel"
           value={wholeNumber.format(lifeStats.travel.greatCircleMinimum.miles)}
-          note="Great-circle displacement · venue to venue"
+          note={
+            <>
+              Great-circle displacement · venue to venue
+              <span style={{ display: 'block', marginTop: 2 }}>Routes don’t run straight, so the real number is larger.</span>
+            </>
+          }
         />
       </div>
+      {liveToday && liveToday.covered ? (
+        /* Already in the exact total above — preview the replay's laps, add
+         * nothing. This is the guard against the false 7,053. */
+        <div className="odometer-live odometer-live--preview">
+          <span className="caption">Replay preview</span>
+          <TickerValue
+            className="odometer-live__value"
+            value={`+${wholeNumber.format(liveToday.todayMiles)} mi`}
+            valueKey={liveToday.laps}
+          />
+          <p className="caption caption--secondary odometer-live__note">
+            {wholeNumber.format(liveToday.laps)} {liveToday.laps === 1 ? 'lap' : 'laps'} ×{' '}
+            {liveToday.lengthMi.toFixed(2)} mi at {liveToday.trackName}. This session already counts in the total above —
+            replaying it adds nothing.
+          </p>
+        </div>
+      ) : liveToday && provisionalTotalMiles !== null ? (
+        /* A session not yet in the ledger (a live race in progress). Today's
+         * laps lead; the total including today stays subordinate. */
+        <div className="odometer-live">
+          <span className="caption">Today, provisional</span>
+          <TickerValue
+            className="odometer-live__value"
+            value={`+${wholeNumber.format(liveToday.todayMiles)} mi today`}
+            valueKey={liveToday.laps}
+          />
+          <p className="caption caption--secondary odometer-live__note">
+            {wholeNumber.format(provisionalTotalMiles)} mi including today · {wholeNumber.format(liveToday.laps)}{' '}
+            {liveToday.laps === 1 ? 'lap' : 'laps'} × {liveToday.lengthMi.toFixed(2)} mi at {liveToday.trackName}.
+            Reconciled with official results after the flag.
+          </p>
+        </div>
+      ) : null}
       <p className="caption caption--secondary" style={{ margin: '18px 0 0' }}>
-        Route-adjusted minimum proxy: {wholeNumber.format(lifeStats.travel.routeAdjustedMinimum.lowMiles)}–
-        {wholeNumber.format(lifeStats.travel.routeAdjustedMinimum.highMiles)} miles. Actual travel stays unknown until
-        season bases and return-home frequency are supplied. The on-track floor excludes {lifeStats.physicalSessionMileage.unknown.sessions}{' '}
-        sessions with no lap count.
+        The on-track floor excludes {lifeStats.physicalSessionMileage.unknown.sessions} sessions with no lap count.
       </p>
     </Card>
   );
 };
 
-export const CareerScreen = () => {
+export const CareerScreen = ({ readiness }: { readiness?: ReadinessStatus }) => {
   const careerLab = uiDataPackage.screens.careerLab;
   const rows = careerLab.seriesSummary as Row[];
   const rowByName = new Map(rows.map((row) => [asString(row.seriesName) ?? '', row]));
@@ -295,7 +388,7 @@ export const CareerScreen = () => {
       </div>
       <CareerRestarts />
 
-      <OdometerCard />
+      <OdometerCard live={readiness?.payload ?? null} />
 
       <CareerAtlas />
 

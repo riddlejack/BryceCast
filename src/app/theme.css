@@ -321,6 +321,27 @@ button { font-family: inherit; }
   margin-left: 6px;
 }
 
+/* Brief Q: the odometer's live provisional strip — a divided row under the
+ * exact career stats, ticking up as today's laps run. No new colors. */
+.odometer-live {
+  margin: 18px 0 0;
+  padding: 16px 0 0;
+  border-top: 1px solid var(--divider);
+  display: grid;
+  gap: 4px;
+}
+.odometer-live__value {
+  font-weight: 620;
+  font-variant-numeric: tabular-nums;
+  /* Subordinate to the exact career mileage above: today's laps read as a
+   * secondary live value, not a competing headline. */
+  font-size: clamp(20px, 4.5vw, 22px);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--ink-primary);
+}
+.odometer-live__note { margin: 2px 0 0; }
+
 .stat__delta { font-size: 12.5px; font-weight: 550; }
 .stat__delta--up { color: var(--status-good); }
 /* Jack (race-detail review): the down arrow is the down arrow — mirror the
@@ -975,6 +996,12 @@ button { font-family: inherit; }
   display: grid;
   margin-top: 2px;
 }
+
+.live-hero__speed {
+  margin: 12px 0 0;
+  font-variant-numeric: tabular-nums;
+}
+.live-hero__speed-value { font-weight: 550; color: var(--ink-secondary); }
 
 .live-hero__art {
   display: flex;
