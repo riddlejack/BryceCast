@@ -45,6 +45,50 @@ export const isRaceSession = (kind: LiveSessionKind): boolean => kind === 'race'
 export const sessionRankCaption = (kind: LiveSessionKind): string =>
   kind === 'race' ? 'running position' : 'best-lap order';
 
+/** Every place the running-order chart names its currency. In a race the rows
+ *  carry an on-track interval and the noun is "running order"; in practice and
+ *  qualifying the same lanes are best-lap order, the gap is a best-lap gap, and
+ *  the wording never implies an on-track interval. One formatter so tooltips,
+ *  screen-reader text, the empty state, and the change verbs all agree. */
+export interface SessionOrderWording {
+  /** Lane meaning / rank caption. */
+  rankLabel: string;
+  /** The order as a whole. */
+  orderNoun: string;
+  /** Empty state before two samples exist. */
+  emptyState: string;
+  /** Tooltip: no change detected in view. */
+  unchanged: string;
+  /** Tooltip: the gap could not be resolved. */
+  gapUnavailable: string;
+  /** Ladder row: the gap could not be resolved (Bryce-relative, no "to Bryce"). */
+  ladderGapUnavailable: string;
+  /** Which currency the rows carry: a sourced on-track interval (race) or a
+   *  best-lap gap (practice / qualifying). */
+  currency: 'interval' | 'bestLap';
+}
+
+export const sessionOrderWording = (kind: LiveSessionKind): SessionOrderWording =>
+  kind === 'race'
+    ? {
+        rankLabel: 'running position',
+        orderNoun: 'running order',
+        emptyState: 'The running order appears after two official timing samples.',
+        unchanged: 'position unchanged in this view',
+        gapUnavailable: 'gap to Bryce unavailable',
+        ladderGapUnavailable: 'gap unavailable',
+        currency: 'interval'
+      }
+    : {
+        rankLabel: 'best-lap order',
+        orderNoun: 'best-lap order',
+        emptyState: 'The best-lap order appears after two official timing samples.',
+        unchanged: 'best-lap order unchanged in this view',
+        gapUnavailable: 'best-lap gap to Bryce unavailable',
+        ladderGapUnavailable: 'best-lap gap unavailable',
+        currency: 'bestLap'
+      };
+
 /** Parse a Race Control lap-time string ("1:05.139", "58.421", "1:02:03.4")
  *  into seconds. Empty / non-numeric / non-positive → null (never zero-filled).
  *  Best-lap deltas are computed only from values that parse cleanly. */

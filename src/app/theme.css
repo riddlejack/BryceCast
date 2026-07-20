@@ -1218,6 +1218,23 @@ button { font-family: inherit; }
 
 .best-lap-deltas__currency { margin: 8px 0 0; }
 
+/* Phone: the four-column row (pos · name+tag · time · delta) collides on narrow
+   screens — the "teammate" tag rides into the lap time. Drop to a two-row grid:
+   pos · name · time on top, the delta on its own line right-aligned beneath. */
+@media (max-width: 560px) {
+  .best-lap-deltas__row {
+    grid-template-columns: 34px 1fr auto;
+    grid-template-areas:
+      "pos name time"
+      "pos delta delta";
+    gap: 2px 10px;
+  }
+  .best-lap-deltas__pos { grid-area: pos; align-self: start; padding-top: 1px; }
+  .best-lap-deltas__name { grid-area: name; }
+  .best-lap-deltas__time { grid-area: time; }
+  .best-lap-deltas__delta { grid-area: delta; justify-self: end; }
+}
+
 .live-camera {
   position: relative;
   width: 100%;

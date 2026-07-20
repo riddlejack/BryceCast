@@ -36,6 +36,7 @@ import {
   buildBestLapDeltas,
   parseLapTimeSeconds,
   resolveLiveSessionKind,
+  sessionOrderWording,
   sessionRankCaption
 } from '../src/data/liveSessionModel.ts';
 
@@ -257,6 +258,25 @@ assert.equal(sessionRankCaption('race'), 'running position');
 assert.equal(sessionRankCaption('practice'), 'best-lap order');
 assert.equal(sessionRankCaption('qualifying'), 'best-lap order');
 
+// Session-aware wording formatter: one source of truth for every string the
+// running-order chart shows, so tooltips, screen-reader text, and the empty
+// state never leak race words into a practice / qualifying session.
+const raceWording = sessionOrderWording('race');
+assert.equal(raceWording.currency, 'interval', 'a race carries the sourced on-track interval');
+assert.equal(raceWording.orderNoun, 'running order');
+assert.equal(raceWording.unchanged, 'position unchanged in this view');
+assert.equal(raceWording.gapUnavailable, 'gap to Bryce unavailable');
+assert.match(raceWording.emptyState, /running order/);
+const practiceWording = sessionOrderWording('practice');
+assert.equal(practiceWording.currency, 'bestLap', 'practice compares best laps, never an on-track interval');
+assert.equal(practiceWording.rankLabel, 'best-lap order');
+assert.equal(practiceWording.orderNoun, 'best-lap order');
+assert.equal(practiceWording.unchanged, 'best-lap order unchanged in this view');
+assert.equal(practiceWording.gapUnavailable, 'best-lap gap to Bryce unavailable');
+assert.equal(practiceWording.ladderGapUnavailable, 'best-lap gap unavailable');
+assert.match(practiceWording.emptyState, /best-lap order/);
+assert.equal(sessionOrderWording('qualifying').currency, 'bestLap', 'qualifying shares the practice best-lap currency');
+
 const near = (value, target) => Math.abs(value - target) < 1e-6;
 assert.ok(near(parseLapTimeSeconds('1:05.139'), 65.139), 'M:SS.mmm parses to seconds');
 assert.ok(near(parseLapTimeSeconds('58.421'), 58.421), 'a bare seconds string parses');
@@ -292,4 +312,4 @@ assert.equal(bestLapDeltaWords(0.3), '0.30s ahead', 'positive reads ahead, Bryce
 assert.equal(bestLapDeltaWords(-0.15), '0.15s behind', 'negative reads behind');
 assert.equal(bestLapDeltaWords(0), 'level', 'a dead heat reads level, never signed zero');
 
-console.log(JSON.stringify({ ok: true, assertions: 116, model: 'session-keyed-live-history + session-aware-live' }, null, 2));
+console.log(JSON.stringify({ ok: true, assertions: 132, model: 'session-keyed-live-history + session-aware-live' }, null, 2));

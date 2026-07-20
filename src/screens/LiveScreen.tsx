@@ -64,6 +64,7 @@ import {
   bestLapDeltaWords,
   buildBestLapDeltas,
   resolveLiveSessionKind,
+  sessionOrderWording,
   sessionRankCaption,
   type BestLapDeltas,
   type LiveSessionKind
@@ -494,11 +495,15 @@ const BestLapDeltas = ({ deltas }: { deltas: BestLapDeltas | null }) => {
   const { leader, bryce, bryceIsFastest, offSessionBestSeconds, teammates } = deltas;
   return (
     <div className="best-lap-deltas">
-      <div className="best-lap-deltas__row" data-role="leader">
+      <div className={`best-lap-deltas__row${leader.isBryce ? ' best-lap-deltas__row--bryce' : ''}`} data-role={leader.isBryce ? 'leader bryce' : 'leader'}>
         <span className="best-lap-deltas__pos">{leader.isBryce ? <Plate size="row" /> : 'P1'}</span>
-        <span className="best-lap-deltas__name">{leader.surname}</span>
+        <span className="best-lap-deltas__name">{leader.isBryce ? 'Bryce' : leader.surname}</span>
         <span className="best-lap-deltas__time"><TickerValue value={leader.bestLapTime} valueKey={leader.bestLapTime} /></span>
-        <span className="best-lap-deltas__delta best-lap-deltas__delta--flat">the lap to beat</span>
+        {leader.isBryce ? (
+          <span className="best-lap-deltas__delta best-lap-deltas__delta--up">the lap to beat</span>
+        ) : (
+          <span className="best-lap-deltas__delta best-lap-deltas__delta--flat">the lap to beat</span>
+        )}
       </div>
       {teammates.map((teammate) => (
         <div className="best-lap-deltas__row" key={teammate.entry.id} data-role="teammate">
@@ -508,6 +513,9 @@ const BestLapDeltas = ({ deltas }: { deltas: BestLapDeltas | null }) => {
           <span className="best-lap-deltas__delta">Bryce {bestLapDeltaWords(teammate.bryceAheadSeconds)}</span>
         </div>
       ))}
+      {/* Bryce's own row appears only when he is NOT the session best — when he
+          is, the leader row above already IS his row (Plate, "the lap to beat").
+          Rendering both would double him. */}
       {bryce && !bryceIsFastest ? (
         <div className="best-lap-deltas__row best-lap-deltas__row--bryce" data-role="bryce">
           <span className="best-lap-deltas__pos"><Plate size="row" /></span>
@@ -516,14 +524,6 @@ const BestLapDeltas = ({ deltas }: { deltas: BestLapDeltas | null }) => {
           <span className="best-lap-deltas__delta">
             {offSessionBestSeconds !== null ? `${offSessionBestSeconds.toFixed(offSessionBestSeconds < 10 ? 2 : 1)}s off the best` : 'best lap pending'}
           </span>
-        </div>
-      ) : null}
-      {bryce && bryceIsFastest ? (
-        <div className="best-lap-deltas__row best-lap-deltas__row--bryce" data-role="bryce">
-          <span className="best-lap-deltas__pos"><Plate size="row" /></span>
-          <span className="best-lap-deltas__name">Bryce</span>
-          <span className="best-lap-deltas__time"><TickerValue value={bryce.bestLapTime} valueKey={bryce.bestLapTime} /></span>
-          <span className="best-lap-deltas__delta best-lap-deltas__delta--up">fastest in the field</span>
         </div>
       ) : null}
       <p className="caption caption--secondary best-lap-deltas__currency">gaps in seconds · best laps</p>
@@ -542,7 +542,7 @@ const BattleModule = ({ payload, samples, history, replayEnded = false, sessionK
         <BestLapDeltas deltas={deltas} />
         <div className="live-battle__divider" />
         <p className="live-battle__shared-title">Best-lap order over {sessionNoun}</p>
-        <LiveRunningOrder history={history} clockCheckedAt={liveSourceCheckedAtOf(payload)} replayEnded={replayEnded} orderLabel="best-lap order" />
+        <LiveRunningOrder history={history} clockCheckedAt={liveSourceCheckedAtOf(payload)} replayEnded={replayEnded} wording={sessionOrderWording(sessionKind)} />
         <p className="caption caption--secondary live-battle__caption">Five minutes of best-lap order · gold is Bryce · neutral line patterns stay with each driver · ○ a best-lap order change involving Bryce</p>
       </Card>
     );
@@ -710,7 +710,7 @@ const LiveHero = ({ payload, samples, replayEnded = false, sessionKind }: { payl
                     <> · {speedFastestCopy}</>
                   ) : (
                     <>
-                      {' · '}fastest in the field{fastestName ? ` (${fastestName})` : ''} ran{' '}
+                      {' · '}field best: {fastestName ? `${fastestName}, ` : ''}
                       <TickerValue
                         className="live-hero__speed-value"
                         value={`${fieldFastest!.speed.toFixed(1)} mph`}
@@ -1512,9 +1512,12 @@ export const LiveScreen = ({
   const latestHistorySample = history?.samples.at(-1) ?? null;
   const liveHeartbeat = heartbeatOf(payload);
   const payloadSessionKey = [asString(liveHeartbeat.eventId), asString(liveHeartbeat.eventSessionId)].filter(Boolean).join('-');
-  // The session shape comes from the sourced payload only (Race Control's
-  // SessionType), never the clock. A finished-race replay stays race-shaped.
-  const sessionKind = replayEnded ? 'race' : resolveLiveSessionKind(payload);
+  // The session shape comes from the sourced payload ALONE (Race Control's
+  // SessionType), never a display flag and never the clock. `replayEnded` is a
+  // separate presentation state (it drives the "Race complete · as raced" hero);
+  // it must not override the sourced kind. Replays are always of races, so a
+  // finished-race replay resolves to race here on its own.
+  const sessionKind = resolveLiveSessionKind(payload);
   const raceShaped = sessionKind === 'race';
   return (
     <div

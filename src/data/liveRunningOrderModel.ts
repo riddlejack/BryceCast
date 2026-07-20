@@ -1,5 +1,6 @@
 import { buildBattleFrameForSample, type LiveHistorySample, type LiveSessionHistory } from './liveHistoryModel.ts';
 import { driverSurname, livePosition, stableDriverId } from './liveMotionModel.ts';
+import { parseLapTimeSeconds } from './liveSessionModel.ts';
 
 export const RUNNING_ORDER_WINDOW_MS = 300_000;
 export const RUNNING_ORDER_LANE_COUNT = 7;
@@ -389,10 +390,56 @@ export const runningOrderGapWords = (
   return `${gap.seconds.toFixed(1)}s ${gap.direction}${subject}`;
 };
 
+/** Best-lap gap between a driver and Bryce, from each car's sourced best lap in
+ *  the sample. Practice / qualifying currency: cars run different cycles, so a
+ *  published on-track interval is meaningless here — this compares the two best
+ *  laps directly. "ahead" means the driver's best lap is faster than Bryce's.
+ *  Null when either best lap is missing; never zero-filled. */
+export const bestLapGapToBryce = (
+  sample: LiveHistorySample,
+  driverId: string
+): { seconds: number; direction: 'ahead' | 'behind' } | null => {
+  if (driverId === sample.bryceId) return null;
+  const bryceRow = sample.rows.find((row) => stableDriverId(row) === sample.bryceId);
+  const driverRow = sample.rows.find((row) => stableDriverId(row) === driverId);
+  const bryceBest = bryceRow ? parseLapTimeSeconds(bryceRow.bestLapTime) : null;
+  const driverBest = driverRow ? parseLapTimeSeconds(driverRow.bestLapTime) : null;
+  if (bryceBest === null || driverBest === null) return null;
+  const diff = driverBest - bryceBest;
+  return { seconds: Math.abs(diff), direction: diff < 0 ? 'ahead' : 'behind' };
+};
+
+export const bestLapGapWords = (
+  sample: LiveHistorySample,
+  driverId: string,
+  includeBryce = true
+): string => {
+  if (driverId === sample.bryceId) return 'Bryce';
+  const gap = bestLapGapToBryce(sample, driverId);
+  if (!gap) return '—';
+  const subject = includeBryce ? (gap.direction === 'ahead' ? ' of Bryce' : ' Bryce') : '';
+  const rounded = gap.seconds.toFixed(gap.seconds < 10 ? 2 : 1);
+  return `${rounded}s ${gap.direction}${subject}`;
+};
+
+/** Currency-aware gap words: the sourced on-track interval in a race, the
+ *  best-lap gap in practice / qualifying. */
+export const orderGapWords = (
+  sample: LiveHistorySample,
+  driverId: string,
+  currency: 'interval' | 'bestLap',
+  includeBryce = true
+): string => (currency === 'bestLap'
+  ? bestLapGapWords(sample, driverId, includeBryce)
+  : runningOrderGapWords(sample, driverId, includeBryce));
+
 export const lastRunningOrderChange = (
   history: LiveSessionHistory,
   driverId: string,
-  throughSampleIndex = history.samples.length - 1
+  throughSampleIndex = history.samples.length - 1,
+  /** Race verbs read as on-track overtakes ("passed X"); best-lap order verbs
+   *  read as order moves ("moved ahead of X"), never implying a pass. */
+  orderMode: 'race' | 'bestLap' = 'race'
 ): RunningOrderLastChange | null => {
   for (let index = Math.min(throughSampleIndex, history.samples.length - 1); index > 0; index -= 1) {
     const previous = new Map(runningOrderFrameForSample(history.samples[index - 1]).map((entry) => [entry.id, entry]));
@@ -411,9 +458,14 @@ export const lastRunningOrderChange = (
       })
       .sort((left, right) => Math.abs(left.rank - after.rank) - Math.abs(right.rank - after.rank) || left.id.localeCompare(right.id))[0] ?? null;
     const lap = history.samples[index].lap;
-    const text = swapped
-      ? `${gained ? 'passed' : 'passed by'} ${swapped.name}`
-      : `${gained ? 'gained' : 'lost'} ${Math.abs(after.rank - before.rank)} place${Math.abs(after.rank - before.rank) === 1 ? '' : 's'}`;
+    const places = Math.abs(after.rank - before.rank);
+    const text = orderMode === 'bestLap'
+      ? swapped
+        ? `moved ${gained ? 'ahead of' : 'behind'} ${swapped.name}`
+        : `${gained ? 'up' : 'down'} ${places} in best-lap order`
+      : swapped
+        ? `${gained ? 'passed' : 'passed by'} ${swapped.name}`
+        : `${gained ? 'gained' : 'lost'} ${places} place${places === 1 ? '' : 's'}`;
     return { text, lap };
   }
   return null;

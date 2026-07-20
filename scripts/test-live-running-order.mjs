@@ -2,10 +2,12 @@ import assert from 'node:assert/strict';
 import {
   RUNNING_ORDER_HOVER_RADIUS_PX,
   RUNNING_ORDER_WINDOW_MS,
+  bestLapGapWords,
   detectBryceRunningOrderCrossings,
   fullFieldRunningOrderSeries,
   lastRunningOrderChange,
   nearestRunningOrderSegment,
+  orderGapWords,
   resolveRunningOrderLadder,
   runningOrderCautionSpans,
   runningOrderDomainFor,
@@ -133,6 +135,26 @@ const gaps = runningOrderGapWords(history.samples[0], 'rival');
 assert.match(gaps, /^\d+\.\d+s ahead of Bryce$/, 'gap wording is spatial and names Bryce');
 assert.equal(runningOrderGapWords(history.samples[0], 'unknown'), '—', 'unavailable corridor intervals stay unavailable');
 
+// Best-lap currency (practice / qualifying). The lanes stay best-lap order, the
+// gap compares each car's best lap directly (never the on-track interval that
+// would imply track position), and the change verbs read as order moves.
+const lapField = () => [
+  row('leader', '1', 1, '0', 'Leader', { bestLapTime: '1:04.200' }),
+  row('2143', '9', 2, '0.6', 'Aron', { bestLapTime: '1:04.500' }),
+  row('rival', '7', 3, '1.0', 'Allaer', { bestLapTime: '1:04.900' })
+].sort((left, right) => left.liveRank - right.liveRank || left.driverId.localeCompare(right.driverId));
+const lapSample = historyFrom([0, 1], () => lapField()).samples.at(-1);
+assert.equal(bestLapGapWords(lapSample, 'leader'), '0.30s ahead of Bryce', 'best-lap gap compares best laps, faster reads ahead of Bryce');
+assert.equal(bestLapGapWords(lapSample, 'rival'), '0.40s behind Bryce', 'a slower best lap reads behind Bryce');
+assert.equal(bestLapGapWords(lapSample, '2143'), 'Bryce', 'Bryce is never gapped against himself');
+assert.equal(orderGapWords(lapSample, 'leader', 'bestLap'), bestLapGapWords(lapSample, 'leader'), 'best-lap currency routes to the best-lap gap');
+assert.equal(orderGapWords(history.samples[0], 'rival', 'interval'), runningOrderGapWords(history.samples[0], 'rival'), 'interval currency keeps the sourced on-track gap');
+assert.deepEqual(
+  lastRunningOrderChange(history, '2143', history.samples.length - 1, 'bestLap'),
+  { text: 'moved ahead of Allaer', lap: 12 },
+  'best-lap change verbs read as order moves, never on-track overtakes'
+);
+
 const collisions = resolveRunningOrderLadder([
   { id: 'b', carNo: '2', name: 'B', bryce: false, rank: 4, status: null },
   { id: 'a', carNo: '1', name: 'A', bryce: false, rank: 4, status: null },
@@ -154,7 +176,7 @@ assert.deepEqual(cautions, [{ startMs: baseMs, endMs: baseMs + 15_000 }], 'conti
 
 console.log(JSON.stringify({
   ok: true,
-  assertions: 44,
+  assertions: 48,
   model: 'official-rank-space-running-order',
   regressions: ['lapped-upstream-appends', 't+10-now-edge', 't+60-now-edge']
 }, null, 2));
