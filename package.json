@@ -33,6 +33,7 @@
     "test:postrace-roll": "node scripts/test-postrace-roll.mjs",
     "test:live-readiness": "node scripts/test-live-readiness.mjs",
     "test:live-rank-series": "node scripts/test-live-rank-series.mjs",
+    "test:snapshot-dedup": "node scripts/test-snapshot-dedup-equivalence.mjs",
     "test:static-routing": "node scripts/test-static-routing.mjs",
     "analytics:view-models:validate": "node scripts/validate-ui-view-models.mjs",
     "test:ui-context-adapter": "node scripts/test-ui-context-adapter.mjs",
