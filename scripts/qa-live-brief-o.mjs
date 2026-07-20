@@ -139,10 +139,15 @@ const browser = await chromium.launch({ channel: 'chrome', headless: true });
   const context = await browser.newContext({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 2, colorScheme: 'light', reducedMotion: 'reduce' });
   const page = await context.newPage();
 
-  // Capture the ONE seed fetch the mid-race joiner makes.
+  // Capture the ONE seed fetch the mid-race joiner makes, and count the client's
+  // own readiness polls so the post-seed continuity gate can wait for real
+  // arrivals to append onto the seeded window.
   let seed = null;
+  let readinessArrivals = 0;
   page.on('response', async (response) => {
-    if (seed || !response.url().includes('/api/history/rank-series')) return;
+    const url = response.url();
+    if (url.includes('/api/readiness')) readinessArrivals += 1;
+    if (seed || !url.includes('/api/history/rank-series')) return;
     try { seed = { status: response.status(), body: await response.json() }; } catch { /* ignore */ }
   });
 
@@ -181,11 +186,38 @@ const browser = await chromium.launch({ channel: 'chrome', headless: true });
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.screenshot({ path: path.join(OUT_DIR, 'live-page-midrace-seed--1440.png'), fullPage: true });
 
+  // Seed-to-polled CONTINUITY: the seed is structurally shared with live polls,
+  // but that must be proven VISUALLY after the client's own polls append. Wait
+  // for two post-seed readiness arrivals (at 1× the replay advances ~1 sample/s),
+  // then assert the seeded window kept growing in the SAME bucket, never fell
+  // into a waiting/blank state, and still touches now — and capture that state at
+  // both viewports so a reviewer can see the seam is invisible.
+  const arrivalsAtSeed = readinessArrivals;
+  let postPoll = null;
+  const postDeadline = Date.now() + 20_000;
+  while (Date.now() < postDeadline) {
+    postPoll = await readRunningOrder(page);
+    if (readinessArrivals - arrivalsAtSeed >= 2 && postPoll && postPoll.sampleCount >= (firstPaint?.sampleCount ?? 0)) break;
+    await new Promise((resolve) => setTimeout(resolve, 200));
+  }
+  const postArrivals = readinessArrivals - arrivalsAtSeed;
+  console.log(`post-seed running order: ${JSON.stringify(postPoll)} (${postArrivals} post-seed readiness arrivals)`);
+  check(postArrivals >= 2, `mid-race: at least two post-seed readiness polls arrived (${postArrivals})`);
+  check(postPoll?.sessionKey === firstPaint?.sessionKey, 'CONTINUITY: post-seed polls append into the SAME session bucket as the seed');
+  check((postPoll?.sampleCount ?? 0) >= (firstPaint?.sampleCount ?? 0), `CONTINUITY: the sample count is nondecreasing across the seam (${firstPaint?.sampleCount} → ${postPoll?.sampleCount})`);
+  check(postPoll?.orderingWaiting === 'false', 'CONTINUITY: the chart never falls into a waiting/blank state after the seed');
+  check(postPoll?.touchesNow === 'true', 'CONTINUITY: the appended chart still touches now — no reserved empty span at the seam');
+  check(postPoll?.hasBryce === true, 'CONTINUITY: Bryce keeps his rank line through the append');
+  await screenshotModule(page, 'running-order-midrace-postpoll', 1440);
+  await screenshotModule(page, 'running-order-midrace-postpoll', 390);
+
   await writeFile(path.join(OUT_DIR, 'brief-o-qa-evidence.json'), JSON.stringify({
     race: DEMO_RACE,
     midRaceT0: midRaceIso,
     firstPaint,
     fullAfterMs: fullAtMs,
+    postPoll,
+    postSeedReadinessArrivals: postArrivals,
     seed: seed ? { status: seed.status, available: seed.body?.available, mode: seed.body?.mode, frameCount: seed.body?.frameCount, breakpointCount: seed.body?.breakpointCount, window: seed.body?.window, clientSessionKey: seed.body?.clientSessionKey } : null
   }, null, 2));
   console.log(`log   ${path.join(OUT_DIR, 'brief-o-qa-evidence.json')}`);
