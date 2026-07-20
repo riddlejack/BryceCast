@@ -8,6 +8,7 @@ import type { LiveReadiness, ReadinessStatus } from '../app/useReadiness';
 import { CareerAtlas } from './careerAtlas';
 import { Gb3DepthLayer } from './gb3Depth';
 import { FormulaFordDepthLayer } from './formulaFordDepth';
+import { DaytonaDepthLayer } from './daytonaDepth';
 import {
   BestClimbs,
   CareerBests,
@@ -136,20 +137,22 @@ const ChapterCard = ({
                 {extra}
               </p>
             ) : null}
-            {depth ? (
-              <div style={{ marginTop: 12 }}>
-                <GhostButton expanded={expanded} onClick={() => setExpanded((value) => !value)}>
-                  {expanded ? 'Show less' : depth.title}
-                </GhostButton>
-                {expanded ? (
-                  <Reveal>
-                    <div style={{ paddingTop: 4 }}>{depth.render()}</div>
-                  </Reveal>
-                ) : null}
-              </div>
-            ) : null}
           </>
         )}
+        {/* The depth layer serves both the ordinary chapters and the one-race
+            Daytona card (its stint timeline + co-driver roster). */}
+        {depth ? (
+          <div style={{ marginTop: 12 }}>
+            <GhostButton expanded={expanded} onClick={() => setExpanded((value) => !value)}>
+              {expanded ? 'Show less' : depth.title}
+            </GhostButton>
+            {expanded ? (
+              <Reveal>
+                <div style={{ paddingTop: 4 }}>{depth.render()}</div>
+              </Reveal>
+            ) : null}
+          </div>
+        ) : null}
       </Card>
     </div>
   );
@@ -426,7 +429,9 @@ export const CareerScreen = ({ readiness }: { readiness?: ReadinessStatus }) => 
                       ? { title: 'The GB3 years, in depth', render: () => <Gb3DepthLayer /> }
                       : chapter.name === 'Formula Ford'
                         ? { title: 'Formula Ford lap shape', render: () => <FormulaFordDepthLayer /> }
-                        : undefined
+                        : chapter.short === 'IMSA'
+                          ? { title: 'The 24 hours, in depth', render: () => <DaytonaDepthLayer /> }
+                          : undefined
                   }
                 />
               </Reveal>

@@ -3108,6 +3108,15 @@ const buildPackage = () => {
           const payload = readJson(relativePath);
           return { id: payload.id, type: 'formula_ford_lap_shape', ...summarizeArtifact(relativePath) };
         })(),
+        /* IMSA Daytona stint/co-driver pack, integrity-registered so the
+           Daytona chapter verifies sha256 + id and fails closed (replacing the
+           earlier unchecked direct import). */
+        imsaStintRef: (() => {
+          const relativePath = 'analysis/imsa-daytona-stint-class-pace/output/context-packs/imsa-daytona-stint-class-context.json';
+          if (!fs.existsSync(path.join(repoRoot, relativePath))) return null;
+          const payload = readJson(relativePath);
+          return { id: payload.id, type: 'imsa_daytona_stint', ...summarizeArtifact(relativePath) };
+        })(),
         careerPriorMatrixPath: sources.predictiveCareerPriorMatrix,
         seriesSummary: (careerLabPayload.seriesSummary ?? []).map((row) => ({
           seriesId: row.seriesId,

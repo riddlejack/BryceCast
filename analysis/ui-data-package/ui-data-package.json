@@ -1,6 +1,6 @@
 {
   "schemaVersion": "brycecast.uiDataPackage.v1",
-  "generatedAt": "2026-07-20T11:29:11.666Z",
+  "generatedAt": "2026-07-20T11:37:35.914Z",
   "sourceHash": "64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978",
   "asOfDate": "2026-07-19",
   "baselineCommit": "dbc879e",
@@ -178,8 +178,8 @@
     "careerLifeStatsSummary": {
       "path": "analysis/career-life-stats/output/summary.json",
       "bytes": 20389,
-      "modifiedAt": "2026-07-19T21:03:33.032Z",
-      "sha256": "844ec2ab8892e8c4a812a0d37b18e05654154aa7d0f8026b33b094291261d82c"
+      "modifiedAt": "2026-07-20T11:37:09.666Z",
+      "sha256": "5e3f7648a15788acc0edc146c1c0514a55bd31b33d6c85e594c888280c84375e"
     },
     "careerLifeStatsResearch": {
       "path": "analysis/career-life-stats/RESEARCH.md",
@@ -286,8 +286,8 @@
     "restartReportSummary": {
       "path": "analysis/restart-report/output/summary.json",
       "bytes": 17440,
-      "modifiedAt": "2026-07-20T11:29:01.422Z",
-      "sha256": "2006ead968beab4fdbc5f24fa52c05bc03479c36e26bb5ef10ebb4577c5a3bbe"
+      "modifiedAt": "2026-07-20T11:37:17.921Z",
+      "sha256": "e43b8208849be6e303324100b41d5e710c5946db6a34c1de259ccd2b3235b837"
     },
     "restartReportEvents": {
       "path": "analysis/restart-report/output/tables/restart_events.csv",
@@ -340,8 +340,8 @@
     "qualifyingLayerSummary": {
       "path": "analysis/qualifying-layer/output/summary.json",
       "bytes": 10286,
-      "modifiedAt": "2026-07-20T11:29:08.279Z",
-      "sha256": "647ffe883d50204ab6d8ba144e4aa3588d346ca3421018946c250b8dccc384a4"
+      "modifiedAt": "2026-07-20T11:37:30.081Z",
+      "sha256": "ffea8bc0b8bd8260f5f9fd161e1a876f98db13e98a64327d7e3d9f52cb3d456e"
     },
     "qualifyingLayerSessions": {
       "path": "analysis/qualifying-layer/output/tables/quali_sessions.csv",
@@ -382,8 +382,8 @@
     "cautionAtlasSummary": {
       "path": "analysis/caution-atlas/output/summary.json",
       "bytes": 12386,
-      "modifiedAt": "2026-07-20T11:29:04.716Z",
-      "sha256": "1273ba8cb8b3191a66de066df4a26cdbaacdb0d8514694d011ece1d1e01e6fcf"
+      "modifiedAt": "2026-07-20T11:37:22.030Z",
+      "sha256": "5d91f191cb9e614802929eed05801678735fa8a73f509d05c9ca091847d2b742"
     },
     "cautionAtlasEvents": {
       "path": "analysis/caution-atlas/output/tables/caution_events.csv",
@@ -531,9 +531,9 @@
     },
     "uiDataPackageBuilderScript": {
       "path": "scripts/build-ui-data-package.mjs",
-      "bytes": 169057,
-      "modifiedAt": "2026-07-20T11:26:41.026Z",
-      "sha256": "3c3ced75dab558f6fc612e502bc63cc4b3194a4233e39e97ab8bcdb019060424"
+      "bytes": 169665,
+      "modifiedAt": "2026-07-20T11:34:05.775Z",
+      "sha256": "04d73dcef5addaa1bdfbf21d68f73150b700891b5b01f3cafc29137e4d98aab4"
     },
     "uiDataPackageValidatorScript": {
       "path": "scripts/validate-ui-data-package.mjs",
@@ -19196,6 +19196,14 @@
         "bytes": 33104,
         "modifiedAt": "2026-07-20T11:25:41.533Z",
         "sha256": "8082ee53a53465551b29dba6abd951731394ca86270ce69f6b19ac0232295c50"
+      },
+      "imsaStintRef": {
+        "id": "imsa-daytona-stint-class-context",
+        "type": "imsa_daytona_stint",
+        "path": "analysis/imsa-daytona-stint-class-pace/output/context-packs/imsa-daytona-stint-class-context.json",
+        "bytes": 24058,
+        "modifiedAt": "2026-07-20T11:31:43.295Z",
+        "sha256": "45036751164a2c54372313e43b759efba8e1e9fd8e7bea40fdedb5157a1026c7"
       },
       "careerPriorMatrixPath": "analysis/predictive-race-intelligence/output/career_prior_matrix.csv",
       "seriesSummary": [
