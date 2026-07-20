@@ -184,7 +184,8 @@ const isLappedUpstream = (row: Record<string, unknown>, bryceRank: number, bryce
 export const LiveRunningOrder = ({
   history,
   clockCheckedAt,
-  replayEnded = false
+  replayEnded = false,
+  orderLabel = 'running position'
 }: {
   history: LiveSessionHistory | null;
   clockCheckedAt?: string | null;
@@ -193,6 +194,9 @@ export const LiveRunningOrder = ({
    *  coming — so the status reads "end of the capture", never "waiting on live
    *  timing…" (the same defect the pre-session/ended hero already retired). */
   replayEnded?: boolean;
+  /** What the rank lanes mean in this session. Race: "running position".
+   *  Practice / qualifying: "best-lap order" — same rank data, honest label. */
+  orderLabel?: string;
 }) => {
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();
   const svgRef = useRef<SVGSVGElement | null>(null);
@@ -321,8 +325,9 @@ export const LiveRunningOrder = ({
             width={width}
             height={height}
             role="img"
-            aria-label="Official running position for the cars around Bryce over the trailing five minutes"
+            aria-label={`Official ${orderLabel} for the cars around Bryce over the trailing five minutes`}
             data-running-order-chart="true"
+            data-order-label={orderLabel}
             data-session-key={history.sessionKey}
             data-source-checked-at={latestSample.checkedAt}
             data-source-sample-count={history.samples.length}
@@ -527,7 +532,7 @@ export const LiveRunningOrder = ({
               <span aria-hidden>&nbsp;</span>
             )}
           </div>
-          <div className="sr-only" aria-label="Current running order near Bryce">
+          <div className="sr-only" aria-label={`Current ${orderLabel} near Bryce`}>
             {ladder.map((entry) => <span key={entry.id}>{entry.bryce ? 'Bryce Aron, car 9' : entry.name}: P{entry.rank}, {entry.bryce ? 'Bryce' : runningOrderGapWords(latestSample, entry.id)}. </span>)}
           </div>
           {tip ? <ChartTipCard tip={tip} width={width} /> : null}

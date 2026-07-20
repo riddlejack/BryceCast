@@ -31,6 +31,13 @@ import {
   sourcedGapToLeaderSeconds,
   stableSessionTimeDomain
 } from '../src/data/liveHistoryModel.ts';
+import {
+  bestLapDeltaWords,
+  buildBestLapDeltas,
+  parseLapTimeSeconds,
+  resolveLiveSessionKind,
+  sessionRankCaption
+} from '../src/data/liveSessionModel.ts';
 
 const row = (driverId, no, liveRank, liveGap, lastName) => ({
   driverId,
@@ -231,4 +238,58 @@ let reversal = advanceBattleAxis(upState, 0.2);
 for (let index = 0; index < BATTLE_AXIS_REVERSAL_PERSISTENCE - 2; index += 1) reversal = advanceBattleAxis(reversal.state, 0.2);
 assert.equal(reversal.decision.changed, false, 'reversing the last move needs long evidence — no A→B→A across consecutive polls, by construction');
 
-console.log(JSON.stringify({ ok: true, assertions: 86, model: 'session-keyed-live-history' }, null, 2));
+// --- Session-aware live mode: practice / qualifying vs race (task #23) ---
+// Session kind comes from the SOURCED payload's Race Control SessionType, never
+// the clock. Anything not clearly practice/qualifying stays race — zero
+// regression for a real race whose type field is missing or unusual.
+const withType = (sessionType, sessionName = '') => ({ liveTiming: { heartbeat: { sessionType, sessionName } }, raceWeekend: {} });
+assert.equal(resolveLiveSessionKind(withType('R')), 'race', 'SessionType R is a race');
+assert.equal(resolveLiveSessionKind(withType('P')), 'practice', 'SessionType P is practice');
+assert.equal(resolveLiveSessionKind(withType('Q')), 'qualifying', 'SessionType Q is qualifying');
+assert.equal(resolveLiveSessionKind(withType('W')), 'practice', 'warm-up runs to a practice grammar');
+assert.equal(resolveLiveSessionKind(withType('X')), 'race', 'an unknown type never strips a race of its race modules');
+assert.equal(resolveLiveSessionKind(withType('', 'Practice 2')), 'practice', 'name falls back only when type is empty');
+assert.equal(resolveLiveSessionKind(withType('', 'Qualifying')), 'qualifying', 'name resolves qualifying');
+assert.equal(resolveLiveSessionKind(withType('', 'Race')), 'race', 'a named race stays a race');
+assert.equal(resolveLiveSessionKind(null), 'race', 'no payload defaults to the untouched race path');
+assert.equal(resolveLiveSessionKind({ liveTiming: {}, raceWeekend: { sessionType: 'P' } }), 'practice', 'raceWeekend carries the type when the heartbeat lacks it');
+assert.equal(sessionRankCaption('race'), 'running position');
+assert.equal(sessionRankCaption('practice'), 'best-lap order');
+assert.equal(sessionRankCaption('qualifying'), 'best-lap order');
+
+const near = (value, target) => Math.abs(value - target) < 1e-6;
+assert.ok(near(parseLapTimeSeconds('1:05.139'), 65.139), 'M:SS.mmm parses to seconds');
+assert.ok(near(parseLapTimeSeconds('58.421'), 58.421), 'a bare seconds string parses');
+assert.ok(near(parseLapTimeSeconds('1:02:03.5'), 3723.5), 'H:MM:SS parses');
+assert.equal(parseLapTimeSeconds(''), null, 'empty string is not zero');
+assert.equal(parseLapTimeSeconds('—'), null, 'a dash is not a lap time');
+assert.equal(parseLapTimeSeconds('0'), null, 'a non-positive time never votes');
+
+const lapRow = (no, lastName, team, bestLapTime, bryce = false) => ({ driverId: no, no, firstName: '', lastName, name: lastName, team, bestLapTime, bryce });
+const deltas = buildBestLapDeltas([
+  lapRow('5', 'One', 'Andretti Global', '1:04.500'),
+  lapRow('9', 'Aron', 'Chip Ganassi Racing', '1:04.900', true),
+  lapRow('8', 'Mate', 'Chip Ganassi Racing', '1:05.100'),
+  lapRow('3', 'NoLap', 'HMD', '') // no best lap — must not vote
+]);
+assert.ok(deltas, 'best-lap deltas build from sourced best-lap times');
+assert.equal(deltas.leader.carNo, '5', 'the fastest best lap is the leader');
+assert.equal(deltas.bryceIsFastest, false, 'Bryce is not the session best here');
+assert.ok(near(deltas.offSessionBestSeconds, 0.4), 'Bryce sits 0.4s off the session best');
+assert.equal(deltas.teammates.length, 1, 'only same-team cars with a best lap are teammates');
+assert.equal(deltas.teammates[0].entry.carNo, '8');
+assert.ok(near(deltas.teammates[0].bryceAheadSeconds, 0.2), 'Bryce is 0.2s ahead of his teammate');
+
+const bryceFastest = buildBestLapDeltas([
+  lapRow('9', 'Aron', 'Chip Ganassi Racing', '1:04.100', true),
+  lapRow('5', 'One', 'Andretti Global', '1:04.500')
+]);
+assert.equal(bryceFastest.bryceIsFastest, true, 'Bryce leads when his best lap is fastest');
+assert.equal(bryceFastest.offSessionBestSeconds, null, 'no off-the-best gap when Bryce owns the best lap');
+assert.equal(buildBestLapDeltas([]), null, 'no rows, no comparison');
+
+assert.equal(bestLapDeltaWords(0.3), '0.30s ahead', 'positive reads ahead, Bryce-first');
+assert.equal(bestLapDeltaWords(-0.15), '0.15s behind', 'negative reads behind');
+assert.equal(bestLapDeltaWords(0), 'level', 'a dead heat reads level, never signed zero');
+
+console.log(JSON.stringify({ ok: true, assertions: 116, model: 'session-keyed-live-history + session-aware-live' }, null, 2));
