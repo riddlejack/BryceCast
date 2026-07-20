@@ -1311,6 +1311,7 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
         if (hasOwnCapture) parts.push('our own trackside replay capture');
         if (hasRaceTools) parts.push('the RaceTools race-weekend capture');
         if (hasTiming71) parts.push('Timing71 normalized timing');
+        if (story?.weather) parts.push('modeled near-track weather (Open-Meteo)');
         const sources =
           parts.length === 1
             ? parts[0]

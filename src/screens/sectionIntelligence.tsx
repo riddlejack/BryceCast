@@ -582,7 +582,12 @@ export const validPriorComparison = (
   for (const visit of others) {
     const set = sectionObservationsFromLaps(visit, { kind: 'full_race' }, 'median');
     if (resolveHeatSections(anchorsForVisit(visit, anchors), set).length > 0) {
-      return { href: raceHref(visit.sessionId), label: `his ${visit.seasonYear ?? 'earlier'} race here` };
+      const row = uiDataPackage.screens.raceDebrief.seasonIndex.find((entry) => entry.sessionId === visit.sessionId);
+      const raceNo = row?.raceLabel?.match(/Race (\d)/)?.[1];
+      return {
+        href: raceHref(visit.sessionId),
+        label: `his ${visit.seasonYear ?? 'earlier'}${raceNo ? ` Race ${raceNo}` : ''} race here`
+      };
     }
   }
   return null;
