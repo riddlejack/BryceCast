@@ -6,7 +6,12 @@ import {
   compactTimingRowForReadiness,
   replayArchiveState
 } from './api-server.mjs';
-import { loadTrackMetadata, loadUpcomingIndyNxtEvents } from './live-weather-service.mjs';
+import {
+  buildUpcomingIndyNxtWeatherReport,
+  eventForecastReadiness,
+  loadTrackMetadata,
+  loadUpcomingIndyNxtEvents
+} from './live-weather-service.mjs';
 
 const checkedAt = '2026-06-16T18:00:00.000Z';
 
@@ -394,4 +399,64 @@ assert.equal(portlandEvent?.track.id, 'track_portland_international_raceway');
 assert.equal(portlandEvent?.eventStartDate, '2026-08-07');
 assert.ok(weatherCatalogRssDelta < 64 * 1024 * 1024, `compact weather catalog used ${weatherCatalogRssDelta} bytes of RSS`);
 
-console.log(JSON.stringify({ ok: true, assertions: 68 }, null, 2));
+/* Date-boundary regression: the upcoming-weather window is derived from an
+ * injectable `now`, so drive it directly instead of the wall clock. The bug
+ * report worried that crossing midnight (or a between-weekends gap) silently
+ * empties the schedule window and makes downstream weather look broken. These
+ * cases pin the honest behaviour: the window is stable across an ordinary
+ * midnight, an event stays selectable through its own end day and drops the
+ * day after, and once the season is over the window is honestly empty rather
+ * than mislabelled. */
+const eventsBeforeMidnight = await loadUpcomingIndyNxtEvents({ now: new Date('2026-08-01T23:59:00.000Z') });
+const eventsAfterMidnight = await loadUpcomingIndyNxtEvents({ now: new Date('2026-08-02T00:05:00.000Z') });
+const idsBefore = eventsBeforeMidnight.map((event) => event.id).sort().join('|');
+const idsAfter = eventsAfterMidnight.map((event) => event.id).sort().join('|');
+assert.equal(eventsBeforeMidnight.length, eventsAfterMidnight.length, 'upcoming window changed size across an ordinary midnight');
+assert.equal(idsBefore, idsAfter, 'upcoming window dropped or added an event across an ordinary midnight');
+
+const eventsOnPortlandDay = await loadUpcomingIndyNxtEvents({ now: new Date('2026-08-07T23:59:00.000Z') });
+const eventsDayAfterPortland = await loadUpcomingIndyNxtEvents({ now: new Date('2026-08-08T06:00:00.000Z') });
+assert.ok(
+  eventsOnPortlandDay.some((event) => event.eventEndDate === '2026-08-07'),
+  'an event must stay selectable through its own end day'
+);
+assert.ok(
+  !eventsDayAfterPortland.some((event) => event.eventEndDate === '2026-08-07'),
+  'a finished event must drop out the day after its end date'
+);
+
+const eventsAfterSeason = await loadUpcomingIndyNxtEvents({ now: new Date('2026-12-31T23:59:59.000Z') });
+assert.equal(eventsAfterSeason.length, 0, 'once the season is over the upcoming window is honestly empty');
+
+const readinessEvent = { eventStartDate: '2026-08-07', eventEndDate: '2026-08-07' };
+assert.equal(
+  eventForecastReadiness(readinessEvent, { now: new Date('2026-07-28T12:00:00.000Z') }).status,
+  'too_far_for_event_forecast',
+  'ten days out should read as too far for an event forecast'
+);
+assert.equal(
+  eventForecastReadiness(readinessEvent, { now: new Date('2026-08-03T12:00:00.000Z') }).status,
+  'forecast_window_open',
+  'inside seven days should open the forecast window'
+);
+assert.equal(
+  eventForecastReadiness(readinessEvent, { now: new Date('2026-08-07T12:00:00.000Z') }).status,
+  'event_window_open',
+  'on the event day the window is open, not stuck in forecast'
+);
+assert.equal(
+  eventForecastReadiness(readinessEvent, { now: new Date('2026-08-08T00:00:00.000Z') }).status,
+  'event_window_open',
+  'just past midnight into the event window stays open, never flipping to an invalid state'
+);
+
+/* End-to-end: once the season is over the whole upcoming report must stay
+ * honest. With zero events there are zero tracks, so this needs no network —
+ * and the report must read 'unavailable' with a reason, never a vacuously-true
+ * 'live' claiming a forecast for events that do not exist. */
+const seasonOverReport = await buildUpcomingIndyNxtWeatherReport({ now: new Date('2026-12-31T23:59:59.000Z') });
+assert.equal(seasonOverReport.events.length, 0, 'season-over upcoming report should carry no events');
+assert.equal(seasonOverReport.sourceState, 'unavailable', 'empty upcoming report must not mislabel itself as live weather');
+assert.ok(typeof seasonOverReport.reason === 'string' && seasonOverReport.reason.length > 0, 'empty upcoming report should explain the between-weekends state');
+
+console.log(JSON.stringify({ ok: true, assertions: 80 }, null, 2));
