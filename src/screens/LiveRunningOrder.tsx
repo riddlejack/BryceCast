@@ -142,20 +142,35 @@ const relativeTicks = (domain: { startMs: number; endMs: number }, width: number
   return [...offsets.map((offset) => domain.endMs - offset * 1_000), domain.endMs];
 };
 
+const LAP_TICK_MIN_GAP_PX = 32;
+
 const lapBoundariesFor = (
   history: LiveSessionHistory,
   domain: { startMs: number; endMs: number },
-  width: number
+  toX: (checkedAtMs: number) => number,
+  minGapPx = LAP_TICK_MIN_GAP_PX
 ): Array<{ lap: number; checkedAtMs: number }> => {
   const boundaries: Array<{ lap: number; checkedAtMs: number }> = [];
   history.samples.forEach((sample) => {
     if (sample.checkedAtMs < domain.startMs || sample.checkedAtMs > domain.endMs || sample.lap === null) return;
     if (boundaries.at(-1)?.lap !== sample.lap) boundaries.push({ lap: sample.lap, checkedAtMs: sample.checkedAtMs });
   });
-  const limit = width < 520 ? 3 : 6;
-  if (boundaries.length <= limit) return boundaries;
-  const stride = Math.ceil(boundaries.length / limit);
-  return boundaries.filter((_, index) => index % stride === 0 || index === boundaries.length - 1);
+  // Collision-filter the lap labels in pixel space, walking right (newest) to
+  // left: always keep the newest lap tick — the live edge must read its true
+  // lap — then drop any earlier label that would land within minGapPx of the
+  // last one we kept. This declutters the crowded right edge (where breakpoints,
+  // and thus lap changes, bunch up) instead of the uniform-stride thinning that
+  // could still leave ticks overlapping there.
+  const kept: Array<{ lap: number; checkedAtMs: number }> = [];
+  let lastKeptX = Number.POSITIVE_INFINITY;
+  for (let index = boundaries.length - 1; index >= 0; index -= 1) {
+    const candidateX = toX(boundaries[index].checkedAtMs);
+    if (kept.length === 0 || Math.abs(lastKeptX - candidateX) >= minGapPx) {
+      kept.push(boundaries[index]);
+      lastKeptX = candidateX;
+    }
+  }
+  return kept.reverse();
 };
 
 const isLappedUpstream = (row: Record<string, unknown>, bryceRank: number, bryceLaps: number | null): boolean => {
@@ -236,7 +251,7 @@ export const LiveRunningOrder = ({
   const crossings = useMemo(() => detectBryceRunningOrderCrossings(history), [history]);
   const cautionSpans = useMemo(() => runningOrderCautionSpans(history?.samples ?? [], timeDomain?.endMs), [history, timeDomain?.endMs]);
   const xTicks = timeDomain ? relativeTicks(timeDomain, plotWidth) : [];
-  const lapBoundaries = history && timeDomain ? lapBoundariesFor(history, timeDomain, width) : [];
+  const lapBoundaries = history && timeDomain ? lapBoundariesFor(history, timeDomain, x) : [];
   const clipId = `running-order-${history?.sessionKey.replace(/[^a-z0-9]/gi, '-') ?? 'empty'}`;
   const sceneTransition = moving ? `transform ${CAMERA_EASE_MS}ms cubic-bezier(0.23, 1, 0.32, 1)` : 'none';
   const latestFrameIds = new Set(currentFrame.map((entry) => entry.id));

@@ -204,13 +204,24 @@ export const fullFieldRunningOrderSeries = (history: LiveSessionHistory | null):
     points: history.samples.map((sample, index) => {
       const value = frames[index].find((entry) => entry.id === identity.id) ?? null;
       const previous = history.samples[index - 1] ?? null;
+      // A seed frame states its own continuity (`archiveGapBefore`): a
+      // downsampled hold spans a long interval yet is continuous, so it must NOT
+      // break on the cadence heuristic — only a server-verified archive gap
+      // breaks it. A live-polled sample (no such field) still infers a break
+      // from an over-cadence timestamp jump, exactly as before.
+      const gapBefore = index > 0 && (
+        !runningOrderAvailableForSample(sample)
+        || (sample.archiveGapBefore === undefined
+          ? sample.checkedAtMs - previous.checkedAtMs > threshold
+          : sample.archiveGapBefore)
+      );
       return {
         checkedAt: sample.checkedAt,
         checkedAtMs: sample.checkedAtMs,
         rank: value?.rank ?? null,
         lap: sample.lap,
         flag: sample.flag,
-        breakBefore: Boolean(index > 0 && (!runningOrderAvailableForSample(sample) || sample.checkedAtMs - previous.checkedAtMs > threshold)),
+        breakBefore: Boolean(gapBefore),
         status: value?.status ?? null
       };
     })

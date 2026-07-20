@@ -32,6 +32,12 @@ export interface LiveHistorySample {
   rows: LiveMotionRow[];
   bryceId: string;
   signature: string;
+  /** Continuity relative to the preceding sample, resolved by the server for a
+   * downsampled seed frame: `false` — continuous archive coverage since the last
+   * frame (a position HOLD, draw straight through); `true` — a verified archive
+   * gap (missing snapshots, break the line). `undefined` for a live-polled
+   * sample, whose continuity the chart infers from the poll cadence instead. */
+  archiveGapBefore?: boolean;
 }
 
 export interface LiveHistoryStats {
@@ -186,18 +192,18 @@ const selectedDriversFrom = (sample: LiveHistorySample): LiveHistoryDriver[] => 
   ];
 };
 
-/** One bounded reducer owns both live charts. Samples are session-isolated,
- * timestamp-unique, and chronologically sorted even if an API response arrives
- * late. The selected comparison identities are captured once per session. */
-export const appendLiveHistoryPayload = (
-  state: LiveHistoryState,
-  payload: LiveReadinessPayload,
-  maxSamples = 300,
-  maxSessions = 4
-): LiveHistoryState => {
-  const sample = liveHistorySampleFromPayload(payload);
-  if (!sample) return state;
-  const previousSession = state.sessions[sample.sessionKey];
+/** Merge one sample into a session window: timestamp-unique, chronologically
+ * sorted even if an API response arrives late, bounded, and stat-tracked. Both
+ * the live-poll append and the server seed fold through this ONE path, so a
+ * seeded sample is deduplicated and ordered exactly like a polled one. Seed
+ * frames pass `countAsArrival = false` so the archive backfill never inflates
+ * the on-screen "N polls" counters, which describe THIS client's live polls. */
+const mergeSampleIntoSession = (
+  previousSession: LiveSessionHistory | undefined,
+  sample: LiveHistorySample,
+  maxSamples: number,
+  countAsArrival: boolean
+): LiveSessionHistory => {
   const previousSamples = previousSession?.samples ?? [];
   const latest = previousSamples.at(-1) ?? null;
   const duplicateIndex = previousSamples.findIndex((candidate) => candidate.checkedAt === sample.checkedAt);
@@ -213,29 +219,155 @@ export const appendLiveHistoryPayload = (
   samples.sort((left, right) => left.checkedAtMs - right.checkedAtMs);
   const boundedSamples = samples.slice(-Math.max(2, maxSamples));
   const stats = previousSession?.stats ?? emptyStats();
-  const nextSession: LiveSessionHistory = {
+  return {
     sessionKey: sample.sessionKey,
     samples: boundedSamples,
     selectedDrivers:
       previousSession?.selectedDrivers.length ? previousSession.selectedDrivers : selectedDriversFrom(sample),
-    stats: {
-      arrivals: stats.arrivals + 1,
-      valueChanges: stats.valueChanges + (latest && changed ? 1 : 0),
-      unchangedValues: stats.unchangedValues + (latest && !changed ? 1 : 0),
-      duplicateTimestamps: stats.duplicateTimestamps + (duplicate ? 1 : 0),
-      outOfOrderArrivals: stats.outOfOrderArrivals + (outOfOrder ? 1 : 0)
-    }
+    stats: countAsArrival
+      ? {
+          arrivals: stats.arrivals + 1,
+          valueChanges: stats.valueChanges + (latest && changed ? 1 : 0),
+          unchangedValues: stats.unchangedValues + (latest && !changed ? 1 : 0),
+          duplicateTimestamps: stats.duplicateTimestamps + (duplicate ? 1 : 0),
+          outOfOrderArrivals: stats.outOfOrderArrivals + (outOfOrder ? 1 : 0)
+        }
+      : stats
   };
-  const sessions = { ...state.sessions, [sample.sessionKey]: nextSession };
+};
+
+/** Keep at most `maxSessions` session windows, evicting the least-recently
+ * touched (never the one we just wrote). Mutates in place. */
+const evictOldestSessions = (
+  sessions: Record<string, LiveSessionHistory>,
+  keep: string,
+  maxSessions: number
+): void => {
   const sessionKeys = Object.keys(sessions);
-  if (sessionKeys.length > maxSessions) {
-    sessionKeys
-      .filter((key) => key !== sample.sessionKey)
-      .sort((left, right) => (sessions[left].samples.at(-1)?.checkedAtMs ?? 0) - (sessions[right].samples.at(-1)?.checkedAtMs ?? 0))
-      .slice(0, sessionKeys.length - maxSessions)
-      .forEach((key) => delete sessions[key]);
-  }
+  if (sessionKeys.length <= maxSessions) return;
+  sessionKeys
+    .filter((key) => key !== keep)
+    .sort((left, right) => (sessions[left].samples.at(-1)?.checkedAtMs ?? 0) - (sessions[right].samples.at(-1)?.checkedAtMs ?? 0))
+    .slice(0, sessionKeys.length - maxSessions)
+    .forEach((key) => delete sessions[key]);
+};
+
+/** One bounded reducer owns both live charts. Samples are session-isolated,
+ * timestamp-unique, and chronologically sorted even if an API response arrives
+ * late. The selected comparison identities are captured once per session. */
+export const appendLiveHistoryPayload = (
+  state: LiveHistoryState,
+  payload: LiveReadinessPayload,
+  maxSamples = 300,
+  maxSessions = 4
+): LiveHistoryState => {
+  const sample = liveHistorySampleFromPayload(payload);
+  if (!sample) return state;
+  const nextSession = mergeSampleIntoSession(state.sessions[sample.sessionKey], sample, maxSamples, true);
+  const sessions = { ...state.sessions, [sample.sessionKey]: nextSession };
+  evictOldestSessions(sessions, sample.sessionKey, maxSessions);
   return { activeSessionKey: sample.sessionKey, sessions };
+};
+
+/* ---------- server-seeded running-order history (Brief O) ---------- */
+
+/** A single downsampled running-order breakpoint frame from the server: the
+ * full field's compact rows at one rank-change moment. `gapBefore` marks a
+ * verified archive gap before this frame — otherwise the span since the previous
+ * frame was a continuous position hold the chart should draw straight through. */
+export interface RankSeriesFrame {
+  checkedAt: string;
+  lap: number | null;
+  flag: string;
+  rows: LiveMotionRow[];
+  gapBefore?: boolean;
+}
+
+/** The `/api/history/rank-series` response. `clientSessionKey` is the same
+ * `${eventId}-${eventSessionId}` identity the live payload resolves to, so a
+ * seed lands in the exact bucket the client's own polls append into. */
+export interface RankSeriesResponse {
+  schemaVersion: string;
+  available: boolean;
+  mode: 'live' | 'replay';
+  sessionKey: string | null;
+  clientSessionKey: string | null;
+  bryceId: string | null;
+  frameCount: number;
+  breakpointCount: number;
+  window: { firstCheckedAt: string | null; lastCheckedAt: string | null; virtualNow: string | null; coverageSeconds: number } | null;
+  frames: RankSeriesFrame[];
+}
+
+/** Reconstruct a history sample from one server frame, through the same
+ * canonicalization the live path uses. Ids resolve with empty/whitespace
+ * treated as absent (the '' RaceTools lesson): a frame whose Bryce row carries
+ * no stable id, or that resolves no rows, is dropped rather than seeded blank. */
+const rankSeriesSampleFrom = (frame: RankSeriesFrame, sessionKey: string, fallbackBryceId: string | null): LiveHistorySample | null => {
+  const checkedAtMs = Date.parse(frame.checkedAt);
+  if (!Number.isFinite(checkedAtMs)) return null;
+  const byId = new Map<string, LiveMotionRow>();
+  for (const row of frame.rows ?? []) {
+    const id = stableDriverId(row);
+    if (id) byId.set(id, row);
+  }
+  const rows = sortRowsForLiveDisplay([...byId.values()]);
+  if (rows.length === 0) return null;
+  const flagged = rows.find((row) => row.bryce === true) ?? null;
+  const trimmedFallback = String(fallbackBryceId ?? '').trim();
+  const bryceId = flagged
+    ? stableDriverId(flagged)
+    : trimmedFallback && rows.some((row) => stableDriverId(row) === trimmedFallback)
+      ? trimmedFallback
+      : '';
+  if (!bryceId) return null;
+  const sample = {
+    sessionKey,
+    checkedAt: frame.checkedAt,
+    checkedAtMs,
+    arrivalCheckedAt: frame.checkedAt,
+    lap: numberOrNull(frame.lap),
+    flag: String(frame.flag ?? ''),
+    rows,
+    bryceId,
+    signature: '',
+    // A seed frame always carries explicit continuity: false is a hold to draw
+    // straight through, true is a verified archive gap to break on.
+    archiveGapBefore: frame.gapBefore === true
+  } satisfies LiveHistorySample;
+  sample.signature = liveSampleSignature(sample);
+  return sample;
+};
+
+/** Seed a session's window from the server's rank-series before the client has
+ * accumulated its own polls. Seed frames merge through the SAME path as live
+ * appends (deduplicated by timestamp, ordered, bounded) and never touch the
+ * poll counters. `bucketKey` pins every seeded sample to the client's own
+ * session identity, guaranteeing the seed and the live polls share one bucket.
+ * A missing/empty/unavailable response leaves state untouched — the client then
+ * fills the window from its own polls exactly as before. */
+export const seedLiveHistoryState = (
+  state: LiveHistoryState,
+  response: RankSeriesResponse | null,
+  bucketKey: string | null,
+  maxSamples = 300,
+  maxSessions = 4
+): LiveHistoryState => {
+  if (!response?.available || !Array.isArray(response.frames) || response.frames.length === 0) return state;
+  const sessionKey = String(bucketKey ?? response.clientSessionKey ?? '').trim();
+  if (!sessionKey) return state;
+  let session = state.sessions[sessionKey];
+  let seeded = false;
+  for (const frame of response.frames) {
+    const sample = rankSeriesSampleFrom(frame, sessionKey, response.bryceId);
+    if (!sample) continue;
+    session = mergeSampleIntoSession(session, sample, maxSamples, false);
+    seeded = true;
+  }
+  if (!seeded || !session) return state;
+  const sessions = { ...state.sessions, [sessionKey]: session };
+  evictOldestSessions(sessions, sessionKey, maxSessions);
+  return { activeSessionKey: state.activeSessionKey ?? sessionKey, sessions };
 };
 
 export const activeLiveSessionHistory = (state: LiveHistoryState): LiveSessionHistory | null =>

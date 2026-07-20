@@ -105,6 +105,12 @@ const virtualNowMsOf = (clock: ReplayClock): number => {
 export const useReplaySession = (replayKey: string | null, onRestart?: () => void): ReplaySession => {
   const { navigate, route } = useRouter();
   const fromParam = route.search.get('from');
+  // Optional deep-link into a race already in progress: `/live?replay=<key>&t0=<iso>`
+  // starts the virtual clock at that archived moment instead of the green flag,
+  // so a joiner enters mid-race (the exact "server remembers the race" case Brief
+  // O seeds). Absent — the race-page replay button flow — the clock still starts
+  // at green. Restart always returns to green regardless.
+  const t0Param = route.search.get('t0');
   const [state, setState] = useState(inactive);
   const sessionRef = useRef<ReplaySessionInfo | null>(null);
   const clockRef = useRef<ReplayClock | null>(null);
@@ -160,10 +166,11 @@ export const useReplaySession = (replayKey: string | null, onRestart?: () => voi
         return;
       }
       sessionRef.current = session;
-      // Start the local virtual clock at the green flag. No server round-trip —
-      // the cue-up clears as soon as the first archived frame arrives from the
+      // Start the local virtual clock at the green flag (or, when a `t0` deep-link
+      // is present, at that archived moment mid-race). No server round-trip — the
+      // cue-up clears as soon as the first archived frame arrives from the
       // client's own next readiness poll.
-      const virtualStartMs = Date.parse(clampT0(session, session.firstGreenAt));
+      const virtualStartMs = Date.parse(clampT0(session, t0Param ?? session.firstGreenAt));
       const firstCheckedMs = Date.parse(session.firstCheckedAt ?? '');
       const lastCheckedMs = Date.parse(session.lastCheckedAt ?? '');
       const safeStart = Number.isFinite(virtualStartMs) ? virtualStartMs : Date.now();
@@ -192,7 +199,7 @@ export const useReplaySession = (replayKey: string | null, onRestart?: () => voi
       cancelled = true;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [replayKey, fromParam]);
+  }, [replayKey, fromParam, t0Param]);
 
   // Live-guard watch: while replaying, poll readiness with THIS client's own
   // replay params. If the server answers with a non-simulated payload, the real
