@@ -8,6 +8,8 @@ import { Link, useRouter } from '../app/router';
 import { displayRaceLabelText } from '../data/debriefArchive';
 import { getSeasonIndex } from '../data/seasons';
 import { getUpcomingEvents, raceDayOf, type UpcomingPrepEvent } from '../data/upcoming';
+import { liveArchiveUpgradeFor, type LiveArchiveUpgrade } from '../data/liveRaceShellModel';
+import type { LiveReadiness } from '../app/useReadiness';
 import type { UiSeasonIndexRow } from '../data/uiDataPackage';
 
 /** Archive labels drop the series prefix — everything here is INDY NXT. */
@@ -340,26 +342,59 @@ const remainingRoundsFor = (completed: UiSeasonIndexRow[], upcoming: UpcomingPre
 /* One placeholder row: the archive's grammar (outline mini in its fixed box,
  * series prefix trimmed, date) but quieter and honestly non-interactive — no
  * result numerals, no chevron, no link. It becomes a real, clickable row only
- * once the race has run and its results land in the package. */
-const UpcomingRaceRow = ({ round }: { round: PlaceholderRound }) => (
-  <div className="tower__row race-row--upcoming" aria-disabled="true">
-    <MiniTrack trackName={round.trackName} muted />
-    <span className="tower__name" style={{ whiteSpace: 'normal' }}>
-      {round.label}
-      <span className="tower__team">
-        race {round.round} of {round.seasonTotal}
+ * once the race has run and its results land in the package.
+ *
+ * The moment this round's race goes live (the shell exists), the row upgrades
+ * IN PLACE: a quiet ink dot + "LIVE", and the row opens the race's live page —
+ * the same URL that will hold the finished story forever (Brief R-c). */
+const UpcomingRaceRow = ({ round, live }: { round: PlaceholderRound; live: LiveArchiveUpgrade | null }) =>
+  live ? (
+    <Link to={`/races/${encodeURIComponent(live.sessionId)}`} className="tower__row race-row--upcoming race-row--live">
+      <MiniTrack trackName={round.trackName} />
+      <span className="tower__name" style={{ whiteSpace: 'normal' }}>
+        {round.label}
+        <span className="tower__team">
+          race {round.round} of {round.seasonTotal}
+        </span>
       </span>
-    </span>
-    <span className="tower__gap tnum" style={{ fontSize: 11.5, color: 'var(--ink-muted)', minWidth: 52 }}>
-      {round.raceDate ? formatDate(round.raceDate, { month: 'short', day: 'numeric' }) : ''}
-    </span>
-  </div>
-);
+      <span
+        className="row tnum"
+        style={{ gap: 6, fontSize: 11.5, fontWeight: 650, color: 'var(--ink-primary)', justifyContent: 'flex-end' }}
+      >
+        {/* The spec's QUIET INK dot — never the status green; the archive is
+            not a health indicator, it just points at the live page. */}
+        <span className="live-dot" style={{ background: 'var(--ink-primary)' }} aria-hidden />
+        LIVE
+      </span>
+      <ArrowRight size={13} style={{ color: 'var(--ink-muted)' }} aria-hidden />
+    </Link>
+  ) : (
+    <div className="tower__row race-row--upcoming" aria-disabled="true">
+      <MiniTrack trackName={round.trackName} muted />
+      <span className="tower__name" style={{ whiteSpace: 'normal' }}>
+        {round.label}
+        <span className="tower__team">
+          race {round.round} of {round.seasonTotal}
+        </span>
+      </span>
+      <span className="tower__gap tnum" style={{ fontSize: 11.5, color: 'var(--ink-muted)', minWidth: 52 }}>
+        {round.raceDate ? formatDate(round.raceDate, { month: 'short', day: 'numeric' }) : ''}
+      </span>
+    </div>
+  );
 
 /* The remaining-season block no longer carries its own source control: its
  * schedule entry and caveats fold into the season card's one SourcePill (see
  * RacesScreen), so a single card keeps a single source drawer. */
-const RemainingSeason = ({ season, rounds }: { season: number; rounds: PlaceholderRound[] }) => (
+const RemainingSeason = ({
+  season,
+  rounds,
+  livePayload
+}: {
+  season: number;
+  rounds: PlaceholderRound[];
+  livePayload: LiveReadiness | null;
+}) => (
   <div className="race-upcoming">
     <div className="race-upcoming__head">
       <p className="caption caption--secondary" style={{ margin: 0 }}>
@@ -369,13 +404,13 @@ const RemainingSeason = ({ season, rounds }: { season: number; rounds: Placehold
     </div>
     <div className="tower race-upcoming__list" style={{ margin: '4px -12px 0' }}>
       {rounds.map((round) => (
-        <UpcomingRaceRow key={round.eventId} round={round} />
+        <UpcomingRaceRow key={round.eventId} round={round} live={liveArchiveUpgradeFor(round.eventId, livePayload)} />
       ))}
     </div>
   </div>
 );
 
-export const RacesScreen = () => {
+export const RacesScreen = ({ livePayload = null }: { livePayload?: LiveReadiness | null }) => {
   const index = getSeasonIndex();
 
   const seasons = useMemo(() => {
@@ -468,7 +503,7 @@ export const RacesScreen = () => {
               </span>
             }
           >
-            {remaining.length > 0 ? <RemainingSeason season={season} rounds={remaining} /> : null}
+            {remaining.length > 0 ? <RemainingSeason season={season} rounds={remaining} livePayload={livePayload} /> : null}
             <p className="caption caption--secondary" style={{ margin: '0 0 8px' }}>
               Gold marks a top-5 finish · ○ a day that ended early · the quiet line is his championship position · click any
               round

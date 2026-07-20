@@ -60,7 +60,19 @@ const CheckeredTick = ({ x, y }: { x: number; y: number }) => (
   </g>
 );
 
-const LapChart = ({ story }: { story: RaceStoryPack }) => {
+/** The lap-chart fields this chart reads — a structural subset of
+ *  RaceStoryPack, so the live race page shell can feed the SAME chart its
+ *  building running-order window without forking the grammar. */
+export type LapChartStory = Pick<RaceStoryPack, 'lapChart' | 'inflections'>;
+
+/** Live-shell layer for a race still running: caution spans shade as they
+ *  happen and the checkered tick stays down until the flag. Absent (every
+ *  debrief page), rendering is exactly as before. */
+export interface LapChartBuildingLayer {
+  cautionSpans: Array<{ fromLap: number; toLap: number }>;
+}
+
+export const LapChart = ({ story, building }: { story: LapChartStory; building?: LapChartBuildingLayer }) => {
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();
   const svgRef = useRef<SVGSVGElement | null>(null);
   const [focusedDriver, setFocusedDriver] = useState<string | null>(null);
@@ -162,6 +174,23 @@ const LapChart = ({ story }: { story: RaceStoryPack }) => {
           onMouseMove={onMove}
           onMouseLeave={clearHover}
         >
+          {/* Live shell only: caution spans shade as they happen (same quiet
+              wash as the Live page's gap chart). Never present on a debrief. */}
+          {(building?.cautionSpans ?? []).map((span, index) => {
+            const left = Math.max(x(Math.max(span.fromLap - 0.5, 1)), margin.left);
+            const right = Math.min(x(Math.min(span.toLap + 0.5, totalLaps)), width - margin.right);
+            return (
+              <rect
+                key={`caution-${index}`}
+                x={left}
+                y={margin.top}
+                width={Math.max(right - left, 2)}
+                height={plotHeight}
+                fill="var(--status-warn-dot)"
+                opacity={0.1}
+              />
+            );
+          })}
           {yTicks.map((tick) => (
             <g key={tick}>
               <line x1={margin.left} x2={width - margin.right} y1={y(tick)} y2={y(tick)} stroke="var(--grid-hairline)" />
@@ -197,7 +226,9 @@ const LapChart = ({ story }: { story: RaceStoryPack }) => {
           <text x={margin.left - 8} y={height - 10} textAnchor="end" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={10.5}>
             lap
           </text>
-          <CheckeredTick x={x(totalLaps) + 8} y={height - 19} />
+          {/* The checkered tick marks a FINISHED distance; a building chart's
+              right edge is "now", so the tick stays down until the flag. */}
+          {building ? null : <CheckeredTick x={x(totalLaps) + 8} y={height - 19} />}
 
           {/* rivals first, teammates above them, Bryce last (paint order = read order) */}
           {drivers

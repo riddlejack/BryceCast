@@ -11,7 +11,7 @@ import { HomeScreen } from '../screens/HomeScreen';
 import { LiveScreen } from '../screens/LiveScreen';
 import { RaceWeekScreen } from '../screens/RaceWeekScreen';
 import { RacesScreen } from '../screens/RacesScreen';
-import { RaceDetailScreen } from '../screens/RaceDetailScreen';
+import { RaceScreen } from '../screens/RaceScreen';
 import { CareerScreen } from '../screens/CareerScreen';
 import { CareerRaceScreen } from '../screens/CareerRaceScreen';
 import { DataScreen } from '../screens/DataScreen';
@@ -89,10 +89,13 @@ const Routes = () => {
   const { route } = useRouter();
   const onLive = route.path === '/live';
   const fixtureMode = Boolean(route.search.get('fixture'));
+  const raceDetail = matchPath('/races/:sessionId', route.path);
   // The replay is a client-wide virtual clock, not a Live-page-only overlay: the
   // Career odometer (Brief Q) also reads the live feed, so a `?replay=` URL must
-  // engage on `/career` too. Other surfaces stay on the real feed (no param).
-  const replayCapableRoute = onLive || route.path === '/career';
+  // engage on `/career` too — and a race page URL with replay params renders
+  // that race's LIVE shell as it happened (Brief R-c: a replayed race gets a
+  // replayed race page). Other surfaces stay on the real feed (no param).
+  const replayCapableRoute = onLive || route.path === '/career' || raceDetail !== null;
   const replayKey = replayCapableRoute && !fixtureMode ? route.search.get('replay') : null;
   // The replay clock is created first so readiness can append this client's
   // replay params to its own polls. A restart must clear the live-history chart
@@ -112,15 +115,25 @@ const Routes = () => {
     if (replay.started && !startedRef.current) readiness.refresh();
     startedRef.current = replay.started;
   }, [replay.started, readiness.refresh]);
-  const raceDetail = matchPath('/races/:sessionId', route.path);
   const careerRace = matchPath('/career/race/:sessionId', route.path);
 
   let screen: ReactNode;
   if (route.path === '/') screen = <HomeScreen readiness={readiness} />;
   else if (route.path === '/live') screen = <LiveScreen payload={readiness.payload} fixtureMode={readiness.fixtureMode} history={liveHistory.active} replay={replay.engaged ? replay : null} readinessError={readiness.error} readinessCheckedAt={readiness.checkedAt} />;
   else if (route.path === '/race-week') screen = <RaceWeekScreen />;
-  else if (raceDetail) screen = <RaceDetailScreen sessionId={raceDetail.sessionId} />;
-  else if (route.path === '/races') screen = <RacesScreen />;
+  else if (raceDetail)
+    screen = (
+      <RaceScreen
+        sessionId={raceDetail.sessionId}
+        payload={readiness.payload}
+        history={liveHistory.active}
+        // Passed whenever the URL REQUESTS a replay (not only once engaged):
+        // the resolver must hold its skeleton while the capture resolves, or
+        // the debrief flashes for a beat before the shell takes the page.
+        replay={replayKey ? replay : null}
+      />
+    );
+  else if (route.path === '/races') screen = <RacesScreen livePayload={readiness.fixtureMode ? null : readiness.payload} />;
   else if (careerRace) screen = <CareerRaceScreen sessionId={careerRace.sessionId} />;
   else if (route.path === '/career') screen = <CareerScreen readiness={readiness} />;
   else if (route.path === '/data') screen = <DataScreen />;

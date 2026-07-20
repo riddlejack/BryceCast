@@ -61,6 +61,7 @@ import {
   type LiveSessionHistory
 } from '../data/liveHistoryModel';
 import { uiDataPackage } from '../data/uiDataPackage';
+import { canonicalLiveRaceSessionId, replayDeepLinkQuery } from '../data/liveRaceShellModel';
 
 type Row = Record<string, unknown>;
 
@@ -1370,6 +1371,24 @@ export const LiveScreen = ({
       {liveish || replayEnded ? (
         <>
           <LiveHero payload={payload} samples={samples} replayEnded={replayEnded} />
+          {(() => {
+            /* Cross-links, never duplication (Brief R-c): /live answers "what is
+             * happening right now?"; the race's own page holds the accumulating
+             * record. One quiet link — races only, and mid-replay it carries the
+             * virtual clock so the replayed race gets its replayed race page. */
+            const storySoFarId = replayActive
+              ? replay?.session?.canonicalSessionId ?? null
+              : canonicalLiveRaceSessionId(payload);
+            if (!storySoFarId) return null;
+            const query = replayActive && replay ? replayDeepLinkQuery(replay.getReplayParams()) : '';
+            return (
+              <p className="caption caption--secondary" style={{ margin: '-8px 0 0' }}>
+                <Link to={`/races/${encodeURIComponent(storySoFarId)}${query}`}>
+                  This race&rsquo;s page — the story so far →
+                </Link>
+              </p>
+            );
+          })()}
           <BattleModule payload={payload} samples={samples} history={history} replayEnded={replayEnded} />
           <div className="grid live-layout">
             <div className="stack live-layout__main">

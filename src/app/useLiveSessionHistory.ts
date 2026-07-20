@@ -60,7 +60,12 @@ export const useLiveSessionHistory = (
   }, [payload]);
 
   useEffect(() => {
-    if (!payload || !['ready', 'degraded'].includes(payload.state)) return;
+    // 'stale' seeds too (Brief R-c): between COLD and roll-forward the capture
+    // itself reads stale, and a fresh visitor to the race page must still see
+    // the race-so-far — the archive holds the honest record, never a blank.
+    // Live appends stay gated to ready/degraded in the history model; only the
+    // one-shot server seed is allowed through here.
+    if (!payload || !['ready', 'degraded', 'stale'].includes(payload.state)) return;
     const sessionKey = liveSessionKeyOf(payload);
     if (!sessionKey || seededRef.current.has(sessionKey) || inFlightRef.current.has(sessionKey)) return;
     const replayParams = replayParamsRef.current();

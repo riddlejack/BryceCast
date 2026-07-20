@@ -760,6 +760,13 @@ button { font-family: inherit; }
 .race-row--upcoming .race-row__mini { display: inline-flex; }
 .race-row--upcoming .tower__name { color: var(--ink-secondary); }
 
+/* The placeholder row, upgraded in place while its race is LIVE (Brief R-c):
+ * quiet ink dot + LIVE, and the row opens the race's live page. */
+.tower__row.race-row--upcoming.race-row--live { grid-template-columns: 50px minmax(0, 1fr) auto 16px; cursor: pointer; }
+.race-row--live .tower__name { color: var(--ink-primary); }
+a.tower__row.race-row--live { transition: background-color 150ms ease; }
+a.tower__row.race-row--live:hover { background: var(--surface-0); }
+
 /* ---------- footer ---------- */
 
 .footer { border-top: 1px solid var(--divider); margin-top: 28px; }
