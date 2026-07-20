@@ -137,6 +137,144 @@ export const buildCumulativeLiveBattleFrame = (
   return { cars, ahead, behind, sourceField: 'liveGap' };
 };
 
+/* ---------- Brief J stage 2: field compression (facts, not forecasts) ---------- */
+
+/** The tight window that reads as "genuinely wheel-to-wheel" — one second, the
+ * same threshold the field tower uses for its battle brackets. */
+export const FIELD_COMPRESSION_TIGHT_GAP_SECONDS = 1;
+/** A car within this of its neighbour is still "in Bryce's pack". Kept equal to
+ * the tight window so the module speaks a single, explainable number. */
+export const FIELD_COMPRESSION_PACK_GAP_SECONDS = 1;
+
+export type FieldGapBasis = 'leader-cumulative' | 'preceding-interval';
+
+export interface FieldCompression {
+  /** Contiguous cars around Bryce (Bryce included) each within the pack gap. */
+  packCars: number;
+  /** Nose-to-tail span of that pack, in seconds. */
+  packCoveredSeconds: number;
+  /** Adjacent car-pairs across the whole running order within the tight gap. */
+  pairsWithinTight: number;
+  /** The tight threshold used, in seconds (surfaced in copy). */
+  tightGapSeconds: number;
+  /** The pack threshold used, in seconds. */
+  packGapSeconds: number;
+  /** Rows that carried a numeric gap this poll — the availability signal. */
+  numericGapCount: number;
+  /** Which reading of `liveGap` the field resolved to this poll. */
+  gapBasis: FieldGapBasis;
+}
+
+/** The published `liveGap` field means one of two things depending on the feed:
+ * the RaceTools/Timing71 lake (and the live feed's own `gap`) publish the
+ * CUMULATIVE gap to the leader, which is monotonic non-decreasing by rank; some
+ * paths carry the already-differenced interval to the preceding car. Adjacent
+ * on-track intervals are the difference of consecutive leader gaps in the first
+ * case and the value itself in the second. We detect the basis from the sourced
+ * numbers alone — a non-decreasing run of ranked gaps is cumulative — so the
+ * compression facts stay correct whichever way the current payload reads, with
+ * no guess baked in. */
+export const resolveFieldGapBasis = (rankedGaps: Array<number | null>): FieldGapBasis => {
+  let comparable = 0;
+  let decreasing = 0;
+  for (let index = 1; index < rankedGaps.length; index += 1) {
+    const previous = rankedGaps[index - 1];
+    const current = rankedGaps[index];
+    if (previous === null || current === null) continue;
+    comparable += 1;
+    // A hair of tolerance so a rounding wobble in a cumulative feed does not
+    // read as a genuine decrease.
+    if (current < previous - 0.02) decreasing += 1;
+  }
+  // Cumulative gap-to-leader never decreases; require a clear monotone run
+  // before trusting the differenced reading, and fall back to the preceding-
+  // interval convention when the evidence is thin or mixed.
+  if (comparable >= 3 && decreasing === 0) return 'leader-cumulative';
+  return 'preceding-interval';
+};
+
+/** Adjacent on-track interval seconds per rank transition: entry `i` is the gap
+ * between the car at ranked index `i` and the car ahead of it (index `i-1`).
+ * `null` where either side lacks a numeric gap (a lapped car, a break in the
+ * feed) — those never fall back to zero and always break a chain. */
+export const adjacentIntervalsSeconds = (
+  rankedGaps: Array<number | null>,
+  basis: FieldGapBasis
+): Array<number | null> =>
+  rankedGaps.map((gap, index) => {
+    if (index === 0) return null;
+    if (basis === 'preceding-interval') return gap;
+    const previous = rankedGaps[index - 1];
+    if (gap === null || previous === null) return null;
+    const interval = gap - previous;
+    return interval >= 0 ? interval : null;
+  });
+
+/** Descriptive field-compression facts around Bryce, computed from the sourced
+ * gaps in the current payload — the same corridor data the battle uses. Facts
+ * only: how many cars sit in Bryce's contiguous pack and the time that pack
+ * covers, plus how many pairs across the field run within the tight window.
+ * No probabilities, no forecasts. Returns null when the gaps cannot be read. */
+export const buildFieldCompression = (
+  inputRows: LiveMotionRow[],
+  bryce: LiveMotionRow | null,
+  options: { tightGapSeconds?: number; packGapSeconds?: number } = {}
+): FieldCompression | null => {
+  const tightGapSeconds = options.tightGapSeconds ?? FIELD_COMPRESSION_TIGHT_GAP_SECONDS;
+  const packGapSeconds = options.packGapSeconds ?? FIELD_COMPRESSION_PACK_GAP_SECONDS;
+  if (!bryce) return null;
+  const rows = sortRowsForLiveDisplay(inputRows);
+  if (rows.length < 2) return null;
+
+  const rankedGaps = rows.map((row) => positiveGapSeconds(row.liveGap));
+  const numericGapCount = rankedGaps.filter((gap) => gap !== null).length;
+  // Fewer than two sourced gaps cannot form a single interval — the field read
+  // is unavailable, so the module stays absent rather than inventing a fact.
+  if (numericGapCount < 2) return null;
+
+  const gapBasis = resolveFieldGapBasis(rankedGaps);
+  const intervals = adjacentIntervalsSeconds(rankedGaps, gapBasis);
+
+  let pairsWithinTight = 0;
+  for (let index = 1; index < intervals.length; index += 1) {
+    const interval = intervals[index];
+    if (interval !== null && interval > 0 && interval <= tightGapSeconds) pairsWithinTight += 1;
+  }
+
+  const bryceId = stableDriverId(bryce);
+  const bryceIndex = rows.findIndex((row) => row.bryce === true || stableDriverId(row) === bryceId);
+  let packCars = 0;
+  let packCoveredSeconds = 0;
+  // Bryce must hold a numeric gap himself before he can anchor a pack — a
+  // lapped Bryce ("+N L") has no on-track interval, so the pack collapses to
+  // the field fact alone.
+  if (bryceIndex >= 0 && rankedGaps[bryceIndex] !== null) {
+    packCars = 1;
+    for (let index = bryceIndex; index > 0; index -= 1) {
+      const interval = intervals[index];
+      if (interval === null || interval > packGapSeconds) break;
+      packCoveredSeconds += interval;
+      packCars += 1;
+    }
+    for (let index = bryceIndex + 1; index < rows.length; index += 1) {
+      const interval = intervals[index];
+      if (interval === null || interval > packGapSeconds) break;
+      packCoveredSeconds += interval;
+      packCars += 1;
+    }
+  }
+
+  return {
+    packCars,
+    packCoveredSeconds,
+    pairsWithinTight,
+    tightGapSeconds,
+    packGapSeconds,
+    numericGapCount,
+    gapBasis
+  };
+};
+
 /* ---------- Brief P: the battle axis breathes ---------- */
 
 /** Quantized half-frame widths for the corridor, in seconds. The axis only ever

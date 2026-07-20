@@ -13,7 +13,10 @@ export {
   battleAxisExtentSeconds,
   battleAxisFitStep,
   BATTLE_AXIS_LADDER,
+  buildFieldCompression,
   createBattleAxisState,
+  FIELD_COMPRESSION_PACK_GAP_SECONDS,
+  FIELD_COMPRESSION_TIGHT_GAP_SECONDS,
   isFreshCheckedAt,
   livePosition,
   positiveGapSeconds,
@@ -24,7 +27,7 @@ export {
   stableLabelLane,
   timestampWindowDomain
 } from './liveMotionModel';
-export type { BattleAxisState, LiveBattleCar, LiveBattleFrame, LiveBattleNeighbor, RankChange } from './liveMotionModel';
+export type { BattleAxisState, FieldCompression, LiveBattleCar, LiveBattleFrame, LiveBattleNeighbor, RankChange } from './liveMotionModel';
 
 export type LiveRow = Record<string, unknown>;
 

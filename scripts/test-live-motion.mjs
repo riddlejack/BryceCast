@@ -3,10 +3,13 @@ import {
   advanceBattleAxis,
   BATTLE_AXIS_LADDER,
   BATTLE_AXIS_REVERSAL_PERSISTENCE,
+  adjacentIntervalsSeconds,
   battleAxisExtentSeconds,
   battleAxisFitStep,
   buildCumulativeLiveBattleFrame,
+  buildFieldCompression,
   createBattleAxisState,
+  resolveFieldGapBasis,
   isFreshCheckedAt,
   nextBattleAxisStep,
   positiveGapSeconds,
@@ -312,4 +315,97 @@ assert.equal(bestLapDeltaWords(0.3), '0.30s ahead', 'positive reads ahead, Bryce
 assert.equal(bestLapDeltaWords(-0.15), '0.15s behind', 'negative reads behind');
 assert.equal(bestLapDeltaWords(0), 'level', 'a dead heat reads level, never signed zero');
 
-console.log(JSON.stringify({ ok: true, assertions: 132, model: 'session-keyed-live-history + session-aware-live' }, null, 2));
+/* ---------- Brief J stage 2: field compression ---------- */
+
+const fcRow = (no, liveRank, liveGap, lastName, bryce = false) => ({
+  driverId: bryce ? '2143' : `id-${no}`,
+  no,
+  liveRank,
+  rank: liveRank,
+  liveGap,
+  firstName: bryce ? 'Bryce' : 'Test',
+  lastName,
+  status: 'Active',
+  bryce
+});
+
+// The gap basis is read from the numbers alone: a non-decreasing ranked run is
+// cumulative gap-to-leader (the RaceTools/Timing71 lake and the live `gap`
+// field); a mixed run is already-differenced intervals.
+assert.equal(resolveFieldGapBasis([0, 1.328, 2.246, 2.923, 3.758]), 'leader-cumulative', 'a monotone ranked run reads as gap-to-leader');
+assert.equal(resolveFieldGapBasis([0, 0.5, 0.8, 0.4, 0.9]), 'preceding-interval', 'a run that dips reads as preceding intervals');
+assert.equal(resolveFieldGapBasis([0, 0.5]), 'preceding-interval', 'too few comparable gaps stays on the interval convention');
+assert.deepEqual(
+  adjacentIntervalsSeconds([0, 1.328, 2.246, null, 3.0], 'leader-cumulative').map((v) => (v === null ? null : Number(v.toFixed(3)))),
+  [null, 1.328, 0.918, null, null],
+  'cumulative intervals are consecutive differences; a null gap breaks both sides'
+);
+assert.deepEqual(
+  adjacentIntervalsSeconds([0, 0.5, 0.8], 'preceding-interval'),
+  [null, 0.5, 0.8],
+  'interval basis uses the sourced value directly'
+);
+
+// A tightly bunched lead pack (real St Louis 2025 ranked gap-to-leader values,
+// Bryce P9). Intervals are the differences, so the pack chains to six cars.
+const packField = [
+  fcRow('76', 1, '0', 'Leader'),
+  fcRow('28', 2, '1.328', 'Two'),
+  fcRow('14', 3, '2.246', 'Three'),
+  fcRow('99', 4, '2.923', 'Four'),
+  fcRow('17', 5, '3.758', 'Five'),
+  fcRow('26', 6, '4.770', 'Six'),
+  fcRow('16', 7, '5.682', 'Seven'),
+  fcRow('30', 8, '6.061', 'Eight'),
+  fcRow('9', 9, '6.645', 'Aron', true),
+  fcRow('40', 10, '7.532', 'Ten'),
+  fcRow('11', 11, '8.438', 'Eleven'),
+  fcRow('38', 12, '17.090', 'Twelve')
+];
+const packBryce = packField.find((row) => row.bryce);
+const packed = buildFieldCompression(packField, packBryce);
+assert.ok(packed, 'compression builds from a sourced field');
+assert.equal(packed.gapBasis, 'leader-cumulative', 'the lake field reads as gap-to-leader');
+assert.equal(packed.pairsWithinTight, 8, 'eight adjacent pairs run within a second across the field');
+assert.equal(packed.packCars, 6, "Bryce's contiguous sub-second pack holds six cars");
+assert.ok(near(packed.packCoveredSeconds, 3.668), 'the pack covers 3.7s nose to tail');
+// The field tower would never chain this from raw gap-to-leader (only the
+// leader's neighbour reads <= 1s) — the corrected intervals are the point.
+
+// Preceding-interval basis: the same helper works when the feed already carries
+// per-car intervals, so a live feed of that shape is not misread.
+const intervalField = [
+  fcRow('1', 1, '0', 'Leader'),
+  fcRow('2', 2, '0.5', 'Two'),
+  fcRow('9', 3, '0.8', 'Aron', true),
+  fcRow('4', 4, '0.4', 'Four'),
+  fcRow('5', 5, '0.9', 'Five')
+];
+const intervalCompression = buildFieldCompression(intervalField, intervalField.find((row) => row.bryce));
+assert.equal(intervalCompression.gapBasis, 'preceding-interval', 'a dipping field keeps the interval reading');
+assert.equal(intervalCompression.pairsWithinTight, 4, 'all four intervals sit within a second');
+assert.equal(intervalCompression.packCars, 5, 'the whole field chains into one pack here');
+
+// Bryce lapped: he holds no numeric gap, so no pack forms, but the field fact
+// still stands from the lead-lap cars.
+const lappedField = [
+  fcRow('1', 1, '0', 'Leader'),
+  fcRow('2', 2, '0.5', 'Two'),
+  fcRow('3', 3, '1.6', 'Three'),
+  fcRow('4', 4, '2.0', 'Four'),
+  fcRow('9', 5, '+2 L', 'Aron', true)
+];
+const lapped = buildFieldCompression(lappedField, lappedField.find((row) => row.bryce));
+assert.equal(lapped.packCars, 0, 'a lapped Bryce anchors no pack');
+assert.equal(lapped.pairsWithinTight, 2, 'the lead-lap pairs still count');
+
+// Gaps unavailable: nothing numeric to read, so the module stays absent.
+assert.equal(buildFieldCompression([fcRow('9', 1, '', 'Aron', true)], fcRow('9', 1, '', 'Aron', true)), null, 'a single row cannot form an interval');
+assert.equal(
+  buildFieldCompression([fcRow('1', 1, '', 'Leader'), fcRow('9', 2, '', 'Aron', true)], fcRow('9', 2, '', 'Aron', true)),
+  null,
+  'no numeric gaps means the fact is unavailable'
+);
+assert.equal(buildFieldCompression([fcRow('1', 1, '0', 'Leader')], null), null, 'no Bryce row, no fact');
+
+console.log(JSON.stringify({ ok: true, assertions: 150, model: 'session-keyed-live-history + session-aware-live + field-compression' }, null, 2));

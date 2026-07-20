@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { CalendarClock, ExternalLink, History, Radio, RotateCcw, Tv, X } from 'lucide-react';
 import {
   Card,
@@ -28,6 +28,7 @@ import {
   advanceBattleAxis,
   battleAxisExtentSeconds,
   BATTLE_AXIS_LADDER,
+  buildFieldCompression,
   buildLiveBattleFrame,
   buildOfficialPointsWindow,
   captureAgeSeconds,
@@ -532,6 +533,78 @@ const BestLapDeltas = ({ deltas }: { deltas: BestLapDeltas | null }) => {
   );
 };
 
+/* ---------- Brief J stage 2: the field-compression ticker ----------
+ * A quiet one-line fact under the corridor: how many cars sit in Bryce's
+ * contiguous pack and the time it covers, plus how many pairs across the field
+ * run within a second. Facts from the same sourced gaps the battle uses — no
+ * probabilities, no forecasts. Under caution the field bunches behind the pace
+ * car for reasons that have nothing to do with racing, so it states the honest
+ * bunch instead of a racing number; it is absent outside a race, when the gaps
+ * cannot be read, or when a caution feed has gone stale. */
+const FieldCompressionTicker = ({ payload, sessionKind }: { payload: LiveReadiness; sessionKind: LiveSessionKind }) => {
+  if (sessionKind !== 'race') return null;
+  const heartbeat = heartbeatOf(payload);
+  const flag = asString(heartbeat.currentFlag ?? heartbeat.flag ?? (payload.raceWeekend as Row).flag);
+  // A stopped session isn't racing, so there is no compression to speak of.
+  if (isRedFlag(flag)) return null;
+
+  if (isCautionFlag(flag)) {
+    // The gaps still read, but under yellow they compress artificially. Say the
+    // bunch plainly; when the feed has also gone stale, stay silent rather than
+    // imply a live read.
+    if (payload.state === 'stale' || payload.state === 'blocked') return null;
+    return (
+      <p className="caption caption--secondary live-battle__compression" data-field-compression="caution">
+        Under caution — field bunched
+      </p>
+    );
+  }
+
+  const compression = buildFieldCompression(liveRowsOf(payload), liveBryceRowOf(payload));
+  if (!compression) return null;
+
+  const tightText = `${compression.tightGapSeconds.toFixed(1)}s`;
+  const coveredText = `${compression.packCoveredSeconds.toFixed(1)}s`;
+  const pairWord = compression.pairsWithinTight === 1 ? 'pair' : 'pairs';
+
+  let body: ReactNode;
+  if (compression.packCars >= 2) {
+    body = (
+      <>
+        <TickerValue value={compression.packCars} valueKey={compression.packCars} /> cars covered by{' '}
+        <TickerValue value={coveredText} valueKey={coveredText} /> around Bryce
+        {compression.pairsWithinTight > 0 ? (
+          <>
+            {' '}·{' '}
+            <TickerValue value={compression.pairsWithinTight} valueKey={compression.pairsWithinTight} /> {pairWord} within {tightText}
+          </>
+        ) : null}
+      </>
+    );
+  } else if (compression.pairsWithinTight >= 1) {
+    body = (
+      <>
+        <TickerValue value={compression.pairsWithinTight} valueKey={compression.pairsWithinTight} /> {pairWord} within {tightText} across the field
+      </>
+    );
+  } else {
+    body = <>The field is spread — no pairs within {tightText}</>;
+  }
+
+  return (
+    <p
+      className="caption caption--secondary live-battle__compression"
+      data-field-compression="green"
+      data-gap-basis={compression.gapBasis}
+      data-pack-cars={compression.packCars}
+      data-pack-covered={compression.packCoveredSeconds.toFixed(3)}
+      data-pairs-within={compression.pairsWithinTight}
+    >
+      {body}
+    </p>
+  );
+};
+
 const BattleModule = ({ payload, samples, history, replayEnded = false, sessionKind }: { payload: LiveReadiness; samples: GapSample[]; history: LiveSessionHistory | null; replayEnded?: boolean; sessionKind: LiveSessionKind }) => {
   if (sessionKind !== 'race') {
     const deltas = buildBestLapDeltas(liveRowsOf(payload));
@@ -559,6 +632,7 @@ const BattleModule = ({ payload, samples, history, replayEnded = false, sessionK
       <p className="live-battle__intro">The pack around Bryce — every line a car's running position, gold is Bryce.</p>
       <div className={`live-battle__mode${mode ? ' live-battle__mode--active' : ''}`} aria-live="polite">{mode ?? '\u00a0'}</div>
       <BattleCorridor payload={payload} samples={samples} history={history} />
+      <FieldCompressionTicker payload={payload} sessionKind={sessionKind} />
       <div className="live-battle__divider" />
       <p className="live-battle__shared-title">The running order</p>
       <LiveRunningOrder history={history} clockCheckedAt={liveSourceCheckedAtOf(payload)} replayEnded={replayEnded} />

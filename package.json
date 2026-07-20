@@ -20,6 +20,7 @@
     "audit:live-f6:running-order": "node scripts/audit-live-f6-running-order.mjs",
     "qa:live-f6:running-order": "node scripts/qa-live-f6-running-order.mjs",
     "qa:live-battle-axis": "node scripts/qa-live-battle-axis.mjs",
+    "qa:live-field-compression": "node scripts/qa-live-field-compression.mjs",
     "qa:live-brief-o": "node scripts/qa-live-brief-o.mjs",
     "live:runner": "node scripts/live-runner.mjs",
     "live:runner:once": "node scripts/live-runner.mjs --once",
