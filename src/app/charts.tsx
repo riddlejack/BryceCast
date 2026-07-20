@@ -100,6 +100,27 @@ export const useReducedMotion = (): boolean => {
   return reduced;
 };
 
+/** True when the primary input can't hover — a touch screen. Chart captions that
+ *  instruct an interaction must swap "Hover" for "Tap" on these devices; hover is
+ *  simply unavailable, so the copy would otherwise ask for a gesture that can't
+ *  happen. Defaults to hover-capable so desktop and static QA captures read
+ *  "Hover" unless the device explicitly reports a coarse, hoverless pointer. */
+export const useCoarsePointer = (): boolean => {
+  const [coarse, setCoarse] = useState(() => {
+    if (typeof window === 'undefined' || !window.matchMedia) return false;
+    return window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+  });
+  useEffect(() => {
+    if (typeof window === 'undefined' || !window.matchMedia) return undefined;
+    const media = window.matchMedia('(hover: none) and (pointer: coarse)');
+    const update = () => setCoarse(media.matches);
+    update();
+    media.addEventListener('change', update);
+    return () => media.removeEventListener('change', update);
+  }, []);
+  return coarse;
+};
+
 /* ---------- house hover tooltip (white card, no delay, mark-anchored) ---------- */
 
 export interface ChartTip {

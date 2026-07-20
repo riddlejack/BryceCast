@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { Card, SourcePill } from '../app/components';
-import { inkGoldDiverging } from '../app/charts';
+import { inkGoldDiverging, useCoarsePointer } from '../app/charts';
 import { TrackArt } from '../app/trackArt';
 import type { TrackOutline } from '../assets/tracks';
 import {
@@ -246,6 +246,10 @@ export const SectionHeatCard = ({
   const [scrubLap, setScrubLap] = useState(1);
   const [stat, setStat] = useState<SectionStat>('median');
   const [numbersOpen, setNumbersOpen] = useState(false);
+  /* Touch screens can't hover: swap the interaction verb so the caption asks
+   * for a gesture the device can actually make (a tap opens the same tooltip). */
+  const coarse = useCoarsePointer();
+  const readVerb = coarse ? 'tap' : 'hover';
 
   const scopes = useMemo(() => (laps ? lapScopesFor(laps.totalLaps) : []), [laps]);
   const lapContext = useMemo(() => (laps ? lapContextOf(laps) : []), [laps]);
@@ -322,13 +326,15 @@ export const SectionHeatCard = ({
     ...(showMarks && passMarks ? passMarks.caveats : []),
     anchors.note
   ];
+  /* The face keeps only family-legible scope + denominator; the timing-loop
+   * coverage string (method) moves into "The numbers behind the shades". */
   const scopeSummary = !set
     ? null
     : singleLap
-      ? `${coverage} · Lap ${scrubLap} of ${laps?.totalLaps ?? '—'} · ${scrubContext ? cautionCopy[scrubContext.caution] : 'no flag report'}`
+      ? `Lap ${scrubLap} of ${laps?.totalLaps ?? '—'} · ${scrubContext ? cautionCopy[scrubContext.caution] : 'no flag report'}`
       : scope.kind === 'lap_window'
-        ? `${coverage} · ${scope.label} · laps ${scope.fromLap}–${scope.toLap} · ${set.comparisonRows ?? 0} clean-lap comparisons`
-        : `${coverage} · ${set.comparisonRows ?? 0} clean-lap comparisons`;
+        ? `${scope.label} · laps ${scope.fromLap}–${scope.toLap} · ${set.comparisonRows ?? 0} clean-lap comparisons`
+        : `${set.comparisonRows ?? 0} clean-lap comparisons`;
 
   return (
     <Card
@@ -338,8 +344,8 @@ export const SectionHeatCard = ({
       <p style={{ margin: '0 0 12px', fontSize: 13.5, color: 'var(--ink-secondary)' }}>
         {hasHeat
           ? orientationClause
-            ? `${orientationClause} Hover the shape to read his pace stretch by stretch — the gold dots mark his two strongest.`
-            : 'Hover the shape to read Bryce’s pace stretch by stretch — the gold dots mark his two strongest.'
+            ? `${orientationClause} Gold shows where he was strongest — ${readVerb} the shape to read his pace stretch by stretch.`
+            : `Gold shows where Bryce was strongest — ${readVerb} the shape to read his pace stretch by stretch.`
           : set
             ? visitLapsCompleted === 0
               ? `His ${laps?.seasonYear ?? ''} visit ended on the opening lap — no clean laps to compare.`.replace(/\s{2,}/g, ' ')
@@ -418,7 +424,7 @@ export const SectionHeatCard = ({
         <p style={{ margin: '10px 0 0', fontSize: 11.5, color: 'var(--ink-muted)' }}>
           <span aria-hidden style={{ marginRight: 6 }}>○</span>
           a pass involving Bryce — placed between timing loops · derived from the RaceTools race-weekend capture,{' '}
-          {resolvedMarks.length} this race. Hover for the lap and the car.
+          {resolvedMarks.length} this race. {coarse ? 'Tap' : 'Hover'} for the lap and the car.
         </p>
       ) : null}
       {suppressedCount > 0 && !singleLap && hasHeat ? (
@@ -485,6 +491,14 @@ export const SectionHeatCard = ({
                 )}
               </div>
               <p style={{ margin: 0, fontSize: 11.5, color: 'var(--ink-muted)' }}>
+                {coverage}.{' '}
+                {measured
+                  ? `${measuredSectionCount(anchors)} timing-loop sub-sections from the RaceTools race-weekend capture, tiling the whole lap — time-based, not GPS, and not official timing.`
+                  : hasDerivedRemainder(anchors)
+                    ? 'Solid spans are official timing loops — time-based, not GPS. The dotted stretch is derived: lap time minus the timed sections, ranked against the field the same way.'
+                    : 'Section times from official timing loops — time-based, not GPS. Stretches without timing loops stay the plain line.'}
+              </p>
+              <p style={{ margin: 0, fontSize: 11.5, color: 'var(--ink-muted)' }}>
                 Clean green-flag laps only — caution and restart laps are excluded from the shades. Loop timing measures
                 time, not car position.
               </p>
@@ -501,17 +515,15 @@ export const SectionHeatCard = ({
           ) : null}
         </div>
       ) : null}
-      <p style={{ margin: 0, paddingTop: 14, fontSize: 11.5, color: 'var(--ink-muted)' }}>
-        {hasHeat
-          ? measured
-            ? `${measuredSectionCount(anchors)} timing-loop sub-sections from the RaceTools race-weekend capture, tiling the whole lap — time-based, not GPS, and not official timing.`
-            : hasDerivedRemainder(anchors)
-              ? 'Solid spans are official timing loops — time-based, not GPS. The dotted stretch is derived: lap time minus the timed sections, ranked against the field the same way.'
-              : 'Section times from official timing loops — time-based, not GPS. Stretches without timing loops stay the plain line.'
-          : set
+      {!hasHeat ? (
+        /* Method copy (coverage, derivation, GPS caveats) now lives behind "The
+         * numbers behind the shades"; the face only carries the empty state. */
+        <p style={{ margin: 0, paddingTop: 14, fontSize: 11.5, color: 'var(--ink-muted)' }}>
+          {set
             ? `Sections need ${MIN_CLEAN_LAPS} clean laps in a scope to compare honestly.`
             : 'No official section times are on file for this race yet.'}
-      </p>
+        </p>
+      ) : null}
     </Card>
   );
 };

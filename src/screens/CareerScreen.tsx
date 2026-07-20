@@ -250,6 +250,16 @@ const OdometerCard = ({ live }: { live: LiveReadiness | null }) => {
           ]}
           caveats={[
             ...lifeStats.caveats,
+            /* Confidence classes, the harder bounds, and proxy methodology (#13)
+               live here now — the card face stays family-first. */
+            'Every sourced mile stays in its confidence class: exact, lower bound, modeled range, or unknown.',
+            `On-track floor: ${wholeNumber.format(lifeStats.physicalSessionMileage.floor.miles)}+ miles across ${wholeNumber.format(
+              lifeStats.physicalSessionMileage.floor.laps
+            )} laps — exact laps plus lower bounds where a session's count is known but partial.`,
+            `The on-track floor excludes ${lifeStats.physicalSessionMileage.unknown.sessions} sessions with no lap count.`,
+            `Minimum travel: ${wholeNumber.format(
+              lifeStats.travel.greatCircleMinimum.miles
+            )} miles is the great-circle displacement venue to venue; real routes don't run straight, so the true number is larger.`,
             `Route-adjusted minimum proxy: ${wholeNumber.format(routeAdjusted.lowMiles)}–${wholeNumber.format(
               routeAdjusted.highMiles
             )} miles. Actual travel stays unknown until season bases and return-home frequency are supplied.`,
@@ -259,33 +269,18 @@ const OdometerCard = ({ live }: { live: LiveReadiness | null }) => {
       }
     >
       <p style={{ margin: '0 0 16px', color: 'var(--ink-secondary)', fontSize: 13.5 }}>
-        Every sourced mile stays in its confidence class: exact, lower bound, modeled range, or unknown.
+        How far the career has gone — every mile Bryce has raced, and every place he’s raced it, counted from official lap logs.
       </p>
-      <div className="grid grid--4">
+      <div className="grid grid--2">
         <Stat
           label="Miles raced"
           value={wholeNumber.format(lifeStats.personalRaceMileage.miles)}
-          note={`${wholeNumber.format(lifeStats.personalRaceMileage.laps)} personal laps · ${lifeStats.personalRaceMileage.raceRows} races · exact`}
-        />
-        <Stat
-          label="On-track floor"
-          value={`${wholeNumber.format(lifeStats.physicalSessionMileage.floor.miles)}+`}
-          note={`${wholeNumber.format(lifeStats.physicalSessionMileage.floor.laps)} laps · exact + lower bounds`}
+          note={`${wholeNumber.format(lifeStats.personalRaceMileage.laps)} personal laps · ${lifeStats.personalRaceMileage.raceRows} races`}
         />
         <Stat
           label="Venues · countries"
           value={`${wholeNumber.format(lifeStats.venues)} · ${wholeNumber.format(lifeStats.countries)}`}
           note="Physical venues · layouts combined"
-        />
-        <Stat
-          label="Minimum travel"
-          value={wholeNumber.format(lifeStats.travel.greatCircleMinimum.miles)}
-          note={
-            <>
-              Great-circle displacement · venue to venue
-              <span style={{ display: 'block', marginTop: 2 }}>Routes don’t run straight, so the real number is larger.</span>
-            </>
-          }
         />
       </div>
       {liveToday && liveToday.covered ? (
@@ -321,9 +316,6 @@ const OdometerCard = ({ live }: { live: LiveReadiness | null }) => {
           </p>
         </div>
       ) : null}
-      <p className="caption caption--secondary" style={{ margin: '18px 0 0' }}>
-        The on-track floor excludes {lifeStats.physicalSessionMileage.unknown.sessions} sessions with no lap count.
-      </p>
     </Card>
   );
 };

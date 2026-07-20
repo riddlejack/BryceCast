@@ -394,7 +394,10 @@ button { font-family: inherit; }
   width: 100%;
   max-width: var(--content-max);
   margin: 0 auto;
-  padding: 14px 20px calc(var(--tabbar-height) + 32px);
+  /* Reserve the fixed tab bar's full footprint — its height AND the device safe
+     area — plus breathing room, so no card boundary hides behind the bar at the
+     bottom of a scroll (#7). The tab bar itself is height + safe-area. */
+  padding: 14px 20px calc(var(--tabbar-height) + env(safe-area-inset-bottom) + 32px);
   flex: 1;
 }
 
@@ -760,7 +763,9 @@ button { font-family: inherit; }
 .footer__inner {
   max-width: var(--content-max);
   margin: 0 auto;
-  padding: 18px 28px calc(18px + var(--tabbar-height));
+  /* The footer is the last element before the fixed tab bar; its bottom padding
+     is what clears the bar (height + safe area) at max scroll (#7). */
+  padding: 18px 28px calc(18px + var(--tabbar-height) + env(safe-area-inset-bottom));
   display: flex;
   flex-wrap: wrap;
   align-items: center;

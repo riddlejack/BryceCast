@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { ArrowLeft, Flag, Users } from 'lucide-react';
-import { Card, HeroPanel, SourcePill, Stat, StatusChip, Unavailable } from '../app/components';
-import { ChartTipCard, chartFont, useMeasuredWidth, type ChartTip } from '../app/charts';
+import { Card, HeroPanel, SourcePill, Stat, Unavailable } from '../app/components';
+import { ChartTipCard, chartFont, useCoarsePointer, useMeasuredWidth, type ChartTip } from '../app/charts';
 import { TrackArt } from '../app/trackArt';
 import { trackOutlineFor, type TrackOutline } from '../assets/tracks';
 import { measuredTrackSectionsFor, trackSectionsFor } from '../assets/tracks/sections';
@@ -321,6 +321,7 @@ const LapChart = ({ story }: { story: RaceStoryPack }) => {
 };
 
 const LapChartCard = ({ story, mover }: { story: RaceStoryPack; mover: { name: string; gain: number } | null }) => {
+  const coarse = useCoarsePointer();
   const hasBryceLine = story.bryce.inLapChart;
   const teammateCount = story.lapChart.drivers.filter((driver) => driver.isTeammate).length;
   /* Zero-lap day (lap-1 contact): with no Bryce line to draw, the legend itself
@@ -355,14 +356,14 @@ const LapChartCard = ({ story, mover }: { story: RaceStoryPack; mover: { name: s
       {hasBryceLine ? (
         <p className="caption caption--secondary" style={{ margin: '0 0 10px' }}>
           Bryce in ink with gold moments{teammateCount > 0 ? ` · ${story.teamContext?.teamName ?? 'team'} cars in darker gray` : ''} · the
-          field in light gray · ○ marks a day that ended early · hover any line
+          field in light gray · ○ marks a day that ended early · {coarse ? 'tap any line' : 'hover any line'}
         </p>
       ) : (
         /* Fact first: the legend explains the missing ink so it never reads as
            "Bryce is missing." The hero already carries the official status. */
         <p className="caption caption--secondary" style={{ margin: '0 0 10px' }}>
           {zeroLapReason} ended Bryce’s race on lap {endedOnLap} — the chart shows the rest of the field’s day. ○ marks a car that
-          ended early · hover any line
+          ended early · {coarse ? 'tap any line' : 'hover any line'}
         </p>
       )}
       {hasBryceLine ? (
@@ -1173,7 +1174,11 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
                   ]
                 : [])
             ]}
-            caveats={pack.caveats}
+            caveats={
+              bryceStatus && bryceStatus !== 'running'
+                ? [...pack.caveats, `Official finishing status: ${bryceStatus}.`]
+                : pack.caveats
+            }
           />
         </div>
         <div className="hero-race">
@@ -1194,8 +1199,11 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
               </span>
             ) : null}
             {bryceStatus && bryceStatus !== 'running' ? (
-              <span style={{ marginTop: 8 }}>
-                <StatusChip tone="neutral" label={`official status: ${bryceStatus}`} />
+              /* Dignity for a hard day (#23): the hero leads with the humane
+                 sentence; the exact clinical status stays in the source drawer. */
+              <span style={{ fontSize: 13, color: 'var(--ink-secondary)', marginTop: 8, maxWidth: '38ch' }}>
+                {`${bryceStatus.charAt(0).toUpperCase()}${bryceStatus.slice(1)}`} ended Bryce’s race on lap{' '}
+                {(story?.bryce.lapsCompleted ?? 0) + 1}.
               </span>
             ) : null}
           </div>

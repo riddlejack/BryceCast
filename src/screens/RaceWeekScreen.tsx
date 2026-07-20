@@ -516,9 +516,21 @@ const FridaySlope = ({ prep, debriefIds }: { prep: UiNextEventPrep; debriefIds: 
   );
 };
 
+/* Family copy over signed numbers (#25): spell the small place count so "better"
+ * never fights a minus sign. medianPositionsBetter is negative when race day
+ * beat practice; the absolute value is how many places better he typically ran. */
+const smallCountWords = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
+const placesPhrase = (medianPositionsBetter: number | null): string | null => {
+  if (medianPositionsBetter === null || medianPositionsBetter >= 0) return null;
+  const places = Math.abs(medianPositionsBetter);
+  const word = places <= 10 ? smallCountWords[places] : String(places);
+  return `${word} ${places === 1 ? 'place' : 'places'}`;
+};
+
 const FridaySignal = ({ prep, trackTypeName, debriefIds }: { prep: UiNextEventPrep; trackTypeName: string; debriefIds: Set<string> }) => {
   const summary = prep.fridaySummary;
   if (summary.weekendCount < 3) return null;
+  const betterBy = placesPhrase(summary.medianPositionsBetter);
   return (
     <Card
       title="The Friday signal"
@@ -541,7 +553,7 @@ const FridaySignal = ({ prep, trackTypeName, debriefIds }: { prep: UiNextEventPr
         <strong style={{ color: 'var(--ink-primary)' }}>
           {summary.finishBeatBestPractice} of {summary.weekendCount}
         </strong>{' '}
-        clean weekends{summary.medianPositionsBetter !== null ? `, typically by ${summary.medianPositionsBetter} spots` : ''}. If
+        clean weekends{betterBy ? `, typically finishing ${betterBy} better than his practice rank` : ''}. If
         you liked practice, you’ll love the race.
       </p>
       <FridaySlope prep={prep} debriefIds={debriefIds} />
@@ -1341,6 +1353,14 @@ export const RaceWeekScreen = () => {
                 </div>
               </HeroBlock>
             )}
+            {/* Weather rides here as a quiet caption beside the countdown (#27),
+                never a pill on the track line — the geometry stays clean and the
+                full reading lives in the Weather window below. */}
+            {heroWind ? (
+              <p className="caption caption--secondary" style={{ margin: '10px 0 0' }}>
+                At the track {heroWind.frame ?? 'now'} · {heroWind.label}
+              </p>
+            ) : null}
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <div className="hero-race__art" style={{ width: '100%' }}>
@@ -1354,7 +1374,6 @@ export const RaceWeekScreen = () => {
                   annotation={venueSections.heroHeat.length > 0 ? null : sectionNote}
                   sections={venueSections.heroHeat.length > 0 ? { resolved: venueSections.heroHeat, showLabels: false } : null}
                   maxHeight={190}
-                  wind={heroWind}
                 />
               ) : null}
             </div>
