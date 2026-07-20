@@ -24,6 +24,7 @@ import {
 } from '../data/sectionObservations';
 import { loadSectionLaps, sectionLapVisitsFor, type SectionLapsPack } from '../data/sectionLaps';
 import { loadPassMarks, resolvePassMarks, type PassMarksPack } from '../data/passMarks';
+import { loadRaceStory } from '../data/raceStory';
 import { uiDataPackage } from '../data/uiDataPackage';
 import { ControlRow, Segmented } from './careerExplorer';
 import { ordinal } from '../app/format';
@@ -221,7 +222,8 @@ export const SectionHeatCard = ({
   passMarks,
   title = 'The track, section by section',
   orientationClause,
-  visitControl
+  visitControl,
+  visitLapsCompleted
 }: {
   outline: TrackOutline;
   anchors: TrackSectionAnchorSet;
@@ -235,6 +237,10 @@ export const SectionHeatCard = ({
   /** Race Week only: the quiet year toggle (a ControlRow + Segmented wired to
    *  the suite's selected-visit state), rendered above the scope control. */
   visitControl?: ReactNode;
+  /** Canonical laps Bryce completed this visit (from the race-story pack). When
+   *  it's zero — an opening-lap ending — the empty state states why with dignity
+   *  instead of the generic too-few-clean-laps line. Absent on race pages. */
+  visitLapsCompleted?: number | null;
 }) => {
   const [scopeKey, setScopeKey] = useState('full');
   const [scrubLap, setScrubLap] = useState(1);
@@ -335,7 +341,9 @@ export const SectionHeatCard = ({
             ? `${orientationClause} Hover the shape to read his pace stretch by stretch — the gold dots mark his two strongest.`
             : 'Hover the shape to read Bryce’s pace stretch by stretch — the gold dots mark his two strongest.'
           : set
-            ? 'Too few clean laps in this scope to compare sections.'
+            ? visitLapsCompleted === 0
+              ? `His ${laps?.seasonYear ?? ''} visit ended on the opening lap — no clean laps to compare.`.replace(/\s{2,}/g, ' ')
+              : 'Too few clean laps in this scope to compare sections.'
             : 'The venue shape, with the start/finish line marked.'}
       </p>
       {laps ? (
@@ -513,11 +521,15 @@ export const SectionHeatCard = ({
 const VisitShape = ({
   outline,
   anchors,
-  pack
+  pack,
+  lapsCompleted
 }: {
   outline: TrackOutline;
   anchors: TrackSectionAnchorSet;
   pack: SectionLapsPack;
+  /** Canonical laps Bryce completed this visit; zero means the caption states an
+   *  opening-lap ending instead of a bare "0 clean-lap comparisons". */
+  lapsCompleted?: number | null;
 }) => {
   const set = useMemo(() => sectionObservationsFromLaps(pack, { kind: 'full_race' }, 'median'), [pack]);
   /* Each visit joins the anchor set matching ITS OWN pack's grain — a lake
@@ -547,7 +559,7 @@ const VisitShape = ({
           {resultLabel ? <span className="tnum" style={{ color: 'var(--ink-secondary)' }}> · {resultLabel}</span> : null}
         </span>
         <span className="tnum" style={{ fontSize: 11.5, color: 'var(--ink-muted)' }}>
-          {set.comparisonRows ?? 0} clean-lap comparisons
+          {lapsCompleted === 0 ? 'ended on the opening lap' : `${set.comparisonRows ?? 0} clean-lap comparisons`}
         </span>
       </div>
     </div>
@@ -561,12 +573,17 @@ export const VenueYearsCard = ({
   outline,
   anchors,
   visits,
-  title = 'This place, other years'
+  title = 'This place, other years',
+  lapsCompletedBySession
 }: {
   outline: TrackOutline;
   anchors: TrackSectionAnchorSet;
   visits: SectionLapsPack[];
   title?: string;
+  /** Canonical laps-completed per session, so an opening-lap visit's shape reads
+   *  "ended on the opening lap" instead of "0 clean-lap comparisons". Absent on
+   *  race pages (each shape then keeps the bare comparison count). */
+  lapsCompletedBySession?: Map<string, number | null>;
 }) => {
   if (visits.length < 2) return null;
   const measured = visits.every((visit) => visit.sourceTier === 'lake_loop_crossings');
@@ -607,7 +624,13 @@ export const VenueYearsCard = ({
       </div>
       <div className="row" style={{ gap: 22, flexWrap: 'wrap', alignItems: 'flex-start' }}>
         {visits.map((pack) => (
-          <VisitShape key={pack.sessionId} outline={outline} anchors={anchors} pack={pack} />
+          <VisitShape
+            key={pack.sessionId}
+            outline={outline}
+            anchors={anchors}
+            pack={pack}
+            lapsCompleted={lapsCompletedBySession?.get(pack.sessionId) ?? null}
+          />
         ))}
       </div>
     </Card>
@@ -629,6 +652,10 @@ export interface VenueSectionData {
   /** Loaded section-lap packs for the venue, oldest-first. */
   visits: SectionLapsPack[];
   passMarksBySession: Map<string, PassMarksPack | null>;
+  /** Canonical laps Bryce completed per visit (from each race-story pack). Zero
+   *  means an opening-lap ending — the suite states why with dignity instead of
+   *  a bare zero-comparison count. */
+  lapsCompletedBySession: Map<string, number | null>;
   /** The most recent visit (the heat card's default + the hero's shading). */
   mostRecent: SectionLapsPack | null;
   /** The most recent visit's full-race median heat, resolved for the hero's
@@ -643,12 +670,14 @@ export interface VenueSectionData {
 export const useVenueSectionData = (trackName: string | null | undefined): VenueSectionData => {
   const [visits, setVisits] = useState<SectionLapsPack[]>([]);
   const [passMarksBySession, setPassMarksBySession] = useState<Map<string, PassMarksPack | null>>(new Map());
+  const [lapsCompletedBySession, setLapsCompletedBySession] = useState<Map<string, number | null>>(new Map());
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let cancelled = false;
     setVisits([]);
     setPassMarksBySession(new Map());
+    setLapsCompletedBySession(new Map());
     setLoading(true);
     const venueRefs = sectionLapVisitsFor(trackName);
     if (venueRefs.length === 0) {
@@ -669,6 +698,16 @@ export const useVenueSectionData = (trackName: string | null | undefined): Venue
     ).then((entries) => {
       if (!cancelled) setPassMarksBySession(new Map(entries));
     });
+    /* Canonical laps-completed per visit, from the same race-story pack the race
+       page reads — the honest source for the opening-lap dignity copy. Cached in
+       the loader; null when a visit has no story pack (copy then falls back). */
+    Promise.all(
+      venueRefs.map(
+        async (ref) => [ref.sessionId, (await loadRaceStory(ref.sessionId).catch(() => null))?.bryce.lapsCompleted ?? null] as const
+      )
+    ).then((entries) => {
+      if (!cancelled) setLapsCompletedBySession(new Map(entries));
+    });
     return () => {
       cancelled = true;
     };
@@ -685,8 +724,8 @@ export const useVenueSectionData = (trackName: string | null | undefined): Venue
     const mostRecent = visits.length > 0 ? visits[visits.length - 1] : null;
     const heroHeat =
       anchors && mostRecent ? resolveHeatSections(anchors, sectionObservationsFromLaps(mostRecent)) : [];
-    return { loading, anchors, visits, passMarksBySession, mostRecent, heroHeat };
-  }, [trackName, visits, passMarksBySession, loading]);
+    return { loading, anchors, visits, passMarksBySession, lapsCompletedBySession, mostRecent, heroHeat };
+  }, [trackName, visits, passMarksBySession, lapsCompletedBySession, loading]);
 };
 
 /** The Race Week section suite: the venue heat card (defaulting to the most
@@ -700,7 +739,7 @@ export const VenueSectionSuite = ({
   outline: TrackOutline;
   data: VenueSectionData;
 }) => {
-  const { anchors, visits, passMarksBySession, mostRecent } = data;
+  const { anchors, visits, passMarksBySession, lapsCompletedBySession, mostRecent } = data;
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
   if (!outline || !anchors || visits.length === 0 || !mostRecent) return null;
@@ -762,8 +801,15 @@ export const VenueSectionSuite = ({
         laps={selected}
         fallbackSet={null}
         passMarks={passMarks}
+        visitLapsCompleted={lapsCompletedBySession.get(selected.sessionId) ?? null}
       />
-      <VenueYearsCard title="The track, year over year" outline={outline} anchors={anchors} visits={visits} />
+      <VenueYearsCard
+        title="The track, year over year"
+        outline={outline}
+        anchors={anchors}
+        visits={visits}
+        lapsCompletedBySession={lapsCompletedBySession}
+      />
     </>
   );
 };

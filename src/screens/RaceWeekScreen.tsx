@@ -35,15 +35,29 @@ import { VenueSectionSuite, useVenueSectionData } from './sectionIntelligence';
 
 type Row = Record<string, unknown>;
 
-/** Compact venue names for chart row labels; falls back to shortVenue. */
+/** Compact venue names for chart row labels; falls back to shortVenue. Road/
+ *  street venues whose official names carry a mid-string sponsor or descriptor
+ *  (so shortVenue's trailing-suffix trim can't reach it) are named here the way
+ *  the race archive reads them. */
 const venueShortNames: Record<string, string> = {
   'World Wide Technology Raceway': 'WWTR',
   'The Milwaukee Mile': 'Milwaukee',
   'Iowa Speedway': 'Iowa',
-  'Nashville Superspeedway': 'Nashville'
+  'Nashville Superspeedway': 'Nashville',
+  'Indianapolis Motor Speedway Road Course': 'Indy Road Course',
+  'WeatherTech Raceway Laguna Seca': 'Laguna Seca'
 };
 
 const venueShort = (trackName: string): string => venueShortNames[trackName] ?? shortVenue(trackName);
+
+/** One race's row label: the two-digit season tick + its short venue name. Shared
+ *  by the chart's rendered label and the gutter-width measurement so they can
+ *  never disagree (a fixed gutter with right-anchored text was clipping long road-
+ *  course names off the SVG's left edge). */
+const conversionRowLabel = (race: UiNextEventPrepRace): string => {
+  const seasonShort = race.seasonYear !== null ? `’${String(race.seasonYear).slice(2)}` : '';
+  return `${seasonShort} ${venueShort(race.trackName)}`.trim();
+};
 
 /** Session ids with a race-debrief page, shared by every module that links out. */
 const useDebriefIds = (): Set<string> => {
@@ -69,7 +83,13 @@ const ConversionChart = ({ prep, debriefIds }: { prep: UiNextEventPrep; debriefI
   const [hovered, setHovered] = useState<string | null>(null);
   const [tip, setTip] = useState<ChartTip | null>(null);
   const races = prep.races;
-  const labelWidth = width < 480 ? 86 : 118;
+  /* The gutter grows to the longest label so right-anchored names never spill off
+     the SVG's left edge. Short oval labels keep their established width (the floor);
+     long road-course names widen it, capped so the dumbbell plot always survives. */
+  const labelFloor = width < 480 ? 86 : 118;
+  const labelCap = Math.round(width * (width < 480 ? 0.52 : 0.44));
+  const longestLabelChars = races.reduce((max, race) => Math.max(max, Array.from(conversionRowLabel(race)).length), 0);
+  const labelWidth = Math.min(Math.max(labelFloor, Math.ceil(longestLabelChars * 5.9 + 8)), labelCap);
   const rowHeight = 30;
   const axisHeight = 20;
   const plotLeft = labelWidth + 6;
@@ -113,8 +133,12 @@ const ConversionChart = ({ prep, debriefIds }: { prep: UiNextEventPrep; debriefI
             const clean = race.officialStatus === 'running';
             const linked = debriefIds.has(race.sessionId);
             const isHovered = hovered === race.sessionId;
-            const seasonShort = race.seasonYear !== null ? `’${String(race.seasonYear).slice(2)}` : '';
-            const rowLabel = `${seasonShort} ${venueShort(race.trackName)}`;
+            const rowLabel = conversionRowLabel(race);
+            /* The gold finish tag normally sits left of the dot for a gained/held
+               finish. On a narrow chart a near-front finish (P3) would push that
+               tag back into the label gutter, so flip it to the dot's right when
+               the left side has no clear room — never over the venue label. */
+            const finishTagLeft = finish <= start && x(finish) - 10 - 16 >= plotLeft;
             return (
               <g
                 key={race.sessionId}
@@ -168,9 +192,9 @@ const ConversionChart = ({ prep, debriefIds }: { prep: UiNextEventPrep; debriefI
                 />
                 {race.sameTrack ? (
                   <text
-                    x={x(finish) + (finish <= start ? -10 : 10)}
+                    x={x(finish) + (finishTagLeft ? -10 : 10)}
                     y={y}
-                    textAnchor={finish <= start ? 'end' : 'start'}
+                    textAnchor={finishTagLeft ? 'end' : 'start'}
                     dominantBaseline="middle"
                     fill="var(--ink-primary)"
                     fontFamily={chartFont}
