@@ -721,6 +721,17 @@ button { font-family: inherit; }
   .race-row__date { display: block; }
 }
 
+/* Remaining-season placeholders (Brief R-a): the archive's row grammar, but
+ * quieter and honestly non-interactive — outline mini + trimmed venue + round +
+ * date, with no result numerals, no chevron, and no navigation. The venue
+ * outline is the content here, so it stays visible at every width (completed
+ * rows hide the mini on phones to lead with the finish). */
+.race-upcoming { border-bottom: 1px solid var(--divider); padding-bottom: 12px; margin-bottom: 14px; }
+.race-upcoming__head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.tower__row.race-row--upcoming { grid-template-columns: 50px minmax(0, 1fr) auto; cursor: default; }
+.race-row--upcoming .race-row__mini { display: inline-flex; }
+.race-row--upcoming .tower__name { color: var(--ink-secondary); }
+
 /* ---------- footer ---------- */
 
 .footer { border-top: 1px solid var(--divider); margin-top: 28px; }
