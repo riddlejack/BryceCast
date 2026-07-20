@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import {
   BATTLES_MIN_LAPS,
   battlesSoFarFrom,
+  buildLiveRaceShellSnapshot,
   buildingLapChartFrom,
   canonicalLiveRaceSessionId,
   isPostCheckeredRef,
@@ -252,6 +253,56 @@ const closest = battles[0];
 assert.equal(closest.lapsAdjacent, 14, 'the swap partner stays within one spot every lap');
 assert.equal(closest.swaps, 2, 'two changes of order between shared laps');
 
+/* ---------- the coherent snapshot: hero lap === chart lap ---------- */
+
+// The mixed-clock defect: the hero derived its lap from the payload heartbeat
+// while the chart derived "through lap N" from the accumulated history, and the
+// two update on slightly different clocks — at 72s the heartbeat read lap 28
+// while the history had charted lap 29; at 136s the heartbeat led at lap 65
+// while the chart trailed at lap 64. One snapshot reconciles them: the lap it
+// hands the hero is always the chart's newest charted lap.
+const requested = 'session_indy_nxt_2026_6755';
+const historyThrough = (latestLap) => ({
+  sessionKey: '5538-6755',
+  selectedDrivers: [],
+  stats: { arrivals: 0, valueChanges: 0, unchangedValues: 0, duplicateTimestamps: 0, outOfOrderArrivals: 0 },
+  samples: Array.from({ length: latestLap }, (_, index) => sampleFor(index + 1, 'GREEN', fieldAt(5), t0 + (index + 1) * 60_000))
+});
+
+const snapAhead = buildLiveRaceShellSnapshot(payloadFor({ lap: 28 }), historyThrough(29), requested);
+assert.equal(snapAhead.chart.latestLap, 29);
+assert.equal(snapAhead.lap, 29, 'the hero adopts the chart lap when the history leads the heartbeat');
+assert.equal(snapAhead.lap, snapAhead.chart.latestLap, 'visible hero lap === chart lap');
+
+const snapBehind = buildLiveRaceShellSnapshot(payloadFor({ lap: 65, totalLaps: 80 }), historyThrough(64), requested);
+assert.equal(snapBehind.chart.latestLap, 64);
+assert.equal(snapBehind.lap, 64, 'the hero adopts the chart lap when the heartbeat leads the history');
+assert.equal(snapBehind.lap, snapBehind.chart.latestLap, 'visible hero lap === chart lap');
+
+// The invariant across a whole timeline of ±1-skewed frames.
+for (let heartbeatLap = 1; heartbeatLap <= 30; heartbeatLap += 1) {
+  const chartLap = Math.max(1, heartbeatLap + ((heartbeatLap % 3) - 1)); // ±1 skew
+  const snap = buildLiveRaceShellSnapshot(
+    payloadFor({ lap: heartbeatLap, totalLaps: 80 }),
+    historyThrough(chartLap),
+    requested
+  );
+  assert.ok(snap.chart === null || snap.lap === snap.chart.latestLap, `frame ${heartbeatLap}: hero lap must equal chart lap`);
+}
+
+// Before the chart exists (pre-green) the heartbeat lap stands in — nothing to
+// contradict it.
+const preGreenSnap = buildLiveRaceShellSnapshot(payloadFor({ state: 'pre_session', lap: 0, flag: 'COLD' }), null, requested);
+assert.equal(preGreenSnap.chart, null);
+assert.equal(preGreenSnap.lap, 0, 'before the chart exists the heartbeat lap stands in');
+assert.equal(preGreenSnap.preGreen, true);
+
+// A payload for a DIFFERENT race never paints this shell (no chart, no lap).
+const otherRaceSnap = buildLiveRaceShellSnapshot(payloadFor({ eventSessionId: '6754', lap: 10 }), historyThrough(12), requested);
+assert.equal(otherRaceSnap.isThisRace, false);
+assert.equal(otherRaceSnap.chart, null, 'a different live race never charts this page');
+assert.equal(otherRaceSnap.lap, null);
+
 /* ---------- the archive LIVE dot ---------- */
 
 assert.deepEqual(liveArchiveUpgradeFor('event_indy_nxt_2026_5538', liveRace), { sessionId: 'session_indy_nxt_2026_6755' });
@@ -280,7 +331,8 @@ console.log(
         rollForward: 'debrief-present-owns-the-url',
         preGreen: 'shell-exists-before-the-flag',
         timeMachine: 'engaged-replay-renders-shell-over-existing-debrief',
-        emptyIds: 'empty-string-never-an-identity'
+        emptyIds: 'empty-string-never-an-identity',
+        coherentLap: 'one-snapshot-hero-lap-equals-chart-lap'
       }
     },
     null,

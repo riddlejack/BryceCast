@@ -7,16 +7,12 @@ import { trackOutlineFor } from '../assets/tracks';
 import { formatDate } from '../app/format';
 import type { LiveReadiness } from '../app/useReadiness';
 import type { ReplaySession } from '../app/useReplaySession';
-import { livePosition, liveBryceRowOf } from '../data/livePageModel';
-import { liveSourceCheckedAtOf, type LiveSessionHistory } from '../data/liveHistoryModel';
+import type { LiveSessionHistory } from '../data/liveHistoryModel';
 import {
   BATTLES_MIN_LAPS,
   battlesSoFarFrom,
-  buildingLapChartFrom,
-  isPostCheckeredRef,
-  liveRaceSessionRefOf,
+  buildLiveRaceShellSnapshot,
   replayDeepLinkQuery,
-  trailingNumericId,
   type BuildingLapChart
 } from '../data/liveRaceShellModel';
 import { LapChart } from './RaceDetailScreen';
@@ -215,29 +211,21 @@ export const LiveRaceShell = ({
   history: LiveSessionHistory | null;
   replay: ReplaySession | null;
 }) => {
-  const ref = liveRaceSessionRefOf(payload);
-  const requestedEsid = trailingNumericId(sessionId);
-  // Only frames that belong to THIS race render — during a replay's cue-up the
-  // poll may still carry the real feed, which must never paint the shell.
-  const payloadIsThisRace = Boolean(ref && requestedEsid && ref.eventSessionId === requestedEsid);
-  const simulated = Boolean(ref?.simulated && payloadIsThisRace);
-  const chart = useMemo(
-    () => (payloadIsThisRace ? buildingLapChartFrom(history) : null),
-    [payloadIsThisRace, history]
+  // One coherent frame drives the whole shell — hero, rank, flag, lap, and the
+  // building chart all read from this single snapshot, so the hero's lap and the
+  // chart's "through lap N" can never disagree by a clock frame (they used to,
+  // deriving the lap separately from the payload and the history).
+  const snapshot = useMemo(
+    () => buildLiveRaceShellSnapshot(payload, history, sessionId),
+    [payload, history, sessionId]
   );
+  const { ref, simulated, preGreen, finished, paused, running, rank, chart } = snapshot;
+  const payloadIsThisRace = snapshot.isThisRace;
 
-  const preGreen = payloadIsThisRace && payload?.state === 'pre_session';
-  const finished = payloadIsThisRace && isPostCheckeredRef(ref);
-  // Post-race the capture itself goes cold and reads 'stale' — that is the
-  // finished state, not a pause, so the paused treatment yields to "Finished".
-  const paused = payloadIsThisRace && payload?.state === 'stale' && !finished;
-  const running = payloadIsThisRace && !preGreen && !finished;
-
-  const rank = payloadIsThisRace && payload ? livePosition(liveBryceRowOf(payload) ?? {}) : null;
   const outline = payloadIsThisRace ? trackOutlineFor(ref?.trackName ?? null) : null;
   // The archived record time, so a replayed race is dated the day it RAN;
   // live, this is simply today — the race day.
-  const raceDate = payloadIsThisRace && payload ? liveSourceCheckedAtOf(payload) : null;
+  const raceDate = payloadIsThisRace ? snapshot.sourceCheckedAt : null;
   const heroTitle =
     (payloadIsThisRace ? ref?.eventName : null) ?? (replay?.session?.eventName ?? null) ?? 'This race, live';
   const seasonYear = (payloadIsThisRace ? ref?.seasonYear : null) ?? replay?.session?.seasonYear ?? null;
@@ -253,8 +241,10 @@ export const LiveRaceShell = ({
       : simulated
         ? 'Replay'
         : 'LIVE';
+  // The reconciled lap (chart's newest charted lap when the chart exists), so
+  // the hero's lap line agrees with the chart's "through lap N".
   const lapLine =
-    ref?.lap !== null && ref?.lap !== undefined && ref?.totalLaps ? `lap ${ref.lap} of ${ref.totalLaps}` : null;
+    snapshot.lap !== null && snapshot.totalLaps ? `lap ${snapshot.lap} of ${snapshot.totalLaps}` : null;
 
   return (
     <div className="page stack">
@@ -331,7 +321,7 @@ export const LiveRaceShell = ({
             <TickerValue
               className="tnum"
               value={[raceStateLabel, lapLine].filter(Boolean).join(' · ')}
-              valueKey={`${raceStateLabel}-${ref?.lap ?? 'na'}`}
+              valueKey={`${raceStateLabel}-${snapshot.lap ?? 'na'}`}
             />
             <Link to={liveHref} className="navlink" style={{ padding: 0 }}>
               Watch live →

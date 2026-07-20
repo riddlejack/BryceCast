@@ -288,6 +288,75 @@ export const buildingLapChartFrom = (history: LiveSessionHistory | null): Buildi
   };
 };
 
+/* ---------- the coherent shell snapshot (one source frame) ---------- */
+
+const bryceRowOf = (payload: LiveReadinessPayload): Row => recordOf(recordOf(payload.bryce).bryce);
+
+export interface LiveRaceShellSnapshot {
+  ref: LiveRaceSessionRef | null;
+  /** The polled payload belongs to THIS requested race. */
+  isThisRace: boolean;
+  simulated: boolean;
+  preGreen: boolean;
+  finished: boolean;
+  paused: boolean;
+  running: boolean;
+  rank: number | null;
+  flag: string | null;
+  /** The ONE lap the hero AND the building chart both display. Reconciled so
+   *  the two surfaces can never disagree by a clock frame. When the chart exists
+   *  it is the newest CHARTED lap (the lap actually drawn); before the chart
+   *  exists (pre-green) the payload's heartbeat lap stands in. */
+  lap: number | null;
+  totalLaps: number | null;
+  chart: BuildingLapChart | null;
+  sourceCheckedAt: string | null;
+}
+
+/**
+ * One coherent frame for the whole shell. The hero and the building lap chart
+ * used to derive their lap SEPARATELY — the hero from the payload heartbeat, the
+ * chart from the accumulated history — which update on slightly different clocks
+ * and so disagreed by a lap (hero "lap 28" over a chart reading "through lap
+ * 29"). This reads hero, rank, flag, and chart from ONE object, and reconciles
+ * the displayed lap to the chart's newest charted lap — the value both surfaces
+ * show — so `chart === null || lap === chart.latestLap` always holds.
+ */
+export const buildLiveRaceShellSnapshot = (
+  payload: LiveReadinessPayload | null,
+  history: LiveSessionHistory | null,
+  requestedSessionId: string
+): LiveRaceShellSnapshot => {
+  const ref = liveRaceSessionRefOf(payload);
+  const requestedEsid = trailingNumericId(requestedSessionId);
+  const isThisRace = Boolean(ref && requestedEsid && ref.eventSessionId === requestedEsid);
+  const simulated = Boolean(ref?.simulated && isThisRace);
+  const chart = isThisRace ? buildingLapChartFrom(history) : null;
+  const preGreen = Boolean(isThisRace && payload?.state === 'pre_session');
+  const finished = isThisRace && isPostCheckeredRef(ref);
+  const paused = Boolean(isThisRace && payload?.state === 'stale' && !finished);
+  const running = Boolean(isThisRace && !preGreen && !finished);
+  const rank = isThisRace && payload ? livePosition(bryceRowOf(payload)) : null;
+  // The chart is the record actually drawn, so its newest lap is the lap the
+  // hero shows too; before a chart exists the heartbeat lap stands in.
+  const lap = chart ? chart.latestLap : isThisRace ? ref?.lap ?? null : null;
+  return {
+    ref,
+    isThisRace,
+    simulated,
+    preGreen,
+    finished,
+    paused,
+    running,
+    rank,
+    flag: isThisRace ? ref?.flag ?? null : null,
+    lap,
+    totalLaps: isThisRace ? ref?.totalLaps ?? null : null,
+    chart,
+    sourceCheckedAt: payload ? liveSourceCheckedAtOf(payload) : null
+  };
+};
+
 /* ---------- battles so far (module 3) ---------- */
 
 export interface LiveBattleSoFar {
