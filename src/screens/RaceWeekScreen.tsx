@@ -516,13 +516,15 @@ const FridaySlope = ({ prep, debriefIds }: { prep: UiNextEventPrep; debriefIds: 
   );
 };
 
-/* Family copy over signed numbers (#25): spell the small place count so "better"
- * never fights a minus sign. medianPositionsBetter is negative when race day
- * beat practice; the absolute value is how many places better he typically ran. */
+/* Family copy over signed numbers (#25). Builder convention (build-ui-data-
+ * package.mjs): medianPositionsBetter = bestPracticeRank - raceFinish, so
+ * POSITIVE means race day finished better than Friday. The copy claims
+ * "better" only when the sign says so; a negative median is stated as the
+ * field sharpening on race day — a fact about the day, not a verdict. */
 const smallCountWords = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
 const placesPhrase = (medianPositionsBetter: number | null): string | null => {
-  if (medianPositionsBetter === null || medianPositionsBetter >= 0) return null;
-  const places = Math.abs(medianPositionsBetter);
+  if (medianPositionsBetter === null || medianPositionsBetter <= 0) return null;
+  const places = Math.round(medianPositionsBetter);
   const word = places <= 10 ? smallCountWords[places] : String(places);
   return `${word} ${places === 1 ? 'place' : 'places'}`;
 };
@@ -549,12 +551,14 @@ const FridaySignal = ({ prep, trackTypeName, debriefIds }: { prep: UiNextEventPr
       }
     >
       <p style={{ margin: '0 0 6px', fontSize: 13.5, color: 'var(--ink-secondary)', maxWidth: '58ch' }}>
-        On {trackTypeName.toLowerCase()}s, race day has beaten Friday. His finish improved on his best practice rank in{' '}
+        On {trackTypeName.toLowerCase()}s, his race finish beat his best practice rank in{' '}
         <strong style={{ color: 'var(--ink-primary)' }}>
           {summary.finishBeatBestPractice} of {summary.weekendCount}
         </strong>{' '}
-        clean weekends{betterBy ? `, typically finishing ${betterBy} better than his practice rank` : ''}. If
-        you liked practice, you’ll love the race.
+        clean weekends{betterBy ? `, typically finishing ${betterBy} better` : ''}.
+        {betterBy || summary.finishBeatBestPractice * 2 > summary.weekendCount
+          ? ' If you liked practice, you’ll love the race.'
+          : ' Race day runs deeper than Friday — the whole field sharpens when it counts.'}
       </p>
       <FridaySlope prep={prep} debriefIds={debriefIds} />
       <p className="caption caption--secondary" style={{ margin: '6px 0 0' }}>
