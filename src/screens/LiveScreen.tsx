@@ -18,6 +18,7 @@ import { Link } from '../app/router';
 import { TrackArt } from '../app/trackArt';
 import { LiveRunningOrder } from './LiveRunningOrder';
 import { useNextSession } from '../app/useNextSession';
+import { getNextEvent, raceDayOf } from '../data/upcoming';
 import { trackOutlineFor } from '../assets/tracks';
 import type { LiveReadiness } from '../app/useReadiness';
 import type { ReplaySession } from '../app/useReplaySession';
@@ -974,6 +975,105 @@ const WaitingState = ({ payload }: { payload: LiveReadiness }) => {
   );
 };
 
+/* ---------- off-air: the live page with no readiness payload ----------
+ * The readiness endpoint returns nothing until a runner is live (a family
+ * visiting between race weekends gets a 503). The page used to sit on four empty
+ * gray skeleton slabs forever — no status, no next race, no way out (the audit
+ * blocker). This replaces them with a bounded loading beat that times out into a
+ * real idle state: what's next, when it wakes up, and a way to Race Week. */
+const monthDay = (isoDate: string | null): string | null => {
+  if (!isoDate) return null;
+  const date = new Date(`${isoDate}T12:00:00`);
+  if (Number.isNaN(date.getTime())) return null;
+  return date.toLocaleDateString([], { weekday: 'long', month: 'long', day: 'numeric' });
+};
+
+const LiveOffAir = ({ loading }: { loading: boolean }) => {
+  // A visible timeout: the calm loading beat never outstays a stalled feed — it
+  // resolves into the idle state after a few seconds no matter what.
+  const [timedOut, setTimedOut] = useState(false);
+  useEffect(() => {
+    if (!loading) {
+      setTimedOut(false);
+      return undefined;
+    }
+    const timer = window.setTimeout(() => setTimedOut(true), 6_000);
+    return () => window.clearTimeout(timer);
+  }, [loading]);
+
+  const nextSession = useNextSession();
+  const nextEvent = getNextEvent();
+  const eventName = nextSession?.eventName ?? nextEvent?.eventName ?? null;
+  const sessionName = nextSession?.sessionName ?? null;
+  const trackName = nextEvent?.trackName ?? null;
+  const startsAt =
+    nextSession?.startsAt && new Date(nextSession.startsAt).getTime() > Date.now() ? nextSession.startsAt : null;
+  const raceDay = nextEvent ? monthDay(raceDayOf(nextEvent)) : null;
+
+  if (loading && !timedOut) {
+    return (
+      <HeroPanel>
+        <span className="kicker">Live</span>
+        <h1 className="screen-head__title" style={{ marginTop: 8 }}>Checking for a live session…</h1>
+        <p style={{ margin: '14px 0 0', fontSize: 15, color: 'var(--ink-secondary)', maxWidth: '58ch' }}>
+          One moment — reading the timing feed.
+        </p>
+        <div className="skeleton" style={{ height: 3, width: 140, marginTop: 20, borderRadius: 2 }} aria-hidden />
+      </HeroPanel>
+    );
+  }
+
+  return (
+    <HeroPanel>
+      <div className="row row--between" style={{ alignItems: 'flex-start' }}>
+        <div>
+          <span className="kicker">Live</span>
+          <h1 className="screen-head__title" style={{ marginTop: 8 }}>The live feed is quiet.</h1>
+        </div>
+        <SourcePill
+          title="Live idle state"
+          entries={[
+            {
+              label: 'Product readiness reducer',
+              path: '/api/readiness',
+              note: 'No active INDY NXT session is confirmed by the timing feed right now; the page rechecks continuously and switches to live the moment one is.'
+            }
+          ]}
+        />
+      </div>
+      <p style={{ margin: '14px 0 0', fontSize: 15, color: 'var(--ink-secondary)', maxWidth: '62ch' }}>
+        When Bryce’s car is on track, this page follows every lap from green flag to checkered. Until then it stays
+        quiet — and it keeps checking on its own.
+      </p>
+      {eventName ? (
+        <div style={{ marginTop: 20 }}>
+          <span className="caption">Next up · {[eventName, sessionName].filter(Boolean).join(' · ')}</span>
+          {trackName ? (
+            <p style={{ margin: '4px 0 0', fontSize: 13.5, color: 'var(--ink-secondary)' }}>
+              {trackName}
+              {raceDay ? ` · race day ${raceDay}` : ''}
+            </p>
+          ) : null}
+          {startsAt ? (
+            <div style={{ marginTop: 10 }}>
+              <Countdown to={startsAt} />
+            </div>
+          ) : (
+            <p style={{ margin: '8px 0 0', fontSize: 13, color: 'var(--ink-muted)' }}>
+              It comes alive the moment the session starts.
+            </p>
+          )}
+        </div>
+      ) : (
+        <p style={{ margin: '18px 0 0', fontSize: 13.5, color: 'var(--ink-secondary)' }}>
+          The next session isn’t on the calendar yet. Race Week has the full schedule as soon as it’s set.
+        </p>
+      )}
+      <Link to="/race-week" className="live-race-week-link"><CalendarClock size={14} aria-hidden /> Race Week</Link>
+    </HeroPanel>
+  );
+};
+
 /* ---------- watch along: official routes, never a proxied broadcast ---------- */
 
 const WatchAlong = ({ payload }: { payload: LiveReadiness }) => {
@@ -1182,12 +1282,19 @@ export const LiveScreen = ({
   payload,
   fixtureMode,
   history,
-  replay = null
+  replay = null,
+  readinessError = null,
+  readinessCheckedAt = null
 }: {
   payload: LiveReadiness | null;
   fixtureMode: boolean;
   history: LiveSessionHistory | null;
   replay?: ReplaySession | null;
+  /** Readiness fetch error (endpoint 503/unreachable). Distinguishes the idle
+   *  "no runner" state from a still-in-flight first poll. */
+  readinessError?: string | null;
+  /** When the last readiness poll resolved (null = first fetch still pending). */
+  readinessCheckedAt?: number | null;
 }) => {
   const samples = useMemo(() => gapSamplesFromHistory(history), [history]);
   // A replay that a live session preempted is no longer "active": the page drops
@@ -1219,11 +1326,7 @@ export const LiveScreen = ({
         {replayActive && replay ? (
           <ReplayCueing session={replay.session} />
         ) : (
-          <>
-            <div className="skeleton" style={{ height: 42 }} />
-            <div className="skeleton" style={{ height: 300 }} />
-            <div className="grid live-layout"><div className="skeleton" style={{ height: 340 }} /><div className="skeleton" style={{ height: 540 }} /></div>
-          </>
+          <LiveOffAir loading={readinessCheckedAt === null && !readinessError} />
         )}
       </div>
     );

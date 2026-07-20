@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { Card, SourcePill, Stat, Unavailable } from '../app/components';
-import { ChartTipCard, chartFont, useInViewOnce, useMeasuredWidth, type ChartTip } from '../app/charts';
+import { ChartTipCard, chartFont, useInViewOnce, useMeasuredWidth, useReducedMotion, type ChartTip } from '../app/charts';
 import { asNumber, asString, ordinal } from '../app/format';
 import { Link, useRouter } from '../app/router';
 import { uiDataPackage, type UiCareerMoment } from '../data/uiDataPackage';
@@ -187,6 +187,12 @@ export const TheClimb = () => {
   const rows = useCareerRows();
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();
   const [viewRef, chartSeen] = useInViewOnce<HTMLDivElement>(0.35);
+  const reducedMotion = useReducedMotion();
+  /* Same guard as the rivals swarm: the form line hides itself (dashoffset 1)
+   * until the in-view observer fires. Under reduced motion / a static capture
+   * that observer may never fire, so treat reduced-motion as "already seen" and
+   * draw the full line. */
+  const chartShown = chartSeen || reducedMotion;
   const svgRef = useRef<SVGSVGElement | null>(null);
   const { navigate } = useRouter();
   const [hovered, setHovered] = useState<number | null>(null);
@@ -376,8 +382,8 @@ export const TheClimb = () => {
               strokeLinejoin="round"
               pathLength={1}
               strokeDasharray={1}
-              strokeDashoffset={chartSeen ? 0 : 1}
-              style={{ transition: 'stroke-dashoffset 1200ms cubic-bezier(0.23, 1, 0.32, 1) 150ms' }}
+              strokeDashoffset={chartShown ? 0 : 1}
+              style={{ transition: reducedMotion ? 'none' : 'stroke-dashoffset 1200ms cubic-bezier(0.23, 1, 0.32, 1) 150ms' }}
             />
 
             <g className="climb-moments" aria-hidden="true">
@@ -1020,6 +1026,14 @@ const recordColor = (share: number): string =>
 export const RivalsCard = () => {
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();
   const [swarmRef, swarmSeen] = useInViewOnce<HTMLDivElement>(0.3);
+  const reducedMotion = useReducedMotion();
+  /* The dots' entrance animation gates their opacity on the in-view observer.
+   * Under reduced motion — including every static/QA screenshot, which sets
+   * prefers-reduced-motion — that observer may never fire, leaving 43 promised
+   * marks at opacity 0 (the audit's empty-plot blocker). Render them fully
+   * shown whenever motion is reduced, keeping the animation only for readers
+   * who opted into it. */
+  const swarmShown = swarmSeen || reducedMotion;
   const [tip, setTip] = useState<ChartTip | null>(null);
   const rivals = uiDataPackage.screens.careerLab.headToHead ?? [];
 
@@ -1142,9 +1156,11 @@ export const RivalsCard = () => {
                   style={{
                     transformBox: 'fill-box',
                     transformOrigin: 'center',
-                    transform: swarmSeen ? 'scale(1)' : 'scale(0.55)',
-                    opacity: swarmSeen ? 1 : 0,
-                    transition: `transform 460ms cubic-bezier(0.23, 1, 0.32, 1) ${delay}ms, opacity 340ms ease ${delay}ms, fill-opacity 150ms ease`
+                    transform: swarmShown ? 'scale(1)' : 'scale(0.55)',
+                    opacity: swarmShown ? 1 : 0,
+                    transition: reducedMotion
+                      ? 'fill-opacity 150ms ease'
+                      : `transform 460ms cubic-bezier(0.23, 1, 0.32, 1) ${delay}ms, opacity 340ms ease ${delay}ms, fill-opacity 150ms ease`
                   }}
                   onMouseEnter={() => setTip(tipForRival(dot))}
                   onMouseLeave={() => setTip(null)}
@@ -1599,7 +1615,7 @@ export const CareerBests = () => {
   const topTens = rows.filter((row) => row.finish <= 10).length;
   return (
     <div className="row row--wrap" style={{ gap: 26 }}>
-      <Stat label="Career races" value={rows.length} />
+      <Stat label="Races with a sourced result" value={rows.length} />
       <Stat label="Wins" value={wins} />
       <Stat label="Podiums" value={podiums} />
       <Stat label="Top-10s" value={topTens} />

@@ -117,7 +117,7 @@ const Routes = () => {
 
   let screen: ReactNode;
   if (route.path === '/') screen = <HomeScreen readiness={readiness} />;
-  else if (route.path === '/live') screen = <LiveScreen payload={readiness.payload} fixtureMode={readiness.fixtureMode} history={liveHistory.active} replay={replay.engaged ? replay : null} />;
+  else if (route.path === '/live') screen = <LiveScreen payload={readiness.payload} fixtureMode={readiness.fixtureMode} history={liveHistory.active} replay={replay.engaged ? replay : null} readinessError={readiness.error} readinessCheckedAt={readiness.checkedAt} />;
   else if (route.path === '/race-week') screen = <RaceWeekScreen />;
   else if (raceDetail) screen = <RaceDetailScreen sessionId={raceDetail.sessionId} />;
   else if (route.path === '/races') screen = <RacesScreen />;

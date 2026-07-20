@@ -242,6 +242,69 @@ export const TrackArt = ({
     return out;
   }, [passMarks, geometry]);
 
+  /* Which section spans get a DIRECT label, and where. A compressed street
+   * circuit (Detroit: 18 loop-to-loop families) piled every station code on top
+   * of the next at phone width — "I6 → I7" over "I7 → I8" over "S/F" — an
+   * unreadable text mound (the audit blocker). Two rules fix it, both here so no
+   * label ever renders before it clears:
+   *   1. Priority — the gold "strongest" anchors first (the card's whole point),
+   *      then human-named features (a "Back straight"), then S/F, then the plain
+   *      station codes. Every suppressed code is still one tap away in the tip.
+   *   2. Collision detection — a label is kept only if its box clears every label
+   *      already placed; on phones the direct labels are hard-capped at five. */
+  const compactLabels = width > 0 && width < 500;
+  const sectionLabels = useMemo(() => {
+    if (!hasHeat || !sections?.showLabels || width === 0) return [];
+    const pxOf = (visual: number) => visual / (width / viewWidth);
+    const candidates = heatSections
+      .filter((section) => section.kind !== 'derived_remainder')
+      .map((section) => {
+        const mid = geometry.pointAtT(spanMid(section.startT, section.endT));
+        const away = Math.hypot(mid.x - center.x, mid.y - center.y) || 1;
+        const hasWord = /[a-z]{3,}/.test(section.label); // a named feature, e.g. "Back straight"
+        const isStartFinish = /S\/F/.test(section.label);
+        const halfW = pxOf(section.label.length * 3 + 4);
+        const halfH = pxOf(6.5);
+        /* The SVG paints with overflow visible. Vertically that's fine — the
+         * card has room above and below — but the card is width-tight, so an
+         * outward-pushed label near the outline's left/right edge spills past
+         * the card and clips (the Detroit "I2A → I2" edge cut). Clamp X into the
+         * viewBox; leave Y as the natural outward push so bottom labels still
+         * sit clear of the outline. */
+        const rawX = mid.x + ((mid.x - center.x) / away) * pxOf(16);
+        const rawY = mid.y + ((mid.y - center.y) / away) * pxOf(16);
+        return {
+          familyId: section.familyId,
+          label: section.label,
+          lx: Math.min(Math.max(rawX, halfW + pxOf(2)), viewWidth - halfW - pxOf(2)),
+          ly: rawY,
+          rank: section.isTopSection ? 0 : hasWord ? 1 : isStartFinish ? 2 : 3,
+          percentile: section.percentile,
+          halfW,
+          halfH
+        };
+      })
+      .sort((left, right) => left.rank - right.rank || right.percentile - left.percentile);
+
+    /* Phones show only labels a family member can read cold: gold anchors,
+     * named features, S/F. Plain station-code spans (rank 3) never fill in —
+     * they live in the tap tooltip (the audit's arbitrary-filler fix). */
+    const eligible = compactLabels ? candidates.filter((candidate) => candidate.rank < 3) : candidates;
+    const cap = compactLabels ? 5 : eligible.length;
+    const gap = pxOf(3);
+    const kept: typeof candidates = [];
+    for (const candidate of eligible) {
+      if (kept.length >= cap) break;
+      const collides = kept.some(
+        (other) =>
+          Math.abs(other.lx - candidate.lx) < other.halfW + candidate.halfW + gap &&
+          Math.abs(other.ly - candidate.ly) < other.halfH + candidate.halfH + gap
+      );
+      if (!collides) kept.push(candidate);
+    }
+    return kept;
+  }, [hasHeat, sections?.showLabels, heatSections, geometry, center.x, center.y, width, viewWidth, viewHeight, compactLabels]);
+
   const showPassTip = (mark: { x: number; y: number; lap: number; direction: 'gain' | 'loss'; otherName: string }) => {
     markTipActive.current = true;
     setHoveredFamily(null);
@@ -433,32 +496,24 @@ export const TrackArt = ({
                 );
               })
             : null}
-          {/* Official section labels beside each span (Brief H #1). */}
-          {hasHeat && sections?.showLabels
-            ? heatSections.map((section) => {
-                if (section.kind === 'derived_remainder') return null; // derived stretches stay label-free; the key line names them
-                const mid = geometry.pointAtT(spanMid(section.startT, section.endT));
-                const away = Math.hypot(mid.x - center.x, mid.y - center.y) || 1;
-                const lx = mid.x + ((mid.x - center.x) / away) * px(16);
-                const ly = mid.y + ((mid.y - center.y) / away) * px(16);
-                return (
-                  <text
-                    key={`label-${section.familyId}`}
-                    x={lx}
-                    y={ly}
-                    textAnchor="middle"
-                    dominantBaseline="middle"
-                    fill="var(--ink-secondary)"
-                    fontFamily={chartFont}
-                    fontSize={px(10.5)}
-                    fontWeight={500}
-                    style={{ pointerEvents: 'none' }}
-                  >
-                    {section.label}
-                  </text>
-                );
-              })
-            : null}
+          {/* Direct section labels (Brief H #1): priority-ranked, collision-
+              detected, phone-capped. Suppressed codes stay one tap away. */}
+          {sectionLabels.map((entry) => (
+            <text
+              key={`label-${entry.familyId}`}
+              x={entry.lx}
+              y={entry.ly}
+              textAnchor="middle"
+              dominantBaseline="middle"
+              fill="var(--ink-secondary)"
+              fontFamily={chartFont}
+              fontSize={px(10.5)}
+              fontWeight={500}
+              style={{ pointerEvents: 'none' }}
+            >
+              {entry.label}
+            </text>
+          ))}
           {/* Pass marks (heat-map v2): quiet open circles on the spans where a
               green Bryce pass happened; hover reads lap · direction · other car. */}
           {placedMarks.map((mark) => (

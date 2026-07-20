@@ -6,6 +6,27 @@ import { uiDataPackage } from '../data/uiDataPackage';
 
 type Row = Record<string, unknown>;
 
+/* The honest source taxonomy behind "a named, checkable source" — official
+ * timing is the core, but modeled context and permissioned third-party captures
+ * carry a share of the numbers and must be told apart from official fact. */
+const sourceClasses: Array<{ name: string; detail: string }> = [
+  {
+    name: 'Official',
+    detail:
+      'Series timing, results, lap charts, and section reports. The core of almost every number on the site — the finishing positions, the gaps, the percentiles.'
+  },
+  {
+    name: 'Modeled',
+    detail:
+      'Clearly labeled estimates where no official feed exists: near-track NWS weather, and the untimed stretch of a lap derived as lap time minus the timed sections. Shown as context, never as official fact.'
+  },
+  {
+    name: 'Permissioned third-party',
+    detail:
+      'Outside captures shared with permission: RaceTools race-weekend geometry for street-circuit shapes, and Timing71 timing for 2026 replays. Always named where they appear.'
+  }
+];
+
 /** Live recorder console: the single-ingestor's own status file, via the API. */
 const RecorderConsole = () => {
   const status = useApiJson<Row>('/api/next-session', 60_000);
@@ -54,14 +75,20 @@ export const DataScreen = () => {
       <ScreenHead
         kicker="Source ops"
         title="Data & trust"
-        sub="Every number in BryceCast traces to an official source. This page is the receipts."
+        sub="Every number in BryceCast traces to a named, checkable source. This page is the receipts."
       />
 
       <div className="grid grid--2">
         <Card title="Dataset health">
           <div className="row row--wrap" style={{ gap: 8 }}>
-            <StatusChip tone={errorCount === 0 ? 'good' : 'bad'} label={`${formatNumber(errorCount, 0)} validation errors`} />
-            <StatusChip tone={warningCount === 0 ? 'good' : 'warn'} label={`${formatNumber(warningCount, 0)} warnings`} />
+            <StatusChip
+              tone={errorCount === 0 ? 'good' : 'bad'}
+              label={`${formatNumber(errorCount, 0)} validation ${errorCount === 1 ? 'error' : 'errors'}`}
+            />
+            <StatusChip
+              tone={warningCount === 0 ? 'good' : 'warn'}
+              label={`${formatNumber(warningCount, 0)} ${warningCount === 1 ? 'warning' : 'warnings'}`}
+            />
             {asString(uiDataPackage.asOfDate) ? <StatusChip tone="neutral" label={`data as of ${uiDataPackage.asOfDate}`} /> : null}
           </div>
           {asNumber(ingestion.results) !== null ? (
@@ -74,18 +101,54 @@ export const DataScreen = () => {
         <RecorderConsole />
       </div>
 
+      <Card title="Three kinds of source">
+        <p style={{ margin: '0 0 14px', fontSize: 13, color: 'var(--ink-secondary)', maxWidth: '64ch' }}>
+          Every number here comes from one of three kinds of source, and each source family below carries its kind.
+          Source drawers across the site name the specific source behind each module.
+        </p>
+        <div style={{ display: 'grid', gap: 12 }}>
+          {sourceClasses.map((entry) => (
+            <div key={entry.name} style={{ borderTop: '1px solid var(--divider)', paddingTop: 12 }}>
+              <span style={{ fontSize: 13.5, fontWeight: 600, color: 'var(--ink-primary)' }}>{entry.name}</span>
+              <p style={{ margin: '4px 0 0', fontSize: 13, color: 'var(--ink-secondary)', maxWidth: '64ch' }}>{entry.detail}</p>
+            </div>
+          ))}
+        </div>
+      </Card>
+
       <Card title="Source families" flush>
         {Array.isArray(audit) && audit.length > 0 ? (
           <div className="tower">
-            {audit.map((row, index) => (
-              <div key={index} className="tower__row" style={{ gridTemplateColumns: '1fr auto' }}>
-                <span className="tower__name" style={{ whiteSpace: 'normal' }}>
-                  {row.sourceFamily ?? row.family ?? '—'}
-                  <span className="tower__team"> {row.auditConclusion ?? row.analysisStatus ?? ''}</span>
-                </span>
-                <span className="tower__gap mono" style={{ fontSize: 12 }}>{row.sourceRows ?? ''}</span>
-              </div>
-            ))}
+            {audit.map((row, index) => {
+              const conclusion = row.auditConclusion ?? row.analysisStatus ?? '';
+              /* Read the class straight from the family's own conclusion so the
+               * table can't drift from the data: the modeled family says so in
+               * its own words ("Modeled non-official weather…"). */
+              const sourceClass = /modeled/i.test(conclusion)
+                ? 'modeled'
+                : /racetools|timing71|third.party|permission/i.test(conclusion)
+                  ? 'permissioned third-party'
+                  : 'official';
+              return (
+                <div key={index} className="tower__row" style={{ gridTemplateColumns: '1fr auto' }}>
+                  <span className="tower__name" style={{ whiteSpace: 'normal' }}>
+                    {row.sourceFamily ?? row.family ?? '—'}
+                    <span
+                      style={{
+                        marginLeft: 8,
+                        fontSize: 11,
+                        fontWeight: 500,
+                        color: sourceClass === 'modeled' ? 'var(--ink-secondary)' : 'var(--ink-muted)'
+                      }}
+                    >
+                      {sourceClass}
+                    </span>
+                    <span className="tower__team"> {conclusion}</span>
+                  </span>
+                  <span className="tower__gap mono" style={{ fontSize: 12 }}>{row.sourceRows ?? ''}</span>
+                </div>
+              );
+            })}
           </div>
         ) : (
           <div style={{ padding: 18 }}>
