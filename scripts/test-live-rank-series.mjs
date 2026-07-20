@@ -241,6 +241,27 @@ try {
     // The seeded Bryce line actually shows his climb (P4 → P2), not a flat floor.
     const bryceRanks = rankSeries.find((entry) => entry.bryce).points.map((point) => point.rank).filter((rank) => rank !== null);
     assert.ok(new Set(bryceRanks).size >= 2, 'the seeded Bryce line carries his rank changes');
+
+    // CONTINUITY CONTRACT (Brief O blocker fix). A downsampled seed emits a frame
+    // only at a rank/flag change, so the long spans between frames are CONTINUOUS
+    // position holds — not feed outages. Every seed frame carries explicit
+    // continuity metadata, and the reconstructed lines break ONLY at a verified
+    // archive gap (here the sole one is the [140,150) source degradation), never
+    // at every held breakpoint the way a naive cadence heuristic would.
+    assert.ok(live.frames.every((frame) => typeof frame.gapBefore === 'boolean'), 'every seed frame carries continuity metadata (gapBefore)');
+    const verifiedGaps = live.frames.filter((frame) => frame.gapBefore === true).length;
+    assert.equal(verifiedGaps, 1, 'the only verified archive gap is the source-degradation stretch');
+    rankSeries.forEach((entry) => {
+      const entryBreaks = entry.points.filter((point) => point.breakBefore).length;
+      assert.ok(
+        entryBreaks <= verifiedGaps,
+        `${entry.name}'s seeded line breaks only at verified gaps (${entryBreaks} breaks ≤ ${verifiedGaps} gap), not once per held breakpoint`
+      );
+    });
+    assert.ok(
+      rankSeries.some((entry) => entry.points.some((point) => point.breakBefore)),
+      'a verified archive gap does still break the seeded line'
+    );
   }
 
   // -------------------------------------------------------------------------

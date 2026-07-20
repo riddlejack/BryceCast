@@ -1887,6 +1887,30 @@ const RANK_SERIES_MAX_SESSIONS = 4;
 // The running-order chart windows to five minutes and the client caps at 300
 // samples; a few hundred breakpoints covers a full race with headroom.
 const RANK_SERIES_MAX_FRAMES = 400;
+// Continuity vs. outage. A downsampled series emits a frame only when the order
+// or flag changes, so the spans BETWEEN breakpoints are continuous position
+// holds, not feed gaps — the client must be told so, or it reads every long
+// hold as an outage and paints the line as isolated fragments. A "verified
+// archive gap" is instead a stretch where consecutive archived snapshots are
+// missing: the ingest cadence is ~1s (own-capture and lake replays alike), so
+// a gap threshold of max(FLOOR, median cadence × MULT) clears normal jitter and
+// only a real outage carries `gapBefore` (and thus a visual break) downstream.
+const RANK_SERIES_GAP_FLOOR_MS = Number(process.env.BRYCECAST_RANK_SERIES_GAP_FLOOR_MS ?? 5000);
+const RANK_SERIES_GAP_CADENCE_MULT = 4;
+const RANK_SERIES_CADENCE_WINDOW = 60;
+
+const medianOf = (values) => {
+  if (values.length === 0) return null;
+  const sorted = values.slice().sort((left, right) => left - right);
+  const middle = Math.floor(sorted.length / 2);
+  return sorted.length % 2 ? sorted[middle] : (sorted[middle - 1] + sorted[middle]) / 2;
+};
+
+// The gap threshold for THIS session's observed cadence: a floor that clears
+// sub-second jitter, or a healthy multiple of the running median cadence for a
+// slower-polling archive — whichever is larger.
+const rankSeriesGapThresholdMs = (cadenceDeltas) =>
+  Math.max(RANK_SERIES_GAP_FLOOR_MS, (medianOf(cadenceDeltas) ?? 1_000) * RANK_SERIES_GAP_CADENCE_MULT);
 
 const rankSeriesCache = new Map();
 
@@ -1962,8 +1986,16 @@ const rankSeriesFrameFromSnapshot = (checkedAt, payloadJson) => {
 };
 
 // Fold one built frame into a session entry: track the newest frame and the
-// resolved identities, and append a breakpoint ONLY when the running order or
-// the flag changes (never a raw 1s sample). Shared by both ingest paths.
+// resolved identities, and append a breakpoint when the running order or the
+// flag changes (never a raw 1s sample). Continuity metadata rides along so the
+// client can tell a long position HOLD (continuous coverage, draw straight
+// through) from a verified archive GAP (missing snapshots, break the line):
+//   - every emitted breakpoint carries `gapBefore` (default false → continuous),
+//   - when consecutive VALID snapshots fall more than the cadence-derived gap
+//     threshold apart, the last observed state is sealed (so its hold is drawn
+//     up to the moment coverage stopped) and the resuming frame is emitted with
+//     `gapBefore = true`, even if the order never changed across the outage.
+// Shared by both ingest paths.
 const foldRankSeriesFrame = (entry, frame, checkedAt) => {
   if (!frame) return;
   const enriched = {
@@ -1972,17 +2004,35 @@ const foldRankSeriesFrame = (entry, frame, checkedAt) => {
     lap: frame.lap,
     flag: frame.flag,
     rows: frame.rows,
-    signature: frame.signature
+    signature: frame.signature,
+    gapBefore: false
   };
   entry.currentFrame = enriched;
   if (frame.bryceId && !entry.bryceId) entry.bryceId = frame.bryceId;
   if (!entry.clientSessionKey && (frame.eventId || frame.eventSessionId)) {
     entry.clientSessionKey = frame.eventId ? `${frame.eventId}-${frame.eventSessionId}` : frame.eventSessionId;
   }
-  if (entry.lastSignature === null || enriched.signature !== entry.lastSignature) {
+  // Is this frame separated from the last observed one by a verified archive
+  // gap? Measure against the running cadence, and keep the cadence estimate
+  // clean by folding only normal-interval deltas back into it.
+  const delta = Number.isFinite(entry.lastRawCheckedAtMs) ? enriched.checkedAtMs - entry.lastRawCheckedAtMs : null;
+  const gapBefore = delta !== null && delta > rankSeriesGapThresholdMs(entry.cadenceDeltas);
+  if (delta !== null && !gapBefore) {
+    entry.cadenceDeltas.push(delta);
+    if (entry.cadenceDeltas.length > RANK_SERIES_CADENCE_WINDOW) entry.cadenceDeltas.shift();
+  }
+  // On a gap, seal the pre-gap hold at the last observed sample so its position
+  // line reaches the moment coverage stopped, then break before resuming.
+  if (gapBefore && entry.lastRawEnriched && entry.breakpoints.at(-1) !== entry.lastRawEnriched) {
+    entry.breakpoints.push(entry.lastRawEnriched);
+  }
+  if (entry.lastSignature === null || enriched.signature !== entry.lastSignature || gapBefore) {
+    enriched.gapBefore = gapBefore;
     entry.breakpoints.push(enriched);
     entry.lastSignature = enriched.signature;
   }
+  entry.lastRawCheckedAtMs = enriched.checkedAtMs;
+  entry.lastRawEnriched = enriched;
 };
 
 // Incremental, session-keyed cache. Reads only rows past the last one folded in
@@ -2004,6 +2054,9 @@ const computeRankSeriesEntry = (sessionKey) => {
       currentFrame: null,
       clientSessionKey: null,
       bryceId: null,
+      lastRawCheckedAtMs: null,
+      lastRawEnriched: null,
+      cadenceDeltas: [],
       refreshedAt: 0,
       error: null
     };
@@ -2075,12 +2128,17 @@ const buildRankSeriesResponse = ({ sessionKey, clientSessionKeyHint = null, uppe
   const withinUpper = upperMs === null ? entry.breakpoints : entry.breakpoints.filter((point) => point.checkedAtMs <= upperMs);
   const stateAtUpper = withinUpper.at(-1) ?? null;
   const lastCheckedAt = upperBoundCheckedAt ?? entry.currentFrame?.checkedAt ?? stateAtUpper?.checkedAt ?? null;
-  let frames = withinUpper.map((point) => ({ checkedAt: point.checkedAt, lap: point.lap, flag: point.flag, rows: point.rows }));
+  // `gapBefore` distinguishes a continuous position hold since the previous
+  // frame (false → the client draws straight through) from a verified archive
+  // gap (true → the client breaks the line). Without it a downsampled seed's
+  // long holds photograph as isolated fragments.
+  let frames = withinUpper.map((point) => ({ checkedAt: point.checkedAt, lap: point.lap, flag: point.flag, rows: point.rows, gapBefore: point.gapBefore === true }));
   // The newest frame must touch "now": a synthetic frame at the (virtual) clock
   // carrying the state as-of that clock, so the seeded line reaches the right
-  // edge with no reserved empty span (the F5 startup-window gate).
+  // edge with no reserved empty span (the F5 startup-window gate). It continues
+  // the last observed state, so it is continuous (gapBefore false).
   if (stateAtUpper && lastCheckedAt && stateAtUpper.checkedAt !== lastCheckedAt) {
-    frames.push({ checkedAt: lastCheckedAt, lap: stateAtUpper.lap, flag: stateAtUpper.flag, rows: stateAtUpper.rows });
+    frames.push({ checkedAt: lastCheckedAt, lap: stateAtUpper.lap, flag: stateAtUpper.flag, rows: stateAtUpper.rows, gapBefore: false });
   }
   if (frames.length > RANK_SERIES_MAX_FRAMES) frames = frames.slice(frames.length - RANK_SERIES_MAX_FRAMES);
   const firstCheckedAt = frames[0]?.checkedAt ?? null;

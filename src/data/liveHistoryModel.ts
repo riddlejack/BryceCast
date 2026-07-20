@@ -32,6 +32,12 @@ export interface LiveHistorySample {
   rows: LiveMotionRow[];
   bryceId: string;
   signature: string;
+  /** Continuity relative to the preceding sample, resolved by the server for a
+   * downsampled seed frame: `false` — continuous archive coverage since the last
+   * frame (a position HOLD, draw straight through); `true` — a verified archive
+   * gap (missing snapshots, break the line). `undefined` for a live-polled
+   * sample, whose continuity the chart infers from the poll cadence instead. */
+  archiveGapBefore?: boolean;
 }
 
 export interface LiveHistoryStats {
@@ -266,12 +272,15 @@ export const appendLiveHistoryPayload = (
 /* ---------- server-seeded running-order history (Brief O) ---------- */
 
 /** A single downsampled running-order breakpoint frame from the server: the
- * full field's compact rows at one rank-change moment. */
+ * full field's compact rows at one rank-change moment. `gapBefore` marks a
+ * verified archive gap before this frame — otherwise the span since the previous
+ * frame was a continuous position hold the chart should draw straight through. */
 export interface RankSeriesFrame {
   checkedAt: string;
   lap: number | null;
   flag: string;
   rows: LiveMotionRow[];
+  gapBefore?: boolean;
 }
 
 /** The `/api/history/rank-series` response. `clientSessionKey` is the same
@@ -321,7 +330,10 @@ const rankSeriesSampleFrom = (frame: RankSeriesFrame, sessionKey: string, fallba
     flag: String(frame.flag ?? ''),
     rows,
     bryceId,
-    signature: ''
+    signature: '',
+    // A seed frame always carries explicit continuity: false is a hold to draw
+    // straight through, true is a verified archive gap to break on.
+    archiveGapBefore: frame.gapBefore === true
   } satisfies LiveHistorySample;
   sample.signature = liveSampleSignature(sample);
   return sample;
