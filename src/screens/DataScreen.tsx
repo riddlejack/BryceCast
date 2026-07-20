@@ -23,7 +23,7 @@ const sourceClasses: Array<{ name: string; detail: string }> = [
   {
     name: 'Permissioned third-party',
     detail:
-      'Outside captures used with permission and normalized to our schema: RaceTools race-weekend geometry for street-circuit shapes, and Timing71 timing for 2026 replays. Named wherever they appear.'
+      'Outside captures shared with permission: RaceTools race-weekend geometry for street-circuit shapes, and Timing71 timing for 2026 replays. Always named where they appear.'
   }
 ];
 
@@ -103,8 +103,8 @@ export const DataScreen = () => {
 
       <Card title="Three kinds of source">
         <p style={{ margin: '0 0 14px', fontSize: 13, color: 'var(--ink-secondary)', maxWidth: '64ch' }}>
-          Named and checkable doesn’t mean everything is official series timing. Each number on the site comes from one of
-          three kinds of source, and the kind is labeled wherever the number appears.
+          Every number here comes from one of three kinds of source, and each source family below carries its kind.
+          Source drawers across the site name the specific source behind each module.
         </p>
         <div style={{ display: 'grid', gap: 12 }}>
           {sourceClasses.map((entry) => (
@@ -124,7 +124,11 @@ export const DataScreen = () => {
               /* Read the class straight from the family's own conclusion so the
                * table can't drift from the data: the modeled family says so in
                * its own words ("Modeled non-official weather…"). */
-              const sourceClass = /modeled/i.test(conclusion) ? 'modeled' : 'official';
+              const sourceClass = /modeled/i.test(conclusion)
+                ? 'modeled'
+                : /racetools|timing71|third.party|permission/i.test(conclusion)
+                  ? 'permissioned third-party'
+                  : 'official';
               return (
                 <div key={index} className="tower__row" style={{ gridTemplateColumns: '1fr auto' }}>
                   <span className="tower__name" style={{ whiteSpace: 'normal' }}>

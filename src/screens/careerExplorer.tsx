@@ -1615,7 +1615,7 @@ export const CareerBests = () => {
   const topTens = rows.filter((row) => row.finish <= 10).length;
   return (
     <div className="row row--wrap" style={{ gap: 26 }}>
-      <Stat label="Career races" value={rows.length} />
+      <Stat label="Races with a sourced result" value={rows.length} />
       <Stat label="Wins" value={wins} />
       <Stat label="Podiums" value={podiums} />
       <Stat label="Top-10s" value={topTens} />

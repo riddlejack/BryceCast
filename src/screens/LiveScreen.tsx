@@ -1028,7 +1028,7 @@ const LiveOffAir = ({ loading }: { loading: boolean }) => {
       <div className="row row--between" style={{ alignItems: 'flex-start' }}>
         <div>
           <span className="kicker">Live</span>
-          <h1 className="screen-head__title" style={{ marginTop: 8 }}>No session on track right now.</h1>
+          <h1 className="screen-head__title" style={{ marginTop: 8 }}>The live feed is quiet.</h1>
         </div>
         <SourcePill
           title="Live idle state"
@@ -1036,14 +1036,14 @@ const LiveOffAir = ({ loading }: { loading: boolean }) => {
             {
               label: 'Product readiness reducer',
               path: '/api/readiness',
-              note: 'The readiness endpoint reports no active INDY NXT timing. This page arms itself automatically when Bryce’s session goes green.'
+              note: 'No active INDY NXT session is confirmed by the timing feed right now; the page rechecks continuously and switches to live the moment one is.'
             }
           ]}
         />
       </div>
       <p style={{ margin: '14px 0 0', fontSize: 15, color: 'var(--ink-secondary)', maxWidth: '62ch' }}>
-        The live page wakes up when Bryce’s car is on track. The recorder arms itself before the session and follows every
-        lap from green to checkered — there’s nothing to show until then.
+        When Bryce’s car is on track, this page follows every lap from green flag to checkered. Until then it stays
+        quiet — and it keeps checking on its own.
       </p>
       {eventName ? (
         <div style={{ marginTop: 20 }}>
@@ -1060,7 +1060,7 @@ const LiveOffAir = ({ loading }: { loading: boolean }) => {
             </div>
           ) : (
             <p style={{ margin: '8px 0 0', fontSize: 13, color: 'var(--ink-muted)' }}>
-              This page goes live the moment Race Control timing turns green.
+              It comes alive the moment the session starts.
             </p>
           )}
         </div>

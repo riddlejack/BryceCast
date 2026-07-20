@@ -286,10 +286,14 @@ export const TrackArt = ({
       })
       .sort((left, right) => left.rank - right.rank || right.percentile - left.percentile);
 
-    const cap = compactLabels ? 5 : candidates.length;
+    /* Phones show only labels a family member can read cold: gold anchors,
+     * named features, S/F. Plain station-code spans (rank 3) never fill in —
+     * they live in the tap tooltip (the audit's arbitrary-filler fix). */
+    const eligible = compactLabels ? candidates.filter((candidate) => candidate.rank < 3) : candidates;
+    const cap = compactLabels ? 5 : eligible.length;
     const gap = pxOf(3);
     const kept: typeof candidates = [];
-    for (const candidate of candidates) {
+    for (const candidate of eligible) {
       if (kept.length >= cap) break;
       const collides = kept.some(
         (other) =>
