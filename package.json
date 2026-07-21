@@ -31,6 +31,8 @@
     "archive:v2:migrate": "node scripts/archive-v2-migrate.mjs",
     "postrace:roll": "node scripts/postrace-roll.mjs",
     "postrace:roll:dry": "node scripts/postrace-roll.mjs --dry-run",
+    "postrace:lake-sync": "node scripts/postrace-lake-sync.mjs",
+    "postrace:lake-sync:dry": "node scripts/postrace-lake-sync.mjs --dry-run",
     "test:postrace-roll": "node scripts/test-postrace-roll.mjs",
     "test:live-readiness": "node scripts/test-live-readiness.mjs",
     "test:live-rank-series": "node scripts/test-live-rank-series.mjs",

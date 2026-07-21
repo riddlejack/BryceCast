@@ -1,7 +1,7 @@
 {
   "lane": "analysis/semantic-layer",
   "slice": "slice-2-timing71-2026",
-  "generatedAt": "2026-07-21T23:51:23.134Z",
+  "generatedAt": "2026-07-21T23:57:11.650Z",
   "sourceTier": "timing71_normalized",
   "lakeDataRoot": "/Users/example/.codex/worktrees/a534/Bryce POV access/data/historical-data-lake",
   "provenanceNote": "Derived from Timing71 replay recordings (third-party normalized display state; 1-2 s cadence; real archive timestamps, no interpolation). Never label as official. Identity requires the validated crosswalk before ANY UI use.",

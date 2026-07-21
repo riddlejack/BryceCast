@@ -72,7 +72,7 @@ async function writeGzipNdjson(path, rows) {
   await once(out, 'finish');
 }
 
-// Load the 33 validated 2026 Timing71 sessions from the committed coverage CSV.
+// Load the validated 2026 Timing71 sessions from the committed coverage CSV.
 const csv = (await readFile(COVERAGE_CSV, 'utf8')).split(/\r?\n/).filter(Boolean);
 const header = parseCsvLine(csv[0]);
 const idx = Object.fromEntries(header.map((h, i) => [h, i]));
@@ -94,8 +94,26 @@ const rows = csv
     expectedHasCheckered: f[idx.cleanSegmentHasCheckered] === 'true',
   }));
 console.log(`Coverage matrix: ${rows.length} validated 2026 Timing71 sessions.`);
-// 34 = 33 through Mid-Ohio + the Music City race (6755), validated 2026-07-21 in the coverage matrix.
-if (rows.length !== 34) throw new Error(`expected 34 sessions, got ${rows.length}`);
+// Cross-artifact invariant (replaces the hand-moved session-count pin on
+// 2026-07-21): the committed coverage CSV's 2026 Timing71 rows must equal the
+// audited canonical list in timing71-2026-coverage.json exactly — every
+// audited replay present, nothing unaudited smuggled in. New races enter by
+// updating the audit file (postrace:lake-sync automates the gated update),
+// never by editing a number here.
+const audit = JSON.parse(
+  await readFile(join(REPO_ROOT, 'analysis/historical-high-frequency-data-audit/timing71-2026-coverage.json'), 'utf8')
+);
+const auditedReplayIds = new Set(
+  [...(audit.raceReplays ?? []), ...(audit.nonRaceSessionCandidates ?? [])].map((r) => r.replayId)
+);
+const rowReplayIds = new Set(rows.map((r) => r.replayId));
+const missingFromCsv = [...auditedReplayIds].filter((id) => !rowReplayIds.has(id));
+const unaudited = [...rowReplayIds].filter((id) => !auditedReplayIds.has(id));
+if (missingFromCsv.length > 0 || unaudited.length > 0) {
+  throw new Error(
+    `coverage CSV vs audited canonical list mismatch — missing from CSV: [${missingFromCsv.join(', ')}] unaudited in CSV: [${unaudited.join(', ')}]`
+  );
+}
 
 // Resolve replayId -> raw view path via the committed manifest.
 const manifest = JSON.parse(await readFile(MANIFEST, 'utf8'));
