@@ -1,11 +1,11 @@
 {
   "lane": "analysis/semantic-layer",
   "slice": "slice-2-timing71-2026",
-  "generatedAt": "2026-07-19T03:02:42.585Z",
+  "generatedAt": "2026-07-21T23:51:23.134Z",
   "sourceTier": "timing71_normalized",
   "lakeDataRoot": "/Users/example/.codex/worktrees/a534/Bryce POV access/data/historical-data-lake",
   "provenanceNote": "Derived from Timing71 replay recordings (third-party normalized display state; 1-2 s cadence; real archive timestamps, no interpolation). Never label as official. Identity requires the validated crosswalk before ANY UI use.",
-  "sessionCount": 33,
+  "sessionCount": 34,
   "sessions": [
     {
       "id": "t71_2026_st-petersburg_practice_p1_2026-02-27",
@@ -1150,6 +1150,40 @@
       "maxLapMatchesCoverage": true,
       "qualityMasks": [],
       "pack": "sessions-2026/t71_2026_nashville_qualifying_2026-07-18.ndjson.gz"
+    },
+    {
+      "id": "t71_2026_nashville_race_2026-07-19",
+      "year": 2026,
+      "date": "2026-07-19",
+      "venue": "Nashville",
+      "event": "Nashville",
+      "sessionType": "race",
+      "sessionLabel": "INDY NXT by Firestone Music City Grand Prix - Race",
+      "series": "INDY_NXT",
+      "source": "Timing71",
+      "replayId": "456f5b2c-e18a-420c-99b1-285a55907a35",
+      "lakeSessionId": "4d30fc68685130435db16375",
+      "sourceQuality": "inventory_validated",
+      "recordingDescription": "INDY NXT by Firestone Music City Grand Prix - Race",
+      "sourceTier": "timing71_normalized",
+      "frames": {
+        "total": 5678,
+        "processedNxtSegment": 5678,
+        "firstObservedAtEpoch": 1784480548,
+        "lastObservedAtEpoch": 1784487026,
+        "cadenceMedianSeconds": 1,
+        "cadenceMaxSeconds": 2
+      },
+      "rosterSize": 23,
+      "lapRowCount": 1288,
+      "crossingCount": 1288,
+      "sectorObservationCount": 0,
+      "flagEventCount": 8,
+      "maxLaps": 65,
+      "expectedMaxLap": 65,
+      "maxLapMatchesCoverage": true,
+      "qualityMasks": [],
+      "pack": "sessions-2026/t71_2026_nashville_race_2026-07-19.ndjson.gz"
     }
   ]
 }

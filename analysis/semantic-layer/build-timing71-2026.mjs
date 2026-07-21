@@ -94,7 +94,8 @@ const rows = csv
     expectedHasCheckered: f[idx.cleanSegmentHasCheckered] === 'true',
   }));
 console.log(`Coverage matrix: ${rows.length} validated 2026 Timing71 sessions.`);
-if (rows.length !== 33) throw new Error(`expected 33 sessions, got ${rows.length}`);
+// 34 = 33 through Mid-Ohio + the Music City race (6755), validated 2026-07-21 in the coverage matrix.
+if (rows.length !== 34) throw new Error(`expected 34 sessions, got ${rows.length}`);
 
 // Resolve replayId -> raw view path via the committed manifest.
 const manifest = JSON.parse(await readFile(MANIFEST, 'utf8'));

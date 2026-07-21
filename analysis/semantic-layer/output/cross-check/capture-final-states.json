@@ -1,7 +1,7 @@
 {
   "source": "brycecast_capture",
   "note": "Final-snapshot field state per captured INDY NXT session, extracted from an APFS clone of the live capture sqlite. The live runtime itself is never read by the pipeline.",
-  "extractedAt": "2026-07-19T02:58:20.049Z",
+  "extractedAt": "2026-07-21T23:53:47.704Z",
   "sessions": [
     {
       "sessionKey": "5546-6763",
@@ -2656,6 +2656,276 @@
           "laps": 2,
           "status": "Active",
           "team": "AJ Foyt Racing"
+        }
+      ]
+    },
+    {
+      "sessionKey": "5538-6755",
+      "officialEventSessionId": "6755",
+      "eventName": "INDY NXT by Firestone Music City Grand Prix",
+      "sessionName": "Race",
+      "trackName": "Nashville Superspeedway",
+      "sessionType": "R",
+      "snapshotCount": 2744,
+      "firstCheckedAt": "2026-07-19T16:53:43.741Z",
+      "lastCheckedAt": "2026-07-19T17:49:20.321Z",
+      "finalFlag": "COLD",
+      "finalLap": "65",
+      "totalLaps": "65",
+      "sourceTier": "brycecast_capture",
+      "finalField": [
+        {
+          "car": "20",
+          "firstName": "Matteo",
+          "lastName": "Nannini",
+          "officialDriverId": 2086,
+          "rank": 1,
+          "startPosition": 1,
+          "laps": 65,
+          "status": "Active",
+          "team": "Cape Motorsports"
+        },
+        {
+          "car": "21",
+          "firstName": "Nikita",
+          "lastName": "Johnson",
+          "officialDriverId": 2102,
+          "rank": 2,
+          "startPosition": 3,
+          "laps": 65,
+          "status": "Active",
+          "team": "Cape Motorsports"
+        },
+        {
+          "car": "99",
+          "firstName": "Myles",
+          "lastName": "Rowe",
+          "officialDriverId": 1040,
+          "rank": 3,
+          "startPosition": 4,
+          "laps": 65,
+          "status": "Active",
+          "team": "ABEL Motorsports"
+        },
+        {
+          "car": "12",
+          "firstName": "Max",
+          "lastName": "Garcia",
+          "officialDriverId": 2134,
+          "rank": 4,
+          "startPosition": 6,
+          "laps": 65,
+          "status": "Active",
+          "team": "ABEL Motorsports"
+        },
+        {
+          "car": "28",
+          "firstName": "Max",
+          "lastName": "Taylor",
+          "officialDriverId": 2120,
+          "rank": 5,
+          "startPosition": 12,
+          "laps": 65,
+          "status": "Active",
+          "team": "Andretti Global"
+        },
+        {
+          "car": "29",
+          "firstName": "Josh",
+          "lastName": "Pierson",
+          "officialDriverId": 2040,
+          "rank": 6,
+          "startPosition": 11,
+          "laps": 65,
+          "status": "Active",
+          "team": "Andretti Global"
+        },
+        {
+          "car": "26",
+          "firstName": "Lochie",
+          "lastName": "Hughes",
+          "officialDriverId": 2103,
+          "rank": 7,
+          "startPosition": 9,
+          "laps": 65,
+          "status": "Active",
+          "team": "Andretti Global"
+        },
+        {
+          "car": "45",
+          "firstName": "Jack",
+          "lastName": "Beeton",
+          "officialDriverId": 2162,
+          "rank": 8,
+          "startPosition": 10,
+          "laps": 65,
+          "status": "Active",
+          "team": "HMD Motorsports"
+        },
+        {
+          "car": "14",
+          "firstName": "Alessandro",
+          "lastName": "de Tullio",
+          "officialDriverId": 2163,
+          "rank": 9,
+          "startPosition": 2,
+          "laps": 65,
+          "status": "Active",
+          "team": "AJ Foyt Racing"
+        },
+        {
+          "car": "9",
+          "firstName": "Bryce",
+          "lastName": "Aron",
+          "officialDriverId": 2143,
+          "rank": 10,
+          "startPosition": 8,
+          "laps": 65,
+          "status": "Active",
+          "team": "Chip Ganassi Racing"
+        },
+        {
+          "car": "67",
+          "firstName": "Enzo",
+          "lastName": "Fittipaldi",
+          "officialDriverId": 2065,
+          "rank": 11,
+          "startPosition": 14,
+          "laps": 65,
+          "status": "Active",
+          "team": "HMD Motorsports"
+        },
+        {
+          "car": "17",
+          "firstName": "Salvador",
+          "lastName": "de Alba",
+          "officialDriverId": 2070,
+          "rank": 12,
+          "startPosition": 16,
+          "laps": 65,
+          "status": "Active",
+          "team": "HMD Motorsports"
+        },
+        {
+          "car": "27",
+          "firstName": "Seb",
+          "lastName": "Murray",
+          "officialDriverId": 2158,
+          "rank": 13,
+          "startPosition": 18,
+          "laps": 65,
+          "status": "Active",
+          "team": "Andretti Global"
+        },
+        {
+          "car": "75",
+          "firstName": "Alexander",
+          "lastName": "Koreiba",
+          "officialDriverId": 2013,
+          "rank": 14,
+          "startPosition": 22,
+          "laps": 65,
+          "status": "Active",
+          "team": "Juncos Hollinger Racing"
+        },
+        {
+          "car": "15",
+          "firstName": "Nicolas",
+          "lastName": "Stati",
+          "officialDriverId": 2167,
+          "rank": 15,
+          "startPosition": 20,
+          "laps": 65,
+          "status": "Active",
+          "team": "Cusick Morgan Motorsports"
+        },
+        {
+          "car": "8",
+          "firstName": "James",
+          "lastName": "Roe",
+          "officialDriverId": 1063,
+          "rank": 16,
+          "startPosition": 15,
+          "laps": 65,
+          "status": "Active",
+          "team": "Chip Ganassi Racing"
+        },
+        {
+          "car": "4",
+          "firstName": "Nicholas",
+          "lastName": "Monteiro",
+          "officialDriverId": 2114,
+          "rank": 17,
+          "startPosition": 23,
+          "laps": 65,
+          "status": "Active",
+          "team": "AJ Foyt Racing"
+        },
+        {
+          "car": "71",
+          "firstName": "Tymek",
+          "lastName": "Kucharczyk",
+          "officialDriverId": 2174,
+          "rank": 18,
+          "startPosition": 17,
+          "laps": 62,
+          "status": "Active",
+          "team": "HMD Motorsports"
+        },
+        {
+          "car": "57",
+          "firstName": "Colin",
+          "lastName": "Kaminsky",
+          "officialDriverId": 990,
+          "rank": 19,
+          "startPosition": 7,
+          "laps": 52,
+          "status": "DNF",
+          "team": "ABEL Motorsports"
+        },
+        {
+          "car": "11",
+          "firstName": "Carson",
+          "lastName": "Etter",
+          "officialDriverId": 2115,
+          "rank": 20,
+          "startPosition": 21,
+          "laps": 39,
+          "status": "Active",
+          "team": "Chip Ganassi Racing"
+        },
+        {
+          "car": "10",
+          "firstName": "Niels",
+          "lastName": "Koolen",
+          "officialDriverId": 2146,
+          "rank": 21,
+          "startPosition": 5,
+          "laps": 21,
+          "status": "Active",
+          "team": "Chip Ganassi Racing"
+        },
+        {
+          "car": "48",
+          "firstName": "Jordan",
+          "lastName": "Missig",
+          "officialDriverId": 2021,
+          "rank": 22,
+          "startPosition": 13,
+          "laps": 4,
+          "status": "DNF",
+          "team": "ABEL Motorsports"
+        },
+        {
+          "car": "68",
+          "firstName": "JM",
+          "lastName": "Correa",
+          "officialDriverId": 2160,
+          "rank": 23,
+          "startPosition": 19,
+          "laps": 4,
+          "status": "DNF",
+          "team": "Cusick Morgan Motorsports"
         }
       ]
     }

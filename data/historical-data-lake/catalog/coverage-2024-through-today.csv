@@ -175,3 +175,4 @@ year,date,source,sessionId,replayId,series,sessionType,event,sessionLabel,source
 2026,2026-07-05,Timing71,4cd5bb1023e6c384226f820c,ed6dcdbd-befc-4136-95c6-e300f761f0ac,INDY_NXT,race,Mid-Ohio Race 2,INDY NXT by Firestone Grand Prix at Mid-Ohio - Race 2,inventory_validated,usable,,,,3303,30,true
 2026,2026-07-18,Timing71,97556535efffd163e342f6a4,d2d29656-7449-49a2-a444-7b3346bbbce9,INDY_NXT,practice,Nashville,INDY NXT by Firestone Music City Grand Prix - Practice 1,inventory_validated,usable,,,,3307,83,true
 2026,2026-07-18,Timing71,0b366064009531922e92a076,d416a374-49d4-4946-a748-ae589db49a8e,INDY_NXT,qualifying,Nashville,INDY NXT by Firestone Music City Grand Prix - Qualifications,inventory_validated,usable,,,,2066,2,false
+2026,2026-07-19,Timing71,4d30fc68685130435db16375,456f5b2c-e18a-420c-99b1-285a55907a35,INDY_NXT,race,Nashville,INDY NXT by Firestone Music City Grand Prix - Race,inventory_validated,usable,,,,5678,65,true

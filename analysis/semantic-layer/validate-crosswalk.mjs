@@ -130,11 +130,16 @@ async function loadPackRecords(pack, record) {
 // canonical name matches it too. Any mismatch fails the gate.
 {
   const captureSessions = crosswalk.sessions.filter((s) => s.scopeUsed === 'event_capture');
-  assertThat('T4: exactly the 2 Nashville sessions use capture authority', captureSessions.length === 2, captureSessions.map((s) => s.t71SessionId).join(','));
+  // 2026-07-21: after the Music City roll-forward, the canonical dataset carries
+  // the Nashville event's entry lists, so no session needs capture authority any
+  // more (was: exactly the 2 pre-roll Nashville sessions). The chain check below
+  // still runs for any session that does use it.
+  assertThat('T4: capture authority only where canonical scope is unavailable', captureSessions.length <= 2, captureSessions.map((s) => s.t71SessionId).join(','));
   // Rebuild the official roster independently from the committed extract.
   const officialByEventSession = new Map(capture.sessions.map((c) => [String(c.officialEventSessionId), c]));
   const nashvilleCaps = ['6924', '6923'].map((id) => officialByEventSession.get(id)).filter(Boolean);
   assertThat('T4: capture extract holds both Nashville sessions (6924 P1, 6923 Quali)', nashvilleCaps.length === 2);
+  assertThat('T4: with canonical event scope available, capture authority is unused', captureSessions.length === 0, `${captureSessions.length}`);
   const officialRoster = new Map(); // car -> {name, ids:Set}
   for (const cap of nashvilleCaps) {
     for (const row of cap.finalField) {
@@ -169,7 +174,7 @@ async function loadPackRecords(pack, record) {
     const nine = s.mappings.find((m) => m.car === '9');
     assertThat(`T4: ${s.t71SessionId} #9 -> driver_bryce_aron`, nine?.driverId === 'driver_bryce_aron', nine?.driverId);
   }
-  notes.push('T4: Nashville 2026 P1 + Quali identities are event-scoped via the capture official roster (23 cars each, chain closed three ways per car, feed DriverIDs stable and injective).');
+  notes.push('T4: capture-roster chain intact (23 cars each for 6924/6923, feed DriverIDs stable and injective); since the 2026-07-21 Music City roll-forward every session resolves via canonical event scope, so capture authority is dormant.');
 }
 function splitAsDriver(name) {
   const parts = String(name).trim().split(/\s+/);
@@ -221,7 +226,8 @@ for (const s of t71Summary.sessions.filter((x) => x.sessionType === 'race')) {
   });
 }
 const matchedRaces = raceChecks.filter((r) => r.matched);
-assertThat('races: all 12 matched to canonical', matchedRaces.length === 12, `${matchedRaces.length}`);
+// 13 = 12 through Mid-Ohio + Music City 2026 (6755), added 2026-07-21.
+assertThat('races: all 13 matched to canonical', matchedRaces.length === 13, `${matchedRaces.length}`);
 // A winner/order divergence is only acceptable when it is a confirmed
 // AS-RACED vs OFFICIAL-CLASSIFICATION divergence: our own capture (official
 // Race Control feed) must agree with the Timing71 final state, proving the

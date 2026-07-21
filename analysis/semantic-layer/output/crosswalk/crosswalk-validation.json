@@ -1,12 +1,12 @@
 {
   "artifact": "crosswalk-validation-2026",
-  "generatedAt": "2026-07-19T05:02:57.099Z",
+  "generatedAt": "2026-07-21T23:53:55.608Z",
   "trapTests": {
     "failures": [],
     "notes": [
       "T1 note: canonical 2026 itself uses the short displayed forms (\"JM Correa\", \"Seb Murray\"), so 2026 real-data matches are exact; the variant rules are proven at unit level and guard the 2024-25 unification in a later slice.",
       "T2 reused numbers verified: #14, #9, #11, #29, #28, #76, #17, #27",
-      "T4: Nashville 2026 P1 + Quali identities are event-scoped via the capture official roster (23 cars each, chain closed three ways per car, feed DriverIDs stable and injective).",
+      "T4: capture-roster chain intact (23 cars each for 6924/6923, feed DriverIDs stable and injective); since the 2026-07-21 Music City roll-forward every session resolves via canonical event scope, so capture authority is dormant.",
       "Race divergence explained: t71_2026_road-america_race_r2_2026-06-21 — Timing71 and the BryceCast capture agree on the as-crossed order (24/24); canonical carries the official post-race reclassification. Classification for UI must come from canonical results; the timing/lap/identity tables remain valid."
     ]
   },
@@ -143,6 +143,17 @@
       "positionExact": 24,
       "lapCountExact": 24,
       "checked": 24
+    },
+    {
+      "id": "t71_2026_nashville_race_2026-07-19",
+      "matched": true,
+      "canonicalSessionId": "session_indy_nxt_2026_6755",
+      "fieldSize": 23,
+      "winnerMatch": true,
+      "podiumMatch": true,
+      "positionExact": 23,
+      "lapCountExact": 23,
+      "checked": 23
     }
   ],
   "twoSourceCrossChecks": [
@@ -342,6 +353,28 @@
       "positions": {
         "checked": 0,
         "exact": 0
+      }
+    },
+    {
+      "captureSessionKey": "5538-6755",
+      "canonicalSessionId": "session_indy_nxt_2026_6755",
+      "t71SessionId": "t71_2026_nashville_race_2026-07-19",
+      "sessionType": "race",
+      "captureSnapshots": 2744,
+      "thinCapture": false,
+      "identity": {
+        "checked": 23,
+        "agree": 23,
+        "mismatches": []
+      },
+      "laps": {
+        "checked": 23,
+        "exact": 23,
+        "within1": 23
+      },
+      "positions": {
+        "checked": 23,
+        "exact": 23
       }
     }
   ],
@@ -688,9 +721,7 @@
       "verdict": "GO",
       "crossCheck": "confirmed",
       "qualityMasks": [],
-      "reasons": [
-        "identity event-scoped via BryceCast capture official Race Control roster (T4-validated); canonical event results land post-weekend"
-      ]
+      "reasons": []
     },
     {
       "t71SessionId": "t71_2026_nashville_qualifying_2026-07-18",
@@ -700,12 +731,20 @@
       "verdict": "GO",
       "crossCheck": "confirmed",
       "qualityMasks": [],
-      "reasons": [
-        "identity event-scoped via BryceCast capture official Race Control roster (T4-validated); canonical event results land post-weekend"
-      ]
+      "reasons": []
+    },
+    {
+      "t71SessionId": "t71_2026_nashville_race_2026-07-19",
+      "sessionType": "race",
+      "date": "2026-07-19",
+      "venue": "Nashville",
+      "verdict": "GO",
+      "crossCheck": "confirmed",
+      "qualityMasks": [],
+      "reasons": []
     }
   ],
-  "goCount": 32,
+  "goCount": 33,
   "conditionalCount": 1,
   "noGoCount": 0,
   "hardFailures": []

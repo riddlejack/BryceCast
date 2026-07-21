@@ -1,12 +1,12 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-18T23:43:49.385Z",
+  "generatedAt": "2026-07-21T23:49:55.133Z",
   "detailLevel": "compact_source_quality_index",
   "semanticNote": "Full manifests, rosters, and frame samples remain in the content-addressed replay ZIPs and are decoded on demand.",
   "series": "all",
-  "sessionCount": 377,
+  "sessionCount": 381,
   "statusCounts": {
-    "usable": 371,
+    "usable": 375,
     "decoder_error": 1,
     "wrong_series_or_stale_capture": 3,
     "quarantined_cross_session": 1,
@@ -32184,6 +32184,171 @@
       "error": null
     },
     {
+      "sessionId": "906d1367dc8c71ad14cbe8e1",
+      "replayId": "f71d1601-c882-4946-8d9f-44a4c5f8f604",
+      "year": 2026,
+      "series": "INDYCAR",
+      "sessionType": "practice",
+      "sessionLabel": "Borchetta Bourbon Music City Grand Prix - Practice Final",
+      "analysis": {
+        "manifest": {
+          "uuid": "f71d1601-c882-4946-8d9f-44a4c5f8f604",
+          "name": "IndyCar",
+          "description": "Borchetta Bourbon Music City Grand Prix - Practice Final",
+          "startTime": 1784411845.913,
+          "version": 1,
+          "columnNames": [
+            "Num",
+            "State",
+            "Driver",
+            "Team",
+            "Laps",
+            "T",
+            "Gap",
+            "Int",
+            "T1S",
+            "T3S",
+            "Last",
+            "Spd",
+            "Best",
+            "B.Spd",
+            "Pits"
+          ],
+          "trackDataSpecCount": 0
+        },
+        "frames": {
+          "count": 3044,
+          "fullFrameCount": 305,
+          "incrementalFrameCount": 2739,
+          "nonemptyCarFrameCount": 2843,
+          "firstObservedAt": "2026-07-18T21:57:26.000Z",
+          "lastObservedAt": "2026-07-18T22:55:25.000Z",
+          "observedSpanSeconds": 3479,
+          "updateGapMedianSeconds": 1,
+          "updateGapMaxSeconds": 2,
+          "exactConsecutiveOneSecondUpdates": false,
+          "patchPreconditionCount": 14282,
+          "patchPreconditionMismatchCount": 0
+        },
+        "content": {
+          "driverCount": 48,
+          "bryce": {
+            "carNumber": "9",
+            "driver": "Bryce Aron",
+            "team": "Chip Ganassi Racing"
+          },
+          "flagStates": [
+            "none",
+            "green",
+            "chequered"
+          ],
+          "flagMessageCount": 2,
+          "yellowMessageCount": 0,
+          "hasTrackDataSpec": false,
+          "bryceSegment": {
+            "frameCount": 201,
+            "firstObservedAt": "2026-07-18T21:57:26.000Z",
+            "lastObservedAt": "2026-07-18T22:01:15.000Z",
+            "observedSpanSeconds": 229,
+            "minCars": 23,
+            "maxCars": 23,
+            "uniqueDriverCount": 23,
+            "maxLap": 2,
+            "flagStates": [
+              "none"
+            ],
+            "hasCheckered": false
+          }
+        },
+        "quality": {
+          "status": "usable",
+          "reasons": [],
+          "decoderErrors": []
+        }
+      },
+      "error": null
+    },
+    {
+      "sessionId": "83c0235acf79380310b44c82",
+      "replayId": "af1ca01b-2d7a-44c8-a65b-02246cc5bce4",
+      "year": 2026,
+      "series": "INDYCAR",
+      "sessionType": "practice",
+      "sessionLabel": "Borchetta Bourbon Music City Grand Prix - Practice Final",
+      "analysis": {
+        "manifest": {
+          "uuid": "af1ca01b-2d7a-44c8-a65b-02246cc5bce4",
+          "name": "IndyCar",
+          "description": "Borchetta Bourbon Music City Grand Prix - Practice Final",
+          "startTime": 1784415450.717,
+          "version": 1,
+          "columnNames": [
+            "Num",
+            "State",
+            "Driver",
+            "Team",
+            "Laps",
+            "T",
+            "Gap",
+            "Int",
+            "T1S",
+            "T3S",
+            "Last",
+            "Spd",
+            "Best",
+            "B.Spd",
+            "Pits"
+          ],
+          "trackDataSpecCount": 0
+        },
+        "frames": {
+          "count": 3839,
+          "fullFrameCount": 384,
+          "incrementalFrameCount": 3455,
+          "nonemptyCarFrameCount": 3839,
+          "firstObservedAt": "2026-07-18T22:57:31.000Z",
+          "lastObservedAt": "2026-07-19T00:10:28.000Z",
+          "observedSpanSeconds": 4377,
+          "updateGapMedianSeconds": 1,
+          "updateGapMaxSeconds": 2,
+          "exactConsecutiveOneSecondUpdates": false,
+          "patchPreconditionCount": 23407,
+          "patchPreconditionMismatchCount": 0
+        },
+        "content": {
+          "driverCount": 25,
+          "bryce": null,
+          "flagStates": [
+            "none",
+            "green",
+            "yellow",
+            "chequered"
+          ],
+          "flagMessageCount": 8,
+          "yellowMessageCount": 3,
+          "hasTrackDataSpec": false,
+          "bryceSegment": {
+            "frameCount": 0,
+            "firstObservedAt": null,
+            "lastObservedAt": null,
+            "observedSpanSeconds": null,
+            "minCars": null,
+            "maxCars": null,
+            "uniqueDriverCount": 0,
+            "maxLap": null,
+            "flagStates": [],
+            "hasCheckered": false
+          }
+        },
+        "quality": {
+          "status": "usable",
+          "reasons": [],
+          "decoderErrors": []
+        }
+      },
+      "error": null
+    },
+    {
       "sessionId": "c7fbc98961a024fe0defb676",
       "replayId": "14922090-7fb1-45d1-be88-a123f44d620c",
       "year": 2026,
@@ -32423,6 +32588,175 @@
               "none",
               "green"
             ],
+            "hasCheckered": false
+          }
+        },
+        "quality": {
+          "status": "usable",
+          "reasons": [],
+          "decoderErrors": []
+        }
+      },
+      "error": null
+    },
+    {
+      "sessionId": "4d30fc68685130435db16375",
+      "replayId": "456f5b2c-e18a-420c-99b1-285a55907a35",
+      "year": 2026,
+      "series": "INDY_NXT",
+      "sessionType": "race",
+      "sessionLabel": "INDY NXT by Firestone Music City Grand Prix - Race",
+      "analysis": {
+        "manifest": {
+          "uuid": "456f5b2c-e18a-420c-99b1-285a55907a35",
+          "name": "IndyCar",
+          "description": "INDY NXT by Firestone Music City Grand Prix - Race",
+          "startTime": 1784480547.399,
+          "version": 1,
+          "columnNames": [
+            "Num",
+            "State",
+            "Driver",
+            "Team",
+            "Laps",
+            "T",
+            "Gap",
+            "Int",
+            "T1S",
+            "T3S",
+            "Last",
+            "Spd",
+            "Best",
+            "B.Spd",
+            "Pits"
+          ],
+          "trackDataSpecCount": 0
+        },
+        "frames": {
+          "count": 5678,
+          "fullFrameCount": 568,
+          "incrementalFrameCount": 5110,
+          "nonemptyCarFrameCount": 5678,
+          "firstObservedAt": "2026-07-19T17:02:28.000Z",
+          "lastObservedAt": "2026-07-19T18:50:26.000Z",
+          "observedSpanSeconds": 6478,
+          "updateGapMedianSeconds": 1,
+          "updateGapMaxSeconds": 2,
+          "exactConsecutiveOneSecondUpdates": false,
+          "patchPreconditionCount": 13321,
+          "patchPreconditionMismatchCount": 0
+        },
+        "content": {
+          "driverCount": 23,
+          "bryce": {
+            "carNumber": "9",
+            "driver": "Bryce Aron",
+            "team": "Chip Ganassi Racing"
+          },
+          "flagStates": [
+            "none",
+            "green",
+            "caution",
+            "chequered"
+          ],
+          "flagMessageCount": 6,
+          "yellowMessageCount": 2,
+          "hasTrackDataSpec": false,
+          "bryceSegment": {
+            "frameCount": 5678,
+            "firstObservedAt": "2026-07-19T17:02:28.000Z",
+            "lastObservedAt": "2026-07-19T18:50:26.000Z",
+            "observedSpanSeconds": 6478,
+            "minCars": 23,
+            "maxCars": 23,
+            "uniqueDriverCount": 23,
+            "maxLap": 65,
+            "flagStates": [
+              "none",
+              "green",
+              "caution",
+              "chequered"
+            ],
+            "hasCheckered": true
+          }
+        },
+        "quality": {
+          "status": "usable",
+          "reasons": [],
+          "decoderErrors": []
+        }
+      },
+      "error": null
+    },
+    {
+      "sessionId": "418c9f0865986a8b778dd8e0",
+      "replayId": "8b09c2fc-0cc7-4bc7-ab81-f786d1c1a8d2",
+      "year": 2026,
+      "series": "INDYCAR",
+      "sessionType": "race",
+      "sessionLabel": "Borchetta Bourbon Music City Grand Prix - Race",
+      "analysis": {
+        "manifest": {
+          "uuid": "8b09c2fc-0cc7-4bc7-ab81-f786d1c1a8d2",
+          "name": "IndyCar",
+          "description": "Borchetta Bourbon Music City Grand Prix - Race",
+          "startTime": 1784573841.59,
+          "version": 1,
+          "columnNames": [
+            "Num",
+            "State",
+            "Driver",
+            "Team",
+            "Laps",
+            "T",
+            "Gap",
+            "Int",
+            "T1S",
+            "T3S",
+            "Last",
+            "Spd",
+            "Best",
+            "B.Spd",
+            "Pits"
+          ],
+          "trackDataSpecCount": 0
+        },
+        "frames": {
+          "count": 10135,
+          "fullFrameCount": 1014,
+          "incrementalFrameCount": 9121,
+          "nonemptyCarFrameCount": 10135,
+          "firstObservedAt": "2026-07-20T18:57:22.000Z",
+          "lastObservedAt": "2026-07-20T22:10:20.000Z",
+          "observedSpanSeconds": 11578,
+          "updateGapMedianSeconds": 1,
+          "updateGapMaxSeconds": 5,
+          "exactConsecutiveOneSecondUpdates": false,
+          "patchPreconditionCount": 60573,
+          "patchPreconditionMismatchCount": 0
+        },
+        "content": {
+          "driverCount": 25,
+          "bryce": null,
+          "flagStates": [
+            "none",
+            "green",
+            "caution",
+            "chequered"
+          ],
+          "flagMessageCount": 10,
+          "yellowMessageCount": 4,
+          "hasTrackDataSpec": false,
+          "bryceSegment": {
+            "frameCount": 0,
+            "firstObservedAt": null,
+            "lastObservedAt": null,
+            "observedSpanSeconds": null,
+            "minCars": null,
+            "maxCars": null,
+            "uniqueDriverCount": 0,
+            "maxLap": null,
+            "flagStates": [],
             "hasCheckered": false
           }
         },

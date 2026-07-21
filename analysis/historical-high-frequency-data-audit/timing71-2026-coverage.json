@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "auditedAt": "2026-07-18",
+  "auditedAt": "2026-07-21",
   "source": {
     "name": "Timing71 replay archive",
     "archiveApi": "https://archive.timing71.org/replays",
@@ -23,48 +23,237 @@
     "zipIntegrityFailures": 0
   },
   "coverage": {
-    "completedRaces": 12,
-    "completeRaceCandidates": 12,
+    "completedRaces": 13,
+    "completeRaceCandidates": 13,
     "completedPracticeAndQualifyingSessionsThroughNashvilleQualifying": 21,
     "practiceAndQualifyingReplayCandidates": 21,
-    "futureRacesNotYetHistorical": 5
+    "futureRacesNotYetHistorical": 4
   },
   "nonRaceSessionCandidates": [
-    {"event": "St. Petersburg", "sessionType": "Practice 1", "replayId": "23c82ccd-0826-45b4-aeaf-7f8eaf0d3533"},
-    {"event": "St. Petersburg", "sessionType": "Practice 2", "replayId": "0e6cefe7-ff6f-49fd-890a-a81d98e41964"},
-    {"event": "St. Petersburg", "sessionType": "Qualifications", "replayId": "060afe99-f6ad-4ce1-b796-7d44e6e4972c"},
-    {"event": "Arlington", "sessionType": "Practice 1", "replayId": "196e71f4-e854-4607-b106-13b2b0a3cefe"},
-    {"event": "Arlington", "sessionType": "Practice 2", "replayId": "31717f23-1e00-474b-8407-9c25757e2625", "validationNote": "on-track capture candidate; no clear checkered state in full frames"},
-    {"event": "Arlington", "sessionType": "Qualifications", "replayId": "4d23a3cb-3c4d-457d-8224-604a1eab2f0d"},
-    {"event": "Barber", "sessionType": "Practice 1", "replayId": "47f9c991-4945-413d-8838-799febc303ec"},
-    {"event": "Barber", "sessionType": "Qualifications", "replayId": "81fbebf1-31f7-4d68-9ce4-774785371154"},
-    {"event": "Indianapolis GP", "sessionType": "Practice 1", "replayId": "97d1fd58-0a0e-49b7-a415-74da97b9b94c"},
-    {"event": "Indianapolis GP", "sessionType": "Qualifications", "replayId": "11667e2a-abf4-4086-97b9-9be913ce0fd4"},
-    {"event": "Detroit", "sessionType": "Practice 1", "replayId": "f66821a2-af0c-454f-a6d1-8e05bb9dbed6"},
-    {"event": "Detroit", "sessionType": "Practice 2", "replayId": "79b44eca-5c97-4f44-b555-2c461eb84240"},
-    {"event": "Detroit", "sessionType": "Qualifications", "replayId": "47f71e87-e239-4710-95be-e39085ed53ea"},
-    {"event": "WWT Raceway", "sessionType": "Practice 1", "replayId": "59e0b35d-22ff-4403-9084-61f7b86e2f9e"},
-    {"event": "WWT Raceway", "sessionType": "Qualifications", "replayId": "7955b89c-7029-4a9f-bea0-769925a47c36", "validationNote": "use this second qualifying-labelled replay; reject dd951383-eb15-4242-a985-96c426ea8ab8"},
-    {"event": "Road America", "sessionType": "Practice 1", "replayId": "6c13b476-3c1f-4ca5-9a8a-b190a1cea0fd"},
-    {"event": "Road America", "sessionType": "Qualifications", "replayId": "3a11cff2-1f80-41b4-b332-66cab2af1e44"},
-    {"event": "Mid-Ohio", "sessionType": "Practice 1", "replayId": "2c825388-353f-4223-8513-d372184d1363"},
-    {"event": "Mid-Ohio", "sessionType": "Qualifications", "replayId": "edfdc884-b347-476f-b354-e77144abcc59"},
-    {"event": "Nashville", "sessionType": "Practice 1", "replayId": "d2d29656-7449-49a2-a444-7b3346bbbce9"},
-    {"event": "Nashville", "sessionType": "Qualifications", "replayId": "d416a374-49d4-4946-a748-ae589db49a8e", "validationNote": "single-car qualifying sequence; no checkered state observed"}
+    {
+      "event": "St. Petersburg",
+      "sessionType": "Practice 1",
+      "replayId": "23c82ccd-0826-45b4-aeaf-7f8eaf0d3533"
+    },
+    {
+      "event": "St. Petersburg",
+      "sessionType": "Practice 2",
+      "replayId": "0e6cefe7-ff6f-49fd-890a-a81d98e41964"
+    },
+    {
+      "event": "St. Petersburg",
+      "sessionType": "Qualifications",
+      "replayId": "060afe99-f6ad-4ce1-b796-7d44e6e4972c"
+    },
+    {
+      "event": "Arlington",
+      "sessionType": "Practice 1",
+      "replayId": "196e71f4-e854-4607-b106-13b2b0a3cefe"
+    },
+    {
+      "event": "Arlington",
+      "sessionType": "Practice 2",
+      "replayId": "31717f23-1e00-474b-8407-9c25757e2625",
+      "validationNote": "on-track capture candidate; no clear checkered state in full frames"
+    },
+    {
+      "event": "Arlington",
+      "sessionType": "Qualifications",
+      "replayId": "4d23a3cb-3c4d-457d-8224-604a1eab2f0d"
+    },
+    {
+      "event": "Barber",
+      "sessionType": "Practice 1",
+      "replayId": "47f9c991-4945-413d-8838-799febc303ec"
+    },
+    {
+      "event": "Barber",
+      "sessionType": "Qualifications",
+      "replayId": "81fbebf1-31f7-4d68-9ce4-774785371154"
+    },
+    {
+      "event": "Indianapolis GP",
+      "sessionType": "Practice 1",
+      "replayId": "97d1fd58-0a0e-49b7-a415-74da97b9b94c"
+    },
+    {
+      "event": "Indianapolis GP",
+      "sessionType": "Qualifications",
+      "replayId": "11667e2a-abf4-4086-97b9-9be913ce0fd4"
+    },
+    {
+      "event": "Detroit",
+      "sessionType": "Practice 1",
+      "replayId": "f66821a2-af0c-454f-a6d1-8e05bb9dbed6"
+    },
+    {
+      "event": "Detroit",
+      "sessionType": "Practice 2",
+      "replayId": "79b44eca-5c97-4f44-b555-2c461eb84240"
+    },
+    {
+      "event": "Detroit",
+      "sessionType": "Qualifications",
+      "replayId": "47f71e87-e239-4710-95be-e39085ed53ea"
+    },
+    {
+      "event": "WWT Raceway",
+      "sessionType": "Practice 1",
+      "replayId": "59e0b35d-22ff-4403-9084-61f7b86e2f9e"
+    },
+    {
+      "event": "WWT Raceway",
+      "sessionType": "Qualifications",
+      "replayId": "7955b89c-7029-4a9f-bea0-769925a47c36",
+      "validationNote": "use this second qualifying-labelled replay; reject dd951383-eb15-4242-a985-96c426ea8ab8"
+    },
+    {
+      "event": "Road America",
+      "sessionType": "Practice 1",
+      "replayId": "6c13b476-3c1f-4ca5-9a8a-b190a1cea0fd"
+    },
+    {
+      "event": "Road America",
+      "sessionType": "Qualifications",
+      "replayId": "3a11cff2-1f80-41b4-b332-66cab2af1e44"
+    },
+    {
+      "event": "Mid-Ohio",
+      "sessionType": "Practice 1",
+      "replayId": "2c825388-353f-4223-8513-d372184d1363"
+    },
+    {
+      "event": "Mid-Ohio",
+      "sessionType": "Qualifications",
+      "replayId": "edfdc884-b347-476f-b354-e77144abcc59"
+    },
+    {
+      "event": "Nashville",
+      "sessionType": "Practice 1",
+      "replayId": "d2d29656-7449-49a2-a444-7b3346bbbce9"
+    },
+    {
+      "event": "Nashville",
+      "sessionType": "Qualifications",
+      "replayId": "d416a374-49d4-4946-a748-ae589db49a8e",
+      "validationNote": "single-car qualifying sequence; no checkered state observed"
+    }
   ],
   "raceReplays": [
-    {"officialSessionId": 6751, "event": "St. Petersburg", "replayId": "a3fdd8d2-ac20-4398-ba8b-6e78fa1c1b1a", "discovery": "nxt_labelled", "maxLap": 42, "checkered": true},
-    {"officialSessionId": 6753, "event": "Arlington", "replayId": "a1cfa8d9-ce92-4424-95b9-e1cec62a7bc3", "discovery": "nxt_labelled", "maxLap": 15, "checkered": true},
-    {"officialSessionId": 6750, "event": "Barber Race 1", "replayId": "1522fa4d-cb20-46fa-8e97-3769480327b8", "discovery": "cross_session_indycar_label", "nxtSegmentStart": 1774717438, "nxtSegmentEnd": 1774722369, "checkeredAt": 1774720496, "maxLap": 35, "checkered": true},
-    {"officialSessionId": 6752, "event": "Barber Race 2", "replayId": "d364ad8e-831f-493e-8549-30e6a05231cb", "discovery": "nxt_labelled", "maxLap": 30, "checkered": true},
-    {"officialSessionId": 6756, "event": "IMS Race 1", "replayId": "323a79f6-8cba-4cd6-bbc0-e1ed1650ae64", "discovery": "cross_session_indycar_label", "nxtSegmentStart": 1778270591, "nxtSegmentEnd": 1778275848, "checkeredAt": 1778274221, "maxLap": 29, "checkered": true},
-    {"officialSessionId": 6765, "event": "IMS Race 2", "replayId": "e17a3b10-889c-40d5-aba7-3c5648d13216", "discovery": "nxt_labelled", "maxLap": 30, "checkered": true},
-    {"officialSessionId": 6749, "event": "Detroit", "replayId": "4b5590b2-499f-424d-9898-e250a0c1a129", "discovery": "nxt_labelled", "maxLap": 42, "checkered": true},
-    {"officialSessionId": 6763, "event": "WWT Raceway", "replayId": "d8efcb85-3eed-4410-b514-714b64f3eb85", "discovery": "nxt_labelled_after_stale_prefix", "maxLap": 75, "checkered": true},
-    {"officialSessionId": 6762, "event": "Road America Race 1", "replayId": "089a8c49-ab69-4f6e-a4e4-c01793d07075", "discovery": "cross_session_indycar_label", "nxtSegmentStart": 1781973204, "nxtSegmentEnd": 1781978128, "checkeredAt": 1781976338, "maxLap": 20, "checkered": true},
-    {"officialSessionId": 6754, "event": "Road America Race 2", "replayId": "5aa5070d-23ff-495d-887c-6f83717b2cc9", "discovery": "nxt_labelled", "maxLap": 18, "checkered": true},
-    {"officialSessionId": 6761, "event": "Mid-Ohio Race 1", "replayId": "88bfc2e9-33d3-44f5-b3ca-98900e65d95e", "discovery": "nxt_labelled", "maxLap": 35, "checkered": true},
-    {"officialSessionId": 6760, "event": "Mid-Ohio Race 2", "replayId": "ed6dcdbd-befc-4136-95c6-e300f761f0ac", "discovery": "nxt_labelled", "maxLap": 30, "checkered": true}
+    {
+      "officialSessionId": 6751,
+      "event": "St. Petersburg",
+      "replayId": "a3fdd8d2-ac20-4398-ba8b-6e78fa1c1b1a",
+      "discovery": "nxt_labelled",
+      "maxLap": 42,
+      "checkered": true
+    },
+    {
+      "officialSessionId": 6753,
+      "event": "Arlington",
+      "replayId": "a1cfa8d9-ce92-4424-95b9-e1cec62a7bc3",
+      "discovery": "nxt_labelled",
+      "maxLap": 15,
+      "checkered": true
+    },
+    {
+      "officialSessionId": 6750,
+      "event": "Barber Race 1",
+      "replayId": "1522fa4d-cb20-46fa-8e97-3769480327b8",
+      "discovery": "cross_session_indycar_label",
+      "nxtSegmentStart": 1774717438,
+      "nxtSegmentEnd": 1774722369,
+      "checkeredAt": 1774720496,
+      "maxLap": 35,
+      "checkered": true
+    },
+    {
+      "officialSessionId": 6752,
+      "event": "Barber Race 2",
+      "replayId": "d364ad8e-831f-493e-8549-30e6a05231cb",
+      "discovery": "nxt_labelled",
+      "maxLap": 30,
+      "checkered": true
+    },
+    {
+      "officialSessionId": 6756,
+      "event": "IMS Race 1",
+      "replayId": "323a79f6-8cba-4cd6-bbc0-e1ed1650ae64",
+      "discovery": "cross_session_indycar_label",
+      "nxtSegmentStart": 1778270591,
+      "nxtSegmentEnd": 1778275848,
+      "checkeredAt": 1778274221,
+      "maxLap": 29,
+      "checkered": true
+    },
+    {
+      "officialSessionId": 6765,
+      "event": "IMS Race 2",
+      "replayId": "e17a3b10-889c-40d5-aba7-3c5648d13216",
+      "discovery": "nxt_labelled",
+      "maxLap": 30,
+      "checkered": true
+    },
+    {
+      "officialSessionId": 6749,
+      "event": "Detroit",
+      "replayId": "4b5590b2-499f-424d-9898-e250a0c1a129",
+      "discovery": "nxt_labelled",
+      "maxLap": 42,
+      "checkered": true
+    },
+    {
+      "officialSessionId": 6763,
+      "event": "WWT Raceway",
+      "replayId": "d8efcb85-3eed-4410-b514-714b64f3eb85",
+      "discovery": "nxt_labelled_after_stale_prefix",
+      "maxLap": 75,
+      "checkered": true
+    },
+    {
+      "officialSessionId": 6762,
+      "event": "Road America Race 1",
+      "replayId": "089a8c49-ab69-4f6e-a4e4-c01793d07075",
+      "discovery": "cross_session_indycar_label",
+      "nxtSegmentStart": 1781973204,
+      "nxtSegmentEnd": 1781978128,
+      "checkeredAt": 1781976338,
+      "maxLap": 20,
+      "checkered": true
+    },
+    {
+      "officialSessionId": 6754,
+      "event": "Road America Race 2",
+      "replayId": "5aa5070d-23ff-495d-887c-6f83717b2cc9",
+      "discovery": "nxt_labelled",
+      "maxLap": 18,
+      "checkered": true
+    },
+    {
+      "officialSessionId": 6761,
+      "event": "Mid-Ohio Race 1",
+      "replayId": "88bfc2e9-33d3-44f5-b3ca-98900e65d95e",
+      "discovery": "nxt_labelled",
+      "maxLap": 35,
+      "checkered": true
+    },
+    {
+      "officialSessionId": 6760,
+      "event": "Mid-Ohio Race 2",
+      "replayId": "ed6dcdbd-befc-4136-95c6-e300f761f0ac",
+      "discovery": "nxt_labelled",
+      "maxLap": 30,
+      "checkered": true
+    },
+    {
+      "officialSessionId": 6755,
+      "event": "Nashville",
+      "replayId": "456f5b2c-e18a-420c-99b1-285a55907a35",
+      "discovery": "nxt_labelled",
+      "maxLap": 65,
+      "checkered": true,
+      "validationNote": "2026-07-21 update: 23-car NXT roster incl. Bryce Aron (No. 9, CGR); 5,678 frames over 6,478s (median gap 1s, max 2s); flags none/green/caution/chequered; max lap 65 matches the official 65-lap result; clean single-session capture, no cross-session trimming needed."
+    }
   ],
   "excludedFalsePositives": [
     {

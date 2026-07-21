@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-18T23:20:00.096Z",
+  "generatedAt": "2026-07-21T23:47:33.133Z",
   "dataRoot": "data/historical-data-lake",
   "contentAddressing": "sha256",
   "files": [
@@ -24369,6 +24369,118 @@
       "provenanceGrade": "reused_download_basename_only"
     },
     {
+      "id": "e33c343546f7b7534b80bb8c",
+      "sourceId": "timing71-analysis",
+      "sourceClass": "third-party derived replay analysis",
+      "kind": "derived_analysis",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-07-18%2021-57%20IndyCar%20-%20Borchetta%20Bourbon%20Music%20City%20Grand%20Prix%20-%20Practice%20Final.json",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/analysis/2026-07-18 21-57 IndyCar - Borchetta Bourbon Music City Grand Prix - Practice Final.json",
+      "metadata": {
+        "replayId": "f71d1601-c882-4946-8d9f-44a4c5f8f604",
+        "description": "Borchetta Bourbon Music City Grand Prix - Practice Final",
+        "startTime": 1784411845,
+        "duration": 3479,
+        "archiveApiUrl": "https://archive.timing71.org/replays/f71d1601-c882-4946-8d9f-44a4c5f8f604"
+      },
+      "bytes": 154262,
+      "sha256": "7f843d5f84e635a77166bcd773da9d0b729ce2ad7d4722b0fdd4398f64fc146c",
+      "objectPath": "raw/objects/sha256/7f/7f843d5f84e635a77166bcd773da9d0b729ce2ad7d4722b0fdd4398f64fc146c.json",
+      "viewPath": "raw/views/timing71/2026/analysis/2026-07-18 21-57 IndyCar - Borchetta Bourbon Music City Grand Prix - Practice Final.json",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-07-21T23:44:03.711Z"
+    },
+    {
+      "id": "41b15b24307dfdcf0410de21",
+      "sourceId": "timing71-analysis",
+      "sourceClass": "third-party derived replay analysis",
+      "kind": "derived_analysis",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-07-18%2022-57%20IndyCar%20-%20Borchetta%20Bourbon%20Music%20City%20Grand%20Prix%20-%20Practice%20Final.json",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/analysis/2026-07-18 22-57 IndyCar - Borchetta Bourbon Music City Grand Prix - Practice Final.json",
+      "metadata": {
+        "replayId": "af1ca01b-2d7a-44c8-a65b-02246cc5bce4",
+        "description": "Borchetta Bourbon Music City Grand Prix - Practice Final",
+        "startTime": 1784415450,
+        "duration": 4377,
+        "archiveApiUrl": "https://archive.timing71.org/replays/af1ca01b-2d7a-44c8-a65b-02246cc5bce4"
+      },
+      "bytes": 270408,
+      "sha256": "7a1e3c6ab90bdaf6f6e4310c32cfd36abe6b753009634af09d5a81c43ad630a7",
+      "objectPath": "raw/objects/sha256/7a/7a1e3c6ab90bdaf6f6e4310c32cfd36abe6b753009634af09d5a81c43ad630a7.json",
+      "viewPath": "raw/views/timing71/2026/analysis/2026-07-18 22-57 IndyCar - Borchetta Bourbon Music City Grand Prix - Practice Final.json",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-07-21T23:44:03.835Z"
+    },
+    {
+      "id": "f0465601bb03549e76186aa3",
+      "sourceId": "timing71-analysis",
+      "sourceClass": "third-party derived replay analysis",
+      "kind": "derived_analysis",
+      "year": 2026,
+      "series": [
+        "INDY_NXT"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-07-19%2017-02%20IndyCar%20-%20INDY%20NXT%20by%20Firestone%20Music%20City%20Grand%20Prix%20-%20Race.json",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/analysis/2026-07-19 17-02 IndyCar - INDY NXT by Firestone Music City Grand Prix - Race.json",
+      "metadata": {
+        "replayId": "456f5b2c-e18a-420c-99b1-285a55907a35",
+        "description": "INDY NXT by Firestone Music City Grand Prix - Race",
+        "startTime": 1784480547,
+        "duration": 6478,
+        "archiveApiUrl": "https://archive.timing71.org/replays/456f5b2c-e18a-420c-99b1-285a55907a35"
+      },
+      "bytes": 166197,
+      "sha256": "15c914a8fa3ee068c0ed490c3ec7c32c6fb5a0a3c7fa4efb19dc1cd6b8260e54",
+      "objectPath": "raw/objects/sha256/15/15c914a8fa3ee068c0ed490c3ec7c32c6fb5a0a3c7fa4efb19dc1cd6b8260e54.json",
+      "viewPath": "raw/views/timing71/2026/analysis/2026-07-19 17-02 IndyCar - INDY NXT by Firestone Music City Grand Prix - Race.json",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-07-21T23:44:04.775Z"
+    },
+    {
+      "id": "c7ccf62b4b1e761dd172b450",
+      "sourceId": "timing71-analysis",
+      "sourceClass": "third-party derived replay analysis",
+      "kind": "derived_analysis",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-07-20%2018-57%20IndyCar%20-%20Borchetta%20Bourbon%20Music%20City%20Grand%20Prix%20-%20Race.json",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/analysis/2026-07-20 18-57 IndyCar - Borchetta Bourbon Music City Grand Prix - Race.json",
+      "metadata": {
+        "replayId": "8b09c2fc-0cc7-4bc7-ab81-f786d1c1a8d2",
+        "description": "Borchetta Bourbon Music City Grand Prix - Race",
+        "startTime": 1784573841,
+        "duration": 11578,
+        "archiveApiUrl": "https://archive.timing71.org/replays/8b09c2fc-0cc7-4bc7-ab81-f786d1c1a8d2"
+      },
+      "bytes": 598060,
+      "sha256": "b4d38d02fa6420f49e2cff724fbc6e68240d88ff7d6eaaafd1efa89d8fc8226b",
+      "objectPath": "raw/objects/sha256/b4/b4d38d02fa6420f49e2cff724fbc6e68240d88ff7d6eaaafd1efa89d8fc8226b.json",
+      "viewPath": "raw/views/timing71/2026/analysis/2026-07-20 18-57 IndyCar - Borchetta Bourbon Music City Grand Prix - Race.json",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-07-21T23:44:04.503Z"
+    },
+    {
       "id": "9060d8cbe3a4d537806c7f19",
       "sourceId": "timing71-replay",
       "sourceClass": "third-party normalized replay of live timing",
@@ -27307,6 +27419,118 @@
       "reusedFrom": "2026-07-18 20-32 IndyCar - INDY NXT by Firestone Music City Grand Prix - Qualifications.zip",
       "acquiredAt": "2026-07-18T23:19:58.116Z",
       "provenanceGrade": "reused_download_basename_only"
+    },
+    {
+      "id": "8d2f28f1a2eded173d9e750f",
+      "sourceId": "timing71-replay",
+      "sourceClass": "third-party normalized replay of live timing",
+      "kind": "normalized_replay",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-07-18%2021-57%20IndyCar%20-%20Borchetta%20Bourbon%20Music%20City%20Grand%20Prix%20-%20Practice%20Final.zip",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/replays/2026-07-18 21-57 IndyCar - Borchetta Bourbon Music City Grand Prix - Practice Final.zip",
+      "metadata": {
+        "replayId": "f71d1601-c882-4946-8d9f-44a4c5f8f604",
+        "description": "Borchetta Bourbon Music City Grand Prix - Practice Final",
+        "startTime": 1784411845,
+        "duration": 3479,
+        "archiveApiUrl": "https://archive.timing71.org/replays/f71d1601-c882-4946-8d9f-44a4c5f8f604"
+      },
+      "bytes": 1588702,
+      "sha256": "c8bfd4ebaf555c62e6bf55c3c8851023b1dfffecdf15964cd77e39e4fd60f930",
+      "objectPath": "raw/objects/sha256/c8/c8bfd4ebaf555c62e6bf55c3c8851023b1dfffecdf15964cd77e39e4fd60f930.zip",
+      "viewPath": "raw/views/timing71/2026/replays/2026-07-18 21-57 IndyCar - Borchetta Bourbon Music City Grand Prix - Practice Final.zip",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-07-21T23:44:05.626Z"
+    },
+    {
+      "id": "b917bd2b15a2984ebf6796e3",
+      "sourceId": "timing71-replay",
+      "sourceClass": "third-party normalized replay of live timing",
+      "kind": "normalized_replay",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-07-18%2022-57%20IndyCar%20-%20Borchetta%20Bourbon%20Music%20City%20Grand%20Prix%20-%20Practice%20Final.zip",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/replays/2026-07-18 22-57 IndyCar - Borchetta Bourbon Music City Grand Prix - Practice Final.zip",
+      "metadata": {
+        "replayId": "af1ca01b-2d7a-44c8-a65b-02246cc5bce4",
+        "description": "Borchetta Bourbon Music City Grand Prix - Practice Final",
+        "startTime": 1784415450,
+        "duration": 4377,
+        "archiveApiUrl": "https://archive.timing71.org/replays/af1ca01b-2d7a-44c8-a65b-02246cc5bce4"
+      },
+      "bytes": 2198329,
+      "sha256": "e1f075b58f842e0f0691bae1f4d50efbe827a2b496eaca4e1b3fa245acc45b21",
+      "objectPath": "raw/objects/sha256/e1/e1f075b58f842e0f0691bae1f4d50efbe827a2b496eaca4e1b3fa245acc45b21.zip",
+      "viewPath": "raw/views/timing71/2026/replays/2026-07-18 22-57 IndyCar - Borchetta Bourbon Music City Grand Prix - Practice Final.zip",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-07-21T23:44:05.593Z"
+    },
+    {
+      "id": "fc1eb1824f9f63c829a05da3",
+      "sourceId": "timing71-replay",
+      "sourceClass": "third-party normalized replay of live timing",
+      "kind": "normalized_replay",
+      "year": 2026,
+      "series": [
+        "INDY_NXT"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-07-19%2017-02%20IndyCar%20-%20INDY%20NXT%20by%20Firestone%20Music%20City%20Grand%20Prix%20-%20Race.zip",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/replays/2026-07-19 17-02 IndyCar - INDY NXT by Firestone Music City Grand Prix - Race.zip",
+      "metadata": {
+        "replayId": "456f5b2c-e18a-420c-99b1-285a55907a35",
+        "description": "INDY NXT by Firestone Music City Grand Prix - Race",
+        "startTime": 1784480547,
+        "duration": 6478,
+        "archiveApiUrl": "https://archive.timing71.org/replays/456f5b2c-e18a-420c-99b1-285a55907a35"
+      },
+      "bytes": 2681521,
+      "sha256": "49172f48a18d2982532026e8f5eb5d0dc5ed23442c8758c1691fe4dd9558225c",
+      "objectPath": "raw/objects/sha256/49/49172f48a18d2982532026e8f5eb5d0dc5ed23442c8758c1691fe4dd9558225c.zip",
+      "viewPath": "raw/views/timing71/2026/replays/2026-07-19 17-02 IndyCar - INDY NXT by Firestone Music City Grand Prix - Race.zip",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-07-21T23:44:06.333Z"
+    },
+    {
+      "id": "c604a164d78e4056b20272f0",
+      "sourceId": "timing71-replay",
+      "sourceClass": "third-party normalized replay of live timing",
+      "kind": "normalized_replay",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-07-20%2018-57%20IndyCar%20-%20Borchetta%20Bourbon%20Music%20City%20Grand%20Prix%20-%20Race.zip",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/replays/2026-07-20 18-57 IndyCar - Borchetta Bourbon Music City Grand Prix - Race.zip",
+      "metadata": {
+        "replayId": "8b09c2fc-0cc7-4bc7-ab81-f786d1c1a8d2",
+        "description": "Borchetta Bourbon Music City Grand Prix - Race",
+        "startTime": 1784573841,
+        "duration": 11578,
+        "archiveApiUrl": "https://archive.timing71.org/replays/8b09c2fc-0cc7-4bc7-ab81-f786d1c1a8d2"
+      },
+      "bytes": 5528047,
+      "sha256": "e1ebd542df3abe881ab1a4a10f8fb7381bb258d4b521eb50cbeb82fef5904b23",
+      "objectPath": "raw/objects/sha256/e1/e1ebd542df3abe881ab1a4a10f8fb7381bb258d4b521eb50cbeb82fef5904b23.zip",
+      "viewPath": "raw/views/timing71/2026/replays/2026-07-20 18-57 IndyCar - Borchetta Bourbon Music City Grand Prix - Race.zip",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-07-21T23:47:33.133Z"
     }
   ]
 }

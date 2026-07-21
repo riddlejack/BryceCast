@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-18T23:24:45.521Z",
-  "sourceFileCount": 1046,
-  "sessionCount": 5258,
+  "generatedAt": "2026-07-21T23:49:27.297Z",
+  "sourceFileCount": 1054,
+  "sessionCount": 5262,
   "mapArchiveCount": 39,
   "counts": {
     "2008:RaceTools:racetools_raw_replay:unknown:race": 1,
@@ -259,10 +259,10 @@
     "2025:Timing71:timing71_full_incremental_state:INDYCAR:race": 21,
     "2025:Timing71:timing71_full_incremental_state:INDY_NXT:test": 1,
     "2026:Timing71:timing71_full_incremental_state:INDY_NXT:practice": 11,
-    "2026:Timing71:timing71_full_incremental_state:INDYCAR:practice": 42,
+    "2026:Timing71:timing71_full_incremental_state:INDYCAR:practice": 44,
     "2026:Timing71:timing71_full_incremental_state:INDY_NXT:qualifying": 11,
-    "2026:Timing71:timing71_full_incremental_state:INDY_NXT:race": 13,
-    "2026:Timing71:timing71_full_incremental_state:INDYCAR:race": 11,
+    "2026:Timing71:timing71_full_incremental_state:INDY_NXT:race": 14,
+    "2026:Timing71:timing71_full_incremental_state:INDYCAR:race": 12,
     "2026:Timing71:timing71_full_incremental_state:INDYCAR:qualifying": 13,
     "2026:Timing71:timing71_full_incremental_state:INDYCAR:test": 4
   },

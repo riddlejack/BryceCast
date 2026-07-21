@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-20T17:52:49Z",
+  "generatedAt": "2026-07-21T23:54:47Z",
   "methodology": {
     "claimPolicy": "Use source-bounded historical prior bands, paths, and analog races. Do not publish point predictions from this sample.",
     "promotionPolicy": "Product prediction requires out-of-sample lift over the relevant naive baseline and no leakage.",

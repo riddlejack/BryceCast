@@ -1,17 +1,17 @@
 {
   "artifact": "replay-feeds-manifest",
-  "generatedAt": "2026-07-19T14:49:55.731Z",
+  "generatedAt": "2026-07-21T23:54:07.175Z",
   "note": "Lake-fed replay feeds for the Time Machine. Every session is source-tiered and validated; failing sessions are excluded from available() with the reason recorded. Classification/final order shown is as-raced (the honesty line at the checkered); canonical is the validation reference.",
   "clockCaveat": "RaceTools feeds carry a session-local virtual clock (seconds-of-day on the session date, labelled Z) — correct year/date, NOT UTC-accurate; the replay uses it only as a relative virtual clock. Timing71 feeds carry real UTC epoch timestamps.",
   "scope": {
     "racetools_2024_25_races": 28,
-    "timing71_2026_races": 12,
+    "timing71_2026_races": 13,
     "practiceQualifyingShipped": 0,
     "practiceQualifyingNote": "Practice/qualifying (slice c) intentionally not shipped: a validated race subset over an unvalidated sweep."
   },
   "counts": {
-    "reduced": 40,
-    "watchable": 40,
+    "reduced": 41,
+    "watchable": 41,
     "excluded": 0
   },
   "tierLabels": {
@@ -206,7 +206,7 @@
           "22",
           "14"
         ],
-        "lapCountWithin1": "18/21",
+        "lapCountWithin1": "21/21",
         "flags": {
           "startsGreen": true,
           "endsCheckered": true,
@@ -341,7 +341,7 @@
           "27",
           "75"
         ],
-        "lapCountWithin1": "19/21",
+        "lapCountWithin1": "20/21",
         "flags": {
           "startsGreen": true,
           "endsCheckered": true,
@@ -544,7 +544,7 @@
           "29",
           "23"
         ],
-        "lapCountWithin1": "19/20",
+        "lapCountWithin1": "20/20",
         "flags": {
           "startsGreen": true,
           "endsCheckered": true,
@@ -740,7 +740,7 @@
           "99",
           "40"
         ],
-        "lapCountWithin1": "16/17",
+        "lapCountWithin1": "18/18",
         "flags": {
           "startsGreen": true,
           "endsCheckered": true,
@@ -869,7 +869,7 @@
           "10",
           "55"
         ],
-        "lapCountWithin1": "15/16",
+        "lapCountWithin1": "16/16",
         "flags": {
           "startsGreen": true,
           "endsCheckered": true,
@@ -934,7 +934,7 @@
           "28",
           "55"
         ],
-        "lapCountWithin1": "15/18",
+        "lapCountWithin1": "18/18",
         "flags": {
           "startsGreen": true,
           "endsCheckered": true,
@@ -1002,7 +1002,7 @@
           "29",
           "10"
         ],
-        "lapCountWithin1": "18/20",
+        "lapCountWithin1": "21/21",
         "flags": {
           "startsGreen": true,
           "endsCheckered": true,
@@ -1069,7 +1069,7 @@
           "76",
           "11"
         ],
-        "lapCountWithin1": "19/20",
+        "lapCountWithin1": "20/20",
         "flags": {
           "startsGreen": true,
           "endsCheckered": true,
@@ -1137,7 +1137,7 @@
           "18",
           "39"
         ],
-        "lapCountWithin1": "20/21",
+        "lapCountWithin1": "21/21",
         "flags": {
           "startsGreen": true,
           "endsCheckered": true,
@@ -1205,7 +1205,7 @@
           "11",
           "16"
         ],
-        "lapCountWithin1": "20/21",
+        "lapCountWithin1": "21/21",
         "flags": {
           "startsGreen": true,
           "endsCheckered": true,
@@ -1272,7 +1272,7 @@
           "18",
           "3"
         ],
-        "lapCountWithin1": "7/18",
+        "lapCountWithin1": "18/18",
         "flags": {
           "startsGreen": true,
           "endsCheckered": true,
@@ -1469,7 +1469,7 @@
           "2",
           "3"
         ],
-        "lapCountWithin1": "18/19",
+        "lapCountWithin1": "19/19",
         "flags": {
           "startsGreen": true,
           "endsCheckered": true,
@@ -1602,7 +1602,7 @@
           "48",
           "27"
         ],
-        "lapCountWithin1": "16/17",
+        "lapCountWithin1": "17/17",
         "flags": {
           "startsGreen": true,
           "endsCheckered": true,
@@ -1668,7 +1668,7 @@
           "30",
           "9"
         ],
-        "lapCountWithin1": "15/18",
+        "lapCountWithin1": "18/18",
         "flags": {
           "startsGreen": true,
           "endsCheckered": true,
@@ -1864,7 +1864,7 @@
           "16",
           "17"
         ],
-        "lapCountWithin1": "17/18",
+        "lapCountWithin1": "18/18",
         "flags": {
           "startsGreen": true,
           "endsCheckered": true,
@@ -2961,6 +2961,133 @@
             "57",
             "11",
             "75"
+          ]
+        }
+      },
+      "excludedFromAvailable": false,
+      "watchable": true
+    },
+    {
+      "id": "t71_2026_nashville_race_2026-07-19",
+      "canonicalSessionId": "session_indy_nxt_2026_6755",
+      "sessionKey": "session_indy_nxt_2026_6755",
+      "eventSessionId": "6755",
+      "seasonYear": 2026,
+      "sourceTier": "timing71_normalized",
+      "tierLabel": "third-party normalized (Timing71)",
+      "verdict": "GO",
+      "venue": "Nashville",
+      "sessionName": "Race",
+      "eventName": "Nashville",
+      "date": "2026-07-19",
+      "totalLaps": 65,
+      "samples": 2040,
+      "bryceSamples": 2040,
+      "firstCheckedAt": "2026-07-19T17:05:46.000Z",
+      "lastCheckedAt": "2026-07-19T17:39:45.000Z",
+      "firstGreenAt": "2026-07-19T17:05:14.000Z",
+      "durationSeconds": 2039,
+      "validation": {
+        "winner": "20",
+        "canonicalWinnerMatch": true,
+        "canonicalPositionExact": "23/23",
+        "podium": [
+          "20",
+          "21",
+          "99"
+        ],
+        "finalOrder": [
+          "20",
+          "21",
+          "99",
+          "12",
+          "28",
+          "29",
+          "26",
+          "45",
+          "14",
+          "9",
+          "67",
+          "17",
+          "27",
+          "75",
+          "15",
+          "8",
+          "4",
+          "71",
+          "57",
+          "11",
+          "10",
+          "48",
+          "68"
+        ],
+        "flags": {
+          "startsGreen": true,
+          "endsCheckered": true,
+          "states": [
+            "GREEN",
+            "YELLOW",
+            "CHECKERED"
+          ],
+          "ok": true
+        },
+        "asRacedVsCanonical": "match",
+        "twoSource": {
+          "captureSessionKey": "5538-6755",
+          "captureSnapshots": 2744,
+          "thinCapture": false,
+          "checked": 23,
+          "agree": 23,
+          "agreementFraction": 1,
+          "captureFinalOrder": [
+            "20",
+            "21",
+            "99",
+            "12",
+            "28",
+            "29",
+            "26",
+            "45",
+            "14",
+            "9",
+            "67",
+            "17",
+            "27",
+            "75",
+            "15",
+            "8",
+            "4",
+            "71",
+            "57",
+            "11",
+            "10",
+            "48",
+            "68"
+          ],
+          "reducedFinalOrder": [
+            "20",
+            "21",
+            "99",
+            "12",
+            "28",
+            "29",
+            "26",
+            "45",
+            "14",
+            "9",
+            "67",
+            "17",
+            "27",
+            "75",
+            "15",
+            "8",
+            "4",
+            "71",
+            "57",
+            "11",
+            "10",
+            "48",
+            "68"
           ]
         }
       },

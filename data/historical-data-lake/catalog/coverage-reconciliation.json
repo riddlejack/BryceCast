@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-19T02:13:06.697Z",
+  "generatedAt": "2026-07-21T23:50:14.387Z",
   "throughDate": "2026-07-18",
   "method": "Reconcile the lake high-frequency coverage matrix against the canonical career dataset (the official session list). Canonical INDY NXT practice/qualifying/race sessions are collapsed to physical (event, date, type) sessions and matched to a lake capture by exact date and type, with a ±1-day fallback. This is official-schedule reconciliation, not source-index self-consistency.",
   "canonical": {
