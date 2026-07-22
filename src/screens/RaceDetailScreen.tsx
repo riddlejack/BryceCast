@@ -1364,7 +1364,14 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
           passMarks={passMarks}
           priorComparison={validPriorComparison(visitPacks, sessionId, sectionAnchors)}
         />
-      ) : null}
+      ) : (
+        /* No geometric anchors yet (IMS awaits the correct 2.44-mi map; St.
+           Pete's outline is honestly approximate): the same section numbers
+           render as the table, IN THE SAME SLOT the heat map occupies on
+           anchored pages — sections always follow the lap chart, whatever
+           their form (Jack's page-to-page consistency review, 2026-07-21). */
+        story ? <SectionStory story={story} /> : null
+      )}
 
       {outline && sectionAnchors ? <VenueYearsCard outline={outline} anchors={sectionAnchors} visits={visitPacks} /> : null}
 
@@ -1373,19 +1380,8 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
       {story ? <RestartsCard story={story} /> : null}
 
       {/* Where the heat card renders, the section table retires INTO its
-          drawer (director ruling, 2026-07-18): same numbers, richer form.
-          Venues without a heat card keep the table — the handoff is per-page
-          and automatic as venues gain anchors. */}
-      {story ? (
-        outline && sectionAnchors ? (
-          <TeamStory story={story} />
-        ) : (
-          <div className="grid grid--2">
-            <TeamStory story={story} />
-            <SectionStory story={story} />
-          </div>
-        )
-      ) : null}
+          drawer (director ruling, 2026-07-18): same numbers, richer form. */}
+      {story ? <TeamStory story={story} /> : null}
 
       {/* The footer claim is built from the sources the page's VISIBLE modules
           actually cite (finding #19): official results + lap chart always; section
