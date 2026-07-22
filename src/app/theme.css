@@ -668,6 +668,7 @@ button { font-family: inherit; }
 
 .hero-now__art {
   display: flex;
+  flex-direction: column; /* art above its "shaded by …" caption, never beside */
   align-items: center;
   justify-content: center;
   min-height: 176px;

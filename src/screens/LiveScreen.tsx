@@ -1189,10 +1189,15 @@ const WaitingState = ({ payload }: { payload: LiveReadiness }) => {
    * event/location — "Detroit" is a place, not a series. Unknown → drop the claim
    * rather than mislabel it (finding #22). */
   const timingEndpoints = ((payload.sources as Record<string, unknown> | undefined)?.endpoints as Array<Row> | undefined) ?? [];
-  const seriesOnTrack =
+  const rawSeriesOnTrack =
     payload.state === 'wrong_series'
       ? asString(timingEndpoints.find((endpoint) => asString(endpoint.role) === 'primary_timing')?.series)
       : null;
+  /* The endpoint's series field can be a machine identifier (the fallback
+   * endpoint descriptor carries 'global_active_session'). Family copy never
+   * prints an identifier — snake_case means unknown, and unknown drops the
+   * claim (finding #22's own rule; leak caught 2026-07-21). */
+  const seriesOnTrack = rawSeriesOnTrack && !rawSeriesOnTrack.includes('_') ? rawSeriesOnTrack : null;
   return (
     <HeroPanel>
       <div className="row row--between" style={{ alignItems: 'flex-start' }}>

@@ -10,9 +10,12 @@ import { normalizedName, useNextSession } from '../app/useNextSession';
 import { uiDataPackage } from '../data/uiDataPackage';
 import { trackOutlineFor } from '../assets/tracks';
 import { getVenueByTrackName } from '../data/venueDossier';
-import { daysUntil, getNextEvent, raceDayOf, type UpcomingPrepEvent } from '../data/upcoming';
+import { daysUntil, getNextEvent, getStandingsSnapshot, raceDayOf, type UpcomingPrepEvent } from '../data/upcoming';
 import { chronoCompare, displayRaceLabel, loadDebriefArchive, type ArchiveEntry } from '../data/debriefArchive';
 import { TrackArt } from '../app/trackArt';
+import { useVenueSectionData } from './sectionIntelligence';
+import { ReplayAffordance, useReplayCatalog } from './replayAffordance';
+import { replayProvenance, watchableCaptureForRace } from '../data/replayAvailable';
 
 type Row = Record<string, unknown>;
 
@@ -100,6 +103,12 @@ const HomeHero = ({
   const venueEvent = nextEvent;
   const venueName = venueEvent?.trackName ?? (latest ? asString((latest.pack.track as Row | undefined)?.name) : null);
   const outline = trackOutlineFor(venueName);
+  /* The venue's section heat lights the hero shape — the same data-bearing
+   * most-recent-visit shading (and the same loaders) the Race Week hero uses,
+   * so the landing page carries the analytical read, not a bare outline
+   * (Jack's review, 2026-07-21). */
+  const venueSections = useVenueSectionData(venueName);
+  const heroHeat = venueSections.heroHeat.length > 0 ? { resolved: venueSections.heroHeat, showLabels: false } : null;
   /* Same near-track weather hook the Race Week hero and weather window read, so
    * the "now" wind pill can never disagree between pages (one source of truth).
    * Only the current reading is needed here — no race-hour sessions. Calm air
@@ -171,7 +180,12 @@ const HomeHero = ({
         </div>
 
         <div className="hero-now__art">
-          {outline ? <TrackArt outline={outline} maxHeight={200} wind={imminent ? wind : null} /> : null}
+          {outline ? <TrackArt outline={outline} maxHeight={200} wind={imminent ? wind : null} sections={heroHeat} /> : null}
+          {heroHeat && venueSections.mostRecent?.seasonYear ? (
+            <p className="caption caption--secondary" style={{ margin: '8px 0 0', textAlign: 'center' }}>
+              shaded by his {venueSections.mostRecent.seasonYear} pace here
+            </p>
+          ) : null}
         </div>
 
         <div className="hero-now__foot">
@@ -350,9 +364,26 @@ const SeasonSparkline = ({ season }: { season: ArchiveEntry[] }) => {
   );
 };
 
+/** The chase, in one sentence: the nearest rival up the road (and how close),
+ *  from the same standings snapshot Race Week's points picture reads. Silent
+ *  when the snapshot is unavailable — never an empty frame. */
+const chaseLine = (): string | null => {
+  const snapshot = getStandingsSnapshot();
+  if (!snapshot.available) return null;
+  const bryce = snapshot.entries.find((entry) => entry.isBryce);
+  if (!bryce) return null;
+  const ahead = snapshot.entries
+    .filter((entry) => !entry.isBryce && entry.points > bryce.points)
+    .sort((a, b) => a.points - b.points)[0];
+  if (!ahead) return null;
+  const gap = ahead.points - bryce.points;
+  return `${ahead.driverName} is ${gap} point${gap === 1 ? '' : 's'} up the road.`;
+};
+
 const SeasonSoFar = ({ season }: { season: ArchiveEntry[] }) => {
   const standing = getSeasonStanding();
   const hasEarlyEnd = season.some((entry) => endedEarly(entry.pack.sessionId));
+  const chase = chaseLine();
   return (
     <Card
       title={
@@ -373,6 +404,9 @@ const SeasonSoFar = ({ season }: { season: ArchiveEntry[] }) => {
         <Stat label="Top 10s" value={standing.top10 ?? '—'} />
         <Stat label="Best finish" value={standing.bestFinish !== null ? `P${standing.bestFinish}` : '—'} />
       </div>
+      {chase ? (
+        <p style={{ margin: '12px 0 0', fontSize: 13, color: 'var(--ink-secondary)' }}>{chase}</p>
+      ) : null}
       {season.length >= 2 ? (
         <div style={{ marginTop: 18 }}>
           <span className="caption">
@@ -384,6 +418,34 @@ const SeasonSoFar = ({ season }: { season: ArchiveEntry[] }) => {
         </div>
       ) : null}
     </Card>
+  );
+};
+
+/* ---------- watch the last race unfold (the time machine, surfaced) ----------
+ * The replay is the site's most-loved depth — the landing page now offers it
+ * directly for the most recent race, through the exact affordance the race
+ * pages use (same provenance drawer, same Live-page playback, no new surface).
+ * Renders nothing when replay is off or the race has no watchable capture. */
+
+const WatchLastRace = ({ latest }: { latest: ArchiveEntry | null }) => {
+  const catalog = useReplayCatalog();
+  if (!latest || !catalog) return null;
+  const capture = watchableCaptureForRace(catalog, latest.pack.sessionId);
+  if (!capture) return null;
+  const isOwnCapture = replayProvenance(capture).tier === 'brycecast_capture';
+  return (
+    <section className="race-replay" aria-label="Watch the last race unfold">
+      <ReplayAffordance
+        capture={capture}
+        fromSessionId={latest.pack.sessionId}
+        title={`Watch ${displayRaceLabel(latest.pack)} unfold`}
+        copy={
+          isOwnCapture
+            ? 'Every second of the last race, replayed as it happened, from our own trackside capture.'
+            : 'Every second of the last race, reconstructed from a third-party timing archive and replayed as it happened.'
+        }
+      />
+    </section>
   );
 };
 
@@ -457,6 +519,9 @@ export const HomeScreen = ({ readiness }: { readiness: ReadinessStatus }) => {
           <SeasonSoFar season={season} />
         </Reveal>
       </div>
+      <Reveal delay={80}>
+        <WatchLastRace latest={latest} />
+      </Reveal>
       <Reveal delay={90}>
         <CareerStrip />
       </Reveal>
