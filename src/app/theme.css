@@ -589,6 +589,28 @@ button { font-family: inherit; }
   border-bottom: 1px solid var(--divider);
 }
 .dossier-col:last-child { border-bottom: none; }
+/* Wide screens: the visits sit side by side — 2024 left, 2025 right — divided
+ * by a hairline, so the module takes one block's height instead of a stack
+ * of them (Jack's review, 2026-07-21). Phones keep the stacked read. */
+@media (min-width: 640px) {
+  .dossier-grid {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    column-gap: 0;
+  }
+  .dossier-col {
+    border-bottom: none;
+    margin: 0;
+    padding: 2px 16px;
+    border-left: 1px solid var(--divider);
+  }
+  .dossier-col:first-child {
+    border-left: none;
+    padding-left: 0;
+  }
+  .dossier-col:last-child { padding-right: 0; }
+}
 .dossier-col--link {
   display: block;
   color: inherit;

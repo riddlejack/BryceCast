@@ -802,12 +802,20 @@ export interface VenueSectionData {
    *  means an opening-lap ending — the suite states why with dignity instead of
    *  a bare zero-comparison count. */
   lapsCompletedBySession: Map<string, number | null>;
-  /** The most recent visit (the heat card's default + the hero's shading). */
+  /** The most recent visit that carries clean-lap comparisons (the heat card's
+   *  default + the hero's shading); falls back to the plain newest visit only
+   *  when no visit here has data. */
   mostRecent: SectionLapsPack | null;
   /** The most recent visit's full-race median heat, resolved for the hero's
    *  compact (no-labels) shading. Empty when the venue has no anchors/packs. */
   heroHeat: ResolvedHeatSection[];
 }
+
+/** True when a pack holds at least one clean lap with a real field percentile —
+ *  the "does this visit have anything to shade" test. Tuple order:
+ *  [lap, fieldPercentile, fieldRank, fieldComparisonCount, clean, caution, …]. */
+const packHasCleanComparisons = (pack: SectionLapsPack): boolean =>
+  pack.sections.some((section) => section.laps.some((lap) => lap[4] === 1 && lap[1] !== null));
 
 /** Load a venue's section packs + pass marks and resolve its anchor set — the
  *  data behind both the Race Week hero shading and the section suite. Keyed on
@@ -867,7 +875,12 @@ export const useVenueSectionData = (trackName: string | null | undefined): Venue
      * against a PDF-tier pack. Nashville: both visits measured. */
     const allMeasured = visits.length > 0 && visits.every((visit) => visit.sourceTier === 'lake_loop_crossings');
     const anchors = (allMeasured ? measuredTrackSectionsFor(trackName) : null) ?? pdfAnchors;
-    const mostRecent = visits.length > 0 ? visits[visits.length - 1] : null;
+    /* The default (and the hero shading) is the most recent visit that CARRIES
+     * clean-lap comparisons — a visit that ended on the opening lap (Portland
+     * 2025) stays reachable through the year toggle but never greets the reader
+     * with an empty shape (Jack's review, 2026-07-21). */
+    const newestWithData = [...visits].reverse().find(packHasCleanComparisons) ?? null;
+    const mostRecent = newestWithData ?? (visits.length > 0 ? visits[visits.length - 1] : null);
     const heroHeat =
       anchors && mostRecent ? resolveHeatSections(anchors, sectionObservationsFromLaps(mostRecent)) : [];
     return { loading, anchors, visits, passMarksBySession, lapsCompletedBySession, mostRecent, heroHeat };
@@ -916,15 +929,17 @@ export const VenueSectionSuite = ({
     }
   }
   const selectedLabel = labelFor.get(selected.sessionId) ?? String(selected.seasonYear ?? '');
-  /* Newest-first toggle (2025 · 2024): visits are oldest-first, so reverse. */
-  const yearOptions = [...visits]
-    .reverse()
-    .map((visit) => ({ value: visit.sessionId, label: labelFor.get(visit.sessionId) ?? String(visit.seasonYear ?? '—') }));
-  /* Orientation names the OTHER distinct years, newest-first — "toggle for 2024"
-   * on a two-visit venue; a double-header lists its distinct other years. */
+  /* Chronological toggle (2024 · 2025): visits arrive oldest-first and stay
+   * that way, so the control reads left-to-right through time (Jack's review,
+   * 2026-07-21 — was newest-first). */
+  const yearOptions = visits.map((visit) => ({
+    value: visit.sessionId,
+    label: labelFor.get(visit.sessionId) ?? String(visit.seasonYear ?? '—')
+  }));
+  /* Orientation names the OTHER distinct years, in the toggle's own order. */
   const otherYears = [...new Set(visits.map((visit) => visit.seasonYear).filter((year): year is number => year !== null))]
     .filter((year) => year !== selected.seasonYear)
-    .sort((left, right) => right - left);
+    .sort((left, right) => left - right);
   const orientationClause = `His ${selectedLabel} race here, section by section${
     multi && otherYears.length > 0 ? ` — toggle for ${otherYears.join(' · ')}` : ''
   }.`;

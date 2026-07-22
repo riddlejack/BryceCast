@@ -403,7 +403,10 @@ const RemainingSeason = ({
       </p>
     </div>
     <div className="tower race-upcoming__list" style={{ margin: '4px -12px 0' }}>
-      {rounds.map((round) => (
+      {/* Latest first, like every list on this page: the whole archive reads as
+          one timeline running down into the past, so the season finale sits at
+          the top and the next race sits right above the most recent result. */}
+      {[...rounds].reverse().map((round) => (
         <UpcomingRaceRow key={round.eventId} round={round} live={liveArchiveUpgradeFor(round.eventId, livePayload)} />
       ))}
     </div>
@@ -503,12 +506,15 @@ export const RacesScreen = ({ livePayload = null }: { livePayload?: LiveReadines
               </span>
             }
           >
-            {remaining.length > 0 ? <RemainingSeason season={season} rounds={remaining} livePayload={livePayload} /> : null}
+            {/* The season's shape leads the card; the rounds still to run sit
+                between it and the completed rows, so the whole card reads as
+                one timeline — future at the top, past running down. */}
             <p className="caption caption--secondary" style={{ margin: '0 0 8px' }}>
               Gold marks a top-5 finish · ○ a day that ended early · the quiet line is his championship position · click any
               round
             </p>
             <SeasonSpine rows={rows} />
+            {remaining.length > 0 ? <RemainingSeason season={season} rounds={remaining} livePayload={livePayload} /> : null}
             <div className="tower" style={{ margin: '10px -12px 0' }}>
               {[...rows].reverse().map((row) => (
                 <RaceRow key={row.sessionId} row={row} />
