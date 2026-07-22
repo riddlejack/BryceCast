@@ -1398,14 +1398,63 @@ export const CareerRestarts = () => {
             }}
             style={{ cursor: hovered !== null ? 'pointer' : 'default' }}
           >
-            {/* The even line = the field's typical restart outcome (median ≈ 0). */}
-            <line x1={margin.left} x2={width - margin.right} y1={y(0)} y2={y(0)} stroke="var(--ink-primary)" strokeWidth={1} strokeDasharray="2 3" opacity={0.5} />
-            <text x={width - margin.right} y={y(0) - 6} textAnchor="end" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={10.5}>
-              even
+            {/* A quiet scale so the dots aren't floating: one hairline + label
+                per whole position, "even" on the field's typical line
+                (Jack's review, 2026-07-21). */}
+            {Array.from({ length: maxNet - minNet + 1 }, (_, i) => minNet + i).map((net) => (
+              <g key={net}>
+                <line
+                  x1={margin.left}
+                  x2={width - margin.right}
+                  y1={y(net)}
+                  y2={y(net)}
+                  stroke={net === 0 ? 'var(--ink-primary)' : 'var(--grid-hairline)'}
+                  strokeWidth={1}
+                  strokeDasharray={net === 0 ? '2 3' : undefined}
+                  opacity={net === 0 ? 0.5 : 1}
+                />
+                <text
+                  x={margin.left - 8}
+                  y={y(net) + 3.5}
+                  textAnchor="end"
+                  fill="var(--ink-muted)"
+                  fontFamily={chartFont}
+                  fontSize={10.5}
+                >
+                  {net === 0 ? 'even' : net > 0 ? `+${net}` : `−${Math.abs(net)}`}
+                </text>
+              </g>
+            ))}
+            <text x={margin.left - 8} y={margin.top - 12} textAnchor="end" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={10.5}>
+              net
             </text>
-            <text x={4} y={margin.top - 12} textAnchor="start" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={10.5}>
-              ground made up
-            </text>
+
+            {/* Season labels orient the x-axis: each year centered under its
+                span of race days. */}
+            {(() => {
+              const groups: Array<{ year: number; from: number; to: number }> = [];
+              races.forEach((row, index) => {
+                const year = row.seasonYear ?? 0;
+                const last = groups[groups.length - 1];
+                if (last && last.year === year) last.to = index;
+                else groups.push({ year, from: index, to: index });
+              });
+              return groups
+                .filter((group) => group.year > 0)
+                .map((group) => (
+                  <text
+                    key={`${group.year}-${group.from}`}
+                    x={(x(group.from) + x(group.to)) / 2}
+                    y={height - 8}
+                    textAnchor="middle"
+                    fill="var(--ink-muted)"
+                    fontFamily={chartFont}
+                    fontSize={10.5}
+                  >
+                    {group.year}
+                  </text>
+                ));
+            })()}
 
             {races.map((row, index) => {
               const net = row.bryceNet ?? 0;
@@ -1509,7 +1558,7 @@ export const QualiConversion = () => {
   const maxCount = Math.max(1, ...rows.map((row) => Math.max(row.finishedAhead, row.finishedBehind)));
   const scale = halfSpan / maxCount;
   const rowY = (index: number) => margin.top + index * 40 + 12;
-  const barH = 15;
+  const barH = 9;
 
   const clearHover = () => {
     setHovered(null);
@@ -1597,8 +1646,8 @@ export const QualiConversion = () => {
       </div>
 
       <p className="caption caption--secondary" style={{ margin: '0 0 8px' }}>
-        One lane per chapter · the bar leans right for races he finished ahead of his grid slot, left for ground given back · length
-        by how many races · the count at each end, the chapter total on the right
+        One lane per chapter · gold leans right for races he finished ahead of his grid slot, quiet ink leans left for ground
+        given back · length by how many races · the count at each end, the chapter total on the right
       </p>
       <div ref={ref} style={{ width: '100%', position: 'relative' }}>
         {width > 0 ? (
@@ -1637,31 +1686,33 @@ export const QualiConversion = () => {
               const behindW = row.finishedBehind * scale;
               return (
                 <g key={row.seriesId} opacity={focused ? 1 : 0.35} style={{ transition: 'opacity 150ms ease' }}>
-                  {/* series identity: tint dot + short name */}
-                  <circle cx={12} cy={y} r={4} fill={tint} />
+                  {/* series identity: the chapter tint stays a small key dot —
+                      the bars themselves speak the house ink↔gold language
+                      (Jack's review, 2026-07-21: tint-filled bars read off-family). */}
+                  <circle cx={12} cy={y} r={3.5} fill={tint} />
                   <text x={24} y={y + 3.5} textAnchor="start" fill="var(--ink-primary)" fontFamily={chartFont} fontSize={12}>
                     {seriesShort(row.seriesName)}
                   </text>
-                  {/* gave ground: left, solid neutral ink-muted (magnitude by length,
-                      not a second hue) — reads at 390px where 0.16 ink washed out */}
+                  {/* gave ground: left, quiet ink — magnitude by length only */}
                   {row.finishedBehind > 0 ? (
-                    <rect x={centerX - behindW} y={y - barH / 2} width={behindW} height={barH} rx={2} fill="var(--ink-muted)" />
+                    <rect x={centerX - behindW} y={y - barH / 2} width={behindW} height={barH} rx={barH / 2} fill="var(--ink-muted)" opacity={0.55} />
                   ) : null}
-                  {/* made up ground: right, chapter tint */}
+                  {/* made up ground: right, gold — the same "his moments" gold
+                      the rivals bars and restart days carry */}
                   {row.finishedAhead > 0 ? (
-                    <rect x={centerX} y={y - barH / 2} width={aheadW} height={barH} rx={2} fill={tint} opacity={0.85} />
+                    <rect x={centerX} y={y - barH / 2} width={aheadW} height={barH} rx={barH / 2} fill="var(--bryce)" />
                   ) : null}
-                  {/* held: a quiet notch straddling the grid slot */}
+                  {/* held: a quiet tick straddling the grid slot */}
                   {row.held > 0 ? (
-                    <rect x={centerX - 1.5} y={y - barH / 2 - 3} width={3} height={barH + 6} rx={1.5} fill="var(--ink-primary)" opacity={0.55} />
+                    <rect x={centerX - 1} y={y - barH / 2 - 3} width={2} height={barH + 6} rx={1} fill="var(--ink-primary)" opacity={0.5} />
                   ) : null}
                   {row.finishedAhead > 0 ? (
-                    <text x={centerX + aheadW + 5} y={y + 3.5} textAnchor="start" fill="var(--ink-secondary)" fontFamily={chartFont} fontSize={11}>
+                    <text x={centerX + aheadW + 9} y={y + 3.5} textAnchor="start" fill="var(--ink-secondary)" fontFamily={chartFont} fontSize={11}>
                       {row.finishedAhead}
                     </text>
                   ) : null}
                   {row.finishedBehind > 0 ? (
-                    <text x={centerX - behindW - 5} y={y + 3.5} textAnchor="end" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={11}>
+                    <text x={centerX - behindW - 9} y={y + 3.5} textAnchor="end" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={11}>
                       {row.finishedBehind}
                     </text>
                   ) : null}

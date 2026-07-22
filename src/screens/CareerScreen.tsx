@@ -22,7 +22,6 @@ import {
   DaytonaSourcePill,
   RainDays,
   RivalsCard,
-  TheCampaigns,
   TheClimb,
   chapterTint
 } from './careerExplorer';
@@ -324,7 +323,8 @@ const OdometerCard = ({ live }: { live: LiveReadiness | null }) => {
       }
     >
       <p style={{ margin: '0 0 16px', color: 'var(--ink-secondary)', fontSize: 13.5 }}>
-        How far the career has gone — every mile Bryce has raced, and every place he’s raced it, counted from official lap logs.
+        How far the career has gone — every mile Bryce has raced, every mile getting there, and every place he’s raced,
+        counted from official lap logs and venue coordinates.
       </p>
       <div className="grid grid--2">
         <Stat
@@ -332,10 +332,23 @@ const OdometerCard = ({ live }: { live: LiveReadiness | null }) => {
           value={wholeNumber.format(lifeStats.personalRaceMileage.miles)}
           note={`${wholeNumber.format(lifeStats.personalRaceMileage.laps)} personal laps · ${lifeStats.personalRaceMileage.raceRows} races`}
         />
+        {/* The travel ledger is back on the card face (Jack's review, 2026-07-21
+            — it had retreated into the source drawer). Family phrasing on the
+            face; the confidence classes stay in the drawer. */}
+        <Stat
+          label="Miles between venues"
+          value={`${wholeNumber.format(lifeStats.travel.greatCircleMinimum.miles)}+`}
+          note="Flights don’t fly straight, so the real number is larger"
+        />
         <Stat
           label="Venues · countries"
           value={`${wholeNumber.format(lifeStats.venues)} · ${wholeNumber.format(lifeStats.countries)}`}
           note="Physical venues · layouts combined"
+        />
+        <Stat
+          label="By road and air"
+          value={`${wholeNumber.format(routeAdjusted.lowMiles)}–${wholeNumber.format(routeAdjusted.highMiles)}`}
+          note="The honest range once real roads and flight paths are counted"
         />
       </div>
       {liveToday && liveToday.covered ? (
@@ -450,7 +463,9 @@ export const CareerScreen = ({ readiness }: { readiness?: ReadinessStatus }) => 
       <CareerRestarts />
 
       <QualiConversion />
-      <TheCampaigns />
+      {/* The campaigns (cumulative points arcs) retired 2026-07-21 on Jack's
+          call: points always accumulate, so the arcs said nothing the season
+          cards don't. Component retained in careerExplorer for archaeology. */}
 
       <OdometerCard live={readiness?.payload ?? null} />
 
