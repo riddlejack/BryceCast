@@ -10,8 +10,8 @@
       "caveat": "Exploratory association only; no public point prediction and no post-race leakage for upcoming events.",
       "claimStrength": "historical_backtest_only",
       "label": "Practice section median vs race finish percentile",
-      "n": 33,
-      "pearson": 0.2868042477438564,
+      "n": 36,
+      "pearson": 0.19846476366321994,
       "x": "practiceMedianTrackSectionPercentile",
       "y": "finishPercentile"
     },
@@ -19,29 +19,30 @@
       "caveat": "Exploratory association only; no public point prediction and no post-race leakage for upcoming events.",
       "claimStrength": "historical_backtest_only",
       "label": "Qualifying section median vs race finish percentile",
-      "n": 40,
-      "pearson": 0.2432380455825847,
+      "n": 44,
+      "pearson": 0.15974190896888601,
       "x": "qualifyingMedianTrackSectionPercentile",
       "y": "finishPercentile"
     }
   ],
   "counts": {
     "roadAmericaPrepRows": 9,
-    "sectionFamilyRows": 250,
-    "sectionObservations": 22660,
-    "sessionSummaries": 91,
-    "sessionToRaceTransferRows": 41,
-    "topSectionRows": 3047,
-    "upcomingVenuePrepRows": 6
+    "sectionFamilyRows": 264,
+    "sectionObservations": 26304,
+    "sessionSummaries": 100,
+    "sessionToRaceTransferRows": 45,
+    "topSectionRows": 3357,
+    "upcomingVenuePrepRows": 0
   },
-  "generatedAt": "2026-07-21T23:55:05Z",
+  "generatedAt": "2026-09-10T23:02:15Z",
   "ok": true,
   "publicPointPrediction": false,
   "sourceDataset": "data/career/career.dataset.json",
-  "sourceHash": "64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978",
+  "sourceHash": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd",
   "upcomingVenue": {
-    "artifactSlug": "portland_international_raceway",
-    "asOfDate": "2026-07-19",
-    "trackName": "Portland International Raceway"
+    "artifactSlug": null,
+    "asOfDate": "2026-09-10",
+    "status": "season_complete",
+    "trackName": null
   }
 }

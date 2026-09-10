@@ -1,3 +1,5 @@
+> Current procedure (September 10, 2026): use [Release and data refresh](operations/RELEASE_AND_DATA_REFRESH.md). `npm run deploy:mini` now transfers directly over SSH, builds before publishing, verifies the release identity, and can roll back. The iCloud/hard-reset procedure below is historical.
+
 # BryceCast Deploy Runbook
 
 Updated: 2026-07-11. Owner: Jack (Cloudflare/account steps), Fable (everything else).

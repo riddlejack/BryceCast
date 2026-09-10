@@ -1,14 +1,14 @@
 venueSlug,trackName,trackType,seasons,races,cautions,medianPerRace,minPerRace,maxPerRace,meanPerRace,openingThird,middleThird,finalThird,unknownThird,dominantThird,ranToFlagCount,medianDurationLaps,categories,sourceHash
-barber_motorsports_park,Barber Motorsports Park,road,2024;2025;2026,4,6,2.0,0,2,1.5,4,0,2,0,opening,1,2.0,Contact:2;Off course:2;Debris:1;Spin:1,64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978
-indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,road,2024;2025;2026,6,7,1.5,0,2,1.167,2,2,3,0,final,1,2.0,Contact:4;Conditions:1;Off course:1;Spin:1,64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978
-iowa_speedway,Iowa Speedway,oval,2024;2025,2,5,2.5,2,3,2.5,1,3,1,0,middle,1,3.0,Spin:3;Contact:2,64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978
-mid_ohio,Mid-Ohio Sports Car Course,road,2024;2025;2026,4,5,1.0,0,3,1.25,3,2,0,0,opening,0,2.0,Contact:2;Mechanical:2;Off course:1,64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978
-nashville_superspeedway,Nashville Superspeedway,oval,2024;2025;2026,3,4,1.0,1,2,1.333,2,1,1,0,opening,0,7.5,Contact:3;Debris:1,64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978
-portland_international_raceway,Portland International Raceway,road,2024;2025,2,2,1.0,1,1,1.0,2,0,0,0,opening,0,2.5,Contact:2,64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978
-road_america,Road America,road,2024;2025;2026,4,8,2.5,0,3,2.0,4,2,2,0,opening,0,2.0,Contact:6;Off course:2,64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978
-streets_of_arlington,Streets of Arlington,street,2026,1,2,2.0,2,2,2.0,1,0,1,0,,0,2.5,Contact:2,64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978
-streets_of_detroit,Streets of Detroit,street,2024;2025;2026,3,10,4.0,2,4,3.333,3,2,5,0,final,2,3.0,Contact:7;Debris:1;Off course:1;Spin:1,64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978
-streets_of_st_petersburg,Streets of St. Petersburg,street,2024;2025;2026,3,10,4.0,2,4,3.333,4,3,3,0,opening,1,3.0,Contact:9;Debris:1,64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978
-the_milwaukee_mile,The Milwaukee Mile,oval,2024;2025,2,2,1.0,1,1,1.0,1,1,0,0,,0,4.5,Contact:1;Spin:1,64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978
-weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,road,2024;2025,4,7,1.0,1,4,1.75,3,3,1,0,,0,3.0,Contact:6;Off course:1,64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978
-world_wide_technology_raceway,World Wide Technology Raceway,oval,2024;2025;2026,3,6,3.0,0,3,2.0,3,0,3,0,,0,6.5,Contact:5;Debris:1,64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978
+barber_motorsports_park,Barber Motorsports Park,road,2024;2025;2026,4,6,2.0,0,2,1.5,4,0,2,0,opening,1,2.0,Contact:2;Off course:2;Debris:1;Spin:1,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
+indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,road,2024;2025;2026,6,7,1.5,0,2,1.167,2,2,3,0,final,1,2.0,Contact:4;Conditions:1;Off course:1;Spin:1,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
+iowa_speedway,Iowa Speedway,oval,2024;2025,2,5,2.5,2,3,2.5,1,3,1,0,middle,1,3.0,Spin:3;Contact:2,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
+mid_ohio,Mid-Ohio Sports Car Course,road,2024;2025;2026,4,5,1.0,0,3,1.25,3,2,0,0,opening,0,2.0,Contact:2;Mechanical:2;Off course:1,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
+nashville_superspeedway,Nashville Superspeedway,oval,2024;2025;2026,3,4,1.0,1,2,1.333,2,1,1,0,opening,0,7.5,Contact:3;Debris:1,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
+portland_international_raceway,Portland International Raceway,road,2024;2025;2026,3,3,1.0,1,1,1.0,3,0,0,0,opening,0,2.0,Contact:3,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
+road_america,Road America,road,2024;2025;2026,4,8,2.5,0,3,2.0,4,2,2,0,opening,0,2.0,Contact:6;Off course:2,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
+streets_of_arlington,Streets of Arlington,street,2026,1,2,2.0,2,2,2.0,1,0,1,0,,0,2.5,Contact:2,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
+streets_of_detroit,Streets of Detroit,street,2024;2025;2026,3,10,4.0,2,4,3.333,3,2,5,0,final,2,3.0,Contact:7;Debris:1;Off course:1;Spin:1,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
+streets_of_st_petersburg,Streets of St. Petersburg,street,2024;2025;2026,3,10,4.0,2,4,3.333,4,3,3,0,opening,1,3.0,Contact:9;Debris:1,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
+the_milwaukee_mile,The Milwaukee Mile,oval,2024;2025;2026,3,6,1.0,1,4,2.0,1,2,3,0,final,0,4.0,Contact:3;Spin:3,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
+weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,road,2024;2025;2026,6,11,1.0,1,4,1.833,4,6,1,0,middle,0,3.0,Contact:9;Off course:2,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
+world_wide_technology_raceway,World Wide Technology Raceway,oval,2024;2025;2026,3,6,3.0,0,3,2.0,3,0,3,0,,0,6.5,Contact:5;Debris:1,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd

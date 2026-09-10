@@ -1,3 +1,3 @@
 cohort,races,avgStart,avgFinish,avgGain,avgPaceIndex,avgChaosExposure,avgTeamDelta,issueOrReliabilityLimitedRows,ovalRows,roadRows,streetRows
-best_8_by_finish,8,8.25,5.125,3.125,0.6313190214586979,0.26222749247068877,-3.0625,0,5,3,0
-worst_8_by_finish,8,10.875,20.25,-9.375,0.45560339419035073,0.4436854892295861,6.875,5,1,5,2
+best_8_by_finish,8,7.875,5.0,2.875,0.6559143189938679,0.2854394888076851,-3.90625,0,4,4,0
+worst_8_by_finish,8,10.875,20.25,-9.375,0.46084028692724344,0.4436854892295861,6.875,5,1,5,2

@@ -1,6 +1,6 @@
 {
   "artifact": "crosswalk-validation-2026",
-  "generatedAt": "2026-07-21T23:53:55.608Z",
+  "generatedAt": "2026-09-10T23:05:13.340Z",
   "trapTests": {
     "failures": [],
     "notes": [
@@ -154,6 +154,50 @@
       "positionExact": 23,
       "lapCountExact": 23,
       "checked": 23
+    },
+    {
+      "id": "t71_2026_portland-international-raceway_race_2026-08-09",
+      "matched": true,
+      "canonicalSessionId": "session_indy_nxt_2026_6764",
+      "fieldSize": 24,
+      "winnerMatch": true,
+      "podiumMatch": true,
+      "positionExact": 24,
+      "lapCountExact": 24,
+      "checked": 24
+    },
+    {
+      "id": "t71_2026_the-milwaukee-mile_race_2026-08-30",
+      "matched": true,
+      "canonicalSessionId": "session_indy_nxt_2026_6757",
+      "fieldSize": 23,
+      "winnerMatch": true,
+      "podiumMatch": true,
+      "positionExact": 23,
+      "lapCountExact": 23,
+      "checked": 23
+    },
+    {
+      "id": "t71_2026_weathertech-raceway-laguna-seca_race_r1_2026-09-05",
+      "matched": true,
+      "canonicalSessionId": "session_indy_nxt_2026_6759",
+      "fieldSize": 24,
+      "winnerMatch": true,
+      "podiumMatch": true,
+      "positionExact": 24,
+      "lapCountExact": 24,
+      "checked": 24
+    },
+    {
+      "id": "t71_2026_weathertech-raceway-laguna-seca_race_r2_2026-09-06",
+      "matched": true,
+      "canonicalSessionId": "session_indy_nxt_2026_6758",
+      "fieldSize": 24,
+      "winnerMatch": true,
+      "podiumMatch": true,
+      "positionExact": 24,
+      "lapCountExact": 24,
+      "checked": 24
     }
   ],
   "twoSourceCrossChecks": [
@@ -742,9 +786,111 @@
       "crossCheck": "confirmed",
       "qualityMasks": [],
       "reasons": []
+    },
+    {
+      "t71SessionId": "t71_2026_portland-international-raceway_practice_p1_2026-08-07",
+      "sessionType": "practice",
+      "date": "2026-08-07",
+      "venue": "Portland International Raceway",
+      "verdict": "GO",
+      "crossCheck": "unavailable",
+      "qualityMasks": [],
+      "reasons": []
+    },
+    {
+      "t71SessionId": "t71_2026_portland-international-raceway_practice_p2_2026-08-08",
+      "sessionType": "practice",
+      "date": "2026-08-08",
+      "venue": "Portland International Raceway",
+      "verdict": "GO",
+      "crossCheck": "unavailable",
+      "qualityMasks": [],
+      "reasons": []
+    },
+    {
+      "t71SessionId": "t71_2026_portland-international-raceway_qualifying_2026-08-08",
+      "sessionType": "qualifying",
+      "date": "2026-08-08",
+      "venue": "Portland International Raceway",
+      "verdict": "GO",
+      "crossCheck": "unavailable",
+      "qualityMasks": [
+        "cross_session_recording_segmented"
+      ],
+      "reasons": []
+    },
+    {
+      "t71SessionId": "t71_2026_portland-international-raceway_race_2026-08-09",
+      "sessionType": "race",
+      "date": "2026-08-09",
+      "venue": "Portland International Raceway",
+      "verdict": "GO",
+      "crossCheck": "unavailable",
+      "qualityMasks": [],
+      "reasons": []
+    },
+    {
+      "t71SessionId": "t71_2026_the-milwaukee-mile_practice_p1_2026-08-29",
+      "sessionType": "practice",
+      "date": "2026-08-29",
+      "venue": "The Milwaukee Mile",
+      "verdict": "GO",
+      "crossCheck": "unavailable",
+      "qualityMasks": [],
+      "reasons": []
+    },
+    {
+      "t71SessionId": "t71_2026_the-milwaukee-mile_qualifying_2026-08-29",
+      "sessionType": "qualifying",
+      "date": "2026-08-29",
+      "venue": "The Milwaukee Mile",
+      "verdict": "GO",
+      "crossCheck": "unavailable",
+      "qualityMasks": [],
+      "reasons": []
+    },
+    {
+      "t71SessionId": "t71_2026_the-milwaukee-mile_race_2026-08-30",
+      "sessionType": "race",
+      "date": "2026-08-30",
+      "venue": "The Milwaukee Mile",
+      "verdict": "GO",
+      "crossCheck": "unavailable",
+      "qualityMasks": [],
+      "reasons": []
+    },
+    {
+      "t71SessionId": "t71_2026_weathertech-raceway-laguna-seca_practice_p2_2026-09-04",
+      "sessionType": "practice",
+      "date": "2026-09-04",
+      "venue": "WeatherTech Raceway Laguna Seca",
+      "verdict": "GO",
+      "crossCheck": "unavailable",
+      "qualityMasks": [],
+      "reasons": []
+    },
+    {
+      "t71SessionId": "t71_2026_weathertech-raceway-laguna-seca_race_r1_2026-09-05",
+      "sessionType": "race",
+      "date": "2026-09-05",
+      "venue": "WeatherTech Raceway Laguna Seca",
+      "verdict": "GO",
+      "crossCheck": "unavailable",
+      "qualityMasks": [],
+      "reasons": []
+    },
+    {
+      "t71SessionId": "t71_2026_weathertech-raceway-laguna-seca_race_r2_2026-09-06",
+      "sessionType": "race",
+      "date": "2026-09-06",
+      "venue": "WeatherTech Raceway Laguna Seca",
+      "verdict": "GO",
+      "crossCheck": "unavailable",
+      "qualityMasks": [],
+      "reasons": []
     }
   ],
-  "goCount": 33,
+  "goCount": 43,
   "conditionalCount": 1,
   "noGoCount": 0,
   "hardFailures": []

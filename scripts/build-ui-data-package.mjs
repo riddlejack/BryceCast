@@ -4,6 +4,7 @@ import { createHash } from 'node:crypto';
 import { execSync, spawnSync } from 'node:child_process';
 
 import { buildPointsProjectionState } from './live-points-state.mjs';
+import { buildIndyNxtCalendar } from './lib/indy-nxt-calendar.mjs';
 import { analyticsPython, runPredictiveRaceIntelligence } from './run-predictive-race-intelligence.mjs';
 
 const repoRoot = process.cwd();
@@ -1419,7 +1420,7 @@ const campaignRaceHref = (sessionId) =>
  *  total (a series' own drop-scores rule), both sourced numbers are surfaced
  *  and the panel carries a reconciliation note — the number is never silently
  *  reconciled or hidden. */
-const buildSeasonCampaigns = ({ canonicalDataset, progressionRows, resultConversionSessionIds }) => {
+const buildSeasonCampaigns = ({ canonicalDataset, progressionRows, resultConversionSessionIds, asOfDate }) => {
   const seriesById = new Map((canonicalDataset.series ?? []).map((series) => [series.id, series]));
   const trackById = new Map((canonicalDataset.tracks ?? []).map((track) => [track.id, track]));
   const sessionById = new Map((canonicalDataset.sessions ?? []).map((session) => [session.id, session]));
@@ -1467,6 +1468,12 @@ const buildSeasonCampaigns = ({ canonicalDataset, progressionRows, resultConvers
       .filter((season) => season.driverId === 'driver_bryce_aron' && season.seriesId === 'series_indy_nxt')
       .map((season) => numberOrNull(season.year) ?? 0)
   );
+  const latestIndySeasonEndDate = (canonicalDataset.events ?? [])
+    .filter((event) => event.seriesId === 'series_indy_nxt' && numberOrNull(event.seasonYear) === latestIndyYear)
+    .map((event) => String(event.eventEndDate ?? event.eventStartDate ?? '').slice(0, 10))
+    .filter((date) => /^\d{4}-\d{2}-\d{2}$/.test(date))
+    .sort()
+    .at(-1) ?? null;
 
   const bryceSeasons = (canonicalDataset.seasons ?? [])
     .filter((season) => season.driverId === 'driver_bryce_aron')
@@ -1569,8 +1576,8 @@ const buildSeasonCampaigns = ({ canonicalDataset, progressionRows, resultConvers
 
     const earnedPoints = cumulative;
     const reconciles = officialSeasonPoints !== null ? earnedPoints === officialSeasonPoints : null;
-    const inProgress = isIndy && year === latestIndyYear;
-    const isCurrent = inProgress;
+    const isCurrent = isIndy && year === latestIndyYear;
+    const inProgress = isCurrent && (latestIndySeasonEndDate === null || asOfDate <= latestIndySeasonEndDate);
     const roundCount =
       new Set(races.map((row) => numberOrNull(row.event.round)).filter((round) => round !== null)).size || null;
     const reconciliationNote =
@@ -2809,6 +2816,26 @@ const readLatestColdRaceCapture = () => {
 };
 
 const buildStandingsSnapshot = ({ headToHeadRows, racesRemaining, roundsCompleted }) => {
+  const historyPath = path.join(repoRoot, 'public/data/history-bryce.json');
+  const history = fs.existsSync(historyPath) ? JSON.parse(fs.readFileSync(historyPath, 'utf8')) : null;
+  const official = history?.officialStandings;
+  if (official?.entries?.length && official.sourceUrl && history.points?.length === roundsCompleted) {
+    const entries = official.entries.map((row) => {
+      const h = headToHeadRows.find((h) => h.driverName.toLowerCase() === row.driverName.toLowerCase());
+      return { ...row, pointsRankInCapture: row.rank, headToHead: h ? {
+        racesTogether: numberOrNull(h.racesTogether), bryceAhead: numberOrNull(h.bryceAhead), bryceBehind: numberOrNull(h.bryceBehind)
+      } : null };
+    });
+    const bryce = entries.find((r) => r.isBryce);
+    if (bryce) return {
+      available: true, capturedAt: official.checkedAt, capturePath: official.sourceUrl,
+      sessionKey: `official-standings-${official.seasonYear}`, eventName: `${official.seasonYear} INDY NXT championship`, sessionName: 'Official standings',
+      seriesGuard: { series: 'L', sessionType: 'championship', ok: true }, roundsCompleted, racesRemaining,
+      bryce: { carNo: bryce.carNo, points: bryce.points, pointsRankInCapture: bryce.rank }, entries,
+      sourceState: 'official_championship_standings',
+      caveats: ['Official championship classification includes part-season drivers and applies the series tie-break order.', 'Career head-to-head counts every shared INDY NXT race since 2024, not just this season.']
+    };
+  }
   const capture = readLatestColdRaceCapture();
   if (!capture.available) return { available: false, reason: capture.reason };
   const timing = capture.payload?.raw?.timing?.timing_results ?? {};
@@ -3286,6 +3313,7 @@ const buildPackage = () => {
   const upcomingContextPackRefs = upcomingPackPairs.map(({ packRef }) => packRef);
 
   const canonicalDataset = readJson(sources.canonicalDataset);
+  fs.writeFileSync(path.join(repoRoot, 'public/data/indy-nxt-calendar.json'), `${JSON.stringify(buildIndyNxtCalendar(canonicalDataset), null, 2)}\n`);
 
   /* Each event's RACE date: the earliest race session's scheduledStart, kept as
      the schedule's own LOCAL date string (America/Chicago etc.) — no timezone
@@ -3336,16 +3364,21 @@ const buildPackage = () => {
   const passMarkRefs = buildPassMarkRefs({ raceDebriefPackPairs });
   const seasonIndex = buildSeasonIndex({ raceDebriefPackPairs, resultsBySession, progressionRows: championshipRows });
   const nextUpcomingVenue = upcomingEvents[0]?.trackName ?? null;
-  const nextUpcomingVenueSlug = venueSlug(nextUpcomingVenue);
-  const nextUpcomingVenuePackSlug = nextUpcomingVenueSlug.replaceAll('_', '-');
-  const supplementalPrepSectionRef = supplementalContextPackRef(
-    `analysis/indy-nxt-section-lap-deep-dive/output/context-packs/${nextUpcomingVenuePackSlug}-prep-context.json`,
-    'next_upcoming_venue_prep_section_context'
-  );
-  const supplementalRaceLapSectionRef = supplementalContextPackRef(
-    `analysis/indy-nxt-race-lap-section-enhancement/output/context-packs/${nextUpcomingVenuePackSlug}-race-context.json`,
-    'next_upcoming_venue_race_lap_section_context'
-  );
+  const nextUpcomingVenuePackSlug = nextUpcomingVenue
+    ? venueSlug(nextUpcomingVenue).replaceAll('_', '-')
+    : null;
+  const supplementalPrepSectionRef = nextUpcomingVenuePackSlug
+    ? supplementalContextPackRef(
+        `analysis/indy-nxt-section-lap-deep-dive/output/context-packs/next-venue-${nextUpcomingVenuePackSlug}-prep-context.json`,
+        'next_upcoming_venue_prep_section_context'
+      )
+    : null;
+  const supplementalRaceLapSectionRef = nextUpcomingVenuePackSlug
+    ? supplementalContextPackRef(
+        `analysis/indy-nxt-race-lap-section-enhancement/output/context-packs/next-venue-${nextUpcomingVenuePackSlug}-race-context.json`,
+        'next_upcoming_venue_race_lap_section_context'
+      )
+    : null;
 
   const latestDebrief = raceDebriefPackPairs
     .slice()
@@ -3377,8 +3410,14 @@ const buildPackage = () => {
 
   const sourceInventory = {
     ...Object.fromEntries(Object.entries(sources).map(([key, relativePath]) => [key, summarizeArtifact(relativePath)])),
-    supplementalPrepSectionContextPack: supplementalPrepSectionRef,
-    supplementalRaceLapSectionContextPack: supplementalRaceLapSectionRef,
+    indyNxtCalendar: summarizeArtifact('public/data/indy-nxt-calendar.json'),
+    timingCoverageLedger: fs.existsSync(path.join(repoRoot, 'data/historical-data-lake/catalog/timing-coverage-ledger.json')) ? summarizeArtifact('data/historical-data-lake/catalog/timing-coverage-ledger.json') : null,
+    ...(supplementalPrepSectionRef
+      ? { supplementalPrepSectionContextPack: supplementalPrepSectionRef }
+      : {}),
+    ...(supplementalRaceLapSectionRef
+      ? { supplementalRaceLapSectionContextPack: supplementalRaceLapSectionRef }
+      : {}),
     /* Quali & Practice Lab run-by-run pack (Brief M), integrity-registered like
        the GB3 pack: the UI loader verifies raw-byte sha256 + id against THIS ref
        at load time and fails closed. Null when the package predates the lane. */
@@ -3444,8 +3483,8 @@ const buildPackage = () => {
         standingsSnapshot,
         contextPackRefs: upcomingContextPackRefs,
         supplementalContextRefs: {
-          prepSection: supplementalPrepSectionRef,
-          raceLapSection: supplementalRaceLapSectionRef
+          ...(supplementalPrepSectionRef ? { prepSection: supplementalPrepSectionRef } : {}),
+          ...(supplementalRaceLapSectionRef ? { raceLapSection: supplementalRaceLapSectionRef } : {})
         },
         runtimeApiRequirements: ['/api/readiness', '/api/weather/upcoming', '/api/weather/live'],
         caveats: [
@@ -3461,8 +3500,12 @@ const buildPackage = () => {
           sourceRef('predictiveContextPackManifest', 'Full upcoming-event predictive race-intelligence pack refs.'),
           sourceRef('sectionLapDeepDiveSummary', 'Practice/qualifying section-lap supplemental context summary.'),
           sourceRef('raceLapSectionSummary', 'Race lap/section supplemental context summary.'),
-          { key: supplementalPrepSectionRef.key, path: supplementalPrepSectionRef.path, note: 'Current next-venue practice/qualifying section context pack.' },
-          { key: supplementalRaceLapSectionRef.key, path: supplementalRaceLapSectionRef.path, note: 'Current next-venue race lap/section context pack.' },
+          ...(supplementalPrepSectionRef
+            ? [{ key: supplementalPrepSectionRef.key, path: supplementalPrepSectionRef.path, note: 'Current next-venue practice/qualifying section context pack.' }]
+            : []),
+          ...(supplementalRaceLapSectionRef
+            ? [{ key: supplementalRaceLapSectionRef.key, path: supplementalRaceLapSectionRef.path, note: 'Current next-venue race lap/section context pack.' }]
+            : []),
           sourceRef('manifest', 'UI metric contract and caveats.')
         ]
       },
@@ -3578,7 +3621,8 @@ const buildPackage = () => {
         seasonCampaigns: buildSeasonCampaigns({
           canonicalDataset,
           progressionRows: championshipRows,
-          resultConversionSessionIds: new Set(careerConversionEnriched.map((row) => row.sessionId))
+          resultConversionSessionIds: new Set(careerConversionEnriched.map((row) => row.sessionId)),
+          asOfDate: predictiveSummary.asOfDate
         }),
         smallSeriesStories: buildSmallSeriesStories({
           canonicalDataset,
@@ -3611,7 +3655,7 @@ const buildPackage = () => {
             sourceRef('careerAtlasNaturalEarthSource', 'Natural Earth source commit, checksum, and public-domain terms.'),
             sourceRef('careerAtlasRequirements', 'Pinned Pillow dependency for byte-stable full-world texture generation.'),
             sourceRef('careerLifeStatsVenueFacts', 'A2 track identity and sourced coordinates for every career venue.'),
-            sourceRef('careerLifeStatsMilesRaced', 'A2 personally attributable ledger covering all 145 canonical race rows.'),
+            sourceRef('careerLifeStatsMilesRaced', 'A2 personally attributable ledger covering every canonical Bryce race row.'),
             sourceRef('careerLifeStatsResearch', 'A2 metric-grain and confidence-class contracts.'),
             sourceRef('canonicalDataset', 'Canonical race identity, series, date, and classified finish fields.'),
             sourceRef('careerResultConversion', 'Career Lab conversion context; A2 restores four unclassified canonical race rows for atlas counts.'),
@@ -3671,7 +3715,7 @@ const buildPackage = () => {
           })),
           venueSources: careerLifeStats.venueSources ?? [],
           caveats: [
-            'All 145 canonical race rows count. Daytona uses Bryce’s 142 Al Kamel-derived driver-stint laps, never the shared car’s 780 laps.',
+            'Every canonical Bryce race row counts. Daytona uses Bryce’s 142 Al Kamel-derived driver-stint laps, never the shared car’s 780 laps.',
             'The physical-session number is a floor: exact observations and F1600 lower bounds stay separate; FROC and private-test gaps remain unknown.',
             'Travel is a minimum venue-to-venue displacement. The route adjustment is a modeled range; actual travel is blocked pending seasonBase and returnHomeFrequency.'
           ],
@@ -3680,7 +3724,7 @@ const buildPackage = () => {
             sourceRef('careerLifeStatsResearch', 'Source-grain, metric-grain, confidence, travel, fuel, and tire contracts.'),
             sourceRef('careerLifeStatsVenueFacts', 'Named, checkable length and coordinate sources for every career venue.'),
             sourceRef('careerLifeStatsResourceAssumptions', 'Explicit low/base/high model assumptions and primary source URLs.'),
-            sourceRef('careerLifeStatsMilesRaced', 'All 145 race rows at personally attributable driver-race grain.'),
+            sourceRef('careerLifeStatsMilesRaced', 'Every canonical race row at personally attributable driver-race grain.'),
             sourceRef('careerLifeStatsSessionLedger', 'Deduplicated physical-session ledger with confidence classes.'),
             sourceRef('careerLifeStatsMileageBreakdowns', 'Visualization-ready mileage dimensions for future UI work.'),
             sourceRef('careerLifeStatsTravelLegs', 'Chronological travel minimum and route-proxy range by leg.'),
@@ -3777,6 +3821,11 @@ runCareerAtlas();
 runRestartReport();
 runCautionAtlas();
 runQualifyingLayer();
+// Qualifying is part of the shipped artifact graph, not a manual side lane.
+for (const script of ['analysis/quali-lab/scripts/build_quali_lab.mjs', 'analysis/quali-lab/scripts/validate_quali_lab.mjs']) {
+  const result = spawnSync(process.execPath, [script], { cwd: repoRoot, stdio: 'inherit' });
+  if (result.status !== 0 || result.error) throw new Error(`Qualifying refresh failed: ${script}`);
+}
 const dataPackage = buildPackage();
 fs.writeFileSync(outputPath, `${JSON.stringify(dataPackage, null, 2)}\n`);
 console.log(JSON.stringify({ ok: true, wrote: path.relative(repoRoot, outputPath), schemaVersion: dataPackage.schemaVersion }, null, 2));

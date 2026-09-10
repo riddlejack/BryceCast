@@ -16,6 +16,7 @@
 
 export const BRYCE_DRIVER_ID = '2143';
 export const BRYCE_NAME = { first: 'bryce', last: 'aron' };
+export const MAX_INTERPOLATION_HOLD_SECONDS = 5;
 
 const isBryceName = (first, last) =>
   String(first ?? '').trim().toLowerCase() === BRYCE_NAME.first &&
@@ -81,6 +82,23 @@ const gapString = (deltaSeconds) => {
   return deltaSeconds.toFixed(3);
 };
 
+function withheldSourceGaps(coverage, projectEpoch) {
+  return (coverage?.gapIntervals ?? [])
+    .filter((gap) => Number(gap.gapSeconds) > MAX_INTERPOLATION_HOLD_SECONDS)
+    .map((gap) => ({
+      lastObserved: projectEpoch(Number(gap.lastObservedEpoch)),
+      nextObserved: projectEpoch(Number(gap.nextObservedEpoch)),
+      sourceGapSeconds: Number(gap.gapSeconds),
+      withheldAfterSeconds: MAX_INTERPOLATION_HOLD_SECONDS,
+    }))
+    .filter((gap) => Number.isFinite(gap.lastObserved) && Number.isFinite(gap.nextObserved));
+}
+
+const isWithheld = (timestamp, gaps) =>
+  gaps.some(
+    (gap) => timestamp > gap.lastObserved + MAX_INTERPOLATION_HOLD_SECONDS && timestamp < gap.nextObserved,
+  );
+
 /** Assemble one capture-shaped snapshot record from computed running order. */
 const buildSnapshot = ({
   checkedAt,
@@ -89,7 +107,9 @@ const buildSnapshot = ({
   rows,
   bryceProfile,
   sourceTier,
-  trackName
+  trackName,
+  observationBasis = 'interpolated_step_hold_from_observed_timing_events',
+  interpolated = true
 }) => ({
   checkedAt,
   sessionKey,
@@ -99,7 +119,11 @@ const buildSnapshot = ({
     flag: heartbeat.currentFlag ?? null,
     lap: heartbeat.lapNumber ?? null,
     totalLaps: heartbeat.totalLaps ?? null,
-    sourceTier
+    sourceTier,
+    observationBasis,
+    interpolated,
+    interpolationBoundSeconds: interpolated ? MAX_INTERPOLATION_HOLD_SECONDS : null,
+    noGps: true
   },
   raw: {
     timing: { timing_results: { heartbeat, Item: rows } },
@@ -266,6 +290,11 @@ export const reduceRaceTools = (pack, { canonicalSessionId, eventSessionId, seas
 
   const cars = [...crossingsByCar.keys()];
   const snapshots = [];
+  const withheldGaps = withheldSourceGaps(meta?.sourceObservationCoverage, (epoch) => {
+    const date = new Date(epoch * 1000);
+    return date.getUTCHours() * 3600 + date.getUTCMinutes() * 60 + date.getUTCSeconds();
+  });
+  let withheldSeconds = 0;
   const startSec = Math.floor(greenStart);
   const endSec = Math.ceil(endTime);
 
@@ -299,6 +328,10 @@ export const reduceRaceTools = (pack, { canonicalSessionId, eventSessionId, seas
 
   for (let ts = startSec; ts <= endSec; ts += 1) {
     const clamped = Math.min(ts, endTime);
+    if (ts < endSec && isWithheld(clamped, withheldGaps)) {
+      withheldSeconds += 1;
+      continue;
+    }
     const running = [];
     for (const car of cars) {
       const st = carStateAt(car, clamped);
@@ -395,6 +428,16 @@ export const reduceRaceTools = (pack, { canonicalSessionId, eventSessionId, seas
     totalLaps,
     firstGreenIso: isoFromLocalSecondsOfDay(meta.date, greenStart),
     finalOrder,
+    interpolationCoverage: {
+      maximumHoldSeconds: MAX_INTERPOLATION_HOLD_SECONDS,
+      withheldSeconds,
+      sourceGaps: withheldGaps.map((gap) => ({
+        lastObservedAt: isoFromLocalSecondsOfDay(meta.date, gap.lastObserved),
+        nextObservedAt: isoFromLocalSecondsOfDay(meta.date, gap.nextObserved),
+        sourceGapSeconds: gap.sourceGapSeconds,
+        withheldAfterSeconds: gap.withheldAfterSeconds,
+      })),
+    },
     bryceSeen: snapshots.some((s) => s.raw.timing.timing_results.Item.some((r) => r.DriverID === BRYCE_DRIVER_ID))
   };
 };
@@ -503,6 +546,8 @@ export const reduceTiming71 = (pack, { canonicalSessionId, eventSessionId, seaso
 
   const cars = [...crossingsByCar.keys()];
   const snapshots = [];
+  const withheldGaps = withheldSourceGaps(meta?.sourceObservationCoverage, (epoch) => epoch);
+  let withheldSeconds = 0;
   const startSec = Math.floor(greenStart);
   const endSec = Math.ceil(endTime);
 
@@ -536,6 +581,10 @@ export const reduceTiming71 = (pack, { canonicalSessionId, eventSessionId, seaso
 
   for (let ts = startSec; ts <= endSec; ts += 1) {
     const clamped = Math.min(ts, endTime);
+    if (ts < endSec && isWithheld(clamped, withheldGaps)) {
+      withheldSeconds += 1;
+      continue;
+    }
     const running = [];
     for (const car of cars) {
       const st = carStateAt(car, clamped);
@@ -638,6 +687,16 @@ export const reduceTiming71 = (pack, { canonicalSessionId, eventSessionId, seaso
     totalLaps,
     firstGreenIso: isoFromEpoch(greenStart),
     finalOrder,
+    interpolationCoverage: {
+      maximumHoldSeconds: MAX_INTERPOLATION_HOLD_SECONDS,
+      withheldSeconds,
+      sourceGaps: withheldGaps.map((gap) => ({
+        lastObservedAt: isoFromEpoch(gap.lastObserved),
+        nextObservedAt: isoFromEpoch(gap.nextObserved),
+        sourceGapSeconds: gap.sourceGapSeconds,
+        withheldAfterSeconds: gap.withheldAfterSeconds,
+      })),
+    },
     bryceSeen: snapshots.some((s) => s.raw.timing.timing_results.Item.some((r) => r.DriverID === BRYCE_DRIVER_ID))
   };
 };

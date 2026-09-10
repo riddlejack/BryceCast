@@ -26,8 +26,18 @@ const refresh = process.argv.includes('--refresh');
 
 const asArray = (value) => (Array.isArray(value) ? value : value ? [value] : []);
 const safeNumber = (value) => {
+  if (value === null || value === undefined || String(value).trim() === '') return null;
   const parsed = Number(value);
   return Number.isFinite(parsed) ? parsed : null;
+};
+
+const qualifyingLapsCompleted = (record) => {
+  const lapsComplete = safeNumber(record?.LapsComplete);
+  if (lapsComplete !== null && lapsComplete > 0) return lapsComplete;
+  const timedOvalLaps = [record?.QualLap1, record?.QualLap2, record?.QualLap3, record?.QualLap4]
+    .filter((value) => nullableGap(value) !== null)
+    .length;
+  return timedOvalLaps > 0 ? timedOvalLaps : null;
 };
 
 const slug = (value) =>
@@ -59,7 +69,7 @@ const statusCategory = (status) => {
 
 const officialStatusIncidentTypes = new Set(['contact', 'mechanical', 'dns']);
 const statusIncidentPrefix = 'incident_indy_nxt_status_';
-const indyNxtReportDetailGapDescription = 'EventsSessionDetails imports race/session result rows, qualifyingResults for official SessionType=Q records, and official terminal-status incident rows for contact/mechanical/dns outcomes. Official Race Lap Chart PDFs now import 29,519 official lap-by-lap position samples from all 36 completed Race Lap Chart PDFs: 26 charts fully validate against official completed-lap counts and 10 clean partial Race Lap Chart PDFs preserve explicit missing car-lap or official result/chart conflict diagnostics without guessing terminal or conflict laps. Official Event Summary PDFs import race-stat metrics and most-improved racecraft notes. Official Leader Lap Summary PDFs import leader-by-lap timing, margin, and flag-state metrics. Official Top Section Times PDFs import practice, qualifying, and race section-rank timing metrics when official section rows are present. Official Section Results PDFs import practice, qualifying, and race lap-by-lap section times and speeds at per-car/per-lap grain when official section rows are present. The remaining true section-results holdout is session_indy_nxt_2024_6325, where the official Section Results PDF URL returns corrupt non-PDF bytes; canceled/no-row reports remain held out rather than treated as missing data. Source-visible rows without canonical API timing rows keep car/name text with null canonical IDs. Official race Results PDFs import penalty/decision summary rows and caution-summary causal incident rows. Detailed pit-lane sequence context is source-unavailable in the current official report family; use official/API pit-stop counts as the production-safe pit metric unless a new official pit-summary source appears.';
+const indyNxtReportDetailGapDescription = 'EventsSessionDetails imports official race/session result rows, qualifyingResults for official SessionType=Q records, and official terminal-status incident rows for contact/mechanical/dns outcomes. Season rollups reconcile the official schedule and EventsSessionDetails rows against DriverYearDetails because that driver-history endpoint can omit completed races. Official Race Lap Chart, Event Summary, Leader Lap Summary, Top Section Times, Section Results, and Results PDFs provide the supported report-detail categories; the report-detail backfill records current discovered, parsed, partial, and held-out counts. Section Results rows are merged across continuation pages and terminal partial rows beyond each car\'s official completed-lap count are excluded from completed-lap facts. The remaining known section-results holdout is session_indy_nxt_2024_6325, where the official Section Results PDF URL returns corrupt non-PDF bytes; canceled/no-row reports remain held out rather than treated as missing data. Source-visible rows without canonical API timing rows keep car/name text with null canonical IDs. Detailed pit-lane sequence context is source-unavailable in the current official report family; use official/API pit-stop counts as the production-safe pit metric unless a new official pit-summary source appears.';
 
 const nullableGap = (value) => {
   const normalized = String(value ?? '').trim();
@@ -237,11 +247,25 @@ const main = async () => {
   const seasons = new Map(asArray(existing.seasons).map((row) => [row.id, row]));
   const events = new Map(asArray(existing.events).map((row) => [row.id, row]));
   const sessions = new Map(asArray(existing.sessions).map((row) => [row.id, row]));
+  for (const [eventId, event] of events) {
+    if (/^event_indy_nxt_20(?:24|25|26)_/.test(eventId)) {
+      events.set(eventId, {
+        ...event,
+        provenanceRefs: asArray(event.provenanceRefs).filter((ref) => !/^source_indynxt_events_session_/.test(ref))
+      });
+    }
+  }
   const sanitizeResultIncidentRefs = (row) => ({
     ...row,
     incidentRefs: asArray(row.incidentRefs).filter((id) => !String(id).startsWith(statusIncidentPrefix))
   });
-  const results = new Map(asArray(existing.results).map((row) => sanitizeResultIncidentRefs(row)).map((row) => [row.id, row]));
+  const refreshedIndyNxtResultPrefixes = years.map((year) => `result_indy_nxt_${year}_`);
+  const results = new Map(
+    asArray(existing.results)
+      .filter((row) => !refreshedIndyNxtResultPrefixes.some((prefix) => String(row.id ?? '').startsWith(prefix)))
+      .map((row) => sanitizeResultIncidentRefs(row))
+      .map((row) => [row.id, row])
+  );
   const qualifyingResults = new Map(asArray(existing.qualifyingResults).map((row) => [row.id, row]));
   for (const id of qualifyingResults.keys()) {
     if (String(id).startsWith('qualifying_indy_nxt_')) qualifyingResults.delete(id);
@@ -305,6 +329,7 @@ const main = async () => {
     fetched: 0,
     cached: 0,
     rawArtifacts: [],
+    seasonReconciliation: [],
     gaps: []
   };
 
@@ -401,27 +426,6 @@ const main = async () => {
       rawArtifactPath: driverYearPath.replace(`${root}/`, ''),
       notes: 'Used as cross-check against EventsSessionDetails records.'
     }));
-
-    const bryceStanding = asArray(yearPointSummary.DriverList).find((driver) => driver.DriverName === 'Bryce Aron');
-    const bryceDriverRows = asArray(driverYearDetails.Results);
-    upsert(seasons, {
-      id: `season_indy_nxt_${year}_bryce_aron`,
-      year,
-      seriesId: 'series_indy_nxt',
-      driverId: 'driver_bryce_aron',
-      teamIds: [],
-      carIds: [],
-      championshipPosition: safeNumber(bryceStanding?.OverallPosition),
-      points: safeNumber(bryceStanding?.TotalPoints),
-      starts: bryceDriverRows.length,
-      wins: safeNumber(bryceStanding?.TotalWins),
-      poles: safeNumber(bryceStanding?.TotalPoles),
-      podiums: bryceDriverRows.filter((row) => safeNumber(row.Rank) !== null && safeNumber(row.Rank) <= 3).length,
-      top5: safeNumber(bryceStanding?.TotalTop5s),
-      top10: bryceDriverRows.filter((row) => safeNumber(row.Rank) !== null && safeNumber(row.Rank) <= 10).length,
-      dnfs: bryceDriverRows.filter((row) => statusCategory(row.Status) !== 'running').length,
-      provenanceRefs: [yearEvidenceId, driverYearEvidenceId]
-    });
 
     const officialSessions = sessionsByYear.get(year) ?? [];
     if (!officialSessions.length) {
@@ -585,6 +589,28 @@ const main = async () => {
       }
 
       const records = asArray(details.records).filter((record) => !record.IsDeleted);
+      if (records.length) {
+        const importedSession = sessions.get(canonicalSessionId);
+        const raceControlWindow = importedSession?.raw?.raceControlTrackActivityWindow;
+        if (importedSession) {
+          delete importedSession.ingestionState;
+          if (importedSession.timeSource === 'official_race_control_trackactivity_schedule_only') {
+            importedSession.timeSource = 'official_race_control_trackactivity';
+          }
+          if (raceControlWindow) {
+            importedSession.raw = {
+              ...(importedSession.raw ?? {}),
+              raceControlTrackActivityWindow: {
+                ...raceControlWindow,
+                resultImported: true,
+                resultOfficial: true,
+                scheduleOnly: false
+              }
+            };
+          }
+          sessions.set(canonicalSessionId, importedSession);
+        }
+      }
       const fieldSize = records.length;
       const bestLapRankByDriver = new Map(
         records
@@ -721,7 +747,8 @@ const main = async () => {
             position: finish,
             bestLapTime: record.BestLapTime ?? null,
             gapToPole: nullableGap(record.Difference),
-            laps: safeNumber(record.LapsComplete),
+            carNumber: String(record.CarNumber ?? ''),
+            laps: qualifyingLapsCompleted(record),
             sessionSegment: details.SessionName ?? discoveredSession.sessionName ?? null,
             penaltyApplied: false,
             gridPositionResulting: safeNumber(record.PositionStart),
@@ -744,6 +771,100 @@ const main = async () => {
           if (driverId === 'driver_bryce_aron') importReport.bryceQualifyingResultsImported += 1;
         }
       }
+  }
+
+  for (const {
+    year,
+    yearEvidenceId,
+    driverYearEvidenceId,
+    yearPointSummary,
+    driverYearDetails
+  } of yearDetails) {
+    const bryceStanding = asArray(yearPointSummary.DriverList).find((driver) => driver.DriverName === 'Bryce Aron');
+    const officialRaceSessions = asArray(sessionsByYear.get(year))
+      .map((row) => sessions.get(`session_indy_nxt_${year}_${row.eventsSessionId}`))
+      .filter((row) => row?.sessionType === 'race');
+    const officialRaceSessionIds = new Set(officialRaceSessions.map((row) => row.id));
+    const bryceRaceRows = Array.from(results.values())
+      .filter((row) => row.driverId === 'driver_bryce_aron' && officialRaceSessionIds.has(row.sessionId))
+      .sort((left, right) => left.sessionId.localeCompare(right.sessionId));
+    const bryceRowsBySessionId = new Map(bryceRaceRows.map((row) => [row.sessionId, row]));
+    const missingBryceResultSessionIds = officialRaceSessions
+      .map((row) => row.id)
+      .filter((sessionId) => !bryceRowsBySessionId.has(sessionId));
+    const historyNameCounts = new Map();
+    for (const row of asArray(driverYearDetails.Results)) {
+      const key = slug(row.RaceName);
+      historyNameCounts.set(key, (historyNameCounts.get(key) ?? 0) + 1);
+    }
+    const missingFromDriverYearDetails = [];
+    for (const session of officialRaceSessions) {
+      const event = events.get(session.eventId);
+      const key = slug(event?.name);
+      const remaining = historyNameCounts.get(key) ?? 0;
+      if (remaining > 0) historyNameCounts.set(key, remaining - 1);
+      else missingFromDriverYearDetails.push(session.id);
+    }
+    const standingsRaceSessionIds = asArray(bryceStanding?.Points)
+      .map((row) => safeNumber(row.EventsSessionsID))
+      .filter((id) => id !== null && id > 0)
+      .map((id) => `session_indy_nxt_${year}_${id}`);
+    const standingsSessionsMissingResults = standingsRaceSessionIds.filter((sessionId) => !bryceRowsBySessionId.has(sessionId));
+    const finishes = bryceRaceRows.map((row) => row.finishPosition).filter((value) => value !== null);
+    const reconciliation = {
+      year,
+      scheduledOfficialRaceSessions: officialRaceSessions.length,
+      eventsSessionDetailsBryceRaceRows: bryceRaceRows.length,
+      driverYearDetailsRows: asArray(driverYearDetails.Results).length,
+      yearPointSummaryRaceSessionIds: standingsRaceSessionIds.length,
+      missingBryceResultSessionIds,
+      missingFromDriverYearDetails,
+      standingsSessionsMissingResults,
+      authoritativeSeasonRollup: 'official_schedule_plus_events_session_details',
+      driverYearDetailsRole: 'cross_check_only'
+    };
+    importReport.seasonReconciliation.push(reconciliation);
+    if (missingBryceResultSessionIds.length || standingsSessionsMissingResults.length) {
+      importReport.gaps.push({
+        year,
+        status: 'official_race_reconciliation_incomplete',
+        ...reconciliation
+      });
+    }
+    if (missingFromDriverYearDetails.length) {
+      importReport.gaps.push({
+        year,
+        status: 'driver_year_details_incomplete',
+        missingSessionIds: missingFromDriverYearDetails,
+        note: 'DriverYearDetails is retained as a cross-check and does not control season starts or race-derived rollups.'
+      });
+    }
+    upsert(seasons, {
+      id: `season_indy_nxt_${year}_bryce_aron`,
+      year,
+      seriesId: 'series_indy_nxt',
+      driverId: 'driver_bryce_aron',
+      teamIds: Array.from(new Set(bryceRaceRows.map((row) => row.teamId).filter(Boolean))),
+      carIds: Array.from(new Set(bryceRaceRows.map((row) => row.carId).filter(Boolean))),
+      championshipPosition: safeNumber(bryceStanding?.OverallPosition),
+      points: safeNumber(bryceStanding?.TotalPoints),
+      starts: bryceRaceRows.length,
+      wins: bryceRaceRows.filter((row) => row.finishPosition === 1).length,
+      poles: safeNumber(bryceStanding?.TotalPoles),
+      podiums: bryceRaceRows.filter((row) => row.finishPosition !== null && row.finishPosition <= 3).length,
+      top5: bryceRaceRows.filter((row) => row.finishPosition !== null && row.finishPosition <= 5).length,
+      top10: bryceRaceRows.filter((row) => row.finishPosition !== null && row.finishPosition <= 10).length,
+      dnfs: bryceRaceRows.filter((row) => row.status !== 'running').length,
+      bestFinish: finishes.length ? Math.min(...finishes) : safeNumber(bryceStanding?.BestFinish),
+      raw: {
+        reconciliation
+      },
+      provenanceRefs: [
+        yearEvidenceId,
+        driverYearEvidenceId,
+        ...officialRaceSessions.flatMap((session) => asArray(session.provenanceRefs).filter((ref) => ref.startsWith('source_indynxt_events_session_')))
+      ]
+    });
   }
 
   const imsaImported = series.has('series_imsa_weathertech');

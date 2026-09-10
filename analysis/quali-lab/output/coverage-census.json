@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-07-20T17:33:46.201Z",
-  "sourceHash": "64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978",
+  "generatedAt": "2026-09-10T23:21:18.605Z",
+  "sourceHash": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd",
   "covered": [
     {
       "id": "rt_2024_st-petersburg-street-circuit_qb_2024-03-09_a",
@@ -176,6 +176,22 @@
       "combinedFieldSize": 18,
       "rankAttribution": "single",
       "positionCrossCheck": "match",
+      "crosswalkVerdict": null
+    },
+    {
+      "id": "official_session_indy_nxt_2024_6489",
+      "seasonYear": 2024,
+      "date": "2024-09-14",
+      "venueName": "Nashville Superspeedway",
+      "source": "official_section_results",
+      "sourceTier": "official_section_results",
+      "lapCount": 2,
+      "onTrackGroupRank": null,
+      "groupFieldSize": null,
+      "combinedGridPosition": null,
+      "combinedFieldSize": null,
+      "rankAttribution": "cancelled",
+      "positionCrossCheck": "na",
       "crosswalkVerdict": null
     },
     {
@@ -444,8 +460,8 @@
       "lapCount": 2,
       "onTrackGroupRank": 12,
       "groupFieldSize": 24,
-      "combinedGridPosition": null,
-      "combinedFieldSize": null,
+      "combinedGridPosition": 12,
+      "combinedFieldSize": 24,
       "rankAttribution": "single",
       "positionCrossCheck": "na",
       "crosswalkVerdict": "GO"
@@ -497,6 +513,54 @@
       "rankAttribution": "single",
       "positionCrossCheck": "na",
       "crosswalkVerdict": "GO"
+    },
+    {
+      "id": "t71_2026_portland-international-raceway_qualifying_2026-08-08",
+      "seasonYear": 2026,
+      "date": "2026-08-08",
+      "venueName": "Portland International Raceway",
+      "source": "timing71",
+      "sourceTier": "timing71_normalized",
+      "lapCount": 10,
+      "onTrackGroupRank": 8,
+      "groupFieldSize": 12,
+      "combinedGridPosition": 15,
+      "combinedFieldSize": 24,
+      "rankAttribution": "single",
+      "positionCrossCheck": "na",
+      "crosswalkVerdict": "GO"
+    },
+    {
+      "id": "t71_2026_the-milwaukee-mile_qualifying_2026-08-29",
+      "seasonYear": 2026,
+      "date": "2026-08-29",
+      "venueName": "The Milwaukee Mile",
+      "source": "timing71",
+      "sourceTier": "timing71_normalized",
+      "lapCount": 2,
+      "onTrackGroupRank": 14,
+      "groupFieldSize": 23,
+      "combinedGridPosition": 14,
+      "combinedFieldSize": 23,
+      "rankAttribution": "single",
+      "positionCrossCheck": "na",
+      "crosswalkVerdict": "GO"
+    },
+    {
+      "id": "official_session_indy_nxt_2026_6950",
+      "seasonYear": 2026,
+      "date": "2026-09-05",
+      "venueName": "WeatherTech Raceway Laguna Seca",
+      "source": "official_section_results",
+      "sourceTier": "official_section_results",
+      "lapCount": 8,
+      "onTrackGroupRank": 4,
+      "groupFieldSize": 12,
+      "combinedGridPosition": 7,
+      "combinedFieldSize": 24,
+      "rankAttribution": "single",
+      "positionCrossCheck": "na",
+      "crosswalkVerdict": null
     }
   ],
   "excluded": [

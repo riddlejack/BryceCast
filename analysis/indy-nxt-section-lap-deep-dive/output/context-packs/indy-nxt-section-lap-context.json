@@ -74,77 +74,77 @@
   ],
   "bestTrackSectionContexts": [
     {
-      "bottomQuartileShare": 0.058823529411764705,
-      "meanPercentile": 0.7949346405228759,
+      "bottomQuartileShare": 0.2857142857142857,
+      "meanPercentile": 0.6192142513571085,
       "medianPercentile": 0.875,
-      "observationRows": 34,
-      "sectionFamily": "Turn 5",
-      "sessionType": "qualifying",
-      "sourceHash": "64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978",
-      "topQuartileShare": 0.8823529411764706,
-      "trackName": "WeatherTech Raceway Laguna Seca"
-    },
-    {
-      "bottomQuartileShare": 0.07142857142857142,
-      "meanPercentile": 0.8125,
-      "medianPercentile": 0.875,
-      "observationRows": 14,
-      "sectionFamily": "Turn 8",
-      "sessionType": "qualifying",
-      "sourceHash": "64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978",
-      "topQuartileShare": 0.9285714285714286,
-      "trackName": "Portland International Raceway"
-    },
-    {
-      "bottomQuartileShare": 0.0,
-      "meanPercentile": 0.8632369614512472,
-      "medianPercentile": 0.875,
-      "observationRows": 14,
+      "observationRows": 21,
       "sectionFamily": "Turn 9",
       "sessionType": "qualifying",
-      "sourceHash": "64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978",
-      "topQuartileShare": 0.9285714285714286,
+      "sourceHash": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd",
+      "topQuartileShare": 0.6190476190476191,
       "trackName": "Portland International Raceway"
     },
     {
       "bottomQuartileShare": 0.0,
-      "meanPercentile": 0.8708626673819978,
-      "medianPercentile": 0.8695652173913043,
+      "meanPercentile": 0.874290208566976,
+      "medianPercentile": 0.8636363636363636,
       "observationRows": 19,
       "sectionFamily": "BS 2",
       "sessionType": "practice",
-      "sourceHash": "64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978",
-      "topQuartileShare": 0.9473684210526315,
+      "sourceHash": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd",
+      "topQuartileShare": 1.0,
       "trackName": "Streets of Arlington"
     },
     {
-      "bottomQuartileShare": 0.14285714285714285,
-      "meanPercentile": 0.7249149659863946,
-      "medianPercentile": 0.8660714285714286,
-      "observationRows": 14,
+      "bottomQuartileShare": 0.19047619047619047,
+      "meanPercentile": 0.6940991548134405,
+      "medianPercentile": 0.8571428571428572,
+      "observationRows": 21,
       "sectionFamily": "Turn 2",
       "sessionType": "qualifying",
-      "sourceHash": "64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978",
-      "topQuartileShare": 0.7142857142857143,
+      "sourceHash": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd",
+      "topQuartileShare": 0.6666666666666666,
       "trackName": "Portland International Raceway"
+    },
+    {
+      "bottomQuartileShare": 0.10526315789473684,
+      "meanPercentile": 0.7496330799955996,
+      "medianPercentile": 0.8095238095238095,
+      "observationRows": 19,
+      "sectionFamily": "BS 3",
+      "sessionType": "practice",
+      "sourceHash": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd",
+      "topQuartileShare": 0.631578947368421,
+      "trackName": "Streets of Arlington"
+    },
+    {
+      "bottomQuartileShare": 0.15384615384615385,
+      "meanPercentile": 0.6340159840159839,
+      "medianPercentile": 0.8,
+      "observationRows": 52,
+      "sectionFamily": "Turn 12/13",
+      "sessionType": "qualifying",
+      "sourceHash": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd",
+      "topQuartileShare": 0.5384615384615384,
+      "trackName": "Indianapolis Motor Speedway Road Course"
     }
   ],
   "claimStrength": "historical_backtest_only",
   "counts": {
     "roadAmericaPrepRows": 9,
-    "sectionFamilyRows": 250,
-    "sectionObservations": 22660,
-    "sessionSummaries": 91,
-    "sessionToRaceTransferRows": 41,
-    "topSectionRows": 3047,
-    "upcomingVenuePrepRows": 6
+    "sectionFamilyRows": 264,
+    "sectionObservations": 26304,
+    "sessionSummaries": 100,
+    "sessionToRaceTransferRows": 45,
+    "topSectionRows": 3357,
+    "upcomingVenuePrepRows": 0
   },
   "displayRules": [
     "Use section percentiles as drilldown and prep context, not as deterministic race forecasts.",
     "Suppress rows with low comparison counts or show denominator badges.",
     "Keep pit/timing-line sections separate from true track sections."
   ],
-  "generatedAt": "2026-07-21T23:55:05Z",
+  "generatedAt": "2026-09-10T23:02:15Z",
   "id": "indy-nxt-section-lap-context",
   "primaryUseCases": [
     "race_week_prep",
@@ -154,14 +154,14 @@
   ],
   "publicPointPrediction": false,
   "sourceDataset": "data/career/career.dataset.json",
-  "sourceHash": "64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978",
+  "sourceHash": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd",
   "transferCorrelations": [
     {
       "caveat": "Exploratory association only; no public point prediction and no post-race leakage for upcoming events.",
       "claimStrength": "historical_backtest_only",
       "label": "Practice section median vs race finish percentile",
-      "n": 33,
-      "pearson": 0.2868042477438564,
+      "n": 36,
+      "pearson": 0.19846476366321994,
       "x": "practiceMedianTrackSectionPercentile",
       "y": "finishPercentile"
     },
@@ -169,34 +169,56 @@
       "caveat": "Exploratory association only; no public point prediction and no post-race leakage for upcoming events.",
       "claimStrength": "historical_backtest_only",
       "label": "Qualifying section median vs race finish percentile",
-      "n": 40,
-      "pearson": 0.2432380455825847,
+      "n": 44,
+      "pearson": 0.15974190896888601,
       "x": "qualifyingMedianTrackSectionPercentile",
       "y": "finishPercentile"
     }
   ],
   "weakestTrackSectionContexts": [
     {
-      "bottomQuartileShare": 0.8,
-      "meanPercentile": 0.16368176117267516,
+      "bottomQuartileShare": 0.7894736842105263,
+      "meanPercentile": 0.16675642450309294,
       "medianPercentile": 0.15000000000000002,
-      "observationRows": 20,
+      "observationRows": 19,
       "sectionFamily": "Turn 2",
       "sessionType": "practice",
-      "sourceHash": "64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978",
+      "sourceHash": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd",
       "topQuartileShare": 0.0,
       "trackName": "Streets of Arlington"
     },
     {
       "bottomQuartileShare": 0.5263157894736842,
-      "meanPercentile": 0.24609396384658339,
-      "medianPercentile": 0.17391304347826086,
+      "meanPercentile": 0.24644563353463753,
+      "medianPercentile": 0.18181818181818177,
       "observationRows": 19,
       "sectionFamily": "BS 5",
       "sessionType": "practice",
-      "sourceHash": "64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978",
+      "sourceHash": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd",
       "topQuartileShare": 0.0,
       "trackName": "Streets of Arlington"
+    },
+    {
+      "bottomQuartileShare": 0.631578947368421,
+      "meanPercentile": 0.24878192986105785,
+      "medianPercentile": 0.18181818181818177,
+      "observationRows": 19,
+      "sectionFamily": "Turn 5",
+      "sessionType": "practice",
+      "sourceHash": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd",
+      "topQuartileShare": 0.0,
+      "trackName": "Streets of Arlington"
+    },
+    {
+      "bottomQuartileShare": 0.5217391304347826,
+      "meanPercentile": 0.3608397641006336,
+      "medianPercentile": 0.18181818181818177,
+      "observationRows": 23,
+      "sectionFamily": "I8 to I9",
+      "sessionType": "qualifying",
+      "sourceHash": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd",
+      "topQuartileShare": 0.21739130434782608,
+      "trackName": "Road America"
     },
     {
       "bottomQuartileShare": 0.6086956521739131,
@@ -205,31 +227,9 @@
       "observationRows": 23,
       "sectionFamily": "Turn 10",
       "sessionType": "qualifying",
-      "sourceHash": "64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978",
+      "sourceHash": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd",
       "topQuartileShare": 0.13043478260869565,
       "trackName": "Streets of St. Petersburg"
-    },
-    {
-      "bottomQuartileShare": 0.625,
-      "meanPercentile": 0.2589330808080808,
-      "medianPercentile": 0.19090909090909086,
-      "observationRows": 8,
-      "sectionFamily": "Turns 13/14",
-      "sessionType": "qualifying",
-      "sourceHash": "64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978",
-      "topQuartileShare": 0.0,
-      "trackName": "Streets of Arlington"
-    },
-    {
-      "bottomQuartileShare": 0.6,
-      "meanPercentile": 0.2537341377158311,
-      "medianPercentile": 0.1996047430830039,
-      "observationRows": 20,
-      "sectionFamily": "Turn 5",
-      "sessionType": "practice",
-      "sourceHash": "64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978",
-      "topQuartileShare": 0.0,
-      "trackName": "Streets of Arlington"
     }
   ]
 }

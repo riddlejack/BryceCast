@@ -1,12 +1,12 @@
 {
-  "analyzableBryceRaceRows": 41,
+  "analyzableBryceRaceRows": 45,
   "datasetPath": "data/career/career.dataset.json",
-  "datasetUpdatedAt": "2026-07-19T20:49:43.792Z",
-  "headToHeadRows": 49,
+  "datasetUpdatedAt": "2026-09-10T22:28:43.621Z",
+  "headToHeadRows": 50,
   "indyNxtEvents": 45,
   "indyNxtSessions": 213,
-  "lapShapeRows": 41,
-  "lapTimelineRows": 1558,
+  "lapShapeRows": 45,
+  "lapTimelineRows": 1748,
   "outputs": {
     "charts": [
       "analysis/indy-nxt-discovery/output/charts/best_section_percentiles.svg",
@@ -29,8 +29,8 @@
       "analysis/indy-nxt-discovery/output/tables/indy_nxt_weather_segments.csv"
     ]
   },
-  "repoHead": "62c7078",
-  "sectionStrengthRows": 1147,
+  "repoHead": "d9a4128",
+  "sectionStrengthRows": 1266,
   "weatherRowsInRaceSet": 40,
   "weatherSegmentRows": 13
 }

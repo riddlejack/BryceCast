@@ -32,7 +32,7 @@ import {
 } from '../data/uiDataPackage';
 import { getVenueByTrackName, getVenueDossier } from '../data/venueDossier';
 import { causeFacts, causeMajority, orderedCauses } from '../data/cautionCause';
-import { priorYearReplaysAtVenue, replayProvenance } from '../data/replayAvailable';
+import { isBryceCastCaptureTier, priorYearReplaysAtVenue, replayProvenance } from '../data/replayAvailable';
 import { loadDebriefArchive } from '../data/debriefArchive';
 import { ReplayAffordance, priorYearTitle, useReplayCatalog } from './replayAffordance';
 import { VenueSectionSuite, useVenueSectionData } from './sectionIntelligence';
@@ -1013,6 +1013,20 @@ const PointsPicture = ({ snapshot }: { snapshot: UiStandingsSnapshot }) => {
   const bryceRank = snapshot.bryce.pointsRankInCapture;
   const rivals = snapshot.entries.filter((entry) => !entry.isBryce && Math.abs(entry.pointsRankInCapture - bryceRank) <= 3);
   const nextUp = snapshot.entries.find((entry) => entry.pointsRankInCapture === bryceRank - 1);
+  const officialStandings = snapshot.sourceState === 'official_championship_standings';
+  const pointsSourceEntry = officialStandings
+    ? {
+        label: 'Official INDY NXT championship standings',
+        path: snapshot.capturePath,
+        note: `Full-field official points and championship rank from ${snapshot.sessionName ?? 'the official year summary'}${
+          snapshot.eventName ? ` after ${snapshot.eventName}` : ''
+        }.`
+      }
+    : {
+        label: 'Race Control capture · last completed race',
+        path: snapshot.capturePath,
+        note: `Full-field running points at the end of ${snapshot.eventName ?? 'the last race'} (${snapshot.sessionName ?? 'race'}). The /api/timing route serves the same capture.`
+      };
 
   return (
     <Card
@@ -1021,11 +1035,7 @@ const PointsPicture = ({ snapshot }: { snapshot: UiStandingsSnapshot }) => {
         <SourcePill
           title="Championship points around Bryce"
           entries={[
-            {
-              label: 'Race Control capture · last completed race',
-              path: snapshot.capturePath,
-              note: `Full-field running points at the end of ${snapshot.eventName ?? 'the last race'} (${snapshot.sessionName ?? 'race'}). The /api/timing route serves the same capture.`
-            },
+            pointsSourceEntry,
             {
               label: 'Career head-to-head',
               path: 'analysis/indy-nxt-discovery/output/tables/indy_nxt_head_to_head.csv',
@@ -1092,8 +1102,10 @@ const PointsPicture = ({ snapshot }: { snapshot: UiStandingsSnapshot }) => {
         })}
       </div>
       <p className="caption caption--secondary" style={{ margin: '10px 0 0' }}>
-        Points from our timing capture at {shortVenue(snapshot.eventName)} · unofficial · head-to-head counts every shared race
-        since 2024.
+        {officialStandings
+          ? 'Points and rank from the official INDY NXT championship standings'
+          : `Points from our timing capture at ${shortVenue(snapshot.eventName)} · unofficial`}{' '}
+        · head-to-head counts every shared race since 2024.
       </p>
     </Card>
   );
@@ -1433,7 +1445,7 @@ const RaceWeekReplay = ({ venue, upcomingYear }: { venue: UiVenueDossierVenue; u
   const priors = priorYearReplaysAtVenue(available, venue.visits, upcomingYear ?? new Date().getUTCFullYear() + 1);
   if (priors.length === 0) return null;
   const [primary, ...older] = priors;
-  const isOwn = replayProvenance(primary.capture).tier === 'brycecast_capture';
+  const isOwn = isBryceCastCaptureTier(replayProvenance(primary.capture).tier);
   // "Last year's race" only when the most recent prior IS the year before this
   // weekend and it isn't a doubleheader; otherwise name the year, so the copy is
   // never loose about which race it opens.

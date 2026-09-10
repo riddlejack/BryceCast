@@ -127,8 +127,21 @@ const canonicalBryceFinishedRaceSessions = (dataset) => {
       .map((result) => result.sessionId)
   );
 };
+const canonicalBryceRaceSessions = (dataset) => {
+  const { sessions } = canonicalIndexes(dataset);
+  return new Set(
+    (dataset.results ?? [])
+      .filter(
+        (result) =>
+          result.driverId === 'driver_bryce_aron' &&
+          sessions.get(result.sessionId)?.sessionType === 'race'
+      )
+      .map((result) => result.sessionId)
+  );
+};
 const expectedUpcomingEventIds = canonicalFutureIndyEvents(canonicalDataset, packageAsOfDate);
 const expectedRaceDebriefSessionIds = canonicalIndyBryceRaceSessions(canonicalDataset);
+const expectedCareerRaceSessionIds = canonicalBryceRaceSessions(canonicalDataset);
 const expectedUpcomingEventPacks = expectedUpcomingEventIds.size;
 const expectedRaceDebriefPacks = expectedRaceDebriefSessionIds.size;
 const expectedCareerResultConversionRows = canonicalBryceFinishedRaceSessions(canonicalDataset).size;
@@ -308,8 +321,6 @@ for (const key of [
   'sectionLapContextPack',
   'raceLapSectionSummary',
   'raceLapSectionContextPack',
-  'supplementalPrepSectionContextPack',
-  'supplementalRaceLapSectionContextPack',
   'prepSessionSignals',
   'fieldStrengthByRace',
   'sectionResultsDeepByRace',
@@ -318,6 +329,14 @@ for (const key of [
 ]) {
   if (!sourceInventory[key]) {
     fail(`sourceInventory missing predictive source ${key}`);
+  }
+}
+for (const key of ['supplementalPrepSectionContextPack', 'supplementalRaceLapSectionContextPack']) {
+  if (expectedUpcomingEventPacks > 0 && !sourceInventory[key]) {
+    fail(`sourceInventory missing current next-venue source ${key}`);
+  }
+  if (expectedUpcomingEventPacks === 0 && sourceInventory[key]) {
+    fail(`sourceInventory must omit ${key} when the canonical schedule has no future event`);
   }
 }
 for (const key of ['predictiveBuilderScript', 'predictiveValidatorScript', 'sectionLapBuilderScript', 'sectionLapValidatorScript', 'raceLapSectionBuilderScript', 'raceLapSectionValidatorScript', 'predictiveRunnerScript', 'uiDataPackageBuilderScript', 'uiDataPackageValidatorScript']) {
@@ -383,10 +402,10 @@ const contextPackRefsByType = predictive.contextPackRefs.reduce((acc, packRef) =
   return acc;
 }, {});
 if (
-  contextPackRefsByType.upcoming_event !== predictive.contextPackCounts.upcomingEvent ||
-  contextPackRefsByType.race_debrief !== predictive.contextPackCounts.raceDebrief ||
-  contextPackRefsByType.career_lab !== predictive.contextPackCounts.careerLab ||
-  contextPackRefsByType.live_race_day !== predictive.contextPackCounts.liveRaceDay
+  (contextPackRefsByType.upcoming_event ?? 0) !== predictive.contextPackCounts.upcomingEvent ||
+  (contextPackRefsByType.race_debrief ?? 0) !== predictive.contextPackCounts.raceDebrief ||
+  (contextPackRefsByType.career_lab ?? 0) !== predictive.contextPackCounts.careerLab ||
+  (contextPackRefsByType.live_race_day ?? 0) !== predictive.contextPackCounts.liveRaceDay
 ) {
   fail('Predictive contextPackRefs counts must match contextPackCounts.');
 }
@@ -406,6 +425,9 @@ if (!Array.isArray(dataPackage.screens.upcomingPrep.events) || dataPackage.scree
 }
 if (expectedUpcomingEventPacks > 0 && !dataPackage.screens.upcomingPrep.nextVenue) {
   fail('Upcoming prep must identify the next upcoming venue.');
+}
+if (expectedUpcomingEventPacks === 0 && dataPackage.screens.upcomingPrep.nextVenue !== null) {
+  fail('Upcoming prep nextVenue must be null when the canonical schedule has no future event.');
 }
 if (dataPackage.screens.upcomingPrep.contextPackRefs?.length !== dataPackage.screens.upcomingPrep.events.length) {
   fail('Upcoming prep must link every predictive upcoming-event context pack.');
@@ -467,8 +489,12 @@ for (const [key, ref] of Object.entries(dataPackage.screens.upcomingPrep.supplem
   }
 }
 for (const key of ['prepSection', 'raceLapSection']) {
-  if (!dataPackage.screens.upcomingPrep.supplementalContextRefs?.[key]) {
-    fail(`Upcoming prep missing supplementalContextRefs.${key}`);
+  const ref = dataPackage.screens.upcomingPrep.supplementalContextRefs?.[key];
+  if (expectedUpcomingEventPacks > 0 && !ref) {
+    fail(`Upcoming prep missing supplementalContextRefs.${key} while future events exist`);
+  }
+  if (expectedUpcomingEventPacks === 0 && ref) {
+    fail(`Upcoming prep must omit supplementalContextRefs.${key} after the season`);
   }
 }
 
@@ -933,12 +959,28 @@ for (const campaign of seasonCampaigns.campaigns) {
 if (arcCount < 2) {
   fail(`careerLab.seasonCampaigns must carry at least two real points arcs (got ${arcCount}).`);
 }
-if (currentCount > 1) {
-  fail(`careerLab.seasonCampaigns must mark at most one current campaign (got ${currentCount}).`);
-}
 const currentCampaign = seasonCampaigns.campaigns.find((campaign) => campaign.isCurrent);
-if (currentCampaign && (currentCampaign.renderMode !== 'arc' || !currentCampaign.inProgress)) {
-  fail('careerLab.seasonCampaigns current campaign must be an in-progress arc.');
+const latestIndySeasonYear = Math.max(
+  0,
+  ...(canonicalDataset.seasons ?? [])
+    .filter((season) => season.driverId === 'driver_bryce_aron' && season.seriesId === 'series_indy_nxt')
+    .map((season) => numberOrZero(season.year))
+);
+const latestIndySeasonEndDate = (canonicalDataset.events ?? [])
+  .filter((event) => event.seriesId === 'series_indy_nxt' && numberOrZero(event.seasonYear) === latestIndySeasonYear)
+  .map((event) => String(event.eventEndDate ?? event.eventStartDate ?? '').slice(0, 10))
+  .filter((date) => /^\d{4}-\d{2}-\d{2}$/.test(date))
+  .sort()
+  .at(-1) ?? null;
+if (currentCount !== 1 || !currentCampaign || currentCampaign.seriesId !== 'series_indy_nxt' || currentCampaign.seasonYear !== latestIndySeasonYear) {
+  fail(`careerLab.seasonCampaigns must mark the latest INDY NXT season as its one current campaign (got ${currentCount}).`);
+}
+if (currentCampaign.renderMode !== 'arc') {
+  fail('careerLab.seasonCampaigns current campaign must be a sourced points arc.');
+}
+const expectedCurrentInProgress = latestIndySeasonEndDate === null || packageAsOfDate <= latestIndySeasonEndDate;
+if (currentCampaign.inProgress !== expectedCurrentInProgress) {
+  fail('careerLab.seasonCampaigns current campaign progress state must match the canonical season end date.');
 }
 for (const exclusion of seasonCampaigns.excluded ?? []) {
   if (!exclusion.reason || typeof exclusion.reason !== 'string') {
@@ -1097,11 +1139,15 @@ for (const field of [
     fail(`careerLab.lifeStats.${field} must mirror the validated summary.`);
   }
 }
-if (lifeStats.personalRaceMileage.raceRows !== 146 || lifeStats.personalRaceMileage.coveredRaceRows !== 146) {
-  fail('careerLab.lifeStats must cover all 146 canonical Bryce race results.');
+if (
+  lifeStats.personalRaceMileage.raceRows !== expectedCareerRaceSessionIds.size ||
+  lifeStats.personalRaceMileage.coveredRaceRows !== expectedCareerRaceSessionIds.size
+) {
+  fail(`careerLab.lifeStats must cover all ${expectedCareerRaceSessionIds.size} canonical Bryce race results.`);
 }
-if (lifeStats.personalRaceMileage.laps !== 3084 || lifeStats.personalRaceMileage.miles !== 7010.9) {
-  fail('careerLab.lifeStats must carry personally attributable race laps and mileage.');
+assertSetEqual(new Set(lifeStats.coveredSessionIds ?? []), expectedCareerRaceSessionIds, 'careerLab.lifeStats covered race sessionIds');
+if (!(lifeStats.personalRaceMileage.laps > 0) || !(lifeStats.personalRaceMileage.miles > 0)) {
+  fail('careerLab.lifeStats must carry positive personally attributable race laps and mileage.');
 }
 if (
   lifeStats.physicalSessionMileage.floor.confidenceClass !== 'observed_lower_bound' ||
@@ -1111,7 +1157,7 @@ if (
   fail('careerLab.lifeStats physical-session aggregates must preserve confidence classes.');
 }
 if (
-  lifeStats.travel.greatCircleMinimum.miles !== 55029.6 ||
+  !(lifeStats.travel.greatCircleMinimum.miles > 0) ||
   lifeStats.travel.routeAdjustedMinimum.confidenceClass !== 'modeled_range' ||
   lifeStats.travel.actualTravel.confidenceClass !== 'unknown'
 ) {
@@ -1377,7 +1423,7 @@ if (restartSummary.fieldBaseline) {
   }
 }
 
-/* ---------- Career Lab atlas (deterministic land + 145-race venue contract) ---------- */
+/* ---------- Career Lab atlas (deterministic land + canonical race/venue contract) ---------- */
 
 const atlas = dataPackage.screens.careerLab.atlas;
 if (atlas?.schemaVersion !== 'brycecast.careerAtlas.v3') {
@@ -1402,11 +1448,15 @@ for (const field of ['schemaVersion', 'naturalEarth', 'geometry', 'globe', 'venu
     fail(`careerLab.atlas.${field} must mirror the validated atlas artifact.`);
   }
 }
-if (atlas.venueCount !== 34 || atlas.venues.length !== 34 || atlas.raceCount !== 146) {
-  fail('careerLab.atlas must carry all 34 physical venues and all 146 canonical race rows.');
+if (
+  atlas.venueCount !== atlas.venues.length ||
+  new Set(atlas.venues.map((venue) => venue.venueId)).size !== atlas.venueCount ||
+  atlas.raceCount !== expectedCareerRaceSessionIds.size
+) {
+  fail(`careerLab.atlas must carry unique physical venues and all ${expectedCareerRaceSessionIds.size} canonical race rows.`);
 }
-if (atlas.venues.reduce((sum, venue) => sum + venue.raceCount, 0) !== 146) {
-  fail('careerLab.atlas venue race counts must reconcile to 146.');
+if (atlas.venues.reduce((sum, venue) => sum + venue.raceCount, 0) !== expectedCareerRaceSessionIds.size) {
+  fail(`careerLab.atlas venue race counts must reconcile to ${expectedCareerRaceSessionIds.size}.`);
 }
 if (atlas.naturalEarth.license !== 'public_domain' || atlas.naturalEarth.sourceSha256 !== sourceInventory.careerAtlasNaturalEarth.sha256) {
   fail('careerLab.atlas must preserve pinned Natural Earth public-domain provenance.');

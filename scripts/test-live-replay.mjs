@@ -162,6 +162,28 @@ await writeFile(runnerStatusPath, JSON.stringify({ phase: 'IDLE', updatedAt: new
 }
 
 // ---------------------------------------------------------------------------
+// Unit: parsed lake rows use bounded least-recently-used retention.
+// ---------------------------------------------------------------------------
+{
+  const boundedLake = createLakeReplayFeeds({ enabled: true, runnerStatusPath, rowsCacheMaxSessions: 2 });
+  const [first, second, third] = boundedLake.sessions()
+    .filter((session) => session.watchable)
+    .sort((a, b) => a.samples - b.samples)
+    .slice(0, 3);
+  assert.ok(first && second && third, 'the generated manifest provides three watchable LRU fixtures');
+  boundedLake.seriesRowsFor(first.sessionKey);
+  boundedLake.seriesRowsFor(second.sessionKey);
+  assert.deepEqual(boundedLake.cacheInfo().sessionKeys, [first.sessionKey, second.sessionKey]);
+  boundedLake.seriesRowsFor(first.sessionKey); // touch: first becomes most recent
+  boundedLake.seriesRowsFor(third.sessionKey); // evicts second, the least recent
+  assert.deepEqual(
+    boundedLake.cacheInfo(),
+    { maxSessions: 2, size: 2, sessionKeys: [first.sessionKey, third.sessionKey] },
+    'LRU eviction retains the two most recently used parsed sessions'
+  );
+}
+
+// ---------------------------------------------------------------------------
 // Unit: the router's resolveReplay enforces the live-guard + watchable gating.
 // ---------------------------------------------------------------------------
 const makeRouter = () => {
@@ -177,6 +199,31 @@ const makeRouter = () => {
   assert.equal(router.resolveReplay({ session: '5537-6753', rt: REPLAY_EARLY_RT, speed: 1 }).statusCode, 422, 'a non-watchable capture refuses with 422');
   assert.equal(router.resolveReplay({ session: '9001-8801', rt: REPLAY_EARLY_RT, speed: 1 }).statusCode, 422, 'a wrong-series capture refuses with 422');
   assert.equal(router.resolveReplay({ session: 'no-such-session', rt: REPLAY_EARLY_RT, speed: 1 }).statusCode, 404, 'an unknown session refuses with 404');
+  const midOhioGap = router.resolveReplay({
+    session: 'session_indy_nxt_2025_6452',
+    rt: '2025-07-06T10:45:00.000Z',
+    speed: 1
+  });
+  assert.equal(midOhioGap.kind, 'source_gap', 'a withheld lake interval resolves as a source gap, not a stale record');
+  assert.equal(midOhioGap.statusCode, 409, 'source gaps use a distinct conflict response');
+  assert.equal(midOhioGap.gap.lastObservedAt, '2025-07-06T10:42:12.000Z');
+  assert.equal(midOhioGap.gap.heldThroughAt, '2025-07-06T10:42:17.000Z');
+  assert.equal(midOhioGap.gap.nextObservedAt, '2025-07-06T10:49:28.000Z');
+  assert.equal(midOhioGap.gap.maximumHoldSeconds, 5);
+  const beforeWithheld = router.resolveReplay({
+    session: 'session_indy_nxt_2025_6452',
+    rt: '2025-07-06T10:42:17.000Z',
+    speed: 1
+  });
+  assert.equal(beforeWithheld.kind, 'record', 'the declared five-second step-hold remains available');
+  assert.equal(beforeWithheld.record.archiveCheckedAt, '2025-07-06T10:42:17.000Z');
+  const resumed = router.resolveReplay({
+    session: 'session_indy_nxt_2025_6452',
+    rt: '2025-07-06T10:49:28.000Z',
+    speed: 1
+  });
+  assert.equal(resumed.kind, 'record', 'replay resumes on the next observed frame');
+  assert.equal(resumed.record.archiveCheckedAt, '2025-07-06T10:49:28.000Z');
   const disabledRouter = createReplayRouter({
     captureOverlay: createReplayOverlay({ enabled: false, sqlitePath, runnerStatusPath }),
     lakeFeeds: createLakeReplayFeeds({ enabled: false, runnerStatusPath }),

@@ -118,30 +118,36 @@ def baseline_rows_differ(left: dict[str, Any], right: dict[str, Any]) -> list[st
 
 
 def check_venue_baseline_surfaces(baseline_rows: list[dict[str, str]], summary: dict[str, Any]) -> None:
-    """Deep-compare every venue baseline row across the three surfaces a value can
-    drift between — the CSV table, the summary block, and the UI package the app
-    hydrates. sourceHash is the only field stripped; stable is a boolean."""
+    """Compare the lane outputs and, when current, the downstream UI package.
+
+    The UI-package builder validates this lane before replacing its own output,
+    so a package from the prior canonical hash is expected during a refresh and
+    must not create a circular build dependency.
+    """
     csv_by = {r["venueSlug"]: normalize_baseline_row(r) for r in baseline_rows}
     summary_by = {r["venueSlug"]: normalize_baseline_row(r) for r in summary.get("venueBaselines", [])}
-    if not UI_DATA_PACKAGE_PATH.exists():
-        fail("ui-data-package.json is missing — rebuild the UI data package before validating")
-    package = json.loads(UI_DATA_PACKAGE_PATH.read_text())
-    try:
-        pkg_rows = package["screens"]["careerLab"]["restarts"]["venueBaselines"]
-    except (KeyError, TypeError):
-        fail("ui-data-package has no screens.careerLab.restarts.venueBaselines")
-    package_by = {r["venueSlug"]: normalize_baseline_row(r) for r in pkg_rows}
     if set(csv_by) != set(summary_by):
         fail("venue baseline venues differ between the CSV table and the summary block")
-    if set(csv_by) != set(package_by):
-        fail("venue baseline venues differ between the CSV table and the UI package")
     for slug, csv_row in csv_by.items():
         d_summary = baseline_rows_differ(csv_row, summary_by[slug])
         if d_summary:
             fail(f"venue {slug}: summary baseline differs from the CSV on {d_summary}")
+    if not UI_DATA_PACKAGE_PATH.exists():
+        return
+    package = json.loads(UI_DATA_PACKAGE_PATH.read_text())
+    if package.get("sourceHash") != summary.get("datasetSha256"):
+        return
+    try:
+        pkg_rows = package["screens"]["careerLab"]["restarts"]["venueBaselines"]
+    except (KeyError, TypeError):
+        fail("current ui-data-package has no screens.careerLab.restarts.venueBaselines")
+    package_by = {r["venueSlug"]: normalize_baseline_row(r) for r in pkg_rows}
+    if set(csv_by) != set(package_by):
+        fail("venue baseline venues differ between the CSV table and the current UI package")
+    for slug, csv_row in csv_by.items():
         d_package = baseline_rows_differ(csv_row, package_by[slug])
         if d_package:
-            fail(f"venue {slug}: UI-package baseline differs from the CSV on {d_package}")
+            fail(f"venue {slug}: current UI-package baseline differs from the CSV on {d_package}")
 
 
 def check_mutation_detected(baseline_rows: list[dict[str, str]]) -> None:

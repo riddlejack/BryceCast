@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
-    "build": "tsc && vite build",
+    "build": "tsc && vite build && node scripts/write-release.mjs",
     "preview": "vite preview --host 0.0.0.0",
     "serve:api": "node scripts/api-server.mjs",
     "serve:app": "node scripts/api-server.mjs --static=dist",
@@ -87,7 +87,7 @@
     "weather:live:upcoming": "node scripts/live-weather.mjs --upcoming-indy-nxt",
     "ingest:history": "node scripts/ingest-history.mjs",
     "career:import:indy-nxt": "node scripts/import-indy-nxt-career.mjs",
-    "career:import:indy-nxt:refresh": "node scripts/import-indy-nxt-career.mjs --refresh --concurrency=64",
+    "career:import:indy-nxt:refresh": "node scripts/import-indy-nxt-career.mjs --refresh --concurrency=8",
     "career:import:gb3": "node scripts/import-gb3-career.mjs",
     "career:import:gb3:refresh": "node scripts/import-gb3-career.mjs --refresh --concurrency=4",
     "career:import:gb3-2021": "node scripts/import-gb3-2021-career.mjs",
@@ -129,7 +129,13 @@
     "probe:pov:watch": "node scripts/probe-onboards.mjs --watch --interval-ms=15000",
     "poll:race": "node scripts/race-poller.mjs --once",
     "poll:race:watch": "node scripts/race-poller.mjs --watch --interval-ms=15000",
-    "qa:render": "node scripts/qa-render.mjs"
+    "qa:render": "node scripts/qa-render.mjs",
+    "test:api-operator-idle": "node scripts/test-api-operator-idle.mjs",
+    "analytics:timing-coverage": "node analysis/historical-data-lake/build-timing-coverage.mjs",
+    "analytics:timing-coverage:validate": "node analysis/historical-data-lake/validate-timing-coverage.mjs",
+    "analytics:live-captures:export": "node analysis/semantic-layer/export-live-captures.mjs",
+    "test:timing-downloads": "node scripts/test-timing-downloads.mjs",
+    "analytics:setup": "node scripts/setup-analytics.mjs"
   },
   "dependencies": {
     "@vitejs/plugin-react": "^5.0.0",

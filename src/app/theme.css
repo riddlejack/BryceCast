@@ -1655,6 +1655,44 @@ a.tower__row.race-row--live:hover { background: var(--surface-0); }
 .race-replay__year-prov { display: inline-flex; align-items: center; gap: 10px; flex: 0 0 auto; }
 .race-replay__year-prov .caption { font-size: 11.5px; }
 
+/* ---------- retained timing archive: observed source vs replay ---------- */
+
+.timing-archive__intro {
+  margin: -2px 0 14px;
+  color: var(--ink-secondary);
+  font-size: 13.5px;
+  line-height: 1.45;
+  max-width: 72ch;
+}
+
+.timing-archive__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0;
+  border-top: 1px solid var(--divider);
+}
+
+.timing-archive__session { padding: 16px 18px 2px 0; min-width: 0; }
+.timing-archive__session + .timing-archive__session {
+  padding-left: 18px;
+  padding-right: 0;
+  border-left: 1px solid var(--divider);
+}
+
+.timing-archive__eyebrow { color: var(--ink-muted); font-size: 11.5px; }
+.timing-archive__source { margin-top: 3px; font-size: 14px; font-weight: 590; }
+.timing-archive__facts { display: grid; gap: 5px; margin-top: 13px; color: var(--ink-secondary); font-size: 12px; }
+.timing-archive__facts strong { color: var(--ink-primary); font-weight: 620; }
+.timing-archive__note { margin: 10px 0 0; color: var(--ink-muted); font-size: 11.5px; line-height: 1.45; }
+.timing-archive__actions { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 18px; margin-top: 14px; }
+.timing-archive__actions .navlink { padding: 4px 0; color: var(--link); font-size: 12.5px; }
+
+@media (max-width: 719px) {
+  .timing-archive__grid { grid-template-columns: minmax(0, 1fr); }
+  .timing-archive__session { padding: 15px 0; }
+  .timing-archive__session + .timing-archive__session { padding-left: 0; border-left: 0; border-top: 1px solid var(--divider); }
+}
+
 /* ---------- the time machine: Live-page replay bar ---------- */
 
 .replay-bar {
@@ -1666,6 +1704,50 @@ a.tower__row.race-row--live:hover { background: var(--surface-0); }
   padding: 12px 16px;
   background: var(--surface-2);
   border-radius: var(--radius-tile);
+}
+
+.replay-source-gap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: clamp(20px, 3vw, 28px);
+  background: var(--surface-1);
+  border-radius: var(--radius-panel);
+}
+
+.replay-source-gap__title { margin: 10px 0 0; font-size: clamp(22px, 4vw, 30px); letter-spacing: -0.02em; }
+.replay-source-gap__copy { margin: 9px 0 0; max-width: 66ch; color: var(--ink-secondary); font-size: 14px; line-height: 1.5; }
+.replay-source-gap__jump {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  flex: 0 0 auto;
+  padding: 10px 13px;
+  border: 1px solid var(--hairline);
+  border-radius: 9px;
+  background: var(--surface-0);
+  color: var(--link);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 560;
+  cursor: pointer;
+}
+
+.replay-gap-skipped {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 9px 12px;
+  padding: 11px 14px;
+  border-radius: var(--radius-tile);
+  background: var(--surface-1);
+  color: var(--ink-secondary);
+  font-size: 12.5px;
+}
+
+@media (max-width: 719px) {
+  .replay-source-gap { align-items: flex-start; flex-direction: column; }
 }
 
 .replay-ended-note {

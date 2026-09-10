@@ -55,14 +55,24 @@ const nash = JSON.parse(await readFile(join(OUT, 'nashville', 'loop-inventory.js
 check('nashville: feed carries more loops than published (both races)', nash.races.length === 2 && nash.races.every((r) => r.feedCarriesMoreThanPublished));
 check('nashville: published fraction ~0.43-0.44', nash.races.every((r) => r.official.publishedLapFractionMedian > 0.4 && r.official.publishedLapFractionMedian < 0.47));
 
-// 5. Slice 2: Timing71 2026 tables + identity crosswalk.
+// 5. Slice 2: Timing71 2026 tables + identity crosswalk. The audited replay
+// list is the expected set, so a newly promoted session does not require a
+// validator source edit merely to advance a hard-coded season count.
+const audit = JSON.parse(await readFile(join(OUT, '..', '..', 'historical-high-frequency-data-audit', 'timing71-2026-coverage.json'), 'utf8'));
+const expectedT71ReplayIds = new Set(
+  [...(audit.raceReplays ?? []), ...(audit.nonRaceSessionCandidates ?? [])]
+    .map((row) => row.replayId)
+    .filter(Boolean),
+);
+const expectedT71SessionCount = expectedT71ReplayIds.size;
 const t71 = JSON.parse(await readFile(join(OUT, 'timing71-2026-summary.json'), 'utf8'));
-check('t71: 33 validated 2026 sessions', t71.sessionCount === 33, `${t71.sessionCount}`);
+check('t71: session count matches audited replay set', t71.sessionCount === expectedT71SessionCount, `${t71.sessionCount}/${expectedT71SessionCount}`);
+check('t71: session IDs exactly match audited replay set', t71.sessions.every((s) => expectedT71ReplayIds.has(s.replayId)) && t71.sessions.length === expectedT71SessionCount);
 check('t71: every session sourceTier timing71_normalized', t71.sessions.every((s) => s.sourceTier === 'timing71_normalized'));
-check('t71: maxLap matches audit coverage for all 33', t71.sessions.every((s) => s.maxLapMatchesCoverage === true));
+check('t71: maxLap matches audit coverage for every session', t71.sessions.every((s) => s.maxLapMatchesCoverage === true));
 
 const cw = JSON.parse(await readFile(join(OUT, 'crosswalk', 'identity-crosswalk-2026.json'), 'utf8'));
-check('crosswalk: 33/33 sessions complete', cw.completeSessions === 33, `${cw.completeSessions}`);
+check('crosswalk: every audited session complete', cw.completeSessions === expectedT71SessionCount && cw.sessionCount === expectedT71SessionCount, `${cw.completeSessions}/${expectedT71SessionCount}`);
 check('crosswalk: >=31 sessions strict event scope', cw.sessions.filter((s) => s.strictEventScope).length >= 31);
 check('crosswalk: every session event-scoped (canonical or capture authority)', cw.sessions.every((s) => s.eventScoped));
 check('crosswalk: zero season-fallback sessions remain', cw.sessions.every((s) => s.scopeUsed !== 'season_fallback'));
@@ -77,7 +87,8 @@ check('crosswalk: zero ambiguous mappings anywhere', cw.sessions.every((s) => s.
 const cwv = JSON.parse(await readFile(join(OUT, 'crosswalk', 'crosswalk-validation.json'), 'utf8'));
 check('crosswalk validation: no hard failures', cwv.hardFailures.length === 0, JSON.stringify(cwv.hardFailures.slice(0, 3)));
 check('crosswalk validation: zero NO-GO sessions', cwv.noGoCount === 0, `${cwv.noGoCount}`);
-check('crosswalk validation: GO=32, CONDITIONAL=1 (Road America R2 semantics only)', cwv.goCount === 32 && cwv.conditionalCount === 1, `GO=${cwv.goCount} COND=${cwv.conditionalCount}`);
+check('crosswalk validation: every audited session is GO or CONDITIONAL', cwv.goCount + cwv.conditionalCount === expectedT71SessionCount, `GO=${cwv.goCount} COND=${cwv.conditionalCount} expected=${expectedT71SessionCount}`);
+check('crosswalk validation: one CONDITIONAL (Road America R2 semantics only)', cwv.conditionalCount === 1, `COND=${cwv.conditionalCount}`);
 check('crosswalk validation: >=5 two-source cross-checks', cwv.twoSourceCrossChecks.length >= 5);
 check(
   'crosswalk validation: identity 100% on all non-thin cross-checks',

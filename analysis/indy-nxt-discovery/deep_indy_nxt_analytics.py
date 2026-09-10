@@ -31,6 +31,25 @@ CHART_DIR = OUT_DIR / "charts"
 
 BRYCE_ID = "driver_bryce_aron"
 INDY_SERIES_ID = "series_indy_nxt"
+FUTURE_WEEKEND_PREP_FIELDS = (
+    "eventId",
+    "eventName",
+    "eventStartDate",
+    "trackName",
+    "trackType",
+    "trackLengthMi",
+    "cornerCount",
+    "bryceIndyNxtRacesAtTrack",
+    "sameTrackAvgFinish",
+    "sameTrackAvgGain",
+    "sameTrackTop10Rate",
+    "trackTypeAvgFinish",
+    "trackTypeAvgGain",
+    "trackTypeTop10Rate",
+    "weatherState",
+    "prepUse",
+    "sourceState",
+)
 
 
 def resolve_run_date() -> date:
@@ -107,16 +126,21 @@ def entropy_share(counts: Counter[str]) -> float | None:
     return ent / math.log(len(counts))
 
 
-def write_csv(rows: list[dict[str, Any]], path: Path) -> None:
+def write_csv(
+    rows: list[dict[str, Any]],
+    path: Path,
+    fieldnames: tuple[str, ...] | list[str] | None = None,
+) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    if not rows:
+    keys = list(fieldnames or ())
+    if not keys:
+        for row in rows:
+            for key in row:
+                if key not in keys:
+                    keys.append(key)
+    if not keys:
         path.write_text("")
         return
-    keys: list[str] = []
-    for row in rows:
-        for key in row:
-            if key not in keys:
-                keys.append(key)
     with path.open("w", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=keys, lineterminator="\n")
         writer.writeheader()
@@ -1474,7 +1498,7 @@ def main() -> None:
     write_csv(racecraft_driver_rows, TABLE_DIR / "racecraft_context_by_driver.csv")
     write_csv(source_audit_rows, TABLE_DIR / "indy_nxt_source_family_audit.csv")
     write_csv(contract_rows, TABLE_DIR / "ui_analytics_contract.csv")
-    write_csv(future_rows, TABLE_DIR / "future_weekend_prep_inputs.csv")
+    write_csv(future_rows, TABLE_DIR / "future_weekend_prep_inputs.csv", FUTURE_WEEKEND_PREP_FIELDS)
     write_csv(backlog_rows, TABLE_DIR / "analysis_opportunity_backlog.csv")
 
     ranked_positive = sorted(race_scores, key=lambda r: (clean_num(r.get("conversionPercentileDelta")) or -999), reverse=True)

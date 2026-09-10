@@ -959,9 +959,9 @@ def build_context_packs(
     section_observations: list[dict[str, Any]],
     section_summaries: list[dict[str, Any]],
     road_america_rows: list[dict[str, Any]],
-    upcoming_track_name: str,
+    upcoming_track_name: str | None,
     upcoming_rows: list[dict[str, Any]],
-) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any], dict[str, Any]]:
+) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any], dict[str, Any] | None]:
     best_segments = sorted(segments, key=lambda row: clean_float(row.get("netGain")) or -999, reverse=True)[:8]
     biggest_inflections = sorted(inflections, key=lambda row: clean_float(row.get("magnitude")) or -999, reverse=True)[:12]
     best_sections = sorted(
@@ -992,8 +992,9 @@ def build_context_packs(
         "counts": counts,
         "upcomingVenue": {
             "asOfDate": RUN_DATE.isoformat(),
+            "status": "available" if upcoming_track_name else "season_complete",
             "trackName": upcoming_track_name,
-            "artifactSlug": venue_slug(upcoming_track_name),
+            "artifactSlug": venue_slug(upcoming_track_name) if upcoming_track_name else None,
         },
         "sectionSourceStateCounts": section_source_state_counts,
         "caveats": [
@@ -1045,22 +1046,24 @@ def build_context_packs(
             "Do not blend with future session claims without live/current source rows.",
         ],
     }
-    upcoming_slug = venue_slug(upcoming_track_name).replace("_", "-")
-    upcoming_pack = {
-        "id": f"{upcoming_slug}-race-context",
-        "generatedAt": generated_at,
-        "sourceDataset": "data/career/career.dataset.json",
-        "sourceHash": source_hash,
-        "claimStrength": "post_race_descriptive_only",
-        "publicPointPrediction": False,
-        "asOfDate": RUN_DATE.isoformat(),
-        "trackName": upcoming_track_name,
-        "historicalRaceRows": upcoming_rows,
-        "displayRules": [
-            f"Use these rows as completed {upcoming_track_name} race history only.",
-            "Do not blend with future session claims without live/current source rows.",
-        ],
-    }
+    upcoming_pack = None
+    if upcoming_track_name:
+        upcoming_slug = venue_slug(upcoming_track_name).replace("_", "-")
+        upcoming_pack = {
+            "id": f"next-venue-{upcoming_slug}-race-context",
+            "generatedAt": generated_at,
+            "sourceDataset": "data/career/career.dataset.json",
+            "sourceHash": source_hash,
+            "claimStrength": "post_race_descriptive_only",
+            "publicPointPrediction": False,
+            "asOfDate": RUN_DATE.isoformat(),
+            "trackName": upcoming_track_name,
+            "historicalRaceRows": upcoming_rows,
+            "displayRules": [
+                f"Use these rows as completed {upcoming_track_name} race history only.",
+                "Do not blend with future session claims without live/current source rows.",
+            ],
+        }
     return summary, pack, road_pack, upcoming_pack
 
 
@@ -1069,7 +1072,7 @@ def render_report(
     summary: dict[str, Any],
     road_america_rows: list[dict[str, Any]],
     section_summaries: list[dict[str, Any]],
-    upcoming_track_name: str,
+    upcoming_track_name: str | None,
     upcoming_rows: list[dict[str, Any]],
 ) -> str:
     counts = summary["counts"]
@@ -1077,10 +1080,17 @@ def render_report(
         f"- {row['raceLabel']}: start {fmt(row['startPosition'])}, finish {fmt(row['finishPosition'])}, best running {fmt(row['bestRunningPosition'])}, section median {fmt(row['medianCleanTrackSectionPercentile'], 3)}."
         for row in road_america_rows
     ) or "- No Road America race lap rows were available."
-    upcoming_lines = "\n".join(
-        f"- {row['raceLabel']}: start {fmt(row['startPosition'])}, finish {fmt(row['finishPosition'])}, best running {fmt(row['bestRunningPosition'])}, section median {fmt(row['medianCleanTrackSectionPercentile'], 3)}."
-        for row in upcoming_rows
-    ) or f"- No {upcoming_track_name} race lap rows were available."
+    if upcoming_track_name:
+        upcoming_lines = "\n".join(
+            f"- {row['raceLabel']}: start {fmt(row['startPosition'])}, finish {fmt(row['finishPosition'])}, best running {fmt(row['bestRunningPosition'])}, section median {fmt(row['medianCleanTrackSectionPercentile'], 3)}."
+            for row in upcoming_rows
+        ) or f"- No {upcoming_track_name} race lap rows were available."
+        upcoming_heading = f"Track: `{upcoming_track_name}`"
+        context_pack_line = "A current next-venue race context pack is also emitted."
+    else:
+        upcoming_lines = "- No future INDY NXT venue remains on the canonical schedule as of the analysis date."
+        upcoming_heading = "Season complete; no next-venue race artifact is emitted."
+        context_pack_line = "The next-venue pack is omitted when the canonical schedule has no future event."
     section_lines = "\n".join(
         f"- {row['raceLabel']}: clean section median {fmt(row['medianCleanTrackSectionPercentile'], 3)}, best {row['bestCleanSectionFamilies'] or 'n/a'}."
         for row in sorted(section_summaries, key=lambda r: clean_float(r.get("medianCleanTrackSectionPercentile")) or -999, reverse=True)[:6]
@@ -1104,7 +1114,7 @@ This lane uses official INDY NXT race lap chart rows, official caution/incidents
 - `race_section_lap_field_observations.csv.gz`: {counts.get('raceSectionFieldObservations', 0)} FULL-FIELD ranked rows — every car, every lap, every section, plus a synthesized derived-remainder row per car/lap.
 - `race_section_field_distribution.json`: per-section field time distributions + Bryce's per-lap derived remainder with real full-field percentiles.
 - `race_section_session_summary.csv`: {counts['raceSectionSessionSummaries']} race section summaries.
-- Context packs: `context-packs/indy-nxt-race-lap-section-context.json`, `context-packs/road-america-race-context.json`, and the current next-venue race context pack.
+- Context packs: `context-packs/indy-nxt-race-lap-section-context.json` and the permanent historical `context-packs/road-america-race-context.json`. {context_pack_line}
 - Source split: {summary.get('sectionSourceStateCounts', {})}.
 
 ## Lap Microstates
@@ -1128,16 +1138,10 @@ its named section splits. Per lap, `lapTotal - sum(racing-line sections)` is the
 exact time spent on everything the loops don't watch — the stopwatch trick — and
 because the field's lap totals are present, that remainder ranks against the
 whole field, not just Bryce. The remainder is shipped as a shadeable
-`{DERIVED_SECTION_NAME}` section ONLY where the racing sections leave a genuine
-untimed stretch (>2% of the lap): Nashville's straights carry no loops (~56% of
-the lap). Iowa and Milwaukee tile to 0.00% — their `SF to T1` / `T4 to SF` /
-`FS to SF` frontstretch sections are racing line measured loop-to-loop across
-the start/finish line. (An earlier classification regex over-matched `SF` and
-filed those as pit lines; `classify_section` now delegates to the corrected
-`is_pit_line` rule, which moved exactly 7 of 109 distinct section names to
-track_section and left every PI/PO/Alt pit split untouched.) A negative
-remainder (sections overrunning the lap) marks that lap uncovered; it is never
-clamped.
+`{DERIVED_SECTION_NAME}` section only where the racing sections leave a genuine
+untimed stretch (>2% of the lap). Sessions at or below that threshold are
+classified as fully timed and do not ship a derived row. A negative remainder
+(sections overrunning the lap) marks that lap uncovered; it is never clamped.
 
 ## Road America Context
 
@@ -1145,7 +1149,7 @@ clamped.
 
 ## Upcoming Venue Race Context
 
-Track: `{upcoming_track_name}`
+{upcoming_heading}
 
 {upcoming_lines}
 
@@ -1173,8 +1177,12 @@ def main() -> int:
     field_observations, field_distribution = build_field_and_derived_observations(data, idx, source_hash, microstates)
     section_summaries = build_section_session_summary(section_observations, source_hash)
     road_america_rows = build_track_race_rows(microstates, segments, section_summaries, source_hash, "Road America")
-    upcoming_track_name = next_upcoming_track_name(data) or "Road America"
-    upcoming_rows = build_track_race_rows(microstates, segments, section_summaries, source_hash, upcoming_track_name)
+    upcoming_track_name = next_upcoming_track_name(data)
+    upcoming_rows = (
+        build_track_race_rows(microstates, segments, section_summaries, source_hash, upcoming_track_name)
+        if upcoming_track_name
+        else []
+    )
     summary, pack, road_pack, upcoming_pack = build_context_packs(
         generated_at,
         source_hash,
@@ -1201,9 +1209,8 @@ def main() -> int:
         ),
         "note": (
             "The derived remainder (lapTotal minus racing-line sections) is shipped only for sessions whose "
-            "racing sections leave a genuine untimed stretch (>2% of the lap). Iowa and Milwaukee tile to 0.00% — "
-            "their SF/FS frontstretch sections are racing line (rescued by the corrected is_pit_line rule) and "
-            "render as measured spans, so no derived treatment applies there."
+            "racing sections leave a genuine untimed stretch (>2% of the lap). Sessions at or below that "
+            "threshold are classified as fully timed and do not ship a derived row."
         ),
     }
 
@@ -1374,32 +1381,38 @@ def main() -> int:
             "sourceHash",
         ],
     )
-    upcoming_slug = venue_slug(upcoming_track_name)
-    write_csv(
-        OUTPUT_DIR / f"{upcoming_slug}_race_lap_section_context.csv",
-        upcoming_rows,
-        [
-            "sessionId",
-            "raceLabel",
-            "seasonYear",
-            "trackName",
-            "lapRows",
-            "startPosition",
-            "finishPosition",
-            "netLapChartGain",
-            "bestRunningPosition",
-            "worstRunningPosition",
-            "bestSegment",
-            "medianCleanTrackSectionPercentile",
-            "bestCleanSectionFamilies",
-            "weakestCleanSectionFamilies",
-            "sourceHash",
-        ],
-    )
+    for stale_path in OUTPUT_DIR.glob("next_venue_*_race_lap_section_context.csv"):
+        stale_path.unlink()
+    for stale_path in PACK_DIR.glob("next-venue-*-race-context.json"):
+        stale_path.unlink()
+    if upcoming_track_name:
+        upcoming_slug = venue_slug(upcoming_track_name)
+        write_csv(
+            OUTPUT_DIR / f"next_venue_{upcoming_slug}_race_lap_section_context.csv",
+            upcoming_rows,
+            [
+                "sessionId",
+                "raceLabel",
+                "seasonYear",
+                "trackName",
+                "lapRows",
+                "startPosition",
+                "finishPosition",
+                "netLapChartGain",
+                "bestRunningPosition",
+                "worstRunningPosition",
+                "bestSegment",
+                "medianCleanTrackSectionPercentile",
+                "bestCleanSectionFamilies",
+                "weakestCleanSectionFamilies",
+                "sourceHash",
+            ],
+        )
     write_json(OUTPUT_DIR / "summary.json", summary)
     write_json(PACK_DIR / "indy-nxt-race-lap-section-context.json", pack)
     write_json(PACK_DIR / "road-america-race-context.json", road_pack)
-    write_json(PACK_DIR / f"{upcoming_slug.replace('_', '-')}-race-context.json", upcoming_pack)
+    if upcoming_track_name and upcoming_pack:
+        write_json(PACK_DIR / f"next-venue-{upcoming_slug.replace('_', '-')}-race-context.json", upcoming_pack)
     (OUTPUT_DIR / "INDY_NXT_RACE_LAP_SECTION_ENHANCEMENT.md").write_text(
         render_report(generated_at, summary, road_america_rows, section_summaries, upcoming_track_name, upcoming_rows)
     )

@@ -1,7 +1,7 @@
 import type { TrackSectionAnchorSet } from './types';
 
 /** WeatherTech Raceway Laguna Seca — 2.24-mi, 11-turn road course.
- *  The official Section Results report FOURTEEN timing sections (Turn 1 … Turn
+ *  The official Section Results report FIFTEEN timing sections (Turn 1 … Turn
  *  11 with the 4A/5A/7A sub-loops and the Corkscrew standing in for Turn 8)
  *  covering 87.0% of the lap; the start/finish straight from the Turn 11 exit
  *  past the S/F line to Turn 1 carries no timing loop and stays the quiet base
@@ -9,11 +9,13 @@ import type { TrackSectionAnchorSet } from './types';
  *
  *  Span LENGTHS are MEASURED: official section speeds are averages, so
  *  timeSeconds × speedMph is constant per family and equals the section length
- *  (scripts/compute-section-anchors.mjs; the 14 families sum to 1.946 mi =
- *  87.0% of the 2.238-mi lap). Span POSITIONS are arc-anchored: the chain runs
+ *  (scripts/compute-section-anchors.mjs; the 15 fields sum to 2.075 mi =
+ *  92.7% of the 2.238-mi lap). Span POSITIONS are arc-anchored: the chain runs
  *  in driving order (= increasing t, verified from the S/F tangent) with the
  *  untimed gap placed on the start/finish straight so the S/F line falls inside
- *  it. The offset is fitted to the two unmistakable control corners — the
+ *  it. Turn 1 Entry and Turn 1 Exit are separated at feed loop I1 between the
+ *  outline's exact S/F datum and the established I2/Turn 2 boundary. The rest
+ *  of the offset is fitted to the two unmistakable control corners — the
  *  Andretti Hairpin (Turn 2, the 217° arc, apex t≈0.373) and the Corkscrew (the
  *  346° double, apex t≈0.930) — which agree to within 0.003; verified visually
  *  against the debug overlay, every detected corner arc lands inside its named
@@ -25,9 +27,10 @@ export const weathertechRacewayLagunaSecaSections: TrackSectionAnchorSet = {
   drivingDirection: 'counterclockwise',
   lapLengthMi: 2.238,
   confidence: 'anchored',
-  note: 'Fourteen official timing sections covering 87.0% of the lap; lengths measured from official time × speed, positions arc-anchored to the Andretti Hairpin (Turn 2) and Corkscrew control corners. The start/finish straight past S/F is not a timing section and stays the base outline.',
+  note: 'Fifteen official timing sections covering 92.7% of the lap. Turn 1 Entry and Exit are split at feed loop I1 between the exact outline S/F datum and the established Turn 2 boundary; the remaining positions are anchored to the Andretti Hairpin and Corkscrew.',
   sections: [
-    { familyId: 'wtls-turn-1', sectionName: 'Turn 1 Entry Turn 1 Exit', label: 'Turn 1', startT: 0.2864, endT: 0.3303, measuredLengthMi: 0.0983 },
+    { familyId: 'wtls-turn-1-entry', sectionName: 'Turn 1 Entry', label: 'Turn 1 entry', startLoop: 'SF', endLoop: 'I1', startT: 0.2818, endT: 0.3028, measuredLengthMi: 0.0983 },
+    { familyId: 'wtls-turn-1-exit', sectionName: 'Turn 1 Exit', label: 'Turn 1 exit', startLoop: 'I1', endLoop: 'I2', startT: 0.3028, endT: 0.3303, measuredLengthMi: 0.1286 },
     { familyId: 'wtls-turn-2', sectionName: 'Turn 2', label: 'Turn 2', startT: 0.3303, endT: 0.4179, measuredLengthMi: 0.1960 },
     { familyId: 'wtls-turn-3', sectionName: 'Turn 3', label: 'Turn 3', startT: 0.4179, endT: 0.4891, measuredLengthMi: 0.1593 },
     { familyId: 'wtls-turn-4', sectionName: 'Turn 4', label: 'Turn 4', startT: 0.4891, endT: 0.5926, measuredLengthMi: 0.2316 },

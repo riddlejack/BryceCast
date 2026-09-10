@@ -1,0 +1,1041 @@
+{
+  "schemaVersion": "brycecast.indyNxtCalendar.v1",
+  "sourceUpdatedAt": "2026-09-10T22:28:43.621Z",
+  "source": "data/career/career.dataset.json",
+  "events": [
+    {
+      "id": "event_indy_nxt_2024_5470",
+      "eventId": "event_indy_nxt_2024_5470",
+      "eventName": "Grand Prix of Alabama",
+      "seasonYear": 2024,
+      "eventStartDate": "2024-04-26",
+      "eventEndDate": "2024-04-28",
+      "track": {
+        "id": "track_barber_motorsports_park",
+        "name": "Barber Motorsports Park"
+      },
+      "timezone": "America/Chicago",
+      "sourceRefs": [
+        "source_indynxt_season_drop_down",
+        "source_track_metadata_barber_motorsports_park",
+        "source_indy_nxt_2024_weekend_schedule_ala",
+        "source_indynxt_events_session_6314",
+        "source_indynxt_events_session_6537",
+        "source_indynxt_events_session_6357",
+        "source_indynxt_events_session_6356",
+        "source_indynxt_events_session_6355",
+        "source_indynxt_events_session_6354"
+      ]
+    },
+    {
+      "id": "event_indy_nxt_2024_5471",
+      "eventId": "event_indy_nxt_2024_5471",
+      "eventName": "Indianapolis Grand Prix Race 1",
+      "seasonYear": 2024,
+      "eventStartDate": "2024-05-10",
+      "eventEndDate": "2024-05-10",
+      "track": {
+        "id": "track_indianapolis_motor_speedway_road_course",
+        "name": "Indianapolis Motor Speedway Road Course"
+      },
+      "timezone": "America/Indiana/Indianapolis",
+      "sourceRefs": [
+        "source_indynxt_season_drop_down",
+        "source_track_metadata_indianapolis_motor_speedway_road_course",
+        "source_indy_nxt_2024_weekend_schedule_ims",
+        "source_indynxt_events_session_6315",
+        "source_indynxt_events_session_6538",
+        "source_indynxt_events_session_6367",
+        "source_indynxt_events_session_6366",
+        "source_indynxt_events_session_6365"
+      ]
+    },
+    {
+      "id": "event_indy_nxt_2024_5472",
+      "eventId": "event_indy_nxt_2024_5472",
+      "eventName": "Grand Prix at Road America",
+      "seasonYear": 2024,
+      "eventStartDate": "2024-06-07",
+      "eventEndDate": "2024-06-09",
+      "track": {
+        "id": "track_road_america",
+        "name": "Road America"
+      },
+      "timezone": "America/Chicago",
+      "sourceRefs": [
+        "source_indynxt_season_drop_down",
+        "source_track_metadata_road_america",
+        "source_indy_nxt_2024_weekend_schedule_ra",
+        "source_indynxt_events_session_6316",
+        "source_indynxt_events_session_6541",
+        "source_indynxt_events_session_6405",
+        "source_indynxt_events_session_6404",
+        "source_indynxt_events_session_6403",
+        "source_indynxt_events_session_6402"
+      ]
+    },
+    {
+      "id": "event_indy_nxt_2024_5473",
+      "eventId": "event_indy_nxt_2024_5473",
+      "eventName": "Grand Prix of Monterey Race 1",
+      "seasonYear": 2024,
+      "eventStartDate": "2024-06-21",
+      "eventEndDate": "2024-06-22",
+      "track": {
+        "id": "track_weathertech_raceway_laguna_seca",
+        "name": "WeatherTech Raceway Laguna Seca"
+      },
+      "timezone": "America/Los_Angeles",
+      "sourceRefs": [
+        "source_indynxt_season_drop_down",
+        "source_track_metadata_weathertech_raceway_laguna_seca",
+        "source_indy_nxt_2024_weekend_schedule_lag",
+        "source_indynxt_events_session_6317",
+        "source_indynxt_events_session_6542",
+        "source_indynxt_events_session_6416",
+        "source_indynxt_events_session_6415",
+        "source_indynxt_events_session_6414",
+        "source_indynxt_events_session_6413"
+      ]
+    },
+    {
+      "id": "event_indy_nxt_2024_5474",
+      "eventId": "event_indy_nxt_2024_5474",
+      "eventName": "Grand Prix at Mid-Ohio",
+      "seasonYear": 2024,
+      "eventStartDate": "2024-07-05",
+      "eventEndDate": "2024-07-07",
+      "track": {
+        "id": "track_mid_ohio_sports_car_course",
+        "name": "Mid-Ohio Sports Car Course"
+      },
+      "timezone": "America/New_York",
+      "sourceRefs": [
+        "source_indynxt_season_drop_down",
+        "source_track_metadata_mid_ohio_sports_car_course",
+        "source_indy_nxt_2024_weekend_schedule_mid",
+        "source_indynxt_events_session_6318",
+        "source_indynxt_events_session_6544",
+        "source_indynxt_events_session_6429",
+        "source_indynxt_events_session_6428",
+        "source_indynxt_events_session_6427",
+        "source_indynxt_events_session_6426"
+      ]
+    },
+    {
+      "id": "event_indy_nxt_2024_5475",
+      "eventId": "event_indy_nxt_2024_5475",
+      "eventName": "INDY NXT by Firestone at Iowa Speedway",
+      "seasonYear": 2024,
+      "eventStartDate": "2024-07-12",
+      "eventEndDate": "2024-07-13",
+      "track": {
+        "id": "track_iowa_speedway",
+        "name": "Iowa Speedway"
+      },
+      "timezone": "America/Chicago",
+      "sourceRefs": [
+        "source_indynxt_season_drop_down",
+        "source_track_metadata_iowa_speedway",
+        "source_indy_nxt_2024_weekend_schedule_iow",
+        "source_indynxt_events_session_6319",
+        "source_indynxt_events_session_6438",
+        "source_indynxt_events_session_6437"
+      ]
+    },
+    {
+      "id": "event_indy_nxt_2024_5476",
+      "eventId": "event_indy_nxt_2024_5476",
+      "eventName": "OUTFRONT Showdown",
+      "seasonYear": 2024,
+      "eventStartDate": "2024-08-16",
+      "eventEndDate": "2024-08-17",
+      "track": {
+        "id": "track_world_wide_technology_raceway",
+        "name": "World Wide Technology Raceway"
+      },
+      "timezone": "America/Chicago",
+      "sourceRefs": [
+        "source_indynxt_season_drop_down",
+        "source_track_metadata_world_wide_technology_raceway",
+        "source_indy_nxt_2024_weekend_schedule_stl",
+        "source_indynxt_events_session_6320",
+        "source_indynxt_events_session_6481",
+        "source_indynxt_events_session_6480"
+      ]
+    },
+    {
+      "id": "event_indy_nxt_2024_5477",
+      "eventId": "event_indy_nxt_2024_5477",
+      "eventName": "Grand Prix of Portland",
+      "seasonYear": 2024,
+      "eventStartDate": "2024-08-23",
+      "eventEndDate": "2024-08-25",
+      "track": {
+        "id": "track_portland_international_raceway",
+        "name": "Portland International Raceway"
+      },
+      "timezone": "America/Los_Angeles",
+      "sourceRefs": [
+        "source_indynxt_season_drop_down",
+        "source_track_metadata_portland_international_raceway",
+        "source_indy_nxt_2024_weekend_schedule_por",
+        "source_indynxt_events_session_6321",
+        "source_indynxt_events_session_6545",
+        "source_indynxt_events_session_6513",
+        "source_indynxt_events_session_6496",
+        "source_indynxt_events_session_6495",
+        "source_indynxt_events_session_6494"
+      ]
+    },
+    {
+      "id": "event_indy_nxt_2024_5478",
+      "eventId": "event_indy_nxt_2024_5478",
+      "eventName": "INDY NXT By Firestone at The Milwaukee Mile",
+      "seasonYear": 2024,
+      "eventStartDate": "2024-08-30",
+      "eventEndDate": "2024-08-31",
+      "track": {
+        "id": "track_the_milwaukee_mile",
+        "name": "The Milwaukee Mile"
+      },
+      "timezone": "America/Chicago",
+      "sourceRefs": [
+        "source_indynxt_season_drop_down",
+        "source_track_metadata_the_milwaukee_mile",
+        "source_indy_nxt_2024_weekend_schedule_mil",
+        "source_indynxt_events_session_6322",
+        "source_indynxt_events_session_6506",
+        "source_indynxt_events_session_6505"
+      ]
+    },
+    {
+      "id": "event_indy_nxt_2024_5479",
+      "eventId": "event_indy_nxt_2024_5479",
+      "eventName": "Music City Grand Prix",
+      "seasonYear": 2024,
+      "eventStartDate": "2024-09-14",
+      "eventEndDate": "2024-09-15",
+      "track": {
+        "id": "track_nashville_superspeedway",
+        "name": "Nashville Superspeedway"
+      },
+      "timezone": "America/Chicago",
+      "sourceRefs": [
+        "source_indynxt_season_drop_down",
+        "source_track_metadata_nashville_superspeedway",
+        "source_indy_nxt_2024_weekend_schedule_nsh",
+        "source_indynxt_events_session_6323",
+        "source_indynxt_events_session_6489",
+        "source_indynxt_events_session_6490",
+        "source_indynxt_events_session_6488"
+      ]
+    },
+    {
+      "id": "event_indy_nxt_2024_5480",
+      "eventId": "event_indy_nxt_2024_5480",
+      "eventName": "Grand Prix of St. Petersburg",
+      "seasonYear": 2024,
+      "eventStartDate": "2024-03-08",
+      "eventEndDate": "2024-03-10",
+      "track": {
+        "id": "track_streets_of_st_petersburg",
+        "name": "Streets of St. Petersburg"
+      },
+      "timezone": "America/New_York",
+      "sourceRefs": [
+        "source_indynxt_season_drop_down",
+        "source_track_metadata_streets_of_st_petersburg",
+        "source_indy_nxt_2024_weekend_schedule_stp",
+        "source_indynxt_events_session_6324",
+        "source_indynxt_events_session_6536",
+        "source_indynxt_events_session_6346",
+        "source_indynxt_events_session_6330",
+        "source_indynxt_events_session_6329",
+        "source_indynxt_events_session_6328"
+      ]
+    },
+    {
+      "id": "event_indy_nxt_2024_5481",
+      "eventId": "event_indy_nxt_2024_5481",
+      "eventName": "Indianapolis Grand Prix Race 2",
+      "seasonYear": 2024,
+      "eventStartDate": "2024-05-10",
+      "eventEndDate": "2024-05-11",
+      "track": {
+        "id": "track_indianapolis_motor_speedway_road_course",
+        "name": "Indianapolis Motor Speedway Road Course"
+      },
+      "timezone": "America/Indiana/Indianapolis",
+      "sourceRefs": [
+        "source_indynxt_season_drop_down",
+        "source_track_metadata_indianapolis_motor_speedway_road_course",
+        "source_indy_nxt_2024_weekend_schedule_ims",
+        "source_indynxt_events_session_6325",
+        "source_indynxt_events_session_6539",
+        "source_indynxt_events_session_6390",
+        "source_indynxt_events_session_6389"
+      ]
+    },
+    {
+      "id": "event_indy_nxt_2024_5482",
+      "eventId": "event_indy_nxt_2024_5482",
+      "eventName": "Detroit Grand Prix",
+      "seasonYear": 2024,
+      "eventStartDate": "2024-05-31",
+      "eventEndDate": "2024-06-02",
+      "track": {
+        "id": "track_streets_of_detroit",
+        "name": "Streets of Detroit"
+      },
+      "timezone": "America/Detroit",
+      "sourceRefs": [
+        "source_indynxt_season_drop_down",
+        "source_track_metadata_streets_of_detroit",
+        "source_indy_nxt_2024_weekend_schedule_det",
+        "source_indynxt_events_session_6326",
+        "source_indynxt_events_session_6540",
+        "source_indynxt_events_session_6394",
+        "source_indynxt_events_session_6393",
+        "source_indynxt_events_session_6392",
+        "source_indynxt_events_session_6391"
+      ]
+    },
+    {
+      "id": "event_indy_nxt_2024_5483",
+      "eventId": "event_indy_nxt_2024_5483",
+      "eventName": "Grand Prix of Monterey Race 2",
+      "seasonYear": 2024,
+      "eventStartDate": "2024-06-22",
+      "eventEndDate": "2024-06-23",
+      "track": {
+        "id": "track_weathertech_raceway_laguna_seca",
+        "name": "WeatherTech Raceway Laguna Seca"
+      },
+      "timezone": "America/Los_Angeles",
+      "sourceRefs": [
+        "source_indynxt_season_drop_down",
+        "source_track_metadata_weathertech_raceway_laguna_seca",
+        "source_indy_nxt_2024_weekend_schedule_lag",
+        "source_indynxt_events_session_6327",
+        "source_indynxt_events_session_6543",
+        "source_indynxt_events_session_6418",
+        "source_indynxt_events_session_6417"
+      ]
+    },
+    {
+      "id": "event_indy_nxt_2025_5484",
+      "eventId": "event_indy_nxt_2025_5484",
+      "eventName": "Grand Prix of Monterey Race 1",
+      "seasonYear": 2025,
+      "eventStartDate": "2025-07-25",
+      "eventEndDate": "2025-07-26",
+      "track": {
+        "id": "track_weathertech_raceway_laguna_seca",
+        "name": "WeatherTech Raceway Laguna Seca"
+      },
+      "timezone": "America/Los_Angeles",
+      "sourceRefs": [
+        "source_indynxt_season_drop_down",
+        "source_track_metadata_weathertech_raceway_laguna_seca",
+        "source_indy_nxt_2025_weekend_schedule_lag",
+        "source_indynxt_events_session_6442",
+        "source_indynxt_events_session_6589",
+        "source_indynxt_events_session_6710",
+        "source_indynxt_events_session_6709",
+        "source_indynxt_events_session_6708",
+        "source_indynxt_events_session_6707"
+      ]
+    },
+    {
+      "id": "event_indy_nxt_2025_5485",
+      "eventId": "event_indy_nxt_2025_5485",
+      "eventName": "Indianapolis Grand Prix Race 2",
+      "seasonYear": 2025,
+      "eventStartDate": "2025-05-09",
+      "eventEndDate": "2025-05-10",
+      "track": {
+        "id": "track_indianapolis_motor_speedway_road_course",
+        "name": "Indianapolis Motor Speedway Road Course"
+      },
+      "timezone": "America/Indiana/Indianapolis",
+      "sourceRefs": [
+        "source_indynxt_season_drop_down",
+        "source_track_metadata_indianapolis_motor_speedway_road_course",
+        "source_indy_nxt_2025_weekend_schedule_ims",
+        "source_indynxt_events_session_6443",
+        "source_indynxt_events_session_6590",
+        "source_indynxt_events_session_6631",
+        "source_indynxt_events_session_6630"
+      ]
+    },
+    {
+      "id": "event_indy_nxt_2025_5486",
+      "eventId": "event_indy_nxt_2025_5486",
+      "eventName": "Indianapolis Grand Prix Race 1",
+      "seasonYear": 2025,
+      "eventStartDate": "2025-05-09",
+      "eventEndDate": "2025-05-09",
+      "track": {
+        "id": "track_indianapolis_motor_speedway_road_course",
+        "name": "Indianapolis Motor Speedway Road Course"
+      },
+      "timezone": "America/Indiana/Indianapolis",
+      "sourceRefs": [
+        "source_indynxt_season_drop_down",
+        "source_track_metadata_indianapolis_motor_speedway_road_course",
+        "source_indy_nxt_2025_weekend_schedule_ims",
+        "source_indynxt_events_session_6444",
+        "source_indynxt_events_session_6591",
+        "source_indynxt_events_session_6629",
+        "source_indynxt_events_session_6628",
+        "source_indynxt_events_session_6627"
+      ]
+    },
+    {
+      "id": "event_indy_nxt_2025_5487",
+      "eventId": "event_indy_nxt_2025_5487",
+      "eventName": "Grand Prix of Alabama",
+      "seasonYear": 2025,
+      "eventStartDate": "2025-05-02",
+      "eventEndDate": "2025-05-04",
+      "track": {
+        "id": "track_barber_motorsports_park",
+        "name": "Barber Motorsports Park"
+      },
+      "timezone": "America/Chicago",
+      "sourceRefs": [
+        "source_indynxt_season_drop_down",
+        "source_track_metadata_barber_motorsports_park",
+        "source_indy_nxt_2025_weekend_schedule_ala",
+        "source_indynxt_events_session_6445",
+        "source_indynxt_events_session_6592",
+        "source_indynxt_events_session_6614",
+        "source_indynxt_events_session_6613",
+        "source_indynxt_events_session_6612",
+        "source_indynxt_events_session_6611"
+      ]
+    },
+    {
+      "id": "event_indy_nxt_2025_5488",
+      "eventId": "event_indy_nxt_2025_5488",
+      "eventName": "Grand Prix of St. Petersburg",
+      "seasonYear": 2025,
+      "eventStartDate": "2025-02-28",
+      "eventEndDate": "2025-03-02",
+      "track": {
+        "id": "track_streets_of_st_petersburg",
+        "name": "Streets of St. Petersburg"
+      },
+      "timezone": "America/New_York",
+      "sourceRefs": [
+        "source_indynxt_season_drop_down",
+        "source_track_metadata_streets_of_st_petersburg",
+        "source_indy_nxt_2025_weekend_schedule_stp",
+        "source_indynxt_events_session_6446",
+        "source_indynxt_events_session_6518",
+        "source_indynxt_events_session_6517",
+        "source_indynxt_events_session_6516",
+        "source_indynxt_events_session_6515"
+      ]
+    },
+    {
+      "id": "event_indy_nxt_2025_5489",
+      "eventId": "event_indy_nxt_2025_5489",
+      "eventName": "Music City Grand Prix",
+      "seasonYear": 2025,
+      "eventStartDate": "2025-08-30",
+      "eventEndDate": "2025-08-31",
+      "track": {
+        "id": "track_nashville_superspeedway",
+        "name": "Nashville Superspeedway"
+      },
+      "timezone": "America/Chicago",
+      "sourceRefs": [
+        "source_indynxt_season_drop_down",
+        "source_track_metadata_nashville_superspeedway",
+        "source_indy_nxt_2025_weekend_schedule_nsh",
+        "source_indynxt_events_session_6447",
+        "source_indynxt_events_session_6593",
+        "source_indynxt_events_session_6731"
+      ]
+    },
+    {
+      "id": "event_indy_nxt_2025_5490",
+      "eventId": "event_indy_nxt_2025_5490",
+      "eventName": "INDY NXT by Firestone at the Milwaukee Mile",
+      "seasonYear": 2025,
+      "eventStartDate": "2025-08-23",
+      "eventEndDate": "2025-08-24",
+      "track": {
+        "id": "track_the_milwaukee_mile",
+        "name": "The Milwaukee Mile"
+      },
+      "timezone": "America/Chicago",
+      "sourceRefs": [
+        "source_indynxt_season_drop_down",
+        "source_track_metadata_the_milwaukee_mile",
+        "source_indy_nxt_2025_weekend_schedule_mil",
+        "source_indynxt_events_session_6448",
+        "source_indynxt_events_session_6588",
+        "source_indynxt_events_session_6727"
+      ]
+    },
+    {
+      "id": "event_indy_nxt_2025_5491",
+      "eventId": "event_indy_nxt_2025_5491",
+      "eventName": "Grand Prix of Portland",
+      "seasonYear": 2025,
+      "eventStartDate": "2025-08-08",
+      "eventEndDate": "2025-08-10",
+      "track": {
+        "id": "track_portland_international_raceway",
+        "name": "Portland International Raceway"
+      },
+      "timezone": "America/Los_Angeles",
+      "sourceRefs": [
+        "source_indynxt_season_drop_down",
+        "source_track_metadata_portland_international_raceway",
+        "source_indy_nxt_2025_weekend_schedule_por",
+        "source_indynxt_events_session_6449",
+        "source_indynxt_events_session_6594",
+        "source_indynxt_events_session_6716",
+        "source_indynxt_events_session_6715",
+        "source_indynxt_events_session_6714",
+        "source_indynxt_events_session_6713"
+      ]
+    },
+    {
+      "id": "event_indy_nxt_2025_5492",
+      "eventId": "event_indy_nxt_2025_5492",
+      "eventName": "Grand Prix of Monterey Race 2",
+      "seasonYear": 2025,
+      "eventStartDate": "2025-07-26",
+      "eventEndDate": "2025-07-27",
+      "track": {
+        "id": "track_weathertech_raceway_laguna_seca",
+        "name": "WeatherTech Raceway Laguna Seca"
+      },
+      "timezone": "America/Los_Angeles",
+      "sourceRefs": [
+        "source_indynxt_season_drop_down",
+        "source_track_metadata_weathertech_raceway_laguna_seca",
+        "source_indy_nxt_2025_weekend_schedule_lag",
+        "source_indynxt_events_session_6450",
+        "source_indynxt_events_session_6595",
+        "source_indynxt_events_session_6712",
+        "source_indynxt_events_session_6711"
+      ]
+    },
+    {
+      "id": "event_indy_nxt_2025_5493",
+      "eventId": "event_indy_nxt_2025_5493",
+      "eventName": "INDY NXT by Firestone at Iowa Speedway",
+      "seasonYear": 2025,
+      "eventStartDate": "2025-07-11",
+      "eventEndDate": "2025-07-12",
+      "track": {
+        "id": "track_iowa_speedway",
+        "name": "Iowa Speedway"
+      },
+      "timezone": "America/Chicago",
+      "sourceRefs": [
+        "source_indynxt_season_drop_down",
+        "source_track_metadata_iowa_speedway",
+        "source_indy_nxt_2025_weekend_schedule_iow",
+        "source_indynxt_events_session_6451",
+        "source_indynxt_events_session_6596",
+        "source_indynxt_events_session_6690"
+      ]
+    },
+    {
+      "id": "event_indy_nxt_2025_5494",
+      "eventId": "event_indy_nxt_2025_5494",
+      "eventName": "Grand Prix at Mid-Ohio",
+      "seasonYear": 2025,
+      "eventStartDate": "2025-07-04",
+      "eventEndDate": "2025-07-06",
+      "track": {
+        "id": "track_mid_ohio_sports_car_course",
+        "name": "Mid-Ohio Sports Car Course"
+      },
+      "timezone": "America/New_York",
+      "sourceRefs": [
+        "source_indynxt_season_drop_down",
+        "source_track_metadata_mid_ohio_sports_car_course",
+        "source_indy_nxt_2025_weekend_schedule_mid",
+        "source_indynxt_events_session_6452",
+        "source_indynxt_events_session_6597",
+        "source_indynxt_events_session_6682",
+        "source_indynxt_events_session_6681",
+        "source_indynxt_events_session_6680",
+        "source_indynxt_events_session_6679"
+      ]
+    },
+    {
+      "id": "event_indy_nxt_2025_5495",
+      "eventId": "event_indy_nxt_2025_5495",
+      "eventName": "Grand Prix at Road America",
+      "seasonYear": 2025,
+      "eventStartDate": "2025-06-20",
+      "eventEndDate": "2025-06-22",
+      "track": {
+        "id": "track_road_america",
+        "name": "Road America"
+      },
+      "timezone": "America/Chicago",
+      "sourceRefs": [
+        "source_indynxt_season_drop_down",
+        "source_track_metadata_road_america",
+        "source_indy_nxt_2025_weekend_schedule_ra",
+        "source_indynxt_events_session_6453",
+        "source_indynxt_events_session_6598",
+        "source_indynxt_events_session_6678",
+        "source_indynxt_events_session_6677",
+        "source_indynxt_events_session_6676",
+        "source_indynxt_events_session_6675"
+      ]
+    },
+    {
+      "id": "event_indy_nxt_2025_5496",
+      "eventId": "event_indy_nxt_2025_5496",
+      "eventName": "INDY NXT by Firestone at World Wide Technology Raceway",
+      "seasonYear": 2025,
+      "eventStartDate": "2025-06-14",
+      "eventEndDate": "2025-06-15",
+      "track": {
+        "id": "track_world_wide_technology_raceway",
+        "name": "World Wide Technology Raceway"
+      },
+      "timezone": "America/Chicago",
+      "sourceRefs": [
+        "source_indynxt_season_drop_down",
+        "source_track_metadata_world_wide_technology_raceway",
+        "source_indy_nxt_2025_weekend_schedule_stl",
+        "source_indynxt_events_session_6454",
+        "source_indynxt_events_session_6599",
+        "source_indynxt_events_session_6667"
+      ]
+    },
+    {
+      "id": "event_indy_nxt_2025_5497",
+      "eventId": "event_indy_nxt_2025_5497",
+      "eventName": "Detroit Grand Prix",
+      "seasonYear": 2025,
+      "eventStartDate": "2025-05-30",
+      "eventEndDate": "2025-06-01",
+      "track": {
+        "id": "track_streets_of_detroit",
+        "name": "Streets of Detroit"
+      },
+      "timezone": "America/Detroit",
+      "sourceRefs": [
+        "source_indynxt_season_drop_down",
+        "source_track_metadata_streets_of_detroit",
+        "source_indy_nxt_2025_weekend_schedule_det",
+        "source_indynxt_events_session_6455",
+        "source_indynxt_events_session_6600",
+        "source_indynxt_events_session_6642",
+        "source_indynxt_events_session_6641",
+        "source_indynxt_events_session_6640",
+        "source_indynxt_events_session_6639"
+      ]
+    },
+    {
+      "id": "event_indy_nxt_2026_5532",
+      "eventId": "event_indy_nxt_2026_5532",
+      "eventName": "Detroit Grand Prix",
+      "seasonYear": 2026,
+      "eventStartDate": "2026-05-29",
+      "eventEndDate": "2026-05-31",
+      "track": {
+        "id": "track_streets_of_detroit",
+        "name": "Streets of Detroit"
+      },
+      "timezone": "America/Detroit",
+      "sourceRefs": [
+        "source_indynxt_season_drop_down",
+        "source_track_metadata_streets_of_detroit",
+        "source_indy_nxt_2026_race_control_trackactivity_schedule",
+        "source_indynxt_events_session_6749",
+        "source_indynxt_events_session_6854",
+        "source_indynxt_events_session_6853",
+        "source_indynxt_events_session_6852",
+        "source_indynxt_events_session_6851",
+        "source_indynxt_events_session_6850"
+      ]
+    },
+    {
+      "id": "event_indy_nxt_2026_5533",
+      "eventId": "event_indy_nxt_2026_5533",
+      "eventName": "Grand Prix of Alabama Race 1",
+      "seasonYear": 2026,
+      "eventStartDate": "2026-03-27",
+      "eventEndDate": "2026-03-28",
+      "track": {
+        "id": "track_barber_motorsports_park",
+        "name": "Barber Motorsports Park"
+      },
+      "timezone": "America/Chicago",
+      "sourceRefs": [
+        "source_indynxt_season_drop_down",
+        "source_track_metadata_barber_motorsports_park",
+        "source_indy_nxt_2026_race_control_schedule",
+        "source_indynxt_events_session_6750",
+        "source_indynxt_events_session_6807",
+        "source_indynxt_events_session_6806",
+        "source_indynxt_events_session_6805",
+        "source_indynxt_events_session_6804"
+      ]
+    },
+    {
+      "id": "event_indy_nxt_2026_5534",
+      "eventId": "event_indy_nxt_2026_5534",
+      "eventName": "Grand Prix of St. Petersburg",
+      "seasonYear": 2026,
+      "eventStartDate": "2026-02-27",
+      "eventEndDate": "2026-03-01",
+      "track": {
+        "id": "track_streets_of_st_petersburg",
+        "name": "Streets of St. Petersburg"
+      },
+      "timezone": "America/New_York",
+      "sourceRefs": [
+        "source_indynxt_season_drop_down",
+        "source_track_metadata_streets_of_st_petersburg",
+        "source_indy_nxt_2026_race_control_schedule",
+        "source_indynxt_events_session_6751",
+        "source_indynxt_events_session_6770",
+        "source_indynxt_events_session_6769",
+        "source_indynxt_events_session_6768",
+        "source_indynxt_events_session_6767",
+        "source_indynxt_events_session_6766"
+      ]
+    },
+    {
+      "id": "event_indy_nxt_2026_5535",
+      "eventId": "event_indy_nxt_2026_5535",
+      "eventName": "Grand Prix of Alabama Race 2",
+      "seasonYear": 2026,
+      "eventStartDate": "2026-03-28",
+      "eventEndDate": "2026-03-29",
+      "track": {
+        "id": "track_barber_motorsports_park",
+        "name": "Barber Motorsports Park"
+      },
+      "timezone": "America/Chicago",
+      "sourceRefs": [
+        "source_indynxt_season_drop_down",
+        "source_track_metadata_barber_motorsports_park",
+        "source_indy_nxt_2026_race_control_schedule",
+        "source_indynxt_events_session_6752",
+        "source_indynxt_events_session_6810",
+        "source_indynxt_events_session_6809",
+        "source_indynxt_events_session_6808"
+      ]
+    },
+    {
+      "id": "event_indy_nxt_2026_5536",
+      "eventId": "event_indy_nxt_2026_5536",
+      "eventName": "Grand Prix of Arlington",
+      "seasonYear": 2026,
+      "eventStartDate": "2026-03-13",
+      "eventEndDate": "2026-03-15",
+      "track": {
+        "id": "track_streets_of_arlington",
+        "name": "Streets of Arlington"
+      },
+      "timezone": "America/Chicago",
+      "sourceRefs": [
+        "source_indynxt_season_drop_down",
+        "source_track_metadata_streets_of_arlington",
+        "source_indy_nxt_2026_race_control_schedule",
+        "source_indynxt_events_session_6753",
+        "source_indynxt_events_session_6787",
+        "source_indynxt_events_session_6786",
+        "source_indynxt_events_session_6785",
+        "source_indynxt_events_session_6784",
+        "source_indynxt_events_session_6783"
+      ]
+    },
+    {
+      "id": "event_indy_nxt_2026_5537",
+      "eventId": "event_indy_nxt_2026_5537",
+      "eventName": "Grand Prix at Road America Race 2",
+      "seasonYear": 2026,
+      "eventStartDate": "2026-06-20",
+      "eventEndDate": "2026-06-21",
+      "track": {
+        "id": "track_road_america",
+        "name": "Road America"
+      },
+      "timezone": "America/Chicago",
+      "sourceRefs": [
+        "source_indy_nxt_2026_race_control_schedule",
+        "source_indy_nxt_2026_race_control_trackactivity_schedule",
+        "source_track_metadata_road_america",
+        "source_indynxt_season_drop_down",
+        "source_indynxt_events_session_6754",
+        "source_indynxt_events_session_6875",
+        "source_indynxt_events_session_6874",
+        "source_indynxt_events_session_6873"
+      ]
+    },
+    {
+      "id": "event_indy_nxt_2026_5538",
+      "eventId": "event_indy_nxt_2026_5538",
+      "eventName": "Music City Grand Prix",
+      "seasonYear": 2026,
+      "eventStartDate": "2026-07-18",
+      "eventEndDate": "2026-07-19",
+      "track": {
+        "id": "track_nashville_superspeedway",
+        "name": "Nashville Superspeedway"
+      },
+      "timezone": "America/Chicago",
+      "sourceRefs": [
+        "source_indy_nxt_2026_race_control_schedule",
+        "source_indy_nxt_2026_race_control_trackactivity_schedule",
+        "source_track_metadata_nashville_superspeedway",
+        "source_indynxt_season_drop_down",
+        "source_indynxt_events_session_6755",
+        "source_indynxt_events_session_6923",
+        "source_indynxt_events_session_6924"
+      ]
+    },
+    {
+      "id": "event_indy_nxt_2026_5539",
+      "eventId": "event_indy_nxt_2026_5539",
+      "eventName": "Indianapolis Grand Prix Race 1",
+      "seasonYear": 2026,
+      "eventStartDate": "2026-05-08",
+      "eventEndDate": "2026-05-08",
+      "track": {
+        "id": "track_indianapolis_motor_speedway_road_course",
+        "name": "Indianapolis Motor Speedway Road Course"
+      },
+      "timezone": "America/Indiana/Indianapolis",
+      "sourceRefs": [
+        "source_indynxt_season_drop_down",
+        "source_track_metadata_indianapolis_motor_speedway_road_course",
+        "source_indy_nxt_2026_race_control_schedule",
+        "source_indynxt_events_session_6756",
+        "source_indynxt_events_session_6829",
+        "source_indynxt_events_session_6830",
+        "source_indynxt_events_session_6831",
+        "source_indynxt_events_session_6828"
+      ]
+    },
+    {
+      "id": "event_indy_nxt_2026_5540",
+      "eventId": "event_indy_nxt_2026_5540",
+      "eventName": "INDY NXT by Firestone at Milwaukee Mile",
+      "seasonYear": 2026,
+      "eventStartDate": "2026-08-29",
+      "eventEndDate": "2026-08-30",
+      "track": {
+        "id": "track_the_milwaukee_mile",
+        "name": "The Milwaukee Mile"
+      },
+      "timezone": "America/Chicago",
+      "sourceRefs": [
+        "source_indy_nxt_2026_race_control_schedule",
+        "source_indy_nxt_2026_race_control_trackactivity_schedule",
+        "source_track_metadata_the_milwaukee_mile",
+        "source_indynxt_season_drop_down",
+        "source_indynxt_events_session_6757",
+        "source_indynxt_events_session_6935",
+        "source_indynxt_events_session_6934"
+      ]
+    },
+    {
+      "id": "event_indy_nxt_2026_5541",
+      "eventId": "event_indy_nxt_2026_5541",
+      "eventName": "Grand Prix of Monterey Race 2",
+      "seasonYear": 2026,
+      "eventStartDate": "2026-09-05",
+      "eventEndDate": "2026-09-06",
+      "track": {
+        "id": "track_weathertech_raceway_laguna_seca",
+        "name": "WeatherTech Raceway Laguna Seca"
+      },
+      "timezone": "America/Los_Angeles",
+      "sourceRefs": [
+        "source_indy_nxt_2026_race_control_schedule",
+        "source_indy_nxt_2026_race_control_trackactivity_schedule",
+        "source_track_metadata_weathertech_raceway_laguna_seca",
+        "source_indynxt_season_drop_down",
+        "source_indynxt_events_session_6758",
+        "source_indynxt_events_session_6954",
+        "source_indynxt_events_session_6953",
+        "source_indynxt_events_session_6952"
+      ]
+    },
+    {
+      "id": "event_indy_nxt_2026_5542",
+      "eventId": "event_indy_nxt_2026_5542",
+      "eventName": "Grand Prix of Monterey Race 1",
+      "seasonYear": 2026,
+      "eventStartDate": "2026-09-04",
+      "eventEndDate": "2026-09-05",
+      "track": {
+        "id": "track_weathertech_raceway_laguna_seca",
+        "name": "WeatherTech Raceway Laguna Seca"
+      },
+      "timezone": "America/Los_Angeles",
+      "sourceRefs": [
+        "source_indy_nxt_2026_race_control_schedule",
+        "source_indy_nxt_2026_race_control_trackactivity_schedule",
+        "source_track_metadata_weathertech_raceway_laguna_seca",
+        "source_indynxt_season_drop_down",
+        "source_indynxt_events_session_6759",
+        "source_indynxt_events_session_6951",
+        "source_indynxt_events_session_6950",
+        "source_indynxt_events_session_6949",
+        "source_indynxt_events_session_6948",
+        "source_indynxt_events_session_6947"
+      ]
+    },
+    {
+      "id": "event_indy_nxt_2026_5543",
+      "eventId": "event_indy_nxt_2026_5543",
+      "eventName": "Grand Prix at Mid-Ohio Race 2",
+      "seasonYear": 2026,
+      "eventStartDate": "2026-07-04",
+      "eventEndDate": "2026-07-05",
+      "track": {
+        "id": "track_mid_ohio_sports_car_course",
+        "name": "Mid-Ohio Sports Car Course"
+      },
+      "timezone": "America/New_York",
+      "sourceRefs": [
+        "source_indy_nxt_2026_race_control_schedule",
+        "source_indy_nxt_2026_race_control_trackactivity_schedule",
+        "source_track_metadata_mid_ohio_sports_car_course",
+        "source_frp_f1600_2019_archive",
+        "source_indynxt_season_drop_down",
+        "source_indynxt_events_session_6760",
+        "source_indynxt_events_session_6897",
+        "source_indynxt_events_session_6896",
+        "source_indynxt_events_session_6895"
+      ]
+    },
+    {
+      "id": "event_indy_nxt_2026_5544",
+      "eventId": "event_indy_nxt_2026_5544",
+      "eventName": "Grand Prix at Mid-Ohio Race 1",
+      "seasonYear": 2026,
+      "eventStartDate": "2026-07-03",
+      "eventEndDate": "2026-07-04",
+      "track": {
+        "id": "track_mid_ohio_sports_car_course",
+        "name": "Mid-Ohio Sports Car Course"
+      },
+      "timezone": "America/New_York",
+      "sourceRefs": [
+        "source_indy_nxt_2026_race_control_schedule",
+        "source_indy_nxt_2026_race_control_trackactivity_schedule",
+        "source_track_metadata_mid_ohio_sports_car_course",
+        "source_frp_f1600_2019_archive",
+        "source_indynxt_season_drop_down",
+        "source_indynxt_events_session_6761",
+        "source_indynxt_events_session_6894",
+        "source_indynxt_events_session_6893",
+        "source_indynxt_events_session_6892",
+        "source_indynxt_events_session_6891"
+      ]
+    },
+    {
+      "id": "event_indy_nxt_2026_5545",
+      "eventId": "event_indy_nxt_2026_5545",
+      "eventName": "Grand Prix at Road America Race 1",
+      "seasonYear": 2026,
+      "eventStartDate": "2026-06-19",
+      "eventEndDate": "2026-06-20",
+      "track": {
+        "id": "track_road_america",
+        "name": "Road America"
+      },
+      "timezone": "America/Chicago",
+      "sourceRefs": [
+        "source_indy_nxt_2026_race_control_schedule",
+        "source_indy_nxt_2026_race_control_trackactivity_schedule",
+        "source_track_metadata_road_america",
+        "source_indynxt_season_drop_down",
+        "source_indynxt_events_session_6762",
+        "source_indynxt_events_session_6872",
+        "source_indynxt_events_session_6871",
+        "source_indynxt_events_session_6870",
+        "source_indynxt_events_session_6869"
+      ]
+    },
+    {
+      "id": "event_indy_nxt_2026_5546",
+      "eventId": "event_indy_nxt_2026_5546",
+      "eventName": "INDY NXT by Firestone at World Wide Technology Raceway",
+      "seasonYear": 2026,
+      "eventStartDate": "2026-06-06",
+      "eventEndDate": "2026-06-07",
+      "track": {
+        "id": "track_world_wide_technology_raceway",
+        "name": "World Wide Technology Raceway"
+      },
+      "timezone": "America/Chicago",
+      "sourceRefs": [
+        "source_indynxt_season_drop_down",
+        "source_track_metadata_world_wide_technology_raceway",
+        "source_indy_nxt_2026_race_control_trackactivity_schedule",
+        "source_indynxt_events_session_6763",
+        "source_indynxt_events_session_6864",
+        "source_indynxt_events_session_6863"
+      ]
+    },
+    {
+      "id": "event_indy_nxt_2026_5547",
+      "eventId": "event_indy_nxt_2026_5547",
+      "eventName": "Grand Prix of Portland",
+      "seasonYear": 2026,
+      "eventStartDate": "2026-08-07",
+      "eventEndDate": "2026-08-09",
+      "track": {
+        "id": "track_portland_international_raceway",
+        "name": "Portland International Raceway"
+      },
+      "timezone": "America/Los_Angeles",
+      "sourceRefs": [
+        "source_indy_nxt_2026_race_control_schedule",
+        "source_indy_nxt_2026_race_control_trackactivity_schedule",
+        "source_track_metadata_portland_international_raceway",
+        "source_indynxt_season_drop_down",
+        "source_indynxt_events_session_6764",
+        "source_indynxt_events_session_6902",
+        "source_indynxt_events_session_6901",
+        "source_indynxt_events_session_6900",
+        "source_indynxt_events_session_6899",
+        "source_indynxt_events_session_6898"
+      ]
+    },
+    {
+      "id": "event_indy_nxt_2026_5548",
+      "eventId": "event_indy_nxt_2026_5548",
+      "eventName": "Indianapolis Grand Prix Race 2",
+      "seasonYear": 2026,
+      "eventStartDate": "2026-05-08",
+      "eventEndDate": "2026-05-09",
+      "track": {
+        "id": "track_indianapolis_motor_speedway_road_course",
+        "name": "Indianapolis Motor Speedway Road Course"
+      },
+      "timezone": "America/Indiana/Indianapolis",
+      "sourceRefs": [
+        "source_indynxt_season_drop_down",
+        "source_track_metadata_indianapolis_motor_speedway_road_course",
+        "source_indy_nxt_2026_race_control_schedule",
+        "source_indynxt_events_session_6765",
+        "source_indynxt_events_session_6832",
+        "source_indynxt_events_session_6834",
+        "source_indynxt_events_session_6833"
+      ]
+    }
+  ]
+}

@@ -18,13 +18,19 @@
 //   - output/feeds/<canonicalSessionId>.ndjson.gz   (capture-shaped snapshot rows)
 //   - output/replay-feeds-manifest.json             (what is in / excluded and why)
 
-import { readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { readSessionPack, writeFeedPack } from './lib/pack-reader.mjs';
-import { reduceRaceTools, reduceTiming71, BRYCE_DRIVER_ID } from './lib/reduce.mjs';
+import {
+  reduceRaceTools,
+  reduceTiming71,
+  BRYCE_DRIVER_ID,
+  MAX_INTERPOLATION_HOLD_SECONDS,
+} from './lib/reduce.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
+const REPO_ROOT = join(__dirname, '..', '..');
 const semanticOut = join(__dirname, '..', 'semantic-layer', 'output');
 const feedsDir = join(__dirname, 'output', 'feeds');
 const manifestPath = join(__dirname, 'output', 'replay-feeds-manifest.json');
@@ -33,7 +39,8 @@ const readJson = (p) => JSON.parse(readFileSync(p, 'utf8'));
 
 const TIER_LABEL = {
   racetools_capture: 'RaceTools race-weekend capture',
-  timing71_normalized: 'third-party normalized (Timing71)'
+  timing71_normalized: 'third-party normalized (Timing71)',
+  race_control_capture: 'BryceCast capture of INDYCAR Race Control timing'
 };
 
 const numericSuffix = (id) => {
@@ -48,6 +55,10 @@ const finishingOrder = readJson(join(semanticOut, 'validation', 'finishing-order
 const crosswalkValidation = readJson(join(semanticOut, 'crosswalk', 'crosswalk-validation.json'));
 const identityCrosswalk = readJson(join(semanticOut, 'crosswalk', 'identity-crosswalk-2026.json'));
 const captureFinalStates = readJson(join(semanticOut, 'cross-check', 'capture-final-states.json'));
+const liveCaptureManifestPath = join(semanticOut, 'live-captures', 'live-captures-manifest.json');
+const liveCaptureManifest = existsSync(liveCaptureManifestPath)
+  ? readJson(liveCaptureManifestPath)
+  : { sessions: [] };
 
 const crosswalkBySession = new Map(identityCrosswalk.sessions.map((s) => [s.t71SessionId, s]));
 const captureByEventSessionId = new Map(
@@ -137,6 +148,10 @@ for (const race of finishingOrder.results) {
     seasonYear: race.year,
     sourceTier: out.sourceTier,
     tierLabel: TIER_LABEL[out.sourceTier],
+    observationBasis: 'interpolated_step_hold_from_observed_timing_events',
+    replayInterpolated: true,
+    noGps: true,
+    interpolationCoverage: out.interpolationCoverage,
     venue: race.venue,
     sessionName: out.meta?.sessionLabel ?? 'Race',
     eventName: out.meta?.event ?? race.venue,
@@ -225,6 +240,10 @@ for (const race of crosswalkValidation.raceClassificationChecks) {
     seasonYear: 2026,
     sourceTier: out.sourceTier,
     tierLabel: TIER_LABEL[out.sourceTier],
+    observationBasis: 'interpolated_step_hold_from_observed_timing_events',
+    replayInterpolated: true,
+    noGps: true,
+    interpolationCoverage: out.interpolationCoverage,
     verdict,
     venue: out.meta?.venue ?? cw?.venue,
     sessionName: 'Race',
@@ -262,6 +281,81 @@ for (const race of crosswalkValidation.raceClassificationChecks) {
   process.stdout.write(`T71 2026 ${(out.meta?.venue ?? '').padEnd(20)} -> ${race.canonicalSessionId}  ${out.snapshots.length}r  win#${winner} ${verdict} ${asRaced === 'match' ? '' : '(as-raced)'} ${validationOk ? 'OK' : 'EXCLUDED'}\n`);
 }
 
+// --- (c) late-2026 direct Race Control captures -------------------------------
+// These packs are produced by export-live-captures.mjs from sqlite opened with
+// -readonly. They are already capture-shaped source observations, so the replay
+// preserves native timestamps and does not interpolate between them.
+for (const capture of liveCaptureManifest.sessions ?? []) {
+  if (capture.sessionType !== 'race' || !capture.replayArtifact) continue;
+  const feedPath = join(REPO_ROOT, capture.replayArtifact);
+  let rows;
+  try {
+    const { gunzipSync } = await import('node:zlib');
+    rows = gunzipSync(readFileSync(feedPath)).toString('utf8').trim().split('\n').map((line) => JSON.parse(line));
+  } catch (error) {
+    excluded.push({
+      id: capture.captureSessionKey,
+      canonicalSessionId: capture.canonicalSessionId,
+      sourceTier: 'race_control_capture',
+      reason: `capture feed unreadable: ${error.message}`,
+    });
+    continue;
+  }
+  const flags = flagSanity(rows);
+  const bryceSamples = rows.filter((row) =>
+    row.raw.timing.timing_results.Item.some((item) => String(item.DriverID) === BRYCE_DRIVER_ID)
+  ).length;
+  const finalOrder = rows.at(-1).raw.timing.timing_results.Item
+    .filter((row) => Number(row.rank ?? row.liveRank) > 0)
+    .sort((a, b) => Number(a.rank ?? a.liveRank) - Number(b.rank ?? b.liveRank))
+    .map((row) => String(row.no));
+  const watchable = rows.length >= MIN_WATCHABLE_SAMPLES && bryceSamples >= MIN_WATCHABLE_SAMPLES && flags.ok && finalOrder.length > 0;
+  const canonicalOfficialSessionId = numericSuffix(capture.canonicalSessionId);
+  const entry = {
+    id: capture.captureSessionKey,
+    canonicalSessionId: capture.canonicalSessionId,
+    sessionKey: capture.canonicalSessionId,
+    eventSessionId: canonicalOfficialSessionId,
+    seasonYear: 2026,
+    sourceTier: 'race_control_capture',
+    tierLabel: TIER_LABEL.race_control_capture,
+    observationBasis: 'observed_source_snapshot',
+    replayInterpolated: false,
+    noGps: true,
+    interpolationCoverage: {
+      maximumHoldSeconds: 0,
+      withheldSeconds: 0,
+      sourceGaps: [],
+      note: 'Native Race Control snapshots are replayed at observed timestamps; no intermediate rows are created.',
+    },
+    venue: rows[0].summary.trackName,
+    sessionName: 'Race',
+    eventName: rows[0].raw.timing.timing_results.heartbeat.eventName,
+    date: rows[0].checkedAt.slice(0, 10),
+    totalLaps: Number(rows.at(-1).summary.totalLaps) || null,
+    samples: rows.length,
+    bryceSamples,
+    firstCheckedAt: rows[0].checkedAt,
+    lastCheckedAt: rows.at(-1).checkedAt,
+    firstGreenAt: rows[0].checkedAt,
+    durationSeconds: Math.round((Date.parse(rows.at(-1).checkedAt) - Date.parse(rows[0].checkedAt)) / 1000),
+    validation: {
+      winner: finalOrder[0] ?? null,
+      canonicalWinnerMatch: null,
+      podium: finalOrder.slice(0, 3),
+      finalOrder,
+      flags,
+      asRacedVsCanonical: 'capture_observed_pending_or_independent_of_official_classification',
+      twoSource: twoSourceDiff(canonicalOfficialSessionId, finalOrder),
+    },
+    excludedFromAvailable: !watchable,
+    watchable,
+  };
+  if (!watchable) entry.excludeReason = 'direct capture failed cadence/identity/flag/final-order gate';
+  reduced.push(entry);
+  process.stdout.write(`RC 2026 ${String(entry.venue ?? '').padEnd(20)} -> ${entry.canonicalSessionId}  ${rows.length}r ${watchable ? 'OK' : 'EXCLUDED'}\n`);
+}
+
 // --- Manifest ------------------------------------------------------------------
 const watchable = reduced.filter((r) => r.watchable);
 const manifest = {
@@ -269,9 +363,16 @@ const manifest = {
   generatedAt: new Date().toISOString(),
   note: 'Lake-fed replay feeds for the Time Machine. Every session is source-tiered and validated; failing sessions are excluded from available() with the reason recorded. Classification/final order shown is as-raced (the honesty line at the checkered); canonical is the validation reference.',
   clockCaveat: 'RaceTools feeds carry a session-local virtual clock (seconds-of-day on the session date, labelled Z) — correct year/date, NOT UTC-accurate; the replay uses it only as a relative virtual clock. Timing71 feeds carry real UTC epoch timestamps.',
+  interpolationPolicy: {
+    derivedReplayCadenceSeconds: 1,
+    maximumHoldSeconds: MAX_INTERPOLATION_HOLD_SECONDS,
+    behaviorAfterMaximumHold: 'withhold rows until the next observed source heartbeat/frame',
+    directCaptureRows: 'native observed timestamps; no interpolation',
+  },
   scope: {
     racetools_2024_25_races: reduced.filter((r) => r.sourceTier === 'racetools_capture').length,
     timing71_2026_races: reduced.filter((r) => r.sourceTier === 'timing71_normalized').length,
+    raceControlCapture_2026_races: reduced.filter((r) => r.sourceTier === 'race_control_capture').length,
     practiceQualifyingShipped: 0,
     practiceQualifyingNote: 'Practice/qualifying (slice c) intentionally not shipped: a validated race subset over an unvalidated sweep.'
   },

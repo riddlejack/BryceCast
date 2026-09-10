@@ -38,7 +38,7 @@
       "type": "small_multiple"
     }
   ],
-  "generatedAt": "2026-07-21T23:54:53Z",
+  "generatedAt": "2026-09-10T23:14:56Z",
   "id": "career_lab_context",
   "metricFamilyParity": [
     {
@@ -468,7 +468,7 @@
       "parityStatus": "production_safe",
       "seriesId": "series_indy_nxt",
       "seriesName": "INDY NXT",
-      "sourceRowsOrSessions": "41",
+      "sourceRowsOrSessions": "45",
       "uiUse": "Use in Career Analytics Lab."
     },
     {
@@ -478,7 +478,7 @@
       "parityStatus": "production_safe",
       "seriesId": "series_indy_nxt",
       "seriesName": "INDY NXT",
-      "sourceRowsOrSessions": "70",
+      "sourceRowsOrSessions": "77",
       "uiUse": "Use in Career Analytics Lab."
     },
     {
@@ -508,7 +508,7 @@
       "parityStatus": "source_bounded_partial",
       "seriesId": "series_indy_nxt",
       "seriesName": "INDY NXT",
-      "sourceRowsOrSessions": "1558",
+      "sourceRowsOrSessions": "1748",
       "uiUse": "Use with coverage badge and denominators."
     },
     {
@@ -518,7 +518,7 @@
       "parityStatus": "source_bounded_partial",
       "seriesId": "series_indy_nxt",
       "seriesName": "INDY NXT",
-      "sourceRowsOrSessions": "3193",
+      "sourceRowsOrSessions": "3557",
       "uiUse": "Use with coverage badge and denominators."
     },
     {
@@ -528,7 +528,7 @@
       "parityStatus": "source_bounded_partial",
       "seriesId": "series_indy_nxt",
       "seriesName": "INDY NXT",
-      "sourceRowsOrSessions": "325",
+      "sourceRowsOrSessions": "357",
       "uiUse": "Use with coverage badge and denominators."
     }
   ],
@@ -3000,6 +3000,60 @@
       "trackType": "road"
     },
     {
+      "eventName": "INDY NXT by Firestone at Milwaukee Mile",
+      "finishPercentile": "0.6957",
+      "finishPosition": "8.0",
+      "points": "24",
+      "positionGain": "6.0",
+      "raceLabel": "2026 INDY NXT by Firestone at Milwaukee Mile",
+      "seasonYear": "2026",
+      "seriesId": "series_indy_nxt",
+      "seriesName": "INDY NXT",
+      "sessionId": "session_indy_nxt_2026_6757",
+      "sourceState": "official_or_source_backed_result",
+      "startPosition": "14.0",
+      "status": "running",
+      "teamName": "Chip Ganassi Racing",
+      "trackName": "The Milwaukee Mile",
+      "trackType": "oval"
+    },
+    {
+      "eventName": "Grand Prix of Monterey Race 2",
+      "finishPercentile": "0.6667",
+      "finishPosition": "9.0",
+      "points": "22",
+      "positionGain": "1.0",
+      "raceLabel": "2026 Grand Prix of Monterey Race 2",
+      "seasonYear": "2026",
+      "seriesId": "series_indy_nxt",
+      "seriesName": "INDY NXT",
+      "sessionId": "session_indy_nxt_2026_6758",
+      "sourceState": "official_or_source_backed_result",
+      "startPosition": "10.0",
+      "status": "running",
+      "teamName": "Chip Ganassi Racing",
+      "trackName": "WeatherTech Raceway Laguna Seca",
+      "trackType": "road"
+    },
+    {
+      "eventName": "Grand Prix of Monterey Race 1",
+      "finishPercentile": "0.7917",
+      "finishPosition": "6.0",
+      "points": "28",
+      "positionGain": "1.0",
+      "raceLabel": "2026 Grand Prix of Monterey Race 1",
+      "seasonYear": "2026",
+      "seriesId": "series_indy_nxt",
+      "seriesName": "INDY NXT",
+      "sessionId": "session_indy_nxt_2026_6759",
+      "sourceState": "official_or_source_backed_result",
+      "startPosition": "7.0",
+      "status": "running",
+      "teamName": "Chip Ganassi Racing",
+      "trackName": "WeatherTech Raceway Laguna Seca",
+      "trackType": "road"
+    },
+    {
       "eventName": "Grand Prix at Mid-Ohio Race 2",
       "finishPercentile": "0.4583",
       "finishPosition": "14.0",
@@ -3072,6 +3126,24 @@
       "trackType": "oval"
     },
     {
+      "eventName": "Grand Prix of Portland",
+      "finishPercentile": "0.375",
+      "finishPosition": "16.0",
+      "points": "14",
+      "positionGain": "-1.0",
+      "raceLabel": "2026 Grand Prix of Portland",
+      "seasonYear": "2026",
+      "seriesId": "series_indy_nxt",
+      "seriesName": "INDY NXT",
+      "sessionId": "session_indy_nxt_2026_6764",
+      "sourceState": "official_or_source_backed_result",
+      "startPosition": "15.0",
+      "status": "running",
+      "teamName": "Chip Ganassi Racing",
+      "trackName": "Portland International Raceway",
+      "trackType": "road"
+    },
+    {
       "eventName": "Indianapolis Grand Prix Race 2",
       "finishPercentile": "0.5417",
       "finishPosition": "12.0",
@@ -3090,9 +3162,21 @@
       "trackType": "road"
     }
   ],
-  "resultConversionRows": 142,
+  "resultConversionRows": 146,
   "schemaVersion": "brycecast.careerLabContextPack.v1",
   "seriesSummary": [
+    {
+      "avgFinish": "12.222222222222221",
+      "avgFinishPercentile": "0.47334666666666664",
+      "avgGain": "-0.7333333333333333",
+      "issueLikeStatusRate": "0.1111111111111111",
+      "medianFinish": "12.0",
+      "raceRows": "45",
+      "seriesId": "series_indy_nxt",
+      "seriesName": "INDY NXT",
+      "top10Rate": "0.4888888888888889",
+      "top5Rate": "0.08888888888888889"
+    },
     {
       "avgFinish": "10.738095238095237",
       "avgFinishPercentile": "0.49766666666666665",
@@ -3104,18 +3188,6 @@
       "seriesName": "GB3 Championship",
       "top10Rate": "0.42857142857142855",
       "top5Rate": "0.11904761904761904"
-    },
-    {
-      "avgFinish": "12.463414634146341",
-      "avgFinishPercentile": "0.45784146341463416",
-      "avgGain": "-0.975609756097561",
-      "issueLikeStatusRate": "0.12195121951219512",
-      "medianFinish": "12.0",
-      "raceRows": "41",
-      "seriesId": "series_indy_nxt",
-      "seriesName": "INDY NXT",
-      "top10Rate": "0.4634146341463415",
-      "top5Rate": "0.0975609756097561"
     },
     {
       "avgFinish": "4.75",
@@ -3185,36 +3257,36 @@
     "Formula Ford lap/weather context is source-bounded and should be labeled separately.",
     "IMSA Daytona remains a standalone sports-car feature."
   ],
-  "sourceHash": "64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978",
+  "sourceHash": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd",
   "sourceRefs": [
     {
-      "bytes": 915,
+      "bytes": 916,
       "path": "analysis/career-parity/output/tables/career_series_result_summary.csv",
       "role": "career summary",
-      "sha256": "2a70c2d8016f25ef0a4425c11e517f2d137f5cfb1a133dd3b2a4509666111b34"
+      "sha256": "7a2d21b60aac7254b301e7b91413fa4db7bf3bf031b32938d43787033c550efc"
     },
     {
       "bytes": 12247,
       "path": "analysis/career-parity/output/tables/career_metric_family_parity.csv",
       "role": "metric parity",
-      "sha256": "7f1d3e6466d18ba4e0be74ef70341c5b355e11f5c5d47dd303c86f19e0d44f10"
+      "sha256": "f7d95aa2a291d143f8512951a0d494ebaa92a30e4d78913a08ccda4fa43d8d8c"
     },
     {
-      "bytes": 36269,
+      "bytes": 37233,
       "path": "analysis/career-parity/output/tables/career_result_conversion.csv",
       "role": "result conversion",
-      "sha256": "96ac7c27b407d8b15f845051906c38d127927e116d9a6c57dce2b9c3b467f8f1"
+      "sha256": "5fbb6838d1cae3feda74bf4e8d438eca47926f4f2df0bee8391aafe01f06aa6c"
     },
     {
-      "bytes": 23439,
+      "bytes": 23451,
       "path": "analysis/predictive-race-intelligence/output/career_prior_matrix.csv",
       "role": "career prior matrix chart source",
-      "sha256": "b680a804217dd67509abbd0774e735b91d131631a2ba9e9b2ab2fdaf11350215"
+      "sha256": "5bdd0674eac0baf8b2efd0cbb5cd406930c595ff80ad5534fac4e71d2b028f15"
     }
   ],
   "topCareerStories": [
     {
-      "detail": "GB3 Championship has 42 race rows.",
+      "detail": "INDY NXT has 45 race rows.",
       "story": "Largest source-backed race sample"
     },
     {
@@ -3226,7 +3298,7 @@
       "story": "Track-type prior"
     },
     {
-      "detail": "2024 FROC 2024 Round 5 - Highlands Motorsport Park; 2023 Euroformula Open 2023 Round 4 - Paul Ricard; 2023 Euroformula Open 2023 Round 2 - Spa-Francorchamps",
+      "detail": "2022 GB3 2022 Round 3 - Donington Park; 2023 Euroformula Open 2023 Round 4 - Paul Ricard; 2024 FROC 2024 Round 5 - Highlands Motorsport Park",
       "story": "Best finish-percentile races"
     }
   ],

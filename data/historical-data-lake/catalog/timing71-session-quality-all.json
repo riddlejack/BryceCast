@@ -1,18 +1,18 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-21T23:49:55.133Z",
+  "generatedAt": "2026-09-10T22:59:47.251Z",
   "detailLevel": "compact_source_quality_index",
   "semanticNote": "Full manifests, rosters, and frame samples remain in the content-addressed replay ZIPs and are decoded on demand.",
   "series": "all",
-  "sessionCount": 381,
+  "sessionCount": 420,
   "statusCounts": {
-    "usable": 375,
+    "usable": 413,
     "decoder_error": 1,
-    "wrong_series_or_stale_capture": 3,
+    "wrong_series_or_stale_capture": 4,
     "quarantined_cross_session": 1,
     "quarantined_false_positive": 1
   },
-  "issueCount": 6,
+  "issueCount": 7,
   "issues": [
     {
       "sessionId": "4a536f1f906f2146a1c39092",
@@ -84,6 +84,18 @@
       "error": null,
       "reasons": [
         "NXT-labelled replay lacks an NXT race checkered state."
+      ]
+    },
+    {
+      "sessionId": "d4d132027b3850bc2ca66285",
+      "replayId": "0895cf60-5926-438b-bf15-c73a99af4043",
+      "year": 2026,
+      "series": "INDY_NXT",
+      "sessionLabel": "INDYNXT by Firestone at Milwaukee Mile - Qualifications",
+      "status": "wrong_series_or_stale_capture",
+      "error": null,
+      "reasons": [
+        "NXT-labelled candidate has no reconstructed frame containing Bryce Aron"
       ]
     }
   ],
@@ -32746,6 +32758,3392 @@
           ],
           "flagMessageCount": 10,
           "yellowMessageCount": 4,
+          "hasTrackDataSpec": false,
+          "bryceSegment": {
+            "frameCount": 0,
+            "firstObservedAt": null,
+            "lastObservedAt": null,
+            "observedSpanSeconds": null,
+            "minCars": null,
+            "maxCars": null,
+            "uniqueDriverCount": 0,
+            "maxLap": null,
+            "flagStates": [],
+            "hasCheckered": false
+          }
+        },
+        "quality": {
+          "status": "usable",
+          "reasons": [],
+          "decoderErrors": []
+        }
+      },
+      "error": null
+    },
+    {
+      "sessionId": "9116c83ded8d784ac5bdcc24",
+      "replayId": "aea0444b-d683-459b-bd60-a3616da6e633",
+      "year": 2026,
+      "series": "INDY_NXT",
+      "sessionType": "practice",
+      "sessionLabel": "INDY NXT By Firestone GP of Portland - Practice 1",
+      "analysis": {
+        "manifest": {
+          "uuid": "aea0444b-d683-459b-bd60-a3616da6e633",
+          "name": "IndyCar",
+          "description": "INDY NXT By Firestone GP of Portland - Practice 1",
+          "startTime": 1786134426.635,
+          "version": 1,
+          "columnNames": [
+            "Num",
+            "State",
+            "Driver",
+            "Team",
+            "Laps",
+            "T",
+            "PTP",
+            "Gap",
+            "Int",
+            "S1",
+            "BS1",
+            "S2",
+            "BS2",
+            "S3",
+            "BS3",
+            "Last",
+            "Spd",
+            "Best",
+            "B.Spd",
+            "Pits"
+          ],
+          "trackDataSpecCount": 0
+        },
+        "frames": {
+          "count": 3032,
+          "fullFrameCount": 304,
+          "incrementalFrameCount": 2728,
+          "nonemptyCarFrameCount": 3032,
+          "firstObservedAt": "2026-08-07T20:27:07.000Z",
+          "lastObservedAt": "2026-08-07T21:25:05.000Z",
+          "observedSpanSeconds": 3478,
+          "updateGapMedianSeconds": 1,
+          "updateGapMaxSeconds": 2,
+          "exactConsecutiveOneSecondUpdates": false,
+          "patchPreconditionCount": 24081,
+          "patchPreconditionMismatchCount": 0
+        },
+        "content": {
+          "driverCount": 24,
+          "bryce": {
+            "carNumber": "9",
+            "driver": "Bryce Aron",
+            "team": "Chip Ganassi Racing"
+          },
+          "flagStates": [
+            "none",
+            "green",
+            "red",
+            "chequered"
+          ],
+          "flagMessageCount": 6,
+          "yellowMessageCount": 0,
+          "hasTrackDataSpec": false,
+          "bryceSegment": {
+            "frameCount": 3032,
+            "firstObservedAt": "2026-08-07T20:27:07.000Z",
+            "lastObservedAt": "2026-08-07T21:25:05.000Z",
+            "observedSpanSeconds": 3478,
+            "minCars": 24,
+            "maxCars": 24,
+            "uniqueDriverCount": 24,
+            "maxLap": 34,
+            "flagStates": [
+              "none",
+              "green",
+              "red",
+              "chequered"
+            ],
+            "hasCheckered": true
+          }
+        },
+        "quality": {
+          "status": "usable",
+          "reasons": [],
+          "decoderErrors": []
+        }
+      },
+      "error": null
+    },
+    {
+      "sessionId": "30a6b9dec0d2b797d507b816",
+      "replayId": "c902ecfc-f5e9-4f47-b10f-9971e4db1a3a",
+      "year": 2026,
+      "series": "INDYCAR",
+      "sessionType": "practice",
+      "sessionLabel": "ONLYBULLS Grand Prix of Portland - Practice 1 - Group A",
+      "analysis": {
+        "manifest": {
+          "uuid": "c902ecfc-f5e9-4f47-b10f-9971e4db1a3a",
+          "name": "IndyCar",
+          "description": "ONLYBULLS Grand Prix of Portland - Practice 1 - Group A",
+          "startTime": 1786138331.296,
+          "version": 1,
+          "columnNames": [
+            "Num",
+            "State",
+            "Driver",
+            "Team",
+            "Laps",
+            "T",
+            "PTP",
+            "Gap",
+            "Int",
+            "S1",
+            "BS1",
+            "S2",
+            "BS2",
+            "S3",
+            "BS3",
+            "Last",
+            "Spd",
+            "Best",
+            "B.Spd",
+            "Pits"
+          ],
+          "trackDataSpecCount": 0
+        },
+        "frames": {
+          "count": 4912,
+          "fullFrameCount": 492,
+          "incrementalFrameCount": 4420,
+          "nonemptyCarFrameCount": 4912,
+          "firstObservedAt": "2026-08-07T21:32:12.000Z",
+          "lastObservedAt": "2026-08-07T23:05:09.000Z",
+          "observedSpanSeconds": 5577,
+          "updateGapMedianSeconds": 1,
+          "updateGapMaxSeconds": 2,
+          "exactConsecutiveOneSecondUpdates": false,
+          "patchPreconditionCount": 27277,
+          "patchPreconditionMismatchCount": 0
+        },
+        "content": {
+          "driverCount": 25,
+          "bryce": null,
+          "flagStates": [
+            "none",
+            "green",
+            "red",
+            "chequered"
+          ],
+          "flagMessageCount": 8,
+          "yellowMessageCount": 0,
+          "hasTrackDataSpec": false,
+          "bryceSegment": {
+            "frameCount": 0,
+            "firstObservedAt": null,
+            "lastObservedAt": null,
+            "observedSpanSeconds": null,
+            "minCars": null,
+            "maxCars": null,
+            "uniqueDriverCount": 0,
+            "maxLap": null,
+            "flagStates": [],
+            "hasCheckered": false
+          }
+        },
+        "quality": {
+          "status": "usable",
+          "reasons": [],
+          "decoderErrors": []
+        }
+      },
+      "error": null
+    },
+    {
+      "sessionId": "77fec0ee5b803dbbaabc7654",
+      "replayId": "8cb920ae-d919-4c44-9c2e-739c868fea3c",
+      "year": 2026,
+      "series": "INDY_NXT",
+      "sessionType": "practice",
+      "sessionLabel": "INDY NXT By Firestone GP of Portland - Practice 2",
+      "analysis": {
+        "manifest": {
+          "uuid": "8cb920ae-d919-4c44-9c2e-739c868fea3c",
+          "name": "IndyCar",
+          "description": "INDY NXT By Firestone GP of Portland - Practice 2",
+          "startTime": 1786204661.562,
+          "version": 1,
+          "columnNames": [
+            "Num",
+            "State",
+            "Driver",
+            "Team",
+            "Laps",
+            "T",
+            "PTP",
+            "Gap",
+            "Int",
+            "S1",
+            "BS1",
+            "S2",
+            "BS2",
+            "S3",
+            "BS3",
+            "Last",
+            "Spd",
+            "Best",
+            "B.Spd",
+            "Pits"
+          ],
+          "trackDataSpecCount": 0
+        },
+        "frames": {
+          "count": 3061,
+          "fullFrameCount": 307,
+          "incrementalFrameCount": 2754,
+          "nonemptyCarFrameCount": 3061,
+          "firstObservedAt": "2026-08-08T15:57:42.000Z",
+          "lastObservedAt": "2026-08-08T16:55:41.000Z",
+          "observedSpanSeconds": 3479,
+          "updateGapMedianSeconds": 1,
+          "updateGapMaxSeconds": 2,
+          "exactConsecutiveOneSecondUpdates": false,
+          "patchPreconditionCount": 39303,
+          "patchPreconditionMismatchCount": 0
+        },
+        "content": {
+          "driverCount": 24,
+          "bryce": {
+            "carNumber": "9",
+            "driver": "Bryce Aron",
+            "team": "Chip Ganassi Racing"
+          },
+          "flagStates": [
+            "none",
+            "green",
+            "red",
+            "chequered"
+          ],
+          "flagMessageCount": 4,
+          "yellowMessageCount": 0,
+          "hasTrackDataSpec": false,
+          "bryceSegment": {
+            "frameCount": 3061,
+            "firstObservedAt": "2026-08-08T15:57:42.000Z",
+            "lastObservedAt": "2026-08-08T16:55:41.000Z",
+            "observedSpanSeconds": 3479,
+            "minCars": 24,
+            "maxCars": 24,
+            "uniqueDriverCount": 24,
+            "maxLap": 36,
+            "flagStates": [
+              "none",
+              "green",
+              "red",
+              "chequered"
+            ],
+            "hasCheckered": true
+          }
+        },
+        "quality": {
+          "status": "usable",
+          "reasons": [],
+          "decoderErrors": []
+        }
+      },
+      "error": null
+    },
+    {
+      "sessionId": "053ec6e77c63325b202c57c4",
+      "replayId": "6204d63b-2d7b-4a42-bb30-404b4bb97224",
+      "year": 2026,
+      "series": "INDY_NXT",
+      "sessionType": "qualifying",
+      "sessionLabel": "INDY NXT By Firestone GP of Portland - Qualifications",
+      "analysis": {
+        "manifest": {
+          "uuid": "6204d63b-2d7b-4a42-bb30-404b4bb97224",
+          "name": "IndyCar",
+          "description": "INDY NXT By Firestone GP of Portland - Qualifications",
+          "startTime": 1786215474.506,
+          "version": 1,
+          "columnNames": [
+            "Num",
+            "State",
+            "Driver",
+            "Team",
+            "Laps",
+            "T",
+            "PTP",
+            "Gap",
+            "Int",
+            "S1",
+            "BS1",
+            "S2",
+            "BS2",
+            "S3",
+            "BS3",
+            "Last",
+            "Spd",
+            "Best",
+            "B.Spd",
+            "Pits"
+          ],
+          "trackDataSpecCount": 0
+        },
+        "frames": {
+          "count": 2265,
+          "fullFrameCount": 227,
+          "incrementalFrameCount": 2038,
+          "nonemptyCarFrameCount": 2265,
+          "firstObservedAt": "2026-08-08T18:57:55.000Z",
+          "lastObservedAt": "2026-08-08T19:40:54.000Z",
+          "observedSpanSeconds": 2579,
+          "updateGapMedianSeconds": 1,
+          "updateGapMaxSeconds": 2,
+          "exactConsecutiveOneSecondUpdates": false,
+          "patchPreconditionCount": 12808,
+          "patchPreconditionMismatchCount": 0
+        },
+        "content": {
+          "driverCount": 24,
+          "bryce": {
+            "carNumber": "9",
+            "driver": "Bryce Aron",
+            "team": "Chip Ganassi Racing"
+          },
+          "flagStates": [
+            "none",
+            "green",
+            "chequered"
+          ],
+          "flagMessageCount": 4,
+          "yellowMessageCount": 0,
+          "hasTrackDataSpec": false,
+          "bryceSegment": {
+            "frameCount": 1500,
+            "firstObservedAt": "2026-08-08T18:57:55.000Z",
+            "lastObservedAt": "2026-08-08T19:40:54.000Z",
+            "observedSpanSeconds": 2579,
+            "minCars": 12,
+            "maxCars": 24,
+            "uniqueDriverCount": 24,
+            "maxLap": 10,
+            "flagStates": [
+              "none",
+              "green",
+              "chequered"
+            ],
+            "hasCheckered": true
+          }
+        },
+        "quality": {
+          "status": "usable",
+          "reasons": [],
+          "decoderErrors": []
+        }
+      },
+      "error": null
+    },
+    {
+      "sessionId": "1cd48cf72cd6f528fced7bf0",
+      "replayId": "24e2431c-1265-4387-ba42-3894f7ad1a4b",
+      "year": 2026,
+      "series": "INDYCAR",
+      "sessionType": "practice",
+      "sessionLabel": "ONLYBULLS Grand Prix of Portland - Practice 2 - Group B",
+      "analysis": {
+        "manifest": {
+          "uuid": "24e2431c-1265-4387-ba42-3894f7ad1a4b",
+          "name": "IndyCar",
+          "description": "ONLYBULLS Grand Prix of Portland - Practice 2 - Group B",
+          "startTime": 1786208567.31,
+          "version": 1,
+          "columnNames": [
+            "Num",
+            "State",
+            "Driver",
+            "Team",
+            "Laps",
+            "T",
+            "PTP",
+            "Gap",
+            "Int",
+            "S1",
+            "BS1",
+            "S2",
+            "BS2",
+            "S3",
+            "BS3",
+            "Last",
+            "Spd",
+            "Best",
+            "B.Spd",
+            "Pits"
+          ],
+          "trackDataSpecCount": 0
+        },
+        "frames": {
+          "count": 4914,
+          "fullFrameCount": 492,
+          "incrementalFrameCount": 4422,
+          "nonemptyCarFrameCount": 4914,
+          "firstObservedAt": "2026-08-08T17:02:48.000Z",
+          "lastObservedAt": "2026-08-08T18:35:46.000Z",
+          "observedSpanSeconds": 5578,
+          "updateGapMedianSeconds": 1,
+          "updateGapMaxSeconds": 2,
+          "exactConsecutiveOneSecondUpdates": false,
+          "patchPreconditionCount": 28090,
+          "patchPreconditionMismatchCount": 0
+        },
+        "content": {
+          "driverCount": 25,
+          "bryce": null,
+          "flagStates": [
+            "none",
+            "green",
+            "chequered"
+          ],
+          "flagMessageCount": 6,
+          "yellowMessageCount": 0,
+          "hasTrackDataSpec": false,
+          "bryceSegment": {
+            "frameCount": 0,
+            "firstObservedAt": null,
+            "lastObservedAt": null,
+            "observedSpanSeconds": null,
+            "minCars": null,
+            "maxCars": null,
+            "uniqueDriverCount": 0,
+            "maxLap": null,
+            "flagStates": [],
+            "hasCheckered": false
+          }
+        },
+        "quality": {
+          "status": "usable",
+          "reasons": [],
+          "decoderErrors": []
+        }
+      },
+      "error": null
+    },
+    {
+      "sessionId": "47289b7d410e7be20a6a357a",
+      "replayId": "eedf1cdd-8715-475e-968b-a4dd9ee970f0",
+      "year": 2026,
+      "series": "INDY_NXT",
+      "sessionType": "race",
+      "sessionLabel": "INDY NXT By Firestone GP of Portland - Race",
+      "analysis": {
+        "manifest": {
+          "uuid": "eedf1cdd-8715-475e-968b-a4dd9ee970f0",
+          "name": "IndyCar",
+          "description": "INDY NXT By Firestone GP of Portland - Race",
+          "startTime": 1786298742.477,
+          "version": 1,
+          "columnNames": [
+            "Num",
+            "State",
+            "Driver",
+            "Team",
+            "Laps",
+            "T",
+            "PTP",
+            "Gap",
+            "Int",
+            "S1",
+            "BS1",
+            "S2",
+            "BS2",
+            "S3",
+            "BS3",
+            "Last",
+            "Spd",
+            "Best",
+            "B.Spd",
+            "Pits"
+          ],
+          "trackDataSpecCount": 0
+        },
+        "frames": {
+          "count": 3578,
+          "fullFrameCount": 358,
+          "incrementalFrameCount": 3220,
+          "nonemptyCarFrameCount": 3578,
+          "firstObservedAt": "2026-08-09T18:05:43.000Z",
+          "lastObservedAt": "2026-08-09T19:13:41.000Z",
+          "observedSpanSeconds": 4078,
+          "updateGapMedianSeconds": 1,
+          "updateGapMaxSeconds": 2,
+          "exactConsecutiveOneSecondUpdates": false,
+          "patchPreconditionCount": 16082,
+          "patchPreconditionMismatchCount": 0
+        },
+        "content": {
+          "driverCount": 24,
+          "bryce": {
+            "carNumber": "9",
+            "driver": "Bryce Aron",
+            "team": "Chip Ganassi Racing"
+          },
+          "flagStates": [
+            "none",
+            "green",
+            "caution",
+            "chequered"
+          ],
+          "flagMessageCount": 4,
+          "yellowMessageCount": 1,
+          "hasTrackDataSpec": false,
+          "bryceSegment": {
+            "frameCount": 3578,
+            "firstObservedAt": "2026-08-09T18:05:43.000Z",
+            "lastObservedAt": "2026-08-09T19:13:41.000Z",
+            "observedSpanSeconds": 4078,
+            "minCars": 24,
+            "maxCars": 24,
+            "uniqueDriverCount": 24,
+            "maxLap": 35,
+            "flagStates": [
+              "none",
+              "green",
+              "caution",
+              "chequered"
+            ],
+            "hasCheckered": true
+          }
+        },
+        "quality": {
+          "status": "usable",
+          "reasons": [],
+          "decoderErrors": []
+        }
+      },
+      "error": null
+    },
+    {
+      "sessionId": "544dcf1616a4663997b36ce0",
+      "replayId": "65415d32-1cba-45b8-a1a4-6e34e35c8ab4",
+      "year": 2026,
+      "series": "INDYCAR",
+      "sessionType": "race",
+      "sessionLabel": "ONLYBULLS Grand Prix of Portland - Race",
+      "analysis": {
+        "manifest": {
+          "uuid": "65415d32-1cba-45b8-a1a4-6e34e35c8ab4",
+          "name": "IndyCar",
+          "description": "ONLYBULLS Grand Prix of Portland - Race",
+          "startTime": 1786307088.168,
+          "version": 1,
+          "columnNames": [
+            "Num",
+            "State",
+            "Driver",
+            "Team",
+            "Laps",
+            "T",
+            "PTP",
+            "Gap",
+            "Int",
+            "S1",
+            "BS1",
+            "S2",
+            "BS2",
+            "S3",
+            "BS3",
+            "Last",
+            "Spd",
+            "Best",
+            "B.Spd",
+            "Pits"
+          ],
+          "trackDataSpecCount": 0
+        },
+        "frames": {
+          "count": 8614,
+          "fullFrameCount": 862,
+          "incrementalFrameCount": 7752,
+          "nonemptyCarFrameCount": 8614,
+          "firstObservedAt": "2026-08-09T20:24:48.000Z",
+          "lastObservedAt": "2026-08-09T23:07:47.000Z",
+          "observedSpanSeconds": 9779,
+          "updateGapMedianSeconds": 1,
+          "updateGapMaxSeconds": 3,
+          "exactConsecutiveOneSecondUpdates": false,
+          "patchPreconditionCount": 49570,
+          "patchPreconditionMismatchCount": 0
+        },
+        "content": {
+          "driverCount": 25,
+          "bryce": null,
+          "flagStates": [
+            "none",
+            "green",
+            "caution",
+            "chequered"
+          ],
+          "flagMessageCount": 4,
+          "yellowMessageCount": 1,
+          "hasTrackDataSpec": false,
+          "bryceSegment": {
+            "frameCount": 0,
+            "firstObservedAt": null,
+            "lastObservedAt": null,
+            "observedSpanSeconds": null,
+            "minCars": null,
+            "maxCars": null,
+            "uniqueDriverCount": 0,
+            "maxLap": null,
+            "flagStates": [],
+            "hasCheckered": false
+          }
+        },
+        "quality": {
+          "status": "usable",
+          "reasons": [],
+          "decoderErrors": []
+        }
+      },
+      "error": null
+    },
+    {
+      "sessionId": "2a4bb6a79fc55824c2bed8fa",
+      "replayId": "ab71cfd6-7e42-4105-9c8b-fcc6cd4550df",
+      "year": 2026,
+      "series": "INDYCAR",
+      "sessionType": "practice",
+      "sessionLabel": "ONLYBULLS Grand Prix of Portland - Warmup",
+      "analysis": {
+        "manifest": {
+          "uuid": "ab71cfd6-7e42-4105-9c8b-fcc6cd4550df",
+          "name": "IndyCar",
+          "description": "ONLYBULLS Grand Prix of Portland - Warmup",
+          "startTime": 1786294958.649,
+          "version": 1,
+          "columnNames": [
+            "Num",
+            "State",
+            "Driver",
+            "Team",
+            "Laps",
+            "T",
+            "PTP",
+            "Gap",
+            "Int",
+            "S1",
+            "BS1",
+            "S2",
+            "BS2",
+            "S3",
+            "BS3",
+            "Last",
+            "Spd",
+            "Best",
+            "B.Spd",
+            "Pits"
+          ],
+          "trackDataSpecCount": 0
+        },
+        "frames": {
+          "count": 2260,
+          "fullFrameCount": 226,
+          "incrementalFrameCount": 2034,
+          "nonemptyCarFrameCount": 2260,
+          "firstObservedAt": "2026-08-09T17:02:39.000Z",
+          "lastObservedAt": "2026-08-09T17:45:37.000Z",
+          "observedSpanSeconds": 2578,
+          "updateGapMedianSeconds": 1,
+          "updateGapMaxSeconds": 2,
+          "exactConsecutiveOneSecondUpdates": false,
+          "patchPreconditionCount": 25286,
+          "patchPreconditionMismatchCount": 0
+        },
+        "content": {
+          "driverCount": 25,
+          "bryce": null,
+          "flagStates": [
+            "none",
+            "green",
+            "chequered"
+          ],
+          "flagMessageCount": 2,
+          "yellowMessageCount": 0,
+          "hasTrackDataSpec": false,
+          "bryceSegment": {
+            "frameCount": 0,
+            "firstObservedAt": null,
+            "lastObservedAt": null,
+            "observedSpanSeconds": null,
+            "minCars": null,
+            "maxCars": null,
+            "uniqueDriverCount": 0,
+            "maxLap": null,
+            "flagStates": [],
+            "hasCheckered": false
+          }
+        },
+        "quality": {
+          "status": "usable",
+          "reasons": [],
+          "decoderErrors": []
+        }
+      },
+      "error": null
+    },
+    {
+      "sessionId": "0f9cc1110c39aa3658ce8178",
+      "replayId": "966da49a-4618-4a23-8353-eed07902bfb8",
+      "year": 2026,
+      "series": "INDYCAR",
+      "sessionType": "practice",
+      "sessionLabel": "Ontario Honda Dealers Indy at Markham - Practice 1 - Group B",
+      "analysis": {
+        "manifest": {
+          "uuid": "966da49a-4618-4a23-8353-eed07902bfb8",
+          "name": "IndyCar",
+          "description": "Ontario Honda Dealers Indy at Markham - Practice 1 - Group B",
+          "startTime": 1786802545.687,
+          "version": 1,
+          "columnNames": [
+            "Num",
+            "State",
+            "Driver",
+            "Team",
+            "Laps",
+            "T",
+            "PTP",
+            "Gap",
+            "Int",
+            "S1",
+            "BS1",
+            "S2",
+            "BS2",
+            "S3",
+            "BS3",
+            "Last",
+            "Spd",
+            "Best",
+            "B.Spd",
+            "Pits"
+          ],
+          "trackDataSpecCount": 0
+        },
+        "frames": {
+          "count": 4910,
+          "fullFrameCount": 491,
+          "incrementalFrameCount": 4419,
+          "nonemptyCarFrameCount": 4910,
+          "firstObservedAt": "2026-08-15T14:02:26.000Z",
+          "lastObservedAt": "2026-08-15T15:35:27.000Z",
+          "observedSpanSeconds": 5581,
+          "updateGapMedianSeconds": 1,
+          "updateGapMaxSeconds": 2,
+          "exactConsecutiveOneSecondUpdates": false,
+          "patchPreconditionCount": 38476,
+          "patchPreconditionMismatchCount": 0
+        },
+        "content": {
+          "driverCount": 25,
+          "bryce": null,
+          "flagStates": [
+            "none",
+            "green",
+            "red",
+            "chequered"
+          ],
+          "flagMessageCount": 12,
+          "yellowMessageCount": 0,
+          "hasTrackDataSpec": false,
+          "bryceSegment": {
+            "frameCount": 0,
+            "firstObservedAt": null,
+            "lastObservedAt": null,
+            "observedSpanSeconds": null,
+            "minCars": null,
+            "maxCars": null,
+            "uniqueDriverCount": 0,
+            "maxLap": null,
+            "flagStates": [],
+            "hasCheckered": false
+          }
+        },
+        "quality": {
+          "status": "usable",
+          "reasons": [],
+          "decoderErrors": []
+        }
+      },
+      "error": null
+    },
+    {
+      "sessionId": "0e85fe17491b31e702f5fd3a",
+      "replayId": "27a95685-f6ef-47e6-9b53-e2ca3911c289",
+      "year": 2026,
+      "series": "INDYCAR",
+      "sessionType": "practice",
+      "sessionLabel": "Ontario Honda Dealers Indy at Markham - Practice 2 - Group A",
+      "analysis": {
+        "manifest": {
+          "uuid": "27a95685-f6ef-47e6-9b53-e2ca3911c289",
+          "name": "IndyCar",
+          "description": "Ontario Honda Dealers Indy at Markham - Practice 2 - Group A",
+          "startTime": 1786818157.74,
+          "version": 1,
+          "columnNames": [
+            "Num",
+            "State",
+            "Driver",
+            "Team",
+            "Laps",
+            "T",
+            "PTP",
+            "Gap",
+            "Int",
+            "S1",
+            "BS1",
+            "S2",
+            "BS2",
+            "S3",
+            "BS3",
+            "Last",
+            "Spd",
+            "Best",
+            "B.Spd",
+            "Pits"
+          ],
+          "trackDataSpecCount": 0
+        },
+        "frames": {
+          "count": 5176,
+          "fullFrameCount": 518,
+          "incrementalFrameCount": 4658,
+          "nonemptyCarFrameCount": 5176,
+          "firstObservedAt": "2026-08-15T18:22:38.000Z",
+          "lastObservedAt": "2026-08-15T20:00:44.000Z",
+          "observedSpanSeconds": 5886,
+          "updateGapMedianSeconds": 1,
+          "updateGapMaxSeconds": 2,
+          "exactConsecutiveOneSecondUpdates": false,
+          "patchPreconditionCount": 39507,
+          "patchPreconditionMismatchCount": 0
+        },
+        "content": {
+          "driverCount": 25,
+          "bryce": null,
+          "flagStates": [
+            "none",
+            "green",
+            "red",
+            "chequered"
+          ],
+          "flagMessageCount": 9,
+          "yellowMessageCount": 0,
+          "hasTrackDataSpec": false,
+          "bryceSegment": {
+            "frameCount": 0,
+            "firstObservedAt": null,
+            "lastObservedAt": null,
+            "observedSpanSeconds": null,
+            "minCars": null,
+            "maxCars": null,
+            "uniqueDriverCount": 0,
+            "maxLap": null,
+            "flagStates": [],
+            "hasCheckered": false
+          }
+        },
+        "quality": {
+          "status": "usable",
+          "reasons": [],
+          "decoderErrors": []
+        }
+      },
+      "error": null
+    },
+    {
+      "sessionId": "4d59fd7325c552bfdd4a8aec",
+      "replayId": "faae8c42-f6a4-462a-9efd-d575c77e6ae9",
+      "year": 2026,
+      "series": "INDYCAR",
+      "sessionType": "practice",
+      "sessionLabel": "Ontario Honda Dealers Indy at Markham - Practice 2 - Group A",
+      "analysis": {
+        "manifest": {
+          "uuid": "faae8c42-f6a4-462a-9efd-d575c77e6ae9",
+          "name": "IndyCar",
+          "description": "Ontario Honda Dealers Indy at Markham - Practice 2 - Group A",
+          "startTime": 1786818457.835,
+          "version": 1,
+          "columnNames": [
+            "Num",
+            "State",
+            "Driver",
+            "Team",
+            "Laps",
+            "T",
+            "PTP",
+            "Gap",
+            "Int",
+            "S1",
+            "BS1",
+            "S2",
+            "BS2",
+            "S3",
+            "BS3",
+            "Last",
+            "Spd",
+            "Best",
+            "B.Spd",
+            "Pits"
+          ],
+          "trackDataSpecCount": 0
+        },
+        "frames": {
+          "count": 4919,
+          "fullFrameCount": 492,
+          "incrementalFrameCount": 4427,
+          "nonemptyCarFrameCount": 4919,
+          "firstObservedAt": "2026-08-15T18:27:38.000Z",
+          "lastObservedAt": "2026-08-15T20:00:39.000Z",
+          "observedSpanSeconds": 5581,
+          "updateGapMedianSeconds": 1,
+          "updateGapMaxSeconds": 2,
+          "exactConsecutiveOneSecondUpdates": false,
+          "patchPreconditionCount": 39718,
+          "patchPreconditionMismatchCount": 0
+        },
+        "content": {
+          "driverCount": 25,
+          "bryce": null,
+          "flagStates": [
+            "none",
+            "green",
+            "red",
+            "chequered"
+          ],
+          "flagMessageCount": 9,
+          "yellowMessageCount": 0,
+          "hasTrackDataSpec": false,
+          "bryceSegment": {
+            "frameCount": 0,
+            "firstObservedAt": null,
+            "lastObservedAt": null,
+            "observedSpanSeconds": null,
+            "minCars": null,
+            "maxCars": null,
+            "uniqueDriverCount": 0,
+            "maxLap": null,
+            "flagStates": [],
+            "hasCheckered": false
+          }
+        },
+        "quality": {
+          "status": "usable",
+          "reasons": [],
+          "decoderErrors": []
+        }
+      },
+      "error": null
+    },
+    {
+      "sessionId": "66be8742a40b6af9dad93697",
+      "replayId": "28b6bbb2-d077-49f7-981c-0d3a8b734f0b",
+      "year": 2026,
+      "series": "INDYCAR",
+      "sessionType": "qualifying",
+      "sessionLabel": "Ontario Honda Dealers Indy at Markham - Qualifications - Segment 3 / Firestone Fast 6",
+      "analysis": {
+        "manifest": {
+          "uuid": "28b6bbb2-d077-49f7-981c-0d3a8b734f0b",
+          "name": "IndyCar",
+          "description": "Ontario Honda Dealers Indy at Markham - Qualifications - Segment 3 / Firestone Fast 6",
+          "startTime": 1786832874.986,
+          "version": 1,
+          "columnNames": [
+            "Num",
+            "State",
+            "Driver",
+            "Team",
+            "Laps",
+            "T",
+            "PTP",
+            "Gap",
+            "Int",
+            "S1",
+            "BS1",
+            "S2",
+            "BS2",
+            "S3",
+            "BS3",
+            "Last",
+            "Spd",
+            "Best",
+            "B.Spd",
+            "Pits"
+          ],
+          "trackDataSpecCount": 0
+        },
+        "frames": {
+          "count": 5167,
+          "fullFrameCount": 517,
+          "incrementalFrameCount": 4650,
+          "nonemptyCarFrameCount": 5167,
+          "firstObservedAt": "2026-08-15T22:27:55.000Z",
+          "lastObservedAt": "2026-08-16T00:05:53.000Z",
+          "observedSpanSeconds": 5878,
+          "updateGapMedianSeconds": 1,
+          "updateGapMaxSeconds": 2,
+          "exactConsecutiveOneSecondUpdates": false,
+          "patchPreconditionCount": 20959,
+          "patchPreconditionMismatchCount": 0
+        },
+        "content": {
+          "driverCount": 25,
+          "bryce": null,
+          "flagStates": [
+            "none",
+            "green",
+            "red",
+            "chequered"
+          ],
+          "flagMessageCount": 15,
+          "yellowMessageCount": 0,
+          "hasTrackDataSpec": false,
+          "bryceSegment": {
+            "frameCount": 0,
+            "firstObservedAt": null,
+            "lastObservedAt": null,
+            "observedSpanSeconds": null,
+            "minCars": null,
+            "maxCars": null,
+            "uniqueDriverCount": 0,
+            "maxLap": null,
+            "flagStates": [],
+            "hasCheckered": false
+          }
+        },
+        "quality": {
+          "status": "usable",
+          "reasons": [],
+          "decoderErrors": []
+        }
+      },
+      "error": null
+    },
+    {
+      "sessionId": "f1d53b4d825d9fd18ca58f02",
+      "replayId": "ecf3c4c5-354e-46ed-84e4-f0ca0e800050",
+      "year": 2026,
+      "series": "INDYCAR",
+      "sessionType": "race",
+      "sessionLabel": "Ontario Honda Dealers Indy at Markham - Race",
+      "analysis": {
+        "manifest": {
+          "uuid": "ecf3c4c5-354e-46ed-84e4-f0ca0e800050",
+          "name": "IndyCar",
+          "description": "Ontario Honda Dealers Indy at Markham - Race",
+          "startTime": 1786897179.727,
+          "version": 1,
+          "columnNames": [
+            "Num",
+            "State",
+            "Driver",
+            "Team",
+            "Laps",
+            "T",
+            "PTP",
+            "Gap",
+            "Int",
+            "S1",
+            "BS1",
+            "S2",
+            "BS2",
+            "S3",
+            "BS3",
+            "Last",
+            "Spd",
+            "Best",
+            "B.Spd",
+            "Pits"
+          ],
+          "trackDataSpecCount": 0
+        },
+        "frames": {
+          "count": 7449,
+          "fullFrameCount": 745,
+          "incrementalFrameCount": 6704,
+          "nonemptyCarFrameCount": 7449,
+          "firstObservedAt": "2026-08-16T16:19:40.000Z",
+          "lastObservedAt": "2026-08-16T18:40:41.000Z",
+          "observedSpanSeconds": 8461,
+          "updateGapMedianSeconds": 1,
+          "updateGapMaxSeconds": 4,
+          "exactConsecutiveOneSecondUpdates": false,
+          "patchPreconditionCount": 33933,
+          "patchPreconditionMismatchCount": 0
+        },
+        "content": {
+          "driverCount": 25,
+          "bryce": null,
+          "flagStates": [
+            "none",
+            "green",
+            "caution",
+            "chequered"
+          ],
+          "flagMessageCount": 16,
+          "yellowMessageCount": 7,
+          "hasTrackDataSpec": false,
+          "bryceSegment": {
+            "frameCount": 0,
+            "firstObservedAt": null,
+            "lastObservedAt": null,
+            "observedSpanSeconds": null,
+            "minCars": null,
+            "maxCars": null,
+            "uniqueDriverCount": 0,
+            "maxLap": null,
+            "flagStates": [],
+            "hasCheckered": false
+          }
+        },
+        "quality": {
+          "status": "usable",
+          "reasons": [],
+          "decoderErrors": []
+        }
+      },
+      "error": null
+    },
+    {
+      "sessionId": "c33a96455d5cdf51e211cabf",
+      "replayId": "1552ade7-e144-42ce-a173-94da2b472375",
+      "year": 2026,
+      "series": "INDYCAR",
+      "sessionType": "practice",
+      "sessionLabel": "Ontario Honda Dealers Indy at Markham - Warmup",
+      "analysis": {
+        "manifest": {
+          "uuid": "1552ade7-e144-42ce-a173-94da2b472375",
+          "name": "IndyCar",
+          "description": "Ontario Honda Dealers Indy at Markham - Warmup",
+          "startTime": 1786883248.158,
+          "version": 1,
+          "columnNames": [
+            "Num",
+            "State",
+            "Driver",
+            "Team",
+            "Laps",
+            "T",
+            "PTP",
+            "Gap",
+            "Int",
+            "S1",
+            "BS1",
+            "S2",
+            "BS2",
+            "S3",
+            "BS3",
+            "Last",
+            "Spd",
+            "Best",
+            "B.Spd",
+            "Pits"
+          ],
+          "trackDataSpecCount": 0
+        },
+        "frames": {
+          "count": 2253,
+          "fullFrameCount": 226,
+          "incrementalFrameCount": 2027,
+          "nonemptyCarFrameCount": 2253,
+          "firstObservedAt": "2026-08-16T12:27:28.000Z",
+          "lastObservedAt": "2026-08-16T13:10:31.000Z",
+          "observedSpanSeconds": 2583,
+          "updateGapMedianSeconds": 1,
+          "updateGapMaxSeconds": 9,
+          "exactConsecutiveOneSecondUpdates": false,
+          "patchPreconditionCount": 24188,
+          "patchPreconditionMismatchCount": 0
+        },
+        "content": {
+          "driverCount": 25,
+          "bryce": null,
+          "flagStates": [
+            "none",
+            "green",
+            "chequered"
+          ],
+          "flagMessageCount": 2,
+          "yellowMessageCount": 0,
+          "hasTrackDataSpec": false,
+          "bryceSegment": {
+            "frameCount": 0,
+            "firstObservedAt": null,
+            "lastObservedAt": null,
+            "observedSpanSeconds": null,
+            "minCars": null,
+            "maxCars": null,
+            "uniqueDriverCount": 0,
+            "maxLap": null,
+            "flagStates": [],
+            "hasCheckered": false
+          }
+        },
+        "quality": {
+          "status": "usable",
+          "reasons": [],
+          "decoderErrors": []
+        }
+      },
+      "error": null
+    },
+    {
+      "sessionId": "e1225b7b7ff6c3944fd8d9ac",
+      "replayId": "bacec8b0-ba98-48e9-87fb-83a5f7b4bb75",
+      "year": 2026,
+      "series": "INDYCAR",
+      "sessionType": "practice",
+      "sessionLabel": "Freedom 250 Grand Prix of Washington DC - Practice 1",
+      "analysis": {
+        "manifest": {
+          "uuid": "bacec8b0-ba98-48e9-87fb-83a5f7b4bb75",
+          "name": "IndyCar",
+          "description": "Freedom 250 Grand Prix of Washington DC - Practice 1",
+          "startTime": 1787409453.94,
+          "version": 1,
+          "columnNames": [
+            "Num",
+            "State",
+            "Driver",
+            "Team",
+            "Laps",
+            "T",
+            "PTP",
+            "Gap",
+            "Int",
+            "S1",
+            "BS1",
+            "S2",
+            "BS2",
+            "S3",
+            "BS3",
+            "Last",
+            "Spd",
+            "Best",
+            "B.Spd",
+            "Pits"
+          ],
+          "trackDataSpecCount": 0
+        },
+        "frames": {
+          "count": 1990,
+          "fullFrameCount": 199,
+          "incrementalFrameCount": 1791,
+          "nonemptyCarFrameCount": 1990,
+          "firstObservedAt": "2026-08-22T14:37:34.000Z",
+          "lastObservedAt": "2026-08-22T15:15:37.000Z",
+          "observedSpanSeconds": 2283,
+          "updateGapMedianSeconds": 1,
+          "updateGapMaxSeconds": 2,
+          "exactConsecutiveOneSecondUpdates": false,
+          "patchPreconditionCount": 1027,
+          "patchPreconditionMismatchCount": 0
+        },
+        "content": {
+          "driverCount": 25,
+          "bryce": null,
+          "flagStates": [
+            "green",
+            "chequered",
+            "none"
+          ],
+          "flagMessageCount": 2,
+          "yellowMessageCount": 0,
+          "hasTrackDataSpec": false,
+          "bryceSegment": {
+            "frameCount": 0,
+            "firstObservedAt": null,
+            "lastObservedAt": null,
+            "observedSpanSeconds": null,
+            "minCars": null,
+            "maxCars": null,
+            "uniqueDriverCount": 0,
+            "maxLap": null,
+            "flagStates": [],
+            "hasCheckered": false
+          }
+        },
+        "quality": {
+          "status": "usable",
+          "reasons": [],
+          "decoderErrors": []
+        }
+      },
+      "error": null
+    },
+    {
+      "sessionId": "6814120b5101f7366c144854",
+      "replayId": "e2ee2e2d-ddbb-4198-a2cf-5e2d589d20e5",
+      "year": 2026,
+      "series": "INDYCAR",
+      "sessionType": "practice",
+      "sessionLabel": "Freedom 250 Grand Prix of Washington DC - Practice 1 - Group A",
+      "analysis": {
+        "manifest": {
+          "uuid": "e2ee2e2d-ddbb-4198-a2cf-5e2d589d20e5",
+          "name": "IndyCar",
+          "description": "Freedom 250 Grand Prix of Washington DC - Practice 1 - Group A",
+          "startTime": 1787403752.021,
+          "version": 1,
+          "columnNames": [
+            "Num",
+            "State",
+            "Driver",
+            "Team",
+            "Laps",
+            "T",
+            "PTP",
+            "Gap",
+            "Int",
+            "S1",
+            "BS1",
+            "S2",
+            "BS2",
+            "S3",
+            "BS3",
+            "Last",
+            "Spd",
+            "Best",
+            "B.Spd",
+            "Pits"
+          ],
+          "trackDataSpecCount": 0
+        },
+        "frames": {
+          "count": 5168,
+          "fullFrameCount": 517,
+          "incrementalFrameCount": 4651,
+          "nonemptyCarFrameCount": 5168,
+          "firstObservedAt": "2026-08-22T13:02:32.000Z",
+          "lastObservedAt": "2026-08-22T14:40:32.000Z",
+          "observedSpanSeconds": 5880,
+          "updateGapMedianSeconds": 1,
+          "updateGapMaxSeconds": 2,
+          "exactConsecutiveOneSecondUpdates": false,
+          "patchPreconditionCount": 42633,
+          "patchPreconditionMismatchCount": 0
+        },
+        "content": {
+          "driverCount": 25,
+          "bryce": null,
+          "flagStates": [
+            "none",
+            "green",
+            "chequered"
+          ],
+          "flagMessageCount": 6,
+          "yellowMessageCount": 0,
+          "hasTrackDataSpec": false,
+          "bryceSegment": {
+            "frameCount": 0,
+            "firstObservedAt": null,
+            "lastObservedAt": null,
+            "observedSpanSeconds": null,
+            "minCars": null,
+            "maxCars": null,
+            "uniqueDriverCount": 0,
+            "maxLap": null,
+            "flagStates": [],
+            "hasCheckered": false
+          }
+        },
+        "quality": {
+          "status": "usable",
+          "reasons": [],
+          "decoderErrors": []
+        }
+      },
+      "error": null
+    },
+    {
+      "sessionId": "50372d83960d98ebf494d20c",
+      "replayId": "3e327001-b86b-407e-b666-6759f5698be4",
+      "year": 2026,
+      "series": "INDYCAR",
+      "sessionType": "practice",
+      "sessionLabel": "Freedom 250 Grand Prix of Washington DC - Practice 2",
+      "analysis": {
+        "manifest": {
+          "uuid": "3e327001-b86b-407e-b666-6759f5698be4",
+          "name": "IndyCar",
+          "description": "Freedom 250 Grand Prix of Washington DC - Practice 2",
+          "startTime": 1787418180.755,
+          "version": 1,
+          "columnNames": [
+            "Num",
+            "State",
+            "Driver",
+            "Team",
+            "Laps",
+            "T",
+            "PTP",
+            "Gap",
+            "Int",
+            "S1",
+            "BS1",
+            "S2",
+            "BS2",
+            "S3",
+            "BS3",
+            "Last",
+            "Spd",
+            "Best",
+            "B.Spd",
+            "Pits"
+          ],
+          "trackDataSpecCount": 0
+        },
+        "frames": {
+          "count": 4863,
+          "fullFrameCount": 487,
+          "incrementalFrameCount": 4376,
+          "nonemptyCarFrameCount": 4863,
+          "firstObservedAt": "2026-08-22T17:03:01.000Z",
+          "lastObservedAt": "2026-08-22T18:35:00.000Z",
+          "observedSpanSeconds": 5519,
+          "updateGapMedianSeconds": 1,
+          "updateGapMaxSeconds": 2,
+          "exactConsecutiveOneSecondUpdates": false,
+          "patchPreconditionCount": 37293,
+          "patchPreconditionMismatchCount": 0
+        },
+        "content": {
+          "driverCount": 25,
+          "bryce": null,
+          "flagStates": [
+            "none",
+            "green",
+            "red",
+            "chequered"
+          ],
+          "flagMessageCount": 10,
+          "yellowMessageCount": 0,
+          "hasTrackDataSpec": false,
+          "bryceSegment": {
+            "frameCount": 0,
+            "firstObservedAt": null,
+            "lastObservedAt": null,
+            "observedSpanSeconds": null,
+            "minCars": null,
+            "maxCars": null,
+            "uniqueDriverCount": 0,
+            "maxLap": null,
+            "flagStates": [],
+            "hasCheckered": false
+          }
+        },
+        "quality": {
+          "status": "usable",
+          "reasons": [],
+          "decoderErrors": []
+        }
+      },
+      "error": null
+    },
+    {
+      "sessionId": "38dbe2e26846b6d24a2ca967",
+      "replayId": "2309ca48-bfe5-4cb7-bba8-10f6197c9834",
+      "year": 2026,
+      "series": "INDYCAR",
+      "sessionType": "practice",
+      "sessionLabel": "Freedom 250 Grand Prix of Washington DC - Practice 2",
+      "analysis": {
+        "manifest": {
+          "uuid": "2309ca48-bfe5-4cb7-bba8-10f6197c9834",
+          "name": "IndyCar",
+          "description": "Freedom 250 Grand Prix of Washington DC - Practice 2",
+          "startTime": 1787428631.051,
+          "version": 1,
+          "columnNames": [
+            "Num",
+            "State",
+            "Driver",
+            "Team",
+            "Laps",
+            "T",
+            "PTP",
+            "Gap",
+            "Int",
+            "S1",
+            "BS1",
+            "S2",
+            "BS2",
+            "S3",
+            "BS3",
+            "Last",
+            "Spd",
+            "Best",
+            "B.Spd",
+            "Pits"
+          ],
+          "trackDataSpecCount": 0
+        },
+        "frames": {
+          "count": 2257,
+          "fullFrameCount": 226,
+          "incrementalFrameCount": 2031,
+          "nonemptyCarFrameCount": 2257,
+          "firstObservedAt": "2026-08-22T19:57:11.000Z",
+          "lastObservedAt": "2026-08-22T20:40:19.000Z",
+          "observedSpanSeconds": 2588,
+          "updateGapMedianSeconds": 1,
+          "updateGapMaxSeconds": 2,
+          "exactConsecutiveOneSecondUpdates": false,
+          "patchPreconditionCount": 0,
+          "patchPreconditionMismatchCount": 0
+        },
+        "content": {
+          "driverCount": 25,
+          "bryce": null,
+          "flagStates": [
+            "none"
+          ],
+          "flagMessageCount": 0,
+          "yellowMessageCount": 0,
+          "hasTrackDataSpec": false,
+          "bryceSegment": {
+            "frameCount": 0,
+            "firstObservedAt": null,
+            "lastObservedAt": null,
+            "observedSpanSeconds": null,
+            "minCars": null,
+            "maxCars": null,
+            "uniqueDriverCount": 0,
+            "maxLap": null,
+            "flagStates": [],
+            "hasCheckered": false
+          }
+        },
+        "quality": {
+          "status": "usable",
+          "reasons": [],
+          "decoderErrors": []
+        }
+      },
+      "error": null
+    },
+    {
+      "sessionId": "a2091d0f80cfb2ce5d102299",
+      "replayId": "bb675a64-eae4-4e8e-9b20-1cdd1b3ceaca",
+      "year": 2026,
+      "series": "INDYCAR",
+      "sessionType": "practice",
+      "sessionLabel": "Freedom 250 Grand Prix of Washington DC - Practice 2 - All Cars",
+      "analysis": {
+        "manifest": {
+          "uuid": "bb675a64-eae4-4e8e-9b20-1cdd1b3ceaca",
+          "name": "IndyCar",
+          "description": "Freedom 250 Grand Prix of Washington DC - Practice 2 - All Cars",
+          "startTime": 1787415774.725,
+          "version": 1,
+          "columnNames": [
+            "Num",
+            "State",
+            "Driver",
+            "Team",
+            "Laps",
+            "T",
+            "PTP",
+            "Gap",
+            "Int",
+            "S1",
+            "BS1",
+            "S2",
+            "BS2",
+            "S3",
+            "BS3",
+            "Last",
+            "Spd",
+            "Best",
+            "B.Spd",
+            "Pits"
+          ],
+          "trackDataSpecCount": 0
+        },
+        "frames": {
+          "count": 1988,
+          "fullFrameCount": 199,
+          "incrementalFrameCount": 1789,
+          "nonemptyCarFrameCount": 1988,
+          "firstObservedAt": "2026-08-22T16:22:55.000Z",
+          "lastObservedAt": "2026-08-22T17:00:56.000Z",
+          "observedSpanSeconds": 2281,
+          "updateGapMedianSeconds": 1,
+          "updateGapMaxSeconds": 2,
+          "exactConsecutiveOneSecondUpdates": false,
+          "patchPreconditionCount": 549,
+          "patchPreconditionMismatchCount": 0
+        },
+        "content": {
+          "driverCount": 25,
+          "bryce": null,
+          "flagStates": [
+            "none"
+          ],
+          "flagMessageCount": 0,
+          "yellowMessageCount": 0,
+          "hasTrackDataSpec": false,
+          "bryceSegment": {
+            "frameCount": 0,
+            "firstObservedAt": null,
+            "lastObservedAt": null,
+            "observedSpanSeconds": null,
+            "minCars": null,
+            "maxCars": null,
+            "uniqueDriverCount": 0,
+            "maxLap": null,
+            "flagStates": [],
+            "hasCheckered": false
+          }
+        },
+        "quality": {
+          "status": "usable",
+          "reasons": [],
+          "decoderErrors": []
+        }
+      },
+      "error": null
+    },
+    {
+      "sessionId": "4fd027117b4ef1602170ea3d",
+      "replayId": "ba82e0bc-25a4-4f1b-bbc0-6501351eafc4",
+      "year": 2026,
+      "series": "INDYCAR",
+      "sessionType": "qualifying",
+      "sessionLabel": "Freedom 250 Grand Prix of Washington DC - Qualifications",
+      "analysis": {
+        "manifest": {
+          "uuid": "ba82e0bc-25a4-4f1b-bbc0-6501351eafc4",
+          "name": "IndyCar",
+          "description": "Freedom 250 Grand Prix of Washington DC - Qualifications",
+          "startTime": 1787432243.662,
+          "version": 1,
+          "columnNames": [
+            "Num",
+            "State",
+            "Driver",
+            "Team",
+            "Laps",
+            "T",
+            "PTP",
+            "Gap",
+            "Int",
+            "S1",
+            "BS1",
+            "S2",
+            "BS2",
+            "S3",
+            "BS3",
+            "Last",
+            "Spd",
+            "Best",
+            "B.Spd",
+            "Pits"
+          ],
+          "trackDataSpecCount": 0
+        },
+        "frames": {
+          "count": 5190,
+          "fullFrameCount": 519,
+          "incrementalFrameCount": 4671,
+          "nonemptyCarFrameCount": 5190,
+          "firstObservedAt": "2026-08-22T20:57:24.000Z",
+          "lastObservedAt": "2026-08-22T22:35:23.000Z",
+          "observedSpanSeconds": 5879,
+          "updateGapMedianSeconds": 1,
+          "updateGapMaxSeconds": 2,
+          "exactConsecutiveOneSecondUpdates": false,
+          "patchPreconditionCount": 20055,
+          "patchPreconditionMismatchCount": 0
+        },
+        "content": {
+          "driverCount": 25,
+          "bryce": null,
+          "flagStates": [
+            "none",
+            "green",
+            "chequered"
+          ],
+          "flagMessageCount": 8,
+          "yellowMessageCount": 0,
+          "hasTrackDataSpec": false,
+          "bryceSegment": {
+            "frameCount": 0,
+            "firstObservedAt": null,
+            "lastObservedAt": null,
+            "observedSpanSeconds": null,
+            "minCars": null,
+            "maxCars": null,
+            "uniqueDriverCount": 0,
+            "maxLap": null,
+            "flagStates": [],
+            "hasCheckered": false
+          }
+        },
+        "quality": {
+          "status": "usable",
+          "reasons": [],
+          "decoderErrors": []
+        }
+      },
+      "error": null
+    },
+    {
+      "sessionId": "d28861a6575ab54ad5cf981f",
+      "replayId": "6f3e250a-bd3c-4073-af6e-baaa02bd8980",
+      "year": 2026,
+      "series": "INDYCAR",
+      "sessionType": "race",
+      "sessionLabel": "Freedom 250 Grand Prix of Washington DC - Race",
+      "analysis": {
+        "manifest": {
+          "uuid": "6f3e250a-bd3c-4073-af6e-baaa02bd8980",
+          "name": "IndyCar",
+          "description": "Freedom 250 Grand Prix of Washington DC - Race",
+          "startTime": 1787505030.06,
+          "version": 1,
+          "columnNames": [
+            "Num",
+            "State",
+            "Driver",
+            "Team",
+            "Laps",
+            "T",
+            "PTP",
+            "Gap",
+            "Int",
+            "S1",
+            "BS1",
+            "S2",
+            "BS2",
+            "S3",
+            "BS3",
+            "Last",
+            "Spd",
+            "Best",
+            "B.Spd",
+            "Pits"
+          ],
+          "trackDataSpecCount": 0
+        },
+        "frames": {
+          "count": 8878,
+          "fullFrameCount": 888,
+          "incrementalFrameCount": 7990,
+          "nonemptyCarFrameCount": 8878,
+          "firstObservedAt": "2026-08-23T17:10:30.000Z",
+          "lastObservedAt": "2026-08-23T19:58:34.000Z",
+          "observedSpanSeconds": 10084,
+          "updateGapMedianSeconds": 1,
+          "updateGapMaxSeconds": 4,
+          "exactConsecutiveOneSecondUpdates": false,
+          "patchPreconditionCount": 53220,
+          "patchPreconditionMismatchCount": 0
+        },
+        "content": {
+          "driverCount": 25,
+          "bryce": null,
+          "flagStates": [
+            "none",
+            "green",
+            "caution"
+          ],
+          "flagMessageCount": 15,
+          "yellowMessageCount": 7,
+          "hasTrackDataSpec": false,
+          "bryceSegment": {
+            "frameCount": 0,
+            "firstObservedAt": null,
+            "lastObservedAt": null,
+            "observedSpanSeconds": null,
+            "minCars": null,
+            "maxCars": null,
+            "uniqueDriverCount": 0,
+            "maxLap": null,
+            "flagStates": [],
+            "hasCheckered": false
+          }
+        },
+        "quality": {
+          "status": "usable",
+          "reasons": [],
+          "decoderErrors": []
+        }
+      },
+      "error": null
+    },
+    {
+      "sessionId": "6b068f9aa8e8ea450463026a",
+      "replayId": "8840b2cf-dd2b-46b3-a5e2-ee09aad32e15",
+      "year": 2026,
+      "series": "INDYCAR",
+      "sessionType": "practice",
+      "sessionLabel": "Freedom 250 Grand Prix of Washington DC - Warmup",
+      "analysis": {
+        "manifest": {
+          "uuid": "8840b2cf-dd2b-46b3-a5e2-ee09aad32e15",
+          "name": "IndyCar",
+          "description": "Freedom 250 Grand Prix of Washington DC - Warmup",
+          "startTime": 1787490727.636,
+          "version": 1,
+          "columnNames": [
+            "Num",
+            "State",
+            "Driver",
+            "Team",
+            "Laps",
+            "T",
+            "PTP",
+            "Gap",
+            "Int",
+            "S1",
+            "BS1",
+            "S2",
+            "BS2",
+            "S3",
+            "BS3",
+            "Last",
+            "Spd",
+            "Best",
+            "B.Spd",
+            "Pits"
+          ],
+          "trackDataSpecCount": 0
+        },
+        "frames": {
+          "count": 2266,
+          "fullFrameCount": 227,
+          "incrementalFrameCount": 2039,
+          "nonemptyCarFrameCount": 2266,
+          "firstObservedAt": "2026-08-23T13:12:08.000Z",
+          "lastObservedAt": "2026-08-23T13:55:05.000Z",
+          "observedSpanSeconds": 2577,
+          "updateGapMedianSeconds": 1,
+          "updateGapMaxSeconds": 2,
+          "exactConsecutiveOneSecondUpdates": false,
+          "patchPreconditionCount": 28110,
+          "patchPreconditionMismatchCount": 0
+        },
+        "content": {
+          "driverCount": 25,
+          "bryce": null,
+          "flagStates": [
+            "none",
+            "green",
+            "chequered"
+          ],
+          "flagMessageCount": 2,
+          "yellowMessageCount": 0,
+          "hasTrackDataSpec": false,
+          "bryceSegment": {
+            "frameCount": 0,
+            "firstObservedAt": null,
+            "lastObservedAt": null,
+            "observedSpanSeconds": null,
+            "minCars": null,
+            "maxCars": null,
+            "uniqueDriverCount": 0,
+            "maxLap": null,
+            "flagStates": [],
+            "hasCheckered": false
+          }
+        },
+        "quality": {
+          "status": "usable",
+          "reasons": [],
+          "decoderErrors": []
+        }
+      },
+      "error": null
+    },
+    {
+      "sessionId": "3f8aabac93634229168dee93",
+      "replayId": "d428472c-e68e-4aa7-8811-e5d10a95e240",
+      "year": 2026,
+      "series": "INDYCAR",
+      "sessionType": "practice",
+      "sessionLabel": "SNAP-ON Makers and Fixers 250 - Practice 1",
+      "analysis": {
+        "manifest": {
+          "uuid": "d428472c-e68e-4aa7-8811-e5d10a95e240",
+          "name": "IndyCar",
+          "description": "SNAP-ON Makers and Fixers 250 - Practice 1",
+          "startTime": 1787954258.905,
+          "version": 1,
+          "columnNames": [
+            "Num",
+            "State",
+            "Driver",
+            "Team",
+            "Laps",
+            "T",
+            "Gap",
+            "Int",
+            "T1S",
+            "T3S",
+            "Last",
+            "Spd",
+            "Best",
+            "B.Spd",
+            "Pits"
+          ],
+          "trackDataSpecCount": 0
+        },
+        "frames": {
+          "count": 5436,
+          "fullFrameCount": 544,
+          "incrementalFrameCount": 4892,
+          "nonemptyCarFrameCount": 5436,
+          "firstObservedAt": "2026-08-28T21:57:39.000Z",
+          "lastObservedAt": "2026-08-28T23:40:39.000Z",
+          "observedSpanSeconds": 6180,
+          "updateGapMedianSeconds": 1,
+          "updateGapMaxSeconds": 2,
+          "exactConsecutiveOneSecondUpdates": false,
+          "patchPreconditionCount": 26061,
+          "patchPreconditionMismatchCount": 0
+        },
+        "content": {
+          "driverCount": 25,
+          "bryce": null,
+          "flagStates": [
+            "none",
+            "green",
+            "yellow",
+            "chequered"
+          ],
+          "flagMessageCount": 6,
+          "yellowMessageCount": 2,
+          "hasTrackDataSpec": false,
+          "bryceSegment": {
+            "frameCount": 0,
+            "firstObservedAt": null,
+            "lastObservedAt": null,
+            "observedSpanSeconds": null,
+            "minCars": null,
+            "maxCars": null,
+            "uniqueDriverCount": 0,
+            "maxLap": null,
+            "flagStates": [],
+            "hasCheckered": false
+          }
+        },
+        "quality": {
+          "status": "usable",
+          "reasons": [],
+          "decoderErrors": []
+        }
+      },
+      "error": null
+    },
+    {
+      "sessionId": "a6bfb9a3b6a31825dae78c80",
+      "replayId": "b66b10ab-1b89-4a9e-b94e-2d42f7107639",
+      "year": 2026,
+      "series": "INDY_NXT",
+      "sessionType": "practice",
+      "sessionLabel": "INDYNXT by Firestone at Milwaukee Mile - Practice 1",
+      "analysis": {
+        "manifest": {
+          "uuid": "b66b10ab-1b89-4a9e-b94e-2d42f7107639",
+          "name": "IndyCar",
+          "description": "INDYNXT by Firestone at Milwaukee Mile - Practice 1",
+          "startTime": 1788008229.594,
+          "version": 1,
+          "columnNames": [
+            "Num",
+            "State",
+            "Driver",
+            "Team",
+            "Laps",
+            "T",
+            "Gap",
+            "Int",
+            "T1S",
+            "T3S",
+            "Last",
+            "Spd",
+            "Best",
+            "B.Spd",
+            "Pits"
+          ],
+          "trackDataSpecCount": 0
+        },
+        "frames": {
+          "count": 3330,
+          "fullFrameCount": 333,
+          "incrementalFrameCount": 2997,
+          "nonemptyCarFrameCount": 3330,
+          "firstObservedAt": "2026-08-29T12:57:10.000Z",
+          "lastObservedAt": "2026-08-29T14:00:12.000Z",
+          "observedSpanSeconds": 3782,
+          "updateGapMedianSeconds": 1,
+          "updateGapMaxSeconds": 2,
+          "exactConsecutiveOneSecondUpdates": false,
+          "patchPreconditionCount": 19424,
+          "patchPreconditionMismatchCount": 0
+        },
+        "content": {
+          "driverCount": 23,
+          "bryce": {
+            "carNumber": "9",
+            "driver": "Bryce Aron",
+            "team": "Chip Ganassi Racing"
+          },
+          "flagStates": [
+            "none",
+            "green",
+            "yellow",
+            "chequered"
+          ],
+          "flagMessageCount": 4,
+          "yellowMessageCount": 1,
+          "hasTrackDataSpec": false,
+          "bryceSegment": {
+            "frameCount": 3330,
+            "firstObservedAt": "2026-08-29T12:57:10.000Z",
+            "lastObservedAt": "2026-08-29T14:00:12.000Z",
+            "observedSpanSeconds": 3782,
+            "minCars": 23,
+            "maxCars": 23,
+            "uniqueDriverCount": 23,
+            "maxLap": 79,
+            "flagStates": [
+              "none",
+              "green",
+              "yellow",
+              "chequered"
+            ],
+            "hasCheckered": true
+          }
+        },
+        "quality": {
+          "status": "usable",
+          "reasons": [],
+          "decoderErrors": []
+        }
+      },
+      "error": null
+    },
+    {
+      "sessionId": "d4d132027b3850bc2ca66285",
+      "replayId": "0895cf60-5926-438b-bf15-c73a99af4043",
+      "year": 2026,
+      "series": "INDY_NXT",
+      "sessionType": "qualifying",
+      "sessionLabel": "INDYNXT by Firestone at Milwaukee Mile - Qualifications",
+      "analysis": {
+        "manifest": {
+          "uuid": "0895cf60-5926-438b-bf15-c73a99af4043",
+          "name": "IndyCar",
+          "description": "INDYNXT by Firestone at Milwaukee Mile - Qualifications",
+          "startTime": 1788015742.086,
+          "version": 1,
+          "columnNames": [
+            "Num",
+            "State",
+            "Driver",
+            "Team",
+            "Laps",
+            "T",
+            "Gap",
+            "Int",
+            "T1S",
+            "T3S",
+            "Last",
+            "Spd",
+            "Best",
+            "B.Spd",
+            "Pits"
+          ],
+          "trackDataSpecCount": 0
+        },
+        "frames": {
+          "count": 4388,
+          "fullFrameCount": 439,
+          "incrementalFrameCount": 3949,
+          "nonemptyCarFrameCount": 4043,
+          "firstObservedAt": "2026-08-29T15:02:22.000Z",
+          "lastObservedAt": "2026-08-29T16:25:32.000Z",
+          "observedSpanSeconds": 4990,
+          "updateGapMedianSeconds": 1,
+          "updateGapMaxSeconds": 2,
+          "exactConsecutiveOneSecondUpdates": false,
+          "patchPreconditionCount": 3689,
+          "patchPreconditionMismatchCount": 0
+        },
+        "content": {
+          "driverCount": 25,
+          "bryce": null,
+          "flagStates": [
+            "none",
+            "green",
+            "chequered"
+          ],
+          "flagMessageCount": 26,
+          "yellowMessageCount": 0,
+          "hasTrackDataSpec": false,
+          "bryceSegment": {
+            "frameCount": 0,
+            "firstObservedAt": null,
+            "lastObservedAt": null,
+            "observedSpanSeconds": null,
+            "minCars": null,
+            "maxCars": null,
+            "uniqueDriverCount": 0,
+            "maxLap": null,
+            "flagStates": [],
+            "hasCheckered": false
+          }
+        },
+        "quality": {
+          "status": "wrong_series_or_stale_capture",
+          "reasons": [
+            "NXT-labelled candidate has no reconstructed frame containing Bryce Aron"
+          ],
+          "decoderErrors": []
+        }
+      },
+      "error": null
+    },
+    {
+      "sessionId": "33ccbf3291c7754b552df24e",
+      "replayId": "23e69e36-7170-4dca-8027-0024c386df68",
+      "year": 2026,
+      "series": "INDY_NXT",
+      "sessionType": "qualifying",
+      "sessionLabel": "INDYNXT by Firestone at Milwaukee Mile - Qualifications",
+      "analysis": {
+        "manifest": {
+          "uuid": "23e69e36-7170-4dca-8027-0024c386df68",
+          "name": "IndyCar",
+          "description": "INDYNXT by Firestone at Milwaukee Mile - Qualifications",
+          "startTime": 1788021159.553,
+          "version": 1,
+          "columnNames": [
+            "Num",
+            "State",
+            "Driver",
+            "Team",
+            "Laps",
+            "T",
+            "Gap",
+            "Int",
+            "T1S",
+            "T3S",
+            "Last",
+            "Spd",
+            "Best",
+            "B.Spd",
+            "Pits"
+          ],
+          "trackDataSpecCount": 0
+        },
+        "frames": {
+          "count": 3073,
+          "fullFrameCount": 308,
+          "incrementalFrameCount": 2765,
+          "nonemptyCarFrameCount": 3073,
+          "firstObservedAt": "2026-08-29T16:32:40.000Z",
+          "lastObservedAt": "2026-08-29T17:30:47.000Z",
+          "observedSpanSeconds": 3487,
+          "updateGapMedianSeconds": 1,
+          "updateGapMaxSeconds": 2,
+          "exactConsecutiveOneSecondUpdates": false,
+          "patchPreconditionCount": 3226,
+          "patchPreconditionMismatchCount": 0
+        },
+        "content": {
+          "driverCount": 23,
+          "bryce": {
+            "carNumber": "9",
+            "driver": "Bryce Aron",
+            "team": "Chip Ganassi Racing"
+          },
+          "flagStates": [
+            "none",
+            "green",
+            "yellow",
+            "chequered"
+          ],
+          "flagMessageCount": 28,
+          "yellowMessageCount": 2,
+          "hasTrackDataSpec": false,
+          "bryceSegment": {
+            "frameCount": 2571,
+            "firstObservedAt": "2026-08-29T16:42:09.000Z",
+            "lastObservedAt": "2026-08-29T17:30:47.000Z",
+            "observedSpanSeconds": 2918,
+            "minCars": 7,
+            "maxCars": 23,
+            "uniqueDriverCount": 23,
+            "maxLap": 2,
+            "flagStates": [
+              "none",
+              "green",
+              "yellow",
+              "chequered"
+            ],
+            "hasCheckered": true
+          }
+        },
+        "quality": {
+          "status": "usable",
+          "reasons": [],
+          "decoderErrors": []
+        }
+      },
+      "error": null
+    },
+    {
+      "sessionId": "e73f1ea4d0209be974bf55de",
+      "replayId": "bba0d52f-8485-47ac-bb4c-c5663821a16c",
+      "year": 2026,
+      "series": "INDYCAR",
+      "sessionType": "race",
+      "sessionLabel": "SNAP-ON Makers and Fixers 250 - Race 1",
+      "analysis": {
+        "manifest": {
+          "uuid": "bba0d52f-8485-47ac-bb4c-c5663821a16c",
+          "name": "IndyCar",
+          "description": "SNAP-ON Makers and Fixers 250 - Race 1",
+          "startTime": 1788028732.985,
+          "version": 1,
+          "columnNames": [
+            "Num",
+            "State",
+            "Driver",
+            "Team",
+            "Laps",
+            "T",
+            "Gap",
+            "Int",
+            "T1S",
+            "T3S",
+            "Last",
+            "Spd",
+            "Best",
+            "B.Spd",
+            "Pits"
+          ],
+          "trackDataSpecCount": 0
+        },
+        "frames": {
+          "count": 8841,
+          "fullFrameCount": 885,
+          "incrementalFrameCount": 7956,
+          "nonemptyCarFrameCount": 8841,
+          "firstObservedAt": "2026-08-29T18:38:54.000Z",
+          "lastObservedAt": "2026-08-29T21:26:55.000Z",
+          "observedSpanSeconds": 10081,
+          "updateGapMedianSeconds": 1,
+          "updateGapMaxSeconds": 2,
+          "exactConsecutiveOneSecondUpdates": false,
+          "patchPreconditionCount": 33770,
+          "patchPreconditionMismatchCount": 0
+        },
+        "content": {
+          "driverCount": 48,
+          "bryce": {
+            "carNumber": "9",
+            "driver": "Bryce Aron",
+            "team": "Chip Ganassi Racing"
+          },
+          "flagStates": [
+            "none",
+            "green",
+            "caution",
+            "red"
+          ],
+          "flagMessageCount": 3,
+          "yellowMessageCount": 1,
+          "hasTrackDataSpec": false,
+          "bryceSegment": {
+            "frameCount": 2426,
+            "firstObservedAt": "2026-08-29T18:38:54.000Z",
+            "lastObservedAt": "2026-08-29T19:25:00.000Z",
+            "observedSpanSeconds": 2766,
+            "minCars": 23,
+            "maxCars": 23,
+            "uniqueDriverCount": 23,
+            "maxLap": 2,
+            "flagStates": [
+              "none"
+            ],
+            "hasCheckered": false
+          }
+        },
+        "quality": {
+          "status": "usable",
+          "reasons": [],
+          "decoderErrors": []
+        }
+      },
+      "error": null
+    },
+    {
+      "sessionId": "008fd1f37f1332cf2e44f4b3",
+      "replayId": "322f3fcc-6be7-4677-87fe-dc741dd292e6",
+      "year": 2026,
+      "series": "INDY_NXT",
+      "sessionType": "race",
+      "sessionLabel": "INDYNXT by Firestone at Milwaukee Mile - Race",
+      "analysis": {
+        "manifest": {
+          "uuid": "322f3fcc-6be7-4677-87fe-dc741dd292e6",
+          "name": "IndyCar",
+          "description": "INDYNXT by Firestone at Milwaukee Mile - Race",
+          "startTime": 1788102221.868,
+          "version": 1,
+          "columnNames": [
+            "Num",
+            "State",
+            "Driver",
+            "Team",
+            "Laps",
+            "T",
+            "Gap",
+            "Int",
+            "T1S",
+            "T3S",
+            "Last",
+            "Spd",
+            "Best",
+            "B.Spd",
+            "Pits"
+          ],
+          "trackDataSpecCount": 0
+        },
+        "frames": {
+          "count": 5703,
+          "fullFrameCount": 571,
+          "incrementalFrameCount": 5132,
+          "nonemptyCarFrameCount": 5703,
+          "firstObservedAt": "2026-08-30T15:03:42.000Z",
+          "lastObservedAt": "2026-08-30T16:51:42.000Z",
+          "observedSpanSeconds": 6480,
+          "updateGapMedianSeconds": 1,
+          "updateGapMaxSeconds": 3,
+          "exactConsecutiveOneSecondUpdates": false,
+          "patchPreconditionCount": 24609,
+          "patchPreconditionMismatchCount": 0
+        },
+        "content": {
+          "driverCount": 23,
+          "bryce": {
+            "carNumber": "9",
+            "driver": "Bryce Aron",
+            "team": "Chip Ganassi Racing"
+          },
+          "flagStates": [
+            "none",
+            "green",
+            "caution",
+            "chequered"
+          ],
+          "flagMessageCount": 10,
+          "yellowMessageCount": 4,
+          "hasTrackDataSpec": false,
+          "bryceSegment": {
+            "frameCount": 5703,
+            "firstObservedAt": "2026-08-30T15:03:42.000Z",
+            "lastObservedAt": "2026-08-30T16:51:42.000Z",
+            "observedSpanSeconds": 6480,
+            "minCars": 23,
+            "maxCars": 23,
+            "uniqueDriverCount": 23,
+            "maxLap": 90,
+            "flagStates": [
+              "none",
+              "green",
+              "caution",
+              "chequered"
+            ],
+            "hasCheckered": true
+          }
+        },
+        "quality": {
+          "status": "usable",
+          "reasons": [],
+          "decoderErrors": []
+        }
+      },
+      "error": null
+    },
+    {
+      "sessionId": "9e304b0a040e09e747a268be",
+      "replayId": "5678bb37-4a98-4e94-aea5-01b56d7e025b",
+      "year": 2026,
+      "series": "INDYCAR",
+      "sessionType": "race",
+      "sessionLabel": "SNAP-ON Makers and Fixers 250 - Race 1",
+      "analysis": {
+        "manifest": {
+          "uuid": "5678bb37-4a98-4e94-aea5-01b56d7e025b",
+          "name": "IndyCar",
+          "description": "SNAP-ON Makers and Fixers 250 - Race 1",
+          "startTime": 1788127023.21,
+          "version": 1,
+          "columnNames": [
+            "Num",
+            "State",
+            "Driver",
+            "Team",
+            "Laps",
+            "T",
+            "Gap",
+            "Int",
+            "T1S",
+            "T3S",
+            "Last",
+            "Spd",
+            "Best",
+            "B.Spd",
+            "Pits"
+          ],
+          "trackDataSpecCount": 0
+        },
+        "frames": {
+          "count": 5182,
+          "fullFrameCount": 519,
+          "incrementalFrameCount": 4663,
+          "nonemptyCarFrameCount": 5182,
+          "firstObservedAt": "2026-08-30T21:57:03.000Z",
+          "lastObservedAt": "2026-08-30T23:35:09.000Z",
+          "observedSpanSeconds": 5886,
+          "updateGapMedianSeconds": 1,
+          "updateGapMaxSeconds": 4,
+          "exactConsecutiveOneSecondUpdates": false,
+          "patchPreconditionCount": 49144,
+          "patchPreconditionMismatchCount": 0
+        },
+        "content": {
+          "driverCount": 25,
+          "bryce": null,
+          "flagStates": [
+            "none",
+            "caution",
+            "green",
+            "chequered"
+          ],
+          "flagMessageCount": 9,
+          "yellowMessageCount": 4,
+          "hasTrackDataSpec": false,
+          "bryceSegment": {
+            "frameCount": 0,
+            "firstObservedAt": null,
+            "lastObservedAt": null,
+            "observedSpanSeconds": null,
+            "minCars": null,
+            "maxCars": null,
+            "uniqueDriverCount": 0,
+            "maxLap": null,
+            "flagStates": [],
+            "hasCheckered": false
+          }
+        },
+        "quality": {
+          "status": "usable",
+          "reasons": [],
+          "decoderErrors": []
+        }
+      },
+      "error": null
+    },
+    {
+      "sessionId": "3763dc6fca312df18f816600",
+      "replayId": "8d3629e1-8af1-443d-bccd-ebdaa9faac7e",
+      "year": 2026,
+      "series": "INDYCAR",
+      "sessionType": "race",
+      "sessionLabel": "SNAP-ON Milwaukee Mile 250 - Race 2",
+      "analysis": {
+        "manifest": {
+          "uuid": "8d3629e1-8af1-443d-bccd-ebdaa9faac7e",
+          "name": "IndyCar",
+          "description": "SNAP-ON Milwaukee Mile 250 - Race 2",
+          "startTime": 1788110269.76,
+          "version": 1,
+          "columnNames": [
+            "Num",
+            "State",
+            "Driver",
+            "Team",
+            "Laps",
+            "T",
+            "Gap",
+            "Int",
+            "T1S",
+            "T3S",
+            "Last",
+            "Spd",
+            "Best",
+            "B.Spd",
+            "Pits"
+          ],
+          "trackDataSpecCount": 0
+        },
+        "frames": {
+          "count": 8854,
+          "fullFrameCount": 886,
+          "incrementalFrameCount": 7968,
+          "nonemptyCarFrameCount": 8854,
+          "firstObservedAt": "2026-08-30T17:17:50.000Z",
+          "lastObservedAt": "2026-08-30T20:05:50.000Z",
+          "observedSpanSeconds": 10080,
+          "updateGapMedianSeconds": 1,
+          "updateGapMaxSeconds": 4,
+          "exactConsecutiveOneSecondUpdates": false,
+          "patchPreconditionCount": 71773,
+          "patchPreconditionMismatchCount": 0
+        },
+        "content": {
+          "driverCount": 25,
+          "bryce": null,
+          "flagStates": [
+            "green",
+            "caution",
+            "chequered",
+            "none"
+          ],
+          "flagMessageCount": 8,
+          "yellowMessageCount": 3,
+          "hasTrackDataSpec": false,
+          "bryceSegment": {
+            "frameCount": 0,
+            "firstObservedAt": null,
+            "lastObservedAt": null,
+            "observedSpanSeconds": null,
+            "minCars": null,
+            "maxCars": null,
+            "uniqueDriverCount": 0,
+            "maxLap": null,
+            "flagStates": [],
+            "hasCheckered": false
+          }
+        },
+        "quality": {
+          "status": "usable",
+          "reasons": [],
+          "decoderErrors": []
+        }
+      },
+      "error": null
+    },
+    {
+      "sessionId": "b292b56ced601c30865e86f8",
+      "replayId": "cb57a111-39cd-453a-bcce-ef0016f84660",
+      "year": 2026,
+      "series": "INDYCAR",
+      "sessionType": "practice",
+      "sessionLabel": "Grand Prix of Monterey Doubleheader - Practice 2",
+      "analysis": {
+        "manifest": {
+          "uuid": "cb57a111-39cd-453a-bcce-ef0016f84660",
+          "name": "IndyCar",
+          "description": "Grand Prix of Monterey Doubleheader - Practice 2",
+          "startTime": 1788555443.119,
+          "version": 1,
+          "columnNames": [
+            "Num",
+            "State",
+            "Driver",
+            "Team",
+            "Laps",
+            "T",
+            "PTP",
+            "Gap",
+            "Int",
+            "S1",
+            "BS1",
+            "S2",
+            "BS2",
+            "S3",
+            "BS3",
+            "Last",
+            "Spd",
+            "Best",
+            "B.Spd",
+            "Pits"
+          ],
+          "trackDataSpecCount": 0
+        },
+        "frames": {
+          "count": 5186,
+          "fullFrameCount": 519,
+          "incrementalFrameCount": 4667,
+          "nonemptyCarFrameCount": 5186,
+          "firstObservedAt": "2026-09-04T20:57:24.000Z",
+          "lastObservedAt": "2026-09-04T22:35:27.000Z",
+          "observedSpanSeconds": 5883,
+          "updateGapMedianSeconds": 1,
+          "updateGapMaxSeconds": 9,
+          "exactConsecutiveOneSecondUpdates": false,
+          "patchPreconditionCount": 30875,
+          "patchPreconditionMismatchCount": 0
+        },
+        "content": {
+          "driverCount": 49,
+          "bryce": {
+            "carNumber": "9",
+            "driver": "Bryce Aron",
+            "team": "Chip Ganassi Racing"
+          },
+          "flagStates": [
+            "none",
+            "green",
+            "red",
+            "chequered"
+          ],
+          "flagMessageCount": 10,
+          "yellowMessageCount": 0,
+          "hasTrackDataSpec": false,
+          "bryceSegment": {
+            "frameCount": 281,
+            "firstObservedAt": "2026-09-04T22:30:10.000Z",
+            "lastObservedAt": "2026-09-04T22:35:27.000Z",
+            "observedSpanSeconds": 317,
+            "minCars": 24,
+            "maxCars": 24,
+            "uniqueDriverCount": 24,
+            "maxLap": 0,
+            "flagStates": [
+              "none",
+              "green"
+            ],
+            "hasCheckered": false
+          }
+        },
+        "quality": {
+          "status": "usable",
+          "reasons": [],
+          "decoderErrors": []
+        }
+      },
+      "error": null
+    },
+    {
+      "sessionId": "cbac6f22d461cf2c2f4cd494",
+      "replayId": "b2f9ffa3-2248-4ba8-8ffc-3da22178b5ad",
+      "year": 2026,
+      "series": "INDYCAR",
+      "sessionType": "practice",
+      "sessionLabel": "Grand Prix of Monterey Doubleheader - Practice 2",
+      "analysis": {
+        "manifest": {
+          "uuid": "b2f9ffa3-2248-4ba8-8ffc-3da22178b5ad",
+          "name": "IndyCar",
+          "description": "Grand Prix of Monterey Doubleheader - Practice 2",
+          "startTime": 1788560848.656,
+          "version": 1,
+          "columnNames": [
+            "Num",
+            "State",
+            "Driver",
+            "Team",
+            "Laps",
+            "T",
+            "PTP",
+            "Gap",
+            "Int",
+            "S1",
+            "BS1",
+            "S2",
+            "BS2",
+            "S3",
+            "BS3",
+            "Last",
+            "Spd",
+            "Best",
+            "B.Spd",
+            "Pits"
+          ],
+          "trackDataSpecCount": 0
+        },
+        "frames": {
+          "count": 3059,
+          "fullFrameCount": 306,
+          "incrementalFrameCount": 2753,
+          "nonemptyCarFrameCount": 3059,
+          "firstObservedAt": "2026-09-04T22:27:29.000Z",
+          "lastObservedAt": "2026-09-04T23:25:34.000Z",
+          "observedSpanSeconds": 3485,
+          "updateGapMedianSeconds": 1,
+          "updateGapMaxSeconds": 9,
+          "exactConsecutiveOneSecondUpdates": false,
+          "patchPreconditionCount": 20982,
+          "patchPreconditionMismatchCount": 0
+        },
+        "content": {
+          "driverCount": 38,
+          "bryce": {
+            "carNumber": "9",
+            "driver": "Bryce Aron",
+            "team": "Chip Ganassi Racing"
+          },
+          "flagStates": [
+            "none",
+            "green",
+            "red",
+            "chequered"
+          ],
+          "flagMessageCount": 4,
+          "yellowMessageCount": 0,
+          "hasTrackDataSpec": false,
+          "bryceSegment": {
+            "frameCount": 2924,
+            "firstObservedAt": "2026-09-04T22:30:10.000Z",
+            "lastObservedAt": "2026-09-04T23:25:34.000Z",
+            "observedSpanSeconds": 3324,
+            "minCars": 24,
+            "maxCars": 24,
+            "uniqueDriverCount": 24,
+            "maxLap": 16,
+            "flagStates": [
+              "none",
+              "green",
+              "red",
+              "chequered"
+            ],
+            "hasCheckered": true
+          }
+        },
+        "quality": {
+          "status": "usable",
+          "reasons": [],
+          "decoderErrors": []
+        }
+      },
+      "error": null
+    },
+    {
+      "sessionId": "0cd9d4687cd9612c53a101ba",
+      "replayId": "53c64588-605a-4d9c-b56e-d388375f0c2e",
+      "year": 2026,
+      "series": "INDYCAR",
+      "sessionType": "practice",
+      "sessionLabel": "Mission Foods Grand Prix of Monterey - Practice 1 - All Cars",
+      "analysis": {
+        "manifest": {
+          "uuid": "53c64588-605a-4d9c-b56e-d388375f0c2e",
+          "name": "IndyCar",
+          "description": "Mission Foods Grand Prix of Monterey - Practice 1 - All Cars",
+          "startTime": 1788551837.664,
+          "version": 1,
+          "columnNames": [
+            "Num",
+            "State",
+            "Driver",
+            "Team",
+            "Laps",
+            "T",
+            "PTP",
+            "Gap",
+            "Int",
+            "S1",
+            "BS1",
+            "S2",
+            "BS2",
+            "S3",
+            "BS3",
+            "Last",
+            "Spd",
+            "Best",
+            "B.Spd",
+            "Pits"
+          ],
+          "trackDataSpecCount": 0
+        },
+        "frames": {
+          "count": 3061,
+          "fullFrameCount": 307,
+          "incrementalFrameCount": 2754,
+          "nonemptyCarFrameCount": 3061,
+          "firstObservedAt": "2026-09-04T19:57:18.000Z",
+          "lastObservedAt": "2026-09-04T20:55:16.000Z",
+          "observedSpanSeconds": 3478,
+          "updateGapMedianSeconds": 1,
+          "updateGapMaxSeconds": 2,
+          "exactConsecutiveOneSecondUpdates": false,
+          "patchPreconditionCount": 17356,
+          "patchPreconditionMismatchCount": 0
+        },
+        "content": {
+          "driverCount": 49,
+          "bryce": {
+            "carNumber": "9",
+            "driver": "Bryce Aron",
+            "team": "Chip Ganassi Racing"
+          },
+          "flagStates": [
+            "none",
+            "green",
+            "red",
+            "chequered"
+          ],
+          "flagMessageCount": 4,
+          "yellowMessageCount": 0,
+          "hasTrackDataSpec": false,
+          "bryceSegment": {
+            "frameCount": 3054,
+            "firstObservedAt": "2026-09-04T19:57:18.000Z",
+            "lastObservedAt": "2026-09-04T20:55:08.000Z",
+            "observedSpanSeconds": 3470,
+            "minCars": 24,
+            "maxCars": 24,
+            "uniqueDriverCount": 24,
+            "maxLap": 17,
+            "flagStates": [
+              "none",
+              "green",
+              "red",
+              "chequered"
+            ],
+            "hasCheckered": true
+          }
+        },
+        "quality": {
+          "status": "usable",
+          "reasons": [],
+          "decoderErrors": []
+        }
+      },
+      "error": null
+    },
+    {
+      "sessionId": "50ff8fb7c0d6cc4e1f9e4fcc",
+      "replayId": "d8950231-dbd4-41bf-b764-7818ccc23c86",
+      "year": 2026,
+      "series": "INDYCAR",
+      "sessionType": "race",
+      "sessionLabel": "Grand Prix of Monterey Doubleheader - Race 1",
+      "analysis": {
+        "manifest": {
+          "uuid": "d8950231-dbd4-41bf-b764-7818ccc23c86",
+          "name": "IndyCar",
+          "description": "Grand Prix of Monterey Doubleheader - Race 1",
+          "startTime": 1788647747.52,
+          "version": 1,
+          "columnNames": [
+            "Num",
+            "State",
+            "Driver",
+            "Team",
+            "Laps",
+            "T",
+            "PTP",
+            "Gap",
+            "Int",
+            "S1",
+            "BS1",
+            "S2",
+            "BS2",
+            "S3",
+            "BS3",
+            "Last",
+            "Spd",
+            "Best",
+            "B.Spd",
+            "Pits"
+          ],
+          "trackDataSpecCount": 0
+        },
+        "frames": {
+          "count": 3573,
+          "fullFrameCount": 358,
+          "incrementalFrameCount": 3215,
+          "nonemptyCarFrameCount": 3573,
+          "firstObservedAt": "2026-09-05T22:35:48.000Z",
+          "lastObservedAt": "2026-09-05T23:43:45.000Z",
+          "observedSpanSeconds": 4077,
+          "updateGapMedianSeconds": 1,
+          "updateGapMaxSeconds": 2,
+          "exactConsecutiveOneSecondUpdates": false,
+          "patchPreconditionCount": 14820,
+          "patchPreconditionMismatchCount": 0
+        },
+        "content": {
+          "driverCount": 24,
+          "bryce": {
+            "carNumber": "9",
+            "driver": "Bryce Aron",
+            "team": "Chip Ganassi Racing"
+          },
+          "flagStates": [
+            "none",
+            "green",
+            "caution",
+            "chequered"
+          ],
+          "flagMessageCount": 8,
+          "yellowMessageCount": 3,
+          "hasTrackDataSpec": false,
+          "bryceSegment": {
+            "frameCount": 3573,
+            "firstObservedAt": "2026-09-05T22:35:48.000Z",
+            "lastObservedAt": "2026-09-05T23:43:45.000Z",
+            "observedSpanSeconds": 4077,
+            "minCars": 24,
+            "maxCars": 24,
+            "uniqueDriverCount": 24,
+            "maxLap": 35,
+            "flagStates": [
+              "none",
+              "green",
+              "caution",
+              "chequered"
+            ],
+            "hasCheckered": true
+          }
+        },
+        "quality": {
+          "status": "usable",
+          "reasons": [],
+          "decoderErrors": []
+        }
+      },
+      "error": null
+    },
+    {
+      "sessionId": "d5fbbe568eeed108dd786e09",
+      "replayId": "065d8d08-985a-4a1c-88d5-6db7ecfc2229",
+      "year": 2026,
+      "series": "INDYCAR",
+      "sessionType": "practice",
+      "sessionLabel": "Mission Foods Grand Prix of Monterey - Practice 2 - All Cars",
+      "analysis": {
+        "manifest": {
+          "uuid": "065d8d08-985a-4a1c-88d5-6db7ecfc2229",
+          "name": "IndyCar",
+          "description": "Mission Foods Grand Prix of Monterey - Practice 2 - All Cars",
+          "startTime": 1788627431.387,
+          "version": 1,
+          "columnNames": [
+            "Num",
+            "State",
+            "Driver",
+            "Team",
+            "Laps",
+            "T",
+            "PTP",
+            "Gap",
+            "Int",
+            "S1",
+            "BS1",
+            "S2",
+            "BS2",
+            "S3",
+            "BS3",
+            "Last",
+            "Spd",
+            "Best",
+            "B.Spd",
+            "Pits"
+          ],
+          "trackDataSpecCount": 0
+        },
+        "frames": {
+          "count": 4895,
+          "fullFrameCount": 490,
+          "incrementalFrameCount": 4405,
+          "nonemptyCarFrameCount": 4895,
+          "firstObservedAt": "2026-09-05T16:57:12.000Z",
+          "lastObservedAt": "2026-09-05T18:30:16.000Z",
+          "observedSpanSeconds": 5584,
+          "updateGapMedianSeconds": 1,
+          "updateGapMaxSeconds": 2,
+          "exactConsecutiveOneSecondUpdates": false,
+          "patchPreconditionCount": 17810,
+          "patchPreconditionMismatchCount": 0
+        },
+        "content": {
+          "driverCount": 49,
+          "bryce": {
+            "carNumber": "9",
+            "driver": "Bryce Aron",
+            "team": "Chip Ganassi Racing"
+          },
+          "flagStates": [
+            "none",
+            "green"
+          ],
+          "flagMessageCount": 1,
+          "yellowMessageCount": 0,
+          "hasTrackDataSpec": false,
+          "bryceSegment": {
+            "frameCount": 3579,
+            "firstObservedAt": "2026-09-05T16:57:12.000Z",
+            "lastObservedAt": "2026-09-05T18:05:14.000Z",
+            "observedSpanSeconds": 4082,
+            "minCars": 24,
+            "maxCars": 24,
+            "uniqueDriverCount": 24,
+            "maxLap": 16,
+            "flagStates": [
+              "none"
+            ],
+            "hasCheckered": false
+          }
+        },
+        "quality": {
+          "status": "usable",
+          "reasons": [],
+          "decoderErrors": []
+        }
+      },
+      "error": null
+    },
+    {
+      "sessionId": "e6f8bedf77683a0c59c674d7",
+      "replayId": "80492479-e1b6-4924-bd58-198f0a7048f9",
+      "year": 2026,
+      "series": "INDYCAR",
+      "sessionType": "practice",
+      "sessionLabel": "Mission Foods Grand Prix of Monterey - Practice Final",
+      "analysis": {
+        "manifest": {
+          "uuid": "80492479-e1b6-4924-bd58-198f0a7048f9",
+          "name": "IndyCar",
+          "description": "Mission Foods Grand Prix of Monterey - Practice Final",
+          "startTime": 1788652673.775,
+          "version": 1,
+          "columnNames": [
+            "Num",
+            "State",
+            "Driver",
+            "Team",
+            "Laps",
+            "T",
+            "PTP",
+            "Gap",
+            "Int",
+            "S1",
+            "BS1",
+            "S2",
+            "BS2",
+            "S3",
+            "BS3",
+            "Last",
+            "Spd",
+            "Best",
+            "B.Spd",
+            "Pits"
+          ],
+          "trackDataSpecCount": 0
+        },
+        "frames": {
+          "count": 2267,
+          "fullFrameCount": 227,
+          "incrementalFrameCount": 2040,
+          "nonemptyCarFrameCount": 2267,
+          "firstObservedAt": "2026-09-05T23:57:54.000Z",
+          "lastObservedAt": "2026-09-06T00:40:53.000Z",
+          "observedSpanSeconds": 2579,
+          "updateGapMedianSeconds": 1,
+          "updateGapMaxSeconds": 2,
+          "exactConsecutiveOneSecondUpdates": false,
+          "patchPreconditionCount": 22735,
+          "patchPreconditionMismatchCount": 0
+        },
+        "content": {
+          "driverCount": 49,
+          "bryce": {
+            "carNumber": "9",
+            "driver": "Bryce Aron",
+            "team": "Chip Ganassi Racing"
+          },
+          "flagStates": [
+            "none",
+            "green",
+            "red"
+          ],
+          "flagMessageCount": 5,
+          "yellowMessageCount": 0,
+          "hasTrackDataSpec": false,
+          "bryceSegment": {
+            "frameCount": 399,
+            "firstObservedAt": "2026-09-05T23:57:54.000Z",
+            "lastObservedAt": "2026-09-06T00:05:27.000Z",
+            "observedSpanSeconds": 453,
+            "minCars": 24,
+            "maxCars": 24,
+            "uniqueDriverCount": 24,
+            "maxLap": 35,
+            "flagStates": [
+              "none"
+            ],
+            "hasCheckered": false
+          }
+        },
+        "quality": {
+          "status": "usable",
+          "reasons": [],
+          "decoderErrors": []
+        }
+      },
+      "error": null
+    },
+    {
+      "sessionId": "a54cf01b2f8504b8d4e1a888",
+      "replayId": "8df28c85-4f28-4058-ba4a-e152dcafdd99",
+      "year": 2026,
+      "series": "INDYCAR",
+      "sessionType": "qualifying",
+      "sessionLabel": "Mission Foods Grand Prix of Monterey - Qualifications - Segment 3 / Firestone Fast 6",
+      "analysis": {
+        "manifest": {
+          "uuid": "8df28c85-4f28-4058-ba4a-e152dcafdd99",
+          "name": "IndyCar",
+          "description": "Mission Foods Grand Prix of Monterey - Qualifications - Segment 3 / Firestone Fast 6",
+          "startTime": 1788640058.162,
+          "version": 1,
+          "columnNames": [
+            "Num",
+            "State",
+            "Driver",
+            "Team",
+            "Laps",
+            "T",
+            "PTP",
+            "Gap",
+            "Int",
+            "S1",
+            "BS1",
+            "S2",
+            "BS2",
+            "S3",
+            "BS3",
+            "Last",
+            "Spd",
+            "Best",
+            "B.Spd",
+            "Pits"
+          ],
+          "trackDataSpecCount": 0
+        },
+        "frames": {
+          "count": 5185,
+          "fullFrameCount": 519,
+          "incrementalFrameCount": 4666,
+          "nonemptyCarFrameCount": 5185,
+          "firstObservedAt": "2026-09-05T20:27:39.000Z",
+          "lastObservedAt": "2026-09-05T22:05:40.000Z",
+          "observedSpanSeconds": 5881,
+          "updateGapMedianSeconds": 1,
+          "updateGapMaxSeconds": 2,
+          "exactConsecutiveOneSecondUpdates": false,
+          "patchPreconditionCount": 17229,
+          "patchPreconditionMismatchCount": 0
+        },
+        "content": {
+          "driverCount": 49,
+          "bryce": {
+            "carNumber": "9",
+            "driver": "Bryce Aron",
+            "team": "Chip Ganassi Racing"
+          },
+          "flagStates": [
+            "none",
+            "green",
+            "chequered"
+          ],
+          "flagMessageCount": 8,
+          "yellowMessageCount": 0,
+          "hasTrackDataSpec": false,
+          "bryceSegment": {
+            "frameCount": 87,
+            "firstObservedAt": "2026-09-05T20:27:39.000Z",
+            "lastObservedAt": "2026-09-05T20:29:17.000Z",
+            "observedSpanSeconds": 98,
+            "minCars": 24,
+            "maxCars": 24,
+            "uniqueDriverCount": 24,
+            "maxLap": 8,
+            "flagStates": [
+              "none"
+            ],
+            "hasCheckered": false
+          }
+        },
+        "quality": {
+          "status": "usable",
+          "reasons": [],
+          "decoderErrors": []
+        }
+      },
+      "error": null
+    },
+    {
+      "sessionId": "6d3420a81494babfef4cc23b",
+      "replayId": "b49e14f4-ea16-4c2b-bc82-077cd3e28ec1",
+      "year": 2026,
+      "series": "INDYCAR",
+      "sessionType": "race",
+      "sessionLabel": "Grand Prix of Monterey Doubleheader - Race 2",
+      "analysis": {
+        "manifest": {
+          "uuid": "b49e14f4-ea16-4c2b-bc82-077cd3e28ec1",
+          "name": "IndyCar",
+          "description": "Grand Prix of Monterey Doubleheader - Race 2",
+          "startTime": 1788712538.248,
+          "version": 1,
+          "columnNames": [
+            "Num",
+            "State",
+            "Driver",
+            "Team",
+            "Laps",
+            "T",
+            "PTP",
+            "Gap",
+            "Int",
+            "S1",
+            "BS1",
+            "S2",
+            "BS2",
+            "S3",
+            "BS3",
+            "Last",
+            "Spd",
+            "Best",
+            "B.Spd",
+            "Pits"
+          ],
+          "trackDataSpecCount": 0
+        },
+        "frames": {
+          "count": 3592,
+          "fullFrameCount": 360,
+          "incrementalFrameCount": 3232,
+          "nonemptyCarFrameCount": 3592,
+          "firstObservedAt": "2026-09-06T16:35:39.000Z",
+          "lastObservedAt": "2026-09-06T17:43:36.000Z",
+          "observedSpanSeconds": 4077,
+          "updateGapMedianSeconds": 1,
+          "updateGapMaxSeconds": 2,
+          "exactConsecutiveOneSecondUpdates": false,
+          "patchPreconditionCount": 13258,
+          "patchPreconditionMismatchCount": 0
+        },
+        "content": {
+          "driverCount": 24,
+          "bryce": {
+            "carNumber": "9",
+            "driver": "Bryce Aron",
+            "team": "Chip Ganassi Racing"
+          },
+          "flagStates": [
+            "none",
+            "green",
+            "caution",
+            "chequered"
+          ],
+          "flagMessageCount": 4,
+          "yellowMessageCount": 1,
+          "hasTrackDataSpec": false,
+          "bryceSegment": {
+            "frameCount": 3592,
+            "firstObservedAt": "2026-09-06T16:35:39.000Z",
+            "lastObservedAt": "2026-09-06T17:43:36.000Z",
+            "observedSpanSeconds": 4077,
+            "minCars": 24,
+            "maxCars": 24,
+            "uniqueDriverCount": 24,
+            "maxLap": 30,
+            "flagStates": [
+              "none",
+              "green",
+              "caution",
+              "chequered"
+            ],
+            "hasCheckered": true
+          }
+        },
+        "quality": {
+          "status": "usable",
+          "reasons": [],
+          "decoderErrors": []
+        }
+      },
+      "error": null
+    },
+    {
+      "sessionId": "a8557f014136e9116ed250d9",
+      "replayId": "f4c1e809-73ae-420e-9249-a019ce40a835",
+      "year": 2026,
+      "series": "INDYCAR",
+      "sessionType": "race",
+      "sessionLabel": "Mission Foods Grand Prix of Monterey - Race",
+      "analysis": {
+        "manifest": {
+          "uuid": "f4c1e809-73ae-420e-9249-a019ce40a835",
+          "name": "IndyCar",
+          "description": "Mission Foods Grand Prix of Monterey - Race",
+          "startTime": 1788721363.787,
+          "version": 1,
+          "columnNames": [
+            "Num",
+            "State",
+            "Driver",
+            "Team",
+            "Laps",
+            "T",
+            "PTP",
+            "Gap",
+            "Int",
+            "S1",
+            "BS1",
+            "S2",
+            "BS2",
+            "S3",
+            "BS3",
+            "Last",
+            "Spd",
+            "Best",
+            "B.Spd",
+            "Pits"
+          ],
+          "trackDataSpecCount": 0
+        },
+        "frames": {
+          "count": 8823,
+          "fullFrameCount": 883,
+          "incrementalFrameCount": 7940,
+          "nonemptyCarFrameCount": 8823,
+          "firstObservedAt": "2026-09-06T19:02:44.000Z",
+          "lastObservedAt": "2026-09-06T21:50:43.000Z",
+          "observedSpanSeconds": 10079,
+          "updateGapMedianSeconds": 1,
+          "updateGapMaxSeconds": 5,
+          "exactConsecutiveOneSecondUpdates": false,
+          "patchPreconditionCount": 44182,
+          "patchPreconditionMismatchCount": 0
+        },
+        "content": {
+          "driverCount": 25,
+          "bryce": null,
+          "flagStates": [
+            "none",
+            "green",
+            "caution",
+            "chequered"
+          ],
+          "flagMessageCount": 4,
+          "yellowMessageCount": 1,
           "hasTrackDataSpec": false,
           "bryceSegment": {
             "frameCount": 0,

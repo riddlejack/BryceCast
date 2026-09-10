@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "note": "Hand-audited 2026 source joins that cannot be inferred safely from labels alone. Timing71 Monterey race labels omit INDY NXT; Monterey qualifying is recovered from BryceCast's read-only Race Control capture.",
+  "raceReplayOverrides": {
+    "6757": "322f3fcc-6be7-4677-87fe-dc741dd292e6",
+    "6758": "b49e14f4-ea16-4c2b-bc82-077cd3e28ec1",
+    "6759": "d8950231-dbd4-41bf-b764-7818ccc23c86",
+    "6764": "eedf1cdd-8715-475e-968b-a4dd9ee970f0"
+  },
+  "supplementalRaceSources": {
+    "session_indy_nxt_2025_6452": {
+      "kind": "timing71",
+      "replayId": "b8128c6f-dc53-492e-a7e5-1bef64c4c567",
+      "purpose": "Independent observed frames cover the RaceTools heartbeat gap during the red-flag period. This Timing71 recording is incomplete after 21 laps and has no checkered frame, so RaceTools remains primary."
+    }
+  },
+  "qualifyingSources": {
+    "6769": {
+      "kind": "timing71",
+      "replayId": "060afe99-f6ad-4ce1-b796-7d44e6e4972c"
+    },
+    "6785": {
+      "kind": "timing71",
+      "replayId": "4d23a3cb-3c4d-457d-8224-604a1eab2f0d"
+    },
+    "6806": {
+      "kind": "timing71",
+      "replayId": "81fbebf1-31f7-4d68-9ce4-774785371154"
+    },
+    "6809": {
+      "kind": "timing71",
+      "replayId": "81fbebf1-31f7-4d68-9ce4-774785371154"
+    },
+    "6831": {
+      "kind": "timing71",
+      "replayId": "11667e2a-abf4-4086-97b9-9be913ce0fd4"
+    },
+    "6833": {
+      "kind": "timing71",
+      "replayId": "11667e2a-abf4-4086-97b9-9be913ce0fd4"
+    },
+    "6853": {
+      "kind": "timing71",
+      "replayId": "47f71e87-e239-4710-95be-e39085ed53ea"
+    },
+    "6864": {
+      "kind": "timing71",
+      "replayId": "7955b89c-7029-4a9f-bea0-769925a47c36"
+    },
+    "6871": {
+      "kind": "timing71",
+      "replayId": "3a11cff2-1f80-41b4-b332-66cab2af1e44"
+    },
+    "6874": {
+      "kind": "timing71",
+      "replayId": "3a11cff2-1f80-41b4-b332-66cab2af1e44"
+    },
+    "6893": {
+      "kind": "timing71",
+      "replayId": "edfdc884-b347-476f-b354-e77144abcc59"
+    },
+    "6896": {
+      "kind": "timing71",
+      "replayId": "edfdc884-b347-476f-b354-e77144abcc59"
+    },
+    "6900": {
+      "kind": "timing71",
+      "replayId": "6204d63b-2d7b-4a42-bb30-404b4bb97224"
+    },
+    "6923": {
+      "kind": "timing71",
+      "replayId": "d416a374-49d4-4946-a748-ae589db49a8e"
+    },
+    "6935": {
+      "kind": "timing71",
+      "replayId": "23e69e36-7170-4dca-8027-0024c386df68"
+    },
+    "6950": {
+      "kind": "race_control_capture",
+      "captureSessionKey": "5542-6950"
+    },
+    "6953": {
+      "kind": "race_control_capture",
+      "captureSessionKey": "5542-6950",
+      "sharedPhysicalSessionWith": "6950"
+    }
+  },
+  "rejectedReplayIds": {
+    "0895cf60-5926-438b-bf15-c73a99af4043": "Milwaukee file is an INDYCAR Scott Dixon session despite its NXT label; no Bryce roster observation."
+  },
+  "knownAsOfRegression": {
+    "asOfDate": "2026-09-10",
+    "raceCounts": {
+      "2024": 14,
+      "2025": 14,
+      "2026": 17
+    },
+    "raceSessionIds": [
+      "session_indy_nxt_2024_6314",
+      "session_indy_nxt_2024_6315",
+      "session_indy_nxt_2024_6316",
+      "session_indy_nxt_2024_6317",
+      "session_indy_nxt_2024_6318",
+      "session_indy_nxt_2024_6319",
+      "session_indy_nxt_2024_6320",
+      "session_indy_nxt_2024_6321",
+      "session_indy_nxt_2024_6322",
+      "session_indy_nxt_2024_6323",
+      "session_indy_nxt_2024_6324",
+      "session_indy_nxt_2024_6325",
+      "session_indy_nxt_2024_6326",
+      "session_indy_nxt_2024_6327",
+      "session_indy_nxt_2025_6442",
+      "session_indy_nxt_2025_6443",
+      "session_indy_nxt_2025_6444",
+      "session_indy_nxt_2025_6445",
+      "session_indy_nxt_2025_6446",
+      "session_indy_nxt_2025_6447",
+      "session_indy_nxt_2025_6448",
+      "session_indy_nxt_2025_6449",
+      "session_indy_nxt_2025_6450",
+      "session_indy_nxt_2025_6451",
+      "session_indy_nxt_2025_6452",
+      "session_indy_nxt_2025_6453",
+      "session_indy_nxt_2025_6454",
+      "session_indy_nxt_2025_6455",
+      "session_indy_nxt_2026_6749",
+      "session_indy_nxt_2026_6750",
+      "session_indy_nxt_2026_6751",
+      "session_indy_nxt_2026_6752",
+      "session_indy_nxt_2026_6753",
+      "session_indy_nxt_2026_6754",
+      "session_indy_nxt_2026_6755",
+      "session_indy_nxt_2026_6756",
+      "session_indy_nxt_2026_6757",
+      "session_indy_nxt_2026_6758",
+      "session_indy_nxt_2026_6759",
+      "session_indy_nxt_2026_6760",
+      "session_indy_nxt_2026_6761",
+      "session_indy_nxt_2026_6762",
+      "session_indy_nxt_2026_6763",
+      "session_indy_nxt_2026_6764",
+      "session_indy_nxt_2026_6765"
+    ]
+  }
+}

@@ -1,10 +1,10 @@
 {
   "schemaVersion": "bryce-career-coverage-matrix.v1",
-  "generatedAt": "2026-07-19T20:51:07.282Z",
+  "generatedAt": "2026-09-10T22:28:50.492Z",
   "datasetPath": "data/career/career.dataset.json",
   "validation": {
     "ok": true,
-    "checkedAt": "2026-07-19T20:51:05.588Z",
+    "checkedAt": "2026-09-10T22:28:48.837Z",
     "errors": [],
     "warnings": [
       {
@@ -1053,7 +1053,7 @@
       "sourceFamilyPriorityExclusions": {
         "exact_session_windows": "INDY NXT official Race Control feeds and cached weekend schedule PDFs expose exact clock-time starts for 111 physical sessions. The remaining 78 date-only rows are qualifying/group/combined qualifying sessions where official weekend schedules expose only coarse qualifying blocks or no exact qualifying row, so there is no safe source-backed group or aggregate split to promote into session-hour joins.",
         "indy_section_data": "INDY NXT official Top Section Times and Section Results reports are parsed for every comparable source-exposed session except session_indy_nxt_2024_6325, where the official Section Results URL returns corrupt/truncated non-PDF bytes from the CDN. Keep the section-data category partial with an explicit source-broken gap unless an alternate official non-corrupt copy appears.",
-        "lap_samples": "INDY NXT official Race Lap Chart PDFs are imported for all 41 completed race sessions: 31 charts fully parsed and 10 clean partial visible-sample imports; residual partials preserve explicit missing car-lap or result/chart conflict diagnostics without guessing terminal or conflict laps.",
+        "lap_samples": "INDY NXT official Race Lap Chart PDFs are imported for all 45 completed race sessions: 33 charts fully parsed and 12 clean partial visible-sample imports; residual partials preserve explicit missing car-lap or result/chart conflict diagnostics without guessing terminal or conflict laps.",
         "detailed_pit_context": "INDY NXT official report inventory exposes PitStops counts in API/result rows and Race Lap Chart position samples, but no dedicated pit-summary, pit-lane sequence, stop-lap, tire/service, or pit-time report was found across the cached official report family."
       },
       "categories": [
@@ -1070,28 +1070,28 @@
           "id": "race_results",
           "label": "Race/heat classifications",
           "status": "complete",
-          "covered": 41,
-          "total": 41,
+          "covered": 45,
+          "total": 45,
           "coverage": 1,
-          "notes": "857 race/heat result rows across 41 result-bearing race/heat sessions; 4 schedule-only future sessions excluded from result completeness."
+          "notes": "952 race/heat result rows across 45 result-bearing race/heat sessions; 0 schedule-only future sessions excluded from result completeness."
         },
         {
           "id": "qualifying_classifications",
           "label": "Qualifying classifications",
           "status": "complete",
-          "covered": 100,
-          "total": 100,
+          "covered": 110,
+          "total": 110,
           "coverage": 1,
-          "notes": "100 result-bearing qualifying sessions; qualifying classifications may live in results for PDF source families. 10 schedule-only future sessions and 2 official canceled qualifying sessions excluded from result completeness."
+          "notes": "110 result-bearing qualifying sessions; qualifying classifications may live in results for PDF source families. 0 schedule-only future sessions and 2 official canceled qualifying sessions excluded from result completeness."
         },
         {
           "id": "grid_start_positions",
           "label": "Grid/start positions",
           "status": "complete",
-          "covered": 857,
-          "total": 857,
+          "covered": 952,
+          "total": 952,
           "coverage": 1,
-          "notes": "857/857 race/heat rows have gridPosition or startPosition."
+          "notes": "952/952 race/heat rows have gridPosition or startPosition."
         },
         {
           "id": "exact_session_windows",
@@ -1124,55 +1124,55 @@
           "id": "lap_samples",
           "label": "Lap samples",
           "status": "partial",
-          "covered": 41,
-          "total": 41,
+          "covered": 45,
+          "total": 45,
           "coverage": 1,
-          "notes": "41/41 completed race sessions have lap-chart samples; 41 completed race sessions: 31 charts fully parsed and 10 clean partial visible-sample imports."
+          "notes": "45/45 completed race sessions have lap-chart samples; 45 completed race sessions: 33 charts fully parsed and 12 clean partial visible-sample imports."
         },
         {
           "id": "indy_section_data",
           "label": "INDY NXT section data",
           "status": "partial",
-          "covered": 161,
-          "total": 162,
-          "coverage": 0.9938,
-          "notes": "161/162 comparable sessions have both official Top Section Times and Section Results metrics. Aggregate combined qualifying rows, future schedule-only sessions, canceled sessions, and official no-row reports are excluded. Report parser cross-check: 163/163 comparable Top Section reports parsed; 162/163 comparable Section Results reports parsed. True held-outs: session_indy_nxt_2024_6325 (official_pdf_corrupt_or_truncated)."
+          "covered": 177,
+          "total": 178,
+          "coverage": 0.9944,
+          "notes": "177/178 comparable sessions have both official Top Section Times and Section Results metrics. Aggregate combined qualifying rows, future schedule-only sessions, canceled sessions, and official no-row reports are excluded. Report parser cross-check: 179/179 comparable Top Section reports parsed; 178/179 comparable Section Results reports parsed. True held-outs: session_indy_nxt_2024_6325 (official_pdf_corrupt_or_truncated)."
         },
         {
           "id": "penalties_decisions",
           "label": "Penalties/decisions",
           "status": "complete",
-          "covered": 29,
+          "covered": 32,
           "total": 213,
-          "coverage": 0.1362,
-          "notes": "29 sessions have official penalty/decision rows."
+          "coverage": 0.1502,
+          "notes": "32 sessions have official penalty/decision rows."
         },
         {
           "id": "incidents_cautions",
           "label": "Incidents/cautions",
           "status": "complete",
-          "covered": 36,
+          "covered": 40,
           "total": 45,
-          "coverage": 0.8,
-          "notes": "36 sessions have official incident/caution rows."
+          "coverage": 0.8889,
+          "notes": "40 sessions have official incident/caution rows."
         },
         {
           "id": "racecraft_summary",
           "label": "Racecraft summary",
           "status": "complete",
-          "covered": 40,
+          "covered": 44,
           "total": 45,
-          "coverage": 0.8889,
-          "notes": "40 race sessions have official most-improved/racecraft summary rows."
+          "coverage": 0.9778,
+          "notes": "44 race sessions have official most-improved/racecraft summary rows."
         },
         {
           "id": "pit_stop_counts",
           "label": "Pit-stop counts",
           "status": "complete",
-          "covered": 857,
-          "total": 857,
+          "covered": 952,
+          "total": 952,
           "coverage": 1,
-          "notes": "857/857 race/heat result rows have pit-stop counts."
+          "notes": "952/952 race/heat result rows have pit-stop counts."
         },
         {
           "id": "detailed_pit_context",
@@ -2592,13 +2592,13 @@
       "events": 17,
       "sessions": 79,
       "raceSessions": 17,
-      "raceRows": 311,
+      "raceRows": 406,
       "qualifyingSessions": 45,
       "exactWindowSessions": 61,
       "physicalSessions": 79,
-      "raceRowsWithGridOrStart": 311,
-      "raceRowsWithPitStops": 311,
-      "lapSampleSessions": 13,
+      "raceRowsWithGridOrStart": 406,
+      "raceRowsWithPitStops": 406,
+      "lapSampleSessions": 17,
       "weatherSessions": 41,
       "priorityGaps": [],
       "categories": [
@@ -2615,28 +2615,28 @@
           "id": "race_results",
           "label": "Race/heat classifications",
           "status": "complete",
-          "covered": 13,
-          "total": 13,
+          "covered": 17,
+          "total": 17,
           "coverage": 1,
-          "notes": "311 race/heat result rows across 13 result-bearing race/heat sessions."
+          "notes": "406 race/heat result rows across 17 result-bearing race/heat sessions."
         },
         {
           "id": "qualifying_classifications",
           "label": "Qualifying classifications",
           "status": "complete",
-          "covered": 35,
-          "total": 35,
+          "covered": 45,
+          "total": 45,
           "coverage": 1,
-          "notes": "35 result-bearing qualifying sessions; 0 official canceled qualifying sessions excluded."
+          "notes": "45 result-bearing qualifying sessions; 0 official canceled qualifying sessions excluded."
         },
         {
           "id": "grid_start_positions",
           "label": "Grid/start positions",
           "status": "complete",
-          "covered": 311,
-          "total": 311,
+          "covered": 406,
+          "total": 406,
           "coverage": 1,
-          "notes": "311/311 race/heat rows have gridPosition or startPosition."
+          "notes": "406/406 race/heat rows have gridPosition or startPosition."
         },
         {
           "id": "exact_session_windows",
@@ -2669,55 +2669,55 @@
           "id": "lap_samples",
           "label": "Lap samples",
           "status": "partial",
-          "covered": 13,
-          "total": 13,
+          "covered": 17,
+          "total": 17,
           "coverage": 1,
-          "notes": "13/13 completed race sessions have lap-chart samples; chart fidelity is tracked in importer diagnostics."
+          "notes": "17/17 completed race sessions have lap-chart samples; chart fidelity is tracked in importer diagnostics."
         },
         {
           "id": "indy_section_data",
           "label": "INDY NXT section data",
           "status": "complete",
-          "covered": 49,
-          "total": 49,
+          "covered": 65,
+          "total": 65,
           "coverage": 1,
-          "notes": "49/49 comparable sessions have both official Top Section Times and Section Results metrics. Aggregate combined qualifying rows, future schedule-only sessions, canceled sessions, and official no-row reports are excluded."
+          "notes": "65/65 comparable sessions have both official Top Section Times and Section Results metrics. Aggregate combined qualifying rows, future schedule-only sessions, canceled sessions, and official no-row reports are excluded."
         },
         {
           "id": "penalties_decisions",
           "label": "Penalties/decisions",
           "status": "complete",
-          "covered": 10,
+          "covered": 13,
           "total": 79,
-          "coverage": 0.1266,
-          "notes": "10 sessions have official penalty/decision rows."
+          "coverage": 0.1646,
+          "notes": "13 sessions have official penalty/decision rows."
         },
         {
           "id": "incidents_cautions",
           "label": "Incidents/cautions",
           "status": "complete",
-          "covered": 11,
+          "covered": 15,
           "total": 17,
-          "coverage": 0.6471,
-          "notes": "11 sessions have official incident/caution rows."
+          "coverage": 0.8824,
+          "notes": "15 sessions have official incident/caution rows."
         },
         {
           "id": "racecraft_summary",
           "label": "Racecraft summary",
           "status": "complete",
-          "covered": 13,
+          "covered": 17,
           "total": 17,
-          "coverage": 0.7647,
-          "notes": "13 race sessions have official most-improved/racecraft summary rows."
+          "coverage": 1,
+          "notes": "17 race sessions have official most-improved/racecraft summary rows."
         },
         {
           "id": "pit_stop_counts",
           "label": "Pit-stop counts",
           "status": "complete",
-          "covered": 311,
-          "total": 311,
+          "covered": 406,
+          "total": 406,
           "coverage": 1,
-          "notes": "311/311 race/heat result rows have pit-stop counts."
+          "notes": "406/406 race/heat result rows have pit-stop counts."
         },
         {
           "id": "detailed_pit_context",
@@ -33543,7 +33543,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 20,
+          "covered": 0,
           "total": 0
         },
         {
@@ -33597,7 +33597,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 20,
+          "covered": 0,
           "total": 0
         },
         {
@@ -33647,7 +33647,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 21,
+          "covered": 0,
           "total": 0
         },
         {
@@ -33701,7 +33701,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 21,
+          "covered": 0,
           "total": 0
         },
         {
@@ -33751,7 +33751,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 10,
+          "covered": 0,
           "total": 0
         },
         {
@@ -33805,7 +33805,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 10,
+          "covered": 0,
           "total": 0
         },
         {
@@ -33855,7 +33855,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 11,
+          "covered": 0,
           "total": 0
         },
         {
@@ -33909,7 +33909,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 11,
+          "covered": 0,
           "total": 0
         },
         {
@@ -33959,7 +33959,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 21,
+          "covered": 0,
           "total": 0
         },
         {
@@ -34013,7 +34013,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 21,
+          "covered": 0,
           "total": 0
         },
         {
@@ -34063,7 +34063,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 21,
+          "covered": 0,
           "total": 0
         },
         {
@@ -34117,7 +34117,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 21,
+          "covered": 0,
           "total": 0
         },
         {
@@ -34167,7 +34167,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 10,
+          "covered": 0,
           "total": 0
         },
         {
@@ -34221,7 +34221,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 10,
+          "covered": 0,
           "total": 0
         },
         {
@@ -34271,7 +34271,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 11,
+          "covered": 0,
           "total": 0
         },
         {
@@ -34325,7 +34325,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 11,
+          "covered": 0,
           "total": 0
         },
         {
@@ -34375,7 +34375,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 21,
+          "covered": 0,
           "total": 0
         },
         {
@@ -34429,7 +34429,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 21,
+          "covered": 0,
           "total": 0
         },
         {
@@ -34479,7 +34479,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 10,
+          "covered": 0,
           "total": 0
         },
         {
@@ -34533,7 +34533,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 10,
+          "covered": 0,
           "total": 0
         },
         {
@@ -34583,7 +34583,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 11,
+          "covered": 0,
           "total": 0
         },
         {
@@ -34637,7 +34637,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 11,
+          "covered": 0,
           "total": 0
         },
         {
@@ -34687,7 +34687,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 10,
+          "covered": 0,
           "total": 0
         },
         {
@@ -34741,7 +34741,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 10,
+          "covered": 0,
           "total": 0
         },
         {
@@ -34791,7 +34791,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 11,
+          "covered": 0,
           "total": 0
         },
         {
@@ -34845,7 +34845,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 11,
+          "covered": 0,
           "total": 0
         },
         {
@@ -34895,7 +34895,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 21,
+          "covered": 0,
           "total": 0
         },
         {
@@ -34949,7 +34949,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 21,
+          "covered": 0,
           "total": 0
         },
         {
@@ -34999,7 +34999,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 21,
+          "covered": 0,
           "total": 0
         },
         {
@@ -35053,7 +35053,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 21,
+          "covered": 0,
           "total": 0
         },
         {
@@ -35103,7 +35103,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 10,
+          "covered": 0,
           "total": 0
         },
         {
@@ -35157,7 +35157,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 10,
+          "covered": 0,
           "total": 0
         },
         {
@@ -35207,7 +35207,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 11,
+          "covered": 0,
           "total": 0
         },
         {
@@ -35261,7 +35261,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 11,
+          "covered": 0,
           "total": 0
         },
         {
@@ -35311,7 +35311,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 21,
+          "covered": 0,
           "total": 0
         },
         {
@@ -35365,7 +35365,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 21,
+          "covered": 0,
           "total": 0
         },
         {
@@ -35415,7 +35415,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 21,
+          "covered": 0,
           "total": 0
         },
         {
@@ -35469,7 +35469,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 21,
+          "covered": 0,
           "total": 0
         },
         {
@@ -35519,7 +35519,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 10,
+          "covered": 0,
           "total": 0
         },
         {
@@ -35573,7 +35573,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 10,
+          "covered": 0,
           "total": 0
         },
         {
@@ -35623,7 +35623,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 11,
+          "covered": 0,
           "total": 0
         },
         {
@@ -35677,7 +35677,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 11,
+          "covered": 0,
           "total": 0
         },
         {
@@ -35727,7 +35727,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 20,
+          "covered": 0,
           "total": 0
         },
         {
@@ -35781,7 +35781,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 20,
+          "covered": 0,
           "total": 0
         },
         {
@@ -35831,7 +35831,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 20,
+          "covered": 0,
           "total": 0
         },
         {
@@ -35885,7 +35885,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 20,
+          "covered": 0,
           "total": 0
         },
         {
@@ -35935,7 +35935,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 10,
+          "covered": 0,
           "total": 0
         },
         {
@@ -35989,7 +35989,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 10,
+          "covered": 0,
           "total": 0
         },
         {
@@ -36039,7 +36039,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 10,
+          "covered": 0,
           "total": 0
         },
         {
@@ -36093,7 +36093,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 10,
+          "covered": 0,
           "total": 0
         },
         {
@@ -36143,7 +36143,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 10,
+          "covered": 0,
           "total": 0
         },
         {
@@ -36197,7 +36197,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 10,
+          "covered": 0,
           "total": 0
         },
         {
@@ -36247,7 +36247,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 10,
+          "covered": 0,
           "total": 0
         },
         {
@@ -36301,7 +36301,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 10,
+          "covered": 0,
           "total": 0
         },
         {
@@ -36351,7 +36351,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 19,
+          "covered": 0,
           "total": 0
         },
         {
@@ -36405,7 +36405,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 19,
+          "covered": 0,
           "total": 0
         },
         {
@@ -36455,7 +36455,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 19,
+          "covered": 0,
           "total": 0
         },
         {
@@ -36509,7 +36509,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 19,
+          "covered": 0,
           "total": 0
         },
         {
@@ -36559,7 +36559,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 9,
+          "covered": 0,
           "total": 0
         },
         {
@@ -36613,7 +36613,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 9,
+          "covered": 0,
           "total": 0
         },
         {
@@ -36663,7 +36663,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 10,
+          "covered": 0,
           "total": 0
         },
         {
@@ -36717,7 +36717,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 10,
+          "covered": 0,
           "total": 0
         },
         {
@@ -36767,7 +36767,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 18,
+          "covered": 0,
           "total": 0
         },
         {
@@ -36821,7 +36821,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 18,
+          "covered": 0,
           "total": 0
         },
         {
@@ -36871,7 +36871,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 18,
+          "covered": 0,
           "total": 0
         },
         {
@@ -36925,7 +36925,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 18,
+          "covered": 0,
           "total": 0
         },
         {
@@ -36975,7 +36975,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 18,
+          "covered": 0,
           "total": 0
         },
         {
@@ -37029,7 +37029,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 18,
+          "covered": 0,
           "total": 0
         },
         {
@@ -37079,7 +37079,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 18,
+          "covered": 0,
           "total": 0
         },
         {
@@ -37133,7 +37133,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 18,
+          "covered": 0,
           "total": 0
         },
         {
@@ -37183,7 +37183,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 18,
+          "covered": 0,
           "total": 0
         },
         {
@@ -37237,7 +37237,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 18,
+          "covered": 0,
           "total": 0
         },
         {
@@ -37391,7 +37391,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 18,
+          "covered": 0,
           "total": 0
         },
         {
@@ -37445,7 +37445,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 18,
+          "covered": 0,
           "total": 0
         },
         {
@@ -37495,7 +37495,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 17,
+          "covered": 0,
           "total": 0
         },
         {
@@ -37549,7 +37549,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 17,
+          "covered": 0,
           "total": 0
         },
         {
@@ -37599,7 +37599,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 17,
+          "covered": 0,
           "total": 0
         },
         {
@@ -37653,7 +37653,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 17,
+          "covered": 0,
           "total": 0
         },
         {
@@ -37703,7 +37703,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 8,
+          "covered": 0,
           "total": 0
         },
         {
@@ -37757,7 +37757,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 8,
+          "covered": 0,
           "total": 0
         },
         {
@@ -37807,7 +37807,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 18,
+          "covered": 0,
           "total": 0
         },
         {
@@ -37861,7 +37861,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 18,
+          "covered": 0,
           "total": 0
         },
         {
@@ -37911,7 +37911,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 18,
+          "covered": 0,
           "total": 0
         },
         {
@@ -37965,7 +37965,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 18,
+          "covered": 0,
           "total": 0
         },
         {
@@ -38015,7 +38015,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 9,
+          "covered": 0,
           "total": 0
         },
         {
@@ -38069,7 +38069,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 9,
+          "covered": 0,
           "total": 0
         },
         {
@@ -38119,7 +38119,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 21,
+          "covered": 0,
           "total": 0
         },
         {
@@ -38173,7 +38173,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 21,
+          "covered": 0,
           "total": 0
         },
         {
@@ -38223,7 +38223,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 20,
+          "covered": 0,
           "total": 0
         },
         {
@@ -38277,7 +38277,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 20,
+          "covered": 0,
           "total": 0
         },
         {
@@ -38327,7 +38327,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 20,
+          "covered": 0,
           "total": 0
         },
         {
@@ -38381,7 +38381,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 20,
+          "covered": 0,
           "total": 0
         },
         {
@@ -38431,7 +38431,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 20,
+          "covered": 0,
           "total": 0
         },
         {
@@ -38485,7 +38485,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 20,
+          "covered": 0,
           "total": 0
         },
         {
@@ -38535,7 +38535,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 20,
+          "covered": 0,
           "total": 0
         },
         {
@@ -38589,7 +38589,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 20,
+          "covered": 0,
           "total": 0
         },
         {
@@ -38639,7 +38639,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 20,
+          "covered": 0,
           "total": 0
         },
         {
@@ -38693,7 +38693,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 20,
+          "covered": 0,
           "total": 0
         },
         {
@@ -38743,7 +38743,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 19,
+          "covered": 0,
           "total": 0
         },
         {
@@ -38797,7 +38797,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 19,
+          "covered": 0,
           "total": 0
         },
         {
@@ -38847,7 +38847,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 19,
+          "covered": 0,
           "total": 0
         },
         {
@@ -38901,7 +38901,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 19,
+          "covered": 0,
           "total": 0
         },
         {
@@ -38951,7 +38951,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 18,
+          "covered": 0,
           "total": 0
         },
         {
@@ -39005,7 +39005,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 18,
+          "covered": 0,
           "total": 0
         },
         {
@@ -39055,7 +39055,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 16,
+          "covered": 0,
           "total": 0
         },
         {
@@ -39109,7 +39109,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 16,
+          "covered": 0,
           "total": 0
         },
         {
@@ -40615,7 +40615,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 21,
+          "covered": 0,
           "total": 0
         },
         {
@@ -40669,7 +40669,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 21,
+          "covered": 0,
           "total": 0
         },
         {
@@ -40719,7 +40719,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 21,
+          "covered": 0,
           "total": 0
         },
         {
@@ -40773,7 +40773,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 21,
+          "covered": 0,
           "total": 0
         },
         {
@@ -40823,7 +40823,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 10,
+          "covered": 0,
           "total": 0
         },
         {
@@ -40877,7 +40877,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 10,
+          "covered": 0,
           "total": 0
         },
         {
@@ -40927,7 +40927,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 11,
+          "covered": 0,
           "total": 0
         },
         {
@@ -40981,7 +40981,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 11,
+          "covered": 0,
           "total": 0
         },
         {
@@ -41031,7 +41031,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 18,
+          "covered": 0,
           "total": 0
         },
         {
@@ -41085,7 +41085,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 18,
+          "covered": 0,
           "total": 0
         },
         {
@@ -41135,7 +41135,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 19,
+          "covered": 0,
           "total": 0
         },
         {
@@ -41189,7 +41189,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 19,
+          "covered": 0,
           "total": 0
         },
         {
@@ -41239,7 +41239,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 21,
+          "covered": 0,
           "total": 0
         },
         {
@@ -41293,7 +41293,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 21,
+          "covered": 0,
           "total": 0
         },
         {
@@ -41343,7 +41343,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 21,
+          "covered": 0,
           "total": 0
         },
         {
@@ -41397,7 +41397,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 21,
+          "covered": 0,
           "total": 0
         },
         {
@@ -41447,7 +41447,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 10,
+          "covered": 0,
           "total": 0
         },
         {
@@ -41501,7 +41501,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 10,
+          "covered": 0,
           "total": 0
         },
         {
@@ -41551,7 +41551,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 18,
+          "covered": 0,
           "total": 0
         },
         {
@@ -41605,7 +41605,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 18,
+          "covered": 0,
           "total": 0
         },
         {
@@ -41655,7 +41655,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 19,
+          "covered": 0,
           "total": 0
         },
         {
@@ -41709,7 +41709,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 19,
+          "covered": 0,
           "total": 0
         },
         {
@@ -41759,7 +41759,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 19,
+          "covered": 0,
           "total": 0
         },
         {
@@ -41813,7 +41813,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 19,
+          "covered": 0,
           "total": 0
         },
         {
@@ -41967,7 +41967,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 19,
+          "covered": 0,
           "total": 0
         },
         {
@@ -42021,7 +42021,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 19,
+          "covered": 0,
           "total": 0
         },
         {
@@ -42071,7 +42071,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 19,
+          "covered": 0,
           "total": 0
         },
         {
@@ -42125,7 +42125,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 19,
+          "covered": 0,
           "total": 0
         },
         {
@@ -42175,7 +42175,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 19,
+          "covered": 0,
           "total": 0
         },
         {
@@ -42229,7 +42229,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 19,
+          "covered": 0,
           "total": 0
         },
         {
@@ -42279,7 +42279,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 20,
+          "covered": 0,
           "total": 0
         },
         {
@@ -42333,7 +42333,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 20,
+          "covered": 0,
           "total": 0
         },
         {
@@ -42383,7 +42383,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 20,
+          "covered": 0,
           "total": 0
         },
         {
@@ -42437,7 +42437,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 20,
+          "covered": 0,
           "total": 0
         },
         {
@@ -42487,7 +42487,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 20,
+          "covered": 0,
           "total": 0
         },
         {
@@ -42541,7 +42541,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 20,
+          "covered": 0,
           "total": 0
         },
         {
@@ -42591,7 +42591,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 10,
+          "covered": 0,
           "total": 0
         },
         {
@@ -42645,7 +42645,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 10,
+          "covered": 0,
           "total": 0
         },
         {
@@ -42695,7 +42695,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 10,
+          "covered": 0,
           "total": 0
         },
         {
@@ -42749,7 +42749,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 10,
+          "covered": 0,
           "total": 0
         },
         {
@@ -42799,7 +42799,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 21,
+          "covered": 0,
           "total": 0
         },
         {
@@ -42853,7 +42853,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 21,
+          "covered": 0,
           "total": 0
         },
         {
@@ -42903,7 +42903,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 10,
+          "covered": 0,
           "total": 0
         },
         {
@@ -42957,7 +42957,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 10,
+          "covered": 0,
           "total": 0
         },
         {
@@ -43007,7 +43007,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 11,
+          "covered": 0,
           "total": 0
         },
         {
@@ -43061,7 +43061,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 11,
+          "covered": 0,
           "total": 0
         },
         {
@@ -43111,7 +43111,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 10,
+          "covered": 0,
           "total": 0
         },
         {
@@ -43165,7 +43165,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 10,
+          "covered": 0,
           "total": 0
         },
         {
@@ -43215,7 +43215,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 11,
+          "covered": 0,
           "total": 0
         },
         {
@@ -43269,7 +43269,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 11,
+          "covered": 0,
           "total": 0
         },
         {
@@ -43319,7 +43319,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 20,
+          "covered": 0,
           "total": 0
         },
         {
@@ -43373,7 +43373,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 20,
+          "covered": 0,
           "total": 0
         },
         {
@@ -43423,7 +43423,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 20,
+          "covered": 0,
           "total": 0
         },
         {
@@ -43477,7 +43477,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 20,
+          "covered": 0,
           "total": 0
         },
         {
@@ -43527,7 +43527,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 10,
+          "covered": 0,
           "total": 0
         },
         {
@@ -43581,7 +43581,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 10,
+          "covered": 0,
           "total": 0
         },
         {
@@ -43631,7 +43631,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 10,
+          "covered": 0,
           "total": 0
         },
         {
@@ -43685,7 +43685,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 10,
+          "covered": 0,
           "total": 0
         },
         {
@@ -43735,7 +43735,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 19,
+          "covered": 0,
           "total": 0
         },
         {
@@ -43789,7 +43789,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 19,
+          "covered": 0,
           "total": 0
         },
         {
@@ -43839,7 +43839,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 19,
+          "covered": 0,
           "total": 0
         },
         {
@@ -43893,7 +43893,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 19,
+          "covered": 0,
           "total": 0
         },
         {
@@ -43943,7 +43943,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 19,
+          "covered": 0,
           "total": 0
         },
         {
@@ -43997,7 +43997,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 19,
+          "covered": 0,
           "total": 0
         },
         {
@@ -44047,7 +44047,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 9,
+          "covered": 0,
           "total": 0
         },
         {
@@ -44101,7 +44101,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 9,
+          "covered": 0,
           "total": 0
         },
         {
@@ -44151,7 +44151,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 10,
+          "covered": 0,
           "total": 0
         },
         {
@@ -44205,7 +44205,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 10,
+          "covered": 0,
           "total": 0
         },
         {
@@ -44255,7 +44255,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 19,
+          "covered": 0,
           "total": 0
         },
         {
@@ -44309,7 +44309,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 19,
+          "covered": 0,
           "total": 0
         },
         {
@@ -44359,7 +44359,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 19,
+          "covered": 0,
           "total": 0
         },
         {
@@ -44413,7 +44413,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 19,
+          "covered": 0,
           "total": 0
         },
         {
@@ -44463,7 +44463,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 9,
+          "covered": 0,
           "total": 0
         },
         {
@@ -44517,7 +44517,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 9,
+          "covered": 0,
           "total": 0
         },
         {
@@ -44567,7 +44567,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 10,
+          "covered": 0,
           "total": 0
         },
         {
@@ -44621,7 +44621,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 10,
+          "covered": 0,
           "total": 0
         },
         {
@@ -44671,7 +44671,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 19,
+          "covered": 0,
           "total": 0
         },
         {
@@ -44725,7 +44725,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 19,
+          "covered": 0,
           "total": 0
         },
         {
@@ -44775,7 +44775,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 19,
+          "covered": 0,
           "total": 0
         },
         {
@@ -44829,7 +44829,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 19,
+          "covered": 0,
           "total": 0
         },
         {
@@ -44879,7 +44879,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 19,
+          "covered": 0,
           "total": 0
         },
         {
@@ -44933,7 +44933,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 19,
+          "covered": 0,
           "total": 0
         },
         {
@@ -44983,7 +44983,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 9,
+          "covered": 0,
           "total": 0
         },
         {
@@ -45037,7 +45037,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 9,
+          "covered": 0,
           "total": 0
         },
         {
@@ -45087,7 +45087,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 10,
+          "covered": 0,
           "total": 0
         },
         {
@@ -45141,7 +45141,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 10,
+          "covered": 0,
           "total": 0
         },
         {
@@ -45191,7 +45191,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 9,
+          "covered": 0,
           "total": 0
         },
         {
@@ -45245,7 +45245,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 9,
+          "covered": 0,
           "total": 0
         },
         {
@@ -45295,7 +45295,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 19,
+          "covered": 0,
           "total": 0
         },
         {
@@ -45349,7 +45349,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 19,
+          "covered": 0,
           "total": 0
         },
         {
@@ -45399,7 +45399,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 19,
+          "covered": 0,
           "total": 0
         },
         {
@@ -45453,7 +45453,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 19,
+          "covered": 0,
           "total": 0
         },
         {
@@ -45503,7 +45503,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 19,
+          "covered": 0,
           "total": 0
         },
         {
@@ -45557,7 +45557,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 19,
+          "covered": 0,
           "total": 0
         },
         {
@@ -45607,7 +45607,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 9,
+          "covered": 0,
           "total": 0
         },
         {
@@ -45661,7 +45661,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 9,
+          "covered": 0,
           "total": 0
         },
         {
@@ -45711,7 +45711,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 10,
+          "covered": 0,
           "total": 0
         },
         {
@@ -45765,7 +45765,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 10,
+          "covered": 0,
           "total": 0
         },
         {
@@ -45815,7 +45815,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 18,
+          "covered": 0,
           "total": 0
         },
         {
@@ -45869,7 +45869,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 18,
+          "covered": 0,
           "total": 0
         },
         {
@@ -45919,7 +45919,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 18,
+          "covered": 0,
           "total": 0
         },
         {
@@ -45973,7 +45973,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 18,
+          "covered": 0,
           "total": 0
         },
         {
@@ -46831,7 +46831,7 @@
       "sessionId": "session_indy_nxt_2026_6757",
       "sessionName": "Race",
       "sessionType": "race",
-      "ingestionState": "schedule_only",
+      "ingestionState": null,
       "sourceFamily": null,
       "categories": [
         {
@@ -46842,21 +46842,21 @@
         },
         {
           "id": "race_results",
-          "status": "unavailable",
-          "covered": 0,
-          "total": 0
+          "status": "complete",
+          "covered": 23,
+          "total": 1
         },
         {
           "id": "qualifying_classifications",
           "status": "out_of_scope",
-          "covered": 0,
+          "covered": 23,
           "total": 0
         },
         {
           "id": "grid_start_positions",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
+          "status": "complete",
+          "covered": 23,
+          "total": 23
         },
         {
           "id": "exact_session_windows",
@@ -46878,15 +46878,15 @@
         },
         {
           "id": "lap_samples",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
+          "status": "partial",
+          "covered": 1959,
+          "total": 1
         },
         {
           "id": "indy_section_data",
-          "status": "unavailable",
-          "covered": 0,
-          "total": 0
+          "status": "complete",
+          "covered": 2,
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -46896,21 +46896,21 @@
         },
         {
           "id": "incidents_cautions",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
+          "status": "complete",
+          "covered": 7,
+          "total": 1
         },
         {
           "id": "racecraft_summary",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
+          "status": "complete",
+          "covered": 1,
+          "total": 1
         },
         {
           "id": "pit_stop_counts",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
+          "status": "complete",
+          "covered": 23,
+          "total": 23
         },
         {
           "id": "detailed_pit_context",
@@ -46935,7 +46935,7 @@
       "sessionId": "session_indy_nxt_2026_6758",
       "sessionName": "Race",
       "sessionType": "race",
-      "ingestionState": "schedule_only",
+      "ingestionState": null,
       "sourceFamily": null,
       "categories": [
         {
@@ -46946,21 +46946,21 @@
         },
         {
           "id": "race_results",
-          "status": "unavailable",
-          "covered": 0,
-          "total": 0
+          "status": "complete",
+          "covered": 24,
+          "total": 1
         },
         {
           "id": "qualifying_classifications",
           "status": "out_of_scope",
-          "covered": 0,
+          "covered": 24,
           "total": 0
         },
         {
           "id": "grid_start_positions",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
+          "status": "complete",
+          "covered": 24,
+          "total": 24
         },
         {
           "id": "exact_session_windows",
@@ -46982,39 +46982,39 @@
         },
         {
           "id": "lap_samples",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
+          "status": "partial",
+          "covered": 660,
+          "total": 1
         },
         {
           "id": "indy_section_data",
-          "status": "unavailable",
-          "covered": 0,
-          "total": 0
+          "status": "complete",
+          "covered": 2,
+          "total": 2
         },
         {
           "id": "penalties_decisions",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 1,
           "total": 1
         },
         {
           "id": "incidents_cautions",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
+          "status": "complete",
+          "covered": 3,
+          "total": 1
         },
         {
           "id": "racecraft_summary",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
+          "status": "complete",
+          "covered": 1,
+          "total": 1
         },
         {
           "id": "pit_stop_counts",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
+          "status": "complete",
+          "covered": 24,
+          "total": 24
         },
         {
           "id": "detailed_pit_context",
@@ -47039,7 +47039,7 @@
       "sessionId": "session_indy_nxt_2026_6759",
       "sessionName": "Race",
       "sessionType": "race",
-      "ingestionState": "schedule_only",
+      "ingestionState": null,
       "sourceFamily": null,
       "categories": [
         {
@@ -47050,21 +47050,21 @@
         },
         {
           "id": "race_results",
-          "status": "unavailable",
-          "covered": 0,
-          "total": 0
+          "status": "complete",
+          "covered": 24,
+          "total": 1
         },
         {
           "id": "qualifying_classifications",
           "status": "out_of_scope",
-          "covered": 0,
+          "covered": 24,
           "total": 0
         },
         {
           "id": "grid_start_positions",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
+          "status": "complete",
+          "covered": 24,
+          "total": 24
         },
         {
           "id": "exact_session_windows",
@@ -47086,39 +47086,39 @@
         },
         {
           "id": "lap_samples",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
+          "status": "partial",
+          "covered": 785,
+          "total": 1
         },
         {
           "id": "indy_section_data",
-          "status": "unavailable",
-          "covered": 0,
-          "total": 0
+          "status": "complete",
+          "covered": 2,
+          "total": 2
         },
         {
           "id": "penalties_decisions",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 3,
           "total": 1
         },
         {
           "id": "incidents_cautions",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
+          "status": "complete",
+          "covered": 6,
+          "total": 1
         },
         {
           "id": "racecraft_summary",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
+          "status": "complete",
+          "covered": 1,
+          "total": 1
         },
         {
           "id": "pit_stop_counts",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
+          "status": "complete",
+          "covered": 24,
+          "total": 24
         },
         {
           "id": "detailed_pit_context",
@@ -47559,7 +47559,7 @@
       "sessionId": "session_indy_nxt_2026_6764",
       "sessionName": "Race",
       "sessionType": "race",
-      "ingestionState": "schedule_only",
+      "ingestionState": null,
       "sourceFamily": null,
       "categories": [
         {
@@ -47570,21 +47570,21 @@
         },
         {
           "id": "race_results",
-          "status": "unavailable",
-          "covered": 0,
-          "total": 0
+          "status": "complete",
+          "covered": 24,
+          "total": 1
         },
         {
           "id": "qualifying_classifications",
           "status": "out_of_scope",
-          "covered": 0,
+          "covered": 24,
           "total": 0
         },
         {
           "id": "grid_start_positions",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
+          "status": "complete",
+          "covered": 24,
+          "total": 24
         },
         {
           "id": "exact_session_windows",
@@ -47606,39 +47606,39 @@
         },
         {
           "id": "lap_samples",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
+          "status": "partial",
+          "covered": 837,
+          "total": 1
         },
         {
           "id": "indy_section_data",
-          "status": "unavailable",
-          "covered": 0,
-          "total": 0
+          "status": "complete",
+          "covered": 2,
+          "total": 2
         },
         {
           "id": "penalties_decisions",
-          "status": "partial",
-          "covered": 0,
+          "status": "complete",
+          "covered": 4,
           "total": 1
         },
         {
           "id": "incidents_cautions",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
+          "status": "complete",
+          "covered": 1,
+          "total": 1
         },
         {
           "id": "racecraft_summary",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
+          "status": "complete",
+          "covered": 1,
+          "total": 1
         },
         {
           "id": "pit_stop_counts",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
+          "status": "complete",
+          "covered": 24,
+          "total": 24
         },
         {
           "id": "detailed_pit_context",
@@ -47791,7 +47791,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 24,
+          "covered": 0,
           "total": 0
         },
         {
@@ -47845,7 +47845,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 24,
+          "covered": 0,
           "total": 0
         },
         {
@@ -47895,7 +47895,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 24,
+          "covered": 0,
           "total": 0
         },
         {
@@ -47949,7 +47949,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 24,
+          "covered": 0,
           "total": 0
         },
         {
@@ -47999,7 +47999,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 12,
+          "covered": 0,
           "total": 0
         },
         {
@@ -48053,7 +48053,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 12,
+          "covered": 0,
           "total": 0
         },
         {
@@ -48103,7 +48103,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 12,
+          "covered": 0,
           "total": 0
         },
         {
@@ -48157,7 +48157,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 12,
+          "covered": 0,
           "total": 0
         },
         {
@@ -48207,7 +48207,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 24,
+          "covered": 0,
           "total": 0
         },
         {
@@ -48261,7 +48261,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 24,
+          "covered": 0,
           "total": 0
         },
         {
@@ -48311,7 +48311,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 24,
+          "covered": 0,
           "total": 0
         },
         {
@@ -48365,7 +48365,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 24,
+          "covered": 0,
           "total": 0
         },
         {
@@ -48415,7 +48415,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 24,
+          "covered": 0,
           "total": 0
         },
         {
@@ -48469,7 +48469,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 24,
+          "covered": 0,
           "total": 0
         },
         {
@@ -48519,7 +48519,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 12,
+          "covered": 0,
           "total": 0
         },
         {
@@ -48573,7 +48573,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 12,
+          "covered": 0,
           "total": 0
         },
         {
@@ -48623,7 +48623,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 12,
+          "covered": 0,
           "total": 0
         },
         {
@@ -48677,7 +48677,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 12,
+          "covered": 0,
           "total": 0
         },
         {
@@ -48727,7 +48727,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 24,
+          "covered": 0,
           "total": 0
         },
         {
@@ -48781,7 +48781,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 24,
+          "covered": 0,
           "total": 0
         },
         {
@@ -48831,7 +48831,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 24,
+          "covered": 0,
           "total": 0
         },
         {
@@ -48885,7 +48885,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 24,
+          "covered": 0,
           "total": 0
         },
         {
@@ -48935,7 +48935,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 12,
+          "covered": 0,
           "total": 0
         },
         {
@@ -48989,7 +48989,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 12,
+          "covered": 0,
           "total": 0
         },
         {
@@ -49039,7 +49039,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 12,
+          "covered": 0,
           "total": 0
         },
         {
@@ -49093,7 +49093,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 12,
+          "covered": 0,
           "total": 0
         },
         {
@@ -49143,7 +49143,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 24,
+          "covered": 0,
           "total": 0
         },
         {
@@ -49197,7 +49197,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 24,
+          "covered": 0,
           "total": 0
         },
         {
@@ -49247,7 +49247,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 12,
+          "covered": 0,
           "total": 0
         },
         {
@@ -49301,7 +49301,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 12,
+          "covered": 0,
           "total": 0
         },
         {
@@ -49351,7 +49351,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 12,
+          "covered": 0,
           "total": 0
         },
         {
@@ -49405,7 +49405,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 12,
+          "covered": 0,
           "total": 0
         },
         {
@@ -49455,7 +49455,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 24,
+          "covered": 0,
           "total": 0
         },
         {
@@ -49509,7 +49509,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 24,
+          "covered": 0,
           "total": 0
         },
         {
@@ -49559,7 +49559,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 23,
+          "covered": 0,
           "total": 0
         },
         {
@@ -49613,7 +49613,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 23,
+          "covered": 0,
           "total": 0
         },
         {
@@ -49663,7 +49663,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 24,
+          "covered": 0,
           "total": 0
         },
         {
@@ -49717,7 +49717,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 24,
+          "covered": 0,
           "total": 0
         },
         {
@@ -49767,7 +49767,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 12,
+          "covered": 0,
           "total": 0
         },
         {
@@ -49821,7 +49821,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 12,
+          "covered": 0,
           "total": 0
         },
         {
@@ -49871,7 +49871,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 12,
+          "covered": 0,
           "total": 0
         },
         {
@@ -49925,7 +49925,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 12,
+          "covered": 0,
           "total": 0
         },
         {
@@ -49975,7 +49975,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 24,
+          "covered": 0,
           "total": 0
         },
         {
@@ -50029,7 +50029,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 24,
+          "covered": 0,
           "total": 0
         },
         {
@@ -50079,7 +50079,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 12,
+          "covered": 0,
           "total": 0
         },
         {
@@ -50133,7 +50133,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 12,
+          "covered": 0,
           "total": 0
         },
         {
@@ -50183,7 +50183,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 12,
+          "covered": 0,
           "total": 0
         },
         {
@@ -50237,7 +50237,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 12,
+          "covered": 0,
           "total": 0
         },
         {
@@ -50287,7 +50287,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 24,
+          "covered": 0,
           "total": 0
         },
         {
@@ -50341,7 +50341,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 24,
+          "covered": 0,
           "total": 0
         },
         {
@@ -50391,7 +50391,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 24,
+          "covered": 0,
           "total": 0
         },
         {
@@ -50445,7 +50445,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 24,
+          "covered": 0,
           "total": 0
         },
         {
@@ -50495,7 +50495,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 12,
+          "covered": 0,
           "total": 0
         },
         {
@@ -50549,7 +50549,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 12,
+          "covered": 0,
           "total": 0
         },
         {
@@ -50599,7 +50599,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 12,
+          "covered": 0,
           "total": 0
         },
         {
@@ -50653,7 +50653,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 12,
+          "covered": 0,
           "total": 0
         },
         {
@@ -50703,7 +50703,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 24,
+          "covered": 0,
           "total": 0
         },
         {
@@ -50757,7 +50757,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 24,
+          "covered": 0,
           "total": 0
         },
         {
@@ -50807,7 +50807,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 24,
+          "covered": 0,
           "total": 0
         },
         {
@@ -50861,7 +50861,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 24,
+          "covered": 0,
           "total": 0
         },
         {
@@ -50911,7 +50911,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 24,
+          "covered": 0,
           "total": 0
         },
         {
@@ -50965,7 +50965,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 24,
+          "covered": 0,
           "total": 0
         },
         {
@@ -51015,7 +51015,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 24,
+          "covered": 0,
           "total": 0
         },
         {
@@ -51069,7 +51069,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 24,
+          "covered": 0,
           "total": 0
         },
         {
@@ -51119,7 +51119,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 12,
+          "covered": 0,
           "total": 0
         },
         {
@@ -51173,7 +51173,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 12,
+          "covered": 0,
           "total": 0
         },
         {
@@ -51223,7 +51223,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 12,
+          "covered": 0,
           "total": 0
         },
         {
@@ -51277,7 +51277,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 12,
+          "covered": 0,
           "total": 0
         },
         {
@@ -51327,7 +51327,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 24,
+          "covered": 0,
           "total": 0
         },
         {
@@ -51381,7 +51381,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 24,
+          "covered": 0,
           "total": 0
         },
         {
@@ -51431,7 +51431,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 12,
+          "covered": 0,
           "total": 0
         },
         {
@@ -51485,7 +51485,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 12,
+          "covered": 0,
           "total": 0
         },
         {
@@ -51535,7 +51535,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 12,
+          "covered": 0,
           "total": 0
         },
         {
@@ -51589,7 +51589,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 12,
+          "covered": 0,
           "total": 0
         },
         {
@@ -51639,7 +51639,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 24,
+          "covered": 0,
           "total": 0
         },
         {
@@ -51693,7 +51693,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 24,
+          "covered": 0,
           "total": 0
         },
         {
@@ -51743,7 +51743,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 24,
+          "covered": 0,
           "total": 0
         },
         {
@@ -51797,7 +51797,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 24,
+          "covered": 0,
           "total": 0
         },
         {
@@ -51847,7 +51847,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 12,
+          "covered": 0,
           "total": 0
         },
         {
@@ -51901,7 +51901,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 12,
+          "covered": 0,
           "total": 0
         },
         {
@@ -51951,7 +51951,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 12,
+          "covered": 0,
           "total": 0
         },
         {
@@ -52005,7 +52005,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 12,
+          "covered": 0,
           "total": 0
         },
         {
@@ -52055,7 +52055,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 24,
+          "covered": 0,
           "total": 0
         },
         {
@@ -52109,7 +52109,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 24,
+          "covered": 0,
           "total": 0
         },
         {
@@ -52159,7 +52159,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 12,
+          "covered": 0,
           "total": 0
         },
         {
@@ -52213,7 +52213,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 12,
+          "covered": 0,
           "total": 0
         },
         {
@@ -52263,7 +52263,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 12,
+          "covered": 0,
           "total": 0
         },
         {
@@ -52317,7 +52317,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 12,
+          "covered": 0,
           "total": 0
         },
         {
@@ -52367,7 +52367,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 24,
+          "covered": 0,
           "total": 0
         },
         {
@@ -52421,7 +52421,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 24,
+          "covered": 0,
           "total": 0
         },
         {
@@ -52447,7 +52447,7 @@
       "sessionId": "session_indy_nxt_2026_6898",
       "sessionName": "Practice 1",
       "sessionType": "practice",
-      "ingestionState": "schedule_only",
+      "ingestionState": null,
       "sourceFamily": null,
       "categories": [
         {
@@ -52459,13 +52459,13 @@
         {
           "id": "race_results",
           "status": "out_of_scope",
-          "covered": 0,
+          "covered": 24,
           "total": 0
         },
         {
           "id": "qualifying_classifications",
           "status": "out_of_scope",
-          "covered": 0,
+          "covered": 24,
           "total": 0
         },
         {
@@ -52500,9 +52500,9 @@
         },
         {
           "id": "indy_section_data",
-          "status": "unavailable",
-          "covered": 0,
-          "total": 0
+          "status": "complete",
+          "covered": 2,
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -52551,7 +52551,7 @@
       "sessionId": "session_indy_nxt_2026_6899",
       "sessionName": "Practice 2",
       "sessionType": "practice",
-      "ingestionState": "schedule_only",
+      "ingestionState": null,
       "sourceFamily": null,
       "categories": [
         {
@@ -52563,13 +52563,13 @@
         {
           "id": "race_results",
           "status": "out_of_scope",
-          "covered": 0,
+          "covered": 24,
           "total": 0
         },
         {
           "id": "qualifying_classifications",
           "status": "out_of_scope",
-          "covered": 0,
+          "covered": 24,
           "total": 0
         },
         {
@@ -52604,9 +52604,9 @@
         },
         {
           "id": "indy_section_data",
-          "status": "unavailable",
-          "covered": 0,
-          "total": 0
+          "status": "complete",
+          "covered": 2,
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -52655,7 +52655,7 @@
       "sessionId": "session_indy_nxt_2026_6900",
       "sessionName": "Qualifying - Group 1",
       "sessionType": "qualifying",
-      "ingestionState": "schedule_only",
+      "ingestionState": null,
       "sourceFamily": null,
       "categories": [
         {
@@ -52667,14 +52667,14 @@
         {
           "id": "race_results",
           "status": "out_of_scope",
-          "covered": 0,
+          "covered": 12,
           "total": 0
         },
         {
           "id": "qualifying_classifications",
-          "status": "unavailable",
-          "covered": 0,
-          "total": 0
+          "status": "complete",
+          "covered": 24,
+          "total": 1
         },
         {
           "id": "grid_start_positions",
@@ -52708,9 +52708,9 @@
         },
         {
           "id": "indy_section_data",
-          "status": "unavailable",
-          "covered": 0,
-          "total": 0
+          "status": "complete",
+          "covered": 2,
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -52759,7 +52759,7 @@
       "sessionId": "session_indy_nxt_2026_6901",
       "sessionName": "Qualifying - Group 2",
       "sessionType": "qualifying",
-      "ingestionState": "schedule_only",
+      "ingestionState": null,
       "sourceFamily": null,
       "categories": [
         {
@@ -52771,14 +52771,14 @@
         {
           "id": "race_results",
           "status": "out_of_scope",
-          "covered": 0,
+          "covered": 12,
           "total": 0
         },
         {
           "id": "qualifying_classifications",
-          "status": "unavailable",
-          "covered": 0,
-          "total": 0
+          "status": "complete",
+          "covered": 24,
+          "total": 1
         },
         {
           "id": "grid_start_positions",
@@ -52812,9 +52812,9 @@
         },
         {
           "id": "indy_section_data",
-          "status": "unavailable",
-          "covered": 0,
-          "total": 0
+          "status": "complete",
+          "covered": 2,
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -52863,7 +52863,7 @@
       "sessionId": "session_indy_nxt_2026_6902",
       "sessionName": "Combined Qualifying",
       "sessionType": "qualifying",
-      "ingestionState": "schedule_only",
+      "ingestionState": null,
       "sourceFamily": null,
       "categories": [
         {
@@ -52875,14 +52875,14 @@
         {
           "id": "race_results",
           "status": "out_of_scope",
-          "covered": 0,
+          "covered": 24,
           "total": 0
         },
         {
           "id": "qualifying_classifications",
-          "status": "unavailable",
-          "covered": 0,
-          "total": 0
+          "status": "complete",
+          "covered": 48,
+          "total": 1
         },
         {
           "id": "grid_start_positions",
@@ -52991,7 +52991,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 23,
+          "covered": 0,
           "total": 0
         },
         {
@@ -53045,7 +53045,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 23,
+          "covered": 0,
           "total": 0
         },
         {
@@ -53095,7 +53095,7 @@
         {
           "id": "grid_start_positions",
           "status": "out_of_scope",
-          "covered": 23,
+          "covered": 0,
           "total": 0
         },
         {
@@ -53149,7 +53149,7 @@
         {
           "id": "pit_stop_counts",
           "status": "out_of_scope",
-          "covered": 23,
+          "covered": 0,
           "total": 0
         },
         {
@@ -53175,7 +53175,7 @@
       "sessionId": "session_indy_nxt_2026_6934",
       "sessionName": "Practice",
       "sessionType": "practice",
-      "ingestionState": "schedule_only",
+      "ingestionState": null,
       "sourceFamily": null,
       "categories": [
         {
@@ -53187,13 +53187,13 @@
         {
           "id": "race_results",
           "status": "out_of_scope",
-          "covered": 0,
+          "covered": 23,
           "total": 0
         },
         {
           "id": "qualifying_classifications",
           "status": "out_of_scope",
-          "covered": 0,
+          "covered": 23,
           "total": 0
         },
         {
@@ -53228,9 +53228,9 @@
         },
         {
           "id": "indy_section_data",
-          "status": "unavailable",
-          "covered": 0,
-          "total": 0
+          "status": "complete",
+          "covered": 2,
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -53279,7 +53279,7 @@
       "sessionId": "session_indy_nxt_2026_6935",
       "sessionName": "Qualifying",
       "sessionType": "qualifying",
-      "ingestionState": "schedule_only",
+      "ingestionState": null,
       "sourceFamily": null,
       "categories": [
         {
@@ -53291,14 +53291,14 @@
         {
           "id": "race_results",
           "status": "out_of_scope",
-          "covered": 0,
+          "covered": 23,
           "total": 0
         },
         {
           "id": "qualifying_classifications",
-          "status": "unavailable",
-          "covered": 0,
-          "total": 0
+          "status": "complete",
+          "covered": 46,
+          "total": 1
         },
         {
           "id": "grid_start_positions",
@@ -53332,9 +53332,9 @@
         },
         {
           "id": "indy_section_data",
-          "status": "unavailable",
-          "covered": 0,
-          "total": 0
+          "status": "complete",
+          "covered": 2,
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -53383,7 +53383,7 @@
       "sessionId": "session_indy_nxt_2026_6947",
       "sessionName": "Practice 1",
       "sessionType": "practice",
-      "ingestionState": "schedule_only",
+      "ingestionState": null,
       "sourceFamily": null,
       "categories": [
         {
@@ -53395,13 +53395,13 @@
         {
           "id": "race_results",
           "status": "out_of_scope",
-          "covered": 0,
+          "covered": 24,
           "total": 0
         },
         {
           "id": "qualifying_classifications",
           "status": "out_of_scope",
-          "covered": 0,
+          "covered": 24,
           "total": 0
         },
         {
@@ -53436,9 +53436,9 @@
         },
         {
           "id": "indy_section_data",
-          "status": "unavailable",
-          "covered": 0,
-          "total": 0
+          "status": "complete",
+          "covered": 2,
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -53487,7 +53487,7 @@
       "sessionId": "session_indy_nxt_2026_6948",
       "sessionName": "Practice 2",
       "sessionType": "practice",
-      "ingestionState": "schedule_only",
+      "ingestionState": null,
       "sourceFamily": null,
       "categories": [
         {
@@ -53499,13 +53499,13 @@
         {
           "id": "race_results",
           "status": "out_of_scope",
-          "covered": 0,
+          "covered": 23,
           "total": 0
         },
         {
           "id": "qualifying_classifications",
           "status": "out_of_scope",
-          "covered": 0,
+          "covered": 23,
           "total": 0
         },
         {
@@ -53540,9 +53540,9 @@
         },
         {
           "id": "indy_section_data",
-          "status": "unavailable",
-          "covered": 0,
-          "total": 0
+          "status": "complete",
+          "covered": 2,
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -53591,7 +53591,7 @@
       "sessionId": "session_indy_nxt_2026_6949",
       "sessionName": "Qualifying - Race 1 Group 1",
       "sessionType": "qualifying",
-      "ingestionState": "schedule_only",
+      "ingestionState": null,
       "sourceFamily": null,
       "categories": [
         {
@@ -53603,14 +53603,14 @@
         {
           "id": "race_results",
           "status": "out_of_scope",
-          "covered": 0,
+          "covered": 12,
           "total": 0
         },
         {
           "id": "qualifying_classifications",
-          "status": "unavailable",
-          "covered": 0,
-          "total": 0
+          "status": "complete",
+          "covered": 24,
+          "total": 1
         },
         {
           "id": "grid_start_positions",
@@ -53644,9 +53644,9 @@
         },
         {
           "id": "indy_section_data",
-          "status": "unavailable",
-          "covered": 0,
-          "total": 0
+          "status": "complete",
+          "covered": 2,
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -53695,7 +53695,7 @@
       "sessionId": "session_indy_nxt_2026_6950",
       "sessionName": "Qualifying - Race 1 Group 2",
       "sessionType": "qualifying",
-      "ingestionState": "schedule_only",
+      "ingestionState": null,
       "sourceFamily": null,
       "categories": [
         {
@@ -53707,14 +53707,14 @@
         {
           "id": "race_results",
           "status": "out_of_scope",
-          "covered": 0,
+          "covered": 12,
           "total": 0
         },
         {
           "id": "qualifying_classifications",
-          "status": "unavailable",
-          "covered": 0,
-          "total": 0
+          "status": "complete",
+          "covered": 24,
+          "total": 1
         },
         {
           "id": "grid_start_positions",
@@ -53748,9 +53748,9 @@
         },
         {
           "id": "indy_section_data",
-          "status": "unavailable",
-          "covered": 0,
-          "total": 0
+          "status": "complete",
+          "covered": 2,
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -53799,7 +53799,7 @@
       "sessionId": "session_indy_nxt_2026_6951",
       "sessionName": "Combined Qualifying - Race 1",
       "sessionType": "qualifying",
-      "ingestionState": "schedule_only",
+      "ingestionState": null,
       "sourceFamily": null,
       "categories": [
         {
@@ -53811,14 +53811,14 @@
         {
           "id": "race_results",
           "status": "out_of_scope",
-          "covered": 0,
+          "covered": 24,
           "total": 0
         },
         {
           "id": "qualifying_classifications",
-          "status": "unavailable",
-          "covered": 0,
-          "total": 0
+          "status": "complete",
+          "covered": 48,
+          "total": 1
         },
         {
           "id": "grid_start_positions",
@@ -53903,7 +53903,7 @@
       "sessionId": "session_indy_nxt_2026_6952",
       "sessionName": "Qualifying - Race 2 Group 1",
       "sessionType": "qualifying",
-      "ingestionState": "schedule_only",
+      "ingestionState": null,
       "sourceFamily": null,
       "categories": [
         {
@@ -53915,14 +53915,14 @@
         {
           "id": "race_results",
           "status": "out_of_scope",
-          "covered": 0,
+          "covered": 12,
           "total": 0
         },
         {
           "id": "qualifying_classifications",
-          "status": "unavailable",
-          "covered": 0,
-          "total": 0
+          "status": "complete",
+          "covered": 24,
+          "total": 1
         },
         {
           "id": "grid_start_positions",
@@ -53956,9 +53956,9 @@
         },
         {
           "id": "indy_section_data",
-          "status": "unavailable",
-          "covered": 0,
-          "total": 0
+          "status": "complete",
+          "covered": 2,
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -54007,7 +54007,7 @@
       "sessionId": "session_indy_nxt_2026_6953",
       "sessionName": "Qualifying - Race 2 Group 2",
       "sessionType": "qualifying",
-      "ingestionState": "schedule_only",
+      "ingestionState": null,
       "sourceFamily": null,
       "categories": [
         {
@@ -54019,14 +54019,14 @@
         {
           "id": "race_results",
           "status": "out_of_scope",
-          "covered": 0,
+          "covered": 12,
           "total": 0
         },
         {
           "id": "qualifying_classifications",
-          "status": "unavailable",
-          "covered": 0,
-          "total": 0
+          "status": "complete",
+          "covered": 24,
+          "total": 1
         },
         {
           "id": "grid_start_positions",
@@ -54060,9 +54060,9 @@
         },
         {
           "id": "indy_section_data",
-          "status": "unavailable",
-          "covered": 0,
-          "total": 0
+          "status": "complete",
+          "covered": 2,
+          "total": 2
         },
         {
           "id": "penalties_decisions",
@@ -54111,7 +54111,7 @@
       "sessionId": "session_indy_nxt_2026_6954",
       "sessionName": "Combined Qualifying - Race 2",
       "sessionType": "qualifying",
-      "ingestionState": "schedule_only",
+      "ingestionState": null,
       "sourceFamily": null,
       "categories": [
         {
@@ -54123,14 +54123,14 @@
         {
           "id": "race_results",
           "status": "out_of_scope",
-          "covered": 0,
+          "covered": 24,
           "total": 0
         },
         {
           "id": "qualifying_classifications",
-          "status": "unavailable",
-          "covered": 0,
-          "total": 0
+          "status": "complete",
+          "covered": 48,
+          "total": 1
         },
         {
           "id": "grid_start_positions",
@@ -54271,7 +54271,7 @@
     {
       "id": "gap_indy_nxt_qualifying_lap_reports",
       "status": "open",
-      "description": "EventsSessionDetails imports race/session result rows, qualifyingResults for official SessionType=Q records, and official terminal-status incident rows for contact/mechanical/dns outcomes. Official Race Lap Chart PDFs now import 29,519 official lap-by-lap position samples from all 36 completed Race Lap Chart PDFs: 26 charts fully validate against official completed-lap counts and 10 clean partial Race Lap Chart PDFs preserve explicit missing car-lap or official result/chart conflict diagnostics without guessing terminal or conflict laps. Official Event Summary PDFs import race-stat metrics and most-improved racecraft notes. Official Leader Lap Summary PDFs import leader-by-lap timing, margin, and flag-state metrics. Official Top Section Times PDFs import practice, qualifying, and race section-rank timing metrics when official section rows are present. Official Section Results PDFs import practice, qualifying, and race lap-by-lap section times and speeds at per-car/per-lap grain when official section rows are present. The remaining true section-results holdout is session_indy_nxt_2024_6325, where the official Section Results PDF URL returns corrupt non-PDF bytes; canceled/no-row reports remain held out rather than treated as missing data. Source-visible rows without canonical API timing rows keep car/name text with null canonical IDs. Official race Results PDFs import penalty/decision summary rows and caution-summary causal incident rows. Detailed pit-lane sequence context is source-unavailable in the current official report family; use official/API pit-stop counts as the production-safe pit metric unless a new official pit-summary source appears."
+      "description": "EventsSessionDetails imports race/session result rows, qualifyingResults for official SessionType=Q records, and official terminal-status incident rows for contact/mechanical/dns outcomes. Official Race Lap Chart PDFs import 37,422 official lap-by-lap position samples from 45 completed Race Lap Chart PDFs: 33 charts fully validate against official completed-lap counts and 12 clean partial Race Lap Chart PDFs preserve explicit missing car-lap or official result/chart conflict diagnostics without guessing terminal or conflict laps. Official Event Summary PDFs import race-stat metrics and most-improved racecraft notes. Official Leader Lap Summary PDFs import leader-by-lap timing, margin, and flag-state metrics. Official Top Section Times PDFs import 179 practice, qualifying, and race section-rank timing metrics when official section rows are present. Official Section Results PDFs import 178 practice, qualifying, and race lap-by-lap section metrics; continuation pages are merged by car/lap/section and 2670 source-proven post-limit terminal rows are excluded from completed-lap facts. The remaining true section-results holdout is session_indy_nxt_2024_6325, where the official Section Results PDF URL returns corrupt non-PDF bytes; canceled/no-row reports remain held out rather than treated as missing data. Source-visible rows without canonical API timing rows keep car/name text with null canonical IDs. Official race Results PDFs import penalty/decision summary rows and caution-summary causal incident rows. Detailed pit-lane sequence context is source-unavailable in the current official report family; use official/API pit-stop counts as the production-safe pit metric unless a new official pit-summary source appears."
     },
     {
       "id": "gap_remaining_career_rows_after_imsa",

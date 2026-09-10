@@ -16,7 +16,7 @@
       "seriesId": "series_frp_f1600",
       "seriesName": "F1600 Championship Series",
       "sourceFamily": "qualifying_session_result",
-      "sourceHash": "64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978"
+      "sourceHash": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd"
     },
     {
       "avgFinishConverted": 5.8,
@@ -34,7 +34,7 @@
       "seriesId": "series_formula_ford",
       "seriesName": "Formula Ford",
       "sourceFamily": "qualifying_session_result",
-      "sourceHash": "64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978"
+      "sourceHash": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd"
     },
     {
       "avgFinishConverted": 10.0,
@@ -52,7 +52,7 @@
       "seriesId": "series_gb3",
       "seriesName": "GB3 Championship",
       "sourceFamily": "official_qualifying",
-      "sourceHash": "64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978"
+      "sourceHash": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd"
     },
     {
       "avgFinishConverted": null,
@@ -70,7 +70,7 @@
       "seriesId": "series_gb3",
       "seriesName": "GB3 Championship",
       "sourceFamily": "qualifying_session_result",
-      "sourceHash": "64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978"
+      "sourceHash": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd"
     },
     {
       "avgFinishConverted": 4.857,
@@ -88,7 +88,7 @@
       "seriesId": "series_euroformula_open",
       "seriesName": "Euroformula Open",
       "sourceFamily": "official_qualifying",
-      "sourceHash": "64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978"
+      "sourceHash": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd"
     },
     {
       "avgFinishConverted": 6.5,
@@ -106,7 +106,7 @@
       "seriesId": "series_froc",
       "seriesName": "Castrol Toyota Formula Regional Oceania Championship",
       "sourceFamily": "qualifying_session_result",
-      "sourceHash": "64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978"
+      "sourceHash": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd"
     },
     {
       "avgFinishConverted": 11.917,
@@ -124,7 +124,7 @@
       "seriesId": "series_indy_nxt",
       "seriesName": "INDY NXT",
       "sourceFamily": "official_qualifying",
-      "sourceHash": "64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978"
+      "sourceHash": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd"
     },
     {
       "avgFinishConverted": 12.182,
@@ -142,38 +142,38 @@
       "seriesId": "series_indy_nxt",
       "seriesName": "INDY NXT",
       "sourceFamily": "official_qualifying",
-      "sourceHash": "64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978"
+      "sourceHash": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd"
     },
     {
-      "avgFinishConverted": 14.385,
-      "avgQualiFieldSize": 23.923,
-      "avgQualiRank": 13.615,
-      "avgQualiRankConverted": 13.615,
+      "avgFinishConverted": 13.294,
+      "avgQualiFieldSize": 23.882,
+      "avgQualiRank": 13.118,
+      "avgQualiRankConverted": 13.118,
       "bestQualiRank": 5,
-      "conversionRaces": 13,
-      "finishedAhead": 7,
-      "finishedBehind": 6,
-      "gridSettingSessions": 13,
+      "conversionRaces": 17,
+      "finishedAhead": 10,
+      "finishedBehind": 7,
+      "gridSettingSessions": 17,
       "held": 0,
-      "qualifyingSessions": 24,
+      "qualifyingSessions": 31,
       "seasonYear": 2026,
       "seriesId": "series_indy_nxt",
       "seriesName": "INDY NXT",
       "sourceFamily": "official_qualifying",
-      "sourceHash": "64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978"
+      "sourceHash": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd"
     }
   ],
   "career": {
-    "avgFinishConverted": 10.508,
-    "avgQualiRank": 9.519,
-    "avgQualiRankConverted": 10.046,
+    "avgFinishConverted": 10.464,
+    "avgQualiRank": 9.617,
+    "avgQualiRankConverted": 10.13,
     "bestQualiRank": 1,
-    "conversionRaces": 65,
-    "finishedAhead": 32,
-    "finishedBehind": 28,
-    "gridSettingSessions": 77,
+    "conversionRaces": 69,
+    "finishedAhead": 35,
+    "finishedBehind": 29,
+    "gridSettingSessions": 81,
     "held": 5,
-    "qualifyingAppearances": 115
+    "qualifyingAppearances": 122
   },
   "caveats": [
     "Source families are never blended within a session: qualifyingResults wins per session, and the results rows for that same session are not mixed in.",
@@ -184,11 +184,11 @@
   ],
   "coverage": {
     "appearancesByFamily": {
-      "official_qualifying": 90,
+      "official_qualifying": 97,
       "qualifying_session_result": 25
     },
-    "bryceRaces": 146,
-    "conversionRaces": 65,
+    "bryceRaces": 150,
+    "conversionRaces": 69,
     "excludedRaces": 81,
     "excludedReasons": {
       "no_finish": 4,
@@ -196,12 +196,12 @@
       "no_qualifying_in_event": 8,
       "reverse_grid_no_quali_match": 32
     },
-    "qualifyingAppearances": 115,
+    "qualifyingAppearances": 122,
     "seriesWithConversion": 5,
     "seriesWithQualifying": 6
   },
-  "datasetSha256": "64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978",
-  "generatedAt": "2026-07-21T23:55:29Z",
+  "datasetSha256": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd",
+  "generatedAt": "2026-09-10T23:21:13Z",
   "method": {
     "currency": "grid positions and place counts; qualifying lap times are context strings, never differenced into a pace claim.",
     "linkage": "A qualifying set a race's grid when Bryce's race grid equals his qualifying rank in the same event; that race is the grid_confirmed conversion. Reverse-grid races carry no matching rank and are recorded as excluded, never estimated. Where a source has no grid column, the qualifying position is recorded but conversion is left unconfirmed.",
@@ -211,7 +211,7 @@
     },
     "sourceFamilyDiscipline": "Each qualifying session is read from exactly one family; qualifyingResults wins per session and the results rows for that same session are never blended in."
   },
-  "runDate": "2026-07-19",
+  "runDate": "2026-09-10",
   "schemaVersion": "brycecast.qualifyingLayer.v1",
   "sourceFamilyMap": [
     {
@@ -288,7 +288,7 @@
     },
     {
       "families": {
-        "official_qualifying": 24
+        "official_qualifying": 31
       },
       "primaryFamily": "official_qualifying",
       "seasonYear": 2026,

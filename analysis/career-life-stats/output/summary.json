@@ -11,7 +11,7 @@
     "miles": 11997.4,
     "toTrackName": "Euromarque Motorsport Park"
   },
-  "generatedAt": "2026-07-19T20:49:43.792Z",
+  "generatedAt": "2026-09-10T22:28:43.621Z",
   "longestLeg": {
     "fromTrackName": "Autodromo Nazionale Monza",
     "miles": 11599.1,
@@ -19,24 +19,24 @@
   },
   "personalRaceMileage": {
     "confidenceClass": "observed_exact",
-    "coveredRaceRows": 146,
-    "laps": 3084,
+    "coveredRaceRows": 150,
+    "laps": 3274,
     "metricGrain": "driver_physical_race",
-    "miles": 7010.9,
-    "raceRows": 146
+    "miles": 7316.4,
+    "raceRows": 150
   },
   "physicalSessionMileage": {
     "exact": {
       "confidenceClass": "observed_exact",
-      "laps": 6003,
-      "miles": 13848.0,
-      "sessions": 322
+      "laps": 6355,
+      "miles": 14440.7,
+      "sessions": 325
     },
-    "excludedAggregateSessions": 30,
+    "excludedAggregateSessions": 33,
     "floor": {
       "confidenceClass": "observed_lower_bound",
-      "laps": 6152,
-      "miles": 14208.5
+      "laps": 6504,
+      "miles": 14801.2
     },
     "lowerBound": {
       "confidenceClass": "observed_lower_bound",
@@ -45,10 +45,10 @@
       "sessions": 14
     },
     "metricGrain": "driver_physical_session",
-    "sessionRows": 352,
+    "sessionRows": 365,
     "unknown": {
       "confidenceClass": "unknown",
-      "sessions": 16
+      "sessions": 26
     }
   },
   "resourceModels": {
@@ -68,7 +68,7 @@
     {
       "note": "Canonical source facts at result, qualifying-result, session, event, and venue grain.",
       "path": "data/career/career.dataset.json",
-      "sha256": "64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978"
+      "sha256": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd"
     },
     {
       "note": "Curated track lengths and coordinates with named sources.",
@@ -88,47 +88,47 @@
     {
       "note": "Source-grain, metric-grain, confidence, travel, and resource-model contracts.",
       "path": "analysis/career-life-stats/RESEARCH.md",
-      "sha256": "0268ca9a22a0213273448a5e21b3025297cdf8a969e428b7fbef2969182492d4"
+      "sha256": "ca910b43fc128940a7a97ddf87c6ed2dcb15badf5802fb9a7f14d4819a1a9e98"
     },
     {
       "note": "Deterministic generated career life-stats artifact.",
       "path": "analysis/career-life-stats/output/tables/miles_raced.csv",
-      "sha256": "aa958b1af6a94752643766307af7618a522df3aa4e6b3e9f996ea58df70ae991"
+      "sha256": "32703bc453ba7c45b18e60a36b501eca1b3ecb02c57f22e2fa95422ff591d377"
     },
     {
       "note": "Deterministic generated career life-stats artifact.",
       "path": "analysis/career-life-stats/output/tables/session_mileage_ledger.csv",
-      "sha256": "5468bc95b79639f86eed2c61f2293064aad40f72f9946460a9f68755370a710a"
+      "sha256": "b5e7b1cfc261d1f98a90b40c3578136269871f591d00041c3db0810b5df1111e"
     },
     {
       "note": "Deterministic generated career life-stats artifact.",
       "path": "analysis/career-life-stats/output/tables/excluded_aggregate_sessions.csv",
-      "sha256": "cb807da2848db3ffefe42995a5bbc4401041959b906b9d00ddeadbfea37709df"
+      "sha256": "13049202665754c6d6ea81e16cd48c709c8990bb6f404f75983359681abb1661"
     },
     {
       "note": "Deterministic generated career life-stats artifact.",
       "path": "analysis/career-life-stats/output/tables/travel_legs.csv",
-      "sha256": "306877cd2e8a14f841d4eb60efc3a9994b57864bb4df0b5aa52bcc871e4fda7a"
+      "sha256": "49cc4efc737f4d8d1184e104cce07dbad3c6b18a4363b6edbe2eb82b1604d9ad"
     },
     {
       "note": "Deterministic generated career life-stats artifact.",
       "path": "analysis/career-life-stats/output/tables/mileage_breakdowns.csv",
-      "sha256": "6f12ffbce5a644dce1a634bf2d2961a44cb5065aa0763d644155604f79960663"
+      "sha256": "16562e1d8f3f12885994875b4ca89d337555df69dc8708eee7cdcca2d17c2bfa"
     },
     {
       "note": "Deterministic generated career life-stats artifact.",
       "path": "analysis/career-life-stats/output/tables/travel_mode_breakdown.csv",
-      "sha256": "c85d105f739da9807886cf3986a109344ea1f4ca2de20e69c65eb7e6f429c6f8"
+      "sha256": "d095efc134abddd7d349d44adb759469397a8ead20bdc4bd0c00ab9b5cc7221e"
     },
     {
       "note": "Deterministic generated career life-stats artifact.",
       "path": "analysis/career-life-stats/output/tables/estimated_fuel_burned.csv",
-      "sha256": "27e0f5170759c783df33f7fc0064195802ec9d05fc5e1188cbf819bd25c0e726"
+      "sha256": "23615045c13a54db3e5386a34a1593d879330f81514f1082a80aa1137b031eb5"
     },
     {
       "note": "Deterministic generated career life-stats artifact.",
       "path": "analysis/career-life-stats/output/tables/estimated_unique_tires.csv",
-      "sha256": "501f6f85ab689f19dec1f7fee58cf325dadab7d64db187d63c18b24dc0800273"
+      "sha256": "38b48896ef3904f3dd9c3369bafcb70ed4bdc42824fcd97f8c0daa2eddb67459"
     }
   ],
   "travel": {
@@ -142,17 +142,17 @@
     "greatCircleMinimum": {
       "confidenceClass": "observed_exact",
       "label": "minimum venue-to-venue displacement between consecutive race events",
-      "miles": 55029.6
+      "miles": 60561.1
     },
     "routeAdjustedMinimum": {
       "assumptions": {
         "driveProxy": "same-country and <=750 great-circle miles; factor 1.12/1.18/1.28",
         "flightProxy": "all other non-zero legs; factor 1.03/1.08/1.15"
       },
-      "baseMiles": 60868.1,
+      "baseMiles": 66842.2,
       "confidenceClass": "modeled_range",
-      "highMiles": 65150.9,
-      "lowMiles": 57973.1
+      "highMiles": 71512.1,
+      "lowMiles": 63670.6
     }
   },
   "venueSources": [

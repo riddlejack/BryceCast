@@ -80,7 +80,8 @@ export const createReplayRouter = ({ captureOverlay, lakeFeeds, enabled = false 
    *   2. the real runner is live    → { kind: 'live' }     (ignore params, real feed)
    *   3. session unknown/not watchable → { kind: 'refused', statusCode, reason }
    *   4. a row resolves at `rt`     → { kind: 'record', record }
-   *   5. `rt` out of the archived span → { kind: 'refused', 400 }
+   *   5. `rt` falls in a withheld source interval → { kind: 'source_gap', 409, gap }
+   *   6. `rt` out of the archived span → { kind: 'refused', 400 }
    *
    * The live-guard here is per-request and stricter than the old mid-playback
    * one: a live runner preempts EVERY replaying client on their very next poll.
@@ -106,6 +107,14 @@ export const createReplayRouter = ({ captureOverlay, lakeFeeds, enabled = false 
     const owner = lakeFeeds.has(session) ? lakeFeeds : captureOverlay;
     const resolved = owner.recordAt({ session, rt, speed });
     if (resolved?.record) return { kind: 'record', record: resolved.record };
+    if (resolved?.sourceGap) {
+      return {
+        kind: 'source_gap',
+        statusCode: 409,
+        reason: resolved.sourceGap.message,
+        gap: resolved.sourceGap
+      };
+    }
     return {
       kind: 'refused',
       statusCode: 400,

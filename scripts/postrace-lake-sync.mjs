@@ -21,8 +21,9 @@
  *                                  canonical list (timing71-2026-coverage.json)
  *                                  are appended ONLY if the decode passes the
  *                                  stop-gates from TIMING71_2026_DISCOVERY.md:
- *                                  usable status, >=20-car NXT roster, Bryce
- *                                  present, and (races) a checkered flag. Every
+ *                                  usable status, Bryce present, race/full-field
+ *                                  roster proof or qualifying group/sequential-run
+ *                                  proof, and (races) a checkered flag. Every
  *                                  promotion carries a validation note. Anything
  *                                  failing a gate is reported and NOT promoted.
  *   5. build-coverage            — regenerates the coverage matrix through today.
@@ -49,11 +50,12 @@
  *   npm run postrace:lake-sync:dry       # discover + report candidates, no writes
  *
  * Env:
- *   BRYCECAST_LAKE_DATA_ROOT — lake data root holding raw/ (default: the a534
- *   worktree path, same default as analysis/semantic-layer/lib/lake.mjs).
+ *   BRYCECAST_LAKE_DATA_ROOT — durable lake root (default:
+ *   ~/.brycecast/data-lake, same as analysis/semantic-layer/lib/lake.mjs).
  */
 
-import { copyFileSync, existsSync, readFileSync, writeFileSync } from 'node:fs';
+import { copyFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { homedir } from 'node:os';
 import { join, resolve, dirname } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
@@ -61,7 +63,7 @@ import { fileURLToPath } from 'node:url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = resolve(__dirname, '..');
 const DEFAULT_LAKE_DATA_ROOT =
-  '/Users/example/.codex/worktrees/a534/Bryce POV access/data/historical-data-lake';
+  join(homedir(), '.brycecast', 'data-lake');
 const lakeRoot = process.env.BRYCECAST_LAKE_DATA_ROOT || DEFAULT_LAKE_DATA_ROOT;
 const dryRun = process.argv.includes('--dry-run');
 
@@ -94,9 +96,16 @@ const run = (label, cmd, args, opts = {}) => {
   }
 };
 
-if (!existsSync(join(lakeRoot, 'raw'))) {
-  process.stderr.write(`Lake data root has no raw/ directory: ${lakeRoot}\nSet BRYCECAST_LAKE_DATA_ROOT.\n`);
-  process.exit(2);
+// A new host may have no durable lake directory yet. Initializing the skeleton
+// is safe: archive-sync will content-address and fetch every missing object. Seed
+// only the source manifest when absent so discovery retains the committed source
+// inventory without replacing any durable manifest already present.
+for (const rel of ['raw', 'manifests', 'catalog']) mkdirSync(join(lakeRoot, rel), {recursive: true});
+const durableManifest = join(lakeRoot, 'manifests/source-files.json');
+const committedManifest = join(REPO_ROOT, 'data/historical-data-lake/manifests/source-files.json');
+if (!existsSync(durableManifest) && existsSync(committedManifest)) {
+  copyFileSync(committedManifest, durableManifest);
+  process.stdout.write(`Initialized durable lake manifest from ${committedManifest}\n`);
 }
 if (!existsSync(AUDIT_PATH)) {
   process.stderr.write(`Audited canonical list missing: ${AUDIT_PATH}\n`);
@@ -108,7 +117,7 @@ if (dryRun) {
   run('archive-sync plan (dry run)', 'node', [join(LAKE_SCRIPTS, 'archive-sync.mjs'), 'plan', '--data-root', lakeRoot]);
 } else {
   run('archive-sync acquire', 'node', [join(LAKE_SCRIPTS, 'archive-sync.mjs'), 'acquire', '--data-root', lakeRoot, '--concurrency', '2']);
-  run('build-catalog', 'node', [join(LAKE_SCRIPTS, 'build-catalog.mjs'), '--data-root', lakeRoot]);
+  run('build-catalog', 'node', [join(LAKE_SCRIPTS, 'build-catalog.mjs'), 'build', '--data-root', lakeRoot]);
   run('analyze-timing71-sessions', 'node', [join(LAKE_SCRIPTS, 'analyze-timing71-sessions.mjs'), '--data-root', lakeRoot, '--concurrency', '4']);
 }
 
@@ -122,17 +131,52 @@ const audited = new Set(
 
 const qualityPath = join(dryRun ? join(REPO_ROOT, 'data/historical-data-lake') : lakeRoot, 'catalog/timing71-session-quality-all.json');
 const quality = JSON.parse(readFileSync(qualityPath, 'utf8'));
+const isVerifiedUnlabelledNxtSession = (session) =>
+  /^Grand Prix of Monterey Doubleheader\b/i.test(String(session.sessionLabel ?? ''));
 const candidates = quality.sessions.filter(
-  (s) => s.year === 2026 && s.series === 'INDY_NXT' && !audited.has(s.replayId)
+  // Keep Bryce-bearing INDYCAR rows in the gate report so an identity mismatch
+  // is explicit rather than silently skipped. Only the verified Monterey
+  // doubleheader label is eligible for the narrow archive-metadata exception.
+  // The inverse trap (Milwaukee's NXT-labelled Scott Dixon recording) enters
+  // through its label and is rejected below because it has no Bryce run.
+  (s) =>
+    s.year === 2026 &&
+    (s.series === 'INDY_NXT' || Boolean(s.analysis?.content?.bryce?.driver)) &&
+    !audited.has(s.replayId)
 );
 
-const promoted = [];
+// The coverage CSV's `event` value becomes the semantic session's venue join
+// key. Archive descriptions often contain series sponsors and session suffixes,
+// so store a stable track label instead of copying that description verbatim.
+const canonicalEventLabel = (session) => {
+  const label = String(session.sessionLabel ?? '');
+  if (/portland/i.test(label)) return 'Portland International Raceway';
+  if (/milwaukee/i.test(label)) return 'The Milwaukee Mile';
+  if (/monterey/i.test(label)) {
+    const race = /race\s*(\d+)/i.exec(label)?.[1];
+    return `WeatherTech Raceway Laguna Seca${race ? ` Race ${race}` : ''}`;
+  }
+  return label.replace(/\s+-\s+(?:Practice|Qualifications?|Qualifying|Race).*$/i, '').trim() || label;
+};
+
+const eligiblePromotions = [];
 const held = [];
 for (const s of candidates) {
   const seg = s.analysis?.content?.bryceSegment;
+  const isQualifying = s.sessionType === 'qualifying';
+  const raceRosterProof = (seg?.minCars ?? 0) >= 20 && (seg?.uniqueDriverCount ?? 0) >= 20;
+  // Road-course groups can contain only half the field; oval qualifying can be
+  // one car at a time. Require an actual Bryce run plus enough observed frames,
+  // while retaining the full reconstructed roster when it is present.
+  const qualifyingRunProof =
+    isQualifying &&
+    (seg?.frameCount ?? 0) >= 120 &&
+    (seg?.maxLap ?? 0) >= 1 &&
+    ((seg?.uniqueDriverCount ?? 0) >= 7 || (seg?.minCars ?? 0) >= 1);
   const gates = {
+    seriesIdentity: s.series === 'INDY_NXT' || isVerifiedUnlabelledNxtSession(s),
     usable: s.analysis?.quality?.status === 'usable',
-    roster: (seg?.minCars ?? 0) >= 20 && (seg?.uniqueDriverCount ?? 0) >= 20,
+    rosterOrQualifyingRun: isQualifying ? qualifyingRunProof : raceRosterProof,
     bryce: Boolean(s.analysis?.content?.bryce?.driver),
     checkered: s.sessionType !== 'race' || seg?.hasCheckered === true
   };
@@ -148,11 +192,37 @@ for (const s of candidates) {
     `max lap ${seg.maxLap}; checkered=${seg.hasCheckered}. ` +
     'Downstream semantic/crosswalk/replay-feed validators must confirm against canonical before this session reaches any surface.';
   if (s.sessionType === 'race') {
-    promoted.push({ kind: 'race', row: { event: s.sessionLabel.replace(/^INDY NXT.*? /, '').replace(/ - Race.*$/, '') || s.sessionLabel, replayId: s.replayId, discovery: 'nxt_labelled', maxLap: seg.maxLap, checkered: seg.hasCheckered, validationNote: note } });
+    eligiblePromotions.push({ source: s, kind: 'race', row: { event: canonicalEventLabel(s), replayId: s.replayId, discovery: s.series === 'INDY_NXT' ? 'nxt_labelled' : 'verified_event_roster', maxLap: seg.maxLap, checkered: seg.hasCheckered, validationNote: note } });
   } else {
-    promoted.push({ kind: 'nonRace', row: { event: s.sessionLabel, sessionType: s.sessionType, replayId: s.replayId, validationNote: note } });
+    eligiblePromotions.push({ source: s, kind: 'nonRace', row: { event: canonicalEventLabel(s), sessionType: s.sessionType, replayId: s.replayId, validationNote: note } });
   }
 }
+
+// Archive searches can return both a partial recording and a longer recording
+// for one logical session. Promote only the strongest observed span, while
+// reporting the other replay ID as an explicit superseded duplicate.
+const bestPromotionBySession = new Map();
+const promotionScore = (promotion) => {
+  const seg = promotion.source.analysis?.content?.bryceSegment;
+  return [Number(seg?.frameCount) || 0, Number(seg?.observedSpanSeconds) || 0, promotion.row.replayId];
+};
+const outranks = (candidate, incumbent) => {
+  const left = promotionScore(candidate);
+  const right = promotionScore(incumbent);
+  return left[0] > right[0] || (left[0] === right[0] && (left[1] > right[1] || (left[1] === right[1] && left[2] > right[2])));
+};
+for (const promotion of eligiblePromotions) {
+  const key = `${promotion.kind}|${String(promotion.source.sessionLabel).trim().toLowerCase()}|${promotion.source.sessionType}`;
+  const incumbent = bestPromotionBySession.get(key);
+  if (!incumbent) {
+    bestPromotionBySession.set(key, promotion);
+    continue;
+  }
+  const loser = outranks(promotion, incumbent) ? incumbent : promotion;
+  if (loser === incumbent) bestPromotionBySession.set(key, promotion);
+  held.push({ replayId: loser.row.replayId, label: loser.source.sessionLabel, sessionType: loser.source.sessionType, failedGates: ['superseded_duplicate'] });
+}
+const promoted = [...bestPromotionBySession.values()].map(({kind, row}) => ({kind, row}));
 
 process.stdout.write(`\n=== promotion gate\nnew candidates: ${candidates.length}, promotable: ${promoted.length}, held: ${held.length}\n`);
 for (const p of promoted) process.stdout.write(`  PROMOTE ${p.kind} ${p.row.replayId} — ${p.row.event}\n`);

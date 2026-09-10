@@ -1,10 +1,10 @@
 {
   "schemaVersion": "bryce-career-ingestion-summary.v1",
-  "generatedAt": "2026-07-19T20:51:06.218Z",
+  "generatedAt": "2026-09-10T22:28:49.572Z",
   "datasetPath": "data/career/career.dataset.json",
   "validation": {
     "ok": true,
-    "checkedAt": "2026-07-19T20:51:05.588Z",
+    "checkedAt": "2026-09-10T22:28:48.837Z",
     "errors": [],
     "warnings": [
       {
@@ -15,7 +15,7 @@
     ]
   },
   "counts": {
-    "drivers": 555,
+    "drivers": 556,
     "series": 7,
     "teams": 75,
     "cars": 472,
@@ -23,19 +23,19 @@
     "seasons": 10,
     "events": 87,
     "sessions": 493,
-    "results": 8563,
-    "qualifyingResults": 1762,
-    "lapSamples": 71348,
-    "racecraftEvents": 40,
-    "penalties": 86,
-    "incidents": 149,
+    "results": 8943,
+    "qualifyingResults": 1929,
+    "lapSamples": 75589,
+    "racecraftEvents": 44,
+    "penalties": 94,
+    "incidents": 166,
     "weatherObservations": 201,
-    "mediaAssets": 1024,
+    "mediaAssets": 1098,
     "broadcastRoutes": 0,
     "notificationRules": 0,
     "notificationEvents": 0,
-    "derivedMetrics": 413,
-    "sourceEvidence": 1280,
+    "derivedMetrics": 453,
+    "sourceEvidence": 1347,
     "gaps": 10
   },
   "readiness": {
@@ -73,12 +73,12 @@
     "analyticsBlockedOrPartial": []
   },
   "sourceEvidence": {
-    "total": 1280,
+    "total": 1347,
     "bySourceType": {
       "archived_official_page": 2,
-      "official_pdf": 764,
+      "official_pdf": 812,
       "official_page": 117,
-      "official_api": 285,
+      "official_api": 304,
       "official_html": 16,
       "official_image": 5,
       "official_article": 4,
@@ -405,17 +405,26 @@
     },
     {
       "name": "indy-nxt-import-report.json",
-      "checkedAt": "2026-07-19T20:42:57.160Z",
-      "refresh": true,
-      "fetched": 201,
-      "cached": 0,
-      "sessionsImported": 194,
-      "resultsImported": 3355,
-      "bryceResultsImported": 162,
+      "checkedAt": "2026-09-10T22:28:41.730Z",
+      "refresh": false,
+      "fetched": 0,
+      "cached": 220,
+      "sessionsImported": 213,
+      "resultsImported": 3735,
+      "bryceResultsImported": 178,
       "lapSamplesImported": null,
       "weatherObservationsImported": null,
       "standingsImported": null,
-      "gaps": []
+      "gaps": [
+        {
+          "year": 2026,
+          "status": "driver_year_details_incomplete",
+          "missingSessionIds": [
+            "session_indy_nxt_2026_6759"
+          ],
+          "note": "DriverYearDetails is retained as a cross-check and does not control season starts or race-derived rollups."
+        }
+      ]
     },
     {
       "name": "track-metadata-import-report.json",
@@ -695,7 +704,7 @@
       "id": "gap_indy_nxt_qualifying_lap_reports",
       "scope": "indy_nxt_official",
       "status": "open",
-      "description": "EventsSessionDetails imports race/session result rows, qualifyingResults for official SessionType=Q records, and official terminal-status incident rows for contact/mechanical/dns outcomes. Official Race Lap Chart PDFs now import 29,519 official lap-by-lap position samples from all 36 completed Race Lap Chart PDFs: 26 charts fully validate against official completed-lap counts and 10 clean partial Race Lap Chart PDFs preserve explicit missing car-lap or official result/chart conflict diagnostics without guessing terminal or conflict laps. Official Event Summary PDFs import race-stat metrics and most-improved racecraft notes. Official Leader Lap Summary PDFs import leader-by-lap timing, margin, and flag-state metrics. Official Top Section Times PDFs import practice, qualifying, and race section-rank timing metrics when official section rows are present. Official Section Results PDFs import practice, qualifying, and race lap-by-lap section times and speeds at per-car/per-lap grain when official section rows are present. The remaining true section-results holdout is session_indy_nxt_2024_6325, where the official Section Results PDF URL returns corrupt non-PDF bytes; canceled/no-row reports remain held out rather than treated as missing data. Source-visible rows without canonical API timing rows keep car/name text with null canonical IDs. Official race Results PDFs import penalty/decision summary rows and caution-summary causal incident rows. Detailed pit-lane sequence context is source-unavailable in the current official report family; use official/API pit-stop counts as the production-safe pit metric unless a new official pit-summary source appears."
+      "description": "EventsSessionDetails imports race/session result rows, qualifyingResults for official SessionType=Q records, and official terminal-status incident rows for contact/mechanical/dns outcomes. Official Race Lap Chart PDFs import 37,422 official lap-by-lap position samples from 45 completed Race Lap Chart PDFs: 33 charts fully validate against official completed-lap counts and 12 clean partial Race Lap Chart PDFs preserve explicit missing car-lap or official result/chart conflict diagnostics without guessing terminal or conflict laps. Official Event Summary PDFs import race-stat metrics and most-improved racecraft notes. Official Leader Lap Summary PDFs import leader-by-lap timing, margin, and flag-state metrics. Official Top Section Times PDFs import 179 practice, qualifying, and race section-rank timing metrics when official section rows are present. Official Section Results PDFs import 178 practice, qualifying, and race lap-by-lap section metrics; continuation pages are merged by car/lap/section and 2670 source-proven post-limit terminal rows are excluded from completed-lap facts. The remaining true section-results holdout is session_indy_nxt_2024_6325, where the official Section Results PDF URL returns corrupt non-PDF bytes; canceled/no-row reports remain held out rather than treated as missing data. Source-visible rows without canonical API timing rows keep car/name text with null canonical IDs. Official race Results PDFs import penalty/decision summary rows and caution-summary causal incident rows. Detailed pit-lane sequence context is source-unavailable in the current official report family; use official/API pit-stop counts as the production-safe pit metric unless a new official pit-summary source appears."
     },
     {
       "id": "gap_remaining_career_rows_after_imsa",

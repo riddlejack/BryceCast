@@ -18,9 +18,10 @@
 import { useEffect, useState } from 'react';
 import { packModules, packRawModules } from './packModules';
 import { uiDataPackage } from './uiDataPackage';
+import type { SectionLapsPack } from './sectionLaps';
 
-export type QualiSource = 'racetools' | 'timing71';
-export type QualiSourceTier = 'racetools_capture' | 'timing71_normalized';
+export type QualiSource = 'racetools' | 'timing71' | 'official' | 'official_section_results';
+export type QualiSourceTier = 'racetools_capture' | 'timing71_normalized' | 'official_section_results';
 export type QualiLapKind = 'flying' | 'support';
 /** The weekend contract holds practice and qualifying alike; this first slice
  *  builds qualifying only, and a practice producer fills the same shape. */
@@ -84,6 +85,22 @@ export interface QualiPairedRace {
   eventName: string;
 }
 
+/** One official grid projection from a physical qualifying session. A
+ * doubleheader keeps both projections beside the shared lap run: fastest lap
+ * sets one grid, second-fastest lap the other (or the documented oval basis). */
+export interface QualiGridClassification {
+  raceSessionId: string;
+  eventId: string;
+  raceLabel: string | null;
+  combinedGridPosition: number | null;
+  combinedFieldSize: number | null;
+  officialBestLapSeconds: number | null;
+  lapSelection: 'fastest' | 'second_fastest' | 'fastest_lap' | 'second_fastest_lap' | 'two_lap_average' | 'oval_two_lap_average';
+  groupRank?: number | null;
+  groupFieldSize?: number | null;
+  source: 'canonical_official_qualifying';
+}
+
 export interface QualiLabSession {
   id: string;
   source: QualiSource;
@@ -115,7 +132,7 @@ export interface QualiLabSession {
   sessionBestSeconds: number;
   sessionBestByBryce: boolean;
   benchmarkScope: QualiBenchmarkScope;
-  sessionBestMoves: number;
+  sessionBestMoves: number | null;
   sessionBestSteps: Array<{ seconds: number; byBryce: boolean }>;
   gapToSessionBestSeconds: number;
   lapHolderCount: number;
@@ -131,12 +148,19 @@ export interface QualiLabSession {
   officialBestLapSeconds: number | null;
   capturedBestVsOfficialSeconds: number | null;
   doubleheaderRaceLabel: string | null;
-  rankAttribution: 'single' | 'doubleheader_bestlap';
+  rankAttribution: 'single' | 'doubleheader_bestlap' | 'cancelled';
   rankSource: string;
+  qualifyingStatus?: 'cancelled' | 'completed';
+  cancellation?: { note: string; url: string | null } | null;
 
   /* validation echoes */
   semanticClassificationPosition: number | null;
   positionCrossCheck: 'match' | 'mismatch' | 'na';
+
+  /** Per-grid official classifications. Doubleheaders carry two entries while
+   * retaining one physical run of laps. Optional while older packs remain
+   * readable; resolution projects the matching row into the legacy scalars. */
+  gridClassifications?: QualiGridClassification[];
 
   /** Doubleheader pairing: the uncaptured sibling races of this weekend, so a
    *  Race-2 page shows a quiet note instead of silence and never reuses this
@@ -147,6 +171,11 @@ export interface QualiLabSession {
    * consumed through this same contract with no UI rework (adapter-contract law). */
   theoreticalBest: QualiTheoreticalBest | null;
   trackEvolution: QualiTrackEvolutionObservation[] | null;
+
+  /** Official Section Results at qualifying-lap grain, using the established
+   * SectionLapsPack tuple contract. It stays a separate sourced substrate from
+   * the captured run-by-run laps above. */
+  sectionLaps?: SectionLapsPack | null;
 }
 
 export interface QualiExclusion {
@@ -161,6 +190,17 @@ export interface QualiLabCoverage {
   excludedSessions: number;
   bySeasonSource: Record<string, number>;
   exclusions: QualiExclusion[];
+  races?: QualiCoverageRace[];
+}
+
+export interface QualiCoverageRace {
+  raceSessionId: string;
+  qualifyingSessionId: string | null;
+  status: 'available' | 'partial' | 'unavailable' | 'cancelled';
+  lapRunAvailable: boolean;
+  sectionTimesAvailable: boolean;
+  note: string;
+  sourceUrl: string | null;
 }
 
 export interface QualiLabPack {
@@ -196,6 +236,9 @@ export interface QualiLabResolution {
   session: QualiLabSession | null;
   pairedNote: QualiPairedNote | null;
   coverage: QualiLabCoverage;
+  /** The grid row selected for the race page being resolved. */
+  gridClassification: QualiGridClassification | null;
+  coverageRace: QualiCoverageRace | null;
 }
 
 /** The inventory-backed integrity ref (id + path + sha256). Null when the
@@ -246,13 +289,33 @@ export const loadQualiLab = (): Promise<QualiLabPack | null> => {
 export const qualiSessionForRace = (pack: QualiLabPack, raceSessionId: string): QualiLabSession | null =>
   pack.sessions.find((session) => session.raceSessionIds.includes(raceSessionId)) ?? null;
 
+const sessionForRace = (session: QualiLabSession, raceSessionId: string): QualiLabSession => {
+  const grid = session.gridClassifications?.find((entry) => entry.raceSessionId === raceSessionId) ?? null;
+  if (!grid) return session;
+  return {
+    ...session,
+    combinedGridPosition: grid.combinedGridPosition,
+    combinedFieldSize: grid.combinedFieldSize,
+    officialBestLapSeconds: grid.officialBestLapSeconds,
+    onTrackGroupRank: grid.groupRank ?? session.onTrackGroupRank,
+    groupFieldSize: grid.groupFieldSize ?? session.groupFieldSize,
+    doubleheaderRaceLabel: session.gridClassifications && session.gridClassifications.length > 1 ? grid.raceLabel : session.doubleheaderRaceLabel,
+    rankAttribution: session.gridClassifications && session.gridClassifications.length > 1 ? 'doubleheader_bestlap' : session.rankAttribution,
+    rankSource: grid.source
+  };
+};
+
 /** Resolve a race page against the pack: prefer a covered qualifying module;
  *  otherwise, if this page is the uncaptured Race-2 sibling of a covered
  *  doubleheader weekend, return a quiet paired note (never the Race-1 ranks).
  *  Returns null when the weekend's qualifying is not in the lab at all. */
 export const resolveQualiForRace = (pack: QualiLabPack, raceSessionId: string): QualiLabResolution | null => {
   const session = qualiSessionForRace(pack, raceSessionId);
-  if (session) return { session, pairedNote: null, coverage: pack.coverage };
+  const coverageRace = pack.coverage.races?.find((entry) => entry.raceSessionId === raceSessionId) ?? null;
+  if (session) {
+    const gridClassification = session.gridClassifications?.find((entry) => entry.raceSessionId === raceSessionId) ?? null;
+    return { session: sessionForRace(session, raceSessionId), pairedNote: null, coverage: pack.coverage, gridClassification, coverageRace };
+  }
 
   for (const covered of pack.sessions) {
     const paired = covered.pairedUncapturedRaces.find((race) => race.raceSessionId === raceSessionId);
@@ -266,9 +329,14 @@ export const resolveQualiForRace = (pack: QualiLabPack, raceSessionId: string): 
           capturedRaceLabel: covered.doubleheaderRaceLabel,
           sourceTierLabel: covered.sourceTierLabel
         },
-        coverage: pack.coverage
+        coverage: pack.coverage,
+        gridClassification: null,
+        coverageRace
       };
     }
+  }
+  if (coverageRace) {
+    return { session: null, pairedNote: null, coverage: pack.coverage, gridClassification: null, coverageRace };
   }
   return null;
 };

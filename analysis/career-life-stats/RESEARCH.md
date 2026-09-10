@@ -11,7 +11,7 @@ N proves only that at least N laps were started.
 
 | Metric | Metric grain | Source grain | Rule |
 | --- | --- | --- | --- |
-| Personally attributable race mileage | driver × physical race | canonical driver result, except Daytona driver stints | All 145 canonical Bryce race rows. Daytona uses the sum of Bryce's Al Kamel-derived stint `lapCount`, not the shared-car classification. Sourced DNF/DSQ laps count; DNS and genuine zero-lap results remain zero. |
+| Personally attributable race mileage | driver × physical race | canonical driver result, except Daytona driver stints | Every canonical Bryce race row. Daytona uses the sum of Bryce's Al Kamel-derived stint `lapCount`, not the shared-car classification. Sourced DNF/DSQ laps count; DNS and genuine zero-lap results remain zero. |
 | Physical-session mileage | driver × physical session | canonical result or qualifying result | Race, practice, qualifying, heat, and official test only. INDY NXT combined classifications are excluded as summaries. Euroformula qualifying uses `qualifyingResults.laps`. F1600 `bestLapNumber` is an observed lower bound. FROC non-race rows do not expose completed laps and remain unknown. |
 | Minimum travel displacement | consecutive race event pair | event venue coordinates | Great-circle venue-to-venue distance. It is a mathematical minimum, not an itinerary. |
 | Route-adjusted minimum proxy | consecutive race event pair | great-circle leg plus explicit proxy | Same-country legs no longer than 750 great-circle miles use a 1.18 road-circuity factor; all other non-zero legs use a 1.08 flight-path factor; same-venue legs remain zero. This is still not actual travel. |
@@ -25,8 +25,8 @@ components remain separate even when a floor is useful for display.
 
 ## Source audit notes
 
-- The canonical dataset contains 145 Bryce race results. The 141-row Career
-  Lab conversion table excludes four unclassified rows: Monza 2023 Race 2
+- The Career Lab conversion table excludes four unclassified canonical rows:
+  Monza 2023 Race 2
   (DNF, 9 laps), Watkins Glen 2019 Race 3 (DNS, 0), GB3 Silverstone 2022
   session 1305 (DSQ, 0), and GB3 Silverstone 2022 session 1376 (DNF, 7).
 - Daytona's canonical `lapsCompleted=780` is `resultGrain=car_driver` and is

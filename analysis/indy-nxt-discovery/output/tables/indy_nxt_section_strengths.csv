@@ -998,6 +998,95 @@ session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,I3 to I6,0.841
 session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,I6 to SF,0.749998,19.0,24,0.21739130434782605,00:24.0697,112.174,4,official,source_indy_nxt_2026_6756_top_section_times_pdf
 session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,SF to I4,1.18901,14.0,24,0.4347826086956522,00:34.5588,123.86,5,official,source_indy_nxt_2026_6756_top_section_times_pdf
 session_indy_nxt_2026_6756,2026 Indianapolis Grand Prix Race 1 R1,I4 to I6,0.5,18.0,24,0.26086956521739135,00:18.5427,97.073,4,official,source_indy_nxt_2026_6756_top_section_times_pdf
+session_indy_nxt_2026_6757,2026 INDY NXT by Firestone at Milwaukee Mile,Lap,1.015,11.0,23,0.5454545454545454,00:25.5739,142.88,9,official,source_indy_nxt_2026_6757_top_section_times_pdf
+session_indy_nxt_2026_6757,2026 INDY NXT by Firestone at Milwaukee Mile,SF to T1,0.128029,13.0,23,0.4545454545454546,00:02.9337,157.107,9,official,source_indy_nxt_2026_6757_top_section_times_pdf
+session_indy_nxt_2026_6757,2026 INDY NXT by Firestone at Milwaukee Mile,T1 to SS1,0.126136,8.0,23,0.6818181818181819,00:03.2522,139.625,8,official,source_indy_nxt_2026_6757_top_section_times_pdf
+session_indy_nxt_2026_6757,2026 INDY NXT by Firestone at Milwaukee Mile,SS1 to T2,0.144885,22.0,23,0.045454545454545414,00:03.4590,150.791,7,official,source_indy_nxt_2026_6757_top_section_times_pdf
+session_indy_nxt_2026_6757,2026 INDY NXT by Firestone at Milwaukee Mile,T2 to BS,0.097348,21.0,23,0.09090909090909094,00:02.3908,146.584,7,official,source_indy_nxt_2026_6757_top_section_times_pdf
+session_indy_nxt_2026_6757,2026 INDY NXT by Firestone at Milwaukee Mile,BS to T3,0.07481,16.0,23,0.31818181818181823,00:02.2392,120.273,1,official,source_indy_nxt_2026_6757_top_section_times_pdf
+session_indy_nxt_2026_6757,2026 INDY NXT by Firestone at Milwaukee Mile,T3 to SS2,0.116098,5.0,23,0.8181818181818181,00:02.7307,153.057,8,official,source_indy_nxt_2026_6757_top_section_times_pdf
+session_indy_nxt_2026_6757,2026 INDY NXT by Firestone at Milwaukee Mile,SS2 to T4,0.116477,18.0,23,0.2272727272727273,00:03.1998,131.045,8,official,source_indy_nxt_2026_6757_top_section_times_pdf
+session_indy_nxt_2026_6757,2026 INDY NXT by Firestone at Milwaukee Mile,T4 to FS,0.132386,16.0,23,0.31818181818181823,00:03.3779,141.091,5,official,source_indy_nxt_2026_6757_top_section_times_pdf
+session_indy_nxt_2026_6757,2026 INDY NXT by Firestone at Milwaukee Mile,FS to SF,0.078787,16.0,23,0.31818181818181823,00:01.8613,152.384,5,official,source_indy_nxt_2026_6757_top_section_times_pdf
+session_indy_nxt_2026_6757,2026 INDY NXT by Firestone at Milwaukee Mile,T1 to T2,0.27102,14.0,23,0.40909090909090906,00:06.7455,144.64,8,official,source_indy_nxt_2026_6757_top_section_times_pdf
+session_indy_nxt_2026_6757,2026 INDY NXT by Firestone at Milwaukee Mile,T2 to T3,0.172157,22.0,23,0.045454545454545414,00:04.6497,133.291,7,official,source_indy_nxt_2026_6757_top_section_times_pdf
+session_indy_nxt_2026_6757,2026 INDY NXT by Firestone at Milwaukee Mile,T3 to T4,0.232574,9.0,23,0.6363636363636364,00:05.9305,141.18,8,official,source_indy_nxt_2026_6757_top_section_times_pdf
+session_indy_nxt_2026_6757,2026 INDY NXT by Firestone at Milwaukee Mile,T4 to SF,0.211172,15.0,23,0.36363636363636365,00:05.2392,145.102,5,official,source_indy_nxt_2026_6757_top_section_times_pdf
+session_indy_nxt_2026_6757,2026 INDY NXT by Firestone at Milwaukee Mile,T2T to T2,0.022916,20.0,23,0.13636363636363635,00:00.5960,138.419,7,official,source_indy_nxt_2026_6757_top_section_times_pdf
+session_indy_nxt_2026_6757,2026 INDY NXT by Firestone at Milwaukee Mile,T3T to T3,0.022727,8.0,23,0.6818181818181819,00:00.5118,159.862,1,official,source_indy_nxt_2026_6757_top_section_times_pdf
+session_indy_nxt_2026_6757,2026 INDY NXT by Firestone at Milwaukee Mile,SF to SFT,0.023484,20.0,23,0.13636363636363635,00:00.5431,155.666,3,official,source_indy_nxt_2026_6757_top_section_times_pdf
+session_indy_nxt_2026_6757,2026 INDY NXT by Firestone at Milwaukee Mile,PO to SF,0.848295,7.0,23,0.7272727272727273,00:37.7672,80.86,0,official,source_indy_nxt_2026_6757_top_section_times_pdf
+session_indy_nxt_2026_6757,2026 INDY NXT by Firestone at Milwaukee Mile,PO to T2,0.232385,16.0,23,0.31818181818181823,00:13.6826,61.142,0,official,source_indy_nxt_2026_6757_top_section_times_pdf
+session_indy_nxt_2026_6758,2026 Grand Prix of Monterey Race 2 R2,Lap,2.238,10.0,22,0.5714285714285714,01:15.8147,106.27,15,official,source_indy_nxt_2026_6758_top_section_times_pdf
+session_indy_nxt_2026_6758,2026 Grand Prix of Monterey Race 2 R2,Turn 1 Entry,0.098295,11.0,24,0.5652173913043479,00:02.4065,147.044,27,official,source_indy_nxt_2026_6758_top_section_times_pdf
+session_indy_nxt_2026_6758,2026 Grand Prix of Monterey Race 2 R2,Turn 1 Exit,0.128598,13.0,24,0.4782608695652174,00:03.1714,145.977,15,official,source_indy_nxt_2026_6758_top_section_times_pdf
+session_indy_nxt_2026_6758,2026 Grand Prix of Monterey Race 2 R2,Turn 2,0.196022,12.0,24,0.5217391304347826,00:08.9215,79.099,10,official,source_indy_nxt_2026_6758_top_section_times_pdf
+session_indy_nxt_2026_6758,2026 Grand Prix of Monterey Race 2 R2,Turn 3,0.15928,11.0,24,0.5652173913043479,00:06.1228,93.651,12,official,source_indy_nxt_2026_6758_top_section_times_pdf
+session_indy_nxt_2026_6758,2026 Grand Prix of Monterey Race 2 R2,Turn 4,0.231628,1.0,24,1.0,00:06.7946,122.724,12,official,source_indy_nxt_2026_6758_top_section_times_pdf
+session_indy_nxt_2026_6758,2026 Grand Prix of Monterey Race 2 R2,Turn 4A,0.079924,3.0,25,0.9166666666666666,00:02.0402,141.029,13,official,source_indy_nxt_2026_6758_top_section_times_pdf
+session_indy_nxt_2026_6758,2026 Grand Prix of Monterey Race 2 R2,Turn 5,0.155492,9.0,24,0.6521739130434783,00:05.7323,97.652,13,official,source_indy_nxt_2026_6758_top_section_times_pdf
+session_indy_nxt_2026_6758,2026 Grand Prix of Monterey Race 2 R2,Turn 5A,0.09697,14.0,24,0.4347826086956522,00:02.6566,131.406,10,official,source_indy_nxt_2026_6758_top_section_times_pdf
+session_indy_nxt_2026_6758,2026 Grand Prix of Monterey Race 2 R2,Turn 6,0.232007,19.0,24,0.21739130434782605,00:06.7151,124.38,19,official,source_indy_nxt_2026_6758_top_section_times_pdf
+session_indy_nxt_2026_6758,2026 Grand Prix of Monterey Race 2 R2,Turn 7,0.075568,11.0,24,0.5652173913043479,00:02.0014,135.927,15,official,source_indy_nxt_2026_6758_top_section_times_pdf
+session_indy_nxt_2026_6758,2026 Grand Prix of Monterey Race 2 R2,Turn 7A,0.041856,6.0,24,0.782608695652174,00:01.6802,89.681,7,official,source_indy_nxt_2026_6758_top_section_times_pdf
+session_indy_nxt_2026_6758,2026 Grand Prix of Monterey Race 2 R2,Corkscrew,0.137121,11.0,24,0.5652173913043479,00:06.0206,81.991,24,official,source_indy_nxt_2026_6758_top_section_times_pdf
+session_indy_nxt_2026_6758,2026 Grand Prix of Monterey Race 2 R2,Turn 9,0.150379,15.0,24,0.3913043478260869,00:04.3960,123.149,10,official,source_indy_nxt_2026_6758_top_section_times_pdf
+session_indy_nxt_2026_6758,2026 Grand Prix of Monterey Race 2 R2,Turn 10,0.213824,3.0,24,0.9130434782608696,00:06.7926,113.324,11,official,source_indy_nxt_2026_6758_top_section_times_pdf
+session_indy_nxt_2026_6758,2026 Grand Prix of Monterey Race 2 R2,Turn 11,0.077841,8.0,24,0.6956521739130435,00:04.5680,61.346,14,official,source_indy_nxt_2026_6758_top_section_times_pdf
+session_indy_nxt_2026_6758,2026 Grand Prix of Monterey Race 2 R2,FS - PI,0.163258,6.0,24,0.782608695652174,00:04.9977,117.6,4,official,source_indy_nxt_2026_6758_top_section_times_pdf
+session_indy_nxt_2026_6758,2026 Grand Prix of Monterey Race 2 R2,I4 to I5,0.311552,1.0,24,1.0,00:08.8610,126.576,12,official,source_indy_nxt_2026_6758_top_section_times_pdf
+session_indy_nxt_2026_6758,2026 Grand Prix of Monterey Race 2 R2,I5 to I6,0.252461,9.0,24,0.6521739130434783,00:08.3950,108.262,13,official,source_indy_nxt_2026_6758_top_section_times_pdf
+session_indy_nxt_2026_6758,2026 Grand Prix of Monterey Race 2 R2,I8 to I9,0.178977,8.0,24,0.6956521739130435,00:07.7684,82.941,24,official,source_indy_nxt_2026_6758_top_section_times_pdf
+session_indy_nxt_2026_6758,2026 Grand Prix of Monterey Race 2 R2,SF to SFT,0.025568,8.0,25,0.7083333333333333,00:00.6366,144.588,5,official,source_indy_nxt_2026_6758_top_section_times_pdf
+session_indy_nxt_2026_6758,2026 Grand Prix of Monterey Race 2 R2,I1T to I1,0.017803,6.0,24,0.782608695652174,00:00.4227,151.622,27,official,source_indy_nxt_2026_6758_top_section_times_pdf
+session_indy_nxt_2026_6758,2026 Grand Prix of Monterey Race 2 R2,I10 to I10T,0.022727,6.0,25,0.7916666666666666,00:00.6413,127.58,12,official,source_indy_nxt_2026_6758_top_section_times_pdf
+session_indy_nxt_2026_6758,2026 Grand Prix of Monterey Race 2 R2,I11T to I11,0.018939,3.0,24,0.9130434782608696,00:00.6761,100.844,21,official,source_indy_nxt_2026_6758_top_section_times_pdf
+session_indy_nxt_2026_6758,2026 Grand Prix of Monterey Race 2 R2,Start/Finish Backup to Start/Finish,0.013447,4.0,24,0.8695652173913043,00:00.3441,140.684,4,official,source_indy_nxt_2026_6758_top_section_times_pdf
+session_indy_nxt_2026_6758,2026 Grand Prix of Monterey Race 2 R2,SFP to PO,0.025758,21.0,24,0.13043478260869568,00:02.9563,31.367,0,official,source_indy_nxt_2026_6758_top_section_times_pdf
+session_indy_nxt_2026_6758,2026 Grand Prix of Monterey Race 2 R2,PO to SF,2.21249,16.0,24,0.34782608695652173,01:51.8120,71.235,0,official,source_indy_nxt_2026_6758_top_section_times_pdf
+session_indy_nxt_2026_6758,2026 Grand Prix of Monterey Race 2 R2,PO to I3,0.397347,13.0,24,0.4782608695652174,00:23.5742,60.679,0,official,source_indy_nxt_2026_6758_top_section_times_pdf
+session_indy_nxt_2026_6758,2026 Grand Prix of Monterey Race 2 R2,PO to Alt S/F,1.75757,18.0,24,0.26086956521739135,01:30.0721,70.247,0,official,source_indy_nxt_2026_6758_top_section_times_pdf
+session_indy_nxt_2026_6758,2026 Grand Prix of Monterey Race 2 R2,SF to I5,0.813823,5.0,24,0.8260869565217391,00:27.5675,106.276,15,official,source_indy_nxt_2026_6758_top_section_times_pdf
+session_indy_nxt_2026_6758,2026 Grand Prix of Monterey Race 2 R2,I5 to I11,0.818937,13.0,24,0.4782608695652174,00:27.0850,108.849,11,official,source_indy_nxt_2026_6758_top_section_times_pdf
+session_indy_nxt_2026_6758,2026 Grand Prix of Monterey Race 2 R2,I11 to SF,0.605301,8.0,24,0.6956521739130435,00:20.9866,103.832,14,official,source_indy_nxt_2026_6758_top_section_times_pdf
+session_indy_nxt_2026_6758,2026 Grand Prix of Monterey Race 2 R2,I10 to I3,0.877837,9.0,24,0.6521739130434783,00:31.1738,101.374,15,official,source_indy_nxt_2026_6758_top_section_times_pdf
+session_indy_nxt_2026_6758,2026 Grand Prix of Monterey Race 2 R2,I3 to I7,0.9553,8.0,24,0.6956521739130435,00:30.2264,113.777,12,official,source_indy_nxt_2026_6758_top_section_times_pdf
+session_indy_nxt_2026_6758,2026 Grand Prix of Monterey Race 2 R2,I7 to I10,0.404923,12.0,24,0.5217391304347826,00:14.2375,102.386,14,official,source_indy_nxt_2026_6758_top_section_times_pdf
+session_indy_nxt_2026_6759,2026 Grand Prix of Monterey Race 1 R1,Lap,2.238,6.0,24,0.782608695652174,01:15.7856,106.31,6,official,source_indy_nxt_2026_6759_top_section_times_pdf
+session_indy_nxt_2026_6759,2026 Grand Prix of Monterey Race 1 R1,Turn 1 Entry,0.098295,8.0,24,0.6956521739130435,00:02.3885,148.152,27,official,source_indy_nxt_2026_6759_top_section_times_pdf
+session_indy_nxt_2026_6759,2026 Grand Prix of Monterey Race 1 R1,Turn 1 Exit,0.128598,12.0,24,0.5217391304347826,00:03.1645,146.296,6,official,source_indy_nxt_2026_6759_top_section_times_pdf
+session_indy_nxt_2026_6759,2026 Grand Prix of Monterey Race 1 R1,Turn 2,0.196022,7.0,24,0.7391304347826086,00:08.9336,78.992,5,official,source_indy_nxt_2026_6759_top_section_times_pdf
+session_indy_nxt_2026_6759,2026 Grand Prix of Monterey Race 1 R1,Turn 3,0.15928,6.0,24,0.782608695652174,00:06.0944,94.088,4,official,source_indy_nxt_2026_6759_top_section_times_pdf
+session_indy_nxt_2026_6759,2026 Grand Prix of Monterey Race 1 R1,Turn 4,0.231628,2.0,24,0.9565217391304348,00:06.8318,122.056,5,official,source_indy_nxt_2026_6759_top_section_times_pdf
+session_indy_nxt_2026_6759,2026 Grand Prix of Monterey Race 1 R1,Turn 4A,0.079924,15.0,24,0.3913043478260869,00:02.0548,140.026,6,official,source_indy_nxt_2026_6759_top_section_times_pdf
+session_indy_nxt_2026_6759,2026 Grand Prix of Monterey Race 1 R1,Turn 5,0.155492,6.0,24,0.782608695652174,00:05.7250,97.777,6,official,source_indy_nxt_2026_6759_top_section_times_pdf
+session_indy_nxt_2026_6759,2026 Grand Prix of Monterey Race 1 R1,Turn 5A,0.09697,2.0,24,0.9565217391304348,00:02.6279,132.841,33,official,source_indy_nxt_2026_6759_top_section_times_pdf
+session_indy_nxt_2026_6759,2026 Grand Prix of Monterey Race 1 R1,Turn 6,0.232007,18.0,24,0.26086956521739135,00:06.7511,123.717,8,official,source_indy_nxt_2026_6759_top_section_times_pdf
+session_indy_nxt_2026_6759,2026 Grand Prix of Monterey Race 1 R1,Turn 7,0.075568,2.0,24,0.9565217391304348,00:01.9836,137.147,7,official,source_indy_nxt_2026_6759_top_section_times_pdf
+session_indy_nxt_2026_6759,2026 Grand Prix of Monterey Race 1 R1,Turn 7A,0.041856,8.0,25,0.7083333333333333,00:01.6936,88.971,31,official,source_indy_nxt_2026_6759_top_section_times_pdf
+session_indy_nxt_2026_6759,2026 Grand Prix of Monterey Race 1 R1,Corkscrew,0.137121,9.0,24,0.6521739130434783,00:06.0155,82.061,5,official,source_indy_nxt_2026_6759_top_section_times_pdf
+session_indy_nxt_2026_6759,2026 Grand Prix of Monterey Race 1 R1,Turn 9,0.150379,5.0,24,0.8260869565217391,00:04.3281,125.081,4,official,source_indy_nxt_2026_6759_top_section_times_pdf
+session_indy_nxt_2026_6759,2026 Grand Prix of Monterey Race 1 R1,Turn 10,0.213824,10.0,24,0.6086956521739131,00:06.8242,112.8,2,official,source_indy_nxt_2026_6759_top_section_times_pdf
+session_indy_nxt_2026_6759,2026 Grand Prix of Monterey Race 1 R1,Turn 11,0.077841,21.0,24,0.13043478260869568,00:04.5647,61.39,6,official,source_indy_nxt_2026_6759_top_section_times_pdf
+session_indy_nxt_2026_6759,2026 Grand Prix of Monterey Race 1 R1,FS - PI,0.163258,6.0,24,0.782608695652174,00:05.0060,117.405,19,official,source_indy_nxt_2026_6759_top_section_times_pdf
+session_indy_nxt_2026_6759,2026 Grand Prix of Monterey Race 1 R1,I4 to I5,0.311552,4.0,24,0.8695652173913043,00:08.9095,125.887,5,official,source_indy_nxt_2026_6759_top_section_times_pdf
+session_indy_nxt_2026_6759,2026 Grand Prix of Monterey Race 1 R1,I5 to I6,0.252461,6.0,24,0.782608695652174,00:08.3650,108.65,6,official,source_indy_nxt_2026_6759_top_section_times_pdf
+session_indy_nxt_2026_6759,2026 Grand Prix of Monterey Race 1 R1,I8 to I9,0.178977,12.0,24,0.5217391304347826,00:07.8008,82.596,5,official,source_indy_nxt_2026_6759_top_section_times_pdf
+session_indy_nxt_2026_6759,2026 Grand Prix of Monterey Race 1 R1,SF to SFT,0.025568,9.0,24,0.6521739130434783,00:00.6343,145.112,20,official,source_indy_nxt_2026_6759_top_section_times_pdf
+session_indy_nxt_2026_6759,2026 Grand Prix of Monterey Race 1 R1,I1T to I1,0.017803,12.0,24,0.5217391304347826,00:00.4205,152.416,20,official,source_indy_nxt_2026_6759_top_section_times_pdf
+session_indy_nxt_2026_6759,2026 Grand Prix of Monterey Race 1 R1,I10 to I10T,0.022727,3.0,24,0.9130434782608696,00:00.6392,127.999,7,official,source_indy_nxt_2026_6759_top_section_times_pdf
+session_indy_nxt_2026_6759,2026 Grand Prix of Monterey Race 1 R1,I11T to I11,0.018939,15.0,24,0.3913043478260869,00:00.6952,98.073,27,official,source_indy_nxt_2026_6759_top_section_times_pdf
+session_indy_nxt_2026_6759,2026 Grand Prix of Monterey Race 1 R1,Start/Finish Backup to Start/Finish,0.013447,4.0,25,0.875,00:00.3433,141.011,19,official,source_indy_nxt_2026_6759_top_section_times_pdf
+session_indy_nxt_2026_6759,2026 Grand Prix of Monterey Race 1 R1,SFP to PO,0.025758,18.0,24,0.26086956521739135,00:02.8632,32.386,0,official,source_indy_nxt_2026_6759_top_section_times_pdf
+session_indy_nxt_2026_6759,2026 Grand Prix of Monterey Race 1 R1,PO to SF,2.21249,19.0,24,0.21739130434782605,01:52.1705,71.008,0,official,source_indy_nxt_2026_6759_top_section_times_pdf
+session_indy_nxt_2026_6759,2026 Grand Prix of Monterey Race 1 R1,PO to I3,0.397347,9.0,24,0.6521739130434783,00:21.9700,65.109,0,official,source_indy_nxt_2026_6759_top_section_times_pdf
+session_indy_nxt_2026_6759,2026 Grand Prix of Monterey Race 1 R1,PO to Alt S/F,1.75757,13.0,24,0.4782608695652174,01:27.9798,71.917,0,official,source_indy_nxt_2026_6759_top_section_times_pdf
+session_indy_nxt_2026_6759,2026 Grand Prix of Monterey Race 1 R1,SF to I5,0.813823,5.0,24,0.8260869565217391,00:27.6058,106.129,5,official,source_indy_nxt_2026_6759_top_section_times_pdf
+session_indy_nxt_2026_6759,2026 Grand Prix of Monterey Race 1 R1,I5 to I11,0.818937,11.0,24,0.5652173913043479,00:27.1043,108.771,6,official,source_indy_nxt_2026_6759_top_section_times_pdf
+session_indy_nxt_2026_6759,2026 Grand Prix of Monterey Race 1 R1,I11 to SF,0.605301,12.0,24,0.5217391304347826,00:20.9342,104.092,4,official,source_indy_nxt_2026_6759_top_section_times_pdf
+session_indy_nxt_2026_6759,2026 Grand Prix of Monterey Race 1 R1,I10 to I3,0.877837,10.0,24,0.6086956521739131,00:31.2329,101.182,5,official,source_indy_nxt_2026_6759_top_section_times_pdf
+session_indy_nxt_2026_6759,2026 Grand Prix of Monterey Race 1 R1,I3 to I7,0.9553,7.0,24,0.7391304347826086,00:30.3112,113.459,5,official,source_indy_nxt_2026_6759_top_section_times_pdf
+session_indy_nxt_2026_6759,2026 Grand Prix of Monterey Race 1 R1,I7 to I10,0.404923,10.0,24,0.6086956521739131,00:14.2353,102.402,8,official,source_indy_nxt_2026_6759_top_section_times_pdf
 session_indy_nxt_2026_6760,2026 Grand Prix at Mid-Ohio Race 2 R2,Lap,2.258,19.0,24,0.21739130434782605,01:11.3914,113.862,23,official,source_indy_nxt_2026_6760_top_section_times_pdf
 session_indy_nxt_2026_6760,2026 Grand Prix at Mid-Ohio Race 2 R2,FS - PO,0.141667,18.0,24,0.26086956521739135,00:03.7334,136.605,26,official,source_indy_nxt_2026_6760_top_section_times_pdf
 session_indy_nxt_2026_6760,2026 Grand Prix at Mid-Ohio Race 2 R2,Turn 1,0.127083,17.0,24,0.30434782608695654,00:03.3552,136.355,28,official,source_indy_nxt_2026_6760_top_section_times_pdf
@@ -1117,6 +1206,36 @@ session_indy_nxt_2026_6763,2026 INDY NXT by Firestone at World Wide Technology R
 session_indy_nxt_2026_6763,2026 INDY NXT by Firestone at World Wide Technology Raceway,T4T to T4,0.022727,25.0,25,0.0,00:00.5316,153.907,3,official,source_indy_nxt_2026_6763_top_section_times_pdf
 session_indy_nxt_2026_6763,2026 INDY NXT by Firestone at World Wide Technology Raceway,PO - SF,1.06761,13.0,24,0.4782608695652174,00:52.5075,73.197,0,official,source_indy_nxt_2026_6763_top_section_times_pdf
 session_indy_nxt_2026_6763,2026 INDY NXT by Firestone at World Wide Technology Raceway,PO - T2,0.243938,9.0,24,0.6521739130434783,00:13.1642,66.709,0,official,source_indy_nxt_2026_6763_top_section_times_pdf
+session_indy_nxt_2026_6764,2026 Grand Prix of Portland,Lap,1.964,20.0,24,0.17391304347826086,01:03.7192,110.962,32,official,source_indy_nxt_2026_6764_top_section_times_pdf
+session_indy_nxt_2026_6764,2026 Grand Prix of Portland,FS-PO,0.064962,2.0,24,0.9565217391304348,00:01.4250,164.115,5,official,source_indy_nxt_2026_6764_top_section_times_pdf
+session_indy_nxt_2026_6764,2026 Grand Prix of Portland,Turn 1,0.147159,19.0,24,0.21739130434782605,00:04.6707,113.425,11,official,source_indy_nxt_2026_6764_top_section_times_pdf
+session_indy_nxt_2026_6764,2026 Grand Prix of Portland,Turn 2,0.049621,16.0,24,0.34782608695652173,00:02.9097,61.393,29,official,source_indy_nxt_2026_6764_top_section_times_pdf
+session_indy_nxt_2026_6764,2026 Grand Prix of Portland,Turn 3,0.173295,22.0,24,0.08695652173913049,00:05.5988,111.428,31,official,source_indy_nxt_2026_6764_top_section_times_pdf
+session_indy_nxt_2026_6764,2026 Grand Prix of Portland,Turn 4,0.123674,21.0,24,0.13043478260869568,00:04.2868,103.86,27,official,source_indy_nxt_2026_6764_top_section_times_pdf
+session_indy_nxt_2026_6764,2026 Grand Prix of Portland,Turn 5,0.117045,23.0,24,0.04347826086956519,00:04.6367,90.875,18,official,source_indy_nxt_2026_6764_top_section_times_pdf
+session_indy_nxt_2026_6764,2026 Grand Prix of Portland,Turn 6,0.176136,11.0,24,0.5652173913043479,00:07.4046,85.635,26,official,source_indy_nxt_2026_6764_top_section_times_pdf
+session_indy_nxt_2026_6764,2026 Grand Prix of Portland,Turn 7,0.102652,8.0,24,0.6956521739130435,00:04.6212,79.968,23,official,source_indy_nxt_2026_6764_top_section_times_pdf
+session_indy_nxt_2026_6764,2026 Grand Prix of Portland,Turn 8,0.135417,22.0,24,0.08695652173913049,00:03.7999,128.293,33,official,source_indy_nxt_2026_6764_top_section_times_pdf
+session_indy_nxt_2026_6764,2026 Grand Prix of Portland,Turn 9,0.278408,19.0,24,0.21739130434782605,00:06.3631,157.513,1,official,source_indy_nxt_2026_6764_top_section_times_pdf
+session_indy_nxt_2026_6764,2026 Grand Prix of Portland,Turns 10/11,0.197158,13.0,24,0.4782608695652174,00:05.6517,125.585,23,official,source_indy_nxt_2026_6764_top_section_times_pdf
+session_indy_nxt_2026_6764,2026 Grand Prix of Portland,Turn 12,0.177273,9.0,24,0.6521739130434783,00:06.1152,104.36,31,official,source_indy_nxt_2026_6764_top_section_times_pdf
+session_indy_nxt_2026_6764,2026 Grand Prix of Portland,FS-PI,0.221211,14.0,24,0.4347826086956522,00:05.4807,145.303,4,official,source_indy_nxt_2026_6764_top_section_times_pdf
+session_indy_nxt_2026_6764,2026 Grand Prix of Portland,I1 to I2,0.196779,18.0,24,0.26086956521739135,00:07.6087,93.105,29,official,source_indy_nxt_2026_6764_top_section_times_pdf
+session_indy_nxt_2026_6764,2026 Grand Prix of Portland,I1T to I1,0.022917,6.0,24,0.782608695652174,00:00.4987,165.433,5,official,source_indy_nxt_2026_6764_top_section_times_pdf
+session_indy_nxt_2026_6764,2026 Grand Prix of Portland,I9T to I9,0.022727,19.0,27,0.3076923076923077,00:00.4971,164.589,5,official,source_indy_nxt_2026_6764_top_section_times_pdf
+session_indy_nxt_2026_6764,2026 Grand Prix of Portland,SFP to PO,0.041856,18.0,22,0.19047619047619047,00:04.9641,30.354,0,official,source_indy_nxt_2026_6764_top_section_times_pdf
+session_indy_nxt_2026_6764,2026 Grand Prix of Portland,PO to SF,1.92196,12.0,24,0.5217391304347826,01:32.2327,75.017,0,official,source_indy_nxt_2026_6764_top_section_times_pdf
+session_indy_nxt_2026_6764,2026 Grand Prix of Portland,SF to PI,1.7428,8.0,22,0.6666666666666667,01:21.3124,77.16,35,official,source_indy_nxt_2026_6764_top_section_times_pdf
+session_indy_nxt_2026_6764,2026 Grand Prix of Portland,PO to I2A,0.170076,13.0,24,0.4782608695652174,00:10.9193,56.073,0,official,source_indy_nxt_2026_6764_top_section_times_pdf
+session_indy_nxt_2026_6764,2026 Grand Prix of Portland,I10 to PI,0.177273,22.0,22,0.0,00:16.3586,39.012,35,official,source_indy_nxt_2026_6764_top_section_times_pdf
+session_indy_nxt_2026_6764,2026 Grand Prix of Portland,PO to PI,1.70075,22.0,22,0.0,45:09.4285,2.26,35,official,source_indy_nxt_2026_6764_top_section_times_pdf
+session_indy_nxt_2026_6764,2026 Grand Prix of Portland,PO to Alt S/F,1.32632,11.0,24,0.5652173913043479,01:07.8396,70.383,0,official,source_indy_nxt_2026_6764_top_section_times_pdf
+session_indy_nxt_2026_6764,2026 Grand Prix of Portland,Alt S/F to PI,0.374431,20.0,22,0.09523809523809523,00:24.4676,55.091,35,official,source_indy_nxt_2026_6764_top_section_times_pdf
+session_indy_nxt_2026_6764,2026 Grand Prix of Portland,SF to I5,0.675754,23.0,25,0.08333333333333337,00:23.7208,102.556,29,official,source_indy_nxt_2026_6764_top_section_times_pdf
+session_indy_nxt_2026_6764,2026 Grand Prix of Portland,I5 to I9,0.692612,22.0,24,0.08695652173913049,00:22.4554,111.038,17,official,source_indy_nxt_2026_6764_top_section_times_pdf
+session_indy_nxt_2026_6764,2026 Grand Prix of Portland,I9 to SF,0.595644,9.0,24,0.6521739130434783,00:17.3244,123.774,31,official,source_indy_nxt_2026_6764_top_section_times_pdf
+session_indy_nxt_2026_6764,2026 Grand Prix of Portland,SF to I4,0.558709,22.0,24,0.08695652173913049,00:19.0637,105.507,28,official,source_indy_nxt_2026_6764_top_section_times_pdf
+session_indy_nxt_2026_6764,2026 Grand Prix of Portland,I4 to I9,0.809657,22.0,24,0.08695652173913049,00:27.0976,107.565,17,official,source_indy_nxt_2026_6764_top_section_times_pdf
 session_indy_nxt_2026_6765,2026 Indianapolis Grand Prix Race 2 R2,Lap,2.439,13.0,24,0.4782608695652174,01:17.4063,113.433,12,official,source_indy_nxt_2026_6765_top_section_times_pdf
 session_indy_nxt_2026_6765,2026 Indianapolis Grand Prix Race 2 R2,FS - PO,0.200379,9.0,24,0.6521739130434783,00:04.2057,171.521,1,official,source_indy_nxt_2026_6765_top_section_times_pdf
 session_indy_nxt_2026_6765,2026 Indianapolis Grand Prix Race 2 R2,FS - PO 2,0.053788,9.0,24,0.6521739130434783,00:01.1025,175.634,1,official,source_indy_nxt_2026_6765_top_section_times_pdf

@@ -473,9 +473,17 @@ function analyzeHeartbeats(lines) {
   epochs.sort((a, b) => a - b);
   let maxGap = null;
   const gaps = [];
+  const gapIntervals = [];
   for (let i = 1; i < epochs.length; i += 1) {
     const g = epochs[i] - epochs[i - 1];
     gaps.push(g);
+    if (g > 2) {
+      gapIntervals.push({
+        lastObservedEpoch: epochs[i - 1],
+        nextObservedEpoch: epochs[i],
+        gapSeconds: g,
+      });
+    }
     maxGap = maxGap === null ? g : Math.max(maxGap, g);
   }
   const span = epochs.length ? epochs[epochs.length - 1] - epochs[0] : null;
@@ -486,6 +494,7 @@ function analyzeHeartbeats(lines) {
     lastEpoch: epochs[epochs.length - 1] ?? null,
     spanSeconds: span,
     maxGapSeconds: maxGap,
+    gapIntervals,
     seriesCodes: [...seriesSet],
   };
 }

@@ -18,18 +18,19 @@ import type { TrackSectionAnchorSet } from './types';
  *  line (OSM arc-length is not proportional to real distance — Nashville lesson).
  *  Verified faithful on the debug overlay (scripts/roadcourse-anchor-lab.mjs):
  *  corner apex a2 lands on loop I2 (0.003 t) and a8 on I8 at the Turn 17 entry —
- *  no control points needed. Nine measured turn families cover 88.3% of the lap;
- *  the S/F front stretch (SF→I1, the pit line "FS-PO") and the I7→I8 link stay
- *  the quiet base outline — honest gaps. Positions may later be superseded by
- *  measured loop-crossing geometry arriving through the same contract. */
+ *  no control points needed. The official report now exposes the previously
+ *  concatenated final sector as separate fields: Turns 12-13 is I6→I7 and Turns
+ *  14-16 is I7→I8. FS-PO is the measured SF→I1 span. Together the eleven fields
+ *  tile the timing lap. */
 export const barberMotorsportsParkSections: TrackSectionAnchorSet = {
   slug: 'barber-motorsports-park',
   venueName: 'Barber Motorsports Park',
   drivingDirection: 'clockwise',
   lapLengthMi: 2.30,
   confidence: 'anchored',
-  note: 'Nine official turn-named timing sections covering 88.3% of the lap, anchored from the data lake 30-section map package (loop LapDistance re-referenced to S/F; family↔loop join proven by the map length reproducing each measured PDF length). The S/F front stretch and the Turn 16→17 link are not timing sections and stay the base outline.',
+  note: 'Eleven official timing sections anchored from the data lake map package. The newly separated FS-PO, Turns 12-13, and Turns 14-16 fields match SF→I1, I6→I7, and I7→I8 respectively by time × speed length and tile the timing lap with the other turn sections.',
   sections: [
+    { familyId: 'bmp-fs-po', sectionName: 'FS-PO', label: 'S/F → pit out', startLoop: 'SF', endLoop: 'I1', startT: 0.9630, endT: 0.0070, measuredLengthMi: 0.0845 },
     { familyId: 'bmp-turns-1-3', sectionName: 'Turns 1-3', label: 'Turns 1–3', startLoop: 'I1', endLoop: 'I2', startT: 0.007, endT: 0.1323, measuredLengthMi: 0.2883 },
     { familyId: 'bmp-turn-4', sectionName: 'Turn 4', label: 'Turn 4', startLoop: 'I2', endLoop: 'I3A', startT: 0.1323, endT: 0.2483, measuredLengthMi: 0.2667 },
     { familyId: 'bmp-turns-5-6', sectionName: 'Turns 5-6', label: 'Turns 5–6', startLoop: 'I3A', endLoop: 'I3', startT: 0.2483, endT: 0.2966, measuredLengthMi: 0.1112 },
@@ -37,7 +38,8 @@ export const barberMotorsportsParkSections: TrackSectionAnchorSet = {
     { familyId: 'bmp-turns-8-9', sectionName: 'Turns 8-9', label: 'Turns 8–9', startLoop: 'I4', endLoop: 'I5A', startT: 0.4219, endT: 0.5004, measuredLengthMi: 0.1805 },
     { familyId: 'bmp-turn-10', sectionName: 'Turn 10', label: 'Turn 10', startLoop: 'I5A', endLoop: 'I5', startT: 0.5004, endT: 0.5663, measuredLengthMi: 0.1515 },
     { familyId: 'bmp-turn-11', sectionName: 'Turn 11', label: 'Turn 11', startLoop: 'I5', endLoop: 'I6', startT: 0.5663, endT: 0.6752, measuredLengthMi: 0.2506 },
-    { familyId: 'bmp-turns-12-16', sectionName: 'Turns 12-13 Turns 14-16', label: 'T12–16', startLoop: 'I6', endLoop: 'I7', startT: 0.6752, endT: 0.7617, measuredLengthMi: 0.1989 },
+    { familyId: 'bmp-turns-12-13', sectionName: 'Turns 12-13', label: 'Turns 12–13', startLoop: 'I6', endLoop: 'I7', startT: 0.6752, endT: 0.7617, measuredLengthMi: 0.1989 },
+    { familyId: 'bmp-turns-14-16', sectionName: 'Turns 14-16', label: 'Turns 14–16', startLoop: 'I7', endLoop: 'I8', startT: 0.7617, endT: 0.8344, measuredLengthMi: 0.1672 },
     { familyId: 'bmp-turn-17', sectionName: 'Turn 17', label: 'Turn 17', startLoop: 'I8', endLoop: 'SF', startT: 0.8344, endT: 0.963, measuredLengthMi: 0.2958 }
   ]
 };

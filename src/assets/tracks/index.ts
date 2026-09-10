@@ -74,6 +74,13 @@ const outlines: TrackOutline[] = [
 
 const normalized = (name: string) => name.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
 
+/** Stable-id lookup for source packs that already carry a canonical track id.
+ * Prefer this over venue-name aliases when that id is present. */
+export const trackOutlineForSlug = (slug: string | null | undefined): TrackOutline | null => {
+  if (!slug) return null;
+  return outlines.find((outline) => outline.slug === slug) ?? null;
+};
+
 /** Analytics packs sometimes name venues differently than the canonical
  *  tracks table; map known synonyms onto asset slugs. */
 const aliasSlugs: Record<string, string> = {
@@ -89,9 +96,9 @@ export const trackOutlineFor = (trackName: string | null | undefined): TrackOutl
   if (!trackName) return null;
   const target = normalized(trackName);
   const aliasSlug = aliasSlugs[target];
-  if (aliasSlug) return outlines.find((outline) => outline.slug === aliasSlug) ?? null;
+  if (aliasSlug) return trackOutlineForSlug(aliasSlug);
   return outlines.find((outline) => normalized(outline.name) === target) ?? null;
 };
 
 export const trackOutlineAttribution =
-  'Permanent-circuit outlines traced from OpenStreetMap data © OpenStreetMap contributors (ODbL 1.0); street-circuit outlines derived from RaceTools static track-map centreline polylines, used by direct permission for private, non-commercial use.';
+  'Permanent-circuit outlines traced from OpenStreetMap data © OpenStreetMap contributors (ODbL 1.0); street-circuit outlines derived from RaceTools static track-map centreline polylines, used by direct permission for private, non-commercial use. The Indianapolis road-course outline traces the official INDYCAR Timing & Scoring 2.439-mile section map.';

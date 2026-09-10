@@ -5,6 +5,7 @@ import { useRouter } from '../app/router';
 import { formatDate } from '../app/format';
 import {
   loadReplayAvailable,
+  isBryceCastCaptureTier,
   replayProvenance,
   type ReplayAvailable,
   type ReplaySessionInfo
@@ -71,7 +72,7 @@ export const ReplayAffordance = ({
 }) => {
   const { navigate } = useRouter();
   const prov = replayProvenance(capture);
-  const isOwnCapture = prov.tier === 'brycecast_capture';
+  const isOwnCapture = isBryceCastCaptureTier(prov.tier);
   const meta = replayMeta(capture, isOwnCapture);
   const open = () => navigate(`/live?replay=${encodeURIComponent(capture.sessionKey)}&from=${encodeURIComponent(fromSessionId)}`);
   const sourcePill = (

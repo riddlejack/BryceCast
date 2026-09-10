@@ -35,8 +35,11 @@ export interface ReplaySession {
   venue: string | null;
   seasonYear: number | null;
   returnHref: string;
+  skippedSourceGap: { seconds: number; resumeAt: string } | null;
   setSpeed: (speed: number) => void;
   restart: () => void;
+  /** Move the local clock to the first observation after a withheld source gap. */
+  jumpTo: (iso: string, sourceGapSeconds?: number) => void;
   exit: () => void;
   /** The query string this client must append to every live-route poll while
    *  replaying — `?replay=<sessionKey>&rt=<isoVirtualTime>&speed=<n>` — or `''`
@@ -58,7 +61,7 @@ interface ReplayClock {
   lastCheckedMs: number;
 }
 
-const inactive: Omit<ReplaySession, 'setSpeed' | 'restart' | 'exit' | 'getReplayParams'> = {
+const inactive: Omit<ReplaySession, 'setSpeed' | 'restart' | 'jumpTo' | 'exit' | 'getReplayParams'> = {
   engaged: false,
   starting: false,
   started: false,
@@ -70,7 +73,8 @@ const inactive: Omit<ReplaySession, 'setSpeed' | 'restart' | 'exit' | 'getReplay
   speeds: REPLAY_SPEEDS,
   venue: null,
   seasonYear: null,
-  returnHref: '/races'
+  returnHref: '/races',
+  skippedSourceGap: null
 };
 
 /** The initial playback rate a deep-link may seed via `?speed=`. "Clamped to the
@@ -276,7 +280,29 @@ export const useReplaySession = (replayKey: string | null, onRestart?: () => voi
       startedAtWallMs: Date.now()
     };
     onRestartRef.current?.();
-    setState((previous) => ({ ...previous, started: true, endedByLive: false }));
+    setState((previous) => ({ ...previous, started: true, endedByLive: false, skippedSourceGap: null }));
+  }, []);
+
+  const jumpTo = useCallback((iso: string, sourceGapSeconds = 0) => {
+    const clock = clockRef.current;
+    const session = sessionRef.current;
+    if (!clock || !session) return;
+    const nextMs = Date.parse(clampT0(session, iso));
+    if (!Number.isFinite(nextMs)) return;
+    clockRef.current = {
+      ...clock,
+      virtualStartMs: nextMs,
+      startedAtWallMs: Date.now()
+    };
+    // A source gap must not leave a chart line joining the last pre-gap rank to
+    // the first post-gap rank as if those seven minutes had been observed.
+    onRestartRef.current?.();
+    setState((previous) => ({
+      ...previous,
+      started: true,
+      endedByLive: false,
+      skippedSourceGap: { seconds: Math.max(0, sourceGapSeconds), resumeAt: iso }
+    }));
   }, []);
 
   const exit = useCallback(() => {
@@ -285,5 +311,5 @@ export const useReplaySession = (replayKey: string | null, onRestart?: () => voi
     navigate(href);
   }, [navigate, state.returnHref]);
 
-  return { ...state, setSpeed, restart, exit, getReplayParams };
+  return { ...state, setSpeed, restart, jumpTo, exit, getReplayParams };
 };

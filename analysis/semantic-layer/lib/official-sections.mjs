@@ -3,9 +3,11 @@
 // Path via BRYCECAST_SECTION_OBS; documented default is the master lane output.
 
 import {readFile} from 'node:fs/promises';
+import {dirname, join, resolve} from 'node:path';
+import {fileURLToPath} from 'node:url';
 
-export const DEFAULT_SECTION_OBS =
-  '/Users/example/.codex/worktrees/ac78/Bryce POV access/analysis/indy-nxt-race-lap-section-enhancement/output/race_section_lap_observations.csv';
+const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../../..');
+export const DEFAULT_SECTION_OBS = join(REPO_ROOT, 'analysis/indy-nxt-race-lap-section-enhancement/output/race_section_lap_observations.csv');
 
 function parseCsvLine(line) {
   const out = [];

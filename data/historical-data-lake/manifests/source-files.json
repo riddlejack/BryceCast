@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-21T23:47:33.133Z",
-  "dataRoot": "data/historical-data-lake",
+  "generatedAt": "2026-09-10T22:09:19.765Z",
+  "dataRoot": "../../../Documents/Bryce POV access/data/historical-data-lake",
   "contentAddressing": "sha256",
   "files": [
     {
@@ -907,6 +907,28 @@
       "provenanceGrade": "verified_fetch"
     },
     {
+      "id": "bd65603c54c0493a67c0ea48",
+      "sourceId": "racetools-indycar-maps",
+      "sourceClass": "third-party timing-map definition",
+      "kind": "track_map_archive",
+      "year": null,
+      "series": [
+        "INDYCAR",
+        "INDY_NXT"
+      ],
+      "url": "https://racetools.com/maps/INDYCAR/LagunaSeca.zip",
+      "expectedBytes": 80262,
+      "viewRelativePath": "racetools/maps/LagunaSeca.zip",
+      "bytes": 80262,
+      "sha256": "13a075143b320b2061880c78b59b4d6b13f0a0e8eca7f52784ccca884f5a190e",
+      "objectPath": "raw/objects/sha256/13/13a075143b320b2061880c78b59b4d6b13f0a0e8eca7f52784ccca884f5a190e.zip",
+      "viewPath": "raw/views/racetools/maps/LagunaSeca.zip",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:08.931Z"
+    },
+    {
       "id": "8a5bc95e23b230a6f9cd7c28",
       "sourceId": "racetools-indycar-maps",
       "sourceClass": "third-party timing-map definition",
@@ -949,6 +971,50 @@
       "reusedFrom": null,
       "acquiredAt": "2026-07-18T23:14:31.163Z",
       "provenanceGrade": "verified_fetch"
+    },
+    {
+      "id": "b8677403bf8593e025d36246",
+      "sourceId": "racetools-indycar-maps",
+      "sourceClass": "third-party timing-map definition",
+      "kind": "track_map_archive",
+      "year": null,
+      "series": [
+        "INDYCAR",
+        "INDY_NXT"
+      ],
+      "url": "https://racetools.com/maps/INDYCAR/Markham_2026.zip",
+      "expectedBytes": 80914,
+      "viewRelativePath": "racetools/maps/Markham_2026.zip",
+      "bytes": 80914,
+      "sha256": "f7a97939db68a837d483e4a57bdca2e1f94d060d4bce5223faaed749907339ef",
+      "objectPath": "raw/objects/sha256/f7/f7a97939db68a837d483e4a57bdca2e1f94d060d4bce5223faaed749907339ef.zip",
+      "viewPath": "raw/views/racetools/maps/Markham_2026.zip",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:08.932Z"
+    },
+    {
+      "id": "290c63236c9163f425ff8028",
+      "sourceId": "racetools-indycar-maps",
+      "sourceClass": "third-party timing-map definition",
+      "kind": "track_map_archive",
+      "year": null,
+      "series": [
+        "INDYCAR",
+        "INDY_NXT"
+      ],
+      "url": "https://racetools.com/maps/INDYCAR/Markham_2026a.zip",
+      "expectedBytes": 80469,
+      "viewRelativePath": "racetools/maps/Markham_2026a.zip",
+      "bytes": 80469,
+      "sha256": "2bb579836c0f6f64f18cf5924d4e2872a3b6f7a9731a89f9cd7a630ad68dabd7",
+      "objectPath": "raw/objects/sha256/2b/2bb579836c0f6f64f18cf5924d4e2872a3b6f7a9731a89f9cd7a630ad68dabd7.zip",
+      "viewPath": "raw/views/racetools/maps/Markham_2026a.zip",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:08.937Z"
     },
     {
       "id": "9d64eedd88b10a76eed64f08",
@@ -1323,6 +1389,28 @@
       "reusedFrom": null,
       "acquiredAt": "2026-07-18T23:14:34.786Z",
       "provenanceGrade": "verified_fetch"
+    },
+    {
+      "id": "34987ae275d9a3acf7570cab",
+      "sourceId": "racetools-indycar-maps",
+      "sourceClass": "third-party timing-map definition",
+      "kind": "track_map_archive",
+      "year": null,
+      "series": [
+        "INDYCAR",
+        "INDY_NXT"
+      ],
+      "url": "https://racetools.com/maps/INDYCAR/WashingtonDC.zip",
+      "expectedBytes": 56999,
+      "viewRelativePath": "racetools/maps/WashingtonDC.zip",
+      "bytes": 56999,
+      "sha256": "1eece4fc3d31c3a2aaededcd5fdb8d9ccfdfcae7efff5b12446e4567a05715a4",
+      "objectPath": "raw/objects/sha256/1e/1eece4fc3d31c3a2aaededcd5fdb8d9ccfdfcae7efff5b12446e4567a05715a4.zip",
+      "viewPath": "raw/views/racetools/maps/WashingtonDC.zip",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:08.921Z"
     },
     {
       "id": "618c7f4ac39f1934dcfaeaa5",
@@ -24481,6 +24569,1098 @@
       "acquiredAt": "2026-07-21T23:44:04.503Z"
     },
     {
+      "id": "99cf19746092aac2fef38055",
+      "sourceId": "timing71-analysis",
+      "sourceClass": "third-party derived replay analysis",
+      "kind": "derived_analysis",
+      "year": 2026,
+      "series": [
+        "INDY_NXT"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-08-07%2020-27%20IndyCar%20-%20INDY%20NXT%20By%20Firestone%20GP%20of%20Portland%20-%20Practice%201.json",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/analysis/2026-08-07 20-27 IndyCar - INDY NXT By Firestone GP of Portland - Practice 1.json",
+      "metadata": {
+        "replayId": "aea0444b-d683-459b-bd60-a3616da6e633",
+        "description": "INDY NXT By Firestone GP of Portland - Practice 1",
+        "startTime": 1786134426,
+        "duration": 3478,
+        "archiveApiUrl": "https://archive.timing71.org/replays/aea0444b-d683-459b-bd60-a3616da6e633"
+      },
+      "bytes": 143465,
+      "sha256": "f49ea3e3c5b31a6946313438a1eee8e5e714148475056222a2a0cf79d3dd9fca",
+      "objectPath": "raw/objects/sha256/f4/f49ea3e3c5b31a6946313438a1eee8e5e714148475056222a2a0cf79d3dd9fca.json",
+      "viewPath": "raw/views/timing71/2026/analysis/2026-08-07 20-27 IndyCar - INDY NXT By Firestone GP of Portland - Practice 1.json",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:09.283Z"
+    },
+    {
+      "id": "cb82fb9d7864be7004a5c382",
+      "sourceId": "timing71-analysis",
+      "sourceClass": "third-party derived replay analysis",
+      "kind": "derived_analysis",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-08-07%2021-32%20IndyCar%20-%20ONLYBULLS%20Grand%20Prix%20of%20Portland%20-%20Practice%201%20-%20Group%20A.json",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/analysis/2026-08-07 21-32 IndyCar - ONLYBULLS Grand Prix of Portland - Practice 1 - Group A.json",
+      "metadata": {
+        "replayId": "c902ecfc-f5e9-4f47-b10f-9971e4db1a3a",
+        "description": "ONLYBULLS Grand Prix of Portland - Practice 1 - Group A",
+        "startTime": 1786138331,
+        "duration": 5577,
+        "archiveApiUrl": "https://archive.timing71.org/replays/c902ecfc-f5e9-4f47-b10f-9971e4db1a3a"
+      },
+      "bytes": 149237,
+      "sha256": "21104e0ec2dfdf8eb23347d95b2e3ea3c80dce5637eff25802a2ff561895ed54",
+      "objectPath": "raw/objects/sha256/21/21104e0ec2dfdf8eb23347d95b2e3ea3c80dce5637eff25802a2ff561895ed54.json",
+      "viewPath": "raw/views/timing71/2026/analysis/2026-08-07 21-32 IndyCar - ONLYBULLS Grand Prix of Portland - Practice 1 - Group A.json",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:09.505Z"
+    },
+    {
+      "id": "5680af2357eb4616027d5978",
+      "sourceId": "timing71-analysis",
+      "sourceClass": "third-party derived replay analysis",
+      "kind": "derived_analysis",
+      "year": 2026,
+      "series": [
+        "INDY_NXT"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-08-08%2015-57%20IndyCar%20-%20INDY%20NXT%20By%20Firestone%20GP%20of%20Portland%20-%20Practice%202.json",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/analysis/2026-08-08 15-57 IndyCar - INDY NXT By Firestone GP of Portland - Practice 2.json",
+      "metadata": {
+        "replayId": "8cb920ae-d919-4c44-9c2e-739c868fea3c",
+        "description": "INDY NXT By Firestone GP of Portland - Practice 2",
+        "startTime": 1786204661,
+        "duration": 3479,
+        "archiveApiUrl": "https://archive.timing71.org/replays/8cb920ae-d919-4c44-9c2e-739c868fea3c"
+      },
+      "bytes": 163416,
+      "sha256": "680b999edb183ad6697477661a687fd4068fcb1e606825211c1e8dc1ee941f7f",
+      "objectPath": "raw/objects/sha256/68/680b999edb183ad6697477661a687fd4068fcb1e606825211c1e8dc1ee941f7f.json",
+      "viewPath": "raw/views/timing71/2026/analysis/2026-08-08 15-57 IndyCar - INDY NXT By Firestone GP of Portland - Practice 2.json",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:09.737Z"
+    },
+    {
+      "id": "63cb5beae04d29d3285452ce",
+      "sourceId": "timing71-analysis",
+      "sourceClass": "third-party derived replay analysis",
+      "kind": "derived_analysis",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-08-08%2017-02%20IndyCar%20-%20ONLYBULLS%20Grand%20Prix%20of%20Portland%20-%20Practice%202%20-%20Group%20B.json",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/analysis/2026-08-08 17-02 IndyCar - ONLYBULLS Grand Prix of Portland - Practice 2 - Group B.json",
+      "metadata": {
+        "replayId": "24e2431c-1265-4387-ba42-3894f7ad1a4b",
+        "description": "ONLYBULLS Grand Prix of Portland - Practice 2 - Group B",
+        "startTime": 1786208567,
+        "duration": 5578,
+        "archiveApiUrl": "https://archive.timing71.org/replays/24e2431c-1265-4387-ba42-3894f7ad1a4b"
+      },
+      "bytes": 153571,
+      "sha256": "6fa81ee8c95b8c2b724c5a314d6f506b7c7e510236e231985c15ecae291df91a",
+      "objectPath": "raw/objects/sha256/6f/6fa81ee8c95b8c2b724c5a314d6f506b7c7e510236e231985c15ecae291df91a.json",
+      "viewPath": "raw/views/timing71/2026/analysis/2026-08-08 17-02 IndyCar - ONLYBULLS Grand Prix of Portland - Practice 2 - Group B.json",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:09.630Z"
+    },
+    {
+      "id": "cba4448a85f58b7d669f60ac",
+      "sourceId": "timing71-analysis",
+      "sourceClass": "third-party derived replay analysis",
+      "kind": "derived_analysis",
+      "year": 2026,
+      "series": [
+        "INDY_NXT"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-08-08%2018-57%20IndyCar%20-%20INDY%20NXT%20By%20Firestone%20GP%20of%20Portland%20-%20Qualifications.json",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/analysis/2026-08-08 18-57 IndyCar - INDY NXT By Firestone GP of Portland - Qualifications.json",
+      "metadata": {
+        "replayId": "6204d63b-2d7b-4a42-bb30-404b4bb97224",
+        "description": "INDY NXT By Firestone GP of Portland - Qualifications",
+        "startTime": 1786215474,
+        "duration": 2579,
+        "archiveApiUrl": "https://archive.timing71.org/replays/6204d63b-2d7b-4a42-bb30-404b4bb97224"
+      },
+      "bytes": 67906,
+      "sha256": "40fe51b644bdb4c097a600297d944fdb1afc13408eb1d781f001f56cdd0ad4d5",
+      "objectPath": "raw/objects/sha256/40/40fe51b644bdb4c097a600297d944fdb1afc13408eb1d781f001f56cdd0ad4d5.json",
+      "viewPath": "raw/views/timing71/2026/analysis/2026-08-08 18-57 IndyCar - INDY NXT By Firestone GP of Portland - Qualifications.json",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:09.651Z"
+    },
+    {
+      "id": "8a2dc9bc7b154e9074a8d46d",
+      "sourceId": "timing71-analysis",
+      "sourceClass": "third-party derived replay analysis",
+      "kind": "derived_analysis",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-08-09%2017-02%20IndyCar%20-%20ONLYBULLS%20Grand%20Prix%20of%20Portland%20-%20Warmup.json",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/analysis/2026-08-09 17-02 IndyCar - ONLYBULLS Grand Prix of Portland - Warmup.json",
+      "metadata": {
+        "replayId": "ab71cfd6-7e42-4105-9c8b-fcc6cd4550df",
+        "description": "ONLYBULLS Grand Prix of Portland - Warmup",
+        "startTime": 1786294958,
+        "duration": 2578,
+        "archiveApiUrl": "https://archive.timing71.org/replays/ab71cfd6-7e42-4105-9c8b-fcc6cd4550df"
+      },
+      "bytes": 143668,
+      "sha256": "fce932f6e014f612632dd68e6273f9c1eaf7e72f9e56c32cd738a1c4427ed480",
+      "objectPath": "raw/objects/sha256/fc/fce932f6e014f612632dd68e6273f9c1eaf7e72f9e56c32cd738a1c4427ed480.json",
+      "viewPath": "raw/views/timing71/2026/analysis/2026-08-09 17-02 IndyCar - ONLYBULLS Grand Prix of Portland - Warmup.json",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:09.808Z"
+    },
+    {
+      "id": "2f4000191821fc5c3cb0cea0",
+      "sourceId": "timing71-analysis",
+      "sourceClass": "third-party derived replay analysis",
+      "kind": "derived_analysis",
+      "year": 2026,
+      "series": [
+        "INDY_NXT"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-08-09%2018-05%20IndyCar%20-%20INDY%20NXT%20By%20Firestone%20GP%20of%20Portland%20-%20Race.json",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/analysis/2026-08-09 18-05 IndyCar - INDY NXT By Firestone GP of Portland - Race.json",
+      "metadata": {
+        "replayId": "eedf1cdd-8715-475e-968b-a4dd9ee970f0",
+        "description": "INDY NXT By Firestone GP of Portland - Race",
+        "startTime": 1786298742,
+        "duration": 4078,
+        "archiveApiUrl": "https://archive.timing71.org/replays/eedf1cdd-8715-475e-968b-a4dd9ee970f0"
+      },
+      "bytes": 138165,
+      "sha256": "26bf4c31447fa27c261a975c143e13a12491d01e82b24bc2fdb5806de08e2c00",
+      "objectPath": "raw/objects/sha256/26/26bf4c31447fa27c261a975c143e13a12491d01e82b24bc2fdb5806de08e2c00.json",
+      "viewPath": "raw/views/timing71/2026/analysis/2026-08-09 18-05 IndyCar - INDY NXT By Firestone GP of Portland - Race.json",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:10.193Z"
+    },
+    {
+      "id": "e37349f1e4462ab24184184e",
+      "sourceId": "timing71-analysis",
+      "sourceClass": "third-party derived replay analysis",
+      "kind": "derived_analysis",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-08-09%2020-24%20IndyCar%20-%20ONLYBULLS%20Grand%20Prix%20of%20Portland%20-%20Race.json",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/analysis/2026-08-09 20-24 IndyCar - ONLYBULLS Grand Prix of Portland - Race.json",
+      "metadata": {
+        "replayId": "65415d32-1cba-45b8-a1a4-6e34e35c8ab4",
+        "description": "ONLYBULLS Grand Prix of Portland - Race",
+        "startTime": 1786307088,
+        "duration": 9779,
+        "archiveApiUrl": "https://archive.timing71.org/replays/65415d32-1cba-45b8-a1a4-6e34e35c8ab4"
+      },
+      "bytes": 328186,
+      "sha256": "4ad5ccca60d6bcad3f7b2163db5be68f4600255bd73583d61bd8d1a0b173b45f",
+      "objectPath": "raw/objects/sha256/4a/4ad5ccca60d6bcad3f7b2163db5be68f4600255bd73583d61bd8d1a0b173b45f.json",
+      "viewPath": "raw/views/timing71/2026/analysis/2026-08-09 20-24 IndyCar - ONLYBULLS Grand Prix of Portland - Race.json",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:10.033Z"
+    },
+    {
+      "id": "94b2867bf9f4771b228ec2ea",
+      "sourceId": "timing71-analysis",
+      "sourceClass": "third-party derived replay analysis",
+      "kind": "derived_analysis",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-08-15%2014-02%20IndyCar%20-%20Ontario%20Honda%20Dealers%20Indy%20at%20Markham%20-%20Practice%201%20-%20Group%20B.json",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/analysis/2026-08-15 14-02 IndyCar - Ontario Honda Dealers Indy at Markham - Practice 1 - Group B.json",
+      "metadata": {
+        "replayId": "966da49a-4618-4a23-8353-eed07902bfb8",
+        "description": "Ontario Honda Dealers Indy at Markham - Practice 1 - Group B",
+        "startTime": 1786802545,
+        "duration": 5581,
+        "archiveApiUrl": "https://archive.timing71.org/replays/966da49a-4618-4a23-8353-eed07902bfb8"
+      },
+      "bytes": 171543,
+      "sha256": "73327b123f569f29001c1236fabe1f21b96f4646a75755cded59dc8237921d34",
+      "objectPath": "raw/objects/sha256/73/73327b123f569f29001c1236fabe1f21b96f4646a75755cded59dc8237921d34.json",
+      "viewPath": "raw/views/timing71/2026/analysis/2026-08-15 14-02 IndyCar - Ontario Honda Dealers Indy at Markham - Practice 1 - Group B.json",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:10.354Z"
+    },
+    {
+      "id": "e567c70d0b35999c42b64a42",
+      "sourceId": "timing71-analysis",
+      "sourceClass": "third-party derived replay analysis",
+      "kind": "derived_analysis",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-08-15%2018-22%20IndyCar%20-%20Ontario%20Honda%20Dealers%20Indy%20at%20Markham%20-%20Practice%202%20-%20Group%20A.json",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/analysis/2026-08-15 18-22 IndyCar - Ontario Honda Dealers Indy at Markham - Practice 2 - Group A.json",
+      "metadata": {
+        "replayId": "27a95685-f6ef-47e6-9b53-e2ca3911c289",
+        "description": "Ontario Honda Dealers Indy at Markham - Practice 2 - Group A",
+        "startTime": 1786818157,
+        "duration": 5886,
+        "archiveApiUrl": "https://archive.timing71.org/replays/27a95685-f6ef-47e6-9b53-e2ca3911c289"
+      },
+      "bytes": 158007,
+      "sha256": "53bfee4662a2a0d328964d2e7425a6f6c5895492624d3828ede65e2a52908053",
+      "objectPath": "raw/objects/sha256/53/53bfee4662a2a0d328964d2e7425a6f6c5895492624d3828ede65e2a52908053.json",
+      "viewPath": "raw/views/timing71/2026/analysis/2026-08-15 18-22 IndyCar - Ontario Honda Dealers Indy at Markham - Practice 2 - Group A.json",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:10.206Z"
+    },
+    {
+      "id": "c24c1ee0951988a38921f18b",
+      "sourceId": "timing71-analysis",
+      "sourceClass": "third-party derived replay analysis",
+      "kind": "derived_analysis",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-08-15%2018-27%20IndyCar%20-%20Ontario%20Honda%20Dealers%20Indy%20at%20Markham%20-%20Practice%202%20-%20Group%20A.json",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/analysis/2026-08-15 18-27 IndyCar - Ontario Honda Dealers Indy at Markham - Practice 2 - Group A.json",
+      "metadata": {
+        "replayId": "faae8c42-f6a4-462a-9efd-d575c77e6ae9",
+        "description": "Ontario Honda Dealers Indy at Markham - Practice 2 - Group A",
+        "startTime": 1786818457,
+        "duration": 5581,
+        "archiveApiUrl": "https://archive.timing71.org/replays/faae8c42-f6a4-462a-9efd-d575c77e6ae9"
+      },
+      "bytes": 155421,
+      "sha256": "baf32a38258391d88202c9a83e84bebbd2a1cd346ee72474cd6b437dbc365dc4",
+      "objectPath": "raw/objects/sha256/ba/baf32a38258391d88202c9a83e84bebbd2a1cd346ee72474cd6b437dbc365dc4.json",
+      "viewPath": "raw/views/timing71/2026/analysis/2026-08-15 18-27 IndyCar - Ontario Honda Dealers Indy at Markham - Practice 2 - Group A.json",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:10.373Z"
+    },
+    {
+      "id": "423a3ab575521f66cf1a7e5e",
+      "sourceId": "timing71-analysis",
+      "sourceClass": "third-party derived replay analysis",
+      "kind": "derived_analysis",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-08-15%2022-27%20IndyCar%20-%20Ontario%20Honda%20Dealers%20Indy%20at%20Markham%20-%20Qualifications%20-%20Segment%203%20_%20Firestone%20Fast%206.json",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/analysis/2026-08-15 22-27 IndyCar - Ontario Honda Dealers Indy at Markham - Qualifications - Segment 3 _ Firestone Fast 6.json",
+      "metadata": {
+        "replayId": "28b6bbb2-d077-49f7-981c-0d3a8b734f0b",
+        "description": "Ontario Honda Dealers Indy at Markham - Qualifications - Segment 3 / Firestone Fast 6",
+        "startTime": 1786832874,
+        "duration": 5878,
+        "archiveApiUrl": "https://archive.timing71.org/replays/28b6bbb2-d077-49f7-981c-0d3a8b734f0b"
+      },
+      "bytes": 110868,
+      "sha256": "5a732a2e92d43cca1338fba992fdc32b254493c096ac68307bea593a633caae9",
+      "objectPath": "raw/objects/sha256/5a/5a732a2e92d43cca1338fba992fdc32b254493c096ac68307bea593a633caae9.json",
+      "viewPath": "raw/views/timing71/2026/analysis/2026-08-15 22-27 IndyCar - Ontario Honda Dealers Indy at Markham - Qualifications - Segment 3 _ Firestone Fast 6.json",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:10.586Z"
+    },
+    {
+      "id": "278b127fe32964db997bcda3",
+      "sourceId": "timing71-analysis",
+      "sourceClass": "third-party derived replay analysis",
+      "kind": "derived_analysis",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-08-16%2012-27%20IndyCar%20-%20Ontario%20Honda%20Dealers%20Indy%20at%20Markham%20-%20Warmup.json",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/analysis/2026-08-16 12-27 IndyCar - Ontario Honda Dealers Indy at Markham - Warmup.json",
+      "metadata": {
+        "replayId": "1552ade7-e144-42ce-a173-94da2b472375",
+        "description": "Ontario Honda Dealers Indy at Markham - Warmup",
+        "startTime": 1786883248,
+        "duration": 2583,
+        "archiveApiUrl": "https://archive.timing71.org/replays/1552ade7-e144-42ce-a173-94da2b472375"
+      },
+      "bytes": 129692,
+      "sha256": "96b3e530005fc7890853fab2d0f163cf9c112b2be0131b4516991e2820b5b63c",
+      "objectPath": "raw/objects/sha256/96/96b3e530005fc7890853fab2d0f163cf9c112b2be0131b4516991e2820b5b63c.json",
+      "viewPath": "raw/views/timing71/2026/analysis/2026-08-16 12-27 IndyCar - Ontario Honda Dealers Indy at Markham - Warmup.json",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:10.633Z"
+    },
+    {
+      "id": "65dabe5b5021aa3367b910ad",
+      "sourceId": "timing71-analysis",
+      "sourceClass": "third-party derived replay analysis",
+      "kind": "derived_analysis",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-08-16%2016-19%20IndyCar%20-%20Ontario%20Honda%20Dealers%20Indy%20at%20Markham%20-%20Race.json",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/analysis/2026-08-16 16-19 IndyCar - Ontario Honda Dealers Indy at Markham - Race.json",
+      "metadata": {
+        "replayId": "ecf3c4c5-354e-46ed-84e4-f0ca0e800050",
+        "description": "Ontario Honda Dealers Indy at Markham - Race",
+        "startTime": 1786897179,
+        "duration": 8461,
+        "archiveApiUrl": "https://archive.timing71.org/replays/ecf3c4c5-354e-46ed-84e4-f0ca0e800050"
+      },
+      "bytes": 265810,
+      "sha256": "35408a79661c23460b47131b396b11f0472c9871511245e49e37c904282a1ac1",
+      "objectPath": "raw/objects/sha256/35/35408a79661c23460b47131b396b11f0472c9871511245e49e37c904282a1ac1.json",
+      "viewPath": "raw/views/timing71/2026/analysis/2026-08-16 16-19 IndyCar - Ontario Honda Dealers Indy at Markham - Race.json",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:10.737Z"
+    },
+    {
+      "id": "bd624e7688113d12996f62f3",
+      "sourceId": "timing71-analysis",
+      "sourceClass": "third-party derived replay analysis",
+      "kind": "derived_analysis",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-08-22%2013-02%20IndyCar%20-%20Freedom%20250%20Grand%20Prix%20of%20Washington%20DC%20-%20Practice%201%20-%20Group%20A.json",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/analysis/2026-08-22 13-02 IndyCar - Freedom 250 Grand Prix of Washington DC - Practice 1 - Group A.json",
+      "metadata": {
+        "replayId": "e2ee2e2d-ddbb-4198-a2cf-5e2d589d20e5",
+        "description": "Freedom 250 Grand Prix of Washington DC - Practice 1 - Group A",
+        "startTime": 1787403752,
+        "duration": 5880,
+        "archiveApiUrl": "https://archive.timing71.org/replays/e2ee2e2d-ddbb-4198-a2cf-5e2d589d20e5"
+      },
+      "bytes": 172102,
+      "sha256": "9ba6cea48b34596ab3503d3321d2dc7b58b3d28784a7767202a9bc8b4b039145",
+      "objectPath": "raw/objects/sha256/9b/9ba6cea48b34596ab3503d3321d2dc7b58b3d28784a7767202a9bc8b4b039145.json",
+      "viewPath": "raw/views/timing71/2026/analysis/2026-08-22 13-02 IndyCar - Freedom 250 Grand Prix of Washington DC - Practice 1 - Group A.json",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:10.712Z"
+    },
+    {
+      "id": "f5f3f481990f62f3e50c1406",
+      "sourceId": "timing71-analysis",
+      "sourceClass": "third-party derived replay analysis",
+      "kind": "derived_analysis",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-08-22%2014-37%20IndyCar%20-%20Freedom%20250%20Grand%20Prix%20of%20Washington%20DC%20-%20Practice%201.json",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/analysis/2026-08-22 14-37 IndyCar - Freedom 250 Grand Prix of Washington DC - Practice 1.json",
+      "metadata": {
+        "replayId": "bacec8b0-ba98-48e9-87fb-83a5f7b4bb75",
+        "description": "Freedom 250 Grand Prix of Washington DC - Practice 1",
+        "startTime": 1787409453,
+        "duration": 2283,
+        "archiveApiUrl": "https://archive.timing71.org/replays/bacec8b0-ba98-48e9-87fb-83a5f7b4bb75"
+      },
+      "bytes": 21934,
+      "sha256": "061320982db848c77763963044621627b036d071ad53f718672976dcc7377c49",
+      "objectPath": "raw/objects/sha256/06/061320982db848c77763963044621627b036d071ad53f718672976dcc7377c49.json",
+      "viewPath": "raw/views/timing71/2026/analysis/2026-08-22 14-37 IndyCar - Freedom 250 Grand Prix of Washington DC - Practice 1.json",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:11.367Z"
+    },
+    {
+      "id": "13f8c156d57a6c135a5343eb",
+      "sourceId": "timing71-analysis",
+      "sourceClass": "third-party derived replay analysis",
+      "kind": "derived_analysis",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-08-22%2016-22%20IndyCar%20-%20Freedom%20250%20Grand%20Prix%20of%20Washington%20DC%20-%20Practice%202%20-%20All%20Cars.json",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/analysis/2026-08-22 16-22 IndyCar - Freedom 250 Grand Prix of Washington DC - Practice 2 - All Cars.json",
+      "metadata": {
+        "replayId": "bb675a64-eae4-4e8e-9b20-1cdd1b3ceaca",
+        "description": "Freedom 250 Grand Prix of Washington DC - Practice 2 - All Cars",
+        "startTime": 1787415774,
+        "duration": 2281,
+        "archiveApiUrl": "https://archive.timing71.org/replays/bb675a64-eae4-4e8e-9b20-1cdd1b3ceaca"
+      },
+      "bytes": 17113,
+      "sha256": "9d37eae88962aa26a2308b2ca9353264f694b05cab4af99ec5e87e6239fd93db",
+      "objectPath": "raw/objects/sha256/9d/9d37eae88962aa26a2308b2ca9353264f694b05cab4af99ec5e87e6239fd93db.json",
+      "viewPath": "raw/views/timing71/2026/analysis/2026-08-22 16-22 IndyCar - Freedom 250 Grand Prix of Washington DC - Practice 2 - All Cars.json",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:10.936Z"
+    },
+    {
+      "id": "5fbf87a839c371498c0381a2",
+      "sourceId": "timing71-analysis",
+      "sourceClass": "third-party derived replay analysis",
+      "kind": "derived_analysis",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-08-22%2017-03%20IndyCar%20-%20Freedom%20250%20Grand%20Prix%20of%20Washington%20DC%20-%20Practice%202.json",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/analysis/2026-08-22 17-03 IndyCar - Freedom 250 Grand Prix of Washington DC - Practice 2.json",
+      "metadata": {
+        "replayId": "3e327001-b86b-407e-b666-6759f5698be4",
+        "description": "Freedom 250 Grand Prix of Washington DC - Practice 2",
+        "startTime": 1787418180,
+        "duration": 5519,
+        "archiveApiUrl": "https://archive.timing71.org/replays/3e327001-b86b-407e-b666-6759f5698be4"
+      },
+      "bytes": 175185,
+      "sha256": "9e3d072d4bc7da12e5b7e42292f893f407255d445f3139eb867b03ca5c2b88d1",
+      "objectPath": "raw/objects/sha256/9e/9e3d072d4bc7da12e5b7e42292f893f407255d445f3139eb867b03ca5c2b88d1.json",
+      "viewPath": "raw/views/timing71/2026/analysis/2026-08-22 17-03 IndyCar - Freedom 250 Grand Prix of Washington DC - Practice 2.json",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:10.998Z"
+    },
+    {
+      "id": "ae15e9cb0ca582e6da202192",
+      "sourceId": "timing71-analysis",
+      "sourceClass": "third-party derived replay analysis",
+      "kind": "derived_analysis",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-08-22%2019-57%20IndyCar%20-%20Freedom%20250%20Grand%20Prix%20of%20Washington%20DC%20-%20Practice%202.json",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/analysis/2026-08-22 19-57 IndyCar - Freedom 250 Grand Prix of Washington DC - Practice 2.json",
+      "metadata": {
+        "replayId": "2309ca48-bfe5-4cb7-bba8-10f6197c9834",
+        "description": "Freedom 250 Grand Prix of Washington DC - Practice 2",
+        "startTime": 1787428631,
+        "duration": 2588,
+        "archiveApiUrl": "https://archive.timing71.org/replays/2309ca48-bfe5-4cb7-bba8-10f6197c9834"
+      },
+      "bytes": 16327,
+      "sha256": "551e8e68994057caa5ffc5630986bfb8c109b1caee2715f73ee2882d3326c764",
+      "objectPath": "raw/objects/sha256/55/551e8e68994057caa5ffc5630986bfb8c109b1caee2715f73ee2882d3326c764.json",
+      "viewPath": "raw/views/timing71/2026/analysis/2026-08-22 19-57 IndyCar - Freedom 250 Grand Prix of Washington DC - Practice 2.json",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:11.032Z"
+    },
+    {
+      "id": "14dea6797b24f8fde791222a",
+      "sourceId": "timing71-analysis",
+      "sourceClass": "third-party derived replay analysis",
+      "kind": "derived_analysis",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-08-22%2020-57%20IndyCar%20-%20Freedom%20250%20Grand%20Prix%20of%20Washington%20DC%20-%20Qualifications.json",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/analysis/2026-08-22 20-57 IndyCar - Freedom 250 Grand Prix of Washington DC - Qualifications.json",
+      "metadata": {
+        "replayId": "ba82e0bc-25a4-4f1b-bbc0-6501351eafc4",
+        "description": "Freedom 250 Grand Prix of Washington DC - Qualifications",
+        "startTime": 1787432243,
+        "duration": 5879,
+        "archiveApiUrl": "https://archive.timing71.org/replays/ba82e0bc-25a4-4f1b-bbc0-6501351eafc4"
+      },
+      "bytes": 107115,
+      "sha256": "0893ddcce72b6924b4e7d90c322a8f9ff43c77ec621b855a6725a778d3e273b2",
+      "objectPath": "raw/objects/sha256/08/0893ddcce72b6924b4e7d90c322a8f9ff43c77ec621b855a6725a778d3e273b2.json",
+      "viewPath": "raw/views/timing71/2026/analysis/2026-08-22 20-57 IndyCar - Freedom 250 Grand Prix of Washington DC - Qualifications.json",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:11.272Z"
+    },
+    {
+      "id": "91bceae604198cbf056a9818",
+      "sourceId": "timing71-analysis",
+      "sourceClass": "third-party derived replay analysis",
+      "kind": "derived_analysis",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-08-23%2013-12%20IndyCar%20-%20Freedom%20250%20Grand%20Prix%20of%20Washington%20DC%20-%20Warmup.json",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/analysis/2026-08-23 13-12 IndyCar - Freedom 250 Grand Prix of Washington DC - Warmup.json",
+      "metadata": {
+        "replayId": "8840b2cf-dd2b-46b3-a5e2-ee09aad32e15",
+        "description": "Freedom 250 Grand Prix of Washington DC - Warmup",
+        "startTime": 1787490727,
+        "duration": 2577,
+        "archiveApiUrl": "https://archive.timing71.org/replays/8840b2cf-dd2b-46b3-a5e2-ee09aad32e15"
+      },
+      "bytes": 139003,
+      "sha256": "b64ad90653424f9b27c94eed03c36565ea876c624c241fb2d9cd7773d38c80f3",
+      "objectPath": "raw/objects/sha256/b6/b64ad90653424f9b27c94eed03c36565ea876c624c241fb2d9cd7773d38c80f3.json",
+      "viewPath": "raw/views/timing71/2026/analysis/2026-08-23 13-12 IndyCar - Freedom 250 Grand Prix of Washington DC - Warmup.json",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:11.423Z"
+    },
+    {
+      "id": "f5b3fb12ec0705d1461cffe0",
+      "sourceId": "timing71-analysis",
+      "sourceClass": "third-party derived replay analysis",
+      "kind": "derived_analysis",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-08-23%2017-10%20IndyCar%20-%20Freedom%20250%20Grand%20Prix%20of%20Washington%20DC%20-%20Race.json",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/analysis/2026-08-23 17-10 IndyCar - Freedom 250 Grand Prix of Washington DC - Race.json",
+      "metadata": {
+        "replayId": "6f3e250a-bd3c-4073-af6e-baaa02bd8980",
+        "description": "Freedom 250 Grand Prix of Washington DC - Race",
+        "startTime": 1787505030,
+        "duration": 10084,
+        "archiveApiUrl": "https://archive.timing71.org/replays/6f3e250a-bd3c-4073-af6e-baaa02bd8980"
+      },
+      "bytes": 428720,
+      "sha256": "2b60bcc5619557b705f987b4a4267b21b1ae35c8d6934e7d8d0fa13030cff3e7",
+      "objectPath": "raw/objects/sha256/2b/2b60bcc5619557b705f987b4a4267b21b1ae35c8d6934e7d8d0fa13030cff3e7.json",
+      "viewPath": "raw/views/timing71/2026/analysis/2026-08-23 17-10 IndyCar - Freedom 250 Grand Prix of Washington DC - Race.json",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:11.841Z"
+    },
+    {
+      "id": "d8cabd85c87a4bb3a0d17192",
+      "sourceId": "timing71-analysis",
+      "sourceClass": "third-party derived replay analysis",
+      "kind": "derived_analysis",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-08-28%2021-57%20IndyCar%20-%20SNAP-ON%20Makers%20and%20Fixers%20250%20-%20Practice%201.json",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/analysis/2026-08-28 21-57 IndyCar - SNAP-ON Makers and Fixers 250 - Practice 1.json",
+      "metadata": {
+        "replayId": "d428472c-e68e-4aa7-8811-e5d10a95e240",
+        "description": "SNAP-ON Makers and Fixers 250 - Practice 1",
+        "startTime": 1787954258,
+        "duration": 6180,
+        "archiveApiUrl": "https://archive.timing71.org/replays/d428472c-e68e-4aa7-8811-e5d10a95e240"
+      },
+      "bytes": 291326,
+      "sha256": "4b90b3b4bc75b8aef7fffd1ff2d1352d6ea9bd16d65bcc8b45167c2855af848d",
+      "objectPath": "raw/objects/sha256/4b/4b90b3b4bc75b8aef7fffd1ff2d1352d6ea9bd16d65bcc8b45167c2855af848d.json",
+      "viewPath": "raw/views/timing71/2026/analysis/2026-08-28 21-57 IndyCar - SNAP-ON Makers and Fixers 250 - Practice 1.json",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:11.645Z"
+    },
+    {
+      "id": "aa488a6ed7544bec95c3af86",
+      "sourceId": "timing71-analysis",
+      "sourceClass": "third-party derived replay analysis",
+      "kind": "derived_analysis",
+      "year": 2026,
+      "series": [
+        "INDY_NXT"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-08-29%2012-57%20IndyCar%20-%20INDYNXT%20by%20Firestone%20at%20Milwaukee%20Mile%20-%20Practice%201.json",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/analysis/2026-08-29 12-57 IndyCar - INDYNXT by Firestone at Milwaukee Mile - Practice 1.json",
+      "metadata": {
+        "replayId": "b66b10ab-1b89-4a9e-b94e-2d42f7107639",
+        "description": "INDYNXT by Firestone at Milwaukee Mile - Practice 1",
+        "startTime": 1788008229,
+        "duration": 3782,
+        "archiveApiUrl": "https://archive.timing71.org/replays/b66b10ab-1b89-4a9e-b94e-2d42f7107639"
+      },
+      "bytes": 233100,
+      "sha256": "32d04f9e26f104772f64d1b6b1c5e928b6091b3c54402794fd68dae662cbdd38",
+      "objectPath": "raw/objects/sha256/32/32d04f9e26f104772f64d1b6b1c5e928b6091b3c54402794fd68dae662cbdd38.json",
+      "viewPath": "raw/views/timing71/2026/analysis/2026-08-29 12-57 IndyCar - INDYNXT by Firestone at Milwaukee Mile - Practice 1.json",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:11.691Z"
+    },
+    {
+      "id": "921cc970639d44db8ee65269",
+      "sourceId": "timing71-analysis",
+      "sourceClass": "third-party derived replay analysis",
+      "kind": "derived_analysis",
+      "year": 2026,
+      "series": [
+        "INDY_NXT"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-08-29%2015-02%20IndyCar%20-%20INDYNXT%20by%20Firestone%20at%20Milwaukee%20Mile%20-%20Qualifications.json",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/analysis/2026-08-29 15-02 IndyCar - INDYNXT by Firestone at Milwaukee Mile - Qualifications.json",
+      "metadata": {
+        "replayId": "0895cf60-5926-438b-bf15-c73a99af4043",
+        "description": "INDYNXT by Firestone at Milwaukee Mile - Qualifications",
+        "startTime": 1788015742,
+        "duration": 4990,
+        "archiveApiUrl": "https://archive.timing71.org/replays/0895cf60-5926-438b-bf15-c73a99af4043"
+      },
+      "bytes": 25459,
+      "sha256": "0524f2d6e98caa1f7a993fb737869b19a7e28796fa09a6c5356eab2df32f81e7",
+      "objectPath": "raw/objects/sha256/05/0524f2d6e98caa1f7a993fb737869b19a7e28796fa09a6c5356eab2df32f81e7.json",
+      "viewPath": "raw/views/timing71/2026/analysis/2026-08-29 15-02 IndyCar - INDYNXT by Firestone at Milwaukee Mile - Qualifications.json",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:11.932Z"
+    },
+    {
+      "id": "cde932d0f1b3be959ee4d38b",
+      "sourceId": "timing71-analysis",
+      "sourceClass": "third-party derived replay analysis",
+      "kind": "derived_analysis",
+      "year": 2026,
+      "series": [
+        "INDY_NXT"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-08-29%2016-32%20IndyCar%20-%20INDYNXT%20by%20Firestone%20at%20Milwaukee%20Mile%20-%20Qualifications.json",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/analysis/2026-08-29 16-32 IndyCar - INDYNXT by Firestone at Milwaukee Mile - Qualifications.json",
+      "metadata": {
+        "replayId": "23e69e36-7170-4dca-8027-0024c386df68",
+        "description": "INDYNXT by Firestone at Milwaukee Mile - Qualifications",
+        "startTime": 1788021159,
+        "duration": 3487,
+        "archiveApiUrl": "https://archive.timing71.org/replays/23e69e36-7170-4dca-8027-0024c386df68"
+      },
+      "bytes": 28036,
+      "sha256": "c1e9b1a4378511d20dac077495775f62570d1bc78f3e61fd229527fc2e4c57b6",
+      "objectPath": "raw/objects/sha256/c1/c1e9b1a4378511d20dac077495775f62570d1bc78f3e61fd229527fc2e4c57b6.json",
+      "viewPath": "raw/views/timing71/2026/analysis/2026-08-29 16-32 IndyCar - INDYNXT by Firestone at Milwaukee Mile - Qualifications.json",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:12.200Z"
+    },
+    {
+      "id": "09d8a4333b8bd500429c50c4",
+      "sourceId": "timing71-analysis",
+      "sourceClass": "third-party derived replay analysis",
+      "kind": "derived_analysis",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-08-29%2018-38%20IndyCar%20-%20SNAP-ON%20Makers%20and%20Fixers%20250%20-%20Race%201.json",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/analysis/2026-08-29 18-38 IndyCar - SNAP-ON Makers and Fixers 250 - Race 1.json",
+      "metadata": {
+        "replayId": "bba0d52f-8485-47ac-bb4c-c5663821a16c",
+        "description": "SNAP-ON Makers and Fixers 250 - Race 1",
+        "startTime": 1788028732,
+        "duration": 10081,
+        "archiveApiUrl": "https://archive.timing71.org/replays/bba0d52f-8485-47ac-bb4c-c5663821a16c"
+      },
+      "bytes": 279798,
+      "sha256": "08b0d835438e27f83dd6fcfe05d842f3bbc480c2282b8216edfec35909dc2c53",
+      "objectPath": "raw/objects/sha256/08/08b0d835438e27f83dd6fcfe05d842f3bbc480c2282b8216edfec35909dc2c53.json",
+      "viewPath": "raw/views/timing71/2026/analysis/2026-08-29 18-38 IndyCar - SNAP-ON Makers and Fixers 250 - Race 1.json",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:12.230Z"
+    },
+    {
+      "id": "275b01c05b6ef8eb1407e39f",
+      "sourceId": "timing71-analysis",
+      "sourceClass": "third-party derived replay analysis",
+      "kind": "derived_analysis",
+      "year": 2026,
+      "series": [
+        "INDY_NXT"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-08-30%2015-03%20IndyCar%20-%20INDYNXT%20by%20Firestone%20at%20Milwaukee%20Mile%20-%20Race.json",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/analysis/2026-08-30 15-03 IndyCar - INDYNXT by Firestone at Milwaukee Mile - Race.json",
+      "metadata": {
+        "replayId": "322f3fcc-6be7-4677-87fe-dc741dd292e6",
+        "description": "INDYNXT by Firestone at Milwaukee Mile - Race",
+        "startTime": 1788102221,
+        "duration": 6480,
+        "archiveApiUrl": "https://archive.timing71.org/replays/322f3fcc-6be7-4677-87fe-dc741dd292e6"
+      },
+      "bytes": 224042,
+      "sha256": "1954c00ed0b2ae2f2fd550fb252bc324cbcefa96a4af58778c4b17edb0173da6",
+      "objectPath": "raw/objects/sha256/19/1954c00ed0b2ae2f2fd550fb252bc324cbcefa96a4af58778c4b17edb0173da6.json",
+      "viewPath": "raw/views/timing71/2026/analysis/2026-08-30 15-03 IndyCar - INDYNXT by Firestone at Milwaukee Mile - Race.json",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:12.360Z"
+    },
+    {
+      "id": "70137649fe206b9e7d79f2a9",
+      "sourceId": "timing71-analysis",
+      "sourceClass": "third-party derived replay analysis",
+      "kind": "derived_analysis",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-08-30%2017-17%20IndyCar%20-%20SNAP-ON%20Milwaukee%20Mile%20250%20-%20Race%202.json",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/analysis/2026-08-30 17-17 IndyCar - SNAP-ON Milwaukee Mile 250 - Race 2.json",
+      "metadata": {
+        "replayId": "8d3629e1-8af1-443d-bccd-ebdaa9faac7e",
+        "description": "SNAP-ON Milwaukee Mile 250 - Race 2",
+        "startTime": 1788110269,
+        "duration": 10080,
+        "archiveApiUrl": "https://archive.timing71.org/replays/8d3629e1-8af1-443d-bccd-ebdaa9faac7e"
+      },
+      "bytes": 625158,
+      "sha256": "7fe4eeb9fe73aa6958ff2dc5b043ed1e1622c30e1475acd1143de06fac6b0f0d",
+      "objectPath": "raw/objects/sha256/7f/7fe4eeb9fe73aa6958ff2dc5b043ed1e1622c30e1475acd1143de06fac6b0f0d.json",
+      "viewPath": "raw/views/timing71/2026/analysis/2026-08-30 17-17 IndyCar - SNAP-ON Milwaukee Mile 250 - Race 2.json",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:12.555Z"
+    },
+    {
+      "id": "36a32e8e2f27a0816b40bd1a",
+      "sourceId": "timing71-analysis",
+      "sourceClass": "third-party derived replay analysis",
+      "kind": "derived_analysis",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-08-30%2021-57%20IndyCar%20-%20SNAP-ON%20Makers%20and%20Fixers%20250%20-%20Race%201.json",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/analysis/2026-08-30 21-57 IndyCar - SNAP-ON Makers and Fixers 250 - Race 1.json",
+      "metadata": {
+        "replayId": "5678bb37-4a98-4e94-aea5-01b56d7e025b",
+        "description": "SNAP-ON Makers and Fixers 250 - Race 1",
+        "startTime": 1788127023,
+        "duration": 5886,
+        "archiveApiUrl": "https://archive.timing71.org/replays/5678bb37-4a98-4e94-aea5-01b56d7e025b"
+      },
+      "bytes": 430387,
+      "sha256": "9cb43d1c5640d20cff2c3b726a1c4687160b4e67059511aa0b001371271479a7",
+      "objectPath": "raw/objects/sha256/9c/9cb43d1c5640d20cff2c3b726a1c4687160b4e67059511aa0b001371271479a7.json",
+      "viewPath": "raw/views/timing71/2026/analysis/2026-08-30 21-57 IndyCar - SNAP-ON Makers and Fixers 250 - Race 1.json",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:12.958Z"
+    },
+    {
+      "id": "25f611b6cce786b3927842f0",
+      "sourceId": "timing71-analysis",
+      "sourceClass": "third-party derived replay analysis",
+      "kind": "derived_analysis",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-09-04%2019-57%20IndyCar%20-%20Mission%20Foods%20Grand%20Prix%20of%20Monterey%20-%20Practice%201%20-%20All%20Cars.json",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/analysis/2026-09-04 19-57 IndyCar - Mission Foods Grand Prix of Monterey - Practice 1 - All Cars.json",
+      "metadata": {
+        "replayId": "53c64588-605a-4d9c-b56e-d388375f0c2e",
+        "description": "Mission Foods Grand Prix of Monterey - Practice 1 - All Cars",
+        "startTime": 1788551837,
+        "duration": 3478,
+        "archiveApiUrl": "https://archive.timing71.org/replays/53c64588-605a-4d9c-b56e-d388375f0c2e"
+      },
+      "bytes": 98181,
+      "sha256": "1217387fe3aaf7443705a7773fe5b05f2fd15dde93c4751a67560d332f6c588d",
+      "objectPath": "raw/objects/sha256/12/1217387fe3aaf7443705a7773fe5b05f2fd15dde93c4751a67560d332f6c588d.json",
+      "viewPath": "raw/views/timing71/2026/analysis/2026-09-04 19-57 IndyCar - Mission Foods Grand Prix of Monterey - Practice 1 - All Cars.json",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:12.927Z"
+    },
+    {
+      "id": "633aad9f3d868a9aff8e2d98",
+      "sourceId": "timing71-analysis",
+      "sourceClass": "third-party derived replay analysis",
+      "kind": "derived_analysis",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-09-04%2020-57%20IndyCar%20-%20Grand%20Prix%20of%20Monterey%20Doubleheader%20-%20Practice%202.json",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/analysis/2026-09-04 20-57 IndyCar - Grand Prix of Monterey Doubleheader - Practice 2.json",
+      "metadata": {
+        "replayId": "cb57a111-39cd-453a-bcce-ef0016f84660",
+        "description": "Grand Prix of Monterey Doubleheader - Practice 2",
+        "startTime": 1788555443,
+        "duration": 5883,
+        "archiveApiUrl": "https://archive.timing71.org/replays/cb57a111-39cd-453a-bcce-ef0016f84660"
+      },
+      "bytes": 168873,
+      "sha256": "ad033422bc4aa256ddebd367b413980c0a49558694964cd4dd9d6c0fb868b7d6",
+      "objectPath": "raw/objects/sha256/ad/ad033422bc4aa256ddebd367b413980c0a49558694964cd4dd9d6c0fb868b7d6.json",
+      "viewPath": "raw/views/timing71/2026/analysis/2026-09-04 20-57 IndyCar - Grand Prix of Monterey Doubleheader - Practice 2.json",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:12.653Z"
+    },
+    {
+      "id": "156abb8903c33533a05449c0",
+      "sourceId": "timing71-analysis",
+      "sourceClass": "third-party derived replay analysis",
+      "kind": "derived_analysis",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-09-04%2022-27%20IndyCar%20-%20Grand%20Prix%20of%20Monterey%20Doubleheader%20-%20Practice%202.json",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/analysis/2026-09-04 22-27 IndyCar - Grand Prix of Monterey Doubleheader - Practice 2.json",
+      "metadata": {
+        "replayId": "b2f9ffa3-2248-4ba8-8ffc-3da22178b5ad",
+        "description": "Grand Prix of Monterey Doubleheader - Practice 2",
+        "startTime": 1788560848,
+        "duration": 3485,
+        "archiveApiUrl": "https://archive.timing71.org/replays/b2f9ffa3-2248-4ba8-8ffc-3da22178b5ad"
+      },
+      "bytes": 98656,
+      "sha256": "40757cc99032cec877be5a92f51f90edaf4c4885794eae6cfe57894e98933a36",
+      "objectPath": "raw/objects/sha256/40/40757cc99032cec877be5a92f51f90edaf4c4885794eae6cfe57894e98933a36.json",
+      "viewPath": "raw/views/timing71/2026/analysis/2026-09-04 22-27 IndyCar - Grand Prix of Monterey Doubleheader - Practice 2.json",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:12.994Z"
+    },
+    {
+      "id": "4427c1d7c11d52dae9bec6d6",
+      "sourceId": "timing71-analysis",
+      "sourceClass": "third-party derived replay analysis",
+      "kind": "derived_analysis",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-09-05%2016-57%20IndyCar%20-%20Mission%20Foods%20Grand%20Prix%20of%20Monterey%20-%20Practice%202%20-%20All%20Cars.json",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/analysis/2026-09-05 16-57 IndyCar - Mission Foods Grand Prix of Monterey - Practice 2 - All Cars.json",
+      "metadata": {
+        "replayId": "065d8d08-985a-4a1c-88d5-6db7ecfc2229",
+        "description": "Mission Foods Grand Prix of Monterey - Practice 2 - All Cars",
+        "startTime": 1788627431,
+        "duration": 5584,
+        "archiveApiUrl": "https://archive.timing71.org/replays/065d8d08-985a-4a1c-88d5-6db7ecfc2229"
+      },
+      "bytes": 82577,
+      "sha256": "c1a1c92f91a629c12a674e63600478d1e3601ee147ebb75893200077361b326e",
+      "objectPath": "raw/objects/sha256/c1/c1a1c92f91a629c12a674e63600478d1e3601ee147ebb75893200077361b326e.json",
+      "viewPath": "raw/views/timing71/2026/analysis/2026-09-05 16-57 IndyCar - Mission Foods Grand Prix of Monterey - Practice 2 - All Cars.json",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:13.296Z"
+    },
+    {
+      "id": "28b5e965a13dd6fad801ef5c",
+      "sourceId": "timing71-analysis",
+      "sourceClass": "third-party derived replay analysis",
+      "kind": "derived_analysis",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-09-05%2020-27%20IndyCar%20-%20Mission%20Foods%20Grand%20Prix%20of%20Monterey%20-%20Qualifications%20-%20Segment%203%20_%20Firestone%20Fast%206.json",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/analysis/2026-09-05 20-27 IndyCar - Mission Foods Grand Prix of Monterey - Qualifications - Segment 3 _ Firestone Fast 6.json",
+      "metadata": {
+        "replayId": "8df28c85-4f28-4058-ba4a-e152dcafdd99",
+        "description": "Mission Foods Grand Prix of Monterey - Qualifications - Segment 3 / Firestone Fast 6",
+        "startTime": 1788640058,
+        "duration": 5881,
+        "archiveApiUrl": "https://archive.timing71.org/replays/8df28c85-4f28-4058-ba4a-e152dcafdd99"
+      },
+      "bytes": 107327,
+      "sha256": "16d2d005595a5ec2529546e24dcb253c368bfdb592fc5a34635d66e51df0fba5",
+      "objectPath": "raw/objects/sha256/16/16d2d005595a5ec2529546e24dcb253c368bfdb592fc5a34635d66e51df0fba5.json",
+      "viewPath": "raw/views/timing71/2026/analysis/2026-09-05 20-27 IndyCar - Mission Foods Grand Prix of Monterey - Qualifications - Segment 3 _ Firestone Fast 6.json",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:13.248Z"
+    },
+    {
+      "id": "483d3db6d44738355a792c4b",
+      "sourceId": "timing71-analysis",
+      "sourceClass": "third-party derived replay analysis",
+      "kind": "derived_analysis",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-09-05%2022-35%20IndyCar%20-%20Grand%20Prix%20of%20Monterey%20Doubleheader%20-%20Race%201.json",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/analysis/2026-09-05 22-35 IndyCar - Grand Prix of Monterey Doubleheader - Race 1.json",
+      "metadata": {
+        "replayId": "d8950231-dbd4-41bf-b764-7818ccc23c86",
+        "description": "Grand Prix of Monterey Doubleheader - Race 1",
+        "startTime": 1788647747,
+        "duration": 4077,
+        "archiveApiUrl": "https://archive.timing71.org/replays/d8950231-dbd4-41bf-b764-7818ccc23c86"
+      },
+      "bytes": 117210,
+      "sha256": "1ac98907a5bbd03e168d1c61748d4cd97f2f3887a2dc4e028a22456753e7bc10",
+      "objectPath": "raw/objects/sha256/1a/1ac98907a5bbd03e168d1c61748d4cd97f2f3887a2dc4e028a22456753e7bc10.json",
+      "viewPath": "raw/views/timing71/2026/analysis/2026-09-05 22-35 IndyCar - Grand Prix of Monterey Doubleheader - Race 1.json",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:13.388Z"
+    },
+    {
+      "id": "653688df18cecbe333393392",
+      "sourceId": "timing71-analysis",
+      "sourceClass": "third-party derived replay analysis",
+      "kind": "derived_analysis",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-09-05%2023-57%20IndyCar%20-%20Mission%20Foods%20Grand%20Prix%20of%20Monterey%20-%20Practice%20Final.json",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/analysis/2026-09-05 23-57 IndyCar - Mission Foods Grand Prix of Monterey - Practice Final.json",
+      "metadata": {
+        "replayId": "80492479-e1b6-4924-bd58-198f0a7048f9",
+        "description": "Mission Foods Grand Prix of Monterey - Practice Final",
+        "startTime": 1788652673,
+        "duration": 2579,
+        "archiveApiUrl": "https://archive.timing71.org/replays/80492479-e1b6-4924-bd58-198f0a7048f9"
+      },
+      "bytes": 128321,
+      "sha256": "2bf01ac98e65ebceb0c9a189cab8139f39b10968ad1b4336df98ee5ec4280a07",
+      "objectPath": "raw/objects/sha256/2b/2bf01ac98e65ebceb0c9a189cab8139f39b10968ad1b4336df98ee5ec4280a07.json",
+      "viewPath": "raw/views/timing71/2026/analysis/2026-09-05 23-57 IndyCar - Mission Foods Grand Prix of Monterey - Practice Final.json",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:13.301Z"
+    },
+    {
+      "id": "e326f407b76588fcd48fde76",
+      "sourceId": "timing71-analysis",
+      "sourceClass": "third-party derived replay analysis",
+      "kind": "derived_analysis",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-09-06%2016-35%20IndyCar%20-%20Grand%20Prix%20of%20Monterey%20Doubleheader%20-%20Race%202.json",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/analysis/2026-09-06 16-35 IndyCar - Grand Prix of Monterey Doubleheader - Race 2.json",
+      "metadata": {
+        "replayId": "b49e14f4-ea16-4c2b-bc82-077cd3e28ec1",
+        "description": "Grand Prix of Monterey Doubleheader - Race 2",
+        "startTime": 1788712538,
+        "duration": 4077,
+        "archiveApiUrl": "https://archive.timing71.org/replays/b49e14f4-ea16-4c2b-bc82-077cd3e28ec1"
+      },
+      "bytes": 113725,
+      "sha256": "3c9671bf12d4c9ea226677b3292b17c64d40a03f05189c74fb43c6045a49f21f",
+      "objectPath": "raw/objects/sha256/3c/3c9671bf12d4c9ea226677b3292b17c64d40a03f05189c74fb43c6045a49f21f.json",
+      "viewPath": "raw/views/timing71/2026/analysis/2026-09-06 16-35 IndyCar - Grand Prix of Monterey Doubleheader - Race 2.json",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:13.736Z"
+    },
+    {
+      "id": "1469332272a94df8c9f07081",
+      "sourceId": "timing71-analysis",
+      "sourceClass": "third-party derived replay analysis",
+      "kind": "derived_analysis",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-09-06%2019-02%20IndyCar%20-%20Mission%20Foods%20Grand%20Prix%20of%20Monterey%20-%20Race.json",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/analysis/2026-09-06 19-02 IndyCar - Mission Foods Grand Prix of Monterey - Race.json",
+      "metadata": {
+        "replayId": "f4c1e809-73ae-420e-9249-a019ce40a835",
+        "description": "Mission Foods Grand Prix of Monterey - Race",
+        "startTime": 1788721363,
+        "duration": 10079,
+        "archiveApiUrl": "https://archive.timing71.org/replays/f4c1e809-73ae-420e-9249-a019ce40a835"
+      },
+      "bytes": 305213,
+      "sha256": "b5159fb02ee72193c751c6be78e9f30653ee1eabaecd2b5aa262132d206bffee",
+      "objectPath": "raw/objects/sha256/b5/b5159fb02ee72193c751c6be78e9f30653ee1eabaecd2b5aa262132d206bffee.json",
+      "viewPath": "raw/views/timing71/2026/analysis/2026-09-06 19-02 IndyCar - Mission Foods Grand Prix of Monterey - Race.json",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:13.723Z"
+    },
+    {
       "id": "9060d8cbe3a4d537806c7f19",
       "sourceId": "timing71-replay",
       "sourceClass": "third-party normalized replay of live timing",
@@ -27531,6 +28711,1098 @@
       "provenanceGrade": "verified_fetch",
       "reusedFrom": null,
       "acquiredAt": "2026-07-21T23:47:33.133Z"
+    },
+    {
+      "id": "1fc993611d388cdd2dd6c166",
+      "sourceId": "timing71-replay",
+      "sourceClass": "third-party normalized replay of live timing",
+      "kind": "normalized_replay",
+      "year": 2026,
+      "series": [
+        "INDY_NXT"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-08-07%2020-27%20IndyCar%20-%20INDY%20NXT%20By%20Firestone%20GP%20of%20Portland%20-%20Practice%201.zip",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/replays/2026-08-07 20-27 IndyCar - INDY NXT By Firestone GP of Portland - Practice 1.zip",
+      "metadata": {
+        "replayId": "aea0444b-d683-459b-bd60-a3616da6e633",
+        "description": "INDY NXT By Firestone GP of Portland - Practice 1",
+        "startTime": 1786134426,
+        "duration": 3478,
+        "archiveApiUrl": "https://archive.timing71.org/replays/aea0444b-d683-459b-bd60-a3616da6e633"
+      },
+      "bytes": 1921851,
+      "sha256": "36145ae6cffad3fdb864e17e43d9f75037b7f44497103f73f30b3a82e29174ab",
+      "objectPath": "raw/objects/sha256/36/36145ae6cffad3fdb864e17e43d9f75037b7f44497103f73f30b3a82e29174ab.zip",
+      "viewPath": "raw/views/timing71/2026/replays/2026-08-07 20-27 IndyCar - INDY NXT By Firestone GP of Portland - Practice 1.zip",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:13.730Z"
+    },
+    {
+      "id": "7754308ba9dffd4eaccf14dc",
+      "sourceId": "timing71-replay",
+      "sourceClass": "third-party normalized replay of live timing",
+      "kind": "normalized_replay",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-08-07%2021-32%20IndyCar%20-%20ONLYBULLS%20Grand%20Prix%20of%20Portland%20-%20Practice%201%20-%20Group%20A.zip",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/replays/2026-08-07 21-32 IndyCar - ONLYBULLS Grand Prix of Portland - Practice 1 - Group A.zip",
+      "metadata": {
+        "replayId": "c902ecfc-f5e9-4f47-b10f-9971e4db1a3a",
+        "description": "ONLYBULLS Grand Prix of Portland - Practice 1 - Group A",
+        "startTime": 1786138331,
+        "duration": 5577,
+        "archiveApiUrl": "https://archive.timing71.org/replays/c902ecfc-f5e9-4f47-b10f-9971e4db1a3a"
+      },
+      "bytes": 2679697,
+      "sha256": "c1e63a62afe16bbe7ebd26dfb722f83c6545afc5c56824bfb122439e53a38ff9",
+      "objectPath": "raw/objects/sha256/c1/c1e63a62afe16bbe7ebd26dfb722f83c6545afc5c56824bfb122439e53a38ff9.zip",
+      "viewPath": "raw/views/timing71/2026/replays/2026-08-07 21-32 IndyCar - ONLYBULLS Grand Prix of Portland - Practice 1 - Group A.zip",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:13.988Z"
+    },
+    {
+      "id": "6b13348f62e33983f397ef91",
+      "sourceId": "timing71-replay",
+      "sourceClass": "third-party normalized replay of live timing",
+      "kind": "normalized_replay",
+      "year": 2026,
+      "series": [
+        "INDY_NXT"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-08-08%2015-57%20IndyCar%20-%20INDY%20NXT%20By%20Firestone%20GP%20of%20Portland%20-%20Practice%202.zip",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/replays/2026-08-08 15-57 IndyCar - INDY NXT By Firestone GP of Portland - Practice 2.zip",
+      "metadata": {
+        "replayId": "8cb920ae-d919-4c44-9c2e-739c868fea3c",
+        "description": "INDY NXT By Firestone GP of Portland - Practice 2",
+        "startTime": 1786204661,
+        "duration": 3479,
+        "archiveApiUrl": "https://archive.timing71.org/replays/8cb920ae-d919-4c44-9c2e-739c868fea3c"
+      },
+      "bytes": 2067833,
+      "sha256": "e4dd96c7a82d45b0c6d15e184b379719dd78adc9491b29b9a5dde9cec15e65d5",
+      "objectPath": "raw/objects/sha256/e4/e4dd96c7a82d45b0c6d15e184b379719dd78adc9491b29b9a5dde9cec15e65d5.zip",
+      "viewPath": "raw/views/timing71/2026/replays/2026-08-08 15-57 IndyCar - INDY NXT By Firestone GP of Portland - Practice 2.zip",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:14.222Z"
+    },
+    {
+      "id": "886329cfcd7f37b97ba1f7c2",
+      "sourceId": "timing71-replay",
+      "sourceClass": "third-party normalized replay of live timing",
+      "kind": "normalized_replay",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-08-08%2017-02%20IndyCar%20-%20ONLYBULLS%20Grand%20Prix%20of%20Portland%20-%20Practice%202%20-%20Group%20B.zip",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/replays/2026-08-08 17-02 IndyCar - ONLYBULLS Grand Prix of Portland - Practice 2 - Group B.zip",
+      "metadata": {
+        "replayId": "24e2431c-1265-4387-ba42-3894f7ad1a4b",
+        "description": "ONLYBULLS Grand Prix of Portland - Practice 2 - Group B",
+        "startTime": 1786208567,
+        "duration": 5578,
+        "archiveApiUrl": "https://archive.timing71.org/replays/24e2431c-1265-4387-ba42-3894f7ad1a4b"
+      },
+      "bytes": 2754203,
+      "sha256": "7eaca5a0620641151c96a603edaf76e570ff6646fe16403a5a65c22982d29581",
+      "objectPath": "raw/objects/sha256/7e/7eaca5a0620641151c96a603edaf76e570ff6646fe16403a5a65c22982d29581.zip",
+      "viewPath": "raw/views/timing71/2026/replays/2026-08-08 17-02 IndyCar - ONLYBULLS Grand Prix of Portland - Practice 2 - Group B.zip",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:14.359Z"
+    },
+    {
+      "id": "ed62ec31ebde8fa8da2035d2",
+      "sourceId": "timing71-replay",
+      "sourceClass": "third-party normalized replay of live timing",
+      "kind": "normalized_replay",
+      "year": 2026,
+      "series": [
+        "INDY_NXT"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-08-08%2018-57%20IndyCar%20-%20INDY%20NXT%20By%20Firestone%20GP%20of%20Portland%20-%20Qualifications.zip",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/replays/2026-08-08 18-57 IndyCar - INDY NXT By Firestone GP of Portland - Qualifications.zip",
+      "metadata": {
+        "replayId": "6204d63b-2d7b-4a42-bb30-404b4bb97224",
+        "description": "INDY NXT By Firestone GP of Portland - Qualifications",
+        "startTime": 1786215474,
+        "duration": 2579,
+        "archiveApiUrl": "https://archive.timing71.org/replays/6204d63b-2d7b-4a42-bb30-404b4bb97224"
+      },
+      "bytes": 1179542,
+      "sha256": "42df636853e47eb5bd6301d9630dfe44116d48c5f482f50770680b0f3d886c80",
+      "objectPath": "raw/objects/sha256/42/42df636853e47eb5bd6301d9630dfe44116d48c5f482f50770680b0f3d886c80.zip",
+      "viewPath": "raw/views/timing71/2026/replays/2026-08-08 18-57 IndyCar - INDY NXT By Firestone GP of Portland - Qualifications.zip",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:14.141Z"
+    },
+    {
+      "id": "aafe797224506b60d3ec6634",
+      "sourceId": "timing71-replay",
+      "sourceClass": "third-party normalized replay of live timing",
+      "kind": "normalized_replay",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-08-09%2017-02%20IndyCar%20-%20ONLYBULLS%20Grand%20Prix%20of%20Portland%20-%20Warmup.zip",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/replays/2026-08-09 17-02 IndyCar - ONLYBULLS Grand Prix of Portland - Warmup.zip",
+      "metadata": {
+        "replayId": "ab71cfd6-7e42-4105-9c8b-fcc6cd4550df",
+        "description": "ONLYBULLS Grand Prix of Portland - Warmup",
+        "startTime": 1786294958,
+        "duration": 2578,
+        "archiveApiUrl": "https://archive.timing71.org/replays/ab71cfd6-7e42-4105-9c8b-fcc6cd4550df"
+      },
+      "bytes": 1466389,
+      "sha256": "ca9624f887f7f5632a4288666801362450b77032ec50d299cefeca9f98ae5c42",
+      "objectPath": "raw/objects/sha256/ca/ca9624f887f7f5632a4288666801362450b77032ec50d299cefeca9f98ae5c42.zip",
+      "viewPath": "raw/views/timing71/2026/replays/2026-08-09 17-02 IndyCar - ONLYBULLS Grand Prix of Portland - Warmup.zip",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:14.985Z"
+    },
+    {
+      "id": "af0eaacf08e931112ec10db3",
+      "sourceId": "timing71-replay",
+      "sourceClass": "third-party normalized replay of live timing",
+      "kind": "normalized_replay",
+      "year": 2026,
+      "series": [
+        "INDY_NXT"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-08-09%2018-05%20IndyCar%20-%20INDY%20NXT%20By%20Firestone%20GP%20of%20Portland%20-%20Race.zip",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/replays/2026-08-09 18-05 IndyCar - INDY NXT By Firestone GP of Portland - Race.zip",
+      "metadata": {
+        "replayId": "eedf1cdd-8715-475e-968b-a4dd9ee970f0",
+        "description": "INDY NXT By Firestone GP of Portland - Race",
+        "startTime": 1786298742,
+        "duration": 4078,
+        "archiveApiUrl": "https://archive.timing71.org/replays/eedf1cdd-8715-475e-968b-a4dd9ee970f0"
+      },
+      "bytes": 1904605,
+      "sha256": "c6b4a0d9d3bc69107570b464367dc671c03255f658e7f904739cb5c9d7131c68",
+      "objectPath": "raw/objects/sha256/c6/c6b4a0d9d3bc69107570b464367dc671c03255f658e7f904739cb5c9d7131c68.zip",
+      "viewPath": "raw/views/timing71/2026/replays/2026-08-09 18-05 IndyCar - INDY NXT By Firestone GP of Portland - Race.zip",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:14.629Z"
+    },
+    {
+      "id": "49101e377099ed82e768aa03",
+      "sourceId": "timing71-replay",
+      "sourceClass": "third-party normalized replay of live timing",
+      "kind": "normalized_replay",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-08-09%2020-24%20IndyCar%20-%20ONLYBULLS%20Grand%20Prix%20of%20Portland%20-%20Race.zip",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/replays/2026-08-09 20-24 IndyCar - ONLYBULLS Grand Prix of Portland - Race.zip",
+      "metadata": {
+        "replayId": "65415d32-1cba-45b8-a1a4-6e34e35c8ab4",
+        "description": "ONLYBULLS Grand Prix of Portland - Race",
+        "startTime": 1786307088,
+        "duration": 9779,
+        "archiveApiUrl": "https://archive.timing71.org/replays/65415d32-1cba-45b8-a1a4-6e34e35c8ab4"
+      },
+      "bytes": 4854701,
+      "sha256": "0455749f4683739945fb7937219f67d69ea5d1902fd972f99278fd057ed5fb10",
+      "objectPath": "raw/objects/sha256/04/0455749f4683739945fb7937219f67d69ea5d1902fd972f99278fd057ed5fb10.zip",
+      "viewPath": "raw/views/timing71/2026/replays/2026-08-09 20-24 IndyCar - ONLYBULLS Grand Prix of Portland - Race.zip",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:14.837Z"
+    },
+    {
+      "id": "4ab06d2e68ea0e177644cd92",
+      "sourceId": "timing71-replay",
+      "sourceClass": "third-party normalized replay of live timing",
+      "kind": "normalized_replay",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-08-15%2014-02%20IndyCar%20-%20Ontario%20Honda%20Dealers%20Indy%20at%20Markham%20-%20Practice%201%20-%20Group%20B.zip",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/replays/2026-08-15 14-02 IndyCar - Ontario Honda Dealers Indy at Markham - Practice 1 - Group B.zip",
+      "metadata": {
+        "replayId": "966da49a-4618-4a23-8353-eed07902bfb8",
+        "description": "Ontario Honda Dealers Indy at Markham - Practice 1 - Group B",
+        "startTime": 1786802545,
+        "duration": 5581,
+        "archiveApiUrl": "https://archive.timing71.org/replays/966da49a-4618-4a23-8353-eed07902bfb8"
+      },
+      "bytes": 2907162,
+      "sha256": "bf80ecdb937a7f29a5fee564379facd6349581a934480a3d63395a80c5928b84",
+      "objectPath": "raw/objects/sha256/bf/bf80ecdb937a7f29a5fee564379facd6349581a934480a3d63395a80c5928b84.zip",
+      "viewPath": "raw/views/timing71/2026/replays/2026-08-15 14-02 IndyCar - Ontario Honda Dealers Indy at Markham - Practice 1 - Group B.zip",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:14.922Z"
+    },
+    {
+      "id": "254ec6a3f58acfb9ad8bf45e",
+      "sourceId": "timing71-replay",
+      "sourceClass": "third-party normalized replay of live timing",
+      "kind": "normalized_replay",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-08-15%2018-22%20IndyCar%20-%20Ontario%20Honda%20Dealers%20Indy%20at%20Markham%20-%20Practice%202%20-%20Group%20A.zip",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/replays/2026-08-15 18-22 IndyCar - Ontario Honda Dealers Indy at Markham - Practice 2 - Group A.zip",
+      "metadata": {
+        "replayId": "27a95685-f6ef-47e6-9b53-e2ca3911c289",
+        "description": "Ontario Honda Dealers Indy at Markham - Practice 2 - Group A",
+        "startTime": 1786818157,
+        "duration": 5886,
+        "archiveApiUrl": "https://archive.timing71.org/replays/27a95685-f6ef-47e6-9b53-e2ca3911c289"
+      },
+      "bytes": 2972989,
+      "sha256": "65b233c78e73bad413bde6ff458bd9f31552f7f589fd41edaa912d3ebba400c6",
+      "objectPath": "raw/objects/sha256/65/65b233c78e73bad413bde6ff458bd9f31552f7f589fd41edaa912d3ebba400c6.zip",
+      "viewPath": "raw/views/timing71/2026/replays/2026-08-15 18-22 IndyCar - Ontario Honda Dealers Indy at Markham - Practice 2 - Group A.zip",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:15.431Z"
+    },
+    {
+      "id": "d4bac312e53ae83b79290b56",
+      "sourceId": "timing71-replay",
+      "sourceClass": "third-party normalized replay of live timing",
+      "kind": "normalized_replay",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-08-15%2018-27%20IndyCar%20-%20Ontario%20Honda%20Dealers%20Indy%20at%20Markham%20-%20Practice%202%20-%20Group%20A.zip",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/replays/2026-08-15 18-27 IndyCar - Ontario Honda Dealers Indy at Markham - Practice 2 - Group A.zip",
+      "metadata": {
+        "replayId": "faae8c42-f6a4-462a-9efd-d575c77e6ae9",
+        "description": "Ontario Honda Dealers Indy at Markham - Practice 2 - Group A",
+        "startTime": 1786818457,
+        "duration": 5581,
+        "archiveApiUrl": "https://archive.timing71.org/replays/faae8c42-f6a4-462a-9efd-d575c77e6ae9"
+      },
+      "bytes": 2890785,
+      "sha256": "1cac235ef50e0bb84ba00a2e3ccec253912ba39f2665d2c5950a6db087c9872a",
+      "objectPath": "raw/objects/sha256/1c/1cac235ef50e0bb84ba00a2e3ccec253912ba39f2665d2c5950a6db087c9872a.zip",
+      "viewPath": "raw/views/timing71/2026/replays/2026-08-15 18-27 IndyCar - Ontario Honda Dealers Indy at Markham - Practice 2 - Group A.zip",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:15.335Z"
+    },
+    {
+      "id": "75bbf1ec44c6b289d581911b",
+      "sourceId": "timing71-replay",
+      "sourceClass": "third-party normalized replay of live timing",
+      "kind": "normalized_replay",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-08-15%2022-27%20IndyCar%20-%20Ontario%20Honda%20Dealers%20Indy%20at%20Markham%20-%20Qualifications%20-%20Segment%203%20_%20Firestone%20Fast%206.zip",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/replays/2026-08-15 22-27 IndyCar - Ontario Honda Dealers Indy at Markham - Qualifications - Segment 3 _ Firestone Fast 6.zip",
+      "metadata": {
+        "replayId": "28b6bbb2-d077-49f7-981c-0d3a8b734f0b",
+        "description": "Ontario Honda Dealers Indy at Markham - Qualifications - Segment 3 / Firestone Fast 6",
+        "startTime": 1786832874,
+        "duration": 5878,
+        "archiveApiUrl": "https://archive.timing71.org/replays/28b6bbb2-d077-49f7-981c-0d3a8b734f0b"
+      },
+      "bytes": 2369244,
+      "sha256": "0737abef53866af6174f9efe429e31fe82f83a64267ca2a8677a51512d202880",
+      "objectPath": "raw/objects/sha256/07/0737abef53866af6174f9efe429e31fe82f83a64267ca2a8677a51512d202880.zip",
+      "viewPath": "raw/views/timing71/2026/replays/2026-08-15 22-27 IndyCar - Ontario Honda Dealers Indy at Markham - Qualifications - Segment 3 _ Firestone Fast 6.zip",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:15.744Z"
+    },
+    {
+      "id": "f72e825187a664130e6c3daa",
+      "sourceId": "timing71-replay",
+      "sourceClass": "third-party normalized replay of live timing",
+      "kind": "normalized_replay",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-08-16%2012-27%20IndyCar%20-%20Ontario%20Honda%20Dealers%20Indy%20at%20Markham%20-%20Warmup.zip",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/replays/2026-08-16 12-27 IndyCar - Ontario Honda Dealers Indy at Markham - Warmup.zip",
+      "metadata": {
+        "replayId": "1552ade7-e144-42ce-a173-94da2b472375",
+        "description": "Ontario Honda Dealers Indy at Markham - Warmup",
+        "startTime": 1786883248,
+        "duration": 2583,
+        "archiveApiUrl": "https://archive.timing71.org/replays/1552ade7-e144-42ce-a173-94da2b472375"
+      },
+      "bytes": 1414505,
+      "sha256": "c6201f6320cd60b56ea09de4afc198ea19ad0e3d6eb5f79fb5f9664a25af37f2",
+      "objectPath": "raw/objects/sha256/c6/c6201f6320cd60b56ea09de4afc198ea19ad0e3d6eb5f79fb5f9664a25af37f2.zip",
+      "viewPath": "raw/views/timing71/2026/replays/2026-08-16 12-27 IndyCar - Ontario Honda Dealers Indy at Markham - Warmup.zip",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:15.919Z"
+    },
+    {
+      "id": "e6b755fddfa65b9aea662d27",
+      "sourceId": "timing71-replay",
+      "sourceClass": "third-party normalized replay of live timing",
+      "kind": "normalized_replay",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-08-16%2016-19%20IndyCar%20-%20Ontario%20Honda%20Dealers%20Indy%20at%20Markham%20-%20Race.zip",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/replays/2026-08-16 16-19 IndyCar - Ontario Honda Dealers Indy at Markham - Race.zip",
+      "metadata": {
+        "replayId": "ecf3c4c5-354e-46ed-84e4-f0ca0e800050",
+        "description": "Ontario Honda Dealers Indy at Markham - Race",
+        "startTime": 1786897179,
+        "duration": 8461,
+        "archiveApiUrl": "https://archive.timing71.org/replays/ecf3c4c5-354e-46ed-84e4-f0ca0e800050"
+      },
+      "bytes": 4118480,
+      "sha256": "785bce0d747f58426d2870836816c7337831f1b39bc05921e0a146be2dd86a3a",
+      "objectPath": "raw/objects/sha256/78/785bce0d747f58426d2870836816c7337831f1b39bc05921e0a146be2dd86a3a.zip",
+      "viewPath": "raw/views/timing71/2026/replays/2026-08-16 16-19 IndyCar - Ontario Honda Dealers Indy at Markham - Race.zip",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:15.825Z"
+    },
+    {
+      "id": "0f4915d16f8554c44660b297",
+      "sourceId": "timing71-replay",
+      "sourceClass": "third-party normalized replay of live timing",
+      "kind": "normalized_replay",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-08-22%2013-02%20IndyCar%20-%20Freedom%20250%20Grand%20Prix%20of%20Washington%20DC%20-%20Practice%201%20-%20Group%20A.zip",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/replays/2026-08-22 13-02 IndyCar - Freedom 250 Grand Prix of Washington DC - Practice 1 - Group A.zip",
+      "metadata": {
+        "replayId": "e2ee2e2d-ddbb-4198-a2cf-5e2d589d20e5",
+        "description": "Freedom 250 Grand Prix of Washington DC - Practice 1 - Group A",
+        "startTime": 1787403752,
+        "duration": 5880,
+        "archiveApiUrl": "https://archive.timing71.org/replays/e2ee2e2d-ddbb-4198-a2cf-5e2d589d20e5"
+      },
+      "bytes": 2910475,
+      "sha256": "6c8597d9e7706f935afa23bb2f1a58ae60834f28d68dd243d7f03359bf338392",
+      "objectPath": "raw/objects/sha256/6c/6c8597d9e7706f935afa23bb2f1a58ae60834f28d68dd243d7f03359bf338392.zip",
+      "viewPath": "raw/views/timing71/2026/replays/2026-08-22 13-02 IndyCar - Freedom 250 Grand Prix of Washington DC - Practice 1 - Group A.zip",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:16.050Z"
+    },
+    {
+      "id": "6929620976f99f9e094b3d9c",
+      "sourceId": "timing71-replay",
+      "sourceClass": "third-party normalized replay of live timing",
+      "kind": "normalized_replay",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-08-22%2014-37%20IndyCar%20-%20Freedom%20250%20Grand%20Prix%20of%20Washington%20DC%20-%20Practice%201.zip",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/replays/2026-08-22 14-37 IndyCar - Freedom 250 Grand Prix of Washington DC - Practice 1.zip",
+      "metadata": {
+        "replayId": "bacec8b0-ba98-48e9-87fb-83a5f7b4bb75",
+        "description": "Freedom 250 Grand Prix of Washington DC - Practice 1",
+        "startTime": 1787409453,
+        "duration": 2283,
+        "archiveApiUrl": "https://archive.timing71.org/replays/bacec8b0-ba98-48e9-87fb-83a5f7b4bb75"
+      },
+      "bytes": 864387,
+      "sha256": "aec9638872bf66b0c19ef08769cb043f65a8fa9d6df74bf4a51429d545c65ed0",
+      "objectPath": "raw/objects/sha256/ae/aec9638872bf66b0c19ef08769cb043f65a8fa9d6df74bf4a51429d545c65ed0.zip",
+      "viewPath": "raw/views/timing71/2026/replays/2026-08-22 14-37 IndyCar - Freedom 250 Grand Prix of Washington DC - Practice 1.zip",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:16.396Z"
+    },
+    {
+      "id": "327cf370de78ef9ab485b72e",
+      "sourceId": "timing71-replay",
+      "sourceClass": "third-party normalized replay of live timing",
+      "kind": "normalized_replay",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-08-22%2016-22%20IndyCar%20-%20Freedom%20250%20Grand%20Prix%20of%20Washington%20DC%20-%20Practice%202%20-%20All%20Cars.zip",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/replays/2026-08-22 16-22 IndyCar - Freedom 250 Grand Prix of Washington DC - Practice 2 - All Cars.zip",
+      "metadata": {
+        "replayId": "bb675a64-eae4-4e8e-9b20-1cdd1b3ceaca",
+        "description": "Freedom 250 Grand Prix of Washington DC - Practice 2 - All Cars",
+        "startTime": 1787415774,
+        "duration": 2281,
+        "archiveApiUrl": "https://archive.timing71.org/replays/bb675a64-eae4-4e8e-9b20-1cdd1b3ceaca"
+      },
+      "bytes": 810186,
+      "sha256": "3ca8708552d9d4027c067018a5f88d7baca494a74f07aae0ae117139babf569e",
+      "objectPath": "raw/objects/sha256/3c/3ca8708552d9d4027c067018a5f88d7baca494a74f07aae0ae117139babf569e.zip",
+      "viewPath": "raw/views/timing71/2026/replays/2026-08-22 16-22 IndyCar - Freedom 250 Grand Prix of Washington DC - Practice 2 - All Cars.zip",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:16.775Z"
+    },
+    {
+      "id": "7fc7382f5004b9d1736adbb8",
+      "sourceId": "timing71-replay",
+      "sourceClass": "third-party normalized replay of live timing",
+      "kind": "normalized_replay",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-08-22%2017-03%20IndyCar%20-%20Freedom%20250%20Grand%20Prix%20of%20Washington%20DC%20-%20Practice%202.zip",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/replays/2026-08-22 17-03 IndyCar - Freedom 250 Grand Prix of Washington DC - Practice 2.zip",
+      "metadata": {
+        "replayId": "3e327001-b86b-407e-b666-6759f5698be4",
+        "description": "Freedom 250 Grand Prix of Washington DC - Practice 2",
+        "startTime": 1787418180,
+        "duration": 5519,
+        "archiveApiUrl": "https://archive.timing71.org/replays/3e327001-b86b-407e-b666-6759f5698be4"
+      },
+      "bytes": 2905319,
+      "sha256": "013983a6aa3a3fba650776a77ec3b8e7015cc3277f8b7fb8a364422be774d2b6",
+      "objectPath": "raw/objects/sha256/01/013983a6aa3a3fba650776a77ec3b8e7015cc3277f8b7fb8a364422be774d2b6.zip",
+      "viewPath": "raw/views/timing71/2026/replays/2026-08-22 17-03 IndyCar - Freedom 250 Grand Prix of Washington DC - Practice 2.zip",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:16.826Z"
+    },
+    {
+      "id": "e38fd01b7e13471e999d72af",
+      "sourceId": "timing71-replay",
+      "sourceClass": "third-party normalized replay of live timing",
+      "kind": "normalized_replay",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-08-22%2019-57%20IndyCar%20-%20Freedom%20250%20Grand%20Prix%20of%20Washington%20DC%20-%20Practice%202.zip",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/replays/2026-08-22 19-57 IndyCar - Freedom 250 Grand Prix of Washington DC - Practice 2.zip",
+      "metadata": {
+        "replayId": "2309ca48-bfe5-4cb7-bba8-10f6197c9834",
+        "description": "Freedom 250 Grand Prix of Washington DC - Practice 2",
+        "startTime": 1787428631,
+        "duration": 2588,
+        "archiveApiUrl": "https://archive.timing71.org/replays/2309ca48-bfe5-4cb7-bba8-10f6197c9834"
+      },
+      "bytes": 919482,
+      "sha256": "d43e94bd8f328aeeb71ec2ea2438806f805035d2a8bbb204b484c145466a0414",
+      "objectPath": "raw/objects/sha256/d4/d43e94bd8f328aeeb71ec2ea2438806f805035d2a8bbb204b484c145466a0414.zip",
+      "viewPath": "raw/views/timing71/2026/replays/2026-08-22 19-57 IndyCar - Freedom 250 Grand Prix of Washington DC - Practice 2.zip",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:16.931Z"
+    },
+    {
+      "id": "99da5a0962fff9920d2b0bfc",
+      "sourceId": "timing71-replay",
+      "sourceClass": "third-party normalized replay of live timing",
+      "kind": "normalized_replay",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-08-22%2020-57%20IndyCar%20-%20Freedom%20250%20Grand%20Prix%20of%20Washington%20DC%20-%20Qualifications.zip",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/replays/2026-08-22 20-57 IndyCar - Freedom 250 Grand Prix of Washington DC - Qualifications.zip",
+      "metadata": {
+        "replayId": "ba82e0bc-25a4-4f1b-bbc0-6501351eafc4",
+        "description": "Freedom 250 Grand Prix of Washington DC - Qualifications",
+        "startTime": 1787432243,
+        "duration": 5879,
+        "archiveApiUrl": "https://archive.timing71.org/replays/ba82e0bc-25a4-4f1b-bbc0-6501351eafc4"
+      },
+      "bytes": 2567389,
+      "sha256": "cba49af0f9a160e741cfa7c4b53f3b3979e3c9e83e150b434e15de4dd5eb0e48",
+      "objectPath": "raw/objects/sha256/cb/cba49af0f9a160e741cfa7c4b53f3b3979e3c9e83e150b434e15de4dd5eb0e48.zip",
+      "viewPath": "raw/views/timing71/2026/replays/2026-08-22 20-57 IndyCar - Freedom 250 Grand Prix of Washington DC - Qualifications.zip",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:16.878Z"
+    },
+    {
+      "id": "a8eed0758f02244344d252e5",
+      "sourceId": "timing71-replay",
+      "sourceClass": "third-party normalized replay of live timing",
+      "kind": "normalized_replay",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-08-23%2013-12%20IndyCar%20-%20Freedom%20250%20Grand%20Prix%20of%20Washington%20DC%20-%20Warmup.zip",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/replays/2026-08-23 13-12 IndyCar - Freedom 250 Grand Prix of Washington DC - Warmup.zip",
+      "metadata": {
+        "replayId": "8840b2cf-dd2b-46b3-a5e2-ee09aad32e15",
+        "description": "Freedom 250 Grand Prix of Washington DC - Warmup",
+        "startTime": 1787490727,
+        "duration": 2577,
+        "archiveApiUrl": "https://archive.timing71.org/replays/8840b2cf-dd2b-46b3-a5e2-ee09aad32e15"
+      },
+      "bytes": 1516109,
+      "sha256": "50de711b1131d7ae7f23baf95624129c1db0e9ef5c1bd7107155d18500c30c94",
+      "objectPath": "raw/objects/sha256/50/50de711b1131d7ae7f23baf95624129c1db0e9ef5c1bd7107155d18500c30c94.zip",
+      "viewPath": "raw/views/timing71/2026/replays/2026-08-23 13-12 IndyCar - Freedom 250 Grand Prix of Washington DC - Warmup.zip",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:17.512Z"
+    },
+    {
+      "id": "785be97fb07547cea0dfc5a6",
+      "sourceId": "timing71-replay",
+      "sourceClass": "third-party normalized replay of live timing",
+      "kind": "normalized_replay",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-08-23%2017-10%20IndyCar%20-%20Freedom%20250%20Grand%20Prix%20of%20Washington%20DC%20-%20Race.zip",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/replays/2026-08-23 17-10 IndyCar - Freedom 250 Grand Prix of Washington DC - Race.zip",
+      "metadata": {
+        "replayId": "6f3e250a-bd3c-4073-af6e-baaa02bd8980",
+        "description": "Freedom 250 Grand Prix of Washington DC - Race",
+        "startTime": 1787505030,
+        "duration": 10084,
+        "archiveApiUrl": "https://archive.timing71.org/replays/6f3e250a-bd3c-4073-af6e-baaa02bd8980"
+      },
+      "bytes": 5102193,
+      "sha256": "a93491f69a08f9f61cddb2c20ff25d57d7a04a24ba50f3ca2aa517d147473aee",
+      "objectPath": "raw/objects/sha256/a9/a93491f69a08f9f61cddb2c20ff25d57d7a04a24ba50f3ca2aa517d147473aee.zip",
+      "viewPath": "raw/views/timing71/2026/replays/2026-08-23 17-10 IndyCar - Freedom 250 Grand Prix of Washington DC - Race.zip",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:17.386Z"
+    },
+    {
+      "id": "040b21e7f841023ea066f891",
+      "sourceId": "timing71-replay",
+      "sourceClass": "third-party normalized replay of live timing",
+      "kind": "normalized_replay",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-08-28%2021-57%20IndyCar%20-%20SNAP-ON%20Makers%20and%20Fixers%20250%20-%20Practice%201.zip",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/replays/2026-08-28 21-57 IndyCar - SNAP-ON Makers and Fixers 250 - Practice 1.zip",
+      "metadata": {
+        "replayId": "d428472c-e68e-4aa7-8811-e5d10a95e240",
+        "description": "SNAP-ON Makers and Fixers 250 - Practice 1",
+        "startTime": 1787954258,
+        "duration": 6180,
+        "archiveApiUrl": "https://archive.timing71.org/replays/d428472c-e68e-4aa7-8811-e5d10a95e240"
+      },
+      "bytes": 3077854,
+      "sha256": "2c7087e5ee120fe1ce8d51834fe156bec8f6961814a8fb72134c31a4ed56c974",
+      "objectPath": "raw/objects/sha256/2c/2c7087e5ee120fe1ce8d51834fe156bec8f6961814a8fb72134c31a4ed56c974.zip",
+      "viewPath": "raw/views/timing71/2026/replays/2026-08-28 21-57 IndyCar - SNAP-ON Makers and Fixers 250 - Practice 1.zip",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:17.463Z"
+    },
+    {
+      "id": "989d57fdea9f128436dea6e0",
+      "sourceId": "timing71-replay",
+      "sourceClass": "third-party normalized replay of live timing",
+      "kind": "normalized_replay",
+      "year": 2026,
+      "series": [
+        "INDY_NXT"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-08-29%2012-57%20IndyCar%20-%20INDYNXT%20by%20Firestone%20at%20Milwaukee%20Mile%20-%20Practice%201.zip",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/replays/2026-08-29 12-57 IndyCar - INDYNXT by Firestone at Milwaukee Mile - Practice 1.zip",
+      "metadata": {
+        "replayId": "b66b10ab-1b89-4a9e-b94e-2d42f7107639",
+        "description": "INDYNXT by Firestone at Milwaukee Mile - Practice 1",
+        "startTime": 1788008229,
+        "duration": 3782,
+        "archiveApiUrl": "https://archive.timing71.org/replays/b66b10ab-1b89-4a9e-b94e-2d42f7107639"
+      },
+      "bytes": 1814019,
+      "sha256": "7900e3a1878bc47cf90a9c897535bf7d53aa5188f4a22cfa6d90683bb6255352",
+      "objectPath": "raw/objects/sha256/79/7900e3a1878bc47cf90a9c897535bf7d53aa5188f4a22cfa6d90683bb6255352.zip",
+      "viewPath": "raw/views/timing71/2026/replays/2026-08-29 12-57 IndyCar - INDYNXT by Firestone at Milwaukee Mile - Practice 1.zip",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:17.523Z"
+    },
+    {
+      "id": "5b597494011eede7c44e3cfc",
+      "sourceId": "timing71-replay",
+      "sourceClass": "third-party normalized replay of live timing",
+      "kind": "normalized_replay",
+      "year": 2026,
+      "series": [
+        "INDY_NXT"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-08-29%2015-02%20IndyCar%20-%20INDYNXT%20by%20Firestone%20at%20Milwaukee%20Mile%20-%20Qualifications.zip",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/replays/2026-08-29 15-02 IndyCar - INDYNXT by Firestone at Milwaukee Mile - Qualifications.zip",
+      "metadata": {
+        "replayId": "0895cf60-5926-438b-bf15-c73a99af4043",
+        "description": "INDYNXT by Firestone at Milwaukee Mile - Qualifications",
+        "startTime": 1788015742,
+        "duration": 4990,
+        "archiveApiUrl": "https://archive.timing71.org/replays/0895cf60-5926-438b-bf15-c73a99af4043"
+      },
+      "bytes": 1526624,
+      "sha256": "babc3afce011d893fc342f82957119c94ec35071a1f8181bfb2e5113779b7de7",
+      "objectPath": "raw/objects/sha256/ba/babc3afce011d893fc342f82957119c94ec35071a1f8181bfb2e5113779b7de7.zip",
+      "viewPath": "raw/views/timing71/2026/replays/2026-08-29 15-02 IndyCar - INDYNXT by Firestone at Milwaukee Mile - Qualifications.zip",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:17.963Z"
+    },
+    {
+      "id": "9cb1d9d5823dcfd83225996c",
+      "sourceId": "timing71-replay",
+      "sourceClass": "third-party normalized replay of live timing",
+      "kind": "normalized_replay",
+      "year": 2026,
+      "series": [
+        "INDY_NXT"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-08-29%2016-32%20IndyCar%20-%20INDYNXT%20by%20Firestone%20at%20Milwaukee%20Mile%20-%20Qualifications.zip",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/replays/2026-08-29 16-32 IndyCar - INDYNXT by Firestone at Milwaukee Mile - Qualifications.zip",
+      "metadata": {
+        "replayId": "23e69e36-7170-4dca-8027-0024c386df68",
+        "description": "INDYNXT by Firestone at Milwaukee Mile - Qualifications",
+        "startTime": 1788021159,
+        "duration": 3487,
+        "archiveApiUrl": "https://archive.timing71.org/replays/23e69e36-7170-4dca-8027-0024c386df68"
+      },
+      "bytes": 1070666,
+      "sha256": "fa2ba8e24263bf43a18317bce29a9dd159d6f57c98bc5bcb3b58080557f51df1",
+      "objectPath": "raw/objects/sha256/fa/fa2ba8e24263bf43a18317bce29a9dd159d6f57c98bc5bcb3b58080557f51df1.zip",
+      "viewPath": "raw/views/timing71/2026/replays/2026-08-29 16-32 IndyCar - INDYNXT by Firestone at Milwaukee Mile - Qualifications.zip",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:17.850Z"
+    },
+    {
+      "id": "97525f9d1454d75d9e0d7cc1",
+      "sourceId": "timing71-replay",
+      "sourceClass": "third-party normalized replay of live timing",
+      "kind": "normalized_replay",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-08-29%2018-38%20IndyCar%20-%20SNAP-ON%20Makers%20and%20Fixers%20250%20-%20Race%201.zip",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/replays/2026-08-29 18-38 IndyCar - SNAP-ON Makers and Fixers 250 - Race 1.zip",
+      "metadata": {
+        "replayId": "bba0d52f-8485-47ac-bb4c-c5663821a16c",
+        "description": "SNAP-ON Makers and Fixers 250 - Race 1",
+        "startTime": 1788028732,
+        "duration": 10081,
+        "archiveApiUrl": "https://archive.timing71.org/replays/bba0d52f-8485-47ac-bb4c-c5663821a16c"
+      },
+      "bytes": 4200996,
+      "sha256": "96568f402a9e9d93de1d2b46225ede1ae5b814baf62091cf42c3cea54d3e5378",
+      "objectPath": "raw/objects/sha256/96/96568f402a9e9d93de1d2b46225ede1ae5b814baf62091cf42c3cea54d3e5378.zip",
+      "viewPath": "raw/views/timing71/2026/replays/2026-08-29 18-38 IndyCar - SNAP-ON Makers and Fixers 250 - Race 1.zip",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:18.139Z"
+    },
+    {
+      "id": "5e0ffa49f5d012e768334692",
+      "sourceId": "timing71-replay",
+      "sourceClass": "third-party normalized replay of live timing",
+      "kind": "normalized_replay",
+      "year": 2026,
+      "series": [
+        "INDY_NXT"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-08-30%2015-03%20IndyCar%20-%20INDYNXT%20by%20Firestone%20at%20Milwaukee%20Mile%20-%20Race.zip",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/replays/2026-08-30 15-03 IndyCar - INDYNXT by Firestone at Milwaukee Mile - Race.zip",
+      "metadata": {
+        "replayId": "322f3fcc-6be7-4677-87fe-dc741dd292e6",
+        "description": "INDYNXT by Firestone at Milwaukee Mile - Race",
+        "startTime": 1788102221,
+        "duration": 6480,
+        "archiveApiUrl": "https://archive.timing71.org/replays/322f3fcc-6be7-4677-87fe-dc741dd292e6"
+      },
+      "bytes": 2889847,
+      "sha256": "84e661a16f2f9be48d4be82fec18be75ef6d6a36347890b8932216ed9998157b",
+      "objectPath": "raw/objects/sha256/84/84e661a16f2f9be48d4be82fec18be75ef6d6a36347890b8932216ed9998157b.zip",
+      "viewPath": "raw/views/timing71/2026/replays/2026-08-30 15-03 IndyCar - INDYNXT by Firestone at Milwaukee Mile - Race.zip",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:17.999Z"
+    },
+    {
+      "id": "d0710ebb4d2868fb57e145e3",
+      "sourceId": "timing71-replay",
+      "sourceClass": "third-party normalized replay of live timing",
+      "kind": "normalized_replay",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-08-30%2017-17%20IndyCar%20-%20SNAP-ON%20Milwaukee%20Mile%20250%20-%20Race%202.zip",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/replays/2026-08-30 17-17 IndyCar - SNAP-ON Milwaukee Mile 250 - Race 2.zip",
+      "metadata": {
+        "replayId": "8d3629e1-8af1-443d-bccd-ebdaa9faac7e",
+        "description": "SNAP-ON Milwaukee Mile 250 - Race 2",
+        "startTime": 1788110269,
+        "duration": 10080,
+        "archiveApiUrl": "https://archive.timing71.org/replays/8d3629e1-8af1-443d-bccd-ebdaa9faac7e"
+      },
+      "bytes": 4985481,
+      "sha256": "13a8079a87508842352f82c547697bf65f78ce5ea3eff1bf164b0a7e6bcb6898",
+      "objectPath": "raw/objects/sha256/13/13a8079a87508842352f82c547697bf65f78ce5ea3eff1bf164b0a7e6bcb6898.zip",
+      "viewPath": "raw/views/timing71/2026/replays/2026-08-30 17-17 IndyCar - SNAP-ON Milwaukee Mile 250 - Race 2.zip",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:18.356Z"
+    },
+    {
+      "id": "79bdf7dfc51055f119f5bcd0",
+      "sourceId": "timing71-replay",
+      "sourceClass": "third-party normalized replay of live timing",
+      "kind": "normalized_replay",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-08-30%2021-57%20IndyCar%20-%20SNAP-ON%20Makers%20and%20Fixers%20250%20-%20Race%201.zip",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/replays/2026-08-30 21-57 IndyCar - SNAP-ON Makers and Fixers 250 - Race 1.zip",
+      "metadata": {
+        "replayId": "5678bb37-4a98-4e94-aea5-01b56d7e025b",
+        "description": "SNAP-ON Makers and Fixers 250 - Race 1",
+        "startTime": 1788127023,
+        "duration": 5886,
+        "archiveApiUrl": "https://archive.timing71.org/replays/5678bb37-4a98-4e94-aea5-01b56d7e025b"
+      },
+      "bytes": 2997975,
+      "sha256": "4a5c44790e162e6fa60679d45be2910b2ba6e4277c45ccf12f320b0dff21d7d2",
+      "objectPath": "raw/objects/sha256/4a/4a5c44790e162e6fa60679d45be2910b2ba6e4277c45ccf12f320b0dff21d7d2.zip",
+      "viewPath": "raw/views/timing71/2026/replays/2026-08-30 21-57 IndyCar - SNAP-ON Makers and Fixers 250 - Race 1.zip",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:18.491Z"
+    },
+    {
+      "id": "270f974dd61d65e5c46369cb",
+      "sourceId": "timing71-replay",
+      "sourceClass": "third-party normalized replay of live timing",
+      "kind": "normalized_replay",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-09-04%2019-57%20IndyCar%20-%20Mission%20Foods%20Grand%20Prix%20of%20Monterey%20-%20Practice%201%20-%20All%20Cars.zip",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/replays/2026-09-04 19-57 IndyCar - Mission Foods Grand Prix of Monterey - Practice 1 - All Cars.zip",
+      "metadata": {
+        "replayId": "53c64588-605a-4d9c-b56e-d388375f0c2e",
+        "description": "Mission Foods Grand Prix of Monterey - Practice 1 - All Cars",
+        "startTime": 1788551837,
+        "duration": 3478,
+        "archiveApiUrl": "https://archive.timing71.org/replays/53c64588-605a-4d9c-b56e-d388375f0c2e"
+      },
+      "bytes": 1835479,
+      "sha256": "364f665cb36313da2a09b4b3e4f52f21fdd495b1c92d50966a7035072a751659",
+      "objectPath": "raw/objects/sha256/36/364f665cb36313da2a09b4b3e4f52f21fdd495b1c92d50966a7035072a751659.zip",
+      "viewPath": "raw/views/timing71/2026/replays/2026-09-04 19-57 IndyCar - Mission Foods Grand Prix of Monterey - Practice 1 - All Cars.zip",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:18.436Z"
+    },
+    {
+      "id": "d8e9f5eccab996e76a13f67c",
+      "sourceId": "timing71-replay",
+      "sourceClass": "third-party normalized replay of live timing",
+      "kind": "normalized_replay",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-09-04%2020-57%20IndyCar%20-%20Grand%20Prix%20of%20Monterey%20Doubleheader%20-%20Practice%202.zip",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/replays/2026-09-04 20-57 IndyCar - Grand Prix of Monterey Doubleheader - Practice 2.zip",
+      "metadata": {
+        "replayId": "cb57a111-39cd-453a-bcce-ef0016f84660",
+        "description": "Grand Prix of Monterey Doubleheader - Practice 2",
+        "startTime": 1788555443,
+        "duration": 5883,
+        "archiveApiUrl": "https://archive.timing71.org/replays/cb57a111-39cd-453a-bcce-ef0016f84660"
+      },
+      "bytes": 2917864,
+      "sha256": "58f1b80b92b3a13e8ece0ca363e9dddca8885d654ccdc0b96538b0d08a2f3d21",
+      "objectPath": "raw/objects/sha256/58/58f1b80b92b3a13e8ece0ca363e9dddca8885d654ccdc0b96538b0d08a2f3d21.zip",
+      "viewPath": "raw/views/timing71/2026/replays/2026-09-04 20-57 IndyCar - Grand Prix of Monterey Doubleheader - Practice 2.zip",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:18.947Z"
+    },
+    {
+      "id": "488f774b158ac513a86b22a3",
+      "sourceId": "timing71-replay",
+      "sourceClass": "third-party normalized replay of live timing",
+      "kind": "normalized_replay",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-09-04%2022-27%20IndyCar%20-%20Grand%20Prix%20of%20Monterey%20Doubleheader%20-%20Practice%202.zip",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/replays/2026-09-04 22-27 IndyCar - Grand Prix of Monterey Doubleheader - Practice 2.zip",
+      "metadata": {
+        "replayId": "b2f9ffa3-2248-4ba8-8ffc-3da22178b5ad",
+        "description": "Grand Prix of Monterey Doubleheader - Practice 2",
+        "startTime": 1788560848,
+        "duration": 3485,
+        "archiveApiUrl": "https://archive.timing71.org/replays/b2f9ffa3-2248-4ba8-8ffc-3da22178b5ad"
+      },
+      "bytes": 1782893,
+      "sha256": "c8170ded1c964da3abd7249123002ef311b8236cf5f6de222925dad42f2d5775",
+      "objectPath": "raw/objects/sha256/c8/c8170ded1c964da3abd7249123002ef311b8236cf5f6de222925dad42f2d5775.zip",
+      "viewPath": "raw/views/timing71/2026/replays/2026-09-04 22-27 IndyCar - Grand Prix of Monterey Doubleheader - Practice 2.zip",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:19.030Z"
+    },
+    {
+      "id": "d5bd22acec65f88d0194b1c2",
+      "sourceId": "timing71-replay",
+      "sourceClass": "third-party normalized replay of live timing",
+      "kind": "normalized_replay",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-09-05%2016-57%20IndyCar%20-%20Mission%20Foods%20Grand%20Prix%20of%20Monterey%20-%20Practice%202%20-%20All%20Cars.zip",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/replays/2026-09-05 16-57 IndyCar - Mission Foods Grand Prix of Monterey - Practice 2 - All Cars.zip",
+      "metadata": {
+        "replayId": "065d8d08-985a-4a1c-88d5-6db7ecfc2229",
+        "description": "Mission Foods Grand Prix of Monterey - Practice 2 - All Cars",
+        "startTime": 1788627431,
+        "duration": 5584,
+        "archiveApiUrl": "https://archive.timing71.org/replays/065d8d08-985a-4a1c-88d5-6db7ecfc2229"
+      },
+      "bytes": 2271291,
+      "sha256": "93c18b64a97097c780035f7b9880b0075457158733df19a841c9e09ee396ab7a",
+      "objectPath": "raw/objects/sha256/93/93c18b64a97097c780035f7b9880b0075457158733df19a841c9e09ee396ab7a.zip",
+      "viewPath": "raw/views/timing71/2026/replays/2026-09-05 16-57 IndyCar - Mission Foods Grand Prix of Monterey - Practice 2 - All Cars.zip",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:19.238Z"
+    },
+    {
+      "id": "f36ef9c59c23acaffa95d6df",
+      "sourceId": "timing71-replay",
+      "sourceClass": "third-party normalized replay of live timing",
+      "kind": "normalized_replay",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-09-05%2020-27%20IndyCar%20-%20Mission%20Foods%20Grand%20Prix%20of%20Monterey%20-%20Qualifications%20-%20Segment%203%20_%20Firestone%20Fast%206.zip",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/replays/2026-09-05 20-27 IndyCar - Mission Foods Grand Prix of Monterey - Qualifications - Segment 3 _ Firestone Fast 6.zip",
+      "metadata": {
+        "replayId": "8df28c85-4f28-4058-ba4a-e152dcafdd99",
+        "description": "Mission Foods Grand Prix of Monterey - Qualifications - Segment 3 / Firestone Fast 6",
+        "startTime": 1788640058,
+        "duration": 5881,
+        "archiveApiUrl": "https://archive.timing71.org/replays/8df28c85-4f28-4058-ba4a-e152dcafdd99"
+      },
+      "bytes": 2391041,
+      "sha256": "986d8d7a4dafc57d2ca9be97bd65e0d71ac79efabf176280dc3eaf39ea0aca72",
+      "objectPath": "raw/objects/sha256/98/986d8d7a4dafc57d2ca9be97bd65e0d71ac79efabf176280dc3eaf39ea0aca72.zip",
+      "viewPath": "raw/views/timing71/2026/replays/2026-09-05 20-27 IndyCar - Mission Foods Grand Prix of Monterey - Qualifications - Segment 3 _ Firestone Fast 6.zip",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:19.248Z"
+    },
+    {
+      "id": "1af937fa6d46ded5cc747b4a",
+      "sourceId": "timing71-replay",
+      "sourceClass": "third-party normalized replay of live timing",
+      "kind": "normalized_replay",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-09-05%2022-35%20IndyCar%20-%20Grand%20Prix%20of%20Monterey%20Doubleheader%20-%20Race%201.zip",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/replays/2026-09-05 22-35 IndyCar - Grand Prix of Monterey Doubleheader - Race 1.zip",
+      "metadata": {
+        "replayId": "d8950231-dbd4-41bf-b764-7818ccc23c86",
+        "description": "Grand Prix of Monterey Doubleheader - Race 1",
+        "startTime": 1788647747,
+        "duration": 4077,
+        "archiveApiUrl": "https://archive.timing71.org/replays/d8950231-dbd4-41bf-b764-7818ccc23c86"
+      },
+      "bytes": 1911945,
+      "sha256": "e1d8adbc7b23e5137750b6ce36a754240b4d6d9f4893bf88a3dfeaa6f78e9589",
+      "objectPath": "raw/objects/sha256/e1/e1d8adbc7b23e5137750b6ce36a754240b4d6d9f4893bf88a3dfeaa6f78e9589.zip",
+      "viewPath": "raw/views/timing71/2026/replays/2026-09-05 22-35 IndyCar - Grand Prix of Monterey Doubleheader - Race 1.zip",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:19.617Z"
+    },
+    {
+      "id": "23915d1ffcf03f5b423a58d7",
+      "sourceId": "timing71-replay",
+      "sourceClass": "third-party normalized replay of live timing",
+      "kind": "normalized_replay",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-09-05%2023-57%20IndyCar%20-%20Mission%20Foods%20Grand%20Prix%20of%20Monterey%20-%20Practice%20Final.zip",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/replays/2026-09-05 23-57 IndyCar - Mission Foods Grand Prix of Monterey - Practice Final.zip",
+      "metadata": {
+        "replayId": "80492479-e1b6-4924-bd58-198f0a7048f9",
+        "description": "Mission Foods Grand Prix of Monterey - Practice Final",
+        "startTime": 1788652673,
+        "duration": 2579,
+        "archiveApiUrl": "https://archive.timing71.org/replays/80492479-e1b6-4924-bd58-198f0a7048f9"
+      },
+      "bytes": 1365305,
+      "sha256": "552489a7a771a69dd435968031ba3330077c34ba2865737178574c083a8c09cf",
+      "objectPath": "raw/objects/sha256/55/552489a7a771a69dd435968031ba3330077c34ba2865737178574c083a8c09cf.zip",
+      "viewPath": "raw/views/timing71/2026/replays/2026-09-05 23-57 IndyCar - Mission Foods Grand Prix of Monterey - Practice Final.zip",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:19.459Z"
+    },
+    {
+      "id": "04b37d55719e03ac2b23e5e9",
+      "sourceId": "timing71-replay",
+      "sourceClass": "third-party normalized replay of live timing",
+      "kind": "normalized_replay",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-09-06%2016-35%20IndyCar%20-%20Grand%20Prix%20of%20Monterey%20Doubleheader%20-%20Race%202.zip",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/replays/2026-09-06 16-35 IndyCar - Grand Prix of Monterey Doubleheader - Race 2.zip",
+      "metadata": {
+        "replayId": "b49e14f4-ea16-4c2b-bc82-077cd3e28ec1",
+        "description": "Grand Prix of Monterey Doubleheader - Race 2",
+        "startTime": 1788712538,
+        "duration": 4077,
+        "archiveApiUrl": "https://archive.timing71.org/replays/b49e14f4-ea16-4c2b-bc82-077cd3e28ec1"
+      },
+      "bytes": 1806459,
+      "sha256": "b04a450b5f6c28a14ef3b3b30d1c47e8764273196518b60a8b58eff7ee8c57df",
+      "objectPath": "raw/objects/sha256/b0/b04a450b5f6c28a14ef3b3b30d1c47e8764273196518b60a8b58eff7ee8c57df.zip",
+      "viewPath": "raw/views/timing71/2026/replays/2026-09-06 16-35 IndyCar - Grand Prix of Monterey Doubleheader - Race 2.zip",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:19.765Z"
+    },
+    {
+      "id": "cebbdcacb25227c090a6c4fc",
+      "sourceId": "timing71-replay",
+      "sourceClass": "third-party normalized replay of live timing",
+      "kind": "normalized_replay",
+      "year": 2026,
+      "series": [
+        "INDYCAR"
+      ],
+      "url": "https://s3.us-east-005.backblazeb2.com/t71-archive/2026-09-06%2019-02%20IndyCar%20-%20Mission%20Foods%20Grand%20Prix%20of%20Monterey%20-%20Race.zip",
+      "expectedBytes": null,
+      "viewRelativePath": "timing71/2026/replays/2026-09-06 19-02 IndyCar - Mission Foods Grand Prix of Monterey - Race.zip",
+      "metadata": {
+        "replayId": "f4c1e809-73ae-420e-9249-a019ce40a835",
+        "description": "Mission Foods Grand Prix of Monterey - Race",
+        "startTime": 1788721363,
+        "duration": 10079,
+        "archiveApiUrl": "https://archive.timing71.org/replays/f4c1e809-73ae-420e-9249-a019ce40a835"
+      },
+      "bytes": 4802431,
+      "sha256": "1c7b1aea2349d620a7d97443a6e782dbf7dc0c6e7c476fe8324464d0688f3612",
+      "objectPath": "raw/objects/sha256/1c/1c7b1aea2349d620a7d97443a6e782dbf7dc0c6e7c476fe8324464d0688f3612.zip",
+      "viewPath": "raw/views/timing71/2026/replays/2026-09-06 19-02 IndyCar - Mission Foods Grand Prix of Monterey - Race.zip",
+      "acquisitionMethod": "downloaded_with_resumable_curl",
+      "provenanceGrade": "verified_fetch",
+      "reusedFrom": null,
+      "acquiredAt": "2026-09-10T22:09:19.748Z"
     }
   ]
 }

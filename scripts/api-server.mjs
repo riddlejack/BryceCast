@@ -1,6 +1,7 @@
 import { createReadStream } from 'node:fs';
 import { access, mkdir, readFile, stat, writeFile } from 'node:fs/promises';
 import { createServer } from 'node:http';
+import { timingSafeEqual } from 'node:crypto';
 import { dirname, extname, join, normalize, relative, resolve, sep } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { DatabaseSync } from 'node:sqlite';
@@ -941,11 +942,31 @@ const writeJsonFile = async (path, payload) => {
 
 const readBodyJson = async (req) => {
   const chunks = [];
+  let bytes = 0;
   for await (const chunk of req) {
+    bytes += chunk.length;
+    if (bytes > 65536) throw Object.assign(new Error('Operator payload exceeds 64 KiB.'), { statusCode: 413 });
     chunks.push(chunk);
   }
   const body = Buffer.concat(chunks).toString('utf8');
-  return body ? JSON.parse(body) : {};
+  try { return body ? JSON.parse(body) : {}; }
+  catch { throw Object.assign(new Error('Invalid JSON payload.'), { statusCode: 400 }); }
+};
+
+/** Cloudflared also connects from loopback. A proxied request must never acquire
+ * local operator privileges merely because its TCP peer is 127.0.0.1. */
+export const isOperatorRequest = (req, token = process.env.BRYCECAST_OPERATOR_TOKEN) => {
+  const auth = String(req.headers.authorization ?? '');
+  if (token && auth.startsWith('Bearer ')) {
+    const expected = Buffer.from(String(token));
+    const received = Buffer.from(auth.slice(7));
+    if (expected.length === received.length && timingSafeEqual(expected, received)) return true;
+  }
+  const loopback = ['127.0.0.1', '::1', '::ffff:127.0.0.1'].includes(req.socket?.remoteAddress);
+  const localHost = /^(?:localhost|127\.0\.0\.1|\[::1\])(?::\d+)?$/i.test(String(req.headers.host ?? ''));
+  const proxied = Object.keys(req.headers).some((name) => /^(?:cf-|x-forwarded-|forwarded$|x-real-ip$)/i.test(name));
+  const browser = req.headers.origin || req.headers['sec-fetch-site'];
+  return Boolean(loopback && localHost && !proxied && !browser);
 };
 
 const fileStatus = async (path) => {
@@ -1841,7 +1862,34 @@ const cachedReadinessPayload = async (replayRecord = null) => {
   if (replayRecord) return buildReadinessPayloadFromReplayRecord(replayRecord);
   const runnerRecord = await readFreshRunnerRawRecord();
   if (runnerRecord) return buildReadinessPayloadFromRunnerRecord(runnerRecord);
+  if (runnerOnlyApi) {
+    const status = await readJsonFile(runnerStatusPath);
+    if (isHealthyIdleRunner(status)) {
+      const history = await readJsonFile(historyPath);
+      return buildIdleReadinessPayload({ status, history: history ? compactHistory(history) : null, replay: queryReplay({ limit: 5 }) });
+    }
+  }
   return requireCached('readiness', 'Readiness');
+};
+
+// The idle runner polls every five minutes; live-sample freshness (60s) is not
+// the health deadline for that phase. Two missed idle polls remain a failure.
+export const isHealthyIdleRunner = (status, now = Date.now()) => {
+  const elapsed = now - Date.parse(status?.updatedAt ?? '');
+  return status?.phase === 'IDLE' && Number.isFinite(elapsed) && elapsed >= -30000 && elapsed <= 11 * 60000;
+};
+
+export const buildIdleReadinessPayload = ({ status, history = null, replay = null }) => {
+  const checkedAt = new Date().toISOString();
+  const payload = buildReadinessPayloadFromParts({ checkedAt, sourceState: 'cold', history, replay });
+  const reason = 'No INDY NXT session is active. The capture runner is waiting for the next session.';
+  return { ...payload, state: 'pre_session', severity: 'amber', reason,
+    raceWeekend: { ...payload.raceWeekend, readiness: 'pre_session' },
+    bryce: { ...payload.bryce, readiness: 'pre_session' },
+    liveTiming: { ...payload.liveTiming, rows: [], rowCount: 0 },
+    runner: { phase: 'IDLE', updatedAt: status.updatedAt, nextSession: status.nextSession ?? null },
+    gates: [{ id: 'capture_runner_idle', label: 'Capture runner', state: 'pass', detail: reason }]
+  };
 };
 
 const cachedSourceReport = async (replayRecord = null) => {
@@ -2271,12 +2319,25 @@ const sendStatic = async (res, pathname, acceptsHtml = false) => {
   try {
     await access(candidate);
     const type = mimeTypes[extname(candidate)] ?? 'application/octet-stream';
-    res.writeHead(200, { 'content-type': type, 'cache-control': candidate.endsWith('index.html') ? 'no-store' : 'public, max-age=3600' });
+    res.writeHead(200, { 'content-type': type, 'cache-control': (candidate.endsWith('index.html') || candidate.endsWith('release.json')) ? 'no-store' : 'public, max-age=3600' });
     createReadStream(candidate).pipe(res);
     return true;
   } catch {
     return false;
   }
+};
+
+/** Resolve only a known session's published observed artifact. Request input
+ * never becomes an arbitrary filesystem path. */
+export const resolveTimingObservationArtifact = (sessionId, ledger) => {
+  if (!/^session_indy_nxt_\d{4}_\d+$/.test(sessionId)) return null;
+  const row = ledger?.sessions?.find((session) => session.canonicalSessionId === sessionId);
+  const artifact = row?.primarySource?.observedArtifact;
+  if (!artifact || !['observed', 'partial'].includes(row.status)) return null;
+  const allowed = join(root, 'analysis/semantic-layer/output');
+  const absolute = resolve(root, artifact);
+  if (!absolute.startsWith(`${allowed}${sep}`) || !absolute.endsWith('.ndjson.gz')) return null;
+  return absolute;
 };
 
 const handler = async (req, res) => {
@@ -2302,6 +2363,9 @@ const handler = async (req, res) => {
     if (resolution.kind === 'refused') {
       throw Object.assign(new Error(resolution.reason), { statusCode: resolution.statusCode });
     }
+    if (resolution.kind === 'source_gap') {
+      throw Object.assign(new Error(resolution.reason), { statusCode: 409, sourceGap: resolution.gap });
+    }
     // 'live' (runner is on) and 'disabled' both fall through to the real feed.
     replayRecordValue = resolution.kind === 'record' ? resolution.record : null;
     return replayRecordValue;
@@ -2318,6 +2382,11 @@ const handler = async (req, res) => {
     return;
   }
 
+  if (req.method === 'POST' && !isOperatorRequest(req)) {
+    sendError(res, 403, 'Operator access required.');
+    return;
+  }
+
   try {
     if (req.method === 'GET' && (await proxyRaceControl(req, res, pathname))) return;
 
@@ -2325,6 +2394,7 @@ const handler = async (req, res) => {
       sendJson(res, 200, {
         ok: true,
         service: 'brycecast-api',
+        release: staticDir ? await readJsonFile(join(staticDir, 'release.json')) : null,
         checkedAt: new Date().toISOString(),
         replay: replayOverlay.status(),
         staticDir: staticDir ? relative(root, staticDir) : null,
@@ -2337,6 +2407,33 @@ const handler = async (req, res) => {
           audioProof: await fileStatus(audioProofPath)
         }
       });
+      return;
+    }
+
+    const archiveMatch = pathname.match(/^\/api\/timing-archive\/([^/]+)\/observations$/);
+    if (req.method === 'GET' && archiveMatch) {
+      const sessionId = decodeURIComponent(archiveMatch[1]);
+      const ledger = await readJsonFile(join(root, 'data/historical-data-lake/catalog/timing-coverage-ledger.json'));
+      const artifact = resolveTimingObservationArtifact(sessionId, ledger);
+      if (!artifact) {
+        sendError(res, 404, 'No observed timing archive is published for this session.');
+        return;
+      }
+      const info = await stat(artifact).catch(() => null);
+      if (!info?.isFile()) {
+        sendError(res, 503, 'The published timing artifact is temporarily unavailable.');
+        return;
+      }
+      res.writeHead(200, {
+        'content-type': 'application/gzip',
+        'content-disposition': `attachment; filename="${sessionId}-observations.ndjson.gz"`,
+        'content-length': info.size,
+        'cache-control': 'public, max-age=300',
+        'x-content-type-options': 'nosniff'
+      });
+      const stream = createReadStream(artifact);
+      stream.on('error', () => res.destroy());
+      stream.pipe(res);
       return;
     }
 
@@ -2570,6 +2667,10 @@ const handler = async (req, res) => {
     }
 
     if (pathname === '/api/refresh' && req.method === 'POST') {
+      if (runnerOnlyApi) {
+        sendError(res, 409, 'The capture runner owns upstream refresh on this host.');
+        return;
+      }
       const refreshed = await refreshApiRuntimeCache({ reason: 'admin_refresh', force: true });
       sendJson(res, 200, {
         checkedAt: new Date().toISOString(),
@@ -2588,6 +2689,10 @@ const handler = async (req, res) => {
     if (await sendStatic(res, pathname, acceptsHtml)) return;
     sendError(res, 404, 'Route not found', pathname);
   } catch (error) {
+    if (error?.sourceGap) {
+      sendJson(res, 409, { ok: false, error: 'source_gap', message: error.message, gap: error.sourceGap }, { 'cache-control': 'no-store' });
+      return;
+    }
     const statusCode = Number(error?.statusCode) || 500;
     sendError(res, statusCode, error instanceof Error ? error.message : 'Unexpected API error');
   }

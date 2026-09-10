@@ -1,61 +1,99 @@
 import type { TrackSectionAnchorSet } from './types';
 
 /** Nashville Superspeedway — 1.33-mi D-shaped concrete oval, counterclockwise.
- *  Official section results report THREE timing sections covering 43.1% of the
- *  lap (the corners); the long frontstretch and the backstretch carry no timing
- *  loops and stay the quiet base outline — honest gaps, not coloured spans.
- *
- *  Span LENGTHS are MEASURED: official section speeds are averages, so
- *  timeSeconds x speedMph is constant per family and equals the section length
- *  (compound 0.1884 mi, Turn 3 0.2008 mi, Turn 4 0.1837 mi; lap total
- *  reproduces 1.3300 mi exactly — scripts/compute-section-anchors.mjs).
- *  Span POSITIONS are arc-anchored: the compound section starts at the turns
- *  1-2 arc entry (t 0.1998); Turn 3 and Turn 4 chain back from the S/F line so
- *  both cover their arcs (T3 arc 0.686–0.721, T4 arc 0.765–0.819). Verified
- *  against the debug overlay. Positions may later be superseded by measured
- *  timing-loop locations arriving through the same contract. */
+ * The corrected official-report parser preserves all eight timing columns.
+ * Their order and time x speed length shares match the semantic RaceTools loop
+ * chain one-for-one: SF→T1, T1→SS1, SS1→T2, T2→BS, BS→T3, T3→SS2,
+ * SS2→T4, and T4→SF. The loop positions below were already calibrated to the
+ * visually verified outline, so the official names can use the same measured
+ * boundaries without grouping several source columns into one false family. */
 export const nashvilleSuperspeedwaySections: TrackSectionAnchorSet = {
   slug: 'nashville-superspeedway',
   venueName: 'Nashville Superspeedway',
   drivingDirection: 'counterclockwise',
+  lapLengthMi: 1.325,
   confidence: 'anchored',
-  note: 'Three official timing sections; lengths measured from official time x speed, positions arc-anchored. The frontstretch and backstretch are not timing sections and stay the base outline.',
+  note: 'Eight official timing sections tile the full lap. The corrected source columns map one-for-one to the semantic RaceTools loop chain, whose boundaries are calibrated to the visually verified outline.',
   sections: [
     {
-      familyId: 'nsh-t1-t2-backstretch',
-      sectionName: 'Turn 1 Entry Turn 1 Exit Turn 2 Entry BackStretch BackStretch',
-      label: 'Turns 1–2',
-      startT: 0.1998,
-      endT: 0.3415
+      familyId: 'nsh-official-t1-entry',
+      sectionName: 'Turn 1 Entry',
+      label: 'Turn 1 entry',
+      startT: 0.8584,
+      endT: 0.0174,
+      startLoop: 'SF',
+      endLoop: 'T1',
+      measuredLengthMi: 0.157386
     },
     {
-      familyId: 'nsh-turn-3',
+      familyId: 'nsh-official-t1-exit',
+      sectionName: 'Turn 1 Exit',
+      label: 'Turn 1 exit',
+      startT: 0.0174,
+      endT: 0.1998,
+      startLoop: 'T1',
+      endLoop: 'SS1',
+      measuredLengthMi: 0.180492
+    },
+    {
+      familyId: 'nsh-official-t2-entry',
+      sectionName: 'Turn 2 Entry',
+      label: 'Turn 2 entry',
+      startT: 0.1998,
+      endT: 0.3415,
+      startLoop: 'SS1',
+      endLoop: 'T2',
+      measuredLengthMi: 0.188447
+    },
+    {
+      familyId: 'nsh-official-back-entry',
+      sectionName: 'BackStretch Entry',
+      label: 'Backstretch entry',
+      startT: 0.3415,
+      endT: 0.4602,
+      startLoop: 'T2',
+      endLoop: 'BS',
+      measuredLengthMi: 0.136174
+    },
+    {
+      familyId: 'nsh-official-back-exit',
+      sectionName: 'BackStretch Exit',
+      label: 'Backstretch exit',
+      startT: 0.4602,
+      endT: 0.5693,
+      startLoop: 'BS',
+      endLoop: 'T3',
+      measuredLengthMi: 0.125189
+    },
+    {
+      familyId: 'nsh-official-t3',
       sectionName: 'Turn 3',
       label: 'Turn 3',
       startT: 0.5693,
-      endT: 0.7203
+      endT: 0.7203,
+      startLoop: 'T3',
+      endLoop: 'SS2',
+      measuredLengthMi: 0.200758
     },
     {
-      familyId: 'nsh-turn-4',
-      sectionName: 'Turn 4 Entry Turn 4 Exit',
-      label: 'Turn 4',
+      familyId: 'nsh-official-t4-entry',
+      sectionName: 'Turn 4 Entry',
+      label: 'Turn 4 entry',
       startT: 0.7203,
-      endT: 0.8584
+      endT: 0.8189,
+      startLoop: 'SS2',
+      endLoop: 'T4',
+      measuredLengthMi: 0.183712
     },
     {
-      /* The derived remainder: lap time minus the three timed corner sections
-       * is the exact time on the two untimed straights, ranked against the
-       * field the same way. It shades the complement of the measured spans —
-       * the front straight (Turn 4 exit → S/F → Turn 1 entry, wrapping) and the
-       * back straight (Turn 2 exit → Turn 3) — with one combined value on both.
-       * sectionName matches the pack's synthesized 'Untimed remainder' section. */
-      familyId: 'nsh-untimed-remainder',
-      sectionName: 'Untimed remainder',
-      label: 'The straights',
-      kind: 'derived_remainder',
-      startT: 0.8584,
-      endT: 0.1998,
-      additionalSpans: [{ startT: 0.3415, endT: 0.5693 }]
+      familyId: 'nsh-official-t4-exit',
+      sectionName: 'Turn 4 Exit',
+      label: 'Turn 4 exit',
+      startT: 0.8189,
+      endT: 0.8584,
+      startLoop: 'T4',
+      endLoop: 'SF',
+      measuredLengthMi: 0.152841
     }
   ]
 };
@@ -64,10 +102,9 @@ export const nashvilleSuperspeedwaySections: TrackSectionAnchorSet = {
  *
  *  The RaceTools race-weekend capture carries the full physical timing-loop set
  *  (SF, T1, SS1, T2, BS, T3, SS2, T4), tiling the ENTIRE lap into 8 fine
- *  sub-sections — far more than the 3 officially-published track sections
- *  (which cover ~43.8% of the lap). This set replaces the 3-section + derived-
- *  remainder treatment ON the two Nashville race pages that carry loop data
- *  (2024, 2025); the PDF set above stays the fallback for races without it.
+ *  sub-sections. This set uses capture-native station codes for lake packs; the
+ *  official set above uses the report's eight public labels at the same physical
+ *  boundaries.
  *
  *  Span geometry: each boundary is a physical loop. Boundaries are anchored on
  *  the outline by REAL loop distance (the semantic layer's decoded loop

@@ -64,11 +64,12 @@ check('ALLOW_EVENT_ROLL is scoped to the package step only', () => {
     if (s.id !== 'ui-data-package') assert.ok(!s.env?.BRYCECAST_ALLOW_EVENT_ROLL, `${s.id} must not carry the roll override`);
   }
 });
-check('live-readiness fixture migration is a surfaced MANUAL follow-up', () => {
-  const m = MANUAL_FOLLOWUPS.find((x) => x.id === 'live-readiness-fixture');
-  assert.ok(m, 'manual follow-up present');
-  assert.match(m.detail, /NOT auto-edited/i);
-  assert.ok(MANUAL_FOLLOWUPS.some((x) => x.id === 'deploy'), 'deploy is a manual follow-up');
+check('timing archives and coverage are refreshed before history and UI', () => {
+  const ids = PIPELINE_STEPS.map((s) => s.id);
+  assert.ok(ids.indexOf('lake-sync') < ids.indexOf('timing-coverage'));
+  assert.ok(ids.indexOf('timing-coverage') < ids.indexOf('timing-coverage-validate'));
+  assert.ok(ids.indexOf('timing-coverage-validate') < ids.indexOf('ingest-history'));
+  assert.ok(MANUAL_FOLLOWUPS.some((x) => x.id === 'deploy'));
 });
 
 // --- Preflight: happy path --------------------------------------------------
@@ -78,26 +79,27 @@ check('preflight passes with a valid sqlite in the repo root', () => {
   assert.equal(pre.resolved.archive.hasRaceSnapshots, true);
 });
 
-// --- Failure-stop path A: broken env var (missing sqlite path) --------------
-check('failure-stop: missing BRYCECAST_SQLITE_PATH halts before any step', () => {
+// Official standings eliminate the old full-capture-database prerequisite.
+check('preflight succeeds without SQLite when official standings are used', () => {
   const env = { ...process.env };
   delete env.BRYCECAST_SQLITE_PATH;
+  const pre = runPreflight({ env, cwd: repoRoot });
+  assert.equal(pre.ok, true);
+  assert.equal(pre.resolved.sqlitePath, null);
+});
+check('failure-stop: an explicitly missing archive halts before any step', () => {
   let stepCalls = 0;
   const { ok, exitCode, report } = runPostraceRoll({
-    dryRun: false,
-    env,
+    env: { ...process.env, BRYCECAST_SQLITE_PATH: join(workdir, 'missing.sqlite') },
     cwd: repoRoot,
-    now: () => Date.parse('2026-08-08T12:00:00Z'),
     runStep: () => { stepCalls += 1; return { ok: true, exitCode: 0 }; },
     onLog: silent,
     reportDir
   });
   assert.equal(ok, false);
   assert.equal(exitCode, 1);
-  assert.equal(stepCalls, 0, 'no pipeline step may run when preflight fails');
-  assert.ok(report.steps.every((s) => s.status === 'pending'), 'all steps stay pending');
-  const sqliteCheck = report.preflight.checks.find((c) => c.name === 'sqlite-path-set');
-  assert.equal(sqliteCheck.ok, false);
+  assert.equal(stepCalls, 0);
+  assert.ok(report.steps.every((s) => s.status === 'pending'));
 });
 
 // --- Failure-stop path B: a mid-chain step fails ----------------------------

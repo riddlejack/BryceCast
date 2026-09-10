@@ -29,15 +29,16 @@ const nashvilleStory = {
     comparisonRows: 57,
     medianPercentile: 0.47,
     best: [
-      { name: 'Turn 4 Entry Turn 4 Exit', percentile: 0.51 },
-      { name: 'Turn 1 Entry Turn 1 Exit Turn 2 Entry BackStretch BackStretch', percentile: 0.5 },
-      { name: 'Turn 3', percentile: 0.45 }
+      { name: 'Turn 1 Entry', percentile: 0.3 },
+      { name: 'Turn 1 Exit', percentile: 0.4 },
+      { name: 'Turn 2 Entry', percentile: 0.5 },
+      { name: 'BackStretch Entry', percentile: 0.45 },
+      { name: 'BackStretch Exit', percentile: 0.55 },
+      { name: 'Turn 3', percentile: 0.75 },
+      { name: 'Turn 4 Entry', percentile: 0.6 },
+      { name: 'Turn 4 Exit', percentile: 0.85 }
     ],
-    weakest: [
-      { name: 'Turn 3', percentile: 0.45 },
-      { name: 'Turn 1 Entry Turn 1 Exit Turn 2 Entry BackStretch BackStretch', percentile: 0.5 },
-      { name: 'Turn 4 Entry Turn 4 Exit', percentile: 0.51 }
-    ],
+    weakest: [],
     sourceState: 'official_section_results',
     caveat: 'low-denominator comparisons suppressed'
   }
@@ -49,7 +50,7 @@ assert.ok(set, 'set produced');
 assert.equal(set!.scope.kind, 'full_race');
 assert.equal(set!.sourceTier, 'parsed_pdf_aggregate');
 assert.equal(set!.comparisonRows, 57);
-assert.equal(set!.sections.length, 3, 'union recovers all three families');
+assert.equal(set!.sections.length, 8, 'union recovers all eight official sections');
 assert.ok(
   set!.sections.every((s) => s.observationCount === null),
   'per-section counts null in v1 (lake fills them)'
@@ -63,16 +64,16 @@ const anchors = trackSectionsFor('Nashville Superspeedway');
 assert.ok(anchors, 'Nashville anchors resolve');
 assert.equal(anchors!.confidence, 'anchored');
 const resolved = resolveHeatSections(anchors!, set!);
-assert.equal(resolved.length, 3, 'all three anchored sections join to observations');
+assert.equal(resolved.length, 8, 'all eight anchored sections join to observations');
 const top = resolved.filter((r) => r.isTopSection).map((r) => r.sectionName).sort();
 assert.deepEqual(
   top,
-  ['Turn 1 Entry Turn 1 Exit Turn 2 Entry BackStretch BackStretch', 'Turn 4 Entry Turn 4 Exit'].sort(),
-  'top-2 by percentile (0.51, 0.50) get gold dots, not Turn 3 (0.45)'
+  ['Turn 3', 'Turn 4 Exit'].sort(),
+  'top-2 by percentile get gold dots'
 );
-const turn3 = resolved.find((r) => r.sectionName === 'Turn 3');
-assert.equal(turn3!.isTopSection, false);
-assert.equal(turn3!.label, 'Turn 3');
+const turn1Entry = resolved.find((r) => r.sectionName === 'Turn 1 Entry');
+assert.equal(turn1Entry!.isTopSection, false);
+assert.equal(turn1Entry!.label, 'Turn 1 entry');
 
 // 4. wrap-seam section resolves (Milwaukee mil-t1-ss1 spans 0.979 -> 0.054)
 const mil = trackSectionsFor('The Milwaukee Mile');
@@ -102,7 +103,8 @@ assert.ok(
 assert.equal(trackSectionsFor('Gateway')!.slug, 'world-wide-technology-raceway', 'Gateway alias');
 
 // 5b. Street circuits rebuilt from RaceTools map polylines (phase3/outlines-from-maps).
-//     Detroit + Arlington tile from the S/F datum; St. Petersburg is an approximate fit.
+//     All three tile from the S/F datum; St. Petersburg uses the semantic
+//     session's complete loop-distance chain on its matching centreline.
 const det = trackSectionsFor('Streets of Detroit');
 assert.ok(det, 'Detroit anchors resolve');
 assert.equal(det!.confidence, 'anchored');
@@ -110,7 +112,11 @@ assert.equal(det!.sections.length, 18, 'Detroit ships the 18 loop-to-loop famili
 assert.ok(Math.abs(timedShareOf(det!) - 1) < 0.02, 'Detroit sections tile the full lap');
 const stp = trackSectionsFor('Streets of St. Petersburg');
 assert.ok(stp, 'St. Petersburg anchors resolve (rebuilt from the map polyline)');
-assert.equal(stp!.confidence, 'approximate', 'St. Petersburg is an honest single-offset fit, not anchored');
+assert.equal(stp!.confidence, 'anchored', 'St. Petersburg uses measured S/F-referenced loop distances');
+assert.equal(stp!.sections.length, 11, 'St. Petersburg ships every official timing section');
+assert.ok(Math.abs(timedShareOf(stp!) - 1) < 0.00001, 'St. Petersburg measured sections tile the full lap');
+assert.equal(stp!.sections[0].sectionName, 'FS-PO', 'St. Petersburg starts at its S/F datum');
+assert.equal(stp!.sections.at(-1)?.sectionName, 'FS-PI', 'St. Petersburg closes back to S/F');
 assert.equal(
   trackSectionsFor('Detroit Downtown Street Circuit')!.slug,
   'streets-of-detroit',
@@ -121,6 +127,26 @@ assert.equal(
   'streets-of-arlington',
   'Arlington pack-name alias resolves'
 );
+
+// 5c. The official section parser preserves individual report columns. Every
+// verified road-course anchor must use those exact names; old concatenated
+// labels would silently leave parts of the qualifying map uncoloured.
+const splitSectionChecks: Array<[string, string[], number, number]> = [
+  ['Barber Motorsports Park', ['FS-PO', 'Turns 12-13', 'Turns 14-16'], 11, 0.99],
+  ['Road America', ['I10 to I11', 'I11 to I11B', 'I11B to I12', 'I12 to I13', 'I13 to I13A', 'I13A to I14', 'I14 to I15C', 'I15C to I15'], 22, 0.99],
+  ['WeatherTech Raceway Laguna Seca', ['Turn 1 Entry', 'Turn 1 Exit'], 15, 0.92],
+  ['Portland International Raceway', ['FS-PI', 'FS-PO'], 13, 0.99],
+  ['Indianapolis Motor Speedway Road Course', ['FS - PO', 'FS - PO 2', 'Turn 1/2', 'Turn 12/13', 'FS - PI'], 13, 0.999]
+];
+for (const [venue, names, count, minimumTimedShare] of splitSectionChecks) {
+  const anchors = trackSectionsFor(venue);
+  assert.ok(anchors, `${venue} anchors resolve`);
+  assert.equal(anchors!.sections.length, count, `${venue} preserves every official section column`);
+  for (const name of names) {
+    assert.ok(anchors!.sections.some((section) => section.sectionName === name), `${venue} maps ${name}`);
+  }
+  assert.ok(timedShareOf(anchors!) >= minimumTimedShare, `${venue} timed coverage reflects separated fields`);
+}
 
 // 6. per-lap producer: scopes, stat toggle, clean-lap floor, single-lap caution.
 // Synthetic 30-lap race, one section: laps 1-20 clean at rising percentiles,
@@ -184,16 +210,15 @@ const context = lapContextOf(syntheticPack);
 assert.equal(context.filter((entry) => entry.caution === 'caution').length, 6, 'lap context surfaces caution laps for the scrubber');
 
 // 7. Derived remainder (Brief H coverage fix): a genuine-gap pack carries an
-// 'Untimed remainder' section that rides the same contract, and the Nashville
-// anchor joins it as a derived, combined, never-gold two-span stretch.
-const nashvilleAnchors = trackSectionsFor('Nashville Superspeedway')!;
-const remainderAnchor = nashvilleAnchors.sections.find((s) => s.kind === 'derived_remainder');
-assert.ok(remainderAnchor, 'Nashville ships a derived_remainder anchor');
-assert.equal(remainderAnchor!.sectionName, 'Untimed remainder');
-assert.ok((remainderAnchor!.additionalSpans ?? []).length === 1, 'Nashville remainder spans two disjoint stretches');
+// untimed section that rides the same contract. Arlington's one remaining gap
+// joins as derived and can never become a gold top section.
+const arlingtonAnchors = trackSectionsFor('Streets of Arlington')!;
+const remainderAnchor = arlingtonAnchors.sections.find((s) => s.kind === 'derived_remainder');
+assert.ok(remainderAnchor, 'Arlington ships a derived_remainder anchor');
+assert.equal(remainderAnchor!.sectionName, 'Turn 14 to S/F (untimed)');
 
 const cornerName = 'Turn 3';
-const remainderName = 'Untimed remainder';
+const remainderName = 'Turn 14 to S/F (untimed)';
 const buildLaps = (percentile: number, seconds: number): SectionLapTuple[] =>
   Array.from({ length: 20 }, (_, i) => [i + 1, percentile, 5, 18, 1, 'g', seconds, 150] as SectionLapTuple);
 const derivedPack = {
@@ -203,15 +228,15 @@ const derivedPack = {
   sessionId: 'session_derived',
   raceLabel: 'Derived Test',
   seasonYear: 2026,
-  venueName: 'Nashville Superspeedway',
-  trackType: 'oval',
+  venueName: 'Streets of Arlington',
+  trackType: 'street',
   totalLaps: 20,
   tupleOrder: ['lap', 'fieldPercentile', 'fieldRank', 'fieldComparisonCount', 'clean', 'caution', 'timeSeconds', 'speedMph'],
   derivedCoverage: 'genuine_gap',
   sections: [
     { sectionName: cornerName, kind: 'measured', laps: buildLaps(0.8, 4.0), fieldSeconds: [3.9, 4.0, 4.1, 4.2] },
-    { sectionName: 'Turn 1 Entry Turn 1 Exit Turn 2 Entry BackStretch BackStretch', kind: 'measured', laps: buildLaps(0.6, 4.1), fieldSeconds: [4.0, 4.1] },
-    { sectionName: 'Turn 4 Entry Turn 4 Exit', kind: 'measured', laps: buildLaps(0.9, 3.8), fieldSeconds: [3.8, 3.9] },
+    { sectionName: 'Turn 1', kind: 'measured', laps: buildLaps(0.8, 4.0), fieldSeconds: [3.9, 4.0, 4.1, 4.2] },
+    { sectionName: 'Turn 2', kind: 'measured', laps: buildLaps(0.9, 3.8), fieldSeconds: [3.8, 3.9] },
     { sectionName: remainderName, kind: 'derived_remainder', laps: buildLaps(0.4, 15.1), fieldSeconds: [14.9, 15.0, 15.2, 15.4] }
   ],
   lapTotals: buildLaps(0.5, 27.0),
@@ -227,16 +252,16 @@ assert.ok(Math.abs((remainderObs.percentile ?? 0) - 0.4) < 1e-9, 'derived sectio
 assert.ok(Math.abs((remainderObs.fieldMedianSeconds ?? 0) - 15.1) < 1e-9, 'fieldMedianSeconds is the field distribution median');
 assert.deepEqual(remainderObs.fieldSeconds, [14.9, 15.0, 15.2, 15.4], 'field distribution passes through for the drawer');
 
-const derivedResolved = resolveHeatSections(nashvilleAnchors, derivedSet);
+const derivedResolved = resolveHeatSections(arlingtonAnchors, derivedSet);
 const remainderResolved = derivedResolved.find((r) => r.kind === 'derived_remainder')!;
-assert.ok(remainderResolved, 'derived remainder joins the Nashville anchor');
-assert.equal(remainderResolved.renderSpans.length, 2, 'combined remainder draws both untimed stretches');
-assert.equal(remainderResolved.combined, true, 'two disjoint stretches flag as combined');
+assert.ok(remainderResolved, 'derived remainder joins the Arlington anchor');
+assert.equal(remainderResolved.renderSpans.length, 1, 'single remainder draws its one untimed stretch');
+assert.equal(remainderResolved.combined, false, 'one stretch is not described as combined');
 assert.equal(remainderResolved.isTopSection, false, 'the derived remainder is never a gold top section');
 const topNames = derivedResolved.filter((r) => r.isTopSection).map((r) => r.sectionName).sort();
 assert.deepEqual(
   topNames,
-  ['Turn 3', 'Turn 4 Entry Turn 4 Exit'].sort(),
+  ['Turn 1', 'Turn 2'].sort(),
   'top-2 gold dots are the strongest MEASURED sections (0.9, 0.8), not the derived remainder'
 );
 
@@ -252,18 +277,18 @@ assert.equal(lakeSet.sourceTier, 'lake_loop_crossings', 'lake pack tier flows in
 assert.equal(lakeSet.sourceState, 'racetools_capture_loop_crossings_per_lap', 'measured source state names the capture');
 assert.equal(lakeSet.sections[0].percentile, pdfSet.sections[0].percentile, 'same numbers — only the tier label differs');
 
-// 9. Measured Nashville 8-section anchors: a distinct set from the 3-section
-// fallback (which trackSectionsFor still returns), tiling ~100% of the lap with
-// no derived remainder, and top-2 gold among the eight measured spans.
+// 9. Nashville ships parallel eight-section joins: official report labels for
+// PDF packs and capture-native station codes for lake packs. Both use the same
+// measured boundaries, tile the lap, and carry no invented remainder.
 const measuredNash = measuredTrackSectionsFor('Nashville Superspeedway');
 assert.ok(measuredNash, 'Nashville ships a measured 8-section set');
 assert.equal(measuredNash!.sections.length, 8, 'eight measured sub-sections');
 assert.ok(measuredNash!.sections.every((s) => s.kind !== 'derived_remainder'), 'no derived remainder in the measured set');
 assert.ok(Math.abs(timedShareOf(measuredNash!) - 1) < 0.01, 'the eight sections tile ~100% of the lap');
-// The fallback set trackSectionsFor returns is UNCHANGED (still 3 + derived).
 const pdfNash = trackSectionsFor('Nashville Superspeedway')!;
-assert.equal(pdfNash.sections.length, 4, 'the PDF fallback set is untouched (3 + derived remainder)');
-assert.ok(pdfNash.sections.some((s) => s.kind === 'derived_remainder'), 'PDF set keeps its derived remainder');
+assert.equal(pdfNash.sections.length, 8, 'the official-report set preserves all eight source columns');
+assert.ok(pdfNash.sections.every((s) => s.kind !== 'derived_remainder'), 'official sections tile without a derived remainder');
+assert.ok(Math.abs(timedShareOf(pdfNash) - 1) < 0.00001, 'official-label sections tile the measured lap');
 
 const measuredLaps = (percentile: number): SectionLapTuple[] =>
   Array.from({ length: 12 }, (_, i) => [i + 1, percentile, 5, 18, 1, 'g', 4 + percentile, 150] as SectionLapTuple);

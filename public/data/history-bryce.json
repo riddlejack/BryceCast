@@ -1,145 +1,254 @@
 {
-  "checkedAt": "2026-07-19T21:00:22.531Z",
-  "source": "INDY NXT official results API + Race Control timing feed for unpublished current session",
+  "checkedAt": "2026-09-10T23:13:39.346Z",
+  "source": "Reconciled official INDY NXT session results and championship standings",
+  "seasonYear": 2026,
   "points": [
     {
+      "sessionId": "session_indy_nxt_2026_6751",
       "race": "St. Petersburg",
       "type": "Street",
       "start": 19,
       "finish": 18,
       "bestLapRank": 15,
       "points": 12,
-      "status": "Running",
-      "source": "official session result"
+      "status": "running",
+      "source": "official session result",
+      "provenanceRefs": [
+        "source_indynxt_events_session_6751"
+      ]
     },
     {
+      "sessionId": "session_indy_nxt_2026_6753",
       "race": "Arlington",
       "type": "Street",
       "start": 23,
       "finish": 18,
       "bestLapRank": 23,
       "points": 12,
-      "status": "Running",
-      "source": "official session result"
+      "status": "running",
+      "source": "official session result",
+      "provenanceRefs": [
+        "source_indynxt_events_session_6753"
+      ]
     },
     {
+      "sessionId": "session_indy_nxt_2026_6750",
       "race": "Alabama R1",
       "type": "Road",
       "start": 5,
       "finish": 8,
       "bestLapRank": 10,
       "points": 24,
-      "status": "Running",
-      "source": "official session result"
+      "status": "running",
+      "source": "official session result",
+      "provenanceRefs": [
+        "source_indynxt_events_session_6750"
+      ]
     },
     {
+      "sessionId": "session_indy_nxt_2026_6752",
       "race": "Alabama R2",
       "type": "Road",
       "start": 11,
       "finish": 7,
       "bestLapRank": 10,
       "points": 26,
-      "status": "Running",
-      "source": "official session result"
+      "status": "running",
+      "source": "official session result",
+      "provenanceRefs": [
+        "source_indynxt_events_session_6752"
+      ]
     },
     {
+      "sessionId": "session_indy_nxt_2026_6756",
       "race": "Indy GP R1",
       "type": "Road",
       "start": 13,
       "finish": 22,
       "bestLapRank": 18,
       "points": 8,
-      "status": "Running",
-      "source": "official session result"
+      "status": "running",
+      "source": "official session result",
+      "provenanceRefs": [
+        "source_indynxt_events_session_6756"
+      ]
     },
     {
+      "sessionId": "session_indy_nxt_2026_6765",
       "race": "Indy GP R2",
       "type": "Road",
       "start": 14,
       "finish": 12,
       "bestLapRank": 13,
       "points": 18,
-      "status": "Running",
-      "source": "official session result"
+      "status": "running",
+      "source": "official session result",
+      "provenanceRefs": [
+        "source_indynxt_events_session_6765"
+      ]
     },
     {
+      "sessionId": "session_indy_nxt_2026_6749",
       "race": "Detroit Grand Prix",
       "type": "Street",
       "start": 14,
       "finish": 8,
       "bestLapRank": 12,
       "points": 24,
-      "status": "Running",
-      "source": "official session result"
+      "status": "running",
+      "source": "official session result",
+      "provenanceRefs": [
+        "source_indynxt_events_session_6749"
+      ]
     },
     {
+      "sessionId": "session_indy_nxt_2026_6763",
       "race": "WWTR",
       "type": "Oval",
       "start": 12,
       "finish": 23,
       "bestLapRank": 24,
       "points": 7,
-      "status": "Mechanical",
-      "source": "official session result"
+      "status": "mechanical",
+      "source": "official session result",
+      "provenanceRefs": [
+        "source_indynxt_events_session_6763"
+      ]
     },
     {
+      "sessionId": "session_indy_nxt_2026_6762",
       "race": "Grand Prix at Road America R1",
       "type": "Road",
       "start": 15,
       "finish": 21,
       "bestLapRank": 1,
       "points": 9,
-      "status": "Running",
-      "source": "official session result"
+      "status": "running",
+      "source": "official session result",
+      "provenanceRefs": [
+        "source_indynxt_events_session_6762"
+      ]
     },
     {
+      "sessionId": "session_indy_nxt_2026_6754",
       "race": "Grand Prix at Road America R2",
       "type": "Road",
       "start": 15,
       "finish": 10,
       "bestLapRank": 14,
       "points": 20,
-      "status": "Running",
-      "source": "official session result"
+      "status": "running",
+      "source": "official session result",
+      "provenanceRefs": [
+        "source_indynxt_events_session_6754"
+      ]
     },
     {
+      "sessionId": "session_indy_nxt_2026_6761",
       "race": "Grand Prix at Mid-Ohio R1",
       "type": "Road",
       "start": 13,
       "finish": 16,
       "bestLapRank": 22,
       "points": 14,
-      "status": "Running",
-      "source": "official session result"
+      "status": "running",
+      "source": "official session result",
+      "provenanceRefs": [
+        "source_indynxt_events_session_6761"
+      ]
     },
     {
+      "sessionId": "session_indy_nxt_2026_6760",
       "race": "Grand Prix at Mid-Ohio R2",
       "type": "Road",
       "start": 15,
       "finish": 14,
       "bestLapRank": 19,
       "points": 16,
-      "status": "Running",
-      "source": "official session result"
+      "status": "running",
+      "source": "official session result",
+      "provenanceRefs": [
+        "source_indynxt_events_session_6760"
+      ]
     },
     {
+      "sessionId": "session_indy_nxt_2026_6755",
       "race": "Music City Grand Prix",
       "type": "Oval",
       "start": 8,
       "finish": 10,
       "bestLapRank": 11,
       "points": 20,
-      "status": "Running",
-      "source": "official session result"
+      "status": "running",
+      "source": "official session result",
+      "provenanceRefs": [
+        "source_indynxt_events_session_6755"
+      ]
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6764",
+      "race": "Portland",
+      "type": "Road",
+      "start": 15,
+      "finish": 16,
+      "bestLapRank": 20,
+      "points": 14,
+      "status": "running",
+      "source": "official session result",
+      "provenanceRefs": [
+        "source_indynxt_events_session_6764"
+      ]
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6757",
+      "race": "Milwaukee Mile",
+      "type": "Oval",
+      "start": 14,
+      "finish": 8,
+      "bestLapRank": 11,
+      "points": 24,
+      "status": "running",
+      "source": "official session result",
+      "provenanceRefs": [
+        "source_indynxt_events_session_6757"
+      ]
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6759",
+      "race": "Monterey R1",
+      "type": "Road",
+      "start": 7,
+      "finish": 6,
+      "bestLapRank": 6,
+      "points": 28,
+      "status": "running",
+      "source": "official session result",
+      "provenanceRefs": [
+        "source_indynxt_events_session_6759"
+      ]
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6758",
+      "race": "Monterey R2",
+      "type": "Road",
+      "start": 10,
+      "finish": 9,
+      "bestLapRank": 10,
+      "points": 22,
+      "status": "running",
+      "source": "official session result",
+      "provenanceRefs": [
+        "source_indynxt_events_session_6758"
+      ]
     }
   ],
   "bryceStanding": {
-    "rank": 17,
-    "points": 210,
+    "rank": 14,
+    "points": 298,
     "wins": 0,
     "top5": 0,
-    "top10": 5,
-    "bestFinish": 7
+    "top10": 8,
+    "bestFinish": 6
   },
   "yearSummaries": [
     {
@@ -158,39 +267,302 @@
     },
     {
       "year": 2026,
-      "starts": 13,
-      "bestFinish": 7,
-      "top10s": 5,
-      "averageFinish": 14.4
+      "starts": 17,
+      "bestFinish": 6,
+      "top10s": 8,
+      "averageFinish": 13.3
     }
   ],
   "teammateSummaries": [
     {
-      "name": "Niels Koolen",
-      "driverId": "4963",
+      "name": "Carson Etter",
+      "driverId": "4996",
       "year": 2026,
-      "starts": 13,
-      "bestFinish": 4,
-      "top10s": 3,
-      "averageFinish": 14.5
+      "starts": 17,
+      "bestFinish": 13,
+      "top10s": 0,
+      "averageFinish": 19.3,
+      "scope": "shared-team races with Bryce"
     },
     {
       "name": "James Roe",
       "driverId": "4895",
       "year": 2026,
-      "starts": 13,
+      "starts": 17,
       "bestFinish": 10,
       "top10s": 1,
-      "averageFinish": 17.7
+      "averageFinish": 17.4,
+      "scope": "shared-team races with Bryce"
     },
     {
-      "name": "Carson Etter",
-      "driverId": "4996",
+      "name": "Niels Koolen",
+      "driverId": "4963",
       "year": 2026,
-      "starts": 13,
-      "bestFinish": 13,
-      "top10s": 0,
-      "averageFinish": 19.2
+      "starts": 17,
+      "bestFinish": 4,
+      "top10s": 4,
+      "averageFinish": 15.1,
+      "scope": "shared-team races with Bryce"
     }
-  ]
+  ],
+  "officialStandings": {
+    "seasonYear": 2026,
+    "checkedAt": "2026-09-10T23:13:39.346Z",
+    "publishedAt": "Thursday, September 10, 2026",
+    "sourceUrl": "https://www.indynxt.com/api/results/YearPointSummary?year=2026&id=09341e09-3216-4f89-a45f-db697d72ee13",
+    "entries": [
+      {
+        "driverName": "Nikita Johnson",
+        "driverId": "driver_nikita_johnson",
+        "carNo": "21",
+        "teamName": "Cape Motorsports powered by ECR",
+        "points": 585,
+        "rank": 1,
+        "isBryce": false
+      },
+      {
+        "driverName": "Enzo Fittipaldi",
+        "driverId": "driver_enzo_fittipaldi",
+        "carNo": "67",
+        "teamName": "HMD Motorsports",
+        "points": 556,
+        "rank": 2,
+        "isBryce": false
+      },
+      {
+        "driverName": "Tymek Kucharczyk",
+        "driverId": "driver_tymek_kucharczyk",
+        "carNo": "71",
+        "teamName": "HMD Motorsports",
+        "points": 551,
+        "rank": 3,
+        "isBryce": false
+      },
+      {
+        "driverName": "Max Taylor",
+        "driverId": "driver_max_taylor",
+        "carNo": "28",
+        "teamName": "Andretti Global",
+        "points": 470,
+        "rank": 4,
+        "isBryce": false
+      },
+      {
+        "driverName": "Lochie Hughes",
+        "driverId": "driver_lochie_hughes",
+        "carNo": "26",
+        "teamName": "Andretti Global",
+        "points": 453,
+        "rank": 5,
+        "isBryce": false
+      },
+      {
+        "driverName": "Alessandro de Tullio",
+        "driverId": "driver_alessandro_de_tullio",
+        "carNo": "14",
+        "teamName": "A.J. Foyt Enterprises",
+        "points": 442,
+        "rank": 6,
+        "isBryce": false
+      },
+      {
+        "driverName": "JM Correa",
+        "driverId": "driver_jm_correa",
+        "carNo": "68",
+        "teamName": "Cusick Morgan Motorsports",
+        "points": 389,
+        "rank": 7,
+        "isBryce": false
+      },
+      {
+        "driverName": "Myles Rowe",
+        "driverId": "driver_myles_rowe",
+        "carNo": "99",
+        "teamName": "Abel Motorsports",
+        "points": 388,
+        "rank": 8,
+        "isBryce": false
+      },
+      {
+        "driverName": "Jack Beeton",
+        "driverId": "driver_jack_beeton",
+        "carNo": "45",
+        "teamName": "HMD Motorsports",
+        "points": 382,
+        "rank": 9,
+        "isBryce": false
+      },
+      {
+        "driverName": "Max Garcia",
+        "driverId": "driver_max_garcia",
+        "carNo": "12",
+        "teamName": "Abel Motorsports",
+        "points": 381,
+        "rank": 10,
+        "isBryce": false
+      },
+      {
+        "driverName": "Josh Pierson",
+        "driverId": "driver_josh_pierson",
+        "carNo": "29",
+        "teamName": "Andretti Global",
+        "points": 364,
+        "rank": 11,
+        "isBryce": false
+      },
+      {
+        "driverName": "Matteo Nannini",
+        "driverId": "driver_matteo_nannini",
+        "carNo": "20",
+        "teamName": "Cape Motorsports powered by ECR",
+        "points": 362,
+        "rank": 12,
+        "isBryce": false
+      },
+      {
+        "driverName": "Seb Murray",
+        "driverId": "driver_seb_murray",
+        "carNo": "27",
+        "teamName": "Andretti Global",
+        "points": 306,
+        "rank": 13,
+        "isBryce": false
+      },
+      {
+        "driverName": "Bryce Aron",
+        "driverId": "driver_bryce_aron",
+        "carNo": "9",
+        "teamName": "Chip Ganassi Racing",
+        "points": 298,
+        "rank": 14,
+        "isBryce": true
+      },
+      {
+        "driverName": "Niels Koolen",
+        "driverId": "driver_niels_koolen",
+        "carNo": "10",
+        "teamName": "Chip Ganassi Racing",
+        "points": 268,
+        "rank": 15,
+        "isBryce": false
+      },
+      {
+        "driverName": "Salvador de Alba",
+        "driverId": "driver_salvador_de_alba",
+        "carNo": "17",
+        "teamName": "HMD Motorsports",
+        "points": 245,
+        "rank": 16,
+        "isBryce": false
+      },
+      {
+        "driverName": "Nicolas Stati",
+        "driverId": "driver_nicolas_stati",
+        "carNo": "15",
+        "teamName": "Cusick Morgan Motorsports",
+        "points": 227,
+        "rank": 17,
+        "isBryce": false
+      },
+      {
+        "driverName": "Colin Kaminsky",
+        "driverId": "driver_colin_kaminsky",
+        "carNo": "57",
+        "teamName": "Abel Motorsports",
+        "points": 222,
+        "rank": 18,
+        "isBryce": false
+      },
+      {
+        "driverName": "Jordan Missig",
+        "driverId": "driver_jordan_missig",
+        "carNo": "48",
+        "teamName": "Abel Motorsports",
+        "points": 216,
+        "rank": 19,
+        "isBryce": false
+      },
+      {
+        "driverName": "James Roe",
+        "driverId": "driver_james_roe",
+        "carNo": "8",
+        "teamName": "Chip Ganassi Racing",
+        "points": 214,
+        "rank": 20,
+        "isBryce": false
+      },
+      {
+        "driverName": "Alexander Koreiba",
+        "driverId": "driver_alexander_koreiba",
+        "carNo": "75",
+        "teamName": "Juncos Hollinger Racing",
+        "points": 207,
+        "rank": 21,
+        "isBryce": false
+      },
+      {
+        "driverName": "Carson Etter",
+        "driverId": "driver_carson_etter",
+        "carNo": "11",
+        "teamName": "Chip Ganassi Racing",
+        "points": 182,
+        "rank": 22,
+        "isBryce": false
+      },
+      {
+        "driverName": "Nicholas Monteiro",
+        "driverId": "driver_nicholas_monteiro",
+        "carNo": "4",
+        "teamName": "A.J. Foyt Enterprises",
+        "points": 179,
+        "rank": 23,
+        "isBryce": false
+      },
+      {
+        "driverName": "Ricardo Escotto",
+        "driverId": "driver_ricardo_escotto",
+        "carNo": "76",
+        "teamName": "Juncos Hollinger Racing",
+        "points": 142,
+        "rank": 24,
+        "isBryce": false
+      },
+      {
+        "driverName": "Jacob Abel",
+        "driverId": "driver_jacob_abel",
+        "carNo": "48",
+        "teamName": "Abel Motorsports",
+        "points": 101,
+        "rank": 25,
+        "isBryce": false
+      },
+      {
+        "driverName": "Nolan Allaer",
+        "driverId": "driver_nolan_allaer",
+        "carNo": "76",
+        "teamName": "Juncos Hollinger Racing",
+        "points": 67,
+        "rank": 26,
+        "isBryce": false
+      },
+      {
+        "driverName": "Bart Harrison",
+        "driverId": "driver_bart_harrison",
+        "carNo": "17",
+        "teamName": "HMD Motorsports",
+        "points": 51,
+        "rank": 27,
+        "isBryce": false
+      },
+      {
+        "driverName": "Yuven Sundaramoorthy",
+        "driverId": "driver_yuven_sundaramoorthy",
+        "carNo": "15",
+        "teamName": "Cusick Morgan Motorsports",
+        "points": 9,
+        "rank": 28,
+        "isBryce": false
+      }
+    ]
+  }
 }

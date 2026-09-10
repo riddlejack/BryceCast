@@ -1,9 +1,9 @@
 {
   "lane": "analysis/semantic-layer",
   "slice": "slice-1-loop-crossings",
-  "generatedAt": "2026-07-19T23:14:05.627Z",
+  "generatedAt": "2026-09-10T22:40:37.009Z",
   "sourceTier": "racetools_capture",
-  "lakeDataRoot": "/Users/example/.codex/worktrees/a534/Bryce POV access/data/historical-data-lake",
+  "lakeDataRoot": "/Users/example/.brycecast/data-lake",
   "provenanceNote": "Derived from immutable RaceTools captures (raw/ only). Local time-of-day is the authoritative crossing clock; feed heartbeat epochs are date anchors with UNVALIDATED timezone. Not an official BryceCast fact.",
   "sessionCount": 143,
   "crossingTotal": 2613292,
@@ -41,12 +41,14 @@
         "lastEpoch": 1705321883,
         "spanSeconds": 8982,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "P1.L"
         ]
       },
       "flagEventCount": 1,
       "greenTod": 28806.658,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 0,
       "qualityMasks": [],
@@ -80,6 +82,7 @@
         "lastEpoch": 1705386603,
         "spanSeconds": 64719,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "P1.L",
           "P2.L"
@@ -87,6 +90,7 @@
       },
       "flagEventCount": 0,
       "greenTod": null,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 0,
       "qualityMasks": [
@@ -122,6 +126,18 @@
         "lastEpoch": 1705502241,
         "spanSeconds": 115637,
         "maxGapSeconds": 47354,
+        "gapIntervals": [
+          {
+            "lastObservedEpoch": 1705386611,
+            "nextObservedEpoch": 1705433965,
+            "gapSeconds": 47354
+          },
+          {
+            "lastObservedEpoch": 1705489642,
+            "nextObservedEpoch": 1705489888,
+            "gapSeconds": 246
+          }
+        ],
         "seriesCodes": [
           "P2.L",
           "P3.L"
@@ -129,6 +145,7 @@
       },
       "flagEventCount": 1,
       "greenTod": 29241.129,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 0,
       "qualityMasks": [
@@ -165,12 +182,40 @@
         "lastEpoch": 1707192480,
         "spanSeconds": 65467,
         "maxGapSeconds": 264,
+        "gapIntervals": [
+          {
+            "lastObservedEpoch": 1707127441,
+            "nextObservedEpoch": 1707127475,
+            "gapSeconds": 34
+          },
+          {
+            "lastObservedEpoch": 1707127508,
+            "nextObservedEpoch": 1707127514,
+            "gapSeconds": 6
+          },
+          {
+            "lastObservedEpoch": 1707176017,
+            "nextObservedEpoch": 1707176246,
+            "gapSeconds": 229
+          },
+          {
+            "lastObservedEpoch": 1707176386,
+            "nextObservedEpoch": 1707176650,
+            "gapSeconds": 264
+          },
+          {
+            "lastObservedEpoch": 1707179769,
+            "nextObservedEpoch": 1707179981,
+            "gapSeconds": 212
+          }
+        ],
         "seriesCodes": [
           "P1.L"
         ]
       },
       "flagEventCount": 1,
       "greenTod": 32403.672,
+      "checkeredTod": null,
       "hasCheckered": false,
       "maxDerivedLaps": 0,
       "qualityMasks": [
@@ -250,12 +295,20 @@
         "lastEpoch": 1709908975,
         "spanSeconds": 3088,
         "maxGapSeconds": 13,
+        "gapIntervals": [
+          {
+            "lastObservedEpoch": 1709908030,
+            "nextObservedEpoch": 1709908043,
+            "gapSeconds": 13
+          }
+        ],
         "seriesCodes": [
           "P1.L"
         ]
       },
       "flagEventCount": 23,
       "greenTod": 49801.004,
+      "checkeredTod": 2706,
       "hasCheckered": true,
       "maxDerivedLaps": 29,
       "qualityMasks": [],
@@ -332,6 +385,13 @@
         "lastEpoch": 1709977135,
         "spanSeconds": 4734,
         "maxGapSeconds": 107,
+        "gapIntervals": [
+          {
+            "lastObservedEpoch": 1709973686,
+            "nextObservedEpoch": 1709973793,
+            "gapSeconds": 107
+          }
+        ],
         "seriesCodes": [
           "P2.L",
           "11A1F"
@@ -339,6 +399,7 @@
       },
       "flagEventCount": 21,
       "greenTod": 30300.266,
+      "checkeredTod": 2700,
       "hasCheckered": true,
       "maxDerivedLaps": 31,
       "qualityMasks": [],
@@ -415,12 +476,14 @@
         "lastEpoch": 1709991079,
         "spanSeconds": 1474,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "QA.L"
         ]
       },
       "flagEventCount": 9,
       "greenTod": 47762.236,
+      "checkeredTod": 728,
       "hasCheckered": true,
       "maxDerivedLaps": 11,
       "qualityMasks": [],
@@ -497,12 +560,14 @@
         "lastEpoch": 1709992758,
         "spanSeconds": 1659,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "QB.L"
         ]
       },
       "flagEventCount": 13,
       "greenTod": 48859.018,
+      "checkeredTod": 758,
       "hasCheckered": true,
       "maxDerivedLaps": 9,
       "qualityMasks": [],
@@ -579,12 +644,14 @@
         "lastEpoch": 1710068572,
         "spanSeconds": 3810,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "R.L"
         ]
       },
       "flagEventCount": 7,
       "greenTod": 36559.559,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 45,
       "qualityMasks": [],
@@ -663,12 +730,14 @@
         "lastEpoch": 1714141085,
         "spanSeconds": 3182,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "P1.L"
         ]
       },
       "flagEventCount": 22,
       "greenTod": 48681.57,
+      "checkeredTod": 2709,
       "hasCheckered": true,
       "maxDerivedLaps": 24,
       "qualityMasks": [],
@@ -747,12 +816,20 @@
         "lastEpoch": 1714216200,
         "spanSeconds": 4199,
         "maxGapSeconds": 4,
+        "gapIntervals": [
+          {
+            "lastObservedEpoch": 1714214348,
+            "nextObservedEpoch": 1714214352,
+            "gapSeconds": 4
+          }
+        ],
         "seriesCodes": [
           "P2.L"
         ]
       },
       "flagEventCount": 22,
       "greenTod": 36378.751,
+      "checkeredTod": 2698,
       "hasCheckered": true,
       "maxDerivedLaps": 25,
       "qualityMasks": [],
@@ -826,12 +903,14 @@
         "lastEpoch": 1714225849,
         "spanSeconds": 1548,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "QA.L"
         ]
       },
       "flagEventCount": 2,
       "greenTod": 48989.506,
+      "checkeredTod": 729,
       "hasCheckered": true,
       "maxDerivedLaps": 9,
       "qualityMasks": [],
@@ -905,12 +984,14 @@
         "lastEpoch": 1714226937,
         "spanSeconds": 1063,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "QB.L"
         ]
       },
       "flagEventCount": 10,
       "greenTod": 50111.847,
+      "checkeredTod": 732,
       "hasCheckered": true,
       "maxDerivedLaps": 9,
       "qualityMasks": [],
@@ -989,12 +1070,14 @@
         "lastEpoch": 1714302027,
         "spanSeconds": 3319,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "R.L"
         ]
       },
       "flagEventCount": 5,
       "greenTod": 36875.972,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 35,
       "qualityMasks": [],
@@ -1080,12 +1163,14 @@
         "lastEpoch": 1715342277,
         "spanSeconds": 3475,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "P1.L"
         ]
       },
       "flagEventCount": 15,
       "greenTod": 39900.354,
+      "checkeredTod": 3002,
       "hasCheckered": true,
       "maxDerivedLaps": 31,
       "qualityMasks": [],
@@ -1168,12 +1253,14 @@
         "lastEpoch": 1715352666,
         "spanSeconds": 1721,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "QA.L"
         ]
       },
       "flagEventCount": 9,
       "greenTod": 52293.148,
+      "checkeredTod": 722,
       "hasCheckered": true,
       "maxDerivedLaps": 10,
       "qualityMasks": [],
@@ -1256,12 +1343,14 @@
         "lastEpoch": 1715353607,
         "spanSeconds": 935,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "QB.L"
         ]
       },
       "flagEventCount": 11,
       "greenTod": 53585.192,
+      "checkeredTod": 720,
       "hasCheckered": true,
       "maxDerivedLaps": 9,
       "qualityMasks": [],
@@ -1347,12 +1436,14 @@
         "lastEpoch": 1715368133,
         "spanSeconds": 3695,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "R1.L"
         ]
       },
       "flagEventCount": 5,
       "greenTod": 65973.127,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 35,
       "qualityMasks": [],
@@ -1438,12 +1529,14 @@
         "lastEpoch": 1715435779,
         "spanSeconds": 3368,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "R2.L"
         ]
       },
       "flagEventCount": 1,
       "greenTod": 47383.316,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 35,
       "qualityMasks": [],
@@ -1535,12 +1628,14 @@
         "lastEpoch": 1717166354,
         "spanSeconds": 3253,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "P1.L"
         ]
       },
       "flagEventCount": 17,
       "greenTod": 50056.576,
+      "checkeredTod": 2623,
       "hasCheckered": true,
       "maxDerivedLaps": 29,
       "qualityMasks": [],
@@ -1632,12 +1727,14 @@
         "lastEpoch": 1717231659,
         "spanSeconds": 3157,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "P2.L"
         ]
       },
       "flagEventCount": 22,
       "greenTod": 28877.838,
+      "checkeredTod": 2701,
       "hasCheckered": true,
       "maxDerivedLaps": 28,
       "qualityMasks": [],
@@ -1729,12 +1826,14 @@
         "lastEpoch": 1717241680,
         "spanSeconds": 1479,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "QA.L"
         ]
       },
       "flagEventCount": 12,
       "greenTod": 40872.251,
+      "checkeredTod": 728,
       "hasCheckered": true,
       "maxDerivedLaps": 7,
       "qualityMasks": [],
@@ -1826,12 +1925,14 @@
         "lastEpoch": 1717242795,
         "spanSeconds": 1085,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "QB.L"
         ]
       },
       "flagEventCount": 12,
       "greenTod": 41958.731,
+      "checkeredTod": 784,
       "hasCheckered": true,
       "maxDerivedLaps": 8,
       "qualityMasks": [],
@@ -1923,12 +2024,14 @@
         "lastEpoch": 1717327563,
         "spanSeconds": 3991,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "R.L"
         ]
       },
       "flagEventCount": 9,
       "greenTod": 37743.078,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 45,
       "qualityMasks": [],
@@ -2034,12 +2137,14 @@
         "lastEpoch": 1717771287,
         "spanSeconds": 3385,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "P1.L"
         ]
       },
       "flagEventCount": 4,
       "greenTod": 49800.216,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 17,
       "qualityMasks": [],
@@ -2145,12 +2250,14 @@
         "lastEpoch": 1717840184,
         "spanSeconds": 3282,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "P2.L"
         ]
       },
       "flagEventCount": 20,
       "greenTod": 32525.847,
+      "checkeredTod": 2716,
       "hasCheckered": true,
       "maxDerivedLaps": 14,
       "qualityMasks": [],
@@ -2256,12 +2363,14 @@
         "lastEpoch": 1717864110,
         "spanSeconds": 2007,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "QA.L"
         ]
       },
       "flagEventCount": 10,
       "greenTod": 58371.4,
+      "checkeredTod": 723,
       "hasCheckered": true,
       "maxDerivedLaps": 6,
       "qualityMasks": [],
@@ -2367,12 +2476,14 @@
         "lastEpoch": 1717865267,
         "spanSeconds": 1119,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "QB.L"
         ]
       },
       "flagEventCount": 12,
       "greenTod": 59573.46,
+      "checkeredTod": 721,
       "hasCheckered": true,
       "maxDerivedLaps": 3,
       "qualityMasks": [],
@@ -2478,12 +2589,14 @@
         "lastEpoch": 1717938146,
         "spanSeconds": 3482,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "R.L"
         ]
       },
       "flagEventCount": 10,
       "greenTod": 44030.409,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 19,
       "qualityMasks": [],
@@ -2559,6 +2672,13 @@
         "lastEpoch": 1718191878,
         "spanSeconds": 9377,
         "maxGapSeconds": 20,
+        "gapIntervals": [
+          {
+            "lastObservedEpoch": 1718187623,
+            "nextObservedEpoch": 1718187643,
+            "gapSeconds": 20
+          }
+        ],
         "seriesCodes": [
           "P1.L",
           "N"
@@ -2566,6 +2686,7 @@
       },
       "flagEventCount": 6,
       "greenTod": 32400.387,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 127,
       "qualityMasks": [],
@@ -2639,12 +2760,14 @@
         "lastEpoch": 1718204473,
         "spanSeconds": 9371,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "P2.L"
         ]
       },
       "flagEventCount": 8,
       "greenTod": 45001.022,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 109,
       "qualityMasks": [],
@@ -2737,12 +2860,14 @@
         "lastEpoch": 1718977086,
         "spanSeconds": 1956,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "P1.L"
         ]
       },
       "flagEventCount": 17,
       "greenTod": 47480.471,
+      "checkeredTod": 1500,
       "hasCheckered": true,
       "maxDerivedLaps": 19,
       "qualityMasks": [],
@@ -2835,12 +2960,14 @@
         "lastEpoch": 1718986063,
         "spanSeconds": 1962,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "P2.L"
         ]
       },
       "flagEventCount": 19,
       "greenTod": 56475.655,
+      "checkeredTod": 1502,
       "hasCheckered": true,
       "maxDerivedLaps": 16,
       "qualityMasks": [],
@@ -2930,12 +3057,14 @@
         "lastEpoch": 1719047785,
         "spanSeconds": 1584,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "QA.L"
         ]
       },
       "flagEventCount": 30,
       "greenTod": 32490.793,
+      "checkeredTod": 721,
       "hasCheckered": true,
       "maxDerivedLaps": 9,
       "qualityMasks": [],
@@ -3028,12 +3157,14 @@
         "lastEpoch": 1719048837,
         "spanSeconds": 1037,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "QB.L"
         ]
       },
       "flagEventCount": 9,
       "greenTod": 33624.905,
+      "checkeredTod": 756,
       "hasCheckered": true,
       "maxDerivedLaps": 9,
       "qualityMasks": [],
@@ -3126,12 +3257,14 @@
         "lastEpoch": 1719062481,
         "spanSeconds": 3632,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "R1.L"
         ]
       },
       "flagEventCount": 3,
       "greenTod": 45289.128,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 35,
       "qualityMasks": [],
@@ -3224,12 +3357,14 @@
         "lastEpoch": 1719150622,
         "spanSeconds": 3421,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "R2.L"
         ]
       },
       "flagEventCount": 4,
       "greenTod": 47066.103,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 35,
       "qualityMasks": [],
@@ -3263,12 +3398,14 @@
         "lastEpoch": 1719596230,
         "spanSeconds": 21945,
         "maxGapSeconds": 2,
+        "gapIntervals": [],
         "seriesCodes": [
           "P1.L"
         ]
       },
       "flagEventCount": 0,
       "greenTod": null,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 0,
       "qualityMasks": [
@@ -3358,12 +3495,14 @@
         "lastEpoch": 1720191160,
         "spanSeconds": 3246,
         "maxGapSeconds": 2,
+        "gapIntervals": [],
         "seriesCodes": [
           "P1.L"
         ]
       },
       "flagEventCount": 22,
       "greenTod": 50774.097,
+      "checkeredTod": 2701,
       "hasCheckered": true,
       "maxDerivedLaps": 27,
       "qualityMasks": [],
@@ -3451,12 +3590,14 @@
         "lastEpoch": 1720261667,
         "spanSeconds": 3166,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "P2.L"
         ]
       },
       "flagEventCount": 5,
       "greenTod": 34872.146,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 25,
       "qualityMasks": [],
@@ -3543,12 +3684,14 @@
         "lastEpoch": 1720275603,
         "spanSeconds": 1502,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "QA.L"
         ]
       },
       "flagEventCount": 1,
       "greenTod": 50772.35,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 10,
       "qualityMasks": [],
@@ -3635,12 +3778,14 @@
         "lastEpoch": 1720276660,
         "spanSeconds": 1029,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "QB.L"
         ]
       },
       "flagEventCount": 1,
       "greenTod": 51848.616,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 10,
       "qualityMasks": [],
@@ -3728,12 +3873,14 @@
         "lastEpoch": 1720354205,
         "spanSeconds": 3537,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "R.L"
         ]
       },
       "flagEventCount": 5,
       "greenTod": 41059.243,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 35,
       "qualityMasks": [],
@@ -3802,12 +3949,20 @@
         "lastEpoch": 1720793753,
         "spanSeconds": 4852,
         "maxGapSeconds": 35,
+        "gapIntervals": [
+          {
+            "lastObservedEpoch": 1720791563,
+            "nextObservedEpoch": 1720791598,
+            "gapSeconds": 35
+          }
+        ],
         "seriesCodes": [
           "P1.L"
         ]
       },
       "flagEventCount": 8,
       "greenTod": 46800.396,
+      "checkeredTod": 4505,
       "hasCheckered": true,
       "maxDerivedLaps": 85,
       "qualityMasks": [],
@@ -3871,12 +4026,14 @@
         "lastEpoch": 1720807194,
         "spanSeconds": 2320,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "QC.L"
         ]
       },
       "flagEventCount": 19,
       "greenTod": 63000.293,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 4,
       "qualityMasks": [],
@@ -3945,12 +4102,14 @@
         "lastEpoch": 1720878066,
         "spanSeconds": 2424,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "R.L"
         ]
       },
       "flagEventCount": 23,
       "greenTod": 47584.36,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 55,
       "qualityMasks": [],
@@ -4021,12 +4180,20 @@
         "lastEpoch": 1723820475,
         "spanSeconds": 3074,
         "maxGapSeconds": 69,
+        "gapIntervals": [
+          {
+            "lastObservedEpoch": 1723820057,
+            "nextObservedEpoch": 1723820126,
+            "gapSeconds": 69
+          }
+        ],
         "seriesCodes": [
           "P1.L"
         ]
       },
       "flagEventCount": 10,
       "greenTod": 51300.423,
+      "checkeredTod": 2707,
       "hasCheckered": true,
       "maxDerivedLaps": 63,
       "qualityMasks": [],
@@ -4092,12 +4259,14 @@
         "lastEpoch": 1723832631,
         "spanSeconds": 2930,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "QC.L"
         ]
       },
       "flagEventCount": 18,
       "greenTod": 63900.744,
+      "checkeredTod": null,
       "hasCheckered": false,
       "maxDerivedLaps": 4,
       "qualityMasks": [],
@@ -4168,12 +4337,14 @@
         "lastEpoch": 1723909682,
         "spanSeconds": 3421,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "R.L"
         ]
       },
       "flagEventCount": 9,
       "greenTod": 54216.782,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 75,
       "qualityMasks": [],
@@ -4252,12 +4423,14 @@
         "lastEpoch": 1724423553,
         "spanSeconds": 3152,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "P1.L"
         ]
       },
       "flagEventCount": 20,
       "greenTod": 49568.145,
+      "checkeredTod": 2729,
       "hasCheckered": true,
       "maxDerivedLaps": 25,
       "qualityMasks": [],
@@ -4336,12 +4509,14 @@
         "lastEpoch": 1724501249,
         "spanSeconds": 3148,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "P2.L"
         ]
       },
       "flagEventCount": 9,
       "greenTod": 40865.997,
+      "checkeredTod": 2707,
       "hasCheckered": true,
       "maxDerivedLaps": 30,
       "qualityMasks": [],
@@ -4417,12 +4592,14 @@
         "lastEpoch": 1724517302,
         "spanSeconds": 1501,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "QA.L"
         ]
       },
       "flagEventCount": 9,
       "greenTod": 58862.843,
+      "checkeredTod": 721,
       "hasCheckered": true,
       "maxDerivedLaps": 10,
       "qualityMasks": [],
@@ -4501,12 +4678,14 @@
         "lastEpoch": 1724518347,
         "spanSeconds": 1018,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "QB.L"
         ]
       },
       "flagEventCount": 8,
       "greenTod": 59941.742,
+      "checkeredTod": 720,
       "hasCheckered": true,
       "maxDerivedLaps": 10,
       "qualityMasks": [],
@@ -4585,12 +4764,14 @@
         "lastEpoch": 1724583524,
         "spanSeconds": 3224,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "R.L"
         ]
       },
       "flagEventCount": 5,
       "greenTod": 37135.49,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 35,
       "qualityMasks": [],
@@ -4664,12 +4845,14 @@
         "lastEpoch": 1725027366,
         "spanSeconds": 3065,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "P1.L"
         ]
       },
       "flagEventCount": 15,
       "greenTod": 48600.324,
+      "checkeredTod": 2703,
       "hasCheckered": true,
       "maxDerivedLaps": 57,
       "qualityMasks": [],
@@ -4738,12 +4921,14 @@
         "lastEpoch": 1725107862,
         "spanSeconds": 2861,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "QC.L"
         ]
       },
       "flagEventCount": 19,
       "greenTod": 43200.491,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 4,
       "qualityMasks": [],
@@ -4817,12 +5002,14 @@
         "lastEpoch": 1725118780,
         "spanSeconds": 3013,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "R.L"
         ]
       },
       "flagEventCount": 3,
       "greenTod": 53878.01,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 90,
       "qualityMasks": [],
@@ -4891,12 +5078,14 @@
         "lastEpoch": 1726306256,
         "spanSeconds": 2155,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "P1.L"
         ]
       },
       "flagEventCount": 8,
       "greenTod": 32400.5,
+      "checkeredTod": 1788,
       "hasCheckered": true,
       "maxDerivedLaps": 38,
       "qualityMasks": [],
@@ -4965,12 +5154,14 @@
         "lastEpoch": 1726317094,
         "spanSeconds": 2193,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "P2.L"
         ]
       },
       "flagEventCount": 14,
       "greenTod": 43200.481,
+      "checkeredTod": 1800,
       "hasCheckered": true,
       "maxDerivedLaps": 45,
       "qualityMasks": [],
@@ -5036,12 +5227,14 @@
         "lastEpoch": 1726330738,
         "spanSeconds": 6536,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "QC.L"
         ]
       },
       "flagEventCount": 10,
       "greenTod": 52800.558,
+      "checkeredTod": null,
       "hasCheckered": false,
       "maxDerivedLaps": 4,
       "qualityMasks": [],
@@ -5110,12 +5303,14 @@
         "lastEpoch": 1726399830,
         "spanSeconds": 2671,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "R.L"
         ]
       },
       "flagEventCount": 4,
       "greenTod": 39516.187,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 65,
       "qualityMasks": [],
@@ -5161,12 +5356,14 @@
         "lastEpoch": 1729251129,
         "spanSeconds": 9371,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "P1.L"
         ]
       },
       "flagEventCount": 0,
       "greenTod": null,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 38,
       "qualityMasks": [],
@@ -5212,12 +5409,14 @@
         "lastEpoch": 1729267219,
         "spanSeconds": 11112,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "P2.L"
         ]
       },
       "flagEventCount": 0,
       "greenTod": null,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 54,
       "qualityMasks": [],
@@ -5251,6 +5450,23 @@
         "lastEpoch": 1729555202,
         "spanSeconds": 345598,
         "maxGapSeconds": 11114,
+        "gapIntervals": [
+          {
+            "lastObservedEpoch": 1729209639,
+            "nextObservedEpoch": 1729209674,
+            "gapSeconds": 35
+          },
+          {
+            "lastObservedEpoch": 1729241757,
+            "nextObservedEpoch": 1729251130,
+            "gapSeconds": 9373
+          },
+          {
+            "lastObservedEpoch": 1729256106,
+            "nextObservedEpoch": 1729267220,
+            "gapSeconds": 11114
+          }
+        ],
         "seriesCodes": [
           "P1.L",
           "P2.L"
@@ -5258,6 +5474,7 @@
       },
       "flagEventCount": 0,
       "greenTod": null,
+      "checkeredTod": null,
       "hasCheckered": false,
       "maxDerivedLaps": 0,
       "qualityMasks": [
@@ -5294,12 +5511,20 @@
         "lastEpoch": 1729814402,
         "spanSeconds": 259198,
         "maxGapSeconds": 117,
+        "gapIntervals": [
+          {
+            "lastObservedEpoch": 1729641049,
+            "nextObservedEpoch": 1729641166,
+            "gapSeconds": 117
+          }
+        ],
         "seriesCodes": [
           "P2.L"
         ]
       },
       "flagEventCount": 0,
       "greenTod": null,
+      "checkeredTod": null,
       "hasCheckered": false,
       "maxDerivedLaps": 0,
       "qualityMasks": [
@@ -5335,12 +5560,14 @@
         "lastEpoch": 1729900802,
         "spanSeconds": 86398,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "P2.L"
         ]
       },
       "flagEventCount": 0,
       "greenTod": null,
+      "checkeredTod": null,
       "hasCheckered": false,
       "maxDerivedLaps": 0,
       "qualityMasks": [
@@ -5376,12 +5603,14 @@
         "lastEpoch": 1730158794,
         "spanSeconds": 52798,
         "maxGapSeconds": 2,
+        "gapIntervals": [],
         "seriesCodes": [
           "P1.L"
         ]
       },
       "flagEventCount": 0,
       "greenTod": null,
+      "checkeredTod": null,
       "hasCheckered": false,
       "maxDerivedLaps": 0,
       "qualityMasks": [
@@ -5417,12 +5646,14 @@
         "lastEpoch": 1733755416,
         "spanSeconds": 28743,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "P1.L"
         ]
       },
       "flagEventCount": 0,
       "greenTod": null,
+      "checkeredTod": null,
       "hasCheckered": false,
       "maxDerivedLaps": 0,
       "qualityMasks": [
@@ -5466,12 +5697,14 @@
         "lastEpoch": 1736943864,
         "spanSeconds": 12932,
         "maxGapSeconds": 2,
+        "gapIntervals": [],
         "seriesCodes": [
           "P1.L"
         ]
       },
       "flagEventCount": 0,
       "greenTod": null,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 65,
       "qualityMasks": [],
@@ -5513,12 +5746,14 @@
         "lastEpoch": 1736956976,
         "spanSeconds": 13110,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "P2.L"
         ]
       },
       "flagEventCount": 0,
       "greenTod": null,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 69,
       "qualityMasks": [],
@@ -5560,12 +5795,14 @@
         "lastEpoch": 1737027214,
         "spanSeconds": 9921,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "P3.L"
         ]
       },
       "flagEventCount": 0,
       "greenTod": null,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 68,
       "qualityMasks": [],
@@ -5607,12 +5844,14 @@
         "lastEpoch": 1737039732,
         "spanSeconds": 8915,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "P4.L"
         ]
       },
       "flagEventCount": 0,
       "greenTod": null,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 51,
       "qualityMasks": [],
@@ -5654,12 +5893,14 @@
         "lastEpoch": 1738735601,
         "spanSeconds": 76471,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "P0.L"
         ]
       },
       "flagEventCount": 0,
       "greenTod": null,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 0,
       "qualityMasks": [
@@ -5703,6 +5944,7 @@
         "lastEpoch": 1738760573,
         "spanSeconds": 24956,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "P1.L",
           "P2.L"
@@ -5710,6 +5952,7 @@
       },
       "flagEventCount": 0,
       "greenTod": null,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 0,
       "qualityMasks": [
@@ -5753,12 +5996,14 @@
         "lastEpoch": 1738776770,
         "spanSeconds": 16193,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "P2.L"
         ]
       },
       "flagEventCount": 0,
       "greenTod": null,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 0,
       "qualityMasks": [],
@@ -5800,12 +6045,20 @@
         "lastEpoch": 1738843693,
         "spanSeconds": 17613,
         "maxGapSeconds": 3,
+        "gapIntervals": [
+          {
+            "lastObservedEpoch": 1738839623,
+            "nextObservedEpoch": 1738839626,
+            "gapSeconds": 3
+          }
+        ],
         "seriesCodes": [
           "P3.L"
         ]
       },
       "flagEventCount": 0,
       "greenTod": null,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 0,
       "qualityMasks": [],
@@ -5847,12 +6100,14 @@
         "lastEpoch": 1738861949,
         "spanSeconds": 18255,
         "maxGapSeconds": 2,
+        "gapIntervals": [],
         "seriesCodes": [
           "P4.L"
         ]
       },
       "flagEventCount": 0,
       "greenTod": null,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 0,
       "qualityMasks": [],
@@ -5931,12 +6186,14 @@
         "lastEpoch": 1740753934,
         "spanSeconds": 3033,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "P1.L"
         ]
       },
       "flagEventCount": 6,
       "greenTod": 50465.105,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 28,
       "qualityMasks": [],
@@ -6015,12 +6272,14 @@
         "lastEpoch": 1740823836,
         "spanSeconds": 3791,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "P2.L"
         ]
       },
       "flagEventCount": 2,
       "greenTod": 33838.414,
+      "checkeredTod": 2760,
       "hasCheckered": true,
       "maxDerivedLaps": 32,
       "qualityMasks": [],
@@ -6096,12 +6355,14 @@
         "lastEpoch": 1740836810,
         "spanSeconds": 1488,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "QA.L"
         ]
       },
       "flagEventCount": 2,
       "greenTod": 48784.043,
+      "checkeredTod": 729,
       "hasCheckered": true,
       "maxDerivedLaps": 11,
       "qualityMasks": [],
@@ -6177,12 +6438,14 @@
         "lastEpoch": 1740837757,
         "spanSeconds": 936,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "QB.L"
         ]
       },
       "flagEventCount": 2,
       "greenTod": 49751.592,
+      "checkeredTod": 720,
       "hasCheckered": true,
       "maxDerivedLaps": 10,
       "qualityMasks": [],
@@ -6261,12 +6524,14 @@
         "lastEpoch": 1740913672,
         "spanSeconds": 4259,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "R.L"
         ]
       },
       "flagEventCount": 15,
       "greenTod": 36641.127,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 44,
       "qualityMasks": [],
@@ -6311,12 +6576,14 @@
         "lastEpoch": 1743527306,
         "spanSeconds": 15030,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "P2.L"
         ]
       },
       "flagEventCount": 0,
       "greenTod": null,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 130,
       "qualityMasks": [],
@@ -6350,12 +6617,14 @@
         "lastEpoch": 1745323595,
         "spanSeconds": 12814,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "P1.L"
         ]
       },
       "flagEventCount": 0,
       "greenTod": null,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 0,
       "qualityMasks": [],
@@ -6389,12 +6658,14 @@
         "lastEpoch": 1745339845,
         "spanSeconds": 16244,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "P2.L"
         ]
       },
       "flagEventCount": 0,
       "greenTod": null,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 0,
       "qualityMasks": [],
@@ -6476,12 +6747,14 @@
         "lastEpoch": 1746195446,
         "spanSeconds": 3145,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "P1.L"
         ]
       },
       "flagEventCount": 4,
       "greenTod": 48677.672,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 23,
       "qualityMasks": [],
@@ -6563,12 +6836,14 @@
         "lastEpoch": 1746266287,
         "spanSeconds": 3186,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "P2.L"
         ]
       },
       "flagEventCount": 20,
       "greenTod": 33081.865,
+      "checkeredTod": 2701,
       "hasCheckered": true,
       "maxDerivedLaps": 28,
       "qualityMasks": [],
@@ -6647,12 +6922,20 @@
         "lastEpoch": 1746276455,
         "spanSeconds": 1653,
         "maxGapSeconds": 15,
+        "gapIntervals": [
+          {
+            "lastObservedEpoch": 1746275780,
+            "nextObservedEpoch": 1746275795,
+            "gapSeconds": 15
+          }
+        ],
         "seriesCodes": [
           "QA.L"
         ]
       },
       "flagEventCount": 10,
       "greenTod": 45076.109,
+      "checkeredTod": 727,
       "hasCheckered": true,
       "maxDerivedLaps": 7,
       "qualityMasks": [],
@@ -6734,12 +7017,14 @@
         "lastEpoch": 1746277538,
         "spanSeconds": 961,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "QB.L"
         ]
       },
       "flagEventCount": 11,
       "greenTod": 46275.925,
+      "checkeredTod": 794,
       "hasCheckered": true,
       "maxDerivedLaps": 7,
       "qualityMasks": [],
@@ -6821,12 +7106,14 @@
         "lastEpoch": 1746357801,
         "spanSeconds": 3666,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "R.L"
         ]
       },
       "flagEventCount": 5,
       "greenTod": 38146.558,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 35,
       "qualityMasks": [],
@@ -6860,10 +7147,12 @@
         "lastEpoch": null,
         "spanSeconds": null,
         "maxGapSeconds": null,
+        "gapIntervals": [],
         "seriesCodes": []
       },
       "flagEventCount": 0,
       "greenTod": null,
+      "checkeredTod": null,
       "hasCheckered": false,
       "maxDerivedLaps": 0,
       "qualityMasks": [
@@ -6950,12 +7239,14 @@
         "lastEpoch": 1746801911,
         "spanSeconds": 1510,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "QA.L"
         ]
       },
       "flagEventCount": 1,
       "greenTod": 52284.507,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 9,
       "qualityMasks": [],
@@ -7040,12 +7331,14 @@
         "lastEpoch": 1746803097,
         "spanSeconds": 1157,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "QB.L"
         ]
       },
       "flagEventCount": 1,
       "greenTod": 53359.826,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 9,
       "qualityMasks": [],
@@ -7133,12 +7426,14 @@
         "lastEpoch": 1746820417,
         "spanSeconds": 3731,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "R1.L"
         ]
       },
       "flagEventCount": 6,
       "greenTod": 68752.109,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 35,
       "qualityMasks": [],
@@ -7226,6 +7521,68 @@
         "lastEpoch": 1746838801,
         "spanSeconds": 63607,
         "maxGapSeconds": 3733,
+        "gapIntervals": [
+          {
+            "lastObservedEpoch": 1746781529,
+            "nextObservedEpoch": 1746781599,
+            "gapSeconds": 70
+          },
+          {
+            "lastObservedEpoch": 1746781602,
+            "nextObservedEpoch": 1746781615,
+            "gapSeconds": 13
+          },
+          {
+            "lastObservedEpoch": 1746782700,
+            "nextObservedEpoch": 1746785638,
+            "gapSeconds": 2938
+          },
+          {
+            "lastObservedEpoch": 1746785660,
+            "nextObservedEpoch": 1746787133,
+            "gapSeconds": 1473
+          },
+          {
+            "lastObservedEpoch": 1746787153,
+            "nextObservedEpoch": 1746788076,
+            "gapSeconds": 923
+          },
+          {
+            "lastObservedEpoch": 1746795900,
+            "nextObservedEpoch": 1746798457,
+            "gapSeconds": 2557
+          },
+          {
+            "lastObservedEpoch": 1746800400,
+            "nextObservedEpoch": 1746801912,
+            "gapSeconds": 1512
+          },
+          {
+            "lastObservedEpoch": 1746801939,
+            "nextObservedEpoch": 1746803098,
+            "gapSeconds": 1159
+          },
+          {
+            "lastObservedEpoch": 1746807900,
+            "nextObservedEpoch": 1746809285,
+            "gapSeconds": 1385
+          },
+          {
+            "lastObservedEpoch": 1746809303,
+            "nextObservedEpoch": 1746810562,
+            "gapSeconds": 1259
+          },
+          {
+            "lastObservedEpoch": 1746811822,
+            "nextObservedEpoch": 1746812495,
+            "gapSeconds": 673
+          },
+          {
+            "lastObservedEpoch": 1746816685,
+            "nextObservedEpoch": 1746820418,
+            "gapSeconds": 3733
+          }
+        ],
         "seriesCodes": [
           "S2",
           "PA.I",
@@ -7244,6 +7601,7 @@
       },
       "flagEventCount": 27,
       "greenTod": 24287.508,
+      "checkeredTod": 720,
       "hasCheckered": true,
       "maxDerivedLaps": 37,
       "qualityMasks": [
@@ -7334,12 +7692,14 @@
         "lastEpoch": 1746885227,
         "spanSeconds": 3716,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "R2.L"
         ]
       },
       "flagEventCount": 3,
       "greenTod": 47185.031,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 35,
       "qualityMasks": [],
@@ -7433,12 +7793,14 @@
         "lastEpoch": 1748616643,
         "spanSeconds": 3344,
         "maxGapSeconds": 2,
+        "gapIntervals": [],
         "seriesCodes": [
           "P1.L"
         ]
       },
       "flagEventCount": 19,
       "greenTod": 50655.43,
+      "checkeredTod": 2704,
       "hasCheckered": true,
       "maxDerivedLaps": 26,
       "qualityMasks": [],
@@ -7532,12 +7894,14 @@
         "lastEpoch": 1748681510,
         "spanSeconds": 3408,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "P2.L"
         ]
       },
       "flagEventCount": 22,
       "greenTod": 29057.156,
+      "checkeredTod": 2700,
       "hasCheckered": true,
       "maxDerivedLaps": 31,
       "qualityMasks": [],
@@ -7630,12 +7994,14 @@
         "lastEpoch": 1748691870,
         "spanSeconds": 1381,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "QA.L"
         ]
       },
       "flagEventCount": 10,
       "greenTod": 41469.866,
+      "checkeredTod": 738,
       "hasCheckered": true,
       "maxDerivedLaps": 10,
       "qualityMasks": [],
@@ -7729,12 +8095,14 @@
         "lastEpoch": 1748693131,
         "spanSeconds": 1208,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "QB.L"
         ]
       },
       "flagEventCount": 12,
       "greenTod": 42733.949,
+      "checkeredTod": 746,
       "hasCheckered": true,
       "maxDerivedLaps": 7,
       "qualityMasks": [],
@@ -7828,12 +8196,14 @@
         "lastEpoch": 1748777952,
         "spanSeconds": 4625,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "R.L"
         ]
       },
       "flagEventCount": 9,
       "greenTod": 38121.561,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 45,
       "qualityMasks": [],
@@ -7867,12 +8237,14 @@
         "lastEpoch": 1749472898,
         "spanSeconds": 15526,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "P1.L"
         ]
       },
       "flagEventCount": 0,
       "greenTod": null,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 0,
       "qualityMasks": [],
@@ -7906,12 +8278,14 @@
         "lastEpoch": 1749485298,
         "spanSeconds": 12393,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "P2.L"
         ]
       },
       "flagEventCount": 0,
       "greenTod": null,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 0,
       "qualityMasks": [],
@@ -7982,12 +8356,14 @@
         "lastEpoch": 1749913345,
         "spanSeconds": 3143,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "P1.L"
         ]
       },
       "flagEventCount": 19,
       "greenTod": 51360.448,
+      "checkeredTod": 2701,
       "hasCheckered": true,
       "maxDerivedLaps": 63,
       "qualityMasks": [],
@@ -8053,12 +8429,14 @@
         "lastEpoch": 1749926907,
         "spanSeconds": 3506,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "QC.L"
         ]
       },
       "flagEventCount": 37,
       "greenTod": 65159.871,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 4,
       "qualityMasks": [],
@@ -8128,12 +8506,14 @@
         "lastEpoch": 1750003929,
         "spanSeconds": 2893,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "R.L"
         ]
       },
       "flagEventCount": 1,
       "greenTod": 56143.093,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 75,
       "qualityMasks": [],
@@ -8241,12 +8621,14 @@
         "lastEpoch": 1750432762,
         "spanSeconds": 3257,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "P1.L"
         ]
       },
       "flagEventCount": 18,
       "greenTod": 52695.507,
+      "checkeredTod": 2710,
       "hasCheckered": true,
       "maxDerivedLaps": 13,
       "qualityMasks": [],
@@ -8354,12 +8736,14 @@
         "lastEpoch": 1750499384,
         "spanSeconds": 3281,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "P2.L"
         ]
       },
       "flagEventCount": 13,
       "greenTod": 32513.823,
+      "checkeredTod": 2702,
       "hasCheckered": true,
       "maxDerivedLaps": 16,
       "qualityMasks": [],
@@ -8467,12 +8851,14 @@
         "lastEpoch": 1750510023,
         "spanSeconds": 1662,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "QA.L"
         ]
       },
       "flagEventCount": 8,
       "greenTod": 44988.011,
+      "checkeredTod": 920,
       "hasCheckered": true,
       "maxDerivedLaps": 7,
       "qualityMasks": [],
@@ -8580,12 +8966,14 @@
         "lastEpoch": 1750511378,
         "spanSeconds": 1332,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "QB.L"
         ]
       },
       "flagEventCount": 12,
       "greenTod": 46255.998,
+      "checkeredTod": 1053,
       "hasCheckered": true,
       "maxDerivedLaps": 6,
       "qualityMasks": [],
@@ -8693,12 +9081,14 @@
         "lastEpoch": 1750589090,
         "spanSeconds": 2867,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "R.L"
         ]
       },
       "flagEventCount": 1,
       "greenTod": 36292.992,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 20,
       "qualityMasks": [],
@@ -8732,12 +9122,20 @@
         "lastEpoch": 1750769763,
         "spanSeconds": 23754,
         "maxGapSeconds": 43,
+        "gapIntervals": [
+          {
+            "lastObservedEpoch": 1750753150,
+            "nextObservedEpoch": 1750753193,
+            "gapSeconds": 43
+          }
+        ],
         "seriesCodes": [
           "P1.L"
         ]
       },
       "flagEventCount": 0,
       "greenTod": null,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 0,
       "qualityMasks": [
@@ -8773,12 +9171,20 @@
         "lastEpoch": 1750781017,
         "spanSeconds": 11243,
         "maxGapSeconds": 12,
+        "gapIntervals": [
+          {
+            "lastObservedEpoch": 1750772808,
+            "nextObservedEpoch": 1750772820,
+            "gapSeconds": 12
+          }
+        ],
         "seriesCodes": [
           "P2.L"
         ]
       },
       "flagEventCount": 0,
       "greenTod": null,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 0,
       "qualityMasks": [],
@@ -8868,12 +9274,14 @@
         "lastEpoch": 1751646600,
         "spanSeconds": 5398,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "P1.L"
         ]
       },
       "flagEventCount": 15,
       "greenTod": 54364.608,
+      "checkeredTod": 2710,
       "hasCheckered": true,
       "maxDerivedLaps": 29,
       "qualityMasks": [],
@@ -8963,12 +9371,14 @@
         "lastEpoch": 1751707337,
         "spanSeconds": 3136,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "P2.L"
         ]
       },
       "flagEventCount": 23,
       "greenTod": 30978.731,
+      "checkeredTod": 2701,
       "hasCheckered": true,
       "maxDerivedLaps": 26,
       "qualityMasks": [],
@@ -9057,12 +9467,14 @@
         "lastEpoch": 1751723088,
         "spanSeconds": 1465,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "QA.L"
         ]
       },
       "flagEventCount": 10,
       "greenTod": 48673.043,
+      "checkeredTod": 726,
       "hasCheckered": true,
       "maxDerivedLaps": 10,
       "qualityMasks": [],
@@ -9151,12 +9563,14 @@
         "lastEpoch": 1751724085,
         "spanSeconds": 963,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "QB.L"
         ]
       },
       "flagEventCount": 11,
       "greenTod": 49661.897,
+      "checkeredTod": 721,
       "hasCheckered": true,
       "maxDerivedLaps": 10,
       "qualityMasks": [],
@@ -9246,12 +9660,20 @@
         "lastEpoch": 1751802960,
         "spanSeconds": 5505,
         "maxGapSeconds": 436,
+        "gapIntervals": [
+          {
+            "lastObservedEpoch": 1751798532,
+            "nextObservedEpoch": 1751798968,
+            "gapSeconds": 436
+          }
+        ],
         "seriesCodes": [
           "R.L"
         ]
       },
       "flagEventCount": 6,
       "greenTod": 38133.646,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 33,
       "qualityMasks": [
@@ -9322,12 +9744,14 @@
         "lastEpoch": 1752243004,
         "spanSeconds": 2702,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "P1.L"
         ]
       },
       "flagEventCount": 5,
       "greenTod": 48600.776,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 78,
       "qualityMasks": [],
@@ -9361,6 +9785,18 @@
         "lastEpoch": 1752278401,
         "spanSeconds": 86398,
         "maxGapSeconds": 2704,
+        "gapIntervals": [
+          {
+            "lastObservedEpoch": 1752224751,
+            "nextObservedEpoch": 1752226265,
+            "gapSeconds": 1514
+          },
+          {
+            "lastObservedEpoch": 1752240301,
+            "nextObservedEpoch": 1752243005,
+            "gapSeconds": 2704
+          }
+        ],
         "seriesCodes": [
           "S1",
           "S2",
@@ -9369,6 +9805,7 @@
       },
       "flagEventCount": 6,
       "greenTod": 32752.143,
+      "checkeredTod": null,
       "hasCheckered": false,
       "maxDerivedLaps": 0,
       "qualityMasks": [
@@ -9440,12 +9877,14 @@
         "lastEpoch": 1752320016,
         "spanSeconds": 2479,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "R.L"
         ]
       },
       "flagEventCount": 5,
       "greenTod": 39881.188,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 75,
       "qualityMasks": [],
@@ -9540,12 +9979,14 @@
         "lastEpoch": 1753450251,
         "spanSeconds": 2149,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "P1.L"
         ]
       },
       "flagEventCount": 20,
       "greenTod": 46800.605,
+      "checkeredTod": 1502,
       "hasCheckered": true,
       "maxDerivedLaps": 18,
       "qualityMasks": [],
@@ -9640,12 +10081,14 @@
         "lastEpoch": 1753459748,
         "spanSeconds": 2040,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "P2.L"
         ]
       },
       "flagEventCount": 21,
       "greenTod": 56477.703,
+      "checkeredTod": 1504,
       "hasCheckered": true,
       "maxDerivedLaps": 12,
       "qualityMasks": [],
@@ -9679,6 +10122,43 @@
         "lastEpoch": 1753488002,
         "spanSeconds": 86399,
         "maxGapSeconds": 2804,
+        "gapIntervals": [
+          {
+            "lastObservedEpoch": 1753427107,
+            "nextObservedEpoch": 1753427672,
+            "gapSeconds": 565
+          },
+          {
+            "lastObservedEpoch": 1753448101,
+            "nextObservedEpoch": 1753450252,
+            "gapSeconds": 2151
+          },
+          {
+            "lastObservedEpoch": 1753451701,
+            "nextObservedEpoch": 1753454505,
+            "gapSeconds": 2804
+          },
+          {
+            "lastObservedEpoch": 1753454841,
+            "nextObservedEpoch": 1753455879,
+            "gapSeconds": 1038
+          },
+          {
+            "lastObservedEpoch": 1753455906,
+            "nextObservedEpoch": 1753457191,
+            "gapSeconds": 1285
+          },
+          {
+            "lastObservedEpoch": 1753457707,
+            "nextObservedEpoch": 1753459749,
+            "gapSeconds": 2042
+          },
+          {
+            "lastObservedEpoch": 1753483090,
+            "nextObservedEpoch": 1753483102,
+            "gapSeconds": 12
+          }
+        ],
         "seriesCodes": [
           "S1",
           "S2",
@@ -9691,6 +10171,7 @@
       },
       "flagEventCount": 79,
       "greenTod": 25508.426,
+      "checkeredTod": 1028,
       "hasCheckered": true,
       "maxDerivedLaps": 0,
       "qualityMasks": [
@@ -9785,12 +10266,14 @@
         "lastEpoch": 1753527729,
         "spanSeconds": 1072,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "QA.L"
         ]
       },
       "flagEventCount": 10,
       "greenTod": 38911.1,
+      "checkeredTod": 728,
       "hasCheckered": true,
       "maxDerivedLaps": 9,
       "qualityMasks": [],
@@ -9882,12 +10365,14 @@
         "lastEpoch": 1753528763,
         "spanSeconds": 1012,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "QB.L"
         ]
       },
       "flagEventCount": 11,
       "greenTod": 39926.529,
+      "checkeredTod": 738,
       "hasCheckered": true,
       "maxDerivedLaps": 9,
       "qualityMasks": [],
@@ -9982,12 +10467,14 @@
         "lastEpoch": 1753539852,
         "spanSeconds": 3575,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "R1.L"
         ]
       },
       "flagEventCount": 3,
       "greenTod": 48943.663,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 35,
       "qualityMasks": [],
@@ -10082,12 +10569,14 @@
         "lastEpoch": 1753633928,
         "spanSeconds": 4163,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "R2.L"
         ]
       },
       "flagEventCount": 11,
       "greenTod": 56155.602,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 35,
       "qualityMasks": [],
@@ -10168,12 +10657,14 @@
         "lastEpoch": 1754661159,
         "spanSeconds": 3158,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "P1.L"
         ]
       },
       "flagEventCount": 19,
       "greenTod": 47163.138,
+      "checkeredTod": 2701,
       "hasCheckered": true,
       "maxDerivedLaps": 34,
       "qualityMasks": [],
@@ -10254,12 +10745,14 @@
         "lastEpoch": 1754748946,
         "spanSeconds": 3045,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "P2.L"
         ]
       },
       "flagEventCount": 2,
       "greenTod": 48751.055,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 24,
       "qualityMasks": [],
@@ -10337,12 +10830,14 @@
         "lastEpoch": 1754761485,
         "spanSeconds": 1484,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "QA.L"
         ]
       },
       "flagEventCount": 9,
       "greenTod": 63054.826,
+      "checkeredTod": 725,
       "hasCheckered": true,
       "maxDerivedLaps": 10,
       "qualityMasks": [],
@@ -10423,12 +10918,14 @@
         "lastEpoch": 1754762448,
         "spanSeconds": 933,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "QB.L"
         ]
       },
       "flagEventCount": 12,
       "greenTod": 64053.109,
+      "checkeredTod": 722,
       "hasCheckered": true,
       "maxDerivedLaps": 6,
       "qualityMasks": [],
@@ -10462,6 +10959,53 @@
         "lastEpoch": 1754784002,
         "spanSeconds": 60069,
         "maxGapSeconds": 3138,
+        "gapIntervals": [
+          {
+            "lastObservedEpoch": 1754729700,
+            "nextObservedEpoch": 1754732838,
+            "gapSeconds": 3138
+          },
+          {
+            "lastObservedEpoch": 1754738700,
+            "nextObservedEpoch": 1754740261,
+            "gapSeconds": 1561
+          },
+          {
+            "lastObservedEpoch": 1754740288,
+            "nextObservedEpoch": 1754741447,
+            "gapSeconds": 1159
+          },
+          {
+            "lastObservedEpoch": 1754741489,
+            "nextObservedEpoch": 1754742696,
+            "gapSeconds": 1207
+          },
+          {
+            "lastObservedEpoch": 1754742762,
+            "nextObservedEpoch": 1754743487,
+            "gapSeconds": 725
+          },
+          {
+            "lastObservedEpoch": 1754745900,
+            "nextObservedEpoch": 1754748947,
+            "gapSeconds": 3047
+          },
+          {
+            "lastObservedEpoch": 1754756821,
+            "nextObservedEpoch": 1754758749,
+            "gapSeconds": 1928
+          },
+          {
+            "lastObservedEpoch": 1754760000,
+            "nextObservedEpoch": 1754761486,
+            "gapSeconds": 1486
+          },
+          {
+            "lastObservedEpoch": 1754761514,
+            "nextObservedEpoch": 1754762449,
+            "gapSeconds": 935
+          }
+        ],
         "seriesCodes": [
           "S3",
           "P2.I",
@@ -10477,6 +11021,7 @@
       },
       "flagEventCount": 81,
       "greenTod": 25054.799,
+      "checkeredTod": 382,
       "hasCheckered": true,
       "maxDerivedLaps": 0,
       "qualityMasks": [
@@ -10560,12 +11105,14 @@
         "lastEpoch": 1754822751,
         "spanSeconds": 2984,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "R.L"
         ]
       },
       "flagEventCount": 4,
       "greenTod": 36322.853,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 35,
       "qualityMasks": [],
@@ -10639,12 +11186,14 @@
         "lastEpoch": 1755940128,
         "spanSeconds": 2755,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "P1.L"
         ]
       },
       "flagEventCount": 21,
       "greenTod": 29850.293,
+      "checkeredTod": 3001,
       "hasCheckered": true,
       "maxDerivedLaps": 70,
       "qualityMasks": [],
@@ -10713,12 +11262,20 @@
         "lastEpoch": 1755962287,
         "spanSeconds": 3005,
         "maxGapSeconds": 635,
+        "gapIntervals": [
+          {
+            "lastObservedEpoch": 1755959307,
+            "nextObservedEpoch": 1755959942,
+            "gapSeconds": 635
+          }
+        ],
         "seriesCodes": [
           "QC.L"
         ]
       },
       "flagEventCount": 19,
       "greenTod": 52502.358,
+      "checkeredTod": null,
       "hasCheckered": false,
       "maxDerivedLaps": 4,
       "qualityMasks": [
@@ -10791,12 +11348,14 @@
         "lastEpoch": 1756034149,
         "spanSeconds": 3237,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "R.L"
         ]
       },
       "flagEventCount": 5,
       "greenTod": 38053.966,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 90,
       "qualityMasks": [],
@@ -10865,12 +11424,14 @@
         "lastEpoch": 1756565697,
         "spanSeconds": 2199,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "P1.L"
         ]
       },
       "flagEventCount": 4,
       "greenTod": 50700.171,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 56,
       "qualityMasks": [],
@@ -10934,12 +11495,14 @@
         "lastEpoch": 1756556297,
         "spanSeconds": 3164,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "QC.L"
         ]
       },
       "flagEventCount": 19,
       "greenTod": 41700.439,
+      "checkeredTod": null,
       "hasCheckered": false,
       "maxDerivedLaps": 4,
       "qualityMasks": [],
@@ -11008,12 +11571,14 @@
         "lastEpoch": 1756638601,
         "spanSeconds": 2791,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "R.L"
         ]
       },
       "flagEventCount": 3,
       "greenTod": 38068.692,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 65,
       "qualityMasks": [],
@@ -11047,12 +11612,14 @@
         "lastEpoch": 1759910160,
         "spanSeconds": 23073,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "P1.L"
         ]
       },
       "flagEventCount": 0,
       "greenTod": null,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 0,
       "qualityMasks": [
@@ -11105,12 +11672,14 @@
         "lastEpoch": 1761566508,
         "spanSeconds": 9327,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "P1.L"
         ]
       },
       "flagEventCount": 0,
       "greenTod": null,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 36,
       "qualityMasks": [],
@@ -11161,12 +11730,14 @@
         "lastEpoch": 1761582714,
         "spanSeconds": 11214,
         "maxGapSeconds": 1,
+        "gapIntervals": [],
         "seriesCodes": [
           "P2.L"
         ]
       },
       "flagEventCount": 0,
       "greenTod": null,
+      "checkeredTod": null,
       "hasCheckered": true,
       "maxDerivedLaps": 52,
       "qualityMasks": [],

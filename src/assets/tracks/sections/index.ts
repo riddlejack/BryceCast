@@ -11,6 +11,7 @@ import { midOhioSportsCarCourseSections } from './mid-ohio-sports-car-course';
 import { streetsOfDetroitSections } from './streets-of-detroit';
 import { streetsOfArlingtonSections } from './streets-of-arlington';
 import { streetsOfStPetersburgSections } from './streets-of-st-petersburg';
+import { indianapolisMotorSpeedwayRoadCourseSections } from './indianapolis-motor-speedway-road-course';
 
 /** Curated section anchors, keyed to the track outlines in the parent directory.
  *  Ovals first (Brief E sequencing), then the road courses (Phase 3): Road
@@ -19,8 +20,9 @@ import { streetsOfStPetersburgSections } from './streets-of-st-petersburg';
  *  from the FEED's decoded loop distances (their maps are loop-poor; the feed
  *  geometry.loopDistances carries the intermediate loops — see those files). Then
  *  the street circuits rebuilt from RaceTools map
- *  polylines (phase3/outlines-from-maps): Detroit and Arlington tile the lap from
- *  the S/F datum (anchored); St. Petersburg is an approximate single-offset fit.
+ *  polylines (phase3/outlines-from-maps). All three tile the lap from the S/F
+ *  datum; St. Petersburg's complete feed loop distances supersede its original
+ *  single-offset fit.
  *  See ./types.ts for the adapter-contract note on measured loop locations
  *  superseding this curation. */
 
@@ -38,7 +40,8 @@ const sets: TrackSectionAnchorSet[] = [
   midOhioSportsCarCourseSections,
   streetsOfDetroitSections,
   streetsOfArlingtonSections,
-  streetsOfStPetersburgSections
+  streetsOfStPetersburgSections,
+  indianapolisMotorSpeedwayRoadCourseSections
 ];
 
 /* HONEST WITHHOLDING (phase3/outlines-from-maps) — the old image-trace outlines
@@ -48,16 +51,10 @@ const sets: TrackSectionAnchorSet[] = [
  * unregistered. They are now REBUILT from the RaceTools map-package centreline
  * polylines: real S/F datum, driving direction, corner arcs, and corrected
  * lengths — exactly the UNLOCK that was named. Detroit and Arlington ship as
- * 'anchored' (their measured section chains tile the full lap from the S/F
- * datum). Streets of St. Petersburg is registered but held at 'approximate': the
- * map package is sectionless (no loop distances), so its 27.5% untimed lap is a
- * single approximated remainder rather than pinned per stretch. The race page's
- * `confidence === 'anchored'` gate (RaceDetailScreen / sectionIntelligence) draws
- * NO heat layer for an approximate set, so St. Pete keeps the honest SectionStory
- * fallback — the plain rebuilt outline, never invented anchors. It promotes to
- * 'anchored' the moment measured loop distances arrive through the same contract.
- * (tests/sectionObservations.test.ts pins Detroit 'anchored' + St. Pete
- * 'approximate'.) */
+ * 'anchored'. St. Petersburg's map package is sectionless, but its semantic
+ * RaceTools session geometry contains a complete S/F-referenced loop-distance
+ * chain. Those measured boundaries now anchor all eleven official sections on
+ * the matching centreline, with time x speed as an independent length check. */
 
 const bySlug = new Map(sets.map((set) => [set.slug, set]));
 

@@ -729,10 +729,29 @@ export const createLiveRunner = (options = {}) => {
     const timingResult = await fetchOne('timing');
     const timing = timingResult.payload?.timing_results;
     const heartbeat = timing?.heartbeat ?? null;
-    const { results, summary } = await buildTimingSummary(timingResult, { forceEnrichment: false });
+    const incomingSession = sessionFromHeartbeat(heartbeat);
+    const changedEventSession = Boolean(
+      incomingSession?.eventSessionId &&
+      state.currentSession?.eventSessionId &&
+      incomingSession.eventSessionId !== state.currentSession.eventSessionId
+    );
+    const resumedForNewSession = changedEventSession && heartbeatLooksLive(heartbeat);
+    const { results, summary } = await buildTimingSummary(timingResult, { forceEnrichment: resumedForNewSession });
     updateLatestBryce(summary);
-    if (heartbeat) state.currentSession = sessionFromHeartbeat(heartbeat);
-    await persistSummary(summary, results, timingResult, { raw: false });
+    if (heartbeat) state.currentSession = incomingSession;
+    await persistSummary(summary, results, timingResult, { raw: resumedForNewSession });
+    // Qualifying groups and other back-to-back sessions can share an event ID.
+    // A live heartbeat with a new EventSessionID is authoritative and must end
+    // cooldown immediately; otherwise the next group is sampled at 15 seconds
+    // until the fixed cooldown expires.
+    if (resumedForNewSession) {
+      state.cooldownUntilMs = null;
+      await transition(PHASES.LIVE, {
+        reason: 'new_live_event_session_during_cooldown',
+        currentSession: state.currentSession,
+      });
+      await logEvent({type: 'session_boundary', action: 'live_started', session: state.currentSession});
+    }
   };
 
   const tick = async () => {

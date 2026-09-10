@@ -1,0 +1,4 @@
+# Versions verified by the complete September 2026 analytics build.
+numpy==2.3.5
+pandas==2.2.3
+Pillow==12.2.0

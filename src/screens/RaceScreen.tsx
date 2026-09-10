@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import type { LiveReadiness } from '../app/useReadiness';
+import type { LiveReadiness, ReplaySourceGap } from '../app/useReadiness';
 import type { ReplaySession } from '../app/useReplaySession';
 import type { LiveSessionHistory } from '../data/liveHistoryModel';
 import { loadDebriefBySessionId } from '../data/debriefArchive';
@@ -19,12 +19,14 @@ export const RaceScreen = ({
   sessionId,
   payload,
   history,
-  replay
+  replay,
+  replaySourceGap
 }: {
   sessionId: string;
   payload: LiveReadiness | null;
   history: LiveSessionHistory | null;
   replay: ReplaySession | null;
+  replaySourceGap: ReplaySourceGap | null;
 }) => {
   const [debrief, setDebrief] = useState<DebriefPresence>('loading');
 
@@ -69,7 +71,15 @@ export const RaceScreen = ({
   }
 
   if (surface === 'shell') {
-    return <LiveRaceShell sessionId={sessionId} payload={payload} history={history} replay={replayActive ? replay : null} />;
+    return (
+      <LiveRaceShell
+        sessionId={sessionId}
+        payload={payload}
+        history={history}
+        replay={replayActive ? replay : null}
+        replaySourceGap={replaySourceGap}
+      />
+    );
   }
 
   return <RaceDetailScreen sessionId={sessionId} />;

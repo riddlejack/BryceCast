@@ -182,8 +182,8 @@ def main() -> None:
         if rebuilt_texture.read_bytes() != TEXTURE.read_bytes():
             fail("Full-world globe texture build is not byte-for-byte deterministic")
 
-    if len(ledger) != 146 or len({row["sessionId"] for row in ledger}) != 146:
-        fail("Atlas source ledger must remain the A2 146-race driver ledger")
+    if len({row["sessionId"] for row in ledger}) != len(ledger):
+        fail("Atlas source ledger must contain one row per driver race")
     if any(row["confidenceClass"] != "observed_exact" for row in ledger):
         fail("Every atlas race-count row must remain observed_exact")
 
@@ -196,6 +196,10 @@ def main() -> None:
         for row in dataset["results"]
         if row.get("driverId") == BRYCE and sessions[row["sessionId"]]["sessionType"] == "race"
     }
+    if len(bryce_results) < 140:
+        fail(f"Canonical career race history unexpectedly regressed to {len(bryce_results)} rows")
+    if len(ledger) != len(bryce_results):
+        fail(f"Atlas source ledger has {len(ledger)} rows for {len(bryce_results)} canonical Bryce races")
     if set(bryce_results) != {row["sessionId"] for row in ledger}:
         fail("Atlas race-count source must exactly match all canonical Bryce races")
 
@@ -217,11 +221,13 @@ def main() -> None:
         )
 
     venues = atlas.get("venues", [])
-    if atlas.get("venueCount") != 34 or len(venues) != 34 or set(expected_by_venue) != {row["trackName"] for row in venues}:
-        fail("Atlas must carry all 34 physical A2 career venues exactly once")
-    if atlas.get("raceCount") != 146 or sum(row["raceCount"] for row in venues) != 146:
-        fail("Atlas venue counts must reconcile to all 146 canonical races")
-    if len({row["venueId"] for row in venues}) != 34 or any(not row["venueId"].startswith("venue_") for row in venues):
+    expected_venue_count = len(expected_by_venue)
+    expected_race_count = len(bryce_results)
+    if atlas.get("venueCount") != expected_venue_count or len(venues) != expected_venue_count or set(expected_by_venue) != {row["trackName"] for row in venues}:
+        fail(f"Atlas must carry all {expected_venue_count} canonical physical career venues exactly once")
+    if atlas.get("raceCount") != expected_race_count or sum(row["raceCount"] for row in venues) != expected_race_count:
+        fail(f"Atlas venue counts must reconcile to all {expected_race_count} canonical races")
+    if len({row["venueId"] for row in venues}) != expected_venue_count or any(not row["venueId"].startswith("venue_") for row in venues):
         fail("Atlas venue identities must be unique and deterministic")
 
     for venue in venues:
@@ -303,7 +309,8 @@ def main() -> None:
 
     print(
         "career atlas validation passed: "
-        f"34 sourced venues / 146 canonical races / 127-feature full-world texture / byte-stable rebuild"
+        f"{len(venues)} sourced venues / {len(bryce_results)} canonical races / "
+        "127-feature full-world texture / byte-stable rebuild"
     )
 
 

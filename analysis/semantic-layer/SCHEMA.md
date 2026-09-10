@@ -133,7 +133,7 @@ lists them separately; `heartbeat_gap` alone is a valid race and kept.
 
 ## Slice 2 — Timing71 2026 event-grain + the identity crosswalk (BUILT)
 
-Slice 2 extends the same canonical shapes to the **33 validated 2026 Timing71
+Slice 2 extends the same canonical shapes to the **44 validated 2026 Timing71
 replays** (selected by the audit-validated coverage matrix committed on this
 branch at `data/historical-data-lake/catalog/coverage-2024-through-today.csv`)
 and builds the **identity crosswalk**.
@@ -183,7 +183,7 @@ Validation (`validate-crosswalk.mjs`, artifact `crosswalk-validation.json`):
 the three audit trap classes as explicit test cases (same-season name variants;
 season-to-season number reuse #14/#27/#28 plus every other reused number;
 cross-series recordings where #9 is two different drivers), Timing71 final
-order vs canonical for all 12 races, a TWO-SOURCE cross-check vs BryceCast's
+order vs canonical for all 17 races, a TWO-SOURCE cross-check vs BryceCast's
 own capture (official Race Control feed, `output/cross-check/`) for every
 overlapping session, and a GO / CONDITIONAL / NO-GO verdict per session.
 

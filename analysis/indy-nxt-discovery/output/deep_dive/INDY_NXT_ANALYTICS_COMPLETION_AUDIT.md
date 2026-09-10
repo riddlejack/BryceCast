@@ -6,21 +6,21 @@ This review audits the INDY NXT analytics layer against source families availabl
 
 | sourceFamily | sourceRows | analysisStatus | primaryArtifacts | auditConclusion |
 | --- | --- | --- | --- | --- |
-| race_results | 41 | complete | race_debrief_scores.csv | Core result, conversion, points, and status analysis. |
-| full_field_results | 857 | complete | driver_strength_ratings.csv; field_strength_by_race.csv; team_context_by_year.csv | Full-field context, team context, and descriptive opponent strength. |
+| race_results | 45 | complete | race_debrief_scores.csv | Core result, conversion, points, and status analysis. |
+| full_field_results | 952 | complete | driver_strength_ratings.csv; field_strength_by_race.csv; team_context_by_year.csv | Full-field context, team context, and descriptive opponent strength. |
 | practice_results | 56 | complete_source_bounded | prep_session_signals.csv | Practice is represented as rank context; no absolute pace claims. |
-| qualifying_results | 1453 | complete_source_bounded | prep_session_signals.csv | Qualifying is used for start/prep context; group/combined caveats remain. |
-| lap_samples | 33181 | complete_source_bounded | full_field_lap_dynamics_by_driver.csv | Full-field lap movement and volatility analysis with partial-chart caveats. |
-| section_results | 40 | complete_source_bounded | section_results_deep_by_race.csv | Per-lap section percentiles with sparse-row suppression. |
-| top_section_times | 41 | partial | section_results_deep_by_section.csv | Top-section facts were useful earlier; final pass favors per-lap section results. |
-| event_summary_stats | 41 | complete | race_debrief_scores.csv | Cautions, passes, lead-change context folded into debrief scores. |
-| leader_lap_summary | 40 | complete | leader_lap_context.csv | Leader entropy and dominance context. |
-| incidents | 149 | complete | incident_penalty_context.csv | Incident exposure and type summaries. |
-| penalties | 80 | complete | incident_penalty_context.csv | Penalty exposure and type summaries. |
-| racecraft_events | 40 | complete_source_bounded | racecraft_context_by_race.csv | Official most-improved badges only; no inferred overtake log. |
+| qualifying_results | 1620 | complete_source_bounded | prep_session_signals.csv | Qualifying is used for start/prep context; group/combined caveats remain. |
+| lap_samples | 37422 | complete_source_bounded | full_field_lap_dynamics_by_driver.csv | Full-field lap movement and volatility analysis with partial-chart caveats. |
+| section_results | 44 | complete_source_bounded | section_results_deep_by_race.csv | Per-lap section percentiles with sparse-row suppression. |
+| top_section_times | 45 | partial | section_results_deep_by_section.csv | Top-section facts were useful earlier; final pass favors per-lap section results. |
+| event_summary_stats | 45 | complete | race_debrief_scores.csv | Cautions, passes, lead-change context folded into debrief scores. |
+| leader_lap_summary | 44 | complete | leader_lap_context.csv | Leader entropy and dominance context. |
+| incidents | 166 | complete | incident_penalty_context.csv | Incident exposure and type summaries. |
+| penalties | 88 | complete | incident_penalty_context.csv | Penalty exposure and type summaries. |
+| racecraft_events | 44 | complete_source_bounded | racecraft_context_by_race.csv | Official most-improved badges only; no inferred overtake log. |
 | weather_observations | 115 | complete_context_only | race_debrief_scores.csv; future_weekend_prep_inputs.csv | Modeled non-official weather used as context, not causality. |
-| future_schedule | 95 | complete_context_only | future_weekend_prep_inputs.csv | Future prep rows exclude forecast claims until current weather source is added. |
-| pit_stop_counts | 41 | complete_low_signal | race_debrief_scores.csv | Pit counts are present but low-signal; no pit sequence/tire/service analysis exists. |
+| future_schedule | 75 | complete_context_only | future_weekend_prep_inputs.csv | Future prep rows exclude forecast claims until current weather source is added. |
+| pit_stop_counts | 45 | complete_low_signal | race_debrief_scores.csv | Pit counts are present but low-signal; no pit sequence/tire/service analysis exists. |
 | telemetry_or_car_engineering | 0 | unavailable |  | No telemetry or engineering-root-cause data in canonical sources. |
 
 ## Structural Issues
@@ -28,7 +28,7 @@ This review audits the INDY NXT analytics layer against source families availabl
 | severity | issue | evidence | recommendedFix |
 | --- | --- | --- | --- |
 | medium | Derived race debrief labels are useful but not final copy. | 36 race labels are generated from thresholds and need manual source review before UI narrative copy. | Keep labels as internal archetypes; add source drawer and manual-review status in UI contract. |
-| medium | Opponent strength uses same-sample outcomes. | 50 driver ratings use imported INDY NXT race rows with empirical shrinkage. | Use it as descriptive field context. Avoid predictive claims until a larger model with season controls is built. |
+| medium | Opponent strength uses same-sample outcomes. | 51 driver ratings use imported INDY NXT race rows with empirical shrinkage. | Use it as descriptive field context. Avoid predictive claims until a larger model with season controls is built. |
 | medium | Weather is modeled and non-official. | INDY NXT official weather is unavailable; exact-window modeled rows exist for historical sessions. | Show weather as context and confidence state. Do not headline causal weather effects. |
 | medium | Section rows have uneven density. | Sparse section-result sessions are preserved but suppressed from headline rankings below 50 comparison rows. | Keep the denominator visible on every section visualization. |
 | high | Engineering claims are unsupported. | Team context has official result statuses but no telemetry, setup notes, reliability root-cause feed, or engineering logs. | Limit Ganassi analysis to result/team/status context unless new source-backed engineering evidence is added. |
@@ -37,15 +37,15 @@ This review audits the INDY NXT analytics layer against source families availabl
 
 | sourceFamily | sourceRows | analysisStatus | auditConclusion |
 | --- | --- | --- | --- |
-| top_section_times | 41 | partial | Top-section facts were useful earlier; final pass favors per-lap section results. |
-| pit_stop_counts | 41 | complete_low_signal | Pit counts are present but low-signal; no pit sequence/tire/service analysis exists. |
+| top_section_times | 45 | partial | Top-section facts were useful earlier; final pass favors per-lap section results. |
+| pit_stop_counts | 45 | complete_low_signal | Pit counts are present but low-signal; no pit sequence/tire/service analysis exists. |
 | telemetry_or_car_engineering | 0 | unavailable | No telemetry or engineering-root-cause data in canonical sources. |
 
 ## Final Assessment
 
-- Race debrief coverage: 41 Bryce INDY NXT race rows.
-- Driver strength context: 50 rated drivers.
-- Championship progression rows: 41 race checkpoints.
+- Race debrief coverage: 45 Bryce INDY NXT race rows.
+- Driver strength context: 51 rated drivers.
+- Championship progression rows: 45 race checkpoints.
 - The analysis layer is broad enough for a UI contract after manual review of labels and section denominators.
 - The main unsafe area is overclaiming causality: weather, team engineering, and opponent strength must remain context unless new source families are added.
 

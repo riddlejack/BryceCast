@@ -1,6 +1,6 @@
 import type { ComponentType, ReactNode } from 'react';
-import { useEffect, useRef } from 'react';
-import { CalendarClock, Flag, Home, LineChart, Radio } from 'lucide-react';
+import { lazy, Suspense, useEffect, useRef } from 'react';
+import { CalendarClock, Flag, Home, LineChart, Map, Radio } from 'lucide-react';
 import './theme.css';
 import { Link, RouterProvider, matchPath, useRouter } from './router';
 import { CarMark, Plate } from './components';
@@ -16,11 +16,14 @@ import { CareerScreen } from '../screens/CareerScreen';
 import { CareerRaceScreen } from '../screens/CareerRaceScreen';
 import { DataScreen } from '../screens/DataScreen';
 
+const TracksScreen = lazy(() => import('../screens/TracksScreen').then((module) => ({ default: module.TracksScreen })));
+
 const navItems: Array<{ to: string; label: string; icon: ComponentType<{ size?: number | string }> }> = [
   { to: '/', label: 'Now', icon: Home },
   { to: '/live', label: 'Live', icon: Radio },
   { to: '/race-week', label: 'Race Week', icon: CalendarClock },
   { to: '/races', label: 'Races', icon: Flag },
+  { to: '/tracks', label: 'Tracks', icon: Map },
   { to: '/career', label: 'Career', icon: LineChart }
 ];
 
@@ -119,7 +122,7 @@ const Routes = () => {
 
   let screen: ReactNode;
   if (route.path === '/') screen = <HomeScreen readiness={readiness} />;
-  else if (route.path === '/live') screen = <LiveScreen payload={readiness.payload} fixtureMode={readiness.fixtureMode} history={liveHistory.active} replay={replay.engaged ? replay : null} readinessError={readiness.error} readinessCheckedAt={readiness.checkedAt} />;
+  else if (route.path === '/live') screen = <LiveScreen payload={readiness.payload} fixtureMode={readiness.fixtureMode} history={liveHistory.active} replay={replay.engaged ? replay : null} replaySourceGap={readiness.sourceGap} readinessError={readiness.error} readinessCheckedAt={readiness.checkedAt} />;
   else if (route.path === '/race-week') screen = <RaceWeekScreen />;
   else if (raceDetail)
     screen = (
@@ -131,9 +134,16 @@ const Routes = () => {
         // the resolver must hold its skeleton while the capture resolves, or
         // the debrief flashes for a beat before the shell takes the page.
         replay={replayKey ? replay : null}
+        replaySourceGap={readiness.sourceGap}
       />
     );
   else if (route.path === '/races') screen = <RacesScreen livePayload={readiness.fixtureMode ? null : readiness.payload} />;
+  else if (route.path === '/tracks')
+    screen = (
+      <Suspense fallback={<div className="page"><div className="skeleton" style={{ height: 420 }} /></div>}>
+        <TracksScreen />
+      </Suspense>
+    );
   else if (careerRace) screen = <CareerRaceScreen sessionId={careerRace.sessionId} />;
   else if (route.path === '/career') screen = <CareerScreen readiness={readiness} />;
   else if (route.path === '/data') screen = <DataScreen />;

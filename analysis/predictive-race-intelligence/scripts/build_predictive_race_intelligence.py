@@ -52,6 +52,25 @@ DEEP_TABLES = ROOT / "analysis/indy-nxt-discovery/output/deep_dive/tables"
 CAREER_TABLES = ROOT / "analysis/career-parity/output/tables"
 INVENTORY_CSV_ROOTS = [INDY_TABLES, DEEP_TABLES, CAREER_TABLES]
 SECTION_RACE_ALLOWED_HOLDOUTS = {"session_indy_nxt_2024_6325"}
+FUTURE_WEEKEND_PREP_FIELDS = (
+    "eventId",
+    "eventName",
+    "eventStartDate",
+    "trackName",
+    "trackType",
+    "trackLengthMi",
+    "cornerCount",
+    "bryceIndyNxtRacesAtTrack",
+    "sameTrackAvgFinish",
+    "sameTrackAvgGain",
+    "sameTrackTop10Rate",
+    "trackTypeAvgFinish",
+    "trackTypeAvgGain",
+    "trackTypeTop10Rate",
+    "weatherState",
+    "prepUse",
+    "sourceState",
+)
 UPSTREAM_ANALYTICS_SCRIPTS = [
     ROOT / "analysis/indy-nxt-discovery/analyze_indy_nxt.py",
     ROOT / "analysis/indy-nxt-discovery/deep_indy_nxt_analytics.py",
@@ -168,6 +187,18 @@ def load_json(path: Path) -> Any:
 def read_csv(path: Path) -> list[dict[str, str]]:
     with path.open(newline="") as f:
         return list(csv.DictReader(f))
+
+
+def read_future_weekend_prep() -> pd.DataFrame:
+    path = DEEP_TABLES / "future_weekend_prep_inputs.csv"
+    try:
+        future = pd.read_csv(path)
+    except pd.errors.EmptyDataError:
+        return pd.DataFrame(columns=FUTURE_WEEKEND_PREP_FIELDS)
+    missing = set(FUTURE_WEEKEND_PREP_FIELDS) - set(future.columns)
+    if missing:
+        raise ValueError(f"{rel(path)} missing required columns: {sorted(missing)}")
+    return future
 
 
 def write_json(path: Path, obj: Any) -> None:
@@ -349,7 +380,8 @@ def validate_upstream_coverage(data: dict[str, Any]) -> dict[str, Any]:
         }
     )
 
-    require_exact_ids("future_weekend_prep_inputs", csv_id_set(DEEP_TABLES / "future_weekend_prep_inputs.csv", "eventId"), future_events)
+    future = read_future_weekend_prep()
+    require_exact_ids("future_weekend_prep_inputs", set(future["eventId"].dropna().astype(str)), future_events)
     checks.append({"id": "future_weekend_prep_inputs", "field": "eventId", "rows": len(future_events), "coverage": "exact_future_indy_nxt_events_without_bryce_race_results"})
 
     require_exact_ids("career_result_conversion", csv_id_set(CAREER_TABLES / "career_result_conversion.csv", "sessionId"), finished_race_sessions)
@@ -977,7 +1009,7 @@ def model_row(
 
 
 def build_upcoming_packs(feature_df: pd.DataFrame, career_priors: list[dict[str, Any]], scorecard: dict[str, Any]) -> list[dict[str, Any]]:
-    future = pd.read_csv(DEEP_TABLES / "future_weekend_prep_inputs.csv")
+    future = read_future_weekend_prep()
     race = pd.read_csv(DEEP_TABLES / "race_debrief_scores.csv")
     packs: list[dict[str, Any]] = []
     dataset_source_hash = source_hash(DATASET_PATH)
@@ -1476,6 +1508,8 @@ def build_manifest(pack_refs: list[dict[str, Any]], upstream_coverage: dict[str,
                 "sha256": source_hash(pack_path),
             }
         )
+    pack_counts = {pack_type: 0 for pack_type in ("upcoming_event", "race_debrief", "career_lab", "live_race_day")}
+    pack_counts.update(count_by(enriched_pack_refs, "type"))
     return {
         "schemaVersion": "brycecast.predictiveRaceIntelligence.contextPackManifest.v1",
         "generatedAt": now_iso(),
@@ -1484,7 +1518,7 @@ def build_manifest(pack_refs: list[dict[str, Any]], upstream_coverage: dict[str,
         "repoHead": git_head(),
         "upstreamCoverage": upstream_coverage,
         "packs": sorted(enriched_pack_refs, key=lambda p: (p["type"], p["id"])),
-        "packCounts": dict(sorted(count_by(enriched_pack_refs, "type").items())),
+        "packCounts": dict(sorted(pack_counts.items())),
         "sourceRefs": [
             source_ref(DATASET_PATH, "canonical event/session chronology"),
             source_ref(DEEP_TABLES / "future_weekend_prep_inputs.csv", "upcoming event packs"),
@@ -1548,7 +1582,7 @@ def build_charts(scorecard: dict[str, Any], career_priors: list[dict[str, Any]],
     ]
     simple_bar_svg(CHART_DIR / "career_track_type_priors.svg", track_rows, "Career Track-Type Priors", "Normalized finish percentile by track type.")
 
-    future = pd.read_csv(DEEP_TABLES / "future_weekend_prep_inputs.csv")
+    future = read_future_weekend_prep()
     future = future.sort_values(["eventStartDate", "eventId"], ascending=[True, True])
     next_track_name = str(future.iloc[0].trackName) if len(future) else "upcoming track"
     next_track_history = feature_df[feature_df["trackName"] == next_track_name]
@@ -1583,7 +1617,7 @@ def build_report(
     )
     top_model = models[0]
     baseline = next(m for m in scorecard["models"] if m["id"] == "overall_mean")
-    future = pd.read_csv(DEEP_TABLES / "future_weekend_prep_inputs.csv")
+    future = read_future_weekend_prep()
     future = future.sort_values(["eventStartDate", "eventId"], ascending=[True, True])
     next_track_name = str(future.iloc[0].trackName) if len(future) else "upcoming track"
     next_track_history = feature_df[feature_df["trackName"] == next_track_name]

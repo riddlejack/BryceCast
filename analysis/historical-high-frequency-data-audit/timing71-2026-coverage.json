@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "auditedAt": "2026-07-21",
+  "auditedAt": "2026-09-10",
   "source": {
     "name": "Timing71 replay archive",
     "archiveApi": "https://archive.timing71.org/replays",
@@ -23,11 +23,11 @@
     "zipIntegrityFailures": 0
   },
   "coverage": {
-    "completedRaces": 13,
-    "completeRaceCandidates": 13,
-    "completedPracticeAndQualifyingSessionsThroughNashvilleQualifying": 21,
-    "practiceAndQualifyingReplayCandidates": 21,
-    "futureRacesNotYetHistorical": 4
+    "completedRaces": 17,
+    "completeRaceCandidates": 17,
+    "completedPracticeAndQualifyingSessionsThroughNashvilleQualifying": 27,
+    "practiceAndQualifyingReplayCandidates": 27,
+    "futureRacesNotYetHistorical": 0
   },
   "nonRaceSessionCandidates": [
     {
@@ -137,6 +137,42 @@
       "sessionType": "Qualifications",
       "replayId": "d416a374-49d4-4946-a748-ae589db49a8e",
       "validationNote": "single-car qualifying sequence; no checkered state observed"
+    },
+    {
+      "event": "Portland International Raceway",
+      "sessionType": "practice",
+      "replayId": "aea0444b-d683-459b-bd60-a3616da6e633",
+      "validationNote": "2026-09-10 postrace:lake-sync auto-promotion: 24-car NXT roster incl. Bryce Aron; 3032 frames over 3478s (median gap 1s, max 2s); max lap 34; checkered=true. Downstream semantic/crosswalk/replay-feed validators must confirm against canonical before this session reaches any surface."
+    },
+    {
+      "event": "Portland International Raceway",
+      "sessionType": "practice",
+      "replayId": "8cb920ae-d919-4c44-9c2e-739c868fea3c",
+      "validationNote": "2026-09-10 postrace:lake-sync auto-promotion: 24-car NXT roster incl. Bryce Aron; 3061 frames over 3479s (median gap 1s, max 2s); max lap 36; checkered=true. Downstream semantic/crosswalk/replay-feed validators must confirm against canonical before this session reaches any surface."
+    },
+    {
+      "event": "Portland International Raceway",
+      "sessionType": "qualifying",
+      "replayId": "6204d63b-2d7b-4a42-bb30-404b4bb97224",
+      "validationNote": "2026-09-10 postrace:lake-sync auto-promotion: 12-car NXT roster incl. Bryce Aron; 2265 frames over 2579s (median gap 1s, max 2s); max lap 10; checkered=true. Downstream semantic/crosswalk/replay-feed validators must confirm against canonical before this session reaches any surface."
+    },
+    {
+      "event": "The Milwaukee Mile",
+      "sessionType": "practice",
+      "replayId": "b66b10ab-1b89-4a9e-b94e-2d42f7107639",
+      "validationNote": "2026-09-10 postrace:lake-sync auto-promotion: 23-car NXT roster incl. Bryce Aron; 3330 frames over 3782s (median gap 1s, max 2s); max lap 79; checkered=true. Downstream semantic/crosswalk/replay-feed validators must confirm against canonical before this session reaches any surface."
+    },
+    {
+      "event": "The Milwaukee Mile",
+      "sessionType": "qualifying",
+      "replayId": "23e69e36-7170-4dca-8027-0024c386df68",
+      "validationNote": "2026-09-10 postrace:lake-sync auto-promotion: 7-car NXT roster incl. Bryce Aron; 3073 frames over 3487s (median gap 1s, max 2s); max lap 2; checkered=true. Downstream semantic/crosswalk/replay-feed validators must confirm against canonical before this session reaches any surface."
+    },
+    {
+      "event": "WeatherTech Raceway Laguna Seca",
+      "sessionType": "practice",
+      "replayId": "b2f9ffa3-2248-4ba8-8ffc-3da22178b5ad",
+      "validationNote": "2026-09-10 postrace:lake-sync auto-promotion: 24-car NXT roster incl. Bryce Aron; 3059 frames over 3485s (median gap 1s, max 9s); max lap 16; checkered=true. Downstream semantic/crosswalk/replay-feed validators must confirm against canonical before this session reaches any surface."
     }
   ],
   "raceReplays": [
@@ -253,6 +289,38 @@
       "maxLap": 65,
       "checkered": true,
       "validationNote": "2026-07-21 update: 23-car NXT roster incl. Bryce Aron (No. 9, CGR); 5,678 frames over 6,478s (median gap 1s, max 2s); flags none/green/caution/chequered; max lap 65 matches the official 65-lap result; clean single-session capture, no cross-session trimming needed."
+    },
+    {
+      "event": "Portland International Raceway",
+      "replayId": "eedf1cdd-8715-475e-968b-a4dd9ee970f0",
+      "discovery": "nxt_labelled",
+      "maxLap": 35,
+      "checkered": true,
+      "validationNote": "2026-09-10 postrace:lake-sync auto-promotion: 24-car NXT roster incl. Bryce Aron; 3578 frames over 4078s (median gap 1s, max 2s); max lap 35; checkered=true. Downstream semantic/crosswalk/replay-feed validators must confirm against canonical before this session reaches any surface."
+    },
+    {
+      "event": "The Milwaukee Mile",
+      "replayId": "322f3fcc-6be7-4677-87fe-dc741dd292e6",
+      "discovery": "nxt_labelled",
+      "maxLap": 90,
+      "checkered": true,
+      "validationNote": "2026-09-10 postrace:lake-sync auto-promotion: 23-car NXT roster incl. Bryce Aron; 5703 frames over 6480s (median gap 1s, max 3s); max lap 90; checkered=true. Downstream semantic/crosswalk/replay-feed validators must confirm against canonical before this session reaches any surface."
+    },
+    {
+      "event": "WeatherTech Raceway Laguna Seca Race 1",
+      "replayId": "d8950231-dbd4-41bf-b764-7818ccc23c86",
+      "discovery": "verified_event_roster",
+      "maxLap": 35,
+      "checkered": true,
+      "validationNote": "2026-09-10 postrace:lake-sync auto-promotion: 24-car NXT roster incl. Bryce Aron; 3573 frames over 4077s (median gap 1s, max 2s); max lap 35; checkered=true. Downstream semantic/crosswalk/replay-feed validators must confirm against canonical before this session reaches any surface."
+    },
+    {
+      "event": "WeatherTech Raceway Laguna Seca Race 2",
+      "replayId": "b49e14f4-ea16-4c2b-bc82-077cd3e28ec1",
+      "discovery": "verified_event_roster",
+      "maxLap": 30,
+      "checkered": true,
+      "validationNote": "2026-09-10 postrace:lake-sync auto-promotion: 24-car NXT roster incl. Bryce Aron; 3592 frames over 4077s (median gap 1s, max 2s); max lap 30; checkered=true. Downstream semantic/crosswalk/replay-feed validators must confirm against canonical before this session reaches any surface."
     }
   ],
   "excludedFalsePositives": [

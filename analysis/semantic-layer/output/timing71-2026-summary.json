@@ -1,11 +1,11 @@
 {
   "lane": "analysis/semantic-layer",
   "slice": "slice-2-timing71-2026",
-  "generatedAt": "2026-07-21T23:57:11.650Z",
+  "generatedAt": "2026-09-10T23:03:12.047Z",
   "sourceTier": "timing71_normalized",
-  "lakeDataRoot": "/Users/example/.codex/worktrees/a534/Bryce POV access/data/historical-data-lake",
+  "lakeDataRoot": "/Users/example/.brycecast/data-lake",
   "provenanceNote": "Derived from Timing71 replay recordings (third-party normalized display state; 1-2 s cadence; real archive timestamps, no interpolation). Never label as official. Identity requires the validated crosswalk before ANY UI use.",
-  "sessionCount": 34,
+  "sessionCount": 44,
   "sessions": [
     {
       "id": "t71_2026_st-petersburg_practice_p1_2026-02-27",
@@ -28,7 +28,14 @@
         "firstObservedAtEpoch": 1772213222,
         "lastObservedAtEpoch": 1772216700,
         "cadenceMedianSeconds": 2,
-        "cadenceMaxSeconds": 3
+        "cadenceMaxSeconds": 3,
+        "gapIntervals": [
+          {
+            "lastObservedEpoch": 1772213571,
+            "nextObservedEpoch": 1772213574,
+            "gapSeconds": 3
+          }
+        ]
       },
       "rosterSize": 24,
       "lapRowCount": 638,
@@ -62,7 +69,8 @@
         "firstObservedAtEpoch": 1772285560,
         "lastObservedAtEpoch": 1772288739,
         "cadenceMedianSeconds": 2,
-        "cadenceMaxSeconds": 2
+        "cadenceMaxSeconds": 2,
+        "gapIntervals": []
       },
       "rosterSize": 24,
       "lapRowCount": 286,
@@ -96,7 +104,8 @@
         "firstObservedAtEpoch": 1772313193,
         "lastObservedAtEpoch": 1772313956,
         "cadenceMedianSeconds": 2,
-        "cadenceMaxSeconds": 2
+        "cadenceMaxSeconds": 2,
+        "gapIntervals": []
       },
       "rosterSize": 12,
       "lapRowCount": 71,
@@ -132,7 +141,8 @@
         "firstObservedAtEpoch": 1772377415,
         "lastObservedAtEpoch": 1772383593,
         "cadenceMedianSeconds": 2,
-        "cadenceMaxSeconds": 2
+        "cadenceMaxSeconds": 2,
+        "gapIntervals": []
       },
       "rosterSize": 24,
       "lapRowCount": 901,
@@ -166,7 +176,8 @@
         "firstObservedAtEpoch": 1773428255,
         "lastObservedAtEpoch": 1773431733,
         "cadenceMedianSeconds": 1,
-        "cadenceMaxSeconds": 2
+        "cadenceMaxSeconds": 2,
+        "gapIntervals": []
       },
       "rosterSize": 24,
       "lapRowCount": 460,
@@ -200,7 +211,8 @@
         "firstObservedAtEpoch": 1773501932,
         "lastObservedAtEpoch": 1773504635,
         "cadenceMedianSeconds": 1,
-        "cadenceMaxSeconds": 2
+        "cadenceMaxSeconds": 2,
+        "gapIntervals": []
       },
       "rosterSize": 24,
       "lapRowCount": 312,
@@ -234,7 +246,8 @@
         "firstObservedAtEpoch": 1773520074,
         "lastObservedAtEpoch": 1773521468,
         "cadenceMedianSeconds": 1,
-        "cadenceMaxSeconds": 2
+        "cadenceMaxSeconds": 2,
+        "gapIntervals": []
       },
       "rosterSize": 12,
       "lapRowCount": 80,
@@ -270,7 +283,8 @@
         "firstObservedAtEpoch": 1773585766,
         "lastObservedAtEpoch": 1773588343,
         "cadenceMedianSeconds": 1,
-        "cadenceMaxSeconds": 2
+        "cadenceMaxSeconds": 2,
+        "gapIntervals": []
       },
       "rosterSize": 24,
       "lapRowCount": 338,
@@ -304,7 +318,8 @@
         "firstObservedAtEpoch": 1774636325,
         "lastObservedAtEpoch": 1774639547,
         "cadenceMedianSeconds": 1,
-        "cadenceMaxSeconds": 2
+        "cadenceMaxSeconds": 2,
+        "gapIntervals": []
       },
       "rosterSize": 24,
       "lapRowCount": 637,
@@ -338,7 +353,8 @@
         "firstObservedAtEpoch": 1774717438,
         "lastObservedAtEpoch": 1774722385,
         "cadenceMedianSeconds": 1,
-        "cadenceMaxSeconds": 2
+        "cadenceMaxSeconds": 2,
+        "gapIntervals": []
       },
       "rosterSize": 24,
       "lapRowCount": 801,
@@ -374,7 +390,8 @@
         "firstObservedAtEpoch": 1774707514,
         "lastObservedAtEpoch": 1774708843,
         "cadenceMedianSeconds": 1,
-        "cadenceMaxSeconds": 2
+        "cadenceMaxSeconds": 2,
+        "gapIntervals": []
       },
       "rosterSize": 24,
       "lapRowCount": 101,
@@ -410,7 +427,8 @@
         "firstObservedAtEpoch": 1774796639,
         "lastObservedAtEpoch": 1774802818,
         "cadenceMedianSeconds": 1,
-        "cadenceMaxSeconds": 2
+        "cadenceMaxSeconds": 2,
+        "gapIntervals": []
       },
       "rosterSize": 24,
       "lapRowCount": 692,
@@ -444,7 +462,8 @@
         "firstObservedAtEpoch": 1778241455,
         "lastObservedAtEpoch": 1778244934,
         "cadenceMedianSeconds": 1,
-        "cadenceMaxSeconds": 2
+        "cadenceMaxSeconds": 2,
+        "gapIntervals": []
       },
       "rosterSize": 24,
       "lapRowCount": 508,
@@ -478,7 +497,14 @@
         "firstObservedAtEpoch": 1778255876,
         "lastObservedAtEpoch": 1778258454,
         "cadenceMedianSeconds": 1,
-        "cadenceMaxSeconds": 1165
+        "cadenceMaxSeconds": 1165,
+        "gapIntervals": [
+          {
+            "lastObservedEpoch": 1778256829,
+            "nextObservedEpoch": 1778257994,
+            "gapSeconds": 1165
+          }
+        ]
       },
       "rosterSize": 24,
       "lapRowCount": 94,
@@ -514,7 +540,8 @@
         "firstObservedAtEpoch": 1778270591,
         "lastObservedAtEpoch": 1778275854,
         "cadenceMedianSeconds": 1,
-        "cadenceMaxSeconds": 2
+        "cadenceMaxSeconds": 2,
+        "gapIntervals": []
       },
       "rosterSize": 24,
       "lapRowCount": 684,
@@ -550,7 +577,8 @@
         "firstObservedAtEpoch": 1778351599,
         "lastObservedAtEpoch": 1778355078,
         "cadenceMedianSeconds": 1,
-        "cadenceMaxSeconds": 2
+        "cadenceMaxSeconds": 2,
+        "gapIntervals": []
       },
       "rosterSize": 24,
       "lapRowCount": 689,
@@ -584,7 +612,8 @@
         "firstObservedAtEpoch": 1780077466,
         "lastObservedAtEpoch": 1780080943,
         "cadenceMedianSeconds": 1,
-        "cadenceMaxSeconds": 2
+        "cadenceMaxSeconds": 2,
+        "gapIntervals": []
       },
       "rosterSize": 24,
       "lapRowCount": 615,
@@ -618,7 +647,8 @@
         "firstObservedAtEpoch": 1780142269,
         "lastObservedAtEpoch": 1780145757,
         "cadenceMedianSeconds": 1,
-        "cadenceMaxSeconds": 2
+        "cadenceMaxSeconds": 2,
+        "gapIntervals": []
       },
       "rosterSize": 24,
       "lapRowCount": 706,
@@ -652,7 +682,8 @@
         "firstObservedAtEpoch": 1780157649,
         "lastObservedAtEpoch": 1780159227,
         "cadenceMedianSeconds": 1,
-        "cadenceMaxSeconds": 2
+        "cadenceMaxSeconds": 2,
+        "gapIntervals": []
       },
       "rosterSize": 12,
       "lapRowCount": 107,
@@ -688,7 +719,8 @@
         "firstObservedAtEpoch": 1780237982,
         "lastObservedAtEpoch": 1780244164,
         "cadenceMedianSeconds": 1,
-        "cadenceMaxSeconds": 2
+        "cadenceMaxSeconds": 2,
+        "gapIntervals": []
       },
       "rosterSize": 24,
       "lapRowCount": 964,
@@ -722,7 +754,8 @@
         "firstObservedAtEpoch": 1780772548,
         "lastObservedAtEpoch": 1780776325,
         "cadenceMedianSeconds": 1,
-        "cadenceMaxSeconds": 2
+        "cadenceMaxSeconds": 2,
+        "gapIntervals": []
       },
       "rosterSize": 24,
       "lapRowCount": 1389,
@@ -756,7 +789,8 @@
         "firstObservedAtEpoch": 1780785392,
         "lastObservedAtEpoch": 1780786838,
         "cadenceMedianSeconds": 1,
-        "cadenceMaxSeconds": 2
+        "cadenceMaxSeconds": 2,
+        "gapIntervals": []
       },
       "rosterSize": 22,
       "lapRowCount": 22,
@@ -792,7 +826,8 @@
         "firstObservedAtEpoch": 1780868150,
         "lastObservedAtEpoch": 1780872304,
         "cadenceMedianSeconds": 1,
-        "cadenceMaxSeconds": 2
+        "cadenceMaxSeconds": 2,
+        "gapIntervals": []
       },
       "rosterSize": 24,
       "lapRowCount": 1621,
@@ -826,7 +861,8 @@
         "firstObservedAtEpoch": 1781895427,
         "lastObservedAtEpoch": 1781898906,
         "cadenceMedianSeconds": 1,
-        "cadenceMaxSeconds": 2
+        "cadenceMaxSeconds": 2,
+        "gapIntervals": []
       },
       "rosterSize": 24,
       "lapRowCount": 399,
@@ -860,7 +896,8 @@
         "firstObservedAtEpoch": 1781965110,
         "lastObservedAtEpoch": 1781966416,
         "cadenceMedianSeconds": 1,
-        "cadenceMaxSeconds": 2
+        "cadenceMaxSeconds": 2,
+        "gapIntervals": []
       },
       "rosterSize": 12,
       "lapRowCount": 82,
@@ -896,7 +933,8 @@
         "firstObservedAtEpoch": 1781973204,
         "lastObservedAtEpoch": 1781978137,
         "cadenceMedianSeconds": 1,
-        "cadenceMaxSeconds": 2
+        "cadenceMaxSeconds": 2,
+        "gapIntervals": []
       },
       "rosterSize": 24,
       "lapRowCount": 434,
@@ -932,7 +970,8 @@
         "firstObservedAtEpoch": 1782057832,
         "lastObservedAtEpoch": 1782064015,
         "cadenceMedianSeconds": 1,
-        "cadenceMaxSeconds": 2
+        "cadenceMaxSeconds": 2,
+        "gapIntervals": []
       },
       "rosterSize": 24,
       "lapRowCount": 414,
@@ -966,7 +1005,8 @@
         "firstObservedAtEpoch": 1783101449,
         "lastObservedAtEpoch": 1783104928,
         "cadenceMedianSeconds": 1,
-        "cadenceMaxSeconds": 2
+        "cadenceMaxSeconds": 2,
+        "gapIntervals": []
       },
       "rosterSize": 24,
       "lapRowCount": 610,
@@ -1000,7 +1040,8 @@
         "firstObservedAtEpoch": 1783170801,
         "lastObservedAtEpoch": 1783172419,
         "cadenceMedianSeconds": 1,
-        "cadenceMaxSeconds": 2
+        "cadenceMaxSeconds": 2,
+        "gapIntervals": []
       },
       "rosterSize": 24,
       "lapRowCount": 97,
@@ -1036,7 +1077,8 @@
         "firstObservedAtEpoch": 1783184725,
         "lastObservedAtEpoch": 1783188805,
         "cadenceMedianSeconds": 1,
-        "cadenceMaxSeconds": 2
+        "cadenceMaxSeconds": 2,
+        "gapIntervals": []
       },
       "rosterSize": 24,
       "lapRowCount": 809,
@@ -1070,7 +1112,8 @@
         "firstObservedAtEpoch": 1783260338,
         "lastObservedAtEpoch": 1783264116,
         "cadenceMedianSeconds": 1,
-        "cadenceMaxSeconds": 2
+        "cadenceMaxSeconds": 2,
+        "gapIntervals": []
       },
       "rosterSize": 24,
       "lapRowCount": 719,
@@ -1104,7 +1147,8 @@
         "firstObservedAtEpoch": 1784388723,
         "lastObservedAtEpoch": 1784392503,
         "cadenceMedianSeconds": 1,
-        "cadenceMaxSeconds": 2
+        "cadenceMaxSeconds": 2,
+        "gapIntervals": []
       },
       "rosterSize": 23,
       "lapRowCount": 1433,
@@ -1138,7 +1182,8 @@
         "firstObservedAtEpoch": 1784407850,
         "lastObservedAtEpoch": 1784410221,
         "cadenceMedianSeconds": 1,
-        "cadenceMaxSeconds": 2
+        "cadenceMaxSeconds": 2,
+        "gapIntervals": []
       },
       "rosterSize": 23,
       "lapRowCount": 32,
@@ -1172,7 +1217,8 @@
         "firstObservedAtEpoch": 1784480548,
         "lastObservedAtEpoch": 1784487026,
         "cadenceMedianSeconds": 1,
-        "cadenceMaxSeconds": 2
+        "cadenceMaxSeconds": 2,
+        "gapIntervals": []
       },
       "rosterSize": 23,
       "lapRowCount": 1288,
@@ -1184,6 +1230,370 @@
       "maxLapMatchesCoverage": true,
       "qualityMasks": [],
       "pack": "sessions-2026/t71_2026_nashville_race_2026-07-19.ndjson.gz"
+    },
+    {
+      "id": "t71_2026_portland-international-raceway_practice_p1_2026-08-07",
+      "year": 2026,
+      "date": "2026-08-07",
+      "venue": "Portland International Raceway",
+      "event": "Portland International Raceway",
+      "sessionType": "practice",
+      "sessionLabel": "INDY NXT By Firestone GP of Portland - Practice 1",
+      "series": "INDY_NXT",
+      "source": "Timing71",
+      "replayId": "aea0444b-d683-459b-bd60-a3616da6e633",
+      "lakeSessionId": "9116c83ded8d784ac5bdcc24",
+      "sourceQuality": "inventory_validated",
+      "recordingDescription": "INDY NXT By Firestone GP of Portland - Practice 1",
+      "sourceTier": "timing71_normalized",
+      "frames": {
+        "total": 3032,
+        "processedNxtSegment": 3032,
+        "firstObservedAtEpoch": 1786134427,
+        "lastObservedAtEpoch": 1786137905,
+        "cadenceMedianSeconds": 1,
+        "cadenceMaxSeconds": 2,
+        "gapIntervals": []
+      },
+      "rosterSize": 24,
+      "lapRowCount": 665,
+      "crossingCount": 665,
+      "sectorObservationCount": 3172,
+      "flagEventCount": 8,
+      "maxLaps": 34,
+      "expectedMaxLap": 34,
+      "maxLapMatchesCoverage": true,
+      "qualityMasks": [],
+      "pack": "sessions-2026/t71_2026_portland-international-raceway_practice_p1_2026-08-07.ndjson.gz"
+    },
+    {
+      "id": "t71_2026_portland-international-raceway_practice_p2_2026-08-08",
+      "year": 2026,
+      "date": "2026-08-08",
+      "venue": "Portland International Raceway",
+      "event": "Portland International Raceway",
+      "sessionType": "practice",
+      "sessionLabel": "INDY NXT By Firestone GP of Portland - Practice 2",
+      "series": "INDY_NXT",
+      "source": "Timing71",
+      "replayId": "8cb920ae-d919-4c44-9c2e-739c868fea3c",
+      "lakeSessionId": "77fec0ee5b803dbbaabc7654",
+      "sourceQuality": "inventory_validated",
+      "recordingDescription": "INDY NXT By Firestone GP of Portland - Practice 2",
+      "sourceTier": "timing71_normalized",
+      "frames": {
+        "total": 3061,
+        "processedNxtSegment": 3061,
+        "firstObservedAtEpoch": 1786204662,
+        "lastObservedAtEpoch": 1786208141,
+        "cadenceMedianSeconds": 1,
+        "cadenceMaxSeconds": 2,
+        "gapIntervals": []
+      },
+      "rosterSize": 24,
+      "lapRowCount": 754,
+      "crossingCount": 754,
+      "sectorObservationCount": 3640,
+      "flagEventCount": 6,
+      "maxLaps": 36,
+      "expectedMaxLap": 36,
+      "maxLapMatchesCoverage": true,
+      "qualityMasks": [],
+      "pack": "sessions-2026/t71_2026_portland-international-raceway_practice_p2_2026-08-08.ndjson.gz"
+    },
+    {
+      "id": "t71_2026_portland-international-raceway_qualifying_2026-08-08",
+      "year": 2026,
+      "date": "2026-08-08",
+      "venue": "Portland International Raceway",
+      "event": "Portland International Raceway",
+      "sessionType": "qualifying",
+      "sessionLabel": "INDY NXT By Firestone GP of Portland - Qualifications",
+      "series": "INDY_NXT",
+      "source": "Timing71",
+      "replayId": "6204d63b-2d7b-4a42-bb30-404b4bb97224",
+      "lakeSessionId": "053ec6e77c63325b202c57c4",
+      "sourceQuality": "inventory_validated",
+      "recordingDescription": "INDY NXT By Firestone GP of Portland - Qualifications",
+      "sourceTier": "timing71_normalized",
+      "frames": {
+        "total": 2265,
+        "processedNxtSegment": 1500,
+        "firstObservedAtEpoch": 1786215475,
+        "lastObservedAtEpoch": 1786218054,
+        "cadenceMedianSeconds": 1,
+        "cadenceMaxSeconds": 873,
+        "gapIntervals": [
+          {
+            "lastObservedEpoch": 1786216374,
+            "nextObservedEpoch": 1786217247,
+            "gapSeconds": 873
+          }
+        ]
+      },
+      "rosterSize": 24,
+      "lapRowCount": 114,
+      "crossingCount": 114,
+      "sectorObservationCount": 630,
+      "flagEventCount": 4,
+      "maxLaps": 10,
+      "expectedMaxLap": 10,
+      "maxLapMatchesCoverage": true,
+      "qualityMasks": [
+        "cross_session_recording_segmented"
+      ],
+      "pack": "sessions-2026/t71_2026_portland-international-raceway_qualifying_2026-08-08.ndjson.gz"
+    },
+    {
+      "id": "t71_2026_portland-international-raceway_race_2026-08-09",
+      "year": 2026,
+      "date": "2026-08-09",
+      "venue": "Portland International Raceway",
+      "event": "Portland International Raceway",
+      "sessionType": "race",
+      "sessionLabel": "INDY NXT By Firestone GP of Portland - Race",
+      "series": "INDY_NXT",
+      "source": "Timing71",
+      "replayId": "eedf1cdd-8715-475e-968b-a4dd9ee970f0",
+      "lakeSessionId": "47289b7d410e7be20a6a357a",
+      "sourceQuality": "inventory_validated",
+      "recordingDescription": "INDY NXT By Firestone GP of Portland - Race",
+      "sourceTier": "timing71_normalized",
+      "frames": {
+        "total": 3578,
+        "processedNxtSegment": 3578,
+        "firstObservedAtEpoch": 1786298743,
+        "lastObservedAtEpoch": 1786302821,
+        "cadenceMedianSeconds": 1,
+        "cadenceMaxSeconds": 2,
+        "gapIntervals": []
+      },
+      "rosterSize": 24,
+      "lapRowCount": 838,
+      "crossingCount": 838,
+      "sectorObservationCount": 0,
+      "flagEventCount": 6,
+      "maxLaps": 35,
+      "expectedMaxLap": 35,
+      "maxLapMatchesCoverage": true,
+      "qualityMasks": [],
+      "pack": "sessions-2026/t71_2026_portland-international-raceway_race_2026-08-09.ndjson.gz"
+    },
+    {
+      "id": "t71_2026_the-milwaukee-mile_practice_p1_2026-08-29",
+      "year": 2026,
+      "date": "2026-08-29",
+      "venue": "The Milwaukee Mile",
+      "event": "The Milwaukee Mile",
+      "sessionType": "practice",
+      "sessionLabel": "INDYNXT by Firestone at Milwaukee Mile - Practice 1",
+      "series": "INDY_NXT",
+      "source": "Timing71",
+      "replayId": "b66b10ab-1b89-4a9e-b94e-2d42f7107639",
+      "lakeSessionId": "a6bfb9a3b6a31825dae78c80",
+      "sourceQuality": "inventory_validated",
+      "recordingDescription": "INDYNXT by Firestone at Milwaukee Mile - Practice 1",
+      "sourceTier": "timing71_normalized",
+      "frames": {
+        "total": 3330,
+        "processedNxtSegment": 3330,
+        "firstObservedAtEpoch": 1788008230,
+        "lastObservedAtEpoch": 1788012012,
+        "cadenceMedianSeconds": 1,
+        "cadenceMaxSeconds": 2,
+        "gapIntervals": []
+      },
+      "rosterSize": 23,
+      "lapRowCount": 1454,
+      "crossingCount": 1454,
+      "sectorObservationCount": 0,
+      "flagEventCount": 6,
+      "maxLaps": 79,
+      "expectedMaxLap": 79,
+      "maxLapMatchesCoverage": true,
+      "qualityMasks": [],
+      "pack": "sessions-2026/t71_2026_the-milwaukee-mile_practice_p1_2026-08-29.ndjson.gz"
+    },
+    {
+      "id": "t71_2026_the-milwaukee-mile_qualifying_2026-08-29",
+      "year": 2026,
+      "date": "2026-08-29",
+      "venue": "The Milwaukee Mile",
+      "event": "The Milwaukee Mile",
+      "sessionType": "qualifying",
+      "sessionLabel": "INDYNXT by Firestone at Milwaukee Mile - Qualifications",
+      "series": "INDY_NXT",
+      "source": "Timing71",
+      "replayId": "23e69e36-7170-4dca-8027-0024c386df68",
+      "lakeSessionId": "33ccbf3291c7754b552df24e",
+      "sourceQuality": "inventory_validated",
+      "recordingDescription": "INDYNXT by Firestone at Milwaukee Mile - Qualifications",
+      "sourceTier": "timing71_normalized",
+      "frames": {
+        "total": 3073,
+        "processedNxtSegment": 2571,
+        "firstObservedAtEpoch": 1788021729,
+        "lastObservedAtEpoch": 1788024647,
+        "cadenceMedianSeconds": 1,
+        "cadenceMaxSeconds": 2,
+        "gapIntervals": []
+      },
+      "rosterSize": 23,
+      "lapRowCount": 33,
+      "crossingCount": 33,
+      "sectorObservationCount": 0,
+      "flagEventCount": 41,
+      "maxLaps": 2,
+      "expectedMaxLap": 2,
+      "maxLapMatchesCoverage": true,
+      "qualityMasks": [],
+      "pack": "sessions-2026/t71_2026_the-milwaukee-mile_qualifying_2026-08-29.ndjson.gz"
+    },
+    {
+      "id": "t71_2026_the-milwaukee-mile_race_2026-08-30",
+      "year": 2026,
+      "date": "2026-08-30",
+      "venue": "The Milwaukee Mile",
+      "event": "The Milwaukee Mile",
+      "sessionType": "race",
+      "sessionLabel": "INDYNXT by Firestone at Milwaukee Mile - Race",
+      "series": "INDY_NXT",
+      "source": "Timing71",
+      "replayId": "322f3fcc-6be7-4677-87fe-dc741dd292e6",
+      "lakeSessionId": "008fd1f37f1332cf2e44f4b3",
+      "sourceQuality": "inventory_validated",
+      "recordingDescription": "INDYNXT by Firestone at Milwaukee Mile - Race",
+      "sourceTier": "timing71_normalized",
+      "frames": {
+        "total": 5703,
+        "processedNxtSegment": 5703,
+        "firstObservedAtEpoch": 1788102222,
+        "lastObservedAtEpoch": 1788108702,
+        "cadenceMedianSeconds": 1,
+        "cadenceMaxSeconds": 3,
+        "gapIntervals": [
+          {
+            "lastObservedEpoch": 1788107105,
+            "nextObservedEpoch": 1788107108,
+            "gapSeconds": 3
+          }
+        ]
+      },
+      "rosterSize": 23,
+      "lapRowCount": 1961,
+      "crossingCount": 1961,
+      "sectorObservationCount": 0,
+      "flagEventCount": 12,
+      "maxLaps": 90,
+      "expectedMaxLap": 90,
+      "maxLapMatchesCoverage": true,
+      "qualityMasks": [],
+      "pack": "sessions-2026/t71_2026_the-milwaukee-mile_race_2026-08-30.ndjson.gz"
+    },
+    {
+      "id": "t71_2026_weathertech-raceway-laguna-seca_practice_p2_2026-09-04",
+      "year": 2026,
+      "date": "2026-09-04",
+      "venue": "WeatherTech Raceway Laguna Seca",
+      "event": "WeatherTech Raceway Laguna Seca",
+      "sessionType": "practice",
+      "sessionLabel": "Grand Prix of Monterey Doubleheader - Practice 2",
+      "series": "INDY_NXT",
+      "source": "Timing71",
+      "replayId": "b2f9ffa3-2248-4ba8-8ffc-3da22178b5ad",
+      "lakeSessionId": "cbac6f22d461cf2c2f4cd494",
+      "sourceQuality": "inventory_validated",
+      "recordingDescription": "Grand Prix of Monterey Doubleheader - Practice 2",
+      "sourceTier": "timing71_normalized",
+      "frames": {
+        "total": 3059,
+        "processedNxtSegment": 2924,
+        "firstObservedAtEpoch": 1788561010,
+        "lastObservedAtEpoch": 1788564334,
+        "cadenceMedianSeconds": 1,
+        "cadenceMaxSeconds": 2,
+        "gapIntervals": []
+      },
+      "rosterSize": 24,
+      "lapRowCount": 322,
+      "crossingCount": 322,
+      "sectorObservationCount": 1883,
+      "flagEventCount": 6,
+      "maxLaps": 16,
+      "expectedMaxLap": 16,
+      "maxLapMatchesCoverage": true,
+      "qualityMasks": [],
+      "pack": "sessions-2026/t71_2026_weathertech-raceway-laguna-seca_practice_p2_2026-09-04.ndjson.gz"
+    },
+    {
+      "id": "t71_2026_weathertech-raceway-laguna-seca_race_r1_2026-09-05",
+      "year": 2026,
+      "date": "2026-09-05",
+      "venue": "WeatherTech Raceway Laguna Seca",
+      "event": "WeatherTech Raceway Laguna Seca Race 1",
+      "sessionType": "race",
+      "sessionLabel": "Grand Prix of Monterey Doubleheader - Race 1",
+      "series": "INDY_NXT",
+      "source": "Timing71",
+      "replayId": "d8950231-dbd4-41bf-b764-7818ccc23c86",
+      "lakeSessionId": "50ff8fb7c0d6cc4e1f9e4fcc",
+      "sourceQuality": "inventory_validated",
+      "recordingDescription": "Grand Prix of Monterey Doubleheader - Race 1",
+      "sourceTier": "timing71_normalized",
+      "frames": {
+        "total": 3573,
+        "processedNxtSegment": 3573,
+        "firstObservedAtEpoch": 1788647748,
+        "lastObservedAtEpoch": 1788651825,
+        "cadenceMedianSeconds": 1,
+        "cadenceMaxSeconds": 2,
+        "gapIntervals": []
+      },
+      "rosterSize": 24,
+      "lapRowCount": 785,
+      "crossingCount": 785,
+      "sectorObservationCount": 0,
+      "flagEventCount": 10,
+      "maxLaps": 35,
+      "expectedMaxLap": 35,
+      "maxLapMatchesCoverage": true,
+      "qualityMasks": [],
+      "pack": "sessions-2026/t71_2026_weathertech-raceway-laguna-seca_race_r1_2026-09-05.ndjson.gz"
+    },
+    {
+      "id": "t71_2026_weathertech-raceway-laguna-seca_race_r2_2026-09-06",
+      "year": 2026,
+      "date": "2026-09-06",
+      "venue": "WeatherTech Raceway Laguna Seca",
+      "event": "WeatherTech Raceway Laguna Seca Race 2",
+      "sessionType": "race",
+      "sessionLabel": "Grand Prix of Monterey Doubleheader - Race 2",
+      "series": "INDY_NXT",
+      "source": "Timing71",
+      "replayId": "b49e14f4-ea16-4c2b-bc82-077cd3e28ec1",
+      "lakeSessionId": "6d3420a81494babfef4cc23b",
+      "sourceQuality": "inventory_validated",
+      "recordingDescription": "Grand Prix of Monterey Doubleheader - Race 2",
+      "sourceTier": "timing71_normalized",
+      "frames": {
+        "total": 3592,
+        "processedNxtSegment": 3592,
+        "firstObservedAtEpoch": 1788712539,
+        "lastObservedAtEpoch": 1788716616,
+        "cadenceMedianSeconds": 1,
+        "cadenceMaxSeconds": 2,
+        "gapIntervals": []
+      },
+      "rosterSize": 24,
+      "lapRowCount": 660,
+      "crossingCount": 660,
+      "sectorObservationCount": 0,
+      "flagEventCount": 6,
+      "maxLaps": 30,
+      "expectedMaxLap": 30,
+      "maxLapMatchesCoverage": true,
+      "qualityMasks": [],
+      "pack": "sessions-2026/t71_2026_weathertech-raceway-laguna-seca_race_r2_2026-09-06.ndjson.gz"
     }
   ]
 }

@@ -32,7 +32,11 @@ export interface ReplaySessionInfo {
   supersededByCapture?: boolean;
 }
 
-export type ReplaySourceTier = 'brycecast_capture' | 'racetools_capture' | 'timing71_normalized';
+export type ReplaySourceTier =
+  | 'brycecast_capture'
+  | 'race_control_capture'
+  | 'racetools_capture'
+  | 'timing71_normalized';
 
 export interface ReplayProvenance {
   tier: ReplaySourceTier;
@@ -40,6 +44,12 @@ export interface ReplayProvenance {
   detail: string;
   caveat: string | null;
 }
+
+/** Both names identify timing snapshots retained directly by BryceCast. The
+ * newer ledger uses `race_control_capture`; the legacy overlay still emits
+ * `brycecast_capture` for older archives. */
+export const isBryceCastCaptureTier = (tier: ReplaySourceTier): boolean =>
+  tier === 'brycecast_capture' || tier === 'race_control_capture';
 
 /** The trust-rail descriptor for a replay session's source tier. Keeps the honest
  *  distinction: our own Race Control capture vs a third-party normalized replay —
@@ -72,7 +82,7 @@ export const replayProvenance = (session: ReplaySessionInfo | null): ReplayProve
   return {
     tier,
     label,
-    detail: 'BryceCast recorded the official Race Control timing feed once per second during the session. This replays that archive — never live.',
+    detail: 'BryceCast retained snapshots from INDYCAR Race Control timing during the session. This replays that archive — never live.',
     caveat: null
   };
 };

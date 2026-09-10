@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 import { buildBryceCastUiContext } from '../src/data/uiContextAdapter';
 import { buildLiveBattleFrame, buildOfficialPointsWindow, headToHeadForCar, headToHeadForLiveDriver } from '../src/data/livePageModel';
 import { causeClause, causeFacts, causeMajority } from '../src/data/cautionCause';
@@ -7,6 +8,71 @@ import { causeClause, causeFacts, causeMajority } from '../src/data/cautionCause
    never from a hardcoded event slice, so schedule roll-forwards don't break CI. */
 
 const context = await buildBryceCastUiContext();
+
+const parseCsv = (text: string): Array<Record<string, string>> => {
+  const records: string[][] = [];
+  let record: string[] = [];
+  let field = '';
+  let quoted = false;
+  for (let index = 0; index < text.length; index += 1) {
+    const char = text[index];
+    if (quoted && char === '"' && text[index + 1] === '"') {
+      field += '"';
+      index += 1;
+    } else if (char === '"') {
+      quoted = !quoted;
+    } else if (!quoted && char === ',') {
+      record.push(field);
+      field = '';
+    } else if (!quoted && char === '\n') {
+      record.push(field);
+      records.push(record);
+      record = [];
+      field = '';
+    } else if (char !== '\r') {
+      field += char;
+    }
+  }
+  if (field || record.length) {
+    record.push(field);
+    records.push(record);
+  }
+  const [headers = [], ...rows] = records;
+  return rows
+    .filter((row) => row.some(Boolean))
+    .map((row) => Object.fromEntries(headers.map((header, index) => [header, row[index] ?? ''])));
+};
+
+const [canonicalDataset, raceMileageRows, physicalSessionRows, travelLegRows] = await Promise.all([
+  readFile('data/career/career.dataset.json', 'utf8').then((text) => JSON.parse(text)),
+  readFile('analysis/career-life-stats/output/tables/miles_raced.csv', 'utf8').then(parseCsv),
+  readFile('analysis/career-life-stats/output/tables/session_mileage_ledger.csv', 'utf8').then(parseCsv),
+  readFile('analysis/career-life-stats/output/tables/travel_legs.csv', 'utf8').then(parseCsv)
+]);
+const canonicalRaceSessionIds = new Set(
+  (canonicalDataset.sessions ?? [])
+    .filter((session: { sessionType?: string }) => session.sessionType === 'race')
+    .map((session: { id: string }) => session.id)
+);
+const canonicalBryceRaceSessionIds = new Set<string>(
+  (canonicalDataset.results ?? [])
+    .filter(
+      (result: { driverId?: string; sessionId: string }) =>
+        result.driverId === 'driver_bryce_aron' && canonicalRaceSessionIds.has(result.sessionId)
+    )
+    .map((result: { sessionId: string }) => result.sessionId)
+);
+const raceMileageSessionIds = new Set(raceMileageRows.map((row) => row.sessionId));
+assert.deepEqual(
+  [...raceMileageSessionIds].sort(),
+  [...canonicalBryceRaceSessionIds].sort(),
+  'validated personal-race ledger must cover the canonical Bryce race set exactly'
+);
+const roundedTenth = (value: number) => Math.round(value * 10) / 10;
+const expectedPersonalRaceLaps = raceMileageRows.reduce((sum, row) => sum + Number(row.personalLaps), 0);
+const expectedPersonalRaceMiles = roundedTenth(raceMileageRows.reduce((sum, row) => sum + Number(row.personalMiles), 0));
+const expectedTravelMinimumMiles = roundedTenth(travelLegRows.reduce((sum, row) => sum + Number(row.greatCircleMiles), 0));
+const expectedResourceKeys = new Set(physicalSessionRows.map((row) => `${row.seriesId}|${row.seasonYear}`));
 
 assert.equal(context.dataPackage.schemaVersion, 'brycecast.uiDataPackage.v1');
 
@@ -20,7 +86,11 @@ assert.equal(context.contextPackIntegrity.algorithm, 'sha256');
 assert.ok(context.contextPackIntegrity.checkedRefs >= 4, 'live, career, prep, and debrief packs must be integrity-checked');
 assert.equal(new Set(context.contextPackIntegrity.checkedPaths).size, context.contextPackIntegrity.checkedPaths.length, 'checked paths must be unique');
 
-assert.ok(context.upcomingPrep.events.length >= 1, 'at least one upcoming prep event must hydrate while future events exist');
+assert.deepEqual(
+  context.upcomingPrep.events.map((event) => event.eventId),
+  context.dataPackage.screens.upcomingPrep.events.map((event) => event.eventId),
+  'every packaged upcoming event must hydrate, including an empty completed-season schedule'
+);
 for (const event of context.upcomingPrep.events) {
   assert.ok(event.predictionBand?.finishPercentileBand, `${event.eventName} must expose predictionBand`);
   assert.ok(event.top10Path.length >= 1, `${event.eventName} must expose top10Path`);
@@ -59,13 +129,15 @@ if (context.upcomingPrep.events.length > 0) {
     nextEventPrep.races.filter((row) => row.officialStatus === 'running').length,
     'clean-race summary must count only official running results'
   );
+} else {
+  assert.equal(upcomingScreen.nextEventPrep, null, 'a completed season must not retain a stale next-event preview');
 }
 const standings = upcomingScreen.standingsSnapshot;
 assert.ok(standings && typeof standings.available === 'boolean', 'standingsSnapshot must carry an explicit available flag');
 if (standings.available) {
   assert.equal(standings.seriesGuard.ok, true, 'standings must sit behind a passing series guard');
   assert.equal(standings.entries.filter((entry) => entry.isBryce).length, 1, 'exactly one guarded Bryce standings entry');
-  assert.ok(standings.caveats.length >= 1, 'standings must state unofficial-points caveats');
+  assert.ok(standings.caveats.length >= 1, 'standings must state source and points caveats');
 }
 
 /* Live page: every trust state remains renderable, and the jumbotron only
@@ -360,7 +432,7 @@ for (const season of careerScreen.lapPositionMix) {
 
 /* The campaigns: every championship season as a points arc. Arcs accumulate the
    sourced race points in order; a season whose earned points differ from its
-   official total must say so; the current campaign is the in-progress arc. */
+   official total must say so; latest/current stays distinct from in-progress. */
 const seasonCampaigns = careerScreen.seasonCampaigns;
 assert.equal(seasonCampaigns.schemaVersion, 'brycecast.careerSeasonCampaigns.v1');
 const arcCampaigns = seasonCampaigns.campaigns.filter((campaign) => campaign.renderMode === 'arc');
@@ -389,7 +461,21 @@ const f1600 = arcCampaigns.find((campaign) => campaign.seasonYear === 2019);
 assert.ok(f1600 && f1600.reconciles === false && f1600.earnedPoints === 656 && f1600.officialSeasonPoints === 639, 'F1600 2019 surfaces both the 656 earned and the official 639');
 const currentCampaigns = seasonCampaigns.campaigns.filter((campaign) => campaign.isCurrent);
 assert.equal(currentCampaigns.length, 1, 'exactly one current campaign');
-assert.ok(currentCampaigns[0].inProgress && currentCampaigns[0].renderMode === 'arc', 'the current campaign is the in-progress arc');
+const currentCampaign = currentCampaigns[0];
+const currentSeasonEvents = (canonicalDataset.events ?? []).filter(
+  (event: { seriesId?: string; seasonYear?: number }) =>
+    event.seriesId === currentCampaign.seriesId && Number(event.seasonYear) === currentCampaign.seasonYear
+);
+const currentSeasonEndDate = currentSeasonEvents
+  .map((event: { eventEndDate?: string; eventStartDate?: string }) => event.eventEndDate ?? event.eventStartDate ?? '')
+  .sort()
+  .at(-1);
+assert.equal(currentCampaign.renderMode, 'arc', 'the latest INDY NXT campaign is a sourced points arc');
+assert.equal(
+  currentCampaign.inProgress,
+  Boolean(currentSeasonEndDate && context.dataPackage.asOfDate <= currentSeasonEndDate),
+  'campaign progress state must follow the canonical season boundary'
+);
 assert.ok(seasonCampaigns.excluded.every((row) => row.reason.length > 0), 'every excluded season names its reason');
 
 /* Small-series stories: the three Career-chapter modules the points arc can't
@@ -466,14 +552,19 @@ assert.ok(bridge!.sources.length >= 1 && bridge!.sources.every((source) => !sour
    confidence-preserving physical mileage, and bounded travel semantics. */
 const lifeStats = careerScreen.lifeStats;
 assert.equal(lifeStats.schemaVersion, 'brycecast.careerLifeStats.v2');
-assert.equal(lifeStats.personalRaceMileage.raceRows, 146, 'life-stats must use all canonical Bryce race rows');
-assert.equal(lifeStats.personalRaceMileage.coveredRaceRows, 146, 'every canonical Bryce race row has sourced attribution');
-assert.equal(lifeStats.personalRaceMileage.laps, 3084, 'Daytona must use driver-stint laps, not shared-car laps');
-assert.equal(lifeStats.personalRaceMileage.miles, 7010.9, 'personal race mileage must reconcile to the driver-race ledger');
+assert.equal(lifeStats.personalRaceMileage.raceRows, canonicalBryceRaceSessionIds.size, 'life-stats must use all canonical Bryce race rows');
+assert.equal(lifeStats.personalRaceMileage.coveredRaceRows, raceMileageRows.length, 'every canonical Bryce race row has sourced attribution');
+assert.equal(lifeStats.personalRaceMileage.laps, expectedPersonalRaceLaps, 'personal race laps must reconcile to the driver-race ledger');
+assert.equal(lifeStats.personalRaceMileage.miles, expectedPersonalRaceMiles, 'personal race mileage must reconcile to the driver-race ledger');
+assert.deepEqual(
+  [...new Set(lifeStats.coveredSessionIds)].sort(),
+  [...canonicalBryceRaceSessionIds].sort(),
+  'the packaged odometer dedup set must match the canonical Bryce race set'
+);
 assert.equal(lifeStats.physicalSessionMileage.floor.confidenceClass, 'observed_lower_bound');
 assert.equal(lifeStats.physicalSessionMileage.exact.confidenceClass, 'observed_exact');
 assert.equal(lifeStats.physicalSessionMileage.unknown.confidenceClass, 'unknown');
-assert.equal(lifeStats.travel.greatCircleMinimum.miles, 55029.6, 'minimum displacement must stay venue-to-venue');
+assert.equal(lifeStats.travel.greatCircleMinimum.miles, expectedTravelMinimumMiles, 'minimum displacement must reconcile to the travel-leg ledger');
 assert.equal(lifeStats.travel.routeAdjustedMinimum.confidenceClass, 'modeled_range');
 assert.deepEqual(lifeStats.travel.actualTravel.blockedBy, ['seasonBase', 'returnHomeFrequency']);
 assert.deepEqual(
@@ -482,8 +573,16 @@ assert.deepEqual(
   'life-stats package must carry every requested visualization breakdown'
 );
 assert.ok(lifeStats.travelModeBreakdown.length >= 2, 'travel-mode proxy breakdown must be packaged');
-assert.equal(lifeStats.fuelEstimateRanges.length, 10, 'fuel ranges must be packaged by series/chassis/year');
-assert.equal(lifeStats.tireEstimateRanges.length, 10, 'tire ranges must be packaged by series/year');
+assert.deepEqual(
+  new Set(lifeStats.fuelEstimateRanges.map((row) => `${row.seriesId}|${row.seasonYear}`)),
+  expectedResourceKeys,
+  'fuel ranges must cover every represented physical-session series/year'
+);
+assert.deepEqual(
+  new Set(lifeStats.tireEstimateRanges.map((row) => `${row.seriesId}|${row.seasonYear}`)),
+  expectedResourceKeys,
+  'tire ranges must cover every represented physical-session series/year'
+);
 assert.ok(!JSON.stringify(lifeStats).includes('9137.7'), 'shared-car odometer value must never reach the UI contract');
 assert.equal(lifeStats.venueSources.length, lifeStats.venues, 'SourcePill data must list every physical venue');
 for (const venue of lifeStats.venueSources) {
@@ -492,14 +591,20 @@ for (const venue of lifeStats.venueSources) {
   assert.ok(venue.coordsSources.every((source) => source.includes(' | https://')), `${venue.trackName} needs named coordinate sources`);
 }
 
-/* The career atlas: geometry and every venue arrive package-fed, with A2's
-   145-row semantics and click targets already resolved. */
+/* The career atlas: geometry and every venue arrive package-fed, with canonical
+   race semantics and click targets already resolved. */
 const atlas = careerScreen.atlas;
 assert.equal(atlas.schemaVersion, 'brycecast.careerAtlas.v3');
-assert.equal(atlas.venueCount, 34, 'atlas must carry every physical A2 venue');
-assert.equal(atlas.raceCount, 146, 'atlas race counts must use all canonical Bryce race rows');
+const expectedPhysicalVenueNames = new Set(lifeStats.venueSources.map((venue) => venue.trackName));
+assert.equal(atlas.venueCount, expectedPhysicalVenueNames.size, 'atlas must carry every sourced physical venue after canonical track aliases merge');
+assert.deepEqual(
+  new Set(atlas.venues.map((venue) => venue.trackName)),
+  expectedPhysicalVenueNames,
+  'atlas venue identities must match the validated physical-venue source set'
+);
+assert.equal(atlas.raceCount, canonicalBryceRaceSessionIds.size, 'atlas race counts must use all canonical Bryce race rows');
 assert.equal(atlas.venues.length, atlas.venueCount);
-assert.equal(atlas.venues.reduce((sum, venue) => sum + venue.raceCount, 0), 146);
+assert.equal(atlas.venues.reduce((sum, venue) => sum + venue.raceCount, 0), canonicalBryceRaceSessionIds.size);
 assert.equal(atlas.naturalEarth.license, 'public_domain');
 assert.equal(atlas.geometry.projection, 'equirectangular_wrapped');
 assert.ok(atlas.geometry.landPath.startsWith('M') && atlas.geometry.ringCount >= 20, 'atlas land path must be built and clipped');
@@ -522,7 +627,7 @@ for (const venue of atlas.venues) {
   }
 }
 assert.deepEqual(new Set(atlas.venues.map((venue) => venue.region)), new Set(['North America', 'Europe', 'Oceania']));
-assert.ok(!JSON.stringify(atlas).includes('55029.6'), 'minimum displacement must not leak into the venue-only atlas');
+assert.ok(!JSON.stringify(atlas).includes('travelMiles'), 'travel displacement must not leak into the venue-only atlas');
 
 /* The venue dossier: this place, other years. Bryce's most explicit ask —
    year-over-year conditions + results per venue, wind only where the shape is

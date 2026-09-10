@@ -1,6 +1,6 @@
 seriesId,seriesName,raceRows,parityScore,recommendedDepth
 series_gb3,GB3 Championship,42,17.0,next_deep_dive_candidate
-series_indy_nxt,INDY NXT,41,21.0,reference_model_complete_for_ui_contract
+series_indy_nxt,INDY NXT,45,21.0,reference_model_complete_for_ui_contract
 series_formula_ford,Formula Ford,15,13.5,lap_weather_specialist_pass
 series_euroformula_open,Euroformula Open,17,12.7,result_conversion_pass
 series_imsa_weathertech,IMSA WeatherTech SportsCar Championship,1,12.1,standalone_daytona_feature

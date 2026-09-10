@@ -533,8 +533,21 @@ def build_payload(texture_bytes: bytes | None = None) -> dict[str, Any]:
     dataset = json.loads(CANONICAL_DATASET.read_text())
     if sha256(NATURAL_EARTH) != NATURAL_EARTH_SHA256:
         raise ValueError("Vendored Natural Earth geometry does not match the pinned source")
-    if len(ledger) != 146 or any(row["confidenceClass"] != "observed_exact" for row in ledger):
-        raise ValueError("Career atlas must consume all 146 exact A2 driver-race ledger rows")
+    sessions = {row["id"]: row for row in dataset["sessions"]}
+    canonical_race_ids = {
+        row["sessionId"]
+        for row in dataset["results"]
+        if row.get("driverId") == BRYCE_ID
+        and sessions.get(row["sessionId"], {}).get("sessionType") == "race"
+    }
+    ledger_ids = {row["sessionId"] for row in ledger}
+    if (
+        len(canonical_race_ids) < 140
+        or len(ledger_ids) != len(ledger)
+        or ledger_ids != canonical_race_ids
+        or any(row["confidenceClass"] != "observed_exact" for row in ledger)
+    ):
+        raise ValueError("Career atlas must consume every canonical Bryce race exactly once at observed_exact grain")
     crop = career_crop(facts)
     geometry = build_geometry(natural_earth, crop)
     venues = build_venues(facts, dataset, ledger, crop, geometry["canvas"]["height"])
@@ -577,7 +590,7 @@ def build_payload(texture_bytes: bytes | None = None) -> dict[str, Any]:
             source_ref(NATURAL_EARTH_SOURCE, "Natural Earth source, commit, checksum, and public-domain terms."),
             source_ref(REQUIREMENTS, f"Pinned Pillow {PINNED_PILLOW_VERSION} texture-rendering dependency."),
             source_ref(VENUE_FACTS, "A2 track identity and sourced coordinates for every career venue."),
-            source_ref(RACE_LEDGER, "A2 personally attributable ledger covering all 146 canonical race rows."),
+            source_ref(RACE_LEDGER, "A2 personally attributable ledger covering every canonical Bryce race row."),
             source_ref(LIFE_STATS_RESEARCH, "A2 metric-grain and confidence-class contracts."),
             source_ref(CANONICAL_DATASET, "Canonical race identity, series, date, and classified finish fields."),
         ],

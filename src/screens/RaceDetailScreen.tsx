@@ -23,10 +23,17 @@ import { loadRaceStory, type RaceStoryPack, type RaceStoryLapDriver } from '../d
 import { getVenueBySessionId, pastVisits } from '../data/venueDossier';
 import { FactDelta } from '../app/weatherGlyphs';
 import type { UiVenueDossierVenue, UiVenueDossierVisit } from '../data/uiDataPackage';
-import { watchableCaptureForRace, replayProvenance, priorYearReplaysAtVenue, type ReplaySessionInfo } from '../data/replayAvailable';
+import {
+  isBryceCastCaptureTier,
+  watchableCaptureForRace,
+  replayProvenance,
+  priorYearReplaysAtVenue,
+  type ReplaySessionInfo
+} from '../data/replayAvailable';
 import { ReplayAffordance, priorYearTitle, useReplayCatalog } from './replayAffordance';
 import { QualifyingRunByRunCard } from './qualifyingRunByRun';
 import { useQualiLabForRace } from '../data/qualiLab';
+import { TimingCoverageCard } from './timingCoverageCard';
 
 type Row = Record<string, unknown>;
 
@@ -1097,7 +1104,7 @@ const WatchRaceUnfold = ({ sessionId }: { sessionId: string }) => {
 
   if (!currentCapture && priors.length === 0) return null;
 
-  const isOwnCapture = currentCapture ? replayProvenance(currentCapture).tier === 'brycecast_capture' : false;
+  const isOwnCapture = currentCapture ? isBryceCastCaptureTier(replayProvenance(currentCapture).tier) : false;
   const currentCopy = isOwnCapture
     ? 'Every second of this race, replayed as it happened, from our own trackside capture.'
     : 'Every second of this race, reconstructed from a third-party timing archive and replayed as it happened.';
@@ -1344,6 +1351,8 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
 
       <WatchRaceUnfold sessionId={sessionId} />
 
+      <TimingCoverageCard sessionId={sessionId} />
+
       {/* Weekend arc, chronological: qualifying (Friday signal) before the race
           it set the grid for. Renders the covered module, a quiet Race-2 note,
           or nothing (Brief M). Resolution hoisted above for footer provenance. */}
@@ -1365,8 +1374,8 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
           priorComparison={validPriorComparison(visitPacks, sessionId, sectionAnchors)}
         />
       ) : (
-        /* No geometric anchors yet (IMS awaits the correct 2.44-mi map; St.
-           Pete's outline is honestly approximate): the same section numbers
+        /* No geometric anchors yet (IMS awaits a verified calibration between
+           the correct 2.44-mi feed geometry and its outline): the same numbers
            render as the table, IN THE SAME SLOT the heat map occupies on
            anchored pages — sections always follow the lap chart, whatever
            their form (Jack's page-to-page consistency review, 2026-07-21). */
@@ -1420,7 +1429,7 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
 
         const hasRaceTools = hasLake || marksDrawn || replayTiers.has('racetools_capture') || qualiTier === 'racetools_capture';
         const hasTiming71 = replayTiers.has('timing71_normalized') || qualiTier === 'timing71_normalized';
-        const hasOwnCapture = replayTiers.has('brycecast_capture');
+        const hasOwnCapture = [...replayTiers].some(isBryceCastCaptureTier);
 
         const parts = ['official results', 'the official lap chart'];
         if (hasPdfSections) parts.push('official section reports');

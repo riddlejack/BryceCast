@@ -1,6 +1,6 @@
 x,y,label,n,pearson,interpretation
-bestPracticeRank,raceFinish,Best practice rank vs race finish,33,0.3422429087316289,Exploratory correlation; lower ranks are better; direction only.
-bestPracticeRank,bestLapRank,Best practice rank vs race best-lap rank,32,0.4691665239203621,Exploratory correlation; lower ranks are better; direction only.
-bestQualifyingRank,raceStart,Best qualifying rank vs race start,39,0.7216038717873263,Exploratory correlation; lower ranks are better; direction only.
-bestQualifyingRank,raceFinish,Best qualifying rank vs race finish,39,0.18805174453362858,Exploratory correlation; lower ranks are better; direction only.
-avgQualifyingRank,raceFinish,Average qualifying rank vs race finish,39,0.34884505167872965,Exploratory correlation; lower ranks are better; direction only.
+bestPracticeRank,raceFinish,Best practice rank vs race finish,36,0.28507358086171747,Exploratory correlation; lower ranks are better; direction only.
+bestPracticeRank,bestLapRank,Best practice rank vs race best-lap rank,35,0.44266214883707294,Exploratory correlation; lower ranks are better; direction only.
+bestQualifyingRank,raceStart,Best qualifying rank vs race start,43,0.7101519485835018,Exploratory correlation; lower ranks are better; direction only.
+bestQualifyingRank,raceFinish,Best qualifying rank vs race finish,43,0.16525480090262992,Exploratory correlation; lower ranks are better; direction only.
+avgQualifyingRank,raceFinish,Average qualifying rank vs race finish,43,0.34131543126519037,Exploratory correlation; lower ranks are better; direction only.

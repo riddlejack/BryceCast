@@ -1,21 +1,22 @@
 // Semantic-layer slice 1: lake access + session enumeration (catalog-free).
 //
-// The raw archive (~7.1 GB, git-ignored) lives ONLY in the a534 worktree. We
+// The raw archive (~7.1 GB, git-ignored) lives in the durable user data root. We
 // read it READ-ONLY, and only under raw/ (content-addressed, immutable). We do
 // NOT read the lake `catalog/` directory: another worker is regenerating it,
 // and this lane is upstream of it. Session enumeration is derived directly from
 // the self-describing raw/views tree instead (filenames encode series, session
 // type, and date; series suffix `.L` = INDY NXT, `.I` = INDYCAR).
 //
-// The lake root is exposed via BRYCECAST_LAKE_DATA_ROOT (env) with a documented
-// absolute default, never a hardcoded relative path from a component.
+// The lake root is exposed via BRYCECAST_LAKE_DATA_ROOT (env) with the durable
+// ~/.brycecast/data-lake default, never a worktree-relative path.
 
 import {readFile, readdir, stat} from 'node:fs/promises';
+import {homedir} from 'node:os';
 import {join} from 'node:path';
 import {centralEntries, localEntryData} from '../../historical-data-lake/lib/archive-reader.mjs';
 
 export const DEFAULT_LAKE_DATA_ROOT =
-  '/Users/example/.codex/worktrees/a534/Bryce POV access/data/historical-data-lake';
+  join(homedir(), '.brycecast', 'data-lake');
 
 export function lakeDataRoot() {
   return process.env.BRYCECAST_LAKE_DATA_ROOT || DEFAULT_LAKE_DATA_ROOT;

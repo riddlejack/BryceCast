@@ -28,7 +28,7 @@ const CENSUS = path.join(laneDir, 'output/coverage-census.json');
  * the UI headlines the official best and the run shows captured laps. */
 const ROAD_BEST_FATAL_S = 1.5;
 const ROAD_BEST_ADVISORY_S = 0.15;
-const KNOWN_TIERS = new Set(['racetools_capture', 'timing71_normalized']);
+const KNOWN_TIERS = new Set(['racetools_capture', 'timing71_normalized', 'official_section_results']);
 
 const failures = [];
 const advisories = [];
@@ -37,6 +37,10 @@ const warn = (m) => advisories.push(m);
 
 const pack = JSON.parse(readFileSync(PACK, 'utf8'));
 const census = JSON.parse(readFileSync(CENSUS, 'utf8'));
+const canonical = JSON.parse(readFileSync(path.resolve(laneDir, '../../data/career/career.dataset.json'), 'utf8'));
+const canonicalEvents = new Map(canonical.events.map((row) => [row.id, row]));
+const canonicalTracks = new Map(canonical.tracks.map((row) => [row.id, row]));
+const officialQualifying = new Map(canonical.qualifyingResults.filter((row) => row.driverId === 'driver_bryce_aron').map((row) => [row.sessionId, row]));
 
 // identity
 if (pack.id !== 'quali_lab_run_by_run') fail(`pack id ${pack.id}`);
@@ -51,6 +55,10 @@ let crossMismatchRoad = 0;
 
 for (const s of pack.sessions) {
   const tag = s.id;
+  const event = canonicalEvents.get(s.eventId);
+  const track = canonicalTracks.get(event?.trackId);
+  if (!track || s.trackId !== event.trackId) fail(`${tag}: track must match its canonical event`);
+  if (track && s.isOval !== (track.trackType === 'oval')) fail(`${tag}: oval classification must match canonical track metadata`);
 
   if (!KNOWN_TIERS.has(s.sourceTier)) fail(`${tag}: unknown sourceTier ${s.sourceTier}`);
   if (!s.sourceTierLabel) fail(`${tag}: missing sourceTierLabel`);
@@ -62,8 +70,33 @@ for (const s of pack.sessions) {
   // a rank and a labelled denominator
   const hasRank = s.onTrackGroupRank !== null || s.combinedGridPosition !== null;
   const hasDenom = s.groupFieldSize !== null || s.combinedFieldSize !== null;
-  if (!hasRank) fail(`${tag}: no rank (group or grid)`);
-  if (!hasDenom) fail(`${tag}: no field-size denominator`);
+  if (!hasRank && s.qualifyingStatus !== 'cancelled') fail(`${tag}: no rank (group or grid)`);
+  if (!hasDenom && s.qualifyingStatus !== 'cancelled') fail(`${tag}: no field-size denominator`);
+  if (s.qualifyingStatus === 'cancelled' && (hasRank || !s.cancellation?.url)) fail(`${tag}: cancelled qualifying must carry a source and no classification`);
+
+  if (s.sectionLaps) {
+    if (s.sectionLaps.sessionId !== s.qualifyingSessionId) fail(`${tag}: section report is from another qualifying session`);
+    if (s.sectionLaps.comparisonScope !== 'qualifying_group_best_sections') fail(`${tag}: ambiguous section comparison scope`);
+    if (!s.sectionLaps.sourceRefs?.length) fail(`${tag}: missing official section source`);
+    const laps = new Set(s.sectionLaps.lapTotals.map((r) => r[0]));
+    if (laps.size !== s.sectionLaps.lapTotals.length) fail(`${tag}: duplicate completed section-report laps`);
+    for (const section of s.sectionLaps.sections) for (const row of section.laps) {
+      if (!laps.has(row[0])) fail(`${tag}: section row without completed lap ${row[0]}`);
+      if (!(row[6] > 0) || row[2] < 1 || row[2] > row[3]) fail(`${tag}: invalid section time/rank/denominator`);
+    }
+  }
+  for (const grid of s.gridClassifications ?? []) {
+    if (!s.raceSessionIds.includes(grid.raceSessionId)) fail(`${tag}: grid without race linkage`);
+    if (grid.raceLabel === 'Race 2' && !s.isOval && grid.lapSelection !== 'second_fastest') fail(`${tag}: second grid must use second-fastest classification`);
+    if (s.isOval && s.qualifyingStatus !== 'cancelled') {
+      if (grid.lapSelection !== 'two_lap_average') fail(`${tag}: oval grid must use the two-lap average`);
+      const q = officialQualifying.get(grid.qualifyingSessionId);
+      const first = Number(q?.raw?.qualLap1), second = Number(q?.raw?.qualLap2);
+      if (first > 0 && second > 0 && (grid.officialBestLapSeconds === null || Math.abs(grid.officialBestLapSeconds - (first + second) / 2) > 1e-7)) {
+        fail(`${tag}: oval official time must equal the mean of the two official qualifying laps`);
+      }
+    }
+  }
 
   // 2026 crosswalk gate
   if (s.source === 'timing71') {
@@ -131,6 +164,14 @@ const eventCounts = {};
 for (const s of pack.sessions) eventCounts[s.eventId] = (eventCounts[s.eventId] || 0) + 1;
 const dupEvents = Object.entries(eventCounts).filter(([, n]) => n > 1);
 if (dupEvents.length) fail(`weekend double-counted: ${JSON.stringify(dupEvents)}`);
+const raceIds = pack.sessions.flatMap((s) => s.raceSessionIds);
+if (new Set(raceIds).size !== raceIds.length) fail('a race resolves to more than one physical qualifying run');
+const coverageRows = pack.coverage.races ?? [];
+if (new Set(coverageRows.map((r) => r.raceSessionId)).size !== coverageRows.length) fail('duplicate race coverage rows');
+for (const row of coverageRows) {
+  if (row.status === 'available' && !row.sectionTimesAvailable) fail(`${row.raceSessionId}: false available claim`);
+  if (row.status === 'cancelled' && !row.sourceUrl) fail(`${row.raceSessionId}: unsourced cancellation`);
+}
 
 // report
 console.log(`quali-lab validate: ${pack.sessions.length} sessions, ${census.excluded.length} excluded`);

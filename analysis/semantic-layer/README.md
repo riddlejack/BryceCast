@@ -5,7 +5,7 @@ The first lane to consume the cleared historical data lake.
 - **Slice 1** normalizes the 2024–25 INDY NXT **RaceTools captures** into canonical
   timing tables (`loop_crossings`, `laps`, `flags`, `classification`) and validates
   them along two independent axes plus the Nashville loop-inventory proof.
-- **Slice 2** normalizes the 33 validated **Timing71 2026 replays** to the same
+- **Slice 2** normalizes the 34 currently validated **Timing71 2026 replays** to the same
   shapes (event-observation grain) and builds the **identity crosswalk** — the
   correctness gate for any 2026 lake data reaching the UI — validated against the
   audit's three trap classes plus a two-source cross-check vs BryceCast's own
@@ -18,14 +18,14 @@ time semantics, quality-mask vocabulary, and slice-2 design notes.
 
 ## Data access
 
-Raw bytes live **only** in the git-ignored lake archive. Point at it via an env var
-(a documented absolute default is baked in):
+Raw bytes live **only** in the git-ignored lake archive. The durable default is
+`~/.brycecast/data-lake`; override it only when intentionally using another lake:
 
 ```bash
-export BRYCECAST_LAKE_DATA_ROOT="/Users/.../a534/Bryce POV access/data/historical-data-lake"
+export BRYCECAST_LAKE_DATA_ROOT="$HOME/.brycecast/data-lake"
 # validation references (read-only), also env-overridable:
-#   BRYCECAST_CAREER_DATASET  -> data/career/career.dataset.json (ac78)
-#   BRYCECAST_SECTION_OBS     -> analysis/indy-nxt-race-lap-section-enhancement/output/race_section_lap_observations.csv (ac78)
+#   BRYCECAST_CAREER_DATASET  -> data/career/career.dataset.json
+#   BRYCECAST_SECTION_OBS     -> analysis/indy-nxt-race-lap-section-enhancement/output/race_section_lap_observations.csv
 ```
 
 Only `raw/` is read (content-addressed, immutable). The lake `catalog/` is **not**
@@ -96,18 +96,16 @@ small while still shipping the complete grain.
   "Lap" time to **0.0000 s** (median) for **21/25** races; residuals are confined to
   caution/red-flag/pit laps. Nashville's 3 published sub-sections map to feed spans
   within ~0.08–0.10 s median.
-- **Slice 2 — Timing71 2026:** all 33 sessions decode with max-lap agreement
-  **33/33** vs the audit coverage matrix; race classification matches canonical
-  exactly (positions **24/24** and lap counts **24/24**) for **11/12** races — the 12th
+- **Slice 2 — Timing71 2026:** all 44 sessions decode with max-lap agreement
+  **44/44** vs the audit coverage matrix; race classification matches canonical
+  exactly for **16/17** races — the 17th
   (Road America R2) is a capture-confirmed as-raced vs official divergence
   (post-race DQ of the on-road winner).
-- **Identity crosswalk:** **33/33** sessions fully mapped, zero ambiguous/unmapped,
-  all event-scoped (31 via canonical results; the 2 pre-race Nashville 2026
-  sessions via the capture's official Race Control roster, T4-hard-asserted).
-  All audit trap classes covered by explicit tests. Two-source cross-check vs
-  our own capture: identity **100%** on all 9 overlapping sessions, laps exact
-  on 201/202 car-results.
-- **GO/NO-GO:** **32 GO / 1 CONDITIONAL / 0 NO-GO** (the CONDITIONAL is Road
+- **Identity crosswalk:** **44/44** sessions fully mapped, zero ambiguous/unmapped,
+  all event-scoped. All audit trap classes are covered by explicit tests.
+  Two-source cross-check vs our own capture: identity **100%** on all 10
+  overlapping sessions.
+- **GO/NO-GO:** **43 GO / 1 CONDITIONAL / 0 NO-GO** (the CONDITIONAL is Road
   America R2's as-raced vs official-DQ semantics, by design) —
   `output/crosswalk/crosswalk-validation.json`.
 

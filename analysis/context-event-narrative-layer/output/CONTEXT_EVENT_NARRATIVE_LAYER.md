@@ -1,7 +1,7 @@
 # Context Event Narrative Layer
 
-Generated: 2026-07-21T23:54:38Z
-Source hash: `64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978`
+Generated: 2026-09-10T23:01:45Z
+Source hash: `61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd`
 
 ## Source Scope
 
@@ -9,11 +9,11 @@ This lane normalizes canonical non-lap context collections into product-ready ar
 
 | collection | rows |
 | --- | --- |
-| media | 1024 |
-| penalty | 86 |
+| media | 1098 |
+| penalty | 94 |
 | weather | 201 |
-| incident | 149 |
-| racecraft | 40 |
+| incident | 166 |
+| racecraft | 44 |
 
 ## What Became Productized
 
@@ -45,8 +45,8 @@ This lane normalizes canonical non-lap context collections into product-ready ar
 
 | sourceType | rows |
 | --- | --- |
-| official_pdf | 764 |
-| official_api | 285 |
+| official_pdf | 812 |
+| official_api | 304 |
 | official_page | 117 |
 | weather_api | 85 |
 | official_html | 16 |
@@ -67,10 +67,10 @@ This lane normalizes canonical non-lap context collections into product-ready ar
 
 | metricType | rows |
 | --- | --- |
-| official_top_section_times | 163 |
-| official_section_results | 162 |
-| official_event_summary_race_stats | 41 |
-| official_leader_lap_summary | 40 |
+| official_top_section_times | 179 |
+| official_section_results | 178 |
+| official_event_summary_race_stats | 45 |
+| official_leader_lap_summary | 44 |
 | karting_championship_milestone | 2 |
 | karting_fast_time | 2 |
 | career_award | 1 |
@@ -80,16 +80,16 @@ This lane normalizes canonical non-lap context collections into product-ready ar
 ## Weather And Media
 
 - Weather/condition rows: 201.
-- Media index rows: 1024.
-- Source-evidence rows: 1280.
+- Media index rows: 1098.
+- Source-evidence rows: 1347.
 - Source-boundary gap rows: 10.
-- Derived metric rows: 413.
+- Derived metric rows: 453.
 
 ## Series Coverage
 
 | seriesName | seasonYears | totalContextRows | racecraftCount | penaltyCount | incidentCount | weatherCount | mediaCount |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| INDY NXT | 2024; 2025; 2026 | 1150 | 40 | 80 | 149 | 115 | 766 |
+| INDY NXT | 2024; 2025; 2026 | 1253 | 44 | 88 | 166 | 115 | 840 |
 | GB3 Championship | 2021; 2022 | 180 | 0 | 0 | 0 | 39 | 141 |
 | Formula Ford | 2020 | 61 | 0 | 4 | 0 | 46 | 11 |
 | F1600 Championship Series | 2019 | 39 | 0 | 2 | 0 | 0 | 37 |

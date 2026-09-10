@@ -31,6 +31,7 @@ import { gunzipSync } from 'node:zlib';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { officialQualifyingIndex, buildOfficialSectionLaps, gridClassifications, sharedGroups, sectionCars, seconds, CANCELLED_QUALIFYING } from './official-qualifying.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(__dirname, '../../..');
@@ -45,7 +46,7 @@ const CAREER_DATASET =
   process.env.BRYCECAST_CAREER_DATASET || path.join(repoRoot, 'data/career/career.dataset.json');
 
 const BRYCE_DRIVER_ID = 'driver_bryce_aron';
-const SCHEMA_VERSION = '1.0.0';
+const SCHEMA_VERSION = '1.1.0';
 
 /* Lap classification thresholds. A flying lap sits within FLYING_BAND of the
  * driver's best; a support lap (out-lap, in-lap, traffic-compromised) is slower
@@ -94,9 +95,7 @@ const loadPack = (p) =>
 /** Parse an official "M:SS.mmmm" / "SS.mmmm" lap-time string to seconds. */
 const parseLapTime = (str) => {
   if (str === null || str === undefined || str === '') return null;
-  const m = String(str).match(/(?:(\d+):)?(\d+(?:\.\d+)?)/);
-  if (!m) return null;
-  return (m[1] ? Number(m[1]) * 60 : 0) + Number(m[2]);
+  return seconds(str);
 };
 
 const round4 = (n) => (n === null || n === undefined ? null : Math.round(n * 10000) / 10000);
@@ -111,6 +110,7 @@ const buildCanonicalIndex = () => {
   const datasetSha = createHash('sha256').update(readFileSync(CAREER_DATASET)).digest('hex');
   const sessionById = new Map(dataset.sessions.map((s) => [s.id, s]));
   const eventById = new Map(dataset.events.map((e) => [e.id, e]));
+  const trackById = new Map(dataset.tracks.map((t) => [t.id, t]));
 
   // field size per qualifying session = distinct qR rows for that session
   const fieldSize = {};
@@ -150,7 +150,7 @@ const buildCanonicalIndex = () => {
     raceSessionsByEvent.get(s.eventId).push(s.id);
   }
 
-  return { dataset, datasetSha, byEvent, raceSessionsByEvent, eventById };
+  return { dataset, datasetSha, byEvent, raceSessionsByEvent, eventById, trackById };
 };
 
 /* ------------------------------------------------------------------ */
@@ -246,7 +246,7 @@ const buildRun = (records, bryceCar, timeField) => {
  *  no combined stage and the single on-track group IS the grid. On road/street
  *  a group is never presented as a grid — the grid comes only from a combined
  *  session that genuinely merged the groups. */
-const resolveRank = (canon, { eventId, year, trackId, isOval, bryceBestSeconds }) => {
+const resolveRank = (canon, { eventId, year, trackId, isOval, bryceBestSeconds, qualifyingSessionId }) => {
   let events = [];
   if (eventId && canon.byEvent.has(eventId)) {
     events = [eventId];
@@ -258,7 +258,7 @@ const resolveRank = (canon, { eventId, year, trackId, isOval, bryceBestSeconds }
   if (events.length === 0) return null;
 
   const groupRows = [];
-  for (const eid of events) for (const r of canon.byEvent.get(eid)) if (!r.isCombined) groupRows.push(r);
+  for (const eid of events) for (const r of canon.byEvent.get(eid)) if (!r.isCombined && (!qualifyingSessionId || r.sessionId === qualifyingSessionId)) groupRows.push(r);
   if (groupRows.length === 0) return null;
 
   let group;
@@ -293,6 +293,7 @@ const resolveRank = (canon, { eventId, year, trackId, isOval, bryceBestSeconds }
   const gridRow = combinedMergesField ? combined : ovalSingle ? group : null;
 
   return {
+    qualifyingSessionId: group.sessionId,
     eventId: group.eventId,
     onTrackGroupRank: group.position,
     groupFieldSize: group.fieldSize,
@@ -321,16 +322,19 @@ const assembleSession = (records, opts, canon) => {
   const built = buildRun(records, bryceCar, timeField);
   if (!built) return { excluded: true, reason: 'no_bryce_laps', id: meta.id, meta };
 
-  const trackId = VENUE_TO_TRACK[meta.venue] || null;
+  const trackId = canon.eventById.get(canonicalEventId)?.trackId || opts.trackId || VENUE_TO_TRACK[meta.venue] || null;
   /* Actual track format, resolved once and passed into rank resolution: the
    * group→grid fallback is permitted only where this is true. */
-  const isOval = /oval|superspeedway|milwaukee|iowa|world-wide|world wide/i.test(`${meta.venue} ${trackId}`);
-  const rank = resolveRank(canon, {
+  const track = canon.trackById.get(trackId);
+  if (!track) throw new Error(`${meta.id}: qualifying track cannot be resolved to canonical metadata`);
+  const isOval = track.trackType === 'oval';
+  const rank = opts.rankOverride ?? resolveRank(canon, {
     eventId: canonicalEventId,
     year: meta.year,
     trackId,
     isOval,
-    bryceBestSeconds: built.bryceBestSeconds
+    bryceBestSeconds: built.bryceBestSeconds,
+    qualifyingSessionId: opts.qualifyingSessionId
   });
   if (!rank) {
     return {
@@ -370,6 +374,7 @@ const assembleSession = (records, opts, canon) => {
        * builds qualifying only, a practice producer fills the same shape. */
       sessionType: 'qualifying',
       eventId: rank.eventId,
+      qualifyingSessionId: rank.qualifyingSessionId,
       raceSessionIds,
       isOval,
       // crosswalk gate provenance (2026 only; null for 2024-25)
@@ -437,6 +442,7 @@ const assembleSession = (records, opts, canon) => {
 
 const main = () => {
   const canon = buildCanonicalIndex();
+  const official = officialQualifyingIndex(canon.dataset);
 
   // 2026 crosswalk gate + identity
   const cwValidation = readJson(CROSSWALK_VALIDATION);
@@ -502,31 +508,60 @@ const main = () => {
     else covered.push(result.session);
   }
 
-  covered.sort((a, b) => (a.seasonYear - b.seasonYear) || a.date.localeCompare(b.date));
-
-  /* Doubleheader pairing post-pass. A covered Race-1 qualifying weekend also has
-   * a Race-2 race whose OWN qualifying we did not capture; the canonical dataset
-   * models Race 1 and Race 2 as sibling events at the same track/year. Carry the
-   * uncaptured sibling race session ids so the Race-2 page can show a quiet note
-   * (never reusing Race-1's ranks). Any sibling race that IS covered by another
-   * session is skipped — it needs no note. */
-  const coveredRaceIds = new Set(covered.flatMap((s) => s.raceSessionIds));
-  const raceLabelOf = (name) => (/race 2/i.test(name) ? 'Race 2' : /race 1/i.test(name) ? 'Race 1' : null);
+  const attachOfficial = (session, group) => {
+    session.sectionLaps = buildOfficialSectionLaps(official, group);
+    session.gridClassifications = gridClassifications(official, group, session.isOval);
+    session.raceSessionIds = session.gridClassifications.map((g) => g.raceSessionId);
+    session.sharedQualifyingSessionIds = sharedGroups(official, group).map((g) => g.session.id);
+    session.pairedUncapturedRaces = [];
+    session.qualifyingStatus = group.cancellation ? 'cancelled' : 'completed';
+    session.cancellation = group.cancellation ?? null;
+  };
   for (const s of covered) {
-    const myEvent = canon.eventById.get(s.eventId);
-    if (!myEvent) continue;
-    const siblings = [...canon.eventById.values()].filter(
-      (e) => e.trackId === myEvent.trackId && e.seasonYear === myEvent.seasonYear && e.id !== myEvent.id
-    );
-    const paired = [];
-    for (const sib of siblings) {
-      for (const rid of canon.raceSessionsByEvent.get(sib.id) || []) {
-        if (coveredRaceIds.has(rid)) continue;
-        paired.push({ raceSessionId: rid, raceLabel: raceLabelOf(sib.name), eventName: sib.name });
-      }
-    }
-    s.pairedUncapturedRaces = paired;
+    const group = official.groups.find((g) => g.session.id === s.qualifyingSessionId);
+    if (group) attachOfficial(s, group);
   }
+
+  // An official section report is a useful lap-level fallback when an observed
+  // high-frequency replay is absent. It remains a separate, labelled source.
+  const coveredOfficialIds = new Set(covered.flatMap((s) => s.sharedQualifyingSessionIds ?? [s.qualifyingSessionId]));
+  for (const group of official.groups) {
+    if (coveredOfficialIds.has(group.session.id)) continue;
+    const cars = sectionCars(group);
+    if (!cars.some((car) => car.driverId === BRYCE_DRIVER_ID && car.laps.length)) continue;
+    const dateValue = Date.parse(group.session.scheduledStart ?? group.event.eventStartDate);
+    const records = [{ record: 'session_meta', id: `official_${group.session.id}`, year: group.event.seasonYear,
+      date: Number.isFinite(dateValue) ? new Date(dateValue).toISOString().slice(0, 10) : group.event.eventStartDate,
+      venue: group.track?.name ?? group.event.name, sessionType: 'qualifying', sessionLabel: group.session.sessionName }];
+    for (const car of cars) for (const lap of car.laps) {
+      const lapSeconds = lap.sections.find((s) => s.name === 'Lap')?.timeSeconds;
+      if (lapSeconds > 0) records.push({ record: 'lap', car: car.carNumber, lap: lap.lapNumber, lapSeconds });
+    }
+    const result = assembleSession(records, {
+      source: 'official_section_results', sourceTier: 'official_section_results',
+      sourceTierLabel: 'Official qualifying section report', timeField: 'lap',
+      bryceCar: cars.find((car) => car.driverId === BRYCE_DRIVER_ID).carNumber,
+      canonicalEventId: group.event.id, qualifyingSessionId: group.session.id,
+      trackId: group.event.trackId, crosswalk: null,
+      rankOverride: group.cancellation ? {
+        qualifyingSessionId: group.session.id, eventId: group.event.id,
+        onTrackGroupRank: null, groupFieldSize: null, groupSegment: group.session.sessionName,
+        onTrackGapToPoleSeconds: null, officialBestLapSeconds: null, combinedGridPosition: null,
+        combinedFieldSize: null, combinedGapToPoleSeconds: null, doubleheaderRaceLabel: null,
+        attribution: 'cancelled', rankSource: 'official_cancellation_notice'
+      } : null
+    }, canon);
+    if (result.excluded) continue;
+    // A printed lap number establishes order within each driver, not a wall
+    // clock across the field. Do not manufacture track-evolution chronology.
+    result.session.sessionBestSteps = [];
+    result.session.sessionBestMoves = null;
+    result.session.timingChronology = 'driver_lap_order_only';
+    attachOfficial(result.session, group);
+    covered.push(result.session);
+    for (const id of result.session.sharedQualifyingSessionIds) coveredOfficialIds.add(id);
+  }
+  covered.sort((a, b) => (a.seasonYear - b.seasonYear) || a.date.localeCompare(b.date));
 
   /* Family-legible exclusion notes for the coverage drawer: every set-aside
    * session is named with the reason it was set aside. */
@@ -550,6 +585,20 @@ const main = () => {
     bySeasonSource[k] = (bySeasonSource[k] || 0) + 1;
   }
 
+  const raceCoverage = canon.dataset.results.filter((r) => r.driverId === BRYCE_DRIVER_ID)
+    .map((r) => canon.dataset.sessions.find((s) => s.id === r.sessionId))
+    .filter((s) => s?.sessionType === 'race' && canon.eventById.get(s.eventId)?.seriesId === 'series_indy_nxt')
+    .map((race) => {
+      const session = covered.find((s) => s.raceSessionIds.includes(race.id));
+      const cancellationId = Object.keys(CANCELLED_QUALIFYING).find((id) => official.sessions.get(id)?.eventId === race.eventId);
+      const cancellation = cancellationId ? CANCELLED_QUALIFYING[cancellationId] : null;
+      return { raceSessionId: race.id, qualifyingSessionId: session?.qualifyingSessionId ?? cancellationId ?? null,
+        status: cancellation ? 'cancelled' : session?.sectionLaps ? 'available' : session ? 'partial' : 'unavailable',
+        lapRunAvailable: Boolean(session), sectionTimesAvailable: Boolean(session?.sectionLaps),
+        note: cancellation?.note ?? (session?.sectionLaps ? 'Official qualifying section times available.' : 'Qualifying section report not available in the validated sources.'),
+        sourceUrl: cancellation?.url ?? session?.sectionLaps?.sourceRefs[0]?.path ?? null };
+    });
+
   const pack = {
     id: 'quali_lab_run_by_run',
     type: 'quali_lab',
@@ -558,18 +607,19 @@ const main = () => {
     question: 'How did his qualifying build?',
     sourceHash: canon.datasetSha,
     sourceTiers: [
+      { tier: 'official_section_results', label: 'Official qualifying section report', note: 'Published per-lap and timing-loop observations; no wall-clock replay inferred' },
       { tier: 'racetools_capture', label: 'RaceTools race-weekend capture', note: 'third-party capture of the timing feed; not official timing' },
       { tier: 'timing71_normalized', label: 'third-party normalized (Timing71)', note: 'third-party normalized display-state replay; 2026 rows gated by the validated identity crosswalk' }
     ],
     rankSource: 'canonical official qualifying classification (qualifyingResults)',
     method: [
-      'The run-by-run build (laps, best-lap staircase, session-best evolution) comes only from the semantic layer.',
+      'The run-by-run build uses observed semantic captures, with labelled official section-report fallback where a capture is absent. Section maps use official per-lap section reports.',
       'The final rank (on-track group rank + combined grid position) comes only from the canonical official qualifying classification.',
-      'Doubleheader qualifying is attributed to the race whose official best lap matches the captured best flying lap.',
+      'One physical doubleheader qualifying run links to each race’s own official grid classification: fastest and second-fastest lap on road/street courses.',
       '2026 sessions are gated on a validated Timing71 identity crosswalk (GO); non-GO sessions are excluded and named.'
     ],
     caveats: [
-      'Third-party derived analytics, never official timing; source tier is labelled on every session.',
+      'Source tier is labelled on every session; replay captures are third-party observations and section reports are official timing-loop facts.',
       'Lap times are the capture’s own values; session-start and red-flag crossing-clock artifacts are dropped from the run and counted.',
       'On-track group rank and combined grid position are two different denominators, each labelled where shown.'
     ],
@@ -577,7 +627,8 @@ const main = () => {
       coveredSessions: covered.length,
       excludedSessions: excluded.length,
       bySeasonSource,
-      exclusions
+      exclusions,
+      races: raceCoverage
     },
     sessions: covered
   };

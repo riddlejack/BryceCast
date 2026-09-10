@@ -14,20 +14,20 @@
   "causalAttribution": false,
   "claimStrength": "source_bounded_context_narrative_not_telemetry",
   "contextTypeCounts": {
-    "incident": 149,
-    "media": 1024,
-    "penalty": 86,
-    "racecraft": 40,
+    "incident": 166,
+    "media": 1098,
+    "penalty": 94,
+    "racecraft": 44,
     "weather": 201
   },
   "counts": {
-    "derivedMetricRows": 413,
+    "derivedMetricRows": 453,
     "gapRows": 10,
-    "mediaRows": 1024,
+    "mediaRows": 1098,
     "seriesCoverageRows": 8,
-    "sessionRollupRows": 420,
-    "sourceEvidenceRows": 1280,
-    "timelineRows": 1500,
+    "sessionRollupRows": 439,
+    "sourceEvidenceRows": 1347,
+    "timelineRows": 1603,
     "weatherRows": 201
   },
   "derivedMetricTypeCounts": {
@@ -35,10 +35,10 @@
     "karting_championship_milestone": 2,
     "karting_fast_time": 2,
     "karting_track_record": 1,
-    "official_event_summary_race_stats": 41,
-    "official_leader_lap_summary": 40,
-    "official_section_results": 162,
-    "official_top_section_times": 163,
+    "official_event_summary_race_stats": 45,
+    "official_leader_lap_summary": 44,
+    "official_section_results": 178,
+    "official_top_section_times": 179,
     "season_context_milestone": 1
   },
   "gapStatusCounts": {
@@ -46,19 +46,19 @@
     "partial": 2,
     "source_broken_preserved": 1
   },
-  "generatedAt": "2026-07-21T23:54:38Z",
+  "generatedAt": "2026-09-10T23:01:45Z",
   "ok": true,
   "publicPointPrediction": false,
   "sourceEvidenceTypeCounts": {
     "archived_official_page": 2,
-    "official_api": 285,
+    "official_api": 304,
     "official_article": 4,
     "official_html": 16,
     "official_image": 5,
     "official_json": 2,
     "official_page": 117,
-    "official_pdf": 764,
+    "official_pdf": 812,
     "weather_api": 85
   },
-  "sourceHash": "64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978"
+  "sourceHash": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd"
 }

@@ -244,15 +244,20 @@ export const createReplayOverlay = ({
   const controlState = () => {
     if (!enabled) return { enabled: false, active: false };
     if (!playback) {
+      let captureSessions = [];
+      let archiveError = null;
+      try { captureSessions = sessions(); }
+      catch (cause) { archiveError = cause instanceof Error ? cause.message : String(cause); }
       return {
         enabled: true,
         active: false,
+        ...(archiveError ? { archiveError } : {}),
         // Surfaced only when a live runner preempted playback, so the frontend
         // can render an honest "replay ended — a live session is on" state
         // rather than a stale, misleading replay chrome.
         ...(liveGuardTrip ? { stoppedByLive: true, stoppedByLiveAt: liveGuardTrip.at, reason: liveGuardTrip.reason } : {}),
         sqlitePath,
-        sessions: sessions()
+        sessions: captureSessions
       };
     }
     const elapsedRealMs = Math.max(0, now() - playback.startedAtRealMs);

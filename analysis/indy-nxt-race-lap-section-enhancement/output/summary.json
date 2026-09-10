@@ -7,32 +7,33 @@
   ],
   "claimStrength": "post_race_descriptive_only",
   "counts": {
-    "raceLapInflectionPoints": 170,
-    "raceLapMicrostates": 1558,
-    "raceLapSegments": 191,
-    "raceSectionFieldObservations": 429209,
-    "raceSectionLapObservations": 18104,
-    "raceSectionSessionSummaries": 40,
+    "raceLapInflectionPoints": 189,
+    "raceLapMicrostates": 1748,
+    "raceLapSegments": 220,
+    "raceSectionFieldObservations": 522687,
+    "raceSectionLapObservations": 22333,
+    "raceSectionSessionSummaries": 44,
     "roadAmericaRows": 4,
-    "upcomingVenueRows": 1
+    "upcomingVenueRows": 0
   },
   "derivedRemainderCoverage": {
-    "fullyTimedSessions": 11,
-    "genuineGapSessions": 29,
-    "note": "The derived remainder (lapTotal minus racing-line sections) is shipped only for sessions whose racing sections leave a genuine untimed stretch (>2% of the lap). Iowa and Milwaukee tile to 0.00% \u2014 their SF/FS frontstretch sections are racing line (rescued by the corrected is_pit_line rule) and render as measured spans, so no derived treatment applies there."
+    "fullyTimedSessions": 17,
+    "genuineGapSessions": 27,
+    "note": "The derived remainder (lapTotal minus racing-line sections) is shipped only for sessions whose racing sections leave a genuine untimed stretch (>2% of the lap). Sessions at or below that threshold are classified as fully timed and do not ship a derived row."
   },
-  "generatedAt": "2026-07-21T23:55:09Z",
+  "generatedAt": "2026-09-10T23:02:18Z",
   "ok": true,
   "publicPointPrediction": false,
   "sectionSourceStateCounts": {
-    "official_section_results+official_lap_chart+official_incident_caution_context": 17882,
-    "official_section_results_only": 222
+    "official_section_results+official_lap_chart+official_incident_caution_context": 22322,
+    "official_section_results_only": 11
   },
   "sourceDataset": "data/career/career.dataset.json",
-  "sourceHash": "64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978",
+  "sourceHash": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd",
   "upcomingVenue": {
-    "artifactSlug": "portland_international_raceway",
-    "asOfDate": "2026-07-19",
-    "trackName": "Portland International Raceway"
+    "artifactSlug": null,
+    "asOfDate": "2026-09-10",
+    "status": "season_complete",
+    "trackName": null
   }
 }

@@ -414,14 +414,14 @@ const idsAfter = eventsAfterMidnight.map((event) => event.id).sort().join('|');
 assert.equal(eventsBeforeMidnight.length, eventsAfterMidnight.length, 'upcoming window changed size across an ordinary midnight');
 assert.equal(idsBefore, idsAfter, 'upcoming window dropped or added an event across an ordinary midnight');
 
-const eventsOnPortlandDay = await loadUpcomingIndyNxtEvents({ now: new Date('2026-08-07T23:59:00.000Z') });
-const eventsDayAfterPortland = await loadUpcomingIndyNxtEvents({ now: new Date('2026-08-08T06:00:00.000Z') });
+const eventsOnPortlandDay = await loadUpcomingIndyNxtEvents({ now: new Date('2026-08-10T06:59:00.000Z') });
+const eventsDayAfterPortland = await loadUpcomingIndyNxtEvents({ now: new Date('2026-08-10T07:01:00.000Z') });
 assert.ok(
-  eventsOnPortlandDay.some((event) => event.eventEndDate === '2026-08-07'),
-  'an event must stay selectable through its own end day'
+  eventsOnPortlandDay.some((event) => event.officialEventId === '5547' && event.eventEndDate === '2026-08-09'),
+  'Portland remains selectable through race day in the venue timezone, after UTC midnight'
 );
 assert.ok(
-  !eventsDayAfterPortland.some((event) => event.eventEndDate === '2026-08-07'),
+  !eventsDayAfterPortland.some((event) => event.officialEventId === '5547'),
   'a finished event must drop out the day after its end date'
 );
 

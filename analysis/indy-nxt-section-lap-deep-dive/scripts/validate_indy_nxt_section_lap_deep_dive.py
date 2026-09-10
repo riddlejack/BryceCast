@@ -33,7 +33,7 @@ def resolve_run_date() -> date:
     if summary_path.exists():
         try:
             summary = json.loads(summary_path.read_text())
-            as_of = summary.get("upcomingVenue", {}).get("asOfDate")
+            as_of = (summary.get("upcomingVenue") or {}).get("asOfDate")
             if as_of:
                 return date.fromisoformat(str(as_of))
         except (OSError, ValueError, TypeError):
@@ -489,7 +489,7 @@ def validate_prep_context_csv(expected_hash: str, path: Path, track_name: str, l
     return rows
 
 
-def validate_strengths_and_transfer(expected_hash: str, next_track_name: str) -> None:
+def validate_strengths_and_transfer(expected_hash: str, next_track_name: str | None) -> None:
     strengths = read_csv(OUTPUT_DIR / "section_family_strengths.csv")
     require_fields(
         strengths,
@@ -524,15 +524,16 @@ def validate_strengths_and_transfer(expected_hash: str, next_track_name: str) ->
             fail(f"invalid transferClaimStrength {row['transferClaimStrength']!r}")
 
     validate_prep_context_csv(expected_hash, OUTPUT_DIR / "road_america_prep_section_context.csv", "Road America", "legacy prep")
-    validate_prep_context_csv(
-        expected_hash,
-        OUTPUT_DIR / f"{venue_slug(next_track_name)}_prep_section_context.csv",
-        next_track_name,
-        "next-venue prep",
-    )
+    if next_track_name:
+        validate_prep_context_csv(
+            expected_hash,
+            OUTPUT_DIR / f"next_venue_{venue_slug(next_track_name)}_prep_section_context.csv",
+            next_track_name,
+            "next-venue prep",
+        )
 
 
-def validate_json_and_report(expected_hash: str, next_track_name: str) -> None:
+def validate_json_and_report(expected_hash: str, next_track_name: str | None) -> None:
     summary = load_json(OUTPUT_DIR / "summary.json")
     if summary.get("ok") is not True:
         fail("summary.json must set ok=true")
@@ -542,15 +543,25 @@ def validate_json_and_report(expected_hash: str, next_track_name: str) -> None:
         fail("summary.json must avoid point-prediction claim strength")
     if summary.get("publicPointPrediction") not in (False, None):
         fail("summary.json must not expose public point predictions")
-    if summary.get("upcomingVenue", {}).get("trackName") != next_track_name:
+    upcoming_venue = summary.get("upcomingVenue") or {}
+    if upcoming_venue.get("trackName") != next_track_name:
         fail("summary.json upcomingVenue trackName does not match the next future INDY NXT event")
+    expected_status = "available" if next_track_name else "season_complete"
+    if upcoming_venue.get("status") != expected_status:
+        fail(f"summary.json upcomingVenue status must be {expected_status}")
+    expected_upcoming_rows = summary.get("counts", {}).get("upcomingVenuePrepRows")
+    if not next_track_name and expected_upcoming_rows != 0:
+        fail("summary.json must report zero upcoming venue prep rows after the season")
 
-    dynamic_pack_name = f"context-packs/{venue_slug(next_track_name).replace('_', '-')}-prep-context.json"
-    for name in [
+    pack_names = [
         "context-packs/indy-nxt-section-lap-context.json",
         "context-packs/road-america-prep-context.json",
-        dynamic_pack_name,
-    ]:
+    ]
+    dynamic_pack_name = None
+    if next_track_name:
+        dynamic_pack_name = f"context-packs/next-venue-{venue_slug(next_track_name).replace('_', '-')}-prep-context.json"
+        pack_names.append(dynamic_pack_name)
+    for name in pack_names:
         pack = load_json(OUTPUT_DIR / name)
         if pack.get("sourceHash") != expected_hash:
             fail(f"{name} sourceHash does not match canonical dataset")
@@ -562,7 +573,7 @@ def validate_json_and_report(expected_hash: str, next_track_name: str) -> None:
         hits = [phrase for phrase in forbidden if phrase in text]
         if hits:
             fail(f"{name} contains forbidden predictive claim text: {hits}")
-        if name == dynamic_pack_name:
+        if dynamic_pack_name and name == dynamic_pack_name:
             if pack.get("trackName") != next_track_name:
                 fail(f"{name} trackName does not match next venue")
             if pack.get("asOfDate") != RUN_DATE.isoformat():
@@ -596,10 +607,16 @@ def main() -> int:
         dataset = load_json(ROOT / "data/career/career.dataset.json")
         expected_hash = dataset_hash()
         next_track_name = next_upcoming_track_name(dataset)
-        if not next_track_name:
-            fail("canonical dataset has no future INDY NXT venue for next-venue prep context")
-        require_file(OUTPUT_DIR / f"{venue_slug(next_track_name)}_prep_section_context.csv")
-        require_file(OUTPUT_DIR / f"context-packs/{venue_slug(next_track_name).replace('_', '-')}-prep-context.json")
+        if next_track_name:
+            require_file(OUTPUT_DIR / f"next_venue_{venue_slug(next_track_name)}_prep_section_context.csv")
+            require_file(
+                OUTPUT_DIR
+                / f"context-packs/next-venue-{venue_slug(next_track_name).replace('_', '-')}-prep-context.json"
+            )
+        elif list(OUTPUT_DIR.glob("next_venue_*_prep_section_context.csv")) or list(
+            (OUTPUT_DIR / "context-packs").glob("next-venue-*-prep-context.json")
+        ):
+            fail("season-complete output must not retain a current next-venue prep artifact")
         source_counts = expected_source_counts(dataset)
         validate_observations(expected_hash, source_counts)
         validate_session_summary(expected_hash, source_counts)

@@ -25,13 +25,25 @@ const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
 const failures = [];
 const fail = (id, msg) => failures.push(`${id}: ${msg}`);
 
-const VALID_TIERS = new Set(['racetools_capture', 'timing71_normalized']);
+const VALID_TIERS = new Set(['racetools_capture', 'timing71_normalized', 'race_control_capture']);
 const TWO_SOURCE_FLOOR = 0.99;
+const MAX_INTERPOLATION_HOLD_SECONDS = 5;
 
 for (const s of manifest.sessions) {
   const id = s.canonicalSessionId;
   if (!VALID_TIERS.has(s.sourceTier)) fail(id, `unexpected sourceTier ${s.sourceTier}`);
   if (!s.tierLabel || /official/i.test(s.tierLabel)) fail(id, `tier label missing or reads as official: ${s.tierLabel}`);
+  if (!s.observationBasis) fail(id, 'observationBasis missing');
+  if (s.noGps !== true) fail(id, 'noGps contract missing');
+  if (s.sourceTier === 'race_control_capture' && s.replayInterpolated !== false) {
+    fail(id, 'direct Race Control capture incorrectly labelled interpolated');
+  }
+  if (s.sourceTier !== 'race_control_capture' && s.replayInterpolated !== true) {
+    fail(id, 'derived 1 Hz replay is not labelled interpolated');
+  }
+  if (s.replayInterpolated && s.interpolationCoverage?.maximumHoldSeconds !== MAX_INTERPOLATION_HOLD_SECONDS) {
+    fail(id, `interpolation hold bound is not ${MAX_INTERPOLATION_HOLD_SECONDS}s`);
+  }
   if (!s.watchable) continue; // excluded sessions are documented, not served
 
   const feedPath = join(feedsDir, `${id}.ndjson.gz`);
@@ -55,6 +67,21 @@ for (const s of manifest.sessions) {
   if (last.currentFlag !== 'CHECKERED') fail(id, `last frame is ${last.currentFlag}, not CHECKERED`);
   if (!rows.some((r) => r.raw.timing.timing_results.heartbeat.currentFlag === 'GREEN')) fail(id, 'no GREEN frame');
   if (!first.EventSessionID) fail(id, 'heartbeat missing EventSessionID');
+  if (!rows.every((row) => row.summary?.observationBasis && row.summary?.noGps === true)) {
+    fail(id, 'feed rows missing observation/noGps provenance');
+  }
+  if (s.replayInterpolated && !rows.every((row) => row.summary?.interpolationBoundSeconds === MAX_INTERPOLATION_HOLD_SECONDS)) {
+    fail(id, 'derived rows missing the interpolation hold bound');
+  }
+  for (const gap of s.interpolationCoverage?.sourceGaps ?? []) {
+    const forbiddenStart = Date.parse(gap.lastObservedAt) + MAX_INTERPOLATION_HOLD_SECONDS * 1000;
+    const forbiddenEnd = Date.parse(gap.nextObservedAt);
+    const invented = rows.some((row) => {
+      const at = Date.parse(row.checkedAt);
+      return at > forbiddenStart && at < forbiddenEnd;
+    });
+    if (invented) fail(id, `rows continue through withheld ${gap.sourceGapSeconds}s source gap`);
+  }
 
   const finalOrder = rows[rows.length - 1].raw.timing.timing_results.Item.map((r) => r.no);
   if (JSON.stringify(finalOrder) !== JSON.stringify(s.validation.finalOrder)) {
@@ -87,6 +114,8 @@ console.log(JSON.stringify({
   watchable,
   racetools: manifest.sessions.filter((s) => s.sourceTier === 'racetools_capture').length,
   timing71: manifest.sessions.filter((s) => s.sourceTier === 'timing71_normalized').length,
+  raceControlCapture: manifest.sessions.filter((s) => s.sourceTier === 'race_control_capture').length,
+  withheldSourceGapSeconds: manifest.sessions.reduce((sum, s) => sum + (s.interpolationCoverage?.withheldSeconds ?? 0), 0),
   twoSourceChecked: manifest.sessions.filter((s) => s.validation.twoSource).length,
   gate: 'green'
 }, null, 2));

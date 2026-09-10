@@ -40,3 +40,7 @@ session_indy_nxt_2026_6754,2026 Grand Prix at Road America Race 2 R2,2,3,0,0,dis
 session_indy_nxt_2026_6761,2026 Grand Prix at Mid-Ohio Race 1 R1,0,4,0,0,,caution:2; caution_off_course:1; mechanical:1,Nolan Allaer,,,,official_results_pdf_summaries
 session_indy_nxt_2026_6760,2026 Grand Prix at Mid-Ohio Race 2 R2,0,0,0,0,,,,,,,official_results_pdf_summaries
 session_indy_nxt_2026_6755,2026 Music City Grand Prix,0,5,0,0,,contact:3; caution_contact:1; caution_debris:1,Jordan Missig,,,,official_results_pdf_summaries
+session_indy_nxt_2026_6764,2026 Grand Prix of Portland,4,1,0,0,drive_through:2; yield_positions:2,caution_contact:1,Carson Etter,Niels Koolen,,,official_results_pdf_summaries
+session_indy_nxt_2026_6757,2026 INDY NXT by Firestone at Milwaukee Mile,0,7,0,0,,contact:3; caution_contact:2; caution:2,Josh Pierson,,,,official_results_pdf_summaries
+session_indy_nxt_2026_6759,2026 Grand Prix of Monterey Race 1 R1,3,6,0,0,drive_through:2; pending:1,contact:3; caution_contact:2; caution_off_course:1,Nicholas Monteiro,Myles Rowe,,,official_results_pdf_summaries
+session_indy_nxt_2026_6758,2026 Grand Prix of Monterey Race 2 R2,1,3,0,0,stop_and_hold:1,contact:2; caution_contact:1,Niels Koolen,Max Garcia,,,official_results_pdf_summaries

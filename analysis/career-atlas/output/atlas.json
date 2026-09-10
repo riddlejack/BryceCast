@@ -65,7 +65,7 @@
     "sourceSha256": "9e0729ee253ca7d7a5c4ae9395fb1902264c5377c52e224d13dd85010e2835d9",
     "sourceUrl": "https://github.com/nvkelso/natural-earth-vector/blob/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_land.geojson"
   },
-  "raceCount": 146,
+  "raceCount": 150,
   "schemaVersion": "brycecast.careerAtlas.v3",
   "sourceRefs": [
     {
@@ -89,19 +89,19 @@
       "sha256": "878cf8ba950686b43399cead48f7a66699121404ba6fb9546a4c6f261b5e6f10"
     },
     {
-      "note": "A2 personally attributable ledger covering all 146 canonical race rows.",
+      "note": "A2 personally attributable ledger covering every canonical Bryce race row.",
       "path": "analysis/career-life-stats/output/tables/miles_raced.csv",
-      "sha256": "aa958b1af6a94752643766307af7618a522df3aa4e6b3e9f996ea58df70ae991"
+      "sha256": "32703bc453ba7c45b18e60a36b501eca1b3ecb02c57f22e2fa95422ff591d377"
     },
     {
       "note": "A2 metric-grain and confidence-class contracts.",
       "path": "analysis/career-life-stats/RESEARCH.md",
-      "sha256": "0268ca9a22a0213273448a5e21b3025297cdf8a969e428b7fbef2969182492d4"
+      "sha256": "ca910b43fc128940a7a97ddf87c6ed2dcb15badf5802fb9a7f14d4819a1a9e98"
     },
     {
       "note": "Canonical race identity, series, date, and classified finish fields.",
       "path": "data/career/career.dataset.json",
-      "sha256": "64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978"
+      "sha256": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd"
     }
   ],
   "venueCount": 34,
@@ -1827,52 +1827,52 @@
         "bestFinish": 3,
         "firstRaceDate": "2024-08-23",
         "firstYear": 2024,
-        "lastYear": 2025,
+        "lastYear": 2026,
         "latestRace": {
-          "eventId": "event_indy_nxt_2025_5491",
-          "raceDate": "2025-08-08",
-          "raceHref": "/races/session_indy_nxt_2025_6449",
+          "eventId": "event_indy_nxt_2026_5547",
+          "raceDate": "2026-08-07",
+          "raceHref": "/races/session_indy_nxt_2026_6764",
           "raceLabel": "Grand Prix of Portland \u00b7 Race",
-          "sessionId": "session_indy_nxt_2025_6449"
+          "sessionId": "session_indy_nxt_2026_6764"
         },
-        "latestRaceDate": "2025-08-08",
-        "raceCount": 2,
+        "latestRaceDate": "2026-08-07",
+        "raceCount": 3,
         "seriesId": "series_indy_nxt",
         "seriesName": "INDY NXT",
         "seriesShort": "INDY NXT"
       },
       "firstYear": 2024,
-      "lastYear": 2025,
+      "lastYear": 2026,
       "lat": 45.5939,
       "latestRace": {
-        "eventId": "event_indy_nxt_2025_5491",
-        "raceDate": "2025-08-08",
-        "raceHref": "/races/session_indy_nxt_2025_6449",
+        "eventId": "event_indy_nxt_2026_5547",
+        "raceDate": "2026-08-07",
+        "raceHref": "/races/session_indy_nxt_2026_6764",
         "raceLabel": "Grand Prix of Portland \u00b7 Race",
-        "sessionId": "session_indy_nxt_2025_6449"
+        "sessionId": "session_indy_nxt_2026_6764"
       },
       "lon": -122.6946,
       "projected": {
         "x": 341.735,
         "y": 75.245
       },
-      "raceCount": 2,
+      "raceCount": 3,
       "region": "North America",
       "seriesSpans": [
         {
           "bestFinish": 3,
           "firstRaceDate": "2024-08-23",
           "firstYear": 2024,
-          "lastYear": 2025,
+          "lastYear": 2026,
           "latestRace": {
-            "eventId": "event_indy_nxt_2025_5491",
-            "raceDate": "2025-08-08",
-            "raceHref": "/races/session_indy_nxt_2025_6449",
+            "eventId": "event_indy_nxt_2026_5547",
+            "raceDate": "2026-08-07",
+            "raceHref": "/races/session_indy_nxt_2026_6764",
             "raceLabel": "Grand Prix of Portland \u00b7 Race",
-            "sessionId": "session_indy_nxt_2025_6449"
+            "sessionId": "session_indy_nxt_2026_6764"
           },
-          "latestRaceDate": "2025-08-08",
-          "raceCount": 2,
+          "latestRaceDate": "2026-08-07",
+          "raceCount": 3,
           "seriesId": "series_indy_nxt",
           "seriesName": "INDY NXT",
           "seriesShort": "INDY NXT"
@@ -2365,52 +2365,52 @@
         "bestFinish": 4,
         "firstRaceDate": "2024-08-30",
         "firstYear": 2024,
-        "lastYear": 2025,
+        "lastYear": 2026,
         "latestRace": {
-          "eventId": "event_indy_nxt_2025_5490",
-          "raceDate": "2025-08-23",
-          "raceHref": "/races/session_indy_nxt_2025_6448",
-          "raceLabel": "INDY NXT by Firestone at the Milwaukee Mile \u00b7 Race",
-          "sessionId": "session_indy_nxt_2025_6448"
+          "eventId": "event_indy_nxt_2026_5540",
+          "raceDate": "2026-08-29",
+          "raceHref": "/races/session_indy_nxt_2026_6757",
+          "raceLabel": "INDY NXT by Firestone at Milwaukee Mile \u00b7 Race",
+          "sessionId": "session_indy_nxt_2026_6757"
         },
-        "latestRaceDate": "2025-08-23",
-        "raceCount": 2,
+        "latestRaceDate": "2026-08-29",
+        "raceCount": 3,
         "seriesId": "series_indy_nxt",
         "seriesName": "INDY NXT",
         "seriesShort": "INDY NXT"
       },
       "firstYear": 2024,
-      "lastYear": 2025,
+      "lastYear": 2026,
       "lat": 43.0206,
       "latestRace": {
-        "eventId": "event_indy_nxt_2025_5490",
-        "raceDate": "2025-08-23",
-        "raceHref": "/races/session_indy_nxt_2025_6448",
-        "raceLabel": "INDY NXT by Firestone at the Milwaukee Mile \u00b7 Race",
-        "sessionId": "session_indy_nxt_2025_6448"
+        "eventId": "event_indy_nxt_2026_5540",
+        "raceDate": "2026-08-29",
+        "raceHref": "/races/session_indy_nxt_2026_6757",
+        "raceLabel": "INDY NXT by Firestone at Milwaukee Mile \u00b7 Race",
+        "sessionId": "session_indy_nxt_2026_6757"
       },
       "lon": -88.0105,
       "projected": {
         "x": 490.472,
         "y": 86.275
       },
-      "raceCount": 2,
+      "raceCount": 3,
       "region": "North America",
       "seriesSpans": [
         {
           "bestFinish": 4,
           "firstRaceDate": "2024-08-30",
           "firstYear": 2024,
-          "lastYear": 2025,
+          "lastYear": 2026,
           "latestRace": {
-            "eventId": "event_indy_nxt_2025_5490",
-            "raceDate": "2025-08-23",
-            "raceHref": "/races/session_indy_nxt_2025_6448",
-            "raceLabel": "INDY NXT by Firestone at the Milwaukee Mile \u00b7 Race",
-            "sessionId": "session_indy_nxt_2025_6448"
+            "eventId": "event_indy_nxt_2026_5540",
+            "raceDate": "2026-08-29",
+            "raceHref": "/races/session_indy_nxt_2026_6757",
+            "raceLabel": "INDY NXT by Firestone at Milwaukee Mile \u00b7 Race",
+            "sessionId": "session_indy_nxt_2026_6757"
           },
-          "latestRaceDate": "2025-08-23",
-          "raceCount": 2,
+          "latestRaceDate": "2026-08-29",
+          "raceCount": 3,
           "seriesId": "series_indy_nxt",
           "seriesName": "INDY NXT",
           "seriesShort": "INDY NXT"
@@ -2587,52 +2587,52 @@
         "bestFinish": 3,
         "firstRaceDate": "2024-06-21",
         "firstYear": 2024,
-        "lastYear": 2025,
+        "lastYear": 2026,
         "latestRace": {
-          "eventId": "event_indy_nxt_2025_5492",
-          "raceDate": "2025-07-26",
-          "raceHref": "/races/session_indy_nxt_2025_6450",
+          "eventId": "event_indy_nxt_2026_5541",
+          "raceDate": "2026-09-05",
+          "raceHref": "/races/session_indy_nxt_2026_6758",
           "raceLabel": "Grand Prix of Monterey Race 2 \u00b7 Race",
-          "sessionId": "session_indy_nxt_2025_6450"
+          "sessionId": "session_indy_nxt_2026_6758"
         },
-        "latestRaceDate": "2025-07-26",
-        "raceCount": 4,
+        "latestRaceDate": "2026-09-05",
+        "raceCount": 6,
         "seriesId": "series_indy_nxt",
         "seriesName": "INDY NXT",
         "seriesShort": "INDY NXT"
       },
       "firstYear": 2024,
-      "lastYear": 2025,
+      "lastYear": 2026,
       "lat": 36.5843,
       "latestRace": {
-        "eventId": "event_indy_nxt_2025_5492",
-        "raceDate": "2025-07-26",
-        "raceHref": "/races/session_indy_nxt_2025_6450",
+        "eventId": "event_indy_nxt_2026_5541",
+        "raceDate": "2026-09-05",
+        "raceHref": "/races/session_indy_nxt_2026_6758",
         "raceLabel": "Grand Prix of Monterey Race 2 \u00b7 Race",
-        "sessionId": "session_indy_nxt_2025_6450"
+        "sessionId": "session_indy_nxt_2026_6758"
       },
       "lon": -121.7539,
       "projected": {
         "x": 345.769,
         "y": 113.865
       },
-      "raceCount": 4,
+      "raceCount": 6,
       "region": "North America",
       "seriesSpans": [
         {
           "bestFinish": 3,
           "firstRaceDate": "2024-06-21",
           "firstYear": 2024,
-          "lastYear": 2025,
+          "lastYear": 2026,
           "latestRace": {
-            "eventId": "event_indy_nxt_2025_5492",
-            "raceDate": "2025-07-26",
-            "raceHref": "/races/session_indy_nxt_2025_6450",
+            "eventId": "event_indy_nxt_2026_5541",
+            "raceDate": "2026-09-05",
+            "raceHref": "/races/session_indy_nxt_2026_6758",
             "raceLabel": "Grand Prix of Monterey Race 2 \u00b7 Race",
-            "sessionId": "session_indy_nxt_2025_6450"
+            "sessionId": "session_indy_nxt_2026_6758"
           },
-          "latestRaceDate": "2025-07-26",
-          "raceCount": 4,
+          "latestRaceDate": "2026-09-05",
+          "raceCount": 6,
           "seriesId": "series_indy_nxt",
           "seriesName": "INDY NXT",
           "seriesShort": "INDY NXT"

@@ -35,7 +35,7 @@ def resolve_run_date() -> date:
     if summary_path.exists():
         try:
             summary = json.loads(summary_path.read_text())
-            as_of = summary.get("upcomingVenue", {}).get("asOfDate")
+            as_of = (summary.get("upcomingVenue") or {}).get("asOfDate")
             if as_of:
                 return date.fromisoformat(str(as_of))
         except (OSError, ValueError, TypeError):
@@ -61,6 +61,7 @@ REQUIRED_FILES = [
 ]
 
 DERIVED_SECTION_NAME = "Untimed remainder"
+GENUINE_GAP_MIN_SHARE = 0.02
 
 
 def comparable_rank(field_times: list[float], value: float) -> tuple[int | None, float | None]:
@@ -554,14 +555,18 @@ def validate_field_table_and_derived(expected_hash: str) -> None:
     sessions = distribution.get("sessions", {})
     if not sessions:
         fail("race_section_field_distribution.json has no sessions")
-    nashville = [entry for entry in sessions.values() if "Nashville" in (entry.get("trackName") or "")]
-    if not nashville or any(entry.get("derivedCoverage") != "genuine_gap" for entry in nashville):
-        fail("Nashville must be a genuine untimed gap in the derived-coverage gate")
-    for label in ("Iowa", "Milwaukee"):
-        matches = [entry for entry in sessions.values() if label in (entry.get("trackName") or "")]
-        if matches and any(entry.get("derivedCoverage") != "fully_timed" for entry in matches):
-            fail(f"{label} is fully tiled by racing sections and must not ship a derived remainder")
     for session_id, entry in sessions.items():
+        remainder_share = entry.get("medianRemainderShareOfLap")
+        if not isinstance(remainder_share, (int, float)) or remainder_share < 0:
+            fail(f"distribution session has invalid median remainder share: {session_id}")
+        expected_coverage = "genuine_gap" if remainder_share > GENUINE_GAP_MIN_SHARE else "fully_timed"
+        if entry.get("derivedCoverage") != expected_coverage:
+            fail(
+                f"distribution coverage gate disagrees with remainder share at {session_id}: "
+                f"expected {expected_coverage}, got {entry.get('derivedCoverage')}"
+            )
+        if expected_coverage == "fully_timed" and entry.get("derivedRemainder"):
+            fail(f"fully timed session must not ship derived remainder rows: {session_id}")
         for row in entry.get("derivedRemainder", []):
             table = remainder_times.get((session_id, int(row["lapNumber"])))
             if table is None:
@@ -572,7 +577,7 @@ def validate_field_table_and_derived(expected_hash: str) -> None:
                 fail(f"distribution derived remainder negative: {session_id} L{row['lapNumber']}")
 
 
-def validate_context_and_report(expected_hash: str, next_track_name: str) -> None:
+def validate_context_and_report(expected_hash: str, next_track_name: str | None) -> None:
     summary = load_json(OUTPUT_DIR / "summary.json")
     if summary.get("ok") is not True:
         fail("summary.json must set ok=true")
@@ -580,22 +585,32 @@ def validate_context_and_report(expected_hash: str, next_track_name: str) -> Non
         fail("summary.json sourceHash does not match canonical dataset")
     if summary.get("claimStrength") != "post_race_descriptive_only":
         fail("summary.json must be post_race_descriptive_only")
-    if summary.get("upcomingVenue", {}).get("trackName") != next_track_name:
+    upcoming_venue = summary.get("upcomingVenue") or {}
+    if upcoming_venue.get("trackName") != next_track_name:
         fail("summary.json upcomingVenue trackName does not match the next future INDY NXT event")
+    expected_status = "available" if next_track_name else "season_complete"
+    if upcoming_venue.get("status") != expected_status:
+        fail(f"summary.json upcomingVenue status must be {expected_status}")
+    if not next_track_name and summary.get("counts", {}).get("upcomingVenueRows") != 0:
+        fail("summary.json must report zero upcoming venue race rows after the season")
     validate_race_context_csv(expected_hash, OUTPUT_DIR / "road_america_race_lap_section_context.csv", "Road America", "legacy race")
-    validate_race_context_csv(
-        expected_hash,
-        OUTPUT_DIR / f"{venue_slug(next_track_name)}_race_lap_section_context.csv",
-        next_track_name,
-        "next-venue race",
-    )
+    if next_track_name:
+        validate_race_context_csv(
+            expected_hash,
+            OUTPUT_DIR / f"next_venue_{venue_slug(next_track_name)}_race_lap_section_context.csv",
+            next_track_name,
+            "next-venue race",
+        )
 
-    dynamic_pack_name = f"context-packs/{venue_slug(next_track_name).replace('_', '-')}-race-context.json"
-    for name in [
+    pack_names = [
         "context-packs/indy-nxt-race-lap-section-context.json",
         "context-packs/road-america-race-context.json",
-        dynamic_pack_name,
-    ]:
+    ]
+    dynamic_pack_name = None
+    if next_track_name:
+        dynamic_pack_name = f"context-packs/next-venue-{venue_slug(next_track_name).replace('_', '-')}-race-context.json"
+        pack_names.append(dynamic_pack_name)
+    for name in pack_names:
         pack = load_json(OUTPUT_DIR / name)
         if pack.get("sourceHash") != expected_hash:
             fail(f"{name} sourceHash does not match canonical dataset")
@@ -607,7 +622,7 @@ def validate_context_and_report(expected_hash: str, next_track_name: str) -> Non
         hits = [phrase for phrase in forbidden if phrase in text]
         if hits:
             fail(f"{name} contains forbidden predictive claim text: {hits}")
-        if name == dynamic_pack_name:
+        if dynamic_pack_name and name == dynamic_pack_name:
             if pack.get("trackName") != next_track_name:
                 fail(f"{name} trackName does not match next venue")
             if pack.get("asOfDate") != RUN_DATE.isoformat():
@@ -641,10 +656,16 @@ def main() -> int:
         dataset = load_json(ROOT / "data/career/career.dataset.json")
         expected_hash = dataset_hash()
         next_track_name = next_upcoming_track_name(dataset)
-        if not next_track_name:
-            fail("canonical dataset has no future INDY NXT venue for next-venue race context")
-        require_file(OUTPUT_DIR / f"{venue_slug(next_track_name)}_race_lap_section_context.csv")
-        require_file(OUTPUT_DIR / f"context-packs/{venue_slug(next_track_name).replace('_', '-')}-race-context.json")
+        if next_track_name:
+            require_file(OUTPUT_DIR / f"next_venue_{venue_slug(next_track_name)}_race_lap_section_context.csv")
+            require_file(
+                OUTPUT_DIR
+                / f"context-packs/next-venue-{venue_slug(next_track_name).replace('_', '-')}-race-context.json"
+            )
+        elif list(OUTPUT_DIR.glob("next_venue_*_race_lap_section_context.csv")) or list(
+            (OUTPUT_DIR / "context-packs").glob("next-venue-*-race-context.json")
+        ):
+            fail("season-complete output must not retain a current next-venue race artifact")
         counts = expected_counts(dataset)
         validate_microstates(expected_hash, counts)
         validate_segments_and_inflections(expected_hash, counts)

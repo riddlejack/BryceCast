@@ -368,6 +368,58 @@ async function testIdleDiscoversUnscheduledLiveNxtSession() {
   await rm(root, { recursive: true, force: true });
 }
 
+async function testCooldownPromotesBackToBackQualifyingGroup() {
+  const root = await makeTempRoot();
+  let nowMs = Date.parse('2026-09-05T19:11:20.000Z');
+  let timingCalls = 0;
+  const fetchEndpoint = async (endpoint) => {
+    const fetchedAt = iso(nowMs);
+    if (endpoint.id === 'schedule_nxt') return resultFor(endpoint, schedulePayload(nowMs + 60 * 60 * 1000), fetchedAt);
+    if (endpoint.id === 'trackactivity_nxt') return resultFor(endpoint, trackActivityPayload(nowMs + 60 * 60 * 1000), fetchedAt);
+    if (endpoint.id === 'drivers_nxt') return resultFor(endpoint, driversPayload, fetchedAt);
+    if (endpoint.id === 'config') return resultFor(endpoint, configPayload, fetchedAt);
+    if (endpoint.id !== 'timing') return failureFor(endpoint, `Unexpected endpoint ${endpoint.id}`, fetchedAt);
+    timingCalls += 1;
+    const groupOne = baseHeartbeat({
+      eventName: 'Grand Prix of Monterey Doubleheader',
+      EventID: '5542',
+      EventSessionID: '6949',
+      SessionName: 'Qualifications - Group 1',
+      SessionType: 'Q',
+      totalLaps: '',
+    });
+    const heartbeat = timingCalls === 1
+      ? groupOne
+      : timingCalls === 2
+        ? {...groupOne, currentFlag: 'CHECKERED', SessionStatus: 'CHECKERED'}
+        : {...groupOne, EventSessionID: '6950', SessionName: 'Qualifications - Group 2'};
+    return resultFor(endpoint, {timing_results: {heartbeat, Item: [bryceRow()]}}, fetchedAt);
+  };
+  const runner = createLiveRunner({
+    root,
+    fetchEndpoint,
+    processBudgetProvider: async () => ({checkedAt: iso(nowMs), critical: false}),
+    nowMs: () => nowMs,
+    sleep: async (ms) => { nowMs += ms; },
+    idlePollMs: 1,
+    livePollMs: 1,
+    cooldownPollMs: 15_000,
+    cooldownMs: 10 * 60 * 1000,
+    enrichmentPollMs: 1,
+    pid: 4545,
+  });
+
+  await runner.run({maxIterations: 3});
+  const status = await readJson(join(root, 'data/live/live-runner-status.json'));
+  assert.equal(status.phase, 'LIVE', 'new live EventSessionID must interrupt cooldown immediately');
+  assert.equal(status.currentSession.eventId, '5542', 'shared doubleheader event ID remains valid');
+  assert.equal(status.currentSession.eventSessionId, '6950', 'Group 2 becomes the active session');
+  assert.equal(status.rowCounts.snapshots, 3, 'the first Group 2 frame is persisted during the transition');
+  const events = (await readFile(join(root, 'data/live/live-runner-events.jsonl'), 'utf8')).trim().split('\n').map(JSON.parse);
+  assert(events.some((event) => event.reason === 'new_live_event_session_during_cooldown'));
+  await rm(root, {recursive: true, force: true});
+}
+
 async function testLockTakeover() {
   const root = await makeTempRoot();
   const lockPath = join(root, 'data/live/live-runner.lock');
@@ -403,6 +455,7 @@ async function testLockTakeover() {
 
 await testPhaseMachineStatusRawAndIdentityGuard();
 await testIdleDiscoversUnscheduledLiveNxtSession();
+await testCooldownPromotesBackToBackQualifyingGroup();
 await testLockTakeover();
 
-console.log(JSON.stringify({ ok: true, assertions: 43 }, null, 2));
+console.log(JSON.stringify({ ok: true, assertions: 48 }, null, 2));

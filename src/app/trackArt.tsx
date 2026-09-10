@@ -11,6 +11,9 @@ export interface TrackSectionsLayer {
   resolved: ResolvedHeatSection[];
   /** Persistent official labels beside each span (card: true, hero: false). */
   showLabels?: boolean;
+  /** Short scope phrase used in tooltips and accessible copy. Race-section
+   * maps keep the default; qualifying maps name the selected qualifying lap. */
+  contextLabel?: string;
 }
 
 interface Pt {
@@ -173,7 +176,7 @@ export const TrackArt = ({
         x: anchorPt.x * scale + offset,
         y: anchorPt.y * scale,
         title: 'The rest of the lap, together',
-        detail: `${ordinal(pct)} percentile this race`,
+        detail: `${ordinal(pct)} percentile ${sections?.contextLabel ?? 'this race'}`,
         action: section.combined
           ? 'combined untimed stretches · derived from lap time'
           : 'derived from lap time minus timed sections'
@@ -184,7 +187,7 @@ export const TrackArt = ({
       x: anchorPt.x * scale + offset,
       y: anchorPt.y * scale,
       title: section.label,
-      detail: `beat ${pct}% of the field this race`
+      detail: `beat ${pct}% of the field ${sections?.contextLabel ?? 'this race'}`
     });
   };
 
@@ -389,7 +392,7 @@ export const TrackArt = ({
           role="img"
           aria-label={
             hasHeat
-              ? `${outline.name} track outline, sections shaded by Bryce's pace`
+              ? `${outline.name} track outline, sections shaded by Bryce's pace ${sections?.contextLabel ?? 'this race'}`
               : `${outline.name} track outline`
           }
           style={{ overflow: 'visible', display: 'block' }}

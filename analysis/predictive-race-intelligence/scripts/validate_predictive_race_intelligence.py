@@ -22,6 +22,25 @@ DATASET_PATH = ROOT / "data/career/career.dataset.json"
 DEEP_TABLES = ROOT / "analysis/indy-nxt-discovery/output/deep_dive/tables"
 CAREER_TABLES = ROOT / "analysis/career-parity/output/tables"
 SECTION_RACE_ALLOWED_HOLDOUTS = {"session_indy_nxt_2024_6325"}
+FUTURE_WEEKEND_PREP_FIELDS = {
+    "eventId",
+    "eventName",
+    "eventStartDate",
+    "trackName",
+    "trackType",
+    "trackLengthMi",
+    "cornerCount",
+    "bryceIndyNxtRacesAtTrack",
+    "sameTrackAvgFinish",
+    "sameTrackAvgGain",
+    "sameTrackTop10Rate",
+    "trackTypeAvgFinish",
+    "trackTypeAvgGain",
+    "trackTypeTop10Rate",
+    "weatherState",
+    "prepUse",
+    "sourceState",
+}
 UPSTREAM_ANALYTICS_SCRIPTS = [
     ROOT / "analysis/indy-nxt-discovery/analyze_indy_nxt.py",
     ROOT / "analysis/indy-nxt-discovery/deep_indy_nxt_analytics.py",
@@ -69,6 +88,11 @@ def load_json(path: Path) -> Any:
 def read_csv(path: Path) -> list[dict[str, str]]:
     with path.open(newline="") as f:
         return list(csv.DictReader(f))
+
+
+def csv_fieldnames(path: Path) -> set[str]:
+    with path.open(newline="") as f:
+        return set(csv.DictReader(f).fieldnames or [])
 
 
 def source_hash(path: Path) -> str:
@@ -230,7 +254,11 @@ def validate_upstream_coverage() -> int:
         csv_id_set(DEEP_TABLES / "section_results_deep_by_race.csv", "sessionId"),
         indy_sessions - SECTION_RACE_ALLOWED_HOLDOUTS,
     )
-    require_exact_ids("future_weekend_prep_inputs", csv_id_set(DEEP_TABLES / "future_weekend_prep_inputs.csv", "eventId"), future_events)
+    future_path = DEEP_TABLES / "future_weekend_prep_inputs.csv"
+    missing_future_fields = FUTURE_WEEKEND_PREP_FIELDS - csv_fieldnames(future_path)
+    if missing_future_fields:
+        fail(f"future_weekend_prep_inputs schema missing fields: {sorted(missing_future_fields)}")
+    require_exact_ids("future_weekend_prep_inputs", csv_id_set(future_path, "eventId"), future_events)
     require_exact_ids("career_result_conversion", csv_id_set(CAREER_TABLES / "career_result_conversion.csv", "sessionId"), finished_race_sessions)
     return 8
 
@@ -444,9 +472,15 @@ def validate_context_packs() -> None:
         "career_lab": 1,
         "live_race_day": 1,
     }
+    manifest_counts = manifest.get("packCounts")
+    if not isinstance(manifest_counts, dict):
+        fail("context-pack-manifest packCounts must be an object")
     for pack_type, count in expected.items():
-        if by_type.get(pack_type) != count:
-            fail(f"context packs for {pack_type}: expected {count}, got {by_type.get(pack_type)}")
+        observed_count = by_type.get(pack_type, 0)
+        if observed_count != count:
+            fail(f"context packs for {pack_type}: expected {count}, got {observed_count}")
+        if manifest_counts.get(pack_type) != count:
+            fail(f"context-pack-manifest packCounts.{pack_type}: expected {count}, got {manifest_counts.get(pack_type)}")
     require_exact_ids(
         "context-pack-manifest upcoming_event eventIds",
         {str(pack.get("eventId") or "") for pack in parsed_packs if pack.get("type") == "upcoming_event"},

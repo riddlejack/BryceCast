@@ -9,8 +9,10 @@ import { runnerReportsLiveSession } from './replay-overlay.mjs';
 // the sqlite replay overlay (available / start / stop / status / currentRecord)
 // but reads pre-reduced gzipped NDJSON feeds instead of the runner archive, and
 // never touches the live sqlite. Every session it lists is source-tiered
-// ("RaceTools race-weekend capture" / "third-party normalized (Timing71)") so the
-// Live page's trust rail can never confuse a lake replay with our own capture.
+// ("RaceTools race-weekend capture" / "third-party normalized (Timing71)" /
+// "Race Control capture") so the Live page's trust rail can never confuse a
+// lake replay with a live feed. Source gaps withheld by the reducer stay gaps at
+// request time: this adapter never carries an old row across one indefinitely.
 
 const SPEEDS = new Set([1, 2, 4, 16]);
 const MIN_WATCHABLE_SAMPLES = 120; // mirrors replay-overlay.mjs
@@ -36,7 +38,8 @@ export const createLakeReplayFeeds = ({
   manifestPath = process.env.BRYCECAST_REPLAY_FEEDS_MANIFEST ?? defaultManifestPath,
   runnerStatusPath,
   now = () => Date.now(),
-  guardTtlMs = Number(process.env.BRYCECAST_REPLAY_GUARD_TTL_MS ?? 1000)
+  guardTtlMs = Number(process.env.BRYCECAST_REPLAY_GUARD_TTL_MS ?? 1000),
+  rowsCacheMaxSessions = Number(process.env.BRYCECAST_REPLAY_ROWS_CACHE_SESSIONS ?? 3)
 } = {}) => {
   const feedsDir = manifestPath ? join(dirname(manifestPath), 'feeds') : null;
   let manifest = null;
@@ -104,6 +107,10 @@ export const createLakeReplayFeeds = ({
       watchable: Boolean(s.watchable),
       sourceTier: s.sourceTier,
       tierLabel: s.tierLabel,
+      observationBasis: s.observationBasis ?? null,
+      replayInterpolated: Boolean(s.replayInterpolated),
+      noGps: s.noGps !== false,
+      interpolationCoverage: s.interpolationCoverage ?? null,
       // Surfaced honestly so the UI can carry the as-raced caveat at the checker.
       asRaced: s.validation?.asRacedVsCanonical === 'match' ? null : (s.verdict ?? 'as-raced')
     }));
@@ -128,17 +135,34 @@ export const createLakeReplayFeeds = ({
     return rows;
   };
 
-  // Per-session parsed-rows cache so the stateless per-request path never
-  // re-gunzips/re-parses a feed on every 1 Hz poll. Bounded by the number of
-  // watchable lake sessions (~40), each a modest NDJSON of one race.
+  // Parsed direct-capture feeds can be tens of MB each, so retaining every race
+  // visited can exhaust a small deployment host. Keep only the most recently
+  // used sessions; three avoids re-parsing normal page navigation while putting
+  // a hard bound on lifetime growth. A positive option/env override is useful
+  // for differently sized hosts.
+  const cacheLimit = Number.isFinite(rowsCacheMaxSessions) && rowsCacheMaxSessions >= 1
+    ? Math.floor(rowsCacheMaxSessions)
+    : 3;
   const rowsCache = new Map();
   const rowsFor = (session) => {
     const cached = rowsCache.get(session.sessionKey);
-    if (cached) return cached;
+    if (cached) {
+      rowsCache.delete(session.sessionKey);
+      rowsCache.set(session.sessionKey, cached);
+      return cached;
+    }
     const rows = loadRows(session);
     rowsCache.set(session.sessionKey, rows);
+    while (rowsCache.size > cacheLimit) {
+      rowsCache.delete(rowsCache.keys().next().value);
+    }
     return rows;
   };
+  const cacheInfo = () => ({
+    maxSessions: cacheLimit,
+    size: rowsCache.size,
+    sessionKeys: [...rowsCache.keys()]
+  });
 
   /** Read-only accessor: the full chronologically-sorted rows for a session
    *  (`[{ ms, checkedAt, summary, raw }]`, or `[]` if unknown), from the same
@@ -165,7 +189,42 @@ export const createLakeReplayFeeds = ({
         hi = mid - 1;
       }
     }
-    return idx < 0 ? 0 : idx;
+    return idx;
+  };
+
+  /** Resolve a manifest-declared withheld interval. The reducer emits rows for
+   * the bounded step-hold (normally five seconds), then emits no rows until the
+   * next real observation. This check prevents the runtime binary search from
+   * defeating that policy by returning the last emitted row for the whole gap. */
+  const sourceGapAt = (session, requestedMs) => {
+    if (!Number.isFinite(requestedMs)) return null;
+    const coverage = session?.interpolationCoverage ?? null;
+    const maximumHoldSeconds = Number(coverage?.maximumHoldSeconds);
+    for (const declared of coverage?.sourceGaps ?? []) {
+      const lastObservedMs = parseTime(declared.lastObservedAt);
+      const nextObservedMs = parseTime(declared.nextObservedAt);
+      const holdSeconds = Number.isFinite(Number(declared.withheldAfterSeconds))
+        ? Number(declared.withheldAfterSeconds)
+        : (Number.isFinite(maximumHoldSeconds) ? maximumHoldSeconds : 0);
+      const heldThroughMs = lastObservedMs === null ? null : lastObservedMs + Math.max(0, holdSeconds) * 1000;
+      if (heldThroughMs === null || nextObservedMs === null) continue;
+      if (requestedMs <= heldThroughMs || requestedMs >= nextObservedMs) continue;
+      const requestedAt = new Date(requestedMs).toISOString();
+      const nextObservedAt = new Date(nextObservedMs).toISOString();
+      return {
+        code: 'source_gap',
+        sessionKey: session.sessionKey,
+        requestedAt,
+        lastObservedAt: new Date(lastObservedMs).toISOString(),
+        heldThroughAt: new Date(heldThroughMs).toISOString(),
+        nextObservedAt,
+        resumeAt: nextObservedAt,
+        sourceGapSeconds: Number(declared.sourceGapSeconds) || Math.round((nextObservedMs - lastObservedMs) / 1000),
+        maximumHoldSeconds: Math.max(0, holdSeconds),
+        message: `No source observation covers ${requestedAt}; replay resumes at ${nextObservedAt}.`
+      };
+    }
+    return null;
   };
 
   /** Stateless, per-request row resolve — the per-client replay path. Mirrors
@@ -182,7 +241,11 @@ export const createLakeReplayFeeds = ({
     const numericSpeed = SPEEDS.has(Number(speed)) ? Number(speed) : 1;
     const rows = rowsFor(selected);
     if (!rows.length) return { outOfRange: true };
+    if (requestedMs < rows[0].ms || requestedMs > rows[rows.length - 1].ms) return { outOfRange: true };
+    const sourceGap = sourceGapAt(selected, requestedMs);
+    if (sourceGap) return { sourceGap };
     const idx = rowIndexAt(rows, requestedMs);
+    if (idx < 0) return { outOfRange: true };
     const row = rows[idx];
     const sourceLagVirtualMs = row.ms !== null ? Math.max(0, requestedMs - row.ms) : 0;
     return {
@@ -220,6 +283,7 @@ export const createLakeReplayFeeds = ({
     }
     const elapsedRealMs = Math.max(0, now() - playback.startedAtRealMs);
     const virtualNowMs = playback.t0Ms + elapsedRealMs * playback.speed;
+    const sourceGap = sourceGapAt(playback.session, virtualNowMs);
     return {
       enabled: true,
       active: true,
@@ -232,7 +296,8 @@ export const createLakeReplayFeeds = ({
       virtualNow: new Date(virtualNowMs).toISOString(),
       firstCheckedAt: playback.firstCheckedAt,
       lastCheckedAt: playback.lastCheckedAt,
-      complete: virtualNowMs >= playback.lastCheckedAtMs
+      complete: virtualNowMs >= playback.lastCheckedAtMs,
+      ...(sourceGap ? { sourceGap } : {})
     };
   };
 
@@ -279,7 +344,8 @@ export const createLakeReplayFeeds = ({
       firstCheckedAt: selected.firstCheckedAt,
       lastCheckedAt: selected.lastCheckedAt,
       lastCheckedAtMs: lastMs,
-      rows: loadRows(selected)
+      session: selected,
+      rows: rowsFor(selected)
     };
     return controlState();
   };
@@ -295,22 +361,11 @@ export const createLakeReplayFeeds = ({
     if (!enabled || !playback) return null;
     if (enforceRunnerLiveGuard()) return null;
     const state = controlState();
+    if (state.sourceGap) return null;
     const virtualMs = parseTime(state.virtualNow);
     const rows = playback.rows;
-    // Binary search: last row at or before the virtual clock.
-    let lo = 0;
-    let hi = rows.length - 1;
-    let idx = -1;
-    while (lo <= hi) {
-      const mid = (lo + hi) >> 1;
-      if (rows[mid].ms <= virtualMs) {
-        idx = mid;
-        lo = mid + 1;
-      } else {
-        hi = mid - 1;
-      }
-    }
-    if (idx < 0) idx = 0;
+    const idx = rowIndexAt(rows, virtualMs);
+    if (idx < 0) return null;
     const row = rows[idx];
     const sourceLagVirtualMs = row.ms !== null && virtualMs !== null ? Math.max(0, virtualMs - row.ms) : 0;
     return {
@@ -324,5 +379,5 @@ export const createLakeReplayFeeds = ({
     };
   };
 
-  return { enabled, has, available, sessions, seriesRowsFor, start, stop, status: controlState, currentRecord, recordAt, isActive: () => Boolean(playback) };
+  return { enabled, has, available, sessions, seriesRowsFor, cacheInfo, start, stop, status: controlState, currentRecord, recordAt, isActive: () => Boolean(playback) };
 };

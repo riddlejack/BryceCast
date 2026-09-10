@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-21T23:50:49.784Z",
-  "throughDate": "2026-07-21",
+  "generatedAt": "2026-09-10T23:03:09.381Z",
+  "throughDate": "2026-09-10",
   "completionDefinition": "Completeness is established by two independent methods. (1) Source-index completeness: every file exposed by the tested RaceTools indexes and Timing71 IndyCar archive for 2024 through the through-date is mirrored. (2) Official-schedule reconciliation: every completed canonical INDY NXT championship-weekend session (practice/qualifying/race, status \"official\") is matched by date and type against a lake high-frequency capture, per catalog/coverage-reconciliation.json. Exactly one canonical session is a documented exception — 2025 Iowa Qualifications (session_indy_nxt_2025_6596, 2025-07-11): it carries zero qualifying results in the canonical dataset, has no official-schedule window or weather observation, and has no RaceTools or Timing71 capture — evidence consistent with a cancelled/converted session, recorded as unmapped-with-evidence rather than assumed present. Neither method proves that an unlisted private test or recording never existed.",
   "officialScheduleReconciliation": {
     "source": "catalog/coverage-reconciliation.json",
@@ -24,10 +24,10 @@
     ]
   },
   "acquisition": {
-    "sourceFiles": 1054,
-    "uniqueObjects": 1054,
-    "logicalBytes": 7519931931,
-    "uniqueBytes": 7519931931,
+    "sourceFiles": 1136,
+    "uniqueObjects": 1136,
+    "logicalBytes": 7623690114,
+    "uniqueBytes": 7623690114,
     "exactDuplicateBytesAvoided": 0,
     "bySourceYear": {
       "racetools-annual:2008": {
@@ -115,8 +115,8 @@
         "bytes": 187952207
       },
       "racetools-indycar-maps:all": {
-        "files": 39,
-        "bytes": 7106263
+        "files": 43,
+        "bytes": 7404907
       },
       "racetools-session-2025:2025": {
         "files": 230,
@@ -143,17 +143,17 @@
         "bytes": 264749319
       },
       "timing71-analysis:2026": {
-        "files": 109,
-        "bytes": 17559504
+        "files": 148,
+        "bytes": 24273347
       },
       "timing71-replay:2026": {
-        "files": 109,
-        "bytes": 311042032
+        "files": 148,
+        "bytes": 407787728
       }
     }
   },
   "catalog": {
-    "sessions": 5262,
+    "sessions": 5301,
     "byYearSourceSeriesType": {
       "2008:RaceTools:unknown:other": 21,
       "2008:RaceTools:INDYCAR:race": 4,
@@ -380,12 +380,12 @@
       "2025:Timing71:INDYCAR:race": 21,
       "2025:Timing71:INDY_NXT:race": 14,
       "2025:Timing71:INDY_NXT:test": 1,
-      "2026:Timing71:INDYCAR:practice": 44,
-      "2026:Timing71:INDY_NXT:practice": 11,
-      "2026:Timing71:INDY_NXT:qualifying": 11,
-      "2026:Timing71:INDYCAR:race": 12,
-      "2026:Timing71:INDY_NXT:race": 14,
-      "2026:Timing71:INDYCAR:qualifying": 13,
+      "2026:Timing71:INDYCAR:practice": 63,
+      "2026:Timing71:INDY_NXT:practice": 14,
+      "2026:Timing71:INDY_NXT:qualifying": 14,
+      "2026:Timing71:INDYCAR:race": 21,
+      "2026:Timing71:INDY_NXT:race": 16,
+      "2026:Timing71:INDYCAR:qualifying": 16,
       "2026:RaceTools:INDYCAR:race": 1,
       "2026:RaceTools:INDY_NXT:race": 1,
       "2026:Timing71:INDYCAR:test": 4
@@ -406,15 +406,15 @@
       "2025:qualifying": 20,
       "2025:race": 15
     },
-    "timing71RosterBearingCandidatesNotCoverageClaims": 147,
-    "timing71Canonical2026Sessions": 34,
+    "timing71RosterBearingCandidatesNotCoverageClaims": 163,
+    "timing71Canonical2026Sessions": 44,
     "timing71Canonical2026ByType": {
-      "practice": 12,
-      "qualifying": 9,
-      "race": 13
+      "practice": 16,
+      "qualifying": 11,
+      "race": 17
     },
-    "timing71Canonical2026Race": 13,
-    "timing71Canonical2026PracticeQualifying": 21,
+    "timing71Canonical2026Race": 17,
+    "timing71Canonical2026PracticeQualifying": 27,
     "missingCanonical2026ReplayIds": []
   },
   "knownExceptions": [
@@ -442,5 +442,5 @@
       "resolution": "Coverage requires a decoded Bryce-roster segment; three hidden NXT races in INDYCAR-labelled captures are recovered."
     }
   ],
-  "coverageRowCount": 177
+  "coverageRowCount": 187
 }

@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Semantic-layer slice 2: build canonical event-grain tables for the 33
+// Semantic-layer slice 2: build canonical event-grain tables for the audited
 // completed 2026 INDY NXT sessions from the lake's Timing71 replays.
 //
 // Session selection is the audit-validated coverage matrix COMMITTED ON THIS
@@ -157,7 +157,13 @@ for (const row of rows) {
 
   const packPath = join(SESSIONS_DIR, `${id}.ndjson.gz`);
   const packRows = [];
-  packRows.push({record: 'session_meta', ...session, sourceTier: T71_SOURCE_TIER, qualityMasks: parsed.qualityMasks});
+  packRows.push({
+    record: 'session_meta',
+    ...session,
+    sourceTier: T71_SOURCE_TIER,
+    qualityMasks: parsed.qualityMasks,
+    sourceObservationCoverage: parsed.frames,
+  });
   packRows.push({record: 'roster', cars: parsed.roster, sourceTier: T71_SOURCE_TIER});
   for (const f of parsed.flags) packRows.push({record: 'flag', ...f, sourceTier: T71_SOURCE_TIER});
   for (const c of parsed.classification) packRows.push({record: 'classification', ...c, sourceTier: T71_SOURCE_TIER});

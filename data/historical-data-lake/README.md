@@ -18,9 +18,9 @@ validation status, cadence/count metrics, and coverage fields, but not repeated
 rosters, schemas, or representative raw records. Those details remain losslessly
 available in the source objects and are decoded on demand.
 
-The durable primary checkout also exposes the same raw object inodes at
-`/Users/example/Documents/Bryce POV access/data/historical-data-lake/raw`.
-That is a second hardlink, not a second 7.51 GB payload copy.
+The durable primary archive is `~/.brycecast/data-lake`. A checkout may expose
+the same objects through hardlinks, but consumers do not depend on a worktree or
+iCloud-managed Documents path.
 
 No file in this data lake is automatically an official BryceCast fact. RaceTools files are third-party captures of the official pit-lane timing feed; Timing71 files are normalized display-state replays. Canonical consumers must preserve source, grain, identity, and derivation metadata.
 
@@ -76,6 +76,8 @@ node analysis/historical-data-lake/session-tool.mjs info SESSION_ID
 node analysis/historical-data-lake/session-tool.mjs extract SESSION_ID --output /tmp/session.zip
 node analysis/historical-data-lake/session-tool.mjs export TIMING71_SESSION_ID --output /tmp/session.ndjson --interval 1
 node analysis/historical-data-lake/session-tool.mjs sections RACETOOLS_SESSION_ID --output /tmp/sections.ndjson --car 27
+npm run analytics:timing-coverage
+npm run analytics:timing-coverage:validate
 ```
 
 The acquisition command is resumable. It reuses matching files already present in `~/Downloads`, then downloads only missing source payloads.
@@ -84,6 +86,13 @@ The acquisition command is resumable. It reuses matching files already present i
 observed archive timestamps. It does not interpolate missing timestamps. Exported
 rows are intentionally generated on demand rather than committed as a giant,
 duplicative per-car/per-second table.
+
+`catalog/timing-coverage-ledger.json` is the UI-facing coverage contract for
+every canonical Bryce INDY NXT race and its qualifying link. `observed` means
+the source contains actual observations; it does not claim an unbroken 1 Hz
+recording. Cadence, gaps, active-window coverage, clock basis, native artifact,
+and bounded replay interpolation are separate fields. RaceTools timestamps use
+the session-local feed clock even though their ISO container is labelled `Z`.
 
 Timing71 recordings can include stale states from an adjacent INDYCAR session.
 For catalog rows classified as INDY NXT, `session-tool.mjs export` therefore

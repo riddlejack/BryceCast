@@ -20,9 +20,9 @@ import { LiveRunningOrder } from './LiveRunningOrder';
 import { useNextSession } from '../app/useNextSession';
 import { getNextEvent, raceDayOf } from '../data/upcoming';
 import { trackOutlineFor } from '../assets/tracks';
-import type { LiveReadiness } from '../app/useReadiness';
+import type { LiveReadiness, ReplaySourceGap } from '../app/useReadiness';
 import type { ReplaySession } from '../app/useReplaySession';
-import { replayProvenance, type ReplaySessionInfo } from '../data/replayAvailable';
+import { isBryceCastCaptureTier, replayProvenance, type ReplaySessionInfo } from '../data/replayAvailable';
 import { loadRaceStory } from '../data/raceStory';
 import {
   advanceBattleAxis,
@@ -72,6 +72,7 @@ import {
 } from '../data/liveSessionModel';
 import { uiDataPackage } from '../data/uiDataPackage';
 import { canonicalLiveRaceSessionId, replayDeepLinkQuery } from '../data/liveRaceShellModel';
+import { ReplayGapSkippedNote, ReplaySourceGapNotice } from './replaySourceGap';
 
 type Row = Record<string, unknown>;
 
@@ -1430,7 +1431,7 @@ const ReplayEndedByLiveNote = () => (
 const ReplayCueing = ({ session }: { session: ReplaySessionInfo | null }) => {
   const duration = durationLabel(session);
   const prov = replayProvenance(session);
-  const from = prov.tier === 'brycecast_capture' ? 'our own one-second capture' : prov.label;
+  const from = isBryceCastCaptureTier(prov.tier) ? 'our own timing capture' : prov.label;
   return (
     <HeroPanel>
       <span className="kicker">Cueing up the replay</span>
@@ -1534,6 +1535,7 @@ export const LiveScreen = ({
   fixtureMode,
   history,
   replay = null,
+  replaySourceGap = null,
   readinessError = null,
   readinessCheckedAt = null
 }: {
@@ -1541,6 +1543,7 @@ export const LiveScreen = ({
   fixtureMode: boolean;
   history: LiveSessionHistory | null;
   replay?: ReplaySession | null;
+  replaySourceGap?: ReplaySourceGap | null;
   /** Readiness fetch error (endpoint 503/unreachable). Distinguishes the idle
    *  "no runner" state from a still-in-flight first poll. */
   readinessError?: string | null;
@@ -1565,6 +1568,15 @@ export const LiveScreen = ({
     return (
       <div className="page stack live-page" data-replay-active="false">
         <ReplayRefused replay={replay} />
+      </div>
+    );
+  }
+
+  if (replayActive && replay && replaySourceGap) {
+    return (
+      <div className="page stack live-page" data-replay-active="true" data-replay-source-gap="true">
+        <ReplayBar replay={replay} payload={null} />
+        <ReplaySourceGapNotice gap={replaySourceGap} replay={replay} />
       </div>
     );
   }
@@ -1613,6 +1625,7 @@ export const LiveScreen = ({
     >
       {replayEndedByLive ? <ReplayEndedByLiveNote /> : null}
       {replayActive && replay ? <ReplayBar replay={replay} payload={payload} /> : null}
+      {replayActive && replay ? <ReplayGapSkippedNote replay={replay} /> : null}
       {replayActive && replay ? <ReplayClassificationNote payload={payload} canonicalSessionId={replay.session?.canonicalSessionId ?? null} /> : null}
       <TrustRail payload={payload} fixtureMode={fixtureMode} />
       {liveish || replayEnded ? (

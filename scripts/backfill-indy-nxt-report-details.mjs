@@ -14,6 +14,11 @@ const reportPath = join(root, 'data/career/reports/indy-nxt-report-details-backf
 const refresh = process.argv.includes('--refresh');
 
 const asArray = (value) => (Array.isArray(value) ? value : value ? [value] : []);
+const finiteNumber = (value) => {
+  if (value === null || value === undefined || String(value).trim() === '') return null;
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : null;
+};
 const readJson = async (path) => JSON.parse(await readFile(path, 'utf8'));
 const readJsonIfExists = async (path, fallback) => {
   try {
@@ -637,20 +642,77 @@ const parseTopSectionTimesText = (text) => {
   return { sections };
 };
 
-const sectionColumnsFromHeader = (line) => {
-  const markerIndex = line.indexOf('T/S');
-  if (markerIndex < 0) return [];
-  const sectionText = line.slice(markerIndex + 3).trim();
-  const names = sectionText.split(/\s{2,}/).map((value) => value.trim()).filter(Boolean);
-  const columns = [];
-  let cursor = markerIndex + 3;
-  for (const name of names) {
-    const start = line.indexOf(name, cursor);
-    if (start < 0) continue;
-    columns.push({ name: name.replace(/\s+/g, ' '), start });
-    cursor = start + name.length;
+const sectionValueRightEdges = (lines) => {
+  const rightEdges = [];
+  for (const line of lines) {
+    if (!/^\s*(?:T|S)\s+/.test(line)) continue;
+    for (const match of line.matchAll(/\d+\.\d+/g)) {
+      const rightEdge = (match.index ?? 0) + match[0].length;
+      const existingIndex = rightEdges.findIndex((value) => Math.abs(value - rightEdge) <= 1);
+      if (existingIndex < 0) rightEdges.push(rightEdge);
+      else rightEdges[existingIndex] = Math.round((rightEdges[existingIndex] + rightEdge) / 2);
+    }
   }
-  return columns;
+  return rightEdges.sort((left, right) => left - right);
+};
+
+const normalizeSectionName = (value) => {
+  const normalized = String(value ?? '').replace(/\s+/g, ' ').trim();
+  if (normalized === 'PO to Alt S/F') return 'PO to Alt';
+  return normalized;
+};
+
+const sectionColumnsFromPage = (lines, headerIndex) => {
+  const headerLine = lines[headerIndex] ?? '';
+  const markerIndex = headerLine.indexOf('T/S');
+  if (markerIndex < 0) return [];
+  const firstTimingRowIndex = lines.findIndex((line, index) => index > headerIndex && /^\s*T\s+/.test(line));
+  if (firstTimingRowIndex < 0) return [];
+
+  // The PDF right-aligns numeric values under each section. Using the union of
+  // value right edges across T/S rows recovers columns even when the first lap
+  // has a blank pit or partial-section cell. It is also more reliable than
+  // splitting the header on whitespace because adjacent labels often touch.
+  const rightEdges = sectionValueRightEdges(lines.slice(firstTimingRowIndex));
+  if (!rightEdges.length) return [];
+
+  const columns = rightEdges.map((rightEdge, index) => {
+    const previousRightEdge = rightEdges[index - 1] ?? rightEdge - (rightEdges[index + 1] - rightEdge);
+    const width = rightEdge - previousRightEdge;
+    return { anchor: rightEdge, center: rightEdge - width / 2, tokens: [] };
+  });
+  for (const line of lines.slice(headerIndex, firstTimingRowIndex)) {
+    for (const match of line.matchAll(/\S+/g)) {
+      if ((match.index ?? 0) < markerIndex + 3) continue;
+      const tokenCenter = (match.index ?? 0) + match[0].length / 2;
+      let nearest = columns[0];
+      for (const column of columns) {
+        if (Math.abs(column.center - tokenCenter) < Math.abs(nearest.center - tokenCenter)) nearest = column;
+      }
+      nearest.tokens.push(match[0]);
+    }
+  }
+
+  const duplicateCounts = new Map();
+  return columns.filter((column) => column.tokens.length > 0).map((column) => {
+    const baseName = normalizeSectionName(column.tokens.join(' '));
+    const occurrence = (duplicateCounts.get(baseName) ?? 0) + 1;
+    duplicateCounts.set(baseName, occurrence);
+    return {
+      name: occurrence === 1 ? baseName : `${baseName} ${occurrence}`,
+      start: column.anchor
+    };
+  });
+};
+
+const sectionHeaderSignature = (lines, headerIndex) => {
+  const firstTimingRowIndex = lines.findIndex((line, index) => index > headerIndex && /^\s*T\s+/.test(line));
+  if (firstTimingRowIndex < 0) return '';
+  return lines
+    .slice(headerIndex, firstTimingRowIndex)
+    .map((line) => line.replace(/\s+/g, ' ').trim())
+    .filter(Boolean)
+    .join(' | ');
 };
 
 const sectionIndexForToken = (columns, tokenIndex) => {
@@ -669,7 +731,7 @@ const sectionIndexForToken = (columns, tokenIndex) => {
 const sectionEntriesFromLine = (line, columns) => {
   const entries = new Map();
   for (const match of line.matchAll(/\d+\.\d+/g)) {
-    const sectionIndex = sectionIndexForToken(columns, match.index ?? 0);
+    const sectionIndex = sectionIndexForToken(columns, (match.index ?? 0) + match[0].length);
     if (sectionIndex < 0) continue;
     entries.set(columns[sectionIndex].name, Number(match[0]));
   }
@@ -677,9 +739,19 @@ const sectionEntriesFromLine = (line, columns) => {
 };
 
 const parseSectionResultsLayoutText = (text) => {
-  const cars = [];
+  const carsByNumber = new Map();
   const sectionNames = new Set();
   const pages = String(text ?? '').split('\f');
+  const columnsByHeaderSignature = new Map();
+  for (const page of pages) {
+    const lines = page.split(/\r?\n/);
+    const headerIndex = lines.findIndex((line) => /\bLap\s+T\/S\b/.test(line));
+    if (headerIndex < 0) continue;
+    const signature = sectionHeaderSignature(lines, headerIndex);
+    const candidate = sectionColumnsFromPage(lines, headerIndex);
+    const current = columnsByHeaderSignature.get(signature);
+    if (!current || candidate.length > current.length) columnsByHeaderSignature.set(signature, candidate);
+  }
 
   for (const page of pages) {
     const lines = page.split(/\r?\n/);
@@ -689,7 +761,7 @@ const parseSectionResultsLayoutText = (text) => {
 
     const headerIndex = lines.findIndex((line) => /\bLap\s+T\/S\b/.test(line));
     if (headerIndex < 0) continue;
-    const columns = sectionColumnsFromHeader(lines[headerIndex]);
+    const columns = columnsByHeaderSignature.get(sectionHeaderSignature(lines, headerIndex)) ?? sectionColumnsFromPage(lines, headerIndex);
     if (!columns.length) continue;
     for (const column of columns) sectionNames.add(column.name);
 
@@ -741,15 +813,87 @@ const parseSectionResultsLayoutText = (text) => {
       }
     }
 
-    if (car.laps.length) {
-      car.laps.sort((a, b) => a.lapNumber - b.lapNumber);
-      cars.push(car);
+    if (!car.laps.length) continue;
+    const mergedCar = carsByNumber.get(car.carNumber) ?? {
+      carNumber: car.carNumber,
+      driverName: car.driverName,
+      rookieFlag: car.rookieFlag,
+      laps: []
+    };
+    const lapsByNumber = new Map(mergedCar.laps.map((lap) => [lap.lapNumber, lap]));
+    for (const lap of car.laps) {
+      const mergedLap = lapsByNumber.get(lap.lapNumber) ?? { lapNumber: lap.lapNumber, sections: [] };
+      const sectionsByName = new Map(mergedLap.sections.map((section) => [section.name, section]));
+      for (const section of lap.sections) {
+        const current = sectionsByName.get(section.name);
+        sectionsByName.set(section.name, {
+          name: section.name,
+          timeSeconds: section.timeSeconds ?? current?.timeSeconds ?? null,
+          speedMph: section.speedMph ?? current?.speedMph ?? null
+        });
+      }
+      mergedLap.sections = [...sectionsByName.values()];
+      lapsByNumber.set(lap.lapNumber, mergedLap);
     }
+    mergedCar.laps = [...lapsByNumber.values()].sort((left, right) => left.lapNumber - right.lapNumber);
+    carsByNumber.set(car.carNumber, mergedCar);
   }
 
   return {
     sectionNames: [...sectionNames],
-    cars
+    cars: [...carsByNumber.values()]
+  };
+};
+
+const sectionLapTotal = (lap) => finiteNumber(lap?.sections?.find((section) => section.name === 'Lap')?.timeSeconds);
+const populatedSectionCount = (lap) => asArray(lap?.sections).filter((section) => section.timeSeconds !== null || section.speedMph !== null).length;
+const filterTerminalSectionRows = ({ car, timingEntry, sessionId }) => {
+  const completedLapLimit = finiteNumber(timingEntry?.lapsCompleted ?? timingEntry?.laps);
+  if (completedLapLimit === null || completedLapLimit <= 0) return { car, exclusions: [], unresolved: [] };
+
+  const withinLimit = car.laps.filter((lap) => lap.lapNumber <= completedLapLimit);
+  const afterLimit = car.laps.filter((lap) => lap.lapNumber > completedLapLimit);
+  if (!afterLimit.length) return { car, exclusions: [], unresolved: [] };
+  const expectedSectionCount = Math.max(0, ...withinLimit.map(populatedSectionCount));
+  const lastCompletedLap = withinLimit.filter((lap) => lap.lapNumber > 0).at(-1) ?? withinLimit.at(-1);
+  const lastCompletedLapTotal = sectionLapTotal(lastCompletedLap);
+  const exclusions = [];
+  const unresolved = [];
+  const retainedAfterLimit = [];
+  for (const lap of afterLimit) {
+    const lapTotal = sectionLapTotal(lap);
+    const sparse = populatedSectionCount(lap) < expectedSectionCount;
+    const missingLapTotal = lapTotal === null;
+    const repeatedLapTotal = lapTotal !== null && lastCompletedLapTotal !== null && Math.abs(lapTotal - lastCompletedLapTotal) < 0.00005;
+    const diagnostic = {
+      sessionId,
+      carNumber: car.carNumber,
+      lapNumber: lap.lapNumber,
+      officialCompletedLaps: completedLapLimit,
+      populatedSections: populatedSectionCount(lap),
+      expectedPopulatedSections: expectedSectionCount,
+      lapTotal,
+      lastCompletedLapTotal
+    };
+    if (repeatedLapTotal || (sparse && missingLapTotal)) exclusions.push({
+      ...diagnostic,
+      reason: missingLapTotal ? 'sparse_post_limit_row_without_lap_total' : 'post_limit_row_repeats_last_completed_lap_total'
+    });
+    else {
+      unresolved.push({ ...diagnostic, reason: 'post_limit_row_not_proven_terminal_partial' });
+      retainedAfterLimit.push(lap);
+    }
+  }
+  return {
+    car: {
+      ...car,
+      laps: [...withinLimit, ...retainedAfterLimit].sort((left, right) => left.lapNumber - right.lapNumber),
+      officialCompletedLaps: completedLapLimit,
+      terminalRowsExcluded: exclusions.map((row) => row.lapNumber),
+      lapIndexContract: 'Official report lap number; lap 0 is retained when source-visible, and post-limit terminal rows are excluded only when a sparse row has no lap total or its lap total repeats the last completed lap.'
+    },
+    exclusions,
+    unresolved
   };
 };
 
@@ -913,6 +1057,7 @@ const main = async () => {
     sectionResultsReportsDiscovered: 0,
     sectionResultsReportsParsed: 0,
     sectionResultsMetricsImported: 0,
+    sectionResultTerminalRowsExcluded: 0,
     resultsReportsDiscovered: 0,
     resultsReportsParsed: 0,
     officialPenaltiesImported: 0,
@@ -933,6 +1078,8 @@ const main = async () => {
     sectionResultsFailures: [],
     sectionResultsReportsHeldOut: [],
     sectionResultsUnmappedCars: [],
+    sectionResultTerminalRowExclusions: [],
+    sectionResultPostLimitRowsUnresolved: [],
     resultsReportFailures: [],
     skipped: []
   };
@@ -1543,13 +1690,19 @@ const main = async () => {
                     url: sectionResultsUrl
                   });
                 }
+                const filtered = filterTerminalSectionRows({ car, timingEntry: result, sessionId: canonicalSessionId });
+                report.sectionResultTerminalRowsExcluded += filtered.exclusions.length;
+                report.sectionResultTerminalRowExclusions.push(...filtered.exclusions);
+                report.sectionResultPostLimitRowsUnresolved.push(...filtered.unresolved);
                 return {
-                  ...car,
+                  ...filtered.car,
                   driverId: result?.driverId ?? null,
                   carId: result?.carId ?? null,
                   teamId: result?.teamId ?? null
                 };
               });
+              const mappedSectionNames = [...new Set(mappedCars.flatMap((car) =>
+                car.laps.flatMap((lap) => lap.sections.map((section) => section.name))))];
 
               nextDerivedMetrics.push({
                 id: `metric_indy_nxt_${year}_${sessionIdRaw}_section_results`,
@@ -1563,7 +1716,7 @@ const main = async () => {
                 formula: 'Direct extraction from official INDY NXT Section Results PDF per-car section time and speed rows; no derived calculation.',
                 inputRefs: [evidenceId],
                 metrics: {
-                  sectionNames: parsed.sectionNames,
+                  sectionNames: mappedSectionNames,
                   cars: mappedCars,
                   carCount: mappedCars.length,
                   lapCount: mappedCars.reduce((total, car) => total + car.laps.length, 0)
@@ -1739,9 +1892,9 @@ const main = async () => {
   dataset.updatedAt = retrievedAt;
   const indyNxtDetailGapDescription = [
     'EventsSessionDetails imports race/session result rows, qualifyingResults for official SessionType=Q records, and official terminal-status incident rows for contact/mechanical/dns outcomes.',
-    'Official Race Lap Chart PDFs now import 29,519 official lap-by-lap position samples from all 36 completed Race Lap Chart PDFs: 26 charts fully validate against official completed-lap counts and 10 clean partial Race Lap Chart PDFs preserve explicit missing car-lap or official result/chart conflict diagnostics without guessing terminal or conflict laps.',
+    `Official Race Lap Chart PDFs import ${report.lapSamplesImported.toLocaleString('en-US')} official lap-by-lap position samples from ${report.lapChartsDiscovered} completed Race Lap Chart PDFs: ${report.lapChartsFullyParsed} charts fully validate against official completed-lap counts and ${report.lapChartsPartiallyParsed} clean partial Race Lap Chart PDFs preserve explicit missing car-lap or official result/chart conflict diagnostics without guessing terminal or conflict laps.`,
     'Official Event Summary PDFs import race-stat metrics and most-improved racecraft notes. Official Leader Lap Summary PDFs import leader-by-lap timing, margin, and flag-state metrics.',
-    'Official Top Section Times PDFs import practice, qualifying, and race section-rank timing metrics when official section rows are present. Official Section Results PDFs import practice, qualifying, and race lap-by-lap section times and speeds at per-car/per-lap grain when official section rows are present.',
+    `Official Top Section Times PDFs import ${report.topSectionMetricsImported} practice, qualifying, and race section-rank timing metrics when official section rows are present. Official Section Results PDFs import ${report.sectionResultsMetricsImported} practice, qualifying, and race lap-by-lap section metrics; continuation pages are merged by car/lap/section and ${report.sectionResultTerminalRowsExcluded} source-proven post-limit terminal rows are excluded from completed-lap facts.`,
     'The remaining true section-results holdout is session_indy_nxt_2024_6325, where the official Section Results PDF URL returns corrupt non-PDF bytes; canceled/no-row reports remain held out rather than treated as missing data.',
     'Source-visible rows without canonical API timing rows keep car/name text with null canonical IDs. Official race Results PDFs import penalty/decision summary rows and caution-summary causal incident rows.',
     'Detailed pit-lane sequence context is source-unavailable in the current official report family; use official/API pit-stop counts as the production-safe pit metric unless a new official pit-summary source appears.'

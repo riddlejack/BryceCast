@@ -6,7 +6,7 @@
 //     T1 same-season name-format variants ("JM Correa" ~ "Juan Manuel Correa"),
 //     T2 season-to-season car-number reuse (#14/#27/#28),
 //     T3 cross-series recordings where #9 is two different drivers.
-//  2. Race classification: Timing71 final order vs canonical results, all 12 races.
+//  2. Race classification: Timing71 final order vs canonical results, every audited race.
 //  3. TWO-SOURCE CROSS-CHECK: Timing71 (third-party normalized) vs BryceCast's
 //     own capture (official Race Control feed) for every overlapping session —
 //     identity, lap counts, positions.
@@ -15,7 +15,7 @@
 // Exits non-zero on any trap-test failure or hard inconsistency.
 
 import {readFile, writeFile, mkdir} from 'node:fs/promises';
-import {dirname, join} from 'node:path';
+import {dirname, join, resolve} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {gunzipSync} from 'node:zlib';
 import {loadCanonicalIdentityContext, matchDriverName} from './lib/canonical.mjs';
@@ -183,12 +183,12 @@ function splitAsDriver(name) {
 
 async function canonicalResultsFor(sessionId) {
   if (!sessionId) return null;
-  const path = process.env.BRYCECAST_CAREER_DATASET || '/Users/example/.codex/worktrees/ac78/Bryce POV access/data/career/career.dataset.json';
+  const path = process.env.BRYCECAST_CAREER_DATASET || resolve(LANE_DIR, '../../data/career/career.dataset.json');
   if (!globalThis.__canonData) globalThis.__canonData = JSON.parse(await readFile(path, 'utf8'));
   return globalThis.__canonData.results.filter((r) => r.sessionId === sessionId);
 }
 
-// ---------- 2. Race classification vs canonical (all 12 races) ----------
+// ---------- 2. Race classification vs canonical (every audited race) ----------
 const raceChecks = [];
 for (const s of t71Summary.sessions.filter((x) => x.sessionType === 'race')) {
   const cw = crosswalk.sessions.find((c) => c.t71SessionId === s.id);
@@ -226,8 +226,12 @@ for (const s of t71Summary.sessions.filter((x) => x.sessionType === 'race')) {
   });
 }
 const matchedRaces = raceChecks.filter((r) => r.matched);
-// 13 = 12 through Mid-Ohio + Music City 2026 (6755), added 2026-07-21.
-assertThat('races: all 13 matched to canonical', matchedRaces.length === 13, `${matchedRaces.length}`);
+const expectedRaceCount = t71Summary.sessions.filter((s) => s.sessionType === 'race').length;
+assertThat(
+  'races: every audited Timing71 race matched to canonical',
+  matchedRaces.length === expectedRaceCount,
+  `${matchedRaces.length}/${expectedRaceCount}`,
+);
 // A winner/order divergence is only acceptable when it is a confirmed
 // AS-RACED vs OFFICIAL-CLASSIFICATION divergence: our own capture (official
 // Race Control feed) must agree with the Timing71 final state, proving the

@@ -6,6 +6,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = dirname(__dirname);
 const trackMetadataPath = join(root, 'data/career/raw/track-metadata/track-metadata.v1.json');
 const contextPackManifestPath = join(root, 'analysis/predictive-race-intelligence/output/context-packs/context-pack-manifest.json');
+const calendarPath = join(root, 'public/data/indy-nxt-calendar.json');
 const userAgent = 'BryceCast live weather readiness audit (local development; contact: brycecast.local)';
 const defaultFetchTimeoutMs = 8000;
 const defaultWeatherCacheTtlMs = 5 * 60 * 1000;
@@ -42,7 +43,9 @@ const loadTrackMetadataCatalog = () => {
 };
 
 const loadUpcomingEventPacks = () => {
-  upcomingEventPacksPromise ??= readFile(contextPackManifestPath, 'utf8')
+  upcomingEventPacksPromise ??= readFile(calendarPath, 'utf8').then((text) => JSON.parse(text).events).catch((error) => {
+    if (error.code !== 'ENOENT') throw error;
+    return readFile(contextPackManifestPath, 'utf8')
     .then((text) => JSON.parse(text))
     .then((manifest) =>
       Promise.all(
@@ -51,6 +54,7 @@ const loadUpcomingEventPacks = () => {
           .map((pack) => readFile(join(root, pack.path), 'utf8').then((text) => JSON.parse(text)))
       )
     );
+  });
   return upcomingEventPacksPromise;
 };
 
@@ -148,11 +152,14 @@ export const loadUpcomingIndyNxtEvents = async ({ now = new Date() } = {}) => {
     tracksByName.set(normalizedTrackName(track.name), track);
     tracksByName.set(normalizedTrackName(track.canonicalName), track);
   }
-  const todayUtc = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
   return eventPacks
     .filter((event) => {
-      const date = Date.parse(event.eventEndDate ?? event.eventStartDate ?? '');
-      return Number.isFinite(date) && date >= todayUtc;
+      const track = tracksByName.get(normalizedTrackName(event.track?.name));
+      const parts = new Intl.DateTimeFormat('en-US', { timeZone: track?.timezone ?? 'UTC', year: 'numeric', month: '2-digit', day: '2-digit' }).formatToParts(now);
+      const value = (type) => parts.find((part) => part.type === type)?.value;
+      const todayLocal = `${value('year')}-${value('month')}-${value('day')}`;
+      const endDate = event.eventEndDate ?? event.eventStartDate ?? '';
+      return /^\d{4}-\d{2}-\d{2}$/.test(endDate) && endDate >= todayLocal;
     })
     .map((event) => {
       const track = tracksByName.get(normalizedTrackName(event.track?.name));

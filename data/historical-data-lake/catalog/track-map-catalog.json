@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-21T23:49:27.297Z",
+  "generatedAt": "2026-09-10T22:59:23.700Z",
   "maps": [
     {
       "sourceFileId": "4a9847bb85e917c59dc1da41",
@@ -269,6 +269,17 @@
       ]
     },
     {
+      "sourceFileId": "bd65603c54c0493a67c0ea48",
+      "viewPath": "raw/views/racetools/maps/LagunaSeca.zip",
+      "bytes": 80262,
+      "sha256": "13a075143b320b2061880c78b59b4d6b13f0a0e8eca7f52784ccca884f5a190e",
+      "entries": [
+        "LagunaSeca.csv",
+        "LagunaSeca.ini",
+        "LagunaSeca_Pit.csv"
+      ]
+    },
+    {
       "sourceFileId": "8a5bc95e23b230a6f9cd7c28",
       "viewPath": "raw/views/racetools/maps/LongBeach.zip",
       "bytes": 75251,
@@ -288,6 +299,28 @@
         "LucasOilRaceway.csv",
         "LucasOilRaceway.ini",
         "LucasOilRaceway_Pit.csv"
+      ]
+    },
+    {
+      "sourceFileId": "b8677403bf8593e025d36246",
+      "viewPath": "raw/views/racetools/maps/Markham_2026.zip",
+      "bytes": 80914,
+      "sha256": "f7a97939db68a837d483e4a57bdca2e1f94d060d4bce5223faaed749907339ef",
+      "entries": [
+        "Markham_2026.csv",
+        "Markham_2026_Pit.csv",
+        "Markham_2026.ini"
+      ]
+    },
+    {
+      "sourceFileId": "290c63236c9163f425ff8028",
+      "viewPath": "raw/views/racetools/maps/Markham_2026a.zip",
+      "bytes": 80469,
+      "sha256": "2bb579836c0f6f64f18cf5924d4e2872a3b6f7a9731a89f9cd7a630ad68dabd7",
+      "entries": [
+        "Markham_2026a_Pit.csv",
+        "Markham_2026a.csv",
+        "Markham_2026a.ini"
       ]
     },
     {
@@ -475,6 +508,17 @@
         "Toronto_2018.csv",
         "Toronto_2018.ini",
         "Toronto_2018_Pit.csv"
+      ]
+    },
+    {
+      "sourceFileId": "34987ae275d9a3acf7570cab",
+      "viewPath": "raw/views/racetools/maps/WashingtonDC.zip",
+      "bytes": 56999,
+      "sha256": "1eece4fc3d31c3a2aaededcd5fdb8d9ccfdfcae7efff5b12446e4567a05715a4",
+      "entries": [
+        "WashingtonDC.csv",
+        "WashingtonDC.ini",
+        "WashingtonDC_Pit.csv"
       ]
     }
   ]

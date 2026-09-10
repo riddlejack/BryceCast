@@ -1,40 +1,40 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="960" height="502" viewBox="0 0 960 502">
 <rect width="100%" height="100%" fill="#fbfaf7"/>
 <text x="28" y="28" font-family="Inter, Arial" font-size="18" font-weight="700" fill="#1f2933">Bryce Repeated-Rival Head-to-Head Win Rate</text>
-<text x="28" y="59" font-family="Inter, Arial" font-size="12" fill="#39434d">Hailie Deegan</text>
+<text x="28" y="59" font-family="Inter, Arial" font-size="12" fill="#39434d">Alexander Koreiba</text>
 <rect x="240" y="44" width="680.0" height="20" rx="3" fill="#1f77b4" opacity="0.86"/>
-<text x="928.0" y="59" font-family="Inter, Arial" font-size="12" fill="#1f2933">0.857143</text>
-<text x="28" y="93" font-family="Inter, Arial" font-size="12" fill="#39434d">Alexander Koreiba</text>
-<rect x="240" y="78" width="671.3" height="20" rx="3" fill="#1f77b4" opacity="0.86"/>
-<text x="919.2820512820513" y="93" font-family="Inter, Arial" font-size="12" fill="#1f2933">0.846154</text>
+<text x="928.0" y="59" font-family="Inter, Arial" font-size="12" fill="#1f2933">0.882353</text>
+<text x="28" y="93" font-family="Inter, Arial" font-size="12" fill="#39434d">Hailie Deegan</text>
+<rect x="240" y="78" width="660.6" height="20" rx="3" fill="#1f77b4" opacity="0.86"/>
+<text x="908.5714285714286" y="93" font-family="Inter, Arial" font-size="12" fill="#1f2933">0.857143</text>
 <text x="28" y="127" font-family="Inter, Arial" font-size="12" fill="#39434d">Carson Etter</text>
-<rect x="240" y="112" width="610.3" height="20" rx="3" fill="#1f77b4" opacity="0.86"/>
-<text x="858.2564102564104" y="127" font-family="Inter, Arial" font-size="12" fill="#1f2933">0.769231</text>
+<rect x="240" y="112" width="634.7" height="20" rx="3" fill="#1f77b4" opacity="0.86"/>
+<text x="882.6666666666666" y="127" font-family="Inter, Arial" font-size="12" fill="#1f2933">0.823529</text>
 <text x="28" y="161" font-family="Inter, Arial" font-size="12" fill="#39434d">Nicholas Monteiro</text>
-<rect x="240" y="146" width="566.7" height="20" rx="3" fill="#1f77b4" opacity="0.86"/>
-<text x="814.6666666666667" y="161" font-family="Inter, Arial" font-size="12" fill="#1f2933">0.714286</text>
-<text x="28" y="195" font-family="Inter, Arial" font-size="12" fill="#39434d">Tommy Smith</text>
-<rect x="240" y="180" width="566.7" height="20" rx="3" fill="#1f77b4" opacity="0.86"/>
-<text x="814.6666666666667" y="195" font-family="Inter, Arial" font-size="12" fill="#1f2933">0.714286</text>
-<text x="28" y="229" font-family="Inter, Arial" font-size="12" fill="#39434d">Colin Kaminsky</text>
-<rect x="240" y="214" width="549.2" height="20" rx="3" fill="#1f77b4" opacity="0.86"/>
-<text x="797.2307692307693" y="229" font-family="Inter, Arial" font-size="12" fill="#1f2933">0.692308</text>
-<text x="28" y="263" font-family="Inter, Arial" font-size="12" fill="#39434d">Nicolas Stati</text>
-<rect x="240" y="248" width="528.9" height="20" rx="3" fill="#1f77b4" opacity="0.86"/>
-<text x="776.8888888888889" y="263" font-family="Inter, Arial" font-size="12" fill="#1f2933">0.666667</text>
+<rect x="240" y="146" width="599.4" height="20" rx="3" fill="#1f77b4" opacity="0.86"/>
+<text x="847.4074074074074" y="161" font-family="Inter, Arial" font-size="12" fill="#1f2933">0.777778</text>
+<text x="28" y="195" font-family="Inter, Arial" font-size="12" fill="#39434d">Nicolas Stati</text>
+<rect x="240" y="180" width="578.0" height="20" rx="3" fill="#1f77b4" opacity="0.86"/>
+<text x="826.0" y="195" font-family="Inter, Arial" font-size="12" fill="#1f2933">0.75</text>
+<text x="28" y="229" font-family="Inter, Arial" font-size="12" fill="#39434d">Tommy Smith</text>
+<rect x="240" y="214" width="550.5" height="20" rx="3" fill="#1f77b4" opacity="0.86"/>
+<text x="798.4761904761905" y="229" font-family="Inter, Arial" font-size="12" fill="#1f2933">0.714286</text>
+<text x="28" y="263" font-family="Inter, Arial" font-size="12" fill="#39434d">Colin Kaminsky</text>
+<rect x="240" y="248" width="544.0" height="20" rx="3" fill="#1f77b4" opacity="0.86"/>
+<text x="792.0" y="263" font-family="Inter, Arial" font-size="12" fill="#1f2933">0.705882</text>
 <text x="28" y="297" font-family="Inter, Arial" font-size="12" fill="#39434d">Nolan Allaer</text>
-<rect x="240" y="282" width="507.7" height="20" rx="3" fill="#1f77b4" opacity="0.86"/>
-<text x="755.7333333333333" y="297" font-family="Inter, Arial" font-size="12" fill="#1f2933">0.64</text>
+<rect x="240" y="282" width="495.4" height="20" rx="3" fill="#1f77b4" opacity="0.86"/>
+<text x="743.4285714285716" y="297" font-family="Inter, Arial" font-size="12" fill="#1f2933">0.642857</text>
 <text x="28" y="331" font-family="Inter, Arial" font-size="12" fill="#39434d">Ricardo Escotto</text>
-<rect x="240" y="316" width="495.8" height="20" rx="3" fill="#1f77b4" opacity="0.86"/>
-<text x="743.8333333333334" y="331" font-family="Inter, Arial" font-size="12" fill="#1f2933">0.625</text>
+<rect x="240" y="316" width="481.7" height="20" rx="3" fill="#1f77b4" opacity="0.86"/>
+<text x="729.6666666666667" y="331" font-family="Inter, Arial" font-size="12" fill="#1f2933">0.625</text>
 <text x="28" y="365" font-family="Inter, Arial" font-size="12" fill="#39434d">James Roe</text>
-<rect x="240" y="350" width="464.4" height="20" rx="3" fill="#1f77b4" opacity="0.86"/>
-<text x="712.3902439024391" y="365" font-family="Inter, Arial" font-size="12" fill="#1f2933">0.585366</text>
-<text x="28" y="399" font-family="Inter, Arial" font-size="12" fill="#39434d">Jack William Miller</text>
-<rect x="240" y="384" width="425.0" height="20" rx="3" fill="#1f77b4" opacity="0.86"/>
-<text x="673.0" y="399" font-family="Inter, Arial" font-size="12" fill="#1f2933">0.535714</text>
-<text x="28" y="433" font-family="Inter, Arial" font-size="12" fill="#39434d">Jonathan Browne</text>
-<rect x="240" y="418" width="423.1" height="20" rx="3" fill="#1f77b4" opacity="0.86"/>
-<text x="671.1111111111111" y="433" font-family="Inter, Arial" font-size="12" fill="#1f2933">0.533333</text>
+<rect x="240" y="350" width="462.4" height="20" rx="3" fill="#1f77b4" opacity="0.86"/>
+<text x="710.4000000000001" y="365" font-family="Inter, Arial" font-size="12" fill="#1f2933">0.6</text>
+<text x="28" y="399" font-family="Inter, Arial" font-size="12" fill="#39434d">Niels Koolen</text>
+<rect x="240" y="384" width="423.9" height="20" rx="3" fill="#1f77b4" opacity="0.86"/>
+<text x="671.8666666666668" y="399" font-family="Inter, Arial" font-size="12" fill="#1f2933">0.55</text>
+<text x="28" y="433" font-family="Inter, Arial" font-size="12" fill="#39434d">Jack William Miller</text>
+<rect x="240" y="418" width="412.9" height="20" rx="3" fill="#1f77b4" opacity="0.86"/>
+<text x="660.8571428571429" y="433" font-family="Inter, Arial" font-size="12" fill="#1f2933">0.535714</text>
 </svg>

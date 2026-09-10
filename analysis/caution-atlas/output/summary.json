@@ -1,5 +1,5 @@
 {
-  "asOfDate": "2026-07-19",
+  "asOfDate": "2026-09-10",
   "byVenue": [
     {
       "categories": [
@@ -170,22 +170,22 @@
       "categories": [
         {
           "category": "Contact",
-          "count": 2
+          "count": 3
         }
       ],
-      "cautions": 2,
+      "cautions": 3,
       "dominantThird": "opening",
       "final": 0,
       "maxPerRace": 1,
       "meanPerRace": 1.0,
-      "medianDurationLaps": 2.5,
+      "medianDurationLaps": 2.0,
       "medianPerRace": 1.0,
       "middle": 0,
       "minPerRace": 1,
-      "opening": 2,
-      "races": 2,
+      "opening": 3,
+      "races": 3,
       "ranToFlagCount": 0,
-      "seasons": "2024;2025",
+      "seasons": "2024;2025;2026",
       "trackName": "Portland International Raceway",
       "trackType": "road",
       "unknown": 0,
@@ -315,26 +315,26 @@
       "categories": [
         {
           "category": "Contact",
-          "count": 1
+          "count": 3
         },
         {
           "category": "Spin",
-          "count": 1
+          "count": 3
         }
       ],
-      "cautions": 2,
-      "dominantThird": "",
-      "final": 0,
-      "maxPerRace": 1,
-      "meanPerRace": 1.0,
-      "medianDurationLaps": 4.5,
+      "cautions": 6,
+      "dominantThird": "final",
+      "final": 3,
+      "maxPerRace": 4,
+      "meanPerRace": 2.0,
+      "medianDurationLaps": 4.0,
       "medianPerRace": 1.0,
-      "middle": 1,
+      "middle": 2,
       "minPerRace": 1,
       "opening": 1,
-      "races": 2,
+      "races": 3,
       "ranToFlagCount": 0,
-      "seasons": "2024;2025",
+      "seasons": "2024;2025;2026",
       "trackName": "The Milwaukee Mile",
       "trackType": "oval",
       "unknown": 0,
@@ -344,26 +344,26 @@
       "categories": [
         {
           "category": "Contact",
-          "count": 6
+          "count": 9
         },
         {
           "category": "Off course",
-          "count": 1
+          "count": 2
         }
       ],
-      "cautions": 7,
-      "dominantThird": "",
+      "cautions": 11,
+      "dominantThird": "middle",
       "final": 1,
       "maxPerRace": 4,
-      "meanPerRace": 1.75,
+      "meanPerRace": 1.833,
       "medianDurationLaps": 3.0,
       "medianPerRace": 1.0,
-      "middle": 3,
+      "middle": 6,
       "minPerRace": 1,
-      "opening": 3,
-      "races": 4,
+      "opening": 4,
+      "races": 6,
       "ranToFlagCount": 0,
-      "seasons": "2024;2025",
+      "seasons": "2024;2025;2026",
       "trackName": "WeatherTech Raceway Laguna Seca",
       "trackType": "road",
       "unknown": 0,
@@ -408,13 +408,13 @@
   "coverage": {
     "indyNxtRaceSessions": 45,
     "racesCautionFree": 6,
-    "racesConsidered": 41,
-    "racesWithCaution": 35,
+    "racesConsidered": 45,
+    "racesWithCaution": 39,
     "racesWithoutChart": 0,
-    "totalCautions": 74
+    "totalCautions": 83
   },
-  "datasetSha256": "64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978",
-  "generatedAt": "2026-07-21T23:55:26Z",
+  "datasetSha256": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd",
+  "generatedAt": "2026-09-10T23:21:10Z",
   "handVerification": [
     {
       "cautionCount": 1,
@@ -493,18 +493,18 @@
   "totals": {
     "byCategory": {
       "Conditions": 1,
-      "Contact": 51,
+      "Contact": 57,
       "Debris": 5,
       "Mechanical": 2,
-      "Off course": 8,
-      "Spin": 7
+      "Off course": 9,
+      "Spin": 9
     },
     "byThird": {
-      "final": 22,
-      "middle": 19,
-      "opening": 33,
+      "final": 25,
+      "middle": 23,
+      "opening": 35,
       "unknown": 0
     },
-    "cautions": 74
+    "cautions": 83
   }
 }

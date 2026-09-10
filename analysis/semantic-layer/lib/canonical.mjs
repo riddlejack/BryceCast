@@ -1,10 +1,12 @@
 // Read-only view of the canonical career dataset for validation. Never written.
-// Path via BRYCECAST_CAREER_DATASET; documented default is the ac78 checkout.
+// Path via BRYCECAST_CAREER_DATASET; default is this repository's dataset.
 
 import {readFile} from 'node:fs/promises';
+import {dirname, join, resolve} from 'node:path';
+import {fileURLToPath} from 'node:url';
 
-export const DEFAULT_CAREER_DATASET =
-  '/Users/example/.codex/worktrees/ac78/Bryce POV access/data/career/career.dataset.json';
+const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../../..');
+export const DEFAULT_CAREER_DATASET = join(REPO_ROOT, 'data/career/career.dataset.json');
 
 const VENUE_ALIASES = new Map([
   ['ims', 'indianapolis'], // "IMS" (feed) vs "Indianapolis Motor Speedway ..." (canonical)

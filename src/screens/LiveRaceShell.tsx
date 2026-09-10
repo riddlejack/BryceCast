@@ -5,7 +5,7 @@ import { Link } from '../app/router';
 import { TrackArt } from '../app/trackArt';
 import { trackOutlineFor } from '../assets/tracks';
 import { formatDate } from '../app/format';
-import type { LiveReadiness } from '../app/useReadiness';
+import type { LiveReadiness, ReplaySourceGap } from '../app/useReadiness';
 import type { ReplaySession } from '../app/useReplaySession';
 import type { LiveSessionHistory } from '../data/liveHistoryModel';
 import {
@@ -16,8 +16,9 @@ import {
   type BuildingLapChart
 } from '../data/liveRaceShellModel';
 import { LapChart } from './RaceDetailScreen';
-import { watchableCaptureForRace, replayProvenance } from '../data/replayAvailable';
+import { isBryceCastCaptureTier, watchableCaptureForRace, replayProvenance } from '../data/replayAvailable';
 import { ReplayAffordance, useReplayCatalog } from './replayAffordance';
+import { ReplayGapSkippedNote, ReplaySourceGapNotice } from './replaySourceGap';
 
 /**
  * The live race page (Brief R-c): /races/<sessionId> while THIS race is live or
@@ -181,7 +182,7 @@ const WatchThisRaceUnfold = ({ sessionId }: { sessionId: string }) => {
   const catalog = useReplayCatalog();
   const capture = catalog ? watchableCaptureForRace(catalog, sessionId) : null;
   if (!capture) return null;
-  const isOwnCapture = replayProvenance(capture).tier === 'brycecast_capture';
+  const isOwnCapture = isBryceCastCaptureTier(replayProvenance(capture).tier);
   return (
     <section className="race-replay" aria-label="Watch this race unfold">
       <ReplayAffordance
@@ -204,12 +205,14 @@ export const LiveRaceShell = ({
   sessionId,
   payload,
   history,
-  replay
+  replay,
+  replaySourceGap
 }: {
   sessionId: string;
   payload: LiveReadiness | null;
   history: LiveSessionHistory | null;
   replay: ReplaySession | null;
+  replaySourceGap: ReplaySourceGap | null;
 }) => {
   // One coherent frame drives the whole shell — hero, rank, flag, lap, and the
   // building chart all read from this single snapshot, so the hero's lap and the
@@ -219,6 +222,16 @@ export const LiveRaceShell = ({
     () => buildLiveRaceShellSnapshot(payload, history, sessionId),
     [payload, history, sessionId]
   );
+  if (replay && replaySourceGap) {
+    return (
+      <div className="page stack" data-replay-source-gap="true">
+        <Link to="/races" className="navlink" style={{ alignSelf: 'flex-start', padding: '4px 2px' }}>
+          <ArrowLeft size={14} aria-hidden /> All races
+        </Link>
+        <ReplaySourceGapNotice gap={replaySourceGap} replay={replay} />
+      </div>
+    );
+  }
   const { ref, simulated, preGreen, finished, paused, running, rank, chart } = snapshot;
   const payloadIsThisRace = snapshot.isThisRace;
 
@@ -251,6 +264,7 @@ export const LiveRaceShell = ({
       <Link to="/races" className="navlink" style={{ alignSelf: 'flex-start', padding: '4px 2px' }}>
         <ArrowLeft size={14} aria-hidden /> All races
       </Link>
+      {replay ? <ReplayGapSkippedNote replay={replay} /> : null}
       <header className="screen-head" style={{ margin: 0 }}>
         <span className="kicker">
           {[

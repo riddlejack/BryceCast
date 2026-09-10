@@ -10,7 +10,7 @@
 // is deterministically regenerable from raw via this script.
 //
 // Reads only raw/ from the lake (via BRYCECAST_LAKE_DATA_ROOT). Writes only into
-// this lane's output/. Never touches the live runtime or the a534 worktree.
+// this lane's output/. Never touches the live runtime.
 
 import {createWriteStream} from 'node:fs';
 import {mkdir, writeFile, rm} from 'node:fs/promises';
@@ -102,7 +102,13 @@ for (const session of sessions) {
   // Per-session grain pack: crossings + laps + flags + classification.
   const packPath = join(SESSIONS_DIR, `${session.id}.ndjson.gz`);
   const rows = [];
-  rows.push({record: 'session_meta', ...session, sourceTier: SOURCE_TIER, qualityMasks: parsed.qualityMasks});
+  rows.push({
+    record: 'session_meta',
+    ...session,
+    sourceTier: SOURCE_TIER,
+    qualityMasks: parsed.qualityMasks,
+    sourceObservationCoverage: parsed.heartbeats,
+  });
   rows.push({record: 'geometry', ...parsed.geometry});
   for (const f of parsed.flags.intervals) rows.push({record: 'flag', ...f, sourceTier: SOURCE_TIER});
   for (const c of parsed.classification.byCar) rows.push({record: 'classification', ...c, sourceTier: SOURCE_TIER});
@@ -134,6 +140,7 @@ for (const session of sessions) {
     heartbeat: parsed.heartbeats,
     flagEventCount: parsed.flags.events.length,
     greenTod: parsed.flags.greenTod,
+    checkeredTod: parsed.flags.checkeredTod,
     hasCheckered: parsed.flags.hasCheckered,
     maxDerivedLaps: Math.max(0, ...Object.values(parsed.lapCountByCar)),
     qualityMasks: parsed.qualityMasks,

@@ -661,9 +661,9 @@ def build_context_packs(
     strengths: list[dict[str, Any]],
     transfer_rows: list[dict[str, Any]],
     road_america_rows: list[dict[str, Any]],
-    upcoming_track_name: str,
+    upcoming_track_name: str | None,
     upcoming_rows: list[dict[str, Any]],
-) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any], dict[str, Any]]:
+) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any], dict[str, Any] | None]:
     best = top_strengths(strengths, reverse=True)
     weakest = top_strengths(strengths, reverse=False)
     top_lap_rows = [
@@ -691,8 +691,9 @@ def build_context_packs(
         },
         "upcomingVenue": {
             "asOfDate": RUN_DATE.isoformat(),
+            "status": "available" if upcoming_track_name else "season_complete",
             "trackName": upcoming_track_name,
-            "artifactSlug": venue_slug(upcoming_track_name),
+            "artifactSlug": venue_slug(upcoming_track_name) if upcoming_track_name else None,
         },
         "correlations": correlations,
         "caveats": [
@@ -757,23 +758,25 @@ def build_context_packs(
             "Show session type and source caveat with every Road America prep comparison.",
         ],
     }
-    upcoming_slug = venue_slug(upcoming_track_name).replace("_", "-")
-    upcoming_pack = {
-        "id": f"{upcoming_slug}-prep-section-context",
-        "generatedAt": generated_at,
-        "sourceDataset": "data/career/career.dataset.json",
-        "sourceHash": source_hash,
-        "claimStrength": "descriptive_context_only",
-        "publicPointPrediction": False,
-        "asOfDate": RUN_DATE.isoformat(),
-        "trackName": upcoming_track_name,
-        "historicalPrepRows": upcoming_rows,
-        "displayRules": [
-            f"Use completed {upcoming_track_name} practice/qualifying section rows as historical context.",
-            "Do not update future race-week claims until live/current session rows exist.",
-            f"Show session type and source caveat with every {upcoming_track_name} prep comparison.",
-        ],
-    }
+    upcoming_pack = None
+    if upcoming_track_name:
+        upcoming_slug = venue_slug(upcoming_track_name).replace("_", "-")
+        upcoming_pack = {
+            "id": f"next-venue-{upcoming_slug}-prep-section-context",
+            "generatedAt": generated_at,
+            "sourceDataset": "data/career/career.dataset.json",
+            "sourceHash": source_hash,
+            "claimStrength": "descriptive_context_only",
+            "publicPointPrediction": False,
+            "asOfDate": RUN_DATE.isoformat(),
+            "trackName": upcoming_track_name,
+            "historicalPrepRows": upcoming_rows,
+            "displayRules": [
+                f"Use completed {upcoming_track_name} practice/qualifying section rows as historical context.",
+                "Do not update future race-week claims until live/current session rows exist.",
+                f"Show session type and source caveat with every {upcoming_track_name} prep comparison.",
+            ],
+        }
     return summary, section_pack, road_pack, upcoming_pack
 
 
@@ -783,7 +786,7 @@ def render_report(
     best: list[dict[str, Any]],
     weakest: list[dict[str, Any]],
     road_america_rows: list[dict[str, Any]],
-    upcoming_track_name: str,
+    upcoming_track_name: str | None,
     upcoming_rows: list[dict[str, Any]],
 ) -> str:
     counts = summary["counts"]
@@ -804,10 +807,17 @@ def render_report(
         f"- {row['seasonYear']} {row['sessionName']}: median section percentile {fmt(row['medianTrackSectionPercentile'], 3)}, best {row['bestSectionFamilies'] or 'n/a'}."
         for row in road_america_rows[:10]
     ) or "- No completed Road America practice/qualifying section rows were source-visible."
-    upcoming_lines = "\n".join(
-        f"- {row['seasonYear']} {row['sessionName']}: median section percentile {fmt(row['medianTrackSectionPercentile'], 3)}, best {row['bestSectionFamilies'] or 'n/a'}."
-        for row in upcoming_rows[:10]
-    ) or f"- No completed {upcoming_track_name} practice/qualifying section rows were source-visible."
+    if upcoming_track_name:
+        upcoming_lines = "\n".join(
+            f"- {row['seasonYear']} {row['sessionName']}: median section percentile {fmt(row['medianTrackSectionPercentile'], 3)}, best {row['bestSectionFamilies'] or 'n/a'}."
+            for row in upcoming_rows[:10]
+        ) or f"- No completed {upcoming_track_name} practice/qualifying section rows were source-visible."
+        upcoming_heading = f"Track: `{upcoming_track_name}`"
+        context_pack_line = "and the current next-venue prep pack."
+    else:
+        upcoming_lines = "- No future INDY NXT venue remains on the canonical schedule as of the analysis date."
+        upcoming_heading = "Season complete; no next-venue prep artifact is emitted."
+        context_pack_line = "The next-venue pack is omitted when the canonical schedule has no future event."
     return f"""# INDY NXT Section-Lap Deep Dive
 
 Generated: `{generated_at}`
@@ -825,7 +835,7 @@ This lane uses INDY NXT official `official_section_results` and `official_top_se
 - `practice_qualifying_top_section_times.csv`: {counts['topSectionRows']} Bryce rows from official Top Section Times.
 - `section_family_strengths.csv`: {counts['sectionFamilyRows']} track/session/section-family aggregates.
 - `session_to_race_transfer.csv`: {counts['sessionToRaceTransferRows']} historical prep-to-race rows.
-- Context packs: `context-packs/indy-nxt-section-lap-context.json`, `context-packs/road-america-prep-context.json`, and the current next-venue prep pack.
+- Context packs: `context-packs/indy-nxt-section-lap-context.json` and the permanent historical `context-packs/road-america-prep-context.json`; {context_pack_line}
 
 ## Practice/Qualifying Section-Lap Findings
 
@@ -853,7 +863,7 @@ These rows are historical backtests only. They are suitable for analyst features
 
 ## Upcoming Venue Context
 
-Track: `{upcoming_track_name}`
+{upcoming_heading}
 
 {upcoming_lines}
 
@@ -882,8 +892,12 @@ def main() -> int:
     strengths = build_section_family_strengths(observations, source_hash)
     transfer_rows = build_transfer_rows(session_summaries, observations, data, source_hash, sessions, events, tracks)
     road_america_rows = build_track_prep_rows(session_summaries, source_hash, "Road America")
-    upcoming_track_name = next_upcoming_track_name(data) or "Road America"
-    upcoming_rows = build_track_prep_rows(session_summaries, source_hash, upcoming_track_name)
+    upcoming_track_name = next_upcoming_track_name(data)
+    upcoming_rows = (
+        build_track_prep_rows(session_summaries, source_hash, upcoming_track_name)
+        if upcoming_track_name
+        else []
+    )
     summary, section_pack, road_pack, upcoming_pack = build_context_packs(
         source_hash,
         generated_at,
@@ -1036,35 +1050,41 @@ def main() -> int:
             "caveat",
         ],
     )
-    upcoming_slug = venue_slug(upcoming_track_name)
-    write_csv(
-        OUTPUT_DIR / f"{upcoming_slug}_prep_section_context.csv",
-        upcoming_rows,
-        [
-            "eventId",
-            "seasonYear",
-            "eventName",
-            "trackName",
-            "sessionId",
-            "sessionType",
-            "sessionName",
-            "bryceLapCount",
-            "comparisonRows",
-            "medianTrackSectionPercentile",
-            "topQuartileTrackSectionShare",
-            "bottomQuartileTrackSectionShare",
-            "bestSectionFamilies",
-            "weakestSectionFamilies",
-            "topSectionBryceRows",
-            "sourceState",
-            "sourceHash",
-            "caveat",
-        ],
-    )
+    for stale_path in OUTPUT_DIR.glob("next_venue_*_prep_section_context.csv"):
+        stale_path.unlink()
+    for stale_path in PACK_DIR.glob("next-venue-*-prep-context.json"):
+        stale_path.unlink()
+    if upcoming_track_name:
+        upcoming_slug = venue_slug(upcoming_track_name)
+        write_csv(
+            OUTPUT_DIR / f"next_venue_{upcoming_slug}_prep_section_context.csv",
+            upcoming_rows,
+            [
+                "eventId",
+                "seasonYear",
+                "eventName",
+                "trackName",
+                "sessionId",
+                "sessionType",
+                "sessionName",
+                "bryceLapCount",
+                "comparisonRows",
+                "medianTrackSectionPercentile",
+                "topQuartileTrackSectionShare",
+                "bottomQuartileTrackSectionShare",
+                "bestSectionFamilies",
+                "weakestSectionFamilies",
+                "topSectionBryceRows",
+                "sourceState",
+                "sourceHash",
+                "caveat",
+            ],
+        )
     write_json(OUTPUT_DIR / "summary.json", summary)
     write_json(PACK_DIR / "indy-nxt-section-lap-context.json", section_pack)
     write_json(PACK_DIR / "road-america-prep-context.json", road_pack)
-    write_json(PACK_DIR / f"{upcoming_slug.replace('_', '-')}-prep-context.json", upcoming_pack)
+    if upcoming_track_name and upcoming_pack:
+        write_json(PACK_DIR / f"next-venue-{upcoming_slug.replace('_', '-')}-prep-context.json", upcoming_pack)
 
     best = top_strengths(strengths, reverse=True)
     weakest = top_strengths(strengths, reverse=False)

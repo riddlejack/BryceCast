@@ -1,10 +1,10 @@
 {
   "artifact": "identity-crosswalk-2026",
-  "generatedAt": "2026-07-21T23:53:54.675Z",
+  "generatedAt": "2026-09-10T23:03:12.696Z",
   "scope": "INDY_NXT 2026, Timing71 replays -> canonical driverIds (event-scoped)",
   "law": "No 2026 lake-derived identity reaches the UI except through this crosswalk; ambiguous/unmapped entries are hard failures, never silent fallbacks.",
-  "sessionCount": 34,
-  "completeSessions": 34,
+  "sessionCount": 44,
+  "completeSessions": 44,
   "sessions": [
     {
       "t71SessionId": "t71_2026_st-petersburg_practice_p1_2026-02-27",
@@ -7788,6 +7788,2409 @@
           "status": "mapped_exact",
           "rule": "exact",
           "evidence": "Nicholas Monteiro ~ Nicholas Monteiro (exact)"
+        }
+      ]
+    },
+    {
+      "t71SessionId": "t71_2026_portland-international-raceway_practice_p1_2026-08-07",
+      "sessionType": "practice",
+      "date": "2026-08-07",
+      "venue": "Portland International Raceway",
+      "canonicalEventId": "event_indy_nxt_2026_5547",
+      "canonicalSessionId": "session_indy_nxt_2026_6898",
+      "canonicalOfficialSessionId": "6898",
+      "rosterSize": 24,
+      "scopeUsed": "event",
+      "eventAuthority": "canonical_results",
+      "counts": {
+        "mapped": 24,
+        "exact": 24,
+        "nameVariant": 0,
+        "swapResolved": 0,
+        "eventCaptureConfirmed": 0,
+        "seasonScope": 0,
+        "ambiguous": 0,
+        "unmapped": 0
+      },
+      "complete": true,
+      "strictEventScope": true,
+      "eventScoped": true,
+      "mappings": [
+        {
+          "car": "4",
+          "sourceName": "Nicholas Monteiro",
+          "sourceTeam": "AJ Foyt Racing",
+          "driverId": "driver_nicholas_monteiro",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Nicholas Monteiro ~ Nicholas Monteiro (exact)"
+        },
+        {
+          "car": "8",
+          "sourceName": "James Roe",
+          "sourceTeam": "Chip Ganassi Racing",
+          "driverId": "driver_james_roe",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "James Roe ~ James Roe (exact)"
+        },
+        {
+          "car": "9",
+          "sourceName": "Bryce Aron",
+          "sourceTeam": "Chip Ganassi Racing",
+          "driverId": "driver_bryce_aron",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Bryce Aron ~ Bryce Aron (exact)"
+        },
+        {
+          "car": "10",
+          "sourceName": "Niels Koolen",
+          "sourceTeam": "Chip Ganassi Racing",
+          "driverId": "driver_niels_koolen",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Niels Koolen ~ Niels Koolen (exact)"
+        },
+        {
+          "car": "11",
+          "sourceName": "Carson Etter",
+          "sourceTeam": "Chip Ganassi Racing",
+          "driverId": "driver_carson_etter",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Carson Etter ~ Carson Etter (exact)"
+        },
+        {
+          "car": "12",
+          "sourceName": "Max Garcia",
+          "sourceTeam": "ABEL Motorsports",
+          "driverId": "driver_max_garcia",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Max Garcia ~ Max Garcia (exact)"
+        },
+        {
+          "car": "14",
+          "sourceName": "Alessandro de Tullio",
+          "sourceTeam": "AJ Foyt Racing",
+          "driverId": "driver_alessandro_de_tullio",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Alessandro de Tullio ~ Alessandro de Tullio (exact)"
+        },
+        {
+          "car": "15",
+          "sourceName": "Nicolas Stati",
+          "sourceTeam": "Cusick Morgan Motorsports",
+          "driverId": "driver_nicolas_stati",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Nicolas Stati ~ Nicolas Stati (exact)"
+        },
+        {
+          "car": "17",
+          "sourceName": "Bart Harrison",
+          "sourceTeam": "HMD Motorsports",
+          "driverId": "driver_bart_harrison",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Bart Harrison ~ Bart Harrison (exact)"
+        },
+        {
+          "car": "20",
+          "sourceName": "Matteo Nannini",
+          "sourceTeam": "Cape Motorsports",
+          "driverId": "driver_matteo_nannini",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Matteo Nannini ~ Matteo Nannini (exact)"
+        },
+        {
+          "car": "21",
+          "sourceName": "Nikita Johnson",
+          "sourceTeam": "Cape Motorsports",
+          "driverId": "driver_nikita_johnson",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Nikita Johnson ~ Nikita Johnson (exact)"
+        },
+        {
+          "car": "26",
+          "sourceName": "Lochie Hughes",
+          "sourceTeam": "Andretti Global",
+          "driverId": "driver_lochie_hughes",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Lochie Hughes ~ Lochie Hughes (exact)"
+        },
+        {
+          "car": "27",
+          "sourceName": "Seb Murray",
+          "sourceTeam": "Andretti Global",
+          "driverId": "driver_seb_murray",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Seb Murray ~ Seb Murray (exact)"
+        },
+        {
+          "car": "28",
+          "sourceName": "Max Taylor",
+          "sourceTeam": "Andretti Global",
+          "driverId": "driver_max_taylor",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Max Taylor ~ Max Taylor (exact)"
+        },
+        {
+          "car": "29",
+          "sourceName": "Josh Pierson",
+          "sourceTeam": "Andretti Global",
+          "driverId": "driver_josh_pierson",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Josh Pierson ~ Josh Pierson (exact)"
+        },
+        {
+          "car": "45",
+          "sourceName": "Jack Beeton",
+          "sourceTeam": "HMD Motorsports",
+          "driverId": "driver_jack_beeton",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Jack Beeton ~ Jack Beeton (exact)"
+        },
+        {
+          "car": "48",
+          "sourceName": "Jacob Abel",
+          "sourceTeam": "ABEL Motorsports",
+          "driverId": "driver_jacob_abel",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Jacob Abel ~ Jacob Abel (exact)"
+        },
+        {
+          "car": "57",
+          "sourceName": "Colin Kaminsky",
+          "sourceTeam": "ABEL Motorsports",
+          "driverId": "driver_colin_kaminsky",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Colin Kaminsky ~ Colin Kaminsky (exact)"
+        },
+        {
+          "car": "67",
+          "sourceName": "Enzo Fittipaldi",
+          "sourceTeam": "HMD Motorsports",
+          "driverId": "driver_enzo_fittipaldi",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Enzo Fittipaldi ~ Enzo Fittipaldi (exact)"
+        },
+        {
+          "car": "68",
+          "sourceName": "JM Correa",
+          "sourceTeam": "Cusick Morgan Motorsports",
+          "driverId": "driver_jm_correa",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "JM Correa ~ JM Correa (exact)"
+        },
+        {
+          "car": "71",
+          "sourceName": "Tymek Kucharczyk",
+          "sourceTeam": "HMD Motorsports",
+          "driverId": "driver_tymek_kucharczyk",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Tymek Kucharczyk ~ Tymek Kucharczyk (exact)"
+        },
+        {
+          "car": "75",
+          "sourceName": "Alexander Koreiba",
+          "sourceTeam": "Juncos Hollinger Racing",
+          "driverId": "driver_alexander_koreiba",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Alexander Koreiba ~ Alexander Koreiba (exact)"
+        },
+        {
+          "car": "76",
+          "sourceName": "Nolan Allaer",
+          "sourceTeam": "Juncos Hollinger Racing",
+          "driverId": "driver_nolan_allaer",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Nolan Allaer ~ Nolan Allaer (exact)"
+        },
+        {
+          "car": "99",
+          "sourceName": "Myles Rowe",
+          "sourceTeam": "ABEL Motorsports",
+          "driverId": "driver_myles_rowe",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Myles Rowe ~ Myles Rowe (exact)"
+        }
+      ]
+    },
+    {
+      "t71SessionId": "t71_2026_portland-international-raceway_practice_p2_2026-08-08",
+      "sessionType": "practice",
+      "date": "2026-08-08",
+      "venue": "Portland International Raceway",
+      "canonicalEventId": "event_indy_nxt_2026_5547",
+      "canonicalSessionId": "session_indy_nxt_2026_6899",
+      "canonicalOfficialSessionId": "6899",
+      "rosterSize": 24,
+      "scopeUsed": "event",
+      "eventAuthority": "canonical_results",
+      "counts": {
+        "mapped": 24,
+        "exact": 24,
+        "nameVariant": 0,
+        "swapResolved": 0,
+        "eventCaptureConfirmed": 0,
+        "seasonScope": 0,
+        "ambiguous": 0,
+        "unmapped": 0
+      },
+      "complete": true,
+      "strictEventScope": true,
+      "eventScoped": true,
+      "mappings": [
+        {
+          "car": "4",
+          "sourceName": "Nicholas Monteiro",
+          "sourceTeam": "AJ Foyt Racing",
+          "driverId": "driver_nicholas_monteiro",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Nicholas Monteiro ~ Nicholas Monteiro (exact)"
+        },
+        {
+          "car": "8",
+          "sourceName": "James Roe",
+          "sourceTeam": "Chip Ganassi Racing",
+          "driverId": "driver_james_roe",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "James Roe ~ James Roe (exact)"
+        },
+        {
+          "car": "9",
+          "sourceName": "Bryce Aron",
+          "sourceTeam": "Chip Ganassi Racing",
+          "driverId": "driver_bryce_aron",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Bryce Aron ~ Bryce Aron (exact)"
+        },
+        {
+          "car": "10",
+          "sourceName": "Niels Koolen",
+          "sourceTeam": "Chip Ganassi Racing",
+          "driverId": "driver_niels_koolen",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Niels Koolen ~ Niels Koolen (exact)"
+        },
+        {
+          "car": "11",
+          "sourceName": "Carson Etter",
+          "sourceTeam": "Chip Ganassi Racing",
+          "driverId": "driver_carson_etter",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Carson Etter ~ Carson Etter (exact)"
+        },
+        {
+          "car": "12",
+          "sourceName": "Max Garcia",
+          "sourceTeam": "ABEL Motorsports",
+          "driverId": "driver_max_garcia",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Max Garcia ~ Max Garcia (exact)"
+        },
+        {
+          "car": "14",
+          "sourceName": "Alessandro de Tullio",
+          "sourceTeam": "AJ Foyt Racing",
+          "driverId": "driver_alessandro_de_tullio",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Alessandro de Tullio ~ Alessandro de Tullio (exact)"
+        },
+        {
+          "car": "15",
+          "sourceName": "Nicolas Stati",
+          "sourceTeam": "Cusick Morgan Motorsports",
+          "driverId": "driver_nicolas_stati",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Nicolas Stati ~ Nicolas Stati (exact)"
+        },
+        {
+          "car": "17",
+          "sourceName": "Bart Harrison",
+          "sourceTeam": "HMD Motorsports",
+          "driverId": "driver_bart_harrison",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Bart Harrison ~ Bart Harrison (exact)"
+        },
+        {
+          "car": "20",
+          "sourceName": "Matteo Nannini",
+          "sourceTeam": "Cape Motorsports",
+          "driverId": "driver_matteo_nannini",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Matteo Nannini ~ Matteo Nannini (exact)"
+        },
+        {
+          "car": "21",
+          "sourceName": "Nikita Johnson",
+          "sourceTeam": "Cape Motorsports",
+          "driverId": "driver_nikita_johnson",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Nikita Johnson ~ Nikita Johnson (exact)"
+        },
+        {
+          "car": "26",
+          "sourceName": "Lochie Hughes",
+          "sourceTeam": "Andretti Global",
+          "driverId": "driver_lochie_hughes",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Lochie Hughes ~ Lochie Hughes (exact)"
+        },
+        {
+          "car": "27",
+          "sourceName": "Seb Murray",
+          "sourceTeam": "Andretti Global",
+          "driverId": "driver_seb_murray",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Seb Murray ~ Seb Murray (exact)"
+        },
+        {
+          "car": "28",
+          "sourceName": "Max Taylor",
+          "sourceTeam": "Andretti Global",
+          "driverId": "driver_max_taylor",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Max Taylor ~ Max Taylor (exact)"
+        },
+        {
+          "car": "29",
+          "sourceName": "Josh Pierson",
+          "sourceTeam": "Andretti Global",
+          "driverId": "driver_josh_pierson",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Josh Pierson ~ Josh Pierson (exact)"
+        },
+        {
+          "car": "45",
+          "sourceName": "Jack Beeton",
+          "sourceTeam": "HMD Motorsports",
+          "driverId": "driver_jack_beeton",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Jack Beeton ~ Jack Beeton (exact)"
+        },
+        {
+          "car": "48",
+          "sourceName": "Jacob Abel",
+          "sourceTeam": "ABEL Motorsports",
+          "driverId": "driver_jacob_abel",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Jacob Abel ~ Jacob Abel (exact)"
+        },
+        {
+          "car": "57",
+          "sourceName": "Colin Kaminsky",
+          "sourceTeam": "ABEL Motorsports",
+          "driverId": "driver_colin_kaminsky",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Colin Kaminsky ~ Colin Kaminsky (exact)"
+        },
+        {
+          "car": "67",
+          "sourceName": "Enzo Fittipaldi",
+          "sourceTeam": "HMD Motorsports",
+          "driverId": "driver_enzo_fittipaldi",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Enzo Fittipaldi ~ Enzo Fittipaldi (exact)"
+        },
+        {
+          "car": "68",
+          "sourceName": "JM Correa",
+          "sourceTeam": "Cusick Morgan Motorsports",
+          "driverId": "driver_jm_correa",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "JM Correa ~ JM Correa (exact)"
+        },
+        {
+          "car": "71",
+          "sourceName": "Tymek Kucharczyk",
+          "sourceTeam": "HMD Motorsports",
+          "driverId": "driver_tymek_kucharczyk",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Tymek Kucharczyk ~ Tymek Kucharczyk (exact)"
+        },
+        {
+          "car": "75",
+          "sourceName": "Alexander Koreiba",
+          "sourceTeam": "Juncos Hollinger Racing",
+          "driverId": "driver_alexander_koreiba",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Alexander Koreiba ~ Alexander Koreiba (exact)"
+        },
+        {
+          "car": "76",
+          "sourceName": "Nolan Allaer",
+          "sourceTeam": "Juncos Hollinger Racing",
+          "driverId": "driver_nolan_allaer",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Nolan Allaer ~ Nolan Allaer (exact)"
+        },
+        {
+          "car": "99",
+          "sourceName": "Myles Rowe",
+          "sourceTeam": "ABEL Motorsports",
+          "driverId": "driver_myles_rowe",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Myles Rowe ~ Myles Rowe (exact)"
+        }
+      ]
+    },
+    {
+      "t71SessionId": "t71_2026_portland-international-raceway_qualifying_2026-08-08",
+      "sessionType": "qualifying",
+      "date": "2026-08-08",
+      "venue": "Portland International Raceway",
+      "canonicalEventId": "event_indy_nxt_2026_5547",
+      "canonicalSessionId": "session_indy_nxt_2026_6900",
+      "canonicalOfficialSessionId": "6900",
+      "rosterSize": 24,
+      "scopeUsed": "event",
+      "eventAuthority": "canonical_results",
+      "counts": {
+        "mapped": 24,
+        "exact": 24,
+        "nameVariant": 0,
+        "swapResolved": 0,
+        "eventCaptureConfirmed": 0,
+        "seasonScope": 0,
+        "ambiguous": 0,
+        "unmapped": 0
+      },
+      "complete": true,
+      "strictEventScope": true,
+      "eventScoped": true,
+      "mappings": [
+        {
+          "car": "9",
+          "sourceName": "Bryce Aron",
+          "sourceTeam": "Chip Ganassi Racing",
+          "driverId": "driver_bryce_aron",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Bryce Aron ~ Bryce Aron (exact)"
+        },
+        {
+          "car": "10",
+          "sourceName": "Niels Koolen",
+          "sourceTeam": "Chip Ganassi Racing",
+          "driverId": "driver_niels_koolen",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Niels Koolen ~ Niels Koolen (exact)"
+        },
+        {
+          "car": "11",
+          "sourceName": "Carson Etter",
+          "sourceTeam": "Chip Ganassi Racing",
+          "driverId": "driver_carson_etter",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Carson Etter ~ Carson Etter (exact)"
+        },
+        {
+          "car": "12",
+          "sourceName": "Max Garcia",
+          "sourceTeam": "ABEL Motorsports",
+          "driverId": "driver_max_garcia",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Max Garcia ~ Max Garcia (exact)"
+        },
+        {
+          "car": "14",
+          "sourceName": "Alessandro de Tullio",
+          "sourceTeam": "AJ Foyt Racing",
+          "driverId": "driver_alessandro_de_tullio",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Alessandro de Tullio ~ Alessandro de Tullio (exact)"
+        },
+        {
+          "car": "15",
+          "sourceName": "Nicolas Stati",
+          "sourceTeam": "Cusick Morgan Motorsports",
+          "driverId": "driver_nicolas_stati",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Nicolas Stati ~ Nicolas Stati (exact)"
+        },
+        {
+          "car": "17",
+          "sourceName": "Bart Harrison",
+          "sourceTeam": "HMD Motorsports",
+          "driverId": "driver_bart_harrison",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Bart Harrison ~ Bart Harrison (exact)"
+        },
+        {
+          "car": "21",
+          "sourceName": "Nikita Johnson",
+          "sourceTeam": "Cape Motorsports",
+          "driverId": "driver_nikita_johnson",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Nikita Johnson ~ Nikita Johnson (exact)"
+        },
+        {
+          "car": "27",
+          "sourceName": "Seb Murray",
+          "sourceTeam": "Andretti Global",
+          "driverId": "driver_seb_murray",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Seb Murray ~ Seb Murray (exact)"
+        },
+        {
+          "car": "28",
+          "sourceName": "Max Taylor",
+          "sourceTeam": "Andretti Global",
+          "driverId": "driver_max_taylor",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Max Taylor ~ Max Taylor (exact)"
+        },
+        {
+          "car": "48",
+          "sourceName": "Jacob Abel",
+          "sourceTeam": "ABEL Motorsports",
+          "driverId": "driver_jacob_abel",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Jacob Abel ~ Jacob Abel (exact)"
+        },
+        {
+          "car": "75",
+          "sourceName": "Alexander Koreiba",
+          "sourceTeam": "Juncos Hollinger Racing",
+          "driverId": "driver_alexander_koreiba",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Alexander Koreiba ~ Alexander Koreiba (exact)"
+        },
+        {
+          "car": "26",
+          "sourceName": "Lochie Hughes",
+          "sourceTeam": "Andretti Global",
+          "driverId": "driver_lochie_hughes",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Lochie Hughes ~ Lochie Hughes (exact)"
+        },
+        {
+          "car": "71",
+          "sourceName": "Tymek Kucharczyk",
+          "sourceTeam": "HMD Motorsports",
+          "driverId": "driver_tymek_kucharczyk",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Tymek Kucharczyk ~ Tymek Kucharczyk (exact)"
+        },
+        {
+          "car": "99",
+          "sourceName": "Myles Rowe",
+          "sourceTeam": "ABEL Motorsports",
+          "driverId": "driver_myles_rowe",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Myles Rowe ~ Myles Rowe (exact)"
+        },
+        {
+          "car": "29",
+          "sourceName": "Josh Pierson",
+          "sourceTeam": "Andretti Global",
+          "driverId": "driver_josh_pierson",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Josh Pierson ~ Josh Pierson (exact)"
+        },
+        {
+          "car": "68",
+          "sourceName": "JM Correa",
+          "sourceTeam": "Cusick Morgan Motorsports",
+          "driverId": "driver_jm_correa",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "JM Correa ~ JM Correa (exact)"
+        },
+        {
+          "car": "20",
+          "sourceName": "Matteo Nannini",
+          "sourceTeam": "Cape Motorsports",
+          "driverId": "driver_matteo_nannini",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Matteo Nannini ~ Matteo Nannini (exact)"
+        },
+        {
+          "car": "67",
+          "sourceName": "Enzo Fittipaldi",
+          "sourceTeam": "HMD Motorsports",
+          "driverId": "driver_enzo_fittipaldi",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Enzo Fittipaldi ~ Enzo Fittipaldi (exact)"
+        },
+        {
+          "car": "45",
+          "sourceName": "Jack Beeton",
+          "sourceTeam": "HMD Motorsports",
+          "driverId": "driver_jack_beeton",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Jack Beeton ~ Jack Beeton (exact)"
+        },
+        {
+          "car": "57",
+          "sourceName": "Colin Kaminsky",
+          "sourceTeam": "ABEL Motorsports",
+          "driverId": "driver_colin_kaminsky",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Colin Kaminsky ~ Colin Kaminsky (exact)"
+        },
+        {
+          "car": "8",
+          "sourceName": "James Roe",
+          "sourceTeam": "Chip Ganassi Racing",
+          "driverId": "driver_james_roe",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "James Roe ~ James Roe (exact)"
+        },
+        {
+          "car": "76",
+          "sourceName": "Nolan Allaer",
+          "sourceTeam": "Juncos Hollinger Racing",
+          "driverId": "driver_nolan_allaer",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Nolan Allaer ~ Nolan Allaer (exact)"
+        },
+        {
+          "car": "4",
+          "sourceName": "Nicholas Monteiro",
+          "sourceTeam": "AJ Foyt Racing",
+          "driverId": "driver_nicholas_monteiro",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Nicholas Monteiro ~ Nicholas Monteiro (exact)"
+        }
+      ]
+    },
+    {
+      "t71SessionId": "t71_2026_portland-international-raceway_race_2026-08-09",
+      "sessionType": "race",
+      "date": "2026-08-09",
+      "venue": "Portland International Raceway",
+      "canonicalEventId": "event_indy_nxt_2026_5547",
+      "canonicalSessionId": "session_indy_nxt_2026_6764",
+      "canonicalOfficialSessionId": "6764",
+      "rosterSize": 24,
+      "scopeUsed": "event",
+      "eventAuthority": "canonical_results",
+      "counts": {
+        "mapped": 24,
+        "exact": 24,
+        "nameVariant": 0,
+        "swapResolved": 0,
+        "eventCaptureConfirmed": 0,
+        "seasonScope": 0,
+        "ambiguous": 0,
+        "unmapped": 0
+      },
+      "complete": true,
+      "strictEventScope": true,
+      "eventScoped": true,
+      "mappings": [
+        {
+          "car": "14",
+          "sourceName": "Alessandro de Tullio",
+          "sourceTeam": "AJ Foyt Racing",
+          "driverId": "driver_alessandro_de_tullio",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Alessandro de Tullio ~ Alessandro de Tullio (exact)"
+        },
+        {
+          "car": "26",
+          "sourceName": "Lochie Hughes",
+          "sourceTeam": "Andretti Global",
+          "driverId": "driver_lochie_hughes",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Lochie Hughes ~ Lochie Hughes (exact)"
+        },
+        {
+          "car": "28",
+          "sourceName": "Max Taylor",
+          "sourceTeam": "Andretti Global",
+          "driverId": "driver_max_taylor",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Max Taylor ~ Max Taylor (exact)"
+        },
+        {
+          "car": "71",
+          "sourceName": "Tymek Kucharczyk",
+          "sourceTeam": "HMD Motorsports",
+          "driverId": "driver_tymek_kucharczyk",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Tymek Kucharczyk ~ Tymek Kucharczyk (exact)"
+        },
+        {
+          "car": "48",
+          "sourceName": "Jacob Abel",
+          "sourceTeam": "ABEL Motorsports",
+          "driverId": "driver_jacob_abel",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Jacob Abel ~ Jacob Abel (exact)"
+        },
+        {
+          "car": "99",
+          "sourceName": "Myles Rowe",
+          "sourceTeam": "ABEL Motorsports",
+          "driverId": "driver_myles_rowe",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Myles Rowe ~ Myles Rowe (exact)"
+        },
+        {
+          "car": "10",
+          "sourceName": "Niels Koolen",
+          "sourceTeam": "Chip Ganassi Racing",
+          "driverId": "driver_niels_koolen",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Niels Koolen ~ Niels Koolen (exact)"
+        },
+        {
+          "car": "29",
+          "sourceName": "Josh Pierson",
+          "sourceTeam": "Andretti Global",
+          "driverId": "driver_josh_pierson",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Josh Pierson ~ Josh Pierson (exact)"
+        },
+        {
+          "car": "21",
+          "sourceName": "Nikita Johnson",
+          "sourceTeam": "Cape Motorsports",
+          "driverId": "driver_nikita_johnson",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Nikita Johnson ~ Nikita Johnson (exact)"
+        },
+        {
+          "car": "68",
+          "sourceName": "JM Correa",
+          "sourceTeam": "Cusick Morgan Motorsports",
+          "driverId": "driver_jm_correa",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "JM Correa ~ JM Correa (exact)"
+        },
+        {
+          "car": "27",
+          "sourceName": "Seb Murray",
+          "sourceTeam": "Andretti Global",
+          "driverId": "driver_seb_murray",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Seb Murray ~ Seb Murray (exact)"
+        },
+        {
+          "car": "67",
+          "sourceName": "Enzo Fittipaldi",
+          "sourceTeam": "HMD Motorsports",
+          "driverId": "driver_enzo_fittipaldi",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Enzo Fittipaldi ~ Enzo Fittipaldi (exact)"
+        },
+        {
+          "car": "12",
+          "sourceName": "Max Garcia",
+          "sourceTeam": "ABEL Motorsports",
+          "driverId": "driver_max_garcia",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Max Garcia ~ Max Garcia (exact)"
+        },
+        {
+          "car": "45",
+          "sourceName": "Jack Beeton",
+          "sourceTeam": "HMD Motorsports",
+          "driverId": "driver_jack_beeton",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Jack Beeton ~ Jack Beeton (exact)"
+        },
+        {
+          "car": "9",
+          "sourceName": "Bryce Aron",
+          "sourceTeam": "Chip Ganassi Racing",
+          "driverId": "driver_bryce_aron",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Bryce Aron ~ Bryce Aron (exact)"
+        },
+        {
+          "car": "20",
+          "sourceName": "Matteo Nannini",
+          "sourceTeam": "Cape Motorsports",
+          "driverId": "driver_matteo_nannini",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Matteo Nannini ~ Matteo Nannini (exact)"
+        },
+        {
+          "car": "17",
+          "sourceName": "Bart Harrison",
+          "sourceTeam": "HMD Motorsports",
+          "driverId": "driver_bart_harrison",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Bart Harrison ~ Bart Harrison (exact)"
+        },
+        {
+          "car": "57",
+          "sourceName": "Colin Kaminsky",
+          "sourceTeam": "ABEL Motorsports",
+          "driverId": "driver_colin_kaminsky",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Colin Kaminsky ~ Colin Kaminsky (exact)"
+        },
+        {
+          "car": "11",
+          "sourceName": "Carson Etter",
+          "sourceTeam": "Chip Ganassi Racing",
+          "driverId": "driver_carson_etter",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Carson Etter ~ Carson Etter (exact)"
+        },
+        {
+          "car": "8",
+          "sourceName": "James Roe",
+          "sourceTeam": "Chip Ganassi Racing",
+          "driverId": "driver_james_roe",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "James Roe ~ James Roe (exact)"
+        },
+        {
+          "car": "15",
+          "sourceName": "Nicolas Stati",
+          "sourceTeam": "Cusick Morgan Motorsports",
+          "driverId": "driver_nicolas_stati",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Nicolas Stati ~ Nicolas Stati (exact)"
+        },
+        {
+          "car": "76",
+          "sourceName": "Nolan Allaer",
+          "sourceTeam": "Juncos Hollinger Racing",
+          "driverId": "driver_nolan_allaer",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Nolan Allaer ~ Nolan Allaer (exact)"
+        },
+        {
+          "car": "75",
+          "sourceName": "Alexander Koreiba",
+          "sourceTeam": "Juncos Hollinger Racing",
+          "driverId": "driver_alexander_koreiba",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Alexander Koreiba ~ Alexander Koreiba (exact)"
+        },
+        {
+          "car": "4",
+          "sourceName": "Nicholas Monteiro",
+          "sourceTeam": "AJ Foyt Racing",
+          "driverId": "driver_nicholas_monteiro",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Nicholas Monteiro ~ Nicholas Monteiro (exact)"
+        }
+      ]
+    },
+    {
+      "t71SessionId": "t71_2026_the-milwaukee-mile_practice_p1_2026-08-29",
+      "sessionType": "practice",
+      "date": "2026-08-29",
+      "venue": "The Milwaukee Mile",
+      "canonicalEventId": "event_indy_nxt_2026_5540",
+      "canonicalSessionId": "session_indy_nxt_2026_6934",
+      "canonicalOfficialSessionId": "6934",
+      "rosterSize": 23,
+      "scopeUsed": "event",
+      "eventAuthority": "canonical_results",
+      "counts": {
+        "mapped": 23,
+        "exact": 23,
+        "nameVariant": 0,
+        "swapResolved": 0,
+        "eventCaptureConfirmed": 0,
+        "seasonScope": 0,
+        "ambiguous": 0,
+        "unmapped": 0
+      },
+      "complete": true,
+      "strictEventScope": true,
+      "eventScoped": true,
+      "mappings": [
+        {
+          "car": "4",
+          "sourceName": "Nicholas Monteiro",
+          "sourceTeam": "AJ Foyt Racing",
+          "driverId": "driver_nicholas_monteiro",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Nicholas Monteiro ~ Nicholas Monteiro (exact)"
+        },
+        {
+          "car": "8",
+          "sourceName": "James Roe",
+          "sourceTeam": "Chip Ganassi Racing",
+          "driverId": "driver_james_roe",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "James Roe ~ James Roe (exact)"
+        },
+        {
+          "car": "9",
+          "sourceName": "Bryce Aron",
+          "sourceTeam": "Chip Ganassi Racing",
+          "driverId": "driver_bryce_aron",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Bryce Aron ~ Bryce Aron (exact)"
+        },
+        {
+          "car": "10",
+          "sourceName": "Niels Koolen",
+          "sourceTeam": "Chip Ganassi Racing",
+          "driverId": "driver_niels_koolen",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Niels Koolen ~ Niels Koolen (exact)"
+        },
+        {
+          "car": "11",
+          "sourceName": "Carson Etter",
+          "sourceTeam": "Chip Ganassi Racing",
+          "driverId": "driver_carson_etter",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Carson Etter ~ Carson Etter (exact)"
+        },
+        {
+          "car": "12",
+          "sourceName": "Max Garcia",
+          "sourceTeam": "ABEL Motorsports",
+          "driverId": "driver_max_garcia",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Max Garcia ~ Max Garcia (exact)"
+        },
+        {
+          "car": "14",
+          "sourceName": "Alessandro de Tullio",
+          "sourceTeam": "AJ Foyt Racing",
+          "driverId": "driver_alessandro_de_tullio",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Alessandro de Tullio ~ Alessandro de Tullio (exact)"
+        },
+        {
+          "car": "15",
+          "sourceName": "Nicolas Stati",
+          "sourceTeam": "Cusick Morgan Motorsports",
+          "driverId": "driver_nicolas_stati",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Nicolas Stati ~ Nicolas Stati (exact)"
+        },
+        {
+          "car": "17",
+          "sourceName": "Salvador de Alba",
+          "sourceTeam": "HMD Motorsports",
+          "driverId": "driver_salvador_de_alba",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Salvador de Alba ~ Salvador de Alba (exact)"
+        },
+        {
+          "car": "20",
+          "sourceName": "Matteo Nannini",
+          "sourceTeam": "Cape Motorsports",
+          "driverId": "driver_matteo_nannini",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Matteo Nannini ~ Matteo Nannini (exact)"
+        },
+        {
+          "car": "21",
+          "sourceName": "Nikita Johnson",
+          "sourceTeam": "Cape Motorsports",
+          "driverId": "driver_nikita_johnson",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Nikita Johnson ~ Nikita Johnson (exact)"
+        },
+        {
+          "car": "26",
+          "sourceName": "Lochie Hughes",
+          "sourceTeam": "Andretti Global",
+          "driverId": "driver_lochie_hughes",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Lochie Hughes ~ Lochie Hughes (exact)"
+        },
+        {
+          "car": "27",
+          "sourceName": "Seb Murray",
+          "sourceTeam": "Andretti Global",
+          "driverId": "driver_seb_murray",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Seb Murray ~ Seb Murray (exact)"
+        },
+        {
+          "car": "28",
+          "sourceName": "Max Taylor",
+          "sourceTeam": "Andretti Global",
+          "driverId": "driver_max_taylor",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Max Taylor ~ Max Taylor (exact)"
+        },
+        {
+          "car": "29",
+          "sourceName": "Josh Pierson",
+          "sourceTeam": "Andretti Global",
+          "driverId": "driver_josh_pierson",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Josh Pierson ~ Josh Pierson (exact)"
+        },
+        {
+          "car": "45",
+          "sourceName": "Jack Beeton",
+          "sourceTeam": "HMD Motorsports",
+          "driverId": "driver_jack_beeton",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Jack Beeton ~ Jack Beeton (exact)"
+        },
+        {
+          "car": "48",
+          "sourceName": "Jacob Abel",
+          "sourceTeam": "ABEL Motorsports",
+          "driverId": "driver_jacob_abel",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Jacob Abel ~ Jacob Abel (exact)"
+        },
+        {
+          "car": "57",
+          "sourceName": "Colin Kaminsky",
+          "sourceTeam": "ABEL Motorsports",
+          "driverId": "driver_colin_kaminsky",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Colin Kaminsky ~ Colin Kaminsky (exact)"
+        },
+        {
+          "car": "67",
+          "sourceName": "Enzo Fittipaldi",
+          "sourceTeam": "HMD Motorsports",
+          "driverId": "driver_enzo_fittipaldi",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Enzo Fittipaldi ~ Enzo Fittipaldi (exact)"
+        },
+        {
+          "car": "68",
+          "sourceName": "JM Correa",
+          "sourceTeam": "Cusick Morgan Motorsports",
+          "driverId": "driver_jm_correa",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "JM Correa ~ JM Correa (exact)"
+        },
+        {
+          "car": "71",
+          "sourceName": "Tymek Kucharczyk",
+          "sourceTeam": "HMD Motorsports",
+          "driverId": "driver_tymek_kucharczyk",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Tymek Kucharczyk ~ Tymek Kucharczyk (exact)"
+        },
+        {
+          "car": "75",
+          "sourceName": "Alexander Koreiba",
+          "sourceTeam": "Juncos Hollinger Racing",
+          "driverId": "driver_alexander_koreiba",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Alexander Koreiba ~ Alexander Koreiba (exact)"
+        },
+        {
+          "car": "99",
+          "sourceName": "Myles Rowe",
+          "sourceTeam": "ABEL Motorsports",
+          "driverId": "driver_myles_rowe",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Myles Rowe ~ Myles Rowe (exact)"
+        }
+      ]
+    },
+    {
+      "t71SessionId": "t71_2026_the-milwaukee-mile_qualifying_2026-08-29",
+      "sessionType": "qualifying",
+      "date": "2026-08-29",
+      "venue": "The Milwaukee Mile",
+      "canonicalEventId": "event_indy_nxt_2026_5540",
+      "canonicalSessionId": "session_indy_nxt_2026_6935",
+      "canonicalOfficialSessionId": "6935",
+      "rosterSize": 23,
+      "scopeUsed": "event",
+      "eventAuthority": "canonical_results",
+      "counts": {
+        "mapped": 23,
+        "exact": 23,
+        "nameVariant": 0,
+        "swapResolved": 0,
+        "eventCaptureConfirmed": 0,
+        "seasonScope": 0,
+        "ambiguous": 0,
+        "unmapped": 0
+      },
+      "complete": true,
+      "strictEventScope": true,
+      "eventScoped": true,
+      "mappings": [
+        {
+          "car": "15",
+          "sourceName": "Nicolas Stati",
+          "sourceTeam": "Cusick Morgan Motorsports",
+          "driverId": "driver_nicolas_stati",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Nicolas Stati ~ Nicolas Stati (exact)"
+        },
+        {
+          "car": "57",
+          "sourceName": "Colin Kaminsky",
+          "sourceTeam": "ABEL Motorsports",
+          "driverId": "driver_colin_kaminsky",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Colin Kaminsky ~ Colin Kaminsky (exact)"
+        },
+        {
+          "car": "75",
+          "sourceName": "Alexander Koreiba",
+          "sourceTeam": "Juncos Hollinger Racing",
+          "driverId": "driver_alexander_koreiba",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Alexander Koreiba ~ Alexander Koreiba (exact)"
+        },
+        {
+          "car": "11",
+          "sourceName": "Carson Etter",
+          "sourceTeam": "Chip Ganassi Racing",
+          "driverId": "driver_carson_etter",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Carson Etter ~ Carson Etter (exact)"
+        },
+        {
+          "car": "8",
+          "sourceName": "James Roe",
+          "sourceTeam": "Chip Ganassi Racing",
+          "driverId": "driver_james_roe",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "James Roe ~ James Roe (exact)"
+        },
+        {
+          "car": "4",
+          "sourceName": "Nicholas Monteiro",
+          "sourceTeam": "AJ Foyt Racing",
+          "driverId": "driver_nicholas_monteiro",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Nicholas Monteiro ~ Nicholas Monteiro (exact)"
+        },
+        {
+          "car": "9",
+          "sourceName": "Bryce Aron",
+          "sourceTeam": "Chip Ganassi Racing",
+          "driverId": "driver_bryce_aron",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Bryce Aron ~ Bryce Aron (exact)"
+        },
+        {
+          "car": "10",
+          "sourceName": "Niels Koolen",
+          "sourceTeam": "Chip Ganassi Racing",
+          "driverId": "driver_niels_koolen",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Niels Koolen ~ Niels Koolen (exact)"
+        },
+        {
+          "car": "48",
+          "sourceName": "Jacob Abel",
+          "sourceTeam": "ABEL Motorsports",
+          "driverId": "driver_jacob_abel",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Jacob Abel ~ Jacob Abel (exact)"
+        },
+        {
+          "car": "17",
+          "sourceName": "Salvador de Alba",
+          "sourceTeam": "HMD Motorsports",
+          "driverId": "driver_salvador_de_alba",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Salvador de Alba ~ Salvador de Alba (exact)"
+        },
+        {
+          "car": "27",
+          "sourceName": "Seb Murray",
+          "sourceTeam": "Andretti Global",
+          "driverId": "driver_seb_murray",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Seb Murray ~ Seb Murray (exact)"
+        },
+        {
+          "car": "12",
+          "sourceName": "Max Garcia",
+          "sourceTeam": "ABEL Motorsports",
+          "driverId": "driver_max_garcia",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Max Garcia ~ Max Garcia (exact)"
+        },
+        {
+          "car": "29",
+          "sourceName": "Josh Pierson",
+          "sourceTeam": "Andretti Global",
+          "driverId": "driver_josh_pierson",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Josh Pierson ~ Josh Pierson (exact)"
+        },
+        {
+          "car": "68",
+          "sourceName": "JM Correa",
+          "sourceTeam": "Cusick Morgan Motorsports",
+          "driverId": "driver_jm_correa",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "JM Correa ~ JM Correa (exact)"
+        },
+        {
+          "car": "20",
+          "sourceName": "Matteo Nannini",
+          "sourceTeam": "Cape Motorsports",
+          "driverId": "driver_matteo_nannini",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Matteo Nannini ~ Matteo Nannini (exact)"
+        },
+        {
+          "car": "45",
+          "sourceName": "Jack Beeton",
+          "sourceTeam": "HMD Motorsports",
+          "driverId": "driver_jack_beeton",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Jack Beeton ~ Jack Beeton (exact)"
+        },
+        {
+          "car": "99",
+          "sourceName": "Myles Rowe",
+          "sourceTeam": "ABEL Motorsports",
+          "driverId": "driver_myles_rowe",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Myles Rowe ~ Myles Rowe (exact)"
+        },
+        {
+          "car": "14",
+          "sourceName": "Alessandro de Tullio",
+          "sourceTeam": "AJ Foyt Racing",
+          "driverId": "driver_alessandro_de_tullio",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Alessandro de Tullio ~ Alessandro de Tullio (exact)"
+        },
+        {
+          "car": "26",
+          "sourceName": "Lochie Hughes",
+          "sourceTeam": "Andretti Global",
+          "driverId": "driver_lochie_hughes",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Lochie Hughes ~ Lochie Hughes (exact)"
+        },
+        {
+          "car": "28",
+          "sourceName": "Max Taylor",
+          "sourceTeam": "Andretti Global",
+          "driverId": "driver_max_taylor",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Max Taylor ~ Max Taylor (exact)"
+        },
+        {
+          "car": "71",
+          "sourceName": "Tymek Kucharczyk",
+          "sourceTeam": "HMD Motorsports",
+          "driverId": "driver_tymek_kucharczyk",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Tymek Kucharczyk ~ Tymek Kucharczyk (exact)"
+        },
+        {
+          "car": "21",
+          "sourceName": "Nikita Johnson",
+          "sourceTeam": "Cape Motorsports",
+          "driverId": "driver_nikita_johnson",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Nikita Johnson ~ Nikita Johnson (exact)"
+        },
+        {
+          "car": "67",
+          "sourceName": "Enzo Fittipaldi",
+          "sourceTeam": "HMD Motorsports",
+          "driverId": "driver_enzo_fittipaldi",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Enzo Fittipaldi ~ Enzo Fittipaldi (exact)"
+        }
+      ]
+    },
+    {
+      "t71SessionId": "t71_2026_the-milwaukee-mile_race_2026-08-30",
+      "sessionType": "race",
+      "date": "2026-08-30",
+      "venue": "The Milwaukee Mile",
+      "canonicalEventId": "event_indy_nxt_2026_5540",
+      "canonicalSessionId": "session_indy_nxt_2026_6757",
+      "canonicalOfficialSessionId": "6757",
+      "rosterSize": 23,
+      "scopeUsed": "event",
+      "eventAuthority": "canonical_results",
+      "counts": {
+        "mapped": 23,
+        "exact": 23,
+        "nameVariant": 0,
+        "swapResolved": 0,
+        "eventCaptureConfirmed": 0,
+        "seasonScope": 0,
+        "ambiguous": 0,
+        "unmapped": 0
+      },
+      "complete": true,
+      "strictEventScope": true,
+      "eventScoped": true,
+      "mappings": [
+        {
+          "car": "29",
+          "sourceName": "Josh Pierson",
+          "sourceTeam": "Andretti Global",
+          "driverId": "driver_josh_pierson",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Josh Pierson ~ Josh Pierson (exact)"
+        },
+        {
+          "car": "71",
+          "sourceName": "Tymek Kucharczyk",
+          "sourceTeam": "HMD Motorsports",
+          "driverId": "driver_tymek_kucharczyk",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Tymek Kucharczyk ~ Tymek Kucharczyk (exact)"
+        },
+        {
+          "car": "45",
+          "sourceName": "Jack Beeton",
+          "sourceTeam": "HMD Motorsports",
+          "driverId": "driver_jack_beeton",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Jack Beeton ~ Jack Beeton (exact)"
+        },
+        {
+          "car": "68",
+          "sourceName": "JM Correa",
+          "sourceTeam": "Cusick Morgan Motorsports",
+          "driverId": "driver_jm_correa",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "JM Correa ~ JM Correa (exact)"
+        },
+        {
+          "car": "28",
+          "sourceName": "Max Taylor",
+          "sourceTeam": "Andretti Global",
+          "driverId": "driver_max_taylor",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Max Taylor ~ Max Taylor (exact)"
+        },
+        {
+          "car": "67",
+          "sourceName": "Enzo Fittipaldi",
+          "sourceTeam": "HMD Motorsports",
+          "driverId": "driver_enzo_fittipaldi",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Enzo Fittipaldi ~ Enzo Fittipaldi (exact)"
+        },
+        {
+          "car": "26",
+          "sourceName": "Lochie Hughes",
+          "sourceTeam": "Andretti Global",
+          "driverId": "driver_lochie_hughes",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Lochie Hughes ~ Lochie Hughes (exact)"
+        },
+        {
+          "car": "27",
+          "sourceName": "Seb Murray",
+          "sourceTeam": "Andretti Global",
+          "driverId": "driver_seb_murray",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Seb Murray ~ Seb Murray (exact)"
+        },
+        {
+          "car": "12",
+          "sourceName": "Max Garcia",
+          "sourceTeam": "ABEL Motorsports",
+          "driverId": "driver_max_garcia",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Max Garcia ~ Max Garcia (exact)"
+        },
+        {
+          "car": "17",
+          "sourceName": "Salvador de Alba",
+          "sourceTeam": "HMD Motorsports",
+          "driverId": "driver_salvador_de_alba",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Salvador de Alba ~ Salvador de Alba (exact)"
+        },
+        {
+          "car": "15",
+          "sourceName": "Nicolas Stati",
+          "sourceTeam": "Cusick Morgan Motorsports",
+          "driverId": "driver_nicolas_stati",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Nicolas Stati ~ Nicolas Stati (exact)"
+        },
+        {
+          "car": "20",
+          "sourceName": "Matteo Nannini",
+          "sourceTeam": "Cape Motorsports",
+          "driverId": "driver_matteo_nannini",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Matteo Nannini ~ Matteo Nannini (exact)"
+        },
+        {
+          "car": "10",
+          "sourceName": "Niels Koolen",
+          "sourceTeam": "Chip Ganassi Racing",
+          "driverId": "driver_niels_koolen",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Niels Koolen ~ Niels Koolen (exact)"
+        },
+        {
+          "car": "9",
+          "sourceName": "Bryce Aron",
+          "sourceTeam": "Chip Ganassi Racing",
+          "driverId": "driver_bryce_aron",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Bryce Aron ~ Bryce Aron (exact)"
+        },
+        {
+          "car": "21",
+          "sourceName": "Nikita Johnson",
+          "sourceTeam": "Cape Motorsports",
+          "driverId": "driver_nikita_johnson",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Nikita Johnson ~ Nikita Johnson (exact)"
+        },
+        {
+          "car": "99",
+          "sourceName": "Myles Rowe",
+          "sourceTeam": "ABEL Motorsports",
+          "driverId": "driver_myles_rowe",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Myles Rowe ~ Myles Rowe (exact)"
+        },
+        {
+          "car": "48",
+          "sourceName": "Jacob Abel",
+          "sourceTeam": "ABEL Motorsports",
+          "driverId": "driver_jacob_abel",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Jacob Abel ~ Jacob Abel (exact)"
+        },
+        {
+          "car": "57",
+          "sourceName": "Colin Kaminsky",
+          "sourceTeam": "ABEL Motorsports",
+          "driverId": "driver_colin_kaminsky",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Colin Kaminsky ~ Colin Kaminsky (exact)"
+        },
+        {
+          "car": "75",
+          "sourceName": "Alexander Koreiba",
+          "sourceTeam": "Juncos Hollinger Racing",
+          "driverId": "driver_alexander_koreiba",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Alexander Koreiba ~ Alexander Koreiba (exact)"
+        },
+        {
+          "car": "11",
+          "sourceName": "Carson Etter",
+          "sourceTeam": "Chip Ganassi Racing",
+          "driverId": "driver_carson_etter",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Carson Etter ~ Carson Etter (exact)"
+        },
+        {
+          "car": "14",
+          "sourceName": "Alessandro de Tullio",
+          "sourceTeam": "AJ Foyt Racing",
+          "driverId": "driver_alessandro_de_tullio",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Alessandro de Tullio ~ Alessandro de Tullio (exact)"
+        },
+        {
+          "car": "8",
+          "sourceName": "James Roe",
+          "sourceTeam": "Chip Ganassi Racing",
+          "driverId": "driver_james_roe",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "James Roe ~ James Roe (exact)"
+        },
+        {
+          "car": "4",
+          "sourceName": "Nicholas Monteiro",
+          "sourceTeam": "AJ Foyt Racing",
+          "driverId": "driver_nicholas_monteiro",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Nicholas Monteiro ~ Nicholas Monteiro (exact)"
+        }
+      ]
+    },
+    {
+      "t71SessionId": "t71_2026_weathertech-raceway-laguna-seca_practice_p2_2026-09-04",
+      "sessionType": "practice",
+      "date": "2026-09-04",
+      "venue": "WeatherTech Raceway Laguna Seca",
+      "canonicalEventId": "event_indy_nxt_2026_5542",
+      "canonicalSessionId": "session_indy_nxt_2026_6947",
+      "canonicalOfficialSessionId": "6947",
+      "rosterSize": 24,
+      "scopeUsed": "event",
+      "eventAuthority": "canonical_results",
+      "counts": {
+        "mapped": 24,
+        "exact": 24,
+        "nameVariant": 0,
+        "swapResolved": 0,
+        "eventCaptureConfirmed": 0,
+        "seasonScope": 0,
+        "ambiguous": 0,
+        "unmapped": 0
+      },
+      "complete": true,
+      "strictEventScope": true,
+      "eventScoped": true,
+      "mappings": [
+        {
+          "car": "4",
+          "sourceName": "Nicholas Monteiro",
+          "sourceTeam": "AJ Foyt Racing",
+          "driverId": "driver_nicholas_monteiro",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Nicholas Monteiro ~ Nicholas Monteiro (exact)"
+        },
+        {
+          "car": "8",
+          "sourceName": "James Roe",
+          "sourceTeam": "Chip Ganassi Racing",
+          "driverId": "driver_james_roe",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "James Roe ~ James Roe (exact)"
+        },
+        {
+          "car": "9",
+          "sourceName": "Bryce Aron",
+          "sourceTeam": "Chip Ganassi Racing",
+          "driverId": "driver_bryce_aron",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Bryce Aron ~ Bryce Aron (exact)"
+        },
+        {
+          "car": "10",
+          "sourceName": "Niels Koolen",
+          "sourceTeam": "Chip Ganassi Racing",
+          "driverId": "driver_niels_koolen",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Niels Koolen ~ Niels Koolen (exact)"
+        },
+        {
+          "car": "11",
+          "sourceName": "Carson Etter",
+          "sourceTeam": "Chip Ganassi Racing",
+          "driverId": "driver_carson_etter",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Carson Etter ~ Carson Etter (exact)"
+        },
+        {
+          "car": "12",
+          "sourceName": "Max Garcia",
+          "sourceTeam": "ABEL Motorsports",
+          "driverId": "driver_max_garcia",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Max Garcia ~ Max Garcia (exact)"
+        },
+        {
+          "car": "14",
+          "sourceName": "Alessandro de Tullio",
+          "sourceTeam": "AJ Foyt Racing",
+          "driverId": "driver_alessandro_de_tullio",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Alessandro de Tullio ~ Alessandro de Tullio (exact)"
+        },
+        {
+          "car": "15",
+          "sourceName": "Nicolas Stati",
+          "sourceTeam": "Cusick Morgan Motorsports",
+          "driverId": "driver_nicolas_stati",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Nicolas Stati ~ Nicolas Stati (exact)"
+        },
+        {
+          "car": "17",
+          "sourceName": "Bart Harrison",
+          "sourceTeam": "HMD Motorsports",
+          "driverId": "driver_bart_harrison",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Bart Harrison ~ Bart Harrison (exact)"
+        },
+        {
+          "car": "20",
+          "sourceName": "Matteo Nannini",
+          "sourceTeam": "Cape Motorsports",
+          "driverId": "driver_matteo_nannini",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Matteo Nannini ~ Matteo Nannini (exact)"
+        },
+        {
+          "car": "21",
+          "sourceName": "Nikita Johnson",
+          "sourceTeam": "Cape Motorsports",
+          "driverId": "driver_nikita_johnson",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Nikita Johnson ~ Nikita Johnson (exact)"
+        },
+        {
+          "car": "26",
+          "sourceName": "Lochie Hughes",
+          "sourceTeam": "Andretti Global",
+          "driverId": "driver_lochie_hughes",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Lochie Hughes ~ Lochie Hughes (exact)"
+        },
+        {
+          "car": "27",
+          "sourceName": "Seb Murray",
+          "sourceTeam": "Andretti Global",
+          "driverId": "driver_seb_murray",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Seb Murray ~ Seb Murray (exact)"
+        },
+        {
+          "car": "28",
+          "sourceName": "Max Taylor",
+          "sourceTeam": "Andretti Global",
+          "driverId": "driver_max_taylor",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Max Taylor ~ Max Taylor (exact)"
+        },
+        {
+          "car": "29",
+          "sourceName": "Josh Pierson",
+          "sourceTeam": "Andretti Global",
+          "driverId": "driver_josh_pierson",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Josh Pierson ~ Josh Pierson (exact)"
+        },
+        {
+          "car": "45",
+          "sourceName": "Jack Beeton",
+          "sourceTeam": "HMD Motorsports",
+          "driverId": "driver_jack_beeton",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Jack Beeton ~ Jack Beeton (exact)"
+        },
+        {
+          "car": "48",
+          "sourceName": "Jacob Abel",
+          "sourceTeam": "ABEL Motorsports",
+          "driverId": "driver_jacob_abel",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Jacob Abel ~ Jacob Abel (exact)"
+        },
+        {
+          "car": "57",
+          "sourceName": "Colin Kaminsky",
+          "sourceTeam": "ABEL Motorsports",
+          "driverId": "driver_colin_kaminsky",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Colin Kaminsky ~ Colin Kaminsky (exact)"
+        },
+        {
+          "car": "67",
+          "sourceName": "Enzo Fittipaldi",
+          "sourceTeam": "HMD Motorsports",
+          "driverId": "driver_enzo_fittipaldi",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Enzo Fittipaldi ~ Enzo Fittipaldi (exact)"
+        },
+        {
+          "car": "68",
+          "sourceName": "JM Correa",
+          "sourceTeam": "Cusick Morgan Motorsports",
+          "driverId": "driver_jm_correa",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "JM Correa ~ JM Correa (exact)"
+        },
+        {
+          "car": "71",
+          "sourceName": "Tymek Kucharczyk",
+          "sourceTeam": "HMD Motorsports",
+          "driverId": "driver_tymek_kucharczyk",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Tymek Kucharczyk ~ Tymek Kucharczyk (exact)"
+        },
+        {
+          "car": "75",
+          "sourceName": "Alexander Koreiba",
+          "sourceTeam": "Juncos Hollinger Racing",
+          "driverId": "driver_alexander_koreiba",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Alexander Koreiba ~ Alexander Koreiba (exact)"
+        },
+        {
+          "car": "76",
+          "sourceName": "Nolan Allaer",
+          "sourceTeam": "Juncos Hollinger Racing",
+          "driverId": "driver_nolan_allaer",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Nolan Allaer ~ Nolan Allaer (exact)"
+        },
+        {
+          "car": "99",
+          "sourceName": "Myles Rowe",
+          "sourceTeam": "ABEL Motorsports",
+          "driverId": "driver_myles_rowe",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Myles Rowe ~ Myles Rowe (exact)"
+        }
+      ]
+    },
+    {
+      "t71SessionId": "t71_2026_weathertech-raceway-laguna-seca_race_r1_2026-09-05",
+      "sessionType": "race",
+      "date": "2026-09-05",
+      "venue": "WeatherTech Raceway Laguna Seca",
+      "canonicalEventId": "event_indy_nxt_2026_5542",
+      "canonicalSessionId": "session_indy_nxt_2026_6759",
+      "canonicalOfficialSessionId": "6759",
+      "rosterSize": 24,
+      "scopeUsed": "event",
+      "eventAuthority": "canonical_results",
+      "counts": {
+        "mapped": 24,
+        "exact": 24,
+        "nameVariant": 0,
+        "swapResolved": 0,
+        "eventCaptureConfirmed": 0,
+        "seasonScope": 0,
+        "ambiguous": 0,
+        "unmapped": 0
+      },
+      "complete": true,
+      "strictEventScope": true,
+      "eventScoped": true,
+      "mappings": [
+        {
+          "car": "29",
+          "sourceName": "Josh Pierson",
+          "sourceTeam": "Andretti Global",
+          "driverId": "driver_josh_pierson",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Josh Pierson ~ Josh Pierson (exact)"
+        },
+        {
+          "car": "71",
+          "sourceName": "Tymek Kucharczyk",
+          "sourceTeam": "HMD Motorsports",
+          "driverId": "driver_tymek_kucharczyk",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Tymek Kucharczyk ~ Tymek Kucharczyk (exact)"
+        },
+        {
+          "car": "10",
+          "sourceName": "Niels Koolen",
+          "sourceTeam": "Chip Ganassi Racing",
+          "driverId": "driver_niels_koolen",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Niels Koolen ~ Niels Koolen (exact)"
+        },
+        {
+          "car": "99",
+          "sourceName": "Myles Rowe",
+          "sourceTeam": "ABEL Motorsports",
+          "driverId": "driver_myles_rowe",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Myles Rowe ~ Myles Rowe (exact)"
+        },
+        {
+          "car": "21",
+          "sourceName": "Nikita Johnson",
+          "sourceTeam": "Cape Motorsports",
+          "driverId": "driver_nikita_johnson",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Nikita Johnson ~ Nikita Johnson (exact)"
+        },
+        {
+          "car": "48",
+          "sourceName": "Jacob Abel",
+          "sourceTeam": "ABEL Motorsports",
+          "driverId": "driver_jacob_abel",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Jacob Abel ~ Jacob Abel (exact)"
+        },
+        {
+          "car": "9",
+          "sourceName": "Bryce Aron",
+          "sourceTeam": "Chip Ganassi Racing",
+          "driverId": "driver_bryce_aron",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Bryce Aron ~ Bryce Aron (exact)"
+        },
+        {
+          "car": "12",
+          "sourceName": "Max Garcia",
+          "sourceTeam": "ABEL Motorsports",
+          "driverId": "driver_max_garcia",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Max Garcia ~ Max Garcia (exact)"
+        },
+        {
+          "car": "26",
+          "sourceName": "Lochie Hughes",
+          "sourceTeam": "Andretti Global",
+          "driverId": "driver_lochie_hughes",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Lochie Hughes ~ Lochie Hughes (exact)"
+        },
+        {
+          "car": "20",
+          "sourceName": "Matteo Nannini",
+          "sourceTeam": "Cape Motorsports",
+          "driverId": "driver_matteo_nannini",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Matteo Nannini ~ Matteo Nannini (exact)"
+        },
+        {
+          "car": "68",
+          "sourceName": "JM Correa",
+          "sourceTeam": "Cusick Morgan Motorsports",
+          "driverId": "driver_jm_correa",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "JM Correa ~ JM Correa (exact)"
+        },
+        {
+          "car": "14",
+          "sourceName": "Alessandro de Tullio",
+          "sourceTeam": "AJ Foyt Racing",
+          "driverId": "driver_alessandro_de_tullio",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Alessandro de Tullio ~ Alessandro de Tullio (exact)"
+        },
+        {
+          "car": "67",
+          "sourceName": "Enzo Fittipaldi",
+          "sourceTeam": "HMD Motorsports",
+          "driverId": "driver_enzo_fittipaldi",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Enzo Fittipaldi ~ Enzo Fittipaldi (exact)"
+        },
+        {
+          "car": "76",
+          "sourceName": "Nolan Allaer",
+          "sourceTeam": "Juncos Hollinger Racing",
+          "driverId": "driver_nolan_allaer",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Nolan Allaer ~ Nolan Allaer (exact)"
+        },
+        {
+          "car": "45",
+          "sourceName": "Jack Beeton",
+          "sourceTeam": "HMD Motorsports",
+          "driverId": "driver_jack_beeton",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Jack Beeton ~ Jack Beeton (exact)"
+        },
+        {
+          "car": "27",
+          "sourceName": "Seb Murray",
+          "sourceTeam": "Andretti Global",
+          "driverId": "driver_seb_murray",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Seb Murray ~ Seb Murray (exact)"
+        },
+        {
+          "car": "28",
+          "sourceName": "Max Taylor",
+          "sourceTeam": "Andretti Global",
+          "driverId": "driver_max_taylor",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Max Taylor ~ Max Taylor (exact)"
+        },
+        {
+          "car": "17",
+          "sourceName": "Bart Harrison",
+          "sourceTeam": "HMD Motorsports",
+          "driverId": "driver_bart_harrison",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Bart Harrison ~ Bart Harrison (exact)"
+        },
+        {
+          "car": "57",
+          "sourceName": "Colin Kaminsky",
+          "sourceTeam": "ABEL Motorsports",
+          "driverId": "driver_colin_kaminsky",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Colin Kaminsky ~ Colin Kaminsky (exact)"
+        },
+        {
+          "car": "15",
+          "sourceName": "Nicolas Stati",
+          "sourceTeam": "Cusick Morgan Motorsports",
+          "driverId": "driver_nicolas_stati",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Nicolas Stati ~ Nicolas Stati (exact)"
+        },
+        {
+          "car": "75",
+          "sourceName": "Alexander Koreiba",
+          "sourceTeam": "Juncos Hollinger Racing",
+          "driverId": "driver_alexander_koreiba",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Alexander Koreiba ~ Alexander Koreiba (exact)"
+        },
+        {
+          "car": "8",
+          "sourceName": "James Roe",
+          "sourceTeam": "Chip Ganassi Racing",
+          "driverId": "driver_james_roe",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "James Roe ~ James Roe (exact)"
+        },
+        {
+          "car": "11",
+          "sourceName": "Carson Etter",
+          "sourceTeam": "Chip Ganassi Racing",
+          "driverId": "driver_carson_etter",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Carson Etter ~ Carson Etter (exact)"
+        },
+        {
+          "car": "4",
+          "sourceName": "Nicholas Monteiro",
+          "sourceTeam": "AJ Foyt Racing",
+          "driverId": "driver_nicholas_monteiro",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Nicholas Monteiro ~ Nicholas Monteiro (exact)"
+        }
+      ]
+    },
+    {
+      "t71SessionId": "t71_2026_weathertech-raceway-laguna-seca_race_r2_2026-09-06",
+      "sessionType": "race",
+      "date": "2026-09-06",
+      "venue": "WeatherTech Raceway Laguna Seca",
+      "canonicalEventId": "event_indy_nxt_2026_5541",
+      "canonicalSessionId": "session_indy_nxt_2026_6758",
+      "canonicalOfficialSessionId": "6758",
+      "rosterSize": 24,
+      "scopeUsed": "event",
+      "eventAuthority": "canonical_results",
+      "counts": {
+        "mapped": 24,
+        "exact": 24,
+        "nameVariant": 0,
+        "swapResolved": 0,
+        "eventCaptureConfirmed": 0,
+        "seasonScope": 0,
+        "ambiguous": 0,
+        "unmapped": 0
+      },
+      "complete": true,
+      "strictEventScope": true,
+      "eventScoped": true,
+      "mappings": [
+        {
+          "car": "71",
+          "sourceName": "Tymek Kucharczyk",
+          "sourceTeam": "HMD Motorsports",
+          "driverId": "driver_tymek_kucharczyk",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Tymek Kucharczyk ~ Tymek Kucharczyk (exact)"
+        },
+        {
+          "car": "29",
+          "sourceName": "Josh Pierson",
+          "sourceTeam": "Andretti Global",
+          "driverId": "driver_josh_pierson",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Josh Pierson ~ Josh Pierson (exact)"
+        },
+        {
+          "car": "10",
+          "sourceName": "Niels Koolen",
+          "sourceTeam": "Chip Ganassi Racing",
+          "driverId": "driver_niels_koolen",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Niels Koolen ~ Niels Koolen (exact)"
+        },
+        {
+          "car": "12",
+          "sourceName": "Max Garcia",
+          "sourceTeam": "ABEL Motorsports",
+          "driverId": "driver_max_garcia",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Max Garcia ~ Max Garcia (exact)"
+        },
+        {
+          "car": "21",
+          "sourceName": "Nikita Johnson",
+          "sourceTeam": "Cape Motorsports",
+          "driverId": "driver_nikita_johnson",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Nikita Johnson ~ Nikita Johnson (exact)"
+        },
+        {
+          "car": "48",
+          "sourceName": "Jacob Abel",
+          "sourceTeam": "ABEL Motorsports",
+          "driverId": "driver_jacob_abel",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Jacob Abel ~ Jacob Abel (exact)"
+        },
+        {
+          "car": "26",
+          "sourceName": "Lochie Hughes",
+          "sourceTeam": "Andretti Global",
+          "driverId": "driver_lochie_hughes",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Lochie Hughes ~ Lochie Hughes (exact)"
+        },
+        {
+          "car": "20",
+          "sourceName": "Matteo Nannini",
+          "sourceTeam": "Cape Motorsports",
+          "driverId": "driver_matteo_nannini",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Matteo Nannini ~ Matteo Nannini (exact)"
+        },
+        {
+          "car": "99",
+          "sourceName": "Myles Rowe",
+          "sourceTeam": "ABEL Motorsports",
+          "driverId": "driver_myles_rowe",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Myles Rowe ~ Myles Rowe (exact)"
+        },
+        {
+          "car": "9",
+          "sourceName": "Bryce Aron",
+          "sourceTeam": "Chip Ganassi Racing",
+          "driverId": "driver_bryce_aron",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Bryce Aron ~ Bryce Aron (exact)"
+        },
+        {
+          "car": "14",
+          "sourceName": "Alessandro de Tullio",
+          "sourceTeam": "AJ Foyt Racing",
+          "driverId": "driver_alessandro_de_tullio",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Alessandro de Tullio ~ Alessandro de Tullio (exact)"
+        },
+        {
+          "car": "67",
+          "sourceName": "Enzo Fittipaldi",
+          "sourceTeam": "HMD Motorsports",
+          "driverId": "driver_enzo_fittipaldi",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Enzo Fittipaldi ~ Enzo Fittipaldi (exact)"
+        },
+        {
+          "car": "76",
+          "sourceName": "Nolan Allaer",
+          "sourceTeam": "Juncos Hollinger Racing",
+          "driverId": "driver_nolan_allaer",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Nolan Allaer ~ Nolan Allaer (exact)"
+        },
+        {
+          "car": "28",
+          "sourceName": "Max Taylor",
+          "sourceTeam": "Andretti Global",
+          "driverId": "driver_max_taylor",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Max Taylor ~ Max Taylor (exact)"
+        },
+        {
+          "car": "27",
+          "sourceName": "Seb Murray",
+          "sourceTeam": "Andretti Global",
+          "driverId": "driver_seb_murray",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Seb Murray ~ Seb Murray (exact)"
+        },
+        {
+          "car": "45",
+          "sourceName": "Jack Beeton",
+          "sourceTeam": "HMD Motorsports",
+          "driverId": "driver_jack_beeton",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Jack Beeton ~ Jack Beeton (exact)"
+        },
+        {
+          "car": "17",
+          "sourceName": "Bart Harrison",
+          "sourceTeam": "HMD Motorsports",
+          "driverId": "driver_bart_harrison",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Bart Harrison ~ Bart Harrison (exact)"
+        },
+        {
+          "car": "68",
+          "sourceName": "JM Correa",
+          "sourceTeam": "Cusick Morgan Motorsports",
+          "driverId": "driver_jm_correa",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "JM Correa ~ JM Correa (exact)"
+        },
+        {
+          "car": "15",
+          "sourceName": "Nicolas Stati",
+          "sourceTeam": "Cusick Morgan Motorsports",
+          "driverId": "driver_nicolas_stati",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Nicolas Stati ~ Nicolas Stati (exact)"
+        },
+        {
+          "car": "57",
+          "sourceName": "Colin Kaminsky",
+          "sourceTeam": "ABEL Motorsports",
+          "driverId": "driver_colin_kaminsky",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Colin Kaminsky ~ Colin Kaminsky (exact)"
+        },
+        {
+          "car": "8",
+          "sourceName": "James Roe",
+          "sourceTeam": "Chip Ganassi Racing",
+          "driverId": "driver_james_roe",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "James Roe ~ James Roe (exact)"
+        },
+        {
+          "car": "75",
+          "sourceName": "Alexander Koreiba",
+          "sourceTeam": "Juncos Hollinger Racing",
+          "driverId": "driver_alexander_koreiba",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Alexander Koreiba ~ Alexander Koreiba (exact)"
+        },
+        {
+          "car": "4",
+          "sourceName": "Nicholas Monteiro",
+          "sourceTeam": "AJ Foyt Racing",
+          "driverId": "driver_nicholas_monteiro",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Nicholas Monteiro ~ Nicholas Monteiro (exact)"
+        },
+        {
+          "car": "11",
+          "sourceName": "Carson Etter",
+          "sourceTeam": "Chip Ganassi Racing",
+          "driverId": "driver_carson_etter",
+          "status": "mapped_exact",
+          "rule": "exact",
+          "evidence": "Carson Etter ~ Carson Etter (exact)"
         }
       ]
     }

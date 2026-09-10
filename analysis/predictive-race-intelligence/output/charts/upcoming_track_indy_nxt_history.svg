@@ -1,11 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="980" height="260" viewBox="0 0 980 260">
 <rect width="100%" height="100%" fill="#fbfaf7"/>
-<text x="28" y="30" font-family="Inter, Arial" font-size="19" font-weight="700" fill="#1f2933">Portland International Raceway INDY NXT History</text>
-<text x="28" y="52" font-family="Inter, Arial" font-size="12" fill="#5d6875">Bryce finish percentile in prior Portland International Raceway races.</text>
-<text x="28" y="91" font-family="Inter, Arial" font-size="12" fill="#39434d">2024 Grand Prix of Portland</text>
-<rect x="280" y="76" width="650.0" height="20" rx="3" fill="#2d6f8f" opacity="0.88"/>
-<text x="938.0" y="91" font-family="Inter, Arial" font-size="12" fill="#1f2933">0.882</text>
-<text x="28" y="125" font-family="Inter, Arial" font-size="12" fill="#39434d">2025 Grand Prix of Portland</text>
-<rect x="280" y="110" width="38.7" height="20" rx="3" fill="#2d6f8f" opacity="0.88"/>
-<text x="326.7466001813237" y="125" font-family="Inter, Arial" font-size="12" fill="#1f2933">0.053</text>
+<text x="28" y="30" font-family="Inter, Arial" font-size="19" font-weight="700" fill="#1f2933">upcoming track INDY NXT History</text>
+<text x="28" y="52" font-family="Inter, Arial" font-size="12" fill="#5d6875">Bryce finish percentile in prior upcoming track races.</text>
 </svg>

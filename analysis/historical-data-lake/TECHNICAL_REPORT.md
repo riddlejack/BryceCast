@@ -290,15 +290,11 @@ upgrade for the present goal.
 
 ## Storage and access design
 
-Raw source ZIP/JSON payloads live under `data/historical-data-lake/raw/` and are
-Git-ignored. The same bytes are exposed through human-readable hardlinked views,
-so there is one physical payload per SHA-256 object. The durable primary checkout
-also has a hardlinked repository-local archive at:
-
-`/Users/example/Documents/Bryce POV access/data/historical-data-lake/raw`
-
-This prevents deletion of this research worktree from removing the only local
-copy and does not consume another 7.51 GB. The committed source manifest and
+Raw source ZIP/JSON payloads live under the Git-ignored durable archive at
+`~/.brycecast/data-lake/raw`. The same bytes are exposed through human-readable
+hardlinked views, so there is one physical payload per SHA-256 object. A checkout
+may expose additional hardlinks, but no consumer depends on a worktree or
+iCloud-managed Documents path. The committed source manifest and
 catalogs are portable; another machine can reconstruct the archive by running
 the resumable acquisition command.
 

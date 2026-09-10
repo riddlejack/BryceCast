@@ -45,10 +45,10 @@
     "bestLapRank": 8.0,
     "conversionPercentileDelta": 0.195,
     "labelReviewState": "review_required_before_public_copy",
-    "paceIndex": 0.594
+    "paceIndex": 0.615
   },
   "eventStartDate": "2024-08-23",
-  "generatedAt": "2026-07-21T23:54:49Z",
+  "generatedAt": "2026-09-10T23:14:52Z",
   "id": "debrief_session_indy_nxt_2024_6321",
   "lapStory": {
     "bryceBestRunningPosition": 3.0,
@@ -95,68 +95,68 @@
   "schemaVersion": "brycecast.raceDebriefContextPack.v1",
   "seasonYear": 2024,
   "sectionSignal": {
-    "bestSectionFamilies": "Turn 12:0.80; Turn 6:0.71; Turn 2:0.68; Turn 1:0.66",
+    "bestSectionFamilies": "Turn 2:0.80; Turn 12:0.77; Turn 6:0.74; Turn 3:0.71",
     "displayPolicy": "headline_allowed_if_sectionComparisonRows_gte_50_else_badge_or_suppress",
-    "medianSectionPercentile": 0.625,
-    "sectionComparisonRows": 247.0,
-    "weakestSectionFamilies": "Turn 9:0.31; FS-PO:0.36; Turn 8:0.48; Turn 5:0.49"
+    "medianSectionPercentile": 0.667,
+    "sectionComparisonRows": 455.0,
+    "weakestSectionFamilies": "Turn 9:0.35; FS-PO:0.48; Turn 5:0.48; Turn 8:0.51"
   },
   "sessionId": "session_indy_nxt_2024_6321",
-  "sourceHash": "64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978",
+  "sourceHash": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd",
   "sourceRefs": [
     {
-      "bytes": 19748,
+      "bytes": 21659,
       "path": "analysis/indy-nxt-discovery/output/deep_dive/tables/race_debrief_scores.csv",
       "role": "debrief score",
-      "sha256": "bc7d8ce5d97581bf39ab4af57b0def382e3353437dd9cff25f4f13265c6cecb0"
+      "sha256": "bcb3f202feab0c33528a574ce4863d217e137b74aa59184ee4914c139dc896e3"
     },
     {
-      "bytes": 10375,
+      "bytes": 11370,
       "path": "analysis/indy-nxt-discovery/output/deep_dive/tables/full_field_lap_dynamics_by_race.csv",
       "role": "lap dynamics",
-      "sha256": "25d8274e05258e18beda40dc552e3887e6a0203cee6d7be5573c855ae7225031"
+      "sha256": "78a45f6d967efe229147083ad4f549f32a0519e118ab60b976e7fc4ff4a2410a"
     },
     {
-      "bytes": 8659,
+      "bytes": 9390,
       "path": "analysis/indy-nxt-discovery/output/deep_dive/tables/incident_penalty_context.csv",
       "role": "incident and penalty context",
-      "sha256": "f9bf11e09afdb853fd2b2f33a22a28faf1d580b3101f9ef5a7467cb4d16447f2"
+      "sha256": "8b96f7f0c54f2ee9928ffda198f245807e8cc7e7926d974ae9a5000879653437"
     },
     {
-      "bytes": 5542,
+      "bytes": 6085,
       "path": "analysis/indy-nxt-discovery/output/deep_dive/tables/leader_lap_context.csv",
       "role": "leader lap context",
-      "sha256": "b773e6fb49b4e3cfdeb6ea1ed758b04f9b77ab39e46bb80f6ebee1d5d25537f3"
+      "sha256": "1e5aea124d8a73cf8d2327adb6bca035d55f28f74d537613498d50a9bafa3735"
     },
     {
-      "bytes": 11259,
+      "bytes": 12374,
       "path": "analysis/indy-nxt-discovery/output/deep_dive/tables/team_context_by_race.csv",
       "role": "team context",
-      "sha256": "cd1c0a7f7b7ca7a3a3d8be431173eaf186c84d9b7679a5396045267d7a7cb171"
+      "sha256": "8945a136b93ee75c0ce3b5651352d50ce110c011089b46a35b917a8d00b93715"
     },
     {
-      "bytes": 15065,
+      "bytes": 16141,
       "path": "analysis/indy-nxt-discovery/output/deep_dive/tables/section_results_deep_by_race.csv",
       "role": "section context",
-      "sha256": "61ed911b600a6952ebd29687fe81f9fe6543862f01b7d8091fc2a1d2c214605b"
+      "sha256": "b7826829585197df69d797231dc0c018c331514b26123a9b998f0245eae27a8e"
     },
     {
-      "bytes": 10773,
+      "bytes": 11827,
       "path": "analysis/indy-nxt-discovery/output/deep_dive/tables/championship_progression.csv",
       "role": "championship context",
-      "sha256": "9866525f3fddc3295863545823274ec31a9515b1f80dc7d73c958b3b14141825"
+      "sha256": "1a6b3632a787d803105b93a7190325ef17a40f444b9f1a2c1e85c8a8470f2bf2"
     },
     {
-      "bytes": 171050,
+      "bytes": 192491,
       "path": "analysis/indy-nxt-discovery/output/tables/indy_nxt_lap_timeline.csv",
       "role": "lap timeline chart source",
-      "sha256": "d8484a524dc28e618dc8038b97c0464d36e2dcc8a8d18aa44fc34cc7d229ec96"
+      "sha256": "b1db72b354b2e4cc488091bb493c2bdc44c9f3353ff5c9e1f5084aa7c2928394"
     },
     {
-      "bytes": 326435067,
+      "bytes": 363747732,
       "path": "data/career/career.dataset.json",
       "role": "canonical event/session chronology",
-      "sha256": "64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978"
+      "sha256": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd"
     }
   ],
   "sourceState": "derived_from_official_results_lap_chart_sections_and_modeled_weather",

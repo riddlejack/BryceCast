@@ -811,11 +811,13 @@ export interface VenueSectionData {
   heroHeat: ResolvedHeatSection[];
 }
 
-/** True when a pack holds at least one clean lap with a real field percentile —
- *  the "does this visit have anything to shade" test. Tuple order:
+/** True when a pack holds enough clean laps with real field percentiles for at
+ * least one section to shade under the same suppression rule as the card. Tuple order:
  *  [lap, fieldPercentile, fieldRank, fieldComparisonCount, clean, caution, …]. */
 const packHasCleanComparisons = (pack: SectionLapsPack): boolean =>
-  pack.sections.some((section) => section.laps.some((lap) => lap[4] === 1 && lap[1] !== null));
+  pack.sections.some(
+    (section) => section.laps.filter((lap) => lap[4] === 1 && lap[1] !== null).length >= MIN_CLEAN_LAPS
+  );
 
 /** Load a venue's section packs + pass marks and resolve its anchor set — the
  *  data behind both the Race Week hero shading and the section suite. Keyed on
@@ -893,17 +895,26 @@ export const useVenueSectionData = (trackName: string | null | undefined): Venue
  *  venue's anchors + at least one pack are resolved. */
 export const VenueSectionSuite = ({
   outline,
-  data
+  data,
+  selectedVisitId,
+  onSelectedVisitChange,
+  showVisitControl = true
 }: {
   outline: TrackOutline;
   data: VenueSectionData;
+  /** Optional route-owned visit selection for permanent venue URLs. Omitted on
+   * Race Week, which keeps the suite's local control. */
+  selectedVisitId?: string | null;
+  onSelectedVisitChange?: (sessionId: string) => void;
+  showVisitControl?: boolean;
 }) => {
   const { anchors, visits, passMarksBySession, lapsCompletedBySession, mostRecent } = data;
-  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [localSelectedId, setLocalSelectedId] = useState<string | null>(null);
 
   if (!outline || !anchors || visits.length === 0 || !mostRecent) return null;
 
-  const selected = visits.find((visit) => visit.sessionId === (selectedId ?? mostRecent.sessionId)) ?? mostRecent;
+  const activeSelectedId = selectedVisitId === undefined ? localSelectedId : selectedVisitId;
+  const selected = visits.find((visit) => visit.sessionId === (activeSelectedId ?? mostRecent.sessionId)) ?? mostRecent;
   const passMarks = passMarksBySession.get(selected.sessionId) ?? null;
   const multi = visits.length > 1;
   /* Toggle label per visit. A single race that year is just the year ("2025").
@@ -941,13 +952,17 @@ export const VenueSectionSuite = ({
     .filter((year) => year !== selected.seasonYear)
     .sort((left, right) => left - right);
   const orientationClause = `His ${selectedLabel} race here, section by section${
-    multi && otherYears.length > 0 ? ` — toggle for ${otherYears.join(' · ')}` : ''
+    multi && showVisitControl && otherYears.length > 0 ? ` — toggle for ${otherYears.join(' · ')}` : ''
   }.`;
   /* Single-visit venues hide the toggle entirely (director spec): one year, no
    * control, no "toggle for" clause. */
-  const visitControl = multi ? (
+  const selectVisit = (sessionId: string) => {
+    if (selectedVisitId === undefined) setLocalSelectedId(sessionId);
+    onSelectedVisitChange?.(sessionId);
+  };
+  const visitControl = multi && showVisitControl ? (
     <ControlRow label="Year">
-      <Segmented options={yearOptions} value={selected.sessionId} onChange={setSelectedId} />
+      <Segmented options={yearOptions} value={selected.sessionId} onChange={selectVisit} />
     </ControlRow>
   ) : null;
 

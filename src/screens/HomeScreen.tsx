@@ -15,7 +15,8 @@ import { chronoCompare, displayRaceLabel, loadDebriefArchive, type ArchiveEntry 
 import { TrackArt } from '../app/trackArt';
 import { useVenueSectionData } from './sectionIntelligence';
 import { ReplayAffordance, useReplayCatalog } from './replayAffordance';
-import { replayProvenance, watchableCaptureForRace } from '../data/replayAvailable';
+import { isBryceCastCaptureTier, replayProvenance, watchableCaptureForRace } from '../data/replayAvailable';
+import { DataFreshness } from '../app/dataFreshness';
 
 type Row = Record<string, unknown>;
 
@@ -432,7 +433,7 @@ const WatchLastRace = ({ latest }: { latest: ArchiveEntry | null }) => {
   if (!latest || !catalog) return null;
   const capture = watchableCaptureForRace(catalog, latest.pack.sessionId);
   if (!capture) return null;
-  const isOwnCapture = replayProvenance(capture).tier === 'brycecast_capture';
+  const isOwnCapture = isBryceCastCaptureTier(replayProvenance(capture).tier);
   return (
     <section className="race-replay" aria-label="Watch the last race unfold">
       <ReplayAffordance
@@ -511,6 +512,7 @@ export const HomeScreen = ({ readiness }: { readiness: ReadinessStatus }) => {
   return (
     <div className="page stack">
       <HomeHero readiness={readiness} liveish={liveish} nextEvent={nextEvent} days={days} latest={latest} />
+      <DataFreshness />
       <div className="grid grid--2">
         <Reveal>
           <LastTimeOut latest={latest} />

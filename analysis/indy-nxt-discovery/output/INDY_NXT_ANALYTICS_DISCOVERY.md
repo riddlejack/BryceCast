@@ -4,10 +4,10 @@ Generated from `data/career/career.dataset.json` at repo head `f3e5e32` after th
 
 ## Executive Readout
 
-- Analyzable Bryce INDY NXT race rows: **41**. Weather-enriched race rows: **40** of 36 race rows, all modeled/non-official.
-- Mean start: **11.5**. Mean finish: **12.5**. Mean position gain: **-1.0**.
-- Top-10 rate: **46%**. Top-5 rate: **10%**. Running/classified rate: **88%**.
-- Races where Bryce finished ahead of or tied his best same-team comparison: **29%** of races with teammate rows.
+- Analyzable Bryce INDY NXT race rows: **45**. Weather-enriched race rows: **40** of 36 race rows, all modeled/non-official.
+- Mean start: **11.5**. Mean finish: **12.2**. Mean position gain: **-0.7**.
+- Top-10 rate: **49%**. Top-5 rate: **9%**. Running/classified rate: **89%**.
+- Races where Bryce finished ahead of or tied his best same-team comparison: **31%** of races with teammate rows.
 - Causal regression should stay out of the headline product for now. The useful near-term product is decomposition, race-shape analysis, context-aware comparisons, and confidence-labeled modeled weather.
 
 ## Most UI-Worthy Findings To Build Around
@@ -27,7 +27,7 @@ Generated from `data/career/career.dataset.json` at repo head `f3e5e32` after th
 | 2024 Grand Prix of Portland | road | 6 | 3 | 3 | 35 | running |
 | 2024 INDY NXT By Firestone at The Milwaukee Mile | oval | 7 | 4 | 3 | 32 | running |
 | 2025 INDY NXT by Firestone at the Milwaukee Mile | oval | 6 | 5 | 1 | 30 | running |
-| 2025 Music City Grand Prix | oval | 8 | 6 | 2 | 28 | running |
+| 2026 Grand Prix of Monterey Race 1 R1 | road | 7 | 6 | 1 | 28 | running |
 
 ## Biggest Position Gains
 
@@ -36,8 +36,8 @@ Generated from `data/career/career.dataset.json` at repo head `f3e5e32` after th
 | 2024 OUTFRONT Showdown | oval | 13 | 6 | 7 | 28 | 19 | 0 |
 | 2025 Grand Prix of St. Petersburg | street | 20 | 13 | 7 | 17 | 10 | 0 |
 | 2026 Detroit Grand Prix | street | 14 | 8 | 6 | 24 | 14 | 0 |
+| 2026 INDY NXT by Firestone at Milwaukee Mile | oval | 14 | 8 | 6 | 24 | 21 | 0 |
 | 2025 Detroit Grand Prix | street | 15 | 10 | 5 | 20 | 5 | 1 |
-| 2026 Grand Prix at Road America Race 2 R2 | road | 15 | 10 | 5 | 20 | 3 | 0 |
 
 ## Qualifying-To-Race Conversion
 
@@ -49,12 +49,12 @@ Use this as a core debrief module. It is stronger than a generic result card bec
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | 2024 OUTFRONT Showdown | 13.00 | Qualifications | 13 | 6 | 7.00 | 7 | running |
 | 2026 Detroit Grand Prix | 14.00 | Combined Qualifying | 14 | 8 | 6.00 | 6 | running |
+| 2026 INDY NXT by Firestone at Milwaukee Mile | 14.00 | Qualifying | 14 | 8 | 6.00 | 6 | running |
 | 2025 Detroit Grand Prix | 15.00 | Combined Qualifications | 15 | 10 | 5.00 | 5 | running |
 | 2026 Grand Prix at Road America Race 2 R2 | 15.00 | Combined Qualifying - Race 2 | 15 | 10 | 5.00 | 5 | running |
 | 2026 Grand Prix of Arlington | 23.00 | Combined Qualifications | 23 | 18 | 5.00 | 5 | running |
 | 2024 Grand Prix of Portland | 7.00 | Combined Qualifications | 6 | 3 | 4.00 | 3 | running |
 | 2026 Grand Prix of Alabama Race 2 R2 | 11.00 | Combined Qualifying - Race 2 | 11 | 7 | 4.00 | 4 | running |
-| 2025 Grand Prix of Monterey Race 1 R1 | 14.00 | Combined Qualifications | 14 | 10 | 4.00 | 4 | running |
 
 ### Weakest conversions
 
@@ -88,7 +88,7 @@ High-volatility races are the best candidates for annotated lap-position storyte
 | 2026 Indianapolis Grand Prix Race 1 R1 | 28.00 | -8.00 | 24.00 | 10.00 | 22.00 | 1.00 | 2.00 | -10.00 |
 | 2024 Indianapolis Grand Prix Race 1 R1 | 34.00 | -2.00 | 14.00 | 12.00 | 19.00 | -6.00 | 1.00 | 2.00 |
 | 2024 Grand Prix of Monterey Race 1 R1 | 34.00 | -8.00 | 14.00 | 7.00 | 18.00 | 1.00 | -11.00 | 2.00 |
-| 2025 Grand Prix of Alabama | 35.00 | -7.00 | 11.00 | 8.00 | 17.00 | -8.00 | 1.00 | 0.00 |
+| 2026 INDY NXT by Firestone at Milwaukee Mile | 90.00 | 6.00 | 12.00 | 7.00 | 15.00 | -1.00 | 2.00 | 5.00 |
 | 2025 Indianapolis Grand Prix Race 2 R2 | 35.00 | 5.00 | 11.00 | 15.00 | 20.00 | 5.00 | 2.00 | 1.00 |
 
 Low-volatility races are good examples of steady execution or limited passing opportunity.
@@ -97,9 +97,9 @@ Low-volatility races are good examples of steady execution or limited passing op
 | --- | --- | --- | --- | --- | --- |
 | 2026 Grand Prix of Alabama Race 2 R2 | 30.00 | 0.00 | 0.00 | 7.00 | 7.00 |
 | 2024 Detroit Grand Prix | 2.00 | 0.00 | 0.00 | 11.00 | 11.00 |
+| 2026 Grand Prix of Monterey Race 1 R1 | 35.00 | 0.00 | 0.00 | 6.00 | 6.00 |
 | 2024 Grand Prix of Portland | 35.00 | 0.00 | 0.00 | 3.00 | 3.00 |
 | 2025 Grand Prix at Road America | 20.00 | 1.00 | 1.00 | 9.00 | 10.00 |
-| 2025 INDY NXT by Firestone at World Wide Technology Raceway | 74.00 | 0.00 | 2.00 | 13.00 | 14.00 |
 
 ## Race Story Classifier
 
@@ -107,13 +107,13 @@ This is a first-pass product classifier for UI copy and filtering. It should be 
 
 | primaryStory | races | avgFinish | avgGain | top10Rate |
 | --- | --- | --- | --- | --- |
-| steady_context_race | 12 | 12.08 | 0.17 | 0.50 |
-| recovery_drive | 6 | 10.83 | 5.83 | 0.67 |
+| steady_context_race | 14 | 12.14 | 0.14 | 0.50 |
+| recovery_drive | 7 | 10.43 | 5.86 | 0.71 |
 | incident_or_reliability_limited | 5 | 20.00 | -10.40 | 0.00 |
+| steady_conversion | 5 | 7.20 | -0.40 | 1.00 |
 | volatile_race_shape | 5 | 12.60 | 1.60 | 0.20 |
 | front_running_conversion | 4 | 3.75 | 2.25 | 1.00 |
 | position_loss_race | 4 | 18.00 | -8.25 | 0.00 |
-| steady_conversion | 4 | 7.50 | -0.75 | 1.00 |
 | hidden_pace_bad_outcome | 1 | 21.00 | -6.00 | 0.00 |
 
 ## Teammate And Rival Context
@@ -126,31 +126,31 @@ These rows are useful for serious users because they put results into local comp
 | --- | --- | --- | --- | --- | --- |
 | 2026 Detroit Grand Prix | Chip Ganassi Racing | 8 | 18 | -10 | 1 |
 | 2026 Grand Prix of Alabama Race 1 R1 | Chip Ganassi Racing | 8 | 17 | -9 | 1 |
+| 2026 Grand Prix of Monterey Race 2 R2 | Chip Ganassi Racing | 9 | 16 | -7 | 1 |
+| 2026 INDY NXT by Firestone at Milwaukee Mile | Chip Ganassi Racing | 8 | 15 | -7 | 1 |
 | 2025 INDY NXT by Firestone at the Milwaukee Mile | Chip Ganassi Racing | 5 | 12 | -7 | 1 |
-| 2025 Grand Prix at Road America | Chip Ganassi Racing | 9 | 15 | -6 | 1 |
 | 2026 Music City Grand Prix | Chip Ganassi Racing | 10 | 16 | -6 | 1 |
+| 2025 Grand Prix at Road America | Chip Ganassi Racing | 9 | 15 | -6 | 1 |
 | 2026 Grand Prix of Alabama Race 2 R2 | Chip Ganassi Racing | 7 | 12 | -5 | 1 |
 | 2025 Indianapolis Grand Prix Race 1 R1 | Chip Ganassi Racing | 15 | 18 | -3 | 1 |
 | 2026 Grand Prix of St. Petersburg | Chip Ganassi Racing | 18 | 21 | -3 | 1 |
-| 2025 Grand Prix at Mid-Ohio | Chip Ganassi Racing | 12 | 14 | -2 | 1 |
-| 2026 Indianapolis Grand Prix Race 2 R2 | Chip Ganassi Racing | 12 | 14 | -2 | 1 |
 
 ### Repeated head-to-head rivals
 
 | driverName | racesTogether | bryceAhead | bryceBehind | headToHeadWinRate | avgFinishDeltaVsRival | sameTeamRaces |
 | --- | --- | --- | --- | --- | --- | --- |
+| Alexander Koreiba | 17 | 15 | 2 | 0.88 | -4.53 | 0 |
 | Hailie Deegan | 14 | 12 | 2 | 0.86 | -3.36 | 1 |
-| Alexander Koreiba | 13 | 11 | 2 | 0.85 | -4.15 | 0 |
-| Carson Etter | 13 | 10 | 3 | 0.77 | -4.77 | 13 |
-| Nicholas Monteiro | 14 | 10 | 4 | 0.71 | -3.79 | 0 |
+| Carson Etter | 17 | 14 | 3 | 0.82 | -6.00 | 17 |
+| Nicholas Monteiro | 18 | 14 | 4 | 0.78 | -5.22 | 0 |
+| Nicolas Stati | 16 | 12 | 4 | 0.75 | -3.31 | 0 |
 | Tommy Smith | 14 | 10 | 4 | 0.71 | -3.36 | 1 |
-| Colin Kaminsky | 13 | 9 | 4 | 0.69 | -3.31 | 0 |
-| Nicolas Stati | 12 | 8 | 4 | 0.67 | -2.00 | 0 |
-| Nolan Allaer | 25 | 16 | 9 | 0.64 | -2.32 | 1 |
+| Colin Kaminsky | 17 | 12 | 5 | 0.71 | -3.65 | 0 |
+| Nolan Allaer | 28 | 18 | 10 | 0.64 | -2.46 | 1 |
 | Ricardo Escotto | 24 | 15 | 9 | 0.62 | -2.71 | 0 |
-| James Roe | 41 | 24 | 17 | 0.59 | -1.39 | 27 |
+| James Roe | 45 | 27 | 18 | 0.60 | -1.87 | 31 |
+| Niels Koolen | 40 | 22 | 18 | 0.55 | -0.68 | 30 |
 | Jack William Miller | 28 | 15 | 13 | 0.54 | -1.75 | 0 |
-| Jonathan Browne | 15 | 8 | 7 | 0.53 | 0.27 | 0 |
 
 ## Section Timing Signals
 
@@ -160,31 +160,31 @@ Best section percentiles can become a 'where he was fast' module. Worst section 
 
 | raceLabel | sectionName | bryceRank | fieldRows | rankPercentile | time | speedMph | lapNumber |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| 2025 Music City Grand Prix | T1 to T2 | 1.00 | 18 | 1.00 | 00:07.1120 | 186.75 | 3 |
-| 2024 INDY NXT By Firestone at The Milwaukee Mile | T4 to FS | 1.00 | 16 | 1.00 | 00:03.2841 | 145.12 | 1 |
+| 2024 Grand Prix at Mid-Ohio | Turn 5 | 1.00 | 19 | 1.00 | 00:04.7498 | 79.95 | 21 |
+| 2026 Detroit Grand Prix | Back Str 2 | 1.00 | 24 | 1.00 | 00:02.0804 | 114.38 | 22 |
+| 2026 Grand Prix of Alabama Race 1 R1 | Turn 4 | 1.00 | 24 | 1.00 | 00:07.0712 | 135.76 | 33 |
+| 2025 Grand Prix at Mid-Ohio | Turn 2 | 1.00 | 19 | 1.00 | 00:07.2266 | 86.80 | 32 |
+| 2025 Music City Grand Prix | BackStretch Exit | 1.00 | 18 | 1.00 | 00:02.4120 | 186.85 | 58 |
+| 2025 Music City Grand Prix | BackStretch Entry | 1.00 | 18 | 1.00 | 00:02.6844 | 182.62 | 3 |
 | 2024 Grand Prix at Road America | I13A to I14 | 1.00 | 21 | 1.00 | 00:01.8200 | 127.00 | 1 |
-| 2026 Grand Prix at Road America Race 1 R1 | I9 to I13A | 1.00 | 24 | 1.00 | 00:34.7082 | 138.71 | 16 |
-| 2026 Grand Prix at Road America Race 1 R1 | I4 to I9 | 1.00 | 24 | 1.00 | 00:33.7461 | 110.68 | 14 |
-| 2026 Grand Prix at Road America Race 1 R1 | I9 to I10 | 1.00 | 24 | 1.00 | 00:06.0866 | 131.74 | 16 |
-| 2024 INDY NXT By Firestone at The Milwaukee Mile | T4 to SF | 1.00 | 16 | 1.00 | 00:05.1219 | 148.43 | 1 |
-| 2024 Grand Prix of Portland | Turn 2 | 1.00 | 18 | 1.00 | 00:02.8927 | 61.75 | 24 |
-| 2024 INDY NXT By Firestone at The Milwaukee Mile | T3 to T4 | 1.00 | 16 | 1.00 | 00:05.9489 | 140.74 | 5 |
-| 2024 Indianapolis Grand Prix Race 1 R1 | I6T to I6 | 1.00 | 21 | 1.00 | 00:00.5066 | 145.36 | 33 |
+| 2025 Music City Grand Prix | Turn 2 Entry | 1.00 | 18 | 1.00 | 00:03.6902 | 183.84 | 3 |
+| 2026 Grand Prix at Road America Race 1 R1 | I4A to I11 | 1.00 | 24 | 1.00 | 00:42.8964 | 115.14 | 14 |
+| 2026 Grand Prix of Alabama Race 2 R2 | Turns 1-3 | 1.00 | 24 | 1.00 | 00:10.2787 | 100.96 | 12 |
 
 ### Weakest section rows
 
 | raceLabel | sectionName | bryceRank | fieldRows | rankPercentile | time | speedMph | lapNumber |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| 2026 Grand Prix of Arlington | Lap | 23.00 | 23 | 0.00 | 01:42.6011 | 95.79 | 15 |
-| 2026 INDY NXT by Firestone at World Wide Technology Raceway | Turns 1/2 | 24.00 | 24 | 0.00 | 00:06.7534 | 141.34 | 4 |
-| 2026 INDY NXT by Firestone at World Wide Technology Raceway | Turn 3 | 24.00 | 24 | 0.00 | 00:04.1428 | 159.48 | 3 |
-| 2026 INDY NXT by Firestone at World Wide Technology Raceway | BS - T3 | 24.00 | 24 | 0.00 | 00:03.6336 | 156.87 | 2 |
-| 2026 INDY NXT by Firestone at World Wide Technology Raceway | BS - T2 | 24.00 | 24 | 0.00 | 00:03.8697 | 147.12 | 2 |
-| 2026 INDY NXT by Firestone at World Wide Technology Raceway | Turn 2 | 24.00 | 24 | 0.00 | 00:03.8112 | 136.68 | 3 |
+| 2024 Detroit Grand Prix | Back Str 2 | 21.00 | 21 | 0.00 | 00:02.4407 | 97.49 | 1 |
+| 2024 Detroit Grand Prix | I2A to I2 | 21.00 | 21 | 0.00 | 00:01.9617 | 77.51 | 2 |
+| 2024 Detroit Grand Prix | I5 to I6 | 21.00 | 21 | 0.00 | 00:03.5257 | 141.17 | 1 |
+| 2026 Grand Prix of Portland | PO to PI | 22.00 | 22 | 0.00 | 45:09.4285 | 2.26 | 35 |
+| 2024 Detroit Grand Prix | I6 to I7 | 21.00 | 21 | 0.00 | 00:07.1388 | 50.33 | 1 |
+| 2024 Detroit Grand Prix | I7 to I8 | 21.00 | 21 | 0.00 | 00:02.5892 | 74.79 | 1 |
+| 2026 Grand Prix of Portland | I10 to PI | 22.00 | 22 | 0.00 | 00:16.3586 | 39.01 | 35 |
+| 2026 Grand Prix at Mid-Ohio Race 1 R1 | Turn 12C | 25.00 | 25 | 0.00 | 00:01.3791 | 90.97 | 16 |
+| 2024 Detroit Grand Prix | I8 to I9 | 21.00 | 21 | 0.00 | 00:03.5162 | 51.97 | 1 |
 | 2024 Detroit Grand Prix | I1 to I2A | 21.00 | 21 | 0.00 | 00:03.9547 | 51.03 | 2 |
-| 2024 Detroit Grand Prix | I10 to SF | 21.00 | 21 | 0.00 | 00:27.2271 | 69.17 | 1 |
-| 2026 INDY NXT by Firestone at World Wide Technology Raceway | Lap | 24.00 | 24 | 0.00 | 00:29.7074 | 151.48 | 4 |
-| 2024 Detroit Grand Prix | I4 to I10 | 21.00 | 21 | 0.00 | 00:24.3143 | 90.30 | 1 |
 
 ## Weather Context Segments
 
@@ -192,19 +192,19 @@ Weather rows are modeled/non-official, so this should inform UI context rather t
 
 | dimension | segment | races | avgFinish | avgGain | top10Rate | dnfOrIssueRate | avgCautionShare |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| wetDry | dry | 37 | 11.68 | -0.32 | 0.51 | 0.08 | 0.15 |
+| wetDry | dry | 41 | 11.49 | -0.12 | 0.54 | 0.07 | 0.15 |
 | wetDry | wet | 4 | 19.75 | -7.00 | 0.00 | 0.50 | 0.17 |
 | thermalStress | cold | 1 | 7.00 | 4.00 | 1.00 | 0.00 | 0.00 |
 | thermalStress | cool | 12 | 13.58 | -2.17 | 0.42 | 0.08 | 0.16 |
 | thermalStress | hot | 8 | 11.50 | -0.62 | 0.50 | 0.12 | 0.15 |
 | thermalStress | moderate | 19 | 12.58 | -0.58 | 0.42 | 0.16 | 0.14 |
-| thermalStress | unknown | 1 | 10.00 | -2.00 | 1.00 | 0.00 | 0.17 |
+| thermalStress | unknown | 5 | 9.80 | 1.00 | 0.80 | 0.00 | 0.18 |
 | windRisk | high | 5 | 10.60 | -0.20 | 0.60 | 0.00 | 0.10 |
 | windRisk | low | 8 | 11.88 | 1.88 | 0.38 | 0.00 | 0.08 |
 | windRisk | medium | 27 | 13.07 | -1.93 | 0.44 | 0.19 | 0.18 |
-| windRisk | unknown | 1 | 10.00 | -2.00 | 1.00 | 0.00 | 0.17 |
+| windRisk | unknown | 5 | 9.80 | 1.00 | 0.80 | 0.00 | 0.18 |
 | weatherConfidence | modeled_medium | 40 | 12.53 | -0.95 | 0.45 | 0.12 | 0.15 |
-| weatherConfidence | unavailable | 1 | 10.00 | -2.00 | 1.00 | 0.00 | 0.17 |
+| weatherConfidence | unavailable | 5 | 9.80 | 1.00 | 0.80 | 0.00 | 0.18 |
 
 ## Exploratory Relationship Checks
 
@@ -212,17 +212,17 @@ These are scan lines for product ideation, not causal evidence.
 
 | x | y | label | n | pearson | caution |
 | --- | --- | --- | --- | --- | --- |
-| startPosition | finishPosition | Lower start vs lower finish | 41 | 0.41 | exploratory_correlation_not_causal |
-| qualifyingPosition | finishPosition | Qualifying rank vs finish | 39 | 0.40 | exploratory_correlation_not_causal |
-| qualifyingToFinishDelta | finishPosition | Qualifying conversion vs finish | 39 | -0.68 | exploratory_correlation_not_causal |
-| positionGain | finishPosition | Position gain vs finish | 41 | -0.68 | exploratory_correlation_not_causal |
-| bestLapRank | finishPosition | Best-lap rank vs finish | 39 | 0.46 | exploratory_correlation_not_causal |
-| cautionShare | positionGain | Caution share vs gain | 41 | -0.06 | exploratory_correlation_not_causal |
-| passesPerLap | positionGain | Race passing density vs gain | 41 | 0.01 | exploratory_correlation_not_causal |
+| startPosition | finishPosition | Lower start vs lower finish | 45 | 0.42 | exploratory_correlation_not_causal |
+| qualifyingPosition | finishPosition | Qualifying rank vs finish | 43 | 0.41 | exploratory_correlation_not_causal |
+| qualifyingToFinishDelta | finishPosition | Qualifying conversion vs finish | 43 | -0.69 | exploratory_correlation_not_causal |
+| positionGain | finishPosition | Position gain vs finish | 45 | -0.68 | exploratory_correlation_not_causal |
+| bestLapRank | finishPosition | Best-lap rank vs finish | 43 | 0.48 | exploratory_correlation_not_causal |
+| cautionShare | positionGain | Caution share vs gain | 45 | -0.02 | exploratory_correlation_not_causal |
+| passesPerLap | positionGain | Race passing density vs gain | 45 | 0.00 | exploratory_correlation_not_causal |
 | ambientTempC | finishPosition | Ambient temp vs finish | 40 | -0.12 | exploratory_correlation_not_causal |
 | windGustKph | positionGain | Wind gust vs gain | 40 | -0.12 | exploratory_correlation_not_causal |
 | precipitationMm | positionGain | Precipitation vs gain | 40 | -0.02 | exploratory_correlation_not_causal |
-| pitStops | finishPosition | Pit stops vs finish | 41 | -0.00 | exploratory_correlation_not_causal |
+| pitStops | finishPosition | Pit stops vs finish | 45 | 0.01 | exploratory_correlation_not_causal |
 
 ## Exploratory Multivariate Model
 

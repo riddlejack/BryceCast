@@ -66,8 +66,13 @@ def main() -> None:
         row["sessionId"]: row for row in bryce_results
         if sessions[row["sessionId"]]["sessionType"] == "race"
     }
-    if len(canonical_races) != 146 or len(race) != 146:
-        fail(f"Personally attributable race ledger must cover all 146 rows, got {len(race)}")
+    if len(canonical_races) < 140:
+        fail(f"Canonical career race history unexpectedly regressed to {len(canonical_races)} rows")
+    if len(race) != len(canonical_races):
+        fail(
+            "Personally attributable race ledger must cover every canonical Bryce race, "
+            f"expected {len(canonical_races)}, got {len(race)}"
+        )
     if {row["sessionId"] for row in race} != set(canonical_races):
         fail("Race ledger session set must exactly match canonical Bryce race results")
     stint_laps = sum(int(row["lapCount"]) for row in rows(STINTS) if row["sessionId"] == DAYTONA)
@@ -149,8 +154,12 @@ def main() -> None:
     if not close(exact_miles + lower_miles, physical["floor"]["miles"]):
         fail("Physical-session mileage floor does not reconcile")
     personal = summary["personalRaceMileage"]
-    if personal["laps"] != 3084 or not close(personal["miles"], 7010.9):
-        fail("Personally attributable race audit totals changed unexpectedly")
+    expected_race_laps = sum(int(row["personalLaps"]) for row in race)
+    expected_race_miles = sum(float(row["personalMiles"]) for row in race)
+    if personal["raceRows"] != len(canonical_races) or personal["coveredRaceRows"] != len(race):
+        fail("Personally attributable race row counts do not reconcile to the canonical ledger")
+    if personal["laps"] != expected_race_laps or not close(personal["miles"], expected_race_miles):
+        fail("Personally attributable race totals do not reconcile to the session ledger")
 
     represented_events = {row["eventId"] for row in race}
     if len(travel) != len(represented_events) - 1:
@@ -165,8 +174,9 @@ def main() -> None:
             factor = float(row[f"routeFactor{suffix}"])
             if not close(float(row[f"routeAdjusted{suffix}Miles"]), distance * factor, 0.11):
                 fail(f"Route proxy formula invalid for {row['fromEventId']} to {row['toEventId']}")
-    if not close(sum(float(row["greatCircleMiles"]) for row in travel), 55029.6):
-        fail("Great-circle minimum displacement must preserve the audited 55,029.6 miles")
+    expected_travel_miles = sum(float(row["greatCircleMiles"]) for row in travel)
+    if not close(summary["travel"]["greatCircleMinimum"]["miles"], expected_travel_miles):
+        fail("Great-circle minimum displacement does not reconcile to the travel ledger")
     if summary["travel"]["actualTravel"]["blockedBy"] != ["seasonBase", "returnHomeFrequency"]:
         fail("Actual travel blockers must remain explicit")
 
@@ -176,8 +186,11 @@ def main() -> None:
     if {row["travelModeProxy"] for row in travel_modes} != {row["travelModeProxy"] for row in travel}:
         fail("Travel-mode proxy breakdown is incomplete")
 
-    if len(fuel) != len(tires) or len(fuel) != 10:
-        fail("Fuel and tire artifacts must carry every represented series/year model row")
+    expected_resource_keys = {(row["seriesId"], int(row["seasonYear"])) for row in ledger}
+    fuel_keys = {(row["seriesId"], int(row["seasonYear"])) for row in fuel}
+    tire_keys = {(row["seriesId"], int(row["seasonYear"])) for row in tires}
+    if fuel_keys != expected_resource_keys or tire_keys != expected_resource_keys:
+        fail("Fuel and tire artifacts must carry every represented series/year model row exactly once")
     assumption_keys = set()
     for row in assumptions:
         key = (row["seriesId"], int(row["seasonStart"]), int(row["seasonEnd"]))
@@ -214,7 +227,7 @@ def main() -> None:
 
     print(
         "career life-stats validation passed: "
-        f"146 race rows, 3084 personal race laps, {exact_laps + lower_laps} physical-session floor laps, "
+        f"{len(race)} race rows, {expected_race_laps} personal race laps, {exact_laps + lower_laps} physical-session floor laps, "
         f"{len(unknown)} unknown sessions, {len(excluded)} aggregate qualifying summaries excluded"
     )
 

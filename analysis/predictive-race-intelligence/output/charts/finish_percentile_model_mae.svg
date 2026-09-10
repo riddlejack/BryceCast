@@ -3,18 +3,18 @@
 <text x="28" y="30" font-family="Inter, Arial" font-size="19" font-weight="700" fill="#1f2933">Finish-Percentile Model Backtest</text>
 <text x="28" y="52" font-family="Inter, Arial" font-size="12" fill="#5d6875">Pre-race-safe context models only; lower MAE is better.</text>
 <text x="28" y="91" font-family="Inter, Arial" font-size="12" fill="#39434d">start_position_ridge</text>
-<rect x="280" y="76" width="617.2" height="20" rx="3" fill="#2d6f8f" opacity="0.88"/>
-<text x="905.2018348623853" y="91" font-family="Inter, Arial" font-size="12" fill="#1f2933">0.207</text>
+<rect x="280" y="76" width="602.3" height="20" rx="3" fill="#2d6f8f" opacity="0.88"/>
+<text x="890.2935779816514" y="91" font-family="Inter, Arial" font-size="12" fill="#1f2933">0.202</text>
 <text x="28" y="125" font-family="Inter, Arial" font-size="12" fill="#39434d">track_type_mean</text>
-<rect x="280" y="110" width="623.2" height="20" rx="3" fill="#2d6f8f" opacity="0.88"/>
-<text x="911.1651376146789" y="125" font-family="Inter, Arial" font-size="12" fill="#1f2933">0.209</text>
+<rect x="280" y="110" width="614.2" height="20" rx="3" fill="#2d6f8f" opacity="0.88"/>
+<text x="902.2201834862385" y="125" font-family="Inter, Arial" font-size="12" fill="#1f2933">0.206</text>
 <text x="28" y="159" font-family="Inter, Arial" font-size="12" fill="#39434d">track_start_qualifying_ridge</text>
-<rect x="280" y="144" width="629.1" height="20" rx="3" fill="#2d6f8f" opacity="0.88"/>
-<text x="917.1284403669724" y="159" font-family="Inter, Arial" font-size="12" fill="#1f2933">0.211</text>
-<text x="28" y="193" font-family="Inter, Arial" font-size="12" fill="#39434d">prep_practice_qualifying_knn5</text>
-<rect x="280" y="178" width="632.1" height="20" rx="3" fill="#2d6f8f" opacity="0.88"/>
-<text x="920.1100917431193" y="193" font-family="Inter, Arial" font-size="12" fill="#1f2933">0.212</text>
-<text x="28" y="227" font-family="Inter, Arial" font-size="12" fill="#39434d">overall_mean</text>
+<rect x="280" y="144" width="623.2" height="20" rx="3" fill="#2d6f8f" opacity="0.88"/>
+<text x="911.1651376146789" y="159" font-family="Inter, Arial" font-size="12" fill="#1f2933">0.209</text>
+<text x="28" y="193" font-family="Inter, Arial" font-size="12" fill="#39434d">overall_mean</text>
+<rect x="280" y="178" width="647.0" height="20" rx="3" fill="#2d6f8f" opacity="0.88"/>
+<text x="935.0183486238533" y="193" font-family="Inter, Arial" font-size="12" fill="#1f2933">0.217</text>
+<text x="28" y="227" font-family="Inter, Arial" font-size="12" fill="#39434d">prep_practice_qualifying_knn5</text>
 <rect x="280" y="212" width="650.0" height="20" rx="3" fill="#2d6f8f" opacity="0.88"/>
 <text x="938.0" y="227" font-family="Inter, Arial" font-size="12" fill="#1f2933">0.218</text>
 </svg>

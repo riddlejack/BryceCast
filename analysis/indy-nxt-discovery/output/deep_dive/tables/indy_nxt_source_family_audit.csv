@@ -1,17 +1,17 @@
 sourceFamily,sourceRows,analysisStatus,primaryArtifacts,auditConclusion
-race_results,41,complete,race_debrief_scores.csv,"Core result, conversion, points, and status analysis."
-full_field_results,857,complete,driver_strength_ratings.csv; field_strength_by_race.csv; team_context_by_year.csv,"Full-field context, team context, and descriptive opponent strength."
+race_results,45,complete,race_debrief_scores.csv,"Core result, conversion, points, and status analysis."
+full_field_results,952,complete,driver_strength_ratings.csv; field_strength_by_race.csv; team_context_by_year.csv,"Full-field context, team context, and descriptive opponent strength."
 practice_results,56,complete_source_bounded,prep_session_signals.csv,Practice is represented as rank context; no absolute pace claims.
-qualifying_results,1453,complete_source_bounded,prep_session_signals.csv,Qualifying is used for start/prep context; group/combined caveats remain.
-lap_samples,33181,complete_source_bounded,full_field_lap_dynamics_by_driver.csv,Full-field lap movement and volatility analysis with partial-chart caveats.
-section_results,40,complete_source_bounded,section_results_deep_by_race.csv,Per-lap section percentiles with sparse-row suppression.
-top_section_times,41,partial,section_results_deep_by_section.csv,Top-section facts were useful earlier; final pass favors per-lap section results.
-event_summary_stats,41,complete,race_debrief_scores.csv,"Cautions, passes, lead-change context folded into debrief scores."
-leader_lap_summary,40,complete,leader_lap_context.csv,Leader entropy and dominance context.
-incidents,149,complete,incident_penalty_context.csv,Incident exposure and type summaries.
-penalties,80,complete,incident_penalty_context.csv,Penalty exposure and type summaries.
-racecraft_events,40,complete_source_bounded,racecraft_context_by_race.csv,Official most-improved badges only; no inferred overtake log.
+qualifying_results,1620,complete_source_bounded,prep_session_signals.csv,Qualifying is used for start/prep context; group/combined caveats remain.
+lap_samples,37422,complete_source_bounded,full_field_lap_dynamics_by_driver.csv,Full-field lap movement and volatility analysis with partial-chart caveats.
+section_results,44,complete_source_bounded,section_results_deep_by_race.csv,Per-lap section percentiles with sparse-row suppression.
+top_section_times,45,partial,section_results_deep_by_section.csv,Top-section facts were useful earlier; final pass favors per-lap section results.
+event_summary_stats,45,complete,race_debrief_scores.csv,"Cautions, passes, lead-change context folded into debrief scores."
+leader_lap_summary,44,complete,leader_lap_context.csv,Leader entropy and dominance context.
+incidents,166,complete,incident_penalty_context.csv,Incident exposure and type summaries.
+penalties,88,complete,incident_penalty_context.csv,Penalty exposure and type summaries.
+racecraft_events,44,complete_source_bounded,racecraft_context_by_race.csv,Official most-improved badges only; no inferred overtake log.
 weather_observations,115,complete_context_only,race_debrief_scores.csv; future_weekend_prep_inputs.csv,"Modeled non-official weather used as context, not causality."
-future_schedule,95,complete_context_only,future_weekend_prep_inputs.csv,Future prep rows exclude forecast claims until current weather source is added.
-pit_stop_counts,41,complete_low_signal,race_debrief_scores.csv,Pit counts are present but low-signal; no pit sequence/tire/service analysis exists.
+future_schedule,75,complete_context_only,future_weekend_prep_inputs.csv,Future prep rows exclude forecast claims until current weather source is added.
+pit_stop_counts,45,complete_low_signal,race_debrief_scores.csv,Pit counts are present but low-signal; no pit sequence/tire/service analysis exists.
 telemetry_or_car_engineering,0,unavailable,,No telemetry or engineering-root-cause data in canonical sources.

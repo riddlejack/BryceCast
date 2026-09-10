@@ -11,6 +11,7 @@ import { getUpcomingEvents, raceDayOf, type UpcomingPrepEvent } from '../data/up
 import { liveArchiveUpgradeFor, type LiveArchiveUpgrade } from '../data/liveRaceShellModel';
 import type { LiveReadiness } from '../app/useReadiness';
 import type { UiSeasonIndexRow } from '../data/uiDataPackage';
+import { DataFreshness } from '../app/dataFreshness';
 
 /** Archive labels drop the series prefix — everything here is INDY NXT. */
 const archiveLabel = (raceLabel: string): string =>
@@ -454,6 +455,7 @@ export const RacesScreen = ({ livePayload = null }: { livePayload?: LiveReadines
             : 'Every INDY NXT weekend, told straight from the official data.'
         }
       />
+      <DataFreshness />
       {index.length === 0 ? (
         <Card>
           <Unavailable>No completed races in the package yet.</Unavailable>

@@ -21,23 +21,16 @@ import type { TrackSectionAnchorSet } from './types';
  *  Every single-loop family's measured PDF length (time × avg speed) reproduces
  *  its map loop-to-loop distance to sub-metre precision.
  *
- *  Two families carry CONCATENATED names ("I10 to I11 I11 to I11B" and
- *  "I11B to I12 … I15C to I15"). Their measured PDF length (0.2566 mi, 0.1085 mi)
- *  uniquely fingerprints ONE real timed sub-section inside the named loop range —
- *  I11→I11B and I13→I13A respectively (exact map-section length match) — with the
- *  remaining named span absorbed by the pack's `Untimed remainder`. They are
- *  anchored to that fingerprinted sub-span; `sectionName` stays the full pack
- *  string (the join key). The 16 measured families cover 72.7% of the lap; the
- *  untimed sweeps (Moraine, Kettle Bottoms, the S/F straight) stay the quiet base
- *  outline — honest gaps, not coloured spans. Positions may later be superseded
- *  by measured loop-crossing geometry arriving through the same contract. */
+ *  The official parser now preserves all 22 fields individually. Every field's
+ *  time × speed length reproduces the corresponding feed loop interval; the
+ *  complete SF→…→I15→SF chain therefore tiles the 4.014-mi timing lap. */
 export const roadAmericaSections: TrackSectionAnchorSet = {
   slug: 'road-america',
   venueName: 'Road America',
   drivingDirection: 'clockwise',
   lapLengthMi: 4.014,
   confidence: 'anchored',
-  note: 'Sixteen official loop-to-loop timing sections covering 72.7% of the lap, anchored from the data lake 45-section map package (loop LapDistance re-referenced to S/F). Two concatenated-name families are anchored to the single measured sub-section their PDF length fingerprints. The untimed sweeps stay the base outline.',
+  note: 'All 22 official loop-to-loop timing sections tile the 4.014-mi timing lap. Each field is anchored from the feed loop distance re-referenced to the outline’s measured S/F datum; time × speed independently reproduces every loop interval.',
   sections: [
     { familyId: 'ra-sf-i1b', sectionName: 'SF to I1B', label: 'S/F→I1B', startLoop: 'SF', endLoop: 'I1B', startT: 0.0965, endT: 0.1551, measuredLengthMi: 0.2354 },
     { familyId: 'ra-i1b-i1', sectionName: 'I1B to I1', label: 'I1B→I1', startLoop: 'I1B', endLoop: 'I1', startT: 0.1551, endT: 0.1654, measuredLengthMi: 0.0411 },
@@ -52,12 +45,14 @@ export const roadAmericaSections: TrackSectionAnchorSet = {
     { familyId: 'ra-i7-i8', sectionName: 'I7 to I8', label: 'I7→I8', startLoop: 'I7', endLoop: 'I8', startT: 0.532, endT: 0.5953, measuredLengthMi: 0.2542 },
     { familyId: 'ra-i8-i9', sectionName: 'I8 to I9', label: 'I8→I9', startLoop: 'I8', endLoop: 'I9', startT: 0.5953, endT: 0.6304, measuredLengthMi: 0.1407 },
     { familyId: 'ra-i9-i10', sectionName: 'I9 to I10', label: 'I9→I10', startLoop: 'I9', endLoop: 'I10', startT: 0.6304, endT: 0.6859, measuredLengthMi: 0.2227 },
-    /* Concatenated-name family → drawn at fingerprinted sub-section I11→I11B; the
-     * measuredLengthMi is the FULL official family length (what the loops measure). */
-    { familyId: 'ra-i11-i11b', sectionName: 'I10 to I11 I11 to I11B', label: 'I11→I11B', startLoop: 'I11', endLoop: 'I11B', startT: 0.7569, endT: 0.8209, measuredLengthMi: 0.2566 },
-    /* Concatenated-name family → drawn at fingerprinted sub-section I13→I13A; the
-     * measuredLengthMi is the FULL official family length. */
-    { familyId: 'ra-i13-i13a', sectionName: 'I11B to I12 I12 to I13 I13 to I13A I13A to I14 I14 to I15C I15C to I15', label: 'I13→I13A', startLoop: 'I13', endLoop: 'I13A', startT: 0.9365, endT: 0.9636, measuredLengthMi: 0.1085 },
+    { familyId: 'ra-i10-i11', sectionName: 'I10 to I11', label: 'I10→I11', startLoop: 'I10', endLoop: 'I11', startT: 0.6859, endT: 0.7570, measuredLengthMi: 0.2852 },
+    { familyId: 'ra-i11-i11b', sectionName: 'I11 to I11B', label: 'I11→I11B', startLoop: 'I11', endLoop: 'I11B', startT: 0.7570, endT: 0.8209, measuredLengthMi: 0.2566 },
+    { familyId: 'ra-i11b-i12', sectionName: 'I11B to I12', label: 'I11B→I12', startLoop: 'I11B', endLoop: 'I12', startT: 0.8209, endT: 0.8665, measuredLengthMi: 0.1828 },
+    { familyId: 'ra-i12-i13', sectionName: 'I12 to I13', label: 'I12→I13', startLoop: 'I12', endLoop: 'I13', startT: 0.8665, endT: 0.9366, measuredLengthMi: 0.2814 },
+    { familyId: 'ra-i13-i13a', sectionName: 'I13 to I13A', label: 'I13→I13A', startLoop: 'I13', endLoop: 'I13A', startT: 0.9366, endT: 0.9636, measuredLengthMi: 0.1085 },
+    { familyId: 'ra-i13a-i14', sectionName: 'I13A to I14', label: 'I13A→I14', startLoop: 'I13A', endLoop: 'I14', startT: 0.9636, endT: 0.9796, measuredLengthMi: 0.0642 },
+    { familyId: 'ra-i14-i15c', sectionName: 'I14 to I15C', label: 'I14→I15C', startLoop: 'I14', endLoop: 'I15C', startT: 0.9796, endT: 0.0298, measuredLengthMi: 0.2015 },
+    { familyId: 'ra-i15c-i15', sectionName: 'I15C to I15', label: 'I15C→I15', startLoop: 'I15C', endLoop: 'I15', startT: 0.0298, endT: 0.0501, measuredLengthMi: 0.0813 },
     { familyId: 'ra-i15-sf', sectionName: 'I15 to SF', label: 'I15→S/F', startLoop: 'I15', endLoop: 'SF', startT: 0.05, endT: 0.0965, measuredLengthMi: 0.1864 }
   ]
 };

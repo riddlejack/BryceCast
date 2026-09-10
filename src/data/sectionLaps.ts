@@ -40,6 +40,11 @@ export interface SectionLapsPack {
    *  upgrade: fine sub-sections tiling the whole lap). The producer reads this
    *  to label the tier in the set it emits — same contract, richer source. */
   sourceTier?: SectionSourceTier;
+  /** Qualifying packs compare each driver's best clean time in each section
+   * inside Bryce's actual qualifying group. Those best sections need not come
+   * from one lap, so the UI names this basis explicitly instead of implying a
+   * whole-lap comparison. Race packs omit this field. */
+  comparisonScope?: 'qualifying_group_best_sections';
   sections: Array<{
     sectionName: string;
     /** 'measured' = a real timing-loop section; 'derived_remainder' = the
@@ -77,9 +82,26 @@ const refFor = (sessionId: string): UiSectionLapRef | null =>
  *  oldest first. Metadata only — nothing loads until loadSectionLaps. */
 export const sectionLapVisitsFor = (venueName: string | null | undefined): UiSectionLapRef[] => {
   if (!venueName) return [];
+  const canonicalOrder = new Map(
+    (uiDataPackage.screens.raceDebrief.seasonIndex ?? [])
+      .filter((row) => row.trackName === venueName)
+      .sort(
+        (left, right) =>
+          (left.raceDate ?? left.eventStartDate ?? '').localeCompare(right.raceDate ?? right.eventStartDate ?? '') ||
+          (left.roundIndex ?? 0) - (right.roundIndex ?? 0) ||
+          left.sessionId.localeCompare(right.sessionId)
+      )
+      .map((row, index) => [row.sessionId, index])
+  );
   return refs()
     .filter((ref) => ref.venueName === venueName)
-    .sort((left, right) => (left.seasonYear ?? 0) - (right.seasonYear ?? 0) || left.sessionId.localeCompare(right.sessionId));
+    .sort(
+      (left, right) =>
+        (canonicalOrder.get(left.sessionId) ?? Number.MAX_SAFE_INTEGER) -
+          (canonicalOrder.get(right.sessionId) ?? Number.MAX_SAFE_INTEGER) ||
+        (left.seasonYear ?? 0) - (right.seasonYear ?? 0) ||
+        left.sessionId.localeCompare(right.sessionId)
+    );
 };
 
 const cache = new Map<string, Promise<SectionLapsPack | null>>();

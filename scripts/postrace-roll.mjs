@@ -9,7 +9,7 @@
  *   npm run postrace:roll            # run the full chain (hard-stops on failure)
  *   npm run postrace:roll:dry        # validate preflight only, run nothing
  *
- * Requires BRYCECAST_SQLITE_PATH pointed at a capture archive so standings bake.
+ * BRYCECAST_SQLITE_PATH is optional; official championship standings are primary.
  * Sets BRYCECAST_ALLOW_EVENT_ROLL=1 for the package step only, after preflight.
  * Never deploys, never touches LaunchAgents.
  */

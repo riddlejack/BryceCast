@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-09-10T22:28:00.000Z",
+  "inventories": {
+    "racetools": {
+      "archiveRoot": "https://racetools.com/logfiles/IndyCar/",
+      "archiveRootStatus": 200,
+      "latestPublishedSeasonDirectory": 2025,
+      "season2026Directory": "https://racetools.com/logfiles/IndyCar/2026/",
+      "season2026DirectoryStatus": 404,
+      "annual2026Archive": "https://racetools.com/logfiles/IndyCar/IndyCar_2026.zip",
+      "annual2026ArchiveStatus": 404,
+      "finding": "No RaceTools 2026 directory, direct-session inventory, or annual archive was published at the checked endpoints. The root index still ends at the 2025 directory and 2024 annual ZIP."
+    },
+    "timing71": {
+      "archiveApi": "https://archive.timing71.org/replays",
+      "query": "series=IndyCar, startTime >= 2024-01-01 and < 2027-01-01, limit=5000",
+      "finding": "The full 2024-26 archive inventory is retained in the content-addressed lake manifest and re-analyzed before coverage builds. Labels are insufficient identity proof; Bryce roster reconstruction is required."
+    },
+    "brycecastRaceControl": {
+      "access": "sqlite3 -readonly over SSH",
+      "retainedSessionSubsets": ["5547-6764", "5540-6757", "5542-6759", "5541-6758", "5542-6950"],
+      "finding": "Only the five needed late-2026 session subsets were exported. The live database was not copied, mutated, or restarted."
+    }
+  }
+}

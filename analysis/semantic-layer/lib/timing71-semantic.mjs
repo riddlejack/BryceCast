@@ -45,6 +45,7 @@ export function parseTiming71Session(zipBytes, session) {
   let processedFrames = 0;
   let maxLapSum = 0;
   const cadenceGaps = [];
+  const cadenceGapIntervals = [];
   let prevProcessedEpoch = null;
 
   for (const frame of reconstructTiming71Frames(zipBytes)) {
@@ -74,7 +75,17 @@ export function parseTiming71Session(zipBytes, session) {
     processedFrames += 1;
     const epoch = frame.observedAtEpoch;
     firstEpoch ??= epoch;
-    if (prevProcessedEpoch !== null) cadenceGaps.push(epoch - prevProcessedEpoch);
+    if (prevProcessedEpoch !== null) {
+      const gapSeconds = epoch - prevProcessedEpoch;
+      cadenceGaps.push(gapSeconds);
+      if (gapSeconds > 2) {
+        cadenceGapIntervals.push({
+          lastObservedEpoch: prevProcessedEpoch,
+          nextObservedEpoch: epoch,
+          gapSeconds,
+        });
+      }
+    }
     prevProcessedEpoch = epoch;
     lastEpoch = epoch;
     // Snapshot the classification EAGERLY: the reader patches state arrays in
@@ -171,6 +182,7 @@ export function parseTiming71Session(zipBytes, session) {
       lastObservedAtEpoch: lastEpoch,
       cadenceMedianSeconds: cadenceGaps.length ? cadenceGaps[Math.floor(cadenceGaps.length / 2)] : null,
       cadenceMaxSeconds: cadenceGaps.length ? cadenceGaps[cadenceGaps.length - 1] : null,
+      gapIntervals: cadenceGapIntervals,
     },
     roster: [...rosterByCar.values()],
     flags: flagEvents,

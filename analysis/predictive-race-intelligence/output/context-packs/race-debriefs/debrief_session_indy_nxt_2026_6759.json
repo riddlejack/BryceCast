@@ -1,0 +1,176 @@
+{
+  "caveats": [
+    "derived score for product discovery; review labels before public UI copy",
+    "Archetype labels require review before public UI copy."
+  ],
+  "chartSpecs": [
+    {
+      "fields": [
+        "startPosition",
+        "finishPosition"
+      ],
+      "id": "start_finish_slope",
+      "type": "slope"
+    },
+    {
+      "filter": {
+        "sessionId": "session_indy_nxt_2026_6759"
+      },
+      "id": "lap_position_story",
+      "source": "analysis/indy-nxt-discovery/output/tables/indy_nxt_lap_timeline.csv",
+      "type": "inverted_line"
+    },
+    {
+      "displayPolicy": "denominator_badged",
+      "fields": [
+        "bestSectionFamilies",
+        "weakestSectionFamilies"
+      ],
+      "id": "section_strengths",
+      "type": "ranked_bar"
+    },
+    {
+      "fields": [
+        "teamAverageFinish",
+        "bryceVsTeamAvgFinish",
+        "bryceTeamFinishRank"
+      ],
+      "id": "team_context_dotplot",
+      "type": "dot_plot"
+    }
+  ],
+  "confidence": "medium",
+  "conversion": {
+    "archetype": "baseline_execution",
+    "bestLapRank": 6.0,
+    "conversionPercentileDelta": 0.053,
+    "labelReviewState": "review_required_before_public_copy",
+    "paceIndex": 0.674
+  },
+  "eventStartDate": "2026-09-04",
+  "generatedAt": "2026-09-10T23:14:55Z",
+  "id": "debrief_session_indy_nxt_2026_6759",
+  "lapStory": {
+    "bryceBestRunningPosition": 6.0,
+    "bryceNetLapChartGain": 0.0,
+    "brycePrimaryStory": "steady_conversion",
+    "bryceWorstRunningPosition": 6.0,
+    "fieldLapDrivers": 24.0,
+    "sourceState": "official_lap_chart",
+    "topLapChartGain": 12.0,
+    "topLapChartMover": "Tymek Kucharczyk"
+  },
+  "outcome": {
+    "cumulativePoints": 276.0,
+    "finishPercentile": 0.792,
+    "finishPosition": 6.0,
+    "points": 28.0,
+    "positionGain": 1.0,
+    "standingRank": 14.0,
+    "startPosition": 7.0,
+    "teamName": "Chip Ganassi Racing"
+  },
+  "raceContext": {
+    "bryceIncidentCount": 0.0,
+    "brycePenaltyCount": 0.0,
+    "leaderEntropy": 0.0,
+    "sessionIncidentCount": 6.0,
+    "sessionPenaltyCount": 3.0,
+    "topLeader": "Josh Pierson",
+    "topLeaderShare": 1.0,
+    "weatherContext": "dry/unknown/unknown"
+  },
+  "raceLabel": "2026 Grand Prix of Monterey Race 1 R1",
+  "raceOrder": {
+    "roundIndex": 16,
+    "seasonYear": 2026,
+    "sessionStartDate": "2026-09-05",
+    "source": "data/career/career.dataset.json",
+    "sourceFields": [
+      "events.eventStartDate",
+      "sessions.actualStart",
+      "sessions.scheduledStart"
+    ]
+  },
+  "schemaVersion": "brycecast.raceDebriefContextPack.v1",
+  "seasonYear": 2026,
+  "sectionSignal": {
+    "bestSectionFamilies": "Turn 1 Exit:0.70; Turn 7:0.70; Turn 1 Entry:0.65; Turn 4A:0.64",
+    "displayPolicy": "headline_allowed_if_sectionComparisonRows_gte_50_else_badge_or_suppress",
+    "medianSectionPercentile": 0.565,
+    "sectionComparisonRows": 560.0,
+    "weakestSectionFamilies": "Corkscrew:0.39; Turn 11:0.41; Turn 2:0.42; Turn 6:0.44"
+  },
+  "sessionId": "session_indy_nxt_2026_6759",
+  "sourceHash": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd",
+  "sourceRefs": [
+    {
+      "bytes": 21659,
+      "path": "analysis/indy-nxt-discovery/output/deep_dive/tables/race_debrief_scores.csv",
+      "role": "debrief score",
+      "sha256": "bcb3f202feab0c33528a574ce4863d217e137b74aa59184ee4914c139dc896e3"
+    },
+    {
+      "bytes": 11370,
+      "path": "analysis/indy-nxt-discovery/output/deep_dive/tables/full_field_lap_dynamics_by_race.csv",
+      "role": "lap dynamics",
+      "sha256": "78a45f6d967efe229147083ad4f549f32a0519e118ab60b976e7fc4ff4a2410a"
+    },
+    {
+      "bytes": 9390,
+      "path": "analysis/indy-nxt-discovery/output/deep_dive/tables/incident_penalty_context.csv",
+      "role": "incident and penalty context",
+      "sha256": "8b96f7f0c54f2ee9928ffda198f245807e8cc7e7926d974ae9a5000879653437"
+    },
+    {
+      "bytes": 6085,
+      "path": "analysis/indy-nxt-discovery/output/deep_dive/tables/leader_lap_context.csv",
+      "role": "leader lap context",
+      "sha256": "1e5aea124d8a73cf8d2327adb6bca035d55f28f74d537613498d50a9bafa3735"
+    },
+    {
+      "bytes": 12374,
+      "path": "analysis/indy-nxt-discovery/output/deep_dive/tables/team_context_by_race.csv",
+      "role": "team context",
+      "sha256": "8945a136b93ee75c0ce3b5651352d50ce110c011089b46a35b917a8d00b93715"
+    },
+    {
+      "bytes": 16141,
+      "path": "analysis/indy-nxt-discovery/output/deep_dive/tables/section_results_deep_by_race.csv",
+      "role": "section context",
+      "sha256": "b7826829585197df69d797231dc0c018c331514b26123a9b998f0245eae27a8e"
+    },
+    {
+      "bytes": 11827,
+      "path": "analysis/indy-nxt-discovery/output/deep_dive/tables/championship_progression.csv",
+      "role": "championship context",
+      "sha256": "1a6b3632a787d803105b93a7190325ef17a40f444b9f1a2c1e85c8a8470f2bf2"
+    },
+    {
+      "bytes": 192491,
+      "path": "analysis/indy-nxt-discovery/output/tables/indy_nxt_lap_timeline.csv",
+      "role": "lap timeline chart source",
+      "sha256": "b1db72b354b2e4cc488091bb493c2bdc44c9f3353ff5c9e1f5084aa7c2928394"
+    },
+    {
+      "bytes": 363747732,
+      "path": "data/career/career.dataset.json",
+      "role": "canonical event/session chronology",
+      "sha256": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd"
+    }
+  ],
+  "sourceState": "derived_from_official_results_lap_chart_sections_and_modeled_weather",
+  "teamContext": {
+    "bryceTeamFinishRank": 2.0,
+    "bryceVsTeamAvgFinish": -7.0,
+    "policy": "descriptive_result_context_only",
+    "teamAverageFinish": 13.0,
+    "teamCars": 4.0,
+    "teammates": "Carson Etter; James Roe; Niels Koolen"
+  },
+  "track": {
+    "name": "WeatherTech Raceway Laguna Seca",
+    "type": "road"
+  },
+  "type": "race_debrief"
+}
