@@ -121,11 +121,26 @@ export const watchableCaptureForRace = (
   );
 };
 
-/** Lookup by archive sessionKey (the Live page's replay target). */
+/** Lookup by archive sessionKey (the Live page's replay target). A canonical
+ * race id can appear twice after native-capture promotion: once as the old lake
+ * sessionKey, now explicitly unwatchable/superseded, and once as the native
+ * capture's canonicalSessionId. Resolve that exact canonical identity to its
+ * watchable row before considering the superseded exact-key row. Raw capture
+ * keys keep exact-only lookup; no event-id or name fallback is allowed. */
 export const captureBySessionKey = (
   available: ReplayAvailable | null,
   sessionKey: string
-): ReplaySessionInfo | null => available?.sessions.find((session) => session.sessionKey === sessionKey) ?? null;
+): ReplaySessionInfo | null => {
+  if (!available) return null;
+  const isCanonicalIndyNxtRace = /^session_indy_nxt_\d{4}_\d+$/.test(sessionKey);
+  if (isCanonicalIndyNxtRace) {
+    const preferred = available.sessions.find(
+      (session) => session.watchable && session.canonicalSessionId === sessionKey
+    );
+    if (preferred) return preferred;
+  }
+  return available.sessions.find((session) => session.sessionKey === sessionKey) ?? null;
+};
 
 /** A candidate venue visit for the prior-year join — the minimum a venue-dossier
  *  visit carries. Kept structural so both the race page and Race Week can pass

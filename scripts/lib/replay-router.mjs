@@ -91,9 +91,13 @@ export const createReplayRouter = ({ captureOverlay, lakeFeeds, enabled = false 
     // Live-guard wins unconditionally: if the real race is on, replay params are
     // ignored and the request falls through to the real Race Control feed.
     if (captureOverlay.runnerIsLive?.()) return { kind: 'live' };
-    // Watchable gating from the merged, authoritative index (a lake session
-    // superseded by our own watchable capture reads non-watchable here).
-    const entry = (available().sessions ?? []).find((candidate) => candidate.sessionKey === session);
+    // Canonical race links survive promotion to a better native capture. The
+    // suppressed lake row remains in the index as provenance, while playback
+    // resolves the preferred watchable capture for that exact canonical race.
+    const entries = available().sessions ?? [];
+    const canonical = /^session_indy_nxt_\d{4}_\d+$/.test(String(session ?? ''));
+    const entry = (canonical ? entries.find((candidate) => candidate.canonicalSessionId === session && candidate.watchable) : null)
+      ?? entries.find((candidate) => candidate.sessionKey === session);
     if (!entry) {
       return { kind: 'refused', statusCode: 404, reason: `Replay session ${session ?? '(missing)'} was not found.` };
     }
@@ -104,8 +108,9 @@ export const createReplayRouter = ({ captureOverlay, lakeFeeds, enabled = false 
         reason: `Replay refused: ${session} is not a watchable Bryce race capture.`
       };
     }
-    const owner = lakeFeeds.has(session) ? lakeFeeds : captureOverlay;
-    const resolved = owner.recordAt({ session, rt, speed });
+    const resolvedKey = entry.sessionKey;
+    const owner = lakeFeeds.has(resolvedKey) ? lakeFeeds : captureOverlay;
+    const resolved = owner.recordAt({ session: resolvedKey, rt, speed });
     if (resolved?.record) return { kind: 'record', record: resolved.record };
     if (resolved?.sourceGap) {
       return {

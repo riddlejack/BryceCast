@@ -3,6 +3,7 @@ import { readFile } from 'node:fs/promises';
 import { buildBryceCastUiContext } from '../src/data/uiContextAdapter';
 import { buildLiveBattleFrame, buildOfficialPointsWindow, headToHeadForCar, headToHeadForLiveDriver } from '../src/data/livePageModel';
 import { causeClause, causeFacts, causeMajority } from '../src/data/cautionCause';
+import { captureBySessionKey, type ReplayAvailable } from '../src/data/replayAvailable';
 
 /* Venue-agnostic hydration invariants: counts come from the package itself,
    never from a hardcoded event slice, so schedule roll-forwards don't break CI. */
@@ -75,6 +76,72 @@ const expectedTravelMinimumMiles = roundedTenth(travelLegRows.reduce((sum, row) 
 const expectedResourceKeys = new Set(physicalSessionRows.map((row) => `${row.seriesId}|${row.seasonYear}`));
 
 assert.equal(context.dataPackage.schemaVersion, 'brycecast.uiDataPackage.v1');
+
+/* A native capture supersedes a lake replay while retaining the same canonical
+   race identity. Canonical links must select the watchable native row even when
+   the catalog lists the old exact-key lake row first. Raw keys remain exact and
+   unknown/wrong-series inputs never gain a loose canonical alias. */
+{
+  const canonicalId = 'session_indy_nxt_2026_6755';
+  const base = {
+    eventId: null,
+    eventSessionId: '6755',
+    eventName: null,
+    sessionName: null,
+    seasonYear: 2026,
+    isRace: true,
+    samples: 100,
+    firstCheckedAt: null,
+    lastCheckedAt: null,
+    firstGreenAt: null,
+    durationSeconds: null,
+    totalLaps: null
+  };
+  const replayCatalog: ReplayAvailable = {
+    enabled: true,
+    active: null,
+    sessions: [
+      {
+        ...base,
+        sessionKey: canonicalId,
+        canonicalSessionId: canonicalId,
+        watchable: false,
+        supersededByCapture: true,
+        sourceTier: 'timing71_normalized'
+      },
+      {
+        ...base,
+        sessionKey: '5538-6755',
+        canonicalSessionId: canonicalId,
+        watchable: true,
+        sourceTier: 'race_control_capture'
+      },
+      {
+        ...base,
+        sessionKey: 'wrong-series-6755',
+        canonicalSessionId: 'session_other_series_2026_6755',
+        watchable: false,
+        sourceTier: 'timing71_normalized'
+      }
+    ]
+  };
+  assert.equal(
+    captureBySessionKey(replayCatalog, canonicalId)?.sessionKey,
+    '5538-6755',
+    'canonical replay links prefer the watchable native capture over a superseded exact-key lake row'
+  );
+  assert.equal(
+    captureBySessionKey(replayCatalog, '5538-6755')?.sessionKey,
+    '5538-6755',
+    'native capture keys retain exact lookup'
+  );
+  assert.equal(captureBySessionKey(replayCatalog, 'arbitrary-6755'), null, 'arbitrary keys do not match by numeric suffix');
+  assert.equal(
+    captureBySessionKey(replayCatalog, 'wrong-series-6755')?.watchable,
+    false,
+    'wrong-series exact rows remain unwatchable for the existing refusal path'
+  );
+}
 
 const manifest = context.contextPackManifest;
 assert.equal(manifest.packs.filter((pack) => pack.type === 'upcoming_event').length, manifest.packCounts.upcoming_event);

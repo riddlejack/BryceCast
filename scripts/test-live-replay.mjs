@@ -195,6 +195,8 @@ const makeRouter = () => {
   await writeFile(runnerStatusPath, JSON.stringify({ phase: 'IDLE', updatedAt: new Date().toISOString() }));
   const router = makeRouter();
   assert.equal(router.resolveReplay({ session: '5537-6754', rt: REPLAY_EARLY_RT, speed: 1 }).kind, 'record', 'a watchable capture resolves to a record');
+  assert.ok(router.available().sessions.some((s) => s.sessionKey === 'session_indy_nxt_2026_6754' && s.supersededByCapture), 'fixture covers a lake feed superseded by a native capture');
+  assert.equal(router.resolveReplay({ session: 'session_indy_nxt_2026_6754', rt: REPLAY_EARLY_RT, speed: 1 }).kind, 'record', 'canonical race links resolve the preferred native capture after lake supersession');
   assert.equal(router.resolveReplay({ session: '5537-6753', rt: REPLAY_EARLY_RT, speed: 1 }).kind, 'refused', 'a non-watchable practice capture is refused');
   assert.equal(router.resolveReplay({ session: '5537-6753', rt: REPLAY_EARLY_RT, speed: 1 }).statusCode, 422, 'a non-watchable capture refuses with 422');
   assert.equal(router.resolveReplay({ session: '9001-8801', rt: REPLAY_EARLY_RT, speed: 1 }).statusCode, 422, 'a wrong-series capture refuses with 422');
