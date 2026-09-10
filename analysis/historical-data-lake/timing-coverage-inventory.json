@@ -19,8 +19,8 @@
     },
     "brycecastRaceControl": {
       "access": "sqlite3 -readonly over SSH",
-      "retainedSessionSubsets": ["5547-6764", "5540-6757", "5542-6759", "5541-6758", "5542-6950"],
-      "finding": "Only the five needed late-2026 session subsets were exported. The live database was not copied, mutated, or restarted."
+      "retainedSessionSubsets": ["5538-6755", "5547-6764", "5540-6757", "5542-6759", "5541-6758", "5547-6900", "5540-6935", "5542-6950"],
+      "finding": "Only the eight verified 2026 race and qualifying session subsets were exported from an immutable local SQLite backup. The live database was not copied, mutated, or restarted."
     }
   }
 }

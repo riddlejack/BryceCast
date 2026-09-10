@@ -442,8 +442,8 @@ const WatchLastRace = ({ latest }: { latest: ArchiveEntry | null }) => {
         title={`Watch ${displayRaceLabel(latest.pack)} unfold`}
         copy={
           isOwnCapture
-            ? 'Every second of the last race, replayed as it happened, from our own trackside capture.'
-            : 'Every second of the last race, reconstructed from a third-party timing archive and replayed as it happened.'
+            ? 'Replay the last race from our Race Control timing capture.'
+            : 'Replay the last race from archived timing observations.'
         }
       />
     </section>

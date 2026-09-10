@@ -1,6 +1,6 @@
 {
   "artifact": "replay-feeds-manifest",
-  "generatedAt": "2026-09-10T23:07:39.736Z",
+  "generatedAt": "2026-09-10T23:38:05.832Z",
   "note": "Lake-fed replay feeds for the Time Machine. Every session is source-tiered and validated; failing sessions are excluded from available() with the reason recorded. Classification/final order shown is as-raced (the honesty line at the checkered); canonical is the validation reference.",
   "clockCaveat": "RaceTools feeds carry a session-local virtual clock (seconds-of-day on the session date, labelled Z) — correct year/date, NOT UTC-accurate; the replay uses it only as a relative virtual clock. Timing71 feeds carry real UTC epoch timestamps.",
   "interpolationPolicy": {
@@ -11,14 +11,16 @@
   },
   "scope": {
     "racetools_2024_25_races": 28,
-    "timing71_2026_races": 17,
-    "raceControlCapture_2026_races": 4,
+    "timing71_2026_races": 12,
+    "raceControlCapture_2026_races": 5,
     "practiceQualifyingShipped": 0,
     "practiceQualifyingNote": "Practice/qualifying (slice c) intentionally not shipped: a validated race subset over an unvalidated sweep."
   },
   "counts": {
-    "reduced": 49,
-    "watchable": 49,
+    "reduced": 45,
+    "sourceCandidates": 50,
+    "alternateSources": 5,
+    "watchable": 45,
     "excluded": 0
   },
   "tierLabels": {
@@ -38,6 +40,7 @@
       "observationBasis": "interpolated_step_hold_from_observed_timing_events",
       "replayInterpolated": true,
       "noGps": true,
+      "feedArtifact": "feeds/session_indy_nxt_2024_6324.ndjson.gz",
       "interpolationCoverage": {
         "maximumHoldSeconds": 5,
         "withheldSeconds": 0,
@@ -101,7 +104,8 @@
         "twoSource": null
       },
       "excludedFromAvailable": false,
-      "watchable": true
+      "watchable": true,
+      "alternateReplaySources": []
     },
     {
       "id": "rt_2024_barber-motorsports-park_r_2024-04-28_a",
@@ -114,6 +118,7 @@
       "observationBasis": "interpolated_step_hold_from_observed_timing_events",
       "replayInterpolated": true,
       "noGps": true,
+      "feedArtifact": "feeds/session_indy_nxt_2024_6314.ndjson.gz",
       "interpolationCoverage": {
         "maximumHoldSeconds": 5,
         "withheldSeconds": 0,
@@ -177,7 +182,8 @@
         "twoSource": null
       },
       "excludedFromAvailable": false,
-      "watchable": true
+      "watchable": true,
+      "alternateReplaySources": []
     },
     {
       "id": "rt_2024_indianapolis-motor-speedway-rc_r1_2024-05-10_a",
@@ -190,6 +196,7 @@
       "observationBasis": "interpolated_step_hold_from_observed_timing_events",
       "replayInterpolated": true,
       "noGps": true,
+      "feedArtifact": "feeds/session_indy_nxt_2024_6315.ndjson.gz",
       "interpolationCoverage": {
         "maximumHoldSeconds": 5,
         "withheldSeconds": 0,
@@ -253,7 +260,8 @@
         "twoSource": null
       },
       "excludedFromAvailable": false,
-      "watchable": true
+      "watchable": true,
+      "alternateReplaySources": []
     },
     {
       "id": "rt_2024_indianapolis-motor-speedway-rc_r2_2024-05-11_a",
@@ -266,6 +274,7 @@
       "observationBasis": "interpolated_step_hold_from_observed_timing_events",
       "replayInterpolated": true,
       "noGps": true,
+      "feedArtifact": "feeds/session_indy_nxt_2024_6325.ndjson.gz",
       "interpolationCoverage": {
         "maximumHoldSeconds": 5,
         "withheldSeconds": 0,
@@ -328,7 +337,8 @@
         "twoSource": null
       },
       "excludedFromAvailable": false,
-      "watchable": true
+      "watchable": true,
+      "alternateReplaySources": []
     },
     {
       "id": "rt_2024_detroit-street-circuit_r_2024-06-02_a",
@@ -341,6 +351,7 @@
       "observationBasis": "interpolated_step_hold_from_observed_timing_events",
       "replayInterpolated": true,
       "noGps": true,
+      "feedArtifact": "feeds/session_indy_nxt_2024_6326.ndjson.gz",
       "interpolationCoverage": {
         "maximumHoldSeconds": 5,
         "withheldSeconds": 0,
@@ -404,7 +415,8 @@
         "twoSource": null
       },
       "excludedFromAvailable": false,
-      "watchable": true
+      "watchable": true,
+      "alternateReplaySources": []
     },
     {
       "id": "rt_2024_road-america_r_2024-06-09_a",
@@ -417,6 +429,7 @@
       "observationBasis": "interpolated_step_hold_from_observed_timing_events",
       "replayInterpolated": true,
       "noGps": true,
+      "feedArtifact": "feeds/session_indy_nxt_2024_6316.ndjson.gz",
       "interpolationCoverage": {
         "maximumHoldSeconds": 5,
         "withheldSeconds": 0,
@@ -481,7 +494,8 @@
         "twoSource": null
       },
       "excludedFromAvailable": false,
-      "watchable": true
+      "watchable": true,
+      "alternateReplaySources": []
     },
     {
       "id": "rt_2024_weathertech-raceway-laguna-seca_r1_2024-06-22_a",
@@ -494,6 +508,7 @@
       "observationBasis": "interpolated_step_hold_from_observed_timing_events",
       "replayInterpolated": true,
       "noGps": true,
+      "feedArtifact": "feeds/session_indy_nxt_2024_6317.ndjson.gz",
       "interpolationCoverage": {
         "maximumHoldSeconds": 5,
         "withheldSeconds": 0,
@@ -556,7 +571,8 @@
         "twoSource": null
       },
       "excludedFromAvailable": false,
-      "watchable": true
+      "watchable": true,
+      "alternateReplaySources": []
     },
     {
       "id": "rt_2024_weathertech-raceway-laguna-seca_r2_2024-06-23_a",
@@ -569,6 +585,7 @@
       "observationBasis": "interpolated_step_hold_from_observed_timing_events",
       "replayInterpolated": true,
       "noGps": true,
+      "feedArtifact": "feeds/session_indy_nxt_2024_6327.ndjson.gz",
       "interpolationCoverage": {
         "maximumHoldSeconds": 5,
         "withheldSeconds": 0,
@@ -631,7 +648,8 @@
         "twoSource": null
       },
       "excludedFromAvailable": false,
-      "watchable": true
+      "watchable": true,
+      "alternateReplaySources": []
     },
     {
       "id": "rt_2024_mid-ohio-sports-car-course_r_2024-07-07_a",
@@ -644,6 +662,7 @@
       "observationBasis": "interpolated_step_hold_from_observed_timing_events",
       "replayInterpolated": true,
       "noGps": true,
+      "feedArtifact": "feeds/session_indy_nxt_2024_6318.ndjson.gz",
       "interpolationCoverage": {
         "maximumHoldSeconds": 5,
         "withheldSeconds": 0,
@@ -705,7 +724,8 @@
         "twoSource": null
       },
       "excludedFromAvailable": false,
-      "watchable": true
+      "watchable": true,
+      "alternateReplaySources": []
     },
     {
       "id": "rt_2024_iowa-speedway_r_2024-07-13_a",
@@ -718,6 +738,7 @@
       "observationBasis": "interpolated_step_hold_from_observed_timing_events",
       "replayInterpolated": true,
       "noGps": true,
+      "feedArtifact": "feeds/session_indy_nxt_2024_6319.ndjson.gz",
       "interpolationCoverage": {
         "maximumHoldSeconds": 5,
         "withheldSeconds": 0,
@@ -778,7 +799,8 @@
         "twoSource": null
       },
       "excludedFromAvailable": false,
-      "watchable": true
+      "watchable": true,
+      "alternateReplaySources": []
     },
     {
       "id": "rt_2024_world-wide-technology-raceway_r_2024-08-17_a",
@@ -791,6 +813,7 @@
       "observationBasis": "interpolated_step_hold_from_observed_timing_events",
       "replayInterpolated": true,
       "noGps": true,
+      "feedArtifact": "feeds/session_indy_nxt_2024_6320.ndjson.gz",
       "interpolationCoverage": {
         "maximumHoldSeconds": 5,
         "withheldSeconds": 0,
@@ -851,7 +874,8 @@
         "twoSource": null
       },
       "excludedFromAvailable": false,
-      "watchable": true
+      "watchable": true,
+      "alternateReplaySources": []
     },
     {
       "id": "rt_2024_portland-international-raceway_r_2024-08-25_a",
@@ -864,6 +888,7 @@
       "observationBasis": "interpolated_step_hold_from_observed_timing_events",
       "replayInterpolated": true,
       "noGps": true,
+      "feedArtifact": "feeds/session_indy_nxt_2024_6321.ndjson.gz",
       "interpolationCoverage": {
         "maximumHoldSeconds": 5,
         "withheldSeconds": 0,
@@ -923,7 +948,8 @@
         "twoSource": null
       },
       "excludedFromAvailable": false,
-      "watchable": true
+      "watchable": true,
+      "alternateReplaySources": []
     },
     {
       "id": "rt_2024_milwaukee-mile_r_2024-08-31_a",
@@ -936,6 +962,7 @@
       "observationBasis": "interpolated_step_hold_from_observed_timing_events",
       "replayInterpolated": true,
       "noGps": true,
+      "feedArtifact": "feeds/session_indy_nxt_2024_6322.ndjson.gz",
       "interpolationCoverage": {
         "maximumHoldSeconds": 5,
         "withheldSeconds": 0,
@@ -996,7 +1023,8 @@
         "twoSource": null
       },
       "excludedFromAvailable": false,
-      "watchable": true
+      "watchable": true,
+      "alternateReplaySources": []
     },
     {
       "id": "rt_2024_nashville-superspeedway_r_2024-09-15_a",
@@ -1009,6 +1037,7 @@
       "observationBasis": "interpolated_step_hold_from_observed_timing_events",
       "replayInterpolated": true,
       "noGps": true,
+      "feedArtifact": "feeds/session_indy_nxt_2024_6323.ndjson.gz",
       "interpolationCoverage": {
         "maximumHoldSeconds": 5,
         "withheldSeconds": 0,
@@ -1069,7 +1098,8 @@
         "twoSource": null
       },
       "excludedFromAvailable": false,
-      "watchable": true
+      "watchable": true,
+      "alternateReplaySources": []
     },
     {
       "id": "rt_2025_st-petersburg-street-circuit_r_2025-03-02_d",
@@ -1082,6 +1112,7 @@
       "observationBasis": "interpolated_step_hold_from_observed_timing_events",
       "replayInterpolated": true,
       "noGps": true,
+      "feedArtifact": "feeds/session_indy_nxt_2025_6446.ndjson.gz",
       "interpolationCoverage": {
         "maximumHoldSeconds": 5,
         "withheldSeconds": 0,
@@ -1145,7 +1176,8 @@
         "twoSource": null
       },
       "excludedFromAvailable": false,
-      "watchable": true
+      "watchable": true,
+      "alternateReplaySources": []
     },
     {
       "id": "rt_2025_barber-motorsports-park_r_2025-05-04_d",
@@ -1158,6 +1190,7 @@
       "observationBasis": "interpolated_step_hold_from_observed_timing_events",
       "replayInterpolated": true,
       "noGps": true,
+      "feedArtifact": "feeds/session_indy_nxt_2025_6445.ndjson.gz",
       "interpolationCoverage": {
         "maximumHoldSeconds": 5,
         "withheldSeconds": 0,
@@ -1220,7 +1253,8 @@
         "twoSource": null
       },
       "excludedFromAvailable": false,
-      "watchable": true
+      "watchable": true,
+      "alternateReplaySources": []
     },
     {
       "id": "rt_2025_indianapolis-motor-speedway-rc_r1_2025-05-09_d",
@@ -1233,6 +1267,7 @@
       "observationBasis": "interpolated_step_hold_from_observed_timing_events",
       "replayInterpolated": true,
       "noGps": true,
+      "feedArtifact": "feeds/session_indy_nxt_2025_6444.ndjson.gz",
       "interpolationCoverage": {
         "maximumHoldSeconds": 5,
         "withheldSeconds": 0,
@@ -1296,7 +1331,8 @@
         "twoSource": null
       },
       "excludedFromAvailable": false,
-      "watchable": true
+      "watchable": true,
+      "alternateReplaySources": []
     },
     {
       "id": "rt_2025_indianapolis-motor-speedway-rc_r2_2025-05-10_d",
@@ -1309,6 +1345,7 @@
       "observationBasis": "interpolated_step_hold_from_observed_timing_events",
       "replayInterpolated": true,
       "noGps": true,
+      "feedArtifact": "feeds/session_indy_nxt_2025_6443.ndjson.gz",
       "interpolationCoverage": {
         "maximumHoldSeconds": 5,
         "withheldSeconds": 0,
@@ -1372,7 +1409,8 @@
         "twoSource": null
       },
       "excludedFromAvailable": false,
-      "watchable": true
+      "watchable": true,
+      "alternateReplaySources": []
     },
     {
       "id": "rt_2025_detroit-street-circuit_r_2025-06-01_d",
@@ -1385,6 +1423,7 @@
       "observationBasis": "interpolated_step_hold_from_observed_timing_events",
       "replayInterpolated": true,
       "noGps": true,
+      "feedArtifact": "feeds/session_indy_nxt_2025_6455.ndjson.gz",
       "interpolationCoverage": {
         "maximumHoldSeconds": 5,
         "withheldSeconds": 0,
@@ -1448,7 +1487,8 @@
         "twoSource": null
       },
       "excludedFromAvailable": false,
-      "watchable": true
+      "watchable": true,
+      "alternateReplaySources": []
     },
     {
       "id": "rt_2025_world-wide-technology-raceway_r_2025-06-15_d",
@@ -1461,6 +1501,7 @@
       "observationBasis": "interpolated_step_hold_from_observed_timing_events",
       "replayInterpolated": true,
       "noGps": true,
+      "feedArtifact": "feeds/session_indy_nxt_2025_6454.ndjson.gz",
       "interpolationCoverage": {
         "maximumHoldSeconds": 5,
         "withheldSeconds": 0,
@@ -1521,7 +1562,8 @@
         "twoSource": null
       },
       "excludedFromAvailable": false,
-      "watchable": true
+      "watchable": true,
+      "alternateReplaySources": []
     },
     {
       "id": "rt_2025_road-america_r_2025-06-22_d",
@@ -1534,6 +1576,7 @@
       "observationBasis": "interpolated_step_hold_from_observed_timing_events",
       "replayInterpolated": true,
       "noGps": true,
+      "feedArtifact": "feeds/session_indy_nxt_2025_6453.ndjson.gz",
       "interpolationCoverage": {
         "maximumHoldSeconds": 5,
         "withheldSeconds": 0,
@@ -1594,7 +1637,8 @@
         "twoSource": null
       },
       "excludedFromAvailable": false,
-      "watchable": true
+      "watchable": true,
+      "alternateReplaySources": []
     },
     {
       "id": "rt_2025_mid-ohio-sports-car-course_r_2025-07-06_d",
@@ -1607,6 +1651,7 @@
       "observationBasis": "interpolated_step_hold_from_observed_timing_events",
       "replayInterpolated": true,
       "noGps": true,
+      "feedArtifact": "feeds/session_indy_nxt_2025_6452.ndjson.gz",
       "interpolationCoverage": {
         "maximumHoldSeconds": 5,
         "withheldSeconds": 430,
@@ -1676,7 +1721,8 @@
         "twoSource": null
       },
       "excludedFromAvailable": false,
-      "watchable": true
+      "watchable": true,
+      "alternateReplaySources": []
     },
     {
       "id": "rt_2025_iowa-speedway_r_2025-07-12_d",
@@ -1689,6 +1735,7 @@
       "observationBasis": "interpolated_step_hold_from_observed_timing_events",
       "replayInterpolated": true,
       "noGps": true,
+      "feedArtifact": "feeds/session_indy_nxt_2025_6451.ndjson.gz",
       "interpolationCoverage": {
         "maximumHoldSeconds": 5,
         "withheldSeconds": 0,
@@ -1750,7 +1797,8 @@
         "twoSource": null
       },
       "excludedFromAvailable": false,
-      "watchable": true
+      "watchable": true,
+      "alternateReplaySources": []
     },
     {
       "id": "rt_2025_weathertech-raceway-laguna-seca_r1_2025-07-26_d",
@@ -1763,6 +1811,7 @@
       "observationBasis": "interpolated_step_hold_from_observed_timing_events",
       "replayInterpolated": true,
       "noGps": true,
+      "feedArtifact": "feeds/session_indy_nxt_2025_6442.ndjson.gz",
       "interpolationCoverage": {
         "maximumHoldSeconds": 5,
         "withheldSeconds": 0,
@@ -1824,7 +1873,8 @@
         "twoSource": null
       },
       "excludedFromAvailable": false,
-      "watchable": true
+      "watchable": true,
+      "alternateReplaySources": []
     },
     {
       "id": "rt_2025_weathertech-raceway-laguna-seca_r2_2025-07-27_d",
@@ -1837,6 +1887,7 @@
       "observationBasis": "interpolated_step_hold_from_observed_timing_events",
       "replayInterpolated": true,
       "noGps": true,
+      "feedArtifact": "feeds/session_indy_nxt_2025_6450.ndjson.gz",
       "interpolationCoverage": {
         "maximumHoldSeconds": 5,
         "withheldSeconds": 0,
@@ -1898,7 +1949,8 @@
         "twoSource": null
       },
       "excludedFromAvailable": false,
-      "watchable": true
+      "watchable": true,
+      "alternateReplaySources": []
     },
     {
       "id": "rt_2025_portland-international-raceway_r_2025-08-10_d",
@@ -1911,6 +1963,7 @@
       "observationBasis": "interpolated_step_hold_from_observed_timing_events",
       "replayInterpolated": true,
       "noGps": true,
+      "feedArtifact": "feeds/session_indy_nxt_2025_6449.ndjson.gz",
       "interpolationCoverage": {
         "maximumHoldSeconds": 5,
         "withheldSeconds": 0,
@@ -1972,7 +2025,8 @@
         "twoSource": null
       },
       "excludedFromAvailable": false,
-      "watchable": true
+      "watchable": true,
+      "alternateReplaySources": []
     },
     {
       "id": "rt_2025_milwaukee-mile_r_2025-08-24_d",
@@ -1985,6 +2039,7 @@
       "observationBasis": "interpolated_step_hold_from_observed_timing_events",
       "replayInterpolated": true,
       "noGps": true,
+      "feedArtifact": "feeds/session_indy_nxt_2025_6448.ndjson.gz",
       "interpolationCoverage": {
         "maximumHoldSeconds": 5,
         "withheldSeconds": 0,
@@ -2045,7 +2100,8 @@
         "twoSource": null
       },
       "excludedFromAvailable": false,
-      "watchable": true
+      "watchable": true,
+      "alternateReplaySources": []
     },
     {
       "id": "rt_2025_nashville-superspeedway_r_2025-08-31_d",
@@ -2058,6 +2114,7 @@
       "observationBasis": "interpolated_step_hold_from_observed_timing_events",
       "replayInterpolated": true,
       "noGps": true,
+      "feedArtifact": "feeds/session_indy_nxt_2025_6447.ndjson.gz",
       "interpolationCoverage": {
         "maximumHoldSeconds": 5,
         "withheldSeconds": 0,
@@ -2118,7 +2175,8 @@
         "twoSource": null
       },
       "excludedFromAvailable": false,
-      "watchable": true
+      "watchable": true,
+      "alternateReplaySources": []
     },
     {
       "id": "t71_2026_st-petersburg_race_2026-03-01",
@@ -2131,6 +2189,7 @@
       "observationBasis": "interpolated_step_hold_from_observed_timing_events",
       "replayInterpolated": true,
       "noGps": true,
+      "feedArtifact": "feeds/session_indy_nxt_2026_6751.ndjson.gz",
       "interpolationCoverage": {
         "maximumHoldSeconds": 5,
         "withheldSeconds": 0,
@@ -2197,7 +2256,8 @@
         "twoSource": null
       },
       "excludedFromAvailable": false,
-      "watchable": true
+      "watchable": true,
+      "alternateReplaySources": []
     },
     {
       "id": "t71_2026_arlington_race_2026-03-15",
@@ -2210,6 +2270,7 @@
       "observationBasis": "interpolated_step_hold_from_observed_timing_events",
       "replayInterpolated": true,
       "noGps": true,
+      "feedArtifact": "feeds/session_indy_nxt_2026_6753.ndjson.gz",
       "interpolationCoverage": {
         "maximumHoldSeconds": 5,
         "withheldSeconds": 0,
@@ -2276,7 +2337,8 @@
         "twoSource": null
       },
       "excludedFromAvailable": false,
-      "watchable": true
+      "watchable": true,
+      "alternateReplaySources": []
     },
     {
       "id": "t71_2026_barber_race_r1_2026-03-28",
@@ -2289,6 +2351,7 @@
       "observationBasis": "interpolated_step_hold_from_observed_timing_events",
       "replayInterpolated": true,
       "noGps": true,
+      "feedArtifact": "feeds/session_indy_nxt_2026_6750.ndjson.gz",
       "interpolationCoverage": {
         "maximumHoldSeconds": 5,
         "withheldSeconds": 0,
@@ -2355,7 +2418,8 @@
         "twoSource": null
       },
       "excludedFromAvailable": false,
-      "watchable": true
+      "watchable": true,
+      "alternateReplaySources": []
     },
     {
       "id": "t71_2026_barber_race_r2_2026-03-29",
@@ -2368,6 +2432,7 @@
       "observationBasis": "interpolated_step_hold_from_observed_timing_events",
       "replayInterpolated": true,
       "noGps": true,
+      "feedArtifact": "feeds/session_indy_nxt_2026_6752.ndjson.gz",
       "interpolationCoverage": {
         "maximumHoldSeconds": 5,
         "withheldSeconds": 0,
@@ -2433,7 +2498,8 @@
         "twoSource": null
       },
       "excludedFromAvailable": false,
-      "watchable": true
+      "watchable": true,
+      "alternateReplaySources": []
     },
     {
       "id": "t71_2026_ims_race_r1_2026-05-08",
@@ -2446,6 +2512,7 @@
       "observationBasis": "interpolated_step_hold_from_observed_timing_events",
       "replayInterpolated": true,
       "noGps": true,
+      "feedArtifact": "feeds/session_indy_nxt_2026_6756.ndjson.gz",
       "interpolationCoverage": {
         "maximumHoldSeconds": 5,
         "withheldSeconds": 0,
@@ -2513,7 +2580,8 @@
         "twoSource": null
       },
       "excludedFromAvailable": false,
-      "watchable": true
+      "watchable": true,
+      "alternateReplaySources": []
     },
     {
       "id": "t71_2026_ims_race_r2_2026-05-09",
@@ -2526,6 +2594,7 @@
       "observationBasis": "interpolated_step_hold_from_observed_timing_events",
       "replayInterpolated": true,
       "noGps": true,
+      "feedArtifact": "feeds/session_indy_nxt_2026_6765.ndjson.gz",
       "interpolationCoverage": {
         "maximumHoldSeconds": 5,
         "withheldSeconds": 0,
@@ -2591,7 +2660,8 @@
         "twoSource": null
       },
       "excludedFromAvailable": false,
-      "watchable": true
+      "watchable": true,
+      "alternateReplaySources": []
     },
     {
       "id": "t71_2026_detroit_race_2026-05-31",
@@ -2604,6 +2674,7 @@
       "observationBasis": "interpolated_step_hold_from_observed_timing_events",
       "replayInterpolated": true,
       "noGps": true,
+      "feedArtifact": "feeds/session_indy_nxt_2026_6749.ndjson.gz",
       "interpolationCoverage": {
         "maximumHoldSeconds": 5,
         "withheldSeconds": 0,
@@ -2670,7 +2741,8 @@
         "twoSource": null
       },
       "excludedFromAvailable": false,
-      "watchable": true
+      "watchable": true,
+      "alternateReplaySources": []
     },
     {
       "id": "t71_2026_wwt-raceway_race_2026-06-07",
@@ -2683,6 +2755,7 @@
       "observationBasis": "interpolated_step_hold_from_observed_timing_events",
       "replayInterpolated": true,
       "noGps": true,
+      "feedArtifact": "feeds/session_indy_nxt_2026_6763.ndjson.gz",
       "interpolationCoverage": {
         "maximumHoldSeconds": 5,
         "withheldSeconds": 0,
@@ -2808,7 +2881,8 @@
         }
       },
       "excludedFromAvailable": false,
-      "watchable": true
+      "watchable": true,
+      "alternateReplaySources": []
     },
     {
       "id": "t71_2026_road-america_race_r1_2026-06-20",
@@ -2821,6 +2895,7 @@
       "observationBasis": "interpolated_step_hold_from_observed_timing_events",
       "replayInterpolated": true,
       "noGps": true,
+      "feedArtifact": "feeds/session_indy_nxt_2026_6762.ndjson.gz",
       "interpolationCoverage": {
         "maximumHoldSeconds": 5,
         "withheldSeconds": 0,
@@ -2887,7 +2962,8 @@
         "twoSource": null
       },
       "excludedFromAvailable": false,
-      "watchable": true
+      "watchable": true,
+      "alternateReplaySources": []
     },
     {
       "id": "t71_2026_road-america_race_r2_2026-06-21",
@@ -2900,6 +2976,7 @@
       "observationBasis": "interpolated_step_hold_from_observed_timing_events",
       "replayInterpolated": true,
       "noGps": true,
+      "feedArtifact": "feeds/session_indy_nxt_2026_6754.ndjson.gz",
       "interpolationCoverage": {
         "maximumHoldSeconds": 5,
         "withheldSeconds": 0,
@@ -3025,7 +3102,8 @@
         }
       },
       "excludedFromAvailable": false,
-      "watchable": true
+      "watchable": true,
+      "alternateReplaySources": []
     },
     {
       "id": "t71_2026_mid-ohio_race_r1_2026-07-04",
@@ -3038,6 +3116,7 @@
       "observationBasis": "interpolated_step_hold_from_observed_timing_events",
       "replayInterpolated": true,
       "noGps": true,
+      "feedArtifact": "feeds/session_indy_nxt_2026_6761.ndjson.gz",
       "interpolationCoverage": {
         "maximumHoldSeconds": 5,
         "withheldSeconds": 0,
@@ -3163,7 +3242,8 @@
         }
       },
       "excludedFromAvailable": false,
-      "watchable": true
+      "watchable": true,
+      "alternateReplaySources": []
     },
     {
       "id": "t71_2026_mid-ohio_race_r2_2026-07-05",
@@ -3176,6 +3256,7 @@
       "observationBasis": "interpolated_step_hold_from_observed_timing_events",
       "replayInterpolated": true,
       "noGps": true,
+      "feedArtifact": "feeds/session_indy_nxt_2026_6760.ndjson.gz",
       "interpolationCoverage": {
         "maximumHoldSeconds": 5,
         "withheldSeconds": 0,
@@ -3300,8 +3381,511 @@
         }
       },
       "excludedFromAvailable": false,
-      "watchable": true
+      "watchable": true,
+      "alternateReplaySources": []
     },
+    {
+      "id": "5538-6755",
+      "canonicalSessionId": "session_indy_nxt_2026_6755",
+      "sessionKey": "session_indy_nxt_2026_6755",
+      "eventSessionId": "6755",
+      "seasonYear": 2026,
+      "sourceTier": "race_control_capture",
+      "tierLabel": "BryceCast capture of INDYCAR Race Control timing",
+      "observationBasis": "observed_source_snapshot",
+      "replayInterpolated": false,
+      "noGps": true,
+      "feedArtifact": "feeds/rc_capture_session_indy_nxt_2026_6755.ndjson.gz",
+      "sourceArtifactSha256": "d803e0f350e6f4589b39f177809fdcdd77f672ce14c165228a1c22d41636229e",
+      "interpolationCoverage": {
+        "maximumHoldSeconds": 0,
+        "withheldSeconds": 0,
+        "sourceGaps": [],
+        "note": "Native Race Control snapshots are replayed at observed timestamps; no intermediate rows are created."
+      },
+      "venue": "Nashville Superspeedway",
+      "sessionName": "Race",
+      "eventName": "INDY NXT by Firestone Music City Grand Prix",
+      "date": "2026-07-19",
+      "totalLaps": 65,
+      "samples": 2038,
+      "bryceSamples": 2038,
+      "firstCheckedAt": "2026-07-19T17:05:14.947Z",
+      "lastCheckedAt": "2026-07-19T17:39:18.856Z",
+      "firstGreenAt": "2026-07-19T17:05:14.947Z",
+      "durationSeconds": 2044,
+      "validation": {
+        "winner": "20",
+        "canonicalWinnerMatch": null,
+        "podium": [
+          "20",
+          "21",
+          "99"
+        ],
+        "finalOrder": [
+          "20",
+          "21",
+          "99",
+          "12",
+          "28",
+          "29",
+          "26",
+          "45",
+          "14",
+          "9",
+          "67",
+          "17",
+          "27",
+          "75",
+          "15",
+          "8",
+          "4",
+          "71",
+          "57",
+          "11",
+          "10",
+          "48",
+          "68"
+        ],
+        "flags": {
+          "startsGreen": true,
+          "endsCheckered": true,
+          "states": [
+            "GREEN",
+            "YELLOW",
+            "CHECKERED"
+          ],
+          "ok": true
+        },
+        "asRacedVsCanonical": "capture_observed_pending_or_independent_of_official_classification",
+        "twoSource": {
+          "captureSessionKey": "5538-6755",
+          "captureSnapshots": 2744,
+          "thinCapture": false,
+          "checked": 23,
+          "agree": 23,
+          "agreementFraction": 1,
+          "captureFinalOrder": [
+            "20",
+            "21",
+            "99",
+            "12",
+            "28",
+            "29",
+            "26",
+            "45",
+            "14",
+            "9",
+            "67",
+            "17",
+            "27",
+            "75",
+            "15",
+            "8",
+            "4",
+            "71",
+            "57",
+            "11",
+            "10",
+            "48",
+            "68"
+          ],
+          "reducedFinalOrder": [
+            "20",
+            "21",
+            "99",
+            "12",
+            "28",
+            "29",
+            "26",
+            "45",
+            "14",
+            "9",
+            "67",
+            "17",
+            "27",
+            "75",
+            "15",
+            "8",
+            "4",
+            "71",
+            "57",
+            "11",
+            "10",
+            "48",
+            "68"
+          ]
+        }
+      },
+      "excludedFromAvailable": false,
+      "watchable": true,
+      "alternateReplaySources": [
+        {
+          "sourceTier": "timing71_normalized",
+          "feedArtifact": "feeds/session_indy_nxt_2026_6755.ndjson.gz",
+          "samples": 2040,
+          "firstCheckedAt": "2026-07-19T17:05:46.000Z",
+          "lastCheckedAt": "2026-07-19T17:39:45.000Z"
+        }
+      ]
+    },
+    {
+      "id": "5547-6764",
+      "canonicalSessionId": "session_indy_nxt_2026_6764",
+      "sessionKey": "session_indy_nxt_2026_6764",
+      "eventSessionId": "6764",
+      "seasonYear": 2026,
+      "sourceTier": "race_control_capture",
+      "tierLabel": "BryceCast capture of INDYCAR Race Control timing",
+      "observationBasis": "observed_source_snapshot",
+      "replayInterpolated": false,
+      "noGps": true,
+      "feedArtifact": "feeds/rc_capture_session_indy_nxt_2026_6764.ndjson.gz",
+      "sourceArtifactSha256": "0f5ffb87138d05174dc478860157b474805a0319324c9b0d2ae35413aa30e434",
+      "interpolationCoverage": {
+        "maximumHoldSeconds": 0,
+        "withheldSeconds": 0,
+        "sourceGaps": [],
+        "note": "Native Race Control snapshots are replayed at observed timestamps; no intermediate rows are created."
+      },
+      "venue": "Portland International Raceway",
+      "sessionName": "Race",
+      "eventName": "INDY NXT By Firestone GP of Portland",
+      "date": "2026-08-09",
+      "totalLaps": 35,
+      "samples": 2330,
+      "bryceSamples": 2330,
+      "firstCheckedAt": "2026-08-09T18:06:52.519Z",
+      "lastCheckedAt": "2026-08-09T18:45:59.916Z",
+      "firstGreenAt": "2026-08-09T18:06:52.519Z",
+      "durationSeconds": 2347,
+      "validation": {
+        "winner": "14",
+        "canonicalWinnerMatch": null,
+        "podium": [
+          "14",
+          "26",
+          "28"
+        ],
+        "finalOrder": [
+          "14",
+          "26",
+          "28",
+          "71",
+          "48",
+          "68",
+          "67",
+          "21",
+          "12",
+          "17",
+          "76",
+          "99",
+          "45",
+          "57",
+          "8",
+          "9",
+          "27",
+          "10",
+          "75",
+          "4",
+          "20",
+          "29",
+          "15",
+          "11"
+        ],
+        "flags": {
+          "startsGreen": true,
+          "endsCheckered": true,
+          "states": [
+            "GREEN",
+            "YELLOW",
+            "CHECKERED"
+          ],
+          "ok": true
+        },
+        "asRacedVsCanonical": "capture_observed_pending_or_independent_of_official_classification",
+        "twoSource": null
+      },
+      "excludedFromAvailable": false,
+      "watchable": true,
+      "alternateReplaySources": [
+        {
+          "sourceTier": "timing71_normalized",
+          "feedArtifact": "feeds/session_indy_nxt_2026_6764.ndjson.gz",
+          "samples": 2342,
+          "firstCheckedAt": "2026-08-09T18:08:06.000Z",
+          "lastCheckedAt": "2026-08-09T18:47:07.000Z"
+        }
+      ]
+    },
+    {
+      "id": "5540-6757",
+      "canonicalSessionId": "session_indy_nxt_2026_6757",
+      "sessionKey": "session_indy_nxt_2026_6757",
+      "eventSessionId": "6757",
+      "seasonYear": 2026,
+      "sourceTier": "race_control_capture",
+      "tierLabel": "BryceCast capture of INDYCAR Race Control timing",
+      "observationBasis": "observed_source_snapshot",
+      "replayInterpolated": false,
+      "noGps": true,
+      "feedArtifact": "feeds/rc_capture_session_indy_nxt_2026_6757.ndjson.gz",
+      "sourceArtifactSha256": "cede6cbbb9a2c693ab13ab43a8a27a28b67832f4a4a0a343e0379c928edc5180",
+      "interpolationCoverage": {
+        "maximumHoldSeconds": 0,
+        "withheldSeconds": 0,
+        "sourceGaps": [],
+        "note": "Native Race Control snapshots are replayed at observed timestamps; no intermediate rows are created."
+      },
+      "venue": "Milwaukee Mile",
+      "sessionName": "Race",
+      "eventName": "INDYNXT by Firestone at Milwaukee Mile",
+      "date": "2026-08-30",
+      "totalLaps": 90,
+      "samples": 2671,
+      "bryceSamples": 2671,
+      "firstCheckedAt": "2026-08-30T15:05:44.024Z",
+      "lastCheckedAt": "2026-08-30T15:51:17.656Z",
+      "firstGreenAt": "2026-08-30T15:05:44.024Z",
+      "durationSeconds": 2734,
+      "validation": {
+        "winner": "12",
+        "canonicalWinnerMatch": null,
+        "podium": [
+          "12",
+          "68",
+          "45"
+        ],
+        "finalOrder": [
+          "12",
+          "68",
+          "45",
+          "28",
+          "21",
+          "14",
+          "67",
+          "9",
+          "48",
+          "75",
+          "27",
+          "71",
+          "15",
+          "26",
+          "8",
+          "11",
+          "4",
+          "57",
+          "17",
+          "20",
+          "99",
+          "29",
+          "10"
+        ],
+        "flags": {
+          "startsGreen": true,
+          "endsCheckered": true,
+          "states": [
+            "GREEN",
+            "YELLOW",
+            "CHECKERED"
+          ],
+          "ok": true
+        },
+        "asRacedVsCanonical": "capture_observed_pending_or_independent_of_official_classification",
+        "twoSource": null
+      },
+      "excludedFromAvailable": false,
+      "watchable": true,
+      "alternateReplaySources": [
+        {
+          "sourceTier": "timing71_normalized",
+          "feedArtifact": "feeds/session_indy_nxt_2026_6757.ndjson.gz",
+          "samples": 2712,
+          "firstCheckedAt": "2026-08-30T15:06:15.000Z",
+          "lastCheckedAt": "2026-08-30T15:51:26.000Z"
+        }
+      ]
+    },
+    {
+      "id": "5542-6759",
+      "canonicalSessionId": "session_indy_nxt_2026_6759",
+      "sessionKey": "session_indy_nxt_2026_6759",
+      "eventSessionId": "6759",
+      "seasonYear": 2026,
+      "sourceTier": "race_control_capture",
+      "tierLabel": "BryceCast capture of INDYCAR Race Control timing",
+      "observationBasis": "observed_source_snapshot",
+      "replayInterpolated": false,
+      "noGps": true,
+      "feedArtifact": "feeds/rc_capture_session_indy_nxt_2026_6759.ndjson.gz",
+      "sourceArtifactSha256": "fa771e7497d91d28eda12d88492470cf373c2bed7ea17538cbe22c966c3aaa8f",
+      "interpolationCoverage": {
+        "maximumHoldSeconds": 0,
+        "withheldSeconds": 0,
+        "sourceGaps": [],
+        "note": "Native Race Control snapshots are replayed at observed timestamps; no intermediate rows are created."
+      },
+      "venue": "WeatherTech Raceway Laguna Seca",
+      "sessionName": "Race",
+      "eventName": "Grand Prix of Monterey Doubleheader",
+      "date": "2026-09-05",
+      "totalLaps": 35,
+      "samples": 3075,
+      "bryceSamples": 3075,
+      "firstCheckedAt": "2026-09-05T22:38:32.732Z",
+      "lastCheckedAt": "2026-09-05T23:30:48.988Z",
+      "firstGreenAt": "2026-09-05T22:38:32.732Z",
+      "durationSeconds": 3136,
+      "validation": {
+        "winner": "29",
+        "canonicalWinnerMatch": null,
+        "podium": [
+          "29",
+          "21",
+          "12"
+        ],
+        "finalOrder": [
+          "29",
+          "21",
+          "12",
+          "68",
+          "10",
+          "9",
+          "28",
+          "67",
+          "76",
+          "71",
+          "20",
+          "17",
+          "48",
+          "26",
+          "57",
+          "75",
+          "15",
+          "14",
+          "45",
+          "11",
+          "8",
+          "27",
+          "99",
+          "4"
+        ],
+        "flags": {
+          "startsGreen": true,
+          "endsCheckered": true,
+          "states": [
+            "GREEN",
+            "YELLOW",
+            "CHECKERED"
+          ],
+          "ok": true
+        },
+        "asRacedVsCanonical": "capture_observed_pending_or_independent_of_official_classification",
+        "twoSource": null
+      },
+      "excludedFromAvailable": false,
+      "watchable": true,
+      "alternateReplaySources": [
+        {
+          "sourceTier": "timing71_normalized",
+          "feedArtifact": "feeds/session_indy_nxt_2026_6759.ndjson.gz",
+          "samples": 3111,
+          "firstCheckedAt": "2026-09-05T22:39:52.000Z",
+          "lastCheckedAt": "2026-09-05T23:31:42.000Z"
+        }
+      ]
+    },
+    {
+      "id": "5541-6758",
+      "canonicalSessionId": "session_indy_nxt_2026_6758",
+      "sessionKey": "session_indy_nxt_2026_6758",
+      "eventSessionId": "6758",
+      "seasonYear": 2026,
+      "sourceTier": "race_control_capture",
+      "tierLabel": "BryceCast capture of INDYCAR Race Control timing",
+      "observationBasis": "observed_source_snapshot",
+      "replayInterpolated": false,
+      "noGps": true,
+      "feedArtifact": "feeds/rc_capture_session_indy_nxt_2026_6758.ndjson.gz",
+      "sourceArtifactSha256": "4122a6ca7906fdefe55c58b7d5a7f9f0cb532ab1dd91ae5c61eb5751a740c7f8",
+      "interpolationCoverage": {
+        "maximumHoldSeconds": 0,
+        "withheldSeconds": 0,
+        "sourceGaps": [],
+        "note": "Native Race Control snapshots are replayed at observed timestamps; no intermediate rows are created."
+      },
+      "venue": "WeatherTech Raceway Laguna Seca",
+      "sessionName": "Race",
+      "eventName": "Grand Prix of Monterey Doubleheader",
+      "date": "2026-09-06",
+      "totalLaps": 30,
+      "samples": 2472,
+      "bryceSamples": 2472,
+      "firstCheckedAt": "2026-09-06T16:40:16.200Z",
+      "lastCheckedAt": "2026-09-06T17:22:15.351Z",
+      "firstGreenAt": "2026-09-06T16:40:16.200Z",
+      "durationSeconds": 2519,
+      "validation": {
+        "winner": "71",
+        "canonicalWinnerMatch": null,
+        "podium": [
+          "71",
+          "21",
+          "26"
+        ],
+        "finalOrder": [
+          "71",
+          "21",
+          "26",
+          "48",
+          "67",
+          "99",
+          "20",
+          "14",
+          "9",
+          "45",
+          "27",
+          "68",
+          "57",
+          "28",
+          "15",
+          "8",
+          "17",
+          "75",
+          "11",
+          "4",
+          "12",
+          "76",
+          "10",
+          "29"
+        ],
+        "flags": {
+          "startsGreen": true,
+          "endsCheckered": true,
+          "states": [
+            "GREEN",
+            "YELLOW",
+            "CHECKERED"
+          ],
+          "ok": true
+        },
+        "asRacedVsCanonical": "capture_observed_pending_or_independent_of_official_classification",
+        "twoSource": null
+      },
+      "excludedFromAvailable": false,
+      "watchable": true,
+      "alternateReplaySources": [
+        {
+          "sourceTier": "timing71_normalized",
+          "feedArtifact": "feeds/session_indy_nxt_2026_6758.ndjson.gz",
+          "samples": 2461,
+          "firstCheckedAt": "2026-09-06T16:42:19.000Z",
+          "lastCheckedAt": "2026-09-06T17:23:19.000Z"
+        }
+      ]
+    }
+  ],
+  "alternateSessions": [
     {
       "id": "t71_2026_nashville_race_2026-07-19",
       "canonicalSessionId": "session_indy_nxt_2026_6755",
@@ -3313,6 +3897,7 @@
       "observationBasis": "interpolated_step_hold_from_observed_timing_events",
       "replayInterpolated": true,
       "noGps": true,
+      "feedArtifact": "feeds/session_indy_nxt_2026_6755.ndjson.gz",
       "interpolationCoverage": {
         "maximumHoldSeconds": 5,
         "withheldSeconds": 0,
@@ -3448,6 +4033,7 @@
       "observationBasis": "interpolated_step_hold_from_observed_timing_events",
       "replayInterpolated": true,
       "noGps": true,
+      "feedArtifact": "feeds/session_indy_nxt_2026_6764.ndjson.gz",
       "interpolationCoverage": {
         "maximumHoldSeconds": 5,
         "withheldSeconds": 0,
@@ -3527,6 +4113,7 @@
       "observationBasis": "interpolated_step_hold_from_observed_timing_events",
       "replayInterpolated": true,
       "noGps": true,
+      "feedArtifact": "feeds/session_indy_nxt_2026_6757.ndjson.gz",
       "interpolationCoverage": {
         "maximumHoldSeconds": 5,
         "withheldSeconds": 0,
@@ -3605,6 +4192,7 @@
       "observationBasis": "interpolated_step_hold_from_observed_timing_events",
       "replayInterpolated": true,
       "noGps": true,
+      "feedArtifact": "feeds/session_indy_nxt_2026_6759.ndjson.gz",
       "interpolationCoverage": {
         "maximumHoldSeconds": 5,
         "withheldSeconds": 0,
@@ -3684,6 +4272,7 @@
       "observationBasis": "interpolated_step_hold_from_observed_timing_events",
       "replayInterpolated": true,
       "noGps": true,
+      "feedArtifact": "feeds/session_indy_nxt_2026_6758.ndjson.gz",
       "interpolationCoverage": {
         "maximumHoldSeconds": 5,
         "withheldSeconds": 0,
@@ -3747,317 +4336,6 @@
           "ok": true
         },
         "asRacedVsCanonical": "match",
-        "twoSource": null
-      },
-      "excludedFromAvailable": false,
-      "watchable": true
-    },
-    {
-      "id": "5547-6764",
-      "canonicalSessionId": "session_indy_nxt_2026_6764",
-      "sessionKey": "session_indy_nxt_2026_6764",
-      "eventSessionId": "6764",
-      "seasonYear": 2026,
-      "sourceTier": "race_control_capture",
-      "tierLabel": "BryceCast capture of INDYCAR Race Control timing",
-      "observationBasis": "observed_source_snapshot",
-      "replayInterpolated": false,
-      "noGps": true,
-      "interpolationCoverage": {
-        "maximumHoldSeconds": 0,
-        "withheldSeconds": 0,
-        "sourceGaps": [],
-        "note": "Native Race Control snapshots are replayed at observed timestamps; no intermediate rows are created."
-      },
-      "venue": "Portland International Raceway",
-      "sessionName": "Race",
-      "eventName": "Portland International Raceway",
-      "date": "2026-08-09",
-      "totalLaps": 35,
-      "samples": 2342,
-      "bryceSamples": 2332,
-      "firstCheckedAt": "2026-08-09T18:08:06.000Z",
-      "lastCheckedAt": "2026-08-09T18:47:07.000Z",
-      "firstGreenAt": "2026-08-09T18:08:06.000Z",
-      "durationSeconds": 2341,
-      "validation": {
-        "winner": "14",
-        "canonicalWinnerMatch": null,
-        "podium": [
-          "14",
-          "26",
-          "28"
-        ],
-        "finalOrder": [
-          "14",
-          "26",
-          "28",
-          "71",
-          "48",
-          "68",
-          "67",
-          "21",
-          "12",
-          "17",
-          "76",
-          "57",
-          "45",
-          "8",
-          "27",
-          "9",
-          "10",
-          "75",
-          "4",
-          "20",
-          "29",
-          "99",
-          "15",
-          "11"
-        ],
-        "flags": {
-          "startsGreen": true,
-          "endsCheckered": true,
-          "states": [
-            "GREEN",
-            "YELLOW",
-            "CHECKERED"
-          ],
-          "ok": true
-        },
-        "asRacedVsCanonical": "capture_observed_pending_or_independent_of_official_classification",
-        "twoSource": null
-      },
-      "excludedFromAvailable": false,
-      "watchable": true
-    },
-    {
-      "id": "5540-6757",
-      "canonicalSessionId": "session_indy_nxt_2026_6757",
-      "sessionKey": "session_indy_nxt_2026_6757",
-      "eventSessionId": "6757",
-      "seasonYear": 2026,
-      "sourceTier": "race_control_capture",
-      "tierLabel": "BryceCast capture of INDYCAR Race Control timing",
-      "observationBasis": "observed_source_snapshot",
-      "replayInterpolated": false,
-      "noGps": true,
-      "interpolationCoverage": {
-        "maximumHoldSeconds": 0,
-        "withheldSeconds": 0,
-        "sourceGaps": [],
-        "note": "Native Race Control snapshots are replayed at observed timestamps; no intermediate rows are created."
-      },
-      "venue": "The Milwaukee Mile",
-      "sessionName": "Race",
-      "eventName": "The Milwaukee Mile",
-      "date": "2026-08-30",
-      "totalLaps": 90,
-      "samples": 2712,
-      "bryceSamples": 2708,
-      "firstCheckedAt": "2026-08-30T15:06:15.000Z",
-      "lastCheckedAt": "2026-08-30T15:51:26.000Z",
-      "firstGreenAt": "2026-08-30T15:06:15.000Z",
-      "durationSeconds": 2711,
-      "validation": {
-        "winner": "12",
-        "canonicalWinnerMatch": null,
-        "podium": [
-          "12",
-          "68",
-          "45"
-        ],
-        "finalOrder": [
-          "12",
-          "68",
-          "45",
-          "28",
-          "21",
-          "14",
-          "67",
-          "9",
-          "48",
-          "75",
-          "27",
-          "71",
-          "15",
-          "26",
-          "8",
-          "11",
-          "4",
-          "57",
-          "17",
-          "20",
-          "99",
-          "29",
-          "10"
-        ],
-        "flags": {
-          "startsGreen": true,
-          "endsCheckered": true,
-          "states": [
-            "GREEN",
-            "YELLOW",
-            "CHECKERED"
-          ],
-          "ok": true
-        },
-        "asRacedVsCanonical": "capture_observed_pending_or_independent_of_official_classification",
-        "twoSource": null
-      },
-      "excludedFromAvailable": false,
-      "watchable": true
-    },
-    {
-      "id": "5542-6759",
-      "canonicalSessionId": "session_indy_nxt_2026_6759",
-      "sessionKey": "session_indy_nxt_2026_6759",
-      "eventSessionId": "6759",
-      "seasonYear": 2026,
-      "sourceTier": "race_control_capture",
-      "tierLabel": "BryceCast capture of INDYCAR Race Control timing",
-      "observationBasis": "observed_source_snapshot",
-      "replayInterpolated": false,
-      "noGps": true,
-      "interpolationCoverage": {
-        "maximumHoldSeconds": 0,
-        "withheldSeconds": 0,
-        "sourceGaps": [],
-        "note": "Native Race Control snapshots are replayed at observed timestamps; no intermediate rows are created."
-      },
-      "venue": "WeatherTech Raceway Laguna Seca",
-      "sessionName": "Race",
-      "eventName": "WeatherTech Raceway Laguna Seca Race 1",
-      "date": "2026-09-05",
-      "totalLaps": 35,
-      "samples": 3111,
-      "bryceSamples": 3106,
-      "firstCheckedAt": "2026-09-05T22:39:52.000Z",
-      "lastCheckedAt": "2026-09-05T23:31:42.000Z",
-      "firstGreenAt": "2026-09-05T22:39:52.000Z",
-      "durationSeconds": 3110,
-      "validation": {
-        "winner": "29",
-        "canonicalWinnerMatch": null,
-        "podium": [
-          "29",
-          "21",
-          "12"
-        ],
-        "finalOrder": [
-          "29",
-          "21",
-          "12",
-          "68",
-          "10",
-          "9",
-          "28",
-          "67",
-          "76",
-          "71",
-          "20",
-          "17",
-          "48",
-          "26",
-          "57",
-          "75",
-          "15",
-          "14",
-          "45",
-          "11",
-          "8",
-          "27",
-          "99",
-          "4"
-        ],
-        "flags": {
-          "startsGreen": true,
-          "endsCheckered": true,
-          "states": [
-            "GREEN",
-            "YELLOW",
-            "CHECKERED"
-          ],
-          "ok": true
-        },
-        "asRacedVsCanonical": "capture_observed_pending_or_independent_of_official_classification",
-        "twoSource": null
-      },
-      "excludedFromAvailable": false,
-      "watchable": true
-    },
-    {
-      "id": "5541-6758",
-      "canonicalSessionId": "session_indy_nxt_2026_6758",
-      "sessionKey": "session_indy_nxt_2026_6758",
-      "eventSessionId": "6758",
-      "seasonYear": 2026,
-      "sourceTier": "race_control_capture",
-      "tierLabel": "BryceCast capture of INDYCAR Race Control timing",
-      "observationBasis": "observed_source_snapshot",
-      "replayInterpolated": false,
-      "noGps": true,
-      "interpolationCoverage": {
-        "maximumHoldSeconds": 0,
-        "withheldSeconds": 0,
-        "sourceGaps": [],
-        "note": "Native Race Control snapshots are replayed at observed timestamps; no intermediate rows are created."
-      },
-      "venue": "WeatherTech Raceway Laguna Seca",
-      "sessionName": "Race",
-      "eventName": "WeatherTech Raceway Laguna Seca Race 2",
-      "date": "2026-09-06",
-      "totalLaps": 30,
-      "samples": 2461,
-      "bryceSamples": 2456,
-      "firstCheckedAt": "2026-09-06T16:42:19.000Z",
-      "lastCheckedAt": "2026-09-06T17:23:19.000Z",
-      "firstGreenAt": "2026-09-06T16:42:19.000Z",
-      "durationSeconds": 2460,
-      "validation": {
-        "winner": "71",
-        "canonicalWinnerMatch": null,
-        "podium": [
-          "71",
-          "21",
-          "26"
-        ],
-        "finalOrder": [
-          "71",
-          "21",
-          "26",
-          "48",
-          "67",
-          "99",
-          "20",
-          "14",
-          "9",
-          "45",
-          "27",
-          "68",
-          "57",
-          "28",
-          "15",
-          "8",
-          "17",
-          "75",
-          "11",
-          "4",
-          "12",
-          "76",
-          "10",
-          "29"
-        ],
-        "flags": {
-          "startsGreen": false,
-          "endsCheckered": true,
-          "states": [
-            "YELLOW",
-            "GREEN",
-            "CHECKERED"
-          ],
-          "ok": true
-        },
-        "asRacedVsCanonical": "capture_observed_pending_or_independent_of_official_classification",
         "twoSource": null
       },
       "excludedFromAvailable": false,

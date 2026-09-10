@@ -1453,8 +1453,8 @@ const RaceWeekReplay = ({ venue, upcomingYear }: { venue: UiVenueDossierVenue; u
   const racePhrase = isLastYear ? 'last year’s race here' : `the ${primary.seasonYear} race here`;
   const primaryTitle = isLastYear ? 'Watch last year’s race unfold' : priorYearTitle(primary.seasonYear, primary.raceLabel);
   const primaryCopy = isOwn
-    ? `Every second of ${racePhrase}, replayed as it happened, from our own trackside capture.`
-    : `Every second of ${racePhrase}, reconstructed from a third-party timing archive and replayed as it happened.`;
+    ? `Replay ${racePhrase} from our Race Control timing capture.`
+    : `Replay ${racePhrase} from archived timing observations.`;
   return (
     <section className="race-replay" aria-label="Watch a past race at this venue unfold">
       <ReplayAffordance capture={primary.capture} fromSessionId={primary.sessionId} title={primaryTitle} copy={primaryCopy} />

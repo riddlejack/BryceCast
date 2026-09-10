@@ -19,6 +19,7 @@
 //   - output/replay-feeds-manifest.json             (what is in / excluded and why)
 
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { readSessionPack, writeFeedPack } from './lib/pack-reader.mjs';
@@ -36,6 +37,7 @@ const feedsDir = join(__dirname, 'output', 'feeds');
 const manifestPath = join(__dirname, 'output', 'replay-feeds-manifest.json');
 
 const readJson = (p) => JSON.parse(readFileSync(p, 'utf8'));
+const sha256 = (bytes) => createHash('sha256').update(bytes).digest('hex');
 
 const TIER_LABEL = {
   racetools_capture: 'RaceTools race-weekend capture',
@@ -151,6 +153,7 @@ for (const race of finishingOrder.results) {
     observationBasis: 'interpolated_step_hold_from_observed_timing_events',
     replayInterpolated: true,
     noGps: true,
+    feedArtifact: `feeds/${race.canonicalSessionId}.ndjson.gz`,
     interpolationCoverage: out.interpolationCoverage,
     venue: race.venue,
     sessionName: out.meta?.sessionLabel ?? 'Race',
@@ -243,6 +246,7 @@ for (const race of crosswalkValidation.raceClassificationChecks) {
     observationBasis: 'interpolated_step_hold_from_observed_timing_events',
     replayInterpolated: true,
     noGps: true,
+    feedArtifact: `feeds/${race.canonicalSessionId}.ndjson.gz`,
     interpolationCoverage: out.interpolationCoverage,
     verdict,
     venue: out.meta?.venue ?? cw?.venue,
@@ -288,6 +292,7 @@ for (const race of crosswalkValidation.raceClassificationChecks) {
 for (const capture of liveCaptureManifest.sessions ?? []) {
   if (capture.sessionType !== 'race' || !capture.replayArtifact) continue;
   const feedPath = join(REPO_ROOT, capture.replayArtifact);
+  const feedArtifact = capture.replayArtifact.replace(/^analysis\/replay-feeds\/output\//, '');
   let rows;
   try {
     const { gunzipSync } = await import('node:zlib');
@@ -322,6 +327,8 @@ for (const capture of liveCaptureManifest.sessions ?? []) {
     observationBasis: 'observed_source_snapshot',
     replayInterpolated: false,
     noGps: true,
+    feedArtifact,
+    sourceArtifactSha256: capture.replayArtifactSha256 ?? sha256(readFileSync(feedPath)),
     interpolationCoverage: {
       maximumHoldSeconds: 0,
       withheldSeconds: 0,
@@ -357,7 +364,32 @@ for (const capture of liveCaptureManifest.sessions ?? []) {
 }
 
 // --- Manifest ------------------------------------------------------------------
-const watchable = reduced.filter((r) => r.watchable);
+const sourcePriority = {racetools_capture: 1, timing71_normalized: 2, race_control_capture: 3};
+const primaryByCanonical = new Map();
+for (const candidate of reduced) {
+  const current = primaryByCanonical.get(candidate.canonicalSessionId);
+  const preferable = !current ||
+    (candidate.watchable && !current.watchable) ||
+    (candidate.watchable === current.watchable &&
+      (sourcePriority[candidate.sourceTier] ?? 0) > (sourcePriority[current.sourceTier] ?? 0));
+  if (preferable) {
+    primaryByCanonical.set(candidate.canonicalSessionId, candidate);
+  }
+}
+const primary = [...primaryByCanonical.values()];
+const alternateSessions = reduced.filter((candidate) => primaryByCanonical.get(candidate.canonicalSessionId) !== candidate);
+for (const selected of primary) {
+  selected.alternateReplaySources = alternateSessions
+    .filter((candidate) => candidate.canonicalSessionId === selected.canonicalSessionId)
+    .map((candidate) => ({
+      sourceTier: candidate.sourceTier,
+      feedArtifact: candidate.feedArtifact,
+      samples: candidate.samples,
+      firstCheckedAt: candidate.firstCheckedAt,
+      lastCheckedAt: candidate.lastCheckedAt,
+    }));
+}
+const watchable = primary.filter((r) => r.watchable);
 const manifest = {
   artifact: 'replay-feeds-manifest',
   generatedAt: new Date().toISOString(),
@@ -370,21 +402,24 @@ const manifest = {
     directCaptureRows: 'native observed timestamps; no interpolation',
   },
   scope: {
-    racetools_2024_25_races: reduced.filter((r) => r.sourceTier === 'racetools_capture').length,
-    timing71_2026_races: reduced.filter((r) => r.sourceTier === 'timing71_normalized').length,
-    raceControlCapture_2026_races: reduced.filter((r) => r.sourceTier === 'race_control_capture').length,
+    racetools_2024_25_races: primary.filter((r) => r.sourceTier === 'racetools_capture').length,
+    timing71_2026_races: primary.filter((r) => r.sourceTier === 'timing71_normalized').length,
+    raceControlCapture_2026_races: primary.filter((r) => r.sourceTier === 'race_control_capture').length,
     practiceQualifyingShipped: 0,
     practiceQualifyingNote: 'Practice/qualifying (slice c) intentionally not shipped: a validated race subset over an unvalidated sweep.'
   },
   counts: {
-    reduced: reduced.length,
+    reduced: primary.length,
+    sourceCandidates: reduced.length,
+    alternateSources: alternateSessions.length,
     watchable: watchable.length,
-    excluded: reduced.length - watchable.length + excluded.length
+    excluded: primary.length - watchable.length + excluded.length
   },
   tierLabels: TIER_LABEL,
-  sessions: reduced,
+  sessions: primary,
+  alternateSessions,
   excludedSessions: excluded
 };
 
 writeFileSync(manifestPath, JSON.stringify(manifest, null, 2));
-process.stdout.write(`\nmanifest: ${reduced.length} reduced, ${watchable.length} watchable, ${excluded.length} non-race/excluded upstream -> ${manifestPath}\n`);
+process.stdout.write(`\nmanifest: ${primary.length} primary from ${reduced.length} source candidates, ${watchable.length} watchable, ${alternateSessions.length} retained alternates -> ${manifestPath}\n`);

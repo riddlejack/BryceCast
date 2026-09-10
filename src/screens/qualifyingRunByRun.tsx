@@ -123,7 +123,7 @@ const QualifyingSectionHeat = ({ session }: { session: QualiLabSession }) => {
           entries={sourceEntries}
           caveats={[
             groupBasis
-              ? "Each section is compared with every driver's best clean section in Bryce's actual qualifying group; those benchmark sections need not come from one lap."
+              ? "Each section is compared with every driver's best comparable section in Bryce's actual qualifying group; those benchmark sections need not come from one lap."
               : 'Section ranks and denominators follow the official report scope.',
             'Section timing is loop-to-loop time, not GPS or car position.',
             ...(pack.caveats ?? [])
@@ -219,7 +219,7 @@ const QualifyingSectionHeat = ({ session }: { session: QualiLabSession }) => {
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12.5 }}>
           <caption style={{ textAlign: 'left', color: 'var(--ink-muted)', fontSize: 11.5, paddingBottom: 7 }}>
             {groupBasis
-              ? "Compared with each driver's best clean section in Bryce's qualifying group — not one composite benchmark lap."
+              ? "Compared with each driver's best comparable section in Bryce's qualifying group — not one composite benchmark lap."
               : 'Comparison scope follows the official Section Results report.'}
           </caption>
           <thead>

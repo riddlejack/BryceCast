@@ -494,9 +494,13 @@ for (const race of races) {
       sources.push({...supplemental, supplementalPurpose: supplementalConfig.purpose});
     }
   }
-  const replayPath = `analysis/replay-feeds/output/feeds/${race.id}.ndjson.gz`;
-  const replayAvailable = await exists(join(REPLAY_FEEDS_DIR, `${race.id}.ndjson.gz`));
   const replayEntry = replayByCanonical.get(race.id);
+  const replayPath = replayEntry?.feedArtifact
+    ? `analysis/replay-feeds/output/${replayEntry.feedArtifact}`
+    : `analysis/replay-feeds/output/feeds/${race.id}.ndjson.gz`;
+  const replayAvailable = replayEntry?.feedArtifact
+    ? await exists(join(REPO_ROOT, replayPath))
+    : await exists(join(REPLAY_FEEDS_DIR, `${race.id}.ndjson.gz`));
   ledgerSessions.push({
     canonicalSessionId: race.id,
     canonicalOfficialSessionId: String(race.officialSessionId),
@@ -542,6 +546,14 @@ for (const race of races) {
     if (selected?.kind === 'timing71') {
       const source = await timing71Source(selected.replayId);
       if (source) qSources.push(source);
+      if (selected.captureSessionKey) {
+        const capture = liveSource(liveByCanonical.get(qualifying.id));
+        if (!capture || capture.sourceSessionId !== selected.captureSessionKey) {
+          throw new Error(`${qualifying.id}: configured native qualifying capture ${selected.captureSessionKey} is missing or mismatched`);
+        }
+        if (selected.preferredObservedSource === 'race_control_capture') qSources.unshift(capture);
+        else qSources.push(capture);
+      }
     } else if (selected?.kind === 'race_control_capture') {
       const source = liveSource(liveByCanonical.get(qualifying.id));
       if (source) qSources.push(source);

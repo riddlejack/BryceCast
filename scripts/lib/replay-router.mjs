@@ -9,7 +9,7 @@
 // live-guard preempts whichever source is playing.
 
 const CAPTURE_TIER = 'brycecast_capture';
-const CAPTURE_TIER_LABEL = 'BryceCast 1-second Race Control capture';
+const CAPTURE_TIER_LABEL = 'BryceCast Race Control capture';
 
 export const createReplayRouter = ({ captureOverlay, lakeFeeds, enabled = false }) => {
   let activeSource = null; // 'capture' | 'lake'

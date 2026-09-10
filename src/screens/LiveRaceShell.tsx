@@ -71,7 +71,7 @@ const RaceSoFarCard = ({
             path: '/api/readiness',
             note: simulated
               ? 'This client is replaying an archived capture; the chart builds from the archive exactly as it built live.'
-              : 'New laps append from the live 1-second Race Control capture as the race runs.'
+              : 'New laps append from the live Race Control capture as the race runs.'
           }
         ]}
         caveats={[
@@ -191,8 +191,8 @@ const WatchThisRaceUnfold = ({ sessionId }: { sessionId: string }) => {
         title="Watch this race unfold"
         copy={
           isOwnCapture
-            ? 'Every second of this race, replayed as it happened, from our own trackside capture.'
-            : 'Every second of this race, reconstructed from a third-party timing archive and replayed as it happened.'
+            ? 'Recorded race timing, replayed from our Race Control capture.'
+            : 'Replay reconstructed from archived timing observations.'
         }
       />
     </section>

@@ -65,7 +65,10 @@
     },
     "6900": {
       "kind": "timing71",
-      "replayId": "6204d63b-2d7b-4a42-bb30-404b4bb97224"
+      "replayId": "6204d63b-2d7b-4a42-bb30-404b4bb97224",
+      "captureSessionKey": "5547-6900",
+      "preferredObservedSource": "race_control_capture",
+      "selectionReason": "The native capture covers the full green-to-checkered group at approximately 1 Hz. Timing71 remains supplemental and remains the qualifying semantic chronology source."
     },
     "6923": {
       "kind": "timing71",
@@ -73,7 +76,10 @@
     },
     "6935": {
       "kind": "timing71",
-      "replayId": "23e69e36-7170-4dca-8027-0024c386df68"
+      "replayId": "23e69e36-7170-4dca-8027-0024c386df68",
+      "captureSessionKey": "5540-6935",
+      "preferredObservedSource": "timing71_normalized",
+      "selectionReason": "Timing71 has an unbroken 1-2 second active-session cadence. The native capture sampled Bryce's two-lap oval run during a cooldown interval, so it is retained as supplemental evidence."
     },
     "6950": {
       "kind": "race_control_capture",

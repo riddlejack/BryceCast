@@ -1,13 +1,317 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-10T22:51:00.593Z",
+  "generatedAt": "2026-09-10T23:38:00.449Z",
   "source": {
-    "host": "operator@your-host.local",
-    "database": "~/BryceCast/site/data/live/brycecast.sqlite",
-    "access": "sqlite3 -readonly over SSH",
+    "host": "verified local backup",
+    "database": "~/.brycecast/backups/2026-09-10/mini-capture.sqlite",
+    "databaseSha256": "a1a1765ffef36b666681ad7d38d660ebaae785d8fe6fc36a39f5b2b378350aee",
+    "access": "sqlite3 -readonly immutable local backup",
     "mutation": false
   },
   "sessions": [
+    {
+      "canonicalSessionId": "session_indy_nxt_2026_6755",
+      "canonicalAliases": [],
+      "captureSessionKey": "5538-6755",
+      "sessionType": "race",
+      "sourceTier": "race_control_capture",
+      "clockBasis": "utc_capture_timestamp",
+      "sourceLabel": "BryceCast capture of INDYCAR Race Control timing",
+      "observationBasis": "observed_source_snapshot",
+      "interpolated": false,
+      "noGps": true,
+      "observedStart": "2026-07-19T16:53:51.823Z",
+      "observedEnd": "2026-07-19T17:49:04.185Z",
+      "observationCount": 2759,
+      "usableStateObservationCount": 2759,
+      "bryceObservationCount": 2759,
+      "bryceFieldIdentityObservationCount": 2759,
+      "fieldRowsOmittedFromReplayForMissingBryceIdentity": 0,
+      "cadence": {
+        "p50Seconds": 1.002,
+        "p95Seconds": 1.148,
+        "maxSeconds": 20.024,
+        "gapsOver2Seconds": 41,
+        "gapsOver5Seconds": 39,
+        "gapsOver10Seconds": 38,
+        "intervalsOver2Seconds": [
+          {
+            "lastObservedAt": "2026-07-19T17:29:51.769Z",
+            "nextObservedAt": "2026-07-19T17:29:53.770Z",
+            "seconds": 2.001
+          },
+          {
+            "lastObservedAt": "2026-07-19T17:33:44.239Z",
+            "nextObservedAt": "2026-07-19T17:33:46.242Z",
+            "seconds": 2.003
+          },
+          {
+            "lastObservedAt": "2026-07-19T17:39:18.856Z",
+            "nextObservedAt": "2026-07-19T17:39:34.094Z",
+            "seconds": 15.238
+          },
+          {
+            "lastObservedAt": "2026-07-19T17:39:34.094Z",
+            "nextObservedAt": "2026-07-19T17:39:49.118Z",
+            "seconds": 15.024
+          },
+          {
+            "lastObservedAt": "2026-07-19T17:39:49.118Z",
+            "nextObservedAt": "2026-07-19T17:40:03.936Z",
+            "seconds": 14.818
+          },
+          {
+            "lastObservedAt": "2026-07-19T17:40:03.936Z",
+            "nextObservedAt": "2026-07-19T17:40:19.091Z",
+            "seconds": 15.155
+          },
+          {
+            "lastObservedAt": "2026-07-19T17:40:19.091Z",
+            "nextObservedAt": "2026-07-19T17:40:34.091Z",
+            "seconds": 15
+          },
+          {
+            "lastObservedAt": "2026-07-19T17:40:34.091Z",
+            "nextObservedAt": "2026-07-19T17:40:49.097Z",
+            "seconds": 15.006
+          },
+          {
+            "lastObservedAt": "2026-07-19T17:40:49.097Z",
+            "nextObservedAt": "2026-07-19T17:41:03.942Z",
+            "seconds": 14.845
+          },
+          {
+            "lastObservedAt": "2026-07-19T17:41:03.942Z",
+            "nextObservedAt": "2026-07-19T17:41:19.125Z",
+            "seconds": 15.183
+          },
+          {
+            "lastObservedAt": "2026-07-19T17:41:19.125Z",
+            "nextObservedAt": "2026-07-19T17:41:33.953Z",
+            "seconds": 14.828
+          },
+          {
+            "lastObservedAt": "2026-07-19T17:41:33.953Z",
+            "nextObservedAt": "2026-07-19T17:41:49.115Z",
+            "seconds": 15.162
+          },
+          {
+            "lastObservedAt": "2026-07-19T17:41:49.115Z",
+            "nextObservedAt": "2026-07-19T17:42:03.951Z",
+            "seconds": 14.836
+          },
+          {
+            "lastObservedAt": "2026-07-19T17:42:03.951Z",
+            "nextObservedAt": "2026-07-19T17:42:19.085Z",
+            "seconds": 15.134
+          },
+          {
+            "lastObservedAt": "2026-07-19T17:42:19.085Z",
+            "nextObservedAt": "2026-07-19T17:42:34.112Z",
+            "seconds": 15.027
+          },
+          {
+            "lastObservedAt": "2026-07-19T17:42:34.112Z",
+            "nextObservedAt": "2026-07-19T17:42:49.141Z",
+            "seconds": 15.029
+          },
+          {
+            "lastObservedAt": "2026-07-19T17:42:49.141Z",
+            "nextObservedAt": "2026-07-19T17:43:03.960Z",
+            "seconds": 14.819
+          },
+          {
+            "lastObservedAt": "2026-07-19T17:43:03.960Z",
+            "nextObservedAt": "2026-07-19T17:43:19.098Z",
+            "seconds": 15.138
+          },
+          {
+            "lastObservedAt": "2026-07-19T17:43:19.098Z",
+            "nextObservedAt": "2026-07-19T17:43:34.115Z",
+            "seconds": 15.017
+          },
+          {
+            "lastObservedAt": "2026-07-19T17:43:34.115Z",
+            "nextObservedAt": "2026-07-19T17:43:48.964Z",
+            "seconds": 14.849
+          },
+          {
+            "lastObservedAt": "2026-07-19T17:43:48.964Z",
+            "nextObservedAt": "2026-07-19T17:44:04.110Z",
+            "seconds": 15.146
+          },
+          {
+            "lastObservedAt": "2026-07-19T17:44:04.110Z",
+            "nextObservedAt": "2026-07-19T17:44:19.139Z",
+            "seconds": 15.029
+          },
+          {
+            "lastObservedAt": "2026-07-19T17:44:19.139Z",
+            "nextObservedAt": "2026-07-19T17:44:33.978Z",
+            "seconds": 14.839
+          },
+          {
+            "lastObservedAt": "2026-07-19T17:44:33.978Z",
+            "nextObservedAt": "2026-07-19T17:44:49.121Z",
+            "seconds": 15.143
+          },
+          {
+            "lastObservedAt": "2026-07-19T17:44:49.121Z",
+            "nextObservedAt": "2026-07-19T17:45:04.121Z",
+            "seconds": 15
+          },
+          {
+            "lastObservedAt": "2026-07-19T17:45:04.121Z",
+            "nextObservedAt": "2026-07-19T17:45:18.975Z",
+            "seconds": 14.854
+          },
+          {
+            "lastObservedAt": "2026-07-19T17:45:18.975Z",
+            "nextObservedAt": "2026-07-19T17:45:38.999Z",
+            "seconds": 20.024
+          },
+          {
+            "lastObservedAt": "2026-07-19T17:45:38.999Z",
+            "nextObservedAt": "2026-07-19T17:45:48.981Z",
+            "seconds": 9.982
+          },
+          {
+            "lastObservedAt": "2026-07-19T17:45:48.981Z",
+            "nextObservedAt": "2026-07-19T17:46:04.120Z",
+            "seconds": 15.139
+          },
+          {
+            "lastObservedAt": "2026-07-19T17:46:04.120Z",
+            "nextObservedAt": "2026-07-19T17:46:19.131Z",
+            "seconds": 15.011
+          },
+          {
+            "lastObservedAt": "2026-07-19T17:46:19.131Z",
+            "nextObservedAt": "2026-07-19T17:46:34.122Z",
+            "seconds": 14.991
+          },
+          {
+            "lastObservedAt": "2026-07-19T17:46:34.122Z",
+            "nextObservedAt": "2026-07-19T17:46:49.135Z",
+            "seconds": 15.013
+          },
+          {
+            "lastObservedAt": "2026-07-19T17:46:49.135Z",
+            "nextObservedAt": "2026-07-19T17:47:04.182Z",
+            "seconds": 15.047
+          },
+          {
+            "lastObservedAt": "2026-07-19T17:47:04.182Z",
+            "nextObservedAt": "2026-07-19T17:47:19.000Z",
+            "seconds": 14.818
+          },
+          {
+            "lastObservedAt": "2026-07-19T17:47:19.000Z",
+            "nextObservedAt": "2026-07-19T17:47:34.179Z",
+            "seconds": 15.179
+          },
+          {
+            "lastObservedAt": "2026-07-19T17:47:34.179Z",
+            "nextObservedAt": "2026-07-19T17:47:49.041Z",
+            "seconds": 14.862
+          },
+          {
+            "lastObservedAt": "2026-07-19T17:47:49.041Z",
+            "nextObservedAt": "2026-07-19T17:48:04.179Z",
+            "seconds": 15.138
+          },
+          {
+            "lastObservedAt": "2026-07-19T17:48:04.179Z",
+            "nextObservedAt": "2026-07-19T17:48:19.028Z",
+            "seconds": 14.849
+          },
+          {
+            "lastObservedAt": "2026-07-19T17:48:19.028Z",
+            "nextObservedAt": "2026-07-19T17:48:34.231Z",
+            "seconds": 15.203
+          },
+          {
+            "lastObservedAt": "2026-07-19T17:48:34.231Z",
+            "nextObservedAt": "2026-07-19T17:48:49.045Z",
+            "seconds": 14.814
+          },
+          {
+            "lastObservedAt": "2026-07-19T17:48:49.045Z",
+            "nextObservedAt": "2026-07-19T17:49:04.185Z",
+            "seconds": 15.14
+          }
+        ]
+      },
+      "racingWindow": {
+        "startFlag": "GREEN",
+        "endBoundary": "first_observation_where_leader_lap_reaches_total_laps",
+        "observedStart": "2026-07-19T17:05:14.947Z",
+        "observedEnd": "2026-07-19T17:39:18.856Z",
+        "observationCount": 2038,
+        "cadence": {
+          "p50Seconds": 1.002,
+          "p95Seconds": 1.141,
+          "maxSeconds": 2.003,
+          "gapsOver2Seconds": 2,
+          "gapsOver5Seconds": 0,
+          "gapsOver10Seconds": 0,
+          "intervalsOver2Seconds": [
+            {
+              "lastObservedAt": "2026-07-19T17:29:51.769Z",
+              "nextObservedAt": "2026-07-19T17:29:53.770Z",
+              "seconds": 2.001
+            },
+            {
+              "lastObservedAt": "2026-07-19T17:33:44.239Z",
+              "nextObservedAt": "2026-07-19T17:33:46.242Z",
+              "seconds": 2.003
+            }
+          ]
+        },
+        "checkeredObservedAt": "2026-07-19T17:39:18.856Z",
+        "terminalFlagObservationLatencySeconds": 0
+      },
+      "bryceLapCoverage": {
+        "clockBasis": "utc_capture_timestamp",
+        "hasObservedClock": true,
+        "firstObservedAt": "2026-07-19T16:53:51.823Z",
+        "lastObservedAt": "2026-07-19T17:49:04.185Z",
+        "sampleCount": 2759,
+        "lapChangeObservationCount": 65,
+        "minLap": 0,
+        "maxLap": 65
+      },
+      "observedArtifact": "analysis/semantic-layer/output/live-captures/session_indy_nxt_2026_6755.ndjson.gz",
+      "observedArtifactSha256": "8ce1249518255f957e9ca53c88e5ef5fd2f77b604e6555ef5407dd28d0c60467",
+      "replayArtifact": "analysis/replay-feeds/output/feeds/rc_capture_session_indy_nxt_2026_6755.ndjson.gz",
+      "replayArtifactSha256": "d803e0f350e6f4589b39f177809fdcdd77f672ce14c165228a1c22d41636229e",
+      "replaySamples": 2038,
+      "finalOrder": [
+        "20",
+        "21",
+        "99",
+        "12",
+        "28",
+        "29",
+        "26",
+        "45",
+        "14",
+        "9",
+        "67",
+        "17",
+        "27",
+        "75",
+        "15",
+        "8",
+        "4",
+        "71",
+        "57",
+        "11",
+        "10",
+        "48",
+        "68"
+      ]
+    },
     {
       "canonicalSessionId": "session_indy_nxt_2026_6764",
       "canonicalAliases": [],
@@ -265,7 +569,9 @@
         "maxLap": 35
       },
       "observedArtifact": "analysis/semantic-layer/output/live-captures/session_indy_nxt_2026_6764.ndjson.gz",
-      "replayArtifact": "analysis/replay-feeds/output/feeds/session_indy_nxt_2026_6764.ndjson.gz",
+      "observedArtifactSha256": "ffea70debc6d57570e29614f1e295139fbdcf52d8844c9f463b149b375973491",
+      "replayArtifact": "analysis/replay-feeds/output/feeds/rc_capture_session_indy_nxt_2026_6764.ndjson.gz",
+      "replayArtifactSha256": "0f5ffb87138d05174dc478860157b474805a0319324c9b0d2ae35413aa30e434",
       "replaySamples": 2330,
       "finalOrder": [
         "14",
@@ -702,7 +1008,9 @@
         "maxLap": 90
       },
       "observedArtifact": "analysis/semantic-layer/output/live-captures/session_indy_nxt_2026_6757.ndjson.gz",
-      "replayArtifact": "analysis/replay-feeds/output/feeds/session_indy_nxt_2026_6757.ndjson.gz",
+      "observedArtifactSha256": "b510ec3aea099093a94dbfd32f969c7e6b684528c890e868c2e798026fec09c3",
+      "replayArtifact": "analysis/replay-feeds/output/feeds/rc_capture_session_indy_nxt_2026_6757.ndjson.gz",
+      "replayArtifactSha256": "cede6cbbb9a2c693ab13ab43a8a27a28b67832f4a4a0a343e0379c928edc5180",
       "replaySamples": 2671,
       "finalOrder": [
         "12",
@@ -1158,7 +1466,9 @@
         "maxLap": 35
       },
       "observedArtifact": "analysis/semantic-layer/output/live-captures/session_indy_nxt_2026_6759.ndjson.gz",
-      "replayArtifact": "analysis/replay-feeds/output/feeds/session_indy_nxt_2026_6759.ndjson.gz",
+      "observedArtifactSha256": "e6f73a46b565ce44f359fc5fe9a4bd9cdb69116f398610ffb8f6eed4d0bf6163",
+      "replayArtifact": "analysis/replay-feeds/output/feeds/rc_capture_session_indy_nxt_2026_6759.ndjson.gz",
+      "replayArtifactSha256": "fa771e7497d91d28eda12d88492470cf373c2bed7ea17538cbe22c966c3aaa8f",
       "replaySamples": 3075,
       "finalOrder": [
         "29",
@@ -1560,7 +1870,9 @@
         "maxLap": 30
       },
       "observedArtifact": "analysis/semantic-layer/output/live-captures/session_indy_nxt_2026_6758.ndjson.gz",
-      "replayArtifact": "analysis/replay-feeds/output/feeds/session_indy_nxt_2026_6758.ndjson.gz",
+      "observedArtifactSha256": "37cc62ca28e74524116ab8a33ed1ab45e65b59b80fab271a1e5c37a599cd42bb",
+      "replayArtifact": "analysis/replay-feeds/output/feeds/rc_capture_session_indy_nxt_2026_6758.ndjson.gz",
+      "replayArtifactSha256": "4122a6ca7906fdefe55c58b7d5a7f9f0cb532ab1dd91ae5c61eb5751a740c7f8",
       "replaySamples": 2472,
       "finalOrder": [
         "71",
@@ -1588,6 +1900,1178 @@
         "10",
         "29"
       ]
+    },
+    {
+      "canonicalSessionId": "session_indy_nxt_2026_6900",
+      "canonicalAliases": [],
+      "captureSessionKey": "5547-6900",
+      "sessionType": "qualifying",
+      "sourceTier": "race_control_capture",
+      "clockBasis": "utc_capture_timestamp",
+      "sourceLabel": "BryceCast capture of INDYCAR Race Control timing",
+      "observationBasis": "observed_source_snapshot",
+      "interpolated": false,
+      "noGps": true,
+      "observedStart": "2026-08-08T18:50:42.662Z",
+      "observedEnd": "2026-08-08T19:12:47.882Z",
+      "observationCount": 1226,
+      "usableStateObservationCount": 1226,
+      "bryceObservationCount": 1226,
+      "bryceFieldIdentityObservationCount": 1226,
+      "fieldRowsOmittedFromReplayForMissingBryceIdentity": 0,
+      "cadence": {
+        "p50Seconds": 1.002,
+        "p95Seconds": 1.146,
+        "maxSeconds": 15.25,
+        "gapsOver2Seconds": 7,
+        "gapsOver5Seconds": 7,
+        "gapsOver10Seconds": 7,
+        "intervalsOver2Seconds": [
+          {
+            "lastObservedAt": "2026-08-08T19:11:02.638Z",
+            "nextObservedAt": "2026-08-08T19:11:17.888Z",
+            "seconds": 15.25
+          },
+          {
+            "lastObservedAt": "2026-08-08T19:11:17.888Z",
+            "nextObservedAt": "2026-08-08T19:11:32.710Z",
+            "seconds": 14.822
+          },
+          {
+            "lastObservedAt": "2026-08-08T19:11:32.710Z",
+            "nextObservedAt": "2026-08-08T19:11:47.845Z",
+            "seconds": 15.135
+          },
+          {
+            "lastObservedAt": "2026-08-08T19:11:47.845Z",
+            "nextObservedAt": "2026-08-08T19:12:02.851Z",
+            "seconds": 15.006
+          },
+          {
+            "lastObservedAt": "2026-08-08T19:12:02.851Z",
+            "nextObservedAt": "2026-08-08T19:12:17.711Z",
+            "seconds": 14.86
+          },
+          {
+            "lastObservedAt": "2026-08-08T19:12:17.711Z",
+            "nextObservedAt": "2026-08-08T19:12:32.854Z",
+            "seconds": 15.143
+          },
+          {
+            "lastObservedAt": "2026-08-08T19:12:32.854Z",
+            "nextObservedAt": "2026-08-08T19:12:47.882Z",
+            "seconds": 15.028
+          }
+        ]
+      },
+      "racingWindow": {
+        "startFlag": "GREEN",
+        "endBoundary": "first_observed_checkered_flag",
+        "observedStart": "2026-08-08T19:00:02.497Z",
+        "observedEnd": "2026-08-08T19:11:02.638Z",
+        "observationCount": 660,
+        "cadence": {
+          "p50Seconds": 1.002,
+          "p95Seconds": 1.14,
+          "maxSeconds": 1.247,
+          "gapsOver2Seconds": 0,
+          "gapsOver5Seconds": 0,
+          "gapsOver10Seconds": 0,
+          "intervalsOver2Seconds": []
+        },
+        "checkeredObservedAt": "2026-08-08T19:11:02.638Z",
+        "terminalFlagObservationLatencySeconds": null
+      },
+      "bryceLapCoverage": {
+        "clockBasis": "utc_capture_timestamp",
+        "hasObservedClock": true,
+        "firstObservedAt": "2026-08-08T18:50:42.662Z",
+        "lastObservedAt": "2026-08-08T19:12:47.882Z",
+        "sampleCount": 1226,
+        "lapChangeObservationCount": 10,
+        "minLap": 0,
+        "maxLap": 10
+      },
+      "observedArtifact": "analysis/semantic-layer/output/live-captures/session_indy_nxt_2026_6900.ndjson.gz",
+      "observedArtifactSha256": "000043822ed5d76e1ca1edefcdd9ed4a57879a22220f98fa3f7dbadf6aa348eb",
+      "replayArtifact": null,
+      "replayArtifactSha256": null,
+      "replaySamples": 0,
+      "finalOrder": []
+    },
+    {
+      "canonicalSessionId": "session_indy_nxt_2026_6935",
+      "canonicalAliases": [],
+      "captureSessionKey": "5540-6935",
+      "sessionType": "qualifying",
+      "sourceTier": "race_control_capture",
+      "clockBasis": "utc_capture_timestamp",
+      "sourceLabel": "BryceCast capture of INDYCAR Race Control timing",
+      "observationBasis": "observed_source_snapshot",
+      "interpolated": false,
+      "noGps": true,
+      "observedStart": "2026-08-29T16:22:31.052Z",
+      "observedEnd": "2026-08-29T17:36:23.150Z",
+      "observationCount": 2135,
+      "usableStateObservationCount": 1627,
+      "bryceObservationCount": 1285,
+      "bryceFieldIdentityObservationCount": 1259,
+      "fieldRowsOmittedFromReplayForMissingBryceIdentity": 876,
+      "cadence": {
+        "p50Seconds": 1.002,
+        "p95Seconds": 14.825,
+        "maxSeconds": 315.068,
+        "gapsOver2Seconds": 121,
+        "gapsOver5Seconds": 121,
+        "gapsOver10Seconds": 121,
+        "intervalsOver2Seconds": [
+          {
+            "lastObservedAt": "2026-08-29T16:36:18.609Z",
+            "nextObservedAt": "2026-08-29T16:36:33.688Z",
+            "seconds": 15.079
+          },
+          {
+            "lastObservedAt": "2026-08-29T16:36:33.688Z",
+            "nextObservedAt": "2026-08-29T16:36:48.704Z",
+            "seconds": 15.016
+          },
+          {
+            "lastObservedAt": "2026-08-29T16:36:48.704Z",
+            "nextObservedAt": "2026-08-29T16:37:03.537Z",
+            "seconds": 14.833
+          },
+          {
+            "lastObservedAt": "2026-08-29T16:37:03.537Z",
+            "nextObservedAt": "2026-08-29T16:37:18.690Z",
+            "seconds": 15.153
+          },
+          {
+            "lastObservedAt": "2026-08-29T16:37:18.690Z",
+            "nextObservedAt": "2026-08-29T16:37:33.715Z",
+            "seconds": 15.025
+          },
+          {
+            "lastObservedAt": "2026-08-29T16:37:33.715Z",
+            "nextObservedAt": "2026-08-29T16:37:48.548Z",
+            "seconds": 14.833
+          },
+          {
+            "lastObservedAt": "2026-08-29T16:37:48.548Z",
+            "nextObservedAt": "2026-08-29T16:38:03.696Z",
+            "seconds": 15.148
+          },
+          {
+            "lastObservedAt": "2026-08-29T16:38:03.696Z",
+            "nextObservedAt": "2026-08-29T16:38:18.692Z",
+            "seconds": 14.996
+          },
+          {
+            "lastObservedAt": "2026-08-29T16:38:18.692Z",
+            "nextObservedAt": "2026-08-29T16:38:33.694Z",
+            "seconds": 15.002
+          },
+          {
+            "lastObservedAt": "2026-08-29T16:38:33.694Z",
+            "nextObservedAt": "2026-08-29T16:38:48.552Z",
+            "seconds": 14.858
+          },
+          {
+            "lastObservedAt": "2026-08-29T16:38:48.552Z",
+            "nextObservedAt": "2026-08-29T16:39:03.712Z",
+            "seconds": 15.16
+          },
+          {
+            "lastObservedAt": "2026-08-29T16:39:03.712Z",
+            "nextObservedAt": "2026-08-29T16:39:18.570Z",
+            "seconds": 14.858
+          },
+          {
+            "lastObservedAt": "2026-08-29T16:39:18.570Z",
+            "nextObservedAt": "2026-08-29T16:39:33.699Z",
+            "seconds": 15.129
+          },
+          {
+            "lastObservedAt": "2026-08-29T16:39:33.699Z",
+            "nextObservedAt": "2026-08-29T16:39:48.700Z",
+            "seconds": 15.001
+          },
+          {
+            "lastObservedAt": "2026-08-29T16:39:48.700Z",
+            "nextObservedAt": "2026-08-29T16:40:03.556Z",
+            "seconds": 14.856
+          },
+          {
+            "lastObservedAt": "2026-08-29T16:40:03.556Z",
+            "nextObservedAt": "2026-08-29T16:40:18.718Z",
+            "seconds": 15.162
+          },
+          {
+            "lastObservedAt": "2026-08-29T16:40:18.718Z",
+            "nextObservedAt": "2026-08-29T16:40:33.748Z",
+            "seconds": 15.03
+          },
+          {
+            "lastObservedAt": "2026-08-29T16:40:33.748Z",
+            "nextObservedAt": "2026-08-29T16:40:48.566Z",
+            "seconds": 14.818
+          },
+          {
+            "lastObservedAt": "2026-08-29T16:40:48.566Z",
+            "nextObservedAt": "2026-08-29T16:41:03.718Z",
+            "seconds": 15.152
+          },
+          {
+            "lastObservedAt": "2026-08-29T16:41:03.718Z",
+            "nextObservedAt": "2026-08-29T16:41:18.728Z",
+            "seconds": 15.01
+          },
+          {
+            "lastObservedAt": "2026-08-29T16:41:18.728Z",
+            "nextObservedAt": "2026-08-29T16:41:33.726Z",
+            "seconds": 14.998
+          },
+          {
+            "lastObservedAt": "2026-08-29T16:41:33.726Z",
+            "nextObservedAt": "2026-08-29T16:41:48.574Z",
+            "seconds": 14.848
+          },
+          {
+            "lastObservedAt": "2026-08-29T16:41:48.574Z",
+            "nextObservedAt": "2026-08-29T16:42:03.755Z",
+            "seconds": 15.181
+          },
+          {
+            "lastObservedAt": "2026-08-29T16:42:03.755Z",
+            "nextObservedAt": "2026-08-29T16:42:18.580Z",
+            "seconds": 14.825
+          },
+          {
+            "lastObservedAt": "2026-08-29T16:42:18.580Z",
+            "nextObservedAt": "2026-08-29T16:42:33.714Z",
+            "seconds": 15.134
+          },
+          {
+            "lastObservedAt": "2026-08-29T16:42:33.714Z",
+            "nextObservedAt": "2026-08-29T16:42:48.739Z",
+            "seconds": 15.025
+          },
+          {
+            "lastObservedAt": "2026-08-29T16:42:48.739Z",
+            "nextObservedAt": "2026-08-29T16:43:03.725Z",
+            "seconds": 14.986
+          },
+          {
+            "lastObservedAt": "2026-08-29T16:43:03.725Z",
+            "nextObservedAt": "2026-08-29T16:43:18.754Z",
+            "seconds": 15.029
+          },
+          {
+            "lastObservedAt": "2026-08-29T16:43:18.754Z",
+            "nextObservedAt": "2026-08-29T16:43:33.758Z",
+            "seconds": 15.004
+          },
+          {
+            "lastObservedAt": "2026-08-29T16:43:33.758Z",
+            "nextObservedAt": "2026-08-29T16:43:48.592Z",
+            "seconds": 14.834
+          },
+          {
+            "lastObservedAt": "2026-08-29T16:43:48.592Z",
+            "nextObservedAt": "2026-08-29T16:44:03.733Z",
+            "seconds": 15.141
+          },
+          {
+            "lastObservedAt": "2026-08-29T16:44:03.733Z",
+            "nextObservedAt": "2026-08-29T16:44:18.749Z",
+            "seconds": 15.016
+          },
+          {
+            "lastObservedAt": "2026-08-29T16:44:18.749Z",
+            "nextObservedAt": "2026-08-29T16:44:33.598Z",
+            "seconds": 14.849
+          },
+          {
+            "lastObservedAt": "2026-08-29T16:44:33.598Z",
+            "nextObservedAt": "2026-08-29T16:44:48.765Z",
+            "seconds": 15.167
+          },
+          {
+            "lastObservedAt": "2026-08-29T16:44:48.765Z",
+            "nextObservedAt": "2026-08-29T16:45:03.777Z",
+            "seconds": 15.012
+          },
+          {
+            "lastObservedAt": "2026-08-29T16:45:03.777Z",
+            "nextObservedAt": "2026-08-29T16:45:18.613Z",
+            "seconds": 14.836
+          },
+          {
+            "lastObservedAt": "2026-08-29T16:45:18.613Z",
+            "nextObservedAt": "2026-08-29T16:45:33.733Z",
+            "seconds": 15.12
+          },
+          {
+            "lastObservedAt": "2026-08-29T16:45:33.733Z",
+            "nextObservedAt": "2026-08-29T16:45:48.772Z",
+            "seconds": 15.039
+          },
+          {
+            "lastObservedAt": "2026-08-29T16:45:48.772Z",
+            "nextObservedAt": "2026-08-29T16:46:03.769Z",
+            "seconds": 14.997
+          },
+          {
+            "lastObservedAt": "2026-08-29T16:46:03.769Z",
+            "nextObservedAt": "2026-08-29T16:46:18.786Z",
+            "seconds": 15.017
+          },
+          {
+            "lastObservedAt": "2026-08-29T16:46:18.786Z",
+            "nextObservedAt": "2026-08-29T16:51:33.854Z",
+            "seconds": 315.068
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:07:48.477Z",
+            "nextObservedAt": "2026-08-29T17:08:03.759Z",
+            "seconds": 15.282
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:08:03.759Z",
+            "nextObservedAt": "2026-08-29T17:08:18.554Z",
+            "seconds": 14.795
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:08:18.554Z",
+            "nextObservedAt": "2026-08-29T17:08:33.693Z",
+            "seconds": 15.139
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:08:33.693Z",
+            "nextObservedAt": "2026-08-29T17:08:48.687Z",
+            "seconds": 14.994
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:08:48.687Z",
+            "nextObservedAt": "2026-08-29T17:09:03.695Z",
+            "seconds": 15.008
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:09:03.695Z",
+            "nextObservedAt": "2026-08-29T17:09:18.727Z",
+            "seconds": 15.032
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:09:18.727Z",
+            "nextObservedAt": "2026-08-29T17:09:33.751Z",
+            "seconds": 15.024
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:09:33.751Z",
+            "nextObservedAt": "2026-08-29T17:09:48.576Z",
+            "seconds": 14.825
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:09:48.576Z",
+            "nextObservedAt": "2026-08-29T17:10:03.712Z",
+            "seconds": 15.136
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:10:03.712Z",
+            "nextObservedAt": "2026-08-29T17:10:18.723Z",
+            "seconds": 15.011
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:10:18.723Z",
+            "nextObservedAt": "2026-08-29T17:10:33.574Z",
+            "seconds": 14.851
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:10:33.574Z",
+            "nextObservedAt": "2026-08-29T17:10:48.724Z",
+            "seconds": 15.15
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:10:48.724Z",
+            "nextObservedAt": "2026-08-29T17:11:03.769Z",
+            "seconds": 15.045
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:11:03.769Z",
+            "nextObservedAt": "2026-08-29T17:11:18.572Z",
+            "seconds": 14.803
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:11:18.572Z",
+            "nextObservedAt": "2026-08-29T17:11:33.720Z",
+            "seconds": 15.148
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:11:33.720Z",
+            "nextObservedAt": "2026-08-29T17:11:48.732Z",
+            "seconds": 15.012
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:11:48.732Z",
+            "nextObservedAt": "2026-08-29T17:12:03.713Z",
+            "seconds": 14.981
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:12:03.713Z",
+            "nextObservedAt": "2026-08-29T17:12:18.579Z",
+            "seconds": 14.866
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:12:18.579Z",
+            "nextObservedAt": "2026-08-29T17:12:33.767Z",
+            "seconds": 15.188
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:12:33.767Z",
+            "nextObservedAt": "2026-08-29T17:12:48.595Z",
+            "seconds": 14.828
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:12:48.595Z",
+            "nextObservedAt": "2026-08-29T17:13:03.745Z",
+            "seconds": 15.15
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:13:03.745Z",
+            "nextObservedAt": "2026-08-29T17:13:18.584Z",
+            "seconds": 14.839
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:13:18.584Z",
+            "nextObservedAt": "2026-08-29T17:13:33.745Z",
+            "seconds": 15.161
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:13:33.745Z",
+            "nextObservedAt": "2026-08-29T17:13:48.751Z",
+            "seconds": 15.006
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:13:48.751Z",
+            "nextObservedAt": "2026-08-29T17:14:03.796Z",
+            "seconds": 15.045
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:14:03.796Z",
+            "nextObservedAt": "2026-08-29T17:14:18.594Z",
+            "seconds": 14.798
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:14:18.594Z",
+            "nextObservedAt": "2026-08-29T17:14:33.750Z",
+            "seconds": 15.156
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:14:33.750Z",
+            "nextObservedAt": "2026-08-29T17:14:48.751Z",
+            "seconds": 15.001
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:14:48.751Z",
+            "nextObservedAt": "2026-08-29T17:15:03.604Z",
+            "seconds": 14.853
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:15:03.604Z",
+            "nextObservedAt": "2026-08-29T17:15:18.769Z",
+            "seconds": 15.165
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:15:18.769Z",
+            "nextObservedAt": "2026-08-29T17:15:33.789Z",
+            "seconds": 15.02
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:15:33.789Z",
+            "nextObservedAt": "2026-08-29T17:15:48.620Z",
+            "seconds": 14.831
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:15:48.620Z",
+            "nextObservedAt": "2026-08-29T17:16:03.760Z",
+            "seconds": 15.14
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:16:03.760Z",
+            "nextObservedAt": "2026-08-29T17:16:18.757Z",
+            "seconds": 14.997
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:16:18.757Z",
+            "nextObservedAt": "2026-08-29T17:16:33.767Z",
+            "seconds": 15.01
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:16:33.767Z",
+            "nextObservedAt": "2026-08-29T17:16:48.769Z",
+            "seconds": 15.002
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:16:48.769Z",
+            "nextObservedAt": "2026-08-29T17:17:03.818Z",
+            "seconds": 15.049
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:17:03.818Z",
+            "nextObservedAt": "2026-08-29T17:17:18.623Z",
+            "seconds": 14.805
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:17:18.623Z",
+            "nextObservedAt": "2026-08-29T17:17:33.768Z",
+            "seconds": 15.145
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:17:33.768Z",
+            "nextObservedAt": "2026-08-29T17:22:48.813Z",
+            "seconds": 315.045
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:26:23.617Z",
+            "nextObservedAt": "2026-08-29T17:26:38.209Z",
+            "seconds": 14.592
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:26:38.209Z",
+            "nextObservedAt": "2026-08-29T17:26:53.305Z",
+            "seconds": 15.096
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:26:53.305Z",
+            "nextObservedAt": "2026-08-29T17:27:08.227Z",
+            "seconds": 14.922
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:27:08.227Z",
+            "nextObservedAt": "2026-08-29T17:27:23.082Z",
+            "seconds": 14.855
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:27:23.082Z",
+            "nextObservedAt": "2026-08-29T17:27:38.237Z",
+            "seconds": 15.155
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:27:38.237Z",
+            "nextObservedAt": "2026-08-29T17:27:53.227Z",
+            "seconds": 14.99
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:27:53.227Z",
+            "nextObservedAt": "2026-08-29T17:28:08.238Z",
+            "seconds": 15.011
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:28:08.238Z",
+            "nextObservedAt": "2026-08-29T17:28:23.083Z",
+            "seconds": 14.845
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:28:23.083Z",
+            "nextObservedAt": "2026-08-29T17:28:38.294Z",
+            "seconds": 15.211
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:28:38.294Z",
+            "nextObservedAt": "2026-08-29T17:28:53.097Z",
+            "seconds": 14.803
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:28:53.097Z",
+            "nextObservedAt": "2026-08-29T17:29:08.293Z",
+            "seconds": 15.196
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:29:08.293Z",
+            "nextObservedAt": "2026-08-29T17:29:23.091Z",
+            "seconds": 14.798
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:29:23.091Z",
+            "nextObservedAt": "2026-08-29T17:29:38.250Z",
+            "seconds": 15.159
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:29:38.250Z",
+            "nextObservedAt": "2026-08-29T17:29:53.256Z",
+            "seconds": 15.006
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:29:53.256Z",
+            "nextObservedAt": "2026-08-29T17:30:08.325Z",
+            "seconds": 15.069
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:30:08.325Z",
+            "nextObservedAt": "2026-08-29T17:30:23.106Z",
+            "seconds": 14.781
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:30:23.106Z",
+            "nextObservedAt": "2026-08-29T17:30:38.273Z",
+            "seconds": 15.167
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:30:38.273Z",
+            "nextObservedAt": "2026-08-29T17:30:53.112Z",
+            "seconds": 14.839
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:30:53.112Z",
+            "nextObservedAt": "2026-08-29T17:31:08.262Z",
+            "seconds": 15.15
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:31:08.262Z",
+            "nextObservedAt": "2026-08-29T17:31:23.267Z",
+            "seconds": 15.005
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:31:23.267Z",
+            "nextObservedAt": "2026-08-29T17:31:38.324Z",
+            "seconds": 15.057
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:31:38.324Z",
+            "nextObservedAt": "2026-08-29T17:31:53.109Z",
+            "seconds": 14.785
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:31:53.109Z",
+            "nextObservedAt": "2026-08-29T17:32:08.277Z",
+            "seconds": 15.168
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:32:08.277Z",
+            "nextObservedAt": "2026-08-29T17:32:23.119Z",
+            "seconds": 14.842
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:32:23.119Z",
+            "nextObservedAt": "2026-08-29T17:32:38.265Z",
+            "seconds": 15.146
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:32:38.265Z",
+            "nextObservedAt": "2026-08-29T17:32:53.266Z",
+            "seconds": 15.001
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:32:53.266Z",
+            "nextObservedAt": "2026-08-29T17:33:08.304Z",
+            "seconds": 15.038
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:33:08.304Z",
+            "nextObservedAt": "2026-08-29T17:33:23.125Z",
+            "seconds": 14.821
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:33:23.125Z",
+            "nextObservedAt": "2026-08-29T17:33:38.276Z",
+            "seconds": 15.151
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:33:38.276Z",
+            "nextObservedAt": "2026-08-29T17:33:53.127Z",
+            "seconds": 14.851
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:33:53.127Z",
+            "nextObservedAt": "2026-08-29T17:34:08.313Z",
+            "seconds": 15.186
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:34:08.313Z",
+            "nextObservedAt": "2026-08-29T17:34:23.128Z",
+            "seconds": 14.815
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:34:23.128Z",
+            "nextObservedAt": "2026-08-29T17:34:38.318Z",
+            "seconds": 15.19
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:34:38.318Z",
+            "nextObservedAt": "2026-08-29T17:34:53.143Z",
+            "seconds": 14.825
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:34:53.143Z",
+            "nextObservedAt": "2026-08-29T17:35:08.286Z",
+            "seconds": 15.143
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:35:08.286Z",
+            "nextObservedAt": "2026-08-29T17:35:23.281Z",
+            "seconds": 14.995
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:35:23.281Z",
+            "nextObservedAt": "2026-08-29T17:35:38.290Z",
+            "seconds": 15.009
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:35:38.290Z",
+            "nextObservedAt": "2026-08-29T17:35:53.283Z",
+            "seconds": 14.993
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:35:53.283Z",
+            "nextObservedAt": "2026-08-29T17:36:08.353Z",
+            "seconds": 15.07
+          },
+          {
+            "lastObservedAt": "2026-08-29T17:36:08.353Z",
+            "nextObservedAt": "2026-08-29T17:36:23.150Z",
+            "seconds": 14.797
+          }
+        ]
+      },
+      "racingWindow": {
+        "startFlag": "GREEN",
+        "endBoundary": "last_observed_checkered_flag",
+        "observedStart": "2026-08-29T16:30:53.839Z",
+        "observedEnd": "2026-08-29T17:26:23.617Z",
+        "observationCount": 1593,
+        "cadence": {
+          "p50Seconds": 1.002,
+          "p95Seconds": 14.795,
+          "maxSeconds": 315.068,
+          "gapsOver2Seconds": 81,
+          "gapsOver5Seconds": 81,
+          "gapsOver10Seconds": 81,
+          "intervalsOver2Seconds": [
+            {
+              "lastObservedAt": "2026-08-29T16:36:18.609Z",
+              "nextObservedAt": "2026-08-29T16:36:33.688Z",
+              "seconds": 15.079
+            },
+            {
+              "lastObservedAt": "2026-08-29T16:36:33.688Z",
+              "nextObservedAt": "2026-08-29T16:36:48.704Z",
+              "seconds": 15.016
+            },
+            {
+              "lastObservedAt": "2026-08-29T16:36:48.704Z",
+              "nextObservedAt": "2026-08-29T16:37:03.537Z",
+              "seconds": 14.833
+            },
+            {
+              "lastObservedAt": "2026-08-29T16:37:03.537Z",
+              "nextObservedAt": "2026-08-29T16:37:18.690Z",
+              "seconds": 15.153
+            },
+            {
+              "lastObservedAt": "2026-08-29T16:37:18.690Z",
+              "nextObservedAt": "2026-08-29T16:37:33.715Z",
+              "seconds": 15.025
+            },
+            {
+              "lastObservedAt": "2026-08-29T16:37:33.715Z",
+              "nextObservedAt": "2026-08-29T16:37:48.548Z",
+              "seconds": 14.833
+            },
+            {
+              "lastObservedAt": "2026-08-29T16:37:48.548Z",
+              "nextObservedAt": "2026-08-29T16:38:03.696Z",
+              "seconds": 15.148
+            },
+            {
+              "lastObservedAt": "2026-08-29T16:38:03.696Z",
+              "nextObservedAt": "2026-08-29T16:38:18.692Z",
+              "seconds": 14.996
+            },
+            {
+              "lastObservedAt": "2026-08-29T16:38:18.692Z",
+              "nextObservedAt": "2026-08-29T16:38:33.694Z",
+              "seconds": 15.002
+            },
+            {
+              "lastObservedAt": "2026-08-29T16:38:33.694Z",
+              "nextObservedAt": "2026-08-29T16:38:48.552Z",
+              "seconds": 14.858
+            },
+            {
+              "lastObservedAt": "2026-08-29T16:38:48.552Z",
+              "nextObservedAt": "2026-08-29T16:39:03.712Z",
+              "seconds": 15.16
+            },
+            {
+              "lastObservedAt": "2026-08-29T16:39:03.712Z",
+              "nextObservedAt": "2026-08-29T16:39:18.570Z",
+              "seconds": 14.858
+            },
+            {
+              "lastObservedAt": "2026-08-29T16:39:18.570Z",
+              "nextObservedAt": "2026-08-29T16:39:33.699Z",
+              "seconds": 15.129
+            },
+            {
+              "lastObservedAt": "2026-08-29T16:39:33.699Z",
+              "nextObservedAt": "2026-08-29T16:39:48.700Z",
+              "seconds": 15.001
+            },
+            {
+              "lastObservedAt": "2026-08-29T16:39:48.700Z",
+              "nextObservedAt": "2026-08-29T16:40:03.556Z",
+              "seconds": 14.856
+            },
+            {
+              "lastObservedAt": "2026-08-29T16:40:03.556Z",
+              "nextObservedAt": "2026-08-29T16:40:18.718Z",
+              "seconds": 15.162
+            },
+            {
+              "lastObservedAt": "2026-08-29T16:40:18.718Z",
+              "nextObservedAt": "2026-08-29T16:40:33.748Z",
+              "seconds": 15.03
+            },
+            {
+              "lastObservedAt": "2026-08-29T16:40:33.748Z",
+              "nextObservedAt": "2026-08-29T16:40:48.566Z",
+              "seconds": 14.818
+            },
+            {
+              "lastObservedAt": "2026-08-29T16:40:48.566Z",
+              "nextObservedAt": "2026-08-29T16:41:03.718Z",
+              "seconds": 15.152
+            },
+            {
+              "lastObservedAt": "2026-08-29T16:41:03.718Z",
+              "nextObservedAt": "2026-08-29T16:41:18.728Z",
+              "seconds": 15.01
+            },
+            {
+              "lastObservedAt": "2026-08-29T16:41:18.728Z",
+              "nextObservedAt": "2026-08-29T16:41:33.726Z",
+              "seconds": 14.998
+            },
+            {
+              "lastObservedAt": "2026-08-29T16:41:33.726Z",
+              "nextObservedAt": "2026-08-29T16:41:48.574Z",
+              "seconds": 14.848
+            },
+            {
+              "lastObservedAt": "2026-08-29T16:41:48.574Z",
+              "nextObservedAt": "2026-08-29T16:42:03.755Z",
+              "seconds": 15.181
+            },
+            {
+              "lastObservedAt": "2026-08-29T16:42:03.755Z",
+              "nextObservedAt": "2026-08-29T16:42:18.580Z",
+              "seconds": 14.825
+            },
+            {
+              "lastObservedAt": "2026-08-29T16:42:18.580Z",
+              "nextObservedAt": "2026-08-29T16:42:33.714Z",
+              "seconds": 15.134
+            },
+            {
+              "lastObservedAt": "2026-08-29T16:42:33.714Z",
+              "nextObservedAt": "2026-08-29T16:42:48.739Z",
+              "seconds": 15.025
+            },
+            {
+              "lastObservedAt": "2026-08-29T16:42:48.739Z",
+              "nextObservedAt": "2026-08-29T16:43:03.725Z",
+              "seconds": 14.986
+            },
+            {
+              "lastObservedAt": "2026-08-29T16:43:03.725Z",
+              "nextObservedAt": "2026-08-29T16:43:18.754Z",
+              "seconds": 15.029
+            },
+            {
+              "lastObservedAt": "2026-08-29T16:43:18.754Z",
+              "nextObservedAt": "2026-08-29T16:43:33.758Z",
+              "seconds": 15.004
+            },
+            {
+              "lastObservedAt": "2026-08-29T16:43:33.758Z",
+              "nextObservedAt": "2026-08-29T16:43:48.592Z",
+              "seconds": 14.834
+            },
+            {
+              "lastObservedAt": "2026-08-29T16:43:48.592Z",
+              "nextObservedAt": "2026-08-29T16:44:03.733Z",
+              "seconds": 15.141
+            },
+            {
+              "lastObservedAt": "2026-08-29T16:44:03.733Z",
+              "nextObservedAt": "2026-08-29T16:44:18.749Z",
+              "seconds": 15.016
+            },
+            {
+              "lastObservedAt": "2026-08-29T16:44:18.749Z",
+              "nextObservedAt": "2026-08-29T16:44:33.598Z",
+              "seconds": 14.849
+            },
+            {
+              "lastObservedAt": "2026-08-29T16:44:33.598Z",
+              "nextObservedAt": "2026-08-29T16:44:48.765Z",
+              "seconds": 15.167
+            },
+            {
+              "lastObservedAt": "2026-08-29T16:44:48.765Z",
+              "nextObservedAt": "2026-08-29T16:45:03.777Z",
+              "seconds": 15.012
+            },
+            {
+              "lastObservedAt": "2026-08-29T16:45:03.777Z",
+              "nextObservedAt": "2026-08-29T16:45:18.613Z",
+              "seconds": 14.836
+            },
+            {
+              "lastObservedAt": "2026-08-29T16:45:18.613Z",
+              "nextObservedAt": "2026-08-29T16:45:33.733Z",
+              "seconds": 15.12
+            },
+            {
+              "lastObservedAt": "2026-08-29T16:45:33.733Z",
+              "nextObservedAt": "2026-08-29T16:45:48.772Z",
+              "seconds": 15.039
+            },
+            {
+              "lastObservedAt": "2026-08-29T16:45:48.772Z",
+              "nextObservedAt": "2026-08-29T16:46:03.769Z",
+              "seconds": 14.997
+            },
+            {
+              "lastObservedAt": "2026-08-29T16:46:03.769Z",
+              "nextObservedAt": "2026-08-29T16:46:18.786Z",
+              "seconds": 15.017
+            },
+            {
+              "lastObservedAt": "2026-08-29T16:46:18.786Z",
+              "nextObservedAt": "2026-08-29T16:51:33.854Z",
+              "seconds": 315.068
+            },
+            {
+              "lastObservedAt": "2026-08-29T17:07:48.477Z",
+              "nextObservedAt": "2026-08-29T17:08:03.759Z",
+              "seconds": 15.282
+            },
+            {
+              "lastObservedAt": "2026-08-29T17:08:03.759Z",
+              "nextObservedAt": "2026-08-29T17:08:18.554Z",
+              "seconds": 14.795
+            },
+            {
+              "lastObservedAt": "2026-08-29T17:08:18.554Z",
+              "nextObservedAt": "2026-08-29T17:08:33.693Z",
+              "seconds": 15.139
+            },
+            {
+              "lastObservedAt": "2026-08-29T17:08:33.693Z",
+              "nextObservedAt": "2026-08-29T17:08:48.687Z",
+              "seconds": 14.994
+            },
+            {
+              "lastObservedAt": "2026-08-29T17:08:48.687Z",
+              "nextObservedAt": "2026-08-29T17:09:03.695Z",
+              "seconds": 15.008
+            },
+            {
+              "lastObservedAt": "2026-08-29T17:09:03.695Z",
+              "nextObservedAt": "2026-08-29T17:09:18.727Z",
+              "seconds": 15.032
+            },
+            {
+              "lastObservedAt": "2026-08-29T17:09:18.727Z",
+              "nextObservedAt": "2026-08-29T17:09:33.751Z",
+              "seconds": 15.024
+            },
+            {
+              "lastObservedAt": "2026-08-29T17:09:33.751Z",
+              "nextObservedAt": "2026-08-29T17:09:48.576Z",
+              "seconds": 14.825
+            },
+            {
+              "lastObservedAt": "2026-08-29T17:09:48.576Z",
+              "nextObservedAt": "2026-08-29T17:10:03.712Z",
+              "seconds": 15.136
+            },
+            {
+              "lastObservedAt": "2026-08-29T17:10:03.712Z",
+              "nextObservedAt": "2026-08-29T17:10:18.723Z",
+              "seconds": 15.011
+            },
+            {
+              "lastObservedAt": "2026-08-29T17:10:18.723Z",
+              "nextObservedAt": "2026-08-29T17:10:33.574Z",
+              "seconds": 14.851
+            },
+            {
+              "lastObservedAt": "2026-08-29T17:10:33.574Z",
+              "nextObservedAt": "2026-08-29T17:10:48.724Z",
+              "seconds": 15.15
+            },
+            {
+              "lastObservedAt": "2026-08-29T17:10:48.724Z",
+              "nextObservedAt": "2026-08-29T17:11:03.769Z",
+              "seconds": 15.045
+            },
+            {
+              "lastObservedAt": "2026-08-29T17:11:03.769Z",
+              "nextObservedAt": "2026-08-29T17:11:18.572Z",
+              "seconds": 14.803
+            },
+            {
+              "lastObservedAt": "2026-08-29T17:11:18.572Z",
+              "nextObservedAt": "2026-08-29T17:11:33.720Z",
+              "seconds": 15.148
+            },
+            {
+              "lastObservedAt": "2026-08-29T17:11:33.720Z",
+              "nextObservedAt": "2026-08-29T17:11:48.732Z",
+              "seconds": 15.012
+            },
+            {
+              "lastObservedAt": "2026-08-29T17:11:48.732Z",
+              "nextObservedAt": "2026-08-29T17:12:03.713Z",
+              "seconds": 14.981
+            },
+            {
+              "lastObservedAt": "2026-08-29T17:12:03.713Z",
+              "nextObservedAt": "2026-08-29T17:12:18.579Z",
+              "seconds": 14.866
+            },
+            {
+              "lastObservedAt": "2026-08-29T17:12:18.579Z",
+              "nextObservedAt": "2026-08-29T17:12:33.767Z",
+              "seconds": 15.188
+            },
+            {
+              "lastObservedAt": "2026-08-29T17:12:33.767Z",
+              "nextObservedAt": "2026-08-29T17:12:48.595Z",
+              "seconds": 14.828
+            },
+            {
+              "lastObservedAt": "2026-08-29T17:12:48.595Z",
+              "nextObservedAt": "2026-08-29T17:13:03.745Z",
+              "seconds": 15.15
+            },
+            {
+              "lastObservedAt": "2026-08-29T17:13:03.745Z",
+              "nextObservedAt": "2026-08-29T17:13:18.584Z",
+              "seconds": 14.839
+            },
+            {
+              "lastObservedAt": "2026-08-29T17:13:18.584Z",
+              "nextObservedAt": "2026-08-29T17:13:33.745Z",
+              "seconds": 15.161
+            },
+            {
+              "lastObservedAt": "2026-08-29T17:13:33.745Z",
+              "nextObservedAt": "2026-08-29T17:13:48.751Z",
+              "seconds": 15.006
+            },
+            {
+              "lastObservedAt": "2026-08-29T17:13:48.751Z",
+              "nextObservedAt": "2026-08-29T17:14:03.796Z",
+              "seconds": 15.045
+            },
+            {
+              "lastObservedAt": "2026-08-29T17:14:03.796Z",
+              "nextObservedAt": "2026-08-29T17:14:18.594Z",
+              "seconds": 14.798
+            },
+            {
+              "lastObservedAt": "2026-08-29T17:14:18.594Z",
+              "nextObservedAt": "2026-08-29T17:14:33.750Z",
+              "seconds": 15.156
+            },
+            {
+              "lastObservedAt": "2026-08-29T17:14:33.750Z",
+              "nextObservedAt": "2026-08-29T17:14:48.751Z",
+              "seconds": 15.001
+            },
+            {
+              "lastObservedAt": "2026-08-29T17:14:48.751Z",
+              "nextObservedAt": "2026-08-29T17:15:03.604Z",
+              "seconds": 14.853
+            },
+            {
+              "lastObservedAt": "2026-08-29T17:15:03.604Z",
+              "nextObservedAt": "2026-08-29T17:15:18.769Z",
+              "seconds": 15.165
+            },
+            {
+              "lastObservedAt": "2026-08-29T17:15:18.769Z",
+              "nextObservedAt": "2026-08-29T17:15:33.789Z",
+              "seconds": 15.02
+            },
+            {
+              "lastObservedAt": "2026-08-29T17:15:33.789Z",
+              "nextObservedAt": "2026-08-29T17:15:48.620Z",
+              "seconds": 14.831
+            },
+            {
+              "lastObservedAt": "2026-08-29T17:15:48.620Z",
+              "nextObservedAt": "2026-08-29T17:16:03.760Z",
+              "seconds": 15.14
+            },
+            {
+              "lastObservedAt": "2026-08-29T17:16:03.760Z",
+              "nextObservedAt": "2026-08-29T17:16:18.757Z",
+              "seconds": 14.997
+            },
+            {
+              "lastObservedAt": "2026-08-29T17:16:18.757Z",
+              "nextObservedAt": "2026-08-29T17:16:33.767Z",
+              "seconds": 15.01
+            },
+            {
+              "lastObservedAt": "2026-08-29T17:16:33.767Z",
+              "nextObservedAt": "2026-08-29T17:16:48.769Z",
+              "seconds": 15.002
+            },
+            {
+              "lastObservedAt": "2026-08-29T17:16:48.769Z",
+              "nextObservedAt": "2026-08-29T17:17:03.818Z",
+              "seconds": 15.049
+            },
+            {
+              "lastObservedAt": "2026-08-29T17:17:03.818Z",
+              "nextObservedAt": "2026-08-29T17:17:18.623Z",
+              "seconds": 14.805
+            },
+            {
+              "lastObservedAt": "2026-08-29T17:17:18.623Z",
+              "nextObservedAt": "2026-08-29T17:17:33.768Z",
+              "seconds": 15.145
+            },
+            {
+              "lastObservedAt": "2026-08-29T17:17:33.768Z",
+              "nextObservedAt": "2026-08-29T17:22:48.813Z",
+              "seconds": 315.045
+            }
+          ]
+        },
+        "checkeredObservedAt": "2026-08-29T17:26:23.617Z",
+        "terminalFlagObservationLatencySeconds": null
+      },
+      "bryceLapCoverage": {
+        "clockBasis": "utc_capture_timestamp",
+        "hasObservedClock": true,
+        "firstObservedAt": "2026-08-29T16:22:31.052Z",
+        "lastObservedAt": "2026-08-29T17:36:23.150Z",
+        "sampleCount": 2135,
+        "lapChangeObservationCount": 2,
+        "minLap": 0,
+        "maxLap": 2
+      },
+      "observedArtifact": "analysis/semantic-layer/output/live-captures/session_indy_nxt_2026_6935.ndjson.gz",
+      "observedArtifactSha256": "e18cf6d98d1f9a5f44a4bdf08623c91b34606fdb5e8926715b0c8c66d98d4cc7",
+      "replayArtifact": null,
+      "replayArtifactSha256": null,
+      "replaySamples": 0,
+      "finalOrder": []
     },
     {
       "canonicalSessionId": "session_indy_nxt_2026_6950",
@@ -1779,7 +3263,110 @@
           }
         ]
       },
-      "racingWindow": null,
+      "racingWindow": {
+        "startFlag": "GREEN",
+        "endBoundary": "first_observed_checkered_flag",
+        "observedStart": "2026-09-05T19:17:06.024Z",
+        "observedEnd": "2026-09-05T19:28:15.674Z",
+        "observationCount": 417,
+        "cadence": {
+          "p50Seconds": 1.002,
+          "p95Seconds": 1.17,
+          "maxSeconds": 30.147,
+          "gapsOver2Seconds": 17,
+          "gapsOver5Seconds": 17,
+          "gapsOver10Seconds": 17,
+          "intervalsOver2Seconds": [
+            {
+              "lastObservedAt": "2026-09-05T19:17:06.024Z",
+              "nextObservedAt": "2026-09-05T19:17:20.864Z",
+              "seconds": 14.84
+            },
+            {
+              "lastObservedAt": "2026-09-05T19:17:20.864Z",
+              "nextObservedAt": "2026-09-05T19:17:36.019Z",
+              "seconds": 15.155
+            },
+            {
+              "lastObservedAt": "2026-09-05T19:17:36.019Z",
+              "nextObservedAt": "2026-09-05T19:17:51.057Z",
+              "seconds": 15.038
+            },
+            {
+              "lastObservedAt": "2026-09-05T19:17:51.057Z",
+              "nextObservedAt": "2026-09-05T19:18:05.879Z",
+              "seconds": 14.822
+            },
+            {
+              "lastObservedAt": "2026-09-05T19:18:05.879Z",
+              "nextObservedAt": "2026-09-05T19:18:21.015Z",
+              "seconds": 15.136
+            },
+            {
+              "lastObservedAt": "2026-09-05T19:18:21.015Z",
+              "nextObservedAt": "2026-09-05T19:18:36.004Z",
+              "seconds": 14.989
+            },
+            {
+              "lastObservedAt": "2026-09-05T19:18:36.004Z",
+              "nextObservedAt": "2026-09-05T19:18:51.022Z",
+              "seconds": 15.018
+            },
+            {
+              "lastObservedAt": "2026-09-05T19:18:51.022Z",
+              "nextObservedAt": "2026-09-05T19:19:06.024Z",
+              "seconds": 15.002
+            },
+            {
+              "lastObservedAt": "2026-09-05T19:19:06.024Z",
+              "nextObservedAt": "2026-09-05T19:19:21.083Z",
+              "seconds": 15.059
+            },
+            {
+              "lastObservedAt": "2026-09-05T19:19:21.083Z",
+              "nextObservedAt": "2026-09-05T19:19:35.892Z",
+              "seconds": 14.809
+            },
+            {
+              "lastObservedAt": "2026-09-05T19:19:35.892Z",
+              "nextObservedAt": "2026-09-05T19:19:51.032Z",
+              "seconds": 15.14
+            },
+            {
+              "lastObservedAt": "2026-09-05T19:19:51.032Z",
+              "nextObservedAt": "2026-09-05T19:20:06.022Z",
+              "seconds": 14.99
+            },
+            {
+              "lastObservedAt": "2026-09-05T19:20:06.022Z",
+              "nextObservedAt": "2026-09-05T19:20:21.037Z",
+              "seconds": 15.015
+            },
+            {
+              "lastObservedAt": "2026-09-05T19:20:21.037Z",
+              "nextObservedAt": "2026-09-05T19:20:36.034Z",
+              "seconds": 14.997
+            },
+            {
+              "lastObservedAt": "2026-09-05T19:20:36.034Z",
+              "nextObservedAt": "2026-09-05T19:20:51.068Z",
+              "seconds": 15.034
+            },
+            {
+              "lastObservedAt": "2026-09-05T19:20:51.068Z",
+              "nextObservedAt": "2026-09-05T19:21:05.899Z",
+              "seconds": 14.831
+            },
+            {
+              "lastObservedAt": "2026-09-05T19:21:05.899Z",
+              "nextObservedAt": "2026-09-05T19:21:36.046Z",
+              "seconds": 30.147
+            }
+          ]
+        },
+        "checkeredObservedAt": "2026-09-05T19:28:15.674Z",
+        "terminalFlagObservationLatencySeconds": null
+      },
       "bryceLapCoverage": {
         "clockBasis": "utc_capture_timestamp",
         "hasObservedClock": true,
@@ -1791,7 +3378,9 @@
         "maxLap": 8
       },
       "observedArtifact": "analysis/semantic-layer/output/live-captures/session_indy_nxt_2026_6950.ndjson.gz",
+      "observedArtifactSha256": "baf2cdc4cac066541d1af19cc04d9d49466b72ac69a65d3b6814e8231ef28a3c",
       "replayArtifact": null,
+      "replayArtifactSha256": null,
       "replaySamples": 0,
       "finalOrder": []
     }

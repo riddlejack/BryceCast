@@ -12,6 +12,7 @@
 //  6. Two-source diffs (where our own capture exists) meet the agreement floor.
 
 import { readFileSync, existsSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { readSessionPack } from './lib/pack-reader.mjs';
@@ -28,6 +29,15 @@ const fail = (id, msg) => failures.push(`${id}: ${msg}`);
 const VALID_TIERS = new Set(['racetools_capture', 'timing71_normalized', 'race_control_capture']);
 const TWO_SOURCE_FLOOR = 0.99;
 const MAX_INTERPOLATION_HOLD_SECONDS = 5;
+const captureManifest = JSON.parse(readFileSync(join(__dirname, '..', 'semantic-layer', 'output', 'live-captures', 'live-captures-manifest.json'), 'utf8'));
+const captureByCanonical = new Map(captureManifest.sessions.map((session) => [session.canonicalSessionId, session]));
+const feedArtifacts = new Set();
+for (const candidate of [...manifest.sessions, ...(manifest.alternateSessions ?? [])]) {
+  if (!candidate.feedArtifact) fail(candidate.canonicalSessionId, 'source candidate does not name a feed artifact');
+  else if (feedArtifacts.has(candidate.feedArtifact)) fail(candidate.canonicalSessionId, `source candidates collide at ${candidate.feedArtifact}`);
+  else feedArtifacts.add(candidate.feedArtifact);
+}
+feedArtifacts.clear();
 
 for (const s of manifest.sessions) {
   const id = s.canonicalSessionId;
@@ -46,7 +56,12 @@ for (const s of manifest.sessions) {
   }
   if (!s.watchable) continue; // excluded sessions are documented, not served
 
-  const feedPath = join(feedsDir, `${id}.ndjson.gz`);
+  if (!s.feedArtifact) fail(id, 'manifest does not name its source-specific feed artifact');
+  if (feedArtifacts.has(s.feedArtifact)) fail(id, `feed artifact reused by another primary: ${s.feedArtifact}`);
+  feedArtifacts.add(s.feedArtifact);
+  const feedPath = s.feedArtifact
+    ? join(__dirname, 'output', s.feedArtifact)
+    : join(feedsDir, `${id}.ndjson.gz`);
   if (!existsSync(feedPath)) {
     fail(id, 'watchable but feed pack missing');
     continue;
@@ -62,6 +77,20 @@ for (const s of manifest.sessions) {
   }
 
   if (rows.length !== s.samples) fail(id, `sample count drift: feed ${rows.length} vs manifest ${s.samples}`);
+  if (s.sourceTier === 'race_control_capture') {
+    const source = captureByCanonical.get(id);
+    if (!source || source.replayArtifact !== `analysis/replay-feeds/output/${s.feedArtifact}`) {
+      fail(id, 'primary direct-capture path does not match the export manifest');
+    }
+    if (s.feedArtifact === `feeds/${id}.ndjson.gz`) fail(id, 'direct capture collides with the derived canonical feed filename');
+    const digest = createHash('sha256').update(readFileSync(feedPath)).digest('hex');
+    if (!source?.replayArtifactSha256 || digest !== source.replayArtifactSha256 || digest !== s.sourceArtifactSha256) {
+      fail(id, 'primary direct-capture bytes do not match the verified export artifact');
+    }
+    if (rows[0]?.checkedAt !== source?.racingWindow?.observedStart || rows.at(-1)?.checkedAt !== source?.racingWindow?.checkeredObservedAt) {
+      fail(id, 'primary direct-capture active-window timestamps drift from the export manifest');
+    }
+  }
   const first = rows[0].raw.timing.timing_results.heartbeat;
   const last = rows[rows.length - 1].raw.timing.timing_results.heartbeat;
   if (last.currentFlag !== 'CHECKERED') fail(id, `last frame is ${last.currentFlag}, not CHECKERED`);
@@ -69,6 +98,12 @@ for (const s of manifest.sessions) {
   if (!first.EventSessionID) fail(id, 'heartbeat missing EventSessionID');
   if (!rows.every((row) => row.summary?.observationBasis && row.summary?.noGps === true)) {
     fail(id, 'feed rows missing observation/noGps provenance');
+  }
+  if (!rows.every((row) => row.summary?.sourceTier === s.sourceTier)) {
+    fail(id, 'feed row source tier does not match the primary manifest source tier');
+  }
+  if (!rows.every((row) => row.summary?.interpolated === s.replayInterpolated)) {
+    fail(id, 'feed row interpolation label does not match the primary manifest contract');
   }
   if (s.replayInterpolated && !rows.every((row) => row.summary?.interpolationBoundSeconds === MAX_INTERPOLATION_HOLD_SECONDS)) {
     fail(id, 'derived rows missing the interpolation hold bound');

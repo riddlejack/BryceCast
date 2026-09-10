@@ -201,7 +201,7 @@
     "seriesWithQualifying": 6
   },
   "datasetSha256": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd",
-  "generatedAt": "2026-09-10T23:21:13Z",
+  "generatedAt": "2026-09-10T23:40:17Z",
   "method": {
     "currency": "grid positions and place counts; qualifying lap times are context strings, never differenced into a pace claim.",
     "linkage": "A qualifying set a race's grid when Bryce's race grid equals his qualifying rank in the same event; that race is the grid_confirmed conversion. Reverse-grid races carry no matching rank and are recorded as excluded, never estimated. Where a source has no grid column, the qualifying position is recorded but conversion is left unconfirmed.",

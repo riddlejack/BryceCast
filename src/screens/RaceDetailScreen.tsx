@@ -1055,13 +1055,13 @@ const TeamStory = ({ story }: { story: RaceStoryPack }) => {
 
 /* ---------- weekend arc ---------- */
 
-/** "Practice P12 → Qualifying P8 → Grid P8 → Flag P6", stations omitted when unknown. */
+/** Qualifying-session ranks may be within a group; grid is the full-field rank. */
 const weekendArc = (story: RaceStoryPack): string | null => {
   const signal = story.weekendSignal;
   if (!signal) return null;
   const stations = [
     ['Practice', signal.bestPracticeRank],
-    ['Qualifying', signal.bestQualifyingRank],
+    ['Qualifying session', signal.bestQualifyingRank],
     ['Grid', signal.raceStart],
     ['Flag', signal.raceFinish]
   ].filter((station): station is [string, number] => station[1] !== null);
@@ -1106,8 +1106,8 @@ const WatchRaceUnfold = ({ sessionId }: { sessionId: string }) => {
 
   const isOwnCapture = currentCapture ? isBryceCastCaptureTier(replayProvenance(currentCapture).tier) : false;
   const currentCopy = isOwnCapture
-    ? 'Every second of this race, replayed as it happened, from our own trackside capture.'
-    : 'Every second of this race, reconstructed from a third-party timing archive and replayed as it happened.';
+    ? 'Recorded race timing, replayed from our Race Control capture. Sampling intervals and gaps are documented.'
+    : 'Replay reconstructed from archived timing observations. Sampling intervals and gaps are documented.';
 
   return (
     <section className="race-replay" aria-label="Watch this race unfold">
@@ -1433,7 +1433,7 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
 
         const parts = ['official results', 'the official lap chart'];
         if (hasPdfSections) parts.push('official section reports');
-        if (hasOwnCapture) parts.push('our own trackside replay capture');
+        if (hasOwnCapture) parts.push('our Race Control timing capture');
         if (hasRaceTools) parts.push('the RaceTools race-weekend capture');
         if (hasTiming71) parts.push('Timing71 normalized timing');
         if (story?.weather) parts.push('modeled near-track weather (Open-Meteo)');

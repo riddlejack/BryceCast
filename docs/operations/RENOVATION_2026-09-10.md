@@ -15,7 +15,7 @@ The official driver-history endpoint omitted Monterey Race 1. The importer now r
 
 Official section-report evidence supports qualifying analysis for all 43 races where qualifying was completed. Nashville 2024's interrupted/cancelled run remains available without an official qualifying classification. Iowa 2025 qualifying was cancelled before any laps occurred. Doubleheaders retain one physical qualifying run with separate official grid classifications: fastest versus second-fastest lap for road/street doubleheaders, and two-lap averages for ovals.
 
-Every career race has an observed timing recording and a replay. The coverage ledger distinguishes 28 RaceTools race captures, 13 Timing71 normalized race archives and four direct Race Control race captures. Download links return the original published observation artifact as gzipped NDJSON, independently of the derived replay.
+Every career race has an observed timing recording and a replay. The coverage ledger distinguishes 28 RaceTools race captures, 12 Timing71 normalized race archives and five direct Race Control race captures. Download links return the original published observation artifact as gzipped NDJSON, independently of the derived replay. The verified local database backup also yielded native Nashville 2026 race, Portland qualifying and Milwaukee qualifying recordings; those now take precedence over their supplemental Timing71 archives.
 
 ## What “second by second” means
 
@@ -39,6 +39,8 @@ Monterey 2026 qualifying Group 2 has sparse early observations: the old recorder
 - An idle but healthy recorder returns normal pre-session readiness; a missing/overdue recorder remains distinguishable.
 - Public mutation routes require operator authorization. Cloudflare's loopback connection does not confer local operator access.
 - Replay source gaps produce structured HTTP 409 responses with the next observed timestamp. They cannot fall through to stale or unrelated live data.
+- Canonical race replay links resolve to the preferred watchable recording, including native database captures with a different internal session key.
+- Native replay exports have distinct artifact paths, so a reconstructed archive cannot overwrite a captured feed. Validation checks source hashes, timestamp windows and every replay row's source/interpolation labels.
 - Parsed replay rows use a small LRU cache rather than retaining all 45 expanded race feeds indefinitely.
 - A missing optional capture database does not take down the server or disable committed historical replay feeds.
 

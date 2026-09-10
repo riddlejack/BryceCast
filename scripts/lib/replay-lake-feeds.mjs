@@ -123,7 +123,9 @@ export const createLakeReplayFeeds = ({
   };
 
   const loadRows = (session) => {
-    const path = join(feedsDir, `${session.canonicalSessionId}.ndjson.gz`);
+    const path = session.feedArtifact
+      ? resolve(dirname(manifestPath), session.feedArtifact)
+      : join(feedsDir, `${session.canonicalSessionId}.ndjson.gz`);
     const text = gunzipSync(readFileSync(path)).toString('utf8').trim();
     const rows = [];
     for (const line of text.split('\n')) {

@@ -62,7 +62,7 @@ export const replayProvenance = (session: ReplaySessionInfo | null): ReplayProve
       ? 'RaceTools race-weekend capture'
       : tier === 'timing71_normalized'
         ? 'third-party normalized (Timing71)'
-        : 'BryceCast 1-second Race Control capture');
+        : 'BryceCast Race Control capture');
   if (tier === 'racetools_capture') {
     return {
       tier,
@@ -83,7 +83,7 @@ export const replayProvenance = (session: ReplaySessionInfo | null): ReplayProve
     tier,
     label,
     detail: 'BryceCast retained snapshots from INDYCAR Race Control timing during the session. This replays that archive — never live.',
-    caveat: null
+    caveat: 'Sampling cadence varies; the archive can contain source gaps.'
   };
 };
 

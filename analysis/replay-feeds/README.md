@@ -21,7 +21,7 @@ sqlite:
 | `../semantic-layer/output/cross-check/capture-final-states.json` | our own capture's final field, for the two-source diff |
 | `../semantic-layer/output/sessions/*.ndjson.gz` | RaceTools loop-crossing / lap / flag / classification tables |
 | `../semantic-layer/output/sessions-2026/*.ndjson.gz` | Timing71 event-grain tables |
-| `../semantic-layer/output/live-captures/*.ndjson.gz` | observed Race Control rows for the latest four races |
+| `../semantic-layer/output/live-captures/*.ndjson.gz` | observed Race Control rows for five races and three qualifying sessions |
 
 ## How the reduction works
 
@@ -70,7 +70,8 @@ npm run analytics:replay-feeds:validate   # lane gate (exits non-zero on failure
 
 ```
 output/
-  feeds/<canonicalSessionId>.ndjson.gz    # capture-shaped snapshot rows, gzipped NDJSON (level 9)
+  feeds/<canonicalSessionId>.ndjson.gz    # derived RaceTools/Timing71 rows
+  feeds/rc_capture_<canonicalSessionId>.ndjson.gz # native Race Control rows; distinct source artifact
   replay-feeds-manifest.json              # what is in / excluded and why + per-session validation
 ```
 
@@ -97,10 +98,11 @@ Ship a validated subset over an unvalidated sweep. The manifest is the record of
 is in and what is out and why.
 
 - **(a) 2024-25 RaceTools races** — 28/28 clean, all watchable.
-- **(b) 2026 Timing71 races** — 13 watchable (the Road America R2 CONDITIONAL is
+- **(b) 2026 Timing71 primary races** — 12 watchable (the Road America R2 CONDITIONAL is
   served as-raced with the honesty line).
-- **(c) latest 2026 direct captures** — Portland, Milwaukee, and both Monterey
-  races are observed Race Control rows with no interpolation.
+- **(c) 2026 direct-capture primary races** — Nashville, Portland, Milwaukee,
+  and both Monterey races are observed Race Control rows with no interpolation.
+  Their Timing71 recordings remain retained as alternate source artifacts.
 
 ## Validation (per session, in the manifest + gate)
 
@@ -109,4 +111,4 @@ is in and what is out and why.
 - Lap counts within the semantic layer's known ±1.
 - Flag intervals sane (green present, ends checkered, valid states).
 - Bryce present ≥120 frames (identity guard).
-- Two-source diff vs our own capture where it exists (4 races): order agreement ≥99%.
+- Two-source diff vs our own capture where it exists (5 races): order agreement ≥99%.

@@ -78,9 +78,25 @@ const nashville2024 = qualifying.find((session) => session.canonicalOfficialSess
 if (nashville2024?.status !== 'partial') fail('Nashville 2024 qualifying must remain partial/interrupted');
 const iowa2025 = qualifying.find((session) => session.canonicalOfficialSessionId === '6596');
 if (iowa2025?.status !== 'unavailable') fail('Iowa 2025 qualifying must remain unavailable/no capture');
-for (const id of ['6764', '6757', '6759', '6758']) {
+for (const id of ['6755', '6764', '6757', '6759', '6758']) {
   const race = races.find((session) => session.canonicalOfficialSessionId === id);
   if (race?.primarySource?.tier !== 'race_control_capture') fail(`${id}: late race should prefer direct Race Control capture`);
+}
+const portlandQualifying = qualifying.find((row) => row.canonicalOfficialSessionId === '6900');
+if (portlandQualifying?.primarySource?.tier !== 'race_control_capture' ||
+    !portlandQualifying.sources.some((source) => source.replayId === '6204d63b-2d7b-4a42-bb30-404b4bb97224')) {
+  fail('6900: native qualifying capture should be primary with Timing71 retained as supplemental');
+}
+if ((portlandQualifying?.primarySource?.activeWindowCoverage?.cadence?.maxSeconds ?? Infinity) > 2) {
+  fail('6900: native primary does not preserve the verified near-1 Hz active qualifying window');
+}
+const milwaukeeQualifying = qualifying.find((row) => row.canonicalOfficialSessionId === '6935');
+if (milwaukeeQualifying?.primarySource?.tier !== 'timing71_normalized' ||
+    !milwaukeeQualifying.sources.some((source) => source.sourceSessionId === '5540-6935')) {
+  fail('6935: complete Timing71 active coverage should be primary with native capture retained as supplemental');
+}
+if ((milwaukeeQualifying?.primarySource?.activeWindowCoverage?.cadence?.maxSeconds ?? Infinity) > 2) {
+  fail('6935: selected primary does not preserve the unbroken Timing71 active-session cadence');
 }
 for (const id of ['6950', '6953']) {
   const session = qualifying.find((row) => row.canonicalOfficialSessionId === id);
