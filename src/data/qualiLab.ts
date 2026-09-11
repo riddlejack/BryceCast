@@ -345,21 +345,27 @@ export const resolveQualiForRace = (pack: QualiLabPack, raceSessionId: string): 
  *  renders this, and an integrity failure leaves the module honestly empty
  *  (fail closed, never render unverified numbers). */
 export const useQualiLabForRace = (raceSessionId: string): QualiLabResolution | null | 'failed' => {
-  const [state, setState] = useState<QualiLabResolution | null | 'failed'>(null);
+  const [state, setState] = useState<{
+    raceSessionId: string;
+    value: QualiLabResolution | null | 'failed';
+  }>({ raceSessionId, value: null });
   useEffect(() => {
     let alive = true;
+    setState({ raceSessionId, value: null });
     loadQualiLab()
       .then((pack) => {
-        if (alive) setState(pack ? resolveQualiForRace(pack, raceSessionId) : null);
+        if (alive) setState({ raceSessionId, value: pack ? resolveQualiForRace(pack, raceSessionId) : null });
       })
       .catch(() => {
-        if (alive) setState('failed');
+        if (alive) setState({ raceSessionId, value: 'failed' });
       });
     return () => {
       alive = false;
     };
   }, [raceSessionId]);
-  return state;
+  /* A route switch renders once before the effect above runs. Pair the value
+   * with its key so that frame cannot show the prior visit's qualifying data. */
+  return state.raceSessionId === raceSessionId ? state.value : null;
 };
 
 /* ---------- copy helpers (family-legible; denominators always labelled) ---------- */

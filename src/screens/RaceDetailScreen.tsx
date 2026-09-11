@@ -32,6 +32,7 @@ import {
 } from '../data/replayAvailable';
 import { ReplayAffordance, priorYearTitle, useReplayCatalog } from './replayAffordance';
 import { QualifyingRunByRunCard } from './qualifyingRunByRun';
+import { resolveQualifyingHeatMode } from './qualifyingHeat';
 import { useQualiLabForRace } from '../data/qualiLab';
 import { TimingCoverageCard } from './timingCoverageCard';
 
@@ -1234,6 +1235,7 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
   const measuredAnchors =
     sectionLaps?.sourceTier === 'lake_loop_crossings' ? measuredTrackSectionsFor(asString(pack.track.name)) : null;
   const sectionAnchors = measuredAnchors ?? pdfAnchors;
+  const qualifyingHeat = resolveQualifyingHeatMode(qualiResolution, asString(pack.track.name), sectionAnchors);
   const fallbackSet = story ? sectionObservationsFromRaceStory(story) : null;
   const heroSet = sectionLaps ? sectionObservationsFromLaps(sectionLaps) : fallbackSet;
   const heroHeat = sectionAnchors && heroSet ? resolveHeatSections(sectionAnchors, heroSet) : [];
@@ -1366,11 +1368,14 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
           adjacent — come before The Day and Restarts settle the context. */}
       {outline && sectionAnchors ? (
         <SectionHeatCard
+          key={sessionId}
           outline={outline}
           anchors={sectionAnchors}
           laps={sectionLaps}
           fallbackSet={fallbackSet}
           passMarks={passMarks}
+          title="Race and qualifying, section by section"
+          qualifying={qualifyingHeat}
           priorComparison={validPriorComparison(visitPacks, sessionId, sectionAnchors)}
         />
       ) : (

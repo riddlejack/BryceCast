@@ -16,6 +16,8 @@ export interface TimingGaps {
 export interface TimingSourceCoverage {
   tier: string;
   label: string;
+  sourceSessionId?: string;
+  supplementalPurpose?: string;
   clockBasis?: 'session_local_feed_clock' | 'utc_archive_timestamp' | 'utc_capture_timestamp' | string;
   clockCaveat?: string | null;
   observedArtifact?: string | null;

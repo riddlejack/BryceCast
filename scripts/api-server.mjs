@@ -2329,10 +2329,14 @@ const sendStatic = async (res, pathname, acceptsHtml = false) => {
 
 /** Resolve only a known session's published observed artifact. Request input
  * never becomes an arbitrary filesystem path. */
-export const resolveTimingObservationArtifact = (sessionId, ledger) => {
+export const resolveTimingObservationArtifact = (sessionId, ledger, sourceId = null) => {
   if (!/^session_indy_nxt_\d{4}_\d+$/.test(sessionId)) return null;
+  if (sourceId !== null && !/^[A-Za-z0-9_-]{1,160}$/.test(sourceId)) return null;
   const row = ledger?.sessions?.find((session) => session.canonicalSessionId === sessionId);
-  const artifact = row?.primarySource?.observedArtifact;
+  const source = sourceId === null
+    ? row?.primarySource
+    : row?.sources?.find((candidate) => candidate.sourceSessionId === sourceId);
+  const artifact = source?.observedArtifact;
   if (!artifact || !['observed', 'partial'].includes(row.status)) return null;
   const allowed = join(root, 'analysis/semantic-layer/output');
   const absolute = resolve(root, artifact);
@@ -2414,7 +2418,8 @@ const handler = async (req, res) => {
     if (req.method === 'GET' && archiveMatch) {
       const sessionId = decodeURIComponent(archiveMatch[1]);
       const ledger = await readJsonFile(join(root, 'data/historical-data-lake/catalog/timing-coverage-ledger.json'));
-      const artifact = resolveTimingObservationArtifact(sessionId, ledger);
+      const sourceId = url.searchParams.get('source');
+      const artifact = resolveTimingObservationArtifact(sessionId, ledger, sourceId);
       if (!artifact) {
         sendError(res, 404, 'No observed timing archive is published for this session.');
         return;
@@ -2426,7 +2431,7 @@ const handler = async (req, res) => {
       }
       res.writeHead(200, {
         'content-type': 'application/gzip',
-        'content-disposition': `attachment; filename="${sessionId}-observations.ndjson.gz"`,
+        'content-disposition': `attachment; filename="${sessionId}${sourceId ? `-${sourceId}` : ''}-observations.ndjson.gz"`,
         'content-length': info.size,
         'cache-control': 'public, max-age=300',
         'x-content-type-options': 'nosniff'

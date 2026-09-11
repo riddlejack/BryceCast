@@ -14,6 +14,55 @@
       "purpose": "Independent observed frames cover the RaceTools heartbeat gap during the red-flag period. This Timing71 recording is incomplete after 21 laps and has no checkered frame, so RaceTools remains primary."
     }
   },
+  "supplementalQualifyingSources": {
+    "6613": {
+      "kind": "timing71",
+      "replayId": "4a0bb7c0-70cb-472b-a2d1-b730aee53729",
+      "expectedCanonicalSessionId": "session_indy_nxt_2025_6613",
+      "expectedDate": "2025-05-03",
+      "expectedSourceSessionLabel": "INDY NXT by Firestone GP of Alabama - Qualifications - Group 2",
+      "expectedPrimarySourceSessionId": "rt_2025_barber-motorsports-park_qa_2025-05-03_d",
+      "expectedOfficialEntryCount": 10,
+      "expectedBryce": {
+        "carNumber": "9",
+        "driver": "Bryce Aron",
+        "team": "Chip Ganassi Racing",
+        "maxLap": 9
+      },
+      "segmentMode": "bryce_roster_segment",
+      "sourceLabelCaveat": "Timing71's final replay manifest says Group 2 after the recording switched groups. Only the earlier Bryce-present segment is retained, and it must exactly match the ten-car official Group 1 roster for session 6613; the label alone is not identity evidence.",
+      "clockAlignment": {
+        "raceToolsClockBasis": "session_local_feed_clock",
+        "timing71ClockBasis": "utc_archive_timestamp",
+        "raceToolsToTiming71OffsetSeconds": 18000,
+        "expectedPrimaryGapSeconds": 15
+      },
+      "purpose": "Independent Timing71 observations of Bryce's exactly roster-matched ten-car Group 1 segment span the RaceTools 15-second heartbeat hole during Bryce's lap 4. The RaceTools source clock is venue-local with a replay-container Z suffix; adding five hours maps 12:36:20-12:36:35 to 17:36:20-17:36:35 UTC. Timing71 records states throughout that interval at a maximum two-second cadence, and the official section report retains all 11 lap-4 section observations. RaceTools remains primary."
+    },
+    "6588": {
+      "kind": "timing71",
+      "replayId": "47868de5-fca9-44e5-aa06-bec33d1a67fa",
+      "expectedCanonicalSessionId": "session_indy_nxt_2025_6588",
+      "expectedDate": "2025-08-23",
+      "expectedSourceSessionLabel": "INDY NXT by Firestone at The Milwaukee Mile - Qualifications",
+      "expectedPrimarySourceSessionId": "rt_2025_milwaukee-mile_qc_2025-08-23_d",
+      "expectedOfficialEntryCount": 18,
+      "expectedBryce": {
+        "carNumber": "9",
+        "driver": "Bryce Aron",
+        "team": "Chip Ganassi Racing",
+        "maxLap": 2
+      },
+      "segmentMode": "full_physical_session",
+      "clockAlignment": {
+        "raceToolsClockBasis": "session_local_feed_clock",
+        "timing71ClockBasis": "utc_archive_timestamp",
+        "raceToolsToTiming71OffsetSeconds": 18000,
+        "expectedPrimaryGapSeconds": 635
+      },
+      "purpose": "Independent Timing71 observations begin 244 seconds after the RaceTools source-local gap starts and cover the final 391 seconds through the RaceTools return at a maximum two-second cadence. The five-hour clock offset maps the RaceTools 14:28:27-14:39:02 interval to 19:28:27-19:39:02 UTC. The residual 244-second prefix ends before the reported 14:35:02 green and well before Bryce's 14:52:51-14:53:39 timed run, so it is not missing Bryce timed-qualifying evidence. RaceTools remains primary and no feeds are spliced."
+    }
+  },
   "qualifyingSources": {
     "6769": {
       "kind": "timing71",

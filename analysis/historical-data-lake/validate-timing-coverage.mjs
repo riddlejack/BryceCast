@@ -118,6 +118,72 @@ const midOhioSupplement = midOhio?.sources?.find((source) => source.replayId ===
 if (!midOhioSupplement || midOhioSupplement.cadence?.maxSeconds > 4) fail('Mid-Ohio 2025: independent Timing71 supplemental coverage missing');
 if ((midOhio?.replayInterpolationCoverage?.withheldSeconds ?? 0) < 400) fail('Mid-Ohio 2025: replay does not withhold the long source gap');
 const fakeMilwaukee = '0895cf60-5926-438b-bf15-c73a99af4043';
+for (const session of ledger.sessions) {
+  for (const source of session.sources ?? []) {
+    const window = source.activeWindowCoverage;
+    if (!window) continue;
+    if (window.greenFlagAt && window.checkeredFlagAt && Date.parse(window.checkeredFlagAt) < Date.parse(window.greenFlagAt)) {
+      fail(`${session.canonicalSessionId}: checkered clock precedes the green flag`);
+    }
+    if (window.greenFlagAt && Date.parse(window.greenFlagAt) < Date.parse(source.observedEnd) && window.observationCount === 0) {
+      fail(`${session.canonicalSessionId}: session clock overlaps the capture but active observations are empty`);
+    }
+  }
+}
+const barber2025Qualifying = qualifying.find((row) => row.canonicalOfficialSessionId === '6613');
+if ((barber2025Qualifying?.primarySource?.activeWindowCoverage?.gaps?.maxSeconds ?? 0) !== 15) {
+  fail('6613: the qualifying 15-second heartbeat gap must remain visible despite a malformed checkered clock');
+}
+const barber2025Supplement = barber2025Qualifying?.sources?.find(
+  (source) => source.replayId === '4a0bb7c0-70cb-472b-a2d1-b730aee53729',
+);
+if (barber2025Qualifying?.primarySource?.tier !== 'racetools_capture' ||
+    barber2025Supplement?.sourceSegment !== 'bryce_roster_segment' ||
+    barber2025Supplement?.identityProof?.bryce?.carNumber !== '9' ||
+    barber2025Supplement?.identityProof?.uniqueDriverCount !== 10 ||
+    barber2025Supplement?.identityProof?.canonicalSessionId !== 'session_indy_nxt_2025_6613' ||
+    barber2025Supplement?.identityProof?.officialSessionId !== '6613' ||
+    barber2025Supplement?.identityProof?.exactRosterMatch !== true ||
+    JSON.stringify(barber2025Supplement?.identityProof?.officialCarNumbers) !== JSON.stringify(barber2025Supplement?.identityProof?.observedCarNumbers) ||
+    !/Group 2.*Group 1.*label alone is not identity evidence/i.test(barber2025Supplement?.sourceLabelCaveat ?? '') ||
+    !/lap 4.*11 lap-4 section observations/i.test(barber2025Supplement?.supplementalPurpose ?? '') ||
+    barber2025Supplement?.supplementalCoverage?.clockMapping?.mappedPrimaryGapStart !== '2025-05-03T17:36:20.000Z' ||
+    barber2025Supplement?.supplementalCoverage?.clockMapping?.mappedPrimaryGapEnd !== '2025-05-03T17:36:35.000Z' ||
+    barber2025Supplement?.supplementalCoverage?.supplementalObservedWithinMappedGap?.cadence?.maxSeconds > 2 ||
+    barber2025Supplement?.supplementalCoverage?.combinedBoundaryMaximumGapSeconds > 2) {
+  fail('6613: roster-verified Timing71 supplement does not bound the mapped RaceTools gap at two seconds');
+}
+if (barber2025Supplement?.observedArtifact && !(await exists(barber2025Supplement.observedArtifact))) {
+  fail('6613: Timing71 supplemental observation artifact missing');
+}
+const milwaukee2025Qualifying = qualifying.find((row) => row.canonicalOfficialSessionId === '6588');
+if ((milwaukee2025Qualifying?.primarySource?.activeWindowCoverage?.startObservationDelaySeconds ?? 0) < 239) {
+  fail('6588: the delay between the reported session start and first retained heartbeat must remain explicit');
+}
+const milwaukee2025Supplement = milwaukee2025Qualifying?.sources?.find(
+  (source) => source.replayId === '47868de5-fca9-44e5-aa06-bec33d1a67fa',
+);
+if (milwaukee2025Qualifying?.primarySource?.tier !== 'racetools_capture' ||
+    milwaukee2025Supplement?.sourceSegment !== 'full_physical_session' ||
+    !milwaukee2025Supplement?.observedArtifact?.endsWith('_full_physical_session.ndjson.gz') ||
+    milwaukee2025Supplement?.identityProof?.bryce?.carNumber !== '9' ||
+    milwaukee2025Supplement?.identityProof?.uniqueDriverCount !== 18 ||
+    milwaukee2025Supplement?.identityProof?.canonicalSessionId !== 'session_indy_nxt_2025_6588' ||
+    milwaukee2025Supplement?.identityProof?.officialSessionId !== '6588' ||
+    milwaukee2025Supplement?.identityProof?.exactRosterMatch !== true ||
+    JSON.stringify(milwaukee2025Supplement?.identityProof?.officialCarNumbers) !== JSON.stringify(milwaukee2025Supplement?.identityProof?.observedCarNumbers) ||
+    !/before the reported 14:35:02 green.*before Bryce's 14:52:51-14:53:39 timed run/i.test(milwaukee2025Supplement?.supplementalPurpose ?? '') ||
+    milwaukee2025Supplement?.supplementalCoverage?.clockMapping?.mappedPrimaryGapStart !== '2025-08-23T19:28:27.000Z' ||
+    milwaukee2025Supplement?.supplementalCoverage?.clockMapping?.mappedPrimaryGapEnd !== '2025-08-23T19:39:02.000Z' ||
+    milwaukee2025Supplement?.supplementalCoverage?.remainingUnobservedPrefixSeconds !== 244 ||
+    milwaukee2025Supplement?.supplementalCoverage?.remainingUnobservedSuffixSeconds !== 0 ||
+    milwaukee2025Supplement?.supplementalCoverage?.supplementalObservedWithinMappedGap?.cadence?.maxSeconds > 2 ||
+    milwaukee2025Supplement?.supplementalCoverage?.combinedBoundaryMaximumGapSeconds !== 244) {
+  fail('6588: roster-verified Timing71 supplement does not preserve the bounded 244-second uncovered prefix');
+}
+if (milwaukee2025Supplement?.observedArtifact && !(await exists(milwaukee2025Supplement.observedArtifact))) {
+  fail('6588: Timing71 supplemental observation artifact missing');
+}
 if (ledger.sessions.some((session) => session.sources.some((source) => source.replayId === fakeMilwaukee))) {
   fail('false Milwaukee/Scott Dixon replay was promoted');
 }

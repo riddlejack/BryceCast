@@ -27,6 +27,7 @@ try {
   assert.ok(ready, `API did not start: ${output}`);
   const ledger = JSON.parse(await readFile('data/historical-data-lake/catalog/timing-coverage-ledger.json', 'utf8'));
   let checked = 0;
+  let supplementsChecked = 0;
   for (const row of ledger.sessions) {
     const response = await fetch(`${base}/api/timing-archive/${row.canonicalSessionId}/observations`);
     if (!row.primarySource?.observedArtifact) {
@@ -40,9 +41,21 @@ try {
     const expected = await readFile(row.primarySource.observedArtifact);
     assert.equal(sha(received), sha(expected), `${row.canonicalSessionId}: native source bytes must remain unchanged`);
     checked++;
+    for (const alternate of (row.sources ?? []).slice(1)) {
+      if (!alternate.observedArtifact || !alternate.sourceSessionId) continue;
+      const suffix = new URLSearchParams({ source: alternate.sourceSessionId });
+      const alternateResponse = await fetch(`${base}/api/timing-archive/${row.canonicalSessionId}/observations?${suffix}`);
+      assert.equal(alternateResponse.status, 200, `${row.canonicalSessionId}: alternate ${alternate.sourceSessionId}`);
+      assert.equal(sha(Buffer.from(await alternateResponse.arrayBuffer())), sha(await readFile(alternate.observedArtifact)), 'Supplemental source bytes must remain unchanged');
+      supplementsChecked++;
+    }
   }
   for (const id of ['session_indy_nxt_2026_99999', '..%2F..%2Fdata%2Flive%2Fbrycecast.sqlite']) {
     assert.equal((await fetch(`${base}/api/timing-archive/${id}/observations`)).status, 404);
+  }
+  for (const source of ['unknown-source', '../../data/live/brycecast.sqlite', '', '5542-6950']) {
+    const query = new URLSearchParams({ source });
+    assert.equal((await fetch(`${base}/api/timing-archive/session_indy_nxt_2024_6314/observations?${query}`)).status, 404, 'Invalid or cross-session sources must not fall back to the primary');
   }
   const manifest = JSON.parse(await readFile('analysis/replay-feeds/output/replay-feeds-manifest.json', 'utf8'));
   const available = await (await fetch(`${base}/api/replay/available`)).json();
@@ -67,7 +80,7 @@ try {
   }
   gapParams.set('rt', '2025-07-06T10:49:28.000Z');
   assert.equal((await fetch(`${base}/api/timing?${gapParams}`)).status, 200);
-  console.log(`PASS: ${checked} native downloads match source bytes; ${replayed} race replays serve timing; all replay routes withhold missing source time and resume correctly`);
+  console.log(`PASS: ${checked} primary and ${supplementsChecked} supplemental downloads match source bytes; ${replayed} race replays serve timing; all replay routes withhold missing source time and resume correctly`);
 } finally {
   child.kill('SIGTERM');
   await new Promise((resolve) => child.once('exit', resolve));

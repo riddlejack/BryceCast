@@ -176,14 +176,14 @@ function timing71Columns(frame) {
 
 const cell = (value) => (Array.isArray(value) ? value[0] : value);
 
-function normalizeTiming71Rows(zipBytes, sourceId) {
+function normalizeTiming71Rows(zipBytes, sourceId, {retainFramesWithoutBryce = false} = {}) {
   const rows = [];
   let maxLapSum = 0;
   for (const frame of reconstructTiming71Frames(zipBytes)) {
     const idx = timing71Columns(frame);
     const cars = frame.state.cars ?? [];
     const hasBryce = cars.some((car) => /\bbryce\s+aron\b/i.test(String(car[idx.driver] ?? '')));
-    if (!hasBryce) continue;
+    if (!retainFramesWithoutBryce && !hasBryce) continue;
     const lapSum = cars.reduce((sum, car) => sum + (Number(cell(car[idx.laps])) || 0), 0);
     if (maxLapSum >= 10 && lapSum < 0.3 * maxLapSum) break;
     maxLapSum = Math.max(maxLapSum, lapSum);
@@ -309,12 +309,21 @@ async function raceToolsSource(sourceId) {
   const epochs = raceToolsHeartbeatEpochs(await readSessionLogText(raw));
   const stats = coverageStats(epochs.map((epoch) => epoch * 1000));
   const greenAt = isoFromTimeOfDay(summary.date, summary.greenTod);
-  const checkeredAt = isoFromTimeOfDay(summary.date, summary.checkeredTod);
+  const reportedCheckeredAt = isoFromTimeOfDay(summary.date, summary.checkeredTod);
   const activeStartMillis = Date.parse(greenAt);
+  // Some qualifying reports encode a session duration in the checkered field.
+  // Treat it as a clock boundary only when it falls inside the recorded session.
+  const reportedEndMillis = Date.parse(reportedCheckeredAt);
+  const checkeredAt = Number.isFinite(reportedEndMillis) &&
+    reportedEndMillis >= Date.parse(stats.observedStart) &&
+    (!Number.isFinite(activeStartMillis) || reportedEndMillis >= activeStartMillis) &&
+    reportedEndMillis <= Date.parse(stats.observedEnd) + 60_000
+    ? reportedCheckeredAt : null;
   const activeEndMillis = Number.isFinite(Date.parse(checkeredAt)) ? Date.parse(checkeredAt) : Date.parse(stats.observedEnd);
   const activeEpochMillis = epochs
     .map((epoch) => epoch * 1000)
     .filter((epoch) => (!Number.isFinite(activeStartMillis) || epoch >= activeStartMillis) && (!Number.isFinite(activeEndMillis) || epoch <= activeEndMillis));
+  const activeStats = coverageStats(activeEpochMillis);
   const activeWindowCoverage = Number.isFinite(activeStartMillis)
     ? {
         startBoundary: 'first_reported_green_flag',
@@ -322,7 +331,11 @@ async function raceToolsSource(sourceId) {
         greenFlagAt: greenAt,
         checkeredFlagAt: checkeredAt,
         checkeredDetected: summary.hasCheckered === true,
-        ...coverageStats(activeEpochMillis),
+        rejectedCheckeredClock: reportedCheckeredAt && !checkeredAt ? reportedCheckeredAt : null,
+        startObservationDelaySeconds: activeStats.observedStart
+          ? Number(Math.max(0, (Date.parse(activeStats.observedStart) - activeStartMillis) / 1000).toFixed(3))
+          : null,
+        ...activeStats,
       }
     : null;
   const artifact = `analysis/semantic-layer/output/timing-observations/${sourceId}.ndjson.gz`;
@@ -378,18 +391,23 @@ async function raceToolsSource(sourceId) {
   return descriptor;
 }
 
-async function timing71Source(replayId) {
-  if (builtT71.has(replayId)) return builtT71.get(replayId);
+async function timing71Source(replayId, {segmentMode = 'bryce_roster_segment'} = {}) {
+  const cacheKey = `${replayId}:${segmentMode}`;
+  if (builtT71.has(cacheKey)) return builtT71.get(cacheKey);
   const quality = t71ByReplay.get(replayId);
   const file = manifestByReplay.get(replayId);
   if (!quality || !file) return null;
   const zipBytes = await readFile(join(lakeRoot, file.viewPath));
-  const rows = normalizeTiming71Rows(zipBytes, replayId);
+  const rows = normalizeTiming71Rows(zipBytes, replayId, {
+    retainFramesWithoutBryce: segmentMode === 'full_physical_session',
+  });
   const stats = coverageStats(rows.map((row) => Date.parse(row.observedAt)));
   const activeWindowCoverage = timing71ActiveWindow(rows);
   const lapCoverage = lapObservationCoverage(rows, 'utc_archive_frame_timestamp');
-  const artifact = `analysis/semantic-layer/output/timing-observations/t71_${replayId}.ndjson.gz`;
-  await writeGzipNdjson(join(OBS_DIR, `t71_${replayId}.ndjson.gz`), [
+  const segmentSuffix = segmentMode === 'full_physical_session' ? '_full_physical_session' : '';
+  const artifactName = `t71_${replayId}${segmentSuffix}.ndjson.gz`;
+  const artifact = `analysis/semantic-layer/output/timing-observations/${artifactName}`;
+  await writeGzipNdjson(join(OBS_DIR, artifactName), [
     {
       record: 'session_meta',
       sourceSessionId: replayId,
@@ -410,6 +428,7 @@ async function timing71Source(replayId) {
     label: 'Timing71 normalized replay of live timing',
     replayId,
     sourceSessionId: quality.sessionId,
+    sourceSegment: segmentMode,
     clockBasis: 'utc_archive_timestamp',
     observedArtifact: artifact,
     rawReplayView: file.viewPath,
@@ -428,8 +447,92 @@ async function timing71Source(replayId) {
     noGps: true,
     observationAssertion: 'observations_present_not_unbroken_1hz',
   };
-  builtT71.set(replayId, descriptor);
+  Object.defineProperty(descriptor, '_observedEpochMillis', {
+    value: rows.map((row) => Date.parse(row.observedAt)).filter(Number.isFinite),
+    enumerable: false,
+  });
+  Object.defineProperty(descriptor, '_observedRosterCars', {
+    value: [...new Set(rows.flatMap((row) => row.field.map((car) => car.car)).filter(Boolean))]
+      .sort((a, b) => a.localeCompare(b, undefined, {numeric: true})),
+    enumerable: false,
+  });
+  builtT71.set(cacheKey, descriptor);
   return descriptor;
+}
+
+function shiftedIso(value, offsetSeconds) {
+  const epoch = Date.parse(value);
+  return Number.isFinite(epoch) ? new Date(epoch + offsetSeconds * 1000).toISOString() : null;
+}
+
+function qualifyingSupplementCoverage(primary, supplemental, config) {
+  if (primary.sourceSessionId !== config.expectedPrimarySourceSessionId) {
+    throw new Error(`${config.expectedCanonicalSessionId}: expected primary ${config.expectedPrimarySourceSessionId}, found ${primary.sourceSessionId}`);
+  }
+  const gap = primary.gaps?.intervalsOver2Seconds?.find(
+    (row) => row.seconds === config.clockAlignment.expectedPrimaryGapSeconds,
+  );
+  if (!gap) throw new Error(`${config.expectedCanonicalSessionId}: configured primary source gap is missing`);
+  const offsetSeconds = config.clockAlignment.raceToolsToTiming71OffsetSeconds;
+  const mappedStart = shiftedIso(gap.lastObservedAt, offsetSeconds);
+  const mappedEnd = shiftedIso(gap.nextObservedAt, offsetSeconds);
+  const startMillis = Date.parse(mappedStart);
+  const endMillis = Date.parse(mappedEnd);
+  const observed = (supplemental._observedEpochMillis ?? [])
+    .filter((epoch) => epoch >= startMillis && epoch <= endMillis)
+    .sort((a, b) => a - b);
+  if (observed.length === 0) throw new Error(`${config.expectedCanonicalSessionId}: supplemental source has no observation inside the mapped primary gap`);
+  const combined = [startMillis, ...observed, endMillis];
+  const coverage = coverageStats(observed);
+  const combinedCoverage = coverageStats(combined);
+  return {
+    relationship: 'independent_source_overlap_not_spliced',
+    primaryGap: gap,
+    clockMapping: {
+      ...config.clockAlignment,
+      mappedPrimaryGapStart: mappedStart,
+      mappedPrimaryGapEnd: mappedEnd,
+      caveat: 'RaceTools timestamps encode a venue-local source clock despite the Z suffix; Timing71 timestamps are UTC archive time.',
+    },
+    supplementalObservedWithinMappedGap: coverage,
+    combinedBoundaryMaximumGapSeconds: combinedCoverage.cadence.maxSeconds,
+    remainingUnobservedPrefixSeconds: Number(Math.max(0, (observed[0] - startMillis) / 1000).toFixed(3)),
+    remainingUnobservedSuffixSeconds: Number(Math.max(0, (endMillis - observed.at(-1)) / 1000).toFixed(3)),
+  };
+}
+
+function assertQualifyingSupplementIdentity(qualifying, config, supplemental) {
+  const quality = t71ByReplay.get(config.replayId);
+  const bryce = quality?.analysis?.content?.bryce;
+  const segment = quality?.analysis?.content?.bryceSegment;
+  const officialRows = career.qualifyingResults.filter((row) => row.sessionId === qualifying.id);
+  const officialBryce = officialRows.find((row) => row.driverId === 'driver_bryce_aron');
+  const officialRosterCars = [...new Set(officialRows.map((row) => String(row.carNumber)).filter(Boolean))]
+    .sort((a, b) => a.localeCompare(b, undefined, {numeric: true}));
+  const observedRosterCars = supplemental._observedRosterCars ?? [];
+  if (qualifying.id !== config.expectedCanonicalSessionId ||
+      datePart(qualifying.actualStart ?? qualifying.scheduledStart) !== config.expectedDate ||
+      quality?.year !== Number(config.expectedDate.slice(0, 4)) ||
+      quality?.series !== 'INDY_NXT' || quality?.sessionType !== 'qualifying' ||
+      quality?.sessionLabel !== config.expectedSourceSessionLabel ||
+      quality?.analysis?.quality?.status !== 'usable' ||
+      officialRows.length !== config.expectedOfficialEntryCount ||
+      officialBryce?.carNumber !== config.expectedBryce.carNumber ||
+      bryce?.carNumber !== config.expectedBryce.carNumber ||
+      bryce?.driver !== config.expectedBryce.driver || bryce?.team !== config.expectedBryce.team ||
+      segment?.uniqueDriverCount !== config.expectedOfficialEntryCount ||
+      segment?.maxLap !== config.expectedBryce.maxLap ||
+      JSON.stringify(observedRosterCars) !== JSON.stringify(officialRosterCars)) {
+    throw new Error(`${qualifying.id}: configured Timing71 qualifying supplement failed canonical session/roster identity gates`);
+  }
+  return {
+    canonicalSessionId: qualifying.id,
+    officialSessionId: String(qualifying.officialSessionId),
+    officialEntryCount: officialRosterCars.length,
+    officialCarNumbers: officialRosterCars,
+    observedCarNumbers: observedRosterCars,
+    exactRosterMatch: true,
+  };
 }
 
 function liveSource(session) {
@@ -558,6 +661,25 @@ for (const race of races) {
       const source = liveSource(liveByCanonical.get(qualifying.id));
       if (source) qSources.push(source);
     }
+  }
+  const qualifyingSupplementConfig = qualifying
+    ? sourceMap.supplementalQualifyingSources?.[String(qualifying.officialSessionId)]
+    : null;
+  if (qualifyingSupplementConfig?.kind === 'timing71') {
+    const supplemental = await timing71Source(qualifyingSupplementConfig.replayId, {
+      segmentMode: qualifyingSupplementConfig.segmentMode,
+    });
+    if (!supplemental) throw new Error(`${qualifying.id}: configured Timing71 qualifying supplement is missing`);
+    const officialIdentityProof = assertQualifyingSupplementIdentity(qualifying, qualifyingSupplementConfig, supplemental);
+    if (!qSources[0]) throw new Error(`${qualifying.id}: qualifying supplement has no primary source to complement`);
+    const supplementalCoverage = qualifyingSupplementCoverage(qSources[0], supplemental, qualifyingSupplementConfig);
+    qSources.push({
+      ...supplemental,
+      identityProof: {...supplemental.identityProof, ...officialIdentityProof},
+      sourceLabelCaveat: qualifyingSupplementConfig.sourceLabelCaveat ?? null,
+      supplementalPurpose: qualifyingSupplementConfig.purpose,
+      supplementalCoverage,
+    });
   }
   let qStatus = qSources.length ? 'observed' : 'unavailable';
   const qCaveats = [];

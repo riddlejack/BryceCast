@@ -67,7 +67,9 @@ const activeCoverageLine = (session: TimingCoverageSession): string | null => {
     p50 !== null && p95 !== null ? `cadence p50 ${seconds(p50)} · p95 ${seconds(p95)}` : null,
     max !== null ? `longest source gap ${seconds(max)}` : null
   ].filter((value): value is string => value !== null);
-  return bits.length > 0 ? `Active race window: ${bits.join(' · ')}.` : null;
+  const startDelay = numberFrom(coverage, ['startObservationDelaySeconds']);
+  if (startDelay !== null && startDelay > 2) bits.push(`first retained heartbeat ${seconds(startDelay)} after the reported green flag`);
+  return bits.length > 0 ? `Recorded ${session.sessionType === 'race' ? 'race' : 'qualifying'} window: ${bits.join(' · ')}.` : null;
 };
 
 const lapCoverageLine = (session: TimingCoverageSession): string | null => {
@@ -82,8 +84,8 @@ const lapCoverageLine = (session: TimingCoverageSession): string | null => {
   return `${changes !== null ? `${changes} observed lap-counter changes${range}` : 'Observed session clock'}${samples !== null ? ` · ${compactNumber(samples)} retained source samples` : ''}.`;
 };
 
-const sourceEndpoint = (session: TimingCoverageSession): string =>
-  `/api/timing-archive/${encodeURIComponent(session.canonicalSessionId)}/observations`;
+const sourceEndpoint = (session: TimingCoverageSession, sourceId?: string): string =>
+  `/api/timing-archive/${encodeURIComponent(session.canonicalSessionId)}/observations${sourceId ? `?source=${encodeURIComponent(sourceId)}` : ''}`;
 
 const sourceEntries = (session: TimingCoverageSession) => {
   const sources = session.sources?.length ? session.sources : session.primarySource ? [session.primarySource] : [];
@@ -95,11 +97,13 @@ const sourceEntries = (session: TimingCoverageSession) => {
   }
   return sources.map((source, index) => ({
     label: `${session.sessionType === 'race' ? 'Race' : 'Qualifying'} ${index === 0 ? 'primary' : 'supplemental'} · ${source.label}`,
-    path: index === 0 && source.observedArtifact ? sourceEndpoint(session) : undefined,
+    path: source.observedArtifact && (index === 0 || source.sourceSessionId)
+      ? sourceEndpoint(session, index === 0 ? undefined : source.sourceSessionId)
+      : undefined,
     note:
       index === 0
         ? 'Direct source observations. The downloadable gzip is served through the audited timing-archive endpoint.'
-        : 'Independent retained source used for coverage context; the archive download serves the primary source.'
+        : source.supplementalPurpose ?? 'Independent retained recording, downloadable separately with its original source timestamps.'
   }));
 };
 
@@ -112,7 +116,8 @@ const TimingSession = ({ session, race }: { session: TimingCoverageSession; race
   const gaps = source?.gaps;
   const start = clock(source?.observedStart, source?.clockBasis);
   const end = clock(source?.observedEnd, source?.clockBasis);
-  const activeCoverage = race ? activeCoverageLine(session) : lapCoverageLine(session);
+  const activeCoverage = activeCoverageLine(session);
+  const lapCoverage = race ? null : lapCoverageLine(session);
   const replayCoverage = session.replayInterpolationCoverage;
   const maxHold = numberFrom(replayCoverage, ['maximumHoldSeconds', 'maxHoldSeconds']);
   const withheld = numberFrom(replayCoverage, ['withheldSeconds']);
@@ -138,6 +143,7 @@ const TimingSession = ({ session, race }: { session: TimingCoverageSession; race
       ) : null}
 
       {activeCoverage ? <p className="timing-archive__note">{activeCoverage}</p> : null}
+      {lapCoverage ? <p className="timing-archive__note">{lapCoverage}</p> : null}
       {race && terminalLatency !== null ? (
         <p className="timing-archive__note">The terminal flag was retained {seconds(terminalLatency)} after the active timing window ended.</p>
       ) : null}
@@ -166,7 +172,20 @@ const TimingSession = ({ session, race }: { session: TimingCoverageSession; race
             <Download size={13} aria-hidden /> Download {race ? 'race' : 'qualifying'} observations
           </a>
         ) : null}
+        {(session.sources ?? []).slice(1).filter((alternate) => alternate.observedArtifact && alternate.sourceSessionId).map((alternate) => (
+          <a
+            key={alternate.sourceSessionId}
+            className="navlink"
+            href={sourceEndpoint(session, alternate.sourceSessionId)}
+            download
+          >
+            <Download size={13} aria-hidden /> Supplemental: {alternate.label}
+          </a>
+        ))}
       </div>
+      {(session.sources ?? []).slice(1).filter((alternate) => alternate.supplementalPurpose).map((alternate) => (
+        <p className="timing-archive__note" key={alternate.sourceSessionId}>{alternate.supplementalPurpose}</p>
+      ))}
     </div>
   );
 };

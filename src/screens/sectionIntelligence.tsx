@@ -15,6 +15,7 @@ import {
   MIN_CLEAN_LAPS,
   lapContextOf,
   lapScopesFor,
+  lapScopesForObservedLaps,
   resolveHeatSections,
   sectionObservationsFromLaps,
   type ResolvedHeatSection,
@@ -75,7 +76,13 @@ const SectionSingleLapRow = ({
   observation
 }: {
   label: string;
-  observation: { percentile: number | null; cautionState?: 'green' | 'caution' | 'restart' | 'unknown' };
+  observation: {
+    percentile: number | null;
+    cautionState?: 'green' | 'caution' | 'restart' | 'unknown';
+    bryceSummarySeconds?: number | null;
+    fieldRank?: number | null;
+    fieldComparisonCount?: number | null;
+  };
 }) => (
   <div className="row row--between" style={{ gap: 12 }}>
     <span
@@ -88,6 +95,14 @@ const SectionSingleLapRow = ({
       {observation.percentile === null
         ? 'no timing row for this lap'
         : `this lap: ${ordinal(Math.round(observation.percentile * 100))} percentile${
+            typeof observation.bryceSummarySeconds === 'number'
+              ? ` · ${observation.bryceSummarySeconds.toFixed(3)}s`
+              : ''
+          }${
+            typeof observation.fieldRank === 'number' && typeof observation.fieldComparisonCount === 'number'
+              ? ` · P${observation.fieldRank} of ${observation.fieldComparisonCount}`
+              : ''
+          }${
             observation.cautionState && observation.cautionState !== 'green' ? ` · ${cautionCopy[observation.cautionState]}` : ''
           }`}
     </span>
@@ -102,30 +117,38 @@ const SectionSingleLapRow = ({
  *  both, matching the map's key. */
 const SectionDistributionRow = ({
   label,
-  observation
+  observation,
+  stat,
+  qualifying = false
 }: {
   label: string;
   observation: {
     percentile: number | null;
     observationCount: number | null;
     lapPercentiles?: Array<{ lap: number; percentile: number }>;
+    bryceSummarySeconds?: number | null;
     bryceMedianSeconds?: number | null;
     fieldSeconds?: number[] | null;
     kind?: 'measured' | 'derived_remainder';
   };
   stat: SectionStat;
+  qualifying?: boolean;
 }) => {
   const points = observation.lapPercentiles ?? [];
   const suppressed = observation.percentile === null;
   const field = observation.fieldSeconds ?? null;
-  const bryceMed = observation.bryceMedianSeconds ?? null;
+  const bryceMed = observation.bryceSummarySeconds ?? observation.bryceMedianSeconds ?? null;
   /* Field-pace strip range spans the field plus Bryce, so his tick is always in
    * frame even when he is the fastest or slowest car. Faster → right. */
   const paceValues = field && field.length > 0 ? [...field, ...(bryceMed !== null ? [bryceMed] : [])] : [];
   const lo = paceValues.length > 0 ? Math.min(...paceValues) : 0;
   const hi = paceValues.length > 0 ? Math.max(...paceValues) : 1;
   const xOf = (seconds: number) => (hi > lo ? ((hi - seconds) / (hi - lo)) * 100 : 50);
-  const showPace = !suppressed && field !== null && field.length > 0;
+  /* Qualifying fieldSeconds are each driver's best comparable section, while
+   * the summary is Bryce's mean/median across selected laps. Do not draw those
+   * unlike aggregates on one pace axis. The per-lap percentile dots remain the
+   * source-valid comparison against that fixed group benchmark. */
+  const showPace = !qualifying && !suppressed && field !== null && field.length > 0;
   return (
     <div className="row" style={{ gap: 12, alignItems: 'center' }}>
       <span
@@ -199,12 +222,12 @@ const SectionDistributionRow = ({
           </span>
         ) : null}
       </span>
-      <span className="tnum" style={{ fontSize: 12, color: suppressed ? 'var(--ink-muted)' : 'var(--ink-primary)', width: 96, textAlign: 'right' }}>
+      <span className="tnum" style={{ fontSize: 12, color: suppressed ? 'var(--ink-muted)' : 'var(--ink-primary)', width: 128, textAlign: 'right' }}>
         {suppressed
-          ? `${observation.observationCount ?? 0} clean ${observation.observationCount === 1 ? 'lap' : 'laps'}`
+          ? `${observation.observationCount ?? 0} ${qualifying ? 'valid ' : 'clean '}${observation.observationCount === 1 ? 'lap' : 'laps'}`
           : `${ordinal(Math.round(observation.percentile! * 100))} · ${
               showPace ? `vs ${field!.length} cars · ` : ''
-            }${observation.observationCount ?? 0} ${observation.observationCount === 1 ? 'lap' : 'laps'}`}
+            }${bryceMed !== null ? `${bryceMed.toFixed(3)}s ${stat === 'mean' ? 'avg' : 'med'} · ` : ''}${observation.observationCount ?? 0} ${observation.observationCount === 1 ? 'lap' : 'laps'}`}
       </span>
     </div>
   );
@@ -215,6 +238,18 @@ const SectionDistributionRow = ({
  *  Week passes the selected visit's pack plus a `visitControl` year toggle and
  *  an `orientationClause` that names which year is shown. `title` lets Race Week
  *  scope the heading to "his record here" without forking the component. */
+export interface QualifyingHeatMode {
+  laps: SectionLapsPack | null;
+  /** Qualifying can use a different section-name grain from the race pack
+   * (for example Nashville's official report beside measured race loops). */
+  anchors?: TrackSectionAnchorSet | null;
+  status: 'available' | 'partial' | 'unavailable' | 'cancelled';
+  note?: string | null;
+  sourceUrl?: string | null;
+  sessionLabel?: string | null;
+  gridLabel?: string | null;
+}
+
 export const SectionHeatCard = ({
   outline,
   anchors,
@@ -225,7 +260,8 @@ export const SectionHeatCard = ({
   orientationClause,
   visitControl,
   visitLapsCompleted,
-  priorComparison
+  priorComparison,
+  qualifying
 }: {
   outline: TrackOutline;
   anchors: TrackSectionAnchorSet;
@@ -247,29 +283,97 @@ export const SectionHeatCard = ({
    *  one dignified sentence and links here — a prior year that actually renders
    *  (finding #16). Null hides the link; the sentence still stands. */
   priorComparison?: { href: string; label: string } | null;
+  /** Race-detail only: a second sourced substrate rendered through this same
+   * map, controls, key, drawer, and section-selection engine. */
+  qualifying?: QualifyingHeatMode | null;
 }) => {
-  const [scopeKey, setScopeKey] = useState('full');
-  const [scrubLap, setScrubLap] = useState(1);
-  const [stat, setStat] = useState<SectionStat>('median');
+  const [mode, setMode] = useState<'race' | 'qualifying'>('race');
+  const [raceScopeKey, setRaceScopeKey] = useState('full');
+  const [qualifyingScopeKey, setQualifyingScopeKey] = useState('full');
+  const [raceLap, setRaceLap] = useState(1);
+  const [qualifyingLap, setQualifyingLap] = useState(1);
+  const [raceStat, setRaceStat] = useState<SectionStat>('median');
+  const [qualifyingStat, setQualifyingStat] = useState<SectionStat>('mean');
   const [numbersOpen, setNumbersOpen] = useState(false);
   /* Touch screens can't hover: swap the interaction verb so the caption asks
    * for a gesture the device can actually make (a tap opens the same tooltip). */
   const coarse = useCoarsePointer();
   const readVerb = coarse ? 'tap' : 'hover';
 
-  const scopes = useMemo(() => (laps ? lapScopesFor(laps.totalLaps) : []), [laps]);
-  const lapContext = useMemo(() => (laps ? lapContextOf(laps) : []), [laps]);
+  const qualifyingMode = mode === 'qualifying';
+  const activeLaps = qualifyingMode ? qualifying?.laps ?? null : laps;
+  const activeFallbackSet = qualifyingMode ? null : fallbackSet;
+  const activeAnchors = qualifyingMode ? qualifying?.anchors ?? anchors : anchors;
+  const activePassMarks = qualifyingMode ? null : passMarks;
+  const scopeKey = qualifyingMode ? qualifyingScopeKey : raceScopeKey;
+  const setScopeKey = qualifyingMode ? setQualifyingScopeKey : setRaceScopeKey;
+  const scrubLap = qualifyingMode ? qualifyingLap : raceLap;
+  const setScrubLap = qualifyingMode ? setQualifyingLap : setRaceLap;
+  const stat = qualifyingMode ? qualifyingStat : raceStat;
+  const setStat = qualifyingMode ? setQualifyingStat : setRaceStat;
+  const minimumObservations = qualifyingMode ? 1 : MIN_CLEAN_LAPS;
+  const aggregationOptions = qualifyingMode
+    ? { minimumObservations, observationLabel: 'valid observed qualifying laps' }
+    : undefined;
+  const scopes = useMemo(
+    () => {
+      if (!activeLaps) return [{ kind: 'full_race' } as SectionScope];
+      if (!qualifyingMode) return lapScopesFor(activeLaps.totalLaps);
+      return lapScopesForObservedLaps(
+        activeLaps.lapTotals
+          .filter((tuple) => tuple[0] !== null && (tuple[6] !== null || tuple[1] !== null))
+          .map((tuple) => tuple[0] as number)
+      );
+    },
+    [activeLaps, qualifyingMode]
+  );
+  const lapContext = useMemo(() => (activeLaps ? lapContextOf(activeLaps) : []), [activeLaps]);
+  const availableLapIndexes = useMemo(
+    () =>
+      activeLaps
+        ? activeLaps.lapTotals
+            .filter((tuple) => tuple[0] !== null && (tuple[6] !== null || tuple[1] !== null))
+            .map((tuple) => tuple[0] as number)
+            .filter((lap, index, held) => held.indexOf(lap) === index)
+            .sort((left, right) => left - right)
+        : [],
+    [activeLaps]
+  );
+  const officialQualifyingFastestLap = useMemo(() => {
+    const timed = qualifying?.laps?.lapTotals.filter((tuple) => tuple[0] !== null && tuple[6] !== null) ?? [];
+    return timed.reduce<typeof timed[number] | null>(
+      (best, tuple) => (!best || (tuple[6] as number) < (best[6] as number) ? tuple : best),
+      null
+    )?.[0] ?? null;
+  }, [qualifying?.laps]);
+
+  useEffect(() => {
+    setRaceScopeKey('full');
+    setRaceLap(1);
+    setRaceStat('median');
+  }, [laps?.sessionId, fallbackSet?.sessionId]);
+
+  useEffect(() => {
+    if (!qualifying?.laps) return;
+    const timed = qualifying.laps.lapTotals
+      .filter((tuple) => tuple[0] !== null && (tuple[6] !== null || tuple[1] !== null))
+      .map((tuple) => tuple[0] as number);
+    setQualifyingScopeKey('full');
+    setQualifyingStat('mean');
+    if (timed.length > 0) setQualifyingLap(officialQualifyingFastestLap ?? timed[0]);
+  }, [officialQualifyingFastestLap, qualifying?.laps?.sessionId]);
+
   const scope: SectionScope = useMemo(() => {
-    if (!laps || scopeKey === 'full') return { kind: 'full_race' };
+    if (!activeLaps || scopeKey === 'full') return { kind: 'full_race' };
     if (scopeKey === 'lap') return { kind: 'single_lap', lap: scrubLap };
     return scopes.find((entry) => entry.kind === 'lap_window' && entry.label === scopeKey) ?? { kind: 'full_race' };
-  }, [laps, scopeKey, scrubLap, scopes]);
+  }, [activeLaps, scopeKey, scrubLap, scopes]);
 
   const set = useMemo(() => {
-    if (laps) return sectionObservationsFromLaps(laps, scope, stat);
-    return fallbackSet;
-  }, [laps, scope, stat, fallbackSet]);
-  const heatSections = useMemo(() => (set ? resolveHeatSections(anchors, set) : []), [anchors, set]);
+    if (activeLaps) return sectionObservationsFromLaps(activeLaps, scope, stat, aggregationOptions);
+    return activeFallbackSet;
+  }, [activeLaps, scope, stat, aggregationOptions, activeFallbackSet]);
+  const heatSections = useMemo(() => (set ? resolveHeatSections(activeAnchors, set) : []), [activeAnchors, set]);
   const hasHeat = heatSections.length > 0;
   /* Does this race have ANY valid comparison scope? Resolve the full-race default
    * independently of the selected scope — the full race carries the most clean
@@ -277,95 +381,144 @@ export const SectionHeatCard = ({
    * whole card collapses instead of showing a hollow outline + dead controls
    * (finding #16). */
   const noValidScope = useMemo(() => {
-    const fullSet = laps ? sectionObservationsFromLaps(laps, { kind: 'full_race' }, stat) : fallbackSet;
-    return !fullSet || resolveHeatSections(anchors, fullSet).length === 0;
-  }, [laps, stat, fallbackSet, anchors]);
+    const fullSet = activeLaps
+      ? sectionObservationsFromLaps(activeLaps, { kind: 'full_race' }, stat, aggregationOptions)
+      : activeFallbackSet;
+    return !fullSet || resolveHeatSections(activeAnchors, fullSet).length === 0;
+  }, [activeLaps, stat, aggregationOptions, activeFallbackSet, activeAnchors]);
   /* Pass marks are race-wide (scope-independent): each green Bryce pass joined
    * to the span it happened on, for the active anchor set. */
-  const resolvedMarks = useMemo(() => (passMarks ? resolvePassMarks(anchors, passMarks) : []), [passMarks, anchors]);
+  const resolvedMarks = useMemo(
+    () => (activePassMarks ? resolvePassMarks(activeAnchors, activePassMarks) : []),
+    [activePassMarks, activeAnchors]
+  );
   const showMarks = hasHeat && resolvedMarks.length > 0;
   const suppressedCount = set ? set.sections.filter((section) => section.percentile === null).length : 0;
   const singleLap = scope.kind === 'single_lap';
   const scrubContext = singleLap ? lapContext.find((entry) => entry.lap === scrubLap) ?? null : null;
   const drawerRows = useMemo(() => {
     if (!set) return [];
-    const labelFor = new Map(anchors.sections.map((anchor) => [anchor.sectionName, anchor.label]));
+    const labelFor = new Map(activeAnchors.sections.map((anchor) => [anchor.sectionName, anchor.label]));
     /* The drawer explains exactly what the shape shows: only sections with a
      * curated anchor (the derived remainder among them where it's anchored). */
     return set.sections
       .filter((observation) => labelFor.has(observation.sectionName))
       .map((observation) => ({ observation, label: labelFor.get(observation.sectionName) ?? observation.sectionName }))
       .sort((left, right) => (right.observation.percentile ?? -1) - (left.observation.percentile ?? -1));
-  }, [set, anchors]);
+  }, [set, activeAnchors]);
 
   /* Coverage up front (Jack's review): how much of the lap the loops measure,
    * and that the rest is derived from lap time rather than a blind spot. */
-  const measuredPct = Math.round(timedShareOf(anchors) * 100);
-  const coverage = hasDerivedRemainder(anchors)
-    ? `${measuredSectionCount(anchors)} timed sections · ${measuredPct}% measured · rest derived from lap time`
-    : `${measuredSectionCount(anchors)} timed sections · ${measuredPct}% of the lap`;
+  const measuredPct = Math.round(timedShareOf(activeAnchors) * 100);
+  const coverage = hasDerivedRemainder(activeAnchors)
+    ? `${measuredSectionCount(activeAnchors)} timed sections · ${measuredPct}% measured · rest derived from lap time`
+    : `${measuredSectionCount(activeAnchors)} timed sections · ${measuredPct}% of the lap`;
   /* Source-tier switch (adapter-contract law): a measured lake pack names the
      RaceTools capture per the permissions ledger — never "official timing" —
      while the fallback PDF path keeps the official Section Results copy. */
   const measured = set?.sourceTier === 'lake_loop_crossings';
-  const intervalPath = laps?.sourceRefs?.find((ref) => ref.key === 'nashvilleIntervalPack')?.path ?? null;
-  const sourceEntries = measured
+  const intervalPath = activeLaps?.sourceRefs?.find((ref) => ref.key === 'nashvilleIntervalPack')?.path ?? null;
+  const sourceEntries = qualifyingMode
+    ? activeLaps?.sourceRefs?.length
+      ? activeLaps.sourceRefs.map((ref) => ({ label: ref.key, path: ref.path, note: ref.note }))
+      : qualifying?.sourceUrl
+        ? [{ label: 'Official qualifying notice', path: qualifying.sourceUrl, note: qualifying.note ?? undefined }]
+        : []
+    : measured
     ? [
         {
           label: 'RaceTools race-weekend capture · timing-loop crossings',
           path: intervalPath ?? 'analysis/semantic-layer/output/nashville/',
-          note: `Bryce's per-lap section times and full-field percentiles, differenced from the RaceTools race-weekend capture's timing-loop crossings — ${measuredSectionCount(anchors)} sub-sections tiling the whole lap. A third-party capture; not official timing.`
+          note: `Bryce's per-lap section times and full-field percentiles, differenced from the RaceTools race-weekend capture's timing-loop crossings — ${measuredSectionCount(activeAnchors)} sub-sections tiling the whole lap. A third-party capture; not official timing.`
         }
       ]
     : [
         {
           label: 'Official Section Results, lap by lap',
           path: 'analysis/indy-nxt-race-lap-section-enhancement/output/race_section_lap_observations.csv',
-          note: `Bryce's per-lap section times and field percentiles from the official timing loops. Section names follow the track's official timing stations; span lengths are measured from official time × speed (${anchors.confidence}).`
+          note: `Bryce's per-lap section times and field percentiles from the official timing loops. Section names follow the track's official timing stations; span lengths are measured from official time × speed (${activeAnchors.confidence}).`
         }
       ];
   /* Pass-mark provenance rides the SAME drawer as the shades it draws over
      (mixed-tier honesty): the marks are RaceTools-capture-derived even on
      pages whose sections are official PDFs, so their source is named where
      they render — entries and caveats straight from the pass pack. */
-  const passEntries = showMarks && passMarks
-    ? passMarks.sourceRefs.map((ref) => ({ label: ref.key === 'passPlacement' ? 'Pass marks · RaceTools race-weekend capture' : 'Pass-placement validation', path: ref.path, note: ref.note }))
+  const passEntries = showMarks && activePassMarks
+    ? activePassMarks.sourceRefs.map((ref) => ({ label: ref.key === 'passPlacement' ? 'Pass marks · RaceTools race-weekend capture' : 'Pass-placement validation', path: ref.path, note: ref.note }))
     : [];
   const allEntries = [...sourceEntries, ...passEntries];
   const sourceCaveats = [
-    measured
+    qualifyingMode
+      ? activeLaps?.comparisonScope === 'qualifying_group_best_sections'
+        ? "Each lap's section is compared with every driver's best comparable section in Bryce's actual qualifying group; those benchmark sections need not come from one lap."
+        : 'Qualifying section ranks and denominators follow the official report scope.'
+      : measured
       ? 'Section times are the RaceTools race-weekend capture — timing-loop crossings, time-based, not GPS or car position; not official timing.'
       : 'Section times come from official timing loops — they are time-based, not GPS or car position.',
     ...(set ? [set.caveat] : []),
     ...(measured ? ['Sanity-checked: the three published corner sections agree with these measured spans within ~0.10s per lap.'] : []),
-    ...(showMarks && passMarks ? passMarks.caveats : []),
-    anchors.note
+    ...(qualifyingMode && activeLaps
+      ? ['Session averages are arithmetic means of Bryce’s valid observed section times and lap-level field shares; the field reference stays each driver’s best comparable section.', ...(activeLaps.caveats ?? [])]
+      : []),
+    ...(showMarks && activePassMarks ? activePassMarks.caveats : []),
+    activeAnchors.note
   ];
   /* The face keeps only family-legible scope + denominator; the timing-loop
    * coverage string (method) moves into "The numbers behind the shades". */
   const scopeSummary = !set
     ? null
     : singleLap
-      ? `Lap ${scrubLap} of ${laps?.totalLaps ?? '—'} · ${scrubContext ? cautionCopy[scrubContext.caution] : 'no flag report'}`
+      ? `Lap ${scrubLap}${qualifyingMode ? '' : ` of ${activeLaps?.totalLaps ?? '—'}`} · ${scrubContext ? cautionCopy[scrubContext.caution] : 'no flag report'}`
       : scope.kind === 'lap_window'
-        ? `${scope.label} · laps ${scope.fromLap}–${scope.toLap} · ${set.comparisonRows ?? 0} clean-lap comparisons`
-        : `${set.comparisonRows ?? 0} clean-lap comparisons`;
+        ? `${scope.label} · laps ${scope.fromLap}–${scope.toLap} · ${set.comparisonRows ?? 0} ${qualifyingMode ? 'valid section-lap' : 'clean-lap'} comparisons`
+        : qualifyingMode
+          ? `${stat === 'mean' ? 'Average' : 'Median'} across ${new Set(set.sections.flatMap((section) => section.lapPercentiles?.map((point) => point.lap) ?? [])).size} valid observed laps · ${set.comparisonRows ?? 0} section-lap comparisons`
+          : `${set.comparisonRows ?? 0} clean-lap comparisons`;
+
+  const sessionControl = qualifying ? (
+    <ControlRow label="Session">
+      <Segmented
+        options={[
+          { value: 'race', label: 'Race' },
+          { value: 'qualifying', label: 'Qualifying' }
+        ]}
+        value={mode}
+        onChange={setMode}
+      />
+    </ControlRow>
+  ) : null;
+  const qualifyingContext = qualifyingMode
+    ? [qualifying?.sessionLabel, qualifying?.gridLabel].filter(Boolean).join('\u00a0· ')
+    : null;
 
   /* No valid scope: one dignified sentence, no hollow outline, no dead controls
    * (finding #16). The year toggle stays (it's navigation, not a scope control),
    * and a prior year that actually renders is one tap away. */
   if (noValidScope) {
     const dignified =
-      visitLapsCompleted === 0
+      qualifyingMode
+        ? qualifying?.note ?? 'No official qualifying section times are on file for this session.'
+        : visitLapsCompleted === 0
         ? `His ${laps?.seasonYear ?? ''} visit ended on the opening lap — no clean laps to compare.`.replace(/\s{2,}/g, ' ')
         : set
           ? 'Too few clean laps here to compare sections.'
           : 'No official section times are on file for this race yet.';
     return (
-      <Card title={title} action={<SourcePill title="Section signal" entries={allEntries} caveats={sourceCaveats} />}>
-        {visitControl ? <div style={{ marginBottom: 12 }}>{visitControl}</div> : null}
+      <Card
+        title={title}
+        action={allEntries.length > 0 ? <SourcePill title={`${qualifyingMode ? 'Qualifying' : 'Race'} section signal`} entries={allEntries} caveats={sourceCaveats} /> : undefined}
+      >
+        <div className="stack" style={{ gap: 10, marginBottom: 12 }}>
+          {sessionControl}
+          {visitControl}
+        </div>
         <p style={{ margin: 0, fontSize: 13.5, color: 'var(--ink-secondary)' }}>{dignified}</p>
-        {priorComparison ? (
+        {qualifyingMode && qualifying?.sourceUrl ? (
+          <p style={{ margin: '10px 0 0', fontSize: 13 }}>
+            <a href={qualifying.sourceUrl} target="_blank" rel="noreferrer">Official notice</a>
+          </p>
+        ) : null}
+        {!qualifyingMode && priorComparison ? (
           <p style={{ margin: '10px 0 0', fontSize: 13 }}>
             <Link to={priorComparison.href} className="navlink" style={{ padding: 0 }}>
               See {priorComparison.label} →
@@ -379,27 +532,42 @@ export const SectionHeatCard = ({
   return (
     <Card
       title={title}
-      action={<SourcePill title="Section signal" entries={allEntries} caveats={sourceCaveats} />}
+      action={<SourcePill title={`${qualifyingMode ? 'Qualifying' : 'Race'} section signal`} entries={allEntries} caveats={sourceCaveats} />}
     >
       <p style={{ margin: '0 0 12px', fontSize: 13.5, color: 'var(--ink-secondary)' }}>
         {hasHeat
           ? orientationClause
             ? `${orientationClause} Gold shows where he was strongest — ${readVerb} the shape to read his pace stretch by stretch.`
-            : `Gold shows where Bryce was strongest — ${readVerb} the shape to read his pace stretch by stretch.`
+            : qualifyingMode
+              ? `Gold shows the stronger qualifying stretches — ${readVerb} the shape to read the selected session summary stretch by stretch.`
+              : `Gold shows where Bryce was strongest — ${readVerb} the shape to read his pace stretch by stretch.`
           : set
             ? visitLapsCompleted === 0
               ? `His ${laps?.seasonYear ?? ''} visit ended on the opening lap — no clean laps to compare.`.replace(/\s{2,}/g, ' ')
               : 'Too few clean laps in this scope to compare sections.'
             : 'The venue shape, with the start/finish line marked.'}
       </p>
-      {laps ? (
+      {sessionControl || visitControl ? (
         <div className="stack" style={{ gap: 10, marginBottom: 12 }}>
+          {sessionControl}
           {visitControl}
+        </div>
+      ) : null}
+      {activeLaps ? (
+        <div className="stack" style={{ gap: 10, marginBottom: 12 }}>
+          {qualifyingContext ? (
+            <p style={{ margin: 0, fontSize: 12, color: 'var(--ink-secondary)' }}>{qualifyingContext}</p>
+          ) : null}
+          {qualifyingMode && qualifying?.status === 'cancelled' ? (
+            <p style={{ margin: 0, fontSize: 12, color: 'var(--ink-secondary)' }}>
+              {qualifying.note ?? 'This qualifying session was cancelled; the available laps are an interrupted run without an official classification.'}
+            </p>
+          ) : null}
           <ControlRow label="Scope">
             <Segmented
               wrap
               options={[
-                { value: 'full', label: 'Full race' },
+                { value: 'full', label: qualifyingMode ? 'Whole session' : 'Full race' },
                 ...scopes
                   .filter((entry): entry is Extract<SectionScope, { kind: 'lap_window' }> => entry.kind === 'lap_window')
                   .map((entry) => ({ value: entry.label, label: entry.label })),
@@ -409,16 +577,44 @@ export const SectionHeatCard = ({
               onChange={setScopeKey}
             />
           </ControlRow>
+          {!singleLap ? (
+            <ControlRow label="Metric">
+              <Segmented
+                options={[
+                  { value: 'mean', label: 'Average' },
+                  { value: 'median', label: 'Median' }
+                ]}
+                value={stat}
+                onChange={setStat}
+              />
+            </ControlRow>
+          ) : null}
           {singleLap ? (
             <ControlRow label="Lap">
+              {qualifyingMode ? (
+                <span style={{ minWidth: 0, width: '100%', maxWidth: 380, flex: '1 1 180px' }}>
+                  <select
+                    aria-label="Qualifying lap"
+                    value={scrubLap}
+                    onChange={(event) => setScrubLap(Number(event.target.value))}
+                    style={{ width: '100%', minWidth: 0, maxWidth: '100%', font: 'inherit', color: 'var(--ink-primary)', background: 'var(--surface-0)', border: '1px solid var(--hairline)', borderRadius: 8, padding: '6px 28px 6px 9px' }}
+                  >
+                    {availableLapIndexes.map((lap) => (
+                      <option key={lap} value={lap}>
+                        Lap {lap}{lap === officialQualifyingFastestLap ? qualifying?.status === 'cancelled' ? ' · quickest observed' : ' · fastest official lap' : ''}
+                      </option>
+                    ))}
+                  </select>
+                </span>
+              ) : (
               <span className="stack" style={{ gap: 4, minWidth: 220, flex: 1, maxWidth: 380 }}>
                 <input
                   type="range"
-                  min={1}
-                  max={laps.totalLaps}
+                  min={availableLapIndexes[0] ?? 1}
+                  max={availableLapIndexes.at(-1) ?? activeLaps.totalLaps}
                   value={scrubLap}
                   onChange={(event) => setScrubLap(Number(event.target.value))}
-                  aria-label={`Lap ${scrubLap} of ${laps.totalLaps}`}
+                  aria-label={`Race lap ${scrubLap} of ${activeLaps.totalLaps}`}
                   style={{ width: '100%' }}
                 />
                 <span style={{ position: 'relative', display: 'block', height: 4 }} aria-hidden>
@@ -429,7 +625,7 @@ export const SectionHeatCard = ({
                         key={entry.lap}
                         style={{
                           position: 'absolute',
-                          left: `${((entry.lap - 1) / Math.max(laps.totalLaps - 1, 1)) * 100}%`,
+                          left: `${((entry.lap - 1) / Math.max(activeLaps.totalLaps - 1, 1)) * 100}%`,
                           width: 2,
                           height: 4,
                           background: 'var(--ink-muted)',
@@ -439,6 +635,7 @@ export const SectionHeatCard = ({
                     ))}
                 </span>
               </span>
+              )}
             </ControlRow>
           ) : null}
         </div>
@@ -470,7 +667,7 @@ export const SectionHeatCard = ({
       {suppressedCount > 0 && !singleLap && hasHeat ? (
         <p style={{ margin: '10px 0 0', fontSize: 11.5, color: 'var(--ink-muted)' }}>
           {suppressedCount === 1 ? 'One stretch stays uncoloured' : `${suppressedCount} stretches stay uncoloured`} — under{' '}
-          {MIN_CLEAN_LAPS} clean laps in this scope.
+          {minimumObservations} {qualifyingMode ? 'valid observed qualifying laps' : 'clean laps'} in this scope.
         </p>
       ) : null}
       {singleLap && scrubContext && scrubContext.caution !== 'green' ? (
@@ -478,7 +675,7 @@ export const SectionHeatCard = ({
           Lap {scrubLap} ran {cautionCopy[scrubContext.caution]} — one lap is a snapshot, not a trend.
         </p>
       ) : null}
-      {laps && set ? (
+      {activeLaps && set ? (
         <div style={{ marginTop: 14, borderTop: '1px solid var(--divider)', paddingTop: 12 }}>
           <button
             type="button"
@@ -499,22 +696,10 @@ export const SectionHeatCard = ({
           {numbersOpen ? (
             <div className="stack" style={{ gap: 12, marginTop: 12 }}>
               {!singleLap ? (
-                <ControlRow label="Stat">
-                  <Segmented
-                    options={[
-                      { value: 'median', label: 'Median lap' },
-                      { value: 'mean', label: 'Average lap' }
-                    ]}
-                    value={stat}
-                    onChange={setStat}
-                  />
-                </ControlRow>
-              ) : null}
-              {!singleLap ? (
                 <p style={{ margin: 0, fontSize: 11.5, color: 'var(--ink-muted)' }}>
-                  Top rule: each dot is one clean lap — its share of the field beaten in that section, the gold tick his{' '}
-                  {stat === 'median' ? 'median' : 'average'} lap and the number the map carries. Lower rule: where his pace
-                  sits among the field this section — each faint mark a car, the gold tick Bryce, faster to the right.
+                  {qualifyingMode
+                    ? `Each dot is one valid observed qualifying lap and its share of the group benchmark beaten in that section. The gold tick is Bryce’s ${stat === 'median' ? 'median' : 'average'} lap-level share. Each driver’s best comparable section remains the fixed benchmark; it is not drawn as a field average.`
+                    : `Top rule: each dot is one clean lap — its share of the field beaten in that section, the gold tick his ${stat === 'median' ? 'median' : 'average'} lap and the number the map carries. Lower rule: where his pace sits among the field this section — each faint mark a car, the gold tick Bryce, faster to the right.`}
                 </p>
               ) : (
                 <p style={{ margin: 0, fontSize: 11.5, color: 'var(--ink-muted)' }}>
@@ -526,28 +711,29 @@ export const SectionHeatCard = ({
                   singleLap ? (
                     <SectionSingleLapRow key={observation.sectionName} label={label} observation={observation} />
                   ) : (
-                    <SectionDistributionRow key={observation.sectionName} label={label} observation={observation} stat={stat} />
+                    <SectionDistributionRow key={observation.sectionName} label={label} observation={observation} stat={stat} qualifying={qualifyingMode} />
                   )
                 )}
               </div>
               <p style={{ margin: 0, fontSize: 11.5, color: 'var(--ink-muted)' }}>
                 {coverage}.{' '}
                 {measured
-                  ? `${measuredSectionCount(anchors)} timing-loop sub-sections from the RaceTools race-weekend capture, tiling the whole lap — time-based, not GPS, and not official timing.`
-                  : hasDerivedRemainder(anchors)
+                  ? `${measuredSectionCount(activeAnchors)} timing-loop sub-sections from the RaceTools race-weekend capture, tiling the whole lap — time-based, not GPS, and not official timing.`
+                  : hasDerivedRemainder(activeAnchors)
                     ? 'Solid spans are official timing loops — time-based, not GPS. The dotted stretch is derived: lap time minus the timed sections, ranked against the field the same way.'
                     : 'Section times from official timing loops — time-based, not GPS. Stretches without timing loops stay the plain line.'}
               </p>
               <p style={{ margin: 0, fontSize: 11.5, color: 'var(--ink-muted)' }}>
-                Clean green-flag laps only — caution and restart laps are excluded from the shades. Loop timing measures
-                time, not car position.
+                {qualifyingMode
+                  ? 'Qualifying summaries use valid observed laps from the official section report. Loop timing measures time, not GPS or car position.'
+                  : 'Clean green-flag laps only — caution and restart laps are excluded from the shades. Loop timing measures time, not car position.'}
               </p>
-              {passMarks ? (
+              {activePassMarks ? (
                 <p style={{ margin: 0, fontSize: 11.5, color: 'var(--ink-muted)' }}>
                   The open circles are green, on-track passes involving Bryce. Pass placement validated{' '}
-                  {passMarks.pairwiseConcordancePct}% against the official lap chart.
-                  {passMarks.reshuffleCounts.pit_cycle + passMarks.reshuffleCounts.caution > 0
-                    ? ` Pit-cycle and caution reshuffles (${passMarks.reshuffleCounts.pit_cycle} + ${passMarks.reshuffleCounts.caution}) are counted, not drawn.`
+                  {activePassMarks.pairwiseConcordancePct}% against the official lap chart.
+                  {activePassMarks.reshuffleCounts.pit_cycle + activePassMarks.reshuffleCounts.caution > 0
+                    ? ` Pit-cycle and caution reshuffles (${activePassMarks.reshuffleCounts.pit_cycle} + ${activePassMarks.reshuffleCounts.caution}) are counted, not drawn.`
                     : ''}
                 </p>
               ) : null}
@@ -560,8 +746,8 @@ export const SectionHeatCard = ({
          * numbers behind the shades"; the face only carries the empty state. */
         <p style={{ margin: 0, paddingTop: 14, fontSize: 11.5, color: 'var(--ink-muted)' }}>
           {set
-            ? `Sections need ${MIN_CLEAN_LAPS} clean laps in a scope to compare honestly.`
-            : 'No official section times are on file for this race yet.'}
+            ? `Sections need ${minimumObservations} ${qualifyingMode ? 'valid observed qualifying laps' : 'clean laps'} in a scope to compare honestly.`
+            : `No official section times are on file for this ${qualifyingMode ? 'qualifying session' : 'race'} yet.`}
         </p>
       ) : null}
     </Card>
@@ -898,7 +1084,8 @@ export const VenueSectionSuite = ({
   data,
   selectedVisitId,
   onSelectedVisitChange,
-  showVisitControl = true
+  showVisitControl = true,
+  qualifying
 }: {
   outline: TrackOutline;
   data: VenueSectionData;
@@ -907,14 +1094,43 @@ export const VenueSectionSuite = ({
   selectedVisitId?: string | null;
   onSelectedVisitChange?: (sessionId: string) => void;
   showVisitControl?: boolean;
+  qualifying?: QualifyingHeatMode | null;
 }) => {
   const { anchors, visits, passMarksBySession, lapsCompletedBySession, mostRecent } = data;
   const [localSelectedId, setLocalSelectedId] = useState<string | null>(null);
 
-  if (!outline || !anchors || visits.length === 0 || !mostRecent) return null;
+  if (!outline || !anchors || (!mostRecent && !qualifying)) return null;
 
   const activeSelectedId = selectedVisitId === undefined ? localSelectedId : selectedVisitId;
-  const selected = visits.find((visit) => visit.sessionId === (activeSelectedId ?? mostRecent.sessionId)) ?? mostRecent;
+  const selectedMatch = visits.find((visit) => visit.sessionId === (activeSelectedId ?? mostRecent?.sessionId)) ?? null;
+  /* A permanent Tracks URL can select a canonical race whose section report is
+   * unavailable. Never substitute another year's race under that label: keep
+   * the Race side honest and let the same card expose qualifying when it exists. */
+  const selected = selectedMatch ?? (selectedVisitId === undefined ? mostRecent : null);
+  if (!selected) {
+    return (
+      <>
+        <SectionHeatCard
+          key={selectedVisitId ?? 'missing-race-pack'}
+          title="Race and qualifying, section by section — his record here"
+          outline={outline}
+          anchors={anchors}
+          laps={null}
+          fallbackSet={null}
+          passMarks={null}
+          priorComparison={validPriorComparison(visits, selectedVisitId ?? null, anchors)}
+          qualifying={qualifying}
+        />
+        <VenueYearsCard
+          title="The track, year over year"
+          outline={outline}
+          anchors={anchors}
+          visits={visits}
+          lapsCompletedBySession={lapsCompletedBySession}
+        />
+      </>
+    );
+  }
   const passMarks = passMarksBySession.get(selected.sessionId) ?? null;
   const multi = visits.length > 1;
   /* Toggle label per visit. A single race that year is just the year ("2025").
@@ -969,7 +1185,8 @@ export const VenueSectionSuite = ({
   return (
     <>
       <SectionHeatCard
-        title="The track, section by section — his record here"
+        key={selected.sessionId}
+        title={qualifying ? 'Race and qualifying, section by section — his record here' : 'The track, section by section — his record here'}
         orientationClause={orientationClause}
         visitControl={visitControl}
         outline={outline}
@@ -979,6 +1196,7 @@ export const VenueSectionSuite = ({
         passMarks={passMarks}
         visitLapsCompleted={lapsCompletedBySession.get(selected.sessionId) ?? null}
         priorComparison={validPriorComparison(visits, selected.sessionId, anchors)}
+        qualifying={qualifying}
       />
       <VenueYearsCard
         title="The track, year over year"

@@ -5,7 +5,9 @@ import {
   MIN_CLEAN_LAPS,
   lapContextOf,
   lapScopesFor,
+  lapScopesForObservedLaps,
   resolveHeatSections,
+  selectableSectionLap,
   sectionObservationsFromLaps,
   sectionObservationsFromRaceStory
 } from '../src/data/sectionObservations';
@@ -189,6 +191,50 @@ assert.equal(full.stat, 'median');
 
 const mean = sectionObservationsFromLaps(syntheticPack, { kind: 'full_race' }, 'mean');
 assert.ok((mean.sections[0].percentile ?? 0) > 0.5 && mean.sections[0].percentile !== full.sections[0].percentile, 'mean differs from median');
+const cleanTimes = lapsTuples.filter((tuple) => tuple[4] === 1).map((tuple) => tuple[6] as number);
+const expectedMeanTime = cleanTimes.reduce((sum, seconds) => sum + seconds, 0) / cleanTimes.length;
+assert.ok(
+  Math.abs((mean.sections[0].bryceSummarySeconds ?? 0) - expectedMeanTime) < 1e-9,
+  'mean mode uses the arithmetic mean of actual section times, not the median time'
+);
+assert.equal(full.sections[0].bryceSummarySeconds, full.sections[0].bryceMedianSeconds, 'median mode reports the median time');
+
+const shortQualifyingPack = {
+  ...syntheticPack,
+  id: 'section_laps_short_qualifying',
+  sessionId: 'qualifying_test',
+  totalLaps: 5,
+  comparisonScope: 'qualifying_group_best_sections',
+  sections: [{ sectionName: 'Turn T', laps: lapsTuples.slice(0, 5), fieldSeconds: [4.0, 4.1, 4.2] }],
+  lapTotals: lapsTuples.slice(0, 5)
+} as SectionLapsPack;
+const racePolicyShort = sectionObservationsFromLaps(shortQualifyingPack, { kind: 'full_race' }, 'mean');
+assert.equal(racePolicyShort.sections[0].percentile, null, 'race floor still suppresses a five-lap aggregate');
+const qualifyingAverage = sectionObservationsFromLaps(shortQualifyingPack, { kind: 'full_race' }, 'mean', {
+  minimumObservations: 1,
+  observationLabel: 'valid observed qualifying laps'
+});
+assert.equal(qualifyingAverage.sections[0].observationCount, 5, 'qualifying average exposes its actual observed-lap denominator');
+assert.ok(qualifyingAverage.sections[0].percentile !== null, 'short qualifying sessions use their complete valid population');
+assert.ok(
+  Math.abs((qualifyingAverage.sections[0].bryceSummarySeconds ?? 0) - 4.03) < 1e-9,
+  'qualifying session average is the arithmetic mean of the five observed section times'
+);
+assert.match(qualifyingAverage.caveat, /valid observed qualifying laps/, 'qualifying denominator language survives the adapter');
+
+const qualifyingScopes = lapScopesForObservedLaps([1, 3, 4, 8, 9]);
+assert.deepEqual(
+  qualifyingScopes.slice(1),
+  [
+    { kind: 'lap_window', label: 'Opening third', fromLap: 1, toLap: 3 },
+    { kind: 'lap_window', label: 'Middle third', fromLap: 4, toLap: 8 },
+    { kind: 'lap_window', label: 'Closing third', fromLap: 9, toLap: 9 }
+  ],
+  'qualifying thirds follow actual official lap indexes, including gaps'
+);
+assert.deepEqual(lapScopesForObservedLaps([4, 7]), [{ kind: 'full_race' }], 'two-lap oval runs omit meaningless thirds');
+assert.equal(selectableSectionLap(75, [2, 5, 8], 8), 8, 'a stale long-race lap resets to the preferred official qualifying lap');
+assert.equal(selectableSectionLap(5, [2, 5, 8], 8), 5, 'an available lap remains selected within the same session');
 
 const middle = sectionObservationsFromLaps(syntheticPack, scopesMenu[2], 'median');
 // middle third = laps 11-20: 10 clean laps, percentiles 0.55..1.0
@@ -205,6 +251,9 @@ const oneLap = sectionObservationsFromLaps(syntheticPack, { kind: 'single_lap', 
 assert.equal(oneLap.sections[0].percentile, 0.1, 'single lap reports the lap as timed');
 assert.equal(oneLap.sections[0].cautionState, 'caution', 'single lap carries its flag context');
 assert.equal(oneLap.sections[0].clean, false);
+assert.equal(oneLap.sections[0].bryceSummarySeconds, 6, 'single lap carries its actual official section time');
+assert.equal(oneLap.sections[0].fieldRank, 15, 'single lap carries its official comparison rank');
+assert.equal(oneLap.sections[0].fieldComparisonCount, 18, 'single lap carries its official comparison denominator');
 
 const context = lapContextOf(syntheticPack);
 assert.equal(context.filter((entry) => entry.caution === 'caution').length, 6, 'lap context surfaces caution laps for the scrubber');

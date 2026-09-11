@@ -44,6 +44,8 @@ The compact canonical calendar at `public/data/indy-nxt-calendar.json` is indepe
 
 Native observations are downloadable from `/api/timing-archive/<canonicalSessionId>/observations` as gzipped NDJSON. The endpoint resolves only published artifacts from the coverage ledger. Native observations retain their original timestamps. A one-second replay frame created between source observations is interpolated and explicitly labeled; it is not another measured sample. Timing-loop section times and display-state recordings are not GPS or pedal/speed telemetry.
 
+Supplemental recordings use the same endpoint with `?source=<sourceSessionId>`. The selector resolves only an exact source listed for that canonical session; unknown, cross-session, or path-like selectors are refused. Supplemental recordings remain separate files with their original clock basis.
+
 Each physical doubleheader qualifying run links to both races, with each race's own official grid classification. Road/street doubleheaders use the fastest lap for Race 1 and second-fastest for Race 2. Oval two-lap classification stays distinct. Qualifying cancellation is not a missing-results error: interrupted Nashville 2024 lap evidence is retained without a qualifying rank, while Iowa 2025 has no qualifying run.
 
 Qualifying section comparisons rank Bryce's selected section against each other driver's best comparable section on a lap within 6% of that driver's fastest recorded lap in the same group. This is a section benchmark across laps, not a single hypothetical opponent lap. The lap-time filter does not prove green flags or clear air. Track shading requires supported geometry; source gaps remain visible.

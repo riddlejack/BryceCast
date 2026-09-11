@@ -7,8 +7,10 @@ import { inkGoldDiverging } from '../app/charts';
 import { trackOutlineFor } from '../assets/tracks';
 import { sectionObservationsFromLaps } from '../data/sectionObservations';
 import type { SectionLapsPack } from '../data/sectionLaps';
+import { useQualiLabForRace } from '../data/qualiLab';
 import { uiDataPackage } from '../data/uiDataPackage';
 import { VenueSectionSuite, useVenueSectionData } from './sectionIntelligence';
+import { resolveQualifyingHeatMode } from './qualifyingHeat';
 
 const selectStyle = {
   width: '100%',
@@ -161,6 +163,16 @@ export const TracksScreen = () => {
     null;
   const selectedVisit = data.visits.find((visit) => visit.sessionId === selectedCanonicalVisit?.sessionId) ?? null;
   const outline = trackOutlineFor(selectedVenue);
+  const qualiResolution = useQualiLabForRace(selectedCanonicalVisit?.sessionId ?? '');
+  const qualifying = useMemo(
+    () =>
+      resolveQualifyingHeatMode(
+        qualiResolution,
+        selectedCanonicalVisit?.trackName ?? selectedVenue,
+        data.anchors
+      ),
+    [qualiResolution, selectedCanonicalVisit?.trackName, selectedVenue, data.anchors]
+  );
 
   const setVenue = (venueName: string) => navigate(`/tracks?venue=${encodeURIComponent(venueName)}`);
   const setVisit = (sessionId: string) => {
@@ -214,7 +226,7 @@ export const TracksScreen = () => {
 
       {data.loading ? (
         <div className="skeleton" style={{ height: 360 }} />
-      ) : selectedCanonicalVisit && !selectedVisit ? (
+      ) : selectedCanonicalVisit && !selectedVisit && !qualifying ? (
         <Card title={labels.get(selectedCanonicalVisit.sessionId) ?? selectedCanonicalVisit.raceLabel}>
           <Unavailable>
             <span>
@@ -229,9 +241,10 @@ export const TracksScreen = () => {
         <VenueSectionSuite
           outline={outline}
           data={data}
-          selectedVisitId={selectedVisit?.sessionId ?? null}
+          selectedVisitId={selectedCanonicalVisit?.sessionId ?? null}
           onSelectedVisitChange={setVisit}
           showVisitControl={false}
+          qualifying={qualifying}
         />
       ) : (
         <VenueNumbersFallback visits={data.visits} labels={labels} />

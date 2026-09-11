@@ -49,7 +49,11 @@ export interface SectionObservation {
   /** Per-lap clean-lap percentiles inside the scope — the drawer's
    *  distribution strip (the percentile's meaning, shown not told). */
   lapPercentiles?: Array<{ lap: number; percentile: number }>;
-  /** Bryce's representative (median) section time in seconds for the scope. */
+  /** Bryce's representative section time in seconds for the scope, computed
+   * with the set's `stat` (mean or median). */
+  bryceSummarySeconds?: number | null;
+  /** Legacy alias retained for aggregate race-story consumers. New per-lap
+   * consumers should read `bryceSummarySeconds`. */
   bryceMedianSeconds?: number | null;
   /** Field-median section time, seconds, from the field distribution below. */
   fieldMedianSeconds?: number | null;
@@ -60,6 +64,9 @@ export interface SectionObservation {
   /** single_lap scope only: that lap's race-control context. */
   cautionState?: 'green' | 'caution' | 'restart' | 'unknown';
   clean?: boolean;
+  /** single_lap scope only: the official row's rank and denominator. */
+  fieldRank?: number | null;
+  fieldComparisonCount?: number | null;
 }
 
 export interface SectionObservationSet {
@@ -119,6 +126,14 @@ export const sectionObservationsFromRaceStory = (story: RaceStoryPack): SectionO
  *  screen wherever it bites. */
 export const MIN_CLEAN_LAPS = 8;
 
+export interface SectionAggregationOptions {
+  /** Race views require a stable eight-lap sample. A qualifying session is a
+   * much shorter population and explicitly opts into one-or-more valid laps. */
+  minimumObservations?: number;
+  /** Source-appropriate denominator language carried into the source drawer. */
+  observationLabel?: string;
+}
+
 const median = (values: number[]): number => {
   const sorted = [...values].sort((a, b) => a - b);
   const mid = Math.floor(sorted.length / 2);
@@ -156,6 +171,36 @@ export const lapScopesFor = (totalLaps: number): SectionScope[] => {
   ];
 };
 
+/** Session thirds based on the actual official lap indexes present. This keeps
+ * qualifying filters useful when lap numbers have gaps and omits phases for a
+ * two-lap oval run where thirds would be meaningless. */
+export const lapScopesForObservedLaps = (lapIndexes: number[]): SectionScope[] => {
+  const laps = [...new Set(lapIndexes)].sort((left, right) => left - right);
+  if (laps.length < 3) return [{ kind: 'full_race' }];
+  const firstEndIndex = Math.ceil(laps.length / 3) - 1;
+  const middleEndIndex = Math.ceil((laps.length * 2) / 3) - 1;
+  return [
+    { kind: 'full_race' },
+    { kind: 'lap_window', label: 'Opening third', fromLap: laps[0], toLap: laps[firstEndIndex] },
+    { kind: 'lap_window', label: 'Middle third', fromLap: laps[firstEndIndex + 1], toLap: laps[middleEndIndex] },
+    { kind: 'lap_window', label: 'Closing third', fromLap: laps[middleEndIndex + 1], toLap: laps.at(-1) as number }
+  ];
+};
+
+/** Keep a lap selector on an actual source lap when a component changes race,
+ * session, or source grain. Preferred is normally the official qualifying
+ * fastest lap; the first observed lap is the deterministic fallback. */
+export const selectableSectionLap = (
+  requested: number,
+  lapIndexes: number[],
+  preferred: number | null = null
+): number | null => {
+  const laps = [...new Set(lapIndexes)].sort((left, right) => left - right);
+  if (laps.includes(requested)) return requested;
+  if (preferred !== null && laps.includes(preferred)) return preferred;
+  return laps[0] ?? null;
+};
+
 /** Per-lap race-control context for the scrubber (caution ticks, clean flags),
  *  from the pack's lap-total rows. */
 export const lapContextOf = (
@@ -175,8 +220,11 @@ export const lapContextOf = (
 export const sectionObservationsFromLaps = (
   pack: SectionLapsPack,
   scope: SectionScope = { kind: 'full_race' },
-  stat: SectionStat = 'median'
+  stat: SectionStat = 'median',
+  options: SectionAggregationOptions = {}
 ): SectionObservationSet => {
+  const minimumObservations = options.minimumObservations ?? MIN_CLEAN_LAPS;
+  const observationLabel = options.observationLabel ?? 'clean green-flag laps';
   const [fromLap, toLap] = lapWindowOf(scope, pack.totalLaps);
   const single = scope.kind === 'single_lap';
   const sections: SectionObservation[] = pack.sections.map(({ sectionName, laps, kind, fieldSeconds }) => {
@@ -191,11 +239,14 @@ export const sectionObservationsFromLaps = (
         kind: kind ?? 'measured',
         percentile: row ? row[1] : null,
         observationCount: row ? 1 : 0,
+        bryceSummarySeconds: row ? row[6] : null,
         bryceMedianSeconds: row ? row[6] : null,
         fieldMedianSeconds,
         fieldSeconds: fieldDistribution,
         cautionState: row ? CAUTION_LABEL[row[5]] ?? 'unknown' : undefined,
-        clean: row ? row[4] === 1 : undefined
+        clean: row ? row[4] === 1 : undefined,
+        fieldRank: row ? row[2] : null,
+        fieldComparisonCount: row ? row[3] : null
       };
     }
     const inWindow = laps.filter(
@@ -206,9 +257,10 @@ export const sectionObservationsFromLaps = (
     return {
       sectionName,
       kind: kind ?? 'measured',
-      percentile: pcts.length >= MIN_CLEAN_LAPS ? summarize(pcts, stat) : null,
+      percentile: pcts.length >= minimumObservations ? summarize(pcts, stat) : null,
       observationCount: pcts.length,
       lapPercentiles: inWindow.map((tuple) => ({ lap: tuple[0] as number, percentile: tuple[1] as number })),
+      bryceSummarySeconds: times.length > 0 ? summarize(times, stat) : null,
       bryceMedianSeconds: times.length > 0 ? median(times) : null,
       fieldMedianSeconds,
       fieldSeconds: fieldDistribution
@@ -231,12 +283,12 @@ export const sectionObservationsFromLaps = (
     comparisonRows: single
       ? sections.reduce((count, section) => count + (section.observationCount ?? 0), 0)
       : allPcts.length,
-    medianPercentile: allPcts.length > 0 ? median(allPcts) : null,
+    medianPercentile: allPcts.length > 0 ? summarize(allPcts, stat) : null,
     sourceState: measured ? 'racetools_capture_loop_crossings_per_lap' : 'official_section_results_per_lap',
     sourceTier: tier,
     caveat: single
       ? 'one lap is one lap — a snapshot, not a trend; caution laps are labeled'
-      : `clean green-flag laps only; sections under ${MIN_CLEAN_LAPS} clean laps in this scope are not compared`
+      : `${observationLabel} only; sections under ${minimumObservations} observations in this scope are not compared`
   };
 };
 
