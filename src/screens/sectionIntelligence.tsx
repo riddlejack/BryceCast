@@ -654,7 +654,7 @@ export const SectionHeatCard = ({
         outline={outline}
         showCornerLabels={false}
         maxHeight={300}
-        sections={hasHeat ? { resolved: heatSections, showLabels: true } : null}
+        sections={hasHeat ? { resolved: heatSections, showLabels: true, contextLabel: qualifyingMode ? 'in qualifying' : 'this race' } : null}
         passMarks={showMarks ? resolvedMarks : null}
       />
       {showMarks ? (
