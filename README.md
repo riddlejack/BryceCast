@@ -11,10 +11,16 @@ Race-day / watch-party mode:
 ```bash
 npm install
 npm run build
+BRYCECAST_API_RUNNER_ONLY=1 \
+BRYCECAST_SQLITE_PATH='/Users/example/Documents/Bryce POV access/data/live/brycecast.sqlite' \
+BRYCECAST_RUNNER_STATUS_PATH='/Users/example/Documents/Bryce POV access/data/live/live-runner-status.json' \
 npm run serve:app
 ```
 
-Open `http://localhost:8787`. In this mode, the Node service serves the built React app and the dashboard reads normalized `/api/*` routes for timing, history, replay, proof state, source freshness, and race-day readiness.
+Open `http://localhost:8787`. In this mode, the Node service serves the built
+React app and the dashboard reads normalized cached `/api/*` routes from the
+installed runner's status and SQLite archive. Follow
+`docs/LIVE_RUNNER_RUNBOOK.md` to verify the runner before relying on this view.
 
 The top room-status strip is the shared readiness contract across TV, Engineer, Phone, Sources, and Race Ops. It summarizes timing state, authorized session route, local archive health, video boundary, and audio/frequency status so the room can tell at a glance whether the app is race-ready, stale/cold, or operating with known unavailable access.
 
@@ -29,6 +35,9 @@ Open the Vite URL, usually `http://localhost:5173`, only for UI development. TV 
 
 ## Verify Sources
 
+Run only the check relevant to the task. The pressure and race-poll commands
+require the live runner to be stopped and are never a companion race-day loop.
+
 ```bash
 npm run audit:sources
 npm run audit:live:pressure:primary
@@ -40,7 +49,10 @@ npm run poll:race
 npm run api:smoke
 ```
 
-For race day, `scripts/api-server.mjs` fetches official/public INDYCAR Race Control blob feeds server-side and exposes normalized `/api/*` routes:
+The live runner owns race-day polling of the official/public INDYCAR Race
+Control blob feeds. The API server exposes normalized cached `/api/*` routes
+from that captured state. Direct API fetch is limited to a bounded
+operator/debug fallback while the runner is stopped:
 
 - `/racecontrol/timingscoring-ris.json`
 - `/racecontrol/driversfeed_nxt.json`
@@ -56,19 +68,28 @@ Live source URLs are centralized in `scripts/live-source-endpoints.mjs`. The API
 
 The history ingest writes `public/data/history-bryce.json` from the INDY NXT official results API. If the current race has timing data but official results are not published, that row is marked provisional and race points are left `null`.
 
-The race poller writes a local race-day archive:
+The installed `com.brycecast.live-runner` is the single race-day ingestor. It
+writes:
 
 - `data/live/brycecast.sqlite` for durable queryable snapshots.
 - `data/live/snapshots.jsonl` for easy inspection and archival.
 - `public/data/live-snapshot.json` so the dashboard can show the latest persisted logger sample.
 
-On race day, run `npm run poll:race:watch -- --interval-ms=1000` beside `npm run serve:app` to capture timing, source health, schedule, config, track activity, and Bryce samples at the current race-day target cadence. The default watch cadence remains slower for casual development, so pass the explicit interval during live-session proof. Watch mode compensates for fetch/write elapsed time before sleeping; slow upstream probes become explicit errors or cadence degradation rather than hidden extra delay.
+On race day, follow `docs/LIVE_RUNNER_RUNBOOK.md`: one live runner owns upstream
+polling and persistence, and the app/API serves its cached state with
+`BRYCECAST_API_RUNNER_ONLY=1`. Do not start `race-poller --watch`, pressure
+tests, browser automation, or another upstream refresh loop beside the runner.
+The standalone poller is only a finite recovery/debug fallback after the
+runbook proves the runner is stopped or stale and resolves its lock; never run
+the fallback and live runner concurrently.
 
 Live race-weekend weather uses the NWS API through `scripts/live-weather-service.mjs`. `npm run weather:live` checks current Road America observations/forecast/alerts, and `npm run weather:live:upcoming` loads the remaining 2026 INDY NXT events from the canonical career dataset and reports each venue's current weather plus forecast-readiness state. Long-range event forecasts stay labeled unavailable until the forecast window opens.
 
 The local API service exposes `GET /api/health`, `/api/snapshot`, `/api/session`, `/api/bryce`, `/api/timing`, `/api/sources`, `/api/weather/live`, `/api/weather/upcoming`, `/api/history/bryce`, `/api/history/bryce?compact=1`, `/api/onboard-catalog`, `/api/race-log/latest`, `/api/replay/bryce`, plus legacy `GET`/`POST` proof routes for POV and audio. `/api/sources` and the in-app Source Health panel include checked age, Last-Modified age, byte counts, source role/cadence, proxy paths, and local artifact status. The compact history route is the first iPhone-ready season analytics projection.
 
-Engineer mode uses `/api/replay/bryce` for SQLite-backed replay analytics. A tiny archive is labeled as coverage proof; a full race trend requires `npm run poll:race:watch` through a live session.
+Engineer mode uses `/api/replay/bryce` for SQLite-backed replay analytics. A tiny
+archive is labeled as coverage proof; a full race trend requires a captured live
+session from the single runner.
 
 `npm run probe:pov:watch` remains available as a research/audit tool, but it is no longer on the critical race-day path. Do not design product screens around a live #9 POV gate unless new access is granted.
 
@@ -98,11 +119,15 @@ state and live-readiness semantics is mandatory in every case.
 
 The core requirement is now a polished Bryce-centric companion surface for desktop web and iPhone: live timing, source freshness, official broadcast routing, Bryce-focused analytics, alerts, race context, historical benchmarks, and clear unavailable-state handling for POV and isolated radio. Use `docs/LIVE_POV_ACCESS_FINDINGS.md` and `docs/POV_ESCALATION_LADDER.md` only as historical research unless new access appears.
 
-Use `CLAUDE.md` and `docs/FABLE_HANDOFF.md` first. Their July 18 controlling
-sections establish `master` and the approved integrated UI as the baseline; old
-frontend-reset language later in those documents is historical provenance.
+Start with `AGENTS.md`. Resolve the current product checkout from
+`git worktree list`, its branch and dirty state, and the local `master` ref.
+Use the guide's conditional task map for additional contracts.
 
-Use `docs/CODEX_HANDOFF_CURRENT.md` next for current lane boundaries, canonical generated counts, known same-file churn, live/career split, and the ambiguity register. If a contradiction cannot be resolved from source files, generated reports, live checks, tests, or official sources, record it there rather than guessing.
+`docs/FABLE_HANDOFF.md`, `docs/CODEX_HANDOFF_CURRENT.md`, and
+`docs/PHASE3_HANDOFF_2026-07-19.md` preserve dated takeover, branch, and runtime
+evidence. They do not establish the current checkout, deployment, URL, live
+runtime, or next action. Verify those states directly rather than copying a
+historical claim or SHA.
 
 Use `docs/SOURCE-INVENTORY.md` for the current source map, confirmed feeds, candidate sources, and unresolved access gaps.
 

@@ -9,38 +9,33 @@ race-day readiness, explicit unavailable states, and a web/mobile surface.
 Brief D is excluded. Legacy POV, isolated-radio, native tvOS, frontend-reset,
 and outreach material remains evidence, not current execution direction.
 
-## Fable Lead-Agent Entry Point
+## Project Entry Point
 
-Start with [../CLAUDE.md](../CLAUDE.md) and
-[FABLE_HANDOFF.md](FABLE_HANDOFF.md). Their July 18 controlling sections make
-the approved integrated UI the baseline and supersede the old instruction to
-replace the frontend.
+Start with [../AGENTS.md](../AGENTS.md). Resolve the current checkout from
+`git worktree list`, its branch and dirty state, and the local `master` ref.
+`CLAUDE.md` imports that same guide. Use the guide's task map rather than reading
+this entire document list for every change.
 
-## Active Build Contracts
+## Task-Specific Documents
 
-Read these first for frontend, view-model, and product work:
+Use these when the task affects their subject:
 
-| Order | Document | Role |
-| ---: | --- | --- |
-| 1 | [FABLE_HANDOFF.md](FABLE_HANDOFF.md) | Current canonical-baseline instructions plus historical Fable/Codex provenance. |
-| 2 | [CODEX_HANDOFF_CURRENT.md](CODEX_HANDOFF_CURRENT.md) | Current repo handoff, validation baseline, source families, and known coordination risk. |
-| 3 | [../LIVE_DRILL_CLOSEOUT_2026-06-21.md](../LIVE_DRILL_CLOSEOUT_2026-06-21.md) | Post-Road America live-drill closeout; supersedes pre-race live-proof uncertainty. |
-| 4 | [../LIVE_DRILL_PROCESS_EXHAUSTION_RCA_2026-06-21.md](../LIVE_DRILL_PROCESS_EXHAUSTION_RCA_2026-06-21.md) | Local process-limit RCA and required single-ingestor prevention plan. |
-| 5 | [../analysis/ui-blueprint/README.md](../analysis/ui-blueprint/README.md) | Current UI V2 navigation map, active blueprint files, and legacy MagicPath boundary. |
-| 6 | [../analysis/ui-data-package/README.md](../analysis/ui-data-package/README.md) | Generated UI data package: hydrated screen seeds, context-pack refs, live fixtures, source refs, and validation commands. |
-| 7 | [../analysis/ANALYTICS_UI_ARTIFACT_INDEX.md](../analysis/ANALYTICS_UI_ARTIFACT_INDEX.md) | Current stable analytics artifact index after the June 18 productization sprint. |
-| 8 | [../analysis/predictive-race-intelligence/output/PREDICTIVE_RACE_INTELLIGENCE_REPORT.md](../analysis/predictive-race-intelligence/output/PREDICTIVE_RACE_INTELLIGENCE_REPORT.md) | Predictive race-intelligence decision, feasibility, context packs, and chart artifacts. |
-| 9 | [../analysis/career-chapter-utilization-audit/README.md](../analysis/career-chapter-utilization-audit/README.md) | July 18 rendered-UI-versus-backend audit. It distinguishes visible use from pack existence and flags stale historic packs. |
-| 10 | [UI_ANALYTICS_PRODUCT_CONTRACT.md](UI_ANALYTICS_PRODUCT_CONTRACT.md) | Controlling UI product contract for screens, metrics, caveats, unavailable states, and source drawers. |
-| 11 | [LIVE_RACE_DAY_PRODUCT_CONTRACT.md](LIVE_RACE_DAY_PRODUCT_CONTRACT.md) | Live timing/readiness/points/weather/replay contract and wrong-series guard rules. |
-| 12 | [READINESS.md](READINESS.md) | Current product readiness brief and the no-POV/no-scanner baseline. |
-| 13 | [API_SERVICE.md](API_SERVICE.md) | Local `/api/*` service contract and API-mode verification commands. |
-| 14 | [ANALYTICS_SOURCE_AUDIT.md](ANALYTICS_SOURCE_AUDIT.md) | Source-backed live, archived, and historical analytics truth table. |
-| 15 | [LIVE_DATA_READINESS_AUDIT.md](LIVE_DATA_READINESS_AUDIT.md) | Pre-Road America live-source audit and endpoint catalog; read with the June 21 closeout. |
-| 16 | [INDY_NXT_DASHBOARD_READINESS.md](INDY_NXT_DASHBOARD_READINESS.md) | Production-safe INDY NXT dashboard categories and caveats. |
-| 17 | [CAREER_ANALYTICS_COVERAGE_MATRIX.md](CAREER_ANALYTICS_COVERAGE_MATRIX.md) | Generated career coverage status and source-bounded gaps. |
-| 18 | [CAREER_DATA_SPEC.md](CAREER_DATA_SPEC.md) | Durable career analytics data model and provenance rules. |
-| 19 | [SOURCE-INVENTORY.md](SOURCE-INVENTORY.md) | Source inventory for official/live/candidate feeds. |
+| Document | Use |
+| --- | --- |
+| [UI_ANALYTICS_PRODUCT_CONTRACT.md](UI_ANALYTICS_PRODUCT_CONTRACT.md) | UI screens, metrics, caveats, unavailable states, and source drawers. |
+| [LIVE_RACE_DAY_PRODUCT_CONTRACT.md](LIVE_RACE_DAY_PRODUCT_CONTRACT.md) | Live timing, readiness, points, weather, replay, and wrong-series guards. |
+| [API_SERVICE.md](API_SERVICE.md) | Cache-backed `/api/*` service behavior and API verification. |
+| [../analysis/ui-data-package/README.md](../analysis/ui-data-package/README.md) | UI data package schema, relevant records, context-pack refs, and validators. |
+| [ANALYTICS_SOURCE_AUDIT.md](ANALYTICS_SOURCE_AUDIT.md) | Source-backed live, archived, and historical analytics truth table. |
+| [INDY_NXT_DASHBOARD_READINESS.md](INDY_NXT_DASHBOARD_READINESS.md) | Production-safe INDY NXT dashboard categories and caveats. |
+| [CAREER_ANALYTICS_COVERAGE_MATRIX.md](CAREER_ANALYTICS_COVERAGE_MATRIX.md) and [CAREER_DATA_SPEC.md](CAREER_DATA_SPEC.md) | Career coverage, data model, and provenance. |
+| [../LIVE_DRILL_CLOSEOUT_2026-06-21.md](../LIVE_DRILL_CLOSEOUT_2026-06-21.md) and [../LIVE_DRILL_PROCESS_EXHAUSTION_RCA_2026-06-21.md](../LIVE_DRILL_PROCESS_EXHAUSTION_RCA_2026-06-21.md) | Live-ingestor design, recovery, or incident analysis. |
+| [SOURCE-INVENTORY.md](SOURCE-INVENTORY.md) | Source inventory for official, live, and candidate feeds. |
+| [FABLE_HANDOFF.md](FABLE_HANDOFF.md), [CODEX_HANDOFF_CURRENT.md](CODEX_HANDOFF_CURRENT.md), and [PHASE3_HANDOFF_2026-07-19.md](PHASE3_HANDOFF_2026-07-19.md) | Dated takeover, branch, and runtime evidence only; verify current Git, production, URL, and runtime state separately. |
+
+Other analytics indexes and dated reviews in this directory remain available as
+evidence. A filename containing “current” does not override `AGENTS.md` or a
+fresh state check.
 
 ## Legacy Research Boundary
 

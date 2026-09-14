@@ -1,11 +1,11 @@
 # Phase 3 Handoff — 2026-07-19, post-race (Music City)
 
-Written by Fable (the race-day director session) at handoff, minutes after the
-checkered flag. This is the controlling state document: a fresh Fable instance
-should read THIS FIRST, then `docs/FABLE_LESSONS.md` (updated today), then
-`docs/PHASE3_EXECUTION_CHARTER_2026-07-18.md` (the charter + 4 addenda remain
-the constitution; this doc supersedes its staler state claims). The July 12
-Codex charter's Global Rules + Reading Order still bind every worker.
+Historical handoff written minutes after the Music City checkered flag. Every
+branch, SHA, URL, host state, pending action, reading order, and model assignment
+below describes the July 19 snapshot. It is not current operating authority.
+Start from `../AGENTS.md`, resolve Git state directly, and verify production and
+runtime state before acting. Do not execute the historical pipeline or starter
+prompt merely because this filename is referenced by an older handoff.
 
 ## 1. What the site is, as of the checkered flag
 
@@ -78,7 +78,7 @@ shipped TODAY, validated at every step:
 - `phase3/outlines-from-maps` — Detroit (18 sections, anchored) +
   Arlington (23, anchored) + St. Pete (approximate, honestly withheld) +
   Toronto (outline only; NO NXT data by design — Bryce never raced there).
-  **Needs: rebase onto current master + re-run race-page QA** (master's
+  **Needed in the July snapshot: rebase onto then-current master + re-run race-page QA** (master's
   RaceDetailScreen/sectionIntelligence moved under it), then director
   overlay gate, then merge. Also fixes wrong lengthMi on 2 old outlines.
 - `phase3/stale-regen` — the four quarantined lanes regenerated (2
@@ -87,7 +87,7 @@ shipped TODAY, validated at every step:
 - Historical branches (integration, anchors-*, etc.) are merged; keep for
   archaeology until the GitHub push, then prune.
 
-## 4. THE POST-RACE PIPELINE (next session's first hours)
+## 4. Historical post-race pipeline planned for the next session
 
 1. **Mini update to 40a75d0** (per-client replay live for the family).
 2. **The roll-forward** — Music City 2026 results into canonical:
@@ -124,7 +124,7 @@ shipped TODAY, validated at every step:
 ## 5. JACK'S POST-RACE BRAIN DUMP (verbatim intent, my annotations)
 
 Captured 2026-07-19 immediately post-race. Not yet scoped/briefed — the
-next director should shape these with the usual taste + data-first gates:
+the next July director was expected to shape these with the then-current gates:
 
 1. **Server-built running-order history.** The rank-space overtake chart
    starts blank for mid-race joiners and accumulates client-side. Want:
@@ -160,7 +160,7 @@ next director should shape these with the usual taste + data-first gates:
    the pin/roll guard was built for exactly this; automation = a guarded
    script + validation gates, never silent.]
 
-## 6. Laws & gotchas that MUST survive the context transfer
+## 6. Historical laws and gotchas recorded for context transfer
 
 - **Regeneration pin law**: `BRYCECAST_ANALYTICS_AS_OF_DATE` reproduces
   the committed package; rolling the venue requires
@@ -193,20 +193,11 @@ next director should shape these with the usual taste + data-first gates:
   always from canonical (as-raced replays carry the honesty line),
   raw data never ships, the DESIGN_TASTE blacklist.
 
-## 7. Starter prompt for the next Fable session
+## 7. Retired starter prompt
 
-```text
-You are Claude Fable 5, director of BryceCast. Read
-docs/PHASE3_HANDOFF_2026-07-19.md FIRST (the controlling state), then
-docs/FABLE_LESSONS.md, then the Phase 3 charter + addenda. Verify
-independently: master sha, the mini's health + URL (Codex runs on the
-mini; the deploy flow is npm run deploy:mini → Codex runs
-update-mini.sh), whether the 40a75d0 bundle landed, and whether the
-Music City roll-forward has run. Then execute the post-race pipeline
-(handoff §4) in order, operating as director with Opus workers and
-gates per the charter. Jack's brain dump (§5) becomes properly scoped
-briefs — data gates before promises, taste gates before renders.
-```
+The July starter prompt is retired. It made this dated handoff controlling,
+fixed model roles, and assigned obsolete deployment and roll-forward actions.
+Use `../AGENTS.md` and its conditional task map.
 
 ---
 

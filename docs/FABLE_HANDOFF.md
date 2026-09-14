@@ -1,8 +1,11 @@
 # Fable Handoff For BryceCast
 
-Updated: 2026-07-18 15:15 EDT.
+Archived takeover packet. Last updated 2026-07-18 15:15 EDT. This document
+records the July product takeover, setup, and incident history; it is not the
+current startup checklist or model-routing contract. Current work starts from
+`AGENTS.md` and follows its task map.
 
-## July 18 Canonical Baseline — Controlling Instructions
+## July 18 Canonical Baseline Ruling
 
 Repository consolidation supersedes the old July 13 branch and frontend-reset
 instructions below.
@@ -29,12 +32,12 @@ instructions.
 
 ## July 13 Night Closeout — Historical Provenance
 
-The current authoritative review build is no longer the older branch described
-later in this historical handoff.
+The review build described below was authoritative on July 13 and was later
+superseded.
 
 - Worktree: `/Users/example/.codex/worktrees/ac78/Bryce POV access`
 - Branch: `codex/integrate-brief-c-live-f6`
-- Current implementation commit: `581925f62d86e39470fd63acbe6aab18bd41b9fc`
+- July 13 implementation commit: `581925f62d86e39470fd63acbe6aab18bd41b9fc`
 - Integration parent: `95d280e4dd8b2e2b9ee132bd5c858be636e9befb`
 - State: saved locally and clean; not merged, pushed, or deployed.
 
@@ -50,12 +53,12 @@ The one inherited exception is
 a stale generated source-reference hash for unchanged `scripts/api-server.mjs`.
 
 All local BryceCast production/review/replay/monitoring processes were stopped
-for the night. LaunchAgent plist files remain installed but were unloaded only
-for the current login session, so they may load on a future login. The old
-production API on port 8787 was consuming approximately one full CPU core at
-closeout; investigate that before restoring it for an extended run.
+for the night. The July record says the LaunchAgent plist files remained
+installed but were unloaded for that login session. This is not a current
+runtime claim. The old production API on port 8787 was consuming approximately
+one full CPU core at closeout.
 
-Tomorrow's isolated review commands are:
+The July 14 planned isolated review commands were:
 
 ```bash
 cd '/Users/example/.codex/worktrees/ac78/Bryce POV access'
@@ -78,16 +81,17 @@ Then optionally pin the deterministic window with:
 curl -fsS 'http://127.0.0.1:8795/api/replay/control?session=5544-6761&t0=2026-07-04T17%3A20%3A20.000Z&speed=1'
 ```
 
-Open `http://127.0.0.1:5181/live`. Review/promote this branch; preserve the
-unrelated edits in the main checkout and do not integrate Brief D by default.
+The July note then directed the reviewer to open
+`http://127.0.0.1:5181/live` and review that branch. The URL, worktree, and
+promotion instruction are historical. The durable rules are to preserve
+unrelated edits and keep Brief D excluded.
 
-This is the entry document for dropping Claude Fable 5 into this repo through
-Claude Code and letting it drive the next product/build phase while using Codex
-GPT-5.5 as the execution and verification worker.
+The sections below record the July takeover context. Current product and
+execution decisions come from `AGENTS.md` and the affected contract.
 
-## Verbatim Vision
+## Historical Verbatim Vision
 
-Jack's current direction:
+Jack's July takeover direction:
 
 > What I want to do is to give Fable key documents to read and just have it take
 > over and drive and build out the project from here. Get from where we're at
@@ -105,11 +109,15 @@ Jack's current direction:
 > should be prompted to use its own discretion. I'm basically just having it use
 > 5.5 agents as execution for any tasks that it would normally use a subagent for.
 
-Interpretation for Fable: own the product direction and visual design, but keep
-the backend/data contracts strict. The current frontend can be replaced. The
-source-backed data system cannot be hand-waved.
+The July interpretation allowed a frontend replacement while keeping the
+backend and source contracts strict. The replacement authorization is now
+superseded by the approved A2 + B + C + F2-F6 baseline in `AGENTS.md`.
 
-## Local Setup Verified
+## Historical Local Setup Snapshot
+
+The versions, aliases, plugin state, and model defaults in this section were
+observed on 2026-07-02. They are preserved as provenance and must not be used as
+current routing instructions without a fresh check.
 
 Verified on this Mac on 2026-07-02:
 
@@ -170,91 +178,40 @@ X research:
   engineer or execution worker. Most low-follower posts should be treated as
   weak corroboration, not source of truth.
 
-Practical conclusion: use the official plugin first. Do not invent a copy/paste
-workflow. The plugin is already installed and now current enough to transfer a
-Claude session into Codex when needed.
+At the time, the official plugin was selected over a copy/paste workflow. That
+setup conclusion is not current configuration evidence.
 
-## Fable Operating Pattern
+## Historical Fable Operating Pattern
 
-Use Fable as:
+The July takeover assigned product/design synthesis to one model and bounded
+implementation, test, UI verification, and independent review to another. That
+fixed model pairing is retired. Current work uses capability-based routing from
+`AGENTS.md`; frozen experiment and independent-review identities remain governed
+by their own contracts.
 
-- Product owner and design lead.
-- Long-context project reader.
-- UI taste arbiter.
-- Final synthesizer over worker outputs.
-- Source-claim reviewer.
+## Historical Claude Code Commands
 
-Use Codex GPT-5.5 as:
+The July launch flags and plugin commands were environment-specific. They are
+available in Git history if the takeover setup itself must be reconstructed;
+they are intentionally absent from the current operating route.
 
-- Execution worker for well-scoped implementation tasks.
-- Backend/test runner.
-- UI verification and computer-use worker.
-- Independent senior review of Fable's plans and diffs.
-- Rescue worker when Claude Code is stuck or the task is terminal-heavy.
+## Conditional Reading Map
 
-Do not use Codex as a vague planner. Give it a bounded prompt with exact files,
-commands, and acceptance criteria.
+Use `AGENTS.md` as the maintained map. Read `README.md` for product orientation
+and use relevant sections of `docs/CODEX_HANDOFF_CURRENT.md` only as dated
+evidence. Read the UI analytics contract for metric or adapter work;
+`docs/API_SERVICE.md` and
+`docs/LIVE_RUNNER_RUNBOOK.md` for API or ingestion work; and the live product
+contract plus `LIVE_DRILL_CLOSEOUT_2026-06-21.md` and
+`LIVE_DRILL_PROCESS_EXHAUSTION_RCA_2026-06-21.md` when changing live behavior.
+Use `docs/DATA_PERMISSIONS.md` for source use and the ML research plan for
+prediction or calibration work. Inspect the UI package schema, relevant keys,
+and representative records instead of loading the full payload by default.
 
-## Claude Code Commands
+Older MagicPath visual docs remain rejected or legacy unless Jack explicitly
+asks to revive them.
 
-Start Fable in this repo:
-
-```bash
-cd "/Users/example/Documents/Bryce POV access"
-env -u CLAUDE_CODE_EFFORT_LEVEL claude --model fable --effort high --dangerously-skip-permissions
-```
-
-Use `--effort max` only for major irreversible architecture/product decisions
-or if the session has enough Fable quota. Recent high-signal X workflow posts
-generally prefer Fable on `high` for sustained work and escalate only when the
-output needs it. If an existing Claude session says
-`CLAUDE_CODE_EFFORT_LEVEL=max overrides this session`, exit and relaunch; `/clear`
-does not change a running process environment.
-
-Inside Claude Code:
-
-```text
-/codex:setup
-/codex:rescue --background implement the bounded task described below...
-/codex:status
-/codex:result
-/codex:review
-/codex:adversarial-review --background review this plan for source/data risks...
-/codex:transfer
-```
-
-For large frontend work, Fable should write the product/design brief and
-component contract, then delegate discrete implementation slices to Codex.
-Fable should review screenshots, source states, and final UX itself before
-declaring the UI good.
-
-## Reading Order For Fable
-
-Read these first:
-
-1. `CLAUDE.md`
-2. `docs/FABLE_HANDOFF.md`
-3. `README.md`
-4. `docs/README.md`
-5. `docs/CODEX_HANDOFF_CURRENT.md`
-6. `LIVE_DRILL_CLOSEOUT_2026-06-21.md`
-7. `LIVE_DRILL_PROCESS_EXHAUSTION_RCA_2026-06-21.md`
-8. `docs/API_SERVICE.md`
-9. `docs/UI_ANALYTICS_PRODUCT_CONTRACT.md`
-10. `docs/LIVE_RACE_DAY_PRODUCT_CONTRACT.md`
-11. `analysis/ui-data-package/README.md`
-12. `analysis/ui-data-package/ui-data-package.json`
-13. `analysis/ui-blueprint/README.md`
-14. `analysis/predictive-race-intelligence/output/context-packs/context-pack-manifest.json`
-15. `analysis/external-review-pack/PROJECT_BRIEF.md`
-16. `analysis/external-review-pack/DATA_CAPABILITY_CATALOG.md`
-17. `analysis/external-review-pack/ANALYTICS_INVENTORY.md`
-18. `analysis/external-review-pack/VISUALIZATION_OPPORTUNITY_MATRIX.md`
-
-Treat older MagicPath visual docs as rejected/legacy unless Jack explicitly asks
-to revive them.
-
-## Current Product Truth
+## Maintained Product Baseline
 
 BryceCast is a Bryce Aron racing analytics and live companion product. The core
 app should cover:
@@ -273,7 +230,8 @@ and why the user should trust each number.
 
 Frontend direction:
 
-- Fable may replace the current frontend design.
+- Preserve the approved A2 + B + C + F2-F6 frontend. A redesign requires a new
+  explicit owner decision; Brief D remains excluded.
 - The first screen should be the actual BryceCast experience, not a marketing
   landing page.
 - Use the existing data package, context packs, and runtime API contracts as the
@@ -339,56 +297,20 @@ Hard constraints:
   races, and source-bounded context. Do not publish expected finish, win/top-10
   probability, betting line, or causal model claims.
 
-## Delegation Recipes
+## Maintained Delegation Rule
 
-Implementation task:
+Use the capability-based rule in `AGENTS.md`. When delegation is useful, give
+the helper a bounded objective, the affected contracts, preserved source-state
+semantics, exact acceptance checks, and the paths it must not change. Select an
+independent reviewer when the decision benefits from independent evidence.
 
-```text
-/codex:rescue --background Read CLAUDE.md, docs/FABLE_HANDOFF.md, docs/UI_ANALYTICS_PRODUCT_CONTRACT.md, and src/data/uiContextAdapter.ts. Implement <specific slice>. Preserve source-state semantics. Do not parse raw CSVs in React. Run <commands>. Return changed files, verification output, and any unresolved risks.
-```
+## Retired Starter Prompt
 
-Independent review:
+The July starter prompt is retired because it required the full takeover reading
+cascade, fixed model roles, and permission to replace the frontend. Start from
+`AGENTS.md` and the affected contract instead.
 
-```text
-/codex:adversarial-review --background Review the current plan/diff for source-backed-data regressions, unsupported live claims, frontend state gaps, and missing tests. Prioritize bugs and behavioral risks with file/line references.
-```
-
-Final pre-ship review:
-
-```text
-/codex:review
-```
-
-Continue Codex work in Codex directly:
-
-```text
-/codex:result
-/codex:transfer
-```
-
-Then resume the returned Codex session with:
-
-```bash
-codex resume <session-id>
-```
-
-## Starter Prompt For Fable
-
-Paste this into Claude Code after starting with `env -u CLAUDE_CODE_EFFORT_LEVEL claude --model fable --effort high --dangerously-skip-permissions`:
-
-```text
-You are Claude Fable 5 leading BryceCast. Read CLAUDE.md and docs/FABLE_HANDOFF.md first, then follow their reading order.
-
-Your job is to take over the project direction and build the next BryceCast product. Use your own frontend taste and discretion. The current React UI is not sacred and can be redesigned or replaced. The data/source contracts are sacred.
-
-Preserve the product truth: BryceCast is a Bryce Aron INDY NXT and career analytics/live companion app. Build source-backed race-week prep, live companion/readiness, post-race debrief, Career Lab, and Source Ops surfaces. Do not invent live POV, team radio audio, GPS, official weather, pit/tire/overtake strategy, or calibrated predictions.
-
-Use Codex GPT-5.5 through the official Claude Code Codex plugin as your execution/review worker. When you would normally spawn a subagent for implementation, tests, computer-use verification, or independent review, use /codex:rescue, /codex:review, or /codex:adversarial-review with a self-contained prompt. You own final synthesis and final product judgment.
-
-First, produce a concise plan for the next frontend/backend architecture pass. Then execute it end to end, delegating bounded tasks to Codex where useful. Validate with the relevant npm scripts and screenshots/QA for frontend work.
-```
-
-## X MCP Notes
+## Historical X MCP Notes
 
 The pasted attachment in this Codex task is the X MCP documentation index.
 Relevant setup path:
@@ -408,7 +330,7 @@ Relevant setup path:
 }
 ```
 
-Current blocker for first-run `xurl mcp` auth on this Mac:
+The July blocker for first-run `xurl mcp` auth on this Mac was:
 
 - `127.0.0.1:8765` is occupied by an ArcWiki Python server.
 - The auto-improvement `.env.local` has X OAuth app/token values.
