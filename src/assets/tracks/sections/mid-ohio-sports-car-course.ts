@@ -1,12 +1,19 @@
 import type { TrackSectionAnchorSet } from './types';
 
 /** Mid-Ohio Sports Car Course — 2.26-mi, 13-section road course, clockwise.
- *  Official Section Results publish SIXTEEN loop-to-loop families that chain the
- *  driving order Turn 1 → 1A → 1B → Turn 2 → Turn 3 → Back Stretch → Turn 4 → 5
- *  → 6/7 → 8 → 9 → 10 → 11 → 12 → 12C → 13, covering 93.7% of the lap; the
- *  remaining 6.3% is the untimed pit/front straight around S/F (feed section
- *  SF → I1), which stays the quiet base outline (an honest gap, not a coloured
- *  span).
+ *  Official Section Results publish SEVENTEEN loop-to-loop families that chain
+ *  the driving order FS - PO → Turn 1 → 1A → 1B → Turn 2 → Turn 3 → Back
+ *  Stretch → Turn 4 → 5 → 6/7 → 8 → 9 → 10 → 11 → 12 → 12C → 13, covering
+ *  100.0% of the lap.
+ *
+ *  FRONT-STRAIGHT CLOSURE (2026-09-19). The 2026-07-19 curation called the
+ *  6.3% around S/F "the untimed pit/front straight (feed section SF → I1)" and
+ *  left it the quiet base outline. The report does publish that span: `FS - PO`
+ *  runs on every lap at a 135 mph median, and the race lane was discarding it
+ *  as a pit split on the name alone. It IS feed section SF → I1 — its official
+ *  time × speed length of 0.141667 mi is 8,976 feed units, loop I1 on the nose
+ *  (the pit-out loop PO sits 48 units earlier, alongside the racing surface
+ *  rather than in the pit lane). The seventeen families now sum to the lap.
  *
  *  PINNED FROM THE FEED LOOP DISTANCES (2026-07-19, scripts/derive-section-
  *  anchors.mjs). The RaceTools MAP package for Mid-Ohio is loop-poor — it
@@ -42,8 +49,9 @@ export const midOhioSportsCarCourseSections: TrackSectionAnchorSet = {
   drivingDirection: 'clockwise',
   lapLengthMi: 2.258,
   confidence: 'anchored',
-  note: 'Sixteen official loop-to-loop sections (93.7% of the lap); the pit/front straight around S/F is untimed and stays the base outline. Section lengths and mid-lap boundaries are pinned to the feed’s decoded timing-loop distances (semantic-layer geometry.loopDistances, nineteen mainline loops I1…I13), which reproduce the official time × speed lengths to the inch and corroborate the whole-lap map section to 0.006%. Positions are laid on the distorted road-course outline from the S/F datum, with Turn 1 and the Turn 2 Keyhole confirmed on the corner arcs.',
+  note: 'Seventeen official loop-to-loop sections (100.0% of the lap); FS - PO is the measured S/F→I1 front-straight span (0.141667 mi = 8,976 feed units, loop I1 exactly). Section lengths and mid-lap boundaries are pinned to the feed’s decoded timing-loop distances (semantic-layer geometry.loopDistances, nineteen mainline loops I1…I13), which reproduce the official time × speed lengths to the inch and corroborate the whole-lap map section to 0.006%. Positions are laid on the distorted road-course outline from the S/F datum, with Turn 1 and the Turn 2 Keyhole confirmed on the corner arcs.',
   sections: [
+    { familyId: 'mid-fs-po', sectionName: 'FS - PO', label: 'S/F → Turn 1', startT: 0.7135, endT: 0.7762, measuredLengthMi: 0.1417, startLoop: 'SF', endLoop: 'I1' },
     { familyId: 'mid-t1', sectionName: 'Turn 1', label: 'Turn 1', startT: 0.7762, endT: 0.8325, measuredLengthMi: 0.1271, startLoop: 'I1', endLoop: 'I1A' },
     { familyId: 'mid-t1a', sectionName: 'Turn 1A', label: 'Turn 1A', startT: 0.8325, endT: 0.8973, measuredLengthMi: 0.1462, startLoop: 'I1A', endLoop: 'I1B' },
     { familyId: 'mid-t1b', sectionName: 'Turn 1B', label: 'Turn 1B', startT: 0.8973, endT: 0.9464, measuredLengthMi: 0.111, startLoop: 'I1B', endLoop: 'I2' },

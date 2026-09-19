@@ -21,7 +21,7 @@
     "teamRadioAudio": false,
     "tireStrategy": false
   },
-  "generatedAt": "2026-09-19T19:54:18Z",
+  "generatedAt": "2026-09-19T22:02:05Z",
   "id": "live_race_day_context",
   "replayQuality": {
     "archiveState": "runtime_only",
@@ -43,15 +43,15 @@
   "sourceRefs": [
     {
       "bytes": 22303,
-      "path": "docs/contracts/LIVE_RACE_DAY_PRODUCT_CONTRACT.md",
+      "path": "docs/LIVE_RACE_DAY_PRODUCT_CONTRACT.md",
       "role": "live product contract",
       "sha256": "569bf18e1aae13d9f43aff10291509912c03e1ad1bbb0d9e53325bb4ff26e3ae"
     },
     {
-      "bytes": 114688,
+      "bytes": 113666,
       "path": "scripts/api-server.mjs",
       "role": "runtime API",
-      "sha256": "143061dfe6a3d850c82157ca243e52504bf5d75969474568688e201c255d89f7"
+      "sha256": "c8bf05731346550b25f3fc3c671557dc17fd2629a05f64c3a3e95fbdb4591239"
     },
     {
       "bytes": 4720,

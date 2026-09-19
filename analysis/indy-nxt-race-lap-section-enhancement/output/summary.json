@@ -10,18 +10,18 @@
     "raceLapInflectionPoints": 189,
     "raceLapMicrostates": 1748,
     "raceLapSegments": 220,
-    "raceSectionFieldObservations": 522687,
+    "raceSectionFieldObservations": 522884,
     "raceSectionLapObservations": 22333,
     "raceSectionSessionSummaries": 44,
     "roadAmericaRows": 4,
     "upcomingVenueRows": 0
   },
   "derivedRemainderCoverage": {
-    "fullyTimedSessions": 17,
-    "genuineGapSessions": 27,
+    "fullyTimedSessions": 44,
+    "genuineGapSessions": 0,
     "note": "The derived remainder (lapTotal minus racing-line sections) is shipped only for sessions whose racing sections leave a genuine untimed stretch (>2% of the lap). Sessions at or below that threshold are classified as fully timed and do not ship a derived row."
   },
-  "generatedAt": "2026-09-10T23:02:18Z",
+  "generatedAt": "2026-09-19T22:02:22Z",
   "ok": true,
   "publicPointPrediction": false,
   "sectionSourceStateCounts": {
