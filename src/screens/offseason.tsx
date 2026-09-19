@@ -226,7 +226,10 @@ export interface CareerChapter {
   races: number;
 }
 
-const chapterColors = ['var(--bryce)', 'var(--chapter-gb3)', 'var(--chapter-f1600)', 'var(--chapter-euro)', 'var(--chapter-ff)', 'var(--chapter-imsa)', 'var(--chapter-fro)'];
+/* One ink ramp, light to dark, with the current series in gold — the career's
+ * chapters by race count without a second palette on the landing page. */
+const chapterShade = (index: number, total: number): string =>
+  index === 0 ? 'var(--bryce)' : `color-mix(in srgb, var(--ink-primary) ${Math.round(62 - (44 * (index - 1)) / Math.max(1, total - 2))}%, var(--surface-0))`;
 
 export const FeatureDoors = ({
   review,
@@ -290,7 +293,7 @@ export const FeatureDoors = ({
               <span className="door__chapters">
                 <span className="door__chapter-bar" aria-hidden>
                   {chapters.map((chapter, index) => (
-                    <span key={chapter.name} style={{ flexGrow: chapter.races, background: chapterColors[index % chapterColors.length] }} />
+                    <span key={chapter.name} style={{ flexGrow: chapter.races, background: chapterShade(index, chapters.length) }} />
                   ))}
                 </span>
                 <span className="caption caption--secondary">
@@ -496,11 +499,10 @@ const WeekendCard = ({ date, venue, eventName, trackName }: { date: string; venu
         <span className="cal-row__month">{formatDate(date, { weekday: 'short' })}</span>
       </span>
       <span className="weekend__art">
-        {history ? (
-          <HeatTrack trackName={trackName} maxHeight={96} />
-        ) : hasOutline ? (
-          <VenueShape trackName={trackName ?? venue} width={150} height={90} muted />
-        ) : null}
+        {/* Plain outlines on every card: most of next year's venues have no laps
+            of his yet, and a board that is half pace maps reads as half broken.
+            The pace map is one tap away where it exists. */}
+        {hasOutline ? <VenueShape trackName={trackName ?? venue} width={132} height={84} muted={!history} /> : null}
       </span>
       <span className="weekend__text">
         <span className="weekend__venue">{venue}</span>

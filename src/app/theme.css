@@ -2601,14 +2601,6 @@ a.ss-race--link:hover { background: var(--surface-0); }
 .door--blue { --door-hue: var(--series-1); }
 .door--green { --door-hue: var(--series-2); }
 .door--live { --door-hue: var(--status-bad-dot); }
-.door::before {
-  content: '';
-  position: absolute;
-  inset: 0 0 auto 0;
-  height: 3px;
-  background: var(--door-hue);
-  opacity: 0.85;
-}
 .door .door__icon { background: color-mix(in srgb, var(--door-hue) 16%, var(--surface-0)); color: color-mix(in srgb, var(--door-hue) 70%, var(--ink-primary)); }
 .door:hover { background: color-mix(in srgb, var(--door-hue) 7%, var(--surface-1)); }
 .door__visual { display: block; width: 100%; margin-top: auto; padding-top: 14px; }
@@ -2647,16 +2639,7 @@ a.ss-race--link:hover { background: var(--surface-0); }
 
 /* standout cards: the race's own pace map is the picture */
 .standout { align-items: stretch; }
-.standout__label {
-  align-self: flex-start;
-  font-size: 11.5px;
-  font-weight: 620;
-  letter-spacing: 0.02em;
-  padding: 3px 9px;
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--bryce) 26%, var(--surface-0));
-  color: var(--bryce-ink-on);
-}
+.standout__label { font-size: 13px; font-weight: 500; color: var(--ink-secondary); }
 .standout__art { display: flex; align-items: center; justify-content: center; min-height: 150px; padding: 6px 0; pointer-events: none; }
 
 /* Live, off-season: the auto-running replay says plainly that it is one */
