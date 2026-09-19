@@ -1052,7 +1052,7 @@
         },
         {
           "kind": "doc",
-          "path": "docs/CAREER_ANALYTICS_COVERAGE_MATRIX.md"
+          "path": "docs/archive/audits/CAREER_ANALYTICS_COVERAGE_MATRIX.md"
         }
       ],
       "grain": [
@@ -1138,7 +1138,7 @@
         },
         {
           "kind": "doc",
-          "path": "docs/LIVE_DATA_READINESS_AUDIT.md"
+          "path": "docs/archive/audits/LIVE_DATA_READINESS_AUDIT.md"
         }
       ],
       "grain": [

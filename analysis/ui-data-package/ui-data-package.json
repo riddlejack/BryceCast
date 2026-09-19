@@ -1,6 +1,6 @@
 {
   "schemaVersion": "brycecast.uiDataPackage.v1",
-  "generatedAt": "2026-09-19T19:54:19.722Z",
+  "generatedAt": "2026-09-19T20:00:34.301Z",
   "sourceHash": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd",
   "asOfDate": "2026-09-10",
   "baselineCommit": "f2f69c6",
@@ -15,9 +15,9 @@
     },
     "manifest": {
       "path": "analysis/ui-contract/ui-metric-manifest.json",
-      "bytes": 39290,
-      "modifiedAt": "2026-07-13T17:02:53.261Z",
-      "sha256": "849debd1f6d78a811e1011ba15e8e2848630d04fb5a87572de518ccda6aaccc7"
+      "bytes": 39320,
+      "modifiedAt": "2026-09-19T20:00:32.838Z",
+      "sha256": "83b28f8e979d0202055eb4104f0c8c9d23a75b96b8d0548724fcc3ecaef6b192"
     },
     "uiReadyArtifacts": {
       "path": "analysis/ui-ready-artifacts.json",
@@ -424,8 +424,8 @@
     "predictiveInventory": {
       "path": "analysis/predictive-race-intelligence/output/analytics_inventory_registry.json",
       "bytes": 54807,
-      "modifiedAt": "2026-09-11T01:20:12.335Z",
-      "sha256": "b0807cb4466abf7f70f7a61e3518f12e259ace13cffb20e76a574124755615a0"
+      "modifiedAt": "2026-09-19T20:00:33.152Z",
+      "sha256": "4d774094b50f92c5dc1ad60d397239fb4951bee8177603125dfa694511ed1bf9"
     },
     "predictiveModelScorecard": {
       "path": "analysis/predictive-race-intelligence/output/model_scorecard.json",
