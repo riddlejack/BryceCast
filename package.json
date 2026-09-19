@@ -4,12 +4,11 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite --host 0.0.0.0",
+    "dev": "vite --host 127.0.0.1",
     "build": "tsc && vite build && node scripts/write-release.mjs",
-    "preview": "vite preview --host 0.0.0.0",
+    "preview": "vite preview --host 127.0.0.1",
     "serve:api": "node scripts/api-server.mjs",
     "serve:app": "node scripts/api-server.mjs --static=dist",
-    "deploy:mini": "node scripts/deploy-to-mini.mjs",
     "live:replay": "node scripts/live-replay.mjs",
     "test:live-replay": "node scripts/test-live-replay.mjs",
     "test:live-motion": "node scripts/test-live-motion.mjs",
@@ -135,7 +134,16 @@
     "analytics:timing-coverage:validate": "node analysis/historical-data-lake/validate-timing-coverage.mjs",
     "analytics:live-captures:export": "node analysis/semantic-layer/export-live-captures.mjs",
     "test:timing-downloads": "node scripts/test-timing-downloads.mjs",
-    "analytics:setup": "node scripts/setup-analytics.mjs"
+    "analytics:setup": "node scripts/setup-analytics.mjs",
+    "demo": "node scripts/serve-demo.mjs",
+    "example:timing": "node examples/timing-sections/run.mjs",
+    "portfolio:stats": "node scripts/portfolio-stats.mjs",
+    "test:publication:security": "node scripts/test-publication-security.mjs",
+    "test:publication:demo": "node scripts/test-publication-demo.mjs",
+    "test:publication": "npm run example:timing && npm run test:api-operator-idle && npm run test:publication:security && npm run test:publication:demo && npm run analytics:view-models:validate && npm run test:publication:adapters && npm run test:archive-v2",
+    "test:publication:adapters": "node scripts/test-ui-context-adapter.mjs --publication",
+    "example:sqlite": "node scripts/test-archive-v2.mjs",
+    "data:schema": "node scripts/print-archive-schema.mjs"
   },
   "dependencies": {
     "@vitejs/plugin-react": "^5.0.0",
@@ -150,5 +158,9 @@
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "playwright-core": "^1.60.0"
+  },
+  "description": "Bryce Aron career analytics, historical timing reconstruction, and live race companion \u2014 portfolio source edition",
+  "engines": {
+    "node": ">=22.13.0"
   }
 }

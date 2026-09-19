@@ -1,6 +1,6 @@
 # Development history
 
-This publication edition preserves the canonical BryceCast `master` line as a 301-commit history spanning **2026-06-08 through 2026-09-14**. Author names, author dates, commit messages, and development order were retained during publication filtering. Git object IDs changed because source-data and private-runtime paths were removed from every reachable tree.
+This publication edition preserves the canonical BryceCast `master` line as a 301-commit history spanning **2026-06-08 through 2026-09-14**. Author names, author dates, and development order were retained during publication filtering. Commit messages preserve their narrative; embedded commit-ID references were rewritten to their filtered equivalents. Human author/committer emails use the owner's GitHub noreply identity. Git object IDs changed because source-data and private-runtime paths were removed from every reachable tree.
 
 The history is evidence of changes recorded in Git. It is not a transcript of prompts, chats, private messages, or every decision made during development. No conversation history was used to reconstruct this account.
 
