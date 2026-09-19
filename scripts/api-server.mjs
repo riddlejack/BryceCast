@@ -38,7 +38,10 @@ const enrichmentCacheTtlMs = 30000;
 const apiCacheRefreshMs = Number(process.env.BRYCECAST_API_CACHE_REFRESH_MS ?? 15000);
 const apiRunnerFreshMs = Number(process.env.BRYCECAST_API_RUNNER_FRESH_MS ?? 60000);
 const replayEnabled = process.env.BRYCECAST_REPLAY === '1';
-const runnerOnlyApi = process.env.BRYCECAST_API_RUNNER_ONLY === '1';
+// A source checkout is a cached reader by default. Upstream polling is an
+// explicit operator choice; the offline portfolio demo never starts this API.
+const runnerOnlyApi = process.env.BRYCECAST_API_RUNNER_ONLY !== '0';
+const timingDownloadsEnabled = process.env.BRYCECAST_ENABLE_TIMING_DOWNLOADS === '1';
 const captureReplayOverlay = createReplayOverlay({ enabled: replayEnabled, sqlitePath, runnerStatusPath });
 const lakeReplayFeeds = createLakeReplayFeeds({ enabled: replayEnabled, runnerStatusPath });
 const replayOverlay = createReplayRouter({ captureOverlay: captureReplayOverlay, lakeFeeds: lakeReplayFeeds, enabled: replayEnabled });
@@ -67,13 +70,13 @@ const argValue = (name, fallback) => {
 };
 
 const port = Number(argValue('port', process.env.PORT ?? '8787'));
-const host = argValue('host', process.env.HOST ?? '0.0.0.0');
+const host = argValue('host', process.env.HOST ?? '127.0.0.1');
 const staticArg = argValue('static', '');
 const staticDir = staticArg ? resolve(root, staticArg) : null;
 
 const jsonHeaders = {
   'content-type': 'application/json; charset=utf-8',
-  'access-control-allow-origin': '*',
+  ...(process.env.BRYCECAST_ALLOWED_ORIGIN ? { 'access-control-allow-origin': process.env.BRYCECAST_ALLOWED_ORIGIN } : {}),
   'access-control-allow-methods': 'GET, POST, OPTIONS',
   'access-control-allow-headers': 'content-type, accept'
 };
@@ -2250,6 +2253,14 @@ const proxyRaceControl = async (req, res, pathname) => {
   if (!endpoint) return false;
   const url = new URL(req.url ?? '/', `http://${req.headers.host ?? 'localhost'}`);
   if (url.searchParams.get('refresh') === '1') {
+    if (!isOperatorRequest(req)) {
+      sendError(res, 403, 'Operator access required for upstream refresh.');
+      return true;
+    }
+    if (runnerOnlyApi) {
+      sendError(res, 409, 'The capture runner owns upstream refresh on this host.');
+      return true;
+    }
     const result = await fetchEndpointAndCache(endpoint);
     if (!result.ok) {
       sendError(res, 502, 'Race Control proxy refresh failed', result.error);
@@ -2258,7 +2269,6 @@ const proxyRaceControl = async (req, res, pathname) => {
     res.writeHead(200, {
       'content-type': result.contentType ?? 'application/json',
       'cache-control': 'no-store',
-      'access-control-allow-origin': '*',
       'x-brycecast-refresh-warning': 'Direct upstream proxy refresh is operator/debug only; app clients should use cached /api routes.'
     });
     res.end(JSON.stringify(result.payload));
@@ -2416,6 +2426,10 @@ const handler = async (req, res) => {
 
     const archiveMatch = pathname.match(/^\/api\/timing-archive\/([^/]+)\/observations$/);
     if (req.method === 'GET' && archiveMatch) {
+      if (!timingDownloadsEnabled) {
+        sendError(res, 403, 'Timing data redistribution is disabled. See DATA_RELEASE.md.');
+        return;
+      }
       const sessionId = decodeURIComponent(archiveMatch[1]);
       const ledger = await readJsonFile(join(root, 'data/historical-data-lake/catalog/timing-coverage-ledger.json'));
       const sourceId = url.searchParams.get('source');
@@ -2570,6 +2584,10 @@ const handler = async (req, res) => {
     if (pathname === '/api/weather/live') {
       const trackId = url.searchParams.get('trackId') ?? 'track_road_america';
       const forceRefresh = url.searchParams.get('cache') === '0' || url.searchParams.get('refresh') === '1';
+      if (forceRefresh && !isOperatorRequest(req)) {
+        sendError(res, 403, 'Operator access required for weather refresh.');
+        return;
+      }
       const track = await loadTrackMetadata(trackId);
       sendJson(res, 200, await fetchCachedLiveWeatherForTrack(track, { forceRefresh }));
       return;
@@ -2577,6 +2595,10 @@ const handler = async (req, res) => {
 
     if (pathname === '/api/weather/upcoming') {
       const forceRefresh = url.searchParams.get('cache') === '0' || url.searchParams.get('refresh') === '1';
+      if (forceRefresh && !isOperatorRequest(req)) {
+        sendError(res, 403, 'Operator access required for weather refresh.');
+        return;
+      }
       sendJson(res, 200, await buildUpcomingIndyNxtWeatherReport({ forceRefresh }));
       return;
     }

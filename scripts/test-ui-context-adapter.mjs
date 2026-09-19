@@ -11,7 +11,7 @@ try {
   await build({
     absWorkingDir: repoRoot,
     bundle: true,
-    entryPoints: ['tests/uiContextAdapter.test.ts'],
+    entryPoints: [process.argv.includes('--publication') ? 'tests/publicationAdapters.test.ts' : 'tests/uiContextAdapter.test.ts'],
     format: 'esm',
     loader: { '.json': 'json' },
     logLevel: 'silent',

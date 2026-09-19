@@ -3,7 +3,7 @@
   "slice": "slice-1-loop-crossings",
   "generatedAt": "2026-09-10T22:40:37.009Z",
   "sourceTier": "racetools_capture",
-  "lakeDataRoot": "/Users/example/.brycecast/data-lake",
+  "lakeDataRoot": "/Users/jackriddle/.brycecast/data-lake",
   "provenanceNote": "Derived from immutable RaceTools captures (raw/ only). Local time-of-day is the authoritative crossing clock; feed heartbeat epochs are date anchors with UNVALIDATED timezone. Not an official BryceCast fact.",
   "sessionCount": 143,
   "crossingTotal": 2613292,

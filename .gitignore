@@ -15,3 +15,23 @@ __pycache__/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Publication/runtime boundaries; datasets can be distributed separately after permission.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.sqlite
+*.sqlite-*
+*.db
+data/career/career.dataset.json
+data/career/raw/
+data/career/staging/
+analysis/**/output/sessions/*.ndjson.gz
+analysis/**/output/sessions-2026/*.ndjson.gz
+analysis/**/output/timing-observations/*.ndjson.gz
+analysis/replay-feeds/output/feeds/
+publication-private/

@@ -1,6 +1,6 @@
 {
   "schemaVersion": "brycecast.uiDataPackage.v1",
-  "generatedAt": "2026-09-11T01:20:52.259Z",
+  "generatedAt": "2026-09-19T18:50:28.106Z",
   "sourceHash": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd",
   "asOfDate": "2026-09-10",
   "baselineCommit": "f2f69c6",
@@ -436,8 +436,8 @@
     "predictiveContextPackManifest": {
       "path": "analysis/predictive-race-intelligence/output/context-packs/context-pack-manifest.json",
       "bytes": 62753,
-      "modifiedAt": "2026-09-11T01:20:20.420Z",
-      "sha256": "7961621e8437fefb9db6c34a57e60886e644dd458e8e9b3692b246dd677c0882"
+      "modifiedAt": "2026-09-19T18:50:26.994Z",
+      "sha256": "251fba6ae8a8ca19e051e63bfaaeb00128850cc7766ae8a08b7e672ce9e7126a"
     },
     "predictiveCareerPriorMatrix": {
       "path": "analysis/predictive-race-intelligence/output/career_prior_matrix.csv",
@@ -531,9 +531,9 @@
     },
     "uiDataPackageBuilderScript": {
       "path": "scripts/build-ui-data-package.mjs",
-      "bytes": 194228,
-      "modifiedAt": "2026-09-10T23:20:31.552Z",
-      "sha256": "ae07c743fca27e96d59f9a339c256a7c96dded7d1c3f58b7a42066791a9597ce"
+      "bytes": 194326,
+      "modifiedAt": "2026-09-19T18:47:58.784Z",
+      "sha256": "fc19f3ce1c4b6c122d86653ea9260ed3d2da440a185fadf47cc8d94f0727e459"
     },
     "uiDataPackageValidatorScript": {
       "path": "scripts/validate-ui-data-package.mjs",
@@ -549,9 +549,9 @@
     },
     "timingCoverageLedger": {
       "path": "data/historical-data-lake/catalog/timing-coverage-ledger.json",
-      "bytes": 862872,
-      "modifiedAt": "2026-09-11T01:16:57.206Z",
-      "sha256": "915ac004ba53f8866d174272eb4f2ebea9142b8ff9df5686a583d0401311f170"
+      "bytes": 862869,
+      "modifiedAt": "2026-09-19T18:36:56.200Z",
+      "sha256": "6c33cdbd3e231a1621cd4bb623d31b2f8a4ef301a57db4d779a73c579fda185f"
     },
     "qualiLabContextPack": {
       "id": "quali_lab_run_by_run",
@@ -684,14 +684,14 @@
         "bytes": 2903,
         "id": "live_race_day_context",
         "path": "analysis/predictive-race-intelligence/output/context-packs/live-race-day-context.json",
-        "sha256": "c1db6c350f83ef69002e587322d6b0049c9d421c6031566f313d83bce9add23c",
+        "sha256": "56d381e57679a198fbad08f323f13dd857324581b38100ee2ab758ad24db5893",
         "sourceRefs": [
           "docs/LIVE_RACE_DAY_PRODUCT_CONTRACT.md",
           "scripts/api-server.mjs",
           "scripts/live-source-endpoints.mjs"
         ],
         "type": "live_race_day",
-        "modifiedAt": "2026-09-11T01:20:20.156Z"
+        "modifiedAt": "2026-09-19T18:50:26.740Z"
       },
       {
         "bytes": 5742,
@@ -2282,14 +2282,14 @@
         "bytes": 2903,
         "id": "live_race_day_context",
         "path": "analysis/predictive-race-intelligence/output/context-packs/live-race-day-context.json",
-        "sha256": "c1db6c350f83ef69002e587322d6b0049c9d421c6031566f313d83bce9add23c",
+        "sha256": "56d381e57679a198fbad08f323f13dd857324581b38100ee2ab758ad24db5893",
         "sourceRefs": [
           "docs/LIVE_RACE_DAY_PRODUCT_CONTRACT.md",
           "scripts/api-server.mjs",
           "scripts/live-source-endpoints.mjs"
         ],
         "type": "live_race_day",
-        "modifiedAt": "2026-09-11T01:20:20.156Z"
+        "modifiedAt": "2026-09-19T18:50:26.740Z"
       },
       "fixtures": [
         {

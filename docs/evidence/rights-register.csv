@@ -1,0 +1,14 @@
+source_family,owner_or_route,contact,material_scope,status,public_derived,public_raw,permission_date,evidence_locator,attribution,notes
+racetools,RaceTools / Realtime Software Development,info@racetools.com,Timing recordings; loop geometry; normalized crossings,OPEN,,,,,,Written public redistribution scope needed; existing reported verbal use scope is narrower
+timing71,Timing71 and underlying timing rights holders,info@timing71.org,Archive recordings; normalized replay and analyses,OPEN,,,,,,Software license does not settle data rights
+indycar,INDYCAR / INDY NXT,indycar@indycar.com,Race Control captures; official results; PDFs; map assets,OPEN,,,,,,Route to timing/data licensing
+imsa,IMSA / Al Kamel,https://www.imsa.com/contactus/,Results; time cards; stint/lap derivatives,OPEN,,,,,,Clarify publisher and timing contractor roles
+gb3,GB3 / MSVR / TSL,https://www.gb-3.net/contact-us,Results books; classification; condition metadata,OPEN,,,,,,Scope each season and publisher
+euroformula,GT Sport,info@gtsport.es,Results PDFs and derived tables,OPEN,,,,,,Scope raw and derived use separately
+froc,Toyota Gazoo Racing NZ,racing@toyota.co.nz,Results pages; grids; PDFs,OPEN,,,,,,Scope raw and derived use separately
+frp,Formula Race Promotions,Media@racefrp.com,F1600 results; standings PDFs,OPEN,,,,,,Scope raw and derived use separately
+formula_ford,BRSCC / BARC / TSL / individual circuits,https://brscc.co.uk/centres-and-contacts/,Timing books; lap charts; classifications,OPEN,,,,,,Multiple source-specific holders
+career_context,Team USA Scholarship / Badger Kart Club,https://badgerkartclub.com/contact-us/,Context articles; karting records; images,OPEN,,,,,,Separate factual extracts from text/media
+open_meteo,Open-Meteo,https://open-meteo.com/en/terms,Modeled weather data,OPEN,,,,,,Review attribution and endpoint-use terms
+osm,OpenStreetMap contributors,https://wiki.openstreetmap.org/wiki/Legal_FAQ,Map-derived geometry,OPEN,,,,,,Review ODbL attribution/share-alike obligations
+media,Individual photographers / teams / map publishers,source-specific,Photos; logos; illustrations,OPEN,,,,,,Asset-level review required

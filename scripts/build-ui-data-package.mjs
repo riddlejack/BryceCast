@@ -3815,16 +3815,17 @@ if (!skipUpstreamRefresh) {
   runContextEventNarrativeLayer();
   runPredictiveRaceIntelligence();
   runSupplementalContextPacks();
-}
-runCareerLifeStats();
-runCareerAtlas();
-runRestartReport();
-runCautionAtlas();
-runQualifyingLayer();
-// Qualifying is part of the shipped artifact graph, not a manual side lane.
-for (const script of ['analysis/quali-lab/scripts/build_quali_lab.mjs', 'analysis/quali-lab/scripts/validate_quali_lab.mjs']) {
-  const result = spawnSync(process.execPath, [script], { cwd: repoRoot, stdio: 'inherit' });
-  if (result.status !== 0 || result.error) throw new Error(`Qualifying refresh failed: ${script}`);
+  runCareerLifeStats();
+  runCareerAtlas();
+  runRestartReport();
+  runCautionAtlas();
+  runQualifyingLayer();
+  // Keep every upstream lane inside the explicit refresh boundary. A narrow
+  // package rebuild must not rewrite analyses or require private raw sessions.
+  for (const script of ['analysis/quali-lab/scripts/build_quali_lab.mjs', 'analysis/quali-lab/scripts/validate_quali_lab.mjs']) {
+    const result = spawnSync(process.execPath, [script], { cwd: repoRoot, stdio: 'inherit' });
+    if (result.status !== 0 || result.error) throw new Error(`Qualifying refresh failed: ${script}`);
+  }
 }
 const dataPackage = buildPackage();
 fs.writeFileSync(outputPath, `${JSON.stringify(dataPackage, null, 2)}\n`);
