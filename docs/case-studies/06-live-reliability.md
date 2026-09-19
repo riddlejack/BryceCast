@@ -4,13 +4,13 @@ BryceCast's live architecture was redesigned after a Road America drill exposed 
 
 ## Failure
 
-The drill exhausted process slots through overlapping collectors and monitors. CPU and memory were not the primary constraint. At the same time, the normal capture path stopped recording for more than 26 minutes. The [root-cause analysis](../../LIVE_DRILL_PROCESS_EXHAUSTION_RCA_2026-06-21.md) treats those as architectural findings rather than isolated operator errors.
+The drill exhausted process slots through overlapping collectors and monitors. CPU and memory were not the primary constraint. At the same time, the normal capture path stopped recording for more than 26 minutes. The [root-cause analysis](../archive/live-drills/LIVE_DRILL_PROCESS_EXHAUSTION_RCA_2026-06-21.md) treats those as architectural findings rather than isolated operator errors.
 
 The key change was ownership: one long-running ingestor now owns upstream polling, normalization, raw persistence, SQLite/JSONL writes, latest-snapshot publication, and health state for a source family. API viewers read cache or archive by default instead of starting another upstream poller.
 
 ## Method
 
-The [runner core](../../scripts/lib/live-runner-core.mjs) uses explicit lifecycle phases: `IDLE` at roughly five-minute cadence, `ARMED` near 15 seconds, `LIVE` at one second, and `COOLDOWN` at 15 seconds for approximately ten minutes. It combines lock aging, heartbeat checks, a minimum process budget, and runner-only ownership. The operating rules are in the [live runner runbook](../LIVE_RUNNER_RUNBOOK.md).
+The [runner core](../../scripts/lib/live-runner-core.mjs) uses explicit lifecycle phases: `IDLE` at roughly five-minute cadence, `ARMED` near 15 seconds, `LIVE` at one second, and `COOLDOWN` at 15 seconds for approximately ten minutes. It combines lock aging, heartbeat checks, a minimum process budget, and runner-only ownership. The operating rules are in the [live runner runbook](../operations/LIVE_RUNNER_RUNBOOK.md).
 
 The [API server](../../scripts/api-server.mjs) also guards identity and series. A current timing row must match Bryce's stable identity. If it does not, the API returns a labeled archived fallback or an error rather than presenting another series as current. Direct upstream refresh remains an explicit operator/debug action.
 

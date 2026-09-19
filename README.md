@@ -4,9 +4,9 @@
 
 BryceCast follows Bryce Aron's career across junior single-seaters, INDY NXT, and endurance racing. It brings together historical research, timing reconstruction, weather context, competitor comparisons, and a web companion designed around real race weekends.
 
-[Website](https://brycecast.com) · [Engineering atlas](docs/ENGINEERING_ATLAS.md) · [Architecture](docs/ARCHITECTURE.md) · [Run locally](#run-the-historical-demo) · [Data release plan](DATA_RELEASE.md)
+[Website](https://brycecast.com) · [Engineering atlas](docs/engineering/ENGINEERING_ATLAS.md) · [Architecture](docs/engineering/ARCHITECTURE.md) · [Run locally](#run-the-historical-demo) · [Data release plan](DATA_RELEASE.md)
 
-> **Publication candidate:** the code repository is being prepared privately. Included historical outputs and third-party visual/data assets remain under source-specific review. Raw archives and production SQLite are candidates for a separate permissioned release; they are not included in this Git checkout. See [release status](docs/RELEASE_STATUS.md).
+> **Publication candidate:** the code repository is being prepared privately. Included historical outputs and third-party visual/data assets remain under source-specific review. Raw archives and production SQLite are candidates for a separate permissioned release; they are not included in this Git checkout. See [release status](docs/publication/RELEASE_STATUS.md).
 
 ![Qualifying section analysis in the local historical demo](docs/evidence/qualifying-heat-map.png)
 
@@ -38,7 +38,7 @@ Career counts are from September 10, 2026; timing coverage is recorded September
 | Career data has very different depth by series | Normalize outcomes while preserving source-family eligibility; build series-specific analyses | [Career and competitors](docs/case-studies/07-career-and-competitors.md); descriptive comparisons, not causal driver/team attribution |
 | One-second captures repeat slow-changing payloads | Store immutable payload versions by content hash and reconstruct observations through references | [SQLite archive](docs/case-studies/08-sqlite-archive.md); runnable synthetic migration and byte-equivalence checks |
 
-The [engineering atlas](docs/ENGINEERING_ATLAS.md) also covers cautions, restarts, race narratives, archive discovery, source contamination, career mileage/travel estimates, and the less visible integrity controls.
+The [engineering atlas](docs/engineering/ENGINEERING_ATLAS.md) also covers cautions, restarts, race narratives, archive discovery, source contamination, career mileage/travel estimates, and the less visible integrity controls.
 
 ## Run the historical demo
 
@@ -69,18 +69,20 @@ These examples are small and fully runnable. Reproducing every historical chart 
 ## Repository map
 
 - `src/` — React/TypeScript application, typed adapters, track geometry, and section rendering.
-- `scripts/` — ingestion, live service, validation, archive, and release/demo utilities. Live/ingestion commands are opt-in and require their documented inputs.
-- `analysis/` — analytical producers, retained reports, generated context packs, and research results.
-- `data/` — source manifests, coverage/validation reports, and schema definitions. Full raw/runtime datasets are withheld.
+- [scripts/](scripts/README.md) — commands grouped by development, ingestion, analytics, operations, and validation.
+- [analysis/](analysis/README.md) — analytical modules, generated context packs, research results, and dated audits.
+- [data/](data/README.md) — source manifests, coverage/validation reports, and schema definitions. Full raw/runtime datasets are withheld.
 - `examples/` — synthetic, reproducible method demonstrations.
-- `docs/` — architecture, case studies, data dictionary, permissions, limitations, and verification.
+- [docs/](docs/README.md) — engineering guides, case studies, project history, and publication documents.
 
-[Development guide](docs/DEVELOPMENT.md) · [Data dictionary](docs/DATA_DICTIONARY.md) · [Security](SECURITY.md) · [Licensing boundaries](THIRD_PARTY.md)
+Dated drills, handoffs, readiness audits, and old design briefs live in the [development archive](docs/archive/README.md). Start with the current guides above; the archive preserves how the project evolved.
+
+[Development guide](docs/engineering/DEVELOPMENT.md) · [Data dictionary](docs/engineering/DATA_DICTIONARY.md) · [Security](SECURITY.md) · [Licensing boundaries](docs/publication/THIRD_PARTY.md)
 
 ## Development history and AI assistance
 
-This edition preserves the maintained branch's **301 original development commits**, beginning June 8, 2026, followed by publication-preparation changes. Historical paths/data were filtered and commit identities changed; original author dates remain. The initial commit was already a substantial baseline, so it is not a claim that all earlier work was committed. See [history provenance](docs/DEVELOPMENT_HISTORY.md).
+This edition preserves the maintained branch's **301 original development commits**, beginning June 8, 2026, followed by publication-preparation changes. Historical paths/data were filtered and commit identities changed; original author dates remain. The initial commit was already a substantial baseline, so it is not a claim that all earlier work was committed. See [history provenance](docs/project/DEVELOPMENT_HISTORY.md).
 
-Jack Riddle directed the product, design, features, and collaboration with Bryce. Implementation used primarily OpenAI Codex, with additional Claude Code work. The fuller owner-authored workflow narrative is pending; see [AI-use disclosure status](AI_USE.md). Commit author labels alone are not treated as a measurement of AI contribution.
+Jack Riddle directed the product, design, features, and collaboration with Bryce. Implementation used primarily OpenAI Codex, with additional Claude Code work. The fuller owner-authored workflow narrative is pending; see [AI-use disclosure status](docs/project/AI_USE.md). Commit author labels alone are not treated as a measurement of AI contribution.
 
 Original software is offered under the [MIT license](LICENSE). That license does not grant rights to third-party data, photographs, logos, track-map source material, or restricted archives. Their status is recorded separately.

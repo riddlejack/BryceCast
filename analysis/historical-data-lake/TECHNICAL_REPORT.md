@@ -423,7 +423,7 @@ experiment becomes defensible—still not a true 2-D collision model.
   source feasibility audit
 - `analysis/historical-high-frequency-data-audit/YELLOW_FLAG_MODEL_FEASIBILITY.md`:
   target, features, leakage, split, and evaluation memo
-- `docs/LIVE_ARCHIVE_V2_PLAN.md`: safe production-storage normalization plan
+- `docs/archive/research/LIVE_ARCHIVE_V2_PLAN.md`: safe production-storage normalization plan
 
 Run `node analysis/historical-data-lake/archive-sync.mjs status` to prove all
 manifested objects are present. The remaining validation and extraction commands

@@ -18,7 +18,7 @@ Use this precedence when a future UI/design agent sees conflicting facts:
 3. Generated career reports: `data/career/reports/validation-report.json`, `data/career/reports/ingestion-summary.json`, `data/career/reports/career-coverage-matrix.json`
 4. `analysis/ui-ready-artifacts.json`
 5. Generated machine-readable contracts: `analysis/ui-contract/ui-metric-manifest.json`, `analysis/live-contract/live-api-contract.json`
-6. Reader-facing docs: `docs/UI_ANALYTICS_PRODUCT_CONTRACT.md`, `docs/LIVE_RACE_DAY_PRODUCT_CONTRACT.md`, `analysis/ANALYTICS_UI_ARTIFACT_INDEX.md`
+6. Reader-facing docs: `docs/contracts/UI_ANALYTICS_PRODUCT_CONTRACT.md`, `docs/contracts/LIVE_RACE_DAY_PRODUCT_CONTRACT.md`, `analysis/ANALYTICS_UI_ARTIFACT_INDEX.md`
 7. Frontend TypeScript contracts under `src/data/`
 8. Prose summaries, worker notes, and chat context
 

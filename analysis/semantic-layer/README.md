@@ -13,7 +13,7 @@ The first lane to consume the cleared historical data lake.
 
 Nothing here is user-visible and nothing ships: this lane is upstream of both the
 lake→master merge and any UI. All rows are labelled `sourceTier: racetools_capture`
-per the permissions ledger. See [`SCHEMA.md`](./SCHEMA.md) for the table shapes,
+per the permissions ledger. See [`SCHEMA.md`](SCHEMA.md) for the table shapes,
 time semantics, quality-mask vocabulary, and slice-2 design notes.
 
 ## Data access

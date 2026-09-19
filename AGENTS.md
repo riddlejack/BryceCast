@@ -2,7 +2,7 @@
 
 This checkout is an isolated source/demo edition derived from original canonical commit `94afeda3ef4ebbaff964c833cd970360efeab32c`. It is not the operational home, production checkout, live archive, or deployment controller.
 
-Start with README.md, docs/ARCHITECTURE.md, docs/DEVELOPMENT.md, and DATA_RELEASE.md. Existing dated internal documents are historical evidence; their deployment commands, worktree paths, "current" labels, and old coverage counts do not override this guide.
+Start with README.md, docs/engineering/ARCHITECTURE.md, docs/engineering/DEVELOPMENT.md, and DATA_RELEASE.md. Existing dated internal documents are historical evidence; their deployment commands, worktree paths, "current" labels, and old coverage counts do not override this guide.
 
 Preserve source tiers, missing states, measured-versus-derived distinctions, metric denominators, and the no-GPS boundary. Do not promote historical model diagnostics to validated forecasts. Regenerate hashes through their owning producers; do not bypass integrity checks.
 

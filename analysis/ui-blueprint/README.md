@@ -8,13 +8,13 @@ This directory is the active UI architecture handoff after the June 18 analytics
 
 Read in this order for UI V2 work:
 
-1. `docs/CODEX_HANDOFF_CURRENT.md`
+1. `docs/archive/handoffs/CODEX_HANDOFF_CURRENT.md`
 2. `analysis/ui-data-package/README.md`
 3. `analysis/ui-data-package/ui-data-package.json`
 4. `analysis/predictive-race-intelligence/output/PREDICTIVE_RACE_INTELLIGENCE_REPORT.md`
 5. `analysis/predictive-race-intelligence/output/context-packs/context-pack-manifest.json`
-6. `docs/UI_ANALYTICS_PRODUCT_CONTRACT.md`
-7. `docs/LIVE_RACE_DAY_PRODUCT_CONTRACT.md`
+6. `docs/contracts/UI_ANALYTICS_PRODUCT_CONTRACT.md`
+7. `docs/contracts/LIVE_RACE_DAY_PRODUCT_CONTRACT.md`
 8. `analysis/ui-blueprint/UI_BLUEPRINT.md`
 9. `analysis/ui-blueprint/COMPONENT_FIELD_MATRIX.md`
 10. `analysis/ui-blueprint/STATE_FIXTURE_QA.md`

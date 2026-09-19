@@ -1,18 +1,24 @@
-# Documentation map
+# Documentation
 
-Start with the [project README](../README.md). This is the publication edition; older task handoffs and product briefs remain historical evidence.
+Start with the [project overview](../README.md), then choose a path below.
 
-| Read | Purpose |
+| I want to… | Start here |
 | --- | --- |
-| [Engineering atlas](ENGINEERING_ATLAS.md) | Comprehensive capability and analysis index |
-| [Architecture](ARCHITECTURE.md) | Historical, live, and demo boundaries |
-| [Case studies](case-studies/01-heatmaps-without-gps.md) | Begin with GPS-free heat maps; follow the linked engineering stories |
-| [Data dictionary](DATA_DICTIONARY.md) | Grains, sources, clocks, and SQLite schema |
-| [Development](DEVELOPMENT.md) | Runnable commands and optional full-corpus checks |
-| [History](DEVELOPMENT_HISTORY.md) | Original development chronology and publication filtering |
-| [Data release](../DATA_RELEASE.md) | Included, withheld, and planned permissioned datasets |
-| [Permissions outreach](PERMISSIONS_OUTREACH.md) | Verified contact routes and request template |
-| [Release status](RELEASE_STATUS.md) | Remaining decisions before a public launch |
-| [Verification](RELEASE_VERIFICATION.md) | Actual tests and limitations |
+| Understand the system | [Architecture](engineering/ARCHITECTURE.md) |
+| Explore the engineering | [Engineering atlas](engineering/ENGINEERING_ATLAS.md) and [eight case studies](case-studies/README.md) |
+| Run the project | [Development guide](engineering/DEVELOPMENT.md) |
+| Understand the data | [Data dictionary](engineering/DATA_DICTIONARY.md) and [data folder](../data/README.md) |
+| Understand how it was built | [Development history](project/DEVELOPMENT_HISTORY.md) and [AI-use disclosure](project/AI_USE.md) |
+| Review publication readiness | [Release status](publication/RELEASE_STATUS.md), [verification](publication/RELEASE_VERIFICATION.md), and [permissions outreach](publication/PERMISSIONS_OUTREACH.md) |
 
-The remaining documents record implementation contracts, investigations, and dated work. Consult generated reports for counts; old prose is not current coverage authority. The current frontend entry is `src/main.tsx` → `src/app/AppV3.tsx`.
+## Folder guide
+
+- **[engineering/](engineering/README.md)** — current architecture, development instructions, data definitions, and capability index.
+- **[case-studies/](case-studies/README.md)** — curated explanations of the project's hardest technical problems.
+- **[project/](project/README.md)** — development chronology and AI-use disclosure.
+- **[publication/](publication/README.md)** — release review, licensing, permissions, and validation.
+- **[contracts/](contracts/README.md)** — application and data contracts for maintainers.
+- **[operations/](operations/README.md)** — technical reference for the live service and archive; separate from the offline demo.
+- **[evidence/](evidence/README.md)** — compact portfolio statistics, screenshot, and permissions register.
+- **[reference/](reference/README.md)** — supporting design and visualization guidance retained with its source notices.
+- **[archive/](archive/README.md)** — dated drills, audits, design briefs, research notes, and handoffs. These preserve project history and are not current setup instructions.

@@ -69,12 +69,12 @@ const csvSummary = async (relativePath) => {
 };
 
 const sourceFiles = [
-  'docs/CODEX_HANDOFF_CURRENT.md',
-  'docs/UI_ANALYTICS_PRODUCT_CONTRACT.md',
-  'docs/LIVE_RACE_DAY_PRODUCT_CONTRACT.md',
-  'docs/LIVE_DATA_READINESS_AUDIT.md',
-  'docs/ANALYTICS_SOURCE_AUDIT.md',
-  'docs/INDY_NXT_WEATHER_ENRICHMENT_AUDIT.md',
+  'docs/archive/handoffs/CODEX_HANDOFF_CURRENT.md',
+  'docs/contracts/UI_ANALYTICS_PRODUCT_CONTRACT.md',
+  'docs/contracts/LIVE_RACE_DAY_PRODUCT_CONTRACT.md',
+  'docs/archive/audits/LIVE_DATA_READINESS_AUDIT.md',
+  'docs/archive/audits/ANALYTICS_SOURCE_AUDIT.md',
+  'docs/archive/audits/INDY_NXT_WEATHER_ENRICHMENT_AUDIT.md',
   'analysis/devspace-audit/devspace-audit-evidence.json',
   'analysis/ANALYTICS_UI_ARTIFACT_INDEX.md',
   'analysis/ui-data-package/README.md',

@@ -1,6 +1,6 @@
 # Contributing
 
-Start with [development](docs/DEVELOPMENT.md) and the [data dictionary](docs/DATA_DICTIONARY.md). Run `npm run build` and `npm run test:publication` for changes to the application or analytical adapters.
+Start with [development](docs/engineering/DEVELOPMENT.md) and the [data dictionary](docs/engineering/DATA_DICTIONARY.md). Run `npm run build` and `npm run test:publication` for changes to the application or analytical adapters.
 
 Preserve the distinction between observed, interpolated, modeled, and unavailable data. State the denominator and source date when adding a metric. Add a meaningful regression or negative-control check when fixing a data interpretation bug; do not manufacture missing observations to fill a chart.
 

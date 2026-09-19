@@ -6,7 +6,7 @@ notes at the end) adds Timing71 2026 and the identity crosswalk.
 
 Every row carries `sourceTier`. Nothing here is an official BryceCast fact — these
 are derived analytics over immutable third-party captures, per the permissions
-ledger (`docs/DATA_PERMISSIONS.md`).
+ledger (`docs/publication/DATA_PERMISSIONS.md`).
 
 ## Source-tier vocabulary (the ledger's labelling law)
 

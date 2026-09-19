@@ -11,4 +11,4 @@ perform (the live-readiness upcoming-fixture migration; deploy), and an explicit
 "never did" list (deploy, LaunchAgent changes, iCloud writes, live-runner
 interaction).
 
-See `docs/POSTRACE_ROLL.md` for the pipeline order and the guard rules.
+See `docs/operations/POSTRACE_ROLL.md` for the pipeline order and the guard rules.

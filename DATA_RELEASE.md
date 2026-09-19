@@ -102,4 +102,4 @@ A schema-only release can be prepared from the writer/migration source without o
 3. **Derived data releases:** source family by source family with claim receipts and rights manifests.
 4. **Raw and sanitized SQLite releases:** added when the extra written permissions and export/privacy gates above are satisfied.
 
-See the [architecture](docs/ARCHITECTURE.md), [public data dictionary](docs/DATA_DICTIONARY.md), and [permission-request drafts](docs/PERMISSIONS_OUTREACH.md).
+See the [architecture](docs/engineering/ARCHITECTURE.md), [public data dictionary](docs/engineering/DATA_DICTIONARY.md), and [permission-request drafts](docs/publication/PERMISSIONS_OUTREACH.md).

@@ -2,7 +2,7 @@
 
 Status after June 18: background evidence only. The active UI fixture baseline is `analysis/ui-data-package/ui-data-package.json` generated `2026-06-18T17:52:13.930Z` plus `analysis/predictive-race-intelligence/output/context-packs/context-pack-manifest.json`. If this note conflicts with those files, use the newer context-pack baseline.
 
-Scope: read-only review of `analysis/ui-data-package/ui-data-package.json`, `docs/UI_ANALYTICS_PRODUCT_CONTRACT.md`, `docs/LIVE_RACE_DAY_PRODUCT_CONTRACT.md`, `analysis/ANALYTICS_UI_ARTIFACT_INDEX.md`, `analysis/ui-ready-artifacts.json`, and supporting generated contract manifests.
+Scope: read-only review of `analysis/ui-data-package/ui-data-package.json`, `docs/contracts/UI_ANALYTICS_PRODUCT_CONTRACT.md`, `docs/contracts/LIVE_RACE_DAY_PRODUCT_CONTRACT.md`, `analysis/ANALYTICS_UI_ARTIFACT_INDEX.md`, `analysis/ui-ready-artifacts.json`, and supporting generated contract manifests.
 
 ## Source-Backed Findings
 
@@ -33,6 +33,6 @@ Scope: read-only review of `analysis/ui-data-package/ui-data-package.json`, `doc
 - `analysis/ui-contract/ui-metric-manifest.json`
 - `analysis/ui-ready-artifacts.json`
 - `analysis/live-contract/live-api-contract.json`
-- `docs/UI_ANALYTICS_PRODUCT_CONTRACT.md`
-- `docs/LIVE_RACE_DAY_PRODUCT_CONTRACT.md`
+- `docs/contracts/UI_ANALYTICS_PRODUCT_CONTRACT.md`
+- `docs/contracts/LIVE_RACE_DAY_PRODUCT_CONTRACT.md`
 - `analysis/ANALYTICS_UI_ARTIFACT_INDEX.md`

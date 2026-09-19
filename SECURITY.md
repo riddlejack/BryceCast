@@ -22,4 +22,4 @@ Please use GitHub's private vulnerability reporting feature if it is enabled. Ot
 
 Configure authentication, network exposure, dependency updates, request budgets, logging, and data permissions for that deployment. Never load a production archive into the portfolio demo. Public CI has read-only repository permissions and no deployment credentials. Source publication does not authorize deployments or source polling.
 
-See [release verification](docs/RELEASE_VERIFICATION.md) for the exact checks performed and their limits. Any source-history credential finding must be triaged and, if genuinely exposed, revoked or rotated before publication; deleting its latest file is insufficient.
+See [release verification](docs/publication/RELEASE_VERIFICATION.md) for the exact checks performed and their limits. Any source-history credential finding must be triaged and, if genuinely exposed, revoked or rotated before publication; deleting its latest file is insufficient.

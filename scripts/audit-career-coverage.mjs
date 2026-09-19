@@ -9,7 +9,7 @@ const reportsDir = join(careerDir, 'reports');
 const datasetPath = join(careerDir, 'career.dataset.json');
 const indyReportDetailsDir = join(careerDir, 'raw/indy-nxt/report-details');
 const jsonOutputPath = join(reportsDir, 'career-coverage-matrix.json');
-const markdownOutputPath = join(root, 'docs/CAREER_ANALYTICS_COVERAGE_MATRIX.md');
+const markdownOutputPath = join(root, 'data/career/reports/coverage-matrix.md');
 
 const readJson = async (path, fallback = null) => {
   try {

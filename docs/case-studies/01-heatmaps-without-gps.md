@@ -10,7 +10,7 @@ The harder problem is reconciliation. RaceTools loop messages use source clocks 
 
 ## Method
 
-The [RaceTools semantic decoder](../../analysis/semantic-layer/lib/racetools-semantic.mjs) converts hexadecimal timing ticks to seconds, reconstructs laps from physical start/finish crossings, removes formation and cool-down regions, and keeps mainline and pit-lane crossings semantically distinct. The [anchor builder](../../scripts/derive-section-anchors.mjs) reconciles loop distances, requires the exact track name and a lap-length guard, and maps each official section family to distance along a curated outline. Thirteen venue anchor sets are retained under [track sections](../../src/assets/tracks/sections/).
+The [RaceTools semantic decoder](../../analysis/semantic-layer/lib/racetools-semantic.mjs) converts hexadecimal timing ticks to seconds, reconstructs laps from physical start/finish crossings, removes formation and cool-down regions, and keeps mainline and pit-lane crossings semantically distinct. The [anchor builder](../../scripts/derive-section-anchors.mjs) reconciles loop distances, requires the exact track name and a lap-length guard, and maps each official section family to distance along a curated outline. Thirteen venue anchor sets are retained under [track sections](../../src/assets/tracks/sections).
 
 The UI reads both race and qualifying data through one [section-observation contract](../../src/data/sectionObservations.ts). Each observation carries its official section name, source tier, denominator, representative time, field distribution, and whether it is directly measured or a derived untimed remainder. Missing observations leave the outline uncolored. A derived remainder cannot receive the top measured-section emphasis.
 

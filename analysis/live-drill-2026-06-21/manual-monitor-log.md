@@ -5,7 +5,7 @@ Codex local command execution is blocked by `Resource temporarily unavailable (o
 ## Pre-green baseline
 
 - Local watcher command attempted from Codex:
-  - `LIVE_DRILL_WATCH=1 LIVE_DRILL_INTERVAL_MS=15000 node live-drill-probe.mjs`
+  - `LIVE_DRILL_WATCH=1 LIVE_DRILL_INTERVAL_MS=15000 node scripts/diagnostics/live-drill-probe.mjs`
   - Result: failed before process start with `Resource temporarily unavailable (os error 35)`.
 - INDY NXT leaderboard:
   - URL: `https://www.indynxt.com/leaderboard`
@@ -114,7 +114,7 @@ Codex local command execution is blocked by `Resource temporarily unavailable (o
 
 - Local command execution recovered after Codex app restart.
 - Started external public-source watcher:
-  - Command: `LIVE_DRILL_WATCH=1 LIVE_DRILL_INTERVAL_MS=15000 node live-drill-probe.mjs --watch`
+  - Command: `LIVE_DRILL_WATCH=1 LIVE_DRILL_INTERVAL_MS=15000 node scripts/diagnostics/live-drill-probe.mjs --watch`
   - Session: `72067`
   - Output: `analysis/live-drill-2026-06-21/latest.json`, timestamped snapshots, and `snapshots.jsonl`.
   - Current status: `pass=12 warn=10 fail=0`.

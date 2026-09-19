@@ -1433,7 +1433,7 @@ def career_stories(series_summary: list[dict[str, str]], result_conversion: list
 
 def build_live_race_day_pack() -> dict[str, Any]:
     source_refs = [
-        source_ref(ROOT / "docs/LIVE_RACE_DAY_PRODUCT_CONTRACT.md", "live product contract"),
+        source_ref(ROOT / "docs/contracts/LIVE_RACE_DAY_PRODUCT_CONTRACT.md", "live product contract"),
         source_ref(ROOT / "scripts/api-server.mjs", "runtime API"),
         source_ref(ROOT / "scripts/live-source-endpoints.mjs", "source map"),
     ]
@@ -1491,7 +1491,7 @@ def build_live_race_day_pack() -> dict[str, Any]:
         "type": "live_race_day",
         "path": rel(path),
         "sourceRefs": [
-            rel(ROOT / "docs/LIVE_RACE_DAY_PRODUCT_CONTRACT.md"),
+            rel(ROOT / "docs/contracts/LIVE_RACE_DAY_PRODUCT_CONTRACT.md"),
             rel(ROOT / "scripts/api-server.mjs"),
             rel(ROOT / "scripts/live-source-endpoints.mjs"),
         ],
@@ -1524,7 +1524,7 @@ def build_manifest(pack_refs: list[dict[str, Any]], upstream_coverage: dict[str,
             source_ref(DEEP_TABLES / "future_weekend_prep_inputs.csv", "upcoming event packs"),
             source_ref(DEEP_TABLES / "race_debrief_scores.csv", "race debrief packs"),
             source_ref(CAREER_TABLES / "career_result_conversion.csv", "career lab pack"),
-            source_ref(ROOT / "docs/LIVE_RACE_DAY_PRODUCT_CONTRACT.md", "live race day pack"),
+            source_ref(ROOT / "docs/contracts/LIVE_RACE_DAY_PRODUCT_CONTRACT.md", "live race day pack"),
         ],
     }
 

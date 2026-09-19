@@ -6,7 +6,7 @@ BryceCast's archive design separates observation cadence from payload duplicatio
 
 The legacy live writer embedded timing plus driver profiles, schedule, track activity, and configuration inside every snapshot. Most enrichment payloads changed far less often than the one-second timing observation, so preserving cadence also copied large stable documents repeatedly.
 
-A historical read-only audit reported **16,474 snapshots**, **5.866 GB of embedded source data**, and **5.523 GB—94.15%—duplicate content**. A separate observation at `2026-07-18T16:35:02Z` recorded a 5.99 GB database and roughly 1.3 GB/hour legacy growth during Nashville Practice 1. These are historical audit baselines, not measurements reproduced from the licensed archive in this repository. See the [Archive V2 plan](../LIVE_ARCHIVE_V2_PLAN.md) and [high-frequency feasibility report](../../analysis/historical-high-frequency-data-audit/FEASIBILITY_REPORT.md).
+A historical read-only audit reported **16,474 snapshots**, **5.866 GB of embedded source data**, and **5.523 GB—94.15%—duplicate content**. A separate observation at `2026-07-18T16:35:02Z` recorded a 5.99 GB database and roughly 1.3 GB/hour legacy growth during Nashville Practice 1. These are historical audit baselines, not measurements reproduced from the licensed archive in this repository. See the [Archive V2 plan](../archive/research/LIVE_ARCHIVE_V2_PLAN.md) and [high-frequency feasibility report](../../analysis/historical-high-frequency-data-audit/FEASIBILITY_REPORT.md).
 
 ## Method
 
@@ -17,7 +17,7 @@ This preserves two distinct facts:
 1. the source was checked at a particular time; and
 2. the returned bytes were identical to an existing payload version.
 
-The archive reader hydrates either legacy or V2 storage back into the same `{summary, raw}` application contract. Migration works from a copied legacy database into a sidecar and refuses the live archive path. Retention planning is inert: it proposes candidates but does not delete or vacuum data. See the [reader](../../scripts/lib/archive-reader.mjs), [acceptance gates](../../scripts/lib/archive-v2-gates.mjs), and [retention contract](../ARCHIVE_V2_RETENTION.md).
+The archive reader hydrates either legacy or V2 storage back into the same `{summary, raw}` application contract. Migration works from a copied legacy database into a sidecar and refuses the live archive path. Retention planning is inert: it proposes candidates but does not delete or vacuum data. See the [reader](../../scripts/lib/archive-reader.mjs), [acceptance gates](../../scripts/lib/archive-v2-gates.mjs), and [retention contract](../operations/ARCHIVE_V2_RETENTION.md).
 
 ## Reproducible synthetic validation
 
