@@ -46,6 +46,6 @@ export const streetsOfArlingtonSections: TrackSectionAnchorSet = {
     { familyId: 'arl-t13', sectionName: 'Turn 13', label: 'Turn 13', startT: 0.8336, endT: 0.8772 },
     { familyId: 'arl-t1314', sectionName: 'Turns 13/14', label: 'Turns 13–14', startT: 0.8772, endT: 0.9258 },
     { familyId: 'arl-t14', sectionName: 'Turn 14', label: 'Turn 14', startT: 0.9258, endT: 0.9445 },
-    { familyId: 'arl-remainder', sectionName: 'Turn 14 to S/F (untimed)', label: 'Untimed final stretch', startT: 0.9445, endT: 0.0, kind: 'derived_remainder' }
+    { familyId: 'arl-remainder', sectionName: 'Untimed remainder', label: 'Untimed final stretch', startT: 0.9445, endT: 0.0, kind: 'derived_remainder' }
   ]
 };

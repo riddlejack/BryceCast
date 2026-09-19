@@ -1,13 +1,14 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { ArrowRight, CalendarDays, LineChart, Map as MapIcon, PlayCircle, Radio } from 'lucide-react';
-import { Card, HeroPanel, ScreenHead, SourcePill, Stat, Unavailable } from '../app/components';
+import { Card, Countdown, HeroPanel, ScreenHead, SourcePill, Unavailable } from '../app/components';
 import { formatDate, formatPosition } from '../app/format';
 import { Link } from '../app/router';
 import { TrackArt } from '../app/trackArt';
 import { trackOutlineFor } from '../assets/tracks';
 import { displayRaceLabelText } from '../data/debriefArchive';
 import { nextSeasonOutlook } from '../data/nextSeason';
-import { bestFinishAt, getSeasonReview, type SeasonReview, type SeasonStandout, type SeasonVenue } from '../data/seasonPhase';
+import { bestFinishAt, getSeasonReview, racesAt, type SeasonReview, type SeasonStandout, type SeasonVenue } from '../data/seasonPhase';
+import { resolveHeatSections, sectionObservationsFromLaps } from '../data/sectionObservations';
 import { getUpcomingEvents, raceDayOf } from '../data/upcoming';
 import { useVenueSectionData } from './sectionIntelligence';
 
@@ -51,6 +52,40 @@ export const VenueShape = ({
         </svg>
       ) : null}
     </span>
+  );
+};
+
+/* ---------- a venue drawn with his pace on it ----------
+ * The signature read, reusable at any size: the venue outline shaded section by
+ * section. With a sessionId it shades from that race; otherwise from the most
+ * recent visit that carries clean-lap comparisons. Falls back to the plain
+ * outline while packs load or where a venue has no anchored sections. */
+
+export const HeatTrack = ({ trackName, sessionId, maxHeight = 120 }: { trackName: string | null; sessionId?: string; maxHeight?: number }) => {
+  const outline = trackOutlineFor(trackName);
+  const canonical = outline?.name ?? trackName;
+  const sections = useVenueSectionData(canonical);
+  const resolved = useMemo(() => {
+    if (sessionId && sections.anchors) {
+      const visit = sections.visits.find((pack) => pack.sessionId === sessionId);
+      if (visit) {
+        const own = resolveHeatSections(sections.anchors, sectionObservationsFromLaps(visit));
+        if (own.length > 0) return own;
+      }
+    }
+    return sections.heroHeat;
+  }, [sessionId, sections.anchors, sections.visits, sections.heroHeat]);
+  if (!outline) return null;
+  return (
+    <div className="heat-track" style={{ width: '100%' }}>
+      <TrackArt
+        outline={outline}
+        maxHeight={maxHeight}
+        wind={null}
+        showCornerLabels={false}
+        sections={resolved.length > 0 ? { resolved, showLabels: false } : null}
+      />
+    </div>
   );
 };
 
@@ -136,7 +171,7 @@ export const TrackShowcase = ({ venues, seasonYear }: { venues: SeasonVenue[]; s
 /* ---------- Home hero for a finished season: say what this place is ---------- */
 
 export const SeasonCompleteHero = ({ review }: { review: SeasonReview }) => (
-  <HeroPanel tint="bryce">
+  <HeroPanel tint="bryce" className="hero--wash">
     <div className="hero-now">
       <div className="hero-now__head">
         <span className="kicker">BryceCast · No. 9 · INDY NXT</span>
@@ -168,10 +203,15 @@ export const SeasonCompleteHero = ({ review }: { review: SeasonReview }) => (
   </HeroPanel>
 );
 
-/* ---------- what's inside: four doors into the site ---------- */
+/* ---------- what's inside: four doors into the site ----------
+ * Each door carries one hue and one small, real visual — heat-mapped tracks,
+ * the latest replays, the career's chapters by race count, the live cadence —
+ * so the landing page shows the product instead of describing it. */
 
-const Door = ({ to, icon, title, children, visual }: { to: string; icon: ReactNode; title: string; children: ReactNode; visual?: ReactNode }) => (
-  <Link to={to} className="door">
+type DoorTone = 'gold' | 'blue' | 'green' | 'live';
+
+const Door = ({ to, tone, icon, title, children, visual }: { to: string; tone: DoorTone; icon: ReactNode; title: string; children: ReactNode; visual?: ReactNode }) => (
+  <Link to={to} className={`door door--${tone}`}>
     <span className="door__icon" aria-hidden>{icon}</span>
     <span className="door__title">
       {title} <ArrowRight size={14} aria-hidden />
@@ -181,40 +221,108 @@ const Door = ({ to, icon, title, children, visual }: { to: string; icon: ReactNo
   </Link>
 );
 
-export const FeatureDoors = ({ venues, careerRaces, seriesCount }: { venues: SeasonVenue[]; careerRaces: number | null; seriesCount: number | null }) => (
-  <section aria-label="What’s inside BryceCast">
-    <h2 className="section-title">What’s inside</h2>
-    <div className="doors">
-      <Door
-        to="/tracks"
-        icon={<MapIcon size={18} />}
-        title="Pace maps without GPS"
-        visual={
-          <span className="row" style={{ gap: 10 }}>
-            {venues.slice(0, 4).map((venue) => (
-              <VenueShape key={venue.trackName} trackName={venue.trackName} width={46} height={28} muted />
-            ))}
-          </span>
-        }
-      >
-        The timing feed carries no car positions. Section times between timing loops become a stretch-by-stretch map of
-        where he was quickest — for races and qualifying, at every track.
-      </Door>
-      <Door to="/races" icon={<PlayCircle size={18} />} title="Any race, replayed">
-        Every INDY NXT race gets a full debrief, and captured races replay second by second — running order, gaps and
-        the battles around the No. 9 as they unfolded.
-      </Door>
-      <Door to="/career" icon={<LineChart size={18} />} title="The whole career, one chart">
-        {careerRaces ?? 'Every'} races across {seriesCount ?? 'seven'} series, each placed by the share of the field he
-        beat, with weather and rivals alongside.
-      </Door>
-      <Door to="/live" icon={<Radio size={18} />} title="Live on race day">
-        When a session goes green the site wakes up on its own: position, gaps, the fight around him and conditions at
-        the track, refreshed every second.
-      </Door>
-    </div>
-  </section>
-);
+export interface CareerChapter {
+  name: string;
+  races: number;
+}
+
+const chapterColors = ['var(--bryce)', 'var(--chapter-gb3)', 'var(--chapter-f1600)', 'var(--chapter-euro)', 'var(--chapter-ff)', 'var(--chapter-imsa)', 'var(--chapter-fro)'];
+
+export const FeatureDoors = ({
+  review,
+  careerRaces,
+  chapters
+}: {
+  review: SeasonReview;
+  careerRaces: number | null;
+  chapters: CareerChapter[];
+}) => {
+  const heatVenues = [...review.venues].reverse().slice(0, 3);
+  const latestRaces = [...review.rows].reverse().slice(0, 3);
+  const chapterTotal = chapters.reduce((sum, chapter) => sum + chapter.races, 0);
+  return (
+    <section aria-label="What’s inside BryceCast">
+      <h2 className="section-title">What’s inside</h2>
+      <div className="doors">
+        <Door
+          to="/tracks"
+          tone="gold"
+          icon={<MapIcon size={18} />}
+          title="Pace maps without GPS"
+          visual={
+            <span className="door__tracks">
+              {heatVenues.map((venue) => (
+                <HeatTrack key={venue.trackName} trackName={venue.trackName} maxHeight={64} />
+              ))}
+            </span>
+          }
+        >
+          The timing feed carries no car positions. Section times between timing loops become a stretch-by-stretch map
+          of where he was quickest — for races and qualifying.
+        </Door>
+        <Door
+          to="/races"
+          tone="blue"
+          icon={<PlayCircle size={18} />}
+          title="Any race, replayed"
+          visual={
+            <span className="door__list">
+              {latestRaces.map((row) => (
+                <span key={row.sessionId} className="door__list-row">
+                  <PlayCircle size={13} aria-hidden />
+                  <span>{shortRaceLabel(row.raceLabel)}</span>
+                  <span className="tnum">{formatPosition(row.finishPosition)}</span>
+                </span>
+              ))}
+            </span>
+          }
+        >
+          Every INDY NXT race gets a full debrief, and captured races replay second by second — running order, gaps
+          and the battles around the No. 9 as they unfolded.
+        </Door>
+        <Door
+          to="/career"
+          tone="green"
+          icon={<LineChart size={18} />}
+          title="The whole career, one chart"
+          visual={
+            chapterTotal > 0 ? (
+              <span className="door__chapters">
+                <span className="door__chapter-bar" aria-hidden>
+                  {chapters.map((chapter, index) => (
+                    <span key={chapter.name} style={{ flexGrow: chapter.races, background: chapterColors[index % chapterColors.length] }} />
+                  ))}
+                </span>
+                <span className="caption caption--secondary">
+                  {chapters.slice(0, 4).map((chapter) => `${chapter.name} ${chapter.races}`).join(' · ')}
+                  {chapters.length > 4 ? ` · +${chapters.length - 4} more` : ''}
+                </span>
+              </span>
+            ) : undefined
+          }
+        >
+          {careerRaces ?? 'Every'} races across {chapters.length || 'seven'} series, each placed by the share of the
+          field he beat, with weather and rivals alongside.
+        </Door>
+        <Door
+          to="/live"
+          tone="live"
+          icon={<Radio size={18} />}
+          title="Live on race day"
+          visual={
+            <span className="door__pulse">
+              <span className="door__pulse-dot" aria-hidden />
+              <span className="caption caption--secondary">arms itself 45 minutes before a session · one-second timing</span>
+            </span>
+          }
+        >
+          When a session goes green the site wakes up on its own: position, gaps, the fight around him and conditions
+          at the track. Off-season, the Live page replays a race so you can see it run.
+        </Door>
+      </div>
+    </section>
+  );
+};
 
 /* ---------- next season's calendar ----------
  * The packaged INDY NXT window wins the moment it exists; until then this shows
@@ -314,29 +422,21 @@ const StandoutCard = ({ standout }: { standout: SeasonStandout }) => {
   const { row, label } = standout;
   return (
     <Link to={`/races/${encodeURIComponent(row.sessionId)}`} className="standout">
-      <span className="caption">{label}</span>
-      <VenueShape trackName={row.trackName} width={120} height={72} />
+      <span className="standout__label">{label}</span>
+      <span className="standout__art">
+        <HeatTrack trackName={row.trackName} sessionId={row.sessionId} maxHeight={150} />
+      </span>
       <span className="row" style={{ gap: 10, alignItems: 'baseline' }}>
         <span className="stat__value stat__value--big">{formatPosition(row.finishPosition)}</span>
-        {row.startPosition !== null ? <span className="caption">from {formatPosition(row.startPosition)}</span> : null}
+        {row.startPosition !== null ? <span className="caption">from {formatPosition(row.startPosition)} on the grid</span> : null}
       </span>
       <span className="standout__name">{shortRaceLabel(row.raceLabel)}</span>
       <span className="caption caption--secondary">
-        {formatDate(row.raceDate ?? row.eventStartDate, { month: 'long', day: 'numeric' })} · full debrief →
+        {formatDate(row.raceDate ?? row.eventStartDate, { month: 'long', day: 'numeric' })} · shaded by his pace that day · full debrief →
       </span>
     </Link>
   );
 };
-
-export const SeasonReviewStats = ({ review }: { review: SeasonReview }) => (
-  <div className="row" style={{ gap: 28, flexWrap: 'wrap' }}>
-    <Stat label="Championship" value={review.finalRank !== null ? `P${review.finalRank}` : '—'} />
-    <Stat label="Points" value={review.points ?? '—'} />
-    <Stat label="Top 10s" value={review.top10s} />
-    <Stat label="Best finish" value={review.bestFinish !== null ? `P${review.bestFinish}` : '—'} />
-    <Stat label="Races" value={review.races} />
-  </div>
-);
 
 /** One honest sentence on the shape of the year — only ever built from what the
  *  results show, and silent when there's no clear shape. */
@@ -360,7 +460,7 @@ export const seasonArcLine = (review: SeasonReview): string | null => {
 export const SeasonStandouts = ({ review }: { review: SeasonReview }) =>
   review.standouts.length > 0 ? (
     <section aria-label="Standout races">
-      <h2 className="section-title">Standout races</h2>
+      <h2 className="section-title">Standout races of {review.seasonYear}</h2>
       <div className="standouts">
         {review.standouts.map((standout) => (
           <StandoutCard key={standout.row.sessionId} standout={standout} />
@@ -369,33 +469,60 @@ export const SeasonStandouts = ({ review }: { review: SeasonReview }) =>
     </section>
   ) : null;
 
-export const SeasonVenues = ({ review }: { review: SeasonReview }) => (
-  <section aria-label="Track by track">
-    <h2 className="section-title">Track by track</h2>
-    <div className="venue-grid">
-      {review.venues.map((venue) => (
-        <Link key={venue.trackName} to={tracksHref(venue.trackName)} className="venue-tile">
-          <VenueShape trackName={venue.trackName} width={84} height={50} />
-          <span className="venue-tile__name">{trackOutlineFor(venue.trackName)?.name ?? venue.trackName}</span>
-          <span className="caption tnum">
-            {venue.rows
-              .map((row) => (row.officialStatus && row.officialStatus !== 'running' && row.officialStatus !== 'unknown' ? 'ended early' : formatPosition(row.finishPosition)))
-              .join(' · ')}
-          </span>
-        </Link>
-      ))}
-    </div>
-  </section>
-);
+/* ---------- Race Week, off-season: the road to next season ----------
+ * Race Week always faces forward (Races owns the look back). With no weekend to
+ * prepare for it becomes the next season's board: a countdown to the first
+ * announced weekend, then every known date as a venue card — the track shaded
+ * by his most recent pace there, and his history at the place. The in-season
+ * HQ returns untouched the moment the package carries an upcoming event. */
 
-/* ---------- Race Week, off-season ----------
- * With no weekend to prepare for, the page looks back over the finished year
- * and ahead to the next calendar. The in-season HQ returns untouched the moment
- * the package carries an upcoming event. */
+const historyLine = (trackName: string | null): string | null => {
+  const races = racesAt(trackName);
+  if (races.length === 0) return null;
+  const years = [...new Set(races.map((row) => row.seasonYear).filter((year): year is number => year !== null))];
+  const best = bestFinishAt(trackName);
+  const count = `${races.length} INDY NXT race${races.length === 1 ? '' : 's'} here (${years.join(', ')})`;
+  return best && best.finish <= 10 ? `${count} · best ${formatPosition(best.finish)}` : count;
+};
+
+const WeekendCard = ({ date, venue, eventName, trackName }: { date: string; venue: string; eventName?: string; trackName: string | null }) => {
+  const history = historyLine(trackName);
+  const hasOutline = trackOutlineFor(trackName ?? venue) !== null;
+  const body = (
+    <>
+      <span className="weekend__date tnum">
+        <span className="cal-row__month">{formatDate(date, { month: 'short' })}</span>
+        <span className="weekend__day">{formatDate(date, { day: 'numeric' })}</span>
+        <span className="cal-row__month">{formatDate(date, { weekday: 'short' })}</span>
+      </span>
+      <span className="weekend__art">
+        {history ? (
+          <HeatTrack trackName={trackName} maxHeight={96} />
+        ) : hasOutline ? (
+          <VenueShape trackName={trackName ?? venue} width={150} height={90} muted />
+        ) : null}
+      </span>
+      <span className="weekend__text">
+        <span className="weekend__venue">{venue}</span>
+        {eventName ? <span className="caption">{eventName}</span> : null}
+        <span className="caption caption--secondary">
+          {history ? `${history} · his pace map →` : 'INDYCAR weekend · INDY NXT round not yet confirmed'}
+        </span>
+      </span>
+    </>
+  );
+  return history ? (
+    <Link to={tracksHref(trackName)} className="weekend weekend--known">{body}</Link>
+  ) : (
+    <div className="weekend">{body}</div>
+  );
+};
 
 export const OffSeasonRaceWeek = () => {
   const review = getSeasonReview();
-  if (!review) {
+  const outlook = nextSeasonOutlook;
+  const opener = outlook.indycarWeekends[0] ?? null;
+  if (!opener) {
     return (
       <div className="page stack">
         <ScreenHead kicker="Race week" title="Off-season" />
@@ -405,37 +532,85 @@ export const OffSeasonRaceWeek = () => {
       </div>
     );
   }
-  const arc = seasonArcLine(review);
   return (
     <div className="page stack">
       <ScreenHead
         kicker="Race week · off-season"
-        title={`${review.seasonYear}, in the books.`}
-        sub={`${review.races} races at ${review.venues.length} tracks. Race week returns with the ${nextSeasonOutlook.seasonYear} calendar — until then, the year in review and the dates already on the board.`}
+        title={`The road to ${outlook.seasonYear}.`}
+        sub={`Race week is where the next weekend gets prepared. With ${review ? review.seasonYear : 'the season'} complete, it turns to the calendar ahead — every ${outlook.seasonYear} date announced so far, and what he has already done at each place.`}
       />
-      <Card
-        title={`The ${review.seasonYear} season`}
-        action={
-          <Link to="/races" className="navlink" style={{ fontSize: 12.5, padding: '0 2px' }}>
-            Every race <ArrowRight size={12} aria-hidden />
-          </Link>
-        }
-      >
-        <SeasonReviewStats review={review} />
-        {arc ? <p style={{ margin: '14px 0 0', fontSize: 14, color: 'var(--ink-secondary)', maxWidth: '64ch' }}>{arc}</p> : null}
-      </Card>
-      <SeasonStandouts review={review} />
-      <NextSeasonCalendar />
-      <SeasonVenues review={review} />
-      <section className="panel panel--quiet">
-        <span className="kicker">When race week returns</span>
-        <p style={{ margin: '8px 0 0', fontSize: 14, color: 'var(--ink-secondary)', maxWidth: '68ch', lineHeight: 1.5 }}>
-          In the days before a race this page becomes the weekend’s headquarters: the session schedule with a live
-          countdown, the race-hour forecast and wind drawn on the track, his section-by-section record at the venue, how
-          past races there unfolded, and the points picture going in. It switches over on its own when the next event is
-          scheduled.
+
+      <HeroPanel tint="bryce" className="hero--wash">
+        <div className="hero-now">
+          <div className="hero-now__head">
+            <span className="kicker">First weekend on the board</span>
+            <h2 className="hero-now__title" style={{ marginTop: 6 }}>{opener.venue}</h2>
+            <p className="hero-now__meta">
+              {formatDate(opener.date, { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })} · the NTT INDYCAR
+              SERIES opener. INDY NXT’s own {outlook.seasonYear} calendar is still to come.
+            </p>
+          </div>
+          <div className="hero-now__art">
+            <HeatTrack trackName={opener.trackName} maxHeight={190} />
+            {racesAt(opener.trackName).length > 0 ? (
+              <p className="caption caption--secondary" style={{ margin: '8px 0 0', textAlign: 'center' }}>
+                shaded by his most recent pace here
+              </p>
+            ) : null}
+          </div>
+          <div className="hero-now__foot">
+            <Countdown to={`${opener.date}T12:00:00`} />
+          </div>
+        </div>
+      </HeroPanel>
+
+      <section aria-label={`${outlook.seasonYear} dates`}>
+        <div className="row row--between" style={{ alignItems: 'baseline', gap: 12 }}>
+          <h2 className="section-title">{outlook.seasonYear}: the dates so far</h2>
+          <SourcePill
+            title={`${outlook.seasonYear} schedule`}
+            entries={[
+              {
+                label: outlook.source.label,
+                path: outlook.source.url,
+                note: `Checked ${formatDate(outlook.checkedOn, { month: 'long', day: 'numeric', year: 'numeric' })}`
+              }
+            ]}
+            caveats={['INDY NXT by Firestone has not published its own calendar for this season. These are NTT INDYCAR SERIES race dates; INDY NXT rounds run on INDYCAR weekends but not all of them.']}
+          />
+        </div>
+        <p style={{ margin: '0 2px 12px', fontSize: 13.5, color: 'var(--ink-secondary)', maxWidth: '68ch' }}>
+          INDYCAR has announced its first {outlook.indycarWeekends.length} race weekends. INDY NXT shares most INDYCAR
+          weekends, and its own rounds take over this board once they’re published.
         </p>
+        <div className="weekends">
+          {outlook.indycarWeekends.map((weekend) => (
+            <WeekendCard key={weekend.date} date={weekend.date} venue={weekend.venue} eventName={weekend.eventName} trackName={weekend.trackName ?? weekend.venue} />
+          ))}
+        </div>
       </section>
+
+      <div className="grid grid--2 grid--equal">
+        <section className="panel panel--quiet">
+          <span className="kicker">When race week returns</span>
+          <p style={{ margin: '8px 0 0', fontSize: 14, color: 'var(--ink-secondary)', lineHeight: 1.5 }}>
+            In the days before a race this page becomes the weekend’s headquarters: the session schedule with a live
+            countdown, the race-hour forecast and wind drawn on the track, his section-by-section record at the venue,
+            how past races there unfolded, and the points picture going in. It switches over on its own.
+          </p>
+        </section>
+        <Link to="/races" className="panel panel--quiet" style={{ color: 'inherit', textDecoration: 'none' }}>
+          <span className="kicker">Looking back</span>
+          <p style={{ margin: '8px 0 0', fontSize: 14, color: 'var(--ink-secondary)', lineHeight: 1.5 }}>
+            {review
+              ? `${review.races} races, ${review.points ?? '—'} points, P${review.finalRank ?? '—'} in the championship. Every ${review.seasonYear} race has a full debrief, and captured races replay second by second.`
+              : 'Every race has a full debrief.'}
+          </p>
+          <span className="hero-now__action" style={{ marginTop: 12, fontSize: 14 }}>
+            The {review?.seasonYear ?? ''} season, race by race <ArrowRight size={15} aria-hidden />
+          </span>
+        </Link>
+      </div>
     </div>
   );
 };

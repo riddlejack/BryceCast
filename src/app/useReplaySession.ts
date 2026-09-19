@@ -236,6 +236,11 @@ export const useReplaySession = (replayKey: string | null, onRestart?: () => voi
     if (!state.started || state.endedByLive) return undefined;
     let cancelled = false;
     const poll = window.setInterval(async () => {
+      // A backgrounded tab has no one watching for the live-guard handoff —
+      // skip this tick's request rather than polling a hidden tab at the same
+      // cadence as a foregrounded one. The interval keeps ticking, so the next
+      // check after the tab is visible again is at most 5s away.
+      if (typeof document !== 'undefined' && document.hidden) return;
       const params = getReplayParams();
       if (!params) return;
       try {

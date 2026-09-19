@@ -282,10 +282,11 @@ assert.equal(context.filter((entry) => entry.caution === 'caution').length, 6, '
 const arlingtonAnchors = trackSectionsFor('Streets of Arlington')!;
 const remainderAnchor = arlingtonAnchors.sections.find((s) => s.kind === 'derived_remainder');
 assert.ok(remainderAnchor, 'Arlington ships a derived_remainder anchor');
-assert.equal(remainderAnchor!.sectionName, 'Turn 14 to S/F (untimed)');
+/* Must equal the name the pack builder gives the derived section, or the join never lands. */
+assert.equal(remainderAnchor!.sectionName, 'Untimed remainder');
 
 const cornerName = 'Turn 3';
-const remainderName = 'Turn 14 to S/F (untimed)';
+const remainderName = 'Untimed remainder';
 const buildLaps = (percentile: number, seconds: number): SectionLapTuple[] =>
   Array.from({ length: 20 }, (_, i) => [i + 1, percentile, 5, 18, 1, 'g', seconds, 150] as SectionLapTuple);
 const derivedPack = {

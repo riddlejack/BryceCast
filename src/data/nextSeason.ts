@@ -16,8 +16,8 @@ export interface AnnouncedWeekend {
   eventName?: string;
   /** Venue as INDYCAR names it. */
   venue: string;
-  /** Canonical BryceCast track name when the venue is one INDY NXT has raced
-   *  in Bryce's seasons — drives the outline and his record there. */
+  /** Canonical BryceCast track name — drives the outline, and his record there
+   *  when it is a venue he has raced. Null only when no outline is traced. */
   trackName: string | null;
 }
 
@@ -40,12 +40,12 @@ export const nextSeasonOutlook: NextSeasonOutlook = {
   },
   indycarWeekends: [
     { date: '2027-03-07', venue: 'Streets of St. Petersburg', trackName: 'Streets of St. Petersburg' },
-    { date: '2027-03-13', venue: 'Phoenix Raceway', trackName: null },
+    { date: '2027-03-13', venue: 'Phoenix Raceway', trackName: 'Phoenix Raceway' },
     { date: '2027-03-21', venue: 'Streets of Arlington', trackName: 'Streets of Arlington' },
     { date: '2027-04-04', venue: 'Barber Motorsports Park', trackName: 'Barber Motorsports Park' },
-    { date: '2027-04-18', venue: 'Streets of Long Beach', trackName: null },
+    { date: '2027-04-18', venue: 'Streets of Long Beach', trackName: 'Streets of Long Beach' },
     { date: '2027-05-15', venue: 'Indianapolis Motor Speedway Road Course', trackName: 'Indianapolis Motor Speedway Road Course' },
-    { date: '2027-05-30', eventName: 'The 111th Indianapolis 500', venue: 'Indianapolis Motor Speedway', trackName: null },
+    { date: '2027-05-30', eventName: 'The 111th Indianapolis 500', venue: 'Indianapolis Motor Speedway', trackName: 'Indianapolis Motor Speedway' },
     { date: '2027-06-06', venue: 'Streets of Detroit', trackName: 'Streets of Detroit' }
   ]
 };

@@ -1,3 +1,4 @@
+import { trackOutlineFor } from '../assets/tracks';
 import { getSeasonIndex } from './seasons';
 import { getUpcomingEvents } from './upcoming';
 import type { UiSeasonIndexRow } from './uiDataPackage';
@@ -105,7 +106,9 @@ export const getSeasonReview = (): SeasonReview | null => {
   for (const row of rows) {
     if (!row.trackName) continue;
     const key = trackKey(row.trackName);
-    const venue = venueMap.get(key) ?? { trackName: row.trackName, rows: [], bestFinish: null };
+    /* Canonical (outline) name: the section packs and the Tracks page key on it,
+     * so the two aliased street venues keep their heat maps and deep links. */
+    const venue = venueMap.get(key) ?? { trackName: trackOutlineFor(row.trackName)?.name ?? row.trackName, rows: [], bestFinish: null };
     venue.rows.push(row);
     if (row.finishPosition !== null && (venue.bestFinish === null || row.finishPosition < venue.bestFinish)) {
       venue.bestFinish = row.finishPosition;
@@ -139,4 +142,13 @@ export const bestFinishAt = (trackName: string | null): { finish: number; season
     if (!best || row.finishPosition < best.finish) best = { finish: row.finishPosition, seasonYear: row.seasonYear };
   }
   return best;
+};
+
+/** Every packaged INDY NXT race of his at a venue, oldest first. */
+export const racesAt = (trackName: string | null): UiSeasonIndexRow[] => {
+  if (!trackName) return [];
+  const key = trackKey(trackName);
+  return getSeasonIndex()
+    .filter((row) => trackKey(row.trackName) === key)
+    .sort((a, b) => (a.seasonYear ?? 0) - (b.seasonYear ?? 0) || (a.roundIndex ?? 0) - (b.roundIndex ?? 0));
 };

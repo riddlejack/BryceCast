@@ -17,8 +17,9 @@ import { useVenueSectionData } from './sectionIntelligence';
 import { ReplayAffordance, useReplayCatalog } from './replayAffordance';
 import { isBryceCastCaptureTier, replayProvenance, watchableCaptureForRace } from '../data/replayAvailable';
 import { DataFreshness } from '../app/dataFreshness';
-import { getSeasonPhase, getSeasonReview } from '../data/seasonPhase';
-import { FeatureDoors, NextSeasonCalendar, SeasonCompleteHero } from './offseason';
+import { getSeasonPhase, getSeasonReview, type SeasonReview } from '../data/seasonPhase';
+import { SeasonShareButton } from './seasonShareCard';
+import { FeatureDoors, NextSeasonCalendar, SeasonCompleteHero, SeasonStandouts, seasonArcLine } from './offseason';
 
 type Row = Record<string, unknown>;
 
@@ -383,7 +384,7 @@ const chaseLine = (): string | null => {
   return `${ahead.driverName} is ${gap} point${gap === 1 ? '' : 's'} up the road.`;
 };
 
-const SeasonSoFar = ({ season, complete }: { season: ArchiveEntry[]; complete: boolean }) => {
+const SeasonSoFar = ({ season, complete, arc, review }: { season: ArchiveEntry[]; complete: boolean; arc: string | null; review: SeasonReview | null }) => {
   const standing = getSeasonStanding();
   const seasonYear = season[0]?.pack.seasonYear ?? null;
   const hasEarlyEnd = season.some((entry) => endedEarly(entry.pack.sessionId));
@@ -409,8 +410,8 @@ const SeasonSoFar = ({ season, complete }: { season: ArchiveEntry[]; complete: b
         <Stat label="Top 10s" value={standing.top10 ?? '—'} />
         <Stat label="Best finish" value={standing.bestFinish !== null ? `P${standing.bestFinish}` : '—'} />
       </div>
-      {chase ? (
-        <p style={{ margin: '12px 0 0', fontSize: 13, color: 'var(--ink-secondary)' }}>{chase}</p>
+      {chase ?? arc ? (
+        <p style={{ margin: '12px 0 0', fontSize: 13, color: 'var(--ink-secondary)' }}>{chase ?? arc}</p>
       ) : null}
       {season.length >= 2 ? (
         <div style={{ marginTop: 18 }}>
@@ -420,6 +421,11 @@ const SeasonSoFar = ({ season, complete }: { season: ArchiveEntry[]; complete: b
           <div style={{ marginTop: 8 }}>
             <SeasonSparkline season={season} />
           </div>
+        </div>
+      ) : null}
+      {complete && review ? (
+        <div style={{ marginTop: 'auto', paddingTop: 14 }}>
+          <SeasonShareButton review={review} />
         </div>
       ) : null}
     </Card>
@@ -522,6 +528,9 @@ export const HomeScreen = ({ readiness }: { readiness: ReadinessStatus }) => {
   const seriesRows = Array.isArray(careerLab.seriesSummary) ? (careerLab.seriesSummary as Row[]) : [];
   const lifeStats = (careerLab.lifeStats ?? null) as { personalRaceMileage?: { raceRows?: number } } | null;
   const careerRaces = asNumber(lifeStats?.personalRaceMileage?.raceRows);
+  const chapters = seriesRows
+    .map((row) => ({ name: asString(row.seriesName) ?? '', races: asNumber(row.raceRows) ?? 0 }))
+    .filter((chapter) => chapter.name && chapter.races > 0);
 
   return (
     <div className="page stack">
@@ -531,20 +540,25 @@ export const HomeScreen = ({ readiness }: { readiness: ReadinessStatus }) => {
         <HomeHero readiness={readiness} liveish={liveish} nextEvent={nextEvent} days={days} latest={latest} />
       )}
       <DataFreshness />
-      <div className="grid grid--2">
+      <div className="grid grid--2 grid--equal">
         <Reveal>
           <LastTimeOut latest={latest} />
         </Reveal>
         <Reveal delay={60}>
-          <SeasonSoFar season={season} complete={complete} />
+          <SeasonSoFar season={season} complete={complete} arc={complete && review ? seasonArcLine(review) : null} review={review} />
         </Reveal>
       </div>
       <Reveal delay={80}>
         <WatchLastRace latest={latest} />
       </Reveal>
+      {complete && review ? (
+        <Reveal delay={85}>
+          <SeasonStandouts review={review} />
+        </Reveal>
+      ) : null}
       {review ? (
         <Reveal delay={90}>
-          <FeatureDoors venues={[...review.venues].reverse()} careerRaces={careerRaces} seriesCount={seriesRows.length || null} />
+          <FeatureDoors review={review} careerRaces={careerRaces} chapters={chapters} />
         </Reveal>
       ) : null}
       {complete ? (

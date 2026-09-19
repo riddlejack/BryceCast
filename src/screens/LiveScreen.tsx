@@ -13,8 +13,8 @@ import {
   type Tone
 } from '../app/components';
 import { ChartTipCard, chartFont, useMeasuredWidth, type ChartTip } from '../app/charts';
-import { asNumber, asString, formatGap, formatNumber } from '../app/format';
-import { Link } from '../app/router';
+import { asNumber, asString, formatDate, formatGap, formatNumber } from '../app/format';
+import { Link, useRouter } from '../app/router';
 import { TrackArt } from '../app/trackArt';
 import { LiveRunningOrder } from './LiveRunningOrder';
 import { useNextSession } from '../app/useNextSession';
@@ -24,7 +24,7 @@ import type { LiveReadiness, ReplaySourceGap } from '../app/useReadiness';
 import type { ReplaySession } from '../app/useReplaySession';
 import { isBryceCastCaptureTier, replayProvenance, watchableCaptureForRace, type ReplaySessionInfo } from '../data/replayAvailable';
 import { useReplayCatalog, ReplayAffordance } from './replayAffordance';
-import { chronoCompare, displayRaceLabel, loadDebriefArchive, type ArchiveEntry } from '../data/debriefArchive';
+import { chronoCompare, displayRaceLabel, displayRaceLabelText, loadDebriefArchive, type ArchiveEntry } from '../data/debriefArchive';
 import { loadRaceStory } from '../data/raceStory';
 import {
   advanceBattleAxis,
@@ -1237,6 +1237,79 @@ const monthDay = (isoDate: string | null): string | null => {
   return date.toLocaleDateString([], { weekday: 'long', month: 'long', day: 'numeric' });
 };
 
+/* ---------- off-season: auto-demo ----------
+ * Rather than a static "nothing on the calendar" page, the off-season idle
+ * state auto-starts a replay of a featured race so a visitor who just taps
+ * Live sees what race day looks like here — positions, battle, the works —
+ * clearly labeled as a replay (OffSeasonDemoBanner, below, rendered once the
+ * replay engages). This reuses the EXACT mechanism ReplayAffordance's play
+ * button uses (navigate to `/live?replay=<sessionKey>&from=<sessionId>`,
+ * which useReplaySession picks up from the URL) — never a second playback
+ * path — plus one extra `&demo=offseason` marker this screen and AppV3's nav
+ * read back to know it's the auto-demo, not a person's own pick.
+ *
+ * Runs at most once per browser tab: sessionStorage remembers that the demo
+ * was offered, so exiting it (or it finishing and the visitor navigating back
+ * to a bare /live) shows the plain race list below instead of restarting. */
+const OFFSEASON_DEMO_PARAM = 'demo';
+const OFFSEASON_DEMO_VALUE = 'offseason';
+const OFFSEASON_DEMO_SEEN_KEY = 'bc:offseason-demo-seen';
+
+const hasOfferedOffSeasonDemo = (): boolean => {
+  try {
+    return window.sessionStorage.getItem(OFFSEASON_DEMO_SEEN_KEY) === '1';
+  } catch {
+    return false; // storage blocked (private mode, etc.) — the demo just offers again next tap, which is fine
+  }
+};
+
+const markOffSeasonDemoOffered = (): void => {
+  try {
+    window.sessionStorage.setItem(OFFSEASON_DEMO_SEEN_KEY, '1');
+  } catch {
+    /* see hasOfferedOffSeasonDemo */
+  }
+};
+
+/** The season's best clean (officially-running) finish with a watchable
+ *  capture — the 2026 Grand Prix of Monterey Race 1 (P6) — falling back to
+ *  the most recent watchable race when no clean finish has one. Ties prefer
+ *  our own Race Control capture over a third-party tier. Pure function of the
+ *  package's season index (synchronous) plus the async replay catalog. */
+const featuredOffSeasonRace = (
+  catalog: ReturnType<typeof useReplayCatalog>
+): { sessionId: string; raceLabel: string; capture: ReplaySessionInfo } | null => {
+  if (!catalog) return null;
+  const rows = uiDataPackage.screens.raceDebrief.seasonIndex ?? [];
+  const years = rows.map((row) => row.seasonYear).filter((year): year is number => year !== null);
+  if (years.length === 0) return null;
+  const latestYear = Math.max(...years);
+  const seasonRows = rows.filter((row) => row.seasonYear === latestYear && row.sessionId);
+
+  const dateOf = (row: (typeof seasonRows)[number]) => row.raceDate ?? row.eventStartDate ?? '';
+  const ownTierFirst = (capture: ReplaySessionInfo) => (isBryceCastCaptureTier(replayProvenance(capture).tier) ? 0 : 1);
+
+  const withCapture = seasonRows
+    .map((row) => ({ row, capture: watchableCaptureForRace(catalog, row.sessionId) }))
+    .filter((entry): entry is { row: (typeof seasonRows)[number]; capture: ReplaySessionInfo } => entry.capture !== null);
+  if (withCapture.length === 0) return null;
+
+  const clean = withCapture.filter((entry) => entry.row.officialStatus === 'running' && entry.row.finishPosition !== null);
+  const ranked =
+    clean.length > 0
+      ? [...clean].sort(
+          (a, b) =>
+            (a.row.finishPosition as number) - (b.row.finishPosition as number) ||
+            ownTierFirst(a.capture) - ownTierFirst(b.capture) ||
+            dateOf(b.row).localeCompare(dateOf(a.row))
+        )
+      : [...withCapture].sort(
+          (a, b) => dateOf(b.row).localeCompare(dateOf(a.row)) || ownTierFirst(a.capture) - ownTierFirst(b.capture)
+        );
+  const best = ranked[0];
+  return { sessionId: best.row.sessionId, raceLabel: best.row.raceLabel, capture: best.capture };
+};
+
 /* ---------- off-season: nothing scheduled at all ----------
  * `pre_session` (and the no-payload idle state above) also cover the ordinary
  * pre-green wait during an active race weekend, so this only renders once the
@@ -1244,10 +1317,12 @@ const monthDay = (isoDate: string | null): string | null => {
  * (getNextEvent), AND readiness itself all agree nothing is on the calendar.
  * "Pre-session / hasn't gone green yet" and Watch Along's "no route published
  * yet" both imply an imminent session — false with the calendar empty. This
- * says so plainly and offers something real to do instead: relive the season
- * that just finished, through the same watchable-replay machinery the race
- * pages and Home's "watch the last race" card already use. */
+ * offers something real to do instead: relive the season that just finished,
+ * through the same watchable-replay machinery the race pages and Home's
+ * "watch the last race" card already use — and, the first time this tab sees
+ * it, auto-starts the featured race so the page shows race day right away. */
 const OffSeasonLive = () => {
+  const { navigate } = useRouter();
   const catalog = useReplayCatalog();
   const [season, setSeason] = useState<ArchiveEntry[] | null>(null);
   useEffect(() => {
@@ -1281,6 +1356,25 @@ const OffSeasonLive = () => {
       .filter((row): row is { entry: ArchiveEntry; capture: ReplaySessionInfo } => row.capture !== null);
   }, [season, catalog]);
   const shown = watchable.slice(0, 6);
+
+  // Auto-start, once per tab. Waits for the catalog so `featured` can resolve;
+  // if this tab already saw the demo (or the season never yields a watchable
+  // race), it stays on the plain list below instead.
+  const autoStartAttempted = useRef(false);
+  useEffect(() => {
+    if (autoStartAttempted.current) return;
+    if (hasOfferedOffSeasonDemo()) {
+      autoStartAttempted.current = true;
+      return;
+    }
+    const featured = featuredOffSeasonRace(catalog);
+    if (!featured) return; // catalog not resolved yet, or nothing watchable — try again once it changes
+    autoStartAttempted.current = true;
+    markOffSeasonDemoOffered();
+    navigate(
+      `/live?replay=${encodeURIComponent(featured.capture.sessionKey)}&from=${encodeURIComponent(featured.sessionId)}&${OFFSEASON_DEMO_PARAM}=${OFFSEASON_DEMO_VALUE}`
+    );
+  }, [catalog, navigate]);
 
   return (
     <HeroPanel>
@@ -1524,6 +1618,43 @@ const ReplayBar = ({ replay, payload }: { replay: ReplaySession; payload: LiveRe
   );
 };
 
+/** Sits above the replay chrome only for the auto-started off-season demo
+ *  (never for a person's own replay pick — race pages, Home, and the "Relive
+ *  a race" list all keep their plain ReplayBar-only experience). Names the
+ *  race and date from the package data, never hardcoded, and offers a way
+ *  back to the race list without hunting for the generic Exit control. */
+const OffSeasonDemoBanner = ({ replay, navigate }: { replay: ReplaySession; navigate: (href: string) => void }) => {
+  const seasonRow = replay.session?.canonicalSessionId
+    ? (uiDataPackage.screens.raceDebrief.seasonIndex ?? []).find(
+        (row) => row.sessionId === replay.session?.canonicalSessionId
+      )
+    : null;
+  // "2026 Grand Prix of Monterey Race 1" — the raw season-index label carries
+  // a redundant trailing "R1"; trim it, then keep the year so the sentence
+  // below reads naturally ("this is the 2026 ...").
+  const raceLabel = seasonRow
+    ? `${seasonRow.seasonYear ?? ''} ${displayRaceLabelText(seasonRow.raceLabel)}`.trim()
+    : replay.session?.eventName ?? 'a past race';
+  const raceDate = seasonRow ? formatDate(seasonRow.raceDate ?? seasonRow.eventStartDate) : null;
+  const prov = replayProvenance(replay.session);
+  const captureLabel = isBryceCastCaptureTier(prov.tier) ? 'our timing capture' : prov.label;
+  return (
+    <section className="demo-banner" aria-label="Off-season demo notice" role="status">
+      <div>
+        <span className="demo-banner__kicker"><History size={13} aria-hidden /> Off-season · replay, not live</span>
+        <p className="demo-banner__copy">
+          Nothing is live right now — this is the {raceLabel}{raceDate ? ` (${raceDate})` : ''}, replayed from{' '}
+          {captureLabel} so you can see what race day looks like here. The page switches to real timing on its own
+          when the next session starts.
+        </p>
+      </div>
+      <button type="button" className="share-button" onClick={() => navigate('/live')}>
+        Pick another race
+      </button>
+    </section>
+  );
+};
+
 /** Honest hand-off when the server live-guard preempts a running replay: the
  *  real Race Control feed is live now, so we say so plainly and let the live
  *  page below render reality. */
@@ -1660,6 +1791,10 @@ export const LiveScreen = ({
   // Called unconditionally (rules of hooks) so the off-season check below can
   // use it regardless of which branch this render takes.
   const nextSessionInfo = useNextSession();
+  // Only used to read the `demo=offseason` URL marker (see OffSeasonLive) and
+  // to drive "Pick another race" — never for engaging/exiting the replay
+  // itself, which stays entirely on useReplaySession's own URL-param path.
+  const { route, navigate } = useRouter();
   // A replay that a live session preempted is no longer "active": the page drops
   // the replay chrome and cueing and renders the real feed with an honest note.
   const replayEndedByLive = Boolean(replay?.endedByLive);
@@ -1672,6 +1807,10 @@ export const LiveScreen = ({
   // Until the virtual clock's first archived payload arrives, hold a calm
   // cue-up state instead of flashing whatever the live feed happens to say.
   const cueing = replayActive && !replaySimulated;
+  // The `demo=offseason` marker OffSeasonLive's auto-start adds to its own
+  // navigate call — never present on a person's own replay pick (a race page,
+  // Home, or the "Relive a race" list), so only the auto-demo gets the banner.
+  const isOffSeasonDemoReplay = replayActive && route.search.get(OFFSEASON_DEMO_PARAM) === OFFSEASON_DEMO_VALUE;
 
   if (replayRefused && replay) {
     return (
@@ -1750,6 +1889,7 @@ export const LiveScreen = ({
       data-live-history-count={history?.samples.length ?? 0}
       data-live-history-first-checked-at={history?.samples[0]?.checkedAt ?? ''}
     >
+      {isOffSeasonDemoReplay && replay ? <OffSeasonDemoBanner replay={replay} navigate={navigate} /> : null}
       {replayEndedByLive ? <ReplayEndedByLiveNote /> : null}
       {replayActive && replay ? <ReplayBar replay={replay} payload={payload} /> : null}
       {replayActive && replay ? <ReplayGapSkippedNote replay={replay} /> : null}

@@ -1,3 +1,4 @@
+import { trackOutlineFor } from '../assets/tracks';
 import { uiDataPackage, type UiSectionLapRef } from './uiDataPackage';
 import { packModules, packRawModules } from './packModules';
 import type { SectionSourceTier } from './sectionObservations';
@@ -80,11 +81,19 @@ const refFor = (sessionId: string): UiSectionLapRef | null =>
 
 /** All race visits with per-lap section data at a venue (for the YoY shapes),
  *  oldest first. Metadata only — nothing loads until loadSectionLaps. */
+/** One venue, one name: result feeds call two street venues by their event
+ *  names ("Detroit Downtown Street Circuit") while the section packs carry the
+ *  asset names ("Streets of Detroit"). Compare through the outline's canonical
+ *  name so no caller has to remember to alias first. */
+const canonicalVenue = (name: string | null | undefined): string | null =>
+  name ? trackOutlineFor(name)?.name ?? name : null;
+
 export const sectionLapVisitsFor = (venueName: string | null | undefined): UiSectionLapRef[] => {
   if (!venueName) return [];
+  const venue = canonicalVenue(venueName);
   const canonicalOrder = new Map(
     (uiDataPackage.screens.raceDebrief.seasonIndex ?? [])
-      .filter((row) => row.trackName === venueName)
+      .filter((row) => canonicalVenue(row.trackName) === venue)
       .sort(
         (left, right) =>
           (left.raceDate ?? left.eventStartDate ?? '').localeCompare(right.raceDate ?? right.eventStartDate ?? '') ||
@@ -94,7 +103,7 @@ export const sectionLapVisitsFor = (venueName: string | null | undefined): UiSec
       .map((row, index) => [row.sessionId, index])
   );
   return refs()
-    .filter((ref) => ref.venueName === venueName)
+    .filter((ref) => canonicalVenue(ref.venueName) === venue)
     .sort(
       (left, right) =>
         (canonicalOrder.get(left.sessionId) ?? Number.MAX_SAFE_INTEGER) -

@@ -15,6 +15,7 @@ import { RaceScreen } from '../screens/RaceScreen';
 import { CareerScreen } from '../screens/CareerScreen';
 import { CareerRaceScreen } from '../screens/CareerRaceScreen';
 import { DataScreen } from '../screens/DataScreen';
+import { AboutScreen } from '../screens/AboutScreen';
 
 const TracksScreen = lazy(() => import('../screens/TracksScreen').then((module) => ({ default: module.TracksScreen })));
 
@@ -29,9 +30,21 @@ const navItems: Array<{ to: string; label: string; icon: ComponentType<{ size?: 
 
 const isActive = (path: string, to: string) => (to === '/' ? path === '/' : path === to || path.startsWith(`${to}/`));
 
-const Shell = ({ children, liveState }: { children: ReactNode; liveState: string | undefined }) => {
+const Shell = ({
+  children,
+  liveState,
+  demoReplay = false
+}: {
+  children: ReactNode;
+  liveState: string | undefined;
+  /** The off-season auto-demo (LiveScreen's OffSeasonLive) marks its own
+   *  replay URL with `&demo=offseason`. Its readiness payload reads 'ready'
+   *  just like a real session (a replay mimics live state on purpose), so the
+   *  nav must be told explicitly not to present it as genuinely live. */
+  demoReplay?: boolean;
+}) => {
   const { route } = useRouter();
-  const liveish = liveState === 'ready' || liveState === 'degraded';
+  const liveish = !demoReplay && (liveState === 'ready' || liveState === 'degraded');
   return (
     <>
       <nav className="topnav">
@@ -50,6 +63,9 @@ const Shell = ({ children, liveState }: { children: ReactNode; liveState: string
         <Link to="/data" className={`navlink${isActive(route.path, '/data') ? ' navlink--active' : ''}`} >
           Data
         </Link>
+        <Link to="/about" className={`navlink${isActive(route.path, '/about') ? ' navlink--active' : ''}`} >
+          About
+        </Link>
       </nav>
       <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>{children}</div>
       <footer className="footer">
@@ -60,6 +76,7 @@ const Shell = ({ children, liveState }: { children: ReactNode; liveState: string
           </span>
           <span className="row" style={{ gap: 14 }}>
             <Link to="/data">Data &amp; sources</Link>
+            <Link to="/about">About</Link>
           </span>
         </div>
       </footer>
@@ -119,6 +136,9 @@ const Routes = () => {
     startedRef.current = replay.started;
   }, [replay.started, readiness.refresh]);
   const careerRace = matchPath('/career/race/:sessionId', route.path);
+  // See Shell's `demoReplay` doc above — only true for the off-season
+  // auto-demo's own marked replay URL on /live, never a person's own pick.
+  const offSeasonDemoReplay = onLive && replay.engaged && route.search.get('demo') === 'offseason';
 
   let screen: ReactNode;
   if (route.path === '/') screen = <HomeScreen readiness={readiness} />;
@@ -147,6 +167,7 @@ const Routes = () => {
   else if (careerRace) screen = <CareerRaceScreen sessionId={careerRace.sessionId} />;
   else if (route.path === '/career') screen = <CareerScreen readiness={readiness} />;
   else if (route.path === '/data') screen = <DataScreen />;
+  else if (route.path === '/about') screen = <AboutScreen />;
   else
     screen = (
       <div className="page">
@@ -157,7 +178,11 @@ const Routes = () => {
       </div>
     );
 
-  return <Shell liveState={readiness.payload?.state}>{screen}</Shell>;
+  return (
+    <Shell liveState={readiness.payload?.state} demoReplay={offSeasonDemoReplay}>
+      {screen}
+    </Shell>
+  );
 };
 
 export const AppV3 = () => (
