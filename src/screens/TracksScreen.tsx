@@ -12,6 +12,20 @@ import { uiDataPackage } from '../data/uiDataPackage';
 import { VenueSectionSuite, useVenueSectionData } from './sectionIntelligence';
 import { resolveQualifyingHeatMode } from './qualifyingHeat';
 
+/** The season schedule (seasonIndex, from the official venue dossier) and the
+ *  section-lap packs (sectionLapRefs, joined by the track-asset name) name a
+ *  couple of street circuits differently — the dossier's full event name vs
+ *  the track asset's short "Streets of …" form. Left uncanonicalized this
+ *  produced two dropdown entries for the same venue (one of which had no
+ *  section-lap pack), and split a venue's visits across both spellings.
+ *  Canonicalize on the track-asset spelling everywhere this screen keys off a
+ *  venue name; extend this map if another dossier/asset name pair diverges. */
+const VENUE_NAME_ALIASES: Record<string, string> = {
+  'Detroit Downtown Street Circuit': 'Streets of Detroit',
+  'Grand Prix of Arlington Street Circuit': 'Streets of Arlington'
+};
+const canonicalVenueName = (name: string): string => VENUE_NAME_ALIASES[name] ?? name;
+
 const selectStyle = {
   width: '100%',
   minWidth: 0,
@@ -128,23 +142,36 @@ export const TracksScreen = () => {
     () =>
       [
         ...new Set([
-          ...refs.map((ref) => ref.venueName),
-          ...seasonIndex.map((row) => row.trackName).filter((name): name is string => Boolean(name))
+          ...refs.map((ref) => canonicalVenueName(ref.venueName)),
+          ...seasonIndex
+            .map((row) => row.trackName)
+            .filter((name): name is string => Boolean(name))
+            .map(canonicalVenueName)
         ])
       ].sort((left, right) => left.localeCompare(right)),
     [refs, seasonIndex]
   );
-  const latestRef = useMemo(
-    () => [...refs].sort((left, right) => (right.seasonYear ?? 0) - (left.seasonYear ?? 0))[0] ?? null,
-    [refs]
-  );
+  /* The actual most-recently-raced venue, by real race date across the whole
+   * schedule — not whichever venue happened to sort first among sectionLapRefs
+   * sharing the same season year (that unstable same-year sort was why the
+   * page defaulted to Streets of Detroit regardless of the real season order). */
+  const mostRecentlyRacedVenue = useMemo(() => {
+    const dated = seasonIndex.filter((row): row is typeof row & { trackName: string } => Boolean(row.trackName));
+    const latest = [...dated].sort(
+      (left, right) =>
+        (left.raceDate ?? left.eventStartDate ?? '').localeCompare(right.raceDate ?? right.eventStartDate ?? '') ||
+        (left.roundIndex ?? 0) - (right.roundIndex ?? 0)
+    ).at(-1);
+    return latest ? canonicalVenueName(latest.trackName) : null;
+  }, [seasonIndex]);
   const requestedVenue = route.search.get('venue');
-  const selectedVenue = requestedVenue && venues.includes(requestedVenue) ? requestedVenue : latestRef?.venueName ?? venues[0] ?? null;
+  const selectedVenue =
+    requestedVenue && venues.includes(requestedVenue) ? requestedVenue : mostRecentlyRacedVenue ?? venues[0] ?? null;
   const data = useVenueSectionData(selectedVenue);
   const canonicalVisits = useMemo(
     () =>
       seasonIndex
-        .filter((row) => row.trackName === selectedVenue)
+        .filter((row) => row.trackName !== null && canonicalVenueName(row.trackName) === selectedVenue)
         .sort(
           (left, right) =>
             (left.raceDate ?? left.eventStartDate ?? '').localeCompare(right.raceDate ?? right.eventStartDate ?? '') ||
@@ -168,7 +195,7 @@ export const TracksScreen = () => {
     () =>
       resolveQualifyingHeatMode(
         qualiResolution,
-        selectedCanonicalVisit?.trackName ?? selectedVenue,
+        (selectedCanonicalVisit?.trackName ? canonicalVenueName(selectedCanonicalVisit.trackName) : null) ?? selectedVenue,
         data.anchors
       ),
     [qualiResolution, selectedCanonicalVisit?.trackName, selectedVenue, data.anchors]

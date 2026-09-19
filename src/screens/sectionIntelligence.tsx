@@ -16,6 +16,7 @@ import {
   lapContextOf,
   lapScopesFor,
   lapScopesForObservedLaps,
+  minimumCleanLapsForScope,
   resolveHeatSections,
   sectionObservationsFromLaps,
   type ResolvedHeatSection,
@@ -311,10 +312,6 @@ export const SectionHeatCard = ({
   const setScrubLap = qualifyingMode ? setQualifyingLap : setRaceLap;
   const stat = qualifyingMode ? qualifyingStat : raceStat;
   const setStat = qualifyingMode ? setQualifyingStat : setRaceStat;
-  const minimumObservations = qualifyingMode ? 1 : MIN_CLEAN_LAPS;
-  const aggregationOptions = qualifyingMode
-    ? { minimumObservations, observationLabel: 'valid observed qualifying laps' }
-    : undefined;
   const scopes = useMemo(
     () => {
       if (!activeLaps) return [{ kind: 'full_race' } as SectionScope];
@@ -368,6 +365,13 @@ export const SectionHeatCard = ({
     if (scopeKey === 'lap') return { kind: 'single_lap', lap: scrubLap };
     return scopes.find((entry) => entry.kind === 'lap_window' && entry.label === scopeKey) ?? { kind: 'full_race' };
   }, [activeLaps, scopeKey, scrubLap, scopes]);
+  /* Race mode's floor tracks the selected scope (a third needs fewer clean
+   * laps than a full race — see minimumCleanLapsForScope); qualifying keeps
+   * its own one-lap-is-enough floor regardless of scope. */
+  const minimumObservations = qualifyingMode ? 1 : minimumCleanLapsForScope(scope);
+  const aggregationOptions = qualifyingMode
+    ? { minimumObservations, observationLabel: 'valid observed qualifying laps' }
+    : undefined;
 
   const set = useMemo(() => {
     if (activeLaps) return sectionObservationsFromLaps(activeLaps, scope, stat, aggregationOptions);
@@ -394,6 +398,10 @@ export const SectionHeatCard = ({
   );
   const showMarks = hasHeat && resolvedMarks.length > 0;
   const suppressedCount = set ? set.sections.filter((section) => section.percentile === null).length : 0;
+  /* observationCount is the real clean-lap count for this scope, unrounded and
+   * ungated by the minimum — cheap to read straight off the set, so the empty
+   * state below can name the actual shortfall instead of a generic sentence. */
+  const scopeCleanLapCount = set ? Math.max(0, ...set.sections.map((section) => section.observationCount ?? 0)) : null;
   const singleLap = scope.kind === 'single_lap';
   const scrubContext = singleLap ? lapContext.find((entry) => entry.lap === scrubLap) ?? null : null;
   const drawerRows = useMemo(() => {
@@ -544,7 +552,9 @@ export const SectionHeatCard = ({
           : set
             ? visitLapsCompleted === 0
               ? `His ${laps?.seasonYear ?? ''} visit ended on the opening lap — no clean laps to compare.`.replace(/\s{2,}/g, ' ')
-              : 'Too few clean laps in this scope to compare sections.'
+              : !qualifyingMode && scope.kind === 'lap_window' && scopeCleanLapCount !== null
+                ? `Only ${scopeCleanLapCount} clean green-flag lap${scopeCleanLapCount === 1 ? '' : 's'} in the ${scope.label.toLowerCase()} — cautions covered the rest. Try Full race.`
+                : 'Too few clean laps in this scope to compare sections.'
             : 'The venue shape, with the start/finish line marked.'}
       </p>
       {sessionControl || visitControl ? (

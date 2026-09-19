@@ -22,7 +22,9 @@ import { getNextEvent, raceDayOf } from '../data/upcoming';
 import { trackOutlineFor } from '../assets/tracks';
 import type { LiveReadiness, ReplaySourceGap } from '../app/useReadiness';
 import type { ReplaySession } from '../app/useReplaySession';
-import { isBryceCastCaptureTier, replayProvenance, type ReplaySessionInfo } from '../data/replayAvailable';
+import { isBryceCastCaptureTier, replayProvenance, watchableCaptureForRace, type ReplaySessionInfo } from '../data/replayAvailable';
+import { useReplayCatalog, ReplayAffordance } from './replayAffordance';
+import { chronoCompare, displayRaceLabel, loadDebriefArchive, type ArchiveEntry } from '../data/debriefArchive';
 import { loadRaceStory } from '../data/raceStory';
 import {
   advanceBattleAxis,
@@ -1235,6 +1237,105 @@ const monthDay = (isoDate: string | null): string | null => {
   return date.toLocaleDateString([], { weekday: 'long', month: 'long', day: 'numeric' });
 };
 
+/* ---------- off-season: nothing scheduled at all ----------
+ * `pre_session` (and the no-payload idle state above) also cover the ordinary
+ * pre-green wait during an active race weekend, so this only renders once the
+ * schedule feed (useNextSession), the package's own upcoming-events list
+ * (getNextEvent), AND readiness itself all agree nothing is on the calendar.
+ * "Pre-session / hasn't gone green yet" and Watch Along's "no route published
+ * yet" both imply an imminent session — false with the calendar empty. This
+ * says so plainly and offers something real to do instead: relive the season
+ * that just finished, through the same watchable-replay machinery the race
+ * pages and Home's "watch the last race" card already use. */
+const OffSeasonLive = () => {
+  const catalog = useReplayCatalog();
+  const [season, setSeason] = useState<ArchiveEntry[] | null>(null);
+  useEffect(() => {
+    let cancelled = false;
+    loadDebriefArchive()
+      .then((archive) => {
+        if (cancelled) return;
+        if (archive.length === 0) {
+          setSeason([]);
+          return;
+        }
+        const latestYear = Math.max(...archive.map((entry) => entry.pack.seasonYear));
+        setSeason(
+          archive
+            .filter((entry) => entry.pack.seasonYear === latestYear)
+            .sort((a, b) => chronoCompare(b.pack, a.pack))
+        );
+      })
+      .catch(() => {
+        if (!cancelled) setSeason([]);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const watchable = useMemo(() => {
+    if (!season || !catalog) return [];
+    return season
+      .map((entry) => ({ entry, capture: watchableCaptureForRace(catalog, entry.pack.sessionId) }))
+      .filter((row): row is { entry: ArchiveEntry; capture: ReplaySessionInfo } => row.capture !== null);
+  }, [season, catalog]);
+  const shown = watchable.slice(0, 6);
+
+  return (
+    <HeroPanel>
+      <div className="row row--between" style={{ alignItems: 'flex-start' }}>
+        <div>
+          <span className="kicker">Live</span>
+          <h1 className="screen-head__title" style={{ marginTop: 8 }}>No session on the calendar.</h1>
+        </div>
+        <SourcePill
+          title="Live idle state"
+          entries={[
+            {
+              label: 'Product readiness reducer',
+              path: '/api/readiness',
+              note: 'No INDY NXT session is active or scheduled right now.'
+            }
+          ]}
+        />
+      </div>
+      <p style={{ margin: '14px 0 0', fontSize: 15, color: 'var(--ink-secondary)', maxWidth: '62ch' }}>
+        This page wakes up on its own the moment the next INDY NXT session is scheduled — the capture runner watches
+        INDYCAR’s official schedule feed.
+      </p>
+      {shown.length > 0 ? (
+        <section className="race-replay" aria-label="Relive a race" style={{ marginTop: 20 }}>
+          <div className="race-replay__years race-replay__years--sole">
+            <span className="race-replay__years-lead">Relive a race</span>
+            {shown.map(({ entry, capture }) => (
+              <ReplayAffordance
+                key={entry.pack.sessionId}
+                capture={capture}
+                fromSessionId={entry.pack.sessionId}
+                title={displayRaceLabel(entry.pack)}
+                variant="compact"
+              />
+            ))}
+          </div>
+          {watchable.length > shown.length ? (
+            <p style={{ margin: '10px 0 0', fontSize: 13 }}>
+              <Link to="/races" className="navlink" style={{ padding: 0 }}>See every race →</Link>
+            </p>
+          ) : null}
+        </section>
+      ) : (
+        <p style={{ margin: '18px 0 0', fontSize: 13.5 }}>
+          <Link to="/races" className="navlink" style={{ padding: 0 }}>Every race</Link>
+          {' · '}
+          <Link to="/career" className="navlink" style={{ padding: 0 }}>The whole career</Link>
+        </p>
+      )}
+      <Link to="/race-week" className="live-race-week-link"><CalendarClock size={14} aria-hidden /> Race Week</Link>
+    </HeroPanel>
+  );
+};
+
 const LiveOffAir = ({ loading }: { loading: boolean }) => {
   // A visible timeout: the calm loading beat never outstays a stalled feed — it
   // resolves into the idle state after a few seconds no matter what.
@@ -1256,6 +1357,9 @@ const LiveOffAir = ({ loading }: { loading: boolean }) => {
   const startsAt =
     nextSession?.startsAt && new Date(nextSession.startsAt).getTime() > Date.now() ? nextSession.startsAt : null;
   const raceDay = nextEvent ? monthDay(raceDayOf(nextEvent)) : null;
+  // Nothing on the schedule feed AND nothing in the package's upcoming-events
+  // list: a genuine off-season idle, not just a quiet moment between weekends.
+  const nothingScheduled = !startsAt && !nextEvent;
 
   if (loading && !timedOut) {
     return (
@@ -1269,6 +1373,8 @@ const LiveOffAir = ({ loading }: { loading: boolean }) => {
       </HeroPanel>
     );
   }
+
+  if (nothingScheduled) return <OffSeasonLive />;
 
   return (
     <HeroPanel>
@@ -1551,6 +1657,9 @@ export const LiveScreen = ({
   readinessCheckedAt?: number | null;
 }) => {
   const samples = useMemo(() => gapSamplesFromHistory(history), [history]);
+  // Called unconditionally (rules of hooks) so the off-season check below can
+  // use it regardless of which branch this render takes.
+  const nextSessionInfo = useNextSession();
   // A replay that a live session preempted is no longer "active": the page drops
   // the replay chrome and cueing and renders the real feed with an honest note.
   const replayEndedByLive = Boolean(replay?.endedByLive);
@@ -1591,6 +1700,24 @@ export const LiveScreen = ({
         ) : (
           <LiveOffAir loading={readinessCheckedAt === null && !readinessError} />
         )}
+      </div>
+    );
+  }
+
+  // Off-season truthfulness: `pre_session` also covers the ordinary pre-green
+  // wait during a scheduled race weekend, so this only fires when the schedule
+  // feed, the package's own upcoming-events list, AND readiness itself all
+  // agree nothing is on the calendar — see OffSeasonLive above. Every other
+  // state (including a scheduled pre_session, and any live/replay state)
+  // falls straight through to the unchanged rendering below.
+  const nextSessionScheduled = Boolean(
+    nextSessionInfo?.startsAt && new Date(nextSessionInfo.startsAt).getTime() > Date.now()
+  );
+  const offSeasonIdle = !replayActive && payload.state === 'pre_session' && !nextSessionScheduled && !getNextEvent();
+  if (offSeasonIdle) {
+    return (
+      <div className="page stack live-page" data-replay-active="false">
+        <OffSeasonLive />
       </div>
     );
   }

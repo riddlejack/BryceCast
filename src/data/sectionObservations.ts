@@ -126,6 +126,19 @@ export const sectionObservationsFromRaceStory = (story: RaceStoryPack): SectionO
  *  screen wherever it bites. */
 export const MIN_CLEAN_LAPS = 8;
 
+/** Scope-aware clean-lap floor. A race-third window is ~1/3 the laps of the
+ *  full race and can open under caution, so holding every scope to the
+ *  full-race floor of MIN_CLEAN_LAPS left otherwise-real thirds blank (e.g. a
+ *  10-15 lap opening third that never reaches 8 green-flag laps). Scale the
+ *  floor down with the window instead, clamped to a still-meaningful sample:
+ *  never below 4, never above MIN_CLEAN_LAPS. Full race and single-lap scopes
+ *  are unaffected. */
+export const minimumCleanLapsForScope = (scope: SectionScope): number => {
+  if (scope.kind !== 'lap_window') return MIN_CLEAN_LAPS;
+  const windowLaps = scope.toLap - scope.fromLap + 1;
+  return Math.min(MIN_CLEAN_LAPS, Math.max(4, Math.ceil(windowLaps * 0.4)));
+};
+
 export interface SectionAggregationOptions {
   /** Race views require a stable eight-lap sample. A qualifying session is a
    * much shorter population and explicitly opts into one-or-more valid laps. */
@@ -223,7 +236,7 @@ export const sectionObservationsFromLaps = (
   stat: SectionStat = 'median',
   options: SectionAggregationOptions = {}
 ): SectionObservationSet => {
-  const minimumObservations = options.minimumObservations ?? MIN_CLEAN_LAPS;
+  const minimumObservations = options.minimumObservations ?? minimumCleanLapsForScope(scope);
   const observationLabel = options.observationLabel ?? 'clean green-flag laps';
   const [fromLap, toLap] = lapWindowOf(scope, pack.totalLaps);
   const single = scope.kind === 'single_lap';

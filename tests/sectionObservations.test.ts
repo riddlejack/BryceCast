@@ -6,6 +6,7 @@ import {
   lapContextOf,
   lapScopesFor,
   lapScopesForObservedLaps,
+  minimumCleanLapsForScope,
   resolveHeatSections,
   selectableSectionLap,
   sectionObservationsFromLaps,
@@ -242,10 +243,27 @@ assert.equal(middle.sections[0].observationCount, 10);
 assert.ok((middle.sections[0].percentile ?? 0) > 0.7, 'middle-third median reflects its window');
 
 const closing = sectionObservationsFromLaps(syntheticPack, scopesMenu[3], 'median');
-// closing third = laps 21-30: only 4 clean laps -> below MIN_CLEAN_LAPS, suppressed
+// closing third = laps 21-30 (a 10-lap window): the caution clears with 4
+// clean laps left. Below the full-race floor (MIN_CLEAN_LAPS = 8) but the
+// scope-aware floor for a 10-lap window is min(8, max(4, ceil(10*0.4))) = 4 —
+// exactly the case that floor exists for: a third that opened under caution
+// but still carries a real, if smaller, clean sample should shade, not
+// suppress (see minimumCleanLapsForScope).
 assert.equal(closing.sections[0].observationCount, 4);
-assert.ok(4 < MIN_CLEAN_LAPS, 'test premise: below the floor');
-assert.equal(closing.sections[0].percentile, null, 'below-floor scopes suppress the percentile, never fake confidence');
+assert.ok(4 < MIN_CLEAN_LAPS, 'still below the full-race floor');
+assert.equal(minimumCleanLapsForScope(scopesMenu[3]), 4, 'a 10-lap third floors at 4, not the full-race 8');
+assert.equal(closing.sections[0].percentile, 0.9, 'a scope right at its scaled floor still reports a real percentile');
+
+// A window too thin even for the scaled-down floor still suppresses — the
+// floor never drops below 4. Laps 26-28: lap 26 is caution, laps 27-28 are
+// clean = 2 clean laps in a 3-lap window; floor = max(4, ceil(3*0.4)) = 4.
+const tooThin = sectionObservationsFromLaps(
+  syntheticPack,
+  { kind: 'lap_window', label: 'Slice', fromLap: 26, toLap: 28 },
+  'median'
+);
+assert.equal(tooThin.sections[0].observationCount, 2);
+assert.equal(tooThin.sections[0].percentile, null, 'a window below even the scaled floor still suppresses the percentile');
 
 const oneLap = sectionObservationsFromLaps(syntheticPack, { kind: 'single_lap', lap: 22 }, 'median');
 assert.equal(oneLap.sections[0].percentile, 0.1, 'single lap reports the lap as timed');
