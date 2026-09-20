@@ -11,7 +11,8 @@ import { setTimeout as delay } from 'node:timers/promises';
 const runtime = await mkdtemp(join(tmpdir(), 'brycecast-download-test-'));
 const base = 'http://127.0.0.1:8796';
 const child = spawn(process.execPath, ['scripts/api-server.mjs', '--host=127.0.0.1', '--port=8796'], {
-  env: { ...process.env, BRYCECAST_API_RUNNER_ONLY: '1', BRYCECAST_REPLAY: '1', BRYCECAST_SQLITE_PATH: join(runtime, 'absent.sqlite'), BRYCECAST_RUNNER_STATUS_PATH: join(runtime, 'absent-status.json') },
+  // Downloads are opt-in; the disabled (403) path is covered by test-publication-security.
+  env: { ...process.env, BRYCECAST_API_RUNNER_ONLY: '1', BRYCECAST_REPLAY: '1', BRYCECAST_ENABLE_TIMING_DOWNLOADS: '1', BRYCECAST_SQLITE_PATH: join(runtime, 'absent.sqlite'), BRYCECAST_RUNNER_STATUS_PATH: join(runtime, 'absent-status.json') },
   stdio: ['ignore', 'pipe', 'pipe']
 });
 let output = '';
