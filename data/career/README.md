@@ -1,6 +1,6 @@
 # BryceCast Career Data
 
-This publication folder retains career manifests and reports. The canonical normalized dataset, raw archive, and staging files described below are withheld; see the [data index](../README.md). The detailed ingestion notes below are historical snapshots, not current coverage counts.
+Git tracks the career manifests and reports. The canonical normalized dataset and the raw archive arrive with `npm run data:restore`; see the [data index](../README.md). The detailed ingestion notes below are historical snapshots, not current coverage counts.
 
 Important files:
 

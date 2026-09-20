@@ -9,7 +9,7 @@ import {dirname, join, resolve} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {createGzip} from 'node:zlib';
 import {once} from 'node:events';
-import {enumerateNxtSessions, lakeDataRoot, readSessionLogText} from '../semantic-layer/lib/lake.mjs';
+import {enumerateNxtSessions, lakeDataRoot, portablePath, readSessionLogText} from '../semantic-layer/lib/lake.mjs';
 import {reconstructTiming71Frames} from './lib/timing71-reader.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -725,7 +725,7 @@ const raceRows = ledgerSessions.filter((session) => session.sessionType === 'rac
 const qualifyingRows = ledgerSessions.filter((session) => session.sessionType === 'qualifying');
 const sourceFiles = manifest.files ?? [];
 const lakeInventory = {
-  lakeDataRoot: lakeRoot,
+  lakeDataRoot: portablePath(lakeRoot),
   manifestFileCount: sourceFiles.length,
   contentAddressedObjectCount: new Set(sourceFiles.map((file) => file.sha256).filter(Boolean)).size,
   timing71AnalyzedSessionCount: t71Quality.sessions.length,

@@ -123,6 +123,12 @@ if (dryRun) {
 
 // ---- 4: gated promotion into the audited canonical list --------------------
 const audit = JSON.parse(readFileSync(AUDIT_PATH, 'utf8'));
+// This file is committed and published. The roll carries `localAcquisition`
+// forward verbatim, so normalise the staging path here rather than letting an
+// absolute home path from an earlier run survive every future rewrite.
+if (audit.localAcquisition?.path?.startsWith(`${homedir()}/`)) {
+  audit.localAcquisition.path = audit.localAcquisition.path.replace(`${homedir()}/`, '~/');
+}
 const audited = new Set(
   [...(audit.raceReplays ?? []), ...(audit.nonRaceSessionCandidates ?? []), ...(audit.excludedFalsePositives ?? [])]
     .map((r) => r.replayId)

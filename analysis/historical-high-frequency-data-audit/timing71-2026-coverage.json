@@ -14,7 +14,7 @@
     "officialEventSessionId": false
   },
   "localAcquisition": {
-    "path": "/Users/jackriddle/Downloads/BryceCast-Timing71-INDYNXT-2026-through-2026-07-18",
+    "path": "~/Downloads/BryceCast-Timing71-INDYNXT-2026-through-2026-07-18",
     "fileCount": 71,
     "totalBytes": 66286392,
     "nxtLabelledReplayZips": 32,

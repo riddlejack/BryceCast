@@ -1,23 +1,25 @@
 # Publication status
 
-Prepared September 19, 2026. This is a **private publication candidate**, not an authorization to redistribute every included third-party artifact.
+Updated September 20, 2026.
 
-## Ready for private review
+BryceCast is published as a public repository with an accompanying source-data release. This page records what was decided and what was checked.
 
-- Maintained development history preserved, with raw/runtime artifacts filtered from every historical revision and personal Git email identities replaced by the owner's GitHub noreply identity.
-- Source code, historical UI packages, an offline demo, synthetic method examples, schema, architecture, data dictionary, and eight engineering case studies.
-- Dependency refresh, narrower API defaults, full-history secret review, build and publication checks. See [verification](RELEASE_VERIFICATION.md) for scope and limits.
-- Headline statistics with dates, grains, source hashes, and caveats. The source corpus counts include data that is not shipped in this checkout.
-- Future raw/SQLite release design and [permission requests](PERMISSIONS_OUTREACH.md). Exclusion from this checkout is temporary custody, not a decision to abandon that release.
+## Decisions
 
-## Owner decisions before public launch
+1. **Publish the source data, credit every source, and remove on request.** Everything in the corpus was collected from pages, files and feeds its publishers make openly available. The owner chose to publish it for auditability rather than wait on individual permissions, to credit each source in [DATA_SOURCES.md](../../DATA_SOURCES.md), to notify the main timing sources after launch, and to honor any removal request. No publisher has granted written redistribution permission; the [rights register](../evidence/rights-register.csv) keeps every row open until one does. RaceTools' July 2026 verbal approval covered the BryceCast site for the driver, friends and family, and is recorded as exactly that.
+2. **Ship source data as a release asset, not in Git history**, so a correction or withdrawal is one step. See [DATA_RELEASE.md](../../DATA_RELEASE.md).
+3. **Keep deployment tooling private.** The scripts and service definitions for the production Mac mini live in a private companion repository. The production SQLite archive and the wider research archive are unpublished for size and operational reasons.
 
-1. **Source/data and media rights.** Obtain written permission or establish applicable redistribution terms, including normalized outputs, retained report extracts, embedded UI packages, photos, logos, and track-map assets. The existing online site and public Git redistribution are different uses. Record approvals by source family and artifact scope; retain or remove artifacts accordingly. Start with RaceTools, Timing71, and INDYCAR.
-2. **AI-use narrative.** Review [AI_USE.md](../project/AI_USE.md), add the owner's examples of direction, iteration, disagreement, and validation, and confirm the portrayal of collaboration with Bryce. No chat transcripts were mined or published.
-3. **Public launch.** After the first two decisions, review the resulting tree and history and deliberately change repository visibility. A private upload is not a public launch.
+## Checked before launch
+
+- Full-history secret scan of every reachable ref with Gitleaks 8.30.1: findings were public timing session keys and series identifiers, no credentials.
+- Secret scan of the data release contents, including 2.6 GB of decompressed gzip payloads: no credentials. Seventeen saved third-party web pages contain those sites' own public browser API keys as served in their page source; they are source evidence read by the importers and are retained unmodified.
+- No private-overlay path, SQLite file, environment file or key in any ref.
+- Generated reports no longer record home-directory paths: the producers now write portable paths. One career validation report keeps its old value until the next post-race roll regenerates it, because 54 dependent files hash it.
+- Build, publication checks and the data-release round-trip test in CI.
+
+[Verification](RELEASE_VERIFICATION.md) records the September 19 preparation pass in detail. [THIRD_PARTY.md](THIRD_PARTY.md) covers licensing boundaries.
 
 ## Runtime boundary
 
-The original working checkouts, production database, collectors, LaunchAgents, and deployed site are separate. Publication preparation does not deploy the candidate API changes. Before serving the operational API publicly, verify the real host's configuration, authentication, reverse proxy, rate limits, and dependency state. The local demo does not need any of those systems.
-
-See [DATA_RELEASE.md](../../DATA_RELEASE.md) for the permissioned release plan and [THIRD_PARTY.md](THIRD_PARTY.md) for licensing boundaries. MIT applies to original software; it does not settle upstream data or asset rights.
+The public repository is what production builds, but publishing it changes nothing about the running site. Credentials, host configuration and the operator token live outside Git. The local demo needs none of them.

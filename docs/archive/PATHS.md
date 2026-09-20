@@ -4,7 +4,6 @@ The repository was organized for publication on September 19, 2026. Git history 
 
 | Original path | Current location |
 | --- | --- |
-| `AI_USE.md` | [docs/project/AI_USE.md](../project/AI_USE.md) |
 | `LIVE_DRILL_CLOSEOUT_2026-06-21.md` | [docs/archive/live-drills/LIVE_DRILL_CLOSEOUT_2026-06-21.md](live-drills/LIVE_DRILL_CLOSEOUT_2026-06-21.md) |
 | `LIVE_DRILL_PRE_GREEN_BASELINE_2026-06-21.md` | [docs/archive/live-drills/LIVE_DRILL_PRE_GREEN_BASELINE_2026-06-21.md](live-drills/LIVE_DRILL_PRE_GREEN_BASELINE_2026-06-21.md) |
 | `LIVE_DRILL_PROCESS_EXHAUSTION_RCA_2026-06-21.md` | [docs/archive/live-drills/LIVE_DRILL_PROCESS_EXHAUSTION_RCA_2026-06-21.md](live-drills/LIVE_DRILL_PROCESS_EXHAUSTION_RCA_2026-06-21.md) |

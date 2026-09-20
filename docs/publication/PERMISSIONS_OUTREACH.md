@@ -1,14 +1,12 @@
-# BryceCast permissions outreach
+# Source notices and contacts
 
-Status: **draft only; no message has been sent**.
+Status: **no notice has been sent yet.** The plan is to notify the three timing sources first, shortly after launch, then the career-results publishers.
 
-Use the [rights register](../evidence/rights-register.csv) to record responses. Blank permission fields mean unknown, never approved.
-
-BryceCast is an existing online website. Its source-code repository remains private while public-release review is underway. Existing permission for internal use, analysis, or display does not automatically cover a public code repository, downloadable sample, raw archive, or SQLite export. Requests must separate those uses.
+BryceCast publishes its source data with credit and removes anything a publisher asks to have removed ([policy](../../DATA_RELEASE.md)). These notices are a courtesy and an open door: they tell each publisher what is being used, how it was collected, where it is credited, and how to ask for changes. Use the [rights register](../evidence/rights-register.csv) to record replies. A blank field means unknown, never approved.
 
 ## First three contacts
 
-1. **RaceTools / Realtime Software Development** — `info@racetools.com`, with sales/support routes and phone details on the official [RaceTools contact page](https://racetools.com/contact/). Ask for written scope covering public derived display, public transformation code, a small sample, compact map derivatives, and raw archives as separate decisions. Existing approval is reported as verbal and scoped to BryceCast use; raw redistribution remains open.
+1. **RaceTools / Realtime Software Development** — `info@racetools.com`, with sales/support routes and phone details on the official [RaceTools contact page](https://racetools.com/contact/). Existing approval is verbal, from July 2026, and scoped to the BryceCast site for the driver, friends and family; say plainly that the repository now includes the recordings.
 2. **Timing71** — `info@timing71.org` on the current [Timing71 site](https://www.timing71.org/). Older official [Timing71 documentation](https://info.timing71.org/) identifies James Muscat and `james@timing71.org`. Ask about archive recordings, analyses, and normalized timing data. The AGPL license for Timing71 software and the license for its documentation do not establish rights in archived race data.
 3. **INDYCAR / INDY NXT / Race Control** — `indycar@indycar.com` and `marketing@indycar.com` on the official [INDYCAR contact page](https://www.indycar.com/Contact-Us). Ask the recipient to route the request to timing/data licensing. Specify official results JSON, PDFs, Race Control captures, track maps, and media separately.
 
@@ -28,47 +26,34 @@ Contact the publisher or promoter named on each source item. A promoter may need
 
 OpenStreetMap and Open-Meteo have published license terms rather than ad hoc permission routes. Follow the [OpenStreetMap Legal FAQ](https://wiki.openstreetmap.org/wiki/Legal_FAQ) for ODbL attribution/share-alike analysis and [Open-Meteo terms](https://open-meteo.com/en/terms) for CC BY 4.0 attribution and endpoint-use conditions. Government weather sources should retain their notices; non-U.S. sources need source-specific review.
 
-## Written request template
+## Notice template
 
-**Subject:** Permission request — BryceCast public portfolio and versioned data release
+**Subject:** BryceCast — an open-source fan project that uses your public timing data
 
 ```text
 Hello [name/team],
 
-I maintain BryceCast, an existing online, non-commercial analytics website about
-driver Bryce Aron's racing career. Its source-code repository remains private
-while I review a possible public code release.
+I built BryceCast (https://brycecast.com), a non-commercial site that follows my
+friend Bryce Aron's racing career. I have just open-sourced it:
+https://github.com/riddlejack/brycecast
 
-BryceCast currently uses [exact source/material, years, file classes, and URLs]
-to produce [specific charts, statistics, or derived outputs]. I am requesting
-written permission for these separately scoped uses:
+It uses [exact material: e.g. the session replay and map files on your public
+downloads page, 2024-2026 INDY NXT], which I collected from [URL] without any
+login or payment. With it, the project [what it produces: e.g. reconstructs laps
+and section times to draw track heat maps].
 
-1. Continue publicly displaying the derived charts/statistics listed in
-   [attached manifest or URL].
-2. Publish the transformation and validation code in a public repository, with
-   source citations but without your raw files.
-3. Publish a small reproducibility sample containing [exact fields/rows/files].
-4. Optional and separate: redistribute [exact raw files] or a newly created,
-   sanitized database export described in [manifest].
+You are credited here: https://github.com/riddlejack/brycecast/blob/main/DATA_SOURCES.md
 
-Audience and access: [online website / public portfolio / public code repository /
-downloadable data release].
-Commercial status: [non-commercial today; describe any contemplated future use].
-Attribution proposed: "[exact credit and link]."
-Transformations: [normalization, validation, aggregation, derived metrics].
-Volume: [years, file count, row count, and approximate bytes].
-Security/privacy: no credentials, private communications, or access-control
-bypass material; operational captures remain offline unless specifically approved.
+Because I want the analysis to be checkable, the repository's data release
+includes a copy of those source files. If you would prefer a different credit,
+want any of it removed, or would rather I link to your site instead of
+including the files, tell me and I will change it promptly.
 
-Please confirm which numbered uses you approve, required attribution, limits on
-modification, redistribution, or commercial use, and whether another rights
-holder must approve the underlying timing, results, map, or media material. If
-raw redistribution is not permitted, permission for derived public display and
-public transformation code would still be useful.
+Thank you for publishing this data in the first place. The project would not
+exist without it.
 
-Thank you,
 Jack Riddle
 [contact]
 ```
 
-Attach a concrete manifest. Record the response per source family with allowed audience, raw-versus-derived scope, modification, commercial use, attribution, share-alike, permission date, evidence locator, expiry/revocation terms, and reviewer. Silence leaves the requested scope `Open`; it is not permission.
+Record each reply in the rights register with the date, what was asked for, and what was changed. Silence is not permission; it leaves the row open.

@@ -1,6 +1,6 @@
 {
   "schemaVersion": "brycecast.uiDataPackage.v1",
-  "generatedAt": "2026-09-20T15:17:31.060Z",
+  "generatedAt": "2026-09-20T17:43:10.191Z",
   "sourceHash": "d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd",
   "asOfDate": "2026-09-19",
   "baselineCommit": "9fab5e6",
@@ -549,9 +549,9 @@
     },
     "timingCoverageLedger": {
       "path": "data/historical-data-lake/catalog/timing-coverage-ledger.json",
-      "bytes": 862872,
-      "modifiedAt": "2026-09-19T22:46:54.183Z",
-      "sha256": "bfdc0370880bcca340ea88215eec01d3844e74ebf2c802d0c4468a4cb0221171"
+      "bytes": 862856,
+      "modifiedAt": "2026-09-20T17:39:20.145Z",
+      "sha256": "df5f742c42463bf918109d5dfe8a18816d21254db56a3d8996efc6c38bf28237"
     },
     "qualiLabContextPack": {
       "id": "quali_lab_run_by_run",
