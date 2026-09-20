@@ -357,10 +357,18 @@ const nextCommands = (dataset) => {
 // ----------------------------------------------------------------- main ---
 
 const flag = (name, fallback = null) => {
-  const hit = process.argv.slice(2).find((a) => a === `--${name}` || a.startsWith(`--${name}=`));
-  if (hit === undefined) return fallback;
-  return hit.includes('=') ? hit.slice(hit.indexOf('=') + 1) : true;
+  const args = process.argv.slice(2);
+  const index = args.findIndex((a) => a === `--${name}` || a.startsWith(`--${name}=`));
+  if (index === -1) return fallback;
+  const hit = args[index];
+  if (hit.includes('=')) return hit.slice(hit.indexOf('=') + 1);
+  // `--root dir` as well as `--root=dir`: a following non-flag argument is the value.
+  const next = args[index + 1];
+  if (!VALUE_FLAGS.has(name)) return true;
+  if (next === undefined || next.startsWith('--')) throw new Error(`--${name} needs a value`);
+  return next;
 };
+const VALUE_FLAGS = new Set(['root', 'tag', 'from', 'manifest', 'repo']);
 
 const main = async () => {
   const root = resolve(flag('root', process.cwd()));
