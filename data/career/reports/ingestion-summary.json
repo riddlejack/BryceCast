@@ -1,10 +1,10 @@
 {
   "schemaVersion": "bryce-career-ingestion-summary.v1",
-  "generatedAt": "2026-09-10T22:28:49.572Z",
+  "generatedAt": "2026-09-19T22:46:05.585Z",
   "datasetPath": "data/career/career.dataset.json",
   "validation": {
     "ok": true,
-    "checkedAt": "2026-09-10T22:28:48.837Z",
+    "checkedAt": "2026-09-19T22:46:04.925Z",
     "errors": [],
     "warnings": [
       {
@@ -29,13 +29,13 @@
     "racecraftEvents": 44,
     "penalties": 94,
     "incidents": 166,
-    "weatherObservations": 201,
+    "weatherObservations": 221,
     "mediaAssets": 1098,
     "broadcastRoutes": 0,
     "notificationRules": 0,
     "notificationEvents": 0,
     "derivedMetrics": 453,
-    "sourceEvidence": 1347,
+    "sourceEvidence": 1356,
     "gaps": 10
   },
   "readiness": {
@@ -57,12 +57,12 @@
       "lengthCoverage": 1
     },
     "weather": {
-      "observations": 201,
-      "sessionsCovered": 201,
+      "observations": 221,
+      "sessionsCovered": 221,
       "tracksCovered": 24,
-      "withAmbientTemp": 116,
+      "withAmbientTemp": 136,
       "withTrackTemp": 1,
-      "trackTempCoverage": 0.005
+      "trackTempCoverage": 0.0045
     },
     "analyticsSafeNow": [
       "Source-backed result analytics for imported official families: INDY NXT 2024-2026, GB3/BRDC British F3 2021-2022, IMSA Daytona 2025, Euroformula 2023, FROC 2024, FRP F1600 2019, and Formula Ford 2020",
@@ -73,7 +73,7 @@
     "analyticsBlockedOrPartial": []
   },
   "sourceEvidence": {
-    "total": 1347,
+    "total": 1356,
     "bySourceType": {
       "archived_official_page": 2,
       "official_pdf": 812,
@@ -83,7 +83,7 @@
       "official_image": 5,
       "official_article": 4,
       "official_json": 2,
-      "weather_api": 85
+      "weather_api": 94
     }
   },
   "workstreams": [
@@ -405,10 +405,10 @@
     },
     {
       "name": "indy-nxt-import-report.json",
-      "checkedAt": "2026-09-10T22:28:41.730Z",
-      "refresh": false,
-      "fetched": 0,
-      "cached": 220,
+      "checkedAt": "2026-09-19T22:42:04.425Z",
+      "refresh": true,
+      "fetched": 220,
+      "cached": 0,
       "sessionsImported": 213,
       "resultsImported": 3735,
       "bryceResultsImported": 178,

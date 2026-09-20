@@ -1,19 +1,28 @@
 import type { TrackSectionAnchorSet } from './types';
 
 /** WeatherTech Raceway Laguna Seca — 2.24-mi, 11-turn road course.
- *  The official Section Results report FIFTEEN timing sections (Turn 1 … Turn
- *  11 with the 4A/5A/7A sub-loops and the Corkscrew standing in for Turn 8)
- *  covering 87.0% of the lap; the start/finish straight from the Turn 11 exit
- *  past the S/F line to Turn 1 carries no timing loop and stays the quiet base
- *  outline — an honest gap, not a coloured span.
+ *  The official Section Results report SIXTEEN timing sections (Turn 1 … Turn
+ *  11 with the 4A/5A/7A sub-loops, the Corkscrew standing in for Turn 8, and
+ *  FS - PI closing the lap) covering 100.0% of it.
+ *
+ *  FRONT-STRAIGHT CLOSURE (2026-09-19). The 2026-07-19 curation recorded the
+ *  run from the Turn 11 exit past the S/F line as carrying no timing loop and
+ *  left it an honest gap. It does carry one: `FS - PI` is published on every
+ *  lap at a 115 mph median — the race lane had been filing it as a pit split
+ *  on the name alone, so no pack ever offered the family here. The feed's
+ *  decoded loop inventory settles the geometry: the pit-in loop sits at -11,982
+ *  feed units, i.e. BEFORE the S/F line on the main straight rather than in the
+ *  pit lane, and the family's official time × speed length of 0.163258 mi
+ *  reproduces I11A → SF (141,804 - 131,460 = 10,344 units = 0.163259 mi) to six
+ *  decimals. With it the sixteen families sum to 2.238063 mi — the whole lap.
  *
  *  Span LENGTHS are MEASURED: official section speeds are averages, so
  *  timeSeconds × speedMph is constant per family and equals the section length
- *  (scripts/compute-section-anchors.mjs; the 15 fields sum to 2.075 mi =
- *  92.7% of the 2.238-mi lap). Span POSITIONS are arc-anchored: the chain runs
- *  in driving order (= increasing t, verified from the S/F tangent) with the
- *  untimed gap placed on the start/finish straight so the S/F line falls inside
- *  it. Turn 1 Entry and Turn 1 Exit are separated at feed loop I1 between the
+ *  (scripts/compute-section-anchors.mjs; the 16 fields sum to 2.238 mi =
+ *  100.0% of the 2.238-mi lap). Span POSITIONS are arc-anchored: the chain runs
+ *  in driving order (= increasing t, verified from the S/F tangent), FS - PI
+ *  filling the start/finish straight from the Turn 11 exit to the outline's
+ *  exact S/F datum. Turn 1 Entry and Turn 1 Exit are separated at feed loop I1 between the
  *  outline's exact S/F datum and the established I2/Turn 2 boundary. The rest
  *  of the offset is fitted to the two unmistakable control corners — the
  *  Andretti Hairpin (Turn 2, the 217° arc, apex t≈0.373) and the Corkscrew (the
@@ -27,7 +36,7 @@ export const weathertechRacewayLagunaSecaSections: TrackSectionAnchorSet = {
   drivingDirection: 'counterclockwise',
   lapLengthMi: 2.238,
   confidence: 'anchored',
-  note: 'Fifteen official timing sections covering 92.7% of the lap. Turn 1 Entry and Exit are split at feed loop I1 between the exact outline S/F datum and the established Turn 2 boundary; the remaining positions are anchored to the Andretti Hairpin and Corkscrew.',
+  note: 'Sixteen official timing sections covering 100.0% of the lap. FS - PI is the measured I11A→S/F front-straight span (0.163258 mi, reproduced from the feed loop inventory to six decimals); Turn 1 Entry and Exit are split at feed loop I1 between the exact outline S/F datum and the established Turn 2 boundary; the remaining positions are anchored to the Andretti Hairpin and Corkscrew.',
   sections: [
     { familyId: 'wtls-turn-1-entry', sectionName: 'Turn 1 Entry', label: 'Turn 1 entry', startLoop: 'SF', endLoop: 'I1', startT: 0.2818, endT: 0.3028, measuredLengthMi: 0.0983 },
     { familyId: 'wtls-turn-1-exit', sectionName: 'Turn 1 Exit', label: 'Turn 1 exit', startLoop: 'I1', endLoop: 'I2', startT: 0.3028, endT: 0.3303, measuredLengthMi: 0.1286 },
@@ -43,6 +52,7 @@ export const weathertechRacewayLagunaSecaSections: TrackSectionAnchorSet = {
     { familyId: 'wtls-corkscrew', sectionName: 'Corkscrew', label: 'Corkscrew', startT: 0.8972, endT: 0.9585, measuredLengthMi: 0.1371 },
     { familyId: 'wtls-turn-9', sectionName: 'Turn 9', label: 'Turn 9', startT: 0.9585, endT: 0.0257, measuredLengthMi: 0.1504 },
     { familyId: 'wtls-turn-10', sectionName: 'Turn 10', label: 'Turn 10', startT: 0.0257, endT: 0.1212, measuredLengthMi: 0.2138 },
-    { familyId: 'wtls-turn-11', sectionName: 'Turn 11', label: 'Turn 11', startT: 0.1212, endT: 0.1560, measuredLengthMi: 0.0778 }
+    { familyId: 'wtls-turn-11', sectionName: 'Turn 11', label: 'Turn 11', startT: 0.1212, endT: 0.1560, measuredLengthMi: 0.0778 },
+    { familyId: 'wtls-fs-pi', sectionName: 'FS - PI', label: 'Turn 11 → S/F', startLoop: 'I11A', endLoop: 'SF', startT: 0.1560, endT: 0.2818, measuredLengthMi: 0.1633 }
   ]
 };

@@ -37,6 +37,12 @@ DERIVED_SECTION_NAME = "Untimed remainder"
 # Milwaukee leave 0.00% once the SF/FS racing sections are counted correctly, so
 # their remainder is a classification artefact, not a real gap, and is not shipped.
 GENUINE_GAP_MIN_SHARE = 0.02
+# Official Section Results print times to 4 decimal places, so a lap whose
+# sections tile it exactly lands within half a print unit of zero — with the
+# sign decided by float addition order. Below this, a remainder is noise, not a
+# measurement. (Before the 2026-09-19 front-straight ruling the affected venues
+# never tiled exactly, so this never came up; afterwards eight of them do.)
+PRINT_PRECISION_SECONDS = 0.00005
 # A car needs at least this many clean section observations to contribute a
 # representative time to a section's field distribution (denominator honesty).
 MIN_CAR_CLEAN_OBSERVATIONS = 3
@@ -177,33 +183,104 @@ def is_bryce(row: dict[str, Any]) -> bool:
     return row.get("driverId") == BRYCE_ID or "aron, bryce" in str(row.get("driverName", "")).lower()
 
 
-def is_pit_line(name: str) -> bool:
-    """Pit/timing-line test (corrected 2026-07-19, the SF over-match fix).
+# The front-straight racing-line families (the 2026-09-19 front-straights fix).
+#
+# The official Section Results name the S/F straight after the pit timing loops
+# it runs between — the loops sit BESIDE the racing surface, so the span the car
+# actually drives is the front straight, not the pit lane. The July rule read
+# any PI/PO reference as a pit split and threw these away, which is why the
+# straights at St. Petersburg, Indianapolis RC, Barber, Portland and the S/F
+# stretches at Laguna Seca, WWTR, Mid-Ohio and Arlington never coloured.
+#
+# Keyed by (official track name -> exact section families), so a genuinely new
+# name at a new venue FAILS CLOSED into pit_or_timing_line rather than being
+# swept in by a loose regex. Every entry below is admitted on three pieces of
+# evidence, measured over all 44 race sessions in race_section_lap_observations:
+#
+#   1. SPEED. Median speed on green laps is full racing pace, not pit pace:
+#      Barber FS-PO 147 mph; IMS FS - PO 165 / FS - PO 2 170 / FS - PI 150;
+#      Mid-Ohio FS - PO 135; Portland FS-PO 156 / FS-PI 142; St. Petersburg
+#      FS-PO 148 / FS-PI 130; Laguna Seca FS - PI 115; WWTR FS - PO 172 /
+#      FS - PI 164; Arlington FS-PO 114 / FS PI 86 (a 40 mph pit lane cannot
+#      produce these). The genuine pit splits sit at 0.4-33 mph.
+#   2. PRESENCE. They are recorded on EVERY lap (n = the car's lap count). The
+#      genuine pit splits (``PI to PO``, ``PO to SF``, ``SF to PI``,
+#      ``PO to Alt``, ``Alt S/F to PI``, ``PO to I13A``) appear once or twice
+#      per race — only on the laps the car actually pitted — and are excluded.
+#   3. TILING. At every venue above, sum(track sections) + sum(these families)
+#      equals the official ``Lap`` row to 0.000s on green laps, with no venue
+#      carrying an overlapping alternative span; before the fix the same
+#      venues left 2.8-24.1% of the lap unaccounted for. That residual WAS
+#      these families.
+#
+# This also brings the race lane in line with the qualifying lane, which has
+# always read them as mainline sections (analysis/quali-lab/scripts/
+# official-qualifying.mjs: "FS-PI / FS-PO are named mainline sections in these
+# reports"), and with the curated map anchors, which were derived from the
+# qualifying packs and have been waiting for these names ever since.
+ON_TRACK_FRONT_STRAIGHT_FAMILIES: dict[str, frozenset[str]] = {
+    "Barber Motorsports Park": frozenset({"FS-PO"}),
+    "Indianapolis Motor Speedway Road Course": frozenset({"FS - PO", "FS - PO 2", "FS - PI"}),
+    "Mid-Ohio Sports Car Course": frozenset({"FS - PO"}),
+    "Portland International Raceway": frozenset({"FS-PI", "FS-PO"}),
+    "Streets of Arlington": frozenset({"FS PI", "FS-PO"}),
+    "Streets of St. Petersburg": frozenset({"FS-PI", "FS-PO"}),
+    "WeatherTech Raceway Laguna Seca": frozenset({"FS - PI"}),
+    "World Wide Technology Raceway": frozenset({"FS - PI", "FS - PO"}),
+}
 
-    The original rule treated ANY section referencing SF/S-F as a timing line —
-    but a section like ``SF to T1`` / ``T4 to SF`` / ``FS to SF`` (ovals) or
-    ``SF to I1`` / ``I15 to SF`` (road courses) is the RACING LINE measured
-    loop-to-loop across the start/finish line, not a pit split. Genuine pit
-    splits always reference pit-in / pit-out (PI/PO) or the alternate start.
-    Classification diff across all 109 distinct section names in the 39 race
-    sessions: exactly 7 names move to track_section (SF to T1, T4 to SF,
-    FS to SF, SF to I1, SF to I1B, I15 to SF, I16 to SF); every PI/PO/Alt
-    split stays pit_or_timing_line. This is also the tiling check's rule for
-    deciding whether an untimed stretch is a GENUINE gap (Nashville's
-    straights) or fully timed (Iowa/Milwaukee, which tile to 0.0000s). See
-    INDY_NXT_RACE_LAP_SECTION_ENHANCEMENT.md § Derived Remainder."""
+
+def is_pit_line(name: str, track_name: str) -> bool:
+    """Pit/timing-line test (front-straight fix 2026-09-19; supersedes the
+    2026-07-19 SF over-match fix).
+
+    July's rule is kept for the SF half: a section like ``SF to T1`` /
+    ``T4 to SF`` / ``FS to SF`` (ovals) or ``SF to I1`` / ``I15 to SF`` (road
+    courses) is the RACING LINE measured loop-to-loop across the start/finish
+    line, not a pit split, so an SF reference alone never excludes a section.
+
+    What July got wrong is the other half — it assumed a PI/PO reference always
+    means the pit lane. It does not: the S/F straight is named after the pit
+    loops it runs past. ``ON_TRACK_FRONT_STRAIGHT_FAMILIES`` is the evidenced
+    per-venue list of those on-track spans (see its comment for the speed,
+    presence and tiling proof); everything else referencing pit-in/pit-out or
+    the alternate start stays a pit split.
+
+    Classification diff against the July rule across the 44 race sessions:
+    14 (venue, family) pairs move to track_section — Barber FS-PO; IMS
+    FS - PO / FS - PO 2 / FS - PI; Mid-Ohio FS - PO; Portland FS-PI / FS-PO;
+    Arlington FS PI / FS-PO; St. Petersburg FS-PI / FS-PO; Laguna Seca
+    FS - PI; WWTR FS - PI / FS - PO. The six pit-transit families
+    (``PI to PO``, ``PO to SF``, ``SF to PI``, ``PO to Alt``,
+    ``Alt S/F to PI``, ``PO to I13A``) stay pit_or_timing_line at every venue.
+
+    This is also the tiling check's rule for deciding whether an untimed
+    stretch is a GENUINE gap (Nashville's straights, which carry no loop at
+    all) or fully timed. Under the new rule Nashville stays the only road/oval
+    venue shipping a derived remainder; Barber, IMS, Mid-Ohio, Portland,
+    St. Petersburg, Arlington, Laguna Seca and WWTR join Iowa, Milwaukee, Road
+    America and Detroit at a 0.000s residual. See
+    INDY_NXT_RACE_LAP_SECTION_ENHANCEMENT.md § Derived Remainder.
+
+    Pit laps cannot pollute these spans: the clean-lap filter already drops any
+    lap over 110% of the car's own median green lap, and a pit stop costs far
+    more than that (all 188 laps above 140% of the session median are already
+    flagged ``no``), so a pit-in or pit-out lap never counts as a clean
+    comparison here. Verified rather than assumed — no new guard was needed."""
     cleaned = name.strip()
     if cleaned == "Lap":
+        return False
+    if cleaned in ON_TRACK_FRONT_STRAIGHT_FAMILIES.get(track_name, frozenset()):
         return False
     upper = cleaned.upper()
     return bool(re.search(r"(^|[^A-Z])(PI|PO)([^A-Z]|$)", upper)) or "ALT START" in upper
 
 
-def classify_section(name: str) -> str:
+def classify_section(name: str, track_name: str) -> str:
     cleaned = name.strip()
     if cleaned == "Lap":
         return "lap_total"
-    if is_pit_line(cleaned):
+    if is_pit_line(cleaned, track_name):
         return "pit_or_timing_line"
     return "track_section"
 
@@ -543,7 +620,7 @@ def build_race_section_observations(
                             "lapNumber": lap_no_int,
                             "sectionName": name,
                             "sectionFamily": section_family(name),
-                            "sectionType": classify_section(name),
+                            "sectionType": classify_section(name, context["trackName"]),
                             "timeSeconds": time_seconds,
                             "speedMph": clean_float(section.get("speedMph")),
                             "fieldComparisonCount": len(field_times),
@@ -660,7 +737,7 @@ def build_field_and_derived_observations(
         for laps in per_car.values():
             for sections in laps.values():
                 for name in sections:
-                    if name.strip() != "Lap" and not is_pit_line(name):
+                    if name.strip() != "Lap" and not is_pit_line(name, context["trackName"]):
                         racing_families.add(section_family(name))
 
         # Per car: clean flags + remainder (lapTotal - sum of racing families,
@@ -678,15 +755,19 @@ def build_field_and_derived_observations(
                 by_family = {
                     section_family(name): time_seconds
                     for name, time_seconds in sections.items()
-                    if name.strip() != "Lap" and not is_pit_line(name)
+                    if name.strip() != "Lap" and not is_pit_line(name, context["trackName"])
                 }
                 if not racing_families or set(by_family) != racing_families:
                     continue
                 remainder = lap_total - sum(by_family.values())
-                if remainder < 0:  # data error: sections overrun the lap -> lap uncovered, never clamped
+                if remainder < -PRINT_PRECISION_SECONDS:  # data error: sections overrun the lap -> lap uncovered, never clamped
                     uncovered_laps[key].add(lap_no)
                     continue
-                remainder_by_lap[lap_no][key] = remainder
+                # Inside the source's own print precision the lap tiles exactly
+                # and the sign is float noise, not an overrun. Clamping HERE is
+                # not hiding a discrepancy: anything the source could actually
+                # print is still caught above.
+                remainder_by_lap[lap_no][key] = max(0.0, remainder)
 
         # Field time lists per (lap, section) and per lap (remainder) for ranking.
         field_by_lap_section: dict[tuple[int, str], list[float]] = defaultdict(list)
@@ -723,7 +804,7 @@ def build_field_and_derived_observations(
                 for name in sorted(sections):
                     if name.strip() == "Lap":
                         section_type = "lap_total"
-                    elif is_pit_line(name):
+                    elif is_pit_line(name, context["trackName"]):
                         section_type = "pit_or_timing_line"
                     else:
                         section_type = "track_section"
@@ -1091,6 +1172,7 @@ def render_report(
         upcoming_lines = "- No future INDY NXT venue remains on the canonical schedule as of the analysis date."
         upcoming_heading = "Season complete; no next-venue race artifact is emitted."
         context_pack_line = "The next-venue pack is omitted when the canonical schedule has no future event."
+    session_count = counts['raceSectionSessionSummaries']
     section_lines = "\n".join(
         f"- {row['raceLabel']}: clean section median {fmt(row['medianCleanTrackSectionPercentile'], 3)}, best {row['bestCleanSectionFamilies'] or 'n/a'}."
         for row in sorted(section_summaries, key=lambda r: clean_float(r.get("medianCleanTrackSectionPercentile")) or -999, reverse=True)[:6]
@@ -1141,7 +1223,62 @@ whole field, not just Bryce. The remainder is shipped as a shadeable
 `{DERIVED_SECTION_NAME}` section only where the racing sections leave a genuine
 untimed stretch (>2% of the lap). Sessions at or below that threshold are
 classified as fully timed and do not ship a derived row. A negative remainder
-(sections overrunning the lap) marks that lap uncovered; it is never clamped.
+(sections overrunning the lap) marks that lap uncovered; it is never clamped,
+but a remainder inside the source's own 0.0001 s print precision counts as
+zero rather than as an overrun.
+
+As of the 2026-09-19 front-straight ruling below, **every one of the {session_count}
+race sessions is fully timed** and no session ships a derived row. The lane
+keeps the machinery: a future venue, or a venue whose report drops a family,
+falls back to the derived remainder automatically.
+
+## The Front-Straight Ruling (2026-09-19)
+
+This supersedes the 2026-07-19 SF over-match fix on its second half.
+
+July corrected one error and introduced another. It established — rightly —
+that an `SF`/`S/F` reference does not make a section a pit split, rescuing
+`SF to T1`, `T4 to SF`, `FS to SF`, `SF to I1` and friends at Iowa, Milwaukee,
+Road America and Detroit. But it kept the converse as an axiom: *"pit means
+PI/PO or the alternate start, nothing else"*, and so it left every `FS-PO` /
+`FS-PI` / `FS - PO 2` family classified as a pit split. Those families are the
+start/finish straight. The result was that the S/F straight went uncoloured on
+the heat map at eight venues, and at four of them (Laguna Seca, Mid-Ohio, WWTR,
+Arlington) the discarded time reappeared as a "genuine untimed gap" that the
+curated map assets then described as a stretch carrying no timing loop.
+
+The evidence that overturns it, measured across all 44 race sessions:
+
+- **Speed.** These families run at full racing pace on every green lap —
+  86-172 mph depending on venue. The genuine pit-transit families
+  (`PI to PO`, `PO to SF`, `SF to PI`, `PO to Alt`, `Alt S/F to PI`,
+  `PO to I13A`) run at 0.4-33 mph.
+- **Presence.** They are recorded on every lap. The pit-transit families appear
+  once or twice per race — only on the laps the car actually pitted.
+- **Tiling.** `sum(track sections) + sum(these families)` equals the official
+  `Lap` row to 0.000 s on green laps at every affected venue. Before the fix
+  the same venues left 2.8% (Barber) to 24.1% (WWTR) of the lap unexplained,
+  and that residual was exactly these families. No venue carries an
+  overlapping alternative span, so there is one tiling and no double count.
+- **Geometry.** The semantic layer's decoded loop inventory puts the pit-in
+  loop at a *negative* distance from S/F and the pit-out loop just past it:
+  both sit on the main straight, either side of the line, not in the pit lane.
+  The family lengths reproduce those loop distances to the foot — Barber
+  `FS-PO` = SF→I1 = 5,352 units = 0.0845 mi; Indianapolis `FS - PO` = SF→I1B
+  and `FS - PO 2` = I1B→I1; St. Petersburg `FS-PO` = SF→I1 = 8,244 units.
+- **Ranking.** Every reclassified row resolves a field percentile against a
+  median of 20 cars (min 12), so the comparison the map draws is real.
+- **Precedent.** The qualifying lane has always read them as mainline sections
+  (`analysis/quali-lab/scripts/official-qualifying.mjs`), and the curated map
+  anchors at Barber, Indianapolis, Portland and St. Petersburg were derived
+  from the qualifying packs and had been waiting for these names since July.
+
+Fourteen (venue, family) pairs move to `track_section`; every pit-transit
+family stays excluded at every venue. Pit laps cannot pollute the new spans:
+the clean-lap filter drops any lap over 110% of the car's own median green lap,
+and all 188 laps above 140% of the session median were already flagged `no`, so
+no pit-in or pit-out lap counts as a clean comparison. That was verified, not
+assumed; no new guard was added, and caution/clean-lap semantics are unchanged.
 
 ## Road America Context
 

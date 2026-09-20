@@ -114,7 +114,7 @@
       "label": "media"
     },
     {
-      "count": 201,
+      "count": 221,
       "label": "weather"
     },
     {
@@ -182,7 +182,7 @@
       "label": "source_broken_preserved"
     }
   ],
-  "generatedAt": "2026-09-10T23:01:45Z",
+  "generatedAt": "2026-09-20T00:00:20Z",
   "highestContextSessions": [
     {
       "bryceContextCount": 1,
@@ -199,7 +199,7 @@
       "seriesName": "INDY NXT",
       "sessionId": "session_indy_nxt_2025_6450",
       "sessionType": "race",
-      "sourceHash": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd",
+      "sourceHash": "d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd",
       "sourceStateCounts": "media_narrative_context:7; modeled_weather_context:1; official_incident_context:8; official_penalty_context:6; official_racecraft_context:1",
       "totalContextRows": 23,
       "weatherCount": 1,
@@ -220,7 +220,7 @@
       "seriesName": "INDY NXT",
       "sessionId": "session_indy_nxt_2026_6749",
       "sessionType": "race",
-      "sourceHash": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd",
+      "sourceHash": "d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd",
       "sourceStateCounts": "media_narrative_context:6; modeled_weather_context:1; official_incident_context:6; official_penalty_context:6; official_racecraft_context:1",
       "totalContextRows": 20,
       "weatherCount": 1,
@@ -241,7 +241,7 @@
       "seriesName": "INDY NXT",
       "sessionId": "session_indy_nxt_2024_6326",
       "sessionType": "race",
-      "sourceHash": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd",
+      "sourceHash": "d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd",
       "sourceStateCounts": "media_narrative_context:6; modeled_weather_context:1; official_incident_context:7; official_penalty_context:4; official_racecraft_context:1",
       "totalContextRows": 19,
       "weatherCount": 1,
@@ -262,7 +262,7 @@
       "seriesName": "INDY NXT",
       "sessionId": "session_indy_nxt_2025_6455",
       "sessionType": "race",
-      "sourceHash": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd",
+      "sourceHash": "d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd",
       "sourceStateCounts": "media_narrative_context:6; modeled_weather_context:1; official_incident_context:7; official_penalty_context:4; official_racecraft_context:1",
       "totalContextRows": 19,
       "weatherCount": 1,
@@ -283,7 +283,7 @@
       "seriesName": "INDY NXT",
       "sessionId": "session_indy_nxt_2026_6751",
       "sessionType": "race",
-      "sourceHash": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd",
+      "sourceHash": "d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd",
       "sourceStateCounts": "media_narrative_context:7; modeled_weather_context:1; official_incident_context:8; official_penalty_context:2; official_racecraft_context:1",
       "totalContextRows": 19,
       "weatherCount": 1,
@@ -304,7 +304,7 @@
       "seriesName": "INDY NXT",
       "sessionId": "session_indy_nxt_2024_6320",
       "sessionType": "race",
-      "sourceHash": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd",
+      "sourceHash": "d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd",
       "sourceStateCounts": "media_narrative_context:6; modeled_weather_context:1; official_incident_context:8; official_penalty_context:1; official_racecraft_context:1",
       "totalContextRows": 17,
       "weatherCount": 1,
@@ -325,7 +325,7 @@
       "seriesName": "INDY NXT",
       "sessionId": "session_indy_nxt_2025_6446",
       "sessionType": "race",
-      "sourceHash": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd",
+      "sourceHash": "d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd",
       "sourceStateCounts": "media_narrative_context:6; modeled_weather_context:1; official_incident_context:8; official_penalty_context:1; official_racecraft_context:1",
       "totalContextRows": 17,
       "weatherCount": 1,
@@ -346,8 +346,29 @@
       "seriesName": "INDY NXT",
       "sessionId": "session_indy_nxt_2026_6753",
       "sessionType": "race",
-      "sourceHash": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd",
+      "sourceHash": "d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd",
       "sourceStateCounts": "media_narrative_context:7; modeled_weather_context:1; official_incident_context:4; official_penalty_context:4; official_racecraft_context:1",
+      "totalContextRows": 17,
+      "weatherCount": 1,
+      "wetDryStates": "dry"
+    },
+    {
+      "bryceContextCount": 0,
+      "eventId": "event_indy_nxt_2026_5542",
+      "eventName": "Grand Prix of Monterey Race 1",
+      "firstLapNumber": 2,
+      "incidentCount": 6,
+      "lastLapNumber": 28,
+      "mediaCount": 6,
+      "penaltyCount": 3,
+      "racecraftCount": 1,
+      "seasonYear": 2026,
+      "seriesId": "series_indy_nxt",
+      "seriesName": "INDY NXT",
+      "sessionId": "session_indy_nxt_2026_6759",
+      "sessionType": "race",
+      "sourceHash": "d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd",
+      "sourceStateCounts": "media_narrative_context:6; modeled_weather_context:1; official_incident_context:6; official_penalty_context:3; official_racecraft_context:1",
       "totalContextRows": 17,
       "weatherCount": 1,
       "wetDryStates": "dry"
@@ -367,7 +388,7 @@
       "seriesName": "INDY NXT",
       "sessionId": "session_indy_nxt_2026_6765",
       "sessionType": "race",
-      "sourceHash": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd",
+      "sourceHash": "d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd",
       "sourceStateCounts": "media_narrative_context:7; modeled_weather_context:1; official_incident_context:1; official_penalty_context:7; official_racecraft_context:1",
       "totalContextRows": 17,
       "weatherCount": 1,
@@ -388,7 +409,7 @@
       "seriesName": "INDY NXT",
       "sessionId": "session_indy_nxt_2024_6315",
       "sessionType": "race",
-      "sourceHash": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd",
+      "sourceHash": "d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd",
       "sourceStateCounts": "media_narrative_context:7; modeled_weather_context:1; official_incident_context:2; official_penalty_context:5; official_racecraft_context:1",
       "totalContextRows": 16,
       "weatherCount": 1,
@@ -409,29 +430,8 @@
       "seriesName": "INDY NXT",
       "sessionId": "session_indy_nxt_2024_6324",
       "sessionType": "race",
-      "sourceHash": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd",
+      "sourceHash": "d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd",
       "sourceStateCounts": "media_narrative_context:7; modeled_weather_context:1; official_incident_context:5; official_penalty_context:2; official_racecraft_context:1",
-      "totalContextRows": 16,
-      "weatherCount": 1,
-      "wetDryStates": "dry"
-    },
-    {
-      "bryceContextCount": 0,
-      "eventId": "event_indy_nxt_2024_5483",
-      "eventName": "Grand Prix of Monterey Race 2",
-      "firstLapNumber": 3,
-      "incidentCount": 3,
-      "lastLapNumber": 32,
-      "mediaCount": 7,
-      "penaltyCount": 4,
-      "racecraftCount": 1,
-      "seasonYear": 2024,
-      "seriesId": "series_indy_nxt",
-      "seriesName": "INDY NXT",
-      "sessionId": "session_indy_nxt_2024_6327",
-      "sessionType": "race",
-      "sourceHash": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd",
-      "sourceStateCounts": "media_narrative_context:7; modeled_weather_context:1; official_incident_context:3; official_penalty_context:4; official_racecraft_context:1",
       "totalContextRows": 16,
       "weatherCount": 1,
       "wetDryStates": "dry"
@@ -585,16 +585,16 @@
       "eventCount": 45,
       "incidentCount": 166,
       "mediaCount": 840,
-      "officialContextShare": 0.237829209896249,
+      "officialContextShare": 0.23409269442262373,
       "penaltyCount": 88,
       "racecraftCount": 44,
       "seasonYears": "2024; 2025; 2026",
       "seriesId": "series_indy_nxt",
       "seriesName": "INDY NXT",
       "sessionCount": 203,
-      "sourceHash": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd",
-      "totalContextRows": 1253,
-      "weatherCount": 115
+      "sourceHash": "d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd",
+      "totalContextRows": 1273,
+      "weatherCount": 135
     },
     {
       "bryceContextCount": 0,
@@ -608,7 +608,7 @@
       "seriesId": "series_gb3",
       "seriesName": "GB3 Championship",
       "sessionCount": 113,
-      "sourceHash": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd",
+      "sourceHash": "d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd",
       "totalContextRows": 180,
       "weatherCount": 39
     },
@@ -624,7 +624,7 @@
       "seriesId": "series_formula_ford",
       "seriesName": "Formula Ford",
       "sessionCount": 46,
-      "sourceHash": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd",
+      "sourceHash": "d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd",
       "totalContextRows": 61,
       "weatherCount": 46
     },
@@ -640,7 +640,7 @@
       "seriesId": "series_frp_f1600",
       "seriesName": "F1600 Championship Series",
       "sessionCount": 37,
-      "sourceHash": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd",
+      "sourceHash": "d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd",
       "totalContextRows": 39,
       "weatherCount": 0
     },
@@ -656,7 +656,7 @@
       "seriesId": "series_froc",
       "seriesName": "Castrol Toyota Formula Regional Oceania Championship",
       "sessionCount": 11,
-      "sourceHash": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd",
+      "sourceHash": "d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd",
       "totalContextRows": 32,
       "weatherCount": 0
     },
@@ -672,7 +672,7 @@
       "seriesId": "series_euroformula_open",
       "seriesName": "Euroformula Open",
       "sessionCount": 28,
-      "sourceHash": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd",
+      "sourceHash": "d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd",
       "totalContextRows": 28,
       "weatherCount": 0
     },
@@ -688,7 +688,7 @@
       "seriesId": "global_context",
       "seriesName": "Global / career context",
       "sessionCount": 0,
-      "sourceHash": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd",
+      "sourceHash": "d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd",
       "totalContextRows": 5,
       "weatherCount": 0
     },
@@ -704,7 +704,7 @@
       "seriesId": "series_imsa_weathertech",
       "seriesName": "IMSA WeatherTech SportsCar Championship",
       "sessionCount": 1,
-      "sourceHash": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd",
+      "sourceHash": "d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd",
       "totalContextRows": 5,
       "weatherCount": 1
     }
@@ -793,7 +793,7 @@
       "label": "official_page"
     },
     {
-      "count": 85,
+      "count": 94,
       "label": "weather_api"
     },
     {
@@ -817,14 +817,14 @@
       "label": "official_json"
     }
   ],
-  "sourceHash": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd",
+  "sourceHash": "d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd",
   "sourceScope": {
     "derivedMetricRows": 453,
     "gapRows": 10,
     "mediaRows": 1098,
     "seriesCoverageRows": 8,
     "sessionRollupRows": 439,
-    "sourceEvidenceRows": 1347,
+    "sourceEvidenceRows": 1356,
     "timelineCollections": [
       "racecraftEvents",
       "penalties",
@@ -832,7 +832,7 @@
       "weatherObservations",
       "mediaAssets"
     ],
-    "timelineRows": 1603,
-    "weatherRows": 201
+    "timelineRows": 1623,
+    "weatherRows": 221
   }
 }

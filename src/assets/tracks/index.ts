@@ -1,12 +1,15 @@
 import barberMotorsportsPark from './barber-motorsports-park.json';
+import indianapolisMotorSpeedway from './indianapolis-motor-speedway.json';
 import indianapolisMotorSpeedwayRoadCourse from './indianapolis-motor-speedway-road-course.json';
 import iowaSpeedway from './iowa-speedway.json';
 import midOhioSportsCarCourse from './mid-ohio-sports-car-course.json';
 import nashvilleSuperspeedway from './nashville-superspeedway.json';
+import phoenixRaceway from './phoenix-raceway.json';
 import portlandInternationalRaceway from './portland-international-raceway.json';
 import roadAmerica from './road-america.json';
 import streetsOfArlington from './streets-of-arlington.json';
 import streetsOfDetroit from './streets-of-detroit.json';
+import streetsOfLongBeach from './streets-of-long-beach.json';
 import streetsOfStPetersburg from './streets-of-st-petersburg.json';
 import streetsOfToronto from './streets-of-toronto.json';
 import theMilwaukeeMile from './the-milwaukee-mile.json';
@@ -52,14 +55,30 @@ export interface TrackOutline {
 
 const outlines: TrackOutline[] = [
   barberMotorsportsPark,
+  // Indianapolis Motor Speedway (the 2.5-mile oval) is outline-only, like
+  // Toronto below: it is a prospective 2027-calendar venue Bryce has not yet
+  // raced, so the section-observation lane has no rows to anchor against.
+  // Traced from OSM's eight named oval segments (turns + straights), joined
+  // into one loop; not to be confused with indianapolisMotorSpeedwayRoadCourse.
+  indianapolisMotorSpeedway,
   indianapolisMotorSpeedwayRoadCourse,
   iowaSpeedway,
   midOhioSportsCarCourse,
   nashvilleSuperspeedway,
+  // Phoenix Raceway is outline-only for the same reason: a prospective
+  // 2027-calendar venue with no section-observation rows yet.
+  phoenixRaceway,
   portlandInternationalRaceway,
   roadAmerica,
   streetsOfArlington,
   streetsOfDetroit,
+  // Streets of Long Beach is outline-only for the same reason as Indianapolis
+  // Motor Speedway and Phoenix Raceway above: a prospective 2027-calendar
+  // venue with no section-observation rows yet. Traced from the RaceTools
+  // LongBeach.zip map package's own track-centreline polyline (3175 points,
+  // INI Track.Name "Streets of Long Beach", package sha256 ea2ae53c...),
+  // the same method as Toronto/Detroit/Arlington/St. Petersburg below.
+  streetsOfLongBeach,
   streetsOfStPetersburg,
   // Toronto is outline-only: INDY NXT last supported the Toronto round in 2019
   // (pre-Bryce), so the section-observation lane — scoped to Bryce's 2024–2026

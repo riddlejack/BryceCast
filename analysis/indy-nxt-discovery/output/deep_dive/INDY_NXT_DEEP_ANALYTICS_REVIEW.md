@@ -283,7 +283,7 @@ _No rows._
 | incidents | 166 | complete | incident_penalty_context.csv | Incident exposure and type summaries. |
 | penalties | 88 | complete | incident_penalty_context.csv | Penalty exposure and type summaries. |
 | racecraft_events | 44 | complete_source_bounded | racecraft_context_by_race.csv | Official most-improved badges only; no inferred overtake log. |
-| weather_observations | 115 | complete_context_only | race_debrief_scores.csv; future_weekend_prep_inputs.csv | Modeled non-official weather used as context, not causality. |
+| weather_observations | 135 | complete_context_only | race_debrief_scores.csv; future_weekend_prep_inputs.csv | Modeled non-official weather used as context, not causality. |
 | future_schedule | 75 | complete_context_only | future_weekend_prep_inputs.csv | Future prep rows exclude forecast claims until current weather source is added. |
 | pit_stop_counts | 45 | complete_low_signal | race_debrief_scores.csv | Pit counts are present but low-signal; no pit sequence/tire/service analysis exists. |
 | telemetry_or_car_engineering | 0 | unavailable |  | No telemetry or engineering-root-cause data in canonical sources. |

@@ -380,22 +380,24 @@ assert.ok(
    tamper (the raceStory integrity contract). */
 {
   const { loadGb3DeepDive, gb3DeepDiveRef } = await import('../src/data/gb3DeepDive');
-  const { packRawModules } = await import('../src/data/packModules');
+  const { packUrls } = await import('../src/data/packModules');
   const ref = gb3DeepDiveRef();
   assert.ok(ref, 'the GB3 pack is registered in the package source inventory');
   assert.equal(ref!.id, 'gb3-deep-dive-context');
   assert.ok(/^[0-9a-f]{64}$/.test(ref!.sha256), 'the inventory ref carries a real sha256');
   const key = `../../${ref!.path}`;
-  const originalRaw = packRawModules[key];
-  assert.ok(originalRaw, 'the GB3 pack resolves through the context-pack glob');
-  // Tamper: one flipped byte in the raw pack must fail the load CLOSED.
-  packRawModules[key] = async () => {
-    const text = (await originalRaw()) as string;
-    return text.replace('"raceRows"', '"raceRowsX"');
-  };
+  const originalUrlLoader = packUrls[key];
+  assert.ok(originalUrlLoader, 'the GB3 pack resolves through the context-pack glob');
+  // Tamper: one flipped byte in the fetched pack must fail the load CLOSED.
+  // Packs are `?url` assets now (see packModules.ts) — point the loader at a
+  // tampered `data:` URL carrying the same bytes minus one substring.
+  const originalUrl = await originalUrlLoader();
+  const originalText = await fetch(originalUrl).then((response) => response.text());
+  const tamperedUrl = `data:application/json,${encodeURIComponent(originalText.replace('"raceRows"', '"raceRowsX"'))}`;
+  packUrls[key] = async () => tamperedUrl;
   await assert.rejects(loadGb3DeepDive(), /integrity mismatch/, 'a tampered GB3 pack is rejected, never rendered');
   // Restore: the failed load was not cached, so a clean load verifies again.
-  packRawModules[key] = originalRaw;
+  packUrls[key] = async () => originalUrl;
   const gb3 = await loadGb3DeepDive();
   assert.ok(gb3, 'the untampered GB3 pack loads');
   assert.equal(gb3!.id, ref!.id, 'the loaded pack id matches the inventory ref');
@@ -406,20 +408,20 @@ assert.ok(
    inventory-ref contract, rejects a tampered pack. */
 {
   const { loadFormulaFordLapShape, formulaFordLapShapeRef } = await import('../src/data/formulaFordLapShape');
-  const { packRawModules } = await import('../src/data/packModules');
+  const { packUrls } = await import('../src/data/packModules');
   const ref = formulaFordLapShapeRef();
   assert.ok(ref, 'the Formula Ford pack is registered in the package source inventory');
   assert.equal(ref!.id, 'formula-ford-lap-shape-context');
   assert.ok(/^[0-9a-f]{64}$/.test(ref!.sha256), 'the inventory ref carries a real sha256');
   const key = `../../${ref!.path}`;
-  const originalRaw = packRawModules[key];
-  assert.ok(originalRaw, 'the Formula Ford pack resolves through the context-pack glob');
-  packRawModules[key] = async () => {
-    const text = (await originalRaw()) as string;
-    return text.replace('"displayRules"', '"displayRulesX"');
-  };
+  const originalUrlLoader = packUrls[key];
+  assert.ok(originalUrlLoader, 'the Formula Ford pack resolves through the context-pack glob');
+  const originalUrl = await originalUrlLoader();
+  const originalText = await fetch(originalUrl).then((response) => response.text());
+  const tamperedUrl = `data:application/json,${encodeURIComponent(originalText.replace('"displayRules"', '"displayRulesX"'))}`;
+  packUrls[key] = async () => tamperedUrl;
   await assert.rejects(loadFormulaFordLapShape(), /integrity mismatch/, 'a tampered Formula Ford pack is rejected, never rendered');
-  packRawModules[key] = originalRaw;
+  packUrls[key] = async () => originalUrl;
   const ff = await loadFormulaFordLapShape();
   assert.ok(ff, 'the untampered Formula Ford pack loads');
   assert.equal(ff!.id, ref!.id, 'the loaded pack id matches the inventory ref');
@@ -430,20 +432,20 @@ assert.ok(
    same centralized fail-closed loader, rejects a tampered pack. */
 {
   const { loadImsaDaytonaStint, imsaStintRef } = await import('../src/data/imsaDaytonaStint');
-  const { packRawModules } = await import('../src/data/packModules');
+  const { packUrls } = await import('../src/data/packModules');
   const ref = imsaStintRef();
   assert.ok(ref, 'the IMSA pack is registered in the package source inventory');
   assert.equal(ref!.id, 'imsa-daytona-stint-class-context');
   assert.ok(/^[0-9a-f]{64}$/.test(ref!.sha256), 'the inventory ref carries a real sha256');
   const key = `../../${ref!.path}`;
-  const originalRaw = packRawModules[key];
-  assert.ok(originalRaw, 'the IMSA pack resolves through the context-pack glob');
-  packRawModules[key] = async () => {
-    const text = (await originalRaw()) as string;
-    return text.replace('"displayRules"', '"displayRulesX"');
-  };
+  const originalUrlLoader = packUrls[key];
+  assert.ok(originalUrlLoader, 'the IMSA pack resolves through the context-pack glob');
+  const originalUrl = await originalUrlLoader();
+  const originalText = await fetch(originalUrl).then((response) => response.text());
+  const tamperedUrl = `data:application/json,${encodeURIComponent(originalText.replace('"displayRules"', '"displayRulesX"'))}`;
+  packUrls[key] = async () => tamperedUrl;
   await assert.rejects(loadImsaDaytonaStint(), /integrity mismatch/, 'a tampered IMSA pack is rejected, never rendered');
-  packRawModules[key] = originalRaw;
+  packUrls[key] = async () => originalUrl;
   const imsa = await loadImsaDaytonaStint();
   assert.ok(imsa, 'the untampered IMSA pack loads');
   assert.equal(imsa!.id, ref!.id, 'the loaded pack id matches the inventory ref');

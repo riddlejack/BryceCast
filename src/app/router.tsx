@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState, type CSSProperties, type ReactNode, type MouseEvent } from 'react';
+import { prefetchRoute } from './routePrefetch';
 
 export interface Route {
   path: string;
@@ -57,8 +58,23 @@ export const Link = ({
     onClick?.();
     navigate(to);
   };
+  // Prefetch on intent: a hover/focus/touch that reaches this link is a
+  // strong signal the click is coming, so start loading that route's lazy
+  // chunk immediately — by the time the click lands, React's lazy() import
+  // is often already resolved, so the route mounts instantly instead of
+  // waiting out a cold chunk fetch. A no-op for routes with no lazy chunk
+  // (Home) or on Data Saver / 2G (see routePrefetch.ts).
+  const prefetch = () => prefetchRoute(to);
   return (
-    <a href={to} className={className} style={style} onClick={handleClick}>
+    <a
+      href={to}
+      className={className}
+      style={style}
+      onClick={handleClick}
+      onMouseEnter={prefetch}
+      onFocus={prefetch}
+      onTouchStart={prefetch}
+    >
       {children}
     </a>
   );

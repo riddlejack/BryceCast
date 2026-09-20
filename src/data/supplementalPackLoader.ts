@@ -10,7 +10,8 @@
  *  here; there is no second, unverified load path. */
 
 import { useEffect, useState } from 'react';
-import { packModules, packRawModules } from './packModules';
+import { packUrls } from './packModules';
+import { loadContextPack } from './packLoader';
 
 /** The shape of an inventory integrity ref (screens.careerLab.gb3DeepDiveRef &
  *  friends). `type` narrows per pack in the package types; here it is a plain
@@ -24,14 +25,6 @@ export interface SupplementalPackRef {
   sha256: string;
 }
 
-const sha256Hex = async (value: string): Promise<string> => {
-  const bytes = new TextEncoder().encode(value);
-  const digest = await globalThis.crypto.subtle.digest('SHA-256', bytes);
-  return Array.from(new Uint8Array(digest))
-    .map((byte) => byte.toString(16).padStart(2, '0'))
-    .join('');
-};
-
 /** Load one supplemental pack, hash-verified against its inventory ref.
  *
  *  Returns null only when the ref is absent (the package predates the module) or
@@ -44,16 +37,13 @@ export const loadVerifiedSupplementalPack = async <TPack extends { id: string }>
 ): Promise<TPack | null> => {
   if (!ref) return null;
   const key = `../../${ref.path}`;
-  const jsonLoader = packModules[key];
-  const rawLoader = packRawModules[key];
-  if (!jsonLoader || !rawLoader) return null;
-  const pack = ((await jsonLoader()) as { default: TPack }).default;
-  const rawText = (await rawLoader()) as string;
-  const actualSha256 = await sha256Hex(rawText);
-  if (actualSha256 !== ref.sha256) {
+  const loaded = await loadContextPack<TPack>(packUrls, key);
+  if (!loaded) return null;
+  const { data: pack, sha256, bytes } = loaded;
+  if (sha256 !== ref.sha256) {
     throw new Error(`${label} integrity mismatch (sha256): ${ref.path}`);
   }
-  if (new TextEncoder().encode(rawText).byteLength !== ref.bytes) {
+  if (bytes !== ref.bytes) {
     throw new Error(`${label} integrity mismatch (bytes): ${ref.path}`);
   }
   if (pack.id !== ref.id) {

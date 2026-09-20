@@ -1,5 +1,6 @@
 import { uiDataPackage, type UiPassMarkRef } from './uiDataPackage';
-import { packModules, packRawModules } from './packModules';
+import { packUrls } from './packModules';
+import { loadContextPack } from './packLoader';
 import { passSpanAnchor, type TrackSectionAnchorSet } from '../assets/tracks/sections';
 
 /** Pass-mark packs (heat-map v2, item 7): every `on_track_green` Bryce-involving
@@ -38,14 +39,6 @@ export interface PassMarksPack {
   caveats: string[];
 }
 
-const sha256Hex = async (value: string): Promise<string> => {
-  const bytes = new TextEncoder().encode(value);
-  const digest = await globalThis.crypto.subtle.digest('SHA-256', bytes);
-  return Array.from(new Uint8Array(digest))
-    .map((byte) => byte.toString(16).padStart(2, '0'))
-    .join('');
-};
-
 const refs = (): UiPassMarkRef[] => uiDataPackage.screens.raceDebrief.passMarkRefs ?? [];
 
 const refFor = (sessionId: string): UiPassMarkRef | null =>
@@ -60,12 +53,10 @@ export const loadPassMarks = (sessionId: string): Promise<PassMarksPack | null> 
     const ref = refFor(sessionId);
     if (!ref) return null;
     const key = `../../${ref.path}`;
-    const jsonLoader = packModules[key];
-    const rawLoader = packRawModules[key];
-    if (!jsonLoader || !rawLoader) return null;
-    const pack = ((await jsonLoader()) as { default: PassMarksPack }).default;
-    const rawText = (await rawLoader()) as string;
-    if ((await sha256Hex(rawText)) !== ref.sha256 || pack.id !== ref.id || pack.sessionId !== sessionId) {
+    const loaded = await loadContextPack<PassMarksPack>(packUrls, key);
+    if (!loaded) return null;
+    const { data: pack, sha256 } = loaded;
+    if (sha256 !== ref.sha256 || pack.id !== ref.id || pack.sessionId !== sessionId) {
       throw new Error(`Pass-mark pack integrity mismatch: ${ref.path}`);
     }
     return pack;

@@ -1,265 +1,265 @@
 sectionFamily,sessionType,trackName,observationRows,medianPercentile,meanPercentile,topQuartileShare,bottomQuartileShare,sourceHash
-Turn 10,practice,Barber Motorsports Park,99,0.5455,0.5223,0.2929,0.2626,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 11,practice,Barber Motorsports Park,99,0.4615,0.4853,0.2121,0.1919,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 17,practice,Barber Motorsports Park,99,0.6111,0.5734,0.2929,0.1111,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 4,practice,Barber Motorsports Park,99,0.5294,0.544,0.2424,0.1515,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 7,practice,Barber Motorsports Park,99,0.6364,0.573,0.404,0.2121,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turns 1-3,practice,Barber Motorsports Park,99,0.6667,0.6206,0.3939,0.1515,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turns 12-13,practice,Barber Motorsports Park,99,0.5263,0.5193,0.1515,0.1111,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turns 14-16,practice,Barber Motorsports Park,99,0.5556,0.5485,0.2828,0.1717,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turns 5-6,practice,Barber Motorsports Park,99,0.65,0.6154,0.4242,0.1111,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turns 8-9,practice,Barber Motorsports Park,99,0.5333,0.5024,0.2424,0.2323,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 10,qualifying,Barber Motorsports Park,29,0.625,0.5958,0.4138,0.2069,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 11,qualifying,Barber Motorsports Park,29,0.3333,0.3819,0.1724,0.3793,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 17,qualifying,Barber Motorsports Park,29,0.7273,0.7175,0.4138,0.069,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 4,qualifying,Barber Motorsports Park,29,0.5455,0.536,0.3103,0.1379,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 7,qualifying,Barber Motorsports Park,29,0.5556,0.6044,0.4138,0.2069,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turns 1-3,qualifying,Barber Motorsports Park,29,0.7273,0.736,0.4828,0.0345,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turns 12-13,qualifying,Barber Motorsports Park,29,0.4545,0.4637,0.2414,0.3103,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turns 14-16,qualifying,Barber Motorsports Park,29,0.625,0.5821,0.2759,0.069,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turns 5-6,qualifying,Barber Motorsports Park,29,0.6364,0.6272,0.3793,0.1379,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turns 8-9,qualifying,Barber Motorsports Park,29,0.625,0.5116,0.2069,0.2759,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Backstretch,practice,Indianapolis Motor Speedway Road Course,67,0.7059,0.5884,0.4776,0.2537,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 1/2,practice,Indianapolis Motor Speedway Road Course,67,0.5,0.5113,0.3134,0.2836,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 10,practice,Indianapolis Motor Speedway Road Course,67,0.5714,0.556,0.2687,0.0896,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 11,practice,Indianapolis Motor Speedway Road Course,67,0.65,0.6028,0.3582,0.1493,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 12/13,practice,Indianapolis Motor Speedway Road Course,67,0.7647,0.6646,0.5224,0.1493,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 14,practice,Indianapolis Motor Speedway Road Course,67,0.3889,0.4198,0.1045,0.2687,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 3,practice,Indianapolis Motor Speedway Road Course,67,0.4,0.441,0.1642,0.3284,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 4/5/6,practice,Indianapolis Motor Speedway Road Course,67,0.6,0.5954,0.3284,0.0896,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 7,practice,Indianapolis Motor Speedway Road Course,67,0.6,0.5616,0.3284,0.1791,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 8/9,practice,Indianapolis Motor Speedway Road Course,67,0.6,0.5907,0.3881,0.1791,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Backstretch,qualifying,Indianapolis Motor Speedway Road Course,52,0.6515,0.517,0.2692,0.2692,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 1/2,qualifying,Indianapolis Motor Speedway Road Course,52,0.6125,0.5904,0.2692,0.1923,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 10,qualifying,Indianapolis Motor Speedway Road Course,52,0.5,0.4657,0.1154,0.1923,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 11,qualifying,Indianapolis Motor Speedway Road Course,52,0.4273,0.4549,0.1538,0.2308,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 12/13,qualifying,Indianapolis Motor Speedway Road Course,52,0.8,0.634,0.5385,0.1538,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 14,qualifying,Indianapolis Motor Speedway Road Course,52,0.3636,0.3889,0.0385,0.2308,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 3,qualifying,Indianapolis Motor Speedway Road Course,52,0.3,0.3321,0.0769,0.3462,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 4/5/6,qualifying,Indianapolis Motor Speedway Road Course,52,0.7071,0.6501,0.4615,0.0769,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 7,qualifying,Indianapolis Motor Speedway Road Course,50,0.6,0.5375,0.24,0.2,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 8/9,qualifying,Indianapolis Motor Speedway Road Course,50,0.5714,0.5113,0.12,0.08,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-BS to T3,practice,Iowa Speedway,77,0.5556,0.5518,0.2208,0.1429,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-SS1 to T2,practice,Iowa Speedway,77,0.5,0.5069,0.1818,0.1818,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-SS2 to T4,practice,Iowa Speedway,77,0.5,0.5103,0.1818,0.1299,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-T1 to SS1,practice,Iowa Speedway,77,0.4375,0.4671,0.2208,0.2987,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-T2 to BS,practice,Iowa Speedway,77,0.5294,0.5277,0.1688,0.1429,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-T3 to SS2,practice,Iowa Speedway,36,0.5425,0.5215,0.1944,0.1667,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Back Stretch,practice,Mid-Ohio Sports Car Course,101,0.5217,0.5172,0.2475,0.1782,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 1,practice,Mid-Ohio Sports Car Course,100,0.2426,0.2821,0.04,0.53,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 10,practice,Mid-Ohio Sports Car Course,101,0.3182,0.3745,0.1287,0.4059,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 11,practice,Mid-Ohio Sports Car Course,101,0.2778,0.368,0.0594,0.3663,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 12,practice,Mid-Ohio Sports Car Course,101,0.4,0.4339,0.1683,0.297,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 12C,practice,Mid-Ohio Sports Car Course,101,0.3529,0.3957,0.099,0.3465,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 13,practice,Mid-Ohio Sports Car Course,101,0.4667,0.4989,0.2079,0.198,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 1A,practice,Mid-Ohio Sports Car Course,100,0.3333,0.3982,0.12,0.28,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 1B,practice,Mid-Ohio Sports Car Course,101,0.3889,0.4072,0.0792,0.2475,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 2,practice,Mid-Ohio Sports Car Course,101,0.6111,0.5855,0.297,0.1188,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 3,practice,Mid-Ohio Sports Car Course,101,0.5882,0.531,0.2277,0.198,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 4,practice,Mid-Ohio Sports Car Course,101,0.5,0.5261,0.2673,0.1881,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 5,practice,Mid-Ohio Sports Car Course,101,0.6111,0.5629,0.3366,0.198,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 6/7,practice,Mid-Ohio Sports Car Course,101,0.3913,0.4072,0.0396,0.2673,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 8,practice,Mid-Ohio Sports Car Course,101,0.4783,0.4666,0.1683,0.2574,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 9,practice,Mid-Ohio Sports Car Course,101,0.3478,0.4059,0.1287,0.3465,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Back Stretch,qualifying,Mid-Ohio Sports Car Course,33,0.375,0.4618,0.2424,0.3636,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 1,qualifying,Mid-Ohio Sports Car Course,33,0.3,0.335,0.0909,0.3333,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 10,qualifying,Mid-Ohio Sports Car Course,33,0.5,0.5069,0.2121,0.1212,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 11,qualifying,Mid-Ohio Sports Car Course,33,0.4,0.4497,0.1515,0.2121,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 12,qualifying,Mid-Ohio Sports Car Course,33,0.375,0.4654,0.2727,0.303,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 12C,qualifying,Mid-Ohio Sports Car Course,33,0.5,0.472,0.2121,0.3333,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 13,qualifying,Mid-Ohio Sports Car Course,33,0.7,0.6624,0.3939,0.0303,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 1A,qualifying,Mid-Ohio Sports Car Course,33,0.2,0.2661,0.0606,0.6667,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 1B,qualifying,Mid-Ohio Sports Car Course,33,0.375,0.4091,0.1515,0.2727,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 2,qualifying,Mid-Ohio Sports Car Course,33,0.5,0.5539,0.303,0.1818,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 3,qualifying,Mid-Ohio Sports Car Course,33,0.375,0.4141,0.1818,0.2727,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 4,qualifying,Mid-Ohio Sports Car Course,33,0.625,0.5725,0.303,0.1515,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 5,qualifying,Mid-Ohio Sports Car Course,33,0.4545,0.5121,0.2727,0.1212,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 6/7,qualifying,Mid-Ohio Sports Car Course,33,0.6,0.5491,0.3636,0.2424,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 8,qualifying,Mid-Ohio Sports Car Course,33,0.6364,0.5744,0.3333,0.2121,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 9,qualifying,Mid-Ohio Sports Car Course,33,0.5455,0.5289,0.2424,0.2121,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-BackStretch Entry,practice,Nashville Superspeedway,152,0.6667,0.6344,0.4013,0.125,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-BackStretch Exit,practice,Nashville Superspeedway,152,0.7059,0.6624,0.4342,0.0263,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 1 Entry,practice,Nashville Superspeedway,152,0.6667,0.5937,0.3618,0.1711,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 1 Exit,practice,Nashville Superspeedway,152,0.6875,0.6118,0.3684,0.1316,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 2 Entry,practice,Nashville Superspeedway,152,0.7143,0.656,0.4474,0.1184,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 3,practice,Nashville Superspeedway,151,0.7333,0.6814,0.4901,0.0927,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 4 Entry,practice,Nashville Superspeedway,151,0.6667,0.6315,0.4106,0.1126,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 4 Exit,practice,Nashville Superspeedway,151,0.6667,0.6075,0.3841,0.1325,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 1,practice,Portland International Raceway,145,0.5455,0.5233,0.1724,0.1517,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 12,practice,Portland International Raceway,146,0.5714,0.5556,0.3082,0.1918,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 2,practice,Portland International Raceway,145,0.5882,0.568,0.2621,0.1172,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 3,practice,Portland International Raceway,145,0.6,0.5833,0.3034,0.1103,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 4,practice,Portland International Raceway,146,0.6,0.5649,0.2055,0.1096,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 5,practice,Portland International Raceway,146,0.5228,0.535,0.1986,0.1301,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 6,practice,Portland International Raceway,146,0.5556,0.5382,0.2397,0.1918,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 7,practice,Portland International Raceway,146,0.6087,0.5747,0.274,0.1301,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 8,practice,Portland International Raceway,146,0.4606,0.5497,0.3493,0.1507,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 9,practice,Portland International Raceway,146,0.3901,0.4642,0.2534,0.3219,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turns 10/11,practice,Portland International Raceway,146,0.5,0.503,0.1849,0.1575,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 1,qualifying,Portland International Raceway,21,0.2727,0.3583,0.0952,0.4286,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 12,qualifying,Portland International Raceway,21,0.5455,0.5673,0.3333,0.1429,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 2,qualifying,Portland International Raceway,21,0.8571,0.6941,0.6667,0.1905,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 3,qualifying,Portland International Raceway,21,0.8,0.6659,0.5714,0.0952,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 4,qualifying,Portland International Raceway,21,0.375,0.3808,0.1429,0.381,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 5,qualifying,Portland International Raceway,21,0.375,0.3757,0.0952,0.4286,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 6,qualifying,Portland International Raceway,21,0.4545,0.451,0.2381,0.3333,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 7,qualifying,Portland International Raceway,21,0.375,0.4093,0.1429,0.2381,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 8,qualifying,Portland International Raceway,21,0.75,0.6088,0.619,0.2857,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 9,qualifying,Portland International Raceway,21,0.875,0.6192,0.619,0.2857,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turns 10/11,qualifying,Portland International Raceway,21,0.5,0.5026,0.2381,0.1429,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I1 to I2,practice,Road America,60,0.5721,0.5738,0.3,0.1167,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I10 to I11,practice,Road America,60,0.6111,0.5975,0.2667,0.1,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I11 to I11B,practice,Road America,60,0.6594,0.6268,0.25,0.0833,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I11B to I12,practice,Road America,60,0.6283,0.6078,0.3167,0.0833,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I12 to I13,practice,Road America,60,0.5604,0.5618,0.25,0.1667,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I13 to I13A,practice,Road America,60,0.5217,0.5035,0.1667,0.1667,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I13A to I14,practice,Road America,60,0.5652,0.5642,0.2833,0.1833,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I14 to I15C,practice,Road America,60,0.6667,0.6192,0.3167,0.0833,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I15C to I15,practice,Road America,60,0.5417,0.5364,0.2,0.1667,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I1B to I1,practice,Road America,60,0.5691,0.5596,0.2167,0.1667,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I2 to I3,practice,Road America,60,0.6754,0.6676,0.4667,0.05,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I3 to I3A,practice,Road America,60,0.5,0.4923,0.2167,0.2167,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I3A to I4,practice,Road America,60,0.6491,0.6209,0.3333,0.1,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I4 to I4A,practice,Road America,60,0.6682,0.6516,0.4167,0.05,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I4A to I5,practice,Road America,60,0.6899,0.6848,0.4167,0.05,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I5 to I6,practice,Road America,60,0.5,0.4953,0.1667,0.1833,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I6 to I7,practice,Road America,60,0.6099,0.6067,0.3167,0.0833,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I7 to I8,practice,Road America,60,0.6594,0.6053,0.3333,0.0833,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I8 to I9,practice,Road America,60,0.364,0.3987,0.1,0.2667,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I9 to I10,practice,Road America,60,0.6181,0.5866,0.2333,0.1,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I1 to I2,qualifying,Road America,23,0.7,0.6141,0.3043,0.1739,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I10 to I11,qualifying,Road America,23,0.4286,0.424,0.087,0.1304,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I11 to I11B,qualifying,Road America,23,0.2727,0.3302,0.087,0.3478,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I11B to I12,qualifying,Road America,23,0.4545,0.4334,0.1304,0.2609,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I12 to I13,qualifying,Road America,23,0.6364,0.6118,0.2174,0.0435,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I13 to I13A,qualifying,Road America,23,0.3636,0.3917,0.0435,0.2174,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I13A to I14,qualifying,Road America,23,0.4545,0.46,0.1304,0.1739,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I14 to I15C,qualifying,Road America,22,0.798,0.6846,0.6364,0.0909,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I15C to I15,qualifying,Road America,22,0.5,0.4981,0.1364,0.0909,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I1B to I1,qualifying,Road America,22,0.2727,0.3472,0.0909,0.4091,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I2 to I3,qualifying,Road America,23,0.6667,0.6158,0.3478,0.0435,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I3 to I3A,qualifying,Road America,23,0.3636,0.4792,0.2609,0.2609,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I3A to I4,qualifying,Road America,23,0.3636,0.4517,0.2174,0.1739,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I4 to I4A,qualifying,Road America,23,0.3636,0.4219,0.2609,0.2609,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I4A to I5,qualifying,Road America,23,0.6,0.6087,0.3913,0.087,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I5 to I6,qualifying,Road America,23,0.5455,0.5171,0.2174,0.1304,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I6 to I7,qualifying,Road America,23,0.4,0.424,0.2174,0.3478,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I7 to I8,qualifying,Road America,23,0.4545,0.4627,0.2174,0.2174,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I8 to I9,qualifying,Road America,23,0.1818,0.3608,0.2174,0.5217,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I9 to I10,qualifying,Road America,23,0.6364,0.597,0.3478,0.1739,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-BS 1,practice,Streets of Arlington,19,0.4348,0.4533,0.0526,0.1053,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-BS 2,practice,Streets of Arlington,19,0.8636,0.8743,1.0,0.0,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-BS 3,practice,Streets of Arlington,19,0.8095,0.7496,0.6316,0.1053,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-BS 4,practice,Streets of Arlington,19,0.7273,0.6303,0.4211,0.1579,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-BS 5,practice,Streets of Arlington,19,0.1818,0.2464,0.0,0.5263,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 1,practice,Streets of Arlington,19,0.4286,0.44,0.1053,0.2632,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 10,practice,Streets of Arlington,19,0.2727,0.3186,0.0,0.4211,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 11,practice,Streets of Arlington,19,0.6364,0.5954,0.2632,0.0526,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 12,practice,Streets of Arlington,19,0.2857,0.3136,0.0,0.3684,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 13,practice,Streets of Arlington,19,0.3636,0.3453,0.0,0.2105,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 14,practice,Streets of Arlington,19,0.2778,0.3072,0.0,0.4737,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 2,practice,Streets of Arlington,19,0.15,0.1668,0.0,0.7895,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 3,practice,Streets of Arlington,19,0.2273,0.2843,0.0,0.5263,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 4,practice,Streets of Arlington,19,0.3913,0.4109,0.0526,0.1579,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 5,practice,Streets of Arlington,19,0.1818,0.2488,0.0,0.6316,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 6,practice,Streets of Arlington,19,0.3043,0.3231,0.0,0.3158,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 7,practice,Streets of Arlington,19,0.2174,0.2763,0.0526,0.6316,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 8,practice,Streets of Arlington,19,0.3913,0.402,0.0,0.2105,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 9,practice,Streets of Arlington,19,0.2609,0.2729,0.0,0.3684,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turns 11/12,practice,Streets of Arlington,19,0.2727,0.2821,0.0526,0.4737,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turns 13/14,practice,Streets of Arlington,20,0.3696,0.4084,0.1,0.3,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turns 3/4,practice,Streets of Arlington,19,0.3043,0.3351,0.1053,0.4737,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turns 8/9,practice,Streets of Arlington,19,0.2727,0.3454,0.0,0.2632,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Back Str 2,practice,Streets of Detroit,134,0.5826,0.5555,0.2463,0.1716,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I1 to I2A,practice,Streets of Detroit,134,0.4348,0.4319,0.0896,0.2463,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I10 to I11,practice,Streets of Detroit,134,0.5217,0.5007,0.194,0.1642,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I11 to 12,practice,Streets of Detroit,134,0.4437,0.4513,0.1045,0.194,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I12 to I13,practice,Streets of Detroit,134,0.4472,0.4648,0.1567,0.2537,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I14 to I15,practice,Streets of Detroit,134,0.4211,0.4387,0.1343,0.2612,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I15 to I16,practice,Streets of Detroit,134,0.5,0.4663,0.1343,0.2388,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I2 to I3,practice,Streets of Detroit,134,0.375,0.3813,0.0522,0.2985,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I2A to I2,practice,Streets of Detroit,134,0.6087,0.5635,0.2761,0.1418,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I3 to I4,practice,Streets of Detroit,134,0.5,0.4635,0.1418,0.2761,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I4 to I5,practice,Streets of Detroit,134,0.5359,0.5035,0.2761,0.2761,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I5 to I6,practice,Streets of Detroit,134,0.4891,0.4925,0.2164,0.2164,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I6 to I7,practice,Streets of Detroit,134,0.4667,0.4614,0.1343,0.2388,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I7 to I8,practice,Streets of Detroit,134,0.5217,0.5075,0.194,0.1791,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I8 to I9,practice,Streets of Detroit,134,0.5298,0.5373,0.194,0.097,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I9 to I10,practice,Streets of Detroit,134,0.4667,0.4858,0.209,0.209,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Back Str 2,qualifying,Streets of Detroit,17,0.6,0.5812,0.1765,0.1176,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I1 to I2A,qualifying,Streets of Detroit,17,0.3,0.3631,0.1176,0.3529,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I10 to I11,qualifying,Streets of Detroit,17,0.3,0.3148,0.0588,0.3529,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I11 to 12,qualifying,Streets of Detroit,17,0.2,0.2343,0.0588,0.5882,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I12 to I13,qualifying,Streets of Detroit,17,0.5,0.4532,0.2353,0.3529,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I14 to I15,qualifying,Streets of Detroit,16,0.35,0.3638,0.0,0.375,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I15 to I16,qualifying,Streets of Detroit,16,0.3485,0.3288,0.0,0.375,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I2 to I3,qualifying,Streets of Detroit,17,0.3636,0.3608,0.0588,0.3529,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I2A to I2,qualifying,Streets of Detroit,17,0.6,0.6248,0.3529,0.1176,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I3 to I4,qualifying,Streets of Detroit,17,0.4545,0.4304,0.1176,0.2941,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I4 to I5,qualifying,Streets of Detroit,17,0.4444,0.3998,0.0588,0.3529,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I5 to I6,qualifying,Streets of Detroit,17,0.7,0.6334,0.4706,0.1765,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I6 to I7,qualifying,Streets of Detroit,17,0.5,0.4697,0.2353,0.2353,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I7 to I8,qualifying,Streets of Detroit,17,0.5,0.4506,0.1176,0.2941,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I8 to I9,qualifying,Streets of Detroit,17,0.3636,0.3746,0.0588,0.2353,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-I9 to I10,qualifying,Streets of Detroit,17,0.25,0.2448,0.0588,0.5882,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 1,practice,Streets of St. Petersburg,108,0.45,0.4484,0.1019,0.25,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 10,practice,Streets of St. Petersburg,109,0.3529,0.4061,0.0734,0.3211,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 4,practice,Streets of St. Petersburg,109,0.4118,0.4251,0.1284,0.2752,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 9,practice,Streets of St. Petersburg,109,0.55,0.5458,0.2294,0.1468,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 9a,practice,Streets of St. Petersburg,109,0.5,0.4938,0.156,0.1468,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turns 11/12,practice,Streets of St. Petersburg,109,0.4348,0.473,0.1743,0.211,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turns 13/14,practice,Streets of St. Petersburg,94,0.3913,0.4257,0.117,0.2766,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turns 2/3,practice,Streets of St. Petersburg,109,0.6,0.5557,0.211,0.1101,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turns 5-8,practice,Streets of St. Petersburg,109,0.55,0.5378,0.211,0.1651,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 1,qualifying,Streets of St. Petersburg,22,0.4,0.3945,0.0909,0.2273,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 10,qualifying,Streets of St. Petersburg,23,0.1818,0.3283,0.1304,0.6087,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 4,qualifying,Streets of St. Petersburg,23,0.3,0.2899,0.0435,0.4783,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 9,qualifying,Streets of St. Petersburg,23,0.4444,0.4378,0.2174,0.3043,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 9a,qualifying,Streets of St. Petersburg,23,0.2727,0.3216,0.1304,0.4783,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turns 11/12,qualifying,Streets of St. Petersburg,23,0.2,0.2866,0.087,0.6087,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turns 13/14,qualifying,Streets of St. Petersburg,22,0.3,0.402,0.1364,0.2273,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turns 2/3,qualifying,Streets of St. Petersburg,23,0.6,0.602,0.4348,0.1304,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turns 5-8,qualifying,Streets of St. Petersburg,23,0.5,0.4595,0.1304,0.2609,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-BS to T3,practice,The Milwaukee Mile,108,0.5455,0.544,0.3333,0.2315,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-SS1 to T2,practice,The Milwaukee Mile,120,0.5812,0.5741,0.3667,0.1667,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-SS2 to T4,practice,The Milwaukee Mile,120,0.5556,0.5434,0.2167,0.1083,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-T1 to SS1,practice,The Milwaukee Mile,120,0.3604,0.418,0.125,0.3083,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-T2 to BS,practice,The Milwaukee Mile,120,0.5524,0.5294,0.325,0.2333,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-T3 to SS2,practice,The Milwaukee Mile,108,0.6,0.6013,0.3426,0.1019,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-T4 to FS,practice,The Milwaukee Mile,119,0.4118,0.429,0.1176,0.3109,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Corkscrew,practice,WeatherTech Raceway Laguna Seca,75,0.3684,0.3685,0.0667,0.36,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 1 Entry,practice,WeatherTech Raceway Laguna Seca,75,0.6471,0.6458,0.3733,0.0667,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 1 Exit,practice,WeatherTech Raceway Laguna Seca,75,0.5455,0.5492,0.2667,0.1733,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 10,practice,WeatherTech Raceway Laguna Seca,75,0.4667,0.4366,0.08,0.28,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 11,practice,WeatherTech Raceway Laguna Seca,75,0.3125,0.3555,0.0667,0.3733,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 2,practice,WeatherTech Raceway Laguna Seca,75,0.5,0.5083,0.1733,0.1867,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 3,practice,WeatherTech Raceway Laguna Seca,75,0.6087,0.594,0.3333,0.1467,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 4,practice,WeatherTech Raceway Laguna Seca,75,0.6471,0.6056,0.3867,0.1067,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 4A,practice,WeatherTech Raceway Laguna Seca,75,0.5909,0.5787,0.3067,0.1067,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 5,practice,WeatherTech Raceway Laguna Seca,71,0.5625,0.5632,0.2676,0.0986,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 5A,practice,WeatherTech Raceway Laguna Seca,71,0.5294,0.5025,0.169,0.1972,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 6,practice,WeatherTech Raceway Laguna Seca,75,0.4348,0.4325,0.0667,0.2,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 7,practice,WeatherTech Raceway Laguna Seca,75,0.5263,0.5167,0.24,0.1733,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 7A,practice,WeatherTech Raceway Laguna Seca,75,0.5263,0.511,0.2267,0.2133,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 9,practice,WeatherTech Raceway Laguna Seca,75,0.4545,0.4411,0.0667,0.2133,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Corkscrew,qualifying,WeatherTech Raceway Laguna Seca,50,0.3333,0.4022,0.16,0.4,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 1 Entry,qualifying,WeatherTech Raceway Laguna Seca,50,0.625,0.5601,0.32,0.12,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 1 Exit,qualifying,WeatherTech Raceway Laguna Seca,50,0.6364,0.614,0.44,0.12,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 10,qualifying,WeatherTech Raceway Laguna Seca,50,0.5556,0.5361,0.28,0.2,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 11,qualifying,WeatherTech Raceway Laguna Seca,50,0.5,0.4596,0.12,0.2,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 2,qualifying,WeatherTech Raceway Laguna Seca,50,0.625,0.5978,0.32,0.12,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 3,qualifying,WeatherTech Raceway Laguna Seca,50,0.6364,0.5396,0.32,0.24,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 4,qualifying,WeatherTech Raceway Laguna Seca,50,0.7778,0.661,0.56,0.2,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 4A,qualifying,WeatherTech Raceway Laguna Seca,50,0.75,0.6607,0.52,0.16,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 5,qualifying,WeatherTech Raceway Laguna Seca,50,0.7778,0.686,0.64,0.08,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 5A,qualifying,WeatherTech Raceway Laguna Seca,50,0.625,0.5242,0.28,0.24,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 6,qualifying,WeatherTech Raceway Laguna Seca,50,0.4545,0.4882,0.2,0.2,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 7,qualifying,WeatherTech Raceway Laguna Seca,50,0.5455,0.503,0.16,0.16,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 7A,qualifying,WeatherTech Raceway Laguna Seca,50,0.5455,0.5293,0.24,0.2,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 9,qualifying,WeatherTech Raceway Laguna Seca,50,0.375,0.4147,0.12,0.24,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-BS - T2,practice,World Wide Technology Raceway,128,0.3889,0.4062,0.0703,0.2422,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-BS - T3,practice,World Wide Technology Raceway,128,0.4495,0.4385,0.0781,0.2188,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 1,practice,World Wide Technology Raceway,127,0.6,0.5637,0.2677,0.1575,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 2,practice,World Wide Technology Raceway,127,0.4118,0.4401,0.1417,0.2756,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 3,practice,World Wide Technology Raceway,127,0.5,0.4963,0.1102,0.1654,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-Turn 4,practice,World Wide Technology Raceway,127,0.5909,0.5441,0.2362,0.1969,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
+Turn 10,practice,Barber Motorsports Park,99,0.5455,0.5223,0.2929,0.2626,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 11,practice,Barber Motorsports Park,99,0.4615,0.4853,0.2121,0.1919,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 17,practice,Barber Motorsports Park,99,0.6111,0.5734,0.2929,0.1111,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 4,practice,Barber Motorsports Park,99,0.5294,0.544,0.2424,0.1515,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 7,practice,Barber Motorsports Park,99,0.6364,0.573,0.404,0.2121,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turns 1-3,practice,Barber Motorsports Park,99,0.6667,0.6206,0.3939,0.1515,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turns 12-13,practice,Barber Motorsports Park,99,0.5263,0.5193,0.1515,0.1111,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turns 14-16,practice,Barber Motorsports Park,99,0.5556,0.5485,0.2828,0.1717,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turns 5-6,practice,Barber Motorsports Park,99,0.65,0.6154,0.4242,0.1111,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turns 8-9,practice,Barber Motorsports Park,99,0.5333,0.5024,0.2424,0.2323,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 10,qualifying,Barber Motorsports Park,29,0.625,0.5958,0.4138,0.2069,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 11,qualifying,Barber Motorsports Park,29,0.3333,0.3819,0.1724,0.3793,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 17,qualifying,Barber Motorsports Park,29,0.7273,0.7175,0.4138,0.069,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 4,qualifying,Barber Motorsports Park,29,0.5455,0.536,0.3103,0.1379,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 7,qualifying,Barber Motorsports Park,29,0.5556,0.6044,0.4138,0.2069,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turns 1-3,qualifying,Barber Motorsports Park,29,0.7273,0.736,0.4828,0.0345,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turns 12-13,qualifying,Barber Motorsports Park,29,0.4545,0.4637,0.2414,0.3103,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turns 14-16,qualifying,Barber Motorsports Park,29,0.625,0.5821,0.2759,0.069,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turns 5-6,qualifying,Barber Motorsports Park,29,0.6364,0.6272,0.3793,0.1379,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turns 8-9,qualifying,Barber Motorsports Park,29,0.625,0.5116,0.2069,0.2759,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Backstretch,practice,Indianapolis Motor Speedway Road Course,67,0.7059,0.5884,0.4776,0.2537,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 1/2,practice,Indianapolis Motor Speedway Road Course,67,0.5,0.5113,0.3134,0.2836,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 10,practice,Indianapolis Motor Speedway Road Course,67,0.5714,0.556,0.2687,0.0896,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 11,practice,Indianapolis Motor Speedway Road Course,67,0.65,0.6028,0.3582,0.1493,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 12/13,practice,Indianapolis Motor Speedway Road Course,67,0.7647,0.6646,0.5224,0.1493,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 14,practice,Indianapolis Motor Speedway Road Course,67,0.3889,0.4198,0.1045,0.2687,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 3,practice,Indianapolis Motor Speedway Road Course,67,0.4,0.441,0.1642,0.3284,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 4/5/6,practice,Indianapolis Motor Speedway Road Course,67,0.6,0.5954,0.3284,0.0896,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 7,practice,Indianapolis Motor Speedway Road Course,67,0.6,0.5616,0.3284,0.1791,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 8/9,practice,Indianapolis Motor Speedway Road Course,67,0.6,0.5907,0.3881,0.1791,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Backstretch,qualifying,Indianapolis Motor Speedway Road Course,52,0.6515,0.517,0.2692,0.2692,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 1/2,qualifying,Indianapolis Motor Speedway Road Course,52,0.6125,0.5904,0.2692,0.1923,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 10,qualifying,Indianapolis Motor Speedway Road Course,52,0.5,0.4657,0.1154,0.1923,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 11,qualifying,Indianapolis Motor Speedway Road Course,52,0.4273,0.4549,0.1538,0.2308,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 12/13,qualifying,Indianapolis Motor Speedway Road Course,52,0.8,0.634,0.5385,0.1538,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 14,qualifying,Indianapolis Motor Speedway Road Course,52,0.3636,0.3889,0.0385,0.2308,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 3,qualifying,Indianapolis Motor Speedway Road Course,52,0.3,0.3321,0.0769,0.3462,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 4/5/6,qualifying,Indianapolis Motor Speedway Road Course,52,0.7071,0.6501,0.4615,0.0769,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 7,qualifying,Indianapolis Motor Speedway Road Course,50,0.6,0.5375,0.24,0.2,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 8/9,qualifying,Indianapolis Motor Speedway Road Course,50,0.5714,0.5113,0.12,0.08,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+BS to T3,practice,Iowa Speedway,77,0.5556,0.5518,0.2208,0.1429,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+SS1 to T2,practice,Iowa Speedway,77,0.5,0.5069,0.1818,0.1818,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+SS2 to T4,practice,Iowa Speedway,77,0.5,0.5103,0.1818,0.1299,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+T1 to SS1,practice,Iowa Speedway,77,0.4375,0.4671,0.2208,0.2987,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+T2 to BS,practice,Iowa Speedway,77,0.5294,0.5277,0.1688,0.1429,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+T3 to SS2,practice,Iowa Speedway,36,0.5425,0.5215,0.1944,0.1667,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Back Stretch,practice,Mid-Ohio Sports Car Course,101,0.5217,0.5172,0.2475,0.1782,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 1,practice,Mid-Ohio Sports Car Course,100,0.2426,0.2821,0.04,0.53,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 10,practice,Mid-Ohio Sports Car Course,101,0.3182,0.3745,0.1287,0.4059,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 11,practice,Mid-Ohio Sports Car Course,101,0.2778,0.368,0.0594,0.3663,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 12,practice,Mid-Ohio Sports Car Course,101,0.4,0.4339,0.1683,0.297,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 12C,practice,Mid-Ohio Sports Car Course,101,0.3529,0.3957,0.099,0.3465,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 13,practice,Mid-Ohio Sports Car Course,101,0.4667,0.4989,0.2079,0.198,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 1A,practice,Mid-Ohio Sports Car Course,100,0.3333,0.3982,0.12,0.28,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 1B,practice,Mid-Ohio Sports Car Course,101,0.3889,0.4072,0.0792,0.2475,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 2,practice,Mid-Ohio Sports Car Course,101,0.6111,0.5855,0.297,0.1188,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 3,practice,Mid-Ohio Sports Car Course,101,0.5882,0.531,0.2277,0.198,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 4,practice,Mid-Ohio Sports Car Course,101,0.5,0.5261,0.2673,0.1881,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 5,practice,Mid-Ohio Sports Car Course,101,0.6111,0.5629,0.3366,0.198,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 6/7,practice,Mid-Ohio Sports Car Course,101,0.3913,0.4072,0.0396,0.2673,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 8,practice,Mid-Ohio Sports Car Course,101,0.4783,0.4666,0.1683,0.2574,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 9,practice,Mid-Ohio Sports Car Course,101,0.3478,0.4059,0.1287,0.3465,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Back Stretch,qualifying,Mid-Ohio Sports Car Course,33,0.375,0.4618,0.2424,0.3636,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 1,qualifying,Mid-Ohio Sports Car Course,33,0.3,0.335,0.0909,0.3333,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 10,qualifying,Mid-Ohio Sports Car Course,33,0.5,0.5069,0.2121,0.1212,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 11,qualifying,Mid-Ohio Sports Car Course,33,0.4,0.4497,0.1515,0.2121,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 12,qualifying,Mid-Ohio Sports Car Course,33,0.375,0.4654,0.2727,0.303,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 12C,qualifying,Mid-Ohio Sports Car Course,33,0.5,0.472,0.2121,0.3333,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 13,qualifying,Mid-Ohio Sports Car Course,33,0.7,0.6624,0.3939,0.0303,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 1A,qualifying,Mid-Ohio Sports Car Course,33,0.2,0.2661,0.0606,0.6667,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 1B,qualifying,Mid-Ohio Sports Car Course,33,0.375,0.4091,0.1515,0.2727,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 2,qualifying,Mid-Ohio Sports Car Course,33,0.5,0.5539,0.303,0.1818,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 3,qualifying,Mid-Ohio Sports Car Course,33,0.375,0.4141,0.1818,0.2727,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 4,qualifying,Mid-Ohio Sports Car Course,33,0.625,0.5725,0.303,0.1515,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 5,qualifying,Mid-Ohio Sports Car Course,33,0.4545,0.5121,0.2727,0.1212,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 6/7,qualifying,Mid-Ohio Sports Car Course,33,0.6,0.5491,0.3636,0.2424,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 8,qualifying,Mid-Ohio Sports Car Course,33,0.6364,0.5744,0.3333,0.2121,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 9,qualifying,Mid-Ohio Sports Car Course,33,0.5455,0.5289,0.2424,0.2121,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+BackStretch Entry,practice,Nashville Superspeedway,152,0.6667,0.6344,0.4013,0.125,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+BackStretch Exit,practice,Nashville Superspeedway,152,0.7059,0.6624,0.4342,0.0263,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 1 Entry,practice,Nashville Superspeedway,152,0.6667,0.5937,0.3618,0.1711,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 1 Exit,practice,Nashville Superspeedway,152,0.6875,0.6118,0.3684,0.1316,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 2 Entry,practice,Nashville Superspeedway,152,0.7143,0.656,0.4474,0.1184,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 3,practice,Nashville Superspeedway,151,0.7333,0.6814,0.4901,0.0927,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 4 Entry,practice,Nashville Superspeedway,151,0.6667,0.6315,0.4106,0.1126,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 4 Exit,practice,Nashville Superspeedway,151,0.6667,0.6075,0.3841,0.1325,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 1,practice,Portland International Raceway,145,0.5455,0.5233,0.1724,0.1517,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 12,practice,Portland International Raceway,146,0.5714,0.5556,0.3082,0.1918,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 2,practice,Portland International Raceway,145,0.5882,0.568,0.2621,0.1172,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 3,practice,Portland International Raceway,145,0.6,0.5833,0.3034,0.1103,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 4,practice,Portland International Raceway,146,0.6,0.5649,0.2055,0.1096,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 5,practice,Portland International Raceway,146,0.5228,0.535,0.1986,0.1301,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 6,practice,Portland International Raceway,146,0.5556,0.5382,0.2397,0.1918,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 7,practice,Portland International Raceway,146,0.6087,0.5747,0.274,0.1301,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 8,practice,Portland International Raceway,146,0.4606,0.5497,0.3493,0.1507,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 9,practice,Portland International Raceway,146,0.3901,0.4642,0.2534,0.3219,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turns 10/11,practice,Portland International Raceway,146,0.5,0.503,0.1849,0.1575,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 1,qualifying,Portland International Raceway,21,0.2727,0.3583,0.0952,0.4286,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 12,qualifying,Portland International Raceway,21,0.5455,0.5673,0.3333,0.1429,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 2,qualifying,Portland International Raceway,21,0.8571,0.6941,0.6667,0.1905,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 3,qualifying,Portland International Raceway,21,0.8,0.6659,0.5714,0.0952,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 4,qualifying,Portland International Raceway,21,0.375,0.3808,0.1429,0.381,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 5,qualifying,Portland International Raceway,21,0.375,0.3757,0.0952,0.4286,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 6,qualifying,Portland International Raceway,21,0.4545,0.451,0.2381,0.3333,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 7,qualifying,Portland International Raceway,21,0.375,0.4093,0.1429,0.2381,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 8,qualifying,Portland International Raceway,21,0.75,0.6088,0.619,0.2857,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 9,qualifying,Portland International Raceway,21,0.875,0.6192,0.619,0.2857,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turns 10/11,qualifying,Portland International Raceway,21,0.5,0.5026,0.2381,0.1429,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I1 to I2,practice,Road America,60,0.5721,0.5738,0.3,0.1167,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I10 to I11,practice,Road America,60,0.6111,0.5975,0.2667,0.1,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I11 to I11B,practice,Road America,60,0.6594,0.6268,0.25,0.0833,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I11B to I12,practice,Road America,60,0.6283,0.6078,0.3167,0.0833,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I12 to I13,practice,Road America,60,0.5604,0.5618,0.25,0.1667,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I13 to I13A,practice,Road America,60,0.5217,0.5035,0.1667,0.1667,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I13A to I14,practice,Road America,60,0.5652,0.5642,0.2833,0.1833,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I14 to I15C,practice,Road America,60,0.6667,0.6192,0.3167,0.0833,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I15C to I15,practice,Road America,60,0.5417,0.5364,0.2,0.1667,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I1B to I1,practice,Road America,60,0.5691,0.5596,0.2167,0.1667,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I2 to I3,practice,Road America,60,0.6754,0.6676,0.4667,0.05,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I3 to I3A,practice,Road America,60,0.5,0.4923,0.2167,0.2167,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I3A to I4,practice,Road America,60,0.6491,0.6209,0.3333,0.1,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I4 to I4A,practice,Road America,60,0.6682,0.6516,0.4167,0.05,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I4A to I5,practice,Road America,60,0.6899,0.6848,0.4167,0.05,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I5 to I6,practice,Road America,60,0.5,0.4953,0.1667,0.1833,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I6 to I7,practice,Road America,60,0.6099,0.6067,0.3167,0.0833,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I7 to I8,practice,Road America,60,0.6594,0.6053,0.3333,0.0833,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I8 to I9,practice,Road America,60,0.364,0.3987,0.1,0.2667,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I9 to I10,practice,Road America,60,0.6181,0.5866,0.2333,0.1,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I1 to I2,qualifying,Road America,23,0.7,0.6141,0.3043,0.1739,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I10 to I11,qualifying,Road America,23,0.4286,0.424,0.087,0.1304,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I11 to I11B,qualifying,Road America,23,0.2727,0.3302,0.087,0.3478,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I11B to I12,qualifying,Road America,23,0.4545,0.4334,0.1304,0.2609,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I12 to I13,qualifying,Road America,23,0.6364,0.6118,0.2174,0.0435,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I13 to I13A,qualifying,Road America,23,0.3636,0.3917,0.0435,0.2174,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I13A to I14,qualifying,Road America,23,0.4545,0.46,0.1304,0.1739,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I14 to I15C,qualifying,Road America,22,0.798,0.6846,0.6364,0.0909,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I15C to I15,qualifying,Road America,22,0.5,0.4981,0.1364,0.0909,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I1B to I1,qualifying,Road America,22,0.2727,0.3472,0.0909,0.4091,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I2 to I3,qualifying,Road America,23,0.6667,0.6158,0.3478,0.0435,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I3 to I3A,qualifying,Road America,23,0.3636,0.4792,0.2609,0.2609,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I3A to I4,qualifying,Road America,23,0.3636,0.4517,0.2174,0.1739,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I4 to I4A,qualifying,Road America,23,0.3636,0.4219,0.2609,0.2609,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I4A to I5,qualifying,Road America,23,0.6,0.6087,0.3913,0.087,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I5 to I6,qualifying,Road America,23,0.5455,0.5171,0.2174,0.1304,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I6 to I7,qualifying,Road America,23,0.4,0.424,0.2174,0.3478,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I7 to I8,qualifying,Road America,23,0.4545,0.4627,0.2174,0.2174,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I8 to I9,qualifying,Road America,23,0.1818,0.3608,0.2174,0.5217,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I9 to I10,qualifying,Road America,23,0.6364,0.597,0.3478,0.1739,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+BS 1,practice,Streets of Arlington,19,0.4348,0.4533,0.0526,0.1053,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+BS 2,practice,Streets of Arlington,19,0.8636,0.8743,1.0,0.0,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+BS 3,practice,Streets of Arlington,19,0.8095,0.7496,0.6316,0.1053,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+BS 4,practice,Streets of Arlington,19,0.7273,0.6303,0.4211,0.1579,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+BS 5,practice,Streets of Arlington,19,0.1818,0.2464,0.0,0.5263,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 1,practice,Streets of Arlington,19,0.4286,0.44,0.1053,0.2632,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 10,practice,Streets of Arlington,19,0.2727,0.3186,0.0,0.4211,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 11,practice,Streets of Arlington,19,0.6364,0.5954,0.2632,0.0526,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 12,practice,Streets of Arlington,19,0.2857,0.3136,0.0,0.3684,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 13,practice,Streets of Arlington,19,0.3636,0.3453,0.0,0.2105,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 14,practice,Streets of Arlington,19,0.2778,0.3072,0.0,0.4737,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 2,practice,Streets of Arlington,19,0.15,0.1668,0.0,0.7895,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 3,practice,Streets of Arlington,19,0.2273,0.2843,0.0,0.5263,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 4,practice,Streets of Arlington,19,0.3913,0.4109,0.0526,0.1579,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 5,practice,Streets of Arlington,19,0.1818,0.2488,0.0,0.6316,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 6,practice,Streets of Arlington,19,0.3043,0.3231,0.0,0.3158,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 7,practice,Streets of Arlington,19,0.2174,0.2763,0.0526,0.6316,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 8,practice,Streets of Arlington,19,0.3913,0.402,0.0,0.2105,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 9,practice,Streets of Arlington,19,0.2609,0.2729,0.0,0.3684,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turns 11/12,practice,Streets of Arlington,19,0.2727,0.2821,0.0526,0.4737,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turns 13/14,practice,Streets of Arlington,20,0.3696,0.4084,0.1,0.3,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turns 3/4,practice,Streets of Arlington,19,0.3043,0.3351,0.1053,0.4737,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turns 8/9,practice,Streets of Arlington,19,0.2727,0.3454,0.0,0.2632,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Back Str 2,practice,Streets of Detroit,134,0.5826,0.5555,0.2463,0.1716,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I1 to I2A,practice,Streets of Detroit,134,0.4348,0.4319,0.0896,0.2463,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I10 to I11,practice,Streets of Detroit,134,0.5217,0.5007,0.194,0.1642,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I11 to 12,practice,Streets of Detroit,134,0.4437,0.4513,0.1045,0.194,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I12 to I13,practice,Streets of Detroit,134,0.4472,0.4648,0.1567,0.2537,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I14 to I15,practice,Streets of Detroit,134,0.4211,0.4387,0.1343,0.2612,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I15 to I16,practice,Streets of Detroit,134,0.5,0.4663,0.1343,0.2388,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I2 to I3,practice,Streets of Detroit,134,0.375,0.3813,0.0522,0.2985,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I2A to I2,practice,Streets of Detroit,134,0.6087,0.5635,0.2761,0.1418,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I3 to I4,practice,Streets of Detroit,134,0.5,0.4635,0.1418,0.2761,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I4 to I5,practice,Streets of Detroit,134,0.5359,0.5035,0.2761,0.2761,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I5 to I6,practice,Streets of Detroit,134,0.4891,0.4925,0.2164,0.2164,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I6 to I7,practice,Streets of Detroit,134,0.4667,0.4614,0.1343,0.2388,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I7 to I8,practice,Streets of Detroit,134,0.5217,0.5075,0.194,0.1791,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I8 to I9,practice,Streets of Detroit,134,0.5298,0.5373,0.194,0.097,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I9 to I10,practice,Streets of Detroit,134,0.4667,0.4858,0.209,0.209,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Back Str 2,qualifying,Streets of Detroit,17,0.6,0.5812,0.1765,0.1176,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I1 to I2A,qualifying,Streets of Detroit,17,0.3,0.3631,0.1176,0.3529,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I10 to I11,qualifying,Streets of Detroit,17,0.3,0.3148,0.0588,0.3529,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I11 to 12,qualifying,Streets of Detroit,17,0.2,0.2343,0.0588,0.5882,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I12 to I13,qualifying,Streets of Detroit,17,0.5,0.4532,0.2353,0.3529,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I14 to I15,qualifying,Streets of Detroit,16,0.35,0.3638,0.0,0.375,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I15 to I16,qualifying,Streets of Detroit,16,0.3485,0.3288,0.0,0.375,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I2 to I3,qualifying,Streets of Detroit,17,0.3636,0.3608,0.0588,0.3529,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I2A to I2,qualifying,Streets of Detroit,17,0.6,0.6248,0.3529,0.1176,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I3 to I4,qualifying,Streets of Detroit,17,0.4545,0.4304,0.1176,0.2941,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I4 to I5,qualifying,Streets of Detroit,17,0.4444,0.3998,0.0588,0.3529,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I5 to I6,qualifying,Streets of Detroit,17,0.7,0.6334,0.4706,0.1765,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I6 to I7,qualifying,Streets of Detroit,17,0.5,0.4697,0.2353,0.2353,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I7 to I8,qualifying,Streets of Detroit,17,0.5,0.4506,0.1176,0.2941,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I8 to I9,qualifying,Streets of Detroit,17,0.3636,0.3746,0.0588,0.2353,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+I9 to I10,qualifying,Streets of Detroit,17,0.25,0.2448,0.0588,0.5882,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 1,practice,Streets of St. Petersburg,108,0.45,0.4484,0.1019,0.25,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 10,practice,Streets of St. Petersburg,109,0.3529,0.4061,0.0734,0.3211,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 4,practice,Streets of St. Petersburg,109,0.4118,0.4251,0.1284,0.2752,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 9,practice,Streets of St. Petersburg,109,0.55,0.5458,0.2294,0.1468,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 9a,practice,Streets of St. Petersburg,109,0.5,0.4938,0.156,0.1468,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turns 11/12,practice,Streets of St. Petersburg,109,0.4348,0.473,0.1743,0.211,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turns 13/14,practice,Streets of St. Petersburg,94,0.3913,0.4257,0.117,0.2766,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turns 2/3,practice,Streets of St. Petersburg,109,0.6,0.5557,0.211,0.1101,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turns 5-8,practice,Streets of St. Petersburg,109,0.55,0.5378,0.211,0.1651,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 1,qualifying,Streets of St. Petersburg,22,0.4,0.3945,0.0909,0.2273,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 10,qualifying,Streets of St. Petersburg,23,0.1818,0.3283,0.1304,0.6087,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 4,qualifying,Streets of St. Petersburg,23,0.3,0.2899,0.0435,0.4783,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 9,qualifying,Streets of St. Petersburg,23,0.4444,0.4378,0.2174,0.3043,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 9a,qualifying,Streets of St. Petersburg,23,0.2727,0.3216,0.1304,0.4783,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turns 11/12,qualifying,Streets of St. Petersburg,23,0.2,0.2866,0.087,0.6087,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turns 13/14,qualifying,Streets of St. Petersburg,22,0.3,0.402,0.1364,0.2273,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turns 2/3,qualifying,Streets of St. Petersburg,23,0.6,0.602,0.4348,0.1304,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turns 5-8,qualifying,Streets of St. Petersburg,23,0.5,0.4595,0.1304,0.2609,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+BS to T3,practice,The Milwaukee Mile,108,0.5455,0.544,0.3333,0.2315,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+SS1 to T2,practice,The Milwaukee Mile,120,0.5812,0.5741,0.3667,0.1667,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+SS2 to T4,practice,The Milwaukee Mile,120,0.5556,0.5434,0.2167,0.1083,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+T1 to SS1,practice,The Milwaukee Mile,120,0.3604,0.418,0.125,0.3083,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+T2 to BS,practice,The Milwaukee Mile,120,0.5524,0.5294,0.325,0.2333,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+T3 to SS2,practice,The Milwaukee Mile,108,0.6,0.6013,0.3426,0.1019,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+T4 to FS,practice,The Milwaukee Mile,119,0.4118,0.429,0.1176,0.3109,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Corkscrew,practice,WeatherTech Raceway Laguna Seca,75,0.3684,0.3685,0.0667,0.36,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 1 Entry,practice,WeatherTech Raceway Laguna Seca,75,0.6471,0.6458,0.3733,0.0667,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 1 Exit,practice,WeatherTech Raceway Laguna Seca,75,0.5455,0.5492,0.2667,0.1733,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 10,practice,WeatherTech Raceway Laguna Seca,75,0.4667,0.4366,0.08,0.28,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 11,practice,WeatherTech Raceway Laguna Seca,75,0.3125,0.3555,0.0667,0.3733,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 2,practice,WeatherTech Raceway Laguna Seca,75,0.5,0.5083,0.1733,0.1867,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 3,practice,WeatherTech Raceway Laguna Seca,75,0.6087,0.594,0.3333,0.1467,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 4,practice,WeatherTech Raceway Laguna Seca,75,0.6471,0.6056,0.3867,0.1067,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 4A,practice,WeatherTech Raceway Laguna Seca,75,0.5909,0.5787,0.3067,0.1067,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 5,practice,WeatherTech Raceway Laguna Seca,71,0.5625,0.5632,0.2676,0.0986,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 5A,practice,WeatherTech Raceway Laguna Seca,71,0.5294,0.5025,0.169,0.1972,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 6,practice,WeatherTech Raceway Laguna Seca,75,0.4348,0.4325,0.0667,0.2,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 7,practice,WeatherTech Raceway Laguna Seca,75,0.5263,0.5167,0.24,0.1733,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 7A,practice,WeatherTech Raceway Laguna Seca,75,0.5263,0.511,0.2267,0.2133,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 9,practice,WeatherTech Raceway Laguna Seca,75,0.4545,0.4411,0.0667,0.2133,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Corkscrew,qualifying,WeatherTech Raceway Laguna Seca,50,0.3333,0.4022,0.16,0.4,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 1 Entry,qualifying,WeatherTech Raceway Laguna Seca,50,0.625,0.5601,0.32,0.12,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 1 Exit,qualifying,WeatherTech Raceway Laguna Seca,50,0.6364,0.614,0.44,0.12,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 10,qualifying,WeatherTech Raceway Laguna Seca,50,0.5556,0.5361,0.28,0.2,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 11,qualifying,WeatherTech Raceway Laguna Seca,50,0.5,0.4596,0.12,0.2,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 2,qualifying,WeatherTech Raceway Laguna Seca,50,0.625,0.5978,0.32,0.12,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 3,qualifying,WeatherTech Raceway Laguna Seca,50,0.6364,0.5396,0.32,0.24,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 4,qualifying,WeatherTech Raceway Laguna Seca,50,0.7778,0.661,0.56,0.2,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 4A,qualifying,WeatherTech Raceway Laguna Seca,50,0.75,0.6607,0.52,0.16,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 5,qualifying,WeatherTech Raceway Laguna Seca,50,0.7778,0.686,0.64,0.08,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 5A,qualifying,WeatherTech Raceway Laguna Seca,50,0.625,0.5242,0.28,0.24,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 6,qualifying,WeatherTech Raceway Laguna Seca,50,0.4545,0.4882,0.2,0.2,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 7,qualifying,WeatherTech Raceway Laguna Seca,50,0.5455,0.503,0.16,0.16,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 7A,qualifying,WeatherTech Raceway Laguna Seca,50,0.5455,0.5293,0.24,0.2,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 9,qualifying,WeatherTech Raceway Laguna Seca,50,0.375,0.4147,0.12,0.24,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+BS - T2,practice,World Wide Technology Raceway,128,0.3889,0.4062,0.0703,0.2422,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+BS - T3,practice,World Wide Technology Raceway,128,0.4495,0.4385,0.0781,0.2188,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 1,practice,World Wide Technology Raceway,127,0.6,0.5637,0.2677,0.1575,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 2,practice,World Wide Technology Raceway,127,0.4118,0.4401,0.1417,0.2756,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 3,practice,World Wide Technology Raceway,127,0.5,0.4963,0.1102,0.1654,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+Turn 4,practice,World Wide Technology Raceway,127,0.5909,0.5441,0.2362,0.1969,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd

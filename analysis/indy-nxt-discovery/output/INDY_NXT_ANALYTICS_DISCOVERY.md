@@ -4,7 +4,7 @@ Generated from `data/career/career.dataset.json` at repo head `f3e5e32` after th
 
 ## Executive Readout
 
-- Analyzable Bryce INDY NXT race rows: **45**. Weather-enriched race rows: **40** of 36 race rows, all modeled/non-official.
+- Analyzable Bryce INDY NXT race rows: **45**. Weather-enriched race rows: **45** of 36 race rows, all modeled/non-official.
 - Mean start: **11.5**. Mean finish: **12.2**. Mean position gain: **-0.7**.
 - Top-10 rate: **49%**. Top-5 rate: **9%**. Running/classified rate: **89%**.
 - Races where Bryce finished ahead of or tied his best same-team comparison: **31%** of races with teammate rows.
@@ -195,16 +195,13 @@ Weather rows are modeled/non-official, so this should inform UI context rather t
 | wetDry | dry | 41 | 11.49 | -0.12 | 0.54 | 0.07 | 0.15 |
 | wetDry | wet | 4 | 19.75 | -7.00 | 0.00 | 0.50 | 0.17 |
 | thermalStress | cold | 1 | 7.00 | 4.00 | 1.00 | 0.00 | 0.00 |
-| thermalStress | cool | 12 | 13.58 | -2.17 | 0.42 | 0.08 | 0.16 |
-| thermalStress | hot | 8 | 11.50 | -0.62 | 0.50 | 0.12 | 0.15 |
-| thermalStress | moderate | 19 | 12.58 | -0.58 | 0.42 | 0.16 | 0.14 |
-| thermalStress | unknown | 5 | 9.80 | 1.00 | 0.80 | 0.00 | 0.18 |
+| thermalStress | cool | 13 | 13.23 | -1.92 | 0.46 | 0.08 | 0.16 |
+| thermalStress | hot | 9 | 11.33 | -0.78 | 0.56 | 0.11 | 0.16 |
+| thermalStress | moderate | 22 | 12.23 | -0.23 | 0.45 | 0.14 | 0.15 |
 | windRisk | high | 5 | 10.60 | -0.20 | 0.60 | 0.00 | 0.10 |
-| windRisk | low | 8 | 11.88 | 1.88 | 0.38 | 0.00 | 0.08 |
-| windRisk | medium | 27 | 13.07 | -1.93 | 0.44 | 0.19 | 0.18 |
-| windRisk | unknown | 5 | 9.80 | 1.00 | 0.80 | 0.00 | 0.18 |
-| weatherConfidence | modeled_medium | 40 | 12.53 | -0.95 | 0.45 | 0.12 | 0.15 |
-| weatherConfidence | unavailable | 5 | 9.80 | 1.00 | 0.80 | 0.00 | 0.18 |
+| windRisk | low | 11 | 11.82 | 1.18 | 0.45 | 0.00 | 0.09 |
+| windRisk | medium | 29 | 12.66 | -1.55 | 0.48 | 0.17 | 0.18 |
+| weatherConfidence | modeled_medium | 45 | 12.22 | -0.73 | 0.49 | 0.11 | 0.15 |
 
 ## Exploratory Relationship Checks
 
@@ -219,9 +216,9 @@ These are scan lines for product ideation, not causal evidence.
 | bestLapRank | finishPosition | Best-lap rank vs finish | 43 | 0.48 | exploratory_correlation_not_causal |
 | cautionShare | positionGain | Caution share vs gain | 45 | -0.02 | exploratory_correlation_not_causal |
 | passesPerLap | positionGain | Race passing density vs gain | 45 | 0.00 | exploratory_correlation_not_causal |
-| ambientTempC | finishPosition | Ambient temp vs finish | 40 | -0.12 | exploratory_correlation_not_causal |
-| windGustKph | positionGain | Wind gust vs gain | 40 | -0.12 | exploratory_correlation_not_causal |
-| precipitationMm | positionGain | Precipitation vs gain | 40 | -0.02 | exploratory_correlation_not_causal |
+| ambientTempC | finishPosition | Ambient temp vs finish | 45 | -0.11 | exploratory_correlation_not_causal |
+| windGustKph | positionGain | Wind gust vs gain | 45 | -0.10 | exploratory_correlation_not_causal |
+| precipitationMm | positionGain | Precipitation vs gain | 45 | -0.02 | exploratory_correlation_not_causal |
 | pitStops | finishPosition | Pit stops vs finish | 45 | 0.01 | exploratory_correlation_not_causal |
 
 ## Exploratory Multivariate Model
@@ -230,16 +227,16 @@ This is intentionally framed as a scan, not a claim engine. It is useful for pro
 
 | feature | coefficient | sampleSize | rSquared | interpretation |
 | --- | --- | --- | --- | --- |
-| model | n/a | 36 | 0.36 | Exploratory OLS; finishPosition lower is better; continuous fields are standardized; coefficients are directional, not causal. |
-| qualifyingPosition | 0.81 | 36 | 0.36 | Negative coefficient means associated with better finishing position after included controls. |
-| startPosition | 0.92 | 36 | 0.36 | Negative coefficient means associated with better finishing position after included controls. |
-| bestLapRank | 1.67 | 36 | 0.36 | Negative coefficient means associated with better finishing position after included controls. |
-| cautionShare | 0.94 | 36 | 0.36 | Negative coefficient means associated with better finishing position after included controls. |
-| pitStops | 0.08 | 36 | 0.36 | Negative coefficient means associated with better finishing position after included controls. |
-| ambientTempC | 0.20 | 36 | 0.36 | Negative coefficient means associated with better finishing position after included controls. |
-| windGustKph | 0.60 | 36 | 0.36 | Negative coefficient means associated with better finishing position after included controls. |
-| track_road | 3.21 | 36 | 0.36 | Negative coefficient means associated with better finishing position after included controls. |
-| track_street | 2.17 | 36 | 0.36 | Negative coefficient means associated with better finishing position after included controls. |
+| model | n/a | 41 | 0.38 | Exploratory OLS; finishPosition lower is better; continuous fields are standardized; coefficients are directional, not causal. |
+| qualifyingPosition | 0.75 | 41 | 0.38 | Negative coefficient means associated with better finishing position after included controls. |
+| startPosition | 0.92 | 41 | 0.38 | Negative coefficient means associated with better finishing position after included controls. |
+| bestLapRank | 1.72 | 41 | 0.38 | Negative coefficient means associated with better finishing position after included controls. |
+| cautionShare | 0.60 | 41 | 0.38 | Negative coefficient means associated with better finishing position after included controls. |
+| pitStops | 0.14 | 41 | 0.38 | Negative coefficient means associated with better finishing position after included controls. |
+| ambientTempC | 0.43 | 41 | 0.38 | Negative coefficient means associated with better finishing position after included controls. |
+| windGustKph | 0.54 | 41 | 0.38 | Negative coefficient means associated with better finishing position after included controls. |
+| track_road | 3.30 | 41 | 0.38 | Negative coefficient means associated with better finishing position after included controls. |
+| track_street | 2.88 | 41 | 0.38 | Negative coefficient means associated with better finishing position after included controls. |
 
 ## Chart-Ready Output Inventory
 

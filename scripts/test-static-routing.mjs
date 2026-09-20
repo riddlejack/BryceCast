@@ -57,6 +57,10 @@ await writeFile(
   join(staticDir, 'data', 'history-bryce.json'),
   JSON.stringify({ marker: HISTORY_MARKER, meta: { schemaVersion: 'history-bryce.v1' }, points: [] })
 );
+// A content-hashed build asset, the way Vite names dist/assets/*.js — cache
+// headers key off this "assets/" prefix, not the extension.
+await mkdir(join(staticDir, 'assets'), { recursive: true });
+await writeFile(join(staticDir, 'assets', 'index-abc12345.js'), 'export const marker = "index-fixture";');
 
 const child = spawn(
   process.execPath,
@@ -133,6 +137,32 @@ try {
   const rootBody = await rootReq.text();
   assert(rootReq.status === 200 && rootBody.includes(SHELL_MARKER), 'root path did not serve the SPA shell');
   record('/ → index.html 200');
+
+  // 7. Cache-control: a content-hashed dist/assets/* file caches for a year,
+  //    immutable — its URL changes whenever its content does, so a browser or
+  //    Cloudflare edge can hold it indefinitely without ever revalidating.
+  const asset = await fetch(`${baseUrl}/assets/index-abc12345.js`, { headers: { accept: '*/*' } });
+  assert(asset.status === 200, `/assets/index-abc12345.js returned ${asset.status}, expected 200`);
+  assert(
+    asset.headers.get('cache-control') === 'public, max-age=31536000, immutable',
+    `/assets/index-abc12345.js cache-control was "${asset.headers.get('cache-control')}", expected long-lived immutable`
+  );
+  record('/assets/*.js → immutable, 1-year cache');
+
+  // 8. Cache-control: the SPA shell must always revalidate — a fresh deploy
+  //    has to be visible on the very next load, not held for a cache window.
+  const shellHeaders = await fetch(`${baseUrl}/`, { headers: { accept: 'text/html' } });
+  assert(shellHeaders.headers.get('cache-control') === 'no-cache', `/ cache-control was "${shellHeaders.headers.get('cache-control')}", expected no-cache`);
+  record('/ (index.html) → no-cache');
+
+  // 9. Cache-control: unhashed /data/*.json (copied verbatim from public/data/)
+  //    must also always revalidate — a data refresh must be visible immediately.
+  const dataHeaders = await fetch(`${baseUrl}/data/history-bryce.json`, { headers: { accept: 'application/json' } });
+  assert(
+    dataHeaders.headers.get('cache-control') === 'no-cache',
+    `/data/history-bryce.json cache-control was "${dataHeaders.headers.get('cache-control')}", expected no-cache`
+  );
+  record('/data/*.json → no-cache');
 
   console.log(JSON.stringify({ ok: true, baseUrl, checks }, null, 2));
 } finally {

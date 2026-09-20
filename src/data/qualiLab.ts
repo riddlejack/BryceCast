@@ -16,7 +16,8 @@
  *  on mismatch (the GB3 / raceStory loader pattern). */
 
 import { useEffect, useState } from 'react';
-import { packModules, packRawModules } from './packModules';
+import { packUrls } from './packModules';
+import { loadContextPack } from './packLoader';
 import { uiDataPackage } from './uiDataPackage';
 import type { SectionLapsPack } from './sectionLaps';
 
@@ -246,24 +247,18 @@ export interface QualiLabResolution {
  *  than loading an unverifiable pack. */
 export const qualiLabRef = () => uiDataPackage.sourceInventory.qualiLabContextPack ?? null;
 
-const sha256Hex = async (value: string): Promise<string> => {
-  const bytes = new TextEncoder().encode(value);
-  const digest = await globalThis.crypto.subtle.digest('SHA-256', bytes);
-  return Array.from(new Uint8Array(digest))
-    .map((byte) => byte.toString(16).padStart(2, '0'))
-    .join('');
-};
-
 const load = async (): Promise<QualiLabPack | null> => {
   const ref = qualiLabRef();
   if (!ref) return null;
   const key = `../../${ref.path}`;
-  const jsonLoader = packModules[key];
-  const rawLoader = packRawModules[key];
-  if (!jsonLoader || !rawLoader) return null;
-  const pack = ((await jsonLoader()) as { default: QualiLabPack }).default;
-  const rawText = (await rawLoader()) as string;
-  if ((await sha256Hex(rawText)) !== ref.sha256 || pack.id !== ref.id) {
+  // Race and Tracks pages both request this (~1.2 MB) pack unconditionally on
+  // mount, whether or not the person ever opens the Qualifying tab — low
+  // priority so it doesn't contend with that page's own race-section pack,
+  // which is what's actually on screen first. See packLoader.ts.
+  const loaded = await loadContextPack<QualiLabPack>(packUrls, key, 'low');
+  if (!loaded) return null;
+  const { data: pack, sha256 } = loaded;
+  if (sha256 !== ref.sha256 || pack.id !== ref.id) {
     throw new Error(`Quali Lab pack integrity mismatch: ${ref.path}`);
   }
   return pack;

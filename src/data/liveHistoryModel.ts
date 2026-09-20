@@ -38,6 +38,15 @@ export interface LiveHistorySample {
    * gap (missing snapshots, break the line). `undefined` for a live-polled
    * sample, whose continuity the chart infers from the poll cadence instead. */
   archiveGapBefore?: boolean;
+  /** How much SOURCE time one poll is expected to cover, for a sample this
+   * client polled itself. Live it is the ~1 s feed cadence and this is
+   * `undefined` (the charts infer the cadence from the samples, as before). In a
+   * replay it is `pollInterval × speed`: at 16× a 1 s poll steps 16 s through
+   * the archive, which is sparse SAMPLING of a continuous record, not a gap in
+   * it. Stating it removes the guess — without it every 16× sample, and every
+   * sample for ~2 minutes after any speed change, reads as a feed outage and the
+   * running-order line shatters into single points. */
+  expectedCadenceMs?: number;
 }
 
 export interface LiveHistoryStats {
@@ -86,6 +95,10 @@ const emptyStats = (): LiveHistoryStats => ({
 
 export const createLiveHistoryState = (): LiveHistoryState => ({ activeSessionKey: null, sessions: {} });
 
+/** The live/ready readiness poll cadence (useReadiness `cadenceFor`). One poll
+ * covers this much SOURCE time live, and this × the playback speed in a replay. */
+export const LIVE_POLL_INTERVAL_MS = 1_000;
+
 const recordOf = (value: unknown): Row =>
   value && typeof value === 'object' && !Array.isArray(value) ? (value as Row) : {};
 
@@ -114,6 +127,17 @@ export const liveSessionKeyOf = (payload: LiveReadinessPayload | null): string |
 /** Replay shifts payload.checkedAt to wall time for freshness. History must use
  * the archived record identity or the same record would be appended on every
  * poll and look like fabricated motion. */
+/** The playback rate the server resolved this frame at, or `null` for a live
+ * payload. Only the three offered rates (plus 2× for the replay harness) are
+ * honoured; anything else is treated as live so a malformed field can never
+ * widen a continuity threshold. */
+export const livePlaybackSpeedOf = (payload: LiveReadinessPayload): number | null => {
+  const simulation = recordOf(recordOf(payload.replay).simulation);
+  if (simulation.active !== true) return null;
+  const speed = Number(simulation.speed);
+  return [1, 2, 4, 16].includes(speed) ? speed : null;
+};
+
 export const liveSourceCheckedAtOf = (payload: LiveReadinessPayload): string => {
   const replay = recordOf(payload.replay);
   const simulation = recordOf(replay.simulation);
@@ -161,6 +185,7 @@ export const liveHistorySampleFromPayload = (payload: LiveReadinessPayload): Liv
   const bryceId = bryce ? stableDriverId(bryce) : '';
   if (!sessionKey || !Number.isFinite(checkedAtMs) || rows.length === 0 || !bryceId) return null;
   const heartbeat = recordOf(recordOf(payload.liveTiming).heartbeat);
+  const speed = livePlaybackSpeedOf(payload);
   const sample = {
     sessionKey,
     checkedAt,
@@ -170,7 +195,10 @@ export const liveHistorySampleFromPayload = (payload: LiveReadinessPayload): Liv
     flag: String(heartbeat.currentFlag ?? heartbeat.flag ?? ''),
     rows,
     bryceId,
-    signature: ''
+    signature: '',
+    // Replay only. A live sample leaves this undefined and the charts behave
+    // exactly as they always have.
+    ...(speed === null ? {} : { expectedCadenceMs: LIVE_POLL_INTERVAL_MS * speed })
   } satisfies LiveHistorySample;
   sample.signature = liveSampleSignature(sample);
   return sample;

@@ -6,6 +6,7 @@ import {
   lapContextOf,
   lapScopesFor,
   lapScopesForObservedLaps,
+  minimumCleanLapsForScope,
   resolveHeatSections,
   selectableSectionLap,
   sectionObservationsFromLaps,
@@ -15,7 +16,8 @@ import {
   measuredTrackSectionsFor,
   passSpanAnchor,
   timedShareOf,
-  trackSectionsFor
+  trackSectionsFor,
+  type TrackSectionAnchorSet
 } from '../src/assets/tracks/sections';
 
 /** Guards the Section Intelligence adapter-contract (Brief H). The v1 producer
@@ -136,7 +138,9 @@ assert.equal(
 const splitSectionChecks: Array<[string, string[], number, number]> = [
   ['Barber Motorsports Park', ['FS-PO', 'Turns 12-13', 'Turns 14-16'], 11, 0.99],
   ['Road America', ['I10 to I11', 'I11 to I11B', 'I11B to I12', 'I12 to I13', 'I13 to I13A', 'I13A to I14', 'I14 to I15C', 'I15C to I15'], 22, 0.99],
-  ['WeatherTech Raceway Laguna Seca', ['Turn 1 Entry', 'Turn 1 Exit'], 15, 0.92],
+  // Laguna Seca gained FS - PI on 2026-09-19 (the front-straight ruling): the
+  // family was always published, the race lane was filing it as a pit split.
+  ['WeatherTech Raceway Laguna Seca', ['Turn 1 Entry', 'Turn 1 Exit', 'FS - PI'], 16, 0.999],
   ['Portland International Raceway', ['FS-PI', 'FS-PO'], 13, 0.99],
   ['Indianapolis Motor Speedway Road Course', ['FS - PO', 'FS - PO 2', 'Turn 1/2', 'Turn 12/13', 'FS - PI'], 13, 0.999]
 ];
@@ -242,10 +246,27 @@ assert.equal(middle.sections[0].observationCount, 10);
 assert.ok((middle.sections[0].percentile ?? 0) > 0.7, 'middle-third median reflects its window');
 
 const closing = sectionObservationsFromLaps(syntheticPack, scopesMenu[3], 'median');
-// closing third = laps 21-30: only 4 clean laps -> below MIN_CLEAN_LAPS, suppressed
+// closing third = laps 21-30 (a 10-lap window): the caution clears with 4
+// clean laps left. Below the full-race floor (MIN_CLEAN_LAPS = 8) but the
+// scope-aware floor for a 10-lap window is min(8, max(4, ceil(10*0.4))) = 4 —
+// exactly the case that floor exists for: a third that opened under caution
+// but still carries a real, if smaller, clean sample should shade, not
+// suppress (see minimumCleanLapsForScope).
 assert.equal(closing.sections[0].observationCount, 4);
-assert.ok(4 < MIN_CLEAN_LAPS, 'test premise: below the floor');
-assert.equal(closing.sections[0].percentile, null, 'below-floor scopes suppress the percentile, never fake confidence');
+assert.ok(4 < MIN_CLEAN_LAPS, 'still below the full-race floor');
+assert.equal(minimumCleanLapsForScope(scopesMenu[3]), 4, 'a 10-lap third floors at 4, not the full-race 8');
+assert.equal(closing.sections[0].percentile, 0.9, 'a scope right at its scaled floor still reports a real percentile');
+
+// A window too thin even for the scaled-down floor still suppresses — the
+// floor never drops below 4. Laps 26-28: lap 26 is caution, laps 27-28 are
+// clean = 2 clean laps in a 3-lap window; floor = max(4, ceil(3*0.4)) = 4.
+const tooThin = sectionObservationsFromLaps(
+  syntheticPack,
+  { kind: 'lap_window', label: 'Slice', fromLap: 26, toLap: 28 },
+  'median'
+);
+assert.equal(tooThin.sections[0].observationCount, 2);
+assert.equal(tooThin.sections[0].percentile, null, 'a window below even the scaled floor still suppresses the percentile');
 
 const oneLap = sectionObservationsFromLaps(syntheticPack, { kind: 'single_lap', lap: 22 }, 'median');
 assert.equal(oneLap.sections[0].percentile, 0.1, 'single lap reports the lap as timed');
@@ -259,15 +280,24 @@ const context = lapContextOf(syntheticPack);
 assert.equal(context.filter((entry) => entry.caution === 'caution').length, 6, 'lap context surfaces caution laps for the scrubber');
 
 // 7. Derived remainder (Brief H coverage fix): a genuine-gap pack carries an
-// untimed section that rides the same contract. Arlington's one remaining gap
-// joins as derived and can never become a gold top section.
+// untimed section that rides the same contract, and it can never become a gold
+// top section.
+//
+// Arlington used to be the live example. Since the 2026-09-19 front-straight
+// ruling its FS-PO and FS PI families are measured sections, so it tiles the
+// lap and ships nothing derived — as does every other venue. The contract is
+// still live for the next venue whose report leaves a real untimed stretch, so
+// it is pinned here against a synthetic anchor set rather than a real one.
 const arlingtonAnchors = trackSectionsFor('Streets of Arlington')!;
-const remainderAnchor = arlingtonAnchors.sections.find((s) => s.kind === 'derived_remainder');
-assert.ok(remainderAnchor, 'Arlington ships a derived_remainder anchor');
-assert.equal(remainderAnchor!.sectionName, 'Turn 14 to S/F (untimed)');
+assert.ok(
+  arlingtonAnchors.sections.every((s) => s.kind !== 'derived_remainder'),
+  'Arlington is fully measured — its S/F straight is FS-PO + FS PI, not a derived remainder'
+);
+assert.equal(arlingtonAnchors.sections[0].sectionName, 'FS-PO', 'Arlington opens the lap at its S/F datum');
+assert.equal(arlingtonAnchors.sections.at(-1)?.sectionName, 'FS PI', 'Arlington closes back to S/F');
 
 const cornerName = 'Turn 3';
-const remainderName = 'Turn 14 to S/F (untimed)';
+const remainderName = 'Untimed remainder';
 const buildLaps = (percentile: number, seconds: number): SectionLapTuple[] =>
   Array.from({ length: 20 }, (_, i) => [i + 1, percentile, 5, 18, 1, 'g', seconds, 150] as SectionLapTuple);
 const derivedPack = {
@@ -301,9 +331,27 @@ assert.ok(Math.abs((remainderObs.percentile ?? 0) - 0.4) < 1e-9, 'derived sectio
 assert.ok(Math.abs((remainderObs.fieldMedianSeconds ?? 0) - 15.1) < 1e-9, 'fieldMedianSeconds is the field distribution median');
 assert.deepEqual(remainderObs.fieldSeconds, [14.9, 15.0, 15.2, 15.4], 'field distribution passes through for the drawer');
 
-const derivedResolved = resolveHeatSections(arlingtonAnchors, derivedSet);
+/* Synthetic anchor set standing in for the next venue that leaves a real
+   untimed stretch. `sectionName` must equal the name the pack builder gives
+   the derived section (DERIVED_SECTION_NAME in
+   analysis/indy-nxt-race-lap-section-enhancement/scripts/
+   build_indy_nxt_race_lap_section_enhancement.py), or the join never lands. */
+const derivedAnchors: TrackSectionAnchorSet = {
+  slug: 'derived-contract-fixture',
+  venueName: 'Streets of Arlington',
+  drivingDirection: 'clockwise',
+  confidence: 'approximate',
+  note: 'Fixture: pins the derived-remainder contract now that no shipped venue exercises it.',
+  sections: [
+    { familyId: 'fx-t1', sectionName: 'Turn 1', label: 'Turn 1', startT: 0.0, endT: 0.2 },
+    { familyId: 'fx-t2', sectionName: 'Turn 2', label: 'Turn 2', startT: 0.2, endT: 0.4 },
+    { familyId: 'fx-t3', sectionName: cornerName, label: 'Turn 3', startT: 0.4, endT: 0.6 },
+    { familyId: 'fx-rem', sectionName: remainderName, label: 'Untimed stretch', startT: 0.6, endT: 0.0, kind: 'derived_remainder' }
+  ]
+};
+const derivedResolved = resolveHeatSections(derivedAnchors, derivedSet);
 const remainderResolved = derivedResolved.find((r) => r.kind === 'derived_remainder')!;
-assert.ok(remainderResolved, 'derived remainder joins the Arlington anchor');
+assert.ok(remainderResolved, 'derived remainder joins its anchor');
 assert.equal(remainderResolved.renderSpans.length, 1, 'single remainder draws its one untimed stretch');
 assert.equal(remainderResolved.combined, false, 'one stretch is not described as combined');
 assert.equal(remainderResolved.isTopSection, false, 'the derived remainder is never a gold top section');

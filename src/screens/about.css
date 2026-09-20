@@ -1,0 +1,95 @@
+/* ---------- About screen: architecture strip and hard-parts cards ----------
+ * Everything else on this page reuses existing theme.css classes (page/stack,
+ * card, grid--2, panel--quiet, kicker, caption, section-title, doors/door).
+ * This file only covers what theme.css has no equivalent for. */
+
+.about-pipeline {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.about-pipeline__step {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  background: var(--surface-0);
+  border-radius: 10px;
+  padding: 12px 14px;
+  text-align: center;
+}
+
+.about-pipeline__step-label {
+  font-size: 13px;
+  font-weight: 620;
+  color: var(--ink-primary);
+}
+
+.about-pipeline__step-note {
+  font-size: 11.5px;
+  color: var(--ink-muted);
+  line-height: 1.35;
+}
+
+.about-pipeline__arrow {
+  align-self: center;
+  color: var(--ink-muted);
+  flex: none;
+  transform: rotate(90deg);
+}
+
+@media (min-width: 640px) {
+  .about-pipeline {
+    flex-direction: row;
+    align-items: stretch;
+  }
+  .about-pipeline__arrow {
+    transform: none;
+  }
+}
+
+.about-hardpart {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.about-hardpart__body {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--ink-secondary);
+}
+
+.about-hardpart__link {
+  align-self: flex-start;
+  font-size: 12.5px;
+  padding: 0 2px;
+}
+
+.about-credit {
+  display: grid;
+  gap: 6px;
+  border-top: 1px solid var(--divider);
+  padding-top: 12px;
+}
+
+.about-credit:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.about-credit__label {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--ink-primary);
+}
+
+.about-credit__detail {
+  margin: 0;
+  font-size: 13px;
+  color: var(--ink-secondary);
+  line-height: 1.5;
+  max-width: 64ch;
+}

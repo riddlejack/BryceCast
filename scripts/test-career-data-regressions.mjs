@@ -63,28 +63,59 @@ const indyNxtBryceRaceResults = dataset.results.filter((row) => {
   const session = sessionsById.get(row.sessionId);
   return row.driverId === 'driver_bryce_aron' && session?.sessionType === 'race' && indyNxtEventIds.has(session.eventId);
 });
+/* Seasons are discovered from the official SeasonDropDown feed (see
+ * scripts/lib/indy-nxt-seasons.mjs), so the importer's season set grows without
+ * a code edit. The counts below are HISTORY — complete seasons that will never
+ * change again — so they are asserted per season rather than as a whole-array
+ * deepEqual: a newly discovered season is additive, not a spurious regression.
+ * New seasons are still checked, by the consistency assertion further down. */
+const PINNED_INDY_NXT_RACE_COUNTS = { 2024: 14, 2025: 14, 2026: 17 };
+for (const [year, expected] of Object.entries(PINNED_INDY_NXT_RACE_COUNTS)) {
+  assert.equal(
+    indyNxtBryceRaceResults.filter((row) => row.sessionId.startsWith(`session_indy_nxt_${year}_`)).length,
+    expected,
+    `Official schedule plus EventsSessionDetails reconciliation must retain all ${expected} Bryce INDY NXT ${year} race results`
+  );
+}
+const PINNED_SEASON_RECONCILIATION = {
+  2024: { year: 2024, scheduled: 14, results: 14, driverHistory: 14, standings: 14, missingResults: [], missingStandingsResults: [] },
+  2025: { year: 2025, scheduled: 14, results: 14, driverHistory: 14, standings: 14, missingResults: [], missingStandingsResults: [] },
+  2026: { year: 2026, scheduled: 17, results: 17, driverHistory: 16, standings: 17, missingResults: [], missingStandingsResults: [] }
+};
+const reconciliationShape = (row) => ({
+  year: row.year,
+  scheduled: row.scheduledOfficialRaceSessions,
+  results: row.eventsSessionDetailsBryceRaceRows,
+  driverHistory: row.driverYearDetailsRows,
+  standings: row.yearPointSummaryRaceSessionIds,
+  missingResults: row.missingBryceResultSessionIds,
+  missingStandingsResults: row.standingsSessionsMissingResults
+});
 assert.deepEqual(
-  [2024, 2025, 2026].map((year) => indyNxtBryceRaceResults.filter((row) => row.sessionId.startsWith(`session_indy_nxt_${year}_`)).length),
-  [14, 14, 17],
-  'Official schedule plus EventsSessionDetails reconciliation must retain all 45 Bryce INDY NXT race results'
-);
-assert.deepEqual(
-  indyNxtImportReport.seasonReconciliation.map((row) => ({
-    year: row.year,
-    scheduled: row.scheduledOfficialRaceSessions,
-    results: row.eventsSessionDetailsBryceRaceRows,
-    driverHistory: row.driverYearDetailsRows,
-    standings: row.yearPointSummaryRaceSessionIds,
-    missingResults: row.missingBryceResultSessionIds,
-    missingStandingsResults: row.standingsSessionsMissingResults
-  })),
-  [
-    { year: 2024, scheduled: 14, results: 14, driverHistory: 14, standings: 14, missingResults: [], missingStandingsResults: [] },
-    { year: 2025, scheduled: 14, results: 14, driverHistory: 14, standings: 14, missingResults: [], missingStandingsResults: [] },
-    { year: 2026, scheduled: 17, results: 17, driverHistory: 16, standings: 17, missingResults: [], missingStandingsResults: [] }
-  ],
+  indyNxtImportReport.seasonReconciliation.filter((row) => PINNED_SEASON_RECONCILIATION[row.year]).map(reconciliationShape),
+  Object.keys(PINNED_SEASON_RECONCILIATION)
+    .map(Number)
+    .sort((left, right) => left - right)
+    .map((year) => PINNED_SEASON_RECONCILIATION[year]),
   'Season reconciliation must use the official schedule and per-session result rows while preserving driver-history coverage as a cross-check'
 );
+assert.deepEqual(
+  Object.keys(PINNED_SEASON_RECONCILIATION)
+    .map(Number)
+    .filter((year) => !indyNxtImportReport.seasonReconciliation.some((row) => row.year === year)),
+  [],
+  'every pinned INDY NXT season must still be reconciled by the importer — a dropped season is a coverage loss, not a passing test'
+);
+/* A season discovered after these pins were written has no hand-checked numbers,
+ * but it must still be internally consistent: no scheduled Bryce race without a
+ * result row, and no standings session without one. */
+for (const row of indyNxtImportReport.seasonReconciliation.filter((entry) => !PINNED_SEASON_RECONCILIATION[entry.year])) {
+  assert.deepEqual(
+    { missingResults: row.missingBryceResultSessionIds, missingStandingsResults: row.standingsSessionsMissingResults },
+    { missingResults: [], missingStandingsResults: [] },
+    `newly discovered INDY NXT season ${row.year} must reconcile with no missing result rows`
+  );
+}
 assert.deepEqual(
   indyNxtImportReport.seasonReconciliation.find((row) => row.year === 2026)?.missingFromDriverYearDetails,
   ['session_indy_nxt_2026_6759'],
@@ -137,7 +168,12 @@ assert.equal(
 );
 assert.equal(careerCoverageMatrix.schemaVersion, 'bryce-career-coverage-matrix.v1', 'coverage matrix report must be generated');
 assert.equal(careerCoverageMatrix.series?.length, 7, 'coverage matrix must cover all seven imported production-scope series');
-assert.equal(careerCoverageMatrix.seasons?.length, 10, 'coverage matrix must include season-grain coverage rows');
+// Season rows are built from the dataset, and the INDY NXT lane discovers new
+// seasons from the official feed — so this is a floor, not an equality pin.
+assert.ok(
+  (careerCoverageMatrix.seasons?.length ?? 0) >= 10,
+  `coverage matrix must include season-grain coverage rows (>= 10, got ${careerCoverageMatrix.seasons?.length})`
+);
 assert.equal(careerCoverageMatrix.sessions?.length, dataset.sessions.length, 'coverage matrix must include session-grain coverage rows');
 assert.equal(
   careerCoverageMatrix.sessions?.every((row) => row.categories?.length === careerCoverageMatrix.categoryDefinitions?.length),

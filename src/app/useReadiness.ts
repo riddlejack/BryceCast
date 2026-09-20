@@ -68,6 +68,9 @@ export const useReadiness = (getReplayParams?: () => string): ReadinessStatus =>
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const failuresRef = useRef(0);
   const nudgeRef = useRef<() => void>(() => {});
+  // Replay-only: a poll held back because the tab was hidden when it would have
+  // fired (see scheduleTick below).
+  const pendingResumeRef = useRef(false);
 
   useEffect(() => {
     if (fixtureState) {
@@ -93,7 +96,7 @@ export const useReadiness = (getReplayParams?: () => string): ReadinessStatus =>
             // Drop the prior payload immediately. Keeping it would visually hold
             // the last known rank through an interval the archive did not see.
             setStatus({ payload: null, fixtureMode: false, error: null, sourceGap: refused.gap, checkedAt: Date.now(), refresh: nudgeRef.current });
-            timerRef.current = setTimeout(tick, 1_000);
+            scheduleTick(1_000);
             return;
           }
         }
@@ -102,19 +105,42 @@ export const useReadiness = (getReplayParams?: () => string): ReadinessStatus =>
         if (cancelled) return;
         failuresRef.current = 0;
         setStatus({ payload, fixtureMode: false, error: null, sourceGap: null, checkedAt: Date.now(), refresh: nudgeRef.current });
-        timerRef.current = setTimeout(tick, cadenceFor(payload.state, 0));
+        scheduleTick(cadenceFor(payload.state, 0));
       } catch (error) {
         if (cancelled) return;
         failuresRef.current += 1;
         setStatus((previous) => ({ ...previous, error: error instanceof Error ? error.message : String(error), checkedAt: Date.now(), refresh: nudgeRef.current }));
-        timerRef.current = setTimeout(tick, cadenceFor(undefined, failuresRef.current));
+        scheduleTick(cadenceFor(undefined, failuresRef.current));
       }
     };
+
+    // Replay mode only: a demo tab left in the background has no one watching
+    // it, so hold the next poll instead of running it at full (up to 1s) live
+    // cadence — the off-season auto-demo can leave several tabs idling. Plain
+    // live polling is untouched: a family glancing back at a backgrounded live
+    // tab expects it to already be caught up, so it keeps polling regardless of
+    // visibility, exactly as before.
+    const scheduleTick = (delayMs: number) => {
+      if (replayParamsRef.current() && typeof document !== 'undefined' && document.hidden) {
+        pendingResumeRef.current = true;
+        return;
+      }
+      timerRef.current = setTimeout(tick, delayMs);
+    };
+
+    const onVisibilityChange = () => {
+      if (!document.hidden && pendingResumeRef.current) {
+        pendingResumeRef.current = false;
+        nudgeRef.current();
+      }
+    };
+    if (typeof document !== 'undefined') document.addEventListener('visibilitychange', onVisibilityChange);
 
     // An immediate poll that cancels the scheduled one — idempotent enough that a
     // spurious call just refreshes readiness a beat early.
     nudgeRef.current = () => {
       if (cancelled) return;
+      pendingResumeRef.current = false;
       if (timerRef.current) clearTimeout(timerRef.current);
       void tick();
     };
@@ -125,6 +151,7 @@ export const useReadiness = (getReplayParams?: () => string): ReadinessStatus =>
     return () => {
       cancelled = true;
       if (timerRef.current) clearTimeout(timerRef.current);
+      if (typeof document !== 'undefined') document.removeEventListener('visibilitychange', onVisibilityChange);
     };
   }, [fixtureState, fixtureVariant]);
 

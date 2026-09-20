@@ -1,5 +1,7 @@
+import { trackOutlineFor } from '../assets/tracks';
 import { uiDataPackage, type UiSectionLapRef } from './uiDataPackage';
-import { packModules, packRawModules } from './packModules';
+import { packUrls } from './packModules';
+import { loadContextPack } from './packLoader';
 import type { SectionSourceTier } from './sectionObservations';
 
 /** Section-lap packs (Brief H — Section Intelligence): Bryce's per-lap,
@@ -65,14 +67,6 @@ export interface SectionLapsPack {
   caveats: string[];
 }
 
-const sha256Hex = async (value: string): Promise<string> => {
-  const bytes = new TextEncoder().encode(value);
-  const digest = await globalThis.crypto.subtle.digest('SHA-256', bytes);
-  return Array.from(new Uint8Array(digest))
-    .map((byte) => byte.toString(16).padStart(2, '0'))
-    .join('');
-};
-
 const refs = (): UiSectionLapRef[] => uiDataPackage.screens.raceDebrief.sectionLapRefs ?? [];
 
 const refFor = (sessionId: string): UiSectionLapRef | null =>
@@ -80,11 +74,19 @@ const refFor = (sessionId: string): UiSectionLapRef | null =>
 
 /** All race visits with per-lap section data at a venue (for the YoY shapes),
  *  oldest first. Metadata only — nothing loads until loadSectionLaps. */
+/** One venue, one name: result feeds call two street venues by their event
+ *  names ("Detroit Downtown Street Circuit") while the section packs carry the
+ *  asset names ("Streets of Detroit"). Compare through the outline's canonical
+ *  name so no caller has to remember to alias first. */
+const canonicalVenue = (name: string | null | undefined): string | null =>
+  name ? trackOutlineFor(name)?.name ?? name : null;
+
 export const sectionLapVisitsFor = (venueName: string | null | undefined): UiSectionLapRef[] => {
   if (!venueName) return [];
+  const venue = canonicalVenue(venueName);
   const canonicalOrder = new Map(
     (uiDataPackage.screens.raceDebrief.seasonIndex ?? [])
-      .filter((row) => row.trackName === venueName)
+      .filter((row) => canonicalVenue(row.trackName) === venue)
       .sort(
         (left, right) =>
           (left.raceDate ?? left.eventStartDate ?? '').localeCompare(right.raceDate ?? right.eventStartDate ?? '') ||
@@ -94,7 +96,7 @@ export const sectionLapVisitsFor = (venueName: string | null | undefined): UiSec
       .map((row, index) => [row.sessionId, index])
   );
   return refs()
-    .filter((ref) => ref.venueName === venueName)
+    .filter((ref) => canonicalVenue(ref.venueName) === venue)
     .sort(
       (left, right) =>
         (canonicalOrder.get(left.sessionId) ?? Number.MAX_SAFE_INTEGER) -
@@ -106,19 +108,24 @@ export const sectionLapVisitsFor = (venueName: string | null | undefined): UiSec
 
 const cache = new Map<string, Promise<SectionLapsPack | null>>();
 
-export const loadSectionLaps = (sessionId: string): Promise<SectionLapsPack | null> => {
+/** `priority` (Fetch Priority Hints) only takes effect on the FIRST call for a
+ *  given sessionId — the one that actually creates the cached fetch; a second
+ *  caller just gets that same in-flight/resolved promise. `useVenueSectionData`
+ *  uses this to mark the venue page's selected visit `'high'` among the batch
+ *  of visits it loads concurrently, so that pack — the one actually about to
+ *  render — wins the race on a constrained connection instead of finishing
+ *  whenever it happens to among several equal-priority requests. */
+export const loadSectionLaps = (sessionId: string, priority?: RequestPriority): Promise<SectionLapsPack | null> => {
   const existing = cache.get(sessionId);
   if (existing) return existing;
   const promise = (async (): Promise<SectionLapsPack | null> => {
     const ref = refFor(sessionId);
     if (!ref) return null;
     const key = `../../${ref.path}`;
-    const jsonLoader = packModules[key];
-    const rawLoader = packRawModules[key];
-    if (!jsonLoader || !rawLoader) return null;
-    const pack = ((await jsonLoader()) as { default: SectionLapsPack }).default;
-    const rawText = (await rawLoader()) as string;
-    if ((await sha256Hex(rawText)) !== ref.sha256 || pack.id !== ref.id || pack.sessionId !== sessionId) {
+    const loaded = await loadContextPack<SectionLapsPack>(packUrls, key, priority);
+    if (!loaded) return null;
+    const { data: pack, sha256 } = loaded;
+    if (sha256 !== ref.sha256 || pack.id !== ref.id || pack.sessionId !== sessionId) {
       throw new Error(`Section-lap pack integrity mismatch: ${ref.path}`);
     }
     return pack;

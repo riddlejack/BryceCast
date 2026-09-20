@@ -38,7 +38,7 @@
       "type": "small_multiple"
     }
   ],
-  "generatedAt": "2026-09-11T01:20:19Z",
+  "generatedAt": "2026-09-20T00:00:36Z",
   "id": "career_lab_context",
   "metricFamilyParity": [
     {
@@ -498,7 +498,7 @@
       "parityStatus": "source_bounded_partial",
       "seriesId": "series_indy_nxt",
       "seriesName": "INDY NXT",
-      "sourceRowsOrSessions": "115",
+      "sourceRowsOrSessions": "135",
       "uiUse": "Use with coverage badge and denominators."
     },
     {
@@ -3257,7 +3257,7 @@
     "Formula Ford lap/weather context is source-bounded and should be labeled separately.",
     "IMSA Daytona remains a standalone sports-car feature."
   ],
-  "sourceHash": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd",
+  "sourceHash": "d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd",
   "sourceRefs": [
     {
       "bytes": 916,
@@ -3269,7 +3269,7 @@
       "bytes": 12247,
       "path": "analysis/career-parity/output/tables/career_metric_family_parity.csv",
       "role": "metric parity",
-      "sha256": "f7d95aa2a291d143f8512951a0d494ebaa92a30e4d78913a08ccda4fa43d8d8c"
+      "sha256": "a4ef842d640a72c28baf5518c99294d5bda0caa856602a712d618d1556f14c7c"
     },
     {
       "bytes": 37233,
@@ -3281,7 +3281,7 @@
       "bytes": 23451,
       "path": "analysis/predictive-race-intelligence/output/career_prior_matrix.csv",
       "role": "career prior matrix chart source",
-      "sha256": "5bdd0674eac0baf8b2efd0cbb5cd406930c595ff80ad5534fac4e71d2b028f15"
+      "sha256": "fa849b6e2432501af28ab057b9365bd1378f84decf8f882c0a1253de348d3f2d"
     }
   ],
   "topCareerStories": [

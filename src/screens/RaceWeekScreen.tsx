@@ -36,6 +36,7 @@ import { isBryceCastCaptureTier, priorYearReplaysAtVenue, replayProvenance } fro
 import { loadDebriefArchive } from '../data/debriefArchive';
 import { ReplayAffordance, priorYearTitle, useReplayCatalog } from './replayAffordance';
 import { VenueSectionSuite, useVenueSectionData } from './sectionIntelligence';
+import { OffSeasonRaceWeek } from './offseason';
 
 type Row = Record<string, unknown>;
 
@@ -1610,15 +1611,7 @@ export const RaceWeekScreen = () => {
 
   if (!weekend) {
     return (
-      <div className="page stack">
-        <header className="screen-head">
-          <span className="kicker">Race week</span>
-          <h1 className="screen-head__title">Off-season</h1>
-        </header>
-        <Card>
-          <Unavailable>No upcoming races in the schedule yet. The next event appears here as soon as it’s published.</Unavailable>
-        </Card>
-      </div>
+      <OffSeasonRaceWeek />
     );
   }
 

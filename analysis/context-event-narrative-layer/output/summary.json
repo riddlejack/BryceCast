@@ -18,7 +18,7 @@
     "media": 1098,
     "penalty": 94,
     "racecraft": 44,
-    "weather": 201
+    "weather": 221
   },
   "counts": {
     "derivedMetricRows": 453,
@@ -26,9 +26,9 @@
     "mediaRows": 1098,
     "seriesCoverageRows": 8,
     "sessionRollupRows": 439,
-    "sourceEvidenceRows": 1347,
-    "timelineRows": 1603,
-    "weatherRows": 201
+    "sourceEvidenceRows": 1356,
+    "timelineRows": 1623,
+    "weatherRows": 221
   },
   "derivedMetricTypeCounts": {
     "career_award": 1,
@@ -46,7 +46,7 @@
     "partial": 2,
     "source_broken_preserved": 1
   },
-  "generatedAt": "2026-09-10T23:01:45Z",
+  "generatedAt": "2026-09-20T00:00:20Z",
   "ok": true,
   "publicPointPrediction": false,
   "sourceEvidenceTypeCounts": {
@@ -58,7 +58,7 @@
     "official_json": 2,
     "official_page": 117,
     "official_pdf": 812,
-    "weather_api": 85
+    "weather_api": 94
   },
-  "sourceHash": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd"
+  "sourceHash": "d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd"
 }

@@ -7,7 +7,7 @@ import type { TrackSectionAnchorSet } from '../src/assets/tracks/sections';
 
 // Hydrate the actual included snapshot through its production SHA-256 loaders.
 const context = await buildBryceCastUiContext();
-assert.equal(context.dataPackage.asOfDate, '2026-09-10');
+assert.equal(context.dataPackage.asOfDate, '2026-09-19');
 assert.equal(context.raceDebrief.featuredDebriefs.length, 3, 'The dated snapshot must hydrate all three featured debriefs');
 assert.ok(context.contextPackIntegrity.checkedRefs >= 6);
 const manifest = JSON.parse(await readFile('analysis/predictive-race-intelligence/output/context-packs/context-pack-manifest.json', 'utf8'));

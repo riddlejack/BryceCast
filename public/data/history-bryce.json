@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-09-10T23:13:39.346Z",
+  "checkedAt": "2026-09-19T22:46:55.710Z",
   "source": "Reconciled official INDY NXT session results and championship standings",
   "seasonYear": 2026,
   "points": [
@@ -307,8 +307,8 @@
   ],
   "officialStandings": {
     "seasonYear": 2026,
-    "checkedAt": "2026-09-10T23:13:39.346Z",
-    "publishedAt": "Thursday, September 10, 2026",
+    "checkedAt": "2026-09-19T22:46:55.710Z",
+    "publishedAt": "Saturday, September 19, 2026",
     "sourceUrl": "https://www.indynxt.com/api/results/YearPointSummary?year=2026&id=09341e09-3216-4f89-a45f-db697d72ee13",
     "entries": [
       {

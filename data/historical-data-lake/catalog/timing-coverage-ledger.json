@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-11T01:16:57.204Z",
-  "asOfDate": "2026-09-11",
-  "canonicalDatasetUpdatedAt": "2026-09-10T22:28:43.621Z",
+  "generatedAt": "2026-09-19T22:46:54.181Z",
+  "asOfDate": "2026-09-19",
+  "canonicalDatasetUpdatedAt": "2026-09-19T22:45:37.078Z",
   "scope": "Bryce Aron INDY NXT races and the qualifying source used for each race, 2024-2026",
   "contract": {
     "observed": "A timestamp exists in a retained source heartbeat, replay frame, or BryceCast Race Control snapshot.",
@@ -101,7 +101,7 @@
       }
     },
     "currentLake": {
-      "lakeDataRoot": "/Users/example/.brycecast/data-lake",
+      "lakeDataRoot": "/Users/jackriddle/.brycecast/data-lake",
       "manifestFileCount": 1136,
       "contentAddressedObjectCount": 1136,
       "timing71AnalyzedSessionCount": 420,

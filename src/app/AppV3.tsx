@@ -3,20 +3,37 @@ import { lazy, Suspense, useEffect, useRef } from 'react';
 import { CalendarClock, Flag, Home, LineChart, Map, Radio } from 'lucide-react';
 import './theme.css';
 import { Link, RouterProvider, matchPath, useRouter } from './router';
+import { idlePrefetchLikelyNextRoutes } from './routePrefetch';
 import { CarMark, Plate } from './components';
 import { useReadiness } from './useReadiness';
 import { useLiveSessionHistory } from './useLiveSessionHistory';
 import { useReplaySession } from './useReplaySession';
 import { HomeScreen } from '../screens/HomeScreen';
-import { LiveScreen } from '../screens/LiveScreen';
-import { RaceWeekScreen } from '../screens/RaceWeekScreen';
-import { RacesScreen } from '../screens/RacesScreen';
-import { RaceScreen } from '../screens/RaceScreen';
-import { CareerScreen } from '../screens/CareerScreen';
-import { CareerRaceScreen } from '../screens/CareerRaceScreen';
-import { DataScreen } from '../screens/DataScreen';
 
+/* Every screen except Home is lazy: Home is what a cold visit renders first,
+ * so it alone should be in the entry chunk. Everything else — Live, Race
+ * Week, Races, a race detail page, Career, a career race page, Tracks, Data,
+ * About — is its own chunk, fetched only when that route is actually opened
+ * (or prefetched on link hover/focus/touch — see router.tsx's `Link`). This
+ * is a routing-only change: each lazily-imported module is untouched. */
+const LiveScreen = lazy(() => import('../screens/LiveScreen').then((module) => ({ default: module.LiveScreen })));
+const RaceWeekScreen = lazy(() => import('../screens/RaceWeekScreen').then((module) => ({ default: module.RaceWeekScreen })));
+const RacesScreen = lazy(() => import('../screens/RacesScreen').then((module) => ({ default: module.RacesScreen })));
+const RaceScreen = lazy(() => import('../screens/RaceScreen').then((module) => ({ default: module.RaceScreen })));
+const CareerScreen = lazy(() => import('../screens/CareerScreen').then((module) => ({ default: module.CareerScreen })));
+const CareerRaceScreen = lazy(() =>
+  import('../screens/CareerRaceScreen').then((module) => ({ default: module.CareerRaceScreen }))
+);
+const DataScreen = lazy(() => import('../screens/DataScreen').then((module) => ({ default: module.DataScreen })));
+const AboutScreen = lazy(() => import('../screens/AboutScreen').then((module) => ({ default: module.AboutScreen })));
 const TracksScreen = lazy(() => import('../screens/TracksScreen').then((module) => ({ default: module.TracksScreen })));
+
+/** The one fallback every lazy route shares (unchanged from Tracks' original). */
+const RouteFallback = () => (
+  <div className="page">
+    <div className="skeleton" style={{ height: 420 }} />
+  </div>
+);
 
 const navItems: Array<{ to: string; label: string; icon: ComponentType<{ size?: number | string }> }> = [
   { to: '/', label: 'Now', icon: Home },
@@ -29,9 +46,21 @@ const navItems: Array<{ to: string; label: string; icon: ComponentType<{ size?: 
 
 const isActive = (path: string, to: string) => (to === '/' ? path === '/' : path === to || path.startsWith(`${to}/`));
 
-const Shell = ({ children, liveState }: { children: ReactNode; liveState: string | undefined }) => {
+const Shell = ({
+  children,
+  liveState,
+  demoReplay = false
+}: {
+  children: ReactNode;
+  liveState: string | undefined;
+  /** The off-season auto-demo (LiveScreen's OffSeasonLive) marks its own
+   *  replay URL with `&demo=offseason`. Its readiness payload reads 'ready'
+   *  just like a real session (a replay mimics live state on purpose), so the
+   *  nav must be told explicitly not to present it as genuinely live. */
+  demoReplay?: boolean;
+}) => {
   const { route } = useRouter();
-  const liveish = liveState === 'ready' || liveState === 'degraded';
+  const liveish = !demoReplay && (liveState === 'ready' || liveState === 'degraded');
   return (
     <>
       <nav className="topnav">
@@ -50,6 +79,9 @@ const Shell = ({ children, liveState }: { children: ReactNode; liveState: string
         <Link to="/data" className={`navlink${isActive(route.path, '/data') ? ' navlink--active' : ''}`} >
           Data
         </Link>
+        <Link to="/about" className={`navlink${isActive(route.path, '/about') ? ' navlink--active' : ''}`} >
+          About
+        </Link>
       </nav>
       <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>{children}</div>
       <footer className="footer">
@@ -60,6 +92,7 @@ const Shell = ({ children, liveState }: { children: ReactNode; liveState: string
           </span>
           <span className="row" style={{ gap: 14 }}>
             <Link to="/data">Data &amp; sources</Link>
+            <Link to="/about">About</Link>
           </span>
         </div>
       </footer>
@@ -90,6 +123,12 @@ const Shell = ({ children, liveState }: { children: ReactNode; liveState: string
 
 const Routes = () => {
   const { route } = useRouter();
+  // Once Home has actually rendered, use idle time to warm the chunks for the
+  // routes people go to next most often (see routePrefetch.ts) — a no-op on
+  // Data Saver / 2G, and it never competes with anything Home itself needed.
+  useEffect(() => {
+    if (route.path === '/') idlePrefetchLikelyNextRoutes();
+  }, [route.path]);
   const onLive = route.path === '/live';
   const fixtureMode = Boolean(route.search.get('fixture'));
   const raceDetail = matchPath('/races/:sessionId', route.path);
@@ -119,6 +158,9 @@ const Routes = () => {
     startedRef.current = replay.started;
   }, [replay.started, readiness.refresh]);
   const careerRace = matchPath('/career/race/:sessionId', route.path);
+  // See Shell's `demoReplay` doc above — only true for the off-season
+  // auto-demo's own marked replay URL on /live, never a person's own pick.
+  const offSeasonDemoReplay = onLive && replay.engaged && route.search.get('demo') === 'offseason';
 
   let screen: ReactNode;
   if (route.path === '/') screen = <HomeScreen readiness={readiness} />;
@@ -138,15 +180,11 @@ const Routes = () => {
       />
     );
   else if (route.path === '/races') screen = <RacesScreen livePayload={readiness.fixtureMode ? null : readiness.payload} />;
-  else if (route.path === '/tracks')
-    screen = (
-      <Suspense fallback={<div className="page"><div className="skeleton" style={{ height: 420 }} /></div>}>
-        <TracksScreen />
-      </Suspense>
-    );
+  else if (route.path === '/tracks') screen = <TracksScreen />;
   else if (careerRace) screen = <CareerRaceScreen sessionId={careerRace.sessionId} />;
   else if (route.path === '/career') screen = <CareerScreen readiness={readiness} />;
   else if (route.path === '/data') screen = <DataScreen />;
+  else if (route.path === '/about') screen = <AboutScreen />;
   else
     screen = (
       <div className="page">
@@ -157,7 +195,11 @@ const Routes = () => {
       </div>
     );
 
-  return <Shell liveState={readiness.payload?.state}>{screen}</Shell>;
+  return (
+    <Shell liveState={readiness.payload?.state} demoReplay={offSeasonDemoReplay}>
+      <Suspense fallback={<RouteFallback />}>{screen}</Suspense>
+    </Shell>
+  );
 };
 
 export const AppV3 = () => (

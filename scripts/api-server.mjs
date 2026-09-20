@@ -30,6 +30,12 @@ const onboardCatalogPath = join(publicDataDir, 'onboard-catalog.json');
 const historyPath = join(publicDataDir, 'history-bryce.json');
 const povProofPath = join(dataDir, 'pov-proof.json');
 const audioProofPath = join(dataDir, 'audio-proof.json');
+// Written by scripts/postrace-auto.mjs. Read-only here: the API never triggers,
+// schedules or modifies the unattended pipeline, it only reports what the last
+// run recorded.
+const postraceAutoStatusPath = resolve(
+  process.env.BRYCECAST_POSTRACE_AUTO_STATUS_PATH ?? join(dataDir, 'postrace-auto-status.json')
+);
 
 const raceControlEndpoints = raceSnapshotEndpoints;
 const sourceProbeEndpoints = liveSourceEndpoints;
@@ -188,6 +194,27 @@ const historyPoints = (payload) => (Array.isArray(payload?.points) ? payload.poi
 
 const isOfficialHistoryPoint = (point) => String(point?.source ?? '').toLowerCase().includes('official');
 
+/** The season this history payload describes. `ingest-history.mjs` derives it
+ *  from the canonical dataset's latest INDY NXT season and writes `seasonYear`;
+ *  the yearSummaries maximum is the fallback for an older payload. Never
+ *  hardcode a season here — the importer discovers new ones from the official
+ *  season feed, and a stale literal would silently mislabel a new year. */
+const historySeasonYear = (payload) => {
+  const declared = Number(payload?.seasonYear);
+  if (Number.isInteger(declared)) return declared;
+  const years = asArray(payload?.yearSummaries)
+    .map((summary) => Number(summary?.year))
+    .filter((year) => Number.isInteger(year));
+  return years.length ? Math.max(...years) : null;
+};
+
+const historyCurrentYearSummary = (payload) => {
+  const season = historySeasonYear(payload);
+  return season === null
+    ? null
+    : asArray(payload?.yearSummaries).find((summary) => Number(summary?.year) === season) ?? null;
+};
+
 const historyMeta = (payload) => {
   const points = historyPoints(payload);
   const officialRows = points.filter(isOfficialHistoryPoint).length;
@@ -196,7 +223,7 @@ const historyMeta = (payload) => {
   const sourceFingerprint = `${historySchemaVersion}:${source}:${points.length}:${officialRows}:${payload?.checkedAt ?? 'unchecked'}`;
   return {
     schemaVersion: historySchemaVersion,
-    seasonYear: 2026,
+    seasonYear: historySeasonYear(payload),
     rows: points.length,
     officialRows,
     provisionalRows: points.length - officialRows,
@@ -230,12 +257,13 @@ const historySplits = (payload) =>
 
 const historyBench = (payload) => {
   const points = historyPoints(payload);
-  const currentYear = payload?.yearSummaries?.find((summary) => summary.year === 2026);
+  const seasonYear = historySeasonYear(payload);
+  const currentYear = historyCurrentYearSummary(payload);
   return [
     {
       name: 'Bryce Aron',
       driverId: 'bryce',
-      year: 2026,
+      year: seasonYear,
       starts: currentYear?.starts ?? points.length,
       bestFinish: payload?.bryceStanding?.bestFinish ?? currentYear?.bestFinish ?? null,
       top10s: payload?.bryceStanding?.top10 ?? currentYear?.top10s ?? null,
@@ -244,7 +272,7 @@ const historyBench = (payload) => {
     ...asArray(payload?.teammateSummaries).map((row) => ({
       name: row.name,
       driverId: row.driverId,
-      year: row.year ?? 2026,
+      year: row.year ?? seasonYear,
       starts: row.starts,
       bestFinish: row.bestFinish,
       top10s: row.top10s ?? null,
@@ -268,7 +296,7 @@ const compactHistory = (payload) => {
   return {
     meta: historyMeta(payload),
     bryceStanding: payload?.bryceStanding ?? null,
-    currentYear: payload?.yearSummaries?.find((summary) => summary.year === 2026) ?? null,
+    currentYear: historyCurrentYearSummary(payload),
     latestRace: points.at(-1) ?? null,
     trackSplits: historySplits(payload),
     bestGain: deltaRows[0] ?? null,
@@ -970,6 +998,41 @@ export const isOperatorRequest = (req, token = process.env.BRYCECAST_OPERATOR_TO
   const proxied = Object.keys(req.headers).some((name) => /^(?:cf-|x-forwarded-|forwarded$|x-real-ip$)/i.test(name));
   const browser = req.headers.origin || req.headers['sec-fetch-site'];
   return Boolean(loopback && localHost && !proxied && !browser);
+};
+
+/**
+ * Compact, read-only view of the unattended pipeline's status file. Failures are
+ * surfaced rather than smoothed over: `lastOutcome` and `abandoned` are the two
+ * fields that say "a race did not make it onto the site".
+ */
+const postraceAutoSummary = (payload, { compact = false } = {}) => {
+  if (!payload) return { available: false, lastRunAt: null, lastSuccessAt: null };
+  const lastRun = payload.lastRun ?? null;
+  const detail = compact
+    ? {
+        pendingRetries: (payload.pendingRetries ?? []).length,
+        abandoned: (payload.abandoned ?? []).length,
+        flags: (payload.flags ?? []).length
+      }
+    : {
+        pendingRetries: payload.pendingRetries ?? [],
+        abandoned: payload.abandoned ?? [],
+        flags: payload.flags ?? []
+      };
+  return {
+    available: true,
+    schemaVersion: payload.schemaVersion ?? null,
+    updatedAt: payload.updatedAt ?? null,
+    lastRunAt: payload.lastRunAt ?? null,
+    lastSuccessAt: payload.lastSuccessAt ?? null,
+    lastPublishAt: payload.lastPublishAt ?? null,
+    lastOutcome: lastRun?.outcome ?? null,
+    lastSummary: lastRun?.summary ?? null,
+    lastGateReason: lastRun?.gate?.reason ?? null,
+    lastContentChanged: lastRun?.contentDiff?.changed ?? null,
+    sessionCounts: payload.sessionCounts ?? {},
+    ...detail
+  };
 };
 
 const fileStatus = async (path) => {
@@ -1770,8 +1833,15 @@ const buildReplaySourceReport = (record) =>
 
 const buildReadinessPayloadFromReplayRecord = async (record) => {
   const replay = {
+    // The SAME bound the live path uses (`queryReplay({ limit: 5 })`, twice
+    // above). A replay poll runs at up to 1 Hz for the whole race, and the 500
+    // archived rows this used to carry were 411 KB of a 447 KB payload that no
+    // client reads — the Live page consumes `replay.simulation` only, and the
+    // Data page fetches `/api/replay/bryce` for itself. Nothing downstream can
+    // tell a replay poll from a live one by this field any more, which is the
+    // point: one shape, one budget.
     ...queryReplay({
-      limit: 500,
+      limit: 5,
       sessionKey: record.sessionKey,
       beforeCheckedAt: record.archiveCheckedAt
     }),
@@ -1781,7 +1851,15 @@ const buildReadinessPayloadFromReplayRecord = async (record) => {
       label: 'Simulated replay',
       source: 'Archived Race Control capture',
       sessionKey: record.sessionKey,
-      archiveCheckedAt: record.archiveCheckedAt
+      archiveCheckedAt: record.archiveCheckedAt,
+      // The playback rate this frame was resolved at, and the virtual instant it
+      // represents. The client owns the clock, but the history models need the
+      // rate to know how much VIRTUAL time one poll covers: at 16× a 1 s poll
+      // advances 16 s of archive, which is sparse sampling of a continuous
+      // record, not a feed outage. Without this the running-order chart reads
+      // every high-speed sample as a break (see liveRunningOrderModel).
+      speed: record.replay?.speed ?? 1,
+      virtualNow: record.replay?.virtualNow ?? null
     }
   };
   return buildReadinessPayloadFromRuntimeParts({
@@ -2182,7 +2260,125 @@ const computeRankSeriesEntry = (sessionKey) => {
   return entry;
 };
 
-const buildRankSeriesResponse = ({ sessionKey, clientSessionKeyHint = null, upperBoundCheckedAt = null, virtualNow = null, mode }) => {
+// --- bounded windows over the same archive -------------------------------
+//
+// Two shapes of request share the breakpoint cache above:
+//
+//   `window=<seconds>`  the SEED a joiner takes once. The chart shows five
+//     minutes; shipping the whole race (up to 400 frames / 2.4 MB mid-race) to
+//     draw five of them is waste, so the seed asks for the trailing span it will
+//     actually paint. The breakpoint covering the window's left edge rides along
+//     (a real archived frame, never a re-stamped one) so the line reaches the
+//     edge instead of starting wherever the first change happened to fall.
+//
+//   `since=<iso>&dense=1`  the CATCH-UP a replaying client takes each poll. At
+//     4×/16× one 1 s poll advances 4–16 s of archive, so the readiness frame
+//     alone skips 3–15 archived samples: every rank change inside them lands
+//     late (up to 16 s) and the battle gaps arrive as a coarse polyline. This
+//     returns the archived frames in that narrow span at full cadence. It reads
+//     the archive directly rather than the downsampled breakpoint cache — a
+//     bounded, indexed range read (≤ DENSE_MAX_SECONDS of archive, ≤
+//     DENSE_MAX_FRAMES rows), which is why it is NOT memoized: it is already
+//     O(window), and memoizing per (session, since) would be an unbounded key
+//     space. Live clients never send it (they see every sample already).
+const RANK_SERIES_MAX_WINDOW_SECONDS = 3600;
+const RANK_SERIES_DENSE_MAX_SECONDS = Number(process.env.BRYCECAST_RANK_SERIES_DENSE_MAX_SECONDS ?? 120);
+// Rows READ from the archive for one catch-up (the bound on the range query)…
+const RANK_SERIES_DENSE_READ_LIMIT = Number(process.env.BRYCECAST_RANK_SERIES_DENSE_READ_LIMIT ?? 240);
+// …and frames RETURNED from it, after subsampling (the bound on the response).
+const RANK_SERIES_DENSE_MAX_FRAMES = Number(process.env.BRYCECAST_RANK_SERIES_DENSE_MAX_FRAMES ?? 4);
+
+const clampSeconds = (raw, maximum) => {
+  const value = Number(raw);
+  if (!Number.isFinite(value) || value <= 0) return null;
+  return Math.min(Math.round(value), maximum);
+};
+
+// One bounded, chronological archive read. Returns compact frames in
+// (fromMs, toMs], newest-truncated to `maxFrames`. Both sources are already
+// bounded: the lake rows are an in-memory array (slice), and the sqlite read is
+// an indexed range with a LIMIT — no scan of the 8 GB archive either way.
+const readDenseArchiveFrames = (sessionKey, fromMs, toMs, maxFrames) => {
+  const frames = [];
+  const push = (checkedAt, built) => {
+    if (!built || built.dedup === true) return;
+    frames.push(built);
+  };
+  if (lakeReplayFeeds.has(sessionKey)) {
+    const rows = lakeReplayFeeds.seriesRowsFor(sessionKey);
+    for (const row of rows) {
+      const ms = Date.parse(row.checkedAt);
+      if (!Number.isFinite(ms) || ms <= fromMs) continue;
+      if (ms > toMs) break;
+      push(row.checkedAt, rankSeriesFrameFromRaw(row.checkedAt, row.raw));
+    }
+  } else {
+    const db = openArchiveReadOnly();
+    try {
+      const rows = db
+        .prepare(
+          `SELECT checked_at, payload_json
+             FROM race_snapshots
+            WHERE session_key = ? AND checked_at > ? AND checked_at <= ?
+            ORDER BY id ASC
+            LIMIT ?`
+        )
+        .all(sessionKey, new Date(fromMs).toISOString(), new Date(toMs).toISOString(), maxFrames + 1);
+      for (const row of rows) push(row.checked_at, rankSeriesFrameFromSnapshot(row.checked_at, row.payload_json));
+    } finally {
+      db.close();
+    }
+  }
+  // Keep the NEWEST frames when the span overflows: the client is catching up to
+  // the current virtual instant, and the frames nearest it are the ones its
+  // chart is about to paint at the right edge.
+  return frames.length > maxFrames ? frames.slice(frames.length - maxFrames) : frames;
+};
+
+// Thin a dense window down to a frame budget WITHOUT losing information. Every
+// frame that changes the running order or the flag survives — those are the
+// events the chart exists to show — and the remaining budget is spent on an even
+// stride through the holds, which carry the gap curve. The newest frame always
+// survives so the line reaches the current virtual instant.
+//
+// Why a budget at all: one 1 s poll at 16× spans 16 archived samples, and a full
+// field frame is ~15 KB. Shipping all of them would cost more per viewer-second
+// than the readiness payload itself, to draw points a few pixels apart. Six
+// frames give the five-minute window ~75 points at 16× (vs ~19 with no catch-up
+// at all), which reads as a smooth line at any width we render.
+const subsampleDenseFrames = (frames, maxFrames) => {
+  if (frames.length <= maxFrames) return frames;
+  const changed = [];
+  let previousSignature = null;
+  frames.forEach((frame, index) => {
+    if (previousSignature !== null && frame.signature !== previousSignature) changed.push(index);
+    previousSignature = frame.signature;
+  });
+  const keep = new Set(changed.slice(-maxFrames));
+  keep.add(frames.length - 1);
+  if (keep.size < maxFrames) {
+    const budget = maxFrames - keep.size;
+    const stride = frames.length / (budget + 1);
+    for (let step = 1; step <= budget; step += 1) {
+      const index = Math.min(frames.length - 1, Math.round(step * stride));
+      keep.add(index);
+      if (keep.size >= maxFrames) break;
+    }
+  }
+  return [...keep].sort((left, right) => left - right).map((index) => frames[index]);
+};
+
+const buildRankSeriesResponse = ({
+  sessionKey,
+  clientSessionKeyHint = null,
+  upperBoundCheckedAt = null,
+  virtualNow = null,
+  mode,
+  windowSeconds = null,
+  sinceCheckedAt = null,
+  dense = false,
+  denseFrameBudget = null
+}) => {
   const base = {
     schemaVersion: RANK_SERIES_SCHEMA_VERSION,
     available: false,
@@ -2205,17 +2401,62 @@ const buildRankSeriesResponse = ({ sessionKey, clientSessionKeyHint = null, uppe
   const withinUpper = upperMs === null ? entry.breakpoints : entry.breakpoints.filter((point) => point.checkedAtMs <= upperMs);
   const stateAtUpper = withinUpper.at(-1) ?? null;
   const lastCheckedAt = upperBoundCheckedAt ?? entry.currentFrame?.checkedAt ?? stateAtUpper?.checkedAt ?? null;
+  // The requested lower bound, clamped. `since` is exclusive (the client already
+  // holds that frame); `window` is inclusive of the breakpoint covering its left
+  // edge. Both are clamped against the resolved upper bound, so a stale or
+  // hostile value can never widen the read beyond one hour of archive.
+  const boundedWindow = clampSeconds(windowSeconds, RANK_SERIES_MAX_WINDOW_SECONDS);
+  const sinceMs = sinceCheckedAt ? Date.parse(sinceCheckedAt) : NaN;
+  const requestedLowerMs = Number.isFinite(sinceMs)
+    ? sinceMs
+    : boundedWindow !== null && upperMs !== null
+      ? upperMs - boundedWindow * 1000
+      : null;
+  const lowerMs =
+    requestedLowerMs !== null && upperMs !== null
+      ? Math.max(requestedLowerMs, upperMs - RANK_SERIES_MAX_WINDOW_SECONDS * 1000)
+      : requestedLowerMs;
   // `gapBefore` distinguishes a continuous position hold since the previous
   // frame (false → the client draws straight through) from a verified archive
   // gap (true → the client breaks the line). Without it a downsampled seed's
   // long holds photograph as isolated fragments.
-  let frames = withinUpper.map((point) => ({ checkedAt: point.checkedAt, lap: point.lap, flag: point.flag, rows: point.rows, gapBefore: point.gapBefore === true }));
+  const breakpointFrames = withinUpper.map((point) => ({ checkedAt: point.checkedAt, lap: point.lap, flag: point.flag, rows: point.rows, gapBefore: point.gapBefore === true }));
+  let frames = breakpointFrames;
+  let denseFrames = 0;
+  if (lowerMs !== null) {
+    const inWindow = breakpointFrames.filter((frame) => Date.parse(frame.checkedAt) > lowerMs);
+    if (Number.isFinite(sinceMs)) {
+      // Incremental catch-up: only what happened after the client's last frame.
+      // `dense` swaps the downsampled breakpoints for every archived sample in
+      // the span, so the battle chart's gap curve is continuous at 4×/16× rather
+      // than a 4–16 s polyline.
+      if (dense && upperMs !== null) {
+        const from = Math.max(lowerMs, upperMs - RANK_SERIES_DENSE_MAX_SECONDS * 1000);
+        const read = readDenseArchiveFrames(sessionKey, from, upperMs, RANK_SERIES_DENSE_READ_LIMIT);
+        const built = subsampleDenseFrames(read, Math.max(1, clampSeconds(denseFrameBudget, RANK_SERIES_DENSE_MAX_FRAMES) ?? RANK_SERIES_DENSE_MAX_FRAMES));
+        denseFrames = built.length;
+        frames = built.map((frame) => ({ checkedAt: frame.checkedAt, lap: frame.lap, flag: frame.flag, rows: frame.rows, gapBefore: false }));
+        // A dense read that starts later than the client's last frame (because
+        // the span was clamped) leaves a genuine hole: say so on the first frame
+        // rather than letting the chart draw straight across it.
+        if (frames.length > 0 && from > lowerMs) frames[0].gapBefore = true;
+      } else {
+        frames = inWindow;
+      }
+    } else {
+      // Bounded seed: carry in the breakpoint covering the left edge so the
+      // seeded line reaches it. It is a real archived frame, kept at its own
+      // timestamp — never re-stamped onto the window boundary.
+      const carryIn = breakpointFrames.filter((frame) => Date.parse(frame.checkedAt) <= lowerMs).at(-1) ?? null;
+      frames = carryIn ? [carryIn, ...inWindow] : inWindow;
+    }
+  }
   // The newest frame must touch "now": a synthetic frame at the (virtual) clock
   // carrying the state as-of that clock, so the seeded line reaches the right
   // edge with no reserved empty span (the F5 startup-window gate). It continues
   // the last observed state, so it is continuous (gapBefore false).
-  if (stateAtUpper && lastCheckedAt && stateAtUpper.checkedAt !== lastCheckedAt) {
-    frames.push({ checkedAt: lastCheckedAt, lap: stateAtUpper.lap, flag: stateAtUpper.flag, rows: stateAtUpper.rows, gapBefore: false });
+  if (stateAtUpper && lastCheckedAt && stateAtUpper.checkedAt !== lastCheckedAt && frames.at(-1)?.checkedAt !== lastCheckedAt) {
+    frames = [...frames, { checkedAt: lastCheckedAt, lap: stateAtUpper.lap, flag: stateAtUpper.flag, rows: stateAtUpper.rows, gapBefore: false }];
   }
   if (frames.length > RANK_SERIES_MAX_FRAMES) frames = frames.slice(frames.length - RANK_SERIES_MAX_FRAMES);
   const firstCheckedAt = frames[0]?.checkedAt ?? null;
@@ -2228,7 +2469,20 @@ const buildRankSeriesResponse = ({ sessionKey, clientSessionKeyHint = null, uppe
     bryceId: entry.bryceId,
     breakpointCount: withinUpper.length,
     frameCount: frames.length,
-    window: { firstCheckedAt, lastCheckedAt, virtualNow, coverageSeconds },
+    window: {
+      firstCheckedAt,
+      lastCheckedAt,
+      virtualNow,
+      coverageSeconds,
+      // What the request actually asked for, after clamping. A client can tell a
+      // full-session read from a bounded seed from an incremental catch-up
+      // without guessing from frame counts.
+      requestedWindowSeconds: boundedWindow,
+      sinceCheckedAt: Number.isFinite(sinceMs) ? new Date(sinceMs).toISOString() : null,
+      lowerCheckedAt: lowerMs === null ? null : new Date(lowerMs).toISOString(),
+      dense: denseFrames > 0 || (dense === true && Number.isFinite(sinceMs)),
+      denseFrameCount: denseFrames
+    },
     frames,
     cache: {
       refreshBucketMs: RANK_SERIES_REFRESH_MS,
@@ -2239,9 +2493,11 @@ const buildRankSeriesResponse = ({ sessionKey, clientSessionKeyHint = null, uppe
   };
 };
 
-const sendJson = (res, statusCode, payload, headers = {}) => {
+/** Indented by default — these payloads are read by people as often as by
+ *  clients. `pretty: false` is for high-cadence machine feeds only. */
+const sendJson = (res, statusCode, payload, headers = {}, { pretty = true } = {}) => {
   res.writeHead(statusCode, { ...jsonHeaders, ...headers });
-  res.end(JSON.stringify(payload, null, 2));
+  res.end(pretty ? JSON.stringify(payload, null, 2) : JSON.stringify(payload));
 };
 
 const sendError = (res, statusCode, message, detail) => {
@@ -2329,12 +2585,27 @@ const sendStatic = async (res, pathname, acceptsHtml = false) => {
   try {
     await access(candidate);
     const type = mimeTypes[extname(candidate)] ?? 'application/octet-stream';
-    res.writeHead(200, { 'content-type': type, 'cache-control': (candidate.endsWith('index.html') || candidate.endsWith('release.json')) ? 'no-store' : 'public, max-age=3600' });
+    res.writeHead(200, { 'content-type': type, 'cache-control': staticCacheControl(staticDir, candidate) });
     createReadStream(candidate).pipe(res);
     return true;
   } catch {
     return false;
   }
+};
+
+/** Vite content-hashes every file under `dist/assets/` (a new filename on any
+ * content change), so those can cache for a year and never revalidate — the
+ * URL itself is the cache key. The SPA shell and the unhashed `/data/*.json`
+ * assets (copied verbatim from `public/data/`) carry no hash, so a browser
+ * must always check back with the origin before reusing a cached copy: a
+ * fresh deploy or a data refresh must be visible on the very next load, not
+ * held for the next 4-hour cache window. Everything else keeps the prior,
+ * unrelated-to-this-change default. */
+const staticCacheControl = (root, candidate) => {
+  const relativePath = relative(root, candidate).split(sep).join('/');
+  if (relativePath.startsWith('assets/')) return 'public, max-age=31536000, immutable';
+  if (relativePath === 'index.html' || relativePath === 'release.json' || relativePath.startsWith('data/')) return 'no-cache';
+  return 'public, max-age=3600';
 };
 
 /** Resolve only a known session's published observed artifact. Request input
@@ -2418,9 +2689,40 @@ const handler = async (req, res) => {
           history: await fileStatus(historyPath),
           sqlite: await fileStatus(sqlitePath),
           povProof: await fileStatus(povProofPath),
-          audioProof: await fileStatus(audioProofPath)
-        }
+          audioProof: await fileStatus(audioProofPath),
+          postraceAuto: await fileStatus(postraceAutoStatusPath)
+        },
+        // Counts only here; /api/postrace-status carries the per-session detail.
+        postraceAuto: postraceAutoSummary(await readJsonFile(postraceAutoStatusPath), { compact: true })
       });
+      return;
+    }
+
+    // Read-only projection of the unattended pipeline's own status file. This is
+    // what a future "last automated update" line on the Data page reads. It is a
+    // plain file read, like every other local-state route here, so a client poll
+    // can never trigger pipeline work.
+    if (pathname === '/api/postrace-status') {
+      const payload = await readJsonFile(postraceAutoStatusPath);
+      if (!payload) {
+        sendJson(res, 200, {
+          available: false,
+          reason: 'The unattended post-race pipeline has not run on this host.',
+          file: await fileStatus(postraceAutoStatusPath)
+        });
+        return;
+      }
+      sendJson(
+        res,
+        200,
+        {
+          available: true,
+          ...postraceAutoSummary(payload),
+          sessions: payload.sessions ?? {},
+          file: await fileStatus(postraceAutoStatusPath)
+        },
+        { 'x-brycecast-schema-version': String(payload.schemaVersion ?? 'unknown') }
+      );
       return;
     }
 
@@ -2645,14 +2947,25 @@ const handler = async (req, res) => {
       const mode = record ? 'replay' : 'live';
       const requestedSession = String(url.searchParams.get('session') ?? '').trim() || null;
       const sessionKey = record ? record.sessionKey ?? null : requestedSession ?? latestArchivedSessionKey();
+      // `window=<seconds>` bounds a seed to the span the chart will paint;
+      // `since=<iso>` (optionally `&dense=1`) asks only for what happened after
+      // the frame the caller already holds. Both are clamped inside the builder,
+      // so an absent, stale or absurd value can only ever narrow the read.
       const payload = buildRankSeriesResponse({
         sessionKey,
         clientSessionKeyHint: requestedSession,
         upperBoundCheckedAt: record?.archiveCheckedAt ?? null,
         virtualNow: record?.replay?.virtualNow ?? null,
-        mode
+        mode,
+        windowSeconds: url.searchParams.get('window'),
+        sinceCheckedAt: url.searchParams.get('since'),
+        dense: url.searchParams.get('dense') === '1',
+        denseFrameBudget: url.searchParams.get('frames')
       });
-      sendJson(res, 200, payload, { 'x-brycecast-schema-version': RANK_SERIES_SCHEMA_VERSION });
+      // Sent compact: this is a chart feed a replaying client pulls up to once a
+      // second, and the indentation every other route uses for readability is a
+      // third of its bytes.
+      sendJson(res, 200, payload, { 'x-brycecast-schema-version': RANK_SERIES_SCHEMA_VERSION }, { pretty: false });
       return;
     }
 

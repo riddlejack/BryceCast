@@ -1,6 +1,6 @@
 {
   "artifact": "replay-feeds-manifest",
-  "generatedAt": "2026-09-10T23:38:05.832Z",
+  "generatedAt": "2026-09-19T22:46:45.295Z",
   "note": "Lake-fed replay feeds for the Time Machine. Every session is source-tiered and validated; failing sessions are excluded from available() with the reason recorded. Classification/final order shown is as-raced (the honesty line at the checkered); canonical is the validation reference.",
   "clockCaveat": "RaceTools feeds carry a session-local virtual clock (seconds-of-day on the session date, labelled Z) — correct year/date, NOT UTC-accurate; the replay uses it only as a relative virtual clock. Timing71 feeds carry real UTC epoch timestamps.",
   "interpolationPolicy": {

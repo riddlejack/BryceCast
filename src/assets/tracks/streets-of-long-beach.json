@@ -1,0 +1,183 @@
+{
+  "slug": "streets-of-long-beach",
+  "name": "Streets of Long Beach",
+  "lengthMi": 1.969,
+  "viewBox": "0 0 1000 415",
+  "mainPath": "M739.7 354.9 L700.8 374.4 L654.6 386.3 L602.7 391.2 L555.8 385.2 L511.7 369.4 L469.6 347.6 L326.9 269.1 L269.1 229.7 L227.1 205.2 L217.7 205.2 L208.6 218.6 L182.5 238.2 L162.6 247.1 L124.9 256.7 L114.9 266.1 L103.8 266.6 L96.3 261.2 L92.5 249.3 L83.1 239.3 L55 215 L28.6 201.3 L24 193.3 L25.9 170 L52.9 123.8 L67.2 105.2 L77.1 97.9 L88.9 94.7 L97.2 95.7 L138.6 120.3 L250.7 201 L286.7 221.8 L310.8 239.3 L337.3 251.9 L346.8 250.2 L357 246.9 L368.1 237.5 L377.5 216.9 L388.1 47.6 L391 35.5 L399.2 28.2 L410 24.9 L453.3 24 L634.4 33.6 L763 48 L847 64.9 L863.4 70.3 L869.8 74.6 L878.4 88.4 L880.4 113.5 L870.5 160.1 L876.8 177.7 L889.7 195.1 L897.2 199.9 L925.3 204.3 L946.1 198.8 L958.2 191.1 L968.9 188.4 L976 191 L975 199.3 L969.6 206.8 L949.7 224 L912.4 246.3 L793.6 324.6 Z",
+  "pitPath": null,
+  "startFinish": {
+    "x": 739.7,
+    "y": 354.9,
+    "angleDeg": 153
+  },
+  "drivingDirection": "clockwise",
+  "cornerArcs": [
+    {
+      "label": null,
+      "apex": {
+        "x": 602.7,
+        "y": 391.2
+      },
+      "entryQuarter": {
+        "x": 700.8,
+        "y": 374.4
+      },
+      "exitQuarter": {
+        "x": 511.7,
+        "y": 369.4
+      },
+      "turnDeg": 62
+    },
+    {
+      "label": null,
+      "apex": {
+        "x": 227.1,
+        "y": 205.2
+      },
+      "entryQuarter": {
+        "x": 269.1,
+        "y": 229.7
+      },
+      "exitQuarter": {
+        "x": 217.7,
+        "y": 205.2
+      },
+      "turnDeg": 90
+    },
+    {
+      "label": null,
+      "apex": {
+        "x": 182.5,
+        "y": 238.2
+      },
+      "entryQuarter": {
+        "x": 208.6,
+        "y": 218.6
+      },
+      "exitQuarter": {
+        "x": 162.6,
+        "y": 247.1
+      },
+      "turnDeg": 42
+    },
+    {
+      "label": null,
+      "apex": {
+        "x": 103.8,
+        "y": 266.6
+      },
+      "entryQuarter": {
+        "x": 114.9,
+        "y": 266.1
+      },
+      "exitQuarter": {
+        "x": 96.3,
+        "y": 261.2
+      },
+      "turnDeg": 116
+    },
+    {
+      "label": null,
+      "apex": {
+        "x": 83.1,
+        "y": 239.3
+      },
+      "entryQuarter": {
+        "x": 92.5,
+        "y": 249.3
+      },
+      "exitQuarter": {
+        "x": 55,
+        "y": 215
+      },
+      "turnDeg": 45
+    },
+    {
+      "label": null,
+      "apex": {
+        "x": 67.2,
+        "y": 105.2
+      },
+      "entryQuarter": {
+        "x": 25.9,
+        "y": 170
+      },
+      "exitQuarter": {
+        "x": 88.9,
+        "y": 94.7
+      },
+      "turnDeg": 188
+    },
+    {
+      "label": null,
+      "apex": {
+        "x": 357,
+        "y": 246.9
+      },
+      "entryQuarter": {
+        "x": 337.3,
+        "y": 251.9
+      },
+      "exitQuarter": {
+        "x": 368.1,
+        "y": 237.5
+      },
+      "turnDeg": 122
+    },
+    {
+      "label": null,
+      "apex": {
+        "x": 763,
+        "y": 48
+      },
+      "entryQuarter": {
+        "x": 410,
+        "y": 24.9
+      },
+      "exitQuarter": {
+        "x": 869.8,
+        "y": 74.6
+      },
+      "turnDeg": 188
+    },
+    {
+      "label": null,
+      "apex": {
+        "x": 897.2,
+        "y": 199.9
+      },
+      "entryQuarter": {
+        "x": 876.8,
+        "y": 177.7
+      },
+      "exitQuarter": {
+        "x": 925.3,
+        "y": 204.3
+      },
+      "turnDeg": 134
+    },
+    {
+      "label": null,
+      "apex": {
+        "x": 975,
+        "y": 199.3
+      },
+      "entryQuarter": {
+        "x": 968.9,
+        "y": 188.4
+      },
+      "exitQuarter": {
+        "x": 969.6,
+        "y": 206.8
+      },
+      "turnDeg": 182
+    }
+  ],
+  "source": {
+    "provider": "RaceTools static track-map package",
+    "license": "Used by direct permission for private, non-commercial use; raw archive git-ignored (data/historical-data-lake/PERMISSIONS_AND_SOURCE_TERMS.md).",
+    "attribution": "Outline derived from the RaceTools track-map centreline polyline",
+    "wayIds": [],
+    "cachedResponse": "racetools:Streets of Long Beach @ sha256:ea2ae53ca4a49333e92335f99679ed5c1fcee7df6350ce68c90d28cfe6d1ac52"
+  }
+}

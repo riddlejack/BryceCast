@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "auditedAt": "2026-09-10",
+  "auditedAt": "2026-09-19",
   "source": {
     "name": "Timing71 replay archive",
     "archiveApi": "https://archive.timing71.org/replays",
@@ -14,7 +14,7 @@
     "officialEventSessionId": false
   },
   "localAcquisition": {
-    "path": "/Users/example/Downloads/BryceCast-Timing71-INDYNXT-2026-through-2026-07-18",
+    "path": "/Users/jackriddle/Downloads/BryceCast-Timing71-INDYNXT-2026-through-2026-07-18",
     "fileCount": 71,
     "totalBytes": 66286392,
     "nxtLabelledReplayZips": 32,
@@ -25,8 +25,8 @@
   "coverage": {
     "completedRaces": 17,
     "completeRaceCandidates": 17,
-    "completedPracticeAndQualifyingSessionsThroughNashvilleQualifying": 27,
-    "practiceAndQualifyingReplayCandidates": 27,
+    "completedPracticeAndQualifyingSessionsThroughNashvilleQualifying": 28,
+    "practiceAndQualifyingReplayCandidates": 28,
     "futureRacesNotYetHistorical": 0
   },
   "nonRaceSessionCandidates": [
@@ -173,6 +173,12 @@
       "sessionType": "practice",
       "replayId": "b2f9ffa3-2248-4ba8-8ffc-3da22178b5ad",
       "validationNote": "2026-09-10 postrace:lake-sync auto-promotion: 24-car NXT roster incl. Bryce Aron; 3059 frames over 3485s (median gap 1s, max 9s); max lap 16; checkered=true. Downstream semantic/crosswalk/replay-feed validators must confirm against canonical before this session reaches any surface."
+    },
+    {
+      "event": "WeatherTech Raceway Laguna Seca",
+      "sessionType": "practice",
+      "replayId": "cb57a111-39cd-453a-bcce-ef0016f84660",
+      "validationNote": "2026-09-19 postrace:lake-sync auto-promotion: 24-car NXT roster incl. Bryce Aron; 5186 frames over 5883s (median gap 1s, max 9s); max lap 0; checkered=false. Downstream semantic/crosswalk/replay-feed validators must confirm against canonical before this session reaches any surface."
     }
   ],
   "raceReplays": [

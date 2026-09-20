@@ -11,12 +11,15 @@ import { uiDataPackage } from '../data/uiDataPackage';
 import { trackOutlineFor } from '../assets/tracks';
 import { getVenueByTrackName } from '../data/venueDossier';
 import { daysUntil, getNextEvent, getStandingsSnapshot, raceDayOf, type UpcomingPrepEvent } from '../data/upcoming';
-import { chronoCompare, displayRaceLabel, loadDebriefArchive, type ArchiveEntry } from '../data/debriefArchive';
+import { chronoCompare, displayRaceLabel, loadLatestSeasonDebriefs, type ArchiveEntry } from '../data/debriefArchive';
 import { TrackArt } from '../app/trackArt';
 import { useVenueSectionData } from './sectionIntelligence';
 import { ReplayAffordance, useReplayCatalog } from './replayAffordance';
 import { isBryceCastCaptureTier, replayProvenance, watchableCaptureForRace } from '../data/replayAvailable';
 import { DataFreshness } from '../app/dataFreshness';
+import { getSeasonPhase, getSeasonReview, type SeasonReview } from '../data/seasonPhase';
+import { SeasonShareButton } from './seasonShareCard';
+import { FeatureDoors, NextSeasonCalendar, SeasonCompleteHero, SeasonStandouts, seasonArcLine } from './offseason';
 
 type Row = Record<string, unknown>;
 
@@ -327,7 +330,7 @@ const SeasonSparkline = ({ season }: { season: ArchiveEntry[] }) => {
   const bestIndex = best !== null ? points.findIndex((point) => !point.early && point.finish === best) : -1;
 
   return (
-    <Link to="/career" className="season-spark" aria-label={`Every 2026 finish${best !== null ? `; season best P${best}` : ''}. Open the Career Lab.`}>
+    <Link to="/career" className="season-spark" aria-label={`Every finish this season${best !== null ? `; season best P${best}` : ''}. Open the Career Lab.`}>
       <div ref={ref} style={{ width: '100%' }}>
         {width > 0 ? (
           <svg width={width} height={height} role="img" aria-hidden style={{ display: 'block', overflow: 'visible' }}>
@@ -381,16 +384,18 @@ const chaseLine = (): string | null => {
   return `${ahead.driverName} is ${gap} point${gap === 1 ? '' : 's'} up the road.`;
 };
 
-const SeasonSoFar = ({ season }: { season: ArchiveEntry[] }) => {
+const SeasonSoFar = ({ season, complete, arc, review }: { season: ArchiveEntry[]; complete: boolean; arc: string | null; review: SeasonReview | null }) => {
   const standing = getSeasonStanding();
+  const seasonYear = season[0]?.pack.seasonYear ?? null;
   const hasEarlyEnd = season.some((entry) => endedEarly(entry.pack.sessionId));
-  const chase = chaseLine();
+  /* The chase is a mid-season read; a finished championship has no road left. */
+  const chase = complete ? null : chaseLine();
   return (
     <Card
       title={
         <>
           <Trophy size={15} aria-hidden />
-          2026 season so far
+          {seasonYear ?? 'The'} season{complete ? ', final' : ' so far'}
         </>
       }
       action={
@@ -405,17 +410,22 @@ const SeasonSoFar = ({ season }: { season: ArchiveEntry[] }) => {
         <Stat label="Top 10s" value={standing.top10 ?? '—'} />
         <Stat label="Best finish" value={standing.bestFinish !== null ? `P${standing.bestFinish}` : '—'} />
       </div>
-      {chase ? (
-        <p style={{ margin: '12px 0 0', fontSize: 13, color: 'var(--ink-secondary)' }}>{chase}</p>
+      {chase ?? arc ? (
+        <p style={{ margin: '12px 0 0', fontSize: 13, color: 'var(--ink-secondary)' }}>{chase ?? arc}</p>
       ) : null}
       {season.length >= 2 ? (
         <div style={{ marginTop: 18 }}>
           <span className="caption">
-            Every 2026 finish · gold marks his season best{hasEarlyEnd ? ' · ○ a day that ended early' : ''}
+            Every {seasonYear ?? 'season'} finish · gold marks his season best{hasEarlyEnd ? ' · ○ a day that ended early' : ''}
           </span>
           <div style={{ marginTop: 8 }}>
             <SeasonSparkline season={season} />
           </div>
+        </div>
+      ) : null}
+      {complete && review ? (
+        <div style={{ marginTop: 'auto', paddingTop: 14 }}>
+          <SeasonShareButton review={review} />
         </div>
       ) : null}
     </Card>
@@ -493,7 +503,11 @@ export const HomeScreen = ({ readiness }: { readiness: ReadinessStatus }) => {
 
   const [season, setSeason] = useState<ArchiveEntry[]>([]);
   useEffect(() => {
-    loadDebriefArchive()
+    // Home only ever shows the latest season's races — loadLatestSeasonDebriefs
+    // fetches just those packs (via the manifest's own seasonYear field)
+    // instead of loadDebriefArchive's every-season-ever-raced set, which used
+    // to mean ~45 extra requests on first paint for a handful shown here.
+    loadLatestSeasonDebriefs()
       .then((archive) => {
         const latestYear = Math.max(...archive.map((entry) => entry.pack.seasonYear));
         setSeason(
@@ -508,25 +522,58 @@ export const HomeScreen = ({ readiness }: { readiness: ReadinessStatus }) => {
   const latest = season.length > 0 ? season[season.length - 1] : null;
   const nextEvent = getNextEvent();
   const days = nextEvent ? daysUntil(nextEvent) : null;
+  /* A finished season is its own state, never "between race weekends": the
+   * landing page turns to face a first-time visitor — what this site is, what's
+   * inside, the year in review and the calendar ahead. A live session always
+   * wins (replays and late sessions still take the hero). */
+  const review = getSeasonReview();
+  const complete = getSeasonPhase() === 'complete' && !liveish && review !== null;
+  const careerLab = uiDataPackage.screens.careerLab as unknown as Row;
+  const seriesRows = Array.isArray(careerLab.seriesSummary) ? (careerLab.seriesSummary as Row[]) : [];
+  const lifeStats = (careerLab.lifeStats ?? null) as { personalRaceMileage?: { raceRows?: number } } | null;
+  const careerRaces = asNumber(lifeStats?.personalRaceMileage?.raceRows);
+  const chapters = seriesRows
+    .map((row) => ({ name: asString(row.seriesName) ?? '', races: asNumber(row.raceRows) ?? 0 }))
+    .filter((chapter) => chapter.name && chapter.races > 0);
 
   return (
     <div className="page stack">
-      <HomeHero readiness={readiness} liveish={liveish} nextEvent={nextEvent} days={days} latest={latest} />
+      {complete && review ? (
+        <SeasonCompleteHero review={review} />
+      ) : (
+        <HomeHero readiness={readiness} liveish={liveish} nextEvent={nextEvent} days={days} latest={latest} />
+      )}
       <DataFreshness />
-      <div className="grid grid--2">
+      <div className="grid grid--2 grid--equal">
         <Reveal>
           <LastTimeOut latest={latest} />
         </Reveal>
         <Reveal delay={60}>
-          <SeasonSoFar season={season} />
+          <SeasonSoFar season={season} complete={complete} arc={complete && review ? seasonArcLine(review) : null} review={review} />
         </Reveal>
       </div>
       <Reveal delay={80}>
         <WatchLastRace latest={latest} />
       </Reveal>
-      <Reveal delay={90}>
-        <CareerStrip />
-      </Reveal>
+      {complete && review ? (
+        <Reveal delay={85}>
+          <SeasonStandouts review={review} />
+        </Reveal>
+      ) : null}
+      {review ? (
+        <Reveal delay={90}>
+          <FeatureDoors review={review} careerRaces={careerRaces} chapters={chapters} />
+        </Reveal>
+      ) : null}
+      {complete ? (
+        <Reveal delay={100}>
+          <NextSeasonCalendar compact />
+        </Reveal>
+      ) : (
+        <Reveal delay={100}>
+          <CareerStrip />
+        </Reveal>
+      )}
     </div>
   );
 };

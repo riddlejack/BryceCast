@@ -11,6 +11,14 @@ import { createReplayRouter } from './lib/replay-router.mjs';
 import { raceSnapshotEndpoints } from './live-source-endpoints.mjs';
 import { appendLiveHistoryPayload, createLiveHistoryState, liveHistorySampleFromPayload, liveSessionKeyOf } from '../src/data/liveHistoryModel.ts';
 import { buildCumulativeLiveBattleFrame } from '../src/data/liveMotionModel.ts';
+import {
+  OFFSEASON_DEMO_DECLINED_KEY,
+  OFFSEASON_DEMO_JOIN_SECONDS,
+  declineOffSeasonDemo,
+  hasDeclinedOffSeasonDemo,
+  offSeasonDemoStartAt,
+  shouldAutoStartOffSeasonDemo
+} from '../src/data/offSeasonDemo.ts';
 
 // BryceCast per-client replay contract test.
 //
@@ -438,6 +446,108 @@ try {
   await rm(temp, { recursive: true, force: true });
 }
 
+/* ---------- off-season auto-demo: the default, not a one-shot ----------
+ *
+ * With nothing on the calendar, Live auto-starts the featured race. The flag
+ * used to be written the moment auto-start was DECIDED, so the demo ran once per
+ * tab and the second tap on Live landed on "No session on the calendar" — the
+ * owner read that as the feature never having shipped. The record now means
+ * DECLINED, and only a control the visitor pressed writes it. */
+{
+  const makeStorage = (initial = {}) => {
+    const map = new Map(Object.entries(initial));
+    return { getItem: (key) => (map.has(key) ? map.get(key) : null), setItem: (key, value) => map.set(key, String(value)), size: () => map.size };
+  };
+
+  const fresh = makeStorage();
+  assert.equal(hasDeclinedOffSeasonDemo(fresh), false, 'a new tab has declined nothing');
+  assert.equal(
+    shouldAutoStartOffSeasonDemo({ declined: false, hasFeaturedRace: true, alreadyAttempted: false }),
+    true,
+    'the demo auto-starts when nothing is scheduled'
+  );
+  // Auto-starting writes nothing: opening Live again must show the demo again.
+  assert.equal(fresh.size(), 0, 'auto-start records no choice on the visitor’s behalf');
+  assert.equal(hasDeclinedOffSeasonDemo(fresh), false, 'the demo is still the default on the second visit');
+  assert.equal(
+    shouldAutoStartOffSeasonDemo({ declined: hasDeclinedOffSeasonDemo(fresh), hasFeaturedRace: true, alreadyAttempted: false }),
+    true,
+    'REGRESSION: tapping Live a second time in the same tab starts the demo again'
+  );
+
+  // "Exit replay" / "Pick another race" — the only two writers.
+  const declined = makeStorage();
+  declineOffSeasonDemo(declined);
+  assert.equal(declined.getItem(OFFSEASON_DEMO_DECLINED_KEY), '1', 'an explicit exit is recorded for this tab');
+  assert.equal(
+    shouldAutoStartOffSeasonDemo({ declined: hasDeclinedOffSeasonDemo(declined), hasFeaturedRace: true, alreadyAttempted: false }),
+    false,
+    'after an explicit exit, Live shows the race list instead of restarting the demo'
+  );
+
+  // The old key must not opt anyone out: a tab still holding it sees the demo.
+  const legacy = makeStorage({ 'bc:offseason-demo-seen': '1' });
+  assert.equal(hasDeclinedOffSeasonDemo(legacy), false, 'the retired once-per-tab flag no longer suppresses the demo');
+
+  // Guards that keep the auto-start effect from looping or firing early.
+  assert.equal(
+    shouldAutoStartOffSeasonDemo({ declined: false, hasFeaturedRace: false, alreadyAttempted: false }),
+    false,
+    'an unresolved replay catalog waits rather than refusing'
+  );
+  assert.equal(
+    shouldAutoStartOffSeasonDemo({ declined: false, hasFeaturedRace: true, alreadyAttempted: true }),
+    false,
+    'the auto-start navigates once per mount'
+  );
+
+  // Where the demo JOINS. At the green flag the archive has nothing behind it,
+  // so the seed is empty and both charts have to grow from scratch — the demo's
+  // whole job is to show a running race. It starts a few minutes in instead, and
+  // every input is treated as untrustworthy.
+  const capture = (overrides = {}) => ({
+    firstCheckedAt: '2026-09-05T22:30:00.000Z',
+    firstGreenAt: '2026-09-05T22:38:00.000Z',
+    lastCheckedAt: '2026-09-05T23:30:00.000Z',
+    durationSeconds: 3600,
+    ...overrides
+  });
+  assert.equal(
+    offSeasonDemoStartAt(capture()),
+    '2026-09-05T22:44:00.000Z',
+    'the demo joins six minutes past the green flag, one more than the charts’ five-minute window'
+  );
+  assert.equal(OFFSEASON_DEMO_JOIN_SECONDS, 360);
+  // A short or part-captured race is never skipped a fixed six minutes into a
+  // ten-minute archive: the offset caps at 40% of what was recorded.
+  assert.equal(
+    offSeasonDemoStartAt(capture({ firstGreenAt: '2026-09-05T22:31:00.000Z', lastCheckedAt: '2026-09-05T22:40:00.000Z', durationSeconds: 600 })),
+    '2026-09-05T22:35:00.000Z',
+    'the join offset caps at 40% of a short capture (four minutes of ten, not six)'
+  );
+  // Unknown or unusable inputs fall back to the green flag (no t0 in the URL).
+  assert.equal(offSeasonDemoStartAt(capture({ firstGreenAt: null })), null, 'a capture that never went green starts at green');
+  assert.equal(offSeasonDemoStartAt(capture({ firstGreenAt: 'not a date' })), null, 'an unparseable green flag starts at green');
+  assert.equal(
+    offSeasonDemoStartAt({ firstGreenAt: '2026-09-05T22:38:00.000Z' }),
+    null,
+    'a capture with no measurable span starts at green'
+  );
+  assert.equal(offSeasonDemoStartAt(capture({ durationSeconds: 0, firstCheckedAt: null })), null, 'a zero-length capture starts at green');
+  assert.equal(offSeasonDemoStartAt(null), null, 'an unresolved capture starts at green');
+  assert.equal(
+    offSeasonDemoStartAt(capture({ firstGreenAt: '2026-09-05T23:29:00.000Z' })),
+    null,
+    'a green flag near the end of the capture is never pushed past the last archived sample'
+  );
+
+  // Storage blocked (private mode): the demo stays the default, never crashes.
+  const blocked = { getItem: () => { throw new Error('blocked'); }, setItem: () => { throw new Error('blocked'); } };
+  assert.equal(hasDeclinedOffSeasonDemo(blocked), false, 'blocked storage leaves the demo as the default');
+  assert.doesNotThrow(() => declineOffSeasonDemo(blocked), 'blocked storage never breaks the exit control');
+  assert.equal(hasDeclinedOffSeasonDemo(null), false, 'a missing storage leaves the demo as the default');
+}
+
 assert.equal(stderr, '', stderr);
 console.log(JSON.stringify({
   ok: true,
@@ -446,5 +556,7 @@ console.log(JSON.stringify({
   liveGuard: 'per-request-preempts-replay',
   gating: 'watchable-only-refused-422/404',
   lakeFeeds: '2024-racetools+2025-nashville-per-request',
-  nashvilleRegression: 'battle-rivals+running-order-accumulates'
+  nashvilleRegression: 'battle-rivals+running-order-accumulates',
+  offSeasonDemo: 'default-until-explicitly-declined',
+  offSeasonDemoJoin: 'starts-in-progress-green-flag-fallback'
 }, null, 2));

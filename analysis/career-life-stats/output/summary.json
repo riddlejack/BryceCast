@@ -11,7 +11,7 @@
     "miles": 11997.4,
     "toTrackName": "Euromarque Motorsport Park"
   },
-  "generatedAt": "2026-09-10T22:28:43.621Z",
+  "generatedAt": "2026-09-19T22:45:37.078Z",
   "longestLeg": {
     "fromTrackName": "Autodromo Nazionale Monza",
     "miles": 11599.1,
@@ -68,7 +68,7 @@
     {
       "note": "Canonical source facts at result, qualifying-result, session, event, and venue grain.",
       "path": "data/career/career.dataset.json",
-      "sha256": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd"
+      "sha256": "d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd"
     },
     {
       "note": "Curated track lengths and coordinates with named sources.",

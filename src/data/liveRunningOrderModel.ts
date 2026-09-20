@@ -177,11 +177,43 @@ const median = (values: number[]): number | null => {
 
 /** A missing ordering poll is represented by a timestamp gap. Three normal
  * source cadences (with a three-second floor) separates a real gap from small
- * poll jitter without drawing through a feed outage. */
+ * poll jitter without drawing through a feed outage.
+ *
+ * This is the LIVE rule and is unchanged: the observed deltas are the feed's own
+ * ~1 s cadence, and anything past ten seconds is excluded from the estimate so a
+ * real outage cannot raise the bar that detects it. */
 export const runningOrderGapThresholdMs = (history: LiveSessionHistory | null): number => {
   const deltas = (history?.samples ?? []).slice(1).map((sample, index) => sample.checkedAtMs - history!.samples[index].checkedAtMs)
     .filter((value) => value > 0 && value <= 10_000);
   return Math.max(3_000, (median(deltas) ?? 1_000) * 3);
+};
+
+/** The threshold that applies to ONE sample.
+ *
+ * A replay sample states the source time its poll was expected to cover
+ * (`expectedCadenceMs` = poll interval × playback speed), so the bar is set from
+ * what this client asked for rather than inferred from the window. That matters
+ * because the inferred estimate is wrong in exactly the two places the replay
+ * lives: at 16× every delta (16 s) falls outside the live rule's ten-second
+ * estimator and the bar collapses to its 3 s floor, and after a speed change the
+ * window's median stays at the OLD rate until the new samples outnumber the old
+ * ones — about two minutes of playback. In both cases every arriving sample
+ * reads as an outage and the line is drawn as isolated points. A live sample
+ * carries no expectation and keeps the window-derived rule above.
+ *
+ * `previous` matters on a speed change. The interval being judged was polled at
+ * the OLD rate and lands at the new one, so 16×→1× leaves a 16 s step that the
+ * arriving 1× sample would otherwise call an outage. The expectation for a span
+ * is the wider of the two rates that bracket it — the interval really could have
+ * covered that much source time. */
+export const sampleGapThresholdMs = (
+  sample: LiveHistorySample,
+  fallbackMs: number,
+  previous: LiveHistorySample | null = null
+): number => {
+  const expectations = [sample.expectedCadenceMs, previous?.expectedCadenceMs]
+    .filter((value): value is number => Number.isFinite(value) && (value as number) > 0);
+  return expectations.length > 0 ? Math.max(3_000, Math.max(...expectations) * 3) : fallbackMs;
 };
 
 export const fullFieldRunningOrderSeries = (history: LiveSessionHistory | null): RunningOrderSeries[] => {
@@ -210,10 +242,21 @@ export const fullFieldRunningOrderSeries = (history: LiveSessionHistory | null):
       // break on the cadence heuristic — only a server-verified archive gap
       // breaks it. A live-polled sample (no such field) still infers a break
       // from an over-cadence timestamp jump, exactly as before.
+      //
+      // The one span the heuristic cannot judge is the handover: from a
+      // server-supplied frame to this client's own next poll. The server chose
+      // that frame's timestamp (a rank-change breakpoint, or a subsampled point
+      // in a catch-up window), so the distance to the next poll says nothing
+      // about the archive — only about where the downsample happened to land.
+      // The server is the authority on archive gaps either side of it and marks
+      // them on the frames it returns, so this span is drawn through. Spans
+      // between two of the client's OWN polls keep the full heuristic, which is
+      // what catches a real feed outage.
+      const afterServerFrame = previous !== null && previous.archiveGapBefore !== undefined;
       const gapBefore = index > 0 && (
         !runningOrderAvailableForSample(sample)
         || (sample.archiveGapBefore === undefined
-          ? sample.checkedAtMs - previous.checkedAtMs > threshold
+          ? !afterServerFrame && sample.checkedAtMs - previous.checkedAtMs > sampleGapThresholdMs(sample, threshold, previous)
           : sample.archiveGapBefore)
       );
       return {
@@ -239,7 +282,9 @@ export const runningOrderTimeDomain = (
   const firstSampleMs = samples[0].checkedAtMs;
   const latestSampleMs = samples.at(-1)!.checkedAtMs;
   const parsedClock = Date.parse(String(clockCheckedAt ?? ''));
-  const threshold = runningOrderGapThresholdMs(history);
+  // Same rule as the line itself: a replaying client at 16× is a slow poller of
+  // a fast clock, not a page waiting on a stalled feed.
+  const threshold = sampleGapThresholdMs(samples.at(-1)!, runningOrderGapThresholdMs(history));
   const waiting = Number.isFinite(parsedClock) && parsedClock - latestSampleMs > threshold;
   const endMs = waiting ? Math.max(parsedClock, latestSampleMs) : latestSampleMs;
   const startMs = Math.max(firstSampleMs, endMs - windowMs);

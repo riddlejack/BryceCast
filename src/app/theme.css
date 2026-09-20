@@ -2442,8 +2442,271 @@ a.ss-race--link:hover { background: var(--surface-0); }
 
 /* ---------- reduced motion ---------- */
 
+/* ---------- off-season: the landing page introduces the site ----------
+ * Season-complete Home hero showcase, the "what's inside" doors, next season's
+ * calendar rows, and Race Week's season-in-review blocks. */
+.section-title {
+  font-size: 17px;
+  font-weight: 620;
+  letter-spacing: -0.01em;
+  margin: 14px 2px 10px;
+}
+
+.showcase { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.showcase__stage { position: relative; width: 100%; min-height: 210px; display: grid; }
+.showcase__slide {
+  grid-area: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 700ms ease;
+}
+.showcase__slide > * { width: 100%; }
+.showcase__slide--active { opacity: 1; pointer-events: auto; }
+.showcase__caption {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  text-align: center;
+  text-decoration: none;
+  color: inherit;
+}
+.showcase__venue { font-size: 13.5px; font-weight: 570; color: var(--ink-primary); }
+.showcase__dots { display: flex; gap: 2px; }
+.showcase__dot {
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.showcase__dot::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--hairline);
+  transition: background-color 200ms ease, transform 200ms ease;
+}
+.showcase__dot--active::before { background: var(--bryce); transform: scale(1.25); }
+
+.doors { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; }
+@media (min-width: 640px) { .doors { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.door {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: var(--pad-panel);
+  border-radius: var(--radius-panel);
+  background: var(--surface-1);
+  color: inherit;
+  text-decoration: none;
+  transition: background-color 160ms ease;
+}
+.door:hover { background: var(--surface-2); }
+.door__icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: var(--surface-0);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-primary);
+}
+.door__title {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 16px;
+  font-weight: 620;
+  letter-spacing: -0.01em;
+  margin-top: 4px;
+}
+.door__title svg { color: var(--ink-muted); transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1); }
+.door:hover .door__title svg { transform: translateX(3px); color: var(--ink-secondary); }
+.door__copy { font-size: 13.5px; line-height: 1.5; color: var(--ink-secondary); max-width: 46ch; }
+.door__visual { margin-top: auto; padding-top: 8px; }
+
+.tower__row.cal-row { grid-template-columns: 44px minmax(0, 1fr) auto; }
+.cal-row > span:nth-child(2) { display: none; }
+@media (min-width: 560px) {
+  .tower__row.cal-row { grid-template-columns: 44px 58px minmax(0, 1fr) auto; }
+  .cal-row > span:nth-child(2) { display: inline-flex; }
+}
+.cal-row__date { display: flex; flex-direction: column; align-items: flex-start; line-height: 1.1; }
+.cal-row__month { font-size: 11px; color: var(--ink-muted); text-transform: uppercase; letter-spacing: 0.04em; }
+.cal-row__day { font-size: 17px; font-weight: 620; color: var(--ink-primary); }
+
+.standouts { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; }
+@media (min-width: 700px) { .standouts { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.standout {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  padding: var(--pad-panel);
+  border-radius: var(--radius-panel);
+  background: var(--surface-1);
+  color: inherit;
+  text-decoration: none;
+  transition: background-color 160ms ease;
+}
+.standout:hover { background: var(--surface-2); }
+.standout__name { font-size: 14.5px; font-weight: 570; }
+
+.venue-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+@media (min-width: 640px) { .venue-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (min-width: 900px) { .venue-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.venue-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 16px;
+  border-radius: var(--radius-tile);
+  background: var(--surface-1);
+  color: inherit;
+  text-decoration: none;
+  transition: background-color 160ms ease;
+}
+.venue-tile:hover { background: var(--surface-2); }
+.venue-tile__name { font-size: 13px; font-weight: 570; line-height: 1.25; }
+
+/* equal-height card pairs: both cards fill the taller one's row */
+.grid--equal > * { display: flex; flex-direction: column; }
+.grid--equal > * > a, .grid--equal > * > .card, .grid--equal > * > a > .card { flex: 1; display: flex; flex-direction: column; }
+.grid--equal > a.panel, .grid--equal > section.panel { display: flex; flex-direction: column; }
+
+/* a quiet gold wash for the flagship panel — the one place the brand hue spreads */
+.panel--hero.hero--wash {
+  background:
+    radial-gradient(120% 140% at 100% 0%, color-mix(in srgb, var(--bryce) 20%, transparent) 0%, transparent 58%),
+    var(--surface-1);
+}
+
+.heat-track { display: flex; justify-content: center; }
+.heat-track > * { width: 100%; }
+
+/* doors: one hue each */
+.door { position: relative; overflow: hidden; }
+.door--gold { --door-hue: var(--bryce); }
+.door--blue { --door-hue: var(--series-1); }
+.door--green { --door-hue: var(--series-2); }
+.door--live { --door-hue: var(--status-bad-dot); }
+.door .door__icon { background: color-mix(in srgb, var(--door-hue) 16%, var(--surface-0)); color: color-mix(in srgb, var(--door-hue) 70%, var(--ink-primary)); }
+.door:hover { background: color-mix(in srgb, var(--door-hue) 7%, var(--surface-1)); }
+.door__visual { display: block; width: 100%; margin-top: auto; padding-top: 14px; }
+.door__tracks { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; align-items: center; pointer-events: none; }
+.door__list { display: flex; flex-direction: column; gap: 6px; }
+.door__list-row {
+  display: grid;
+  grid-template-columns: 16px minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: center;
+  font-size: 12.5px;
+  color: var(--ink-secondary);
+  padding: 7px 10px;
+  border-radius: 8px;
+  background: var(--surface-0);
+}
+.door__list-row svg { color: var(--door-hue); }
+.door__list-row span:nth-child(2) { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.door__chapters { display: flex; flex-direction: column; gap: 8px; }
+.door__chapter-bar { display: flex; gap: 2px; height: 12px; border-radius: 6px; overflow: hidden; }
+.door__chapter-bar > span { min-width: 3px; }
+.door__pulse { display: inline-flex; align-items: center; gap: 9px; }
+.door__pulse-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--status-bad-dot);
+  box-shadow: 0 0 0 0 color-mix(in srgb, var(--status-bad-dot) 50%, transparent);
+  animation: door-pulse 2s ease-out infinite;
+  flex: none;
+}
+@keyframes door-pulse {
+  0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--status-bad-dot) 50%, transparent); }
+  100% { box-shadow: 0 0 0 9px transparent; }
+}
+
+/* standout cards: the race's own pace map is the picture */
+.standout { align-items: stretch; }
+.standout__label { font-size: 13px; font-weight: 500; color: var(--ink-secondary); }
+.standout__art { display: flex; align-items: center; justify-content: center; min-height: 150px; padding: 6px 0; pointer-events: none; }
+
+/* Live, off-season: the auto-running replay says plainly that it is one */
+.demo-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 20px;
+  padding: 14px 18px;
+  border-radius: var(--radius-panel);
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--bryce) 22%, transparent), transparent 70%),
+    var(--surface-1);
+}
+.demo-banner > div { flex: 1 1 420px; min-width: 0; }
+.demo-banner__kicker { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 620; color: var(--ink-primary); }
+.demo-banner__copy { margin: 4px 0 0; font-size: 13.5px; line-height: 1.45; color: var(--ink-secondary); max-width: 78ch; }
+
+/* share the season card */
+.share-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 570;
+  padding: 7px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--hairline);
+  background: var(--surface-0);
+  color: var(--ink-primary);
+  cursor: pointer;
+  transition: background-color 160ms ease, border-color 160ms ease;
+}
+.share-button:hover { background: color-mix(in srgb, var(--bryce) 14%, var(--surface-0)); border-color: color-mix(in srgb, var(--bryce) 60%, var(--hairline)); }
+.share-button:disabled { opacity: 0.6; cursor: default; }
+
+/* next season's board */
+.weekends { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; }
+@media (min-width: 760px) { .weekends { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.weekend {
+  display: grid;
+  grid-template-columns: 48px 132px minmax(0, 1fr);
+  gap: 16px;
+  align-items: center;
+  padding: 16px 18px;
+  border-radius: var(--radius-panel);
+  background: var(--surface-1);
+  color: inherit;
+  text-decoration: none;
+  min-height: 128px;
+}
+.weekend--known { transition: background-color 160ms ease; }
+.weekend--known:hover { background: color-mix(in srgb, var(--bryce) 8%, var(--surface-1)); }
+.weekend__date { display: flex; flex-direction: column; align-items: flex-start; line-height: 1.1; gap: 1px; }
+.weekend__day { font-size: 26px; font-weight: 680; letter-spacing: -0.02em; color: var(--ink-primary); }
+.weekend__art { display: flex; align-items: center; justify-content: center; pointer-events: none; }
+.weekend__text { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.weekend__venue { font-size: 15px; font-weight: 620; letter-spacing: -0.01em; line-height: 1.25; }
+@media (max-width: 480px) {
+  .weekend { grid-template-columns: 44px minmax(0, 1fr); }
+  .weekend__art { grid-column: 1 / -1; grid-row: 1; }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .live-dot, .live-field__row--rank-change, .ticker-value__old, .ticker-value__new, .skeleton, .drawer, .drawer-backdrop { animation: none; }
+  .live-dot, .door__pulse-dot, .live-field__row--rank-change, .ticker-value__old, .ticker-value__new, .skeleton, .drawer, .drawer-backdrop { animation: none; }
   .reveal { animation: none; opacity: 1; transform: none; }
   * { transition-duration: 0.01ms !important; }
 }

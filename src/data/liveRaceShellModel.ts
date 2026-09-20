@@ -429,6 +429,11 @@ export const replayDeepLinkQuery = (replayParams: string): string => {
   if (rt) out.set('t0', rt);
   const speed = params.get('speed');
   if (speed) out.set('speed', speed);
+  /* The off-season auto-demo marks its URL so Live keeps its "replay, not live"
+   * banner and a dark nav dot; carry the mark across the Live ⇄ race-page hop. */
+  if (typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('demo') === 'offseason') {
+    out.set('demo', 'offseason');
+  }
   return `?${out.toString()}`;
 };
 

@@ -16,7 +16,9 @@ import {
   runningOrderIdentityStyle,
   runningOrderPointSegments,
   runningOrderProximityStyle,
-  runningOrderTimeDomain
+  runningOrderGapThresholdMs,
+  runningOrderTimeDomain,
+  sampleGapThresholdMs
 } from '../src/data/liveRunningOrderModel.ts';
 import { appendLiveHistoryPayload, createLiveHistoryState } from '../src/data/liveHistoryModel.ts';
 
@@ -174,9 +176,128 @@ assert.equal(RUNNING_ORDER_HOVER_RADIUS_PX, 14);
 const cautions = runningOrderCautionSpans(historyFrom([0, 5, 10, 15], () => field(), (index) => index < 3 ? 'YELLOW' : 'GREEN').samples);
 assert.deepEqual(cautions, [{ startMs: baseMs, endMs: baseMs + 15_000 }], 'contiguous caution samples become one source-backed span');
 
+/* ---------- replay playback rate: continuity across 1x / 4x / 16x ----------
+ *
+ * A replaying client polls once a second whatever the speed, so one poll covers
+ * `1s x speed` of SOURCE time. That is sparse sampling of a continuous archive,
+ * not a hole in it. The live cadence heuristic cannot see the difference — it
+ * estimates from the observed deltas and excludes anything past ten seconds, so
+ * at 16x its estimate collapsed to the 3s floor and EVERY arriving sample was
+ * drawn as an outage; after a speed change its median stayed at the old rate
+ * until the new samples outnumbered the old ones (~121 polls, about two minutes
+ * of playback), breaking the line the whole time. This is what the owner saw as
+ * "it breaks the data connection and there's a big gap in the running order".
+ *
+ * The replay payload now states the rate it was resolved at, so the bar is set
+ * from what the client asked for. Live samples carry no such statement and keep
+ * the window-derived rule, which is what still catches a real feed outage. */
+const replayPayloadAt = (seconds, speed, rows = field()) => {
+  const payload = payloadAt(seconds, 10 + Math.floor(seconds / 60), rows);
+  return {
+    ...payload,
+    replay: {
+      simulation: {
+        active: true,
+        mode: 'archived_replay',
+        sessionKey: '5544-6761',
+        archiveCheckedAt: payload.checkedAt,
+        speed
+      }
+    }
+  };
+};
+
+/** Poll once a second of WALL time at `speed`, from `startSecond` of source time. */
+const playAt = (state, startSecond, speed, polls, rowsFor = () => field()) => {
+  let second = startSecond;
+  for (let index = 0; index < polls; index += 1) {
+    state = appendLiveHistoryPayload(state, replayPayloadAt(second, speed, rowsFor(second)), 2_000);
+    second += speed;
+  }
+  return { state, second };
+};
+
+const bryceLineOf = (session) => fullFieldRunningOrderSeries(session).find((entry) => entry.bryce);
+const breaksIn = (session) => bryceLineOf(session).points.filter((point) => point.breakBefore).length;
+
+// Steady 16x: 16s between samples, every one of them continuous archive.
+{
+  const { state } = playAt(createLiveHistoryState(), 0, 16, 25);
+  const session = state.sessions['5544-6761'];
+  assert.equal(session.samples.length, 25, 'a 16x replay accumulates a sample per poll');
+  assert.equal(breaksIn(session), 0, '16x playback draws one continuous line, not 25 isolated points');
+  assert.equal(runningOrderPointSegments(bryceLineOf(session).points).length, 1, '16x playback is a single rank-space segment');
+}
+
+// Every speed change, up and down. None of them may break the line, and none of
+// them may reset what has already been drawn.
+{
+  let state = createLiveHistoryState();
+  let second = 0;
+  const lengths = [];
+  for (const speed of [1, 4, 16, 4, 1, 16]) {
+    ({ state, second } = playAt(state, second, speed, 20));
+    const session = state.sessions['5544-6761'];
+    lengths.push(session.samples.length);
+    assert.equal(breaksIn(session), 0, `changing to ${speed}x keeps the running order continuous`);
+  }
+  assert.deepEqual(lengths, [20, 40, 60, 80, 100, 120], 'a speed change never resets the accumulated window');
+  const session = state.sessions['5544-6761'];
+  assert.equal(runningOrderPointSegments(bryceLineOf(session).points).length, 1, '1x->4x->16x->4x->1x->16x is one unbroken line');
+}
+
+// The honest half: a real archive outage must STILL break, at any speed. Six
+// minutes of missing source is not sparse sampling by any rate we offer.
+{
+  let state = createLiveHistoryState();
+  let second = 0;
+  ({ state, second } = playAt(state, second, 16, 10));
+  ({ state } = playAt(state, second + 360, 16, 6));
+  const session = state.sessions['5544-6761'];
+  assert.equal(breaksIn(session), 1, 'a genuine source outage still breaks the line during a 16x replay');
+}
+
+// A live page is untouched: no rate is stated, the existing rule decides.
+{
+  const liveHistory = historyFrom([0, 1, 2, 3, 4]);
+  assert.equal(breaksIn(liveHistory), 0, 'a 1s live feed stays continuous');
+  const outage = historyFrom([0, 1, 2, 3, 60]);
+  assert.equal(breaksIn(outage), 1, 'a live feed outage still breaks, unchanged');
+  assert.equal(
+    sampleGapThresholdMs(liveHistory.samples[2], runningOrderGapThresholdMs(liveHistory)),
+    runningOrderGapThresholdMs(liveHistory),
+    'a live sample falls back to the window-derived threshold'
+  );
+  assert.equal(sampleGapThresholdMs({ expectedCadenceMs: 16_000 }, 3_000), 48_000, 'a 16x sample is judged against 16x');
+  assert.equal(
+    sampleGapThresholdMs({ expectedCadenceMs: 1_000 }, 3_000, { expectedCadenceMs: 16_000 }),
+    48_000,
+    'a speed change is judged against the wider of the two rates that bracket the span'
+  );
+}
+
+// The handover from a server-supplied frame (a seed breakpoint, or a subsampled
+// catch-up point) to the client's own next poll: the server chose that
+// timestamp, so the distance to the next poll says nothing about the archive.
+{
+  let state = createLiveHistoryState();
+  ({ state } = playAt(state, 0, 1, 3));
+  const session = state.sessions['5544-6761'];
+  const seedFrame = (offsetMs, archiveGapBefore) => ({
+    ...session.samples[0],
+    checkedAt: new Date(baseMs + offsetMs).toISOString(),
+    checkedAtMs: baseMs + offsetMs,
+    archiveGapBefore
+  });
+  const withSeed = { ...session, samples: [seedFrame(-120_000, false), seedFrame(-9_000, false), ...session.samples] };
+  assert.equal(breaksIn(withSeed), 0, 'a seeded frame hands over to the first live poll without a break');
+  const withGap = { ...session, samples: [seedFrame(-120_000, false), seedFrame(-9_000, true), ...session.samples] };
+  assert.equal(breaksIn(withGap), 1, 'a server-verified archive gap still breaks, and only that one span');
+}
+
 console.log(JSON.stringify({
   ok: true,
-  assertions: 48,
+  assertions: 62,
   model: 'official-rank-space-running-order',
-  regressions: ['lapped-upstream-appends', 't+10-now-edge', 't+60-now-edge']
+  regressions: ['lapped-upstream-appends', 't+10-now-edge', 't+60-now-edge', '16x-line-shatter', 'speed-change-gap', 'speed-change-history-reset']
 }, null, 2));
