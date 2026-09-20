@@ -191,6 +191,29 @@ await writeFile(runnerStatusPath, JSON.stringify({ phase: 'IDLE', updatedAt: new
   );
 }
 
+// A manifest entry cannot escape the replay feed directory, and an admitted
+// feed cannot exceed the configured decompressed-byte ceiling.
+{
+  const escapeManifestPath = join(temp, 'escape-manifest.json');
+  await writeFile(escapeManifestPath, JSON.stringify({
+    sessions: [{ sessionKey: 'escape', canonicalSessionId: 'session_indy_nxt_2026_9999', feedArtifact: '../outside.ndjson.gz', watchable: true }]
+  }));
+  const confinedLake = createLakeReplayFeeds({ enabled: true, manifestPath: escapeManifestPath, runnerStatusPath });
+  assert.throws(
+    () => confinedLake.seriesRowsFor('escape'),
+    /outside the feed directory/,
+    'manifest-derived replay paths stay inside the feed directory'
+  );
+
+  const cappedLake = createLakeReplayFeeds({ enabled: true, runnerStatusPath, maxUncompressedBytes: 1024 });
+  const cappedSession = cappedLake.sessions().find((session) => session.watchable);
+  assert.ok(cappedSession, 'the generated manifest provides a watchable decompressed-byte-cap fixture');
+  assert.throws(
+    () => cappedLake.seriesRowsFor(cappedSession.sessionKey),
+    'a replay feed cannot inflate beyond the configured decompressed-byte ceiling'
+  );
+}
+
 // ---------------------------------------------------------------------------
 // Unit: the router's resolveReplay enforces the live-guard + watchable gating.
 // ---------------------------------------------------------------------------

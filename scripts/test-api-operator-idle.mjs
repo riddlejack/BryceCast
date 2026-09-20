@@ -1,5 +1,12 @@
 import assert from 'node:assert/strict';
-import { isOperatorRequest, isHealthyIdleRunner, buildIdleReadinessPayload, resolveTimingObservationArtifact } from './api-server.mjs';
+import {
+  buildIdleReadinessPayload,
+  createReplayRequestLimiter,
+  isHealthyIdleRunner,
+  isOperatorRequest,
+  replayClientKey,
+  resolveTimingObservationArtifact
+} from './api-server.mjs';
 
 const direct = { headers: { host: '127.0.0.1:5181' }, socket: { remoteAddress: '127.0.0.1' } };
 assert.equal(isOperatorRequest(direct, ''), true);
@@ -13,6 +20,24 @@ for (const headers of [
 assert.equal(isOperatorRequest({ headers: { authorization: 'Bearer example-test-token' } }, 'example-test-token'), true);
 assert.equal(isOperatorRequest({ headers: { authorization: 'Bearer wrong' } }, 'example-test-token'), false);
 assert.equal(isOperatorRequest({ ...direct, socket: { remoteAddress: '192.168.1.10' } }, ''), false);
+
+assert.equal(
+  replayClientKey({ headers: { 'cf-connecting-ip': '203.0.113.20', 'cf-ray': 'synthetic' }, socket: { remoteAddress: '127.0.0.1' } }),
+  'cloudflare:203.0.113.20',
+  'a Cloudflare-marked loopback hop keys replay limits by the connecting client'
+);
+assert.equal(
+  replayClientKey({ headers: { 'cf-connecting-ip': '203.0.113.20', 'cf-ray': 'spoofed' }, socket: { remoteAddress: '192.0.2.44' } }),
+  'peer:192.0.2.44',
+  'a non-loopback peer cannot select its limiter key with Cloudflare headers'
+);
+let limiterNow = 1_000;
+const limiter = createReplayRequestLimiter({ maxRequests: 2, windowMs: 1_000, maxClients: 2, now: () => limiterNow });
+assert.equal(limiter.check(direct).allowed, true);
+assert.equal(limiter.check(direct).allowed, true);
+assert.equal(limiter.check(direct).allowed, false, 'the per-client replay budget refuses excess work');
+limiterNow += 1_000;
+assert.equal(limiter.check(direct).allowed, true, 'the replay budget reopens after its bounded window');
 
 const now = Date.parse('2026-09-10T12:00:00Z');
 const idle = { phase: 'IDLE', updatedAt: new Date(now - 5 * 60000).toISOString(), currentSession: { eventName: 'Unrelated INDYCAR event' } };
