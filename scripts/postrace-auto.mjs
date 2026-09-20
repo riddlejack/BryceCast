@@ -9,7 +9,13 @@
  *
  *   npm run postrace:auto -- --dry-run          # decide and print, touch nothing
  *   npm run postrace:auto                       # gate, roll, validate, build
- *   npm run postrace:auto -- --publish=deploy-mini
+ *   npm run postrace:auto -- --publish=github    # commit, push main, update prod
+ *
+ * `--publish=none` is the default and the only mode the installed LaunchAgent
+ * uses today. `github` is the unified-repo mode: it refuses unless HEAD is the
+ * publish branch and the push would fast-forward, then pushes the public commit,
+ * the private overlay (when `ops/private-overlay.sh` is present) and finally
+ * runs `BRYCECAST_PRODUCTION_UPDATE_CMD` with the pushed sha.
  *
  * Safety properties this file is responsible for:
  *   - the gate reads only local files; no upstream call happens before it passes;
@@ -534,6 +540,11 @@ const main = async () => {
       branch: currentBranch(),
       // Stage exactly what the classification allowed, nothing wider.
       stagePaths: tree.allowed.map((entry) => entry.path),
+      remote: process.env.BRYCECAST_GIT_REMOTE ?? 'origin',
+      publishBranch: process.env.BRYCECAST_GIT_BRANCH ?? 'main',
+      // The private companion repo is only there on an operator's machine.
+      privateOverlay: existsSync(join(repoRoot, 'ops/private-overlay.sh')) ? './ops/private-overlay.sh' : null,
+      productionUpdateCmd: process.env.BRYCECAST_PRODUCTION_UPDATE_CMD ?? null,
       commitMessage: `Automated post-race data refresh (${run.asOfDate})\n\nSessions: ${dueIds.join(', ')}\nPackage content signature: ${diff.afterSignature?.slice(0, 12)}`
     });
     run.publish = { mode: publishMode, executed: false, plan: plan.commands.map(describeCommand), note: plan.note };
@@ -658,6 +669,19 @@ const executePlan = async (plan, run) => {
     if (command.internal === 'swap-dist') {
       swapDist(run);
       run.publish.steps = [...(run.publish.steps ?? []), { id: command.id, exitCode: 0 }];
+      continue;
+    }
+    if (command.internal === 'production-update') {
+      // Runs after the push, so HEAD is the commit production will fetch. The
+      // configured command receives it as "$1"; nothing else is interpolated.
+      const sha = String(spawnSync('git', ['rev-parse', 'HEAD'], { cwd: repoRoot, encoding: 'utf8' }).stdout ?? '').trim();
+      const result = spawnSync('/bin/sh', ['-c', `${command.command} "$@"`, 'sh', sha], {
+        cwd: repoRoot,
+        stdio: asJson ? 'pipe' : 'inherit'
+      });
+      run.publish.steps = [...(run.publish.steps ?? []), { id: command.id, exitCode: result.status ?? 1 }];
+      run.publish.productionUpdate = { command: command.command, sha, exitCode: result.status ?? 1 };
+      if (result.status !== 0) throw new Error(`Publish step ${command.id} failed (exit ${result.status}).`);
       continue;
     }
     if (command.internal === 'health-check') {

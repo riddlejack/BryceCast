@@ -18,6 +18,7 @@ import { join } from 'node:path';
 
 import {
   PUBLISHABLE_PATHS,
+  PUBLISH_MODES,
   RETRY_OFFSETS_MS,
   RUNNER_STATUS_MAX_AGE_MS,
   SESSION_PROXIMITY_MS,
@@ -607,6 +608,74 @@ check('local mode builds, swaps dist, restarts and health-checks — no ssh, no 
   const restart = plan.commands.find((command) => command.id === 'restart-app-server');
   assert.deepEqual(restart.argv, ['launchctl', 'kickstart', '-k', 'gui/501/com.brycecast.app-server']);
   assert.ok(plan.commands.every((command) => !command.argv?.includes('ssh')));
+});
+
+check('github mode fetches and proves a fast-forward BEFORE it commits anything', () => {
+  const plan = planPublish({ mode: 'github', repoRoot: workdir, branch: 'main', commitMessage: 'x' });
+  const ids = plan.commands.map((command) => command.id);
+  assert.deepEqual(ids, ['fetch', 'assert-fast-forward', 'stage', 'commit', 'push']);
+  assert.ok(ids.indexOf('assert-fast-forward') < ids.indexOf('commit'), 'a diverged branch must stop before the commit');
+  assert.deepEqual(plan.commands[0].argv, ['git', 'fetch', '--quiet', 'origin', 'main']);
+  assert.deepEqual(plan.commands[1].requiresAncestor, { of: 'origin/main', to: 'main' });
+  const push = plan.commands.find((command) => command.id === 'push');
+  assert.deepEqual(push.argv, ['git', 'push', 'origin', 'main:main']);
+  assert.ok(plan.commands.every((command) => !command.argv?.includes('--force')), 'a publish never force-pushes');
+});
+
+check('github mode refuses to publish from any branch but the publish branch', () => {
+  assert.throws(
+    () => planPublish({ mode: 'github', repoRoot: workdir, branch: 'fable/postrace-auto', commitMessage: 'x' }),
+    /publishes main only/
+  );
+  // …and the publish branch itself is configurable, not a constant.
+  const plan = planPublish({ mode: 'github', repoRoot: workdir, branch: 'release', commitMessage: 'x', publishBranch: 'release', remote: 'github' });
+  assert.deepEqual(plan.commands[0].argv, ['git', 'fetch', '--quiet', 'github', 'release']);
+});
+
+check('github mode pushes the private overlay after the public commit, never before', () => {
+  const plan = planPublish({
+    mode: 'github',
+    repoRoot: workdir,
+    branch: 'main',
+    commitMessage: 'x',
+    privateOverlay: './ops/private-overlay.sh',
+    productionUpdateCmd: 'ssh host update'
+  });
+  assert.deepEqual(plan.commands.map((command) => command.id), [
+    'fetch',
+    'assert-fast-forward',
+    'stage',
+    'commit',
+    'push',
+    'private-overlay-commit',
+    'private-overlay-push',
+    'production-update'
+  ]);
+  assert.deepEqual(plan.commands[5].argv, ['./ops/private-overlay.sh', 'commit', '-m', 'x']);
+  assert.equal(plan.commands[7].internal, 'production-update');
+  assert.equal(plan.commands[7].command, 'ssh host update');
+});
+
+check('github mode without an overlay or an updater is just commit-and-push', () => {
+  const plan = planPublish({ mode: 'github', repoRoot: workdir, branch: 'main', commitMessage: 'x' });
+  assert.ok(!plan.commands.some((command) => command.id.startsWith('private-overlay')));
+  assert.ok(!plan.commands.some((command) => command.internal === 'production-update'));
+});
+
+check('github mode stages through the same allowlist as every other mode', () => {
+  const plan = planPublish({
+    mode: 'github',
+    repoRoot: workdir,
+    branch: 'main',
+    commitMessage: 'x',
+    stagePaths: ['data/career/career.dataset.json', 'ops/macos/update-mini.sh', 'src/App.tsx']
+  });
+  assert.deepEqual(plan.commands.find((command) => command.id === 'stage').argv.slice(3), ['data/career/career.dataset.json']);
+});
+
+check('the existing modes are untouched and none is the default', () => {
+  assert.deepEqual(PUBLISH_MODES, ['none', 'deploy-mini', 'local', 'github']);
+  assert.equal(PUBLISH_MODES[0], 'none');
 });
 
 check('an unknown publish mode is rejected rather than silently doing nothing', () => {

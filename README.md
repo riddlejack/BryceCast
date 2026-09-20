@@ -7,6 +7,8 @@ BryceCast follows Bryce Aron's career across junior single-seaters, INDY NXT, an
 [Website](https://brycecast.com) · [Engineering atlas](docs/engineering/ENGINEERING_ATLAS.md) · [Architecture](docs/engineering/ARCHITECTURE.md) · [Run locally](#run-the-historical-demo) · [Data release plan](DATA_RELEASE.md)
 
 > **Publication candidate:** the code repository is being prepared privately. Included historical outputs and third-party visual/data assets remain under source-specific review. Raw archives and production SQLite are candidates for a separate permissioned release; they are not included in this Git checkout. See [release status](docs/publication/RELEASE_STATUS.md).
+>
+> **This is the single codebase.** Production builds `main` from this repository. The withheld material above — plus the deployment tooling — lives in a private companion repository that operators overlay onto a checkout of this one; every path it carries is listed in `.gitignore` here. See [release and data refresh](docs/operations/RELEASE_AND_DATA_REFRESH.md#repository-topology).
 
 ![Qualifying section analysis in the local historical demo](docs/evidence/qualifying-heat-map.png)
 

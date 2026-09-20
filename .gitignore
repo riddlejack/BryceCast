@@ -34,4 +34,19 @@ analysis/**/output/sessions/*.ndjson.gz
 analysis/**/output/sessions-2026/*.ndjson.gz
 analysis/**/output/timing-observations/*.ndjson.gz
 analysis/replay-feeds/output/feeds/
+analysis/semantic-layer/output/live-captures/*.ndjson.gz
+analysis/semantic-layer/output/nashville/*.ndjson.gz
 publication-private/
+
+# Private companion repo. Operators overlay it onto this checkout: its git dir
+# is /.private.git and its work tree is this directory, so every path it tracks
+# has to be ignored here. See docs/operations/RELEASE_AND_DATA_REFRESH.md.
+/.private.git/
+/ops/
+/scripts/deploy-to-mini.mjs
+data/career/career.dataset.json.gz
+data/career/career.dataset.json.sha256
+
+# `postrace-auto --publish=local` moves the previous build aside under this name
+# before swapping in the new one. It is a rollback handle, never a commit.
+.dist-before-*

@@ -170,7 +170,7 @@ export const GATE_STEPS = [
   { id: 'build', npmScript: 'build' }
 ];
 
-export const PUBLISH_MODES = ['none', 'deploy-mini', 'local'];
+export const PUBLISH_MODES = ['none', 'deploy-mini', 'local', 'github'];
 
 // ---------------------------------------------------------------------------
 // Small helpers
@@ -792,7 +792,11 @@ export const planPublish = ({
   stagePaths = null,
   miniHost = null,
   appServerLabel = 'com.brycecast.app-server',
-  uid = null
+  uid = null,
+  remote = 'origin',
+  publishBranch = 'main',
+  privateOverlay = null,
+  productionUpdateCmd = null
 }) => {
   if (!PUBLISH_MODES.includes(mode)) throw new Error(`Unknown publish mode "${mode}". Expected one of: ${PUBLISH_MODES.join(', ')}.`);
 
@@ -820,6 +824,10 @@ export const planPublish = ({
     { id: 'commit', argv: ['git', 'commit', '-m', commitMessage], cwd: repoRoot }
   ];
 
+  // The pre-unification mode: bundle-over-SSH from a `master`-based checkout.
+  // Superseded by `github`, kept working for an operator still on that layout.
+  // It needs a `deploy:mini` npm script, which this repository deliberately does
+  // not define — the deployment tooling lives in the private companion repo.
   if (mode === 'deploy-mini') {
     return {
       mode,
@@ -830,6 +838,53 @@ export const planPublish = ({
         { id: 'deploy', argv: ['npm', 'run', 'deploy:mini'], cwd: repoRoot }
       ],
       note: `Commits generated data on ${branch}, fast-forwards master and runs the guarded deploy to ${miniHost ?? 'the mini'}.`
+    };
+  }
+
+  if (mode === 'github') {
+    // The unified mode: one public repo is the release channel, so publishing
+    // is a push and production pulls. Three refusals, all before the commit:
+    // the branch has to be the publish branch, the fetch has to prove the push
+    // will fast-forward, and the working tree has to be clean outside the
+    // allowlist (the caller checks that with classifyWorkingTree).
+    if (branch !== publishBranch) {
+      throw new Error(`Refusing to publish from "${branch}": mode 'github' publishes ${publishBranch} only.`);
+    }
+    return {
+      mode,
+      commands: [
+        { id: 'fetch', argv: ['git', 'fetch', '--quiet', remote, publishBranch], cwd: repoRoot },
+        // origin/main must already be an ancestor of ours, i.e. the push is a
+        // fast-forward. A diverged branch stops here, before anything is
+        // committed, and a human reconciles it.
+        {
+          id: 'assert-fast-forward',
+          argv: ['git', 'rev-parse', '--verify', `${remote}/${publishBranch}`],
+          cwd: repoRoot,
+          requiresAncestor: { of: `${remote}/${publishBranch}`, to: branch }
+        },
+        ...commit,
+        { id: 'push', argv: ['git', 'push', remote, `${publishBranch}:${publishBranch}`], cwd: repoRoot },
+        // The private companion repo carries the raw corpus and the captures the
+        // same roll just rewrote. It is pushed second: the public commit is the
+        // one production fetches, and a private push failure must not leave the
+        // public history unpublished.
+        ...(privateOverlay
+          ? [
+              { id: 'private-overlay-commit', argv: [privateOverlay, 'commit', '-m', commitMessage], cwd: repoRoot },
+              { id: 'private-overlay-push', argv: [privateOverlay, 'push'], cwd: repoRoot }
+            ]
+          : []),
+        // Finally, tell production to fetch what was just pushed. The command is
+        // configuration (BRYCECAST_PRODUCTION_UPDATE_CMD), not a hardcoded host,
+        // and it receives the pushed sha as its one argument.
+        ...(productionUpdateCmd
+          ? [{ id: 'production-update', internal: 'production-update', command: productionUpdateCmd }]
+          : [])
+      ],
+      note: `Commits generated data on ${publishBranch}, pushes to ${remote}${privateOverlay ? ', pushes the private overlay' : ''}${
+        productionUpdateCmd ? ', then runs the production updater' : ' (no production updater configured)'
+      }.`
     };
   }
 

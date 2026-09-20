@@ -13,6 +13,15 @@ const repoPath = (relativePath) => path.join(repoRoot, relativePath);
 
 const json = async (relativePath) => JSON.parse(await readFile(repoPath(relativePath), 'utf8'));
 const text = async (relativePath) => readFile(repoPath(relativePath), 'utf8');
+const jsonIfPresent = async (relativePath) => (existsSync(repoPath(relativePath)) ? json(relativePath) : null);
+
+/**
+ * Declared sources that a checkout may legitimately not have. The DevSpace
+ * preinstall audit was a one-off security review of a third-party tool; its
+ * evidence file is not part of the published codebase, so the pack reports its
+ * absence and omits the one section that depends on it rather than failing.
+ */
+const OPTIONAL_SOURCE_FILES = new Set(['analysis/devspace-audit/devspace-audit-evidence.json']);
 
 const number = (value, digits = 3) => {
   if (typeof value !== 'number' || !Number.isFinite(value)) return value;
@@ -410,7 +419,7 @@ const sourceManifestMarkdown = (sourceManifest) => {
   ].join('\n');
 };
 
-const readmeMarkdown = ({ generatedAt, validation }) =>
+const readmeMarkdown = ({ generatedAt, validation, hasDevspaceAudit }) =>
   [
     '# BryceCast External Review Pack',
     '',
@@ -434,7 +443,9 @@ const readmeMarkdown = ({ generatedAt, validation }) =>
     '- `sample-payloads/`: bounded JSON excerpts for Road America prep, debrief, Career Lab, live fixtures, and source/capability summaries.',
     '- `SOURCE_MANIFEST.json` and `SOURCE_MANIFEST.md`: exact source files and hashes used by the pack.',
     '- `PACK_VALIDATION_REPORT.json`: automated completeness checks.',
-    '- `DEVSPACE_AUDIT.md`: preinstall/runtime audit of `@waishnav/devspace@1.0.1` and the recommended containment stance.',
+    ...(hasDevspaceAudit
+      ? ['- `DEVSPACE_AUDIT.md`: preinstall/runtime audit of `@waishnav/devspace@1.0.1` and the recommended containment stance.']
+      : []),
     '- `DEVSPACE_SETUP.md`: exact copied-pack sandbox setup recipe for a DevSpace run.',
     '',
     `Validation status: ${validation.ok ? 'ok' : 'failed'}. Checks: ${validation.checks.length}.`
@@ -942,7 +953,9 @@ const validatePack = ({ uiPackage, manifest, careerCapability, samples, sourceMa
   );
   add('career_series_count', careerCapability.length === 7, careerCapability.map((series) => series.seriesName));
   add('source_manifest_files', sourceManifest.files.length >= 30, sourceManifest.files.length);
-  add('source_manifest_declared_files_exist', missingSourceFiles.length === 0, missingSourceFiles);
+  const missingRequired = missingSourceFiles.filter((file) => !OPTIONAL_SOURCE_FILES.has(file));
+  const missingOptional = missingSourceFiles.filter((file) => OPTIONAL_SOURCE_FILES.has(file));
+  add('source_manifest_declared_files_exist', missingRequired.length === 0, { missingRequired, missingOptional });
   add(
     'source_manifest_includes_adapter_test',
     sourceManifest.files.some((file) => file.path === 'tests/uiContextAdapter.test.ts'),
@@ -976,7 +989,7 @@ const main = async () => {
   ] = await Promise.all([
     json('data/career/career.dataset.json'),
     json('data/career/sources.manifest.json'),
-    json('analysis/devspace-audit/devspace-audit-evidence.json'),
+    jsonIfPresent('analysis/devspace-audit/devspace-audit-evidence.json'),
     json('data/career/reports/career-coverage-matrix.json'),
     json('data/career/reports/ingestion-summary.json'),
     json('data/career/reports/validation-report.json'),
@@ -1021,6 +1034,13 @@ const main = async () => {
   summaries.predictive = predictiveSummary;
 
   const missingSourceFiles = sourceFiles.filter((file) => !existsSync(repoPath(file)));
+  for (const file of missingSourceFiles) {
+    console.warn(
+      OPTIONAL_SOURCE_FILES.has(file)
+        ? `[skip] ${file} is not in this checkout; the section that depends on it is omitted from the pack.`
+        : `[warn] declared source missing: ${file}`
+    );
+  }
   const existingSourceFiles = sourceFiles.filter((file) => existsSync(repoPath(file)));
   const sourceFilesWithPacks = [
     ...new Set([
@@ -1119,7 +1139,12 @@ const main = async () => {
   };
 
   const validation = validatePack({ uiPackage, manifest, careerCapability, samples, sourceManifest, missingSourceFiles });
-  validation.checks.push({
+  validation.checks.push(devspaceAuditEvidence === null ? {
+    id: 'devspace_audit_evidence',
+    ok: true,
+    skipped: true,
+    details: 'analysis/devspace-audit/devspace-audit-evidence.json is not in this checkout; DEVSPACE_AUDIT.md was omitted from the pack.'
+  } : {
     id: 'devspace_audit_evidence',
     ok:
       devspaceAuditEvidence.schemaVersion === 'brycecast.devspaceAuditEvidence.v1' &&
@@ -1142,7 +1167,7 @@ const main = async () => {
   await mkdir(sampleDir, { recursive: true });
 
   const files = {
-    'README.md': readmeMarkdown({ generatedAt, validation }),
+    'README.md': readmeMarkdown({ generatedAt, validation, hasDevspaceAudit: devspaceAuditEvidence !== null }),
     'PROJECT_BRIEF.md': projectBriefMarkdown({
       dataset,
       uiPackage,
@@ -1166,7 +1191,7 @@ const main = async () => {
     'PROMPT_FOR_GPT_5_5_PRO_ENVELOPE_A.md': promptEnvelopeA(),
     'PROMPT_FOR_GPT_5_5_PRO_ENVELOPE_B.md': promptEnvelopeB(),
     'SOURCE_MANIFEST.md': sourceManifestMarkdown(sourceManifest),
-    'DEVSPACE_AUDIT.md': devspaceAuditMarkdown({ evidence: devspaceAuditEvidence }),
+    ...(devspaceAuditEvidence ? { 'DEVSPACE_AUDIT.md': devspaceAuditMarkdown({ evidence: devspaceAuditEvidence }) } : {}),
     'DEVSPACE_SETUP.md': devspaceSetupMarkdown(),
     'SOURCE_MANIFEST.json': compactJson(sourceManifest),
     'PACK_VALIDATION_REPORT.json': compactJson(validation)

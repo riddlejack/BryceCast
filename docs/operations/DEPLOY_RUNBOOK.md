@@ -1,4 +1,4 @@
-> Current procedure (September 10, 2026): use [Release and data refresh](RELEASE_AND_DATA_REFRESH.md). `npm run deploy:mini` now transfers directly over SSH, builds before publishing, verifies the release identity, and can roll back. The iCloud/hard-reset procedure below is historical.
+> Current procedure: use [Release and data refresh](RELEASE_AND_DATA_REFRESH.md). Production now fetches `main` from this repository and builds it before publishing, verifies the release identity, and can roll back. The deployment scripts and LaunchAgent kit referenced below live in the private companion repo and are not part of this repository. Everything under this banner is historical.
 
 # BryceCast Deploy Runbook
 
