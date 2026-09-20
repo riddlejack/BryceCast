@@ -22,12 +22,12 @@
       "type": "career_lab"
     },
     {
-      "bytes": 2903,
+      "bytes": 2913,
       "id": "live_race_day_context",
       "path": "analysis/predictive-race-intelligence/output/context-packs/live-race-day-context.json",
-      "sha256": "b2849e97bac2745b435cfde03f5b832d8e3a4ae651751b36bd7f345b71fbaaab",
+      "sha256": "f0cc5dd9b668906c778c27df18204ba640a7e6cf7a0ce1b9a35c0af379dbf2c9",
       "sourceRefs": [
-        "docs/LIVE_RACE_DAY_PRODUCT_CONTRACT.md",
+        "docs/contracts/LIVE_RACE_DAY_PRODUCT_CONTRACT.md",
         "scripts/api-server.mjs",
         "scripts/live-source-endpoints.mjs"
       ],
@@ -1054,7 +1054,7 @@
     },
     {
       "bytes": 22303,
-      "path": "docs/LIVE_RACE_DAY_PRODUCT_CONTRACT.md",
+      "path": "docs/contracts/LIVE_RACE_DAY_PRODUCT_CONTRACT.md",
       "role": "live race day pack",
       "sha256": "569bf18e1aae13d9f43aff10291509912c03e1ad1bbb0d9e53325bb4ff26e3ae"
     }

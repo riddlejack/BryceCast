@@ -44,7 +44,7 @@ export const MANUAL_FOLLOWUPS = [
   {
     id: 'deploy',
     title: 'Publish the verified release',
-    detail: 'Commit, fast-forward master and run `npm run deploy:mini`. The updater builds before publishing and rolls back on a failed health check.'
+    detail: 'Commit, merge into `main` and push. An operator then runs the release driver from the private companion repo; the updater builds before publishing and rolls back on a failed health check.'
   }
 ];
 

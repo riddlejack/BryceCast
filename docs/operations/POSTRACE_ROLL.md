@@ -4,9 +4,10 @@
 `docs/archive/handoffs/PHASE3_HANDOFF_2026-07-19.md` §4.2 and `docs/archive/handoffs/PHASE3_BRIEFS_O_T_2026-07-19.md`
 Brief T into one command that hard-stops on any failure and writes a run report.
 
-It **never deploys** and **never touches LaunchAgents, iCloud, or the live
-runner**. Deploy stays the separate, gated `npm run deploy:mini` + SSH mini
-update.
+It **never deploys** and **never touches LaunchAgents or the live runner**.
+Deploy stays separate and gated: push `main`, then run the release driver from
+the private companion repo (see
+[Release and data refresh](RELEASE_AND_DATA_REFRESH.md)).
 
 ## Usage
 
@@ -65,7 +66,8 @@ reachable, not inside a sandbox without DNS.
   A roll-forward moves it every time. Edit it by hand and re-run
   `npm run test:live-readiness`. The run report flags this every run; it is
   never auto-edited.
-- **Deploy** — still `npm run deploy:mini` + the SSH mini update, reviewed.
+- **Deploy** — still separate and reviewed: push `main`, then the release
+  driver in the private companion repo.
 
 ## Run reports
 

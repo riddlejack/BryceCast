@@ -4,7 +4,7 @@
   "items": [
     {
       "availability": "partial",
-      "bytes": 39290,
+      "bytes": 39320,
       "caveat": "Schedule feed timestamps lack explicit timezone offsets; weather forecast readiness is NWS context, not official series weather.",
       "confidence": "medium",
       "id": "metric:prep_event_command_center",
@@ -12,13 +12,13 @@
       "label": "prep_event_command_center",
       "productizationStatus": "productized",
       "recommendedAction": "Keep as canonical metric id; hydrate from context pack or runtime API.",
-      "sha256": "849debd1f6d78a811e1011ba15e8e2848630d04fb5a87572de518ccda6aaccc7",
+      "sha256": "83b28f8e979d0202055eb4104f0c8c9d23a75b96b8d0548724fcc3ecaef6b192",
       "sourcePath": "analysis/ui-contract/ui-metric-manifest.json",
       "surface": "race_weekend_prep"
     },
     {
       "availability": "available",
-      "bytes": 39290,
+      "bytes": 39320,
       "caveat": "Small same-track samples need denominators in the drawer.",
       "confidence": "high",
       "id": "metric:prep_track_history",
@@ -26,13 +26,13 @@
       "label": "prep_track_history",
       "productizationStatus": "productized",
       "recommendedAction": "Keep as canonical metric id; hydrate from context pack or runtime API.",
-      "sha256": "849debd1f6d78a811e1011ba15e8e2848630d04fb5a87572de518ccda6aaccc7",
+      "sha256": "83b28f8e979d0202055eb4104f0c8c9d23a75b96b8d0548724fcc3ecaef6b192",
       "sourcePath": "analysis/ui-contract/ui-metric-manifest.json",
       "surface": "race_weekend_prep"
     },
     {
       "availability": "source_bounded",
-      "bytes": 39290,
+      "bytes": 39320,
       "caveat": "Practice and group qualifying are rank/context signals; session formats are not fully equivalent.",
       "confidence": "medium",
       "id": "metric:prep_practice_qualifying_funnel",
@@ -40,13 +40,13 @@
       "label": "prep_practice_qualifying_funnel",
       "productizationStatus": "productized",
       "recommendedAction": "Keep as canonical metric id; hydrate from context pack or runtime API.",
-      "sha256": "849debd1f6d78a811e1011ba15e8e2848630d04fb5a87572de518ccda6aaccc7",
+      "sha256": "83b28f8e979d0202055eb4104f0c8c9d23a75b96b8d0548724fcc3ecaef6b192",
       "sourcePath": "analysis/ui-contract/ui-metric-manifest.json",
       "surface": "race_weekend_prep"
     },
     {
       "availability": "live_only",
-      "bytes": 39290,
+      "bytes": 39320,
       "caveat": "NWS weather is current and forecast context, not official series weather or track temperature.",
       "confidence": "medium",
       "id": "metric:prep_weather_window",
@@ -54,13 +54,13 @@
       "label": "prep_weather_window",
       "productizationStatus": "productized",
       "recommendedAction": "Keep as canonical metric id; hydrate from context pack or runtime API.",
-      "sha256": "849debd1f6d78a811e1011ba15e8e2848630d04fb5a87572de518ccda6aaccc7",
+      "sha256": "83b28f8e979d0202055eb4104f0c8c9d23a75b96b8d0548724fcc3ecaef6b192",
       "sourcePath": "analysis/ui-contract/ui-metric-manifest.json",
       "surface": "race_weekend_prep"
     },
     {
       "availability": "live_only",
-      "bytes": 39290,
+      "bytes": 39320,
       "caveat": "Timing endpoint can point to top-series; require /api/readiness to prove INDY NXT heartbeat plus car 9 and DriverID 2143 or exact Bryce identity.",
       "confidence": "medium",
       "id": "metric:live_source_readiness",
@@ -68,13 +68,13 @@
       "label": "live_source_readiness",
       "productizationStatus": "productized",
       "recommendedAction": "Keep as canonical metric id; hydrate from context pack or runtime API.",
-      "sha256": "849debd1f6d78a811e1011ba15e8e2848630d04fb5a87572de518ccda6aaccc7",
+      "sha256": "83b28f8e979d0202055eb4104f0c8c9d23a75b96b8d0548724fcc3ecaef6b192",
       "sourcePath": "analysis/ui-contract/ui-metric-manifest.json",
       "surface": "live_race_companion"
     },
     {
       "availability": "live_only",
-      "bytes": 39290,
+      "bytes": 39320,
       "caveat": "Gap strings need label discipline; null and zero are different.",
       "confidence": "medium",
       "id": "metric:live_bryce_status_tile",
@@ -82,13 +82,13 @@
       "label": "live_bryce_status_tile",
       "productizationStatus": "productized",
       "recommendedAction": "Keep as canonical metric id; hydrate from context pack or runtime API.",
-      "sha256": "849debd1f6d78a811e1011ba15e8e2848630d04fb5a87572de518ccda6aaccc7",
+      "sha256": "83b28f8e979d0202055eb4104f0c8c9d23a75b96b8d0548724fcc3ecaef6b192",
       "sourcePath": "analysis/ui-contract/ui-metric-manifest.json",
       "surface": "live_race_companion"
     },
     {
       "availability": "live_only",
-      "bytes": 39290,
+      "bytes": 39320,
       "caveat": "Top-series car-number collisions must be guarded by Bryce identity predicate.",
       "confidence": "medium",
       "id": "metric:live_timing_tower",
@@ -96,13 +96,13 @@
       "label": "live_timing_tower",
       "productizationStatus": "productized",
       "recommendedAction": "Keep as canonical metric id; hydrate from context pack or runtime API.",
-      "sha256": "849debd1f6d78a811e1011ba15e8e2848630d04fb5a87572de518ccda6aaccc7",
+      "sha256": "83b28f8e979d0202055eb4104f0c8c9d23a75b96b8d0548724fcc3ecaef6b192",
       "sourcePath": "analysis/ui-contract/ui-metric-manifest.json",
       "surface": "live_race_companion"
     },
     {
       "availability": "replay_only",
-      "bytes": 39290,
+      "bytes": 39320,
       "caveat": "Current archive is tiny; full-session trend quality requires race watch capture.",
       "confidence": "low",
       "id": "metric:live_gap_lap_trend",
@@ -110,13 +110,13 @@
       "label": "live_gap_lap_trend",
       "productizationStatus": "productized",
       "recommendedAction": "Keep as canonical metric id; hydrate from context pack or runtime API.",
-      "sha256": "849debd1f6d78a811e1011ba15e8e2848630d04fb5a87572de518ccda6aaccc7",
+      "sha256": "83b28f8e979d0202055eb4104f0c8c9d23a75b96b8d0548724fcc3ecaef6b192",
       "sourcePath": "analysis/ui-contract/ui-metric-manifest.json",
       "surface": "live_race_companion"
     },
     {
       "availability": "live_only",
-      "bytes": 39290,
+      "bytes": 39320,
       "caveat": "Required v1 card. Display only the /api/readiness.points state; reconcile against official standings after session. Do not fabricate from local formula or promote raw timing fields outside the readiness reducer.",
       "confidence": "medium",
       "id": "metric:live_points_projection",
@@ -124,13 +124,13 @@
       "label": "live_points_projection",
       "productizationStatus": "productized",
       "recommendedAction": "Keep as canonical metric id; hydrate from context pack or runtime API.",
-      "sha256": "849debd1f6d78a811e1011ba15e8e2848630d04fb5a87572de518ccda6aaccc7",
+      "sha256": "83b28f8e979d0202055eb4104f0c8c9d23a75b96b8d0548724fcc3ecaef6b192",
       "sourcePath": "analysis/ui-contract/ui-metric-manifest.json",
       "surface": "live_race_companion"
     },
     {
       "availability": "live_only",
-      "bytes": 39290,
+      "bytes": 39320,
       "caveat": "NWS only; no official track temp or radar.",
       "confidence": "medium",
       "id": "metric:live_weather_strip",
@@ -138,13 +138,13 @@
       "label": "live_weather_strip",
       "productizationStatus": "productized",
       "recommendedAction": "Keep as canonical metric id; hydrate from context pack or runtime API.",
-      "sha256": "849debd1f6d78a811e1011ba15e8e2848630d04fb5a87572de518ccda6aaccc7",
+      "sha256": "83b28f8e979d0202055eb4104f0c8c9d23a75b96b8d0548724fcc3ecaef6b192",
       "sourcePath": "analysis/ui-contract/ui-metric-manifest.json",
       "surface": "live_race_companion"
     },
     {
       "availability": "available",
-      "bytes": 39290,
+      "bytes": 39320,
       "caveat": "Derived archetype labels are review aids until manually approved.",
       "confidence": "high",
       "id": "metric:debrief_header",
@@ -152,13 +152,13 @@
       "label": "debrief_header",
       "productizationStatus": "productized",
       "recommendedAction": "Keep as canonical metric id; hydrate from context pack or runtime API.",
-      "sha256": "849debd1f6d78a811e1011ba15e8e2848630d04fb5a87572de518ccda6aaccc7",
+      "sha256": "83b28f8e979d0202055eb4104f0c8c9d23a75b96b8d0548724fcc3ecaef6b192",
       "sourcePath": "analysis/ui-contract/ui-metric-manifest.json",
       "surface": "race_debrief"
     },
     {
       "availability": "available",
-      "bytes": 39290,
+      "bytes": 39320,
       "caveat": "Group and combined qualifying formats need source/session caveats.",
       "confidence": "high",
       "id": "metric:debrief_qualifying_conversion",
@@ -166,13 +166,13 @@
       "label": "debrief_qualifying_conversion",
       "productizationStatus": "productized",
       "recommendedAction": "Keep as canonical metric id; hydrate from context pack or runtime API.",
-      "sha256": "849debd1f6d78a811e1011ba15e8e2848630d04fb5a87572de518ccda6aaccc7",
+      "sha256": "83b28f8e979d0202055eb4104f0c8c9d23a75b96b8d0548724fcc3ecaef6b192",
       "sourcePath": "analysis/ui-contract/ui-metric-manifest.json",
       "surface": "race_debrief"
     },
     {
       "availability": "source_bounded",
-      "bytes": 39290,
+      "bytes": 39320,
       "caveat": "36/36 completed INDY NXT races have lap samples; 26 fully validate and 10 are clean partial visible-sample imports.",
       "confidence": "medium",
       "id": "metric:debrief_lap_position_story",
@@ -180,13 +180,13 @@
       "label": "debrief_lap_position_story",
       "productizationStatus": "productized",
       "recommendedAction": "Keep as canonical metric id; hydrate from context pack or runtime API.",
-      "sha256": "849debd1f6d78a811e1011ba15e8e2848630d04fb5a87572de518ccda6aaccc7",
+      "sha256": "83b28f8e979d0202055eb4104f0c8c9d23a75b96b8d0548724fcc3ecaef6b192",
       "sourcePath": "analysis/ui-contract/ui-metric-manifest.json",
       "surface": "race_debrief"
     },
     {
       "availability": "source_bounded",
-      "bytes": 39290,
+      "bytes": 39320,
       "caveat": "Useful as a v1.5 drilldown only. The section artifacts still need denominator QA and display filtering before headline claims; session_indy_nxt_2024_6325 remains source-broken.",
       "confidence": "medium",
       "id": "metric:debrief_section_strengths",
@@ -194,13 +194,13 @@
       "label": "debrief_section_strengths",
       "productizationStatus": "productized",
       "recommendedAction": "Keep as canonical metric id; hydrate from context pack or runtime API.",
-      "sha256": "849debd1f6d78a811e1011ba15e8e2848630d04fb5a87572de518ccda6aaccc7",
+      "sha256": "83b28f8e979d0202055eb4104f0c8c9d23a75b96b8d0548724fcc3ecaef6b192",
       "sourcePath": "analysis/ui-contract/ui-metric-manifest.json",
       "surface": "race_debrief"
     },
     {
       "availability": "available",
-      "bytes": 39290,
+      "bytes": 39320,
       "caveat": "Rows exist when official PDFs/API expose them; absence is not proof nothing happened unless source family has complete no-event semantics.",
       "confidence": "medium",
       "id": "metric:debrief_incidents_penalties",
@@ -208,13 +208,13 @@
       "label": "debrief_incidents_penalties",
       "productizationStatus": "productized",
       "recommendedAction": "Keep as canonical metric id; hydrate from context pack or runtime API.",
-      "sha256": "849debd1f6d78a811e1011ba15e8e2848630d04fb5a87572de518ccda6aaccc7",
+      "sha256": "83b28f8e979d0202055eb4104f0c8c9d23a75b96b8d0548724fcc3ecaef6b192",
       "sourcePath": "analysis/ui-contract/ui-metric-manifest.json",
       "surface": "race_debrief"
     },
     {
       "availability": "source_bounded",
-      "bytes": 39290,
+      "bytes": 39320,
       "caveat": "Descriptive only; no engineering root-cause claims.",
       "confidence": "medium",
       "id": "metric:debrief_team_context",
@@ -222,13 +222,13 @@
       "label": "debrief_team_context",
       "productizationStatus": "productized",
       "recommendedAction": "Keep as canonical metric id; hydrate from context pack or runtime API.",
-      "sha256": "849debd1f6d78a811e1011ba15e8e2848630d04fb5a87572de518ccda6aaccc7",
+      "sha256": "83b28f8e979d0202055eb4104f0c8c9d23a75b96b8d0548724fcc3ecaef6b192",
       "sourcePath": "analysis/ui-contract/ui-metric-manifest.json",
       "surface": "race_debrief"
     },
     {
       "availability": "available",
-      "bytes": 39290,
+      "bytes": 39320,
       "caveat": "Drawer owns detail so main screen stays clean.",
       "confidence": "high",
       "id": "metric:debrief_source_drawer",
@@ -236,13 +236,13 @@
       "label": "debrief_source_drawer",
       "productizationStatus": "productized",
       "recommendedAction": "Keep as canonical metric id; hydrate from context pack or runtime API.",
-      "sha256": "849debd1f6d78a811e1011ba15e8e2848630d04fb5a87572de518ccda6aaccc7",
+      "sha256": "83b28f8e979d0202055eb4104f0c8c9d23a75b96b8d0548724fcc3ecaef6b192",
       "sourcePath": "analysis/ui-contract/ui-metric-manifest.json",
       "surface": "race_debrief"
     },
     {
       "availability": "available",
-      "bytes": 39290,
+      "bytes": 39320,
       "caveat": "Use percentiles with raw finish because field sizes differ.",
       "confidence": "high",
       "id": "metric:career_series_summary",
@@ -250,13 +250,13 @@
       "label": "career_series_summary",
       "productizationStatus": "productized",
       "recommendedAction": "Keep as canonical metric id; hydrate from context pack or runtime API.",
-      "sha256": "849debd1f6d78a811e1011ba15e8e2848630d04fb5a87572de518ccda6aaccc7",
+      "sha256": "83b28f8e979d0202055eb4104f0c8c9d23a75b96b8d0548724fcc3ecaef6b192",
       "sourcePath": "analysis/ui-contract/ui-metric-manifest.json",
       "surface": "career_lab"
     },
     {
       "availability": "available",
-      "bytes": 39290,
+      "bytes": 39320,
       "caveat": "Prevent weak source families from poisoning INDY NXT-grade views.",
       "confidence": "high",
       "id": "metric:career_metric_parity_matrix",
@@ -264,13 +264,13 @@
       "label": "career_metric_parity_matrix",
       "productizationStatus": "productized",
       "recommendedAction": "Keep as canonical metric id; hydrate from context pack or runtime API.",
-      "sha256": "849debd1f6d78a811e1011ba15e8e2848630d04fb5a87572de518ccda6aaccc7",
+      "sha256": "83b28f8e979d0202055eb4104f0c8c9d23a75b96b8d0548724fcc3ecaef6b192",
       "sourcePath": "analysis/ui-contract/ui-metric-manifest.json",
       "surface": "career_lab"
     },
     {
       "availability": "source_bounded",
-      "bytes": 39290,
+      "bytes": 39320,
       "caveat": "Start/gain unavailable for series without grid/start source; do not compute gain from missing start.",
       "confidence": "high",
       "id": "metric:career_result_conversion_explorer",
@@ -278,13 +278,13 @@
       "label": "career_result_conversion_explorer",
       "productizationStatus": "productized",
       "recommendedAction": "Keep as canonical metric id; hydrate from context pack or runtime API.",
-      "sha256": "849debd1f6d78a811e1011ba15e8e2848630d04fb5a87572de518ccda6aaccc7",
+      "sha256": "83b28f8e979d0202055eb4104f0c8c9d23a75b96b8d0548724fcc3ecaef6b192",
       "sourcePath": "analysis/ui-contract/ui-metric-manifest.json",
       "surface": "career_lab"
     },
     {
       "availability": "available",
-      "bytes": 39290,
+      "bytes": 39320,
       "caveat": "Open gaps can be caveats, not blockers. Priority gaps drive blocked UI calls.",
       "confidence": "high",
       "id": "metric:career_gap_ledger",
@@ -292,13 +292,13 @@
       "label": "career_gap_ledger",
       "productizationStatus": "productized",
       "recommendedAction": "Keep as canonical metric id; hydrate from context pack or runtime API.",
-      "sha256": "849debd1f6d78a811e1011ba15e8e2848630d04fb5a87572de518ccda6aaccc7",
+      "sha256": "83b28f8e979d0202055eb4104f0c8c9d23a75b96b8d0548724fcc3ecaef6b192",
       "sourcePath": "analysis/ui-contract/ui-metric-manifest.json",
       "surface": "career_lab"
     },
     {
       "availability": "available",
-      "bytes": 39290,
+      "bytes": 39320,
       "caveat": "Warning about 9 sessions without exact starts blocks weather/live joins for those sessions only.",
       "confidence": "high",
       "id": "metric:ops_validation_status",
@@ -306,13 +306,13 @@
       "label": "ops_validation_status",
       "productizationStatus": "productized",
       "recommendedAction": "Keep as canonical metric id; hydrate from context pack or runtime API.",
-      "sha256": "849debd1f6d78a811e1011ba15e8e2848630d04fb5a87572de518ccda6aaccc7",
+      "sha256": "83b28f8e979d0202055eb4104f0c8c9d23a75b96b8d0548724fcc3ecaef6b192",
       "sourcePath": "analysis/ui-contract/ui-metric-manifest.json",
       "surface": "source_ops"
     },
     {
       "availability": "live_only",
-      "bytes": 39290,
+      "bytes": 39320,
       "caveat": "HTTP 200 is not readiness; candidate/reference feeds must not become Bryce data.",
       "confidence": "medium",
       "id": "metric:ops_live_source_console",
@@ -320,13 +320,13 @@
       "label": "ops_live_source_console",
       "productizationStatus": "productized",
       "recommendedAction": "Keep as canonical metric id; hydrate from context pack or runtime API.",
-      "sha256": "849debd1f6d78a811e1011ba15e8e2848630d04fb5a87572de518ccda6aaccc7",
+      "sha256": "83b28f8e979d0202055eb4104f0c8c9d23a75b96b8d0548724fcc3ecaef6b192",
       "sourcePath": "analysis/ui-contract/ui-metric-manifest.json",
       "surface": "source_ops"
     },
     {
       "availability": "replay_only",
-      "bytes": 39290,
+      "bytes": 39320,
       "caveat": "Tiny archive is proof of plumbing, not full-session analysis.",
       "confidence": "low",
       "id": "metric:ops_replay_archive_state",
@@ -334,13 +334,13 @@
       "label": "ops_replay_archive_state",
       "productizationStatus": "productized",
       "recommendedAction": "Keep as canonical metric id; hydrate from context pack or runtime API.",
-      "sha256": "849debd1f6d78a811e1011ba15e8e2848630d04fb5a87572de518ccda6aaccc7",
+      "sha256": "83b28f8e979d0202055eb4104f0c8c9d23a75b96b8d0548724fcc3ecaef6b192",
       "sourcePath": "analysis/ui-contract/ui-metric-manifest.json",
       "surface": "source_ops"
     },
     {
       "availability": "unavailable",
-      "bytes": 39290,
+      "bytes": 39320,
       "caveat": "No validated live GPS or car-coordinate feed. Static track map exists only as reference.",
       "confidence": "not_applicable",
       "id": "deferred:live_moving_dot_map",
@@ -348,13 +348,13 @@
       "label": "live_moving_dot_map",
       "productizationStatus": "blocked",
       "recommendedAction": "Do not expose except as unavailable/deferred state until required proof exists.",
-      "sha256": "849debd1f6d78a811e1011ba15e8e2848630d04fb5a87572de518ccda6aaccc7",
+      "sha256": "83b28f8e979d0202055eb4104f0c8c9d23a75b96b8d0548724fcc3ecaef6b192",
       "sourcePath": "analysis/ui-contract/ui-metric-manifest.json",
       "surface": "cross_surface"
     },
     {
       "availability": "deferred",
-      "bytes": 39290,
+      "bytes": 39320,
       "caveat": "Race Control fields exist but cold samples are not enough to prove live INDY NXT meaning.",
       "confidence": "not_applicable",
       "id": "deferred:tire_overtake_strategy",
@@ -362,13 +362,13 @@
       "label": "tire_overtake_strategy",
       "productizationStatus": "deferred",
       "recommendedAction": "Do not expose except as unavailable/deferred state until required proof exists.",
-      "sha256": "849debd1f6d78a811e1011ba15e8e2848630d04fb5a87572de518ccda6aaccc7",
+      "sha256": "83b28f8e979d0202055eb4104f0c8c9d23a75b96b8d0548724fcc3ecaef6b192",
       "sourcePath": "analysis/ui-contract/ui-metric-manifest.json",
       "surface": "cross_surface"
     },
     {
       "availability": "unavailable",
-      "bytes": 39290,
+      "bytes": 39320,
       "caveat": "Official INDY NXT sources expose pit-stop counts, not pit lane time, stop lap sequence, service, tire, or pit time.",
       "confidence": "not_applicable",
       "id": "deferred:detailed_pit_sequence",
@@ -376,13 +376,13 @@
       "label": "detailed_pit_sequence",
       "productizationStatus": "blocked",
       "recommendedAction": "Do not expose except as unavailable/deferred state until required proof exists.",
-      "sha256": "849debd1f6d78a811e1011ba15e8e2848630d04fb5a87572de518ccda6aaccc7",
+      "sha256": "83b28f8e979d0202055eb4104f0c8c9d23a75b96b8d0548724fcc3ecaef6b192",
       "sourcePath": "analysis/ui-contract/ui-metric-manifest.json",
       "surface": "cross_surface"
     },
     {
       "availability": "unavailable",
-      "bytes": 39290,
+      "bytes": 39320,
       "caveat": "0/189 official weather rows in current career coverage.",
       "confidence": "not_applicable",
       "id": "deferred:official_indy_nxt_weather",
@@ -390,13 +390,13 @@
       "label": "official_indy_nxt_weather",
       "productizationStatus": "blocked",
       "recommendedAction": "Do not expose except as unavailable/deferred state until required proof exists.",
-      "sha256": "849debd1f6d78a811e1011ba15e8e2848630d04fb5a87572de518ccda6aaccc7",
+      "sha256": "83b28f8e979d0202055eb4104f0c8c9d23a75b96b8d0548724fcc3ecaef6b192",
       "sourcePath": "analysis/ui-contract/ui-metric-manifest.json",
       "surface": "cross_surface"
     },
     {
       "availability": "unavailable",
-      "bytes": 39290,
+      "bytes": 39320,
       "caveat": "Radio frequency metadata is not audio; POV is out of scope without permissioned stream.",
       "confidence": "not_applicable",
       "id": "deferred:team_radio_audio_or_live_pov",
@@ -404,13 +404,13 @@
       "label": "team_radio_audio_or_live_pov",
       "productizationStatus": "blocked",
       "recommendedAction": "Do not expose except as unavailable/deferred state until required proof exists.",
-      "sha256": "849debd1f6d78a811e1011ba15e8e2848630d04fb5a87572de518ccda6aaccc7",
+      "sha256": "83b28f8e979d0202055eb4104f0c8c9d23a75b96b8d0548724fcc3ecaef6b192",
       "sourcePath": "analysis/ui-contract/ui-metric-manifest.json",
       "surface": "cross_surface"
     },
     {
       "availability": "deferred",
-      "bytes": 39290,
+      "bytes": 39320,
       "caveat": "Derived benchmarks are blocked in coverage matrix; existing context is descriptive only.",
       "confidence": "not_applicable",
       "id": "deferred:predictive_field_strength_teammate_model",
@@ -418,7 +418,7 @@
       "label": "predictive_field_strength_teammate_model",
       "productizationStatus": "deferred",
       "recommendedAction": "Do not expose except as unavailable/deferred state until required proof exists.",
-      "sha256": "849debd1f6d78a811e1011ba15e8e2848630d04fb5a87572de518ccda6aaccc7",
+      "sha256": "83b28f8e979d0202055eb4104f0c8c9d23a75b96b8d0548724fcc3ecaef6b192",
       "sourcePath": "analysis/ui-contract/ui-metric-manifest.json",
       "surface": "cross_surface"
     },
@@ -1000,7 +1000,7 @@
     },
     {
       "availability": "available",
-      "bytes": 39290,
+      "bytes": 39320,
       "caveat": null,
       "confidence": "high",
       "id": "governance:uiMetricManifest",
@@ -1008,7 +1008,7 @@
       "label": "uiMetricManifest",
       "productizationStatus": "productized",
       "recommendedAction": "Use as source precedence, caveat, or validation input.",
-      "sha256": "849debd1f6d78a811e1011ba15e8e2848630d04fb5a87572de518ccda6aaccc7",
+      "sha256": "83b28f8e979d0202055eb4104f0c8c9d23a75b96b8d0548724fcc3ecaef6b192",
       "sourcePath": "analysis/ui-contract/ui-metric-manifest.json",
       "surface": "governance"
     },
@@ -1144,10 +1144,10 @@
   "sourceHash": "d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd",
   "sourceRefs": [
     {
-      "bytes": 39290,
+      "bytes": 39320,
       "path": "analysis/ui-contract/ui-metric-manifest.json",
       "role": "uiMetricManifest",
-      "sha256": "849debd1f6d78a811e1011ba15e8e2848630d04fb5a87572de518ccda6aaccc7"
+      "sha256": "83b28f8e979d0202055eb4104f0c8c9d23a75b96b8d0548724fcc3ecaef6b192"
     },
     {
       "bytes": 11689,

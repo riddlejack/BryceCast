@@ -1,6 +1,20 @@
 # BryceCast data refresh and release
 
-The live website is https://brycecast.com. The Mac Mini serves a committed `master` checkout at `~/BryceCast/site`; its capture database is separate runtime state at `data/live/brycecast.sqlite`. The app, capture runner, and Cloudflare tunnel are separate LaunchAgents.
+The live website is https://brycecast.com. The production host serves a committed `main` checkout; its capture database is separate runtime state at `data/live/brycecast.sqlite`. The app, capture runner, and Cloudflare tunnel are separate LaunchAgents.
+
+## Repository topology
+
+This repository is the single BryceCast codebase. There is no second source of truth: production fetches `main` from here and builds it.
+
+Some of what the running site and the data pipeline need cannot be published — the raw career corpus, the canonical dataset, the timing captures and replay feeds, and the deployment tooling that names real hosts. Operators keep that material in a **private companion repository** which is *overlaid* onto a checkout of this one: its git directory lives at `<checkout>/.private.git` while its work tree is the checkout itself, so both repositories see the same files and neither tracks the other's.
+
+Every path the private repo tracks is matched by this repository's `.gitignore` — the entries under "Private companion repo", plus the publication boundary above them. That is what keeps `git status` clean on a production checkout, which the release process requires.
+
+Consequences for a reader of this repository:
+
+- `npm run build` needs nothing private (verified: the three files `src/` imports from outside `src/` are all tracked here).
+- Running the API server and refreshing the data do need private files. Without them the site builds and serves, but `/api/weather/*`, replay playback and the post-race roll have no inputs.
+- **Deployment tooling is not here.** `ops/` and `scripts/deploy-to-mini.mjs` live in the private repo; they are ignored by this one. Nothing in `package.json` invokes them.
 
 ## Refresh data
 
@@ -17,9 +31,9 @@ The durable lake default is `~/.brycecast/data-lake`; `BRYCECAST_LAKE_DATA_ROOT`
 
 ## Publish
 
-Commit the reviewed change and fast-forward `master`. Run `npm run deploy:mini` from the repository. `-- --bundle-only` prepares a verified local bundle without publishing.
+Commit the reviewed change, merge it into `main`, and push. The push *is* the release candidate: production fetches this repository rather than receiving a bundle.
 
-The command writes a bundle atomically under `~/.brycecast/deploy`, sends it directly over SSH to `operator@your-host.local`, and runs `ops/macos/update-mini.sh`. No iCloud synchronization is required. The updater:
+An operator with the private companion repo then runs its release driver, which refuses unless the local branch is `main`, the tree is clean, and `HEAD` already equals the pushed `main` — so nothing unreviewed or unpushed can ever reach production. It reports CI status for the commit as a warning, then runs the updater on the production host pinned to that exact sha (`--expect <sha>`, which replaced bundle verification as the integrity guard). The updater:
 
 - takes a release lock and refuses an uncommitted or divergent production checkout;
 - preserves a backup Git ref;
@@ -28,9 +42,15 @@ The command writes a bundle atomically under `~/.brycecast/deploy`, sends it dir
 - restarts `com.brycecast.app-server`; when recorder code changed, it also restarts `com.brycecast.live-runner` after verifying a fresh idle status;
 - verifies the exact commit through `/api/health.release` and restores the prior commit/build if that check fails.
 
-The previous built release is retained under `~/BryceCast/.dist-before-<timestamp>`. Live SQLite, raw captures, and tunnel credentials are preserved. The tunnel process is left running. An idle recorder restart loads recorder fixes without waiting for a reboot. A Git backup does not back up the SQLite database.
+The previous built release is retained under `.dist-before-<timestamp>` beside the checkout. Live SQLite, raw captures, and tunnel credentials are preserved. The tunnel process is left running. An idle recorder restart loads recorder fixes without waiting for a reboot. A Git backup does not back up the SQLite database.
 
-Successful releases also back up and replace `~/mini-kit/update-mini.sh`, retiring the old iCloud hard-reset updater. Direct Mini-side use now requires an explicit `BRYCECAST_BUNDLE_OVERRIDE` pointing to the incoming bundle; the normal MacBook command supplies it automatically.
+After the health check passes, the updater refreshes the private overlay on the production checkout. A failure there is reported loudly and carried in the exit code, but never rolls back a site that is already healthy on the new commit.
+
+Successful releases also back up and replace the operator's copy of the updater. Direct host-side use requires an explicit `--expect <sha>`; `--latest` exists but must be passed deliberately.
+
+### Automated publication
+
+`scripts/postrace-auto.mjs` accepts `--publish=github`: after the gates pass and the working tree is clean outside the generated-data allowlist, it fetches, proves the push would fast-forward, commits the allowlisted paths on `main`, pushes, pushes the private overlay if one is attached, and finally runs `BRYCECAST_PRODUCTION_UPDATE_CMD` with the pushed sha. It refuses to publish from any branch but `main` and never force-pushes. `--publish=none` remains the default and is what the installed LaunchAgent uses.
 
 ## Runtime safeguards
 
