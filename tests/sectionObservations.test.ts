@@ -3,14 +3,18 @@ import type { RaceStoryPack } from '../src/data/raceStory';
 import type { SectionLapsPack, SectionLapTuple } from '../src/data/sectionLaps';
 import {
   MIN_CLEAN_LAPS,
+  MIN_CLEAN_LAPS_FOR_THIRDS,
+  anchorsForPack,
+  cleanSectionLapsOf,
   lapContextOf,
   lapScopesFor,
   lapScopesForObservedLaps,
-  minimumCleanLapsForScope,
+  lapScopesForPack,
   resolveHeatSections,
   selectableSectionLap,
   sectionObservationsFromLaps,
-  sectionObservationsFromRaceStory
+  sectionObservationsFromRaceStory,
+  thirdLapWindows
 } from '../src/data/sectionObservations';
 import {
   measuredTrackSectionsFor,
@@ -184,7 +188,7 @@ assert.equal(scopesMenu.length, 4, 'full race + three thirds');
 assert.deepEqual(
   scopesMenu[1],
   { kind: 'lap_window', label: 'Opening third', fromLap: 1, toLap: 10 },
-  'thirds are lap-count thirds'
+  'the every-lap-clean helper still splits by lap count'
 );
 
 const full = sectionObservationsFromLaps(syntheticPack, { kind: 'full_race' }, 'median');
@@ -212,8 +216,25 @@ const shortQualifyingPack = {
   sections: [{ sectionName: 'Turn T', laps: lapsTuples.slice(0, 5), fieldSeconds: [4.0, 4.1, 4.2] }],
   lapTotals: lapsTuples.slice(0, 5)
 } as SectionLapsPack;
+/* One floor now, and it is three clean laps: a five-lap race aggregate clears
+ * it; two clean laps do not, and that race's card collapses to its honest
+ * sentence rather than offering a scope that draws nothing. */
 const racePolicyShort = sectionObservationsFromLaps(shortQualifyingPack, { kind: 'full_race' }, 'mean');
-assert.equal(racePolicyShort.sections[0].percentile, null, 'race floor still suppresses a five-lap aggregate');
+assert.ok(racePolicyShort.sections[0].percentile !== null, 'a five-lap race aggregate clears the single three-lap floor');
+const twoLapPack = {
+  ...shortQualifyingPack,
+  id: 'section_laps_two_lap_race',
+  sessionId: 'two_lap_test',
+  totalLaps: 2,
+  sections: [{ sectionName: 'Turn T', laps: lapsTuples.slice(0, 2) }],
+  lapTotals: lapsTuples.slice(0, 2)
+} as SectionLapsPack;
+assert.equal(
+  sectionObservationsFromLaps(twoLapPack, { kind: 'full_race' }, 'median').sections[0].percentile,
+  null,
+  'two clean laps stay below the one floor'
+);
+assert.deepEqual(lapScopesForPack(twoLapPack), [{ kind: 'full_race' }], 'a two-lap race is never offered thirds');
 const qualifyingAverage = sectionObservationsFromLaps(shortQualifyingPack, { kind: 'full_race' }, 'mean', {
   minimumObservations: 1,
   observationLabel: 'valid observed qualifying laps'
@@ -246,27 +267,66 @@ assert.equal(middle.sections[0].observationCount, 10);
 assert.ok((middle.sections[0].percentile ?? 0) > 0.7, 'middle-third median reflects its window');
 
 const closing = sectionObservationsFromLaps(syntheticPack, scopesMenu[3], 'median');
-// closing third = laps 21-30 (a 10-lap window): the caution clears with 4
-// clean laps left. Below the full-race floor (MIN_CLEAN_LAPS = 8) but the
-// scope-aware floor for a 10-lap window is min(8, max(4, ceil(10*0.4))) = 4 —
-// exactly the case that floor exists for: a third that opened under caution
-// but still carries a real, if smaller, clean sample should shade, not
-// suppress (see minimumCleanLapsForScope).
+// closing third of the LAP-COUNT menu = laps 21-30: the caution clears with
+// four clean laps left. It shades under the single three-lap floor.
 assert.equal(closing.sections[0].observationCount, 4);
-assert.ok(4 < MIN_CLEAN_LAPS, 'still below the full-race floor');
-assert.equal(minimumCleanLapsForScope(scopesMenu[3]), 4, 'a 10-lap third floors at 4, not the full-race 8');
-assert.equal(closing.sections[0].percentile, 0.9, 'a scope right at its scaled floor still reports a real percentile');
+assert.equal(closing.sections[0].percentile, 0.9, 'a four-lap sample clears the single floor');
 
-// A window too thin even for the scaled-down floor still suppresses — the
-// floor never drops below 4. Laps 26-28: lap 26 is caution, laps 27-28 are
-// clean = 2 clean laps in a 3-lap window; floor = max(4, ceil(3*0.4)) = 4.
+// A window below the one floor still suppresses. Laps 26-28: lap 26 is
+// caution, laps 27-28 are clean — two clean laps, one short of the floor.
 const tooThin = sectionObservationsFromLaps(
   syntheticPack,
   { kind: 'lap_window', label: 'Slice', fromLap: 26, toLap: 28 },
   'median'
 );
 assert.equal(tooThin.sections[0].observationCount, 2);
-assert.equal(tooThin.sections[0].percentile, null, 'a window below even the scaled floor still suppresses the percentile');
+assert.equal(tooThin.sections[0].percentile, null, 'a window below the floor still suppresses the percentile');
+
+/* 6b. Thirds are equal shares of the CLEAN laps, not of the lap count.
+ * The synthetic race runs 24 clean laps (1-20, 27-30) inside 30, so the clean
+ * laps split 8/8/8 and the closing third absorbs the whole caution block
+ * instead of starving on it — the Laguna Seca 2026 R1 failure in miniature. */
+const packScopes = lapScopesForPack(syntheticPack);
+assert.equal(cleanSectionLapsOf(syntheticPack).length, 24, 'clean laps are the population the thirds split');
+assert.deepEqual(
+  packScopes.slice(1),
+  [
+    { kind: 'lap_window', label: 'Opening third', fromLap: 1, toLap: 8 },
+    { kind: 'lap_window', label: 'Middle third', fromLap: 9, toLap: 16 },
+    { kind: 'lap_window', label: 'Closing third', fromLap: 17, toLap: 30 }
+  ],
+  'thirds carry equal clean-lap shares and are labeled by the laps they span'
+);
+for (const window of packScopes.filter((entry) => entry.kind === 'lap_window')) {
+  const scoped = sectionObservationsFromLaps(syntheticPack, window, 'median');
+  assert.equal(scoped.sections[0].observationCount, 8, `${(window as { label: string }).label} carries its equal share`);
+  assert.ok(scoped.sections[0].percentile !== null, 'an offered third always has something to draw');
+}
+
+/* Boundary rule + balance, stated as a property over a spread of shapes: the
+ * three ranges tile [1, totalLaps] with no gap and no overlap, and the clean
+ * laps inside them differ in count by at most one. */
+const tilingCases: Array<{ cleanLaps: number[]; totalLaps: number }> = [
+  { cleanLaps: [1, 2, 3, 4, 5, 6, 7, 8, 9], totalLaps: 9 },
+  { cleanLaps: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], totalLaps: 20 },
+  { cleanLaps: [2, 3, 4, 11, 12, 13, 14, 25, 26, 27], totalLaps: 30 },
+  { cleanLaps: [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18], totalLaps: 18 },
+  { cleanLaps: Array.from({ length: 55 }, (_, index) => index + 6), totalLaps: 65 }
+];
+for (const { cleanLaps, totalLaps } of tilingCases) {
+  const windows = thirdLapWindows(cleanLaps, totalLaps);
+  assert.equal(windows.length, 3, 'three thirds');
+  assert.equal(windows[0].fromLap, 1, 'the opening third starts at lap 1');
+  assert.equal(windows[2].toLap, totalLaps, 'the closing third runs to the final lap');
+  assert.equal(windows[1].fromLap, windows[0].toLap + 1, 'no gap and no overlap at the first seam');
+  assert.equal(windows[2].fromLap, windows[1].toLap + 1, 'no gap and no overlap at the second seam');
+  const counts = windows.map(
+    (window) => cleanLaps.filter((lap) => lap >= window.fromLap && lap <= window.toLap).length
+  );
+  assert.equal(counts.reduce((sum, count) => sum + count, 0), cleanLaps.length, 'every clean lap lands in exactly one third');
+  assert.ok(Math.max(...counts) - Math.min(...counts) <= 1, `group sizes differ by at most one (${counts.join('/')})`);
+}
+assert.equal(MIN_CLEAN_LAPS_FOR_THIRDS, MIN_CLEAN_LAPS * 3, 'the thirds gate is three floors of clean laps');
 
 const oneLap = sectionObservationsFromLaps(syntheticPack, { kind: 'single_lap', lap: 22 }, 'median');
 assert.equal(oneLap.sections[0].percentile, 0.1, 'single lap reports the lap as timed');
@@ -426,5 +486,131 @@ assert.equal(passSpanAnchor(measuredNash!, 'SF', 'T4'), null, 'a non-adjacent/un
 // Milwaukee's curated chain resolves passes by its "A to B" section names.
 const milPass = passSpanAnchor(trackSectionsFor('The Milwaukee Mile')!, 'SF', 'T1');
 assert.ok(milPass, 'Milwaukee resolves a pass interval from its chain section names');
+
+/* 11. Shipped-pack sweep — the standing version of the throwaway thirds audit.
+ *
+ * Walks every section-lap pack the UI data package ships and asserts, against
+ * the anchors that pack itself resolves (never a venue-wide set):
+ *   (a) every scope the UI will OFFER draws at least one section — no blank map
+ *       is ever reachable through a control the reader can press;
+ *   (b) a pack's section names join the anchors chosen for it, so no surface
+ *       can print a clean-lap count beside an empty shape;
+ *   (c) the thirds tile [1, totalLaps] with no gap or overlap, and their
+ *       clean-lap counts differ by at most one.
+ * A pack whose venue carries no anchored curation draws no heat layer at all
+ * and is skipped — that is a curation gap, not a rendering bug. */
+{
+  const fs = await import('node:fs');
+  const path = await import('node:path');
+  const repoRoot = process.cwd();
+  const dataPackage = JSON.parse(
+    fs.readFileSync(path.join(repoRoot, 'analysis/ui-data-package/ui-data-package.json'), 'utf8')
+  ) as { screens: { raceDebrief: { sectionLapRefs?: Array<{ sessionId: string; path: string }> } } };
+  const refs = dataPackage.screens.raceDebrief.sectionLapRefs ?? [];
+  assert.ok(refs.length > 0, 'the shipped package must carry section-lap packs to sweep');
+
+  let swept = 0;
+  let withheld = 0;
+  let collapsed = 0;
+  for (const ref of refs) {
+    const pack = JSON.parse(fs.readFileSync(path.join(repoRoot, ref.path), 'utf8')) as SectionLapsPack;
+    const pdf = trackSectionsFor(pack.venueName);
+    const pdfAnchors = pdf && pdf.confidence === 'anchored' ? pdf : null;
+    const measuredAnchors =
+      pack.sourceTier === 'lake_loop_crossings' ? measuredTrackSectionsFor(pack.venueName) : null;
+    const packAnchors = measuredAnchors ?? pdfAnchors;
+    if (!packAnchors) continue;
+    swept += 1;
+    const where = `${pack.venueName} ${pack.seasonYear ?? ''} ${pack.sessionId}`.trim();
+
+    /* The adapter's own resolver must agree — every surface goes through it. */
+    assert.equal(
+      anchorsForPack(pack, packAnchors).slug,
+      packAnchors.slug,
+      `${where}: anchorsForPack must resolve this pack's own grain`
+    );
+
+    // (b) name join
+    const anchorNames = new Set(packAnchors.sections.map((anchor) => anchor.sectionName));
+    assert.ok(
+      pack.sections.some((section) => anchorNames.has(section.sectionName)),
+      `${where}: pack section names must join the anchors chosen for it`
+    );
+
+    const scopes = lapScopesForPack(pack);
+    const windows = scopes.filter(
+      (scope): scope is Extract<typeof scope, { kind: 'lap_window' }> => scope.kind === 'lap_window'
+    );
+    const cleanLaps = cleanSectionLapsOf(pack);
+
+    /* A race whose full-race scope cannot shade offers NO scope at all: the
+     * card collapses to one honest sentence (a hollow outline with live
+     * controls is the thing this sweep exists to prevent). Legitimate only
+     * when the race really is below the floor. */
+    if (resolveHeatSections(packAnchors, sectionObservationsFromLaps(pack, { kind: 'full_race' }, 'median')).length === 0) {
+      assert.ok(
+        cleanLaps.length < MIN_CLEAN_LAPS,
+        `${where}: full race draws nothing although it holds ${cleanLaps.length} clean laps`
+      );
+      assert.deepEqual(scopes, [{ kind: 'full_race' }], `${where}: a collapsed card must not offer thirds`);
+      collapsed += 1;
+      continue;
+    }
+
+    // (a) every offered scope draws
+    for (const scope of scopes) {
+      const drawn = resolveHeatSections(packAnchors, sectionObservationsFromLaps(pack, scope, 'median'));
+      const label = scope.kind === 'lap_window' ? scope.label : 'Full race';
+      assert.ok(
+        drawn.length > 0,
+        `${where}: offered scope "${label}" draws nothing (${cleanLaps.length} clean laps in the pack)`
+      );
+    }
+
+    // (c) tiling + balance, whenever thirds are offered
+    if (windows.length === 0) {
+      withheld += 1;
+      assert.ok(
+        cleanLaps.length < MIN_CLEAN_LAPS_FOR_THIRDS ||
+          !thirdLapWindows(cleanLaps, pack.totalLaps).every((window) =>
+            pack.sections.some(
+              (section) =>
+                section.laps.filter(
+                  (tuple) =>
+                    tuple[0] !== null &&
+                    tuple[0] >= window.fromLap &&
+                    tuple[0] <= window.toLap &&
+                    tuple[4] === 1 &&
+                    tuple[1] !== null
+                ).length >= MIN_CLEAN_LAPS
+            )
+          ),
+        `${where}: thirds withheld without cause (${cleanLaps.length} clean laps)`
+      );
+      continue;
+    }
+    assert.equal(windows.length, 3, `${where}: thirds come in threes`);
+    assert.equal(windows[0].fromLap, 1, `${where}: the opening third starts at lap 1`);
+    assert.equal(windows[2].toLap, pack.totalLaps, `${where}: the closing third runs to the final lap`);
+    assert.equal(windows[1].fromLap, windows[0].toLap + 1, `${where}: no gap or overlap at the first seam`);
+    assert.equal(windows[2].fromLap, windows[1].toLap + 1, `${where}: no gap or overlap at the second seam`);
+    const counts = windows.map(
+      (window) => cleanLaps.filter((lap) => lap >= window.fromLap && lap <= window.toLap).length
+    );
+    assert.equal(
+      counts.reduce((sum, count) => sum + count, 0),
+      cleanLaps.length,
+      `${where}: every clean lap lands in exactly one third`
+    );
+    assert.ok(
+      Math.max(...counts) - Math.min(...counts) <= 1,
+      `${where}: clean-lap shares differ by more than one (${counts.join('/')})`
+    );
+  }
+  assert.ok(swept >= 40, `the sweep must cover the shipped corpus (covered ${swept})`);
+  console.log(
+    `shipped-pack sweep: ${swept} packs, 0 blank offered scopes, thirds withheld on ${withheld}, card collapsed on ${collapsed}`
+  );
+}
 
 console.log('section observations contract tests passed');
