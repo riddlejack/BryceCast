@@ -41,10 +41,12 @@ import {
   mergeDiscoveredSessions,
   nextAttemptAt,
   planPublish,
+  planSync,
   recordAttempt,
   reconcileState,
   seasonCurationFlag,
   stripVolatile,
+  syncOptOutReason,
   trackAssetSlug,
   venueCurationFlag
 } from './lib/postrace-auto-core.mjs';
@@ -680,6 +682,93 @@ check('the existing modes are untouched and none is the default', () => {
 
 check('an unknown publish mode is rejected rather than silently doing nothing', () => {
   assert.throws(() => planPublish({ mode: 'yolo', repoRoot: workdir, branch: 'x', commitMessage: 'x' }), /Unknown publish mode/);
+});
+
+// ---------------------------------------------------------------------------
+console.log('\n pre-roll sync');
+// ---------------------------------------------------------------------------
+
+check('on the publish branch, clean, up to date → no-op', () => {
+  const sync = planSync({ branch: 'main', publishBranch: 'main', fetchOk: true, ahead: false, diverged: false });
+  assert.equal(sync.action, 'noop');
+  assert.equal(sync.ok, true);
+  assert.deepEqual(sync.steps, []);
+});
+
+check('behind origin → fast-forward, merge-ff first', () => {
+  const sync = planSync({ branch: 'main', publishBranch: 'main', fetchOk: true, ahead: true, diverged: false });
+  assert.equal(sync.action, 'fast_forward');
+  assert.equal(sync.ok, true);
+  assert.deepEqual(sync.steps.map((step) => step.id), ['merge-ff']);
+  assert.deepEqual(sync.steps[0].argv, ['git', 'merge', '--ff-only', 'origin/main']);
+});
+
+check('diverged → refuse, never a fast-forward', () => {
+  const sync = planSync({ branch: 'main', publishBranch: 'main', fetchOk: true, ahead: false, diverged: true });
+  assert.equal(sync.action, 'refuse');
+  assert.equal(sync.ok, false);
+  assert.equal(sync.reason, 'diverged');
+});
+
+check('a dirty tree refuses before the network is ever touched', () => {
+  const sync = planSync({ branch: 'main', publishBranch: 'main', dirty: true });
+  assert.equal(sync.action, 'refuse');
+  assert.equal(sync.reason, 'dirty_tree');
+  // fetchOk defaults to null (not attempted) — the refusal short-circuits before it matters.
+});
+
+check('off the publish branch refuses, naming the branch it is stuck reconciling to', () => {
+  const sync = planSync({ branch: 'fix/some-feature', publishBranch: 'main' });
+  assert.equal(sync.action, 'refuse');
+  assert.equal(sync.reason, 'off_branch');
+  assert.match(sync.detail, /fix\/some-feature/);
+});
+
+check('clean and on-branch, before fetching, is the go-ahead to fetch', () => {
+  const sync = planSync({ branch: 'main', publishBranch: 'main' });
+  assert.equal(sync.action, 'fetch');
+  assert.equal(sync.ok, true);
+});
+
+check('an offline fetch continues the roll on stale code rather than refusing', () => {
+  const sync = planSync({ branch: 'main', publishBranch: 'main', fetchOk: false });
+  assert.equal(sync.action, 'continue_stale');
+  assert.equal(sync.ok, false, 'recorded as not-ok in the run, but not a refusal');
+  assert.equal(sync.reason, 'fetch_failed');
+});
+
+check('a lockfile change across the fast-forward adds an npm ci step, in order after the merge', () => {
+  const sync = planSync({ branch: 'main', publishBranch: 'main', fetchOk: true, ahead: true, lockfileChanged: true });
+  assert.deepEqual(sync.steps.map((step) => step.id), ['merge-ff', 'npm-ci']);
+  assert.deepEqual(sync.steps[1].argv, ['npm', 'ci', '--no-audit', '--no-fund']);
+});
+
+check('no lockfile change means no npm ci step', () => {
+  const sync = planSync({ branch: 'main', publishBranch: 'main', fetchOk: true, ahead: true, lockfileChanged: false });
+  assert.ok(!sync.steps.some((step) => step.id === 'npm-ci'));
+});
+
+check('an attached private overlay is pulled after the merge, tolerant of failure, on fast-forward, no-op and offline alike', () => {
+  const overlay = './ops/private-overlay.sh';
+  const ff = planSync({ branch: 'main', publishBranch: 'main', fetchOk: true, ahead: true, privateOverlay: overlay });
+  assert.deepEqual(ff.steps.map((step) => step.id), ['merge-ff', 'overlay-pull']);
+  const noop = planSync({ branch: 'main', publishBranch: 'main', fetchOk: true, ahead: false, privateOverlay: overlay });
+  assert.deepEqual(noop.steps.map((step) => step.id), ['overlay-pull']);
+  const offline = planSync({ branch: 'main', publishBranch: 'main', fetchOk: false, privateOverlay: overlay });
+  assert.deepEqual(offline.steps.map((step) => step.id), ['overlay-pull']);
+  assert.ok(offline.steps[0].offlineTolerant, 'overlay pull must not turn a stale-fetch continue into a hard failure');
+});
+
+check('no overlay script attached means no overlay-pull step', () => {
+  const sync = planSync({ branch: 'main', publishBranch: 'main', fetchOk: true, ahead: false });
+  assert.deepEqual(sync.steps, []);
+});
+
+check('--no-sync opts out; so does the env var; neither fires on an unrelated flag', () => {
+  assert.equal(syncOptOutReason(['--no-sync'], {}), '--no-sync flag');
+  assert.equal(syncOptOutReason([], { BRYCECAST_POSTRACE_NO_SYNC: '1' }), 'BRYCECAST_POSTRACE_NO_SYNC=1');
+  assert.equal(syncOptOutReason(['--dry-run'], {}), null);
+  assert.equal(syncOptOutReason([], { BRYCECAST_POSTRACE_NO_SYNC: '0' }), null);
 });
 
 // ---------------------------------------------------------------------------

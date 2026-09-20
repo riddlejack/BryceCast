@@ -52,6 +52,8 @@ Successful releases also back up and replace the operator's copy of the updater.
 
 `scripts/postrace-auto.mjs` accepts `--publish=github`: after the gates pass and the working tree is clean outside the generated-data allowlist, it fetches, proves the push would fast-forward, commits the allowlisted paths on `main`, pushes, pushes the private overlay if one is attached, and finally runs `BRYCECAST_PRODUCTION_UPDATE_CMD` with the pushed sha. It refuses to publish from any branch but `main` and never force-pushes. `--publish=none` remains the default and is what the installed LaunchAgent uses.
 
+The production clone this script runs from is never otherwise updated, so before it rolls anything it also syncs itself: once the gate finds work due (never on the fast nothing-due path, never in `--dry-run`), it requires a clean tree on the publish branch, fetches and fast-forwards onto `origin/<branch>` (refusing on a dirty tree, an off-branch checkout, or a diverged history, the same way the gate itself refuses — a clear reason logged, exit 0, no error spam), pulls the private overlay if attached, and runs `npm ci` when the fast-forward moved `package-lock.json`. An offline fetch is not a refusal — it warns and the roll proceeds on the current code, because a roll on slightly stale code beats no roll. Pass `--no-sync` or set `BRYCECAST_POSTRACE_NO_SYNC=1` to skip this stage when running the pipeline by hand in a feature worktree.
+
 ## Runtime safeguards
 
 An idle runner polls every five minutes. `/api/readiness` returns a normal pre-session state while its idle status is fresh, with no stale timing rows promoted to live data. A missing or overdue runner remains an error.

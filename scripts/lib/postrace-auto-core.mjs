@@ -909,3 +909,111 @@ export const planPublish = ({
     note: 'Mini-resident mode: build, atomic dist swap, app-server restart, /api/health release check with rollback on failure.'
   };
 };
+
+// ---------------------------------------------------------------------------
+// Pre-roll sync — keeping the production clone off stale code
+// ---------------------------------------------------------------------------
+
+/**
+ * `scripts/postrace-auto.mjs` runs from a dedicated clone of `main` on the
+ * production host. Nothing else ever updates that clone, so code that lands on
+ * `main` between race weekends just sits there until the next roll runs it —
+ * at which point `--publish=github` either refuses (the clone's `main` is
+ * behind `origin/main`, so the push can't fast-forward) or, worse, builds and
+ * publishes a stale site with fresh data. `planSync` decides whether a sync is
+ * safe BEFORE the roll starts; like `planPublish`, it only reasons about the
+ * facts it is given and never touches git itself.
+ *
+ * The shell calls this twice on a normal run: once before `git fetch`
+ * (`fetchOk` left at its default `null`) to confirm the tree and branch are
+ * safe to touch at all, and once after, with the fetch result and the
+ * ahead/diverged facts it derived from `git merge-base`. A refusal from the
+ * first call means the second is never made — a dirty tree or an off-branch
+ * checkout never reaches the network.
+ */
+export const SYNC_ACTIONS = ['refuse', 'fetch', 'continue_stale', 'noop', 'fast_forward'];
+
+export const planSync = ({
+  branch,
+  publishBranch = 'main',
+  remote = 'origin',
+  dirty = false,
+  fetchOk = null,
+  ahead = false,
+  diverged = false,
+  lockfileChanged = false,
+  privateOverlay = null
+} = {}) => {
+  const refuse = (reason, detail) => ({ action: 'refuse', ok: false, reason, detail, steps: [] });
+
+  // Both checks are local reads (git status, git branch) a human's mid-edit or
+  // a developer's feature worktree could trip; neither needs the network, so
+  // both come before the fetch and refuse the same way the gate does.
+  if (dirty) {
+    return refuse(
+      'dirty_tree',
+      'Working tree has changes outside a clean checkout. Sync refuses to fetch/merge onto uncommitted work — commit or discard them, or pass --no-sync (BRYCECAST_POSTRACE_NO_SYNC=1) in a feature worktree.'
+    );
+  }
+  if (branch !== publishBranch) {
+    return refuse(
+      'off_branch',
+      `HEAD is on "${branch}", not the publish branch "${publishBranch}". Sync only reconciles ${publishBranch} — check it out, or pass --no-sync (BRYCECAST_POSTRACE_NO_SYNC=1) in a feature worktree.`
+    );
+  }
+
+  if (fetchOk === null) {
+    // The caller hasn't fetched yet; this is the go-ahead to do so.
+    return { action: 'fetch', ok: true, reason: 'ready', detail: `Clean tree on ${publishBranch}; fetching ${remote}/${publishBranch}.`, steps: [] };
+  }
+
+  // The private overlay is a second, independent remote — pulled whenever we
+  // haven't already refused, regardless of whether origin's fetch or the
+  // fast-forward itself happened, with the same offline tolerance.
+  const overlaySteps = privateOverlay ? [{ id: 'overlay-pull', argv: [privateOverlay, 'pull'], offlineTolerant: true }] : [];
+
+  if (!fetchOk) {
+    // Offline. A roll on slightly stale code beats no roll at all, so this is
+    // not a refusal — the caller records it in the run's `sync` field and the
+    // pipeline continues on whatever code is already checked out.
+    return {
+      action: 'continue_stale',
+      ok: false,
+      reason: 'fetch_failed',
+      detail: `git fetch ${remote} ${publishBranch} failed (offline?). Continuing the roll on the current code.`,
+      steps: overlaySteps
+    };
+  }
+
+  if (diverged) {
+    return refuse(
+      'diverged',
+      `HEAD and ${remote}/${publishBranch} have both moved past their common ancestor — not a fast-forward. A human has to reconcile the branches by hand.`
+    );
+  }
+
+  if (!ahead) {
+    return { action: 'noop', ok: true, reason: 'up_to_date', detail: `Already at ${remote}/${publishBranch}.`, steps: overlaySteps };
+  }
+
+  return {
+    action: 'fast_forward',
+    ok: true,
+    reason: 'behind_remote',
+    detail: `${remote}/${publishBranch} is ahead; fast-forwarding.`,
+    steps: [
+      { id: 'merge-ff', argv: ['git', 'merge', '--ff-only', `${remote}/${publishBranch}`] },
+      ...overlaySteps,
+      // "Across the fast-forward": the caller diffs HEAD against the target
+      // before merging (equivalent, and lets the whole plan be built up front).
+      ...(lockfileChanged ? [{ id: 'npm-ci', argv: ['npm', 'ci', '--no-audit', '--no-fund'] }] : [])
+    ]
+  };
+};
+
+/** Developer opt-out for a feature worktree: --no-sync or BRYCECAST_POSTRACE_NO_SYNC=1. */
+export const syncOptOutReason = (argv = [], env = {}) => {
+  if (argv.includes('--no-sync')) return '--no-sync flag';
+  if (env?.BRYCECAST_POSTRACE_NO_SYNC === '1') return 'BRYCECAST_POSTRACE_NO_SYNC=1';
+  return null;
+};
