@@ -13,10 +13,11 @@ import {
 } from '../assets/tracks/sections';
 import {
   MIN_CLEAN_LAPS,
+  anchorsForPack,
+  cleanSectionLapsOf,
   lapContextOf,
-  lapScopesFor,
   lapScopesForObservedLaps,
-  minimumCleanLapsForScope,
+  lapScopesForPack,
   resolveHeatSections,
   sectionObservationsFromLaps,
   type ResolvedHeatSection,
@@ -315,7 +316,7 @@ export const SectionHeatCard = ({
   const scopes = useMemo(
     () => {
       if (!activeLaps) return [{ kind: 'full_race' } as SectionScope];
-      if (!qualifyingMode) return lapScopesFor(activeLaps.totalLaps);
+      if (!qualifyingMode) return lapScopesForPack(activeLaps);
       return lapScopesForObservedLaps(
         activeLaps.lapTotals
           .filter((tuple) => tuple[0] !== null && (tuple[6] !== null || tuple[1] !== null))
@@ -365,10 +366,10 @@ export const SectionHeatCard = ({
     if (scopeKey === 'lap') return { kind: 'single_lap', lap: scrubLap };
     return scopes.find((entry) => entry.kind === 'lap_window' && entry.label === scopeKey) ?? { kind: 'full_race' };
   }, [activeLaps, scopeKey, scrubLap, scopes]);
-  /* Race mode's floor tracks the selected scope (a third needs fewer clean
-   * laps than a full race — see minimumCleanLapsForScope); qualifying keeps
-   * its own one-lap-is-enough floor regardless of scope. */
-  const minimumObservations = qualifyingMode ? 1 : minimumCleanLapsForScope(scope);
+  /* One floor for every race scope (MIN_CLEAN_LAPS) — the thirds menu above
+   * only offers a third that can clear it. Qualifying keeps its own
+   * one-lap-is-enough floor regardless of scope. */
+  const minimumObservations = qualifyingMode ? 1 : MIN_CLEAN_LAPS;
   const aggregationOptions = qualifyingMode
     ? { minimumObservations, observationLabel: 'valid observed qualifying laps' }
     : undefined;
@@ -397,11 +398,35 @@ export const SectionHeatCard = ({
     [activePassMarks, activeAnchors]
   );
   const showMarks = hasHeat && resolvedMarks.length > 0;
-  const suppressedCount = set ? set.sections.filter((section) => section.percentile === null).length : 0;
+  /* Both counts read only the sections this map can actually draw — the ones
+   * whose names join the ACTIVE anchor set. Reading the whole pack instead is
+   * what let a venue page print "Only 55 clean green-flag laps…" beside an
+   * empty shape: the count came from a measured pack whose section names never
+   * matched the anchors it was being joined against. */
+  const joinedSections = useMemo(() => {
+    if (!set) return [];
+    const anchorNames = new Set(activeAnchors.sections.map((anchor) => anchor.sectionName));
+    return set.sections.filter((section) => anchorNames.has(section.sectionName));
+  }, [set, activeAnchors]);
+  const suppressedCount = joinedSections.filter((section) => section.percentile === null).length;
   /* observationCount is the real clean-lap count for this scope, unrounded and
    * ungated by the minimum — cheap to read straight off the set, so the empty
    * state below can name the actual shortfall instead of a generic sentence. */
-  const scopeCleanLapCount = set ? Math.max(0, ...set.sections.map((section) => section.observationCount ?? 0)) : null;
+  const scopeCleanLapCount = set ? Math.max(0, ...joinedSections.map((section) => section.observationCount ?? 0)) : null;
+  /* Thirds are offered only when every third clears the floor (see
+   * lapScopesForPack). When they aren't, the card says so once, quietly, in the
+   * same muted note style as the suppression line — never a dead control and
+   * never an empty map. */
+  const cleanLapTotal = useMemo(
+    () => (activeLaps && !qualifyingMode ? cleanSectionLapsOf(activeLaps).length : null),
+    [activeLaps, qualifyingMode]
+  );
+  const thirdsWithheld =
+    !qualifyingMode &&
+    activeLaps !== null &&
+    cleanLapTotal !== null &&
+    cleanLapTotal > 0 &&
+    !scopes.some((entry) => entry.kind === 'lap_window');
   const singleLap = scope.kind === 'single_lap';
   const scrubContext = singleLap ? lapContext.find((entry) => entry.lap === scrubLap) ?? null : null;
   const drawerRows = useMemo(() => {
@@ -503,14 +528,21 @@ export const SectionHeatCard = ({
    * (finding #16). The year toggle stays (it's navigation, not a scope control),
    * and a prior year that actually renders is one tap away. */
   if (noValidScope) {
+    /* The honest empty state names the actual clean-lap count, and by
+     * construction can never print one at or above the floor: this branch is
+     * only reached when the full-race scope itself cannot shade. */
     const dignified =
       qualifyingMode
         ? qualifying?.note ?? 'No official qualifying section times are on file for this session.'
         : visitLapsCompleted === 0
         ? `His ${laps?.seasonYear ?? ''} visit ended on the opening lap — no clean laps to compare.`.replace(/\s{2,}/g, ' ')
-        : set
-          ? 'Too few clean laps here to compare sections.'
-          : 'No official section times are on file for this race yet.';
+        : !set
+          ? 'No official section times are on file for this race yet.'
+          : cleanLapTotal === 0
+            ? 'This race ran no clean green-flag laps, so there is no section comparison to draw.'
+            : cleanLapTotal !== null && cleanLapTotal < MIN_CLEAN_LAPS
+              ? `This race ran ${cleanLapTotal} clean green-flag lap${cleanLapTotal === 1 ? '' : 's'} — a section comparison needs ${MIN_CLEAN_LAPS}.`
+              : 'The section report for this race does not line up with this track’s timing sections.';
     return (
       <Card
         title={title}
@@ -552,7 +584,10 @@ export const SectionHeatCard = ({
           : set
             ? visitLapsCompleted === 0
               ? `His ${laps?.seasonYear ?? ''} visit ended on the opening lap — no clean laps to compare.`.replace(/\s{2,}/g, ' ')
-              : !qualifyingMode && scope.kind === 'lap_window' && scopeCleanLapCount !== null
+              : !qualifyingMode &&
+                  scope.kind === 'lap_window' &&
+                  scopeCleanLapCount !== null &&
+                  scopeCleanLapCount < minimumObservations
                 ? `Only ${scopeCleanLapCount} clean green-flag lap${scopeCleanLapCount === 1 ? '' : 's'} in the ${scope.label.toLowerCase()} — cautions covered the rest. Try Full race.`
                 : 'Too few clean laps in this scope to compare sections.'
             : 'The venue shape, with the start/finish line marked.'}
@@ -674,6 +709,12 @@ export const SectionHeatCard = ({
           {resolvedMarks.length} this race. {coarse ? 'Tap' : 'Hover'} for the lap and the car.
         </p>
       ) : null}
+      {thirdsWithheld && hasHeat && !singleLap ? (
+        <p style={{ margin: '10px 0 0', fontSize: 11.5, color: 'var(--ink-muted)' }}>
+          This race carries {cleanLapTotal} clean green-flag lap{cleanLapTotal === 1 ? '' : 's'} — the map reads them
+          together rather than splitting them into thirds.
+        </p>
+      ) : null}
       {suppressedCount > 0 && !singleLap && hasHeat ? (
         <p style={{ margin: '10px 0 0', fontSize: 11.5, color: 'var(--ink-muted)' }}>
           {suppressedCount === 1 ? 'One stretch stays uncoloured' : `${suppressedCount} stretches stay uncoloured`} — under{' '}
@@ -770,12 +811,10 @@ export const SectionHeatCard = ({
  *  venue's finer tiling; a PDF-tier pack keeps the venue's coarser PDF anchors —
  *  never a finer set it can't match. This is what lets Nashville's 2026 3-section
  *  PDF shape render beside its 8-loop measured years instead of a bare outline
- *  that still claimed its clean-lap count (finding #17). */
-const anchorsForVisit = (pack: SectionLapsPack, fallback: TrackSectionAnchorSet): TrackSectionAnchorSet => {
-  if (pack.sourceTier === 'lake_loop_crossings') return measuredTrackSectionsFor(pack.venueName) ?? fallback;
-  const pdf = trackSectionsFor(pack.venueName);
-  return pdf && pdf.confidence === 'anchored' ? pdf : fallback;
-};
+ *  that still claimed its clean-lap count (finding #17). The rule itself lives
+ *  in the adapter layer (`anchorsForPack`) so every surface — and the contract
+ *  test — resolves it identically. */
+const anchorsForVisit = anchorsForPack;
 
 /** The most recent OTHER visit at this venue whose section shape actually renders
  *  — the honest destination for a collapsed hollow heat card (finding #16). */
@@ -987,10 +1026,20 @@ export const VenueYearsCard = ({
 
 export interface VenueSectionData {
   loading: boolean;
-  /** The venue's active anchor set: the measured (finer) tiling when every
-   *  loaded visit carries lake loop-crossings, else the curated-PDF anchored
-   *  set, else null (no anchors → the suite renders nothing). */
+  /** The venue's representative anchor set: the measured (finer) tiling when
+   *  every loaded visit carries lake loop-crossings, else the curated-PDF
+   *  anchored set, else null (no anchors → the suite renders nothing). This is
+   *  the venue FRAME — the card's coverage line and the "all visits measured"
+   *  check. Anything that JOINS a pack's section names must use
+   *  `anchorsBySession` instead. */
   anchors: TrackSectionAnchorSet | null;
+  /** Per-visit anchors, resolved by that visit's own source tier (measured lake
+   *  pack → measured anchors; PDF-tier pack → curated PDF anchors), mirroring
+   *  what the race page does. A venue-wide, all-or-nothing choice is what left
+   *  Nashville's 2024/2025 measured packs (S1…S5) joined against the PDF anchor
+   *  set — blank at every scope, under copy that still claimed its clean-lap
+   *  count. */
+  anchorsBySession: Map<string, TrackSectionAnchorSet>;
   /** Loaded section-lap packs for the venue, oldest-first. */
   visits: SectionLapsPack[];
   passMarksBySession: Map<string, PassMarksPack | null>;
@@ -1093,6 +1142,12 @@ export const useVenueSectionData = (
      * against a PDF-tier pack. Nashville: both visits measured. */
     const allMeasured = visits.length > 0 && visits.every((visit) => visit.sourceTier === 'lake_loop_crossings');
     const anchors = (allMeasured ? measuredTrackSectionsFor(trackName) : null) ?? pdfAnchors;
+    /* …but every JOIN resolves per visit, at that visit's own grain, so a
+     * mixed-tier venue draws each year against the anchors its own timing
+     * carried instead of one all-or-nothing venue choice. */
+    const anchorsBySession = new Map(
+      anchors ? visits.map((visit) => [visit.sessionId, anchorsForVisit(visit, anchors)] as const) : []
+    );
     /* The default (and the hero shading) is the most recent visit that CARRIES
      * clean-lap comparisons — a visit that ended on the opening lap (Portland
      * 2025) stays reachable through the year toggle but never greets the reader
@@ -1100,8 +1155,13 @@ export const useVenueSectionData = (
     const newestWithData = [...visits].reverse().find(packHasCleanComparisons) ?? null;
     const mostRecent = newestWithData ?? (visits.length > 0 ? visits[visits.length - 1] : null);
     const heroHeat =
-      anchors && mostRecent ? resolveHeatSections(anchors, sectionObservationsFromLaps(mostRecent)) : [];
-    return { loading, anchors, visits, passMarksBySession, lapsCompletedBySession, mostRecent, heroHeat };
+      anchors && mostRecent
+        ? resolveHeatSections(
+            anchorsBySession.get(mostRecent.sessionId) ?? anchors,
+            sectionObservationsFromLaps(mostRecent)
+          )
+        : [];
+    return { loading, anchors, anchorsBySession, visits, passMarksBySession, lapsCompletedBySession, mostRecent, heroHeat };
   }, [trackName, visits, passMarksBySession, lapsCompletedBySession, loading]);
 };
 
@@ -1126,7 +1186,7 @@ export const VenueSectionSuite = ({
   showVisitControl?: boolean;
   qualifying?: QualifyingHeatMode | null;
 }) => {
-  const { anchors, visits, passMarksBySession, lapsCompletedBySession, mostRecent } = data;
+  const { anchors, anchorsBySession, visits, passMarksBySession, lapsCompletedBySession, mostRecent } = data;
   const [localSelectedId, setLocalSelectedId] = useState<string | null>(null);
 
   if (!outline || !anchors || (!mostRecent && !qualifying)) return null;
@@ -1220,7 +1280,8 @@ export const VenueSectionSuite = ({
         orientationClause={orientationClause}
         visitControl={visitControl}
         outline={outline}
-        anchors={anchors}
+        /* The selected visit joins against ITS OWN grain, not the venue's. */
+        anchors={anchorsBySession.get(selected.sessionId) ?? anchors}
         laps={selected}
         fallbackSet={null}
         passMarks={passMarks}

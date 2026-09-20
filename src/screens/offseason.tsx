@@ -69,12 +69,14 @@ export const HeatTrack = ({ trackName, sessionId, maxHeight = 120 }: { trackName
     if (sessionId && sections.anchors) {
       const visit = sections.visits.find((pack) => pack.sessionId === sessionId);
       if (visit) {
-        const own = resolveHeatSections(sections.anchors, sectionObservationsFromLaps(visit));
+        /* That visit's own anchors — a measured pack never joins PDF names. */
+        const visitAnchors = sections.anchorsBySession.get(visit.sessionId) ?? sections.anchors;
+        const own = resolveHeatSections(visitAnchors, sectionObservationsFromLaps(visit));
         if (own.length > 0) return own;
       }
     }
     return sections.heroHeat;
-  }, [sessionId, sections.anchors, sections.visits, sections.heroHeat]);
+  }, [sessionId, sections.anchors, sections.anchorsBySession, sections.visits, sections.heroHeat]);
   if (!outline) return null;
   return (
     <div className="heat-track" style={{ width: '100%' }}>
