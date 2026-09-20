@@ -36,13 +36,18 @@ and the script sets it only after preflight passes.
 5. `career:validate`
 6. `career:summary`
 7. `career:coverage`
-8. `analytics:predictive-race-intelligence`
-9. `ingest:history`  ← standings, before the package
-10. `analytics:ui-data-package:refresh-validate`  ← `BRYCECAST_ALLOW_EVENT_ROLL=1`
+8. `postrace:lake-sync`  ← acquire + validate timing archives and replay feeds
+9. `analytics:timing-coverage`
+10. `analytics:timing-coverage:validate`
+11. `ingest:history`  ← standings, before the package
+12. `analytics:ui-data-package:refresh-validate`  ← `BRYCECAST_ALLOW_EVENT_ROLL=1`
+
+`PIPELINE_STEPS` in `scripts/lib/postrace-roll-core.mjs` is the authority; this
+list mirrors it.
 
 ## Preflight (what `--dry-run` validates)
 
-- The working directory is a BryceCast repo root with all 10 pipeline scripts.
+- The working directory is a BryceCast repo root with all 12 pipeline scripts.
 - `BRYCECAST_SQLITE_PATH` is set, the file exists, and its header is a real
   SQLite database; `race_snapshots` is present (row count reported).
 - `npm` is on PATH.

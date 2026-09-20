@@ -434,8 +434,38 @@ const main = async () => {
     say(`  decision: ${gate.proceed ? 'WOULD RUN' : `would exit 0 — ${gate.reason}`}`);
     if (gate.proceed) {
       say(`  would run: postrace:roll → ${GATE_STEPS.map((step) => step.npmScript).join(' → ')}`);
-      const plan = planPublish({ mode: publishMode, repoRoot, branch: currentBranch(), commitMessage: '(dry run)' });
-      say(`  publish (${publishMode}): ${plan.commands.length ? plan.commands.map(describeCommand).join(' ; ') : 'nothing — build only'}`);
+      // Build the plan the REAL run would build, not a reduced one. A dry run
+      // that omitted the private-overlay push and the production updater made
+      // `--publish=github` look like a plain `git push` — which is the opposite
+      // of what an operator is using this output to decide.
+      const dryTree = classifyWorkingTree(gitPorcelain());
+      // planPublish refuses some combinations by throwing — github mode from a
+      // branch that is not the publish branch, most of all. A dry run must
+      // REPORT that refusal, not die with a stack trace: telling an operator
+      // "this is why it would not publish" is the entire point of the mode.
+      try {
+        const plan = planPublish({
+          mode: publishMode,
+          repoRoot,
+          branch: currentBranch(),
+          // Empty on a clean tree; planPublish then falls back to the static
+          // allowlist rather than refusing, which is what a dry run wants.
+          stagePaths: dryTree.allowed.length ? dryTree.allowed.map((entry) => entry.path) : null,
+          remote: process.env.BRYCECAST_GIT_REMOTE ?? 'origin',
+          publishBranch: process.env.BRYCECAST_GIT_BRANCH ?? 'main',
+          privateOverlay: existsSync(join(repoRoot, 'ops/private-overlay.sh')) ? './ops/private-overlay.sh' : null,
+          productionUpdateCmd: process.env.BRYCECAST_PRODUCTION_UPDATE_CMD ?? null,
+          commitMessage: '(dry run)'
+        });
+        say(`  publish (${publishMode}): ${plan.commands.length ? plan.commands.map(describeCommand).join(' ; ') : 'nothing — build only'}`);
+        if (plan.note) say(`  publish note: ${plan.note}`);
+        if (dryTree.refused.length) {
+          say(`  publish would REFUSE: dirty outside the allowlist — ${dryTree.refused.map((entry) => entry.path).join(', ')}`);
+        }
+      } catch (error) {
+        say(`  publish (${publishMode}): WOULD REFUSE — ${error?.message ?? error}`);
+        decision.publishRefusal = String(error?.message ?? error);
+      }
     }
     if (asJson) process.stdout.write(`${JSON.stringify({ ...decision, mode: 'dry-run' }, null, 2)}\n`);
     return 0;
