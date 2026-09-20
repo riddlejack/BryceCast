@@ -50,6 +50,3 @@ data/career/career.dataset.json.sha256
 # `postrace-auto --publish=local` moves the previous build aside under this name
 # before swapping in the new one. It is a rollback handle, never a commit.
 .dist-before-*
-
-# Loop-crossing-derived pass placement inputs; carried by the private companion repo.
-analysis/track-position/output/races/*.passes.ndjson.gz
