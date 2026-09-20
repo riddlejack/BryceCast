@@ -193,7 +193,7 @@ export const SeasonCompleteHero = ({ review }: { review: SeasonReview }) => (
           {review.seasonYear} season complete · {nextSeasonOutlook.seasonYear} calendar on the way
         </span>
         <div className="row row--wrap" style={{ gap: 20 }}>
-          <Link to="/race-week" className="hero-now__action">
+          <Link to="/races" className="hero-now__action">
             The {review.seasonYear} season in review <ArrowRight size={16} aria-hidden />
           </Link>
           <Link to="/career" className="hero-now__action">
