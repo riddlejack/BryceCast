@@ -36,6 +36,14 @@ analysis/**/output/timing-observations/*.ndjson.gz
 analysis/replay-feeds/output/feeds/
 analysis/semantic-layer/output/live-captures/*.ndjson.gz
 analysis/semantic-layer/output/nashville/*.ndjson.gz
+# Per-race pass-placement packs: outputs of `npm run analytics:track-position`,
+# derived from the loop-crossing recordings above and therefore just as private.
+# Without this rule they are untracked-but-unignored, which is two failures at
+# once: a non-empty `git status` blocks every release, and the generated-data
+# allowlist in scripts/lib/postrace-auto-core.mjs matches
+# `analysis/<lane>/output/` — so an unattended `--publish=github` run would stage
+# and push them to this public repository.
+analysis/track-position/output/races/
 publication-private/
 
 # Private companion repo. Operators overlay it onto this checkout: its git dir
