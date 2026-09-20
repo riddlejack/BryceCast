@@ -96,8 +96,8 @@ BryceCast is a non-commercial fan project, and none of it would exist without th
 
 Everything here was gathered from pages and feeds those organizations publish openly, and it all remains theirs. If you represent one of them and would like something removed, open an issue or reach me through my GitHub profile and I'll take it down.
 
-## About the build
+## History and license
 
-The history starts on June 8, 2026 with a working baseline and runs to today; [development history](docs/project/DEVELOPMENT_HISTORY.md) walks through the milestones. I'm not a programmer by trade. I designed the product with Bryce, decided what it should claim and what it shouldn't, and built it with AI coding tools — mostly OpenAI Codex, with Claude Code for the later work.
+The history starts on June 8, 2026 with a working baseline and runs to today; [development history](docs/project/DEVELOPMENT_HISTORY.md) walks through the milestones.
 
 The code is [MIT licensed](LICENSE). That license covers my software, not the third-party data, photos, logos or track maps, which stay with their owners.
