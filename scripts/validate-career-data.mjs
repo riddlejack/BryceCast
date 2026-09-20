@@ -1,5 +1,5 @@
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
-import { dirname, join } from 'node:path';
+import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -314,7 +314,9 @@ const main = async () => {
   const warnings = issues.filter((issue) => issue.severity === 'warn');
   const report = {
     checkedAt: new Date().toISOString(),
-    dataset: datasetPath,
+    // Checkout-relative: this report is committed, so it must not record the
+    // absolute path of whichever worktree happened to produce it.
+    dataset: relative(root, datasetPath),
     ok: errors.length === 0,
     counts: Object.fromEntries(collectionNames.map((name) => [name, Array.isArray(dataset[name]) ? dataset[name].length : null])),
     errors,

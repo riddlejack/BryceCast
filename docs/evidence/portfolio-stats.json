@@ -3,7 +3,7 @@
   "evidenceBasis": "Recomputed from included generated reports. Underlying acquisition and full-corpus validations were not rerun by this command.",
   "originalSourceCommit": "94afeda3ef4ebbaff964c833cd970360efeab32c",
   "career": {
-    "generatedAt": "2026-09-10T22:28:49.572Z",
+    "generatedAt": "2026-09-19T22:46:05.585Z",
     "counts": {
       "drivers": 556,
       "series": 7,
@@ -19,17 +19,17 @@
       "racecraftEvents": 44,
       "penalties": 94,
       "incidents": 166,
-      "weatherObservations": 201,
+      "weatherObservations": 221,
       "mediaAssets": 1098,
       "broadcastRoutes": 0,
       "notificationRules": 0,
       "notificationEvents": 0,
       "derivedMetrics": 453,
-      "sourceEvidence": 1347,
+      "sourceEvidence": 1356,
       "gaps": 10
     },
     "validation": {
-      "checkedAt": "2026-09-10T23:05:49.768Z",
+      "checkedAt": "2026-09-19T22:46:04.925Z",
       "ok": true,
       "errors": 0,
       "warnings": 1,
@@ -43,7 +43,7 @@
     }
   },
   "archive": {
-    "throughDate": "2026-09-10",
+    "throughDate": "2026-09-19",
     "sourceObjects": 1136,
     "uniqueBytes": 7623690114,
     "scope": "Broader INDYCAR/INDY NXT research archive, not only Bryce career data; source objects are withheld pending redistribution clearance.",
@@ -51,7 +51,7 @@
     "catalogEntryCaveat": "Source/session candidates, not a deduplicated count of official races."
   },
   "timing": {
-    "asOfDate": "2026-09-11",
+    "asOfDate": "2026-09-20",
     "racesExpected": 45,
     "racesObserved": 45,
     "racesWithReplay": 45,
@@ -62,29 +62,29 @@
     "caveat": "Observed coverage is not an uninterrupted 1 Hz guarantee. Qualifying counts are race links, not unique physical qualifying sessions."
   },
   "loopCrossings": {
-    "generatedAt": "2026-09-10T22:40:37.009Z",
+    "generatedAt": "2026-09-20T17:38:55.651Z",
     "sourceSessions": 143,
     "rows": 2613292,
     "grain": "One normalized timing-loop crossing record; not GPS telemetry or independent training examples."
   },
   "qualifyingLab": {
-    "generatedAt": "2026-09-11T01:20:50.466Z",
+    "generatedAt": "2026-09-20T00:01:19.984Z",
     "coveredPhysicalSessions": 35,
     "exclusions": 5
   },
   "historicalWeather": {
-    "generatedAt": "2026-07-19T20:49:53.633Z",
+    "generatedAt": "2026-09-19T22:45:41.065Z",
     "source": "open_meteo_historical_archive",
-    "cutoffDate": "2026-07-18",
-    "eligibleExactWindowSessions": 115,
-    "joinedSessions": 115,
+    "cutoffDate": "2026-09-18",
+    "eligibleExactWindowSessions": 135,
+    "joinedSessions": 135,
     "joinedBySessionType": {
-      "race": 40,
-      "practice": 51,
-      "qualifying": 24
+      "race": 45,
+      "practice": 56,
+      "qualifying": 34
     },
     "skippedDateOnlySessions": 78,
-    "skippedFutureSessions": 20,
+    "skippedFutureSessions": 0,
     "caveat": "Modeled hourly joins for eligible INDY NXT sessions, not measured weather for every career series or every race through September."
   },
   "storedValidation": {
@@ -104,8 +104,8 @@
       "interpretation": "21/25 races reproduce the official per-lap \"Lap\" time to 0.0000 s at the median (i.e. clean racing laps are exact to the 0.0001 s tick). Large residuals are confined to caution/red-flag/pit laps (whose lap timing spans stoppages differently) and a few races with a residual lap-alignment offset; the residual distribution per race is reported honestly below."
     },
     "identityCrosswalk": {
-      "generatedAt": "2026-09-10T23:05:13.340Z",
-      "go": 43,
+      "generatedAt": "2026-09-20T17:42:30.766Z",
+      "go": 44,
       "conditional": 1,
       "noGo": 0,
       "hardFailures": 0
@@ -113,22 +113,22 @@
   },
   "sources": {
     "data/career/reports/ingestion-summary.json": {
-      "sha256": "08f984ac7c627ac8790545330c36b1899ff40ed00bfec31db0ecb02acde22ae7"
+      "sha256": "923e6db9bbd762e95d3952c4483ed9a93e4f084e141af3af59bba64340b4ab97"
     },
     "data/career/reports/validation-report.json": {
-      "sha256": "f667aeb2547f7b6c0e61556693209dba7134f29c567745f6f9a9fed0afa02fc1"
+      "sha256": "d573547448466b11b06044bfc785c1c204747086ae3232906f81af4841093c5c"
     },
     "data/historical-data-lake/catalog/coverage-summary.json": {
-      "sha256": "d2216055e407ced48a631801b6731064a5b1c242fe9918991850f8e62d5b4977"
+      "sha256": "48710dc9df11d6bac2aec110e04e314ac61ee6d8e0bb7e133399745f2e94c942"
     },
     "data/historical-data-lake/catalog/timing-coverage-ledger.json": {
-      "sha256": "6c33cdbd3e231a1621cd4bb623d31b2f8a4ef301a57db4d779a73c579fda185f"
+      "sha256": "df5f742c42463bf918109d5dfe8a18816d21254db56a3d8996efc6c38bf28237"
     },
     "analysis/semantic-layer/output/loop-crossings-summary.json": {
-      "sha256": "0d648c2578c3dc103926df54af75e1b5760d7c1b1d90338ad58c7d3398c9c4be"
+      "sha256": "eda9dc4998f3273aa200a463983df81e2762fef386cc5e27d75bbeb92c9f5a60"
     },
     "analysis/quali-lab/output/coverage-census.json": {
-      "sha256": "f63e7e246ac244d57a8d7190317657c9873aa0734311ac24f3baf8368751fe2f"
+      "sha256": "070549197bd0c4da87f0c3e7a511194fbdd0b345c1e7577b2092d9038a64f3ae"
     },
     "analysis/semantic-layer/output/validation/finishing-order.json": {
       "sha256": "8a6d3fa8ec91cb59d92bf3e792c00aac952cf7e0bfeb1073d1e6f6cc553f19bc"
@@ -137,10 +137,10 @@
       "sha256": "5f295fafc2490c0f40e717df8f19bc82f26f16ed2b281109a769c40af9e47dee"
     },
     "analysis/semantic-layer/output/crosswalk/crosswalk-validation.json": {
-      "sha256": "519d6b2f0508d28e4242c1c1d0091bea7a5da8548ae703d5c2b70365a90b6d75"
+      "sha256": "1a7e59d72cd48445fdcd3328420c7d7aa6455843d0a00a9300f4fddf6b245bbd"
     },
     "data/career/reports/indy-nxt-weather-backfill-report.json": {
-      "sha256": "58ee5ff338fb8a5c4936cc3d35e1f8a01726ae6d22421cb7f734e9d99b174da0"
+      "sha256": "734e36df5bdbc7da62b0407e742356002d7b3a46c733537d622a0fa4fdbd24ad"
     }
   }
 }

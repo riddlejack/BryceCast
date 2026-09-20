@@ -5,7 +5,7 @@ BryceCast has three distinct execution boundaries: a historical analytics lane, 
 ```mermaid
 flowchart LR
   subgraph historical["Historical and analytics lane"]
-    H1["Official results and reports<br/>permissioned archives"] --> H2["Private raw lake and canonical career data<br/>withheld from default clone"]
+    H1["Official results and reports<br/>public timing archives"] --> H2["Raw corpus and canonical career data<br/>data release, outside Git"]
     H2 --> H3["Import, normalization, semantic, and validation jobs"]
     H3 --> H4["Dated derived reports, context packs,<br/>track outlines, and UI aggregate"]
   end
@@ -29,9 +29,9 @@ flowchart LR
 
 ## Historical lane
 
-The full pipeline preserves raw source objects, normalizes them into stable entities, derives analytical tables, validates joins and metric contracts, and finally emits compact UI artifacts. The public candidate begins at the derived-output boundary. Its central artifact is the dated [UI data package](../../analysis/ui-data-package/ui-data-package.json), supported by [context packs](../../analysis), the [timing-coverage ledger](../../data/historical-data-lake/catalog/timing-coverage-ledger.json), [generated career reports](../../data/career/reports), public history JSON, and compact track outlines.
+The full pipeline preserves raw source objects, normalizes them into stable entities, derives analytical tables, validates joins and metric contracts, and finally emits compact UI artifacts. A plain clone begins at the derived-output boundary; `npm run data:restore` adds the source data behind it. Its central artifact is the dated [UI data package](../../analysis/ui-data-package/ui-data-package.json), supported by [context packs](../../analysis), the [timing-coverage ledger](../../data/historical-data-lake/catalog/timing-coverage-ledger.json), [generated career reports](../../data/career/reports), public history JSON, and compact track outlines.
 
-The default build does not require the canonical career dataset, raw career archive, timing lake, or operational SQLite database. Their paths and hashes may appear in provenance records without embedding their contents. A hash proves which withheld snapshot produced an output; it does not make that output independently reproducible from the public clone.
+The default build does not require the canonical career dataset, raw career archive, timing lake, or operational SQLite database. Their paths and hashes appear in provenance records. For the career corpus and timing captures, the [data release](../../DATA_RELEASE.md) supplies the files those hashes name; outputs computed from the unpublished production archive are verifiable only against their stored receipts.
 
 The declared build is:
 

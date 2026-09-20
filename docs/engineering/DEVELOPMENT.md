@@ -55,27 +55,28 @@ The default workflow intentionally requires none of the following:
 
 Commands whose names include `poll`, `live`, `weather`, `refresh`, `postrace`, migration, deployment, or release operations are retained because they document the application architecture. They are not part of the public development loop. Do not run them from a public clone as a way to make missing data appear. Historical operational documents also contain commands from their original context; the [publication guide](../../AGENTS.md) and [data policy](../../DATA_RELEASE.md) control this edition.
 
-## Optional full-corpus maintainer workflow
+## Full-corpus workflow
 
-This lane is for maintainers who already have an approved, immutable source release and permission to use it. It is not a setup recipe for acquiring the withheld corpus. Confirm the release identifier, rights record, hash, and data cutoff before changing the checkout. Never point these commands at the live writer database or the operational runtime.
-
-The canonical normalized dataset belongs at `data/career/career.dataset.json` as a local symlink to the approved external snapshot. Keep the source outside Git. Replace the example path only after the private release receipt has been checked:
+The source data is published as a release asset rather than in Git ([why](../../DATA_RELEASE.md)). Install it with:
 
 ```bash
-export BRYCECAST_CANONICAL_DATASET=/absolute/path/to/approved-release/career.dataset.json
-
-test -f "$BRYCECAST_CANONICAL_DATASET"
-test ! -e data/career/career.dataset.json
-test ! -L data/career/career.dataset.json
-ln -s "$BRYCECAST_CANONICAL_DATASET" data/career/career.dataset.json
-
-test -L data/career/career.dataset.json
-test -f data/career/career.dataset.json
-readlink data/career/career.dataset.json
-shasum -a 256 data/career/career.dataset.json
+npm run data:restore
 ```
 
-Compare the printed target and SHA-256 with the private release receipt. A readable file is not sufficient provenance. If the link already exists, inspect it rather than replacing it. Other full-corpus lanes may require their own approved source families; restoring this one file does not authorize or satisfy them.
+The script downloads the latest `data-*` release (about 855 MB, mostly mirrored timing PDFs), verifies the archive and then every file against the release manifest, unpacks into git-ignored paths, and expands the canonical dataset to `data/career/career.dataset.json` after checking its recorded SHA-256. It refuses to overwrite a differing file without `--force`; `--dry-run` previews and `--tag` pins a release. Operators with the private overlay already have these files, and the script says so and exits.
+
+With the data restored:
+
+```bash
+npm run career:validate                   # referential integrity of the canonical dataset
+npm run career:coverage                   # source coverage against the raw corpus
+npm run analytics:replay-feeds:validate   # replay feed packs against their committed manifest
+npm run build && BRYCECAST_REPLAY=1 npm run serve:app   # the app with replay enabled
+```
+
+From there the career corpus, semantic layer, pass-placement packs, context packs and UI data package can all be validated and regenerated, and the 2024–2025 RaceTools and 2026 Timing71 replays play in the app.
+
+What the data release does not unlock, because it depends on the unpublished production archive or on a live operator environment: BryceCast's own Race Control capture replays and the `/api/timing-archive/*` routes (they read `data/live/brycecast.sqlite`), the standings snapshot inside the UI data package, current-conditions weather (it fetches upstream), and the `postrace:*` automation, which expects the operator's local data lake. Never point any command at a live writer database.
 
 The optional analytics environment uses Python 3.10 or newer and may download Python packages. It is separate from the Node-only public workflow:
 
@@ -83,7 +84,7 @@ The optional analytics environment uses Python 3.10 or newer and may download Py
 npm run analytics:setup
 ```
 
-After restoring the canonical snapshot, an API-source change that affects the live context pack must flow through its owning producer. Repack the live context and manifest first, then rebuild the UI package with the committed cutoff pinned and upstream refresh disabled:
+After restoring the data, an API-source change that affects the live context pack must flow through its owning producer. Repack the live context and manifest first, then rebuild the UI package with the committed cutoff pinned and upstream refresh disabled:
 
 ```bash
 BRYCECAST_ANALYTICS_AS_OF_DATE=2026-09-10 \
@@ -97,8 +98,8 @@ npm run analytics:ui-data-package:validate
 npm run build
 ```
 
-Do not run that sequence blindly. `scripts/repack-live-context.py` rewrites the live context through the owning Python producer and updates its manifest; it requires the licensed canonical dataset and deliberately does not refresh sources or fit models. `BRYCECAST_SKIP_UPSTREAM_REFRESH=1` prevents the package builder from invoking the broader Python refresh. `BRYCECAST_ANALYTICS_AS_OF_DATE=2026-09-10` reproduces the committed analytical cutoff and prevents an accidental calendar roll. A deliberate post-race roll uses a new reviewed cutoff and its own release procedure; it is not a routine local build.
+Do not run that sequence blindly. `scripts/repack-live-context.py` rewrites the live context through the owning Python producer and updates its manifest; it requires the canonical dataset and deliberately does not refresh sources or fit models. `BRYCECAST_SKIP_UPSTREAM_REFRESH=1` prevents the package builder from invoking the broader Python refresh. `BRYCECAST_ANALYTICS_AS_OF_DATE=2026-09-10` reproduces the committed analytical cutoff and prevents an accidental calendar roll. A deliberate post-race roll uses a new reviewed cutoff and its own release procedure; it is not a routine local build.
 
-Inspect all regenerated files and claim receipts before accepting them. A package validation proves internal consistency. Full-corpus provenance, source rights, and the data-as-of boundary still require the private release record. Architecture and ownership details are indexed in the [engineering atlas](ENGINEERING_ATLAS.md), and the repository lineage is described in [development history](../project/DEVELOPMENT_HISTORY.md).
+Inspect all regenerated files and claim receipts before accepting them. A package validation proves internal consistency. Full-corpus provenance and the data-as-of boundary come from the release manifest and the stored receipts. Architecture and ownership details are indexed in the [engineering atlas](ENGINEERING_ATLAS.md), and the repository lineage is described in [development history](../project/DEVELOPMENT_HISTORY.md).
 
 The historical `analytics:external-review-pack` commands additionally require the withheld `analysis/devspace-audit/devspace-audit-evidence.json` and their declared private inputs. They are not publication checks and cannot run from this clone alone; use `test:publication` for the supported self-contained validation.

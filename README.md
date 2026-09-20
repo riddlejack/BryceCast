@@ -1,50 +1,60 @@
 # BryceCast
 
-**A driver-centered motorsport data system: from inconsistent historical records and live timing feeds to source-backed race analysis.**
+**A race-weekend companion and career archive for one driver, built from public timing data.**
 
-BryceCast follows Bryce Aron's career across junior single-seaters, INDY NXT, and endurance racing. It brings together historical research, timing reconstruction, weather context, competitor comparisons, and a web companion designed around real race weekends.
+My friend Bryce Aron races in INDY NXT, the series one step below IndyCar. I wanted a better way to follow his weekends than refreshing a timing screen, so I built one: a site that polls live timing once a second during a session, keeps everything it sees, and turns it into things a timing screen can't show you — where on the track he's gaining or losing time, where a pass actually happened, what the wind was doing in Turn 4, and how this weekend compares with every other race of his career back to 2019.
 
-[Website](https://brycecast.com) · [Engineering atlas](docs/engineering/ENGINEERING_ATLAS.md) · [Architecture](docs/engineering/ARCHITECTURE.md) · [Run locally](#run-the-historical-demo) · [Data release plan](DATA_RELEASE.md)
+It runs at **[brycecast.com](https://brycecast.com)** on a Mac mini. This repository is the whole thing: the collectors, the archive, the analysis, the React app, and the automation that rolls new data in after each race.
 
-> **Publication candidate:** the code repository is being prepared privately. Included historical outputs and third-party visual/data assets remain under source-specific review. Raw archives and production SQLite are candidates for a separate permissioned release; they are not included in this Git checkout. See [release status](docs/publication/RELEASE_STATUS.md).
->
-> **This is the single codebase.** Production builds `main` from this repository. The withheld material above — plus the deployment tooling — lives in a private companion repository that operators overlay onto a checkout of this one; every path it carries is listed in `.gitignore` here. See [release and data refresh](docs/operations/RELEASE_AND_DATA_REFRESH.md#repository-topology).
+[Live site](https://brycecast.com) · [Case studies](docs/case-studies/README.md) · [Architecture](docs/engineering/ARCHITECTURE.md) · [Run it yourself](#run-it) · [Data sources](DATA_SOURCES.md)
 
-![Qualifying section analysis in the local historical demo](docs/evidence/qualifying-heat-map.png)
+![Section-by-section qualifying heat map, drawn from timing loops rather than GPS](docs/evidence/qualifying-heat-map.png)
 
-## What went into it
+## By the numbers
 
-The figures below describe the source corpus and stored analytical outputs, **not the volume shipped in this repository**. Dates and denominators are part of every claim.
-
-| Scale | Meaning |
+| | |
 | --- | --- |
-| **7 series · 10 series-season records · 2019–2026** | Unequal source coverage across Bryce's career; 87 events and 493 sessions |
-| **8,943 session-result records · 75,589 lap samples** | Full-field/session records and source-bounded lap observations; not 8,943 races |
-| **2,613,292 timing-loop crossing rows** | Normalized RaceTools output across 143 source captures; not GPS telemetry |
-| **45/45 INDY NXT races with observed timing and replay coverage** | 2024–2026 career ledger; does not imply uninterrupted one-second capture |
-| **115 exact-window historical weather joins** | Modeled hourly weather for eligible INDY NXT sessions through July 18, 2026; date-only sessions were withheld |
-| **7.62 GB · 1,136 source objects** | Indexed historical archive including a broader INDYCAR research pool; permission-pending source files |
+| **8 seasons, 7 series** | Bryce's career from F1600 in 2019 through Formula Ford, GB3, Euroformula Open, Formula Regional Oceania, IMSA and INDY NXT — 87 events, 493 sessions, 42 tracks |
+| **75,589 laps** | Lap-level records across the career, alongside 8,943 session results covering 556 drivers, so every result has the full field around it |
+| **2.6 million timing-loop crossings** | Every car over every timing loop in 143 INDY NXT sessions, decoded from raw timing recordings at 0.0001-second resolution |
+| **45 of 45 races** | Every INDY NXT race from 2024 to 2026 has timing and a replay you can scrub through |
+| **1-second polling** | The live collector samples Race Control once a second while cars are on track; the archive behind the site holds about 6 GB of those snapshots |
+| **135 sessions with weather** | Hourly conditions joined to the exact session window and track location, not just the date |
 
-Career counts are from September 10, 2026; timing coverage is recorded September 11. The [machine-readable evidence receipt](docs/evidence/portfolio-stats.json) includes source paths, hashes, dates, caveats, and stored validation results. Run `npm run portfolio:stats` to recompute that receipt from the included reports. See the [weather case study](docs/case-studies/04-weather-and-wind.md) for the older weather cutoff and source-family differences.
+Every figure is recomputed by `npm run portfolio:stats` into a [receipt](docs/evidence/portfolio-stats.json) with dates, definitions and source hashes. Where a number has an asterisk — coverage gaps, modeled rather than measured weather — the [case studies](docs/case-studies/README.md) say so.
 
-## Engineering stories
+## How it works
 
-| Problem | What the project does | Evidence and limits |
-| --- | --- | --- |
-| No GPS trace for section heat maps | Decode timing clocks, reconcile loop geometry, and map named intervals onto track outlines | [Heat maps without GPS](docs/case-studies/01-heatmaps-without-gps.md); 21/25 stored race comparisons have tick-exact median lap-time residuals |
-| A lap chart cannot tell you where order changed | Reconstruct relative crossing order and bound a change between named loops | [Pass placement](docs/case-studies/02-pass-placement.md); no exact pass coordinate or physical proximity claim |
-| Qualifying formats disagree | Separate capture laps, official group rank, combined grid, doubleheader rules, and oval averages | [Qualifying](docs/case-studies/03-qualifying.md); cancellation and missing ranks remain visible |
-| Weather is not a date-only join | Join source-backed session windows and track locations; rotate meteorological wind bearing into the map frame | [Weather and wind](docs/case-studies/04-weather-and-wind.md); modeled/near-track weather stays distinct from official conditions |
-| A more accurate backtest can still be invalid | Compare baseline, ridge, and nearest-neighbor models; retain null results and reject post-race leakage | [Models and leakage](docs/case-studies/05-models-and-leakage.md); no validated public prediction claim |
-| Multiple race-day monitors exhausted the process budget | Centralize polling/persistence in one supervised ingestor and make viewers read cached state | [Live reliability](docs/case-studies/06-live-reliability.md); the original capture gaps remain documented |
-| Career data has very different depth by series | Normalize outcomes while preserving source-family eligibility; build series-specific analyses | [Career and competitors](docs/case-studies/07-career-and-competitors.md); descriptive comparisons, not causal driver/team attribution |
-| One-second captures repeat slow-changing payloads | Store immutable payload versions by content hash and reconstruct observations through references | [SQLite archive](docs/case-studies/08-sqlite-archive.md); runnable synthetic migration and byte-equivalence checks |
+```text
+collect ──► archive ──► normalize ──► analyze ──► serve
+```
 
-The [engineering atlas](docs/engineering/ENGINEERING_ATLAS.md) also covers cautions, restarts, race narratives, archive discovery, source contamination, career mileage/travel estimates, and the less visible integrity controls.
+- **Collect.** On a race weekend a single supervised runner owns all upstream polling. It idles at a five-minute heartbeat, tightens to 15 seconds as a session approaches, samples once a second while it's live, then cools down. Historical seasons come from official results, timing PDFs and public timing archives, each pulled by its own importer.
+- **Archive.** Snapshots go into SQLite. One-second captures repeat most of their payload, so each distinct payload is stored once by content hash and observations point at it. Raw source files are kept byte-for-byte with their hashes.
+- **Normalize.** Seven series publish results seven different ways. Importers map them onto one career model — drivers, teams, cars, tracks, sessions, laps — and record which source each fact came from and how much that source can be trusted.
+- **Analyze.** Python and Node jobs decode timing loops into laps and sections, place passes between loops, reconcile qualifying formats, join weather, and compare Bryce with teammates and rivals. Each job has a validator, and the build fails if one does.
+- **Serve.** The analysis is packed into dated JSON that the React app reads. After a race, an hourly job on the mini notices the new session, reruns the pipeline, checks the result, and builds the updated site.
 
-## Run the historical demo
+## The hard parts
 
-Use **Node.js 24** and npm:
+These were the problems that took real thought. Each links to a short write-up with the evidence and the limits.
+
+| Problem | What I ended up doing |
+| --- | --- |
+| **There's no GPS.** I wanted heat maps of where Bryce is fast, and the feed only says when a car crossed a wire in the track. | Decode the loop clocks, reconcile loop distances against each circuit's geometry, and color the track by section. Rebuilt lap times match the official ones to the tick in 21 of 25 races. [Heat maps without GPS](docs/case-studies/01-heatmaps-without-gps.md) |
+| **A lap chart says the order changed, not where.** | Rebuild the running order at every loop, so a pass is pinned between two named points on the track — and never claimed more precisely than that. [Pass placement](docs/case-studies/02-pass-placement.md) |
+| **The collector died mid-race.** During a Road America drill, overlapping monitors used up the machine's process slots and capture stopped for 26 minutes. | Rebuild around one ingestor that owns polling and writing, with every viewer reading its cache. The gap is still in the record. [Live reliability](docs/case-studies/06-live-reliability.md) |
+| **One-second captures were eating the disk.** | Content-addressed storage: each payload once, every observation a reference. Reconstruction is byte-identical, and there's a runnable migration test. [SQLite archive](docs/case-studies/08-sqlite-archive.md) |
+| **Every series does qualifying differently.** Groups, combined grids, doubleheaders, two-lap oval averages. | One qualifying model that keeps each format's rules separate and leaves a rank blank when the source doesn't give one. [Qualifying](docs/case-studies/03-qualifying.md) |
+| **"It rained that day" isn't weather data.** | Join conditions to the exact session window and track, then rotate the wind bearing into the track map's frame so an arrow over Turn 4 means what it looks like. [Weather and wind](docs/case-studies/04-weather-and-wind.md) |
+| **My best-scoring prediction model was cheating.** | It was reading information from after the race. I kept the failed models and the null results, and the site makes no forecasts. [Models and leakage](docs/case-studies/05-models-and-leakage.md) |
+| **A 2019 F1600 season and a 2026 INDY NXT season are not the same depth of data.** | Normalize what's comparable, keep track of what each source can support, and build series-specific views for the rest. [Career and competitors](docs/case-studies/07-career-and-competitors.md) |
+
+The [engineering atlas](docs/engineering/ENGINEERING_ATLAS.md) is the long version: cautions and restarts, race narratives, identity matching, archive discovery, and the integrity checks behind it all.
+
+## Run it
+
+You need **Node.js 24**.
 
 ```bash
 npm ci --ignore-scripts
@@ -52,39 +62,42 @@ npm run build
 npm run demo
 ```
 
-Open **http://127.0.0.1:4173**. The demo serves the actual React application and included historical packages. Its banner identifies the snapshot date. It has **no upstream polling, production database access, operator writes, or simulated live race**. Historical Race, Tracks, and Career pages work from the included outputs; live weather, live capture, and timing downloads are explicitly unavailable.
+Open **http://127.0.0.1:4173**. That's the real app serving a dated snapshot of the analysis that ships in this repo: Races, Tracks and Career all work. Nothing is polled and nothing talks to the live site.
 
-The website linked above is a separate deployment. Running this demo does not connect to or update it.
-
-## Reproduce a method without licensed source data
+To go past the snapshot and run the pipeline end to end, pull the source data:
 
 ```bash
-npm run example:timing  # Actual decoder, invented source-format records
-npm run example:sqlite  # Actual archive migration, synthetic 600-observation database
-npm run test:publication
+npm run data:restore
 ```
 
-The [timing example](examples/timing-sections/README.md) demonstrates a subtle bug: ignoring a pit-lane start/finish crossing loses a completed lap. The SQLite example verifies timestamps, rare transitions, idempotent migration, and byte-identical reconstruction.
+That downloads the latest data release — the raw career corpus, the timing captures and the replay feeds, about 855 MB — verifies every file against its checksum, and unpacks it into the paths the pipeline expects. From there you can validate and regenerate the analysis from source and play back any of the 45 races; the [development guide](docs/engineering/DEVELOPMENT.md) has the commands. The one thing that isn't published is the live site's own SQLite archive, which is a 6 GB working database.
 
-These examples are small and fully runnable. Reproducing every historical chart or refitting the stored models requires the withheld canonical/source corpus. The [data release plan](DATA_RELEASE.md) describes that boundary and the intended raw/SQLite releases.
+Two small examples run with no data at all, if you just want to see a method work:
 
-## Repository map
+```bash
+npm run example:timing   # the real lap decoder on invented crossings, including a pit-lane finish most decoders miss
+npm run example:sqlite   # the archive migration on a synthetic 600-snapshot database
+```
 
-- `src/` — React/TypeScript application, typed adapters, track geometry, and section rendering.
-- [scripts/](scripts/README.md) — commands grouped by development, ingestion, analytics, operations, and validation.
-- [analysis/](analysis/README.md) — analytical modules, generated context packs, research results, and dated audits.
-- [data/](data/README.md) — source manifests, coverage/validation reports, and schema definitions. Full raw/runtime datasets are withheld.
-- `examples/` — synthetic, reproducible method demonstrations.
-- [docs/](docs/README.md) — engineering guides, case studies, project history, and publication documents.
+## What's where
 
-Dated drills, handoffs, readiness audits, and old design briefs live in the [development archive](docs/archive/README.md). Start with the current guides above; the archive preserves how the project evolved.
+- `src/` — the React and TypeScript app: screens, typed data adapters, track geometry, section rendering.
+- [scripts/](scripts/README.md) — collectors, importers, the API server, post-race automation, and validators.
+- [analysis/](analysis/README.md) — the analytical jobs, their outputs, and dated audits.
+- [data/](data/README.md) — source manifests, coverage and validation reports, schemas.
+- `examples/` — small synthetic demonstrations of the trickier methods.
+- [docs/](docs/README.md) — architecture, case studies, contracts, and runbooks. The [archive](docs/archive/README.md) keeps the drills, audits and design briefs from along the way.
 
-[Development guide](docs/engineering/DEVELOPMENT.md) · [Data dictionary](docs/engineering/DATA_DICTIONARY.md) · [Security](SECURITY.md) · [Licensing boundaries](docs/publication/THIRD_PARTY.md)
+The scripts that deploy to my own Mac mini live in a separate private repository, since nobody else has a use for them. Everything else is here.
 
-## Development history and AI assistance
+## Data and credits
 
-This edition preserves the maintained branch's **301 original development commits**, beginning June 8, 2026, followed by publication-preparation changes. Historical paths/data were filtered and commit identities changed; original author dates remain. The initial commit was already a substantial baseline, so it is not a claim that all earlier work was committed. See [history provenance](docs/project/DEVELOPMENT_HISTORY.md).
+BryceCast is a non-commercial fan project, and none of it would exist without the people who publish timing data. Live and recorded timing comes from **INDYCAR Race Control**, **[RaceTools](https://racetools.com)** and **[Timing71](https://www.timing71.org)**. Career results come from each series' official results service, weather from **[Open-Meteo](https://open-meteo.com)**, and track geometry from **OpenStreetMap** contributors. [DATA_SOURCES.md](DATA_SOURCES.md) lists every source, what came from it, and how it was collected.
 
-Jack Riddle directed the product, design, features, and collaboration with Bryce. Implementation used primarily OpenAI Codex, with additional Claude Code work. The fuller owner-authored workflow narrative is pending; see [AI-use disclosure status](docs/project/AI_USE.md). Commit author labels alone are not treated as a measurement of AI contribution.
+Everything here was gathered from pages and feeds those organizations publish openly, and it all remains theirs. If you represent one of them and would like something removed, open an issue or reach me through my GitHub profile and I'll take it down.
 
-Original software is offered under the [MIT license](LICENSE). That license does not grant rights to third-party data, photographs, logos, track-map source material, or restricted archives. Their status is recorded separately.
+## History and license
+
+The history starts on June 8, 2026 with a working baseline and runs to today; [development history](docs/project/DEVELOPMENT_HISTORY.md) walks through the milestones.
+
+The code is [MIT licensed](LICENSE). That license covers my software, not the third-party data, photos, logos or track maps, which stay with their owners.

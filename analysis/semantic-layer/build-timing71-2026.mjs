@@ -15,7 +15,7 @@ import {dirname, join, resolve} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {createGzip} from 'node:zlib';
 import {once} from 'node:events';
-import {lakeDataRoot} from './lib/lake.mjs';
+import {lakeDataRoot, portablePath} from './lib/lake.mjs';
 import {parseTiming71Session, T71_SOURCE_TIER} from './lib/timing71-semantic.mjs';
 
 const LANE_DIR = dirname(fileURLToPath(import.meta.url));
@@ -197,7 +197,7 @@ const summary = {
   slice: 'slice-2-timing71-2026',
   generatedAt: new Date().toISOString(),
   sourceTier: T71_SOURCE_TIER,
-  lakeDataRoot: lakeDataRoot(),
+  lakeDataRoot: portablePath(lakeDataRoot()),
   provenanceNote:
     'Derived from Timing71 replay recordings (third-party normalized display state; 1-2 s cadence; real archive timestamps, no interpolation). Never label as official. Identity requires the validated crosswalk before ANY UI use.',
   sessionCount: index.length,

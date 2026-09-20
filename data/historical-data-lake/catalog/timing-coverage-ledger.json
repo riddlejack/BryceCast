@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-19T22:46:54.181Z",
-  "asOfDate": "2026-09-19",
+  "generatedAt": "2026-09-20T17:39:20.141Z",
+  "asOfDate": "2026-09-20",
   "canonicalDatasetUpdatedAt": "2026-09-19T22:45:37.078Z",
   "scope": "Bryce Aron INDY NXT races and the qualifying source used for each race, 2024-2026",
   "contract": {
@@ -101,7 +101,7 @@
       }
     },
     "currentLake": {
-      "lakeDataRoot": "/Users/jackriddle/.brycecast/data-lake",
+      "lakeDataRoot": "~/.brycecast/data-lake",
       "manifestFileCount": 1136,
       "contentAddressedObjectCount": 1136,
       "timing71AnalyzedSessionCount": 420,

@@ -144,10 +144,13 @@
     "portfolio:stats": "node scripts/portfolio-stats.mjs",
     "test:publication:security": "node scripts/test-publication-security.mjs",
     "test:publication:demo": "node scripts/test-publication-demo.mjs",
-    "test:publication": "npm run example:timing && npm run test:api-operator-idle && npm run test:publication:security && npm run test:publication:demo && npm run analytics:view-models:validate && npm run test:publication:adapters && npm run test:section-observations && npm run test:archive-v2",
+    "test:publication": "npm run example:timing && npm run test:api-operator-idle && npm run test:publication:security && npm run test:publication:demo && npm run analytics:view-models:validate && npm run test:publication:adapters && npm run test:section-observations && npm run test:archive-v2 && npm run test:data-release",
     "test:publication:adapters": "node scripts/test-ui-context-adapter.mjs --publication",
     "example:sqlite": "node scripts/test-archive-v2.mjs",
-    "data:schema": "node scripts/print-archive-schema.mjs"
+    "data:schema": "node scripts/print-archive-schema.mjs",
+    "data:pack": "node scripts/data-pack.mjs",
+    "data:restore": "node scripts/data-restore.mjs",
+    "test:data-release": "node scripts/test-data-release.mjs"
   },
   "dependencies": {
     "@vitejs/plugin-react": "^5.0.0",

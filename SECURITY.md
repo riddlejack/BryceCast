@@ -8,7 +8,7 @@ This repository is a source/demo edition. It is not the production deployment co
 - The full API defaults to runner-only cached mode; direct upstream polling requires an explicit configuration change.
 - Operator POSTs and forced source/weather refreshes require operator authorization. An authorized request still cannot start competing Race Control polling in runner-only mode.
 - Browser/proxy requests do not inherit local operator privilege merely because a tunnel connects over loopback.
-- Native timing downloads are disabled unless `BRYCECAST_ENABLE_TIMING_DOWNLOADS=1` is explicitly set after redistribution approval.
+- Native timing downloads are disabled unless `BRYCECAST_ENABLE_TIMING_DOWNLOADS=1` is explicitly set.
 - Cross-origin API access is not enabled by default; configure an exact origin if needed.
 - Secrets and environment files belong outside Git. `.env.example` contains no credentials.
 

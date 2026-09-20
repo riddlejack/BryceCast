@@ -1,9 +1,9 @@
 {
   "lane": "analysis/semantic-layer",
   "slice": "slice-2-timing71-2026",
-  "generatedAt": "2026-09-19T22:46:38.621Z",
+  "generatedAt": "2026-09-20T17:38:08.801Z",
   "sourceTier": "timing71_normalized",
-  "lakeDataRoot": "/Users/jackriddle/.brycecast/data-lake",
+  "lakeDataRoot": "~/.brycecast/data-lake",
   "provenanceNote": "Derived from Timing71 replay recordings (third-party normalized display state; 1-2 s cadence; real archive timestamps, no interpolation). Never label as official. Identity requires the validated crosswalk before ANY UI use.",
   "sessionCount": 45,
   "sessions": [

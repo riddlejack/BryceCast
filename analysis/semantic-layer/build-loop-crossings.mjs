@@ -18,7 +18,7 @@ import {dirname, join} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {createGzip} from 'node:zlib';
 import {once} from 'node:events';
-import {enumerateNxtSessions, readSessionLogText, lakeDataRoot} from './lib/lake.mjs';
+import {enumerateNxtSessions, readSessionLogText, lakeDataRoot, portablePath} from './lib/lake.mjs';
 import {parseRaceToolsSession, SOURCE_TIER} from './lib/racetools-semantic.mjs';
 
 const LANE_DIR = dirname(fileURLToPath(import.meta.url));
@@ -156,7 +156,7 @@ const summary = {
   slice: 'slice-1-loop-crossings',
   generatedAt: new Date().toISOString(),
   sourceTier: SOURCE_TIER,
-  lakeDataRoot: lakeDataRoot(),
+  lakeDataRoot: portablePath(lakeDataRoot()),
   provenanceNote:
     'Derived from immutable RaceTools captures (raw/ only). Local time-of-day is the authoritative crossing clock; feed heartbeat epochs are date anchors with UNVALIDATED timezone. Not an official BryceCast fact.',
   sessionCount: sessions.length,

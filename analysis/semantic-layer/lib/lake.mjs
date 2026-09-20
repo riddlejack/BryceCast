@@ -12,7 +12,8 @@
 
 import {readFile, readdir, stat} from 'node:fs/promises';
 import {homedir} from 'node:os';
-import {join} from 'node:path';
+import {isAbsolute, join, relative, resolve} from 'node:path';
+import {fileURLToPath} from 'node:url';
 import {centralEntries, localEntryData} from '../../historical-data-lake/lib/archive-reader.mjs';
 
 export const DEFAULT_LAKE_DATA_ROOT =
@@ -20,6 +21,27 @@ export const DEFAULT_LAKE_DATA_ROOT =
 
 export function lakeDataRoot() {
   return process.env.BRYCECAST_LAKE_DATA_ROOT || DEFAULT_LAKE_DATA_ROOT;
+}
+
+const REPO_ROOT = resolve(fileURLToPath(import.meta.url), '..', '..', '..', '..');
+
+function isInside(from, path) {
+  const rel = relative(from, path);
+  return rel !== '' && !rel.startsWith('..') && !isAbsolute(rel);
+}
+
+// Absolute paths are for the filesystem, never for committed report metadata:
+// this repository is published, so `/Users/<name>/...` both leaks the
+// operator's home directory and means nothing to any other reader. Emit a
+// checkout-relative path inside the repo, a `~`-relative path elsewhere under
+// the home directory, and otherwise leave the path alone.
+export function portablePath(path) {
+  if (!path) return path;
+  const absolute = resolve(path);
+  if (absolute === REPO_ROOT) return '.';
+  if (isInside(REPO_ROOT, absolute)) return relative(REPO_ROOT, absolute);
+  if (isInside(homedir(), absolute)) return join('~', relative(homedir(), absolute));
+  return path;
 }
 
 export function viewsRoot() {
