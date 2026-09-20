@@ -8,14 +8,32 @@
  * rationale and the state machine; this file is the I/O shell around it.
  *
  *   npm run postrace:auto -- --dry-run          # decide and print, touch nothing
- *   npm run postrace:auto                       # gate, roll, validate, build
+ *   npm run postrace:auto                       # gate, sync, roll, validate, build
  *   npm run postrace:auto -- --publish=github    # commit, push main, update prod
+ *   npm run postrace:auto -- --no-sync           # skip the sync stage below
  *
  * `--publish=none` is the default and the only mode the installed LaunchAgent
  * uses today. `github` is the unified-repo mode: it refuses unless HEAD is the
  * publish branch and the push would fast-forward, then pushes the public commit,
  * the private overlay (when `ops/private-overlay.sh` is present) and finally
  * runs `BRYCECAST_PRODUCTION_UPDATE_CMD` with the pushed sha.
+ *
+ * This script runs hourly from a dedicated clone of `main` on the production
+ * host, and nothing else ever updates that clone. So once the gate decides
+ * work is due — and only then, never on the fast nothing-due path and never in
+ * `--dry-run` — a sync stage runs BEFORE the roll: it requires a clean tree on
+ * the publish branch (`BRYCECAST_GIT_BRANCH ?? 'main'`), fetches and
+ * fast-forwards onto `origin/<branch>` (refusing on divergence), pulls the
+ * private overlay if attached, and runs `npm ci` when the fast-forward moved
+ * `package-lock.json`. A dirty tree or a diverged branch stops the run the
+ * same way the gate does — a clear reason in the status file and the JSONL
+ * log, exit 0, no error spam. An offline fetch is not a refusal: it logs a
+ * warning and the roll proceeds on whatever code is already checked out,
+ * because a roll on slightly stale code beats no roll. Set `--no-sync` or
+ * `BRYCECAST_POSTRACE_NO_SYNC=1` to skip this stage entirely — for a developer
+ * running the pipeline by hand in a feature worktree, where "sync to main" is
+ * never what's wanted. The pure decision logic lives in
+ * `scripts/lib/postrace-auto-core.mjs` (`planSync`).
  *
  * Safety properties this file is responsible for:
  *   - the gate reads only local files; no upstream call happens before it passes;
@@ -60,9 +78,11 @@ import {
   evaluateGate,
   mergeDiscoveredSessions,
   planPublish,
+  planSync,
   recordAttempt,
   reconcileState,
   seasonCurationFlag,
+  syncOptOutReason,
   trackAssetSlug,
   venueCurationFlag
 } from './lib/postrace-auto-core.mjs';
@@ -485,6 +505,38 @@ const main = async () => {
     return 0;
   }
 
+  // A sync refusal (dirty tree, off-branch, diverged) is a gate outcome, not a
+  // pipeline failure: it must not advance any due session's retry ladder, and
+  // it exits 0 the same way `!gate.proceed` does above, so launchd never sees
+  // it as an error to alert on.
+  const syncGateSkip = (sync) => {
+    writeAtomicJson(paths.statePath, state);
+    writeAtomicJson(
+      paths.statusPath,
+      buildStatus({ state, run: { ...decision, sync, outcome: 'gated', finishedAt: new Date().toISOString() }, now: Date.now() })
+    );
+    logEvent({ type: 'sync_gated', reason: sync.reason, detail: sync.detail });
+    say(`  sync: exit 0 — ${sync.detail}`);
+    if (asJson) process.stdout.write(`${JSON.stringify({ ...decision, sync, outcome: 'gated' }, null, 2)}\n`);
+    return 0;
+  };
+
+  const syncSkipReason = syncOptOutReason(argv, process.env);
+  const publishBranch = process.env.BRYCECAST_GIT_BRANCH ?? 'main';
+  const syncRemote = process.env.BRYCECAST_GIT_REMOTE ?? 'origin';
+
+  // --- Sync preflight: cheap, local-only, before the lock -----------------
+  // Dirty and off-branch are exactly the checks the gate itself favors: local
+  // reads that decide the whole run before anything touches the network or
+  // takes the pipeline lock.
+  let syncPreflight = null;
+  if (!syncSkipReason) {
+    const branch = currentBranch();
+    const treeForSync = classifyWorkingTree(gitPorcelain());
+    syncPreflight = planSync({ branch, publishBranch, remote: syncRemote, dirty: !treeForSync.ok });
+    if (syncPreflight.action === 'refuse') return syncGateSkip(syncPreflight);
+  }
+
   // --- Expensive phase ----------------------------------------------------
   acquireLock();
   logEvent({ type: 'run_started', due: due.map((entry) => entry.sessionId), publishMode });
@@ -494,6 +546,73 @@ const main = async () => {
   const packageBefore = readJson(paths.packagePath, null);
 
   try {
+    // --- Sync stage: fetch, fast-forward, private overlay, npm ci ---------
+    // Runs only here — after the gate found work due, before the roll starts,
+    // and never in --dry-run (which already returned above).
+    if (syncSkipReason) {
+      run.sync = { action: 'skipped', ok: true, reason: 'opt_out', detail: `Sync stage skipped: ${syncSkipReason}.` };
+      say(`  sync: skipped (${syncSkipReason})`);
+    } else {
+      const fetchResult = spawnSync('git', ['fetch', '--quiet', syncRemote, publishBranch], { cwd: repoRoot });
+      const fetchOk = fetchResult.status === 0;
+      const isAncestor = (of, to) => spawnSync('git', ['merge-base', '--is-ancestor', of, to], { cwd: repoRoot }).status === 0;
+      let ahead = false;
+      let diverged = false;
+      let lockfileChanged = false;
+      if (fetchOk) {
+        const headBehindRemote = isAncestor('HEAD', `${syncRemote}/${publishBranch}`);
+        const remoteBehindHead = isAncestor(`${syncRemote}/${publishBranch}`, 'HEAD');
+        ahead = headBehindRemote && !remoteBehindHead;
+        diverged = !headBehindRemote && !remoteBehindHead;
+        if (ahead) {
+          // "Across the fast-forward": diffed against the target BEFORE
+          // merging, which is equivalent and lets the whole plan (including
+          // whether npm ci is needed) be built up front.
+          const lockDiff = spawnSync(
+            'git',
+            ['diff', '--name-only', 'HEAD', `${syncRemote}/${publishBranch}`, '--', 'package-lock.json'],
+            { cwd: repoRoot, encoding: 'utf8' }
+          );
+          lockfileChanged = String(lockDiff.stdout ?? '').trim().length > 0;
+        }
+      }
+      const overlayPath = existsSync(join(repoRoot, 'ops/private-overlay.sh')) ? './ops/private-overlay.sh' : null;
+      const sync = planSync({
+        branch: currentBranch(), // re-read rather than trusted from the preflight above
+        publishBranch,
+        remote: syncRemote,
+        dirty: false,
+        fetchOk,
+        ahead,
+        diverged,
+        lockfileChanged,
+        privateOverlay: overlayPath
+      });
+
+      if (sync.action === 'refuse') return syncGateSkip(sync);
+
+      say(`  sync: ${sync.action} — ${sync.detail}`);
+      const stepResults = [];
+      let syncOk = sync.ok;
+      for (const step of sync.steps) {
+        const [bin, ...args] = step.argv;
+        const result = spawnSync(bin, args, { cwd: repoRoot, stdio: asJson ? 'pipe' : 'inherit' });
+        const ok = result.status === 0;
+        stepResults.push({ id: step.id, ok, exitCode: result.status ?? 1 });
+        say(`    sync.${step.id} ${ok ? 'ok' : `FAILED (exit ${result.status ?? 1})`}`);
+        if (!ok) {
+          if (step.offlineTolerant) {
+            syncOk = false;
+          } else {
+            run.sync = { ...sync, ok: false, steps: stepResults };
+            return finish(run, state, dueIds, false, `sync step ${step.id} failed`, { discovered });
+          }
+        }
+      }
+      run.sync = { ...sync, ok: syncOk, steps: stepResults };
+      logEvent({ type: 'sync', action: sync.action, ok: syncOk, reason: sync.reason });
+    }
+
     // The roll owns every upstream refresh. ALLOW_EVENT_ROLL is already scoped
     // to its package step; the as-of date is pinned explicitly so an unattended
     // run is reproducible and its roll target is recorded rather than implied by
@@ -570,8 +689,8 @@ const main = async () => {
       branch: currentBranch(),
       // Stage exactly what the classification allowed, nothing wider.
       stagePaths: tree.allowed.map((entry) => entry.path),
-      remote: process.env.BRYCECAST_GIT_REMOTE ?? 'origin',
-      publishBranch: process.env.BRYCECAST_GIT_BRANCH ?? 'main',
+      remote: syncRemote,
+      publishBranch,
       // The private companion repo is only there on an operator's machine.
       privateOverlay: existsSync(join(repoRoot, 'ops/private-overlay.sh')) ? './ops/private-overlay.sh' : null,
       productionUpdateCmd: process.env.BRYCECAST_PRODUCTION_UPDATE_CMD ?? null,
