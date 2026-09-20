@@ -2,6 +2,7 @@ import { createReadStream } from 'node:fs';
 import { access, mkdir, readFile, stat, writeFile } from 'node:fs/promises';
 import { createServer } from 'node:http';
 import { timingSafeEqual } from 'node:crypto';
+import { isIP } from 'node:net';
 import { dirname, extname, join, normalize, relative, resolve, sep } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { DatabaseSync } from 'node:sqlite';
@@ -80,12 +81,72 @@ const host = argValue('host', process.env.HOST ?? '127.0.0.1');
 const staticArg = argValue('static', '');
 const staticDir = staticArg ? resolve(root, staticArg) : null;
 
+const securityHeaders = {
+  'content-security-policy': "frame-ancestors 'none'",
+  'permissions-policy': 'camera=(), geolocation=(), microphone=()',
+  'referrer-policy': 'strict-origin-when-cross-origin',
+  'x-content-type-options': 'nosniff',
+  'x-frame-options': 'DENY'
+};
+
 const jsonHeaders = {
+  ...securityHeaders,
   'content-type': 'application/json; charset=utf-8',
   ...(process.env.BRYCECAST_ALLOWED_ORIGIN ? { 'access-control-allow-origin': process.env.BRYCECAST_ALLOWED_ORIGIN } : {}),
   'access-control-allow-methods': 'GET, POST, OPTIONS',
   'access-control-allow-headers': 'content-type, accept'
 };
+
+/** Request targets are origin-form paths. Never use the untrusted Host header as
+ * the URL base: malformed Host values otherwise throw before the route's error
+ * boundary and terminate Node through an unhandled async-listener rejection. */
+const requestUrl = (req) => new URL(req.url ?? '/', 'http://localhost');
+
+const loopbackAddresses = new Set(['127.0.0.1', '::1', '::ffff:127.0.0.1']);
+
+/** Cloudflare's client address is useful only on the loopback hop used by the
+ * configured tunnel and only when its own request marker is present. Direct
+ * peers are keyed by the socket address; X-Forwarded-For is never trusted. */
+export const replayClientKey = (req) => {
+  const peer = String(req.socket?.remoteAddress ?? 'unknown');
+  const cfAddress = String(req.headers['cf-connecting-ip'] ?? '').trim();
+  const cfRay = String(req.headers['cf-ray'] ?? '').trim();
+  if (loopbackAddresses.has(peer) && cfRay && isIP(cfAddress)) return `cloudflare:${cfAddress}`;
+  return `peer:${peer}`;
+};
+
+export const createReplayRequestLimiter = ({
+  maxRequests = Number(process.env.BRYCECAST_REPLAY_CLIENT_REQUESTS ?? 120),
+  windowMs = Number(process.env.BRYCECAST_REPLAY_CLIENT_WINDOW_MS ?? 10_000),
+  maxClients = Number(process.env.BRYCECAST_REPLAY_CLIENTS_MAX ?? 5_000),
+  now = () => Date.now()
+} = {}) => {
+  const boundedMaxRequests = Number.isFinite(maxRequests) && maxRequests >= 1 ? Math.floor(maxRequests) : 120;
+  const boundedWindowMs = Number.isFinite(windowMs) && windowMs >= 1_000 ? Math.floor(windowMs) : 10_000;
+  const boundedMaxClients = Number.isFinite(maxClients) && maxClients >= 1 ? Math.floor(maxClients) : 5_000;
+  const clients = new Map();
+
+  const check = (req) => {
+    const checkedAt = now();
+    const key = replayClientKey(req);
+    let entry = clients.get(key);
+    if (!entry || checkedAt - entry.windowStartedAt >= boundedWindowMs) {
+      entry = { count: 0, windowStartedAt: checkedAt, lastSeenAt: checkedAt };
+    }
+    entry.count += 1;
+    entry.lastSeenAt = checkedAt;
+    clients.delete(key);
+    clients.set(key, entry);
+    while (clients.size > boundedMaxClients) clients.delete(clients.keys().next().value);
+
+    const retryAfterSeconds = Math.max(1, Math.ceil((entry.windowStartedAt + boundedWindowMs - checkedAt) / 1000));
+    return { allowed: entry.count <= boundedMaxRequests, retryAfterSeconds };
+  };
+
+  return { check, size: () => clients.size };
+};
+
+const replayRequestLimiter = createReplayRequestLimiter();
 
 const historySchemaVersion = 'history-bryce.v1';
 
@@ -993,7 +1054,7 @@ export const isOperatorRequest = (req, token = process.env.BRYCECAST_OPERATOR_TO
     const received = Buffer.from(auth.slice(7));
     if (expected.length === received.length && timingSafeEqual(expected, received)) return true;
   }
-  const loopback = ['127.0.0.1', '::1', '::ffff:127.0.0.1'].includes(req.socket?.remoteAddress);
+  const loopback = loopbackAddresses.has(req.socket?.remoteAddress);
   const localHost = /^(?:localhost|127\.0\.0\.1|\[::1\])(?::\d+)?$/i.test(String(req.headers.host ?? ''));
   const proxied = Object.keys(req.headers).some((name) => /^(?:cf-|x-forwarded-|forwarded$|x-real-ip$)/i.test(name));
   const browser = req.headers.origin || req.headers['sec-fetch-site'];
@@ -2507,7 +2568,7 @@ const sendError = (res, statusCode, message, detail) => {
 const proxyRaceControl = async (req, res, pathname) => {
   const endpoint = sourceEndpointByPath.get(pathname);
   if (!endpoint) return false;
-  const url = new URL(req.url ?? '/', `http://${req.headers.host ?? 'localhost'}`);
+  const url = requestUrl(req);
   if (url.searchParams.get('refresh') === '1') {
     if (!isOperatorRequest(req)) {
       sendError(res, 403, 'Operator access required for upstream refresh.');
@@ -2523,6 +2584,7 @@ const proxyRaceControl = async (req, res, pathname) => {
       return true;
     }
     res.writeHead(200, {
+      ...securityHeaders,
       'content-type': result.contentType ?? 'application/json',
       'cache-control': 'no-store',
       'x-brycecast-refresh-warning': 'Direct upstream proxy refresh is operator/debug only; app clients should use cached /api routes.'
@@ -2548,6 +2610,7 @@ const proxyRaceControl = async (req, res, pathname) => {
     return true;
   }
   res.writeHead(200, {
+    ...securityHeaders,
     'content-type': cached.contentType ?? 'application/json',
     'cache-control': 'no-store',
     'access-control-allow-origin': '*',
@@ -2585,7 +2648,7 @@ const sendStatic = async (res, pathname, acceptsHtml = false) => {
   try {
     await access(candidate);
     const type = mimeTypes[extname(candidate)] ?? 'application/octet-stream';
-    res.writeHead(200, { 'content-type': type, 'cache-control': staticCacheControl(staticDir, candidate) });
+    res.writeHead(200, { ...securityHeaders, 'content-type': type, 'cache-control': staticCacheControl(staticDir, candidate) });
     createReadStream(candidate).pipe(res);
     return true;
   } catch {
@@ -2626,7 +2689,13 @@ export const resolveTimingObservationArtifact = (sessionId, ledger, sourceId = n
 };
 
 const handler = async (req, res) => {
-  const url = new URL(req.url ?? '/', `http://${req.headers.host ?? 'localhost'}`);
+  let url;
+  try {
+    url = requestUrl(req);
+  } catch {
+    sendError(res, 400, 'Malformed request URL.');
+    return;
+  }
   const pathname = url.pathname;
 
   // Per-client replay params. A request WITHOUT `replay`+`rt` never touches the
@@ -2638,6 +2707,19 @@ const handler = async (req, res) => {
   const replayParam = url.searchParams.get('replay');
   const rtParam = url.searchParams.get('rt');
   const hasReplayParams = Boolean(replayParam && rtParam);
+  const replayWorkRequest = hasReplayParams || ['/api/replay/available', '/api/replay/bryce', '/api/history/rank-series'].includes(pathname);
+  if (req.method === 'GET' && replayWorkRequest && !isOperatorRequest(req)) {
+    const admission = replayRequestLimiter.check(req);
+    if (!admission.allowed) {
+      sendJson(
+        res,
+        429,
+        { ok: false, error: 'Replay request rate limit exceeded.', detail: `Retry after ${admission.retryAfterSeconds} seconds.` },
+        { 'retry-after': String(admission.retryAfterSeconds) }
+      );
+      return;
+    }
+  }
   let replayResolved = false;
   let replayRecordValue = null;
   const replayRecord = () => {
@@ -2676,11 +2758,18 @@ const handler = async (req, res) => {
     if (req.method === 'GET' && (await proxyRaceControl(req, res, pathname))) return;
 
     if (pathname === '/api/health') {
-      sendJson(res, 200, {
+      const publicHealth = {
         ok: true,
         service: 'brycecast-api',
         release: staticDir ? await readJsonFile(join(staticDir, 'release.json')) : null,
-        checkedAt: new Date().toISOString(),
+        checkedAt: new Date().toISOString()
+      };
+      if (!isOperatorRequest(req)) {
+        sendJson(res, 200, publicHealth);
+        return;
+      }
+      sendJson(res, 200, {
+        ...publicHealth,
         replay: replayOverlay.status(),
         staticDir: staticDir ? relative(root, staticDir) : null,
         storage: {
@@ -2705,11 +2794,17 @@ const handler = async (req, res) => {
     if (pathname === '/api/postrace-status') {
       const payload = await readJsonFile(postraceAutoStatusPath);
       if (!payload) {
-        sendJson(res, 200, {
+        const unavailable = {
           available: false,
-          reason: 'The unattended post-race pipeline has not run on this host.',
-          file: await fileStatus(postraceAutoStatusPath)
-        });
+          reason: 'The unattended post-race pipeline has not run on this host.'
+        };
+        sendJson(res, 200, isOperatorRequest(req)
+          ? { ...unavailable, file: await fileStatus(postraceAutoStatusPath) }
+          : unavailable);
+        return;
+      }
+      if (!isOperatorRequest(req)) {
+        sendJson(res, 200, { available: true, ...postraceAutoSummary(payload, { compact: true }) });
         return;
       }
       sendJson(
@@ -2746,6 +2841,7 @@ const handler = async (req, res) => {
         return;
       }
       res.writeHead(200, {
+        ...securityHeaders,
         'content-type': 'application/gzip',
         'content-disposition': `attachment; filename="${sessionId}${sourceId ? `-${sourceId}` : ''}-observations.ndjson.gz"`,
         'content-length': info.size,
@@ -2868,6 +2964,10 @@ const handler = async (req, res) => {
 
     if (pathname === '/api/sources') {
       const report = await cachedSourceReport(replayRecord());
+      if (!isOperatorRequest(req)) {
+        sendJson(res, 200, { ...report, local: {} });
+        return;
+      }
       sendJson(res, 200, {
         ...report,
         local: {

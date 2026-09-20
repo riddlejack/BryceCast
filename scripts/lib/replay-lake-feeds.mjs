@@ -1,6 +1,6 @@
 import { readFileSync, existsSync } from 'node:fs';
 import { gunzipSync } from 'node:zlib';
-import { dirname, join, resolve } from 'node:path';
+import { dirname, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { runnerReportsLiveSession } from './replay-overlay.mjs';
 
@@ -39,9 +39,10 @@ export const createLakeReplayFeeds = ({
   runnerStatusPath,
   now = () => Date.now(),
   guardTtlMs = Number(process.env.BRYCECAST_REPLAY_GUARD_TTL_MS ?? 1000),
-  rowsCacheMaxSessions = Number(process.env.BRYCECAST_REPLAY_ROWS_CACHE_SESSIONS ?? 3)
+  rowsCacheMaxSessions = Number(process.env.BRYCECAST_REPLAY_ROWS_CACHE_SESSIONS ?? 3),
+  maxUncompressedBytes = Number(process.env.BRYCECAST_REPLAY_MAX_UNCOMPRESSED_BYTES ?? 128 * 1024 * 1024)
 } = {}) => {
-  const feedsDir = manifestPath ? join(dirname(manifestPath), 'feeds') : null;
+  const feedsDir = manifestPath ? resolve(dirname(manifestPath), 'feeds') : null;
   let manifest = null;
   let sessionIndex = new Map(); // sessionKey -> manifest session entry
   let loaded = false;
@@ -49,6 +50,12 @@ export const createLakeReplayFeeds = ({
   let playback = null; // { sessionKey, speed, t0Ms, startedAtRealMs, firstCheckedAt, lastCheckedAt, lastCheckedAtMs, rows }
   let runnerStatusGuard = null;
   let liveGuardTrip = null;
+
+  // Bounds the decompressed byte buffer only. Parsed rows and their JS object
+  // representation can consume additional process memory after decompression.
+  const outputLimit = Number.isFinite(maxUncompressedBytes) && maxUncompressedBytes >= 1024
+    ? Math.floor(maxUncompressedBytes)
+    : 128 * 1024 * 1024;
 
   const load = () => {
     if (loaded) return;
@@ -126,7 +133,11 @@ export const createLakeReplayFeeds = ({
     const path = session.feedArtifact
       ? resolve(dirname(manifestPath), session.feedArtifact)
       : join(feedsDir, `${session.canonicalSessionId}.ndjson.gz`);
-    const text = gunzipSync(readFileSync(path)).toString('utf8').trim();
+    const relativeFeedPath = relative(resolve(feedsDir), path);
+    if (relativeFeedPath === '..' || relativeFeedPath.startsWith(`..${sep}`) || resolve(feedsDir, relativeFeedPath) !== path) {
+      throw Object.assign(new Error('Replay feed artifact resolves outside the feed directory.'), { statusCode: 500 });
+    }
+    const text = gunzipSync(readFileSync(path), { maxOutputLength: outputLimit }).toString('utf8').trim();
     const rows = [];
     for (const line of text.split('\n')) {
       if (!line) continue;
