@@ -1,6 +1,6 @@
 # Career Analytics Parity Pass
 
-Generated from canonical career dataset updated `2026-09-10T22:28:43.621Z`.
+Generated from canonical career dataset updated `2026-09-19T22:45:37.078Z`.
 
 ## Series Result Summary
 
@@ -63,7 +63,7 @@ Generated from canonical career dataset updated `2026-09-10T22:28:43.621Z`.
 | INDY NXT | result_conversion | 45 | production_safe | Use in Career Analytics Lab. | Use percentiles alongside raw finish because field sizes and formats vary by series. |
 | INDY NXT | qualifying_conversion | 77 | production_safe | Use in Career Analytics Lab. | Qualifying rows exist; display session-format and group caveats where applicable. |
 | INDY NXT | track_venue_history | 13 | production_safe | Use in Career Analytics Lab. | Venue and track-type coverage comes from canonical event and track metadata. |
-| INDY NXT | weather_context | 115 | source_bounded_partial | Use with coverage badge and denominators. | INDY NXT weather is modeled non-official; context only. |
+| INDY NXT | weather_context | 135 | source_bounded_partial | Use with coverage badge and denominators. | INDY NXT weather is modeled non-official; context only. |
 | INDY NXT | lap_shape | 1748 | source_bounded_partial | Use with coverage badge and denominators. | Lap row grains differ by source family; use within-series first and show coverage denominators. |
 | INDY NXT | team_teammate_context | 3557 | source_bounded_partial | Use with coverage badge and denominators. | Full-field results support descriptive team/teammate context, not engineering root-cause attribution. |
 | INDY NXT | section_pace | 357 | source_bounded_partial | Use with coverage badge and denominators. | Section metrics are currently INDY NXT-only and need denominator badges for sparse sessions. |

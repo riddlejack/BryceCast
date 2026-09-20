@@ -1,6 +1,6 @@
 {
   "artifact": "crosswalk-validation-2026",
-  "generatedAt": "2026-09-10T23:05:13.340Z",
+  "generatedAt": "2026-09-19T22:46:40.244Z",
   "trapTests": {
     "failures": [],
     "notes": [
@@ -866,6 +866,18 @@
       "venue": "WeatherTech Raceway Laguna Seca",
       "verdict": "GO",
       "crossCheck": "unavailable",
+      "qualityMasks": [
+        "cross_session_recording_segmented"
+      ],
+      "reasons": []
+    },
+    {
+      "t71SessionId": "t71_2026_weathertech-raceway-laguna-seca_practice_p2_2026-09-04",
+      "sessionType": "practice",
+      "date": "2026-09-04",
+      "venue": "WeatherTech Raceway Laguna Seca",
+      "verdict": "GO",
+      "crossCheck": "unavailable",
       "qualityMasks": [],
       "reasons": []
     },
@@ -890,7 +902,7 @@
       "reasons": []
     }
   ],
-  "goCount": 43,
+  "goCount": 44,
   "conditionalCount": 1,
   "noGoCount": 0,
   "hardFailures": []

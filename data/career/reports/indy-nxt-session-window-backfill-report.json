@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-07-19T20:49:43.792Z",
+  "checkedAt": "2026-09-19T22:45:37.078Z",
   "refresh": true,
   "sources": {
     "trackActivity": {
@@ -325,81 +325,111 @@
       }
     ]
   },
-  "feedSessions": 26,
+  "feedSessions": 10,
   "scheduleFeedSessions": 55,
-  "directCanonicalMatches": 7,
+  "directCanonicalMatches": 10,
   "scheduleCanonicalMatches": 11,
   "scheduleGreenFlagCanonicalMatches": 1,
   "sessionsUpdated": [
     {
-      "sessionId": "session_indy_nxt_2026_6895",
-      "officialSessionId": "6895",
-      "scheduledStart": "2026-07-04T09:00:00",
-      "actualStart": "2026-07-04T09:00:00",
-      "scheduledEnd": "2026-07-04T09:12:00",
-      "timezone": "America/New_York",
-      "sourceStartUtc": "2026-07-04T13:00:00Z",
-      "sourceEstimatedGreenFlagUtc": "2026-07-04T13:00:00Z"
+      "sessionId": "session_indy_nxt_2026_6947",
+      "officialSessionId": "6947",
+      "scheduledStart": "2026-09-04T13:00:00",
+      "actualStart": "2026-09-04T13:00:00",
+      "scheduledEnd": "2026-09-04T13:25:00",
+      "timezone": "America/Los_Angeles",
+      "sourceStartUtc": "2026-09-04T20:00:00Z",
+      "sourceEstimatedGreenFlagUtc": "2026-09-04T20:00:00Z"
     },
     {
-      "sessionId": "session_indy_nxt_2026_6896",
-      "officialSessionId": "6896",
-      "scheduledStart": "2026-07-04T09:18:00",
-      "actualStart": "2026-07-04T09:18:00",
-      "scheduledEnd": "2026-07-04T09:30:00",
-      "timezone": "America/New_York",
-      "sourceStartUtc": "2026-07-04T13:18:00Z",
-      "sourceEstimatedGreenFlagUtc": "2026-07-04T13:18:00Z"
+      "sessionId": "session_indy_nxt_2026_6948",
+      "officialSessionId": "6948",
+      "scheduledStart": "2026-09-04T15:30:00",
+      "actualStart": "2026-09-04T15:35:00",
+      "scheduledEnd": "2026-09-04T16:00:00",
+      "timezone": "America/Los_Angeles",
+      "sourceStartUtc": "2026-09-04T22:30:00Z",
+      "sourceEstimatedGreenFlagUtc": "2026-09-04T22:35:00Z"
     },
     {
-      "sessionId": "session_indy_nxt_2026_6897",
-      "officialSessionId": "6897",
-      "scheduledStart": "2026-07-04T09:30:00",
-      "actualStart": "2026-07-04T09:30:00",
-      "scheduledEnd": "2026-07-04T09:35:00",
-      "timezone": "America/New_York",
-      "sourceStartUtc": "2026-07-04T13:30:00Z",
-      "sourceEstimatedGreenFlagUtc": "2026-07-04T13:30:00Z"
+      "sessionId": "session_indy_nxt_2026_6949",
+      "officialSessionId": "6949",
+      "scheduledStart": "2026-09-05T12:00:00",
+      "actualStart": "2026-09-05T12:00:00",
+      "scheduledEnd": "2026-09-05T12:12:00",
+      "timezone": "America/Los_Angeles",
+      "sourceStartUtc": "2026-09-05T19:00:00Z",
+      "sourceEstimatedGreenFlagUtc": "2026-09-05T19:00:00Z"
     },
     {
-      "sessionId": "session_indy_nxt_2026_6760",
-      "officialSessionId": "6760",
-      "scheduledStart": "2026-07-05T10:00:00",
-      "actualStart": "2026-07-05T10:08:00",
-      "scheduledEnd": "2026-07-05T11:00:00",
-      "timezone": "America/New_York",
-      "sourceStartUtc": "2026-07-05T14:00:00Z",
-      "sourceEstimatedGreenFlagUtc": "2026-07-05T14:08:00Z"
+      "sessionId": "session_indy_nxt_2026_6950",
+      "officialSessionId": "6950",
+      "scheduledStart": "2026-09-05T12:18:00",
+      "actualStart": "2026-09-05T12:18:00",
+      "scheduledEnd": "2026-09-05T12:30:00",
+      "timezone": "America/Los_Angeles",
+      "sourceStartUtc": "2026-09-05T19:18:00Z",
+      "sourceEstimatedGreenFlagUtc": "2026-09-05T19:18:00Z"
     },
     {
-      "sessionId": "session_indy_nxt_2026_6924",
-      "officialSessionId": "6924",
-      "scheduledStart": "2026-07-18T10:30:00",
-      "actualStart": "2026-07-18T10:35:00",
-      "scheduledEnd": "2026-07-18T11:30:00",
-      "timezone": "America/Chicago",
-      "sourceStartUtc": "2026-07-18T15:30:00Z",
-      "sourceEstimatedGreenFlagUtc": "2026-07-18T15:35:00Z"
+      "sessionId": "session_indy_nxt_2026_6951",
+      "officialSessionId": "6951",
+      "scheduledStart": "2026-09-05T12:30:00",
+      "actualStart": "2026-09-05T12:30:00",
+      "scheduledEnd": "2026-09-05T12:35:00",
+      "timezone": "America/Los_Angeles",
+      "sourceStartUtc": "2026-09-05T19:30:00Z",
+      "sourceEstimatedGreenFlagUtc": "2026-09-05T19:30:00Z"
     },
     {
-      "sessionId": "session_indy_nxt_2026_6923",
-      "officialSessionId": "6923",
-      "scheduledStart": "2026-07-18T15:30:00",
-      "actualStart": "2026-07-18T15:35:00",
-      "scheduledEnd": "2026-07-18T16:30:00",
-      "timezone": "America/Chicago",
-      "sourceStartUtc": "2026-07-18T20:30:00Z",
-      "sourceEstimatedGreenFlagUtc": "2026-07-18T20:35:00Z"
+      "sessionId": "session_indy_nxt_2026_6759",
+      "officialSessionId": "6759",
+      "scheduledStart": "2026-09-05T15:30:00",
+      "actualStart": null,
+      "scheduledEnd": "2026-09-05T16:30:00",
+      "timezone": "America/Los_Angeles",
+      "sourceStartUtc": "2026-09-05T22:30:00Z",
+      "sourceEstimatedGreenFlagUtc": null
     },
     {
-      "sessionId": "session_indy_nxt_2026_6755",
-      "officialSessionId": "6755",
-      "scheduledStart": "2026-07-19T12:00:00",
-      "actualStart": "2026-07-19T12:05:00",
-      "scheduledEnd": "2026-07-19T13:00:00",
-      "timezone": "America/Chicago",
-      "sourceStartUtc": "2026-07-19T17:00:00Z",
-      "sourceEstimatedGreenFlagUtc": "2026-07-19T17:05:00Z"
+      "sessionId": "session_indy_nxt_2026_6952",
+      "officialSessionId": "6952",
+      "scheduledStart": "2026-09-05T12:00:00",
+      "actualStart": "2026-09-05T12:00:00",
+      "scheduledEnd": "2026-09-05T12:12:00",
+      "timezone": "America/Los_Angeles",
+      "sourceStartUtc": "2026-09-05T19:00:00Z",
+      "sourceEstimatedGreenFlagUtc": "2026-09-05T19:00:00Z"
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6953",
+      "officialSessionId": "6953",
+      "scheduledStart": "2026-09-05T12:18:00",
+      "actualStart": "2026-09-05T12:18:00",
+      "scheduledEnd": "2026-09-05T12:30:00",
+      "timezone": "America/Los_Angeles",
+      "sourceStartUtc": "2026-09-05T19:18:00Z",
+      "sourceEstimatedGreenFlagUtc": "2026-09-05T19:18:00Z"
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6954",
+      "officialSessionId": "6954",
+      "scheduledStart": "2026-09-05T12:30:00",
+      "actualStart": "2026-09-05T12:30:00",
+      "scheduledEnd": "2026-09-05T12:35:00",
+      "timezone": "America/Los_Angeles",
+      "sourceStartUtc": "2026-09-05T19:30:00Z",
+      "sourceEstimatedGreenFlagUtc": "2026-09-05T19:30:00Z"
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6758",
+      "officialSessionId": "6758",
+      "scheduledStart": "2026-09-06T09:30:00",
+      "actualStart": null,
+      "scheduledEnd": "2026-09-06T10:30:00",
+      "timezone": "America/Los_Angeles",
+      "sourceStartUtc": "2026-09-06T16:30:00Z",
+      "sourceEstimatedGreenFlagUtc": null
     }
   ],
   "scheduleSessionsUpdated": [
@@ -1940,806 +1970,9 @@
     }
   ],
   "scheduleOnlyEventsCreated": [],
-  "scheduleOnlySessionsCreated": [
-    {
-      "sessionId": "session_indy_nxt_2026_6934",
-      "officialSessionId": "6934",
-      "eventId": "event_indy_nxt_2026_5540",
-      "officialEventId": "5540",
-      "sessionLabel": "Practice",
-      "sessionType": "practice",
-      "scheduledStart": "2026-08-29T08:00:00",
-      "actualStart": "2026-08-29T08:00:00",
-      "scheduledEnd": "2026-08-29T09:00:00",
-      "timezone": "America/Chicago",
-      "sourceStartUtc": "2026-08-29T13:00:00Z",
-      "sourceEstimatedGreenFlagUtc": "2026-08-29T13:00:00Z"
-    },
-    {
-      "sessionId": "session_indy_nxt_2026_6935",
-      "officialSessionId": "6935",
-      "eventId": "event_indy_nxt_2026_5540",
-      "officialEventId": "5540",
-      "sessionLabel": "Qualifying",
-      "sessionType": "qualifying",
-      "scheduledStart": "2026-08-29T11:30:00",
-      "actualStart": "2026-08-29T11:35:00",
-      "scheduledEnd": "2026-08-29T12:30:00",
-      "timezone": "America/Chicago",
-      "sourceStartUtc": "2026-08-29T16:30:00Z",
-      "sourceEstimatedGreenFlagUtc": "2026-08-29T16:35:00Z"
-    },
-    {
-      "sessionId": "session_indy_nxt_2026_6947",
-      "officialSessionId": "6947",
-      "eventId": "event_indy_nxt_2026_5542",
-      "officialEventId": "5542",
-      "sessionLabel": "Practice 1",
-      "sessionType": "practice",
-      "scheduledStart": "2026-09-04T13:00:00",
-      "actualStart": "2026-09-04T13:00:00",
-      "scheduledEnd": "2026-09-04T13:25:00",
-      "timezone": "America/Los_Angeles",
-      "sourceStartUtc": "2026-09-04T20:00:00Z",
-      "sourceEstimatedGreenFlagUtc": "2026-09-04T20:00:00Z"
-    },
-    {
-      "sessionId": "session_indy_nxt_2026_6948",
-      "officialSessionId": "6948",
-      "eventId": "event_indy_nxt_2026_5542",
-      "officialEventId": "5542",
-      "sessionLabel": "Practice 2",
-      "sessionType": "practice",
-      "scheduledStart": "2026-09-04T15:30:00",
-      "actualStart": "2026-09-04T15:35:00",
-      "scheduledEnd": "2026-09-04T16:00:00",
-      "timezone": "America/Los_Angeles",
-      "sourceStartUtc": "2026-09-04T22:30:00Z",
-      "sourceEstimatedGreenFlagUtc": "2026-09-04T22:35:00Z"
-    },
-    {
-      "sessionId": "session_indy_nxt_2026_6949",
-      "officialSessionId": "6949",
-      "eventId": "event_indy_nxt_2026_5542",
-      "officialEventId": "5542",
-      "sessionLabel": "Qualifying - Race 1 Group 1",
-      "sessionType": "qualifying",
-      "scheduledStart": "2026-09-05T12:00:00",
-      "actualStart": "2026-09-05T12:00:00",
-      "scheduledEnd": "2026-09-05T12:12:00",
-      "timezone": "America/Los_Angeles",
-      "sourceStartUtc": "2026-09-05T19:00:00Z",
-      "sourceEstimatedGreenFlagUtc": "2026-09-05T19:00:00Z"
-    },
-    {
-      "sessionId": "session_indy_nxt_2026_6950",
-      "officialSessionId": "6950",
-      "eventId": "event_indy_nxt_2026_5542",
-      "officialEventId": "5542",
-      "sessionLabel": "Qualifying - Race 1 Group 2",
-      "sessionType": "qualifying",
-      "scheduledStart": "2026-09-05T12:18:00",
-      "actualStart": "2026-09-05T12:18:00",
-      "scheduledEnd": "2026-09-05T12:30:00",
-      "timezone": "America/Los_Angeles",
-      "sourceStartUtc": "2026-09-05T19:18:00Z",
-      "sourceEstimatedGreenFlagUtc": "2026-09-05T19:18:00Z"
-    },
-    {
-      "sessionId": "session_indy_nxt_2026_6951",
-      "officialSessionId": "6951",
-      "eventId": "event_indy_nxt_2026_5542",
-      "officialEventId": "5542",
-      "sessionLabel": "Combined Qualifying - Race 1",
-      "sessionType": "qualifying",
-      "scheduledStart": "2026-09-05T12:30:00",
-      "actualStart": "2026-09-05T12:30:00",
-      "scheduledEnd": "2026-09-05T12:35:00",
-      "timezone": "America/Los_Angeles",
-      "sourceStartUtc": "2026-09-05T19:30:00Z",
-      "sourceEstimatedGreenFlagUtc": "2026-09-05T19:30:00Z"
-    },
-    {
-      "sessionId": "session_indy_nxt_2026_6952",
-      "officialSessionId": "6952",
-      "eventId": "event_indy_nxt_2026_5541",
-      "officialEventId": "5541",
-      "sessionLabel": "Qualifying - Race 2 Group 1",
-      "sessionType": "qualifying",
-      "scheduledStart": "2026-09-05T12:00:00",
-      "actualStart": "2026-09-05T12:00:00",
-      "scheduledEnd": "2026-09-05T12:12:00",
-      "timezone": "America/Los_Angeles",
-      "sourceStartUtc": "2026-09-05T19:00:00Z",
-      "sourceEstimatedGreenFlagUtc": "2026-09-05T19:00:00Z"
-    },
-    {
-      "sessionId": "session_indy_nxt_2026_6953",
-      "officialSessionId": "6953",
-      "eventId": "event_indy_nxt_2026_5541",
-      "officialEventId": "5541",
-      "sessionLabel": "Qualifying - Race 2 Group 2",
-      "sessionType": "qualifying",
-      "scheduledStart": "2026-09-05T12:18:00",
-      "actualStart": "2026-09-05T12:18:00",
-      "scheduledEnd": "2026-09-05T12:30:00",
-      "timezone": "America/Los_Angeles",
-      "sourceStartUtc": "2026-09-05T19:18:00Z",
-      "sourceEstimatedGreenFlagUtc": "2026-09-05T19:18:00Z"
-    },
-    {
-      "sessionId": "session_indy_nxt_2026_6954",
-      "officialSessionId": "6954",
-      "eventId": "event_indy_nxt_2026_5541",
-      "officialEventId": "5541",
-      "sessionLabel": "Combined Qualifying - Race 2",
-      "sessionType": "qualifying",
-      "scheduledStart": "2026-09-05T12:30:00",
-      "actualStart": "2026-09-05T12:30:00",
-      "scheduledEnd": "2026-09-05T12:35:00",
-      "timezone": "America/Los_Angeles",
-      "sourceStartUtc": "2026-09-05T19:30:00Z",
-      "sourceEstimatedGreenFlagUtc": "2026-09-05T19:30:00Z"
-    }
-  ],
-  "scheduleOnlySessionsUpdated": [
-    {
-      "sessionId": "session_indy_nxt_2026_6898",
-      "officialSessionId": "6898",
-      "eventId": "event_indy_nxt_2026_5547",
-      "officialEventId": "5547",
-      "sessionLabel": "Practice 1",
-      "sessionType": "practice",
-      "scheduledStart": "2026-08-07T13:30:00",
-      "actualStart": "2026-08-07T13:30:00",
-      "scheduledEnd": "2026-08-07T14:15:00",
-      "timezone": "America/Los_Angeles",
-      "sourceStartUtc": "2026-08-07T20:30:00Z",
-      "sourceEstimatedGreenFlagUtc": "2026-08-07T20:30:00Z"
-    },
-    {
-      "sessionId": "session_indy_nxt_2026_6899",
-      "officialSessionId": "6899",
-      "eventId": "event_indy_nxt_2026_5547",
-      "officialEventId": "5547",
-      "sessionLabel": "Practice 2",
-      "sessionType": "practice",
-      "scheduledStart": "2026-08-08T09:00:00",
-      "actualStart": "2026-08-08T09:00:00",
-      "scheduledEnd": "2026-08-08T09:45:00",
-      "timezone": "America/Los_Angeles",
-      "sourceStartUtc": "2026-08-08T16:00:00Z",
-      "sourceEstimatedGreenFlagUtc": "2026-08-08T16:00:00Z"
-    },
-    {
-      "sessionId": "session_indy_nxt_2026_6900",
-      "officialSessionId": "6900",
-      "eventId": "event_indy_nxt_2026_5547",
-      "officialEventId": "5547",
-      "sessionLabel": "Qualifying - Group 1",
-      "sessionType": "qualifying",
-      "scheduledStart": "2026-08-08T12:00:00",
-      "actualStart": "2026-08-08T12:00:00",
-      "scheduledEnd": "2026-08-08T12:12:00",
-      "timezone": "America/Los_Angeles",
-      "sourceStartUtc": "2026-08-08T19:00:00Z",
-      "sourceEstimatedGreenFlagUtc": "2026-08-08T19:00:00Z"
-    },
-    {
-      "sessionId": "session_indy_nxt_2026_6901",
-      "officialSessionId": "6901",
-      "eventId": "event_indy_nxt_2026_5547",
-      "officialEventId": "5547",
-      "sessionLabel": "Qualifying - Group 2",
-      "sessionType": "qualifying",
-      "scheduledStart": "2026-08-08T12:18:00",
-      "actualStart": "2026-08-08T12:18:00",
-      "scheduledEnd": "2026-08-08T12:30:00",
-      "timezone": "America/Los_Angeles",
-      "sourceStartUtc": "2026-08-08T19:18:00Z",
-      "sourceEstimatedGreenFlagUtc": "2026-08-08T19:18:00Z"
-    },
-    {
-      "sessionId": "session_indy_nxt_2026_6902",
-      "officialSessionId": "6902",
-      "eventId": "event_indy_nxt_2026_5547",
-      "officialEventId": "5547",
-      "sessionLabel": "Combined Qualifying",
-      "sessionType": "qualifying",
-      "scheduledStart": "2026-08-08T12:30:00",
-      "actualStart": "2026-08-08T12:30:00",
-      "scheduledEnd": "2026-08-08T12:35:00",
-      "timezone": "America/Los_Angeles",
-      "sourceStartUtc": "2026-08-08T19:30:00Z",
-      "sourceEstimatedGreenFlagUtc": "2026-08-08T19:30:00Z"
-    },
-    {
-      "sessionId": "session_indy_nxt_2026_6764",
-      "officialSessionId": "6764",
-      "eventId": "event_indy_nxt_2026_5547",
-      "officialEventId": "5547",
-      "sessionLabel": "Race",
-      "sessionType": "race",
-      "scheduledStart": "2026-08-09T11:00:00",
-      "actualStart": "2026-08-09T11:08:00",
-      "scheduledEnd": "2026-08-09T12:00:00",
-      "timezone": "America/Los_Angeles",
-      "sourceStartUtc": "2026-08-09T18:00:00Z",
-      "sourceEstimatedGreenFlagUtc": "2026-08-09T18:08:00Z"
-    },
-    {
-      "sessionId": "session_indy_nxt_2026_6757",
-      "officialSessionId": "6757",
-      "eventId": "event_indy_nxt_2026_5540",
-      "officialEventId": "5540",
-      "sessionLabel": "Race",
-      "sessionType": "race",
-      "scheduledStart": "2026-08-30T10:00:00",
-      "actualStart": "2026-08-30T10:06:00",
-      "scheduledEnd": "2026-08-30T11:00:00",
-      "timezone": "America/Chicago",
-      "sourceStartUtc": "2026-08-30T15:00:00Z",
-      "sourceEstimatedGreenFlagUtc": "2026-08-30T15:06:00Z"
-    },
-    {
-      "sessionId": "session_indy_nxt_2026_6759",
-      "officialSessionId": "6759",
-      "eventId": "event_indy_nxt_2026_5542",
-      "officialEventId": "5542",
-      "sessionLabel": "Race",
-      "sessionType": "race",
-      "scheduledStart": "2026-09-05T15:30:00",
-      "actualStart": null,
-      "scheduledEnd": "2026-09-05T16:30:00",
-      "timezone": "America/Los_Angeles",
-      "sourceStartUtc": "2026-09-05T22:30:00Z",
-      "sourceEstimatedGreenFlagUtc": null
-    },
-    {
-      "sessionId": "session_indy_nxt_2026_6758",
-      "officialSessionId": "6758",
-      "eventId": "event_indy_nxt_2026_5541",
-      "officialEventId": "5541",
-      "sessionLabel": "Race",
-      "sessionType": "race",
-      "scheduledStart": "2026-09-06T09:30:00",
-      "actualStart": null,
-      "scheduledEnd": "2026-09-06T10:30:00",
-      "timezone": "America/Los_Angeles",
-      "sourceStartUtc": "2026-09-06T16:30:00Z",
-      "sourceEstimatedGreenFlagUtc": null
-    }
-  ],
-  "eventDateSpansUpdated": [
-    {
-      "eventId": "event_indy_nxt_2026_5540",
-      "officialEventId": "5540",
-      "eventName": "INDY NXT by Firestone at Milwaukee Mile",
-      "oldEventStartDate": "2026-08-30",
-      "oldEventEndDate": "2026-08-30",
-      "eventStartDate": "2026-08-29",
-      "eventEndDate": "2026-08-30",
-      "timezone": "America/Chicago",
-      "sourceEvidence": [
-        {
-          "date": "2026-08-30",
-          "sourceRef": "source_indy_nxt_2026_race_control_schedule",
-          "sourceField": "canonical event.eventStartDate originally imported from official event/session date",
-          "sourceValue": "2026-08-30",
-          "sessionId": null,
-          "note": "normalized_to_iso_date"
-        },
-        {
-          "date": "2026-08-30",
-          "sourceRef": "source_indy_nxt_2026_race_control_schedule",
-          "sourceField": "canonical event.eventEndDate originally imported from official event/session date",
-          "sourceValue": "2026-08-30",
-          "sessionId": null,
-          "note": "normalized_to_iso_date"
-        },
-        {
-          "date": "2026-08-30",
-          "sourceRef": "source_indy_nxt_2026_race_control_trackactivity_schedule",
-          "sourceField": "trackactivity.session.scheduledStart converted from source UTC",
-          "sourceValue": {
-            "sourceStartUtc": "2026-08-30T15:00:00Z",
-            "sourceEndUtc": "2026-08-30T16:00:00Z",
-            "sourceEstimatedGreenFlagUtc": "2026-08-30T15:06:00Z"
-          },
-          "sessionId": "session_indy_nxt_2026_6757",
-          "note": null
-        },
-        {
-          "date": "2026-08-30",
-          "sourceRef": "source_indy_nxt_2026_race_control_trackactivity_schedule",
-          "sourceField": "trackactivity.session.estimatedGreenFlag converted from source UTC",
-          "sourceValue": {
-            "sourceStartUtc": "2026-08-30T15:00:00Z",
-            "sourceEndUtc": "2026-08-30T16:00:00Z",
-            "sourceEstimatedGreenFlagUtc": "2026-08-30T15:06:00Z"
-          },
-          "sessionId": "session_indy_nxt_2026_6757",
-          "note": null
-        },
-        {
-          "date": "2026-08-30",
-          "sourceRef": "source_indy_nxt_2026_race_control_trackactivity_schedule",
-          "sourceField": "trackactivity.session.scheduledEnd converted from source UTC",
-          "sourceValue": {
-            "sourceStartUtc": "2026-08-30T15:00:00Z",
-            "sourceEndUtc": "2026-08-30T16:00:00Z",
-            "sourceEstimatedGreenFlagUtc": "2026-08-30T15:06:00Z"
-          },
-          "sessionId": "session_indy_nxt_2026_6757",
-          "note": null
-        },
-        {
-          "date": "2026-08-29",
-          "sourceRef": "source_indy_nxt_2026_race_control_trackactivity_schedule",
-          "sourceField": "trackactivity.session.scheduledStart converted from source UTC",
-          "sourceValue": {
-            "sourceStartUtc": "2026-08-29T13:00:00Z",
-            "sourceEndUtc": "2026-08-29T14:00:00Z",
-            "sourceEstimatedGreenFlagUtc": "2026-08-29T13:00:00Z"
-          },
-          "sessionId": "session_indy_nxt_2026_6934",
-          "note": null
-        },
-        {
-          "date": "2026-08-29",
-          "sourceRef": "source_indy_nxt_2026_race_control_trackactivity_schedule",
-          "sourceField": "trackactivity.session.estimatedGreenFlag converted from source UTC",
-          "sourceValue": {
-            "sourceStartUtc": "2026-08-29T13:00:00Z",
-            "sourceEndUtc": "2026-08-29T14:00:00Z",
-            "sourceEstimatedGreenFlagUtc": "2026-08-29T13:00:00Z"
-          },
-          "sessionId": "session_indy_nxt_2026_6934",
-          "note": null
-        },
-        {
-          "date": "2026-08-29",
-          "sourceRef": "source_indy_nxt_2026_race_control_trackactivity_schedule",
-          "sourceField": "trackactivity.session.scheduledEnd converted from source UTC",
-          "sourceValue": {
-            "sourceStartUtc": "2026-08-29T13:00:00Z",
-            "sourceEndUtc": "2026-08-29T14:00:00Z",
-            "sourceEstimatedGreenFlagUtc": "2026-08-29T13:00:00Z"
-          },
-          "sessionId": "session_indy_nxt_2026_6934",
-          "note": null
-        },
-        {
-          "date": "2026-08-29",
-          "sourceRef": "source_indy_nxt_2026_race_control_trackactivity_schedule",
-          "sourceField": "trackactivity.session.scheduledStart converted from source UTC",
-          "sourceValue": {
-            "sourceStartUtc": "2026-08-29T16:30:00Z",
-            "sourceEndUtc": "2026-08-29T17:30:00Z",
-            "sourceEstimatedGreenFlagUtc": "2026-08-29T16:35:00Z"
-          },
-          "sessionId": "session_indy_nxt_2026_6935",
-          "note": null
-        },
-        {
-          "date": "2026-08-29",
-          "sourceRef": "source_indy_nxt_2026_race_control_trackactivity_schedule",
-          "sourceField": "trackactivity.session.estimatedGreenFlag converted from source UTC",
-          "sourceValue": {
-            "sourceStartUtc": "2026-08-29T16:30:00Z",
-            "sourceEndUtc": "2026-08-29T17:30:00Z",
-            "sourceEstimatedGreenFlagUtc": "2026-08-29T16:35:00Z"
-          },
-          "sessionId": "session_indy_nxt_2026_6935",
-          "note": null
-        },
-        {
-          "date": "2026-08-29",
-          "sourceRef": "source_indy_nxt_2026_race_control_trackactivity_schedule",
-          "sourceField": "trackactivity.session.scheduledEnd converted from source UTC",
-          "sourceValue": {
-            "sourceStartUtc": "2026-08-29T16:30:00Z",
-            "sourceEndUtc": "2026-08-29T17:30:00Z",
-            "sourceEstimatedGreenFlagUtc": "2026-08-29T16:35:00Z"
-          },
-          "sessionId": "session_indy_nxt_2026_6935",
-          "note": null
-        }
-      ]
-    },
-    {
-      "eventId": "event_indy_nxt_2026_5541",
-      "officialEventId": "5541",
-      "eventName": "Grand Prix of Monterey Race 2",
-      "oldEventStartDate": "2026-09-06",
-      "oldEventEndDate": "2026-09-06",
-      "eventStartDate": "2026-09-05",
-      "eventEndDate": "2026-09-06",
-      "timezone": "America/Los_Angeles",
-      "sourceEvidence": [
-        {
-          "date": "2026-09-06",
-          "sourceRef": "source_indy_nxt_2026_race_control_schedule",
-          "sourceField": "canonical event.eventStartDate originally imported from official event/session date",
-          "sourceValue": "2026-09-06",
-          "sessionId": null,
-          "note": "normalized_to_iso_date"
-        },
-        {
-          "date": "2026-09-06",
-          "sourceRef": "source_indy_nxt_2026_race_control_schedule",
-          "sourceField": "canonical event.eventEndDate originally imported from official event/session date",
-          "sourceValue": "2026-09-06",
-          "sessionId": null,
-          "note": "normalized_to_iso_date"
-        },
-        {
-          "date": "2026-09-06",
-          "sourceRef": "source_indy_nxt_2026_race_control_trackactivity_schedule",
-          "sourceField": "trackactivity.session.scheduledStart converted from source UTC",
-          "sourceValue": {
-            "sourceStartUtc": "2026-09-06T16:30:00Z",
-            "sourceEndUtc": "2026-09-06T17:30:00Z",
-            "sourceEstimatedGreenFlagUtc": null
-          },
-          "sessionId": "session_indy_nxt_2026_6758",
-          "note": null
-        },
-        {
-          "date": "2026-09-06",
-          "sourceRef": "source_indy_nxt_2026_race_control_trackactivity_schedule",
-          "sourceField": "trackactivity.session.scheduledEnd converted from source UTC",
-          "sourceValue": {
-            "sourceStartUtc": "2026-09-06T16:30:00Z",
-            "sourceEndUtc": "2026-09-06T17:30:00Z",
-            "sourceEstimatedGreenFlagUtc": null
-          },
-          "sessionId": "session_indy_nxt_2026_6758",
-          "note": null
-        },
-        {
-          "date": "2026-09-05",
-          "sourceRef": "source_indy_nxt_2026_race_control_trackactivity_schedule",
-          "sourceField": "trackactivity.session.scheduledStart converted from source UTC",
-          "sourceValue": {
-            "sourceStartUtc": "2026-09-05T19:00:00Z",
-            "sourceEndUtc": "2026-09-05T19:12:00Z",
-            "sourceEstimatedGreenFlagUtc": "2026-09-05T19:00:00Z"
-          },
-          "sessionId": "session_indy_nxt_2026_6952",
-          "note": null
-        },
-        {
-          "date": "2026-09-05",
-          "sourceRef": "source_indy_nxt_2026_race_control_trackactivity_schedule",
-          "sourceField": "trackactivity.session.estimatedGreenFlag converted from source UTC",
-          "sourceValue": {
-            "sourceStartUtc": "2026-09-05T19:00:00Z",
-            "sourceEndUtc": "2026-09-05T19:12:00Z",
-            "sourceEstimatedGreenFlagUtc": "2026-09-05T19:00:00Z"
-          },
-          "sessionId": "session_indy_nxt_2026_6952",
-          "note": null
-        },
-        {
-          "date": "2026-09-05",
-          "sourceRef": "source_indy_nxt_2026_race_control_trackactivity_schedule",
-          "sourceField": "trackactivity.session.scheduledEnd converted from source UTC",
-          "sourceValue": {
-            "sourceStartUtc": "2026-09-05T19:00:00Z",
-            "sourceEndUtc": "2026-09-05T19:12:00Z",
-            "sourceEstimatedGreenFlagUtc": "2026-09-05T19:00:00Z"
-          },
-          "sessionId": "session_indy_nxt_2026_6952",
-          "note": null
-        },
-        {
-          "date": "2026-09-05",
-          "sourceRef": "source_indy_nxt_2026_race_control_trackactivity_schedule",
-          "sourceField": "trackactivity.session.scheduledStart converted from source UTC",
-          "sourceValue": {
-            "sourceStartUtc": "2026-09-05T19:18:00Z",
-            "sourceEndUtc": "2026-09-05T19:30:00Z",
-            "sourceEstimatedGreenFlagUtc": "2026-09-05T19:18:00Z"
-          },
-          "sessionId": "session_indy_nxt_2026_6953",
-          "note": null
-        },
-        {
-          "date": "2026-09-05",
-          "sourceRef": "source_indy_nxt_2026_race_control_trackactivity_schedule",
-          "sourceField": "trackactivity.session.estimatedGreenFlag converted from source UTC",
-          "sourceValue": {
-            "sourceStartUtc": "2026-09-05T19:18:00Z",
-            "sourceEndUtc": "2026-09-05T19:30:00Z",
-            "sourceEstimatedGreenFlagUtc": "2026-09-05T19:18:00Z"
-          },
-          "sessionId": "session_indy_nxt_2026_6953",
-          "note": null
-        },
-        {
-          "date": "2026-09-05",
-          "sourceRef": "source_indy_nxt_2026_race_control_trackactivity_schedule",
-          "sourceField": "trackactivity.session.scheduledEnd converted from source UTC",
-          "sourceValue": {
-            "sourceStartUtc": "2026-09-05T19:18:00Z",
-            "sourceEndUtc": "2026-09-05T19:30:00Z",
-            "sourceEstimatedGreenFlagUtc": "2026-09-05T19:18:00Z"
-          },
-          "sessionId": "session_indy_nxt_2026_6953",
-          "note": null
-        },
-        {
-          "date": "2026-09-05",
-          "sourceRef": "source_indy_nxt_2026_race_control_trackactivity_schedule",
-          "sourceField": "trackactivity.session.scheduledStart converted from source UTC",
-          "sourceValue": {
-            "sourceStartUtc": "2026-09-05T19:30:00Z",
-            "sourceEndUtc": "2026-09-05T19:35:00Z",
-            "sourceEstimatedGreenFlagUtc": "2026-09-05T19:30:00Z"
-          },
-          "sessionId": "session_indy_nxt_2026_6954",
-          "note": null
-        },
-        {
-          "date": "2026-09-05",
-          "sourceRef": "source_indy_nxt_2026_race_control_trackactivity_schedule",
-          "sourceField": "trackactivity.session.estimatedGreenFlag converted from source UTC",
-          "sourceValue": {
-            "sourceStartUtc": "2026-09-05T19:30:00Z",
-            "sourceEndUtc": "2026-09-05T19:35:00Z",
-            "sourceEstimatedGreenFlagUtc": "2026-09-05T19:30:00Z"
-          },
-          "sessionId": "session_indy_nxt_2026_6954",
-          "note": null
-        },
-        {
-          "date": "2026-09-05",
-          "sourceRef": "source_indy_nxt_2026_race_control_trackactivity_schedule",
-          "sourceField": "trackactivity.session.scheduledEnd converted from source UTC",
-          "sourceValue": {
-            "sourceStartUtc": "2026-09-05T19:30:00Z",
-            "sourceEndUtc": "2026-09-05T19:35:00Z",
-            "sourceEstimatedGreenFlagUtc": "2026-09-05T19:30:00Z"
-          },
-          "sessionId": "session_indy_nxt_2026_6954",
-          "note": null
-        }
-      ]
-    },
-    {
-      "eventId": "event_indy_nxt_2026_5542",
-      "officialEventId": "5542",
-      "eventName": "Grand Prix of Monterey Race 1",
-      "oldEventStartDate": "2026-09-05",
-      "oldEventEndDate": "2026-09-05",
-      "eventStartDate": "2026-09-04",
-      "eventEndDate": "2026-09-05",
-      "timezone": "America/Los_Angeles",
-      "sourceEvidence": [
-        {
-          "date": "2026-09-05",
-          "sourceRef": "source_indy_nxt_2026_race_control_schedule",
-          "sourceField": "canonical event.eventStartDate originally imported from official event/session date",
-          "sourceValue": "2026-09-05",
-          "sessionId": null,
-          "note": "normalized_to_iso_date"
-        },
-        {
-          "date": "2026-09-05",
-          "sourceRef": "source_indy_nxt_2026_race_control_schedule",
-          "sourceField": "canonical event.eventEndDate originally imported from official event/session date",
-          "sourceValue": "2026-09-05",
-          "sessionId": null,
-          "note": "normalized_to_iso_date"
-        },
-        {
-          "date": "2026-09-05",
-          "sourceRef": "source_indy_nxt_2026_race_control_trackactivity_schedule",
-          "sourceField": "trackactivity.session.scheduledStart converted from source UTC",
-          "sourceValue": {
-            "sourceStartUtc": "2026-09-05T22:30:00Z",
-            "sourceEndUtc": "2026-09-05T23:30:00Z",
-            "sourceEstimatedGreenFlagUtc": null
-          },
-          "sessionId": "session_indy_nxt_2026_6759",
-          "note": null
-        },
-        {
-          "date": "2026-09-05",
-          "sourceRef": "source_indy_nxt_2026_race_control_trackactivity_schedule",
-          "sourceField": "trackactivity.session.scheduledEnd converted from source UTC",
-          "sourceValue": {
-            "sourceStartUtc": "2026-09-05T22:30:00Z",
-            "sourceEndUtc": "2026-09-05T23:30:00Z",
-            "sourceEstimatedGreenFlagUtc": null
-          },
-          "sessionId": "session_indy_nxt_2026_6759",
-          "note": null
-        },
-        {
-          "date": "2026-09-04",
-          "sourceRef": "source_indy_nxt_2026_race_control_trackactivity_schedule",
-          "sourceField": "trackactivity.session.scheduledStart converted from source UTC",
-          "sourceValue": {
-            "sourceStartUtc": "2026-09-04T20:00:00Z",
-            "sourceEndUtc": "2026-09-04T20:25:00Z",
-            "sourceEstimatedGreenFlagUtc": "2026-09-04T20:00:00Z"
-          },
-          "sessionId": "session_indy_nxt_2026_6947",
-          "note": null
-        },
-        {
-          "date": "2026-09-04",
-          "sourceRef": "source_indy_nxt_2026_race_control_trackactivity_schedule",
-          "sourceField": "trackactivity.session.estimatedGreenFlag converted from source UTC",
-          "sourceValue": {
-            "sourceStartUtc": "2026-09-04T20:00:00Z",
-            "sourceEndUtc": "2026-09-04T20:25:00Z",
-            "sourceEstimatedGreenFlagUtc": "2026-09-04T20:00:00Z"
-          },
-          "sessionId": "session_indy_nxt_2026_6947",
-          "note": null
-        },
-        {
-          "date": "2026-09-04",
-          "sourceRef": "source_indy_nxt_2026_race_control_trackactivity_schedule",
-          "sourceField": "trackactivity.session.scheduledEnd converted from source UTC",
-          "sourceValue": {
-            "sourceStartUtc": "2026-09-04T20:00:00Z",
-            "sourceEndUtc": "2026-09-04T20:25:00Z",
-            "sourceEstimatedGreenFlagUtc": "2026-09-04T20:00:00Z"
-          },
-          "sessionId": "session_indy_nxt_2026_6947",
-          "note": null
-        },
-        {
-          "date": "2026-09-04",
-          "sourceRef": "source_indy_nxt_2026_race_control_trackactivity_schedule",
-          "sourceField": "trackactivity.session.scheduledStart converted from source UTC",
-          "sourceValue": {
-            "sourceStartUtc": "2026-09-04T22:30:00Z",
-            "sourceEndUtc": "2026-09-04T23:00:00Z",
-            "sourceEstimatedGreenFlagUtc": "2026-09-04T22:35:00Z"
-          },
-          "sessionId": "session_indy_nxt_2026_6948",
-          "note": null
-        },
-        {
-          "date": "2026-09-04",
-          "sourceRef": "source_indy_nxt_2026_race_control_trackactivity_schedule",
-          "sourceField": "trackactivity.session.estimatedGreenFlag converted from source UTC",
-          "sourceValue": {
-            "sourceStartUtc": "2026-09-04T22:30:00Z",
-            "sourceEndUtc": "2026-09-04T23:00:00Z",
-            "sourceEstimatedGreenFlagUtc": "2026-09-04T22:35:00Z"
-          },
-          "sessionId": "session_indy_nxt_2026_6948",
-          "note": null
-        },
-        {
-          "date": "2026-09-04",
-          "sourceRef": "source_indy_nxt_2026_race_control_trackactivity_schedule",
-          "sourceField": "trackactivity.session.scheduledEnd converted from source UTC",
-          "sourceValue": {
-            "sourceStartUtc": "2026-09-04T22:30:00Z",
-            "sourceEndUtc": "2026-09-04T23:00:00Z",
-            "sourceEstimatedGreenFlagUtc": "2026-09-04T22:35:00Z"
-          },
-          "sessionId": "session_indy_nxt_2026_6948",
-          "note": null
-        },
-        {
-          "date": "2026-09-05",
-          "sourceRef": "source_indy_nxt_2026_race_control_trackactivity_schedule",
-          "sourceField": "trackactivity.session.scheduledStart converted from source UTC",
-          "sourceValue": {
-            "sourceStartUtc": "2026-09-05T19:00:00Z",
-            "sourceEndUtc": "2026-09-05T19:12:00Z",
-            "sourceEstimatedGreenFlagUtc": "2026-09-05T19:00:00Z"
-          },
-          "sessionId": "session_indy_nxt_2026_6949",
-          "note": null
-        },
-        {
-          "date": "2026-09-05",
-          "sourceRef": "source_indy_nxt_2026_race_control_trackactivity_schedule",
-          "sourceField": "trackactivity.session.estimatedGreenFlag converted from source UTC",
-          "sourceValue": {
-            "sourceStartUtc": "2026-09-05T19:00:00Z",
-            "sourceEndUtc": "2026-09-05T19:12:00Z",
-            "sourceEstimatedGreenFlagUtc": "2026-09-05T19:00:00Z"
-          },
-          "sessionId": "session_indy_nxt_2026_6949",
-          "note": null
-        },
-        {
-          "date": "2026-09-05",
-          "sourceRef": "source_indy_nxt_2026_race_control_trackactivity_schedule",
-          "sourceField": "trackactivity.session.scheduledEnd converted from source UTC",
-          "sourceValue": {
-            "sourceStartUtc": "2026-09-05T19:00:00Z",
-            "sourceEndUtc": "2026-09-05T19:12:00Z",
-            "sourceEstimatedGreenFlagUtc": "2026-09-05T19:00:00Z"
-          },
-          "sessionId": "session_indy_nxt_2026_6949",
-          "note": null
-        },
-        {
-          "date": "2026-09-05",
-          "sourceRef": "source_indy_nxt_2026_race_control_trackactivity_schedule",
-          "sourceField": "trackactivity.session.scheduledStart converted from source UTC",
-          "sourceValue": {
-            "sourceStartUtc": "2026-09-05T19:18:00Z",
-            "sourceEndUtc": "2026-09-05T19:30:00Z",
-            "sourceEstimatedGreenFlagUtc": "2026-09-05T19:18:00Z"
-          },
-          "sessionId": "session_indy_nxt_2026_6950",
-          "note": null
-        },
-        {
-          "date": "2026-09-05",
-          "sourceRef": "source_indy_nxt_2026_race_control_trackactivity_schedule",
-          "sourceField": "trackactivity.session.estimatedGreenFlag converted from source UTC",
-          "sourceValue": {
-            "sourceStartUtc": "2026-09-05T19:18:00Z",
-            "sourceEndUtc": "2026-09-05T19:30:00Z",
-            "sourceEstimatedGreenFlagUtc": "2026-09-05T19:18:00Z"
-          },
-          "sessionId": "session_indy_nxt_2026_6950",
-          "note": null
-        },
-        {
-          "date": "2026-09-05",
-          "sourceRef": "source_indy_nxt_2026_race_control_trackactivity_schedule",
-          "sourceField": "trackactivity.session.scheduledEnd converted from source UTC",
-          "sourceValue": {
-            "sourceStartUtc": "2026-09-05T19:18:00Z",
-            "sourceEndUtc": "2026-09-05T19:30:00Z",
-            "sourceEstimatedGreenFlagUtc": "2026-09-05T19:18:00Z"
-          },
-          "sessionId": "session_indy_nxt_2026_6950",
-          "note": null
-        },
-        {
-          "date": "2026-09-05",
-          "sourceRef": "source_indy_nxt_2026_race_control_trackactivity_schedule",
-          "sourceField": "trackactivity.session.scheduledStart converted from source UTC",
-          "sourceValue": {
-            "sourceStartUtc": "2026-09-05T19:30:00Z",
-            "sourceEndUtc": "2026-09-05T19:35:00Z",
-            "sourceEstimatedGreenFlagUtc": "2026-09-05T19:30:00Z"
-          },
-          "sessionId": "session_indy_nxt_2026_6951",
-          "note": null
-        },
-        {
-          "date": "2026-09-05",
-          "sourceRef": "source_indy_nxt_2026_race_control_trackactivity_schedule",
-          "sourceField": "trackactivity.session.estimatedGreenFlag converted from source UTC",
-          "sourceValue": {
-            "sourceStartUtc": "2026-09-05T19:30:00Z",
-            "sourceEndUtc": "2026-09-05T19:35:00Z",
-            "sourceEstimatedGreenFlagUtc": "2026-09-05T19:30:00Z"
-          },
-          "sessionId": "session_indy_nxt_2026_6951",
-          "note": null
-        },
-        {
-          "date": "2026-09-05",
-          "sourceRef": "source_indy_nxt_2026_race_control_trackactivity_schedule",
-          "sourceField": "trackactivity.session.scheduledEnd converted from source UTC",
-          "sourceValue": {
-            "sourceStartUtc": "2026-09-05T19:30:00Z",
-            "sourceEndUtc": "2026-09-05T19:35:00Z",
-            "sourceEstimatedGreenFlagUtc": "2026-09-05T19:30:00Z"
-          },
-          "sessionId": "session_indy_nxt_2026_6951",
-          "note": null
-        }
-      ]
-    }
-  ],
+  "scheduleOnlySessionsCreated": [],
+  "scheduleOnlySessionsUpdated": [],
+  "eventDateSpansUpdated": [],
   "scheduleSessionsSkipped": [
     {
       "eventId": "5534",

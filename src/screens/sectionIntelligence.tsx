@@ -1018,8 +1018,22 @@ const packHasCleanComparisons = (pack: SectionLapsPack): boolean =>
 /** Load a venue's section packs + pass marks and resolve its anchor set — the
  *  data behind both the Race Week hero shading and the section suite. Keyed on
  *  the upcoming venue's track name; async and cancel-safe, mirroring the race
- *  page's own load. No new data lanes — the same loaders the race page uses. */
-export const useVenueSectionData = (trackName: string | null | undefined): VenueSectionData => {
+ *  page's own load. No new data lanes — the same loaders the race page uses.
+ *
+ *  `prioritySessionId` (optional): the visit about to actually render (the
+ *  Tracks page's selected year/race) among the whole venue's visits this hook
+ *  fetches concurrently for the year-over-year comparison. All visits are
+ *  still awaited before `loading` clears — the anchor-set choice below
+ *  legitimately needs every visit's `sourceTier` to decide measured vs PDF
+ *  tiling, so this can't skip ahead to render early without risking a visible
+ *  geometry flip once the rest arrive. What it CAN safely do is bias which
+ *  pack wins the race on a constrained connection: the selected visit is
+ *  fetched at `'high'` priority so it's not left waiting behind 2-3 other
+ *  years' packs the reader isn't looking at yet. */
+export const useVenueSectionData = (
+  trackName: string | null | undefined,
+  prioritySessionId?: string | null
+): VenueSectionData => {
   const [visits, setVisits] = useState<SectionLapsPack[]>([]);
   const [passMarksBySession, setPassMarksBySession] = useState<Map<string, PassMarksPack | null>>(new Map());
   const [lapsCompletedBySession, setLapsCompletedBySession] = useState<Map<string, number | null>>(new Map());
@@ -1036,7 +1050,9 @@ export const useVenueSectionData = (trackName: string | null | undefined): Venue
       setLoading(false);
       return;
     }
-    Promise.all(venueRefs.map((ref) => loadSectionLaps(ref.sessionId).catch(() => null)))
+    Promise.all(
+      venueRefs.map((ref) => loadSectionLaps(ref.sessionId, ref.sessionId === prioritySessionId ? 'high' : undefined).catch(() => null))
+    )
       .then((packs) => {
         if (cancelled) return;
         setVisits(packs.filter((pack): pack is SectionLapsPack => pack !== null));
@@ -1063,6 +1079,10 @@ export const useVenueSectionData = (trackName: string | null | undefined): Venue
     return () => {
       cancelled = true;
     };
+    // `prioritySessionId` is deliberately not a dependency: it only needs to
+    // be correct for the initial fetch this effect kicks off (all of a
+    // venue's visits are cached after that; switching the selected visit
+    // within the same venue must stay instant, not re-fetch everything).
   }, [trackName]);
 
   return useMemo<VenueSectionData>(() => {

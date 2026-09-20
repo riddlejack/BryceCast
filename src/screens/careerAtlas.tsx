@@ -1,5 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import worldLandTextureUrl from '../../analysis/career-atlas/output/world_land_texture.png?inline';
+// `?url` (a separate, independently-cacheable asset), not `?inline`: inlining
+// this 44 KB PNG as base64 grew it ~33% and folded it into the CareerScreen
+// JS chunk, where it compressed far worse alongside code than the PNG's own
+// DEFLATE data does on its own, and it had to be re-downloaded on every code
+// change to that chunk. As a `?url` asset it's a normal `<img>`-style fetch —
+// decoded by the browser's native image pipeline and cached for a year
+// (immutable, see scripts/api-server.mjs) independent of app code.
+import worldLandTextureUrl from '../../analysis/career-atlas/output/world_land_texture.png?url';
 import { Card, SourcePill, Unavailable } from '../app/components';
 import { focusFade, useMeasuredWidth } from '../app/charts';
 import { useRouter } from '../app/router';

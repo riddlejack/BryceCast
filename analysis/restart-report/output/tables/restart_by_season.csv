@@ -1,4 +1,4 @@
 seasonYear,races,restarts,bryceRestartsCounted,bryceNet,bryceGained,bryceHeld,bryceSlipped,avgBryceNetPerRestart,fieldAvgNetPerRestart,sourceHash
-2024,13,21,16,7,8,6,2,0.438,0.0,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-2025,12,21,15,3,2,13,0,0.2,0.0,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
-2026,14,34,31,-5,5,18,8,-0.161,0.0,61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd
+2024,13,21,16,7,8,6,2,0.438,0.0,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+2025,12,21,15,3,2,13,0,0.2,0.0,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd
+2026,14,34,31,-5,5,18,8,-0.161,0.0,d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd

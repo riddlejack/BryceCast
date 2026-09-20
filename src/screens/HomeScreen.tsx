@@ -11,7 +11,7 @@ import { uiDataPackage } from '../data/uiDataPackage';
 import { trackOutlineFor } from '../assets/tracks';
 import { getVenueByTrackName } from '../data/venueDossier';
 import { daysUntil, getNextEvent, getStandingsSnapshot, raceDayOf, type UpcomingPrepEvent } from '../data/upcoming';
-import { chronoCompare, displayRaceLabel, loadDebriefArchive, type ArchiveEntry } from '../data/debriefArchive';
+import { chronoCompare, displayRaceLabel, loadLatestSeasonDebriefs, type ArchiveEntry } from '../data/debriefArchive';
 import { TrackArt } from '../app/trackArt';
 import { useVenueSectionData } from './sectionIntelligence';
 import { ReplayAffordance, useReplayCatalog } from './replayAffordance';
@@ -503,7 +503,11 @@ export const HomeScreen = ({ readiness }: { readiness: ReadinessStatus }) => {
 
   const [season, setSeason] = useState<ArchiveEntry[]>([]);
   useEffect(() => {
-    loadDebriefArchive()
+    // Home only ever shows the latest season's races — loadLatestSeasonDebriefs
+    // fetches just those packs (via the manifest's own seasonYear field)
+    // instead of loadDebriefArchive's every-season-ever-raced set, which used
+    // to mean ~45 extra requests on first paint for a handful shown here.
+    loadLatestSeasonDebriefs()
       .then((archive) => {
         const latestYear = Math.max(...archive.map((entry) => entry.pack.seasonYear));
         setSeason(

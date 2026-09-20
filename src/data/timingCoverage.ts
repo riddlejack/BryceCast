@@ -1,3 +1,5 @@
+import ledgerUrl from '../../data/historical-data-lake/catalog/timing-coverage-ledger.json?url';
+
 export type TimingCoverageStatus = 'observed' | 'partial' | 'unavailable';
 
 export interface TimingCadence {
@@ -67,15 +69,20 @@ export interface RaceTimingCoverage {
 
 let ledgerPromise: Promise<TimingCoverageLedger | null> | null = null;
 
-/** The ledger is intentionally a separate Vite chunk. Race pages load its
- * source audit only when opened; the home, archive, and live bundles stay lean. */
+/** The ledger is intentionally loaded on demand, not bundled into any screen
+ *  chunk: race pages fetch its source audit only when opened, so the home,
+ *  archive, and live bundles stay lean. It's fetched as a plain `.json`
+ *  asset (`?url` + `fetch` + `JSON.parse`) rather than imported as a JS
+ *  module — at ~560 KB, evaluating it as a JS object-literal chunk cost
+ *  noticeably more main-thread time than parsing the same bytes as JSON, and
+ *  a `.json` asset compresses better and caches independently of app code. */
 const loadTimingCoverageLedger = (): Promise<TimingCoverageLedger | null> => {
   if (!ledgerPromise) {
-    ledgerPromise = import('../../data/historical-data-lake/catalog/timing-coverage-ledger.json')
-      .then((module) => {
-        const ledger = module.default as TimingCoverageLedger;
-        return ledger?.schemaVersion === 1 && Array.isArray(ledger.sessions) ? ledger : null;
-      })
+    ledgerPromise = fetch(ledgerUrl)
+      .then((response) => response.json())
+      .then((ledger: TimingCoverageLedger) =>
+        ledger?.schemaVersion === 1 && Array.isArray(ledger.sessions) ? ledger : null
+      )
       .catch(() => null);
   }
   return ledgerPromise;

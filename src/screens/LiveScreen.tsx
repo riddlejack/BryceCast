@@ -73,6 +73,14 @@ import {
   type LiveSessionKind
 } from '../data/liveSessionModel';
 import { uiDataPackage } from '../data/uiDataPackage';
+import {
+  OFFSEASON_DEMO_PARAM,
+  OFFSEASON_DEMO_VALUE,
+  declineOffSeasonDemo,
+  hasDeclinedOffSeasonDemo,
+  offSeasonDemoStartAt,
+  shouldAutoStartOffSeasonDemo
+} from '../data/offSeasonDemo';
 import { canonicalLiveRaceSessionId, replayDeepLinkQuery } from '../data/liveRaceShellModel';
 import { ReplayGapSkippedNote, ReplaySourceGapNotice } from './replaySourceGap';
 
@@ -1248,28 +1256,10 @@ const monthDay = (isoDate: string | null): string | null => {
  * path — plus one extra `&demo=offseason` marker this screen and AppV3's nav
  * read back to know it's the auto-demo, not a person's own pick.
  *
- * Runs at most once per browser tab: sessionStorage remembers that the demo
- * was offered, so exiting it (or it finishing and the visitor navigating back
- * to a bare /live) shows the plain race list below instead of restarting. */
-const OFFSEASON_DEMO_PARAM = 'demo';
-const OFFSEASON_DEMO_VALUE = 'offseason';
-const OFFSEASON_DEMO_SEEN_KEY = 'bc:offseason-demo-seen';
-
-const hasOfferedOffSeasonDemo = (): boolean => {
-  try {
-    return window.sessionStorage.getItem(OFFSEASON_DEMO_SEEN_KEY) === '1';
-  } catch {
-    return false; // storage blocked (private mode, etc.) — the demo just offers again next tap, which is fine
-  }
-};
-
-const markOffSeasonDemoOffered = (): void => {
-  try {
-    window.sessionStorage.setItem(OFFSEASON_DEMO_SEEN_KEY, '1');
-  } catch {
-    /* see hasOfferedOffSeasonDemo */
-  }
-};
+ * The demo is the DEFAULT experience every time Live is opened with nothing
+ * scheduled — not a once-per-tab offer. Only an explicit choice in this tab
+ * ("Exit replay", or "Pick another race" in the banner) turns it off and shows
+ * the plain race list below; see src/data/offSeasonDemo.ts. */
 
 /** The season's best clean (officially-running) finish with a watchable
  *  capture — the 2026 Grand Prix of Monterey Race 1 (P6) — falling back to
@@ -1357,22 +1347,35 @@ const OffSeasonLive = () => {
   }, [season, catalog]);
   const shown = watchable.slice(0, 6);
 
-  // Auto-start, once per tab. Waits for the catalog so `featured` can resolve;
-  // if this tab already saw the demo (or the season never yields a watchable
-  // race), it stays on the plain list below instead.
+  // Auto-start. Waits for the catalog so `featured` can resolve; if this tab
+  // explicitly left the demo (or the season never yields a watchable race), it
+  // stays on the plain list below instead. Nothing is recorded here — running
+  // the demo is not a choice the visitor made, so it must not opt them out of
+  // seeing it again.
   const autoStartAttempted = useRef(false);
   useEffect(() => {
-    if (autoStartAttempted.current) return;
-    if (hasOfferedOffSeasonDemo()) {
-      autoStartAttempted.current = true;
-      return;
-    }
     const featured = featuredOffSeasonRace(catalog);
-    if (!featured) return; // catalog not resolved yet, or nothing watchable — try again once it changes
+    if (
+      !shouldAutoStartOffSeasonDemo({
+        declined: hasDeclinedOffSeasonDemo(),
+        hasFeaturedRace: featured !== null,
+        alreadyAttempted: autoStartAttempted.current
+      })
+      || !featured
+    ) {
+      return; // catalog not resolved yet, already navigating, or declined in this tab
+    }
     autoStartAttempted.current = true;
-    markOffSeasonDemoOffered();
+    // `t0` joins the race a few minutes past the green flag so the seed arrives
+    // with the running order and the battle already full — see
+    // offSeasonDemoStartAt. Absent when the capture cannot support it, which
+    // starts at green exactly as before. Only the auto-demo adds it; every
+    // replay a person picks still opens at the green flag.
+    const startAt = offSeasonDemoStartAt(featured.capture);
     navigate(
-      `/live?replay=${encodeURIComponent(featured.capture.sessionKey)}&from=${encodeURIComponent(featured.sessionId)}&${OFFSEASON_DEMO_PARAM}=${OFFSEASON_DEMO_VALUE}`
+      `/live?replay=${encodeURIComponent(featured.capture.sessionKey)}&from=${encodeURIComponent(featured.sessionId)}`
+      + `${startAt ? `&t0=${encodeURIComponent(startAt)}` : ''}`
+      + `&${OFFSEASON_DEMO_PARAM}=${OFFSEASON_DEMO_VALUE}`
     );
   }, [catalog, navigate]);
 
@@ -1567,7 +1570,14 @@ const durationLabel = (session: ReplaySessionInfo | null): string | null => {
 
 /** Unmistakably a replay of archived data — no green live dot, its own quiet
  *  frame — with speed, restart-from-green, and an exit back to the race page. */
-const ReplayBar = ({ replay, payload }: { replay: ReplaySession; payload: LiveReadiness | null }) => {
+const ReplayBar = ({
+  replay,
+  payload,
+  /** The off-season demo passes a wrapper so leaving it counts as the explicit
+   *  choice that turns auto-start off for this tab. Every other replay — a race
+   *  page, Home, the "Relive a race" list — keeps the plain exit. */
+  onExit
+}: { replay: ReplaySession; payload: LiveReadiness | null; onExit?: () => void }) => {
   const heartbeat = payload ? heartbeatOf(payload) : {};
   const venue = asString(heartbeat.trackName) ?? replay.venue ?? replay.session?.eventName ?? 'archived race';
   const year = replay.seasonYear ? ` ${replay.seasonYear}` : '';
@@ -1610,7 +1620,7 @@ const ReplayBar = ({ replay, payload }: { replay: ReplaySession; payload: LiveRe
         <button type="button" className="replay-bar__btn" onClick={replay.restart}>
           <RotateCcw size={13} aria-hidden /> Restart
         </button>
-        <button type="button" className="replay-bar__btn replay-bar__btn--exit" onClick={replay.exit}>
+        <button type="button" className="replay-bar__btn replay-bar__btn--exit" onClick={onExit ?? replay.exit}>
           <X size={13} aria-hidden /> Exit replay
         </button>
       </div>
@@ -1623,7 +1633,14 @@ const ReplayBar = ({ replay, payload }: { replay: ReplaySession; payload: LiveRe
  *  a race" list all keep their plain ReplayBar-only experience). Names the
  *  race and date from the package data, never hardcoded, and offers a way
  *  back to the race list without hunting for the generic Exit control. */
-const OffSeasonDemoBanner = ({ replay, navigate }: { replay: ReplaySession; navigate: (href: string) => void }) => {
+const OffSeasonDemoBanner = ({
+  replay,
+  navigate,
+  /** True when the demo joined past the green flag (the `t0` the auto-start
+   *  URL carries). The copy must say so — the page opens mid-race and the lap
+   *  counter starts at something other than 1. */
+  joinedInProgress = false
+}: { replay: ReplaySession; navigate: (href: string) => void; joinedInProgress?: boolean }) => {
   const seasonRow = replay.session?.canonicalSessionId
     ? (uiDataPackage.screens.raceDebrief.seasonIndex ?? []).find(
         (row) => row.sessionId === replay.session?.canonicalSessionId
@@ -1644,11 +1661,21 @@ const OffSeasonDemoBanner = ({ replay, navigate }: { replay: ReplaySession; navi
         <span className="demo-banner__kicker"><History size={13} aria-hidden /> Off-season · replay, not live</span>
         <p className="demo-banner__copy">
           Nothing is live right now — this is the {raceLabel}{raceDate ? ` (${raceDate})` : ''}, replayed from{' '}
-          {captureLabel} so you can see what race day looks like here. The page switches to real timing on its own
-          when the next session starts.
+          {captureLabel} so you can see what race day looks like here.
+          {joinedInProgress ? ' It joins a few minutes in, with the race already running — Restart goes back to the green flag.' : ''}
+          {' '}The page switches to real timing on its own when the next session starts.
         </p>
       </div>
-      <button type="button" className="share-button" onClick={() => navigate('/live')}>
+      <button
+        type="button"
+        className="share-button"
+        onClick={() => {
+          // An explicit "no thanks" for this tab: /live now opens on the race
+          // list instead of restarting the demo.
+          declineOffSeasonDemo();
+          navigate('/live');
+        }}
+      >
         Pick another race
       </button>
     </section>
@@ -1665,7 +1692,7 @@ const ReplayEndedByLiveNote = () => (
   </section>
 );
 
-const ReplayCueing = ({ session }: { session: ReplaySessionInfo | null }) => {
+const ReplayCueing = ({ session, joinedInProgress = false }: { session: ReplaySessionInfo | null; joinedInProgress?: boolean }) => {
   const duration = durationLabel(session);
   const prov = replayProvenance(session);
   const from = isBryceCastCaptureTier(prov.tier) ? 'our own timing capture' : prov.label;
@@ -1674,8 +1701,8 @@ const ReplayCueing = ({ session }: { session: ReplaySessionInfo | null }) => {
       <span className="kicker">Cueing up the replay</span>
       <h1 className="screen-head__title" style={{ marginTop: 8 }}>{session?.eventName ?? 'Archived race'}</h1>
       <p style={{ margin: '14px 0 0', fontSize: 15, color: 'var(--ink-secondary)', maxWidth: '58ch' }}>
-        Rewinding to the green flag from {from}{duration ? ` · ${duration}` : ''}. The page below will
-        move exactly as it did on the day.
+        {joinedInProgress ? 'Picking the race up in progress' : 'Rewinding to the green flag'} from {from}
+        {duration ? ` · ${duration}` : ''}. The page below will move exactly as it did on the day.
       </p>
     </HeroPanel>
   );
@@ -1811,6 +1838,18 @@ export const LiveScreen = ({
   // navigate call — never present on a person's own replay pick (a race page,
   // Home, or the "Relive a race" list), so only the auto-demo gets the banner.
   const isOffSeasonDemoReplay = replayActive && route.search.get(OFFSEASON_DEMO_PARAM) === OFFSEASON_DEMO_VALUE;
+  // Leaving the auto-demo through its own Exit control is the explicit choice
+  // that stops it auto-starting again in this tab. `undefined` everywhere else,
+  // so a person's own replay keeps the plain exit.
+  // The auto-demo opens past the green flag (offSeasonDemoStartAt). Read back
+  // off the URL so the banner and the cue-up say what actually happened.
+  const joinedInProgress = Boolean(route.search.get('t0'));
+  const demoExit = isOffSeasonDemoReplay && replay
+    ? () => {
+        declineOffSeasonDemo();
+        replay.exit();
+      }
+    : undefined;
 
   if (replayRefused && replay) {
     return (
@@ -1823,7 +1862,7 @@ export const LiveScreen = ({
   if (replayActive && replay && replaySourceGap) {
     return (
       <div className="page stack live-page" data-replay-active="true" data-replay-source-gap="true">
-        <ReplayBar replay={replay} payload={null} />
+        <ReplayBar replay={replay} payload={null} onExit={demoExit} />
         <ReplaySourceGapNotice gap={replaySourceGap} replay={replay} />
       </div>
     );
@@ -1835,7 +1874,7 @@ export const LiveScreen = ({
         {replayEndedByLive ? <ReplayEndedByLiveNote /> : null}
         {replayActive && replay ? <ReplayBar replay={replay} payload={payload} /> : null}
         {replayActive && replay ? (
-          <ReplayCueing session={replay.session} />
+          <ReplayCueing session={replay.session} joinedInProgress={joinedInProgress} />
         ) : (
           <LiveOffAir loading={readinessCheckedAt === null && !readinessError} />
         )}
@@ -1889,9 +1928,9 @@ export const LiveScreen = ({
       data-live-history-count={history?.samples.length ?? 0}
       data-live-history-first-checked-at={history?.samples[0]?.checkedAt ?? ''}
     >
-      {isOffSeasonDemoReplay && replay ? <OffSeasonDemoBanner replay={replay} navigate={navigate} /> : null}
+      {isOffSeasonDemoReplay && replay ? <OffSeasonDemoBanner replay={replay} navigate={navigate} joinedInProgress={joinedInProgress} /> : null}
       {replayEndedByLive ? <ReplayEndedByLiveNote /> : null}
-      {replayActive && replay ? <ReplayBar replay={replay} payload={payload} /> : null}
+      {replayActive && replay ? <ReplayBar replay={replay} payload={payload} onExit={demoExit} /> : null}
       {replayActive && replay ? <ReplayGapSkippedNote replay={replay} /> : null}
       {replayActive && replay ? <ReplayClassificationNote payload={payload} canonicalSessionId={replay.session?.canonicalSessionId ?? null} /> : null}
       <TrustRail payload={payload} fixtureMode={fixtureMode} />

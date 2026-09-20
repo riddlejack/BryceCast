@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-10T22:59:47.251Z",
+  "generatedAt": "2026-09-19T22:46:35.825Z",
   "detailLevel": "compact_source_quality_index",
   "semanticNote": "Full manifests, rosters, and frame samples remain in the content-addressed replay ZIPs and are decoded on demand.",
   "series": "all",

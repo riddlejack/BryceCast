@@ -1,7 +1,7 @@
 # Context Event Narrative Layer
 
-Generated: 2026-09-19T22:01:50Z
-Source hash: `61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd`
+Generated: 2026-09-20T00:00:20Z
+Source hash: `d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd`
 
 ## Source Scope
 
@@ -11,7 +11,7 @@ This lane normalizes canonical non-lap context collections into product-ready ar
 | --- | --- |
 | media | 1098 |
 | penalty | 94 |
-| weather | 201 |
+| weather | 221 |
 | incident | 166 |
 | racecraft | 44 |
 
@@ -36,10 +36,10 @@ This lane normalizes canonical non-lap context collections into product-ready ar
 | INDY NXT | 2024 | OUTFRONT Showdown | race | 17 | 8 | 1 | 1 | 6 |
 | INDY NXT | 2025 | Grand Prix of St. Petersburg | race | 17 | 8 | 1 | 1 | 6 |
 | INDY NXT | 2026 | Grand Prix of Arlington | race | 17 | 4 | 4 | 1 | 7 |
+| INDY NXT | 2026 | Grand Prix of Monterey Race 1 | race | 17 | 6 | 3 | 1 | 6 |
 | INDY NXT | 2026 | Indianapolis Grand Prix Race 2 | race | 17 | 1 | 7 | 1 | 7 |
 | INDY NXT | 2024 | Indianapolis Grand Prix Race 1 | race | 16 | 2 | 5 | 1 | 7 |
 | INDY NXT | 2024 | Grand Prix of St. Petersburg | race | 16 | 5 | 2 | 1 | 7 |
-| INDY NXT | 2024 | Grand Prix of Monterey Race 2 | race | 16 | 3 | 4 | 1 | 7 |
 
 ## Source Evidence
 
@@ -48,7 +48,7 @@ This lane normalizes canonical non-lap context collections into product-ready ar
 | official_pdf | 812 |
 | official_api | 304 |
 | official_page | 117 |
-| weather_api | 85 |
+| weather_api | 94 |
 | official_html | 16 |
 | official_image | 5 |
 | official_article | 4 |
@@ -79,9 +79,9 @@ This lane normalizes canonical non-lap context collections into product-ready ar
 
 ## Weather And Media
 
-- Weather/condition rows: 201.
+- Weather/condition rows: 221.
 - Media index rows: 1098.
-- Source-evidence rows: 1347.
+- Source-evidence rows: 1356.
 - Source-boundary gap rows: 10.
 - Derived metric rows: 453.
 
@@ -89,7 +89,7 @@ This lane normalizes canonical non-lap context collections into product-ready ar
 
 | seriesName | seasonYears | totalContextRows | racecraftCount | penaltyCount | incidentCount | weatherCount | mediaCount |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| INDY NXT | 2024; 2025; 2026 | 1253 | 44 | 88 | 166 | 115 | 840 |
+| INDY NXT | 2024; 2025; 2026 | 1273 | 44 | 88 | 166 | 135 | 840 |
 | GB3 Championship | 2021; 2022 | 180 | 0 | 0 | 0 | 39 | 141 |
 | Formula Ford | 2020 | 61 | 0 | 4 | 0 | 46 | 11 |
 | F1600 Championship Series | 2019 | 39 | 0 | 2 | 0 | 0 | 37 |

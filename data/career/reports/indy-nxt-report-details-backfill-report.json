@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-10T22:28:43.621Z",
+  "generatedAt": "2026-09-19T22:43:02.957Z",
   "lapChartsDiscovered": 45,
   "lapChartsParsed": 45,
   "lapChartsFullyParsed": 33,
@@ -25,12 +25,12 @@
   "resultsReportsParsed": 45,
   "officialPenaltiesImported": 88,
   "officialCautionIncidentsImported": 83,
-  "pdfsFetched": 0,
-  "pdfsCached": 539,
-  "textExtracted": 0,
-  "textCached": 539,
-  "xmlExtracted": 0,
-  "xmlCached": 12,
+  "pdfsFetched": 539,
+  "pdfsCached": 0,
+  "textExtracted": 539,
+  "textCached": 0,
+  "xmlExtracted": 12,
+  "xmlCached": 0,
   "partialLapChartImports": [
     {
       "sessionId": "session_indy_nxt_2024_6317",

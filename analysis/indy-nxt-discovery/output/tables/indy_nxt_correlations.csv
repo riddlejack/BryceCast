@@ -6,7 +6,7 @@ positionGain,finishPosition,Position gain vs finish,45,-0.6773805374820323,explo
 bestLapRank,finishPosition,Best-lap rank vs finish,43,0.48120208742564613,exploratory_correlation_not_causal
 cautionShare,positionGain,Caution share vs gain,45,-0.02478117619278872,exploratory_correlation_not_causal
 passesPerLap,positionGain,Race passing density vs gain,45,0.002374366652127447,exploratory_correlation_not_causal
-ambientTempC,finishPosition,Ambient temp vs finish,40,-0.11693100023389107,exploratory_correlation_not_causal
-windGustKph,positionGain,Wind gust vs gain,40,-0.1246419789867599,exploratory_correlation_not_causal
-precipitationMm,positionGain,Precipitation vs gain,40,-0.01619593382454059,exploratory_correlation_not_causal
+ambientTempC,finishPosition,Ambient temp vs finish,45,-0.11117927283883892,exploratory_correlation_not_causal
+windGustKph,positionGain,Wind gust vs gain,45,-0.09570858980067619,exploratory_correlation_not_causal
+precipitationMm,positionGain,Precipitation vs gain,45,-0.023611825874919765,exploratory_correlation_not_causal
 pitStops,finishPosition,Pit stops vs finish,45,0.011571137082807433,exploratory_correlation_not_causal

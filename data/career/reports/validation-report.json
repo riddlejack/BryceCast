@@ -1,6 +1,6 @@
 {
-  "checkedAt": "2026-09-10T23:05:49.768Z",
-  "dataset": "/Users/jackriddle/.brycecast/worktrees/season-refresh/data/career/career.dataset.json",
+  "checkedAt": "2026-09-19T22:46:04.925Z",
+  "dataset": "/Users/jackriddle/.brycecast/worktrees/postrace-auto/data/career/career.dataset.json",
   "ok": true,
   "counts": {
     "drivers": 556,
@@ -17,13 +17,13 @@
     "racecraftEvents": 44,
     "penalties": 94,
     "incidents": 166,
-    "weatherObservations": 201,
+    "weatherObservations": 221,
     "mediaAssets": 1098,
     "broadcastRoutes": 0,
     "notificationRules": 0,
     "notificationEvents": 0,
     "derivedMetrics": 453,
-    "sourceEvidence": 1347,
+    "sourceEvidence": 1356,
     "gaps": 10
   },
   "errors": [],

@@ -1,7 +1,7 @@
 {
   "analyzableBryceRaceRows": 45,
   "datasetPath": "data/career/career.dataset.json",
-  "datasetUpdatedAt": "2026-09-10T22:28:43.621Z",
+  "datasetUpdatedAt": "2026-09-19T22:45:37.078Z",
   "headToHeadRows": 50,
   "indyNxtEvents": 45,
   "indyNxtSessions": 213,
@@ -29,8 +29,8 @@
       "analysis/indy-nxt-discovery/output/tables/indy_nxt_weather_segments.csv"
     ]
   },
-  "repoHead": "97d9b7c",
+  "repoHead": "9fab5e6",
   "sectionStrengthRows": 1266,
-  "weatherRowsInRaceSet": 40,
-  "weatherSegmentRows": 13
+  "weatherRowsInRaceSet": 45,
+  "weatherSegmentRows": 10
 }

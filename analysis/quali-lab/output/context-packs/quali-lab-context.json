@@ -2,9 +2,9 @@
   "id": "quali_lab_run_by_run",
   "type": "quali_lab",
   "schemaVersion": "1.1.0",
-  "generatedAt": "2026-09-19T22:02:47.648Z",
+  "generatedAt": "2026-09-20T00:01:19.984Z",
   "question": "How did his qualifying build?",
-  "sourceHash": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd",
+  "sourceHash": "d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd",
   "sourceTiers": [
     {
       "tier": "official_section_results",

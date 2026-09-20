@@ -2,6 +2,8 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { discoverSeasons, seasonIdPrefixPattern } from './lib/indy-nxt-seasons.mjs';
+
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = dirname(__dirname);
 const datasetPath = join(root, 'data/career/career.dataset.json');
@@ -11,7 +13,8 @@ const reportPath = join(root, 'data/career/reports/indy-nxt-import-report.json')
 const seriesId = '09341e09-3216-4f89-a45f-db697d72ee13';
 const bryceDriverOverrideId = '4959';
 const bryceRaceControlDriverId = '2143';
-const years = [2024, 2025, 2026];
+// Seasons come from the official SeasonDropDown feed at run time — see
+// scripts/lib/indy-nxt-seasons.mjs. There is deliberately no hardcoded list.
 const api = (path) => `https://www.indynxt.com/api/results/${path}`;
 const argValue = (name, fallback) => {
   const prefix = `--${name}=`;
@@ -238,6 +241,25 @@ const main = async () => {
 
   const existing = await readJsonIfExists(datasetPath, {});
   const retrievedAt = new Date().toISOString();
+
+  // Season discovery runs first: every later id prefix, purge filter and
+  // per-year fetch is derived from it. The feed is the series' own drop-down,
+  // so a newly published season joins the import with no code change, and a
+  // season the feed has not published yet is simply not in the list.
+  const seasonDropDownUrl = api(`SeasonDropDown?id=${seriesId}`);
+  const seasonDropDownPath = join(rawDir, 'season-drop-down.json');
+  const { payload: seasonDropDown, fromCache: seasonDropDownFromCache } = await fetchJsonCached(
+    seasonDropDownUrl,
+    seasonDropDownPath
+  );
+  const years = discoverSeasons(seasonDropDown);
+  if (!years.length) {
+    throw new Error(
+      `SeasonDropDown returned no INDY NXT season at or after the floor season; refusing to purge the existing import. URL: ${seasonDropDownUrl}`
+    );
+  }
+  const importedEventIdPattern = seasonIdPrefixPattern(years, 'event_indy_nxt_');
+
   const sourceEvidenceMap = new Map(asArray(existing.sourceEvidence).map((row) => [row.id, row]));
   const drivers = new Map(asArray(existing.drivers).map((row) => [row.id, row]));
   const series = new Map(asArray(existing.series).map((row) => [row.id, row]));
@@ -248,7 +270,7 @@ const main = async () => {
   const events = new Map(asArray(existing.events).map((row) => [row.id, row]));
   const sessions = new Map(asArray(existing.sessions).map((row) => [row.id, row]));
   for (const [eventId, event] of events) {
-    if (/^event_indy_nxt_20(?:24|25|26)_/.test(eventId)) {
+    if (importedEventIdPattern.test(eventId)) {
       events.set(eventId, {
         ...event,
         provenanceRefs: asArray(event.provenanceRefs).filter((ref) => !/^source_indynxt_events_session_/.test(ref))
@@ -333,9 +355,9 @@ const main = async () => {
     gaps: []
   };
 
-  const seasonDropDownUrl = api(`SeasonDropDown?id=${seriesId}`);
-  const seasonDropDownPath = join(rawDir, 'season-drop-down.json');
-  const { payload: seasonDropDown, fromCache: seasonDropDownFromCache } = await fetchJsonCached(seasonDropDownUrl, seasonDropDownPath);
+  // The drop-down itself was fetched at the top of main() — season discovery has
+  // to precede the id-prefix purges above. Account for it here, where the report
+  // exists.
   importReport[seasonDropDownFromCache ? 'cached' : 'fetched'] += 1;
   importReport.rawArtifacts.push(seasonDropDownPath.replace(`${root}/`, ''));
   upsert(sourceEvidenceMap, sourceEvidence({
@@ -371,7 +393,29 @@ const main = async () => {
     const driverYearUrl = api(`DriverYearDetails?year=${year}&series=${seriesId}&driverID=${bryceDriverOverrideId}`);
     const yearPointPath = join(rawDir, `${year}-year-point-summary.json`);
     const driverYearPath = join(rawDir, `${year}-driver-year-details-bryce.json`);
-    const [yearPointResult, driverYearResult] = await Promise.all([fetchJsonCached(yearPointUrl, yearPointPath), fetchJsonCached(driverYearUrl, driverYearPath)]);
+    // A season the drop-down has just started listing can exist before its
+    // standings/driver-history endpoints do. That is a not-yet state, not a
+    // failure: record the gap, carry empty payloads, and let the rest of the
+    // import proceed. Only the endpoints for THIS year are softened — a
+    // network failure on an established season still surfaces as a gap and the
+    // downstream reconciliation counts will show the shortfall.
+    const [yearPointResult, driverYearResult] = await Promise.all([
+      fetchJsonCached(yearPointUrl, yearPointPath).catch((error) => ({ payload: {}, fromCache: false, error })),
+      fetchJsonCached(driverYearUrl, driverYearPath).catch((error) => ({ payload: {}, fromCache: false, error }))
+    ]);
+    for (const [label, result, url] of [
+      ['YearPointSummary', yearPointResult, yearPointUrl],
+      ['DriverYearDetails', driverYearResult, driverYearUrl]
+    ]) {
+      if (result.error) {
+        importReport.gaps.push({
+          year,
+          status: 'season_endpoint_unavailable',
+          note: `${label} is not published for ${year} yet (${String(result.error.message ?? result.error)}).`,
+          url
+        });
+      }
+    }
     const yearPointSummary = yearPointResult.payload;
     const driverYearDetails = driverYearResult.payload;
     importReport[yearPointResult.fromCache ? 'cached' : 'fetched'] += 1;
@@ -388,8 +432,8 @@ const main = async () => {
       driverYearPath,
       yearEvidenceId,
       driverYearEvidenceId,
-      yearPointSummary: yearPointResult.payload,
-      driverYearDetails: driverYearResult.payload
+      yearPointSummary,
+      driverYearDetails
     };
   });
 

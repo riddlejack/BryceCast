@@ -167,7 +167,6 @@ export const TracksScreen = () => {
   const requestedVenue = route.search.get('venue');
   const selectedVenue =
     requestedVenue && venues.includes(requestedVenue) ? requestedVenue : mostRecentlyRacedVenue ?? venues[0] ?? null;
-  const data = useVenueSectionData(selectedVenue);
   const canonicalVisits = useMemo(
     () =>
       seasonIndex
@@ -180,9 +179,17 @@ export const TracksScreen = () => {
         ),
     [seasonIndex, selectedVenue]
   );
+  const requestedVisit = route.search.get('visit');
+  // The pack this page is actually about to draw: an explicit `?visit=` deep
+  // link if given, else a same-render best guess (the chronologically latest
+  // visit — `data.mostRecent`'s own fallback once loaded almost always agrees)
+  // so the fetch batch below can prioritize it without waiting on `data`
+  // itself, which would be circular (`data.mostRecent` only exists once a
+  // visit has already loaded). See useVenueSectionData's `prioritySessionId` doc.
+  const priorityVisitId = requestedVisit ?? canonicalVisits.at(-1)?.sessionId ?? null;
+  const data = useVenueSectionData(selectedVenue, priorityVisitId);
   const labels = useMemo(() => visitLabels(canonicalVisits), [canonicalVisits]);
   const sectionPackSessionIds = useMemo(() => new Set(refs.map((ref) => ref.sessionId)), [refs]);
-  const requestedVisit = route.search.get('visit');
   const selectedCanonicalVisit =
     canonicalVisits.find((visit) => visit.sessionId === requestedVisit) ??
     canonicalVisits.find((visit) => visit.sessionId === data.mostRecent?.sessionId) ??

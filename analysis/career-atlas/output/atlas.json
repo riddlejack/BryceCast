@@ -101,7 +101,7 @@
     {
       "note": "Canonical race identity, series, date, and classified finish fields.",
       "path": "data/career/career.dataset.json",
-      "sha256": "61e7c0e8ca2682cb606c7604b26f433daf6d95c358be5879e2fdbc06135604fd"
+      "sha256": "d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd"
     }
   ],
   "venueCount": 34,

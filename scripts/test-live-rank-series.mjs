@@ -425,6 +425,76 @@ try {
     const again = (await fetchJson(seriesQuery(replayQuery(lake.sessionKey, rt, 4)))).json;
     assert.equal(again.cache.totalBreakpoints, series.cache.totalBreakpoints, 'the lake breakpoint list is cached, not rebuilt per viewer');
   }
+
+  // -------------------------------------------------------------------------
+  // 9. Bounded windows: `window=<seconds>` (the seed) and `since=<iso>[&dense=1]`
+  //    (the playback-rate catch-up).
+  //
+  //    Why they exist: the unbounded seed shipped the whole race to draw a
+  //    five-minute chart, and a replay at 4×/16× advances 4–16 s of archive per
+  //    1 s poll, so every frame between two polls was simply lost. Both must stay
+  //    CHEAP and CLAMPED — a bad value may only ever narrow the read.
+  // -------------------------------------------------------------------------
+  {
+    const rt = at(TOTAL - 5);
+    const full = (await fetchJson(seriesQuery(replayQuery(SESSION, rt, 4)))).json;
+
+    // -- the seed's window -------------------------------------------------
+    const windowed = (await fetchJson(seriesQuery(`${replayQuery(SESSION, rt, 4)}&window=60`))).json;
+    assert.equal(windowed.window.requestedWindowSeconds, 60, 'the window the seed asked for is echoed');
+    assert.ok(windowed.frameCount < full.frameCount, 'a bounded seed ships fewer frames than the whole session');
+    assert.equal(windowed.frames.at(-1).checkedAt, full.frames.at(-1).checkedAt, 'a bounded seed still touches virtual now');
+    // The breakpoint covering the left edge rides along, so the seeded line
+    // reaches the edge instead of starting wherever a change happened to fall.
+    const lowerMs = Date.parse(windowed.window.lowerCheckedAt);
+    assert.ok(Date.parse(windowed.frames[0].checkedAt) <= lowerMs, 'the frame covering the window edge is carried in');
+    assert.ok(windowed.frames.every((frame) => frame.checkedAt <= rt), 'a bounded seed never runs past virtual now');
+    // Seeding the client model from the bounded window still clears the gate
+    // and still reaches now — the whole point of shipping less.
+    const seededWindow = seedLiveHistoryState(createLiveHistoryState(), windowed, windowed.clientSessionKey);
+    const windowSession = seededWindow.sessions[windowed.clientSessionKey];
+    assert.ok(windowSession.samples.length >= 2, 'a bounded seed clears the two-sample gate on first paint');
+    assert.equal(touchesNow(windowSession, windowed.window.lastCheckedAt), true, 'a bounded seed touches its virtual now');
+
+    // A window larger than the archive, and a nonsense one, can only narrow.
+    const huge = (await fetchJson(seriesQuery(`${replayQuery(SESSION, rt, 4)}&window=999999`))).json;
+    assert.equal(huge.frameCount, full.frameCount, 'an oversized window clamps to the archived span, never beyond it');
+    const nonsense = (await fetchJson(seriesQuery(`${replayQuery(SESSION, rt, 4)}&window=-5`))).json;
+    assert.equal(nonsense.window.requestedWindowSeconds, null, 'an unusable window is ignored, not honoured');
+    assert.equal(nonsense.frameCount, full.frameCount, 'an unusable window falls back to the unbounded read');
+
+    // -- the catch-up ------------------------------------------------------
+    const since = at(TOTAL - 21);
+    const incremental = (await fetchJson(seriesQuery(`${replayQuery(SESSION, rt, 16)}&since=${encodeURIComponent(since)}`))).json;
+    assert.ok(
+      incremental.frames.every((frame) => Date.parse(frame.checkedAt) > Date.parse(since)),
+      'a catch-up returns only what happened after the frame the client already holds'
+    );
+
+    const dense = (await fetchJson(seriesQuery(`${replayQuery(SESSION, rt, 16)}&since=${encodeURIComponent(since)}&dense=1`))).json;
+    assert.equal(dense.window.dense, true, 'a dense catch-up says so');
+    assert.ok(dense.frameCount > incremental.frameCount, 'a dense catch-up carries the archived samples the breakpoints skip');
+    assert.ok(dense.frameCount <= 4, 'a dense catch-up stays inside its per-request frame budget');
+    assert.equal(dense.frames.at(-1).checkedAt, full.frames.at(-1).checkedAt, 'a dense catch-up reaches virtual now');
+    assert.ok(
+      dense.frames.every((frame) => Array.isArray(frame.rows) && frame.rows.some((row) => row.bryce === true)),
+      'dense frames carry the same full-field rows a live poll does'
+    );
+    // An absurd `since` is clamped rather than turning into a scan of the race.
+    const clamped = (await fetchJson(seriesQuery(`${replayQuery(SESSION, rt, 16)}&since=${encodeURIComponent(at(0))}&dense=1`))).json;
+    assert.ok(clamped.frameCount <= 4, 'a far-behind catch-up clamps to its frame budget');
+    assert.ok(
+      Date.parse(clamped.window.firstCheckedAt) > Date.parse(at(0)),
+      'a far-behind catch-up clamps its span instead of replaying the race'
+    );
+    assert.equal(clamped.frames[0].gapBefore, true, 'a clamped catch-up marks the span it could not cover as a break');
+
+    // Neither shape may move the cache: windowing is in-memory over one
+    // memoized breakpoint list, and the dense read is its own bounded query.
+    const afterWindows = (await fetchJson(seriesQuery(replayQuery(SESSION, rt, 4)))).json;
+    assert.equal(afterWindows.cache.totalBreakpoints, full.cache.totalBreakpoints, 'bounded reads never rebuild the shared breakpoint list');
+  }
+
 } finally {
   child.kill('SIGTERM');
   await new Promise((resolve) => child.once('exit', resolve));
@@ -441,5 +511,6 @@ console.log(JSON.stringify({
   cacheBacked: 'constant-archive-reads-per-bucket',
   degradation: 'endpoint-serves-through-gaps',
   emptyIds: 'racetools-empty-id-absent-bryce-resolved',
-  lakePath: 'lake-fed-replays-served-and-seeded'
+  lakePath: 'lake-fed-replays-served-and-seeded',
+  boundedWindows: 'seed-window-and-dense-catch-up-clamped'
 }, null, 2));

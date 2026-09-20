@@ -237,45 +237,25 @@ export interface HydratedBryceCastUiContext {
    resolves by path — new venues and new debriefs need no code change.
    ------------------------------------------------------------------ */
 
-import { manifestModules, manifestRawModules, packModules, packRawModules } from './packModules';
+import { manifestUrls, packUrls } from './packModules';
+import { loadContextPack, loadFirstContextPack, type LoadedContextPack } from './packLoader';
 
 const toModuleKey = (repoPath: string) => `../../${repoPath}`;
 
-const loadPackJson = async <T>(repoPath: string): Promise<T> => {
-  const loader = packModules[toModuleKey(repoPath)];
-  if (!loader) throw new Error(`No context pack module found for ${repoPath}`);
-  const module = (await loader()) as { default: T };
-  return module.default;
-};
-
-const loadPackRaw = async (repoPath: string): Promise<string> => {
-  const loader = packRawModules[toModuleKey(repoPath)];
-  if (!loader) throw new Error(`No raw context pack module found for ${repoPath}`);
-  return (await loader()) as string;
-};
-
-const sha256Hex = async (value: string): Promise<string> => {
-  const bytes = new TextEncoder().encode(value);
-  const digest = await globalThis.crypto.subtle.digest('SHA-256', bytes);
-  return Array.from(new Uint8Array(digest))
-    .map((byte) => byte.toString(16).padStart(2, '0'))
-    .join('');
-};
-
-const validateRawIntegrity = async (rawText: string, ref: IntegrityRef, label: string) => {
-  const actualSha256 = await sha256Hex(rawText);
-  const actualBytes = new TextEncoder().encode(rawText).byteLength;
-  if (actualSha256 !== ref.sha256) {
+const assertPackIntegrity = (loaded: LoadedContextPack<unknown>, ref: IntegrityRef, label: string) => {
+  if (loaded.sha256 !== ref.sha256) {
     throw new Error(`SHA-256 mismatch for ${label}: ${ref.path}`);
   }
-  if (actualBytes !== ref.bytes) {
+  if (loaded.bytes !== ref.bytes) {
     throw new Error(`Byte-size mismatch for ${label}: ${ref.path}`);
   }
 };
 
 const getContextPack = async <TPack extends { id: string; type: string }>(ref: ContextPackRef, label: string): Promise<TPack> => {
-  const [pack, rawText] = await Promise.all([loadPackJson<TPack>(ref.path), loadPackRaw(ref.path)]);
-  await validateRawIntegrity(rawText, ref, label);
+  const loaded = await loadContextPack<TPack>(packUrls, toModuleKey(ref.path));
+  if (!loaded) throw new Error(`No context pack module found for ${ref.path}`);
+  assertPackIntegrity(loaded, ref, label);
+  const pack = loaded.data;
   if (pack.id !== ref.id || pack.type !== ref.type) {
     throw new Error(`Context pack identity mismatch for ${label}: ${ref.path}`);
   }
@@ -295,24 +275,21 @@ const loadSupplementalPack = async (
   checked: string[]
 ): Promise<SupplementalContextPack | null> => {
   const path = inventoryRef?.path ?? repoPath;
-  if (!path || !packModules[toModuleKey(path)]) return null;
-  const pack = await loadPackJson<SupplementalContextPack>(path);
+  if (!path) return null;
+  const loaded = await loadContextPack<SupplementalContextPack>(packUrls, toModuleKey(path));
+  if (!loaded) return null;
   if (inventoryRef) {
-    const rawText = await loadPackRaw(path);
-    await validateRawIntegrity(rawText, inventoryRef, path);
+    assertPackIntegrity(loaded, inventoryRef, path);
     checked.push(path);
   }
-  return pack;
+  return loaded.data;
 };
 
 const loadManifest = async (ref: IntegrityRef): Promise<ContextPackManifest> => {
-  const [moduleLoader] = Object.values(manifestModules);
-  const [rawLoader] = Object.values(manifestRawModules);
-  if (!moduleLoader || !rawLoader) throw new Error('Context-pack manifest module missing');
-  const manifest = ((await moduleLoader()) as { default: unknown }).default;
-  const rawText = (await rawLoader()) as string;
-  await validateRawIntegrity(rawText, ref, 'context-pack manifest');
-  return manifest as ContextPackManifest;
+  const loaded = await loadFirstContextPack<ContextPackManifest>(manifestUrls);
+  if (!loaded) throw new Error('Context-pack manifest module missing');
+  assertPackIntegrity(loaded, ref, 'context-pack manifest');
+  return loaded.data;
 };
 
 const getManifestPackByType = (manifest: ContextPackManifest, type: ContextPackRef['type']) => {
