@@ -43,15 +43,15 @@
   "sourceRefs": [
     {
       "bytes": 22303,
-      "path": "docs/LIVE_RACE_DAY_PRODUCT_CONTRACT.md",
+      "path": "docs/contracts/LIVE_RACE_DAY_PRODUCT_CONTRACT.md",
       "role": "live product contract",
       "sha256": "569bf18e1aae13d9f43aff10291509912c03e1ad1bbb0d9e53325bb4ff26e3ae"
     },
     {
-      "bytes": 129251,
+      "bytes": 130273,
       "path": "scripts/api-server.mjs",
       "role": "runtime API",
-      "sha256": "8e6291a6996b93d4888783b0fdebbcaaf9982a735b8e1f04f574fe7bcf7d5b75"
+      "sha256": "f225d00f03327c7f0220540d01fcf20c6ce96a2d00f1c57efe3c2c70195cfc25"
     },
     {
       "bytes": 4720,

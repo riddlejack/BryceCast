@@ -4,32 +4,32 @@
   "packageSource": "@waishnav/devspace audit and BryceCast generated artifacts",
   "files": [
     {
-      "path": "docs/CODEX_HANDOFF_CURRENT.md",
+      "path": "docs/archive/handoffs/CODEX_HANDOFF_CURRENT.md",
       "bytes": 37998,
       "sha256": "04e86730725153780566b8b10085015e8327a5c4fb39a88ede1b5d2fc396250b"
     },
     {
-      "path": "docs/UI_ANALYTICS_PRODUCT_CONTRACT.md",
+      "path": "docs/contracts/UI_ANALYTICS_PRODUCT_CONTRACT.md",
       "bytes": 30920,
       "sha256": "b39f73598d3ddeecbe2a6ef30edf5cee18cd6ef609f9b4d9821e9adeed928195"
     },
     {
-      "path": "docs/LIVE_RACE_DAY_PRODUCT_CONTRACT.md",
+      "path": "docs/contracts/LIVE_RACE_DAY_PRODUCT_CONTRACT.md",
       "bytes": 22303,
       "sha256": "569bf18e1aae13d9f43aff10291509912c03e1ad1bbb0d9e53325bb4ff26e3ae"
     },
     {
-      "path": "docs/LIVE_DATA_READINESS_AUDIT.md",
+      "path": "docs/archive/audits/LIVE_DATA_READINESS_AUDIT.md",
       "bytes": 27883,
       "sha256": "90a38184a2562fcdebd67db3a557c4f59e03e2b8a6dd460cc43ff8d14ab2fc8d"
     },
     {
-      "path": "docs/ANALYTICS_SOURCE_AUDIT.md",
+      "path": "docs/archive/audits/ANALYTICS_SOURCE_AUDIT.md",
       "bytes": 13690,
       "sha256": "421bfce026ea15db97f274de8c668d3e89c35f94f85091c85d21ee605b859b5c"
     },
     {
-      "path": "docs/INDY_NXT_WEATHER_ENRICHMENT_AUDIT.md",
+      "path": "docs/archive/audits/INDY_NXT_WEATHER_ENRICHMENT_AUDIT.md",
       "bytes": 12339,
       "sha256": "0590bcd61e721181843a992b81eb73be6823cfda305744c6cc6c8be1f542aad2"
     },
