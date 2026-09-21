@@ -37,7 +37,7 @@ The private audit retains redacted findings, original-to-public commit mappings,
 
 ## Browser interaction evidence
 
-The tested flow was home → last race debrief → Qualifying → One lap (observed eight-lap selector) → whole-session map → Career; mobile home → Races; then Live with its historical/unavailable banner. The real application rendered meaningful historical results and the qualifying map. The [README screenshot](../evidence/qualifying-heat-map.png) comes from that local snapshot. Private audit screenshots also retain desktop Career and mobile home/Races views. Other browsers, every race, and live production states remain untested in this pass.
+The tested flow was home → last race debrief → Qualifying → One lap (observed eight-lap selector) → whole-session map → Career; mobile home → Races; then Live with its historical/unavailable banner. The real application rendered meaningful historical results and the qualifying map. The README screenshot at the time, a Laguna Seca qualifying map, came from that local snapshot; it was replaced on 2026-09-21 by a [race section map](../evidence/race-section-heat-map.png) of the 2024 Grand Prix of Portland, captured from the local demo build. Private audit screenshots also retain desktop Career and mobile home/Races views. Other browsers, every race, and live production states remain untested in this pass.
 
 ## Remaining verification limits
 
