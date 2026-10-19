@@ -36,6 +36,7 @@ const runner = createLiveRunner({
   cooldownPollMs: numericArg('cooldown-poll-ms', 15_000),
   enrichmentPollMs: numericArg('enrichment-poll-ms', 15_000),
   armWindowMs: numericArg('arm-window-ms', 45 * 60 * 1000),
+  armGraceMs: numericArg('arm-grace-ms', 3 * 60 * 60 * 1000),
   cooldownMs: numericArg('cooldown-ms', 10 * 60 * 1000),
   sleepCapMs: boundedWithoutCadence ? 0 : Infinity
 });

@@ -1980,8 +1980,91 @@ const requireCached = async (key, label) => {
     await apiRuntimeCache.refreshPromise.catch(() => {});
     if (apiRuntimeCache[key]) return apiRuntimeCache[key];
   }
-  const detail = apiRuntimeCache.lastError?.join('; ') ?? 'Cache has not warmed yet.';
+  // In runner-only mode this cache is never filled (the API does not poll
+  // upstream), so "has not warmed yet" would be untrue: the runner is the only
+  // source and it is not reporting.
+  const detail = runnerOnlyApi
+    ? 'The capture runner is not reporting; it is the only live source on this host.'
+    : apiRuntimeCache.lastError?.join('; ') ?? 'Cache has not warmed yet.';
   throw Object.assign(new Error(`${label} cache unavailable. ${detail}`), { statusCode: 503 });
+};
+
+const IDLE_RUNNER_REASON = 'No INDY NXT session is active. The capture runner is waiting for the next session.';
+const ARMED_RUNNER_REASON =
+  'No INDY NXT session is live yet. The capture runner is armed for the next one and starts recording when timing goes live.';
+const waitingRunnerReason = (status) => (status?.phase === 'ARMED' ? ARMED_RUNNER_REASON : IDLE_RUNNER_REASON);
+
+// In runner-only mode the runner is the only live source, and it writes timing
+// only while a session runs. Between sessions a healthy runner (IDLE, or ARMED
+// and waiting for a session) means "no INDY NXT session is active", which is an
+// answer, not an outage. These routes used to answer 503 for the whole off-season.
+// A missing, stale or LIVE-but-silent runner still falls through to the 503.
+const noSessionState = async () => {
+  if (!runnerOnlyApi) return null;
+  const status = await readJsonFile(runnerStatusPath);
+  if (!isHealthyWaitingRunner(status)) return null;
+  return {
+    noSession: true,
+    checkedAt: new Date().toISOString(),
+    sourceState: 'cold',
+    reason: waitingRunnerReason(status),
+    runner: { phase: status.phase, updatedAt: status.updatedAt, nextSession: status.nextSession ?? null }
+  };
+};
+
+export const noSessionPayloads = {
+  snapshot: ({ checkedAt, sourceState, reason, runner }) => ({
+    heartbeat: null,
+    timingRows: [],
+    bryce: null,
+    bryceProfile: null,
+    trackMapUrl: '',
+    broadcastRoute: null,
+    updatedAt: checkedAt,
+    sourceState,
+    sourceProbes: [],
+    reason,
+    runner
+  }),
+  session: ({ checkedAt, sourceState, reason, runner }) => ({
+    checkedAt,
+    eventName: null,
+    eventId: null,
+    eventSessionId: null,
+    sessionName: null,
+    sessionType: null,
+    sessionStatus: null,
+    flag: null,
+    lap: null,
+    totalLaps: null,
+    trackName: null,
+    trackType: null,
+    sourceState,
+    broadcastRoute: null,
+    reason,
+    runner
+  }),
+  bryce: ({ checkedAt, sourceState, reason, runner }) => ({
+    checkedAt,
+    sourceState,
+    heartbeat: null,
+    bryce: null,
+    profile: null,
+    broadcastRoute: null,
+    reason,
+    runner
+  }),
+  timing: ({ checkedAt, sourceState, reason, runner }) => ({
+    checkedAt,
+    sourceState,
+    rowCount: 0,
+    bryceNo: bryceCarNumber,
+    heartbeat: null,
+    rows: [],
+    reason,
+    runner
+  }),
+  sources: ({ checkedAt, sourceState, reason, runner }) => ({ checkedAt, sourceState, endpoints: [], reason, runner })
 };
 
 // Per-client replay is stateless: the caller resolves an optional `replayRecord`
@@ -1997,6 +2080,9 @@ const cachedRaceSnapshot = async (replayRecord = null) => {
       return buildRaceSnapshotFromResults(rawResultsFromSnapshotRecord(runnerRecord));
     } catch {}
   }
+  // Returns a `noSession` state, not a RaceSnapshot; each route shapes its own reply.
+  const noSession = await noSessionState();
+  if (noSession) return noSession;
   return requireCached('snapshot', 'Race snapshot');
 };
 
@@ -2006,7 +2092,7 @@ const cachedReadinessPayload = async (replayRecord = null) => {
   if (runnerRecord) return buildReadinessPayloadFromRunnerRecord(runnerRecord);
   if (runnerOnlyApi) {
     const status = await readJsonFile(runnerStatusPath);
-    if (isHealthyIdleRunner(status)) {
+    if (isHealthyWaitingRunner(status)) {
       const history = await readJsonFile(historyPath);
       return buildIdleReadinessPayload({ status, history: history ? compactHistory(history) : null, replay: queryReplay({ limit: 5 }) });
     }
@@ -2021,16 +2107,28 @@ export const isHealthyIdleRunner = (status, now = Date.now()) => {
   return status?.phase === 'IDLE' && Number.isFinite(elapsed) && elapsed >= -30000 && elapsed <= 11 * 60000;
 };
 
+// A runner waiting between sessions. IDLE polls every five minutes; ARMED polls
+// timing every fifteen seconds before a session, so its deadline is two minutes.
+// An armed runner that has written no live timing is a normal pre-session state:
+// readiness used to trust IDLE only and answer 503 for every armed wait.
+export const isHealthyWaitingRunner = (status, now = Date.now()) => {
+  if (isHealthyIdleRunner(status, now)) return true;
+  const elapsed = now - Date.parse(status?.updatedAt ?? '');
+  return status?.phase === 'ARMED' && Number.isFinite(elapsed) && elapsed >= -30000 && elapsed <= 2 * 60000;
+};
+
+// Pre-session readiness for a waiting runner, IDLE or ARMED.
 export const buildIdleReadinessPayload = ({ status, history = null, replay = null }) => {
   const checkedAt = new Date().toISOString();
   const payload = buildReadinessPayloadFromParts({ checkedAt, sourceState: 'cold', history, replay });
-  const reason = 'No INDY NXT session is active. The capture runner is waiting for the next session.';
+  const armed = status?.phase === 'ARMED';
+  const reason = waitingRunnerReason(status);
   return { ...payload, state: 'pre_session', severity: 'amber', reason,
     raceWeekend: { ...payload.raceWeekend, readiness: 'pre_session' },
     bryce: { ...payload.bryce, readiness: 'pre_session' },
     liveTiming: { ...payload.liveTiming, rows: [], rowCount: 0 },
-    runner: { phase: 'IDLE', updatedAt: status.updatedAt, nextSession: status.nextSession ?? null },
-    gates: [{ id: 'capture_runner_idle', label: 'Capture runner', state: 'pass', detail: reason }]
+    runner: { phase: armed ? 'ARMED' : 'IDLE', updatedAt: status.updatedAt, nextSession: status.nextSession ?? null },
+    gates: [{ id: armed ? 'capture_runner_armed' : 'capture_runner_idle', label: 'Capture runner', state: 'pass', detail: reason }]
   };
 };
 
@@ -2038,6 +2136,8 @@ const cachedSourceReport = async (replayRecord = null) => {
   if (replayRecord) return buildReplaySourceReport(replayRecord);
   const runnerRecord = await readFreshRunnerRawRecord();
   if (runnerRecord) return buildSourceReportFromResults(sourceResultsFromSnapshotRecord(runnerRecord), runnerRecord.checkedAt ?? new Date().toISOString());
+  const noSession = await noSessionState();
+  if (noSession) return noSessionPayloads.sources(noSession);
   return requireCached('sources', 'Source report');
 };
 
@@ -2886,7 +2986,8 @@ const handler = async (req, res) => {
     }
 
     if (pathname === '/api/snapshot' || pathname === '/api/race/snapshot') {
-      sendJson(res, 200, await cachedRaceSnapshot(replayRecord()));
+      const snapshot = await cachedRaceSnapshot(replayRecord());
+      sendJson(res, 200, snapshot.noSession ? noSessionPayloads.snapshot(snapshot) : snapshot);
       return;
     }
 
@@ -2917,6 +3018,10 @@ const handler = async (req, res) => {
 
     if (pathname === '/api/session') {
       const snapshot = await cachedRaceSnapshot(replayRecord());
+      if (snapshot.noSession) {
+        sendJson(res, 200, noSessionPayloads.session(snapshot));
+        return;
+      }
       sendJson(res, 200, {
         checkedAt: snapshot.updatedAt,
         eventName: snapshot.heartbeat.eventName,
@@ -2938,6 +3043,10 @@ const handler = async (req, res) => {
 
     if (pathname === '/api/bryce') {
       const snapshot = await cachedRaceSnapshot(replayRecord());
+      if (snapshot.noSession) {
+        sendJson(res, 200, noSessionPayloads.bryce(snapshot));
+        return;
+      }
       sendJson(res, 200, {
         checkedAt: snapshot.updatedAt,
         sourceState: snapshot.sourceState,
@@ -2951,6 +3060,10 @@ const handler = async (req, res) => {
 
     if (pathname === '/api/timing') {
       const snapshot = await cachedRaceSnapshot(replayRecord());
+      if (snapshot.noSession) {
+        sendJson(res, 200, noSessionPayloads.timing(snapshot));
+        return;
+      }
       sendJson(res, 200, {
         checkedAt: snapshot.updatedAt,
         sourceState: snapshot.sourceState,

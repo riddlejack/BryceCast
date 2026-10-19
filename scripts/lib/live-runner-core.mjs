@@ -334,6 +334,9 @@ export const createLiveRunner = (options = {}) => {
     cooldownPollMs: options.cooldownPollMs ?? 15_000,
     enrichmentPollMs: options.enrichmentPollMs ?? 15_000,
     armWindowMs: options.armWindowMs ?? 45 * 60 * 1000,
+    // How long ARMED waits after the last moment a session was due before it
+    // stands down to IDLE. Long enough for a delayed start; see handleArmed.
+    armGraceMs: options.armGraceMs ?? 3 * 60 * 60 * 1000,
     cooldownMs: options.cooldownMs ?? 10 * 60 * 1000,
     processBudgetPollMs: options.processBudgetPollMs ?? 60 * 60 * 1000,
     staleLockMs: options.staleLockMs ?? 60_000,
@@ -363,6 +366,8 @@ export const createLiveRunner = (options = {}) => {
     lastEnrichmentFetchMs: 0,
     enrichmentCache: new Map(),
     cooldownUntilMs: null,
+    // Last time, while ARMED, that a session was inside the arm window.
+    armedDueAtMs: null,
     lastProcessBudgetMs: 0,
     processBudget: null,
     rowCounts: {
@@ -402,6 +407,7 @@ export const createLiveRunner = (options = {}) => {
     // Dedup only runs inside a single LIVE phase; drop the baseline on the way out
     // so a later session can never dedup against a stale key.
     if (from === PHASES.LIVE && to !== PHASES.LIVE) state.lastTimingDedup = null;
+    state.armedDueAtMs = to === PHASES.ARMED ? nowMs() : null;
     await logEvent({ type: 'phase_transition', from, to, ...extra });
   };
 
@@ -690,6 +696,24 @@ export const createLiveRunner = (options = {}) => {
     }
     const { summary } = await buildTimingSummary(timingResult, { forceEnrichment: false });
     updateLatestBryce(summary);
+    // ARMED must be able to stand down. Its only other exit is a live INDY NXT
+    // heartbeat, so a session that never went live (cancelled, rescheduled, or the
+    // season already over) held the runner here indefinitely: after the 2026
+    // Monterey finale it stayed ARMED for weeks with no next session, and the API
+    // answered 503 for readiness the whole time. buildTimingSummary re-reads the
+    // schedule on the enrichment cadence. While a session is inside the arm window
+    // the runner stays armed; once nothing has been due for armGraceMs (room for a
+    // delayed start) it returns to IDLE, which still goes straight to LIVE on any
+    // live INDY NXT heartbeat.
+    const now = nowMs();
+    if (isWithinArmWindow(state.nextSession, now, config.armWindowMs)) {
+      state.armedDueAtMs = now;
+      return;
+    }
+    state.armedDueAtMs ??= now;
+    if (now - state.armedDueAtMs >= config.armGraceMs) {
+      await transition(PHASES.IDLE, { reason: 'arm_window_lapsed', lastDueAt: iso(state.armedDueAtMs), nextSession: state.nextSession });
+    }
   };
 
   const handleLive = async () => {

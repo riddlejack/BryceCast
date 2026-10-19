@@ -56,7 +56,7 @@ The production clone this script runs from is never otherwise updated, so before
 
 ## Runtime safeguards
 
-An idle runner polls every five minutes. `/api/readiness` returns a normal pre-session state while its idle status is fresh, with no stale timing rows promoted to live data. A missing or overdue runner remains an error.
+An idle runner polls every five minutes; an armed one every fifteen seconds. While either status is fresh, `/api/readiness` returns a normal pre-session state, and `/api/session`, `/api/bryce`, `/api/timing`, `/api/snapshot` and `/api/sources` answer with an explicit cold, no-session reply, with no stale timing rows promoted to live data. A missing or overdue runner, or a LIVE runner writing no timing, remains a 503.
 
 Public POST requests require `BRYCECAST_OPERATOR_TOKEN` as a bearer token. Direct command-line requests on the machine can use a loopback host without a token. Browser requests and proxied requests—including Cloudflare's loopback connection—do not receive local operator privileges. Runner-only mode refuses a competing API upstream refresh even for an operator.
 

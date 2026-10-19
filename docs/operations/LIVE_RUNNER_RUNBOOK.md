@@ -72,7 +72,7 @@ During sessions:
 Expected phases:
 
 - `IDLE`: schedule/trackactivity hints plus one timing heartbeat check, about every 5 minutes.
-- `ARMED`: near an upcoming NXT window, timing check about every 15 seconds.
+- `ARMED`: near an upcoming NXT window, timing check about every 15 seconds. Returns to `IDLE` once no session has been inside the arm window for three hours (`--arm-grace-ms`), which leaves room for a delayed start. Before October 2026 ARMED had no exit but a live NXT heartbeat, and the runner stayed armed from the Monterey finale into the off-season.
 - `LIVE`: guarded INDY NXT Bryce heartbeat, 1-second timing archive, raw timing capture under `data/live/raw/`.
 - `COOLDOWN`: after COLD/checkered, 15-second capture for about 10 minutes to preserve the final official state.
 

@@ -3,6 +3,7 @@ import {
   buildIdleReadinessPayload,
   createReplayRequestLimiter,
   isHealthyIdleRunner,
+  isHealthyWaitingRunner,
   isOperatorRequest,
   replayClientKey,
   resolveTimingObservationArtifact
@@ -50,6 +51,18 @@ assert.equal(payload.state, 'pre_session');
 assert.equal(payload.liveTiming.rows.length, 0);
 assert.equal(payload.raceWeekend.eventName, null, 'idle status must not promote an unrelated series');
 assert.equal(payload.raceWeekend.sourceState, 'cold');
+const armed = { phase: 'ARMED', updatedAt: new Date(now - 20000).toISOString(), nextSession: null };
+assert.equal(isHealthyWaitingRunner(idle, now), true, 'a healthy idle runner is waiting');
+assert.equal(isHealthyWaitingRunner(armed, now), true, 'an armed runner polling every 15 s is waiting, not an outage');
+assert.equal(isHealthyWaitingRunner({ ...armed, updatedAt: new Date(now - 2 * 60000).toISOString() }, now), true);
+assert.equal(isHealthyWaitingRunner({ ...armed, updatedAt: new Date(now - 2 * 60000 - 1).toISOString() }, now), false, 'an armed runner silent past two minutes is down');
+assert.equal(isHealthyWaitingRunner({ ...armed, phase: 'LIVE' }, now), false, 'LIVE without fresh timing is not a waiting state');
+assert.equal(isHealthyWaitingRunner({ ...armed, phase: 'COOLDOWN' }, now), false);
+const armedPayload = buildIdleReadinessPayload({ status: armed });
+assert.equal(armedPayload.state, 'pre_session');
+assert.equal(armedPayload.runner.phase, 'ARMED');
+assert.equal(armedPayload.gates[0].id, 'capture_runner_armed');
+assert.equal(payload.runner.phase, 'IDLE');
 const sessionId = 'session_indy_nxt_2026_6759';
 const ledger = { sessions: [{ canonicalSessionId: sessionId, status: 'observed', primarySource: { observedArtifact: 'analysis/semantic-layer/output/timing-observations/test.ndjson.gz' } }] };
 assert.ok(resolveTimingObservationArtifact(sessionId, ledger)?.endsWith('/timing-observations/test.ndjson.gz'));

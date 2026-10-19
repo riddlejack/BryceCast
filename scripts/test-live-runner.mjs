@@ -420,6 +420,98 @@ async function testCooldownPromotesBackToBackQualifyingGroup() {
   await rm(root, {recursive: true, force: true});
 }
 
+// The 2026 Monterey failure: armed for a session that never went live, then the
+// schedule emptied for the off-season while the timing feed sat on an INDYCAR
+// session. ARMED had no exit but a live INDY NXT heartbeat, so it never left.
+async function testArmedStandsDownWhenNothingIsDue() {
+  const root = await makeTempRoot();
+  const armedAt = Date.parse('2026-09-06T21:00:00.000Z');
+  const startMs = armedAt + 30 * 60 * 1000;
+  const graceMs = 3 * 60 * 60 * 1000;
+  let nowMs = armedAt;
+  let scheduleListsSession = true;
+  const fetchEndpoint = async (endpoint) => {
+    const fetchedAt = iso(nowMs);
+    if (endpoint.id === 'schedule_nxt') {
+      return resultFor(endpoint, scheduleListsSession ? schedulePayload(startMs) : { schedule: { race: [] } }, fetchedAt);
+    }
+    if (endpoint.id === 'trackactivity_nxt') {
+      return resultFor(endpoint, scheduleListsSession ? trackActivityPayload(startMs) : { trackactivity: { event: [] } }, fetchedAt);
+    }
+    if (endpoint.id === 'drivers_nxt') return resultFor(endpoint, driversPayload, fetchedAt);
+    if (endpoint.id === 'config') return resultFor(endpoint, configPayload, fetchedAt);
+    if (endpoint.id === 'timing') {
+      return resultFor(
+        endpoint,
+        {
+          timing_results: {
+            heartbeat: baseHeartbeat({
+              Series: 'I',
+              eventName: 'Mission Foods Grand Prix of Monterey',
+              EventID: '5519',
+              EventSessionID: '6736',
+              SessionName: 'Race',
+              currentFlag: 'COLD',
+              SessionStatus: 'Complete'
+            }),
+            Item: [bryceRow({ DriverID: '9', firstName: 'Scott', lastName: 'Dixon' })]
+          }
+        },
+        fetchedAt
+      );
+    }
+    return failureFor(endpoint, `Unexpected endpoint ${endpoint.id}`, fetchedAt);
+  };
+  const runner = createLiveRunner({
+    root,
+    fetchEndpoint,
+    processBudgetProvider: async () => ({ checkedAt: iso(nowMs), critical: false }),
+    nowMs: () => nowMs,
+    sleep: async () => {},
+    enrichmentPollMs: 1,
+    armGraceMs: graceMs,
+    pid: 4646
+  });
+
+  await runner.tick();
+  assert.equal(runner.state.phase, 'ARMED', 'a session 30 minutes out arms the runner');
+
+  // Still due one minute before the start: the grace period counts from here.
+  const lastDueMs = startMs - 60 * 1000;
+  nowMs = lastDueMs;
+  await runner.tick();
+  assert.equal(runner.state.phase, 'ARMED');
+
+  // The start passes without a live INDY NXT heartbeat and the schedule empties.
+  scheduleListsSession = false;
+  nowMs = startMs + 60 * 60 * 1000;
+  await runner.tick();
+  assert.equal(runner.state.nextSession, null, 'nothing left on the schedule');
+  assert.equal(runner.state.phase, 'ARMED', 'a delayed start keeps the runner armed inside the grace period');
+
+  nowMs = lastDueMs + graceMs - 1;
+  await runner.tick();
+  assert.equal(runner.state.phase, 'ARMED', 'the grace period counts from the last time a session was due, not from arming');
+
+  nowMs = lastDueMs + graceMs;
+  await runner.tick();
+  assert.equal(runner.state.phase, 'IDLE', 'nothing due for the whole grace period returns the runner to IDLE');
+  const status = await readJson(join(root, 'data/live/live-runner-status.json'));
+  assert.equal(status.phase, 'IDLE', 'the status file the API reads reports IDLE');
+  assert.equal(status.latestBryce.rank, null, 'the INDYCAR session on the feed is never recorded as Bryce');
+
+  nowMs += 5 * 60 * 1000;
+  await runner.tick();
+  assert.equal(runner.state.phase, 'IDLE', 'an empty schedule does not re-arm');
+
+  const events = (await readFile(join(root, 'data/live/live-runner-events.jsonl'), 'utf8')).trim().split('\n').map(JSON.parse);
+  const transitions = events.filter((event) => event.type === 'phase_transition');
+  assert.deepEqual(transitions.map((event) => `${event.from}->${event.to}`), ['IDLE->ARMED', 'ARMED->IDLE']);
+  assert.equal(transitions[1].reason, 'arm_window_lapsed');
+  assert.equal(transitions[1].lastDueAt, iso(lastDueMs));
+  await rm(root, { recursive: true, force: true });
+}
+
 async function testLockTakeover() {
   const root = await makeTempRoot();
   const lockPath = join(root, 'data/live/live-runner.lock');
@@ -456,6 +548,7 @@ async function testLockTakeover() {
 await testPhaseMachineStatusRawAndIdentityGuard();
 await testIdleDiscoversUnscheduledLiveNxtSession();
 await testCooldownPromotesBackToBackQualifyingGroup();
+await testArmedStandsDownWhenNothingIsDue();
 await testLockTakeover();
 
-console.log(JSON.stringify({ ok: true, assertions: 48 }, null, 2));
+console.log(JSON.stringify({ ok: true, assertions: 60 }, null, 2));
