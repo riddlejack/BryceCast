@@ -117,8 +117,8 @@ export const AboutScreen = () => (
         How BryceCast is built
       </h1>
       <p className="screen-head__sub" style={{ maxWidth: '62ch' }}>
-        BryceCast is a family-built race companion and career-analytics site for Bryce Aron, driver of the No. 9 car
-        in INDY NXT. It turns raw timing feeds, official results, and near-track weather into a companion for race
+        BryceCast is a race companion and career-analytics site built by a friend for Bryce Aron, driver of the No. 9
+        car in INDY NXT. It turns raw timing feeds, official results, and near-track weather into a companion for race
         weekends and a navigable record of his career — and this page is the tour of how that's built, section by
         section, and what it deliberately won't claim.
       </p>

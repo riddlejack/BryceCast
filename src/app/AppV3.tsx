@@ -88,7 +88,7 @@ const Shell = ({
         <div className="footer__inner">
           <span className="row" style={{ gap: 10 }}>
             <CarMark height={16} />
-            BryceCast · following Bryce Aron, No. 9, Chip Ganassi Racing · built by family, powered by official sources
+            BryceCast · following Bryce Aron, No. 9, Chip Ganassi Racing · built by a friend, powered by official sources
           </span>
           <span className="row" style={{ gap: 14 }}>
             <Link to="/data">Data &amp; sources</Link>
