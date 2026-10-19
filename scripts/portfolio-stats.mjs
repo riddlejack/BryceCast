@@ -13,6 +13,8 @@ const validation = await read('data/career/reports/validation-report.json');
 const lake = await read('data/historical-data-lake/catalog/coverage-summary.json');
 const timing = await read('data/historical-data-lake/catalog/timing-coverage-ledger.json');
 const loops = await read('analysis/semantic-layer/output/loop-crossings-summary.json');
+const passages = await read('analysis/semantic-layer/output/loop-passages.json');
+if (passages.summarySha256 !== sources['analysis/semantic-layer/output/loop-crossings-summary.json'].sha256) throw new Error('loop-passages.json was counted from a different loop summary; rerun npm run analytics:semantic-layer:passages');
 const quali = await read('analysis/quali-lab/output/coverage-census.json');
 const classification = await read('analysis/semantic-layer/output/validation/finishing-order.json');
 const sections = await read('analysis/semantic-layer/output/validation/section-time-residuals.json');
@@ -25,7 +27,7 @@ const result = {
   career: { generatedAt: career.generatedAt, counts: career.counts, validation: { checkedAt: validation.checkedAt, ok: validation.ok, errors: validation.errorCount, warnings: validation.warningCount, warningDetails: validation.warnings } },
   archive: { throughDate: lake.throughDate, sourceObjects: lake.acquisition.uniqueObjects, uniqueBytes: lake.acquisition.uniqueBytes, scope: 'Broader INDYCAR/INDY NXT research archive, not only Bryce career data; source objects are withheld pending redistribution clearance.', catalogEntries: lake.catalog.sessions, catalogEntryCaveat: 'Source/session candidates, not a deduplicated count of official races.' },
   timing: { asOfDate: timing.asOfDate, ...timing.counts, caveat: 'Observed coverage is not an uninterrupted 1 Hz guarantee. Qualifying counts are race links, not unique physical qualifying sessions.' },
-  loopCrossings: { generatedAt: loops.generatedAt, sourceSessions: loops.sessionCount, rows: loops.crossingTotal, grain: 'One normalized timing-loop crossing record; not GPS telemetry or independent training examples.' },
+  loopCrossings: { generatedAt: loops.generatedAt, sourceSessions: loops.sessionCount, rows: loops.crossingTotal, grain: 'One section-completion record as the feed sent it, not one pass over a loop: the rows include feed resends, and one pass can close several timing sections. Not GPS telemetry or independent training examples.', countedAt: passages.generatedAt, repeatedRows: passages.repeatedRecords, sectionRecords: passages.sectionRecords, passages: passages.passages, passageGrain: passages.definitions.passages },
   qualifyingLab: { generatedAt: quali.generatedAt, coveredPhysicalSessions: quali.covered.length, exclusions: quali.excluded.length },
   historicalWeather: { generatedAt: weather.generatedAt, source: weather.source, cutoffDate: weather.archiveCutoffDate, eligibleExactWindowSessions: weather.eligibleExactWindowSessions, joinedSessions: weather.joinedSessions, joinedBySessionType: weather.joinedBySessionType, skippedDateOnlySessions: weather.skippedDateOnlySessions, skippedFutureSessions: weather.skippedFutureSessions, caveat: 'Modeled hourly joins for eligible INDY NXT sessions, not measured weather for every career series or every race through September.' },
   storedValidation: {

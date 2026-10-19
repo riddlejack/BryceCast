@@ -65,7 +65,12 @@
     "generatedAt": "2026-09-20T17:38:55.651Z",
     "sourceSessions": 143,
     "rows": 2613292,
-    "grain": "One normalized timing-loop crossing record; not GPS telemetry or independent training examples."
+    "grain": "One section-completion record as the feed sent it, not one pass over a loop: the rows include feed resends, and one pass can close several timing sections. Not GPS telemetry or independent training examples.",
+    "countedAt": "2026-10-19T23:25:18.831Z",
+    "repeatedRows": 1564848,
+    "sectionRecords": 1048444,
+    "passages": 690494,
+    "passageGrain": "Distinct (car, loop, crossing time) per session: one pass of one car over one timing loop, which can close more than one timing section."
   },
   "qualifyingLab": {
     "generatedAt": "2026-09-20T00:01:19.984Z",
@@ -98,10 +103,15 @@
       "lapCarsChecked": 538
     },
     "sectionTiming": {
-      "generatedAt": "2026-07-19T23:14:15.627Z",
-      "fullLapRaces": 25,
-      "fullLapRacesTickExactMedian": 21,
-      "interpretation": "21/25 races reproduce the official per-lap \"Lap\" time to 0.0000 s at the median (i.e. clean racing laps are exact to the 0.0001 s tick). Large residuals are confined to caution/red-flag/pit laps (whose lap timing spans stoppages differently) and a few races with a residual lap-alignment offset; the residual distribution per race is reported honestly below."
+      "generatedAt": "2026-10-19T23:24:54.592Z",
+      "raceSessions": 28,
+      "fullLapRaces": 24,
+      "fullLapRacesTickExactMedian": 24,
+      "fullLapRacesEveryLapMatching": 23,
+      "lapsCompared": 1101,
+      "lapsMatching": 1098,
+      "racesNotCompared": 4,
+      "interpretation": "24 of the 28 races have official lap times to check against. In those races 1098 of Bryce's 1101 laps rebuilt from the timing feed equal the official lap time. The laps that differ are in 2024 Road America (3); each is listed under lapsDiffering. The other 4 races have no usable official lap times (racesNotCompared). The official results come from the same timing system as the feed, so the match shows the feed was decoded without losing, doubling or misassigning one of his start/finish crossings; it does not measure timing accuracy."
     },
     "identityCrosswalk": {
       "generatedAt": "2026-09-20T17:42:30.766Z",
@@ -127,6 +137,9 @@
     "analysis/semantic-layer/output/loop-crossings-summary.json": {
       "sha256": "eda9dc4998f3273aa200a463983df81e2762fef386cc5e27d75bbeb92c9f5a60"
     },
+    "analysis/semantic-layer/output/loop-passages.json": {
+      "sha256": "05df6dc31448a40cf292c36b410f5fd064f84b8510293d28b121ce523ce510e1"
+    },
     "analysis/quali-lab/output/coverage-census.json": {
       "sha256": "070549197bd0c4da87f0c3e7a511194fbdd0b345c1e7577b2092d9038a64f3ae"
     },
@@ -134,7 +147,7 @@
       "sha256": "8a6d3fa8ec91cb59d92bf3e792c00aac952cf7e0bfeb1073d1e6f6cc553f19bc"
     },
     "analysis/semantic-layer/output/validation/section-time-residuals.json": {
-      "sha256": "5f295fafc2490c0f40e717df8f19bc82f26f16ed2b281109a769c40af9e47dee"
+      "sha256": "6170f536ee7d79dc2abfc2bbcd579dd7040225cb640084b00f03dadcf8d24102"
     },
     "analysis/semantic-layer/output/crosswalk/crosswalk-validation.json": {
       "sha256": "1a7e59d72cd48445fdcd3328420c7d7aa6455843d0a00a9300f4fddf6b245bbd"

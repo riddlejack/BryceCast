@@ -28,7 +28,7 @@ This repository contains the complete system: the collectors, a content-addresse
 | --- | --- |
 | **8 seasons, 7 series** | F1600, Formula Ford, GB3, Euroformula Open, Formula Regional Oceania, IMSA, and INDY NXT, 2019–2026: 87 events, 493 sessions, 42 tracks |
 | **75,589 laps** | Lap-level records, plus 8,943 session results covering 556 drivers, so each result is stored with the field around it |
-| **2.6 million loop crossings** | Every car over every timing loop in 143 INDY NXT sessions, decoded from raw timing captures at 0.0001-second resolution |
+| **About 690,000 timing-loop passages** | Every car over every timing loop in 143 INDY NXT sessions, decoded from raw timing captures at 0.0001-second resolution, with the feed's repeated records removed and each pass counted once |
 | **45 of 45 races** | Complete timing and replay coverage of INDY NXT races, 2024–2026 |
 | **1 Hz capture** | One Race Control sample per second while cars are on track; the production archive holds roughly 6 GB of snapshots |
 | **135 sessions with weather** | Hourly conditions joined to each session's exact time window and track location, not to the calendar date |
@@ -53,7 +53,7 @@ collect ──► archive ──► normalize ──► analyze ──► serve
 
 Each item links to a case study covering the method, the validation evidence, and the limits of the result.
 
-**Section pace maps without GPS.** The feed reports when a car crossed a loop, not where the car is. The decoder converts raw loop clocks into laps, reconciles loop distances against each circuit's geometry, and maps official timing sections onto a curated track outline. Reconstructed lap times match the official lap times to the 0.0001-second tick, at the median, in 21 of 25 validated races. [Case study](docs/case-studies/01-heatmaps-without-gps.md)
+**Section pace maps without GPS.** The feed reports when a car crossed a loop, not where the car is. The decoder converts raw loop clocks into laps, reconciles loop distances against each circuit's geometry, and maps official timing sections onto a curated track outline. Every one of Bryce's laps rebuilt from the feed was checked against the official section results: 1,098 of 1,101 match across the 24 races of 2024–2025 that have official lap times, and the other three follow from one red-flag lap the official results split in two. The official results come from the same timing system, so this shows the decoder lost, doubled and misassigned none of his crossings; it is not a claim about timing precision. [Case study](docs/case-studies/01-heatmaps-without-gps.md)
 
 **Pass placement between timing loops.** A lap chart shows that the running order changed during a lap, not where on the circuit it changed. BryceCast rebuilds the running order at every loop, which bounds each pass between two named points and claims no precision beyond that. Across 28 validated races, mean pairwise concordance with the official lap-chart order is 99.65%. [Case study](docs/case-studies/02-pass-placement.md)
 

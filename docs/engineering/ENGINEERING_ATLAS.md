@@ -18,7 +18,7 @@ The candidate was derived from canonical source commit `94afeda3ef4ebbaff964c833
 
 | Case | Core question | Best evidence |
 |---|---|---|
-| [Heat maps without GPS](../case-studies/01-heatmaps-without-gps.md) | How can timing loops become a spatial interface without claiming a vehicle trajectory? | 2,613,292 loop crossings; 21/25 race medians reproduce official lap time to 0.0000 s; 13 anchored venues. |
+| [Heat maps without GPS](../case-studies/01-heatmaps-without-gps.md) | How can timing loops become a spatial interface without claiming a vehicle trajectory? | About 690,000 timing-loop passages; 1,098 of Bryce's 1,101 rebuilt laps match the official lap times in the 24 races that have official lap times to check against; 13 anchored venues. |
 | [Pass placement](../case-studies/02-pass-placement.md) | Can order changes be bracketed between physical loops? | 28 races; 99.65% mean pairwise concordance with official lap charts. |
 | [Qualifying](../case-studies/03-qualifying.md) | How can incompatible qualifying formats share one product model? | 122 career appearances; 69 exact grid conversions; 35/40 inspected lap captures usable. |
 | [Weather and wind](../case-studies/04-weather-and-wind.md) | How can modeled weather and track-relative wind remain source-honest? | 115/115 exact-window sessions joined; 78 date-only sessions skipped; north-aware arrow transform. |
@@ -56,7 +56,7 @@ The [field-granularity dictionary](../../analysis/historical-high-frequency-data
 
 The [RaceTools decoder](../../analysis/semantic-layer/lib/racetools-semantic.mjs) interprets `$S` hexadecimal ticks at 0.0001-second source resolution, handles mainline and pit-lane start/finish planes, removes non-race regions, and reconstructs car-laps. The [Timing71 decoder](../../analysis/semantic-layer/lib/timing71-semantic.mjs) treats its input as quantized display state: lap completion comes from a lap-counter increment, the source `Last` field supplies lap time, and no interpolation is added.
 
-The [loop summary](../../analysis/semantic-layer/output/loop-crossings-summary.json), generated 2026-09-10, contains 2,613,292 normalized crossing records across 143 sessions. Quality masks include 17 full-day captures, nine heartbeat gaps, and one header-only log. The [identity crosswalk validation](../../analysis/semantic-layer/output/crosswalk/crosswalk-validation.json) records 43 `GO`, one `CONDITIONAL`, zero `NO-GO`, and zero hard failures as of 2026-09-10.
+The [loop summary](../../analysis/semantic-layer/output/loop-crossings-summary.json), generated 2026-09-10, indexes 2,613,292 crossing records across 143 sessions; with the feed's repeated records removed and each pass counted once per car, loop and time, they come to 690,494 timing-loop passages ([passage count](../../analysis/semantic-layer/output/loop-passages.json)). Quality masks include 17 full-day captures, nine heartbeat gaps, and one header-only log. The [identity crosswalk validation](../../analysis/semantic-layer/output/crosswalk/crosswalk-validation.json) records 43 `GO`, one `CONDITIONAL`, zero `NO-GO`, and zero hard failures as of 2026-09-10.
 
 The high-frequency source investigation also retains contaminated-duplicate and source-preamble failure cases in the [feasibility report](../../analysis/historical-high-frequency-data-audit/FEASIBILITY_REPORT.md) and [race inventory](../../analysis/historical-high-frequency-data-audit/racetools-race-inventory.json). Those records prevent a larger or later file from automatically replacing a cleaner session capture.
 

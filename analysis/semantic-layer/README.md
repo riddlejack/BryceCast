@@ -26,6 +26,8 @@ export BRYCECAST_LAKE_DATA_ROOT="$HOME/.brycecast/data-lake"
 # validation references (read-only), also env-overridable:
 #   BRYCECAST_CAREER_DATASET  -> data/career/career.dataset.json
 #   BRYCECAST_SECTION_OBS     -> analysis/indy-nxt-race-lap-section-enhancement/output/race_section_lap_observations.csv
+# axis (b) also reads the committed data/historical-data-lake/catalog/timing-coverage-ledger.json
+# to pair each capture with its own race session.
 ```
 
 Only `raw/` is read (content-addressed, immutable). The lake `catalog/` is **not**
@@ -40,6 +42,7 @@ of catalog regeneration.
 npm run analytics:semantic-layer                 # build all per-session tables
 npm run analytics:semantic-layer:finishing-order # axis (a) vs canonical
 npm run analytics:semantic-layer:section-times   # axis (b) vs official PDFs
+npm run analytics:semantic-layer:passages        # crossing records vs timing-loop passages
 npm run analytics:semantic-layer:nashville       # the Nashville loop-inventory proof
 # slice 2 (Timing71 2026 + crosswalk)
 npm run analytics:semantic-layer:timing71        # build 2026 event-grain tables
@@ -60,6 +63,7 @@ during a race window.
 ```
 output/
   loop-crossings-summary.json          # compact index over all 143 sessions
+  loop-passages.json                   # crossing records vs timing-loop passages
   sessions/<id>.ndjson.gz              # per-session grain (crossings/laps/flags/classification)
   validation/finishing-order.json      # axis (a)
   validation/section-time-residuals.json # axis (b)
@@ -70,7 +74,7 @@ output/
 ## Storage choice
 
 Per-session grain is committed as gzipped NDJSON (level 9): **~42 MB** total for all
-143 sessions × 2.6 M crossings — well under the lane's <100 MB budget — plus a
+143 sessions' 2.6 M crossing records — well under the lane's <100 MB budget — plus a
 ~240 KB summary index. Full grain is deterministically regenerable from raw via
 `build-loop-crossings.mjs`, so the pack/summary pattern keeps the committed footprint
 small while still shipping the complete grain.
@@ -92,10 +96,18 @@ small while still shipping the complete grain.
   3 s de-dup); `isLapBoundary` on the emitted crossing rows stays mainline-only so
   the finishing-order derivation is unchanged. Residual lap-count drift is confined
   to caution/red-flag laps race control resolves with its own yellow-lap accounting.
-- **Axis (b):** derived full-lap section times reproduce the official PDF per-lap
-  "Lap" time to **0.0000 s** (median) for **21/25** races; residuals are confined to
-  caution/red-flag/pit laps. Nashville's 3 published sub-sections map to feed spans
-  within ~0.08–0.10 s median.
+- **Crossing records vs passages:** the 2.6 M crossing records are section-completion
+  records as the feed sent them. **1,564,848** repeat an earlier record's car, section,
+  time and lap (nearly all feed resends in five 2025 Laguna Seca test sessions), and
+  one pass over a loop can close several sections; counted once per car, loop and
+  time they are **690,494** timing-loop passages (`output/loop-passages.json`).
+- **Axis (b):** each race is held against its own official session (timing-coverage
+  ledger) for the car Bryce drove in it (career dataset). **24/28** races have official
+  lap times; in those, **1,098/1,101** of Bryce's derived full-lap times equal the
+  official "Lap" time. The other three are the 2024 Road America red flag, which the
+  official results split into two laps. The official results come from the same timing
+  system, so this checks the decoding, not timing accuracy. Nashville's 3 published
+  sub-sections map to feed spans within ~0.08–0.10 s median.
 - **Slice 2 — Timing71 2026:** all 44 sessions decode with max-lap agreement
   **44/44** vs the audit coverage matrix; race classification matches canonical
   exactly for **16/17** races — the 17th

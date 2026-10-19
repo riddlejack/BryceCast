@@ -18,7 +18,7 @@ export const REPO_URL: string | null = null;
 const stats: Array<{ label: string; value: string; note: string }> = [
   { label: 'Series', value: '7', note: '2019–2026 · 87 events, 493 sessions' },
   { label: 'Lap samples', value: '75,589', note: '8,943 session-result records' },
-  { label: 'Timing-loop crossings', value: '2,613,292', note: '143 source captures — not GPS telemetry' },
+  { label: 'Timing-loop passages', value: '~690,000', note: '143 source captures, resends removed — not GPS telemetry' },
   { label: 'INDY NXT races', value: '45 of 45', note: 'observed timing and replay coverage, 2024–2026' },
   { label: 'Weather joins', value: '115', note: 'exact-window sessions, modeled near-track weather' },
   { label: 'Historical archive', value: '7.62 GB', note: '1,136 source objects indexed, not shipped in this build' }
@@ -32,7 +32,7 @@ type HardPart = { title: string; body: string; href: string; label: string };
 const hardParts: HardPart[] = [
   {
     title: 'Heat maps without GPS',
-    body: 'The timing feed reports when a car crosses fixed physical loops around a track, not GPS coordinates. BryceCast decodes those crossings, reconciles official section distances against a traced outline of the circuit, and colors each named stretch by how the car performed there. Checked against official lap times, the reconstruction reproduced 21 of 25 races to the exact timing tick.',
+    body: 'The timing feed reports when a car crosses fixed physical loops around a track, not GPS coordinates. BryceCast decodes those crossings, reconciles official section distances against a traced outline of the circuit, and colors each named stretch by how the car performed there. Checked against the official timing sheets, which come from the same timing system, 1,098 of Bryce’s 1,101 rebuilt laps across 24 races match.',
     href: '/tracks',
     label: 'Pace maps'
   },
