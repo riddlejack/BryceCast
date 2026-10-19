@@ -69,6 +69,7 @@
     "analytics:semantic-layer:validate": "node analysis/semantic-layer/validate.mjs",
     "analytics:semantic-layer:finishing-order": "node analysis/semantic-layer/validate-finishing-order.mjs",
     "analytics:semantic-layer:section-times": "node analysis/semantic-layer/validate-section-times.mjs",
+    "analytics:semantic-layer:passages": "node analysis/semantic-layer/count-loop-passages.mjs",
     "analytics:semantic-layer:nashville": "node analysis/semantic-layer/nashville-loop-inventory.mjs",
     "analytics:semantic-layer:nashville-measured": "node analysis/semantic-layer/build-nashville-measured-sections.mjs",
     "analytics:semantic-layer:nashville-measured:check": "node analysis/semantic-layer/build-nashville-measured-sections.mjs --check",

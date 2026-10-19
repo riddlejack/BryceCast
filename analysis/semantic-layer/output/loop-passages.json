@@ -1,0 +1,183 @@
+{
+  "lane": "semantic_layer",
+  "generatedAt": "2026-10-19T23:25:18.831Z",
+  "summaryGeneratedAt": "2026-09-20T17:38:55.651Z",
+  "summarySha256": "eda9dc4998f3273aa200a463983df81e2762fef386cc5e27d75bbeb92c9f5a60",
+  "definitions": {
+    "crossingRecords": "Every loop_crossing row in the session packs: one section-completion record as the feed reported it.",
+    "repeatedRecords": "Rows whose car, timing section, crossing time and lap repeat an earlier row in the same session (feed resends).",
+    "sectionRecords": "crossingRecords minus repeatedRecords.",
+    "passages": "Distinct (car, loop, crossing time) per session: one pass of one car over one timing loop, which can close more than one timing section."
+  },
+  "sessionCount": 143,
+  "sessionsWithCrossings": 122,
+  "crossingRecords": 2613292,
+  "repeatedRecords": 1564848,
+  "sectionRecords": 1048444,
+  "passages": 690494,
+  "bySessionType": {
+    "test": {
+      "sessions": 33,
+      "crossingRecords": 1643415,
+      "repeatedRecords": 1564289,
+      "sectionRecords": 79126,
+      "passages": 58937
+    },
+    "practice": {
+      "sessions": 41,
+      "crossingRecords": 402288,
+      "repeatedRecords": 254,
+      "sectionRecords": 402034,
+      "passages": 264758
+    },
+    "qualifying": {
+      "sessions": 40,
+      "crossingRecords": 81399,
+      "repeatedRecords": 0,
+      "sectionRecords": 81399,
+      "passages": 53191
+    },
+    "race": {
+      "sessions": 29,
+      "crossingRecords": 486190,
+      "repeatedRecords": 305,
+      "sectionRecords": 485885,
+      "passages": 313608
+    }
+  },
+  "repeatedRecordsBySession": [
+    {
+      "id": "rt_2025_laguna-seca_p4_2025-02-06_d",
+      "sessionType": "test",
+      "qualityMasks": [],
+      "crossingRecords": 552241,
+      "repeatedRecords": 550132,
+      "sectionRecords": 2109,
+      "passages": 2109
+    },
+    {
+      "id": "rt_2025_laguna-seca_p2_2025-02-05_d",
+      "sessionType": "test",
+      "qualityMasks": [],
+      "crossingRecords": 496116,
+      "repeatedRecords": 493811,
+      "sectionRecords": 2305,
+      "passages": 2305
+    },
+    {
+      "id": "rt_2025_laguna-seca_p0_2025-02-05_d",
+      "sessionType": "test",
+      "qualityMasks": [
+        "full_day_capture"
+      ],
+      "crossingRecords": 352559,
+      "repeatedRecords": 352399,
+      "sectionRecords": 160,
+      "passages": 160
+    },
+    {
+      "id": "rt_2025_laguna-seca_p1_2025-02-05_d",
+      "sessionType": "test",
+      "qualityMasks": [
+        "full_day_capture"
+      ],
+      "crossingRecords": 120074,
+      "repeatedRecords": 119176,
+      "sectionRecords": 898,
+      "passages": 898
+    },
+    {
+      "id": "rt_2025_laguna-seca_p3_2025-02-06_d",
+      "sessionType": "test",
+      "qualityMasks": [],
+      "crossingRecords": 49625,
+      "repeatedRecords": 48755,
+      "sectionRecords": 870,
+      "passages": 870
+    },
+    {
+      "id": "rt_2025_indianapolis-motor-speedway-rc_r1_2025-05-10_d",
+      "sessionType": "race",
+      "qualityMasks": [
+        "full_day_capture",
+        "heartbeat_gap"
+      ],
+      "crossingRecords": 15079,
+      "repeatedRecords": 299,
+      "sectionRecords": 14780,
+      "passages": 8045
+    },
+    {
+      "id": "rt_2024_st-petersburg-street-circuit_p2_2024-03-09_a",
+      "sessionType": "practice",
+      "qualityMasks": [],
+      "crossingRecords": 11012,
+      "repeatedRecords": 172,
+      "sectionRecords": 10840,
+      "passages": 6221
+    },
+    {
+      "id": "rt_2024_iowa-speedway_p1_2024-07-12_a",
+      "sessionType": "practice",
+      "qualityMasks": [],
+      "crossingRecords": 12295,
+      "repeatedRecords": 81,
+      "sectionRecords": 12214,
+      "passages": 8745
+    },
+    {
+      "id": "rt_2024_milwaukee-mile_p1_2024-06-12_a",
+      "sessionType": "test",
+      "qualityMasks": [],
+      "crossingRecords": 24995,
+      "repeatedRecords": 10,
+      "sectionRecords": 24985,
+      "passages": 15273
+    },
+    {
+      "id": "rt_2025_sebring-international-raceway_p3_2025-01-16_d",
+      "sessionType": "test",
+      "qualityMasks": [],
+      "crossingRecords": 2599,
+      "repeatedRecords": 6,
+      "sectionRecords": 2593,
+      "passages": 2591
+    },
+    {
+      "id": "rt_2025_iowa-speedway_r_2025-07-12_d",
+      "sessionType": "race",
+      "qualityMasks": [],
+      "crossingRecords": 17830,
+      "repeatedRecords": 3,
+      "sectionRecords": 17827,
+      "passages": 13350
+    },
+    {
+      "id": "rt_2025_weathertech-raceway-laguna-seca_r2_2025-07-27_d",
+      "sessionType": "race",
+      "qualityMasks": [],
+      "crossingRecords": 16839,
+      "repeatedRecords": 2,
+      "sectionRecords": 16837,
+      "passages": 11197
+    },
+    {
+      "id": "rt_2024_road-america_r_2024-06-09_a",
+      "sessionType": "race",
+      "qualityMasks": [],
+      "crossingRecords": 14308,
+      "repeatedRecords": 1,
+      "sectionRecords": 14307,
+      "passages": 9688
+    },
+    {
+      "id": "rt_2024_milwaukee-mile_p1_2024-08-30_a",
+      "sessionType": "practice",
+      "qualityMasks": [],
+      "crossingRecords": 12878,
+      "repeatedRecords": 1,
+      "sectionRecords": 12877,
+      "passages": 7777
+    }
+  ]
+}
