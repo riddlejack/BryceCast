@@ -20,7 +20,7 @@ const stats: Array<{ label: string; value: string; note: string }> = [
   { label: 'Lap samples', value: '75,589', note: '8,943 session-result records' },
   { label: 'Timing-loop passages', value: '~690,000', note: '143 source captures, resends removed — not GPS telemetry' },
   { label: 'INDY NXT races', value: '45 of 45', note: 'observed timing and replay coverage, 2024–2026' },
-  { label: 'Weather joins', value: '115', note: 'exact-window sessions, modeled near-track weather' },
+  { label: 'Weather joins', value: '135', note: 'exact-window sessions, modeled near-track weather' },
   { label: 'Historical archive', value: '7.62 GB', note: '1,136 source objects indexed, not shipped in this build' }
 ];
 
@@ -189,7 +189,7 @@ export const AboutScreen = () => (
           <div className="stack" style={{ gap: 12 }}>
             <div className="about-credit">
               <span className="about-credit__label">Built by</span>
-              <p className="about-credit__detail">Jack Riddle, with family.</p>
+              <p className="about-credit__detail">Jack Riddle.</p>
             </div>
             <div className="about-credit">
               <span className="about-credit__label">Data sources</span>
