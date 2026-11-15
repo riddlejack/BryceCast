@@ -64,7 +64,7 @@ const StintTimeline = ({ pack }: { pack: ImsaDaytonaStintPack }) => {
       </h3>
       <p className="imsa-copy">
         Bryce drove <strong>{bryceLaps}</strong> of the car’s <strong>{totalLaps}</strong> laps across{' '}
-        <strong>{stints.length}</strong> stints — in the evening, through the small hours, and again at dawn.
+        <strong>{stints.length}</strong> stints: in the evening, through the small hours, and again at dawn.
       </p>
       <div ref={ref} style={{ width: '100%', position: 'relative' }}>
         {width > 0 ? (

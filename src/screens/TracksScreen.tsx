@@ -73,7 +73,7 @@ const VenueNumbersFallback = ({ visits, labels }: { visits: SectionLapsPack[]; l
   ];
   return (
     <Card
-      title="The track, year over year — timing table"
+      title="The track, year over year: timing table"
       action={
         <SourcePill
           title="Venue section comparison"

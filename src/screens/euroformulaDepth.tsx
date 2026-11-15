@@ -157,7 +157,7 @@ const QualiToRace = () => {
       </div>
       <p className="euro-caption">
         Each line is one race, qualifying slot to flag · a Euro-magenta line marks a race he gained on his grid · P1 at the top.
-        Only the {races.length} of 17 races whose grid a qualifying session set are shown — Euro’s three-race weekends also use
+        Only the {races.length} of 17 races whose grid a qualifying session set are shown. Euro’s three-race weekends also use
         reverse and second grids, which aren’t a read on qualifying. Click a line to open the race.
       </p>
     </div>
@@ -257,7 +257,7 @@ const EuroSourcePill = ({ conversionRaces }: { conversionRaces: number }) => (
       {
         label: 'Career result conversion',
         path: 'analysis/career-parity/output/tables/career_result_conversion.csv',
-        note: 'Official Euroformula Open classifications — 17 classified races, grids, and finishes across six venues (the Barcelona finale ran without him).'
+        note: 'Official Euroformula Open classifications: 17 classified races, grids, and finishes across six venues (the Barcelona finale ran without him).'
       }
     ]}
     caveats={[
@@ -280,13 +280,15 @@ export const EuroformulaDepthLayer = () => {
     <div className="euro-depth stack">
       <div className="row row--between row--wrap" style={{ alignItems: 'baseline', gap: 8 }}>
         <p className="euro-copy" style={{ margin: 0, maxWidth: '58ch' }}>
-          A full European campaign in continental single-seaters — front-running results across six circuits. Here is how his
+          A full European campaign in continental single-seaters, with front-running results across six circuits. Here is how his
           weekends converted, and where he was strongest.
         </p>
         <EuroSourcePill conversionRaces={euroSummary?.conversionRaces ?? 7} />
       </div>
-      <QualiToRace />
-      <EuroVenues races={races} />
+      <div className="depth-pair">
+        <QualiToRace />
+        <EuroVenues races={races} />
+      </div>
     </div>
   );
 };

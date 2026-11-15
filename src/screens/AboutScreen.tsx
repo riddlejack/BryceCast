@@ -97,7 +97,7 @@ const limits: string[] = [
   'Live GPS or a moving car dot: no validated position feed exists.',
   'Win or finish predictions: history gets shown as ranges and paths, never as a forecast.',
   'Official series weather: near-track NWS weather is labeled for what it is.',
-  'Pit, tire, or fuel strategy claims: the official feeds don’t carry them.'
+  'Pit, tire or fuel strategy calls: the official feeds don’t carry them. The Career page’s fuel figure is a modelled range, and says how.'
 ];
 
 const HardPartCard = ({ part }: { part: HardPart }) => (

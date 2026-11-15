@@ -1944,13 +1944,13 @@ const buildCareerMilestoneItem = (id, metricById, sourceById) => {
     date = facts.date ?? null;
     year = date ? Number(date.slice(0, 4)) : numberOrNull(facts.year);
     figure = facts.lapTime ? `${facts.lapTime}s` : null;
-    label = `Badger Kart Club — ${facts.className}`;
+    label = `Badger Kart Club, ${facts.className}`;
     detail = `A ${facts.lapTime}-second fast time${facts.configuration ? ` on the ${facts.configuration}` : ''}, entered on the club's ${facts.recordTable ?? 'record'} board.`;
   } else if (metric.metricType === 'karting_track_record') {
     date = facts.date ?? null;
     year = date ? Number(date.slice(0, 4)) : numberOrNull(facts.year);
     figure = facts.lapTime ? `${facts.lapTime}s` : null;
-    label = 'Badger Kart Club — a track record';
+    label = 'Badger Kart Club, a track record';
     detail = `A ${facts.lapTime}-second ${facts.className} track record on the ${facts.configuration} layout.`;
   } else if (metric.metricType === 'karting_championship_milestone') {
     year = numberOrNull(facts.year);
@@ -1965,7 +1965,7 @@ const buildCareerMilestoneItem = (id, metricById, sourceById) => {
     const coWinners = Array.isArray(facts.coWinners) ? facts.coWinners : [];
     const planned = Array.isArray(facts.plannedEventFamilies) ? facts.plannedEventFamilies : [];
     const bookends = planned.length >= 2 ? `, from the ${planned[0]} to the ${planned[1]}` : '';
-    detail = `A ${facts.year} ${facts.award}${coWinners.length ? `, alongside ${coWinners.join(' and ')}` : ''} — the award that funded a UK Formula Ford campaign${bookends}.`;
+    detail = `A ${facts.year} ${facts.award}${coWinners.length ? `, alongside ${coWinners.join(' and ')}` : ''}. The award funded a UK Formula Ford campaign${bookends}.`;
   } else {
     return null;
   }

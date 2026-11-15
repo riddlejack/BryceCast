@@ -13,36 +13,51 @@
     'now'
     'track'
     'position'
-    'points';
+    'points'
+    'near';
   gap: 24px;
   align-items: start;
   /* Close to the bar above: the page's section gap is for sections. */
   margin-top: calc(var(--section-gap) * -0.5);
 }
 
-/* Before the green, the minutes to go come before the circuit on a phone. */
+/* Before the green, the minutes to go come before the circuit on a phone,
+   and the grid follows the circuit. */
 .live-page .live-hero--prestart {
   grid-template-areas:
     'head'
     'now'
     'position'
     'track'
-    'points';
+    'near';
 }
 
 @media (min-width: 1000px) {
-  .live-page .live-hero,
-  .live-page .live-hero--prestart {
+  .live-page .live-hero {
     grid-template-columns: minmax(340px, 4fr) minmax(0, 7fr);
-    grid-template-rows: auto auto auto auto 1fr;
+    grid-template-rows: auto auto auto auto auto 1fr;
     grid-template-areas:
       'head track'
       'now track'
       'position track'
       'points track'
+      'near track'
       '. track';
     column-gap: clamp(36px, 4vw, 80px);
     row-gap: 30px;
+  }
+
+  /* Before the green the left column is the countdown and Bryce's slot side
+     by side, then the whole grid, so the first screen is full. */
+  .live-page .live-hero--prestart {
+    grid-template-rows: auto auto auto auto 1fr;
+    grid-template-areas:
+      'head track'
+      'now track'
+      'position track'
+      'near track'
+      '. track';
+    row-gap: 24px;
   }
 }
 
@@ -215,19 +230,30 @@
 
 /* ---------- a replay before the green ---------- */
 
+.live-prestart__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 18px clamp(28px, 3vw, 56px);
+}
 .live-prestart__countdown { display: flex; flex-direction: column; gap: 4px; }
 .live-prestart__clock { font-variant-numeric: tabular-nums; }
+.live-prestart__slot { display: flex; flex-direction: column; gap: 4px; }
 .live-prestart__slot-row { display: flex; align-items: center; gap: 12px; margin: 6px 0 2px; }
 
-.live-grid { padding-top: 22px; border-top: 1px solid var(--divider); }
-.live-grid__title { margin: 0 0 6px; font-size: clamp(20px, 1.6vw, 26px); font-weight: 620; letter-spacing: -0.015em; }
+.live-page .live-hero__near { grid-area: near; min-width: 0; }
+
+.live-grid { padding-top: 16px; border-top: 1px solid var(--divider); }
+.live-grid__title { margin: 0 0 4px; font-size: 15px; font-weight: 620; letter-spacing: -0.01em; }
+.live-grid__note { margin: 0; }
 
 .live-grid__list {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  column-gap: clamp(20px, 4vw, 64px);
-  max-width: 780px;
-  margin: 0 0 30px;
+  column-gap: clamp(16px, 2vw, 32px);
+  max-width: 640px;
+  /* Room for the second column's half-row step. */
+  margin: 0 0 22px;
   padding: 0;
   list-style: none;
 }
@@ -236,23 +262,48 @@
 .live-grid__car {
   position: relative;
   display: grid;
-  grid-template-columns: 2em minmax(0, 1fr) auto;
+  grid-template-columns: 1.7em minmax(0, 1fr) auto;
   align-items: baseline;
-  gap: 10px;
-  padding: 9px 6px;
+  gap: 8px;
+  padding: 4px 4px;
   border-bottom: 1px solid var(--divider);
-  font-size: 14px;
+  font-size: 13px;
+  line-height: 1.35;
 }
 
-.live-grid__car--even { top: 19px; }
+.live-grid__car--even { top: 12px; }
 .live-grid__car--bryce { background: var(--accent-wash); font-weight: 600; }
 .live-grid__slot { color: var(--ink-muted); font-variant-numeric: tabular-nums; }
 .live-grid__name { display: inline-flex; align-items: center; gap: 7px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.live-grid__no { color: var(--ink-muted); font-size: 12.5px; font-weight: 450; }
+.live-grid__no { color: var(--ink-muted); font-size: 12px; font-weight: 450; }
+
+/* The No. column only where the column is wide enough to keep surnames whole. */
+@media (max-width: 1399px) and (min-width: 1000px), (max-width: 559px) {
+  .live-grid__no { display: none; }
+  .live-grid__car { grid-template-columns: 1.7em minmax(0, 1fr); }
+}
+
+/* ---------- the cars around Bryce (race hero, left column) ---------- */
+
+.live-around { display: flex; flex-direction: column; gap: 6px; padding-top: 16px; border-top: 1px solid var(--divider); }
+.live-around__list { margin: 0; padding: 0; list-style: none; max-width: 440px; }
+.live-around__car {
+  display: grid;
+  grid-template-columns: 2.6em minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 10px;
+  padding: 6px 6px;
+  border-bottom: 1px solid var(--divider);
+  font-size: 14px;
+}
+.live-around__car:last-child { border-bottom: 0; }
+.live-around__car--bryce { background: var(--accent-wash); font-weight: 600; }
+.live-around__pos { color: var(--ink-muted); font-variant-numeric: tabular-nums; }
+.live-around__car--bryce .live-around__pos { color: var(--ink-primary); }
+.live-around__name { display: inline-flex; align-items: center; gap: 7px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.live-around__gap { color: var(--ink-secondary); font-size: 13px; white-space: nowrap; }
 
 @media (max-width: 559px) {
-  .live-grid__no { display: none; }
-  .live-grid__car { grid-template-columns: 1.7em minmax(0, 1fr); font-size: 13.5px; }
   .live-page .live-hero__head .source-pill { flex: none; }
 }
 

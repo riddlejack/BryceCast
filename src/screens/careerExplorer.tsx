@@ -294,7 +294,7 @@ export const TheClimb = () => {
             {
               label: 'Career result conversion · all series',
               path: 'analysis/career-parity/output/tables/career_result_conversion.csv',
-              note: `${n} source-backed races with a finishing percentile — the share of the field beaten, which stays honest as field sizes change between series. Named moments use deterministic event-date and finish-position rules; the form line is an eleven-race trimmed mean (middle 60% of the window).`
+              note: `${n} source-backed races with a finishing percentile: the share of the field beaten, which stays honest as field sizes change between series. Named moments use deterministic event-date and finish-position rules; the form line is an eleven-race trimmed mean (middle 60% of the window).`
             },
             {
               label: 'Canonical career results · official status',
@@ -535,12 +535,7 @@ export const FilterChip = ({ label, active, onClick }: { label: string; active: 
     type="button"
     onClick={onClick}
     aria-pressed={active}
-    className="chip"
-    style={
-      active
-        ? { cursor: 'pointer', background: 'var(--ink-primary)', color: '#fff', borderColor: 'transparent' }
-        : { cursor: 'pointer', color: 'var(--ink-secondary)' }
-    }
+    className={`chip chip--toggle${active ? ' chip--toggle-on' : ''}`}
   >
     {label}
   </button>
@@ -947,12 +942,12 @@ export const CareerExplorer = () => {
         withStart.length === 0 ? (
           <Unavailable>
             {seriesWithoutStart.join(' and ')} time cards don’t carry a sourced grid position, so there’s no start → finish view
-            here — the percentile view still holds every race.
+            here. The percentile view still holds every race.
           </Unavailable>
         ) : (
           <>
             <p style={{ margin: '0 0 6px', fontSize: 13, color: 'var(--ink-secondary)' }}>
-              Dots above the line are races where he gained positions —{' '}
+              Dots above the line are races where he gained positions:{' '}
               <strong style={{ color: 'var(--ink-primary)' }}>
                 {gained} of {withStart.length}
               </strong>{' '}
@@ -1140,7 +1135,7 @@ export const RivalsCard = () => {
         {mostShared ? (
           <>
             {' '}
-            Nobody more than <strong style={{ color: 'var(--ink-primary)' }}>{mostShared.driverName}</strong> — Bryce ahead in{' '}
+            Nobody more than <strong style={{ color: 'var(--ink-primary)' }}>{mostShared.driverName}</strong>, with Bryce ahead in{' '}
             <strong style={{ color: 'var(--ink-primary)' }}>
               {mostShared.bryceAhead} of {mostShared.racesTogether}
             </strong>
@@ -1225,7 +1220,7 @@ export const RivalsCard = () => {
         })}
       </div>
       <p className="caption caption--secondary" style={{ margin: '8px 0 0' }}>
-        Records read Bryce first — the gold stretch is his share of the record, the notch is even
+        Records read Bryce first: the gold stretch is his share of the record, the notch is even
       </p>
     </Card>
   );
@@ -1366,7 +1361,7 @@ export const CareerRestarts = () => {
             {
               label: 'Official caution summaries and lap chart',
               path: 'data/career/career.dataset.json',
-              note: 'Restarts from the official Results-PDF caution summary; movement from the official lap chart — positions only.'
+              note: 'Restarts from the official Results-PDF caution summary; movement from the official lap chart, positions only.'
             }
           ]}
           caveats={report.caveats}
@@ -1636,12 +1631,12 @@ export const QualiConversion = () => {
             {
               label: 'Qualifying layer · per series and conversion',
               path: 'analysis/qualifying-layer/output/summary.json',
-              note: `Where Bryce qualified across ${layer.coverage.seriesWithQualifying} series and, where the source carries a grid column, how that grid slot converted to the flag — ${career.conversionRaces} races.`
+              note: `Where Bryce qualified across ${layer.coverage.seriesWithQualifying} series and, where the source carries a grid column, how that grid slot converted to the flag: ${career.conversionRaces} races.`
             },
             {
               label: 'Two qualifying source families, never blended',
               path: 'analysis/qualifying-layer/output/tables/quali_sessions.csv',
-              note: 'The dedicated qualifying sheet where it exists, the qualifying-session result where it does not — one family per session, its field size the denominator.'
+              note: 'The dedicated qualifying sheet where it exists, the qualifying-session result where it does not. One family per session, its field size the denominator.'
             }
           ]}
           caveats={layer.caveats}
@@ -1656,7 +1651,7 @@ export const QualiConversion = () => {
         {exclusionLine}
       </p>
       <p style={{ margin: '0 0 14px', fontSize: 12, color: 'var(--ink-muted)' }}>
-        Each qualifying result uses one official source&mdash;the qualifying sheet when available, otherwise the session result.
+        Each qualifying result uses one official source: the qualifying sheet when available, otherwise the session result.
       </p>
 
       <div className="grid grid--4" style={{ marginBottom: 18 }}>
@@ -2208,7 +2203,7 @@ export const TheCampaigns = () => {
       action={<SourcePill title="The campaigns" entries={data.sourceRefs.map((ref) => ({ label: ref.key, path: ref.path, note: ref.note }))} caveats={data.caveats} />}
     >
       <p style={{ margin: '0 0 4px', color: 'var(--ink-secondary)', fontSize: 13.5, maxWidth: '62ch' }}>
-        Every championship campaign in the order it was raced — points banked as they were scored, or the official final
+        Every championship campaign in the order it was raced: points banked as they were scored, or the official final
         standing where the round-by-round points aren&rsquo;t sourced.{' '}
         {hasCurrent ? 'Gold marks where the current season stands right now. ' : ''}Each season keeps its own scale;
         points don&rsquo;t compare across series.

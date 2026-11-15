@@ -8,9 +8,13 @@ import {
 } from '../data/replayAvailable';
 import {
   FORMATION_MIN_LEAD_SECONDS,
+  SKIM_SPEED,
   findFormationStart,
   findRaceStart,
-  type FlagSample
+  phasedClockPosition,
+  skimPhases,
+  type FlagSample,
+  type ReplayPhase
 } from '../data/replayStart';
 import { useRouter } from './router';
 
@@ -18,6 +22,22 @@ import { useRouter } from './router';
  *  default; 16× skims. All three keep the archived payload shapes intact. */
 export const REPLAY_SPEEDS = [1, 4, 16] as const;
 const DEFAULT_REPLAY_SPEED = 4;
+export { SKIM_SPEED };
+
+/** What the clock is skimming right now, for the bar to say in plain words. */
+export interface ReplaySkim {
+  /** `formation`: before the green flag. `caution`: the opening caution
+   *  between a start that did not hold and the restart. */
+  kind: 'formation' | 'caution';
+  /** The rate it plays at now. */
+  speed: number;
+  /** The visitor's own speed, which comes back at `until`. */
+  backTo: number;
+  /** Where the visitor's speed comes back. */
+  until: 'green' | 'restart';
+  /** Leader lap at that restart, when known. */
+  restartLap: number | null;
+}
 
 export interface ReplaySession {
   /** A resolvable replay is being driven from the URL. */
@@ -59,12 +79,23 @@ export interface ReplaySession {
    *  (a source-gap skip). Lets the bar say "starts at the restart" only while
    *  that is true. */
   clockFrom: 'raceStart' | 't0' | 'formation' | 'greenFlag' | 'jump' | null;
+  /** Set while the clock plays the formation laps or the opening caution at
+   *  {@link SKIM_SPEED}; null when it plays at the visitor's speed. */
+  skim: ReplaySkim | null;
+  /** The rate the clock runs at this moment: `speed`, or the skim's rate. */
+  playbackSpeed: number;
+  /** Bumped whenever the clock jumps (restart, formation, green flag, a gap
+   *  skip), so the page can fetch the new moment at once. */
+  clockEpoch: number;
   setSpeed: (speed: number) => void;
   restart: () => void;
   /** Go back before the start: the clock runs from just before the field
    *  leaves the grid for the formation lap (session open when that can't be
    *  found). */
   restartFromFormation: () => void;
+  /** Start locating the formation lap ahead of a click (hover or focus on the
+   *  control), so the click itself is instant. Safe to call repeatedly. */
+  prepareFormation: () => void;
   /** Go back to the plain green flag, before any skipped opening caution. */
   restartFromGreenFlag: () => void;
   /** Move the local clock to the first observation after a withheld source gap. */
@@ -88,11 +119,14 @@ interface ReplayClock {
   /** Archived span bounds, so the virtual clock never runs past the capture. */
   firstCheckedMs: number;
   lastCheckedMs: number;
+  /** Stretches before the visitor's speed takes over (formation, opening
+   *  caution). Empty for a plain clock. */
+  phases: ReplayPhase[];
 }
 
 const inactive: Omit<
   ReplaySession,
-  'setSpeed' | 'restart' | 'restartFromFormation' | 'restartFromGreenFlag' | 'jumpTo' | 'exit' | 'getReplayParams'
+  'setSpeed' | 'restart' | 'restartFromFormation' | 'prepareFormation' | 'restartFromGreenFlag' | 'jumpTo' | 'exit' | 'getReplayParams'
 > = {
   engaged: false,
   starting: false,
@@ -111,7 +145,10 @@ const inactive: Omit<
   formationAvailable: false,
   formationPending: false,
   greenFlagAt: null,
-  clockFrom: null
+  clockFrom: null,
+  skim: null,
+  playbackSpeed: DEFAULT_REPLAY_SPEED,
+  clockEpoch: 0
 };
 
 /** The longest the cue-up waits on the start search before starting at the
@@ -217,14 +254,24 @@ const clampT0 = (session: ReplaySessionInfo, iso: string | null): string => {
   return iso;
 };
 
+/** Where a clock is now (src/data/replayStart.ts, `phasedClockPosition`). */
+const clockPosition = (clock: ReplayClock, nowWallMs = Date.now()) =>
+  phasedClockPosition({
+    virtualStartMs: clock.virtualStartMs,
+    elapsedWallMs: nowWallMs - clock.startedAtWallMs,
+    speed: clock.speed,
+    phases: clock.phases
+  });
+
 /** The current virtual timestamp of a clock, clamped into the archived span. At
  *  the end of the capture it pins to the last frame — the post-checkered
  *  "Race complete · as raced" state, which stays simulated (never live). */
-const virtualNowMsOf = (clock: ReplayClock): number => {
-  const elapsedReal = Math.max(0, Date.now() - clock.startedAtWallMs);
-  const raw = clock.virtualStartMs + elapsedReal * clock.speed;
-  return Math.min(clock.lastCheckedMs, Math.max(clock.firstCheckedMs, raw));
-};
+const virtualNowMsOf = (clock: ReplayClock): number =>
+  Math.min(clock.lastCheckedMs, Math.max(clock.firstCheckedMs, clockPosition(clock).atMs));
+
+/** The skim phases for a clock going back before the race start. */
+const skimPhasesFor = (session: ReplaySessionInfo, fromMs: number, speed: number, raceStartMs: number | null): ReplayPhase[] =>
+  skimPhases({ fromMs, greenMs: greenFlagMsOf(session), raceStartMs, speed });
 
 /**
  * Drives a per-CLIENT replay from `/live?replay=<sessionKey>`. The client owns
@@ -256,19 +303,67 @@ export const useReplaySession = (replayKey: string | null, onRestart?: () => voi
   const sessionRef = useRef<ReplaySessionInfo | null>(null);
   const clockRef = useRef<ReplayClock | null>(null);
   /** Where Restart returns (the resolved race start), per session key. */
-  const raceStartRef = useRef<{ sessionKey: string; at: string } | null>(null);
-  /** The located formation start, per session key, once found. */
-  const formationRef = useRef<{ sessionKey: string; atMs: number } | null>(null);
+  const raceStartRef = useRef<{ sessionKey: string; at: string; lap: number | null } | null>(null);
+  /** The formation start for a session key: the search in flight, then its
+   *  answer. One search per session, shared by hover and click. */
+  const formationRef = useRef<{ sessionKey: string; promise: Promise<number> } | null>(null);
   const speedRef = useRef<number>(DEFAULT_REPLAY_SPEED);
   const onRestartRef = useRef(onRestart);
   onRestartRef.current = onRestart;
+  const phaseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const getReplayParams = useCallback((): string => {
     const clock = clockRef.current;
     if (!clock) return '';
-    const rt = new Date(virtualNowMsOf(clock)).toISOString();
-    return `?replay=${encodeURIComponent(clock.sessionKey)}&rt=${encodeURIComponent(rt)}&speed=${clock.speed}`;
+    const position = clockPosition(clock);
+    const rt = new Date(Math.min(clock.lastCheckedMs, Math.max(clock.firstCheckedMs, position.atMs))).toISOString();
+    return `?replay=${encodeURIComponent(clock.sessionKey)}&rt=${encodeURIComponent(rt)}&speed=${position.rate}`;
   }, []);
+
+  /** Publish the clock's current phase (skim or not) and wake again at the
+   *  next phase boundary, so the bar says 16x exactly while it is true. */
+  const syncPhase = useCallback(() => {
+    if (phaseTimerRef.current !== null) clearTimeout(phaseTimerRef.current);
+    phaseTimerRef.current = null;
+    const clock = clockRef.current;
+    if (!clock) {
+      setState((previous) => (previous.skim === null ? previous : { ...previous, skim: null }));
+      return;
+    }
+    const position = clockPosition(clock);
+    const restartLap = raceStartRef.current?.sessionKey === clock.sessionKey ? raceStartRef.current.lap : null;
+    const skim: ReplaySkim | null =
+      position.phase && position.phase.kind !== 'start' && position.rate > clock.speed
+        ? {
+            kind: position.phase.kind,
+            speed: position.rate,
+            backTo: clock.speed,
+            // The caution always ends at the restart; the formation ends at
+            // the green flag, where the visitor's speed returns for the start.
+            until: position.phase.kind === 'caution' ? 'restart' : 'green',
+            restartLap
+          }
+        : null;
+    setState((previous) => {
+      const same =
+        previous.playbackSpeed === position.rate &&
+        previous.skim?.kind === skim?.kind &&
+        previous.skim?.speed === skim?.speed &&
+        previous.skim?.backTo === skim?.backTo &&
+        previous.skim?.restartLap === skim?.restartLap;
+      return same ? previous : { ...previous, skim, playbackSpeed: position.rate };
+    });
+    if (position.wallToNextMs !== null) {
+      phaseTimerRef.current = setTimeout(syncPhase, Math.ceil(position.wallToNextMs) + 20);
+    }
+  }, []);
+
+  useEffect(
+    () => () => {
+      if (phaseTimerRef.current !== null) clearTimeout(phaseTimerRef.current);
+    },
+    []
+  );
 
   useEffect(() => {
     if (!replayKey) {
@@ -324,11 +419,11 @@ export const useReplaySession = (replayKey: string | null, onRestart?: () => voi
       const raceStartPromise = resolveRaceStart(session);
       const raceStart = t0Param ? null : await raceStartPromise;
       if (cancelled) return;
-      if (raceStart) raceStartRef.current = { sessionKey: session.sessionKey, at: raceStart.at };
+      if (raceStart) raceStartRef.current = { sessionKey: session.sessionKey, at: raceStart.at, lap: raceStart.lap };
       else
         void raceStartPromise.then((resolved) => {
           if (cancelled || !resolved) return;
-          raceStartRef.current = { sessionKey: session.sessionKey, at: resolved.at };
+          raceStartRef.current = { sessionKey: session.sessionKey, at: resolved.at, lap: resolved.lap };
           setState((previous) => (previous.session?.sessionKey === session.sessionKey ? { ...previous, raceStart: resolved } : previous));
         });
       // Start the local virtual clock at the race start (or, when a `t0`
@@ -345,7 +440,8 @@ export const useReplaySession = (replayKey: string | null, onRestart?: () => voi
         startedAtWallMs: Date.now(),
         speed: seededSpeed,
         firstCheckedMs: Number.isFinite(firstCheckedMs) ? firstCheckedMs : safeStart,
-        lastCheckedMs: Number.isFinite(lastCheckedMs) ? lastCheckedMs : safeStart
+        lastCheckedMs: Number.isFinite(lastCheckedMs) ? lastCheckedMs : safeStart,
+        phases: []
       };
       setState({
         ...inactive,
@@ -359,6 +455,7 @@ export const useReplaySession = (replayKey: string | null, onRestart?: () => voi
         returnHref,
         raceStart,
         formationAvailable,
+        playbackSpeed: seededSpeed,
         clockFrom: t0Param ? 't0' : 'raceStart',
         greenFlagAt: (() => {
           const ms = greenFlagMsOf(session);
@@ -412,13 +509,18 @@ export const useReplaySession = (replayKey: string | null, onRestart?: () => voi
 
   const setSpeed = useCallback((next: number) => {
     const clock = clockRef.current;
-    if (!clock || next === clock.speed || !REPLAY_SPEEDS.includes(next as (typeof REPLAY_SPEEDS)[number])) return;
+    if (!clock || !REPLAY_SPEEDS.includes(next as (typeof REPLAY_SPEEDS)[number])) return;
+    // A speed the visitor picks wins over any skim still ahead: pressing 4×
+    // during the 16× formation slows it to 4× there and then.
+    const skimming = clockPosition(clock).rate !== clock.speed;
+    if (next === clock.speed && !skimming) return;
     // Continue from the current virtual position at the new speed — purely local,
     // so the change is instant with no server round-trip.
-    clockRef.current = { ...clock, virtualStartMs: virtualNowMsOf(clock), startedAtWallMs: Date.now(), speed: next };
+    clockRef.current = { ...clock, virtualStartMs: virtualNowMsOf(clock), startedAtWallMs: Date.now(), speed: next, phases: [] };
     speedRef.current = next;
     setState((previous) => ({ ...previous, speed: next, started: true }));
-  }, []);
+    syncPhase();
+  }, [syncPhase]);
 
   const restart = useCallback(() => {
     const clock = clockRef.current;
@@ -429,24 +531,64 @@ export const useReplaySession = (replayKey: string | null, onRestart?: () => voi
     clockRef.current = {
       ...clock,
       virtualStartMs: Number.isFinite(virtualStartMs) ? virtualStartMs : clock.firstCheckedMs,
-      startedAtWallMs: Date.now()
+      startedAtWallMs: Date.now(),
+      phases: []
     };
     onRestartRef.current?.();
-    setState((previous) => ({ ...previous, started: true, endedByLive: false, skippedSourceGap: null, clockFrom: 'raceStart' }));
+    setState((previous) => ({
+      ...previous,
+      started: true,
+      endedByLive: false,
+      skippedSourceGap: null,
+      clockFrom: 'raceStart',
+      clockEpoch: previous.clockEpoch + 1
+    }));
+    syncPhase();
+  }, [syncPhase]);
+
+  /** The formation start for the current session: one bounded search,
+   *  shared by a hover that prepares it and the click that uses it. */
+  const locateFormation = useCallback((): Promise<number> | null => {
+    const session = sessionRef.current;
+    if (!session || !formationAvailableFor(session)) return null;
+    const sessionKey = session.sessionKey;
+    if (formationRef.current?.sessionKey === sessionKey) return formationRef.current.promise;
+    const openMs = Date.parse(session.firstCheckedAt ?? '');
+    const greenMs = Date.parse(session.firstGreenAt ?? '');
+    const promise = withTimeout(
+      findFormationStart({ openMs, startMs: greenMs, movingAt: timingMovingAt(sessionKey) }),
+      RACE_START_SEARCH_TIMEOUT_MS,
+      { atMs: openMs, requests: 0 }
+    ).then(({ atMs }) => atMs);
+    formationRef.current = { sessionKey, promise };
+    return promise;
   }, []);
+
+  const prepareFormation = useCallback(() => {
+    void locateFormation();
+  }, [locateFormation]);
 
   const restartFromFormation = useCallback(() => {
     const session = sessionRef.current;
-    if (!clockRef.current || !session || !formationAvailableFor(session)) return;
+    if (!clockRef.current || !session) return;
     const sessionKey = session.sessionKey;
-    const startAt = (atMs: number) => {
+    const located = locateFormation();
+    if (!located) return;
+    setState((previous) => ({ ...previous, formationPending: true }));
+    void located.then((atMs) => {
       const clock = clockRef.current;
       if (!clock || clock.sessionKey !== sessionKey) return;
-      const virtualStartMs = Date.parse(clampT0(session, new Date(atMs).toISOString()));
+      const startMs = Date.parse(clampT0(session, new Date(atMs).toISOString()));
+      const virtualStartMs = Number.isFinite(startMs) ? startMs : clock.firstCheckedMs;
+      const raceStartAt = raceStartRef.current?.sessionKey === sessionKey ? Date.parse(raceStartRef.current.at) : NaN;
       clockRef.current = {
         ...clock,
-        virtualStartMs: Number.isFinite(virtualStartMs) ? virtualStartMs : clock.firstCheckedMs,
-        startedAtWallMs: Date.now()
+        virtualStartMs,
+        startedAtWallMs: Date.now(),
+        // The formation laps run at 16×, and so does an opening caution the
+        // default start would have skipped; the start itself and the race
+        // after the restart play at the visitor's speed.
+        phases: skimPhasesFor(session, virtualStartMs, clock.speed, Number.isFinite(raceStartAt) ? raceStartAt : null)
       };
       onRestartRef.current?.();
       setState((previous) => ({
@@ -455,41 +597,39 @@ export const useReplaySession = (replayKey: string | null, onRestart?: () => voi
         endedByLive: false,
         skippedSourceGap: null,
         formationPending: false,
-        clockFrom: 'formation'
+        clockFrom: 'formation',
+        clockEpoch: previous.clockEpoch + 1
       }));
-    };
-    const cached = formationRef.current?.sessionKey === sessionKey ? formationRef.current.atMs : null;
-    if (cached !== null) {
-      startAt(cached);
-      return;
-    }
-    const openMs = Date.parse(session.firstCheckedAt ?? '');
-    const greenMs = Date.parse(session.firstGreenAt ?? '');
-    setState((previous) => ({ ...previous, formationPending: true }));
-    void withTimeout(
-      findFormationStart({ openMs, startMs: greenMs, movingAt: timingMovingAt(sessionKey) }),
-      RACE_START_SEARCH_TIMEOUT_MS,
-      { atMs: openMs, requests: 0 }
-    ).then(({ atMs }) => {
-      formationRef.current = { sessionKey, atMs };
-      startAt(atMs);
+      syncPhase();
     });
-  }, []);
+  }, [locateFormation, syncPhase]);
 
   const restartFromGreenFlag = useCallback(() => {
     const clock = clockRef.current;
     const session = sessionRef.current;
     if (!clock || !session) return;
     const greenMs = greenFlagMsOf(session);
-    const virtualStartMs = Date.parse(clampT0(session, greenMs === null ? null : new Date(greenMs).toISOString()));
+    const startMs = Date.parse(clampT0(session, greenMs === null ? null : new Date(greenMs).toISOString()));
+    const virtualStartMs = Number.isFinite(startMs) ? startMs : clock.firstCheckedMs;
+    const raceStartAt = raceStartRef.current?.sessionKey === session.sessionKey ? Date.parse(raceStartRef.current.at) : NaN;
     clockRef.current = {
       ...clock,
-      virtualStartMs: Number.isFinite(virtualStartMs) ? virtualStartMs : clock.firstCheckedMs,
-      startedAtWallMs: Date.now()
+      virtualStartMs,
+      startedAtWallMs: Date.now(),
+      // The start at the visitor's speed, then the caution at 16× to the restart.
+      phases: skimPhasesFor(session, virtualStartMs, clock.speed, Number.isFinite(raceStartAt) ? raceStartAt : null)
     };
     onRestartRef.current?.();
-    setState((previous) => ({ ...previous, started: true, endedByLive: false, skippedSourceGap: null, clockFrom: 'greenFlag' }));
-  }, []);
+    setState((previous) => ({
+      ...previous,
+      started: true,
+      endedByLive: false,
+      skippedSourceGap: null,
+      clockFrom: 'greenFlag',
+      clockEpoch: previous.clockEpoch + 1
+    }));
+    syncPhase();
+  }, [syncPhase]);
 
   const jumpTo = useCallback((iso: string, sourceGapSeconds = 0) => {
     const clock = clockRef.current;
@@ -500,7 +640,9 @@ export const useReplaySession = (replayKey: string | null, onRestart?: () => voi
     clockRef.current = {
       ...clock,
       virtualStartMs: nextMs,
-      startedAtWallMs: Date.now()
+      startedAtWallMs: Date.now(),
+      // A gap skip keeps whatever skim is still ahead of the new moment.
+      phases: clock.phases.filter((phase) => phase.untilMs > nextMs)
     };
     // A source gap must not leave a chart line joining the last pre-gap rank to
     // the first post-gap rank as if those seven minutes had been observed.
@@ -510,9 +652,11 @@ export const useReplaySession = (replayKey: string | null, onRestart?: () => voi
       started: true,
       endedByLive: false,
       skippedSourceGap: { seconds: Math.max(0, sourceGapSeconds), resumeAt: iso },
-      clockFrom: 'jump'
+      clockFrom: 'jump',
+      clockEpoch: previous.clockEpoch + 1
     }));
-  }, []);
+    syncPhase();
+  }, [syncPhase]);
 
   const exit = useCallback(() => {
     const href = state.returnHref;
@@ -520,5 +664,5 @@ export const useReplaySession = (replayKey: string | null, onRestart?: () => voi
     navigate(href);
   }, [navigate, state.returnHref]);
 
-  return { ...state, setSpeed, restart, restartFromFormation, restartFromGreenFlag, jumpTo, exit, getReplayParams };
+  return { ...state, setSpeed, restart, restartFromFormation, prepareFormation, restartFromGreenFlag, jumpTo, exit, getReplayParams };
 };

@@ -98,7 +98,7 @@ const WithinTeamStrip = ({ pack }: { pack: Gb3DeepDivePack }) => {
     <div>
       <SectionHead title="Within the team" />
       <p className="gb3-copy">
-        Where Bryce placed among his own team’s classified cars, race by race — {teams2021} through 2021, {teams2022} through
+        Where Bryce placed among his own team’s classified cars, race by race: {teams2021} through 2021, {teams2022} through
         2022. He led the team’s cars home in {ledCount} of {classified} classified races.
       </p>
       <div ref={ref} style={{ width: '100%', position: 'relative' }}>
@@ -178,7 +178,7 @@ const WithinTeamStrip = ({ pack }: { pack: Gb3DeepDivePack }) => {
         {tip ? <ChartTipCard tip={tip} width={width} /> : null}
       </div>
       <p className="gb3-caption">
-        Amber = races he led the team’s cars home · result order only — where he placed among his own cars, not a read on
+        Amber = races he led the team’s cars home · result order only: where he placed among his own cars, not a read on
         machinery, setup, or strategy.
         {unclassified > 0 ? ` ${unclassified} of ${rows.length} races have no classified result (shown open).` : ''} Click any
         race to open it.
@@ -231,8 +231,8 @@ const QualifyingToRace = ({ pack }: { pack: Gb3DeepDivePack }) => {
     <div>
       <SectionHead title="Qualifying to race" badge="2021 · TSL PDFs" />
       <p className="gb3-copy">
-        In 2021, Bryce made up ground off the line in <strong>{gained}</strong> of his <strong>{races.length}</strong> starts —
-        a best of <strong>{bestGain}</strong> places gained in a single race.
+        In 2021, Bryce made up ground off the line in <strong>{gained}</strong> of his <strong>{races.length}</strong> starts,
+        with a best of <strong>{bestGain}</strong> places gained in a single race.
       </p>
       <div ref={ref} style={{ width: '100%', maxWidth: 720, position: 'relative' }}>
         {width > 0 ? (
@@ -329,7 +329,7 @@ const VenueRows = ({ pack }: { pack: Gb3DeepDivePack }) => {
       <SectionHead title="The venues" />
       <p className="gb3-copy">
         Six circuits across the two seasons, strongest first by the share of the field he beat. Best finish and race count sit
-        beside each — small samples, so percentile carries the comparison.
+        beside each. The samples are small, so percentile carries the comparison.
       </p>
       <div className="tower gb3-venues">
         <div className="tower__row gb3-venues__head" style={{ gridTemplateColumns: venueGrid }}>
@@ -413,7 +413,7 @@ const ConditionsBar = ({ pack }: { pack: Gb3DeepDivePack }) => {
     <div>
       <SectionHead title="2021 conditions" badge="2021 · TSL PDFs" />
       <p className="gb3-copy">
-        Across {total} officially logged 2021 sessions — practice, qualifying and races — the track ran dry far more often than
+        Across {total} officially logged 2021 sessions (practice, qualifying and races), the track ran dry far more often than
         not.
       </p>
       <div className="gb3-conditions" role="img" aria-label={`${counts.dry} dry, ${counts.damp} damp, ${counts.wet} wet 2021 sessions`}>
@@ -430,7 +430,7 @@ const ConditionsBar = ({ pack }: { pack: Gb3DeepDivePack }) => {
         ))}
       </div>
       <p className="gb3-caption">
-        Lighter to darker reads drier to wetter. Official TSL session labels — context only, never the cause of a result. 2022’s
+        Lighter to darker reads drier to wetter. Official TSL session labels: context only, never the cause of a result. 2022’s
         feed carries no conditions.
       </p>
     </div>
@@ -624,7 +624,7 @@ const SeasonArc = ({ pack }: { pack: Gb3DeepDivePack }) => {
     <div>
       <SectionHead title="The season, round by round" />
       <p className="gb3-copy">
-        Two campaigns end to end — where he qualified and the best he took from each round. Across the two seasons he reached the
+        Two campaigns end to end: where he qualified and the best he took from each round. Across the two seasons he reached the
         podium in <strong>{podiumRounds}</strong> of <strong>{events.length}</strong> rounds, with his first GB3 win coming at
         Donington in 2022{wins > 1 ? ` (one of ${wins})` : ''}.
       </p>
@@ -682,19 +682,19 @@ const Gb3SourcePill = ({ pack }: { pack: Gb3DeepDivePack }) => {
         },
         {
           label: '2021 · TSL official PDFs',
-          note: `${r2021?.events ?? 7} events, ${r2021?.bryceRaceRows ?? 20} Bryce races — official classifications, grids, and session conditions.`
+          note: `${r2021?.events ?? 7} events, ${r2021?.bryceRaceRows ?? 20} Bryce races: official classifications, grids, and session conditions.`
         },
         {
           label: '2022 · GB3 official JSON',
-          note: `${r2022?.events ?? 8} events, ${r2022?.bryceRaceRows ?? 24} Bryce races — official classifications and pit counts; no grids or conditions.`
+          note: `${r2022?.events ?? 8} events, ${r2022?.bryceRaceRows ?? 24} Bryce races: official classifications and pit counts; no grids or conditions.`
         }
       ]}
       caveats={[
         'The two seasons come from different sources that cover different fields, so detail stays split by season.',
-        'Every finish travels with the share of the field it beat and its race count — fields ran 16 to 23 cars.',
+        'Every finish travels with the share of the field it beat and its race count. Fields ran 16 to 23 cars.',
         'Grid positions are official for 2021 only; 2022 carries no race starts, so start-to-finish is 2021-only.',
         'Qualifying is the official TSL grid for 2021 and the qualifying-session result order for 2022 (the JSON feed has no dedicated qualifying table); the season arc keeps them side by side, never merged.',
-        'Condition strings are official 2021 session labels — context, never a cause of a result.',
+        'Condition strings are official 2021 session labels: context, never a cause of a result.',
         'Team context is finishing order within Bryce’s own cars, not a read on machinery, setup, or strategy.',
         'GB3’s records hold no lap traces or section timing, so there are no pace-trace charts here.'
       ]}
@@ -722,15 +722,17 @@ export const Gb3DepthLayer = () => {
     <div className="gb3-depth stack">
       <div className="row row--between row--wrap" style={{ alignItems: 'baseline', gap: 8 }}>
         <p className="gb3-copy" style={{ margin: 0, maxWidth: '60ch' }}>
-          Two seasons in British GB3, against deep international fields — the longest chapter of the climb, and its first real
+          Two seasons in British GB3, against deep international fields: the longest chapter of the climb, and its first real
           proving ground. Here is what the official records hold.
         </p>
         <Gb3SourcePill pack={pack} />
       </div>
       <SeasonArc pack={pack} />
       <WithinTeamStrip pack={pack} />
-      <QualifyingToRace pack={pack} />
-      <VenueRows pack={pack} />
+      <div className="depth-pair">
+        <QualifyingToRace pack={pack} />
+        <VenueRows pack={pack} />
+      </div>
       <ConditionsBar pack={pack} />
     </div>
   );

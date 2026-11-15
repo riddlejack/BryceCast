@@ -1,23 +1,21 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
-import { useMeasuredWidth } from '../app/charts';
+import { Play } from 'lucide-react';
 import { asNumber, formatDate, formatGain } from '../app/format';
-import { Link } from '../app/router';
+import { Link, useRouter } from '../app/router';
 import type { ReadinessStatus } from '../app/useReadiness';
-import { TrackArt } from '../app/trackArt';
-import { trackOutlineFor } from '../assets/tracks';
 import { DataFreshness } from '../app/dataFreshness';
-import { uiDataPackage, type UiCareerFigure, type UiSeasonIndexRow } from '../data/uiDataPackage';
+import { uiDataPackage, type UiCareerFigure } from '../data/uiDataPackage';
 import { daysUntil, getNextEvent, raceDayOf } from '../data/upcoming';
 import { getSeasonIndex } from '../data/seasons';
 import { loadLatestSeasonDebriefs, chronoCompare, type ArchiveEntry } from '../data/debriefArchive';
 import { getSeasonPhase, getSeasonReview, type SeasonReview } from '../data/seasonPhase';
 import { nextSeasonOutlook } from '../data/nextSeason';
-import { resolveHeatSections, sectionObservationsFromLaps } from '../data/sectionObservations';
-import { watchableCaptureForRace } from '../data/replayAvailable';
-import { ReplayAffordance, useReplayCatalog } from './replayAffordance';
-import { useVenueSectionData } from './sectionIntelligence';
+import { loadReplayAvailable, watchableCaptureForRace, type ReplayAvailable } from '../data/replayAvailable';
+import { ReplayAffordance } from './replayAffordance';
 import { SeasonShareButton } from './seasonShareCard';
 import { HomeNow, homeNowState } from './homeNow';
+import { HeroStill, type HeroStillSpec } from './homeHeroStill';
+import { Standouts, shortRaceName } from './homeStandouts';
 import './home.css';
 
 /* ============================================================
@@ -43,21 +41,13 @@ const HERO_STILL = {
   sessionId: 'session_indy_nxt_2026_6759',
   src: '/tracks-3d/weathertech-raceway-laguna-seca-pace-2026-r1.jpg',
   src1200: '/tracks-3d/weathertech-raceway-laguna-seca-pace-2026-r1@1200.jpg',
+  /* The matching section ID map and its legend (homeHeroStill.tsx). */
+  ids: '/tracks-3d/weathertech-raceway-laguna-seca-pace-2026-r1-ids.png',
+  legend: '/tracks-3d/weathertech-raceway-laguna-seca-pace-2026-r1-ids.json',
   width: 2400,
   height: 1350,
   credit: 'Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others.'
 };
-
-/** "2026 Grand Prix of Monterey Race 2 R2" → "Grand Prix of Monterey, Race 2";
- *  "2026 INDY NXT by Firestone at Milwaukee Mile" → "Milwaukee Mile". */
-const shortRaceName = (raceLabel: string): string =>
-  raceLabel
-    .replace(/^\d{4}\s+/, '')
-    .replace(/^INDY NXT by Firestone at (the )?/i, '')
-    .replace(/\s+R\d$/, '')
-    .replace(/\s+(Race \d)$/, ', $1');
-
-const raceDayOfRow = (row: UiSeasonIndexRow): string | null => row.raceDate ?? row.eventStartDate;
 
 const figureById = (id: string): UiCareerFigure | null =>
   uiDataPackage.screens.careerLab.lifeStats?.figures?.find((figure) => figure.id === id) ?? null;
@@ -69,6 +59,10 @@ const HomeHero = ({ review }: { review: SeasonReview | null }) => {
   const isSeasonBest =
     review?.standouts.some((standout) => standout.row.sessionId === HERO_STILL.sessionId && standout.label === 'Season best') ?? false;
   const raceName = row ? `${row.seasonYear ?? ''} ${shortRaceName(row.raceLabel)}`.trim() : null;
+  const heroSpec: HeroStillSpec = {
+    ...HERO_STILL,
+    alt: `A 3D model of WeatherTech Raceway Laguna Seca with the track shaded section by section by Bryce’s pace${raceName ? ` in the ${raceName}` : ''}.`
+  };
   return (
     <section className="home-hero">
       <div className="home-hero__text">
@@ -82,22 +76,7 @@ const HomeHero = ({ review }: { review: SeasonReview | null }) => {
           <Link to="/career">His career in numbers →</Link>
         </div>
       </div>
-      <Link
-        to={`/races/${encodeURIComponent(HERO_STILL.sessionId)}`}
-        className="home-hero__still"
-        aria-label={raceName ? `${raceName}: the race page` : 'The race page'}
-      >
-        <img
-          src={HERO_STILL.src}
-          srcSet={`${HERO_STILL.src1200} 1200w, ${HERO_STILL.src} 2400w`}
-          sizes="(max-width: 760px) 100vw, 66vw"
-          width={HERO_STILL.width}
-          height={HERO_STILL.height}
-          alt={`A 3D model of WeatherTech Raceway Laguna Seca with the track shaded section by section by Bryce’s pace${raceName ? ` in the ${raceName}` : ''}.`}
-          fetchPriority="high"
-          decoding="async"
-        />
-      </Link>
+      <HeroStill spec={heroSpec} raceName={raceName} />
       <div className="home-hero__cap">
         <p>
           WeatherTech Raceway Laguna Seca{raceName ? `, ${raceName}` : ''}. The film’s 3D model, each section shaded by his pace in
@@ -118,8 +97,54 @@ const HomeHero = ({ review }: { review: SeasonReview | null }) => {
 
 /* ---------- last time out: one line, the replay beside it ---------- */
 
+/** The replay catalog with its loading state: 'pending' until the API answers
+ *  (or fails), so the slot can hold the button's place from the first paint. */
+const useReplayCatalogState = (): { done: boolean; catalog: ReplayAvailable | null } => {
+  const [state, setState] = useState<{ done: boolean; catalog: ReplayAvailable | null }>({ done: false, catalog: null });
+  useEffect(() => {
+    let cancelled = false;
+    loadReplayAvailable()
+      .then((catalog) => {
+        if (!cancelled) setState({ done: true, catalog });
+      })
+      .catch(() => {
+        if (!cancelled) setState({ done: true, catalog: null });
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+  return state;
+};
+
+/** The replay button before the catalog has answered: the same disc and title
+ *  in the same place, the meta and source lines held at their height. It
+ *  already works: the Live page resolves a race id to its capture itself. */
+const PendingReplay = ({ sessionId, title }: { sessionId: string; title: string }) => {
+  const { navigate } = useRouter();
+  const key = encodeURIComponent(sessionId);
+  return (
+    <div className="race-replay__year home-replay--pending">
+      <button type="button" className="race-replay__year-link" onClick={() => navigate(`/live?replay=${key}&from=${key}`)}>
+        <span className="race-replay__year-play" aria-hidden>
+          <Play size={14} />
+        </span>
+        <span className="race-replay__year-text">
+          <span className="race-replay__year-title">{title}</span>
+          <span className="race-replay__year-meta tnum" aria-hidden>
+            &nbsp;
+          </span>
+        </span>
+      </button>
+      <div className="race-replay__year-prov" aria-hidden>
+        &nbsp;
+      </div>
+    </div>
+  );
+};
+
 const LastTimeOut = ({ review, latestPack, complete }: { review: SeasonReview; latestPack: ArchiveEntry | null; complete: boolean }) => {
-  const catalog = useReplayCatalog();
+  const { done: catalogDone, catalog } = useReplayCatalogState();
   const row = review.rows[review.rows.length - 1];
   if (!row) return null;
   const finish = row.finishPosition;
@@ -201,6 +226,8 @@ const LastTimeOut = ({ review, latestPack, complete }: { review: SeasonReview; l
       <div className="home-last__replay">
         {capture ? (
           <ReplayAffordance capture={capture} fromSessionId={row.sessionId} title="Watch the race replay" variant="compact" />
+        ) : !catalogDone ? (
+          <PendingReplay sessionId={row.sessionId} title="Watch the race replay" />
         ) : (
           <Link to={racePath} className="home-textlink">
             The race, lap by lap →
@@ -286,73 +313,7 @@ const CareerSoFar = () => {
   );
 };
 
-/* ---------- the standout races, drawn large ----------
- * The season review's standouts (season best, then the biggest charges through
- * the field, clean days only), each venue shaded by his pace in that race,
- * from the same section packs and anchors the race page uses. */
-
-const StandoutArt = ({ trackName, sessionId }: { trackName: string | null; sessionId: string }) => {
-  const [ref, width] = useMeasuredWidth<HTMLDivElement>();
-  const outline = trackOutlineFor(trackName);
-  const sections = useVenueSectionData(outline?.name ?? trackName);
-  const resolved = useMemo(() => {
-    if (!sections.anchors) return [];
-    const visit = sections.visits.find((pack) => pack.sessionId === sessionId);
-    if (!visit) return [];
-    /* That visit's own anchors: a measured pack never joins PDF names. */
-    const anchors = sections.anchorsBySession.get(visit.sessionId) ?? sections.anchors;
-    return resolveHeatSections(anchors, sectionObservationsFromLaps(visit));
-  }, [sessionId, sections.anchors, sections.anchorsBySession, sections.visits]);
-  const maxHeight = width > 0 && width < 480 ? 230 : 290;
-  return (
-    <div ref={ref} className="home-race__art">
-      {outline && width > 0 ? (
-        <div className="home-race__draw">
-          <TrackArt
-            outline={outline}
-            maxHeight={maxHeight}
-            wind={null}
-            showCornerLabels={false}
-            strokeScale={2}
-            sections={resolved.length > 0 ? { resolved, showLabels: false } : null}
-          />
-        </div>
-      ) : null}
-    </div>
-  );
-};
-
-const Standouts = ({ review, complete }: { review: SeasonReview; complete: boolean }) => {
-  if (review.standouts.length === 0) return null;
-  return (
-    <section className="home-standouts" aria-labelledby="home-standouts-title">
-      <h2 id="home-standouts-title">
-        Standout races of {review.seasonYear}
-        {complete ? '' : ' so far'}
-      </h2>
-      <p className="home-sub">Each track shaded by his pace in that race, section by section.</p>
-      <div className="home-races">
-        {review.standouts.map(({ row, label }) => {
-          const date = raceDayOfRow(row);
-          return (
-            <Link key={row.sessionId} to={`/races/${encodeURIComponent(row.sessionId)}`} className="home-race">
-              <StandoutArt trackName={row.trackName} sessionId={row.sessionId} />
-              <span className="home-race__pos">
-                <b>{row.finishPosition !== null ? `P${row.finishPosition}` : '—'}</b>
-                {row.startPosition !== null ? <span>from P{row.startPosition} on the grid</span> : null}
-              </span>
-              <span className="home-race__name">{shortRaceName(row.raceLabel)}</span>
-              <span className="home-race__meta">
-                {date ? `${formatDate(date, { month: 'long', day: 'numeric' })} · ` : ''}
-                {label.charAt(0).toLowerCase() + label.slice(1)}
-              </span>
-            </Link>
-          );
-        })}
-      </div>
-    </section>
-  );
-};
+/* ---------- the standout races: homeStandouts.tsx ---------- */
 
 /* ---------- the rest of the site, as plain links ---------- */
 
@@ -422,7 +383,7 @@ export const HomeScreen = ({ readiness }: { readiness: ReadinessStatus }) => {
       {nowOnTop ? null : now}
       {review ? <LastTimeOut review={review} latestPack={latestPack} complete={complete} /> : null}
       <CareerSoFar />
-      {review ? <Standouts review={review} complete={complete} /> : null}
+      {review ? <Standouts review={review} complete={complete} heroSessionId={HERO_STILL.sessionId} /> : null}
       <MoreLinks />
       <div className="home-fresh">
         <DataFreshness />

@@ -14,9 +14,13 @@ import type { UiSeasonIndexRow } from '../data/uiDataPackage';
 import { DataFreshness } from '../app/dataFreshness';
 import './race.css';
 
-/** Archive labels drop the series prefix — everything here is INDY NXT. */
+/** Archive labels drop the series prefix (everything here is INDY NXT) and
+ *  write a doubleheader the way the rest of the site does: "Grand Prix of
+ *  Monterey, Race 2". */
 const archiveLabel = (raceLabel: string): string =>
-  displayRaceLabelText(raceLabel).replace(/^INDY NXT by Firestone at (the )?/i, '');
+  displayRaceLabelText(raceLabel)
+    .replace(/^INDY NXT by Firestone at (the )?/i, '')
+    .replace(/[,\s]+(Race\s+\d+)$/i, ', $1');
 
 /* ---------- tiny venue mark: letterboxed outline, no measurement needed ---------- */
 
@@ -400,7 +404,7 @@ const RemainingSeason = ({
   <div className="race-upcoming">
     <div className="race-upcoming__head">
       <p className="caption caption--secondary" style={{ margin: 0 }}>
-        The rest of {season} — {rounds.length} round{rounds.length === 1 ? '' : 's'} still to run. Each opens once it&rsquo;s been
+        The rest of {season}: {rounds.length} round{rounds.length === 1 ? '' : 's'} still to run. Each opens once it&rsquo;s been
         raced.
       </p>
     </div>
@@ -452,8 +456,8 @@ export const RacesScreen = ({ livePayload = null }: { livePayload?: LiveReadines
         title="Races"
         sub={
           index.length > 0
-            ? `Every INDY NXT weekend — ${formatNumber(index.length, 0)} races told straight from the official data.`
-            : 'Every INDY NXT weekend, told straight from the official data.'
+            ? `All ${formatNumber(index.length, 0)} of his INDY NXT races, from the official results and timing.`
+            : 'His INDY NXT races, from the official results and timing.'
         }
       />
       <DataFreshness />

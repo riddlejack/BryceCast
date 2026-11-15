@@ -1007,6 +1007,104 @@ const ChapterTimeline = ({ rowByName, lapLine }: { rowByName: Map<string, Row>; 
 };
 
 /* ============================================================
+ * 7. More from the archive: the older tools, folded. Each opens on
+ *    a click and renders only while open, so the page stays short.
+ * ============================================================ */
+
+const archiveItems: Array<{ key: string; title: string; blurb: string; render: () => ReactNode }> = [
+  {
+    key: 'before',
+    title: 'Before the record',
+    blurb: 'The karting years, 2016 through 2018: sourced facts, not race results.',
+    render: () => <OriginTimeline />
+  },
+  {
+    key: 'explorer',
+    title: 'The explorer',
+    blurb: 'Every race on one chart, grouped by series, season, track type or conditions.',
+    render: () => <CareerExplorer />
+  },
+  {
+    key: 'rivals',
+    title: 'The rivals',
+    blurb: 'The drivers who shared an INDY NXT grid with him five or more times, and who finished ahead.',
+    render: () => <RivalsCard />
+  },
+  {
+    key: 'restarts',
+    title: 'The restarts',
+    blurb: 'What happened to his place at each INDY NXT restart.',
+    render: () => <CareerRestarts />
+  },
+  {
+    key: 'qualifying',
+    title: 'Qualifying to the flag',
+    blurb: 'Where qualifying put him against where he finished, in every series.',
+    render: () => <QualiConversion />
+  },
+  {
+    key: 'climbs',
+    title: 'Biggest climbs',
+    blurb: 'The five races where he gained the most places.',
+    render: () => <BestClimbs />
+  },
+  {
+    key: 'rain',
+    title: 'Rain days',
+    blurb: 'His wet and mixed days against his dry ones.',
+    render: () => <RainDays />
+  }
+];
+
+const ArchiveFold = () => {
+  const [open, setOpen] = useState<Set<string>>(() => new Set());
+  const toggle = (key: string) =>
+    setOpen((current) => {
+      const next = new Set(current);
+      if (next.has(key)) next.delete(key);
+      else next.add(key);
+      return next;
+    });
+  return (
+    <section className="career-archive" aria-labelledby="career-archive-title">
+      <div className="career-section-head">
+        <h2 id="career-archive-title" className="career-section-title">
+          More from the archive
+        </h2>
+      </div>
+      <ul className="archive-list">
+        {archiveItems.map((item) => {
+          const isOpen = open.has(item.key);
+          return (
+            <li key={item.key} id={`archive-${item.key}`} className={`archive-item${isOpen ? ' archive-item--open' : ''}`}>
+              <button
+                type="button"
+                className="archive-item__toggle"
+                aria-expanded={isOpen}
+                aria-controls={`archive-body-${item.key}`}
+                onClick={() => toggle(item.key)}
+              >
+                <span className="archive-item__title">{item.title}</span>
+                <span className="archive-item__blurb">{item.blurb}</span>
+                <span className="archive-item__action" aria-hidden>
+                  {isOpen ? 'Close' : 'Open'}
+                  <span className="archive-item__sign">{isOpen ? '−' : '+'}</span>
+                </span>
+              </button>
+              {isOpen ? (
+                <div id={`archive-body-${item.key}`} className="archive-item__body">
+                  {item.render()}
+                </div>
+              ) : null}
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+  );
+};
+
+/* ============================================================
  * The page
  * ============================================================ */
 
@@ -1088,23 +1186,10 @@ export const CareerScreen = ({ readiness }: { readiness?: ReadinessStatus }) => 
         <ChapterTimeline rowByName={rowByName} lapLine={lapLine} />
       )}
 
-      <OriginTimeline />
-
-      <CareerExplorer />
-
-      <RivalsCard />
-
-      <CareerRestarts />
-
-      <QualiConversion />
       {/* The campaigns (cumulative points arcs) retired 2026-07-21 on Jack's
           call: points always accumulate, so the arcs said nothing the season
           cards don't. Component retained in careerExplorer for archaeology. */}
-
-      <div className="grid grid--2">
-        <BestClimbs />
-        <RainDays />
-      </div>
+      <ArchiveFold />
     </div>
   );
 };

@@ -307,7 +307,7 @@ const QualiModule = ({
       label: `Run-by-run laps · ${session.sourceTierLabel}`,
       note: runIsOfficial
         ? `Bryce's laps in session order and ${benchmarkSourceWord} come from the official Section Results report.`
-        : `Bryce's laps in session order and ${benchmarkSourceWord} come from the ${session.sourceTierLabel} — a third-party capture, not official timing.`
+        : `Bryce's laps in session order and ${benchmarkSourceWord} come from the ${session.sourceTierLabel}, a third-party capture, not official timing.`
     },
     {
       label: 'Qualifying result · official qualifying classification',

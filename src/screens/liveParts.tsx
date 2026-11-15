@@ -259,7 +259,7 @@ export const ReplayPreStart = ({
     <>
       <HeroPanel className="live-hero live-hero--prestart">
         <HeroIdentity identity={identity} action={source} />
-        <div className="live-hero__now" data-live-flag={asString(heartbeat.flag) ?? ''}>
+        <div className="live-hero__now" data-live-flag={asString(heartbeat.flag) ?? ''} data-prestart-phase={rolling ? 'formation' : 'grid'}>
           <div className="live-now">
             <span className="live-now__flag live-now__flag--neutral">
               <span className="live-now__swatch" aria-hidden />
@@ -268,13 +268,16 @@ export const ReplayPreStart = ({
             {totalLaps !== null ? <span className="live-now__lap">{totalLaps} laps to run</span> : null}
           </div>
         </div>
-        <div className="live-hero__position">
+        <div className="live-hero__position live-prestart__row">
           {toGreen !== null && toGreen > 0 ? (
             <div className="live-prestart__countdown" role="timer" aria-label="Race time to the green flag">
               <span className="caption">Green flag in</span>
               <span className="stat__value stat__value--hero live-prestart__clock">{clockText(toGreen)}</span>
               <span className="caption caption--secondary">
-                race time{replay.speed > 1 ? ` · about ${clockText(toGreen / replay.speed)} at ${replay.speed}×` : ''}
+                race time
+                {replay.playbackSpeed > 1
+                  ? ` · about ${clockText(toGreen / replay.playbackSpeed)} at ${replay.playbackSpeed}×`
+                  : ''}
               </span>
             </div>
           ) : (
@@ -283,39 +286,39 @@ export const ReplayPreStart = ({
               <span className="stat__value stat__value--big">any moment</span>
             </div>
           )}
-        </div>
-        <div className="live-hero__jumbotron live-prestart__slot">
-          <span className="caption">Bryce starts</span>
-          <div className="live-prestart__slot-row">
-            <Plate size="hero" />
-            <span className="stat__value stat__value--big">{bryceSlot !== null ? ordinalWord(bryceSlot) : '—'}</span>
+          <div className="live-prestart__slot">
+            <span className="caption">Bryce starts</span>
+            <div className="live-prestart__slot-row">
+              <Plate size="hero" />
+              <span className="stat__value stat__value--big">{bryceSlot !== null ? ordinalWord(bryceSlot) : '—'}</span>
+            </div>
+            <span className="caption caption--secondary">{grid.length > 0 ? `of ${grid.length} cars on the grid` : 'grid slot pending'}</span>
           </div>
-          <span className="caption caption--secondary">{grid.length > 0 ? `of ${grid.length} cars on the grid` : 'grid slot pending'}</span>
         </div>
+        {grid.length > 0 ? (
+          <section className="live-hero__near live-grid" aria-label="The starting grid">
+            <h2 className="live-grid__title">The grid</h2>
+            <ol className="live-grid__list">
+              {grid.map((row) => {
+                const slot = asNumber(row.startPosition) ?? 0;
+                const name = asString(row.lastName) ?? asString(row.name) ?? `Car ${asString(row.no) ?? ''}`;
+                return (
+                  <li
+                    key={`${asString(row.no) ?? ''}-${slot}`}
+                    className={`live-grid__car${slot % 2 === 0 ? ' live-grid__car--even' : ''}${row.bryce === true ? ' live-grid__car--bryce' : ''}`}
+                  >
+                    <span className="live-grid__slot">{slot}</span>
+                    <span className="live-grid__name">{row.bryce === true ? <Plate size="row" /> : null}{name}</span>
+                    <span className="live-grid__no">No. {asString(row.no) ?? '—'}</span>
+                  </li>
+                );
+              })}
+            </ol>
+            <p className="caption caption--secondary live-grid__note">Grid order as Race Control published it before the start.</p>
+          </section>
+        ) : null}
         <TrackPanel identity={identity} replay={replay} history={history} mode="prestart" />
       </HeroPanel>
-      {grid.length > 0 ? (
-        <section className="live-grid" aria-label="The starting grid">
-          <h2 className="live-grid__title">The grid</h2>
-          <ol className="live-grid__list">
-            {grid.map((row) => {
-              const slot = asNumber(row.startPosition) ?? 0;
-              const name = asString(row.lastName) ?? asString(row.name) ?? `Car ${asString(row.no) ?? ''}`;
-              return (
-                <li
-                  key={`${asString(row.no) ?? ''}-${slot}`}
-                  className={`live-grid__car${slot % 2 === 0 ? ' live-grid__car--even' : ''}${row.bryce === true ? ' live-grid__car--bryce' : ''}`}
-                >
-                  <span className="live-grid__slot">{slot}</span>
-                  <span className="live-grid__name">{row.bryce === true ? <Plate size="row" /> : null}{name}</span>
-                  <span className="live-grid__no">No. {asString(row.no) ?? '—'}</span>
-                </li>
-              );
-            })}
-          </ol>
-          <p className="caption caption--secondary">Grid order as Race Control published it before the start.</p>
-        </section>
-      ) : null}
     </>
   );
 };

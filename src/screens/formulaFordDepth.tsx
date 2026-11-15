@@ -44,7 +44,7 @@ const LapShapeByCondition = ({ pack }: { pack: FormulaFordLapShapePack }) => {
         Lap shape by condition
       </h3>
       <p className="ff-copy">
-        Formula Ford’s records keep only Bryce’s own timed laps, so the honest read is his rhythm — how tightly each lap sat to
+        Formula Ford’s records keep only Bryce’s own timed laps, so the honest read is his rhythm: how tightly each lap sat to
         his own best that session.{' '}
         {dry ? (
           <>
@@ -76,7 +76,7 @@ const LapShapeByCondition = ({ pack }: { pack: FormulaFordLapShapePack }) => {
         ))}
       </div>
       <p className="ff-caption">
-        Bars show his median gap from lap to session best — shorter is a tighter, more repeatable rhythm. The dry races show the
+        Bars show his median gap from lap to session best. Shorter is a tighter, more repeatable rhythm. The dry races show the
         smallest gaps; the single damp race and the two drying races show larger ones, on those small samples. That is the
         observed distribution, not an adaptation claim. These are Bryce’s laps only, not a field comparison, and absolute pace
         isn’t compared across conditions because they fall at different circuits. Read from {totalRaces} races and {totalLaps}
@@ -99,7 +99,7 @@ const FormulaFordSourcePill = ({ pack }: { pack: FormulaFordLapShapePack }) => (
     caveats={[
       'The imported laps are Bryce-only labeled blocks, so they support his own rhythm, never a comparison against opponents.',
       'The comparable read is the within-session gap to his own best; absolute lap times aren’t compared across conditions because the conditions fall at different circuits.',
-      'Damp and drying windows are small (one and two races) — shown with lap-count badges, not broad conclusions.',
+      'Damp and drying windows are small (one and two races), so they are shown with lap-count badges, not broad conclusions.',
       'Continuation lap pages remain held out; there are no section, sector, or field-relative pace rows for Formula Ford.'
     ]}
   />
@@ -118,7 +118,7 @@ export const FormulaFordDepthLayer = () => {
     return <p className="ff-caption" style={{ margin: 0 }}>Opening the Formula Ford lap records…</p>;
   }
   return (
-    <div className="ff-depth stack">
+    <div className="ff-depth stack depth-pair depth-pair--lead">
       <div className="row row--between row--wrap" style={{ alignItems: 'baseline', gap: 8 }}>
         <p className="ff-copy" style={{ margin: 0, maxWidth: '58ch' }}>
           A year in the UK’s classic school of racecraft. The archive holds his own timed laps but no full-field trace, so the one

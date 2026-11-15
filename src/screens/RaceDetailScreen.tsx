@@ -365,8 +365,23 @@ export const LapChart = ({ story, building }: { story: LapChartStory; building?:
   );
 };
 
-const LapChartCard = ({ story, mover }: { story: RaceStoryPack; mover: { name: string; gain: number } | null }) => {
+const LapChartCard = ({
+  story,
+  mover,
+  resultsFieldSize = null
+}: {
+  story: RaceStoryPack;
+  mover: { name: string; gain: number } | null;
+  /** Cars in the official results. More than the chart draws when a car never
+   *  completed a lap (out on lap 1, or a non-starter), and the legend says so. */
+  resultsFieldSize?: number | null;
+}) => {
   const coarse = useCoarsePointer();
+  const undrawn = resultsFieldSize !== null ? resultsFieldSize - story.lapChart.fieldSize : 0;
+  const undrawnNote =
+    undrawn > 0
+      ? ` · ${undrawn === 1 ? 'one car' : `${restartCountWord(undrawn)} cars`} of ${resultsFieldSize} never completed a lap, so ${undrawn === 1 ? 'it isn’t' : 'they aren’t'} drawn`
+      : '';
   const hasBryceLine = story.bryce.inLapChart;
   const teammateCount = story.lapChart.drivers.filter((driver) => driver.isTeammate).length;
   /* Zero-lap day (lap-1 contact): with no Bryce line to draw, the legend itself
@@ -401,14 +416,14 @@ const LapChartCard = ({ story, mover }: { story: RaceStoryPack; mover: { name: s
       {hasBryceLine ? (
         <p className="caption caption--secondary" style={{ margin: '0 0 10px' }}>
           Bryce in ink with gold moments{teammateCount > 0 ? ` · ${story.teamContext?.teamName ?? 'team'} cars in darker gray` : ''} · the
-          field in light gray · ○ marks a day that ended early · {coarse ? 'tap any line' : 'hover any line'}
+          field in light gray · ○ marks a day that ended early{undrawnNote} · {coarse ? 'tap any line' : 'hover any line'}
         </p>
       ) : (
         /* Fact first: the legend explains the missing ink so it never reads as
            "Bryce is missing." The hero already carries the official status. */
         <p className="caption caption--secondary" style={{ margin: '0 0 10px' }}>
-          {zeroLapReason} ended Bryce’s race on lap {endedOnLap} — the chart shows the rest of the field’s day. ○ marks a car that
-          ended early · {coarse ? 'tap any line' : 'hover any line'}
+          {zeroLapReason} ended Bryce’s race on lap {endedOnLap}, so the chart shows the rest of the field’s day. ○ marks a car
+          that ended early · {coarse ? 'tap any line' : 'hover any line'}
         </p>
       )}
       {hasBryceLine ? (
@@ -426,7 +441,7 @@ const LapChartCard = ({ story, mover }: { story: RaceStoryPack; mover: { name: s
           <div style={{ marginTop: 10, fontSize: 12, color: 'var(--ink-secondary)', display: 'grid', gap: 3 }}>
             {meaningful ? (
               <span>
-                Closest company: {battle.driverName} — within one spot for {battle.lapsAdjacent} laps
+                Closest company: {battle.driverName}, within one spot for {battle.lapsAdjacent} laps
                 {battle.swaps >= 2 ? `, trading places ${battle.swaps} times` : ''}.
               </span>
             ) : null}
@@ -612,7 +627,7 @@ const TheDay = ({ story, pack, venue, visit }: { story: RaceStoryPack; pack: Arc
                   {
                     label: 'Full-course cautions',
                     path: 'analysis/caution-atlas/output/tables/caution_by_race.csv',
-                    note: 'Caution count, laps under yellow, and official causes from the Results-PDF caution summary — counts only.'
+                    note: 'Caution count, laps under yellow, and official causes from the Results-PDF caution summary. Counts only.'
                   }
                 ]
               : [])
@@ -784,7 +799,7 @@ const restartSourcePill = (
       {
         label: 'Official lap chart',
         path: 'analysis/restart-report/output/tables/restart_events.csv',
-        note: 'Running order at the last caution lap vs two green laps later, for every car — positions only, never lap times.'
+        note: 'Running order at the last caution lap vs two green laps later, for every car. Positions only, never lap times.'
       }
     ]}
     caveats={[
@@ -829,7 +844,7 @@ const RestartsCard = ({ story }: { story: RaceStoryPack }) => {
     const line =
       restarts.noRestartReason === 'cautions_ended_under_yellow'
         ? 'The caution flew as the race wound down, so there was no restart to run.'
-        : 'The field ran green flag to flag — no cautions, so no restarts this race.';
+        : 'The field ran green flag to flag: no cautions, so no restarts this race.';
     return (
       <Card title={<><Flag size={15} aria-hidden />Restarts</>} action={restartSourcePill}>
         <p style={{ margin: 0, fontSize: 13.5, color: 'var(--ink-secondary)' }}>{line}</p>
@@ -866,7 +881,10 @@ const RestartsCard = ({ story }: { story: RaceStoryPack }) => {
   } else if (bryce.net > 0) {
     headline = `Bryce gained ${bryce.net} spot${bryce.net === 1 ? '' : 's'} across ${countedWord} restart${bryce.counted === 1 ? '' : 's'}.`;
   } else if (heldOrGained === bryce.counted) {
-    headline = `Bryce held or gained his spot on every restart — ${countedWord} of ${countedWord}.`;
+    headline =
+      bryce.counted === 1
+        ? 'Bryce held or gained his spot on the one restart.'
+        : `Bryce held or gained his spot on all ${countedWord} restarts.`;
   } else if (bryce.gained > 0) {
     headline = `Bryce moved forward on ${restartCountWord(bryce.gained)} of ${countedWord} restart${bryce.counted === 1 ? '' : 's'}.`;
   } else if (bryce.held > 0) {
@@ -1090,28 +1108,34 @@ const TeamStory = ({ story }: { story: RaceStoryPack }) => {
 
 /* ---------- weekend arc ---------- */
 
-/** Qualifying-session ranks may be within a group; grid is the full-field rank.
- *  When the hero's gain line already reads "▲1 from P10", the grid and the flag
- *  are on screen twice over, so the arc keeps only what the line doesn't say
- *  (practice and the qualifying-session rank). Without a start position the
- *  full arc stays. */
-const weekendArc = (story: RaceStoryPack, gainLineShown: boolean): string | null => {
-  const signal = story.weekendSignal;
-  if (!signal) return null;
-  const stations = [
-    ['Practice', signal.bestPracticeRank],
-    ['Qualifying session', signal.bestQualifyingRank],
-    ['Grid', signal.raceStart],
-    ['Flag', signal.raceFinish]
-  ].filter((station): station is [string, number] => station[1] !== null);
-  if (stations.length < 3) return null;
-  if (gainLineShown) {
-    const before = stations.filter(([label]) => label === 'Practice' || label === 'Qualifying session');
-    if (before.length === 0) return null;
-    return before.map(([label, rank], index) => `${index === 0 ? label : label.toLowerCase()} P${rank}`).join(' · ');
-  }
-  return stations.map(([label, rank]) => `${label} P${rank}`).join(' → ');
+/** The hero's qualifying line, with both denominators said: "Qualified 10th of
+ *  24, 5th of 12 in his qualifying group." The race-story pack's weekend signal
+ *  carries only the bare group rank (the old "Qualifying session P5" under
+ *  "from P10" read as a contradiction), so the line comes from the official
+ *  qualifying classification the qualifying module already resolves for this
+ *  race. When the grid he started from differs from where he qualified, both
+ *  are stated and nothing is guessed about why. No classification, no line. */
+const qualifyingLine = (resolution: ReturnType<typeof useQualiLabForRace>, start: number | null): string | null => {
+  if (!resolution || resolution === 'failed') return null;
+  const session = resolution.session;
+  if (session?.qualifyingStatus === 'cancelled') return null;
+  const grid = resolution.gridClassification;
+  const position = grid?.combinedGridPosition ?? session?.combinedGridPosition ?? null;
+  const size = grid?.combinedFieldSize ?? session?.combinedFieldSize ?? null;
+  if (position === null || size === null) return null;
+  const groupRank = grid ? grid.groupRank ?? null : session?.onTrackGroupRank ?? null;
+  const groupSize = grid ? grid.groupFieldSize ?? null : session?.groupFieldSize ?? null;
+  const group =
+    groupRank !== null && groupSize !== null && !(groupRank === position && groupSize === size)
+      ? `, ${ordinal(groupRank)} of ${groupSize} in his ${session?.isOval ? 'session' : 'qualifying group'}`
+      : '';
+  const moved = start !== null && start !== position ? `. Started P${start}` : '';
+  return `Qualified ${ordinal(position)} of ${size}${group}${moved}.`;
 };
+
+/** Practice is the one weekend station the qualifying line doesn't cover. */
+const practiceLine = (story: RaceStoryPack): string | null =>
+  story.weekendSignal?.bestPracticeRank != null ? `Best in practice: P${story.weekendSignal.bestPracticeRank}.` : null;
 
 /* ---------- hero verdict (field-strength framing, facts + context only) ---------- */
 
@@ -1123,7 +1147,7 @@ const verdictFor = (story: RaceStoryPack): string | null => {
   if (delta >= -0.05) return 'Right in line with what this field’s strength suggested.';
   const depth = strength.seasonDepthRank;
   if (depth && depth.rank <= 3) {
-    return `One of the season’s deepest fields — ${ordinal(depth.rank)} of ${depth.of} by rating.`;
+    return `One of the season’s deepest fields: ${ordinal(depth.rank)} of ${depth.of} by rating.`;
   }
   return null;
 };
@@ -1246,14 +1270,22 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
   const finish = asNumber(pack.outcome.finishPosition);
   const start = asNumber(pack.outcome.startPosition);
   const gain = start !== null && finish !== null ? formatGain(start - finish) : null;
-  const fieldSize = story?.lapChart.fieldSize ?? asNumber(pack.lapStory?.fieldLapDrivers);
+  const dossierVenue = getVenueBySessionId(sessionId);
+  const dossierVisit = dossierVenue?.visits.find((visit) => visit.sessionId === sessionId) ?? null;
+  /* Two counts, two meanings. The official results list every car in the race
+   * (24 at Monterey Race 2, which is also the "10th of 24" grid). The lap chart
+   * draws only cars that completed a lap (22 there: two went out on lap 1). The
+   * hero states the results field; the lap chart names the difference. */
+  const resultsFieldSize = dossierVisit?.result.fieldSize ?? null;
+  const fieldSize = resultsFieldSize ?? story?.lapChart.fieldSize ?? asNumber(pack.lapStory?.fieldLapDrivers);
   /* The race's own date when the pack carries it (raceOrder.sessionStartDate);
    * eventStartDate is the WEEKEND's first day and can sit a day early. */
   const eventDate =
     asString((pack.raceOrder as Row | undefined)?.sessionStartDate) ??
     asString((pack as unknown as Row).eventStartDate);
   const verdict = story ? verdictFor(story) : null;
-  const arc = story ? weekendArc(story, gain !== null) : null;
+  const qualified = qualifyingLine(qualiResolution, start);
+  const practice = story ? practiceLine(story) : null;
   const moverName = asString(pack.lapStory?.topLapChartMover);
   const moverGain = asNumber(pack.lapStory?.topLapChartGain);
   const mover = moverName && moverGain !== null ? { name: moverName, gain: moverGain } : null;
@@ -1283,8 +1315,13 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
   const heroSet = sectionLaps ? sectionObservationsFromLaps(sectionLaps) : fallbackSet;
   const heroHeat = sectionAnchors && heroSet ? resolveHeatSections(sectionAnchors, heroSet) : [];
   const heroSectionsLayer = heroHeat.length > 0 ? { resolved: heroHeat, showLabels: false } : null;
-  const dossierVenue = getVenueBySessionId(sessionId);
-  const dossierVisit = dossierVenue?.visits.find((visit) => visit.sessionId === sessionId) ?? null;
+  /* The big section map follows the replay rows directly whenever it can shade
+   * (Jack, Nov 14: "the tracks could be thicker or bigger"). Then the hero's
+   * 200 px copy of the same shape is a smaller duplicate a screen above it, so
+   * the hero drops it. A race whose section card can't shade, or whose venue
+   * has no anchored sections, keeps the hero shape as its only track. */
+  /* The big section map follows the lap chart (the approved order), so the hero keeps its track. */
+  const bigMapFollows = false;
   /* Historic race-hour wind, drawn on the hero shape (real-geo outlines only).
    * Calm (0 mph) carries no bearing — the pill draws no arrow and reads "calm". */
   const heroWind =
@@ -1305,7 +1342,8 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
           {pack.seasonYear} season · Round {roundIndexOf(pack)} · {asString(pack.track.name)}
           {eventDate ? ` · ${formatDate(eventDate, { month: 'long', day: 'numeric' })}` : ''}
         </span>
-        <h1 className="screen-head__title">{displayRaceLabel(pack)}</h1>
+        {/* One race-name format across the site: "Grand Prix of Monterey, Race 2". */}
+        <h1 className="screen-head__title">{displayRaceLabel(pack).replace(/[,\s]+(Race\s+\d+)$/i, ', $1')}</h1>
       </header>
 
       <HeroPanel tint="bryce">
@@ -1327,7 +1365,7 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
                     {
                       label: 'Section shading · RaceTools race-weekend capture',
                       path: sectionLaps?.sourceRefs?.find((ref) => ref.key === 'nashvilleIntervalPack')?.path,
-                      note: "The track shape's section shading comes from the RaceTools race-weekend capture's timing-loop crossings — a third-party capture; not official timing."
+                      note: "The track shape's section shading comes from the RaceTools race-weekend capture's timing-loop crossings. A third-party capture, not official timing."
                     }
                   ]
                 : [])
@@ -1339,7 +1377,7 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
             }
           />
         </div>
-        <div className="hero-race">
+        <div className={`hero-race${bigMapFollows ? ' hero-race--no-art' : ''}`}>
           <div className="stat">
             <span className="stat__value stat__value--hero">{formatPosition(finish)}</span>
             {gain ? (
@@ -1351,9 +1389,9 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
             {verdict ? (
               <span style={{ fontSize: 13, color: 'var(--ink-secondary)', marginTop: 6, maxWidth: '38ch' }}>{verdict}</span>
             ) : null}
-            {arc ? (
-              <span className="tnum" style={{ fontSize: 12, color: 'var(--ink-muted)', marginTop: 8 }}>
-                {arc}
+            {qualified || practice ? (
+              <span className="tnum" style={{ fontSize: 12.5, color: 'var(--ink-muted)', marginTop: 8, maxWidth: '44ch' }}>
+                {[qualified, practice].filter(Boolean).join(' ')}
               </span>
             ) : null}
             {bryceStatus && bryceStatus !== 'running' ? (
@@ -1367,17 +1405,19 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
           </div>
           {/* Fixed art zone: every venue letterboxes into the same box, so the
               layout never shifts race to race (street circuits stay calm and empty). */}
+          {bigMapFollows ? null : (
           <div className="hero-race__art">
             {outline ? (
               <TrackArt
                 outline={outline}
                 showCornerLabels={false}
-                maxHeight={170}
+                maxHeight={270}
                 sections={heroSectionsLayer}
                 wind={heroWind}
               />
             ) : null}
           </div>
+          )}
           <div className="row" style={{ gap: 28, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
             <Stat label="Points scored" value={impact?.racePoints ?? asNumber(pack.outcome.points) ?? '—'} />
             <Stat label="Season points" value={impact?.cumulativePoints ?? asNumber(pack.outcome.cumulativePoints) ?? '—'} />
@@ -1394,12 +1434,13 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
         </div>
       </HeroPanel>
 
-      {/* The page reads like the race (site refresh, round 2): the result, the
-          replay, the race lap by lap, where he was quick, the day, and the
-          engineering detail (the timing archive) last. */}
+      {/* The page reads like the race: the result, the replay, the race lap by
+          lap, where he was quick (the big section map), the other years and
+          qualifying, the day, and the engineering detail (the timing archive)
+          last. */}
       <WatchRaceUnfold sessionId={sessionId} />
 
-      {story ? <LapChartCard story={story} mover={mover} /> : null}
+      {story ? <LapChartCard story={story} mover={mover} resultsFieldSize={resultsFieldSize} /> : null}
 
       {/* Restarts and the team sit beside each other under the lap chart: both
           read the same race from the running order. */}
@@ -1410,8 +1451,11 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
         </div>
       ) : null}
 
-      {/* Where he was quick: the section heat first, its year-over-year shapes
-          kept adjacent (same key), then the qualifying run that set the grid. */}
+
+      {/* Where he was quick, drawn large, after the race lap by lap: the order
+          in the plan Jack approved on Nov 14 (result, replay, lap by lap, where
+          he was quick, the day), which keeps his July 21 ruling that the
+          sections follow the lap chart. */}
       {outline && sectionAnchors ? (
         /* Drawn large with the Tracks page's own layout (the map, where his lap
            goes, lap by section). The wrapper carries that page's scope class
@@ -1434,8 +1478,8 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
         /* No geometric anchors yet (IMS awaits a verified calibration between
            the correct 2.44-mi feed geometry and its outline): the same numbers
            render as the table, IN THE SAME SLOT the heat map occupies on
-           anchored pages — sections always follow the lap chart, whatever
-           their form (Jack's page-to-page consistency review, 2026-07-21). */
+           anchored pages, whatever their form (Jack's page-to-page
+           consistency review, 2026-07-21). */
         story ? <SectionStory story={story} /> : null
       )}
 

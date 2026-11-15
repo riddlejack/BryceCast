@@ -1,6 +1,6 @@
 {
   "schemaVersion": "brycecast.uiDataPackage.v1",
-  "generatedAt": "2026-11-15T02:19:20.694Z",
+  "generatedAt": "2026-11-15T04:23:13.559Z",
   "sourceHash": "d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd",
   "asOfDate": "2026-09-19",
   "baselineCommit": "9fab5e6",
@@ -178,8 +178,8 @@
     "careerLifeStatsSummary": {
       "path": "analysis/career-life-stats/output/summary.json",
       "bytes": 20951,
-      "modifiedAt": "2026-11-15T02:19:18.248Z",
-      "sha256": "3c62f53eb8300ecf224366b6321bd595afaabba5820dcb0bd6af175842583515"
+      "modifiedAt": "2026-11-15T04:15:00.255Z",
+      "sha256": "e09be2c151f5fdc3ad558a6092eb7ce2fdd5e9d38a5d9d670637d6b4ede7cdba"
     },
     "careerLifeStatsResearch": {
       "path": "analysis/career-life-stats/RESEARCH.md",
@@ -243,9 +243,9 @@
     },
     "careerLifeStatsFigures": {
       "path": "analysis/career-life-stats/output/career_figures.json",
-      "bytes": 130612,
-      "modifiedAt": "2026-11-15T02:19:18.126Z",
-      "sha256": "c77553eb8d9c863ecd7fceba54a8eeb936e2468835c36d0887d52be5b98ec3bc"
+      "bytes": 130685,
+      "modifiedAt": "2026-11-15T04:15:00.131Z",
+      "sha256": "a7af9550873d4149d6891a7aaddffeb9436dbdc7ff31e14613f1261eb86385d2"
     },
     "careerLifeStatsDriverVariants": {
       "path": "analysis/career-life-stats/data/driver_record_variants.csv",
@@ -543,9 +543,9 @@
     },
     "uiDataPackageBuilderScript": {
       "path": "scripts/build-ui-data-package.mjs",
-      "bytes": 195363,
-      "modifiedAt": "2026-11-15T01:56:34.527Z",
-      "sha256": "711c6a77bccef284e73799e4f4b5f3b62be600c2fa4136b4564ce56355a0e1e4"
+      "bytes": 195349,
+      "modifiedAt": "2026-11-15T04:22:43.815Z",
+      "sha256": "085364aa6b8c7598fc2f4216938f118f97c575a6543d3bcadf5b180a2b634427"
     },
     "uiDataPackageValidatorScript": {
       "path": "scripts/validate-ui-data-package.mjs",
@@ -26255,7 +26255,7 @@
               "year": 2016,
               "date": "2016-08-06",
               "kind": "karting_fast_time",
-              "label": "Badger Kart Club — Yamaha Junior",
+              "label": "Badger Kart Club, Yamaha Junior",
               "detail": "A 40.536-second fast time, entered on the club's 2016 Fast Times board.",
               "figure": "40.536s",
               "sourceId": "source_badger_kart_club_2016_fast_times_track_records",
@@ -26267,7 +26267,7 @@
               "year": 2017,
               "date": "2017-06-11",
               "kind": "karting_fast_time",
-              "label": "Badger Kart Club — TaG Junior",
+              "label": "Badger Kart Club, TaG Junior",
               "detail": "A 38.938-second fast time on the Classic Track, entered on the club's 2017 Fast Times board.",
               "figure": "38.938s",
               "sourceId": "source_badger_kart_club_2017_fast_times_track_records",
@@ -26279,7 +26279,7 @@
               "year": 2017,
               "date": "2017-10-09",
               "kind": "karting_track_record",
-              "label": "Badger Kart Club — a track record",
+              "label": "Badger Kart Club, a track record",
               "detail": "A 39.070-second TaG Junior track record on the Bus Stop layout.",
               "figure": "39.070s",
               "sourceId": "source_badger_kart_club_2017_fast_times_track_records",
@@ -26352,7 +26352,7 @@
             "date": null,
             "kind": "career_award",
             "label": "Team USA Scholarship",
-            "detail": "A 2020 Team USA Scholarship winner, alongside Jackson Lee and Simon Sikes — the award that funded a UK Formula Ford campaign, from the Formula Ford Festival to the Walter Hayes Trophy.",
+            "detail": "A 2020 Team USA Scholarship winner, alongside Jackson Lee and Simon Sikes. The award funded a UK Formula Ford campaign, from the Formula Ford Festival to the Walter Hayes Trophy.",
             "figure": "Scholarship",
             "sourceId": "source_team_usa_2020_winners_announcement",
             "sourceName": "Team USA Scholarship 2020 winners announcement",
@@ -35805,8 +35805,8 @@
             "caveat": "About 29% of one trip around the equator.",
             "class": "counted",
             "denominator": null,
-            "display": "7,316.4",
-            "how": "Each race's laps times that track's length, added up race by race.",
+            "display": "7,316",
+            "how": "Each race's laps times that track's length, added up race by race: 7,316.4 miles to the tenth.",
             "id": "raceMiles",
             "label": "Miles raced",
             "parts": null,
@@ -35856,7 +35856,7 @@
             "caveat": "Covers 148 of 150 races; the other 2 had no laps. Real laps are slower than his best, so the true time is longer.",
             "class": "lower_bound",
             "denominator": null,
-            "display": "71 h 47 min+",
+            "display": "71 h 46 min+",
             "how": "The timed races, plus his laps times his best lap for the races with no official time.",
             "id": "raceTimeAll",
             "label": "Time racing, all races",
@@ -35879,8 +35879,8 @@
             "caveat": "Leaves out sessions with no lap count and every private test.",
             "class": "lower_bound",
             "denominator": null,
-            "display": "133.2 h+",
-            "how": "Race time, plus his laps times his best lap in every practice, qualifying and test session with a lap count.",
+            "display": "133 h+",
+            "how": "Race time, plus his laps times his best lap in every practice, qualifying and test session with a lap count: 133.2 hours to the tenth.",
             "id": "sessionHours",
             "label": "Time on track, all official sessions",
             "parts": null,
@@ -35957,8 +35957,8 @@
             "caveat": "The least distance anyone could cover between his races, not his real travel: trips home and testing are left out.",
             "class": "lower_bound",
             "denominator": null,
-            "display": "60,561.1+",
-            "how": "A straight line from each race's track to the next race's track, added up in date order.",
+            "display": "60,561+",
+            "how": "A straight line from each race's track to the next race's track, added up in date order: 60,561.1 miles to the tenth.",
             "id": "milesBetweenTracks",
             "label": "Miles between tracks",
             "parts": null,
@@ -35971,7 +35971,7 @@
             "caveat": "The stretch factors are assumptions. Still only track to track, not his real travel.",
             "class": "modelled_range",
             "denominator": null,
-            "display": "63,670.6 to 71,512.1",
+            "display": "63,671 to 71,512",
             "how": "The straight lines stretched to allow for roads on short trips and flight paths on long ones.",
             "id": "milesBetweenTracksByRoad",
             "label": "Miles between tracks, by road and air",

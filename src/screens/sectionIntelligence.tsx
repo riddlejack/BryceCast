@@ -162,6 +162,18 @@ export interface LapBudget {
   /** Sum of his section medians (differs from his median lap only because a
    *  median of sums is not a sum of medians). */
   bryceSectionSum: number | null;
+  /** Present when the budget reads ONE lap (lapBudgetForLap): his section
+   *  times on that lap against the field's whole-race median in each section. */
+  lap?: {
+    lap: number;
+    /** His official lap time for that lap, from the lap rows. */
+    lapSeconds: number | null;
+    /** The field's section medians added up (all sections compared only). */
+    fieldSectionSum: number | null;
+    /** His whole-lap rank on that lap, and the cars ranked. */
+    rank: number | null;
+    rankOf: number | null;
+  } | null;
 }
 
 /** "Where his lap goes": in lap order, his median clean-lap time in each
@@ -213,6 +225,66 @@ export const lapBudgetOf = (pack: SectionLapsPack, anchors: TrackSectionAnchorSe
   };
 };
 
+/** "Where his lap goes" for ONE lap: his time in each section on that lap
+ *  minus the field's median there. The pack carries the field's section times
+ *  only as each car's whole-race median (fieldSeconds), so the field reference
+ *  is the same one the whole-race bars use: the middle of every timed car's own
+ *  clean-lap median, his included. The bars therefore add up to his lap time
+ *  on that lap minus the field's section medians added up, and the note says
+ *  that in words. Null when the lap is not a clean green-flag lap (caution,
+ *  restart, pit or no flag report), where a comparison with clean-lap medians
+ *  would be unlike with unlike. */
+export const lapBudgetForLap = (
+  pack: SectionLapsPack,
+  anchors: TrackSectionAnchorSet,
+  outline: TrackOutline,
+  lap: number
+): LapBudget | null => {
+  const total = pack.lapTotals.find((tuple) => tuple[0] === lap) ?? null;
+  if (!total || total[4] !== 1) return null;
+  const bySection = new Map(pack.sections.map((section) => [section.sectionName, section]));
+  const ordered = sectionsInLapOrder(anchors, outline);
+  const anchoredNames = new Set(ordered.map((anchor) => anchor.sectionName));
+  const rowFor = (sectionName: string, label: string, kind: 'measured' | 'derived_remainder'): LapBudgetRow => {
+    const section = bySection.get(sectionName);
+    const fieldCars = section?.fieldSeconds?.length ?? 0;
+    const tuple = section?.laps.find((entry) => entry[0] === lap) ?? null;
+    const bryce = tuple ? tuple[6] : null;
+    const base = { sectionName, label, kind, cleanLaps: bryce !== null ? 1 : 0, fieldCars };
+    if (!section || bryce === null) return { ...base, state: 'no_timing', bryceSeconds: null, fieldMedianSeconds: null, delta: null };
+    const field = fieldCars > 0 ? medianOf(section.fieldSeconds!) : null;
+    if (field === null) return { ...base, state: 'no_field', bryceSeconds: bryce, fieldMedianSeconds: null, delta: null };
+    return { ...base, state: 'compared', bryceSeconds: bryce, fieldMedianSeconds: field, delta: bryce - field };
+  };
+  const rows = [
+    ...ordered.map((anchor) => rowFor(anchor.sectionName, anchor.label, anchor.kind ?? 'measured')),
+    ...pack.sections
+      .filter((section) => !anchoredNames.has(section.sectionName))
+      .map((section) => rowFor(section.sectionName, section.sectionName, section.kind ?? 'measured'))
+  ];
+  const compared = rows.filter((row) => row.state === 'compared');
+  const cars = compared.map((row) => row.fieldCars);
+  const all = compared.length === rows.length;
+  return {
+    rows,
+    total: compared.reduce((sum, row) => sum + (row.delta ?? 0), 0),
+    compared: compared.length,
+    cleanLaps: cleanSectionLapsOf(pack).length,
+    totalLaps: pack.totalLaps,
+    fieldCarsMin: cars.length > 0 ? Math.min(...cars) : 0,
+    fieldCarsMax: cars.length > 0 ? Math.max(...cars) : 0,
+    bryceMedianLap: null,
+    bryceSectionSum: all ? compared.reduce((sum, row) => sum + (row.bryceSeconds ?? 0), 0) : null,
+    lap: {
+      lap,
+      lapSeconds: total[6],
+      fieldSectionSum: all ? compared.reduce((sum, row) => sum + (row.fieldMedianSeconds ?? 0), 0) : null,
+      rank: total[2],
+      rankOf: total[3]
+    }
+  };
+};
+
 /** Signed seconds, delta convention: minus is quicker than the field median. */
 const signedSeconds = (value: number): string => {
   const rounded = Math.round(value * 1000) / 1000;
@@ -223,16 +295,23 @@ const signedSeconds = (value: number): string => {
 const GAIN_COLOUR = inkGoldDiverging(0.92);
 const LOSS_COLOUR = inkGoldDiverging(0.16);
 
-const budgetMissingCopy = (row: LapBudgetRow): string =>
+const budgetMissingCopy = (row: LapBudgetRow, oneLap = false): string =>
   row.state === 'too_few'
     ? `not compared: ${row.cleanLaps} clean ${row.cleanLaps === 1 ? 'lap' : 'laps'}`
     : row.state === 'no_field'
       ? 'not compared: no field times'
-      : 'no timing row this race';
+      : oneLap
+        ? 'no timing row this lap'
+        : 'no timing row this race';
 
 /** The lap budget drawn as one bar per section, quicker to the right in gold,
- *  slower to the left in ink, with the total underneath on the same scale. */
-export const LapBudgetBars = ({ budget }: { budget: LapBudget }) => {
+ *  slower to the left in ink, with the total underneath on the same scale.
+ *  `budget.lap` set: the bars read that one lap. `wholeRaceNote` set: the map
+ *  shows a scope the bars can't follow (a third, or a caution lap), so the
+ *  whole-race bars stay, dimmed, under a plain "Whole race" label. */
+export const LapBudgetBars = ({ budget, wholeRaceNote = null }: { budget: LapBudget; wholeRaceNote?: string | null }) => {
+  /* Pointing at a row reads it out under the total (no stock browser box). */
+  const [hovered, setHovered] = useState<number | null>(null);
   /* A running sum, drawn as a waterfall: each section's bar starts where the
    * lap so far had got to, so the last bar ends on the total and the chart
    * adds itself up. Quicker reads to the right (minus seconds), slower to the
@@ -263,17 +342,49 @@ export const LapBudgetBars = ({ budget }: { budget: LapBudget }) => {
       ? `${budget.fieldCarsMax} cars`
       : `${budget.fieldCarsMin} to ${budget.fieldCarsMax} cars`;
   const missing = budget.rows.length - budget.compared;
+  const oneLap = budget.lap ?? null;
   const totalWords =
     Math.round(budget.total * 100) === 0
       ? 'level with the field median, to the hundredth'
       : `${budget.total < 0 ? 'quicker' : 'slower'} than the field median`;
+  const readout = (row: LapBudgetRow): string =>
+    row.state === 'compared'
+      ? oneLap
+        ? `${row.label}: his ${row.bryceSeconds!.toFixed(3)} s on lap ${oneLap.lap} against the field median ${row.fieldMedianSeconds!.toFixed(3)} s (${row.fieldCars} cars), ${signedSeconds(row.delta!)} s`
+        : `${row.label}: his median ${row.bryceSeconds!.toFixed(3)} s against the field median ${row.fieldMedianSeconds!.toFixed(3)} s, over ${row.cleanLaps} clean laps and ${row.fieldCars} cars`
+      : `${row.label}: ${budgetMissingCopy(row, Boolean(oneLap))}`;
+  /* The worked sum, in words: for one lap the bars add up to his lap time
+   * minus the field's section medians added up, which the note prints. */
+  const lapSum =
+    oneLap && missing === 0 && oneLap.fieldSectionSum !== null && budget.bryceSectionSum !== null
+      ? {
+          his: oneLap.lapSeconds ?? budget.bryceSectionSum,
+          sectionsDiffer: oneLap.lapSeconds !== null && Math.abs(oneLap.lapSeconds - budget.bryceSectionSum) >= 0.0015,
+          field: oneLap.fieldSectionSum
+        }
+      : null;
   return (
-    <div className="tracks-budget">
+    <div className={`tracks-budget${wholeRaceNote ? ' tracks-budget--dimmed' : ''}`} onMouseLeave={() => setHovered(null)}>
       <h3 className="tracks-subhead">Where his lap goes</h3>
+      <p className="tracks-budget__scope">
+        {oneLap ? `Lap ${oneLap.lap} of ${budget.totalLaps}` : 'Whole race'}
+        {wholeRaceNote ? <span> · {wholeRaceNote}</span> : null}
+      </p>
       <p className="tracks-note">
-        One bar per section in the order he drives them: his median time there against the field&rsquo;s. Each bar starts
-        where the lap so far had got to, so the last one ends on the total. {budget.cleanLaps} clean
-        green-flag laps of {budget.totalLaps}; the field median is the middle of {cars}&rsquo; own medians, his included.
+        {oneLap ? (
+          <>
+            One bar per section in the order he drives them: his time there on lap {oneLap.lap} against the field&rsquo;s
+            median for that section. Each bar starts where the lap so far had got to, so the last one ends on the total. The
+            field median is the middle of {cars}&rsquo; own clean-lap medians over the whole race, his included. The
+            other cars&rsquo; section times are held as whole-race medians, not lap by lap.
+          </>
+        ) : (
+          <>
+            One bar per section in the order he drives them: his median time there against the field&rsquo;s. Each bar
+            starts where the lap so far had got to, so the last one ends on the total. {budget.cleanLaps} clean green-flag
+            laps of {budget.totalLaps}; the field median is the middle of {cars}&rsquo; own medians, his included.
+          </>
+        )}
       </p>
       <div className="tracks-budget__axis" aria-hidden>
         <span>&larr; slower</span>
@@ -283,36 +394,37 @@ export const LapBudgetBars = ({ budget }: { budget: LapBudget }) => {
         {budget.rows.map((row, index) => (
           <li
             key={row.sectionName}
-            className={`tracks-budget__row${row.state === 'compared' ? '' : ' tracks-budget__row--missing'}`}
-            title={
-              row.state === 'compared'
-                ? `${row.label}: his median ${row.bryceSeconds!.toFixed(3)} s, field median ${row.fieldMedianSeconds!.toFixed(3)} s, over ${row.cleanLaps} clean laps and ${row.fieldCars} cars`
-                : `${row.label}: ${budgetMissingCopy(row)}`
-            }
+            className={`tracks-budget__row${row.state === 'compared' ? '' : ' tracks-budget__row--missing'}${hovered === index ? ' tracks-budget__row--on' : ''}`}
+            onMouseEnter={() => setHovered(index)}
           >
             <span className="tracks-budget__label">{row.label}</span>
             <span className="tracks-budget__track">
               <span className="tracks-budget__zero" style={zero} />
               {row.state === 'compared' ? <span className="tracks-budget__bar" style={bar(running[index].from, running[index].to)} /> : null}
-              {row.state !== 'compared' ? <span className="tracks-budget__gap">{budgetMissingCopy(row)}</span> : null}
+              {row.state !== 'compared' ? <span className="tracks-budget__gap">{budgetMissingCopy(row, Boolean(oneLap))}</span> : null}
             </span>
             <span className="tracks-budget__value tnum">{row.state === 'compared' ? signedSeconds(row.delta!) : '—'}</span>
           </li>
         ))}
       </ol>
       <div className="tracks-budget__row tracks-budget__row--total">
-        <span className="tracks-budget__label">His lap against the field</span>
+        <span className="tracks-budget__label">{oneLap ? `Lap ${oneLap.lap} against the field` : 'His lap against the field'}</span>
         <span className="tracks-budget__track">
           <span className="tracks-budget__zero" style={zero} />
           <span className="tracks-budget__bar" style={bar(0, budget.total)} />
         </span>
         <span className="tracks-budget__value tnum">{signedSeconds(budget.total)}</span>
       </div>
+      <p className="tracks-budget__readout tnum" aria-hidden>
+        {hovered !== null && budget.rows[hovered] ? readout(budget.rows[hovered]) : ' '}
+      </p>
       <p className="tracks-note">
-        {missing === 0
-          ? `The ${budget.compared} sections cover the whole lap and add up to ${signedSeconds(budget.total)} s, ${totalWords}.`
-          : `${budget.compared} of ${budget.rows.length} sections compared; those add up to ${signedSeconds(budget.total)} s. The ${missing === 1 ? 'missing one stays' : `${missing} missing stay`} out of the total.`}
-        {budget.bryceMedianLap !== null ? ` His median clean lap was ${budget.bryceMedianLap.toFixed(3)} s.` : ''}
+        {lapSum
+          ? `His lap ${oneLap!.lap} was ${lapSum.his.toFixed(3)} s${lapSum.sectionsDiffer ? ` (his sections add up to ${budget.bryceSectionSum!.toFixed(3)} s)` : ''}; the field’s section medians add up to ${lapSum.field.toFixed(3)} s. The ${budget.compared} bars add up to the difference, ${signedSeconds(budget.total)} s.${oneLap!.rank !== null && oneLap!.rankOf !== null ? ` On the whole lap he was P${oneLap!.rank} of ${oneLap!.rankOf}.` : ''}`
+          : missing === 0
+            ? `The ${budget.compared} sections cover the whole lap and add up to ${signedSeconds(budget.total)} s, ${totalWords}.`
+            : `${budget.compared} of ${budget.rows.length} sections compared; those add up to ${signedSeconds(budget.total)} s. The ${missing === 1 ? 'missing one stays' : `${missing} missing stay`} out of the total.`}
+        {!oneLap && budget.bryceMedianLap !== null ? ` His median clean lap was ${budget.bryceMedianLap.toFixed(3)} s.` : ''}
       </p>
     </div>
   );
@@ -339,6 +451,11 @@ export const LapSectionGrid = ({
   /* Phone: the grid starts folded to one strip of whole-lap ranks; opening it
    * draws every section at compact row heights. */
   const [open, setOpen] = useState(false);
+  /* The square under the pointer (or the lap with keyboard focus). It reads
+   * out in the line under the grid and gets an ink outline: the grid's own
+   * readout, in place of the browser's grey <title> box (review, Nov 14).
+   * col: a section index, -1 the whole-lap column, null the lap as a row. */
+  const [pointed, setPointed] = useState<{ lap: number; col: number | null } | null>(null);
   const coarse = useCoarsePointer();
   const laps = useMemo(() => {
     const byLap = new Map<number, SectionLapsPack['lapTotals'][number]>();
@@ -351,11 +468,57 @@ export const LapSectionGrid = ({
         const source = pack.sections.find((entry) => entry.sectionName === section.sectionName);
         const byLap = new Map<number, SectionLapsPack['sections'][number]['laps'][number]>();
         for (const tuple of source?.laps ?? []) if (tuple[0] !== null) byLap.set(tuple[0], tuple);
-        return { ...section, byLap, present: Boolean(source) };
+        const fieldMedian = source?.fieldSeconds && source.fieldSeconds.length > 0 ? medianOf(source.fieldSeconds) : null;
+        return { ...section, byLap, present: Boolean(source), fieldMedian, fieldCars: source?.fieldSeconds?.length ?? 0 };
       }),
     [pack, ordered]
   );
   if (laps.length === 0) return null;
+  const totalOf = (lap: number) => laps.find(([candidate]) => candidate === lap)?.[1] ?? null;
+  /** One plain line per square: the lap, the section, his rank there and his
+   *  time, with the field's whole-race median for the section beside it. */
+  const readoutFor = (lap: number, col: number | null): string => {
+    const total = totalOf(lap);
+    if (!total) return '';
+    if (total[4] !== 1) {
+      const word = total[5] === 'g' ? 'not a clean lap' : `${GRID_CAUTION_COPY[total[5]] ?? 'not clean'} lap`;
+      return `Lap ${lap}: ${word}, so not compared`;
+    }
+    if (col === null || col < 0 || !cells[col]) {
+      return total[2] !== null
+        ? `Lap ${lap}, whole lap: P${total[2]} of ${total[3] ?? '?'}${total[6] !== null ? ` · ${total[6].toFixed(3)} s` : ''}`
+        : `Lap ${lap}, whole lap: no rank`;
+    }
+    const cell = cells[col];
+    const tuple = cell.byLap.get(lap);
+    if (!tuple || tuple[1] === null || tuple[4] !== 1) return `Lap ${lap}, ${cell.label}: no timing row`;
+    const time = tuple[6] !== null ? ` · ${tuple[6].toFixed(3)} s` : '';
+    const field = cell.fieldMedian !== null ? ` (field median ${cell.fieldMedian.toFixed(3)} s over the race)` : '';
+    return `Lap ${lap}, ${cell.label}: P${tuple[2] ?? '?'} of ${tuple[3] ?? '?'}${time}${field}`;
+  };
+  const readoutText = pointed
+    ? readoutFor(pointed.lap, pointed.col)
+    : highlightLap !== null && highlightLap !== undefined && totalOf(highlightLap)
+      ? `On the map: ${readoutFor(highlightLap, null)}`
+      : `${coarse ? 'Tap' : 'Hover'} a square to read it${onLapSelect ? `; ${coarse ? 'tap' : 'click'} a lap to see it on the map` : ''}.`;
+  const readout = <p className="tracks-grid__readout tnum">{readoutText}</p>;
+  /* Keyboard and screen readers: each lap row is a button named by its readout. */
+  const lapButtonProps = (lap: number) =>
+    onLapSelect
+      ? {
+          role: 'button',
+          tabIndex: 0,
+          'aria-label': `${readoutFor(lap, null)}. Show this lap on the map.`,
+          onKeyDown: (event: React.KeyboardEvent) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+              event.preventDefault();
+              onLapSelect(lap);
+            }
+          },
+          onFocus: () => setPointed({ lap, col: null }),
+          onBlur: () => setPointed(null)
+        }
+      : { 'aria-hidden': true };
   const narrow = width > 0 && width < 520;
   /* Folding is for phones only: a narrow grid column on a wide desktop (the
    * three-across layout) stays open at full row heights. */
@@ -382,7 +545,7 @@ export const LapSectionGrid = ({
       aria-expanded={open}
       onClick={() => setOpen((value) => !value)}
     >
-      {open ? 'Fold the grid' : `Open every section, lap by lap (${cells.length} \u00d7 ${laps.length})`}
+      {open ? 'Fold the grid' : `Open every section, lap by lap (${cells.length} × ${laps.length})`}
     </button>
   ) : null;
   if (phone && !open) {
@@ -396,31 +559,39 @@ export const LapSectionGrid = ({
           width={stripW}
           height={stripH + 20}
           viewBox={`0 0 ${stripW} ${stripH + 20}`}
-          role="img"
+          role={onLapSelect ? 'group' : 'img'}
           aria-label={`His whole-lap rank on each of ${laps.length} laps`}
           style={{ display: 'block', overflow: 'visible' }}
+          onMouseLeave={() => setPointed(null)}
         >
           {laps.map(([lap, total], index) => {
             const x = stepW * index;
             const clean = total[4] === 1 && total[1] !== null;
+            const isPointed = pointed?.lap === lap;
             return (
               <g
                 key={`s-${lap}`}
                 className={onLapSelect ? 'tracks-grid__lap' : undefined}
                 onClick={onLapSelect ? () => onLapSelect(lap) : undefined}
+                onMouseEnter={() => setPointed({ lap, col: -1 })}
+                {...lapButtonProps(lap)}
               >
                 <rect x={x} y={0} width={stepW} height={stripH} fill="transparent" />
                 {clean ? (
-                  <rect x={x + 0.5} y={0.5} width={Math.max(0, stepW - 1)} height={stripH - 1} fill={inkGoldDiverging(total[1] as number)}>
-                    <title>{`Lap ${lap}: P${total[2] ?? '?'} of ${total[3] ?? '?'} on the whole lap${total[6] !== null ? ` \u00b7 ${total[6].toFixed(3)} s` : ''}`}</title>
-                  </rect>
+                  <rect x={x + 0.5} y={0.5} width={Math.max(0, stepW - 1)} height={stripH - 1} fill={inkGoldDiverging(total[1] as number)} />
                 ) : (
-                  <line x1={x} x2={x + stepW} y1={stripH / 2} y2={stripH / 2} stroke="var(--grey-hair)" strokeWidth={1}>
-                    <title>{`Lap ${lap}: ${GRID_CAUTION_COPY[total[5] ?? ''] ?? 'not compared'}`}</title>
-                  </line>
+                  <line x1={x} x2={x + stepW} y1={stripH / 2} y2={stripH / 2} stroke="var(--grey-hair)" strokeWidth={1} />
                 )}
-                {highlightLap === lap ? (
-                  <rect x={x + 0.5} y={0.5} width={Math.max(0, stepW - 1)} height={stripH - 1} fill="none" stroke="var(--amber)" strokeWidth={1.5} />
+                {highlightLap === lap || isPointed ? (
+                  <rect
+                    x={x + 0.5}
+                    y={0.5}
+                    width={Math.max(0, stepW - 1)}
+                    height={stripH - 1}
+                    fill="none"
+                    stroke={highlightLap === lap ? 'var(--amber)' : 'var(--ink-primary)'}
+                    strokeWidth={1.5}
+                  />
                 ) : null}
               </g>
             );
@@ -432,11 +603,32 @@ export const LapSectionGrid = ({
             Lap {laps[laps.length - 1][0]}
           </text>
         </svg>
-        <p className="tracks-grid__strip-note">His rank in the field on each whole lap, quickest in gold. Blank laps were not clean green-flag laps. {onLapSelect ? `${coarse ? 'Tap' : 'Click'} a lap to see it on the map.` : null}</p>
+        {readout}
+        <p className="tracks-grid__strip-note">His rank in the field on each whole lap, quickest in gold. Blank laps were not clean green-flag laps.</p>
         {foldToggle}
       </div>
     );
   }
+  /* Pointer position to a square: rows by lap, columns by section, the last
+   * column the whole lap. The svg is drawn 1:1 with its viewBox. */
+  const onGridMove = (event: React.MouseEvent<SVGSVGElement>) => {
+    const box = event.currentTarget.getBoundingClientRect();
+    const x = event.clientX - box.left;
+    const y = event.clientY - box.top;
+    const row = Math.floor((y - headerH) / rowH);
+    if (y < headerH || row < 0 || row >= laps.length) {
+      setPointed(null);
+      return;
+    }
+    const lap = laps[row][0];
+    const col =
+      x >= labelW && x < labelW + cellW * n
+        ? Math.min(n - 1, Math.floor((x - labelW) / cellW))
+        : x >= lapX && x <= lapX + lapColW
+          ? -1
+          : null;
+    if (pointed?.lap !== lap || pointed?.col !== col) setPointed({ lap, col });
+  };
   return (
     <div ref={ref} className="tracks-grid__frame">
       {foldToggle}
@@ -445,17 +637,20 @@ export const LapSectionGrid = ({
           width={gridW}
           height={height}
           viewBox={`0 0 ${gridW} ${height}`}
-          role="img"
+          role={onLapSelect ? 'group' : 'img'}
           aria-label={`His rank in each of ${cells.length} sections on each of ${laps.length} laps`}
           style={{ display: 'block', overflow: 'visible' }}
+          onMouseMove={onGridMove}
+          onMouseLeave={() => setPointed(null)}
         >
           {cells.map((cell, index) => (
             <text
               key={`h-${cell.sectionName}`}
               transform={`translate(${labelW + cellW * (index + 0.5) + fontPx * 0.35} ${headerH - 6}) rotate(-90)`}
               fontSize={fontPx}
-              fill={cell.present ? 'var(--ink-secondary)' : 'var(--ink-muted)'}
+              fill={pointed?.col === index ? 'var(--ink-primary)' : cell.present ? 'var(--ink-secondary)' : 'var(--ink-muted)'}
               fontFamily={chartFont}
+              aria-hidden
             >
               {cell.label}
             </text>
@@ -465,6 +660,7 @@ export const LapSectionGrid = ({
             fontSize={fontPx}
             fill="var(--ink-primary)"
             fontFamily={chartFont}
+            aria-hidden
           >
             Whole lap
           </text>
@@ -491,21 +687,23 @@ export const LapSectionGrid = ({
                 : null;
             const showLabel = everyLabel || lap === 1 || lap % 5 === 0;
             const highlighted = highlightLap === lap;
+            const rowPointed = pointed?.lap === lap;
             return (
               <g
                 key={`lap-${lap}`}
                 className={onLapSelect ? 'tracks-grid__lap' : undefined}
                 onClick={onLapSelect ? () => onLapSelect(lap) : undefined}
+                {...lapButtonProps(lap)}
               >
                 <rect x={0} y={y} width={gridW} height={rowH} fill="transparent" />
-                {showLabel ? (
+                {showLabel || rowPointed ? (
                   <text
                     x={labelW - 8}
                     y={y + rowH / 2}
                     textAnchor="end"
                     dominantBaseline="central"
                     fontSize={fontPx}
-                    fill={highlighted ? 'var(--ink-primary)' : 'var(--ink-muted)'}
+                    fill={highlighted || rowPointed ? 'var(--ink-primary)' : 'var(--ink-muted)'}
                     fontFamily={chartFont}
                     className="tnum"
                   >
@@ -527,9 +725,7 @@ export const LapSectionGrid = ({
                           fill="none"
                           stroke="var(--grey-line)"
                           strokeWidth={1}
-                        >
-                          <title>{`Lap ${lap} · ${cell.label}: no timing row`}</title>
-                        </rect>
+                        />
                       );
                     }
                     return (
@@ -540,11 +736,7 @@ export const LapSectionGrid = ({
                         width={Math.max(0, cellW - 1)}
                         height={Math.max(0, rowH - 1)}
                         fill={inkGoldDiverging(tuple[1])}
-                      >
-                        <title>
-                          {`Lap ${lap} · ${cell.label}: P${tuple[2] ?? '?'} of ${tuple[3] ?? '?'}${tuple[6] !== null ? ` · ${tuple[6].toFixed(3)} s` : ''}`}
-                        </title>
-                      </rect>
+                      />
                     );
                   })
                 ) : (
@@ -574,9 +766,7 @@ export const LapSectionGrid = ({
                 )}
                 {clean && total[1] !== null ? (
                   <>
-                    <rect x={lapX + 0.5} y={y + 0.5} width={lapColW - 1} height={rowH - 1} fill={inkGoldDiverging(total[1])}>
-                      <title>{`Lap ${lap}: P${total[2] ?? '?'} of ${total[3] ?? '?'} on the whole lap${total[6] !== null ? ` · ${total[6].toFixed(3)} s` : ''}`}</title>
-                    </rect>
+                    <rect x={lapX + 0.5} y={y + 0.5} width={lapColW - 1} height={rowH - 1} fill={inkGoldDiverging(total[1])} />
                     {rowH >= 14 && total[2] !== null ? (
                       <text
                         x={lapX + lapColW / 2}
@@ -607,8 +797,22 @@ export const LapSectionGrid = ({
               </g>
             );
           })}
+          {/* The pointed square, outlined in ink above everything else. */}
+          {pointed && pointed.col !== null && totalOf(pointed.lap)?.[4] === 1 ? (
+            <rect
+              x={(pointed.col < 0 ? lapX : labelW + cellW * pointed.col) + 0.75}
+              y={headerH + laps.findIndex(([lap]) => lap === pointed.lap) * rowH + 0.75}
+              width={(pointed.col < 0 ? lapColW : cellW) - 1.5}
+              height={rowH - 1.5}
+              fill="none"
+              stroke="var(--ink-primary)"
+              strokeWidth={1.5}
+              pointerEvents="none"
+            />
+          ) : null}
         </svg>
       ) : null}
+      {width > 0 ? readout : null}
     </div>
   );
 };
@@ -1341,7 +1545,24 @@ export const SectionHeatCard = ({
   if (layout === 'tracks') {
     /* Plain computations, not hooks: this branch sits after the empty-state
      * return above. Both are a few hundred tuples. */
-    const budget = !qualifyingMode && activeLaps ? lapBudgetOf(activeLaps, activeAnchors, outline) : null;
+    const raceBudget = !qualifyingMode && activeLaps ? lapBudgetOf(activeLaps, activeAnchors, outline) : null;
+    /* The bars follow the map. One lap picked (the grid or the slider): his
+     * section times on that lap against the field median. A lap the bars can't
+     * read (caution, restart, no timing) or a third of the race: the whole-race
+     * bars stay, dimmed, and say so plainly. */
+    const oneLapBudget =
+      raceBudget && activeLaps && singleLap ? lapBudgetForLap(activeLaps, activeAnchors, outline, scrubLap) : null;
+    const lapReadable = oneLapBudget !== null && oneLapBudget.compared > 0;
+    const budget = lapReadable ? oneLapBudget : raceBudget;
+    const wholeRaceNote = !raceBudget || lapReadable
+      ? null
+      : singleLap
+        ? scrubContext && scrubContext.caution !== 'green'
+          ? `lap ${scrubLap} ran ${cautionCopy[scrubContext.caution]}, so these stay on the whole race`
+          : `lap ${scrubLap} has no clean section times, so these stay on the whole race`
+        : scope.kind === 'lap_window'
+          ? 'the bars read the whole race, not one third; pick One lap to read a single lap'
+          : null;
     const ordered = sectionsInLapOrder(activeAnchors, outline);
     const [, , viewW, viewH] = outline.viewBox.split(' ').map(Number);
     const wide = viewH / viewW < 0.55;
@@ -1389,7 +1610,7 @@ export const SectionHeatCard = ({
           <div className="tracks-story__budget">
             {budget ? (
               budget.compared > 0 ? (
-                <LapBudgetBars budget={budget} />
+                <LapBudgetBars budget={budget} wholeRaceNote={wholeRaceNote} />
               ) : (
                 <div className="tracks-budget">
                   <h3 className="tracks-subhead">Where his lap goes</h3>

@@ -189,3 +189,78 @@ export const findFormationStart = async ({
   }
   return { atMs: loMs, requests };
 };
+
+/* ---------- skimming the formation laps and an opening caution ---------- */
+
+/** The rate the formation laps, and an opening caution the default start
+ *  skips, play at when the visitor goes back to them. */
+export const SKIM_SPEED = 16;
+
+/** A stretch of the replay clock with its own rate. `speed: null` plays at the
+ *  visitor's chosen speed. Phases run in order from the clock's start; after
+ *  the last one the clock runs at the chosen speed. */
+export interface ReplayPhase {
+  untilMs: number;
+  speed: number | null;
+  kind: 'formation' | 'start' | 'caution';
+}
+
+/**
+ * The phases for a clock started at `fromMs`, before the race start: the
+ * formation laps at {@link SKIM_SPEED} up to the green flag; then, when the
+ * start did not hold and the default start skips to a restart, the start
+ * itself at the visitor's speed for the hold window (the moment the caution
+ * came from), and the caution after it at {@link SKIM_SPEED} up to the
+ * restart. Nothing when the visitor already plays at the skim speed or faster.
+ */
+export const skimPhases = ({
+  fromMs,
+  greenMs,
+  raceStartMs,
+  speed,
+  holdMs = RACE_GREEN_HOLD_SECONDS * 1000
+}: {
+  fromMs: number;
+  greenMs: number | null;
+  raceStartMs: number | null;
+  speed: number;
+  holdMs?: number;
+}): ReplayPhase[] => {
+  if (speed >= SKIM_SPEED || greenMs === null || !Number.isFinite(greenMs)) return [];
+  const phases: ReplayPhase[] = [];
+  if (fromMs < greenMs) phases.push({ untilMs: greenMs, speed: SKIM_SPEED, kind: 'formation' });
+  const holdEndMs = greenMs + holdMs;
+  if (raceStartMs !== null && Number.isFinite(raceStartMs) && raceStartMs > holdEndMs && fromMs < raceStartMs) {
+    phases.push({ untilMs: holdEndMs, speed: null, kind: 'start' });
+    phases.push({ untilMs: raceStartMs, speed: SKIM_SPEED, kind: 'caution' });
+  }
+  return phases;
+};
+
+/** Where a phased clock is after `elapsedWallMs` of wall time: its virtual
+ *  time, the phase it is in (null once the visitor's speed has taken over),
+ *  the rate it runs at, and the wall ms to the next phase boundary (null with
+ *  no boundary ahead). */
+export const phasedClockPosition = ({
+  virtualStartMs,
+  elapsedWallMs,
+  speed,
+  phases
+}: {
+  virtualStartMs: number;
+  elapsedWallMs: number;
+  speed: number;
+  phases: ReplayPhase[];
+}): { atMs: number; phase: ReplayPhase | null; rate: number; wallToNextMs: number | null } => {
+  let left = Math.max(0, elapsedWallMs);
+  let at = virtualStartMs;
+  for (const phase of phases) {
+    if (at >= phase.untilMs) continue;
+    const rate = phase.speed ?? speed;
+    const span = (phase.untilMs - at) / rate;
+    if (left < span) return { atMs: at + left * rate, phase, rate, wallToNextMs: span - left };
+    at = phase.untilMs;
+    left -= span;
+  }
+  return { atMs: at + left * speed, phase: null, rate: speed, wallToNextMs: null };
+};

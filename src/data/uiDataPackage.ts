@@ -834,7 +834,7 @@ export interface UiCareerFigure {
   value: number | null;
   /** low/base/high for modelled ranges; low/high (base null) for a people range on a counted record total. */
   range: { low: number; base: number | null; high: number } | null;
-  /** Ready-to-show value, e.g. "7,316.4", "71 h 47 min+", "886 to 1,591". */
+  /** Ready-to-show value, e.g. "7,316", "71 h 46 min+", "886 to 1,591". Whole numbers; "at least" values round down. */
   display: string;
   /** "of N": e.g. 98 of 150 races, 177 of 2,699 days. */
   denominator: { value: number; unit: string } | null;

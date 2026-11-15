@@ -48,9 +48,34 @@
 }
 
 /* The hero's result art box: a little more room for the shape. */
-.race-page .hero-race__art { height: 180px; }
+.race-page .hero-race__art { height: 280px; }
 @media (min-width: 900px) {
   .race-page .hero-race { grid-template-columns: minmax(0, 1fr) 340px minmax(0, 1fr); }
+  /* No hero shape when the big section map follows the replay rows: the
+   * result on the left, the points on the right. */
+  .race-page .hero-race.hero-race--no-art { grid-template-columns: minmax(0, 1fr) auto; }
+}
+
+/* The replay rows, side by side on a wide screen: this race's replay on the
+ * left, the earlier years two by two on the right. Half the height of the
+ * stacked list, so the big section map that follows starts a screen sooner. */
+@media (min-width: 1100px) {
+  .race-page .race-replay:has(> .race-replay__affordance + .race-replay__years) {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    column-gap: clamp(32px, 4vw, 72px);
+    align-items: start;
+  }
+  .race-page .race-replay__years:not(.race-replay__years--sole) {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px 32px;
+    padding-top: 0;
+    padding-left: clamp(24px, 3vw, 48px);
+    border-top: 0;
+    border-left: 1px solid var(--divider);
+  }
+  .race-page .race-replay__years-lead { grid-column: 1 / -1; }
 }
 
 /* ---------- /career/race/:id ---------- */
@@ -113,3 +138,8 @@
 
 /* Facts in the right-hand column (no track drawing): no rule above them. */
 .career-race .career-race__facts--aside { margin-top: 0; padding-top: 22px; border-top: 0; }
+
+/* Phone: with no hero shape, the points line up under the result. */
+@media (max-width: 899px) {
+  .race-page .hero-race--no-art > .row:last-child { justify-content: flex-start !important; }
+}

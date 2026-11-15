@@ -123,7 +123,7 @@ const caution = await readCompression(page);
 console.log('caution:', JSON.stringify(caution));
 check(caution.sessionKind === 'race', 'caution window is race-shaped');
 check(caution.state === 'caution', 'under yellow the ticker states the caution, never racing numbers');
-check(caution.text === 'Under caution — field bunched', `the caution copy is the honest bunch line ("${caution.text}")`);
+check(caution.text === 'Under caution, the field is bunched up', `the caution copy is the honest bunch line ("${caution.text}")`);
 check(caution.packCars === null && caution.pairsWithin === null, 'no compression facts are emitted under caution');
 await screenshotPair(page, CAUTION.label);
 

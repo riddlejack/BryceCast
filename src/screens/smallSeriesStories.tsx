@@ -48,8 +48,8 @@ const citedSourceEntry = (source: UiCitedSource): SourceEntry => ({
   label: source.sourceName,
   path: source.sourceUrl ?? undefined,
   note: source.archived
-    ? 'Archived official page — stored as a source URL only.'
-    : 'Direct official page — stored as a source URL only.'
+    ? 'Archived official page, stored as a source URL only.'
+    : 'Direct official page, stored as a source URL only.'
 });
 
 const posLabel = (position: number | null, status: string | null): string => {
@@ -123,9 +123,8 @@ export const F1600SeasonStory = () => {
     <div className="ss-depth stack">
       <div className="row row--between row--wrap" style={{ alignItems: 'baseline', gap: 8 }}>
         <p className="ss-copy" style={{ margin: 0, maxWidth: '60ch' }}>
-          His first season in cars, in American grassroots open-wheel — seven weekends, {totals.raceCount} races, and a
-          third-place run in the championship built on {totals.podiums} podiums. The Campaigns chart the points; this is the
-          weekend-by-weekend shape underneath.
+          His first season in cars, in American grassroots open-wheel: seven weekends, {totals.raceCount} races, and a
+          third-place run in the championship built on {totals.podiums} podiums. Here is the season weekend by weekend.
         </p>
         <SourcePill title="The F1600 season, in depth" entries={refEntries(story.sourceRefs)} caveats={story.caveats} />
       </div>
@@ -149,7 +148,7 @@ export const F1600SeasonStory = () => {
         </div>
         <p className="ss-caption">
           Each weekend, left to right: where he qualified, then the round&rsquo;s races. A blue dot marks a podium. F1600 2019
-          carries no sourced grid positions, so there is no grid-to-finish here — qualifying is only where he lined up. Click a
+          carries no sourced grid positions, so there is no grid-to-finish here; qualifying is only where he lined up. Click a
           race to open it.
         </p>
       </div>
@@ -185,7 +184,7 @@ const FrocRoundsRibbon = ({ story }: { story: UiFrocCampaignStory }) => {
         ))}
       </div>
       <p className="ss-caption">
-        The 2024 championship ran five rounds; Bryce joined for the final two — {story.coverage.racesRun} races in all. Green
+        The 2024 championship ran five rounds; Bryce joined for the final two, {story.coverage.racesRun} races in all. Green
         marks the rounds he raced.
       </p>
     </div>
@@ -250,7 +249,7 @@ export const FrocCampaignStory = () => {
       <div className="row row--between row--wrap" style={{ alignItems: 'baseline', gap: 8 }}>
         <p className="ss-copy" style={{ margin: 0, maxWidth: '60ch' }}>
           A southern-hemisphere summer in the Toyota junior series. Bryce joined for the final two rounds of the 2024
-          championship — {story.coverage.racesRun} races across Euromarque and Highlands, with a win at Highlands. Here is the
+          championship: {story.coverage.racesRun} races across Euromarque and Highlands, with a win at Highlands. Here is the
           guest campaign, honest about the rounds he didn&rsquo;t run.
         </p>
         <SourcePill title="The FR Oceania campaign, in depth" entries={refEntries(story.sourceRefs)} caveats={story.caveats} />
@@ -323,8 +322,8 @@ export const OriginTimeline = () => {
   return (
     <Card title="Before the record" action={<SourcePill title="Before the record" entries={sourceEntries} caveats={origin.caveats} />}>
       <p className="ss-copy" style={{ maxWidth: '62ch' }}>
-        The measured career starts with F1600 in {origin.recordStartsYear}. What survives from before it — the karting years,
-        2016 through 2018 — is context, not a scoreboard. Every fact here is sourced; none is a race result.
+        The measured career starts with F1600 in {origin.recordStartsYear}. What survives from before it, the karting years
+        from 2016 through 2018, is context, not a scoreboard. Every fact here is sourced; none is a race result.
       </p>
       <div className="ss-timeline">
         {byYear.map((group) => (

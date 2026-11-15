@@ -1,4 +1,4 @@
-import { Card, ScreenHead, SourcePill, StatusChip, Unavailable } from '../app/components';
+import { Card, ScreenHead, SourcePill, Unavailable } from '../app/components';
 import { trackOutlineAttribution } from '../assets/tracks';
 import { asNumber, asString, formatNumber } from '../app/format';
 import { useApiJson } from '../app/useApiJson';
@@ -50,6 +50,11 @@ const familyLabels: Record<string, string> = {
 const humanFamily = (id: string): string =>
   familyLabels[id] ?? id.replace(/_/g, ' ').replace(/^./, (character) => character.toUpperCase());
 
+/** Status as plain words: no coloured dots, the word carries the state. */
+const PlainStatus = ({ parts }: { parts: Array<string | null> }) => (
+  <p style={{ margin: 0, fontSize: 14, color: 'var(--ink-primary)' }}>{parts.filter(Boolean).join(' · ')}</p>
+);
+
 /** Live recorder console: the single-ingestor's own status file, via the API. */
 const RecorderConsole = () => {
   const status = useApiJson<Row>('/api/next-session', 60_000);
@@ -58,18 +63,14 @@ const RecorderConsole = () => {
   const ageSeconds = asNumber(status.data.statusAgeSeconds);
   const next = (status.data.nextSession as Row) ?? {};
   const fresh = ageSeconds !== null && ageSeconds < 15 * 60;
-  const phaseTone = phase === 'LIVE' ? 'good' : fresh ? 'neutral' : 'warn';
   return (
     <Card title="Live recorder">
-      <div className="row row--wrap" style={{ gap: 8 }}>
-        <StatusChip tone={phaseTone} label={`recorder ${phase.toLowerCase()}`} live={phase === 'LIVE'} />
-        {ageSeconds !== null ? (
-          <StatusChip
-            tone={fresh ? 'good' : 'warn'}
-            label={fresh ? 'heartbeat fresh' : `heartbeat ${Math.round(ageSeconds / 60)} min old`}
-          />
-        ) : null}
-      </div>
+      <PlainStatus
+        parts={[
+          `Recorder ${phase.toLowerCase()}`,
+          ageSeconds !== null ? (fresh ? 'heartbeat fresh' : `heartbeat ${Math.round(ageSeconds / 60)} min old`) : null
+        ]}
+      />
       <p style={{ margin: '12px 0 0', fontSize: 13, color: 'var(--ink-secondary)' }}>
         One quiet capture process owns Race Control polling. It sleeps between sessions, arms itself before Bryce runs,
         and records every lap at one-second cadence.
@@ -103,17 +104,13 @@ export const DataScreen = () => {
 
       <div className="grid grid--fit">
         <Card title="Dataset health">
-          <div className="row row--wrap" style={{ gap: 8 }}>
-            <StatusChip
-              tone={errorCount === 0 ? 'good' : 'bad'}
-              label={`${formatNumber(errorCount, 0)} validation ${errorCount === 1 ? 'error' : 'errors'}`}
-            />
-            <StatusChip
-              tone={warningCount === 0 ? 'good' : 'warn'}
-              label={`${formatNumber(warningCount, 0)} ${warningCount === 1 ? 'warning' : 'warnings'}`}
-            />
-            {asString(uiDataPackage.asOfDate) ? <StatusChip tone="neutral" label={`data as of ${uiDataPackage.asOfDate}`} /> : null}
-          </div>
+          <PlainStatus
+            parts={[
+              `${formatNumber(errorCount, 0)} validation ${errorCount === 1 ? 'error' : 'errors'}`,
+              `${formatNumber(warningCount, 0)} ${warningCount === 1 ? 'warning' : 'warnings'}`,
+              asString(uiDataPackage.asOfDate) ? `data as of ${uiDataPackage.asOfDate}` : null
+            ]}
+          />
           {asNumber(ingestion.results) !== null ? (
             <p style={{ margin: '12px 0 0', fontSize: 13, color: 'var(--ink-secondary)' }} className="tnum">
               {formatNumber(ingestion.results, 0)} results · {formatNumber(ingestion.lapSamples, 0)} lap samples ·{' '}
@@ -210,7 +207,10 @@ export const DataScreen = () => {
           <li>In-car video or team radio audio: not available to this project.</li>
           <li>Win or finish predictions: history gets shown as ranges and paths, never as a forecast.</li>
           <li>Official series weather: near-track NWS weather is labeled for what it is.</li>
-          <li>Pit, tire, or fuel strategy claims: the official feeds don’t carry them.</li>
+          <li>
+            Pit, tire or fuel strategy calls: the official feeds don’t carry them. The Career page’s fuel figure is a modelled range,
+            and says how.
+          </li>
         </ul>
       </Card>
 

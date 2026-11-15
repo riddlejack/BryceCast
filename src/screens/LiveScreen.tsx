@@ -158,7 +158,7 @@ const sourceEntries = {
     {
       label: 'Lap average speed · official timing',
       path: '/api/readiness → liveTiming.rows[].lastSpeed / bestSpeed',
-      note: 'Per-lap average speeds published by official timing, updating once per completed lap. These are lap averages, not instantaneous velocity — BryceCast shows no speedometer dial.'
+      note: 'Per-lap average speeds published by official timing, updating once per completed lap. These are lap averages, not instantaneous velocity. BryceCast shows no speedometer dial.'
     }
   ],
   points: [
@@ -187,7 +187,7 @@ const sourceEntries = {
     {
       label: 'Race Control timing feed · per-car best lap',
       path: '/api/readiness → liveTiming.rows[].bestLapTime',
-      note: 'Each car’s fastest lap of the session, exactly as published. Deltas subtract sourced best-lap times; a car with no published best lap does not appear. These are best-lap gaps, not on-track intervals — practice and qualifying cars run different cycles, so this is never a running order.'
+      note: 'Each car’s fastest lap of the session, exactly as published. Deltas subtract sourced best-lap times; a car with no published best lap does not appear. These are best-lap gaps, not on-track intervals. Practice and qualifying cars run different cycles, so this is never a running order.'
     },
     {
       label: 'Race Control timing feed · best-lap order',
@@ -566,7 +566,7 @@ const FieldCompressionTicker = ({ payload, sessionKind }: { payload: LiveReadine
     if (payload.state === 'stale' || payload.state === 'blocked') return null;
     return (
       <p className="caption caption--secondary live-battle__compression" data-field-compression="caution">
-        Under caution — field bunched
+        Under caution, the field is bunched up
       </p>
     );
   }
@@ -599,7 +599,7 @@ const FieldCompressionTicker = ({ payload, sessionKind }: { payload: LiveReadine
       </>
     );
   } else {
-    body = <>The field is spread — no pairs within {tightText}</>;
+    body = <>The field is spread out, with no pair within {tightText}</>;
   }
 
   return (
@@ -623,7 +623,7 @@ const BattleModule = ({ payload, samples, history, replayEnded = false, sessionK
     const cycleNoun = sessionKind === 'qualifying' ? 'qualifying' : 'practice';
     return (
       <Card className="live-battle" title="Best-lap order" action={<SourcePill title="Best-lap order" entries={sourceEntries.bestLap} />}>
-        <p className="live-battle__intro">The fastest lap each car has set, gold is Bryce. These are best-lap gaps, not on-track position — cars run different cycles in {cycleNoun}.</p>
+        <p className="live-battle__intro">The fastest lap each car has set, gold is Bryce. These are best-lap gaps, not on-track position. Cars run different cycles in {cycleNoun}.</p>
         <BestLapDeltas deltas={deltas} />
         <div className="live-battle__divider" />
         <p className="live-battle__shared-title">Best-lap order over {sessionNoun}</p>
@@ -634,13 +634,13 @@ const BattleModule = ({ payload, samples, history, replayEnded = false, sessionK
   }
   const flag = asString(heartbeatOf(payload).currentFlag ?? heartbeatOf(payload).flag ?? (payload.raceWeekend as Row).flag);
   const mode = isRedFlag(flag)
-    ? 'Session stopped — red flag'
+    ? 'Red flag: the session is stopped'
     : isCautionFlag(flag)
-      ? 'Field bunched under caution — gaps compress until the restart'
+      ? 'Under caution the field bunches up, so the gaps close until the restart'
       : null;
   return (
     <Card className="live-battle" title="The battle" action={<SourcePill title="The battle" entries={sourceEntries.battle} />}>
-      <p className="live-battle__intro">The pack around Bryce — every line a car's running position, gold is Bryce.</p>
+      <p className="live-battle__intro">The pack around Bryce. Each line is a car's running position, and gold is Bryce.</p>
       <div className={`live-battle__mode${mode ? ' live-battle__mode--active' : ''}`} aria-live="polite">{mode ?? '\u00a0'}</div>
       <BattleCorridor payload={payload} samples={samples} history={history} />
       <FieldCompressionTicker payload={payload} sessionKind={sessionKind} />
@@ -667,7 +667,7 @@ const TrustRail = ({ payload, fixtureMode }: { payload: LiveReadiness; fixtureMo
   const simulatedReplay = replaySimulation?.active === true;
   const replayLabel = asString(replaySimulation?.label) ?? 'Simulated replay';
   const detail = simulatedReplay
-    ? 'Archived Race Control replay — not official live data.'
+    ? 'Archived Race Control replay, not official live data.'
     : copy.detail;
   return (
     <section className="live-trust" aria-label="Live data trust state">
@@ -685,6 +685,52 @@ const TrustRail = ({ payload, fixtureMode }: { payload: LiveReadiness; fixtureMo
 };
 
 /* ---------- hero: the race, now ---------- */
+
+const aroundGapText = (offsetSeconds: number | undefined): string => {
+  if (offsetSeconds === undefined || !Number.isFinite(offsetSeconds)) return '';
+  const seconds = Math.abs(offsetSeconds);
+  return `${seconds.toFixed(seconds < 100 ? 1 : 0)} s ${offsetSeconds > 0 ? 'ahead' : 'behind'}`;
+};
+
+/** The five cars around Bryce on the first screen: two ahead, him, two
+ *  behind (or the nearest five at either end of the order), with each car's
+ *  time to him from the same summed intervals the battle uses. A gap the
+ *  feed does not chain (a lapped car, a car in the pits) shows the car's
+ *  status or nothing, never a made-up number. */
+const AroundBryce = ({ payload }: { payload: LiveReadiness }) => {
+  const rows = sortRowsForLiveDisplay(liveRowsOf(payload)) as LiveRow[];
+  const bryceIndex = rows.findIndex((row) => row.bryce === true);
+  if (bryceIndex < 0 || rows.length < 2) return null;
+  const from = Math.max(0, Math.min(bryceIndex - 2, rows.length - 5));
+  const shown = rows.slice(from, from + 5);
+  const frame = buildLiveBattleFrame(payload);
+  const offsets = new Map((frame?.cars ?? []).map((car) => [car.id, car.offsetSeconds]));
+  return (
+    <section className="live-hero__near live-around" aria-label="The cars around Bryce">
+      <span className="caption">The cars around him</span>
+      <ol className="live-around__list">
+        {shown.map((row) => {
+          const id = stableDriverId(row);
+          const isBryce = row.bryce === true;
+          const rank = livePosition(row);
+          const status = (asString(row.status) ?? '').toLowerCase();
+          const running = !status || ['active', 'running', 'run'].includes(status);
+          const gapText = isBryce ? '' : running ? aroundGapText(offsets.get(id)) : asString(row.comment) || asString(row.status) || '';
+          return (
+            <li key={id} className={`live-around__car${isBryce ? ' live-around__car--bryce' : ''}`} data-driver-id={id}>
+              <span className="live-around__pos">{rank !== null ? `P${rank}` : ''}</span>
+              <span className="live-around__name">
+                {isBryce ? <Plate size="row" /> : null}
+                {driverLabel(row) ?? ''}
+              </span>
+              <TickerValue className="live-around__gap" value={gapText} valueKey={gapText} />
+            </li>
+          );
+        })}
+      </ol>
+    </section>
+  );
+};
 
 const LiveHero = ({
   payload,
@@ -835,6 +881,7 @@ const LiveHero = ({
           )}
         </div>
       )}
+      {isRace ? <AroundBryce payload={payload} /> : null}
       <TrackPanel identity={identity} replay={replay} history={history} mode={isRace ? 'race' : 'session'} />
     </HeroPanel>
   );
@@ -1345,7 +1392,7 @@ const OffSeasonLive = () => {
         />
       </div>
       <p style={{ margin: '14px 0 0', fontSize: 15, color: 'var(--ink-secondary)', maxWidth: '62ch' }}>
-        This page wakes up on its own the moment the next INDY NXT session is scheduled — the capture runner watches
+        This page wakes up on its own the moment the next INDY NXT session is scheduled. The capture runner watches
         INDYCAR’s official schedule feed.
       </p>
       {shown.length > 0 ? (
@@ -1411,7 +1458,7 @@ const LiveOffAir = ({ loading }: { loading: boolean }) => {
         <span className="kicker">Live</span>
         <h1 className="screen-head__title" style={{ marginTop: 8 }}>Checking for a live session…</h1>
         <p style={{ margin: '14px 0 0', fontSize: 15, color: 'var(--ink-secondary)', maxWidth: '58ch' }}>
-          One moment — reading the timing feed.
+          One moment, reading the timing feed.
         </p>
         <div className="skeleton" style={{ height: 3, width: 140, marginTop: 20, borderRadius: 2 }} aria-hidden />
       </HeroPanel>
@@ -1440,7 +1487,7 @@ const LiveOffAir = ({ loading }: { loading: boolean }) => {
       </div>
       <p style={{ margin: '14px 0 0', fontSize: 15, color: 'var(--ink-secondary)', maxWidth: '62ch' }}>
         When Bryce’s car is on track, this page follows every lap from green flag to checkered. Until then it stays
-        quiet — and it keeps checking on its own.
+        quiet, and it keeps checking on its own.
       </p>
       {eventName ? (
         <div style={{ marginTop: 20 }}>
@@ -1502,7 +1549,7 @@ const WatchAlong = ({ payload }: { payload: LiveReadiness }) => {
       ) : (
         <Unavailable>The official session feed has not published a watch route for this state. It appears here only after EventSessionID matching.</Unavailable>
       )}
-      <p className="live-watch__pip">start the broadcast, then pop it out — picture-in-picture sits nicely over this page.</p>
+      <p className="live-watch__pip">start the broadcast, then pop it out. Picture-in-picture sits nicely over this page.</p>
     </Card>
   );
 };
@@ -1538,6 +1585,8 @@ const ReplayBar = ({
       className="replay-bar"
       aria-label="Race replay controls"
       data-replay-speed={replay.speed}
+      data-replay-playback-speed={replay.playbackSpeed}
+      data-replay-skim={replay.skim?.kind ?? ''}
       data-replay-start={replay.raceStart?.kind ?? ''}
       data-replay-flag={flag ?? ''}
     >
@@ -1551,23 +1600,32 @@ const ReplayBar = ({
             /* The hero below names the race and carries the flag and lap large;
                the bar says only what kind of page this is. */
             <span className="replay-bar__where">
-              Archived timing, replayed at <span className="replay-bar__speed-read">{replay.speed}×</span>. Not live.
+              Archived timing, replayed at <span className="replay-bar__speed-read">{replay.playbackSpeed}×</span>. Not live.
             </span>
           ) : (
             <span className="replay-bar__where">
               {venue}
-              {year} · <span className="replay-bar__speed-read">{replay.speed}×</span>
+              {year} · <span className="replay-bar__speed-read">{replay.playbackSpeed}×</span>
             </span>
           )}
           <span
             className="replay-bar__tier"
             data-replay-tier={prov.tier}
-            title={`${prov.detail}${prov.caveat ? ` — ${prov.caveat}` : ''}`}
+            title={[prov.detail, prov.caveat].filter(Boolean).map((part) => (/[.!?]$/.test(part!) ? part : `${part}.`)).join(' ')}
           >
             {prov.label}
           </span>
         </div>
-        {replay.raceStart?.kind === 'restart' && replay.clockFrom === 'raceStart' ? (
+        {replay.skim ? (
+          <span className="caption caption--secondary" data-replay-skim-note>
+            {replay.skim.kind === 'formation' ? 'Formation laps' : 'The caution'} at {replay.skim.speed}×. Back to{' '}
+            {replay.skim.backTo}× at the{' '}
+            {replay.skim.until === 'green'
+              ? 'green flag'
+              : `${replay.skim.restartLap !== null ? `lap ${replay.skim.restartLap} ` : ''}restart`}
+            .
+          </span>
+        ) : replay.raceStart?.kind === 'restart' && replay.clockFrom === 'raceStart' ? (
           <span className="caption caption--secondary" data-replay-start-note>
             Starts at the {restartLap !== null ? `lap ${restartLap} ` : ''}restart, skipping the caution before it.
           </span>
@@ -1601,6 +1659,8 @@ const ReplayBar = ({
             className="replay-bar__btn"
             data-replay-formation
             onClick={replay.restartFromFormation}
+            onPointerEnter={replay.prepareFormation}
+            onFocus={replay.prepareFormation}
             disabled={replay.formationPending}
             aria-busy={replay.formationPending}
             title="Back to before the start, as the field leaves the grid"
@@ -1660,9 +1720,9 @@ const OffSeasonDemoBanner = ({
       <div>
         <span className="demo-banner__kicker"><History size={13} aria-hidden /> Off-season · replay, not live</span>
         <p className="demo-banner__copy">
-          Nothing is live right now — this is the {raceLabel}{raceDate ? ` (${raceDate})` : ''}, replayed from{' '}
+          Nothing is live right now. This is the {raceLabel}{raceDate ? ` (${raceDate})` : ''}, replayed from{' '}
           {captureLabel} so you can see what race day looks like here.
-          {joinedInProgress ? ' It joins a few minutes in, with the race already running — Restart goes back to the green flag.' : ''}
+          {joinedInProgress ? ' It joins a few minutes in, with the race already running. Restart goes back to the green flag.' : ''}
           {' '}The page switches to real timing on its own when the next session starts.
         </p>
       </div>
@@ -1688,7 +1748,7 @@ const OffSeasonDemoBanner = ({
 const ReplayEndedByLiveNote = () => (
   <section className="replay-ended-note" role="status">
     <span className="replay-bar__chip"><History size={13} aria-hidden /> Replay ended</span>
-    <span>A live session is on — this is the real Race Control feed now.</span>
+    <span>A live session is on, so this is the real Race Control feed now.</span>
   </section>
 );
 
@@ -1952,7 +2012,7 @@ export const LiveScreen = ({
             return (
               <p className="caption caption--secondary" style={{ margin: '-8px 0 0' }}>
                 <Link to={`/races/${encodeURIComponent(storySoFarId)}${query}`}>
-                  This race&rsquo;s page — the story so far →
+                  The story so far, on this race&rsquo;s page →
                 </Link>
               </p>
             );

@@ -49,18 +49,18 @@ const isActive = (path: string, to: string) => (to === '/' ? path === '/' : path
 const Shell = ({
   children,
   liveState,
-  demoReplay = false
+  replayActive = false
 }: {
   children: ReactNode;
   liveState: string | undefined;
-  /** The off-season auto-demo (LiveScreen's OffSeasonLive) marks its own
-   *  replay URL with `&demo=offseason`. Its readiness payload reads 'ready'
-   *  just like a real session (a replay mimics live state on purpose), so the
-   *  nav must be told explicitly not to present it as genuinely live. */
-  demoReplay?: boolean;
+  /** Any replay is playing: one the visitor chose (a race page, Home, the
+   *  replay list) or the off-season auto-demo. A replay's readiness payload
+   *  reads 'ready' just like a real session (it mimics live state on
+   *  purpose), so the nav must be told explicitly not to present it as live. */
+  replayActive?: boolean;
 }) => {
   const { route } = useRouter();
-  const liveish = !demoReplay && (liveState === 'ready' || liveState === 'degraded');
+  const liveish = !replayActive && (liveState === 'ready' || liveState === 'degraded');
   return (
     <>
       <nav className="topnav">
@@ -157,10 +157,28 @@ const Routes = () => {
     if (replay.started && !startedRef.current) readiness.refresh();
     startedRef.current = replay.started;
   }, [replay.started, readiness.refresh]);
+  // A replay clock jumps (Restart, the formation lap, the green flag) and the
+  // pre-green readiness cadence is 15 s: fetch the new moment at once, and
+  // poll every second while a replay sits before its green flag, so the
+  // formation laps at 16× and the green itself show when they happen.
+  useEffect(() => {
+    if (replay.clockEpoch > 0) readiness.refresh();
+  }, [replay.clockEpoch, readiness.refresh]);
+  const replayPreGreen = replay.started && readiness.payload?.state === 'pre_session';
+  useEffect(() => {
+    if (!replayPreGreen) return undefined;
+    const timer = window.setInterval(() => readiness.refresh(), 1_000);
+    return () => window.clearInterval(timer);
+  }, [replayPreGreen, readiness.refresh]);
   const careerRace = matchPath('/career/race/:sessionId', route.path);
-  // See Shell's `demoReplay` doc above — only true for the off-season
-  // auto-demo's own marked replay URL on /live, never a person's own pick.
-  const offSeasonDemoReplay = onLive && replay.engaged && route.search.get('demo') === 'offseason';
+  // The nav's green live dot is for real sessions only. Any replay clears it:
+  // one the visitor chose and the off-season auto-demo alike, and a payload
+  // the server marks as simulated playback. A replay a live session preempted
+  // (endedByLive) is the real feed again, so the dot comes back.
+  const replaySimulated = Boolean(
+    (readiness.payload?.replay as { simulation?: { active?: unknown } } | undefined)?.simulation?.active === true
+  );
+  const replayActive = (replay.engaged && !replay.unavailable && !replay.endedByLive) || replaySimulated;
 
   let screen: ReactNode;
   if (route.path === '/') screen = <HomeScreen readiness={readiness} />;
@@ -196,7 +214,7 @@ const Routes = () => {
     );
 
   return (
-    <Shell liveState={readiness.payload?.state} demoReplay={offSeasonDemoReplay}>
+    <Shell liveState={readiness.payload?.state} replayActive={replayActive}>
       <Suspense fallback={<RouteFallback />}>{screen}</Suspense>
     </Shell>
   );

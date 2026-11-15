@@ -293,6 +293,8 @@ export const TrackArt = ({
     const pxOf = (visual: number) => visual / (width / viewWidth);
     type PlacedLabel = {
       familyId: string;
+      /** Every section this label names (two for a merged "Turn 1"). */
+      familyIds: string[];
       label: string;
       lx: number;
       ly: number;
@@ -303,15 +305,18 @@ export const TrackArt = ({
       t: number;
       leader?: { x1: number; y1: number; x2: number; y2: number } | null;
     };
-    const candidates: PlacedLabel[] = heatSections
-      .filter((section) => section.kind !== 'derived_remainder')
-      .map((section) => {
-        const t = spanMid(section.startT, section.endT);
+    const candidateFor = (
+      familyIds: string[],
+      label: string,
+      t: number,
+      isTopSection: boolean,
+      percentile: number
+    ): PlacedLabel => {
         const mid = geometry.pointAtT(t);
         const away = Math.hypot(mid.x - center.x, mid.y - center.y) || 1;
-        const hasWord = /[a-z]{3,}/.test(section.label); // a named feature, e.g. "Back straight"
-        const isStartFinish = /S\/F/.test(section.label);
-        const halfW = outside ? pxOf(section.label.length * labelPx * 0.28 + 3) : pxOf(section.label.length * labelPx * 0.29 + 4);
+        const hasWord = /[a-z]{3,}/.test(label); // a named feature, e.g. "Back straight"
+        const isStartFinish = /S\/F/.test(label);
+        const halfW = outside ? pxOf(label.length * labelPx * 0.28 + 3) : pxOf(label.length * labelPx * 0.29 + 4);
         const halfH = outside ? pxOf(labelPx * 0.62) : pxOf(labelPx * 0.62);
         /* The SVG paints with overflow visible. Vertically that's fine — the
          * card has room above and below — but the card is width-tight, so an
@@ -322,18 +327,71 @@ export const TrackArt = ({
         const rawX = mid.x + ((mid.x - center.x) / away) * pxOf(16);
         const rawY = mid.y + ((mid.y - center.y) / away) * pxOf(16);
         return {
-          familyId: section.familyId,
-          label: section.label,
+          familyId: familyIds[0],
+          familyIds,
+          label,
           lx: Math.min(Math.max(rawX, halfW + pxOf(2)), viewWidth - halfW - pxOf(2)),
           ly: rawY,
-          rank: section.isTopSection ? 0 : hasWord ? 1 : isStartFinish ? 2 : 3,
-          percentile: section.percentile,
+          rank: isTopSection ? 0 : hasWord ? 1 : isStartFinish ? 2 : 3,
+          percentile,
           halfW,
           halfH,
           t
         };
-      })
-      .sort((left, right) => left.rank - right.rank || right.percentile - left.percentile);
+    };
+    const timed = heatSections.filter((section) => section.kind !== 'derived_remainder');
+    /* A corner timed in two short pieces ("Turn 1 entry", "Turn 1 exit") gets
+     * ONE label, "Turn 1", at the middle of the pair. Two labels for a few
+     * hundred feet of track crowded the start/finish line at Laguna Seca (the
+     * three-label cluster in the Nov 14 review). Each piece still reads out on
+     * hover under its own name, and the bars and the grid keep both. */
+    const pieceSuffix = /\s+(entry|exit)$/i;
+    const pieces = new Map<string, ResolvedHeatSection[]>();
+    for (const section of timed) {
+      if (!pieceSuffix.test(section.label)) continue;
+      const base = section.label.replace(pieceSuffix, '');
+      pieces.set(base, [...(pieces.get(base) ?? []), section]);
+    }
+    const merged: PlacedLabel[] = [];
+    const absorbed = new Set<string>();
+    for (const [base, members] of pieces) {
+      if (members.length < 2) continue;
+      const chain = [...members].sort((left, right) => left.startT - right.startT);
+      const joined = chain.every((section, index) => index === 0 || Math.abs(section.startT - chain[index - 1].endT) < 0.003);
+      if (!joined) continue;
+      for (const section of chain) absorbed.add(section.familyId);
+      merged.push(
+        candidateFor(
+          chain.map((section) => section.familyId),
+          base,
+          spanMid(chain[0].startT, chain[chain.length - 1].endT),
+          chain.some((section) => section.isTopSection),
+          Math.max(...chain.map((section) => section.percentile))
+        )
+      );
+    }
+    const candidates: PlacedLabel[] = [
+      ...timed
+        .filter((section) => !absorbed.has(section.familyId))
+        .map((section) =>
+          candidateFor([section.familyId], section.label, spanMid(section.startT, section.endT), Boolean(section.isTopSection), section.percentile)
+        ),
+      ...merged
+    ].sort((left, right) => left.rank - right.rank || right.percentile - left.percentile);
+    /* The gold start/finish tick crosses the line well past the stroke, so a
+     * label that only clears the line can still sit on the tick. Its points
+     * join the obstacles both placements test against. */
+    const startFinishPoints = outline.startFinish
+      ? (() => {
+          const sf = outline.startFinish;
+          const angle = ((sf.angleDeg + 90) * Math.PI) / 180;
+          const half = pxOf(8 * strokeScale) + pxOf(2);
+          return Array.from({ length: 11 }, (_, k) => {
+            const u = -half + (2 * half * k) / 10;
+            return { x: sf.x + Math.cos(angle) * u, y: sf.y + Math.sin(angle) * u };
+          });
+        })()
+      : [];
 
     /* Phones show only labels a family member can read cold: gold anchors,
      * named features, S/F. Plain station-code spans (rank 3) never fill in —
@@ -353,7 +411,7 @@ export const TrackArt = ({
        * own half-size along that direction, so a 12 px label clears the line
        * instead of straddling it; one further step if the first spot still
        * touches the line, and otherwise the label stays in the tap tip. */
-      const line = Array.from({ length: 480 }, (_, k) => geometry.pointAtT(k / 480));
+      const line = [...Array.from({ length: 480 }, (_, k) => geometry.pointAtT(k / 480)), ...startFinishPoints];
       const half = pxOf(3 * strokeScale);
       const touchesLine = (box: { lx: number; ly: number; halfW: number; halfH: number }) =>
         line.some((point) => {
@@ -392,7 +450,7 @@ export const TrackArt = ({
      * first — and keep the first spot whose box clears every point of the
      * line by the stroke's half-width plus a margin, clears every label
      * already placed, and stays inside the drawing's room. */
-    const dense = Array.from({ length: 720 }, (_, k) => geometry.pointAtT(k / 720));
+    const dense = [...Array.from({ length: 720 }, (_, k) => geometry.pointAtT(k / 720)), ...startFinishPoints];
     const strokeHalf = pxOf(3 * strokeScale);
     const clearance = strokeHalf + pxOf(4);
     const steps = [6, 16, 30, 48, 72].map((step) => strokeHalf + pxOf(step));
@@ -452,7 +510,7 @@ export const TrackArt = ({
       if (placed) kept.push(placed);
     }
     return kept;
-  }, [hasHeat, sections?.showLabels, heatSections, geometry, center.x, center.y, width, viewWidth, viewHeight, compactLabels, outside, labelPx, strokeScale, margin]);
+  }, [hasHeat, sections?.showLabels, heatSections, geometry, center.x, center.y, width, viewWidth, viewHeight, compactLabels, outside, labelPx, strokeScale, margin, outline.startFinish]);
 
   const showPassTip = (mark: { x: number; y: number; lap: number; direction: 'gain' | 'loss'; otherName: string }) => {
     markTipActive.current = true;
@@ -666,7 +724,7 @@ export const TrackArt = ({
                 y={entry.ly}
                 textAnchor="middle"
                 dominantBaseline="middle"
-                fill={outside && activeFamily === entry.familyId ? 'var(--ink-primary)' : 'var(--ink-secondary)'}
+                fill={outside && activeFamily !== null && entry.familyIds.includes(activeFamily) ? 'var(--ink-primary)' : 'var(--ink-secondary)'}
                 fontFamily={chartFont}
                 fontSize={px(labelPx)}
                 fontWeight={500}

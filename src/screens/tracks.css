@@ -313,3 +313,37 @@
 /* Folded, the grid's own description gives way to the strip's one line. */
 .tracks-page .tracks-laps:has(.tracks-grid__frame--folded) > .tracks-note { display: none; }
 .tracks-page .tracks-grid__frame--folded { padding-top: 10px; }
+
+/* ---------- where his lap goes: scope line, dimmed whole race, readout ---------- */
+
+.tracks-page .tracks-budget__scope {
+  margin: 0 0 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-primary);
+}
+.tracks-page .tracks-budget__scope span { font-weight: 400; color: var(--ink-secondary); }
+
+/* The map shows a scope the bars can't follow: the bars stay, quietly. */
+.tracks-page .tracks-budget--dimmed .tracks-budget__rows,
+.tracks-page .tracks-budget--dimmed .tracks-budget__row--total,
+.tracks-page .tracks-budget--dimmed .tracks-budget__axis {
+  opacity: 0.38;
+  transition: opacity 160ms ease-out;
+}
+
+.tracks-page .tracks-budget__row--on .tracks-budget__label,
+.tracks-page .tracks-budget__row--on .tracks-budget__value { color: var(--ink-primary); }
+.tracks-page .tracks-budget__row--on .tracks-budget__track { outline: 1px solid var(--grid-hairline); outline-offset: 3px; }
+
+.tracks-page .tracks-budget__readout,
+.tracks-page .tracks-grid__readout {
+  margin: 0 0 10px;
+  min-height: 1.45em;
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--ink-primary);
+}
+.tracks-page .tracks-grid__readout { margin: 10px 0 0; color: var(--ink-secondary); }
+.tracks-page .tracks-grid__lap:focus { outline: none; }
+.tracks-page .tracks-grid__lap:focus-visible > rect:first-child { fill: var(--grey-wash); }

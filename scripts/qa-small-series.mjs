@@ -90,7 +90,13 @@ try {
     await page.goto(`${base}/career`, { waitUntil: 'load' });
     await page.waitForTimeout(1200);
 
-    // The origin timeline: the "Before the record" card.
+    // The origin timeline: the "Before the record" card, folded under
+    // "More from the archive" since the November 14 fixes round.
+    const archiveToggle = page.locator('#archive-before .archive-item__toggle');
+    if ((await archiveToggle.count()) > 0 && (await archiveToggle.getAttribute('aria-expanded')) !== 'true') {
+      await archiveToggle.click();
+      await page.waitForTimeout(300);
+    }
     const origin = page
       .locator('.card')
       .filter({ has: page.locator('.card__title, h2, h3', { hasText: 'Before the record' }) })

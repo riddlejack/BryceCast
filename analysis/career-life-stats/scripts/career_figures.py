@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import csv
 import datetime as dt
+import math
 import re
 from collections import Counter, defaultdict
 from pathlib import Path
@@ -93,6 +94,22 @@ def fmt_int(value: int) -> str:
 
 def fmt_1(value: float) -> str:
     return f"{value:,.1f}"
+
+
+def fmt_whole(value: float) -> str:
+    """A counted or modelled value as a headline: the nearest whole number."""
+    return f"{int(round(value)):,}"
+
+
+def fmt_floor(value: float) -> str:
+    """An "at least" value as a headline: rounded down, so the floor stays a floor."""
+    return f"{math.floor(value):,}"
+
+
+def hm_floor(seconds: float) -> str:
+    """An "at least" duration, rounded down to the whole minute."""
+    minutes = math.floor(seconds / 60)
+    return f"{minutes // 60} h {minutes % 60} min"
 
 
 def pct(part: float, whole: float) -> float:
@@ -401,8 +418,8 @@ def build_career_figures(
             caveat="Daytona counts his 142 laps, not the 780 the shared car ran.",
         ),
         figure(
-            "raceMiles", "Miles raced", "counted", "miles", fmt_1(race_miles),
-            "Each race's laps times that track's length, added up race by race.",
+            "raceMiles", "Miles raced", "counted", "miles", fmt_whole(race_miles),
+            f"Each race's laps times that track's length, added up race by race: {fmt_1(race_miles)} miles to the tenth.",
             value=race_miles,
             caveat=f"About {round(100 * race_miles / EQUATOR_MILES)}% of one trip around the equator.",
         ),
@@ -419,7 +436,7 @@ def build_career_figures(
             caveat=f"Covers {timed_races} of {race_count} races and includes time behind the safety car.",
         ),
         figure(
-            "raceTimeAll", "Time racing, all races", "lower_bound", "hours", f"{hm(all_race_seconds)}+",
+            "raceTimeAll", "Time racing, all races", "lower_bound", "hours", f"{hm_floor(all_race_seconds)}+",
             "The timed races, plus his laps times his best lap for the races with no official time.",
             value=round(all_race_seconds / 3600, 2), parts=[("races covered", races_with_time), ("races in all", race_count)],
             caveat=(
@@ -429,8 +446,9 @@ def build_career_figures(
         ),
         figure(
             "sessionHours", "Time on track, all official sessions", "lower_bound", "hours",
-            f"{all_session_hours:,.1f} h+",
-            "Race time, plus his laps times his best lap in every practice, qualifying and test session with a lap count.",
+            f"{fmt_floor(all_session_hours)} h+",
+            "Race time, plus his laps times his best lap in every practice, qualifying and test session with a lap count: "
+            f"{all_session_hours:,.1f} hours to the tenth.",
             value=round(all_session_hours, 1),
             caveat="Leaves out sessions with no lap count and every private test.",
         ),
@@ -461,14 +479,15 @@ def build_career_figures(
             value=len(countries),
         ),
         figure(
-            "milesBetweenTracks", "Miles between tracks", "lower_bound", "miles", f"{fmt_1(great_circle)}+",
-            "A straight line from each race's track to the next race's track, added up in date order.",
+            "milesBetweenTracks", "Miles between tracks", "lower_bound", "miles", f"{fmt_floor(great_circle)}+",
+            "A straight line from each race's track to the next race's track, added up in date order: "
+            f"{fmt_1(great_circle)} miles to the tenth.",
             value=great_circle,
             caveat="The least distance anyone could cover between his races, not his real travel: trips home and testing are left out.",
         ),
         figure(
             "milesBetweenTracksByRoad", "Miles between tracks, by road and air", "modelled_range", "miles",
-            f"{fmt_1(route_low)} to {fmt_1(route_high)}",
+            f"{fmt_whole(route_low)} to {fmt_whole(route_high)}",
             "The straight lines stretched to allow for roads on short trips and flight paths on long ones.",
             low=route_low, base=route_base, high=route_high,
             caveat="The stretch factors are assumptions. Still only track to track, not his real travel.",

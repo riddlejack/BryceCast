@@ -172,7 +172,7 @@ export const CareerRaceScreen = ({ sessionId }: { sessionId: string }) => {
             {
               label: 'Career result conversion table',
               path: 'analysis/career-parity/output/tables/career_result_conversion.csv',
-              note: 'Official/source-backed result rows across all series. Older series don’t expose INDY NXT-grade depth — this sheet states only what the sources carry.'
+              note: 'Official/source-backed result rows across all series. Older series don’t expose INDY NXT-grade depth, so this sheet states only what the sources carry.'
             },
             ...(condition
               ? [
@@ -206,12 +206,12 @@ export const CareerRaceScreen = ({ sessionId }: { sessionId: string }) => {
             </div>
             <p className="caption caption--secondary" style={{ margin: '12px 0 0', fontSize: 13 }}>
               {!clean
-                ? `Official status: ${row.status} — the percentile still counts every classified car.`
+                ? `Official status: ${row.status}. The percentile still counts every classified car.`
                 : row.start === null
                   ? 'This series’ time cards don’t carry a sourced grid position.'
                   : gain && gain.direction === 'up'
                     ? `Up ${row.gain} ${row.gain === 1 ? 'place' : 'places'} from where he started.`
-                    : 'Percentile is the share of the field he beat — honest across changing field sizes.'}
+                    : 'Percentile is the share of the field he beat, so it reads the same whatever the field size.'}
             </p>
             {outline ? factList : null}
           </div>
@@ -231,7 +231,7 @@ export const CareerRaceScreen = ({ sessionId }: { sessionId: string }) => {
 
       <Card title={`The ${row.seriesShort} chapter around it`}>
         <p style={{ margin: '0 0 4px', fontSize: 14, color: 'var(--ink-secondary)' }}>
-          Race {chapterIndex + 1} of {chapterRows.length} in his {row.seriesShort} chapter — every dot a race, this one in
+          Race {chapterIndex + 1} of {chapterRows.length} in his {row.seriesShort} chapter. Every dot is a race; this one is in
           full ink.
         </p>
         <ChapterContext row={row} chapterRows={chapterRows} />

@@ -19,7 +19,14 @@ import {
   offSeasonDemoStartAt,
   shouldAutoStartOffSeasonDemo
 } from '../src/data/offSeasonDemo.ts';
-import { RACE_GREEN_HOLD_SECONDS, findFormationStart, findRaceStart } from '../src/data/replayStart.ts';
+import {
+  RACE_GREEN_HOLD_SECONDS,
+  SKIM_SPEED,
+  findFormationStart,
+  findRaceStart,
+  phasedClockPosition,
+  skimPhases
+} from '../src/data/replayStart.ts';
 
 // BryceCast per-client replay contract test.
 //
@@ -632,6 +639,42 @@ try {
   assert.equal(formation.requests, 14);
   const never = await findFormationStart({ openMs: open, startMs: t0, movingAt: async () => null });
   assert.ok(never.atMs < t0 && never.atMs >= open, 'with no movement found it stays before the start');
+
+  // "From the formation lap" skims: 16× to the green flag, the visitor's speed
+  // for the start, 16× through an opening caution the default start skips,
+  // then the visitor's speed from the restart (Monterey 2026 Race 2 shapes).
+  assert.equal(SKIM_SPEED, 16);
+  const rollOut = t0 - 353_000;
+  const restartAt = t0 + 600_000;
+  const phases = skimPhases({ fromMs: rollOut, greenMs: t0, raceStartMs: restartAt, speed: 4 });
+  assert.deepEqual(phases.map((phase) => [phase.kind, phase.speed, phase.untilMs - t0]), [
+    ['formation', 16, 0],
+    ['start', null, RACE_GREEN_HOLD_SECONDS * 1000],
+    ['caution', 16, 600_000]
+  ]);
+  const at = (wallMs) => phasedClockPosition({ virtualStartMs: rollOut, elapsedWallMs: wallMs, speed: 4, phases });
+  assert.equal(at(0).rate, 16, 'the formation plays at 16× from the click');
+  assert.equal(at(5_000).atMs, rollOut + 80_000, 'five wall seconds are 80 s of formation');
+  const toGreenWall = 353_000 / 16;
+  assert.ok(Math.abs(at(toGreenWall - 1).wallToNextMs - 1) < 1e-6, 'the boundary is the green flag');
+  assert.equal(at(toGreenWall + 1_000).rate, 4, 'the visitor’s speed is back at the green flag');
+  assert.equal(at(toGreenWall + 1_000).atMs, t0 + 4_000);
+  const cautionWall = toGreenWall + (RACE_GREEN_HOLD_SECONDS * 1000) / 4;
+  assert.equal(at(cautionWall + 1_000).phase?.kind, 'caution');
+  assert.equal(at(cautionWall + 1_000).rate, 16, 'the opening caution plays at 16×');
+  const restartWall = cautionWall + (600_000 - RACE_GREEN_HOLD_SECONDS * 1000) / 16;
+  assert.equal(at(restartWall + 2_000).phase, null);
+  assert.equal(at(restartWall + 2_000).atMs, restartAt + 8_000, 'the visitor’s speed again from the restart');
+  assert.ok(restartWall < 70_000, `formation to restart in about a minute of wall time (${(restartWall / 1000).toFixed(1)} s)`);
+
+  // A clean start: only the formation is skimmed. 16× chosen: nothing to skim.
+  assert.deepEqual(skimPhases({ fromMs: rollOut, greenMs: t0, raceStartMs: t0, speed: 1 }).map((phase) => phase.kind), ['formation']);
+  assert.deepEqual(skimPhases({ fromMs: rollOut, greenMs: t0, raceStartMs: restartAt, speed: 16 }), []);
+  // From the green flag (a lake replay with no formation): the start, then the caution.
+  assert.deepEqual(skimPhases({ fromMs: t0, greenMs: t0, raceStartMs: restartAt, speed: 4 }).map((phase) => phase.kind), ['start', 'caution']);
+  assert.deepEqual(skimPhases({ fromMs: rollOut, greenMs: null, raceStartMs: null, speed: 4 }), []);
+  // A plain clock is linear.
+  assert.equal(phasedClockPosition({ virtualStartMs: t0, elapsedWallMs: 10_000, speed: 4, phases: [] }).atMs, t0 + 40_000);
 }
 
 assert.equal(stderr, '', stderr);
@@ -645,5 +688,6 @@ console.log(JSON.stringify({
   nashvilleRegression: 'battle-rivals+running-order-accumulates',
   offSeasonDemo: 'default-until-explicitly-declined',
   offSeasonDemoJoin: 'starts-in-progress-green-flag-fallback',
-  replayStart: 'held-green-or-restart+formation-search'
+  replayStart: 'held-green-or-restart+formation-search',
+  formationSkim: '16x-to-green+16x-opening-caution'
 }, null, 2));

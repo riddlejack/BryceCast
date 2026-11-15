@@ -90,11 +90,21 @@
   font-size: 17px;
 }
 
-/* The still bleeds into the right gutter, as in the mock-up. */
+/* The still bleeds into the right gutter, as in the mock-up. It answers the
+   hand (homeHeroStill.tsx): the section under the pointer or the tap lights
+   from the matching ID map, drawn into a canvas the exact size of the image,
+   and a paper veil quiets the rest of the picture while the hand is on it. */
+.home-hero__figure { margin: 0; min-width: 0; }
+
 .home-hero__still {
+  position: relative;
   display: block;
   margin-right: calc(-1 * var(--gutter));
   border-radius: 0;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .home-hero__still img {
@@ -104,7 +114,61 @@
   aspect-ratio: 2400 / 1350;
 }
 
-.home-hero__still:focus-visible { outline-offset: -2px; }
+.home-hero__still:focus { outline: none; }
+.home-hero__still:focus-visible { outline: 2px solid var(--link); outline-offset: -2px; }
+
+.home-hero__veil,
+.home-hero__lit {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.home-hero__veil { background: var(--paper); opacity: 0; transition: opacity 160ms ease-out; }
+.home-hero__still.is-pointing .home-hero__veil,
+.home-hero__still:focus-visible .home-hero__veil { opacity: 0.45; }
+
+/* The section's name on the picture, above its stretch of track. */
+.home-hero__tag {
+  position: absolute;
+  transform: translate(-50%, calc(-100% - 8px));
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  white-space: nowrap;
+  pointer-events: none;
+  font-size: 14px;
+  line-height: 1.2;
+  color: var(--ink-primary);
+  text-shadow: 0 0 2px var(--paper), 0 0 4px var(--paper), 0 0 8px var(--paper);
+}
+.home-hero__tag.is-below { transform: translate(-50%, 8px); }
+.home-hero__tag b { font-weight: 600; }
+.home-hero__tag span { color: var(--ink-secondary); }
+
+/* The readout under the still: always present, so nothing waits on hover. */
+.home-hero__read {
+  margin: 10px 0 0;
+  min-height: 96px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.home-hero__read-line {
+  font-size: 18px;
+  line-height: 1.35;
+  color: var(--ink-secondary);
+}
+.home-hero__read-line b { color: var(--ink-primary); font-weight: 600; }
+.home-hero__read-how { font-size: 13px; line-height: 1.45; color: var(--ink-muted); }
+.home .home-hero__race { align-self: flex-start; margin-top: 2px; font-size: 14px; }
+
+.home-hero__still.is-still .home-hero__veil { transition: none; }
+@media (prefers-reduced-motion: reduce) {
+  .home-hero__veil { transition: none; }
+}
 
 .home-hero__cap {
   grid-column: 1 / -1;
@@ -194,8 +258,12 @@
 @media (hover: hover) { .home .home-share .share-button:hover { color: var(--ink-primary); } }
 
 /* The replay: the race pages' own affordance (compact), drawn as the
-   mock-up's ink disc and one bold line, with its source beneath. */
-.home-last__replay { justify-self: end; }
+   mock-up's ink disc and one bold line, with its source beneath. The slot
+   keeps one size from the first paint: the button shows at once (pending),
+   and the catalog's answer only fills its meta and source lines. */
+.home-last__replay { justify-self: end; min-width: 360px; }
+.home-last__replay .race-replay__year-meta { min-height: 1.35em; }
+.home-last__replay .race-replay__year-prov { min-height: 24px; }
 .home-last__replay .race-replay__year { flex-direction: column; align-items: flex-start; gap: 8px; }
 .home-last__replay .race-replay__year-link {
   grid-template-columns: 46px auto;
@@ -308,17 +376,54 @@
 }
 
 .home-race { display: block; min-width: 0; }
+.home-race__link { display: block; }
 
 .home-race__art {
-  height: 318px;
+  position: relative;
+  height: 340px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-bottom: 18px;
+  padding-bottom: 34px;
   border-bottom: 1px solid var(--divider);
 }
 
-.home-race__draw { width: 100%; }
+.home-race__draw { position: relative; width: 100%; }
+
+/* The sweep (homeStandouts.tsx): the drawing dims, and each section lights in
+   amber in turn, on the drawing's own geometry; the last one fades as the
+   next lights. */
+.home-race__draw > div:first-child { transition: opacity 200ms ease-out; }
+.home-race__art.is-playing .home-race__draw > div:first-child { opacity: 0.28; }
+.home-race__sweep { position: absolute; top: 0; overflow: visible; pointer-events: none; }
+.home-race__sweep path { opacity: 0; transition: opacity 280ms ease-out; }
+.home-race__sweep path.is-lit { opacity: 1; transition: none; }
+.home-race__hit { position: absolute; inset: 0; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.home-race__hit:focus { outline: none; }
+.home-race__hit:focus-visible { outline: 2px solid var(--link); outline-offset: 4px; }
+
+.home-race__sweep-cap {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 8px;
+  font-size: 13px;
+  line-height: 1.35;
+  color: var(--ink-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.home-race__sweep-cap b { font-weight: 560; color: var(--ink-primary); }
+.home-race__sweep-hint--touch { display: none; }
+@media (hover: none) {
+  .home-race__sweep-hint--hover { display: none; }
+  .home-race__sweep-hint--touch { display: inline; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .home-race__draw > div:first-child,
+  .home-race__sweep path { transition: none; }
+}
 
 .home-race__pos { margin-top: 18px; display: flex; align-items: baseline; gap: 12px; }
 .home-race__pos b {
@@ -333,7 +438,8 @@
 .home-race__meta { display: block; margin-top: 4px; font-size: 14px; color: var(--ink-muted); }
 
 @media (hover: hover) {
-  .home-race:hover .home-race__name { text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+  .home-race__link:hover .home-race__name { text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+  .home-race__link:hover .home-race__pos b { color: var(--link-active); }
 }
 
 /* ---------- the rest of the site, plain links ---------- */
@@ -379,13 +485,16 @@
   .home-hero__text p { font-size: 17px; }
   .home-hero__links { gap: 12px 22px; }
   .home-hero__still { margin: 20px calc(-1 * var(--gutter)) 0; }
+  .home-hero__read { min-height: 132px; }
+  .home-hero__read-line { font-size: 16px; }
+  .home-hero__tag { font-size: 13px; }
   .home-hero__cap { flex-direction: column; gap: 4px; }
   .home-hero__result { white-space: normal; }
 
   .home-line { grid-template-columns: minmax(0, 1fr); gap: 14px; margin-top: 44px; }
   .home-line__big { font-size: 84px; }
   .home-line__facts { font-size: 16px; }
-  .home-last__replay { justify-self: start; }
+  .home-last__replay { justify-self: start; min-width: 0; }
   .home-last__replay .race-replay__year-prov { padding-left: 0; }
 
   .home h2 { font-size: 24px; margin-top: 60px; }
@@ -394,7 +503,7 @@
   .home-odo__cell b { font-size: clamp(28px, 9cqi, 40px); }
 
   .home-races { grid-template-columns: minmax(0, 1fr); gap: 36px; }
-  .home-race__art { height: auto; min-height: 120px; padding-top: 8px; }
+  .home-race__art { height: auto; min-height: 120px; padding-top: 8px; padding-bottom: 34px; }
 
   .home-more { grid-template-columns: minmax(0, 1fr); gap: 20px; }
 }

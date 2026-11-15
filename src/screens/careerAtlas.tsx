@@ -90,12 +90,15 @@ const projectPoint = (lat: number, lon: number, lift: number, view: GlobeView, w
   const cosLatitude = Math.cos(latitude);
   const depth = Math.sin(centerLatitude) * Math.sin(latitude) + Math.cos(centerLatitude) * cosLatitude * Math.cos(longitudeDelta);
   const radius = height * SPHERE_RADIUS_RATIO * view.zoom;
-  const r = radius * (1 + lift);
+  /* Only the near side of the globe is drawn (the visible hemisphere, like a
+   * 90° clip angle). A lifted arc near the edge would project past the disc and
+   * stop in mid-air, so the lift is capped where the point nears the horizon:
+   * the line comes down onto the globe's rim and goes round the back there. */
+  const visible = depth > 0;
+  const rimLift = visible ? 1 / Math.sqrt(Math.max(1e-6, 1 - depth * depth)) - 1 : 0;
+  const r = radius * (1 + Math.min(lift, rimLift));
   const dx = r * cosLatitude * Math.sin(longitudeDelta);
   const dy = -r * (Math.cos(centerLatitude) * Math.sin(latitude) - Math.sin(centerLatitude) * cosLatitude * Math.cos(longitudeDelta));
-  // Only the near side of the globe is drawn; a leg that flies round the back
-  // (Europe to New Zealand) stops at the edge rather than looping in the air.
-  const visible = depth > 0;
   return { x: width / 2 + dx, y: height / 2 + dy, visible };
 };
 
@@ -140,6 +143,37 @@ const legLift = (leg: TravelLeg, t: number): number => {
  * forty times a short drive); the whole journey plays in about 13 seconds. */
 const LEAD_MS = 700;
 const legDuration = (miles: number): number => (miles <= 0 ? 70 : 48 + 5.2 * Math.sqrt(miles));
+
+/** The point the globe turns to while a leg draws: the leg's middle, so both
+ *  of its ends sit on the visible side. */
+const legCentre = (leg: TravelLeg): { lat: number; lon: number } => legHead(leg, 0.5);
+
+/** Degrees between two points on the globe. */
+const arcDegrees = (a: { lat: number; lon: number }, b: { lat: number; lon: number }): number => {
+  const va = toVec(a.lat, a.lon);
+  const vb = toVec(b.lat, b.lon);
+  return Math.acos(Math.max(-1, Math.min(1, va.x * vb.x + va.y * vb.y + va.z * vb.z))) * RAD_TO_DEG;
+};
+
+/* Before a leg that needs the globe to turn a long way (Monza to New Zealand,
+ * New Zealand to St. Petersburg), the pen waits while the globe turns, so the
+ * leg draws on the near side instead of round the back. */
+const turnDuration = (degrees: number): number => (degrees < 24 ? 0 : Math.min(1000, degrees * 8));
+
+type JourneyTimeline = { turns: number[]; starts: number[]; total: number };
+
+/** Which leg the clock is on, and how far along it the pen is (0 while the globe turns). */
+const legAt = (
+  timeline: JourneyTimeline,
+  legs: TravelLeg[],
+  elapsed: number
+): { index: number; t: number } => {
+  let index = 0;
+  while (index + 1 < legs.length && timeline.turns[index + 1] <= elapsed) index += 1;
+  const leg = legs[index];
+  if (!leg || elapsed < LEAD_MS) return { index, t: 0 };
+  return { index, t: Math.max(0, Math.min(1, (elapsed - timeline.starts[index]) / legDuration(leg.greatCircleMiles))) };
+};
 
 const monthYearShort = (iso: string): string =>
   new Date(`${iso}T00:00:00Z`).toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' });
@@ -665,14 +699,20 @@ export const CareerAtlas = () => {
   const [renderError, setRenderError] = useState<string | null>(null);
 
   /* ---- the journey's clock ---- */
-  const timeline = useMemo(() => {
+  const timeline = useMemo<JourneyTimeline>(() => {
+    const turns: number[] = [];
     const starts: number[] = [];
     let total = LEAD_MS;
+    let previousCentre: { lat: number; lon: number } | null = null;
     for (const leg of legs) {
+      turns.push(total);
+      const centre = leg.greatCircleMiles > 0 ? legCentre(leg) : { lat: leg.to.lat, lon: leg.to.lon };
+      if (previousCentre) total += turnDuration(arcDegrees(previousCentre, centre));
+      previousCentre = centre;
       starts.push(total);
       total += legDuration(leg.greatCircleMiles);
     }
-    return { starts, total };
+    return { turns, starts, total };
   }, [legs]);
   const legVenues = useMemo(
     () =>
@@ -709,17 +749,29 @@ export const CareerAtlas = () => {
       if (followRef.current) {
         let target: GlobeView;
         if (playing) {
-          let index = 0;
-          while (index + 1 < legs.length && timeline.starts[index + 1] <= elapsed) index += 1;
+          const { index } = legAt(timeline, legs, elapsed);
           const leg = legs[index];
-          const t = Math.max(0, Math.min(1, (elapsed - timeline.starts[index]) / legDuration(leg.greatCircleMiles)));
-          const head = elapsed < LEAD_MS ? { lat: leg.from.lat, lon: leg.from.lon } : legHead(leg, t);
+          /* The globe turns to the leg's middle, so the whole leg, start to
+           * end, draws on the visible side. */
+          const aim =
+            elapsed < LEAD_MS
+              ? { lat: leg.from.lat, lon: leg.from.lon }
+              : leg.greatCircleMiles > 0
+                ? legCentre(leg)
+                : { lat: leg.to.lat, lon: leg.to.lon };
           if (leg.greatCircleMiles > 0) zoomTargetRef.current = Math.max(1, Math.min(2.3, Math.sqrt(1700 / Math.max(leg.greatCircleMiles, 180))));
-          target = { latitude: clampLatitude(head.lat * 0.85 + 8), longitude: head.lon, zoom: zoomTargetRef.current };
+          /* Short legs sit a little low in the frame; an ocean crossing is centred
+           * exactly, since its ends are already near the rim. */
+          const long = leg.greatCircleMiles > 3000;
+          target = {
+            latitude: clampLatitude(long ? aim.lat : aim.lat * 0.85 + 8),
+            longitude: aim.lon,
+            zoom: zoomTargetRef.current
+          };
         } else {
           target = defaultView;
         }
-        const centre = 1 - Math.exp(-dt / 420);
+        const centre = 1 - Math.exp(-dt / 300);
         const zoomEase = 1 - Math.exp(-dt / 760);
         setGlobeView((current) => {
           const next = {
@@ -749,10 +801,9 @@ export const CareerAtlas = () => {
   let currentIndex = legs.length - 1;
   let currentT = 1;
   if (!finished) {
-    currentIndex = 0;
-    while (currentIndex + 1 < legs.length && timeline.starts[currentIndex + 1] <= playhead) currentIndex += 1;
-    currentT =
-      playhead < LEAD_MS ? 0 : Math.max(0, Math.min(1, (playhead - timeline.starts[currentIndex]) / legDuration(legs[currentIndex].greatCircleMiles)));
+    const at = legAt(timeline, legs, playhead);
+    currentIndex = at.index;
+    currentT = at.t;
   }
   const started = finished || playhead >= LEAD_MS;
   const currentLeg = legs[currentIndex] ?? null;
@@ -1065,6 +1116,7 @@ export const CareerAtlas = () => {
             data-atlas-latitude={globeView.latitude.toFixed(2)}
             data-atlas-ready={textureReady ? 'true' : 'false'}
             data-travel-finished={finished ? 'true' : 'false'}
+            data-travel-leg={finished ? legs.length : currentIndex + 1}
           >
             <canvas ref={canvasRef} className="career-atlas__globe-canvas" aria-hidden="true" />
             {width > 0 ? (
