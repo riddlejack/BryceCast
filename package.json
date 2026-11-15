@@ -11,6 +11,7 @@
     "serve:app": "node scripts/api-server.mjs --static=dist",
     "live:replay": "node scripts/live-replay.mjs",
     "test:live-replay": "node scripts/test-live-replay.mjs",
+    "test:replay-load": "node scripts/test-replay-load.mjs",
     "test:live-motion": "node scripts/test-live-motion.mjs",
     "test:live-camera": "node scripts/test-live-camera.mjs",
     "test:live-running-order": "node scripts/test-live-running-order.mjs",
