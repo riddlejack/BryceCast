@@ -1117,7 +1117,9 @@ for (const [key, expectedPath] of Object.entries({
   careerLifeStatsTravelLegs: 'analysis/career-life-stats/output/tables/travel_legs.csv',
   careerLifeStatsTravelModeBreakdown: 'analysis/career-life-stats/output/tables/travel_mode_breakdown.csv',
   careerLifeStatsFuelEstimate: 'analysis/career-life-stats/output/tables/estimated_fuel_burned.csv',
-  careerLifeStatsTireEstimate: 'analysis/career-life-stats/output/tables/estimated_unique_tires.csv'
+  careerLifeStatsTireEstimate: 'analysis/career-life-stats/output/tables/estimated_unique_tires.csv',
+  careerLifeStatsFigures: 'analysis/career-life-stats/output/career_figures.json',
+  careerLifeStatsDriverVariants: 'analysis/career-life-stats/data/driver_record_variants.csv'
 })) {
   if (sourceInventory[key]?.path !== expectedPath) {
     fail(`sourceInventory.${key} must point to ${expectedPath}.`);
@@ -1137,6 +1139,48 @@ for (const field of [
 ]) {
   if (JSON.stringify(lifeStats[field]) !== JSON.stringify(lifeStatsSummary[field])) {
     fail(`careerLab.lifeStats.${field} must mirror the validated summary.`);
+  }
+}
+const careerFiguresSource = JSON.parse(fs.readFileSync(path.join(repoRoot, sourceInventory.careerLifeStatsFigures.path), 'utf8'));
+for (const [field, sourceField] of [
+  ['figureClasses', 'classes'],
+  ['span', 'span'],
+  ['figures', 'figures'],
+  ['lifeShare', 'lifeShare'],
+  ['weeksGrid', 'weeksGrid'],
+  ['travelLegs', 'travelLegs']
+]) {
+  if (JSON.stringify(lifeStats[field]) !== JSON.stringify(careerFiguresSource[sourceField])) {
+    fail(`careerLab.lifeStats.${field} must mirror the validated career_figures.json.`);
+  }
+}
+{
+  const figureIds = new Set((lifeStats.figures ?? []).map((item) => item.id));
+  for (const id of [
+    'races', 'wins', 'podiums', 'topTens', 'raceLaps', 'raceMiles', 'raceCorners', 'raceTimeTimed', 'raceTimeAll',
+    'sessionHours', 'otherDriverRecords', 'otherDriverRecordsSingleSeater', 'venues', 'countries',
+    'milesBetweenTracks', 'milesBetweenTracksByRoad', 'eventDays', 'sessionDays', 'raceWeeks',
+    'fuelRaces', 'fuelAllSessions', 'indyNxtCautions', 'indyNxtRetirements', 'indyNxtPenalties'
+  ]) {
+    if (!figureIds.has(id)) fail(`careerLab.lifeStats.figures is missing ${id}.`);
+  }
+  for (const item of [...(lifeStats.figures ?? []), ...(lifeStats.lifeShare?.figures ?? [])]) {
+    if (!['counted', 'lower_bound', 'modelled_range'].includes(item.class) || !item.how || !item.display || !item.unit) {
+      fail(`careerLab.lifeStats figure ${item.id ?? '(unnamed)'} needs a class, unit, display and plain how.`);
+    }
+  }
+  if (figureIds.has('tyres') || figureIds.has('tires')) {
+    fail('careerLab.lifeStats.figures must not carry tyres until an honest range exists.');
+  }
+  const byId = Object.fromEntries(lifeStats.figures.map((item) => [item.id, item]));
+  if (byId.races.value !== expectedCareerRaceSessionIds.size || byId.raceMiles.value !== lifeStats.personalRaceMileage.miles) {
+    fail('careerLab.lifeStats race figures must agree with the race ledger.');
+  }
+  if (lifeStats.weeksGrid.weeks.length !== lifeStats.span.weeks) {
+    fail('careerLab.lifeStats.weeksGrid must carry one cell per week of the span.');
+  }
+  if (lifeStats.travelLegs.totalMiles !== lifeStats.travel.greatCircleMinimum.miles) {
+    fail('careerLab.lifeStats.travelLegs must add up to the great-circle minimum.');
   }
 }
 if (
@@ -1209,7 +1253,9 @@ for (const key of [
   'careerLifeStatsTravelLegs',
   'careerLifeStatsTravelModeBreakdown',
   'careerLifeStatsFuelEstimate',
-  'careerLifeStatsTireEstimate'
+  'careerLifeStatsTireEstimate',
+  'careerLifeStatsFigures',
+  'careerLifeStatsDriverVariants'
 ]) {
   if (!lifeStatSourcePaths.has(sourceInventory[key].path)) {
     fail(`careerLab.lifeStats sourceRefs must include ${sourceInventory[key].path}.`);

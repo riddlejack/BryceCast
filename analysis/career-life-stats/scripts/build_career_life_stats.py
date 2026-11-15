@@ -12,6 +12,8 @@ from itertools import combinations
 from pathlib import Path
 from typing import Any
 
+from career_figures import build_career_figures, parse_duration
+
 
 ROOT = Path(__file__).resolve().parents[3]
 LANE = ROOT / "analysis/career-life-stats"
@@ -20,8 +22,16 @@ VENUE_FACTS_PATH = LANE / "data/venue_facts.csv"
 ASSUMPTIONS_PATH = LANE / "data/resource_model_assumptions.csv"
 STINT_PATH = ROOT / "analysis/imsa-daytona-stint-class-pace/output/bryce_imsa_stint_context.csv"
 RESEARCH_PATH = LANE / "RESEARCH.md"
+VARIANTS_PATH = LANE / "data/driver_record_variants.csv"
 OUTPUT = LANE / "output"
 TABLES = OUTPUT / "tables"
+FIGURES_PATH = OUTPUT / "career_figures.json"
+
+# A session's layout is re-measured when the field's lap speeds say the cars ran
+# a different layout of the same circuit than the event's track (GB3 2022 Brands
+# Hatch Friday testing ran the 1.208-mile Indy loop during a Grand Prix weekend).
+LAYOUT_MISMATCH_RATIO = 0.03
+LAYOUT_MATCH_RATIO = 0.02
 
 BRYCE_ID = "driver_bryce_aron"
 DAYTONA_SESSION = "session_imsa_2025_daytona_rolex_24_race"
@@ -127,6 +137,143 @@ def aggregate(rows: list[dict[str, Any]], key: str, value: str) -> list[dict[str
     ]
 
 
+def require_venue_facts(dataset: dict[str, Any], facts_by_track: dict[str, dict[str, str]]) -> None:
+    """Fail loudly, naming each track, when a Bryce session's track has no venue_facts row.
+
+    venue_facts.csv is hand-kept (length, coordinates, country, sources). A new
+    venue must get a row there before the odometer, travel legs and globe can
+    include it; the post-race roll stops here rather than dropping the race.
+    """
+    sessions = {row["id"]: row for row in dataset["sessions"]}
+    events = {row["id"]: row for row in dataset["events"]}
+    tracks = {row["id"]: row for row in dataset["tracks"]}
+    missing: dict[str, list[str]] = defaultdict(list)
+    for result in dataset["results"]:
+        if result.get("driverId") != BRYCE_ID:
+            continue
+        session = sessions[result["sessionId"]]
+        if session["sessionType"] not in SESSION_TYPES:
+            continue
+        track_id = events[session["eventId"]]["trackId"]
+        if track_id not in facts_by_track:
+            missing[track_id].append(session["id"])
+    if missing:
+        lines = []
+        for track_id, session_ids in sorted(missing.items()):
+            track = tracks.get(track_id, {})
+            name = track.get("name") or track.get("canonicalName") or "(no track row in the dataset)"
+            lines.append(
+                f"  - {name} [{track_id}]: {len(session_ids)} session(s), e.g. {session_ids[0]}"
+            )
+        raise SystemExit(
+            "career life-stats build FAILED: these tracks have no row in "
+            f"{rel(VENUE_FACTS_PATH)}:\n" + "\n".join(lines) + "\n"
+            "Add a row for each (trackId, trackName, lengthMi, lengthSource, lat, lon, country, coordsSource) "
+            "from a named source, then rerun."
+        )
+
+
+def measured_layouts(
+    dataset: dict[str, Any], facts: list[dict[str, str]], facts_by_track: dict[str, dict[str, str]]
+) -> dict[str, dict[str, Any]]:
+    """Session id -> the venue_facts layout the field's lap speeds say it ran on.
+
+    Uses result rows that carry both a best lap and the official average speed of
+    that lap (raw.fastestLapAvgSpeedMph). Implied lap length = speed × time. When
+    the median implied length disagrees with the event's track by more than 3%
+    and matches another layout of the same circuit within 2%, that layout wins.
+    A disagreement that matches no known layout stops the build.
+    """
+    sessions = {row["id"]: row for row in dataset["sessions"]}
+    events = {row["id"]: row for row in dataset["events"]}
+    layouts_by_name: dict[str, list[dict[str, str]]] = defaultdict(list)
+    for fact in facts:
+        if fact["trackId"] not in {row["trackId"] for row in layouts_by_name[fact["trackName"]]}:
+            layouts_by_name[fact["trackName"]].append(fact)
+    implied: dict[str, list[float]] = defaultdict(list)
+    for result in dataset["results"]:
+        raw = result.get("raw") if isinstance(result.get("raw"), dict) else {}
+        speed = raw.get("fastestLapAvgSpeedMph")
+        seconds = parse_duration(result.get("bestLapTime"))
+        if not speed or not seconds:
+            continue
+        implied[result["sessionId"]].append(float(speed) * seconds / 3600)
+    bryce_sessions = {row["sessionId"] for row in dataset["results"] if row.get("driverId") == BRYCE_ID}
+    overrides: dict[str, dict[str, Any]] = {}
+    for session_id in sorted(bryce_sessions & set(implied)):
+        values = sorted(implied[session_id])
+        median = values[len(values) // 2]
+        event = events[sessions[session_id]["eventId"]]
+        fact = facts_by_track.get(event["trackId"])
+        if fact is None:
+            continue
+        assigned = float(fact["lengthMi"])
+        if abs(median / assigned - 1) <= LAYOUT_MISMATCH_RATIO:
+            continue
+        candidates = [
+            row for row in layouts_by_name[fact["trackName"]]
+            if abs(median / float(row["lengthMi"]) - 1) <= LAYOUT_MATCH_RATIO
+        ]
+        if len(candidates) != 1:
+            raise SystemExit(
+                f"career life-stats build FAILED: {session_id} at {fact['trackName']} has lap speeds implying "
+                f"{median:.3f} mi a lap, but the event's track is {assigned} mi and no single other layout "
+                f"in {rel(VENUE_FACTS_PATH)} matches."
+            )
+        overrides[session_id] = {
+            "fact": candidates[0],
+            "evidence": (
+                f"field lap speeds imply {median:.3f} mi a lap (median of {len(values)} cars); "
+                f"event track {fact['trackId']} is {assigned} mi"
+            ),
+        }
+    return overrides
+
+
+def gb3_duplicate_reason(
+    session: dict[str, Any], result: dict[str, Any], dataset_index: dict[str, Any]
+) -> str | None:
+    """Why a GB3 classification repeats laps already in the ledger, or None.
+
+    - "Qualifying 2nd Fastest" (GB3 2021) is the same qualifying session ranked by
+      each driver's second-fastest lap for the Race 2 grid: same start, same laps.
+    - "Thursday/Friday combined" (GB3 2022) adds up that day's practice sessions.
+    Each is checked against the sessions it repeats; a mismatch stops the build.
+    """
+    name = (session.get("sessionName") or "").strip().lower()
+    sessions_by_event = dataset_index["sessions_by_event"]
+    bryce = dataset_index["bryce_results"]
+    siblings = [row for row in sessions_by_event[session["eventId"]] if row["id"] != session["id"]]
+    laps = int(result.get("lapsCompleted") or 0)
+    if session["sessionType"] == "qualifying" and "2nd fastest" in name:
+        twins = [
+            row for row in siblings
+            if row["sessionType"] == "qualifying"
+            and (row.get("sessionName") or "").strip().lower() == "qualifying"
+            and row.get("scheduledStart") == session.get("scheduledStart")
+        ]
+        if len(twins) != 1 or int(bryce.get(twins[0]["id"], {}).get("lapsCompleted") or -1) != laps:
+            raise SystemExit(f"career life-stats build FAILED: {session['id']} has no matching first classification")
+        return f"second classification of {twins[0]['id']} (same start, same {laps} laps); not a second session"
+    if session["sessionType"] == "practice" and "combined" in name:
+        day = str(session.get("scheduledStart") or "")[:10]
+        parts = [
+            row for row in siblings
+            if row["sessionType"] == "practice"
+            and "combined" not in (row.get("sessionName") or "").lower()
+            and str(row.get("scheduledStart") or "")[:10] == day
+            and row["id"] in bryce
+        ]
+        part_laps = sum(int(bryce[row["id"]].get("lapsCompleted") or 0) for row in parts)
+        if part_laps != laps:
+            raise SystemExit(
+                f"career life-stats build FAILED: {session['id']} ({laps} laps) is not the sum of that day's "
+                f"practice sessions ({part_laps} laps)"
+            )
+        return f"sum of {', '.join(row['id'] for row in parts)} ({laps} laps); not a separate session"
+    return None
+
+
 def main() -> None:
     dataset = json.loads(DATASET_PATH.read_text())
     facts = read_csv(VENUE_FACTS_PATH)
@@ -136,6 +283,15 @@ def main() -> None:
     events = {row["id"]: row for row in dataset["events"]}
     series = {row["id"]: row for row in dataset["series"]}
     facts_by_track = {row["trackId"]: row for row in facts}
+    require_venue_facts(dataset, facts_by_track)
+    layout_overrides = measured_layouts(dataset, facts, facts_by_track)
+    sessions_by_event: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    for session in dataset["sessions"]:
+        sessions_by_event[session["eventId"]].append(session)
+    dataset_index = {
+        "sessions_by_event": sessions_by_event,
+        "bryce_results": {row["sessionId"]: row for row in dataset["results"] if row.get("driverId") == BRYCE_ID},
+    }
     qualifying = {
         row["sessionId"]: row for row in dataset.get("qualifyingResults", [])
         if row.get("driverId") == BRYCE_ID
@@ -160,7 +316,8 @@ def main() -> None:
     for result in race_results:
         session = sessions[result["sessionId"]]
         event = events[session["eventId"]]
-        fact = facts_by_track[event["trackId"]]
+        override = layout_overrides.get(session["id"])
+        fact = override["fact"] if override else facts_by_track[event["trackId"]]
         canonical_laps = result.get("lapsCompleted")
         if canonical_laps is None:
             confidence, laps, method = "unknown", None, "canonical race result has no lapsCompleted"
@@ -200,6 +357,7 @@ def main() -> None:
         represented_events[event["id"]] = {
             "eventId": event["id"],
             "eventStartDate": event.get("eventStartDate") or "",
+            "eventEndDate": event.get("eventEndDate") or event.get("eventStartDate") or "",
             "trackId": fact["trackId"],
             "trackName": fact["trackName"],
             "country": fact["country"],
@@ -214,20 +372,27 @@ def main() -> None:
         if session["sessionType"] not in SESSION_TYPES:
             continue
         event = events[session["eventId"]]
-        fact = facts_by_track[event["trackId"]]
+        override = layout_overrides.get(session["id"])
+        fact = override["fact"] if override else facts_by_track[event["trackId"]]
         name = session.get("sessionName") or ""
+        duplicate_reason = None
         if (
             event["seriesId"] == "series_indy_nxt"
             and session["sessionType"] == "qualifying"
             and name.lower().startswith("combined qual")
         ):
+            duplicate_reason = "aggregate classification; not a second physical qualifying session"
+        elif event["seriesId"] == "series_gb3":
+            duplicate_reason = gb3_duplicate_reason(session, result, dataset_index)
+        if duplicate_reason:
             excluded_rows.append(
                 {
                     "sessionId": session["id"],
                     "eventId": event["id"],
+                    "seriesId": event["seriesId"],
                     "sessionName": name,
                     "lapsInSummary": result.get("lapsCompleted") or 0,
-                    "reason": "aggregate classification; not a second physical qualifying session",
+                    "reason": duplicate_reason,
                     "sourceRef": source_ref(result),
                 }
             )
@@ -288,6 +453,7 @@ def main() -> None:
                 "metricGrain": "driver_physical_session",
                 "lapField": lap_field,
                 "semanticNote": note,
+                "layoutEvidence": override["evidence"] if override else "",
                 "sourceRef": rel(STINT_PATH) if session["id"] == DAYTONA_SESSION else source_ref(result),
             }
         )
@@ -327,6 +493,7 @@ def main() -> None:
                 "metricGrain": "driver_physical_session",
                 "lapField": "qualifyingResults.laps",
                 "semanticNote": "official qualifying classification lap count",
+                "layoutEvidence": "",
                 "sourceRef": source_ref(qrow),
             }
         )
@@ -354,6 +521,12 @@ def main() -> None:
                 "toEventStartDate": right["eventStartDate"],
                 "toTrackName": right["trackName"],
                 "toCountry": right["country"],
+                "fromTrackId": left["trackId"],
+                "fromLat": left["lat"],
+                "fromLon": left["lon"],
+                "toTrackId": right["trackId"],
+                "toLat": right["lat"],
+                "toLon": right["lon"],
                 "greatCircleMiles": f"{distance:.1f}",
                 "greatCircleConfidence": "observed_exact",
                 "travelModeProxy": mode,
@@ -487,7 +660,21 @@ def main() -> None:
     for name, (rows, fields) in files.items():
         write_csv(TABLES / name, rows, fields)
 
-    source_paths = [DATASET_PATH, VENUE_FACTS_PATH, STINT_PATH, ASSUMPTIONS_PATH, RESEARCH_PATH]
+    career_figures = build_career_figures(
+        dataset=dataset,
+        bryce_id=BRYCE_ID,
+        daytona_session=DAYTONA_SESSION,
+        race_rows=race_rows,
+        ledger_rows=ledger_rows,
+        travel_rows=travel_rows,
+        fuel_rows=fuel_rows,
+        assumptions_for=lambda series_id, year: model_assumption(assumptions, series_id, year),
+        facts_by_track=facts_by_track,
+        variants_path=VARIANTS_PATH,
+    )
+    write_json(FIGURES_PATH, career_figures)
+
+    source_paths = [DATASET_PATH, VENUE_FACTS_PATH, STINT_PATH, ASSUMPTIONS_PATH, RESEARCH_PATH, VARIANTS_PATH]
     source_refs = [
         {"path": rel(path), "sha256": sha256(path), "note": note}
         for path, note in zip(
@@ -498,9 +685,17 @@ def main() -> None:
                 "Al Kamel-derived Bryce driver stints used for Daytona attribution.",
                 "Explicit low/base/high fuel and tire model assumptions with source URLs.",
                 "Source-grain, metric-grain, confidence, travel, and resource-model contracts.",
+                "Driver records that look like one person entered twice, for the people range.",
             ),
         )
     ]
+    source_refs.append(
+        {
+            "path": rel(FIGURES_PATH),
+            "sha256": sha256(FIGURES_PATH),
+            "note": "Career page figures, share of his life, weeks grid and ordered travel legs.",
+        }
+    )
     source_refs.extend(
         {
             "path": rel(TABLES / name),
@@ -528,6 +723,7 @@ def main() -> None:
             "unknown": {"sessions": len(unknown_rows), "confidenceClass": "unknown"},
             "floor": {"laps": exact_laps + lower_laps, "miles": round(exact_miles + lower_miles, 1), "confidenceClass": "observed_lower_bound"},
             "excludedAggregateSessions": len(excluded_rows),
+            "remeasuredLayoutSessions": len([row for row in ledger_rows if row["layoutEvidence"]]),
             "metricGrain": "driver_physical_session",
         },
         "travel": {

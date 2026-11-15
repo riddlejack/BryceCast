@@ -28,15 +28,15 @@
   "physicalSessionMileage": {
     "exact": {
       "confidenceClass": "observed_exact",
-      "laps": 6355,
-      "miles": 14440.7,
-      "sessions": 325
+      "laps": 6164,
+      "miles": 13786.4,
+      "sessions": 315
     },
-    "excludedAggregateSessions": 33,
+    "excludedAggregateSessions": 43,
     "floor": {
       "confidenceClass": "observed_lower_bound",
-      "laps": 6504,
-      "miles": 14801.2
+      "laps": 6313,
+      "miles": 14146.9
     },
     "lowerBound": {
       "confidenceClass": "observed_lower_bound",
@@ -45,7 +45,8 @@
       "sessions": 14
     },
     "metricGrain": "driver_physical_session",
-    "sessionRows": 365,
+    "remeasuredLayoutSessions": 4,
+    "sessionRows": 355,
     "unknown": {
       "confidenceClass": "unknown",
       "sessions": 26
@@ -83,12 +84,22 @@
     {
       "note": "Explicit low/base/high fuel and tire model assumptions with source URLs.",
       "path": "analysis/career-life-stats/data/resource_model_assumptions.csv",
-      "sha256": "5e6f7ecf6d5459788dbccca509ab9791911278647deef848d7a673de97d8cf6f"
+      "sha256": "73c225f3b4832ea46dc9e2ec5e84d030927e2a305ed8d4ac7bf4480ca1e81808"
     },
     {
       "note": "Source-grain, metric-grain, confidence, travel, and resource-model contracts.",
       "path": "analysis/career-life-stats/RESEARCH.md",
-      "sha256": "ca910b43fc128940a7a97ddf87c6ed2dcb15badf5802fb9a7f14d4819a1a9e98"
+      "sha256": "53ad13df1e2fe44cb5a3236cc6fde93383246030858d38cff2b762b89252a19b"
+    },
+    {
+      "note": "Driver records that look like one person entered twice, for the people range.",
+      "path": "analysis/career-life-stats/data/driver_record_variants.csv",
+      "sha256": "9858320d17d4fbf6945b32e0d8fcbd5a37e8f5d30e45200edb02d69cda89b3d9"
+    },
+    {
+      "note": "Career page figures, share of his life, weeks grid and ordered travel legs.",
+      "path": "analysis/career-life-stats/output/career_figures.json",
+      "sha256": "c77553eb8d9c863ecd7fceba54a8eeb936e2468835c36d0887d52be5b98ec3bc"
     },
     {
       "note": "Deterministic generated career life-stats artifact.",
@@ -98,22 +109,22 @@
     {
       "note": "Deterministic generated career life-stats artifact.",
       "path": "analysis/career-life-stats/output/tables/session_mileage_ledger.csv",
-      "sha256": "b5e7b1cfc261d1f98a90b40c3578136269871f591d00041c3db0810b5df1111e"
+      "sha256": "58c1bb0aff6b8a1f77c566d930a71a7d7dfa37f8199a3d40f451171bf0266066"
     },
     {
       "note": "Deterministic generated career life-stats artifact.",
       "path": "analysis/career-life-stats/output/tables/excluded_aggregate_sessions.csv",
-      "sha256": "13049202665754c6d6ea81e16cd48c709c8990bb6f404f75983359681abb1661"
+      "sha256": "a09bf21e755e566b5fb39798ab51b630e398a3cf03fb7249c25789b697bca466"
     },
     {
       "note": "Deterministic generated career life-stats artifact.",
       "path": "analysis/career-life-stats/output/tables/travel_legs.csv",
-      "sha256": "49cc4efc737f4d8d1184e104cce07dbad3c6b18a4363b6edbe2eb82b1604d9ad"
+      "sha256": "0eb31cec545f2d358f04bad0b695c1c2c796bc3a7d2fd164d6411e6f767d02f8"
     },
     {
       "note": "Deterministic generated career life-stats artifact.",
       "path": "analysis/career-life-stats/output/tables/mileage_breakdowns.csv",
-      "sha256": "16562e1d8f3f12885994875b4ca89d337555df69dc8708eee7cdcca2d17c2bfa"
+      "sha256": "d40679fa856e46fb39e499585a49fcecb2d147e7e9ccfd38dc2012f2b3d25072"
     },
     {
       "note": "Deterministic generated career life-stats artifact.",
@@ -123,12 +134,12 @@
     {
       "note": "Deterministic generated career life-stats artifact.",
       "path": "analysis/career-life-stats/output/tables/estimated_fuel_burned.csv",
-      "sha256": "23615045c13a54db3e5386a34a1593d879330f81514f1082a80aa1137b031eb5"
+      "sha256": "f71c70f925fddee241343fdfdff760e6a5a24ccd4321d278004e150bd7fbeb57"
     },
     {
       "note": "Deterministic generated career life-stats artifact.",
       "path": "analysis/career-life-stats/output/tables/estimated_unique_tires.csv",
-      "sha256": "38b48896ef3904f3dd9c3369bafcb70ed4bdc42824fcd97f8c0daa2eddb67459"
+      "sha256": "718299915b5393ab4888f8ab1432c5b40fbeea8c585352ce1ebd31f39b3138f1"
     }
   ],
   "travel": {

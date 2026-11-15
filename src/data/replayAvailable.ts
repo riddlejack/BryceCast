@@ -18,6 +18,11 @@ export interface ReplaySessionInfo {
   firstCheckedAt: string | null;
   lastCheckedAt: string | null;
   firstGreenAt: string | null;
+  /** Optional, from a server that computes it: the first green flag that held
+   *  (the rule is in src/data/replayStart.ts). When present the client starts
+   *  there without probing; when absent it probes the archive itself. No server
+   *  emits it yet. */
+  firstRaceGreenAt?: string | null;
   durationSeconds: number | null;
   totalLaps: number | null;
   watchable: boolean;

@@ -173,22 +173,13 @@ const ChapterCard = ({
               </p>
             ) : null}
             {bridge ? <div style={{ marginTop: 12 }}>{bridge}</div> : null}
-            {depth ? (
-              <div style={{ marginTop: 12 }}>
-                <GhostButton expanded={expanded} onClick={() => setExpanded((value) => !value)}>
-                  {expanded ? 'Show less' : depth.title}
-                </GhostButton>
-                {expanded ? (
-                  <Reveal>
-                    <div style={{ paddingTop: 4 }}>{depth.render()}</div>
-                  </Reveal>
-                ) : null}
-              </div>
-            ) : null}
           </>
         )}
         {/* The depth layer serves both the ordinary chapters and the one-race
-            Daytona card (its stint timeline + co-driver roster). */}
+            Daytona card (its stint timeline + co-driver roster). It renders
+            here once, after either body; a second copy inside the
+            ordinary-chapter branch used to put two identical toggles on every
+            chapter except Daytona. */}
         {depth ? (
           <div style={{ marginTop: 12 }}>
             <GhostButton expanded={expanded} onClick={() => setExpanded((value) => !value)}>
@@ -393,14 +384,16 @@ export const CareerScreen = ({ readiness }: { readiness?: ReadinessStatus }) => 
   const rows = careerLab.seriesSummary as Row[];
   const rowByName = new Map(rows.map((row) => [asString(row.seriesName) ?? '', row]));
   /* Two deliberate, different denominators (FABLE_LESSONS editorial law):
-   *  · ledgerRaces (146) — every race Bryce personally drove, across all series;
-   *    the canonical career count the odometer and the atlas map also carry.
-   *  · resultRaces (142) — the subset that carries a sourced finishing result,
+   *  · ledgerRaces (150 as of the September 2026 data) — every race Bryce
+   *    personally drove, across all series; the canonical career count the
+   *    odometer and the atlas map also carry.
+   *  · resultRaces (146) — the subset that carries a sourced finishing result,
    *    which is what the per-series averages and percentiles are computed on.
    *  The four-race gap is a DNS and three unclassified races: real starts with
-   *  no finishing position to rank. The hero leads with the canonical 146 so the
-   *  page's headline race count matches everywhere, and names the 142 for what
-   *  it is rather than letting two unlabeled totals contradict each other. */
+   *  no finishing position to rank. The hero leads with the canonical 150 so the
+   *  page's headline race count matches everywhere, and names the 146 for what
+   *  it is rather than letting two unlabeled totals contradict each other. Both
+   *  numbers are computed from the data below; these are only examples. */
   const resultRaces = rows.reduce((sum, row) => sum + (asNumber(row.raceRows) ?? 0), 0);
   const ledgerRaces =
     asNumber(careerLab.lifeStats?.personalRaceMileage?.raceRows) ??

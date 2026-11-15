@@ -56,6 +56,8 @@ const sources = {
   careerLifeStatsTravelModeBreakdown: 'analysis/career-life-stats/output/tables/travel_mode_breakdown.csv',
   careerLifeStatsFuelEstimate: 'analysis/career-life-stats/output/tables/estimated_fuel_burned.csv',
   careerLifeStatsTireEstimate: 'analysis/career-life-stats/output/tables/estimated_unique_tires.csv',
+  careerLifeStatsFigures: 'analysis/career-life-stats/output/career_figures.json',
+  careerLifeStatsDriverVariants: 'analysis/career-life-stats/data/driver_record_variants.csv',
   careerAtlasOutput: 'analysis/career-atlas/output/atlas.json',
   careerAtlasGlobeTexture: 'analysis/career-atlas/output/world_land_texture.png',
   careerAtlasNaturalEarth: 'analysis/career-atlas/data/ne_110m_land.geojson',
@@ -3277,6 +3279,7 @@ const buildPackage = () => {
   const careerLifeStatsTravelModeBreakdown = readCsv(sources.careerLifeStatsTravelModeBreakdown);
   const careerLifeStatsFuelEstimate = readCsv(sources.careerLifeStatsFuelEstimate);
   const careerLifeStatsTireEstimate = readCsv(sources.careerLifeStatsTireEstimate);
+  const careerFigures = readJson(sources.careerLifeStatsFigures);
   const careerAtlas = readJson(sources.careerAtlasOutput);
   const restartReportSummary = readJson(sources.restartReportSummary);
   const restartByRaceRows = readCsv(sources.restartReportByRace);
@@ -3714,6 +3717,15 @@ const buildPackage = () => {
             estimatedUniqueTiresHigh: numberOrNull(row.estimatedUniqueTiresHigh)
           })),
           venueSources: careerLifeStats.venueSources ?? [],
+          /* The Career page's figures (each with its class, unit and a plain
+             "how"), the share-of-his-life figures, the weeks grid and the travel
+             legs in date order. Mirrors career_figures.json verbatim. */
+          figureClasses: careerFigures.classes,
+          span: careerFigures.span,
+          figures: careerFigures.figures,
+          lifeShare: careerFigures.lifeShare,
+          weeksGrid: careerFigures.weeksGrid,
+          travelLegs: careerFigures.travelLegs,
           caveats: [
             'Every canonical Bryce race row counts. Daytona uses Bryce’s 142 Al Kamel-derived driver-stint laps, never the shared car’s 780 laps.',
             'The physical-session number is a floor: exact observations and F1600 lower bounds stay separate; FROC and private-test gaps remain unknown.',
@@ -3730,7 +3742,9 @@ const buildPackage = () => {
             sourceRef('careerLifeStatsTravelLegs', 'Chronological travel minimum and route-proxy range by leg.'),
             sourceRef('careerLifeStatsTravelModeBreakdown', 'Visualization-ready travel-mode proxy totals.'),
             sourceRef('careerLifeStatsFuelEstimate', 'Modeled low/base/high fuel estimates by series and chassis.'),
-            sourceRef('careerLifeStatsTireEstimate', 'Modeled low/base/high unique-tire estimates by series and year.')
+            sourceRef('careerLifeStatsTireEstimate', 'Modeled low/base/high unique-tire estimates by series and year.'),
+            sourceRef('careerLifeStatsFigures', 'Career page figures with class and plain how, share of his life, weeks grid and ordered travel legs.'),
+            sourceRef('careerLifeStatsDriverVariants', 'Driver records that look like one person entered twice, behind the people range.')
           ]
         },
         caveats: [

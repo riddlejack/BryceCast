@@ -875,12 +875,12 @@ const VisitShape = ({
   return (
     <div className="stack" style={{ gap: 6, flex: '1 1 240px', minWidth: 220, maxWidth: 420 }}>
       <TrackArt outline={outline} showCornerLabels={false} maxHeight={170} sections={resolved.length > 0 ? { resolved } : null} />
-      <div className="row row--between" style={{ alignItems: 'baseline' }}>
-        <span style={{ fontSize: 13 }}>
+      <div className="yoy-caption">
+        <span className="yoy-caption__title">
           <strong style={{ fontWeight: 600 }}>{label ?? (pack.seasonYear !== null ? String(pack.seasonYear) : '—')}</strong>
-          {resultLabel ? <span className="tnum" style={{ color: 'var(--ink-secondary)' }}> · {resultLabel}</span> : null}
+          {resultLabel ? <span className="tnum yoy-caption__result"> · {resultLabel}</span> : null}
         </span>
-        <span className="tnum" style={{ fontSize: 11.5, color: 'var(--ink-muted)' }}>
+        <span className="tnum yoy-caption__meta">
           {lapsCompleted === 0
             ? 'ended on the opening lap'
             : resolved.length === 0

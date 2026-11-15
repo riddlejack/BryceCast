@@ -733,6 +733,8 @@ export interface UiCareerLifeStats {
     unknown: { sessions: number; confidenceClass: 'unknown' };
     floor: { laps: number; miles: number; confidenceClass: 'observed_lower_bound' };
     excludedAggregateSessions: number;
+    /** Sessions measured on a different layout than their event's track (lap speeds say so). */
+    remeasuredLayoutSessions: number;
     metricGrain: 'driver_physical_session';
   };
   travel: {
@@ -808,8 +810,98 @@ export interface UiCareerLifeStats {
     lengthSources: string[];
     coordsSources: string[];
   }>;
+  /* The Career page's figures, from analysis/career-life-stats/output/career_figures.json. */
+  figureClasses: Record<UiCareerFigureClass, string>;
+  span: { firstDay: string; lastDay: string; days: number; weeks: number };
+  figures: UiCareerFigure[];
+  lifeShare: UiCareerLifeShare;
+  weeksGrid: UiCareerWeeksGrid;
+  travelLegs: UiCareerTravelLegs;
   caveats: string[];
   sourceRefs: UiSourceRef[];
+}
+
+/** counted: exact from the data. lower_bound: the true figure is at least this
+ *  (display ends in "+"). modelled_range: an estimate built on stated assumptions. */
+export type UiCareerFigureClass = 'counted' | 'lower_bound' | 'modelled_range';
+
+export interface UiCareerFigure {
+  id: string;
+  label: string;
+  class: UiCareerFigureClass;
+  unit: string;
+  /** Single value; null for a modelled range. Hours for time figures, percent for shares. */
+  value: number | null;
+  /** low/base/high for modelled ranges; low/high (base null) for a people range on a counted record total. */
+  range: { low: number; base: number | null; high: number } | null;
+  /** Ready-to-show value, e.g. "7,316.4", "71 h 47 min+", "886 to 1,591". */
+  display: string;
+  /** "of N": e.g. 98 of 150 races, 177 of 2,699 days. */
+  denominator: { value: number; unit: string } | null;
+  /** Breakdown, e.g. cautions: contact 6, spin 1. */
+  parts: Array<{ label: string; value: number }> | null;
+  /** "career", or a narrower scope such as "INDY NXT only". */
+  scope: string;
+  /** One plain sentence on how the figure was made. */
+  how: string;
+  caveat: string | null;
+}
+
+export interface UiCareerLifeShare {
+  birthDate: string;
+  /** Internal provenance note; not for the page. */
+  birthDateProvenance: string;
+  asOf: string;
+  firstRaceDate: string;
+  lastRaceDate: string;
+  figures: UiCareerFigure[];
+}
+
+export interface UiCareerWeeksGrid {
+  firstWeek: string;
+  lastWeek: string;
+  weekCount: number;
+  raceWeekCount: number;
+  how: string;
+  /** One entry per ISO week, in order; `races` is empty for a week with no race meeting. */
+  weeks: Array<{
+    isoWeek: string;
+    monday: string;
+    races: Array<{
+      eventId: string;
+      seriesId: string;
+      eventName: string;
+      /** Races of this event dated in this week (0 when only its practice fell here). */
+      raceCount: number;
+      bestFinish: number | null;
+    }>;
+  }>;
+}
+
+export interface UiCareerTravelLegEnd {
+  eventId: string;
+  trackName: string;
+  country: string;
+  lat: number;
+  lon: number;
+  /** The event's start date. */
+  date: string;
+}
+
+export interface UiCareerTravelLegs {
+  legCount: number;
+  totalMiles: number;
+  class: 'lower_bound';
+  how: string;
+  legs: Array<{
+    index: number;
+    from: UiCareerTravelLegEnd;
+    to: UiCareerTravelLegEnd;
+    greatCircleMiles: number;
+    /** A rule of thumb (same country and under 750 miles = drive), not how he travelled. */
+    modeProxy: 'drive' | 'flight' | 'same_venue';
+    runningMiles: number;
+  }>;
 }
 
 export interface UiChartSpec {

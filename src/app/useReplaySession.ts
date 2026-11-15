@@ -1,11 +1,17 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { apiUrl } from '../data/api';
+import { apiUrl, loadApiJson } from '../data/api';
 import {
   captureBySessionKey,
   loadReplayAvailable,
   shortVenueFromEventName,
   type ReplaySessionInfo
 } from '../data/replayAvailable';
+import {
+  FORMATION_MIN_LEAD_SECONDS,
+  findFormationStart,
+  findRaceStart,
+  type FlagSample
+} from '../data/replayStart';
 import { useRouter } from './router';
 
 /** The speeds the Time Machine offers. 1× is "as it happened"; 4× is the lively
@@ -36,8 +42,31 @@ export interface ReplaySession {
   seasonYear: number | null;
   returnHref: string;
   skippedSourceGap: { seconds: number; resumeAt: string } | null;
+  /** Where the clock starts and where Restart returns: the race start, or the
+   *  restart when the start went to caution at once (src/data/replayStart.ts).
+   *  Null until resolved. */
+  raceStart: { at: string; kind: 'start' | 'restart'; lap: number | null } | null;
+  /** The capture opens early enough before the start to replay the formation
+   *  lap (BryceCast's own captures; lake replays begin at or after the green). */
+  formationAvailable: boolean;
+  /** The formation lap is being located in the archive (a few reads). */
+  formationPending: boolean;
+  /** The plain green flag (`firstGreenAt`, or the first frame of a lake feed
+   *  that begins after it), for going back past a skipped opening caution. */
+  greenFlagAt: string | null;
+  /** Where the running clock was last started from: the resolved race start,
+   *  a `t0` deep link, the formation lap, the plain green flag, or a jump
+   *  (a source-gap skip). Lets the bar say "starts at the restart" only while
+   *  that is true. */
+  clockFrom: 'raceStart' | 't0' | 'formation' | 'greenFlag' | 'jump' | null;
   setSpeed: (speed: number) => void;
   restart: () => void;
+  /** Go back before the start: the clock runs from just before the field
+   *  leaves the grid for the formation lap (session open when that can't be
+   *  found). */
+  restartFromFormation: () => void;
+  /** Go back to the plain green flag, before any skipped opening caution. */
+  restartFromGreenFlag: () => void;
   /** Move the local clock to the first observation after a withheld source gap. */
   jumpTo: (iso: string, sourceGapSeconds?: number) => void;
   exit: () => void;
@@ -51,7 +80,7 @@ export interface ReplaySession {
 
 interface ReplayClock {
   sessionKey: string;
-  /** Virtual time the clock started from (the green flag), in ms. */
+  /** Virtual time the clock started from (the race start), in ms. */
   virtualStartMs: number;
   /** Wall-clock ms when this segment started (reset on restart / speed change). */
   startedAtWallMs: number;
@@ -61,7 +90,10 @@ interface ReplayClock {
   lastCheckedMs: number;
 }
 
-const inactive: Omit<ReplaySession, 'setSpeed' | 'restart' | 'jumpTo' | 'exit' | 'getReplayParams'> = {
+const inactive: Omit<
+  ReplaySession,
+  'setSpeed' | 'restart' | 'restartFromFormation' | 'restartFromGreenFlag' | 'jumpTo' | 'exit' | 'getReplayParams'
+> = {
   engaged: false,
   starting: false,
   started: false,
@@ -74,7 +106,93 @@ const inactive: Omit<ReplaySession, 'setSpeed' | 'restart' | 'jumpTo' | 'exit' |
   venue: null,
   seasonYear: null,
   returnHref: '/races',
-  skippedSourceGap: null
+  skippedSourceGap: null,
+  raceStart: null,
+  formationAvailable: false,
+  formationPending: false,
+  greenFlagAt: null,
+  clockFrom: null
+};
+
+/** The longest the cue-up waits on the start search before starting at the
+ *  plain green flag anyway. A clean start costs one read (~200 ms); finding a
+ *  restart took 0.7-1.5 s through the dev proxy, and 4.8 s for the one
+ *  20-minute opening caution in the archive (Road America 2026 Race 1). */
+const RACE_START_SEARCH_TIMEOUT_MS = 6_000;
+
+const withTimeout = <T,>(promise: Promise<T>, ms: number, fallback: T): Promise<T> =>
+  new Promise((resolve) => {
+    const timer = setTimeout(() => resolve(fallback), ms);
+    promise.then(
+      (value) => {
+        clearTimeout(timer);
+        resolve(value);
+      },
+      () => {
+        clearTimeout(timer);
+        resolve(fallback);
+      }
+    );
+  });
+
+const replayQuery = (sessionKey: string, atMs: number) =>
+  `replay=${encodeURIComponent(sessionKey)}&rt=${encodeURIComponent(new Date(atMs).toISOString())}&speed=${DEFAULT_REPLAY_SPEED}`;
+
+/** The archive's flag and leader lap at one virtual moment, read from the
+ *  smallest replay-aware route (`/api/session`, ~2 KB). */
+const sessionFlagAt = (sessionKey: string) => async (atMs: number): Promise<FlagSample> => {
+  const payload = await loadApiJson<{ flag?: unknown; lap?: unknown }>(`/api/session?${replayQuery(sessionKey, atMs)}`);
+  const flag = typeof payload?.flag === 'string' && payload.flag.trim() ? payload.flag.trim().toUpperCase() : null;
+  const lap = Number.parseInt(String(payload?.lap ?? ''), 10);
+  return { flag, lap: Number.isFinite(lap) ? lap : null };
+};
+
+/** Whether any car has registered on the timing loops at a virtual moment:
+ *  a non-zero `liveGap` on any row. Null when the archive has no rows there. */
+const timingMovingAt = (sessionKey: string) => async (atMs: number): Promise<boolean | null> => {
+  const payload = await loadApiJson<{ rows?: Array<{ liveGap?: unknown }> }>(`/api/timing?${replayQuery(sessionKey, atMs)}`);
+  if (!payload || !Array.isArray(payload.rows) || payload.rows.length === 0) return null;
+  return payload.rows.some((row) => {
+    const gap = String(row?.liveGap ?? '').trim();
+    return gap !== '' && !/^0+(\.0+)?$/.test(gap);
+  });
+};
+
+/** The race start for a capture: the server's `firstRaceGreenAt` when it sends
+ *  one, otherwise a bounded probe of the archive from `firstGreenAt`. */
+/** The plain green flag as the clock can reach it. Lake replays can carry a
+ *  green flag before their first frame; the clock clamps to the first frame
+ *  there, so that is where "the green flag" is for them. */
+const greenFlagMsOf = (session: ReplaySessionInfo): number | null => {
+  const greenMs = Date.parse(session.firstGreenAt ?? '');
+  const firstMs = Date.parse(session.firstCheckedAt ?? '');
+  if (!Number.isFinite(greenMs)) return null;
+  return Number.isFinite(firstMs) ? Math.max(greenMs, firstMs) : greenMs;
+};
+
+const resolveRaceStart = async (session: ReplaySessionInfo): Promise<ReplaySession['raceStart']> => {
+  const lastMs = Date.parse(session.lastCheckedAt ?? '');
+  const startMs = greenFlagMsOf(session);
+  if (startMs === null) return null;
+  const plain = { at: new Date(startMs).toISOString(), kind: 'start' as const, lap: null };
+  const serverMs = Date.parse(session.firstRaceGreenAt ?? '');
+  if (Number.isFinite(serverMs)) {
+    return { at: new Date(serverMs).toISOString(), kind: serverMs > startMs + 1_000 ? 'restart' : 'start', lap: null };
+  }
+  if (!Number.isFinite(lastMs)) return plain;
+  const found = await withTimeout(
+    findRaceStart({ startMs, lastMs, flagAt: sessionFlagAt(session.sessionKey) }),
+    RACE_START_SEARCH_TIMEOUT_MS,
+    null
+  );
+  if (!found) return plain;
+  return { at: new Date(found.atMs).toISOString(), kind: found.kind, lap: found.lap };
+};
+
+const formationAvailableFor = (session: ReplaySessionInfo): boolean => {
+  const greenMs = Date.parse(session.firstGreenAt ?? '');
+  const firstMs = Date.parse(session.firstCheckedAt ?? '');
+  return Number.isFinite(greenMs) && Number.isFinite(firstMs) && greenMs - firstMs >= FORMATION_MIN_LEAD_SECONDS * 1000;
 };
 
 /** The initial playback rate a deep-link may seed via `?speed=`. "Clamped to the
@@ -137,6 +255,10 @@ export const useReplaySession = (replayKey: string | null, onRestart?: () => voi
   const [state, setState] = useState(inactive);
   const sessionRef = useRef<ReplaySessionInfo | null>(null);
   const clockRef = useRef<ReplayClock | null>(null);
+  /** Where Restart returns (the resolved race start), per session key. */
+  const raceStartRef = useRef<{ sessionKey: string; at: string } | null>(null);
+  /** The located formation start, per session key, once found. */
+  const formationRef = useRef<{ sessionKey: string; atMs: number } | null>(null);
   const speedRef = useRef<number>(DEFAULT_REPLAY_SPEED);
   const onRestartRef = useRef(onRestart);
   onRestartRef.current = onRestart;
@@ -152,6 +274,8 @@ export const useReplaySession = (replayKey: string | null, onRestart?: () => voi
     if (!replayKey) {
       sessionRef.current = null;
       clockRef.current = null;
+      raceStartRef.current = null;
+      formationRef.current = null;
       setState(inactive);
       return undefined;
     }
@@ -192,11 +316,26 @@ export const useReplaySession = (replayKey: string | null, onRestart?: () => voi
         return;
       }
       sessionRef.current = session;
-      // Start the local virtual clock at the green flag (or, when a `t0` deep-link
-      // is present, at that archived moment mid-race). No server round-trip — the
-      // cue-up clears as soon as the first archived frame arrives from the
-      // client's own next readiness poll.
-      const virtualStartMs = Date.parse(clampT0(session, t0Param ?? session.firstGreenAt));
+      const formationAvailable = formationAvailableFor(session);
+      // Find where the race really gets going (src/data/replayStart.ts): the
+      // green flag, or the restart when the start went to caution at once. A
+      // `t0` deep link starts where it says without waiting; the search then
+      // runs behind it, only so Restart knows where to go.
+      const raceStartPromise = resolveRaceStart(session);
+      const raceStart = t0Param ? null : await raceStartPromise;
+      if (cancelled) return;
+      if (raceStart) raceStartRef.current = { sessionKey: session.sessionKey, at: raceStart.at };
+      else
+        void raceStartPromise.then((resolved) => {
+          if (cancelled || !resolved) return;
+          raceStartRef.current = { sessionKey: session.sessionKey, at: resolved.at };
+          setState((previous) => (previous.session?.sessionKey === session.sessionKey ? { ...previous, raceStart: resolved } : previous));
+        });
+      // Start the local virtual clock at the race start (or, when a `t0`
+      // deep-link is present, at that archived moment mid-race). The cue-up
+      // clears as soon as the first archived frame arrives from the client's
+      // own next readiness poll.
+      const virtualStartMs = Date.parse(clampT0(session, t0Param ?? raceStart?.at ?? session.firstGreenAt));
       const firstCheckedMs = Date.parse(session.firstCheckedAt ?? '');
       const lastCheckedMs = Date.parse(session.lastCheckedAt ?? '');
       const safeStart = Number.isFinite(virtualStartMs) ? virtualStartMs : Date.now();
@@ -217,7 +356,14 @@ export const useReplaySession = (replayKey: string | null, onRestart?: () => voi
         speed: seededSpeed,
         venue: shortVenueFromEventName(session.eventName),
         seasonYear: session.seasonYear,
-        returnHref
+        returnHref,
+        raceStart,
+        formationAvailable,
+        clockFrom: t0Param ? 't0' : 'raceStart',
+        greenFlagAt: (() => {
+          const ms = greenFlagMsOf(session);
+          return ms === null ? null : new Date(ms).toISOString();
+        })()
       });
     })();
 
@@ -278,14 +424,71 @@ export const useReplaySession = (replayKey: string | null, onRestart?: () => voi
     const clock = clockRef.current;
     const session = sessionRef.current;
     if (!clock || !session) return;
-    const virtualStartMs = Date.parse(clampT0(session, session.firstGreenAt));
+    const raceStartAt = raceStartRef.current?.sessionKey === session.sessionKey ? raceStartRef.current.at : null;
+    const virtualStartMs = Date.parse(clampT0(session, raceStartAt ?? session.firstGreenAt));
     clockRef.current = {
       ...clock,
       virtualStartMs: Number.isFinite(virtualStartMs) ? virtualStartMs : clock.firstCheckedMs,
       startedAtWallMs: Date.now()
     };
     onRestartRef.current?.();
-    setState((previous) => ({ ...previous, started: true, endedByLive: false, skippedSourceGap: null }));
+    setState((previous) => ({ ...previous, started: true, endedByLive: false, skippedSourceGap: null, clockFrom: 'raceStart' }));
+  }, []);
+
+  const restartFromFormation = useCallback(() => {
+    const session = sessionRef.current;
+    if (!clockRef.current || !session || !formationAvailableFor(session)) return;
+    const sessionKey = session.sessionKey;
+    const startAt = (atMs: number) => {
+      const clock = clockRef.current;
+      if (!clock || clock.sessionKey !== sessionKey) return;
+      const virtualStartMs = Date.parse(clampT0(session, new Date(atMs).toISOString()));
+      clockRef.current = {
+        ...clock,
+        virtualStartMs: Number.isFinite(virtualStartMs) ? virtualStartMs : clock.firstCheckedMs,
+        startedAtWallMs: Date.now()
+      };
+      onRestartRef.current?.();
+      setState((previous) => ({
+        ...previous,
+        started: true,
+        endedByLive: false,
+        skippedSourceGap: null,
+        formationPending: false,
+        clockFrom: 'formation'
+      }));
+    };
+    const cached = formationRef.current?.sessionKey === sessionKey ? formationRef.current.atMs : null;
+    if (cached !== null) {
+      startAt(cached);
+      return;
+    }
+    const openMs = Date.parse(session.firstCheckedAt ?? '');
+    const greenMs = Date.parse(session.firstGreenAt ?? '');
+    setState((previous) => ({ ...previous, formationPending: true }));
+    void withTimeout(
+      findFormationStart({ openMs, startMs: greenMs, movingAt: timingMovingAt(sessionKey) }),
+      RACE_START_SEARCH_TIMEOUT_MS,
+      { atMs: openMs, requests: 0 }
+    ).then(({ atMs }) => {
+      formationRef.current = { sessionKey, atMs };
+      startAt(atMs);
+    });
+  }, []);
+
+  const restartFromGreenFlag = useCallback(() => {
+    const clock = clockRef.current;
+    const session = sessionRef.current;
+    if (!clock || !session) return;
+    const greenMs = greenFlagMsOf(session);
+    const virtualStartMs = Date.parse(clampT0(session, greenMs === null ? null : new Date(greenMs).toISOString()));
+    clockRef.current = {
+      ...clock,
+      virtualStartMs: Number.isFinite(virtualStartMs) ? virtualStartMs : clock.firstCheckedMs,
+      startedAtWallMs: Date.now()
+    };
+    onRestartRef.current?.();
+    setState((previous) => ({ ...previous, started: true, endedByLive: false, skippedSourceGap: null, clockFrom: 'greenFlag' }));
   }, []);
 
   const jumpTo = useCallback((iso: string, sourceGapSeconds = 0) => {
@@ -306,7 +509,8 @@ export const useReplaySession = (replayKey: string | null, onRestart?: () => voi
       ...previous,
       started: true,
       endedByLive: false,
-      skippedSourceGap: { seconds: Math.max(0, sourceGapSeconds), resumeAt: iso }
+      skippedSourceGap: { seconds: Math.max(0, sourceGapSeconds), resumeAt: iso },
+      clockFrom: 'jump'
     }));
   }, []);
 
@@ -316,5 +520,5 @@ export const useReplaySession = (replayKey: string | null, onRestart?: () => voi
     navigate(href);
   }, [navigate, state.returnHref]);
 
-  return { ...state, setSpeed, restart, jumpTo, exit, getReplayParams };
+  return { ...state, setSpeed, restart, restartFromFormation, restartFromGreenFlag, jumpTo, exit, getReplayParams };
 };

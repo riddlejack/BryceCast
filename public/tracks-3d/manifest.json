@@ -1,0 +1,679 @@
+{
+ "generated": "2026-11-14",
+ "by": "Portfolio/builds/project-brycecast/site-refresh/stills-tools/run.sh",
+ "size": {
+  "width": 2400,
+  "height": 1350,
+  "also": 1200
+ },
+ "look": "the film rig's models, light and desk (paper #FDFCFA); camera as the film's a-heat.png (whole model, 25 degree lens, 90% fill); no type in the picture",
+ "shadingSource": "the race page's own pace map: resolveHeatSections(anchors, sectionObservationsFromLaps(pack)) from src/data/sectionObservations.ts (full race, median of clean green-flag laps, sections under MIN_CLEAN_LAPS = 3 left unshaded), coloured with inkGoldDiverging(percentile) from src/app/charts.tsx; anchors as RaceDetailScreen.tsx (measured when the pack is lake_loop_crossings, else the curated set when anchored); span positions (startT/endT on the site outline) carried onto the 3D centreline by a least-squares fit of the site outline to the model",
+ "tracks": {
+  "weathertech-raceway-laguna-seca": {
+   "trackName": "WeatherTech Raceway Laguna Seca",
+   "aliases": [
+    "WeatherTech Raceway Laguna Seca"
+   ],
+   "files": {
+    "pace": {
+     "2400": "/tracks-3d/weathertech-raceway-laguna-seca-pace.jpg",
+     "1200": "/tracks-3d/weathertech-raceway-laguna-seca-pace@1200.jpg"
+    },
+    "plain": {
+     "2400": "/tracks-3d/weathertech-raceway-laguna-seca-plain.jpg",
+     "1200": "/tracks-3d/weathertech-raceway-laguna-seca-plain@1200.jpg"
+    }
+   },
+   "race": {
+    "sessionId": "session_indy_nxt_2024_6327",
+    "name": "2024 Grand Prix of Monterey Race 2 R2",
+    "date": "2024-06-23",
+    "finish": 3,
+    "start": 5,
+    "shading": {
+     "scope": "full_race",
+     "stat": "median",
+     "sourceTier": "parsed_pdf_aggregate",
+     "anchors": "weathertech-raceway-laguna-seca",
+     "sectionsShaded": 16,
+     "sectionsInAnchorSet": 16,
+     "sections": [
+      {
+       "name": "Turn 1 Entry",
+       "percentile": 0.4211,
+       "color": "rgb(176, 176, 181)",
+       "kind": "measured"
+      },
+      {
+       "name": "Turn 1 Exit",
+       "percentile": 0.75,
+       "color": "rgb(211, 176, 125)",
+       "kind": "measured"
+      },
+      {
+       "name": "Turn 2",
+       "percentile": 0.7895,
+       "color": "rgb(213, 173, 113)",
+       "kind": "measured"
+      },
+      {
+       "name": "Turn 3",
+       "percentile": 0.8947,
+       "color": "rgb(219, 163, 80)",
+       "kind": "measured"
+      },
+      {
+       "name": "Turn 4",
+       "percentile": 0.8421,
+       "color": "rgb(216, 168, 96)",
+       "kind": "measured"
+      },
+      {
+       "name": "Turn 4A",
+       "percentile": 0.7368,
+       "color": "rgb(210, 177, 129)",
+       "kind": "measured"
+      },
+      {
+       "name": "Turn 5",
+       "percentile": 0.7368,
+       "color": "rgb(210, 177, 129)",
+       "kind": "measured"
+      },
+      {
+       "name": "Turn 5A",
+       "percentile": 0.6316,
+       "color": "rgb(205, 186, 162)",
+       "kind": "measured"
+      },
+      {
+       "name": "Turn 6",
+       "percentile": 0.375,
+       "color": "rgb(163, 163, 168)",
+       "kind": "measured"
+      },
+      {
+       "name": "Turn 7",
+       "percentile": 0.5263,
+       "color": "rgb(199, 196, 195)",
+       "kind": "measured"
+      },
+      {
+       "name": "Turn 7A",
+       "percentile": 0.5789,
+       "color": "rgb(202, 191, 178)",
+       "kind": "measured"
+      },
+      {
+       "name": "Corkscrew",
+       "percentile": 0.4211,
+       "color": "rgb(176, 176, 181)",
+       "kind": "measured"
+      },
+      {
+       "name": "Turn 9",
+       "percentile": 0.5714,
+       "color": "rgb(202, 192, 181)",
+       "kind": "measured"
+      },
+      {
+       "name": "Turn 10",
+       "percentile": 0.7222,
+       "color": "rgb(210, 178, 134)",
+       "kind": "measured"
+      },
+      {
+       "name": "Turn 11",
+       "percentile": 0.7368,
+       "color": "rgb(210, 177, 129)",
+       "kind": "measured"
+      },
+      {
+       "name": "FS - PI",
+       "percentile": 0.5263,
+       "color": "rgb(199, 196, 195)",
+       "kind": "measured"
+      }
+     ]
+    }
+   },
+   "camera": {
+    "azimDeg": 0,
+    "elevDeg": 32,
+    "fovDeg": 25
+   },
+   "model": "film-rig/shots/brycecast-film/data/laguna.json (world/laguna.js, the film's hero model)",
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others.",
+   "checks": {
+    "alignment": {
+     "dir": 1,
+     "mirror": false,
+     "rotDeg": 32.61,
+     "metresPerSiteUnit": 1.02,
+     "rmsM": 1.2,
+     "worstM": 2
+    },
+    "lapHiddenFromCamera": {
+     "0": 0.0011,
+     "1": 0.0011,
+     "2": 0.0011
+    }
+   },
+   "alternates": [
+    {
+     "key": "2026-r1",
+     "why": "the race the film and the approved landing mock-up show (a-heat.png, 'Bryce P6')",
+     "files": {
+      "pace": {
+       "2400": "/tracks-3d/weathertech-raceway-laguna-seca-pace-2026-r1.jpg",
+       "1200": "/tracks-3d/weathertech-raceway-laguna-seca-pace-2026-r1@1200.jpg"
+      }
+     },
+     "race": {
+      "sessionId": "session_indy_nxt_2026_6759",
+      "name": "2026 Grand Prix of Monterey Race 1 R1",
+      "date": "2026-09-05",
+      "finish": 6,
+      "start": 7,
+      "shading": {
+       "scope": "full_race",
+       "stat": "median",
+       "sourceTier": "parsed_pdf_aggregate",
+       "anchors": "weathertech-raceway-laguna-seca",
+       "sectionsShaded": 16,
+       "sectionsInAnchorSet": 16,
+       "sections": [
+        {
+         "name": "Turn 1 Entry",
+         "percentile": 0.7391,
+         "color": "rgb(210, 177, 128)",
+         "kind": "measured"
+        },
+        {
+         "name": "Turn 1 Exit",
+         "percentile": 0.7948,
+         "color": "rgb(213, 172, 111)",
+         "kind": "measured"
+        },
+        {
+         "name": "Turn 2",
+         "percentile": 0.4206,
+         "color": "rgb(176, 176, 181)",
+         "kind": "measured"
+        },
+        {
+         "name": "Turn 3",
+         "percentile": 0.4891,
+         "color": "rgb(195, 195, 200)",
+         "kind": "measured"
+        },
+        {
+         "name": "Turn 4",
+         "percentile": 0.3957,
+         "color": "rgb(169, 169, 174)",
+         "kind": "measured"
+        },
+        {
+         "name": "Turn 4A",
+         "percentile": 0.6957,
+         "color": "rgb(208, 181, 142)",
+         "kind": "measured"
+        },
+        {
+         "name": "Turn 5",
+         "percentile": 0.5767,
+         "color": "rgb(202, 191, 179)",
+         "kind": "measured"
+        },
+        {
+         "name": "Turn 5A",
+         "percentile": 0.6957,
+         "color": "rgb(208, 181, 142)",
+         "kind": "measured"
+        },
+        {
+         "name": "Turn 6",
+         "percentile": 0.5359,
+         "color": "rgb(200, 195, 192)",
+         "kind": "measured"
+        },
+        {
+         "name": "Turn 7",
+         "percentile": 0.674,
+         "color": "rgb(207, 183, 149)",
+         "kind": "measured"
+        },
+        {
+         "name": "Turn 7A",
+         "percentile": 0.6043,
+         "color": "rgb(203, 189, 170)",
+         "kind": "measured"
+        },
+        {
+         "name": "Corkscrew",
+         "percentile": 0.4348,
+         "color": "rgb(180, 180, 185)",
+         "kind": "measured"
+        },
+        {
+         "name": "Turn 9",
+         "percentile": 0.6087,
+         "color": "rgb(204, 188, 169)",
+         "kind": "measured"
+        },
+        {
+         "name": "Turn 10",
+         "percentile": 0.6408,
+         "color": "rgb(205, 186, 159)",
+         "kind": "measured"
+        },
+        {
+         "name": "Turn 11",
+         "percentile": 0.3044,
+         "color": "rgb(143, 143, 148)",
+         "kind": "measured"
+        },
+        {
+         "name": "FS - PI",
+         "percentile": 0.7446,
+         "color": "rgb(211, 176, 127)",
+         "kind": "measured"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  "road-america": {
+   "trackName": "Road America",
+   "aliases": [
+    "Road America"
+   ],
+   "files": {
+    "pace": {
+     "2400": "/tracks-3d/road-america-pace.jpg",
+     "1200": "/tracks-3d/road-america-pace@1200.jpg"
+    },
+    "plain": {
+     "2400": "/tracks-3d/road-america-plain.jpg",
+     "1200": "/tracks-3d/road-america-plain@1200.jpg"
+    }
+   },
+   "race": {
+    "sessionId": "session_indy_nxt_2024_6316",
+    "name": "2024 Grand Prix at Road America",
+    "date": "2024-06-09",
+    "finish": 8,
+    "start": 7,
+    "shading": {
+     "scope": "full_race",
+     "stat": "median",
+     "sourceTier": "parsed_pdf_aggregate",
+     "anchors": "road-america",
+     "sectionsShaded": 22,
+     "sectionsInAnchorSet": 22,
+     "sections": [
+      {
+       "name": "SF to I1B",
+       "percentile": 0.6579,
+       "color": "rgb(206, 184, 154)",
+       "kind": "measured"
+      },
+      {
+       "name": "I1B to I1",
+       "percentile": 0.6421,
+       "color": "rgb(205, 185, 159)",
+       "kind": "measured"
+      },
+      {
+       "name": "I1 to I2",
+       "percentile": 0.6644,
+       "color": "rgb(207, 184, 152)",
+       "kind": "measured"
+      },
+      {
+       "name": "I2 to I3",
+       "percentile": 0.3579,
+       "color": "rgb(158, 158, 163)",
+       "kind": "measured"
+      },
+      {
+       "name": "I3 to I3A",
+       "percentile": 0.4881,
+       "color": "rgb(195, 195, 200)",
+       "kind": "measured"
+      },
+      {
+       "name": "I3A to I4",
+       "percentile": 0.5645,
+       "color": "rgb(201, 192, 183)",
+       "kind": "measured"
+      },
+      {
+       "name": "I4 to I4A",
+       "percentile": 0.6408,
+       "color": "rgb(205, 186, 159)",
+       "kind": "measured"
+      },
+      {
+       "name": "I4A to I5",
+       "percentile": 0.425,
+       "color": "rgb(177, 177, 182)",
+       "kind": "measured"
+      },
+      {
+       "name": "I5 to I6",
+       "percentile": 0.5263,
+       "color": "rgb(199, 196, 195)",
+       "kind": "measured"
+      },
+      {
+       "name": "I6 to I7",
+       "percentile": 0.4592,
+       "color": "rgb(187, 187, 192)",
+       "kind": "measured"
+      },
+      {
+       "name": "I7 to I8",
+       "percentile": 0.725,
+       "color": "rgb(210, 178, 133)",
+       "kind": "measured"
+      },
+      {
+       "name": "I8 to I9",
+       "percentile": 0.5645,
+       "color": "rgb(201, 192, 183)",
+       "kind": "measured"
+      },
+      {
+       "name": "I9 to I10",
+       "percentile": 0.7184,
+       "color": "rgb(209, 179, 135)",
+       "kind": "measured"
+      },
+      {
+       "name": "I10 to I11",
+       "percentile": 0.7421,
+       "color": "rgb(211, 177, 127)",
+       "kind": "measured"
+      },
+      {
+       "name": "I11 to I11B",
+       "percentile": 0.85,
+       "color": "rgb(216, 167, 94)",
+       "kind": "measured"
+      },
+      {
+       "name": "I11B to I12",
+       "percentile": 0.799,
+       "color": "rgb(214, 172, 110)",
+       "kind": "measured"
+      },
+      {
+       "name": "I12 to I13",
+       "percentile": 0.6291,
+       "color": "rgb(205, 187, 163)",
+       "kind": "measured"
+      },
+      {
+       "name": "I13 to I13A",
+       "percentile": 0.9388,
+       "color": "rgb(221, 159, 66)",
+       "kind": "measured"
+      },
+      {
+       "name": "I13A to I14",
+       "percentile": 0.5834,
+       "color": "rgb(202, 191, 177)",
+       "kind": "measured"
+      },
+      {
+       "name": "I14 to I15C",
+       "percentile": 0.5719,
+       "color": "rgb(202, 192, 181)",
+       "kind": "measured"
+      },
+      {
+       "name": "I15C to I15",
+       "percentile": 0.6389,
+       "color": "rgb(205, 186, 160)",
+       "kind": "measured"
+      },
+      {
+       "name": "I15 to SF",
+       "percentile": 0.5882,
+       "color": "rgb(203, 190, 175)",
+       "kind": "measured"
+      }
+     ]
+    }
+   },
+   "camera": {
+    "azimDeg": 90,
+    "elevDeg": 45,
+    "fovDeg": 25
+   },
+   "model": "film-rig/shots/brycecast-film/data/venue-road-america.json (world/venues.js)",
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others.",
+   "checks": {
+    "alignment": {
+     "dir": 1,
+     "mirror": false,
+     "rotDeg": -76.21,
+     "metresPerSiteUnit": 1.54,
+     "rmsM": 2.6,
+     "worstM": 3.9
+    },
+    "lapHiddenFromCamera": {
+     "0": 0.0006,
+     "1": 0.0006
+    }
+   }
+  },
+  "streets-of-detroit": {
+   "trackName": "Streets of Detroit",
+   "aliases": [
+    "Detroit Downtown Street Circuit"
+   ],
+   "files": {
+    "pace": {
+     "2400": "/tracks-3d/streets-of-detroit-pace.jpg",
+     "1200": "/tracks-3d/streets-of-detroit-pace@1200.jpg"
+    },
+    "plain": {
+     "2400": "/tracks-3d/streets-of-detroit-plain.jpg",
+     "1200": "/tracks-3d/streets-of-detroit-plain@1200.jpg"
+    }
+   },
+   "race": {
+    "sessionId": "session_indy_nxt_2026_6749",
+    "name": "2026 Detroit Grand Prix",
+    "date": "2026-05-31",
+    "finish": 8,
+    "start": 14,
+    "shading": {
+     "scope": "full_race",
+     "stat": "median",
+     "sourceTier": "parsed_pdf_aggregate",
+     "anchors": "streets-of-detroit",
+     "sectionsShaded": 18,
+     "sectionsInAnchorSet": 18,
+     "sections": [
+      {
+       "name": "SF to I1",
+       "percentile": 0.7105,
+       "color": "rgb(209, 179, 137)",
+       "kind": "measured"
+      },
+      {
+       "name": "I1 to I2A",
+       "percentile": 0.6743,
+       "color": "rgb(207, 183, 149)",
+       "kind": "measured"
+      },
+      {
+       "name": "I2A to I2",
+       "percentile": 0.6957,
+       "color": "rgb(208, 181, 142)",
+       "kind": "measured"
+      },
+      {
+       "name": "I2 to I3",
+       "percentile": 0.3043,
+       "color": "rgb(143, 143, 148)",
+       "kind": "measured"
+      },
+      {
+       "name": "I3 to I4",
+       "percentile": 0.2792,
+       "color": "rgb(136, 136, 141)",
+       "kind": "measured"
+      },
+      {
+       "name": "I4 to I5",
+       "percentile": 0.1334,
+       "color": "rgb(95, 95, 100)",
+       "kind": "measured"
+      },
+      {
+       "name": "I5 to I6",
+       "percentile": 0.674,
+       "color": "rgb(207, 183, 149)",
+       "kind": "measured"
+      },
+      {
+       "name": "I6 to I7",
+       "percentile": 0.5,
+       "color": "rgb(198, 198, 203)",
+       "kind": "measured"
+      },
+      {
+       "name": "I7 to I8",
+       "percentile": 0.8478,
+       "color": "rgb(216, 167, 94)",
+       "kind": "measured"
+      },
+      {
+       "name": "I8 to I9",
+       "percentile": 0.7342,
+       "color": "rgb(210, 177, 130)",
+       "kind": "measured"
+      },
+      {
+       "name": "I9 to I10",
+       "percentile": 0.6304,
+       "color": "rgb(205, 187, 162)",
+       "kind": "measured"
+      },
+      {
+       "name": "I10 to I11",
+       "percentile": 0.5921,
+       "color": "rgb(203, 190, 174)",
+       "kind": "measured"
+      },
+      {
+       "name": "I11 to 12",
+       "percentile": 0.2792,
+       "color": "rgb(136, 136, 141)",
+       "kind": "measured"
+      },
+      {
+       "name": "I12 to I13",
+       "percentile": 0.4189,
+       "color": "rgb(175, 175, 180)",
+       "kind": "measured"
+      },
+      {
+       "name": "Back Str 2",
+       "percentile": 0.9783,
+       "color": "rgb(223, 156, 54)",
+       "kind": "measured"
+      },
+      {
+       "name": "I14 to I15",
+       "percentile": 0.5228,
+       "color": "rgb(199, 196, 196)",
+       "kind": "measured"
+      },
+      {
+       "name": "I15 to I16",
+       "percentile": 0.5955,
+       "color": "rgb(203, 190, 173)",
+       "kind": "measured"
+      },
+      {
+       "name": "I16 to SF",
+       "percentile": 0.3568,
+       "color": "rgb(158, 158, 163)",
+       "kind": "measured"
+      }
+     ]
+    }
+   },
+   "camera": {
+    "azimDeg": 20,
+    "elevDeg": 60,
+    "fovDeg": 25
+   },
+   "model": "film-rig/shots/brycecast-film/data/city-detroit.json (world/city.js, built state u = 0.5)",
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0).",
+   "checks": {
+    "alignment": {
+     "dir": 1,
+     "mirror": false,
+     "rotDeg": -29.59,
+     "metresPerSiteUnit": 1.134,
+     "rmsM": 4.7,
+     "worstM": 10.8
+    },
+    "lapHiddenFromCamera": {
+     "0": 0.003,
+     "1": 0.003
+    }
+   }
+  }
+ },
+ "missing": [
+  {
+   "slug": "streets-of-st-petersburg",
+   "why": "the rig has only an OpenStreetMap circuit outline (opendata/st-petersburg/circuit-relation.json); no terrain, buildings or 3D model"
+  },
+  {
+   "slug": "streets-of-arlington",
+   "why": "the rig has only OpenStreetMap streets traced into an outline (opendata/arlington/roads.json); no terrain, buildings or 3D model"
+  },
+  {
+   "slug": "barber-motorsports-park",
+   "why": "no data for this venue in the rig"
+  },
+  {
+   "slug": "indianapolis-motor-speedway-road-course",
+   "why": "no data for this venue in the rig (opendata/indianapolis-motor-speedway-oval is an outline of the oval only)"
+  },
+  {
+   "slug": "mid-ohio-sports-car-course",
+   "why": "no data for this venue in the rig"
+  },
+  {
+   "slug": "iowa-speedway",
+   "why": "no data for this venue in the rig"
+  },
+  {
+   "slug": "world-wide-technology-raceway",
+   "why": "no data for this venue in the rig"
+  },
+  {
+   "slug": "portland-international-raceway",
+   "why": "no data for this venue in the rig"
+  },
+  {
+   "slug": "the-milwaukee-mile",
+   "why": "no data for this venue in the rig"
+  },
+  {
+   "slug": "nashville-superspeedway",
+   "why": "no data for this venue in the rig (opendata/nashville-street-circuit is a different circuit)"
+  }
+ ]
+}

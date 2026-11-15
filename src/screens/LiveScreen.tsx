@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react';
-import { CalendarClock, ExternalLink, History, Radio, RotateCcw, Tv, X } from 'lucide-react';
+import { CalendarClock, ExternalLink, Flag, History, Radio, RotateCcw, Tv, X } from 'lucide-react';
 import {
   Card,
   Countdown,
@@ -907,8 +907,8 @@ const PointsJumbotron = ({ payload }: { payload: LiveReadiness }) => {
             <div>
               <span className="caption">Race Control running points</span>
               <TickerValue className="stat__value stat__value--big live-points__score" value={window.bryce.runningDriverPoints} valueKey={window.bryce.runningDriverPoints} />
-              <span className="live-points__provisional">{pointsProvenanceLabel(payload)}</span>
             </div>
+            <span className="live-points__provisional">{pointsProvenanceLabel(payload)}</span>
           </div>
           <div className="live-points__neighbors" aria-label="Projected championship neighbors">
             {[window.above, window.below].map((row, index) =>
@@ -1569,7 +1569,9 @@ const durationLabel = (session: ReplaySessionInfo | null): string | null => {
 };
 
 /** Unmistakably a replay of archived data — no green live dot, its own quiet
- *  frame — with speed, restart-from-green, and an exit back to the race page. */
+ *  frame — with speed, restart-from-green, the formation lap, and an exit back
+ *  to the race page. Under caution it carries the flag and lap, so a still
+ *  running order reads as the yellow it is. */
 const ReplayBar = ({
   replay,
   payload,
@@ -1582,8 +1584,19 @@ const ReplayBar = ({
   const venue = asString(heartbeat.trackName) ?? replay.venue ?? replay.session?.eventName ?? 'archived race';
   const year = replay.seasonYear ? ` ${replay.seasonYear}` : '';
   const prov = replayProvenance(replay.session);
+  const flag = asString(heartbeat.flag)?.toUpperCase() ?? null;
+  const lap = asNumber(heartbeat.lap);
+  const totalLaps = asNumber(heartbeat.totalLaps);
+  const neutralised = flag !== null && (isCautionFlag(flag) || isRedFlag(flag));
+  const restartLap = replay.raceStart?.kind === 'restart' ? replay.raceStart.lap : null;
   return (
-    <section className="replay-bar" aria-label="Race replay controls" data-replay-speed={replay.speed}>
+    <section
+      className="replay-bar"
+      aria-label="Race replay controls"
+      data-replay-speed={replay.speed}
+      data-replay-start={replay.raceStart?.kind ?? ''}
+      data-replay-flag={flag ?? ''}
+    >
       <div className="replay-bar__id">
         {/* Identity and provenance sit on their own rows so neither truncates —
             "Detroit 2026 · 4×" and "third-party normalized (Timing71)" both read
@@ -1594,7 +1607,18 @@ const ReplayBar = ({
             {venue}
             {year} · <span className="replay-bar__speed-read">{replay.speed}×</span>
           </span>
+          {neutralised ? (
+            <StatusChip
+              tone={flagTone(flag)}
+              label={`${flag} flag${lap !== null ? ` · Lap ${lap}${totalLaps !== null ? ` of ${totalLaps}` : ''}` : ''}`}
+            />
+          ) : null}
         </div>
+        {replay.raceStart?.kind === 'restart' && replay.clockFrom === 'raceStart' ? (
+          <span className="caption caption--secondary" data-replay-start-note>
+            Starts at the {restartLap !== null ? `lap ${restartLap} ` : ''}restart, skipping the caution before it.
+          </span>
+        ) : null}
         <span
           className="replay-bar__tier"
           data-replay-tier={prov.tier}
@@ -1617,9 +1641,39 @@ const ReplayBar = ({
             </button>
           ))}
         </div>
-        <button type="button" className="replay-bar__btn" onClick={replay.restart}>
+        <button
+          type="button"
+          className="replay-bar__btn"
+          onClick={replay.restart}
+          title={restartLap !== null ? `Back to the lap ${restartLap} restart` : 'Back to the green flag'}
+        >
           <RotateCcw size={13} aria-hidden /> Restart
         </button>
+        {replay.formationAvailable ? (
+          <button
+            type="button"
+            className="replay-bar__btn"
+            data-replay-formation
+            onClick={replay.restartFromFormation}
+            disabled={replay.formationPending}
+            aria-busy={replay.formationPending}
+            title="Back to before the start, as the field leaves the grid"
+          >
+            <Flag size={13} aria-hidden /> From the formation lap
+          </button>
+        ) : replay.raceStart?.kind === 'restart' && replay.greenFlagAt ? (
+          /* No formation lap in this capture (a lake replay begins at or after
+             the green), but the opening caution was skipped: keep it reachable. */
+          <button
+            type="button"
+            className="replay-bar__btn"
+            data-replay-green-flag
+            onClick={replay.restartFromGreenFlag}
+            title="Back to the green flag, through the caution"
+          >
+            <Flag size={13} aria-hidden /> From the green flag
+          </button>
+        ) : null}
         <button type="button" className="replay-bar__btn replay-bar__btn--exit" onClick={onExit ?? replay.exit}>
           <X size={13} aria-hidden /> Exit replay
         </button>

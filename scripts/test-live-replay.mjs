@@ -19,6 +19,7 @@ import {
   offSeasonDemoStartAt,
   shouldAutoStartOffSeasonDemo
 } from '../src/data/offSeasonDemo.ts';
+import { RACE_GREEN_HOLD_SECONDS, findFormationStart, findRaceStart } from '../src/data/replayStart.ts';
 
 // BryceCast per-client replay contract test.
 //
@@ -571,6 +572,68 @@ try {
   assert.equal(hasDeclinedOffSeasonDemo(null), false, 'a missing storage leaves the demo as the default');
 }
 
+// Where the replay clock starts (src/data/replayStart.ts). The archive is
+// faked as a flag timeline; the shapes are the ones measured on the production
+// archive on November 14, 2026.
+{
+  const t0 = Date.parse('2026-09-06T16:40:16.000Z');
+  const timeline = (segments) => async (atMs) => {
+    const seconds = (atMs - t0) / 1000;
+    const hit = segments.find(([from, to]) => seconds >= from && seconds < to);
+    return hit ? { flag: hit[2], lap: hit[3] ?? null } : { flag: null, lap: null };
+  };
+  const lastMs = t0 + 3_600_000;
+  assert.equal(RACE_GREEN_HOLD_SECONDS, 30);
+
+  // A clean start (Milwaukee, Portland): one read, the start is kept.
+  const clean = await findRaceStart({ startMs: t0, lastMs, flagAt: timeline([[0, 3600, 'GREEN', 1]]) });
+  assert.deepEqual(clean, { atMs: t0, kind: 'start', lap: null, requests: 1 }, 'a start whose green holds is kept with one read');
+
+  // Monterey 2026 Race 2: green for ~8 s, yellow to the lap-4 restart at +600 s.
+  const monterey = await findRaceStart({
+    startMs: t0,
+    lastMs,
+    flagAt: timeline([[0, 8, 'GREEN', 0], [8, 600, 'YELLOW', 2], [600, 3600, 'GREEN', 4]])
+  });
+  assert.equal(monterey.kind, 'restart', 'a start neutralised inside the hold goes to the restart');
+  assert.equal(monterey.lap, 4);
+  assert.ok(monterey.atMs >= t0 + 600_000 && monterey.atMs <= t0 + 602_000, `restart found to ~2 s (${(monterey.atMs - t0) / 1000}s)`);
+  assert.ok(monterey.requests <= 25, `bounded reads (${monterey.requests})`);
+
+  // A start that held 45 s before an opening yellow (Monterey 2025 Race 1)
+  // keeps its start: the rule skips only starts shorter than the hold.
+  const held = await findRaceStart({
+    startMs: t0,
+    lastMs,
+    flagAt: timeline([[0, 45, 'GREEN', 0], [45, 400, 'YELLOW', 1], [400, 3600, 'GREEN', 3]])
+  });
+  assert.equal(held.kind, 'start');
+
+  // Unreadable archive at the probe (a source gap, a lake feed with no
+  // heartbeat yet), failing reads, or a caution that never ends: the plain
+  // start, as before this search existed.
+  assert.equal((await findRaceStart({ startMs: t0, lastMs, flagAt: timeline([]) })).kind, 'start');
+  assert.equal((await findRaceStart({ startMs: t0, lastMs, flagAt: async () => { throw new Error('down'); } })).atMs, t0);
+  assert.equal((await findRaceStart({ startMs: t0, lastMs, flagAt: timeline([[0, 5, 'GREEN', 0], [5, 3600, 'RED', 0]]) })).kind, 'start');
+
+  // A restart that is itself neutralised at once gets one more round.
+  const twice = await findRaceStart({
+    startMs: t0,
+    lastMs,
+    flagAt: timeline([[0, 5, 'GREEN', 0], [5, 300, 'YELLOW', 1], [300, 310, 'GREEN', 3], [310, 700, 'YELLOW', 3], [700, 3600, 'GREEN', 6]])
+  });
+  assert.equal(twice.kind, 'restart');
+  assert.equal(twice.lap, 6);
+
+  // Formation: the last moment before any car registers on the loops.
+  const open = t0 - 611_000;
+  const formation = await findFormationStart({ openMs: open, startMs: t0, movingAt: async (atMs) => atMs >= t0 - 353_000 });
+  assert.ok(formation.atMs <= t0 - 353_000 && formation.atMs >= t0 - 353_000 - 15_000, `formation within 15 s before roll-out (${(formation.atMs - t0) / 1000}s)`);
+  assert.equal(formation.requests, 14);
+  const never = await findFormationStart({ openMs: open, startMs: t0, movingAt: async () => null });
+  assert.ok(never.atMs < t0 && never.atMs >= open, 'with no movement found it stays before the start');
+}
+
 assert.equal(stderr, '', stderr);
 console.log(JSON.stringify({
   ok: true,
@@ -581,5 +644,6 @@ console.log(JSON.stringify({
   lakeFeeds: '2024-racetools+2025-nashville-per-request',
   nashvilleRegression: 'battle-rivals+running-order-accumulates',
   offSeasonDemo: 'default-until-explicitly-declined',
-  offSeasonDemoJoin: 'starts-in-progress-green-flag-fallback'
+  offSeasonDemoJoin: 'starts-in-progress-green-flag-fallback',
+  replayStart: 'held-green-or-restart+formation-search'
 }, null, 2));

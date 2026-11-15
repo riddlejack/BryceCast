@@ -106,7 +106,10 @@ export const Stat = ({
   </div>
 );
 
-/* ---------- cards ---------- */
+/* ---------- cards ----------
+ * A plain section on the paper (Direction A): no fill, no radius, no shadow.
+ * A hairline above the title row marks the start; the page's stack spaces
+ * sections apart. The title row keeps its action (usually the source pill). */
 
 export const Card = ({
   title,
@@ -123,7 +126,7 @@ export const Card = ({
 }) => (
   <section className={`card${flush ? ' card--flush' : ''}${className ? ` ${className}` : ''}`}>
     {title ? (
-      <header className="card__header" style={flush ? { padding: '16px 18px 0' } : undefined}>
+      <header className="card__header">
         <h2 className="card__title">{title}</h2>
         {action}
       </header>
@@ -269,7 +272,7 @@ export const CarMark = ({ height = 18 }: { height?: number }) => (
     <path d="M56 11 L92 13.6 Q94 14.4 92 15.4 L56 16.2 Z" fill="var(--ink-primary)" />
     <path d="M85 13.1 L92 13.6 Q94 14.4 92 15.4 L85 15.8 Z" fill="#c8102e" />
     {/* the 9, in white on the sidepod */}
-    <text x={43} y={15.4} textAnchor="middle" fontSize={5.4} fontWeight={700} fill="#ffffff" fontFamily="-apple-system, system-ui, sans-serif">
+    <text x={43} y={15.4} textAnchor="middle" fontSize={5.4} fontWeight={700} fill="#ffffff">
       9
     </text>
     {/* wheels last, so they sit over the floor line */}
@@ -280,40 +283,13 @@ export const CarMark = ({ height = 18 }: { height?: number }) => (
   </svg>
 );
 
-/* ---------- scroll-in reveal: one soft settle per element, once ---------- */
+/* ---------- section wrapper (formerly the scroll-in reveal) ----------
+ * Reading pages have no entrance animation (site direction), so this is now a
+ * plain wrapper: content is present the moment the page renders, and a still
+ * capture never comes out blank. The `delay` prop is accepted and ignored so
+ * existing call sites keep compiling until the page rebuilds remove them. */
 
-export const Reveal = ({ children, delay = 0 }: { children: ReactNode; delay?: number }) => {
-  const ref = useRef<HTMLDivElement | null>(null);
-  const [shown, setShown] = useState(false);
-  useEffect(() => {
-    const node = ref.current;
-    if (!node) return;
-    if (typeof IntersectionObserver === 'undefined') {
-      setShown(true);
-      return;
-    }
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((entry) => entry.isIntersecting)) {
-          setShown(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.12, rootMargin: '0px 0px -36px' }
-    );
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, []);
-  return (
-    <div
-      ref={ref}
-      className={`reveal${shown ? ' reveal--in' : ''}`}
-      style={delay ? { transitionDelay: `${delay}ms` } : undefined}
-    >
-      {children}
-    </div>
-  );
-};
+export const Reveal = ({ children }: { children: ReactNode; delay?: number }) => <div className="reveal">{children}</div>;
 
 /* ---------- source drawer ---------- */
 
@@ -368,7 +344,7 @@ export const SourceDrawer = ({
             <div key={index} style={{ borderTop: '1px solid var(--divider)', paddingTop: 10 }}>
               <div style={{ fontSize: 13, fontWeight: 600 }}>{entry.label}</div>
               {entry.path ? (
-                <div style={{ fontFamily: 'ui-monospace, monospace', fontSize: 11, color: 'var(--ink-muted)', wordBreak: 'break-all' }}>{entry.path}</div>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--ink-muted)', wordBreak: 'break-all' }}>{entry.path}</div>
               ) : null}
               {entry.note ? <div style={{ fontSize: 12.5, color: 'var(--ink-secondary)', marginTop: 2 }}>{entry.note}</div> : null}
             </div>

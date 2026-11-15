@@ -133,7 +133,7 @@ The [career life-stats research contract](../../analysis/career-life-stats/RESEA
 The [generated summary](../../analysis/career-life-stats/output/summary.json), dated 2026-09-10, reports:
 
 - **7,316.4 observed race miles** across 150 driver-physical-race rows and 3,274 laps;
-- **14,440.7 exact physical-session miles** across 325 sessions and 6,355 laps;
+- **13,786.4 exact physical-session miles** across 315 sessions and 6,164 laps (after removing 10 repeated GB3 classifications and re-measuring four Brands Hatch 2022 sessions on the Indy layout);
 - a lower-bound component of 360.5 miles across 14 sessions, plus 26 unknown-lap sessions;
 - **60,561.1 miles** as the exact minimum venue-to-venue great-circle displacement between consecutive race events; and
 - a route-adjusted modeled minimum of **63,670.6–71,512.1 miles**.

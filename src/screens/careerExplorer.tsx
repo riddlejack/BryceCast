@@ -472,7 +472,14 @@ export const ChapterStrip = ({ seriesName }: { seriesName: string }) => {
 
   const height = 40;
   const axisY = 22;
-  const x = (percentile: number) => 8 + percentile * (width - 16);
+  // The line runs 8 px in from each edge. Dots are inset by their own radius
+  // (plus stroke) and the percentile is clamped to 0..1, so a race that beat the
+  // whole field (FR Oceania, Highlands R2, P1) sits at the line's end, not past
+  // it, and nothing can be drawn outside the line whatever the data says.
+  const dotRadius = 3.4;
+  const dotInset = 8 + dotRadius + 1;
+  const x = (percentile: number) =>
+    dotInset + Math.min(1, Math.max(0, percentile)) * Math.max(width - 2 * dotInset, 0);
   const sorted = [...chapterRows].sort((a, b) => a.percentile - b.percentile);
   const median = sorted[Math.floor(sorted.length / 2)].percentile;
 
@@ -486,7 +493,7 @@ export const ChapterStrip = ({ seriesName }: { seriesName: string }) => {
               key={row.sessionId + index}
               cx={x(row.percentile)}
               cy={axisY}
-              r={3.4}
+              r={dotRadius}
               fill={row.status === 'running' ? chapterTint(row.seriesName) : 'var(--surface-1)'}
               fillOpacity={row.status === 'running' ? 0.5 : 1}
               stroke={row.status === 'running' ? 'none' : chapterTint(row.seriesName)}
@@ -1229,7 +1236,10 @@ const ConditionLane = ({
   const { navigate } = useRouter();
   const height = 44;
   const axisY = 26;
-  const x = (percentile: number) => 8 + percentile * (width - 16);
+  // Same inset and clamp as the chapter strip, so a P1 sits on the line's end.
+  const dotInset = 8 + 3.4 + 1;
+  const x = (percentile: number) =>
+    dotInset + Math.min(1, Math.max(0, percentile)) * Math.max(width - 2 * dotInset, 0);
   const sorted = [...laneRows].sort((a, b) => a.percentile - b.percentile);
   const median = sorted[Math.floor(sorted.length / 2)].percentile;
   return (
