@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { MapPin } from 'lucide-react';
 import { Card, ScreenHead, SourcePill, Unavailable } from '../app/components';
 import { useRouter } from '../app/router';
@@ -11,6 +11,7 @@ import { useQualiLabForRace } from '../data/qualiLab';
 import { uiDataPackage } from '../data/uiDataPackage';
 import { VenueSectionSuite, useVenueSectionData } from './sectionIntelligence';
 import { resolveQualifyingHeatMode } from './qualifyingHeat';
+import './tracks.css';
 
 /** The season schedule (seasonIndex, from the official venue dossier) and the
  *  section-lap packs (sectionLapRefs, joined by the track-asset name) name a
@@ -134,6 +135,60 @@ const VenueNumbersFallback = ({ visits, labels }: { visits: SectionLapsPack[]; l
   );
 };
 
+/* ---------- the film's 3D stills (public/tracks-3d/manifest.json) ---------- */
+
+interface StillFiles {
+  pace?: Record<string, string>;
+  plain?: Record<string, string>;
+}
+interface StillRace {
+  sessionId: string;
+}
+interface StillEntry {
+  trackName: string;
+  files: StillFiles;
+  race?: StillRace;
+  attribution?: string;
+  alternates?: Array<{ key: string; files: StillFiles; race?: StillRace }>;
+}
+interface StillsManifest {
+  tracks: Record<string, StillEntry>;
+}
+
+let stillsPromise: Promise<StillsManifest | null> | null = null;
+const loadStills = (): Promise<StillsManifest | null> => {
+  stillsPromise ??= fetch('/tracks-3d/manifest.json')
+    .then((response) => (response.ok ? (response.json() as Promise<StillsManifest>) : null))
+    .catch(() => null);
+  return stillsPromise;
+};
+
+/** The venue's still, if the film's rig made one: the pace-shaded render when
+ *  it was shaded from the visit on screen, else the plain model (never another
+ *  race's shading under this visit's label). */
+const useVenueStill = (venueName: string | null, sessionId: string | null) => {
+  const [manifest, setManifest] = useState<StillsManifest | null>(null);
+  useEffect(() => {
+    let live = true;
+    loadStills().then((loaded) => {
+      if (live) setManifest(loaded);
+    });
+    return () => {
+      live = false;
+    };
+  }, []);
+  const slug = trackOutlineFor(venueName)?.slug ?? null;
+  const entry = slug && manifest ? manifest.tracks[slug] ?? null : null;
+  if (!entry) return null;
+  const shaded =
+    entry.race?.sessionId === sessionId
+      ? entry.files.pace
+      : entry.alternates?.find((alternate) => alternate.race?.sessionId === sessionId)?.files.pace;
+  const files = shaded ?? entry.files.plain;
+  if (!files) return null;
+  return { files, shaded: Boolean(shaded), attribution: entry.attribution ?? null };
+};
+
 export const TracksScreen = () => {
   const { route, navigate } = useRouter();
   const refs = uiDataPackage.screens.raceDebrief.sectionLapRefs ?? [];
@@ -208,6 +263,9 @@ export const TracksScreen = () => {
     [qualiResolution, selectedCanonicalVisit?.trackName, selectedVenue, data.anchors]
   );
 
+  const still = useVenueStill(selectedVenue, selectedCanonicalVisit?.sessionId ?? null);
+  const visitLabel = selectedCanonicalVisit ? labels.get(selectedCanonicalVisit.sessionId) ?? null : null;
+
   const setVenue = (venueName: string) => navigate(`/tracks?venue=${encodeURIComponent(venueName)}`);
   const setVisit = (sessionId: string) => {
     if (!selectedVenue) return;
@@ -224,39 +282,60 @@ export const TracksScreen = () => {
   }
 
   return (
-    <div className="page stack">
-      <ScreenHead
-        kicker={<><MapPin size={13} aria-hidden /> Track archive</>}
-        title={selectedVenue}
-        sub="Open any venue or year at any time — during race week, after the season, or between schedules."
-      />
-
-      <Card title="Choose a venue and visit">
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))', gap: 14 }}>
-          <label className="stack" style={{ gap: 6, fontSize: 12.5, color: 'var(--ink-secondary)' }}>
-            <span>Venue</span>
-            <select aria-label="Venue" value={selectedVenue} onChange={(event) => setVenue(event.target.value)} style={selectStyle}>
-              {venues.map((venue) => <option key={venue} value={venue}>{venue}</option>)}
-            </select>
-          </label>
-          <label className="stack" style={{ gap: 6, fontSize: 12.5, color: 'var(--ink-secondary)' }}>
-            <span>Year and race</span>
-            <select
-              aria-label="Year and race"
-              value={selectedCanonicalVisit?.sessionId ?? ''}
-              disabled={canonicalVisits.length === 0}
-              onChange={(event) => setVisit(event.target.value)}
-              style={selectStyle}
-            >
-              {canonicalVisits.map((visit) => (
-                <option key={visit.sessionId} value={visit.sessionId}>
-                  {labels.get(visit.sessionId)}{sectionPackSessionIds.has(visit.sessionId) ? '' : ' · section report unavailable'}
-                </option>
-              ))}
-            </select>
-          </label>
+    <div className="page stack tracks-page">
+      <div className={`tracks-head${still ? ' tracks-head--still' : ''}`}>
+        <div className="tracks-head__text">
+          <ScreenHead
+            kicker={<><MapPin size={13} aria-hidden /> Track archive</>}
+            title={selectedVenue}
+            sub="His pace at every INDY NXT track he has raced, section by section, from the official timing loops."
+          />
+          <div className="tracks-head__pickers">
+            <label className="tracks-pick">
+              <span>Venue</span>
+              <select aria-label="Venue" value={selectedVenue} onChange={(event) => setVenue(event.target.value)} style={selectStyle}>
+                {venues.map((venue) => <option key={venue} value={venue}>{venue}</option>)}
+              </select>
+            </label>
+            <label className="tracks-pick">
+              <span>Year and race</span>
+              <select
+                aria-label="Year and race"
+                value={selectedCanonicalVisit?.sessionId ?? ''}
+                disabled={canonicalVisits.length === 0}
+                onChange={(event) => setVisit(event.target.value)}
+                style={selectStyle}
+              >
+                {canonicalVisits.map((visit) => (
+                  <option key={visit.sessionId} value={visit.sessionId}>
+                    {labels.get(visit.sessionId)}{sectionPackSessionIds.has(visit.sessionId) ? '' : ' · section report unavailable'}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
         </div>
-      </Card>
+        {still ? (
+          <figure className="tracks-still">
+            <img
+              src={still.files['1200']}
+              srcSet={[still.files['1200'] ? `${still.files['1200']} 1200w` : null, still.files['2400'] ? `${still.files['2400']} 2400w` : null]
+                .filter(Boolean)
+                .join(', ')}
+              sizes="(min-width: 1100px) 56vw, 100vw"
+              width={2400}
+              height={1350}
+              alt={`${selectedVenue}, the film's 3D model of the track${still.shaded ? ', shaded by his pace section by section' : ''}`}
+            />
+            <figcaption>
+              {still.shaded && visitLabel
+                ? `The film's 3D model, shaded by his pace in ${visitLabel}, the same shading as the map below.`
+                : "The film's 3D model of the track."}{' '}
+              {still.attribution}
+            </figcaption>
+          </figure>
+        ) : null}
+      </div>
 
       {data.loading ? (
         <div className="skeleton" style={{ height: 360 }} />
@@ -279,6 +358,8 @@ export const TracksScreen = () => {
           onSelectedVisitChange={setVisit}
           showVisitControl={false}
           qualifying={qualifying}
+          layout="tracks"
+          heatTitle={visitLabel ? `${visitLabel}, section by section` : undefined}
         />
       ) : (
         <VenueNumbersFallback visits={data.visits} labels={labels} />

@@ -35,6 +35,8 @@ import { QualifyingRunByRunCard } from './qualifyingRunByRun';
 import { resolveQualifyingHeatMode } from './qualifyingHeat';
 import { useQualiLabForRace } from '../data/qualiLab';
 import { TimingCoverageCard } from './timingCoverageCard';
+import './tracks.css';
+import './race.css';
 
 type Row = Record<string, unknown>;
 
@@ -98,7 +100,7 @@ export const LapChart = ({ story, building }: { story: LapChartStory; building?:
    * edge, so no digit can ever fall outside the viewport (FABLE_LESSONS #8). */
   const phone = width < 560;
   const endLabelEdgePad = 8;
-  const margin = { top: 16, right: phone ? 88 : 120, bottom: 30, left: 36 };
+  const margin = { top: 16, right: phone ? 88 : 120, bottom: 30, left: 42 };
   const plotWidth = Math.max(width - margin.left - margin.right, 80);
   const plotHeight = height - margin.top - margin.bottom;
   const x = (lap: number) => margin.left + ((lap - 1) / Math.max(totalLaps - 1, 1)) * plotWidth;
@@ -211,7 +213,7 @@ export const LapChart = ({ story, building }: { story: LapChartStory; building?:
                 dominantBaseline="middle"
                 fill="var(--ink-muted)"
                 fontFamily={chartFont}
-                fontSize={10.5}
+                fontSize={12}
                 style={{ fontVariantNumeric: 'tabular-nums' }}
               >
                 P{tick}
@@ -226,19 +228,19 @@ export const LapChart = ({ story, building }: { story: LapChartStory; building?:
                 textAnchor="middle"
                 fill="var(--ink-muted)"
                 fontFamily={chartFont}
-                fontSize={10.5}
+                fontSize={12}
                 style={{ fontVariantNumeric: 'tabular-nums' }}
               >
                 {tick}
               </text>
             </g>
           ))}
-          <text x={margin.left - 8} y={height - 10} textAnchor="end" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={10.5}>
+          <text x={margin.left - 8} y={height - 10} textAnchor="end" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={12}>
             lap
           </text>
           {/* The checkered tick marks a FINISHED distance; a building chart's
               right edge is "now", so the tick stays down until the flag. */}
-          {building ? null : <CheckeredTick x={x(totalLaps) + 8} y={height - 19} />}
+          {building ? null : <CheckeredTick x={x(totalLaps) + 13} y={height - 20} />}
 
           {/* rivals first, teammates above them, Bryce last (paint order = read order) */}
           {drivers
@@ -314,7 +316,7 @@ export const LapChart = ({ story, building }: { story: LapChartStory; building?:
               dominantBaseline="middle"
               fill="var(--ink-muted)"
               fontFamily={chartFont}
-              fontSize={11}
+              fontSize={12}
               style={{ fontVariantNumeric: 'tabular-nums' }}
             >
               {winner.driverName.split(' ').slice(-1)[0]} P1
@@ -450,15 +452,26 @@ const DayTile = ({ label, value, note }: { label: string; value: ReactNode; note
     <span className="tnum" style={{ fontSize: 19, fontWeight: 620, letterSpacing: '-0.01em' }}>
       {value}
     </span>
-    {note ? <span style={{ fontSize: 11.5, color: 'var(--ink-muted)' }}>{note}</span> : null}
+    {note ? <span style={{ fontSize: 12.5, color: 'var(--ink-muted)' }}>{note}</span> : null}
   </div>
 );
 
-/** Year-over-year conditions strip: this visit against Bryce's previous race
- *  at the same venue, in the dossier's per-value glyph grammar — neutral-ink
- *  ▲▽ deltas beside each reading, plus the wind-swing mini-visual. Renders
- *  only when the venue has been visited at least twice. */
-const YoYConditionsStrip = ({ venue, visit }: { venue: UiVenueDossierVenue; visit: UiVenueDossierVisit }) => {
+/** Year-over-year conditions line: this visit against Bryce's previous race at
+ *  the same venue, in the dossier's per-value glyph grammar (neutral-ink ▲▽
+ *  deltas). It sits under the day's tiles, so a reading the tile above already
+ *  shows (same rounded value) is named rather than repeated; a reading that
+ *  differs from the tile (the dossier's own join) keeps its value. Renders only
+ *  when the venue has been visited at least twice. */
+const YoYConditionsStrip = ({
+  venue,
+  visit,
+  shown
+}: {
+  venue: UiVenueDossierVenue;
+  visit: UiVenueDossierVisit;
+  /** What the tiles above already print, for the de-duplication. */
+  shown: { tempF: number | null; humidityPct: number | null; windMph: number | null };
+}) => {
   const prior = venue.visits.find((candidate) => candidate.sessionId === visit.deltaVsPrior?.priorSessionId) ?? null;
   const here = visit.conditions;
   const d = visit.deltaVsPrior;
@@ -466,50 +479,61 @@ const YoYConditionsStrip = ({ venue, visit }: { venue: UiVenueDossierVenue; visi
 
   const segments: ReactNode[] = [];
   if (here.ambientTempF !== null) {
+    const same = shown.tempF !== null && Math.round(here.ambientTempF) === shown.tempF;
     segments.push(
       <span key="temp" className="row" style={{ gap: 4, alignItems: 'center' }}>
-        <span className="tnum">{here.ambientTempF}°F</span>
+        <span className="tnum">{same ? 'air' : `${here.ambientTempF}°F`}</span>
         <FactDelta delta={d.tempDeltaF} unit="°" />
       </span>
     );
   }
   if (here.humidityPct !== null) {
+    const same = shown.humidityPct !== null && Math.round(here.humidityPct) === Math.round(shown.humidityPct);
     segments.push(
       <span key="humidity" className="row" style={{ gap: 4, alignItems: 'center' }}>
-        <span className="tnum">{Math.round(here.humidityPct)}%</span>
+        <span className="tnum">{same ? 'humidity' : `${Math.round(here.humidityPct)}%`}</span>
         <FactDelta delta={d.humidityDeltaPct} />
       </span>
     );
   }
   if (here.windSpeedMph !== null) {
+    const same = shown.windMph !== null && Math.round(here.windSpeedMph) === shown.windMph;
     segments.push(
       <span key="wind" className="row" style={{ gap: 4, alignItems: 'center' }}>
         {/* Value + speed delta only; the from→to reads across the year labels,
-            so the swing mini-arrows are gone (Jack's review). Calm at 0 mph. */}
-        <span className="tnum">{formatWind(here.windSpeedMph, here.windCardinal)}</span>
+            so the swing mini-arrows are gone (Jack's review). Calm at 0 mph.
+            The cardinal stays even when the speed is the tile's: the tiles
+            don't carry the direction. */}
+        <span className="tnum">
+          {same ? `wind${here.windCardinal && here.windSpeedMph > 0 ? ` from the ${here.windCardinal}` : ''}` : formatWind(here.windSpeedMph, here.windCardinal)}
+        </span>
         <FactDelta delta={d.windSpeedDeltaMph} unit=" mph" />
       </span>
     );
   }
-  segments.push(
-    <span key="vs" style={{ color: 'var(--ink-muted)' }}>
-      vs{' '}
-      {prior ? (
-        <Link to={prior.raceHref} className="navlink" style={{ padding: 0 }}>
-          {d.priorSeasonYear}
-        </Link>
-      ) : (
-        d.priorSeasonYear
-      )}
-    </span>
-  );
+
+  /* "vs 2026" under a 2026 race reads as a typo on a double-header weekend;
+     name the race when the prior visit is the same year. */
+  const priorName =
+    prior && prior.seasonYear === visit.seasonYear && prior.raceInYearIndex !== null
+      ? `${d.priorSeasonYear} Race ${prior.raceInYearIndex}`
+      : `${d.priorSeasonYear} race`;
 
   return (
-    <div style={{ borderTop: '1px solid var(--grid-hairline)', marginTop: 14, paddingTop: 12 }}>
-      <span className="caption">This place, other years</span>
-      <div className="row row--wrap" style={{ gap: 10, marginTop: 6, fontSize: 13, color: 'var(--ink-secondary)', alignItems: 'center' }}>
-        <span style={{ color: 'var(--ink-primary)', fontWeight: 560 }}>{visit.seasonYear}:</span>
-        {segments.length > 1
+    <div className="race-day__yoy">
+      <span className="caption">
+        Against his{' '}
+        {prior ? (
+          <Link to={prior.raceHref} className="navlink" style={{ padding: 0, color: 'var(--link)', fontSize: 'inherit' }}>
+            {priorName}
+          </Link>
+        ) : (
+          priorName
+        )}{' '}
+        here
+      </span>
+      <div className="row row--wrap" style={{ gap: 10, marginTop: 6, fontSize: 14, color: 'var(--ink-secondary)', alignItems: 'center' }}>
+        {segments.length > 0
           ? segments.flatMap((segment, index) =>
               index > 0
                 ? [
@@ -638,7 +662,13 @@ const TheDay = ({ story, pack, venue, visit }: { story: RaceStoryPack; pack: Arc
           <DayTile label="Sky" value={sky} note="during the race hour" />
         ) : null}
       </div>
-      {venue && venue.visits.length >= 2 && visit ? <YoYConditionsStrip venue={venue} visit={visit} /> : null}
+      {venue && venue.visits.length >= 2 && visit ? (
+        <YoYConditionsStrip
+          venue={venue}
+          visit={visit}
+          shown={{ tempF, humidityPct: weather?.humidityPct ?? null, windMph }}
+        />
+      ) : null}
     </Card>
   );
 };
@@ -719,7 +749,7 @@ const SectionStory = ({ story }: { story: RaceStoryPack }) => {
           </div>
         </div>
       </div>
-      <p style={{ margin: 0, paddingTop: 14, marginTop: 'auto', fontSize: 11.5, color: 'var(--ink-muted)' }}>
+      <p style={{ margin: 0, paddingTop: 14, marginTop: 'auto', fontSize: 12.5, color: 'var(--ink-muted)' }}>
         Percentile of the field beaten in each timing section, from {formatNumber(sections.comparisonRows, 0)} official comparisons
         across the weekend.
       </p>
@@ -735,7 +765,11 @@ const restartCountWord = (value: number): string =>
 const RestartDeltaChip = ({ net }: { net: number }) => {
   const gain = formatGain(net);
   if (!gain) return null;
-  return <span className={`stat__delta stat__delta--${gain.direction}`} style={{ fontSize: 12 }}>{gain.text}</span>;
+  return (
+    <span className={`stat__delta stat__delta--${gain.direction}`} style={{ fontSize: 13 }}>
+      {gain.direction === 'flat' ? 'held' : gain.text}
+    </span>
+  );
 };
 
 const restartSourcePill = (
@@ -779,7 +813,7 @@ const RestartBaselineLine = ({ sessionId }: { sessionId: string }) => {
       ? restartThinVenueNote(shortVenue(venueRow.trackName), venueRow.restarts)
       : null;
   return (
-    <p style={{ margin: '12px 0 0', fontSize: 11.5, color: 'var(--ink-muted)' }}>
+    <p style={{ margin: '12px 0 0', fontSize: 12.5, color: 'var(--ink-muted)' }}>
       {sentence}
       {thin ? ` · ${thin}` : ''}
     </p>
@@ -901,7 +935,7 @@ const RestartsCard = ({ story }: { story: RaceStoryPack }) => {
 
       <RestartBaselineLine sessionId={story.sessionId} />
 
-      <p style={{ margin: '14px 0 0', fontSize: 11.5, color: 'var(--ink-muted)' }}>
+      <p style={{ margin: '14px 0 0', fontSize: 12.5, color: 'var(--ink-muted)' }}>
         Running order over the two green laps after each restart, Bryce against the full field
         {classified.length < restarts.detected
           ? ` · ${restartCountWord(restarts.detected - classified.length)} later restart${restarts.detected - classified.length === 1 ? '' : 's'} ran after his race`
@@ -937,7 +971,7 @@ const TeamStrip = ({ story }: { story: RaceStoryPack }) => {
               textAnchor="middle"
               fill="var(--ink-muted)"
               fontFamily={chartFont}
-              fontSize={10}
+              fontSize={12}
               style={{ fontVariantNumeric: 'tabular-nums' }}
             >
               P{tick}
@@ -955,7 +989,7 @@ const TeamStrip = ({ story }: { story: RaceStoryPack }) => {
             return (
               <g key={teammate.driverName}>
                 {teammate.isBryce ? (
-                  <rect x={pointX - 8} y={axisY - 8} width={16} height={16} rx={4.5} fill="var(--bryce)" />
+                  <rect x={pointX - 10} y={axisY - 10} width={20} height={20} rx={5} fill="var(--bryce)" />
                 ) : (
                   <circle cx={pointX} cy={axisY} r={4} fill="var(--ink-primary)" fillOpacity={0.55} />
                 )}
@@ -967,7 +1001,7 @@ const TeamStrip = ({ story }: { story: RaceStoryPack }) => {
                     dominantBaseline="central"
                     fill="var(--bryce-ink-on)"
                     fontFamily={chartFont}
-                    fontSize={10}
+                    fontSize={12}
                     fontWeight={700}
                   >
                     9
@@ -1047,7 +1081,7 @@ const TeamStory = ({ story }: { story: RaceStoryPack }) => {
             </div>
           ))}
       </div>
-      <p style={{ margin: 0, paddingTop: 14, marginTop: 'auto', fontSize: 11.5, color: 'var(--ink-muted)' }}>
+      <p style={{ margin: 0, paddingTop: 14, marginTop: 'auto', fontSize: 12.5, color: 'var(--ink-muted)' }}>
         Every {story.teamContext?.teamName ?? 'team'} car in this race, start to finish, from official results.
       </p>
     </Card>
@@ -1056,8 +1090,12 @@ const TeamStory = ({ story }: { story: RaceStoryPack }) => {
 
 /* ---------- weekend arc ---------- */
 
-/** Qualifying-session ranks may be within a group; grid is the full-field rank. */
-const weekendArc = (story: RaceStoryPack): string | null => {
+/** Qualifying-session ranks may be within a group; grid is the full-field rank.
+ *  When the hero's gain line already reads "▲1 from P10", the grid and the flag
+ *  are on screen twice over, so the arc keeps only what the line doesn't say
+ *  (practice and the qualifying-session rank). Without a start position the
+ *  full arc stays. */
+const weekendArc = (story: RaceStoryPack, gainLineShown: boolean): string | null => {
   const signal = story.weekendSignal;
   if (!signal) return null;
   const stations = [
@@ -1067,6 +1105,11 @@ const weekendArc = (story: RaceStoryPack): string | null => {
     ['Flag', signal.raceFinish]
   ].filter((station): station is [string, number] => station[1] !== null);
   if (stations.length < 3) return null;
+  if (gainLineShown) {
+    const before = stations.filter(([label]) => label === 'Practice' || label === 'Qualifying session');
+    if (before.length === 0) return null;
+    return before.map(([label, rank], index) => `${index === 0 ? label : label.toLowerCase()} P${rank}`).join(' · ');
+  }
   return stations.map(([label, rank]) => `${label} P${rank}`).join(' → ');
 };
 
@@ -1210,7 +1253,7 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
     asString((pack.raceOrder as Row | undefined)?.sessionStartDate) ??
     asString((pack as unknown as Row).eventStartDate);
   const verdict = story ? verdictFor(story) : null;
-  const arc = story ? weekendArc(story) : null;
+  const arc = story ? weekendArc(story, gain !== null) : null;
   const moverName = asString(pack.lapStory?.topLapChartMover);
   const moverGain = asNumber(pack.lapStory?.topLapChartGain);
   const mover = moverName && moverGain !== null ? { name: moverName, gain: moverGain } : null;
@@ -1253,7 +1296,7 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
       : null;
 
   return (
-    <div className="page stack">
+    <div className="page stack race-page">
       <Link to="/races" className="navlink" style={{ alignSelf: 'flex-start', padding: '4px 2px' }}>
         <ArrowLeft size={14} aria-hidden /> All races
       </Link>
@@ -1300,8 +1343,8 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
           <div className="stat">
             <span className="stat__value stat__value--hero">{formatPosition(finish)}</span>
             {gain ? (
-              <span className={`stat__delta ${gain.direction === 'up' ? 'stat__delta--up' : 'stat__delta--down'}`}>
-                {gain.text} from {formatPosition(start)}
+              <span className={`stat__delta stat__delta--${gain.direction}`}>
+                {gain.direction === 'flat' ? `Held his grid slot, ${formatPosition(start)}` : `${gain.text} from ${formatPosition(start)}`}
                 {fieldSize !== null ? ` · ${fieldSize}-car field` : ''}
               </span>
             ) : null}
@@ -1329,7 +1372,7 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
               <TrackArt
                 outline={outline}
                 showCornerLabels={false}
-                maxHeight={150}
+                maxHeight={170}
                 sections={heroSectionsLayer}
                 wind={heroWind}
               />
@@ -1351,23 +1394,31 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
         </div>
       </HeroPanel>
 
+      {/* The page reads like the race (site refresh, round 2): the result, the
+          replay, the race lap by lap, where he was quick, the day, and the
+          engineering detail (the timing archive) last. */}
       <WatchRaceUnfold sessionId={sessionId} />
-
-      <TimingCoverageCard sessionId={sessionId} />
-
-      {/* Weekend arc, chronological: qualifying (Friday signal) before the race
-          it set the grid for. Renders the covered module, a quiet Race-2 note,
-          or nothing (Brief M). Resolution hoisted above for footer provenance. */}
-      <QualifyingRunByRunCard resolution={qualiResolution} />
 
       {story ? <LapChartCard story={story} mover={mover} /> : null}
 
-      {/* Deeper analysis rides above the summary stats (Jack's directive,
-          2026-07-19): once the race has been watched and read lap by lap, the
-          track section-by-section — and its year-over-year shapes card, kept
-          adjacent — come before The Day and Restarts settle the context. */}
+      {/* Restarts and the team sit beside each other under the lap chart: both
+          read the same race from the running order. */}
+      {story && (story.restarts || story.teammates.length >= 2) ? (
+        <div className="race-pair">
+          <RestartsCard story={story} />
+          <TeamStory story={story} />
+        </div>
+      ) : null}
+
+      {/* Where he was quick: the section heat first, its year-over-year shapes
+          kept adjacent (same key), then the qualifying run that set the grid. */}
       {outline && sectionAnchors ? (
+        /* Drawn large with the Tracks page's own layout (the map, where his lap
+           goes, lap by section). The wrapper carries that page's scope class
+           so tracks.css applies to this card and nothing else here. */
+        <div className="tracks-page race-quick">
         <SectionHeatCard
+          layout="tracks"
           key={sessionId}
           outline={outline}
           anchors={sectionAnchors}
@@ -1378,6 +1429,7 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
           qualifying={qualifyingHeat}
           priorComparison={validPriorComparison(visitPacks, sessionId, sectionAnchors)}
         />
+        </div>
       ) : (
         /* No geometric anchors yet (IMS awaits a verified calibration between
            the correct 2.44-mi feed geometry and its outline): the same numbers
@@ -1387,15 +1439,21 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
         story ? <SectionStory story={story} /> : null
       )}
 
-      {outline && sectionAnchors ? <VenueYearsCard outline={outline} anchors={sectionAnchors} visits={visitPacks} /> : null}
+      {outline && sectionAnchors ? (
+        <div className="race-years">
+          <VenueYearsCard outline={outline} anchors={sectionAnchors} visits={visitPacks} shapeMaxHeight={300} />
+        </div>
+      ) : null}
+
+      {/* Renders the covered module, a quiet Race-2 note, or nothing (Brief M).
+          Resolution hoisted above for footer provenance. */}
+      <QualifyingRunByRunCard resolution={qualiResolution} />
 
       {story ? <TheDay story={story} pack={pack} venue={dossierVenue} visit={dossierVisit} /> : null}
 
-      {story ? <RestartsCard story={story} /> : null}
-
-      {/* Where the heat card renders, the section table retires INTO its
-          drawer (director ruling, 2026-07-18): same numbers, richer form. */}
-      {story ? <TeamStory story={story} /> : null}
+      {/* The retained timing frames are engineering detail: last, before the
+          page's source line. */}
+      <TimingCoverageCard sessionId={sessionId} />
 
       {/* The footer claim is built from the sources the page's VISIBLE modules
           actually cite (finding #19): official results + lap chart always; section
@@ -1450,7 +1508,7 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
               : `${parts.slice(0, -1).join(', ')}, and ${parts[parts.length - 1]}`;
 
         return (
-          <p style={{ margin: 0, fontSize: 11.5, color: 'var(--ink-muted)' }}>
+          <p style={{ margin: 0, fontSize: 12.5, color: 'var(--ink-muted)' }}>
             Everything on this page comes from {sources}.
           </p>
         );

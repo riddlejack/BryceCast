@@ -15,11 +15,9 @@ import {
 import { ChartTipCard, chartFont, useMeasuredWidth, type ChartTip } from '../app/charts';
 import { asNumber, asString, formatDate, formatGap, formatNumber } from '../app/format';
 import { Link, useRouter } from '../app/router';
-import { TrackArt } from '../app/trackArt';
 import { LiveRunningOrder } from './LiveRunningOrder';
 import { useNextSession } from '../app/useNextSession';
 import { getNextEvent, raceDayOf } from '../data/upcoming';
-import { trackOutlineFor } from '../assets/tracks';
 import type { LiveReadiness, ReplaySourceGap } from '../app/useReadiness';
 import type { ReplaySession } from '../app/useReplaySession';
 import { isBryceCastCaptureTier, replayProvenance, watchableCaptureForRace, type ReplaySessionInfo } from '../data/replayAvailable';
@@ -83,6 +81,8 @@ import {
 } from '../data/offSeasonDemo';
 import { canonicalLiveRaceSessionId, replayDeepLinkQuery } from '../data/liveRaceShellModel';
 import { ReplayGapSkippedNote, ReplaySourceGapNotice } from './replaySourceGap';
+import { FlagReadout, HeroIdentity, ReplayPreStart, TrackPanel, raceIdentityFor } from './liveParts';
+import './live.css';
 
 type Row = Record<string, unknown>;
 
@@ -405,7 +405,7 @@ const BattleCorridor = ({ payload, samples, history }: { payload: LiveReadiness;
             {axisTicks.map((tick) => (
               <g key={tick} className="live-battle__tick" transform={`translate(${x(tick)} 0)`} data-axis-tick={tick}>
                 <line x1={0} x2={0} y1={axisY - (tick === 0 ? 9 : 5)} y2={axisY + (tick === 0 ? 9 : 5)} stroke={tick === 0 ? 'var(--bryce)' : 'var(--axis-baseline)'} />
-                <text x={0} y={axisY + 23} textAnchor="middle" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={10.5}>{tickLabel(tick)}</text>
+                <text x={0} y={axisY + 23} textAnchor="middle" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={12}>{tickLabel(tick)}</text>
               </g>
             ))}
             {cars.map((car) => {
@@ -438,7 +438,7 @@ const BattleCorridor = ({ payload, samples, history }: { payload: LiveReadiness;
                     y2={connector.y2}
                     data-connector-driver-id={car.id}
                   />
-                  <text x={0} y={labelY} textAnchor="middle" fill="var(--ink-secondary)" fontFamily={chartFont} fontSize={10}>{car.surname}</text>
+                  <text x={0} y={labelY} textAnchor="middle" fill="var(--ink-secondary)" fontFamily={chartFont} fontSize={12}>{car.surname}</text>
                   <circle cx={0} cy={axisY} r={close ? 6.5 : 5} fill="var(--ink-primary)" opacity={close ? 1 : 0.8} stroke="var(--surface-1)" strokeWidth={2} />
                   <circle
                     cx={0}
@@ -466,11 +466,11 @@ const BattleCorridor = ({ payload, samples, history }: { payload: LiveReadiness;
               <rect x={-15} y={-11} width={30} height={22} rx={4} fill="var(--bryce)" />
               <text y={1} textAnchor="middle" dominantBaseline="middle" fill="#1d1d1f" fontFamily={chartFont} fontSize={12} fontWeight={750}>№9</text>
             </g>
-            <text x={margin.left} y={188} textAnchor="start" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={10.5}>behind Bryce</text>
-            <text x={margin.left + plotWidth / 2} y={188} textAnchor="middle" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={10.5} data-axis-frame-note>
+            <text x={margin.left} y={188} textAnchor="start" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={12}>behind Bryce</text>
+            <text x={margin.left + plotWidth / 2} y={188} textAnchor="middle" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={12} data-axis-frame-note>
               {width < 520 ? `seconds · ±${step}s` : `gaps in seconds · frame ±${step}s`}
             </text>
-            <text x={width - margin.right} y={188} textAnchor="end" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={10.5}>ahead of Bryce</text>
+            <text x={width - margin.right} y={188} textAnchor="end" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={12}>ahead of Bryce</text>
           </svg>
           {tip ? <ChartTipCard tip={tip} width={width} /> : null}
         </>
@@ -686,7 +686,21 @@ const TrustRail = ({ payload, fixtureMode }: { payload: LiveReadiness; fixtureMo
 
 /* ---------- hero: the race, now ---------- */
 
-const LiveHero = ({ payload, samples, replayEnded = false, sessionKind }: { payload: LiveReadiness; samples: GapSample[]; replayEnded?: boolean; sessionKind: LiveSessionKind }) => {
+const LiveHero = ({
+  payload,
+  samples,
+  replayEnded = false,
+  sessionKind,
+  replay,
+  history
+}: {
+  payload: LiveReadiness;
+  samples: GapSample[];
+  replayEnded?: boolean;
+  sessionKind: LiveSessionKind;
+  replay: ReplaySession | null;
+  history: LiveSessionHistory | null;
+}) => {
   const weekend = payload.raceWeekend as Row;
   const heartbeat = heartbeatOf(payload);
   const bryce = liveBryceRowOf(payload);
@@ -696,8 +710,7 @@ const LiveHero = ({ payload, samples, replayEnded = false, sessionKind }: { payl
   const totalLaps = asNumber(heartbeat.totalLaps ?? weekend.totalLaps);
   const rank = bryce ? livePosition(bryce) : null;
   const sessionName = asString(heartbeat.sessionName ?? weekend.sessionName);
-  const outline = trackOutlineFor(asString(heartbeat.trackName ?? weekend.trackName));
-  const progress = lap !== null && totalLaps !== null && totalLaps > 0 ? lap / totalLaps : 0;
+  const identity = raceIdentityFor(payload, replay);
   const pointsWindow = buildOfficialPointsWindow(liveRowsOf(payload));
   const points = payload.points as Row;
   const historicalRank = asNumber((points.bryce as Row)?.historicalRank);
@@ -725,7 +738,8 @@ const LiveHero = ({ payload, samples, replayEnded = false, sessionKind }: { payl
   const gained = rank !== null && firstRecent?.rank !== null && firstRecent?.rank !== undefined ? firstRecent.rank - rank : 0;
   let positionStory: { text: string; up: boolean } | null = null;
   if (gained > 0 && firstRecent?.lap !== null && firstRecent?.lap !== undefined && lap !== null && lap > firstRecent.lap) {
-    positionStory = { text: `▲ up ${gained} in the last ${Math.min(5, lap - firstRecent.lap)} laps`, up: true };
+    const span = Math.min(5, lap - firstRecent.lap);
+    positionStory = { text: `▲ up ${gained} ${span === 1 ? 'on the last lap' : `in the last ${span} laps`}`, up: true };
   } else if (rank !== null && lap !== null) {
     let heldFrom = lap;
     for (let index = recent.length - 1; index >= 0; index -= 1) {
@@ -737,148 +751,91 @@ const LiveHero = ({ payload, samples, replayEnded = false, sessionKind }: { payl
 
   return (
     <HeroPanel className="live-hero">
-      <div className="live-hero__identity">
-        <div>
-          <span className="kicker">{asString(heartbeat.trackName ?? weekend.trackName) ?? 'Live companion'}</span>
-          <h1 className="screen-head__title">{asString(weekend.eventName) ?? asString(heartbeat.eventName) ?? 'INDY NXT'}</h1>
-        </div>
-        <SourcePill title="The race, now" entries={sourceEntries.hero} />
-      </div>
-      <div className="hero-race hero-race--week live-hero__body">
-        <div className="live-hero__race-state">
-          <div className="row row--wrap live-hero__flag-lap">
-            {replayEnded ? (
-              <StatusChip tone="neutral" label="Race complete · as raced" />
-            ) : flag ? (
-              <StatusChip tone={flagTone(flag)} label={`${flag} flag`} live={flag.toUpperCase() === 'GREEN'} />
-            ) : null}
-            {isRace ? (
-              <TickerValue className="live-lap" value={lap !== null && totalLaps !== null ? `Lap ${lap} of ${totalLaps}` : sessionName ?? 'Session live'} valueKey={`${lap ?? 'na'}-${totalLaps ?? 'na'}`} />
-            ) : (
-              /* No lap counter outside a race — a session has no finish line. The
-               * payload carries no session clock, so we show its name and status,
-               * never an invented elapsed time. */
-              <TickerValue className="live-lap" value={sessionName ?? 'Session live'} valueKey={sessionName ?? 'session'} />
-            )}
+      <HeroIdentity identity={identity} action={<SourcePill title="The race, now" entries={sourceEntries.hero} />} />
+      <FlagReadout flag={flag} lap={lap} totalLaps={totalLaps} ended={replayEnded} isRace={isRace} sessionName={sessionName} />
+      <div className="live-hero__position">
+        <div className="live-position">
+          <Plate size="hero" />
+          <div>
+            <span className="caption">{sessionRankCaption(sessionKind)}</span>
+            <TickerValue className="stat__value stat__value--hero live-position__value" value={rank !== null ? `P${rank}` : '—'} valueKey={rank ?? 'na'} />
+            {isRace && positionStory ? <span className={`stat__delta${positionStory.up ? ' stat__delta--up' : ''}`}>{positionStory.text}</span> : null}
           </div>
-          <div className="live-position">
-            <Plate size="hero" />
-            <div>
-              <span className="caption">{sessionRankCaption(sessionKind)}</span>
-              <TickerValue className="stat__value stat__value--hero live-position__value" value={rank !== null ? `P${rank}` : '—'} valueKey={rank ?? 'na'} />
-              {isRace && positionStory ? <span className={`stat__delta${positionStory.up ? ' stat__delta--up' : ''}`}>{positionStory.text}</span> : null}
-            </div>
-          </div>
-          {speedValue !== null ? (
-            <p className="live-hero__speed caption caption--secondary">
-              {isRace && underCaution ? (
-                /* Under yellow the field runs to a controlled caution pace, so
-                 * the drop is real but a cross-car comparison would pit laps
-                 * that aren't the same caution lap against each other. Keep
-                 * Bryce's own last lap; omit the field comparison. */
-                <>
-                  Last lap under caution ·{' '}
-                  <TickerValue
-                    className="live-hero__speed-value"
-                    value={`${speedValue.toFixed(1)} mph`}
-                    valueKey={`${lap ?? 'na'}-${speedValue}`}
-                  />
-                </>
-              ) : (
-                <>
-                  {speedLead}{' '}
-                  <TickerValue
-                    className="live-hero__speed-value"
-                    value={`${speedValue.toFixed(1)} mph`}
-                    valueKey={`${lap ?? 'na'}-${speedValue}`}
-                  />
-                  {bryceHoldsFastest ? (
-                    <> · {speedFastestCopy}</>
-                  ) : (
-                    <>
-                      {' · '}field best: {fastestName ? `${fastestName}, ` : ''}
-                      <TickerValue
-                        className="live-hero__speed-value"
-                        value={`${fieldFastest!.speed.toFixed(1)} mph`}
-                        valueKey={`${lap ?? 'na'}-${fieldFastest!.speed}`}
-                      />
-                    </>
-                  )}
-                </>
-              )}
-            </p>
-          ) : null}
         </div>
-        <div className="hero-race__art live-hero__art">
-          {outline ? <TrackArt outline={outline} showCornerLabels={false} maxHeight={150} /> : null}
-          <span className="caption caption--secondary live-hero__art-caption">full circuit outline · no car-position data</span>
-          {/* Race completion is a race-only idea — a practice or qualifying
-              session runs to the clock, not a lap total. */}
-          {isRace ? (
-            <>
-              <div className="live-lap-progress__meta">
-                <span>Race completion</span>
-                <span>{lap !== null && totalLaps !== null ? `${lap} / ${totalLaps} laps` : 'lap pending'}</span>
-              </div>
-              <div
-                className="live-lap-progress"
-                role="progressbar"
-                aria-label="Race completion by completed lap"
-                aria-valuemin={0}
-                aria-valuemax={totalLaps ?? 0}
-                aria-valuenow={lap ?? 0}
-              >
-                <span style={{ width: `${Math.max(0, Math.min(1, progress)) * 100}%` }} />
-              </div>
-            </>
-          ) : null}
-        </div>
-        {isRace ? (
-          <div className="live-hero__jumbotron">
-            <span className="caption">If the race ended now</span>
-            {pointsWindow ? (
+        {speedValue !== null ? (
+          <p className="live-hero__speed caption caption--secondary">
+            {isRace && underCaution ? (
+              /* Under yellow the field runs to a controlled caution pace, so
+               * the drop is real but a cross-car comparison would pit laps
+               * that aren't the same caution lap against each other. Keep
+               * Bryce's own last lap; omit the field comparison. */
               <>
-                <div className="row live-hero__standing-row">
-                  <TickerValue className="stat__value stat__value--big" value={`P${pointsWindow.bryce.projectedStanding}`} valueKey={pointsWindow.bryce.projectedStanding} />
-                  {standingMove !== null && standingMove !== 0 ? (
-                    <span className={`stat__delta ${standingMove > 0 ? 'stat__delta--up' : 'stat__delta--down'}`}>{standingMove > 0 ? `▲ ${standingMove}` : `▽ ${Math.abs(standingMove)}`} vs pre-race</span>
-                  ) : null}
-                </div>
-                <div className="live-hero__running-points"><TickerValue className="live-hero__points-number" value={pointsWindow.bryce.runningDriverPoints} valueKey={pointsWindow.bryce.runningDriverPoints} /> running points</div>
-                <span className="live-points__provisional">{pointsProvenanceLabel(payload)}</span>
+                Last lap under caution ·{' '}
+                <TickerValue className="live-hero__speed-value" value={`${speedValue.toFixed(1)} mph`} valueKey={`${lap ?? 'na'}-${speedValue}`} />
               </>
             ) : (
-              <Unavailable>Official running points are not published in this state.</Unavailable>
-            )}
-          </div>
-        ) : (
-          /* Outside a race there is no championship math — the headline is
-             Bryce's best lap and how far it sits off the session best. */
-          <div className="live-hero__jumbotron">
-            <span className="caption">Bryce's best lap</span>
-            {bestDeltas?.bryce ? (
               <>
-                <div className="row live-hero__standing-row">
-                  <TickerValue className="stat__value stat__value--big" value={bestDeltas.bryce.bestLapTime} valueKey={bestDeltas.bryce.bestLapTime} />
-                  {bestDeltas.bryceIsFastest ? (
-                    <span className="stat__delta stat__delta--up">fastest in the field</span>
-                  ) : bestDeltas.offSessionBestSeconds !== null ? (
-                    <span className="stat__delta stat__delta--flat">{bestDeltas.offSessionBestSeconds.toFixed(bestDeltas.offSessionBestSeconds < 10 ? 2 : 1)}s off the best</span>
-                  ) : null}
-                </div>
-                {bestDeltas.bryceIsFastest ? (
-                  <div className="live-hero__running-points">the lap to beat, right now</div>
+                {speedLead}{' '}
+                <TickerValue className="live-hero__speed-value" value={`${speedValue.toFixed(1)} mph`} valueKey={`${lap ?? 'na'}-${speedValue}`} />
+                {bryceHoldsFastest ? (
+                  <> · {speedFastestCopy}</>
                 ) : (
-                  <div className="live-hero__running-points">P1 <TickerValue className="live-hero__points-number" value={bestDeltas.leader.surname} valueKey={bestDeltas.leader.surname} /> set {bestDeltas.leader.bestLapTime}</div>
+                  <>
+                    {' · '}field best: {fastestName ? `${fastestName}, ` : ''}
+                    <TickerValue className="live-hero__speed-value" value={`${fieldFastest!.speed.toFixed(1)} mph`} valueKey={`${lap ?? 'na'}-${fieldFastest!.speed}`} />
+                  </>
                 )}
-                <span className="live-points__provisional">gaps in seconds · best laps</span>
               </>
-            ) : (
-              <Unavailable>Bryce's best lap appears once Race Control publishes it.</Unavailable>
             )}
-          </div>
-        )}
+          </p>
+        ) : null}
       </div>
+      {isRace ? (
+        <div className="live-hero__jumbotron">
+          <span className="caption">If the race ended now</span>
+          {pointsWindow ? (
+            <>
+              <div className="row live-hero__standing-row">
+                <TickerValue className="stat__value stat__value--big" value={`P${pointsWindow.bryce.projectedStanding}`} valueKey={pointsWindow.bryce.projectedStanding} />
+                {standingMove !== null && standingMove !== 0 ? (
+                  <span className={`stat__delta ${standingMove > 0 ? 'stat__delta--up' : 'stat__delta--down'}`}>{standingMove > 0 ? `▲ ${standingMove}` : `▽ ${Math.abs(standingMove)}`} vs pre-race</span>
+                ) : null}
+              </div>
+              <div className="live-hero__running-points"><TickerValue className="live-hero__points-number" value={pointsWindow.bryce.runningDriverPoints} valueKey={pointsWindow.bryce.runningDriverPoints} /> running points</div>
+              <span className="live-points__provisional">{pointsProvenanceLabel(payload)}</span>
+            </>
+          ) : (
+            <Unavailable>Official running points are not published in this state.</Unavailable>
+          )}
+        </div>
+      ) : (
+        /* Outside a race there is no championship math — the headline is
+           Bryce's best lap and how far it sits off the session best. */
+        <div className="live-hero__jumbotron">
+          <span className="caption">Bryce's best lap</span>
+          {bestDeltas?.bryce ? (
+            <>
+              <div className="row live-hero__standing-row">
+                <TickerValue className="stat__value stat__value--big" value={bestDeltas.bryce.bestLapTime} valueKey={bestDeltas.bryce.bestLapTime} />
+                {bestDeltas.bryceIsFastest ? (
+                  <span className="stat__delta stat__delta--up">fastest in the field</span>
+                ) : bestDeltas.offSessionBestSeconds !== null ? (
+                  <span className="stat__delta stat__delta--flat">{bestDeltas.offSessionBestSeconds.toFixed(bestDeltas.offSessionBestSeconds < 10 ? 2 : 1)}s off the best</span>
+                ) : null}
+              </div>
+              {bestDeltas.bryceIsFastest ? (
+                <div className="live-hero__running-points">the lap to beat, right now</div>
+              ) : (
+                <div className="live-hero__running-points">P1 <TickerValue className="live-hero__points-number" value={bestDeltas.leader.surname} valueKey={bestDeltas.leader.surname} /> set {bestDeltas.leader.bestLapTime}</div>
+              )}
+              <span className="live-points__provisional">gaps in seconds · best laps</span>
+            </>
+          ) : (
+            <Unavailable>Bryce's best lap appears once Race Control publishes it.</Unavailable>
+          )}
+        </div>
+      )}
+      <TrackPanel identity={identity} replay={replay} history={history} mode={isRace ? 'race' : 'session'} />
     </HeroPanel>
   );
 };
@@ -894,34 +851,24 @@ const PointsJumbotron = ({ payload }: { payload: LiveReadiness }) => {
   return (
     <Card
       className="live-points"
-      title="If the race ended now"
-      action={<SourcePill title="If the race ended now" entries={sourceEntries.points} caveats={['Provisional until official results publish and are reconciled.']} />}
+      title="The championship around him"
+      action={<SourcePill title="The championship around him" entries={sourceEntries.points} caveats={['Provisional until official results publish and are reconciled.']} />}
     >
       {liveEligible && window ? (
         <>
-          <div className="live-points__main">
-            <div>
-              <span className="caption">Projected championship standing</span>
-              <TickerValue className="stat__value stat__value--big live-points__standing" value={`P${window.bryce.projectedStanding}`} valueKey={window.bryce.projectedStanding} />
-            </div>
-            <div>
-              <span className="caption">Race Control running points</span>
-              <TickerValue className="stat__value stat__value--big live-points__score" value={window.bryce.runningDriverPoints} valueKey={window.bryce.runningDriverPoints} />
-            </div>
-            <span className="live-points__provisional">{pointsProvenanceLabel(payload)}</span>
-          </div>
-          <div className="live-points__neighbors" aria-label="Projected championship neighbors">
-            {[window.above, window.below].map((row, index) =>
+          <div className="live-points__neighbors" aria-label="Projected championship around Bryce">
+            {[window.above, window.bryce, window.below].map((row, index) =>
               row ? (
-                <div className="live-points__neighbor" key={row.carNo}>
+                <div className={`live-points__neighbor${index === 1 ? ' live-points__neighbor--bryce' : ''}`} key={row.carNo}>
                   <span className="tower__pos">P{row.projectedStanding}</span>
                   <span>{row.driverName}</span>
                   <strong><TickerValue value={row.runningDriverPoints} valueKey={row.runningDriverPoints} /></strong>
-                  <span className="caption caption--secondary">{index === 0 ? 'one spot up' : 'one spot down'}</span>
+                  <span className="caption caption--secondary">{index === 0 ? 'one spot up' : index === 1 ? 'if the race ended now' : 'one spot down'}</span>
                 </div>
               ) : null
             )}
           </div>
+          <span className="live-points__provisional">{pointsProvenanceLabel(payload)}</span>
         </>
       ) : (
         <Unavailable>
@@ -1166,7 +1113,7 @@ const GapTrend = ({ history }: { history: LiveSessionHistory | null }) => {
                 {yTicks.map((tick) => (
                   <g key={tick}>
                     <line x1={margin.left} x2={width - margin.right} y1={y(tick)} y2={y(tick)} stroke="var(--grid-hairline)" />
-                    <text x={margin.left - 7} y={y(tick)} textAnchor="end" dominantBaseline="middle" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={10.5}>
+                    <text x={margin.left - 7} y={y(tick)} textAnchor="end" dominantBaseline="middle" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={12}>
                       {`${tick.toFixed(tick < 10 ? 1 : 0)}s`}
                     </text>
                   </g>
@@ -1174,10 +1121,10 @@ const GapTrend = ({ history }: { history: LiveSessionHistory | null }) => {
                 {segments.map((segment, index) => <path key={index} d={stepPath(segment, x, y)} fill="none" stroke="var(--ink-primary)" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />)}
                 {latestValue ? <circle cx={x(latestValue.checkedAtMs)} cy={y(latestValue.value)} r={5} fill="var(--bryce)" stroke="var(--surface-1)" strokeWidth={2} /> : null}
                 {xTicks.map((tick, index) => (
-                  <text key={tick} x={x(tick)} y={height - 7} textAnchor={index === 0 ? 'start' : index === xTicks.length - 1 ? 'end' : 'middle'} fill="var(--ink-muted)" fontFamily={chartFont} fontSize={10.5}>{timeTickLabel(tick, spanMs)}</text>
+                  <text key={tick} x={x(tick)} y={height - 7} textAnchor={index === 0 ? 'start' : index === xTicks.length - 1 ? 'end' : 'middle'} fill="var(--ink-muted)" fontFamily={chartFont} fontSize={12}>{timeTickLabel(tick, spanMs)}</text>
                 ))}
                 {lapBoundaries.map((boundary) => (
-                  <text key={`${boundary.lap}-${boundary.checkedAtMs}`} x={x(boundary.checkedAtMs)} y={margin.top + 11} textAnchor="middle" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={9.5}>L{boundary.lap}</text>
+                  <text key={`${boundary.lap}-${boundary.checkedAtMs}`} x={x(boundary.checkedAtMs)} y={margin.top + 11} textAnchor="middle" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={12}>L{boundary.lap}</text>
                 ))}
               </svg>
             ) : null}
@@ -1585,9 +1532,6 @@ const ReplayBar = ({
   const year = replay.seasonYear ? ` ${replay.seasonYear}` : '';
   const prov = replayProvenance(replay.session);
   const flag = asString(heartbeat.flag)?.toUpperCase() ?? null;
-  const lap = asNumber(heartbeat.lap);
-  const totalLaps = asNumber(heartbeat.totalLaps);
-  const neutralised = flag !== null && (isCautionFlag(flag) || isRedFlag(flag));
   const restartLap = replay.raceStart?.kind === 'restart' ? replay.raceStart.lap : null;
   return (
     <section
@@ -1603,29 +1547,31 @@ const ReplayBar = ({
             in full at every width (finding #21). */}
         <div className="replay-bar__identity">
           <span className="replay-bar__chip"><History size={13} aria-hidden /> Replay</span>
-          <span className="replay-bar__where">
-            {venue}
-            {year} · <span className="replay-bar__speed-read">{replay.speed}×</span>
+          {payload ? (
+            /* The hero below names the race and carries the flag and lap large;
+               the bar says only what kind of page this is. */
+            <span className="replay-bar__where">
+              Archived timing, replayed at <span className="replay-bar__speed-read">{replay.speed}×</span>. Not live.
+            </span>
+          ) : (
+            <span className="replay-bar__where">
+              {venue}
+              {year} · <span className="replay-bar__speed-read">{replay.speed}×</span>
+            </span>
+          )}
+          <span
+            className="replay-bar__tier"
+            data-replay-tier={prov.tier}
+            title={`${prov.detail}${prov.caveat ? ` — ${prov.caveat}` : ''}`}
+          >
+            {prov.label}
           </span>
-          {neutralised ? (
-            <StatusChip
-              tone={flagTone(flag)}
-              label={`${flag} flag${lap !== null ? ` · Lap ${lap}${totalLaps !== null ? ` of ${totalLaps}` : ''}` : ''}`}
-            />
-          ) : null}
         </div>
         {replay.raceStart?.kind === 'restart' && replay.clockFrom === 'raceStart' ? (
           <span className="caption caption--secondary" data-replay-start-note>
             Starts at the {restartLap !== null ? `lap ${restartLap} ` : ''}restart, skipping the caution before it.
           </span>
         ) : null}
-        <span
-          className="replay-bar__tier"
-          data-replay-tier={prov.tier}
-          title={`${prov.detail}${prov.caveat ? ` — ${prov.caveat}` : ''}`}
-        >
-          {prov.label}
-        </span>
       </div>
       <div className="replay-bar__controls">
         <div className="segmented replay-bar__speeds" role="group" aria-label="Replay speed">
@@ -1987,10 +1933,12 @@ export const LiveScreen = ({
       {replayActive && replay ? <ReplayBar replay={replay} payload={payload} onExit={demoExit} /> : null}
       {replayActive && replay ? <ReplayGapSkippedNote replay={replay} /> : null}
       {replayActive && replay ? <ReplayClassificationNote payload={payload} canonicalSessionId={replay.session?.canonicalSessionId ?? null} /> : null}
-      <TrustRail payload={payload} fixtureMode={fixtureMode} />
+      {/* In a replay the bar above carries the provenance; the trust rail
+          would repeat it. */}
+      {replayActive ? null : <TrustRail payload={payload} fixtureMode={fixtureMode} />}
       {liveish || replayEnded ? (
         <>
-          <LiveHero payload={payload} samples={samples} replayEnded={replayEnded} sessionKind={sessionKind} />
+          <LiveHero payload={payload} samples={samples} replayEnded={replayEnded} sessionKind={sessionKind} replay={replayActive ? replay : null} history={history} />
           {(() => {
             /* Cross-links, never duplication (Brief R-c): /live answers "what is
              * happening right now?"; the race's own page holds the accumulating
@@ -2032,7 +1980,19 @@ export const LiveScreen = ({
          * two projection modules collapse into the single protected-state card
          * (finding #22). Exit replay (the bar above, during a replay) and Race
          * Week (inside the card) are the prioritized ways out. */
-        <WaitingState payload={payload} />
+        replayActive && replay ? (
+          /* A replay before its green flag: this race's own grid and minutes
+           * to the green, never the off-season countdown to the next event. */
+          <ReplayPreStart
+            payload={payload}
+            replay={replay}
+            history={history}
+            identity={raceIdentityFor(payload, replay)}
+            source={<SourcePill title="Before the start" entries={[{ label: 'Archived Race Control timing', path: '/api/readiness (replay)', note: 'Grid order, the cars and the session state as Race Control published them before the start. The time to the green is the archive\u2019s own green-flag moment minus the replay clock.' }]} />}
+          />
+        ) : (
+          <WaitingState payload={payload} />
+        )
       )}
       {replayActive ? null : <WatchAlong payload={payload} />}
     </div>

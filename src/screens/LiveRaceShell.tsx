@@ -357,7 +357,7 @@ export const LiveRaceShell = ({
 
       {finished ? <WatchThisRaceUnfold sessionId={sessionId} /> : null}
 
-      <p style={{ margin: 0, fontSize: 11.5, color: 'var(--ink-muted)' }}>
+      <p style={{ margin: 0, fontSize: 12, color: 'var(--ink-muted)' }}>
         Everything on this page comes from {simulated ? 'an archived Race Control capture, replayed second by second' : 'our own live Race Control capture'} — the full debrief takes over here once official results land.
       </p>
     </div>

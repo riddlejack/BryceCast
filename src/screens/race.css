@@ -1,0 +1,118 @@
+/* Race pages (site refresh, round 2): /races/:id, /races and /career/race/:id.
+ * Everything here is scoped under a race class so nothing leaks into the
+ * shared theme. Paper ground, 1 px rules, no grey boxes. */
+
+/* ---------- /races/:id ---------- */
+
+/* Restarts and the team, side by side under the lap chart on a wide screen. */
+.race-page .race-pair {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--section-gap) var(--card-gap);
+  align-items: start;
+}
+@media (min-width: 1100px) {
+  .race-page .race-pair { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .race-page .race-pair:has(> :only-child) { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* "This place, other years": the year shapes on an even grid, three across on
+ * a desktop, so a sixth visit never sits alone on a second row and each shape
+ * gets the full column the component lets it fill. The shapes row is the
+ * card's last child (sectionIntelligence.tsx renders it; we only lay it out). */
+.race-page .race-years > .card > .row:last-child {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 36px 40px !important;
+}
+.race-page .race-years > .card > .row:last-child > * {
+  max-width: none !important;
+  min-width: 0 !important;
+}
+@media (min-width: 640px) {
+  .race-page .race-years > .card > .row:last-child { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 1100px) {
+  .race-page .race-years > .card > .row:last-child { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  /* Four visits read as one row of four rather than three and an orphan. */
+  .race-page .race-years > .card > .row:last-child:has(> :nth-child(4):last-child) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* The day: the year-over-year line under the tiles, split by a rule. */
+.race-page .race-day__yoy {
+  border-top: 1px solid var(--grid-hairline);
+  margin-top: 18px;
+  padding-top: 14px;
+}
+
+/* The hero's result art box: a little more room for the shape. */
+.race-page .hero-race__art { height: 180px; }
+@media (min-width: 900px) {
+  .race-page .hero-race { grid-template-columns: minmax(0, 1fr) 340px minmax(0, 1fr); }
+}
+
+/* ---------- /career/race/:id ---------- */
+
+.career-race .career-race__sheet {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--section-gap) var(--card-gap);
+  align-items: start;
+}
+@media (min-width: 1000px) {
+  .career-race .career-race__sheet--art { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); }
+}
+
+.career-race .career-race__result {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px 36px;
+  align-items: flex-end;
+}
+
+.career-race .career-race__facts {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 10px 24px;
+  margin: 22px 0 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--grid-hairline);
+  font-size: 14px;
+}
+.career-race .career-race__facts dt { color: var(--ink-muted); }
+.career-race .career-race__facts dd { margin: 0; color: var(--ink-primary); }
+
+.career-race .career-race__art { min-width: 0; }
+.career-race .career-race__art-caption {
+  margin: 10px 0 0;
+  font-size: 12.5px;
+  color: var(--ink-muted);
+}
+
+.career-race .career-race__nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px 24px;
+  margin-top: 16px;
+}
+.career-race .career-race__nav .navlink { color: var(--link); padding: 4px 0; }
+
+/* ---------- /races ---------- */
+
+/* Phone: the season title gets its own line; the summary and source sit
+ * under it instead of squeezing "2025 season" onto two lines. */
+@media (max-width: 640px) {
+  .races-index .card__header { flex-wrap: wrap; row-gap: 4px; }
+  .races-index .card__header > .card__title { flex: 1 0 100%; }
+}
+.races-index .tower__name > span:first-child { text-wrap: pretty; }
+.races-index .card__header .caption { white-space: nowrap; }
+
+/* The shared ▲▽ delta glyph prints at 11.5 px; on this line it reads with the
+ * words beside it, so it takes their size. */
+.race-page .race-day__yoy .tnum { font-size: 13px !important; }
+/* Facts in the right-hand column (no track drawing): no rule above them. */
+.career-race .career-race__facts--aside { margin-top: 0; padding-top: 22px; border-top: 0; }

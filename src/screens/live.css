@@ -1,0 +1,270 @@
+/* ============================================================
+   Live and replay, round 2 (November 14, 2026).
+   The track is the biggest thing on the page; the flag and the lap
+   read large; the section Bryce is in lights amber in a replay.
+   Everything here is scoped under .live-page.
+   ============================================================ */
+
+.live-page .live-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas:
+    'head'
+    'now'
+    'track'
+    'position'
+    'points';
+  gap: 24px;
+  align-items: start;
+  /* Close to the bar above: the page's section gap is for sections. */
+  margin-top: calc(var(--section-gap) * -0.5);
+}
+
+/* Before the green, the minutes to go come before the circuit on a phone. */
+.live-page .live-hero--prestart {
+  grid-template-areas:
+    'head'
+    'now'
+    'position'
+    'track'
+    'points';
+}
+
+@media (min-width: 1000px) {
+  .live-page .live-hero,
+  .live-page .live-hero--prestart {
+    grid-template-columns: minmax(340px, 4fr) minmax(0, 7fr);
+    grid-template-rows: auto auto auto auto 1fr;
+    grid-template-areas:
+      'head track'
+      'now track'
+      'position track'
+      'points track'
+      '. track';
+    column-gap: clamp(36px, 4vw, 80px);
+    row-gap: 30px;
+  }
+}
+
+/* ---------- the race's name ---------- */
+
+.live-page .live-hero__head {
+  grid-area: head;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  min-width: 0;
+}
+
+.live-page .live-hero__head-text { min-width: 0; }
+
+.live-page .live-hero__title {
+  font-size: clamp(30px, 2.7vw, 48px);
+  max-width: 16ch;
+  margin-top: 8px;
+}
+
+/* ---------- the flag and the lap ---------- */
+
+.live-page .live-hero__now { grid-area: now; min-width: 0; }
+
+.live-now {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 26px;
+}
+
+.live-now__flag,
+.live-now__lap {
+  font-size: clamp(26px, 2.2vw, 38px);
+  font-weight: 620;
+  letter-spacing: -0.02em;
+  line-height: 1.08;
+  font-variant-numeric: proportional-nums;
+  white-space: nowrap;
+}
+
+.live-now__flag { display: inline-flex; align-items: center; gap: 0.36em; color: var(--ink-secondary); }
+
+.live-now__swatch {
+  display: inline-block;
+  width: 0.6em;
+  height: 0.6em;
+  border-radius: 3px;
+  background: var(--grey-ink3);
+  flex: none;
+}
+
+.live-now__flag--green { color: var(--status-good); }
+.live-now__flag--green .live-now__swatch { background: var(--status-good-dot); }
+.live-now__flag--yellow { color: var(--status-warn); }
+.live-now__flag--yellow .live-now__swatch { background: #f2c230; }
+.live-now__flag--red { color: var(--status-bad); }
+.live-now__flag--red .live-now__swatch { background: var(--status-bad-dot); }
+.live-now__flag--white { color: var(--ink-secondary); }
+.live-now__flag--white .live-now__swatch { background: var(--paper); box-shadow: inset 0 0 0 1.5px var(--grey-ink3); }
+.live-now__flag--checkered { color: var(--ink-primary); }
+.live-now__flag--checkered .live-now__swatch {
+  background: conic-gradient(var(--ink) 25%, var(--paper) 0 50%, var(--ink) 0 75%, var(--paper) 0) 0 0 / 50% 50%;
+  box-shadow: inset 0 0 0 1px var(--ink);
+}
+
+.live-now__lap { color: var(--ink-primary); }
+.live-now__of { color: var(--ink-muted); }
+
+.live-now__progress {
+  max-width: 440px;
+  height: 3px;
+  margin-top: 16px;
+  overflow: hidden;
+  background: var(--grey-hair);
+}
+
+.live-now__progress > span {
+  display: block;
+  height: 100%;
+  background: var(--ink-primary);
+  transition: width 600ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* ---------- Bryce's position and the points ---------- */
+
+.live-page .live-hero__position { grid-area: position; min-width: 0; }
+.live-page .live-hero__position .live-position { min-height: 0; }
+.live-page .live-hero__speed { margin-top: 14px; font-size: 13px; }
+
+.live-page .live-hero__jumbotron {
+  grid-area: points;
+  align-items: flex-start;
+  justify-self: stretch;
+  text-align: left;
+  padding-top: 18px;
+  border-top: 1px solid var(--divider);
+}
+
+.live-page .live-hero__standing-row { justify-content: flex-start; align-items: baseline; }
+.live-page .live-hero__jumbotron .live-points__provisional { margin-top: 6px; font-size: 12.5px; color: var(--ink-muted); }
+
+/* ---------- the track ---------- */
+
+.live-page .live-hero__track {
+  grid-area: track;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+.live-track { width: 100%; min-width: 0; }
+.live-track__svg { display: block; overflow: visible; }
+
+.live-track__base {
+  fill: none;
+  stroke: #b9b2aa;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.live-track__pit {
+  fill: none;
+  stroke: var(--grey-line);
+  stroke-width: 2;
+  stroke-dasharray: 2 5;
+  stroke-linecap: round;
+}
+
+.live-track__section {
+  fill: none;
+  stroke: var(--amber);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0;
+  transition: opacity 180ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.live-track__section--lit { opacity: 1; }
+
+/* The timing loops: hairline gaps across the line where each section ends. */
+.live-track__loop { stroke: var(--paper); stroke-width: 1.5; }
+.live-track__sf { stroke: var(--ink); stroke-width: 3; }
+.live-track__chevron { fill: none; stroke: var(--paper); stroke-linecap: round; stroke-linejoin: round; }
+
+.live-track__label {
+  font-family: var(--font-ui);
+  font-weight: 450;
+  fill: var(--ink-muted);
+}
+
+.live-track__label--lit {
+  font-weight: 620;
+  fill: var(--link);
+  paint-order: stroke;
+  stroke: var(--paper);
+  stroke-width: 4px;
+  stroke-linejoin: round;
+}
+
+.live-page .live-hero__track-caption { margin: 0; max-width: 74ch; line-height: 1.45; }
+
+@media (prefers-reduced-motion: reduce) {
+  .live-track__section,
+  .live-now__progress > span { transition: none; }
+}
+
+/* ---------- a replay before the green ---------- */
+
+.live-prestart__countdown { display: flex; flex-direction: column; gap: 4px; }
+.live-prestart__clock { font-variant-numeric: tabular-nums; }
+.live-prestart__slot-row { display: flex; align-items: center; gap: 12px; margin: 6px 0 2px; }
+
+.live-grid { padding-top: 22px; border-top: 1px solid var(--divider); }
+.live-grid__title { margin: 0 0 6px; font-size: clamp(20px, 1.6vw, 26px); font-weight: 620; letter-spacing: -0.015em; }
+
+.live-grid__list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: clamp(20px, 4vw, 64px);
+  max-width: 780px;
+  margin: 0 0 30px;
+  padding: 0;
+  list-style: none;
+}
+
+/* Two by two, the second column a half-row back, the way a grid stands. */
+.live-grid__car {
+  position: relative;
+  display: grid;
+  grid-template-columns: 2em minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 10px;
+  padding: 9px 6px;
+  border-bottom: 1px solid var(--divider);
+  font-size: 14px;
+}
+
+.live-grid__car--even { top: 19px; }
+.live-grid__car--bryce { background: var(--accent-wash); font-weight: 600; }
+.live-grid__slot { color: var(--ink-muted); font-variant-numeric: tabular-nums; }
+.live-grid__name { display: inline-flex; align-items: center; gap: 7px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.live-grid__no { color: var(--ink-muted); font-size: 12.5px; font-weight: 450; }
+
+@media (max-width: 559px) {
+  .live-grid__no { display: none; }
+  .live-grid__car { grid-template-columns: 1.7em minmax(0, 1fr); font-size: 13.5px; }
+  .live-page .live-hero__head .source-pill { flex: none; }
+}
+
+/* The field: keep the gap figures clear of the one-second battle brackets. */
+.live-page .live-field__row .tower__gap { padding-right: 12px; }
+
+/* Nothing on the live page reads under 12 px. */
+.live-page .replay-bar__chip,
+.live-page .live-field__teammate,
+.live-page .live-gap-chart__status { font-size: 12px; }
+.live-page .plate--row { width: 18px; height: 18px; font-size: 12px; }
+
+/* The championship ladder: Bryce's own row between his neighbours. */
+.live-page .live-points__neighbor--bryce { background: color-mix(in srgb, var(--amber, #CC7E16) 9%, transparent); }
+.live-page .live-points__neighbor--bryce strong { color: var(--ink, #1E1C1A); }

@@ -12,6 +12,7 @@ import { liveArchiveUpgradeFor, type LiveArchiveUpgrade } from '../data/liveRace
 import type { LiveReadiness } from '../app/useReadiness';
 import type { UiSeasonIndexRow } from '../data/uiDataPackage';
 import { DataFreshness } from '../app/dataFreshness';
+import './race.css';
 
 /** Archive labels drop the series prefix — everything here is INDY NXT. */
 const archiveLabel = (raceLabel: string): string =>
@@ -52,7 +53,7 @@ const SeasonSpine = ({ rows }: { rows: UiSeasonIndexRow[] }) => {
   const n = ordered.length;
   if (n < 2) return null;
 
-  const margin = { top: 26, right: 18, bottom: 24, left: 36 };
+  const margin = { top: 26, right: 18, bottom: 24, left: 46 };
   const finishPanelHeight = 150;
   const panelGap = 34;
   const standingPanelHeight = 74;
@@ -143,7 +144,7 @@ const SeasonSpine = ({ rows }: { rows: UiSeasonIndexRow[] }) => {
           }}
           style={{ cursor: hovered !== null ? 'pointer' : 'default' }}
         >
-          <text x={margin.left} y={13} fill="var(--ink-secondary)" fontFamily={chartFont} fontSize={11.5} fontWeight={550}>
+          <text x={margin.left} y={13} fill="var(--ink-secondary)" fontFamily={chartFont} fontSize={12.5} fontWeight={550}>
             Race finishes
           </text>
           {finishTicks.map((tick) => (
@@ -156,7 +157,7 @@ const SeasonSpine = ({ rows }: { rows: UiSeasonIndexRow[] }) => {
                 dominantBaseline="middle"
                 fill="var(--ink-muted)"
                 fontFamily={chartFont}
-                fontSize={10.5}
+                fontSize={12}
                 style={{ fontVariantNumeric: 'tabular-nums' }}
               >
                 P{tick}
@@ -168,7 +169,7 @@ const SeasonSpine = ({ rows }: { rows: UiSeasonIndexRow[] }) => {
             y={standingTop - 9}
             fill="var(--ink-secondary)"
             fontFamily={chartFont}
-            fontSize={11.5}
+            fontSize={12.5}
             fontWeight={550}
           >
             Championship standing
@@ -189,7 +190,7 @@ const SeasonSpine = ({ rows }: { rows: UiSeasonIndexRow[] }) => {
                 dominantBaseline="middle"
                 fill="var(--ink-muted)"
                 fontFamily={chartFont}
-                fontSize={10.5}
+                fontSize={12}
                 style={{ fontVariantNumeric: 'tabular-nums' }}
               >
                 P{tick}
@@ -241,14 +242,14 @@ const SeasonSpine = ({ rows }: { rows: UiSeasonIndexRow[] }) => {
                 textAnchor="middle"
                 fill="var(--ink-muted)"
                 fontFamily={chartFont}
-                fontSize={10.5}
+                fontSize={12}
                 style={{ fontVariantNumeric: 'tabular-nums' }}
               >
                 {row.roundIndex ?? index + 1}
               </text>
             ) : null
           )}
-          <text x={margin.left - 8} y={height - 8} textAnchor="end" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={10.5}>
+          <text x={margin.left - 8} y={height - 8} textAnchor="end" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={12}>
             round
           </text>
         </svg>
@@ -281,7 +282,7 @@ const RaceRow = ({ row }: { row: UiSeasonIndexRow }) => {
         className="tower__name"
         style={{ whiteSpace: 'normal', flexDirection: 'column', alignItems: 'flex-start', gap: 2 }}
       >
-        <span>{shortLabel}</span>
+        <span>{shortLabel.replace(/ (Race \d+)$/, (_, race: string) => `\u00a0${race.replace(' ', '\u00a0')}`)}</span>
         {!clean && row.officialStatus && row.officialStatus !== 'unknown' ? (
           <span className="tower__team">
             {row.officialStatus.charAt(0).toUpperCase() + row.officialStatus.slice(1)}
@@ -292,7 +293,7 @@ const RaceRow = ({ row }: { row: UiSeasonIndexRow }) => {
         {gain ? gain.text : ''}
       </span>
       <span className="tower__gap tnum">{row.points !== null ? `${row.points} pts` : ''}</span>
-      <span className="tower__gap race-row__date" style={{ fontSize: 11.5, minWidth: 52 }}>
+      <span className="tower__gap race-row__date" style={{ fontSize: 12.5, minWidth: 52 }}>
         {(row.raceDate ?? row.eventStartDate) ? formatDate(row.raceDate ?? row.eventStartDate!, { month: 'short', day: 'numeric' }) : ''}
       </span>
       <ArrowRight size={13} style={{ color: 'var(--ink-muted)' }} aria-hidden />
@@ -360,7 +361,7 @@ const UpcomingRaceRow = ({ round, live }: { round: PlaceholderRound; live: LiveA
       </span>
       <span
         className="row tnum"
-        style={{ gap: 6, fontSize: 11.5, fontWeight: 650, color: 'var(--ink-primary)', justifyContent: 'flex-end' }}
+        style={{ gap: 6, fontSize: 12.5, fontWeight: 650, color: 'var(--ink-primary)', justifyContent: 'flex-end' }}
       >
         {/* The spec's QUIET INK dot — never the status green; the archive is
             not a health indicator, it just points at the live page. */}
@@ -378,7 +379,7 @@ const UpcomingRaceRow = ({ round, live }: { round: PlaceholderRound; live: LiveA
           race {round.round} of {round.seasonTotal}
         </span>
       </span>
-      <span className="tower__gap tnum" style={{ fontSize: 11.5, color: 'var(--ink-muted)', minWidth: 52 }}>
+      <span className="tower__gap tnum" style={{ fontSize: 12.5, color: 'var(--ink-muted)', minWidth: 52 }}>
         {round.raceDate ? formatDate(round.raceDate, { month: 'short', day: 'numeric' }) : ''}
       </span>
     </div>
@@ -445,7 +446,7 @@ export const RacesScreen = ({ livePayload = null }: { livePayload?: LiveReadines
   }, []);
 
   return (
-    <div className="page stack">
+    <div className="page stack races-index">
       <ScreenHead
         kicker="The archive"
         title="Races"

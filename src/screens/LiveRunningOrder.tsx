@@ -375,7 +375,7 @@ export const LiveRunningOrder = ({
               {Array.from({ length: RUNNING_ORDER_LANE_COUNT }, (_, index) => targetDomain.lower + index).map((rank) => (
                 <g key={rank}>
                   <line x1={margin.left} x2={plotRight} y1={y(rank)} y2={y(rank)} stroke="var(--grid-hairline)" />
-                  <text x={margin.left - 8} y={y(rank)} textAnchor="end" dominantBaseline="middle" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={10.5} style={{ fontVariantNumeric: 'tabular-nums' }}>P{rank}</text>
+                  <text x={margin.left - 8} y={y(rank)} textAnchor="end" dominantBaseline="middle" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={12} style={{ fontVariantNumeric: 'tabular-nums' }}>P{rank}</text>
                 </g>
               ))}
               </g>
@@ -492,7 +492,7 @@ export const LiveRunningOrder = ({
                   {entry.bryce ? (
                     <g transform={`translate(${plotRight + 18} ${rowY})`}>
                       <rect x={0} y={-9} width={30} height={18} rx={4} fill="var(--bryce)" />
-                      <text x={15} y={0.5} textAnchor="middle" dominantBaseline="middle" fill="#1d1d1f" fontFamily={chartFont} fontSize={10.5} fontWeight={750}>№9</text>
+                      <text x={15} y={0.5} textAnchor="middle" dominantBaseline="middle" fill="#1d1d1f" fontFamily={chartFont} fontSize={12} fontWeight={750}>№9</text>
                     </g>
                   ) : (
                     <g transform={`translate(${plotRight + 14} ${rowY})`}>
@@ -512,9 +512,9 @@ export const LiveRunningOrder = ({
                   )}
                   {!entry.bryce ? (
                     <g transform={`translate(${plotRight + 35} ${rowY})`}>
-                      <text y={role ? -9 : -4} fill="var(--ink-secondary)" fontFamily={chartFont} fontSize={9.5} fontWeight={role ? 650 : 540}>{entry.name}</text>
-                      <text y={role ? 1.5 : 7} fill="var(--ink-muted)" fontFamily={chartFont} fontSize={8.5}>{gap}</text>
-                      {role ? <text y={12} fill={color} fontFamily={chartFont} fontSize={8.2} fontWeight={650}>{roleWord}</text> : null}
+                      <text y={role ? -12 : -5} fill="var(--ink-secondary)" fontFamily={chartFont} fontSize={12} fontWeight={role ? 650 : 540}>{entry.name}</text>
+                      <text y={role ? 2 : 9} fill="var(--ink-muted)" fontFamily={chartFont} fontSize={12}>{gap}</text>
+                      {role ? <text y={16} fill={color} fontFamily={chartFont} fontSize={12} fontWeight={650}>{roleWord}</text> : null}
                     </g>
                   ) : null}
                 </g>;
@@ -522,12 +522,12 @@ export const LiveRunningOrder = ({
               </g>
             </g>
             {xTicks.map((tick, index) => (
-              <text key={tick} x={x(tick)} y={height - 8} textAnchor={index === 0 ? 'start' : index === xTicks.length - 1 ? 'end' : 'middle'} fill="var(--ink-muted)" fontFamily={chartFont} fontSize={10}>{relativeTimeLabel(tick - timeDomain.endMs)}</text>
+              <text key={tick} x={x(tick)} y={height - 8} textAnchor={index === 0 ? 'start' : index === xTicks.length - 1 ? 'end' : 'middle'} fill="var(--ink-muted)" fontFamily={chartFont} fontSize={12}>{relativeTimeLabel(tick - timeDomain.endMs)}</text>
             ))}
             {lapBoundaries.map((boundary) => (
               <g key={`${boundary.lap}-${boundary.checkedAtMs}`}>
                 <line x1={x(boundary.checkedAtMs)} x2={x(boundary.checkedAtMs)} y1={margin.top} y2={margin.top + 7} stroke="var(--axis-baseline)" />
-                <text x={x(boundary.checkedAtMs)} y={margin.top - 7} textAnchor="middle" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={9.5}>L{boundary.lap}</text>
+                <text x={x(boundary.checkedAtMs)} y={margin.top - 7} textAnchor="middle" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={12}>L{boundary.lap}</text>
               </g>
             ))}
           </svg>

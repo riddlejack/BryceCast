@@ -234,7 +234,7 @@ const QualifyingToRace = ({ pack }: { pack: Gb3DeepDivePack }) => {
         In 2021, Bryce made up ground off the line in <strong>{gained}</strong> of his <strong>{races.length}</strong> starts —
         a best of <strong>{bestGain}</strong> places gained in a single race.
       </p>
-      <div ref={ref} style={{ width: '100%', position: 'relative' }}>
+      <div ref={ref} style={{ width: '100%', maxWidth: 720, position: 'relative' }}>
         {width > 0 ? (
           <svg
             width={width}
@@ -242,13 +242,13 @@ const QualifyingToRace = ({ pack }: { pack: Gb3DeepDivePack }) => {
             role="img"
             aria-label="Bryce's grid position to finish position, every 2021 GB3 race"
           >
-            <text x={leftX} y={16} textAnchor="middle" fill="var(--ink-secondary)" fontFamily={chartFont} fontSize={11} fontWeight={600}>
+            <text x={leftX} y={12} textAnchor="middle" fill="var(--ink-secondary)" fontFamily={chartFont} fontSize={11} fontWeight={600}>
               Grid
             </text>
-            <text x={rightX} y={16} textAnchor="middle" fill="var(--ink-secondary)" fontFamily={chartFont} fontSize={11} fontWeight={600}>
+            <text x={rightX} y={12} textAnchor="middle" fill="var(--ink-secondary)" fontFamily={chartFont} fontSize={11} fontWeight={600}>
               Finish
             </text>
-            <text x={leftX} y={y(1) - 8} textAnchor="middle" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={9.5}>
+            <text x={leftX} y={y(1) - 6} textAnchor="middle" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={9.5}>
               P1
             </text>
             {/* column rails */}

@@ -200,8 +200,10 @@ export const TheClimb = () => {
   const [tip, setTip] = useState<ChartTip | null>(null);
 
   const n = rows.length;
-  const height = 340;
-  const margin = { top: 30, right: 18, bottom: 26, left: 40 };
+  /* Full width on the page, so the chart grows with it: about a third as tall
+   * as it is wide, between 360 and 660 px (a 2560 screen gets real depth). */
+  const height = Math.round(Math.max(360, Math.min(660, width * 0.34)));
+  const margin = { top: 34, right: 18, bottom: 30, left: 46 };
   const plotWidth = Math.max(width - margin.left - margin.right, 80);
   const plotHeight = height - margin.top - margin.bottom;
   const x = (index: number) => margin.left + (index / Math.max(n - 1, 1)) * plotWidth;
@@ -274,6 +276,16 @@ export const TheClimb = () => {
   if (n < 10) return null;
 
   const trendPath = trend.map((value, index) => `${index === 0 ? 'M' : 'L'}${x(index)} ${y(value)}`).join(' ');
+  const yearTickKept: boolean[] = [];
+  {
+    let lastX = Number.NEGATIVE_INFINITY;
+    rows.forEach((row, index) => {
+      const first = index === 0 || row.seasonYear !== rows[index - 1].seasonYear;
+      const keep = first && x(index) - lastX >= 44;
+      if (keep) lastX = x(index);
+      yearTickKept.push(keep);
+    });
+  }
 
   return (
     <Card
@@ -329,7 +341,7 @@ export const TheClimb = () => {
                     <rect x={from} y={margin.top - 16} width={to - from} height={plotHeight + 22} fill="rgba(0, 0, 0, 0.028)" />
                   ) : null}
                   {wide && width >= 640 ? (
-                    <text x={(from + to) / 2} y={margin.top - 20} textAnchor="middle" fill="var(--ink-secondary)" fontFamily={chartFont} fontSize={11} fontWeight={550}>
+                    <text x={(from + to) / 2} y={margin.top - 22} textAnchor="middle" fill="var(--ink-secondary)" fontFamily={chartFont} fontSize={12.5} fontWeight={550}>
                       {band.series} {band.years}
                     </text>
                   ) : null}
@@ -346,14 +358,14 @@ export const TheClimb = () => {
                   dominantBaseline="middle"
                   fill="var(--ink-muted)"
                   fontFamily={chartFont}
-                  fontSize={10.5}
+                  fontSize={12.5}
                   style={{ fontVariantNumeric: 'tabular-nums' }}
                 >
                   {Math.round(tick * 100)}%
                 </text>
               </g>
             ))}
-            <text x={4} y={margin.top - 20} textAnchor="start" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={10.5}>
+            <text x={4} y={margin.top - 22} textAnchor="start" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={12.5}>
               field beaten
             </text>
 
@@ -424,7 +436,7 @@ export const TheClimb = () => {
                         strokeLinejoin="round"
                         paintOrder="stroke"
                         fontFamily={chartFont}
-                        fontSize={10.5}
+                        fontSize={12.5}
                       >
                         {moment.shortLabel}
                       </text>
@@ -434,9 +446,10 @@ export const TheClimb = () => {
               ))}
             </g>
 
-            {/* year ticks at each season's first race */}
+            {/* year ticks at each season's first race; on a narrow chart a year
+                too close to the one before it is left out rather than overlap */}
             {rows.map((row, index) =>
-              index === 0 || row.seasonYear !== rows[index - 1].seasonYear ? (
+              (index === 0 || row.seasonYear !== rows[index - 1].seasonYear) && yearTickKept[index] ? (
                 <text
                   key={`yr${row.seasonYear}${index}`}
                   x={x(index)}
@@ -444,7 +457,7 @@ export const TheClimb = () => {
                   textAnchor="middle"
                   fill="var(--ink-muted)"
                   fontFamily={chartFont}
-                  fontSize={10.5}
+                  fontSize={12.5}
                   style={{ fontVariantNumeric: 'tabular-nums' }}
                 >
                   {row.seasonYear}
@@ -470,7 +483,7 @@ export const ChapterStrip = ({ seriesName }: { seriesName: string }) => {
   const chapterRows = useMemo(() => rows.filter((row) => row.seriesName === seriesName), [rows, seriesName]);
   if (chapterRows.length === 0) return null;
 
-  const height = 40;
+  const height = 44;
   const axisY = 22;
   // The line runs 8 px in from each edge. Dots are inset by their own radius
   // (plus stroke) and the percentile is clamped to 0..1, so a race that beat the
@@ -505,10 +518,10 @@ export const ChapterStrip = ({ seriesName }: { seriesName: string }) => {
             />
           ))}
           <rect x={x(median) - 1.75} y={axisY - 9} width={3.5} height={18} rx={1.75} fill="var(--ink-primary)" />
-          <text x={8} y={height - 1} fill="var(--ink-muted)" fontFamily={chartFont} fontSize={9.5}>
+          <text x={8} y={height - 1} fill="var(--ink-muted)" fontFamily={chartFont} fontSize={12}>
             tougher days
           </text>
-          <text x={width - 8} y={height - 1} textAnchor="end" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={9.5}>
+          <text x={width - 8} y={height - 1} textAnchor="end" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={12}>
             stronger days
           </text>
         </svg>

@@ -2,10 +2,13 @@ import { useMemo, useState } from 'react';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { Card, SourcePill, Stat, Unavailable } from '../app/components';
 import { ChartTipCard, chartFont, useMeasuredWidth, type ChartTip } from '../app/charts';
-import { formatDate, formatGain, trackTypeLabel } from '../app/format';
+import { asNumber, asString, formatDate, formatGain, trackTypeLabel } from '../app/format';
 import { Link, useRouter } from '../app/router';
 import { uiDataPackage } from '../data/uiDataPackage';
+import { TrackArt } from '../app/trackArt';
+import { trackOutlineFor } from '../assets/tracks';
 import { chapterTint, raceHref, tipFor, useCareerRows, type CareerRow } from './careerExplorer';
+import './race.css';
 
 /* The light race sheet: every non-INDY NXT race in the career table gets a
  * page of its own — the sourced facts, told plainly, with the chapter around
@@ -22,7 +25,7 @@ const conditionLine = (row: CareerRow): string | null => {
 /** Drop the series-and-year preamble from a label when a year token leads it —
  *  the kicker already says the series and season. */
 const heroTitle = (row: CareerRow): string => {
-  const stripped = row.raceLabel.replace(/^.*?\d{4}\s+/, '');
+  const stripped = row.raceLabel.replace(/^.*?\b(?:19|20)\d{2}\s+/, ''); // a season year, never the "1600" in F1600
   return stripped.length >= 4 ? stripped : row.raceLabel;
 };
 
@@ -32,7 +35,7 @@ const ChapterContext = ({ row, chapterRows }: { row: CareerRow; chapterRows: Car
   const { navigate } = useRouter();
   const [tip, setTip] = useState<ChartTip | null>(null);
 
-  const height = 52;
+  const height = 58;
   const axisY = 30;
   const x = (percentile: number) => 10 + percentile * (width - 20);
   const sorted = [...chapterRows].sort((a, b) => a.percentile - b.percentile);
@@ -67,10 +70,10 @@ const ChapterContext = ({ row, chapterRows }: { row: CareerRow; chapterRows: Car
             );
           })}
           <rect x={x(median) - 1.75} y={axisY - 9} width={3.5} height={18} rx={1.75} fill="var(--ink-primary)" />
-          <text x={10} y={height - 2} fill="var(--ink-muted)" fontFamily={chartFont} fontSize={9.5}>
+          <text x={10} y={height - 2} fill="var(--ink-muted)" fontFamily={chartFont} fontSize={12}>
             tougher days
           </text>
-          <text x={width - 10} y={height - 2} textAnchor="end" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={9.5}>
+          <text x={width - 10} y={height - 2} textAnchor="end" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={12}>
             stronger days
           </text>
         </svg>
@@ -124,22 +127,44 @@ export const CareerRaceScreen = ({ sessionId }: { sessionId: string }) => {
   const previous = chapterIndex > 0 ? chapterRows[chapterIndex - 1] : null;
   const next = chapterIndex >= 0 && chapterIndex < chapterRows.length - 1 ? chapterRows[chapterIndex + 1] : null;
   const condition = conditionLine(row);
-  const subParts = [
-    row.trackName,
-    trackTypeLabel(row.trackType),
-    formatDate(row.date, { month: 'long', day: 'numeric', year: 'numeric' }),
-    condition
-  ].filter(Boolean);
+  /* Team and points come from the same conversion-table row the result does
+     (the source drawer names it); blank cells stay off the sheet. */
+  const raw = (uiDataPackage.screens.careerLab.resultConversion ?? []).find((entry) => asString(entry.sessionId) === row.sessionId) ?? null;
+  const teamName = raw ? asString(raw.teamName) : null;
+  const points = raw ? asNumber(raw.points) : null;
+  const dateText = formatDate(row.date, { month: 'long', day: 'numeric', year: 'numeric' });
+  /* The track's drawing when we have traced it (INDY NXT venues he also raced
+     in a junior series); otherwise the facts take the right-hand column. */
+  const outline = trackOutlineFor(row.trackName);
+  const typeText = row.trackType ? trackTypeLabel(row.trackType) : null;
+
+  const facts: Array<[string, string]> = [
+    ['Series', row.seriesName],
+    ...(teamName ? ([['Team', teamName]] as Array<[string, string]>) : []),
+    ['Track', [row.trackName, typeText && typeText !== '—' ? typeText.toLowerCase() : null].filter(Boolean).join(', ')],
+    ...(condition ? ([['Conditions', condition]] as Array<[string, string]>) : []),
+    ...(points !== null ? ([['Points', String(points)]] as Array<[string, string]>) : [])
+  ];
+  const factList = (
+    <dl className={`career-race__facts${outline ? '' : ' career-race__facts--aside'}`}>
+      {facts.map(([label, value]) => (
+        <div key={label} style={{ display: 'contents' }}>
+          <dt>{label}</dt>
+          <dd>{value}</dd>
+        </div>
+      ))}
+    </dl>
+  );
 
   return (
-    <div className="page stack">
+    <div className="page stack career-race">
       <header className="screen-head row row--between" style={{ alignItems: 'flex-end', gap: 14 }}>
         <div>
           <span className="kicker">
             {row.seriesShort} · {row.seasonYear ?? ''}
           </span>
           <h1 className="screen-head__title">{heroTitle(row)}</h1>
-          <p className="screen-head__sub">{subParts.join(' · ')}</p>
+          <p className="screen-head__sub">{dateText}</p>
         </div>
         <SourcePill
           title={row.raceLabel}
@@ -157,63 +182,84 @@ export const CareerRaceScreen = ({ sessionId }: { sessionId: string }) => {
                     note: 'Official series weather lines plus labeled modeled observations, joined by session.'
                   }
                 ]
+              : []),
+            ...(outline
+              ? [
+                  {
+                    label: 'Track outline',
+                    note: `${outline.source.attribution} The drawing is today’s ${outline.name}; the layout this series ran in ${row.seasonYear ?? 'that year'} is not in the source data.`
+                  }
+                ]
               : [])
           ]}
           caveats={uiDataPackage.screens.careerLab.caveats}
         />
       </header>
 
-      <Card>
-        <div className="row" style={{ gap: 26, flexWrap: 'wrap' }}>
-          <Stat label="Finished" value={`P${row.finish}`} hero delta={gain && gain.direction !== 'flat' ? gain : undefined} />
-          <Stat label="Started" value={row.start !== null ? `P${row.start}` : '—'} />
-          <Stat label="Field beaten" value={`${Math.round(row.percentile * 100)}%`} />
+      <Card className="career-race__card">
+        <div className="career-race__sheet career-race__sheet--art">
+          <div>
+            <div className="career-race__result">
+              <Stat label="Finished" value={`P${row.finish}`} hero delta={gain && gain.direction !== 'flat' ? gain : undefined} />
+              <Stat label="Started" value={row.start !== null ? `P${row.start}` : '—'} />
+              <Stat label="Field beaten" value={`${Math.round(row.percentile * 100)}%`} />
+            </div>
+            <p className="caption caption--secondary" style={{ margin: '12px 0 0', fontSize: 13 }}>
+              {!clean
+                ? `Official status: ${row.status} — the percentile still counts every classified car.`
+                : row.start === null
+                  ? 'This series’ time cards don’t carry a sourced grid position.'
+                  : gain && gain.direction === 'up'
+                    ? `Up ${row.gain} ${row.gain === 1 ? 'place' : 'places'} from where he started.`
+                    : 'Percentile is the share of the field he beat — honest across changing field sizes.'}
+            </p>
+            {outline ? factList : null}
+          </div>
+          {outline ? (
+            <figure className="career-race__art" style={{ margin: 0 }}>
+              <TrackArt outline={outline} showCornerLabels={false} maxHeight={340} />
+              <figcaption className="career-race__art-caption">
+                {outline.name}, {outline.lengthMi.toFixed(2)} mi as drawn today. The layout {row.seriesShort} ran in{' '}
+                {row.seasonYear ?? 'that year'} isn’t in the source data.
+              </figcaption>
+            </figure>
+          ) : (
+            factList
+          )}
         </div>
-        <p className="caption caption--secondary" style={{ margin: '10px 0 0' }}>
-          {!clean
-            ? `Official status: ${row.status} — the percentile still counts every classified car.`
-            : row.start === null
-              ? 'This series’ time cards don’t carry a sourced grid position.'
-              : gain && gain.direction === 'up'
-                ? `Up ${row.gain} ${row.gain === 1 ? 'place' : 'places'} from where he started.`
-                : 'Percentile is the share of the field he beat — honest across changing field sizes.'}
-        </p>
       </Card>
 
-      <Card
-        title={`The ${row.seriesShort} chapter around it`}
-      >
-        <p style={{ margin: '0 0 4px', fontSize: 13, color: 'var(--ink-secondary)' }}>
+      <Card title={`The ${row.seriesShort} chapter around it`}>
+        <p style={{ margin: '0 0 4px', fontSize: 14, color: 'var(--ink-secondary)' }}>
           Race {chapterIndex + 1} of {chapterRows.length} in his {row.seriesShort} chapter — every dot a race, this one in
           full ink.
         </p>
         <ChapterContext row={row} chapterRows={chapterRows} />
-        <p className="caption caption--secondary" style={{ margin: '4px 0 0' }}>
+        <p className="caption caption--secondary" style={{ margin: '6px 0 0', fontSize: 13 }}>
           The ink tick marks the chapter median · ○ a day that ended early · click any other dot to open its race
         </p>
-        <div className="row row--between row--wrap" style={{ marginTop: 12, gap: 8 }}>
+        <nav className="career-race__nav" aria-label={`Neighbouring ${row.seriesShort} races`}>
           {previous ? (
-            <Link to={raceHref(previous.sessionId)} className="navlink row" style={{ gap: 6, color: 'var(--link)' }}>
+            <Link to={raceHref(previous.sessionId)} className="navlink row" style={{ gap: 6 }}>
               <ArrowLeft size={14} aria-hidden /> {previous.raceLabel}
             </Link>
           ) : (
             <span />
           )}
           {next ? (
-            <Link to={raceHref(next.sessionId)} className="navlink row" style={{ gap: 6, color: 'var(--link)' }}>
+            <Link to={raceHref(next.sessionId)} className="navlink row" style={{ gap: 6 }}>
               {next.raceLabel} <ArrowRight size={14} aria-hidden />
             </Link>
           ) : (
             <span />
           )}
-        </div>
+        </nav>
+        <p style={{ margin: '28px 0 0' }}>
+          <Link to="/career" className="navlink" style={{ color: 'var(--link)', padding: 0 }}>
+            ← Back to the Career Lab
+          </Link>
+        </p>
       </Card>
-
-      <p>
-        <Link to="/career" className="navlink" style={{ color: 'var(--link)' }}>
-          ← Back to the Career Lab
-        </Link>
-      </p>
     </div>
   );
 };

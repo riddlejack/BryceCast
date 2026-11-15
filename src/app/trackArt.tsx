@@ -55,9 +55,25 @@ export const TrackArt = ({
   progress,
   sections = null,
   passMarks = null,
-  wind
+  wind,
+  strokeScale = 1,
+  labelPlacement = 'beside',
+  labelRoom = 0,
+  labelSize
 }: {
   outline: TrackOutline;
+  /** Multiplies the heat-map stroke, dots and start/finish tick (the Tracks
+   *  page draws a thick line; every other caller keeps 1). */
+  strokeScale?: number;
+  /** 'beside' (default) pushes each section label away from the shape's
+   *  centre. 'outside' searches along the track's normal for a spot that clears
+   *  the line itself and every other label, with a hairline leader when the
+   *  label had to move further out. */
+  labelPlacement?: 'beside' | 'outside';
+  /** Pixels of room kept around the drawing for 'outside' labels. */
+  labelRoom?: number;
+  /** Section label size in screen pixels (default 10.5; 'outside' uses 12.5). */
+  labelSize?: number;
   annotation?: { corner: string; note: string } | null;
   showCornerLabels?: boolean;
   /** Cap the rendered height so differently-shaped circuits occupy one
@@ -101,9 +117,26 @@ export const TrackArt = ({
   const markTipActive = useRef(false);
   const [, , viewWidth, viewHeight] = outline.viewBox.split(' ').map(Number);
   const aspect = viewHeight / viewWidth;
-  const width = maxHeight !== undefined ? Math.min(measuredWidth, maxHeight / aspect) : measuredWidth;
+  const outside = labelPlacement === 'outside';
+  /* Room around the art for outside labels (0 for every other caller, which
+   * keeps their geometry exactly as before). */
+  const room = outside ? Math.max(0, Math.min(labelRoom, measuredWidth * 0.1)) : 0;
+  const artAvailable = Math.max(0, measuredWidth - room * 2);
+  const width =
+    maxHeight !== undefined ? Math.max(0, Math.min(artAvailable, (maxHeight - room * 2) / aspect)) : artAvailable;
   const scale = width > 0 ? width / viewWidth : 1;
   const px = (visual: number) => visual / scale;
+  /* Margin in viewBox units, and the svg's own box in screen pixels. */
+  const margin = room / scale;
+  const svgWidth = width + room * 2;
+  const svgInset = Math.max(0, (measuredWidth - svgWidth) / 2);
+  /** Screen position (container pixels) of a viewBox point. */
+  const toScreen = (point: { x: number; y: number }) => ({
+    x: (point.x + margin) * scale + svgInset,
+    y: (point.y + margin) * scale
+  });
+  const weight = (visual: number) => px(visual * strokeScale);
+  const labelPx = labelSize ?? (outside ? 12.5 : 10.5);
   const center = { x: viewWidth / 2, y: viewHeight / 2 };
   const heatSections = sections?.resolved ?? [];
   const hasHeat = heatSections.length > 0;
@@ -168,13 +201,12 @@ export const TrackArt = ({
     hoveredFamily ?? (selectedIndex !== null ? heatSections[selectedIndex]?.familyId ?? null : null);
 
   const showTipFor = (section: ResolvedHeatSection, at?: { x: number; y: number }) => {
-    const anchorPt = at ?? geometry.pointAtT(spanMid(section.startT, section.endT));
-    const offset = Math.max(0, (measuredWidth - width) / 2);
+    const anchorPt = toScreen(at ?? geometry.pointAtT(spanMid(section.startT, section.endT)));
     const pct = Math.round(section.percentile * 100);
     if (section.kind === 'derived_remainder') {
       setTip({
-        x: anchorPt.x * scale + offset,
-        y: anchorPt.y * scale,
+        x: anchorPt.x,
+        y: anchorPt.y,
         title: 'The rest of the lap, together',
         detail: `${ordinal(pct)} percentile ${sections?.contextLabel ?? 'this race'}`,
         action: section.combined
@@ -184,8 +216,8 @@ export const TrackArt = ({
       return;
     }
     setTip({
-      x: anchorPt.x * scale + offset,
-      y: anchorPt.y * scale,
+      x: anchorPt.x,
+      y: anchorPt.y,
       title: section.label,
       detail: `beat ${pct}% of the field ${sections?.contextLabel ?? 'this race'}`
     });
@@ -197,8 +229,8 @@ export const TrackArt = ({
     const svg = svgRef.current;
     if (!svg) return null;
     const rect = svg.getBoundingClientRect();
-    const vx = ((clientX - rect.left) / rect.width) * viewWidth;
-    const vy = ((clientY - rect.top) / rect.height) * viewHeight;
+    const vx = ((clientX - rect.left) / rect.width) * (viewWidth + margin * 2) - margin;
+    const vy = ((clientY - rect.top) / rect.height) * (viewHeight + margin * 2) - margin;
     let best = geometry.samples[0];
     let bestDist = Infinity;
     for (const sample of geometry.samples) {
@@ -214,10 +246,10 @@ export const TrackArt = ({
   /** The honest-explanation tip for stretches without timing loops (Jack's
    *  review: the gaps must explain themselves, not just the caption). */
   const showUntimedTip = (sample: { x: number; y: number }) => {
-    const offset = Math.max(0, (measuredWidth - width) / 2);
+    const at = toScreen(sample);
     setTip({
-      x: sample.x * scale + offset,
-      y: sample.y * scale,
+      x: at.x,
+      y: at.y,
       title: 'No timing loops on this stretch',
       detail: 'officially untimed'
     });
@@ -259,15 +291,28 @@ export const TrackArt = ({
   const sectionLabels = useMemo(() => {
     if (!hasHeat || !sections?.showLabels || width === 0) return [];
     const pxOf = (visual: number) => visual / (width / viewWidth);
-    const candidates = heatSections
+    type PlacedLabel = {
+      familyId: string;
+      label: string;
+      lx: number;
+      ly: number;
+      rank: number;
+      percentile: number;
+      halfW: number;
+      halfH: number;
+      t: number;
+      leader?: { x1: number; y1: number; x2: number; y2: number } | null;
+    };
+    const candidates: PlacedLabel[] = heatSections
       .filter((section) => section.kind !== 'derived_remainder')
       .map((section) => {
-        const mid = geometry.pointAtT(spanMid(section.startT, section.endT));
+        const t = spanMid(section.startT, section.endT);
+        const mid = geometry.pointAtT(t);
         const away = Math.hypot(mid.x - center.x, mid.y - center.y) || 1;
         const hasWord = /[a-z]{3,}/.test(section.label); // a named feature, e.g. "Back straight"
         const isStartFinish = /S\/F/.test(section.label);
-        const halfW = pxOf(section.label.length * 3 + 4);
-        const halfH = pxOf(6.5);
+        const halfW = outside ? pxOf(section.label.length * labelPx * 0.28 + 3) : pxOf(section.label.length * 3 + 4);
+        const halfH = outside ? pxOf(labelPx * 0.62) : pxOf(6.5);
         /* The SVG paints with overflow visible. Vertically that's fine — the
          * card has room above and below — but the card is width-tight, so an
          * outward-pushed label near the outline's left/right edge spills past
@@ -284,7 +329,8 @@ export const TrackArt = ({
           rank: section.isTopSection ? 0 : hasWord ? 1 : isStartFinish ? 2 : 3,
           percentile: section.percentile,
           halfW,
-          halfH
+          halfH,
+          t
         };
       })
       .sort((left, right) => left.rank - right.rank || right.percentile - left.percentile);
@@ -295,25 +341,95 @@ export const TrackArt = ({
     const eligible = compactLabels ? candidates.filter((candidate) => candidate.rank < 3) : candidates;
     const cap = compactLabels ? 5 : eligible.length;
     const gap = pxOf(3);
-    const kept: typeof candidates = [];
-    for (const candidate of eligible) {
-      if (kept.length >= cap) break;
-      const collides = kept.some(
+    const kept: PlacedLabel[] = [];
+    const clashes = (candidate: { lx: number; ly: number; halfW: number; halfH: number }) =>
+      kept.some(
         (other) =>
           Math.abs(other.lx - candidate.lx) < other.halfW + candidate.halfW + gap &&
           Math.abs(other.ly - candidate.ly) < other.halfH + candidate.halfH + gap
       );
-      if (!collides) kept.push(candidate);
+    if (!outside) {
+      for (const candidate of eligible) {
+        if (kept.length >= cap) break;
+        if (!clashes(candidate)) kept.push(candidate);
+      }
+      return kept;
+    }
+
+    /* Outside placement (the Tracks page, F5): a label never sits on the line
+     * or on a section dot. For each label, step outward along the track's
+     * normal at its span midpoint — the side away from the shape's centre
+     * first — and keep the first spot whose box clears every point of the
+     * line by the stroke's half-width plus a margin, clears every label
+     * already placed, and stays inside the drawing's room. */
+    const dense = Array.from({ length: 720 }, (_, k) => geometry.pointAtT(k / 720));
+    const strokeHalf = pxOf(3 * strokeScale);
+    const clearance = strokeHalf + pxOf(4);
+    const steps = [6, 16, 30, 48, 72].map((step) => strokeHalf + pxOf(step));
+    const minX = -margin;
+    const maxX = viewWidth + margin;
+    const minY = -margin;
+    const maxY = viewHeight + margin;
+    for (const candidate of eligible) {
+      if (kept.length >= cap) break;
+      const mid = geometry.pointAtT(candidate.t);
+      const ahead = geometry.pointAtT(candidate.t + 0.004);
+      const behind = geometry.pointAtT(candidate.t - 0.004);
+      const tx = ahead.x - behind.x;
+      const ty = ahead.y - behind.y;
+      const len = Math.hypot(tx, ty) || 1;
+      let nx = -ty / len;
+      let ny = tx / len;
+      if (nx * (mid.x - center.x) + ny * (mid.y - center.y) < 0) {
+        nx = -nx;
+        ny = -ny;
+      }
+      const sides = [
+        { x: nx, y: ny },
+        { x: -nx, y: -ny }
+      ];
+      let placed: PlacedLabel | null = null;
+      for (let stepIndex = 0; stepIndex < steps.length && !placed; stepIndex += 1) {
+        for (const side of sides) {
+          const extent = Math.abs(side.x) * candidate.halfW + Math.abs(side.y) * candidate.halfH;
+          const lx = mid.x + side.x * (steps[stepIndex] + extent);
+          const ly = mid.y + side.y * (steps[stepIndex] + extent);
+          const box = { lx, ly, halfW: candidate.halfW, halfH: candidate.halfH };
+          if (lx - box.halfW < minX || lx + box.halfW > maxX || ly - box.halfH < minY || ly + box.halfH > maxY) continue;
+          const onLine = dense.some((point) => {
+            const dx = Math.max(Math.abs(point.x - lx) - box.halfW, 0);
+            const dy = Math.max(Math.abs(point.y - ly) - box.halfH, 0);
+            return Math.hypot(dx, dy) < clearance;
+          });
+          if (onLine || clashes(box)) continue;
+          placed = {
+            ...candidate,
+            lx,
+            ly,
+            leader:
+              stepIndex > 0
+                ? {
+                    x1: mid.x + side.x * (strokeHalf + pxOf(2)),
+                    y1: mid.y + side.y * (strokeHalf + pxOf(2)),
+                    x2: lx - side.x * (extent + pxOf(2)),
+                    y2: ly - side.y * (extent + pxOf(2))
+                  }
+                : null
+          };
+          break;
+        }
+      }
+      if (placed) kept.push(placed);
     }
     return kept;
-  }, [hasHeat, sections?.showLabels, heatSections, geometry, center.x, center.y, width, viewWidth, viewHeight, compactLabels]);
+  }, [hasHeat, sections?.showLabels, heatSections, geometry, center.x, center.y, width, viewWidth, viewHeight, compactLabels, outside, labelPx, strokeScale, margin]);
 
   const showPassTip = (mark: { x: number; y: number; lap: number; direction: 'gain' | 'loss'; otherName: string }) => {
     markTipActive.current = true;
     setHoveredFamily(null);
     setTip({
-      x: mark.x * scale + Math.max(0, (measuredWidth - width) / 2),
-      y: mark.y * scale,
+      x: toScreen(mark).x,
+      y: toScreen(mark).y,
       title: `Lap ${mark.lap}`,
       /* Spatial words, Bryce-first, no signed numbers. */
       detail: mark.direction === 'gain' ? `past ${mark.otherName}` : `${mark.otherName} by him`,
@@ -386,9 +502,9 @@ export const TrackArt = ({
       {width > 0 ? (
         <svg
           ref={svgRef}
-          viewBox={outline.viewBox}
-          width={width}
-          height={width * (viewHeight / viewWidth)}
+          viewBox={margin > 0 ? `${-margin} ${-margin} ${viewWidth + margin * 2} ${viewHeight + margin * 2}` : outline.viewBox}
+          width={svgWidth}
+          height={width * (viewHeight / viewWidth) + room * 2}
           role="img"
           aria-label={
             hasHeat
@@ -406,7 +522,7 @@ export const TrackArt = ({
                 d={outline.mainPath}
                 fill="none"
                 stroke="var(--grid-hairline)"
-                strokeWidth={px(2)}
+                strokeWidth={weight(2)}
                 strokeLinejoin="round"
                 strokeLinecap="round"
               />
@@ -423,9 +539,9 @@ export const TrackArt = ({
                       d={spanPolyline(span.startT, span.endT)}
                       fill="none"
                       stroke={color}
-                      strokeWidth={px(activeFamily === section.familyId ? 4 : 3)}
+                      strokeWidth={weight(activeFamily === section.familyId ? 4 : 3)}
                       strokeLinecap="round"
-                      strokeDasharray={`${px(0.1)} ${px(5)}`}
+                      strokeDasharray={`${px(0.1)} ${weight(5)}`}
                       style={{ opacity: focused ? 0.9 : 0.3, transition: 'opacity 150ms ease-out, stroke-width 150ms ease-out' }}
                     />
                   ));
@@ -437,8 +553,10 @@ export const TrackArt = ({
                     fill="none"
                     pathLength={1}
                     stroke={color}
-                    strokeWidth={px(activeFamily === section.familyId ? 7.5 : 6)}
-                    strokeLinecap="round"
+                    strokeWidth={weight(activeFamily === section.familyId ? 7.5 : 6)}
+                    /* Thick lines (strokeScale > 1) meet their neighbours
+                     * flush; round caps would bleed one colour into the next. */
+                    strokeLinecap={strokeScale > 1 ? 'butt' : 'round'}
                     strokeDasharray={dash.dasharray}
                     strokeDashoffset={dash.dashoffset}
                     style={{ opacity: focused ? 1 : 0.35, transition: 'opacity 150ms ease-out, stroke-width 150ms ease-out' }}
@@ -483,7 +601,7 @@ export const TrackArt = ({
             <g
               transform={`translate(${outline.startFinish.x} ${outline.startFinish.y}) rotate(${outline.startFinish.angleDeg + 90})`}
             >
-              <line x1={-px(8)} x2={px(8)} stroke="var(--bryce)" strokeWidth={px(3.5)} strokeLinecap="round" />
+              <line x1={-weight(8)} x2={weight(8)} stroke="var(--bryce)" strokeWidth={weight(3.5)} strokeLinecap="round" />
             </g>
           ) : null}
           {/* Section anchors: gold dots on the top-2 stretches, quiet ink ticks
@@ -493,29 +611,39 @@ export const TrackArt = ({
                 if (section.kind === 'derived_remainder') return null; // no loop dot on a derived stretch
                 const mid = geometry.pointAtT(spanMid(section.startT, section.endT));
                 return section.isTopSection ? (
-                  <circle key={`dot-${section.familyId}`} cx={mid.x} cy={mid.y} r={px(4)} fill="var(--bryce)" />
+                  <circle key={`dot-${section.familyId}`} cx={mid.x} cy={mid.y} r={weight(strokeScale > 1 ? 2.6 : 4)} fill={strokeScale > 1 ? 'var(--ink-primary)' : 'var(--bryce)'} stroke={strokeScale > 1 ? 'var(--bryce)' : undefined} strokeWidth={strokeScale > 1 ? px(2) : undefined} />
                 ) : (
-                  <circle key={`dot-${section.familyId}`} cx={mid.x} cy={mid.y} r={px(2.5)} fill="var(--ink-primary)" />
+                  <circle key={`dot-${section.familyId}`} cx={mid.x} cy={mid.y} r={strokeScale > 1 ? px(2.6) : px(2.5)} fill="var(--ink-primary)" />
                 );
               })
             : null}
           {/* Direct section labels (Brief H #1): priority-ranked, collision-
               detected, phone-capped. Suppressed codes stay one tap away. */}
           {sectionLabels.map((entry) => (
-            <text
-              key={`label-${entry.familyId}`}
-              x={entry.lx}
-              y={entry.ly}
-              textAnchor="middle"
-              dominantBaseline="middle"
-              fill="var(--ink-secondary)"
-              fontFamily={chartFont}
-              fontSize={px(10.5)}
-              fontWeight={500}
-              style={{ pointerEvents: 'none' }}
-            >
-              {entry.label}
-            </text>
+            <g key={`label-${entry.familyId}`} style={{ pointerEvents: 'none' }}>
+              {entry.leader ? (
+                <line
+                  x1={entry.leader.x1}
+                  y1={entry.leader.y1}
+                  x2={entry.leader.x2}
+                  y2={entry.leader.y2}
+                  stroke="var(--ink-faint)"
+                  strokeWidth={px(1)}
+                />
+              ) : null}
+              <text
+                x={entry.lx}
+                y={entry.ly}
+                textAnchor="middle"
+                dominantBaseline="middle"
+                fill={outside && activeFamily === entry.familyId ? 'var(--ink-primary)' : 'var(--ink-secondary)'}
+                fontFamily={chartFont}
+                fontSize={px(labelPx)}
+                fontWeight={500}
+              >
+                {entry.label}
+              </text>
+            </g>
           ))}
           {/* Pass marks (heat-map v2): quiet open circles on the spans where a
               green Bryce pass happened; hover reads lap · direction · other car. */}
@@ -566,8 +694,8 @@ export const TrackArt = ({
                         style={{ cursor: 'default' }}
                         onMouseEnter={() =>
                           setTip({
-                            x: arc.apex.x * scale + Math.max(0, (measuredWidth - width) / 2),
-                            y: arc.apex.y * scale,
+                            x: toScreen(arc.apex).x,
+                            y: toScreen(arc.apex).y,
                             title: `Turn ${annotation.corner}`,
                             detail: annotation.note
                           })

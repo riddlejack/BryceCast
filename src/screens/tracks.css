@@ -1,0 +1,326 @@
+/* ============================================================
+   Tracks page (/tracks), round 2 of the site refresh (option T1).
+   Everything here is scoped under .tracks-page; the shared heat card only
+   picks these classes up when it renders with layout="tracks".
+   ============================================================ */
+
+/* ---------- head: title and pickers, with the film's 3D still beside ---------- */
+
+.tracks-page .tracks-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(20px, 3vw, 48px);
+  align-items: center;
+}
+
+@media (min-width: 1100px) {
+  .tracks-page .tracks-head--still {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  }
+}
+
+.tracks-page .tracks-head__pickers {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px;
+  max-width: 640px;
+  margin-top: clamp(20px, 2.4vw, 32px);
+}
+
+.tracks-page .tracks-pick {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--ink-secondary);
+  min-width: 0;
+}
+
+.tracks-page .tracks-still {
+  margin: 0;
+  min-width: 0;
+}
+
+.tracks-page .tracks-still img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.tracks-page .tracks-still figcaption {
+  margin-top: 8px;
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--ink-muted);
+  max-width: 70ch;
+}
+
+/* ---------- the section story: map, where his lap goes, lap by lap ---------- */
+
+.tracks-page .tracks-story svg text {
+  font-family: var(--font-ui);
+}
+
+/* The shared heat card writes its quiet notes inline at 11.5 px; this page
+ * holds every word at 12 px or more. */
+.tracks-page [style*="font-size: 11.5px"],
+.tracks-page [style*="font-size: 11px"] {
+  font-size: 12.5px !important;
+}
+
+.tracks-page .tracks-lead {
+  margin: 0 0 16px;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--ink-secondary);
+}
+
+.tracks-page .tracks-story__session {
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.tracks-page .tracks-subhead {
+  margin: 0 0 6px;
+  font-size: clamp(17px, 1.2vw, 20px);
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--ink-primary);
+}
+
+.tracks-page .tracks-note {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--ink-secondary);
+  max-width: 62ch;
+  text-wrap: pretty;
+}
+
+.tracks-page .tracks-story__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: 'map' 'budget' 'laps';
+  gap: clamp(36px, 3.4vw, 56px) clamp(28px, 3vw, 56px);
+  margin-top: 8px;
+}
+
+.tracks-page .tracks-story__map { grid-area: map; min-width: 0; }
+.tracks-page .tracks-story__budget { grid-area: budget; min-width: 0; }
+.tracks-page .tracks-story__laps { grid-area: laps; min-width: 0; }
+
+/* Tall circuits (Laguna Seca, Road America): the map and the bars side by
+ * side, the grid across the full width under them. */
+@media (min-width: 1000px) {
+  .tracks-page .tracks-story__layout {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    grid-template-areas: 'map budget' 'laps laps';
+    align-items: start;
+  }
+  .tracks-page .tracks-story__budget { padding-top: 4px; }
+}
+
+/* Wide screens: all three in one row. */
+@media (min-width: 1800px) {
+  .tracks-page .tracks-story__layout {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 3.4fr) minmax(0, 3.6fr);
+    grid-template-areas: 'map budget laps';
+  }
+}
+
+/* Wide, low circuits (Detroit, Portland, the ovals): the map takes the full
+ * width, the bars and the grid share the row under it. */
+@media (min-width: 1000px) {
+  .tracks-page .tracks-story--wide .tracks-story__layout {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    grid-template-areas: 'map map' 'budget laps';
+  }
+}
+
+/* Qualifying (no lap budget, no grid): the map alone, the one-line note under it. */
+.tracks-page .tracks-story--no-grid .tracks-story__layout,
+.tracks-page .tracks-story--wide.tracks-story--no-grid .tracks-story__layout {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: 'map' 'budget';
+}
+
+.tracks-page .tracks-story__drawer { margin-top: clamp(28px, 3vw, 44px); }
+.tracks-page .tracks-story__drawer button { font-size: 14px !important; }
+
+/* ---------- where his lap goes ---------- */
+
+.tracks-page .tracks-budget__axis {
+  display: grid;
+  grid-template-columns: minmax(92px, 9.5em) minmax(0, 1fr) 4.4em;
+  column-gap: 12px;
+  margin: 18px 0 6px;
+  font-size: 12px;
+  color: var(--ink-muted);
+}
+
+.tracks-page .tracks-budget__axis span:nth-child(1) { grid-column: 2; grid-row: 1; justify-self: start; }
+.tracks-page .tracks-budget__axis span:nth-child(2) { grid-column: 2; grid-row: 1; justify-self: end; }
+
+.tracks-page .tracks-budget__rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.tracks-page .tracks-budget__row {
+  display: grid;
+  grid-template-columns: minmax(92px, 9.5em) minmax(0, 1fr) 4.4em;
+  column-gap: 12px;
+  align-items: center;
+  min-height: 27px;
+}
+
+.tracks-page .tracks-budget__label {
+  font-size: 13.5px;
+  color: var(--ink-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tracks-page .tracks-budget__track {
+  position: relative;
+  display: block;
+  height: 13px;
+}
+
+.tracks-page .tracks-budget__zero {
+  position: absolute;
+  left: 50%;
+  top: -7px;
+  bottom: -7px;
+  width: 1px;
+  background: var(--axis-baseline);
+}
+
+.tracks-page .tracks-budget__bar {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  min-width: 1px;
+}
+
+.tracks-page .tracks-budget__gap {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  text-align: center;
+  font-size: 12px;
+  line-height: 1;
+  color: var(--ink-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tracks-page .tracks-budget__row--missing .tracks-budget__zero { opacity: 0.4; }
+
+.tracks-page .tracks-budget__value {
+  font-size: 13.5px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-primary);
+}
+
+.tracks-page .tracks-budget__row--missing .tracks-budget__label,
+.tracks-page .tracks-budget__row--missing .tracks-budget__value {
+  color: var(--ink-muted);
+}
+
+.tracks-page .tracks-budget__row--total {
+  margin: 10px 0 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--ink);
+  min-height: 34px;
+}
+
+.tracks-page .tracks-budget__row--total .tracks-budget__label {
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--ink-primary);
+  white-space: normal;
+}
+
+.tracks-page .tracks-budget__row--total .tracks-budget__track { height: 18px; }
+.tracks-page .tracks-budget__row--total .tracks-budget__value { font-size: 16px; font-weight: 600; }
+
+/* ---------- lap by lap ---------- */
+
+.tracks-page .tracks-story__laps {
+  container-type: inline-size;
+}
+
+.tracks-page .tracks-laps > .tracks-note { margin-bottom: 18px; }
+
+.tracks-page .tracks-grid__frame {
+  width: 100%;
+  min-width: 0;
+}
+
+/* With room to spare, the grid's words sit beside it rather than above. */
+@container (min-width: 900px) {
+  .tracks-page .tracks-laps {
+    display: grid;
+    grid-template-columns: minmax(220px, 300px) minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
+    column-gap: clamp(28px, 3vw, 56px);
+  }
+  .tracks-page .tracks-laps > .tracks-subhead { grid-column: 1; grid-row: 1; }
+  .tracks-page .tracks-laps > .tracks-note { grid-column: 1; grid-row: 2; }
+  .tracks-page .tracks-laps > .tracks-grid__frame { grid-column: 2; grid-row: 1 / span 2; }
+}
+
+.tracks-page .tracks-grid__lap { cursor: pointer; }
+
+@media (hover: hover) {
+  .tracks-page .tracks-grid__lap:hover > rect:first-child { fill: var(--grey-wash); }
+}
+
+/* ---------- the track, year over year: one even row of shapes ---------- */
+
+.tracks-page .tracks-years > .row:not(.row--between) {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 190px), 1fr));
+  gap: 28px 22px !important;
+}
+
+.tracks-page .tracks-years > .row:not(.row--between) > * {
+  min-width: 0 !important;
+  max-width: none !important;
+}
+
+/* ---------- lap by lap on a phone: folded to one strip, opened compact ---------- */
+
+.tracks-page .tracks-grid__strip-note {
+  margin: 4px 0 0;
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--ink-muted);
+}
+
+.tracks-page .tracks-grid__toggle {
+  display: inline-block;
+  margin: 12px 0 14px;
+  padding: 6px 0;
+  border: 0;
+  border-bottom: 1px solid var(--ink-faint);
+  background: none;
+  font: inherit;
+  font-size: 14px;
+  color: var(--ink-primary);
+  cursor: pointer;
+}
+
+.tracks-page .tracks-grid__frame--folded .tracks-grid__toggle { margin-bottom: 0; }
+
+/* Folded, the grid's own description gives way to the strip's one line. */
+.tracks-page .tracks-laps:has(.tracks-grid__frame--folded) > .tracks-note { display: none; }
+.tracks-page .tracks-grid__frame--folded { padding-top: 10px; }

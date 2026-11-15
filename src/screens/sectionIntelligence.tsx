@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { Card, SourcePill } from '../app/components';
-import { inkGoldDiverging, useCoarsePointer } from '../app/charts';
+import { chartFont, inkGoldDiverging, useCoarsePointer, useMeasuredWidth } from '../app/charts';
 import { TrackArt } from '../app/trackArt';
 import type { TrackOutline } from '../assets/tracks';
 import {
@@ -67,6 +67,548 @@ const HeatKey = () => {
       <span style={{ fontSize: 11.5, color: 'var(--ink-secondary)' }}>
         deeper gold = stronger stretch, deeper ink = tougher
       </span>
+    </div>
+  );
+};
+
+/* ---------- the Tracks page's lap reading: lap order, the lap budget, the grid ---------- */
+
+const parseOutlinePoints = (d: string): Array<{ x: number; y: number }> => {
+  const nums = d.match(/-?\d+(?:\.\d+)?/g)?.map(Number) ?? [];
+  const points: Array<{ x: number; y: number }> = [];
+  for (let i = 0; i + 1 < nums.length; i += 2) points.push({ x: nums[i], y: nums[i + 1] });
+  return points;
+};
+
+/** Where the start/finish line sits on the outline's [0,1] arc parameter (the
+ *  same parameterisation the anchors' startT/endT use). 0 when the outline
+ *  carries no S/F datum. */
+const startFinishTOf = (outline: TrackOutline): number => {
+  if (!outline.startFinish) return 0;
+  const points = parseOutlinePoints(outline.mainPath);
+  if (points.length < 2) return 0;
+  const cum = [0];
+  for (let i = 0; i < points.length; i += 1) {
+    const a = points[i];
+    const b = points[(i + 1) % points.length];
+    cum.push(cum[i] + Math.hypot(b.x - a.x, b.y - a.y));
+  }
+  const total = cum[points.length] || 1;
+  const sf = outline.startFinish;
+  let best = 0;
+  let bestDist = Infinity;
+  for (let i = 0; i < points.length; i += 1) {
+    const a = points[i];
+    const b = points[(i + 1) % points.length];
+    const dx = b.x - a.x;
+    const dy = b.y - a.y;
+    const segment = dx * dx + dy * dy || 1;
+    const u = Math.max(0, Math.min(1, ((sf.x - a.x) * dx + (sf.y - a.y) * dy) / segment));
+    const dist = Math.hypot(a.x + dx * u - sf.x, a.y + dy * u - sf.y);
+    if (dist < bestDist) {
+      bestDist = dist;
+      best = (cum[i] + Math.sqrt(segment) * u) / total;
+    }
+  }
+  return best;
+};
+
+/** A venue's anchored sections in the order he drives them, starting at the
+ *  start/finish line (the official reports do not always list them that way:
+ *  Portland's 2026 report opens with FS-PO and ends with Turn 3). */
+export const sectionsInLapOrder = (anchors: TrackSectionAnchorSet, outline: TrackOutline) => {
+  const sf = startFinishTOf(outline);
+  /* A section that starts on the line can read a hair before it after
+   * rounding; the small lead keeps it first rather than last. */
+  const key = (startT: number) => (((startT - sf + 0.004) % 1) + 1) % 1;
+  return [...anchors.sections].sort((left, right) => key(left.startT) - key(right.startT));
+};
+
+const medianOf = (values: number[]): number | null => {
+  if (values.length === 0) return null;
+  const sorted = [...values].sort((a, b) => a - b);
+  const mid = Math.floor(sorted.length / 2);
+  return sorted.length % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
+};
+
+export interface LapBudgetRow {
+  sectionName: string;
+  label: string;
+  kind: 'measured' | 'derived_remainder';
+  /** compared: a bar. too_few: under MIN_CLEAN_LAPS clean laps here. no_field:
+   *  the report carries no field times for this section. no_timing: the race's
+   *  report has no row for this anchored section at all. */
+  state: 'compared' | 'too_few' | 'no_field' | 'no_timing';
+  bryceSeconds: number | null;
+  fieldMedianSeconds: number | null;
+  /** His median minus the field median, seconds. Negative = quicker. */
+  delta: number | null;
+  cleanLaps: number;
+  fieldCars: number;
+}
+
+export interface LapBudget {
+  rows: LapBudgetRow[];
+  /** Sum of the compared rows' deltas: his lap against the field, built
+   *  section by section. */
+  total: number;
+  compared: number;
+  cleanLaps: number;
+  totalLaps: number;
+  fieldCarsMin: number;
+  fieldCarsMax: number;
+  /** His median clean green-flag lap, from the official lap rows. */
+  bryceMedianLap: number | null;
+  /** Sum of his section medians (differs from his median lap only because a
+   *  median of sums is not a sum of medians). */
+  bryceSectionSum: number | null;
+}
+
+/** "Where his lap goes": in lap order, his median clean-lap time in each
+ *  section minus the field's median (the middle of every timed car's own
+ *  median clean-lap time there, his included), over the whole race. The
+ *  sections tile the lap, so the compared rows add up to his lap against the
+ *  field. Always the full race and the median: the field distribution in the
+ *  pack is whole-race only, so a lap window would compare unlike things. */
+export const lapBudgetOf = (pack: SectionLapsPack, anchors: TrackSectionAnchorSet, outline: TrackOutline): LapBudget => {
+  const set = sectionObservationsFromLaps(pack, { kind: 'full_race' }, 'median');
+  const byName = new Map(set.sections.map((observation) => [observation.sectionName, observation]));
+  const ordered = sectionsInLapOrder(anchors, outline);
+  const anchoredNames = new Set(ordered.map((anchor) => anchor.sectionName));
+  const rowFor = (sectionName: string, label: string, kind: 'measured' | 'derived_remainder'): LapBudgetRow => {
+    const observation = byName.get(sectionName);
+    const fieldCars = observation?.fieldSeconds?.length ?? 0;
+    const cleanLaps = observation?.observationCount ?? 0;
+    const base = { sectionName, label, kind, cleanLaps, fieldCars };
+    if (!observation) return { ...base, state: 'no_timing', bryceSeconds: null, fieldMedianSeconds: null, delta: null };
+    const bryce = observation.bryceMedianSeconds ?? null;
+    const field = observation.fieldMedianSeconds ?? null;
+    if (observation.percentile === null) return { ...base, state: 'too_few', bryceSeconds: bryce, fieldMedianSeconds: field, delta: null };
+    if (bryce === null || field === null) return { ...base, state: 'no_field', bryceSeconds: bryce, fieldMedianSeconds: field, delta: null };
+    return { ...base, state: 'compared', bryceSeconds: bryce, fieldMedianSeconds: field, delta: bryce - field };
+  };
+  const rows = [
+    ...ordered.map((anchor) => rowFor(anchor.sectionName, anchor.label, anchor.kind ?? 'measured')),
+    /* A timed section no anchor names (none in the shipped packs) still belongs
+     * in the sum; it goes last, under its official name. */
+    ...pack.sections
+      .filter((section) => !anchoredNames.has(section.sectionName))
+      .map((section) => rowFor(section.sectionName, section.sectionName, section.kind ?? 'measured'))
+  ];
+  const compared = rows.filter((row) => row.state === 'compared');
+  const cars = compared.map((row) => row.fieldCars);
+  const cleanLapTimes = pack.lapTotals
+    .filter((tuple) => tuple[0] !== null && tuple[4] === 1 && tuple[6] !== null)
+    .map((tuple) => tuple[6] as number);
+  return {
+    rows,
+    total: compared.reduce((sum, row) => sum + (row.delta ?? 0), 0),
+    compared: compared.length,
+    cleanLaps: cleanSectionLapsOf(pack).length,
+    totalLaps: pack.totalLaps,
+    fieldCarsMin: cars.length > 0 ? Math.min(...cars) : 0,
+    fieldCarsMax: cars.length > 0 ? Math.max(...cars) : 0,
+    bryceMedianLap: medianOf(cleanLapTimes),
+    bryceSectionSum: compared.length === rows.length ? compared.reduce((sum, row) => sum + (row.bryceSeconds ?? 0), 0) : null
+  };
+};
+
+/** Signed seconds, delta convention: minus is quicker than the field median. */
+const signedSeconds = (value: number): string => {
+  const rounded = Math.round(value * 1000) / 1000;
+  if (rounded === 0) return '0.000';
+  return `${rounded < 0 ? '−' : '+'}${Math.abs(rounded).toFixed(3)}`;
+};
+
+const GAIN_COLOUR = inkGoldDiverging(0.92);
+const LOSS_COLOUR = inkGoldDiverging(0.16);
+
+const budgetMissingCopy = (row: LapBudgetRow): string =>
+  row.state === 'too_few'
+    ? `not compared: ${row.cleanLaps} clean ${row.cleanLaps === 1 ? 'lap' : 'laps'}`
+    : row.state === 'no_field'
+      ? 'not compared: no field times'
+      : 'no timing row this race';
+
+/** The lap budget drawn as one bar per section, quicker to the right in gold,
+ *  slower to the left in ink, with the total underneath on the same scale. */
+export const LapBudgetBars = ({ budget }: { budget: LapBudget }) => {
+  /* A running sum, drawn as a waterfall: each section's bar starts where the
+   * lap so far had got to, so the last bar ends on the total and the chart
+   * adds itself up. Quicker reads to the right (minus seconds), slower to the
+   * left. */
+  const running: Array<{ from: number; to: number }> = [];
+  let sofar = 0;
+  for (const row of budget.rows) {
+    const from = sofar;
+    if (row.state === 'compared') sofar += row.delta ?? 0;
+    running.push({ from, to: sofar });
+  }
+  const extents = [0, ...running.flatMap((step) => [-step.from, -step.to])];
+  const span = Math.max(0.001, Math.max(...extents) - Math.min(...extents));
+  const lo = Math.min(...extents) - span * 0.04;
+  const hi = Math.max(...extents) + span * 0.04;
+  const xOf = (seconds: number) => ((-seconds - lo) / (hi - lo)) * 100;
+  const bar = (from: number, to: number) => {
+    const left = Math.min(xOf(from), xOf(to));
+    return {
+      left: `${left}%`,
+      width: `${Math.abs(xOf(to) - xOf(from))}%`,
+      background: to < from ? GAIN_COLOUR : LOSS_COLOUR
+    };
+  };
+  const zero = { left: `${xOf(0)}%` };
+  const cars =
+    budget.fieldCarsMin === budget.fieldCarsMax
+      ? `${budget.fieldCarsMax} cars`
+      : `${budget.fieldCarsMin} to ${budget.fieldCarsMax} cars`;
+  const missing = budget.rows.length - budget.compared;
+  const totalWords =
+    Math.round(budget.total * 100) === 0
+      ? 'level with the field median, to the hundredth'
+      : `${budget.total < 0 ? 'quicker' : 'slower'} than the field median`;
+  return (
+    <div className="tracks-budget">
+      <h3 className="tracks-subhead">Where his lap goes</h3>
+      <p className="tracks-note">
+        One bar per section in the order he drives them: his median time there against the field&rsquo;s. Each bar starts
+        where the lap so far had got to, so the last one ends on the total. {budget.cleanLaps} clean
+        green-flag laps of {budget.totalLaps}; the field median is the middle of {cars}&rsquo; own medians, his included.
+      </p>
+      <div className="tracks-budget__axis" aria-hidden>
+        <span>&larr; slower</span>
+        <span>quicker &rarr;</span>
+      </div>
+      <ol className="tracks-budget__rows">
+        {budget.rows.map((row, index) => (
+          <li
+            key={row.sectionName}
+            className={`tracks-budget__row${row.state === 'compared' ? '' : ' tracks-budget__row--missing'}`}
+            title={
+              row.state === 'compared'
+                ? `${row.label}: his median ${row.bryceSeconds!.toFixed(3)} s, field median ${row.fieldMedianSeconds!.toFixed(3)} s, over ${row.cleanLaps} clean laps and ${row.fieldCars} cars`
+                : `${row.label}: ${budgetMissingCopy(row)}`
+            }
+          >
+            <span className="tracks-budget__label">{row.label}</span>
+            <span className="tracks-budget__track">
+              <span className="tracks-budget__zero" style={zero} />
+              {row.state === 'compared' ? <span className="tracks-budget__bar" style={bar(running[index].from, running[index].to)} /> : null}
+              {row.state !== 'compared' ? <span className="tracks-budget__gap">{budgetMissingCopy(row)}</span> : null}
+            </span>
+            <span className="tracks-budget__value tnum">{row.state === 'compared' ? signedSeconds(row.delta!) : '—'}</span>
+          </li>
+        ))}
+      </ol>
+      <div className="tracks-budget__row tracks-budget__row--total">
+        <span className="tracks-budget__label">His lap against the field</span>
+        <span className="tracks-budget__track">
+          <span className="tracks-budget__zero" style={zero} />
+          <span className="tracks-budget__bar" style={bar(0, budget.total)} />
+        </span>
+        <span className="tracks-budget__value tnum">{signedSeconds(budget.total)}</span>
+      </div>
+      <p className="tracks-note">
+        {missing === 0
+          ? `The ${budget.compared} sections cover the whole lap and add up to ${signedSeconds(budget.total)} s, ${totalWords}.`
+          : `${budget.compared} of ${budget.rows.length} sections compared; those add up to ${signedSeconds(budget.total)} s. The ${missing === 1 ? 'missing one stays' : `${missing} missing stay`} out of the total.`}
+        {budget.bryceMedianLap !== null ? ` His median clean lap was ${budget.bryceMedianLap.toFixed(3)} s.` : ''}
+      </p>
+    </div>
+  );
+};
+
+const GRID_CAUTION_COPY: Record<string, string> = { c: 'caution', r: 'restart', u: 'no flag report', g: 'not compared' };
+
+/** Laps down, sections across (in lap order), each cell his rank in that
+ *  section on that lap, on the map's ink-to-gold scale. Caution and restart
+ *  laps stay blank and say so; a clean lap with no timing row is an outlined
+ *  empty cell. The last column is his whole lap's rank. */
+export const LapSectionGrid = ({
+  pack,
+  ordered,
+  highlightLap,
+  onLapSelect
+}: {
+  pack: SectionLapsPack;
+  ordered: Array<{ sectionName: string; label: string }>;
+  highlightLap?: number | null;
+  onLapSelect?: (lap: number) => void;
+}) => {
+  const [ref, width] = useMeasuredWidth<HTMLDivElement>();
+  /* Phone: the grid starts folded to one strip of whole-lap ranks; opening it
+   * draws every section at compact row heights. */
+  const [open, setOpen] = useState(false);
+  const coarse = useCoarsePointer();
+  const laps = useMemo(() => {
+    const byLap = new Map<number, SectionLapsPack['lapTotals'][number]>();
+    for (const tuple of pack.lapTotals) if (tuple[0] !== null && !byLap.has(tuple[0])) byLap.set(tuple[0], tuple);
+    return [...byLap.entries()].sort((left, right) => left[0] - right[0]);
+  }, [pack]);
+  const cells = useMemo(
+    () =>
+      ordered.map((section) => {
+        const source = pack.sections.find((entry) => entry.sectionName === section.sectionName);
+        const byLap = new Map<number, SectionLapsPack['sections'][number]['laps'][number]>();
+        for (const tuple of source?.laps ?? []) if (tuple[0] !== null) byLap.set(tuple[0], tuple);
+        return { ...section, byLap, present: Boolean(source) };
+      }),
+    [pack, ordered]
+  );
+  if (laps.length === 0) return null;
+  const narrow = width > 0 && width < 520;
+  /* Folding is for phones only: a narrow grid column on a wide desktop (the
+   * three-across layout) stays open at full row heights. */
+  const phone = narrow && typeof window !== 'undefined' && window.matchMedia('(max-width: 700px)').matches;
+  const labelW = narrow ? 30 : 40;
+  const lapColW = narrow ? 38 : 48;
+  const gapW = narrow ? 6 : 10;
+  const n = Math.max(1, cells.length);
+  const cellW = width > 0 ? Math.max(9, Math.min(60, (width - labelW - gapW - lapColW) / n)) : 0;
+  const rowH = phone
+    ? laps.length > 60 ? 6 : laps.length > 40 ? 8 : laps.length > 20 ? 10 : 14
+    : laps.length > 60 ? 9 : laps.length > 40 ? 12 : laps.length > 20 ? 16 : 22;
+  const fontPx = 12;
+  const longest = Math.max(...cells.map((cell) => cell.label.length), 7);
+  const headerH = Math.ceil(longest * fontPx * 0.56) + 12;
+  const gridW = labelW + cellW * n + gapW + lapColW;
+  const height = headerH + laps.length * rowH + 2;
+  const lapX = labelW + cellW * n + gapW;
+  const everyLabel = rowH >= 14;
+  const foldToggle = phone ? (
+    <button
+      type="button"
+      className="tracks-grid__toggle"
+      aria-expanded={open}
+      onClick={() => setOpen((value) => !value)}
+    >
+      {open ? 'Fold the grid' : `Open every section, lap by lap (${cells.length} \u00d7 ${laps.length})`}
+    </button>
+  ) : null;
+  if (phone && !open) {
+    /* One square per lap, his whole-lap rank, same scale as the grid. */
+    const stripW = Math.min(width, laps.length * 24);
+    const stepW = stripW / laps.length;
+    const stripH = 24;
+    return (
+      <div ref={ref} className="tracks-grid__frame tracks-grid__frame--folded">
+        <svg
+          width={stripW}
+          height={stripH + 20}
+          viewBox={`0 0 ${stripW} ${stripH + 20}`}
+          role="img"
+          aria-label={`His whole-lap rank on each of ${laps.length} laps`}
+          style={{ display: 'block', overflow: 'visible' }}
+        >
+          {laps.map(([lap, total], index) => {
+            const x = stepW * index;
+            const clean = total[4] === 1 && total[1] !== null;
+            return (
+              <g
+                key={`s-${lap}`}
+                className={onLapSelect ? 'tracks-grid__lap' : undefined}
+                onClick={onLapSelect ? () => onLapSelect(lap) : undefined}
+              >
+                <rect x={x} y={0} width={stepW} height={stripH} fill="transparent" />
+                {clean ? (
+                  <rect x={x + 0.5} y={0.5} width={Math.max(0, stepW - 1)} height={stripH - 1} fill={inkGoldDiverging(total[1] as number)}>
+                    <title>{`Lap ${lap}: P${total[2] ?? '?'} of ${total[3] ?? '?'} on the whole lap${total[6] !== null ? ` \u00b7 ${total[6].toFixed(3)} s` : ''}`}</title>
+                  </rect>
+                ) : (
+                  <line x1={x} x2={x + stepW} y1={stripH / 2} y2={stripH / 2} stroke="var(--grey-hair)" strokeWidth={1}>
+                    <title>{`Lap ${lap}: ${GRID_CAUTION_COPY[total[5] ?? ''] ?? 'not compared'}`}</title>
+                  </line>
+                )}
+                {highlightLap === lap ? (
+                  <rect x={x + 0.5} y={0.5} width={Math.max(0, stepW - 1)} height={stripH - 1} fill="none" stroke="var(--amber)" strokeWidth={1.5} />
+                ) : null}
+              </g>
+            );
+          })}
+          <text x={0} y={stripH + 15} fontSize={fontPx} fill="var(--ink-muted)" fontFamily={chartFont} className="tnum">
+            Lap {laps[0][0]}
+          </text>
+          <text x={stripW} y={stripH + 15} textAnchor="end" fontSize={fontPx} fill="var(--ink-muted)" fontFamily={chartFont} className="tnum">
+            Lap {laps[laps.length - 1][0]}
+          </text>
+        </svg>
+        <p className="tracks-grid__strip-note">His rank in the field on each whole lap, quickest in gold. Blank laps were not clean green-flag laps. {onLapSelect ? `${coarse ? 'Tap' : 'Click'} a lap to see it on the map.` : null}</p>
+        {foldToggle}
+      </div>
+    );
+  }
+  return (
+    <div ref={ref} className="tracks-grid__frame">
+      {foldToggle}
+      {width > 0 ? (
+        <svg
+          width={gridW}
+          height={height}
+          viewBox={`0 0 ${gridW} ${height}`}
+          role="img"
+          aria-label={`His rank in each of ${cells.length} sections on each of ${laps.length} laps`}
+          style={{ display: 'block', overflow: 'visible' }}
+        >
+          {cells.map((cell, index) => (
+            <text
+              key={`h-${cell.sectionName}`}
+              transform={`translate(${labelW + cellW * (index + 0.5) + fontPx * 0.35} ${headerH - 6}) rotate(-90)`}
+              fontSize={fontPx}
+              fill={cell.present ? 'var(--ink-secondary)' : 'var(--ink-muted)'}
+              fontFamily={chartFont}
+            >
+              {cell.label}
+            </text>
+          ))}
+          <text
+            transform={`translate(${lapX + lapColW / 2 + fontPx * 0.35} ${headerH - 6}) rotate(-90)`}
+            fontSize={fontPx}
+            fill="var(--ink-primary)"
+            fontFamily={chartFont}
+          >
+            Whole lap
+          </text>
+          {laps.map(([lap, total], rowIndex) => {
+            const y = headerH + rowIndex * rowH;
+            const clean = total[4] === 1;
+            /* One label per run of laps that are not compared ("caution, laps
+             * 26 to 28"), on the run's first row, rather than a word per row. */
+            const previousClean = rowIndex > 0 ? laps[rowIndex - 1][1][4] === 1 : true;
+            let runEnd = rowIndex;
+            while (!clean && runEnd + 1 < laps.length && laps[runEnd + 1][1][4] !== 1) runEnd += 1;
+            const runFlags = new Set(laps.slice(rowIndex, runEnd + 1).map(([, tuple]) => tuple[5]));
+            const runWord =
+              runFlags.size === 1
+                ? GRID_CAUTION_COPY[[...runFlags][0]] ?? 'not clean'
+                : runFlags.has('c') && runFlags.has('r') && runFlags.size === 2
+                  ? 'caution and restart'
+                  : 'not compared';
+            const runLabel =
+              !clean && previousClean && (runEnd - rowIndex + 1) * rowH >= 12
+                ? runEnd > rowIndex
+                  ? `${runWord}, laps ${lap} to ${laps[runEnd][0]}`
+                  : `${runWord}, lap ${lap}`
+                : null;
+            const showLabel = everyLabel || lap === 1 || lap % 5 === 0;
+            const highlighted = highlightLap === lap;
+            return (
+              <g
+                key={`lap-${lap}`}
+                className={onLapSelect ? 'tracks-grid__lap' : undefined}
+                onClick={onLapSelect ? () => onLapSelect(lap) : undefined}
+              >
+                <rect x={0} y={y} width={gridW} height={rowH} fill="transparent" />
+                {showLabel ? (
+                  <text
+                    x={labelW - 8}
+                    y={y + rowH / 2}
+                    textAnchor="end"
+                    dominantBaseline="central"
+                    fontSize={fontPx}
+                    fill={highlighted ? 'var(--ink-primary)' : 'var(--ink-muted)'}
+                    fontFamily={chartFont}
+                    className="tnum"
+                  >
+                    {lap}
+                  </text>
+                ) : null}
+                {clean ? (
+                  cells.map((cell, index) => {
+                    const tuple = cell.byLap.get(lap);
+                    const x = labelW + cellW * index;
+                    if (!tuple || tuple[1] === null || tuple[4] !== 1) {
+                      return (
+                        <rect
+                          key={cell.sectionName}
+                          x={x + 1.5}
+                          y={y + 1.5}
+                          width={Math.max(0, cellW - 3)}
+                          height={Math.max(0, rowH - 3)}
+                          fill="none"
+                          stroke="var(--grey-line)"
+                          strokeWidth={1}
+                        >
+                          <title>{`Lap ${lap} · ${cell.label}: no timing row`}</title>
+                        </rect>
+                      );
+                    }
+                    return (
+                      <rect
+                        key={cell.sectionName}
+                        x={x + 0.5}
+                        y={y + 0.5}
+                        width={Math.max(0, cellW - 1)}
+                        height={Math.max(0, rowH - 1)}
+                        fill={inkGoldDiverging(tuple[1])}
+                      >
+                        <title>
+                          {`Lap ${lap} · ${cell.label}: P${tuple[2] ?? '?'} of ${tuple[3] ?? '?'}${tuple[6] !== null ? ` · ${tuple[6].toFixed(3)} s` : ''}`}
+                        </title>
+                      </rect>
+                    );
+                  })
+                ) : (
+                  <>
+                    <line
+                      x1={labelW}
+                      x2={labelW + cellW * n}
+                      y1={y + rowH / 2}
+                      y2={y + rowH / 2}
+                      stroke="var(--grey-hair)"
+                      strokeWidth={1}
+                    />
+                    {runLabel && cellW * n > 120 ? (
+                      <text
+                        x={labelW + 6}
+                        y={y + ((runEnd - rowIndex + 1) * rowH) / 2}
+                        dominantBaseline="central"
+                        fontSize={fontPx}
+                        fill="var(--ink-muted)"
+                        fontFamily={chartFont}
+                        style={{ paintOrder: 'stroke', stroke: 'var(--paper)', strokeWidth: 4 }}
+                      >
+                        {runLabel}
+                      </text>
+                    ) : null}
+                  </>
+                )}
+                {clean && total[1] !== null ? (
+                  <>
+                    <rect x={lapX + 0.5} y={y + 0.5} width={lapColW - 1} height={rowH - 1} fill={inkGoldDiverging(total[1])}>
+                      <title>{`Lap ${lap}: P${total[2] ?? '?'} of ${total[3] ?? '?'} on the whole lap${total[6] !== null ? ` · ${total[6].toFixed(3)} s` : ''}`}</title>
+                    </rect>
+                    {rowH >= 14 && total[2] !== null ? (
+                      <text
+                        x={lapX + lapColW / 2}
+                        y={y + rowH / 2}
+                        textAnchor="middle"
+                        dominantBaseline="central"
+                        fontSize={fontPx}
+                        fill={total[1] < 0.3 ? 'var(--paper)' : 'var(--ink-primary)'}
+                        fontFamily={chartFont}
+                        className="tnum"
+                      >
+                        P{total[2]}
+                      </text>
+                    ) : null}
+                  </>
+                ) : null}
+                {highlighted ? (
+                  <rect
+                    x={0.5}
+                    y={y + 0.5}
+                    width={gridW - 1}
+                    height={rowH - 1}
+                    fill="none"
+                    stroke="var(--amber)"
+                    strokeWidth={1}
+                  />
+                ) : null}
+              </g>
+            );
+          })}
+        </svg>
+      ) : null}
     </div>
   );
 };
@@ -263,7 +805,8 @@ export const SectionHeatCard = ({
   visitControl,
   visitLapsCompleted,
   priorComparison,
-  qualifying
+  qualifying,
+  layout = 'card'
 }: {
   outline: TrackOutline;
   anchors: TrackSectionAnchorSet;
@@ -288,6 +831,10 @@ export const SectionHeatCard = ({
   /** Race-detail only: a second sourced substrate rendered through this same
    * map, controls, key, drawer, and section-selection engine. */
   qualifying?: QualifyingHeatMode | null;
+  /** 'tracks' (the Tracks page): the map drawn large with a thick line and
+   *  labels outside it, "where his lap goes" beside it, the lap-by-section grid,
+   *  and the percentile lines under a toggle. Every other caller keeps 'card'. */
+  layout?: 'card' | 'tracks';
 }) => {
   const [mode, setMode] = useState<'race' | 'qualifying'>('race');
   const [raceScopeKey, setRaceScopeKey] = useState('full');
@@ -569,19 +1116,8 @@ export const SectionHeatCard = ({
     );
   }
 
-  return (
-    <Card
-      title={title}
-      action={<SourcePill title={`${qualifyingMode ? 'Qualifying' : 'Race'} section signal`} entries={allEntries} caveats={sourceCaveats} />}
-    >
-      <p style={{ margin: '0 0 12px', fontSize: 13.5, color: 'var(--ink-secondary)' }}>
-        {hasHeat
-          ? orientationClause
-            ? `${orientationClause} Gold shows where he was strongest — ${readVerb} the shape to read his pace stretch by stretch.`
-            : qualifyingMode
-              ? `Gold shows the stronger qualifying stretches — ${readVerb} the shape to read the selected session summary stretch by stretch.`
-              : `Gold shows where Bryce was strongest — ${readVerb} the shape to read his pace stretch by stretch.`
-          : set
+  const emptyLead =
+    set
             ? visitLapsCompleted === 0
               ? `His ${laps?.seasonYear ?? ''} visit ended on the opening lap — no clean laps to compare.`.replace(/\s{2,}/g, ' ')
               : !qualifyingMode &&
@@ -590,15 +1126,16 @@ export const SectionHeatCard = ({
                   scopeCleanLapCount < minimumObservations
                 ? `Only ${scopeCleanLapCount} clean green-flag lap${scopeCleanLapCount === 1 ? '' : 's'} in the ${scope.label.toLowerCase()} — cautions covered the rest. Try Full race.`
                 : 'Too few clean laps in this scope to compare sections.'
-            : 'The venue shape, with the start/finish line marked.'}
-      </p>
-      {sessionControl || visitControl ? (
-        <div className="stack" style={{ gap: 10, marginBottom: 12 }}>
-          {sessionControl}
-          {visitControl}
-        </div>
-      ) : null}
-      {activeLaps ? (
+            : 'The venue shape, with the start/finish line marked.';
+  const drawerLabel =
+    layout === 'tracks'
+      ? numbersOpen
+        ? 'Hide the percentile lines'
+        : 'Show the percentile lines'
+      : numbersOpen
+        ? 'Hide the numbers'
+        : 'The numbers behind the shades';
+  const scopeControls = activeLaps ? (
         <div className="stack" style={{ gap: 10, marginBottom: 12 }}>
           {qualifyingContext ? (
             <p style={{ margin: 0, fontSize: 12, color: 'var(--ink-secondary)' }}>{qualifyingContext}</p>
@@ -684,8 +1221,8 @@ export const SectionHeatCard = ({
             </ControlRow>
           ) : null}
         </div>
-      ) : null}
-      {hasHeat ? (
+      ) : null;
+  const keyRow = hasHeat ? (
         <div className="row row--between" style={{ gap: 10, flexWrap: 'wrap', marginBottom: 12 }}>
           <HeatKey />
           {scopeSummary ? (
@@ -694,14 +1231,9 @@ export const SectionHeatCard = ({
             </span>
           ) : null}
         </div>
-      ) : null}
-      <TrackArt
-        outline={outline}
-        showCornerLabels={false}
-        maxHeight={300}
-        sections={hasHeat ? { resolved: heatSections, showLabels: true, contextLabel: qualifyingMode ? 'in qualifying' : 'this race' } : null}
-        passMarks={showMarks ? resolvedMarks : null}
-      />
+      ) : null;
+  const mapNotes = (
+    <>
       {showMarks ? (
         <p style={{ margin: '10px 0 0', fontSize: 11.5, color: 'var(--ink-muted)' }}>
           <span aria-hidden style={{ marginRight: 6 }}>○</span>
@@ -726,7 +1258,10 @@ export const SectionHeatCard = ({
           Lap {scrubLap} ran {cautionCopy[scrubContext.caution]} — one lap is a snapshot, not a trend.
         </p>
       ) : null}
-      {activeLaps && set ? (
+
+    </>
+  );
+  const numbersDrawer = activeLaps && set ? (
         <div style={{ marginTop: 14, borderTop: '1px solid var(--divider)', paddingTop: 12 }}>
           <button
             type="button"
@@ -742,7 +1277,7 @@ export const SectionHeatCard = ({
               cursor: 'pointer'
             }}
           >
-            {numbersOpen ? 'Hide the numbers' : 'The numbers behind the shades'}
+            {drawerLabel}
           </button>
           {numbersOpen ? (
             <div className="stack" style={{ gap: 12, marginTop: 12 }}>
@@ -791,8 +1326,8 @@ export const SectionHeatCard = ({
             </div>
           ) : null}
         </div>
-      ) : null}
-      {!hasHeat ? (
+      ) : null;
+  const emptyFooter = !hasHeat ? (
         /* Method copy (coverage, derivation, GPS caveats) now lives behind "The
          * numbers behind the shades"; the face only carries the empty state. */
         <p style={{ margin: 0, paddingTop: 14, fontSize: 11.5, color: 'var(--ink-muted)' }}>
@@ -800,7 +1335,132 @@ export const SectionHeatCard = ({
             ? `Sections need ${minimumObservations} ${qualifyingMode ? 'valid observed qualifying laps' : 'clean laps'} in a scope to compare honestly.`
             : `No official section times are on file for this ${qualifyingMode ? 'qualifying session' : 'race'} yet.`}
         </p>
+      ) : null;
+
+  if (layout === 'tracks') {
+    /* Plain computations, not hooks: this branch sits after the empty-state
+     * return above. Both are a few hundred tuples. */
+    const budget = !qualifyingMode && activeLaps ? lapBudgetOf(activeLaps, activeAnchors, outline) : null;
+    const ordered = sectionsInLapOrder(activeAnchors, outline);
+    const [, , viewW, viewH] = outline.viewBox.split(' ').map(Number);
+    const wide = viewH / viewW < 0.55;
+    const showGrid = !qualifyingMode && activeLaps !== null;
+    const selectLap = (lap: number) => {
+      setScopeKey('lap');
+      setScrubLap(lap);
+    };
+    return (
+      <Card
+        title={title}
+        className={`tracks-story${wide ? ' tracks-story--wide' : ''}${showGrid ? '' : ' tracks-story--no-grid'}`}
+        action={<SourcePill title={`${qualifyingMode ? 'Qualifying' : 'Race'} section signal`} entries={allEntries} caveats={sourceCaveats} />}
+      >
+        <p className="tracks-lead">
+          {hasHeat
+            ? qualifyingMode
+              ? `Gold marks his stronger qualifying stretches, grey the tougher ones. ${coarse ? 'Tap' : 'Hover'} the track to read each one.`
+              : `Gold marks where he was strongest against the field, grey where it was tougher. ${coarse ? 'Tap' : 'Hover'} the track to read each stretch.`
+            : emptyLead}
+        </p>
+        {sessionControl || visitControl ? (
+          <div className="stack tracks-story__session">
+            {sessionControl}
+            {visitControl}
+          </div>
+        ) : null}
+        <div className="tracks-story__layout">
+          <div className="tracks-story__map">
+            {scopeControls}
+            {keyRow}
+            <TrackArt
+              outline={outline}
+              showCornerLabels={false}
+              maxHeight={wide ? 560 : 700}
+              strokeScale={2.3}
+              labelPlacement="outside"
+              labelRoom={64}
+              sections={hasHeat ? { resolved: heatSections, showLabels: true, contextLabel: qualifyingMode ? 'in qualifying' : 'this race' } : null}
+              passMarks={showMarks ? resolvedMarks : null}
+            />
+            {mapNotes}
+            {emptyFooter}
+          </div>
+          <div className="tracks-story__budget">
+            {budget ? (
+              budget.compared > 0 ? (
+                <LapBudgetBars budget={budget} />
+              ) : (
+                <div className="tracks-budget">
+                  <h3 className="tracks-subhead">Where his lap goes</h3>
+                  <p className="tracks-note">No section here has the {MIN_CLEAN_LAPS} clean laps and field times a comparison needs.</p>
+                </div>
+              )
+            ) : (
+              <div className="tracks-budget">
+                <h3 className="tracks-subhead">Where his lap goes</h3>
+                <p className="tracks-note">
+                  Drawn for races only. In qualifying the benchmark is each driver&rsquo;s best section, which need not come
+                  from one lap, so the sections would not add up to a lap.
+                </p>
+              </div>
+            )}
+          </div>
+          {showGrid && activeLaps ? (
+            <div className="tracks-story__laps">
+              <div className="tracks-laps">
+              <h3 className="tracks-subhead">Every lap, every section</h3>
+              <p className="tracks-note">
+                Each square is one section on one lap, shaded by where he ranked in the field on that lap. Laps run down,
+                sections across in the order he drives them; the last column is the whole lap. Caution and restart laps stay
+                blank. {coarse ? 'Tap' : 'Click'} a lap to see it on the map.
+              </p>
+              <LapSectionGrid
+                pack={activeLaps}
+                ordered={ordered}
+                highlightLap={singleLap ? scrubLap : null}
+                onLapSelect={selectLap}
+              />
+              </div>
+            </div>
+          ) : null}
+        </div>
+        <div className="tracks-story__drawer">{numbersDrawer}</div>
+      </Card>
+    );
+  }
+
+  return (
+    <Card
+      title={title}
+      action={<SourcePill title={`${qualifyingMode ? 'Qualifying' : 'Race'} section signal`} entries={allEntries} caveats={sourceCaveats} />}
+    >
+      <p style={{ margin: '0 0 12px', fontSize: 13.5, color: 'var(--ink-secondary)' }}>
+        {hasHeat
+          ? orientationClause
+            ? `${orientationClause} Gold shows where he was strongest — ${readVerb} the shape to read his pace stretch by stretch.`
+            : qualifyingMode
+              ? `Gold shows the stronger qualifying stretches — ${readVerb} the shape to read the selected session summary stretch by stretch.`
+              : `Gold shows where Bryce was strongest — ${readVerb} the shape to read his pace stretch by stretch.`
+          : emptyLead}
+      </p>
+      {sessionControl || visitControl ? (
+        <div className="stack" style={{ gap: 10, marginBottom: 12 }}>
+          {sessionControl}
+          {visitControl}
+        </div>
       ) : null}
+      {scopeControls}
+      {keyRow}
+      <TrackArt
+        outline={outline}
+        showCornerLabels={false}
+        maxHeight={300}
+        sections={hasHeat ? { resolved: heatSections, showLabels: true, contextLabel: qualifyingMode ? 'in qualifying' : 'this race' } : null}
+        passMarks={showMarks ? resolvedMarks : null}
+      />
+      {mapNotes}
+      {numbersDrawer}
+      {emptyFooter}
     </Card>
   );
 };
@@ -846,7 +1506,8 @@ const VisitShape = ({
   pack,
   lapsCompleted,
   label,
-  grainNote
+  grainNote,
+  shapeMaxHeight
 }: {
   outline: TrackOutline;
   /** Pre-resolved to THIS visit's own grain by the parent. */
@@ -860,6 +1521,8 @@ const VisitShape = ({
   /** When the venue's visits carry mixed grains, each shape states its own section
    *  count so no reader assumes one scale across all the years. */
   grainNote?: string | null;
+  /** Drawn height of the shape; given, the 420 px width cap is dropped too. */
+  shapeMaxHeight?: number;
 }) => {
   const set = useMemo(() => sectionObservationsFromLaps(pack, { kind: 'full_race' }, 'median'), [pack]);
   const resolved = useMemo(() => resolveHeatSections(anchors, set), [anchors, set]);
@@ -873,8 +1536,16 @@ const VisitShape = ({
         : `P${indexRow.finishPosition}`
       : null;
   return (
-    <div className="stack" style={{ gap: 6, flex: '1 1 240px', minWidth: 220, maxWidth: 420 }}>
-      <TrackArt outline={outline} showCornerLabels={false} maxHeight={170} sections={resolved.length > 0 ? { resolved } : null} />
+    <div
+      className="stack"
+      style={{ gap: 6, flex: '1 1 240px', minWidth: 220, ...(shapeMaxHeight === undefined ? { maxWidth: 420 } : null) }}
+    >
+      <TrackArt
+        outline={outline}
+        showCornerLabels={false}
+        maxHeight={shapeMaxHeight ?? 170}
+        sections={resolved.length > 0 ? { resolved } : null}
+      />
       <div className="yoy-caption">
         <span className="yoy-caption__title">
           <strong style={{ fontWeight: 600 }}>{label ?? (pack.seasonYear !== null ? String(pack.seasonYear) : '—')}</strong>
@@ -901,7 +1572,9 @@ export const VenueYearsCard = ({
   anchors,
   visits,
   title = 'This place, other years',
-  lapsCompletedBySession
+  lapsCompletedBySession,
+  className,
+  shapeMaxHeight
 }: {
   outline: TrackOutline;
   anchors: TrackSectionAnchorSet;
@@ -911,6 +1584,11 @@ export const VenueYearsCard = ({
    *  "ended on the opening lap" instead of "0 clean-lap comparisons". Absent on
    *  race pages (each shape then keeps the bare comparison count). */
   lapsCompletedBySession?: Map<string, number | null>;
+  /** Optional class on the card (the Tracks page lays the shapes on a grid). */
+  className?: string;
+  /** Drawn height of each year's shape (default 170). Given, each shape also
+   *  drops its 420 px width cap so a larger shape can use its column. */
+  shapeMaxHeight?: number;
 }) => {
   if (visits.length < 2) return null;
   const measured = visits.every((visit) => visit.sourceTier === 'lake_loop_crossings');
@@ -956,6 +1634,7 @@ export const VenueYearsCard = ({
   return (
     <Card
       title={title}
+      className={className}
       action={
         <SourcePill
           title="Same venue, every visit"
@@ -1010,6 +1689,7 @@ export const VenueYearsCard = ({
               lapsCompleted={lapsCompletedBySession?.get(pack.sessionId) ?? null}
               label={visitLabels.get(pack.sessionId)}
               grainNote={mixedGrain ? `${measuredSectionCount(packAnchors)} timed sections` : null}
+              shapeMaxHeight={shapeMaxHeight}
             />
           );
         })}
@@ -1175,7 +1855,9 @@ export const VenueSectionSuite = ({
   selectedVisitId,
   onSelectedVisitChange,
   showVisitControl = true,
-  qualifying
+  qualifying,
+  layout = 'card',
+  heatTitle
 }: {
   outline: TrackOutline;
   data: VenueSectionData;
@@ -1185,6 +1867,10 @@ export const VenueSectionSuite = ({
   onSelectedVisitChange?: (sessionId: string) => void;
   showVisitControl?: boolean;
   qualifying?: QualifyingHeatMode | null;
+  /** Passed to the heat card ('tracks' on the Tracks page). */
+  layout?: 'card' | 'tracks';
+  /** Overrides the heat card's title (the Tracks page names the visit). */
+  heatTitle?: string;
 }) => {
   const { anchors, anchorsBySession, visits, passMarksBySession, lapsCompletedBySession, mostRecent } = data;
   const [localSelectedId, setLocalSelectedId] = useState<string | null>(null);
@@ -1202,7 +1888,8 @@ export const VenueSectionSuite = ({
       <>
         <SectionHeatCard
           key={selectedVisitId ?? 'missing-race-pack'}
-          title="Race and qualifying, section by section — his record here"
+          title={heatTitle ?? 'Race and qualifying, section by section — his record here'}
+          layout={layout}
           outline={outline}
           anchors={anchors}
           laps={null}
@@ -1217,6 +1904,7 @@ export const VenueSectionSuite = ({
           anchors={anchors}
           visits={visits}
           lapsCompletedBySession={lapsCompletedBySession}
+          className={layout === 'tracks' ? 'tracks-years' : undefined}
         />
       </>
     );
@@ -1276,7 +1964,8 @@ export const VenueSectionSuite = ({
     <>
       <SectionHeatCard
         key={selected.sessionId}
-        title={qualifying ? 'Race and qualifying, section by section — his record here' : 'The track, section by section — his record here'}
+        title={heatTitle ?? (qualifying ? 'Race and qualifying, section by section — his record here' : 'The track, section by section — his record here')}
+        layout={layout}
         orientationClause={orientationClause}
         visitControl={visitControl}
         outline={outline}
@@ -1295,6 +1984,7 @@ export const VenueSectionSuite = ({
         anchors={anchors}
         visits={visits}
         lapsCompletedBySession={lapsCompletedBySession}
+        className={layout === 'tracks' ? 'tracks-years' : undefined}
       />
     </>
   );

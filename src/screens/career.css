@@ -1,0 +1,423 @@
+/* ============================================================
+   Career page (round 2 of the site refresh, November 14, 2026).
+   Everything here is scoped under .career. Paper ground, data drawn
+   large, 1 px rules, no boxes. Tokens come from theme.css.
+   ============================================================ */
+
+.career { --career-gap: clamp(56px, 5.2vw, 112px); }
+.page.stack.career { gap: var(--career-gap); }
+
+/* Charts on this page use the page's face, and no label is under 12 px. */
+.career svg text { font-family: var(--font-ui); }
+.career svg text[font-size="9.5"],
+.career svg text[font-size="10"],
+.career svg text[font-size="10.5"],
+.career svg text[font-size="11"],
+.career svg text[font-size="11.5"] { font-size: 12px; }
+
+/* ---------- head ---------- */
+
+.career-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px;
+  margin-top: clamp(16px, 3vw, 48px);
+}
+.career-head .screen-head__title { margin: 0; }
+.career-head .screen-head__sub { max-width: 66ch; }
+
+.career-section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.career-section-title {
+  font-size: clamp(24px, 1.9vw, 36px);
+  font-weight: 610;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin: 0;
+  text-wrap: balance;
+}
+
+.career-prose {
+  margin: 0;
+  font-size: clamp(16px, 1.1vw, 19px);
+  line-height: 1.5;
+  color: var(--ink-secondary);
+  max-width: 64ch;
+  text-wrap: pretty;
+}
+
+.career-lede {
+  margin: 0 0 22px;
+  font-size: clamp(16px, 1.1vw, 19px);
+  line-height: 1.45;
+  color: var(--ink-secondary);
+  max-width: 70ch;
+}
+.career-lede__big { color: var(--ink); font-weight: 620; }
+
+.career-button {
+  font: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink);
+  background: var(--grey-fill);
+  border: none;
+  border-radius: 8px;
+  padding: 9px 14px;
+  cursor: pointer;
+  transition: background-color 150ms ease;
+}
+@media (hover: hover) { .career-button:hover { background: var(--grey-wash); } }
+.career-button:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
+
+/* ---------- 1. the odometer ---------- */
+
+.career-key {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 28px;
+  margin: 0 0 18px;
+  max-width: none !important;
+  font-size: 14px;
+  color: var(--ink-muted);
+}
+.career-key strong { color: var(--ink-secondary); font-weight: 560; margin-right: 4px; }
+
+.odo-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  column-gap: clamp(24px, 2.6vw, 64px);
+  row-gap: clamp(36px, 3.2vw, 64px);
+  border-top: 1px solid var(--ink);
+  padding-top: clamp(22px, 2vw, 36px);
+}
+@media (max-width: 1199px) { .odo-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 699px) { .odo-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 18px; row-gap: 30px; } }
+
+.odo-cell { container-type: inline-size; min-width: 0; display: flex; flex-direction: column; }
+
+.odo-cell__value {
+  font-size: clamp(30px, 16.5cqi, 76px);
+  font-weight: 620;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.odo-cell__value > span { display: flex; align-items: baseline; }
+
+.odo-num { display: flex; align-items: baseline; line-height: 1.1em; }
+.odo-sep { display: block; line-height: 1.1em; font-variant-numeric: proportional-nums; }
+.odo-wheel {
+  display: block;
+  height: 1.1em;
+  clip-path: inset(0);
+  /* A soft edge top and bottom, like the window on a car's odometer. */
+  -webkit-mask-image: linear-gradient(transparent, #000 9%, #000 91%, transparent);
+  mask-image: linear-gradient(transparent, #000 9%, #000 91%, transparent);
+}
+.odo-wheel__strip { display: block; will-change: transform; }
+.odo-wheel__strip > span { display: block; height: 1.1em; line-height: 1.1em; }
+.odo-wheel--rest { color: var(--grey-line); }
+.odo-unit {
+  font-size: 0.4em;
+  font-weight: 500;
+  letter-spacing: 0;
+  color: var(--ink-secondary);
+  white-space: pre;
+  line-height: 1.1;
+}
+.odo-plus { color: var(--amber); font-weight: 560; margin-left: 0.02em; }
+.odo-pct { font-size: 0.62em; margin-left: 0.04em; }
+
+.odo-cell__label {
+  margin-top: 8px;
+  font-size: 16px;
+  line-height: 1.3;
+  color: var(--ink);
+  font-weight: 520;
+}
+.odo-cell__unit { color: var(--ink-secondary); font-weight: 450; }
+.odo-cell__sub { margin-top: 3px; font-size: 14px; color: var(--ink-secondary); line-height: 1.35; }
+.odo-cell__how {
+  margin: 8px 0 0;
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: var(--ink-muted);
+  text-wrap: pretty;
+}
+.odo-cell__class { color: var(--ink-secondary); font-weight: 560; }
+
+@media (max-width: 699px) {
+  .odo-cell__label { font-size: 15px; }
+  .odo-cell__how { font-size: 13px; }
+}
+
+.career-odometer .odometer-live { margin-top: clamp(28px, 2.4vw, 44px); }
+
+/* ---------- 2. a share of his life ---------- */
+
+.life-figures {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(20px, 2.6vw, 64px);
+  border-top: 1px solid var(--ink);
+  padding-top: clamp(22px, 2vw, 36px);
+  margin-bottom: clamp(20px, 2vw, 32px);
+}
+@media (max-width: 699px) { .life-figures { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 26px; } }
+.life-figure { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.life-figure__value {
+  font-size: clamp(44px, 4.6vw, 104px);
+  font-weight: 620;
+  letter-spacing: -0.035em;
+  line-height: 1;
+  font-variant-numeric: proportional-nums;
+}
+.life-figure__label { font-size: 15px; line-height: 1.35; color: var(--ink-secondary); max-width: 24ch; }
+
+.life-line { margin-top: clamp(20px, 2vw, 36px); }
+.life-line svg { display: block; overflow: visible; }
+.life-line__year { font-size: 12.5px; fill: var(--ink-muted); }
+.life-line__label { font-size: 13px; fill: var(--ink-secondary); }
+
+/* ---------- 3. his career in weeks ---------- */
+
+.weeks-grid { width: 100%; }
+.weeks-grid svg { display: block; outline: none; touch-action: manipulation; }
+.weeks-grid svg:focus-visible { outline: 2px solid var(--amber); outline-offset: 6px; }
+.weeks-grid__axis { font-size: 12.5px; fill: var(--ink-muted); }
+.weeks-grid__year { font-size: 13px; fill: var(--ink-secondary); font-weight: 560; font-variant-numeric: tabular-nums; }
+
+.weeks-detail {
+  min-height: 52px;
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 15px;
+  line-height: 1.4;
+}
+.weeks-detail--hint { color: var(--ink-muted); margin: 16px 0 0; font-size: 14px; }
+.weeks-detail__date { color: var(--ink-muted); font-size: 14px; }
+.weeks-detail__race { color: var(--ink); }
+.weeks-detail__race strong { font-weight: 600; margin-right: 4px; }
+.weeks-detail__race i,
+.series-key i {
+  display: inline-block;
+  width: 11px;
+  height: 11px;
+  margin-right: 7px;
+  vertical-align: -1px;
+}
+.weeks-detail__meta { color: var(--ink-secondary); }
+
+.series-key {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 22px;
+  margin-top: 10px;
+  font-size: 14px;
+  color: var(--ink-secondary);
+}
+.series-key__empty { box-shadow: inset 0 0 0 1px var(--grey-line); }
+
+/* ---------- 4. the travel map ---------- */
+
+.career-travel.career-atlas { background: none; }
+.career-travel__stage {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 20px;
+  border-top: 1px solid var(--ink);
+  padding-top: clamp(22px, 2vw, 36px);
+}
+@media (min-width: 1000px) {
+  .career-travel__stage {
+    grid-template-columns: minmax(280px, 4fr) minmax(0, 8fr);
+    gap: clamp(28px, 3vw, 72px);
+    align-items: start;
+  }
+}
+.career-travel__side { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+.career-travel__counter { display: flex; flex-direction: column; gap: 4px; }
+.career-travel__miles {
+  font-size: clamp(48px, 5.2vw, 112px);
+  font-weight: 630;
+  letter-spacing: -0.035em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+/* In this face the tabular feature also widens commas and points, so only
+ * the digits are tabular. */
+.career-travel__miles { font-variant-numeric: normal; }
+.career-travel__miles .fixed-digit { font-variant-numeric: tabular-nums; }
+.career-travel__miles .fixed-plus { color: var(--amber); font-weight: 560; }
+.career-travel__unit { font-size: 16px; color: var(--ink-secondary); }
+.career-travel__leg {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-height: 92px;
+  padding-top: 14px;
+  border-top: 1px solid var(--grey-hair);
+}
+.career-travel__leg-no { font-size: 14px; color: var(--ink-muted); }
+.career-travel__leg-route { font-size: clamp(17px, 1.25vw, 22px); line-height: 1.3; color: var(--ink); text-wrap: balance; }
+.career-travel__leg-miles { font-size: 15px; color: var(--link); }
+.career-travel__how { margin: 0; font-size: 14px; line-height: 1.5; color: var(--ink-muted); max-width: 44ch; }
+.career-travel__controls { display: flex; gap: 10px; }
+.career-travel__globe { min-width: 0; }
+.career-travel .career-atlas__map { border-radius: 0; background: none; }
+.career-travel__below { display: flex; flex-direction: column; gap: 10px; margin-top: 14px; }
+.career-travel__hint { margin: 0; font-size: 13.5px; color: var(--ink-muted); }
+.career-travel .career-atlas__legend { font-size: 13.5px; }
+.career-travel .career-atlas__tip-action { font-size: 12px; }
+.career-travel .career-atlas__status { margin: 0; font-size: 13px; }
+
+@media (max-width: 999px) {
+  .career-travel__leg { min-height: 0; }
+  .career-travel__how { max-width: 64ch; }
+}
+
+/* ---------- 5. the climb: full width ---------- */
+
+.career > .card { padding-top: 22px; }
+
+/* ---------- 6. the chapters ---------- */
+
+.chapter-rail {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(128px, 1fr));
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--grey-hair);
+  padding-top: 22px;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scrollbar-width: thin;
+}
+
+.chapter-rail__tab {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+  padding: 0 14px 18px 0;
+  margin-bottom: -1px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  font: inherit;
+  color: var(--ink-secondary);
+  text-align: left;
+  cursor: pointer;
+  scroll-snap-align: start;
+  transition: color 150ms ease, border-color 150ms ease;
+}
+.chapter-rail__tab::before {
+  content: '';
+  position: absolute;
+  top: 7px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--grey-line);
+}
+.chapter-rail__tab:first-child::before { left: 7px; }
+.chapter-rail__tab:last-child::before { right: auto; width: 7px; }
+.chapter-rail__node {
+  position: relative;
+  z-index: 1;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: var(--paper);
+  border: 2px solid var(--tint);
+  margin-bottom: 12px;
+  transition: background-color 150ms ease;
+}
+.chapter-rail__years { font-size: 13px; color: var(--ink-muted); font-variant-numeric: tabular-nums; }
+.chapter-rail__name { font-size: clamp(17px, 1.25vw, 22px); font-weight: 600; letter-spacing: -0.01em; line-height: 1.2; }
+.chapter-rail__count { font-size: 13px; color: var(--ink-muted); }
+.chapter-rail__tab--open { color: var(--ink); border-bottom-color: var(--ink); }
+.chapter-rail__tab--open .chapter-rail__node { background: var(--tint); }
+@media (hover: hover) {
+  .chapter-rail__tab:hover { color: var(--ink); }
+}
+.chapter-rail__tab:focus-visible { outline: 2px solid var(--amber); outline-offset: -2px; }
+
+.chapter-open { padding-top: clamp(24px, 2.4vw, 44px); }
+
+/* The open chapter. Its frame comes from the timeline above, so the old
+ * journey line and card padding are off here. */
+.career .chapter-panel { padding: 0; }
+.career .chapter-panel::before { display: none; }
+
+.chapter-panel__summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 18px;
+}
+@media (min-width: 1100px) {
+  .chapter-panel__summary { grid-template-columns: minmax(240px, 4fr) minmax(0, 8fr); gap: clamp(28px, 3vw, 72px); }
+}
+.chapter-panel__head { display: flex; flex-direction: column; gap: 4px; }
+.chapter-panel__years { font-size: 14px; color: var(--ink-muted); }
+.chapter-panel__name {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  font-size: clamp(30px, 2.8vw, 56px);
+  font-weight: 620;
+  letter-spacing: -0.025em;
+  line-height: 1.05;
+}
+.chapter-panel__dot { width: 14px; height: 14px; border-radius: 50%; flex: none; }
+.chapter-panel__count { display: flex; align-items: center; gap: 12px; font-size: 15px; color: var(--ink-secondary); margin-top: 4px; }
+.chapter-panel__full { font-size: 14px; color: var(--ink-muted); }
+.chapter-panel__body { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+.chapter-panel__narrative { margin: 0; font-size: clamp(16px, 1.1vw, 19px); line-height: 1.5; color: var(--ink-secondary); max-width: 62ch; }
+.chapter-panel__stats { display: flex; flex-wrap: wrap; gap: 18px clamp(28px, 3vw, 64px); }
+.chapter-panel__stats .stat__value { font-size: clamp(28px, 2.4vw, 44px); }
+.chapter-panel__stats .caption { font-size: 13.5px; }
+.chapter-panel__strip { max-width: 1100px; }
+.chapter-panel__extra { margin: 0; font-size: 13.5px; }
+.chapter-panel__bridge { margin-top: clamp(28px, 2.4vw, 44px); }
+.chapter-panel__depth {
+  margin-top: clamp(36px, 3.2vw, 64px);
+  padding-top: 22px;
+  border-top: 1px solid var(--grey-hair);
+}
+.chapter-panel__depth-title {
+  margin: 0 0 18px;
+  font-size: clamp(19px, 1.45vw, 26px);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+/* ---------- phone ---------- */
+
+@media (max-width: 699px) {
+  .career-head { flex-direction: column; align-items: flex-start; }
+  .chapter-rail { grid-template-columns: repeat(7, minmax(116px, 1fr)); }
+}
+
+/* No text under 12 px on this page, including the older modules' chips,
+ * source lines and inline-styled captions. */
+.career .career-atlas__zoom-reset,
+.career .ss-timeline__source,
+.career .chip,
+.career [style*="font-size: 9"],
+.career [style*="font-size: 10"],
+.career [style*="font-size: 11px"],
+.career [style*="font-size: 11.5px"] { font-size: 12px !important; }

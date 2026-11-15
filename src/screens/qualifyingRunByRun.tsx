@@ -57,7 +57,7 @@ const RunByRunChart = ({ session, height = 208 }: { session: QualiLabSession; he
     return <div ref={ref} style={{ width: '100%', height }} />;
   }
 
-  const padL = 58;
+  const padL = 64;
   const padR = 16;
   const padT = 16;
   const padB = 30;
@@ -139,7 +139,7 @@ const RunByRunChart = ({ session, height = 208 }: { session: QualiLabSession; he
           return (
             <g key={index}>
               <line x1={padL} x2={width - padR} y1={y} y2={y} stroke="rgba(0,0,0,0.06)" strokeWidth={1} />
-              <text x={padL - 8} y={y + 3} textAnchor="end" fontSize={10.5} fill="var(--ink-muted)" style={{ fontVariantNumeric: 'tabular-nums' }}>
+              <text x={padL - 8} y={y + 3} textAnchor="end" fontSize={12} fill="var(--ink-muted)" style={{ fontVariantNumeric: 'tabular-nums' }}>
                 {formatLapTime(value)}
               </text>
             </g>
@@ -148,7 +148,7 @@ const RunByRunChart = ({ session, height = 208 }: { session: QualiLabSession; he
 
         {/* the benchmark he's building toward — his group's / the session's fastest */}
         <line x1={padL} x2={width - padR} y1={benchmarkY} y2={benchmarkY} stroke={INK} strokeWidth={1} strokeDasharray="2 3" opacity={0.5} />
-        <text x={width - padR} y={benchmarkY - 5} textAnchor="end" fontSize={10.5} fill="var(--ink-secondary)" style={{ fontVariantNumeric: 'tabular-nums' }}>
+        <text x={width - padR} y={benchmarkY - 5} textAnchor="end" fontSize={12} fill="var(--ink-secondary)" style={{ fontVariantNumeric: 'tabular-nums' }}>
           {benchLabel}
         </text>
 
@@ -165,10 +165,10 @@ const RunByRunChart = ({ session, height = 208 }: { session: QualiLabSession; he
         />
 
         {/* x-axis run-order labels */}
-        <text x={padL} y={height - 10} textAnchor="start" fontSize={10.5} fill="var(--ink-muted)">
+        <text x={padL} y={height - 10} textAnchor="start" fontSize={12} fill="var(--ink-muted)">
           1st lap
         </text>
-        <text x={width - padR} y={height - 10} textAnchor="end" fontSize={10.5} fill="var(--ink-muted)">
+        <text x={width - padR} y={height - 10} textAnchor="end" fontSize={12} fill="var(--ink-muted)">
           {laps.length}
           {laps.length === 2 ? 'nd' : laps.length === 3 ? 'rd' : 'th'} lap
         </text>
@@ -343,7 +343,7 @@ const QualiModule = ({
         />
       }
     >
-      <div style={{ padding: '0 18px 16px', display: 'grid', gap: 12 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr)', gap: 14 }}>
         {cancelled ? (
           <Unavailable>
             <span>
@@ -372,18 +372,23 @@ const QualiModule = ({
         </div>
 
         {sharedDoubleheaderRun ? (
-          <div style={{ padding: '10px 12px', borderRadius: 10, background: 'var(--surface-2)' }}>
-            <div style={{ fontSize: 12.5, color: 'var(--ink-secondary)', marginBottom: 6 }}>
-              One physical qualifying session set both grids. The captured lap run is shared; each grid below is its own official classification.
+          <div style={{ borderTop: '1px solid var(--grid-hairline)', borderBottom: '1px solid var(--grid-hairline)', padding: '10px 0' }}>
+            <div style={{ fontSize: 13, color: 'var(--ink-secondary)', marginBottom: 6 }}>
+              One physical qualifying session set both grids from one lap run; each grid is its own official classification.
             </div>
             <div className="row row--wrap" style={{ gap: '6px 18px' }}>
-              {gridClassifications.map((classification) => {
+              {/* This race's own grid and lap lead the card above; the line
+                  lists the other race(s) the same run set, so nothing reads twice.
+                  With no active match every classification stays. */}
+              {gridClassifications
+                .filter((classification) => !gridClassification || classification.raceSessionId !== gridClassification.raceSessionId)
+                .map((classification) => {
                 const active = classification.raceSessionId === gridClassification?.raceSessionId;
                 return (
                   <span
                     key={classification.raceSessionId}
                     className="tnum"
-                    style={{ fontSize: 12, color: active ? 'var(--ink-primary)' : 'var(--ink-secondary)', fontWeight: active ? 620 : 450 }}
+                    style={{ fontSize: 13, color: active ? 'var(--ink-primary)' : 'var(--ink-secondary)', fontWeight: active ? 620 : 450 }}
                   >
                     {classification.raceLabel ?? 'Race grid'}:{' '}
                     {classification.combinedGridPosition !== null && classification.combinedFieldSize !== null
@@ -401,7 +406,7 @@ const QualiModule = ({
 
         <RunByRunChart session={session} />
 
-        <p style={{ margin: 0, fontSize: 12.5, color: 'var(--ink-secondary)', lineHeight: 1.5 }}>
+        <p style={{ margin: 0, fontSize: 13, color: 'var(--ink-secondary)', lineHeight: 1.5 }}>
           {bestLine ? `${bestLine} ` : ''}
           {cancelled
             ? 'The session was stopped before an official qualifying result.'
@@ -426,7 +431,7 @@ const QualiModule = ({
  *  in the weekend-arc slot instead of silence — no rank claim, never Race-1's. */
 const QualiPairedNoteCard = ({ note }: { note: QualiPairedNote }) => (
   <Card title="His qualifying, run by run">
-    <div style={{ padding: '0 18px 16px' }}>
+    <div>
       <p style={{ margin: 0, fontSize: 13, color: 'var(--ink-secondary)', lineHeight: 1.55 }}>
         This is {note.notedRaceLabel ?? 'the second race'} of the {note.venueName} {note.seasonYear} doubleheader. Only{' '}
         {note.capturedRaceLabel ?? 'the first race'}’s qualifying run was captured, and it set a different grid, so there’s
