@@ -13,7 +13,7 @@ const sourceClasses: Array<{ name: string; detail: string }> = [
   {
     name: 'Official',
     detail:
-      'Series timing, results, lap charts, and section reports. The core of almost every number on the site — the finishing positions, the gaps, the percentiles.'
+      'Series timing, results, lap charts, and section reports. The core of almost every number on the site: the finishing positions, the gaps, the percentiles.'
   },
   {
     name: 'Modeled',
@@ -71,7 +71,7 @@ const RecorderConsole = () => {
         ) : null}
       </div>
       <p style={{ margin: '12px 0 0', fontSize: 13, color: 'var(--ink-secondary)' }}>
-        One quiet capture process owns Race Control polling — it sleeps between sessions, arms itself before Bryce runs,
+        One quiet capture process owns Race Control polling. It sleeps between sessions, arms itself before Bryce runs,
         and records every lap at one-second cadence.
         {asString(next.eventName) ? (
           <>
@@ -101,7 +101,7 @@ export const DataScreen = () => {
         sub="Every number in BryceCast traces to a named, checkable source. This page is the receipts."
       />
 
-      <div className="grid grid--2">
+      <div className="grid grid--fit">
         <Card title="Dataset health">
           <div className="row row--wrap" style={{ gap: 8 }}>
             <StatusChip
@@ -129,7 +129,7 @@ export const DataScreen = () => {
           Every number here comes from one of three kinds of source, and each source family below carries its kind.
           Source drawers across the site name the specific source behind each module.
         </p>
-        <div style={{ display: 'grid', gap: 12 }}>
+        <div style={{ display: 'grid', gap: '12px 40px', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))' }}>
           {sourceClasses.map((entry) => (
             <div key={entry.name} style={{ borderTop: '1px solid var(--divider)', paddingTop: 12 }}>
               <span style={{ fontSize: 13.5, fontWeight: 600, color: 'var(--ink-primary)' }}>{entry.name}</span>
@@ -177,22 +177,21 @@ export const DataScreen = () => {
               const records = asNumber(row.sourceRows);
               return (
                 <div key={index} className="tower__row" style={{ gridTemplateColumns: '1fr auto' }}>
-                  <span className="tower__name" style={{ whiteSpace: 'normal' }}>
+                  <span className="tower__name data-family">
                     {humanFamily(row.sourceFamily ?? row.family ?? '—')}
                     <span
                       style={{
-                        marginLeft: 8,
-                        fontSize: 11,
+                        fontSize: 12.5,
                         fontWeight: 500,
                         color: sourceClass === 'modeled' ? 'var(--ink-secondary)' : 'var(--ink-muted)'
                       }}
                     >
                       {sourceClass}
                     </span>
-                    <span className="tower__team"> {conclusion}</span>
+                    <span className="tower__team data-family__note">{conclusion}</span>
                   </span>
                   <span className="tower__gap tnum" style={{ fontSize: 12.5 }}>
-                    {records !== null ? formatNumber(records, 0) : '—'}
+                    {records !== null ? records.toLocaleString('en-US') : '—'}
                   </span>
                 </div>
               );
@@ -207,15 +206,15 @@ export const DataScreen = () => {
 
       <Card title="What BryceCast will not show">
         <ul style={{ margin: 0, paddingLeft: 18, color: 'var(--ink-secondary)', fontSize: 13.5, display: 'grid', gap: 8 }}>
-          <li>Live GPS or a moving car dot — no validated position feed exists.</li>
-          <li>In-car video or team radio audio — not available to this project.</li>
-          <li>Win or finish predictions — history gets shown as ranges and paths, never as a forecast.</li>
-          <li>Official series weather — near-track NWS weather is labeled for what it is.</li>
-          <li>Pit, tire, or fuel strategy claims — the official feeds don’t carry them.</li>
+          <li>Live GPS or a moving car dot: no validated position feed exists.</li>
+          <li>In-car video or team radio audio: not available to this project.</li>
+          <li>Win or finish predictions: history gets shown as ranges and paths, never as a forecast.</li>
+          <li>Official series weather: near-track NWS weather is labeled for what it is.</li>
+          <li>Pit, tire, or fuel strategy claims: the official feeds don’t carry them.</li>
         </ul>
       </Card>
 
-      <p style={{ margin: 0, fontSize: 11.5, color: 'var(--ink-muted)' }}>{trackOutlineAttribution}</p>
+      <p style={{ margin: 0, fontSize: 12.5, color: 'var(--ink-muted)' }}>{trackOutlineAttribution}</p>
     </div>
   );
 };

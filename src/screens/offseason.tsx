@@ -382,7 +382,7 @@ export const NextSeasonCalendar = ({ compact = false }: { compact?: boolean }) =
       {pending ? (
         <p style={{ margin: '0 0 12px', fontSize: 13.5, color: 'var(--ink-secondary)', maxWidth: '64ch' }}>
           INDY NXT’s own {outlook.seasonYear} calendar isn’t out yet. INDYCAR has announced its first eight race
-          weekends — INDY NXT shares most of them, and its own rounds take over this list once they’re published.
+          weekends. INDY NXT shares most of them, and its own rounds take over this list once they’re published.
         </p>
       ) : null}
       <div className="tower">
@@ -541,7 +541,7 @@ export const OffSeasonRaceWeek = () => {
       <ScreenHead
         kicker="Race week · off-season"
         title={`The road to ${outlook.seasonYear}.`}
-        sub={`Race week is where the next weekend gets prepared. With ${review ? review.seasonYear : 'the season'} complete, it turns to the calendar ahead — every ${outlook.seasonYear} date announced so far, and what he has already done at each place.`}
+        sub={`Race week is where the next weekend gets prepared. With ${review ? review.seasonYear : 'the season'} complete, it turns to the calendar ahead: every ${outlook.seasonYear} date announced so far, and what he has already done at each place.`}
       />
 
       <HeroPanel tint="bryce" className="hero--wash">

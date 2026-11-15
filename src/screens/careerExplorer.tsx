@@ -187,13 +187,10 @@ export const tipFor = (row: CareerRow): Omit<ChartTip, 'x' | 'y'> => ({
 export const TheClimb = () => {
   const rows = useCareerRows();
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();
-  const [viewRef, chartSeen] = useInViewOnce<HTMLDivElement>(0.35);
+  const [viewRef] = useInViewOnce<HTMLDivElement>(0.35);
   const reducedMotion = useReducedMotion();
-  /* Same guard as the rivals swarm: the form line hides itself (dashoffset 1)
-   * until the in-view observer fires. Under reduced motion / a static capture
-   * that observer may never fire, so treat reduced-motion as "already seen" and
-   * draw the full line. */
-  const chartShown = chartSeen || reducedMotion;
+  /* No entrance animation on reading pages (site direction): the line is drawn at rest. */
+  const chartShown = true;
   const svgRef = useRef<SVGSVGElement | null>(null);
   const { navigate } = useRouter();
   const [hovered, setHovered] = useState<number | null>(null);
@@ -1047,7 +1044,7 @@ const recordColor = (share: number): string =>
 
 export const RivalsCard = () => {
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();
-  const [swarmRef, swarmSeen] = useInViewOnce<HTMLDivElement>(0.3);
+  const [swarmRef] = useInViewOnce<HTMLDivElement>(0.3);
   const reducedMotion = useReducedMotion();
   const coarse = useCoarsePointer();
   /* The dots' entrance animation gates their opacity on the in-view observer.
@@ -1056,7 +1053,8 @@ export const RivalsCard = () => {
    * marks at opacity 0 (the audit's empty-plot blocker). Render them fully
    * shown whenever motion is reduced, keeping the animation only for readers
    * who opted into it. */
-  const swarmShown = swarmSeen || reducedMotion;
+  /* No entrance animation on reading pages (site direction): the dots are placed at rest. */
+  const swarmShown = true;
   const [tip, setTip] = useState<ChartTip | null>(null);
   const rivals = uiDataPackage.screens.careerLab.headToHead ?? [];
 

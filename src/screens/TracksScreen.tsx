@@ -91,7 +91,7 @@ const VenueNumbersFallback = ({ visits, labels }: { visits: SectionLapsPack[]; l
       </p>
       <div style={{ overflowX: 'auto' }}>
         <table style={{ width: '100%', minWidth: Math.max(420, visits.length * 92 + 190), borderCollapse: 'collapse', fontSize: 12.5 }}>
-          <caption style={{ textAlign: 'left', color: 'var(--ink-muted)', fontSize: 11.5, paddingBottom: 7 }}>
+          <caption style={{ textAlign: 'left', color: 'var(--ink-muted)', fontSize: 12.5, paddingBottom: 7 }}>
             Median clean-lap percentile · higher means Bryce beat more of the field in that section
           </caption>
           <thead>

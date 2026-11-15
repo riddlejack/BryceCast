@@ -259,12 +259,6 @@
 /* The field: keep the gap figures clear of the one-second battle brackets. */
 .live-page .live-field__row .tower__gap { padding-right: 12px; }
 
-/* Nothing on the live page reads under 12 px. */
-.live-page .replay-bar__chip,
-.live-page .live-field__teammate,
-.live-page .live-gap-chart__status { font-size: 12px; }
-.live-page .plate--row { width: 18px; height: 18px; font-size: 12px; }
-
 /* The championship ladder: Bryce's own row between his neighbours. */
 .live-page .live-points__neighbor--bryce { background: color-mix(in srgb, var(--amber, #CC7E16) 9%, transparent); }
 .live-page .live-points__neighbor--bryce strong { color: var(--ink, #1E1C1A); }

@@ -224,7 +224,6 @@ select:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 }
 
 .kicker::before { display: none; }
-.kicker--plain::before { display: none; }
 
 .tnum { font-variant-numeric: proportional-nums; }
 .mono { font-family: var(--font-mono); }
@@ -322,7 +321,7 @@ select:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 
 .plate--nav { width: 24px; height: 24px; font-size: 14px; border-radius: 6px; }
 .plate--hero { width: 40px; height: 40px; font-size: 22px; border-radius: 9px; }
-.plate--row { width: 16px; height: 16px; font-size: 10px; border-radius: 4px; }
+.plate--row { width: 18px; height: 18px; font-size: 12px; border-radius: 4px; }
 .plate { font-family: var(--font-ui); line-height: 1; }
 
 /* ---------- chips: quiet, mostly text ---------- */
@@ -419,8 +418,6 @@ select:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
   letter-spacing: -0.03em;
   line-height: 1;
 }
-
-
 
 .stat__unit {
   font-size: 13px;
@@ -523,10 +520,10 @@ select:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 .grid:has(> .card, > .panel, > * > .card, > .reveal > .card) { gap: var(--section-gap) var(--card-gap); }
 .stack:has(> .card + .card, > .reveal + .reveal, > .card + .reveal, > .reveal + .card, > .grid + .card, > .card + .grid) { gap: var(--section-gap); }
 .grid--2 { grid-template-columns: minmax(0, 1fr); }
-.grid--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .grid--4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-.grid--split { grid-template-columns: 1fr; }
-.grid--split-rev { grid-template-columns: 1fr; }
+
+/* Side by side when there are two, full width when one of them renders nothing. */
+.grid--fit { grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); }
 
 @media (min-width: 720px) {
   .grid--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -549,14 +546,6 @@ select:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 .page.stack > div:has(> .kicker:only-child) + * { margin-top: calc(var(--section-gap) * -1 + 18px); }
 
 /* Wide screens: three-up where pairs of sections used to sit in 1080 px. */
-@media (min-width: 1900px) {
-  .grid--3 { gap: var(--section-gap) var(--card-gap); }
-}
-
-@media (min-width: 980px) {
-  .grid--split { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
-  .grid--split-rev { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); }
-}
 
 .stack { display: flex; flex-direction: column; gap: 14px; }
 .row { display: flex; align-items: center; gap: 10px; }
@@ -634,7 +623,7 @@ select:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
   align-items: center;
   justify-content: center;
   gap: 3px;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 480;
   color: var(--ink-muted);
   background: none;
@@ -682,7 +671,7 @@ select:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 /* One-word timeframe ("now") before the value, quiet, with a hairline middot so
  * the pill reads "now · 7 mph NNE" and never contradicts a forecast nearby. */
 .track-wind__frame {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--ink-muted);
   white-space: nowrap;
 }
@@ -692,7 +681,7 @@ select:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
   color: var(--ink-muted);
 }
 .track-wind__label {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--ink-secondary);
   font-variant-numeric: proportional-nums;
   white-space: nowrap;
@@ -772,6 +761,12 @@ select:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
   .hero-race--week {
     grid-template-columns: minmax(0, 1fr) 340px minmax(0, 1fr);
   }
+}
+/* The record beside the art: right-hand zone on a wide screen, left-aligned
+ * with everything else once the hero stacks. */
+.hero-race__aside { justify-content: flex-start; }
+@media (min-width: 900px) {
+  .hero-race__aside { justify-content: flex-end; }
 }
 
 /* ---------- Home hero: the story of now ----------
@@ -1043,6 +1038,11 @@ a.tower__row.tower__row--bryce:hover { --row-fill: color-mix(in srgb, var(--ambe
 .tower__team { color: var(--ink-muted); font-size: 12px; font-weight: 400; }
 .tower__gap { font-variant-numeric: proportional-nums; color: var(--ink-secondary); text-align: right; }
 
+/* Data page source families: name and kind on one line, the note after them on
+ * a wide screen and under them on a phone. */
+.tower__name.data-family { white-space: normal; flex-wrap: wrap; align-items: baseline; column-gap: 8px; row-gap: 2px; }
+@media (max-width: 719px) { .data-family__note { flex-basis: 100%; } }
+
 /* ---------- quiet action button ---------- */
 
 .btn-ghost {
@@ -1173,29 +1173,6 @@ a.tower__row.tower__row--bryce:hover { --row-fill: color-mix(in srgb, var(--ambe
 
 .live-hero { display: flex; flex-direction: column; gap: 22px; }
 
-.live-hero__identity {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 20px;
-}
-
-.live-hero__identity .screen-head__title { max-width: 22ch; font-size: clamp(28px, 3vw, 48px); }
-
-.live-lap {
-  color: var(--ink-primary);
-  font-size: 14px;
-  font-weight: 580;
-  font-variant-numeric: proportional-nums;
-  white-space: nowrap;
-}
-
-.live-hero__body {
-  align-items: center;
-}
-
-.live-hero__race-state { min-width: 0; }
-.live-hero__flag-lap { gap: 9px; margin-bottom: 12px; }
 .live-position { display: flex; align-items: center; gap: 14px; min-height: 116px; }
 
 .live-position__value {
@@ -1209,42 +1186,7 @@ a.tower__row.tower__row--bryce:hover { --row-fill: color-mix(in srgb, var(--ambe
 }
 .live-hero__speed-value { font-weight: 550; color: var(--ink-secondary); }
 
-.live-hero__art {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-
-.live-hero__art-caption { text-align: center; white-space: nowrap; }
-
 .track-art__progress { transition: stroke-dashoffset 600ms cubic-bezier(0.23, 1, 0.32, 1); }
-
-.live-lap-progress__meta {
-  display: flex;
-  justify-content: space-between;
-  width: min(100%, 250px);
-  color: var(--ink-muted);
-  font-size: 10.5px;
-  font-variant-numeric: proportional-nums;
-}
-
-.live-lap-progress {
-  width: min(100%, 250px);
-  height: 4px;
-  overflow: hidden;
-  border-radius: 999px;
-  background: var(--grid-hairline);
-}
-
-.live-lap-progress > span {
-  display: block;
-  height: 100%;
-  border-radius: inherit;
-  background: var(--ink-primary);
-  transition: width 600ms cubic-bezier(0.23, 1, 0.32, 1);
-}
 
 .live-hero__jumbotron {
   display: flex;
@@ -1283,8 +1225,7 @@ a.tower__row.tower__row--bryce:hover { --row-fill: color-mix(in srgb, var(--ambe
   font-variant-numeric: proportional-nums;
 }
 
-.live-battle__corridor,
-.live-battle__chart {
+.live-battle__corridor {
   position: relative;
   width: 100%;
 }
@@ -1339,18 +1280,6 @@ a.tower__row.tower__row--bryce:hover { --row-fill: color-mix(in srgb, var(--ambe
   font-weight: 620;
 }
 
-.live-battle__legend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px 14px;
-  margin: 0 0 4px;
-  color: var(--ink-secondary);
-  font-size: 10.5px;
-}
-
-.live-battle__legend span { display: inline-flex; align-items: center; gap: 5px; }
-.live-battle__legend i { width: 13px; height: 2px; border-radius: 2px; }
-
 .live-battle__caption { margin: -3px 0 0; }
 
 /* Best-lap deltas — the practice/qualifying comparison. Quiet house rows: the
@@ -1398,7 +1327,7 @@ a.tower__row.tower__row--bryce:hover { --row-fill: color-mix(in srgb, var(--ambe
 
 .best-lap-deltas__tag {
   color: var(--ink-muted);
-  font-size: 10.5px;
+  font-size: 12px;
   font-weight: 500;
 }
 
@@ -1457,7 +1386,7 @@ a.tower__row.tower__row--bryce:hover { --row-fill: color-mix(in srgb, var(--ambe
   gap: 4px 12px;
   margin: -3px 0 7px;
   color: var(--ink-muted);
-  font-size: 10.5px;
+  font-size: 12px;
   line-height: 1.4;
 }
 
@@ -1489,7 +1418,7 @@ a.tower__row.tower__row--bryce:hover { --row-fill: color-mix(in srgb, var(--ambe
   min-height: 16px;
   margin: -3px 0 5px;
   color: var(--ink-muted);
-  font-size: 10.5px;
+  font-size: 12px;
   line-height: 1.4;
 }
 
@@ -1521,34 +1450,6 @@ a.tower__row.tower__row--bryce:hover { --row-fill: color-mix(in srgb, var(--ambe
 }
 
 .live-layout { grid-template-columns: minmax(0, 1fr); align-items: start; }
-
-/* F2: the two figures share one top line: both labels on row 1, both numbers
- * on row 2 (subgrid, so a label that wraps moves both numbers together), and
- * the provenance line under both, across the full width. */
-.live-points__main {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  grid-template-rows: auto auto auto;
-  align-items: start;
-  column-gap: 24px;
-  row-gap: 4px;
-  padding: 4px 0 18px;
-}
-
-.live-points__main > div {
-  display: grid;
-  grid-row: span 2;
-  grid-template-rows: subgrid;
-  align-items: end;
-  row-gap: 4px;
-  min-width: 0;
-}
-
-.live-points__standing,
-.live-points__score {
-  display: grid;
-  align-self: start;
-}
 
 .live-points__provisional { grid-column: 1 / -1; display: block; margin-top: 8px; color: var(--ink-secondary); font-size: 12.5px; }
 
@@ -1589,7 +1490,7 @@ a.tower__row.tower__row--bryce:hover { --row-fill: color-mix(in srgb, var(--ambe
 
 .live-field__teammate {
   color: var(--ink-muted);
-  font-size: 11.5px;
+  font-size: 12px;
   font-weight: 450;
 }
 
@@ -1647,7 +1548,7 @@ a.tower__row.tower__row--bryce:hover { --row-fill: color-mix(in srgb, var(--ambe
   gap: 4px 12px;
   margin: 0 0 5px;
   color: var(--ink-secondary);
-  font-size: 11px;
+  font-size: 12px;
   font-variant-numeric: proportional-nums;
 }
 
@@ -1958,7 +1859,7 @@ a.tower__row.tower__row--bryce:hover { --row-fill: color-mix(in srgb, var(--ambe
   border-radius: var(--radius-tile);
   background: var(--ink-primary);
   color: var(--surface-0);
-  font-size: 11.5px;
+  font-size: 12px;
   font-weight: 640;
   letter-spacing: 0.01em;
   flex: none;
@@ -2041,12 +1942,9 @@ a.tower__row.tower__row--bryce:hover { --row-fill: color-mix(in srgb, var(--ambe
 @media (max-width: 719px) {
   .live-trust { grid-template-columns: 1fr auto; }
   .live-trust__detail { grid-column: 1 / -1; white-space: normal; }
-  .live-hero__identity { align-items: flex-start; }
-  .live-hero__body { gap: 20px; }
   .live-position { min-height: 104px; }
   .live-hero__jumbotron { align-items: flex-start; justify-self: stretch; text-align: left; }
   .live-hero__standing-row { justify-content: flex-start; }
-  .live-points__main { column-gap: 16px; }
   .live-field__teammate { display: none; }
 }
 
@@ -2394,7 +2292,7 @@ a.ss-race--link:hover { background: var(--fill-quiet); }
 .ss-timeline__source {
   display: inline-block;
   margin-top: 4px;
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--ink-muted);
 }
 
@@ -2416,12 +2314,6 @@ a.ss-race--link:hover { background: var(--fill-quiet); }
 /* ---------- career atlas: a quiet, package-fed venue map ---------- */
 
 .career-atlas { background: var(--surface-0); }
-
-.career-atlas__intro {
-  margin: 0 0 8px;
-  color: var(--ink-secondary);
-  font-size: 13.5px;
-}
 
 .career-atlas__filters {
   display: grid;
@@ -2496,7 +2388,7 @@ a.ss-race--link:hover { background: var(--fill-quiet); }
 }
 
 .career-atlas__tip strong { color: var(--ink-primary); }
-.career-atlas__tip-action { color: var(--link); font-size: 11.5px; }
+.career-atlas__tip-action { color: var(--link); font-size: 12px; }
 
 .career-atlas__empty {
   position: absolute;
@@ -2504,21 +2396,6 @@ a.ss-race--link:hover { background: var(--fill-quiet); }
   inset: 50% auto auto 50%;
   width: min(340px, calc(100% - 28px));
   transform: translate(-50%, -50%);
-  pointer-events: none;
-}
-
-.career-atlas__map-hint {
-  position: absolute;
-  left: 9px;
-  bottom: 9px;
-  z-index: 2;
-  padding: 4px 7px;
-  border: none;
-  border-radius: var(--radius-tile);
-  background: color-mix(in srgb, var(--paper) 92%, transparent);
-  color: var(--ink-muted);
-  font-size: 12px;
-  line-height: 1;
   pointer-events: none;
 }
 
@@ -2555,7 +2432,7 @@ a.ss-race--link:hover { background: var(--fill-quiet); }
 .career-atlas__zoom button:disabled { color: var(--ink-muted); cursor: default; }
 
 .career-atlas__zoom .career-atlas__zoom-reset {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 570;
   letter-spacing: 0.01em;
 }
@@ -2571,12 +2448,10 @@ a.ss-race--link:hover { background: var(--fill-quiet); }
 
 .career-atlas__legend span { display: inline-flex; align-items: center; gap: 5px; }
 .career-atlas__legend i { width: 7px; height: 7px; border-radius: 50%; box-shadow: 0 0 0 1px var(--surface-0); }
-.career-atlas__caption { margin: 8px 0 0; }
 
 @media (max-width: 520px) {
   .career-atlas__map { margin-inline: -8px; width: calc(100% + 16px); }
   .career-atlas__legend { gap-inline: 10px; }
-  .career-atlas__map-hint { display: none; }
   .career-atlas__zoom { right: 7px; bottom: 7px; }
 }
 
@@ -2844,6 +2719,10 @@ a.ss-race--link:hover { background: var(--fill-quiet); }
   min-height: 128px;
 }
 .weekend--known .weekend__venue { transition: color 150ms ease; }
+/* A row that is a link: its name takes the link colour on hover, like the weekend cards. */
+.link-row { display: block; }
+.link-row .link-row__label { transition: color 150ms ease; }
+@media (hover: hover) { .link-row:hover .link-row__label { color: var(--link); } }
 @media (hover: hover) { .weekend--known:hover .weekend__venue { color: var(--link); } }
 .weekend__date { display: flex; flex-direction: column; align-items: flex-start; line-height: 1.1; gap: 1px; }
 .weekend__day { font-size: 28px; font-weight: 620; letter-spacing: -0.02em; color: var(--ink-primary); }
@@ -2867,3 +2746,40 @@ a.ss-race--link:hover { background: var(--fill-quiet); }
 .yoy-caption__title { font-size: 14px; color: var(--ink-primary); }
 .yoy-caption__result { color: var(--ink-secondary); white-space: nowrap; }
 .yoy-caption__meta { font-size: 12.5px; color: var(--ink-muted); }
+
+/* ---------- touch: every control answers a 40 px finger ----------
+ * On a touch screen the small controls (source pills, text links, segmented
+ * options, filter chips, footer links, plain text buttons) get an invisible
+ * hit box at least 40 px tall and wide, centred on the control. Nothing moves
+ * and nothing changes how it looks; a control already 40 px or larger keeps
+ * its own box. */
+@media (pointer: coarse) {
+  select { min-height: 40px; }
+  .source-pill,
+  .navlink,
+  .segmented__option,
+  button.chip,
+  .footer a,
+  .tracks-grid__toggle,
+  .replay-bar__btn,
+  .card button:not([class]),
+  .tracks-story button:not([class]) {
+    position: relative;
+  }
+  .source-pill::after,
+  .navlink::after,
+  .segmented__option::after,
+  button.chip::after,
+  .footer a::after,
+  .tracks-grid__toggle::after,
+  .replay-bar__btn::after,
+  .card button:not([class])::after,
+  .tracks-story button:not([class])::after {
+    content: '';
+    position: absolute;
+    top: min(0px, calc(50% - 20px));
+    bottom: min(0px, calc(50% - 20px));
+    left: min(0px, calc(50% - 20px));
+    right: min(0px, calc(50% - 20px));
+  }
+}

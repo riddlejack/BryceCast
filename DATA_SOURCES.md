@@ -36,6 +36,12 @@ Everything below was collected from pages, files and feeds that each organizatio
 | **[OpenStreetMap](https://www.openstreetmap.org/copyright)** contributors | ODbL | Circuit outlines and track geometry are derived from OSM data. © OpenStreetMap contributors |
 | **[Natural Earth](https://www.naturalearthdata.com)** | Public domain | Land texture for the career map ([source record](analysis/career-atlas/data/SOURCE.md)) |
 
+## Fonts
+
+| Font | License | Use |
+| --- | --- | --- |
+| **[Schibsted Grotesk](https://github.com/schibsted/schibsted-grotesk)**, © 2023 The Schibsted-Grotesk Project Authors | [SIL Open Font License 1.1](public/fonts/OFL.txt) | The site's typeface, served from `public/fonts/SchibstedGrotesk-VF.woff2` |
+
 Photos, logos and series marks that appear in the corpus or on the site belong to their respective owners and are used for identification only. BryceCast is not affiliated with or endorsed by any series, team, broadcaster or data provider.
 
 ## Where the data lives

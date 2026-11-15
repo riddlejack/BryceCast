@@ -111,8 +111,5 @@
 .races-index .tower__name > span:first-child { text-wrap: pretty; }
 .races-index .card__header .caption { white-space: nowrap; }
 
-/* The shared ▲▽ delta glyph prints at 11.5 px; on this line it reads with the
- * words beside it, so it takes their size. */
-.race-page .race-day__yoy .tnum { font-size: 13px !important; }
 /* Facts in the right-hand column (no track drawing): no rule above them. */
 .career-race .career-race__facts--aside { margin-top: 0; padding-top: 22px; border-top: 0; }

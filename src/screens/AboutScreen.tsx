@@ -18,7 +18,7 @@ export const REPO_URL: string | null = null;
 const stats: Array<{ label: string; value: string; note: string }> = [
   { label: 'Series', value: '7', note: '2019–2026 · 87 events, 493 sessions' },
   { label: 'Lap samples', value: '75,589', note: '8,943 session-result records' },
-  { label: 'Timing-loop passages', value: '~690,000', note: '143 source captures, resends removed — not GPS telemetry' },
+  { label: 'Timing-loop passages', value: '~690,000', note: '143 source captures, resends removed, not GPS telemetry' },
   { label: 'INDY NXT races', value: '45 of 45', note: 'observed timing and replay coverage, 2024–2026' },
   { label: 'Weather joins', value: '135', note: 'exact-window sessions, modeled near-track weather' },
   { label: 'Historical archive', value: '7.62 GB', note: '1,136 source objects indexed, not shipped in this build' }
@@ -44,7 +44,7 @@ const hardParts: HardPart[] = [
   },
   {
     title: 'One qualifying model, many formats',
-    body: "Bryce's career mixes group qualifying, combined grids, reverse-grid races, oval two-lap averages, and a couple of canceled sessions — formats that don't collapse into one clean qualifying-position number. BryceCast keeps each format's own source record intact, links a qualifying result to a race only when the grid position actually matches it, and shows a canceled session as canceled instead of guessing a rank.",
+    body: "Bryce's career mixes group qualifying, combined grids, reverse-grid races, oval two-lap averages, and a couple of canceled sessions: formats that don't collapse into one clean qualifying-position number. BryceCast keeps each format's own source record intact, links a qualifying result to a race only when the grid position actually matches it, and shows a canceled session as canceled instead of guessing a rank.",
     href: '/races',
     label: 'Race replays'
   },
@@ -56,7 +56,7 @@ const hardParts: HardPart[] = [
   },
   {
     title: 'Models that retain their failures',
-    body: "Race history is short, and a model that peeks at information only available after the finish can look great while being useless before a race even starts. BryceCast's prediction workbench keeps every candidate on the record — including its best-scoring model, which is flagged and rejected for exactly that kind of after-the-fact leakage — instead of only publishing the winner.",
+    body: "Race history is short, and a model that peeks at information only available after the finish can look great while being useless before a race even starts. BryceCast's prediction workbench keeps every candidate on the record, including its best-scoring model, which is flagged and rejected for exactly that kind of after-the-fact leakage, instead of only publishing the winner.",
     href: '/career',
     label: 'Career Lab'
   },
@@ -68,13 +68,13 @@ const hardParts: HardPart[] = [
   },
   {
     title: 'A career across unequal sources',
-    body: "Bryce's seven series carry very different depth of timing — some have lap-by-lap and section data, others only official classification. BryceCast keeps each series' native evidence intact rather than filling gaps with zeros, and uses one shared, descriptive scale — finish percentile — to make the whole career comparable without pretending a thin season has the same evidence as a rich one.",
+    body: "Bryce's seven series carry very different depth of timing. Some have lap-by-lap and section data, others only official classification. BryceCast keeps each series' native evidence intact rather than filling gaps with zeros, and uses one shared, descriptive scale (finish percentile) to make the whole career comparable without pretending a thin season has the same evidence as a rich one.",
     href: '/career',
     label: 'Career Lab'
   },
   {
     title: 'An archive that stores each byte once',
-    body: "Early live captures re-saved a full copy of slow-changing data — driver bios, schedules, track info — inside every one-second timing snapshot, which multiplied storage for content that hadn't actually changed. The current archive stores each unique payload once, keyed by a content hash, and every observation just points back to it, so exact timestamps are kept without repeating the same bytes.",
+    body: "Early live captures re-saved a full copy of slow-changing data (driver bios, schedules, track info) inside every one-second timing snapshot, which multiplied storage for content that hadn't actually changed. The current archive stores each unique payload once, keyed by a content hash, and every observation just points back to it, so exact timestamps are kept without repeating the same bytes.",
     href: '/data',
     label: 'Data & trust'
   }
@@ -85,19 +85,19 @@ const hardParts: HardPart[] = [
 const pipeline: Array<{ label: string; note: string }> = [
   { label: 'Sources', note: 'official timing, results, and near-track weather' },
   { label: 'Single ingestor / capture', note: 'one long-running process owns polling and writes' },
-  { label: 'SQLite + archives', note: 'content-addressed — one payload per hash' },
+  { label: 'SQLite + archives', note: 'content-addressed, one payload per hash' },
   { label: 'Analysis pipeline', note: 'reconciliation, validation, derived reports' },
   { label: 'Typed UI data package', note: 'a compact, versioned data contract' },
-  { label: 'React app', note: 'this site — TypeScript, Vite, typed adapters' }
+  { label: 'React app', note: 'this site: TypeScript, Vite, typed adapters' }
 ];
 
 /* ---------- honest limits: verbatim from the Data page's own list ---------- */
 
 const limits: string[] = [
-  'Live GPS or a moving car dot — no validated position feed exists.',
-  'Win or finish predictions — history gets shown as ranges and paths, never as a forecast.',
-  'Official series weather — near-track NWS weather is labeled for what it is.',
-  'Pit, tire, or fuel strategy claims — the official feeds don’t carry them.'
+  'Live GPS or a moving car dot: no validated position feed exists.',
+  'Win or finish predictions: history gets shown as ranges and paths, never as a forecast.',
+  'Official series weather: near-track NWS weather is labeled for what it is.',
+  'Pit, tire, or fuel strategy claims: the official feeds don’t carry them.'
 ];
 
 const HardPartCard = ({ part }: { part: HardPart }) => (
@@ -119,7 +119,7 @@ export const AboutScreen = () => (
       <p className="screen-head__sub" style={{ maxWidth: '62ch' }}>
         BryceCast is a race companion and career-analytics site built by a friend for Bryce Aron, driver of the No. 9
         car in INDY NXT. It turns raw timing feeds, official results, and near-track weather into a companion for race
-        weekends and a navigable record of his career — and this page is the tour of how that's built, section by
+        weekends and a navigable record of his career. This page is the tour of how that's built, section by
         section, and what it deliberately won't claim.
       </p>
     </HeroPanel>
@@ -128,7 +128,7 @@ export const AboutScreen = () => (
       <section aria-label="By the numbers">
         <h2 className="section-title">By the numbers</h2>
         <Card>
-          <div className="row row--wrap" style={{ gap: 28, rowGap: 20 }}>
+          <div className="about-stats">
             {stats.map((stat) => (
               <Stat key={stat.label} label={stat.label} value={stat.value} note={stat.note} />
             ))}
@@ -195,23 +195,23 @@ export const AboutScreen = () => (
               <span className="about-credit__label">Data sources</span>
               <p className="about-credit__detail">
                 Official series timing, results, lap charts, and section reports; modeled near-track NWS weather;
-                and permissioned third-party captures — RaceTools race-weekend geometry and Timing71 timing for
-                2026 replays. The <Link to="/data" className="navlink" style={{ padding: 0, fontSize: 13 }}>data
+                and permissioned third-party captures: RaceTools race-weekend geometry and Timing71 timing for
+                2026 replays. The <Link to="/data" className="navlink" style={{ padding: 0, fontSize: 'inherit', color: 'var(--link)' }}>data
                 page</Link> names each source behind every number on the site.
               </p>
             </div>
             <div className="about-credit">
               <span className="about-credit__label">AI use</span>
               <p className="about-credit__detail">
-                Some of the implementation used AI coding tools — primarily OpenAI Codex, with additional Claude
-                Code work — directed throughout by Jack.
+                Some of the implementation used AI coding tools, primarily OpenAI Codex with additional Claude
+                Code work, directed throughout by Jack.
               </p>
             </div>
             {REPO_URL ? (
               <div className="about-credit">
                 <span className="about-credit__label">Source</span>
                 <p className="about-credit__detail">
-                  <a href={REPO_URL} className="navlink" style={{ padding: 0, fontSize: 13 }}>
+                  <a href={REPO_URL} className="navlink" style={{ padding: 0, fontSize: 'inherit', color: 'var(--link)' }}>
                     Source on GitHub
                   </a>
                 </p>

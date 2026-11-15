@@ -5,13 +5,13 @@ import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YA
  * 2px lines, recessive grid, tabular tick labels, tooltip always on,
  * Bryce data always and only in Bryce gold. */
 
-const axisTick = { fill: 'var(--ink-muted)', fontSize: 10.5, fontFamily: '-apple-system, system-ui, sans-serif' } as const;
+const axisTick = { fill: 'var(--ink-muted)', fontSize: 12, fontFamily: "'Schibsted Grotesk', -apple-system, system-ui, sans-serif" } as const;
 
 /* ---------- house tokens for hand-rolled SVG charts ---------- */
 
-export const chartFont = '-apple-system, system-ui, sans-serif';
+export const chartFont = "'Schibsted Grotesk', -apple-system, system-ui, sans-serif";
 /** Quiet connector/context ink for marks that support, not carry, the story. */
-export const inkConnector = 'rgba(29, 29, 31, 0.32)';
+export const inkConnector = 'rgba(30, 28, 26, 0.32)';
 /** Opacity for de-focused rows/lines while a sibling is hovered. */
 export const focusFade = 0.22;
 
@@ -153,7 +153,7 @@ export const ChartTipCard = ({ tip, width }: { tip: ChartTip; width: number }) =
   >
     <strong>{tip.title}</strong>
     {tip.detail ? <span style={{ color: 'var(--ink-secondary)' }}> · {tip.detail}</span> : null}
-    {tip.action ? <div style={{ color: 'var(--link)', fontSize: 11.5 }}>{tip.action}</div> : null}
+    {tip.action ? <div style={{ color: 'var(--link)', fontSize: 12 }}>{tip.action}</div> : null}
   </div>
 );
 
@@ -250,7 +250,7 @@ export const SlopeChart = ({ start, finish, height = 150 }: { start: number; fin
           domain={[0, 1]}
           ticks={[0, 1]}
           tickFormatter={(value: number) => (value === 0 ? 'Start' : 'Finish')}
-          tick={{ ...axisTick, fontSize: 11 }}
+          tick={axisTick}
           tickLine={false}
           axisLine={{ stroke: 'var(--axis-baseline)' }}
         />
@@ -273,7 +273,7 @@ export const SlopeChart = ({ start, finish, height = 150 }: { start: number; fin
                 textAnchor={index === 0 ? 'end' : 'start'}
                 style={{
                   fill: 'var(--ink-primary)',
-                  fontFamily: '-apple-system, system-ui, sans-serif',
+                  fontFamily: chartFont,
                   fontWeight: 650,
                   fontSize: 16,
                   fontVariantNumeric: 'tabular-nums'

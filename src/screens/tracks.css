@@ -57,17 +57,6 @@
 
 /* ---------- the section story: map, where his lap goes, lap by lap ---------- */
 
-.tracks-page .tracks-story svg text {
-  font-family: var(--font-ui);
-}
-
-/* The shared heat card writes its quiet notes inline at 11.5 px; this page
- * holds every word at 12 px or more. */
-.tracks-page [style*="font-size: 11.5px"],
-.tracks-page [style*="font-size: 11px"] {
-  font-size: 12.5px !important;
-}
-
 .tracks-page .tracks-lead {
   margin: 0 0 16px;
   font-size: 15px;

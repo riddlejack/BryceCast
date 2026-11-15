@@ -136,7 +136,7 @@ export const TrackArt = ({
     y: (point.y + margin) * scale
   });
   const weight = (visual: number) => px(visual * strokeScale);
-  const labelPx = labelSize ?? (outside ? 12.5 : 10.5);
+  const labelPx = labelSize ?? (outside ? 12.5 : 12);
   const center = { x: viewWidth / 2, y: viewHeight / 2 };
   const heatSections = sections?.resolved ?? [];
   const hasHeat = heatSections.length > 0;
@@ -311,8 +311,8 @@ export const TrackArt = ({
         const away = Math.hypot(mid.x - center.x, mid.y - center.y) || 1;
         const hasWord = /[a-z]{3,}/.test(section.label); // a named feature, e.g. "Back straight"
         const isStartFinish = /S\/F/.test(section.label);
-        const halfW = outside ? pxOf(section.label.length * labelPx * 0.28 + 3) : pxOf(section.label.length * 3 + 4);
-        const halfH = outside ? pxOf(labelPx * 0.62) : pxOf(6.5);
+        const halfW = outside ? pxOf(section.label.length * labelPx * 0.28 + 3) : pxOf(section.label.length * labelPx * 0.29 + 4);
+        const halfH = outside ? pxOf(labelPx * 0.62) : pxOf(labelPx * 0.62);
         /* The SVG paints with overflow visible. Vertically that's fine — the
          * card has room above and below — but the card is width-tight, so an
          * outward-pushed label near the outline's left/right edge spills past
@@ -349,9 +349,39 @@ export const TrackArt = ({
           Math.abs(other.ly - candidate.ly) < other.halfH + candidate.halfH + gap
       );
     if (!outside) {
+      /* Inside placement: push each label out from the shape's centre by its
+       * own half-size along that direction, so a 12 px label clears the line
+       * instead of straddling it; one further step if the first spot still
+       * touches the line, and otherwise the label stays in the tap tip. */
+      const line = Array.from({ length: 480 }, (_, k) => geometry.pointAtT(k / 480));
+      const half = pxOf(3 * strokeScale);
+      const touchesLine = (box: { lx: number; ly: number; halfW: number; halfH: number }) =>
+        line.some((point) => {
+          const dx = Math.max(Math.abs(point.x - box.lx) - box.halfW, 0);
+          const dy = Math.max(Math.abs(point.y - box.ly) - box.halfH, 0);
+          return Math.hypot(dx, dy) < half + pxOf(1.5);
+        });
       for (const candidate of eligible) {
         if (kept.length >= cap) break;
-        if (!clashes(candidate)) kept.push(candidate);
+        const mid = geometry.pointAtT(candidate.t);
+        const away = Math.hypot(mid.x - center.x, mid.y - center.y) || 1;
+        const ux = (mid.x - center.x) / away;
+        const uy = (mid.y - center.y) / away;
+        const extent = Math.abs(ux) * candidate.halfW + Math.abs(uy) * candidate.halfH;
+        let placed: PlacedLabel | null = null;
+        for (const step of [6, 14]) {
+          const reach = half + pxOf(step) + extent;
+          const box = {
+            ...candidate,
+            lx: Math.min(Math.max(mid.x + ux * reach, candidate.halfW + pxOf(2)), viewWidth - candidate.halfW - pxOf(2)),
+            ly: mid.y + uy * reach
+          };
+          if (!touchesLine(box) && !clashes(box)) {
+            placed = box;
+            break;
+          }
+        }
+        if (placed) kept.push(placed);
       }
       return kept;
     }
@@ -712,7 +742,7 @@ export const TrackArt = ({
                       dominantBaseline="middle"
                       fill="var(--ink-muted)"
                       fontFamily={chartFont}
-                      fontSize={px(11.5)}
+                      fontSize={px(12)}
                       fontWeight={500}
                       style={{ pointerEvents: 'none' }}
                     >
@@ -775,7 +805,7 @@ export const TrackArt = ({
                 dominantBaseline="central"
                 fill="var(--ink-muted)"
                 fontFamily={chartFont}
-                fontSize={8}
+                fontSize={12}
                 fontWeight={500}
               >
                 N

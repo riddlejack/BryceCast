@@ -57,14 +57,14 @@ const HeatKey = () => {
   const stops = [0, 0.2, 0.4, 0.5, 0.6, 0.8, 1];
   return (
     <div className="row" style={{ gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
-      <span style={{ fontSize: 11.5, color: 'var(--ink-muted)' }}>Tougher</span>
+      <span style={{ fontSize: 12.5, color: 'var(--ink-muted)' }}>Tougher</span>
       <span style={{ display: 'flex', borderRadius: 3, overflow: 'hidden' }}>
         {stops.map((stop) => (
           <span key={stop} style={{ width: 20, height: 8, background: inkGoldDiverging(stop) }} />
         ))}
       </span>
-      <span style={{ fontSize: 11.5, color: 'var(--ink-muted)' }}>Stronger</span>
-      <span style={{ fontSize: 11.5, color: 'var(--ink-secondary)' }}>
+      <span style={{ fontSize: 12.5, color: 'var(--ink-muted)' }}>Stronger</span>
+      <span style={{ fontSize: 12.5, color: 'var(--ink-secondary)' }}>
         deeper gold = stronger stretch, deeper ink = tougher
       </span>
     </div>
@@ -848,6 +848,7 @@ export const SectionHeatCard = ({
    * for a gesture the device can actually make (a tap opens the same tooltip). */
   const coarse = useCoarsePointer();
   const readVerb = coarse ? 'tap' : 'hover';
+  const readVerbCap = coarse ? 'Tap' : 'Hover';
 
   const qualifyingMode = mode === 'qualifying';
   const activeLaps = qualifyingMode ? qualifying?.laps ?? null : laps;
@@ -1009,7 +1010,7 @@ export const SectionHeatCard = ({
         {
           label: 'RaceTools race-weekend capture · timing-loop crossings',
           path: intervalPath ?? 'analysis/semantic-layer/output/nashville/',
-          note: `Bryce's per-lap section times and full-field percentiles, differenced from the RaceTools race-weekend capture's timing-loop crossings — ${measuredSectionCount(activeAnchors)} sub-sections tiling the whole lap. A third-party capture; not official timing.`
+          note: `Bryce's per-lap section times and full-field percentiles, differenced from the RaceTools race-weekend capture's timing-loop crossings: ${measuredSectionCount(activeAnchors)} sub-sections tiling the whole lap. A third-party capture; not official timing.`
         }
       ]
     : [
@@ -1033,8 +1034,8 @@ export const SectionHeatCard = ({
         ? "Each lap's section is compared with every driver's best comparable section in Bryce's actual qualifying group; those benchmark sections need not come from one lap."
         : 'Qualifying section ranks and denominators follow the official report scope.'
       : measured
-      ? 'Section times are the RaceTools race-weekend capture — timing-loop crossings, time-based, not GPS or car position; not official timing.'
-      : 'Section times come from official timing loops — they are time-based, not GPS or car position.',
+      ? 'Section times come from the RaceTools race-weekend capture: timing-loop crossings, time-based, not GPS or car position, and not official timing.'
+      : 'Section times come from official timing loops. They are time-based, not GPS or car position.',
     ...(set ? [set.caveat] : []),
     ...(measured ? ['Sanity-checked: the three published corner sections agree with these measured spans within ~0.10s per lap.'] : []),
     ...(qualifyingMode && activeLaps
@@ -1082,13 +1083,13 @@ export const SectionHeatCard = ({
       qualifyingMode
         ? qualifying?.note ?? 'No official qualifying section times are on file for this session.'
         : visitLapsCompleted === 0
-        ? `His ${laps?.seasonYear ?? ''} visit ended on the opening lap — no clean laps to compare.`.replace(/\s{2,}/g, ' ')
+        ? `His ${laps?.seasonYear ?? ''} visit ended on the opening lap, so there are no clean laps to compare.`.replace(/\s{2,}/g, ' ')
         : !set
           ? 'No official section times are on file for this race yet.'
           : cleanLapTotal === 0
             ? 'This race ran no clean green-flag laps, so there is no section comparison to draw.'
             : cleanLapTotal !== null && cleanLapTotal < MIN_CLEAN_LAPS
-              ? `This race ran ${cleanLapTotal} clean green-flag lap${cleanLapTotal === 1 ? '' : 's'} — a section comparison needs ${MIN_CLEAN_LAPS}.`
+              ? `This race ran ${cleanLapTotal} clean green-flag lap${cleanLapTotal === 1 ? '' : 's'}. A section comparison needs ${MIN_CLEAN_LAPS}.`
               : 'The section report for this race does not line up with this track’s timing sections.';
     return (
       <Card
@@ -1119,12 +1120,12 @@ export const SectionHeatCard = ({
   const emptyLead =
     set
             ? visitLapsCompleted === 0
-              ? `His ${laps?.seasonYear ?? ''} visit ended on the opening lap — no clean laps to compare.`.replace(/\s{2,}/g, ' ')
+              ? `His ${laps?.seasonYear ?? ''} visit ended on the opening lap, so there are no clean laps to compare.`.replace(/\s{2,}/g, ' ')
               : !qualifyingMode &&
                   scope.kind === 'lap_window' &&
                   scopeCleanLapCount !== null &&
                   scopeCleanLapCount < minimumObservations
-                ? `Only ${scopeCleanLapCount} clean green-flag lap${scopeCleanLapCount === 1 ? '' : 's'} in the ${scope.label.toLowerCase()} — cautions covered the rest. Try Full race.`
+                ? `Only ${scopeCleanLapCount} clean green-flag lap${scopeCleanLapCount === 1 ? '' : 's'} in the ${scope.label.toLowerCase()}. Cautions covered the rest. Try Full race.`
                 : 'Too few clean laps in this scope to compare sections.'
             : 'The venue shape, with the start/finish line marked.';
   const drawerLabel =
@@ -1226,7 +1227,7 @@ export const SectionHeatCard = ({
         <div className="row row--between" style={{ gap: 10, flexWrap: 'wrap', marginBottom: 12 }}>
           <HeatKey />
           {scopeSummary ? (
-            <span className="tnum" style={{ fontSize: 11.5, color: 'var(--ink-muted)' }}>
+            <span className="tnum" style={{ fontSize: 12.5, color: 'var(--ink-muted)' }}>
               {scopeSummary}
             </span>
           ) : null}
@@ -1235,27 +1236,27 @@ export const SectionHeatCard = ({
   const mapNotes = (
     <>
       {showMarks ? (
-        <p style={{ margin: '10px 0 0', fontSize: 11.5, color: 'var(--ink-muted)' }}>
+        <p style={{ margin: '10px 0 0', fontSize: 12.5, color: 'var(--ink-muted)' }}>
           <span aria-hidden style={{ marginRight: 6 }}>○</span>
-          a pass involving Bryce — placed between timing loops · derived from the RaceTools race-weekend capture,{' '}
+          a pass involving Bryce, placed between timing loops · derived from the RaceTools race-weekend capture,{' '}
           {resolvedMarks.length} this race. {coarse ? 'Tap' : 'Hover'} for the lap and the car.
         </p>
       ) : null}
       {thirdsWithheld && hasHeat && !singleLap ? (
-        <p style={{ margin: '10px 0 0', fontSize: 11.5, color: 'var(--ink-muted)' }}>
-          This race carries {cleanLapTotal} clean green-flag lap{cleanLapTotal === 1 ? '' : 's'} — the map reads them
+        <p style={{ margin: '10px 0 0', fontSize: 12.5, color: 'var(--ink-muted)' }}>
+          This race carries {cleanLapTotal} clean green-flag lap{cleanLapTotal === 1 ? '' : 's'}, so the map reads them
           together rather than splitting them into thirds.
         </p>
       ) : null}
       {suppressedCount > 0 && !singleLap && hasHeat ? (
-        <p style={{ margin: '10px 0 0', fontSize: 11.5, color: 'var(--ink-muted)' }}>
-          {suppressedCount === 1 ? 'One stretch stays uncoloured' : `${suppressedCount} stretches stay uncoloured`} — under{' '}
+        <p style={{ margin: '10px 0 0', fontSize: 12.5, color: 'var(--ink-muted)' }}>
+          {suppressedCount === 1 ? 'One stretch stays uncoloured' : `${suppressedCount} stretches stay uncoloured`}: under{' '}
           {minimumObservations} {qualifyingMode ? 'valid observed qualifying laps' : 'clean laps'} in this scope.
         </p>
       ) : null}
       {singleLap && scrubContext && scrubContext.caution !== 'green' ? (
-        <p style={{ margin: '10px 0 0', fontSize: 11.5, color: 'var(--ink-muted)' }}>
-          Lap {scrubLap} ran {cautionCopy[scrubContext.caution]} — one lap is a snapshot, not a trend.
+        <p style={{ margin: '10px 0 0', fontSize: 12.5, color: 'var(--ink-muted)' }}>
+          Lap {scrubLap} ran {cautionCopy[scrubContext.caution]}. One lap is a snapshot, not a trend.
         </p>
       ) : null}
 
@@ -1282,14 +1283,14 @@ export const SectionHeatCard = ({
           {numbersOpen ? (
             <div className="stack" style={{ gap: 12, marginTop: 12 }}>
               {!singleLap ? (
-                <p style={{ margin: 0, fontSize: 11.5, color: 'var(--ink-muted)' }}>
+                <p style={{ margin: 0, fontSize: 12.5, color: 'var(--ink-muted)' }}>
                   {qualifyingMode
                     ? `Each dot is one valid observed qualifying lap and its share of the group benchmark beaten in that section. The gold tick is Bryce’s ${stat === 'median' ? 'median' : 'average'} lap-level share. Each driver’s best comparable section remains the fixed benchmark; it is not drawn as a field average.`
-                    : `Top rule: each dot is one clean lap — its share of the field beaten in that section, the gold tick his ${stat === 'median' ? 'median' : 'average'} lap and the number the map carries. Lower rule: where his pace sits among the field this section — each faint mark a car, the gold tick Bryce, faster to the right.`}
+                    : `Top rule: each dot is one clean lap and its share of the field beaten in that section; the gold tick is his ${stat === 'median' ? 'median' : 'average'} lap and the number the map carries. Lower rule: where his pace sits among the field in this section. Each faint mark is a car, the gold tick is Bryce, and faster is to the right.`}
                 </p>
               ) : (
-                <p style={{ margin: 0, fontSize: 11.5, color: 'var(--ink-muted)' }}>
-                  One lap's field share per section, exactly as timed — {scrubContext ? cautionCopy[scrubContext.caution] : 'no flag report'}.
+                <p style={{ margin: 0, fontSize: 12.5, color: 'var(--ink-muted)' }}>
+                  One lap's field share per section, exactly as timed: {scrubContext ? cautionCopy[scrubContext.caution] : 'no flag report'}.
                 </p>
               )}
               <div className="stack" style={{ gap: 10 }}>
@@ -1301,21 +1302,21 @@ export const SectionHeatCard = ({
                   )
                 )}
               </div>
-              <p style={{ margin: 0, fontSize: 11.5, color: 'var(--ink-muted)' }}>
+              <p style={{ margin: 0, fontSize: 12.5, color: 'var(--ink-muted)' }}>
                 {coverage}.{' '}
                 {measured
-                  ? `${measuredSectionCount(activeAnchors)} timing-loop sub-sections from the RaceTools race-weekend capture, tiling the whole lap — time-based, not GPS, and not official timing.`
+                  ? `${measuredSectionCount(activeAnchors)} timing-loop sub-sections from the RaceTools race-weekend capture, tiling the whole lap. Time-based, not GPS, and not official timing.`
                   : hasDerivedRemainder(activeAnchors)
-                    ? 'Solid spans are official timing loops — time-based, not GPS. The dotted stretch is derived: lap time minus the timed sections, ranked against the field the same way.'
-                    : 'Section times from official timing loops — time-based, not GPS. Stretches without timing loops stay the plain line.'}
+                    ? 'Solid spans are official timing loops, time-based, not GPS. The dotted stretch is derived: lap time minus the timed sections, ranked against the field the same way.'
+                    : 'Section times from official timing loops, time-based, not GPS. Stretches without timing loops stay the plain line.'}
               </p>
-              <p style={{ margin: 0, fontSize: 11.5, color: 'var(--ink-muted)' }}>
+              <p style={{ margin: 0, fontSize: 12.5, color: 'var(--ink-muted)' }}>
                 {qualifyingMode
                   ? 'Qualifying summaries use valid observed laps from the official section report. Loop timing measures time, not GPS or car position.'
-                  : 'Clean green-flag laps only — caution and restart laps are excluded from the shades. Loop timing measures time, not car position.'}
+                  : 'Clean green-flag laps only. Caution and restart laps are excluded from the shades. Loop timing measures time, not car position.'}
               </p>
               {activePassMarks ? (
-                <p style={{ margin: 0, fontSize: 11.5, color: 'var(--ink-muted)' }}>
+                <p style={{ margin: 0, fontSize: 12.5, color: 'var(--ink-muted)' }}>
                   The open circles are green, on-track passes involving Bryce. Pass placement validated{' '}
                   {activePassMarks.pairwiseConcordancePct}% against the official lap chart.
                   {activePassMarks.reshuffleCounts.pit_cycle + activePassMarks.reshuffleCounts.caution > 0
@@ -1330,7 +1331,7 @@ export const SectionHeatCard = ({
   const emptyFooter = !hasHeat ? (
         /* Method copy (coverage, derivation, GPS caveats) now lives behind "The
          * numbers behind the shades"; the face only carries the empty state. */
-        <p style={{ margin: 0, paddingTop: 14, fontSize: 11.5, color: 'var(--ink-muted)' }}>
+        <p style={{ margin: 0, paddingTop: 14, fontSize: 12.5, color: 'var(--ink-muted)' }}>
           {set
             ? `Sections need ${minimumObservations} ${qualifyingMode ? 'valid observed qualifying laps' : 'clean laps'} in a scope to compare honestly.`
             : `No official section times are on file for this ${qualifyingMode ? 'qualifying session' : 'race'} yet.`}
@@ -1437,10 +1438,10 @@ export const SectionHeatCard = ({
       <p style={{ margin: '0 0 12px', fontSize: 13.5, color: 'var(--ink-secondary)' }}>
         {hasHeat
           ? orientationClause
-            ? `${orientationClause} Gold shows where he was strongest — ${readVerb} the shape to read his pace stretch by stretch.`
+            ? `${orientationClause} Gold shows where he was strongest. ${readVerbCap} the shape to read his pace stretch by stretch.`
             : qualifyingMode
-              ? `Gold shows the stronger qualifying stretches — ${readVerb} the shape to read the selected session summary stretch by stretch.`
-              : `Gold shows where Bryce was strongest — ${readVerb} the shape to read his pace stretch by stretch.`
+              ? `Gold shows the stronger qualifying stretches. ${readVerbCap} the shape to read the selected session summary stretch by stretch.`
+              : `Gold shows where Bryce was strongest. ${readVerbCap} the shape to read his pace stretch by stretch.`
           : emptyLead}
       </p>
       {sessionControl || visitControl ? (
@@ -1559,7 +1560,7 @@ const VisitShape = ({
               : `${set.comparisonRows ?? 0} clean-lap comparisons`}
         </span>
       </div>
-      {grainNote ? <span className="caption caption--secondary" style={{ fontSize: 11 }}>{grainNote}</span> : null}
+      {grainNote ? <span className="caption caption--secondary">{grainNote}</span> : null}
     </div>
   );
 };
@@ -1663,13 +1664,13 @@ export const VenueYearsCard = ({
     >
       <p style={{ margin: '0 0 12px', fontSize: 13.5, color: 'var(--ink-secondary)' }}>
         {mixedGrain
-          ? 'The same shape, one per visit — same key as above; each drawn at the finest grain its own timing carried.'
-          : 'The same shape, one per visit — same scale, same key as above.'}
+          ? 'The same shape, one per visit, with the same key as above. Each is drawn at the finest grain its own timing carried.'
+          : 'The same shape once for each visit, drawn at the same scale with the same key as above.'}
       </p>
       <div className="row row--between" style={{ gap: 10, flexWrap: 'wrap', marginBottom: 12 }}>
         <HeatKey />
         {mixedGrain ? null : (
-          <span className="tnum" style={{ fontSize: 11.5, color: 'var(--ink-muted)' }}>
+          <span className="tnum" style={{ fontSize: 12.5, color: 'var(--ink-muted)' }}>
             {measuredSectionCount(anchors)} timed sections ·{' '}
             {hasDerivedRemainder(anchors)
               ? `${Math.round(timedShareOf(anchors) * 100)}% measured · rest derived`
@@ -1888,7 +1889,7 @@ export const VenueSectionSuite = ({
       <>
         <SectionHeatCard
           key={selectedVisitId ?? 'missing-race-pack'}
-          title={heatTitle ?? 'Race and qualifying, section by section — his record here'}
+          title={heatTitle ?? 'Race and qualifying here, section by section'}
           layout={layout}
           outline={outline}
           anchors={anchors}
@@ -1946,7 +1947,7 @@ export const VenueSectionSuite = ({
     .filter((year) => year !== selected.seasonYear)
     .sort((left, right) => left - right);
   const orientationClause = `His ${selectedLabel} race here, section by section${
-    multi && showVisitControl && otherYears.length > 0 ? ` — toggle for ${otherYears.join(' · ')}` : ''
+    multi && showVisitControl && otherYears.length > 0 ? `. Toggle for ${otherYears.join(' · ')}` : ''
   }.`;
   /* Single-visit venues hide the toggle entirely (director spec): one year, no
    * control, no "toggle for" clause. */
@@ -1964,7 +1965,7 @@ export const VenueSectionSuite = ({
     <>
       <SectionHeatCard
         key={selected.sessionId}
-        title={heatTitle ?? (qualifying ? 'Race and qualifying, section by section — his record here' : 'The track, section by section — his record here')}
+        title={heatTitle ?? (qualifying ? 'Race and qualifying here, section by section' : 'His record here, section by section')}
         layout={layout}
         orientationClause={orientationClause}
         visitControl={visitControl}
