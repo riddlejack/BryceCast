@@ -1,4 +1,6 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
+import { TrackModelSlot } from '../three/TrackModelSlot';
+import type { TrackModelSection } from '../three/TrackModel3D';
 import { Card, SourcePill } from '../app/components';
 import { chartFont, inkGoldDiverging, useCoarsePointer, useMeasuredWidth } from '../app/charts';
 import { TrackArt } from '../app/trackArt';
@@ -296,7 +298,7 @@ export const againstFieldWords = (delta: number): string => {
 const GAIN_COLOUR = inkGoldDiverging(0.92);
 const LOSS_COLOUR = inkGoldDiverging(0.16);
 
-const budgetMissingCopy = (row: LapBudgetRow, budget: LapBudget): string => {
+export const budgetMissingCopy = (row: LapBudgetRow, budget: LapBudget): string => {
   const scope = budget.scope;
   if (row.state === 'too_few') {
     const where = scope.kind === 'lap_window' ? ` in the ${scope.label.toLowerCase()}` : '';
@@ -329,9 +331,25 @@ const UNREADABLE_COPY: Record<NonNullable<LapBudget['unreadable']>, string> = {
  *  slower to the left in ink, with the total underneath on the same scale.
  *  It reads whatever scope the map shows: the whole race, a third, or one
  *  lap. A scope it cannot compare says so in words and draws no number. */
-export const LapBudgetBars = ({ budget }: { budget: LapBudget }) => {
+export const LapBudgetBars = ({
+  budget,
+  active,
+  onActiveChange
+}: {
+  budget: LapBudget;
+  /** The section pointed at elsewhere (the Tracks page's 3D model), by name:
+   *  its row lights and reads out here too. */
+  active?: string | null;
+  onActiveChange?: (sectionName: string | null) => void;
+}) => {
   /* Pointing at a row reads it out under the total (no stock browser box). */
-  const [hovered, setHovered] = useState<number | null>(null);
+  const [ownHovered, setOwnHovered] = useState<number | null>(null);
+  const activeIndex = active ? budget.rows.findIndex((row) => row.sectionName === active) : -1;
+  const hovered = ownHovered ?? (activeIndex >= 0 ? activeIndex : null);
+  const setHovered = (index: number | null) => {
+    setOwnHovered(index);
+    onActiveChange?.(index === null ? null : budget.rows[index]?.sectionName ?? null);
+  };
   const coarse = useCoarsePointer();
   const oneLap = budget.lap;
   const statWord = budget.stat === 'mean' ? 'average' : 'median';
@@ -486,14 +504,29 @@ export const LapSectionGrid = ({
   pack,
   ordered,
   highlightLap,
-  onLapSelect
+  onLapSelect,
+  fill = false
 }: {
   pack: SectionLapsPack;
   ordered: Array<{ sectionName: string; label: string }>;
   highlightLap?: number | null;
   onLapSelect?: (lap: number) => void;
+  /** Tracks page: the rows grow to fill the height their column is given (the
+   *  row it shares with "Where his lap goes"), so the two end on one line. */
+  fill?: boolean;
 }) => {
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();
+  const [fillH, setFillH] = useState(0);
+  useEffect(() => {
+    const node = ref.current;
+    if (!fill || !node) return;
+    const observer = new ResizeObserver((entries) => {
+      const next = Math.round(entries[0]?.contentRect.height ?? 0);
+      setFillH((previous) => (Math.abs(previous - next) > 1 ? next : previous));
+    });
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [fill, ref]);
   /* Phone: the grid starts folded to one strip of whole-lap ranks; opening it
    * draws every section at compact row heights. */
   const [open, setOpen] = useState(false);
@@ -552,7 +585,7 @@ export const LapSectionGrid = ({
     ? readoutFor(pointed.lap, pointed.col)
     : highlightLap !== null && highlightLap !== undefined && totalOf(highlightLap)
       ? `On the map: ${readoutFor(highlightLap, null)}`
-      : `${coarse ? 'Tap' : 'Hover'} a square to read it${onLapSelect ? `; ${coarse ? 'tap' : 'click'} a lap to see it on the map` : ''}.`;
+      : `${coarse ? 'Tap' : 'Hover'} a square to read it${onLapSelect ? `; ${coarse ? 'tap' : 'click'} a lap to see it on the track` : ''}.`;
   const readout = <p className="tracks-grid__readout tnum">{readoutText}</p>;
   /* Keyboard and screen readers: each lap row is a button named by its readout. */
   const lapButtonProps = (lap: number) =>
@@ -560,7 +593,7 @@ export const LapSectionGrid = ({
       ? {
           role: 'button',
           tabIndex: 0,
-          'aria-label': `${readoutFor(lap, null)}. Show this lap on the map.`,
+          'aria-label': `${readoutFor(lap, null)}. Show this lap on the track.`,
           onKeyDown: (event: React.KeyboardEvent) => {
             if (event.key === 'Enter' || event.key === ' ') {
               event.preventDefault();
@@ -580,12 +613,19 @@ export const LapSectionGrid = ({
   const gapW = narrow ? 6 : 10;
   const n = Math.max(1, cells.length);
   const cellW = width > 0 ? Math.max(9, Math.min(60, (width - labelW - gapW - lapColW) / n)) : 0;
-  const rowH = phone
+  const baseRowH = phone
     ? laps.length > 60 ? 6 : laps.length > 40 ? 8 : laps.length > 20 ? 10 : 14
     : laps.length > 60 ? 9 : laps.length > 40 ? 12 : laps.length > 20 ? 16 : 22;
   const fontPx = 12;
   const longest = Math.max(...cells.map((cell) => cell.label.length), 7);
   const headerH = Math.ceil(longest * fontPx * 0.56) + 12;
+  /* Fill: never shorter than the usual rows, never taller than 40 px a lap. The
+   * readout line under the grid keeps its 30 px. */
+  const filling = fill && !phone;
+  const fillMinH = headerH + laps.length * baseRowH + 2 + 30;
+  const rowH = filling && fillH > fillMinH
+    ? Math.min(40, Math.max(baseRowH, Math.floor((fillH - headerH - 2 - 30) / laps.length)))
+    : baseRowH;
   const gridW = labelW + cellW * n + gapW + lapColW;
   const height = headerH + laps.length * rowH + 2;
   const lapX = labelW + cellW * n + gapW;
@@ -682,7 +722,12 @@ export const LapSectionGrid = ({
     if (pointed?.lap !== lap || pointed?.col !== col) setPointed({ lap, col });
   };
   return (
-    <div ref={ref} className="tracks-grid__frame">
+    <div
+      ref={ref}
+      className={`tracks-grid__frame${filling ? ' tracks-grid__frame--fill' : ''}`}
+      style={filling ? { minHeight: fillMinH } : undefined}
+    >
+      <div className={filling ? 'tracks-grid__fill' : undefined}>
       {foldToggle}
       {width > 0 ? (
         <svg
@@ -865,6 +910,7 @@ export const LapSectionGrid = ({
         </svg>
       ) : null}
       {width > 0 ? readout : null}
+      </div>
     </div>
   );
 };
@@ -1100,6 +1146,9 @@ export const SectionHeatCard = ({
   const [raceStat, setRaceStat] = useState<SectionStat>('median');
   const [qualifyingStat, setQualifyingStat] = useState<SectionStat>('mean');
   const [numbersOpen, setNumbersOpen] = useState(false);
+  /* Tracks page: the section pointed at on the 3D model or in the bars, by
+   * name, so each lights the other. */
+  const [activeSection, setActiveSection] = useState<string | null>(null);
   /* Touch screens can't hover: swap the interaction verb so the caption asks
    * for a gesture the device can actually make (a tap opens the same tooltip). */
   const coarse = useCoarsePointer();
@@ -1182,7 +1231,14 @@ export const SectionHeatCard = ({
     if (activeLaps) return sectionObservationsFromLaps(activeLaps, scope, stat, aggregationOptions);
     return activeFallbackSet;
   }, [activeLaps, scope, stat, aggregationOptions, activeFallbackSet]);
-  const heatSections = useMemo(() => (set ? resolveHeatSections(activeAnchors, set) : []), [activeAnchors, set]);
+  /* On Tracks the seconds sit beside the shade (the bars, the model's hover),
+   * so the shade reads the same comparison: his time against the other cars'
+   * times over the same laps. Other surfaces keep the lap-rank shade. */
+  const heatBasis = layout === 'tracks' && !qualifyingMode ? 'field_times' : 'lap_rank';
+  const heatSections = useMemo(
+    () => (set ? resolveHeatSections(activeAnchors, set, { basis: heatBasis }) : []),
+    [activeAnchors, set, heatBasis]
+  );
   const hasHeat = heatSections.length > 0;
   /* Does this race have ANY valid comparison scope? Resolve the full-race default
    * independently of the selected scope — the full race carries the most clean
@@ -1356,6 +1412,11 @@ export const SectionHeatCard = ({
           {sessionControl}
           {visitControl}
         </div>
+        {layout === 'tracks' ? (
+          <div style={{ marginBottom: 16 }}>
+            <TrackModelSlot slug={outline.slug} name={outline.name} sections={[]} fallback={null} caption="The track, not shaded: no section comparison for this race." />
+          </div>
+        ) : null}
         <p style={{ margin: 0, fontSize: 13.5, color: 'var(--ink-secondary)' }}>{dignified}</p>
         {qualifyingMode && qualifying?.sourceUrl ? (
           <p style={{ margin: '10px 0 0', fontSize: 13 }}>
@@ -1601,9 +1662,65 @@ export const SectionHeatCard = ({
      * return above, and it is a few hundred tuples. */
     const budget = !qualifyingMode && activeLaps ? lapBudgetOf(activeLaps, activeAnchors, outline, scope, stat) : null;
     const ordered = sectionsInLapOrder(activeAnchors, outline);
-    const [, , viewW, viewH] = outline.viewBox.split(' ').map(Number);
-    const wide = viewH / viewW < 0.55;
     const showGrid = !qualifyingMode && activeLaps !== null;
+    /* The 3D model carries the same shading as the 2D map (heatSections,
+     * inkGoldDiverging) for the same scope, and in its hover the words the
+     * bars use. A section this scope cannot compare stays pale and says why. */
+    const heatByName = new Map(heatSections.map((section) => [section.sectionName, section]));
+    const rowByName = new Map((budget?.rows ?? []).map((row) => [row.sectionName, row]));
+    const where = scope.kind === 'single_lap' ? `on lap ${scope.lap}` : scope.kind === 'lap_window' ? `in the ${scope.label.toLowerCase()}` : qualifyingMode ? 'in qualifying' : 'this race';
+    const modelSections: TrackModelSection[] = ordered.map((anchor) => {
+      const heat = heatByName.get(anchor.sectionName) ?? null;
+      const row = rowByName.get(anchor.sectionName) ?? null;
+      const derived = (anchor.kind ?? 'measured') === 'derived_remainder';
+      const share = heat
+        ? heat.fieldBeaten !== null && heat.fieldCars !== null
+          ? `quicker than ${heat.fieldBeaten} of the ${heat.fieldCars} other cars ${where}`
+          : `beat ${Math.round(heat.percentile * 100)}% of the field ${where}`
+        : null;
+      const seconds = row && budget ? (row.state === 'compared' ? againstFieldWords(row.delta!) : budgetMissingCopy(row, budget)) : null;
+      const fewLaps = !heat && !qualifyingMode ? `not compared, fewer than ${MIN_CLEAN_LAPS} clean laps ${where}` : null;
+      const words = heat ? (row?.state === 'compared' ? seconds! : share!) : seconds && row?.state !== 'too_few' ? seconds : fewLaps ?? 'not compared';
+      const detail = heat
+        ? row?.state === 'compared'
+          ? share
+          : seconds
+            ? `seconds ${seconds}`
+            : null
+        : derived
+          ? 'derived from lap time minus the timed sections'
+          : null;
+      return {
+        key: anchor.sectionName,
+        label: derived ? 'The rest of the lap, together' : anchor.label,
+        spans: [[anchor.startT, anchor.endT] as [number, number], ...(anchor.additionalSpans ?? []).map((span) => [span.startT, span.endT] as [number, number])],
+        color: heat ? inkGoldDiverging(heat.percentile) : null,
+        dashed: derived,
+        words,
+        detail: heat && derived ? `${detail ?? ''}${detail ? '; ' : ''}derived from lap time` : detail
+      };
+    });
+    const trackArt = (
+      <TrackArt
+        outline={outline}
+        showCornerLabels={false}
+        maxHeight={560}
+        strokeScale={2.3}
+        labelPlacement="outside"
+        labelRoom={64}
+        sections={hasHeat ? { resolved: heatSections, showLabels: true, contextLabel: qualifyingMode ? 'in qualifying' : 'this race' } : null}
+        passMarks={showMarks ? resolvedMarks : null}
+      />
+    );
+    const anyPale = modelSections.some((section) => section.color === null);
+    const modelKey = hasHeat && (anyPale || hasDerivedRemainder(activeAnchors)) ? (
+      <div className="track3d-key">
+        {anyPale ? <span className="track3d-key__item"><span className="track3d-key__pale" aria-hidden /> pale: not compared in this scope</span> : null}
+        {hasDerivedRemainder(activeAnchors) ? (
+          <span className="track3d-key__item"><span className="track3d-key__dash" aria-hidden /> dashed: derived from lap time</span>
+        ) : null}
+      </div>
+    ) : null;
     const selectLap = (lap: number) => {
       setScopeKey('lap');
       setScrubLap(lap);
@@ -1611,7 +1728,7 @@ export const SectionHeatCard = ({
     return (
       <Card
         title={title}
-        className={`tracks-story${wide ? ' tracks-story--wide' : ''}${showGrid ? '' : ' tracks-story--no-grid'}`}
+        className={`tracks-story${showGrid ? '' : ' tracks-story--no-grid'}`}
         action={<SourcePill title={`${qualifyingMode ? 'Qualifying' : 'Race'} section signal`} entries={allEntries} caveats={sourceCaveats} />}
       >
         <p className="tracks-lead">
@@ -1630,23 +1747,21 @@ export const SectionHeatCard = ({
         <div className="tracks-story__layout">
           <div className="tracks-story__map">
             {scopeControls}
-            {keyRow}
-            <TrackArt
-              outline={outline}
-              showCornerLabels={false}
-              maxHeight={wide ? 560 : 700}
-              strokeScale={2.3}
-              labelPlacement="outside"
-              labelRoom={64}
-              sections={hasHeat ? { resolved: heatSections, showLabels: true, contextLabel: qualifyingMode ? 'in qualifying' : 'this race' } : null}
-              passMarks={showMarks ? resolvedMarks : null}
+            <TrackModelSlot
+              slug={outline.slug}
+              name={outline.name}
+              sections={hasHeat ? modelSections : []}
+              active={activeSection}
+              onActiveChange={setActiveSection}
+              legend={keyRow || modelKey ? <>{keyRow}{modelKey}</> : null}
+              fallback={<>{keyRow}{trackArt}</>}
             />
             {mapNotes}
             {emptyFooter}
           </div>
           <div className="tracks-story__budget">
             {budget ? (
-              <LapBudgetBars key={`${budget.scope.kind}-${scopeKey}`} budget={budget} />
+              <LapBudgetBars key={`${budget.scope.kind}-${scopeKey}`} budget={budget} active={activeSection} onActiveChange={setActiveSection} />
             ) : (
               <div className="tracks-budget">
                 <h3 className="tracks-subhead">Where his lap goes</h3>
@@ -1664,13 +1779,14 @@ export const SectionHeatCard = ({
               <p className="tracks-note">
                 Each square is one section on one lap, shaded by where he ranked in the field on that lap. Laps run down,
                 sections across in the order he drives them; the last column is the whole lap. Caution and restart laps stay
-                blank. {coarse ? 'Tap' : 'Click'} a lap to see it on the map.
+                blank. {coarse ? 'Tap' : 'Click'} a lap to see it on the track.
               </p>
               <LapSectionGrid
                 pack={activeLaps}
                 ordered={ordered}
                 highlightLap={singleLap ? scrubLap : null}
                 onLapSelect={selectLap}
+                fill
               />
               </div>
             </div>

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { MapPin } from 'lucide-react';
 import { Card, ScreenHead, SourcePill, Unavailable } from '../app/components';
 import { useRouter } from '../app/router';
@@ -10,6 +10,7 @@ import type { SectionLapsPack } from '../data/sectionLaps';
 import { useQualiLabForRace } from '../data/qualiLab';
 import { uiDataPackage } from '../data/uiDataPackage';
 import { VenueSectionSuite, useVenueSectionData } from './sectionIntelligence';
+import { TrackModelSlot } from '../three/TrackModelSlot';
 import { resolveQualifyingHeatMode } from './qualifyingHeat';
 import './tracks.css';
 
@@ -135,60 +136,6 @@ const VenueNumbersFallback = ({ visits, labels }: { visits: SectionLapsPack[]; l
   );
 };
 
-/* ---------- the film's 3D stills (public/tracks-3d/manifest.json) ---------- */
-
-interface StillFiles {
-  pace?: Record<string, string>;
-  plain?: Record<string, string>;
-}
-interface StillRace {
-  sessionId: string;
-}
-interface StillEntry {
-  trackName: string;
-  files: StillFiles;
-  race?: StillRace;
-  attribution?: string;
-  alternates?: Array<{ key: string; files: StillFiles; race?: StillRace }>;
-}
-interface StillsManifest {
-  tracks: Record<string, StillEntry>;
-}
-
-let stillsPromise: Promise<StillsManifest | null> | null = null;
-const loadStills = (): Promise<StillsManifest | null> => {
-  stillsPromise ??= fetch('/tracks-3d/manifest.json')
-    .then((response) => (response.ok ? (response.json() as Promise<StillsManifest>) : null))
-    .catch(() => null);
-  return stillsPromise;
-};
-
-/** The venue's still, if the film's rig made one: the pace-shaded render when
- *  it was shaded from the visit on screen, else the plain model (never another
- *  race's shading under this visit's label). */
-const useVenueStill = (venueName: string | null, sessionId: string | null) => {
-  const [manifest, setManifest] = useState<StillsManifest | null>(null);
-  useEffect(() => {
-    let live = true;
-    loadStills().then((loaded) => {
-      if (live) setManifest(loaded);
-    });
-    return () => {
-      live = false;
-    };
-  }, []);
-  const slug = trackOutlineFor(venueName)?.slug ?? null;
-  const entry = slug && manifest ? manifest.tracks[slug] ?? null : null;
-  if (!entry) return null;
-  const shaded =
-    entry.race?.sessionId === sessionId
-      ? entry.files.pace
-      : entry.alternates?.find((alternate) => alternate.race?.sessionId === sessionId)?.files.pace;
-  const files = shaded ?? entry.files.plain;
-  if (!files) return null;
-  return { files, shaded: Boolean(shaded), attribution: entry.attribution ?? null };
-};
-
 export const TracksScreen = () => {
   const { route, navigate } = useRouter();
   const refs = uiDataPackage.screens.raceDebrief.sectionLapRefs ?? [];
@@ -263,7 +210,11 @@ export const TracksScreen = () => {
     [qualiResolution, selectedCanonicalVisit?.trackName, selectedVenue, data.anchors]
   );
 
-  const still = useVenueStill(selectedVenue, selectedCanonicalVisit?.sessionId ?? null);
+  /* The 3D model (round 5) lives in the section story below, shaded; where
+   * there is no section story to draw, it stands alone, plain. */
+  const plainModel = outline ? (
+    <TrackModelSlot slug={outline.slug} name={outline.name} sections={[]} fallback={null} caption="The track, not shaded." />
+  ) : null;
   const visitLabel = selectedCanonicalVisit ? labels.get(selectedCanonicalVisit.sessionId) ?? null : null;
 
   const setVenue = (venueName: string) => navigate(`/tracks?venue=${encodeURIComponent(venueName)}`);
@@ -283,7 +234,7 @@ export const TracksScreen = () => {
 
   return (
     <div className="page stack tracks-page">
-      <div className={`tracks-head${still ? ' tracks-head--still' : ''}`}>
+      <div className="tracks-head">
         <div className="tracks-head__text">
           <ScreenHead
             kicker={<><MapPin size={13} aria-hidden /> Track archive</>}
@@ -315,32 +266,13 @@ export const TracksScreen = () => {
             </label>
           </div>
         </div>
-        {still ? (
-          <figure className="tracks-still">
-            <img
-              src={still.files['1200']}
-              srcSet={[still.files['1200'] ? `${still.files['1200']} 1200w` : null, still.files['2400'] ? `${still.files['2400']} 2400w` : null]
-                .filter(Boolean)
-                .join(', ')}
-              sizes="(min-width: 1100px) 56vw, 100vw"
-              width={2400}
-              height={1350}
-              alt={`${selectedVenue}, a 3D model of the track${still.shaded ? ', shaded by his pace section by section' : ''}`}
-            />
-            <figcaption>
-              {still.shaded && visitLabel
-                ? `A 3D model of the track, shaded by his pace in ${visitLabel}, the same shading as the map below.`
-                : "A 3D model of the track."}{' '}
-              {still.attribution}
-            </figcaption>
-          </figure>
-        ) : null}
       </div>
 
       {data.loading ? (
         <div className="skeleton" style={{ height: 360 }} />
       ) : selectedCanonicalVisit && !selectedVisit && !qualifying ? (
         <Card title={labels.get(selectedCanonicalVisit.sessionId) ?? selectedCanonicalVisit.raceLabel}>
+          {plainModel ? <div style={{ marginBottom: 16 }}>{plainModel}</div> : null}
           <Unavailable>
             <span>
               This race remains in the canonical archive, but its official Section Results report did not yield a validated lap-by-lap pack, so no section heat map is drawn for this visit.{' '}
@@ -349,7 +281,7 @@ export const TracksScreen = () => {
           </Unavailable>
         </Card>
       ) : data.visits.length === 0 ? (
-        <Card><Unavailable>No official lap-by-lap section timing is on file for this venue.</Unavailable></Card>
+        <Card>{plainModel ? <div style={{ marginBottom: 16 }}>{plainModel}</div> : null}<Unavailable>No official lap-by-lap section timing is on file for this venue.</Unavailable></Card>
       ) : outline && data.anchors ? (
         <VenueSectionSuite
           outline={outline}
@@ -362,7 +294,10 @@ export const TracksScreen = () => {
           heatTitle={visitLabel ? `${visitLabel}, section by section` : undefined}
         />
       ) : (
-        <VenueNumbersFallback visits={data.visits} labels={labels} />
+        <>
+          {plainModel}
+          <VenueNumbersFallback visits={data.visits} labels={labels} />
+        </>
       )}
     </div>
   );

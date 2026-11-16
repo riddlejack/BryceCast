@@ -75,6 +75,16 @@ export interface SectionObservation {
    *  lap; 'whole_race_medians' from a pack that holds only each car's
    *  whole-race median (his taken out); 'qualifying_benchmark' passed through. */
   fieldBasis?: FieldBasis | null;
+  /** The share of the other cars in `fieldSeconds` whose time his own time
+   *  beats (a tie counts half), [0,1]: the same comparison as his seconds
+   *  against `fieldMedianSeconds`, read as a rank. Under the median it sits
+   *  above 0.5 exactly when he is quicker than the field figure, so a shade
+   *  drawn from it and the seconds beside it cannot point opposite ways.
+   *  Null where the seconds comparison is withheld (too few clean laps, too
+   *  few other cars, no field over these laps). */
+  fieldShare?: number | null;
+  /** How many of those other cars he was strictly quicker than, for words. */
+  fieldBeaten?: number | null;
   /** single_lap scope only: that lap's race-control context. */
   cautionState?: 'green' | 'caution' | 'restart' | 'unknown';
   clean?: boolean;
@@ -167,6 +177,22 @@ export type FieldBasis = 'same_laps' | 'whole_race_medians' | 'qualifying_benchm
 /** A field reference needs at least this many other cars: the same "three is
  *  the smallest sample a median can honestly summarise" floor as his laps. */
 export const MIN_FIELD_CARS = 3;
+
+/** His time against the other cars' times: how many he beat and the share
+ *  (ties count half). Null under MIN_FIELD_CARS cars. */
+export const fieldShareOf = (
+  his: number | null | undefined,
+  carSeconds: number[] | null | undefined
+): { share: number; beaten: number; cars: number } | null => {
+  if (his === null || his === undefined || !carSeconds || carSeconds.length < MIN_FIELD_CARS) return null;
+  let beaten = 0;
+  let ties = 0;
+  for (const value of carSeconds) {
+    if (value > his) beaten += 1;
+    else if (value === his) ties += 1;
+  }
+  return { share: (beaten + ties / 2) / carSeconds.length, beaten, cars: carSeconds.length };
+};
 
 /** The field he is compared with, in one section over one scope. */
 export interface FieldReference {
@@ -362,7 +388,10 @@ export const fieldReferenceFor = (
     carSeconds.sort((left, right) => left - right);
     return {
       carSeconds,
-      seconds: carSeconds.length >= MIN_FIELD_CARS ? summarize(carSeconds, single ? 'median' : stat) : null,
+      // The field is the middle car (Nov 16): each car summarised by the chosen
+      // statistic, then the median across cars, so under Average too the shade
+      // (his share of the other cars beaten) and the seconds cannot disagree.
+      seconds: carSeconds.length >= MIN_FIELD_CARS ? median(carSeconds) : null,
       basis: 'same_laps'
     };
   }
@@ -425,6 +454,7 @@ export const sectionObservationsFromLaps = (
     const fieldBasis = reference?.basis ?? null;
     if (single) {
       const row = laps.find((tuple) => tuple[0] === fromLap) ?? null;
+      const versus = row && row[4] === 1 && fieldMedianSeconds !== null ? fieldShareOf(row[6], fieldDistribution) : null;
       return {
         sectionName,
         kind: kind ?? 'measured',
@@ -435,6 +465,8 @@ export const sectionObservationsFromLaps = (
         fieldMedianSeconds,
         fieldSeconds: fieldDistribution,
         fieldBasis,
+        fieldShare: versus?.share ?? null,
+        fieldBeaten: versus?.beaten ?? null,
         cautionState: row ? CAUTION_LABEL[row[5]] ?? 'unknown' : undefined,
         clean: row ? row[4] === 1 : undefined,
         fieldRank: row ? row[2] : null,
@@ -446,17 +478,22 @@ export const sectionObservationsFromLaps = (
     );
     const pcts = inWindow.map((tuple) => tuple[1] as number);
     const times = inWindow.map((tuple) => tuple[6]).filter((value): value is number => value !== null);
+    const summary = times.length > 0 ? summarize(times, stat) : null;
+    const versus =
+      pcts.length >= minimumObservations && fieldMedianSeconds !== null ? fieldShareOf(summary, fieldDistribution) : null;
     return {
       sectionName,
       kind: kind ?? 'measured',
       percentile: pcts.length >= minimumObservations ? summarize(pcts, stat) : null,
       observationCount: pcts.length,
       lapPercentiles: inWindow.map((tuple) => ({ lap: tuple[0] as number, percentile: tuple[1] as number })),
-      bryceSummarySeconds: times.length > 0 ? summarize(times, stat) : null,
+      bryceSummarySeconds: summary,
       bryceMedianSeconds: times.length > 0 ? median(times) : null,
       fieldMedianSeconds,
       fieldSeconds: fieldDistribution,
-      fieldBasis
+      fieldBasis,
+      fieldShare: versus?.share ?? null,
+      fieldBeaten: versus?.beaten ?? null
     };
   });
   const allPcts = sections.flatMap((section) => (section.lapPercentiles ?? []).map((point) => point.percentile));
@@ -515,6 +552,10 @@ export interface ResolvedHeatSection {
    *  or more for a derived remainder that spans disjoint untimed stretches. */
   renderSpans: Array<{ startT: number; endT: number }>;
   percentile: number;
+  /** basis 'field_times' only: how many of how many other cars his time beat
+   *  (null where the shade fell back to the lap-rank percentile). */
+  fieldBeaten: number | null;
+  fieldCars: number | null;
   /** 'measured' draws a solid coloured span; 'derived_remainder' draws a
    *  visually distinct dotted span and reads as derived in the tooltip. */
   kind: 'measured' | 'derived_remainder';
@@ -531,13 +572,21 @@ export interface ResolvedHeatSection {
  *  shows the honest base line there rather than a fabricated colour. */
 export const resolveHeatSections = (
   anchors: TrackSectionAnchorSet,
-  set: SectionObservationSet
+  set: SectionObservationSet,
+  /** What the shade reads. 'lap_rank' (the default, every surface until now):
+   *  the summary of his per-lap field percentiles. 'field_times' (the Tracks
+   *  page, where the seconds sit beside the shade): his time against the other
+   *  cars' times over the same laps (`fieldShare`), so shade and seconds agree
+   *  by construction; a section with no field figure keeps its lap rank. */
+  options: { basis?: 'lap_rank' | 'field_times' } = {}
 ): ResolvedHeatSection[] => {
+  const byTimes = options.basis === 'field_times';
   const byName = new Map(set.sections.map((observation) => [observation.sectionName, observation]));
   const joined = anchors.sections
     .map((anchor) => {
       const observation = byName.get(anchor.sectionName);
       if (!observation || observation.percentile === null) return null;
+      const share = byTimes && observation.fieldShare !== null && observation.fieldShare !== undefined ? observation.fieldShare : null;
       const kind: 'measured' | 'derived_remainder' = anchor.kind ?? 'measured';
       const additional = anchor.additionalSpans ?? [];
       return {
@@ -547,7 +596,9 @@ export const resolveHeatSections = (
         startT: anchor.startT,
         endT: anchor.endT,
         renderSpans: [{ startT: anchor.startT, endT: anchor.endT }, ...additional],
-        percentile: observation.percentile,
+        percentile: share ?? observation.percentile,
+        fieldBeaten: share !== null ? observation.fieldBeaten ?? null : null,
+        fieldCars: share !== null ? observation.fieldSeconds?.length ?? null : null,
         kind,
         combined: kind === 'derived_remainder' && additional.length > 0
       };

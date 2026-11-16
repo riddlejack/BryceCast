@@ -1,0 +1,175 @@
+{
+ "venues": {
+  "weathertech-raceway-laguna-seca": {
+   "file": "/tracks-3d/models/weathertech-raceway-laguna-seca.json",
+   "kind": "laguna",
+   "bytes": 944805,
+   "gzipBytes": 229504,
+   "rmsM": 1.2,
+   "worstM": 2,
+   "poster": {
+    "1200": "/tracks-3d/weathertech-raceway-laguna-seca-plain@1200.jpg",
+    "2400": "/tracks-3d/weathertech-raceway-laguna-seca-plain.jpg"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others."
+  },
+  "road-america": {
+   "file": "/tracks-3d/models/road-america.json",
+   "kind": "venue",
+   "bytes": 237444,
+   "gzipBytes": 66519,
+   "rmsM": 2.6,
+   "worstM": 3.9,
+   "poster": {
+    "1200": "/tracks-3d/road-america-plain@1200.jpg",
+    "2400": "/tracks-3d/road-america-plain.jpg"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others."
+  },
+  "streets-of-detroit": {
+   "file": "/tracks-3d/models/streets-of-detroit.json",
+   "kind": "city",
+   "bytes": 197325,
+   "gzipBytes": 58757,
+   "rmsM": 4.7,
+   "worstM": 10.8,
+   "poster": {
+    "1200": "/tracks-3d/streets-of-detroit-plain@1200.jpg",
+    "2400": "/tracks-3d/streets-of-detroit-plain.jpg"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0)."
+  },
+  "streets-of-st-petersburg": {
+   "file": "/tracks-3d/models/streets-of-st-petersburg.json",
+   "kind": "city",
+   "bytes": 139516,
+   "gzipBytes": 42884,
+   "rmsM": 4.4,
+   "worstM": 11.7,
+   "poster": {
+    "1200": "/tracks-3d/streets-of-st-petersburg-plain@1200.jpg",
+    "2400": "/tracks-3d/streets-of-st-petersburg-plain.jpg"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0)."
+  },
+  "streets-of-arlington": {
+   "file": "/tracks-3d/models/streets-of-arlington.json",
+   "kind": "city",
+   "bytes": 187431,
+   "gzipBytes": 55005,
+   "rmsM": 22.4,
+   "worstM": 66.6,
+   "poster": {
+    "1200": "/tracks-3d/streets-of-arlington-plain@1200.jpg",
+    "2400": "/tracks-3d/streets-of-arlington-plain.jpg"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0)."
+  },
+  "barber-motorsports-park": {
+   "file": "/tracks-3d/models/barber-motorsports-park.json",
+   "kind": "venue",
+   "bytes": 143995,
+   "gzipBytes": 52044,
+   "rmsM": 1.2,
+   "worstM": 2,
+   "poster": {
+    "1200": "/tracks-3d/barber-motorsports-park-plain@1200.jpg",
+    "2400": "/tracks-3d/barber-motorsports-park-plain.jpg"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others. Land cover: ESA WorldCover 2021 (CC BY 4.0). Buildings also from Overture Maps Foundation (ODbL 1.0)."
+  },
+  "indianapolis-motor-speedway-road-course": {
+   "file": "/tracks-3d/models/indianapolis-motor-speedway-road-course.json",
+   "kind": "venue",
+   "bytes": 193231,
+   "gzipBytes": 59233,
+   "rmsM": 49.8,
+   "worstM": 146.9,
+   "poster": {
+    "1200": "/tracks-3d/indianapolis-motor-speedway-road-course-plain@1200.jpg",
+    "2400": "/tracks-3d/indianapolis-motor-speedway-road-course-plain.jpg"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others. Land cover: ESA WorldCover 2021 (CC BY 4.0). Buildings also from Overture Maps Foundation (ODbL 1.0)."
+  },
+  "mid-ohio-sports-car-course": {
+   "file": "/tracks-3d/models/mid-ohio-sports-car-course.json",
+   "kind": "venue",
+   "bytes": 188553,
+   "gzipBytes": 62977,
+   "rmsM": 1,
+   "worstM": 1.8,
+   "poster": {
+    "1200": "/tracks-3d/mid-ohio-sports-car-course-plain@1200.jpg",
+    "2400": "/tracks-3d/mid-ohio-sports-car-course-plain.jpg"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others. Land cover: ESA WorldCover 2021 (CC BY 4.0). Buildings also from Overture Maps Foundation (ODbL 1.0)."
+  },
+  "portland-international-raceway": {
+   "file": "/tracks-3d/models/portland-international-raceway.json",
+   "kind": "venue",
+   "bytes": 161367,
+   "gzipBytes": 55099,
+   "rmsM": 1.1,
+   "worstM": 1.5,
+   "poster": {
+    "1200": "/tracks-3d/portland-international-raceway-plain@1200.jpg",
+    "2400": "/tracks-3d/portland-international-raceway-plain.jpg"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others. Land cover: ESA WorldCover 2021 (CC BY 4.0). Buildings also from Overture Maps Foundation (ODbL 1.0)."
+  },
+  "iowa-speedway": {
+   "file": "/tracks-3d/models/iowa-speedway.json",
+   "kind": "venue",
+   "bytes": 209172,
+   "gzipBytes": 61225,
+   "rmsM": 0.2,
+   "worstM": 0.5,
+   "poster": {
+    "1200": "/tracks-3d/iowa-speedway-plain@1200.jpg",
+    "2400": "/tracks-3d/iowa-speedway-plain.jpg"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others. Land cover: ESA WorldCover 2021 (CC BY 4.0). Buildings also from Overture Maps Foundation (ODbL 1.0)."
+  },
+  "world-wide-technology-raceway": {
+   "file": "/tracks-3d/models/world-wide-technology-raceway.json",
+   "kind": "venue",
+   "bytes": 249196,
+   "gzipBytes": 57037,
+   "rmsM": 0.8,
+   "worstM": 1.3,
+   "poster": {
+    "1200": "/tracks-3d/world-wide-technology-raceway-plain@1200.jpg",
+    "2400": "/tracks-3d/world-wide-technology-raceway-plain.jpg"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others. Land cover: ESA WorldCover 2021 (CC BY 4.0). Buildings also from Overture Maps Foundation (ODbL 1.0)."
+  },
+  "the-milwaukee-mile": {
+   "file": "/tracks-3d/models/the-milwaukee-mile.json",
+   "kind": "venue",
+   "bytes": 257361,
+   "gzipBytes": 72149,
+   "rmsM": 0.6,
+   "worstM": 0.9,
+   "poster": {
+    "1200": "/tracks-3d/the-milwaukee-mile-plain@1200.jpg",
+    "2400": "/tracks-3d/the-milwaukee-mile-plain.jpg"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others. Land cover: ESA WorldCover 2021 (CC BY 4.0). Buildings also from Overture Maps Foundation (ODbL 1.0)."
+  },
+  "nashville-superspeedway": {
+   "file": "/tracks-3d/models/nashville-superspeedway.json",
+   "kind": "venue",
+   "bytes": 296874,
+   "gzipBytes": 83985,
+   "rmsM": 0.8,
+   "worstM": 1.1,
+   "poster": {
+    "1200": "/tracks-3d/nashville-superspeedway-plain@1200.jpg",
+    "2400": "/tracks-3d/nashville-superspeedway-plain.jpg"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others. Land cover: ESA WorldCover 2021 (CC BY 4.0). Buildings also from Overture Maps Foundation (ODbL 1.0)."
+  }
+ },
+ "generated": "2026-11-16",
+ "by": "scripts/build-track-models.mjs"
+}

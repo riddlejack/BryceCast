@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-15",
+ "generated": "2026-11-16",
  "by": "Portfolio/builds/project-brycecast/site-refresh/stills-tools/run.sh",
  "size": {
   "width": 2400,
@@ -1062,7 +1062,7 @@
     "fovDeg": 25
    },
    "model": "stills-tools/models/venue-barber-motorsports-park.json (drawn by film-rig world/venues.js)",
-   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others.",
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others. Land cover: ESA WorldCover 2021 (CC BY 4.0). Buildings also from Overture Maps Foundation (ODbL 1.0).",
    "checks": {
     "alignment": {
      "dir": 1,
@@ -1194,7 +1194,7 @@
     "fovDeg": 25
    },
    "model": "stills-tools/models/venue-indianapolis-motor-speedway-road-course.json (drawn by film-rig world/venues.js)",
-   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others.",
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others. Land cover: ESA WorldCover 2021 (CC BY 4.0). Buildings also from Overture Maps Foundation (ODbL 1.0).",
    "checks": {
     "alignment": {
      "dir": 1,
@@ -1350,7 +1350,7 @@
     "fovDeg": 25
    },
    "model": "stills-tools/models/venue-mid-ohio-sports-car-course.json (drawn by film-rig world/venues.js)",
-   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others.",
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others. Land cover: ESA WorldCover 2021 (CC BY 4.0). Buildings also from Overture Maps Foundation (ODbL 1.0).",
    "checks": {
     "alignment": {
      "dir": 1,
@@ -1482,7 +1482,7 @@
     "fovDeg": 25
    },
    "model": "stills-tools/models/venue-portland-international-raceway.json (drawn by film-rig world/venues.js)",
-   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others.",
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others. Land cover: ESA WorldCover 2021 (CC BY 4.0). Buildings also from Overture Maps Foundation (ODbL 1.0).",
    "checks": {
     "alignment": {
      "dir": 1,
@@ -1584,7 +1584,7 @@
     "fovDeg": 25
    },
    "model": "stills-tools/models/venue-iowa-speedway.json (drawn by film-rig world/venues.js)",
-   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others.",
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others. Land cover: ESA WorldCover 2021 (CC BY 4.0). Buildings also from Overture Maps Foundation (ODbL 1.0).",
    "checks": {
     "alignment": {
      "dir": 1,
@@ -1686,7 +1686,7 @@
     "fovDeg": 25
    },
    "model": "stills-tools/models/venue-world-wide-technology-raceway.json (drawn by film-rig world/venues.js)",
-   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others.",
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others. Land cover: ESA WorldCover 2021 (CC BY 4.0). Buildings also from Overture Maps Foundation (ODbL 1.0).",
    "checks": {
     "alignment": {
      "dir": 1,
@@ -1794,7 +1794,7 @@
     "fovDeg": 25
    },
    "model": "stills-tools/models/venue-the-milwaukee-mile.json (drawn by film-rig world/venues.js)",
-   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others.",
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others. Land cover: ESA WorldCover 2021 (CC BY 4.0). Buildings also from Overture Maps Foundation (ODbL 1.0).",
    "checks": {
     "alignment": {
      "dir": 1,
@@ -1896,7 +1896,7 @@
     "fovDeg": 25
    },
    "model": "stills-tools/models/venue-nashville-superspeedway.json (drawn by film-rig world/venues.js)",
-   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others.",
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others. Land cover: ESA WorldCover 2021 (CC BY 4.0). Buildings also from Overture Maps Foundation (ODbL 1.0).",
    "checks": {
     "alignment": {
      "dir": 1,

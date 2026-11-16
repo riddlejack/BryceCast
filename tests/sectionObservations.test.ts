@@ -8,6 +8,7 @@ import {
   anchorsForPack,
   cleanSectionLapsOf,
   fieldReferenceFor,
+  fieldShareOf,
   lapContextOf,
   lapScopesFor,
   lapScopesForObservedLaps,
@@ -441,12 +442,19 @@ assert.deepEqual(remainderObs.fieldSeconds, [14.9, 15.0, 15.2, 15.4], 'field dis
   const lapThree = fieldReferenceFor(section, { kind: 'single_lap', lap: 3 }, 'median', 9)!;
   assert.deepEqual(lapThree.carSeconds, [4.0, 4.2, 4.8], 'one lap: the other cars with a clean time on that lap');
   const average = fieldReferenceFor(section, { kind: 'lap_window', label: 'Opening third', fromLap: 1, toLap: 3 }, 'mean', 9)!;
-  assert.ok(Math.abs((average.seconds ?? 0) - (4.0 + 4.2 + 4.8) / 3) < 1e-9, 'Average: each car\'s average, then their average');
+  assert.equal(average.seconds, 4.2, 'Average: each car\'s average, then the middle car, so shade and seconds agree');
 
   const openingSet = sectionObservationsFromLaps(fieldPack, { kind: 'lap_window', label: 'Opening third', fromLap: 1, toLap: 3 }, 'median');
   assert.equal(openingSet.sections[0].bryceSummarySeconds, 4.1, 'his side reads the same laps');
   assert.equal(openingSet.sections[0].fieldMedianSeconds, 4.2, 'the set carries the scoped field, so the bars and the drawer follow the filter');
   assert.deepEqual(openingSet.sections[0].fieldSeconds, [4.0, 4.2, 4.8], 'the drawer\'s faint marks are the other cars over the same laps');
+  /* The Tracks shade reads the same comparison as the seconds: his 4.1 beats
+   * two of the three other cars (4.2, 4.8), and he is quicker than their
+   * middle (4.2), so the shade sits on the quicker side. */
+  assert.equal(openingSet.sections[0].fieldBeaten, 2, 'he beat two of the three other cars over these laps');
+  assert.ok(Math.abs((openingSet.sections[0].fieldShare ?? 0) - 2 / 3) < 1e-9, 'share of the other cars beaten');
+  assert.equal(fieldShareOf(4.2, [4.0, 4.2, 4.8])?.share, 0.5, 'a tie counts half');
+  assert.equal(fieldShareOf(4.2, [4.0, 4.8]), null, `under ${MIN_FIELD_CARS} other cars there is no share`);
   const closingSet = sectionObservationsFromLaps(fieldPack, { kind: 'lap_window', label: 'Closing third', fromLap: 7, toLap: 9 }, 'median');
   assert.notEqual(closingSet.sections[0].fieldMedianSeconds, openingSet.sections[0].fieldMedianSeconds, 'changing third changes the field figure');
 
@@ -683,6 +691,23 @@ assert.ok(milPass, 'Milwaukee resolves a pass interval from its chain section na
             `${where} ${section.sectionName}: the other cars can't outnumber the source's whole field`
           );
         }
+      }
+    }
+
+    /* (e) the Tracks shade ('field_times') and the seconds beside it never
+     * point opposite ways, in any offered scope or on any clean lap: quicker
+     * than the field figure is the gold side, slower the ink side, and an
+     * exact half (between the two middle cars) is the neutral middle. */
+    for (const scope of scopesToCheck) {
+      for (const observation of sectionObservationsFromLaps(pack, scope, 'median').sections) {
+        if (observation.fieldShare == null || observation.bryceSummarySeconds == null || observation.fieldMedianSeconds == null) continue;
+        const delta = Math.round((observation.bryceSummarySeconds - observation.fieldMedianSeconds) * 1000);
+        if (delta === 0 || observation.fieldShare === 0.5) continue;
+        assert.equal(
+          observation.fieldShare > 0.5,
+          delta < 0,
+          `${where} ${observation.sectionName}: the shade and the seconds disagree`
+        );
       }
     }
 

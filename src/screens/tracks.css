@@ -4,19 +4,13 @@
    picks these classes up when it renders with layout="tracks".
    ============================================================ */
 
-/* ---------- head: title and pickers, with the film's 3D still beside ---------- */
+/* ---------- head: title and pickers (the 3D model now opens the section story below) ---------- */
 
 .tracks-page .tracks-head {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: clamp(20px, 3vw, 48px);
   align-items: center;
-}
-
-@media (min-width: 1100px) {
-  .tracks-page .tracks-head--still {
-    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-  }
 }
 
 .tracks-page .tracks-head__pickers {
@@ -34,25 +28,6 @@
   font-size: 13px;
   color: var(--ink-secondary);
   min-width: 0;
-}
-
-.tracks-page .tracks-still {
-  margin: 0;
-  min-width: 0;
-}
-
-.tracks-page .tracks-still img {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
-.tracks-page .tracks-still figcaption {
-  margin-top: 8px;
-  font-size: 12.5px;
-  line-height: 1.45;
-  color: var(--ink-muted);
-  max-width: 70ch;
 }
 
 /* ---------- the section story: map, where his lap goes, lap by lap ---------- */
@@ -99,32 +74,20 @@
 .tracks-page .tracks-story__budget { grid-area: budget; min-width: 0; }
 .tracks-page .tracks-story__laps { grid-area: laps; min-width: 0; }
 
-/* Tall circuits (Laguna Seca, Road America): the map and the bars side by
- * side, the grid across the full width under them. */
+/* Round 5 (Jack's review of Nov 16): the 3D model, which is also the heat
+ * map, takes the full width; "Where his lap goes" and "Every lap, every
+ * section" share the row under it and end on one line (the grid's rows grow to
+ * the height of the bars: LapSectionGrid fill). */
 @media (min-width: 1000px) {
   .tracks-page .tracks-story__layout {
-    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
-    grid-template-areas: 'map budget' 'laps laps';
-    align-items: start;
-  }
-  .tracks-page .tracks-story__budget { padding-top: 4px; }
-}
-
-/* Wide screens: all three in one row. */
-@media (min-width: 1800px) {
-  .tracks-page .tracks-story__layout {
-    grid-template-columns: minmax(0, 5fr) minmax(0, 3.4fr) minmax(0, 3.6fr);
-    grid-template-areas: 'map budget laps';
-  }
-}
-
-/* Wide, low circuits (Detroit, Portland, the ovals): the map takes the full
- * width, the bars and the grid share the row under it. */
-@media (min-width: 1000px) {
-  .tracks-page .tracks-story--wide .tracks-story__layout {
     grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
     grid-template-areas: 'map map' 'budget laps';
+    align-items: stretch;
   }
+  .tracks-page .tracks-story__laps { display: flex; flex-direction: column; }
+  .tracks-page .tracks-laps { flex: 1 1 auto; display: flex; flex-direction: column; }
+  .tracks-page .tracks-grid__frame--fill { position: relative; flex: 1 1 auto; }
+  .tracks-page .tracks-grid__frame--fill > .tracks-grid__fill { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: space-between; }
 }
 
 /* Qualifying (no lap budget, no grid): the map alone, the one-line note under it. */
@@ -254,18 +217,8 @@
   min-width: 0;
 }
 
-/* With room to spare, the grid's words sit beside it rather than above. */
-@container (min-width: 900px) {
-  .tracks-page .tracks-laps {
-    display: grid;
-    grid-template-columns: minmax(220px, 300px) minmax(0, 1fr);
-    grid-template-rows: auto 1fr;
-    column-gap: clamp(28px, 3vw, 56px);
-  }
-  .tracks-page .tracks-laps > .tracks-subhead { grid-column: 1; grid-row: 1; }
-  .tracks-page .tracks-laps > .tracks-note { grid-column: 1; grid-row: 2; }
-  .tracks-page .tracks-laps > .tracks-grid__frame { grid-column: 2; grid-row: 1 / span 2; }
-}
+/* The grid's words sit above it, never in a column beside it (Jack's review
+ * of Nov 16: the side column left empty space under its text). */
 
 .tracks-page .tracks-grid__lap { cursor: pointer; }
 
