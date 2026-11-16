@@ -1,5 +1,5 @@
 {
-  "asOfDate": "2026-09-19",
+  "asOfDate": "2026-11-16",
   "byVenue": [
     {
       "categories": [
@@ -413,8 +413,8 @@
     "racesWithoutChart": 0,
     "totalCautions": 83
   },
-  "datasetSha256": "d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd",
-  "generatedAt": "2026-09-20T00:01:12Z",
+  "datasetSha256": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+  "generatedAt": "2026-11-16T18:06:48Z",
   "handVerification": [
     {
       "cautionCount": 1,

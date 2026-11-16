@@ -167,7 +167,7 @@ assert.equal(
   'social media must not be a source-priority lane for the production career analytics dataset'
 );
 assert.equal(careerCoverageMatrix.schemaVersion, 'bryce-career-coverage-matrix.v1', 'coverage matrix report must be generated');
-assert.equal(careerCoverageMatrix.series?.length, 7, 'coverage matrix must cover all seven imported production-scope series');
+assert.equal(careerCoverageMatrix.series?.length, 10, 'coverage matrix must cover all ten imported production-scope series (SCCA Super Tour, RCFFS and USF Pro 2000 added November 2026)');
 // Season rows are built from the dataset, and the INDY NXT lane discovers new
 // seasons from the official feed — so this is a floor, not an equality pin.
 assert.ok(
@@ -612,7 +612,7 @@ const gb32021RaceRows = dataset.results.filter((row) => {
   const session = dataset.sessions.find((candidate) => candidate.id === row.sessionId);
   return session?.sessionType === 'race';
 });
-assert.equal(gb32021RaceRows.length, 369, 'GB3 2021 race result coverage must stay at 369 official TSL rows');
+assert.equal(gb32021RaceRows.length, 425, 'GB3 2021 race result coverage must stay at 425 official TSL rows (369 before the August Silverstone meeting and the status-only DQ rows were imported, November 2026)');
 assert.deepEqual(
   gb32021RaceRows.filter((row) => row.gridPosition === null || row.startPosition === null).map((row) => row.id),
   [],
@@ -1236,9 +1236,10 @@ assert.deepEqual(
   [],
   'Formula Ford 2020 importer must clean unreferenced single-letter class-token drivers'
 );
-assert.equal(formulaFordImportReport.bryceLapSamplesImported, 282, 'Formula Ford importer must extract all source-backed Bryce lap-analysis samples');
-assert.equal(formulaFordImportReport.lapSamplesImported, 282, 'Formula Ford lap-sample import must stay scoped to Bryce-owned lap-analysis rows');
-assert.equal(formulaFordImportReport.gridRowsImported, 755, 'Formula Ford importer must include the Colin Lawson exact-name grid fallback row');
+// 282 from the original 2020 books; 433 with the Castle Combe, Champion of Brands and 2019 Festival books (November 2026).
+assert.equal(formulaFordImportReport.bryceLapSamplesImported, 433, 'Formula Ford importer must extract all source-backed Bryce lap-analysis samples');
+assert.equal(formulaFordImportReport.lapSamplesImported, 433, 'Formula Ford lap-sample import must stay scoped to Bryce-owned lap-analysis rows');
+assert.equal(formulaFordImportReport.gridRowsImported, 1148, 'Formula Ford importer must include the Colin Lawson exact-name grid fallback row (755 from the original 2020 books)');
 assert.deepEqual(
   formulaFordImportReport.gridRowsMatchedByDriverName,
   [
@@ -1259,7 +1260,7 @@ assert.deepEqual(
 {
   const formulaFordGridHoldoutGap = dataset.gaps.find((row) => row.id === 'gap_formula_ford_2020_grid_start_source_asymmetry_holdouts');
   assert.equal(formulaFordGridHoldoutGap?.status, 'open', 'Formula Ford grid/start source-asymmetry holdouts must be explicit open gaps');
-  assert.equal(formulaFordGridHoldoutGap?.raw?.resultIds?.length, 7, 'Formula Ford grid/start holdout gap must enumerate the remaining seven held-out result rows');
+  assert.equal(formulaFordGridHoldoutGap?.raw?.resultIds?.length, 12, 'Formula Ford grid/start holdout gap must enumerate the remaining twelve held-out result rows (seven from 2020, five from the 2019 Festival)');
   assert.equal(
     formulaFordGridHoldoutGap?.raw?.resultIds?.includes('result_formula_ford_2020_wht_grand_final_48_driver_benn_tilley'),
     true,

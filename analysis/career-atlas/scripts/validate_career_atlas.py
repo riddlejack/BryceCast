@@ -184,8 +184,12 @@ def main() -> None:
 
     if len({row["sessionId"] for row in ledger}) != len(ledger):
         fail("Atlas source ledger must contain one row per driver race")
-    if any(row["confidenceClass"] != "observed_exact" for row in ledger):
-        fail("Every atlas race-count row must remain observed_exact")
+    if any(
+        row["confidenceClass"] != "observed_exact"
+        and not (row["confidenceClass"] == "unknown" and row["canonicalLaps"] == "" and row["personalLaps"] == "")
+        for row in ledger
+    ):
+        fail("Every atlas race-count row must remain observed_exact, or unknown only where the sheet lists no laps")
 
     sessions = {row["id"]: row for row in dataset["sessions"]}
     events = {row["id"]: row for row in dataset["events"]}

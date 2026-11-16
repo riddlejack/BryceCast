@@ -57,6 +57,9 @@ SERIES_SHORT = {
     "series_froc": "FR Oceania",
     "series_imsa_weathertech": "IMSA",
     "series_indy_nxt": "INDY NXT",
+    "series_scca_super_tour": "SCCA",
+    "series_rcffs": "RCFFS",
+    "series_usf_pro_2000": "USF Pro 2000",
 }
 
 COUNTRY_REGION = {
@@ -525,6 +528,14 @@ def build_venues(facts: list[dict[str, str]], dataset: dict[str, Any], ledger: l
     return venues
 
 
+def race_count_row_ok(row: dict[str, str]) -> bool:
+    # The atlas counts races, not miles. A race whose official sheet lists no
+    # laps (a disqualification) is still an exact race, with unknown miles.
+    if row["confidenceClass"] == "observed_exact":
+        return True
+    return row["confidenceClass"] == "unknown" and row["canonicalLaps"] == "" and row["personalLaps"] == ""
+
+
 def build_payload(texture_bytes: bytes | None = None) -> dict[str, Any]:
     natural_earth = json.loads(NATURAL_EARTH.read_text())
     texture_bytes = texture_bytes if texture_bytes is not None else world_land_texture(natural_earth)
@@ -545,7 +556,7 @@ def build_payload(texture_bytes: bytes | None = None) -> dict[str, Any]:
         len(canonical_race_ids) < 140
         or len(ledger_ids) != len(ledger)
         or ledger_ids != canonical_race_ids
-        or any(row["confidenceClass"] != "observed_exact" for row in ledger)
+        or any(not race_count_row_ok(row) for row in ledger)
     ):
         raise ValueError("Career atlas must consume every canonical Bryce race exactly once at observed_exact grain")
     crop = career_crop(facts)

@@ -796,7 +796,8 @@ const main = async () => {
           givenName: nameParts.givenName,
           familyName: nameParts.familyName,
           nationality: countryNames[countryCode] ?? countryCode,
-          hometown: driverId === 'driver_bryce_aron' ? 'Winnetka, IL' : null,
+          // Keep a hometown another importer already set for him.
+          hometown: driverId === 'driver_bryce_aron' ? drivers.get(driverId)?.hometown ?? 'Winnetka, IL' : null,
           dateOfBirth: null,
           externalIds: {
             froc2024CountryCode: countryCode,

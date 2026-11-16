@@ -1,18 +1,21 @@
 # Career Analytics Parity Pass
 
-Generated from canonical career dataset updated `2026-09-19T22:45:37.078Z`.
+Generated from canonical career dataset updated `2026-11-16T17:29:58.816Z`.
 
 ## Series Result Summary
 
 | seriesName | raceRows | avgFinish | avgGain | avgFinishPercentile | top5Rate | top10Rate | issueLikeStatusRate |
 | --- | --- | --- | --- | --- | --- | --- | --- |
+| GB3 Championship | 45 | 10.644 | 0.348 | 0.502 | 0.111 | 0.444 | 0 |
 | INDY NXT | 45 | 12.222 | -0.733 | 0.473 | 0.089 | 0.489 | 0.111 |
-| GB3 Championship | 42 | 10.738 | 0.55 | 0.498 | 0.119 | 0.429 | 0 |
+| Formula Ford | 23 | 4.391 | 1.478 | 0.864 | 0.826 | 0.957 | 0 |
 | F1600 Championship Series | 20 | 4.75 |  | 0.745 | 0.7 | 0.95 | 0 |
 | Euroformula Open | 17 | 4.176 | -0.588 | 0.631 | 0.706 | 1 | 0 |
-| Formula Ford | 15 | 4.733 | 0.8 | 0.862 | 0.8 | 1 | 0 |
 | Castrol Toyota Formula Regional Oceania Championship | 6 | 6.167 | -0.5 | 0.676 | 0.333 | 1 | 0 |
+| Hoosier SCCA Super Tour | 6 | 8.333 | -2.5 | 0.718 | 0.5 | 0.833 | 0 |
 | IMSA WeatherTech SportsCar Championship | 1 | 6 |  | 0.918 | 0 | 1 | 0 |
+| Right Coast Formula F Series | 1 | 1 |  | 1 | 1 | 1 | 0 |
+| USF Pro 2000 Championship | 1 | 5 | 1 | 0.778 | 1 | 1 | 0 |
 
 ## Metric-Family Parity Matrix
 
@@ -25,12 +28,12 @@ Generated from canonical career dataset updated `2026-09-19T22:45:37.078Z`.
 | Euroformula Open | lap_shape | 0 | unavailable | Show unavailable or omit from comparison charts. | No lap-sample rows currently available for Bryce in this series. |
 | Euroformula Open | team_teammate_context | 160 | source_bounded_partial | Use with coverage badge and denominators. | Full-field results support descriptive team/teammate context, not engineering root-cause attribution. |
 | Euroformula Open | section_pace | 0 | unavailable | Show unavailable or omit from comparison charts. | No official section-metric rows currently available for this series. |
-| Formula Ford | result_conversion | 15 | production_safe | Use in Career Analytics Lab. | Use percentiles alongside raw finish because field sizes and formats vary by series. |
+| Formula Ford | result_conversion | 23 | production_safe | Use in Career Analytics Lab. | Use percentiles alongside raw finish because field sizes and formats vary by series. |
 | Formula Ford | qualifying_conversion | 0 | unavailable_without_guessing | Show unavailable or omit from comparison charts. | No qualifying rows currently support a start-to-race conversion model for this series. |
-| Formula Ford | track_venue_history | 4 | production_safe | Use in Career Analytics Lab. | Venue and track-type coverage comes from canonical event and track metadata. |
-| Formula Ford | weather_context | 46 | source_bounded_partial | Use with coverage badge and denominators. | Use as ambient/session context with source and confidence labels; do not claim causal weather effects. |
-| Formula Ford | lap_shape | 282 | source_bounded_partial | Use with coverage badge and denominators. | Lap row grains differ by source family; use within-series first and show coverage denominators. |
-| Formula Ford | team_teammate_context | 1070 | source_bounded_partial | Use with coverage badge and denominators. | Full-field results support descriptive team/teammate context, not engineering root-cause attribution. |
+| Formula Ford | track_venue_history | 5 | production_safe | Use in Career Analytics Lab. | Venue and track-type coverage comes from canonical event and track metadata. |
+| Formula Ford | weather_context | 72 | source_bounded_partial | Use with coverage badge and denominators. | Use as ambient/session context with source and confidence labels; do not claim causal weather effects. |
+| Formula Ford | lap_shape | 433 | source_bounded_partial | Use with coverage badge and denominators. | Lap row grains differ by source family; use within-series first and show coverage denominators. |
+| Formula Ford | team_teammate_context | 1624 | source_bounded_partial | Use with coverage badge and denominators. | Full-field results support descriptive team/teammate context, not engineering root-cause attribution. |
 | Formula Ford | section_pace | 0 | unavailable | Show unavailable or omit from comparison charts. | No official section-metric rows currently available for this series. |
 | Castrol Toyota Formula Regional Oceania Championship | result_conversion | 6 | production_safe | Use in Career Analytics Lab. | Use percentiles alongside raw finish because field sizes and formats vary by series. |
 | Castrol Toyota Formula Regional Oceania Championship | qualifying_conversion | 0 | unavailable_without_guessing | Show unavailable or omit from comparison charts. | No qualifying rows currently support a start-to-race conversion model for this series. |
@@ -46,12 +49,12 @@ Generated from canonical career dataset updated `2026-09-19T22:45:37.078Z`.
 | F1600 Championship Series | lap_shape | 0 | unavailable | Show unavailable or omit from comparison charts. | No lap-sample rows currently available for Bryce in this series. |
 | F1600 Championship Series | team_teammate_context | 527 | source_bounded_partial | Use with coverage badge and denominators. | Full-field results support descriptive team/teammate context, not engineering root-cause attribution. |
 | F1600 Championship Series | section_pace | 0 | unavailable | Show unavailable or omit from comparison charts. | No official section-metric rows currently available for this series. |
-| GB3 Championship | result_conversion | 42 | production_safe | Use in Career Analytics Lab. | Use percentiles alongside raw finish because field sizes and formats vary by series. |
-| GB3 Championship | qualifying_conversion | 14 | production_safe | Use in Career Analytics Lab. | Qualifying rows exist; display session-format and group caveats where applicable. |
+| GB3 Championship | result_conversion | 45 | production_safe | Use in Career Analytics Lab. | Use percentiles alongside raw finish because field sizes and formats vary by series. |
+| GB3 Championship | qualifying_conversion | 16 | production_safe | Use in Career Analytics Lab. | Qualifying rows exist; display session-format and group caveats where applicable. |
 | GB3 Championship | track_venue_history | 6 | production_safe | Use in Career Analytics Lab. | Venue and track-type coverage comes from canonical event and track metadata. |
-| GB3 Championship | weather_context | 39 | source_bounded_partial | Use with coverage badge and denominators. | Use as ambient/session context with source and confidence labels; do not claim causal weather effects. |
+| GB3 Championship | weather_context | 44 | source_bounded_partial | Use with coverage badge and denominators. | Use as ambient/session context with source and confidence labels; do not claim causal weather effects. |
 | GB3 Championship | lap_shape | 0 | unavailable | Show unavailable or omit from comparison charts. | No lap-sample rows currently available for Bryce in this series. |
-| GB3 Championship | team_teammate_context | 2190 | source_bounded_partial | Use with coverage badge and denominators. | Full-field results support descriptive team/teammate context, not engineering root-cause attribution. |
+| GB3 Championship | team_teammate_context | 2278 | source_bounded_partial | Use with coverage badge and denominators. | Full-field results support descriptive team/teammate context, not engineering root-cause attribution. |
 | GB3 Championship | section_pace | 0 | unavailable | Show unavailable or omit from comparison charts. | No official section-metric rows currently available for this series. |
 | IMSA WeatherTech SportsCar Championship | result_conversion | 1 | production_safe | Use in Career Analytics Lab. | Use percentiles alongside raw finish because field sizes and formats vary by series. |
 | IMSA WeatherTech SportsCar Championship | qualifying_conversion | 0 | unavailable_without_guessing | Show unavailable or omit from comparison charts. | No qualifying rows currently support a start-to-race conversion model for this series. |
@@ -67,23 +70,37 @@ Generated from canonical career dataset updated `2026-09-19T22:45:37.078Z`.
 | INDY NXT | lap_shape | 1748 | source_bounded_partial | Use with coverage badge and denominators. | Lap row grains differ by source family; use within-series first and show coverage denominators. |
 | INDY NXT | team_teammate_context | 3557 | source_bounded_partial | Use with coverage badge and denominators. | Full-field results support descriptive team/teammate context, not engineering root-cause attribution. |
 | INDY NXT | section_pace | 357 | source_bounded_partial | Use with coverage badge and denominators. | Section metrics are currently INDY NXT-only and need denominator badges for sparse sessions. |
+| Right Coast Formula F Series | result_conversion | 1 | production_safe | Use in Career Analytics Lab. | Use percentiles alongside raw finish because field sizes and formats vary by series. |
+| Right Coast Formula F Series | qualifying_conversion | 0 | unavailable_without_guessing | Show unavailable or omit from comparison charts. | No qualifying rows currently support a start-to-race conversion model for this series. |
+| Right Coast Formula F Series | track_venue_history | 1 | production_safe | Use in Career Analytics Lab. | Venue and track-type coverage comes from canonical event and track metadata. |
+| Right Coast Formula F Series | weather_context | 0 | unavailable | Show unavailable or omit from comparison charts. | No trustworthy source-backed weather rows currently available for this series. |
+| Right Coast Formula F Series | lap_shape | 0 | unavailable | Show unavailable or omit from comparison charts. | No lap-sample rows currently available for Bryce in this series. |
+| Right Coast Formula F Series | team_teammate_context | 27 | source_bounded_partial | Use with coverage badge and denominators. | Full-field results support descriptive team/teammate context, not engineering root-cause attribution. |
+| Right Coast Formula F Series | section_pace | 0 | unavailable | Show unavailable or omit from comparison charts. | No official section-metric rows currently available for this series. |
+| Hoosier SCCA Super Tour | result_conversion | 6 | production_safe | Use in Career Analytics Lab. | Use percentiles alongside raw finish because field sizes and formats vary by series. |
+| Hoosier SCCA Super Tour | qualifying_conversion | 0 | unavailable_without_guessing | Show unavailable or omit from comparison charts. | No qualifying rows currently support a start-to-race conversion model for this series. |
+| Hoosier SCCA Super Tour | track_venue_history | 3 | production_safe | Use in Career Analytics Lab. | Venue and track-type coverage comes from canonical event and track metadata. |
+| Hoosier SCCA Super Tour | weather_context | 0 | unavailable | Show unavailable or omit from comparison charts. | No trustworthy source-backed weather rows currently available for this series. |
 
 ## Modeling Priority
 
 | seriesName | raceRows | parityScore | recommendedDepth |
 | --- | --- | --- | --- |
-| GB3 Championship | 42 | 17 | next_deep_dive_candidate |
+| GB3 Championship | 45 | 17 | next_deep_dive_candidate |
 | INDY NXT | 45 | 21 | reference_model_complete_for_ui_contract |
-| Formula Ford | 15 | 13.5 | lap_weather_specialist_pass |
+| Formula Ford | 23 | 14.3 | lap_weather_specialist_pass |
 | Euroformula Open | 17 | 12.7 | result_conversion_pass |
 | IMSA WeatherTech SportsCar Championship | 1 | 12.1 | standalone_daytona_feature |
 | F1600 Championship Series | 20 | 10 | result_conversion_pass |
 | Castrol Toyota Formula Regional Oceania Championship | 6 | 8.6 | lightweight_context_only |
+| Hoosier SCCA Super Tour | 6 | 8.6 | lightweight_context_only |
+| Right Coast Formula F Series | 1 | 8.1 | lightweight_context_only |
+| USF Pro 2000 Championship | 1 | 8.1 | lightweight_context_only |
 
 ## Interpretation
 
-- Production-safe metric-family rows: 17.
-- Source-bounded partial metric-family rows: 15.
+- Production-safe metric-family rows: 23.
+- Source-bounded partial metric-family rows: 18.
 - GB3 is the best next historic deep-dive candidate because it has the largest non-INDY race-result set plus qualifying and weather support.
 - Formula Ford is valuable for weather and lap-shape context, but its source shape differs from INDY NXT and should be labeled separately.
 - IMSA should remain a standalone Daytona feature rather than a broad career comparison axis.

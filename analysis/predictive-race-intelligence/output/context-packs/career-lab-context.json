@@ -38,7 +38,7 @@
       "type": "small_multiple"
     }
   ],
-  "generatedAt": "2026-09-20T00:00:36Z",
+  "generatedAt": "2026-11-16T18:06:12Z",
   "id": "career_lab_context",
   "metricFamilyParity": [
     {
@@ -118,7 +118,7 @@
       "parityStatus": "production_safe",
       "seriesId": "series_formula_ford",
       "seriesName": "Formula Ford",
-      "sourceRowsOrSessions": "15",
+      "sourceRowsOrSessions": "23",
       "uiUse": "Use in Career Analytics Lab."
     },
     {
@@ -138,7 +138,7 @@
       "parityStatus": "production_safe",
       "seriesId": "series_formula_ford",
       "seriesName": "Formula Ford",
-      "sourceRowsOrSessions": "4",
+      "sourceRowsOrSessions": "5",
       "uiUse": "Use in Career Analytics Lab."
     },
     {
@@ -148,7 +148,7 @@
       "parityStatus": "source_bounded_partial",
       "seriesId": "series_formula_ford",
       "seriesName": "Formula Ford",
-      "sourceRowsOrSessions": "46",
+      "sourceRowsOrSessions": "72",
       "uiUse": "Use with coverage badge and denominators."
     },
     {
@@ -158,7 +158,7 @@
       "parityStatus": "source_bounded_partial",
       "seriesId": "series_formula_ford",
       "seriesName": "Formula Ford",
-      "sourceRowsOrSessions": "282",
+      "sourceRowsOrSessions": "433",
       "uiUse": "Use with coverage badge and denominators."
     },
     {
@@ -168,7 +168,7 @@
       "parityStatus": "source_bounded_partial",
       "seriesId": "series_formula_ford",
       "seriesName": "Formula Ford",
-      "sourceRowsOrSessions": "1070",
+      "sourceRowsOrSessions": "1624",
       "uiUse": "Use with coverage badge and denominators."
     },
     {
@@ -328,7 +328,7 @@
       "parityStatus": "production_safe",
       "seriesId": "series_gb3",
       "seriesName": "GB3 Championship",
-      "sourceRowsOrSessions": "42",
+      "sourceRowsOrSessions": "45",
       "uiUse": "Use in Career Analytics Lab."
     },
     {
@@ -338,7 +338,7 @@
       "parityStatus": "production_safe",
       "seriesId": "series_gb3",
       "seriesName": "GB3 Championship",
-      "sourceRowsOrSessions": "14",
+      "sourceRowsOrSessions": "16",
       "uiUse": "Use in Career Analytics Lab."
     },
     {
@@ -358,7 +358,7 @@
       "parityStatus": "source_bounded_partial",
       "seriesId": "series_gb3",
       "seriesName": "GB3 Championship",
-      "sourceRowsOrSessions": "39",
+      "sourceRowsOrSessions": "44",
       "uiUse": "Use with coverage badge and denominators."
     },
     {
@@ -378,7 +378,7 @@
       "parityStatus": "source_bounded_partial",
       "seriesId": "series_gb3",
       "seriesName": "GB3 Championship",
-      "sourceRowsOrSessions": "2190",
+      "sourceRowsOrSessions": "2278",
       "uiUse": "Use with coverage badge and denominators."
     },
     {
@@ -530,6 +530,216 @@
       "seriesName": "INDY NXT",
       "sourceRowsOrSessions": "357",
       "uiUse": "Use with coverage badge and denominators."
+    },
+    {
+      "caveat": "Use percentiles alongside raw finish because field sizes and formats vary by series.",
+      "metricFamily": "result_conversion",
+      "metricLabel": "Result conversion across all series",
+      "parityStatus": "production_safe",
+      "seriesId": "series_rcffs",
+      "seriesName": "Right Coast Formula F Series",
+      "sourceRowsOrSessions": "1",
+      "uiUse": "Use in Career Analytics Lab."
+    },
+    {
+      "caveat": "No qualifying rows currently support a start-to-race conversion model for this series.",
+      "metricFamily": "qualifying_conversion",
+      "metricLabel": "Qualifying-to-race conversion where qualifying rows exist",
+      "parityStatus": "unavailable_without_guessing",
+      "seriesId": "series_rcffs",
+      "seriesName": "Right Coast Formula F Series",
+      "sourceRowsOrSessions": "0",
+      "uiUse": "Show unavailable or omit from comparison charts."
+    },
+    {
+      "caveat": "Venue and track-type coverage comes from canonical event and track metadata.",
+      "metricFamily": "track_venue_history",
+      "metricLabel": "Track type and venue history",
+      "parityStatus": "production_safe",
+      "seriesId": "series_rcffs",
+      "seriesName": "Right Coast Formula F Series",
+      "sourceRowsOrSessions": "1",
+      "uiUse": "Use in Career Analytics Lab."
+    },
+    {
+      "caveat": "No trustworthy source-backed weather rows currently available for this series.",
+      "metricFamily": "weather_context",
+      "metricLabel": "Weather or conditions where source-backed",
+      "parityStatus": "unavailable",
+      "seriesId": "series_rcffs",
+      "seriesName": "Right Coast Formula F Series",
+      "sourceRowsOrSessions": "0",
+      "uiUse": "Show unavailable or omit from comparison charts."
+    },
+    {
+      "caveat": "No lap-sample rows currently available for Bryce in this series.",
+      "metricFamily": "lap_shape",
+      "metricLabel": "Lap-shape where lap samples exist",
+      "parityStatus": "unavailable",
+      "seriesId": "series_rcffs",
+      "seriesName": "Right Coast Formula F Series",
+      "sourceRowsOrSessions": "0",
+      "uiUse": "Show unavailable or omit from comparison charts."
+    },
+    {
+      "caveat": "Full-field results support descriptive team/teammate context, not engineering root-cause attribution.",
+      "metricFamily": "team_teammate_context",
+      "metricLabel": "Team and teammate context where field rows support it",
+      "parityStatus": "source_bounded_partial",
+      "seriesId": "series_rcffs",
+      "seriesName": "Right Coast Formula F Series",
+      "sourceRowsOrSessions": "27",
+      "uiUse": "Use with coverage badge and denominators."
+    },
+    {
+      "caveat": "No official section-metric rows currently available for this series.",
+      "metricFamily": "section_pace",
+      "metricLabel": "Section pace where official section metrics exist",
+      "parityStatus": "unavailable",
+      "seriesId": "series_rcffs",
+      "seriesName": "Right Coast Formula F Series",
+      "sourceRowsOrSessions": "0",
+      "uiUse": "Show unavailable or omit from comparison charts."
+    },
+    {
+      "caveat": "Use percentiles alongside raw finish because field sizes and formats vary by series.",
+      "metricFamily": "result_conversion",
+      "metricLabel": "Result conversion across all series",
+      "parityStatus": "production_safe",
+      "seriesId": "series_scca_super_tour",
+      "seriesName": "Hoosier SCCA Super Tour",
+      "sourceRowsOrSessions": "6",
+      "uiUse": "Use in Career Analytics Lab."
+    },
+    {
+      "caveat": "No qualifying rows currently support a start-to-race conversion model for this series.",
+      "metricFamily": "qualifying_conversion",
+      "metricLabel": "Qualifying-to-race conversion where qualifying rows exist",
+      "parityStatus": "unavailable_without_guessing",
+      "seriesId": "series_scca_super_tour",
+      "seriesName": "Hoosier SCCA Super Tour",
+      "sourceRowsOrSessions": "0",
+      "uiUse": "Show unavailable or omit from comparison charts."
+    },
+    {
+      "caveat": "Venue and track-type coverage comes from canonical event and track metadata.",
+      "metricFamily": "track_venue_history",
+      "metricLabel": "Track type and venue history",
+      "parityStatus": "production_safe",
+      "seriesId": "series_scca_super_tour",
+      "seriesName": "Hoosier SCCA Super Tour",
+      "sourceRowsOrSessions": "3",
+      "uiUse": "Use in Career Analytics Lab."
+    },
+    {
+      "caveat": "No trustworthy source-backed weather rows currently available for this series.",
+      "metricFamily": "weather_context",
+      "metricLabel": "Weather or conditions where source-backed",
+      "parityStatus": "unavailable",
+      "seriesId": "series_scca_super_tour",
+      "seriesName": "Hoosier SCCA Super Tour",
+      "sourceRowsOrSessions": "0",
+      "uiUse": "Show unavailable or omit from comparison charts."
+    },
+    {
+      "caveat": "No lap-sample rows currently available for Bryce in this series.",
+      "metricFamily": "lap_shape",
+      "metricLabel": "Lap-shape where lap samples exist",
+      "parityStatus": "unavailable",
+      "seriesId": "series_scca_super_tour",
+      "seriesName": "Hoosier SCCA Super Tour",
+      "sourceRowsOrSessions": "0",
+      "uiUse": "Show unavailable or omit from comparison charts."
+    },
+    {
+      "caveat": "Full-field results support descriptive team/teammate context, not engineering root-cause attribution.",
+      "metricFamily": "team_teammate_context",
+      "metricLabel": "Team and teammate context where field rows support it",
+      "parityStatus": "source_bounded_partial",
+      "seriesId": "series_scca_super_tour",
+      "seriesName": "Hoosier SCCA Super Tour",
+      "sourceRowsOrSessions": "146",
+      "uiUse": "Use with coverage badge and denominators."
+    },
+    {
+      "caveat": "No official section-metric rows currently available for this series.",
+      "metricFamily": "section_pace",
+      "metricLabel": "Section pace where official section metrics exist",
+      "parityStatus": "unavailable",
+      "seriesId": "series_scca_super_tour",
+      "seriesName": "Hoosier SCCA Super Tour",
+      "sourceRowsOrSessions": "0",
+      "uiUse": "Show unavailable or omit from comparison charts."
+    },
+    {
+      "caveat": "Use percentiles alongside raw finish because field sizes and formats vary by series.",
+      "metricFamily": "result_conversion",
+      "metricLabel": "Result conversion across all series",
+      "parityStatus": "production_safe",
+      "seriesId": "series_usf_pro_2000",
+      "seriesName": "USF Pro 2000 Championship",
+      "sourceRowsOrSessions": "1",
+      "uiUse": "Use in Career Analytics Lab."
+    },
+    {
+      "caveat": "No qualifying rows currently support a start-to-race conversion model for this series.",
+      "metricFamily": "qualifying_conversion",
+      "metricLabel": "Qualifying-to-race conversion where qualifying rows exist",
+      "parityStatus": "unavailable_without_guessing",
+      "seriesId": "series_usf_pro_2000",
+      "seriesName": "USF Pro 2000 Championship",
+      "sourceRowsOrSessions": "0",
+      "uiUse": "Show unavailable or omit from comparison charts."
+    },
+    {
+      "caveat": "Venue and track-type coverage comes from canonical event and track metadata.",
+      "metricFamily": "track_venue_history",
+      "metricLabel": "Track type and venue history",
+      "parityStatus": "production_safe",
+      "seriesId": "series_usf_pro_2000",
+      "seriesName": "USF Pro 2000 Championship",
+      "sourceRowsOrSessions": "1",
+      "uiUse": "Use in Career Analytics Lab."
+    },
+    {
+      "caveat": "No trustworthy source-backed weather rows currently available for this series.",
+      "metricFamily": "weather_context",
+      "metricLabel": "Weather or conditions where source-backed",
+      "parityStatus": "unavailable",
+      "seriesId": "series_usf_pro_2000",
+      "seriesName": "USF Pro 2000 Championship",
+      "sourceRowsOrSessions": "0",
+      "uiUse": "Show unavailable or omit from comparison charts."
+    },
+    {
+      "caveat": "No lap-sample rows currently available for Bryce in this series.",
+      "metricFamily": "lap_shape",
+      "metricLabel": "Lap-shape where lap samples exist",
+      "parityStatus": "unavailable",
+      "seriesId": "series_usf_pro_2000",
+      "seriesName": "USF Pro 2000 Championship",
+      "sourceRowsOrSessions": "0",
+      "uiUse": "Show unavailable or omit from comparison charts."
+    },
+    {
+      "caveat": "Full-field results support descriptive team/teammate context, not engineering root-cause attribution.",
+      "metricFamily": "team_teammate_context",
+      "metricLabel": "Team and teammate context where field rows support it",
+      "parityStatus": "source_bounded_partial",
+      "seriesId": "series_usf_pro_2000",
+      "seriesName": "USF Pro 2000 Championship",
+      "sourceRowsOrSessions": "35",
+      "uiUse": "Use with coverage badge and denominators."
+    },
+    {
+      "caveat": "No official section-metric rows currently available for this series.",
+      "metricFamily": "section_pace",
+      "metricLabel": "Section pace where official section metrics exist",
+      "parityStatus": "unavailable",
+      "seriesId": "series_usf_pro_2000",
+      "seriesName": "USF Pro 2000 Championship",
+      "sourceRowsOrSessions": "0",
+      "uiUse": "Show unavailable or omit from comparison charts."
     }
   ],
   "resultConversion": [
@@ -840,6 +1050,150 @@
       "trackType": "road"
     },
     {
+      "eventName": "BRSCC Formula Ford Festival 2019",
+      "finishPercentile": "0.5238",
+      "finishPosition": "11.0",
+      "points": "",
+      "positionGain": "14.0",
+      "raceLabel": "2019 BRSCC Formula Ford Festival 2019",
+      "seasonYear": "2019",
+      "seriesId": "series_formula_ford",
+      "seriesName": "Formula Ford",
+      "sessionId": "session_formula_ford_2019_festival_race_19_last_chance_race_in_recognition_of_diz",
+      "sourceState": "official_or_source_backed_result",
+      "startPosition": "25.0",
+      "status": "running",
+      "teamName": "",
+      "trackName": "Brands Hatch Circuit",
+      "trackType": "road"
+    },
+    {
+      "eventName": "Castle Combe Racing Club FF1600 2020 - 2020-07-04",
+      "finishPercentile": "0.913",
+      "finishPosition": "3.0",
+      "points": "",
+      "positionGain": "3.0",
+      "raceLabel": "2020 Castle Combe Racing Club FF1600 2020 - 2020-07-04",
+      "seasonYear": "2020",
+      "seriesId": "series_formula_ford",
+      "seriesName": "Formula Ford",
+      "sessionId": "session_formula_ford_2020_castle_combe_202768_race_2",
+      "sourceState": "official_or_source_backed_result",
+      "startPosition": "6.0",
+      "status": "running",
+      "teamName": "",
+      "trackName": "Castle Combe Circuit",
+      "trackType": "road"
+    },
+    {
+      "eventName": "Castle Combe Racing Club FF1600 2020 - 2020-07-04",
+      "finishPercentile": "0.8261",
+      "finishPosition": "5.0",
+      "points": "",
+      "positionGain": "3.0",
+      "raceLabel": "2020 Castle Combe Racing Club FF1600 2020 - 2020-07-04",
+      "seasonYear": "2020",
+      "seriesId": "series_formula_ford",
+      "seriesName": "Formula Ford",
+      "sessionId": "session_formula_ford_2020_castle_combe_202768_race_6",
+      "sourceState": "official_or_source_backed_result",
+      "startPosition": "8.0",
+      "status": "running",
+      "teamName": "",
+      "trackName": "Castle Combe Circuit",
+      "trackType": "road"
+    },
+    {
+      "eventName": "Castle Combe Racing Club FF1600 2020 - 2020-08-01",
+      "finishPercentile": "0.9545",
+      "finishPosition": "2.0",
+      "points": "",
+      "positionGain": "1.0",
+      "raceLabel": "2020 Castle Combe Racing Club FF1600 2020 - 2020-08-01",
+      "seasonYear": "2020",
+      "seriesId": "series_formula_ford",
+      "seriesName": "Formula Ford",
+      "sessionId": "session_formula_ford_2020_castle_combe_203168_race_4",
+      "sourceState": "official_or_source_backed_result",
+      "startPosition": "3.0",
+      "status": "running",
+      "teamName": "",
+      "trackName": "Castle Combe Circuit",
+      "trackType": "road"
+    },
+    {
+      "eventName": "Castle Combe Racing Club FF1600 2020 - 2020-08-01",
+      "finishPercentile": "0.9048",
+      "finishPosition": "3.0",
+      "points": "",
+      "positionGain": "0.0",
+      "raceLabel": "2020 Castle Combe Racing Club FF1600 2020 - 2020-08-01",
+      "seasonYear": "2020",
+      "seriesId": "series_formula_ford",
+      "seriesName": "Formula Ford",
+      "sessionId": "session_formula_ford_2020_castle_combe_203168_race_8",
+      "sourceState": "official_or_source_backed_result",
+      "startPosition": "3.0",
+      "status": "running",
+      "teamName": "",
+      "trackName": "Castle Combe Circuit",
+      "trackType": "road"
+    },
+    {
+      "eventName": "Castle Combe Racing Club FF1600 2020 - 2020-08-31",
+      "finishPercentile": "0.9545",
+      "finishPosition": "2.0",
+      "points": "",
+      "positionGain": "0.0",
+      "raceLabel": "2020 Castle Combe Racing Club FF1600 2020 - 2020-08-31",
+      "seasonYear": "2020",
+      "seriesId": "series_formula_ford",
+      "seriesName": "Formula Ford",
+      "sessionId": "session_formula_ford_2020_castle_combe_203668_race_3",
+      "sourceState": "official_or_source_backed_result",
+      "startPosition": "2.0",
+      "status": "running",
+      "teamName": "",
+      "trackName": "Castle Combe Circuit",
+      "trackType": "road"
+    },
+    {
+      "eventName": "Castle Combe Racing Club FF1600 2020 - 2020-08-31",
+      "finishPercentile": "0.9375",
+      "finishPosition": "2.0",
+      "points": "",
+      "positionGain": "2.0",
+      "raceLabel": "2020 Castle Combe Racing Club FF1600 2020 - 2020-08-31",
+      "seasonYear": "2020",
+      "seriesId": "series_formula_ford",
+      "seriesName": "Formula Ford",
+      "sessionId": "session_formula_ford_2020_castle_combe_203668_race_8",
+      "sourceState": "official_or_source_backed_result",
+      "startPosition": "4.0",
+      "status": "running",
+      "teamName": "",
+      "trackName": "Castle Combe Circuit",
+      "trackType": "road"
+    },
+    {
+      "eventName": "Champion of Brands 2020 - Brands Hatch GP (British GT support)",
+      "finishPercentile": "0.9286",
+      "finishPosition": "2.0",
+      "points": "",
+      "positionGain": "-1.0",
+      "raceLabel": "2020 Champion of Brands 2020 - Brands Hatch GP (British GT support)",
+      "seasonYear": "2020",
+      "seriesId": "series_formula_ford",
+      "seriesName": "Formula Ford",
+      "sessionId": "session_formula_ford_2020_champion_brands_203505_race_10",
+      "sourceState": "official_or_source_backed_result",
+      "startPosition": "1.0",
+      "status": "running",
+      "teamName": "",
+      "trackName": "Brands Hatch Circuit",
+      "trackType": "road"
+    },
+    {
       "eventName": "Champion of Brands 2020",
       "finishPercentile": "0.9231",
       "finishPosition": "3.0",
@@ -1039,7 +1393,7 @@
     },
     {
       "eventName": "BRSCC National FF1600 2020 - Silverstone International",
-      "finishPercentile": "0.7143",
+      "finishPercentile": "0.7241",
       "finishPosition": "9.0",
       "points": "",
       "positionGain": "-3.0",
@@ -1633,7 +1987,7 @@
     },
     {
       "eventName": "GB3 2021 Round 2 - Silverstone",
-      "finishPercentile": "0.5",
+      "finishPercentile": "0.5294",
       "finishPosition": "9.0",
       "points": "",
       "positionGain": "4.0",
@@ -1651,7 +2005,7 @@
     },
     {
       "eventName": "GB3 2021 Round 2 - Silverstone",
-      "finishPercentile": "0.375",
+      "finishPercentile": "0.4118",
       "finishPosition": "11.0",
       "points": "",
       "positionGain": "0.0",
@@ -1687,7 +2041,7 @@
     },
     {
       "eventName": "GB3 2021 Round 3 - Donington Park",
-      "finishPercentile": "0.375",
+      "finishPercentile": "0.4118",
       "finishPosition": "11.0",
       "points": "",
       "positionGain": "1.0",
@@ -1830,12 +2184,66 @@
       "trackType": "road"
     },
     {
-      "eventName": "GB3 2021 Round 6 - Oulton Park",
-      "finishPercentile": "0.1875",
+      "eventName": "GB3 2021 Round 6 - Silverstone",
+      "finishPercentile": "0.4706",
+      "finishPosition": "10.0",
+      "points": "",
+      "positionGain": "3.0",
+      "raceLabel": "2021 GB3 2021 Round 6 - Silverstone",
+      "seasonYear": "2021",
+      "seriesId": "series_gb3",
+      "seriesName": "GB3 Championship",
+      "sessionId": "session_gb3_2021_213252_race_1_result",
+      "sourceState": "official_or_source_backed_result",
+      "startPosition": "13.0",
+      "status": "running",
+      "teamName": "Carlin",
+      "trackName": "Silverstone Circuit",
+      "trackType": "road"
+    },
+    {
+      "eventName": "GB3 2021 Round 6 - Silverstone",
+      "finishPercentile": "0.4118",
+      "finishPosition": "11.0",
+      "points": "",
+      "positionGain": "-1.0",
+      "raceLabel": "2021 GB3 2021 Round 6 - Silverstone",
+      "seasonYear": "2021",
+      "seriesId": "series_gb3",
+      "seriesName": "GB3 Championship",
+      "sessionId": "session_gb3_2021_213252_race_2_result",
+      "sourceState": "official_or_source_backed_result",
+      "startPosition": "10.0",
+      "status": "running",
+      "teamName": "Carlin",
+      "trackName": "Silverstone Circuit",
+      "trackType": "road"
+    },
+    {
+      "eventName": "GB3 2021 Round 6 - Silverstone",
+      "finishPercentile": "0.6471",
+      "finishPosition": "7.0",
+      "points": "",
+      "positionGain": "-5.0",
+      "raceLabel": "2021 GB3 2021 Round 6 - Silverstone",
+      "seasonYear": "2021",
+      "seriesId": "series_gb3",
+      "seriesName": "GB3 Championship",
+      "sessionId": "session_gb3_2021_213252_race_3_result",
+      "sourceState": "official_or_source_backed_result",
+      "startPosition": "2.0",
+      "status": "running",
+      "teamName": "Carlin",
+      "trackName": "Silverstone Circuit",
+      "trackType": "road"
+    },
+    {
+      "eventName": "GB3 2021 Round 7 - Oulton Park",
+      "finishPercentile": "0.2353",
       "finishPosition": "14.0",
       "points": "",
       "positionGain": "1.0",
-      "raceLabel": "2021 GB3 2021 Round 6 - Oulton Park",
+      "raceLabel": "2021 GB3 2021 Round 7 - Oulton Park",
       "seasonYear": "2021",
       "seriesId": "series_gb3",
       "seriesName": "GB3 Championship",
@@ -1848,12 +2256,12 @@
       "trackType": "road"
     },
     {
-      "eventName": "GB3 2021 Round 6 - Oulton Park",
+      "eventName": "GB3 2021 Round 7 - Oulton Park",
       "finishPercentile": "0.5882",
       "finishPosition": "8.0",
       "points": "",
       "positionGain": "7.0",
-      "raceLabel": "2021 GB3 2021 Round 6 - Oulton Park",
+      "raceLabel": "2021 GB3 2021 Round 7 - Oulton Park",
       "seasonYear": "2021",
       "seriesId": "series_gb3",
       "seriesName": "GB3 Championship",
@@ -1866,12 +2274,12 @@
       "trackType": "road"
     },
     {
-      "eventName": "GB3 2021 Round 6 - Oulton Park",
+      "eventName": "GB3 2021 Round 7 - Oulton Park",
       "finishPercentile": "0.2941",
       "finishPosition": "13.0",
       "points": "",
       "positionGain": "-11.0",
-      "raceLabel": "2021 GB3 2021 Round 6 - Oulton Park",
+      "raceLabel": "2021 GB3 2021 Round 7 - Oulton Park",
       "seasonYear": "2021",
       "seriesId": "series_gb3",
       "seriesName": "GB3 Championship",
@@ -1884,12 +2292,12 @@
       "trackType": "road"
     },
     {
-      "eventName": "GB3 2021 Round 7 - Donington Park",
+      "eventName": "GB3 2021 Round 8 - Donington Park",
       "finishPercentile": "0.7619",
       "finishPosition": "6.0",
       "points": "",
       "positionGain": "6.0",
-      "raceLabel": "2021 GB3 2021 Round 7 - Donington Park",
+      "raceLabel": "2021 GB3 2021 Round 8 - Donington Park",
       "seasonYear": "2021",
       "seriesId": "series_gb3",
       "seriesName": "GB3 Championship",
@@ -1902,12 +2310,12 @@
       "trackType": "road"
     },
     {
-      "eventName": "GB3 2021 Round 7 - Donington Park",
+      "eventName": "GB3 2021 Round 8 - Donington Park",
       "finishPercentile": "0.7619",
       "finishPosition": "6.0",
       "points": "",
       "positionGain": "7.0",
-      "raceLabel": "2021 GB3 2021 Round 7 - Donington Park",
+      "raceLabel": "2021 GB3 2021 Round 8 - Donington Park",
       "seasonYear": "2021",
       "seriesId": "series_gb3",
       "seriesName": "GB3 Championship",
@@ -1920,12 +2328,12 @@
       "trackType": "road"
     },
     {
-      "eventName": "GB3 2021 Round 7 - Donington Park",
+      "eventName": "GB3 2021 Round 8 - Donington Park",
       "finishPercentile": "0.4286",
       "finishPosition": "13.0",
       "points": "",
       "positionGain": "-3.0",
-      "raceLabel": "2021 GB3 2021 Round 7 - Donington Park",
+      "raceLabel": "2021 GB3 2021 Round 8 - Donington Park",
       "seasonYear": "2021",
       "seriesId": "series_gb3",
       "seriesName": "GB3 Championship",
@@ -3160,11 +3568,167 @@
       "teamName": "Chip Ganassi Racing",
       "trackName": "Indianapolis Motor Speedway Road Course",
       "trackType": "road"
+    },
+    {
+      "eventName": "Right Coast Formula F Series 2019 - Race Weekend 2, Mid-Ohio (FRP All Formula Weekend)",
+      "finishPercentile": "1.0",
+      "finishPosition": "1.0",
+      "points": "0",
+      "positionGain": "",
+      "raceLabel": "2019 Right Coast Formula F Series 2019 - Race Weekend 2, Mid-Ohio (FRP All Formula Weekend)",
+      "seasonYear": "2019",
+      "seriesId": "series_rcffs",
+      "seriesName": "Right Coast Formula F Series",
+      "sessionId": "session_rcffs_2019_mid_ohio_race_3",
+      "sourceState": "official_or_source_backed_result",
+      "startPosition": "",
+      "status": "running",
+      "teamName": "",
+      "trackName": "Mid-Ohio Sports Car Course",
+      "trackType": "road"
+    },
+    {
+      "eventName": "Hoosier SCCA Super Tour 2019 - Circuit of the Americas (Lone Star Region Polar Prix)",
+      "finishPercentile": "0.8889",
+      "finishPosition": "3.0",
+      "points": "",
+      "positionGain": "-2.0",
+      "raceLabel": "2019 Hoosier SCCA Super Tour 2019 - Circuit of the Americas (Lone Star Region Polar Prix)",
+      "seasonYear": "2019",
+      "seriesId": "series_scca_super_tour",
+      "seriesName": "Hoosier SCCA Super Tour",
+      "sessionId": "session_scca_super_tour_2019_cota_saturday_race",
+      "sourceState": "official_or_source_backed_result",
+      "startPosition": "1.0",
+      "status": "running",
+      "teamName": "",
+      "trackName": "Circuit of the Americas",
+      "trackType": "road"
+    },
+    {
+      "eventName": "Hoosier SCCA Super Tour 2019 - Circuit of the Americas (Lone Star Region Polar Prix)",
+      "finishPercentile": "0.8333",
+      "finishPosition": "4.0",
+      "points": "",
+      "positionGain": "-1.0",
+      "raceLabel": "2019 Hoosier SCCA Super Tour 2019 - Circuit of the Americas (Lone Star Region Polar Prix)",
+      "seasonYear": "2019",
+      "seriesId": "series_scca_super_tour",
+      "seriesName": "Hoosier SCCA Super Tour",
+      "sessionId": "session_scca_super_tour_2019_cota_sunday_race",
+      "sourceState": "official_or_source_backed_result",
+      "startPosition": "3.0",
+      "status": "running",
+      "teamName": "",
+      "trackName": "Circuit of the Americas",
+      "trackType": "road"
+    },
+    {
+      "eventName": "Hoosier SCCA Super Tour 2019 - Michelin Raceway Road Atlanta (Atlanta Region)",
+      "finishPercentile": "0.9063",
+      "finishPosition": "4.0",
+      "points": "",
+      "positionGain": "1.0",
+      "raceLabel": "2019 Hoosier SCCA Super Tour 2019 - Michelin Raceway Road Atlanta (Atlanta Region)",
+      "seasonYear": "2019",
+      "seriesId": "series_scca_super_tour",
+      "seriesName": "Hoosier SCCA Super Tour",
+      "sessionId": "session_scca_super_tour_2019_road_atlanta_saturday_race",
+      "sourceState": "official_or_source_backed_result",
+      "startPosition": "5.0",
+      "status": "running",
+      "teamName": "",
+      "trackName": "Michelin Raceway Road Atlanta",
+      "trackType": "road"
+    },
+    {
+      "eventName": "Hoosier SCCA Super Tour 2019 - Michelin Raceway Road Atlanta (Atlanta Region)",
+      "finishPercentile": "0.7188",
+      "finishPosition": "10.0",
+      "points": "",
+      "positionGain": "-2.0",
+      "raceLabel": "2019 Hoosier SCCA Super Tour 2019 - Michelin Raceway Road Atlanta (Atlanta Region)",
+      "seasonYear": "2019",
+      "seriesId": "series_scca_super_tour",
+      "seriesName": "Hoosier SCCA Super Tour",
+      "sessionId": "session_scca_super_tour_2019_road_atlanta_sunday_race",
+      "sourceState": "official_or_source_backed_result",
+      "startPosition": "8.0",
+      "status": "running",
+      "teamName": "",
+      "trackName": "Michelin Raceway Road Atlanta",
+      "trackType": "road"
+    },
+    {
+      "eventName": "Hoosier SCCA Super Tour 2019 - Sebring (Central Florida Region, Winter Vacation)",
+      "finishPercentile": "0.6538",
+      "finishPosition": "10.0",
+      "points": "",
+      "positionGain": "-1.0",
+      "raceLabel": "2019 Hoosier SCCA Super Tour 2019 - Sebring (Central Florida Region, Winter Vacation)",
+      "seasonYear": "2019",
+      "seriesId": "series_scca_super_tour",
+      "seriesName": "Hoosier SCCA Super Tour",
+      "sessionId": "session_scca_super_tour_2019_sebring_race_1",
+      "sourceState": "official_or_source_backed_result",
+      "startPosition": "9.0",
+      "status": "running",
+      "teamName": "",
+      "trackName": "Sebring International Raceway",
+      "trackType": "road"
+    },
+    {
+      "eventName": "Hoosier SCCA Super Tour 2019 - Sebring (Central Florida Region, Winter Vacation)",
+      "finishPercentile": "0.3077",
+      "finishPosition": "19.0",
+      "points": "",
+      "positionGain": "-10.0",
+      "raceLabel": "2019 Hoosier SCCA Super Tour 2019 - Sebring (Central Florida Region, Winter Vacation)",
+      "seasonYear": "2019",
+      "seriesId": "series_scca_super_tour",
+      "seriesName": "Hoosier SCCA Super Tour",
+      "sessionId": "session_scca_super_tour_2019_sebring_race_2",
+      "sourceState": "official_or_source_backed_result",
+      "startPosition": "9.0",
+      "status": "running",
+      "teamName": "",
+      "trackName": "Sebring International Raceway",
+      "trackType": "road"
+    },
+    {
+      "eventName": "USF Pro 2000 2024 - Freedom 90, Lucas Oil Indianapolis Raceway Park",
+      "finishPercentile": "0.7778",
+      "finishPosition": "5.0",
+      "points": "26",
+      "positionGain": "1.0",
+      "raceLabel": "2024 USF Pro 2000 2024 - Freedom 90, Lucas Oil Indianapolis Raceway Park",
+      "seasonYear": "2024",
+      "seriesId": "series_usf_pro_2000",
+      "seriesName": "USF Pro 2000 Championship",
+      "sessionId": "session_usf_pro_2000_2024_lucas_oil_race",
+      "sourceState": "official_or_source_backed_result",
+      "startPosition": "6.0",
+      "status": "running",
+      "teamName": "TJ Speed Motorsports",
+      "trackName": "Lucas Oil Indianapolis Raceway Park",
+      "trackType": "oval"
     }
   ],
-  "resultConversionRows": 146,
+  "resultConversionRows": 165,
   "schemaVersion": "brycecast.careerLabContextPack.v1",
   "seriesSummary": [
+    {
+      "avgFinish": "10.644444444444444",
+      "avgFinishPercentile": "0.5018288888888889",
+      "avgGain": "0.34782608695652173",
+      "issueLikeStatusRate": "0.0",
+      "medianFinish": "11.0",
+      "raceRows": "45",
+      "seriesId": "series_gb3",
+      "seriesName": "GB3 Championship",
+      "top10Rate": "0.4444444444444444",
+      "top5Rate": "0.1111111111111111"
+    },
     {
       "avgFinish": "12.222222222222221",
       "avgFinishPercentile": "0.47334666666666664",
@@ -3178,16 +3742,16 @@
       "top5Rate": "0.08888888888888889"
     },
     {
-      "avgFinish": "10.738095238095237",
-      "avgFinishPercentile": "0.49766666666666665",
-      "avgGain": "0.55",
+      "avgFinish": "4.391304347826087",
+      "avgFinishPercentile": "0.8644391304347826",
+      "avgGain": "1.4782608695652173",
       "issueLikeStatusRate": "0.0",
-      "medianFinish": "11.0",
-      "raceRows": "42",
-      "seriesId": "series_gb3",
-      "seriesName": "GB3 Championship",
-      "top10Rate": "0.42857142857142855",
-      "top5Rate": "0.11904761904761904"
+      "medianFinish": "3.0",
+      "raceRows": "23",
+      "seriesId": "series_formula_ford",
+      "seriesName": "Formula Ford",
+      "top10Rate": "0.9565217391304348",
+      "top5Rate": "0.8260869565217391"
     },
     {
       "avgFinish": "4.75",
@@ -3214,18 +3778,6 @@
       "top5Rate": "0.7058823529411765"
     },
     {
-      "avgFinish": "4.733333333333333",
-      "avgFinishPercentile": "0.8619666666666667",
-      "avgGain": "0.8",
-      "issueLikeStatusRate": "0.0",
-      "medianFinish": "5.0",
-      "raceRows": "15",
-      "seriesId": "series_formula_ford",
-      "seriesName": "Formula Ford",
-      "top10Rate": "1.0",
-      "top5Rate": "0.8"
-    },
-    {
       "avgFinish": "6.166666666666667",
       "avgFinishPercentile": "0.6762",
       "avgGain": "-0.5",
@@ -3238,6 +3790,18 @@
       "top5Rate": "0.3333333333333333"
     },
     {
+      "avgFinish": "8.333333333333334",
+      "avgFinishPercentile": "0.7181333333333333",
+      "avgGain": "-2.5",
+      "issueLikeStatusRate": "0.0",
+      "medianFinish": "7.0",
+      "raceRows": "6",
+      "seriesId": "series_scca_super_tour",
+      "seriesName": "Hoosier SCCA Super Tour",
+      "top10Rate": "0.8333333333333334",
+      "top5Rate": "0.5"
+    },
+    {
       "avgFinish": "6.0",
       "avgFinishPercentile": "0.918",
       "avgGain": "",
@@ -3248,6 +3812,30 @@
       "seriesName": "IMSA WeatherTech SportsCar Championship",
       "top10Rate": "1.0",
       "top5Rate": "0.0"
+    },
+    {
+      "avgFinish": "1.0",
+      "avgFinishPercentile": "1.0",
+      "avgGain": "",
+      "issueLikeStatusRate": "0.0",
+      "medianFinish": "1.0",
+      "raceRows": "1",
+      "seriesId": "series_rcffs",
+      "seriesName": "Right Coast Formula F Series",
+      "top10Rate": "1.0",
+      "top5Rate": "1.0"
+    },
+    {
+      "avgFinish": "5.0",
+      "avgFinishPercentile": "0.7778",
+      "avgGain": "1.0",
+      "issueLikeStatusRate": "0.0",
+      "medianFinish": "5.0",
+      "raceRows": "1",
+      "seriesId": "series_usf_pro_2000",
+      "seriesName": "USF Pro 2000 Championship",
+      "top10Rate": "1.0",
+      "top5Rate": "1.0"
     }
   ],
   "sourceFamilyRules": [
@@ -3257,36 +3845,36 @@
     "Formula Ford lap/weather context is source-bounded and should be labeled separately.",
     "IMSA Daytona remains a standalone sports-car feature."
   ],
-  "sourceHash": "d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd",
+  "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
   "sourceRefs": [
     {
-      "bytes": 916,
+      "bytes": 1243,
       "path": "analysis/career-parity/output/tables/career_series_result_summary.csv",
       "role": "career summary",
-      "sha256": "7a2d21b60aac7254b301e7b91413fa4db7bf3bf031b32938d43787033c550efc"
+      "sha256": "c91752692d3f18a4ca62f880db65fab4e9dc572d16fa1703c73c1b7e431d52ec"
     },
     {
-      "bytes": 12247,
+      "bytes": 17456,
       "path": "analysis/career-parity/output/tables/career_metric_family_parity.csv",
       "role": "metric parity",
-      "sha256": "a4ef842d640a72c28baf5518c99294d5bda0caa856602a712d618d1556f14c7c"
+      "sha256": "20b34f29e6d5cc00a9d9fc240b07117fef9e347b316a6a81f3fb7184740506d5"
     },
     {
-      "bytes": 37233,
+      "bytes": 43147,
       "path": "analysis/career-parity/output/tables/career_result_conversion.csv",
       "role": "result conversion",
-      "sha256": "5fbb6838d1cae3feda74bf4e8d438eca47926f4f2df0bee8391aafe01f06aa6c"
+      "sha256": "58fc146de9b8c0fbd48fc16456aaa1706bf2b5197154912a89ce0a0abe3aaa54"
     },
     {
-      "bytes": 23451,
+      "bytes": 32756,
       "path": "analysis/predictive-race-intelligence/output/career_prior_matrix.csv",
       "role": "career prior matrix chart source",
-      "sha256": "fa849b6e2432501af28ab057b9365bd1378f84decf8f882c0a1253de348d3f2d"
+      "sha256": "769f4e63bdfad404adf6636e117aa0dad4b4c9375eb230e862cb70328529bcfb"
     }
   ],
   "topCareerStories": [
     {
-      "detail": "INDY NXT has 45 race rows.",
+      "detail": "GB3 Championship has 45 race rows.",
       "story": "Largest source-backed race sample"
     },
     {
@@ -3298,7 +3886,7 @@
       "story": "Track-type prior"
     },
     {
-      "detail": "2022 GB3 2022 Round 3 - Donington Park; 2023 Euroformula Open 2023 Round 4 - Paul Ricard; 2024 FROC 2024 Round 5 - Highlands Motorsport Park",
+      "detail": "2019 Right Coast Formula F Series 2019 - Race Weekend 2, Mid-Ohio (FRP All Formula Weekend); 2024 FROC 2024 Round 5 - Highlands Motorsport Park; 2023 Euroformula Open 2023 Round 2 - Spa-Francorchamps",
       "story": "Best finish-percentile races"
     }
   ],

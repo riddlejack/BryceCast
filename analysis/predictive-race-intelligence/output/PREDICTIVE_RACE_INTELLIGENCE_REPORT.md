@@ -1,7 +1,7 @@
 # Predictive Race Intelligence Productization Pass
 
-Generated: `2026-09-20T00:00:37Z`
-Repo head: `9fab5e6`
+Generated: `2026-11-16T18:06:12Z`
+Repo head: `c0e5782`
 
 ## Decision
 
@@ -12,7 +12,7 @@ BryceCast should promote a predictive race-intelligence workbench, not a point-f
 - Inventory items: `76`.
 - Productization statuses: `{'analyst_only': 5, 'blocked': 4, 'context_pack_ready': 29, 'deferred': 2, 'productized': 36}`.
 - INDY NXT feature rows: `45`.
-- Career prior rows: `68`.
+- Career prior rows: `95`.
 - Context packs: `{'career_lab': 1, 'live_race_day': 1, 'race_debrief': 45, 'upcoming_event': 0}`.
 
 ## Predictive Feasibility

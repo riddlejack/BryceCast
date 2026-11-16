@@ -21,7 +21,7 @@
     "genuineGapSessions": 0,
     "note": "The derived remainder (lapTotal minus racing-line sections) is shipped only for sessions whose racing sections leave a genuine untimed stretch (>2% of the lap). Sessions at or below that threshold are classified as fully timed and do not ship a derived row."
   },
-  "generatedAt": "2026-09-20T00:00:53Z",
+  "generatedAt": "2026-11-16T18:06:29Z",
   "ok": true,
   "publicPointPrediction": false,
   "sectionSourceStateCounts": {
@@ -29,10 +29,10 @@
     "official_section_results_only": 11
   },
   "sourceDataset": "data/career/career.dataset.json",
-  "sourceHash": "d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd",
+  "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
   "upcomingVenue": {
     "artifactSlug": null,
-    "asOfDate": "2026-09-19",
+    "asOfDate": "2026-11-16",
     "status": "season_complete",
     "trackName": null
   }

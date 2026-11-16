@@ -4,7 +4,7 @@
 
 | seriesName | rankScore | raceRows | qualifyingContextRows | weatherRows | lapSampleRows | gridStartCoveragePct | recommendedDepth | confidence |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Formula Ford | 57.127 | 17 | 7 | 46 | 282 | 0.991 | lap_weather_specialist_pass | high |
+| Formula Ford | 67.767 | 29 | 13 | 72 | 433 | 0.99 | lap_weather_specialist_pass | high |
 | IMSA WeatherTech SportsCar Championship | 32.16 | 1 | 0 | 1 | 142 | 0 | standalone_daytona_feature | high |
 | Euroformula Open | 30.86 | 18 | 6 | 0 | 0 | 1 | result_and_qualifying_conversion_pass | high |
 | F1600 Championship Series | 22.727 | 21 | 6 | 0 | 0 | 0 | result_conversion_plus_penalty_context_pass | high |

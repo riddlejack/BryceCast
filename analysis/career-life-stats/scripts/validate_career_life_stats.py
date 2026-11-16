@@ -78,6 +78,11 @@ def main() -> None:
     stint_laps = sum(int(row["lapCount"]) for row in rows(STINTS) if row["sessionId"] == DAYTONA)
     for row in race:
         canonical = canonical_races[row["sessionId"]]
+        if row["sessionId"] != DAYTONA and canonical.get("lapsCompleted") is None:
+            # A disqualification printed with no laps (GB3 2021 Silverstone Race 3) stays unknown.
+            if row["confidenceClass"] != "unknown" or row["personalLaps"] != "" or row["personalMiles"] != "":
+                fail(f"Race row without canonical laps must stay unknown for {row['sessionId']}")
+            continue
         expected = stint_laps if row["sessionId"] == DAYTONA else int(canonical["lapsCompleted"])
         if int(row["personalLaps"]) != expected:
             fail(f"Incorrect personally attributable laps for {row['sessionId']}")
@@ -154,9 +159,10 @@ def main() -> None:
     if not close(exact_miles + lower_miles, physical["floor"]["miles"]):
         fail("Physical-session mileage floor does not reconcile")
     personal = summary["personalRaceMileage"]
-    expected_race_laps = sum(int(row["personalLaps"]) for row in race)
-    expected_race_miles = sum(float(row["personalMiles"]) for row in race)
-    if personal["raceRows"] != len(canonical_races) or personal["coveredRaceRows"] != len(race):
+    expected_race_laps = sum(int(row["personalLaps"]) for row in race if row["personalLaps"] != "")
+    expected_race_miles = sum(float(row["personalMiles"]) for row in race if row["personalMiles"] != "")
+    covered_races = [row for row in race if row["confidenceClass"] == "observed_exact"]
+    if personal["raceRows"] != len(canonical_races) or personal["coveredRaceRows"] != len(covered_races):
         fail("Personally attributable race row counts do not reconcile to the canonical ledger")
     if personal["laps"] != expected_race_laps or not close(personal["miles"], expected_race_miles):
         fail("Personally attributable race totals do not reconcile to the session ledger")
