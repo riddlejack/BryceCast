@@ -11,6 +11,7 @@ import { buildPointsProjectionState } from './live-points-state.mjs';
 import { createReplayOverlay } from './lib/replay-overlay.mjs';
 import { createLakeReplayFeeds } from './lib/replay-lake-feeds.mjs';
 import { createReplayRouter } from './lib/replay-router.mjs';
+import { createArchivedBryceSampleReader } from './lib/archived-bryce-sample.mjs';
 import {
   buildUpcomingIndyNxtWeatherReport,
   fetchCachedLiveWeatherForTrack,
@@ -817,46 +818,10 @@ const fetchRaceControl = async () => {
 };
 const fetchSourceProbes = async () => Promise.all(sourceProbeEndpoints.map(fetchEndpointAndCache));
 
-const readLatestArchivedRaw = () => {
-  try {
-    const db = new DatabaseSync(sqlitePath, { readOnly: true });
-    try {
-      const rows = db
-        .prepare(
-          `SELECT checked_at, payload_json
-           FROM race_snapshots
-           WHERE payload_json LIKE '%"DriverID":"2143"%'
-              OR payload_json LIKE '%"DriverID":2143%'
-              OR (
-                payload_json LIKE '%"firstName":"Bryce"%'
-                AND payload_json LIKE '%"lastName":"Aron"%'
-                AND (payload_json LIKE '%"no":"9"%' OR payload_json LIKE '%"no":9%')
-              )
-           ORDER BY checked_at DESC
-           LIMIT 500`
-        )
-        .all();
-      for (const row of rows) {
-        if (!row?.payload_json) continue;
-        const payload = JSON.parse(row.payload_json);
-        const timing = payload.raw?.timing?.timing_results;
-        const heartbeat = timing?.heartbeat;
-        const timingRows = Array.isArray(timing?.Item) ? timing.Item : [];
-        if (timingRows.some((row) => isBryceTimingRow(row, heartbeat))) {
-          return {
-            raw: payload.raw ?? null,
-            checkedAt: row.checked_at ?? payload.summary?.checkedAt ?? null
-          };
-        }
-      }
-      return null;
-    } finally {
-      db.close();
-    }
-  } catch {
-    return null;
-  }
-};
+// Bounded and memoized: see scripts/lib/archived-bryce-sample.mjs. The old
+// inline query read the whole archive on every call (~26 s on 19 GB).
+const archivedBryceSample = createArchivedBryceSampleReader({ sqlitePath });
+const readLatestArchivedRaw = () => archivedBryceSample.read();
 
 const archivedSnapshot = ({ reason, liveResults, fallbackProfile }) => {
   const archived = readLatestArchivedRaw();
