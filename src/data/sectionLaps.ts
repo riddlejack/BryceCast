@@ -57,6 +57,13 @@ export interface SectionLapsPack {
      *  race — the quiet field distribution behind Bryce's marker in the drawer.
      *  Absent when the source carries no field-time distribution. */
     fieldSeconds?: number[];
+    /** The OTHER cars lap by lap: one row per car (anonymous, Bryce never in
+     *  it), one cell per lap of his race (index lap - 1), each that car's clean
+     *  green-flag time in this section or null. Every scope the race card
+     *  offers compares him with these cars over the same laps
+     *  (fieldReferenceFor). Absent from packs whose source does not carry the
+     *  field lap by lap (the measured Nashville packs, qualifying packs). */
+    otherCarLaps?: Array<Array<number | null>>;
   }>;
   /** Whether this race carries a genuine untimed stretch worth a derived shade
    *  ('genuine_gap') or its racing sections tile the lap ('fully_timed'). */

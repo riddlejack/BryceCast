@@ -314,7 +314,7 @@
 .tracks-page .tracks-laps:has(.tracks-grid__frame--folded) > .tracks-note { display: none; }
 .tracks-page .tracks-grid__frame--folded { padding-top: 10px; }
 
-/* ---------- where his lap goes: scope line, dimmed whole race, readout ---------- */
+/* ---------- where his lap goes: scope line, legend, readout ---------- */
 
 .tracks-page .tracks-budget__scope {
   margin: 0 0 8px;
@@ -324,13 +324,8 @@
 }
 .tracks-page .tracks-budget__scope span { font-weight: 400; color: var(--ink-secondary); }
 
-/* The map shows a scope the bars can't follow: the bars stay, quietly. */
-.tracks-page .tracks-budget--dimmed .tracks-budget__rows,
-.tracks-page .tracks-budget--dimmed .tracks-budget__row--total,
-.tracks-page .tracks-budget--dimmed .tracks-budget__axis {
-  opacity: 0.38;
-  transition: opacity 160ms ease-out;
-}
+/* What minus means, beside the signed seconds (his rule of Nov 15). */
+.tracks-page .tracks-budget__readout.tracks-budget__legend { color: var(--ink-muted); }
 
 .tracks-page .tracks-budget__row--on .tracks-budget__label,
 .tracks-page .tracks-budget__row--on .tracks-budget__value { color: var(--ink-primary); }

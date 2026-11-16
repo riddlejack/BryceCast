@@ -13,13 +13,16 @@ import {
 } from '../assets/tracks/sections';
 import {
   MIN_CLEAN_LAPS,
+  MIN_FIELD_CARS,
   anchorsForPack,
+  fieldReferenceFor,
   cleanSectionLapsOf,
   lapContextOf,
   lapScopesForObservedLaps,
   lapScopesForPack,
   resolveHeatSections,
   sectionObservationsFromLaps,
+  type FieldBasis,
   type ResolvedHeatSection,
   type SectionScope,
   type SectionStat,
@@ -135,68 +138,94 @@ export interface LapBudgetRow {
   sectionName: string;
   label: string;
   kind: 'measured' | 'derived_remainder';
-  /** compared: a bar. too_few: under MIN_CLEAN_LAPS clean laps here. no_field:
-   *  the report carries no field times for this section. no_timing: the race's
-   *  report has no row for this anchored section at all. */
+  /** compared: a bar. too_few: under MIN_CLEAN_LAPS clean laps of his here in
+   *  this scope. no_field: the other cars can't be read here over this scope
+   *  (under MIN_FIELD_CARS of them, or a pack that holds the field for the
+   *  whole race only). no_timing: no time of his here (no timing row this
+   *  race, or no clean time on this one lap). */
   state: 'compared' | 'too_few' | 'no_field' | 'no_timing';
   bryceSeconds: number | null;
   fieldMedianSeconds: number | null;
-  /** His median minus the field median, seconds. Negative = quicker. */
+  /** His time minus the field's, seconds. Negative = quicker. */
   delta: number | null;
   cleanLaps: number;
   fieldCars: number;
 }
 
 export interface LapBudget {
+  /** The laps the bars read: the same scope the map shows. */
+  scope: SectionScope;
+  /** How his laps (and each other car's) are summarised; one lap is one lap. */
+  stat: SectionStat;
   rows: LapBudgetRow[];
   /** Sum of the compared rows' deltas: his lap against the field, built
    *  section by section. */
   total: number;
   compared: number;
+  /** His clean green-flag laps inside the scope (0 or 1 for one lap). */
   cleanLaps: number;
   totalLaps: number;
   fieldCarsMin: number;
   fieldCarsMax: number;
-  /** His median clean green-flag lap, from the official lap rows. */
-  bryceMedianLap: number | null;
-  /** Sum of his section medians (differs from his median lap only because a
-   *  median of sums is not a sum of medians). */
+  /** How the field was built for this scope (null when no row has a field). */
+  fieldBasis: FieldBasis | null;
+  /** His median (or average) clean green-flag lap over the scope, from the
+   *  official lap rows; for one lap, his official time on that lap. */
+  bryceLap: number | null;
+  /** Sum of his section times (all sections compared only). */
   bryceSectionSum: number | null;
-  /** Present when the budget reads ONE lap (lapBudgetForLap): his section
-   *  times on that lap against the field's whole-race median in each section. */
-  lap?: {
-    lap: number;
-    /** His official lap time for that lap, from the lap rows. */
-    lapSeconds: number | null;
-    /** The field's section medians added up (all sections compared only). */
-    fieldSectionSum: number | null;
-    /** His whole-lap rank on that lap, and the cars ranked. */
-    rank: number | null;
-    rankOf: number | null;
-  } | null;
+  /** The field's section times added up (all sections compared only). */
+  fieldSectionSum: number | null;
+  /** One lap only: the lap, and his whole-lap rank on it. */
+  lap: { lap: number; rank: number | null; rankOf: number | null } | null;
+  /** One lap only: why the bars can't read it (a caution or restart lap, or a
+   *  lap that is not clean), or null when they can. */
+  unreadable: 'caution' | 'restart' | 'unknown' | 'not_clean' | null;
 }
 
-/** "Where his lap goes": in lap order, his median clean-lap time in each
- *  section minus the field's median (the middle of every timed car's own
- *  median clean-lap time there, his included), over the whole race. The
+/** "Where his lap goes", for any scope the card offers (Jack's review of Nov
+ *  15: the bars follow every filter, the thirds as well as one lap). In lap
+ *  order, his time in each section over the scope against the field's over
+ *  the SAME laps, the field being the other cars and never him: the whole
+ *  race and each third compare his median (or average) clean-lap time with
+ *  the middle of the other cars' own medians (or averages) over those laps;
+ *  one lap compares his time on it with the other cars' median on it. The
  *  sections tile the lap, so the compared rows add up to his lap against the
- *  field. Always the full race and the median: the field distribution in the
- *  pack is whole-race only, so a lap window would compare unlike things. */
-export const lapBudgetOf = (pack: SectionLapsPack, anchors: TrackSectionAnchorSet, outline: TrackOutline): LapBudget => {
-  const set = sectionObservationsFromLaps(pack, { kind: 'full_race' }, 'median');
+ *  field. The numbers come from sectionObservationsFromLaps, the same set the
+ *  map draws, so the bars and the map always read the same laps. */
+export const lapBudgetOf = (
+  pack: SectionLapsPack,
+  anchors: TrackSectionAnchorSet,
+  outline: TrackOutline,
+  scope: SectionScope = { kind: 'full_race' },
+  stat: SectionStat = 'median'
+): LapBudget => {
+  const single = scope.kind === 'single_lap' ? scope.lap : null;
+  const effectiveStat: SectionStat = single !== null ? 'median' : stat;
+  const set = sectionObservationsFromLaps(pack, scope, effectiveStat);
   const byName = new Map(set.sections.map((observation) => [observation.sectionName, observation]));
   const ordered = sectionsInLapOrder(anchors, outline);
   const anchoredNames = new Set(ordered.map((anchor) => anchor.sectionName));
   const rowFor = (sectionName: string, label: string, kind: 'measured' | 'derived_remainder'): LapBudgetRow => {
     const observation = byName.get(sectionName);
     const fieldCars = observation?.fieldSeconds?.length ?? 0;
-    const cleanLaps = observation?.observationCount ?? 0;
-    const base = { sectionName, label, kind, cleanLaps, fieldCars };
-    if (!observation) return { ...base, state: 'no_timing', bryceSeconds: null, fieldMedianSeconds: null, delta: null };
-    const bryce = observation.bryceMedianSeconds ?? null;
-    const field = observation.fieldMedianSeconds ?? null;
-    if (observation.percentile === null) return { ...base, state: 'too_few', bryceSeconds: bryce, fieldMedianSeconds: field, delta: null };
-    if (bryce === null || field === null) return { ...base, state: 'no_field', bryceSeconds: bryce, fieldMedianSeconds: field, delta: null };
+    const field = observation?.fieldMedianSeconds ?? null;
+    if (!observation) {
+      return { sectionName, label, kind, cleanLaps: 0, fieldCars, state: 'no_timing', bryceSeconds: null, fieldMedianSeconds: null, delta: null };
+    }
+    if (single !== null) {
+      const bryce = observation.clean ? observation.bryceSummarySeconds ?? null : null;
+      const base = { sectionName, label, kind, cleanLaps: bryce !== null ? 1 : 0, fieldCars };
+      if (bryce === null) return { ...base, state: 'no_timing', bryceSeconds: null, fieldMedianSeconds: field, delta: null };
+      if (field === null) return { ...base, state: 'no_field', bryceSeconds: bryce, fieldMedianSeconds: null, delta: null };
+      return { ...base, state: 'compared', bryceSeconds: bryce, fieldMedianSeconds: field, delta: bryce - field };
+    }
+    const bryce = observation.bryceSummarySeconds ?? null;
+    const base = { sectionName, label, kind, cleanLaps: observation.observationCount ?? 0, fieldCars };
+    if (observation.percentile === null || bryce === null) {
+      return { ...base, state: 'too_few', bryceSeconds: bryce, fieldMedianSeconds: field, delta: null };
+    }
+    if (field === null) return { ...base, state: 'no_field', bryceSeconds: bryce, fieldMedianSeconds: null, delta: null };
     return { ...base, state: 'compared', bryceSeconds: bryce, fieldMedianSeconds: field, delta: bryce - field };
   };
   const rows = [
@@ -208,110 +237,121 @@ export const lapBudgetOf = (pack: SectionLapsPack, anchors: TrackSectionAnchorSe
       .map((section) => rowFor(section.sectionName, section.sectionName, section.kind ?? 'measured'))
   ];
   const compared = rows.filter((row) => row.state === 'compared');
-  const cars = compared.map((row) => row.fieldCars);
-  const cleanLapTimes = pack.lapTotals
-    .filter((tuple) => tuple[0] !== null && tuple[4] === 1 && tuple[6] !== null)
-    .map((tuple) => tuple[6] as number);
-  return {
-    rows,
-    total: compared.reduce((sum, row) => sum + (row.delta ?? 0), 0),
-    compared: compared.length,
-    cleanLaps: cleanSectionLapsOf(pack).length,
-    totalLaps: pack.totalLaps,
-    fieldCarsMin: cars.length > 0 ? Math.min(...cars) : 0,
-    fieldCarsMax: cars.length > 0 ? Math.max(...cars) : 0,
-    bryceMedianLap: medianOf(cleanLapTimes),
-    bryceSectionSum: compared.length === rows.length ? compared.reduce((sum, row) => sum + (row.bryceSeconds ?? 0), 0) : null
-  };
-};
-
-/** "Where his lap goes" for ONE lap: his time in each section on that lap
- *  minus the field's median there. The pack carries the field's section times
- *  only as each car's whole-race median (fieldSeconds), so the field reference
- *  is the same one the whole-race bars use: the middle of every timed car's own
- *  clean-lap median, his included. The bars therefore add up to his lap time
- *  on that lap minus the field's section medians added up, and the note says
- *  that in words. Null when the lap is not a clean green-flag lap (caution,
- *  restart, pit or no flag report), where a comparison with clean-lap medians
- *  would be unlike with unlike. */
-export const lapBudgetForLap = (
-  pack: SectionLapsPack,
-  anchors: TrackSectionAnchorSet,
-  outline: TrackOutline,
-  lap: number
-): LapBudget | null => {
-  const total = pack.lapTotals.find((tuple) => tuple[0] === lap) ?? null;
-  if (!total || total[4] !== 1) return null;
-  const bySection = new Map(pack.sections.map((section) => [section.sectionName, section]));
-  const ordered = sectionsInLapOrder(anchors, outline);
-  const anchoredNames = new Set(ordered.map((anchor) => anchor.sectionName));
-  const rowFor = (sectionName: string, label: string, kind: 'measured' | 'derived_remainder'): LapBudgetRow => {
-    const section = bySection.get(sectionName);
-    const fieldCars = section?.fieldSeconds?.length ?? 0;
-    const tuple = section?.laps.find((entry) => entry[0] === lap) ?? null;
-    const bryce = tuple ? tuple[6] : null;
-    const base = { sectionName, label, kind, cleanLaps: bryce !== null ? 1 : 0, fieldCars };
-    if (!section || bryce === null) return { ...base, state: 'no_timing', bryceSeconds: null, fieldMedianSeconds: null, delta: null };
-    const field = fieldCars > 0 ? medianOf(section.fieldSeconds!) : null;
-    if (field === null) return { ...base, state: 'no_field', bryceSeconds: bryce, fieldMedianSeconds: null, delta: null };
-    return { ...base, state: 'compared', bryceSeconds: bryce, fieldMedianSeconds: field, delta: bryce - field };
-  };
-  const rows = [
-    ...ordered.map((anchor) => rowFor(anchor.sectionName, anchor.label, anchor.kind ?? 'measured')),
-    ...pack.sections
-      .filter((section) => !anchoredNames.has(section.sectionName))
-      .map((section) => rowFor(section.sectionName, section.sectionName, section.kind ?? 'measured'))
-  ];
-  const compared = rows.filter((row) => row.state === 'compared');
-  const cars = compared.map((row) => row.fieldCars);
   const all = compared.length === rows.length;
+  const cars = compared.map((row) => row.fieldCars);
+  const [fromLap, toLap] =
+    scope.kind === 'full_race' ? [1, pack.totalLaps] : scope.kind === 'lap_window' ? [scope.fromLap, scope.toLap] : [scope.lap, scope.lap];
+  const lapRow = single !== null ? pack.lapTotals.find((tuple) => tuple[0] === single) ?? null : null;
+  const cleanLapTimes = pack.lapTotals
+    .filter((tuple) => tuple[0] !== null && tuple[0] >= fromLap && tuple[0] <= toLap && tuple[4] === 1 && tuple[6] !== null)
+    .map((tuple) => tuple[6] as number);
+  const unreadable: LapBudget['unreadable'] =
+    single === null
+      ? null
+      : !lapRow || lapRow[4] !== 1
+        ? lapRow?.[5] === 'c'
+          ? 'caution'
+          : lapRow?.[5] === 'r'
+            ? 'restart'
+            : lapRow?.[5] === 'u'
+              ? 'unknown'
+              : 'not_clean'
+        : null;
+  const basisOf = set.sections.find((observation) => observation.fieldBasis)?.fieldBasis ?? null;
   return {
+    scope,
+    stat: effectiveStat,
     rows,
     total: compared.reduce((sum, row) => sum + (row.delta ?? 0), 0),
     compared: compared.length,
-    cleanLaps: cleanSectionLapsOf(pack).length,
+    cleanLaps: single !== null ? (unreadable ? 0 : 1) : cleanSectionLapsOf(pack).filter((lap) => lap >= fromLap && lap <= toLap).length,
     totalLaps: pack.totalLaps,
     fieldCarsMin: cars.length > 0 ? Math.min(...cars) : 0,
     fieldCarsMax: cars.length > 0 ? Math.max(...cars) : 0,
-    bryceMedianLap: null,
-    bryceSectionSum: all ? compared.reduce((sum, row) => sum + (row.bryceSeconds ?? 0), 0) : null,
-    lap: {
-      lap,
-      lapSeconds: total[6],
-      fieldSectionSum: all ? compared.reduce((sum, row) => sum + (row.fieldMedianSeconds ?? 0), 0) : null,
-      rank: total[2],
-      rankOf: total[3]
-    }
+    fieldBasis: basisOf,
+    bryceLap: single !== null ? lapRow?.[6] ?? null : cleanLapTimes.length > 0 ? (effectiveStat === 'mean' ? cleanLapTimes.reduce((a, b) => a + b, 0) / cleanLapTimes.length : medianOf(cleanLapTimes)) : null,
+    bryceSectionSum: all && compared.length > 0 ? compared.reduce((sum, row) => sum + (row.bryceSeconds ?? 0), 0) : null,
+    fieldSectionSum: all && compared.length > 0 ? compared.reduce((sum, row) => sum + (row.fieldMedianSeconds ?? 0), 0) : null,
+    lap: single !== null ? { lap: single, rank: lapRow?.[2] ?? null, rankOf: lapRow?.[3] ?? null } : null,
+    unreadable
   };
 };
 
-/** Signed seconds, delta convention: minus is quicker than the field median. */
+/** Signed seconds for the dense chart (the bars' value column), with the
+ *  legend beside it saying what minus means: minus is quicker than the field. */
 const signedSeconds = (value: number): string => {
   const rounded = Math.round(value * 1000) / 1000;
   if (rounded === 0) return '0.000';
   return `${rounded < 0 ? '−' : '+'}${Math.abs(rounded).toFixed(3)}`;
 };
 
+/** The same difference in words, for sentences (his ruling of Nov 15):
+ *  "0.034 s quicker than the field". `delta` is his time minus the field's. */
+export const againstFieldWords = (delta: number): string => {
+  const rounded = Math.round(delta * 1000) / 1000;
+  if (rounded === 0) return 'level with the field, to the thousandth';
+  return `${Math.abs(rounded).toFixed(3)} s ${rounded < 0 ? 'quicker' : 'slower'} than the field`;
+};
+
 const GAIN_COLOUR = inkGoldDiverging(0.92);
 const LOSS_COLOUR = inkGoldDiverging(0.16);
 
-const budgetMissingCopy = (row: LapBudgetRow, oneLap = false): string =>
-  row.state === 'too_few'
-    ? `not compared: ${row.cleanLaps} clean ${row.cleanLaps === 1 ? 'lap' : 'laps'}`
-    : row.state === 'no_field'
-      ? 'not compared: no field times'
-      : oneLap
-        ? 'no timing row this lap'
-        : 'no timing row this race';
+const budgetMissingCopy = (row: LapBudgetRow, budget: LapBudget): string => {
+  const scope = budget.scope;
+  if (row.state === 'too_few') {
+    const where = scope.kind === 'lap_window' ? ` in the ${scope.label.toLowerCase()}` : '';
+    return `not compared: ${row.cleanLaps} clean ${row.cleanLaps === 1 ? 'lap' : 'laps'}${where}`;
+  }
+  if (row.state === 'no_field') {
+    return budget.fieldBasis === null && scope.kind !== 'full_race'
+      ? 'not compared: field held for the whole race only'
+      : `not compared: under ${MIN_FIELD_CARS} other cars timed`;
+  }
+  return scope.kind === 'single_lap' ? 'no clean time this lap' : 'no timing row this race';
+};
+
+const scopeLine = (budget: LapBudget): string => {
+  const { scope } = budget;
+  const laps = `${budget.cleanLaps} clean green-flag ${budget.cleanLaps === 1 ? 'lap' : 'laps'}`;
+  if (scope.kind === 'single_lap') return `Lap ${scope.lap} of ${budget.totalLaps}`;
+  if (scope.kind === 'lap_window') return `${scope.label} · laps ${scope.fromLap}–${scope.toLap} · ${laps}`;
+  return `Whole race · ${laps} of ${budget.totalLaps}`;
+};
+
+const UNREADABLE_COPY: Record<NonNullable<LapBudget['unreadable']>, string> = {
+  caution: 'ran under caution',
+  restart: 'was a restart lap',
+  unknown: 'has no flag report',
+  not_clean: 'is not a clean green-flag lap (a pit stop, an off or a slow lap)'
+};
 
 /** The lap budget drawn as one bar per section, quicker to the right in gold,
  *  slower to the left in ink, with the total underneath on the same scale.
- *  `budget.lap` set: the bars read that one lap. `wholeRaceNote` set: the map
- *  shows a scope the bars can't follow (a third, or a caution lap), so the
- *  whole-race bars stay, dimmed, under a plain "Whole race" label. */
-export const LapBudgetBars = ({ budget, wholeRaceNote = null }: { budget: LapBudget; wholeRaceNote?: string | null }) => {
+ *  It reads whatever scope the map shows: the whole race, a third, or one
+ *  lap. A scope it cannot compare says so in words and draws no number. */
+export const LapBudgetBars = ({ budget }: { budget: LapBudget }) => {
   /* Pointing at a row reads it out under the total (no stock browser box). */
   const [hovered, setHovered] = useState<number | null>(null);
+  const coarse = useCoarsePointer();
+  const oneLap = budget.lap;
+  const statWord = budget.stat === 'mean' ? 'average' : 'median';
+  if (budget.unreadable || budget.compared === 0) {
+    const scope = budget.scope;
+    const why = budget.unreadable && oneLap
+      ? `Lap ${oneLap.lap} ${UNREADABLE_COPY[budget.unreadable]}, so there is nothing to set against the field. Pick a green-flag lap, or a third of the race.`
+      : budget.fieldBasis === null && scope.kind !== 'full_race' && budget.rows.some((row) => row.state === 'no_field')
+        ? `This race's field times are held for the whole race only, so the other cars can't be read over ${scope.kind === 'lap_window' ? `the ${scope.label.toLowerCase()}` : 'one lap'}. The whole race compares.`
+        : budget.fieldBasis === null && budget.stat === 'mean' && budget.rows.some((row) => row.state === 'no_field')
+          ? "This race's field times are held as medians only, so the comparison reads medians. Pick Median."
+          : `No section ${scope.kind === 'lap_window' ? `in the ${scope.label.toLowerCase()} ` : ''}has the ${MIN_CLEAN_LAPS} clean laps of his and ${MIN_FIELD_CARS} other cars a comparison needs.`;
+    return (
+      <div className="tracks-budget">
+        <h3 className="tracks-subhead">Where his lap goes</h3>
+        <p className="tracks-budget__scope">{scopeLine(budget)}</p>
+        <p className="tracks-note">{why}</p>
+      </div>
+    );
+  }
   /* A running sum, drawn as a waterfall: each section's bar starts where the
    * lap so far had got to, so the last bar ends on the total and the chart
    * adds itself up. Quicker reads to the right (minus seconds), slower to the
@@ -339,53 +379,57 @@ export const LapBudgetBars = ({ budget, wholeRaceNote = null }: { budget: LapBud
   const zero = { left: `${xOf(0)}%` };
   const cars =
     budget.fieldCarsMin === budget.fieldCarsMax
-      ? `${budget.fieldCarsMax} cars`
-      : `${budget.fieldCarsMin} to ${budget.fieldCarsMax} cars`;
+      ? `${budget.fieldCarsMax} other cars`
+      : `${budget.fieldCarsMin} to ${budget.fieldCarsMax} other cars`;
   const missing = budget.rows.length - budget.compared;
-  const oneLap = budget.lap ?? null;
-  const totalWords =
-    Math.round(budget.total * 100) === 0
-      ? 'level with the field median, to the hundredth'
-      : `${budget.total < 0 ? 'quicker' : 'slower'} than the field median`;
   const readout = (row: LapBudgetRow): string =>
     row.state === 'compared'
       ? oneLap
-        ? `${row.label}: his ${row.bryceSeconds!.toFixed(3)} s on lap ${oneLap.lap} against the field median ${row.fieldMedianSeconds!.toFixed(3)} s (${row.fieldCars} cars), ${signedSeconds(row.delta!)} s`
-        : `${row.label}: his median ${row.bryceSeconds!.toFixed(3)} s against the field median ${row.fieldMedianSeconds!.toFixed(3)} s, over ${row.cleanLaps} clean laps and ${row.fieldCars} cars`
-      : `${row.label}: ${budgetMissingCopy(row, Boolean(oneLap))}`;
-  /* The worked sum, in words: for one lap the bars add up to his lap time
-   * minus the field's section medians added up, which the note prints. */
-  const lapSum =
-    oneLap && missing === 0 && oneLap.fieldSectionSum !== null && budget.bryceSectionSum !== null
-      ? {
-          his: oneLap.lapSeconds ?? budget.bryceSectionSum,
-          sectionsDiffer: oneLap.lapSeconds !== null && Math.abs(oneLap.lapSeconds - budget.bryceSectionSum) >= 0.0015,
-          field: oneLap.fieldSectionSum
-        }
-      : null;
+        ? `${row.label}: his ${row.bryceSeconds!.toFixed(3)} s on lap ${oneLap.lap}, the field's median ${row.fieldMedianSeconds!.toFixed(3)} s (${row.fieldCars} other cars): ${againstFieldWords(row.delta!)}`
+        : `${row.label}: his ${statWord} ${row.bryceSeconds!.toFixed(3)} s, the field's ${row.fieldMedianSeconds!.toFixed(3)} s (${row.cleanLaps} clean laps, ${row.fieldCars} other cars): ${againstFieldWords(row.delta!)}`
+      : `${row.label}: ${budgetMissingCopy(row, budget)}`;
+  /* The "how", said once: what each bar compares, and that the field is the
+   * other cars over the same laps, never him. */
+  const how = oneLap ? (
+    <>
+      One bar per section, in the order he drives them: his time there on lap {oneLap.lap} against the field&rsquo;s
+      median on the same lap. The field is the other cars, not him ({cars} with a clean lap {oneLap.lap}). Each bar
+      starts where the lap so far had got to, so the last one ends on the total.
+    </>
+  ) : budget.fieldBasis === 'whole_race_medians' ? (
+    <>
+      One bar per section, in the order he drives them: his median time there against the field&rsquo;s. The field is
+      the other cars, not him: the middle of {cars}&rsquo; own medians over the race. Each bar starts where the lap so
+      far had got to, so the last one ends on the total.
+    </>
+  ) : (
+    <>
+      One bar per section, in the order he drives them: his {statWord} time there against the field&rsquo;s, over the
+      same laps. The field is the other cars, not him: each car&rsquo;s own {statWord} over those laps, then the{' '}
+      {budget.stat === 'mean' ? 'average' : 'middle'} of the {cars}. Each bar starts where the lap so far had got to,
+      so the last one ends on the total.
+    </>
+  );
+  const totalSentence = oneLap
+    ? missing === 0 && budget.fieldSectionSum !== null && budget.bryceSectionSum !== null
+      ? `His lap ${oneLap.lap} was ${(budget.bryceLap ?? budget.bryceSectionSum).toFixed(3)} s${
+          budget.bryceLap !== null && Math.abs(budget.bryceLap - budget.bryceSectionSum) >= 0.0015
+            ? ` (his sections add up to ${budget.bryceSectionSum.toFixed(3)} s)`
+            : ''
+        }; the field's section medians on that lap add up to ${budget.fieldSectionSum.toFixed(3)} s. The ${budget.compared} bars come to ${againstFieldWords(budget.total)}.${
+          oneLap.rank !== null && oneLap.rankOf !== null ? ` On the whole lap he was P${oneLap.rank} of ${oneLap.rankOf}.` : ''
+        }`
+      : `${budget.compared} of ${budget.rows.length} sections compared on lap ${oneLap.lap}; together ${againstFieldWords(budget.total)}. The ${missing === 1 ? 'missing one stays' : `${missing} missing stay`} out of the total.`
+    : `${
+        missing === 0
+          ? `The ${budget.compared} sections cover the whole lap and add up to ${againstFieldWords(budget.total)}.`
+          : `${budget.compared} of ${budget.rows.length} sections compared; together ${againstFieldWords(budget.total)}. The ${missing === 1 ? 'missing one stays' : `${missing} missing stay`} out of the total.`
+      }${budget.bryceLap !== null ? ` His ${statWord} clean lap ${budget.scope.kind === 'lap_window' ? 'in these laps ' : ''}was ${budget.bryceLap.toFixed(3)} s.` : ''}`;
   return (
-    <div className={`tracks-budget${wholeRaceNote ? ' tracks-budget--dimmed' : ''}`} onMouseLeave={() => setHovered(null)}>
+    <div className="tracks-budget" onMouseLeave={() => setHovered(null)}>
       <h3 className="tracks-subhead">Where his lap goes</h3>
-      <p className="tracks-budget__scope">
-        {oneLap ? `Lap ${oneLap.lap} of ${budget.totalLaps}` : 'Whole race'}
-        {wholeRaceNote ? <span> · {wholeRaceNote}</span> : null}
-      </p>
-      <p className="tracks-note">
-        {oneLap ? (
-          <>
-            One bar per section in the order he drives them: his time there on lap {oneLap.lap} against the field&rsquo;s
-            median for that section. Each bar starts where the lap so far had got to, so the last one ends on the total. The
-            field median is the middle of {cars}&rsquo; own clean-lap medians over the whole race, his included. The
-            other cars&rsquo; section times are held as whole-race medians, not lap by lap.
-          </>
-        ) : (
-          <>
-            One bar per section in the order he drives them: his median time there against the field&rsquo;s. Each bar
-            starts where the lap so far had got to, so the last one ends on the total. {budget.cleanLaps} clean green-flag
-            laps of {budget.totalLaps}; the field median is the middle of {cars}&rsquo; own medians, his included.
-          </>
-        )}
-      </p>
+      <p className="tracks-budget__scope">{scopeLine(budget)}</p>
+      <p className="tracks-note">{how}</p>
       <div className="tracks-budget__axis" aria-hidden>
         <span>&larr; slower</span>
         <span>quicker &rarr;</span>
@@ -401,7 +445,7 @@ export const LapBudgetBars = ({ budget, wholeRaceNote = null }: { budget: LapBud
             <span className="tracks-budget__track">
               <span className="tracks-budget__zero" style={zero} />
               {row.state === 'compared' ? <span className="tracks-budget__bar" style={bar(running[index].from, running[index].to)} /> : null}
-              {row.state !== 'compared' ? <span className="tracks-budget__gap">{budgetMissingCopy(row, Boolean(oneLap))}</span> : null}
+              {row.state !== 'compared' ? <span className="tracks-budget__gap">{budgetMissingCopy(row, budget)}</span> : null}
             </span>
             <span className="tracks-budget__value tnum">{row.state === 'compared' ? signedSeconds(row.delta!) : '—'}</span>
           </li>
@@ -415,17 +459,19 @@ export const LapBudgetBars = ({ budget, wholeRaceNote = null }: { budget: LapBud
         </span>
         <span className="tracks-budget__value tnum">{signedSeconds(budget.total)}</span>
       </div>
-      <p className="tracks-budget__readout tnum" aria-hidden>
-        {hovered !== null && budget.rows[hovered] ? readout(budget.rows[hovered]) : ' '}
-      </p>
-      <p className="tracks-note">
-        {lapSum
-          ? `His lap ${oneLap!.lap} was ${lapSum.his.toFixed(3)} s${lapSum.sectionsDiffer ? ` (his sections add up to ${budget.bryceSectionSum!.toFixed(3)} s)` : ''}; the field’s section medians add up to ${lapSum.field.toFixed(3)} s. The ${budget.compared} bars add up to the difference, ${signedSeconds(budget.total)} s.${oneLap!.rank !== null && oneLap!.rankOf !== null ? ` On the whole lap he was P${oneLap!.rank} of ${oneLap!.rankOf}.` : ''}`
-          : missing === 0
-            ? `The ${budget.compared} sections cover the whole lap and add up to ${signedSeconds(budget.total)} s, ${totalWords}.`
-            : `${budget.compared} of ${budget.rows.length} sections compared; those add up to ${signedSeconds(budget.total)} s. The ${missing === 1 ? 'missing one stays' : `${missing} missing stay`} out of the total.`}
-        {!oneLap && budget.bryceMedianLap !== null ? ` His median clean lap was ${budget.bryceMedianLap.toFixed(3)} s.` : ''}
-      </p>
+      {/* One line under the bars: at rest the legend for the signed seconds
+          (what minus means); pointing at a section reads that one out in
+          words in its place, so the line never sits empty. */}
+      {hovered !== null && budget.rows[hovered] ? (
+        <p className="tracks-budget__readout tnum" aria-hidden>
+          {readout(budget.rows[hovered])}
+        </p>
+      ) : (
+        <p className="tracks-budget__readout tracks-budget__legend">
+          Seconds against the field: − quicker, + slower. {coarse ? 'Tap' : 'Point at'} a section to read it in words.
+        </p>
+      )}
+      <p className="tracks-note">{totalSentence}</p>
     </div>
   );
 };
@@ -468,8 +514,7 @@ export const LapSectionGrid = ({
         const source = pack.sections.find((entry) => entry.sectionName === section.sectionName);
         const byLap = new Map<number, SectionLapsPack['sections'][number]['laps'][number]>();
         for (const tuple of source?.laps ?? []) if (tuple[0] !== null) byLap.set(tuple[0], tuple);
-        const fieldMedian = source?.fieldSeconds && source.fieldSeconds.length > 0 ? medianOf(source.fieldSeconds) : null;
-        return { ...section, byLap, present: Boolean(source), fieldMedian, fieldCars: source?.fieldSeconds?.length ?? 0 };
+        return { ...section, byLap, present: Boolean(source), source: source ?? null };
       }),
     [pack, ordered]
   );
@@ -493,7 +538,14 @@ export const LapSectionGrid = ({
     const tuple = cell.byLap.get(lap);
     if (!tuple || tuple[1] === null || tuple[4] !== 1) return `Lap ${lap}, ${cell.label}: no timing row`;
     const time = tuple[6] !== null ? ` · ${tuple[6].toFixed(3)} s` : '';
-    const field = cell.fieldMedian !== null ? ` (field median ${cell.fieldMedian.toFixed(3)} s over the race)` : '';
+    /* The field on the same lap: the other cars' median there, never him. A
+     * pack that holds the field for the whole race only says nothing here
+     * rather than set one lap against a race-long figure. */
+    const reference = cell.source ? fieldReferenceFor(cell.source, { kind: 'single_lap', lap }, 'median', pack.totalLaps) : null;
+    const field =
+      reference?.seconds != null && tuple[6] !== null
+        ? ` · ${againstFieldWords(tuple[6] - reference.seconds)} (the other cars' median ${reference.seconds.toFixed(3)} s)`
+        : '';
     return `Lap ${lap}, ${cell.label}: P${tuple[2] ?? '?'} of ${tuple[3] ?? '?'}${time}${field}`;
   };
   const readoutText = pointed
@@ -974,7 +1026,7 @@ const SectionDistributionRow = ({
         {suppressed
           ? `${observation.observationCount ?? 0} ${qualifying ? 'valid ' : 'clean '}${observation.observationCount === 1 ? 'lap' : 'laps'}`
           : `${ordinal(Math.round(observation.percentile! * 100))} · ${
-              showPace ? `vs ${field!.length} cars · ` : ''
+              showPace ? `vs ${field!.length} others · ` : ''
             }${bryceMed !== null ? `${bryceMed.toFixed(3)}s ${stat === 'mean' ? 'avg' : 'med'} · ` : ''}${observation.observationCount ?? 0} ${observation.observationCount === 1 ? 'lap' : 'laps'}`}
       </span>
     </div>
@@ -1490,7 +1542,7 @@ export const SectionHeatCard = ({
                 <p style={{ margin: 0, fontSize: 12.5, color: 'var(--ink-muted)' }}>
                   {qualifyingMode
                     ? `Each dot is one valid observed qualifying lap and its share of the group benchmark beaten in that section. The gold tick is Bryce’s ${stat === 'median' ? 'median' : 'average'} lap-level share. Each driver’s best comparable section remains the fixed benchmark; it is not drawn as a field average.`
-                    : `Top rule: each dot is one clean lap and its share of the field beaten in that section; the gold tick is his ${stat === 'median' ? 'median' : 'average'} lap and the number the map carries. Lower rule: where his pace sits among the field in this section. Each faint mark is a car, the gold tick is Bryce, and faster is to the right.`}
+                    : `Top rule: each dot is one clean lap and its share of the field beaten in that section; the gold tick is his ${stat === 'median' ? 'median' : 'average'} lap and the number the map carries. Lower rule: where his pace sits among the other cars in this section, over the same laps. Each faint mark is another car, the gold tick is Bryce, and faster is to the right.`}
                 </p>
               ) : (
                 <p style={{ margin: 0, fontSize: 12.5, color: 'var(--ink-muted)' }}>
@@ -1543,26 +1595,11 @@ export const SectionHeatCard = ({
       ) : null;
 
   if (layout === 'tracks') {
-    /* Plain computations, not hooks: this branch sits after the empty-state
-     * return above. Both are a few hundred tuples. */
-    const raceBudget = !qualifyingMode && activeLaps ? lapBudgetOf(activeLaps, activeAnchors, outline) : null;
-    /* The bars follow the map. One lap picked (the grid or the slider): his
-     * section times on that lap against the field median. A lap the bars can't
-     * read (caution, restart, no timing) or a third of the race: the whole-race
-     * bars stay, dimmed, and say so plainly. */
-    const oneLapBudget =
-      raceBudget && activeLaps && singleLap ? lapBudgetForLap(activeLaps, activeAnchors, outline, scrubLap) : null;
-    const lapReadable = oneLapBudget !== null && oneLapBudget.compared > 0;
-    const budget = lapReadable ? oneLapBudget : raceBudget;
-    const wholeRaceNote = !raceBudget || lapReadable
-      ? null
-      : singleLap
-        ? scrubContext && scrubContext.caution !== 'green'
-          ? `lap ${scrubLap} ran ${cautionCopy[scrubContext.caution]}, so these stay on the whole race`
-          : `lap ${scrubLap} has no clean section times, so these stay on the whole race`
-        : scope.kind === 'lap_window'
-          ? 'the bars read the whole race, not one third; pick One lap to read a single lap'
-          : null;
+    /* The bars read exactly the scope the map shows: the whole race, a third,
+     * or one lap, with the metric picked above (Jack's review of Nov 15). A
+     * plain computation, not a hook: this branch sits after the empty-state
+     * return above, and it is a few hundred tuples. */
+    const budget = !qualifyingMode && activeLaps ? lapBudgetOf(activeLaps, activeAnchors, outline, scope, stat) : null;
     const ordered = sectionsInLapOrder(activeAnchors, outline);
     const [, , viewW, viewH] = outline.viewBox.split(' ').map(Number);
     const wide = viewH / viewW < 0.55;
@@ -1609,14 +1646,7 @@ export const SectionHeatCard = ({
           </div>
           <div className="tracks-story__budget">
             {budget ? (
-              budget.compared > 0 ? (
-                <LapBudgetBars budget={budget} wholeRaceNote={wholeRaceNote} />
-              ) : (
-                <div className="tracks-budget">
-                  <h3 className="tracks-subhead">Where his lap goes</h3>
-                  <p className="tracks-note">No section here has the {MIN_CLEAN_LAPS} clean laps and field times a comparison needs.</p>
-                </div>
-              )
+              <LapBudgetBars key={`${budget.scope.kind}-${scopeKey}`} budget={budget} />
             ) : (
               <div className="tracks-budget">
                 <h3 className="tracks-subhead">Where his lap goes</h3>

@@ -136,6 +136,57 @@
 .races-index .tower__name > span:first-child { text-wrap: pretty; }
 .races-index .card__header .caption { white-space: nowrap; }
 
+/* Round 4 (Jack's review, Nov 15): the page "needs to be increased a few
+ * points". Every size here is up two to five points from round 3, the track
+ * outlines in the rows are near twice the size, and the header sits as one
+ * block: the line under the title, the results date tight under it, then the
+ * season. */
+.races-index .screen-head__sub { font-size: clamp(18px, 1.3vw, 23px); max-width: 52ch; }
+/* (!important: DataFreshness sets margin: 0 inline, which is why the stack's
+ * own pull-up under a screen head never reached it.) */
+.page.stack.races-index > .screen-head + [role='status'] { margin-top: calc(var(--section-gap) * -1 + 14px) !important; }
+.races-index > [role='status'] { font-size: 15px; gap: 8px !important; }
+.races-index > [role='status'] svg { width: 15px; height: 15px; }
+.page.stack.races-index > [role='status'] + .card { margin-top: calc(var(--section-gap) * -1 + clamp(40px, 3.4vw, 60px)); }
+
+.races-index .card { padding-top: 24px; }
+.races-index .card__header { margin-bottom: 10px; }
+.races-index .card__title { font-size: clamp(26px, 2.2vw, 40px); letter-spacing: -0.02em; }
+.races-index .card__header .caption { font-size: 16px; }
+.races-index .races-index__legend { margin: 0 0 14px; font-size: 16px; line-height: 1.5; max-width: none; }
+
+.races-index .tower__row { padding: 14px 0; font-size: 19px; }
+.races-index .tower__row.race-row { grid-template-columns: 64px minmax(0, 1fr) auto auto 20px; column-gap: 16px; }
+.races-index .race-row__pos { gap: 5px; font-size: 22px; color: var(--ink-primary); font-variant-numeric: tabular-nums; }
+.races-index .race-row__top5 { width: 6px; height: 6px; border-radius: 2px; background: var(--bryce); }
+.races-index .race-row__mini { width: 84px; height: 46px; align-items: center; justify-content: center; flex: none; }
+.races-index .tower__team { font-size: 15px; }
+.races-index .tower__row .stat__delta { font-size: 17px; font-variant-numeric: tabular-nums; }
+.races-index .tower__row .tower__gap { font-size: 17px; }
+.races-index .race-row__date,
+.races-index .race-row__when { min-width: 64px; }
+.races-index .race-upcoming__head .caption { font-size: 16px; }
+.races-index .tower__row.race-row--upcoming { grid-template-columns: 84px minmax(0, 1fr) auto; column-gap: 16px; }
+.races-index .tower__row.race-row--upcoming.race-row--live { grid-template-columns: 84px minmax(0, 1fr) auto 20px; }
+@media (min-width: 640px) {
+  .races-index .tower__row.race-row { grid-template-columns: 64px 84px minmax(0, 1fr) auto auto auto 20px; }
+}
+@media (max-width: 639px) {
+  .races-index .tower__row { font-size: 17px; padding: 12px 0; }
+  .races-index .race-row__pos { font-size: 20px; }
+  .races-index .tower__row.race-row { grid-template-columns: 52px minmax(0, 1fr) auto auto 18px; column-gap: 12px; }
+  .races-index .race-row__mini { width: 64px; height: 36px; }
+  .races-index .tower__row.race-row--upcoming { grid-template-columns: 64px minmax(0, 1fr) auto; }
+  .races-index .tower__row .stat__delta,
+  .races-index .tower__row .tower__gap { font-size: 15px; }
+  .races-index .races-index__legend, .races-index .card__header .caption { font-size: 15px; }
+  /* the freshness line wraps on a phone: drop its dot so no line ends on one */
+  .races-index > [role='status'] > span[aria-hidden] { display: none; }
+  .races-index > [role='status'] { column-gap: 0 !important; }
+  .races-index > [role='status'] > svg { margin-right: 8px; }
+  .races-index > [role='status'] > span:last-child { flex-basis: 100%; }
+}
+
 /* Facts in the right-hand column (no track drawing): no rule above them. */
 .career-race .career-race__facts--aside { margin-top: 0; padding-top: 22px; border-top: 0; }
 

@@ -167,6 +167,26 @@ const buildRace = (race) => {
     return perCar.sort((a, b) => a - b);
   };
 
+  // The OTHER cars lap by lap (round 4, Nov 15): one row per car, never
+  // Bryce, one cell per lap of his race (index lap - 1), the car's clean
+  // green-flag time in the section or null. The UI compares him with these
+  // over the same laps in every scope (src/data/sectionObservations.ts,
+  // fieldReferenceFor). Cars with no clean time in the section are left out.
+  const otherCarLapsFor = (section) => {
+    const rows = [];
+    for (const car of [...lapsByCar.keys()].filter((car) => car !== bryceCar).sort()) {
+      const cautions = cautionByCar.get(car);
+      const row = Array.from({ length: bryceMaxLap }, (_, index) => {
+        const lap = index + 1;
+        if (cautions.get(lap)?.clean !== true) return null;
+        const time = timeByKey.get(`${section}|${lap}|${car}`);
+        return time === undefined ? null : round(time, 4);
+      });
+      if (row.some((value) => value !== null)) rows.push(row);
+    }
+    return rows;
+  };
+
   const bryceCautions = cautionByCar.get(bryceCar);
 
   // Each section's per-lap tuple for Bryce, with the full-field percentile.
@@ -196,7 +216,7 @@ const buildRace = (race) => {
         speed === null ? null : round(speed, 3)
       ]);
     }
-    return { sectionName: section, kind: 'measured', laps, fieldSeconds: fieldSecondsFor(section) };
+    return { sectionName: section, kind: 'measured', laps, fieldSeconds: fieldSecondsFor(section), otherCarLaps: otherCarLapsFor(section) };
   });
 
   // Lap totals: Bryce's full lap (S/F->S/F delta) vs the field, per lap.

@@ -27,14 +27,14 @@ const archiveLabel = (raceLabel: string): string =>
 const MiniTrack = ({ trackName, muted = false }: { trackName: string | null; muted?: boolean }) => {
   const outline = trackOutlineFor(trackName);
   return (
-    <span className="race-row__mini" style={{ width: 44, height: 26, alignItems: 'center', justifyContent: 'center', flex: 'none' }}>
+    <span className="race-row__mini">
       {outline ? (
         <svg viewBox={outline.viewBox} width="100%" height="100%" preserveAspectRatio="xMidYMid meet" aria-hidden>
           <path
             d={outline.mainPath}
             fill="none"
             stroke={muted ? 'var(--ink-muted)' : 'var(--ink-secondary)'}
-            strokeWidth={1.2}
+            strokeWidth={1.5}
             vectorEffect="non-scaling-stroke"
             strokeLinejoin="round"
           />
@@ -57,10 +57,12 @@ const SeasonSpine = ({ rows }: { rows: UiSeasonIndexRow[] }) => {
   const n = ordered.length;
   if (n < 2) return null;
 
-  const margin = { top: 26, right: 18, bottom: 24, left: 46 };
-  const finishPanelHeight = 150;
-  const panelGap = 34;
-  const standingPanelHeight = 74;
+  /* Round 4 (Jack, Nov 15: "the text on this page needs to be increased a few
+   * points"): labels at 14-15 px, the panels a little taller to match. */
+  const margin = { top: 30, right: 18, bottom: 30, left: 56 };
+  const finishPanelHeight = 180;
+  const panelGap = 42;
+  const standingPanelHeight = 86;
   const height = margin.top + finishPanelHeight + panelGap + standingPanelHeight + margin.bottom;
   const plotWidth = Math.max(width - margin.left - margin.right, 80);
   const x = (index: number) => margin.left + (index / (n - 1)) * plotWidth;
@@ -148,7 +150,7 @@ const SeasonSpine = ({ rows }: { rows: UiSeasonIndexRow[] }) => {
           }}
           style={{ cursor: hovered !== null ? 'pointer' : 'default' }}
         >
-          <text x={margin.left} y={13} fill="var(--ink-secondary)" fontFamily={chartFont} fontSize={12.5} fontWeight={550}>
+          <text x={margin.left} y={15} fill="var(--ink-secondary)" fontFamily={chartFont} fontSize={15} fontWeight={550}>
             Race finishes
           </text>
           {finishTicks.map((tick) => (
@@ -161,7 +163,7 @@ const SeasonSpine = ({ rows }: { rows: UiSeasonIndexRow[] }) => {
                 dominantBaseline="middle"
                 fill="var(--ink-muted)"
                 fontFamily={chartFont}
-                fontSize={12}
+                fontSize={14}
                 style={{ fontVariantNumeric: 'tabular-nums' }}
               >
                 P{tick}
@@ -170,10 +172,10 @@ const SeasonSpine = ({ rows }: { rows: UiSeasonIndexRow[] }) => {
           ))}
           <text
             x={margin.left}
-            y={standingTop - 9}
+            y={standingTop - 11}
             fill="var(--ink-secondary)"
             fontFamily={chartFont}
-            fontSize={12.5}
+            fontSize={15}
             fontWeight={550}
           >
             Championship standing
@@ -194,7 +196,7 @@ const SeasonSpine = ({ rows }: { rows: UiSeasonIndexRow[] }) => {
                 dominantBaseline="middle"
                 fill="var(--ink-muted)"
                 fontFamily={chartFont}
-                fontSize={12}
+                fontSize={14}
                 style={{ fontVariantNumeric: 'tabular-nums' }}
               >
                 P{tick}
@@ -223,7 +225,7 @@ const SeasonSpine = ({ rows }: { rows: UiSeasonIndexRow[] }) => {
                 key={row.sessionId}
                 cx={x(index)}
                 cy={pointY}
-                r={hovered === index ? 5.4 : 4.2}
+                r={hovered === index ? 6 : 4.8}
                 fill={clean ? (topFive ? 'var(--bryce)' : 'var(--ink-primary)') : 'var(--surface-1)'}
                 stroke={clean ? (topFive ? 'var(--bryce)' : 'var(--ink-primary)') : 'var(--ink-muted)'}
                 strokeWidth={1.6}
@@ -246,14 +248,14 @@ const SeasonSpine = ({ rows }: { rows: UiSeasonIndexRow[] }) => {
                 textAnchor="middle"
                 fill="var(--ink-muted)"
                 fontFamily={chartFont}
-                fontSize={12}
+                fontSize={14}
                 style={{ fontVariantNumeric: 'tabular-nums' }}
               >
                 {row.roundIndex ?? index + 1}
               </text>
             ) : null
           )}
-          <text x={margin.left - 8} y={height - 8} textAnchor="end" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={12}>
+          <text x={margin.left - 8} y={height - 8} textAnchor="end" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={14}>
             round
           </text>
         </svg>
@@ -273,9 +275,9 @@ const RaceRow = ({ row }: { row: UiSeasonIndexRow }) => {
   const topFive = clean && row.finishPosition !== null && row.finishPosition <= 5;
   return (
     <Link to={`/races/${encodeURIComponent(row.sessionId)}`} className="tower__row race-row">
-      <span className="figure row" style={{ fontSize: 17, gap: 4, color: 'var(--ink-primary)' }}>
+      <span className="figure row race-row__pos">
         {formatPosition(row.finishPosition)}
-        {topFive ? <span aria-label="top five" style={{ width: 5, height: 5, borderRadius: 2, background: 'var(--bryce)' }} /> : null}
+        {topFive ? <span aria-label="top five" className="race-row__top5" /> : null}
       </span>
       <MiniTrack trackName={row.trackName} />
       {/* Name + status stack vertically (#24): the shared .tower__name is a
@@ -297,10 +299,10 @@ const RaceRow = ({ row }: { row: UiSeasonIndexRow }) => {
         {gain ? gain.text : ''}
       </span>
       <span className="tower__gap tnum">{row.points !== null ? `${row.points} pts` : ''}</span>
-      <span className="tower__gap race-row__date" style={{ fontSize: 12.5, minWidth: 52 }}>
+      <span className="tower__gap race-row__date">
         {(row.raceDate ?? row.eventStartDate) ? formatDate(row.raceDate ?? row.eventStartDate!, { month: 'short', day: 'numeric' }) : ''}
       </span>
-      <ArrowRight size={13} style={{ color: 'var(--ink-muted)' }} aria-hidden />
+      <ArrowRight size={16} style={{ color: 'var(--ink-muted)' }} aria-hidden />
     </Link>
   );
 };
@@ -365,14 +367,14 @@ const UpcomingRaceRow = ({ round, live }: { round: PlaceholderRound; live: LiveA
       </span>
       <span
         className="row tnum"
-        style={{ gap: 6, fontSize: 12.5, fontWeight: 650, color: 'var(--ink-primary)', justifyContent: 'flex-end' }}
+        style={{ gap: 6, fontSize: 15, fontWeight: 650, color: 'var(--ink-primary)', justifyContent: 'flex-end' }}
       >
         {/* The spec's QUIET INK dot — never the status green; the archive is
             not a health indicator, it just points at the live page. */}
         <span className="live-dot" style={{ background: 'var(--ink-primary)' }} aria-hidden />
         LIVE
       </span>
-      <ArrowRight size={13} style={{ color: 'var(--ink-muted)' }} aria-hidden />
+      <ArrowRight size={16} style={{ color: 'var(--ink-muted)' }} aria-hidden />
     </Link>
   ) : (
     <div className="tower__row race-row--upcoming" aria-disabled="true">
@@ -383,7 +385,7 @@ const UpcomingRaceRow = ({ round, live }: { round: PlaceholderRound; live: LiveA
           race {round.round} of {round.seasonTotal}
         </span>
       </span>
-      <span className="tower__gap tnum" style={{ fontSize: 12.5, color: 'var(--ink-muted)', minWidth: 52 }}>
+      <span className="tower__gap race-row__when" style={{ color: 'var(--ink-muted)' }}>
         {round.raceDate ? formatDate(round.raceDate, { month: 'short', day: 'numeric' }) : ''}
       </span>
     </div>
@@ -516,7 +518,7 @@ export const RacesScreen = ({ livePayload = null }: { livePayload?: LiveReadines
             {/* The season's shape leads the card; the rounds still to run sit
                 between it and the completed rows, so the whole card reads as
                 one timeline — future at the top, past running down. */}
-            <p className="caption caption--secondary" style={{ margin: '0 0 8px' }}>
+            <p className="caption caption--secondary races-index__legend">
               Gold marks a top-5 finish · ○ a day that ended early · the quiet line is his championship position · click any
               round
             </p>

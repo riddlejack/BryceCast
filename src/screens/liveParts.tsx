@@ -3,7 +3,7 @@ import { HeroPanel, Plate } from '../app/components';
 import { asNumber, asString, formatDate } from '../app/format';
 import { trackOutlineFor, type TrackOutline } from '../assets/tracks';
 import type { LiveReadiness } from '../app/useReadiness';
-import type { ReplaySession } from '../app/useReplaySession';
+import type { ReplayOpeningCaution, ReplaySession } from '../app/useReplaySession';
 import { uiDataPackage } from '../data/uiDataPackage';
 import { displayRaceLabelText } from '../data/debriefArchive';
 import { canonicalLiveRaceSessionId } from '../data/liveRaceShellModel';
@@ -162,6 +162,51 @@ const trackCaption = (light: SectionLightState, mode: 'race' | 'prestart' | 'ses
   }
 };
 
+/* ---------- the opening caution a replay jumped ---------- */
+
+/** "Caution, laps 1–4, skipped to the restart." A feed that began with the
+ *  caution out knows only where it ended: "Caution to lap 7, …". */
+export const skippedCautionWords = (caution: ReplayOpeningCaution): string => {
+  const what = caution.kind === 'red' ? 'Red flag' : 'Caution';
+  const span = caution.laps;
+  const laps = !span
+    ? ' at the start'
+    : span.from === null
+      ? ` to lap ${span.to}`
+      : span.from === span.to
+        ? `, lap ${span.from}`
+        : `, laps ${span.from}–${span.to}`;
+  return `${what}${laps}, skipped to the restart.`;
+};
+
+/** How long the note sits on the track after the jump; the bar keeps it after. */
+export const SKIP_NOTE_WALL_MS = 15_000;
+
+/** On the track, for a few seconds after the jump: what the replay skipped,
+ *  and the way to watch it instead. */
+const SkippedCautionNote = ({ replay }: { replay: ReplaySession }) => {
+  const caution = replay.openingCaution;
+  const skippedAt = replay.clockFrom === 'caution' ? null : replay.cautionSkippedAt;
+  const [, setTick] = useState(0);
+  useEffect(() => {
+    if (skippedAt === null) return undefined;
+    const left = skippedAt + SKIP_NOTE_WALL_MS - Date.now();
+    if (left <= 0) return undefined;
+    const timer = window.setTimeout(() => setTick((value) => value + 1), left + 50);
+    return () => window.clearTimeout(timer);
+  }, [skippedAt]);
+  if (!caution || skippedAt === null || Date.now() - skippedAt > SKIP_NOTE_WALL_MS) return null;
+  return (
+    <div className={`live-skip-note live-skip-note--${caution.kind}`} role="status" data-replay-skip-note>
+      <span className="live-skip-note__swatch" aria-hidden />
+      <span className="live-skip-note__text">{skippedCautionWords(caution)}</span>
+      <button type="button" className="live-skip-note__watch" onClick={replay.watchCaution}>
+        Watch it
+      </button>
+    </div>
+  );
+};
+
 export const TrackPanel = ({
   identity,
   replay,
@@ -192,6 +237,7 @@ export const TrackPanel = ({
   const litName = light.lit && chain ? sectionDisplayName(light.lit.anchor, light.lit.index, chain.length) : null;
   return (
     <div className="live-hero__track" data-section-light={light.status} data-section-light-reason={light.plan?.reason ?? ''}>
+      {replay && mode === 'race' ? <SkippedCautionNote replay={replay} /> : null}
       <LiveTrack
         outline={identity.outline}
         chain={chain}

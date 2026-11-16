@@ -79,27 +79,29 @@ export const HomeNow = ({
     ].filter(Boolean);
     return (
       <section className="home-line home-line--now home-line--live" aria-label="Live now">
-        <div>
-          <div className="home-label">
-            Live now{eventName ? ` · ${eventName}` : ''}
-            {sessionName && !(eventName ?? '').toLowerCase().includes(sessionName.toLowerCase()) ? ` · ${sessionName}` : ''}
-          </div>
+        <div className="home-line__head">
+          Live now{eventName ? ` · ${eventName}` : ''}
+          {sessionName && !(eventName ?? '').toLowerCase().includes(sessionName.toLowerCase()) ? ` · ${sessionName}` : ''}
+        </div>
+        <div className="home-line__lead">
           <div className="home-line__big">{rank !== null ? `P${rank}` : 'On track'}</div>
         </div>
-        <div className="home-line__facts">
-          {facts.length > 0
-            ? facts.map((fact, index) => (
-                <span key={index}>
-                  {index > 0 ? ' · ' : ''}
-                  {fact}
-                </span>
-              ))
-            : 'Bryce’s session is underway.'}
+        <div className="home-line__body">
+          <div className="home-line__facts">
+            {facts.length > 0
+              ? facts.map((fact, index) => (
+                  <span key={index}>
+                    {index > 0 ? ' · ' : ''}
+                    {fact}
+                  </span>
+                ))
+              : 'Bryce’s session is underway.'}
+          </div>
+          <Link to="/live" className="home-action">
+            <LiveDisc />
+            Follow it live
+          </Link>
         </div>
-        <Link to="/live" className="home-action">
-          <LiveDisc />
-          Follow it live
-        </Link>
       </section>
     );
   }
@@ -111,17 +113,17 @@ export const HomeNow = ({
    * countdown; the package's day-precision date is the fallback. */
   const sessionMatchesEvent =
     nextSession?.startsAt && normalizedName(nextSession.eventName).includes(normalizedName(nextEvent.eventName).slice(0, 12));
-  const preciseStart = sessionMatchesEvent ? nextSession?.startsAt ?? null : null;
+  const preciseStart = sessionMatchesEvent ? (nextSession?.startsAt ?? null) : null;
   const label = state === 'raceDay' ? 'Race day' : state === 'raceWeek' ? 'Race week' : 'Next race';
   const typeText = trackTypeLabel(nextEvent.trackType);
   const typeLabel = typeText === '—' ? null : typeText;
 
   return (
     <section className="home-line home-line--now" aria-label={label}>
-      <div>
-        <div className="home-label">
-          {label} · {venue}
-        </div>
+      <div className="home-line__head">
+        {label} · {venue}
+      </div>
+      <div className="home-line__lead">
         {(state === 'raceDay' || state === 'raceWeek') && preciseStart ? (
           <div className="home-line__count">
             <Countdown to={preciseStart} />
@@ -133,21 +135,27 @@ export const HomeNow = ({
           </div>
         )}
       </div>
-      <div className="home-line__facts">
-        {nextEvent.eventName}
-        {typeLabel ? ` · ${typeLabel}` : ''} · {state === 'raceDay' ? '' : 'race day '}
-        {formatDate(raceDate, { weekday: 'long', month: 'long', day: 'numeric' })}
+      <div className="home-line__body">
+        <div className="home-line__facts">
+          {nextEvent.eventName}
+          {typeLabel ? ` · ${typeLabel}` : ''} · {state === 'raceDay' ? '' : 'race day '}
+          {formatDate(raceDate, {
+            weekday: 'long',
+            month: 'long',
+            day: 'numeric'
+          })}
+        </div>
+        {state === 'raceDay' ? (
+          <Link to="/live" className="home-action">
+            <LiveDisc />
+            Follow it live
+          </Link>
+        ) : (
+          <Link to="/race-week" className="home-textlink">
+            The weekend ahead →
+          </Link>
+        )}
       </div>
-      {state === 'raceDay' ? (
-        <Link to="/live" className="home-action">
-          <LiveDisc />
-          Follow it live
-        </Link>
-      ) : (
-        <Link to="/race-week" className="home-textlink">
-          The weekend ahead →
-        </Link>
-      )}
     </section>
   );
 };

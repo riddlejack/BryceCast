@@ -81,7 +81,7 @@ import {
 } from '../data/offSeasonDemo';
 import { canonicalLiveRaceSessionId, replayDeepLinkQuery } from '../data/liveRaceShellModel';
 import { ReplayGapSkippedNote, ReplaySourceGapNotice } from './replaySourceGap';
-import { FlagReadout, HeroIdentity, ReplayPreStart, TrackPanel, raceIdentityFor } from './liveParts';
+import { FlagReadout, HeroIdentity, ReplayPreStart, TrackPanel, raceIdentityFor, skippedCautionWords, SKIP_NOTE_WALL_MS } from './liveParts';
 import './live.css';
 
 type Row = Record<string, unknown>;
@@ -1579,7 +1579,13 @@ const ReplayBar = ({
   const year = replay.seasonYear ? ` ${replay.seasonYear}` : '';
   const prov = replayProvenance(replay.session);
   const flag = asString(heartbeat.flag)?.toUpperCase() ?? null;
-  const restartLap = replay.raceStart?.kind === 'restart' ? replay.raceStart.lap : null;
+  // The opening caution, once the replay has jumped it: said in the bar for
+  // as long as this run of the clock is past it, with the way to watch it.
+  const skippedCaution =
+    replay.openingCaution && replay.cautionSkippedAt !== null && replay.clockFrom !== 'caution' ? replay.openingCaution : null;
+  // While the track carries the same note (its first 15 s), the bar stays quiet,
+  // so the words never show twice at once; the bar keeps it after that.
+  const trackNoteShowing = skippedCaution !== null && Date.now() - (replay.cautionSkippedAt ?? 0) <= SKIP_NOTE_WALL_MS;
   return (
     <section
       className="replay-bar"
@@ -1587,7 +1593,8 @@ const ReplayBar = ({
       data-replay-speed={replay.speed}
       data-replay-playback-speed={replay.playbackSpeed}
       data-replay-skim={replay.skim?.kind ?? ''}
-      data-replay-start={replay.raceStart?.kind ?? ''}
+      data-replay-opening-caution={replay.openingCaution?.kind ?? ''}
+      data-replay-caution-skipped={skippedCaution ? 'true' : 'false'}
       data-replay-flag={flag ?? ''}
     >
       <div className="replay-bar__id">
@@ -1625,9 +1632,12 @@ const ReplayBar = ({
               : `${replay.skim.restartLap !== null ? `lap ${replay.skim.restartLap} ` : ''}restart`}
             .
           </span>
-        ) : replay.raceStart?.kind === 'restart' && replay.clockFrom === 'raceStart' ? (
+        ) : skippedCaution && !trackNoteShowing ? (
           <span className="caption caption--secondary" data-replay-start-note>
-            Starts at the {restartLap !== null ? `lap ${restartLap} ` : ''}restart, skipping the caution before it.
+            {skippedCautionWords(skippedCaution)}{' '}
+            <button type="button" className="replay-bar__inline-btn" data-replay-watch-caution onClick={replay.watchCaution}>
+              Watch it
+            </button>
           </span>
         ) : null}
       </div>
@@ -1649,7 +1659,7 @@ const ReplayBar = ({
           type="button"
           className="replay-bar__btn"
           onClick={replay.restart}
-          title={restartLap !== null ? `Back to the lap ${restartLap} restart` : 'Back to the green flag'}
+          title="Back to the start"
         >
           <RotateCcw size={13} aria-hidden /> Restart
         </button>
@@ -1666,18 +1676,6 @@ const ReplayBar = ({
             title="Back to before the start, as the field leaves the grid"
           >
             <Flag size={13} aria-hidden /> From the formation lap
-          </button>
-        ) : replay.raceStart?.kind === 'restart' && replay.greenFlagAt ? (
-          /* No formation lap in this capture (a lake replay begins at or after
-             the green), but the opening caution was skipped: keep it reachable. */
-          <button
-            type="button"
-            className="replay-bar__btn"
-            data-replay-green-flag
-            onClick={replay.restartFromGreenFlag}
-            title="Back to the green flag, through the caution"
-          >
-            <Flag size={13} aria-hidden /> From the green flag
           </button>
         ) : null}
         <button type="button" className="replay-bar__btn replay-bar__btn--exit" onClick={onExit ?? replay.exit}>

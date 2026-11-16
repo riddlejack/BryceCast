@@ -164,33 +164,89 @@ const RollingValue = ({ display, progress }: { display: string; progress: number
 };
 
 /* ============================================================
- * 1. The odometer
+ * 1. The odometer (round 4, November 15): the ledger's figures in six
+ *    groups, each with one drawing. A figure shows its number and a short
+ *    label; a click opens how it was counted. One panel explains the method.
  * ============================================================ */
 
-/* The ledger's figures, in reading order: on track, people and places, then
- * the modelled and INDY NXT-only figures. Values always come from the package. */
-const ODOMETER_IDS = [
-  'races',
-  'raceLaps',
-  'raceMiles',
-  'raceCorners',
-  'raceTimeAll',
-  'sessionHours',
-  'otherDriverRecords',
-  'venues',
-  'countries',
-  'milesBetweenTracks',
-  'eventDays',
-  'raceWeeks',
-  'fuelRaces',
-  'indyNxtCautions',
-  'indyNxtRetirements'
-] as const;
-
-/** Units the label does not already carry. */
-const unitSuffix: Partial<Record<string, string>> = {
-  fuelRaces: 'US gallons'
+type OdoFigureSpec = { id: string; label: string };
+type OdoGroupSpec = {
+  key: string;
+  title: string;
+  /** Column weights for the figures, so a wide value (a range) gets room. */
+  columns: string;
+  figures: OdoFigureSpec[];
+  visual: 'series' | 'distance' | 'time' | 'places' | 'people' | 'incidents';
 };
+
+/* Cut from the odometer in round 4: "Days at race meetings" (177) and "Weeks
+ * with a race meeting" (75). Both are the captions of "His life in weeks"
+ * just below, so they appeared twice. Added: the single-seater share of the
+ * other drivers (269), which the people drawing splits out. */
+const ODOMETER_GROUPS: OdoGroupSpec[] = [
+  {
+    key: 'on-track',
+    title: 'On track',
+    columns: '1fr 1.15fr 1.25fr',
+    visual: 'series',
+    figures: [
+      { id: 'races', label: 'Races' },
+      { id: 'raceLaps', label: 'Race laps' },
+      { id: 'raceCorners', label: 'Corners in races' }
+    ]
+  },
+  {
+    key: 'distance',
+    title: 'Distance',
+    columns: '1fr 1.42fr 1.38fr',
+    visual: 'distance',
+    figures: [
+      { id: 'raceMiles', label: 'Miles raced' },
+      { id: 'milesBetweenTracks', label: 'Miles between tracks' },
+      { id: 'fuelRaces', label: 'US gallons of fuel' }
+    ]
+  },
+  {
+    key: 'time',
+    title: 'Time in the car',
+    columns: '1fr 1fr',
+    visual: 'time',
+    figures: [
+      { id: 'raceTimeAll', label: 'Racing' },
+      { id: 'sessionHours', label: 'In every official session' }
+    ]
+  },
+  {
+    key: 'places',
+    title: 'Places',
+    columns: '1fr 1fr',
+    visual: 'places',
+    figures: [
+      { id: 'venues', label: 'Tracks' },
+      { id: 'countries', label: 'Countries' }
+    ]
+  },
+  {
+    key: 'people',
+    title: 'The other drivers',
+    columns: '1fr 1fr',
+    visual: 'people',
+    figures: [
+      { id: 'otherDriverRecords', label: 'Drivers in his races' },
+      { id: 'otherDriverRecordsSingleSeater', label: 'Of them in single-seaters' }
+    ]
+  },
+  {
+    key: 'incidents',
+    title: 'When it went wrong, INDY NXT only',
+    columns: '1fr 1fr',
+    visual: 'incidents',
+    figures: [
+      { id: 'indyNxtRetirements', label: 'Races he retired from' },
+      { id: 'indyNxtCautions', label: 'Cautions he was named in' }
+    ]
+  }
+];
 
 const figureById = (figures: UiCareerFigure[], id: string): UiCareerFigure | undefined =>
   figures.find((figure) => figure.id === id);
@@ -279,36 +335,481 @@ const OdometerLive = ({ lifeStats, live }: { lifeStats: UiCareerLifeStats; live:
   return null;
 };
 
-const OdometerCell = ({ figure, progress }: { figure: UiCareerFigure; progress: number }) => {
-  const unit = unitSuffix[figure.id];
-  const people =
-    figure.id.startsWith('otherDriverRecords') && figure.range
-      ? `${wholeNumber.format(figure.range.low)} to ${wholeNumber.format(figure.range.high)} people`
-      : null;
-  const parts = figure.parts && figure.id.startsWith('indyNxt') ? figure.parts.map((part) => `${part.value} ${part.label}`).join(', ') : null;
-  const denominator = figure.denominator
-    ? `of ${wholeNumber.format(figure.denominator.value)} ${figure.denominator.unit}${figure.id === 'eventDays' ? ' from his first race meeting to his latest' : ''}`
-    : null;
-  const subLine = [denominator, people, parts, figure.scope !== 'career' ? figure.scope : null].filter(Boolean).join(' · ');
-  /* The caveat shows where it changes how the number reads: why a floor is a
-   * floor, what a model assumes, and what a narrower scope leaves out. */
-  const showCaveat = figure.caveat && (figure.class !== 'counted' || figure.id === 'indyNxtCautions');
+/* ---------- the drawings, one per group ---------- */
+
+const ordinal = (n: number): string => {
+  const mod100 = n % 100;
+  if (mod100 >= 11 && mod100 <= 13) return `${n}th`;
+  return `${n}${['th', 'st', 'nd', 'rd'][n % 10] ?? 'th'}`;
+};
+
+/** Races by series, from the weeks grid (every race sits in exactly one week). */
+const racesBySeries = (lifeStats: UiCareerLifeStats): Array<{ seriesId: string; races: number }> => {
+  const counts = new Map<string, number>();
+  for (const week of lifeStats.weeksGrid.weeks) {
+    for (const race of week.races) counts.set(race.seriesId, (counts.get(race.seriesId) ?? 0) + race.raceCount);
+  }
+  return seriesOrder.filter((id) => (counts.get(id) ?? 0) > 0).map((id) => ({ seriesId: id, races: counts.get(id) ?? 0 }));
+};
+
+const SeriesVisual = ({ lifeStats }: { lifeStats: UiCareerLifeStats }) => {
+  const rows = racesBySeries(lifeStats);
+  const total = rows.reduce((sum, row) => sum + row.races, 0);
   return (
-    <div className={`odo-cell odo-cell--${figure.class}`} data-figure-id={figure.id}>
-      <div className="odo-cell__value" aria-label={`${figure.display}${unit ? ` ${unit}` : ''}`}>
-        <span aria-hidden>
-          <RollingValue display={figure.display} progress={progress} />
+    <figure className="odo-visual" aria-label={`Races by series: ${rows.map((row) => `${seriesMetaById(row.seriesId).short} ${row.races}`).join(', ')}.`}>
+      <div className="odo-bar" aria-hidden>
+        {rows.map((row) => (
+          <span
+            key={row.seriesId}
+            className="odo-bar__seg"
+            style={{ flexGrow: row.races, background: seriesMetaById(row.seriesId).tint }}
+            title={`${seriesMetaById(row.seriesId).name}: ${row.races} ${row.races === 1 ? 'race' : 'races'}`}
+          />
+        ))}
+      </div>
+      <figcaption className="odo-legend">
+        {rows.map((row) => (
+          <span key={row.seriesId}>
+            <i aria-hidden style={{ background: seriesMetaById(row.seriesId).tint }} />
+            {seriesMetaById(row.seriesId).short} {row.races}
+          </span>
+        ))}
+        <span className="odo-legend__note">{total} races, in the order he raced the series</span>
+      </figcaption>
+    </figure>
+  );
+};
+
+/** Two or three bars on one scale. A floor ends in a dashed run: there is more. */
+type ScaleBar = { key: string; label: string; parts: Array<{ value: number; tone: 'ink' | 'soft' | 'hatch' }>; floor?: boolean };
+
+const ScaleBars = ({
+  bars,
+  max,
+  marks,
+  ariaLabel,
+  note
+}: {
+  bars: ScaleBar[];
+  max: number;
+  marks?: Array<{ value: number; label: string }>;
+  ariaLabel: string;
+  note?: ReactNode;
+}) => (
+  <figure className="odo-visual" aria-label={ariaLabel}>
+    <div className="odo-scale" aria-hidden>
+      {marks?.map((mark) => (
+        <span key={mark.label} className="odo-scale__mark" style={{ ['--f' as string]: String(mark.value / max) }}>
+          <span className="odo-scale__mark-label">{mark.label}</span>
         </span>
+      ))}
+      {bars.map((bar) => {
+        const total = bar.parts.reduce((sum, part) => sum + part.value, 0);
+        return (
+          <div key={bar.key} className="odo-scale__row">
+            <span className="odo-scale__label">{bar.label}</span>
+            <span className="odo-scale__track">
+              <span className="odo-scale__fill" style={{ width: `${(total / max) * 100}%` }}>
+                {bar.parts.map((part, index) => (
+                  <span key={index} className={`odo-scale__part odo-scale__part--${part.tone}`} style={{ flexGrow: part.value }} />
+                ))}
+              </span>
+              {bar.floor ? <span className="odo-scale__more" style={{ left: `${(total / max) * 100}%` }} /> : null}
+            </span>
+          </div>
+        );
+      })}
+    </div>
+    {note ? <figcaption className="odo-legend">{note}</figcaption> : null}
+  </figure>
+);
+
+const EQUATOR_MILES = 24_901;
+
+const DistanceVisual = ({ figures }: { figures: UiCareerFigure[] }) => {
+  const raced = figureById(figures, 'raceMiles')?.value ?? 0;
+  const between = figureById(figures, 'milesBetweenTracks')?.value ?? 0;
+  if (!raced || !between) return <div className="odo-visual" />;
+  const max = between * 1.12;
+  /* A floor, so the ratio rounds down to a whole number (8.28 is "8"). */
+  const ratio = Math.floor(between / raced);
+  return (
+    <ScaleBars
+      ariaLabel={`Miles raced against miles between tracks, on one scale with the equator marked: ${ratio} miles between tracks for every mile raced.`}
+      max={max}
+      marks={[
+        { value: EQUATOR_MILES, label: 'once round the equator' },
+        { value: EQUATOR_MILES * 2, label: 'twice' }
+      ]}
+      bars={[
+        { key: 'raced', label: 'Raced', parts: [{ value: raced, tone: 'ink' }] },
+        { key: 'between', label: 'Between tracks', parts: [{ value: between, tone: 'soft' }], floor: true }
+      ]}
+      note={<span>At least {ratio} miles between tracks for every mile raced</span>}
+    />
+  );
+};
+
+const TimeVisual = ({ figures }: { figures: UiCareerFigure[] }) => {
+  const timed = figureById(figures, 'raceTimeTimed')?.value ?? 0;
+  const racing = figureById(figures, 'raceTimeAll')?.value ?? 0;
+  const sessions = figureById(figures, 'sessionHours')?.value ?? 0;
+  if (!racing || !sessions) return <div className="odo-visual" />;
+  const untimed = Math.max(0, racing - timed);
+  return (
+    <ScaleBars
+      ariaLabel={`Hours in the car on one scale: racing ${hoursText(racing)} or more, every official session ${hoursText(sessions)} or more.`}
+      max={sessions * 1.12}
+      bars={[
+        {
+          key: 'racing',
+          label: 'Racing',
+          parts: [
+            { value: timed, tone: 'ink' },
+            { value: untimed, tone: 'hatch' }
+          ],
+          floor: true
+        },
+        {
+          key: 'sessions',
+          label: 'All sessions',
+          parts: [
+            { value: timed, tone: 'ink' },
+            { value: untimed, tone: 'hatch' },
+            { value: sessions - racing, tone: 'soft' }
+          ],
+          floor: true
+        }
+      ]}
+      note={
+        <>
+          <span>
+            <i aria-hidden className="odo-key odo-key--ink" />
+            official race times
+          </span>
+          <span>
+            <i aria-hidden className="odo-key odo-key--hatch" />
+            races with no official time
+          </span>
+          <span>
+            <i aria-hidden className="odo-key odo-key--soft" />
+            practice, qualifying, tests
+          </span>
+        </>
+      }
+    />
+  );
+};
+
+const hoursText = (hours: number): string => `${Math.floor(hours)} hours`;
+
+const countryCode: Record<string, string> = {
+  'United States': 'US',
+  'United Kingdom': 'UK',
+  'New Zealand': 'NZ',
+  Austria: 'AT',
+  Belgium: 'BE',
+  France: 'FR',
+  Hungary: 'HU',
+  Italy: 'IT',
+  Portugal: 'PT'
+};
+
+const PlacesVisual = () => {
+  const venues = uiDataPackage.screens.careerLab.atlas?.venues ?? [];
+  const byCountry = new Map<string, number>();
+  for (const venue of venues) byCountry.set(venue.country, (byCountry.get(venue.country) ?? 0) + 1);
+  const countries = [...byCountry.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+  return (
+    <figure className="odo-visual" aria-label={`Tracks by country: ${countries.map(([name, count]) => `${name} ${count}`).join(', ')}.`}>
+      <div className="odo-places" aria-hidden>
+        {countries.map(([name, count]) => (
+          <span key={name} className="odo-places__country">
+            <span className="odo-places__dots">
+              {Array.from({ length: count }, (_, index) => (
+                <i key={index} />
+              ))}
+            </span>
+            <span className="odo-places__name" title={name}>
+              {countryCode[name] ?? name}
+            </span>
+          </span>
+        ))}
       </div>
-      <div className="odo-cell__label">
-        {figure.label}
-        {unit ? <span className="odo-cell__unit">, {unit}</span> : null}
+      <figcaption className="odo-legend">
+        <span className="odo-legend__note">One dot is one track, grouped by country</span>
+      </figcaption>
+    </figure>
+  );
+};
+
+const PeopleVisual = ({ figures }: { figures: UiCareerFigure[] }) => {
+  const all = figureById(figures, 'otherDriverRecords')?.value ?? 0;
+  const single = figureById(figures, 'otherDriverRecordsSingleSeater')?.value ?? 0;
+  const [ref, width] = useMeasuredWidth<HTMLDivElement>();
+  if (!all) return <div className="odo-visual" />;
+  const daytonaOnly = all - single;
+  const pitch = 7;
+  const cols = Math.max(20, Math.floor(width / pitch));
+  const rows = Math.ceil(all / cols);
+  return (
+    <figure
+      className="odo-visual"
+      aria-label={`${all} other driver names: ${single} in his single-seater races, ${daytonaOnly} met only at the Daytona 24-hour race.`}
+    >
+      <div ref={ref} className="odo-people" aria-hidden>
+        {width > 0 ? (
+          <svg width={cols * pitch} height={rows * pitch}>
+            {Array.from({ length: all }, (_, index) => (
+              <circle
+                key={index}
+                cx={(index % cols) * pitch + pitch / 2}
+                cy={Math.floor(index / cols) * pitch + pitch / 2}
+                r={2.4}
+                className={index < single ? 'odo-people__dot' : 'odo-people__dot odo-people__dot--daytona'}
+              />
+            ))}
+          </svg>
+        ) : null}
       </div>
-      {subLine ? <div className="odo-cell__sub">{subLine}</div> : null}
-      <p className="odo-cell__how">
-        <span className="odo-cell__class">{classWord[figure.class]}.</span> {figure.how}
-        {showCaveat ? <span className="odo-cell__caveat"> {figure.caveat}</span> : null}
+      <figcaption className="odo-legend">
+        <span>
+          <i aria-hidden className="odo-key odo-key--dot" />
+          single-seater races
+        </span>
+        <span>
+          <i aria-hidden className="odo-key odo-key--dot-soft" />
+          only at Daytona ({daytonaOnly})
+        </span>
+      </figcaption>
+    </figure>
+  );
+};
+
+const IncidentsVisual = () => {
+  const rows = (uiDataPackage.screens.careerLab.resultConversion as Row[])
+    .filter((row) => row.seriesId === 'series_indy_nxt')
+    .map((row) => ({
+      date: asString(row.eventStartDate) ?? '',
+      label: asString(row.raceLabel) ?? '',
+      status: asString(row.status) ?? 'running',
+      finish: asNumber(row.finishPosition)
+    }))
+    .sort((a, b) => a.date.localeCompare(b.date) || a.label.localeCompare(b.label, 'en', { numeric: true }));
+  const years = [...new Set(rows.map((row) => row.date.slice(0, 4)))];
+  const contact = rows.filter((row) => row.status === 'contact').length;
+  const mechanical = rows.filter((row) => row.status === 'mechanical').length;
+  return (
+    <figure
+      className="odo-visual"
+      aria-label={`His ${rows.length} INDY NXT races in date order: ${contact} ended early after contact and ${mechanical} with a mechanical failure.`}
+    >
+      <div className="odo-races" aria-hidden>
+        {years.map((year) => (
+          <span key={year} className="odo-races__year">
+            <span className="odo-races__cells">
+              {rows
+                .filter((row) => row.date.startsWith(year))
+                .map((row) => (
+                  <i
+                    key={`${row.date}-${row.label}`}
+                    className={`odo-races__cell odo-races__cell--${row.status}`}
+                    title={`${row.label}: ${row.status === 'running' ? (row.finish ? ordinal(row.finish) : 'finished') : row.status === 'contact' ? 'out after contact' : 'out with a mechanical failure'}`}
+                  />
+                ))}
+            </span>
+            <span className="odo-races__label">{year}</span>
+          </span>
+        ))}
+      </div>
+      <figcaption className="odo-legend">
+        <span>
+          <i aria-hidden className="odo-key odo-key--ink" />
+          out after contact
+        </span>
+        <span>
+          <i aria-hidden className="odo-key odo-key--hatch" />
+          mechanical
+        </span>
+        <span className="odo-legend__note">One square is one INDY NXT race</span>
+      </figcaption>
+    </figure>
+  );
+};
+
+/* ---------- a figure, and its "how" ---------- */
+
+const figureFacts = (figure: UiCareerFigure): string[] => {
+  const facts: string[] = [];
+  if (figure.denominator) facts.push(`Out of ${wholeNumber.format(figure.denominator.value)} ${figure.denominator.unit}.`);
+  if (figure.id.startsWith('otherDriverRecords') && figure.range) {
+    facts.push(`${wholeNumber.format(figure.range.low)} to ${wholeNumber.format(figure.range.high)} people.`);
+  }
+  if (figure.class === 'modelled_range' && figure.range?.base) {
+    facts.push(`Middle estimate ${wholeNumber.format(figure.range.base)} ${figure.unit}.`);
+  }
+  if (figure.parts && figure.id.startsWith('indyNxt')) {
+    facts.push(`${figure.parts.map((part) => `${part.value} ${part.label}`).join(', ')}.`);
+  }
+  return facts;
+};
+
+const OdoFigure = ({
+  figure,
+  label,
+  progress,
+  open,
+  onToggle
+}: {
+  figure: UiCareerFigure;
+  label: string;
+  progress: number;
+  open: boolean;
+  onToggle: () => void;
+}) => (
+  <button
+    type="button"
+    className={`odo-fig odo-fig--${figure.class}${open ? ' odo-fig--open' : ''}`}
+    data-figure-id={figure.id}
+    aria-expanded={open}
+    aria-controls={`odo-how-${figure.id}`}
+    onClick={onToggle}
+  >
+    <span className="odo-fig__value" aria-label={`${figure.display}${figure.unit === 'US gallons' ? ' US gallons' : ''}`}>
+      <span aria-hidden>
+        <RollingValue display={figure.display} progress={progress} />
+      </span>
+    </span>
+    <span className="odo-fig__label">
+      {label.split(' ').slice(0, -1).join(' ')}{label.includes(' ') ? ' ' : ''}
+      <span className="odo-fig__last">
+        {label.split(' ').slice(-1)[0]}
+        <span className="odo-fig__chev" aria-hidden />
+      </span>
+    </span>
+  </button>
+);
+
+const OdoHow = ({ figure, label }: { figure: UiCareerFigure; label: string }) => (
+  <div id={`odo-how-${figure.id}`} className="odo-how" role="region" aria-label={`How "${label}" was counted`}>
+    <p className="odo-how__class">
+      <span className={`odo-how__word odo-how__word--${figure.class}`}>{classWord[figure.class]}</span>
+      <span className="odo-how__def">{classMeaning[figure.class]}</span>
+    </p>
+    <p className="odo-how__text">{figure.how}</p>
+    {figure.caveat || figureFacts(figure).length ? (
+      <p className="odo-how__note">
+        {[...figureFacts(figure), figure.caveat].filter(Boolean).join(' ')}
       </p>
+    ) : null}
+  </div>
+);
+
+const classMeaning: Record<UiCareerFigureClass, string> = {
+  counted: 'exact, added up from the official records',
+  lower_bound: 'a floor; the true figure is higher',
+  modelled_range: 'an estimate from stated assumptions'
+};
+
+const OdoGroup = ({
+  group,
+  figures,
+  lifeStats,
+  progressOf,
+  openId,
+  setOpenId
+}: {
+  group: OdoGroupSpec;
+  figures: UiCareerFigure[];
+  lifeStats: UiCareerLifeStats;
+  progressOf: (id: string) => number;
+  openId: string | null;
+  setOpenId: (id: string | null) => void;
+}) => {
+  const items = group.figures
+    .map((spec) => ({ spec, figure: figureById(figures, spec.id) }))
+    .filter((item): item is { spec: OdoFigureSpec; figure: UiCareerFigure } => item.figure !== undefined);
+  const openItem = items.find((item) => item.figure.id === openId) ?? null;
+  const visual = (() => {
+    switch (group.visual) {
+      case 'series':
+        return <SeriesVisual lifeStats={lifeStats} />;
+      case 'distance':
+        return <DistanceVisual figures={figures} />;
+      case 'time':
+        return <TimeVisual figures={figures} />;
+      case 'places':
+        return <PlacesVisual />;
+      case 'people':
+        return <PeopleVisual figures={figures} />;
+      case 'incidents':
+        return <IncidentsVisual />;
+      default:
+        return null;
+    }
+  })();
+  return (
+    <section className="odo-group" aria-labelledby={`odo-group-${group.key}`} data-group={group.key}>
+      <h3 id={`odo-group-${group.key}`} className="odo-group__title">
+        {group.title}
+      </h3>
+      <div className="odo-group__visual">{visual}</div>
+      <div className="odo-group__figs" style={{ gridTemplateColumns: group.columns.split(' ').map((w) => `minmax(0, ${w})`).join(' ') }}>
+        {items.map(({ spec, figure }) => (
+          <OdoFigure
+            key={figure.id}
+            figure={figure}
+            label={spec.label}
+            progress={progressOf(figure.id)}
+            open={openId === figure.id}
+            onToggle={() => setOpenId(openId === figure.id ? null : figure.id)}
+          />
+        ))}
+      </div>
+      {openItem ? <OdoHow figure={openItem.figure} label={openItem.spec.label} /> : null}
+    </section>
+  );
+};
+
+const OdometerMethod = ({ lifeStats }: { lifeStats: UiCareerLifeStats }) => {
+  const span = `${monthYear(lifeStats.span.firstDay)} to ${monthYear(lifeStats.span.lastDay)}`;
+  const races = figureById(lifeStats.figures, 'races')?.display ?? '150';
+  return (
+    <div id="odo-method" className="odo-method" role="region" aria-label="How these were counted">
+      <div className="odo-method__col">
+        <h3 className="odo-method__title">Where the numbers come from</h3>
+        <p>
+          Every figure is worked out from the BryceCast career dataset: the official results and timing sheets of his {races} races in
+          seven series, {span}, and the practice, qualifying and test sessions that were imported with them. Karting, private testing and
+          the simulator are not in it, so nothing here counts them.
+        </p>
+      </div>
+      <div className="odo-method__col">
+        <h3 className="odo-method__title">Three kinds of number</h3>
+        <p>
+          <strong>Counted</strong> figures are added up exactly from those records. Miles raced, for example, is each race's laps times that
+          track's length, race by race.
+        </p>
+        <p>
+          <strong>
+            At least <span className="odo-plus">+</span>
+          </strong>{' '}
+          means the records have gaps, so the true figure is higher. Where a race has no official time, his laps times his best lap stand in,
+          and real laps are slower than a best lap.
+        </p>
+        <p>
+          <strong>Modelled</strong> figures are ranges built on stated guesses. Fuel uses a low, a middle and a high guess at what each car
+          burns per mile.
+        </p>
+      </div>
+      <div className="odo-method__col">
+        <h3 className="odo-method__title">Rules kept throughout</h3>
+        <p>
+          At the Daytona 24 Hours only his own 142 of the car's 780 laps count. His two Formula Ford heats are not counted as races. Ten
+          sessions the source lists twice were taken out, and four Brands Hatch sessions were measured on the shorter layout they actually
+          ran on. Numbers are whole, and a floor always rounds down, so it stays a floor.
+        </p>
+      </div>
     </div>
   );
 };
@@ -316,12 +817,28 @@ const OdometerCell = ({ figure, progress }: { figure: UiCareerFigure; progress: 
 const Odometer = ({ lifeStats, live }: { lifeStats: UiCareerLifeStats; live: LiveReadiness | null }) => {
   const reduced = useReducedMotion();
   const [viewRef, seen] = useInViewOnce<HTMLDivElement>(0.15);
-  const figures = ODOMETER_IDS.map((id) => figureById(lifeStats.figures, id)).filter(
-    (figure): figure is UiCareerFigure => figure !== undefined
-  );
-  const STAGGER = 70;
+  const [openId, setOpenId] = useState<string | null>(null);
+  const [methodOpen, setMethodOpen] = useState(false);
+  const order = ODOMETER_GROUPS.flatMap((group) => group.figures.map((spec) => spec.id));
+  const figures = order
+    .map((id) => figureById(lifeStats.figures, id))
+    .filter((figure): figure is UiCareerFigure => figure !== undefined);
+  const STAGGER = 60;
   const RUN = 2100;
-  const elapsed = useClock(seen, RUN + STAGGER * figures.length, reduced);
+  const elapsed = useClock(seen, RUN + STAGGER * order.length, reduced);
+  const progressOf = (id: string) => (elapsed - Math.max(0, order.indexOf(id)) * STAGGER) / RUN;
+
+  useEffect(() => {
+    if (openId === null && !methodOpen) return undefined;
+    const onKey = (event: globalThis.KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setOpenId(null);
+        setMethodOpen(false);
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [openId, methodOpen]);
 
   const venueSourceEntries = lifeStats.venueSources.flatMap((venue) => [
     ...venue.lengthSources.map((source, index) => {
@@ -350,23 +867,34 @@ const Odometer = ({ lifeStats, live }: { lifeStats: UiCareerLifeStats; live: Liv
           ]}
         />
       </div>
-      <p className="career-key">
-        <span>
-          <strong>Counted</strong> {lifeStats.figureClasses.counted.toLowerCase()}
-        </span>
-        <span>
-          <strong>
-            At least <span className="odo-plus">+</span>
-          </strong>{' '}
-          {lifeStats.figureClasses.lower_bound.toLowerCase()}
-        </span>
-        <span>
-          <strong>Modelled</strong> {lifeStats.figureClasses.modelled_range.toLowerCase()}
-        </span>
-      </p>
-      <div ref={viewRef} className="odo-grid">
-        {figures.map((figure, index) => (
-          <OdometerCell key={figure.id} figure={figure} progress={(elapsed - index * STAGGER) / RUN} />
+      <div className="odo-keyline">
+        <p className="odo-keyline__key">
+          Counted exactly unless marked. <span className="odo-plus">+</span> means at least: the true figure is higher. A range is
+          modelled. Click a figure to see how it was counted.
+        </p>
+        <button
+          type="button"
+          className={`odo-keyline__toggle${methodOpen ? ' odo-keyline__toggle--open' : ''}`}
+          aria-expanded={methodOpen}
+          aria-controls="odo-method"
+          onClick={() => setMethodOpen((open) => !open)}
+        >
+          How these were counted
+          <span className="odo-fig__chev" aria-hidden />
+        </button>
+      </div>
+      {methodOpen ? <OdometerMethod lifeStats={lifeStats} /> : null}
+      <div ref={viewRef} className="odo-groups">
+        {ODOMETER_GROUPS.map((group) => (
+          <OdoGroup
+            key={group.key}
+            group={group}
+            figures={lifeStats.figures}
+            lifeStats={lifeStats}
+            progressOf={progressOf}
+            openId={openId}
+            setOpenId={setOpenId}
+          />
         ))}
       </div>
       <OdometerLive lifeStats={lifeStats} live={live} />
@@ -375,383 +903,660 @@ const Odometer = ({ lifeStats, live }: { lifeStats: UiCareerLifeStats; live: Liv
 };
 
 /* ============================================================
- * 2. A share of his life
+ * 2. His life in weeks (round 4): "A share of his life" and "His career
+ *    in weeks" made one. Every week since he was born is a square; the
+ *    weeks with a race meeting are lit by series. Pointing at any week
+ *    says what the data holds for it, and nothing it doesn't.
  * ============================================================ */
 
-const LifeLine = ({ lifeStats }: { lifeStats: UiCareerLifeStats }) => {
-  const [ref, width] = useMeasuredWidth<HTMLDivElement>();
-  const share = lifeStats.lifeShare;
-  const birth = toTime(share.birthDate);
-  const end = toTime(share.asOf);
-  const first = toTime(lifeStats.span.firstDay);
-  const last = toTime(lifeStats.span.lastDay);
-  const pad = 2;
-  const x = (time: number) => pad + ((time - birth) / (end - birth)) * Math.max(width - pad * 2, 1);
-  const raceWeeks = lifeStats.weeksGrid.weeks.filter((week) => week.races.length > 0);
-  const birthYear = new Date(birth).getUTCFullYear();
-  const endYear = new Date(end).getUTCFullYear();
-  const years: number[] = [];
-  for (let year = birthYear + 1; year <= endYear; year += 1) years.push(year);
-  const narrow = width < 640;
-  const height = 92;
-  const lineY = 46;
-  const ageFirst = figureById(share.figures, 'ageAtFirstRace');
-  const ageLast = figureById(share.figures, 'ageAtLastRace');
-  return (
-    <div ref={ref} className="life-line">
-      {width > 0 ? (
-        <svg
-          width={width}
-          height={height}
-          role="img"
-          aria-label={`His life from ${longDate(share.birthDate)} to ${longDate(share.asOf)}, with his racing years from ${longDate(
-            lifeStats.span.firstDay
-          )} marked and a tick for each of the ${raceWeeks.length} weeks with a race meeting.`}
-        >
-          <line x1={x(birth)} x2={x(end)} y1={lineY} y2={lineY} stroke="var(--grey-line)" strokeWidth={1} />
-          {years.map((year) => {
-            const time = Date.UTC(year, 0, 1);
-            const yx = x(time);
-            /* Year labels every five years, kept clear of the two race labels. */
-            const clear = yx < x(first) - 150 || (yx > x(first) + 30 && yx < x(last) - (narrow ? 80 : 150));
-            const labelled = year % 5 === 0 && clear;
-            return (
-              <g key={year}>
-                <line x1={yx} x2={yx} y1={lineY + 6} y2={lineY + (year % 5 === 0 ? 12 : 9)} stroke="var(--grey-ink3)" strokeWidth={1} />
-                {labelled ? (
-                  <text x={yx} y={lineY + 30} textAnchor="middle" className="life-line__year">
-                    {year}
-                  </text>
-                ) : null}
-              </g>
-            );
-          })}
-          <line x1={x(first)} x2={x(last)} y1={lineY} y2={lineY} stroke="var(--ink)" strokeWidth={3} />
-          {raceWeeks.map((week) => (
-            <line
-              key={week.isoWeek}
-              x1={x(toTime(week.monday) + 3 * dayMs)}
-              x2={x(toTime(week.monday) + 3 * dayMs)}
-              y1={lineY - 16}
-              y2={lineY - 3}
-              stroke="var(--amber)"
-              strokeWidth={1}
-            />
-          ))}
-          <circle cx={x(birth)} cy={lineY} r={3} fill="var(--ink)" />
-          <text x={x(birth)} y={lineY - 12} className="life-line__label" textAnchor="start">
-            Born, {monthYear(share.birthDate)}
-          </text>
-          <text x={x(first) - 8} y={lineY - 12} className="life-line__label" textAnchor="end">
-            {narrow ? `First race, ${ageFirst?.display ?? ''}` : `First race, age ${ageFirst?.display ?? ''}`}
-          </text>
-          <text x={x(last)} y={lineY + 30} className="life-line__label" textAnchor="end">
-            {narrow ? `Latest, ${ageLast?.display ?? ''}` : `Latest race, age ${ageLast?.display ?? ''}`}
-          </text>
-        </svg>
-      ) : null}
-    </div>
-  );
+const isoOf = (time: number): string => new Date(time).toISOString().slice(0, 10);
+const mondayOf = (time: number): number => {
+  const day = (new Date(time).getUTCDay() + 6) % 7;
+  return time - day * dayMs;
 };
 
-const LifeShare = ({ lifeStats }: { lifeStats: UiCareerLifeStats }) => {
-  const share = lifeStats.lifeShare;
-  const f = (id: string) => figureById(share.figures, id);
-  const eventDays = figureById(lifeStats.figures, 'eventDays');
-  const raceWeeks = figureById(lifeStats.figures, 'raceWeeks');
-  const ageFirst = f('ageAtFirstRace');
-  const ageLast = f('ageAtLastRace');
-  const lifePct = f('eventDaysShareOfLife');
-  const careerPct = f('eventDaysShareOfCareer');
-  const weeksLived = f('weeksLived');
-  const daysAlive = f('daysAlive');
-  if (!ageFirst || !ageLast || !lifePct || !careerPct || !eventDays) {
-    return (
-      <section className="career-life">
-        <h2 className="career-section-title">A share of his life</h2>
-        <Unavailable>The share-of-life figures are not in this data package.</Unavailable>
-      </section>
-    );
-  }
-  const big: Array<{ figure: UiCareerFigure; label: string }> = [
-    { figure: ageFirst, label: `his age at his first race, ${monthYear(share.firstRaceDate)}` },
-    { figure: ageLast, label: `his age at his latest race, ${monthYear(share.lastRaceDate)}` },
-    { figure: lifePct, label: 'of his life spent at race meetings' },
-    { figure: careerPct, label: 'of the days since his first race' }
-  ];
-  return (
-    <section className="career-life" aria-labelledby="career-life-title">
-      <div className="career-section-head">
-        <h2 id="career-life-title" className="career-section-title">
-          A share of his life
-        </h2>
-      </div>
-      <div className="life-figures">
-        {big.map(({ figure, label }) => (
-          <div key={figure.id} className="life-figure">
-            <span className="life-figure__value">{figure.display}</span>
-            <span className="life-figure__label">{label}</span>
-          </div>
-        ))}
-      </div>
-      <p className="career-prose">
-        Bryce has spent {eventDays.display} days at race meetings. That is {lifePct.display} of the {daysAlive?.display ?? ''} days he has
-        been alive, and {careerPct.display} of the {wholeNumber.format(eventDays.denominator?.value ?? lifeStats.span.days)} days from his
-        first race meeting to his latest.
-        {raceWeeks && weeksLived ? ` ${raceWeeks.display} of the ${weeksLived.display} weeks he has lived held a race meeting.` : ''}
-      </p>
-      <LifeLine lifeStats={lifeStats} />
-    </section>
-  );
-};
-
-/* ============================================================
- * 3. His career in weeks
- * ============================================================ */
-
-const isoWeekParts = (isoWeek: string): { year: number; week: number } => {
-  const [year, week] = isoWeek.split('-W');
-  return { year: Number(year), week: Number(week) };
-};
-
-/** ISO week number of a UTC date. */
-const isoWeekOf = (time: number): number => {
+/** ISO week-numbering year and week of a UTC date. */
+const isoWeekYear = (time: number): { year: number; week: number } => {
   const date = new Date(time);
   const day = (date.getUTCDay() + 6) % 7;
   date.setUTCDate(date.getUTCDate() - day + 3);
-  const firstThursday = new Date(Date.UTC(date.getUTCFullYear(), 0, 4));
-  return 1 + Math.round((date.getTime() - firstThursday.getTime()) / dayMs / 7 - ((firstThursday.getUTCDay() + 6) % 7 - 3) / 7);
+  const year = date.getUTCFullYear();
+  const firstThursday = Date.UTC(year, 0, 4);
+  const firstMonday = firstThursday - ((new Date(firstThursday).getUTCDay() + 6) % 7) * dayMs;
+  return { year, week: 1 + Math.round((mondayOf(time) - firstMonday) / dayMs / 7) };
 };
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-const monthColumns = MONTHS.map((label, month) => ({ label, week: isoWeekOf(Date.UTC(2021, month, 4)) }));
+const monthColumns = MONTHS.map((label, month) => ({ label, week: isoWeekYear(Date.UTC(2021, month, 4)).week }));
 
-type GridWeek = UiCareerWeeksGrid['weeks'][number];
+const shortDate = (time: number, withYear = false): string =>
+  new Date(time).toLocaleDateString('en-US', { month: 'long', day: 'numeric', ...(withYear ? { year: 'numeric' } : {}), timeZone: 'UTC' });
 
-const weekColor = (week: GridWeek): string => {
-  const seriesId = week.races[0]?.seriesId;
-  return seriesId ? seriesMetaById(seriesId).tint : 'none';
+const ageOn = (birth: number, time: number): number => {
+  const b = new Date(birth);
+  const d = new Date(time);
+  let age = d.getUTCFullYear() - b.getUTCFullYear();
+  if (d.getUTCMonth() < b.getUTCMonth() || (d.getUTCMonth() === b.getUTCMonth() && d.getUTCDate() < b.getUTCDate())) age -= 1;
+  return age;
 };
 
-const WeekDetail = ({ week, coarse }: { week: GridWeek | null; coarse: boolean }) => {
-  if (!week) {
-    return (
-      <p className="weeks-detail weeks-detail--hint">
-        {coarse ? 'Tap' : 'Point at'} a filled week to see its race meeting.
-      </p>
-    );
+type GridRace = UiCareerWeeksGrid['weeks'][number]['races'][number];
+type LifeEvent = { eventId: string; seriesId: string; trackName: string; country: string; start: number };
+type RaceResult = { label: string; finish: number | null; status: string };
+
+type LifeWeek = {
+  index: number;
+  monday: number;
+  year: number;
+  week: number;
+  kind: 'birth' | 'before' | 'milestone' | 'quiet' | 'race';
+  races: GridRace[];
+  milestones: Array<{ label: string; detail: string }>;
+};
+
+const countryShort = (country: string): string =>
+  country === 'United States' ? 'US' : country === 'United Kingdom' ? 'UK' : country;
+
+/** Everything the hover needs, joined once from the package. */
+const useLifeModel = (lifeStats: UiCareerLifeStats) =>
+  useMemo(() => {
+    const share = lifeStats.lifeShare;
+    const birth = toTime(share.birthDate);
+    const end = toTime(share.asOf);
+    const firstCareer = toTime(lifeStats.weeksGrid.weeks[0]?.monday ?? lifeStats.span.firstDay);
+    const careerByMonday = new Map(lifeStats.weeksGrid.weeks.map((week) => [toTime(week.monday), week]));
+
+    const events = new Map<string, LifeEvent>();
+    for (const leg of lifeStats.travelLegs.legs) {
+      for (const stop of [leg.from, leg.to]) {
+        if (!events.has(stop.eventId)) {
+          events.set(stop.eventId, { eventId: stop.eventId, seriesId: '', trackName: stop.trackName, country: stop.country, start: toTime(stop.date) });
+        }
+      }
+    }
+    const raceTotals = new Map<string, number>();
+    for (const week of lifeStats.weeksGrid.weeks) {
+      for (const race of week.races) {
+        raceTotals.set(race.eventId, (raceTotals.get(race.eventId) ?? 0) + race.raceCount);
+        const known = events.get(race.eventId);
+        if (known) known.seriesId = race.seriesId;
+      }
+    }
+    /* Results join on the meeting's start date and name. INDY NXT result rows
+     * add the year to the name ("Detroit Grand Prix 2026"), and a doubleheader's
+     * two events share a date, so the name must match from its start. */
+    const gridName = new Map<string, string>();
+    for (const week of lifeStats.weeksGrid.weeks) for (const race of week.races) gridName.set(race.eventId, race.eventName);
+    const eventsByDate = new Map<string, string[]>();
+    for (const event of events.values()) {
+      const key = isoOf(event.start);
+      eventsByDate.set(key, [...(eventsByDate.get(key) ?? []), event.eventId]);
+    }
+    const results = new Map<string, RaceResult[]>();
+    for (const row of uiDataPackage.screens.careerLab.resultConversion as Row[]) {
+      const name = asString(row.eventName) ?? '';
+      const candidates = eventsByDate.get(asString(row.eventStartDate) ?? '') ?? [];
+      const eventId =
+        candidates.find((id) => gridName.get(id) === name) ??
+        candidates
+          .filter((id) => name.startsWith(gridName.get(id) ?? '\u0000'))
+          .sort((a, b) => (gridName.get(b)?.length ?? 0) - (gridName.get(a)?.length ?? 0))[0];
+      if (!eventId) continue;
+      const list = results.get(eventId) ?? [];
+      list.push({ label: asString(row.raceLabel) ?? '', finish: asNumber(row.finishPosition), status: asString(row.status) ?? 'running' });
+      results.set(eventId, list);
+    }
+    for (const list of results.values()) list.sort((a, b) => a.label.localeCompare(b.label, 'en', { numeric: true }));
+
+    const milestoneByMonday = new Map<number, Array<{ label: string; detail: string }>>();
+    for (const item of uiDataPackage.screens.careerLab.smallSeriesStories.origin?.items ?? []) {
+      if (!item.date) continue;
+      const monday = mondayOf(toTime(item.date));
+      const list = milestoneByMonday.get(monday) ?? [];
+      list.push({ label: item.label, detail: item.detail });
+      milestoneByMonday.set(monday, list);
+    }
+
+    const weeks: LifeWeek[] = [];
+    for (let monday = mondayOf(birth); monday <= end; monday += 7 * dayMs) {
+      const { year, week } = isoWeekYear(monday);
+      const career = careerByMonday.get(monday);
+      const races = career?.races ?? [];
+      const milestones = milestoneByMonday.get(monday) ?? [];
+      const kind: LifeWeek['kind'] =
+        weeks.length === 0
+          ? 'birth'
+          : races.length > 0
+            ? 'race'
+            : milestones.length > 0
+              ? 'milestone'
+              : monday >= firstCareer
+                ? 'quiet'
+                : 'before';
+      weeks.push({ index: weeks.length, monday, year, week, kind, races, milestones });
+    }
+
+    /* For a week with no racing in the racing years: the meetings either side. */
+    const prevRace: Array<number | null> = [];
+    let last: number | null = null;
+    for (const week of weeks) {
+      prevRace.push(last);
+      if (week.kind === 'race') last = week.index;
+    }
+    const nextRace: Array<number | null> = new Array(weeks.length).fill(null);
+    let next: number | null = null;
+    for (let index = weeks.length - 1; index >= 0; index -= 1) {
+      nextRace[index] = next;
+      if (weeks[index].kind === 'race') next = index;
+    }
+
+    const legMiles = new Map<string, number>();
+    for (const leg of lifeStats.travelLegs.legs) legMiles.set(`${leg.from.eventId}>${leg.to.eventId}`, leg.greatCircleMiles);
+
+    const years = [...new Set(weeks.map((week) => week.year))];
+    return { birth, end, weeks, years, events, raceTotals, results, prevRace, nextRace, legMiles };
+  }, [lifeStats]);
+
+type LifeModel = ReturnType<typeof useLifeModel>;
+
+const resultWord = (result: RaceResult): string => {
+  if (result.status === 'contact') return `${result.finish ? `${ordinal(result.finish)}, ` : ''}out after contact`;
+  if (result.status === 'mechanical') return `${result.finish ? `${ordinal(result.finish)}, ` : ''}out with a mechanical failure`;
+  return result.finish ? ordinal(result.finish) : 'finished';
+};
+
+/** One line per venue and series in the week: an INDY NXT doubleheader is two
+ *  events in the data but one weekend at one track, so its races are joined. */
+const WeekRaceLines = ({ model, races }: { model: LifeModel; races: GridRace[] }) => {
+  const first = races[0];
+  const meta = seriesMetaById(first.seriesId);
+  const event = model.events.get(first.eventId);
+  const place = event ? `${event.trackName}, ${countryShort(event.country)}` : first.eventName;
+  const results = races.flatMap((race) => model.results.get(race.eventId) ?? []);
+  const inWeek = races.reduce((sum, race) => sum + race.raceCount, 0);
+  const total = races.reduce((sum, race) => sum + (model.raceTotals.get(race.eventId) ?? race.raceCount), 0);
+  const counted = (n: number) => (n === 1 ? 'One race' : `${n} races`);
+  let outcome: string;
+  if (inWeek === 0) {
+    outcome = 'Days of this meeting; its races fell in another week';
+  } else if (first.seriesId === 'series_imsa_weathertech') {
+    outcome = `The 24-hour race: ${results[0]?.finish ? ordinal(results[0].finish) : 'finished'} overall, in a car shared with three co-drivers`;
+  } else if (inWeek === total && results.length > 0) {
+    const missing = total - results.length;
+    outcome = `${counted(total)}: ${results.map(resultWord).join(', ')}${missing > 0 ? `; ${missing} not classified` : ''}`;
+  } else {
+    outcome = `${inWeek} of this meeting's ${total} races fell this week${results.length ? `. The meeting: ${results.map(resultWord).join(', ')}` : ''}`;
   }
-  const monday = toTime(week.monday);
-  const sunday = monday + 6 * dayMs;
-  const range = `${new Date(monday).toLocaleDateString('en-US', { month: 'long', day: 'numeric', timeZone: 'UTC' })} to ${new Date(
-    sunday
-  ).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' })}`;
   return (
-    <div className="weeks-detail" aria-live="polite">
-      <span className="weeks-detail__date">Week of {range}</span>
-      {week.races.length === 0 ? (
-        <span className="weeks-detail__race">No race meeting</span>
-      ) : (
-        week.races.map((race) => {
-          const meta = seriesMetaById(race.seriesId);
-          return (
-            <span key={race.eventId} className="weeks-detail__race">
-              <i aria-hidden style={{ background: meta.tint }} />
-              <strong>{meta.short}</strong> {race.eventName}
-              <span className="weeks-detail__meta">
-                {race.raceCount === 0
-                  ? ' · practice only this week'
-                  : ` · ${race.raceCount} ${race.raceCount === 1 ? 'race' : 'races'}${race.bestFinish !== null ? `, best P${race.bestFinish}` : ''}`}
-              </span>
-            </span>
-          );
-        })
-      )}
-    </div>
+    <span className="life-tip__race">
+      <span className="life-tip__event">
+        <i aria-hidden style={{ background: meta.tint }} />
+        {meta.short} at {place}
+      </span>
+      <span className="life-tip__outcome">{outcome}</span>
+    </span>
   );
 };
 
-const WeeksGrid = ({ lifeStats }: { lifeStats: UiCareerLifeStats }) => {
-  const grid = lifeStats.weeksGrid;
+const groupWeekRaces = (model: LifeModel, races: GridRace[]): GridRace[][] => {
+  const groups = new Map<string, GridRace[]>();
+  for (const race of races) {
+    const key = `${race.seriesId}|${model.events.get(race.eventId)?.trackName ?? race.eventId}`;
+    groups.set(key, [...(groups.get(key) ?? []), race]);
+  }
+  return [...groups.values()];
+};
+
+const WeekStory = ({ model, week }: { model: LifeModel; week: LifeWeek }) => {
+  const sunday = week.monday + 6 * dayMs;
+  const sameYear = new Date(week.monday).getUTCFullYear() === new Date(sunday).getUTCFullYear();
+  const age = ageOn(model.birth, Math.min(sunday, model.end));
+  const range =
+    week.kind === 'birth'
+      ? monthYear(isoOf(model.birth))
+      : `${shortDate(week.monday, !sameYear)} to ${shortDate(sunday, true)}`;
+  const head = (
+    <span className="life-tip__date">
+      {range}
+      {week.kind === 'birth' ? null : <span className="life-tip__age"> · age {age}</span>}
+    </span>
+  );
+  if (week.kind === 'birth') {
+    return (
+      <>
+        {head}
+        <span className="life-tip__line">Born.</span>
+      </>
+    );
+  }
+  if (week.kind === 'race') {
+    return (
+      <>
+        {head}
+        {groupWeekRaces(model, week.races).map((races) => (
+          <WeekRaceLines key={races[0].eventId} model={model} races={races} />
+        ))}
+      </>
+    );
+  }
+  if (week.kind === 'milestone') {
+    return (
+      <>
+        {head}
+        {week.milestones.map((item) => (
+          <span key={item.label} className="life-tip__race">
+            <span className="life-tip__event">
+              <i aria-hidden className="life-tip__ring" />
+              {item.label}
+            </span>
+            <span className="life-tip__outcome">{item.detail} A sourced karting milestone, not a race result.</span>
+          </span>
+        ))}
+      </>
+    );
+  }
+  if (week.kind === 'before') {
+    return (
+      <>
+        {head}
+        <span className="life-tip__line">No recorded racing.</span>
+        <span className="life-tip__muted">
+          {week.year >= 2016
+            ? 'The data holds a few karting milestones from 2016 to 2018, but no race-by-race results before April 2019.'
+            : 'The record starts with his first car race, in April 2019.'}
+        </span>
+      </>
+    );
+  }
+  /* A quiet week in the racing years: the meetings either side, from the data. */
+  const prevIndex = model.prevRace[week.index];
+  const nextIndex = model.nextRace[week.index];
+  const prevRace = prevIndex !== null ? model.weeks[prevIndex].races[model.weeks[prevIndex].races.length - 1] : null;
+  const nextRace = nextIndex !== null ? model.weeks[nextIndex].races[0] : null;
+  const prevEvent = prevRace ? model.events.get(prevRace.eventId) : undefined;
+  const nextEvent = nextRace ? model.events.get(nextRace.eventId) : undefined;
+  const sameSeason =
+    prevRace && nextRace && prevEvent && nextEvent && prevRace.seriesId === nextRace.seriesId &&
+    new Date(prevEvent.start).getUTCFullYear() === new Date(nextEvent.start).getUTCFullYear();
+  const miles = prevRace && nextRace ? model.legMiles.get(`${prevRace.eventId}>${nextRace.eventId}`) : undefined;
+  return (
+    <>
+      {head}
+      <span className="life-tip__line">No recorded racing.</span>
+      {sameSeason && prevRace ? (
+        <span className="life-tip__muted">
+          Between rounds of the {new Date(prevEvent!.start).getUTCFullYear()} {seriesMetaById(prevRace.seriesId).short} season.
+        </span>
+      ) : null}
+      {prevEvent && prevRace ? (
+        <span className="life-tip__muted">
+          Last meeting: {seriesMetaById(prevRace.seriesId).short} at {prevEvent.trackName}, from {shortDate(prevEvent.start, true)}.
+        </span>
+      ) : null}
+      {nextEvent && nextRace ? (
+        <span className="life-tip__muted">
+          Next: {seriesMetaById(nextRace.seriesId).short} at {nextEvent.trackName}, from {shortDate(nextEvent.start, true)}
+          {miles && miles > 0 ? `, ${wholeNumber.format(miles)} miles away in a straight line` : ''}.
+        </span>
+      ) : null}
+    </>
+  );
+};
+
+const weekLabel = (model: LifeModel, week: LifeWeek): string => {
+  if (week.kind === 'birth') return `${monthYear(isoOf(model.birth))}: born.`;
+  const base = `Week of ${shortDate(week.monday, true)}`;
+  if (week.kind === 'race') {
+    return `${base}: ${week.races
+      .map((race) => {
+        const event = model.events.get(race.eventId);
+        return `${seriesMetaById(race.seriesId).short} at ${event?.trackName ?? race.eventName}${race.bestFinish ? `, best ${ordinal(race.bestFinish)}` : ''}`;
+      })
+      .join('; ')}.`;
+  }
+  if (week.kind === 'milestone') return `${base}: ${week.milestones.map((item) => item.label).join('; ')}, a karting milestone.`;
+  return `${base}: no recorded racing.`;
+};
+
+const LifeGrid = ({ lifeStats, model }: { lifeStats: UiCareerLifeStats; model: LifeModel }) => {
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();
   const coarse = useCoarsePointer();
   const [active, setActive] = useState<number | null>(null);
-  const weeks = grid.weeks;
-  const raceWeekIndexes = useMemo(
-    () => weeks.flatMap((week, index) => (week.races.length > 0 ? [index] : [])),
-    [weeks]
-  );
-  const years = useMemo(() => [...new Set(weeks.map((week) => isoWeekParts(week.isoWeek).year))], [weeks]);
-  const seriesInGrid = useMemo(() => {
-    const ids = new Set(weeks.flatMap((week) => week.races.map((race) => race.seriesId)));
-    return seriesOrder.filter((id) => ids.has(id));
-  }, [weeks]);
-  const raceWeeks = figureById(lifeStats.figures, 'raceWeeks');
+  const { weeks, years } = model;
+  const raceIndexes = useMemo(() => weeks.filter((week) => week.kind === 'race').map((week) => week.index), [weeks]);
 
-  /* Two layouts: years as rows on a wide screen (a long band), years as
-   * columns on a phone (a tall block). Same cells, same data. */
+  /* Years as rows on a wide screen; years as columns on a phone. */
   const vertical = width > 0 && width < 640;
   const gap = vertical ? 2 : 3;
-  const labelW = vertical ? 34 : 50;
-  const headH = vertical ? 24 : 24;
+  const labelW = vertical ? 0 : 46;
+  const headH = vertical ? 22 : 22;
   const maxWeek = 53;
   const cellW = vertical
-    ? Math.floor((width - labelW - gap * (years.length - 1)) / years.length)
-    : Math.max(6, Math.min(30, Math.floor((width - labelW - gap * (maxWeek - 1)) / maxWeek)));
-  const cellH = vertical ? 7 : cellW;
-  const cellPos = (week: GridWeek) => {
-    const { year, week: weekNo } = isoWeekParts(week.isoWeek);
-    const row = years.indexOf(year);
+    ? Math.max(6, Math.floor((width - 30 - gap * (years.length - 1)) / years.length))
+    : Math.max(6, Math.min(22, Math.floor((width - labelW - gap * (maxWeek - 1)) / maxWeek)));
+  const cellH = vertical ? 6 : cellW;
+  const leftPad = vertical ? 30 : labelW;
+  const pos = (week: LifeWeek) => {
+    const row = years.indexOf(week.year);
     return vertical
-      ? { x: labelW + row * (cellW + gap), y: headH + (weekNo - 1) * (cellH + gap) }
-      : { x: labelW + (weekNo - 1) * (cellW + gap), y: headH + row * (cellH + gap) };
+      ? { x: leftPad + row * (cellW + gap), y: headH + (week.week - 1) * (cellH + gap) }
+      : { x: leftPad + (week.week - 1) * (cellW + gap), y: headH + row * (cellH + gap) };
   };
-  const svgW = width;
+  const svgW = vertical ? leftPad + years.length * (cellW + gap) : leftPad + maxWeek * (cellW + gap);
   const svgH = vertical ? headH + maxWeek * (cellH + gap) : headH + years.length * (cellH + gap);
 
+  const byYearWeek = useMemo(() => new Map(weeks.map((week) => [`${week.year}-${week.week}`, week.index])), [weeks]);
   const pick = (clientX: number, clientY: number, target: SVGSVGElement): number | null => {
     const bounds = target.getBoundingClientRect();
-    const px = clientX - bounds.left;
-    const py = clientY - bounds.top;
-    let best: { index: number; distance: number } | null = null;
-    weeks.forEach((week, index) => {
-      const { x, y } = cellPos(week);
-      const dx = Math.max(x - px, 0, px - (x + cellW));
-      const dy = Math.max(y - py, 0, py - (y + cellH));
-      const distance = Math.hypot(dx, dy);
-      if (!best || distance < best.distance) best = { index, distance };
-    });
-    const found = best as { index: number; distance: number } | null;
-    return found && found.distance <= (vertical ? 3 : 2) ? found.index : null;
+    const px = clientX - bounds.left - leftPad;
+    const py = clientY - bounds.top - headH;
+    if (px < -2 || py < -2) return null;
+    const along = vertical ? py : px;
+    const across = vertical ? px : py;
+    const alongPitch = vertical ? cellH + gap : cellW + gap;
+    const acrossPitch = vertical ? cellW + gap : cellH + gap;
+    const weekNo = Math.floor(along / alongPitch) + 1;
+    const row = Math.floor(across / acrossPitch);
+    if (row < 0 || row >= years.length || weekNo < 1 || weekNo > maxWeek) return null;
+    return byYearWeek.get(`${years[row]}-${weekNo}`) ?? null;
   };
 
   const onKey = (event: KeyboardEvent<SVGSVGElement>) => {
-    if (raceWeekIndexes.length === 0) return;
-    const current = active === null ? -1 : raceWeekIndexes.indexOf(active);
+    const current = active ?? raceIndexes[raceIndexes.length - 1] ?? 0;
     let next: number | null = null;
-    if (event.key === 'ArrowRight' || event.key === 'ArrowDown') next = raceWeekIndexes[Math.min(raceWeekIndexes.length - 1, current + 1)];
-    else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') next = raceWeekIndexes[Math.max(0, current - 1)];
-    else if (event.key === 'Home') next = raceWeekIndexes[0];
-    else if (event.key === 'End') next = raceWeekIndexes[raceWeekIndexes.length - 1];
+    const sameWeekOtherRow = (delta: number) => {
+      const week = weeks[current];
+      const row = years.indexOf(week.year) + delta;
+      if (row < 0 || row >= years.length) return current;
+      return byYearWeek.get(`${years[row]}-${week.week}`) ?? byYearWeek.get(`${years[row]}-${Math.min(week.week, 52)}`) ?? current;
+    };
+    const along = vertical ? ['ArrowDown', 'ArrowUp'] : ['ArrowRight', 'ArrowLeft'];
+    const across = vertical ? ['ArrowRight', 'ArrowLeft'] : ['ArrowDown', 'ArrowUp'];
+    if (event.key === along[0]) next = Math.min(weeks.length - 1, current + 1);
+    else if (event.key === along[1]) next = Math.max(0, current - 1);
+    else if (event.key === across[0]) next = sameWeekOtherRow(1);
+    else if (event.key === across[1]) next = sameWeekOtherRow(-1);
+    else if (event.key === 'PageDown' || event.key === ']') next = raceIndexes.find((index) => index > current) ?? current;
+    else if (event.key === 'PageUp' || event.key === '[') next = [...raceIndexes].reverse().find((index) => index < current) ?? current;
+    else if (event.key === 'Home') next = 0;
+    else if (event.key === 'End') next = weeks.length - 1;
     else if (event.key === 'Escape') {
       setActive(null);
       return;
     }
-    if (next !== null && next !== undefined) {
+    if (next !== null) {
       event.preventDefault();
       setActive(next);
     }
   };
 
   const activeWeek = active === null ? null : weeks[active];
+  const activePos = activeWeek ? pos(activeWeek) : null;
+  /* The note sits beside the week, above it when there is room. */
+  const tipW = Math.min(360, Math.max(240, width - 16));
+  const tipLeft = activePos ? Math.max(0, Math.min(activePos.x + cellW / 2 - tipW / 2, width - tipW)) : 0;
+  const tipAbove = activePos ? activePos.y > svgH * 0.45 : true;
+
+  const firstRace = weeks.find((week) => week.kind === 'race');
+  const lastRace = [...weeks].reverse().find((week) => week.kind === 'race');
+  const birthWeek = weeks[0];
+  const lastWeek = weeks[weeks.length - 1];
+  const ageFirst = figureById(lifeStats.lifeShare.figures, 'ageAtFirstRace');
+  const ageLast = figureById(lifeStats.lifeShare.figures, 'ageAtLastRace');
 
   return (
-    <section className="career-weeks" aria-labelledby="career-weeks-title">
-      <div className="career-section-head">
-        <h2 id="career-weeks-title" className="career-section-title">
-          His career in weeks
-        </h2>
-      </div>
-      <p className="career-lede">
-        <span className="career-lede__big">{raceWeeks?.display ?? grid.raceWeekCount}</span> of the {wholeNumber.format(grid.weekCount)} weeks
-        from {monthYear(lifeStats.span.firstDay)} to {monthYear(lifeStats.span.lastDay)} held a race meeting. One square is one week, Monday
-        to Sunday.
-      </p>
-      <div ref={ref} className="weeks-grid">
-        {width > 0 ? (
+    <div ref={ref} className="life-grid" onPointerLeave={(event) => (event.pointerType === 'mouse' ? setActive(null) : undefined)}>
+      {width > 0 ? (
+        <>
           <svg
             width={svgW}
             height={svgH}
             tabIndex={0}
             role="img"
-            aria-label={`${grid.weekCount} weeks from ${grid.firstWeek} to ${grid.lastWeek}; ${grid.raceWeekCount} held a race meeting, coloured by series. Use the arrow keys to step through the race weeks.`}
+            aria-label={`Every week of his life, ${weeks.length} from ${monthYear(isoOf(model.birth))} to ${monthYear(isoOf(model.end))}. The ${raceIndexes.length} weeks with a race meeting are coloured by series. Use the arrow keys to move week by week, Page Up and Page Down to jump between race weeks.`}
             onPointerMove={(event) => {
               if (event.pointerType === 'touch') return;
               const index = pick(event.clientX, event.clientY, event.currentTarget);
-              if (index !== null && weeks[index].races.length > 0) setActive(index);
+              if (index !== null) setActive(index);
             }}
             onPointerDown={(event) => {
               const index = pick(event.clientX, event.clientY, event.currentTarget);
-              if (index !== null && weeks[index].races.length > 0) setActive(index);
+              setActive(index);
             }}
+            onFocus={() => setActive((current) => current ?? raceIndexes[raceIndexes.length - 1] ?? null)}
+            onBlur={() => setActive(null)}
             onKeyDown={onKey}
           >
-            {/* Month labels, set from a reference year's week numbers. */}
             {monthColumns.map((month, index) =>
               vertical ? (
                 index % 2 === 0 ? (
-                  <text key={month.label} x={0} y={headH + (month.week - 1) * (cellH + gap) + cellH} className="weeks-grid__axis">
+                  <text key={month.label} x={0} y={headH + (month.week - 1) * (cellH + gap) + cellH} className="life-grid__axis">
                     {month.label}
                   </text>
                 ) : null
               ) : (
-                <text key={month.label} x={labelW + (month.week - 1) * (cellW + gap)} y={14} className="weeks-grid__axis">
+                <text key={month.label} x={leftPad + (month.week - 1) * (cellW + gap)} y={13} className="life-grid__axis">
                   {month.label}
                 </text>
               )
             )}
             {years.map((year, row) =>
               vertical ? (
-                <text
-                  key={year}
-                  x={labelW + row * (cellW + gap) + cellW / 2}
-                  y={14}
-                  textAnchor="middle"
-                  className="weeks-grid__year"
-                >
-                  ’{String(year).slice(2)}
-                </text>
+                row % 2 === (years.length - 1) % 2 ? (
+                  <text key={year} x={leftPad + row * (cellW + gap) + cellW / 2} y={13} textAnchor="middle" className="life-grid__year">
+                    ’{String(year).slice(2)}
+                  </text>
+                ) : null
               ) : (
-                <text key={year} x={0} y={headH + row * (cellH + gap) + cellH / 2} dominantBaseline="central" className="weeks-grid__year">
+                <text key={year} x={0} y={headH + row * (cellH + gap) + cellH / 2} dominantBaseline="central" className="life-grid__year">
                   {year}
                 </text>
               )
             )}
-            {weeks.map((week, index) => {
-              const { x, y } = cellPos(week);
-              const filled = week.races.length > 0;
-              const twoSeries = filled && new Set(week.races.map((race) => race.seriesId)).size > 1;
+            {weeks.map((week) => {
+              const { x, y } = pos(week);
+              if (week.kind === 'race') {
+                const ids = [...new Set(week.races.map((race) => race.seriesId))];
+                return (
+                  <g key={week.index}>
+                    <rect x={x} y={y} width={cellW} height={cellH} fill={seriesMetaById(ids[0]).tint} />
+                    {ids.length > 1 ? (
+                      <rect
+                        x={vertical ? x + cellW / 2 : x}
+                        y={vertical ? y : y + cellH / 2}
+                        width={vertical ? cellW / 2 : cellW}
+                        height={vertical ? cellH : cellH / 2}
+                        fill={seriesMetaById(ids[1]).tint}
+                      />
+                    ) : null}
+                  </g>
+                );
+              }
+              if (week.kind === 'quiet') {
+                return <rect key={week.index} x={x + 0.5} y={y + 0.5} width={cellW - 1} height={cellH - 1} className="life-grid__quiet" />;
+              }
+              if (week.kind === 'milestone') {
+                return <rect key={week.index} x={x + 0.75} y={y + 0.75} width={cellW - 1.5} height={cellH - 1.5} className="life-grid__milestone" />;
+              }
+              if (week.kind === 'birth') {
+                return <rect key={week.index} x={x} y={y} width={cellW} height={cellH} className="life-grid__birth" />;
+              }
+              return <rect key={week.index} x={x} y={y} width={cellW} height={cellH} className="life-grid__before" />;
+            })}
+            {!vertical && birthWeek && firstRace && lastRace ? (
+              <>
+                <text x={pos(birthWeek).x - 10} y={pos(birthWeek).y + cellH / 2} dominantBaseline="central" textAnchor="end" className="life-grid__note">
+                  Born, {monthYear(isoOf(model.birth))}
+                </text>
+                <text
+                  x={pos(lastWeek).x + cellW + 10}
+                  y={pos(lastWeek).y + cellH / 2}
+                  dominantBaseline="central"
+                  className="life-grid__note"
+                >
+                  Latest race, age {ageLast?.display ?? ''}
+                </text>
+              </>
+            ) : null}
+            {activeWeek && activePos ? (
+              <rect
+                x={activePos.x - 2.5}
+                y={activePos.y - 2.5}
+                width={cellW + 5}
+                height={cellH + 5}
+                fill="none"
+                stroke="var(--ink)"
+                strokeWidth={1.5}
+                pointerEvents="none"
+              />
+            ) : null}
+          </svg>
+          {activeWeek && activePos ? (
+            <div
+              className={`life-tip${tipAbove ? ' life-tip--above' : ''}`}
+              style={{
+                width: tipW,
+                left: tipLeft,
+                ...(tipAbove ? { top: activePos.y - 10 } : { top: activePos.y + cellH + 10 })
+              }}
+              role="status"
+              aria-live="polite"
+            >
+              <WeekStory model={model} week={activeWeek} />
+            </div>
+          ) : (
+            <span className="sr-only" role="status" aria-live="polite" />
+          )}
+          {activeWeek ? <span className="sr-only">{weekLabel(model, activeWeek)}</span> : null}
+        </>
+      ) : null}
+      {vertical ? null : (
+        <p className="life-grid__firstrace">
+          First race, {firstRace ? monthYear(isoOf(firstRace.monday + 4 * dayMs)) : ''}, age {ageFirst?.display ?? ''}.{' '}
+          {coarse ? 'Tap' : 'Point at'} any week to see what he was doing.
+        </p>
+      )}
+      {vertical ? <p className="life-grid__firstrace">Tap any week to see what he was doing.</p> : null}
+    </div>
+  );
+};
+
+const LifeInWeeks = ({ lifeStats }: { lifeStats: UiCareerLifeStats }) => {
+  const share = lifeStats.lifeShare;
+  const model = useLifeModel(lifeStats);
+  const [howOpen, setHowOpen] = useState(false);
+  const f = (id: string) => figureById(share.figures, id);
+  const eventDays = figureById(lifeStats.figures, 'eventDays');
+  const raceWeeks = figureById(share.figures, 'raceWeeksShareOfLife') ?? figureById(lifeStats.figures, 'raceWeeks');
+  const weeksLived = f('weeksLived');
+  const daysAlive = f('daysAlive');
+  const lifePct = f('eventDaysShareOfLife');
+  const careerPct = f('eventDaysShareOfCareer');
+  const ageFirst = f('ageAtFirstRace');
+  const ageLast = f('ageAtLastRace');
+  if (!eventDays || !raceWeeks || !weeksLived || !lifePct || !careerPct || !ageFirst || !ageLast) {
+    return (
+      <section className="career-life">
+        <h2 className="career-section-title">His life in weeks</h2>
+        <Unavailable>The share-of-life figures are not in this data package.</Unavailable>
+      </section>
+    );
+  }
+  const seriesInGrid = seriesOrder.filter((id) => model.weeks.some((week) => week.races.some((race) => race.seriesId === id)));
+  const hasMilestones = model.weeks.some((week) => week.kind === 'milestone');
+  const facts: Array<{ value: string; label: ReactNode }> = [
+    { value: raceWeeks.display, label: <>of the {weeksLived.display} weeks he has lived held a race meeting</> },
+    {
+      value: lifePct.display,
+      label: (
+        <>
+          of his {daysAlive?.display ?? ''} days alive were race-meeting days ({eventDays.display})
+        </>
+      )
+    },
+    { value: careerPct.display, label: <>of the days since his first race meeting</> },
+    {
+      value: `${ageFirst.display} to ${ageLast.display}`,
+      label: (
+        <>
+          his age at his first race, {monthYear(share.firstRaceDate)}, and his latest, {monthYear(share.lastRaceDate)}
+        </>
+      )
+    }
+  ];
+  return (
+    <section className="career-life" aria-labelledby="career-life-title">
+      <div className="career-section-head">
+        <h2 id="career-life-title" className="career-section-title">
+          His life in weeks
+        </h2>
+      </div>
+      <div className="life-layout">
+        <div className="life-layout__grid">
+          <LifeGrid lifeStats={lifeStats} model={model} />
+          <div className="series-key" aria-label="What the squares mean">
+            {seriesInGrid.map((id) => {
+              const meta = seriesMetaById(id);
               return (
-                <g key={week.isoWeek} data-week={week.isoWeek} data-filled={filled ? 'true' : 'false'}>
-                  {filled ? (
-                    <rect x={x} y={y} width={cellW} height={cellH} fill={weekColor(week)} />
-                  ) : (
-                    <rect x={x + 0.5} y={y + 0.5} width={cellW - 1} height={cellH - 1} fill="none" stroke="var(--grey-hair)" />
-                  )}
-                  {twoSeries ? (
-                    <rect
-                      x={vertical ? x + cellW / 2 : x}
-                      y={vertical ? y : y + cellH / 2}
-                      width={vertical ? cellW / 2 : cellW}
-                      height={vertical ? cellH : cellH / 2}
-                      fill={seriesMetaById(week.races[1].seriesId).tint}
-                    />
-                  ) : null}
-                  {active === index ? (
-                    <rect x={x - 2.5} y={y - 2.5} width={cellW + 5} height={cellH + 5} fill="none" stroke="var(--ink)" strokeWidth={1.5} />
-                  ) : null}
-                </g>
+                <span key={id}>
+                  <i aria-hidden style={{ background: meta.tint }} />
+                  {meta.short}
+                </span>
               );
             })}
-          </svg>
-        ) : null}
-      </div>
-      <div className="series-key" aria-label="Series colours">
-        {seriesInGrid.map((id) => {
-          const meta = seriesMetaById(id);
-          return (
-            <span key={id}>
-              <i aria-hidden style={{ background: meta.tint }} />
-              {meta.short}
+            <span>
+              <i aria-hidden className="series-key__empty" />
+              racing years, no meeting
             </span>
-          );
-        })}
-        <span>
-          <i aria-hidden className="series-key__empty" />
-          No race meeting
-        </span>
+            <span>
+              <i aria-hidden className="series-key__before" />
+              before his first race
+            </span>
+            {hasMilestones ? (
+              <span>
+                <i aria-hidden className="series-key__milestone" />
+                karting milestone
+              </span>
+            ) : null}
+          </div>
+        </div>
+        <div className="life-layout__facts">
+          {facts.map((fact) => (
+            <div key={fact.value} className="life-fact">
+              <span className="life-fact__value">{fact.value}</span>
+              <span className="life-fact__label">{fact.label}</span>
+            </div>
+          ))}
+          <button
+            type="button"
+            className={`odo-keyline__toggle life-how-toggle${howOpen ? ' odo-keyline__toggle--open' : ''}`}
+            aria-expanded={howOpen}
+            aria-controls="life-how"
+            onClick={() => setHowOpen((open) => !open)}
+          >
+            What a lit week means
+            <span className="odo-fig__chev" aria-hidden />
+          </button>
+          {howOpen ? (
+            <div id="life-how" className="life-how">
+              <p>
+                One square is one week, Monday to Sunday, from the week he was born to the week of his latest race. A week is lit when it
+                holds at least one day of an official race meeting, from the first to the last day the series lists, in that series' colour.
+                A week split in two colours held meetings in two series.
+              </p>
+              <p>
+                An unlit week only means no racing is recorded. Travel, testing, the simulator and karting before 2019 are not in the data;
+                the outlined karting weeks are sourced milestones, not races.
+              </p>
+              <p>
+                Days alive count every day from his birth in {monthYear(share.birthDate)} to {longDate(share.asOf)}, both included. The
+                shares divide the {eventDays.display} days at race meetings by those days, and by the{' '}
+                {wholeNumber.format(eventDays.denominator?.value ?? lifeStats.span.days)} days from his first race meeting to his latest.
+              </p>
+            </div>
+          ) : null}
+        </div>
       </div>
-      <WeekDetail week={activeWeek} coarse={coarse} />
     </section>
   );
 };
@@ -1163,8 +1968,7 @@ export const CareerScreen = ({ readiness }: { readiness?: ReadinessStatus }) => 
       {lifeStats ? (
         <>
           <Odometer lifeStats={lifeStats} live={readiness?.payload ?? null} />
-          <LifeShare lifeStats={lifeStats} />
-          <WeeksGrid lifeStats={lifeStats} />
+          <LifeInWeeks lifeStats={lifeStats} />
         </>
       ) : (
         <section>

@@ -1,6 +1,6 @@
 {
   "schemaVersion": "brycecast.uiDataPackage.v1",
-  "generatedAt": "2026-11-15T04:23:13.559Z",
+  "generatedAt": "2026-11-15T23:15:17.434Z",
   "sourceHash": "d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd",
   "asOfDate": "2026-09-19",
   "baselineCommit": "9fab5e6",
@@ -144,6 +144,12 @@
       "bytes": 372964,
       "modifiedAt": "2026-09-20T00:00:59.889Z",
       "sha256": "c440f78e1974b90234cb81ac6221433d84b7896d6f79684eb37897444d18ceba"
+    },
+    "raceSectionLapFieldObservations": {
+      "path": "analysis/indy-nxt-race-lap-section-enhancement/output/race_section_lap_field_observations.csv.gz",
+      "bytes": 4454896,
+      "modifiedAt": "2026-11-15T01:42:46.352Z",
+      "sha256": "4ba1524d932de031ba1063aff629636316a733d8567f51f777b89c02eb3169a5"
     },
     "sectionResultsDeepByRace": {
       "path": "analysis/indy-nxt-discovery/output/deep_dive/tables/section_results_deep_by_race.csv",
@@ -543,9 +549,9 @@
     },
     "uiDataPackageBuilderScript": {
       "path": "scripts/build-ui-data-package.mjs",
-      "bytes": 195349,
-      "modifiedAt": "2026-11-15T04:22:43.815Z",
-      "sha256": "085364aa6b8c7598fc2f4216938f118f97c575a6543d3bcadf5b180a2b634427"
+      "bytes": 198651,
+      "modifiedAt": "2026-11-15T23:10:57.561Z",
+      "sha256": "6f088733f334404ffadf3e22c51e52289f587a5610d1742ae0a7bb3ec92d0791"
     },
     "uiDataPackageValidatorScript": {
       "path": "scripts/validate-ui-data-package.mjs",
@@ -16546,9 +16552,9 @@
           "venueName": "Barber Motorsports Park",
           "seasonYear": 2024,
           "path": "analysis/race-story/output/context-packs/section_laps_session_indy_nxt_2024_6314.json",
-          "bytes": 18923,
-          "modifiedAt": "2026-09-20T00:01:21.715Z",
-          "sha256": "646612919a9f47f57623ad95ae37c7562748e539be793ae9d1e1ce749d91adcf"
+          "bytes": 71609,
+          "modifiedAt": "2026-11-15T23:15:17.143Z",
+          "sha256": "899f453a446c930e1989a1767b263d55241b0e23794395807b861ed1317238c5"
         },
         {
           "sessionId": "session_indy_nxt_2024_6315",
@@ -16557,9 +16563,9 @@
           "venueName": "Indianapolis Motor Speedway Road Course",
           "seasonYear": 2024,
           "path": "analysis/race-story/output/context-packs/section_laps_session_indy_nxt_2024_6315.json",
-          "bytes": 21823,
-          "modifiedAt": "2026-09-20T00:01:21.716Z",
-          "sha256": "4ce169261da040a0aeac08e5f5bd195e208c4b7001c246f79699da919b8827f1"
+          "bytes": 78278,
+          "modifiedAt": "2026-11-15T23:15:17.145Z",
+          "sha256": "645f9b0b1fe15d16ffb194762a92861d5548732344c47fb1d9293f6d64da9e8c"
         },
         {
           "sessionId": "session_indy_nxt_2024_6316",
@@ -16568,9 +16574,9 @@
           "venueName": "Road America",
           "seasonYear": 2024,
           "path": "analysis/race-story/output/context-packs/section_laps_session_indy_nxt_2024_6316.json",
-          "bytes": 22846,
-          "modifiedAt": "2026-09-20T00:01:21.717Z",
-          "sha256": "9d01e0d5895f6bec398294e4ad9e0c562c02daf430c983b113d81b54ab461118"
+          "bytes": 77136,
+          "modifiedAt": "2026-11-15T23:15:17.147Z",
+          "sha256": "ec3324f28847d7df51df2571d8fc459ac00e6308ae2e45260348d9eec699405b"
         },
         {
           "sessionId": "session_indy_nxt_2024_6317",
@@ -16579,9 +16585,9 @@
           "venueName": "WeatherTech Raceway Laguna Seca",
           "seasonYear": 2024,
           "path": "analysis/race-story/output/context-packs/section_laps_session_indy_nxt_2024_6317.json",
-          "bytes": 26038,
-          "modifiedAt": "2026-09-20T00:01:21.718Z",
-          "sha256": "f5c4481c344c85ae0c8dbf9398d37142cb5651ca313691f4b20ed84fc29baf83"
+          "bytes": 95993,
+          "modifiedAt": "2026-11-15T23:15:17.149Z",
+          "sha256": "822de3f3f8fb7e0aea7c008b8062dfab88fb09d07c4451650cdd59349432136c"
         },
         {
           "sessionId": "session_indy_nxt_2024_6318",
@@ -16590,9 +16596,9 @@
           "venueName": "Mid-Ohio Sports Car Course",
           "seasonYear": 2024,
           "path": "analysis/race-story/output/context-packs/section_laps_session_indy_nxt_2024_6318.json",
-          "bytes": 26014,
-          "modifiedAt": "2026-09-20T00:01:21.719Z",
-          "sha256": "c7c1baba24ce986c8abd27a7e86faa23b2e62a168ee883f44a8a9a9a1861c1e0"
+          "bytes": 91240,
+          "modifiedAt": "2026-11-15T23:15:17.150Z",
+          "sha256": "6b80cb7b59e1a05cbaf75868b9fd1e8beda50d5147da8053b32da49b4602b9df"
         },
         {
           "sessionId": "session_indy_nxt_2024_6319",
@@ -16601,9 +16607,9 @@
           "venueName": "Iowa Speedway",
           "seasonYear": 2024,
           "path": "analysis/race-story/output/context-packs/section_laps_session_indy_nxt_2024_6319.json",
-          "bytes": 21406,
-          "modifiedAt": "2026-09-20T00:01:21.720Z",
-          "sha256": "2840a22ec190ad86b9a405bd0f9118d500267522b206c749f779e01db71a113d"
+          "bytes": 65159,
+          "modifiedAt": "2026-11-15T23:15:17.152Z",
+          "sha256": "ca032200abf6e697687c63cb7f053da9ddfe7765b60e3d1ed2f08d99a3fec675"
         },
         {
           "sessionId": "session_indy_nxt_2024_6320",
@@ -16612,9 +16618,9 @@
           "venueName": "World Wide Technology Raceway",
           "seasonYear": 2024,
           "path": "analysis/race-story/output/context-packs/section_laps_session_indy_nxt_2024_6320.json",
-          "bytes": 28160,
-          "modifiedAt": "2026-09-20T00:01:21.721Z",
-          "sha256": "cf36ab6e85d12983be2e9f8af04496b1995c21be1db9dab656da3d5360ffb172"
+          "bytes": 88897,
+          "modifiedAt": "2026-11-15T23:15:17.153Z",
+          "sha256": "f7f09d7697f9157cbf4c2246814a640d763a3799d5f3eadcb889566b08271247"
         },
         {
           "sessionId": "session_indy_nxt_2024_6321",
@@ -16623,9 +16629,9 @@
           "venueName": "Portland International Raceway",
           "seasonYear": 2024,
           "path": "analysis/race-story/output/context-packs/section_laps_session_indy_nxt_2024_6321.json",
-          "bytes": 21963,
-          "modifiedAt": "2026-09-20T00:01:21.722Z",
-          "sha256": "e2b90de186880d40041dca858a6693f61750d8e69bbbbb2db63272c4a1d92be4"
+          "bytes": 71179,
+          "modifiedAt": "2026-11-15T23:15:17.155Z",
+          "sha256": "3cf18dc87ba5fccb5d0e45988554eaccb8536ee19712e30aa0addaa6240b5af8"
         },
         {
           "sessionId": "session_indy_nxt_2024_6322",
@@ -16634,9 +16640,9 @@
           "venueName": "The Milwaukee Mile",
           "seasonYear": 2024,
           "path": "analysis/race-story/output/context-packs/section_laps_session_indy_nxt_2024_6322.json",
-          "bytes": 36788,
-          "modifiedAt": "2026-09-20T00:01:21.723Z",
-          "sha256": "844acafbeb6123e9ecd52bcbeac3df7d827961e1485518b75d5e3975ebc12abd"
+          "bytes": 118965,
+          "modifiedAt": "2026-11-15T23:15:17.158Z",
+          "sha256": "b373a0f474fa6d91053506591d1b25ae8f6969835b05f42d3d0e6f30b1161147"
         },
         {
           "sessionId": "session_indy_nxt_2024_6323",
@@ -16656,9 +16662,9 @@
           "venueName": "Streets of St. Petersburg",
           "seasonYear": 2024,
           "path": "analysis/race-story/output/context-packs/section_laps_session_indy_nxt_2024_6324.json",
-          "bytes": 17368,
-          "modifiedAt": "2026-09-20T00:01:21.725Z",
-          "sha256": "4a348d6a29a65d15833624e448e080fa42361aa40855ae1643418978cccae8c4"
+          "bytes": 64185,
+          "modifiedAt": "2026-11-15T23:15:17.161Z",
+          "sha256": "cb35a139e3eb9743492ec48c2ad26fad02df98a0ce207123eda02a848af7540f"
         },
         {
           "sessionId": "session_indy_nxt_2024_6326",
@@ -16667,9 +16673,9 @@
           "venueName": "Streets of Detroit",
           "seasonYear": 2024,
           "path": "analysis/race-story/output/context-packs/section_laps_session_indy_nxt_2024_6326.json",
-          "bytes": 6662,
-          "modifiedAt": "2026-09-20T00:01:21.725Z",
-          "sha256": "a3aa03a4f1c19a228a2f23330e2bf7b56071033f2507266ac20d7a2127a199ba"
+          "bytes": 12463,
+          "modifiedAt": "2026-11-15T23:15:17.161Z",
+          "sha256": "6249218800588046580d774e6f2c16761fb3c5c98ad3d833ef26adb6c32a378e"
         },
         {
           "sessionId": "session_indy_nxt_2024_6327",
@@ -16678,9 +16684,9 @@
           "venueName": "WeatherTech Raceway Laguna Seca",
           "seasonYear": 2024,
           "path": "analysis/race-story/output/context-packs/section_laps_session_indy_nxt_2024_6327.json",
-          "bytes": 27138,
-          "modifiedAt": "2026-09-20T00:01:21.726Z",
-          "sha256": "37663fdc75c750df31c7c228e97d99848f32c816d7c64dd6d1dc3b61cdbec8ee"
+          "bytes": 99296,
+          "modifiedAt": "2026-11-15T23:15:17.163Z",
+          "sha256": "25f1ff5d3edcbb379dc652ef0e1b4283b7bb16fe4c3af1257a25c15a4b737a7d"
         },
         {
           "sessionId": "session_indy_nxt_2025_6442",
@@ -16689,9 +16695,9 @@
           "venueName": "WeatherTech Raceway Laguna Seca",
           "seasonYear": 2025,
           "path": "analysis/race-story/output/context-packs/section_laps_session_indy_nxt_2025_6442.json",
-          "bytes": 26477,
-          "modifiedAt": "2026-09-20T00:01:21.728Z",
-          "sha256": "bc08555c15e0c8df19bf25f712e93278ebda4cbe0e7af9e853cd4b38af47e314"
+          "bytes": 86374,
+          "modifiedAt": "2026-11-15T23:15:17.165Z",
+          "sha256": "daf631fa176dd2a56a02786f964a3be8430f1217a8099c479d9ae05161598bb7"
         },
         {
           "sessionId": "session_indy_nxt_2025_6443",
@@ -16700,9 +16706,9 @@
           "venueName": "Indianapolis Motor Speedway Road Course",
           "seasonYear": 2025,
           "path": "analysis/race-story/output/context-packs/section_laps_session_indy_nxt_2025_6443.json",
-          "bytes": 22232,
-          "modifiedAt": "2026-09-20T00:01:21.729Z",
-          "sha256": "ea7d729680284a238c65641398f2e80061e933de1b70d5db0bf69453b1e843d5"
+          "bytes": 84280,
+          "modifiedAt": "2026-11-15T23:15:17.166Z",
+          "sha256": "d1f02b068276b930225c17a7eebecbd4bcec0501ddc1b6611e7bb949e8e1d8db"
         },
         {
           "sessionId": "session_indy_nxt_2025_6444",
@@ -16711,9 +16717,9 @@
           "venueName": "Indianapolis Motor Speedway Road Course",
           "seasonYear": 2025,
           "path": "analysis/race-story/output/context-packs/section_laps_session_indy_nxt_2025_6444.json",
-          "bytes": 22649,
-          "modifiedAt": "2026-09-20T00:01:21.730Z",
-          "sha256": "a98eee38e711c9c85c6200712aa5ad879fcfc7580645a454f1f398f9e6c92cac"
+          "bytes": 82676,
+          "modifiedAt": "2026-11-15T23:15:17.168Z",
+          "sha256": "7944758267bfd775dca5056c7568d61453ed29da943fa0a611fad14265f40903"
         },
         {
           "sessionId": "session_indy_nxt_2025_6445",
@@ -16722,9 +16728,9 @@
           "venueName": "Barber Motorsports Park",
           "seasonYear": 2025,
           "path": "analysis/race-story/output/context-packs/section_laps_session_indy_nxt_2025_6445.json",
-          "bytes": 19720,
-          "modifiedAt": "2026-09-20T00:01:21.730Z",
-          "sha256": "61e0dde89ad9bad6fc2d5c22854b3eadb36149c70a91d3b5ca6fa1247edb70a6"
+          "bytes": 68180,
+          "modifiedAt": "2026-11-15T23:15:17.169Z",
+          "sha256": "ca5c8ec15d623c2229b0995df4cbea0c27c642bf92f07f25781d5cf2cd030316"
         },
         {
           "sessionId": "session_indy_nxt_2025_6446",
@@ -16733,9 +16739,9 @@
           "venueName": "Streets of St. Petersburg",
           "seasonYear": 2025,
           "path": "analysis/race-story/output/context-packs/section_laps_session_indy_nxt_2025_6446.json",
-          "bytes": 23727,
-          "modifiedAt": "2026-09-20T00:01:21.731Z",
-          "sha256": "a24e9eed3fcde6005b19bfe75b9534d6f4b1bdcc930f2fa60959bd85b9874a25"
+          "bytes": 81220,
+          "modifiedAt": "2026-11-15T23:15:17.171Z",
+          "sha256": "525ab2f45747be9975a22218838620e527fc3be5b1ade7da55cfcc7edbfa9269"
         },
         {
           "sessionId": "session_indy_nxt_2025_6447",
@@ -16755,9 +16761,9 @@
           "venueName": "The Milwaukee Mile",
           "seasonYear": 2025,
           "path": "analysis/race-story/output/context-packs/section_laps_session_indy_nxt_2025_6448.json",
-          "bytes": 36938,
-          "modifiedAt": "2026-09-20T00:01:21.734Z",
-          "sha256": "c134859df63f2fb58c5333a91f47543480773f830e470c4f6b9e75ff40f8c2ba"
+          "bytes": 128502,
+          "modifiedAt": "2026-11-15T23:15:17.175Z",
+          "sha256": "f585c6b62f333229a638324817f457084f4f6e853e2f265919fe9d11d12c979f"
         },
         {
           "sessionId": "session_indy_nxt_2025_6449",
@@ -16766,9 +16772,9 @@
           "venueName": "Portland International Raceway",
           "seasonYear": 2025,
           "path": "analysis/race-story/output/context-packs/section_laps_session_indy_nxt_2025_6449.json",
-          "bytes": 2559,
-          "modifiedAt": "2026-09-20T00:01:21.734Z",
-          "sha256": "22ab87396802a4a35aaf657d29530436dffd5cffd050e1d05f33c94806b0dd27"
+          "bytes": 3652,
+          "modifiedAt": "2026-11-15T23:15:17.175Z",
+          "sha256": "ac6a83d32a122aafa27309dc95b4f048aece8565c249a10112a6371f19962d2f"
         },
         {
           "sessionId": "session_indy_nxt_2025_6450",
@@ -16777,9 +16783,9 @@
           "venueName": "WeatherTech Raceway Laguna Seca",
           "seasonYear": 2025,
           "path": "analysis/race-story/output/context-packs/section_laps_session_indy_nxt_2025_6450.json",
-          "bytes": 3262,
-          "modifiedAt": "2026-09-20T00:01:21.734Z",
-          "sha256": "4f885c7d09ade0fc06af1ec913b822cdf44eaae2ee9af905cf498a2525b7c269"
+          "bytes": 4784,
+          "modifiedAt": "2026-11-15T23:15:17.175Z",
+          "sha256": "54f6b6f36da191fadb90aec6cb69c6d15ed022f63311cacace9ed1ec2aad2d87"
         },
         {
           "sessionId": "session_indy_nxt_2025_6451",
@@ -16788,9 +16794,9 @@
           "venueName": "Iowa Speedway",
           "seasonYear": 2025,
           "path": "analysis/race-story/output/context-packs/section_laps_session_indy_nxt_2025_6451.json",
-          "bytes": 28597,
-          "modifiedAt": "2026-09-20T00:01:21.735Z",
-          "sha256": "e634723abf3c1e84eeb9e7336259ce89a93ba0c8eef0048d1d78f1956b3a7e13"
+          "bytes": 99862,
+          "modifiedAt": "2026-11-15T23:15:17.177Z",
+          "sha256": "dd0863d4addd47c2745a05e8ddc97de968fe88361c96d98015752162c1b2a7a8"
         },
         {
           "sessionId": "session_indy_nxt_2025_6452",
@@ -16799,9 +16805,9 @@
           "venueName": "Mid-Ohio Sports Car Course",
           "seasonYear": 2025,
           "path": "analysis/race-story/output/context-packs/section_laps_session_indy_nxt_2025_6452.json",
-          "bytes": 26510,
-          "modifiedAt": "2026-09-20T00:01:21.736Z",
-          "sha256": "7a3ffed784cf68bb96dc633f3e249606143b5d78f3794b31b22a1e2ef46886a2"
+          "bytes": 93422,
+          "modifiedAt": "2026-11-15T23:15:17.179Z",
+          "sha256": "ef9ebbf1c55cded70dad10f8be61521855215f81e6d9cb1b33955c01d6c74b7d"
         },
         {
           "sessionId": "session_indy_nxt_2025_6453",
@@ -16810,9 +16816,9 @@
           "venueName": "Road America",
           "seasonYear": 2025,
           "path": "analysis/race-story/output/context-packs/section_laps_session_indy_nxt_2025_6453.json",
-          "bytes": 23401,
-          "modifiedAt": "2026-09-20T00:01:21.737Z",
-          "sha256": "5b0b3cf5b6b3f71ba01d5c3d82b4b5e9f93c96db740a5e4fe42a7f9c65f80253"
+          "bytes": 79579,
+          "modifiedAt": "2026-11-15T23:15:17.180Z",
+          "sha256": "588e0f571c647afad6d6e41bad7530cd089dbe2c3f73f3b4a8802732aaa77fe1"
         },
         {
           "sessionId": "session_indy_nxt_2025_6454",
@@ -16821,9 +16827,9 @@
           "venueName": "World Wide Technology Raceway",
           "seasonYear": 2025,
           "path": "analysis/race-story/output/context-packs/section_laps_session_indy_nxt_2025_6454.json",
-          "bytes": 28826,
-          "modifiedAt": "2026-09-20T00:01:21.738Z",
-          "sha256": "556f8c4e5238e726b75d3e93628b8fcd9878455e0db791fde92e2c6ec76fb670"
+          "bytes": 102403,
+          "modifiedAt": "2026-11-15T23:15:17.182Z",
+          "sha256": "d1844c77f20deb34004a16d4b70f0e80050d9aa9eccc70dbd909ac4af5b89a8f"
         },
         {
           "sessionId": "session_indy_nxt_2025_6455",
@@ -16832,9 +16838,9 @@
           "venueName": "Streets of Detroit",
           "seasonYear": 2025,
           "path": "analysis/race-story/output/context-packs/section_laps_session_indy_nxt_2025_6455.json",
-          "bytes": 35760,
-          "modifiedAt": "2026-09-20T00:01:21.739Z",
-          "sha256": "6cecb0c42a900ad7710231ebc917aba27900216cea92e08c3befbc5024c86c8d"
+          "bytes": 123864,
+          "modifiedAt": "2026-11-15T23:15:17.184Z",
+          "sha256": "cf71f6e81c2fca5fdcca9a15b94b5dc0add68df75735b53eee26c0c84283700e"
         },
         {
           "sessionId": "session_indy_nxt_2026_6749",
@@ -16843,9 +16849,9 @@
           "venueName": "Streets of Detroit",
           "seasonYear": 2026,
           "path": "analysis/race-story/output/context-packs/section_laps_session_indy_nxt_2026_6749.json",
-          "bytes": 35480,
-          "modifiedAt": "2026-09-20T00:01:21.740Z",
-          "sha256": "043900ed21e514250b21701774231ba33b9daff80f82ace82e28c6314984b7de"
+          "bytes": 141342,
+          "modifiedAt": "2026-11-15T23:15:17.187Z",
+          "sha256": "2ab540c41c87c18f9ecd5d0cc6410a9d6f733c45ed0f42c34cd09a84d89b1873"
         },
         {
           "sessionId": "session_indy_nxt_2026_6750",
@@ -16854,9 +16860,9 @@
           "venueName": "Barber Motorsports Park",
           "seasonYear": 2026,
           "path": "analysis/race-story/output/context-packs/section_laps_session_indy_nxt_2026_6750.json",
-          "bytes": 19961,
-          "modifiedAt": "2026-09-20T00:01:21.740Z",
-          "sha256": "e769cf7a30bf89673f0bab2e7357c49fbed7924c42100ce37403bc2f70374752"
+          "bytes": 76639,
+          "modifiedAt": "2026-11-15T23:15:17.188Z",
+          "sha256": "58cf8a7134d30d9c465d362bc36acf6579a6b9eeee8618060c15b27d183d267b"
         },
         {
           "sessionId": "session_indy_nxt_2026_6751",
@@ -16865,9 +16871,9 @@
           "venueName": "Streets of St. Petersburg",
           "seasonYear": 2026,
           "path": "analysis/race-story/output/context-packs/section_laps_session_indy_nxt_2026_6751.json",
-          "bytes": 22988,
-          "modifiedAt": "2026-09-20T00:01:21.741Z",
-          "sha256": "76af9ebf512fdc9926d7e9e9803730aa1aa83bf3d623ffd2a756f8d86eeb8ae4"
+          "bytes": 88225,
+          "modifiedAt": "2026-11-15T23:15:17.190Z",
+          "sha256": "7f18f6608db69c966efccf9691c324ca9046511b531e4dfeec517c8d8ec49515"
         },
         {
           "sessionId": "session_indy_nxt_2026_6752",
@@ -16876,9 +16882,9 @@
           "venueName": "Barber Motorsports Park",
           "seasonYear": 2026,
           "path": "analysis/race-story/output/context-packs/section_laps_session_indy_nxt_2026_6752.json",
-          "bytes": 17701,
-          "modifiedAt": "2026-09-20T00:01:21.742Z",
-          "sha256": "7dba1f07d4e0e36197ca07a957c21609f6ce18856f395185d6af5ef179c489b7"
+          "bytes": 70982,
+          "modifiedAt": "2026-11-15T23:15:17.191Z",
+          "sha256": "023b919cb82005c21989c0edab5207a9f91e7f1b629d658e8c86313a739297d9"
         },
         {
           "sessionId": "session_indy_nxt_2026_6753",
@@ -16887,9 +16893,9 @@
           "venueName": "Streets of Arlington",
           "seasonYear": 2026,
           "path": "analysis/race-story/output/context-packs/section_laps_session_indy_nxt_2026_6753.json",
-          "bytes": 21677,
-          "modifiedAt": "2026-09-20T00:01:21.742Z",
-          "sha256": "cddcd1dca917e0e22d6c4f0a208d0b97c4c10a4ff982b0362091ed4e2ed7f036"
+          "bytes": 72816,
+          "modifiedAt": "2026-11-15T23:15:17.192Z",
+          "sha256": "5a78b2d0f64711081cb596e7066536649aa9f70051e5843829077b7dd1d0aa56"
         },
         {
           "sessionId": "session_indy_nxt_2026_6754",
@@ -16898,9 +16904,9 @@
           "venueName": "Road America",
           "seasonYear": 2026,
           "path": "analysis/race-story/output/context-packs/section_laps_session_indy_nxt_2026_6754.json",
-          "bytes": 22391,
-          "modifiedAt": "2026-09-20T00:01:21.743Z",
-          "sha256": "f325eedc205fa01e316fe77964bc993e614c9e872da5f1e5241237b9489d1f04"
+          "bytes": 81420,
+          "modifiedAt": "2026-11-15T23:15:17.193Z",
+          "sha256": "563a8ef1ed71a8d6ff8260355501d9ea8fbfe247fa57718485e7ead155bcef0e"
         },
         {
           "sessionId": "session_indy_nxt_2026_6755",
@@ -16909,9 +16915,9 @@
           "venueName": "Nashville Superspeedway",
           "seasonYear": 2026,
           "path": "analysis/race-story/output/context-packs/section_laps_session_indy_nxt_2026_6755.json",
-          "bytes": 25335,
-          "modifiedAt": "2026-09-20T00:01:21.744Z",
-          "sha256": "8543f7fd8f9ea220ddc22f8695be1a22f0700f63cc680c361f7b6c3cb622e8f0"
+          "bytes": 97811,
+          "modifiedAt": "2026-11-15T23:15:17.195Z",
+          "sha256": "86457ddface6e0e6f7d4ac8b21296fa73d9355dc1c6d3f981744f79d7c94f368"
         },
         {
           "sessionId": "session_indy_nxt_2026_6756",
@@ -16920,9 +16926,9 @@
           "venueName": "Indianapolis Motor Speedway Road Course",
           "seasonYear": 2026,
           "path": "analysis/race-story/output/context-packs/section_laps_session_indy_nxt_2026_6756.json",
-          "bytes": 19246,
-          "modifiedAt": "2026-09-20T00:01:21.745Z",
-          "sha256": "419b5fdaada3ae93e00ed0df45fe6800d8c2925feca6de1d2882db228f46d749"
+          "bytes": 74757,
+          "modifiedAt": "2026-11-15T23:15:17.197Z",
+          "sha256": "d8e1c5949ba250f3241cfb1e8d98edeff9f87ea152b9581e1a0a3ea614455c44"
         },
         {
           "sessionId": "session_indy_nxt_2026_6757",
@@ -16931,9 +16937,9 @@
           "venueName": "The Milwaukee Mile",
           "seasonYear": 2026,
           "path": "analysis/race-story/output/context-packs/section_laps_session_indy_nxt_2026_6757.json",
-          "bytes": 37311,
-          "modifiedAt": "2026-09-20T00:01:21.747Z",
-          "sha256": "8d1eb2de444be55f6eb7860996db477e2ffca6f63180ab9e749b9ed84803e286"
+          "bytes": 150288,
+          "modifiedAt": "2026-11-15T23:15:17.199Z",
+          "sha256": "ae5e473f8e88f238f4cd3ea67a8ace112634b751b3b5a8acccd27ff681ac1e36"
         },
         {
           "sessionId": "session_indy_nxt_2026_6758",
@@ -16942,9 +16948,9 @@
           "venueName": "WeatherTech Raceway Laguna Seca",
           "seasonYear": 2026,
           "path": "analysis/race-story/output/context-packs/section_laps_session_indy_nxt_2026_6758.json",
-          "bytes": 24207,
-          "modifiedAt": "2026-09-20T00:01:21.748Z",
-          "sha256": "a981766bd001968118d10133becd16e62b6220652ad5931f24a3483deee6dbfe"
+          "bytes": 91970,
+          "modifiedAt": "2026-11-15T23:15:17.201Z",
+          "sha256": "411fef8ffa4d6b129c63fc2951316d2b76cc01d58347e5e0f4412009ca680f84"
         },
         {
           "sessionId": "session_indy_nxt_2026_6759",
@@ -16953,9 +16959,9 @@
           "venueName": "WeatherTech Raceway Laguna Seca",
           "seasonYear": 2026,
           "path": "analysis/race-story/output/context-packs/section_laps_session_indy_nxt_2026_6759.json",
-          "bytes": 27261,
-          "modifiedAt": "2026-09-20T00:01:21.748Z",
-          "sha256": "dcd9cd5f968327aefcc0b40882d8fa07f175b9271803d9c52cd60fd0c68a752e"
+          "bytes": 107097,
+          "modifiedAt": "2026-11-15T23:15:17.203Z",
+          "sha256": "45402f31519d9c11f4c31659cafa0e3acc86f6b80c17b5cf5bf8a94c3cdda391"
         },
         {
           "sessionId": "session_indy_nxt_2026_6760",
@@ -16964,9 +16970,9 @@
           "venueName": "Mid-Ohio Sports Car Course",
           "seasonYear": 2026,
           "path": "analysis/race-story/output/context-packs/section_laps_session_indy_nxt_2026_6760.json",
-          "bytes": 26101,
-          "modifiedAt": "2026-09-20T00:01:21.750Z",
-          "sha256": "d81773ee561a7169dd6133854f153e0af755b775a70dd90ec0cfc0427045a9ea"
+          "bytes": 107705,
+          "modifiedAt": "2026-11-15T23:15:17.205Z",
+          "sha256": "c8746fbee74ad0760ab7ee571547fb7099de7eaa801434279c639ed066b4f633"
         },
         {
           "sessionId": "session_indy_nxt_2026_6761",
@@ -16975,9 +16981,9 @@
           "venueName": "Mid-Ohio Sports Car Course",
           "seasonYear": 2026,
           "path": "analysis/race-story/output/context-packs/section_laps_session_indy_nxt_2026_6761.json",
-          "bytes": 29293,
-          "modifiedAt": "2026-09-20T00:01:21.751Z",
-          "sha256": "92e9fa9f309e743a5d7eaed97bc529037db167db7fc78f4c05e2ba621bed0995"
+          "bytes": 116744,
+          "modifiedAt": "2026-11-15T23:15:17.208Z",
+          "sha256": "38336ffc43cce4eee97f6b5f2702c42b4d59ec0aa83067a5a43d5a4e477a7d9a"
         },
         {
           "sessionId": "session_indy_nxt_2026_6762",
@@ -16986,9 +16992,9 @@
           "venueName": "Road America",
           "seasonYear": 2026,
           "path": "analysis/race-story/output/context-packs/section_laps_session_indy_nxt_2026_6762.json",
-          "bytes": 22433,
-          "modifiedAt": "2026-09-20T00:01:21.752Z",
-          "sha256": "cebdd89b6c7e935ce401953f18e3a16b2638266a969e22d5693d37b1d2f7235a"
+          "bytes": 75703,
+          "modifiedAt": "2026-11-15T23:15:17.209Z",
+          "sha256": "97b5f17fae8d71f1fd87305e4c62f5a0f7f5cf8df0b933c3a85bd2bebe0873b3"
         },
         {
           "sessionId": "session_indy_nxt_2026_6763",
@@ -16997,9 +17003,9 @@
           "venueName": "World Wide Technology Raceway",
           "seasonYear": 2026,
           "path": "analysis/race-story/output/context-packs/section_laps_session_indy_nxt_2026_6763.json",
-          "bytes": 5295,
-          "modifiedAt": "2026-09-20T00:01:21.752Z",
-          "sha256": "8dfbf6770fe5fa05f896b31239ee41b10bcb0909dedbbf6607f32fc9e15f3d2e"
+          "bytes": 12073,
+          "modifiedAt": "2026-11-15T23:15:17.210Z",
+          "sha256": "778e33e263db14fe826dcc987545f4c754993bd914fdfbb6ce4eb80a42b132f5"
         },
         {
           "sessionId": "session_indy_nxt_2026_6764",
@@ -17008,9 +17014,9 @@
           "venueName": "Portland International Raceway",
           "seasonYear": 2026,
           "path": "analysis/race-story/output/context-packs/section_laps_session_indy_nxt_2026_6764.json",
-          "bytes": 23166,
-          "modifiedAt": "2026-09-20T00:01:21.753Z",
-          "sha256": "54032413a0e5482250b10c45fb411c3f958da589118b49b8e1fa548080f00e41"
+          "bytes": 94375,
+          "modifiedAt": "2026-11-15T23:15:17.212Z",
+          "sha256": "5db163897df57f716a1b33aa6c97110b017b0a8cf2f4524daa06118288100625"
         },
         {
           "sessionId": "session_indy_nxt_2026_6765",
@@ -17019,9 +17025,9 @@
           "venueName": "Indianapolis Motor Speedway Road Course",
           "seasonYear": 2026,
           "path": "analysis/race-story/output/context-packs/section_laps_session_indy_nxt_2026_6765.json",
-          "bytes": 20247,
-          "modifiedAt": "2026-09-20T00:01:21.754Z",
-          "sha256": "a72056dfb0b7fb00b9cf83c661feb024c1e7208380c2d6a54353d7e7c1157b33"
+          "bytes": 82349,
+          "modifiedAt": "2026-11-15T23:15:17.214Z",
+          "sha256": "8c561932d3e135271285f0862069e49bca3d4476558f26fba77e01d77e09adf9"
         }
       ],
       "passMarkRefs": [

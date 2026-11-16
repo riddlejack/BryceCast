@@ -4,8 +4,10 @@ import type { SectionLapsPack, SectionLapTuple } from '../src/data/sectionLaps';
 import {
   MIN_CLEAN_LAPS,
   MIN_CLEAN_LAPS_FOR_THIRDS,
+  MIN_FIELD_CARS,
   anchorsForPack,
   cleanSectionLapsOf,
+  fieldReferenceFor,
   lapContextOf,
   lapScopesFor,
   lapScopesForObservedLaps,
@@ -391,6 +393,79 @@ assert.ok(Math.abs((remainderObs.percentile ?? 0) - 0.4) < 1e-9, 'derived sectio
 assert.ok(Math.abs((remainderObs.fieldMedianSeconds ?? 0) - 15.1) < 1e-9, 'fieldMedianSeconds is the field distribution median');
 assert.deepEqual(remainderObs.fieldSeconds, [14.9, 15.0, 15.2, 15.4], 'field distribution passes through for the drawer');
 
+/* ---------- the field is the other cars, over the same laps (round 4) ----------
+ * Jack's rulings of Nov 15: "Where his lap goes" follows every scope, and the
+ * field median leaves Bryce out. A pack with otherCarLaps compares him with
+ * the other cars over exactly the scope's laps; one lap with that lap. */
+{
+  const lapsOf = (times: number[]): SectionLapTuple[] =>
+    times.map((seconds, index) => [index + 1, 0.5, 5, 10, 1, 'g', seconds, 150] as SectionLapTuple);
+  /* Nine laps. Car A is quick early, car B late, car C level; car D only has
+   * two clean laps in the opening third (laps 1-3: null on lap 3). */
+  const otherCarLaps = [
+    [4.0, 4.0, 4.0, 4.4, 4.4, 4.4, 4.8, 4.8, 4.8],
+    [4.8, 4.8, 4.8, 4.4, 4.4, 4.4, 4.0, 4.0, 4.0],
+    [4.2, 4.2, 4.2, 4.2, 4.2, 4.2, 4.2, 4.2, 4.2],
+    [4.6, 4.6, null, 4.6, 4.6, 4.6, 4.6, 4.6, 4.6]
+  ];
+  const his = [4.1, 4.1, 4.1, 4.3, 4.3, 4.3, 4.5, 4.5, 4.5];
+  const fieldPack = {
+    schemaVersion: 'brycecast.sectionLaps.v1',
+    type: 'section_laps',
+    id: 'section_laps_field_test',
+    sessionId: 'session_field_test',
+    raceLabel: 'Field Test',
+    seasonYear: 2026,
+    venueName: 'Field Test Raceway',
+    trackType: 'road',
+    totalLaps: 9,
+    tupleOrder: ['lap', 'fieldPercentile', 'fieldRank', 'fieldComparisonCount', 'clean', 'caution', 'timeSeconds', 'speedMph'],
+    /* fieldSeconds is the source's whole-race distribution, HIM INCLUDED
+     * (4.3 is his median): it must never reach the comparison. */
+    sections: [{ sectionName: 'Turn T', kind: 'measured', laps: lapsOf(his), fieldSeconds: [4.2, 4.3, 4.4, 4.4, 4.6], otherCarLaps }],
+    lapTotals: lapsOf(his.map((value) => value * 10)),
+    sourceStateCounts: {},
+    sourceRefs: [],
+    caveats: []
+  } as unknown as SectionLapsPack;
+  const section = fieldPack.sections[0];
+  const whole = fieldReferenceFor(section, { kind: 'full_race' }, 'median', 9)!;
+  assert.deepEqual(whole.carSeconds, [4.2, 4.4, 4.4, 4.6], 'whole race: each other car\'s own median, his left out');
+  assert.equal(whole.seconds, 4.4, 'whole race: the middle of the other cars');
+  assert.equal(whole.basis, 'same_laps');
+  const opening = fieldReferenceFor(section, { kind: 'lap_window', label: 'Opening third', fromLap: 1, toLap: 3 }, 'median', 9)!;
+  assert.deepEqual(opening.carSeconds, [4.0, 4.2, 4.8], 'a third reads only its own laps; a car under three clean laps there drops out');
+  assert.equal(opening.seconds, 4.2);
+  const closing = fieldReferenceFor(section, { kind: 'lap_window', label: 'Closing third', fromLap: 7, toLap: 9 }, 'median', 9)!;
+  assert.deepEqual(closing.carSeconds, [4.0, 4.2, 4.6, 4.8], 'the closing third reads the closing laps');
+  const lapThree = fieldReferenceFor(section, { kind: 'single_lap', lap: 3 }, 'median', 9)!;
+  assert.deepEqual(lapThree.carSeconds, [4.0, 4.2, 4.8], 'one lap: the other cars with a clean time on that lap');
+  const average = fieldReferenceFor(section, { kind: 'lap_window', label: 'Opening third', fromLap: 1, toLap: 3 }, 'mean', 9)!;
+  assert.ok(Math.abs((average.seconds ?? 0) - (4.0 + 4.2 + 4.8) / 3) < 1e-9, 'Average: each car\'s average, then their average');
+
+  const openingSet = sectionObservationsFromLaps(fieldPack, { kind: 'lap_window', label: 'Opening third', fromLap: 1, toLap: 3 }, 'median');
+  assert.equal(openingSet.sections[0].bryceSummarySeconds, 4.1, 'his side reads the same laps');
+  assert.equal(openingSet.sections[0].fieldMedianSeconds, 4.2, 'the set carries the scoped field, so the bars and the drawer follow the filter');
+  assert.deepEqual(openingSet.sections[0].fieldSeconds, [4.0, 4.2, 4.8], 'the drawer\'s faint marks are the other cars over the same laps');
+  const closingSet = sectionObservationsFromLaps(fieldPack, { kind: 'lap_window', label: 'Closing third', fromLap: 7, toLap: 9 }, 'median');
+  assert.notEqual(closingSet.sections[0].fieldMedianSeconds, openingSet.sections[0].fieldMedianSeconds, 'changing third changes the field figure');
+
+  /* Too few other cars: a number is withheld, never shown on two cars. */
+  const thin = fieldReferenceFor({ ...section, otherCarLaps: otherCarLaps.slice(0, MIN_FIELD_CARS - 1) }, { kind: 'full_race' }, 'median', 9)!;
+  assert.equal(thin.seconds, null, `under ${MIN_FIELD_CARS} other cars there is no field figure`);
+
+  /* A pack holding only whole-race medians (the measured Nashville packs):
+   * the whole race takes his own median out; a third or one lap has no field
+   * over the same laps, so it says so rather than compare unlike laps. */
+  const legacy = { ...section, otherCarLaps: undefined };
+  const legacyWhole = fieldReferenceFor(legacy, { kind: 'full_race' }, 'median', 9)!;
+  assert.deepEqual(legacyWhole.carSeconds, [4.2, 4.4, 4.4, 4.6], 'legacy whole race: his 4.3 taken out of the source distribution');
+  assert.equal(legacyWhole.basis, 'whole_race_medians');
+  assert.equal(fieldReferenceFor(legacy, { kind: 'lap_window', label: 'Opening third', fromLap: 1, toLap: 3 }, 'median', 9), null);
+  assert.equal(fieldReferenceFor(legacy, { kind: 'single_lap', lap: 3 }, 'median', 9), null);
+  assert.equal(fieldReferenceFor(legacy, { kind: 'full_race' }, 'mean', 9), null, 'legacy medians cannot stand in for averages');
+}
+
 /* Synthetic anchor set standing in for the next venue that leaves a real
    untimed stretch. `sectionName` must equal the name the pack builder gives
    the derived section (DERIVED_SECTION_NAME in
@@ -565,6 +640,50 @@ assert.ok(milPass, 'Milwaukee resolves a pass interval from its chain section na
         drawn.length > 0,
         `${where}: offered scope "${label}" draws nothing (${cleanLaps.length} clean laps in the pack)`
       );
+    }
+
+    /* (d) the field is the other cars over the same laps, in every scope the
+     * card offers: never him, never under MIN_FIELD_CARS cars, and over the
+     * whole race no more cars than the source's own distribution holds. */
+    const scopesToCheck = [
+      ...scopes,
+      ...cleanLaps.map((lap) => ({ kind: 'single_lap' as const, lap }))
+    ];
+    for (const section of pack.sections) {
+      if (pack.sourceTier !== 'lake_loop_crossings') {
+        assert.ok(section.otherCarLaps && section.otherCarLaps.length > 0, `${where} ${section.sectionName}: race pack must carry the other cars lap by lap`);
+      }
+      for (const scope of scopesToCheck) {
+        const reference = fieldReferenceFor(section, scope, 'median', pack.totalLaps);
+        if (!reference) continue;
+        if (reference.seconds !== null) {
+          assert.ok(Number.isFinite(reference.seconds), `${where} ${section.sectionName}: field figure must be finite`);
+          assert.ok(reference.carSeconds.length >= MIN_FIELD_CARS, `${where} ${section.sectionName}: field figure on too few cars`);
+        }
+        if (scope.kind === 'full_race' && pack.sessionId === 'session_indy_nxt_2026_6758') {
+          /* Laguna Seca 2026 R1 (he ran every lap): over the whole race the
+           * other cars are exactly the source's distribution minus his own
+           * clean-lap median. */
+          const hisTimes = section.laps.filter((tuple) => tuple[4] === 1 && tuple[6] !== null).map((tuple) => tuple[6] as number).sort((x, y) => x - y);
+          const mid = Math.floor(hisTimes.length / 2);
+          const hisMedian = Math.round((hisTimes.length % 2 ? hisTimes[mid] : (hisTimes[mid - 1] + hisTimes[mid]) / 2) * 10000) / 10000;
+          const expected = [...(section.fieldSeconds ?? [])];
+          expected.splice(expected.findIndex((value) => Math.abs(value - hisMedian) < 5e-5), 1);
+          /* Within the source's 4 dp: Python and JS round a 5 in the fifth
+           * place differently. */
+          assert.ok(
+            reference.carSeconds.length === expected.length &&
+              reference.carSeconds.every((value, index) => Math.abs(value - expected[index]) <= 1.0001e-4),
+            `${where} ${section.sectionName}: whole-race field must be the source distribution without him`
+          );
+        }
+        if (scope.kind === 'full_race') {
+          assert.ok(
+            reference.carSeconds.length <= (section.fieldSeconds?.length ?? 0),
+            `${where} ${section.sectionName}: the other cars can't outnumber the source's whole field`
+          );
+        }
+      }
     }
 
     // (c) tiling + balance, whenever thirds are offered

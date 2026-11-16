@@ -57,41 +57,45 @@ const HomeHero = ({ review }: { review: SeasonReview | null }) => {
   const races = figureById('races');
   const firstYear = uiDataPackage.screens.careerLab.lifeStats?.span?.firstDay?.slice(0, 4) ?? null;
   const isSeasonBest =
-    review?.standouts.some((standout) => standout.row.sessionId === HERO_STILL.sessionId && standout.label === 'Season best') ?? false;
+    review?.standouts.some((standout) => standout.row.sessionId === HERO_STILL.sessionId && standout.label === 'Season best') ??
+    false;
   const raceName = row ? `${row.seasonYear ?? ''} ${shortRaceName(row.raceLabel)}`.trim() : null;
   const heroSpec: HeroStillSpec = {
     ...HERO_STILL,
     alt: `A 3D model of WeatherTech Raceway Laguna Seca with the track shaded section by section by Bryce’s pace${raceName ? ` in the ${raceName}` : ''}.`
   };
+  const result =
+    row && row.finishPosition !== null
+      ? `P${row.finishPosition}${row.startPosition !== null ? ` from P${row.startPosition} on the grid` : ''}${isSeasonBest ? ', his season best' : ''}`
+      : null;
   return (
-    <section className="home-hero">
-      <div className="home-hero__text">
-        <h1>Bryce Aron’s racing career, lap by lap.</h1>
-        <p>
-          Live timing on race day, a pace map of every INDY NXT track he has raced, and
-          {races && firstYear ? ` all ${races.display} of his races since ${firstYear}` : ' every race of his career'} in one place.
-        </p>
-        <div className="home-hero__links">
-          {review ? <Link to="/races">The {review.seasonYear} season →</Link> : <Link to="/races">His races →</Link>}
-          <Link to="/career">His career in numbers →</Link>
-        </div>
-      </div>
-      <HeroStill spec={heroSpec} raceName={raceName} />
-      <div className="home-hero__cap">
-        <p>
-          WeatherTech Raceway Laguna Seca{raceName ? `, ${raceName}` : ''}. The film’s 3D model, each section shaded by his pace in
-          that race: gold where he was strongest against the field, grey where it was tougher.
-          <span className="home-hero__credit">{HERO_STILL.credit}</span>
-        </p>
-        {row && row.finishPosition !== null ? (
-          <span className="home-hero__result">
-            P{row.finishPosition}
-            {row.startPosition !== null ? ` from P${row.startPosition} on the grid` : ''}
-            {isSeasonBest ? ', his season best' : ''}
+    <HeroStill
+      spec={heroSpec}
+      lead={
+        <>
+          <h1>Bryce Aron’s racing career, lap by lap.</h1>
+          <p className="home-hero__intro">
+            Live timing on race day, a pace map of every INDY NXT track he has raced, and
+            {races && firstYear ? ` all ${races.display} of his races since ${firstYear}` : ' every race of his career'} in one
+            place.
+          </p>
+          <div className="home-hero__links">
+            {review ? <Link to="/races">The {review.seasonYear} season →</Link> : <Link to="/races">His races →</Link>}
+            <Link to="/career">His career in numbers →</Link>
+          </div>
+        </>
+      }
+      caption={
+        <>
+          <span className="home-hero__cap-line">
+            WeatherTech Raceway Laguna Seca{raceName ? `, ${raceName}` : ''}
+            {result ? `: ${result}` : ''}. Each section shaded by his pace against the field, gold where he was strongest, grey
+            where it was tougher.
           </span>
-        ) : null}
-      </div>
-    </section>
+          <span className="home-hero__credit">The film’s 3D model. {HERO_STILL.credit}</span>
+        </>
+      }
+    />
   );
 };
 
@@ -99,8 +103,14 @@ const HomeHero = ({ review }: { review: SeasonReview | null }) => {
 
 /** The replay catalog with its loading state: 'pending' until the API answers
  *  (or fails), so the slot can hold the button's place from the first paint. */
-const useReplayCatalogState = (): { done: boolean; catalog: ReplayAvailable | null } => {
-  const [state, setState] = useState<{ done: boolean; catalog: ReplayAvailable | null }>({ done: false, catalog: null });
+const useReplayCatalogState = (): {
+  done: boolean;
+  catalog: ReplayAvailable | null;
+} => {
+  const [state, setState] = useState<{
+    done: boolean;
+    catalog: ReplayAvailable | null;
+  }>({ done: false, catalog: null });
   useEffect(() => {
     let cancelled = false;
     loadReplayAvailable()
@@ -143,7 +153,15 @@ const PendingReplay = ({ sessionId, title }: { sessionId: string; title: string 
   );
 };
 
-const LastTimeOut = ({ review, latestPack, complete }: { review: SeasonReview; latestPack: ArchiveEntry | null; complete: boolean }) => {
+const LastTimeOut = ({
+  review,
+  latestPack,
+  complete
+}: {
+  review: SeasonReview;
+  latestPack: ArchiveEntry | null;
+  complete: boolean;
+}) => {
   const { done: catalogDone, catalog } = useReplayCatalogState();
   const row = review.rows[review.rows.length - 1];
   if (!row) return null;
@@ -196,43 +214,47 @@ const LastTimeOut = ({ review, latestPack, complete }: { review: SeasonReview; l
       </>
     ) : (
       <>
-        <b>P{rank}</b> in the {review.seasonYear} championship{points !== null ? ` on ${points} points` : ''} after {review.races}{' '}
-        {review.races === 1 ? 'race' : 'races'}.
+        <b>P{rank}</b> in the {review.seasonYear} championship
+        {points !== null ? ` on ${points} points` : ''} after {review.races} {review.races === 1 ? 'race' : 'races'}.
       </>
     );
 
   return (
     <section className="home-line home-last" aria-label="Last time out">
-      <Link to={racePath} className="home-last__result">
-        <span className="home-label">Last time out · {shortRaceName(row.raceLabel)}</span>
+      <Link to={racePath} className="home-line__head">
+        Last time out · <span className="home-last__race">{shortRaceName(row.raceLabel)}</span>
+      </Link>
+      <Link to={racePath} className="home-line__lead home-last__result">
         <span className="home-line__big">{finish !== null ? `P${finish}` : '—'}</span>
       </Link>
-      <div className="home-line__facts">
-        <p>
-          {facts.map((fact, index) => (
-            <span key={index}>
-              {index > 0 ? ' · ' : ''}
-              {fact}
-            </span>
-          ))}
-        </p>
-        {seasonLine ? <p>{seasonLine}</p> : null}
-        {complete ? (
-          <div className="home-share">
-            <SeasonShareButton review={review} />
-          </div>
-        ) : null}
-      </div>
-      <div className="home-last__replay">
-        {capture ? (
-          <ReplayAffordance capture={capture} fromSessionId={row.sessionId} title="Watch the race replay" variant="compact" />
-        ) : !catalogDone ? (
-          <PendingReplay sessionId={row.sessionId} title="Watch the race replay" />
-        ) : (
-          <Link to={racePath} className="home-textlink">
-            The race, lap by lap →
-          </Link>
-        )}
+      <div className="home-line__body">
+        <div className="home-line__facts">
+          <p>
+            {facts.map((fact, index) => (
+              <span key={index}>
+                {index > 0 ? ' · ' : ''}
+                {fact}
+              </span>
+            ))}
+          </p>
+          {seasonLine ? <p>{seasonLine}</p> : null}
+          {complete ? (
+            <div className="home-share">
+              <SeasonShareButton review={review} />
+            </div>
+          ) : null}
+        </div>
+        <div className="home-last__replay">
+          {capture ? (
+            <ReplayAffordance capture={capture} fromSessionId={row.sessionId} title="Watch the race replay" variant="compact" />
+          ) : !catalogDone ? (
+            <PendingReplay sessionId={row.sessionId} title="Watch the race replay" />
+          ) : (
+            <Link to={racePath} className="home-textlink">
+              The race, lap by lap →
+            </Link>
+          )}
+        </div>
       </div>
     </section>
   );
@@ -252,7 +274,12 @@ const FigureValue = ({ display }: { display: string }) => {
         return token.split(/(\+)/).map((part, partIndex) => {
           const key = `${index}-${partIndex}`;
           if (!part) return null;
-          if (part === '+') return <span key={key} className="home-odo__plus">+</span>;
+          if (part === '+')
+            return (
+              <span key={key} className="home-odo__plus">
+                +
+              </span>
+            );
           if (!part.trim()) return <span key={key}> </span>;
           return (
             <span key={key} className="home-odo__unit">
@@ -272,7 +299,11 @@ const CareerSoFar = () => {
   const races = figureById('races');
   const laps = figureById('raceLaps');
   const countries = figureById('countries');
-  const cells: Array<{ figure: UiCareerFigure; label: string; sub: string | null }> = [];
+  const cells: Array<{
+    figure: UiCareerFigure;
+    label: string;
+    sub: string | null;
+  }> = [];
   const add = (id: string, label: string, sub: string | null = null) => {
     const figure = figureById(id);
     if (figure) cells.push({ figure, label, sub });
@@ -291,7 +322,8 @@ const CareerSoFar = () => {
       {races && span ? (
         <p className="home-sub">
           {races.display} races{seriesCount ? ` in ${seriesCount} series` : ''},{' '}
-          {formatDate(span.firstDay, { month: 'long', year: 'numeric' })} to {formatDate(span.lastDay, { month: 'long', year: 'numeric' })}.
+          {formatDate(span.firstDay, { month: 'long', year: 'numeric' })} to{' '}
+          {formatDate(span.lastDay, { month: 'long', year: 'numeric' })}.
         </p>
       ) : null}
       <Link to="/career" className="home-odo" aria-label="His career so far: open the career page">

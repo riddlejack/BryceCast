@@ -51,12 +51,24 @@
   .home-hero__links a:hover { color: var(--link-active); text-decoration-line: underline; }
 }
 
-/* ---------- hero: words left, the still right ---------- */
+/* ---------- hero: words left, the still right ----------
+   Round 4 (Jack's review, Nov 15): one left edge. The headline, the intro,
+   the two links and, under a rule, the readout (the map's legend) stack in
+   the left column and share the page's left edge; the left column sits
+   centred against the still, so nothing leaves an empty block under it. The
+   still's caption hangs directly under the picture, its left edge on the
+   island's (the model starts 5% into the frame). The hero's two columns are
+   the page grid: "Last time out" below lines up on them. */
+
+.home {
+  --home-cols: minmax(340px, 0.82fr) minmax(0, 2fr);
+  --home-colgap: clamp(32px, 2.6vw, 56px);
+}
 
 .home-hero {
   display: grid;
-  grid-template-columns: minmax(340px, 0.85fr) 2fr;
-  column-gap: 24px;
+  grid-template-columns: var(--home-cols);
+  column-gap: var(--home-colgap);
   align-items: center;
   margin-top: 8px;
 }
@@ -73,7 +85,7 @@
   text-wrap: balance;
 }
 
-.home-hero__text p {
+.home .home-hero__intro {
   margin: 18px 0 0;
   max-width: 470px;
   font-size: 19px;
@@ -148,59 +160,102 @@
 .home-hero__tag b { font-weight: 600; }
 .home-hero__tag span { color: var(--ink-secondary); }
 
-/* The readout under the still: always present, so nothing waits on hover. */
+/* The readout: the map's legend, under a rule at the foot of the left
+   column. Its height is held (min-height) so a hover that changes the words
+   never moves the headline above it. */
 .home-hero__read {
-  margin: 10px 0 0;
-  min-height: 96px;
+  margin-top: 36px;
+  padding-top: 18px;
+  border-top: 1px solid var(--divider);
+  min-height: 150px;
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 6px;
 }
-.home-hero__read-line {
-  font-size: 18px;
+.home .home-hero__read p { margin: 0; max-width: 470px; }
+.home .home-hero__read-line {
+  font-size: 19px;
   line-height: 1.35;
   color: var(--ink-secondary);
 }
 .home-hero__read-line b { color: var(--ink-primary); font-weight: 600; }
-.home-hero__read-how { font-size: 13px; line-height: 1.45; color: var(--ink-muted); }
-.home .home-hero__race { align-self: flex-start; margin-top: 2px; font-size: 14px; }
+.home .home-hero__read-how {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ink-muted);
+  text-wrap: pretty;
+}
+.home-hero__hint { white-space: nowrap; }
+.home .home-hero__race { align-self: flex-start; margin-top: 4px; font-size: 15px; }
 
 .home-hero__still.is-still .home-hero__veil { transition: none; }
 @media (prefers-reduced-motion: reduce) {
   .home-hero__veil { transition: none; }
 }
 
+/* The caption, directly under the picture and aligned to the island's left
+   edge (5% of the image, which is the figure plus the gutter it bleeds into). */
 .home-hero__cap {
-  grid-column: 1 / -1;
-  text-wrap: pretty;
-  margin-top: 6px;
+  margin: 4px 0 0;
+  padding-left: calc((100% + var(--gutter)) * 0.05);
+  max-width: 980px;
   display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 8px 32px;
+  flex-direction: column;
+  gap: 2px;
   font-size: 13px;
-  line-height: 1.45;
+  line-height: 1.5;
   color: var(--ink-muted);
+  text-wrap: pretty;
 }
+.home-hero__cap-line { color: var(--ink-secondary); }
+.home-hero__credit { display: block; font-size: 12px; color: var(--ink-muted); }
 
-.home .home-hero__cap p { margin: 0; max-width: none; }
-.home-hero__credit { display: block; color: var(--ink-muted); }
-.home-hero__result { flex: none; white-space: nowrap; color: var(--ink-secondary); }
-
-/* ---------- one-line results: last time out, and the "now" line ---------- */
+/* ---------- one-line results: last time out, and the "now" line ----------
+   Round 4: a block of its own. A rule over it, its heading on its own row,
+   then the big figure in the hero's left column and the facts and the action
+   in the right one, so the facts start where the map does. */
 
 .home-line {
-  margin-top: clamp(48px, 4vw, 72px);
+  margin-top: clamp(56px, 4.4vw, 80px);
   display: grid;
-  grid-template-columns: minmax(200px, auto) minmax(0, 1fr) auto;
-  gap: 16px 40px;
-  align-items: end;
-  padding-bottom: 28px;
-  border-bottom: 1px solid var(--divider);
+  grid-template-columns: var(--home-cols);
+  column-gap: var(--home-colgap);
+  row-gap: 18px;
+  align-items: start;
+  padding-top: 16px;
+  border-top: 1px solid var(--ink-primary);
 }
 
-.home-line--now { border-bottom-color: var(--ink-primary); }
 .page.home > .home-line--now:first-child { margin-top: 16px; }
+
+.home-line__head {
+  grid-column: 1 / -1;
+  font-size: 15px;
+  line-height: 1.35;
+  color: var(--ink-secondary);
+}
+a.home-line__head { justify-self: start; }
+.home-last__race { color: var(--ink-primary); }
+@media (hover: hover) {
+  a.home-line__head:hover .home-last__race { text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+}
+
+.home-line__lead { display: block; min-width: 0; }
+
+.home-line__body {
+  min-width: 0;
+  /* the facts start on the island's left edge, like the caption above */
+  padding-left: calc((100% + var(--gutter)) * 0.05);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px 48px;
+}
+/* The big figure's cap height starts level with the first line of facts. */
+.home-line__lead .home-line__big { margin-top: 0; }
+@media (max-width: 1380px) {
+  .home-line__body { flex-direction: column; }
+}
 
 .home-line__big {
   display: block;
@@ -224,6 +279,8 @@
 .home-line__count { margin-top: 10px; }
 
 .home-line__facts {
+  min-width: 0;
+  padding-bottom: 2px;
   font-size: 19px;
   line-height: 1.55;
   color: var(--ink-secondary);
@@ -235,9 +292,8 @@
 .home-line__facts b.home-gain--up { color: var(--status-good); }
 .home-line__facts b.home-gain--down { color: var(--status-bad); }
 
-.home-last__result { display: block; }
 @media (hover: hover) {
-  .home-last__result:hover .home-label { color: var(--ink-secondary); text-decoration: underline; text-underline-offset: 3px; }
+  .home-last__result:hover .home-line__big { color: var(--link-active); }
 }
 
 /* The season card share stays, as a quiet text action under the season line. */
@@ -261,7 +317,7 @@
    mock-up's ink disc and one bold line, with its source beneath. The slot
    keeps one size from the first paint: the button shows at once (pending),
    and the catalog's answer only fills its meta and source lines. */
-.home-last__replay { justify-self: end; min-width: 360px; }
+.home-last__replay { flex: none; min-width: 300px; }
 .home-last__replay .race-replay__year-meta { min-height: 1.35em; }
 .home-last__replay .race-replay__year-prov { min-height: 24px; }
 .home-last__replay .race-replay__year { flex-direction: column; align-items: flex-start; gap: 8px; }
@@ -471,7 +527,7 @@
 /* ---------- mid widths ---------- */
 
 @media (max-width: 1180px) {
-  .home-hero { grid-template-columns: minmax(300px, 0.9fr) 1.6fr; }
+  .home { --home-cols: minmax(300px, 0.9fr) minmax(0, 1.6fr); }
   .home-odo { grid-template-columns: repeat(3, minmax(0, 1fr)); row-gap: 26px; }
   .home-odo__cell b { font-size: clamp(30px, 5.4cqi, 52px); }
   .home-more { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -481,20 +537,28 @@
 /* ---------- phone ---------- */
 
 @media (max-width: 760px) {
+  /* One column. The text column opens up (display: contents) so the readout
+     can drop under the picture: words, picture, readout, caption. */
   .home-hero { grid-template-columns: minmax(0, 1fr); }
-  .home-hero__text p { font-size: 17px; }
+  .home-hero__text { display: contents; }
+  .home-hero__text > * { grid-column: 1; }
+  .home-hero__figure { display: contents; }
+  .home-hero__still { order: 1; }
+  .home-hero__read { order: 2; }
+  .home-hero__cap { order: 3; }
+  .home .home-hero__intro { font-size: 17px; }
   .home-hero__links { gap: 12px 22px; }
   .home-hero__still { margin: 20px calc(-1 * var(--gutter)) 0; }
-  .home-hero__read { min-height: 132px; }
-  .home-hero__read-line { font-size: 16px; }
+  .home-hero__cap { padding-left: 0; margin-top: 14px; }
+  .home-hero__read { margin-top: 18px; padding-top: 14px; min-height: 168px; }
+  .home .home-hero__read-line { font-size: 17px; }
   .home-hero__tag { font-size: 13px; }
-  .home-hero__cap { flex-direction: column; gap: 4px; }
-  .home-hero__result { white-space: normal; }
 
-  .home-line { grid-template-columns: minmax(0, 1fr); gap: 14px; margin-top: 44px; }
+  .home-line { grid-template-columns: minmax(0, 1fr); row-gap: 12px; margin-top: 48px; }
   .home-line__big { font-size: 84px; }
+  .home-line__body { flex-direction: column; align-items: flex-start; gap: 18px; padding-left: 0; }
   .home-line__facts { font-size: 16px; }
-  .home-last__replay { justify-self: start; min-width: 0; }
+  .home-last__replay { min-width: 0; }
   .home-last__replay .race-replay__year-prov { padding-left: 0; }
 
   .home h2 { font-size: 24px; margin-top: 60px; }

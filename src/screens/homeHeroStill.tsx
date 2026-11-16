@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent, type PointerEvent } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent, type PointerEvent, type ReactNode } from 'react';
 import { useReducedMotion } from '../app/charts';
 import { Link } from '../app/router';
 import { trackSectionsFor } from '../assets/tracks/sections';
@@ -103,7 +103,8 @@ const litCanvasFor = (ids: Uint8Array, width: number, height: number, section: L
       }
       let near = false;
       for (let dy = -RING; dy <= RING && !near; dy += 1)
-        for (let dx = -RING; dx <= RING && !near; dx += 1) if (dx * dx + dy * dy <= RING * RING + 1) near = inside(gx + dx, gy + dy);
+        for (let dx = -RING; dx <= RING && !near; dx += 1)
+          if (dx * dx + dy * dy <= RING * RING + 1) near = inside(gx + dx, gy + dy);
       if (near) {
         /* --ink #1E1C1A */
         image.data[o] = 0x1e;
@@ -129,15 +130,22 @@ const deltaPhrase = (section: HeroSection): string | null => {
   return `${fmtSeconds(Math.abs(delta))} ${delta > 0 ? 'quicker' : 'slower'} than the field`;
 };
 
-/** The short form for the label on the picture: "−0.081 s" / "+0.034 s". */
+/** The short form for the label on the picture, in words (his rule of Nov 15:
+ *  signed seconds only in dense charts with a legend): "0.081 s quicker". */
 const deltaShort = (section: HeroSection): string | null => {
   if (section.bryceSeconds === null || section.fieldSeconds === null) return null;
-  const delta = section.bryceSeconds - section.fieldSeconds;
-  if (Math.abs(delta) < 0.0005) return '±0.000 s';
-  return `${delta < 0 ? '−' : '+'}${fmtSeconds(Math.abs(delta))}`;
+  const delta = section.fieldSeconds - section.bryceSeconds;
+  if (Math.abs(delta) < 0.0005) return 'level';
+  return `${fmtSeconds(Math.abs(delta))} ${delta > 0 ? 'quicker' : 'slower'}`;
 };
 
-export const HeroStill = ({ spec, raceName }: { spec: HeroStillSpec; raceName: string | null }) => {
+/* Round 4 (Jack's review, Nov 15): the hero is one grid. The words, and under
+ * them the readout as the map's legend, share the page's left edge; the still
+ * sits right with its caption directly under it, aligned to it. The readout
+ * lives here (not under the picture) so the hand on the map and the words it
+ * changes stay one component; on a phone the readout and caption drop under
+ * the picture (home.css). */
+export const HeroStill = ({ spec, lead, caption }: { spec: HeroStillSpec; lead: ReactNode; caption: ReactNode }) => {
   const reduced = useReducedMotion();
   const [legend, setLegend] = useState<Legend | null>(null);
   const [ids, setIds] = useState<Uint8Array | null>(null);
@@ -214,7 +222,14 @@ export const HeroStill = ({ spec, raceName }: { spec: HeroStillSpec; raceName: s
     return legend.sections.flatMap((section) => {
       const entry = pace.get(section.familyId);
       if (!entry || !section.box) return [];
-      return [{ ...section, percentile: entry.percentile, bryceSeconds: entry.bryce, fieldSeconds: entry.field }];
+      return [
+        {
+          ...section,
+          percentile: entry.percentile,
+          bryceSeconds: entry.bryce,
+          fieldSeconds: entry.field
+        }
+      ];
     });
   }, [legend, pace]);
   const byK = useMemo(() => new Map(sections.map((section) => [section.k, section])), [sections]);
@@ -223,11 +238,13 @@ export const HeroStill = ({ spec, raceName }: { spec: HeroStillSpec; raceName: s
    * shading uses (the most gold stretch in the picture). */
   const strongest = useMemo(() => {
     const measured = sections.filter((section) => section.kind === 'measured');
-    return measured.length > 0 ? measured.reduce((best, section) => (section.percentile > best.percentile ? section : best)) : null;
+    return measured.length > 0
+      ? measured.reduce((best, section) => (section.percentile > best.percentile ? section : best))
+      : null;
   }, [sections]);
 
   const shownK = active ?? strongest?.k ?? null;
-  const shown = shownK !== null ? byK.get(shownK) ?? null : null;
+  const shown = shownK !== null ? (byK.get(shownK) ?? null) : null;
   const isDefault = active === null || active === strongest?.k;
 
   /* Paint the overlay: the lit section, and a paper veil over the rest of the
@@ -354,67 +371,74 @@ export const HeroStill = ({ spec, raceName }: { spec: HeroStillSpec; raceName: s
       : null;
 
   return (
-    <figure className="home-hero__figure">
-      <div
-        ref={wrapRef}
-        className={`home-hero__still${pointing ? ' is-pointing' : ''}${reduced ? ' is-still' : ''}`}
-        role="group"
-        tabIndex={ready ? 0 : -1}
-        aria-label={`${spec.alt} Point at the track, tap it, or use the arrow keys to read each section.`}
-        onPointerMove={ready ? onPointerMove : undefined}
-        onPointerLeave={ready ? onPointerLeave : undefined}
-        onPointerDown={ready ? onPointerDown : undefined}
-        onClick={ready ? onClick : undefined}
-        onKeyDown={ready ? onKeyDown : undefined}
-        onBlur={() => setActive(null)}
-      >
-        <img
-          src={spec.src}
-          srcSet={`${spec.src1200} 1200w, ${spec.src} 2400w`}
-          sizes="(max-width: 760px) 100vw, 66vw"
-          width={spec.width}
-          height={spec.height}
-          alt={spec.alt}
-          fetchPriority="high"
-          decoding="async"
-          draggable={false}
-        />
-        <span className="home-hero__veil" aria-hidden />
-        <canvas ref={canvasRef} className="home-hero__lit" aria-hidden width={spec.width} height={spec.height} />
-        {ready && shown && tag ? (
-          <span
-            className={`home-hero__tag${tag.below ? ' is-below' : ''}`}
-            style={{ left: `${tag.left}%`, top: `${tag.top}%` }}
-            aria-hidden
-          >
-            <b>{shown.label}</b>
-            {short ? <span>{short}</span> : null}
-          </span>
-        ) : null}
+    <section className="home-hero">
+      <div className="home-hero__text">
+        {lead}
+        <div className="home-hero__read" aria-live="polite">
+          {ready && shown ? (
+            <>
+              <p className="home-hero__read-line">
+                <b>{shown.label}</b>
+                {delta ? <> · {delta}</> : null}
+              </p>
+              <p className="home-hero__read-how">
+                {shown.bryceSeconds !== null && shown.fieldSeconds !== null
+                  ? `His median ${fmtSeconds(shown.bryceSeconds)}, the field’s ${fmtSeconds(shown.fieldSeconds)}, on clean green-flag laps. `
+                  : ''}
+                {isDefault ? 'His strongest section. ' : ''}
+                <span className="home-hero__hint">Point at the track, or tap it, for the others.</span>
+              </p>
+            </>
+          ) : (
+            <p className="home-hero__read-line home-hero__read-line--wait" aria-hidden>
+              &nbsp;
+            </p>
+          )}
+          <Link to={`/races/${encodeURIComponent(spec.sessionId)}`} className="home-textlink home-hero__race">
+            Every section on the race page →
+          </Link>
+        </div>
       </div>
-      <figcaption className="home-hero__read" aria-live="polite">
-        {ready && shown ? (
-          <>
-            <span className="home-hero__read-line">
+      <figure className="home-hero__figure">
+        <div
+          ref={wrapRef}
+          className={`home-hero__still${pointing ? ' is-pointing' : ''}${reduced ? ' is-still' : ''}`}
+          role="group"
+          tabIndex={ready ? 0 : -1}
+          aria-label={`${spec.alt} Point at the track, tap it, or use the arrow keys to read each section.`}
+          onPointerMove={ready ? onPointerMove : undefined}
+          onPointerLeave={ready ? onPointerLeave : undefined}
+          onPointerDown={ready ? onPointerDown : undefined}
+          onClick={ready ? onClick : undefined}
+          onKeyDown={ready ? onKeyDown : undefined}
+          onBlur={() => setActive(null)}
+        >
+          <img
+            src={spec.src}
+            srcSet={`${spec.src1200} 1200w, ${spec.src} 2400w`}
+            sizes="(max-width: 760px) 100vw, 66vw"
+            width={spec.width}
+            height={spec.height}
+            alt={spec.alt}
+            fetchPriority="high"
+            decoding="async"
+            draggable={false}
+          />
+          <span className="home-hero__veil" aria-hidden />
+          <canvas ref={canvasRef} className="home-hero__lit" aria-hidden width={spec.width} height={spec.height} />
+          {ready && shown && tag ? (
+            <span
+              className={`home-hero__tag${tag.below ? ' is-below' : ''}`}
+              style={{ left: `${tag.left}%`, top: `${tag.top}%` }}
+              aria-hidden
+            >
               <b>{shown.label}</b>
-              {delta ? <> · {delta}</> : null}
+              {short ? <span>{short}</span> : null}
             </span>
-            <span className="home-hero__read-how">
-              {shown.bryceSeconds !== null && shown.fieldSeconds !== null
-                ? `His median ${fmtSeconds(shown.bryceSeconds)}, the field’s median ${fmtSeconds(shown.fieldSeconds)}, on clean green-flag laps${raceName ? ` in the ${raceName}` : ''}. `
-                : ''}
-              {isDefault ? 'His strongest section. Point at the track, or tap it, for the others.' : null}
-            </span>
-          </>
-        ) : (
-          <span className="home-hero__read-line home-hero__read-line--wait" aria-hidden>
-            &nbsp;
-          </span>
-        )}
-        <Link to={`/races/${encodeURIComponent(spec.sessionId)}`} className="home-textlink home-hero__race">
-          Every section on the race page →
-        </Link>
-      </figcaption>
-    </figure>
+          ) : null}
+        </div>
+        <figcaption className="home-hero__cap">{caption}</figcaption>
+      </figure>
+    </section>
   );
 };

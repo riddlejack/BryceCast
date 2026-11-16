@@ -100,6 +100,8 @@
   font-variant-numeric: proportional-nums;
   white-space: nowrap;
 }
+/* The lap count changes live: tabular, so it doesn't shimmer (round 4). */
+.live-now__lap { font-variant-numeric: tabular-nums; }
 
 .live-now__flag { display: inline-flex; align-items: center; gap: 0.36em; color: var(--ink-secondary); }
 
@@ -221,11 +223,60 @@
   stroke-linejoin: round;
 }
 
+/* The opening caution a replay jumped: on the track for a few seconds after
+   the jump, with the way to watch it instead. */
+.live-skip-note {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 10px;
+  align-self: flex-start;
+  max-width: 100%;
+  padding: 8px 0 10px;
+  border-bottom: 1px solid var(--divider);
+  font-size: 15px;
+  line-height: 1.4;
+  color: var(--ink-primary);
+  animation: live-skip-note-in 220ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.live-skip-note__swatch {
+  display: inline-block;
+  width: 0.62em;
+  height: 0.62em;
+  border-radius: 3px;
+  background: #f2c230;
+  flex: none;
+  align-self: center;
+}
+.live-skip-note--red .live-skip-note__swatch { background: var(--status-bad-dot); }
+.live-skip-note__text { font-weight: 550; }
+.live-skip-note__watch,
+.replay-bar__inline-btn {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-weight: 600;
+  color: var(--link);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+@media (hover: hover) {
+  .live-skip-note__watch:hover,
+  .replay-bar__inline-btn:hover { color: var(--link-active); }
+}
+@keyframes live-skip-note-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: none; }
+}
+
 .live-page .live-hero__track-caption { margin: 0; max-width: 74ch; line-height: 1.45; }
 
 @media (prefers-reduced-motion: reduce) {
   .live-track__section,
   .live-now__progress > span { transition: none; }
+  .live-skip-note { animation: none; }
 }
 
 /* ---------- a replay before the green ---------- */

@@ -325,12 +325,12 @@ export const TracksScreen = () => {
               sizes="(min-width: 1100px) 56vw, 100vw"
               width={2400}
               height={1350}
-              alt={`${selectedVenue}, the film's 3D model of the track${still.shaded ? ', shaded by his pace section by section' : ''}`}
+              alt={`${selectedVenue}, a 3D model of the track${still.shaded ? ', shaded by his pace section by section' : ''}`}
             />
             <figcaption>
               {still.shaded && visitLabel
-                ? `The film's 3D model, shaded by his pace in ${visitLabel}, the same shading as the map below.`
-                : "The film's 3D model of the track."}{' '}
+                ? `A 3D model of the track, shaded by his pace in ${visitLabel}, the same shading as the map below.`
+                : "A 3D model of the track."}{' '}
               {still.attribution}
             </figcaption>
           </figure>

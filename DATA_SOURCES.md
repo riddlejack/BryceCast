@@ -40,7 +40,7 @@ Everything below was collected from pages, files and feeds that each organizatio
 
 | Font | License | Use |
 | --- | --- | --- |
-| **[Schibsted Grotesk](https://github.com/schibsted/schibsted-grotesk)**, © 2023 The Schibsted-Grotesk Project Authors | [SIL Open Font License 1.1](public/fonts/OFL.txt) | The site's typeface, served from `public/fonts/SchibstedGrotesk-VF.woff2` |
+| **[Schibsted Grotesk](https://github.com/schibsted/schibsted-grotesk)**, © 2023 The Schibsted-Grotesk Project Authors | [SIL Open Font License 1.1](public/fonts/OFL.txt) | The site's typeface, served from `public/fonts/SchibstedGrotesk-VF-tnum-digits.woff2`: `SchibstedGrotesk-VF.woff2` modified so its tabular-figures feature (`tnum`) changes only the digits 0-9 (OFL 1.1 permits modification; the license declares no Reserved Font Name) |
 
 Photos, logos and series marks that appear in the corpus or on the site belong to their respective owners and are used for identification only. BryceCast is not affiliated with or endorsed by any series, team, broadcaster or data provider.
 

@@ -8,14 +8,19 @@ import {
 } from '../data/replayAvailable';
 import {
   FORMATION_MIN_LEAD_SECONDS,
+  OPENING_CAUTION_LAPS,
+  SEARCH_BATCH,
   SKIM_SPEED,
+  cautionLapSpan,
   findFormationStart,
-  findRaceStart,
+  findOpeningCaution,
   phasedClockPosition,
-  skimPhases,
+  replayPhases,
   type FlagSample,
+  type OpeningCaution,
   type ReplayPhase
 } from '../data/replayStart';
+import { uiDataPackage } from '../data/uiDataPackage';
 import { useRouter } from './router';
 
 /** The speeds the Time Machine offers. 1× is "as it happened"; 4× is the lively
@@ -26,8 +31,8 @@ export { SKIM_SPEED };
 
 /** What the clock is skimming right now, for the bar to say in plain words. */
 export interface ReplaySkim {
-  /** `formation`: before the green flag. `caution`: the opening caution
-   *  between a start that did not hold and the restart. */
+  /** `formation`: before the green flag. `caution`: the opening caution the
+   *  visitor chose to watch, up to the restart. */
   kind: 'formation' | 'caution';
   /** The rate it plays at now. */
   speed: number;
@@ -36,6 +41,19 @@ export interface ReplaySkim {
   /** Where the visitor's speed comes back. */
   until: 'green' | 'restart';
   /** Leader lap at that restart, when known. */
+  restartLap: number | null;
+}
+
+/** The caution thrown in the opening laps, which a replay jumps by default
+ *  (src/data/replayStart.ts). */
+export interface ReplayOpeningCaution {
+  kind: 'caution' | 'red';
+  thrownAt: string;
+  restartAt: string;
+  /** The racing laps it covered, in the official summaries' terms; `from` is
+   *  null when the feed began with it already out. */
+  laps: { from: number | null; to: number } | null;
+  /** The lap the race went green again on. */
   restartLap: number | null;
 }
 
@@ -62,32 +80,34 @@ export interface ReplaySession {
   seasonYear: number | null;
   returnHref: string;
   skippedSourceGap: { seconds: number; resumeAt: string } | null;
-  /** Where the clock starts and where Restart returns: the race start, or the
-   *  restart when the start went to caution at once (src/data/replayStart.ts).
-   *  Null until resolved. */
-  raceStart: { at: string; kind: 'start' | 'restart'; lap: number | null } | null;
+  /** The opening caution, once the search has found one (null while it runs,
+   *  and for a start that ran green past the opening laps). */
+  openingCaution: ReplayOpeningCaution | null;
+  /** Wall-clock ms when the running clock last jumped the opening caution to
+   *  its restart; null before the jump and after Restart or "watch it". */
+  cautionSkippedAt: number | null;
   /** The capture opens early enough before the start to replay the formation
    *  lap (BryceCast's own captures; lake replays begin at or after the green). */
   formationAvailable: boolean;
   /** The formation lap is being located in the archive (a few reads). */
   formationPending: boolean;
-  /** The plain green flag (`firstGreenAt`, or the first frame of a lake feed
-   *  that begins after it), for going back past a skipped opening caution. */
+  /** The race start: `firstGreenAt`, or the first frame of a lake feed that
+   *  begins after it. Where the clock starts and where Restart returns. */
   greenFlagAt: string | null;
-  /** Where the running clock was last started from: the resolved race start,
-   *  a `t0` deep link, the formation lap, the plain green flag, or a jump
-   *  (a source-gap skip). Lets the bar say "starts at the restart" only while
-   *  that is true. */
-  clockFrom: 'raceStart' | 't0' | 'formation' | 'greenFlag' | 'jump' | null;
-  /** Set while the clock plays the formation laps or the opening caution at
-   *  {@link SKIM_SPEED}; null when it plays at the visitor's speed. */
+  /** Where the running clock was last started from: the race start, a `t0`
+   *  deep link, the formation lap, the opening caution the visitor chose to
+   *  watch, or a jump (a source-gap skip). */
+  clockFrom: 'raceStart' | 't0' | 'formation' | 'caution' | 'jump' | null;
+  /** Set while the clock plays the formation laps or a watched caution faster
+   *  than the visitor's speed; null when it plays at the visitor's speed. */
   skim: ReplaySkim | null;
   /** The rate the clock runs at this moment: `speed`, or the skim's rate. */
   playbackSpeed: number;
-  /** Bumped whenever the clock jumps (restart, formation, green flag, a gap
-   *  skip), so the page can fetch the new moment at once. */
+  /** Bumped whenever the clock jumps (restart, formation, the caution jump or
+   *  watching it, a gap skip), so the page can fetch the new moment at once. */
   clockEpoch: number;
   setSpeed: (speed: number) => void;
+  /** Back to the race start (the opening caution is jumped again). */
   restart: () => void;
   /** Go back before the start: the clock runs from just before the field
    *  leaves the grid for the formation lap (session open when that can't be
@@ -96,8 +116,9 @@ export interface ReplaySession {
   /** Start locating the formation lap ahead of a click (hover or focus on the
    *  control), so the click itself is instant. Safe to call repeatedly. */
   prepareFormation: () => void;
-  /** Go back to the plain green flag, before any skipped opening caution. */
-  restartFromGreenFlag: () => void;
+  /** Play the opening caution the replay jumped, from the moment it was
+   *  thrown, at {@link SKIM_SPEED}, back to the visitor's speed at the restart. */
+  watchCaution: () => void;
   /** Move the local clock to the first observation after a withheld source gap. */
   jumpTo: (iso: string, sourceGapSeconds?: number) => void;
   exit: () => void;
@@ -111,7 +132,7 @@ export interface ReplaySession {
 
 interface ReplayClock {
   sessionKey: string;
-  /** Virtual time the clock started from (the race start), in ms. */
+  /** Virtual time the clock started from, in ms. */
   virtualStartMs: number;
   /** Wall-clock ms when this segment started (reset on restart / speed change). */
   startedAtWallMs: number;
@@ -119,14 +140,15 @@ interface ReplayClock {
   /** Archived span bounds, so the virtual clock never runs past the capture. */
   firstCheckedMs: number;
   lastCheckedMs: number;
-  /** Stretches before the visitor's speed takes over (formation, opening
-   *  caution). Empty for a plain clock. */
+  /** Stretches before the visitor's speed takes over (formation skim, the
+   *  start up to the opening-caution jump, a watched caution). Empty for a
+   *  plain clock. */
   phases: ReplayPhase[];
 }
 
 const inactive: Omit<
   ReplaySession,
-  'setSpeed' | 'restart' | 'restartFromFormation' | 'prepareFormation' | 'restartFromGreenFlag' | 'jumpTo' | 'exit' | 'getReplayParams'
+  'setSpeed' | 'restart' | 'restartFromFormation' | 'prepareFormation' | 'watchCaution' | 'jumpTo' | 'exit' | 'getReplayParams'
 > = {
   engaged: false,
   starting: false,
@@ -141,7 +163,8 @@ const inactive: Omit<
   seasonYear: null,
   returnHref: '/races',
   skippedSourceGap: null,
-  raceStart: null,
+  openingCaution: null,
+  cautionSkippedAt: null,
   formationAvailable: false,
   formationPending: false,
   greenFlagAt: null,
@@ -151,11 +174,10 @@ const inactive: Omit<
   clockEpoch: 0
 };
 
-/** The longest the cue-up waits on the start search before starting at the
- *  plain green flag anyway. A clean start costs one read (~200 ms); finding a
- *  restart took 0.7-1.5 s through the dev proxy, and 4.8 s for the one
- *  20-minute opening caution in the archive (Road America 2026 Race 1). */
-const RACE_START_SEARCH_TIMEOUT_MS = 6_000;
+/** The longest the opening-caution and formation searches may take before
+ *  the replay carries on without them (plays the caution; starts the
+ *  formation at session open). */
+const SEARCH_TIMEOUT_MS = 8_000;
 
 const withTimeout = <T,>(promise: Promise<T>, ms: number, fallback: T): Promise<T> =>
   new Promise((resolve) => {
@@ -175,10 +197,15 @@ const withTimeout = <T,>(promise: Promise<T>, ms: number, fallback: T): Promise<
 const replayQuery = (sessionKey: string, atMs: number) =>
   `replay=${encodeURIComponent(sessionKey)}&rt=${encodeURIComponent(new Date(atMs).toISOString())}&speed=${DEFAULT_REPLAY_SPEED}`;
 
+/** One archive read, retried once: a single dropped read must not hide the
+ *  opening caution. */
+const loadWithRetry = async <T,>(path: string): Promise<T | null> =>
+  (await loadApiJson<T>(path)) ?? (await loadApiJson<T>(path));
+
 /** The archive's flag and leader lap at one virtual moment, read from the
  *  smallest replay-aware route (`/api/session`, ~2 KB). */
 const sessionFlagAt = (sessionKey: string) => async (atMs: number): Promise<FlagSample> => {
-  const payload = await loadApiJson<{ flag?: unknown; lap?: unknown }>(`/api/session?${replayQuery(sessionKey, atMs)}`);
+  const payload = await loadWithRetry<{ flag?: unknown; lap?: unknown }>(`/api/session?${replayQuery(sessionKey, atMs)}`);
   const flag = typeof payload?.flag === 'string' && payload.flag.trim() ? payload.flag.trim().toUpperCase() : null;
   const lap = Number.parseInt(String(payload?.lap ?? ''), 10);
   return { flag, lap: Number.isFinite(lap) ? lap : null };
@@ -195,11 +222,9 @@ const timingMovingAt = (sessionKey: string) => async (atMs: number): Promise<boo
   });
 };
 
-/** The race start for a capture: the server's `firstRaceGreenAt` when it sends
- *  one, otherwise a bounded probe of the archive from `firstGreenAt`. */
-/** The plain green flag as the clock can reach it. Lake replays can carry a
- *  green flag before their first frame; the clock clamps to the first frame
- *  there, so that is where "the green flag" is for them. */
+/** The race start as the clock can reach it. Lake replays can carry a green
+ *  flag before their first frame; the clock clamps to the first frame there,
+ *  so that is where "the start" is for them. */
 const greenFlagMsOf = (session: ReplaySessionInfo): number | null => {
   const greenMs = Date.parse(session.firstGreenAt ?? '');
   const firstMs = Date.parse(session.firstCheckedAt ?? '');
@@ -207,24 +232,101 @@ const greenFlagMsOf = (session: ReplaySessionInfo): number | null => {
   return Number.isFinite(firstMs) ? Math.max(greenMs, firstMs) : greenMs;
 };
 
-const resolveRaceStart = async (session: ReplaySessionInfo): Promise<ReplaySession['raceStart']> => {
+/** What the official caution summaries (the package's caution atlas) say
+ *  about a race's opening laps: `none` when the race is covered and no caution
+ *  started on laps 1-3, the first such caution's laps when one did, `unknown`
+ *  for a race the atlas does not cover yet (newer than its cut-off). */
+type OfficialOpening =
+  | { status: 'none' }
+  | { status: 'caution'; from: number; to: number; restartLap: number | null }
+  | { status: 'unknown' };
+
+const officialOpeningFor = (session: ReplaySessionInfo): OfficialOpening => {
+  const atlas = uiDataPackage.screens?.careerLab?.cautionAtlas;
+  const sessionId = session.canonicalSessionId;
+  const raceMs = Date.parse(session.firstCheckedAt ?? '');
+  const asOfMs = Date.parse(`${atlas?.asOfDate ?? ''}T23:59:59Z`);
+  if (!atlas || !sessionId || !Number.isFinite(raceMs) || !Number.isFinite(asOfMs) || raceMs > asOfMs) return { status: 'unknown' };
+  const opening = (atlas.events ?? [])
+    .filter((event) => event.sessionId === sessionId && event.startLap !== null && event.startLap <= OPENING_CAUTION_LAPS)
+    .sort((left, right) => (left.startLap ?? 0) - (right.startLap ?? 0))[0];
+  if (!opening) return { status: 'none' };
+  const from = opening.startLap ?? 1;
+  return { status: 'caution', from, to: Math.max(from, opening.endLap ?? from), restartLap: opening.restartLap ?? null };
+};
+
+/** At most {@link SEARCH_BATCH} archive reads in flight for this client, so a
+ *  click never lands on the replay host as a burst. */
+const limitConcurrency = <A extends unknown[], R>(fn: (...args: A) => Promise<R>, limit = SEARCH_BATCH) => {
+  let active = 0;
+  const queue: Array<() => void> = [];
+  return async (...args: A): Promise<R> => {
+    if (active >= limit) await new Promise<void>((resolve) => queue.push(resolve));
+    active += 1;
+    try {
+      return await fn(...args);
+    } finally {
+      active -= 1;
+      queue.shift()?.();
+    }
+  };
+};
+
+/** The opening caution for a capture, with the laps to name it by: the
+ *  official summary's when it has one, the archive's otherwise. No archive
+ *  read at all for a race the summaries show starting clean; for the rest, one
+ *  bounded search (null for a start that ran green, an unreadable archive, or
+ *  a search that ran out of time). */
+const locateOpeningCaution = (session: ReplaySessionInfo): Promise<{ caution: OpeningCaution; laps: ReplayOpeningCaution['laps'] } | null> => {
+  const official = officialOpeningFor(session);
+  if (official.status === 'none') return Promise.resolve(null);
+  const greenMs = greenFlagMsOf(session);
   const lastMs = Date.parse(session.lastCheckedAt ?? '');
-  const startMs = greenFlagMsOf(session);
-  if (startMs === null) return null;
-  const plain = { at: new Date(startMs).toISOString(), kind: 'start' as const, lap: null };
-  const serverMs = Date.parse(session.firstRaceGreenAt ?? '');
-  if (Number.isFinite(serverMs)) {
-    return { at: new Date(serverMs).toISOString(), kind: serverMs > startMs + 1_000 ? 'restart' : 'start', lap: null };
-  }
-  if (!Number.isFinite(lastMs)) return plain;
-  const found = await withTimeout(
-    findRaceStart({ startMs, lastMs, flagAt: sessionFlagAt(session.sessionKey) }),
-    RACE_START_SEARCH_TIMEOUT_MS,
+  if (greenMs === null || !Number.isFinite(lastMs)) return Promise.resolve(null);
+  return withTimeout(
+    findOpeningCaution({
+      greenMs,
+      lastMs,
+      flagAt: limitConcurrency(sessionFlagAt(session.sessionKey)),
+      // The official summary already says the caution came on laps 1-3; the
+      // archive's lap counter can tick over at the line as it is thrown
+      // (Detroit 2024: official lap 3, counter 3), so allow one more.
+      openingLaps: official.status === 'caution' ? OPENING_CAUTION_LAPS + 1 : OPENING_CAUTION_LAPS
+    })
+      .then((caution) =>
+        caution
+          ? {
+              // From here on `restartLap` is the lap the race went green again
+              // on, as the bar says it ("back to 4× at the lap 5 restart"): the
+              // official summary's, or the archive's counter plus one (the
+              // counter reads the laps completed; checked against the
+              // summaries on every opening caution in the archive).
+              caution: {
+                ...caution,
+                restartLap:
+                  official.status === 'caution' && official.restartLap !== null
+                    ? official.restartLap
+                    : caution.restartLap !== null
+                      ? caution.restartLap + 1
+                      : null
+              },
+              laps: official.status === 'caution' ? { from: official.from, to: official.to } : cautionLapSpan(caution)
+            }
+          : null
+      )
+      .catch(() => null),
+    SEARCH_TIMEOUT_MS,
     null
   );
-  if (!found) return plain;
-  return { at: new Date(found.atMs).toISOString(), kind: found.kind, lap: found.lap };
 };
+
+const cautionForState = (caution: OpeningCaution, laps: ReplayOpeningCaution['laps']): ReplayOpeningCaution => ({
+  kind: caution.kind,
+  thrownAt: new Date(caution.thrownMs).toISOString(),
+  restartAt: new Date(caution.restartMs).toISOString(),
+  laps,
+  restartLap: caution.restartLap
+});
 
 const formationAvailableFor = (session: ReplaySessionInfo): boolean => {
   const greenMs = Date.parse(session.firstGreenAt ?? '');
@@ -269,41 +371,46 @@ const clockPosition = (clock: ReplayClock, nowWallMs = Date.now()) =>
 const virtualNowMsOf = (clock: ReplayClock): number =>
   Math.min(clock.lastCheckedMs, Math.max(clock.firstCheckedMs, clockPosition(clock).atMs));
 
-/** The skim phases for a clock going back before the race start. */
-const skimPhasesFor = (session: ReplaySessionInfo, fromMs: number, speed: number, raceStartMs: number | null): ReplayPhase[] =>
-  skimPhases({ fromMs, greenMs: greenFlagMsOf(session), raceStartMs, speed });
+/** The server accepts speeds 1, 2, 4 and 16, and uses the value only to age
+ *  the payload's freshness stamp; a faster formation skim says 16 on the wire. */
+const wireSpeed = (rate: number) => (rate > SKIM_SPEED ? SKIM_SPEED : rate);
 
 /**
  * Drives a per-CLIENT replay from `/live?replay=<sessionKey>`. The client owns
  * the virtual clock entirely: it resolves the capture from `/api/replay/available`,
- * starts the clock at the green flag, and thereafter appends `?replay&rt&speed`
- * to its own live-route polls via {@link ReplaySession.getReplayParams}. There
- * are NO start/stop control calls, so one viewer's replay never touches the
- * server's global state or any other viewer's Live page. `onRestart` clears the
- * client-side chart window so a restart genuinely replays from green.
+ * starts the clock at the race start at once, and thereafter appends
+ * `?replay&rt&speed` to its own live-route polls via
+ * {@link ReplaySession.getReplayParams}. There are NO start/stop control calls,
+ * so one viewer's replay never touches the server's global state or any other
+ * viewer's Live page. Behind the running clock it looks for a caution thrown in
+ * the opening laps and, when there is one, jumps it (src/data/replayStart.ts).
+ * `onRestart` clears the client-side chart window on every jump, so no chart
+ * line joins two moments the replay did not play between.
  */
 export const useReplaySession = (replayKey: string | null, onRestart?: () => void): ReplaySession => {
   const { navigate, route } = useRouter();
   const fromParam = route.search.get('from');
   // Optional deep-link into a race already in progress: `/live?replay=<key>&t0=<iso>`
-  // starts the virtual clock at that archived moment instead of the green flag,
+  // starts the virtual clock at that archived moment instead of the race start,
   // so a joiner enters mid-race (the exact "server remembers the race" case Brief
-  // O seeds). Absent — the race-page replay button flow — the clock still starts
-  // at green. Restart always returns to green regardless.
+  // O seeds). Absent — the race-page replay button flow — the clock starts at
+  // the green. Restart always returns to the green regardless.
   const t0Param = route.search.get('t0');
   // Optional deep-link seed for the initial playback rate: `/live?replay=<key>&t0=<iso>&speed=1`
-  // opens the replay paused-in-time at t0 and running at 1× ("as it happened"),
-  // the shape a "watch the pass" share link uses. Absent — the default 4×. Only
-  // `t0` and `speed` are honored as deep-link inputs: `rt` (the live virtual-now)
-  // was superseded by `t0` for the clock SEED — the client derives `rt` off its
-  // own clock for each poll (see getReplayParams) and never reads it from the URL,
-  // so there is no `rt` deep-link param to add.
+  // opens the replay at t0 running at 1× ("as it happened"), the shape a
+  // "watch the pass" share link uses. Absent — the default 4×. Only `t0` and
+  // `speed` are honored as deep-link inputs; the client derives `rt` off its
+  // own clock for each poll (see getReplayParams) and never reads it from the URL.
   const speedParam = route.search.get('speed');
   const [state, setState] = useState(inactive);
   const sessionRef = useRef<ReplaySessionInfo | null>(null);
   const clockRef = useRef<ReplayClock | null>(null);
-  /** Where Restart returns (the resolved race start), per session key. */
-  const raceStartRef = useRef<{ sessionKey: string; at: string; lap: number | null } | null>(null);
+  /** Where the running clock was last started from (mirrors state.clockFrom
+   *  for callbacks that must not wait on a render). */
+  const clockFromRef = useRef<ReplaySession['clockFrom']>(null);
+  /** The opening-caution search for a session key: in flight, then its answer
+   *  (`undefined` until it lands). */
+  const cautionRef = useRef<{ sessionKey: string; promise: Promise<OpeningCaution | null>; value: OpeningCaution | null | undefined } | null>(null);
   /** The formation start for a session key: the search in flight, then its
    *  answer. One search per session, shared by hover and click. */
   const formationRef = useRef<{ sessionKey: string; promise: Promise<number> } | null>(null);
@@ -317,31 +424,53 @@ export const useReplaySession = (replayKey: string | null, onRestart?: () => voi
     if (!clock) return '';
     const position = clockPosition(clock);
     const rt = new Date(Math.min(clock.lastCheckedMs, Math.max(clock.firstCheckedMs, position.atMs))).toISOString();
-    return `?replay=${encodeURIComponent(clock.sessionKey)}&rt=${encodeURIComponent(rt)}&speed=${position.rate}`;
+    return `?replay=${encodeURIComponent(clock.sessionKey)}&rt=${encodeURIComponent(rt)}&speed=${wireSpeed(position.rate)}`;
   }, []);
 
-  /** Publish the clock's current phase (skim or not) and wake again at the
-   *  next phase boundary, so the bar says 16x exactly while it is true. */
+  /** The opening caution for the running session, when the search has landed. */
+  const knownCaution = (sessionKey: string): OpeningCaution | null =>
+    cautionRef.current?.sessionKey === sessionKey ? cautionRef.current.value ?? null : null;
+
+  /** Publish the clock's current phase (skim or not), make the opening-caution
+   *  jump official when the clock has made it, and wake again at the next
+   *  phase boundary, so the bar says each rate exactly while it is true. */
   const syncPhase = useCallback(() => {
     if (phaseTimerRef.current !== null) clearTimeout(phaseTimerRef.current);
     phaseTimerRef.current = null;
-    const clock = clockRef.current;
+    let clock = clockRef.current;
     if (!clock) {
       setState((previous) => (previous.skim === null ? previous : { ...previous, skim: null }));
       return;
     }
-    const position = clockPosition(clock);
-    const restartLap = raceStartRef.current?.sessionKey === clock.sessionKey ? raceStartRef.current.lap : null;
+    const nowWall = Date.now();
+    let position = clockPosition(clock, nowWall);
+    if (position.jumped) {
+      // The clock has gone from the thrown caution to the restart: settle it
+      // there (the jump phase is spent), clear the chart window so no line
+      // joins the start to the restart, fetch the restart at once and say
+      // what was skipped.
+      clock = {
+        ...clock,
+        virtualStartMs: position.atMs,
+        startedAtWallMs: nowWall,
+        phases: clock.phases.filter((phase) => phase.untilMs > position.atMs && phase.jumpToMs === undefined)
+      };
+      clockRef.current = clock;
+      position = clockPosition(clock, nowWall);
+      onRestartRef.current?.();
+      setState((previous) => ({ ...previous, cautionSkippedAt: nowWall, clockEpoch: previous.clockEpoch + 1 }));
+    }
+    const caution = knownCaution(clock.sessionKey);
     const skim: ReplaySkim | null =
       position.phase && position.phase.kind !== 'start' && position.rate > clock.speed
         ? {
             kind: position.phase.kind,
             speed: position.rate,
             backTo: clock.speed,
-            // The caution always ends at the restart; the formation ends at
-            // the green flag, where the visitor's speed returns for the start.
+            // A watched caution ends at the restart; the formation ends at the
+            // green flag, where the visitor's speed returns for the start.
             until: position.phase.kind === 'caution' ? 'restart' : 'green',
-            restartLap
+            restartLap: caution?.restartLap ?? null
           }
         : null;
     setState((previous) => {
@@ -356,6 +485,7 @@ export const useReplaySession = (replayKey: string | null, onRestart?: () => voi
     if (position.wallToNextMs !== null) {
       phaseTimerRef.current = setTimeout(syncPhase, Math.ceil(position.wallToNextMs) + 20);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(
@@ -365,11 +495,54 @@ export const useReplaySession = (replayKey: string | null, onRestart?: () => voi
     []
   );
 
+  /** Start the clock at `fromMs` with the phases the rule gives it there. */
+  const startClockAt = useCallback(
+    (
+      session: ReplaySessionInfo,
+      fromMs: number,
+      from: NonNullable<ReplaySession['clockFrom']>,
+      options: { watchCaution?: boolean; announce?: boolean } = {}
+    ) => {
+      const clock = clockRef.current;
+      if (!clock || clock.sessionKey !== session.sessionKey) return;
+      const startMs = Date.parse(clampT0(session, new Date(fromMs).toISOString()));
+      const virtualStartMs = Number.isFinite(startMs) ? startMs : clock.firstCheckedMs;
+      clockRef.current = {
+        ...clock,
+        virtualStartMs,
+        startedAtWallMs: Date.now(),
+        phases: replayPhases({
+          fromMs: virtualStartMs,
+          greenMs: greenFlagMsOf(session),
+          caution: knownCaution(session.sessionKey),
+          speed: clock.speed,
+          watchCaution: options.watchCaution
+        })
+      };
+      clockFromRef.current = from;
+      if (options.announce !== false) onRestartRef.current?.();
+      setState((previous) => ({
+        ...previous,
+        started: true,
+        endedByLive: false,
+        skippedSourceGap: null,
+        formationPending: false,
+        cautionSkippedAt: null,
+        clockFrom: from,
+        clockEpoch: previous.clockEpoch + 1
+      }));
+      syncPhase();
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [syncPhase]
+  );
+
   useEffect(() => {
     if (!replayKey) {
       sessionRef.current = null;
       clockRef.current = null;
-      raceStartRef.current = null;
+      clockFromRef.current = null;
+      cautionRef.current = null;
       formationRef.current = null;
       setState(inactive);
       return undefined;
@@ -412,25 +585,13 @@ export const useReplaySession = (replayKey: string | null, onRestart?: () => voi
       }
       sessionRef.current = session;
       const formationAvailable = formationAvailableFor(session);
-      // Find where the race really gets going (src/data/replayStart.ts): the
-      // green flag, or the restart when the start went to caution at once. A
-      // `t0` deep link starts where it says without waiting; the search then
-      // runs behind it, only so Restart knows where to go.
-      const raceStartPromise = resolveRaceStart(session);
-      const raceStart = t0Param ? null : await raceStartPromise;
-      if (cancelled) return;
-      if (raceStart) raceStartRef.current = { sessionKey: session.sessionKey, at: raceStart.at, lap: raceStart.lap };
-      else
-        void raceStartPromise.then((resolved) => {
-          if (cancelled || !resolved) return;
-          raceStartRef.current = { sessionKey: session.sessionKey, at: resolved.at, lap: resolved.lap };
-          setState((previous) => (previous.session?.sessionKey === session.sessionKey ? { ...previous, raceStart: resolved } : previous));
-        });
-      // Start the local virtual clock at the race start (or, when a `t0`
-      // deep-link is present, at that archived moment mid-race). The cue-up
-      // clears as soon as the first archived frame arrives from the client's
-      // own next readiness poll.
-      const virtualStartMs = Date.parse(clampT0(session, t0Param ?? raceStart?.at ?? session.firstGreenAt));
+      const greenMs = greenFlagMsOf(session);
+      // Start the clock at once, at the race start (or the `t0` deep link):
+      // the visitor sees the start while the archive is searched, behind the
+      // running clock, for a caution thrown in the opening laps.
+      const virtualStartMs = Date.parse(
+        clampT0(session, t0Param ?? (greenMs !== null ? new Date(greenMs).toISOString() : session.firstGreenAt))
+      );
       const firstCheckedMs = Date.parse(session.firstCheckedAt ?? '');
       const lastCheckedMs = Date.parse(session.lastCheckedAt ?? '');
       const safeStart = Number.isFinite(virtualStartMs) ? virtualStartMs : Date.now();
@@ -443,6 +604,7 @@ export const useReplaySession = (replayKey: string | null, onRestart?: () => voi
         lastCheckedMs: Number.isFinite(lastCheckedMs) ? lastCheckedMs : safeStart,
         phases: []
       };
+      clockFromRef.current = t0Param ? 't0' : 'raceStart';
       setState({
         ...inactive,
         engaged: true,
@@ -453,15 +615,41 @@ export const useReplaySession = (replayKey: string | null, onRestart?: () => voi
         venue: shortVenueFromEventName(session.eventName),
         seasonYear: session.seasonYear,
         returnHref,
-        raceStart,
         formationAvailable,
         playbackSpeed: seededSpeed,
-        clockFrom: t0Param ? 't0' : 'raceStart',
-        greenFlagAt: (() => {
-          const ms = greenFlagMsOf(session);
-          return ms === null ? null : new Date(ms).toISOString();
-        })()
+        clockFrom: clockFromRef.current,
+        greenFlagAt: greenMs === null ? null : new Date(greenMs).toISOString()
       });
+
+      const search = locateOpeningCaution(session);
+      const entry = {
+        sessionKey: session.sessionKey,
+        promise: search.then((found) => found?.caution ?? null),
+        value: undefined as OpeningCaution | null | undefined
+      };
+      cautionRef.current = entry;
+      const found = await search;
+      const caution = found?.caution ?? null;
+      entry.value = caution;
+      if (cancelled || !found || !caution || cautionRef.current !== entry) return;
+      setState((previous) =>
+        previous.session?.sessionKey === session.sessionKey ? { ...previous, openingCaution: cautionForState(caution, found.laps) } : previous
+      );
+      // Give the running clock its jump: from where it is now, the start plays
+      // on to a beat after the throw and then goes to the restart; a clock
+      // already past that beat jumps at once. A clock the visitor has since
+      // moved (formation, watching the caution) was built with the answer.
+      const clock = clockRef.current;
+      if (!clock || clock.sessionKey !== session.sessionKey || clock.phases.length > 0) return;
+      if (clockFromRef.current !== 'raceStart' && clockFromRef.current !== 't0') return;
+      const nowMs = virtualNowMsOf(clock);
+      clockRef.current = {
+        ...clock,
+        virtualStartMs: nowMs,
+        startedAtWallMs: Date.now(),
+        phases: replayPhases({ fromMs: nowMs, greenMs: null, caution, speed: clock.speed })
+      };
+      syncPhase();
     })();
 
     return () => {
@@ -509,42 +697,36 @@ export const useReplaySession = (replayKey: string | null, onRestart?: () => voi
 
   const setSpeed = useCallback((next: number) => {
     const clock = clockRef.current;
-    if (!clock || !REPLAY_SPEEDS.includes(next as (typeof REPLAY_SPEEDS)[number])) return;
+    const session = sessionRef.current;
+    if (!clock || !session || !REPLAY_SPEEDS.includes(next as (typeof REPLAY_SPEEDS)[number])) return;
     // A speed the visitor picks wins over any skim still ahead: pressing 4×
-    // during the 16× formation slows it to 4× there and then.
-    const skimming = clockPosition(clock).rate !== clock.speed;
+    // during the formation slows it to 4× there and then. The opening-caution
+    // jump stays (its beat re-timed to the new speed), unless the visitor is
+    // watching the caution, where the picked speed now plays it.
+    const position = clockPosition(clock);
+    const skimming = position.rate !== clock.speed;
     if (next === clock.speed && !skimming) return;
-    // Continue from the current virtual position at the new speed — purely local,
-    // so the change is instant with no server round-trip.
-    clockRef.current = { ...clock, virtualStartMs: virtualNowMsOf(clock), startedAtWallMs: Date.now(), speed: next, phases: [] };
+    const nowMs = virtualNowMsOf(clock);
+    const watching = clockFromRef.current === 'caution';
+    clockRef.current = {
+      ...clock,
+      virtualStartMs: nowMs,
+      startedAtWallMs: Date.now(),
+      speed: next,
+      phases: watching ? [] : replayPhases({ fromMs: nowMs, greenMs: null, caution: knownCaution(clock.sessionKey), speed: next })
+    };
     speedRef.current = next;
     setState((previous) => ({ ...previous, speed: next, started: true }));
     syncPhase();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [syncPhase]);
 
   const restart = useCallback(() => {
-    const clock = clockRef.current;
     const session = sessionRef.current;
-    if (!clock || !session) return;
-    const raceStartAt = raceStartRef.current?.sessionKey === session.sessionKey ? raceStartRef.current.at : null;
-    const virtualStartMs = Date.parse(clampT0(session, raceStartAt ?? session.firstGreenAt));
-    clockRef.current = {
-      ...clock,
-      virtualStartMs: Number.isFinite(virtualStartMs) ? virtualStartMs : clock.firstCheckedMs,
-      startedAtWallMs: Date.now(),
-      phases: []
-    };
-    onRestartRef.current?.();
-    setState((previous) => ({
-      ...previous,
-      started: true,
-      endedByLive: false,
-      skippedSourceGap: null,
-      clockFrom: 'raceStart',
-      clockEpoch: previous.clockEpoch + 1
-    }));
-    syncPhase();
-  }, [syncPhase]);
+    if (!clockRef.current || !session) return;
+    const greenMs = greenFlagMsOf(session);
+    startClockAt(session, greenMs ?? Date.parse(clampT0(session, null)), 'raceStart');
+  }, [startClockAt]);
 
   /** The formation start for the current session: one bounded search,
    *  shared by a hover that prepares it and the click that uses it. */
@@ -557,7 +739,7 @@ export const useReplaySession = (replayKey: string | null, onRestart?: () => voi
     const greenMs = Date.parse(session.firstGreenAt ?? '');
     const promise = withTimeout(
       findFormationStart({ openMs, startMs: greenMs, movingAt: timingMovingAt(sessionKey) }),
-      RACE_START_SEARCH_TIMEOUT_MS,
+      SEARCH_TIMEOUT_MS,
       { atMs: openMs, requests: 0 }
     ).then(({ atMs }) => atMs);
     formationRef.current = { sessionKey, promise };
@@ -571,65 +753,30 @@ export const useReplaySession = (replayKey: string | null, onRestart?: () => voi
   const restartFromFormation = useCallback(() => {
     const session = sessionRef.current;
     if (!clockRef.current || !session) return;
-    const sessionKey = session.sessionKey;
     const located = locateFormation();
     if (!located) return;
     setState((previous) => ({ ...previous, formationPending: true }));
-    void located.then((atMs) => {
-      const clock = clockRef.current;
-      if (!clock || clock.sessionKey !== sessionKey) return;
-      const startMs = Date.parse(clampT0(session, new Date(atMs).toISOString()));
-      const virtualStartMs = Number.isFinite(startMs) ? startMs : clock.firstCheckedMs;
-      const raceStartAt = raceStartRef.current?.sessionKey === sessionKey ? Date.parse(raceStartRef.current.at) : NaN;
-      clockRef.current = {
-        ...clock,
-        virtualStartMs,
-        startedAtWallMs: Date.now(),
-        // The formation laps run at 16×, and so does an opening caution the
-        // default start would have skipped; the start itself and the race
-        // after the restart play at the visitor's speed.
-        phases: skimPhasesFor(session, virtualStartMs, clock.speed, Number.isFinite(raceStartAt) ? raceStartAt : null)
-      };
-      onRestartRef.current?.();
-      setState((previous) => ({
-        ...previous,
-        started: true,
-        endedByLive: false,
-        skippedSourceGap: null,
-        formationPending: false,
-        clockFrom: 'formation',
-        clockEpoch: previous.clockEpoch + 1
-      }));
-      syncPhase();
+    // The formation laps skim to the green, the start plays at the visitor's
+    // speed, and the opening caution is jumped as from the default start. The
+    // caution search began when the replay did; it is normally in by now.
+    const cautionSearch =
+      cautionRef.current?.sessionKey === session.sessionKey ? cautionRef.current.promise : Promise.resolve(null);
+    void Promise.all([located, cautionSearch]).then(([atMs]) => {
+      startClockAt(session, atMs, 'formation');
     });
-  }, [locateFormation, syncPhase]);
+  }, [locateFormation, startClockAt]);
 
-  const restartFromGreenFlag = useCallback(() => {
-    const clock = clockRef.current;
+  const watchCaution = useCallback(() => {
     const session = sessionRef.current;
-    if (!clock || !session) return;
-    const greenMs = greenFlagMsOf(session);
-    const startMs = Date.parse(clampT0(session, greenMs === null ? null : new Date(greenMs).toISOString()));
-    const virtualStartMs = Number.isFinite(startMs) ? startMs : clock.firstCheckedMs;
-    const raceStartAt = raceStartRef.current?.sessionKey === session.sessionKey ? Date.parse(raceStartRef.current.at) : NaN;
-    clockRef.current = {
-      ...clock,
-      virtualStartMs,
-      startedAtWallMs: Date.now(),
-      // The start at the visitor's speed, then the caution at 16× to the restart.
-      phases: skimPhasesFor(session, virtualStartMs, clock.speed, Number.isFinite(raceStartAt) ? raceStartAt : null)
-    };
-    onRestartRef.current?.();
-    setState((previous) => ({
-      ...previous,
-      started: true,
-      endedByLive: false,
-      skippedSourceGap: null,
-      clockFrom: 'greenFlag',
-      clockEpoch: previous.clockEpoch + 1
-    }));
-    syncPhase();
-  }, [syncPhase]);
+    if (!clockRef.current || !session) return;
+    const caution = knownCaution(session.sessionKey);
+    if (!caution) return;
+    // From two seconds before the throw (never before the start), so the
+    // visitor sees it come out.
+    const greenMs = greenFlagMsOf(session) ?? caution.thrownMs;
+    startClockAt(session, Math.max(greenMs, caution.thrownMs - 2_000), 'caution', { watchCaution: true });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [startClockAt]);
 
   const jumpTo = useCallback((iso: string, sourceGapSeconds = 0) => {
     const clock = clockRef.current;
@@ -641,9 +788,10 @@ export const useReplaySession = (replayKey: string | null, onRestart?: () => voi
       ...clock,
       virtualStartMs: nextMs,
       startedAtWallMs: Date.now(),
-      // A gap skip keeps whatever skim is still ahead of the new moment.
+      // A gap skip keeps whatever skim or jump is still ahead of the new moment.
       phases: clock.phases.filter((phase) => phase.untilMs > nextMs)
     };
+    clockFromRef.current = 'jump';
     // A source gap must not leave a chart line joining the last pre-gap rank to
     // the first post-gap rank as if those seven minutes had been observed.
     onRestartRef.current?.();
@@ -664,5 +812,5 @@ export const useReplaySession = (replayKey: string | null, onRestart?: () => voi
     navigate(href);
   }, [navigate, state.returnHref]);
 
-  return { ...state, setSpeed, restart, restartFromFormation, prepareFormation, restartFromGreenFlag, jumpTo, exit, getReplayParams };
+  return { ...state, setSpeed, restart, restartFromFormation, prepareFormation, watchCaution, jumpTo, exit, getReplayParams };
 };
