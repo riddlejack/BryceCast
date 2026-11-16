@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { CalendarClock, ExternalLink, Flag, History, Pause, Play, Radio, RotateCcw, Tv, X } from 'lucide-react';
+import { switchValue } from '../review/switches';
 import {
   Card,
   Countdown,
@@ -790,8 +791,8 @@ const LiveDesk = ({
   const sessionName = asString(heartbeat.sessionName ?? weekend.sessionName);
   const [hoverCar, setHoverCar] = useState<string | null>(null);
   const { route } = useRouter();
-  const fieldMode = fieldModeOf(route.search.get('field'));
-  const trail = route.search.get('trail') === 'lap';
+  const fieldMode = fieldModeOf(switchValue('field', route.search));
+  const trail = switchValue('trail', route.search) === 'lap';
   const cars = useMemo(() => {
     const map = new Map<string, CarLabel>();
     for (const row of payload ? liveRowsOf(payload) : []) {

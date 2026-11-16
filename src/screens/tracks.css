@@ -335,3 +335,14 @@
   white-space: nowrap;
   vertical-align: 1px;
 }
+
+/* Review switch `yoy` (Jack's switchboard): the year-over-year row as it was.
+ * fill: every visit takes an equal share of the full row (Iowa's two very large).
+ * old: before round 7 (auto-fill at 190 px, ragged right; 96 px page padding). */
+:root[data-yoy='fill'] .tracks-page .tracks-years > .row:not(.row--between) { --yoy-cols: var(--yoy-n, 4); }
+:root[data-yoy='old'] .tracks-page .tracks-years > .row:not(.row--between) {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 190px), 1fr));
+}
+@media (min-width: 900px) {
+  :root[data-yoy='old'] .page.tracks-page { padding-bottom: 96px; }
+}

@@ -3,6 +3,7 @@ import type { TrackOutline } from '../assets/tracks';
 import type { ResolvedHeatSection } from '../data/sectionObservations';
 import { ChartTipCard, chartFont, inkGoldDiverging, useMeasuredWidth, type ChartTip } from './charts';
 import { ordinal } from './format';
+import { switchValue } from '../review/switches';
 
 /** The heat-map / section-intelligence layer (Brief H). `resolved` carries the
  *  curated section spans already joined to Bryce's percentile for the scope;
@@ -920,7 +921,7 @@ export const TRACK_ICON_SLUGS: ReadonlySet<string> = new Set([
 const DEFAULT_ICON_LOOK: 'a' | 'b' = 'a';   // B shrinks the ovals at 76 px (the plate is wider than the track)
 const ICON_LOOK: 'line' | 'a' | 'b' = (() => {
   try {
-    const q = typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('icons') : null;
+    const q = switchValue('icons');
     return q === 'line' || q === 'a' || q === 'b' ? q : DEFAULT_ICON_LOOK;
   } catch {
     return DEFAULT_ICON_LOOK;

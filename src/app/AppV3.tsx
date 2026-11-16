@@ -4,7 +4,8 @@ import { CalendarClock, Flag, Home, LineChart, Map, Radio } from 'lucide-react';
 import './theme.css';
 import { Link, RouterProvider, matchPath, useRouter } from './router';
 import { idlePrefetchLikelyNextRoutes } from './routePrefetch';
-import { CarMark, Plate } from './components';
+import { CarMark, CarMarkRound6, Plate } from './components';
+import { switchValue } from '../review/switches';
 import { useReadiness } from './useReadiness';
 import { useLiveSessionHistory } from './useLiveSessionHistory';
 import { useReplaySession } from './useReplaySession';
@@ -87,7 +88,8 @@ const Shell = ({
       <footer className="footer">
         <div className="footer__inner">
           <span className="row" style={{ gap: 10 }}>
-            <CarMark height={20} />
+            {/* review switch `car`: the new car at 20 px (default), at 16 px, or the round-6 mark */}
+            {switchValue('car') === 'old' ? <CarMarkRound6 height={16} /> : <CarMark height={switchValue('car') === '16' ? 16 : 20} />}
             BryceCast · following Bryce Aron, No. 9, Chip Ganassi Racing · built by a friend, powered by official sources
           </span>
           <span className="row" style={{ gap: 14 }}>
