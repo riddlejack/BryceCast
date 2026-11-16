@@ -656,7 +656,7 @@
 /* ---------- round 7: one screen from the click ---------- */
 
 .live-desk__order.live-grid { padding-top: 0; border-top: 0; }
-.live-desk__order.live-grid .live-grid__list { overflow: hidden; }
+.live-desk__order.live-grid .live-grid__list { padding-bottom: 12px; margin-bottom: 10px; }
 .live-desk__placeholder { display: flex; flex-direction: column; gap: 8px; }
 .live-desk__placeholder-rows { display: flex; flex-direction: column; gap: 8px; }
 .live-desk__placeholder-rows > span { display: block; height: 18px; border-radius: 4px; background: var(--grey-fill); }

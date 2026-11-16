@@ -96,6 +96,61 @@ const readoutAt = (timeline: ReplayTimeline | null, axis: LapAxis, pos: number):
   return [where, flagWordsAt(timeline, axis, atMs), rank !== null ? `P${rank}` : null].filter(Boolean).join(' · ');
 };
 
+/** What the replay's clock says now, shared by the header and the bar so
+ *  the two never disagree, not even while a seek is settling (the clock
+ *  moves at once; the archived frame follows). */
+export interface ReplayNow {
+  atMs: number;
+  /** Bar position of the moment (0 before the green). */
+  pos: number;
+  /** Before the green flag: the formation. */
+  beforeGreen: boolean;
+  /** His lap by his own line crossings (bar basis `laps`), else null. */
+  lap: number | null;
+  /** The flag by the race timeline, or null when it is not read yet. */
+  flag: 'green' | 'caution' | 'red' | 'finished' | null;
+}
+
+const nowAt = (timeline: ReplayTimeline | null, axis: LapAxis, atMs: number): ReplayNow | null => {
+  const pos = axis.posAt(atMs);
+  if (pos === null) return null;
+  const beforeGreen = atMs < axis.startMs;
+  const lap = axis.basis === 'laps' && !beforeGreen ? Math.min(axis.total, Math.floor(pos) + 1) : null;
+  let flag: ReplayNow['flag'] = null;
+  if (!beforeGreen && timeline) {
+    const words = flagWordsAt(timeline, axis, atMs);
+    flag = words === 'red flag' ? 'red' : words === 'caution' ? 'caution' : words === 'finished' ? 'finished' : 'green';
+  }
+  return { atMs, pos, beforeGreen, lap, flag };
+};
+
+/** The clock's facts, re-rendered when any of them (or the bar position, to
+ *  a twentieth of a lap) changes. One loop for the whole desk. */
+export const useReplayNow = (axis: LapAxis | null, timeline: ReplayTimeline | null, virtualNow: VirtualNow): ReplayNow | null => {
+  const [now, setNow] = useState<ReplayNow | null>(null);
+  useEffect(() => {
+    if (!axis) {
+      setNow(null);
+      return undefined;
+    }
+    let frame = 0;
+    let shown = '';
+    const loop = () => {
+      frame = requestAnimationFrame(loop);
+      const atMs = virtualNow();
+      const next = atMs === null ? null : nowAt(timeline, axis, atMs);
+      const key = next ? `${Math.round(next.pos * 20)}|${next.beforeGreen}|${next.lap}|${next.flag}` : 'none';
+      if (key !== shown) {
+        shown = key;
+        setNow(next);
+      }
+    };
+    loop();
+    return () => cancelAnimationFrame(frame);
+  }, [axis, timeline, virtualNow]);
+  return now;
+};
+
 const HEIGHT = 58;
 const TRACE_TOP = 6;
 const TRACE_BOTTOM = 34;
@@ -108,12 +163,15 @@ export const RaceBar = ({
   axis,
   timeline,
   virtualNow,
+  now,
   onSeek
 }: {
   replay: ReplaySession;
   axis: LapAxis;
   timeline: ReplayTimeline | null;
   virtualNow: VirtualNow;
+  /** The desk's shared clock readout (the header reads the same one). */
+  now: ReplayNow | null;
   /** Commit a jump to this moment. */
   onSeek: (atMs: number) => void;
 }) => {
@@ -184,10 +242,9 @@ export const RaceBar = ({
   const [hoverPos, setHoverPos] = useState<number | null>(null);
   const dragRef = useRef<number | null>(null);
   dragRef.current = dragPos;
-  const [nowPos, setNowPos] = useState(0);
+  const nowPos = now?.pos ?? 0;
   useEffect(() => {
     let frame = 0;
-    let lastShown = -1;
     const loop = () => {
       frame = requestAnimationFrame(loop);
       const now = virtualNow();
@@ -197,11 +254,6 @@ export const RaceBar = ({
       const x = xOf(shownPos);
       headRef.current?.setAttribute('transform', `translate(${x.toFixed(1)} 0)`);
       clipRef.current?.setAttribute('width', Math.max(0, xOf(pos) - PAD_X + 0.5).toFixed(1));
-      const rounded = Math.round(pos * 20) / 20;
-      if (rounded !== lastShown) {
-        lastShown = rounded;
-        setNowPos(pos);
-      }
     };
     frame = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(frame);
@@ -234,8 +286,24 @@ export const RaceBar = ({
   // "Skip the caution": under a caution whose restart the timeline knows.
   const skipTo = period && period.toMs !== null && nowMs !== null && nowMs < period.toMs - 1_000 ? period.toMs : null;
   const readPos = dragPos ?? hoverPos;
-  const readout = readPos !== null ? readoutAt(timeline, axis, readPos) : readoutAt(timeline, axis, nowPos);
-  const nowLap = axis.basis === 'laps' ? Math.min(axis.total, Math.floor(nowPos) + 1) : Math.floor(nowPos);
+  const readout =
+    readPos !== null
+      ? readoutAt(timeline, axis, readPos)
+      : now?.beforeGreen
+        ? 'Formation lap · before the green'
+        : now
+          ? [
+              axis.basis === 'laps' ? `Lap ${now.lap}` : `${Math.floor(now.pos)} min in`,
+              now.flag === 'red' ? 'red flag' : now.flag ?? flagWordsAt(timeline, axis, now.atMs),
+              (() => {
+                const rank = positionAt(timeline, now.atMs);
+                return rank !== null ? `P${rank}` : null;
+              })()
+            ]
+              .filter(Boolean)
+              .join(' · ')
+          : '';
+  const nowLap = now?.beforeGreen ? 0 : axis.basis === 'laps' ? Math.min(axis.total, Math.floor(nowPos) + 1) : Math.floor(nowPos);
   return (
     <section className="race-bar" aria-label="The whole race" data-race-bar={axis.basis} data-race-bar-lap={nowLap} data-race-bar-dragging={dragPos !== null ? 'true' : 'false'}>
       <div className="race-bar__head">

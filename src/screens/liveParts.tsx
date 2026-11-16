@@ -156,11 +156,7 @@ const trackCaption = (race: ReplayRace, mode: 'race' | 'prestart' | 'session', f
   if (race.status === 'live') {
     return 'Live, the timing gives each car’s laps and gaps but not its section times, so the track has no car marks. A replay of a finished race shows them.';
   }
-  if (mode === 'prestart') {
-    return race.status === 'no_sections' || race.status === 'loading'
-      ? 'Start / finish is marked; the arrow shows which way they run.'
-      : 'Once the race is on, Bryce’s No. 9 goes round the track and the section he is in fills amber.';
-  }
+  if (mode === 'prestart') return 'On the formation lap; timing places Bryce from the green.';
   switch (race.status) {
     case 'loading':
       return 'Loading the official section times for this race.';
@@ -420,6 +416,21 @@ export const PreStartReadout = ({ payload }: { payload: LiveReadiness }) => {
     </div>
   );
 };
+
+/** A replay's clock before the green flag (round 7): said from the clock,
+ *  not the frame, so it is right the moment the visitor picks the
+ *  formation lap, before its first archived frame arrives. */
+export const FormationReadout = ({ totalLaps }: { totalLaps: number | null }) => (
+  <div className="live-hero__now" data-live-flag="" data-prestart-phase="formation">
+    <div className="live-now">
+      <span className="live-now__flag live-now__flag--neutral">
+        <span className="live-now__swatch" aria-hidden />
+        Formation lap
+      </span>
+      {totalLaps !== null ? <span className="live-now__lap">{totalLaps} laps to run</span> : null}
+    </div>
+  </div>
+);
 
 /** In the running order's place before the green: the grid as Race Control
  *  published it. */

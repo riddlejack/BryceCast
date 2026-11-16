@@ -67,6 +67,7 @@ import {
   PreStartBryce,
   PreStartOrder,
   PreStartReadout,
+  FormationReadout,
   TrackPanel,
   raceIdentityFor,
   skippedCautionWords,
@@ -74,7 +75,7 @@ import {
   SKIP_NOTE_WALL_MS
 } from './liveParts';
 import { useReplayRace, type CarLabel } from './liveTrack';
-import { RaceBar, lapAxisFor, lapStepTarget, type LapAxis } from './liveRaceBar';
+import { RaceBar, lapAxisFor, lapStepTarget, useReplayNow, type LapAxis } from './liveRaceBar';
 import { aroundWindowOf, fieldCarsOf, fieldModeOf } from './liveField';
 import { lapTimeSeconds } from './liveSectionLight';
 import './live.css';
@@ -801,7 +802,6 @@ const LiveDesk = ({
   }, [payload]);
   const bryceRow = payload ? liveBryceRowOf(payload) : null;
   const bryceLabel = bryceRow ? cars.get(stableDriverId(bryceRow)) ?? null : null;
-  const fieldCars = useMemo(() => (phase === 'race' ? fieldCarsOf(payload, fieldMode) : []), [payload, fieldMode, phase]);
 
   const seasonRow = identity.sessionId
     ? (uiDataPackage.screens.raceDebrief.seasonIndex ?? []).find((row) => row.sessionId === identity.sessionId) ?? null
@@ -829,6 +829,20 @@ const LiveDesk = ({
           })
         : null,
     [replay ? 1 : 0, race.model, race.totalLaps, totalLaps, greenMs, endMs]
+  );
+
+  // The clock decides the desk's phase and the header, so they are right the
+  // moment the clock moves; the archived frame fills the columns when it lands.
+  // Before the green it is the formation: the header says so, the order is the
+  // grid (every frame carries the start positions), Bryce's column counts down.
+  // After the green with a pre-green frame still up, the columns wait.
+  const now = useReplayNow(axis, replay?.timeline ?? null, virtualNow);
+  const clockFormation = Boolean(replay && now?.beforeGreen && phase !== 'cueing' && phase !== 'ended');
+  const awaitingRace = Boolean(replay && now && !now.beforeGreen && phase === 'prestart');
+  const shownPhase: DeskPhase = clockFormation ? 'prestart' : awaitingRace ? 'race' : phase;
+  const fieldCars = useMemo(
+    () => (shownPhase === 'race' && !awaitingRace ? fieldCarsOf(payload, fieldMode) : []),
+    [payload, fieldMode, shownPhase, awaitingRace]
   );
 
   // The keys: ←/→ a lap (Shift: five), Space pauses. Never while typing, and
@@ -914,28 +928,35 @@ const LiveDesk = ({
   const jump = jumpRef.current;
   const settling =
     replay !== null &&
+    !clockFormation &&
+    !awaitingRace &&
     jump.atMs !== null &&
     Date.now() - jump.wall < 5_000 &&
     (!Number.isFinite(sourceMs) || Math.abs(sourceMs - jump.atMs) > 8_000 + replay.playbackSpeed * 2_500);
   if (!settling && jump.atMs !== null && Number.isFinite(sourceMs)) jump.atMs = null;
 
-  const readout =
-    phase === 'prestart' && payload ? (
-      <PreStartReadout payload={payload} />
-    ) : (
-      <FlagReadout
-        flag={flag}
-        lap={lap}
-        totalLaps={totalLaps}
-        ended={phase === 'ended'}
-        isRace={isRace}
-        sessionName={sessionName}
-        lapInProgress={Boolean(replay)}
-      />
-    );
+  // A replay's header reads the clock (the same readout as the race bar);
+  // the frame's own flag and counter stand in until the bar has its axis.
+  const clockFlag = now?.flag === 'green' ? 'GREEN' : now?.flag === 'caution' ? 'YELLOW' : now?.flag === 'red' ? 'RED' : null;
+  const clockLap = replay && now && now.lap !== null ? now.lap : null;
+  const readout = clockFormation ? (
+    <FormationReadout totalLaps={race.totalLaps ?? totalLaps} />
+  ) : phase === 'prestart' && payload && !awaitingRace ? (
+    <PreStartReadout payload={payload} />
+  ) : (
+    <FlagReadout
+      flag={clockFlag ?? (awaitingRace ? null : flag)}
+      lap={clockLap ?? (awaitingRace ? null : lap)}
+      totalLaps={race.totalLaps ?? totalLaps}
+      ended={phase === 'ended' || now?.flag === 'finished'}
+      isRace={isRace}
+      sessionName={sessionName}
+      lapInProgress={Boolean(replay) && clockLap === null}
+    />
+  );
   const seek = useCallback((atMs: number) => replayRef.current?.seekTo(atMs), []);
   return (
-    <section className={`live-desk${settling ? ' live-desk--settling' : ''}`} data-live-desk data-desk-phase={phase} aria-label="The race, now">
+    <section className={`live-desk${settling ? ' live-desk--settling' : ''}`} data-live-desk data-desk-phase={shownPhase} aria-label="The race, now">
       <HeroIdentity
         identity={identity}
         action={
@@ -948,7 +969,7 @@ const LiveDesk = ({
       {replay ? (
         <>
           <ReplayBar replay={replay} payload={payload} onExit={onExit} lead={readout} />
-          {axis ? <RaceBar replay={replay} axis={axis} timeline={replay.timeline} virtualNow={virtualNow} onSeek={seek} /> : null}
+          {axis ? <RaceBar replay={replay} axis={axis} timeline={replay.timeline} virtualNow={virtualNow} now={now} onSeek={seek} /> : null}
         </>
       ) : payload ? (
         <div className="live-desk__bar live-desk__bar--live">
@@ -959,7 +980,9 @@ const LiveDesk = ({
       <div className="live-desk__grid">
         {phase === 'cueing' || !payload ? (
           <DeskPlaceholder area="order" words="Reading the first frame of the race." />
-        ) : phase === 'prestart' ? (
+        ) : awaitingRace ? (
+          <DeskPlaceholder area="order" words="Reading the running order at the green." />
+        ) : shownPhase === 'prestart' ? (
           <PreStartOrder payload={payload} />
         ) : (
           <RunningOrder payload={payload} sessionKind={sessionKind} highlightId={hoverCar} onHoverCar={setHoverCar} />
@@ -968,7 +991,7 @@ const LiveDesk = ({
           identity={identity}
           replay={replay}
           race={race}
-          mode={!isRace ? 'session' : phase === 'race' || phase === 'ended' ? 'race' : 'prestart'}
+          mode={!isRace ? 'session' : shownPhase === 'race' || shownPhase === 'ended' ? 'race' : 'prestart'}
           field={fieldMode}
           fieldCars={fieldCars}
           trail={trail}
@@ -978,7 +1001,9 @@ const LiveDesk = ({
         />
         {phase === 'cueing' || !payload ? (
           <DeskPlaceholder area="bryce" words="His position, gaps and lap appear with it." />
-        ) : phase === 'prestart' && replay ? (
+        ) : awaitingRace ? (
+          <DeskPlaceholder area="bryce" words="His position and gaps at the green appear with it." />
+        ) : shownPhase === 'prestart' && replay ? (
           <PreStartBryce payload={payload} replay={replay} />
         ) : (
           <BryceColumn payload={payload} samples={samples} history={history} sessionKind={sessionKind} highlightId={hoverCar} onHoverCar={setHoverCar} />
