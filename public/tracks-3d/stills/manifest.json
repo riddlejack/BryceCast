@@ -1,0 +1,7422 @@
+{
+ "generated": "2026-11-16",
+ "by": "Portfolio/builds/project-brycecast/site-refresh/stills-tools/run.sh races",
+ "look": "the Tracks page's own interactive 3D model (src/three/trackScene.js, public/tracks-3d/models/<slug>.json) at its opening view, drawn headless at 600 x 338 CSS px, device scale 2; the same shading list SectionHeatCard hands the model",
+ "shadingSource": "site-pace.ts: resolveHeatSections(anchorsForPack(pack, venueAnchors), sectionObservationsFromLaps(pack, full race, median), { basis: field_times }), coloured with inkGoldDiverging; sections with no comparison stay the pale lane",
+ "centreline": "site t (the outline's arc parameter the anchors use) -> the model's centreline through the model file's baked map.u, projected with the opening view's camera; x, y are shares of the image width and height",
+ "venues": {
+  "weathertech-raceway-laguna-seca": {
+   "camera": {
+    "azim": 0,
+    "elev": 32,
+    "fill": 0.9
+   },
+   "pose": {
+    "target": [
+     17.461966040519382,
+     -21.306941765530016,
+     25.41631941593298
+    ],
+    "D": 1549.880173550317,
+    "elev": 32,
+    "azim": 0
+   },
+   "hiddenSamples": 1,
+   "naturalAspect": 1.7928560595754899
+  },
+  "road-america": {
+   "camera": {
+    "azim": 90,
+    "elev": 45,
+    "fill": 0.9
+   },
+   "pose": {
+    "target": [
+     143.20951599037437,
+     -11.204371911510716,
+     44.70650851658625
+    ],
+    "D": 2645.386219770862,
+    "elev": 45,
+    "azim": 90
+   },
+   "hiddenSamples": 5,
+   "naturalAspect": 1.899675303360457
+  },
+  "streets-of-detroit": {
+   "camera": {
+    "azim": 20,
+    "elev": 60,
+    "fill": 0.9
+   },
+   "pose": {
+    "target": [
+     0.6392964167415055,
+     36.077534736811934,
+     155.20212690022376
+    ],
+    "D": 2090.202002937153,
+    "elev": 60,
+    "azim": 20
+   },
+   "hiddenSamples": 6,
+   "naturalAspect": 2.4677207373697967
+  },
+  "streets-of-st-petersburg": {
+   "camera": {
+    "azim": 325,
+    "elev": 55,
+    "fill": 0.9
+   },
+   "pose": {
+    "target": [
+     -202.28723533358064,
+     21.966667599862298,
+     52.8176024619314
+    ],
+    "D": 1825.6328732972404,
+    "elev": 55,
+    "azim": 325
+   },
+   "hiddenSamples": 14,
+   "naturalAspect": 1.4487443512494063
+  },
+  "streets-of-arlington": {
+   "camera": {
+    "azim": 355,
+    "elev": 55,
+    "fill": 0.9
+   },
+   "pose": {
+    "target": [
+     -29.527508255605383,
+     -30.689252855315598,
+     -70.68193228466947
+    ],
+    "D": 2746.865101674252,
+    "elev": 55,
+    "azim": 355
+   },
+   "hiddenSamples": 8,
+   "naturalAspect": 2.7450372535460406
+  },
+  "barber-motorsports-park": {
+   "camera": {
+    "azim": 220,
+    "elev": 38,
+    "fill": 0.9
+   },
+   "pose": {
+    "target": [
+     -47.947501051928306,
+     22.48054934180393,
+     19.260965655009265
+    ],
+    "D": 1717.082835369,
+    "elev": 38,
+    "azim": 220
+   },
+   "hiddenSamples": 2,
+   "naturalAspect": 3.03246027898349
+  },
+  "indianapolis-motor-speedway-road-course": {
+   "camera": {
+    "azim": 270,
+    "elev": 40,
+    "fill": 0.9
+   },
+   "pose": {
+    "target": [
+     -53.179611241918,
+     -33.57777328043452,
+     -9.549166254532416
+    ],
+    "D": 2425.429700597285,
+    "elev": 40,
+    "azim": 270
+   },
+   "hiddenSamples": 0,
+   "naturalAspect": 2.608386894971266
+  },
+  "mid-ohio-sports-car-course": {
+   "camera": {
+    "azim": 240,
+    "elev": 38,
+    "fill": 0.9
+   },
+   "pose": {
+    "target": [
+     -36.40449344821745,
+     -17.78266549488013,
+     -31.85546323756032
+    ],
+    "D": 2179.4208710381413,
+    "elev": 38,
+    "azim": 240
+   },
+   "hiddenSamples": 1,
+   "naturalAspect": 2.7264596442948954
+  },
+  "portland-international-raceway": {
+   "camera": {
+    "azim": 335,
+    "elev": 40,
+    "fill": 0.9
+   },
+   "pose": {
+    "target": [
+     12.686681966566073,
+     -2.851145558955943,
+     3.006189448188485
+    ],
+    "D": 2149.388401732234,
+    "elev": 40,
+    "azim": 335
+   },
+   "hiddenSamples": 2,
+   "naturalAspect": 3.1268450003703316
+  },
+  "iowa-speedway": {
+   "camera": {
+    "azim": 310,
+    "elev": 40,
+    "fill": 0.9
+   },
+   "pose": {
+    "target": [
+     -30.45893154315162,
+     -6.772052973724349,
+     21.635839531216735
+    ],
+    "D": 1234.2030651826792,
+    "elev": 40,
+    "azim": 310
+   },
+   "hiddenSamples": 0,
+   "naturalAspect": 1.882431817830748
+  },
+  "world-wide-technology-raceway": {
+   "camera": {
+    "azim": 280,
+    "elev": 40,
+    "fill": 0.9
+   },
+   "pose": {
+    "target": [
+     -13.554986413809527,
+     -33.08959742548641,
+     -5.0539350607259275
+    ],
+    "D": 1665.846184779186,
+    "elev": 40,
+    "azim": 280
+   },
+   "hiddenSamples": 4,
+   "naturalAspect": 2.3631548984372404
+  },
+  "the-milwaukee-mile": {
+   "camera": {
+    "azim": 270,
+    "elev": 40,
+    "fill": 0.9
+   },
+   "pose": {
+    "target": [
+     -35.25484852424978,
+     -41.062242924196944,
+     -0.9122182597016548
+    ],
+    "D": 1409.9463468884521,
+    "elev": 40,
+    "azim": 270
+   },
+   "hiddenSamples": 0,
+   "naturalAspect": 1.8481252283400207
+  },
+  "nashville-superspeedway": {
+   "camera": {
+    "azim": 260,
+    "elev": 40,
+    "fill": 0.9
+   },
+   "pose": {
+    "target": [
+     -47.72077033765935,
+     -39.905281536021434,
+     -20.883261381383477
+    ],
+    "D": 1689.8338890498085,
+    "elev": 40,
+    "azim": 260
+   },
+   "hiddenSamples": 0,
+   "naturalAspect": 2.0450489406133276
+  }
+ },
+ "races": {
+  "session_indy_nxt_2024_6317": {
+   "slug": "weathertech-raceway-laguna-seca",
+   "raceLabel": "2024 Grand Prix of Monterey Race 1 R1",
+   "raceDate": "2024-06-22",
+   "basis": "field_times",
+   "scope": "full_race",
+   "stat": "median",
+   "sourceTier": "parsed_pdf_aggregate",
+   "anchors": "weathertech-raceway-laguna-seca",
+   "modelSections": [
+    {
+     "key": "Turn 1 Entry",
+     "label": "Turn 1 entry",
+     "spans": [
+      [
+       0.2818,
+       0.3028
+      ]
+     ],
+     "color": "rgb(124, 124, 129)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 1 Exit",
+     "label": "Turn 1 exit",
+     "spans": [
+      [
+       0.3028,
+       0.3303
+      ]
+     ],
+     "color": "rgb(191, 191, 196)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 2",
+     "label": "Turn 2",
+     "spans": [
+      [
+       0.3303,
+       0.4179
+      ]
+     ],
+     "color": "rgb(146, 146, 151)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 3",
+     "label": "Turn 3",
+     "spans": [
+      [
+       0.4179,
+       0.4891
+      ]
+     ],
+     "color": "rgb(216, 168, 96)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 4",
+     "label": "Turn 4",
+     "spans": [
+      [
+       0.4891,
+       0.5926
+      ]
+     ],
+     "color": "rgb(213, 173, 113)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 4A",
+     "label": "Turn 4A",
+     "spans": [
+      [
+       0.5926,
+       0.6283
+      ]
+     ],
+     "color": "rgb(210, 177, 129)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 5",
+     "label": "Turn 5",
+     "spans": [
+      [
+       0.6283,
+       0.6978
+      ]
+     ],
+     "color": "rgb(161, 161, 166)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 5A",
+     "label": "Turn 5A",
+     "spans": [
+      [
+       0.6978,
+       0.7411
+      ]
+     ],
+     "color": "rgb(146, 146, 151)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 6",
+     "label": "Turn 6",
+     "spans": [
+      [
+       0.7411,
+       0.8448
+      ]
+     ],
+     "color": "rgb(146, 146, 151)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 7",
+     "label": "Turn 7",
+     "spans": [
+      [
+       0.8448,
+       0.8785
+      ]
+     ],
+     "color": "rgb(210, 177, 129)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 7A",
+     "label": "Turn 7A",
+     "spans": [
+      [
+       0.8785,
+       0.8972
+      ]
+     ],
+     "color": "rgb(208, 182, 146)",
+     "dashed": false
+    },
+    {
+     "key": "Corkscrew",
+     "label": "Corkscrew",
+     "spans": [
+      [
+       0.8972,
+       0.9585
+      ]
+     ],
+     "color": "rgb(161, 161, 166)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 9",
+     "label": "Turn 9",
+     "spans": [
+      [
+       0.9585,
+       0.0257
+      ]
+     ],
+     "color": "rgb(191, 191, 196)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 10",
+     "label": "Turn 10",
+     "spans": [
+      [
+       0.0257,
+       0.1212
+      ]
+     ],
+     "color": "rgb(199, 196, 195)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 11",
+     "label": "Turn 11",
+     "spans": [
+      [
+       0.1212,
+       0.156
+      ]
+     ],
+     "color": "rgb(161, 161, 166)",
+     "dashed": false
+    },
+    {
+     "key": "FS - PI",
+     "label": "Turn 11 → S/F",
+     "spans": [
+      [
+       0.156,
+       0.2818
+      ]
+     ],
+     "color": "rgb(117, 117, 122)",
+     "dashed": false
+    }
+   ]
+  },
+  "session_indy_nxt_2024_6327": {
+   "slug": "weathertech-raceway-laguna-seca",
+   "raceLabel": "2024 Grand Prix of Monterey Race 2 R2",
+   "raceDate": "2024-06-23",
+   "basis": "field_times",
+   "scope": "full_race",
+   "stat": "median",
+   "sourceTier": "parsed_pdf_aggregate",
+   "anchors": "weathertech-raceway-laguna-seca",
+   "modelSections": [
+    {
+     "key": "Turn 1 Entry",
+     "label": "Turn 1 entry",
+     "spans": [
+      [
+       0.2818,
+       0.3028
+      ]
+     ],
+     "color": "rgb(191, 191, 196)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 1 Exit",
+     "label": "Turn 1 exit",
+     "spans": [
+      [
+       0.3028,
+       0.3303
+      ]
+     ],
+     "color": "rgb(219, 163, 80)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 2",
+     "label": "Turn 2",
+     "spans": [
+      [
+       0.3303,
+       0.4179
+      ]
+     ],
+     "color": "rgb(219, 163, 80)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 3",
+     "label": "Turn 3",
+     "spans": [
+      [
+       0.4179,
+       0.4891
+      ]
+     ],
+     "color": "rgb(221, 159, 63)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 4",
+     "label": "Turn 4",
+     "spans": [
+      [
+       0.4891,
+       0.5926
+      ]
+     ],
+     "color": "rgb(219, 163, 80)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 4A",
+     "label": "Turn 4A",
+     "spans": [
+      [
+       0.5926,
+       0.6283
+      ]
+     ],
+     "color": "rgb(213, 173, 113)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 5",
+     "label": "Turn 5",
+     "spans": [
+      [
+       0.6283,
+       0.6978
+      ]
+     ],
+     "color": "rgb(210, 177, 129)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 5A",
+     "label": "Turn 5A",
+     "spans": [
+      [
+       0.6978,
+       0.7411
+      ]
+     ],
+     "color": "rgb(205, 186, 162)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 6",
+     "label": "Turn 6",
+     "spans": [
+      [
+       0.7411,
+       0.8448
+      ]
+     ],
+     "color": "rgb(176, 176, 181)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 7",
+     "label": "Turn 7",
+     "spans": [
+      [
+       0.8448,
+       0.8785
+      ]
+     ],
+     "color": "rgb(202, 191, 178)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 7A",
+     "label": "Turn 7A",
+     "spans": [
+      [
+       0.8785,
+       0.8972
+      ]
+     ],
+     "color": "rgb(202, 191, 178)",
+     "dashed": false
+    },
+    {
+     "key": "Corkscrew",
+     "label": "Corkscrew",
+     "spans": [
+      [
+       0.8972,
+       0.9585
+      ]
+     ],
+     "color": "rgb(132, 132, 137)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 9",
+     "label": "Turn 9",
+     "spans": [
+      [
+       0.9585,
+       0.0257
+      ]
+     ],
+     "color": "rgb(205, 186, 162)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 10",
+     "label": "Turn 10",
+     "spans": [
+      [
+       0.0257,
+       0.1212
+      ]
+     ],
+     "color": "rgb(216, 168, 96)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 11",
+     "label": "Turn 11",
+     "spans": [
+      [
+       0.1212,
+       0.156
+      ]
+     ],
+     "color": "rgb(216, 168, 96)",
+     "dashed": false
+    },
+    {
+     "key": "FS - PI",
+     "label": "Turn 11 → S/F",
+     "spans": [
+      [
+       0.156,
+       0.2818
+      ]
+     ],
+     "color": "rgb(202, 191, 178)",
+     "dashed": false
+    }
+   ]
+  },
+  "session_indy_nxt_2025_6442": {
+   "slug": "weathertech-raceway-laguna-seca",
+   "raceLabel": "2025 Grand Prix of Monterey Race 1 R1",
+   "raceDate": "2025-07-26",
+   "basis": "field_times",
+   "scope": "full_race",
+   "stat": "median",
+   "sourceTier": "parsed_pdf_aggregate",
+   "anchors": "weathertech-raceway-laguna-seca",
+   "modelSections": [
+    {
+     "key": "Turn 1 Entry",
+     "label": "Turn 1 entry",
+     "spans": [
+      [
+       0.2818,
+       0.3028
+      ]
+     ],
+     "color": "rgb(224, 154, 47)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 1 Exit",
+     "label": "Turn 1 exit",
+     "spans": [
+      [
+       0.3028,
+       0.3303
+      ]
+     ],
+     "color": "rgb(214, 171, 106)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 2",
+     "label": "Turn 2",
+     "spans": [
+      [
+       0.3303,
+       0.4179
+      ]
+     ],
+     "color": "rgb(218, 165, 86)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 3",
+     "label": "Turn 3",
+     "spans": [
+      [
+       0.4179,
+       0.4891
+      ]
+     ],
+     "color": "rgb(211, 176, 125)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 4",
+     "label": "Turn 4",
+     "spans": [
+      [
+       0.4891,
+       0.5926
+      ]
+     ],
+     "color": "rgb(163, 163, 168)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 4A",
+     "label": "Turn 4A",
+     "spans": [
+      [
+       0.5926,
+       0.6283
+      ]
+     ],
+     "color": "rgb(208, 182, 145)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 5",
+     "label": "Turn 5",
+     "spans": [
+      [
+       0.6283,
+       0.6978
+      ]
+     ],
+     "color": "rgb(163, 163, 168)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 5A",
+     "label": "Turn 5A",
+     "spans": [
+      [
+       0.6978,
+       0.7411
+      ]
+     ],
+     "color": "rgb(208, 182, 145)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 6",
+     "label": "Turn 6",
+     "spans": [
+      [
+       0.7411,
+       0.8448
+      ]
+     ],
+     "color": "rgb(128, 128, 133)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 7",
+     "label": "Turn 7",
+     "spans": [
+      [
+       0.8448,
+       0.8785
+      ]
+     ],
+     "color": "rgb(146, 146, 151)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 7A",
+     "label": "Turn 7A",
+     "spans": [
+      [
+       0.8785,
+       0.8972
+      ]
+     ],
+     "color": "rgb(181, 181, 186)",
+     "dashed": false
+    },
+    {
+     "key": "Corkscrew",
+     "label": "Corkscrew",
+     "spans": [
+      [
+       0.8972,
+       0.9585
+      ]
+     ],
+     "color": "rgb(128, 128, 133)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 9",
+     "label": "Turn 9",
+     "spans": [
+      [
+       0.9585,
+       0.0257
+      ]
+     ],
+     "color": "rgb(181, 181, 186)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 10",
+     "label": "Turn 10",
+     "spans": [
+      [
+       0.0257,
+       0.1212
+      ]
+     ],
+     "color": "rgb(181, 181, 186)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 11",
+     "label": "Turn 11",
+     "spans": [
+      [
+       0.1212,
+       0.156
+      ]
+     ],
+     "color": "rgb(198, 198, 203)",
+     "dashed": false
+    },
+    {
+     "key": "FS - PI",
+     "label": "Turn 11 → S/F",
+     "spans": [
+      [
+       0.156,
+       0.2818
+      ]
+     ],
+     "color": "rgb(181, 181, 186)",
+     "dashed": false
+    }
+   ]
+  },
+  "session_indy_nxt_2026_6759": {
+   "slug": "weathertech-raceway-laguna-seca",
+   "raceLabel": "2026 Grand Prix of Monterey Race 1 R1",
+   "raceDate": "2026-09-05",
+   "basis": "field_times",
+   "scope": "full_race",
+   "stat": "median",
+   "sourceTier": "parsed_pdf_aggregate",
+   "anchors": "weathertech-raceway-laguna-seca",
+   "modelSections": [
+    {
+     "key": "Turn 1 Entry",
+     "label": "Turn 1 entry",
+     "spans": [
+      [
+       0.2818,
+       0.3028
+      ]
+     ],
+     "color": "rgb(215, 169, 101)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 1 Exit",
+     "label": "Turn 1 exit",
+     "spans": [
+      [
+       0.3028,
+       0.3303
+      ]
+     ],
+     "color": "rgb(222, 158, 61)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 2",
+     "label": "Turn 2",
+     "spans": [
+      [
+       0.3303,
+       0.4179
+      ]
+     ],
+     "color": "rgb(155, 155, 160)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 3",
+     "label": "Turn 3",
+     "spans": [
+      [
+       0.4179,
+       0.4891
+      ]
+     ],
+     "color": "rgb(168, 168, 173)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 4",
+     "label": "Turn 4",
+     "spans": [
+      [
+       0.4891,
+       0.5926
+      ]
+     ],
+     "color": "rgb(180, 180, 185)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 4A",
+     "label": "Turn 4A",
+     "spans": [
+      [
+       0.5926,
+       0.6283
+      ]
+     ],
+     "color": "rgb(208, 181, 142)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 5",
+     "label": "Turn 5",
+     "spans": [
+      [
+       0.6283,
+       0.6978
+      ]
+     ],
+     "color": "rgb(204, 188, 169)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 5A",
+     "label": "Turn 5A",
+     "spans": [
+      [
+       0.6978,
+       0.7411
+      ]
+     ],
+     "color": "rgb(210, 177, 128)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 6",
+     "label": "Turn 6",
+     "spans": [
+      [
+       0.7411,
+       0.8448
+      ]
+     ],
+     "color": "rgb(201, 192, 183)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 7",
+     "label": "Turn 7",
+     "spans": [
+      [
+       0.8448,
+       0.8785
+      ]
+     ],
+     "color": "rgb(213, 173, 115)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 7A",
+     "label": "Turn 7A",
+     "spans": [
+      [
+       0.8785,
+       0.8972
+      ]
+     ],
+     "color": "rgb(204, 188, 169)",
+     "dashed": false
+    },
+    {
+     "key": "Corkscrew",
+     "label": "Corkscrew",
+     "spans": [
+      [
+       0.8972,
+       0.9585
+      ]
+     ],
+     "color": "rgb(143, 143, 148)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 9",
+     "label": "Turn 9",
+     "spans": [
+      [
+       0.9585,
+       0.0257
+      ]
+     ],
+     "color": "rgb(206, 185, 156)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 10",
+     "label": "Turn 10",
+     "spans": [
+      [
+       0.0257,
+       0.1212
+      ]
+     ],
+     "color": "rgb(204, 188, 169)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 11",
+     "label": "Turn 11",
+     "spans": [
+      [
+       0.1212,
+       0.156
+      ]
+     ],
+     "color": "rgb(95, 95, 100)",
+     "dashed": false
+    },
+    {
+     "key": "FS - PI",
+     "label": "Turn 11 → S/F",
+     "spans": [
+      [
+       0.156,
+       0.2818
+      ]
+     ],
+     "color": "rgb(217, 165, 88)",
+     "dashed": false
+    }
+   ]
+  },
+  "session_indy_nxt_2026_6758": {
+   "slug": "weathertech-raceway-laguna-seca",
+   "raceLabel": "2026 Grand Prix of Monterey Race 2 R2",
+   "raceDate": "2026-09-06",
+   "basis": "field_times",
+   "scope": "full_race",
+   "stat": "median",
+   "sourceTier": "parsed_pdf_aggregate",
+   "anchors": "weathertech-raceway-laguna-seca",
+   "modelSections": [
+    {
+     "key": "Turn 1 Entry",
+     "label": "Turn 1 entry",
+     "spans": [
+      [
+       0.2818,
+       0.3028
+      ]
+     ],
+     "color": "rgb(204, 188, 166)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 1 Exit",
+     "label": "Turn 1 exit",
+     "spans": [
+      [
+       0.3028,
+       0.3303
+      ]
+     ],
+     "color": "rgb(165, 165, 170)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 2",
+     "label": "Turn 2",
+     "spans": [
+      [
+       0.3303,
+       0.4179
+      ]
+     ],
+     "color": "rgb(199, 196, 196)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 3",
+     "label": "Turn 3",
+     "spans": [
+      [
+       0.4179,
+       0.4891
+      ]
+     ],
+     "color": "rgb(214, 171, 106)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 4",
+     "label": "Turn 4",
+     "spans": [
+      [
+       0.4891,
+       0.5926
+      ]
+     ],
+     "color": "rgb(219, 162, 77)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 4A",
+     "label": "Turn 4A",
+     "spans": [
+      [
+       0.5926,
+       0.6283
+      ]
+     ],
+     "color": "rgb(214, 171, 106)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 5",
+     "label": "Turn 5",
+     "spans": [
+      [
+       0.6283,
+       0.6978
+      ]
+     ],
+     "color": "rgb(207, 183, 151)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 5A",
+     "label": "Turn 5A",
+     "spans": [
+      [
+       0.6978,
+       0.7411
+      ]
+     ],
+     "color": "rgb(191, 191, 196)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 6",
+     "label": "Turn 6",
+     "spans": [
+      [
+       0.7411,
+       0.8448
+      ]
+     ],
+     "color": "rgb(151, 151, 156)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 7",
+     "label": "Turn 7",
+     "spans": [
+      [
+       0.8448,
+       0.8785
+      ]
+     ],
+     "color": "rgb(214, 171, 106)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 7A",
+     "label": "Turn 7A",
+     "spans": [
+      [
+       0.8785,
+       0.8972
+      ]
+     ],
+     "color": "rgb(178, 178, 183)",
+     "dashed": false
+    },
+    {
+     "key": "Corkscrew",
+     "label": "Corkscrew",
+     "spans": [
+      [
+       0.8972,
+       0.9585
+      ]
+     ],
+     "color": "rgb(199, 196, 196)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 9",
+     "label": "Turn 9",
+     "spans": [
+      [
+       0.9585,
+       0.0257
+      ]
+     ],
+     "color": "rgb(178, 178, 183)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 10",
+     "label": "Turn 10",
+     "spans": [
+      [
+       0.0257,
+       0.1212
+      ]
+     ],
+     "color": "rgb(217, 167, 92)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 11",
+     "label": "Turn 11",
+     "spans": [
+      [
+       0.1212,
+       0.156
+      ]
+     ],
+     "color": "rgb(204, 188, 166)",
+     "dashed": false
+    },
+    {
+     "key": "FS - PI",
+     "label": "Turn 11 → S/F",
+     "spans": [
+      [
+       0.156,
+       0.2818
+      ]
+     ],
+     "color": "rgb(151, 151, 156)",
+     "dashed": false
+    }
+   ]
+  },
+  "session_indy_nxt_2024_6316": {
+   "slug": "road-america",
+   "raceLabel": "2024 Grand Prix at Road America",
+   "raceDate": "2024-06-09",
+   "basis": "field_times",
+   "scope": "full_race",
+   "stat": "median",
+   "sourceTier": "parsed_pdf_aggregate",
+   "anchors": "road-america",
+   "modelSections": [
+    {
+     "key": "SF to I1B",
+     "label": "S/F→I1B",
+     "spans": [
+      [
+       0.0965,
+       0.1551
+      ]
+     ],
+     "color": "rgb(198, 198, 203)",
+     "dashed": false
+    },
+    {
+     "key": "I1B to I1",
+     "label": "I1B→I1",
+     "spans": [
+      [
+       0.1551,
+       0.1654
+      ]
+     ],
+     "color": "rgb(182, 182, 187)",
+     "dashed": false
+    },
+    {
+     "key": "I1 to I2",
+     "label": "I1→I2",
+     "spans": [
+      [
+       0.1654,
+       0.2205
+      ]
+     ],
+     "color": "rgb(210, 178, 134)",
+     "dashed": false
+    },
+    {
+     "key": "I2 to I3",
+     "label": "I2→I3",
+     "spans": [
+      [
+       0.2205,
+       0.26
+      ]
+     ],
+     "color": "rgb(151, 151, 156)",
+     "dashed": false
+    },
+    {
+     "key": "I3 to I3A",
+     "label": "I3→I3A",
+     "spans": [
+      [
+       0.26,
+       0.3243
+      ]
+     ],
+     "color": "rgb(204, 188, 168)",
+     "dashed": false
+    },
+    {
+     "key": "I3A to I4",
+     "label": "I3A→I4",
+     "spans": [
+      [
+       0.3243,
+       0.3719
+      ]
+     ],
+     "color": "rgb(207, 183, 151)",
+     "dashed": false
+    },
+    {
+     "key": "I4 to I4A",
+     "label": "I4→I4A",
+     "spans": [
+      [
+       0.3719,
+       0.4151
+      ]
+     ],
+     "color": "rgb(207, 183, 151)",
+     "dashed": false
+    },
+    {
+     "key": "I4A to I5",
+     "label": "I4A→I5",
+     "spans": [
+      [
+       0.4151,
+       0.4499
+      ]
+     ],
+     "color": "rgb(198, 198, 203)",
+     "dashed": false
+    },
+    {
+     "key": "I5 to I6",
+     "label": "I5→I6",
+     "spans": [
+      [
+       0.4499,
+       0.4846
+      ]
+     ],
+     "color": "rgb(120, 120, 125)",
+     "dashed": false
+    },
+    {
+     "key": "I6 to I7",
+     "label": "I6→I7",
+     "spans": [
+      [
+       0.4846,
+       0.532
+      ]
+     ],
+     "color": "rgb(207, 183, 151)",
+     "dashed": false
+    },
+    {
+     "key": "I7 to I8",
+     "label": "I7→I8",
+     "spans": [
+      [
+       0.532,
+       0.5953
+      ]
+     ],
+     "color": "rgb(212, 174, 116)",
+     "dashed": false
+    },
+    {
+     "key": "I8 to I9",
+     "label": "I8→I9",
+     "spans": [
+      [
+       0.5953,
+       0.6304
+      ]
+     ],
+     "color": "rgb(207, 183, 151)",
+     "dashed": false
+    },
+    {
+     "key": "I9 to I10",
+     "label": "I9→I10",
+     "spans": [
+      [
+       0.6304,
+       0.6859
+      ]
+     ],
+     "color": "rgb(215, 169, 99)",
+     "dashed": false
+    },
+    {
+     "key": "I10 to I11",
+     "label": "I10→I11",
+     "spans": [
+      [
+       0.6859,
+       0.757
+      ]
+     ],
+     "color": "rgb(220, 161, 73)",
+     "dashed": false
+    },
+    {
+     "key": "I11 to I11B",
+     "label": "I11→I11B",
+     "spans": [
+      [
+       0.757,
+       0.8209
+      ]
+     ],
+     "color": "rgb(224, 154, 47)",
+     "dashed": false
+    },
+    {
+     "key": "I11B to I12",
+     "label": "I11B→I12",
+     "spans": [
+      [
+       0.8209,
+       0.8665
+      ]
+     ],
+     "color": "rgb(221, 159, 64)",
+     "dashed": false
+    },
+    {
+     "key": "I12 to I13",
+     "label": "I12→I13",
+     "spans": [
+      [
+       0.8665,
+       0.9366
+      ]
+     ],
+     "color": "rgb(207, 183, 151)",
+     "dashed": false
+    },
+    {
+     "key": "I13 to I13A",
+     "label": "I13→I13A",
+     "spans": [
+      [
+       0.9366,
+       0.9636
+      ]
+     ],
+     "color": "rgb(224, 154, 47)",
+     "dashed": false
+    },
+    {
+     "key": "I13A to I14",
+     "label": "I13A→I14",
+     "spans": [
+      [
+       0.9636,
+       0.9796
+      ]
+     ],
+     "color": "rgb(201, 193, 186)",
+     "dashed": false
+    },
+    {
+     "key": "I14 to I15C",
+     "label": "I14→I15C",
+     "spans": [
+      [
+       0.9796,
+       0.0298
+      ]
+     ],
+     "color": "rgb(207, 183, 151)",
+     "dashed": false
+    },
+    {
+     "key": "I15C to I15",
+     "label": "I15C→I15",
+     "spans": [
+      [
+       0.0298,
+       0.0501
+      ]
+     ],
+     "color": "rgb(215, 169, 99)",
+     "dashed": false
+    },
+    {
+     "key": "I15 to SF",
+     "label": "I15→S/F",
+     "spans": [
+      [
+       0.05,
+       0.0965
+      ]
+     ],
+     "color": "rgb(201, 193, 186)",
+     "dashed": false
+    }
+   ]
+  },
+  "session_indy_nxt_2025_6453": {
+   "slug": "road-america",
+   "raceLabel": "2025 Grand Prix at Road America",
+   "raceDate": "2025-06-22",
+   "basis": "field_times",
+   "scope": "full_race",
+   "stat": "median",
+   "sourceTier": "parsed_pdf_aggregate",
+   "anchors": "road-america",
+   "modelSections": [
+    {
+     "key": "SF to I1B",
+     "label": "S/F→I1B",
+     "spans": [
+      [
+       0.0965,
+       0.1551
+      ]
+     ],
+     "color": "rgb(182, 182, 187)",
+     "dashed": false
+    },
+    {
+     "key": "I1B to I1",
+     "label": "I1B→I1",
+     "spans": [
+      [
+       0.1551,
+       0.1654
+      ]
+     ],
+     "color": "rgb(198, 198, 203)",
+     "dashed": false
+    },
+    {
+     "key": "I1 to I2",
+     "label": "I1→I2",
+     "spans": [
+      [
+       0.1654,
+       0.2205
+      ]
+     ],
+     "color": "rgb(207, 183, 151)",
+     "dashed": false
+    },
+    {
+     "key": "I2 to I3",
+     "label": "I2→I3",
+     "spans": [
+      [
+       0.2205,
+       0.26
+      ]
+     ],
+     "color": "rgb(201, 193, 186)",
+     "dashed": false
+    },
+    {
+     "key": "I3 to I3A",
+     "label": "I3→I3A",
+     "spans": [
+      [
+       0.26,
+       0.3243
+      ]
+     ],
+     "color": "rgb(105, 105, 110)",
+     "dashed": false
+    },
+    {
+     "key": "I3A to I4",
+     "label": "I3A→I4",
+     "spans": [
+      [
+       0.3243,
+       0.3719
+      ]
+     ],
+     "color": "rgb(204, 188, 168)",
+     "dashed": false
+    },
+    {
+     "key": "I4 to I4A",
+     "label": "I4→I4A",
+     "spans": [
+      [
+       0.3719,
+       0.4151
+      ]
+     ],
+     "color": "rgb(207, 183, 151)",
+     "dashed": false
+    },
+    {
+     "key": "I4A to I5",
+     "label": "I4A→I5",
+     "spans": [
+      [
+       0.4151,
+       0.4499
+      ]
+     ],
+     "color": "rgb(204, 188, 168)",
+     "dashed": false
+    },
+    {
+     "key": "I5 to I6",
+     "label": "I5→I6",
+     "spans": [
+      [
+       0.4499,
+       0.4846
+      ]
+     ],
+     "color": "rgb(182, 182, 187)",
+     "dashed": false
+    },
+    {
+     "key": "I6 to I7",
+     "label": "I6→I7",
+     "spans": [
+      [
+       0.4846,
+       0.532
+      ]
+     ],
+     "color": "rgb(210, 178, 134)",
+     "dashed": false
+    },
+    {
+     "key": "I7 to I8",
+     "label": "I7→I8",
+     "spans": [
+      [
+       0.532,
+       0.5953
+      ]
+     ],
+     "color": "rgb(151, 151, 156)",
+     "dashed": false
+    },
+    {
+     "key": "I8 to I9",
+     "label": "I8→I9",
+     "spans": [
+      [
+       0.5953,
+       0.6304
+      ]
+     ],
+     "color": "rgb(136, 136, 141)",
+     "dashed": false
+    },
+    {
+     "key": "I9 to I10",
+     "label": "I9→I10",
+     "spans": [
+      [
+       0.6304,
+       0.6859
+      ]
+     ],
+     "color": "rgb(201, 193, 186)",
+     "dashed": false
+    },
+    {
+     "key": "I10 to I11",
+     "label": "I10→I11",
+     "spans": [
+      [
+       0.6859,
+       0.757
+      ]
+     ],
+     "color": "rgb(120, 120, 125)",
+     "dashed": false
+    },
+    {
+     "key": "I11 to I11B",
+     "label": "I11→I11B",
+     "spans": [
+      [
+       0.757,
+       0.8209
+      ]
+     ],
+     "color": "rgb(151, 151, 156)",
+     "dashed": false
+    },
+    {
+     "key": "I11B to I12",
+     "label": "I11B→I12",
+     "spans": [
+      [
+       0.8209,
+       0.8665
+      ]
+     ],
+     "color": "rgb(210, 178, 134)",
+     "dashed": false
+    },
+    {
+     "key": "I12 to I13",
+     "label": "I12→I13",
+     "spans": [
+      [
+       0.8665,
+       0.9366
+      ]
+     ],
+     "color": "rgb(201, 193, 186)",
+     "dashed": false
+    },
+    {
+     "key": "I13 to I13A",
+     "label": "I13→I13A",
+     "spans": [
+      [
+       0.9366,
+       0.9636
+      ]
+     ],
+     "color": "rgb(120, 120, 125)",
+     "dashed": false
+    },
+    {
+     "key": "I13A to I14",
+     "label": "I13A→I14",
+     "spans": [
+      [
+       0.9636,
+       0.9796
+      ]
+     ],
+     "color": "rgb(182, 182, 187)",
+     "dashed": false
+    },
+    {
+     "key": "I14 to I15C",
+     "label": "I14→I15C",
+     "spans": [
+      [
+       0.9796,
+       0.0298
+      ]
+     ],
+     "color": "rgb(207, 183, 151)",
+     "dashed": false
+    },
+    {
+     "key": "I15C to I15",
+     "label": "I15C→I15",
+     "spans": [
+      [
+       0.0298,
+       0.0501
+      ]
+     ],
+     "color": "rgb(207, 183, 151)",
+     "dashed": false
+    },
+    {
+     "key": "I15 to SF",
+     "label": "I15→S/F",
+     "spans": [
+      [
+       0.05,
+       0.0965
+      ]
+     ],
+     "color": "rgb(207, 183, 151)",
+     "dashed": false
+    }
+   ]
+  },
+  "session_indy_nxt_2026_6762": {
+   "slug": "road-america",
+   "raceLabel": "2026 Grand Prix at Road America Race 1 R1",
+   "raceDate": "2026-06-20",
+   "basis": "field_times",
+   "scope": "full_race",
+   "stat": "median",
+   "sourceTier": "parsed_pdf_aggregate",
+   "anchors": "road-america",
+   "modelSections": [
+    {
+     "key": "SF to I1B",
+     "label": "S/F→I1B",
+     "spans": [
+      [
+       0.0965,
+       0.1551
+      ]
+     ],
+     "color": "rgb(58, 58, 63)",
+     "dashed": false
+    },
+    {
+     "key": "I1B to I1",
+     "label": "I1B→I1",
+     "spans": [
+      [
+       0.1551,
+       0.1654
+      ]
+     ],
+     "color": "rgb(58, 58, 63)",
+     "dashed": false
+    },
+    {
+     "key": "I1 to I2",
+     "label": "I1→I2",
+     "spans": [
+      [
+       0.1654,
+       0.2205
+      ]
+     ],
+     "color": "rgb(224, 154, 47)",
+     "dashed": false
+    },
+    {
+     "key": "I2 to I3",
+     "label": "I2→I3",
+     "spans": [
+      [
+       0.2205,
+       0.26
+      ]
+     ],
+     "color": "rgb(214, 172, 109)",
+     "dashed": false
+    },
+    {
+     "key": "I3 to I3A",
+     "label": "I3→I3A",
+     "spans": [
+      [
+       0.26,
+       0.3243
+      ]
+     ],
+     "color": "rgb(221, 158, 63)",
+     "dashed": false
+    },
+    {
+     "key": "I3A to I4",
+     "label": "I3A→I4",
+     "spans": [
+      [
+       0.3243,
+       0.3719
+      ]
+     ],
+     "color": "rgb(72, 72, 77)",
+     "dashed": false
+    },
+    {
+     "key": "I4 to I4A",
+     "label": "I4→I4A",
+     "spans": [
+      [
+       0.3719,
+       0.4151
+      ]
+     ],
+     "color": "rgb(58, 58, 63)",
+     "dashed": false
+    },
+    {
+     "key": "I4A to I5",
+     "label": "I4A→I5",
+     "spans": [
+      [
+       0.4151,
+       0.4499
+      ]
+     ],
+     "color": "rgb(221, 158, 63)",
+     "dashed": false
+    },
+    {
+     "key": "I5 to I6",
+     "label": "I5→I6",
+     "spans": [
+      [
+       0.4499,
+       0.4846
+      ]
+     ],
+     "color": "rgb(224, 154, 47)",
+     "dashed": false
+    },
+    {
+     "key": "I6 to I7",
+     "label": "I6→I7",
+     "spans": [
+      [
+       0.4846,
+       0.532
+      ]
+     ],
+     "color": "rgb(224, 154, 47)",
+     "dashed": false
+    },
+    {
+     "key": "I7 to I8",
+     "label": "I7→I8",
+     "spans": [
+      [
+       0.532,
+       0.5953
+      ]
+     ],
+     "color": "rgb(224, 154, 47)",
+     "dashed": false
+    },
+    {
+     "key": "I8 to I9",
+     "label": "I8→I9",
+     "spans": [
+      [
+       0.5953,
+       0.6304
+      ]
+     ],
+     "color": "rgb(211, 176, 125)",
+     "dashed": false
+    },
+    {
+     "key": "I9 to I10",
+     "label": "I9→I10",
+     "spans": [
+      [
+       0.6304,
+       0.6859
+      ]
+     ],
+     "color": "rgb(219, 163, 78)",
+     "dashed": false
+    },
+    {
+     "key": "I10 to I11",
+     "label": "I10→I11",
+     "spans": [
+      [
+       0.6859,
+       0.757
+      ]
+     ],
+     "color": "rgb(184, 184, 189)",
+     "dashed": false
+    },
+    {
+     "key": "I11 to I11B",
+     "label": "I11→I11B",
+     "spans": [
+      [
+       0.757,
+       0.8209
+      ]
+     ],
+     "color": "rgb(72, 72, 77)",
+     "dashed": false
+    },
+    {
+     "key": "I11B to I12",
+     "label": "I11B→I12",
+     "spans": [
+      [
+       0.8209,
+       0.8665
+      ]
+     ],
+     "color": "rgb(58, 58, 63)",
+     "dashed": false
+    },
+    {
+     "key": "I12 to I13",
+     "label": "I12→I13",
+     "spans": [
+      [
+       0.8665,
+       0.9366
+      ]
+     ],
+     "color": "rgb(221, 158, 63)",
+     "dashed": false
+    },
+    {
+     "key": "I13 to I13A",
+     "label": "I13→I13A",
+     "spans": [
+      [
+       0.9366,
+       0.9636
+      ]
+     ],
+     "color": "rgb(224, 154, 47)",
+     "dashed": false
+    },
+    {
+     "key": "I13A to I14",
+     "label": "I13A→I14",
+     "spans": [
+      [
+       0.9636,
+       0.9796
+      ]
+     ],
+     "color": "rgb(224, 154, 47)",
+     "dashed": false
+    },
+    {
+     "key": "I14 to I15C",
+     "label": "I14→I15C",
+     "spans": [
+      [
+       0.9796,
+       0.0298
+      ]
+     ],
+     "color": "rgb(224, 154, 47)",
+     "dashed": false
+    },
+    {
+     "key": "I15C to I15",
+     "label": "I15C→I15",
+     "spans": [
+      [
+       0.0298,
+       0.0501
+      ]
+     ],
+     "color": "rgb(142, 142, 147)",
+     "dashed": false
+    },
+    {
+     "key": "I15 to SF",
+     "label": "I15→S/F",
+     "spans": [
+      [
+       0.05,
+       0.0965
+      ]
+     ],
+     "color": "rgb(86, 86, 91)",
+     "dashed": false
+    }
+   ]
+  },
+  "session_indy_nxt_2026_6754": {
+   "slug": "road-america",
+   "raceLabel": "2026 Grand Prix at Road America Race 2 R2",
+   "raceDate": "2026-06-21",
+   "basis": "field_times",
+   "scope": "full_race",
+   "stat": "median",
+   "sourceTier": "parsed_pdf_aggregate",
+   "anchors": "road-america",
+   "modelSections": [
+    {
+     "key": "SF to I1B",
+     "label": "S/F→I1B",
+     "spans": [
+      [
+       0.0965,
+       0.1551
+      ]
+     ],
+     "color": "rgb(204, 188, 169)",
+     "dashed": false
+    },
+    {
+     "key": "I1B to I1",
+     "label": "I1B→I1",
+     "spans": [
+      [
+       0.1551,
+       0.1654
+      ]
+     ],
+     "color": "rgb(215, 169, 101)",
+     "dashed": false
+    },
+    {
+     "key": "I1 to I2",
+     "label": "I1→I2",
+     "spans": [
+      [
+       0.1654,
+       0.2205
+      ]
+     ],
+     "color": "rgb(208, 181, 142)",
+     "dashed": false
+    },
+    {
+     "key": "I2 to I3",
+     "label": "I2→I3",
+     "spans": [
+      [
+       0.2205,
+       0.26
+      ]
+     ],
+     "color": "rgb(180, 180, 185)",
+     "dashed": false
+    },
+    {
+     "key": "I3 to I3A",
+     "label": "I3→I3A",
+     "spans": [
+      [
+       0.26,
+       0.3243
+      ]
+     ],
+     "color": "rgb(168, 168, 173)",
+     "dashed": false
+    },
+    {
+     "key": "I3A to I4",
+     "label": "I3A→I4",
+     "spans": [
+      [
+       0.3243,
+       0.3719
+      ]
+     ],
+     "color": "rgb(155, 155, 160)",
+     "dashed": false
+    },
+    {
+     "key": "I4 to I4A",
+     "label": "I4→I4A",
+     "spans": [
+      [
+       0.3719,
+       0.4151
+      ]
+     ],
+     "color": "rgb(204, 188, 169)",
+     "dashed": false
+    },
+    {
+     "key": "I4A to I5",
+     "label": "I4A→I5",
+     "spans": [
+      [
+       0.4151,
+       0.4499
+      ]
+     ],
+     "color": "rgb(208, 181, 142)",
+     "dashed": false
+    },
+    {
+     "key": "I5 to I6",
+     "label": "I5→I6",
+     "spans": [
+      [
+       0.4499,
+       0.4846
+      ]
+     ],
+     "color": "rgb(192, 192, 197)",
+     "dashed": false
+    },
+    {
+     "key": "I6 to I7",
+     "label": "I6→I7",
+     "spans": [
+      [
+       0.4846,
+       0.532
+      ]
+     ],
+     "color": "rgb(201, 192, 183)",
+     "dashed": false
+    },
+    {
+     "key": "I7 to I8",
+     "label": "I7→I8",
+     "spans": [
+      [
+       0.532,
+       0.5953
+      ]
+     ],
+     "color": "rgb(201, 192, 183)",
+     "dashed": false
+    },
+    {
+     "key": "I8 to I9",
+     "label": "I8→I9",
+     "spans": [
+      [
+       0.5953,
+       0.6304
+      ]
+     ],
+     "color": "rgb(107, 107, 112)",
+     "dashed": false
+    },
+    {
+     "key": "I9 to I10",
+     "label": "I9→I10",
+     "spans": [
+      [
+       0.6304,
+       0.6859
+      ]
+     ],
+     "color": "rgb(199, 196, 196)",
+     "dashed": false
+    },
+    {
+     "key": "I10 to I11",
+     "label": "I10→I11",
+     "spans": [
+      [
+       0.6859,
+       0.757
+      ]
+     ],
+     "color": "rgb(174, 174, 179)",
+     "dashed": false
+    },
+    {
+     "key": "I11 to I11B",
+     "label": "I11→I11B",
+     "spans": [
+      [
+       0.757,
+       0.8209
+      ]
+     ],
+     "color": "rgb(208, 181, 142)",
+     "dashed": false
+    },
+    {
+     "key": "I11B to I12",
+     "label": "I11B→I12",
+     "spans": [
+      [
+       0.8209,
+       0.8665
+      ]
+     ],
+     "color": "rgb(192, 192, 197)",
+     "dashed": false
+    },
+    {
+     "key": "I12 to I13",
+     "label": "I12→I13",
+     "spans": [
+      [
+       0.8665,
+       0.9366
+      ]
+     ],
+     "color": "rgb(213, 173, 115)",
+     "dashed": false
+    },
+    {
+     "key": "I13 to I13A",
+     "label": "I13→I13A",
+     "spans": [
+      [
+       0.9366,
+       0.9636
+      ]
+     ],
+     "color": "rgb(201, 192, 183)",
+     "dashed": false
+    },
+    {
+     "key": "I13A to I14",
+     "label": "I13A→I14",
+     "spans": [
+      [
+       0.9636,
+       0.9796
+      ]
+     ],
+     "color": "rgb(201, 192, 183)",
+     "dashed": false
+    },
+    {
+     "key": "I14 to I15C",
+     "label": "I14→I15C",
+     "spans": [
+      [
+       0.9796,
+       0.0298
+      ]
+     ],
+     "color": "rgb(201, 192, 183)",
+     "dashed": false
+    },
+    {
+     "key": "I15C to I15",
+     "label": "I15C→I15",
+     "spans": [
+      [
+       0.0298,
+       0.0501
+      ]
+     ],
+     "color": "rgb(217, 165, 88)",
+     "dashed": false
+    },
+    {
+     "key": "I15 to SF",
+     "label": "I15→S/F",
+     "spans": [
+      [
+       0.05,
+       0.0965
+      ]
+     ],
+     "color": "rgb(217, 165, 88)",
+     "dashed": false
+    }
+   ]
+  },
+  "session_indy_nxt_2025_6455": {
+   "slug": "streets-of-detroit",
+   "raceLabel": "2025 Detroit Grand Prix",
+   "raceDate": "2025-06-01",
+   "basis": "field_times",
+   "scope": "full_race",
+   "stat": "median",
+   "sourceTier": "parsed_pdf_aggregate",
+   "anchors": "streets-of-detroit",
+   "modelSections": [
+    {
+     "key": "SF to I1",
+     "label": "S/F → I1",
+     "spans": [
+      [
+       0,
+       0.0642
+      ]
+     ],
+     "color": "rgb(91, 91, 96)",
+     "dashed": false
+    },
+    {
+     "key": "I1 to I2A",
+     "label": "I1 → I2A",
+     "spans": [
+      [
+       0.0642,
+       0.0983
+      ]
+     ],
+     "color": "rgb(140, 140, 145)",
+     "dashed": false
+    },
+    {
+     "key": "I2A to I2",
+     "label": "I2A → I2",
+     "spans": [
+      [
+       0.0983,
+       0.124
+      ]
+     ],
+     "color": "rgb(124, 124, 129)",
+     "dashed": false
+    },
+    {
+     "key": "I2 to I3",
+     "label": "I2 → I3",
+     "spans": [
+      [
+       0.124,
+       0.2113
+      ]
+     ],
+     "color": "rgb(91, 91, 96)",
+     "dashed": false
+    },
+    {
+     "key": "I3 to I4",
+     "label": "I3 → I4",
+     "spans": [
+      [
+       0.2113,
+       0.3111
+      ]
+     ],
+     "color": "rgb(91, 91, 96)",
+     "dashed": false
+    },
+    {
+     "key": "I4 to I5",
+     "label": "I4 → I5",
+     "spans": [
+      [
+       0.3111,
+       0.4348
+      ]
+     ],
+     "color": "rgb(74, 74, 79)",
+     "dashed": false
+    },
+    {
+     "key": "I5 to I6",
+     "label": "I5 → I6",
+     "spans": [
+      [
+       0.4348,
+       0.5188
+      ]
+     ],
+     "color": "rgb(91, 91, 96)",
+     "dashed": false
+    },
+    {
+     "key": "I6 to I7",
+     "label": "I6 → I7",
+     "spans": [
+      [
+       0.5188,
+       0.5794
+      ]
+     ],
+     "color": "rgb(124, 124, 129)",
+     "dashed": false
+    },
+    {
+     "key": "I7 to I8",
+     "label": "I7 → I8",
+     "spans": [
+      [
+       0.5794,
+       0.6121
+      ]
+     ],
+     "color": "rgb(124, 124, 129)",
+     "dashed": false
+    },
+    {
+     "key": "I8 to I9",
+     "label": "I8 → I9",
+     "spans": [
+      [
+       0.6121,
+       0.6429
+      ]
+     ],
+     "color": "rgb(124, 124, 129)",
+     "dashed": false
+    },
+    {
+     "key": "I9 to I10",
+     "label": "I9 → I10",
+     "spans": [
+      [
+       0.6429,
+       0.6818
+      ]
+     ],
+     "color": "rgb(107, 107, 112)",
+     "dashed": false
+    },
+    {
+     "key": "I10 to I11",
+     "label": "I10 → I11",
+     "spans": [
+      [
+       0.6818,
+       0.7259
+      ]
+     ],
+     "color": "rgb(107, 107, 112)",
+     "dashed": false
+    },
+    {
+     "key": "I11 to 12",
+     "label": "I11 → I12",
+     "spans": [
+      [
+       0.7259,
+       0.7811
+      ]
+     ],
+     "color": "rgb(91, 91, 96)",
+     "dashed": false
+    },
+    {
+     "key": "I12 to I13",
+     "label": "I12 → I13",
+     "spans": [
+      [
+       0.7811,
+       0.8379
+      ]
+     ],
+     "color": "rgb(91, 91, 96)",
+     "dashed": false
+    },
+    {
+     "key": "Back Str 2",
+     "label": "Back straight (I13 → I14)",
+     "spans": [
+      [
+       0.8379,
+       0.8781
+      ]
+     ],
+     "color": "rgb(190, 190, 195)",
+     "dashed": false
+    },
+    {
+     "key": "I14 to I15",
+     "label": "I14 → I15",
+     "spans": [
+      [
+       0.8781,
+       0.92
+      ]
+     ],
+     "color": "rgb(111, 111, 116)",
+     "dashed": false
+    },
+    {
+     "key": "I15 to I16",
+     "label": "I15 → I16",
+     "spans": [
+      [
+       0.92,
+       0.9507
+      ]
+     ],
+     "color": "rgb(76, 76, 81)",
+     "dashed": false
+    },
+    {
+     "key": "I16 to SF",
+     "label": "I16 → S/F",
+     "spans": [
+      [
+       0.9507,
+       0
+      ]
+     ],
+     "color": "rgb(128, 128, 133)",
+     "dashed": false
+    }
+   ]
+  },
+  "session_indy_nxt_2026_6749": {
+   "slug": "streets-of-detroit",
+   "raceLabel": "2026 Detroit Grand Prix",
+   "raceDate": "2026-05-31",
+   "basis": "field_times",
+   "scope": "full_race",
+   "stat": "median",
+   "sourceTier": "parsed_pdf_aggregate",
+   "anchors": "streets-of-detroit",
+   "modelSections": [
+    {
+     "key": "SF to I1",
+     "label": "S/F → I1",
+     "spans": [
+      [
+       0,
+       0.0642
+      ]
+     ],
+     "color": "rgb(217, 165, 88)",
+     "dashed": false
+    },
+    {
+     "key": "I1 to I2A",
+     "label": "I1 → I2A",
+     "spans": [
+      [
+       0.0642,
+       0.0983
+      ]
+     ],
+     "color": "rgb(208, 181, 142)",
+     "dashed": false
+    },
+    {
+     "key": "I2A to I2",
+     "label": "I2A → I2",
+     "spans": [
+      [
+       0.0983,
+       0.124
+      ]
+     ],
+     "color": "rgb(208, 181, 142)",
+     "dashed": false
+    },
+    {
+     "key": "I2 to I3",
+     "label": "I2 → I3",
+     "spans": [
+      [
+       0.124,
+       0.2113
+      ]
+     ],
+     "color": "rgb(168, 168, 173)",
+     "dashed": false
+    },
+    {
+     "key": "I3 to I4",
+     "label": "I3 → I4",
+     "spans": [
+      [
+       0.2113,
+       0.3111
+      ]
+     ],
+     "color": "rgb(82, 82, 87)",
+     "dashed": false
+    },
+    {
+     "key": "I4 to I5",
+     "label": "I4 → I5",
+     "spans": [
+      [
+       0.3111,
+       0.4348
+      ]
+     ],
+     "color": "rgb(58, 58, 63)",
+     "dashed": false
+    },
+    {
+     "key": "I5 to I6",
+     "label": "I5 → I6",
+     "spans": [
+      [
+       0.4348,
+       0.5188
+      ]
+     ],
+     "color": "rgb(210, 177, 128)",
+     "dashed": false
+    },
+    {
+     "key": "I6 to I7",
+     "label": "I6 → I7",
+     "spans": [
+      [
+       0.5188,
+       0.5794
+      ]
+     ],
+     "color": "rgb(131, 131, 136)",
+     "dashed": false
+    },
+    {
+     "key": "I7 to I8",
+     "label": "I7 → I8",
+     "spans": [
+      [
+       0.5794,
+       0.6121
+      ]
+     ],
+     "color": "rgb(217, 165, 88)",
+     "dashed": false
+    },
+    {
+     "key": "I8 to I9",
+     "label": "I8 → I9",
+     "spans": [
+      [
+       0.6121,
+       0.6429
+      ]
+     ],
+     "color": "rgb(210, 177, 128)",
+     "dashed": false
+    },
+    {
+     "key": "I9 to I10",
+     "label": "I9 → I10",
+     "spans": [
+      [
+       0.6429,
+       0.6818
+      ]
+     ],
+     "color": "rgb(213, 173, 115)",
+     "dashed": false
+    },
+    {
+     "key": "I10 to I11",
+     "label": "I10 → I11",
+     "spans": [
+      [
+       0.6818,
+       0.7259
+      ]
+     ],
+     "color": "rgb(206, 185, 156)",
+     "dashed": false
+    },
+    {
+     "key": "I11 to 12",
+     "label": "I11 → I12",
+     "spans": [
+      [
+       0.7259,
+       0.7811
+      ]
+     ],
+     "color": "rgb(168, 168, 173)",
+     "dashed": false
+    },
+    {
+     "key": "I12 to I13",
+     "label": "I12 → I13",
+     "spans": [
+      [
+       0.7811,
+       0.8379
+      ]
+     ],
+     "color": "rgb(168, 168, 173)",
+     "dashed": false
+    },
+    {
+     "key": "Back Str 2",
+     "label": "Back straight (I13 → I14)",
+     "spans": [
+      [
+       0.8379,
+       0.8781
+      ]
+     ],
+     "color": "rgb(224, 154, 47)",
+     "dashed": false
+    },
+    {
+     "key": "I14 to I15",
+     "label": "I14 → I15",
+     "spans": [
+      [
+       0.8781,
+       0.92
+      ]
+     ],
+     "color": "rgb(206, 185, 156)",
+     "dashed": false
+    },
+    {
+     "key": "I15 to I16",
+     "label": "I15 → I16",
+     "spans": [
+      [
+       0.92,
+       0.9507
+      ]
+     ],
+     "color": "rgb(213, 173, 115)",
+     "dashed": false
+    },
+    {
+     "key": "I16 to SF",
+     "label": "I16 → S/F",
+     "spans": [
+      [
+       0.9507,
+       0
+      ]
+     ],
+     "color": "rgb(155, 155, 160)",
+     "dashed": false
+    }
+   ]
+  },
+  "session_indy_nxt_2024_6324": {
+   "slug": "streets-of-st-petersburg",
+   "raceLabel": "2024 Grand Prix of St. Petersburg",
+   "raceDate": "2024-03-10",
+   "basis": "field_times",
+   "scope": "full_race",
+   "stat": "median",
+   "sourceTier": "parsed_pdf_aggregate",
+   "anchors": "streets-of-st-petersburg",
+   "modelSections": [
+    {
+     "key": "FS-PO",
+     "label": "S/F→PO",
+     "spans": [
+      [
+       0,
+       0.0722854
+      ]
+     ],
+     "color": "rgb(206, 185, 156)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 1",
+     "label": "Turn 1",
+     "spans": [
+      [
+       0.0722854,
+       0.1541456
+      ]
+     ],
+     "color": "rgb(198, 198, 203)",
+     "dashed": false
+    },
+    {
+     "key": "Turns 2/3",
+     "label": "Turns 2–3",
+     "spans": [
+      [
+       0.1541456,
+       0.2897727
+      ]
+     ],
+     "color": "rgb(201, 194, 187)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 4",
+     "label": "Turn 4",
+     "spans": [
+      [
+       0.2897727,
+       0.3595328
+      ]
+     ],
+     "color": "rgb(224, 154, 47)",
+     "dashed": false
+    },
+    {
+     "key": "Turns 5-8",
+     "label": "Turns 5–8",
+     "spans": [
+      [
+       0.3595328,
+       0.453388
+      ]
+     ],
+     "color": "rgb(201, 194, 187)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 9",
+     "label": "Turn 9",
+     "spans": [
+      [
+       0.453388,
+       0.4912668
+      ]
+     ],
+     "color": "rgb(184, 184, 189)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 9a",
+     "label": "Turn 9a",
+     "spans": [
+      [
+       0.4912668,
+       0.6280513
+      ]
+     ],
+     "color": "rgb(206, 185, 156)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 10",
+     "label": "Turn 10",
+     "spans": [
+      [
+       0.6280513,
+       0.6993897
+      ]
+     ],
+     "color": "rgb(221, 158, 63)",
+     "dashed": false
+    },
+    {
+     "key": "Turns 11/12",
+     "label": "Turns 11–12",
+     "spans": [
+      [
+       0.6993897,
+       0.7976641
+      ]
+     ],
+     "color": "rgb(206, 185, 156)",
+     "dashed": false
+    },
+    {
+     "key": "Turns 13/14",
+     "label": "Turns 13–14",
+     "spans": [
+      [
+       0.7976641,
+       0.9084596
+      ]
+     ],
+     "color": "rgb(206, 185, 156)",
+     "dashed": false
+    },
+    {
+     "key": "FS-PI",
+     "label": "PI→S/F",
+     "spans": [
+      [
+       0.9084596,
+       0
+      ]
+     ],
+     "color": "rgb(128, 128, 133)",
+     "dashed": false
+    }
+   ]
+  },
+  "session_indy_nxt_2025_6446": {
+   "slug": "streets-of-st-petersburg",
+   "raceLabel": "2025 Grand Prix of St. Petersburg",
+   "raceDate": "2025-03-02",
+   "basis": "field_times",
+   "scope": "full_race",
+   "stat": "median",
+   "sourceTier": "parsed_pdf_aggregate",
+   "anchors": "streets-of-st-petersburg",
+   "modelSections": [
+    {
+     "key": "FS-PO",
+     "label": "S/F→PO",
+     "spans": [
+      [
+       0,
+       0.0722854
+      ]
+     ],
+     "color": "rgb(102, 102, 107)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 1",
+     "label": "Turn 1",
+     "spans": [
+      [
+       0.0722854,
+       0.1541456
+      ]
+     ],
+     "color": "rgb(161, 161, 166)",
+     "dashed": false
+    },
+    {
+     "key": "Turns 2/3",
+     "label": "Turns 2–3",
+     "spans": [
+      [
+       0.1541456,
+       0.2897727
+      ]
+     ],
+     "color": "rgb(199, 196, 195)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 4",
+     "label": "Turn 4",
+     "spans": [
+      [
+       0.2897727,
+       0.3595328
+      ]
+     ],
+     "color": "rgb(132, 132, 137)",
+     "dashed": false
+    },
+    {
+     "key": "Turns 5-8",
+     "label": "Turns 5–8",
+     "spans": [
+      [
+       0.3595328,
+       0.453388
+      ]
+     ],
+     "color": "rgb(191, 191, 196)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 9",
+     "label": "Turn 9",
+     "spans": [
+      [
+       0.453388,
+       0.4912668
+      ]
+     ],
+     "color": "rgb(117, 117, 122)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 9a",
+     "label": "Turn 9a",
+     "spans": [
+      [
+       0.4912668,
+       0.6280513
+      ]
+     ],
+     "color": "rgb(117, 117, 122)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 10",
+     "label": "Turn 10",
+     "spans": [
+      [
+       0.6280513,
+       0.6993897
+      ]
+     ],
+     "color": "rgb(87, 87, 92)",
+     "dashed": false
+    },
+    {
+     "key": "Turns 11/12",
+     "label": "Turns 11–12",
+     "spans": [
+      [
+       0.6993897,
+       0.7976641
+      ]
+     ],
+     "color": "rgb(102, 102, 107)",
+     "dashed": false
+    },
+    {
+     "key": "Turns 13/14",
+     "label": "Turns 13–14",
+     "spans": [
+      [
+       0.7976641,
+       0.9084596
+      ]
+     ],
+     "color": "rgb(132, 132, 137)",
+     "dashed": false
+    },
+    {
+     "key": "FS-PI",
+     "label": "PI→S/F",
+     "spans": [
+      [
+       0.9084596,
+       0
+      ]
+     ],
+     "color": "rgb(73, 73, 78)",
+     "dashed": false
+    }
+   ]
+  },
+  "session_indy_nxt_2026_6751": {
+   "slug": "streets-of-st-petersburg",
+   "raceLabel": "2026 Grand Prix of St. Petersburg",
+   "raceDate": "2026-03-01",
+   "basis": "field_times",
+   "scope": "full_race",
+   "stat": "median",
+   "sourceTier": "parsed_pdf_aggregate",
+   "anchors": "streets-of-st-petersburg",
+   "modelSections": [
+    {
+     "key": "FS-PO",
+     "label": "S/F→PO",
+     "spans": [
+      [
+       0,
+       0.0722854
+      ]
+     ],
+     "color": "rgb(212, 174, 118)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 1",
+     "label": "Turn 1",
+     "spans": [
+      [
+       0.0722854,
+       0.1541456
+      ]
+     ],
+     "color": "rgb(200, 194, 189)",
+     "dashed": false
+    },
+    {
+     "key": "Turns 2/3",
+     "label": "Turns 2–3",
+     "spans": [
+      [
+       0.1541456,
+       0.2897727
+      ]
+     ],
+     "color": "rgb(160, 160, 165)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 4",
+     "label": "Turn 4",
+     "spans": [
+      [
+       0.2897727,
+       0.3595328
+      ]
+     ],
+     "color": "rgb(83, 83, 88)",
+     "dashed": false
+    },
+    {
+     "key": "Turns 5-8",
+     "label": "Turns 5–8",
+     "spans": [
+      [
+       0.3595328,
+       0.453388
+      ]
+     ],
+     "color": "rgb(122, 122, 127)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 9",
+     "label": "Turn 9",
+     "spans": [
+      [
+       0.453388,
+       0.4912668
+      ]
+     ],
+     "color": "rgb(160, 160, 165)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 9a",
+     "label": "Turn 9a",
+     "spans": [
+      [
+       0.4912668,
+       0.6280513
+      ]
+     ],
+     "color": "rgb(96, 96, 101)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 10",
+     "label": "Turn 10",
+     "spans": [
+      [
+       0.6280513,
+       0.6993897
+      ]
+     ],
+     "color": "rgb(83, 83, 88)",
+     "dashed": false
+    },
+    {
+     "key": "Turns 11/12",
+     "label": "Turns 11–12",
+     "spans": [
+      [
+       0.6993897,
+       0.7976641
+      ]
+     ],
+     "color": "rgb(134, 134, 139)",
+     "dashed": false
+    },
+    {
+     "key": "Turns 13/14",
+     "label": "Turns 13–14",
+     "spans": [
+      [
+       0.7976641,
+       0.9084596
+      ]
+     ],
+     "color": "rgb(200, 194, 189)",
+     "dashed": false
+    },
+    {
+     "key": "FS-PI",
+     "label": "PI→S/F",
+     "spans": [
+      [
+       0.9084596,
+       0
+      ]
+     ],
+     "color": "rgb(212, 174, 118)",
+     "dashed": false
+    }
+   ]
+  },
+  "session_indy_nxt_2026_6753": {
+   "slug": "streets-of-arlington",
+   "raceLabel": "2026 Grand Prix of Arlington",
+   "raceDate": "2026-03-15",
+   "basis": "field_times",
+   "scope": "full_race",
+   "stat": "median",
+   "sourceTier": "parsed_pdf_aggregate",
+   "anchors": "streets-of-arlington",
+   "modelSections": [
+    {
+     "key": "FS-PO",
+     "label": "S/F → pit out",
+     "spans": [
+      [
+       0,
+       0.0309
+      ]
+     ],
+     "color": "rgb(147, 147, 152)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 1",
+     "label": "Turn 1",
+     "spans": [
+      [
+       0.0309,
+       0.0546
+      ]
+     ],
+     "color": "rgb(109, 109, 114)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 2",
+     "label": "Turn 2",
+     "spans": [
+      [
+       0.0546,
+       0.0747
+      ]
+     ],
+     "color": "rgb(58, 58, 63)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 3",
+     "label": "Turn 3",
+     "spans": [
+      [
+       0.0747,
+       0.1326
+      ]
+     ],
+     "color": "rgb(71, 71, 76)",
+     "dashed": false
+    },
+    {
+     "key": "Turns 3/4",
+     "label": "Turns 3–4",
+     "spans": [
+      [
+       0.1326,
+       0.1782
+      ]
+     ],
+     "color": "rgb(71, 71, 76)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 4",
+     "label": "Turn 4",
+     "spans": [
+      [
+       0.1782,
+       0.2053
+      ]
+     ],
+     "color": "rgb(147, 147, 152)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 5",
+     "label": "Turn 5",
+     "spans": [
+      [
+       0.2053,
+       0.2338
+      ]
+     ],
+     "color": "rgb(71, 71, 76)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 6",
+     "label": "Turn 6",
+     "spans": [
+      [
+       0.2338,
+       0.2832
+      ]
+     ],
+     "color": "rgb(71, 71, 76)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 7",
+     "label": "Turn 7",
+     "spans": [
+      [
+       0.2832,
+       0.2969
+      ]
+     ],
+     "color": "rgb(58, 58, 63)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 8",
+     "label": "Turn 8",
+     "spans": [
+      [
+       0.2969,
+       0.3326
+      ]
+     ],
+     "color": "rgb(96, 96, 101)",
+     "dashed": false
+    },
+    {
+     "key": "Turns 8/9",
+     "label": "Turns 8–9",
+     "spans": [
+      [
+       0.3326,
+       0.356
+      ]
+     ],
+     "color": "rgb(71, 71, 76)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 9",
+     "label": "Turn 9",
+     "spans": [
+      [
+       0.356,
+       0.3879
+      ]
+     ],
+     "color": "rgb(58, 58, 63)",
+     "dashed": false
+    },
+    {
+     "key": "BS 1",
+     "label": "Back straight 1",
+     "spans": [
+      [
+       0.3879,
+       0.4537
+      ]
+     ],
+     "color": "rgb(109, 109, 114)",
+     "dashed": false
+    },
+    {
+     "key": "BS 2",
+     "label": "Back straight 2",
+     "spans": [
+      [
+       0.4537,
+       0.5054
+      ]
+     ],
+     "color": "rgb(122, 122, 127)",
+     "dashed": false
+    },
+    {
+     "key": "BS 3",
+     "label": "Back straight 3",
+     "spans": [
+      [
+       0.5054,
+       0.5796
+      ]
+     ],
+     "color": "rgb(96, 96, 101)",
+     "dashed": false
+    },
+    {
+     "key": "BS 4",
+     "label": "Back straight 4",
+     "spans": [
+      [
+       0.5796,
+       0.6521
+      ]
+     ],
+     "color": "rgb(96, 96, 101)",
+     "dashed": false
+    },
+    {
+     "key": "BS 5",
+     "label": "Back straight 5",
+     "spans": [
+      [
+       0.6521,
+       0.6991
+      ]
+     ],
+     "color": "rgb(109, 109, 114)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 10",
+     "label": "Turn 10",
+     "spans": [
+      [
+       0.6991,
+       0.7485
+      ]
+     ],
+     "color": "rgb(58, 58, 63)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 11",
+     "label": "Turn 11",
+     "spans": [
+      [
+       0.7485,
+       0.7898
+      ]
+     ],
+     "color": "rgb(134, 134, 139)",
+     "dashed": false
+    },
+    {
+     "key": "Turns 11/12",
+     "label": "Turns 11–12",
+     "spans": [
+      [
+       0.7898,
+       0.8311
+      ]
+     ],
+     "color": "rgb(58, 58, 63)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 12",
+     "label": "Turn 12",
+     "spans": [
+      [
+       0.8311,
+       0.8647
+      ]
+     ],
+     "color": "rgb(58, 58, 63)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 13",
+     "label": "Turn 13",
+     "spans": [
+      [
+       0.8647,
+       0.9084
+      ]
+     ],
+     "color": "rgb(83, 83, 88)",
+     "dashed": false
+    },
+    {
+     "key": "Turns 13/14",
+     "label": "Turns 13–14",
+     "spans": [
+      [
+       0.9084,
+       0.957
+      ]
+     ],
+     "color": "rgb(71, 71, 76)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 14",
+     "label": "Turn 14",
+     "spans": [
+      [
+       0.957,
+       0.9756
+      ]
+     ],
+     "color": "rgb(83, 83, 88)",
+     "dashed": false
+    },
+    {
+     "key": "FS PI",
+     "label": "Pit in → S/F",
+     "spans": [
+      [
+       0.9756,
+       0
+      ]
+     ],
+     "color": "rgb(83, 83, 88)",
+     "dashed": false
+    }
+   ]
+  },
+  "session_indy_nxt_2024_6314": {
+   "slug": "barber-motorsports-park",
+   "raceLabel": "2024 Grand Prix of Alabama",
+   "raceDate": "2024-04-28",
+   "basis": "field_times",
+   "scope": "full_race",
+   "stat": "median",
+   "sourceTier": "parsed_pdf_aggregate",
+   "anchors": "barber-motorsports-park",
+   "modelSections": [
+    {
+     "key": "FS-PO",
+     "label": "S/F → pit out",
+     "spans": [
+      [
+       0.963,
+       0.007
+      ]
+     ],
+     "color": "rgb(219, 163, 78)",
+     "dashed": false
+    },
+    {
+     "key": "Turns 1-3",
+     "label": "Turns 1–3",
+     "spans": [
+      [
+       0.007,
+       0.1323
+      ]
+     ],
+     "color": "rgb(216, 167, 94)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 4",
+     "label": "Turn 4",
+     "spans": [
+      [
+       0.1323,
+       0.2483
+      ]
+     ],
+     "color": "rgb(86, 86, 91)",
+     "dashed": false
+    },
+    {
+     "key": "Turns 5-6",
+     "label": "Turns 5–6",
+     "spans": [
+      [
+       0.2483,
+       0.2966
+      ]
+     ],
+     "color": "rgb(211, 176, 125)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 7",
+     "label": "Turn 7",
+     "spans": [
+      [
+       0.2966,
+       0.4219
+      ]
+     ],
+     "color": "rgb(208, 180, 141)",
+     "dashed": false
+    },
+    {
+     "key": "Turns 8-9",
+     "label": "Turns 8–9",
+     "spans": [
+      [
+       0.4219,
+       0.5004
+      ]
+     ],
+     "color": "rgb(142, 142, 147)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 10",
+     "label": "Turn 10",
+     "spans": [
+      [
+       0.5004,
+       0.5663
+      ]
+     ],
+     "color": "rgb(170, 170, 175)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 11",
+     "label": "Turn 11",
+     "spans": [
+      [
+       0.5663,
+       0.6752
+      ]
+     ],
+     "color": "rgb(198, 198, 203)",
+     "dashed": false
+    },
+    {
+     "key": "Turns 12-13",
+     "label": "Turns 12–13",
+     "spans": [
+      [
+       0.6752,
+       0.7617
+      ]
+     ],
+     "color": "rgb(203, 189, 172)",
+     "dashed": false
+    },
+    {
+     "key": "Turns 14-16",
+     "label": "Turns 14–16",
+     "spans": [
+      [
+       0.7617,
+       0.8344
+      ]
+     ],
+     "color": "rgb(214, 172, 109)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 17",
+     "label": "Turn 17",
+     "spans": [
+      [
+       0.8344,
+       0.963
+      ]
+     ],
+     "color": "rgb(224, 154, 47)",
+     "dashed": false
+    }
+   ]
+  },
+  "session_indy_nxt_2025_6445": {
+   "slug": "barber-motorsports-park",
+   "raceLabel": "2025 Grand Prix of Alabama",
+   "raceDate": "2025-05-04",
+   "basis": "field_times",
+   "scope": "full_race",
+   "stat": "median",
+   "sourceTier": "parsed_pdf_aggregate",
+   "anchors": "barber-motorsports-park",
+   "modelSections": [
+    {
+     "key": "FS-PO",
+     "label": "S/F → pit out",
+     "spans": [
+      [
+       0.963,
+       0.007
+      ]
+     ],
+     "color": "rgb(105, 105, 110)",
+     "dashed": false
+    },
+    {
+     "key": "Turns 1-3",
+     "label": "Turns 1–3",
+     "spans": [
+      [
+       0.007,
+       0.1323
+      ]
+     ],
+     "color": "rgb(167, 167, 172)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 4",
+     "label": "Turn 4",
+     "spans": [
+      [
+       0.1323,
+       0.2483
+      ]
+     ],
+     "color": "rgb(74, 74, 79)",
+     "dashed": false
+    },
+    {
+     "key": "Turns 5-6",
+     "label": "Turns 5–6",
+     "spans": [
+      [
+       0.2483,
+       0.2966
+      ]
+     ],
+     "color": "rgb(221, 159, 64)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 7",
+     "label": "Turn 7",
+     "spans": [
+      [
+       0.2966,
+       0.4219
+      ]
+     ],
+     "color": "rgb(74, 74, 79)",
+     "dashed": false
+    },
+    {
+     "key": "Turns 8-9",
+     "label": "Turns 8–9",
+     "spans": [
+      [
+       0.4219,
+       0.5004
+      ]
+     ],
+     "color": "rgb(89, 89, 94)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 10",
+     "label": "Turn 10",
+     "spans": [
+      [
+       0.5004,
+       0.5663
+      ]
+     ],
+     "color": "rgb(74, 74, 79)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 11",
+     "label": "Turn 11",
+     "spans": [
+      [
+       0.5663,
+       0.6752
+      ]
+     ],
+     "color": "rgb(89, 89, 94)",
+     "dashed": false
+    },
+    {
+     "key": "Turns 12-13",
+     "label": "Turns 12–13",
+     "spans": [
+      [
+       0.6752,
+       0.7617
+      ]
+     ],
+     "color": "rgb(201, 193, 186)",
+     "dashed": false
+    },
+    {
+     "key": "Turns 14-16",
+     "label": "Turns 14–16",
+     "spans": [
+      [
+       0.7617,
+       0.8344
+      ]
+     ],
+     "color": "rgb(212, 174, 116)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 17",
+     "label": "Turn 17",
+     "spans": [
+      [
+       0.8344,
+       0.963
+      ]
+     ],
+     "color": "rgb(198, 198, 203)",
+     "dashed": false
+    }
+   ]
+  },
+  "session_indy_nxt_2026_6750": {
+   "slug": "barber-motorsports-park",
+   "raceLabel": "2026 Grand Prix of Alabama Race 1 R1",
+   "raceDate": "2026-03-28",
+   "basis": "field_times",
+   "scope": "full_race",
+   "stat": "median",
+   "sourceTier": "parsed_pdf_aggregate",
+   "anchors": "barber-motorsports-park",
+   "modelSections": [
+    {
+     "key": "FS-PO",
+     "label": "S/F → pit out",
+     "spans": [
+      [
+       0.963,
+       0.007
+      ]
+     ],
+     "color": "rgb(217, 166, 90)",
+     "dashed": false
+    },
+    {
+     "key": "Turns 1-3",
+     "label": "Turns 1–3",
+     "spans": [
+      [
+       0.007,
+       0.1323
+      ]
+     ],
+     "color": "rgb(207, 182, 146)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 4",
+     "label": "Turn 4",
+     "spans": [
+      [
+       0.1323,
+       0.2483
+      ]
+     ],
+     "color": "rgb(210, 178, 132)",
+     "dashed": false
+    },
+    {
+     "key": "Turns 5-6",
+     "label": "Turns 5–6",
+     "spans": [
+      [
+       0.2483,
+       0.2966
+      ]
+     ],
+     "color": "rgb(200, 194, 189)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 7",
+     "label": "Turn 7",
+     "spans": [
+      [
+       0.2966,
+       0.4219
+      ]
+     ],
+     "color": "rgb(215, 170, 104)",
+     "dashed": false
+    },
+    {
+     "key": "Turns 8-9",
+     "label": "Turns 8–9",
+     "spans": [
+      [
+       0.4219,
+       0.5004
+      ]
+     ],
+     "color": "rgb(160, 160, 165)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 10",
+     "label": "Turn 10",
+     "spans": [
+      [
+       0.5004,
+       0.5663
+      ]
+     ],
+     "color": "rgb(224, 154, 47)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 11",
+     "label": "Turn 11",
+     "spans": [
+      [
+       0.5663,
+       0.6752
+      ]
+     ],
+     "color": "rgb(134, 134, 139)",
+     "dashed": false
+    },
+    {
+     "key": "Turns 12-13",
+     "label": "Turns 12–13",
+     "spans": [
+      [
+       0.6752,
+       0.7617
+      ]
+     ],
+     "color": "rgb(147, 147, 152)",
+     "dashed": false
+    },
+    {
+     "key": "Turns 14-16",
+     "label": "Turns 14–16",
+     "spans": [
+      [
+       0.7617,
+       0.8344
+      ]
+     ],
+     "color": "rgb(212, 174, 118)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 17",
+     "label": "Turn 17",
+     "spans": [
+      [
+       0.8344,
+       0.963
+      ]
+     ],
+     "color": "rgb(185, 185, 190)",
+     "dashed": false
+    }
+   ]
+  },
+  "session_indy_nxt_2026_6752": {
+   "slug": "barber-motorsports-park",
+   "raceLabel": "2026 Grand Prix of Alabama Race 2 R2",
+   "raceDate": "2026-03-29",
+   "basis": "field_times",
+   "scope": "full_race",
+   "stat": "median",
+   "sourceTier": "parsed_pdf_aggregate",
+   "anchors": "barber-motorsports-park",
+   "modelSections": [
+    {
+     "key": "FS-PO",
+     "label": "S/F → pit out",
+     "spans": [
+      [
+       0.963,
+       0.007
+      ]
+     ],
+     "color": "rgb(208, 181, 142)",
+     "dashed": false
+    },
+    {
+     "key": "Turns 1-3",
+     "label": "Turns 1–3",
+     "spans": [
+      [
+       0.007,
+       0.1323
+      ]
+     ],
+     "color": "rgb(224, 154, 47)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 4",
+     "label": "Turn 4",
+     "spans": [
+      [
+       0.1323,
+       0.2483
+      ]
+     ],
+     "color": "rgb(217, 165, 88)",
+     "dashed": false
+    },
+    {
+     "key": "Turns 5-6",
+     "label": "Turns 5–6",
+     "spans": [
+      [
+       0.2483,
+       0.2966
+      ]
+     ],
+     "color": "rgb(222, 158, 61)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 7",
+     "label": "Turn 7",
+     "spans": [
+      [
+       0.2966,
+       0.4219
+      ]
+     ],
+     "color": "rgb(210, 177, 128)",
+     "dashed": false
+    },
+    {
+     "key": "Turns 8-9",
+     "label": "Turns 8–9",
+     "spans": [
+      [
+       0.4219,
+       0.5004
+      ]
+     ],
+     "color": "rgb(213, 173, 115)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 10",
+     "label": "Turn 10",
+     "spans": [
+      [
+       0.5004,
+       0.5663
+      ]
+     ],
+     "color": "rgb(224, 154, 47)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 11",
+     "label": "Turn 11",
+     "spans": [
+      [
+       0.5663,
+       0.6752
+      ]
+     ],
+     "color": "rgb(192, 192, 197)",
+     "dashed": false
+    },
+    {
+     "key": "Turns 12-13",
+     "label": "Turns 12–13",
+     "spans": [
+      [
+       0.6752,
+       0.7617
+      ]
+     ],
+     "color": "rgb(180, 180, 185)",
+     "dashed": false
+    },
+    {
+     "key": "Turns 14-16",
+     "label": "Turns 14–16",
+     "spans": [
+      [
+       0.7617,
+       0.8344
+      ]
+     ],
+     "color": "rgb(219, 162, 74)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 17",
+     "label": "Turn 17",
+     "spans": [
+      [
+       0.8344,
+       0.963
+      ]
+     ],
+     "color": "rgb(155, 155, 160)",
+     "dashed": false
+    }
+   ]
+  },
+  "session_indy_nxt_2024_6315": {
+   "slug": "indianapolis-motor-speedway-road-course",
+   "raceLabel": "2024 Indianapolis Grand Prix Race 1 R1",
+   "raceDate": "2024-05-10",
+   "basis": "field_times",
+   "scope": "full_race",
+   "stat": "median",
+   "sourceTier": "parsed_pdf_aggregate",
+   "anchors": "indianapolis-motor-speedway-road-course",
+   "modelSections": [
+    {
+     "key": "FS - PO",
+     "label": "S/F→I1B",
+     "spans": [
+      [
+       0,
+       0.1043671
+      ]
+     ],
+     "color": "rgb(221, 158, 63)",
+     "dashed": false
+    },
+    {
+     "key": "FS - PO 2",
+     "label": "I1B→I1",
+     "spans": [
+      [
+       0.1043671,
+       0.1264447
+      ]
+     ],
+     "color": "rgb(214, 172, 109)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 1/2",
+     "label": "Turns 1–2",
+     "spans": [
+      [
+       0.1264447,
+       0.1993009
+      ]
+     ],
+     "color": "rgb(58, 58, 63)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 3",
+     "label": "Turn 3",
+     "spans": [
+      [
+       0.1993009,
+       0.2653332
+      ]
+     ],
+     "color": "rgb(86, 86, 91)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 4/5/6",
+     "label": "Turns 4–6",
+     "spans": [
+      [
+       0.2653332,
+       0.3189216
+      ]
+     ],
+     "color": "rgb(198, 198, 203)",
+     "dashed": false
+    },
+    {
+     "key": "Backstretch",
+     "label": "Backstretch",
+     "spans": [
+      [
+       0.3189216,
+       0.4651359
+      ]
+     ],
+     "color": "rgb(219, 163, 78)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 7",
+     "label": "Turn 7",
+     "spans": [
+      [
+       0.4651359,
+       0.5224374
+      ]
+     ],
+     "color": "rgb(86, 86, 91)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 8/9",
+     "label": "Turns 8–9",
+     "spans": [
+      [
+       0.5224374,
+       0.5782336
+      ]
+     ],
+     "color": "rgb(114, 114, 119)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 10",
+     "label": "Turn 10",
+     "spans": [
+      [
+       0.5782336,
+       0.6344313
+      ]
+     ],
+     "color": "rgb(184, 184, 189)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 11",
+     "label": "Turn 11",
+     "spans": [
+      [
+       0.6344313,
+       0.7590696
+      ]
+     ],
+     "color": "rgb(100, 100, 105)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 12/13",
+     "label": "Turns 12–13",
+     "spans": [
+      [
+       0.7590696,
+       0.8445703
+      ]
+     ],
+     "color": "rgb(114, 114, 119)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 14",
+     "label": "Turn 14",
+     "spans": [
+      [
+       0.8445703,
+       0.9156202
+      ]
+     ],
+     "color": "rgb(211, 176, 125)",
+     "dashed": false
+    },
+    {
+     "key": "FS - PI",
+     "label": "I9→S/F",
+     "spans": [
+      [
+       0.9156202,
+       0
+      ]
+     ],
+     "color": "rgb(221, 158, 63)",
+     "dashed": false
+    }
+   ]
+  },
+  "session_indy_nxt_2025_6444": {
+   "slug": "indianapolis-motor-speedway-road-course",
+   "raceLabel": "2025 Indianapolis Grand Prix Race 1 R1",
+   "raceDate": "2025-05-09",
+   "basis": "field_times",
+   "scope": "full_race",
+   "stat": "median",
+   "sourceTier": "parsed_pdf_aggregate",
+   "anchors": "indianapolis-motor-speedway-road-course",
+   "modelSections": [
+    {
+     "key": "FS - PO",
+     "label": "S/F→I1B",
+     "spans": [
+      [
+       0,
+       0.1043671
+      ]
+     ],
+     "color": "rgb(206, 185, 156)",
+     "dashed": false
+    },
+    {
+     "key": "FS - PO 2",
+     "label": "I1B→I1",
+     "spans": [
+      [
+       0.1043671,
+       0.1264447
+      ]
+     ],
+     "color": "rgb(208, 180, 141)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 1/2",
+     "label": "Turns 1–2",
+     "spans": [
+      [
+       0.1264447,
+       0.1993009
+      ]
+     ],
+     "color": "rgb(170, 170, 175)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 3",
+     "label": "Turn 3",
+     "spans": [
+      [
+       0.1993009,
+       0.2653332
+      ]
+     ],
+     "color": "rgb(114, 114, 119)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 4/5/6",
+     "label": "Turns 4–6",
+     "spans": [
+      [
+       0.2653332,
+       0.3189216
+      ]
+     ],
+     "color": "rgb(142, 142, 147)",
+     "dashed": false
+    },
+    {
+     "key": "Backstretch",
+     "label": "Backstretch",
+     "spans": [
+      [
+       0.3189216,
+       0.4651359
+      ]
+     ],
+     "color": "rgb(201, 194, 187)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 7",
+     "label": "Turn 7",
+     "spans": [
+      [
+       0.4651359,
+       0.5224374
+      ]
+     ],
+     "color": "rgb(203, 189, 172)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 8/9",
+     "label": "Turns 8–9",
+     "spans": [
+      [
+       0.5224374,
+       0.5782336
+      ]
+     ],
+     "color": "rgb(100, 100, 105)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 10",
+     "label": "Turn 10",
+     "spans": [
+      [
+       0.5782336,
+       0.6344313
+      ]
+     ],
+     "color": "rgb(184, 184, 189)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 11",
+     "label": "Turn 11",
+     "spans": [
+      [
+       0.6344313,
+       0.7590696
+      ]
+     ],
+     "color": "rgb(100, 100, 105)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 12/13",
+     "label": "Turns 12–13",
+     "spans": [
+      [
+       0.7590696,
+       0.8445703
+      ]
+     ],
+     "color": "rgb(201, 194, 187)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 14",
+     "label": "Turn 14",
+     "spans": [
+      [
+       0.8445703,
+       0.9156202
+      ]
+     ],
+     "color": "rgb(86, 86, 91)",
+     "dashed": false
+    },
+    {
+     "key": "FS - PI",
+     "label": "I9→S/F",
+     "spans": [
+      [
+       0.9156202,
+       0
+      ]
+     ],
+     "color": "rgb(201, 194, 187)",
+     "dashed": false
+    }
+   ]
+  },
+  "session_indy_nxt_2025_6443": {
+   "slug": "indianapolis-motor-speedway-road-course",
+   "raceLabel": "2025 Indianapolis Grand Prix Race 2 R2",
+   "raceDate": "2025-05-10",
+   "basis": "field_times",
+   "scope": "full_race",
+   "stat": "median",
+   "sourceTier": "parsed_pdf_aggregate",
+   "anchors": "indianapolis-motor-speedway-road-course",
+   "modelSections": [
+    {
+     "key": "FS - PO",
+     "label": "S/F→I1B",
+     "spans": [
+      [
+       0,
+       0.1043671
+      ]
+     ],
+     "color": "rgb(142, 142, 147)",
+     "dashed": false
+    },
+    {
+     "key": "FS - PO 2",
+     "label": "I1B→I1",
+     "spans": [
+      [
+       0.1043671,
+       0.1264447
+      ]
+     ],
+     "color": "rgb(170, 170, 175)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 1/2",
+     "label": "Turns 1–2",
+     "spans": [
+      [
+       0.1264447,
+       0.1993009
+      ]
+     ],
+     "color": "rgb(86, 86, 91)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 3",
+     "label": "Turn 3",
+     "spans": [
+      [
+       0.1993009,
+       0.2653332
+      ]
+     ],
+     "color": "rgb(86, 86, 91)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 4/5/6",
+     "label": "Turns 4–6",
+     "spans": [
+      [
+       0.2653332,
+       0.3189216
+      ]
+     ],
+     "color": "rgb(156, 156, 161)",
+     "dashed": false
+    },
+    {
+     "key": "Backstretch",
+     "label": "Backstretch",
+     "spans": [
+      [
+       0.3189216,
+       0.4651359
+      ]
+     ],
+     "color": "rgb(201, 194, 187)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 7",
+     "label": "Turn 7",
+     "spans": [
+      [
+       0.4651359,
+       0.5224374
+      ]
+     ],
+     "color": "rgb(100, 100, 105)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 8/9",
+     "label": "Turns 8–9",
+     "spans": [
+      [
+       0.5224374,
+       0.5782336
+      ]
+     ],
+     "color": "rgb(72, 72, 77)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 10",
+     "label": "Turn 10",
+     "spans": [
+      [
+       0.5782336,
+       0.6344313
+      ]
+     ],
+     "color": "rgb(156, 156, 161)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 11",
+     "label": "Turn 11",
+     "spans": [
+      [
+       0.6344313,
+       0.7590696
+      ]
+     ],
+     "color": "rgb(86, 86, 91)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 12/13",
+     "label": "Turns 12–13",
+     "spans": [
+      [
+       0.7590696,
+       0.8445703
+      ]
+     ],
+     "color": "rgb(211, 176, 125)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 14",
+     "label": "Turn 14",
+     "spans": [
+      [
+       0.8445703,
+       0.9156202
+      ]
+     ],
+     "color": "rgb(86, 86, 91)",
+     "dashed": false
+    },
+    {
+     "key": "FS - PI",
+     "label": "I9→S/F",
+     "spans": [
+      [
+       0.9156202,
+       0
+      ]
+     ],
+     "color": "rgb(170, 170, 175)",
+     "dashed": false
+    }
+   ]
+  },
+  "session_indy_nxt_2026_6756": {
+   "slug": "indianapolis-motor-speedway-road-course",
+   "raceLabel": "2026 Indianapolis Grand Prix Race 1 R1",
+   "raceDate": "2026-05-08",
+   "basis": "field_times",
+   "scope": "full_race",
+   "stat": "median",
+   "sourceTier": "parsed_pdf_aggregate",
+   "anchors": "indianapolis-motor-speedway-road-course",
+   "modelSections": [
+    {
+     "key": "FS - PO",
+     "label": "S/F→I1B",
+     "spans": [
+      [
+       0,
+       0.1043671
+      ]
+     ],
+     "color": "rgb(219, 162, 74)",
+     "dashed": false
+    },
+    {
+     "key": "FS - PO 2",
+     "label": "I1B→I1",
+     "spans": [
+      [
+       0.1043671,
+       0.1264447
+      ]
+     ],
+     "color": "rgb(217, 165, 88)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 1/2",
+     "label": "Turns 1–2",
+     "spans": [
+      [
+       0.1264447,
+       0.1993009
+      ]
+     ],
+     "color": "rgb(70, 70, 75)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 3",
+     "label": "Turn 3",
+     "spans": [
+      [
+       0.1993009,
+       0.2653332
+      ]
+     ],
+     "color": "rgb(206, 185, 156)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 4/5/6",
+     "label": "Turns 4–6",
+     "spans": [
+      [
+       0.2653332,
+       0.3189216
+      ]
+     ],
+     "color": "rgb(213, 173, 115)",
+     "dashed": false
+    },
+    {
+     "key": "Backstretch",
+     "label": "Backstretch",
+     "spans": [
+      [
+       0.3189216,
+       0.4651359
+      ]
+     ],
+     "color": "rgb(192, 192, 197)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 7",
+     "label": "Turn 7",
+     "spans": [
+      [
+       0.4651359,
+       0.5224374
+      ]
+     ],
+     "color": "rgb(192, 192, 197)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 8/9",
+     "label": "Turns 8–9",
+     "spans": [
+      [
+       0.5224374,
+       0.5782336
+      ]
+     ],
+     "color": "rgb(201, 192, 183)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 10",
+     "label": "Turn 10",
+     "spans": [
+      [
+       0.5782336,
+       0.6344313
+      ]
+     ],
+     "color": "rgb(215, 169, 101)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 11",
+     "label": "Turn 11",
+     "spans": [
+      [
+       0.6344313,
+       0.7590696
+      ]
+     ],
+     "color": "rgb(213, 173, 115)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 12/13",
+     "label": "Turns 12–13",
+     "spans": [
+      [
+       0.7590696,
+       0.8445703
+      ]
+     ],
+     "color": "rgb(208, 181, 142)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 14",
+     "label": "Turn 14",
+     "spans": [
+      [
+       0.8445703,
+       0.9156202
+      ]
+     ],
+     "color": "rgb(213, 173, 115)",
+     "dashed": false
+    },
+    {
+     "key": "FS - PI",
+     "label": "I9→S/F",
+     "spans": [
+      [
+       0.9156202,
+       0
+      ]
+     ],
+     "color": "rgb(208, 181, 142)",
+     "dashed": false
+    }
+   ]
+  },
+  "session_indy_nxt_2026_6765": {
+   "slug": "indianapolis-motor-speedway-road-course",
+   "raceLabel": "2026 Indianapolis Grand Prix Race 2 R2",
+   "raceDate": "2026-05-09",
+   "basis": "field_times",
+   "scope": "full_race",
+   "stat": "median",
+   "sourceTier": "parsed_pdf_aggregate",
+   "anchors": "indianapolis-motor-speedway-road-course",
+   "modelSections": [
+    {
+     "key": "FS - PO",
+     "label": "S/F→I1B",
+     "spans": [
+      [
+       0,
+       0.1043671
+      ]
+     ],
+     "color": "rgb(107, 107, 112)",
+     "dashed": false
+    },
+    {
+     "key": "FS - PO 2",
+     "label": "I1B→I1",
+     "spans": [
+      [
+       0.1043671,
+       0.1264447
+      ]
+     ],
+     "color": "rgb(107, 107, 112)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 1/2",
+     "label": "Turns 1–2",
+     "spans": [
+      [
+       0.1264447,
+       0.1993009
+      ]
+     ],
+     "color": "rgb(168, 168, 173)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 3",
+     "label": "Turn 3",
+     "spans": [
+      [
+       0.1993009,
+       0.2653332
+      ]
+     ],
+     "color": "rgb(180, 180, 185)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 4/5/6",
+     "label": "Turns 4–6",
+     "spans": [
+      [
+       0.2653332,
+       0.3189216
+      ]
+     ],
+     "color": "rgb(222, 158, 61)",
+     "dashed": false
+    },
+    {
+     "key": "Backstretch",
+     "label": "Backstretch",
+     "spans": [
+      [
+       0.3189216,
+       0.4651359
+      ]
+     ],
+     "color": "rgb(131, 131, 136)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 7",
+     "label": "Turn 7",
+     "spans": [
+      [
+       0.4651359,
+       0.5224374
+      ]
+     ],
+     "color": "rgb(215, 169, 101)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 8/9",
+     "label": "Turns 8–9",
+     "spans": [
+      [
+       0.5224374,
+       0.5782336
+      ]
+     ],
+     "color": "rgb(131, 131, 136)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 10",
+     "label": "Turn 10",
+     "spans": [
+      [
+       0.5782336,
+       0.6344313
+      ]
+     ],
+     "color": "rgb(192, 192, 197)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 11",
+     "label": "Turn 11",
+     "spans": [
+      [
+       0.6344313,
+       0.7590696
+      ]
+     ],
+     "color": "rgb(201, 192, 183)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 12/13",
+     "label": "Turns 12–13",
+     "spans": [
+      [
+       0.7590696,
+       0.8445703
+      ]
+     ],
+     "color": "rgb(217, 165, 88)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 14",
+     "label": "Turn 14",
+     "spans": [
+      [
+       0.8445703,
+       0.9156202
+      ]
+     ],
+     "color": "rgb(155, 155, 160)",
+     "dashed": false
+    },
+    {
+     "key": "FS - PI",
+     "label": "I9→S/F",
+     "spans": [
+      [
+       0.9156202,
+       0
+      ]
+     ],
+     "color": "rgb(199, 196, 196)",
+     "dashed": false
+    }
+   ]
+  },
+  "session_indy_nxt_2024_6318": {
+   "slug": "mid-ohio-sports-car-course",
+   "raceLabel": "2024 Grand Prix at Mid-Ohio",
+   "raceDate": "2024-07-07",
+   "basis": "field_times",
+   "scope": "full_race",
+   "stat": "median",
+   "sourceTier": "parsed_pdf_aggregate",
+   "anchors": "mid-ohio-sports-car-course",
+   "modelSections": [
+    {
+     "key": "FS - PO",
+     "label": "S/F → Turn 1",
+     "spans": [
+      [
+       0.7135,
+       0.7762
+      ]
+     ],
+     "color": "rgb(212, 175, 120)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 1",
+     "label": "Turn 1",
+     "spans": [
+      [
+       0.7762,
+       0.8325
+      ]
+     ],
+     "color": "rgb(91, 91, 96)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 1A",
+     "label": "Turn 1A",
+     "spans": [
+      [
+       0.8325,
+       0.8973
+      ]
+     ],
+     "color": "rgb(74, 74, 79)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 1B",
+     "label": "Turn 1B",
+     "spans": [
+      [
+       0.8973,
+       0.9464
+      ]
+     ],
+     "color": "rgb(124, 124, 129)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 2",
+     "label": "Turn 2",
+     "spans": [
+      [
+       0.9464,
+       0.0236
+      ]
+     ],
+     "color": "rgb(203, 190, 175)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 3",
+     "label": "Turn 3",
+     "spans": [
+      [
+       0.0236,
+       0.1417
+      ]
+     ],
+     "color": "rgb(140, 140, 145)",
+     "dashed": false
+    },
+    {
+     "key": "Back Stretch",
+     "label": "Back stretch",
+     "spans": [
+      [
+       0.1417,
+       0.2333
+      ]
+     ],
+     "color": "rgb(200, 195, 194)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 4",
+     "label": "Turn 4",
+     "spans": [
+      [
+       0.2333,
+       0.2907
+      ]
+     ],
+     "color": "rgb(200, 195, 194)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 5",
+     "label": "Turn 5",
+     "spans": [
+      [
+       0.2907,
+       0.3374
+      ]
+     ],
+     "color": "rgb(215, 170, 102)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 6/7",
+     "label": "Turns 6/7",
+     "spans": [
+      [
+       0.3374,
+       0.3999
+      ]
+     ],
+     "color": "rgb(124, 124, 129)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 8",
+     "label": "Turn 8",
+     "spans": [
+      [
+       0.3999,
+       0.4269
+      ]
+     ],
+     "color": "rgb(74, 74, 79)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 9",
+     "label": "Turn 9",
+     "spans": [
+      [
+       0.4269,
+       0.4948
+      ]
+     ],
+     "color": "rgb(91, 91, 96)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 10",
+     "label": "Turn 10",
+     "spans": [
+      [
+       0.4948,
+       0.5624
+      ]
+     ],
+     "color": "rgb(203, 190, 175)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 11",
+     "label": "Turn 11",
+     "spans": [
+      [
+       0.5624,
+       0.6212
+      ]
+     ],
+     "color": "rgb(74, 74, 79)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 12",
+     "label": "Turn 12",
+     "spans": [
+      [
+       0.6212,
+       0.6622
+      ]
+     ],
+     "color": "rgb(157, 157, 162)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 12C",
+     "label": "Turn 12C",
+     "spans": [
+      [
+       0.6622,
+       0.6776
+      ]
+     ],
+     "color": "rgb(224, 154, 47)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 13",
+     "label": "Turn 13",
+     "spans": [
+      [
+       0.6776,
+       0.7135
+      ]
+     ],
+     "color": "rgb(224, 154, 47)",
+     "dashed": false
+    }
+   ]
+  },
+  "session_indy_nxt_2025_6452": {
+   "slug": "mid-ohio-sports-car-course",
+   "raceLabel": "2025 Grand Prix at Mid-Ohio",
+   "raceDate": "2025-07-06",
+   "basis": "field_times",
+   "scope": "full_race",
+   "stat": "median",
+   "sourceTier": "parsed_pdf_aggregate",
+   "anchors": "mid-ohio-sports-car-course",
+   "modelSections": [
+    {
+     "key": "FS - PO",
+     "label": "S/F → Turn 1",
+     "spans": [
+      [
+       0.7135,
+       0.7762
+      ]
+     ],
+     "color": "rgb(181, 181, 186)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 1",
+     "label": "Turn 1",
+     "spans": [
+      [
+       0.7762,
+       0.8325
+      ]
+     ],
+     "color": "rgb(76, 76, 81)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 1A",
+     "label": "Turn 1A",
+     "spans": [
+      [
+       0.8325,
+       0.8973
+      ]
+     ],
+     "color": "rgb(76, 76, 81)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 1B",
+     "label": "Turn 1B",
+     "spans": [
+      [
+       0.8973,
+       0.9464
+      ]
+     ],
+     "color": "rgb(76, 76, 81)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 2",
+     "label": "Turn 2",
+     "spans": [
+      [
+       0.9464,
+       0.0236
+      ]
+     ],
+     "color": "rgb(224, 154, 47)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 3",
+     "label": "Turn 3",
+     "spans": [
+      [
+       0.0236,
+       0.1417
+      ]
+     ],
+     "color": "rgb(198, 198, 203)",
+     "dashed": false
+    },
+    {
+     "key": "Back Stretch",
+     "label": "Back stretch",
+     "spans": [
+      [
+       0.1417,
+       0.2333
+      ]
+     ],
+     "color": "rgb(181, 181, 186)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 4",
+     "label": "Turn 4",
+     "spans": [
+      [
+       0.2333,
+       0.2907
+      ]
+     ],
+     "color": "rgb(146, 146, 151)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 5",
+     "label": "Turn 5",
+     "spans": [
+      [
+       0.2907,
+       0.3374
+      ]
+     ],
+     "color": "rgb(218, 165, 86)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 6/7",
+     "label": "Turns 6/7",
+     "spans": [
+      [
+       0.3374,
+       0.3999
+      ]
+     ],
+     "color": "rgb(181, 181, 186)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 8",
+     "label": "Turn 8",
+     "spans": [
+      [
+       0.3999,
+       0.4269
+      ]
+     ],
+     "color": "rgb(128, 128, 133)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 9",
+     "label": "Turn 9",
+     "spans": [
+      [
+       0.4269,
+       0.4948
+      ]
+     ],
+     "color": "rgb(198, 198, 203)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 10",
+     "label": "Turn 10",
+     "spans": [
+      [
+       0.4948,
+       0.5624
+      ]
+     ],
+     "color": "rgb(146, 146, 151)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 11",
+     "label": "Turn 11",
+     "spans": [
+      [
+       0.5624,
+       0.6212
+      ]
+     ],
+     "color": "rgb(93, 93, 98)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 12",
+     "label": "Turn 12",
+     "spans": [
+      [
+       0.6212,
+       0.6622
+      ]
+     ],
+     "color": "rgb(224, 154, 47)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 12C",
+     "label": "Turn 12C",
+     "spans": [
+      [
+       0.6622,
+       0.6776
+      ]
+     ],
+     "color": "rgb(211, 176, 125)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 13",
+     "label": "Turn 13",
+     "spans": [
+      [
+       0.6776,
+       0.7135
+      ]
+     ],
+     "color": "rgb(208, 182, 145)",
+     "dashed": false
+    }
+   ]
+  },
+  "session_indy_nxt_2026_6761": {
+   "slug": "mid-ohio-sports-car-course",
+   "raceLabel": "2026 Grand Prix at Mid-Ohio Race 1 R1",
+   "raceDate": "2026-07-04",
+   "basis": "field_times",
+   "scope": "full_race",
+   "stat": "median",
+   "sourceTier": "parsed_pdf_aggregate",
+   "anchors": "mid-ohio-sports-car-course",
+   "modelSections": [
+    {
+     "key": "FS - PO",
+     "label": "S/F → Turn 1",
+     "spans": [
+      [
+       0.7135,
+       0.7762
+      ]
+     ],
+     "color": "rgb(131, 131, 136)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 1",
+     "label": "Turn 1",
+     "spans": [
+      [
+       0.7762,
+       0.8325
+      ]
+     ],
+     "color": "rgb(107, 107, 112)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 1A",
+     "label": "Turn 1A",
+     "spans": [
+      [
+       0.8325,
+       0.8973
+      ]
+     ],
+     "color": "rgb(82, 82, 87)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 1B",
+     "label": "Turn 1B",
+     "spans": [
+      [
+       0.8973,
+       0.9464
+      ]
+     ],
+     "color": "rgb(119, 119, 124)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 2",
+     "label": "Turn 2",
+     "spans": [
+      [
+       0.9464,
+       0.0236
+      ]
+     ],
+     "color": "rgb(213, 173, 115)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 3",
+     "label": "Turn 3",
+     "spans": [
+      [
+       0.0236,
+       0.1417
+      ]
+     ],
+     "color": "rgb(192, 192, 197)",
+     "dashed": false
+    },
+    {
+     "key": "Back Stretch",
+     "label": "Back stretch",
+     "spans": [
+      [
+       0.1417,
+       0.2333
+      ]
+     ],
+     "color": "rgb(155, 155, 160)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 4",
+     "label": "Turn 4",
+     "spans": [
+      [
+       0.2333,
+       0.2907
+      ]
+     ],
+     "color": "rgb(70, 70, 75)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 5",
+     "label": "Turn 5",
+     "spans": [
+      [
+       0.2907,
+       0.3374
+      ]
+     ],
+     "color": "rgb(107, 107, 112)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 6/7",
+     "label": "Turns 6/7",
+     "spans": [
+      [
+       0.3374,
+       0.3999
+      ]
+     ],
+     "color": "rgb(82, 82, 87)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 8",
+     "label": "Turn 8",
+     "spans": [
+      [
+       0.3999,
+       0.4269
+      ]
+     ],
+     "color": "rgb(119, 119, 124)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 9",
+     "label": "Turn 9",
+     "spans": [
+      [
+       0.4269,
+       0.4948
+      ]
+     ],
+     "color": "rgb(155, 155, 160)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 10",
+     "label": "Turn 10",
+     "spans": [
+      [
+       0.4948,
+       0.5624
+      ]
+     ],
+     "color": "rgb(119, 119, 124)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 11",
+     "label": "Turn 11",
+     "spans": [
+      [
+       0.5624,
+       0.6212
+      ]
+     ],
+     "color": "rgb(143, 143, 148)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 12",
+     "label": "Turn 12",
+     "spans": [
+      [
+       0.6212,
+       0.6622
+      ]
+     ],
+     "color": "rgb(212, 175, 122)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 12C",
+     "label": "Turn 12C",
+     "spans": [
+      [
+       0.6622,
+       0.6776
+      ]
+     ],
+     "color": "rgb(82, 82, 87)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 13",
+     "label": "Turn 13",
+     "spans": [
+      [
+       0.6776,
+       0.7135
+      ]
+     ],
+     "color": "rgb(155, 155, 160)",
+     "dashed": false
+    }
+   ]
+  },
+  "session_indy_nxt_2026_6760": {
+   "slug": "mid-ohio-sports-car-course",
+   "raceLabel": "2026 Grand Prix at Mid-Ohio Race 2 R2",
+   "raceDate": "2026-07-05",
+   "basis": "field_times",
+   "scope": "full_race",
+   "stat": "median",
+   "sourceTier": "parsed_pdf_aggregate",
+   "anchors": "mid-ohio-sports-car-course",
+   "modelSections": [
+    {
+     "key": "FS - PO",
+     "label": "S/F → Turn 1",
+     "spans": [
+      [
+       0.7135,
+       0.7762
+      ]
+     ],
+     "color": "rgb(201, 192, 183)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 1",
+     "label": "Turn 1",
+     "spans": [
+      [
+       0.7762,
+       0.8325
+      ]
+     ],
+     "color": "rgb(192, 192, 197)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 1A",
+     "label": "Turn 1A",
+     "spans": [
+      [
+       0.8325,
+       0.8973
+      ]
+     ],
+     "color": "rgb(95, 95, 100)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 1B",
+     "label": "Turn 1B",
+     "spans": [
+      [
+       0.8973,
+       0.9464
+      ]
+     ],
+     "color": "rgb(131, 131, 136)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 2",
+     "label": "Turn 2",
+     "spans": [
+      [
+       0.9464,
+       0.0236
+      ]
+     ],
+     "color": "rgb(143, 143, 148)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 3",
+     "label": "Turn 3",
+     "spans": [
+      [
+       0.0236,
+       0.1417
+      ]
+     ],
+     "color": "rgb(82, 82, 87)",
+     "dashed": false
+    },
+    {
+     "key": "Back Stretch",
+     "label": "Back stretch",
+     "spans": [
+      [
+       0.1417,
+       0.2333
+      ]
+     ],
+     "color": "rgb(155, 155, 160)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 4",
+     "label": "Turn 4",
+     "spans": [
+      [
+       0.2333,
+       0.2907
+      ]
+     ],
+     "color": "rgb(119, 119, 124)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 5",
+     "label": "Turn 5",
+     "spans": [
+      [
+       0.2907,
+       0.3374
+      ]
+     ],
+     "color": "rgb(143, 143, 148)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 6/7",
+     "label": "Turns 6/7",
+     "spans": [
+      [
+       0.3374,
+       0.3999
+      ]
+     ],
+     "color": "rgb(70, 70, 75)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 8",
+     "label": "Turn 8",
+     "spans": [
+      [
+       0.3999,
+       0.4269
+      ]
+     ],
+     "color": "rgb(155, 155, 160)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 9",
+     "label": "Turn 9",
+     "spans": [
+      [
+       0.4269,
+       0.4948
+      ]
+     ],
+     "color": "rgb(204, 188, 169)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 10",
+     "label": "Turn 10",
+     "spans": [
+      [
+       0.4948,
+       0.5624
+      ]
+     ],
+     "color": "rgb(201, 192, 183)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 11",
+     "label": "Turn 11",
+     "spans": [
+      [
+       0.5624,
+       0.6212
+      ]
+     ],
+     "color": "rgb(180, 180, 185)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 12",
+     "label": "Turn 12",
+     "spans": [
+      [
+       0.6212,
+       0.6622
+      ]
+     ],
+     "color": "rgb(213, 173, 115)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 12C",
+     "label": "Turn 12C",
+     "spans": [
+      [
+       0.6622,
+       0.6776
+      ]
+     ],
+     "color": "rgb(95, 95, 100)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 13",
+     "label": "Turn 13",
+     "spans": [
+      [
+       0.6776,
+       0.7135
+      ]
+     ],
+     "color": "rgb(95, 95, 100)",
+     "dashed": false
+    }
+   ]
+  },
+  "session_indy_nxt_2024_6321": {
+   "slug": "portland-international-raceway",
+   "raceLabel": "2024 Grand Prix of Portland",
+   "raceDate": "2024-08-25",
+   "basis": "field_times",
+   "scope": "full_race",
+   "stat": "median",
+   "sourceTier": "parsed_pdf_aggregate",
+   "anchors": "portland-international-raceway",
+   "modelSections": [
+    {
+     "key": "FS-PI",
+     "label": "Turn 12 → S/F",
+     "spans": [
+      [
+       0.3093,
+       0.3662
+      ]
+     ],
+     "color": "rgb(181, 181, 186)",
+     "dashed": false
+    },
+    {
+     "key": "FS-PO",
+     "label": "S/F → Turn 1",
+     "spans": [
+      [
+       0.3662,
+       0.455
+      ]
+     ],
+     "color": "rgb(93, 93, 98)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 1",
+     "label": "Turn 1",
+     "spans": [
+      [
+       0.455,
+       0.5299
+      ]
+     ],
+     "color": "rgb(208, 182, 145)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 2",
+     "label": "Turn 2",
+     "spans": [
+      [
+       0.5299,
+       0.5552
+      ]
+     ],
+     "color": "rgb(224, 154, 47)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 3",
+     "label": "Turn 3",
+     "spans": [
+      [
+       0.5552,
+       0.6434
+      ]
+     ],
+     "color": "rgb(224, 154, 47)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 4",
+     "label": "Turn 4",
+     "spans": [
+      [
+       0.6434,
+       0.7064
+      ]
+     ],
+     "color": "rgb(205, 187, 164)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 5",
+     "label": "Turn 5",
+     "spans": [
+      [
+       0.7064,
+       0.766
+      ]
+     ],
+     "color": "rgb(201, 193, 184)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 6",
+     "label": "Turn 6",
+     "spans": [
+      [
+       0.766,
+       0.8557
+      ]
+     ],
+     "color": "rgb(218, 165, 86)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 7",
+     "label": "Turn 7",
+     "spans": [
+      [
+       0.8557,
+       0.9079
+      ]
+     ],
+     "color": "rgb(214, 171, 106)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 8",
+     "label": "Turn 8",
+     "spans": [
+      [
+       0.9079,
+       0.9769
+      ]
+     ],
+     "color": "rgb(198, 198, 203)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 9",
+     "label": "Turn 9",
+     "spans": [
+      [
+       0.9769,
+       0.1186
+      ]
+     ],
+     "color": "rgb(93, 93, 98)",
+     "dashed": false
+    },
+    {
+     "key": "Turns 10/11",
+     "label": "Turns 10–11",
+     "spans": [
+      [
+       0.1186,
+       0.219
+      ]
+     ],
+     "color": "rgb(208, 182, 145)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 12",
+     "label": "Turn 12",
+     "spans": [
+      [
+       0.219,
+       0.3093
+      ]
+     ],
+     "color": "rgb(221, 160, 67)",
+     "dashed": false
+    }
+   ]
+  },
+  "session_indy_nxt_2026_6764": {
+   "slug": "portland-international-raceway",
+   "raceLabel": "2026 Grand Prix of Portland",
+   "raceDate": "2026-08-09",
+   "basis": "field_times",
+   "scope": "full_race",
+   "stat": "median",
+   "sourceTier": "parsed_pdf_aggregate",
+   "anchors": "portland-international-raceway",
+   "modelSections": [
+    {
+     "key": "FS-PI",
+     "label": "Turn 12 → S/F",
+     "spans": [
+      [
+       0.3093,
+       0.3662
+      ]
+     ],
+     "color": "rgb(143, 143, 148)",
+     "dashed": false
+    },
+    {
+     "key": "FS-PO",
+     "label": "S/F → Turn 1",
+     "spans": [
+      [
+       0.3662,
+       0.455
+      ]
+     ],
+     "color": "rgb(119, 119, 124)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 1",
+     "label": "Turn 1",
+     "spans": [
+      [
+       0.455,
+       0.5299
+      ]
+     ],
+     "color": "rgb(155, 155, 160)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 2",
+     "label": "Turn 2",
+     "spans": [
+      [
+       0.5299,
+       0.5552
+      ]
+     ],
+     "color": "rgb(180, 180, 185)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 3",
+     "label": "Turn 3",
+     "spans": [
+      [
+       0.5552,
+       0.6434
+      ]
+     ],
+     "color": "rgb(137, 137, 142)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 4",
+     "label": "Turn 4",
+     "spans": [
+      [
+       0.6434,
+       0.7064
+      ]
+     ],
+     "color": "rgb(119, 119, 124)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 5",
+     "label": "Turn 5",
+     "spans": [
+      [
+       0.7064,
+       0.766
+      ]
+     ],
+     "color": "rgb(82, 82, 87)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 6",
+     "label": "Turn 6",
+     "spans": [
+      [
+       0.766,
+       0.8557
+      ]
+     ],
+     "color": "rgb(131, 131, 136)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 7",
+     "label": "Turn 7",
+     "spans": [
+      [
+       0.8557,
+       0.9079
+      ]
+     ],
+     "color": "rgb(206, 185, 156)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 8",
+     "label": "Turn 8",
+     "spans": [
+      [
+       0.9079,
+       0.9769
+      ]
+     ],
+     "color": "rgb(131, 131, 136)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 9",
+     "label": "Turn 9",
+     "spans": [
+      [
+       0.9769,
+       0.1186
+      ]
+     ],
+     "color": "rgb(131, 131, 136)",
+     "dashed": false
+    },
+    {
+     "key": "Turns 10/11",
+     "label": "Turns 10–11",
+     "spans": [
+      [
+       0.1186,
+       0.219
+      ]
+     ],
+     "color": "rgb(131, 131, 136)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 12",
+     "label": "Turn 12",
+     "spans": [
+      [
+       0.219,
+       0.3093
+      ]
+     ],
+     "color": "rgb(199, 196, 196)",
+     "dashed": false
+    }
+   ]
+  },
+  "session_indy_nxt_2024_6319": {
+   "slug": "iowa-speedway",
+   "raceLabel": "2024 INDY NXT by Firestone at Iowa Speedway",
+   "raceDate": "2024-07-13",
+   "basis": "field_times",
+   "scope": "full_race",
+   "stat": "median",
+   "sourceTier": "parsed_pdf_aggregate",
+   "anchors": "iowa-speedway",
+   "modelSections": [
+    {
+     "key": "SF to T1",
+     "label": "S/F → T1",
+     "spans": [
+      [
+       0.0794,
+       0.227
+      ]
+     ],
+     "color": "rgb(140, 140, 145)",
+     "dashed": false
+    },
+    {
+     "key": "T1 to SS1",
+     "label": "T1 → SS1",
+     "spans": [
+      [
+       0.227,
+       0.3328
+      ]
+     ],
+     "color": "rgb(209, 180, 139)",
+     "dashed": false
+    },
+    {
+     "key": "SS1 to T2",
+     "label": "SS1 → T2",
+     "spans": [
+      [
+       0.3328,
+       0.4622
+      ]
+     ],
+     "color": "rgb(157, 157, 162)",
+     "dashed": false
+    },
+    {
+     "key": "T2 to BS",
+     "label": "T2 → back straight",
+     "spans": [
+      [
+       0.4622,
+       0.5802
+      ]
+     ],
+     "color": "rgb(190, 190, 195)",
+     "dashed": false
+    },
+    {
+     "key": "BS to T3",
+     "label": "Back straight → T3",
+     "spans": [
+      [
+       0.5802,
+       0.6984
+      ]
+     ],
+     "color": "rgb(200, 195, 194)",
+     "dashed": false
+    },
+    {
+     "key": "T3 to SS2",
+     "label": "T3 → SS2",
+     "spans": [
+      [
+       0.6984,
+       0.8291
+      ]
+     ],
+     "color": "rgb(200, 195, 194)",
+     "dashed": false
+    },
+    {
+     "key": "SS2 to T4",
+     "label": "SS2 → T4",
+     "spans": [
+      [
+       0.8291,
+       0.9336
+      ]
+     ],
+     "color": "rgb(107, 107, 112)",
+     "dashed": false
+    },
+    {
+     "key": "T4 to SF",
+     "label": "T4 → S/F",
+     "spans": [
+      [
+       0.9336,
+       0.0794
+      ]
+     ],
+     "color": "rgb(107, 107, 112)",
+     "dashed": false
+    }
+   ]
+  },
+  "session_indy_nxt_2025_6451": {
+   "slug": "iowa-speedway",
+   "raceLabel": "2025 INDY NXT by Firestone at Iowa Speedway",
+   "raceDate": "2025-07-12",
+   "basis": "field_times",
+   "scope": "full_race",
+   "stat": "median",
+   "sourceTier": "parsed_pdf_aggregate",
+   "anchors": "iowa-speedway",
+   "modelSections": [
+    {
+     "key": "SF to T1",
+     "label": "S/F → T1",
+     "spans": [
+      [
+       0.0794,
+       0.227
+      ]
+     ],
+     "color": "rgb(151, 151, 156)",
+     "dashed": false
+    },
+    {
+     "key": "T1 to SS1",
+     "label": "T1 → SS1",
+     "spans": [
+      [
+       0.227,
+       0.3328
+      ]
+     ],
+     "color": "rgb(201, 193, 186)",
+     "dashed": false
+    },
+    {
+     "key": "SS1 to T2",
+     "label": "SS1 → T2",
+     "spans": [
+      [
+       0.3328,
+       0.4622
+      ]
+     ],
+     "color": "rgb(201, 193, 186)",
+     "dashed": false
+    },
+    {
+     "key": "T2 to BS",
+     "label": "T2 → back straight",
+     "spans": [
+      [
+       0.4622,
+       0.5802
+      ]
+     ],
+     "color": "rgb(204, 188, 168)",
+     "dashed": false
+    },
+    {
+     "key": "BS to T3",
+     "label": "Back straight → T3",
+     "spans": [
+      [
+       0.5802,
+       0.6984
+      ]
+     ],
+     "color": "rgb(204, 188, 168)",
+     "dashed": false
+    },
+    {
+     "key": "T3 to SS2",
+     "label": "T3 → SS2",
+     "spans": [
+      [
+       0.6984,
+       0.8291
+      ]
+     ],
+     "color": "rgb(136, 136, 141)",
+     "dashed": false
+    },
+    {
+     "key": "SS2 to T4",
+     "label": "SS2 → T4",
+     "spans": [
+      [
+       0.8291,
+       0.9336
+      ]
+     ],
+     "color": "rgb(58, 58, 63)",
+     "dashed": false
+    },
+    {
+     "key": "T4 to SF",
+     "label": "T4 → S/F",
+     "spans": [
+      [
+       0.9336,
+       0.0794
+      ]
+     ],
+     "color": "rgb(74, 74, 79)",
+     "dashed": false
+    }
+   ]
+  },
+  "session_indy_nxt_2024_6320": {
+   "slug": "world-wide-technology-raceway",
+   "raceLabel": "2024 OUTFRONT Showdown",
+   "raceDate": "2024-08-17",
+   "basis": "field_times",
+   "scope": "full_race",
+   "stat": "median",
+   "sourceTier": "parsed_pdf_aggregate",
+   "anchors": "world-wide-technology-raceway",
+   "modelSections": [
+    {
+     "key": "FS - PO",
+     "label": "S/F → Turn 1",
+     "spans": [
+      [
+       0.2568,
+       0.3053
+      ]
+     ],
+     "color": "rgb(217, 167, 92)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 1",
+     "label": "Turn 1",
+     "spans": [
+      [
+       0.3053,
+       0.3315
+      ]
+     ],
+     "color": "rgb(202, 192, 181)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 2",
+     "label": "Turn 2",
+     "spans": [
+      [
+       0.3315,
+       0.365
+      ]
+     ],
+     "color": "rgb(118, 118, 123)",
+     "dashed": false
+    },
+    {
+     "key": "BS - T2",
+     "label": "T2 → back straight",
+     "spans": [
+      [
+       0.365,
+       0.5802
+      ]
+     ],
+     "color": "rgb(118, 118, 123)",
+     "dashed": false
+    },
+    {
+     "key": "BS - T3",
+     "label": "Back straight → T3",
+     "spans": [
+      [
+       0.5802,
+       0.7957
+      ]
+     ],
+     "color": "rgb(217, 167, 92)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 3",
+     "label": "Turn 3",
+     "spans": [
+      [
+       0.7957,
+       0.8633
+      ]
+     ],
+     "color": "rgb(205, 185, 158)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 4",
+     "label": "Turn 4",
+     "spans": [
+      [
+       0.8633,
+       0.9567
+      ]
+     ],
+     "color": "rgb(209, 179, 136)",
+     "dashed": false
+    },
+    {
+     "key": "FS - PI",
+     "label": "Turn 4 → S/F",
+     "spans": [
+      [
+       0.9567,
+       0.2568
+      ]
+     ],
+     "color": "rgb(209, 179, 136)",
+     "dashed": false
+    }
+   ]
+  },
+  "session_indy_nxt_2025_6454": {
+   "slug": "world-wide-technology-raceway",
+   "raceLabel": "2025 INDY NXT by Firestone at World Wide Technology Raceway",
+   "raceDate": "2025-06-15",
+   "basis": "field_times",
+   "scope": "full_race",
+   "stat": "median",
+   "sourceTier": "parsed_pdf_aggregate",
+   "anchors": "world-wide-technology-raceway",
+   "modelSections": [
+    {
+     "key": "FS - PO",
+     "label": "S/F → Turn 1",
+     "spans": [
+      [
+       0.2568,
+       0.3053
+      ]
+     ],
+     "color": "rgb(182, 182, 187)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 1",
+     "label": "Turn 1",
+     "spans": [
+      [
+       0.3053,
+       0.3315
+      ]
+     ],
+     "color": "rgb(136, 136, 141)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 2",
+     "label": "Turn 2",
+     "spans": [
+      [
+       0.3315,
+       0.365
+      ]
+     ],
+     "color": "rgb(120, 120, 125)",
+     "dashed": false
+    },
+    {
+     "key": "BS - T2",
+     "label": "T2 → back straight",
+     "spans": [
+      [
+       0.365,
+       0.5802
+      ]
+     ],
+     "color": "rgb(136, 136, 141)",
+     "dashed": false
+    },
+    {
+     "key": "BS - T3",
+     "label": "Back straight → T3",
+     "spans": [
+      [
+       0.5802,
+       0.7957
+      ]
+     ],
+     "color": "rgb(151, 151, 156)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 3",
+     "label": "Turn 3",
+     "spans": [
+      [
+       0.7957,
+       0.8633
+      ]
+     ],
+     "color": "rgb(201, 193, 186)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 4",
+     "label": "Turn 4",
+     "spans": [
+      [
+       0.8633,
+       0.9567
+      ]
+     ],
+     "color": "rgb(151, 151, 156)",
+     "dashed": false
+    },
+    {
+     "key": "FS - PI",
+     "label": "Turn 4 → S/F",
+     "spans": [
+      [
+       0.9567,
+       0.2568
+      ]
+     ],
+     "color": "rgb(136, 136, 141)",
+     "dashed": false
+    }
+   ]
+  },
+  "session_indy_nxt_2026_6763": {
+   "slug": "world-wide-technology-raceway",
+   "raceLabel": "2026 INDY NXT by Firestone at World Wide Technology Raceway",
+   "raceDate": "2026-06-07",
+   "basis": "field_times",
+   "scope": "full_race",
+   "stat": "median",
+   "sourceTier": "parsed_pdf_aggregate",
+   "anchors": "world-wide-technology-raceway",
+   "modelSections": [
+    {
+     "key": "FS - PO",
+     "label": "S/F → Turn 1",
+     "spans": [
+      [
+       0.2568,
+       0.3053
+      ]
+     ],
+     "color": "rgb(203, 190, 175)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 1",
+     "label": "Turn 1",
+     "spans": [
+      [
+       0.3053,
+       0.3315
+      ]
+     ],
+     "color": "rgb(96, 96, 101)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 2",
+     "label": "Turn 2",
+     "spans": [
+      [
+       0.3315,
+       0.365
+      ]
+     ],
+     "color": "rgb(71, 71, 76)",
+     "dashed": false
+    },
+    {
+     "key": "BS - T2",
+     "label": "T2 → back straight",
+     "spans": [
+      [
+       0.365,
+       0.5802
+      ]
+     ],
+     "color": "rgb(58, 58, 63)",
+     "dashed": false
+    },
+    {
+     "key": "BS - T3",
+     "label": "Back straight → T3",
+     "spans": [
+      [
+       0.5802,
+       0.7957
+      ]
+     ],
+     "color": "rgb(58, 58, 63)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 3",
+     "label": "Turn 3",
+     "spans": [
+      [
+       0.7957,
+       0.8633
+      ]
+     ],
+     "color": "rgb(109, 109, 114)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 4",
+     "label": "Turn 4",
+     "spans": [
+      [
+       0.8633,
+       0.9567
+      ]
+     ],
+     "color": "rgb(122, 122, 127)",
+     "dashed": false
+    },
+    {
+     "key": "FS - PI",
+     "label": "Turn 4 → S/F",
+     "spans": [
+      [
+       0.9567,
+       0.2568
+      ]
+     ],
+     "color": "rgb(71, 71, 76)",
+     "dashed": false
+    }
+   ]
+  },
+  "session_indy_nxt_2024_6322": {
+   "slug": "the-milwaukee-mile",
+   "raceLabel": "2024 INDY NXT By Firestone at The Milwaukee Mile",
+   "raceDate": "2024-08-31",
+   "basis": "field_times",
+   "scope": "full_race",
+   "stat": "median",
+   "sourceTier": "parsed_pdf_aggregate",
+   "anchors": "the-milwaukee-mile",
+   "modelSections": [
+    {
+     "key": "SF to T1",
+     "label": "S/F → T1",
+     "spans": [
+      [
+       0.8233,
+       0.9494
+      ]
+     ],
+     "color": "rgb(210, 177, 130)",
+     "dashed": false
+    },
+    {
+     "key": "T1 to SS1",
+     "label": "T1 → SS1",
+     "spans": [
+      [
+       0.9494,
+       0.0737
+      ]
+     ],
+     "color": "rgb(210, 177, 130)",
+     "dashed": false
+    },
+    {
+     "key": "SS1 to T2",
+     "label": "SS1 → T2",
+     "spans": [
+      [
+       0.0737,
+       0.2165
+      ]
+     ],
+     "color": "rgb(214, 172, 109)",
+     "dashed": false
+    },
+    {
+     "key": "T2 to BS",
+     "label": "T2 → back straight",
+     "spans": [
+      [
+       0.2165,
+       0.3124
+      ]
+     ],
+     "color": "rgb(210, 177, 130)",
+     "dashed": false
+    },
+    {
+     "key": "BS to T3",
+     "label": "Back straight → T3",
+     "spans": [
+      [
+       0.3124,
+       0.3861
+      ]
+     ],
+     "color": "rgb(217, 166, 89)",
+     "dashed": false
+    },
+    {
+     "key": "T3 to SS2",
+     "label": "T3 → SS2",
+     "spans": [
+      [
+       0.3861,
+       0.5005
+      ]
+     ],
+     "color": "rgb(224, 154, 47)",
+     "dashed": false
+    },
+    {
+     "key": "SS2 to T4",
+     "label": "SS2 → T4",
+     "spans": [
+      [
+       0.5005,
+       0.6152
+      ]
+     ],
+     "color": "rgb(207, 183, 151)",
+     "dashed": false
+    },
+    {
+     "key": "T4 to FS",
+     "label": "T4 → frontstretch",
+     "spans": [
+      [
+       0.6152,
+       0.7457
+      ]
+     ],
+     "color": "rgb(95, 95, 100)",
+     "dashed": false
+    },
+    {
+     "key": "FS to SF",
+     "label": "Frontstretch → S/F",
+     "spans": [
+      [
+       0.7457,
+       0.8233
+      ]
+     ],
+     "color": "rgb(133, 133, 138)",
+     "dashed": false
+    }
+   ]
+  },
+  "session_indy_nxt_2025_6448": {
+   "slug": "the-milwaukee-mile",
+   "raceLabel": "2025 INDY NXT by Firestone at the Milwaukee Mile",
+   "raceDate": "2025-08-24",
+   "basis": "field_times",
+   "scope": "full_race",
+   "stat": "median",
+   "sourceTier": "parsed_pdf_aggregate",
+   "anchors": "the-milwaukee-mile",
+   "modelSections": [
+    {
+     "key": "SF to T1",
+     "label": "S/F → T1",
+     "spans": [
+      [
+       0.8233,
+       0.9494
+      ]
+     ],
+     "color": "rgb(221, 159, 65)",
+     "dashed": false
+    },
+    {
+     "key": "T1 to SS1",
+     "label": "T1 → SS1",
+     "spans": [
+      [
+       0.9494,
+       0.0737
+      ]
+     ],
+     "color": "rgb(206, 185, 157)",
+     "dashed": false
+    },
+    {
+     "key": "SS1 to T2",
+     "label": "SS1 → T2",
+     "spans": [
+      [
+       0.0737,
+       0.2165
+      ]
+     ],
+     "color": "rgb(200, 195, 194)",
+     "dashed": false
+    },
+    {
+     "key": "T2 to BS",
+     "label": "T2 → back straight",
+     "spans": [
+      [
+       0.2165,
+       0.3124
+      ]
+     ],
+     "color": "rgb(173, 173, 178)",
+     "dashed": false
+    },
+    {
+     "key": "BS to T3",
+     "label": "Back straight → T3",
+     "spans": [
+      [
+       0.3124,
+       0.3861
+      ]
+     ],
+     "color": "rgb(190, 190, 195)",
+     "dashed": false
+    },
+    {
+     "key": "T3 to SS2",
+     "label": "T3 → SS2",
+     "spans": [
+      [
+       0.3861,
+       0.5005
+      ]
+     ],
+     "color": "rgb(221, 159, 65)",
+     "dashed": false
+    },
+    {
+     "key": "SS2 to T4",
+     "label": "SS2 → T4",
+     "spans": [
+      [
+       0.5005,
+       0.6152
+      ]
+     ],
+     "color": "rgb(209, 180, 139)",
+     "dashed": false
+    },
+    {
+     "key": "T4 to FS",
+     "label": "T4 → frontstretch",
+     "spans": [
+      [
+       0.6152,
+       0.7457
+      ]
+     ],
+     "color": "rgb(200, 195, 194)",
+     "dashed": false
+    },
+    {
+     "key": "FS to SF",
+     "label": "Frontstretch → S/F",
+     "spans": [
+      [
+       0.7457,
+       0.8233
+      ]
+     ],
+     "color": "rgb(215, 170, 102)",
+     "dashed": false
+    }
+   ]
+  },
+  "session_indy_nxt_2026_6757": {
+   "slug": "the-milwaukee-mile",
+   "raceLabel": "2026 INDY NXT by Firestone at Milwaukee Mile",
+   "raceDate": "2026-08-30",
+   "basis": "field_times",
+   "scope": "full_race",
+   "stat": "median",
+   "sourceTier": "parsed_pdf_aggregate",
+   "anchors": "the-milwaukee-mile",
+   "modelSections": [
+    {
+     "key": "SF to T1",
+     "label": "S/F → T1",
+     "spans": [
+      [
+       0.8233,
+       0.9494
+      ]
+     ],
+     "color": "rgb(203, 190, 175)",
+     "dashed": false
+    },
+    {
+     "key": "T1 to SS1",
+     "label": "T1 → SS1",
+     "spans": [
+      [
+       0.9494,
+       0.0737
+      ]
+     ],
+     "color": "rgb(134, 134, 139)",
+     "dashed": false
+    },
+    {
+     "key": "SS1 to T2",
+     "label": "SS1 → T2",
+     "spans": [
+      [
+       0.0737,
+       0.2165
+      ]
+     ],
+     "color": "rgb(96, 96, 101)",
+     "dashed": false
+    },
+    {
+     "key": "T2 to BS",
+     "label": "T2 → back straight",
+     "spans": [
+      [
+       0.2165,
+       0.3124
+      ]
+     ],
+     "color": "rgb(122, 122, 127)",
+     "dashed": false
+    },
+    {
+     "key": "BS to T3",
+     "label": "Back straight → T3",
+     "spans": [
+      [
+       0.3124,
+       0.3861
+      ]
+     ],
+     "color": "rgb(207, 182, 146)",
+     "dashed": false
+    },
+    {
+     "key": "T3 to SS2",
+     "label": "T3 → SS2",
+     "spans": [
+      [
+       0.3861,
+       0.5005
+      ]
+     ],
+     "color": "rgb(212, 174, 118)",
+     "dashed": false
+    },
+    {
+     "key": "SS2 to T4",
+     "label": "SS2 → T4",
+     "spans": [
+      [
+       0.5005,
+       0.6152
+      ]
+     ],
+     "color": "rgb(134, 134, 139)",
+     "dashed": false
+    },
+    {
+     "key": "T4 to FS",
+     "label": "T4 → frontstretch",
+     "spans": [
+      [
+       0.6152,
+       0.7457
+      ]
+     ],
+     "color": "rgb(122, 122, 127)",
+     "dashed": false
+    },
+    {
+     "key": "FS to SF",
+     "label": "Frontstretch → S/F",
+     "spans": [
+      [
+       0.7457,
+       0.8233
+      ]
+     ],
+     "color": "rgb(173, 173, 178)",
+     "dashed": false
+    }
+   ]
+  },
+  "session_indy_nxt_2024_6323": {
+   "slug": "nashville-superspeedway",
+   "raceLabel": "2024 Music City Grand Prix",
+   "raceDate": "2024-09-15",
+   "basis": "field_times",
+   "scope": "full_race",
+   "stat": "median",
+   "sourceTier": "lake_loop_crossings",
+   "anchors": "nashville-superspeedway",
+   "modelSections": [
+    {
+     "key": "S1",
+     "label": "S/F→T1",
+     "spans": [
+      [
+       0.8584,
+       0.0174
+      ]
+     ],
+     "color": "rgb(218, 164, 84)",
+     "dashed": false
+    },
+    {
+     "key": "S2A",
+     "label": "T1→SS1",
+     "spans": [
+      [
+       0.0174,
+       0.1998
+      ]
+     ],
+     "color": "rgb(209, 180, 139)",
+     "dashed": false
+    },
+    {
+     "key": "S2B",
+     "label": "Turns 1–2",
+     "spans": [
+      [
+       0.1998,
+       0.3415
+      ]
+     ],
+     "color": "rgb(200, 195, 194)",
+     "dashed": false
+    },
+    {
+     "key": "S3A",
+     "label": "T2→Back",
+     "spans": [
+      [
+       0.3415,
+       0.4602
+      ]
+     ],
+     "color": "rgb(200, 195, 194)",
+     "dashed": false
+    },
+    {
+     "key": "S3B",
+     "label": "Back→T3",
+     "spans": [
+      [
+       0.4602,
+       0.5693
+      ]
+     ],
+     "color": "rgb(212, 175, 120)",
+     "dashed": false
+    },
+    {
+     "key": "S4A",
+     "label": "Turn 3",
+     "spans": [
+      [
+       0.5693,
+       0.7203
+      ]
+     ],
+     "color": "rgb(209, 180, 139)",
+     "dashed": false
+    },
+    {
+     "key": "S4B",
+     "label": "Turn 4",
+     "spans": [
+      [
+       0.7203,
+       0.8189
+      ]
+     ],
+     "color": "rgb(200, 195, 194)",
+     "dashed": false
+    },
+    {
+     "key": "S5",
+     "label": "T4→S/F",
+     "spans": [
+      [
+       0.8189,
+       0.8584
+      ]
+     ],
+     "color": "rgb(206, 185, 157)",
+     "dashed": false
+    }
+   ]
+  },
+  "session_indy_nxt_2025_6447": {
+   "slug": "nashville-superspeedway",
+   "raceLabel": "2025 Music City Grand Prix",
+   "raceDate": "2025-08-31",
+   "basis": "field_times",
+   "scope": "full_race",
+   "stat": "median",
+   "sourceTier": "lake_loop_crossings",
+   "anchors": "nashville-superspeedway",
+   "modelSections": [
+    {
+     "key": "S1",
+     "label": "S/F→T1",
+     "spans": [
+      [
+       0.8584,
+       0.0174
+      ]
+     ],
+     "color": "rgb(221, 159, 65)",
+     "dashed": false
+    },
+    {
+     "key": "S2A",
+     "label": "T1→SS1",
+     "spans": [
+      [
+       0.0174,
+       0.1998
+      ]
+     ],
+     "color": "rgb(107, 107, 112)",
+     "dashed": false
+    },
+    {
+     "key": "S2B",
+     "label": "Turns 1–2",
+     "spans": [
+      [
+       0.1998,
+       0.3415
+      ]
+     ],
+     "color": "rgb(200, 195, 194)",
+     "dashed": false
+    },
+    {
+     "key": "S3A",
+     "label": "T2→Back",
+     "spans": [
+      [
+       0.3415,
+       0.4602
+      ]
+     ],
+     "color": "rgb(221, 159, 65)",
+     "dashed": false
+    },
+    {
+     "key": "S3B",
+     "label": "Back→T3",
+     "spans": [
+      [
+       0.4602,
+       0.5693
+      ]
+     ],
+     "color": "rgb(224, 154, 47)",
+     "dashed": false
+    },
+    {
+     "key": "S4A",
+     "label": "Turn 3",
+     "spans": [
+      [
+       0.5693,
+       0.7203
+      ]
+     ],
+     "color": "rgb(157, 157, 162)",
+     "dashed": false
+    },
+    {
+     "key": "S4B",
+     "label": "Turn 4",
+     "spans": [
+      [
+       0.7203,
+       0.8189
+      ]
+     ],
+     "color": "rgb(203, 190, 175)",
+     "dashed": false
+    },
+    {
+     "key": "S5",
+     "label": "T4→S/F",
+     "spans": [
+      [
+       0.8189,
+       0.8584
+      ]
+     ],
+     "color": "rgb(215, 170, 102)",
+     "dashed": false
+    }
+   ]
+  },
+  "session_indy_nxt_2026_6755": {
+   "slug": "nashville-superspeedway",
+   "raceLabel": "2026 Music City Grand Prix",
+   "raceDate": "2026-07-19",
+   "basis": "field_times",
+   "scope": "full_race",
+   "stat": "median",
+   "sourceTier": "parsed_pdf_aggregate",
+   "anchors": "nashville-superspeedway",
+   "modelSections": [
+    {
+     "key": "Turn 1 Entry",
+     "label": "Turn 1 entry",
+     "spans": [
+      [
+       0.8584,
+       0.0174
+      ]
+     ],
+     "color": "rgb(198, 198, 203)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 1 Exit",
+     "label": "Turn 1 exit",
+     "spans": [
+      [
+       0.0174,
+       0.1998
+      ]
+     ],
+     "color": "rgb(173, 173, 178)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 2 Entry",
+     "label": "Turn 2 entry",
+     "spans": [
+      [
+       0.1998,
+       0.3415
+      ]
+     ],
+     "color": "rgb(185, 185, 190)",
+     "dashed": false
+    },
+    {
+     "key": "BackStretch Entry",
+     "label": "Backstretch entry",
+     "spans": [
+      [
+       0.3415,
+       0.4602
+      ]
+     ],
+     "color": "rgb(200, 194, 189)",
+     "dashed": false
+    },
+    {
+     "key": "BackStretch Exit",
+     "label": "Backstretch exit",
+     "spans": [
+      [
+       0.4602,
+       0.5693
+      ]
+     ],
+     "color": "rgb(203, 190, 175)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 3",
+     "label": "Turn 3",
+     "spans": [
+      [
+       0.5693,
+       0.7203
+      ]
+     ],
+     "color": "rgb(217, 166, 90)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 4 Entry",
+     "label": "Turn 4 entry",
+     "spans": [
+      [
+       0.7203,
+       0.8189
+      ]
+     ],
+     "color": "rgb(210, 178, 132)",
+     "dashed": false
+    },
+    {
+     "key": "Turn 4 Exit",
+     "label": "Turn 4 exit",
+     "spans": [
+      [
+       0.8189,
+       0.8584
+      ]
+     ],
+     "color": "rgb(212, 174, 118)",
+     "dashed": false
+    }
+   ]
+  }
+ }
+}

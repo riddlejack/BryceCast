@@ -446,8 +446,18 @@ export async function createTrackScene({ canvas, data, coarse = false, onHover =
     renderer.dispose();
     renderer.forceContextLoss();
   }
+  // ---------- the live page (round 6): screen points along the track, for the overlay that draws the timing loops and
+  // the car dots in the page's own SVG (so a dot moving costs no WebGL frame). t is the site outline's arc parameter,
+  // lat metres across the track (positive to the left of the driving direction, as model.at reads it).
+  function projectT(t, lat = 0) {
+    const p = model.at(uOf(t), lat, model.bandDy);
+    v3.set(p[0], p[1], p[2]).project(camera);
+    if (v3.z >= 1 || v3.z <= -1) return null;
+    return [(v3.x * 0.5 + 0.5) * cssW(), (-v3.y * 0.5 + 0.5) * cssH()];
+  }
+
   return {
-    setSections, setActive, resetView, zoomBy, resize, dispose, naturalAspect,
+    setSections, setActive, resetView, zoomBy, resize, dispose, naturalAspect, projectT, trackHalfWidth: model.half,
     stats: () => ({ frames, lastMs, times: times.slice(), pose: { ...pose }, home: { ...home }, atHome }),
     // for headless checks: where on screen a section's middle is drawn, and a hover at that point
     screenPointOf(key) {

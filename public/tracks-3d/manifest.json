@@ -7,7 +7,7 @@
   "also": 1200
  },
  "look": "the film rig's models (and, for ten venues, models built in stills-tools/models in the same style and drawn by the rig's own code), light and desk (paper #FDFCFA); camera as the film's a-heat.png (whole model, 25 degree lens, 90% fill); no type in the picture",
- "shadingSource": "the race page's own pace map: resolveHeatSections(anchors, sectionObservationsFromLaps(pack)) from src/data/sectionObservations.ts (full race, median of clean green-flag laps, sections under MIN_CLEAN_LAPS = 3 left unshaded), coloured with inkGoldDiverging(percentile) from src/app/charts.tsx; anchors as RaceDetailScreen.tsx (measured when the pack is lake_loop_crossings, else the curated set when anchored); span positions (startT/endT on the site outline) carried onto the 3D centreline by a least-squares fit of the site outline to the model",
+ "shadingSource": "the Tracks page's 3D model shading (round 6, Nov 16 2026): resolveHeatSections(anchorsForPack(pack, venueAnchors), sectionObservationsFromLaps(pack), { basis: field_times }) from src/data/sectionObservations.ts (full race, median of clean green-flag laps, sections under MIN_CLEAN_LAPS = 3 left unshaded; the shade is the share of the other cars his time beat), coloured with inkGoldDiverging(percentile) from src/app/charts.tsx; span positions (startT/endT on the site outline) carried onto the 3D centreline by a least-squares fit of the site outline to the model. A track entry generated before round 6 (see its race.shading.basis, absent = lap_rank) keeps the older lap-rank shade.",
  "tracks": {
   "weathertech-raceway-laguna-seca": {
    "trackName": "WeatherTech Raceway Laguna Seca",
@@ -33,6 +33,7 @@
     "shading": {
      "scope": "full_race",
      "stat": "median",
+     "basis": "field_times",
      "sourceTier": "parsed_pdf_aggregate",
      "anchors": "weathertech-raceway-laguna-seca",
      "sectionsShaded": 16,
@@ -40,38 +41,38 @@
      "sections": [
       {
        "name": "Turn 1 Entry",
-       "percentile": 0.4211,
-       "color": "rgb(176, 176, 181)",
+       "percentile": 0.4737,
+       "color": "rgb(191, 191, 196)",
        "kind": "measured"
       },
       {
        "name": "Turn 1 Exit",
-       "percentile": 0.75,
-       "color": "rgb(211, 176, 125)",
-       "kind": "measured"
-      },
-      {
-       "name": "Turn 2",
-       "percentile": 0.7895,
-       "color": "rgb(213, 173, 113)",
-       "kind": "measured"
-      },
-      {
-       "name": "Turn 3",
        "percentile": 0.8947,
        "color": "rgb(219, 163, 80)",
        "kind": "measured"
       },
       {
+       "name": "Turn 2",
+       "percentile": 0.8947,
+       "color": "rgb(219, 163, 80)",
+       "kind": "measured"
+      },
+      {
+       "name": "Turn 3",
+       "percentile": 0.9474,
+       "color": "rgb(221, 159, 63)",
+       "kind": "measured"
+      },
+      {
        "name": "Turn 4",
-       "percentile": 0.8421,
-       "color": "rgb(216, 168, 96)",
+       "percentile": 0.8947,
+       "color": "rgb(219, 163, 80)",
        "kind": "measured"
       },
       {
        "name": "Turn 4A",
-       "percentile": 0.7368,
-       "color": "rgb(210, 177, 129)",
+       "percentile": 0.7895,
+       "color": "rgb(213, 173, 113)",
        "kind": "measured"
       },
       {
@@ -88,14 +89,14 @@
       },
       {
        "name": "Turn 6",
-       "percentile": 0.375,
-       "color": "rgb(163, 163, 168)",
+       "percentile": 0.4211,
+       "color": "rgb(176, 176, 181)",
        "kind": "measured"
       },
       {
        "name": "Turn 7",
-       "percentile": 0.5263,
-       "color": "rgb(199, 196, 195)",
+       "percentile": 0.5789,
+       "color": "rgb(202, 191, 178)",
        "kind": "measured"
       },
       {
@@ -106,32 +107,32 @@
       },
       {
        "name": "Corkscrew",
-       "percentile": 0.4211,
-       "color": "rgb(176, 176, 181)",
+       "percentile": 0.2632,
+       "color": "rgb(132, 132, 137)",
        "kind": "measured"
       },
       {
        "name": "Turn 9",
-       "percentile": 0.5714,
-       "color": "rgb(202, 192, 181)",
+       "percentile": 0.6316,
+       "color": "rgb(205, 186, 162)",
        "kind": "measured"
       },
       {
        "name": "Turn 10",
-       "percentile": 0.7222,
-       "color": "rgb(210, 178, 134)",
+       "percentile": 0.8421,
+       "color": "rgb(216, 168, 96)",
        "kind": "measured"
       },
       {
        "name": "Turn 11",
-       "percentile": 0.7368,
-       "color": "rgb(210, 177, 129)",
+       "percentile": 0.8421,
+       "color": "rgb(216, 168, 96)",
        "kind": "measured"
       },
       {
        "name": "FS - PI",
-       "percentile": 0.5263,
-       "color": "rgb(199, 196, 195)",
+       "percentile": 0.5789,
+       "color": "rgb(202, 191, 178)",
        "kind": "measured"
       }
      ]
@@ -179,6 +180,7 @@
       "shading": {
        "scope": "full_race",
        "stat": "median",
+       "basis": "field_times",
        "sourceTier": "parsed_pdf_aggregate",
        "anchors": "weathertech-raceway-laguna-seca",
        "sectionsShaded": 16,
@@ -186,32 +188,32 @@
        "sections": [
         {
          "name": "Turn 1 Entry",
-         "percentile": 0.7391,
-         "color": "rgb(210, 177, 128)",
+         "percentile": 0.8261,
+         "color": "rgb(215, 169, 101)",
          "kind": "measured"
         },
         {
          "name": "Turn 1 Exit",
-         "percentile": 0.7948,
-         "color": "rgb(213, 172, 111)",
+         "percentile": 0.9565,
+         "color": "rgb(222, 158, 61)",
          "kind": "measured"
         },
         {
          "name": "Turn 2",
-         "percentile": 0.4206,
-         "color": "rgb(176, 176, 181)",
+         "percentile": 0.3478,
+         "color": "rgb(155, 155, 160)",
          "kind": "measured"
         },
         {
          "name": "Turn 3",
-         "percentile": 0.4891,
-         "color": "rgb(195, 195, 200)",
+         "percentile": 0.3913,
+         "color": "rgb(168, 168, 173)",
          "kind": "measured"
         },
         {
          "name": "Turn 4",
-         "percentile": 0.3957,
-         "color": "rgb(169, 169, 174)",
+         "percentile": 0.4348,
+         "color": "rgb(180, 180, 185)",
          "kind": "measured"
         },
         {
@@ -222,62 +224,62 @@
         },
         {
          "name": "Turn 5",
-         "percentile": 0.5767,
-         "color": "rgb(202, 191, 179)",
-         "kind": "measured"
-        },
-        {
-         "name": "Turn 5A",
-         "percentile": 0.6957,
-         "color": "rgb(208, 181, 142)",
-         "kind": "measured"
-        },
-        {
-         "name": "Turn 6",
-         "percentile": 0.5359,
-         "color": "rgb(200, 195, 192)",
-         "kind": "measured"
-        },
-        {
-         "name": "Turn 7",
-         "percentile": 0.674,
-         "color": "rgb(207, 183, 149)",
-         "kind": "measured"
-        },
-        {
-         "name": "Turn 7A",
-         "percentile": 0.6043,
-         "color": "rgb(203, 189, 170)",
-         "kind": "measured"
-        },
-        {
-         "name": "Corkscrew",
-         "percentile": 0.4348,
-         "color": "rgb(180, 180, 185)",
-         "kind": "measured"
-        },
-        {
-         "name": "Turn 9",
          "percentile": 0.6087,
          "color": "rgb(204, 188, 169)",
          "kind": "measured"
         },
         {
-         "name": "Turn 10",
-         "percentile": 0.6408,
-         "color": "rgb(205, 186, 159)",
+         "name": "Turn 5A",
+         "percentile": 0.7391,
+         "color": "rgb(210, 177, 128)",
          "kind": "measured"
         },
         {
-         "name": "Turn 11",
-         "percentile": 0.3044,
+         "name": "Turn 6",
+         "percentile": 0.5652,
+         "color": "rgb(201, 192, 183)",
+         "kind": "measured"
+        },
+        {
+         "name": "Turn 7",
+         "percentile": 0.7826,
+         "color": "rgb(213, 173, 115)",
+         "kind": "measured"
+        },
+        {
+         "name": "Turn 7A",
+         "percentile": 0.6087,
+         "color": "rgb(204, 188, 169)",
+         "kind": "measured"
+        },
+        {
+         "name": "Corkscrew",
+         "percentile": 0.3043,
          "color": "rgb(143, 143, 148)",
          "kind": "measured"
         },
         {
+         "name": "Turn 9",
+         "percentile": 0.6522,
+         "color": "rgb(206, 185, 156)",
+         "kind": "measured"
+        },
+        {
+         "name": "Turn 10",
+         "percentile": 0.6087,
+         "color": "rgb(204, 188, 169)",
+         "kind": "measured"
+        },
+        {
+         "name": "Turn 11",
+         "percentile": 0.1304,
+         "color": "rgb(95, 95, 100)",
+         "kind": "measured"
+        },
+        {
          "name": "FS - PI",
-         "percentile": 0.7446,
-         "color": "rgb(211, 176, 127)",
+         "percentile": 0.8696,
+         "color": "rgb(217, 165, 88)",
          "kind": "measured"
         }
        ]

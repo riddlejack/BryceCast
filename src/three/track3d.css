@@ -50,6 +50,15 @@
 
 .track3d[data-status='ready'] .track3d__poster { display: none; }
 
+/* Drawn over the model (the live page's timing loops and car dots): the
+ * overlay itself lets the pointer through to the model; what it draws can
+ * take the pointer back (a dot to hover). */
+.track3d__overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
 .track3d__controls {
   position: absolute;
   right: 12px;

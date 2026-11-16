@@ -72,6 +72,18 @@ const hasWebgl = () => {
 
 type Status = 'checking' | 'fallback' | 'loading' | 'ready';
 
+/** What an overlay drawn over the model (the live page's timing loops and car
+ *  dots) needs to place things on the track: where a point of the track is
+ *  drawn now. `version` changes with every camera move and resize. */
+export interface TrackOverlayView {
+  version: number;
+  /** CSS px inside the stage for arc parameter `t` on the site outline, `lat`
+   *  metres across the track; null behind the camera. */
+  project: (t: number, lat?: number) => [number, number] | null;
+  /** Half the track's width, in metres. */
+  halfWidth: number;
+}
+
 export const TrackModel3D = ({
   slug,
   name,
@@ -80,7 +92,9 @@ export const TrackModel3D = ({
   onActiveChange,
   fallback,
   legend,
-  caption
+  caption,
+  overlay,
+  hint: hintOverride
 }: {
   slug: string;
   name: string;
@@ -92,6 +106,10 @@ export const TrackModel3D = ({
   legend?: ReactNode;
   /** A sentence before the credits in the caption. */
   caption?: ReactNode;
+  /** Drawn over the model once it is ready (the live page's car dots). */
+  overlay?: (view: TrackOverlayView) => ReactNode;
+  /** Replaces the how-to-turn-it line in the caption. */
+  hint?: string;
 }) => {
   const coarse = useCoarsePointer();
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -102,8 +120,16 @@ export const TrackModel3D = ({
   const [hover, setHover] = useState<TrackSceneHover | null>(null);
   const [atHome, setAtHome] = useState(true);
   const [aspect, setAspect] = useState<number | null>(null);
+  const [viewVersion, setViewVersion] = useState(0);
   const onActiveRef = useRef(onActiveChange);
   onActiveRef.current = onActiveChange;
+  const project = useCallback((t: number, lat = 0) => sceneRef.current?.projectT(t, lat) ?? null, []);
+  /* Only a page that draws over the model re-renders on camera moves. */
+  const hasOverlayRef = useRef(Boolean(overlay));
+  hasOverlayRef.current = Boolean(overlay);
+  const bumpView = useCallback(() => {
+    if (hasOverlayRef.current) setViewVersion((value) => value + 1);
+  }, []);
 
   /* Which model, if any, and can this browser draw it. */
   useEffect(() => {
@@ -143,7 +169,10 @@ export const TrackModel3D = ({
             setHover(next);
             onActiveRef.current?.(next?.key ?? null);
           },
-          onView: ({ home }) => setAtHome(home)
+          onView: ({ home }) => {
+            setAtHome(home);
+            bumpView();
+          }
         });
         if (!live) {
           scene.dispose();
@@ -188,7 +217,10 @@ export const TrackModel3D = ({
   useLayoutEffect(() => {
     const box = boxRef.current;
     if (!box) return;
-    const observer = new ResizeObserver(() => sceneRef.current?.resize());
+    const observer = new ResizeObserver(() => {
+      sceneRef.current?.resize();
+      bumpView();
+    });
     observer.observe(box);
     return () => observer.disconnect();
   }, [status]);
@@ -235,9 +267,11 @@ export const TrackModel3D = ({
       )}
     </div>
   ) : null;
-  const hint = coarse
-    ? 'Drag sideways to turn it, pinch to zoom, tap a section to read it.'
-    : 'Drag to turn it, hold ⌘ or Ctrl and scroll to zoom, point at a section to read it.';
+  const hint =
+    hintOverride ??
+    (coarse
+      ? 'Drag sideways to turn it, pinch to zoom, tap a section to read it.'
+      : 'Drag to turn it, hold ⌘ or Ctrl and scroll to zoom, point at a section to read it.');
   const poster = entry?.poster?.['1200'] ?? null;
 
   return (
@@ -272,6 +306,11 @@ export const TrackModel3D = ({
           aria-label={`${name}, a 3D model of the track${sections.length ? ', each section shaded by his pace' : ''}. Arrow keys turn it, plus and minus zoom, 0 goes back to the start view.`}
           role="img"
         />
+        {overlay && status === 'ready' && sceneRef.current ? (
+          <div className="track3d__overlay">
+            {overlay({ version: viewVersion, project, halfWidth: sceneRef.current.trackHalfWidth })}
+          </div>
+        ) : null}
         {tip}
         <div className="track3d__controls">
           <button type="button" className="track3d__reset" onClick={resetView} disabled={status !== 'ready' || atHome}>

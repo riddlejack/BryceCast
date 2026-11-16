@@ -1944,25 +1944,30 @@ export const CareerScreen = ({ readiness }: { readiness?: ReadinessStatus }) => 
 
   return (
     <div className="page stack career">
+      {/* Round 6 (Jack, Nov 16, screenshot 6): the page's source closes the
+          intro's last sentence instead of floating at the far right over the
+          gap to the odometer. */}
       <header className="career-head">
         <div>
           <h1 className="screen-head__title">His career so far</h1>
-          {lifeStats && races ? (
-            <p className="screen-head__sub">
-              {races.display} races in {seriesChapters.length} series, {monthYear(lifeStats.span.firstDay)} to{' '}
-              {monthYear(lifeStats.span.lastDay)}
-              {wins && podiums && topTens
-                ? `: ${wins.display} wins, ${podiums.display} podiums and ${topTens.display} top tens.`
-                : '.'}{' '}
-              Every number on this page says how it was made.
-            </p>
-          ) : null}
+          <p className="screen-head__sub">
+            {lifeStats && races ? (
+              <>
+                {races.display} races in {seriesChapters.length} series, {monthYear(lifeStats.span.firstDay)} to{' '}
+                {monthYear(lifeStats.span.lastDay)}
+                {wins && podiums && topTens
+                  ? `: ${wins.display} wins, ${podiums.display} podiums and ${topTens.display} top tens.`
+                  : '.'}{' '}
+                Every number on this page says how it was made.{' '}
+              </>
+            ) : null}
+            <SourcePill
+              title="Career"
+              entries={careerLab.sourceRefs.map((ref) => ({ label: ref.key, path: ref.path, note: ref.note }))}
+              caveats={careerLab.caveats}
+            />
+          </p>
         </div>
-        <SourcePill
-          title="Career"
-          entries={careerLab.sourceRefs.map((ref) => ({ label: ref.key, path: ref.path, note: ref.note }))}
-          caveats={careerLab.caveats}
-        />
       </header>
 
       {lifeStats ? (

@@ -12,10 +12,8 @@ import {
   readinessCopy,
   type Tone
 } from '../app/components';
-import { ChartTipCard, chartFont, useMeasuredWidth, type ChartTip } from '../app/charts';
 import { asNumber, asString, formatDate, formatGap, formatNumber } from '../app/format';
 import { Link, useRouter } from '../app/router';
-import { LiveRunningOrder } from './LiveRunningOrder';
 import { useNextSession } from '../app/useNextSession';
 import { getNextEvent, raceDayOf } from '../data/upcoming';
 import type { LiveReadiness, ReplaySourceGap } from '../app/useReadiness';
@@ -25,47 +23,28 @@ import { useReplayCatalog, ReplayAffordance } from './replayAffordance';
 import { chronoCompare, displayRaceLabel, displayRaceLabelText, loadDebriefArchive, type ArchiveEntry } from '../data/debriefArchive';
 import { loadRaceStory } from '../data/raceStory';
 import {
-  advanceBattleAxis,
-  battleAxisExtentSeconds,
-  BATTLE_AXIS_LADDER,
-  buildFieldCompression,
   buildLiveBattleFrame,
   buildOfficialPointsWindow,
   captureAgeSeconds,
-  createBattleAxisState,
-  headToHeadForLiveDriver,
   livePosition,
   liveBryceRowOf,
   liveRowsOf,
   positiveGapSeconds,
   rankChanges,
-  resolveStableLabelLanes,
   sortRowsForLiveDisplay,
   stableDriverId,
-  timestampWindowDomain,
-  type BattleAxisState,
   type LiveBattleNeighbor,
   type LiveRow
 } from '../data/livePageModel';
 import {
-  adaptiveNumericTicks,
-  adaptiveTimeTicks,
-  battleConnectorGeometry,
   buildBattleFrameForSample,
-  contiguousValueSegments,
-  dataDrivenGapDomain,
-  sharedLeaderGapSeries,
-  shouldAnimateSampleTransition,
   sourcedGapToLeaderSeconds,
-  liveSourceCheckedAtOf,
-  type LiveHistoryPoint,
   type LiveSessionHistory
 } from '../data/liveHistoryModel';
 import {
   bestLapDeltaWords,
   buildBestLapDeltas,
   resolveLiveSessionKind,
-  sessionOrderWording,
   sessionRankCaption,
   type BestLapDeltas,
   type LiveSessionKind
@@ -82,6 +61,8 @@ import {
 import { canonicalLiveRaceSessionId, replayDeepLinkQuery } from '../data/liveRaceShellModel';
 import { ReplayGapSkippedNote, ReplaySourceGapNotice } from './replaySourceGap';
 import { FlagReadout, HeroIdentity, ReplayPreStart, TrackPanel, raceIdentityFor, skippedCautionWords, SKIP_NOTE_WALL_MS } from './liveParts';
+import type { CarLabel } from './liveTrack';
+import { lapTimeSeconds } from './liveSectionLight';
 import './live.css';
 
 type Row = Record<string, unknown>;
@@ -103,15 +84,6 @@ const isCautionFlag = (flag: string | null | undefined) => {
   return value.includes('YELLOW') || value.includes('CAUTION') || value === 'FCY';
 };
 
-const isRedFlag = (flag: string | null | undefined) => (flag ?? '').toUpperCase().includes('RED');
-
-const flagTone = (flag: string | null): Tone => {
-  const value = (flag ?? '').toUpperCase();
-  if (value === 'GREEN') return 'good';
-  if (isCautionFlag(value)) return 'warn';
-  if (isRedFlag(value)) return 'bad';
-  return 'neutral';
-};
 
 const driverLabel = (row: Row | undefined): string | null =>
   row ? asString(row.lastName) ?? asString(row.name) ?? (asString(row.no) ? `Car ${asString(row.no)}` : null) : null;
@@ -170,6 +142,11 @@ const sourceEntries = {
   ],
   tower: [
     { label: 'Race Control timing feed', path: '/api/timing', note: 'Every car in the active session, sorted by liveRank with published rank as the explicit fallback.' },
+    {
+      label: 'To the leader',
+      path: '/api/readiness → liveTiming.rows[].diff, liveGap',
+      note: 'Race Control’s own gap to the leader. While the leader crosses the line, the cars still finishing that lap read “1 lap” and the cars behind them are measured from the first of them; for those seconds a car’s gap is the sum of the published intervals down to it.'
+    },
     {
       label: 'INDY NXT head-to-head context',
       path: 'analysis/ui-data-package/ui-data-package.json → upcomingPrep.standingsSnapshot / careerLab.headToHead',
@@ -255,247 +232,6 @@ const gapSamplesFromHistory = (history: LiveSessionHistory | null): GapSample[] 
     };
   });
 
-const usePrefersReducedMotion = () => {
-  const [reduced, setReduced] = useState(false);
-  useEffect(() => {
-    const media = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const update = () => setReduced(media.matches);
-    update();
-    media.addEventListener('change', update);
-    return () => media.removeEventListener('change', update);
-  }, []);
-  return reduced;
-};
-
-/* ---------- the battle: Bryce-centered spatial reference ---------- */
-
-/** Brief P: one eased rescale ≤300ms, strong ease-out, GPU-only transforms. */
-const AXIS_RESCALE_TRANSITION_MS = 250;
-
-interface AxisTransitionLogEntry {
-  at: string;
-  evalIndex: number;
-  from: number;
-  to: number;
-  occupancy: number | null;
-  breach: 'low' | 'high';
-}
-
-const BattleCorridor = ({ payload, samples, history }: { payload: LiveReadiness; samples: GapSample[]; history: LiveSessionHistory | null }) => {
-  const [ref, width] = useMeasuredWidth<HTMLDivElement>();
-  const [tip, setTip] = useState<ChartTip | null>(null);
-  const reducedMotion = usePrefersReducedMotion();
-  const previousSample = useRef(history?.samples.at(-1) ?? null);
-  const currentSample = history?.samples.at(-1) ?? null;
-  const animateCoordinates = shouldAnimateSampleTransition(previousSample.current, currentSample, reducedMotion);
-  useLayoutEffect(() => {
-    previousSample.current = currentSample;
-  }, [currentSample]);
-  const frame = buildLiveBattleFrame(payload);
-  const frameCars = frame?.cars ?? [];
-
-  /* The breathing axis (Brief P). One evaluation per sourced poll: the frame
-   * width walks the quantized ladder (±1s, ±2s, ±4s, ±8s) to fit the nearest
-   * cars, rescaling only on a hysteresis breach (<55% / >90% occupancy). All
-   * ladder law lives in liveMotionModel; this component only holds the state
-   * and renders the step. */
-  const pollKey = liveSourceCheckedAtOf(payload);
-  const sessionKey = history?.sessionKey ?? null;
-  const axisRef = useRef<{ sessionKey: string | null; state: BattleAxisState } | null>(null);
-  const axisLog = useRef<AxisTransitionLogEntry[]>([]);
-  const breachCount = useRef(0);
-  const evalCount = useRef(0);
-  const lastPollKey = useRef<string | null>(null);
-  const [axisStep, setAxisStep] = useState<number>(() => createBattleAxisState(null).step);
-  const [rescaleStamp, setRescaleStamp] = useState<number | null>(null);
-
-  useLayoutEffect(() => {
-    if (!pollKey || pollKey === lastPollKey.current) return;
-    lastPollKey.current = pollKey;
-    const rawExtent = battleAxisExtentSeconds(frameCars);
-    if (!axisRef.current || axisRef.current.sessionKey !== sessionKey) {
-      // A fresh session snaps straight to the best fit — no motion on arrival.
-      axisRef.current = { sessionKey, state: createBattleAxisState(rawExtent) };
-      axisLog.current = [];
-      breachCount.current = 0;
-      evalCount.current = 0;
-      setAxisStep(axisRef.current.state.step);
-      setRescaleStamp(null);
-      return;
-    }
-    evalCount.current += 1;
-    const from = axisRef.current.state.step;
-    const { state, decision } = advanceBattleAxis(axisRef.current.state, rawExtent);
-    axisRef.current = { sessionKey, state };
-    if (decision.breach) breachCount.current += 1;
-    if (decision.changed && decision.breach) {
-      axisLog.current = [
-        ...axisLog.current,
-        { at: pollKey, evalIndex: evalCount.current, from, to: decision.step, occupancy: decision.occupancy, breach: decision.breach }
-      ].slice(-80);
-      setAxisStep(decision.step);
-      if (!reducedMotion) setRescaleStamp(Date.now());
-    }
-    // frameCars is derived from the same payload as pollKey; the poll guard owns the cadence.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pollKey, sessionKey, reducedMotion]);
-
-  useEffect(() => {
-    if (rescaleStamp === null) return undefined;
-    const timer = window.setTimeout(() => setRescaleStamp(null), AXIS_RESCALE_TRANSITION_MS + 60);
-    return () => window.clearTimeout(timer);
-  }, [rescaleStamp]);
-  const rescaling = rescaleStamp !== null && !reducedMotion;
-
-  const step = axisStep;
-  const maxLadderStep = BATTLE_AXIS_LADDER[BATTLE_AXIS_LADDER.length - 1];
-  const renderExtent = battleAxisExtentSeconds(frameCars);
-  const cars = frameCars
-    .filter((car) => Math.abs(car.offsetSeconds) <= maxLadderStep)
-    .sort((left, right) => left.id.localeCompare(right.id));
-  const margin = { left: 36, right: 36 };
-  const plotWidth = Math.max(width - margin.left - margin.right, 120);
-  const axisY = 82;
-  const labelLanes = [17, 34, 51, 67, 116, 133, 150, 167];
-  const x = (seconds: number) => margin.left + ((Math.max(-step, Math.min(step, seconds)) + step) / (2 * step)) * plotWidth;
-  const carInFrame = (offsetSeconds: number) => Math.abs(offsetSeconds) <= step;
-  const axisTicks = step >= 1 ? [-step, -step / 2, 0, step / 2, step] : [-step, 0, step];
-  const tickLabel = (tick: number) => (tick === 0 ? '0' : `${Math.abs(tick) < 1 ? Math.abs(tick).toFixed(1) : Math.abs(tick)}s`);
-  const lanesByDriver = resolveStableLabelLanes(
-    cars.filter((car) => carInFrame(car.offsetSeconds)).map((car) => ({ id: car.id, surname: car.surname, x: x(car.offsetSeconds) })),
-    labelLanes.length
-  );
-  const rateDetail = (carId: string, side: 'ahead' | 'behind') => {
-    if (samples.length < 10) return null;
-    const matches = samples.filter((sample) => (side === 'ahead' ? sample.aheadNeighbor : sample.behindNeighbor)?.id === carId);
-    const first = matches[0];
-    const last = matches.at(-1);
-    const firstGap = side === 'ahead' ? first?.ahead : first?.behind;
-    const lastGap = side === 'ahead' ? last?.ahead : last?.behind;
-    const laps = first?.lap !== null && first?.lap !== undefined && last?.lap !== null && last?.lap !== undefined ? last.lap - first.lap : 0;
-    if (firstGap === null || firstGap === undefined || lastGap === null || lastGap === undefined || laps < 1) return null;
-    const closing = (firstGap - lastGap) / laps;
-    if (Math.abs(closing) < 0.05) return `gap steady over the last ${laps} lap${laps === 1 ? '' : 's'}`;
-    return `${closing > 0 ? 'closing' : 'opening'} ${Math.abs(closing).toFixed(1)}s/lap over the last ${laps} lap${laps === 1 ? '' : 's'}`;
-  };
-
-  return (
-    <div ref={ref} className={`live-battle__corridor${rescaling ? ' live-battle__corridor--rescale' : ''}`}>
-      {width > 0 && frame ? (
-        <>
-          <svg
-            width={width}
-            height={194}
-            role="img"
-            aria-label={`Cars within ${step} second${step === 1 ? '' : 's'} of Bryce on a Bryce-centered seconds axis`}
-            data-battle-corridor
-            data-session-key={sessionKey ?? ''}
-            data-axis-ladder={BATTLE_AXIS_LADDER.join(',')}
-            data-axis-step={step}
-            data-axis-extent={renderExtent?.toFixed(4) ?? ''}
-            data-axis-occupancy={renderExtent === null ? '' : (renderExtent / step).toFixed(4)}
-            data-axis-eval-count={evalCount.current}
-            data-axis-breach-count={breachCount.current}
-            data-axis-transition-count={axisLog.current.length}
-            data-axis-transitions={JSON.stringify(axisLog.current)}
-            data-axis-motion={reducedMotion ? 'off' : rescaling ? 'rescale' : animateCoordinates ? 'drift' : 'static'}
-            data-axis-poll-checked-at={pollKey ?? ''}
-          >
-            <line x1={margin.left} x2={width - margin.right} y1={axisY} y2={axisY} stroke="var(--axis-baseline)" />
-            {axisTicks.map((tick) => (
-              <g key={tick} className="live-battle__tick" transform={`translate(${x(tick)} 0)`} data-axis-tick={tick}>
-                <line x1={0} x2={0} y1={axisY - (tick === 0 ? 9 : 5)} y2={axisY + (tick === 0 ? 9 : 5)} stroke={tick === 0 ? 'var(--bryce)' : 'var(--axis-baseline)'} />
-                <text x={0} y={axisY + 23} textAnchor="middle" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={12}>{tickLabel(tick)}</text>
-              </g>
-            ))}
-            {cars.map((car) => {
-              const visible = carInFrame(car.offsetSeconds);
-              const side = car.offsetSeconds > 0 ? 'ahead' : 'behind';
-              const sideCopy = side === 'ahead' ? 'ahead of Bryce' : 'behind Bryce';
-              const close = Math.abs(car.offsetSeconds) <= 1;
-              const labelLane = lanesByDriver.get(car.id) ?? 0;
-              const labelY = labelLanes[labelLane];
-              const cx = x(car.offsetSeconds);
-              const connector = battleConnectorGeometry(labelY, axisY, 10, close ? 6.5 : 5);
-              return (
-                <g
-                  key={car.id}
-                  className={`live-battle__car${animateCoordinates ? ' live-battle__car--motion' : ''}`}
-                  data-driver-id={car.id}
-                  data-label-lane={labelLane}
-                  data-offset-seconds={car.offsetSeconds.toFixed(4)}
-                  data-in-frame={visible ? 'true' : 'false'}
-                  opacity={visible ? 1 : 0}
-                  aria-hidden={visible ? undefined : true}
-                  pointerEvents={visible ? undefined : 'none'}
-                  transform={`translate(${cx} 0)`}
-                >
-                  <line
-                    className="live-battle__connector"
-                    x1={0}
-                    x2={0}
-                    y1={connector.y1}
-                    y2={connector.y2}
-                    data-connector-driver-id={car.id}
-                  />
-                  <text x={0} y={labelY} textAnchor="middle" fill="var(--ink-secondary)" fontFamily={chartFont} fontSize={12}>{car.surname}</text>
-                  <circle cx={0} cy={axisY} r={close ? 6.5 : 5} fill="var(--ink-primary)" opacity={close ? 1 : 0.8} stroke="var(--surface-1)" strokeWidth={2} />
-                  <circle
-                    cx={0}
-                    cy={axisY}
-                    r={13}
-                    fill="transparent"
-                    tabIndex={visible ? 0 : -1}
-                    aria-label={`${car.surname}, ${Math.abs(car.offsetSeconds).toFixed(1)} seconds ${sideCopy}`}
-                    onMouseEnter={() => setTip({
-                      x: cx,
-                      y: labelY < axisY ? labelY - 3 : labelY + 3,
-                      title: car.surname,
-                      detail: `${Math.abs(car.offsetSeconds).toFixed(1)}s ${sideCopy}${rateDetail(car.id, side) ? ` · ${rateDetail(car.id, side)}` : ''}`
-                    })}
-                    onFocus={() => setTip({ x: cx, y: axisY - 19, title: car.surname, detail: `${Math.abs(car.offsetSeconds).toFixed(1)}s ${sideCopy}` })}
-                    onMouseLeave={() => setTip(null)}
-                    onBlur={() => setTip(null)}
-                  />
-                </g>
-              );
-            })}
-            {/* The protagonist marker never moves (his frame) and never fades —
-                no opacity, no focus-dim class, ever (lesson 7). */}
-            <g transform={`translate(${x(0)} ${axisY})`} data-protagonist="bryce">
-              <rect x={-15} y={-11} width={30} height={22} rx={4} fill="var(--bryce)" />
-              <text y={1} textAnchor="middle" dominantBaseline="middle" fill="#1d1d1f" fontFamily={chartFont} fontSize={12} fontWeight={750}>№9</text>
-            </g>
-            <text x={margin.left} y={188} textAnchor="start" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={12}>behind Bryce</text>
-            <text x={margin.left + plotWidth / 2} y={188} textAnchor="middle" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={12} data-axis-frame-note>
-              {width < 520 ? `seconds · ±${step}s` : `gaps in seconds · frame ±${step}s`}
-            </text>
-            <text x={width - margin.right} y={188} textAnchor="end" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={12}>ahead of Bryce</text>
-          </svg>
-          {tip ? <ChartTipCard tip={tip} width={width} /> : null}
-        </>
-      ) : (
-        <Unavailable>The corridor appears when Race Control publishes sourced gap-to-leader values for Bryce and the field.</Unavailable>
-      )}
-    </div>
-  );
-};
-
-const stepPath = (points: LiveHistoryPoint[], x: (value: number) => number, y: (value: number) => number): string =>
-  points.reduce((path, point, index) => {
-    if (point.value === null) return path;
-    if (index === 0) return `M${x(point.checkedAtMs)} ${y(point.value)}`;
-    const previous = points[index - 1];
-    return `${path}H${x(point.checkedAtMs)}V${y(point.value)}`;
-  }, '');
-
-const timeTickLabel = (value: number, spanMs: number) =>
-  new Date(value).toLocaleTimeString([], {
-    hour: spanMs > 300_000 ? 'numeric' : undefined,
-    minute: '2-digit',
-    second: spanMs <= 300_000 ? '2-digit' : undefined
-  });
-
 /* ---------- best-lap deltas: the practice/qualifying comparison ---------- */
 
 /** Quiet house rows: the session best (the lap to beat), Bryce measured against
@@ -544,114 +280,6 @@ const BestLapDeltas = ({ deltas }: { deltas: BestLapDeltas | null }) => {
   );
 };
 
-/* ---------- Brief J stage 2: the field-compression ticker ----------
- * A quiet one-line fact under the corridor: how many cars sit in Bryce's
- * contiguous pack and the time it covers, plus how many pairs across the field
- * run within a second. Facts from the same sourced gaps the battle uses — no
- * probabilities, no forecasts. Under caution the field bunches behind the pace
- * car for reasons that have nothing to do with racing, so it states the honest
- * bunch instead of a racing number; it is absent outside a race, when the gaps
- * cannot be read, or when a caution feed has gone stale. */
-const FieldCompressionTicker = ({ payload, sessionKind }: { payload: LiveReadiness; sessionKind: LiveSessionKind }) => {
-  if (sessionKind !== 'race') return null;
-  const heartbeat = heartbeatOf(payload);
-  const flag = asString(heartbeat.currentFlag ?? heartbeat.flag ?? (payload.raceWeekend as Row).flag);
-  // A stopped session isn't racing, so there is no compression to speak of.
-  if (isRedFlag(flag)) return null;
-
-  if (isCautionFlag(flag)) {
-    // The gaps still read, but under yellow they compress artificially. Say the
-    // bunch plainly; when the feed has also gone stale, stay silent rather than
-    // imply a live read.
-    if (payload.state === 'stale' || payload.state === 'blocked') return null;
-    return (
-      <p className="caption caption--secondary live-battle__compression" data-field-compression="caution">
-        Under caution, the field is bunched up
-      </p>
-    );
-  }
-
-  const compression = buildFieldCompression(liveRowsOf(payload), liveBryceRowOf(payload));
-  if (!compression) return null;
-
-  const tightText = `${compression.tightGapSeconds.toFixed(1)}s`;
-  const coveredText = `${compression.packCoveredSeconds.toFixed(1)}s`;
-  const pairWord = compression.pairsWithinTight === 1 ? 'pair' : 'pairs';
-
-  let body: ReactNode;
-  if (compression.packCars >= 2) {
-    body = (
-      <>
-        <TickerValue value={compression.packCars} valueKey={compression.packCars} /> cars covered by{' '}
-        <TickerValue value={coveredText} valueKey={coveredText} /> around Bryce
-        {compression.pairsWithinTight > 0 ? (
-          <>
-            {' '}·{' '}
-            <TickerValue value={compression.pairsWithinTight} valueKey={compression.pairsWithinTight} /> {pairWord} within {tightText}
-          </>
-        ) : null}
-      </>
-    );
-  } else if (compression.pairsWithinTight >= 1) {
-    body = (
-      <>
-        <TickerValue value={compression.pairsWithinTight} valueKey={compression.pairsWithinTight} /> {pairWord} within {tightText} across the field
-      </>
-    );
-  } else {
-    body = <>The field is spread out, with no pair within {tightText}</>;
-  }
-
-  return (
-    <p
-      className="caption caption--secondary live-battle__compression"
-      data-field-compression="green"
-      data-gap-basis={compression.gapBasis}
-      data-pack-cars={compression.packCars}
-      data-pack-covered={compression.packCoveredSeconds.toFixed(3)}
-      data-pairs-within={compression.pairsWithinTight}
-    >
-      {body}
-    </p>
-  );
-};
-
-const BattleModule = ({ payload, samples, history, replayEnded = false, sessionKind }: { payload: LiveReadiness; samples: GapSample[]; history: LiveSessionHistory | null; replayEnded?: boolean; sessionKind: LiveSessionKind }) => {
-  if (sessionKind !== 'race') {
-    const deltas = buildBestLapDeltas(liveRowsOf(payload));
-    const sessionNoun = sessionKind === 'qualifying' ? 'qualifying' : 'the session';
-    const cycleNoun = sessionKind === 'qualifying' ? 'qualifying' : 'practice';
-    return (
-      <Card className="live-battle" title="Best-lap order" action={<SourcePill title="Best-lap order" entries={sourceEntries.bestLap} />}>
-        <p className="live-battle__intro">The fastest lap each car has set, gold is Bryce. These are best-lap gaps, not on-track position. Cars run different cycles in {cycleNoun}.</p>
-        <BestLapDeltas deltas={deltas} />
-        <div className="live-battle__divider" />
-        <p className="live-battle__shared-title">Best-lap order over {sessionNoun}</p>
-        <LiveRunningOrder history={history} clockCheckedAt={liveSourceCheckedAtOf(payload)} replayEnded={replayEnded} wording={sessionOrderWording(sessionKind)} />
-        <p className="caption caption--secondary live-battle__caption">Five minutes of best-lap order · gold is Bryce · neutral line patterns stay with each driver · ○ a best-lap order change involving Bryce</p>
-      </Card>
-    );
-  }
-  const flag = asString(heartbeatOf(payload).currentFlag ?? heartbeatOf(payload).flag ?? (payload.raceWeekend as Row).flag);
-  const mode = isRedFlag(flag)
-    ? 'Red flag: the session is stopped'
-    : isCautionFlag(flag)
-      ? 'Under caution the field bunches up, so the gaps close until the restart'
-      : null;
-  return (
-    <Card className="live-battle" title="The battle" action={<SourcePill title="The battle" entries={sourceEntries.battle} />}>
-      <p className="live-battle__intro">The pack around Bryce. Each line is a car's running position, and gold is Bryce.</p>
-      <div className={`live-battle__mode${mode ? ' live-battle__mode--active' : ''}`} aria-live="polite">{mode ?? '\u00a0'}</div>
-      <BattleCorridor payload={payload} samples={samples} history={history} />
-      <FieldCompressionTicker payload={payload} sessionKind={sessionKind} />
-      <div className="live-battle__divider" />
-      <p className="live-battle__shared-title">The running order</p>
-      <LiveRunningOrder history={history} clockCheckedAt={liveSourceCheckedAtOf(payload)} replayEnded={replayEnded} />
-      <p className="caption caption--secondary live-battle__caption">Five minutes of official running position · gold is Bryce · neutral line patterns stay with each driver · shaded = caution · ○ an overtake involving Bryce</p>
-    </Card>
-  );
-};
-
 /* ---------- trust rail ---------- */
 
 const TrustRail = ({ payload, fixtureMode }: { payload: LiveReadiness; fixtureMode: boolean }) => {
@@ -684,20 +312,93 @@ const TrustRail = ({ payload, fixtureMode }: { payload: LiveReadiness; fixtureMo
   );
 };
 
-/* ---------- hero: the race, now ---------- */
+/* ---------- the one screen (round 6, Jack's review of November 16) ----------
+ *
+ * The track with the cars on it in the middle; the running order with the gap
+ * to the leader on the left; Bryce on the right: where he is, what the race
+ * would mean if it ended now, and the cars around him. One bar above carries
+ * the flag, the lap and the replay controls. It replaces the separate battle,
+ * running order, championship, distance-to-the-leader and field blocks. */
 
-const aroundGapText = (offsetSeconds: number | undefined): string => {
-  if (offsetSeconds === undefined || !Number.isFinite(offsetSeconds)) return '';
-  const seconds = Math.abs(offsetSeconds);
-  return `${seconds.toFixed(seconds < 100 ? 1 : 0)} s ${offsetSeconds > 0 ? 'ahead' : 'behind'}`;
+const runningStatus = (row: Row) => {
+  const status = (asString(row.status) ?? '').toLowerCase();
+  return !status || ['active', 'running', 'run'].includes(status);
 };
 
-/** The five cars around Bryce on the first screen: two ahead, him, two
- *  behind (or the nearest five at either end of the order), with each car's
- *  time to him from the same summed intervals the battle uses. A gap the
- *  feed does not chain (a lapped car, a car in the pits) shows the car's
- *  status or nothing, never a made-up number. */
-const AroundBryce = ({ payload }: { payload: LiveReadiness }) => {
+/** Each car's gap to the leader, in running order. Race Control's own gap to
+ *  the leader for a car on the leader's lap. As the leader crosses the line,
+ *  the cars still finishing that lap read "1 lap" and the cars behind them are
+ *  measured from the first of them, until each crosses too; for that moment a
+ *  car's gap is the sum of the published intervals down to it, which stays
+ *  under one lap. Otherwise (a lapped car, a broken chain) the feed's own text. */
+const leaderGapsOf = (sorted: LiveRow[]): Map<string, number | null> => {
+  const gaps = new Map<string, number | null>();
+  const leader = sorted[0];
+  const leaderLaps = leader ? asNumber(leader.laps) : null;
+  const lapSeconds = leader ? lapTimeSeconds(leader.lastLapTime) : null;
+  let chain: number | null = 0;
+  sorted.forEach((row, index) => {
+    const id = stableDriverId(row);
+    if (index === 0) {
+      gaps.set(id, 0);
+      return;
+    }
+    const interval = positiveGapSeconds(row.liveGap);
+    chain = chain !== null && interval !== null ? chain + interval : null;
+    const laps = asNumber(row.laps);
+    const sourced = sourcedGapToLeaderSeconds(row);
+    if (sourced !== null && laps !== null && laps === leaderLaps) gaps.set(id, sourced);
+    else if (chain !== null && laps !== null && leaderLaps !== null && laps === leaderLaps - 1 && (lapSeconds === null || chain < lapSeconds)) gaps.set(id, chain);
+    else gaps.set(id, null);
+  });
+  return gaps;
+};
+
+/** The newest history sample at least one of Bryce's laps before the latest,
+ *  with no caution in between; null when the window does not reach that far. */
+const sampleLapAgo = (history: LiveSessionHistory | null, lapSeconds: number | null) => {
+  const list = history?.samples ?? [];
+  const latest = list.at(-1);
+  if (!latest || !lapSeconds) return null;
+  const target = latest.checkedAtMs - lapSeconds * 1000;
+  let pick: (typeof list)[number] | null = null;
+  for (const sample of list) {
+    if (sample.checkedAtMs > target + 1_500) break;
+    pick = sample;
+  }
+  if (!pick || pick.checkedAtMs < target - 6_000) return null;
+  const from = pick.checkedAtMs;
+  if (list.some((sample) => sample.checkedAtMs >= from && isCautionFlag(sample.flag))) return null;
+  return pick;
+};
+
+const rateWords = (now: number, before: number | undefined, ahead: boolean): string | null => {
+  if (before === undefined || !Number.isFinite(before)) return null;
+  // Signs flip when a pass happens; a rate across a pass means nothing.
+  if (Math.sign(now) !== Math.sign(before)) return null;
+  const change = Math.abs(now) - Math.abs(before);
+  if (Math.abs(change) < 0.05) return 'about the same as a lap ago';
+  const size = `${Math.abs(change).toFixed(1)} s`;
+  if (ahead) return change < 0 ? `${size} closer than a lap ago` : `${size} further than a lap ago`;
+  return change < 0 ? `${size} closer to him than a lap ago` : `${size} further back than a lap ago`;
+};
+
+/** The five cars around Bryce, two ahead, him, two behind (the nearest five at
+ *  either end of the order), each with its time to him from the summed
+ *  intervals, and how that changed over his last lap. A gap the feed does not
+ *  chain (a lapped car, a car in the pits) shows the car's status or nothing,
+ *  never a made-up number. */
+const AroundBryce = ({
+  payload,
+  history,
+  highlightId,
+  onHoverCar
+}: {
+  payload: LiveReadiness;
+  history: LiveSessionHistory | null;
+  highlightId: string | null;
+  onHoverCar: (id: string | null) => void;
+}) => {
   const rows = sortRowsForLiveDisplay(liveRowsOf(payload)) as LiveRow[];
   const bryceIndex = rows.findIndex((row) => row.bryce === true);
   if (bryceIndex < 0 || rows.length < 2) return null;
@@ -705,228 +406,54 @@ const AroundBryce = ({ payload }: { payload: LiveReadiness }) => {
   const shown = rows.slice(from, from + 5);
   const frame = buildLiveBattleFrame(payload);
   const offsets = new Map((frame?.cars ?? []).map((car) => [car.id, car.offsetSeconds]));
+  const flag = asString(heartbeatOf(payload).flag);
+  const lapAgo = isCautionFlag(flag) ? null : sampleLapAgo(history, lapTimeSeconds(rows[bryceIndex].lastLapTime));
+  const before = lapAgo ? new Map((buildBattleFrameForSample(lapAgo)?.cars ?? []).map((car) => [car.id, car.offsetSeconds])) : null;
   return (
-    <section className="live-hero__near live-around" aria-label="The cars around Bryce">
-      <span className="caption">The cars around him</span>
+    <section className="live-desk__block live-around" aria-label="The cars around Bryce">
+      <h2 className="live-desk__label">The cars around him</h2>
       <ol className="live-around__list">
         {shown.map((row) => {
           const id = stableDriverId(row);
           const isBryce = row.bryce === true;
           const rank = livePosition(row);
-          const status = (asString(row.status) ?? '').toLowerCase();
-          const running = !status || ['active', 'running', 'run'].includes(status);
-          const gapText = isBryce ? '' : running ? aroundGapText(offsets.get(id)) : asString(row.comment) || asString(row.status) || '';
+          const offset = offsets.get(id);
+          const running = runningStatus(row);
+          const gapText = isBryce ? '' : running ? aroundGapText(offset) : asString(row.comment) || asString(row.status) || '';
+          const rate = !isBryce && running && offset !== undefined && before ? rateWords(offset, before.get(id), offset > 0) : null;
           return (
-            <li key={id} className={`live-around__car${isBryce ? ' live-around__car--bryce' : ''}`} data-driver-id={id}>
+            <li
+              key={id}
+              className={`live-around__car${isBryce ? ' live-around__car--bryce' : ''}${highlightId === id ? ' is-focus' : ''}`}
+              data-driver-id={id}
+              onPointerEnter={() => onHoverCar(id)}
+              onPointerLeave={() => onHoverCar(null)}
+            >
               <span className="live-around__pos">{rank !== null ? `P${rank}` : ''}</span>
               <span className="live-around__name">
                 {isBryce ? <Plate size="row" /> : null}
                 {driverLabel(row) ?? ''}
               </span>
-              <TickerValue className="live-around__gap" value={gapText} valueKey={gapText} />
+              <span className="live-around__gaps">
+                <TickerValue className="live-around__gap" value={gapText} valueKey={gapText} />
+                {rate ? <span className="live-around__rate">{rate}</span> : null}
+              </span>
             </li>
           );
         })}
       </ol>
+      {isCautionFlag(flag) ? (
+        <p className="caption caption--secondary live-around__note">Under caution the field bunches up behind the pace car, so the gaps close until the restart.</p>
+      ) : null}
     </section>
   );
 };
 
-const LiveHero = ({
-  payload,
-  samples,
-  replayEnded = false,
-  sessionKind,
-  replay,
-  history
-}: {
-  payload: LiveReadiness;
-  samples: GapSample[];
-  replayEnded?: boolean;
-  sessionKind: LiveSessionKind;
-  replay: ReplaySession | null;
-  history: LiveSessionHistory | null;
-}) => {
-  const weekend = payload.raceWeekend as Row;
-  const heartbeat = heartbeatOf(payload);
-  const bryce = liveBryceRowOf(payload);
-  const isRace = sessionKind === 'race';
-  const flag = asString(heartbeat.flag ?? weekend.flag);
-  const lap = asNumber(heartbeat.lap ?? weekend.lap);
-  const totalLaps = asNumber(heartbeat.totalLaps ?? weekend.totalLaps);
-  const rank = bryce ? livePosition(bryce) : null;
-  const sessionName = asString(heartbeat.sessionName ?? weekend.sessionName);
-  const identity = raceIdentityFor(payload, replay);
-  const pointsWindow = buildOfficialPointsWindow(liveRowsOf(payload));
-  const points = payload.points as Row;
-  const historicalRank = asNumber((points.bryce as Row)?.historicalRank);
-  const standingMove = historicalRank !== null && pointsWindow ? historicalRank - pointsWindow.bryce.projectedStanding : null;
-
-  // Best-lap comparison for practice/qualifying — the currency when the field
-  // is scored by fastest lap, not by finishing order.
-  const bestDeltas = isRace ? null : buildBestLapDeltas(liveRowsOf(payload));
-
-  // The speed line switches currency with the session: last lap in a race,
-  // best lap outside one. Both are official per-lap averages, never a dial.
-  const bryceLastSpeed = bryce ? asNumber(bryce.lastSpeed) : null;
-  const bryceBestSpeed = bryce ? asNumber(bryce.bestSpeed) : null;
-  const speedValue = isRace ? bryceLastSpeed : bryceBestSpeed;
-  const fieldFastest = isRace ? fastestLastSpeedInField(liveRowsOf(payload)) : fastestBestSpeedInField(liveRowsOf(payload));
-  const bryceHoldsFastest =
-    speedValue !== null && (fieldFastest === null || fieldFastest.speed <= speedValue + 0.05);
-  const fastestName = fieldFastest ? driverLabel(fieldFastest.row) : null;
-  const speedLead = isRace ? 'Last lap' : 'Best lap';
-  const speedFastestCopy = isRace ? 'fastest last lap in the field' : 'fastest best lap in the field';
-  const underCaution = isCautionFlag(flag);
-
-  const recent = samples.filter((sample) => sample.rank !== null && (lap === null || sample.lap === null || sample.lap >= lap - 5));
-  const firstRecent = recent[0];
-  const gained = rank !== null && firstRecent?.rank !== null && firstRecent?.rank !== undefined ? firstRecent.rank - rank : 0;
-  let positionStory: { text: string; up: boolean } | null = null;
-  if (gained > 0 && firstRecent?.lap !== null && firstRecent?.lap !== undefined && lap !== null && lap > firstRecent.lap) {
-    const span = Math.min(5, lap - firstRecent.lap);
-    positionStory = { text: `▲ up ${gained} ${span === 1 ? 'on the last lap' : `in the last ${span} laps`}`, up: true };
-  } else if (rank !== null && lap !== null) {
-    let heldFrom = lap;
-    for (let index = recent.length - 1; index >= 0; index -= 1) {
-      if (recent[index].rank !== rank) break;
-      if (recent[index].lap !== null) heldFrom = Math.min(heldFrom, recent[index].lap!);
-    }
-    if (lap - heldFrom >= 1) positionStory = { text: `held P${rank} for ${lap - heldFrom + 1} laps`, up: false };
-  }
-
-  return (
-    <HeroPanel className="live-hero">
-      <HeroIdentity identity={identity} action={<SourcePill title="The race, now" entries={sourceEntries.hero} />} />
-      <FlagReadout flag={flag} lap={lap} totalLaps={totalLaps} ended={replayEnded} isRace={isRace} sessionName={sessionName} />
-      <div className="live-hero__position">
-        <div className="live-position">
-          <Plate size="hero" />
-          <div>
-            <span className="caption">{sessionRankCaption(sessionKind)}</span>
-            <TickerValue className="stat__value stat__value--hero live-position__value" value={rank !== null ? `P${rank}` : '—'} valueKey={rank ?? 'na'} />
-            {isRace && positionStory ? <span className={`stat__delta${positionStory.up ? ' stat__delta--up' : ''}`}>{positionStory.text}</span> : null}
-          </div>
-        </div>
-        {speedValue !== null ? (
-          <p className="live-hero__speed caption caption--secondary">
-            {isRace && underCaution ? (
-              /* Under yellow the field runs to a controlled caution pace, so
-               * the drop is real but a cross-car comparison would pit laps
-               * that aren't the same caution lap against each other. Keep
-               * Bryce's own last lap; omit the field comparison. */
-              <>
-                Last lap under caution ·{' '}
-                <TickerValue className="live-hero__speed-value" value={`${speedValue.toFixed(1)} mph`} valueKey={`${lap ?? 'na'}-${speedValue}`} />
-              </>
-            ) : (
-              <>
-                {speedLead}{' '}
-                <TickerValue className="live-hero__speed-value" value={`${speedValue.toFixed(1)} mph`} valueKey={`${lap ?? 'na'}-${speedValue}`} />
-                {bryceHoldsFastest ? (
-                  <> · {speedFastestCopy}</>
-                ) : (
-                  <>
-                    {' · '}field best: {fastestName ? `${fastestName}, ` : ''}
-                    <TickerValue className="live-hero__speed-value" value={`${fieldFastest!.speed.toFixed(1)} mph`} valueKey={`${lap ?? 'na'}-${fieldFastest!.speed}`} />
-                  </>
-                )}
-              </>
-            )}
-          </p>
-        ) : null}
-      </div>
-      {isRace ? (
-        <div className="live-hero__jumbotron">
-          <span className="caption">If the race ended now</span>
-          {pointsWindow ? (
-            <>
-              <div className="row live-hero__standing-row">
-                <TickerValue className="stat__value stat__value--big" value={`P${pointsWindow.bryce.projectedStanding}`} valueKey={pointsWindow.bryce.projectedStanding} />
-                {standingMove !== null && standingMove !== 0 ? (
-                  <span className={`stat__delta ${standingMove > 0 ? 'stat__delta--up' : 'stat__delta--down'}`}>{standingMove > 0 ? `▲ ${standingMove}` : `▽ ${Math.abs(standingMove)}`} vs pre-race</span>
-                ) : null}
-              </div>
-              <div className="live-hero__running-points"><TickerValue className="live-hero__points-number" value={pointsWindow.bryce.runningDriverPoints} valueKey={pointsWindow.bryce.runningDriverPoints} /> running points</div>
-              <span className="live-points__provisional">{pointsProvenanceLabel(payload)}</span>
-            </>
-          ) : (
-            <Unavailable>Official running points are not published in this state.</Unavailable>
-          )}
-        </div>
-      ) : (
-        /* Outside a race there is no championship math — the headline is
-           Bryce's best lap and how far it sits off the session best. */
-        <div className="live-hero__jumbotron">
-          <span className="caption">Bryce's best lap</span>
-          {bestDeltas?.bryce ? (
-            <>
-              <div className="row live-hero__standing-row">
-                <TickerValue className="stat__value stat__value--big" value={bestDeltas.bryce.bestLapTime} valueKey={bestDeltas.bryce.bestLapTime} />
-                {bestDeltas.bryceIsFastest ? (
-                  <span className="stat__delta stat__delta--up">fastest in the field</span>
-                ) : bestDeltas.offSessionBestSeconds !== null ? (
-                  <span className="stat__delta stat__delta--flat">{bestDeltas.offSessionBestSeconds.toFixed(bestDeltas.offSessionBestSeconds < 10 ? 2 : 1)}s off the best</span>
-                ) : null}
-              </div>
-              {bestDeltas.bryceIsFastest ? (
-                <div className="live-hero__running-points">the lap to beat, right now</div>
-              ) : (
-                <div className="live-hero__running-points">P1 <TickerValue className="live-hero__points-number" value={bestDeltas.leader.surname} valueKey={bestDeltas.leader.surname} /> set {bestDeltas.leader.bestLapTime}</div>
-              )}
-              <span className="live-points__provisional">gaps in seconds · best laps</span>
-            </>
-          ) : (
-            <Unavailable>Bryce's best lap appears once Race Control publishes it.</Unavailable>
-          )}
-        </div>
-      )}
-      {isRace ? <AroundBryce payload={payload} /> : null}
-      <TrackPanel identity={identity} replay={replay} history={history} mode={isRace ? 'race' : 'session'} />
-    </HeroPanel>
-  );
+const aroundGapText = (offsetSeconds: number | undefined): string => {
+  if (offsetSeconds === undefined || !Number.isFinite(offsetSeconds)) return '';
+  const seconds = Math.abs(offsetSeconds);
+  return `${seconds.toFixed(seconds < 100 ? 1 : 0)} s ${offsetSeconds > 0 ? 'ahead' : 'behind'}`;
 };
-
-/* ---------- Bryce's jumbotron ---------- */
-
-const PointsJumbotron = ({ payload }: { payload: LiveReadiness }) => {
-  const rows = liveRowsOf(payload);
-  const window = buildOfficialPointsWindow(rows);
-  const points = payload.points as Row;
-  const liveEligible = ['race_control_live', 'partial'].includes(asString(points.mode) ?? '');
-
-  return (
-    <Card
-      className="live-points"
-      title="The championship around him"
-      action={<SourcePill title="The championship around him" entries={sourceEntries.points} caveats={['Provisional until official results publish and are reconciled.']} />}
-    >
-      {liveEligible && window ? (
-        <>
-          <div className="live-points__neighbors" aria-label="Projected championship around Bryce">
-            {[window.above, window.bryce, window.below].map((row, index) =>
-              row ? (
-                <div className={`live-points__neighbor${index === 1 ? ' live-points__neighbor--bryce' : ''}`} key={row.carNo}>
-                  <span className="tower__pos">P{row.projectedStanding}</span>
-                  <span>{row.driverName}</span>
-                  <strong><TickerValue value={row.runningDriverPoints} valueKey={row.runningDriverPoints} /></strong>
-                  <span className="caption caption--secondary">{index === 0 ? 'one spot up' : index === 1 ? 'if the race ended now' : 'one spot down'}</span>
-                </div>
-              ) : null
-            )}
-          </div>
-          <span className="live-points__provisional">{pointsProvenanceLabel(payload)}</span>
-        </>
-      ) : (
-        <Unavailable>
-          Race Control running points aren’t available in this state. The projection appears only when the official feed publishes the field.
-        </Unavailable>
-      )}
-    </Card>
-  );
-};
-
-/* ---------- full field tower ---------- */
 
 const useFieldRankChanges = (rows: LiveRow[]) => {
   const previousRows = useRef<LiveRow[]>([]);
@@ -950,238 +477,325 @@ const useFieldRankChanges = (rows: LiveRow[]) => {
   return changedIds;
 };
 
-const FieldTower = ({ payload, sessionKind }: { payload: LiveReadiness; sessionKind: LiveSessionKind }) => {
+/** The whole field, compact: position, car, gap to the leader (best lap
+ *  outside a race). Pointing at a row rings that car's dot on the track. */
+const RunningOrder = ({
+  payload,
+  sessionKind,
+  highlightId,
+  onHoverCar
+}: {
+  payload: LiveReadiness;
+  sessionKind: LiveSessionKind;
+  highlightId: string | null;
+  onHoverCar: (id: string | null) => void;
+}) => {
   const isRace = sessionKind === 'race';
   const rows = useMemo(() => sortRowsForLiveDisplay(liveRowsOf(payload)) as LiveRow[], [payload]);
   const changedIds = useFieldRankChanges(rows);
-  const standings = uiDataPackage.screens.upcomingPrep.standingsSnapshot;
-  const careerRivals = uiDataPackage.screens.careerLab.headToHead;
-  const bryceRank = livePosition(rows.find((row) => row.bryce === true) ?? {});
-  const bryceTeam = asString((rows.find((row) => row.bryce === true) ?? {}).team)?.toLowerCase() ?? null;
-  if (rows.length === 0) {
-    return (
-      <Card title="The field" action={<SourcePill title="The field" entries={sourceEntries.tower} />}>
-        <Unavailable>The {isRace ? 'running order' : 'best-lap order'} appears when Race Control publishes timing rows for Bryce’s session.</Unavailable>
-      </Card>
-    );
-  }
-
+  const leaderGaps = useMemo(() => (isRace ? leaderGapsOf(rows) : new Map<string, number | null>()), [isRace, rows]);
+  const title = isRace ? 'Running order' : 'Best-lap order';
   return (
-    <Card flush className="live-field" title="The field" action={<SourcePill title="The field" entries={isRace ? sourceEntries.tower : sourceEntries.bestLap} />}>
-      <div className="tower" role="table" aria-label={isRace ? 'Full live running order' : 'Full field by best lap'}>
-        <div className="tower__row live-field__header" role="row">
-          <span>P</span>
-          <span>driver</span>
-          <span>{isRace ? 'gap to leader' : 'best lap'}</span>
-        </div>
-        {rows.map((row, index) => {
-          const rowId = stableDriverId(row);
-          const isBryce = row.bryce === true;
-          const rank = livePosition(row);
-          const previous = rows[index - 1];
-          // Same-team match: Bryce's team when known (a truthful teammate flag in
-          // any series), falling back to the historical Ganassi entry.
-          const rowTeam = asString(row.team)?.toLowerCase() ?? null;
-          const teammate = !isBryce && Boolean(rowTeam && ((bryceTeam && rowTeam === bryceTeam) || rowTeam.includes('ganassi')));
-          const interval = index > 0 ? positiveGapSeconds(row.liveGap) : null;
-          // Battle brackets are an on-track-proximity idea — race only.
-          const battleBracket = isRace && interval !== null && interval <= 1;
-          const bryceBracket = battleBracket && (isBryce || previous?.bryce === true);
-          const status = (asString(row.status) ?? '').toLowerCase();
-          const running = !status || ['active', 'running', 'run'].includes(status);
-          const honestStatus = running ? null : asString(row.comment) || asString(row.status);
-          const sourcedLeaderGap = sourcedGapToLeaderSeconds(row);
-          const bestLapText = asString(row.bestLapTime);
-          const displayGap = !isRace
-            ? bestLapText ?? 'best lap pending'
-            : honestStatus
-            ? honestStatus
-            : rank === 1
-              ? 'leader'
-              : sourcedLeaderGap !== null
-                ? secondsLabel(sourcedLeaderGap)
-                : positiveGapSeconds(row.diff) === 0
-                  ? 'gap pending'
-                  : formatGap(row.diff);
-          const headToHead =
-            bryceRank !== null && rank !== null && Math.abs(rank - bryceRank) <= 2
-              ? headToHeadForLiveDriver(row.no, driverLabel(row), standings, careerRivals)
-              : null;
-          const shared = (headToHead?.bryceAhead ?? 0) + (headToHead?.bryceBehind ?? 0);
-          return (
-            <div
-              key={rowId}
-              data-driver-id={rowId}
-              data-live-rank={rank ?? ''}
-              className={`tower__row live-field__row${isBryce ? ' tower__row--bryce' : ''}${changedIds.has(rowId) ? ' live-field__row--rank-change' : ''}`}
-              role="row"
-              tabIndex={headToHead && shared > 0 ? 0 : undefined}
-            >
-              <span className="tower__pos">{formatNumber(rank, 0)}</span>
-              <span className="tower__name">
-                {isBryce ? <Plate size="row" /> : null}
-                {driverLabel(row) ?? '—'}
-                {teammate ? <span className="live-field__teammate">teammate</span> : null}
-              </span>
-              <span className="tower__gap">
-                <TickerValue value={displayGap} valueKey={displayGap} />
-              </span>
-              {battleBracket ? <span className={`live-field__bracket${bryceBracket ? ' live-field__bracket--bryce' : ''}`} aria-label={`${interval!.toFixed(1)} second battle with the car ahead`} /> : null}
-              {headToHead && shared > 0 ? (
-                <span className="live-field__tip" role="tooltip">
-                  Bryce ahead in {headToHead.bryceAhead} of {shared} shared races
-                </span>
-              ) : null}
-            </div>
-          );
-        })}
+    <section className="live-desk__order live-order" aria-label={isRace ? 'Full live running order' : 'Full field by best lap'}>
+      <div className="live-order__head">
+        <h2 className="live-desk__label">{title}</h2>
+        <SourcePill title={title} entries={isRace ? sourceEntries.tower : sourceEntries.bestLap} />
       </div>
-    </Card>
+      {rows.length === 0 ? (
+        <Unavailable>The {isRace ? 'running order' : 'best-lap order'} appears when Race Control publishes timing rows for Bryce’s session.</Unavailable>
+      ) : (
+        <>
+          <div className="live-order__cols" aria-hidden>
+            <span>P</span>
+            <span>No.</span>
+            <span>Driver</span>
+            <span>{isRace ? 'To the leader' : 'Best lap'}</span>
+          </div>
+          <ol className="live-order__list">
+            {rows.map((row) => {
+              const id = stableDriverId(row);
+              const isBryce = row.bryce === true;
+              const rank = livePosition(row);
+              const honestStatus = runningStatus(row) ? null : asString(row.comment) || asString(row.status);
+              const leaderGap = leaderGaps.get(id) ?? null;
+              const gap = !isRace
+                ? asString(row.bestLapTime) ?? 'pending'
+                : honestStatus
+                  ? honestStatus
+                  : rank === 1
+                    ? 'leader'
+                    : leaderGap !== null
+                      ? secondsLabel(leaderGap)
+                      : positiveGapSeconds(row.diff) === 0
+                        ? 'pending'
+                        : formatGap(row.diff);
+              return (
+                <li
+                  key={id}
+                  data-driver-id={id}
+                  data-live-rank={rank ?? ''}
+                  className={`live-order__row${isBryce ? ' live-order__row--bryce' : ''}${changedIds.has(id) ? ' live-order__row--rank-change' : ''}${highlightId === id ? ' is-focus' : ''}`}
+                  onPointerEnter={() => onHoverCar(id)}
+                  onPointerLeave={() => onHoverCar(null)}
+                >
+                  <span className="live-order__pos">{formatNumber(rank, 0)}</span>
+                  <span className="live-order__no">{asString(row.no) ?? ''}</span>
+                  <span className="live-order__name">
+                    {isBryce ? <Plate size="row" /> : null}
+                    {driverLabel(row) ?? '—'}
+                  </span>
+                  <TickerValue className="live-order__gap" value={gap} valueKey={gap} />
+                </li>
+              );
+            })}
+          </ol>
+        </>
+      )}
+    </section>
   );
 };
 
-/* ---------- Bryce distance on the same session-keyed liveGap frame ---------- */
+/** Bryce now: his position and its story, his gap to the leader, his last
+ *  lap's speed; in a race, what it would mean if it ended now, and the cars
+ *  around him. Outside a race, his best lap against the session's. */
+const BryceColumn = ({
+  payload,
+  samples,
+  history,
+  sessionKind,
+  highlightId,
+  onHoverCar
+}: {
+  payload: LiveReadiness;
+  samples: GapSample[];
+  history: LiveSessionHistory | null;
+  sessionKind: LiveSessionKind;
+  highlightId: string | null;
+  onHoverCar: (id: string | null) => void;
+}) => {
+  const weekend = payload.raceWeekend as Row;
+  const heartbeat = heartbeatOf(payload);
+  const bryce = liveBryceRowOf(payload);
+  const isRace = sessionKind === 'race';
+  const flag = asString(heartbeat.flag ?? weekend.flag);
+  const lap = asNumber(heartbeat.lap ?? weekend.lap);
+  const rank = bryce ? livePosition(bryce) : null;
+  const rows = liveRowsOf(payload);
+  const pointsWindow = buildOfficialPointsWindow(rows);
+  const points = payload.points as Row;
+  const ladderEligible = ['race_control_live', 'partial'].includes(asString(points.mode) ?? '');
+  const historicalRank = asNumber((points.bryce as Row)?.historicalRank);
+  const standingMove = historicalRank !== null && pointsWindow ? historicalRank - pointsWindow.bryce.projectedStanding : null;
+  const bestDeltas = isRace ? null : buildBestLapDeltas(rows);
+  const underCaution = isCautionFlag(flag);
 
-interface SessionGapPoint extends LiveHistoryPoint {
-  lap: number | null;
-  flag: string;
-}
+  // The speed line switches currency with the session: last lap in a race,
+  // best lap outside one. Both are official per-lap averages, never a dial.
+  const rawSpeed = bryce ? asNumber(isRace ? bryce.lastSpeed : bryce.bestSpeed) : null;
+  // Before his first lap the feed carries a zero, not a speed.
+  const speedValue = rawSpeed !== null && rawSpeed > 0 ? rawSpeed : null;
+  const fieldFastest = isRace ? fastestLastSpeedInField(rows) : fastestBestSpeedInField(rows);
+  const bryceHoldsFastest = speedValue !== null && (fieldFastest === null || fieldFastest.speed <= speedValue + 0.05);
+  const fastestName = fieldFastest ? driverLabel(fieldFastest.row) : null;
 
-const gapTrendPointsFromHistory = (history: LiveSessionHistory | null): SessionGapPoint[] => {
-  if (!history) return [];
-  const bryceSeries = sharedLeaderGapSeries(history).find((series) => series.role === 'bryce');
-  if (!bryceSeries) return [];
-  return bryceSeries.points.map((point, index) => ({
-    ...point,
-    lap: history.samples[index]?.lap ?? null,
-    flag: history.samples[index]?.flag.toUpperCase() ?? ''
-  }));
-};
+  const recent = samples.filter((sample) => sample.rank !== null && (lap === null || sample.lap === null || sample.lap >= lap - 5));
+  const firstRecent = recent[0];
+  const gained = rank !== null && firstRecent?.rank !== null && firstRecent?.rank !== undefined ? firstRecent.rank - rank : 0;
+  let positionStory: { text: string; up: boolean } | null = null;
+  if (gained > 0 && firstRecent?.lap !== null && firstRecent?.lap !== undefined && lap !== null && lap > firstRecent.lap) {
+    const span = Math.min(5, lap - firstRecent.lap);
+    positionStory = { text: `▲ up ${gained} ${span === 1 ? 'on the last lap' : `in the last ${span} laps`}`, up: true };
+  } else if (rank !== null && lap !== null) {
+    let heldFrom = lap;
+    for (let index = recent.length - 1; index >= 0; index -= 1) {
+      if (recent[index].rank !== rank) break;
+      if (recent[index].lap !== null) heldFrom = Math.min(heldFrom, recent[index].lap!);
+    }
+    if (lap - heldFrom >= 1) positionStory = { text: `held P${rank} for ${lap - heldFrom + 1} laps`, up: false };
+  }
 
-const GapTrend = ({ history }: { history: LiveSessionHistory | null }) => {
-  const [ref, width] = useMeasuredWidth<HTMLDivElement>();
-  const svgRef = useRef<SVGSVGElement | null>(null);
-  const [tip, setTip] = useState<ChartTip | null>(null);
-  const points = useMemo(() => gapTrendPointsFromHistory(history), [history]);
-  const valuePoints = points.filter((point): point is SessionGapPoint & { value: number } => point.value !== null);
-  const height = 236;
-  const margin = { top: 18, right: 18, bottom: 31, left: 49 };
-  const plotWidth = Math.max(width - margin.left - margin.right, 80);
-  const plotHeight = height - margin.top - margin.bottom;
-  const sessionDomain = useMemo(() => timestampWindowDomain(points.map((point) => point.checkedAt)), [points]);
-  const gapDomain = useMemo(() => dataDrivenGapDomain(points.map((point) => point.value)), [points]);
-  const x = (checkedAtMs: number) => {
-    if (!sessionDomain) return margin.left;
-    return margin.left + ((checkedAtMs - sessionDomain.startMs) / (sessionDomain.endMs - sessionDomain.startMs)) * plotWidth;
-  };
-  const y = (gap: number) =>
-    gapDomain ? margin.top + ((gap - gapDomain[0]) / (gapDomain[1] - gapDomain[0])) * plotHeight : margin.top + plotHeight / 2;
-  const xTicks = sessionDomain ? adaptiveTimeTicks(sessionDomain, plotWidth) : [];
-  const yTicks = gapDomain ? adaptiveNumericTicks(gapDomain, plotHeight) : [];
-  const segments = contiguousValueSegments(points);
-  const lapBoundaries = useMemo(() => {
-    const boundaries: Array<{ lap: number; checkedAtMs: number }> = [];
-    points.forEach((point) => {
-      if (point.lap === null || boundaries.at(-1)?.lap === point.lap) return;
-      boundaries.push({ lap: point.lap, checkedAtMs: point.checkedAtMs });
-    });
-    if (boundaries.length <= 7) return boundaries;
-    const stride = Math.ceil(boundaries.length / 6);
-    return boundaries.filter((_, index) => index % stride === 0 || index === boundaries.length - 1);
-  }, [points]);
-
-  const cautionBands = useMemo(() => {
-    const bands: Array<{ from: number; to: number }> = [];
-    points.forEach((point, index) => {
-      const caution = isCautionFlag(point.flag);
-      const last = bands.at(-1);
-      if (caution && last && last.to === index - 1) last.to = index;
-      else if (caution) bands.push({ from: index, to: index });
-    });
-    return bands;
-  }, [points]);
-
-  const onMove = (event: React.MouseEvent<SVGSVGElement>) => {
-    if (!svgRef.current || points.length === 0 || !sessionDomain) return;
-    const bounds = svgRef.current.getBoundingClientRect();
-    const cursorX = event.clientX - bounds.left;
-    const cursorTime = sessionDomain.startMs + Math.max(0, Math.min(1, (cursorX - margin.left) / plotWidth)) * (sessionDomain.endMs - sessionDomain.startMs);
-    const point = points.reduce((closest, candidate) => Math.abs(candidate.checkedAtMs - cursorTime) < Math.abs(closest.checkedAtMs - cursorTime) ? candidate : closest);
-    setTip({
-      x: x(point.checkedAtMs),
-      y: point.value === null ? margin.top + 12 : y(point.value),
-      title: point.value === null ? 'Gap unavailable' : `+${point.value.toFixed(1)}s to leader`,
-      detail: `${new Date(point.checkedAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', second: '2-digit' })}${point.flag && point.flag !== 'GREEN' ? ` · ${point.flag.toLowerCase()}` : ''}`
-    });
-  };
-
-  const latestArrival = history?.samples.at(-1) ?? null;
-  const latestValue = valuePoints.at(-1) ?? null;
-  const spanMs = sessionDomain ? sessionDomain.endMs - sessionDomain.startMs : 0;
+  // Distance to the leader: the sourced gap now, and against one lap ago.
+  const bryceId = bryce ? stableDriverId(bryce) : '';
+  const leaderGap = isRace && rank !== null && rank > 1 ? leaderGapsOf(sortRowsForLiveDisplay(rows) as LiveRow[]).get(bryceId) ?? null : null;
+  const lapAgo = isRace && !underCaution ? sampleLapAgo(history, lapTimeSeconds(bryce?.lastLapTime)) : null;
+  const leaderGapBefore = lapAgo ? leaderGapsOf(sortRowsForLiveDisplay(lapAgo.rows) as LiveRow[]).get(lapAgo.bryceId) ?? null : null;
+  const leaderChange = leaderGap !== null && leaderGapBefore !== null ? leaderGap - leaderGapBefore : null;
 
   return (
-    <Card title="Distance to the leader" action={<SourcePill title="Distance to the leader" entries={sourceEntries.trend} />}>
-      <div ref={ref} className="live-gap-chart">
-        {points.length >= 2 && valuePoints.length >= 2 && sessionDomain && gapDomain ? (
-          <>
-            <div className="live-gap-chart__status" aria-live="polite">
-              <strong>{latestValue ? `+${latestValue.value.toFixed(2)}s` : 'gap unavailable'}</strong>
-              <span>{latestValue ? `current source ${new Date(latestValue.checkedAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', second: '2-digit' })}` : 'distance sample pending'}</span>
-              <span>{latestArrival ? `latest 1s poll ${new Date(latestArrival.checkedAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', second: '2-digit' })}` : 'live poll pending'}</span>
-              {history ? <span>{history.stats.arrivals} polls · {history.stats.valueChanges} payload changed · {history.stats.unchangedValues} unchanged</span> : null}
-            </div>
-            <p className="caption caption--secondary live-gap-chart__caption">
-              Latest five minutes · Bryce’s sourced gap to P1 · smaller is higher · shaded = caution
-            </p>
-            {width > 0 ? (
-              <svg
-                ref={svgRef}
-                width={width}
-                height={height}
-                role="img"
-                aria-label="Bryce’s sourced gap to the leader over the latest five minutes, with smaller gaps plotted higher"
-                data-time-domain-start={new Date(sessionDomain.startMs).toISOString()}
-                data-time-domain-end={new Date(sessionDomain.endMs).toISOString()}
-                data-gap-domain-min={gapDomain[0]}
-                data-gap-domain-max={gapDomain[1]}
-                data-missing-point-count={points.filter((point) => point.value === null).length}
-                data-sample-count={points.length}
-                data-live-arrival-count={history?.stats.arrivals ?? 0}
-                data-chart-semantics="leader-gap-from-live-ranked-intervals"
-                onMouseMove={onMove}
-                onMouseLeave={() => setTip(null)}
-              >
-                {cautionBands.map((band, index) => {
-                  const left = x(points[band.from].checkedAtMs);
-                  const rightIndex = Math.min(band.to + 1, points.length - 1);
-                  const right = x(points[rightIndex].checkedAtMs);
-                  return <rect key={index} x={left} y={margin.top} width={Math.max(right - left, 2)} height={plotHeight} fill="var(--status-warn-dot)" opacity={0.1} />;
-                })}
-                {yTicks.map((tick) => (
-                  <g key={tick}>
-                    <line x1={margin.left} x2={width - margin.right} y1={y(tick)} y2={y(tick)} stroke="var(--grid-hairline)" />
-                    <text x={margin.left - 7} y={y(tick)} textAnchor="end" dominantBaseline="middle" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={12}>
-                      {`${tick.toFixed(tick < 10 ? 1 : 0)}s`}
-                    </text>
-                  </g>
-                ))}
-                {segments.map((segment, index) => <path key={index} d={stepPath(segment, x, y)} fill="none" stroke="var(--ink-primary)" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />)}
-                {latestValue ? <circle cx={x(latestValue.checkedAtMs)} cy={y(latestValue.value)} r={5} fill="var(--bryce)" stroke="var(--surface-1)" strokeWidth={2} /> : null}
-                {xTicks.map((tick, index) => (
-                  <text key={tick} x={x(tick)} y={height - 7} textAnchor={index === 0 ? 'start' : index === xTicks.length - 1 ? 'end' : 'middle'} fill="var(--ink-muted)" fontFamily={chartFont} fontSize={12}>{timeTickLabel(tick, spanMs)}</text>
-                ))}
-                {lapBoundaries.map((boundary) => (
-                  <text key={`${boundary.lap}-${boundary.checkedAtMs}`} x={x(boundary.checkedAtMs)} y={margin.top + 11} textAnchor="middle" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={12}>L{boundary.lap}</text>
-                ))}
-              </svg>
-            ) : null}
-            {tip ? <ChartTipCard tip={tip} width={width} /> : null}
-          </>
-        ) : (
-          <Unavailable>The distance trace appears after two sourced gap-to-leader values. Missing values remain breaks; no pace line is estimated.</Unavailable>
-        )}
+    <section className="live-desk__bryce" aria-label="Bryce now">
+      <div className="live-desk__block live-me">
+        <div className="live-position">
+          <Plate size="hero" />
+          <div>
+            <span className="caption">{sessionRankCaption(sessionKind)}</span>
+            <TickerValue className="stat__value stat__value--hero live-position__value" value={rank !== null ? `P${rank}` : '—'} valueKey={rank ?? 'na'} />
+            {isRace && positionStory ? <span className={`stat__delta${positionStory.up ? ' stat__delta--up' : ''}`}>{positionStory.text}</span> : null}
+          </div>
+        </div>
+        {leaderGap !== null ? (
+          <p className="live-me__line">
+            <TickerValue className="live-me__strong" value={`${leaderGap.toFixed(1)} s`} valueKey={leaderGap} /> behind the leader
+            {leaderChange !== null && Math.abs(leaderChange) >= 0.05
+              ? `, ${Math.abs(leaderChange).toFixed(1)} s ${leaderChange < 0 ? 'closer' : 'further'} than a lap ago`
+              : ''}
+          </p>
+        ) : null}
+        {speedValue !== null ? (
+          <p className="live-me__line live-me__line--quiet">
+            {isRace && underCaution ? (
+              <>Last lap under caution · {speedValue.toFixed(1)} mph</>
+            ) : (
+              <>
+                {isRace ? 'Last lap' : 'Best lap'} {speedValue.toFixed(1)} mph
+                {bryceHoldsFastest
+                  ? ` · ${isRace ? 'fastest last lap in the field' : 'fastest best lap in the field'}`
+                  : ` · field best ${fastestName ? `${fastestName}, ` : ''}${fieldFastest!.speed.toFixed(1)} mph`}
+              </>
+            )}
+          </p>
+        ) : null}
       </div>
-    </Card>
+      {isRace ? (
+        <div className="live-desk__block live-ended">
+          <div className="live-order__head">
+            <h2 className="live-desk__label">If the race ended now</h2>
+            <SourcePill title="If the race ended now" entries={sourceEntries.points} caveats={['Provisional until official results publish and are reconciled.']} />
+          </div>
+          {pointsWindow ? (
+            <>
+              <div className="live-ended__row">
+                <TickerValue className="stat__value stat__value--big" value={`P${pointsWindow.bryce.projectedStanding}`} valueKey={pointsWindow.bryce.projectedStanding} />
+                <span className="live-ended__words">
+                  in the championship
+                  {standingMove !== null && standingMove !== 0 ? (
+                    <span className={`stat__delta ${standingMove > 0 ? 'stat__delta--up' : 'stat__delta--down'}`}>
+                      {standingMove > 0 ? `▲ ${standingMove}` : `▽ ${Math.abs(standingMove)}`} vs before the race
+                    </span>
+                  ) : null}
+                </span>
+              </div>
+              {ladderEligible ? (
+                <ol className="live-ended__ladder" aria-label="Projected championship around Bryce">
+                  {[pointsWindow.above, pointsWindow.bryce, pointsWindow.below].map((row, index) =>
+                    row ? (
+                      <li className={`live-ended__rung${index === 1 ? ' live-ended__rung--bryce' : ''}`} key={row.carNo}>
+                        <span className="live-ended__pos">P{row.projectedStanding}</span>
+                        <span className="live-ended__name">{index === 1 ? <Plate size="row" /> : null}{row.driverName}</span>
+                        <span className="live-ended__pts">
+                          <TickerValue value={row.runningDriverPoints} valueKey={row.runningDriverPoints} /> pts
+                        </span>
+                      </li>
+                    ) : null
+                  )}
+                </ol>
+              ) : (
+                <p className="live-me__line">
+                  <TickerValue className="live-me__strong" value={pointsWindow.bryce.runningDriverPoints} valueKey={pointsWindow.bryce.runningDriverPoints} /> running points
+                </p>
+              )}
+              <span className="live-points__provisional">{pointsProvenanceLabel(payload)}</span>
+            </>
+          ) : (
+            <Unavailable>Official running points are not published in this state.</Unavailable>
+          )}
+        </div>
+      ) : (
+        <div className="live-desk__block live-ended">
+          <h2 className="live-desk__label">Bryce&rsquo;s best lap</h2>
+          {bestDeltas?.bryce ? (
+            <div className="live-ended__row">
+              <TickerValue className="stat__value stat__value--big" value={bestDeltas.bryce.bestLapTime} valueKey={bestDeltas.bryce.bestLapTime} />
+              <span className="live-ended__words">
+                {bestDeltas.bryceIsFastest
+                  ? 'fastest in the field'
+                  : bestDeltas.offSessionBestSeconds !== null
+                    ? `${bestDeltas.offSessionBestSeconds.toFixed(bestDeltas.offSessionBestSeconds < 10 ? 2 : 1)} s off the best, ${bestDeltas.leader.surname} ${bestDeltas.leader.bestLapTime}`
+                    : null}
+              </span>
+            </div>
+          ) : (
+            <Unavailable>Bryce's best lap appears once Race Control publishes it.</Unavailable>
+          )}
+          <BestLapDeltas deltas={bestDeltas} />
+        </div>
+      )}
+      {isRace ? <AroundBryce payload={payload} history={history} highlightId={highlightId} onHoverCar={onHoverCar} /> : null}
+    </section>
+  );
+};
+
+const LiveDesk = ({
+  payload,
+  fixtureMode,
+  samples,
+  history,
+  sessionKind,
+  replay,
+  replayEnded,
+  onExit,
+  storyLink
+}: {
+  payload: LiveReadiness;
+  fixtureMode: boolean;
+  samples: GapSample[];
+  history: LiveSessionHistory | null;
+  sessionKind: LiveSessionKind;
+  replay: ReplaySession | null;
+  replayEnded: boolean;
+  onExit?: () => void;
+  storyLink: ReactNode;
+}) => {
+  const weekend = payload.raceWeekend as Row;
+  const heartbeat = heartbeatOf(payload);
+  const isRace = sessionKind === 'race';
+  const identity = raceIdentityFor(payload, replay);
+  const flag = asString(heartbeat.flag ?? weekend.flag);
+  const lap = asNumber(heartbeat.lap ?? weekend.lap);
+  const totalLaps = asNumber(heartbeat.totalLaps ?? weekend.totalLaps);
+  const sessionName = asString(heartbeat.sessionName ?? weekend.sessionName);
+  const [hoverCar, setHoverCar] = useState<string | null>(null);
+  const cars = useMemo(() => {
+    const map = new Map<string, CarLabel>();
+    for (const row of liveRowsOf(payload)) {
+      const id = stableDriverId(row);
+      if (id) map.set(id, { no: asString(row.no) ?? '', surname: driverLabel(row) ?? '', position: livePosition(row) });
+    }
+    return map;
+  }, [payload]);
+  const readout = <FlagReadout flag={flag} lap={lap} totalLaps={totalLaps} ended={replayEnded} isRace={isRace} sessionName={sessionName} />;
+  return (
+    <section className="live-desk" data-live-desk aria-label="The race, now">
+      <HeroIdentity
+        identity={identity}
+        action={
+          <div className="live-desk__head-actions">
+            {storyLink}
+            <SourcePill title="The race, now" entries={sourceEntries.hero} />
+          </div>
+        }
+      />
+      {replay ? (
+        <ReplayBar replay={replay} payload={payload} onExit={onExit} lead={readout} />
+      ) : (
+        <div className="live-desk__bar live-desk__bar--live">
+          {readout}
+          <TrustRail payload={payload} fixtureMode={fixtureMode} />
+        </div>
+      )}
+      <div className="live-desk__grid">
+        <RunningOrder payload={payload} sessionKind={sessionKind} highlightId={hoverCar} onHoverCar={setHoverCar} />
+        <TrackPanel
+          identity={identity}
+          replay={replay}
+          history={history}
+          mode={isRace ? 'race' : 'session'}
+          cars={cars}
+          highlightId={hoverCar}
+          onHoverCar={setHoverCar}
+        />
+        <BryceColumn payload={payload} samples={samples} history={history} sessionKind={sessionKind} highlightId={hoverCar} onHoverCar={setHoverCar} />
+      </div>
+    </section>
   );
 };
 
@@ -1572,8 +1186,10 @@ const ReplayBar = ({
   /** The off-season demo passes a wrapper so leaving it counts as the explicit
    *  choice that turns auto-start off for this tab. Every other replay — a race
    *  page, Home, the "Relive a race" list — keeps the plain exit. */
-  onExit
-}: { replay: ReplaySession; payload: LiveReadiness | null; onExit?: () => void }) => {
+  onExit,
+  /** The one screen's flag and lap, first in the bar (round 6). */
+  lead
+}: { replay: ReplaySession; payload: LiveReadiness | null; onExit?: () => void; lead?: ReactNode }) => {
   const heartbeat = payload ? heartbeatOf(payload) : {};
   const venue = asString(heartbeat.trackName) ?? replay.venue ?? replay.session?.eventName ?? 'archived race';
   const year = replay.seasonYear ? ` ${replay.seasonYear}` : '';
@@ -1588,7 +1204,7 @@ const ReplayBar = ({
   const trackNoteShowing = skippedCaution !== null && Date.now() - (replay.cautionSkippedAt ?? 0) <= SKIP_NOTE_WALL_MS;
   return (
     <section
-      className="replay-bar"
+      className={`replay-bar${lead ? ' replay-bar--desk' : ''}`}
       aria-label="Race replay controls"
       data-replay-speed={replay.speed}
       data-replay-playback-speed={replay.playbackSpeed}
@@ -1597,6 +1213,7 @@ const ReplayBar = ({
       data-replay-caution-skipped={skippedCaution ? 'true' : 'false'}
       data-replay-flag={flag ?? ''}
     >
+      {lead ? <div className="replay-bar__lead">{lead}</div> : null}
       <div className="replay-bar__id">
         {/* Identity and provenance sit on their own rows so neither truncates —
             "Detroit 2026 · 4×" and "third-party normalized (Timing71)" both read
@@ -1973,10 +1590,20 @@ export const LiveScreen = ({
   // it must not override the sourced kind. Replays are always of races, so a
   // finished-race replay resolves to race here on its own.
   const sessionKind = resolveLiveSessionKind(payload);
-  const raceShaped = sessionKind === 'race';
+  const deskShown = liveish || replayEnded;
+  /* Cross-links, never duplication (Brief R-c): /live answers "what is
+   * happening right now?"; the race's own page holds the accumulating record.
+   * One quiet link, races only; mid-replay it carries the virtual clock so the
+   * replayed race gets its replayed race page. */
+  const storySoFarId = replayActive ? replay?.session?.canonicalSessionId ?? null : canonicalLiveRaceSessionId(payload);
+  const storyLink = storySoFarId ? (
+    <Link className="live-desk__story" to={`/races/${encodeURIComponent(storySoFarId)}${replayActive && replay ? replayDeepLinkQuery(replay.getReplayParams()) : ''}`}>
+      The story so far, on the race page →
+    </Link>
+  ) : null;
   return (
     <div
-      className="page stack live-page"
+      className={`page stack live-page${deskShown ? ' live-page--desk' : ''}`}
       data-replay-active={replayActive ? 'true' : 'false'}
       data-live-payload-session-key={payloadSessionKey}
       data-live-session-key={history?.sessionKey ?? ''}
@@ -1988,51 +1615,23 @@ export const LiveScreen = ({
     >
       {isOffSeasonDemoReplay && replay ? <OffSeasonDemoBanner replay={replay} navigate={navigate} joinedInProgress={joinedInProgress} /> : null}
       {replayEndedByLive ? <ReplayEndedByLiveNote /> : null}
-      {replayActive && replay ? <ReplayBar replay={replay} payload={payload} onExit={demoExit} /> : null}
+      {replayActive && replay && !deskShown ? <ReplayBar replay={replay} payload={payload} onExit={demoExit} /> : null}
       {replayActive && replay ? <ReplayGapSkippedNote replay={replay} /> : null}
-      {replayActive && replay ? <ReplayClassificationNote payload={payload} canonicalSessionId={replay.session?.canonicalSessionId ?? null} /> : null}
-      {/* In a replay the bar above carries the provenance; the trust rail
-          would repeat it. */}
-      {replayActive ? null : <TrustRail payload={payload} fixtureMode={fixtureMode} />}
-      {liveish || replayEnded ? (
-        <>
-          <LiveHero payload={payload} samples={samples} replayEnded={replayEnded} sessionKind={sessionKind} replay={replayActive ? replay : null} history={history} />
-          {(() => {
-            /* Cross-links, never duplication (Brief R-c): /live answers "what is
-             * happening right now?"; the race's own page holds the accumulating
-             * record. One quiet link — races only, and mid-replay it carries the
-             * virtual clock so the replayed race gets its replayed race page. */
-            const storySoFarId = replayActive
-              ? replay?.session?.canonicalSessionId ?? null
-              : canonicalLiveRaceSessionId(payload);
-            if (!storySoFarId) return null;
-            const query = replayActive && replay ? replayDeepLinkQuery(replay.getReplayParams()) : '';
-            return (
-              <p className="caption caption--secondary" style={{ margin: '-8px 0 0' }}>
-                <Link to={`/races/${encodeURIComponent(storySoFarId)}${query}`}>
-                  The story so far, on this race&rsquo;s page →
-                </Link>
-              </p>
-            );
-          })()}
-          <BattleModule payload={payload} samples={samples} history={history} replayEnded={replayEnded} sessionKind={sessionKind} />
-          {raceShaped ? (
-            <div className="grid live-layout">
-              <div className="stack live-layout__main">
-                <PointsJumbotron payload={payload} />
-                <GapTrend history={history} />
-              </div>
-              <FieldTower payload={payload} sessionKind={sessionKind} />
-
-            </div>
-          ) : (
-            /* Outside a race the championship projection and the leader-gap trend
-             * are race framing (the doc's "If the race ended now" / "Distance to
-             * the leader"), so they drop; the field stands full-width as the
-             * best-lap order. */
-            <FieldTower payload={payload} sessionKind={sessionKind} />
-          )}
-        </>
+      {/* Outside the one screen, the trust state stands on its own; on it, the
+          bar carries it (live) or the replay chip and provenance (replay). */}
+      {replayActive || deskShown ? null : <TrustRail payload={payload} fixtureMode={fixtureMode} />}
+      {deskShown ? (
+        <LiveDesk
+          payload={payload}
+          fixtureMode={fixtureMode}
+          samples={samples}
+          history={history}
+          sessionKind={sessionKind}
+          replay={replayActive ? replay : null}
+          replayEnded={replayEnded}
+          onExit={demoExit}
+          storyLink={storyLink}
+        />
       ) : (
         /* Bryce's session isn't active: no live outcome or gap to project, so the
          * two projection modules collapse into the single protected-state card
@@ -2052,6 +1651,7 @@ export const LiveScreen = ({
           <WaitingState payload={payload} />
         )
       )}
+      {replayActive && replay ? <ReplayClassificationNote payload={payload} canonicalSessionId={replay.session?.canonicalSessionId ?? null} /> : null}
       {replayActive ? null : <WatchAlong payload={payload} />}
     </div>
   );

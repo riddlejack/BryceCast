@@ -6,6 +6,7 @@ import { asNumber, asString, formatDate, formatGain, trackTypeLabel } from '../a
 import { Link, useRouter } from '../app/router';
 import { uiDataPackage } from '../data/uiDataPackage';
 import { TrackArt } from '../app/trackArt';
+import { TrackStill } from '../app/trackStill';
 import { trackOutlineFor } from '../assets/tracks';
 import { chapterTint, raceHref, tipFor, useCareerRows, type CareerRow } from './careerExplorer';
 import './race.css';
@@ -217,7 +218,14 @@ export const CareerRaceScreen = ({ sessionId }: { sessionId: string }) => {
           </div>
           {outline ? (
             <figure className="career-race__art" style={{ margin: 0 }}>
-              <TrackArt outline={outline} showCornerLabels={false} maxHeight={340} />
+              {/* Round 6: the plain still of the venue's 3D model where it has one. */}
+              <TrackStill
+                slug={outline.slug}
+                interactive={false}
+                alt={`${outline.name}: the 3D track as it is today.`}
+                sizes="(max-width: 760px) 100vw, 600px"
+                fallback={<TrackArt outline={outline} showCornerLabels={false} maxHeight={340} />}
+              />
               <figcaption className="career-race__art-caption">
                 {outline.name}, {outline.lengthMi.toFixed(2)} mi as drawn today. The layout {row.seriesShort} ran in{' '}
                 {row.seasonYear ?? 'that year'} isn’t in the source data.

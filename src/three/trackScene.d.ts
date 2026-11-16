@@ -38,6 +38,11 @@ export interface TrackScene {
   stats(): { frames: number; lastMs: number; times: number[]; atHome: boolean };
   screenPointOf(key: string): [number, number] | null;
   orbitBy(dAzim: number, dElev: number): void;
+  /** Where a point on the track is drawn now, in CSS px inside the canvas: `t` on the site outline's arc parameter,
+   *  `lat` metres across the track. Null behind the camera. */
+  projectT(t: number, lat?: number): [number, number] | null;
+  /** Half the track's width, in metres. */
+  trackHalfWidth: number;
 }
 export function webglAvailable(): boolean;
 export function createTrackScene(options: {

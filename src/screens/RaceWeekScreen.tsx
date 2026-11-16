@@ -36,7 +36,7 @@ import { isBryceCastCaptureTier, priorYearReplaysAtVenue, replayProvenance } fro
 import { loadDebriefArchive } from '../data/debriefArchive';
 import { ReplayAffordance, priorYearTitle, useReplayCatalog } from './replayAffordance';
 import { VenueSectionSuite, useVenueSectionData } from './sectionIntelligence';
-import { OffSeasonRaceWeek } from './offseason';
+import { HeatTrack, OffSeasonRaceWeek } from './offseason';
 
 type Row = Record<string, unknown>;
 
@@ -1716,15 +1716,24 @@ export const RaceWeekScreen = () => {
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <div className="hero-race__art" style={{ width: '100%' }}>
               {outline ? (
-                <TrackArt
-                  outline={outline}
-                  /* The most-recent visit's pace lights the shape quietly (the
-                     compact no-labels mode the race hero uses). When present it
-                     carries the venue read, so the single Turn-note annotation
-                     steps aside; unshaded venues keep the annotation. */
-                  annotation={venueSections.heroHeat.length > 0 ? null : sectionNote}
-                  sections={venueSections.heroHeat.length > 0 ? { resolved: venueSections.heroHeat, showLabels: false } : null}
+                /* Round 6: the 3D still of the venue's model, shaded by the
+                   most recent visit's pace as the Tracks page shades it; a
+                   venue with no model keeps the 2D shape below. */
+                <HeatTrack
+                  trackName={outline.name}
                   maxHeight={190}
+                  fallback={
+                    <TrackArt
+                      outline={outline}
+                      /* The most-recent visit's pace lights the shape quietly (the
+                         compact no-labels mode the race hero uses). When present it
+                         carries the venue read, so the single Turn-note annotation
+                         steps aside; unshaded venues keep the annotation. */
+                      annotation={venueSections.heroHeat.length > 0 ? null : sectionNote}
+                      sections={venueSections.heroHeat.length > 0 ? { resolved: venueSections.heroHeat, showLabels: false } : null}
+                      maxHeight={190}
+                    />
+                  }
                 />
               ) : null}
             </div>

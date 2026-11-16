@@ -1,12 +1,18 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import type { TrackOutline } from '../assets/tracks';
 import { measuredTrackSectionsFor, trackSectionsFor, type TrackSectionAnchor } from '../assets/tracks/sections';
 import { loadSectionLaps, type SectionLapsPack } from '../data/sectionLaps';
 import { stableDriverId } from '../data/livePageModel';
 import type { LiveSessionHistory } from '../data/liveHistoryModel';
+import type { TrackOverlayView } from '../three/TrackModel3D';
 import {
   anchorSetForPack,
+  buildFieldPlan,
   buildSectionLightPlan,
+  dotT,
+  matchFieldRows,
+  mergeFieldLapLineCrossings,
+  mergeObservedLapTimes,
   isNamedSectionLabel,
   lapLineCrossingsFrom,
   mergeLapLineCrossings,
@@ -15,6 +21,7 @@ import {
   sectionAt,
   sectionDisplayName,
   segmentBases,
+  type DotMode,
   type LapLineCrossing,
   type LitSection,
   type SectionLightPlan
@@ -22,8 +29,10 @@ import {
 
 /* ============================================================
    The live page's track: the circuit drawn large, the section
-   Bryce is in lit amber during a replay. A section, never a dot:
-   timing loops are the only position signal there is.
+   Bryce is in lit amber during a replay, and a dot for each car
+   at the last timing loop it crossed (round 6). Timing loops are
+   the only position signal there is: a dot is a measured loop
+   crossing, never a GPS position.
    ============================================================ */
 
 type Pt = { x: number; y: number };
@@ -66,11 +75,37 @@ export type SectionLightStatus =
   | 'between'         // usable and placed, but this moment has no tiled lap
   | 'lit';
 
+/** One car placed on the archive clock: its lap plan (section times in chain
+ *  order) and the observed line crossings that anchor it. */
+export interface CarPlacer {
+  id: string;
+  plan: SectionLightPlan;
+  bases: Map<number, number>;
+}
+
+/** The other cars, as far as the timing lets them be placed. */
+export interface FieldPlacement {
+  /** The race's section times carry the other cars at all. */
+  usable: boolean;
+  reason: string | null;
+  /** Other-car rows in the race's section times. */
+  rows: number;
+  /** Rows joined to a car by lap time so far. */
+  joined: number;
+  /** Joined cars with an observed line crossing to place them by. */
+  placers: CarPlacer[];
+}
+
 export interface SectionLightState {
   status: SectionLightStatus;
   plan: SectionLightPlan | null;
   lit: LitSection | null;
+  /** Bryce, placed the same way (null until a line crossing is seen). */
+  bryce: CarPlacer | null;
+  field: FieldPlacement;
 }
+
+const NO_FIELD: FieldPlacement = { usable: false, reason: null, rows: 0, joined: 0, placers: [] };
 
 /** Reads the replay's virtual clock (epoch ms), or null outside a replay. */
 export type VirtualNow = () => number | null;
@@ -116,23 +151,54 @@ export const useSectionLight = ({
     return buildSectionLightPlan(currentPack, set, outline);
   }, [currentPack, outline]);
 
-  // Lap-line crossings outlive the history window (which trims to minutes).
-  const kept = useRef<{ sessionId: string | null; crossings: Map<number, LapLineCrossing> }>({ sessionId: null, crossings: new Map() });
-  if (kept.current.sessionId !== sessionId) kept.current = { sessionId, crossings: new Map() };
+  const fieldPlan = useMemo(() => (currentPack && plan?.usable ? buildFieldPlan(currentPack, plan) : null), [currentPack, plan]);
+
+  // Lap-line crossings outlive the history window (which trims to minutes),
+  // and so do the field's crossings, lap times and row joins.
+  const kept = useRef<{
+    sessionId: string | null;
+    crossings: Map<number, LapLineCrossing>;
+    field: Map<string, Map<number, LapLineCrossing>>;
+    times: Map<string, Map<number, number>>;
+    matches: Map<string, number>;
+  }>({ sessionId: null, crossings: new Map(), field: new Map(), times: new Map(), matches: new Map() });
+  if (kept.current.sessionId !== sessionId) {
+    kept.current = { sessionId, crossings: new Map(), field: new Map(), times: new Map(), matches: new Map() };
+  }
   const [bases, setBases] = useState<Map<number, number>>(new Map());
+  const [bryceId, setBryceId] = useState('');
+  const [placers, setPlacers] = useState<{ joined: number; list: CarPlacer[] }>({ joined: 0, list: [] });
   useEffect(() => {
     setBases(new Map());
+    setPlacers({ joined: 0, list: [] });
   }, [sessionId]);
   useEffect(() => {
     if (!plan?.usable || !history) return;
-    const crossings = lapLineCrossingsFrom(history.samples, (row) => stableDriverId(row as never));
+    const idOf = (row: Record<string, unknown>) => stableDriverId(row as never);
+    const crossings = lapLineCrossingsFrom(history.samples, idOf);
     if (mergeLapLineCrossings(kept.current.crossings, crossings) || bases.size === 0) {
       const next = segmentBases(plan, [...kept.current.crossings.values()]);
       if (next.size > 0) setBases(next);
     }
-    // bases is read only to retry after a reset; the history drives this.
+    const id = history.samples.at(-1)?.bryceId ?? '';
+    if (id) setBryceId(id);
+    if (!fieldPlan?.usable) return;
+    const moved = mergeFieldLapLineCrossings(kept.current.field, history.samples, idOf);
+    const timed = mergeObservedLapTimes(kept.current.times, history.samples, idOf);
+    if (!moved && !timed && placers.list.length > 0) return;
+    kept.current.matches = matchFieldRows(fieldPlan, kept.current.times, kept.current.matches, id);
+    const list: CarPlacer[] = [];
+    for (const [car, row] of kept.current.matches) {
+      const rowPlan = fieldPlan.rows[row];
+      const carCrossings = kept.current.field.get(car);
+      if (!rowPlan || !carCrossings) continue;
+      const carBases = segmentBases(rowPlan, [...carCrossings.values()]);
+      if (carBases.size > 0) list.push({ id: car, plan: rowPlan, bases: carBases });
+    }
+    setPlacers({ joined: kept.current.matches.size, list });
+    // bases and placers are read only to retry after a reset; the history drives this.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [history, plan]);
+  }, [history, plan, fieldPlan]);
 
   const [lit, setLit] = useState<LitSection | null>(null);
   useEffect(() => {
@@ -154,11 +220,21 @@ export const useSectionLight = ({
     return () => window.clearInterval(timer);
   }, [plan, bases, virtualNow, speed]);
 
-  if (!sessionId) return { status: 'live', plan: null, lit: null };
-  if (!pack || pack.sessionId !== sessionId) return { status: 'loading', plan: null, lit: null };
-  if (!plan?.usable) return { status: 'no_sections', plan, lit: null };
-  if (bases.size === 0) return { status: 'waiting_line', plan, lit: null };
-  return { status: lit ? 'lit' : 'between', plan, lit };
+  const bryce = useMemo<CarPlacer | null>(
+    () => (plan?.usable && bases.size > 0 ? { id: bryceId || 'bryce', plan, bases } : null),
+    [plan, bases, bryceId]
+  );
+  const field = useMemo<FieldPlacement>(() => {
+    if (!fieldPlan) return NO_FIELD;
+    if (!fieldPlan.usable) return { ...NO_FIELD, reason: fieldPlan.reason };
+    return { usable: true, reason: null, rows: fieldPlan.rows.length, joined: placers.joined, placers: placers.list };
+  }, [fieldPlan, placers]);
+
+  if (!sessionId) return { status: 'live', plan: null, lit: null, bryce: null, field: NO_FIELD };
+  if (!pack || pack.sessionId !== sessionId) return { status: 'loading', plan: null, lit: null, bryce: null, field: NO_FIELD };
+  if (!plan?.usable) return { status: 'no_sections', plan, lit: null, bryce: null, field: NO_FIELD };
+  if (bases.size === 0) return { status: 'waiting_line', plan, lit: null, bryce: null, field };
+  return { status: lit ? 'lit' : 'between', plan, lit, bryce, field };
 };
 
 /* ---------- drawing ---------- */
@@ -207,9 +283,11 @@ export interface LiveTrackProps {
   /** Reserve side room for section labels even before the sections load. */
   labelRoom?: boolean;
   ariaLabel: string;
+  /** Drawn over the circuit (the car dots), as the 3D model draws it. */
+  overlay?: (view: TrackOverlayView) => ReactNode;
 }
 
-export const LiveTrack = ({ outline, chain, lit, maxHeight, ariaLabel, labelRoom = false }: LiveTrackProps) => {
+export const LiveTrack = ({ outline, chain, lit, maxHeight, ariaLabel, labelRoom = false, overlay }: LiveTrackProps) => {
   const [ref, width] = useElementWidth<HTMLDivElement>();
   const viewportHeight = useViewportHeight();
   const geometry = useMemo(() => outlineGeometry(outline.mainPath), [outline.mainPath]);
@@ -352,7 +430,16 @@ export const LiveTrack = ({ outline, chain, lit, maxHeight, ariaLabel, labelRoom
           return `M${a.x.toFixed(1)} ${a.y.toFixed(1)} L${tip.x.toFixed(1)} ${tip.y.toFixed(1)} L${b.x.toFixed(1)} ${b.y.toFixed(1)}`;
         })()
       : null;
-    return { compact, quietSize, litSize, svgHeight, stroke, litStroke, fullPath, pitPath, sections, quiet, litSlots, sfLabel, loopTicks, sfTick, chevron };
+    // For an overlay: a point of the circuit, `lat` px across the line.
+    const project = (t: number, lat = 0): [number, number] => {
+      const p = at(t);
+      if (!lat) return [p.x, p.y];
+      const a = at(t - 0.002);
+      const b = at(t + 0.002);
+      const len = Math.hypot(b.x - a.x, b.y - a.y) || 1;
+      return [p.x - ((b.y - a.y) / len) * lat, p.y + ((b.x - a.x) / len) * lat];
+    };
+    return { compact, quietSize, litSize, svgHeight, stroke, litStroke, fullPath, pitPath, sections, quiet, litSlots, sfLabel, loopTicks, sfTick, chevron, project };
   }, [width, outline, geometry, sfT, chain, maxHeight, viewportHeight, labelRoom]);
 
   const litSlot = lit && layout ? layout.litSlots[lit.index] ?? null : null;
@@ -396,6 +483,280 @@ export const LiveTrack = ({ outline, chain, lit, maxHeight, ariaLabel, labelRoom
       ) : (
         <div style={{ height: 240 }} aria-hidden />
       )}
+      {layout && overlay ? (
+        <div className="live-track__overlay">
+          {overlay({ version: width * 10_000 + layout.svgHeight, project: layout.project, halfWidth: layout.stroke / 2 })}
+        </div>
+      ) : null}
     </div>
+  );
+};
+
+/* ---------- the car dots ---------- */
+
+/** Who a dot is, from the timing rows. */
+export interface CarLabel {
+  no: string;
+  surname: string;
+  position: number | null;
+}
+
+interface PlacedCar {
+  id: string;
+  bryce: boolean;
+  lit: LitSection;
+  t: number;
+}
+
+const placeAll = (cars: CarPlacer[], bryceId: string | null, atMs: number, mode: DotMode): PlacedCar[] => {
+  const placed: PlacedCar[] = [];
+  for (const car of cars) {
+    const lit = sectionAt(car.plan, car.bases, atMs);
+    if (lit) placed.push({ id: car.id, bryce: car.id === bryceId, lit, t: dotT(lit, atMs, mode) });
+  }
+  return placed;
+};
+
+const signatureOf = (placed: PlacedCar[]) => placed.map((car) => `${car.id}:${car.lit.lap}:${car.lit.index}`).join('|');
+
+const DOT_R = 5;
+const PLATE_W = 22;
+const PLATE_H = 16;
+
+/**
+ * Car dots over the track (3D model or 2D map: `view` says where a point of
+ * the track is drawn). Default mode `loops`: each dot sits on the last timing
+ * loop that car crossed and moves loop to loop. `glide` moves it through its
+ * section by time between its two crossings. Several cars on one loop line up
+ * along it, in running order. Bryce is the gold plate with his 9.
+ */
+export const TrackDots = ({
+  view,
+  chain,
+  bryce,
+  placers,
+  virtualNow,
+  speed,
+  mode,
+  cars,
+  highlightId,
+  onHoverCar,
+  onCount
+}: {
+  view: TrackOverlayView;
+  chain: TrackSectionAnchor[];
+  bryce: CarPlacer | null;
+  placers: CarPlacer[];
+  virtualNow: VirtualNow;
+  speed: number;
+  mode: DotMode;
+  cars: Map<string, CarLabel>;
+  /** A car to ring (the running order's hovered row). */
+  highlightId?: string | null;
+  onHoverCar?: (id: string | null) => void;
+  /** How many cars have a dot now (called when it changes). */
+  onCount?: (placed: number) => void;
+}) => {
+  const all = useMemo(() => (bryce ? [bryce, ...placers] : placers), [bryce, placers]);
+  const bryceId = bryce?.id ?? null;
+  const [placed, setPlaced] = useState<PlacedCar[]>(() => {
+    const now = virtualNow();
+    return now === null ? [] : placeAll(all, bryceId, now, mode);
+  });
+  const sigRef = useRef('');
+  useEffect(() => {
+    let frame = 0;
+    let timer = 0;
+    const tick = () => {
+      const now = virtualNow();
+      const next = now === null ? [] : placeAll(all, bryceId, now, mode);
+      if (mode === 'glide') {
+        setPlaced(next);
+        return;
+      }
+      const sig = signatureOf(next);
+      if (sig !== sigRef.current) {
+        sigRef.current = sig;
+        setPlaced(next);
+      }
+    };
+    sigRef.current = '';
+    tick();
+    if (mode === 'glide') {
+      const loop = () => {
+        tick();
+        frame = requestAnimationFrame(loop);
+      };
+      frame = requestAnimationFrame(loop);
+    } else {
+      // A car crosses a loop every 1-10 s of race time; at 16x that is well under a second.
+      timer = window.setInterval(tick, Math.max(60, Math.min(250, Math.round(1000 / Math.max(1, speed) / 2))));
+    }
+    return () => {
+      cancelAnimationFrame(frame);
+      window.clearInterval(timer);
+    };
+  }, [all, bryceId, virtualNow, speed, mode]);
+
+  const count = placed.length;
+  useEffect(() => {
+    onCount?.(count);
+  }, [count, onCount]);
+
+  const [hover, setHover] = useState<{ id: string; pinned: boolean } | null>(null);
+  // A dot moves on while it is read (loop to loop, or gliding): the label stays
+  // with that car a moment after the pointer loses it.
+  const leaveTimer = useRef(0);
+  useEffect(() => () => window.clearTimeout(leaveTimer.current), []);
+  const enter = useCallback(
+    (id: string) => {
+      window.clearTimeout(leaveTimer.current);
+      setHover((current) => (current?.pinned ? current : { id, pinned: false }));
+      onHoverCar?.(id);
+    },
+    [onHoverCar]
+  );
+  const leave = useCallback(() => {
+    window.clearTimeout(leaveTimer.current);
+    leaveTimer.current = window.setTimeout(() => {
+      setHover((current) => (current?.pinned ? current : null));
+      onHoverCar?.(null);
+    }, 1_400);
+  }, [onHoverCar]);
+  const toggle = useCallback((id: string) => {
+    setHover((current) => (current?.pinned && current.id === id ? null : { id, pinned: true }));
+  }, []);
+
+  const { project, halfWidth, version } = view;
+  const ticks = useMemo(
+    () =>
+      chain
+        .map((anchor) => {
+          const a = project(anchor.startT, -halfWidth * 1.5);
+          const b = project(anchor.startT, halfWidth * 1.5);
+          return a && b ? { key: anchor.familyId, a, b } : null;
+        })
+        .filter((tick): tick is NonNullable<typeof tick> => tick !== null),
+    // project reads the live camera; version says when it moved
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [chain, project, halfWidth, version]
+  );
+
+  const drawn = useMemo(() => {
+    const rank = (id: string) => cars.get(id)?.position ?? 999;
+    const groups = new Map<string, PlacedCar[]>();
+    for (const car of placed) {
+      const key = mode === 'loops' ? `${car.lit.index}` : `${car.id}`;
+      const list = groups.get(key) ?? [];
+      list.push(car);
+      groups.set(key, list);
+    }
+    const out: Array<{ car: PlacedCar; x: number; y: number }> = [];
+    for (const list of groups.values()) {
+      list.sort((a, b) => rank(a.id) - rank(b.id));
+      const t = list[0].t;
+      const centre = project(t, 0);
+      if (!centre) continue;
+      if (list.length === 1) {
+        out.push({ car: list[0], x: centre[0], y: centre[1] });
+        continue;
+      }
+      // Line them up along the loop: across the track at this point, on screen.
+      const a = project(t, -halfWidth);
+      const b = project(t, halfWidth);
+      let dx = 1;
+      let dy = 0;
+      if (a && b) {
+        const len = Math.hypot(b[0] - a[0], b[1] - a[1]);
+        if (len > 0.5) {
+          dx = (b[0] - a[0]) / len;
+          dy = (b[1] - a[1]) / len;
+        }
+      }
+      // Touching, not spaced: a busy loop stays a short line across the track.
+      const widths = list.map((car) => (car.bryce ? PLATE_W - 2 : DOT_R * 2 - 1));
+      const total = widths.reduce((sum, w) => sum + w, 0);
+      let cursor = -total / 2;
+      list.forEach((car, index) => {
+        const offset = cursor + widths[index] / 2;
+        cursor += widths[index];
+        out.push({ car, x: centre[0] + dx * offset, y: centre[1] + dy * offset });
+      });
+    }
+    // Bryce and the ringed car draw last, on top.
+    const focus = hover?.id ?? highlightId ?? null;
+    out.sort((p, q) => Number(p.car.bryce || p.car.id === focus) - Number(q.car.bryce || q.car.id === focus));
+    return out;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [placed, mode, cars, project, halfWidth, version, hover?.id, highlightId]);
+
+  const svgRef = useRef<SVGSVGElement | null>(null);
+  const focus = hover?.id ?? highlightId ?? null;
+  const tipCar = hover ? drawn.find((entry) => entry.car.id === hover.id) ?? null : null;
+  const tipLabel = tipCar ? cars.get(tipCar.car.id) : null;
+
+  return (
+    <>
+      <svg ref={svgRef} className="live-dots" width="100%" height="100%" aria-hidden data-dots-mode={mode} data-dots-placed={count}>
+        {ticks.map((tick) => (
+          <line key={tick.key} x1={tick.a[0]} y1={tick.a[1]} x2={tick.b[0]} y2={tick.b[1]} className="live-dots__loop" />
+        ))}
+        {drawn.map(({ car, x, y }) => {
+          const label = cars.get(car.id);
+          const ringed = car.id === focus;
+          return (
+            <g
+              key={car.id}
+              className={`live-dots__car${car.bryce ? ' live-dots__car--bryce' : ''}${ringed ? ' is-focus' : ''}`}
+              transform={`translate(${x.toFixed(1)} ${y.toFixed(1)})`}
+              data-car={car.id}
+              data-car-no={label?.no ?? ''}
+              data-section={car.lit.anchor.familyId}
+              onPointerEnter={() => enter(car.id)}
+              onPointerLeave={leave}
+              onClick={() => toggle(car.id)}
+            >
+              {/* a larger, invisible target for the pointer */}
+              <circle r={car.bryce ? 14 : 9} className="live-dots__hit" />
+              {ringed ? <circle r={car.bryce ? 15 : DOT_R + 4} className="live-dots__ring" /> : null}
+              {car.bryce ? (
+                <>
+                  <rect x={-PLATE_W / 2} y={-PLATE_H / 2} width={PLATE_W} height={PLATE_H} rx={4} className="live-dots__plate" />
+                  <text y={4} textAnchor="middle" className="live-dots__plate-no">
+                    {label?.no || '9'}
+                  </text>
+                </>
+              ) : (
+                <circle r={DOT_R} className="live-dots__dot" />
+              )}
+            </g>
+          );
+        })}
+      </svg>
+      {tipCar ? (
+        <div
+          className="live-dots__tip"
+          role="status"
+          style={
+            tipCar.x + 270 > (svgRef.current?.clientWidth ?? Infinity)
+              ? { right: Math.round((svgRef.current?.clientWidth ?? 0) - tipCar.x + 14), top: Math.round(tipCar.y - 12) }
+              : { left: Math.round(tipCar.x + 14), top: Math.round(tipCar.y - 12) }
+          }
+        >
+          <strong>
+            {tipLabel ? `No. ${tipLabel.no} ${tipLabel.surname}` : 'Car'}
+            {tipLabel?.position ? `, P${tipLabel.position}` : ''}
+          </strong>
+          <span>
+            {sectionDisplayName(tipCar.car.lit.anchor, tipCar.car.lit.index, chain.length)}, lap {tipCar.car.lit.lap}
+          </span>
+          <span className="live-dots__tip-detail">
+            {mode === 'loops'
+              ? 'At the timing loop it last crossed.'
+              : 'Placed by time between its two timing loops, not GPS.'}
+          </span>
+        </div>
+      ) : null}
+    </>
   );
 };

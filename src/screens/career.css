@@ -26,6 +26,11 @@
 }
 .career-head .screen-head__title { margin: 0; }
 .career-head .screen-head__sub { max-width: 66ch; }
+/* Round 6 (Jack, Nov 16, screenshot 6: "too much white space here"): the
+ * odometer is the intro's first section, so it follows the intro at the gap
+ * other pages leave under their heads (about 48 px), not the page's full
+ * section gap (up to 112 px). */
+.page.stack.career > .career-head + * { margin-top: calc(var(--career-gap) * -1 + clamp(32px, 2.6vw, 48px)); }
 
 .career-section-head {
   display: flex;

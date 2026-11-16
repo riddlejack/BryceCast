@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { HeroPanel, Plate } from '../app/components';
 import { asNumber, asString, formatDate } from '../app/format';
 import { trackOutlineFor, type TrackOutline } from '../assets/tracks';
@@ -8,8 +8,12 @@ import { uiDataPackage } from '../data/uiDataPackage';
 import { displayRaceLabelText } from '../data/debriefArchive';
 import { canonicalLiveRaceSessionId } from '../data/liveRaceShellModel';
 import type { LiveSessionHistory } from '../data/liveHistoryModel';
-import { LiveTrack, useSectionLight, type SectionLightState } from './liveTrack';
-import { sectionDisplayName } from './liveSectionLight';
+import { useRouter } from '../app/router';
+import { useCoarsePointer } from '../app/charts';
+import { TrackModelSlot } from '../three/TrackModelSlot';
+import type { TrackModelSection, TrackOverlayView } from '../three/TrackModel3D';
+import { LiveTrack, TrackDots, useSectionLight, type CarLabel, type SectionLightState } from './liveTrack';
+import { sectionDisplayName, type DotMode } from './liveSectionLight';
 
 type Row = Record<string, unknown>;
 
@@ -139,27 +143,76 @@ export const useVirtualNow = (replay: ReplaySession | null) => {
 
 /* ---------- the track panel ---------- */
 
-const trackCaption = (light: SectionLightState, mode: 'race' | 'prestart' | 'session'): string => {
-  if (mode === 'session') return 'Timing gives each car’s laps, not where it is on the circuit, so the circuit stays unlit.';
-  if (light.status === 'live') return 'Live timing gives laps and gaps, not where a car is on the circuit, so the circuit stays unlit.';
+/** What the dots are, for the caption and the "how" under the track. */
+export interface DotsReadout {
+  mode: DotMode;
+  /** Cars with a dot now, Bryce included. */
+  placed: number;
+  /** Cars in the timing feed. */
+  cars: number;
+}
+
+const trackCaption = (light: SectionLightState, mode: 'race' | 'prestart' | 'session', dots: DotsReadout | null): string => {
+  if (mode === 'session') return 'Timing gives each car’s laps, not where it is on the circuit, so the track has no car dots outside a race.';
+  if (light.status === 'live') {
+    return 'Live, the timing gives each car’s laps and gaps but not its section times, so the track has no car dots. A replay of a finished race shows them.';
+  }
   if (mode === 'prestart') {
     return light.status === 'no_sections' || light.status === 'loading'
       ? 'Start / finish is marked; the arrow shows which way they run.'
-      : 'Once the race is on, the timing section Bryce is in lights up as he crosses each timing loop.';
+      : 'Once the race is on, each car gets a dot at the timing loop it last crossed.';
   }
   switch (light.status) {
     case 'loading':
       return 'Loading the official section times for this race.';
     case 'no_sections':
-      return 'This race has no complete official section times, so the circuit stays unlit.';
+      return 'This race has no complete official section times, so the track has no car dots.';
     case 'waiting_line':
-      return 'The section light starts the first time he crosses the line in this replay.';
-    case 'between':
-      return 'No complete section times for this lap, so the circuit is unlit until the next one.';
-    case 'lit':
-    default:
-      return 'Amber is the timing section he is in, from the official section times and the moment he crosses the line each lap. Timing loops only: it shows the section, not his exact spot.';
+      return 'The dots start the first time the cars cross the line in this replay.';
+    default: {
+      const count = dots ? `${dots.placed} of ${dots.cars} cars have a dot now. ` : '';
+      const lit = light.lit ? 'Amber is the section Bryce is in. ' : '';
+      return dots?.mode === 'glide'
+        ? `${count}${lit}Each dot moves through its section by time between two timing loops, not GPS.`
+        : `${count}${lit}Each dot sits on the timing loop that car last crossed.`;
+    }
   }
+};
+
+/** The plain account of the dots, under the track. */
+const DotsHow = ({ light, dots }: { light: SectionLightState; dots: DotsReadout }) => {
+  const field = light.field;
+  const others = Math.max(0, dots.cars - 1);
+  const noTimes = field.usable ? Math.max(0, others - field.rows) : others;
+  const unmatched = field.usable ? Math.max(0, field.rows - field.joined) : 0;
+  return (
+    <details className="live-dots-how" data-dots-field={field.usable ? 'usable' : field.reason ?? 'none'} data-dots-joined={field.joined} data-dots-rows={field.rows}>
+      <summary>How the dots work</summary>
+      <p>
+        Cars are timed at loops in the track surface, and a loop is the only place a car&rsquo;s position is measured. A dot sits on the last
+        loop that car crossed and jumps to the next one when the car gets there. Nothing between two loops is measured, and none of this is GPS.
+      </p>
+      <p>
+        Bryce&rsquo;s gold No. 9 is placed from his official section times and the moment he crosses the line each lap. The other cars&rsquo;
+        section times are published without car numbers, so each set is matched to a car by its lap time: the section times of a lap add up to
+        that car&rsquo;s lap time to the thousandth. A car gets its dot after its first clean green-flag lap. Under caution, on a pit lap, or
+        when a car cannot be matched, it has no dot rather than a guess.
+      </p>
+      {dots.mode === 'glide' ? (
+        <p>
+          This view moves each dot through its section at an even pace between its two measured crossings: placed by time between timing loops,
+          not GPS. Without <code>?dots=glide</code> the dots stay on the loops.
+        </p>
+      ) : null}
+      <p className="live-dots-how__count">
+        {field.usable
+          ? `Now: ${dots.placed} of ${dots.cars} cars have a dot. ${field.joined} of ${field.rows} other cars are matched${unmatched ? `, ${unmatched} not yet` : ''}${
+              noTimes ? `; ${noTimes} ${noTimes === 1 ? 'car has' : 'cars have'} no clean lap in the section times, so no dot all race` : ''
+            }.`
+          : `Only Bryce has a dot in this race: ${field.reason ?? 'the section times do not carry the other cars'}.`}
+      </p>
+    </details>
+  );
 };
 
 /* ---------- the opening caution a replay jumped ---------- */
@@ -207,18 +260,30 @@ const SkippedCautionNote = ({ replay }: { replay: ReplaySession }) => {
   );
 };
 
+const AMBER = '#CC7E16';
+
 export const TrackPanel = ({
   identity,
   replay,
   history,
-  mode
+  mode,
+  cars,
+  highlightId = null,
+  onHoverCar
 }: {
   identity: RaceIdentity;
   replay: ReplaySession | null;
   history: LiveSessionHistory | null;
   mode: 'race' | 'prestart' | 'session';
+  /** Who each dot is (from the timing rows); no map, no dots. */
+  cars?: Map<string, CarLabel>;
+  highlightId?: string | null;
+  onHoverCar?: (id: string | null) => void;
 }) => {
   const virtualNow = useVirtualNow(replay);
+  const coarse = useCoarsePointer();
+  const { route } = useRouter();
+  const dotMode: DotMode = route.search.get('dots') === 'glide' ? 'glide' : 'loops';
   const light = useSectionLight({
     sessionId: replay && mode !== 'session' ? identity.sessionId : null,
     outline: identity.outline,
@@ -226,6 +291,40 @@ export const TrackPanel = ({
     virtualNow,
     speed: replay?.speed ?? 1
   });
+  const [placed, setPlaced] = useState(0);
+  const chain = light.plan?.usable ? light.plan.chain : null;
+  const litKey = light.lit?.anchor.familyId ?? null;
+  const sections = useMemo<TrackModelSection[]>(
+    () =>
+      (chain ?? []).map((anchor, index, list) => ({
+        key: anchor.familyId,
+        label: sectionDisplayName(anchor, index, list.length),
+        spans: [[anchor.startT, anchor.endT]],
+        color: anchor.familyId === litKey ? AMBER : null,
+        dashed: false,
+        words: anchor.familyId === litKey ? 'Bryce is in this section now.' : 'A timing section: a loop at each end times every car through it.'
+      })),
+    [chain, litKey]
+  );
+  const dotsOn = mode === 'race' && Boolean(replay) && Boolean(chain) && Boolean(cars) && (light.bryce !== null || light.field.placers.length > 0);
+  const speed = replay?.speed ?? 1;
+  const overlay = dotsOn
+    ? (view: TrackOverlayView) => (
+        <TrackDots
+          view={view}
+          chain={chain!}
+          bryce={light.bryce}
+          placers={light.field.placers}
+          virtualNow={virtualNow}
+          speed={speed}
+          mode={dotMode}
+          cars={cars!}
+          highlightId={highlightId}
+          onHoverCar={onHoverCar}
+          onCount={setPlaced}
+        />
+      )
+    : undefined;
   if (!identity.outline) {
     return (
       <div className="live-hero__track live-hero__track--none">
@@ -233,19 +332,49 @@ export const TrackPanel = ({
       </div>
     );
   }
-  const chain = light.plan?.usable ? light.plan.chain : null;
   const litName = light.lit && chain ? sectionDisplayName(light.lit.anchor, light.lit.index, chain.length) : null;
+  const ariaLabel = `${identity.outline.name}${litName ? `: Bryce is in ${litName}, on his lap ${light.lit!.lap}` : ''}`;
+  const dots: DotsReadout | null = dotsOn ? { mode: dotMode, placed: dotsOn ? placed : 0, cars: cars?.size ?? 0 } : null;
+  const flat = (
+    <LiveTrack
+      outline={identity.outline}
+      chain={chain}
+      labelRoom={Boolean(replay) && mode !== 'session'}
+      lit={light.lit}
+      ariaLabel={ariaLabel}
+      overlay={overlay}
+    />
+  );
   return (
-    <div className="live-hero__track" data-section-light={light.status} data-section-light-reason={light.plan?.reason ?? ''}>
+    <div
+      className="live-hero__track live-desk__track"
+      data-section-light={light.status}
+      data-section-light-reason={light.plan?.reason ?? ''}
+      data-lit-section={litKey ?? ''}
+      data-dots={dots ? dots.mode : 'off'}
+    >
       {replay && mode === 'race' ? <SkippedCautionNote replay={replay} /> : null}
-      <LiveTrack
-        outline={identity.outline}
-        chain={chain}
-        labelRoom={Boolean(replay) && mode !== 'session'}
-        lit={light.lit}
-        ariaLabel={`${identity.outline.name}${litName ? `: Bryce is in ${litName}, on his lap ${light.lit!.lap}` : ''}`}
-      />
-      <p className="caption caption--secondary live-hero__track-caption">{trackCaption(light, mode)}</p>
+      <div className="live-desk__model">
+        <TrackModelSlot
+          slug={identity.outline.slug}
+          name={identity.outline.name}
+          sections={sections}
+          active={litKey}
+          fallback={flat}
+          overlay={overlay}
+          hint={
+            coarse
+              ? dotsOn
+                ? 'Tap a dot for the driver; drag sideways to turn the track.'
+                : 'Drag sideways to turn the track.'
+              : dotsOn
+                ? 'Point at a dot for the driver; drag to turn the track.'
+                : 'Drag to turn the track.'
+          }
+        />
+      </div>
+      <p className="caption caption--secondary live-hero__track-caption">{trackCaption(light, mode, dots)}</p>
+      {dots ? <DotsHow light={light} dots={dots} /> : null}
     </div>
   );
 };

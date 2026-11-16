@@ -1071,22 +1071,64 @@ a.tower__row.tower__row--bryce:hover { --row-fill: color-mix(in srgb, var(--ambe
 
 /* ---------- source affordance ---------- */
 
+/* Round 6 (Jack, Nov 16: "the things that say source are a little bit
+ * odd"): one quiet word, "Source" or "Sources", dotted underline like the
+ * Career figures' "click to see how", sitting right after what it sources. */
 .source-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
+  display: inline;
   flex: none;
+  font-family: inherit;
   font-size: 12.5px;
   font-weight: 450;
+  line-height: inherit;
+  letter-spacing: 0;
   color: var(--ink-muted);
   background: none;
   border: none;
-  padding: 2px 4px;
+  padding: 0;
+  white-space: nowrap;
   cursor: pointer;
-  transition: color 150ms ease;
+  text-decoration: underline dotted;
+  text-decoration-color: var(--grey-line);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+  transition: color 150ms ease, text-decoration-color 150ms ease;
 }
 
-.source-pill:hover { color: var(--ink-primary); }
+@media (hover: hover) {
+  .source-pill:hover { color: var(--ink); text-decoration-color: var(--amber); }
+}
+
+/* In a section head the word follows the title on its baseline instead of
+ * floating to the far edge (where it read as detached and, on Career, sat over
+ * the intro). A head that also carries other controls keeps its layout. */
+.card__header:has(> .source-pill:last-child),
+.career-section-head:has(> .source-pill:last-child),
+.row--between:has(> :is(h2, h3, .section-title, .caption):first-child + .source-pill:last-child) {
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  column-gap: 14px;
+  row-gap: 2px;
+}
+/* A head whose action is a summary and its source (the Races seasons): the
+ * source follows the title too; the summary keeps the far edge. */
+.card__header:has(> .row > .caption + .source-pill:last-child) { justify-content: flex-start; flex-wrap: wrap; column-gap: 14px; }
+.card__header > .row:has(> .caption + .source-pill:last-child) { display: contents; }
+.card__header > .row > .caption:has(+ .source-pill:last-child) { order: 2; margin-left: auto; }
+@media (max-width: 640px) {
+  .card__header > .row > .caption:has(+ .source-pill:last-child) { order: 0; margin-left: 0; }
+}
+/* A paragraph or a context line with its source (Career's series stories):
+ * the word follows the text, level with its last line. */
+.row--between:has(> p:first-child + .source-pill:last-child),
+.ss-bridge__head:has(> .source-pill:last-child) {
+  justify-content: flex-start;
+  align-items: last baseline !important; /* the stories set baseline inline */
+  column-gap: 12px;
+}
+/* A page head with its source beside the title block (the career race pages):
+ * the word sits just after the block, on its last line. */
+.screen-head.row--between:has(> div:first-child + .source-pill:last-child) { justify-content: flex-start; column-gap: 16px; }
 
 .drawer-backdrop {
   position: fixed;

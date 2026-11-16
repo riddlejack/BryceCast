@@ -295,3 +295,21 @@
 .tracks-page .tracks-grid__readout { margin: 10px 0 0; color: var(--ink-secondary); }
 .tracks-page .tracks-grid__lap:focus { outline: none; }
 .tracks-page .tracks-grid__lap:focus-visible > rect:first-child { fill: var(--grey-wash); }
+
+/* ---------- where his lap goes: one lap read by place (round 6) ---------- */
+
+/* A caution, restart or not-clean lap draws his place in each section, not
+ * seconds; the scope line carries the flag, and the bars are hatched so they
+ * never pass for the racing comparison. */
+.tracks-page .tracks-budget__flag {
+  display: inline-block;
+  margin: 0 0 0 10px;
+  padding: 1px 9px;
+  border: 1px solid var(--ink-muted);
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500 !important;
+  color: var(--ink-primary) !important;
+  white-space: nowrap;
+  vertical-align: 1px;
+}

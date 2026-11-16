@@ -183,6 +183,34 @@ export const anchorSetForPack = (
   return null;
 };
 
+/** Segments: runs of consecutive laps with a lap time. Segment k's base is
+ *  the line crossing that starts its first lap. */
+const segmentsOf = (laps: Map<number, SectionLightLap>, totalLaps: number) => {
+  const segmentOf = new Map<number, number>();
+  const cumulative = new Map<number, number>();
+  let segment = 0;
+  let running = 0;
+  let open = false;
+  for (let lap = 1; lap <= totalLaps; lap += 1) {
+    const entry = laps.get(lap);
+    if (!entry) {
+      open = false;
+      continue;
+    }
+    if (!open) {
+      segment += 1;
+      running = 0;
+      open = true;
+      // The base crossing itself: the end of the previous lap (lap - 1).
+      segmentOf.set(-(lap - 1) - 1, segment);
+    }
+    running += entry.lapSeconds;
+    segmentOf.set(lap, segment);
+    cumulative.set(lap, running);
+  }
+  return { segmentOf, cumulative };
+};
+
 export const buildSectionLightPlan = (
   pack: SectionLapsPack,
   set: TrackSectionAnchorSet | null,
@@ -220,35 +248,242 @@ export const buildSectionLightPlan = (
     laps.set(lap, { lap, lapSeconds, sectionSeconds });
   }
   const tiledShare = pack.totalLaps > 0 ? tiled / pack.totalLaps : 0;
-  // Segments: runs of consecutive laps with a lap time. Segment k's base is
-  // the line crossing that starts its first lap.
-  const segmentOf = new Map<number, number>();
-  const cumulative = new Map<number, number>();
-  let segment = 0;
-  let running = 0;
-  let open = false;
-  for (let lap = 1; lap <= pack.totalLaps; lap += 1) {
-    const entry = laps.get(lap);
-    if (!entry) {
-      open = false;
-      continue;
-    }
-    if (!open) {
-      segment += 1;
-      running = 0;
-      open = true;
-      // The base crossing itself: the end of the previous lap (lap - 1).
-      segmentOf.set(-(lap - 1) - 1, segment);
-    }
-    running += entry.lapSeconds;
-    segmentOf.set(lap, segment);
-    cumulative.set(lap, running);
-  }
+  const { segmentOf, cumulative } = segmentsOf(laps, pack.totalLaps);
   if (tiledShare < MIN_TILED_LAP_SHARE) {
     return { ...unusable(`only ${tiled} of ${pack.totalLaps} laps have section times that add up to the lap`, chain), laps, tiledShare, segmentOf, cumulative };
   }
   return { usable: true, reason: null, chain, laps, tiledShare, segmentOf, cumulative };
 };
+
+/* ---------- the other cars (round 6, Jack's review of November 16) ----------
+ *
+ * The same pack carries the other cars lap by lap (`otherCarLaps`): one row per
+ * car, one cell per lap of that car's own race, each its clean green-flag time
+ * through the section or null. The rows carry no car number, so a row is joined
+ * to a car the way the timing itself allows: the official section times of a
+ * clean lap add up to that lap's time exactly, and the archive publishes every
+ * car's lap time as it crosses the line. A row becomes car N when, on some lap,
+ * exactly one car's lap time equals the row's sum for that lap and no other row
+ * claims it (checked offline on every watchable 2024-2026 race with a pack: the
+ * sums equal the feed's lap times to the millisecond, and 42 of 47 races join
+ * every row). Then its loop crossings are placed exactly as Bryce's are: the
+ * observed line crossing, plus the section times.
+ *
+ * Only clean green-flag laps carry the field's section times, so under caution,
+ * on a pit lap or before a car's first clean lap there is nothing to place it
+ * by, and that car has no dot. */
+
+/** A row's lap must equal a car's lap time within this to join them (s). */
+export const LAP_MATCH_TOLERANCE_SECONDS = 0.002;
+/** A joined row is dropped if a later lap disagrees by more than this (s). */
+export const LAP_MISMATCH_SECONDS = 0.02;
+
+export interface FieldRowPlan extends SectionLightPlan {
+  row: number;
+  /** The row's lap time on each clean lap: the sum of its section times. */
+  lapSum: Map<number, number>;
+}
+
+export interface FieldPlan {
+  usable: boolean;
+  reason: string | null;
+  rows: FieldRowPlan[];
+}
+
+/** One plan per other-car row, in the chain's order. Unusable when the race
+ *  carries no field rows, or the sections disagree on how many rows there are
+ *  (a car left out of one section shifts every row after it, so no row could
+ *  be trusted to be one car). */
+export const buildFieldPlan = (pack: SectionLapsPack, bryce: SectionLightPlan): FieldPlan => {
+  if (!bryce.usable || bryce.chain.length === 0) return { usable: false, reason: 'no section chain for this race', rows: [] };
+  const byName = new Map(pack.sections.map((section) => [section.sectionName, section]));
+  const columns = bryce.chain.map((anchor) => byName.get(anchor.sectionName)?.otherCarLaps ?? null);
+  if (columns.some((column) => !column || column.length === 0)) {
+    return { usable: false, reason: 'this race’s section times do not carry the other cars', rows: [] };
+  }
+  const counts = new Set(columns.map((column) => column!.length));
+  if (counts.size !== 1) return { usable: false, reason: 'the sections disagree on how many other cars they carry', rows: [] };
+  const rowCount = columns[0]!.length;
+  const rows: FieldRowPlan[] = [];
+  for (let row = 0; row < rowCount; row += 1) {
+    const laps = new Map<number, SectionLightLap>();
+    const lapSum = new Map<number, number>();
+    for (let lap = 1; lap <= pack.totalLaps; lap += 1) {
+      const sectionSeconds: number[] = [];
+      for (const column of columns) {
+        const time = column![row]?.[lap - 1] ?? null;
+        if (time === null || !(time > 0)) break;
+        sectionSeconds.push(time);
+      }
+      if (sectionSeconds.length !== columns.length) continue;
+      const lapSeconds = sectionSeconds.reduce((total, value) => total + value, 0);
+      laps.set(lap, { lap, lapSeconds, sectionSeconds });
+      lapSum.set(lap, lapSeconds);
+    }
+    const { segmentOf, cumulative } = segmentsOf(laps, pack.totalLaps);
+    rows.push({
+      usable: laps.size > 0,
+      reason: laps.size > 0 ? null : 'no clean lap',
+      chain: bryce.chain,
+      laps,
+      tiledShare: pack.totalLaps > 0 ? laps.size / pack.totalLaps : 0,
+      segmentOf,
+      cumulative,
+      row,
+      lapSum
+    });
+  }
+  return { usable: true, reason: null, rows };
+};
+
+/** "1:17.8725" or "77.8725" → seconds; null for anything else. */
+export const lapTimeSeconds = (value: unknown): number | null => {
+  const text = String(value ?? '').trim();
+  const match = text.match(/^(?:(\d+):)?(\d+(?:\.\d+)?)$/);
+  if (!match) return null;
+  const seconds = (match[1] ? Number(match[1]) * 60 : 0) + Number(match[2]);
+  return Number.isFinite(seconds) && seconds > 0 ? seconds : null;
+};
+
+/** Every car's published lap time per lap, from the samples seen so far: the
+ *  row's `lastLapTime` while its lap count reads that lap (the newest sample
+ *  wins). Merged into `kept`, which outlives the trimmed history window.
+ *  Returns whether anything new arrived. */
+export const mergeObservedLapTimes = (
+  kept: Map<string, Map<number, number>>,
+  samples: CrossingSample[],
+  idOf: (row: Record<string, unknown>) => string
+): boolean => {
+  let changed = false;
+  for (const sample of samples) {
+    for (const row of sample.rows) {
+      const laps = lapsOf(row);
+      const seconds = lapTimeSeconds(row.lastLapTime);
+      if (laps === null || laps < 1 || seconds === null) continue;
+      const id = idOf(row);
+      if (!id) continue;
+      let byLap = kept.get(id);
+      if (!byLap) {
+        byLap = new Map();
+        kept.set(id, byLap);
+      }
+      if (byLap.get(laps) !== seconds) {
+        byLap.set(laps, seconds);
+        changed = true;
+      }
+    }
+  }
+  return changed;
+};
+
+/** Join rows to cars by lap time (see above). `current` is kept unless a
+ *  later lap contradicts it. Bryce is never a candidate (the rows leave him
+ *  out). Returns car id → row index. */
+export const matchFieldRows = (
+  field: FieldPlan,
+  observed: Map<string, Map<number, number>>,
+  current: Map<string, number>,
+  bryceId: string
+): Map<string, number> => {
+  const matches = new Map<string, number>();
+  if (!field.usable) return matches;
+  const contradicts = (plan: FieldRowPlan, times: Map<number, number>) => {
+    for (const [lap, seconds] of times) {
+      const sum = plan.lapSum.get(lap);
+      if (sum !== undefined && Math.abs(sum - seconds) > LAP_MISMATCH_SECONDS) return true;
+    }
+    return false;
+  };
+  for (const [id, row] of current) {
+    const plan = field.rows[row];
+    const times = observed.get(id);
+    if (plan && times && !contradicts(plan, times)) matches.set(id, row);
+  }
+  const takenRows = new Set(matches.values());
+  let progress = true;
+  while (progress) {
+    progress = false;
+    for (const plan of field.rows) {
+      if (takenRows.has(plan.row)) continue;
+      for (const [lap, sum] of plan.lapSum) {
+        const cars: string[] = [];
+        for (const [id, times] of observed) {
+          if (id === bryceId || matches.has(id)) continue;
+          const seconds = times.get(lap);
+          if (seconds !== undefined && Math.abs(seconds - sum) <= LAP_MATCH_TOLERANCE_SECONDS) cars.push(id);
+        }
+        if (cars.length !== 1 || contradicts(plan, observed.get(cars[0])!)) continue;
+        const seconds = observed.get(cars[0])!.get(lap)!;
+        const rivals = field.rows.filter(
+          (other) => other.row !== plan.row && !takenRows.has(other.row) && Math.abs((other.lapSum.get(lap) ?? Infinity) - seconds) <= LAP_MATCH_TOLERANCE_SECONDS
+        );
+        if (rivals.length > 0) continue;
+        matches.set(cars[0], plan.row);
+        takenRows.add(plan.row);
+        progress = true;
+        break;
+      }
+    }
+  }
+  return matches;
+};
+
+/** Lap-line crossings for every car at once (as `lapLineCrossingsFrom` does
+ *  for Bryce), merged into `kept` per car, tightest bracket per lap. Returns
+ *  whether anything tightened. */
+export const mergeFieldLapLineCrossings = (
+  kept: Map<string, Map<number, LapLineCrossing>>,
+  samples: CrossingSample[],
+  idOf: (row: Record<string, unknown>) => string
+): boolean => {
+  let changed = false;
+  const previous = new Map<string, { at: number; laps: number }>();
+  for (const sample of samples) {
+    const seen = new Set<string>();
+    for (const row of sample.rows) {
+      const id = idOf(row);
+      if (!id) continue;
+      seen.add(id);
+      const laps = lapsOf(row);
+      if (laps === null) {
+        previous.delete(id);
+        continue;
+      }
+      const before = previous.get(id);
+      if (before && laps === before.laps + 1 && sample.checkedAtMs > before.at) {
+        let byLap = kept.get(id);
+        if (!byLap) {
+          byLap = new Map();
+          kept.set(id, byLap);
+        }
+        if (mergeLapLineCrossings(byLap, [{ lap: laps, afterMs: before.at, atOrBeforeMs: sample.checkedAtMs }])) changed = true;
+      }
+      previous.set(id, { at: sample.checkedAtMs, laps });
+    }
+    // A car missing from a sample breaks its bracket, as a null lap count does.
+    for (const id of [...previous.keys()]) if (!seen.has(id)) previous.delete(id);
+  }
+  return changed;
+};
+
+/* ---------- where a dot goes ---------- */
+
+/** How a car's dot is placed. `loops` (the default): at the last timing loop
+ *  it crossed, moving loop to loop. `glide`: through its current section by
+ *  time between its two crossings (an even pace assumed between two measured
+ *  moments; behind `?dots=glide`). */
+export type DotMode = 'loops' | 'glide';
+
+/** The arc parameter of a dot in a section, for the mode. */
+export const dotT = (lit: LitSection, atMs: number, mode: DotMode): number => {
+  const { startT, endT } = lit.anchor;
+  if (mode === 'loops') return startT;
+  const span = lit.leavesAtMs - lit.enteredAtMs;
+  const share = span > 0 ? Math.max(0, Math.min(1, (atMs - lit.enteredAtMs) / span)) : 0;
+  return (startT + spanLength(startT, endT) * share) % 1;
+};
+
+const spanLength = (start: number, end: number) => (end >= start ? end - start : 1 - start + end);
 
 /* ---------- placing the laps on the archive clock ---------- */
 

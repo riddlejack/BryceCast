@@ -12,6 +12,7 @@ import { liveArchiveUpgradeFor, type LiveArchiveUpgrade } from '../data/liveRace
 import type { LiveReadiness } from '../app/useReadiness';
 import type { UiSeasonIndexRow } from '../data/uiDataPackage';
 import { DataFreshness } from '../app/dataFreshness';
+import { TrackStillIcon } from '../app/trackStill';
 import './race.css';
 
 /** Archive labels drop the series prefix (everything here is INDY NXT) and
@@ -22,13 +23,23 @@ const archiveLabel = (raceLabel: string): string =>
     .replace(/^INDY NXT by Firestone at (the )?/i, '')
     .replace(/[,\s]+(Race\s+\d+)$/i, ', $1');
 
-/* ---------- tiny venue mark: letterboxed outline, no measurement needed ---------- */
+/* ---------- tiny venue mark: letterboxed outline, no measurement needed ----------
+ * Round 6 tried a small still of the 3D model here (the plain model at the
+ * icon's own size, public/tracks-3d/stills/<slug>-icon.webp). At about 76 px
+ * the line drawing reads better (see the round-6 report), so it stays the
+ * default; ?icons=3d shows the 3D marks for comparison. */
+
+const ICONS_3D = (() => {
+  try {
+    return typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('icons') === '3d';
+  } catch {
+    return false;
+  }
+})();
 
 const MiniTrack = ({ trackName, muted = false }: { trackName: string | null; muted?: boolean }) => {
   const outline = trackOutlineFor(trackName);
-  return (
-    <span className="race-row__mini">
-      {outline ? (
+  const line = outline ? (
         <svg viewBox={outline.viewBox} width="100%" height="100%" preserveAspectRatio="xMidYMid meet" aria-hidden>
           <path
             d={outline.mainPath}
@@ -39,7 +50,10 @@ const MiniTrack = ({ trackName, muted = false }: { trackName: string | null; mut
             strokeLinejoin="round"
           />
         </svg>
-      ) : null}
+      ) : null;
+  return (
+    <span className={`race-row__mini${muted ? ' race-row__mini--muted' : ''}`}>
+      {ICONS_3D && outline ? <TrackStillIcon slug={outline.slug} fallback={line} /> : line}
     </span>
   );
 };

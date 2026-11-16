@@ -446,11 +446,22 @@ a.home-line__head { justify-self: start; }
 
 .home-race__draw { position: relative; width: 100%; }
 
-/* The sweep (homeStandouts.tsx): the drawing dims, and each section lights in
-   amber in turn, on the drawing's own geometry; the last one fades as the
-   next lights. */
-.home-race__draw > div:first-child { transition: opacity 200ms ease-out; }
-.home-race__art.is-playing .home-race__draw > div:first-child { opacity: 0.28; }
+/* The sweep (homeStandouts.tsx). On the 3D still (round 6) the still's own
+   overlay veils the picture and lights each section in its own colour, ringed
+   in ink. On a venue with no still, the 2D drawing dims and each section
+   lights in its own colour in turn, on the drawing's own geometry; the last
+   one fades as the next lights. */
+.home-race__flat { transition: opacity 200ms ease-out; }
+.home-race__art.is-playing .home-race__flat { opacity: 0.28; }
+.home-race__art--still .track-still {
+  max-width: calc((340px - 34px) * 1200 / 676);
+  margin: 0 auto;
+}
+@media (hover: hover) {
+  /* A pointer that hovers reaches the still (which reads each section);
+     the play target stays for taps and keys. */
+  .home-race__art--still .home-race__hit { pointer-events: none; }
+}
 .home-race__sweep { position: absolute; top: 0; overflow: visible; pointer-events: none; }
 .home-race__sweep path { opacity: 0; transition: opacity 280ms ease-out; }
 .home-race__sweep path.is-lit { opacity: 1; transition: none; }
@@ -477,7 +488,7 @@ a.home-line__head { justify-self: start; }
   .home-race__sweep-hint--touch { display: inline; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .home-race__draw > div:first-child,
+  .home-race__flat,
   .home-race__sweep path { transition: none; }
 }
 

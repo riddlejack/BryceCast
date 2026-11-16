@@ -3,11 +3,13 @@ import { useMeasuredWidth, useReducedMotion } from '../app/charts';
 import { formatDate } from '../app/format';
 import { Link } from '../app/router';
 import { TrackArt } from '../app/trackArt';
+import { TrackStill, hasStill, useStillIndex } from '../app/trackStill';
 import { trackOutlineFor } from '../assets/tracks';
 import type { UiSeasonIndexRow } from '../data/uiDataPackage';
 import type { SeasonReview } from '../data/seasonPhase';
-import { resolveHeatSections, sectionObservationsFromLaps, type ResolvedHeatSection } from '../data/sectionObservations';
-import { useVenueSectionData } from './sectionIntelligence';
+import type { ResolvedHeatSection } from '../data/sectionObservations';
+import type { TrackModelSection } from '../three/TrackModel3D';
+import { raceStillSectionsFor, useVenueSectionData } from './sectionIntelligence';
 
 /* ============================================================
  * The landing's standout races (site refresh, Nov 14 2026).
@@ -21,8 +23,16 @@ import { useVenueSectionData } from './sectionIntelligence';
  * What moves: on hover (or a tap, or Enter), each section of the track
  * lights in turn for his median time in it in that race, the whole lap
  * scaled to play once in about 3.5 s, then the map rests. Sections light
- * whole: no dot, and nothing implies where the car was inside a section
- * (there is no position data, only timing loops).
+ * whole, each in its own heat colour ringed in ink: nothing implies where the
+ * car was inside a section (there is no position data, only timing loops).
+ * At rest, pointing at a section reads it in the Tracks page's words.
+ *
+ * Round 6 (Jack's review of Nov 16): the track is a still of the 3D model
+ * (TrackStill), shaded for that race as the Tracks page's model shades it.
+ * A venue with no model keeps the 2D drawing. A dot that runs along the
+ * centreline by time is built behind ?sweep=dot for Jack to compare; it is
+ * placed by time through each section, not a measured position, and off by
+ * default (the repo's no-GPS boundary).
  * ============================================================ */
 
 /** "2026 Grand Prix of Monterey Race 2 R2" → "Grand Prix of Monterey, Race 2". */
@@ -76,44 +86,60 @@ const dashesFor = (start: number, end: number): Array<{ dasharray: string; dasho
       ];
 
 interface SweepStep {
-  section: ResolvedHeatSection;
+  section: TrackModelSection;
   seconds: number;
+  /** The section's forward length on the outline (the dot's run). */
+  length: number;
 }
+
+/** ?sweep=dot: the comparison build of a dot run by time (off by default). */
+const dotSweep = (): boolean => {
+  try {
+    return new URLSearchParams(window.location.search).get('sweep') === 'dot';
+  } catch {
+    return false;
+  }
+};
 
 const StandoutArt = ({ trackName, sessionId, raceName }: { trackName: string | null; sessionId: string; raceName: string }) => {
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();
   const reduced = useReducedMotion();
   const outline = trackOutlineFor(trackName);
   const sections = useVenueSectionData(outline?.name ?? trackName);
-  const { resolved, steps } = useMemo(() => {
-    if (!sections.anchors) return { resolved: [] as ResolvedHeatSection[], steps: [] as SweepStep[] };
+  const stillIndex = useStillIndex();
+  const still = outline ? hasStill(stillIndex, outline.slug) : false;
+  const withDot = useMemo(dotSweep, []);
+  const { modelSections, heat, steps } = useMemo(() => {
+    const none = { modelSections: [] as TrackModelSection[], heat: [] as ResolvedHeatSection[], steps: [] as SweepStep[] };
+    if (!sections.anchors || !outline) return none;
     const visit = sections.visits.find((pack) => pack.sessionId === sessionId);
-    if (!visit) return { resolved: [] as ResolvedHeatSection[], steps: [] as SweepStep[] };
+    if (!visit) return none;
     /* That visit's own anchors: a measured pack never joins PDF names. */
     const anchors = sections.anchorsBySession.get(visit.sessionId) ?? sections.anchors;
-    const set = sectionObservationsFromLaps(visit);
-    const heat = resolveHeatSections(anchors, set);
-    /* His median time in each section, in lap order (the anchor set's order).
-     * A section with no time of his own takes the lap's average pace over its
-     * length, so the sweep never stalls or skips a stretch it has drawn. */
+    const { set, heat, sections: model } = raceStillSectionsFor(visit, anchors, outline);
+    if (heat.length === 0) return none;
+    /* His median time in each section, in the order he drives them. A section
+     * with no time of his own takes the lap's average pace over its length,
+     * so the sweep never stalls or skips a stretch it has drawn. */
     const byName = new Map(set.sections.map((observation) => [observation.sectionName, observation]));
-    const timed = heat.map((section) => ({
+    const timed = model.map((section) => ({
       section,
-      length: section.renderSpans.reduce((sum, span) => sum + spanLength(span.startT, span.endT), 0),
-      seconds: byName.get(section.sectionName)?.bryceMedianSeconds ?? null
+      length: section.spans.reduce((sum, [start, end]) => sum + spanLength(start, end), 0),
+      seconds: byName.get(section.key)?.bryceMedianSeconds ?? null
     }));
     const known = timed.filter((entry) => entry.seconds !== null && entry.length > 0);
     const pace = known.length > 0 ? known.reduce((s, e) => s + (e.seconds as number), 0) / known.reduce((s, e) => s + e.length, 0) : null;
     const sweep: SweepStep[] =
-      pace === null ? [] : timed.map((entry) => ({ section: entry.section, seconds: entry.seconds ?? entry.length * pace }));
-    return { resolved: heat, steps: sweep };
-  }, [sessionId, sections.anchors, sections.anchorsBySession, sections.visits]);
+      pace === null ? [] : timed.map((entry) => ({ section: entry.section, length: entry.length, seconds: entry.seconds ?? entry.length * pace }));
+    return { modelSections: model, heat, steps: sweep };
+  }, [sessionId, outline, sections.anchors, sections.anchorsBySession, sections.visits]);
 
   const lapSeconds = steps.reduce((sum, step) => sum + step.seconds, 0);
   const speedUp = lapSeconds > 0 ? Math.round(lapSeconds / (SWEEP_MS / 1000)) : null;
 
-  /* The clock: which step is lit, or null at rest. */
-  const [lit, setLit] = useState<number | null>(null);
+  /* The clock: which step is lit (and, with the dot, how far through it), or
+   * null at rest. */
+  const [lit, setLit] = useState<{ index: number; through: number } | null>(null);
   const raf = useRef<number | null>(null);
   const playing = lit !== null;
   const play = () => {
@@ -132,8 +158,10 @@ const StandoutArt = ({ trackName, sessionId, raceName }: { trackName: string | n
         setLit(null);
         return;
       }
-      const index = ends.findIndex((end) => t < end);
-      setLit(index < 0 ? steps.length - 1 : index);
+      const found = ends.findIndex((end) => t < end);
+      const index = found < 0 ? steps.length - 1 : found;
+      const from = index > 0 ? ends[index - 1] : 0;
+      setLit({ index, through: Math.max(0, Math.min(1, (t - from) / Math.max(1, ends[index] - from))) });
       raf.current = requestAnimationFrame(tick);
     };
     raf.current = requestAnimationFrame(tick);
@@ -146,9 +174,9 @@ const StandoutArt = ({ trackName, sessionId, raceName }: { trackName: string | n
   );
 
   const maxHeight = width > 0 && width < 480 ? 230 : 290;
-  /* TrackArt's own box (maxHeight letterbox, centred): the overlay draws in
+  /* TrackArt's own box (maxHeight letterbox, centred): the 2D sweep draws in
    * the same viewBox at the same size and place, so each lit span lands on its
-   * drawn span exactly. */
+   * drawn span exactly. Only for a venue with no 3D still. */
   const geometry = useMemo(() => {
     if (!outline || width <= 0) return null;
     const [, , viewWidth, viewHeight] = outline.viewBox.split(' ').map(Number);
@@ -159,27 +187,56 @@ const StandoutArt = ({ trackName, sessionId, raceName }: { trackName: string | n
   }, [outline, width, maxHeight]);
 
   const canPlay = !reduced && steps.length > 0;
-  const current = lit !== null ? steps[lit] : null;
+  const current = lit !== null ? steps[lit.index] : null;
+  /* The dot (comparison build only): through the lit section's first span by
+   * the share of its time gone. Placed by time, not a measured position. */
+  const dotT =
+    withDot && current && lit
+      ? (() => {
+          let left = lit.through * current.length;
+          for (const [start, end] of current.section.spans) {
+            const span = spanLength(start, end);
+            if (left <= span) return (start + left) % 1;
+            left -= span;
+          }
+          return current.section.spans[0][0];
+        })()
+      : null;
+  const flat = (
+    <div className="home-race__flat">
+      <TrackArt
+        outline={outline!}
+        maxHeight={maxHeight}
+        wind={null}
+        showCornerLabels={false}
+        strokeScale={2}
+        sections={heat.length > 0 ? { resolved: heat, showLabels: false } : null}
+      />
+    </div>
+  );
 
   return (
     <div
-      className={`home-race__art${playing ? ' is-playing' : ''}`}
+      className={`home-race__art${playing ? ' is-playing' : ''}${still ? ' home-race__art--still' : ''}`}
       onPointerEnter={(event) => {
         if (event.pointerType !== 'touch') play();
       }}
     >
-      <div ref={ref} className="home-race__draw">
-        {outline && width > 0 ? (
-          <TrackArt
-            outline={outline}
-            maxHeight={maxHeight}
-            wind={null}
-            showCornerLabels={false}
-            strokeScale={2}
-            sections={resolved.length > 0 ? { resolved, showLabels: false } : null}
+      <div ref={ref} className="home-race__draw" onClick={still ? play : undefined}>
+        {outline && still ? (
+          <TrackStill
+            slug={outline.slug}
+            sessionId={sessionId}
+            sections={modelSections}
+            interactive={!playing && modelSections.length > 0}
+            lit={current ? current.section.key : null}
+            dotT={dotT}
+            alt={`${outline.name}: the 3D track, shaded section by section for the ${raceName}.`}
+            sizes="(max-width: 760px) 100vw, 560px"
           />
         ) : null}
-        {outline && geometry && steps.length > 0 ? (
+        {outline && !still && width > 0 ? flat : null}
+        {outline && !still && geometry && steps.length > 0 ? (
           <svg
             className="home-race__sweep"
             viewBox={outline.viewBox}
@@ -189,34 +246,38 @@ const StandoutArt = ({ trackName, sessionId, raceName }: { trackName: string | n
             aria-hidden
           >
             {steps.map((step, index) =>
-              step.section.renderSpans.flatMap((span, spanIndex) =>
-                dashesFor(span.startT, span.endT).map((dash, dashIndex) => (
+              step.section.spans.flatMap(([start, end], spanIndex) =>
+                dashesFor(start, end).map((dash, dashIndex) => (
                   <path
-                    key={`${step.section.familyId}-${spanIndex}-${dashIndex}`}
+                    key={`${step.section.key}-${spanIndex}-${dashIndex}`}
                     d={outline.mainPath}
                     fill="none"
                     pathLength={1}
-                    stroke="var(--amber)"
+                    stroke={step.section.color ?? 'var(--ink-muted)'}
                     strokeWidth={15 / geometry.scale}
                     strokeLinecap="butt"
                     strokeDasharray={dash.dasharray}
                     strokeDashoffset={dash.dashoffset}
-                    className={index === lit ? 'is-lit' : undefined}
+                    className={index === lit?.index ? 'is-lit' : undefined}
                   />
                 ))
               )
             )}
           </svg>
         ) : null}
-        {/* The hand's target over the whole drawing: TrackArt's own hover box
-            and tap cycle stay off here; this card's answer is the sweep. */}
+        {/* The hand's target over the whole drawing for touch and keys: a tap
+            or Enter plays the lap. With a pointer that hovers, it lets the
+            pointer through to the still, which reads each section. */}
         {canPlay ? (
           <span
             className="home-race__hit"
             role="button"
             tabIndex={0}
             aria-label={`Play his median lap of the ${raceName}, section by section, sped up`}
-            onClick={play}
+            onClick={(event) => {
+              event.stopPropagation();
+              play();
+            }}
             onKeyDown={(event) => {
               if (event.key === 'Enter' || event.key === ' ') {
                 event.preventDefault();
@@ -241,6 +302,7 @@ const StandoutArt = ({ trackName, sessionId, raceName }: { trackName: string | n
               <span className="home-race__sweep-hint--touch">tap the track to play it</span>
             </span>
           )}
+          {withDot && still ? <span className="home-race__dot-note"> · the dot is placed by time, not a measured position</span> : null}
         </span>
       ) : null}
     </div>

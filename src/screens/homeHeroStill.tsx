@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent, type PointerEvent, type ReactNode } from 'react';
-import { useReducedMotion } from '../app/charts';
+import { inkGoldDiverging, useReducedMotion } from '../app/charts';
 import { Link } from '../app/router';
 import { trackSectionsFor } from '../assets/tracks/sections';
 import { loadSectionLaps } from '../data/sectionLaps';
@@ -16,9 +16,12 @@ import { anchorsForPack, resolveHeatSections, sectionObservationsFromLaps } from
  * A pixel of the ID map is a section exactly where that section shows in the
  * still. The page reads the pixel under the pointer (or the tap), lights that
  * section from the same map, and reads out his median time there against the
- * field median, from the same section pack the shading came from (the race
+ * field median, from the same section pack the shading came from (the Tracks
  * page's resolveHeatSections over sectionObservationsFromLaps, full race,
- * clean green-flag laps). At rest the strongest section is lit and named.
+ * clean green-flag laps, basis 'field_times': the share of the other cars his
+ * time beat, as the stills are shaded since round 6). At rest the strongest
+ * section is lit and named. The lit section keeps its own colour, ringed in
+ * ink (Jack's review of Nov 16: a fixed orange made every stretch look gold).
  * ============================================================ */
 
 export interface HeroStillSpec {
@@ -68,12 +71,23 @@ const decodeIds = (rgba: Uint8ClampedArray, count: number): Uint8Array => {
   return ids;
 };
 
+/** "rgb(222, 158, 61)" or "#de9e3d" to [r, g, b]; amber if unreadable. */
+const rgbOf = (colour: string): [number, number, number] => {
+  const rgb = colour.match(/rgba?\(\s*(\d+)[,\s]+(\d+)[,\s]+(\d+)/i);
+  if (rgb) return [Number(rgb[1]), Number(rgb[2]), Number(rgb[3])];
+  const hex = colour.match(/^#([0-9a-f]{6})$/i);
+  if (hex) return [parseInt(hex[1].slice(0, 2), 16), parseInt(hex[1].slice(2, 4), 16), parseInt(hex[1].slice(4, 6), 16)];
+  return [0xcc, 0x7e, 0x16];
+};
+
 /** The lit look of one section, drawn once into its own small canvas (its box
- *  plus a margin): the section in amber, ringed in ink two pixels wide (about
- *  one CSS pixel at the hero's size), so it reads on gold and grey alike. */
+ *  plus a margin): the section in its own heat colour (the colour the still
+ *  shades it with), ringed in ink two pixels wide (about one CSS pixel at the
+ *  hero's size), so it reads on gold and grey alike. */
 const RING = 2;
-const litCanvasFor = (ids: Uint8Array, width: number, height: number, section: LegendSection): HTMLCanvasElement | null => {
+const litCanvasFor = (ids: Uint8Array, width: number, height: number, section: LegendSection, colour: string): HTMLCanvasElement | null => {
   if (!section.box) return null;
+  const [red, green, blue] = rgbOf(colour);
   const pad = RING + 1;
   const x0 = Math.max(0, section.box[0] - pad);
   const y0 = Math.max(0, section.box[1] - pad);
@@ -94,10 +108,9 @@ const litCanvasFor = (ids: Uint8Array, width: number, height: number, section: L
       const gy = y + y0;
       const o = (y * w + x) * 4;
       if (inside(gx, gy)) {
-        /* --amber #CC7E16 */
-        image.data[o] = 0xcc;
-        image.data[o + 1] = 0x7e;
-        image.data[o + 2] = 0x16;
+        image.data[o] = red;
+        image.data[o + 1] = green;
+        image.data[o + 2] = blue;
         image.data[o + 3] = 255;
         continue;
       }
@@ -196,7 +209,7 @@ export const HeroStill = ({ spec, lead, caption }: { spec: HeroStillSpec; lead: 
         const fallback = trackSectionsFor(pack.venueName);
         if (!fallback) return;
         const set = sectionObservationsFromLaps(pack);
-        const resolved = resolveHeatSections(anchorsForPack(pack, fallback), set);
+        const resolved = resolveHeatSections(anchorsForPack(pack, fallback), set, { basis: 'field_times' });
         const byName = new Map(set.sections.map((observation) => [observation.sectionName, observation]));
         const map = new Map<string, { percentile: number; bryce: number | null; field: number | null }>();
         for (const section of resolved) {
@@ -260,7 +273,7 @@ export const HeroStill = ({ spec, lead, caption }: { spec: HeroStillSpec; lead: 
     if (!ids || !shown) return;
     let lit = litCache.current.get(shown.k);
     if (lit === undefined) {
-      lit = litCanvasFor(ids, legend.width, legend.height, shown);
+      lit = litCanvasFor(ids, legend.width, legend.height, shown, inkGoldDiverging(shown.percentile));
       litCache.current.set(shown.k, lit);
     }
     if (!lit) return;

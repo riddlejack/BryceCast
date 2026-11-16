@@ -763,3 +763,6 @@ console.log(JSON.stringify({
   replayStart: 'race-start+opening-caution-jump+formation-search',
   formationSkim: 'formation-under-8s-to-green+watch-caution-16x'
 }, null, 2));
+
+// The car dots on the live page's track (round 6): pure join and placement checks.
+await import('./test-live-dots.mjs');

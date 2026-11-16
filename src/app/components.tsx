@@ -365,13 +365,17 @@ export const SourceDrawer = ({
   );
 };
 
+/* Round 6 (Jack, Nov 16: "the things that say source are a little bit odd"):
+ * no icon, sentence case, a quiet dotted-underlined word that sits right after
+ * what it sources (a section's title, the end of a line), never floated to the
+ * far edge. The drawer behind it is unchanged. */
 export const SourcePill = ({ title, entries, caveats }: { title: string; entries: SourceEntry[]; caveats?: string[] }) => {
   const [open, setOpen] = useState(false);
+  const word = entries.length > 1 ? 'Sources' : 'Source';
   return (
     <>
-      <button type="button" className="source-pill" onClick={() => setOpen(true)}>
-        <Database size={11} aria-hidden />
-        source
+      <button type="button" className="source-pill" aria-haspopup="dialog" aria-label={`${word} for ${title}`} onClick={() => setOpen(true)}>
+        {word}
       </button>
       {open ? <SourceDrawer title={title} entries={entries} caveats={caveats} onClose={() => setOpen(false)} /> : null}
     </>

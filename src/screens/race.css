@@ -47,36 +47,114 @@
   padding-top: 14px;
 }
 
-/* The hero's result art box: a little more room for the shape. */
-.race-page .hero-race__art { height: 280px; }
-@media (min-width: 900px) {
-  .race-page .hero-race { grid-template-columns: minmax(0, 1fr) 340px minmax(0, 1fr); }
-  /* No hero shape when the big section map follows the replay rows: the
-   * result on the left, the points on the right. */
-  .race-page .hero-race.hero-race--no-art { grid-template-columns: minmax(0, 1fr) auto; }
+/* ---------- the header: one block, one left edge (round 6) ----------
+ * Jack, Nov 16 (screenshot 5): "a lot of weird lines, there's too much text,
+ * the spacing isn't right, the padding isn't right, the white space is really
+ * off." The back link, the race line and the title sit tight as one head; under
+ * it one block: the result, the points, one line of context and the replays on
+ * the left, the track as the interactive 3D model on the right. Space separates
+ * the parts; the only rules on it are the model's own. */
+
+.race-page .race-head {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: clamp(4px, 1vw, 16px);
+}
+.race-page .race-head__back { padding: 4px 0; margin-bottom: clamp(16px, 1.6vw, 28px); font-size: 14px; }
+.race-page .race-head .screen-head__title { margin-top: 8px; max-width: none; }
+/* The stack's section gap is for sections; the result belongs to the title. */
+.page.stack.race-page > .race-head + .race-hero { margin-top: calc(var(--section-gap) * -1 + clamp(28px, 2.6vw, 48px)); }
+
+.race-page .race-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: 'facts' 'model' 'watch';
+  gap: 32px;
+  align-items: start;
+}
+.race-page .race-hero__facts { grid-area: facts; min-width: 0; }
+.race-page .race-hero__model { grid-area: model; min-width: 0; }
+.race-page .race-hero__watch { grid-area: watch; min-width: 0; }
+.race-page .race-hero__watch:empty { display: none; }
+
+@media (min-width: 1000px) {
+  .race-page .race-hero {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 8fr);
+    grid-template-areas: 'facts model' 'watch model';
+    grid-template-rows: auto 1fr;
+    column-gap: clamp(40px, 4.4vw, 88px);
+    row-gap: 40px;
+  }
+  /* The replays follow the facts directly (Nov 16: no dead band between them). */
+  .race-page .race-hero__watch { align-self: start; }
+  .race-page .race-hero--no-track {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: 'facts' 'watch';
+    grid-template-rows: auto;
+  }
 }
 
-/* The replay rows, side by side on a wide screen: this race's replay on the
- * left, the earlier years two by two on the right. Half the height of the
- * stacked list, so the big section map that follows starts a screen sooner. */
-@media (min-width: 1100px) {
-  .race-page .race-replay:has(> .race-replay__affordance + .race-replay__years) {
-    display: grid;
-    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-    column-gap: clamp(32px, 4vw, 72px);
-    align-items: start;
-  }
-  .race-page .race-replay__years:not(.race-replay__years--sole) {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px 32px;
-    padding-top: 0;
-    padding-left: clamp(24px, 3vw, 48px);
-    border-top: 0;
-    border-left: 1px solid var(--divider);
-  }
-  .race-page .race-replay__years-lead { grid-column: 1 / -1; }
+/* The result: the place, then how he got there. */
+.race-page .race-hero__result { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
+.race-page .race-hero__pos {
+  font-size: clamp(72px, 7vw, 128px);
+  font-weight: 640;
+  font-variant-numeric: proportional-nums;
+  letter-spacing: -0.045em;
+  line-height: 0.86;
+  margin-left: -0.04em; /* the P's stem on the left edge, optically */
 }
+.race-page .race-hero__gain { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; font-size: 16px; }
+.race-page .race-hero__gain .stat__delta { font-size: 16px; }
+.race-page .race-hero__field { color: var(--ink-muted); }
+
+.race-page .race-hero__points {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px clamp(28px, 3vw, 52px);
+  margin-top: clamp(28px, 2.6vw, 44px);
+}
+.race-page .race-hero__points .stat__value { font-size: clamp(26px, 2.1vw, 36px); }
+
+.race-page .race-hero__line {
+  margin: clamp(22px, 2vw, 32px) 0 0;
+  max-width: 46ch;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--ink-secondary);
+  text-wrap: pretty;
+}
+
+/* The replays: this race's as the one filled play button, the earlier years
+ * as a quiet row of links, and one line naming the captures. The shared
+ * affordance's own capture labels, sources and earlier-year meta lines give
+ * way to that one line here (on Home they stay). */
+.race-page .race-watch { display: flex; flex-direction: column; gap: 20px; }
+.race-page .race-watch .race-replay__affordance { justify-content: flex-start; }
+.race-page .race-watch .race-replay__cta { flex: 0 1 auto; }
+.race-page .race-watch .race-replay__provenance,
+.race-page .race-watch .race-replay__year-prov,
+.race-page .race-watch__years .race-replay__year-meta { display: none; }
+.race-page .race-watch__years { display: flex; flex-direction: column; gap: 10px; }
+.race-page .race-watch__lead { font-size: 13.5px; color: var(--ink-secondary); }
+.race-page .race-watch__list { display: flex; flex-wrap: wrap; gap: 8px 22px; }
+.race-page .race-watch__list .race-replay__year { flex: 0 0 auto; }
+.race-page .race-watch__list .race-replay__year-link { flex: 0 0 auto; grid-template-columns: 28px auto; gap: 9px; }
+.race-page .race-watch__list .race-replay__year-play { width: 28px; height: 28px; }
+.race-page .race-watch__list .race-replay__year-play svg { width: 12px; height: 12px; }
+.race-page .race-watch__list .race-replay__year-title { font-size: 14.5px; font-weight: 520; white-space: nowrap; }
+.race-page .race-watch__prov { margin: 0; max-width: 52ch; font-size: 12.5px; line-height: 1.5; color: var(--ink-muted); }
+
+/* The model's key: the ramp and what a shade means, on one line. */
+.race-page .race-hero__key { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; font-size: 12.5px; color: var(--ink-muted); }
+.race-page .race-hero__ramp { display: inline-flex; align-items: center; gap: 8px; }
+.race-page .race-hero__swatches { display: inline-flex; border-radius: 3px; overflow: hidden; }
+.race-page .race-hero__swatches > span { width: 18px; height: 8px; }
+.race-page .race-hero__key-words { color: var(--ink-secondary); }
+.race-page .race-hero__model .track3d__legend { margin-bottom: 12px; }
+.race-page .race-hero__model .track3d__stage { max-height: min(70vh, 760px); }
+.race-page .race-hero__flat { display: flex; flex-direction: column; gap: 12px; }
 
 /* ---------- /career/race/:id ---------- */
 
@@ -195,8 +273,3 @@
 
 /* Facts in the right-hand column (no track drawing): no rule above them. */
 .career-race .career-race__facts--aside { margin-top: 0; padding-top: 22px; border-top: 0; }
-
-/* Phone: with no hero shape, the points line up under the result. */
-@media (max-width: 899px) {
-  .race-page .hero-race--no-art > .row:last-child { justify-content: flex-start !important; }
-}

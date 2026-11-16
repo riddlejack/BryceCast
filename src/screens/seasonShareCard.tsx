@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Share2 } from 'lucide-react';
 import { trackOutlineFor } from '../assets/tracks';
+import { loadStillIndex, stillPictureFor } from '../app/trackStill';
 import { displayRaceLabelText } from '../data/debriefArchive';
 import type { SeasonReview } from '../data/seasonPhase';
 
@@ -8,7 +9,10 @@ import type { SeasonReview } from '../data/seasonPhase';
  * A 1080×1350 card (the portrait size every phone shares well) drawn as SVG
  * from the same season review the page reads, rasterized in the browser and
  * handed to the share sheet — or saved, where there is no share sheet. Nothing
- * leaves the device until the reader sends it. */
+ * leaves the device until the reader sends it. Round 6: the season best's
+ * track is the 3D still of that race (as the landing's standouts show it),
+ * drawn into the canvas after the SVG (an SVG drawn as an image cannot load
+ * pictures of its own); the line drawing stays where there is no still. */
 
 const W = 1080;
 const H = 1350;
@@ -43,7 +47,10 @@ const sparkline = (review: SeasonReview, x: number, y: number, width: number, he
   return `<path d="${path}" fill="none" stroke="${INK}" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>${dots}`;
 };
 
-const buildSvg = (review: SeasonReview): string => {
+/** Where the season best's track sits on the card. */
+const TRACK_BOX = { x: 80, y: 1060, width: 330, height: 200 };
+
+const buildSvg = (review: SeasonReview, drawOutline = true): string => {
   const best = review.standouts[0]?.row ?? null;
   const outline = best ? trackOutlineFor(best.trackName) : null;
   const bestLabel = best
@@ -76,8 +83,8 @@ const buildSvg = (review: SeasonReview): string => {
   <text x="80" y="770" font-size="32" fill="${MUTED}" font-weight="500">Every finish, race by race · gold marks the season best</text>
   ${sparkline(review, 92, 820, W - 184, 170)}
   ${
-    outline
-      ? `<svg x="80" y="1060" width="330" height="200" viewBox="${outline.viewBox}" preserveAspectRatio="xMinYMid meet">
+    outline && drawOutline
+      ? `<svg x="${TRACK_BOX.x}" y="${TRACK_BOX.y}" width="${TRACK_BOX.width}" height="${TRACK_BOX.height}" viewBox="${outline.viewBox}" preserveAspectRatio="xMinYMid meet">
            <path d="${outline.mainPath}" fill="none" stroke="${INK}" stroke-width="3" vector-effect="non-scaling-stroke" stroke-linejoin="round" stroke-linecap="round"/>
          </svg>`
       : ''
@@ -93,7 +100,26 @@ const buildSvg = (review: SeasonReview): string => {
 </svg>`;
 };
 
-const rasterize = (svg: string): Promise<Blob> =>
+const loadImage = (src: string): Promise<HTMLImageElement> =>
+  new Promise((resolve, reject) => {
+    const image = new Image();
+    image.onload = () => resolve(image);
+    image.onerror = () => reject(new Error('image failed to load'));
+    image.src = src;
+  });
+
+/** The season best's 3D still (its own shaded still, else the venue's plain
+ *  model), or null where the venue has no model. */
+const trackStillFor = async (review: SeasonReview): Promise<HTMLImageElement | null> => {
+  const best = review.standouts[0]?.row ?? null;
+  const outline = best ? trackOutlineFor(best.trackName) : null;
+  if (!best || !outline) return null;
+  const picture = stillPictureFor(await loadStillIndex(), outline.slug, best.sessionId);
+  if (!picture) return null;
+  return loadImage(picture.src1200).catch(() => null);
+};
+
+const rasterize = (svg: string, still: HTMLImageElement | null = null): Promise<Blob> =>
   new Promise((resolve, reject) => {
     const image = new Image();
     const url = URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml;charset=utf-8' }));
@@ -108,6 +134,21 @@ const rasterize = (svg: string): Promise<Blob> =>
         return;
       }
       context.drawImage(image, 0, 0, W, H);
+      if (still) {
+        /* Fitted to the box, left-aligned and centred down it (the outline's
+         * own xMinYMid), on its own paper with rounded corners, a picture
+         * set on the card. */
+        const scale = Math.min(TRACK_BOX.width / still.naturalWidth, TRACK_BOX.height / still.naturalHeight);
+        const width = still.naturalWidth * scale;
+        const height = still.naturalHeight * scale;
+        const top = TRACK_BOX.y + (TRACK_BOX.height - height) / 2;
+        context.save();
+        context.beginPath();
+        context.roundRect(TRACK_BOX.x, top, width, height, 18);
+        context.clip();
+        context.drawImage(still, TRACK_BOX.x, top, width, height);
+        context.restore();
+      }
       URL.revokeObjectURL(url);
       canvas.toBlob((blob) => (blob ? resolve(blob) : reject(new Error('no blob'))), 'image/png');
     };
@@ -123,7 +164,8 @@ export const SeasonShareButton = ({ review }: { review: SeasonReview }) => {
   const share = async () => {
     setState('working');
     try {
-      const blob = await rasterize(buildSvg(review));
+      const still = await trackStillFor(review).catch(() => null);
+      const blob = await rasterize(buildSvg(review, still === null), still);
       const fileName = `bryce-aron-${review.seasonYear}-season.png`;
       const file = new File([blob], fileName, { type: 'image/png' });
       if (typeof navigator.canShare === 'function' && navigator.canShare({ files: [file] })) {
@@ -160,3 +202,8 @@ export const SeasonShareButton = ({ review }: { review: SeasonReview }) => {
 
 /** Exposed for the visual check in development only. */
 export const seasonCardSvg = buildSvg;
+/** The card as the share button draws it (PNG), for the visual check. */
+export const seasonCardBlob = async (review: SeasonReview): Promise<Blob> => {
+  const still = await trackStillFor(review).catch(() => null);
+  return rasterize(buildSvg(review, still === null), still);
+};
