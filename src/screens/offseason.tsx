@@ -3,7 +3,7 @@ import { ArrowRight, CalendarDays, LineChart, Map as MapIcon, PlayCircle, Radio 
 import { Card, Countdown, HeroPanel, ScreenHead, SourcePill, Unavailable } from '../app/components';
 import { formatDate, formatPosition } from '../app/format';
 import { Link } from '../app/router';
-import { TrackArt } from '../app/trackArt';
+import { TrackArt, TrackIcon } from '../app/trackArt';
 import { TrackStill } from '../app/trackStill';
 import { trackOutlineFor } from '../assets/tracks';
 import { displayRaceLabelText } from '../data/debriefArchive';
@@ -22,20 +22,12 @@ const shortRaceLabel = (raceLabel: string): string =>
     .replace(/^INDY NXT by Firestone at (the )?/i, '')
     .replace(/\s+R[12]$/, '');
 
-/* ---------- a venue outline, letterboxed (no measurement needed) ----------
- * Round 6 tried the plain still of the venue's 3D model here. On the 2027
- * board three of the eight venues (Phoenix, Long Beach, the Indianapolis oval)
- * have no model yet, and at 132 px the street circuits read as blobs, so the
- * board keeps one kind of mark, the line drawing; ?icons=3d shows the 3D marks
- * where a model exists, for comparison (Jack's call). */
-
-const MARKS_3D = (() => {
-  try {
-    return typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('icons') === '3d';
-  } catch {
-    return false;
-  }
-})();
+/* ---------- a venue mark: the 3D model from above ----------
+ * Round 7 (Jack's review of Nov 16): the board's marks are the venues' 3D
+ * models seen from straight above, the track a bold ink ribbon (TrackIcon in
+ * app/trackArt.tsx), at the board's size (132 x 84) or the Races list's
+ * (76 x 42) for a smaller mark. A venue with no model keeps the line drawing;
+ * ?icons=line shows the line drawings for comparison. */
 
 export const VenueShape = ({
   trackName,
@@ -67,18 +59,7 @@ export const VenueShape = ({
       className={`venue-shape${muted ? ' venue-shape--muted' : ''}`}
       style={{ width, height, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', flex: 'none' }}
     >
-      {outline && MARKS_3D ? (
-        <TrackStill
-          slug={outline.slug}
-          interactive={false}
-          alt=""
-          sizes={`${Math.ceil(width)}px`}
-          className="track-still--bare"
-          fallback={line}
-        />
-      ) : (
-        line
-      )}
+      <TrackIcon slug={outline?.slug} box={width >= 100 ? 'board' : 'row'} muted={muted} fallback={line} />
     </span>
   );
 };

@@ -76,6 +76,9 @@ export const useLiveSessionHistory = (
    *  missing even when several payloads land inside one render. */
   const latestCheckedAtRef = useRef<Map<string, string>>(new Map());
   const mountedRef = useRef(true);
+  /** Bumped by `reset`: a seed or catch-up still in flight for the moment
+   *  before a replay jump is dropped instead of merged into the new window. */
+  const generationRef = useRef(0);
   const replayParamsRef = useRef<() => string>(() => '');
   replayParamsRef.current = getReplayParams ?? (() => '');
 
@@ -120,6 +123,7 @@ export const useLiveSessionHistory = (
         ? `/api/history/rank-series${replayParams}&window=${SEED_WINDOW_SECONDS}`
         : `/api/history/rank-series?session=${encodeURIComponent(sessionKey)}&window=${SEED_WINDOW_SECONDS}`;
       inFlightRef.current.add(sessionKey);
+      const generation = generationRef.current;
       // Fire-and-forget: a later payload must not cancel an in-flight seed, so the
       // guard is unmount-only. The seededRef gate keeps it to one fetch per session.
       void (async () => {
@@ -127,13 +131,13 @@ export const useLiveSessionHistory = (
           const response = await fetch(apiUrl(path), { headers: { accept: 'application/json' } });
           if (!response.ok || !mountedRef.current) return;
           const data = (await response.json()) as RankSeriesResponse;
-          if (!mountedRef.current) return;
+          if (!mountedRef.current || generation !== generationRef.current) return;
           seededRef.current.add(sessionKey);
           mergeRankSeries(data, sessionKey);
         } catch {
           // A failed seed is non-fatal: the client still accumulates its own polls.
         } finally {
-          inFlightRef.current.delete(sessionKey);
+          if (generation === generationRef.current) inFlightRef.current.delete(sessionKey);
         }
       })();
       return;
@@ -150,18 +154,19 @@ export const useLiveSessionHistory = (
     if (!Number.isFinite(heldMs) || payloadMs - heldMs < CATCH_UP_TRIGGER_MS) return;
 
     catchUpInFlightRef.current = true;
+    const catchUpGeneration = generationRef.current;
     void (async () => {
       try {
         const path = `/api/history/rank-series${replayParams}&since=${encodeURIComponent(held!)}&dense=1`;
         const response = await fetch(apiUrl(path), { headers: { accept: 'application/json' } });
         if (!response.ok || !mountedRef.current) return;
         const data = (await response.json()) as RankSeriesResponse;
-        if (!mountedRef.current) return;
+        if (!mountedRef.current || catchUpGeneration !== generationRef.current) return;
         mergeRankSeries(data, sessionKey);
       } catch {
         // Non-fatal: the next poll's frame still lands, the span just stays sparse.
       } finally {
-        catchUpInFlightRef.current = false;
+        if (catchUpGeneration === generationRef.current) catchUpInFlightRef.current = false;
       }
     })();
   }, [payload, mergeRankSeries]);
@@ -170,6 +175,7 @@ export const useLiveSessionHistory = (
   const reset = useCallback(() => {
     // A restart replays from green: forget the seed so the fresh window re-seeds
     // at the restarted virtual clock.
+    generationRef.current += 1;
     seededRef.current = new Set();
     inFlightRef.current = new Set();
     catchUpInFlightRef.current = false;

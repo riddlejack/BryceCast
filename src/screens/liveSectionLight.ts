@@ -15,9 +15,8 @@
  *
  * Chaining the official lap times from the observed line crossings places
  * every lap's start to within the archive cadence, and the section times then
- * give the moment he crossed each loop inside it. That lights a section, never
- * a point: the page shows "between these two loops", which is what the loops
- * measure. Checked offline against Bryce's gap updates in the archive (which
+ * give the moment he crossed each loop inside it (round 7: liveMarker.ts places
+ * him between those crossings by time, never as a measured position). Checked offline against Bryce's gap updates in the archive (which
  * Race Control and RaceTools refresh at each loop): the reconstructed
  * crossings land within one archive frame (median 0.4-0.5 s).
  *
@@ -33,8 +32,6 @@ type Pt = { x: number; y: number };
 export const TILE_TOLERANCE_SECONDS = 0.05;
 /** A race lights only when at least this share of its laps tile. */
 export const MIN_TILED_LAP_SHARE = 0.5;
-/** A lap-line crossing observed across a wider bracket than this is not used. */
-export const MAX_BOUNDARY_BRACKET_MS = 3_000;
 
 /* ---------- outline geometry ---------- */
 
@@ -142,6 +139,10 @@ export interface SectionLightLap {
   lapSeconds: number;
   /** Section times in chain order, or null when this lap does not tile. */
   sectionSeconds: number[] | null;
+  /** A clean green-flag lap in the official timing (the pace basis). */
+  clean: boolean;
+  /** The official flag state of the lap: green, caution, restart, unknown. */
+  flag: 'g' | 'c' | 'r' | 'u';
 }
 
 export interface SectionLightPlan {
@@ -221,9 +222,13 @@ export const buildSectionLightPlan = (
   const chain = sectionChainFor(set, outline);
   if (!chain) return unusable('the sections do not form one chain from the line');
   const lapTotal = new Map<number, number>();
+  const lapState = new Map<number, { clean: boolean; flag: SectionLightLap['flag'] }>();
   for (const tuple of pack.lapTotals) {
-    const [lap, , , , , , seconds] = tuple;
-    if (lap !== null && seconds !== null && seconds > 0) lapTotal.set(lap, seconds);
+    const [lap, , , , clean, flag, seconds] = tuple;
+    if (lap !== null && seconds !== null && seconds > 0) {
+      lapTotal.set(lap, seconds);
+      lapState.set(lap, { clean: clean === 1, flag: flag ?? 'u' });
+    }
   }
   const byName = new Map(pack.sections.map((section) => [section.sectionName, section]));
   const laps = new Map<number, SectionLightLap>();
@@ -245,7 +250,8 @@ export const buildSectionLightPlan = (
       if (Math.abs(sum - lapSeconds) > TILE_TOLERANCE_SECONDS) sectionSeconds = null;
     }
     if (sectionSeconds) tiled += 1;
-    laps.set(lap, { lap, lapSeconds, sectionSeconds });
+    const state = lapState.get(lap) ?? { clean: false, flag: 'u' as const };
+    laps.set(lap, { lap, lapSeconds, sectionSeconds, clean: state.clean && Boolean(sectionSeconds), flag: state.flag });
   }
   const tiledShare = pack.totalLaps > 0 ? tiled / pack.totalLaps : 0;
   const { segmentOf, cumulative } = segmentsOf(laps, pack.totalLaps);
@@ -255,87 +261,6 @@ export const buildSectionLightPlan = (
   return { usable: true, reason: null, chain, laps, tiledShare, segmentOf, cumulative };
 };
 
-/* ---------- the other cars (round 6, Jack's review of November 16) ----------
- *
- * The same pack carries the other cars lap by lap (`otherCarLaps`): one row per
- * car, one cell per lap of that car's own race, each its clean green-flag time
- * through the section or null. The rows carry no car number, so a row is joined
- * to a car the way the timing itself allows: the official section times of a
- * clean lap add up to that lap's time exactly, and the archive publishes every
- * car's lap time as it crosses the line. A row becomes car N when, on some lap,
- * exactly one car's lap time equals the row's sum for that lap and no other row
- * claims it (checked offline on every watchable 2024-2026 race with a pack: the
- * sums equal the feed's lap times to the millisecond, and 42 of 47 races join
- * every row). Then its loop crossings are placed exactly as Bryce's are: the
- * observed line crossing, plus the section times.
- *
- * Only clean green-flag laps carry the field's section times, so under caution,
- * on a pit lap or before a car's first clean lap there is nothing to place it
- * by, and that car has no dot. */
-
-/** A row's lap must equal a car's lap time within this to join them (s). */
-export const LAP_MATCH_TOLERANCE_SECONDS = 0.002;
-/** A joined row is dropped if a later lap disagrees by more than this (s). */
-export const LAP_MISMATCH_SECONDS = 0.02;
-
-export interface FieldRowPlan extends SectionLightPlan {
-  row: number;
-  /** The row's lap time on each clean lap: the sum of its section times. */
-  lapSum: Map<number, number>;
-}
-
-export interface FieldPlan {
-  usable: boolean;
-  reason: string | null;
-  rows: FieldRowPlan[];
-}
-
-/** One plan per other-car row, in the chain's order. Unusable when the race
- *  carries no field rows, or the sections disagree on how many rows there are
- *  (a car left out of one section shifts every row after it, so no row could
- *  be trusted to be one car). */
-export const buildFieldPlan = (pack: SectionLapsPack, bryce: SectionLightPlan): FieldPlan => {
-  if (!bryce.usable || bryce.chain.length === 0) return { usable: false, reason: 'no section chain for this race', rows: [] };
-  const byName = new Map(pack.sections.map((section) => [section.sectionName, section]));
-  const columns = bryce.chain.map((anchor) => byName.get(anchor.sectionName)?.otherCarLaps ?? null);
-  if (columns.some((column) => !column || column.length === 0)) {
-    return { usable: false, reason: 'this race’s section times do not carry the other cars', rows: [] };
-  }
-  const counts = new Set(columns.map((column) => column!.length));
-  if (counts.size !== 1) return { usable: false, reason: 'the sections disagree on how many other cars they carry', rows: [] };
-  const rowCount = columns[0]!.length;
-  const rows: FieldRowPlan[] = [];
-  for (let row = 0; row < rowCount; row += 1) {
-    const laps = new Map<number, SectionLightLap>();
-    const lapSum = new Map<number, number>();
-    for (let lap = 1; lap <= pack.totalLaps; lap += 1) {
-      const sectionSeconds: number[] = [];
-      for (const column of columns) {
-        const time = column![row]?.[lap - 1] ?? null;
-        if (time === null || !(time > 0)) break;
-        sectionSeconds.push(time);
-      }
-      if (sectionSeconds.length !== columns.length) continue;
-      const lapSeconds = sectionSeconds.reduce((total, value) => total + value, 0);
-      laps.set(lap, { lap, lapSeconds, sectionSeconds });
-      lapSum.set(lap, lapSeconds);
-    }
-    const { segmentOf, cumulative } = segmentsOf(laps, pack.totalLaps);
-    rows.push({
-      usable: laps.size > 0,
-      reason: laps.size > 0 ? null : 'no clean lap',
-      chain: bryce.chain,
-      laps,
-      tiledShare: pack.totalLaps > 0 ? laps.size / pack.totalLaps : 0,
-      segmentOf,
-      cumulative,
-      row,
-      lapSum
-    });
-  }
-  return { usable: true, reason: null, rows };
-};
-
 /** "1:17.8725" or "77.8725" → seconds; null for anything else. */
 export const lapTimeSeconds = (value: unknown): number | null => {
   const text = String(value ?? '').trim();
@@ -343,275 +268,6 @@ export const lapTimeSeconds = (value: unknown): number | null => {
   if (!match) return null;
   const seconds = (match[1] ? Number(match[1]) * 60 : 0) + Number(match[2]);
   return Number.isFinite(seconds) && seconds > 0 ? seconds : null;
-};
-
-/** Every car's published lap time per lap, from the samples seen so far: the
- *  row's `lastLapTime` while its lap count reads that lap (the newest sample
- *  wins). Merged into `kept`, which outlives the trimmed history window.
- *  Returns whether anything new arrived. */
-export const mergeObservedLapTimes = (
-  kept: Map<string, Map<number, number>>,
-  samples: CrossingSample[],
-  idOf: (row: Record<string, unknown>) => string
-): boolean => {
-  let changed = false;
-  for (const sample of samples) {
-    for (const row of sample.rows) {
-      const laps = lapsOf(row);
-      const seconds = lapTimeSeconds(row.lastLapTime);
-      if (laps === null || laps < 1 || seconds === null) continue;
-      const id = idOf(row);
-      if (!id) continue;
-      let byLap = kept.get(id);
-      if (!byLap) {
-        byLap = new Map();
-        kept.set(id, byLap);
-      }
-      if (byLap.get(laps) !== seconds) {
-        byLap.set(laps, seconds);
-        changed = true;
-      }
-    }
-  }
-  return changed;
-};
-
-/** Join rows to cars by lap time (see above). `current` is kept unless a
- *  later lap contradicts it. Bryce is never a candidate (the rows leave him
- *  out). Returns car id → row index. */
-export const matchFieldRows = (
-  field: FieldPlan,
-  observed: Map<string, Map<number, number>>,
-  current: Map<string, number>,
-  bryceId: string
-): Map<string, number> => {
-  const matches = new Map<string, number>();
-  if (!field.usable) return matches;
-  const contradicts = (plan: FieldRowPlan, times: Map<number, number>) => {
-    for (const [lap, seconds] of times) {
-      const sum = plan.lapSum.get(lap);
-      if (sum !== undefined && Math.abs(sum - seconds) > LAP_MISMATCH_SECONDS) return true;
-    }
-    return false;
-  };
-  for (const [id, row] of current) {
-    const plan = field.rows[row];
-    const times = observed.get(id);
-    if (plan && times && !contradicts(plan, times)) matches.set(id, row);
-  }
-  const takenRows = new Set(matches.values());
-  let progress = true;
-  while (progress) {
-    progress = false;
-    for (const plan of field.rows) {
-      if (takenRows.has(plan.row)) continue;
-      for (const [lap, sum] of plan.lapSum) {
-        const cars: string[] = [];
-        for (const [id, times] of observed) {
-          if (id === bryceId || matches.has(id)) continue;
-          const seconds = times.get(lap);
-          if (seconds !== undefined && Math.abs(seconds - sum) <= LAP_MATCH_TOLERANCE_SECONDS) cars.push(id);
-        }
-        if (cars.length !== 1 || contradicts(plan, observed.get(cars[0])!)) continue;
-        const seconds = observed.get(cars[0])!.get(lap)!;
-        const rivals = field.rows.filter(
-          (other) => other.row !== plan.row && !takenRows.has(other.row) && Math.abs((other.lapSum.get(lap) ?? Infinity) - seconds) <= LAP_MATCH_TOLERANCE_SECONDS
-        );
-        if (rivals.length > 0) continue;
-        matches.set(cars[0], plan.row);
-        takenRows.add(plan.row);
-        progress = true;
-        break;
-      }
-    }
-  }
-  return matches;
-};
-
-/** Lap-line crossings for every car at once (as `lapLineCrossingsFrom` does
- *  for Bryce), merged into `kept` per car, tightest bracket per lap. Returns
- *  whether anything tightened. */
-export const mergeFieldLapLineCrossings = (
-  kept: Map<string, Map<number, LapLineCrossing>>,
-  samples: CrossingSample[],
-  idOf: (row: Record<string, unknown>) => string
-): boolean => {
-  let changed = false;
-  const previous = new Map<string, { at: number; laps: number }>();
-  for (const sample of samples) {
-    const seen = new Set<string>();
-    for (const row of sample.rows) {
-      const id = idOf(row);
-      if (!id) continue;
-      seen.add(id);
-      const laps = lapsOf(row);
-      if (laps === null) {
-        previous.delete(id);
-        continue;
-      }
-      const before = previous.get(id);
-      if (before && laps === before.laps + 1 && sample.checkedAtMs > before.at) {
-        let byLap = kept.get(id);
-        if (!byLap) {
-          byLap = new Map();
-          kept.set(id, byLap);
-        }
-        if (mergeLapLineCrossings(byLap, [{ lap: laps, afterMs: before.at, atOrBeforeMs: sample.checkedAtMs }])) changed = true;
-      }
-      previous.set(id, { at: sample.checkedAtMs, laps });
-    }
-    // A car missing from a sample breaks its bracket, as a null lap count does.
-    for (const id of [...previous.keys()]) if (!seen.has(id)) previous.delete(id);
-  }
-  return changed;
-};
-
-/* ---------- where a dot goes ---------- */
-
-/** How a car's dot is placed. `loops` (the default): at the last timing loop
- *  it crossed, moving loop to loop. `glide`: through its current section by
- *  time between its two crossings (an even pace assumed between two measured
- *  moments; behind `?dots=glide`). */
-export type DotMode = 'loops' | 'glide';
-
-/** The arc parameter of a dot in a section, for the mode. */
-export const dotT = (lit: LitSection, atMs: number, mode: DotMode): number => {
-  const { startT, endT } = lit.anchor;
-  if (mode === 'loops') return startT;
-  const span = lit.leavesAtMs - lit.enteredAtMs;
-  const share = span > 0 ? Math.max(0, Math.min(1, (atMs - lit.enteredAtMs) / span)) : 0;
-  return (startT + spanLength(startT, endT) * share) % 1;
-};
-
-const spanLength = (start: number, end: number) => (end >= start ? end - start : 1 - start + end);
-
-/* ---------- placing the laps on the archive clock ---------- */
-
-/** Bryce completed lap `lap` somewhere in (afterMs, atOrBeforeMs]. */
-export interface LapLineCrossing {
-  lap: number;
-  afterMs: number;
-  atOrBeforeMs: number;
-}
-
-/** Segment and cumulative seconds for the line crossing at the END of `lap`
- *  (lap 0 = the start). Null when that crossing has no place in a segment. */
-const crossingOffset = (plan: SectionLightPlan, lap: number): { segment: number; seconds: number } | null => {
-  const asEnd = plan.segmentOf.get(lap);
-  if (asEnd !== undefined) return { segment: asEnd, seconds: plan.cumulative.get(lap) ?? 0 };
-  const asBase = plan.segmentOf.get(-lap - 1);
-  if (asBase !== undefined) return { segment: asBase, seconds: 0 };
-  return null;
-};
-
-/** Each segment's base line crossing (epoch ms), from the observed lap-line
- *  crossings. The brackets are intersected; when they disagree (archive
- *  jitter), the median of their midpoints stands. */
-export const segmentBases = (plan: SectionLightPlan, crossings: LapLineCrossing[]): Map<number, number> => {
-  const bySegment = new Map<number, Array<{ lo: number; hi: number }>>();
-  for (const crossing of crossings) {
-    if (crossing.atOrBeforeMs - crossing.afterMs > MAX_BOUNDARY_BRACKET_MS || crossing.atOrBeforeMs <= crossing.afterMs) continue;
-    const offset = crossingOffset(plan, crossing.lap);
-    if (!offset) continue;
-    const list = bySegment.get(offset.segment) ?? [];
-    list.push({ lo: crossing.afterMs - offset.seconds * 1000, hi: crossing.atOrBeforeMs - offset.seconds * 1000 });
-    bySegment.set(offset.segment, list);
-  }
-  const bases = new Map<number, number>();
-  for (const [segment, list] of bySegment) {
-    const lo = Math.max(...list.map((item) => item.lo));
-    const hi = Math.min(...list.map((item) => item.hi));
-    if (lo <= hi) {
-      bases.set(segment, (lo + hi) / 2);
-    } else {
-      const mids = list.map((item) => (item.lo + item.hi) / 2).sort((a, b) => a - b);
-      bases.set(segment, mids[mids.length >> 1]);
-    }
-  }
-  return bases;
-};
-
-export interface LitSection {
-  index: number;
-  anchor: TrackSectionAnchor;
-  lap: number;
-  enteredAtMs: number;
-  leavesAtMs: number;
-}
-
-/** The section Bryce is in at `atMs`, or null (no tiled lap there, or no
- *  observed line crossing to place it). */
-export const sectionAt = (plan: SectionLightPlan, bases: Map<number, number>, atMs: number): LitSection | null => {
-  if (!plan.usable) return null;
-  for (const [lap, entry] of plan.laps) {
-    const segment = plan.segmentOf.get(lap);
-    if (segment === undefined) continue;
-    const base = bases.get(segment);
-    if (base === undefined) continue;
-    const endMs = base + (plan.cumulative.get(lap) ?? 0) * 1000;
-    const startMs = endMs - entry.lapSeconds * 1000;
-    if (atMs < startMs || atMs >= endMs) continue;
-    if (!entry.sectionSeconds) return null;
-    let cursor = startMs;
-    for (let index = 0; index < plan.chain.length; index += 1) {
-      const next = cursor + entry.sectionSeconds[index] * 1000;
-      if (atMs < next) return { index, anchor: plan.chain[index], lap, enteredAtMs: cursor, leavesAtMs: next };
-      cursor = next;
-    }
-    return null;
-  }
-  return null;
-};
-
-/* ---------- reading line crossings from the session history ---------- */
-
-interface CrossingSample {
-  checkedAtMs: number;
-  rows: Array<Record<string, unknown>>;
-  bryceId: string;
-}
-
-const lapsOf = (row: Record<string, unknown> | undefined): number | null => {
-  if (!row) return null;
-  const value = Number(row.laps);
-  return Number.isFinite(value) && String(row.laps ?? '').trim() !== '' ? value : null;
-};
-
-/** Lap-line crossings bracketed by consecutive samples where Bryce's lap
- *  count steps up by one. `idOf` resolves a row's stable driver id. */
-export const lapLineCrossingsFrom = (
-  samples: CrossingSample[],
-  idOf: (row: Record<string, unknown>) => string
-): LapLineCrossing[] => {
-  const crossings: LapLineCrossing[] = [];
-  let previous: { at: number; laps: number } | null = null;
-  for (const sample of samples) {
-    const bryce = sample.rows.find((row) => idOf(row) === sample.bryceId);
-    const laps = lapsOf(bryce);
-    if (laps === null) {
-      previous = null;
-      continue;
-    }
-    if (previous && laps === previous.laps + 1 && sample.checkedAtMs > previous.at) {
-      crossings.push({ lap: laps, afterMs: previous.at, atOrBeforeMs: sample.checkedAtMs });
-    }
-    previous = { at: sample.checkedAtMs, laps };
-  }
-  return crossings;
-};
-
-/** Merge newly seen crossings into a kept set, keeping the tightest bracket
- *  per lap (the history window trims old samples; the kept set does not). */
-export const mergeLapLineCrossings = (kept: Map<number, LapLineCrossing>, incoming: LapLineCrossing[]): boolean => {
-  let changed = false;
-  for (const crossing of incoming) {
-    const current = kept.get(crossing.lap);
-    if (!current || crossing.atOrBeforeMs - crossing.afterMs < current.atOrBeforeMs - current.afterMs) {
-      kept.set(crossing.lap, crossing);
-      changed = true;
-    }
-  }
-  return changed;
 };
 
 /** A readable name for a section: its curated label when that names a corner

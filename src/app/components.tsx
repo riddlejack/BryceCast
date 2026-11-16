@@ -243,45 +243,85 @@ export const Unavailable = ({ children }: { children: ReactNode }) => (
   </div>
 );
 
-/* ---------- the car: No. 9 side profile, black with red trim ---------- */
+/* ---------- the car: No. 9 side profile ----------
+ * Round 7 (Jack's review of Nov 16: "redo this car icon so it more closely
+ * resembles Bryce's actual car"). The INDY NXT chassis, a Dallara IL-15 with
+ * the halo the series has carried since 2021 (not an aeroscreen), side on, nose
+ * to the right, 1 unit = 10 mm: 4,870 mm long, 2,970 mm wheelbase (INDY NXT's
+ * fan guide), 15 in rims, the tyres about 690 mm (rear) and 670 mm (front)
+ * across, the airbox and roll hoop over the driver, the engine cover falling to
+ * the gearbox, a low sidepod, the halo arc, a rear wing (main plane and flap)
+ * on its endplate and the front wing with its endplates. Proportions traced
+ * from a near-side view of the IL-15 (iRacing's model of the car, iracing.com
+ * car page, screenshot 3), the shapes simplified so it reads at 20 px.
+ * The livery's colour blocks are his 2026 No. 9 Chip Ganassi Racing car's:
+ * white upper body over dark navy, red halo, nose tip, front-wing endplates,
+ * mirrors and roll-hoop camera, and the white rear-wing endplate with a navy 9
+ * (INDYCAR's photo of the car at Barber, March 2026, indycar.com, May 1 2026;
+ * the INDY NXT race video of Monterey Race 1 2026 at 50:20). No sponsor marks.
+ * The previous mark (black with red trim) followed his 2024 HMD car. */
+const LIVERY = { white: '#FFFFFF', navy: '#1C2130', red: '#C8161E', tyre: '#1E1C1A', rim: '#5E636B' };
 
-/** Bryce's 2026 machine as a quiet mark — black body, red trim, white 9,
- *  matching the Jaguar Land Rover Chesterfield CGR livery language. */
-export const CarMark = ({ height = 18 }: { height?: number }) => (
-  <svg
-    width={height * (100 / 24)}
-    height={height}
-    viewBox="0 0 100 24"
-    role="img"
-    aria-label="Bryce Aron's No. 9 car"
-    style={{ flex: 'none' }}
-  >
-    {/* rear wing */}
-    <rect x={5} y={5} width={12} height={2.4} rx={1.2} fill="var(--ink-primary)" />
-    <rect x={15.6} y={3.8} width={1.8} height={8.4} rx={0.9} fill="var(--ink-primary)" />
-    <rect x={10.4} y={7.4} width={1.8} height={4.4} fill="var(--ink-primary)" />
-    {/* engine cover with red trim line */}
-    <rect x={22} y={8.2} width={14} height={3} rx={1.5} fill="var(--ink-primary)" />
-    <rect x={22} y={9.1} width={14} height={1} rx={0.5} fill="#c8102e" />
-    {/* halo over the cockpit */}
-    <path d="M39 11 Q 45 4.6 51 11" fill="none" stroke="var(--ink-primary)" strokeWidth={1.8} />
-    {/* sidepod + floor */}
-    <rect x={28} y={11} width={30} height={5.2} rx={2.4} fill="var(--ink-primary)" />
-    <rect x={6} y={14.6} width={84} height={2.2} rx={1.1} fill="var(--ink-primary)" />
-    {/* nose, tipped in red */}
-    <path d="M56 11 L92 13.6 Q94 14.4 92 15.4 L56 16.2 Z" fill="var(--ink-primary)" />
-    <path d="M85 13.1 L92 13.6 Q94 14.4 92 15.4 L85 15.8 Z" fill="#c8102e" />
-    {/* the 9, in white on the sidepod */}
-    <text x={43} y={15.4} textAnchor="middle" fontSize={5.4} fontWeight={700} fill="#ffffff">
-      9
-    </text>
-    {/* wheels last, so they sit over the floor line */}
-    <circle cx={22} cy={17} r={5.4} fill="var(--ink-primary)" />
-    <circle cx={22} cy={17} r={1.9} fill="var(--surface-0)" opacity={0.92} />
-    <circle cx={74} cy={17.4} r={4.9} fill="var(--ink-primary)" />
-    <circle cx={74} cy={17.4} r={1.7} fill="var(--surface-0)" opacity={0.92} />
-  </svg>
-);
+export const CarMark = ({ height = 18 }: { height?: number }) => {
+  const { white, navy, red, tyre, rim } = LIVERY;
+  const edge = { stroke: navy, strokeWidth: 1.8, strokeLinejoin: 'round' as const };
+  const wheel = (cx: number, cy: number, r: number) => (
+    <g>
+      <circle cx={cx} cy={cy} r={r} fill={tyre} />
+      <circle cx={cx} cy={cy} r={19} fill={rim} />
+      <circle cx={cx} cy={cy} r={6} fill={tyre} />
+    </g>
+  );
+  return (
+    <svg
+      width={Math.round((height * 490) / 110)}
+      height={height}
+      viewBox="0 0 490 110"
+      role="img"
+      aria-label="Bryce Aron's No. 9 car"
+      style={{ flex: 'none' }}
+    >
+      {/* gearbox and rear crash structure, the rear wing's pillar */}
+      <path d="M22 64 L60 58 L100 58 L100 88 L60 92 L28 86 Z" fill={navy} />
+      <rect x={38} y={28} width={7} height={34} fill={navy} />
+      {/* engine cover, from the airbox down to the gearbox */}
+      <path d="M240 14 C200 22 140 34 100 44 L92 56 L92 92 L250 92 L250 14 Z" fill={white} {...edge} />
+      {/* the navy lower body, then the sidepod's white top */}
+      <path d="M92 70 C150 64 220 60 300 62 L300 98 L92 98 Z" fill={navy} />
+      <path d="M120 60 C170 52 250 48 300 50 L314 58 L314 70 C250 66 170 68 120 72 Z" fill={white} {...edge} strokeWidth={1.6} />
+      {/* tub and nose: white top, navy side, red tip */}
+      <path d="M250 52 C290 52 340 54 380 60 C420 65 450 70 470 74 C477 76 477 82 470 84 L430 88 L330 98 L250 98 Z" fill={white} {...edge} />
+      <path d="M250 70 C310 68 380 72 468 82 L430 88 L330 98 L250 98 Z" fill={navy} />
+      <path d="M440 68 C452 70 462 72 470 74 C478 76 478 82 470 84 L442 86 Z" fill={red} />
+      {/* floor */}
+      <path d="M96 98 L336 98 L336 104 L96 104 Z" fill={navy} />
+      {/* airbox and roll hoop over the driver, the red camera on top */}
+      <path d="M236 52 L244 16 C245 12 248 10 253 10 L260 10 C264 10 266 13 266 17 L270 52 Z" fill={navy} />
+      <rect x={250} y={2} width={10} height={9} rx={2} fill={red} />
+      {/* helmet, then the halo: from the roll hoop over the helmet, down the centre pillar */}
+      <circle cx={290} cy={42} r={9.5} fill={red} />
+      <path d="M266 30 C280 25 306 23 318 26 C326 29 330 38 334 53" fill="none" stroke={red} strokeWidth={5.5} strokeLinecap="round" strokeLinejoin="round" />
+      {/* mirror */}
+      <path d="M326 56 L330 47" stroke={navy} strokeWidth={2.2} />
+      <rect x={322} y={40} width={15} height={8} rx={2.5} fill={red} />
+      {/* suspension */}
+      <path d="M86 75 L112 68 M86 75 L112 92 M383 77 L336 64 M383 77 L336 90" stroke={navy} strokeWidth={2.2} />
+      {/* front wing: navy plane, red endplate */}
+      <path d="M398 100 L486 98 L486 103 L398 104 Z" fill={navy} />
+      <path d="M442 86 L478 84 L488 104 L438 106 Z" fill={red} />
+      {/* rear wing: the white endplate with the 9, the main plane and flap across it */}
+      <rect x={3} y={8} width={46} height={60} rx={2} fill={white} {...edge} strokeWidth={2} />
+      <path d="M4 21 C14 17 32 16 48 18 L48 25 C32 23 16 24 4 28 Z" fill={navy} />
+      <path d="M28 10 C36 9 43 9 48 10 L48 16 C42 15 35 15 28 16 Z" fill={navy} />
+      <text x={25} y={62} textAnchor="middle" fontSize={36} fontWeight={800} fill={navy} style={{ fontFamily: 'inherit' }}>
+        9
+      </text>
+      {/* wheels: rear, then front */}
+      {wheel(86, 75, 35)}
+      {wheel(383, 76.5, 33.5)}
+    </svg>
+  );
+};
 
 /* ---------- section wrapper (formerly the scroll-in reveal) ----------
  * Reading pages have no entrance animation (site direction), so this is now a

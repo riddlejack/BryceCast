@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState, type ReactNode } from 'react';
 import type { TrackOutline } from '../assets/tracks';
 import type { ResolvedHeatSection } from '../data/sectionObservations';
 import { ChartTipCard, chartFont, inkGoldDiverging, useMeasuredWidth, type ChartTip } from './charts';
@@ -875,5 +875,91 @@ export const TrackArt = ({
       ) : null}
       {tip ? <ChartTipCard tip={tip} width={measuredWidth} /> : null}
     </div>
+  );
+};
+
+/* ---------- the small track icon: the 3D model from above ----------
+ * Round 7 (Jack's review of Nov 16): the small line drawings on /races and on
+ * the Race Week board become "a bird's eye view of the 3D tracks", with the
+ * outline "as visible as it is right now". Each icon is the venue's own 3D
+ * model (public/tracks-3d/models, drawn by src/three/trackScene.js) from
+ * straight above, turned to sit the way the line drawing does, the land paled
+ * toward the paper and the track drawn as a bold ink ribbon on the model's own
+ * centreline. Made by Portfolio/builds/project-brycecast/site-refresh/
+ * stills-tools (run.sh icons: icon-stills.mjs, icon-page.js, finish_icons.py)
+ * into public/tracks-3d/icons/<slug>-<box>(@2x).webp, one per box:
+ *   row    76 x 42 CSS px (the Races list)
+ *   board  132 x 84 CSS px (the Race Week board)
+ * A venue with no model keeps its line drawing (`fallback`), and ?icons=line
+ * shows the line drawings everywhere, for comparison.
+ * Two looks (round 7): A, straight above, the land paled and feathered
+ * (<slug>-<box>.webp); B, the whole plate tilted 14 degrees in the stills' own
+ * colours with its real edge (<slug>-<box>-b.webp, icon-stills.mjs --plate,
+ * ICON_VARIANT=b finish_icons.py). DEFAULT_ICON_LOOK picks one; ?icons=a and
+ * ?icons=b show either. */
+
+/** Venues with a bird's-eye icon (public/tracks-3d/icons/index.json lists the same). */
+export const TRACK_ICON_SLUGS: ReadonlySet<string> = new Set([
+  'barber-motorsports-park',
+  'indianapolis-motor-speedway-road-course',
+  'iowa-speedway',
+  'mid-ohio-sports-car-course',
+  'nashville-superspeedway',
+  'portland-international-raceway',
+  'road-america',
+  'streets-of-arlington',
+  'streets-of-detroit',
+  'streets-of-st-petersburg',
+  'the-milwaukee-mile',
+  'weathertech-raceway-laguna-seca',
+  'world-wide-technology-raceway',
+  // modelled for the icons only (the IMS road course's OSM data; not on the Tracks page)
+  'indianapolis-motor-speedway'
+]);
+
+const DEFAULT_ICON_LOOK: 'a' | 'b' = 'a';   // B shrinks the ovals at 76 px (the plate is wider than the track)
+const ICON_LOOK: 'line' | 'a' | 'b' = (() => {
+  try {
+    const q = typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('icons') : null;
+    return q === 'line' || q === 'a' || q === 'b' ? q : DEFAULT_ICON_LOOK;
+  } catch {
+    return DEFAULT_ICON_LOOK;
+  }
+})();
+
+export type TrackIconBox = 'row' | 'board';
+
+export const TrackIcon = ({
+  slug,
+  box,
+  fallback = null,
+  muted = false,
+  alt = ''
+}: {
+  slug: string | null | undefined;
+  box: TrackIconBox;
+  /** Drawn where the venue has no icon (the line drawing). */
+  fallback?: ReactNode;
+  /** A venue he has no race at: the icon steps back, as the muted line did. */
+  muted?: boolean;
+  alt?: string;
+}) => {
+  const [failed, setFailed] = useState(false);
+  if (!slug || ICON_LOOK === 'line' || failed || !TRACK_ICON_SLUGS.has(slug)) return <>{fallback}</>;
+  const [w, h] = box === 'row' ? [76, 42] : [132, 84];
+  const base = `/tracks-3d/icons/${slug}-${box}${ICON_LOOK === 'b' ? '-b' : ''}`;
+  return (
+    <img
+      className={`track-icon track-icon--${box}${muted ? ' track-icon--muted' : ''}`}
+      src={`${base}.webp`}
+      srcSet={`${base}.webp 1x, ${base}@2x.webp 2x`}
+      width={w}
+      height={h}
+      alt={alt}
+      loading="lazy"
+      decoding="async"
+      draggable={false}
+      onError={() => setFailed(true)}
+    />
   );
 };

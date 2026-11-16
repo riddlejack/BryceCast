@@ -103,10 +103,27 @@ export interface ReplayAvailable {
 
 /** Returns null when replay is disabled (production 404) or unreachable — the
  *  callers treat null as "no replay here" and stay silent. */
-export const loadReplayAvailable = async (): Promise<ReplayAvailable | null> => {
-  const payload = await loadApiJson<ReplayAvailable>('/api/replay/available');
-  if (!payload || payload.enabled !== true || !Array.isArray(payload.sessions)) return null;
-  return payload;
+/** One read shared by every caller for a minute (round 7): the race page has
+ *  just read the list when its replay button is pressed, and the replay read it
+ *  again (0.8 s, 56 KB from production), twice in parallel, before the clock
+ *  could start. A failed read is not kept. */
+const AVAILABLE_TTL_MS = 60_000;
+let availableCache: { atMs: number; promise: Promise<ReplayAvailable | null> } | null = null;
+
+export const loadReplayAvailable = (): Promise<ReplayAvailable | null> => {
+  const now = Date.now();
+  if (availableCache && now - availableCache.atMs < AVAILABLE_TTL_MS) return availableCache.promise;
+  const promise = (async () => {
+    const payload = await loadApiJson<ReplayAvailable>('/api/replay/available');
+    if (!payload || payload.enabled !== true || !Array.isArray(payload.sessions)) return null;
+    return payload;
+  })();
+  const entry = { atMs: now, promise };
+  availableCache = entry;
+  void promise.then((value) => {
+    if (value === null && availableCache === entry) availableCache = null;
+  });
+  return promise;
 };
 
 /** Canonical race sessionIds are `session_indy_nxt_<year>_<eventSessionId>`. */

@@ -226,12 +226,34 @@
   .tracks-page .tracks-grid__lap:hover > rect:first-child { fill: var(--grey-wash); }
 }
 
-/* ---------- the track, year over year: one even row of shapes ---------- */
+/* ---------- the track, year over year: one even row of shapes ----------
+ * Round 7 (Jack's review of Nov 16: "the spacing at the bottom needs some
+ * work"): the row fills the content width whatever the number of visits. Each
+ * visit takes an equal share of the width (--yoy-n, set by VenueYearsCard), and
+ * only where that share would fall under 190 px do the shapes wrap. (Was
+ * auto-fill at 190 px, which left empty columns: six visits stopped short of
+ * the right edge.) The 0.5 px keeps rounding from dropping the last column.
+ * A card is never wider than a third of the row (--yoy-cols = at least 3), so
+ * two visits get two stills at that size, left-aligned, not two huge ones
+ * (auto-fill keeps the empty third column). */
 
 .tracks-page .tracks-years > .row:not(.row--between) {
+  --yoy-gap: 22px;
+  --yoy-cols: max(var(--yoy-n, 4), 3);
   display: grid !important;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 190px), 1fr));
-  gap: 28px 22px !important;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(max(min(100%, 190px), calc((100% - (var(--yoy-cols) - 1) * var(--yoy-gap)) / var(--yoy-cols) - 0.5px)), 1fr)
+  );
+  gap: 28px var(--yoy-gap) !important;
+}
+
+/* The gap before the footer: the page's own gap between sections (the footer's
+ * rule then stands where the next section's rule would). Was the page's 96 px
+ * bottom padding plus the footer's 40 px margin, 136 px, against 72 px between
+ * the sections above. Desktop only: a phone keeps the room the tab bar needs. */
+@media (min-width: 900px) {
+  .page.tracks-page { padding-bottom: max(0px, calc(var(--section-gap) - 40px)); }
 }
 
 .tracks-page .tracks-years > .row:not(.row--between) > * {

@@ -2365,7 +2365,8 @@ export const VenueYearsCard = ({
           </span>
         )}
       </div>
-      <div className="row" style={{ gap: 22, flexWrap: 'wrap', alignItems: 'flex-start' }}>
+      {/* --yoy-n: how many visits, so the Tracks page can give each its share of the full width (tracks.css). */}
+      <div className="row" style={{ gap: 22, flexWrap: 'wrap', alignItems: 'flex-start', ['--yoy-n' as string]: visits.length }}>
         {visits.map((pack) => {
           const packAnchors = visitAnchors.get(pack.sessionId) ?? anchors;
           return (

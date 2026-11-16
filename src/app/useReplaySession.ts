@@ -21,11 +21,15 @@ import {
   type ReplayPhase
 } from '../data/replayStart';
 import { uiDataPackage } from '../data/uiDataPackage';
+import { loadSectionLaps, type SectionLapsPack } from '../data/sectionLaps';
+import { loadReplayTimeline, openingCautionFromTimeline, type ReplayTimeline } from '../data/replayTimeline';
 import { useRouter } from './router';
 
 /** The speeds the Time Machine offers. 1× is "as it happened"; 4× is the lively
- *  default; 16× skims. All three keep the archived payload shapes intact. */
-export const REPLAY_SPEEDS = [1, 4, 16] as const;
+ *  default; 16× skims; 32× runs a whole race in about a minute and a half per
+ *  ten laps (round 7). The server ages its freshness stamp by at most 16×, so
+ *  32× says 16 on the wire; the frames are the archive's own either way. */
+export const REPLAY_SPEEDS = [1, 4, 16, 32] as const;
 const DEFAULT_REPLAY_SPEED = 4;
 export { SKIM_SPEED };
 
@@ -97,7 +101,7 @@ export interface ReplaySession {
   /** Where the running clock was last started from: the race start, a `t0`
    *  deep link, the formation lap, the opening caution the visitor chose to
    *  watch, or a jump (a source-gap skip). */
-  clockFrom: 'raceStart' | 't0' | 'formation' | 'caution' | 'jump' | null;
+  clockFrom: 'raceStart' | 't0' | 'formation' | 'caution' | 'jump' | 'seek' | null;
   /** Set while the clock plays the formation laps or a watched caution faster
    *  than the visitor's speed; null when it plays at the visitor's speed. */
   skim: ReplaySkim | null;
@@ -106,7 +110,24 @@ export interface ReplaySession {
   /** Bumped whenever the clock jumps (restart, formation, the caution jump or
    *  watching it, a gap skip), so the page can fetch the new moment at once. */
   clockEpoch: number;
+  /** The clock is held still (Space, or the pause button). */
+  paused: boolean;
+  /** The whole race's flag changes and Bryce's running position at each order
+   *  change, from one read after the first frame (src/data/replayTimeline.ts);
+   *  null until it lands or when it could not be read. */
+  timeline: ReplayTimeline | null;
+  /** The lap the address asked for (`&lap=N`), read once when the replay opened. */
+  startLap: number | null;
   setSpeed: (speed: number) => void;
+  /** Hold or release the clock. */
+  togglePause: () => void;
+  /** Move the clock to a moment the visitor picked (the race bar, its keys,
+   *  "Skip the caution"). Clears the chart window and fetches that moment at
+   *  once; the opening-caution jump does not re-arm behind it. */
+  seekTo: (atMs: number) => void;
+  /** Ask for the race timeline now (the page calls it once its first frame is
+   *  up, so the read never competes with that frame). */
+  requestTimeline: () => void;
   /** Back to the race start (the opening caution is jumped again). */
   restart: () => void;
   /** Go back before the start: the clock runs from just before the field
@@ -144,11 +165,23 @@ interface ReplayClock {
    *  start up to the opening-caution jump, a watched caution). Empty for a
    *  plain clock. */
   phases: ReplayPhase[];
+  /** Held still at `virtualStartMs`. */
+  paused?: boolean;
 }
 
 const inactive: Omit<
   ReplaySession,
-  'setSpeed' | 'restart' | 'restartFromFormation' | 'prepareFormation' | 'watchCaution' | 'jumpTo' | 'exit' | 'getReplayParams'
+  | 'setSpeed'
+  | 'restart'
+  | 'restartFromFormation'
+  | 'prepareFormation'
+  | 'watchCaution'
+  | 'jumpTo'
+  | 'exit'
+  | 'getReplayParams'
+  | 'togglePause'
+  | 'seekTo'
+  | 'requestTimeline'
 > = {
   engaged: false,
   starting: false,
@@ -171,13 +204,28 @@ const inactive: Omit<
   clockFrom: null,
   skim: null,
   playbackSpeed: DEFAULT_REPLAY_SPEED,
-  clockEpoch: 0
+  clockEpoch: 0,
+  paused: false,
+  timeline: null,
+  startLap: null
 };
 
 /** The longest the opening-caution and formation searches may take before
  *  the replay carries on without them (plays the caution; starts the
  *  formation at session open). */
 const SEARCH_TIMEOUT_MS = 8_000;
+
+/** The formation search when it runs by itself in the background, one read
+ *  at a time (nine reads of 0.4-0.9 s each on the production host). */
+const FORMATION_PROBE_TIMEOUT_MS = 20_000;
+
+/** The race timeline is read once the page's first frame is up (the page asks
+ *  for it); this is the latest it waits for that request. */
+const TIMELINE_AUTO_START_MS = 1_500;
+
+/** The longest `&lap=N` waits for the race's section pack before it starts the
+ *  clock at the race start instead. */
+const LAP_LINK_PACK_TIMEOUT_MS = 1_500;
 
 const withTimeout = <T,>(promise: Promise<T>, ms: number, fallback: T): Promise<T> =>
   new Promise((resolve) => {
@@ -232,6 +280,45 @@ const greenFlagMsOf = (session: ReplaySessionInfo): number | null => {
   return Number.isFinite(firstMs) ? Math.max(greenMs, firstMs) : greenMs;
 };
 
+/** A Timing71 feed opens with 5-17 s of frames that carry timing rows but no
+ *  Bryce row (all 12 of them; the replay-load diagnosis, November 15). The
+ *  fixed server answers such a frame 502. Those feeds already open after the
+ *  green, so their clock starts this far in, where Bryce is on the page. */
+const TIMING71_OPENING_MS = 18_000;
+
+/** Where a replay's clock starts by default and where Restart returns. */
+const raceStartMsOf = (session: ReplaySessionInfo): number | null => {
+  const green = greenFlagMsOf(session);
+  if (green === null || session.sourceTier !== 'timing71_normalized') return green;
+  const firstMs = Date.parse(session.firstCheckedAt ?? '');
+  const lastMs = Date.parse(session.lastCheckedAt ?? '');
+  if (!Number.isFinite(firstMs) || !Number.isFinite(lastMs)) return green;
+  return Math.min(lastMs, Math.max(green, firstMs + TIMING71_OPENING_MS));
+};
+
+/** The moment Bryce starts lap `lap`, from the green flag and his official lap
+ *  times (the section pack's lap totals): what `&lap=N` resumes at before any
+ *  frame has been read. The marker's own model corrects it as frames arrive.
+ *  Null when a lap before it has no time. */
+export const lapStartFromPack = (
+  pack: Pick<SectionLapsPack, 'lapTotals'>,
+  greenMs: number,
+  startPosition: number | null,
+  lap: number
+): number | null => {
+  const seconds = new Map<number, number>();
+  for (const tuple of pack.lapTotals) {
+    if (tuple[0] !== null && tuple[6] !== null && tuple[6] > 0) seconds.set(tuple[0], tuple[6]);
+  }
+  let at = greenMs + Math.max(0, Math.min(10, ((startPosition ?? 1) - 1) * 0.37)) * 1000;
+  for (let index = 1; index < lap; index += 1) {
+    const value = seconds.get(index);
+    if (value === undefined) return null;
+    at += value * 1000;
+  }
+  return at;
+};
+
 /** What the official caution summaries (the package's caution atlas) say
  *  about a race's opening laps: `none` when the race is covered and no caution
  *  started on laps 1-3, the first such caution's laps when one did, `unknown`
@@ -272,52 +359,69 @@ const limitConcurrency = <A extends unknown[], R>(fn: (...args: A) => Promise<R>
   };
 };
 
-/** The opening caution for a capture, with the laps to name it by: the
- *  official summary's when it has one, the archive's otherwise. No archive
- *  read at all for a race the summaries show starting clean; for the rest, one
- *  bounded search (null for a start that ran green, an unreadable archive, or
- *  a search that ran out of time). */
-const locateOpeningCaution = (session: ReplaySessionInfo): Promise<{ caution: OpeningCaution; laps: ReplayOpeningCaution['laps'] } | null> => {
+/** The laps to name an opening caution by, and the lap the race went green
+ *  again on, as the bar says it ("back to 4× at the lap 5 restart"): the
+ *  official summary's, or the archive's counter plus one (the counter reads
+ *  the laps completed; checked against the summaries on every opening caution
+ *  in the archive). */
+const withOfficialLaps = (
+  session: ReplaySessionInfo,
+  caution: OpeningCaution
+): { caution: OpeningCaution; laps: ReplayOpeningCaution['laps'] } => {
   const official = officialOpeningFor(session);
-  if (official.status === 'none') return Promise.resolve(null);
+  return {
+    caution: {
+      ...caution,
+      restartLap:
+        official.status === 'caution' && official.restartLap !== null
+          ? official.restartLap
+          : caution.restartLap !== null
+            ? caution.restartLap + 1
+            : null
+    },
+    laps: official.status === 'caution' ? { from: official.from, to: official.to } : cautionLapSpan(caution)
+  };
+};
+
+/** How long the old search may run when the timeline could not be read. */
+const FALLBACK_SEARCH_TIMEOUT_MS = 20_000;
+
+/**
+ * The opening caution for a capture. From the race timeline when it was read
+ * (exact, no further reads); otherwise the bounded search of the archive, now
+ * one read at a time. No answer at all for a race the official summaries show
+ * starting clean.
+ *
+ * Why the change (round 7): the search issued 27 reads three at a time and
+ * gave up after 8 s. Production answers one of these reads in 0.35-0.66 s
+ * (November 16, measured serially), and the reads queue behind each other and
+ * the page's own once-a-second polls on the one server process, so the search
+ * ran out of time, returned nothing, and Monterey 2026 Race 2 played its ten
+ * minutes of yellow at whatever speed the visitor had picked.
+ */
+const locateOpeningCaution = async (
+  session: ReplaySessionInfo,
+  timeline: ReplayTimeline | null
+): Promise<{ caution: OpeningCaution; laps: ReplayOpeningCaution['laps'] } | null> => {
+  const official = officialOpeningFor(session);
+  if (official.status === 'none') return null;
   const greenMs = greenFlagMsOf(session);
   const lastMs = Date.parse(session.lastCheckedAt ?? '');
-  if (greenMs === null || !Number.isFinite(lastMs)) return Promise.resolve(null);
-  return withTimeout(
-    findOpeningCaution({
-      greenMs,
-      lastMs,
-      flagAt: limitConcurrency(sessionFlagAt(session.sessionKey)),
-      // The official summary already says the caution came on laps 1-3; the
-      // archive's lap counter can tick over at the line as it is thrown
-      // (Detroit 2024: official lap 3, counter 3), so allow one more.
-      openingLaps: official.status === 'caution' ? OPENING_CAUTION_LAPS + 1 : OPENING_CAUTION_LAPS
-    })
-      .then((caution) =>
-        caution
-          ? {
-              // From here on `restartLap` is the lap the race went green again
-              // on, as the bar says it ("back to 4× at the lap 5 restart"): the
-              // official summary's, or the archive's counter plus one (the
-              // counter reads the laps completed; checked against the
-              // summaries on every opening caution in the archive).
-              caution: {
-                ...caution,
-                restartLap:
-                  official.status === 'caution' && official.restartLap !== null
-                    ? official.restartLap
-                    : caution.restartLap !== null
-                      ? caution.restartLap + 1
-                      : null
-              },
-              laps: official.status === 'caution' ? { from: official.from, to: official.to } : cautionLapSpan(caution)
-            }
-          : null
-      )
-      .catch(() => null),
-    SEARCH_TIMEOUT_MS,
+  if (greenMs === null || !Number.isFinite(lastMs)) return null;
+  // The official summary already says the caution came on laps 1-3; the
+  // archive's lap counter can tick over at the line as it is thrown
+  // (Detroit 2024: official lap 3, counter 3), so allow one more.
+  const openingLaps = official.status === 'caution' ? OPENING_CAUTION_LAPS + 1 : OPENING_CAUTION_LAPS;
+  if (timeline) {
+    const found = openingCautionFromTimeline(timeline, { greenMs, openingLaps });
+    return found ? withOfficialLaps(session, found) : null;
+  }
+  const searched = await withTimeout(
+    findOpeningCaution({ greenMs, lastMs, flagAt: limitConcurrency(sessionFlagAt(session.sessionKey), 1), openingLaps, batch: 1 }).catch(() => null),
+    FALLBACK_SEARCH_TIMEOUT_MS,
     null
   );
+  return searched ? withOfficialLaps(session, searched) : null;
 };
 
 const cautionForState = (caution: OpeningCaution, laps: ReplayOpeningCaution['laps']): ReplayOpeningCaution => ({
@@ -345,6 +449,11 @@ const clampSpeed = (raw: string | null): number => {
   return REPLAY_SPEEDS.includes(value as (typeof REPLAY_SPEEDS)[number]) ? value : DEFAULT_REPLAY_SPEED;
 };
 
+const lapParamOf = (raw: string | null): number | null => {
+  const value = Number.parseInt(String(raw ?? ''), 10);
+  return Number.isInteger(value) && value >= 2 && value <= 400 ? value : null;
+};
+
 const clampT0 = (session: ReplaySessionInfo, iso: string | null): string => {
   const green = session.firstGreenAt ?? session.firstCheckedAt ?? new Date().toISOString();
   if (!iso) return green;
@@ -356,11 +465,12 @@ const clampT0 = (session: ReplaySessionInfo, iso: string | null): string => {
   return iso;
 };
 
-/** Where a clock is now (src/data/replayStart.ts, `phasedClockPosition`). */
+/** Where a clock is now (src/data/replayStart.ts, `phasedClockPosition`). A
+ *  paused clock stays where it was held. */
 const clockPosition = (clock: ReplayClock, nowWallMs = Date.now()) =>
   phasedClockPosition({
     virtualStartMs: clock.virtualStartMs,
-    elapsedWallMs: nowWallMs - clock.startedAtWallMs,
+    elapsedWallMs: clock.paused ? 0 : nowWallMs - clock.startedAtWallMs,
     speed: clock.speed,
     phases: clock.phases
   });
@@ -402,6 +512,9 @@ export const useReplaySession = (replayKey: string | null, onRestart?: () => voi
   // `speed` are honored as deep-link inputs; the client derives `rt` off its
   // own clock for each poll (see getReplayParams) and never reads it from the URL.
   const speedParam = route.search.get('speed');
+  // `&lap=N` (round 7): the race bar keeps the lap in the address, so a reload
+  // or a shared link resumes there. Read once at engage, like `t0`.
+  const lapParam = route.search.get('lap');
   const [state, setState] = useState(inactive);
   const sessionRef = useRef<ReplaySessionInfo | null>(null);
   const clockRef = useRef<ReplayClock | null>(null);
@@ -414,6 +527,9 @@ export const useReplaySession = (replayKey: string | null, onRestart?: () => voi
   /** The formation start for a session key: the search in flight, then its
    *  answer. One search per session, shared by hover and click. */
   const formationRef = useRef<{ sessionKey: string; promise: Promise<number> } | null>(null);
+  /** The race timeline for a session key: its read (held until `start`). */
+  const timelineRef = useRef<{ sessionKey: string; promise: Promise<ReplayTimeline | null>; start: () => void } | null>(null);
+  const locateFormationRef = useRef<() => void>(() => {});
   const speedRef = useRef<number>(DEFAULT_REPLAY_SPEED);
   const onRestartRef = useRef(onRestart);
   onRestartRef.current = onRestart;
@@ -482,7 +598,7 @@ export const useReplaySession = (replayKey: string | null, onRestart?: () => voi
         previous.skim?.restartLap === skim?.restartLap;
       return same ? previous : { ...previous, skim, playbackSpeed: position.rate };
     });
-    if (position.wallToNextMs !== null) {
+    if (!clock.paused && position.wallToNextMs !== null) {
       phaseTimerRef.current = setTimeout(syncPhase, Math.ceil(position.wallToNextMs) + 20);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -511,6 +627,7 @@ export const useReplaySession = (replayKey: string | null, onRestart?: () => voi
         ...clock,
         virtualStartMs,
         startedAtWallMs: Date.now(),
+        paused: false,
         phases: replayPhases({
           fromMs: virtualStartMs,
           greenMs: greenFlagMsOf(session),
@@ -528,6 +645,7 @@ export const useReplaySession = (replayKey: string | null, onRestart?: () => voi
         skippedSourceGap: null,
         formationPending: false,
         cautionSkippedAt: null,
+        paused: false,
         clockFrom: from,
         clockEpoch: previous.clockEpoch + 1
       }));
@@ -544,11 +662,13 @@ export const useReplaySession = (replayKey: string | null, onRestart?: () => voi
       clockFromRef.current = null;
       cautionRef.current = null;
       formationRef.current = null;
+      timelineRef.current = null;
       setState(inactive);
       return undefined;
     }
 
     let cancelled = false;
+    let autoTimeline: ReturnType<typeof setTimeout> | null = null;
     // Seed the initial playback rate from `?speed=` (or the default). The client
     // owns the clock after this seed — `setSpeed` drives every later change.
     const seededSpeed = clampSpeed(speedParam);
@@ -586,11 +706,31 @@ export const useReplaySession = (replayKey: string | null, onRestart?: () => voi
       sessionRef.current = session;
       const formationAvailable = formationAvailableFor(session);
       const greenMs = greenFlagMsOf(session);
-      // Start the clock at once, at the race start (or the `t0` deep link):
-      // the visitor sees the start while the archive is searched, behind the
-      // running clock, for a caution thrown in the opening laps.
+      const startLap = lapParamOf(lapParam);
+      // A `&lap=N` link starts at Bryce's lap-N line crossing, from the green
+      // and his official lap times (the section pack, already cached when the
+      // visitor came from the race page). It wins over `t0`.
+      let lapStartMs: number | null = null;
+      if (startLap !== null && greenMs !== null && session.canonicalSessionId) {
+        const pack = await withTimeout(loadSectionLaps(session.canonicalSessionId).catch(() => null), LAP_LINK_PACK_TIMEOUT_MS, null);
+        if (cancelled) return;
+        if (pack) {
+          const grid = (uiDataPackage.screens.raceDebrief.seasonIndex ?? []).find((row) => row.sessionId === session.canonicalSessionId)?.startPosition ?? null;
+          const at = lapStartFromPack(pack, greenMs, grid, Math.min(startLap, pack.totalLaps));
+          // A second past the line, so the page reads the lap it was asked for.
+          if (at !== null) lapStartMs = at + 1_000;
+        }
+      }
+      // Start the clock at once, at the race start (or the deep link): the
+      // visitor sees the start while the race timeline is read behind it.
+      const raceStartMs = raceStartMsOf(session);
       const virtualStartMs = Date.parse(
-        clampT0(session, t0Param ?? (greenMs !== null ? new Date(greenMs).toISOString() : session.firstGreenAt))
+        clampT0(
+          session,
+          lapStartMs !== null
+            ? new Date(lapStartMs).toISOString()
+            : t0Param ?? (raceStartMs !== null ? new Date(raceStartMs).toISOString() : session.firstGreenAt)
+        )
       );
       const firstCheckedMs = Date.parse(session.firstCheckedAt ?? '');
       const lastCheckedMs = Date.parse(session.lastCheckedAt ?? '');
@@ -604,7 +744,9 @@ export const useReplaySession = (replayKey: string | null, onRestart?: () => voi
         lastCheckedMs: Number.isFinite(lastCheckedMs) ? lastCheckedMs : safeStart,
         phases: []
       };
-      clockFromRef.current = t0Param ? 't0' : 'raceStart';
+      // A lap link is the visitor's own pick: the opening-caution jump never
+      // overrides it (a lap inside the caution offers "Skip the caution").
+      clockFromRef.current = lapStartMs !== null ? 'seek' : t0Param ? 't0' : 'raceStart';
       setState({
         ...inactive,
         engaged: true,
@@ -618,16 +760,43 @@ export const useReplaySession = (replayKey: string | null, onRestart?: () => voi
         formationAvailable,
         playbackSpeed: seededSpeed,
         clockFrom: clockFromRef.current,
+        startLap: lapStartMs !== null ? startLap : null,
         greenFlagAt: greenMs === null ? null : new Date(greenMs).toISOString()
       });
 
-      const search = locateOpeningCaution(session);
+      // The race timeline: one read (rarely two or three), held until the page
+      // has its first frame so it never competes with it.
+      let release: () => void = () => {};
+      const gate = new Promise<void>((resolve) => {
+        release = resolve;
+      });
+      const timelinePromise = gate
+        .then(() =>
+          loadReplayTimeline({
+            sessionKey: session.sessionKey,
+            firstCheckedAt: session.firstCheckedAt ?? '',
+            lastCheckedAt: session.lastCheckedAt ?? '',
+            fetchJson: (path) => loadWithRetry(path)
+          })
+        )
+        .catch(() => null);
+      timelineRef.current = { sessionKey: session.sessionKey, promise: timelinePromise, start: release };
+      autoTimeline = setTimeout(release, TIMELINE_AUTO_START_MS);
+
+      const search = timelinePromise.then((timeline) => locateOpeningCaution(session, timeline));
       const entry = {
         sessionKey: session.sessionKey,
         promise: search.then((found) => found?.caution ?? null),
         value: undefined as OpeningCaution | null | undefined
       };
       cautionRef.current = entry;
+      void timelinePromise.then((timeline) => {
+        if (cancelled || timelineRef.current?.sessionKey !== session.sessionKey) return;
+        setState((previous) => (previous.session?.sessionKey === session.sessionKey ? { ...previous, timeline } : previous));
+        // Then the formation lap, in the background and one read at a time, so
+        // "From the formation lap" is instant when the visitor reaches for it.
+        if (formationAvailable) locateFormationRef.current();
+      });
       const found = await search;
       const caution = found?.caution ?? null;
       entry.value = caution;
@@ -638,7 +807,7 @@ export const useReplaySession = (replayKey: string | null, onRestart?: () => voi
       // Give the running clock its jump: from where it is now, the start plays
       // on to a beat after the throw and then goes to the restart; a clock
       // already past that beat jumps at once. A clock the visitor has since
-      // moved (formation, watching the caution) was built with the answer.
+      // moved (formation, watching the caution, a seek) was built without it.
       const clock = clockRef.current;
       if (!clock || clock.sessionKey !== session.sessionKey || clock.phases.length > 0) return;
       if (clockFromRef.current !== 'raceStart' && clockFromRef.current !== 't0') return;
@@ -654,9 +823,10 @@ export const useReplaySession = (replayKey: string | null, onRestart?: () => voi
 
     return () => {
       cancelled = true;
+      if (autoTimeline !== null) clearTimeout(autoTimeline);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [replayKey, fromParam, t0Param, speedParam]);
+  }, [replayKey, fromParam, t0Param, speedParam, lapParam]);
 
   // Live-guard watch: while replaying, poll readiness with THIS client's own
   // replay params. If the server answers with a non-simulated payload, the real
@@ -724,8 +894,8 @@ export const useReplaySession = (replayKey: string | null, onRestart?: () => voi
   const restart = useCallback(() => {
     const session = sessionRef.current;
     if (!clockRef.current || !session) return;
-    const greenMs = greenFlagMsOf(session);
-    startClockAt(session, greenMs ?? Date.parse(clampT0(session, null)), 'raceStart');
+    const startMs = raceStartMsOf(session);
+    startClockAt(session, startMs ?? Date.parse(clampT0(session, null)), 'raceStart');
   }, [startClockAt]);
 
   /** The formation start for the current session: one bounded search,
@@ -737,14 +907,19 @@ export const useReplaySession = (replayKey: string | null, onRestart?: () => voi
     if (formationRef.current?.sessionKey === sessionKey) return formationRef.current.promise;
     const openMs = Date.parse(session.firstCheckedAt ?? '');
     const greenMs = Date.parse(session.firstGreenAt ?? '');
+    // One read at a time: three in parallel on the replay host queue behind
+    // the page's own polls and slow the frame the visitor is watching.
     const promise = withTimeout(
-      findFormationStart({ openMs, startMs: greenMs, movingAt: timingMovingAt(sessionKey) }),
-      SEARCH_TIMEOUT_MS,
+      findFormationStart({ openMs, startMs: greenMs, movingAt: limitConcurrency(timingMovingAt(sessionKey), 1) }),
+      FORMATION_PROBE_TIMEOUT_MS,
       { atMs: openMs, requests: 0 }
     ).then(({ atMs }) => atMs);
     formationRef.current = { sessionKey, promise };
     return promise;
   }, []);
+  locateFormationRef.current = () => {
+    void locateFormation();
+  };
 
   const prepareFormation = useCallback(() => {
     void locateFormation();
@@ -806,11 +981,70 @@ export const useReplaySession = (replayKey: string | null, onRestart?: () => voi
     syncPhase();
   }, [syncPhase]);
 
+  const seekTo = useCallback((atMs: number) => {
+    const clock = clockRef.current;
+    const session = sessionRef.current;
+    if (!clock || !session || !Number.isFinite(atMs)) return;
+    const target = Math.min(clock.lastCheckedMs, Math.max(clock.firstCheckedMs, atMs));
+    const greenMs = greenFlagMsOf(session);
+    clockRef.current = {
+      ...clock,
+      virtualStartMs: target,
+      startedAtWallMs: Date.now(),
+      // Before the green the formation still skims; the opening-caution jump
+      // is not re-armed behind a moment the visitor picked.
+      phases: replayPhases({ fromMs: target, greenMs: greenMs !== null && target < greenMs ? greenMs : null, caution: null, speed: clock.speed })
+    };
+    clockFromRef.current = 'seek';
+    onRestartRef.current?.();
+    setState((previous) => ({
+      ...previous,
+      started: true,
+      endedByLive: false,
+      skippedSourceGap: null,
+      formationPending: false,
+      cautionSkippedAt: null,
+      clockFrom: 'seek',
+      clockEpoch: previous.clockEpoch + 1
+    }));
+    syncPhase();
+  }, [syncPhase]);
+
+  const togglePause = useCallback(() => {
+    const clock = clockRef.current;
+    if (!clock) return;
+    const nowWall = Date.now();
+    const paused = !clock.paused;
+    // Held at the moment it reads now; released from that moment.
+    clockRef.current = paused
+      ? { ...clock, virtualStartMs: virtualNowMsOf(clock), startedAtWallMs: nowWall, paused: true }
+      : { ...clock, startedAtWallMs: nowWall, paused: false };
+    setState((previous) => ({ ...previous, paused }));
+    syncPhase();
+  }, [syncPhase]);
+
+  const requestTimeline = useCallback(() => {
+    timelineRef.current?.start();
+  }, []);
+
   const exit = useCallback(() => {
     const href = state.returnHref;
     clockRef.current = null;
     navigate(href);
   }, [navigate, state.returnHref]);
 
-  return { ...state, setSpeed, restart, restartFromFormation, prepareFormation, watchCaution, jumpTo, exit, getReplayParams };
+  return {
+    ...state,
+    setSpeed,
+    togglePause,
+    seekTo,
+    requestTimeline,
+    restart,
+    restartFromFormation,
+    prepareFormation,
+    watchCaution,
+    jumpTo,
+    exit,
+    getReplayParams
+  };
 };

@@ -31,6 +31,9 @@ export interface ReadinessStatus {
    *  replay engages server-side in ~30ms the page must not wait out that gap on
    *  the cue card, so the replay hook nudges an immediate refetch. */
   refresh: () => void;
+  /** Like `refresh`, after the replay clock has jumped: an answer still in
+   *  flight for the old moment is dropped instead of shown. */
+  resync: () => void;
 }
 
 /** Poll cadence per product contract: 1s live, gentle otherwise, backoff on failure. */
@@ -64,10 +67,24 @@ export const useReadiness = (getReplayParams?: () => string): ReadinessStatus =>
   const replayParamsRef = useRef<() => string>(() => '');
   replayParamsRef.current = getReplayParams ?? (() => '');
 
-  const [status, setStatus] = useState<ReadinessStatus>({ payload: null, fixtureMode: false, error: null, sourceGap: null, checkedAt: null, refresh: () => {} });
+  // A replay route waits for its clock before the first poll (round 7): a poll
+  // without replay params is the real feed, which the production host answers
+  // 503 off-season, and that failure set the first frame back 5 s.
+  const replayRouteRef = useRef(false);
+  replayRouteRef.current = Boolean(route.search.get('replay')) && !fixtureState;
+
+  const [status, setStatus] = useState<Omit<ReadinessStatus, 'resync'>>({ payload: null, fixtureMode: false, error: null, sourceGap: null, checkedAt: null, refresh: () => {} });
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const failuresRef = useRef(0);
   const nudgeRef = useRef<() => void>(() => {});
+  /** One poll in flight at a time; a nudge during one runs straight after it. */
+  const inFlightRef = useRef(false);
+  const againRef = useRef(false);
+  /** Bumped by `resync`: an answer from an older generation is dropped. */
+  const generationRef = useRef(0);
+  /** The replay params of the last answer shown: a paused clock asks again
+   *  only when they change. */
+  const lastShownParamsRef = useRef<string | null>(null);
   // Replay-only: a poll held back because the tab was hidden when it would have
   // fired (see scheduleTick below).
   const pendingResumeRef = useRef(false);
@@ -85,14 +102,42 @@ export const useReadiness = (getReplayParams?: () => string): ReadinessStatus =>
 
     let cancelled = false;
 
+    const waitStartedAt = Date.now();
     const tick = async () => {
+      if (inFlightRef.current) {
+        againRef.current = true;
+        return;
+      }
+      const params = replayParamsRef.current();
+      if (!params && replayRouteRef.current && Date.now() - waitStartedAt < 4_000) {
+        // The replay clock has not started yet; its start nudges this poll.
+        scheduleTick(250);
+        return;
+      }
+      if (params && params === lastShownParamsRef.current) {
+        // Paused: the same moment is already on the page.
+        scheduleTick(1_000);
+        return;
+      }
+      const generation = generationRef.current;
+      inFlightRef.current = true;
       try {
-        const response = await fetch(`/api/readiness${replayParamsRef.current()}`, { headers: { accept: 'application/json' } });
+        const response = await fetch(`/api/readiness${params}`, { headers: { accept: 'application/json' } });
+        if (generation !== generationRef.current) return;
+        if (params && response.status === 502) {
+          // A replay frame the server could not render (a Timing71 feed's
+          // opening seconds carry no Bryce row): keep the page as it is and
+          // ask again for the next moment. Keyed on the status, never the body.
+          if (cancelled) return;
+          scheduleTick(1_000);
+          return;
+        }
         if (response.status === 409) {
           const refused = (await response.json().catch(() => null)) as { error?: string; gap?: ReplaySourceGap } | null;
           if (refused?.error === 'source_gap' && refused.gap?.resumeAt) {
             if (cancelled) return;
             failuresRef.current = 0;
+            lastShownParamsRef.current = null;
             // Drop the prior payload immediately. Keeping it would visually hold
             // the last known rank through an interval the archive did not see.
             setStatus({ payload: null, fixtureMode: false, error: null, sourceGap: refused.gap, checkedAt: Date.now(), refresh: nudgeRef.current });
@@ -102,15 +147,23 @@ export const useReadiness = (getReplayParams?: () => string): ReadinessStatus =>
         }
         if (!response.ok) throw new Error(`readiness ${response.status}`);
         const payload = (await response.json()) as LiveReadiness;
-        if (cancelled) return;
+        if (cancelled || generation !== generationRef.current) return;
         failuresRef.current = 0;
+        lastShownParamsRef.current = params || null;
         setStatus({ payload, fixtureMode: false, error: null, sourceGap: null, checkedAt: Date.now(), refresh: nudgeRef.current });
         scheduleTick(cadenceFor(payload.state, 0));
       } catch (error) {
-        if (cancelled) return;
+        if (cancelled || generation !== generationRef.current) return;
         failuresRef.current += 1;
         setStatus((previous) => ({ ...previous, error: error instanceof Error ? error.message : String(error), checkedAt: Date.now(), refresh: nudgeRef.current }));
         scheduleTick(cadenceFor(undefined, failuresRef.current));
+      } finally {
+        inFlightRef.current = false;
+        if (!cancelled && (againRef.current || generation !== generationRef.current)) {
+          againRef.current = false;
+          if (timerRef.current) clearTimeout(timerRef.current);
+          void tick();
+        }
       }
     };
 
@@ -121,6 +174,7 @@ export const useReadiness = (getReplayParams?: () => string): ReadinessStatus =>
     // tab expects it to already be caught up, so it keeps polling regardless of
     // visibility, exactly as before.
     const scheduleTick = (delayMs: number) => {
+      if (timerRef.current) clearTimeout(timerRef.current);
       if (replayParamsRef.current() && typeof document !== 'undefined' && document.hidden) {
         pendingResumeRef.current = true;
         return;
@@ -156,5 +210,10 @@ export const useReadiness = (getReplayParams?: () => string): ReadinessStatus =>
   }, [fixtureState, fixtureVariant]);
 
   const refresh = useCallback(() => nudgeRef.current(), []);
-  return { ...status, refresh };
+  const resync = useCallback(() => {
+    generationRef.current += 1;
+    lastShownParamsRef.current = null;
+    nudgeRef.current();
+  }, []);
+  return { ...status, refresh, resync };
 };

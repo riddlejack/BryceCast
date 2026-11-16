@@ -244,6 +244,10 @@
 .races-index .race-row__pos { gap: 5px; font-size: 20px; color: var(--ink-primary); font-variant-numeric: tabular-nums; }
 .races-index .race-row__top5 { width: 6px; height: 6px; border-radius: 2px; background: var(--bryce); }
 .races-index .race-row__mini { width: 76px; height: 42px; align-items: center; justify-content: center; flex: none; }
+/* Round 7: the bird's-eye 3D mark (TrackIcon), drawn at the box's own size; a
+ * future round's mark steps back as its muted line did. */
+.races-index .race-row__mini .track-icon { display: block; width: 100%; height: 100%; object-fit: contain; }
+.races-index .race-row__mini .track-icon--muted { opacity: 0.55; }
 .races-index .tower__team { font-size: 14px; }
 .races-index .tower__row .stat__delta { font-size: 16px; font-variant-numeric: tabular-nums; }
 .races-index .tower__row .tower__gap { font-size: 16px; }

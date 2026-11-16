@@ -1,38 +1,48 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import type { TrackOutline } from '../assets/tracks';
 import { measuredTrackSectionsFor, trackSectionsFor, type TrackSectionAnchor } from '../assets/tracks/sections';
-import { loadSectionLaps, type SectionLapsPack } from '../data/sectionLaps';
-import { stableDriverId } from '../data/livePageModel';
+import { loadSectionLaps, sectionLapVisitsFor, type SectionLapsPack } from '../data/sectionLaps';
 import type { LiveSessionHistory } from '../data/liveHistoryModel';
+import { isNeutralisedFlag } from '../data/replayStart';
+import { periodAt, type ReplayTimeline } from '../data/replayTimeline';
 import type { TrackOverlayView } from '../three/TrackModel3D';
 import {
   anchorSetForPack,
-  buildFieldPlan,
   buildSectionLightPlan,
-  dotT,
-  matchFieldRows,
-  mergeFieldLapLineCrossings,
-  mergeObservedLapTimes,
   isNamedSectionLabel,
-  lapLineCrossingsFrom,
-  mergeLapLineCrossings,
   outlineGeometry,
   parseOutlinePoints,
-  sectionAt,
   sectionDisplayName,
-  segmentBases,
-  type DotMode,
-  type LapLineCrossing,
-  type LitSection,
   type SectionLightPlan
 } from './liveSectionLight';
+import {
+  BASE_TRUST_MS,
+  buildPaceModel,
+  chainGeometry,
+  distanceAhead,
+  estimateBases,
+  placeBryce,
+  sectionOfShare,
+  startPrior,
+  tightenBases,
+  tOfDistance,
+  tOfSection,
+  type BaseBounds,
+  type BaseEstimate,
+  type ChainGeometry,
+  type LapSample,
+  type PaceModel,
+  type RaceClockModel
+} from './liveMarker';
+import type { FieldCar, FieldMode } from './liveField';
 
 /* ============================================================
-   The live page's track: the circuit drawn large, the section
-   Bryce is in lit amber during a replay, and a dot for each car
-   at the last timing loop it crossed (round 6). Timing loops are
-   the only position signal there is: a dot is a measured loop
-   crossing, never a GPS position.
+   The live page's track: the circuit drawn large and, in a
+   replay, Bryce's No. 9 moving round it with the section he is
+   in filling amber behind him, and the cars around him placed by
+   their gap (round 7). Timing measures only the moments a car
+   crosses a loop: everything between is placed by time, never
+   GPS, and the page says so.
    ============================================================ */
 
 type Pt = { x: number; y: number };
@@ -65,65 +75,81 @@ const useViewportHeight = () => {
   return height;
 };
 
-/* ---------- the section light ---------- */
+/* ---------- the race, placed on the replay clock ---------- */
 
-export type SectionLightStatus =
-  | 'live'            // a live session: the feed carries no loop crossings
+export type RaceTrackStatus =
+  | 'live'            // a live session: the feed carries no section times
   | 'loading'         // the race's section times are loading
   | 'no_sections'     // no usable section times for this race
-  | 'waiting_line'    // usable, but no lap-line crossing seen yet
-  | 'between'         // usable and placed, but this moment has no tiled lap
-  | 'lit';
+  | 'waiting_line'    // usable, but nothing yet pins his first line crossing
+  | 'placed';         // the clock can place him
 
-/** One car placed on the archive clock: its lap plan (section times in chain
- *  order) and the observed line crossings that anchor it. */
-export interface CarPlacer {
-  id: string;
-  plan: SectionLightPlan;
-  bases: Map<number, number>;
-}
-
-/** The other cars, as far as the timing lets them be placed. */
-export interface FieldPlacement {
-  /** The race's section times carry the other cars at all. */
-  usable: boolean;
-  reason: string | null;
-  /** Other-car rows in the race's section times. */
-  rows: number;
-  /** Rows joined to a car by lap time so far. */
-  joined: number;
-  /** Joined cars with an observed line crossing to place them by. */
-  placers: CarPlacer[];
-}
-
-export interface SectionLightState {
-  status: SectionLightStatus;
+export interface ReplayRace {
+  status: RaceTrackStatus;
   plan: SectionLightPlan | null;
-  lit: LitSection | null;
-  /** Bryce, placed the same way (null until a line crossing is seen). */
-  bryce: CarPlacer | null;
-  field: FieldPlacement;
+  geometry: ChainGeometry | null;
+  model: RaceClockModel | null;
+  totalLaps: number | null;
+  /** What his pace rests on before his first clean lap. */
+  paceBasis: PaceModel['fallbackBasis'] | null;
 }
-
-const NO_FIELD: FieldPlacement = { usable: false, reason: null, rows: 0, joined: 0, placers: [] };
 
 /** Reads the replay's virtual clock (epoch ms), or null outside a replay. */
 export type VirtualNow = () => number | null;
 
-export const useSectionLight = ({
+const median = (values: number[]): number | null => {
+  const sorted = values.filter((value) => Number.isFinite(value) && value > 0).sort((a, b) => a - b);
+  if (sorted.length === 0) return null;
+  const mid = sorted.length >> 1;
+  return sorted.length % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
+};
+
+/** His median clean time in each section of the chain, from another race's
+ *  pack at the same venue (null where it does not carry that section). */
+const venueSectionTimes = (pack: SectionLapsPack, chain: TrackSectionAnchor[]): Array<number | null> => {
+  const byName = new Map(pack.sections.map((section) => [section.sectionName, section]));
+  return chain.map((anchor) => {
+    const section = byName.get(anchor.sectionName);
+    if (!section) return null;
+    return median(section.laps.flatMap((tuple) => (tuple[4] === 1 && tuple[6] !== null ? [tuple[6]] : [])));
+  });
+};
+
+/** One frame's answer to "how many laps has Bryce completed". */
+const bryceLapsOf = (sample: LiveSessionHistory['samples'][number]): number | null => {
+  const bryce = sample.rows.find((row) => (row as Record<string, unknown>).bryce === true) ?? null;
+  if (!bryce) return null;
+  const raw = (bryce as Record<string, unknown>).laps;
+  const value = Number(raw);
+  return Number.isFinite(value) && String(raw ?? '').trim() !== '' ? value : null;
+};
+
+/**
+ * Everything the replay's track and race bar need to place Bryce on the
+ * clock: the race's section chain, his expected pace, and the line crossings
+ * that anchor his laps, read off every frame the page has seen (its polls,
+ * its history seed, the race timeline). liveMarker.ts does the placing.
+ */
+export const useReplayRace = ({
   sessionId,
   outline,
   history,
-  virtualNow,
-  speed
+  timeline,
+  greenAt,
+  startPosition,
+  flag
 }: {
   /** The canonical race id of the replay; null on a live page. */
   sessionId: string | null;
   outline: TrackOutline | null;
   history: LiveSessionHistory | null;
-  virtualNow: VirtualNow;
-  speed: number;
-}): SectionLightState => {
+  timeline: ReplayTimeline | null;
+  /** The archive's green flag (not clamped to the capture's first frame). */
+  greenAt: string | null;
+  startPosition: number | null;
+  /** The flag on the page now: the fallback for "neutralised" without a timeline. */
+  flag: string | null;
+}): ReplayRace => {
   const [pack, setPack] = useState<{ sessionId: string; pack: SectionLapsPack | null } | null>(null);
   useEffect(() => {
     if (!sessionId) return undefined;
@@ -150,91 +176,99 @@ export const useSectionLight = ({
     ]);
     return buildSectionLightPlan(currentPack, set, outline);
   }, [currentPack, outline]);
+  const geometry = useMemo(() => (plan?.usable ? chainGeometry(plan.chain) : null), [plan]);
 
-  const fieldPlan = useMemo(() => (currentPack && plan?.usable ? buildFieldPlan(currentPack, plan) : null), [currentPack, plan]);
-
-  // Lap-line crossings outlive the history window (which trims to minutes),
-  // and so do the field's crossings, lap times and row joins.
-  const kept = useRef<{
-    sessionId: string | null;
-    crossings: Map<number, LapLineCrossing>;
-    field: Map<string, Map<number, LapLineCrossing>>;
-    times: Map<string, Map<number, number>>;
-    matches: Map<string, number>;
-  }>({ sessionId: null, crossings: new Map(), field: new Map(), times: new Map(), matches: new Map() });
-  if (kept.current.sessionId !== sessionId) {
-    kept.current = { sessionId, crossings: new Map(), field: new Map(), times: new Map(), matches: new Map() };
-  }
-  const [bases, setBases] = useState<Map<number, number>>(new Map());
-  const [bryceId, setBryceId] = useState('');
-  const [placers, setPlacers] = useState<{ joined: number; list: CarPlacer[] }>({ joined: 0, list: [] });
+  // His history at the venue: the latest earlier race here whose sections join.
+  const [venue, setVenue] = useState<{ sessionId: string; times: Array<number | null> | null } | null>(null);
   useEffect(() => {
-    setBases(new Map());
-    setPlacers({ joined: 0, list: [] });
-  }, [sessionId]);
-  useEffect(() => {
-    if (!plan?.usable || !history) return;
-    const idOf = (row: Record<string, unknown>) => stableDriverId(row as never);
-    const crossings = lapLineCrossingsFrom(history.samples, idOf);
-    if (mergeLapLineCrossings(kept.current.crossings, crossings) || bases.size === 0) {
-      const next = segmentBases(plan, [...kept.current.crossings.values()]);
-      if (next.size > 0) setBases(next);
-    }
-    const id = history.samples.at(-1)?.bryceId ?? '';
-    if (id) setBryceId(id);
-    if (!fieldPlan?.usable) return;
-    const moved = mergeFieldLapLineCrossings(kept.current.field, history.samples, idOf);
-    const timed = mergeObservedLapTimes(kept.current.times, history.samples, idOf);
-    if (!moved && !timed && placers.list.length > 0) return;
-    kept.current.matches = matchFieldRows(fieldPlan, kept.current.times, kept.current.matches, id);
-    const list: CarPlacer[] = [];
-    for (const [car, row] of kept.current.matches) {
-      const rowPlan = fieldPlan.rows[row];
-      const carCrossings = kept.current.field.get(car);
-      if (!rowPlan || !carCrossings) continue;
-      const carBases = segmentBases(rowPlan, [...carCrossings.values()]);
-      if (carBases.size > 0) list.push({ id: car, plan: rowPlan, bases: carBases });
-    }
-    setPlacers({ joined: kept.current.matches.size, list });
-    // bases and placers are read only to retry after a reset; the history drives this.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [history, plan, fieldPlan]);
-
-  const [lit, setLit] = useState<LitSection | null>(null);
-  useEffect(() => {
-    if (!plan?.usable || bases.size === 0) {
-      setLit(null);
-      return undefined;
-    }
-    const tick = () => {
-      const now = virtualNow();
-      const next = now === null ? null : sectionAt(plan, bases, now);
-      setLit((previous) =>
-        previous?.lap === next?.lap && previous?.index === next?.index && previous?.enteredAtMs === next?.enteredAtMs ? previous : next
-      );
+    if (!currentPack || !plan?.usable || !sessionId) return undefined;
+    let cancelled = false;
+    const visits = sectionLapVisitsFor(currentPack.venueName);
+    const here = visits.findIndex((ref) => ref.sessionId === sessionId);
+    const earlier = (here >= 0 ? visits.slice(0, here) : visits.filter((ref) => ref.sessionId !== sessionId)).reverse().slice(0, 2);
+    void (async () => {
+      for (const ref of earlier) {
+        const other = await loadSectionLaps(ref.sessionId).catch(() => null);
+        if (cancelled) return;
+        const times = other ? venueSectionTimes(other, plan.chain) : null;
+        if (times && times.every((value) => value !== null)) {
+          setVenue({ sessionId, times });
+          return;
+        }
+      }
+      if (!cancelled) setVenue({ sessionId, times: null });
+    })();
+    return () => {
+      cancelled = true;
     };
-    tick();
-    // Sections last 1-10 s of race time; at 16x that is well under a second.
-    const every = Math.max(60, Math.min(250, Math.round(1000 / Math.max(1, speed) / 2)));
-    const timer = window.setInterval(tick, every);
-    return () => window.clearInterval(timer);
-  }, [plan, bases, virtualNow, speed]);
+  }, [currentPack, plan, sessionId]);
 
-  const bryce = useMemo<CarPlacer | null>(
-    () => (plan?.usable && bases.size > 0 ? { id: bryceId || 'bryce', plan, bases } : null),
-    [plan, bases, bryceId]
+  const pace = useMemo(() => {
+    if (!plan?.usable || !currentPack) return null;
+    const byName = new Map(currentPack.sections.map((section) => [section.sectionName, section]));
+    const field = plan.chain.map((anchor) => median(byName.get(anchor.sectionName)?.fieldSeconds ?? []));
+    const laps = [...plan.laps.values()].map((lap) => ({ lap: lap.lap, lapSeconds: lap.lapSeconds, sectionSeconds: lap.sectionSeconds, clean: lap.clean }));
+    return buildPaceModel(laps, plan.chain.length, { venue: venue?.sessionId === sessionId ? venue.times : null, field });
+  }, [plan, currentPack, venue, sessionId]);
+
+  // The bounds on each lap segment's line crossing outlive the history window
+  // (which trims to minutes) and every seek: they are facts about the race.
+  const kept = useRef<{ sessionId: string | null; bounds: Map<number, BaseBounds> }>({ sessionId: null, bounds: new Map() });
+  if (kept.current.sessionId !== sessionId) kept.current = { sessionId, bounds: new Map() };
+  const [boundsVersion, setBoundsVersion] = useState(0);
+  useEffect(() => {
+    if (!plan?.usable) return;
+    const samples: LapSample[] = [];
+    for (const sample of history?.samples ?? []) {
+      const laps = bryceLapsOf(sample);
+      // A frame this client polled is a whole frame; a seeded or caught-up one
+      // comes from the server's breakpoints, whose lap count can be stale.
+      if (laps !== null) samples.push({ atMs: sample.checkedAtMs, laps, upperOnly: sample.expectedCadenceMs === undefined });
+    }
+    for (const frame of timeline?.frames ?? []) {
+      if (frame.bryceLaps !== null) samples.push({ atMs: frame.atMs, laps: frame.bryceLaps, upperOnly: true });
+    }
+    if (tightenBases(plan, kept.current.bounds, samples)) setBoundsVersion((value) => value + 1);
+  }, [history, timeline, plan]);
+
+  const greenMs = greenAt ? Date.parse(greenAt) : NaN;
+  const bases = useMemo(() => {
+    if (!plan?.usable) return new Map<number, BaseEstimate>();
+    const priors = new Map<number, number>();
+    const prior = startPrior(Number.isFinite(greenMs) ? greenMs : null, startPosition);
+    const firstSegment = plan.segmentOf.get(1);
+    if (prior !== null && firstSegment !== undefined) priors.set(firstSegment, prior);
+    const out = new Map<number, BaseEstimate>();
+    for (const [segment, estimate] of estimateBases(kept.current.bounds, priors)) {
+      if (estimate.fromPrior || estimate.spreadMs <= BASE_TRUST_MS) out.set(segment, estimate);
+    }
+    return out;
+    // boundsVersion says the kept bounds moved
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [plan, boundsVersion, greenMs, startPosition]);
+
+  const timelineRef = useRef(timeline);
+  timelineRef.current = timeline;
+  const flagRef = useRef(flag);
+  flagRef.current = flag;
+  const neutralisedAt = useCallback((atMs: number) => {
+    const known = timelineRef.current;
+    if (known && known.periods.length + known.frames.length > 0) return periodAt(known, atMs) !== null;
+    return isNeutralisedFlag(flagRef.current);
+  }, []);
+
+  const model = useMemo<RaceClockModel | null>(
+    () => (plan?.usable && geometry && pace && bases.size > 0 ? { geometry, plan, bases, pace, neutralisedAt, greenMs: Number.isFinite(greenMs) ? greenMs : null } : null),
+    [plan, geometry, pace, bases, neutralisedAt, greenMs]
   );
-  const field = useMemo<FieldPlacement>(() => {
-    if (!fieldPlan) return NO_FIELD;
-    if (!fieldPlan.usable) return { ...NO_FIELD, reason: fieldPlan.reason };
-    return { usable: true, reason: null, rows: fieldPlan.rows.length, joined: placers.joined, placers: placers.list };
-  }, [fieldPlan, placers]);
 
-  if (!sessionId) return { status: 'live', plan: null, lit: null, bryce: null, field: NO_FIELD };
-  if (!pack || pack.sessionId !== sessionId) return { status: 'loading', plan: null, lit: null, bryce: null, field: NO_FIELD };
-  if (!plan?.usable) return { status: 'no_sections', plan, lit: null, bryce: null, field: NO_FIELD };
-  if (bases.size === 0) return { status: 'waiting_line', plan, lit: null, bryce: null, field };
-  return { status: lit ? 'lit' : 'between', plan, lit, bryce, field };
+  const totalLaps = currentPack?.totalLaps ?? null;
+  const paceBasis = pace?.fallbackBasis ?? null;
+  if (!sessionId) return { status: 'live', plan: null, geometry: null, model: null, totalLaps: null, paceBasis: null };
+  if (!pack || pack.sessionId !== sessionId) return { status: 'loading', plan: null, geometry: null, model: null, totalLaps: null, paceBasis: null };
+  if (!plan?.usable) return { status: 'no_sections', plan, geometry: null, model: null, totalLaps, paceBasis: null };
+  if (!model) return { status: 'waiting_line', plan, geometry, model: null, totalLaps, paceBasis };
+  return { status: 'placed', plan, geometry, model, totalLaps, paceBasis };
 };
 
 /* ---------- drawing ---------- */
@@ -277,7 +311,8 @@ export interface LiveTrackProps {
   /** The race's timing sections in driving order from the line, or null to
    *  draw the plain circuit. */
   chain: TrackSectionAnchor[] | null;
-  lit: LitSection | null;
+  /** The section Bryce is in (its name is drawn large); null for none. */
+  lit: { index: number; lap: number } | null;
   /** Upper bound on the drawing's height, in px. */
   maxHeight?: number;
   /** Reserve side room for section labels even before the sections load. */
@@ -443,8 +478,9 @@ export const LiveTrack = ({ outline, chain, lit, maxHeight, ariaLabel, labelRoom
   }, [width, outline, geometry, sfT, chain, maxHeight, viewportHeight, labelRoom]);
 
   const litSlot = lit && layout ? layout.litSlots[lit.index] ?? null : null;
+  const litFamily = lit ? chain?.[lit.index]?.familyId ?? null : null;
   return (
-    <div ref={ref} className="live-track" data-live-track data-lit-section={lit?.anchor.familyId ?? ''} data-lit-lap={lit?.lap ?? ''}>
+    <div ref={ref} className="live-track" data-live-track data-lit-section={litFamily ?? ''} data-lit-lap={lit?.lap ?? ''}>
       {layout ? (
         <svg width={width} height={layout.svgHeight} viewBox={`0 0 ${width} ${layout.svgHeight}`} role="img" aria-label={ariaLabel} className="live-track__svg">
           {layout.pitPath ? <path d={layout.pitPath} className="live-track__pit" /> : null}
@@ -453,7 +489,7 @@ export const LiveTrack = ({ outline, chain, lit, maxHeight, ariaLabel, labelRoom
             <path
               key={section.familyId}
               d={section.d}
-              className={`live-track__section${lit?.anchor.familyId === section.familyId ? ' live-track__section--lit' : ''}`}
+              className="live-track__section"
               strokeWidth={layout.litStroke}
             />
           ))}
@@ -468,7 +504,7 @@ export const LiveTrack = ({ outline, chain, lit, maxHeight, ariaLabel, labelRoom
             </text>
           ) : null}
           {layout.quiet.map((entry) =>
-            entry && !(litSlot && boxesOverlap(entry.label, litSlot, 2)) && entry.familyId !== lit?.anchor.familyId ? (
+            entry && !(litSlot && boxesOverlap(entry.label, litSlot, 2)) && entry.familyId !== litFamily ? (
               <text key={entry.familyId} x={entry.label.tx} y={entry.label.ty} textAnchor={entry.label.anchor} fontSize={layout.quietSize} className="live-track__label">
                 {entry.label.text}
               </text>
@@ -492,148 +528,298 @@ export const LiveTrack = ({ outline, chain, lit, maxHeight, ariaLabel, labelRoom
   );
 };
 
-/* ---------- the car dots ---------- */
 
-/** Who a dot is, from the timing rows. */
+/* ---------- Bryce's marker, the fill, the cars around him ---------- */
+
+/** Who a car is, from the timing rows. */
 export interface CarLabel {
   no: string;
   surname: string;
   position: number | null;
 }
 
-interface PlacedCar {
-  id: string;
-  bryce: boolean;
-  lit: LitSection;
-  t: number;
+/** Where his marker was last drawn, for the page's caption and the bar. */
+export interface MarkerReadout {
+  lap: number;
+  index: number;
+  holding: boolean;
 }
 
-const placeAll = (cars: CarPlacer[], bryceId: string | null, atMs: number, mode: DotMode): PlacedCar[] => {
-  const placed: PlacedCar[] = [];
-  for (const car of cars) {
-    const lit = sectionAt(car.plan, car.bases, atMs);
-    if (lit) placed.push({ id: car.id, bryce: car.id === bryceId, lit, t: dotT(lit, atMs, mode) });
+/** Wall ms over which a finished section's fill fades out. */
+const FADE_WALL_MS = 1_000;
+/** Wall ms over which a car eases to a new gap when a frame lands. */
+const GAP_EASE_WALL_MS = 700;
+/** A drop in his drawn distance smaller than this (laps) is held, never drawn
+ *  backwards; a larger one is a jump of the clock (a seek, a restart). */
+const BACKWARDS_TOLERANCE_LAPS = 0.25;
+const FILL_STEPS = 28;
+
+const PLATE_W = 32;
+const PLATE_H = 24;
+const PLATE_LIFT = 27;
+const CAR_R = 8.5;
+
+const pathThrough = (points: Array<[number, number] | null>): string => {
+  let d = '';
+  let open = false;
+  for (const point of points) {
+    if (!point) {
+      open = false;
+      continue;
+    }
+    d += `${open ? 'L' : 'M'}${point[0].toFixed(1)} ${point[1].toFixed(1)} `;
+    open = true;
   }
-  return placed;
+  return d.trim();
 };
 
-const signatureOf = (placed: PlacedCar[]) => placed.map((car) => `${car.id}:${car.lit.lap}:${car.lit.index}`).join('|');
+/** Screen width of the track at t (px), for the fill's stroke. */
+const trackWidthAt = (view: TrackOverlayView, t: number): number => {
+  const a = view.project(t, -view.halfWidth);
+  const b = view.project(t, view.halfWidth);
+  return a && b ? Math.max(3, Math.min(40, Math.hypot(b[0] - a[0], b[1] - a[1]))) : 8;
+};
 
-const DOT_R = 5;
-const PLATE_W = 22;
-const PLATE_H = 16;
+const sectionPath = (view: TrackOverlayView, geometry: ChainGeometry, index: number, upTo = 1): string =>
+  pathThrough(Array.from({ length: FILL_STEPS + 1 }, (_, step) => view.project(tOfSection(geometry, index, (upTo * step) / FILL_STEPS), 0)));
 
 /**
- * Car dots over the track (3D model or 2D map: `view` says where a point of
- * the track is drawn). Default mode `loops`: each dot sits on the last timing
- * loop that car crossed and moves loop to loop. `glide` moves it through its
- * section by time between its two crossings. Several cars on one loop line up
- * along it, in running order. Bryce is the gold plate with his 9.
+ * Over the track (the 3D model or the 2D map: `view` says where a point of
+ * the track is drawn): Bryce's No. 9 plate raised above the circuit, moving
+ * continuously by liveMarker.ts's rule; the amber fill growing from the start
+ * of his section to him, fading as he crosses into the next; the cars around
+ * him as small ink marks with their numbers, placed by their gap to him. All
+ * moved in one animation frame loop, never through React state.
  */
-export const TrackDots = ({
+export const TrackMarks = ({
   view,
-  chain,
-  bryce,
-  placers,
+  race,
   virtualNow,
-  speed,
-  mode,
+  clockEpoch,
   cars,
+  fieldMode,
+  trail,
+  bryceLabel,
   highlightId,
   onHoverCar,
-  onCount
+  onReadout
 }: {
   view: TrackOverlayView;
-  chain: TrackSectionAnchor[];
-  bryce: CarPlacer | null;
-  placers: CarPlacer[];
+  race: ReplayRace;
   virtualNow: VirtualNow;
-  speed: number;
-  mode: DotMode;
-  cars: Map<string, CarLabel>;
-  /** A car to ring (the running order's hovered row). */
+  /** Bumped when the clock jumps: the marker may then move backwards once. */
+  clockEpoch: number;
+  cars: FieldCar[];
+  fieldMode: FieldMode;
+  /** `?trail=lap`: the lap's finished sections stay lightly tinted. */
+  trail: boolean;
+  bryceLabel: CarLabel | null;
   highlightId?: string | null;
   onHoverCar?: (id: string | null) => void;
-  /** How many cars have a dot now (called when it changes). */
-  onCount?: (placed: number) => void;
+  onReadout?: (readout: MarkerReadout | null) => void;
 }) => {
-  const all = useMemo(() => (bryce ? [bryce, ...placers] : placers), [bryce, placers]);
-  const bryceId = bryce?.id ?? null;
-  const [placed, setPlaced] = useState<PlacedCar[]>(() => {
-    const now = virtualNow();
-    return now === null ? [] : placeAll(all, bryceId, now, mode);
-  });
-  const sigRef = useRef('');
+  const viewRef = useRef(view);
+  viewRef.current = view;
+  const raceRef = useRef(race);
+  raceRef.current = race;
+  const carsRef = useRef(cars);
+  carsRef.current = cars;
+  const epochRef = useRef(clockEpoch);
+  epochRef.current = clockEpoch;
+  const trailRef = useRef(trail);
+  trailRef.current = trail;
+  const readoutRef = useRef(onReadout);
+  readoutRef.current = onReadout;
+
+  const svgRef = useRef<SVGSVGElement | null>(null);
+  const fillRef = useRef<SVGPathElement | null>(null);
+  const fadeRef = useRef<SVGPathElement | null>(null);
+  const trailPathRef = useRef<SVGPathElement | null>(null);
+  const bryceRef = useRef<SVGGElement | null>(null);
+  const carRefs = useRef(new Map<string, SVGGElement>());
+  const tipRef = useRef<HTMLDivElement | null>(null);
+  const tipLineRef = useRef<HTMLSpanElement | null>(null);
+  const [hover, setHover] = useState<string | null>(null);
+  const hoverRef = useRef(hover);
+  hoverRef.current = hover;
+
   useEffect(() => {
     let frame = 0;
-    let timer = 0;
-    const tick = () => {
+    let held: { distance: number; epoch: number } | null = null;
+    let last: { lap: number; index: number } | null = null;
+    let fade: { lap: number; index: number; startedAt: number } | null = null;
+    let finished: number[] = [];
+    let lastReadout = '';
+    const eased = new Map<string, { from: number; to: number; at: number }>();
+    const positions = new Map<string, [number, number]>();
+
+    const hide = (node: Element | null) => node?.setAttribute('visibility', 'hidden');
+    const show = (node: Element | null) => node?.setAttribute('visibility', 'visible');
+
+    const loop = () => {
+      frame = requestAnimationFrame(loop);
+      const current = viewRef.current;
+      const model = raceRef.current.model;
       const now = virtualNow();
-      const next = now === null ? [] : placeAll(all, bryceId, now, mode);
-      if (mode === 'glide') {
-        setPlaced(next);
+      const wall = performance.now();
+      positions.clear();
+      const place = model && now !== null ? placeBryce(model, now) : null;
+      if (!model || !place || now === null) {
+        hide(bryceRef.current);
+        hide(fillRef.current);
+        hide(fadeRef.current);
+        hide(trailPathRef.current);
+        for (const node of carRefs.current.values()) hide(node);
+        svgRef.current?.setAttribute('data-marks-bryce', 'none');
+        if (lastReadout !== 'none') {
+          lastReadout = 'none';
+          readoutRef.current?.(null);
+        }
+        held = null;
+        last = null;
         return;
       }
-      const sig = signatureOf(next);
-      if (sig !== sigRef.current) {
-        sigRef.current = sig;
-        setPlaced(next);
+      const geometry = model.geometry;
+      let distance = place.distance;
+      if (held && held.epoch === epochRef.current && distance < held.distance && held.distance - distance < BACKWARDS_TOLERANCE_LAPS) {
+        distance = held.distance;
+      }
+      held = { distance, epoch: epochRef.current };
+      const lap = Math.floor(distance) + 1;
+      const at = sectionOfShare(geometry, distance - Math.floor(distance));
+      const t = tOfSection(geometry, at.index, at.fraction);
+
+      // A loop crossed: the section just finished fades; a new lap clears the trail.
+      if (last && (last.index !== at.index || last.lap !== lap)) {
+        fade = { lap: last.lap, index: last.index, startedAt: wall };
+        if (lap !== last.lap) finished = [];
+        else if (!finished.includes(last.index)) finished.push(last.index);
+      }
+      if (!last || Math.abs(last.lap - lap) > 1) finished = [];
+      last = { lap, index: at.index };
+
+      const width = trackWidthAt(current, t);
+      const fill = fillRef.current;
+      if (fill) {
+        fill.setAttribute('d', at.fraction > 0.002 ? sectionPath(current, geometry, at.index, at.fraction) : '');
+        fill.setAttribute('stroke-width', width.toFixed(1));
+        show(fill);
+      }
+      const fadeNode = fadeRef.current;
+      if (fadeNode) {
+        const left = fade ? 1 - (wall - fade.startedAt) / FADE_WALL_MS : 0;
+        if (fade && left > 0) {
+          fadeNode.setAttribute('d', sectionPath(current, geometry, fade.index));
+          fadeNode.setAttribute('stroke-width', width.toFixed(1));
+          fadeNode.setAttribute('opacity', (0.9 * left).toFixed(3));
+          show(fadeNode);
+        } else {
+          fade = null;
+          hide(fadeNode);
+        }
+      }
+      const trailNode = trailPathRef.current;
+      if (trailNode) {
+        if (trailRef.current && finished.length > 0) {
+          trailNode.setAttribute('d', finished.map((index) => sectionPath(current, geometry, index)).join(' '));
+          trailNode.setAttribute('stroke-width', width.toFixed(1));
+          show(trailNode);
+        } else hide(trailNode);
+      }
+
+      const point = current.project(t, 0);
+      const bryce = bryceRef.current;
+      if (bryce && point) {
+        bryce.setAttribute('transform', `translate(${point[0].toFixed(1)} ${point[1].toFixed(1)})`);
+        show(bryce);
+        positions.set('bryce', point);
+      } else hide(bryce);
+      svgRef.current?.setAttribute('data-marks-bryce', `${lap}:${at.index}:${place.holding ? 'hold' : 'move'}`);
+
+      // The other cars: their gap to him, eased, turned into distance at his pace.
+      const from = { ...place, distance };
+      let drawn = 0;
+      for (const car of carsRef.current) {
+        const node = carRefs.current.get(car.id);
+        if (!node) continue;
+        let ease = eased.get(car.id);
+        if (!ease) {
+          ease = { from: car.offsetSeconds, to: car.offsetSeconds, at: wall };
+          eased.set(car.id, ease);
+        } else if (ease.to !== car.offsetSeconds) {
+          const u = Math.min(1, (wall - ease.at) / GAP_EASE_WALL_MS);
+          ease.from = ease.from + (ease.to - ease.from) * u;
+          ease.to = car.offsetSeconds;
+          ease.at = wall;
+        }
+        const u = Math.min(1, (wall - ease.at) / GAP_EASE_WALL_MS);
+        const offset = ease.from + (ease.to - ease.from) * (u * u * (3 - 2 * u));
+        const carPoint = current.project(tOfDistance(geometry, distanceAhead(model, from, offset, now)), 0);
+        if (!carPoint) {
+          hide(node);
+          continue;
+        }
+        node.setAttribute('transform', `translate(${carPoint[0].toFixed(1)} ${carPoint[1].toFixed(1)})`);
+        show(node);
+        positions.set(car.id, carPoint);
+        drawn += 1;
+      }
+      svgRef.current?.setAttribute('data-marks-cars', String(drawn));
+
+      const tip = tipRef.current;
+      const focus = hoverRef.current;
+      const tipAt = focus ? positions.get(focus) : undefined;
+      if (tip && tipAt) {
+        const box = svgRef.current?.clientWidth ?? Infinity;
+        const right = tipAt[0] + 280 > box;
+        tip.style.left = right ? '' : `${Math.round(tipAt[0] + 16)}px`;
+        tip.style.right = right ? `${Math.round(box - tipAt[0] + 16)}px` : '';
+        tip.style.top = `${Math.round(tipAt[1] - (focus === 'bryce' ? PLATE_LIFT + 14 : 12))}px`;
+        if (focus === 'bryce' && tipLineRef.current) {
+          const name = sectionDisplayName(geometry.chain[at.index], at.index, geometry.chain.length);
+          const text = `${name}, lap ${lap}`;
+          if (tipLineRef.current.textContent !== text) tipLineRef.current.textContent = text;
+        }
+      }
+
+      const key = `${lap}:${at.index}:${place.holding}`;
+      if (key !== lastReadout) {
+        lastReadout = key;
+        readoutRef.current?.({ lap, index: at.index, holding: place.holding });
       }
     };
-    sigRef.current = '';
-    tick();
-    if (mode === 'glide') {
-      const loop = () => {
-        tick();
-        frame = requestAnimationFrame(loop);
-      };
-      frame = requestAnimationFrame(loop);
-    } else {
-      // A car crosses a loop every 1-10 s of race time; at 16x that is well under a second.
-      timer = window.setInterval(tick, Math.max(60, Math.min(250, Math.round(1000 / Math.max(1, speed) / 2))));
-    }
-    return () => {
-      cancelAnimationFrame(frame);
-      window.clearInterval(timer);
-    };
-  }, [all, bryceId, virtualNow, speed, mode]);
+    frame = requestAnimationFrame(loop);
+    return () => cancelAnimationFrame(frame);
+  }, [virtualNow]);
 
-  const count = placed.length;
-  useEffect(() => {
-    onCount?.(count);
-  }, [count, onCount]);
-
-  const [hover, setHover] = useState<{ id: string; pinned: boolean } | null>(null);
-  // A dot moves on while it is read (loop to loop, or gliding): the label stays
-  // with that car a moment after the pointer loses it.
   const leaveTimer = useRef(0);
   useEffect(() => () => window.clearTimeout(leaveTimer.current), []);
   const enter = useCallback(
     (id: string) => {
       window.clearTimeout(leaveTimer.current);
-      setHover((current) => (current?.pinned ? current : { id, pinned: false }));
-      onHoverCar?.(id);
+      setHover(id);
+      onHoverCar?.(id === 'bryce' ? null : id);
     },
     [onHoverCar]
   );
+  // A mark moves on while it is read: the label stays a moment after the
+  // pointer loses it.
   const leave = useCallback(() => {
     window.clearTimeout(leaveTimer.current);
     leaveTimer.current = window.setTimeout(() => {
-      setHover((current) => (current?.pinned ? current : null));
+      setHover(null);
       onHoverCar?.(null);
-    }, 1_400);
+    }, 1_200);
   }, [onHoverCar]);
-  const toggle = useCallback((id: string) => {
-    setHover((current) => (current?.pinned && current.id === id ? null : { id, pinned: true }));
-  }, []);
 
   const { project, halfWidth, version } = view;
+  const chain = race.geometry?.chain ?? [];
   const ticks = useMemo(
     () =>
       chain
         .map((anchor) => {
-          const a = project(anchor.startT, -halfWidth * 1.5);
-          const b = project(anchor.startT, halfWidth * 1.5);
+          const a = project(anchor.startT, -halfWidth * 1.4);
+          const b = project(anchor.startT, halfWidth * 1.4);
           return a && b ? { key: anchor.familyId, a, b } : null;
         })
         .filter((tick): tick is NonNullable<typeof tick> => tick !== null),
@@ -642,119 +828,74 @@ export const TrackDots = ({
     [chain, project, halfWidth, version]
   );
 
-  const drawn = useMemo(() => {
-    const rank = (id: string) => cars.get(id)?.position ?? 999;
-    const groups = new Map<string, PlacedCar[]>();
-    for (const car of placed) {
-      const key = mode === 'loops' ? `${car.lit.index}` : `${car.id}`;
-      const list = groups.get(key) ?? [];
-      list.push(car);
-      groups.set(key, list);
-    }
-    const out: Array<{ car: PlacedCar; x: number; y: number }> = [];
-    for (const list of groups.values()) {
-      list.sort((a, b) => rank(a.id) - rank(b.id));
-      const t = list[0].t;
-      const centre = project(t, 0);
-      if (!centre) continue;
-      if (list.length === 1) {
-        out.push({ car: list[0], x: centre[0], y: centre[1] });
-        continue;
-      }
-      // Line them up along the loop: across the track at this point, on screen.
-      const a = project(t, -halfWidth);
-      const b = project(t, halfWidth);
-      let dx = 1;
-      let dy = 0;
-      if (a && b) {
-        const len = Math.hypot(b[0] - a[0], b[1] - a[1]);
-        if (len > 0.5) {
-          dx = (b[0] - a[0]) / len;
-          dy = (b[1] - a[1]) / len;
-        }
-      }
-      // Touching, not spaced: a busy loop stays a short line across the track.
-      const widths = list.map((car) => (car.bryce ? PLATE_W - 2 : DOT_R * 2 - 1));
-      const total = widths.reduce((sum, w) => sum + w, 0);
-      let cursor = -total / 2;
-      list.forEach((car, index) => {
-        const offset = cursor + widths[index] / 2;
-        cursor += widths[index];
-        out.push({ car, x: centre[0] + dx * offset, y: centre[1] + dy * offset });
-      });
-    }
-    // Bryce and the ringed car draw last, on top.
-    const focus = hover?.id ?? highlightId ?? null;
-    out.sort((p, q) => Number(p.car.bryce || p.car.id === focus) - Number(q.car.bryce || q.car.id === focus));
-    return out;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [placed, mode, cars, project, halfWidth, version, hover?.id, highlightId]);
-
-  const svgRef = useRef<SVGSVGElement | null>(null);
-  const focus = hover?.id ?? highlightId ?? null;
-  const tipCar = hover ? drawn.find((entry) => entry.car.id === hover.id) ?? null : null;
-  const tipLabel = tipCar ? cars.get(tipCar.car.id) : null;
-
+  const focus = hover ?? highlightId ?? null;
+  const hoveredCar = hover && hover !== 'bryce' ? cars.find((car) => car.id === hover) ?? null : null;
   return (
     <>
-      <svg ref={svgRef} className="live-dots" width="100%" height="100%" aria-hidden data-dots-mode={mode} data-dots-placed={count}>
+      <svg ref={svgRef} className="live-marks" width="100%" height="100%" aria-hidden data-marks-field={fieldMode} data-marks-trail={trail ? 'lap' : 'off'}>
         {ticks.map((tick) => (
-          <line key={tick.key} x1={tick.a[0]} y1={tick.a[1]} x2={tick.b[0]} y2={tick.b[1]} className="live-dots__loop" />
+          <line key={tick.key} x1={tick.a[0]} y1={tick.a[1]} x2={tick.b[0]} y2={tick.b[1]} className="live-marks__loop" />
         ))}
-        {drawn.map(({ car, x, y }) => {
-          const label = cars.get(car.id);
-          const ringed = car.id === focus;
-          return (
-            <g
-              key={car.id}
-              className={`live-dots__car${car.bryce ? ' live-dots__car--bryce' : ''}${ringed ? ' is-focus' : ''}`}
-              transform={`translate(${x.toFixed(1)} ${y.toFixed(1)})`}
-              data-car={car.id}
-              data-car-no={label?.no ?? ''}
-              data-section={car.lit.anchor.familyId}
-              onPointerEnter={() => enter(car.id)}
-              onPointerLeave={leave}
-              onClick={() => toggle(car.id)}
-            >
-              {/* a larger, invisible target for the pointer */}
-              <circle r={car.bryce ? 14 : 9} className="live-dots__hit" />
-              {ringed ? <circle r={car.bryce ? 15 : DOT_R + 4} className="live-dots__ring" /> : null}
-              {car.bryce ? (
-                <>
-                  <rect x={-PLATE_W / 2} y={-PLATE_H / 2} width={PLATE_W} height={PLATE_H} rx={4} className="live-dots__plate" />
-                  <text y={4} textAnchor="middle" className="live-dots__plate-no">
-                    {label?.no || '9'}
-                  </text>
-                </>
-              ) : (
-                <circle r={DOT_R} className="live-dots__dot" />
-              )}
-            </g>
-          );
-        })}
+        <path ref={trailPathRef} className="live-marks__trail" visibility="hidden" />
+        <path ref={fadeRef} className="live-marks__fade" visibility="hidden" />
+        <path ref={fillRef} className="live-marks__fill" visibility="hidden" />
+        {cars.map((car) => (
+          <g
+            key={car.id}
+            ref={(node) => {
+              if (node) carRefs.current.set(car.id, node);
+              else carRefs.current.delete(car.id);
+            }}
+            className={`live-marks__car${car.id === focus ? ' is-focus' : ''}`}
+            visibility="hidden"
+            data-car={car.id}
+            data-car-no={car.no}
+            onPointerEnter={() => enter(car.id)}
+            onPointerLeave={leave}
+          >
+            <circle r={CAR_R + 5} className="live-marks__hit" />
+            <circle r={CAR_R} className="live-marks__dot" />
+            <text y={3.2} textAnchor="middle" className="live-marks__no">
+              {car.no}
+            </text>
+          </g>
+        ))}
+        <g ref={bryceRef} className={`live-marks__bryce${hover === 'bryce' ? ' is-focus' : ''}`} visibility="hidden" onPointerEnter={() => enter('bryce')} onPointerLeave={leave}>
+          <ellipse rx={11} ry={4.4} className="live-marks__shadow" />
+          <line x1={0} y1={0} x2={0} y2={-PLATE_LIFT + PLATE_H / 2} className="live-marks__stem" />
+          <circle r={2.6} className="live-marks__foot" />
+          <rect x={-PLATE_W / 2 - 6} y={-PLATE_LIFT - PLATE_H / 2 - 6} width={PLATE_W + 12} height={PLATE_H + PLATE_LIFT + 10} className="live-marks__hit" />
+          <rect x={-PLATE_W / 2} y={-PLATE_LIFT - PLATE_H / 2} width={PLATE_W} height={PLATE_H} rx={6} className="live-marks__plate" />
+          <text y={-PLATE_LIFT + 6} textAnchor="middle" className="live-marks__plate-no">
+            {bryceLabel?.no || '9'}
+          </text>
+        </g>
       </svg>
-      {tipCar ? (
-        <div
-          className="live-dots__tip"
-          role="status"
-          style={
-            tipCar.x + 270 > (svgRef.current?.clientWidth ?? Infinity)
-              ? { right: Math.round((svgRef.current?.clientWidth ?? 0) - tipCar.x + 14), top: Math.round(tipCar.y - 12) }
-              : { left: Math.round(tipCar.x + 14), top: Math.round(tipCar.y - 12) }
-          }
-        >
-          <strong>
-            {tipLabel ? `No. ${tipLabel.no} ${tipLabel.surname}` : 'Car'}
-            {tipLabel?.position ? `, P${tipLabel.position}` : ''}
-          </strong>
-          <span>
-            {sectionDisplayName(tipCar.car.lit.anchor, tipCar.car.lit.index, chain.length)}, lap {tipCar.car.lit.lap}
-          </span>
-          <span className="live-dots__tip-detail">
-            {mode === 'loops'
-              ? 'At the timing loop it last crossed.'
-              : 'Placed by time between its two timing loops, not GPS.'}
-          </span>
+      {hover ? (
+        <div ref={tipRef} className="live-marks__tip" role="status">
+          {hover === 'bryce' ? (
+            <>
+              <strong>
+                No. {bryceLabel?.no || '9'} {bryceLabel?.surname || 'Aron'}
+                {bryceLabel?.position ? `, P${bryceLabel.position}` : ''}
+              </strong>
+              <span ref={tipLineRef} />
+              <span className="live-marks__tip-detail">Placed by time between the timing loops, not GPS.</span>
+            </>
+          ) : (
+            <>
+              <strong>
+                {hoveredCar ? `No. ${hoveredCar.no} ${hoveredCar.surname}` : 'Car'}
+                {hoveredCar?.position ? `, P${hoveredCar.position}` : ''}
+              </strong>
+              {hoveredCar ? (
+                <span>
+                  {Math.abs(hoveredCar.offsetSeconds).toFixed(1)} s {hoveredCar.offsetSeconds > 0 ? 'ahead of' : 'behind'} Bryce
+                </span>
+              ) : null}
+              <span className="live-marks__tip-detail">Placed by the gap, not GPS.</span>
+            </>
+          )}
         </div>
       ) : null}
     </>

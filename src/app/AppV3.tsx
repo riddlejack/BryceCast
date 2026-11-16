@@ -87,7 +87,7 @@ const Shell = ({
       <footer className="footer">
         <div className="footer__inner">
           <span className="row" style={{ gap: 10 }}>
-            <CarMark height={16} />
+            <CarMark height={20} />
             BryceCast · following Bryce Aron, No. 9, Chip Ganassi Racing · built by a friend, powered by official sources
           </span>
           <span className="row" style={{ gap: 14 }}>
@@ -162,8 +162,8 @@ const Routes = () => {
   // poll every second while a replay sits before its green flag, so the
   // formation laps at 16× and the green itself show when they happen.
   useEffect(() => {
-    if (replay.clockEpoch > 0) readiness.refresh();
-  }, [replay.clockEpoch, readiness.refresh]);
+    if (replay.clockEpoch > 0) readiness.resync();
+  }, [replay.clockEpoch, readiness.resync]);
   const replayPreGreen = replay.started && readiness.payload?.state === 'pre_session';
   useEffect(() => {
     if (!replayPreGreen) return undefined;

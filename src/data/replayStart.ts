@@ -42,7 +42,8 @@ const isGreen = (sample: FlagSample | null | undefined) => sample?.flag === 'GRE
 /** A full-course caution or a red flag: the field is neutralised. */
 export const isNeutralisedFlag = (flag: string | null | undefined): boolean => {
   const value = (flag ?? '').toUpperCase();
-  return value.includes('YELLOW') || value.includes('CAUTION') || value === 'FCY' || value.includes('RED');
+  // "CHECKERED" spells RED inside it: a red flag is the word, not the letters.
+  return value.includes('YELLOW') || value.includes('CAUTION') || value === 'FCY' || /(^|[^A-Z])RED([^A-Z]|$)/.test(value);
 };
 const isNeutralised = (sample: FlagSample | null | undefined) => isNeutralisedFlag(sample?.flag);
 

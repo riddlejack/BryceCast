@@ -12,7 +12,7 @@ import { liveArchiveUpgradeFor, type LiveArchiveUpgrade } from '../data/liveRace
 import type { LiveReadiness } from '../app/useReadiness';
 import type { UiSeasonIndexRow } from '../data/uiDataPackage';
 import { DataFreshness } from '../app/dataFreshness';
-import { TrackStillIcon } from '../app/trackStill';
+import { TrackIcon } from '../app/trackArt';
 import './race.css';
 
 /** Archive labels drop the series prefix (everything here is INDY NXT) and
@@ -23,19 +23,11 @@ const archiveLabel = (raceLabel: string): string =>
     .replace(/^INDY NXT by Firestone at (the )?/i, '')
     .replace(/[,\s]+(Race\s+\d+)$/i, ', $1');
 
-/* ---------- tiny venue mark: letterboxed outline, no measurement needed ----------
- * Round 6 tried a small still of the 3D model here (the plain model at the
- * icon's own size, public/tracks-3d/stills/<slug>-icon.webp). At about 76 px
- * the line drawing reads better (see the round-6 report), so it stays the
- * default; ?icons=3d shows the 3D marks for comparison. */
-
-const ICONS_3D = (() => {
-  try {
-    return typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('icons') === '3d';
-  } catch {
-    return false;
-  }
-})();
+/* ---------- tiny venue mark: the 3D model from above ----------
+ * Round 7 (Jack's review of Nov 16): every row's mark is the venue's 3D model
+ * seen from straight above, the track a bold ink ribbon (TrackIcon in
+ * app/trackArt.tsx). A venue with no model keeps the line drawing; ?icons=line
+ * shows the line drawings for comparison. */
 
 const MiniTrack = ({ trackName, muted = false }: { trackName: string | null; muted?: boolean }) => {
   const outline = trackOutlineFor(trackName);
@@ -53,7 +45,7 @@ const MiniTrack = ({ trackName, muted = false }: { trackName: string | null; mut
       ) : null;
   return (
     <span className={`race-row__mini${muted ? ' race-row__mini--muted' : ''}`}>
-      {ICONS_3D && outline ? <TrackStillIcon slug={outline.slug} fallback={line} /> : line}
+      <TrackIcon slug={outline?.slug} box="row" muted={muted} fallback={line} />
     </span>
   );
 };

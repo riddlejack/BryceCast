@@ -30,8 +30,11 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const STILLS = process.env.STILLS || join(homedir(), 'Documents/ChatGPT/Portfolio/builds/project-brycecast/site-refresh/stills-tools');
 const RIG = process.env.RIG || join(homedir(), 'Documents/ChatGPT/Portfolio/builds/film-rig');
 const RIG_DATA = join(RIG, 'shots/brycecast-film/data');
-const OUT = join(ROOT, 'public/tracks-3d/models');
 const args = process.argv.slice(2);
+// --icons (round 7): the venues.json "icons" venues (models for the bird's-eye icons only), baked into
+// stills-tools/out/icon-models/ with their own index, never into public/tracks-3d/models/index.json
+const ICONS = args.includes('--icons');
+const OUT = ICONS ? join(STILLS, 'out/icon-models') : join(ROOT, 'public/tracks-3d/models');
 const only = args.includes('--only') ? new Set(args[args.indexOf('--only') + 1].split(',')) : null;
 
 const NS = 1200;   // site outline samples (page.js NS)
@@ -44,7 +47,7 @@ const RIG_MODELS = {
   'streets-of-detroit': { kind: 'city', file: join(RIG_DATA, 'city-detroit.json') },
 };
 
-const venues = JSON.parse(readFileSync(join(STILLS, 'venues.json'), 'utf8')).built;
+const venues = Object.fromEntries(Object.entries(JSON.parse(readFileSync(join(STILLS, 'venues.json'), 'utf8'))[ICONS ? 'icons' : 'built']).filter(([k]) => !k.startsWith('_')));
 const stillsManifest = JSON.parse(readFileSync(join(ROOT, 'public/tracks-3d/manifest.json'), 'utf8'));
 
 // ---------- centrelines (the same parameterisation the runtime draws with) ----------

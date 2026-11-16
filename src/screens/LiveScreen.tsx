@@ -1,5 +1,5 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react';
-import { CalendarClock, ExternalLink, Flag, History, Radio, RotateCcw, Tv, X } from 'lucide-react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { CalendarClock, ExternalLink, Flag, History, Pause, Play, Radio, RotateCcw, Tv, X } from 'lucide-react';
 import {
   Card,
   Countdown,
@@ -38,6 +38,7 @@ import {
 } from '../data/livePageModel';
 import {
   buildBattleFrameForSample,
+  liveSourceCheckedAtOf,
   sourcedGapToLeaderSeconds,
   type LiveSessionHistory
 } from '../data/liveHistoryModel';
@@ -60,8 +61,21 @@ import {
 } from '../data/offSeasonDemo';
 import { canonicalLiveRaceSessionId, replayDeepLinkQuery } from '../data/liveRaceShellModel';
 import { ReplayGapSkippedNote, ReplaySourceGapNotice } from './replaySourceGap';
-import { FlagReadout, HeroIdentity, ReplayPreStart, TrackPanel, raceIdentityFor, skippedCautionWords, SKIP_NOTE_WALL_MS } from './liveParts';
-import type { CarLabel } from './liveTrack';
+import {
+  FlagReadout,
+  HeroIdentity,
+  PreStartBryce,
+  PreStartOrder,
+  PreStartReadout,
+  TrackPanel,
+  raceIdentityFor,
+  skippedCautionWords,
+  useVirtualNow,
+  SKIP_NOTE_WALL_MS
+} from './liveParts';
+import { useReplayRace, type CarLabel } from './liveTrack';
+import { RaceBar, lapAxisFor, lapStepTarget, type LapAxis } from './liveRaceBar';
+import { aroundWindowOf, fieldCarsOf, fieldModeOf } from './liveField';
 import { lapTimeSeconds } from './liveSectionLight';
 import './live.css';
 
@@ -402,8 +416,8 @@ const AroundBryce = ({
   const rows = sortRowsForLiveDisplay(liveRowsOf(payload)) as LiveRow[];
   const bryceIndex = rows.findIndex((row) => row.bryce === true);
   if (bryceIndex < 0 || rows.length < 2) return null;
-  const from = Math.max(0, Math.min(bryceIndex - 2, rows.length - 5));
-  const shown = rows.slice(from, from + 5);
+  // The same five the track marks by default (liveField.ts).
+  const shown = aroundWindowOf(rows);
   const frame = buildLiveBattleFrame(payload);
   const offsets = new Map((frame?.cars ?? []).map((car) => [car.id, car.offsetSeconds]));
   const flag = asString(heartbeatOf(payload).flag);
@@ -724,29 +738,49 @@ const BryceColumn = ({
   );
 };
 
+/** What the one screen shows: the first frame still on its way, a replay
+ *  before its green flag, the race, the race after the checkered flag. One
+ *  layout for all four, so the track (and its 3D model) is never remounted. */
+type DeskPhase = 'cueing' | 'prestart' | 'race' | 'ended';
+
+/** Keys that move the clock fire at most this often; the last press wins. */
+const KEY_SEEK_THROTTLE_MS = 300;
+
+const DeskPlaceholder = ({ area, words }: { area: 'order' | 'bryce'; words: string }) => (
+  <section className={`live-desk__${area} live-desk__placeholder`} aria-busy="true">
+    <h2 className="live-desk__label">{area === 'order' ? 'Running order' : 'Bryce'}</h2>
+    <p className="caption caption--secondary">{words}</p>
+    <div className="live-desk__placeholder-rows" aria-hidden>
+      {Array.from({ length: area === 'order' ? 8 : 3 }, (_, index) => (
+        <span key={index} />
+      ))}
+    </div>
+  </section>
+);
+
 const LiveDesk = ({
   payload,
+  phase,
   fixtureMode,
   samples,
   history,
   sessionKind,
   replay,
-  replayEnded,
   onExit,
   storyLink
 }: {
-  payload: LiveReadiness;
+  payload: LiveReadiness | null;
+  phase: DeskPhase;
   fixtureMode: boolean;
   samples: GapSample[];
   history: LiveSessionHistory | null;
   sessionKind: LiveSessionKind;
   replay: ReplaySession | null;
-  replayEnded: boolean;
   onExit?: () => void;
   storyLink: ReactNode;
 }) => {
-  const weekend = payload.raceWeekend as Row;
-  const heartbeat = heartbeatOf(payload);
+  const weekend = (payload?.raceWeekend ?? {}) as Row;
+  const heartbeat = payload ? heartbeatOf(payload) : {};
   const isRace = sessionKind === 'race';
   const identity = raceIdentityFor(payload, replay);
   const flag = asString(heartbeat.flag ?? weekend.flag);
@@ -754,17 +788,154 @@ const LiveDesk = ({
   const totalLaps = asNumber(heartbeat.totalLaps ?? weekend.totalLaps);
   const sessionName = asString(heartbeat.sessionName ?? weekend.sessionName);
   const [hoverCar, setHoverCar] = useState<string | null>(null);
+  const { route } = useRouter();
+  const fieldMode = fieldModeOf(route.search.get('field'));
+  const trail = route.search.get('trail') === 'lap';
   const cars = useMemo(() => {
     const map = new Map<string, CarLabel>();
-    for (const row of liveRowsOf(payload)) {
+    for (const row of payload ? liveRowsOf(payload) : []) {
       const id = stableDriverId(row);
       if (id) map.set(id, { no: asString(row.no) ?? '', surname: driverLabel(row) ?? '', position: livePosition(row) });
     }
     return map;
   }, [payload]);
-  const readout = <FlagReadout flag={flag} lap={lap} totalLaps={totalLaps} ended={replayEnded} isRace={isRace} sessionName={sessionName} />;
+  const bryceRow = payload ? liveBryceRowOf(payload) : null;
+  const bryceLabel = bryceRow ? cars.get(stableDriverId(bryceRow)) ?? null : null;
+  const fieldCars = useMemo(() => (phase === 'race' ? fieldCarsOf(payload, fieldMode) : []), [payload, fieldMode, phase]);
+
+  const seasonRow = identity.sessionId
+    ? (uiDataPackage.screens.raceDebrief.seasonIndex ?? []).find((row) => row.sessionId === identity.sessionId) ?? null
+    : null;
+  const race = useReplayRace({
+    sessionId: replay && isRace ? identity.sessionId : null,
+    outline: identity.outline,
+    history,
+    timeline: replay?.timeline ?? null,
+    greenAt: replay?.session?.firstGreenAt ?? null,
+    startPosition: seasonRow?.startPosition ?? null,
+    flag
+  });
+  const virtualNow = useVirtualNow(replay);
+  const greenMs = replay?.greenFlagAt ? Date.parse(replay.greenFlagAt) : NaN;
+  const endMs = replay?.timeline?.checkeredMs ?? (replay?.session?.lastCheckedAt ? Date.parse(replay.session.lastCheckedAt) : NaN);
+  const axis = useMemo(
+    () =>
+      replay
+        ? lapAxisFor({
+            model: race.model,
+            totalLaps: race.totalLaps ?? totalLaps,
+            startMs: Number.isFinite(greenMs) ? greenMs : null,
+            endMs: Number.isFinite(endMs) ? endMs : null
+          })
+        : null,
+    [replay ? 1 : 0, race.model, race.totalLaps, totalLaps, greenMs, endMs]
+  );
+
+  // The keys: ←/→ a lap (Shift: five), Space pauses. Never while typing, and
+  // the arrows are left to the 3D model when it has the focus.
+  const replayRef = useRef(replay);
+  replayRef.current = replay;
+  const axisRef = useRef<LapAxis | null>(axis);
+  axisRef.current = axis;
+  const engaged = Boolean(replay);
+  useEffect(() => {
+    if (!engaged) return undefined;
+    let pending: number | null = null;
+    let lastCommit = 0;
+    let timer = 0;
+    const commit = () => {
+      timer = 0;
+      if (pending === null) return;
+      lastCommit = Date.now();
+      replayRef.current?.seekTo(pending);
+      pending = null;
+    };
+    const onKey = (event: KeyboardEvent) => {
+      if (event.defaultPrevented || event.metaKey || event.ctrlKey || event.altKey) return;
+      const target = event.target as HTMLElement | null;
+      const tag = target?.tagName ?? '';
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || target?.isContentEditable) return;
+      if (event.key === ' ' || event.code === 'Space') {
+        event.preventDefault();
+        if (!event.repeat) replayRef.current?.togglePause();
+        return;
+      }
+      if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+      if (tag === 'CANVAS') return;
+      const currentAxis = axisRef.current;
+      const from = pending ?? virtualNow();
+      if (!currentAxis || from === null) return;
+      event.preventDefault();
+      const laps = (event.key === 'ArrowRight' ? 1 : -1) * (event.shiftKey ? 5 : 1);
+      const next = lapStepTarget(currentAxis, from, laps);
+      if (next === null) return;
+      pending = next;
+      if (timer) return;
+      const wait = Math.max(0, KEY_SEEK_THROTTLE_MS - (Date.now() - lastCommit));
+      if (wait === 0) commit();
+      else timer = window.setTimeout(commit, wait);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      if (timer) window.clearTimeout(timer);
+    };
+  }, [engaged, virtualNow]);
+
+  // `&lap=N` in the address, so a reload or a shared link resumes there.
+  useEffect(() => {
+    if (!engaged || !axis || axis.basis !== 'laps') return undefined;
+    const write = () => {
+      const now = virtualNow();
+      if (now === null) return;
+      const pos = axis.posAt(now);
+      if (pos === null) return;
+      const lapNow = now < axis.startMs ? null : Math.min(axis.total, Math.floor(pos) + 1);
+      const url = new URL(window.location.href);
+      if (lapNow === null || lapNow < 2) url.searchParams.delete('lap');
+      else url.searchParams.set('lap', String(lapNow));
+      const next = `${url.pathname}${url.search}${url.hash}`;
+      if (next !== `${window.location.pathname}${window.location.search}${window.location.hash}`) {
+        window.history.replaceState(window.history.state, '', next);
+      }
+    };
+    const timer = window.setInterval(write, 1_000);
+    return () => window.clearInterval(timer);
+  }, [engaged, axis, virtualNow]);
+
+  // After a jump of the clock, the panels that show the timing hold their
+  // last frame, quietly dimmed, until the frame for the new moment lands, so
+  // the page never mixes two moments.
+  const jumpRef = useRef<{ epoch: number; atMs: number | null; wall: number }>({ epoch: replay?.clockEpoch ?? 0, atMs: null, wall: 0 });
+  if (replay && replay.clockEpoch !== jumpRef.current.epoch) {
+    jumpRef.current = { epoch: replay.clockEpoch, atMs: virtualNow(), wall: Date.now() };
+  }
+  const sourceMs = payload ? Date.parse(liveSourceCheckedAtOf(payload)) : NaN;
+  const jump = jumpRef.current;
+  const settling =
+    replay !== null &&
+    jump.atMs !== null &&
+    Date.now() - jump.wall < 5_000 &&
+    (!Number.isFinite(sourceMs) || Math.abs(sourceMs - jump.atMs) > 8_000 + replay.playbackSpeed * 2_500);
+  if (!settling && jump.atMs !== null && Number.isFinite(sourceMs)) jump.atMs = null;
+
+  const readout =
+    phase === 'prestart' && payload ? (
+      <PreStartReadout payload={payload} />
+    ) : (
+      <FlagReadout
+        flag={flag}
+        lap={lap}
+        totalLaps={totalLaps}
+        ended={phase === 'ended'}
+        isRace={isRace}
+        sessionName={sessionName}
+        lapInProgress={Boolean(replay)}
+      />
+    );
+  const seek = useCallback((atMs: number) => replayRef.current?.seekTo(atMs), []);
   return (
-    <section className="live-desk" data-live-desk aria-label="The race, now">
+    <section className={`live-desk${settling ? ' live-desk--settling' : ''}`} data-live-desk data-desk-phase={phase} aria-label="The race, now">
       <HeroIdentity
         identity={identity}
         action={
@@ -775,25 +946,43 @@ const LiveDesk = ({
         }
       />
       {replay ? (
-        <ReplayBar replay={replay} payload={payload} onExit={onExit} lead={readout} />
-      ) : (
+        <>
+          <ReplayBar replay={replay} payload={payload} onExit={onExit} lead={readout} />
+          {axis ? <RaceBar replay={replay} axis={axis} timeline={replay.timeline} virtualNow={virtualNow} onSeek={seek} /> : null}
+        </>
+      ) : payload ? (
         <div className="live-desk__bar live-desk__bar--live">
           {readout}
           <TrustRail payload={payload} fixtureMode={fixtureMode} />
         </div>
-      )}
+      ) : null}
       <div className="live-desk__grid">
-        <RunningOrder payload={payload} sessionKind={sessionKind} highlightId={hoverCar} onHoverCar={setHoverCar} />
+        {phase === 'cueing' || !payload ? (
+          <DeskPlaceholder area="order" words="Reading the first frame of the race." />
+        ) : phase === 'prestart' ? (
+          <PreStartOrder payload={payload} />
+        ) : (
+          <RunningOrder payload={payload} sessionKind={sessionKind} highlightId={hoverCar} onHoverCar={setHoverCar} />
+        )}
         <TrackPanel
           identity={identity}
           replay={replay}
-          history={history}
-          mode={isRace ? 'race' : 'session'}
-          cars={cars}
+          race={race}
+          mode={!isRace ? 'session' : phase === 'race' || phase === 'ended' ? 'race' : 'prestart'}
+          field={fieldMode}
+          fieldCars={fieldCars}
+          trail={trail}
+          bryceLabel={bryceLabel}
           highlightId={hoverCar}
           onHoverCar={setHoverCar}
         />
-        <BryceColumn payload={payload} samples={samples} history={history} sessionKind={sessionKind} highlightId={hoverCar} onHoverCar={setHoverCar} />
+        {phase === 'cueing' || !payload ? (
+          <DeskPlaceholder area="bryce" words="His position, gaps and lap appear with it." />
+        ) : phase === 'prestart' && replay ? (
+          <PreStartBryce payload={payload} replay={replay} />
+        ) : (
+          <BryceColumn payload={payload} samples={samples} history={history} sessionKind={sessionKind} highlightId={hoverCar} onHoverCar={setHoverCar} />
+        )}
       </div>
     </section>
   );
@@ -1212,6 +1401,7 @@ const ReplayBar = ({
       data-replay-opening-caution={replay.openingCaution?.kind ?? ''}
       data-replay-caution-skipped={skippedCaution ? 'true' : 'false'}
       data-replay-flag={flag ?? ''}
+      data-replay-paused={replay.paused ? 'true' : 'false'}
     >
       {lead ? <div className="replay-bar__lead">{lead}</div> : null}
       <div className="replay-bar__id">
@@ -1224,7 +1414,13 @@ const ReplayBar = ({
             /* The hero below names the race and carries the flag and lap large;
                the bar says only what kind of page this is. */
             <span className="replay-bar__where">
-              Archived timing, replayed at <span className="replay-bar__speed-read">{replay.playbackSpeed}×</span>. Not live.
+              {replay.paused ? (
+                <>Archived timing, paused. Not live.</>
+              ) : (
+                <>
+                  Archived timing, replayed at <span className="replay-bar__speed-read">{replay.playbackSpeed}×</span>. Not live.
+                </>
+              )}
             </span>
           ) : (
             <span className="replay-bar__where">
@@ -1272,6 +1468,16 @@ const ReplayBar = ({
             </button>
           ))}
         </div>
+        <button
+          type="button"
+          className="replay-bar__btn replay-bar__btn--pause"
+          data-replay-pause
+          onClick={replay.togglePause}
+          aria-pressed={replay.paused}
+          title={replay.paused ? 'Play (Space)' : 'Pause (Space)'}
+        >
+          {replay.paused ? <Play size={13} aria-hidden /> : <Pause size={13} aria-hidden />} {replay.paused ? 'Play' : 'Pause'}
+        </button>
         <button
           type="button"
           className="replay-bar__btn"
@@ -1506,9 +1712,6 @@ export const LiveScreen = ({
   const replayRefused = Boolean(replay?.refusedReason) && !replayEndedByLive;
   const replayActive = Boolean(replay && !replay.unavailable && !replayRefused && !replayEndedByLive);
   const replaySimulated = payload ? isSimulatedReplayPayload(payload) : false;
-  // Until the virtual clock's first archived payload arrives, hold a calm
-  // cue-up state instead of flashing whatever the live feed happens to say.
-  const cueing = replayActive && !replaySimulated;
   // The `demo=offseason` marker OffSeasonLive's auto-start adds to its own
   // navigate call — never present on a person's own replay pick (a race page,
   // Home, or the "Relive a race" list), so only the auto-demo gets the banner.
@@ -1526,6 +1729,12 @@ export const LiveScreen = ({
       }
     : undefined;
 
+  // The race timeline is read once the first frame is up, never beside it.
+  const requestTimeline = replay?.requestTimeline;
+  useEffect(() => {
+    if (replaySimulated && requestTimeline) requestTimeline();
+  }, [replaySimulated, requestTimeline]);
+
   if (replayRefused && replay) {
     return (
       <div className="page stack live-page" data-replay-active="false">
@@ -1534,25 +1743,65 @@ export const LiveScreen = ({
     );
   }
 
-  if (replayActive && replay && replaySourceGap) {
+  // A replay: one screen from the click to the checkered flag. The bar, the
+  // track and the running order are up at once; the first frame fills them.
+  // Before the green the order column holds the grid; a source gap says so
+  // above the same screen. Nothing here remounts the track.
+  if (replayActive && replay) {
+    const framed = payload && replaySimulated && !replaySourceGap ? payload : null;
+    const ended = framed ? isPostCheckeredPayload(framed) : false;
+    const phase: DeskPhase = !framed
+      ? 'cueing'
+      : ended
+        ? 'ended'
+        : framed.state === 'ready' || framed.state === 'degraded'
+          ? 'race'
+          : 'prestart';
+    const kind: LiveSessionKind = framed ? resolveLiveSessionKind(framed) : 'race';
+    const latest = history?.samples.at(-1) ?? null;
+    const storyId = replay.session?.canonicalSessionId ?? null;
     return (
-      <div className="page stack live-page" data-replay-active="true" data-replay-source-gap="true">
-        <ReplayBar replay={replay} payload={null} onExit={demoExit} />
-        <ReplaySourceGapNotice gap={replaySourceGap} replay={replay} />
+      <div
+        className="page stack live-page live-page--desk"
+        data-replay-active="true"
+        data-replay-source-gap={replaySourceGap ? 'true' : 'false'}
+        data-live-session-key={history?.sessionKey ?? ''}
+        data-live-session-kind={kind}
+        data-live-source-checked-at={latest?.checkedAt ?? ''}
+        data-live-arrival-checked-at={latest?.arrivalCheckedAt ?? ''}
+        data-live-history-count={history?.samples.length ?? 0}
+        data-live-history-first-checked-at={history?.samples[0]?.checkedAt ?? ''}
+      >
+        {isOffSeasonDemoReplay ? <OffSeasonDemoBanner replay={replay} navigate={navigate} joinedInProgress={joinedInProgress} /> : null}
+        <ReplayGapSkippedNote replay={replay} />
+        {replaySourceGap ? <ReplaySourceGapNotice gap={replaySourceGap} replay={replay} /> : null}
+        <LiveDesk
+          payload={framed}
+          phase={phase}
+          fixtureMode={fixtureMode}
+          samples={samples}
+          history={history}
+          sessionKind={kind}
+          replay={replay}
+          onExit={demoExit}
+          storyLink={
+            storyId ? (
+              <Link className="live-desk__story" to={`/races/${encodeURIComponent(storyId)}${replayDeepLinkQuery(replay.getReplayParams())}`}>
+                The story so far, on the race page →
+              </Link>
+            ) : null
+          }
+        />
+        {framed ? <ReplayClassificationNote payload={framed} canonicalSessionId={storyId} /> : null}
       </div>
     );
   }
 
-  if (!payload || cueing) {
+  if (!payload) {
     return (
-      <div className="page stack live-page" data-replay-active={replayActive ? 'true' : 'false'}>
+      <div className="page stack live-page" data-replay-active="false">
         {replayEndedByLive ? <ReplayEndedByLiveNote /> : null}
-        {replayActive && replay ? <ReplayBar replay={replay} payload={payload} /> : null}
-        {replayActive && replay ? (
-          <ReplayCueing session={replay.session} joinedInProgress={joinedInProgress} />
-        ) : (
-          <LiveOffAir loading={readinessCheckedAt === null && !readinessError} />
-        )}
+        <LiveOffAir loading={readinessCheckedAt === null && !readinessError} />
       </div>
     );
   }
@@ -1623,33 +1872,16 @@ export const LiveScreen = ({
       {deskShown ? (
         <LiveDesk
           payload={payload}
+          phase={replayEnded ? 'ended' : 'race'}
           fixtureMode={fixtureMode}
           samples={samples}
           history={history}
           sessionKind={sessionKind}
-          replay={replayActive ? replay : null}
-          replayEnded={replayEnded}
-          onExit={demoExit}
+          replay={null}
           storyLink={storyLink}
         />
       ) : (
-        /* Bryce's session isn't active: no live outcome or gap to project, so the
-         * two projection modules collapse into the single protected-state card
-         * (finding #22). Exit replay (the bar above, during a replay) and Race
-         * Week (inside the card) are the prioritized ways out. */
-        replayActive && replay ? (
-          /* A replay before its green flag: this race's own grid and minutes
-           * to the green, never the off-season countdown to the next event. */
-          <ReplayPreStart
-            payload={payload}
-            replay={replay}
-            history={history}
-            identity={raceIdentityFor(payload, replay)}
-            source={<SourcePill title="Before the start" entries={[{ label: 'Archived Race Control timing', path: '/api/readiness (replay)', note: 'Grid order, the cars and the session state as Race Control published them before the start. The time to the green is the archive\u2019s own green-flag moment minus the replay clock.' }]} />}
-          />
-        ) : (
-          <WaitingState payload={payload} />
-        )
+        <WaitingState payload={payload} />
       )}
       {replayActive && replay ? <ReplayClassificationNote payload={payload} canonicalSessionId={replay.session?.canonicalSessionId ?? null} /> : null}
       {replayActive ? null : <WatchAlong payload={payload} />}

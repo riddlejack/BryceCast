@@ -2773,6 +2773,10 @@ a.ss-race--link:hover { background: var(--fill-quiet); }
 .weekend__date { display: flex; flex-direction: column; align-items: flex-start; line-height: 1.1; gap: 1px; }
 .weekend__day { font-size: 28px; font-weight: 620; letter-spacing: -0.02em; color: var(--ink-primary); }
 .weekend__art { display: flex; align-items: center; justify-content: center; pointer-events: none; }
+/* Round 7: the board's bird's-eye 3D marks (TrackIcon); a venue he has not
+ * raced at steps back as its muted line did. */
+.venue-shape .track-icon { display: block; width: 100%; height: 100%; object-fit: contain; }
+.venue-shape .track-icon--muted { opacity: 0.6; }
 .weekend__text { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
 .weekend__venue { font-size: 15px; font-weight: 620; letter-spacing: -0.01em; line-height: 1.25; }
 @media (max-width: 480px) {
