@@ -14,7 +14,8 @@ import type { LiveReadiness } from '../app/useReadiness';
 /** Which cars the track draws besides Bryce (`?field=`). */
 export type FieldMode = 'around' | 'all' | 'bryce';
 
-export const fieldModeOf = (raw: string | null): FieldMode => (raw === 'all' || raw === 'bryce' ? raw : 'around');
+/** Jack's pick, November 16: the whole field by default; `field=around` or `field=bryce` for the others. */
+export const fieldModeOf = (raw: string | null): FieldMode => (raw === 'around' || raw === 'bryce' ? raw : 'all');
 
 const runningRow = (row: LiveRow) => {
   const status = String(row.status ?? '').trim().toLowerCase();

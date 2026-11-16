@@ -1,0 +1,54 @@
+{
+  "lane": "round-7b",
+  "entries": [
+    {
+      "id": "replay-steady",
+      "page": "/live",
+      "title": "No shake as he crosses each loop",
+      "switch": null,
+      "noswitch": "the shake was a fault; there is nothing to switch back to",
+      "look": "Watch the track as his 9 passes each timing loop: the turn's fill moves on, and the track and the view stay still.",
+      "with": {
+        "replay": "5541-6758",
+        "from": "session_indy_nxt_2026_6758",
+        "lap": "9"
+      },
+      "anchor": ".live-marks",
+      "added": "2026-11-16T22:00",
+      "reviewed": false
+    },
+    {
+      "id": "hero-still",
+      "page": "/race-week",
+      "title": "The St. Petersburg still fills its side of the panel",
+      "switch": null,
+      "noswitch": "the small still in the big box was a fault you marked",
+      "look": "The top panel, First weekend on the board: the 3D still of the Streets of St. Petersburg.",
+      "anchor": ".hero-now__art--fill",
+      "added": "2026-11-16T22:00",
+      "reviewed": false
+    },
+    {
+      "id": "icons-clear",
+      "page": "/races",
+      "title": "No white box behind the track icons",
+      "switch": null,
+      "noswitch": "the white box was a fault you marked",
+      "look": "Hover any race: the row's tint now runs right up to the track's land; nothing round the icon is lighter than the row. Same on the 2027 board.",
+      "anchor": ".race-row__mini",
+      "added": "2026-11-16T22:00",
+      "reviewed": false
+    },
+    {
+      "id": "icons-phoenix-lb",
+      "page": "/race-week",
+      "title": "Phoenix and Long Beach, modelled",
+      "switch": null,
+      "noswitch": "new models; the line drawings were only a stand-in",
+      "look": "The 2027 dates: all eight venues are now 3D from above. Phoenix and Long Beach (and the Indianapolis oval) sit a step back, muted, because he hasn't raced there.",
+      "anchor": "section[aria-label$='dates']",
+      "added": "2026-11-16T22:00",
+      "reviewed": false
+    }
+  ]
+}

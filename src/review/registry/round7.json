@@ -8,7 +8,11 @@
       "switch": null,
       "noswitch": "the old loop dots are gone: you ruled them out in your November 16 review",
       "look": "His 9 moves through each turn at his own section times, and the turn fills orange behind him; at the timing loop the next turn starts filling. Placed by time between the loops, not GPS.",
-      "with": { "replay": "5541-6758", "from": "session_indy_nxt_2026_6758", "lap": "9" },
+      "with": {
+        "replay": "5541-6758",
+        "from": "session_indy_nxt_2026_6758",
+        "lap": "9"
+      },
       "anchor": ".live-marks",
       "added": "2026-11-16T15:10",
       "reviewed": false
@@ -19,15 +23,29 @@
       "title": "Which other cars the track shows",
       "switch": "field",
       "values": [
-        { "value": null, "label": "the 4 cars around him, as in the panel on the right (new)" },
-        { "value": "all", "label": "the whole field, each placed by its gap" },
-        { "value": "bryce", "label": "only Bryce" }
+        {
+          "value": null,
+          "label": "the whole field, each placed by its gap (your pick)"
+        },
+        {
+          "value": "around",
+          "label": "the 4 cars around him, as in the panel on the right"
+        },
+        {
+          "value": "bryce",
+          "label": "only Bryce"
+        }
       ],
       "look": "Each car sits where its gap to Bryce puts it, so the order on track matches the running order (a car 1.2 s ahead is where he will be in 1.2 s).",
-      "with": { "replay": "5541-6758", "from": "session_indy_nxt_2026_6758", "lap": "12" },
+      "with": {
+        "replay": "5541-6758",
+        "from": "session_indy_nxt_2026_6758",
+        "lap": "12"
+      },
       "anchor": ".live-marks",
       "added": "2026-11-16T15:10",
-      "reviewed": false
+      "reviewed": true,
+      "ruling": "Jack, Nov 16 review (docs/ideation/2026-11-16-brycecast-round7-review.verbatim.md): \"I prefer showing the whole field\": now the default."
     },
     {
       "id": "replay-trail",
@@ -35,14 +53,25 @@
       "title": "The turns he has finished this lap",
       "switch": "trail",
       "values": [
-        { "value": null, "label": "only the turn he's in fills; the last one fades out (new)" },
-        { "value": "lap", "label": "the lap's finished turns stay lightly orange" }
+        {
+          "value": null,
+          "label": "only the turn he's in fills; the last one fades out (new)"
+        },
+        {
+          "value": "lap",
+          "label": "the lap's finished turns stay lightly orange"
+        }
       ],
       "look": "Watch the track behind his 9 for a few seconds.",
-      "with": { "replay": "5541-6758", "from": "session_indy_nxt_2026_6758", "lap": "9" },
+      "with": {
+        "replay": "5541-6758",
+        "from": "session_indy_nxt_2026_6758",
+        "lap": "9"
+      },
       "anchor": ".live-marks",
       "added": "2026-11-16T15:10",
-      "reviewed": false
+      "reviewed": true,
+      "ruling": "Jack, Nov 16 review (docs/ideation/2026-11-16-brycecast-round7-review.verbatim.md): \"I prefer only the turn he's in fills, the last one fades out\"."
     },
     {
       "id": "replay-bar",
@@ -51,10 +80,15 @@
       "switch": null,
       "noswitch": "new; there was nothing before it to switch back to",
       "look": "Under the controls: drag or click to any lap, cautions shaded yellow, Skip the caution during one, ← → a lap (Shift five), Space pauses, 32×. His position line stops at where you are. This opens on lap 3, under the caution.",
-      "with": { "replay": "5541-6758", "from": "session_indy_nxt_2026_6758", "lap": "3" },
+      "with": {
+        "replay": "5541-6758",
+        "from": "session_indy_nxt_2026_6758",
+        "lap": "3"
+      },
       "anchor": ".race-bar",
       "added": "2026-11-16T15:10",
-      "reviewed": false
+      "reviewed": true,
+      "ruling": "Jack, Nov 16 review (docs/ideation/2026-11-16-brycecast-round7-review.verbatim.md): \"I'm happy with the look of this on the current live page\"."
     },
     {
       "id": "replay-formation",
@@ -63,10 +97,15 @@
       "switch": null,
       "noswitch": "the old version's flash isn't kept",
       "look": "Press From the formation lap (top right): the starting grid, the countdown to the green and his slot (10th), then lap 1 at the green. No flash.",
-      "with": { "replay": "5541-6758", "from": "session_indy_nxt_2026_6758", "lap": "9" },
+      "with": {
+        "replay": "5541-6758",
+        "from": "session_indy_nxt_2026_6758",
+        "lap": "9"
+      },
       "anchor": "[data-replay-formation]",
       "added": "2026-11-16T15:10",
-      "reviewed": false
+      "reviewed": true,
+      "ruling": "Jack, Nov 16 review (docs/ideation/2026-11-16-brycecast-round7-review.verbatim.md): happy with the live page."
     },
     {
       "id": "replay-start",
@@ -75,9 +114,13 @@
       "switch": null,
       "noswitch": "the old start took 36 reads; it isn't kept",
       "look": "This starts Monterey Race 2 from the green: he is on track in under 2 s, and the lap-1 caution is jumped a few seconds in, with Watch it if you want it.",
-      "with": { "replay": "5541-6758", "from": "session_indy_nxt_2026_6758" },
+      "with": {
+        "replay": "5541-6758",
+        "from": "session_indy_nxt_2026_6758"
+      },
       "added": "2026-11-16T15:10",
-      "reviewed": false
+      "reviewed": true,
+      "ruling": "Jack, Nov 16 review (docs/ideation/2026-11-16-brycecast-round7-review.verbatim.md): happy with the live page."
     },
     {
       "id": "icons-races",
@@ -85,14 +128,24 @@
       "title": "Track icons: the 3D models from above",
       "switch": "icons",
       "values": [
-        { "value": null, "label": "3D from straight above, the track drawn bold (new)" },
-        { "value": "b", "label": "3D, tilted so the model's base shows (ovals come out smaller)" },
-        { "value": "line", "label": "line drawings, as before" }
+        {
+          "value": null,
+          "label": "3D from straight above, the track drawn bold (new)"
+        },
+        {
+          "value": "b",
+          "label": "3D, tilted so the model's base shows (ovals come out smaller)"
+        },
+        {
+          "value": "line",
+          "label": "line drawings, as before"
+        }
       ],
       "look": "The small track beside every race. The switch holds on the 2027 board too.",
       "anchor": ".race-row__mini",
       "added": "2026-11-16T15:10",
-      "reviewed": false
+      "reviewed": true,
+      "ruling": "Jack, Nov 16 review (docs/ideation/2026-11-16-brycecast-round7-review.verbatim.md): \"I prefer the 3D from straight above track drawn in bold\"; remove the white box behind the icon on hover."
     },
     {
       "id": "icons-board",
@@ -100,14 +153,24 @@
       "title": "2027 board: the 3D models from above",
       "switch": "icons",
       "values": [
-        { "value": null, "label": "3D from straight above, the track drawn bold (new)" },
-        { "value": "b", "label": "3D, tilted so the model's base shows" },
-        { "value": "line", "label": "line drawings, as before" }
+        {
+          "value": null,
+          "label": "3D from straight above, the track drawn bold (new)"
+        },
+        {
+          "value": "b",
+          "label": "3D, tilted so the model's base shows"
+        },
+        {
+          "value": "line",
+          "label": "line drawings, as before"
+        }
       ],
-      "look": "The eight 2027 dates. Phoenix and Long Beach keep line drawings until the map data service is back; the Indianapolis oval is now modelled.",
+      "look": "The eight 2027 dates, all eight modelled.",
       "anchor": "section[aria-label$='dates']",
       "added": "2026-11-16T15:10",
-      "reviewed": false
+      "reviewed": true,
+      "ruling": "Jack, Nov 16 review (docs/ideation/2026-11-16-brycecast-round7-review.verbatim.md): straight above; Phoenix and Long Beach need models."
     },
     {
       "id": "tracks-yoy",
@@ -115,15 +178,27 @@
       "title": "The track, year over year: the row and the gap below",
       "switch": "yoy",
       "values": [
-        { "value": null, "label": "each picture at most a third of the row; 72 px to the footer (new)" },
-        { "value": "fill", "label": "every visit fills the row (Iowa's two come out very large)" },
-        { "value": "old", "label": "as before: a ragged right edge and 136 px to the footer" }
+        {
+          "value": null,
+          "label": "each picture at most a third of the row; 72 px to the footer (new)"
+        },
+        {
+          "value": "fill",
+          "label": "every visit fills the row (Iowa's two come out very large)"
+        },
+        {
+          "value": "old",
+          "label": "as before: a ragged right edge and 136 px to the footer"
+        }
       ],
       "look": "The bottom of the page. This opens Iowa (two visits); pick Laguna Seca in the venue menu to see six.",
-      "with": { "venue": "Iowa Speedway" },
+      "with": {
+        "venue": "Iowa Speedway"
+      },
       "anchor": ".tracks-years",
       "added": "2026-11-16T15:10",
-      "reviewed": false
+      "reviewed": true,
+      "ruling": "Jack, Nov 16 review (docs/ideation/2026-11-16-brycecast-round7-review.verbatim.md): \"I like the default of each picture at most a third of the row\"."
     },
     {
       "id": "footer-car",
@@ -131,14 +206,24 @@
       "title": "The footer car",
       "switch": "car",
       "values": [
-        { "value": null, "label": "his 2026 No. 9 (white over navy, red nose and halo) at 20 px (new)" },
-        { "value": "16", "label": "the same car at 16 px" },
-        { "value": "old", "label": "the black car with red trim, as before" }
+        {
+          "value": null,
+          "label": "his 2026 No. 9 (white over navy, red nose and halo) at 20 px (new)"
+        },
+        {
+          "value": "16",
+          "label": "the same car at 16 px"
+        },
+        {
+          "value": "old",
+          "label": "the black car with red trim, as before"
+        }
       ],
       "look": "Bottom left of every page. Drawn from INDYCAR's Barber photo and the Monterey broadcast; the 9 sits on the white rear wing as on his car.",
       "anchor": "footer.footer",
       "added": "2026-11-16T15:10",
-      "reviewed": false
+      "reviewed": true,
+      "ruling": "Jack, Nov 16 review (docs/ideation/2026-11-16-brycecast-round7-review.verbatim.md): \"I like the current version of the footer car\"."
     }
   ]
 }

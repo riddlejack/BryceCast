@@ -22,11 +22,20 @@ export const switchValue = (name: string, search?: URLSearchParams): string | nu
   if (params.has(name)) return params.get(name);
   if (!REVIEW_HOST) return null;
   try {
-    return window.localStorage.getItem(KEY(name));
+    const kept = window.localStorage.getItem(KEY(name));
+    // a remembered choice that has since become the default is forgotten, so the board doesn't call it "away"
+    if (kept !== null && NOW_DEFAULT[name] === kept) {
+      window.localStorage.removeItem(KEY(name));
+      return null;
+    }
+    return kept;
   } catch {
     return null;
   }
 };
+
+/** Choices Jack picked that became the default (the bare address now means them). */
+const NOW_DEFAULT: Record<string, string> = { field: 'all' };
 
 /** Remember a choice on the review host (null forgets it, back to the default). */
 export const rememberSwitch = (name: string, value: string | null): void => {

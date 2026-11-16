@@ -309,15 +309,18 @@ export const TrackPanel = ({
           }
         />
       </div>
-      <p className="caption caption--secondary live-hero__track-caption">
-        {litName && shownReadout ? (
-          <span className="live-hero__track-now">
-            Bryce: {litName}, {shownReadout.lap > 0 ? `lap ${shownReadout.lap}` : 'to the line for lap 1'}
-            {shownReadout.holding ? ' (due at the next loop)' : ''}.{' '}
-          </span>
-        ) : null}
-        {trackCaption(race, mode, field, shownReadout !== null)}
-      </p>
+      {/* Where he is changes at every timing loop. It sits on its own line of
+          fixed height, so a longer or shorter section name never re-wraps the
+          caption: a change of the caption's height resized the 3D stage, and
+          the scene re-framed its camera at every crossing (round 7 shake). */}
+      {replay && mode === 'race' ? (
+        <p className="caption live-hero__track-now" aria-live="off">
+          {litName && shownReadout
+            ? `Bryce: ${litName}, ${shownReadout.lap > 0 ? `lap ${shownReadout.lap}` : 'to the line for lap 1'}${shownReadout.holding ? ' (due at the next loop)' : ''}.`
+            : '\u00a0'}
+        </p>
+      ) : null}
+      <p className="caption caption--secondary live-hero__track-caption">{trackCaption(race, mode, field, shownReadout !== null)}</p>
       {replay && mode !== 'session' && race.status !== 'live' ? <TrackHow race={race} field={field} /> : null}
     </div>
   );

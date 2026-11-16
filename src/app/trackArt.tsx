@@ -914,8 +914,11 @@ export const TRACK_ICON_SLUGS: ReadonlySet<string> = new Set([
   'the-milwaukee-mile',
   'weathertech-raceway-laguna-seca',
   'world-wide-technology-raceway',
-  // modelled for the icons only (the IMS road course's OSM data; not on the Tracks page)
-  'indianapolis-motor-speedway'
+  // modelled for the icons only (not on the Tracks page): the oval from the IMS road course's OSM data; Phoenix
+  // and Long Beach from OSM (round 7)
+  'indianapolis-motor-speedway',
+  'phoenix-raceway',
+  'streets-of-long-beach'
 ]);
 
 const DEFAULT_ICON_LOOK: 'a' | 'b' = 'a';   // B shrinks the ovals at 76 px (the plate is wider than the track)

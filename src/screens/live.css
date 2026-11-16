@@ -629,7 +629,18 @@
 }
 .live-marks__tip strong { font-weight: 620; }
 .live-marks__tip-detail { color: var(--ink-muted); font-size: 12px; }
-.live-hero__track-now { color: var(--ink-primary); font-weight: 560; }
+.live-hero__track-now {
+  margin: 0;
+  color: var(--ink-primary);
+  font-weight: 560;
+  /* One line, always: its height never changes as the section names do. */
+  height: 1.45em;
+  line-height: 1.45;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.live-desk .live-hero__track-now { font-size: 12.5px; }
 
 /* ---------- round 7: the race bar ---------- */
 

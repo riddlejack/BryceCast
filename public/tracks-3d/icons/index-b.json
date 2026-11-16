@@ -168,11 +168,35 @@
     "2": "/tracks-3d/icons/indianapolis-motor-speedway-board-b@2x.webp",
     "1": "/tracks-3d/icons/indianapolis-motor-speedway-board-b.webp"
    }
+  },
+  "phoenix-raceway": {
+   "row": {
+    "2": "/tracks-3d/icons/phoenix-raceway-row-b@2x.webp",
+    "1": "/tracks-3d/icons/phoenix-raceway-row-b.webp"
+   },
+   "azim": 19.1,
+   "elev": 76,
+   "board": {
+    "2": "/tracks-3d/icons/phoenix-raceway-board-b@2x.webp",
+    "1": "/tracks-3d/icons/phoenix-raceway-board-b.webp"
+   }
+  },
+  "streets-of-long-beach": {
+   "row": {
+    "2": "/tracks-3d/icons/streets-of-long-beach-row-b@2x.webp",
+    "1": "/tracks-3d/icons/streets-of-long-beach-row-b.webp"
+   },
+   "azim": 3,
+   "elev": 76,
+   "board": {
+    "2": "/tracks-3d/icons/streets-of-long-beach-board-b@2x.webp",
+    "1": "/tracks-3d/icons/streets-of-long-beach-board-b.webp"
+   }
   }
  },
  "generated": "2026-11-16",
  "by": "Portfolio/builds/project-brycecast/site-refresh/stills-tools/run.sh icons",
- "look": "variant B: the venue's 3D model tilted 14 degrees (elev 76), the whole plate framed on its own edge, its colours paled 20% toward the paper; the track as an ink ribbon over a thin light halo along the model's projected centreline",
+ "look": "variant B: the venue's 3D model tilted 14 degrees (elev 76), the whole plate framed on its own edge, its colours paled 20% toward the paper; the track as an ink ribbon along the model's projected centreline, no light halo",
  "boxes": {
   "row": {
    "css": [

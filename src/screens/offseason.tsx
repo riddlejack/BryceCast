@@ -588,8 +588,10 @@ export const OffSeasonRaceWeek = () => {
               SERIES opener. INDY NXT’s own {outlook.seasonYear} calendar is still to come.
             </p>
           </div>
-          <div className="hero-now__art">
-            <HeatTrack trackName={opener.trackName} maxHeight={190} />
+          {/* Round 7 (Jack: "too small for Streets of St. Petersburg"): the still fills
+              its column (up to 760 x 428), centred on the words beside it. */}
+          <div className="hero-now__art hero-now__art--fill">
+            <HeatTrack trackName={opener.trackName} maxHeight={430} />
             {racesAt(opener.trackName).length > 0 ? (
               <p className="caption caption--secondary" style={{ margin: '8px 0 0', textAlign: 'center' }}>
                 shaded by his most recent pace here

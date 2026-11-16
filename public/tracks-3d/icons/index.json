@@ -168,6 +168,30 @@
     "2": "/tracks-3d/icons/indianapolis-motor-speedway-board@2x.webp",
     "1": "/tracks-3d/icons/indianapolis-motor-speedway-board.webp"
    }
+  },
+  "phoenix-raceway": {
+   "row": {
+    "2": "/tracks-3d/icons/phoenix-raceway-row@2x.webp",
+    "1": "/tracks-3d/icons/phoenix-raceway-row.webp"
+   },
+   "azim": 19.1,
+   "elev": 90,
+   "board": {
+    "2": "/tracks-3d/icons/phoenix-raceway-board@2x.webp",
+    "1": "/tracks-3d/icons/phoenix-raceway-board.webp"
+   }
+  },
+  "streets-of-long-beach": {
+   "row": {
+    "2": "/tracks-3d/icons/streets-of-long-beach-row@2x.webp",
+    "1": "/tracks-3d/icons/streets-of-long-beach-row.webp"
+   },
+   "azim": 3,
+   "elev": 90,
+   "board": {
+    "2": "/tracks-3d/icons/streets-of-long-beach-board@2x.webp",
+    "1": "/tracks-3d/icons/streets-of-long-beach-board.webp"
+   }
   }
  },
  "generated": "2026-11-16",
