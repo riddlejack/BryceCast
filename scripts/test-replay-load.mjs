@@ -17,7 +17,13 @@
 //   3. ten parallel cold reads for ten different races, with the cache smaller
 //      than the burst, all answer correctly, and a /api/health probe sent with
 //      them answers well inside the time a full-parse decode of those feeds
-//      takes on this machine.
+//      takes on this machine;
+//   4. a replay frame with timing rows but no Bryce row (every Timing71 feed
+//      opens with a few) is refused as that frame, never answered with the live
+//      path's newest-archived-Bryce substitute. That substitute is a different
+//      race, and finding it is a LIKE scan of every payload in the SQLite
+//      archive: ~26 s per read on the 19 GB production archive, which is what
+//      actually held the server on November 15.
 import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
 import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises';
@@ -28,6 +34,7 @@ import { join } from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
 import { pathToFileURL } from 'node:url';
 import { gunzipSync, gzipSync } from 'node:zlib';
+import { DatabaseSync } from 'node:sqlite';
 import { createLakeReplayFeeds, lazyFeedRow } from './lib/replay-lake-feeds.mjs';
 
 const SESSIONS = 10;
@@ -47,12 +54,14 @@ const iso = (ms) => new Date(ms).toISOString();
 
 // One synthetic row in the reducer's own line shape. Bryce is car 9 by name so
 // the snapshot builder resolves his row; every other car is a placeholder.
+// Like every Timing71 feed, each race opens with frames that carry no Bryce row.
+const OPENING_FRAMES_WITHOUT_BRYCE = 5;
 const rowFor = (sessionIndex, tick) => {
   const checkedAt = iso(firstMs + tick * 1000);
   const lap = String(1 + Math.floor(tick / 80));
   const bryceRank = 1 + ((tick + sessionIndex) % CARS);
   const items = Array.from({ length: CARS }, (_, car) => {
-    const isBryce = car === 0;
+    const isBryce = car === 0 && tick >= OPENING_FRAMES_WITHOUT_BRYCE;
     const rank = isBryce ? bryceRank : 1 + ((car + (car >= bryceRank ? 0 : -1) + CARS) % CARS);
     return {
       no: isBryce ? '9' : String(100 + car),
@@ -131,6 +140,25 @@ for (let index = 0; index < SESSIONS; index += 1) {
 }
 await writeFile(manifestPath, JSON.stringify({ sessions }));
 
+// A runner archive whose newest Bryce sample belongs to a different race: the
+// live path's fallback would substitute it, so a replay must never show it.
+const sqlitePath = join(runtime, 'archive.sqlite');
+{
+  const db = new DatabaseSync(sqlitePath);
+  db.exec(`CREATE TABLE race_snapshots (
+    id INTEGER PRIMARY KEY AUTOINCREMENT, checked_at TEXT NOT NULL, session_key TEXT NOT NULL,
+    event_id TEXT, event_session_id TEXT, event_name TEXT, session_name TEXT, flag TEXT, lap TEXT,
+    total_laps TEXT, source_state TEXT NOT NULL, bryce_rank INTEGER, bryce_status TEXT, bryce_laps TEXT,
+    bryce_gap TEXT, bryce_best_lap_time TEXT, payload_json TEXT NOT NULL);
+    CREATE INDEX idx_race_snapshots_session_checked ON race_snapshots(session_key, checked_at);`);
+  const decoy = rowFor(0, 100);
+  decoy.raw.timing.timing_results.heartbeat.eventName = 'Archive Decoy Grand Prix';
+  db.prepare(`INSERT INTO race_snapshots (checked_at, session_key, event_name, session_name, source_state, payload_json)
+              VALUES (?, 'decoy_practice', 'Archive Decoy Grand Prix', 'Practice 1', 'live', ?)`)
+    .run('2026-10-16T15:00:00.000Z', JSON.stringify({ summary: decoy.summary, raw: decoy.raw }));
+  db.close();
+}
+
 const rtFor = (index) => iso(firstMs + (1200 + index * 37) * 1000);
 const expectedRow = (index) => JSON.parse(feedLines.get(sessionKeyFor(index))[1200 + index * 37]);
 
@@ -190,7 +218,7 @@ try {
       ...process.env,
       BRYCECAST_REPLAY: '1',
       BRYCECAST_API_RUNNER_ONLY: '1',
-      BRYCECAST_SQLITE_PATH: join(runtime, 'absent.sqlite'),
+      BRYCECAST_SQLITE_PATH: sqlitePath,
       BRYCECAST_RUNNER_STATUS_PATH: runnerStatusPath,
       BRYCECAST_REPLAY_FEEDS_MANIFEST: manifestPath,
       BRYCECAST_REPLAY_ROWS_CACHE_SESSIONS: '3'
@@ -243,6 +271,20 @@ try {
     slowestReplayMs < fullDecodeMs / 2,
     `the slowest of ${SESSIONS} parallel cold replay reads took ${slowestReplayMs.toFixed(0)} ms (full decode: ${fullDecodeMs.toFixed(0)} ms)`
   );
+
+  // 4. The opening frames: refused as the replay frame, never substituted.
+  const openingRt = iso(firstMs + 2000);
+  const opening = await timed(`/api/session?replay=${encodeURIComponent(sessionKeyFor(0))}&rt=${encodeURIComponent(openingRt)}&speed=1`);
+  assert.equal(opening.status, 502, `an opening frame without Bryce answered ${opening.status}: ${JSON.stringify(opening.body)}`);
+  assert.doesNotMatch(JSON.stringify(opening.body), /Archive Decoy/, 'a replay frame is never replaced by a different race from the live archive');
+  assert.ok(
+    JSON.stringify(opening.body).includes(`Replay frame ${openingRt} of ${sessionKeyFor(0)} has no Bryce timing row`),
+    `the refusal names the frame: ${JSON.stringify(opening.body)}`
+  );
+  const afterOpening = await timed(`/api/session?replay=${encodeURIComponent(sessionKeyFor(0))}&rt=${encodeURIComponent(iso(firstMs + OPENING_FRAMES_WITHOUT_BRYCE * 1000))}&speed=1`);
+  assert.equal(afterOpening.status, 200, 'the first frame with Bryce serves normally');
+  assert.equal(afterOpening.body.eventName, 'Fixture Grand Prix 0');
+
   console.log('replay-load: ok');
 } finally {
   child?.kill();

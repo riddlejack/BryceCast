@@ -922,7 +922,14 @@ const archivedSnapshot = ({ reason, liveResults, fallbackProfile }) => {
   };
 };
 
-export const buildRaceSnapshotFromResults = (results) => {
+// `archivedFallback` substitutes the newest archived Bryce sample when a LIVE
+// frame has timing rows but no Bryce row. Replay frames must never take it: the
+// substitute would be a different race, and finding it is a LIKE scan of every
+// payload in the archive (19 GB in production, ~26 s, synchronous on the event
+// loop). Every Timing71 feed opens with a few seconds of frames that have no
+// Bryce row, so parallel replay reads at a race's start stalled the whole server
+// on November 15, 2026.
+export const buildRaceSnapshotFromResults = (results, { archivedFallback = true } = {}) => {
   const timing = results.find((result) => result.id === 'timing')?.payload?.timing_results;
   const drivers = results.find((result) => result.id === 'drivers_nxt')?.payload?.drivers?.driver ?? [];
   const config = results.find((result) => result.id === 'config')?.payload ?? {};
@@ -935,7 +942,7 @@ export const buildRaceSnapshotFromResults = (results) => {
   const bryceProfile = liveBryceProfile ?? fallbackBryceProfile(bryce);
 
   if (!heartbeat || !bryce || timingRows.length === 0) {
-    if (heartbeat && !bryce && timingRows.length > 0) {
+    if (archivedFallback && heartbeat && !bryce && timingRows.length > 0) {
       const cached = archivedSnapshot({
         reason: describeBryceMiss(heartbeat, timingRows),
         liveResults: results,
@@ -1887,7 +1894,17 @@ const replayWeatherUnavailable = (checkedAt, record) => ({
   warnings: ['Weather was not part of this archived Race Control replay and is not inferred.']
 });
 
-const buildReplaySnapshot = (record) => buildRaceSnapshotFromResults(rawResultsFromSnapshotRecord(record));
+const buildReplaySnapshot = (record) => {
+  try {
+    return buildRaceSnapshotFromResults(rawResultsFromSnapshotRecord(record), { archivedFallback: false });
+  } catch (cause) {
+    if (cause?.statusCode !== 502) throw cause;
+    throw Object.assign(
+      new Error(`Replay frame ${record.archiveCheckedAt ?? '(unknown)'} of ${record.sessionKey ?? 'this session'} has no Bryce timing row. ${cause.message}`),
+      { statusCode: 502 }
+    );
+  }
+};
 
 const buildReplaySourceReport = (record) =>
   buildSourceReportFromResults(sourceResultsFromSnapshotRecord(record), record.checkedAt ?? new Date().toISOString());
