@@ -42,6 +42,34 @@ export function webglAvailable() {
   }
 }
 
+// Round 9 (Jack on the iPhone simulator: "the whole track is grayed out"): three's PCF shadows read the shadow map
+// through a depth-compare sampler (sampler2DShadow). Where the GPU has none (the iOS Simulator's Metal is an Apple
+// family 2 device, and compare samplers start at family 3), every lookup comes back occluded: the model, the land and
+// the paper all drawn in full shadow, about #C0 for #FD. One pixel tells: a depth of 1 compared against 0.5 must
+// read lit. Where it does not, the scene takes the basic shadow map, which reads the same depths without the sampler.
+let depthCompareWorks = null;
+function shadowCompareWorks(renderer) {
+  if (depthCompareWorks !== null) return depthCompareWorks;
+  const depth = new THREE.DepthTexture(1, 1, THREE.UnsignedIntType);
+  depth.compareFunction = THREE.LessEqualCompare;
+  const probe = new THREE.WebGLRenderTarget(1, 1, { depthTexture: depth }), out = new THREE.WebGLRenderTarget(1, 1);
+  const mat = new THREE.ShaderMaterial({
+    uniforms: { tDepth: { value: depth } }, depthTest: false, depthWrite: false,
+    vertexShader: 'void main() { gl_Position = vec4(position.xy, 0.0, 1.0); }',
+    fragmentShader: 'uniform highp sampler2DShadow tDepth; void main() { gl_FragColor = vec4(texture(tDepth, vec3(0.5, 0.5, 0.5))); }',
+  });
+  const quad = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), mat), probeScene = new THREE.Scene(), px = new Uint8Array(4);
+  quad.frustumCulled = false; probeScene.add(quad);
+  const before = renderer.getRenderTarget();
+  renderer.setRenderTarget(probe); renderer.clear();   // depth 1: nothing in the way
+  renderer.setRenderTarget(out); renderer.render(probeScene, new THREE.OrthographicCamera());
+  renderer.readRenderTargetPixels(out, 0, 0, 1, 1, px);
+  renderer.setRenderTarget(before);
+  quad.geometry.dispose(); mat.dispose(); depth.dispose(); probe.dispose(); out.dispose();
+  depthCompareWorks = px[0] > 127;
+  return depthCompareWorks;
+}
+
 export async function createTrackScene({ canvas, data, coarse = false, onHover = () => {}, onView = () => {} }) {
   const cssW = () => Math.max(1, canvas.clientWidth), cssH = () => Math.max(1, canvas.clientHeight);
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false, powerPreference: 'high-performance' });
@@ -55,6 +83,7 @@ export async function createTrackScene({ canvas, data, coarse = false, onHover =
   const rig = { THREE, renderer, scene, camera, get width() { return cssW(); }, get height() { return cssH(); } };
   const stage = createStage(rig);
   if (coarse) stage.sun.shadow.mapSize.set(2048, 2048);
+  if (!shadowCompareWorks(renderer)) renderer.shadowMap.type = THREE.BasicShadowMap;
   renderer.shadowMap.autoUpdate = false;   // nothing that casts ever moves: one shadow pass, redone only on resize
 
   // The rig draws a pit lane as a 7 m (6 m in the city) open ribbon of the track's dark asphalt; from far off it reads

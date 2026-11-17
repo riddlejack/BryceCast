@@ -10,12 +10,12 @@
       "title": "No grey veil over the 3D track on a phone",
       "switch": null,
       "noswitch": "the grey was a fault you found on the iPhone; there is nothing to switch back to",
-      "look": "On the iPhone, drag the track sideways, tap a section, press the + and − buttons quickly: the model stays its own colours on the paper, with no grey over it, and the page doesn't zoom, so the stage and its − button stay inside the screen. Every 3D model on the site (Tracks, and both on a race page).",
+      "look": "On the iPhone simulator, the model, the land and the paper are their own colours again, not greyed. The grey came from the simulator's graphics chip, which can't read three.js's soft shadows and drew everything as if in shadow. The stage now checks for that once and falls back to plain shadows (harder shadow edges, only where the check fails; Chrome is pixel-for-pixel unchanged). A real iPhone probably never had the fault; not tested on a device. Drag, tap a section and press + and − quickly: the page doesn't zoom. Every 3D model on the site (Tracks, and both on a race page).",
       "with": {
         "venue": "Portland International Raceway"
       },
       "anchor": ".track3d",
-      "added": "2026-11-17T00:50",
+      "added": "2026-11-17T01:40",
       "reviewed": false
     },
     {
