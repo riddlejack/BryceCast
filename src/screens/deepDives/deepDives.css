@@ -1,0 +1,37 @@
+/* Career deep dives: shared frame (November 17, 2026). */
+.dd { display: flex; flex-direction: column; gap: 0; }
+.dd__head {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: end;
+  column-gap: clamp(24px, 3vw, 56px);
+  row-gap: 10px;
+  padding-bottom: clamp(18px, 2vw, 28px);
+}
+.dd__figure { display: flex; flex-direction: column; gap: 4px; }
+.dd__num {
+  font-size: clamp(44px, 4.4vw, 88px);
+  font-weight: 630;
+  letter-spacing: -0.035em;
+  line-height: 0.95;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  color: var(--ink);
+}
+.dd__num .dd__of { color: var(--grey-ink3); font-weight: 560; }
+.dd__unit { font-size: 15px; color: var(--ink-secondary); }
+.dd__words { display: flex; flex-direction: column; gap: 8px; max-width: 62ch; padding-bottom: 4px; }
+.dd__lede { margin: 0; font-size: 17px; line-height: 1.45; color: var(--ink-secondary); }
+.dd__lede strong { color: var(--ink); font-weight: 600; }
+.dd__sources { font-size: 13px; }
+.dd__controls { display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: center; padding-bottom: 14px; }
+.dd__stage { position: relative; width: 100%; }
+.dd__foot { margin: 12px 0 0; font-size: 13px; line-height: 1.45; color: var(--ink-muted); max-width: 80ch; }
+
+/* The archive's own Card chrome is not used inside a deep dive. */
+.archive-item__body .dd { padding-top: 8px; }
+
+@media (max-width: 720px) {
+  .dd__head { grid-template-columns: minmax(0, 1fr); align-items: start; }
+  .dd__lede { font-size: 16px; }
+}

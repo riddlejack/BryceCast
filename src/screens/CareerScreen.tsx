@@ -13,6 +13,13 @@ import { getVenueByTrackName } from '../data/venueDossier';
 import { liveBryceRowOf } from '../data/livePageModel';
 import type { LiveReadiness, ReadinessStatus } from '../app/useReadiness';
 import { CareerAtlas, seriesMetaById, seriesOrder } from './careerAtlas';
+import { useOldDeepDives } from './deepDives/frame';
+import { ExplorerDeepDive } from './deepDives/explorer';
+import { RivalsDeepDive } from './deepDives/rivals';
+import { RestartsDeepDive } from './deepDives/restarts';
+import { QualifyingDeepDive } from './deepDives/qualifying';
+import { ClimbsDeepDive } from './deepDives/climbs';
+import { RainDeepDive } from './deepDives/rain';
 import { Gb3DepthLayer } from './gb3Depth';
 import { FormulaFordDepthLayer } from './formulaFordDepth';
 import { DaytonaDepthLayer } from './daytonaDepth';
@@ -1878,6 +1885,10 @@ const ChapterTimeline = ({ rowByName, lapLine }: { rowByName: Map<string, Row>; 
  *    a click and renders only while open, so the page stays short.
  * ============================================================ */
 
+/* November 17, 2026: the six deep dives rebuilt (src/screens/deepDives/);
+ * `?deepdive=old` shows the versions live on brycecast.com for comparison. */
+const DeepOrOld = ({ old, now }: { old: ReactNode; now: ReactNode }) => (useOldDeepDives() ? <>{old}</> : <>{now}</>);
+
 const archiveItems: Array<{ key: string; title: string; blurb: string; render: () => ReactNode }> = [
   {
     key: 'before',
@@ -1889,37 +1900,37 @@ const archiveItems: Array<{ key: string; title: string; blurb: string; render: (
     key: 'explorer',
     title: 'The explorer',
     blurb: 'Every race on one chart, grouped by series, season, track type or conditions.',
-    render: () => <CareerExplorer />
+    render: () => <DeepOrOld old={<CareerExplorer />} now={<ExplorerDeepDive />} />
   },
   {
     key: 'rivals',
     title: 'The rivals',
     blurb: 'The drivers who shared an INDY NXT grid with him five or more times, and who finished ahead.',
-    render: () => <RivalsCard />
+    render: () => <DeepOrOld old={<RivalsCard />} now={<RivalsDeepDive />} />
   },
   {
     key: 'restarts',
     title: 'The restarts',
     blurb: 'What happened to his place at each INDY NXT restart.',
-    render: () => <CareerRestarts />
+    render: () => <DeepOrOld old={<CareerRestarts />} now={<RestartsDeepDive />} />
   },
   {
     key: 'qualifying',
     title: 'Qualifying to the flag',
     blurb: 'Where qualifying put him against where he finished, in every series.',
-    render: () => <QualiConversion />
+    render: () => <DeepOrOld old={<QualiConversion />} now={<QualifyingDeepDive />} />
   },
   {
     key: 'climbs',
     title: 'Biggest climbs',
     blurb: 'The five races where he gained the most places.',
-    render: () => <BestClimbs />
+    render: () => <DeepOrOld old={<BestClimbs />} now={<ClimbsDeepDive />} />
   },
   {
     key: 'rain',
     title: 'Rain days',
     blurb: 'His wet and mixed days against his dry ones.',
-    render: () => <RainDays />
+    render: () => <DeepOrOld old={<RainDays />} now={<RainDeepDive />} />
   }
 ];
 
