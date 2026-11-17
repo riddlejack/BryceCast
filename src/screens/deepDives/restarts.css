@@ -1,0 +1,33 @@
+/* The restarts deep dive (November 17, 2026). */
+.ddr-stage { position: relative; width: 100%; }
+.ddr-gold {
+  color: var(--ink);
+  background: linear-gradient(transparent 58%, color-mix(in srgb, var(--bryce) 55%, transparent) 58%);
+  padding: 0 1px;
+}
+
+/* The mouse's race card: the venue's 3D still beside the race's restarts. */
+.ddr-tip {
+  position: absolute;
+  transform: translate(-50%, calc(-100% - 10px));
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 340px;
+  padding: 8px 12px 8px 8px;
+  background: var(--surface-0);
+  border: 1px solid var(--divider);
+  border-radius: 8px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  pointer-events: none;
+  z-index: 5;
+  font-size: 12.5px;
+  line-height: 1.4;
+  font-variant-numeric: tabular-nums;
+}
+.ddr-tip__still { flex: none; width: 96px; height: 53px; }
+.ddr-tip__words { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.ddr-tip__words strong { font-weight: 600; color: var(--ink); white-space: nowrap; }
+.ddr-tip__detail { color: var(--ink-secondary); }
+.ddr-tip__flag { color: var(--amber); font-weight: 560; }
+.ddr-tip__action { color: var(--link); }

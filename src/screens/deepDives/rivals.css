@@ -1,0 +1,110 @@
+/* The rivals deep dive (November 17, 2026). */
+
+.rv { width: 100%; }
+.rv__board { position: relative; width: 100%; }
+.rv__board svg { display: block; overflow: visible; }
+
+.rv__side { font-size: 12px; font-weight: 560; letter-spacing: 0.01em; }
+.rv__group {
+  font-size: 12px;
+  font-weight: 600;
+  fill: var(--ink-muted);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.rv__name { font-size: 13px; font-weight: 560; fill: var(--ink); }
+.rv__count,
+.rv__rec { font-size: 12px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.rv__team { font-size: 12px; font-weight: 450; fill: var(--ink-muted); }
+
+.rv__sq { transform-box: fill-box; transform-origin: center; }
+.rv__hit { cursor: default; }
+
+.rv__more {
+  margin-top: 10px;
+  border: 0;
+  background: var(--fill-quiet);
+  border-radius: var(--radius-control);
+  padding: 8px 14px;
+  font: inherit;
+  font-size: 13.5px;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+/* ---------- ?ddrivals=tiles ---------- */
+
+.rv-tiles { --sq: 9px; --gap: 2px; }
+.rv-tiles__key {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  font-size: 12.5px;
+  color: var(--ink-secondary);
+  margin-bottom: 18px;
+}
+.rv-tiles__key span { display: inline-flex; align-items: center; gap: 6px; }
+.rv-tiles__key i { display: inline-block; width: 10px; height: 10px; border-radius: 1.5px; }
+.rv-tiles__keynote { color: var(--ink-muted); }
+
+.rv-tiles__grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
+  gap: 22px 20px;
+}
+/* Each tile spans four rows of the grid (name, record, waffle, teammates), so
+ * a name that wraps pushes its whole row of waffles down together. */
+.rv-tile {
+  min-width: 0;
+  display: grid;
+  grid-row: span 4;
+  grid-template-rows: subgrid;
+  row-gap: 0;
+  align-content: start;
+}
+.rv-tile__name {
+  font-size: 13.5px;
+  font-weight: 580;
+  line-height: 1.25;
+  color: var(--ink);
+  align-self: end;
+}
+.rv-tile__rec {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  column-gap: 1px;
+  font-size: 13px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  margin: 1px 0 7px;
+}
+.rv-tile__dash { color: var(--ink-muted); }
+.rv-tile__team { font-size: 12px; line-height: 1.3; color: var(--ink-muted); margin-top: 5px; min-height: 0; }
+.rv-tile__waffle {
+  display: grid;
+  align-self: start;
+  align-content: start;
+  grid-template-columns: repeat(9, var(--sq));
+  gap: var(--gap);
+}
+.rv-tile__waffle i {
+  display: block;
+  width: var(--sq);
+  height: var(--sq);
+  border-radius: 1.5px;
+  transform: scale(0);
+  transition: transform 220ms cubic-bezier(0.23, 1, 0.32, 1);
+  transition-delay: calc(var(--i) * 14ms + var(--k) * 12ms);
+}
+.rv-tiles--in .rv-tile__waffle i { transform: scale(1); }
+.rv-tiles--still .rv-tile__waffle i { transform: none; transition: none; }
+
+@media (max-width: 640px) {
+  .rv-tiles { --sq: 8px; }
+  .rv-tiles__grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 16px 12px; }
+  .rv-tile__name { font-size: 12.5px; }
+}

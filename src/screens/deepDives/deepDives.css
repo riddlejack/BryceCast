@@ -35,3 +35,25 @@
   .dd__head { grid-template-columns: minmax(0, 1fr); align-items: start; }
   .dd__lede { font-size: 16px; }
 }
+
+/* The race card on a mouse (DeepTip) */
+.dd-card {
+  position: absolute;
+  z-index: 5;
+  transform: translateY(calc(-100% - 10px));
+  max-width: 320px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  background: var(--paper);
+  border: 1px solid var(--grey-hair);
+  border-radius: var(--radius-control);
+  box-shadow: 0 8px 24px rgba(30, 28, 26, 0.12);
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--ink-secondary);
+  pointer-events: none;
+}
+.dd-card strong { color: var(--ink); font-weight: 600; font-size: 13.5px; }
+.dd-card em { font-style: normal; color: var(--link); font-size: 12px; }

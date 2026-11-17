@@ -1,0 +1,19 @@
+{
+  "lane": "deep-dives",
+  "entries": [
+    {
+      "id": "dd-rivals",
+      "page": "/career",
+      "title": "The rivals: every rival named, every shared race a square",
+      "switch": "ddrivals",
+      "values": [
+        { "value": null, "label": "default: the board. One named row per rival, ink squares to the left for races the rival finished ahead, gold to the right for Bryce's; counts at the tips, teammates named in place" },
+        { "value": "tiles", "label": "tiles: one small waffle per rival (name, record, a square per shared race), a grid of people instead of one ranked chart" }
+      ],
+      "look": "Open More from the archive → The rivals. The squares fill outward from the names once on a clock. Hover (laptop) or tap (phone) a driver to read the record; flip Most races together / By record and the rows slide into three labelled groups (Bryce leads, level, the rival leads). On the phone the first 12 show, with All 43 drivers under them. Sources holds the method and the note that squares are grouped, not in race order.",
+      "anchor": "#archive-rivals",
+      "added": "2026-11-17T18:00",
+      "reviewed": false
+    }
+  ]
+}

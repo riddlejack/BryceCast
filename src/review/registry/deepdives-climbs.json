@@ -1,0 +1,19 @@
+{
+  "lane": "deep-dives",
+  "entries": [
+    {
+      "id": "dd-climbs",
+      "page": "/career",
+      "title": "Biggest climbs: five ladders or five rows",
+      "switch": "ddclimbs",
+      "values": [
+        { "value": null, "label": "default: five ladders, one per race, each as long as its classified field; his marker rises from grid slot to finish" },
+        { "value": "rows", "label": "five rows: the field as a line of grid slots, front on the right; his marker runs forward" }
+      ],
+      "look": "Open More from the archive → Biggest climbs and watch the five markers rise once; hover (or tap on the phone) a climb to read it, click (or tap again) to open the race.",
+      "anchor": "#archive-climbs",
+      "added": "2026-11-17T18:00",
+      "reviewed": false
+    }
+  ]
+}

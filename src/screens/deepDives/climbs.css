@@ -1,0 +1,194 @@
+/* Biggest climbs (November 17, 2026): five ladders, or five rows. */
+.climbs {
+  position: relative;
+  width: 100%;
+  font-family: var(--font-ui);
+}
+.climbs__num {
+  font-variant-numeric: tabular-nums;
+}
+
+/* shared head of one climb */
+.climbs__gain {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  column-gap: 6px;
+}
+.climbs__gain-num {
+  font-size: clamp(30px, 2.6vw, 46px);
+  font-weight: 630;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+.climbs__gain-unit {
+  font-size: 13px;
+  color: var(--ink-muted);
+}
+.climbs__place {
+  font-size: 15px;
+  font-weight: 580;
+  color: var(--ink);
+  line-height: 1.25;
+}
+.climbs__meta {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  column-gap: 5px;
+  font-size: 13px;
+  color: var(--ink-muted);
+  line-height: 1.35;
+}
+.climbs__swatch {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex: none;
+}
+.climbs__year {
+  font-variant-numeric: tabular-nums;
+}
+
+[role='link'].climbs__head,
+[role='link'].climbs__ladder,
+.climbs__row[role='link'] {
+  cursor: pointer;
+  outline: none;
+  transition: opacity 160ms ease;
+}
+.climbs__head:focus-visible,
+.climbs__row:focus-visible {
+  box-shadow: inset 0 -2px 0 var(--ink);
+}
+
+/* A: ladders */
+.climbs--ladders {
+  display: grid;
+  column-gap: 0;
+  row-gap: 14px;
+  align-items: start;
+}
+.climbs--ladders .climbs__head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 5px;
+  padding: 0 6px;
+  align-self: stretch;
+}
+.climbs--ladders .climbs__meta {
+  justify-content: center;
+}
+.climbs__ladder,
+.climbs__axis {
+  display: block;
+  overflow: visible;
+}
+
+/* B: rows */
+.climbs--rows {
+  display: flex;
+  flex-direction: column;
+}
+.climbs__row {
+  display: grid;
+  align-items: center;
+  column-gap: 0;
+}
+.climbs__row:not(.climbs__row--axis) {
+  border-top: 1px solid var(--grey-hair);
+  padding: 12px 0 4px;
+}
+.climbs__row--axis svg {
+  display: block;
+}
+.climbs__rowhead {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  min-width: 0;
+}
+.climbs--rows .climbs__gain {
+  flex: none;
+  min-width: 3.4em;
+}
+.climbs__rowname {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.climbs__strip {
+  display: block;
+  overflow: visible;
+}
+
+@media (max-width: 720px) {
+  .climbs__gain-num {
+    font-size: 26px;
+  }
+  .climbs__place {
+    font-size: 13px;
+  }
+  .climbs__meta {
+    font-size: 12px;
+  }
+  .climbs__gain-unit {
+    font-size: 12px;
+  }
+  .climbs--ladders .climbs__gain {
+    justify-content: center;
+  }
+  .climbs--ladders .climbs__head {
+    padding: 0 2px;
+    gap: 3px;
+  }
+  .climbs--rows .climbs__rowhead {
+    padding-bottom: 6px;
+  }
+  .climbs--rows .climbs__rowname {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: baseline;
+    column-gap: 8px;
+  }
+}
+
+/* Phone ladders: the frame's figure already says "places", and the series
+ * reads from the swatch and the card. */
+@media (max-width: 560px) {
+  .climbs--ladders .climbs__gain-unit,
+  .climbs--ladders .climbs__series {
+    display: none;
+  }
+  .climbs--ladders .climbs__place {
+    font-size: 12px;
+    font-weight: 600;
+  }
+}
+
+/* the foot's key: the same two marks the ladders draw */
+.climbs__key {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  vertical-align: -1px;
+  margin-left: 2px;
+}
+.climbs__key--start {
+  background: var(--paper);
+  box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--ink) 60%, transparent);
+}
+.climbs__key--finish {
+  width: 11px;
+  height: 11px;
+  background: var(--bryce);
+  box-shadow: inset 0 0 0 1.5px var(--ink);
+  margin-left: 8px;
+  vertical-align: -2px;
+}

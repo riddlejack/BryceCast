@@ -1,0 +1,19 @@
+{
+  "lane": "deep-dives",
+  "entries": [
+    {
+      "id": "dd-restarts",
+      "page": "/career",
+      "title": "The restarts: every restart as a mark that moves up, holds or drops",
+      "switch": "ddrestarts",
+      "values": [
+        { "value": null, "label": "default: the moves, all 62 restarts in race order, one strip per season (2024, 2025, 2026) with its held-or-gained count in place" },
+        { "value": "tally", "label": "the tally: the same 62 marks settle in race order, then sort into gained 15, held 37, lost 10 under a '52 held or gained' bracket" }
+      ],
+      "look": "Open More from the archive → The restarts and watch the marks move as it opens; hover a race (tap on the phone) for its card with the 3D track, click (second tap) to open it.",
+      "anchor": "#archive-restarts",
+      "added": "2026-11-17T18:00",
+      "reviewed": false
+    }
+  ]
+}
