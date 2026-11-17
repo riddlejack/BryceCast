@@ -26,11 +26,14 @@ const SPHERE_RADIUS_RATIO = 0.46;
 const ZOOM_STEP = 1.55;
 
 const chapterOrder = [
+  'series_scca_super_tour',
   'series_frp_f1600',
+  'series_rcffs',
   'series_formula_ford',
   'series_gb3',
   'series_euroformula_open',
   'series_froc',
+  'series_usf_pro_2000',
   'series_imsa_weathertech',
   'series_indy_nxt'
 ];

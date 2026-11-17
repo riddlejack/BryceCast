@@ -124,7 +124,7 @@ export const F1600SeasonStory = () => {
     <div className="ss-depth stack">
       <div className="row row--between row--wrap" style={{ alignItems: 'baseline', gap: 8 }}>
         <p className="ss-copy" style={{ margin: 0, maxWidth: '60ch' }}>
-          His first season in cars, in American grassroots open-wheel: seven weekends, {totals.raceCount} races, and a
+          His first full season in cars, in American grassroots open-wheel: seven weekends, {totals.raceCount} races, and a
           third-place run in the championship built on {totals.podiums} podiums. Here is the season weekend by weekend.
         </p>
         <SourcePill title="The F1600 season, in depth" entries={refEntries(story.sourceRefs)} caveats={story.caveats} />

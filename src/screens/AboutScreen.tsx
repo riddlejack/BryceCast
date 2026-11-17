@@ -16,8 +16,8 @@ export const REPO_URL: string | null = null;
  * line by line against docs/README.md's "What went into it" table ---------- */
 
 const stats: Array<{ label: string; value: string; note: string }> = [
-  { label: 'Series', value: '7', note: '2019–2026 · 87 events, 493 sessions' },
-  { label: 'Lap samples', value: '75,589', note: '8,943 session-result records' },
+  { label: 'Series', value: '10', note: '2019–2026 · 99 events, 533 sessions' },
+  { label: 'Lap samples', value: '75,740', note: '9,826 session-result records' },
   { label: 'Timing-loop passages', value: '~690,000', note: '143 source captures, resends removed, not GPS telemetry' },
   { label: 'INDY NXT races', value: '45 of 45', note: 'observed timing and replay coverage, 2024–2026' },
   { label: 'Weather joins', value: '135', note: 'exact-window sessions, modeled near-track weather' },
@@ -68,7 +68,7 @@ const hardParts: HardPart[] = [
   },
   {
     title: 'A career across unequal sources',
-    body: "Bryce's seven series carry very different depth of timing. Some have lap-by-lap and section data, others only official classification. BryceCast keeps each series' native evidence intact rather than filling gaps with zeros, and uses one shared, descriptive scale (finish percentile) to make the whole career comparable without pretending a thin season has the same evidence as a rich one.",
+    body: "Bryce's ten series carry very different depth of timing. Some have lap-by-lap and section data, others only official classification. BryceCast keeps each series' native evidence intact rather than filling gaps with zeros, and uses one shared, descriptive scale (finish percentile) to make the whole career comparable without pretending a thin season has the same evidence as a rich one.",
     href: '/career',
     label: 'Career Lab'
   },

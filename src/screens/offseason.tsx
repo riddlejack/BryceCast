@@ -214,7 +214,7 @@ export const SeasonCompleteHero = ({ review }: { review: SeasonReview }) => (
         <h1 className="hero-now__title" style={{ marginTop: 6 }}>Bryce Aron’s racing career, lap by lap.</h1>
         <p className="hero-now__meta" style={{ maxWidth: '46ch', lineHeight: 1.45 }}>
           Live timing on race day. A pace map of every track, built from timing loops instead of GPS. And a career
-          charted across seven series, from F1600 to the doorstep of INDYCAR.
+          charted across ten series, from Formula F to the doorstep of INDYCAR.
         </p>
       </div>
 
@@ -340,7 +340,7 @@ export const FeatureDoors = ({
             ) : undefined
           }
         >
-          {careerRaces ?? 'Every'} races across {chapters.length || 'seven'} series, each placed by the share of the
+          {careerRaces ?? 'Every'} races across {chapters.length || 'ten'} series, each placed by the share of the
           field he beat, with weather and rivals alongside.
         </Door>
         <Door

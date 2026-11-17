@@ -41,6 +41,9 @@ type Row = Record<string, string | number | null>;
 
 const wholeNumber = new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 });
 
+const countWords = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve'];
+const countWord = (value: number): string => countWords[value] ?? wholeNumber.format(value);
+
 
 const monthYear = (iso: string): string =>
   new Date(`${iso}T00:00:00Z`).toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' });
@@ -789,14 +792,15 @@ const OdoGroup = ({
 
 const OdometerMethod = ({ lifeStats }: { lifeStats: UiCareerLifeStats }) => {
   const span = `${monthYear(lifeStats.span.firstDay)} to ${monthYear(lifeStats.span.lastDay)}`;
-  const races = figureById(lifeStats.figures, 'races')?.display ?? '150';
+  const races = figureById(lifeStats.figures, 'races')?.display ?? wholeNumber.format(lifeStats.personalRaceMileage.raceRows);
+  const seriesCount = new Set(lifeStats.mileageBreakdowns.filter((row) => row.dimensionType === 'series').map((row) => row.dimensionValue)).size;
   return (
     <div id="odo-method" className="odo-method" role="region" aria-label="How these were counted">
       <div className="odo-method__col">
         <h3 className="odo-method__title">Where the numbers come from</h3>
         <p>
-          Every figure is worked out from the BryceCast career dataset: the official results and timing sheets of his {races} races in
-          seven series, {span}, and the practice, qualifying and test sessions that were imported with them. Karting, private testing and
+          Every figure is worked out from the BryceCast career dataset: the official results and timing sheets of his {races} races in{' '}
+          {countWord(seriesCount)} series, {span}, and the practice, qualifying and test sessions that were imported with them. Karting, private testing and
           the simulator are not in it, so nothing here counts them.
         </p>
       </div>
@@ -821,7 +825,7 @@ const OdometerMethod = ({ lifeStats }: { lifeStats: UiCareerLifeStats }) => {
       <div className="odo-method__col">
         <h3 className="odo-method__title">Rules kept throughout</h3>
         <p>
-          At the Daytona 24 Hours only his own 142 of the car's 780 laps count. His two Formula Ford heats are not counted as races. Ten
+          At the Daytona 24 Hours only his own 142 of the car's 780 laps count. His three Formula Ford heats are not counted as races. Eleven
           sessions the source lists twice were taken out, and four Brands Hatch sessions were measured on the shorter layout they actually
           ran on. Numbers are whole, and a floor always rounds down, so it stays a floor.
         </p>
@@ -1178,8 +1182,8 @@ const WeekStory = ({ model, week }: { model: LifeModel; week: LifeWeek }) => {
         <span className="life-tip__line">No recorded racing.</span>
         <span className="life-tip__muted">
           {week.year >= 2016
-            ? 'The data holds a few karting milestones from 2016 to 2018, but no race-by-race results before April 2019.'
-            : 'The record starts with his first car race, in April 2019.'}
+            ? `The data holds a few karting milestones from 2016 to 2018, but no race-by-race results before ${monthYear(uiDataPackage.screens.careerLab.lifeStats.lifeShare.firstRaceDate)}.`
+            : `The record starts with his first car race, in ${monthYear(uiDataPackage.screens.careerLab.lifeStats.lifeShare.firstRaceDate)}.`}
         </span>
       </>
     );
@@ -1584,22 +1588,41 @@ const LifeInWeeks = ({ lifeStats }: { lifeStats: UiCareerLifeStats }) => {
 /* Career chapters in journey order — the climb from F1600 to INDY NXT.
  * Narrative lines are descriptive context only; every number beside them
  * comes from the source-backed series summary. */
-const seriesChapters: Array<{ key: string; name: string; years: string; short?: string; narrative: string }> = [
+const seriesChapters: Array<{ key: string; seriesId: string; name: string; years: string; short?: string; narrative: string }> = [
+  {
+    key: 'scca',
+    seriesId: 'series_scca_super_tour',
+    name: 'Hoosier SCCA Super Tour',
+    years: '2019',
+    short: 'SCCA',
+    narrative: 'His first car races: Formula F at Sebring, COTA and Road Atlanta, January to March 2019.'
+  },
   {
     key: 'f1600',
+    seriesId: 'series_frp_f1600',
     name: 'F1600 Championship Series',
     years: '2019',
     short: 'F1600',
-    narrative: 'His first season racing cars, in American grassroots open-wheel.'
+    narrative: 'His first full season racing cars, in American grassroots open-wheel.'
+  },
+  {
+    key: 'rcffs',
+    seriesId: 'series_rcffs',
+    name: 'Right Coast Formula F Series',
+    years: '2019',
+    short: 'RCFFS',
+    narrative: 'One Formula F race at Mid-Ohio in June 2019, and his first win in a car.'
   },
   {
     key: 'formula-ford',
+    seriesId: 'series_formula_ford',
     name: 'Formula Ford',
-    years: '2020',
+    years: '2019–20',
     narrative: 'A year in the UK’s old school of racecraft, through to the Festival and the Walter Hayes Trophy.'
   },
   {
     key: 'gb3',
+    seriesId: 'series_gb3',
     name: 'GB3 Championship',
     years: '2021–22',
     short: 'GB3',
@@ -1607,6 +1630,7 @@ const seriesChapters: Array<{ key: string; name: string; years: string; short?: 
   },
   {
     key: 'euroformula',
+    seriesId: 'series_euroformula_open',
     name: 'Euroformula Open',
     years: '2023',
     short: 'Euroformula',
@@ -1614,13 +1638,23 @@ const seriesChapters: Array<{ key: string; name: string; years: string; short?: 
   },
   {
     key: 'fr-oceania',
+    seriesId: 'series_froc',
     name: 'Castrol Toyota Formula Regional Oceania Championship',
     years: '2024',
     short: 'FR Oceania',
     narrative: 'A New Zealand summer in the Toyota series that feeds the junior ladder.'
   },
   {
+    key: 'usf-pro-2000',
+    seriesId: 'series_usf_pro_2000',
+    name: 'USF Pro 2000 Championship',
+    years: '2024',
+    short: 'USF Pro 2000',
+    narrative: 'One race on the Indianapolis Raceway Park oval: the 2024 Freedom 90.'
+  },
+  {
     key: 'daytona',
+    seriesId: 'series_imsa_weathertech',
     name: 'IMSA WeatherTech SportsCar Championship',
     years: '2025',
     short: 'Daytona 24',
@@ -1629,11 +1663,20 @@ const seriesChapters: Array<{ key: string; name: string; years: string; short?: 
   },
   {
     key: 'indy-nxt',
+    seriesId: 'series_indy_nxt',
     name: 'INDY NXT',
     years: '2024–26',
     narrative: 'The step below INDYCAR, and the current chapter.'
   }
 ];
+
+/* Races entered per series, from the weeks grid the odometer's series bar
+ * reads, so a chapter's count agrees with the bar. The series summary's
+ * raceRows counts only classified finishes; where the two differ the panel
+ * says so ("23 classified of 26 entered"). */
+const enteredBySeries = new Map(
+  racesBySeries(uiDataPackage.screens.careerLab.lifeStats).map((row) => [row.seriesId, row.races])
+);
 
 /* Which chapters carry a depth layer. It renders under the open chapter. */
 const chapterDepth = (key: string): { title: string; render: () => ReactNode } | undefined => {
@@ -1667,6 +1710,7 @@ const ChapterPanel = ({
   extra?: string | null;
 }) => {
   const races = row ? asNumber(row.raceRows) : null;
+  const entered = enteredBySeries.get(chapter.seriesId) ?? null;
   const oneRace = chapter.key === 'daytona';
   // F1600 ran 21 races but classified 20 (one DNS). The generic raceRows count
   // only classified races, which contradicts the depth story's "21 races". Read
@@ -1685,9 +1729,11 @@ const ChapterPanel = ({
           <span className="chapter-panel__count">
             {f1600Totals
               ? `${f1600Totals.classifiedRaces} classified of ${f1600Totals.raceCount} entered`
-              : races !== null
-                ? `${formatNumber(races, 0)} ${races === 1 ? 'race' : 'races'}`
-                : null}
+              : races !== null && entered !== null && races !== entered
+                ? `${formatNumber(races, 0)} classified of ${formatNumber(entered, 0)} entered`
+                : (entered ?? races) !== null
+                  ? `${formatNumber(entered ?? races ?? 0, 0)} ${(entered ?? races) === 1 ? 'race' : 'races'}`
+                  : null}
             {oneRace ? <DaytonaSourcePill /> : null}
           </span>
           {chapter.short && chapter.short !== chapter.name && !oneRace ? <span className="chapter-panel__full">{chapter.name}</span> : null}
@@ -1784,7 +1830,7 @@ const ChapterTimeline = ({ rowByName, lapLine }: { rowByName: Map<string, Row>; 
           const selected = index === openIndex;
           const row = rowByName.get(chapter.name);
           const f1600Totals = chapter.key === 'f1600' ? uiDataPackage.screens.careerLab.smallSeriesStories.f1600?.totals ?? null : null;
-          const races = f1600Totals ? f1600Totals.raceCount : row ? asNumber(row.raceRows) : null;
+          const races = f1600Totals ? f1600Totals.raceCount : enteredBySeries.get(chapter.seriesId) ?? (row ? asNumber(row.raceRows) : null);
           return (
             <button
               key={chapter.key}
