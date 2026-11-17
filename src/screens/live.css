@@ -166,7 +166,8 @@
 
 /* ---------- the track ---------- */
 
-.live-page .live-hero__track {
+.live-page .live-hero__track,
+.tracks-replay .live-hero__track {
   grid-area: track;
   display: flex;
   flex-direction: column;
@@ -271,7 +272,8 @@
   to { opacity: 1; transform: none; }
 }
 
-.live-page .live-hero__track-caption { margin: 0; max-width: 74ch; line-height: 1.45; }
+.live-page .live-hero__track-caption,
+.tracks-replay .live-hero__track-caption { margin: 0; max-width: 74ch; line-height: 1.45; }
 
 @media (prefers-reduced-motion: reduce) {
   .live-track__section,
@@ -397,6 +399,7 @@
 /* The one bar: the flag and the lap, then (in a replay) what this is and the
    controls; live, the trust state. */
 .live-page .replay-bar--desk,
+.tracks-replay .replay-bar--desk,
 .live-desk__bar {
   display: flex;
   flex-wrap: wrap;
@@ -407,13 +410,20 @@
   border-block: 1px solid var(--divider);
 }
 .replay-bar__lead { flex: 0 1 auto; min-width: 0; }
-.live-page .replay-bar--desk .replay-bar__id { flex: 1 1 300px; min-width: 0; }
-.live-page .replay-bar--desk .replay-bar__controls { flex: 0 0 auto; margin-left: auto; }
-.live-desk .live-hero__now { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 20px; }
-.live-desk .live-now { gap: 6px 18px; }
+.live-page .replay-bar--desk .replay-bar__id,
+.tracks-replay .replay-bar--desk .replay-bar__id { flex: 1 1 300px; min-width: 0; }
+.live-page .replay-bar--desk .replay-bar__controls,
+.tracks-replay .replay-bar--desk .replay-bar__controls { flex: 0 0 auto; margin-left: auto; }
+.live-desk .live-hero__now,
+.tracks-replay .live-hero__now { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 20px; }
+.live-desk .live-now,
+.tracks-replay .live-now { gap: 6px 18px; }
 .live-desk .live-now__flag,
-.live-desk .live-now__lap { font-size: clamp(19px, 1.35vw, 25px); }
-.live-desk .live-now__progress { width: clamp(90px, 9vw, 180px); margin-top: 0; }
+.live-desk .live-now__lap,
+.tracks-replay .live-now__flag,
+.tracks-replay .live-now__lap { font-size: clamp(19px, 1.35vw, 25px); }
+.live-desk .live-now__progress,
+.tracks-replay .live-now__progress { width: clamp(90px, 9vw, 180px); margin-top: 0; }
 .live-desk__bar--live .live-trust { flex: 1 1 420px; min-height: 0; padding: 0; border-bottom: 0; }
 
 .live-desk__label {
@@ -544,7 +554,8 @@
 .live-dots-how > summary { cursor: pointer; color: var(--link); font-weight: 560; width: max-content; }
 .live-dots-how > p { margin: 6px 0 0; max-width: 92ch; }
 .live-dots-how__count { color: var(--ink-primary); }
-.live-desk .live-hero__track-caption { font-size: 12.5px; max-width: none; }
+.live-desk .live-hero__track-caption,
+.tracks-replay .live-hero__track-caption { font-size: 12.5px; max-width: none; }
 .live-desk .track3d__caption { margin-top: 6px; font-size: 12px; }
 
 /* ---------- widths ---------- */
@@ -571,13 +582,15 @@
   }
   .live-desk__order,
   .live-desk__bryce { min-height: 0; overflow: hidden; }
-  .live-desk__track { min-height: 0; display: flex; flex-direction: column; }
-  .live-desk__model { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
-  .live-desk__model > .track3d { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
-  .live-desk__model .track3d__stage { flex: 1 1 auto; aspect-ratio: auto; max-height: none; min-height: 0; }
-  .live-desk__model > .track3d-wait { flex: 1 1 auto; aspect-ratio: auto !important; max-height: none !important; min-height: 0 !important; }
-  .live-desk__model > .live-track { flex: 1 1 auto; min-height: 0; }
-  .live-desk__track .live-skip-note { padding: 4px 0 6px; }
+  /* Scoped to the desk's grid: the Tracks page's replay (round 8) uses the
+     same track panel at its own aspect ratio, not stretched to a window. */
+  .live-desk__grid .live-desk__track { min-height: 0; display: flex; flex-direction: column; }
+  .live-desk__grid .live-desk__model { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
+  .live-desk__grid .live-desk__model > .track3d { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
+  .live-desk__grid .live-desk__model .track3d__stage { flex: 1 1 auto; aspect-ratio: auto; max-height: none; min-height: 0; }
+  .live-desk__grid .live-desk__model > .track3d-wait { flex: 1 1 auto; aspect-ratio: auto !important; max-height: none !important; min-height: 0 !important; }
+  .live-desk__grid .live-desk__model > .live-track { flex: 1 1 auto; min-height: 0; }
+  .live-desk__grid .live-desk__track .live-skip-note { padding: 4px 0 6px; }
 }
 
 @media (max-width: 699px) {
@@ -640,7 +653,8 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.live-desk .live-hero__track-now { font-size: 12.5px; }
+.live-desk .live-hero__track-now,
+.tracks-replay .live-hero__track-now { font-size: 12.5px; }
 
 /* ---------- round 7: the race bar ---------- */
 

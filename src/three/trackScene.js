@@ -117,13 +117,22 @@ export async function createTrackScene({ canvas, data, coarse = false, onHover =
   const spanU = (t0, t1) => { const a = uOf(t0), b = uOf(t1); const u0 = DIR > 0 ? a : b; let u1 = DIR > 0 ? b : a; if (u1 <= u0) u1 += 1; return [u0, u1]; };
 
   // ---------- ribbons along the centreline ----------
-  function ribbonGeometry(u0, u1, halfL, halfR, dy, { dashM = 0 } = {}) {
+  // A ribbon from latA to latB metres across the centreline (positive to the left), sampled every metre along and
+  // at most ACROSS_M across, so on a venue's terrain it follows the ground across its width as well as along it. With
+  // only its two edges sampled, a wide ribbon over a cutting, a crest or a camber is a straight chord: it sinks into
+  // the ground on one and floats over a narrower one on the other, which is how the hover's ink rim came up through
+  // its fill at Barber (Jack, Nov 16: "highlighted completely black in some sections").
+  // The terrain is a bilinear grid of ten metres or more, so a sample every 2 m (at most 8 across) follows it to within
+  // millimetres; the city's ground is flat, so its ribbons keep their two edges.
+  const ACROSS_M = 2, ACROSS_MAX = data.kind === 'city' ? 1 : 8;
+  function stripGeometry(u0, u1, latA, latB, dy, { dashM = 0 } = {}) {
     const lenM = (u1 - u0) * model.length, n = Math.max(2, Math.ceil(lenM / 1.0) + 1), P = [], I = [];
+    const m = Math.max(1, Math.min(ACROSS_MAX, Math.ceil(Math.abs(latA - latB) / ACROSS_M))), row = m + 1;
     for (let i = 0; i < n; i++) {
-      const u = u0 + ((u1 - u0) * i) / (n - 1), l = model.at(u, halfL, dy), r = model.at(u, -halfR, dy);
-      P.push(...l, ...r);
+      const u = u0 + ((u1 - u0) * i) / (n - 1);
+      for (let j = 0; j <= m; j++) P.push(...model.at(u, latA + ((latB - latA) * j) / m, dy));
       const on = !dashM || Math.floor((u * model.length) / dashM) % 2 === 0;
-      if (i && on) { const k = (i - 1) * 2; I.push(k, k + 2, k + 1, k + 1, k + 2, k + 3); }
+      if (i && on) for (let j = 0; j < m; j++) { const a = (i - 1) * row + j, b = i * row + j; I.push(a, b, a + 1, a + 1, b, b + 1); }
     }
     // face up whatever the winding (page.js)
     for (let t = 0; t < I.length; t += 3) { const a = I[t] * 3, b = I[t + 1] * 3, c = I[t + 2] * 3, ux = P[b] - P[a], uz = P[b + 2] - P[a + 2], vx = P[c] - P[a], vz = P[c + 2] - P[a + 2]; if (uz * vx - ux * vz < 0) { const k = I[t + 1]; I[t + 1] = I[t + 2]; I[t + 2] = k; } }
@@ -131,6 +140,7 @@ export async function createTrackScene({ canvas, data, coarse = false, onHover =
     const nm = g.attributes.normal.array; for (let i = 0; i < nm.length; i += 3) if (nm[i + 1] < 0) { nm[i] *= -1; nm[i + 1] *= -1; nm[i + 2] *= -1; }
     return g;
   }
+  const ribbonGeometry = (u0, u1, halfL, halfR, dy, opts) => stripGeometry(u0, u1, halfL, -halfR, dy, opts);
   const bandMat = (color, offset = -5) => new THREE.MeshLambertMaterial({ color: hex(color), side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: offset, polygonOffsetUnits: offset });
 
   // Under every section: a thin ink edge the whole lap round, and inside it the pale lane, which is what shows where
@@ -197,11 +207,15 @@ export async function createTrackScene({ canvas, data, coarse = false, onHover =
     hiGroup = new THREE.Group();
     const wide = Math.max(model.half + 5, bandHalfNow * 1.8), rim = wide + Math.max(2.5, bandHalfNow * 0.5);
     const fill = new THREE.MeshBasicMaterial({ color: hex(s.color || PALE), side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: -10, polygonOffsetUnits: -10, toneMapped: false });
-    const ink = new THREE.MeshBasicMaterial({ color: hex(INK), side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: -9, polygonOffsetUnits: -9, toneMapped: false });
+    const ink = new THREE.MeshBasicMaterial({ color: hex(INK), side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: -10, polygonOffsetUnits: -10, toneMapped: false });
+    // the rim is two strips beside the fill, sharing its edge vertices, never a wider ribbon under it: the two never
+    // overlap, so no slope or depth precision can bring the ink up through the colour. Both follow the ground across
+    // (stripGeometry) at the same lift over the section bands.
+    const dy = model.bandDy + 0.1;
     for (const [t0, t1] of s.spans) {
       const [u0, u1] = spanU(t0, t1);
-      const r = new THREE.Mesh(ribbonGeometry(u0, u1, rim, rim, model.bandDy + 0.08), ink); r.renderOrder = 6; hiGroup.add(r);
-      const f = new THREE.Mesh(ribbonGeometry(u0, u1, wide, wide, model.bandDy + 0.1), fill); f.renderOrder = 7; hiGroup.add(f);
+      const f = new THREE.Mesh(stripGeometry(u0, u1, wide, -wide, dy), fill); f.renderOrder = 7; hiGroup.add(f);
+      for (const [a, b] of [[rim, wide], [-wide, -rim]]) { const r = new THREE.Mesh(stripGeometry(u0, u1, a, b, dy), ink); r.renderOrder = 7; hiGroup.add(r); }
     }
     scene.add(hiGroup);
   }

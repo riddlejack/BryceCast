@@ -1,5 +1,5 @@
-import { useMemo } from 'react';
-import { MapPin } from 'lucide-react';
+import { Suspense, lazy, useEffect, useMemo, useRef } from 'react';
+import { MapPin, Play } from 'lucide-react';
 import { Card, ScreenHead, SourcePill, Unavailable } from '../app/components';
 import { useRouter } from '../app/router';
 import { ordinal } from '../app/format';
@@ -12,7 +12,16 @@ import { uiDataPackage } from '../data/uiDataPackage';
 import { VenueSectionSuite, useVenueSectionData } from './sectionIntelligence';
 import { TrackModelSlot } from '../three/TrackModelSlot';
 import { resolveQualifyingHeatMode } from './qualifyingHeat';
+import { switchValue } from '../review/switches';
+import { watchableCaptureForRace } from '../data/replayAvailable';
+import type { LiveReadiness, ReplaySourceGap } from '../app/useReadiness';
+import type { ReplaySession } from '../app/useReplaySession';
+import type { LiveSessionHistory } from '../data/liveHistoryModel';
+import { ReplayAffordance, useReplayCatalog } from './replayAffordance';
 import './tracks.css';
+
+/* The race replayed on the track (round 8), loaded only when a replay starts. */
+const TracksReplay = lazy(() => import('./tracksReplay'));
 
 /** The season schedule (seasonIndex, from the official venue dossier) and the
  *  section-lap packs (sectionLapRefs, joined by the track-asset name) name a
@@ -136,7 +145,18 @@ const VenueNumbersFallback = ({ visits, labels }: { visits: SectionLapsPack[]; l
   );
 };
 
-export const TracksScreen = () => {
+export const TracksScreen = ({
+  replay = null,
+  payload = null,
+  history = null,
+  replaySourceGap = null
+}: {
+  /** The client-wide replay clock, engaged by `?replay=` on this page. */
+  replay?: ReplaySession | null;
+  payload?: LiveReadiness | null;
+  history?: LiveSessionHistory | null;
+  replaySourceGap?: ReplaySourceGap | null;
+} = {}) => {
   const { route, navigate } = useRouter();
   const refs = uiDataPackage.screens.raceDebrief.sectionLapRefs ?? [];
   const seasonIndex = uiDataPackage.screens.raceDebrief.seasonIndex ?? [];
@@ -217,6 +237,73 @@ export const TracksScreen = () => {
   ) : null;
   const visitLabel = selectedCanonicalVisit ? labels.get(selectedCanonicalVisit.sessionId) ?? null : null;
 
+  /* The replay of the picked race, when the archive has a watchable one
+   * (matched by the race's canonical session, as on the race page). By
+   * default it plays here, on this page's track; `trackreplay=link` keeps the
+   * old way, a button to the Live page. A new venue or race drops `replay`
+   * from the address, which stops it. */
+  const catalog = useReplayCatalog();
+  const capture = catalog && selectedCanonicalVisit ? watchableCaptureForRace(catalog, selectedCanonicalVisit.sessionId) : null;
+  const replayAsLink = switchValue('trackreplay', route.search) === 'link';
+  const visitHref = selectedCanonicalVisit
+    ? `/tracks?venue=${encodeURIComponent(selectedVenue ?? '')}&visit=${encodeURIComponent(selectedCanonicalVisit.sessionId)}`
+    : `/tracks?venue=${encodeURIComponent(selectedVenue ?? '')}`;
+  const replayRequested = Boolean(route.search.get('replay')) && !replayAsLink;
+  const replayShown =
+    replayRequested && replay && !replay.unavailable && !replay.refusedReason && !replay.endedByLive && selectedCanonicalVisit
+      ? replay
+      : null;
+  // A press of the button brings the replay up under the nav, once; a reload
+  // or a shared link leaves the scroll where the browser puts it.
+  const arriveRef = useRef(false);
+  useEffect(() => {
+    if (!replayShown || !arriveRef.current) return undefined;
+    let frames = 0;
+    let raf = 0;
+    const settle = () => {
+      const el = document.querySelector<HTMLElement>('[data-tracks-replay]');
+      if (!el) {
+        if (++frames < 120) raf = requestAnimationFrame(settle);
+        return;
+      }
+      arriveRef.current = false;
+      // The nav scrolls away with the page, so the bar goes to the top edge.
+      window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 16, behavior: 'smooth' });
+    };
+    raf = requestAnimationFrame(settle);
+    return () => cancelAnimationFrame(raf);
+  }, [replayShown]);
+  const startReplay = () => {
+    if (!capture || !selectedCanonicalVisit) return;
+    arriveRef.current = true;
+    navigate(`${visitHref}&replay=${encodeURIComponent(capture.sessionKey)}&from=${encodeURIComponent(selectedCanonicalVisit.sessionId)}`);
+  };
+  const exitReplay = () => navigate(visitHref);
+  const replayControl = !selectedCanonicalVisit ? null : capture ? (
+    replayAsLink ? (
+      <div className="tracks-replay-pick tracks-replay-pick--link">
+        <ReplayAffordance capture={capture} fromSessionId={selectedCanonicalVisit.sessionId} title="Watch this race unfold" variant="compact" />
+      </div>
+    ) : (
+      <div className="tracks-replay-pick">
+        <button
+          type="button"
+          className="tracks-replay-pick__btn"
+          data-tracks-replay-start
+          aria-pressed={replayShown !== null}
+          disabled={replayRequested}
+          onClick={startReplay}
+        >
+          <Play size={14} aria-hidden /> {replayRequested ? 'Replaying below' : 'Replay this race'}
+        </button>
+      </div>
+    )
+  ) : catalog ? (
+    <p className="tracks-replay-pick tracks-replay-pick--none caption caption--secondary" data-tracks-replay-none>
+      No replay of this race is on file.
+    </p>
+  ) : null;
+
   const setVenue = (venueName: string) => navigate(`/tracks?venue=${encodeURIComponent(venueName)}`);
   const setVisit = (sessionId: string) => {
     if (!selectedVenue) return;
@@ -264,11 +351,28 @@ export const TracksScreen = () => {
                 ))}
               </select>
             </label>
+            {replayControl}
           </div>
+          {replayRequested && replay?.refusedReason ? (
+            <p className="caption caption--secondary tracks-replay-refused">{replay.refusedReason}</p>
+          ) : null}
         </div>
       </div>
 
-      {data.loading ? (
+      {replayShown && selectedCanonicalVisit ? (
+        <Suspense fallback={<div className="skeleton" style={{ height: 360 }} />}>
+          <TracksReplay
+            replay={replayShown}
+            payload={payload}
+            history={history}
+            sourceGap={replaySourceGap}
+            sessionId={selectedCanonicalVisit.sessionId}
+            onExit={exitReplay}
+          />
+        </Suspense>
+      ) : replayRequested && !replay ? (
+        <div className="skeleton" style={{ height: 360 }} />
+      ) : data.loading ? (
         <div className="skeleton" style={{ height: 360 }} />
       ) : selectedCanonicalVisit && !selectedVisit && !qualifying ? (
         <Card title={labels.get(selectedCanonicalVisit.sessionId) ?? selectedCanonicalVisit.raceLabel}>

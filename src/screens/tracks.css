@@ -346,3 +346,46 @@
 @media (min-width: 900px) {
   :root[data-yoy='old'] .page.tracks-page { padding-bottom: 96px; }
 }
+
+/* ---------- the race, replayed on the track (round 8) ----------
+ * The Live page's own bar, race bar and track panel (live.css styles them
+ * under .tracks-replay too). Nothing here changes height while the race runs:
+ * the place chip has a fixed width, the race bar's room is held before it
+ * lands, and the stage keeps its own aspect ratio, so no caption can resize it. */
+
+.tracks-page .tracks-replay-pick { display: flex; align-items: flex-end; min-width: 0; }
+.tracks-page .tracks-replay-pick--none { align-items: flex-end; margin: 0; padding-bottom: 9px; }
+.tracks-page .tracks-replay-pick--link .race-replay__year { width: 100%; }
+.tracks-page .tracks-replay-pick__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink-primary);
+  background: var(--surface-0);
+  border: 1px solid var(--ink-primary);
+  border-radius: 9px;
+  padding: 8px 14px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.tracks-page .tracks-replay-pick__btn:hover:not(:disabled) { background: var(--grey-fill); }
+.tracks-page .tracks-replay-pick__btn:disabled { cursor: default; color: var(--ink-muted); border-color: var(--hairline); }
+.tracks-page .tracks-replay-refused { margin: 10px 0 0; }
+
+.tracks-page .tracks-replay { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.tracks-page .tracks-replay__lead { display: flex; align-items: center; gap: 8px 20px; min-width: 0; }
+.tracks-page .tracks-replay__place {
+  display: inline-block;
+  min-width: 8.5ch;
+  font-size: clamp(17px, 1.2vw, 22px);
+  font-weight: 620;
+  color: var(--ink-primary);
+  white-space: nowrap;
+}
+.tracks-page .tracks-replay__race { min-height: 58px; }
+.tracks-page .tracks-replay .track3d__stage { max-height: min(calc(100dvh - 290px), 940px); min-height: 360px; }
+.tracks-page .tracks-replay .track3d__caption { margin-top: 6px; font-size: 12px; }
+.tracks-page .tracks-replay__out { margin: 0; font-size: 13.5px; }

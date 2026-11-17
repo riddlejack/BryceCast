@@ -139,7 +139,10 @@ const Routes = () => {
   // engage on `/career` too — and a race page URL with replay params renders
   // that race's LIVE shell as it happened (Brief R-c: a replayed race gets a
   // replayed race page). Other surfaces stay on the real feed (no param).
-  const replayCapableRoute = onLive || route.path === '/career' || raceDetail !== null;
+  // The Tracks page plays a race in place (round 8) unless its switch is set
+  // back to the button that goes to /live.
+  const tracksReplay = route.path === '/tracks' && switchValue('trackreplay', route.search) !== 'link';
+  const replayCapableRoute = onLive || route.path === '/career' || tracksReplay || raceDetail !== null;
   const replayKey = replayCapableRoute && !fixtureMode ? route.search.get('replay') : null;
   // The replay clock is created first so readiness can append this client's
   // replay params to its own polls. A restart must clear the live-history chart
@@ -200,7 +203,8 @@ const Routes = () => {
       />
     );
   else if (route.path === '/races') screen = <RacesScreen livePayload={readiness.fixtureMode ? null : readiness.payload} />;
-  else if (route.path === '/tracks') screen = <TracksScreen />;
+  else if (route.path === '/tracks')
+    screen = <TracksScreen replay={replay.engaged ? replay : null} payload={readiness.payload} history={liveHistory.active} replaySourceGap={readiness.sourceGap} />;
   else if (careerRace) screen = <CareerRaceScreen sessionId={careerRace.sessionId} />;
   else if (route.path === '/career') screen = <CareerScreen readiness={readiness} />;
   else if (route.path === '/data') screen = <DataScreen />;

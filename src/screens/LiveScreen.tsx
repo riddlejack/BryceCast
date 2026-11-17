@@ -743,7 +743,22 @@ const BryceColumn = ({
 /** What the one screen shows: the first frame still on its way, a replay
  *  before its green flag, the race, the race after the checkered flag. One
  *  layout for all four, so the track (and its 3D model) is never remounted. */
-type DeskPhase = 'cueing' | 'prestart' | 'race' | 'ended';
+export type DeskPhase = 'cueing' | 'prestart' | 'race' | 'ended';
+
+/** A replay frame's phase: the frame the page may show (a simulated frame,
+ *  outside a source gap), then before the green, racing, or past the flag. */
+export const replayDeskPhaseOf = (payload: LiveReadiness | null, sourceGap: unknown): { framed: LiveReadiness | null; phase: DeskPhase } => {
+  const framed = payload && isSimulatedReplayPayload(payload) && !sourceGap ? payload : null;
+  const ended = framed ? isPostCheckeredPayload(framed) : false;
+  const phase: DeskPhase = !framed
+    ? 'cueing'
+    : ended
+      ? 'ended'
+      : framed.state === 'ready' || framed.state === 'degraded'
+        ? 'race'
+        : 'prestart';
+  return { framed, phase };
+};
 
 /** Keys that move the clock fire at most this often; the last press wins. */
 const KEY_SEEK_THROTTLE_MS = 300;
@@ -760,26 +775,21 @@ const DeskPlaceholder = ({ area, words }: { area: 'order' | 'bryce'; words: stri
   </section>
 );
 
-const LiveDesk = ({
+/** The replay's stage, shared by the Live desk and the Tracks page (round 8):
+ *  the race model, the bar's axis, the one clock readout, the field, the keys
+ *  and `&lap=` in the address, and the header readout. */
+export const useReplayStage = ({
   payload,
   phase,
-  fixtureMode,
-  samples,
   history,
   sessionKind,
-  replay,
-  onExit,
-  storyLink
+  replay
 }: {
   payload: LiveReadiness | null;
   phase: DeskPhase;
-  fixtureMode: boolean;
-  samples: GapSample[];
   history: LiveSessionHistory | null;
   sessionKind: LiveSessionKind;
   replay: ReplaySession | null;
-  onExit?: () => void;
-  storyLink: ReactNode;
 }) => {
   const weekend = (payload?.raceWeekend ?? {}) as Row;
   const heartbeat = payload ? heartbeatOf(payload) : {};
@@ -789,7 +799,6 @@ const LiveDesk = ({
   const lap = asNumber(heartbeat.lap ?? weekend.lap);
   const totalLaps = asNumber(heartbeat.totalLaps ?? weekend.totalLaps);
   const sessionName = asString(heartbeat.sessionName ?? weekend.sessionName);
-  const [hoverCar, setHoverCar] = useState<string | null>(null);
   const { route } = useRouter();
   const fieldMode = fieldModeOf(switchValue('field', route.search));
   const trail = switchValue('trail', route.search) === 'lap';
@@ -918,24 +927,6 @@ const LiveDesk = ({
     return () => window.clearInterval(timer);
   }, [engaged, axis, virtualNow]);
 
-  // After a jump of the clock, the panels that show the timing hold their
-  // last frame, quietly dimmed, until the frame for the new moment lands, so
-  // the page never mixes two moments.
-  const jumpRef = useRef<{ epoch: number; atMs: number | null; wall: number }>({ epoch: replay?.clockEpoch ?? 0, atMs: null, wall: 0 });
-  if (replay && replay.clockEpoch !== jumpRef.current.epoch) {
-    jumpRef.current = { epoch: replay.clockEpoch, atMs: virtualNow(), wall: Date.now() };
-  }
-  const sourceMs = payload ? Date.parse(liveSourceCheckedAtOf(payload)) : NaN;
-  const jump = jumpRef.current;
-  const settling =
-    replay !== null &&
-    !clockFormation &&
-    !awaitingRace &&
-    jump.atMs !== null &&
-    Date.now() - jump.wall < 5_000 &&
-    (!Number.isFinite(sourceMs) || Math.abs(sourceMs - jump.atMs) > 8_000 + replay.playbackSpeed * 2_500);
-  if (!settling && jump.atMs !== null && Number.isFinite(sourceMs)) jump.atMs = null;
-
   // A replay's header reads the clock (the same readout as the race bar);
   // the frame's own flag and counter stand in until the bar has its axis.
   const clockFlag = now?.flag === 'green' ? 'GREEN' : now?.flag === 'caution' ? 'YELLOW' : now?.flag === 'red' ? 'RED' : null;
@@ -956,6 +947,57 @@ const LiveDesk = ({
     />
   );
   const seek = useCallback((atMs: number) => replayRef.current?.seekTo(atMs), []);
+  // The race timeline is read once the first frame is up, never beside it.
+  const requestTimeline = replay?.requestTimeline;
+  const simulatedFrame = payload ? isSimulatedReplayPayload(payload) : false;
+  useEffect(() => {
+    if (simulatedFrame && requestTimeline) requestTimeline();
+  }, [simulatedFrame, requestTimeline]);
+  return { identity, isRace, flag, lap, totalLaps, sessionName, fieldMode, trail, cars, bryceRow, bryceLabel, race, virtualNow, axis, now, clockFormation, awaitingRace, shownPhase, fieldCars, readout, seek };
+};
+
+const LiveDesk = ({
+  payload,
+  phase,
+  fixtureMode,
+  samples,
+  history,
+  sessionKind,
+  replay,
+  onExit,
+  storyLink
+}: {
+  payload: LiveReadiness | null;
+  phase: DeskPhase;
+  fixtureMode: boolean;
+  samples: GapSample[];
+  history: LiveSessionHistory | null;
+  sessionKind: LiveSessionKind;
+  replay: ReplaySession | null;
+  onExit?: () => void;
+  storyLink: ReactNode;
+}) => {
+  const { identity, isRace, fieldMode, trail, bryceLabel, race, virtualNow, axis, now, clockFormation, awaitingRace, shownPhase, fieldCars, readout, seek } =
+    useReplayStage({ payload, phase, history, sessionKind, replay });
+  const [hoverCar, setHoverCar] = useState<string | null>(null);
+  // After a jump of the clock, the panels that show the timing hold their
+  // last frame, quietly dimmed, until the frame for the new moment lands, so
+  // the page never mixes two moments.
+  const jumpRef = useRef<{ epoch: number; atMs: number | null; wall: number }>({ epoch: replay?.clockEpoch ?? 0, atMs: null, wall: 0 });
+  if (replay && replay.clockEpoch !== jumpRef.current.epoch) {
+    jumpRef.current = { epoch: replay.clockEpoch, atMs: virtualNow(), wall: Date.now() };
+  }
+  const sourceMs = payload ? Date.parse(liveSourceCheckedAtOf(payload)) : NaN;
+  const jump = jumpRef.current;
+  const settling =
+    replay !== null &&
+    !clockFormation &&
+    !awaitingRace &&
+    jump.atMs !== null &&
+    Date.now() - jump.wall < 5_000 &&
+    (!Number.isFinite(sourceMs) || Math.abs(sourceMs - jump.atMs) > 8_000 + replay.playbackSpeed * 2_500);
+  if (!settling && jump.atMs !== null && Number.isFinite(sourceMs)) jump.atMs = null;
+
   return (
     <section className={`live-desk${settling ? ' live-desk--settling' : ''}`} data-live-desk data-desk-phase={shownPhase} aria-label="The race, now">
       <HeroIdentity
@@ -1395,7 +1437,7 @@ const durationLabel = (session: ReplaySessionInfo | null): string | null => {
  *  frame — with speed, restart-from-green, the formation lap, and an exit back
  *  to the race page. Under caution it carries the flag and lap, so a still
  *  running order reads as the yellow it is. */
-const ReplayBar = ({
+export const ReplayBar = ({
   replay,
   payload,
   /** The off-season demo passes a wrapper so leaving it counts as the explicit
@@ -1755,11 +1797,6 @@ export const LiveScreen = ({
       }
     : undefined;
 
-  // The race timeline is read once the first frame is up, never beside it.
-  const requestTimeline = replay?.requestTimeline;
-  useEffect(() => {
-    if (replaySimulated && requestTimeline) requestTimeline();
-  }, [replaySimulated, requestTimeline]);
 
   if (replayRefused && replay) {
     return (
@@ -1774,15 +1811,7 @@ export const LiveScreen = ({
   // Before the green the order column holds the grid; a source gap says so
   // above the same screen. Nothing here remounts the track.
   if (replayActive && replay) {
-    const framed = payload && replaySimulated && !replaySourceGap ? payload : null;
-    const ended = framed ? isPostCheckeredPayload(framed) : false;
-    const phase: DeskPhase = !framed
-      ? 'cueing'
-      : ended
-        ? 'ended'
-        : framed.state === 'ready' || framed.state === 'degraded'
-          ? 'race'
-          : 'prestart';
+    const { framed, phase } = replayDeskPhaseOf(payload, replaySourceGap);
     const kind: LiveSessionKind = framed ? resolveLiveSessionKind(framed) : 'race';
     const latest = history?.samples.at(-1) ?? null;
     const storyId = replay.session?.canonicalSessionId ?? null;
