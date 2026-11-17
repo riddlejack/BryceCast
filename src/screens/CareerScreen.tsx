@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent, type ReactNode } from 'react';
 import { SourcePill, Stat, TickerValue, Unavailable } from '../app/components';
-import { useCoarsePointer, useInViewOnce, useMeasuredWidth, useReducedMotion } from '../app/charts';
+import { PointerWord, useCoarsePointer, useInViewOnce, useMeasuredWidth, useReducedMotion } from '../app/charts';
 import { asNumber, asString, formatNumber, formatPct } from '../app/format';
 import {
   uiDataPackage,
@@ -169,7 +169,8 @@ const RollingValue = ({ display, progress }: { display: string; progress: number
  *    label; a click opens how it was counted. One panel explains the method.
  * ============================================================ */
 
-type OdoFigureSpec = { id: string; label: string };
+/** `short`: the same words, cut to fit one line of a phone's half column (round 9). */
+type OdoFigureSpec = { id: string; label: string; short?: string };
 type OdoGroupSpec = {
   key: string;
   title: string;
@@ -233,7 +234,7 @@ const ODOMETER_GROUPS: OdoGroupSpec[] = [
     visual: 'people',
     figures: [
       { id: 'otherDriverRecords', label: 'Drivers in his races' },
-      { id: 'otherDriverRecordsSingleSeater', label: 'Of them in single-seaters' }
+      { id: 'otherDriverRecordsSingleSeater', label: 'Of them in single-seaters', short: 'In single-seaters' }
     ]
   },
   {
@@ -243,7 +244,7 @@ const ODOMETER_GROUPS: OdoGroupSpec[] = [
     visual: 'incidents',
     figures: [
       { id: 'indyNxtRetirements', label: 'Races he retired from' },
-      { id: 'indyNxtCautions', label: 'Cautions he was named in' }
+      { id: 'indyNxtCautions', label: 'Cautions he was named in', short: 'Cautions naming him' }
     ]
   }
 ];
@@ -654,15 +655,28 @@ const figureFacts = (figure: UiCareerFigure): string[] => {
   return facts;
 };
 
+/* The label's last word carries the chevron, so the two never part. */
+const odoLabelWords = (label: string) => (
+  <>
+    {label.split(' ').slice(0, -1).join(' ')}{label.includes(' ') ? ' ' : ''}
+    <span className="odo-fig__last">
+      {label.split(' ').slice(-1)[0]}
+      <span className="odo-fig__chev" aria-hidden />
+    </span>
+  </>
+);
+
 const OdoFigure = ({
   figure,
   label,
+  short,
   progress,
   open,
   onToggle
 }: {
   figure: UiCareerFigure;
   label: string;
+  short?: string;
   progress: number;
   open: boolean;
   onToggle: () => void;
@@ -680,13 +694,14 @@ const OdoFigure = ({
         <RollingValue display={figure.display} progress={progress} />
       </span>
     </span>
-    <span className="odo-fig__label">
-      {label.split(' ').slice(0, -1).join(' ')}{label.includes(' ') ? ' ' : ''}
-      <span className="odo-fig__last">
-        {label.split(' ').slice(-1)[0]}
-        <span className="odo-fig__chev" aria-hidden />
-      </span>
-    </span>
+    {short ? (
+      <>
+        <span className="odo-fig__label odo-fig__label--full">{odoLabelWords(label)}</span>
+        <span className="odo-fig__label odo-fig__label--short">{odoLabelWords(short)}</span>
+      </>
+    ) : (
+      <span className="odo-fig__label">{odoLabelWords(label)}</span>
+    )}
   </button>
 );
 
@@ -760,6 +775,7 @@ const OdoGroup = ({
             key={figure.id}
             figure={figure}
             label={spec.label}
+            short={spec.short}
             progress={progressOf(figure.id)}
             open={openId === figure.id}
             onToggle={() => setOpenId(openId === figure.id ? null : figure.id)}
@@ -870,7 +886,7 @@ const Odometer = ({ lifeStats, live }: { lifeStats: UiCareerLifeStats; live: Liv
       <div className="odo-keyline">
         <p className="odo-keyline__key">
           Counted exactly unless marked. <span className="odo-plus">+</span> means at least: the true figure is higher. A range is
-          modelled. Click a figure to see how it was counted.
+          modelled. <PointerWord mouse="Click" touch="Tap" /> a figure to see how it was counted.
         </p>
         <button
           type="button"

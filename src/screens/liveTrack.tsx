@@ -558,6 +558,12 @@ const PLATE_W = 32;
 const PLATE_H = 24;
 const PLATE_LIFT = 27;
 const CAR_R = 8.5;
+/** Two cars nearer than this (px, centre to centre) would overlap their
+ *  numbers or their counts: the pile shows one plate, the best placed, with a
+ *  quiet "+n" at its shoulder. */
+const PILE_PX = 24;
+/** Cars this near his foot sit under his stem: they count into his "+n". */
+const BRYCE_PILE_PX = 20;
 
 const pathThrough = (points: Array<[number, number] | null>): string => {
   let d = '';
@@ -636,6 +642,7 @@ export const TrackMarks = ({
   const fadeRef = useRef<SVGPathElement | null>(null);
   const trailPathRef = useRef<SVGPathElement | null>(null);
   const bryceRef = useRef<SVGGElement | null>(null);
+  const bryceMoreRef = useRef<SVGTextElement | null>(null);
   const carRefs = useRef(new Map<string, SVGGElement>());
   const tipRef = useRef<HTMLDivElement | null>(null);
   const tipLineRef = useRef<HTMLSpanElement | null>(null);
@@ -652,6 +659,14 @@ export const TrackMarks = ({
     let lastReadout = '';
     const eased = new Map<string, { from: number; to: number; at: number }>();
     const positions = new Map<string, [number, number]>();
+    let easedEpoch = epochRef.current;
+    let lastEpoch = epochRef.current;
+    const setMore = (node: SVGTextElement | null | undefined, count: number) => {
+      if (!node) return;
+      const text = count > 0 ? `+${count}` : '';
+      if (node.textContent !== text) node.textContent = text;
+      node.setAttribute('visibility', count > 0 ? 'visible' : 'hidden');
+    };
 
     const hide = (node: Element | null) => node?.setAttribute('visibility', 'hidden');
     const show = (node: Element | null) => node?.setAttribute('visibility', 'visible');
@@ -690,7 +705,11 @@ export const TrackMarks = ({
       const t = tOfSection(geometry, at.index, at.fraction);
 
       // A loop crossed: the section just finished fades; a new lap clears the trail.
-      if (last && (last.index !== at.index || last.lap !== lap)) {
+      // A jump of the clock is not a crossing: nothing fades where he was.
+      const jumped = lastEpoch !== epochRef.current;
+      lastEpoch = epochRef.current;
+      if (jumped) fade = null;
+      if (last && !jumped && (last.index !== at.index || last.lap !== lap)) {
         fade = { lap: last.lap, index: last.index, startedAt: wall };
         if (lap !== last.lap) finished = [];
         else if (!finished.includes(last.index)) finished.push(last.index);
@@ -737,8 +756,15 @@ export const TrackMarks = ({
       svgRef.current?.setAttribute('data-marks-bryce', `${lap}:${at.index}:${place.holding ? 'hold' : 'move'}`);
 
       // The other cars: their gap to him, eased, turned into distance at his pace.
+      // A jump of the clock drops the easing: each car takes its new gap at
+      // once, never flying across the track to it.
+      if (easedEpoch !== epochRef.current) {
+        eased.clear();
+        easedEpoch = epochRef.current;
+      }
       const from = { ...place, distance };
       let drawn = 0;
+      const placed: Array<{ id: string; position: number; point: [number, number]; node: SVGGElement }> = [];
       for (const car of carsRef.current) {
         const node = carRefs.current.get(car.id);
         if (!node) continue;
@@ -760,11 +786,75 @@ export const TrackMarks = ({
           continue;
         }
         node.setAttribute('transform', `translate(${carPoint[0].toFixed(1)} ${carPoint[1].toFixed(1)})`);
-        show(node);
         positions.set(car.id, carPoint);
+        placed.push({ id: car.id, position: car.position ?? 999, point: carPoint, node });
         drawn += 1;
       }
+      // Piles (the grid, a restart, a caution): one plate each, the best
+      // placed car, with "+n" for the rest; cars under his stem count into
+      // his own "+n", so his 9 is never buried.
+      const bryceAt = positions.get('bryce');
+      let underBryce = 0;
+      const leaders: Array<{ point: [number, number]; more: number; node: SVGGElement }> = [];
+      placed.sort((a, b) => a.position - b.position);
+      for (const car of placed) {
+        if (bryceAt && Math.hypot(car.point[0] - bryceAt[0], car.point[1] - bryceAt[1]) < BRYCE_PILE_PX) {
+          underBryce += 1;
+          hide(car.node);
+          continue;
+        }
+        const leader = leaders.find((other) => Math.hypot(car.point[0] - other.point[0], car.point[1] - other.point[1]) < PILE_PX);
+        if (leader) {
+          leader.more += 1;
+          hide(car.node);
+          continue;
+        }
+        leaders.push({ point: car.point, more: 0, node: car.node });
+        show(car.node);
+      }
+      // Each count takes the first free spot round its plate (right shoulder,
+      // left shoulder, below right, below left), clear of his plate, his own
+      // count and every other plate, so no two numbers ever touch.
+      type Box = { x0: number; y0: number; x1: number; y1: number };
+      const hit = (a: Box, b: Box) => a.x0 < b.x1 && b.x0 < a.x1 && a.y0 < b.y1 && b.y0 < a.y1;
+      const taken: Box[] = leaders.map((leader) => ({ x0: leader.point[0] - CAR_R, y0: leader.point[1] - CAR_R, x1: leader.point[0] + CAR_R, y1: leader.point[1] + CAR_R }));
+      if (bryceAt) {
+        taken.push({ x0: bryceAt[0] - PLATE_W / 2 - 2, y0: bryceAt[1] - PLATE_LIFT - PLATE_H / 2 - 2, x1: bryceAt[0] + PLATE_W / 2 + 2, y1: bryceAt[1] + 3 });
+        if (underBryce > 0) {
+          const w = textWidth(`+${underBryce}`, 10) + 2;
+          taken.push({ x0: bryceAt[0] + PLATE_W / 2 + 3, y0: bryceAt[1] - PLATE_LIFT - 6, x1: bryceAt[0] + PLATE_W / 2 + 5 + w, y1: bryceAt[1] - PLATE_LIFT + 7 });
+        }
+      }
+      for (const leader of leaders) {
+        const node = leader.node.querySelector<SVGTextElement>('.live-marks__more');
+        if (!node || leader.more === 0) {
+          setMore(node, 0);
+          continue;
+        }
+        const w = textWidth(`+${leader.more}`, 10) + 2;
+        const spots: Array<[number, number, 'start' | 'end']> = [
+          [CAR_R - 1, -CAR_R + 1, 'start'],
+          [-CAR_R + 1, -CAR_R + 1, 'end'],
+          [CAR_R - 1, CAR_R + 8, 'start'],
+          [-CAR_R + 1, CAR_R + 8, 'end']
+        ];
+        const boxOf = ([dx, dy, anchor]: [number, number, 'start' | 'end']): Box => {
+          const x = leader.point[0] + dx;
+          const y = leader.point[1] + dy;
+          return anchor === 'start' ? { x0: x, y0: y - 8, x1: x + w, y1: y + 2 } : { x0: x - w, y0: y - 8, x1: x, y1: y + 2 };
+        };
+        const own: Box = { x0: leader.point[0] - CAR_R, y0: leader.point[1] - CAR_R, x1: leader.point[0] + CAR_R, y1: leader.point[1] + CAR_R };
+        const spot = spots.find((candidate) => { const box = boxOf(candidate); return !taken.some((other) => other !== own && !(other.x0 === own.x0 && other.y0 === own.y0) && hit(box, other)); }) ?? spots[0];
+        node.setAttribute('x', String(spot[0]));
+        node.setAttribute('y', String(spot[1]));
+        node.setAttribute('text-anchor', spot[2]);
+        taken.push(boxOf(spot));
+        setMore(node, leader.more);
+      }
+      for (const car of placed) if (!leaders.some((leader) => leader.node === car.node)) setMore(car.node.querySelector<SVGTextElement>('.live-marks__more'), 0);
+      setMore(bryceMoreRef.current, underBryce);
       svgRef.current?.setAttribute('data-marks-cars', String(drawn));
+      svgRef.current?.setAttribute('data-marks-plates', String(leaders.length));
 
       const tip = tipRef.current;
       const focus = hoverRef.current;
@@ -858,17 +948,21 @@ export const TrackMarks = ({
             <text y={3.2} textAnchor="middle" className="live-marks__no">
               {car.no}
             </text>
+            <text x={CAR_R - 1} y={-CAR_R + 1} className="live-marks__more" visibility="hidden" />
           </g>
         ))}
         <g ref={bryceRef} className={`live-marks__bryce${hover === 'bryce' ? ' is-focus' : ''}`} visibility="hidden" onPointerEnter={() => enter('bryce')} onPointerLeave={leave}>
           <ellipse rx={11} ry={4.4} className="live-marks__shadow" />
           <line x1={0} y1={0} x2={0} y2={-PLATE_LIFT + PLATE_H / 2} className="live-marks__stem" />
           <circle r={2.6} className="live-marks__foot" />
+
           <rect x={-PLATE_W / 2 - 6} y={-PLATE_LIFT - PLATE_H / 2 - 6} width={PLATE_W + 12} height={PLATE_H + PLATE_LIFT + 10} className="live-marks__hit" />
           <rect x={-PLATE_W / 2} y={-PLATE_LIFT - PLATE_H / 2} width={PLATE_W} height={PLATE_H} rx={6} className="live-marks__plate" />
           <text y={-PLATE_LIFT + 6} textAnchor="middle" className="live-marks__plate-no">
             {bryceLabel?.no || '9'}
           </text>
+          {/* the cars under his stem, counted beside his plate */}
+          <text ref={bryceMoreRef} x={PLATE_W / 2 + 4} y={-PLATE_LIFT + 4} className="live-marks__more" visibility="hidden" />
         </g>
       </svg>
       {hover ? (

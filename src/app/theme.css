@@ -506,12 +506,13 @@ select:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
   /* Reserve the fixed tab bar's full footprint — its height AND the device safe
      area — plus breathing room, so nothing hides behind the bar at the
      bottom of a scroll (#7). The tab bar itself is height + safe-area. */
-  padding: 8px var(--gutter) calc(var(--tabbar-height) + env(safe-area-inset-bottom) + 40px);
+  /* Round 9 (Jack: "a lot of white space" above the footer, on every page): the
+   * footer is always the next thing and it clears the tab bar itself (its own
+   * bottom padding), so the page keeps no bottom padding of its own; the space
+   * before the footer is the footer's margin, one section gap, the same rhythm
+   * as between the sections above it. It was 140 px on a phone, 136 on a desk. */
+  padding: 8px var(--gutter) 0;
   flex: 1;
-}
-
-@media (min-width: 900px) {
-  .page { padding: 8px var(--gutter) 96px; }
 }
 
 /* Page rhythm: sections on a page are far apart; things inside a section are
@@ -932,7 +933,7 @@ a.tower__row.tower__row--bryce:hover { --row-fill: color-mix(in srgb, var(--ambe
 
 /* ---------- footer ---------- */
 
-.footer { margin-top: 40px; }
+.footer { margin-top: var(--section-gap); }
 
 .footer__inner {
   max-width: var(--content-max);

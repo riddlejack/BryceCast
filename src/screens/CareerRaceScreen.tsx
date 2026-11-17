@@ -1,9 +1,10 @@
 import { useMemo, useState } from 'react';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { Card, SourcePill, Stat, Unavailable } from '../app/components';
-import { ChartTipCard, chartFont, useMeasuredWidth, type ChartTip } from '../app/charts';
+import { ChartTipCard, chartFont, useMeasuredWidth, PointerOpen, type ChartTip } from '../app/charts';
 import { asNumber, asString, formatDate, formatGain, trackTypeLabel } from '../app/format';
 import { Link, useRouter } from '../app/router';
+import { useTapPreview } from '../app/tapPreview';
 import { uiDataPackage } from '../data/uiDataPackage';
 import { TrackArt } from '../app/trackArt';
 import { TrackStill } from '../app/trackStill';
@@ -35,6 +36,7 @@ const ChapterContext = ({ row, chapterRows }: { row: CareerRow; chapterRows: Car
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();
   const { navigate } = useRouter();
   const [tip, setTip] = useState<ChartTip | null>(null);
+  const tap = useTapPreview();
 
   const height = 58;
   const axisY = 30;
@@ -62,11 +64,11 @@ const ChapterContext = ({ row, chapterRows }: { row: CareerRow; chapterRows: Car
                 stroke={clean ? (isThis ? tint : 'none') : tint}
                 strokeWidth={1.2}
                 style={{ cursor: isThis ? 'default' : 'pointer' }}
-                onMouseEnter={() => setTip({ x: x(other.percentile), y: axisY - 8, ...tipFor(other) })}
-                onMouseLeave={() => setTip(null)}
-                onClick={() => {
-                  if (!isThis) navigate(raceHref(other.sessionId));
-                }}
+                {...tap.target(other.sessionId + index, {
+                  show: () => setTip({ x: x(other.percentile), y: axisY - 8, under: axisY + 8, ...tipFor(other) }),
+                  hide: () => setTip(null),
+                  open: isThis ? null : () => navigate(raceHref(other.sessionId))
+                })}
               />
             );
           })}
@@ -79,7 +81,7 @@ const ChapterContext = ({ row, chapterRows }: { row: CareerRow; chapterRows: Car
           </text>
         </svg>
       ) : null}
-      {tip ? <ChartTipCard tip={tip} width={width} /> : null}
+      {tip ? <ChartTipCard tip={tip} width={width} tap={tap} /> : null}
     </div>
   );
 };
@@ -244,7 +246,7 @@ export const CareerRaceScreen = ({ sessionId }: { sessionId: string }) => {
         </p>
         <ChapterContext row={row} chapterRows={chapterRows} />
         <p className="caption caption--secondary" style={{ margin: '6px 0 0', fontSize: 13 }}>
-          The ink tick marks the chapter median · ○ a day that ended early · click any other dot to open its race
+          The ink tick marks the chapter median · ○ a day that ended early · <PointerOpen what="any other dot" then="to open its race" />
         </p>
         <nav className="career-race__nav" aria-label={`Neighbouring ${row.seriesShort} races`}>
           {previous ? (

@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { ChartTipCard, chartFont, useMeasuredWidth, type ChartTip } from '../app/charts';
 import { Unavailable } from '../app/components';
+import { useTapPreview, type TapKey } from '../app/tapPreview';
 import type { LiveHistorySample, LiveSessionHistory } from '../data/liveHistoryModel';
 import { sessionOrderWording, type SessionOrderWording } from '../data/liveSessionModel';
 import {
@@ -207,6 +208,8 @@ export const LiveRunningOrder = ({
   const svgRef = useRef<SVGSVGElement | null>(null);
   const [tip, setTip] = useState<ChartTip | null>(null);
   const [focusedId, setFocusedId] = useState<string | null>(null);
+  /* Round 9: on a phone the first tap reads a line, a crossing or a ladder row, as hover does; a tap elsewhere lets go. */
+  const tap = useTapPreview();
   const reducedMotion = useReducedMotion();
   const series = useMemo(() => fullFieldRunningOrderSeries(history), [history]);
   const latestSample = history?.samples.at(-1) ?? null;
@@ -296,29 +299,30 @@ export const LiveRunningOrder = ({
     setTip(null);
   };
 
-  const onMove = (event: React.MouseEvent<SVGSVGElement>) => {
-    if (!svgRef.current || !history || !timeDomain) return;
+  const onMove = (event: React.MouseEvent<Element>): TapKey | null => {
+    if (!svgRef.current || !history || !timeDomain) return null;
     const bounds = svgRef.current.getBoundingClientRect();
     const cursorX = event.clientX - bounds.left;
     const cursorY = event.clientY - bounds.top;
     if (cursorX < margin.left || cursorX > plotRight || cursorY < margin.top || cursorY > margin.top + plotHeight) {
       clearFocus();
-      return;
+      return null;
     }
     const hit = nearestRunningOrderSegment(renderedPixelSegments, cursorX, cursorY);
     if (!hit) {
       clearFocus();
-      return;
+      return null;
     }
     const cursorTime = timeDomain.startMs + ((cursorX - margin.left) / plotWidth) * (timeDomain.endMs - timeDomain.startMs);
     const sampleIndex = sampleIndexAtOrBefore(history, cursorTime);
     const nextTip = tipFor(hit.driverId, sampleIndex, hit.x, hit.y);
     if (!nextTip) {
       clearFocus();
-      return;
+      return null;
     }
     setFocusedId(hit.driverId);
     setTip(nextTip);
+    return `${hit.driverId}@${sampleIndex}`;
   };
 
   return (
@@ -356,8 +360,7 @@ export const LiveRunningOrder = ({
             data-focused-driver-id={focusedId ?? ''}
             data-visible-driver-ids={ladder.map((entry) => entry.id).join(',')}
             data-lapped-upstream-count={lappedUpstream.length}
-            onMouseMove={onMove}
-            onMouseLeave={clearFocus}
+            {...tap.surface({ find: onMove, clear: clearFocus })}
           >
             <defs>
               <clipPath id={clipId}><rect x={margin.left} y={margin.top} width={plotWidth} height={plotHeight} /></clipPath>
@@ -433,7 +436,9 @@ export const LiveRunningOrder = ({
                     x: x(crossing.checkedAtMs),
                     y: y(crossing.rank),
                     title: crossing.direction === 'ahead_of' ? `ahead of ${crossing.rivalName}` : `behind ${crossing.rivalName}`,
-                    detail: crossing.lap === null ? null : `lap ${crossing.lap}`
+                    detail: crossing.lap === null ? null : `lap ${crossing.lap}`,
+                    over: y(crossing.rank) - 5,
+                    under: y(crossing.rank) + 5
                   } satisfies ChartTip;
                   return <circle
                     key={crossing.id}
@@ -449,8 +454,8 @@ export const LiveRunningOrder = ({
                     strokeWidth={2}
                     tabIndex={0}
                     aria-label={`${crossingTip.title}${crossing.lap === null ? '' : `, lap ${crossing.lap}`}`}
-                    onMouseMove={(event) => { event.stopPropagation(); setFocusedId(latestSample.bryceId); setTip(crossingTip); }}
-                    onMouseLeave={clearFocus}
+                    {...tap.target(`crossing-${crossing.id}`, { show: () => { setFocusedId(latestSample.bryceId); setTip(crossingTip); }, hide: clearFocus })}
+                    onMouseMove={(event) => event.stopPropagation()}
                     onFocus={() => { setFocusedId(latestSample.bryceId); setTip(crossingTip); }}
                     onBlur={clearFocus}
                   />;
@@ -485,8 +490,7 @@ export const LiveRunningOrder = ({
                   aria-label={`${entry.bryce ? 'Bryce Aron, car 9' : entry.name}, P${entry.rank}, ${ariaGap}${roleWord ? `, ${roleWord}` : ''}`}
                   onFocus={() => { setFocusedId(entry.id); if (currentTip) setTip(currentTip); }}
                   onBlur={clearFocus}
-                  onMouseEnter={() => { setFocusedId(entry.id); if (currentTip) setTip(currentTip); }}
-                  onMouseLeave={clearFocus}
+                  {...tap.target(`row-${entry.id}`, { show: () => { setFocusedId(entry.id); if (currentTip) setTip(currentTip); }, hide: clearFocus })}
                 >
                   <circle data-ladder-dot cx={plotRight + 9} cy={rowY} r={4.5} fill={color} stroke="var(--surface-1)" strokeWidth={1.5} />
                   {entry.bryce ? (
@@ -543,7 +547,7 @@ export const LiveRunningOrder = ({
           <div className="sr-only" aria-label={`Current ${orderLabel} near Bryce`}>
             {ladder.map((entry) => <span key={entry.id}>{entry.bryce ? 'Bryce Aron, car 9' : entry.name}: P{entry.rank}, {entry.bryce ? 'Bryce' : orderGapWords(latestSample, entry.id, wording.currency)}. </span>)}
           </div>
-          {tip ? <ChartTipCard tip={tip} width={width} /> : null}
+          {tip ? <ChartTipCard tip={tip} width={width} tap={tap} /> : null}
         </>
       ) : (
         <Unavailable>{wording.emptyState}</Unavailable>

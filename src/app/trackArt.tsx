@@ -4,6 +4,7 @@ import type { ResolvedHeatSection } from '../data/sectionObservations';
 import { ChartTipCard, chartFont, inkGoldDiverging, useMeasuredWidth, type ChartTip } from './charts';
 import { ordinal } from './format';
 import { switchValue } from '../review/switches';
+import { useTapPreview } from './tapPreview';
 
 /** The heat-map / section-intelligence layer (Brief H). `resolved` carries the
  *  curated section spans already joined to Bryce's percentile for the scope;
@@ -116,6 +117,9 @@ export const TrackArt = ({
   /* A pass mark owns the tip while hovered, so the section nearest-point hover
    * doesn't fight it (same pattern as the lap chart's inflection dots). */
   const markTipActive = useRef(false);
+  /* Round 9: on a phone a tap reads the section (or pass mark) under it, as
+   * hover does; a tap off the track, or anywhere else, lets go. */
+  const tap = useTapPreview();
   const [, , viewWidth, viewHeight] = outline.viewBox.split(' ').map(Number);
   const aspect = viewHeight / viewWidth;
   const outside = labelPlacement === 'outside';
@@ -546,10 +550,40 @@ export const TrackArt = ({
     showTipFor(found, hit.sample);
   };
 
-  const handleLeave = () => {
+  const handleLeave = (event: React.PointerEvent<HTMLDivElement>) => {
+    /* A finger leaves as it lifts: what it tapped stays read. */
+    if (event.pointerType === 'touch') return;
     setHoveredFamily(null);
     if (selectedIndex === null) setTip(null);
   };
+
+  /* A finger's tap: the section (or untimed stretch) under it, read exactly as
+   * hover reads it; off the track, nothing. Returns what it read. */
+  const readAt = (clientX: number, clientY: number): string | null => {
+    setSelectedIndex(null);
+    const hit = hasHeat ? nearestSample(clientX, clientY) : null;
+    if (!hit || hit.dist > px(18)) {
+      setHoveredFamily(null);
+      setTip(null);
+      return null;
+    }
+    const found = heatSections.find((section) => sectionContainsT(section, hit.sample.t));
+    if (!found) {
+      setHoveredFamily(null);
+      showUntimedTip(hit.sample);
+      return `untimed-${Math.round(hit.sample.t * 200)}`;
+    }
+    setHoveredFamily(found.familyId);
+    showTipFor(found, hit.sample);
+    return `section-${heatSections.indexOf(found)}`;
+  };
+  const letGoOfTap = () => {
+    markTipActive.current = false;
+    setHoveredFamily(null);
+    setSelectedIndex(null);
+    setTip(null);
+  };
+  const tapSurface = tap.surface({ find: (event) => readAt(event.clientX, event.clientY), clear: letGoOfTap });
 
   /* Touch / click: a tap ON an untimed stretch explains it; anywhere else
    * cycles through the timed sections (Brief E). */
@@ -586,7 +620,9 @@ export const TrackArt = ({
       }}
       onPointerMove={hasHeat ? handleMove : undefined}
       onPointerLeave={hasHeat ? handleLeave : undefined}
-      onClick={hasHeat ? handleActivate : undefined}
+      onPointerDown={hasHeat ? tapSurface.onPointerDown : undefined}
+      onPointerUp={hasHeat ? tapSurface.onPointerUp : undefined}
+      onClick={hasHeat ? (event) => tap.click(event, () => handleActivate(event)) : undefined}
     >
       {width > 0 ? (
         <svg
@@ -755,11 +791,13 @@ export const TrackArt = ({
                 data-pass-mark={mark.id}
                 aria-label={`Lap ${mark.lap}: a pass involving Bryce, ${mark.direction === 'gain' ? `past ${mark.otherName}` : `${mark.otherName} by him`}`}
                 style={{ cursor: 'pointer' }}
-                onMouseEnter={() => showPassTip(mark)}
-                onMouseLeave={() => {
-                  markTipActive.current = false;
-                  setTip(null);
-                }}
+                {...tap.target(`pass-${mark.id}`, {
+                  show: () => showPassTip(mark),
+                  hide: () => {
+                    markTipActive.current = false;
+                    setTip(null);
+                  }
+                })}
               />
             </g>
           ))}
@@ -781,15 +819,16 @@ export const TrackArt = ({
                         r={px(13)}
                         fill="transparent"
                         style={{ cursor: 'default' }}
-                        onMouseEnter={() =>
-                          setTip({
-                            x: toScreen(arc.apex).x,
-                            y: toScreen(arc.apex).y,
-                            title: `Turn ${annotation.corner}`,
-                            detail: annotation.note
-                          })
-                        }
-                        onMouseLeave={() => setTip(null)}
+                        {...tap.target(`turn-${annotation.corner}`, {
+                          show: () =>
+                            setTip({
+                              x: toScreen(arc.apex).x,
+                              y: toScreen(arc.apex).y,
+                              title: `Turn ${annotation.corner}`,
+                              detail: annotation.note
+                            }),
+                          hide: () => setTip(null)
+                        })}
                       />
                     </>
                   ) : null}
@@ -874,7 +913,7 @@ export const TrackArt = ({
           ) : null}
         </>
       ) : null}
-      {tip ? <ChartTipCard tip={tip} width={measuredWidth} /> : null}
+      {tip ? <ChartTipCard tip={tip} width={measuredWidth} tap={tap} /> : null}
     </div>
   );
 };

@@ -1,7 +1,8 @@
 import { useMemo, useRef, useState } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { Card, ScreenHead, SourcePill, Unavailable } from '../app/components';
-import { ChartTipCard, chartFont, useMeasuredWidth, type ChartTip } from '../app/charts';
+import { ChartTipCard, chartFont, useMeasuredWidth, PointerOpen, type ChartTip } from '../app/charts';
+import { useTapPreview } from '../app/tapPreview';
 import { trackOutlineFor } from '../assets/tracks';
 import { formatDate, formatGain, formatNumber, formatPosition } from '../app/format';
 import { Link, useRouter } from '../app/router';
@@ -58,6 +59,8 @@ const SeasonSpine = ({ rows }: { rows: UiSeasonIndexRow[] }) => {
   const { navigate } = useRouter();
   const [hovered, setHovered] = useState<number | null>(null);
   const [tip, setTip] = useState<ChartTip | null>(null);
+  /* Round 9: on a phone the first tap on a round reads it, the second (or the card's button) opens it. */
+  const tap = useTapPreview();
 
   const ordered = rows;
   const n = ordered.length;
@@ -111,13 +114,13 @@ const SeasonSpine = ({ rows }: { rows: UiSeasonIndexRow[] }) => {
     setTip(null);
   };
 
-  const onMove = (event: React.MouseEvent<SVGSVGElement>) => {
+  const onMove = (event: React.MouseEvent<Element>): number | null => {
     const bounds = svgRef.current?.getBoundingClientRect();
-    if (!bounds) return;
+    if (!bounds) return null;
     const mouseX = event.clientX - bounds.left;
     if (mouseX < margin.left - 12 || mouseX > width - margin.right + 12) {
       clearHover();
-      return;
+      return null;
     }
     const index = Math.min(n - 1, Math.max(0, Math.round(((mouseX - margin.left) / plotWidth) * (n - 1))));
     const row = ordered[index];
@@ -138,6 +141,7 @@ const SeasonSpine = ({ rows }: { rows: UiSeasonIndexRow[] }) => {
         .join(' · '),
       action: 'open the race page'
     });
+    return index;
   };
 
   return (
@@ -149,11 +153,11 @@ const SeasonSpine = ({ rows }: { rows: UiSeasonIndexRow[] }) => {
           height={height}
           role="img"
           aria-label="Season results and championship standing, round by round"
-          onMouseMove={onMove}
-          onMouseLeave={clearHover}
-          onClick={() => {
-            if (hovered !== null) navigate(`/races/${encodeURIComponent(ordered[hovered].sessionId)}`);
-          }}
+          {...tap.surface({
+            find: onMove,
+            clear: clearHover,
+            open: (index) => () => navigate(`/races/${encodeURIComponent(ordered[index as number].sessionId)}`)
+          })}
           style={{ cursor: hovered !== null ? 'pointer' : 'default' }}
         >
           <text x={margin.left} y={15} fill="var(--ink-secondary)" fontFamily={chartFont} fontSize={15} fontWeight={550}>
@@ -266,7 +270,7 @@ const SeasonSpine = ({ rows }: { rows: UiSeasonIndexRow[] }) => {
           </text>
         </svg>
       ) : null}
-      {tip ? <ChartTipCard tip={tip} width={width} /> : null}
+      {tip ? <ChartTipCard tip={tip} width={width} tap={tap} /> : null}
     </div>
   );
 };
@@ -525,8 +529,7 @@ export const RacesScreen = ({ livePayload = null }: { livePayload?: LiveReadines
                 between it and the completed rows, so the whole card reads as
                 one timeline — future at the top, past running down. */}
             <p className="caption caption--secondary races-index__legend">
-              Gold marks a top-5 finish · ○ a day that ended early · the quiet line is his championship position · click any
-              round
+              Gold marks a top-5 finish · ○ a day that ended early · the quiet line is his championship position · <PointerOpen what="any round" />
             </p>
             <SeasonSpine rows={rows} />
             {remaining.length > 0 ? <RemainingSeason season={season} rounds={remaining} livePayload={livePayload} /> : null}

@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { TAP_CARD, TapAction, useTouchPlacement, type TapPreview } from './tapPreview';
 
 /* House chart wrappers — mark specs enforced once (dataviz method):
  * 2px lines, recessive grid, tabular tick labels, tooltip always on,
@@ -121,6 +122,49 @@ export const useCoarsePointer = (): boolean => {
   return coarse;
 };
 
+/* ---------- pointer words (round 9) ----------
+ * A caption that says "click any dot" is wrong on a phone, where the first
+ * tap reads a mark and the second opens it (tapPreview.tsx). One place for the
+ * words: under a mouse every caption keeps exactly what it said; under a
+ * finger it says what the finger does. */
+export interface PointerWords {
+  coarse: boolean;
+  /** "click" / "tap": a plain link, which one tap opens. */
+  click: string;
+  /** "hover" / "tap": a mark that only reads. */
+  hover: string;
+  /** A mark whose hover reads it and whose click opens it. `then` is what the
+   *  click does ("to open its race"); a mouse reads "click {what} {then}", a
+   *  finger "tap {what} for its card, tap again {then}". */
+  open: (what: string, then?: string) => string;
+}
+
+export const pointerWords = (coarse: boolean): PointerWords => ({
+  coarse,
+  click: coarse ? 'tap' : 'click',
+  hover: coarse ? 'tap' : 'hover',
+  open: (what, then = '') =>
+    coarse ? `tap ${what} for its card, tap again ${then || 'to open'}` : then ? `click ${what} ${then}` : `click ${what}`
+});
+
+export const usePointerWords = (): PointerWords => pointerWords(useCoarsePointer());
+
+/** A caption's first word, capitalised: `sentence(words.open('a line', 'to open the race'))`. */
+export const sentence = (text: string) => text.charAt(0).toUpperCase() + text.slice(1);
+
+/** The same words as caption elements, so a caption needs no pointer state of
+ *  its own: `<PointerOpen what="any dot" then="to open its race" />` for a mark
+ *  that reads then opens, `<PointerWord mouse="Click" touch="Tap" />` for a link. */
+export const PointerOpen = ({ what, then, start = false }: { what: string; then?: string; start?: boolean }) => {
+  const text = usePointerWords().open(what, then);
+  return <>{start ? sentence(text) : text}</>;
+};
+
+export const PointerWord = ({ mouse, touch }: { mouse: string; touch: string }) => {
+  const coarse = useCoarsePointer();
+  return <>{coarse ? touch : mouse}</>;
+};
+
 /* ---------- house hover tooltip (white card, no delay, mark-anchored) ---------- */
 
 export interface ChartTip {
@@ -129,9 +173,37 @@ export interface ChartTip {
   title: string;
   detail?: string | null;
   action?: string | null;
+  /** For the touch card only: the y just above the whole mark (a line, a
+   *  round's two marks), so the card never covers it. Defaults to `y`. */
+  over?: number;
+  /** For the touch card only: the y just below the mark, for when it has to
+   *  sit under it (no room above on the screen). Defaults to a little under `y`. */
+  under?: number;
 }
 
-export const ChartTipCard = ({ tip, width }: { tip: ChartTip; width: number }) => (
+/** The house tooltip. With a mouse it is the card it always was. On a touch
+ *  screen (or while a tap holds a preview) it is the touch card: wrapped to
+ *  the screen, placed above the mark (below when the screen has no room),
+ *  and, with `tap`, carrying the mark's own "Open the race →". */
+export const ChartTipCard = ({ tip, width, tap }: { tip: ChartTip; width: number; tap?: TapPreview }) => {
+  const coarse = useCoarsePointer();
+  if (coarse || (tap && tap.armed !== null)) return <TouchTipCard tip={tip} tap={tap} />;
+  return <MouseTipCard tip={tip} width={width} />;
+};
+
+const TouchTipCard = ({ tip, tap }: { tip: ChartTip; tap?: TapPreview }) => {
+  const ref = useRef<HTMLDivElement | null>(null);
+  const place = useTouchPlacement(ref, tip.x, tip.over ?? tip.y, tip.under ?? tip.y + 16, `${tip.title}|${tip.detail ?? ''}|${tap?.openArmed ? 1 : 0}`);
+  return (
+    <div ref={ref} className="tap-card" style={tap ? place : { ...place, pointerEvents: 'none' }} {...{ [TAP_CARD]: '' }} role="status">
+      <strong>{tip.title}</strong>
+      {tip.detail ? <span className="tap-card__detail"> · {tip.detail}</span> : null}
+      <TapAction tap={tap} label={tip.action} />
+    </div>
+  );
+};
+
+const MouseTipCard = ({ tip, width }: { tip: ChartTip; width: number }) => (
   <div
     style={{
       position: 'absolute',

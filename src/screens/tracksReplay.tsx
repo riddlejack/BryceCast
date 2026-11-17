@@ -4,7 +4,6 @@ import { ordinal } from '../app/format';
 import type { LiveReadiness, ReplaySourceGap } from '../app/useReadiness';
 import type { ReplaySession } from '../app/useReplaySession';
 import type { LiveSessionHistory } from '../data/liveHistoryModel';
-import { livePosition } from '../data/liveMotionModel';
 import { replayDeepLinkQuery } from '../data/liveRaceShellModel';
 import { uiDataPackage } from '../data/uiDataPackage';
 import { ReplayBar, replayDeskPhaseOf, useReplayStage } from './LiveScreen';
@@ -44,17 +43,15 @@ const TracksReplay = ({
   // then the running position. A fixed width, so a change never moves the bar.
   const startPosition =
     (uiDataPackage.screens.raceDebrief.seasonIndex ?? []).find((row) => row.sessionId === sessionId)?.startPosition ?? null;
-  const running = stage.bryceRow ? livePosition(stage.bryceRow) : null;
+  // The running place is the stage's one reading, the same the race bar shows.
   const place =
     stage.shownPhase === 'prestart'
       ? startPosition
         ? `Starts ${ordinal(startPosition)}`
         : null
-      : stage.awaitingRace || phase === 'cueing'
-        ? null
-        : running
-          ? `Bryce P${running}`
-          : null;
+      : stage.place !== null
+        ? `Bryce P${stage.place}`
+        : null;
 
   const liveHref = `/live${replayDeepLinkQuery(replay.getReplayParams()) || `?replay=${encodeURIComponent(replay.session?.sessionKey ?? '')}`}&from=${encodeURIComponent(sessionId)}`;
 
@@ -78,7 +75,7 @@ const TracksReplay = ({
       {/* The bar's room is held before its axis lands, so the stage never moves down. */}
       <div className="tracks-replay__race">
         {stage.axis ? (
-          <RaceBar replay={replay} axis={stage.axis} timeline={replay.timeline} virtualNow={stage.virtualNow} now={stage.now} onSeek={stage.seek} />
+          <RaceBar replay={replay} axis={stage.axis} timeline={replay.timeline} virtualNow={stage.virtualNow} now={stage.now} place={stage.place} onSeek={stage.seek} />
         ) : null}
       </div>
       <TrackPanel

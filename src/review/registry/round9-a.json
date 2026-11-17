@@ -1,0 +1,46 @@
+{
+  "lane": "round-9",
+  "entries": [
+    {
+      "id": "live-tab",
+      "page": "/",
+      "title": "The Live tab shows only while a session is on",
+      "switch": "livetab",
+      "values": [
+        {
+          "value": null,
+          "label": "only while INDY NXT timing is live, and the half hour before a session (new)"
+        },
+        {
+          "value": "always",
+          "label": "always there, as before"
+        }
+      ],
+      "look": "Today the nav reads Now · Race Week · Races · Tracks · Career. This address loads the live-timing test feed, so Live comes back with its green dot, as it will on a race weekend. Replays still open on /live from race pages, Race Week and Tracks.",
+      "with": {
+        "fixture": "ready"
+      },
+      "anchor": ".topnav",
+      "added": "2026-11-17T10:00",
+      "reviewed": false
+    },
+    {
+      "id": "replay-phone",
+      "page": [
+        "/tracks",
+        "/live"
+      ],
+      "title": "The replay on a phone",
+      "switch": null,
+      "noswitch": "these were faults on the phone; nothing to switch back to",
+      "look": "Press Replay this race on a phone: no keyboard hints, a pile of cars shows one plate and a quiet +n (his 9 always on top), cars land at their gaps straight after a seek, and the track fills its box with no empty band. The big place and the race bar's place now always agree.",
+      "with": {
+        "venue": "WeatherTech Raceway Laguna Seca",
+        "visit": "session_indy_nxt_2026_6758"
+      },
+      "anchor": ".tracks-head__pickers",
+      "added": "2026-11-17T13:30",
+      "reviewed": false
+    }
+  ]
+}

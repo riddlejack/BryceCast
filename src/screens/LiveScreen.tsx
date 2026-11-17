@@ -850,10 +850,35 @@ export const useReplayStage = ({
   const clockFormation = Boolean(replay && now?.beforeGreen && phase !== 'cueing' && phase !== 'ended');
   const awaitingRace = Boolean(replay && now && !now.beforeGreen && phase === 'prestart');
   const shownPhase: DeskPhase = clockFormation ? 'prestart' : awaitingRace ? 'race' : phase;
+
+  // After a jump of the clock, the timing panels hold their last frame,
+  // quietly dimmed, until the frame for the new moment lands, so the page
+  // never mixes two moments. The other cars on the track wait for it too: an
+  // old frame's gaps drawn at the new moment bunched them (round 9), and when
+  // the new frame lands every car takes its gap at once.
+  const jumpRef = useRef<{ epoch: number; atMs: number | null; wall: number }>({ epoch: replay?.clockEpoch ?? 0, atMs: null, wall: 0 });
+  if (replay && replay.clockEpoch !== jumpRef.current.epoch) {
+    jumpRef.current = { epoch: replay.clockEpoch, atMs: virtualNow(), wall: Date.now() };
+  }
+  const sourceMs = payload ? Date.parse(liveSourceCheckedAtOf(payload)) : NaN;
+  const jump = jumpRef.current;
+  const settling =
+    replay !== null &&
+    !clockFormation &&
+    !awaitingRace &&
+    jump.atMs !== null &&
+    Date.now() - jump.wall < 5_000 &&
+    (!Number.isFinite(sourceMs) || Math.abs(sourceMs - jump.atMs) > 8_000 + replay.playbackSpeed * 2_500);
+  if (!settling && jump.atMs !== null && Number.isFinite(sourceMs)) jump.atMs = null;
   const fieldCars = useMemo(
-    () => (shownPhase === 'race' && !awaitingRace ? fieldCarsOf(payload, fieldMode) : []),
-    [payload, fieldMode, shownPhase, awaitingRace]
+    () => (shownPhase === 'race' && !awaitingRace && !settling ? fieldCarsOf(payload, fieldMode) : []),
+    [payload, fieldMode, shownPhase, awaitingRace, settling]
   );
+  // His place, one reading for the whole page: the frame's own (the running
+  // order and the big position read the same row), and none while the frame
+  // for this moment is still on its way, so the bar and the header never
+  // show two different places.
+  const place = !settling && !awaitingRace && (shownPhase === 'race' || shownPhase === 'ended') && bryceRow ? livePosition(bryceRow) : null;
 
   // The keys: ←/→ a lap (Shift: five), Space pauses. Never while typing, and
   // the arrows are left to the 3D model when it has the focus.
@@ -953,7 +978,7 @@ export const useReplayStage = ({
   useEffect(() => {
     if (simulatedFrame && requestTimeline) requestTimeline();
   }, [simulatedFrame, requestTimeline]);
-  return { identity, isRace, flag, lap, totalLaps, sessionName, fieldMode, trail, cars, bryceRow, bryceLabel, race, virtualNow, axis, now, clockFormation, awaitingRace, shownPhase, fieldCars, readout, seek };
+  return { identity, isRace, flag, lap, totalLaps, sessionName, fieldMode, trail, cars, bryceRow, bryceLabel, race, virtualNow, axis, now, clockFormation, awaitingRace, shownPhase, fieldCars, settling, place, readout, seek };
 };
 
 const LiveDesk = ({
@@ -977,26 +1002,9 @@ const LiveDesk = ({
   onExit?: () => void;
   storyLink: ReactNode;
 }) => {
-  const { identity, isRace, fieldMode, trail, bryceLabel, race, virtualNow, axis, now, clockFormation, awaitingRace, shownPhase, fieldCars, readout, seek } =
+  const { identity, isRace, fieldMode, trail, bryceLabel, race, axis, now, awaitingRace, shownPhase, fieldCars, settling, place, readout, seek, virtualNow } =
     useReplayStage({ payload, phase, history, sessionKind, replay });
   const [hoverCar, setHoverCar] = useState<string | null>(null);
-  // After a jump of the clock, the panels that show the timing hold their
-  // last frame, quietly dimmed, until the frame for the new moment lands, so
-  // the page never mixes two moments.
-  const jumpRef = useRef<{ epoch: number; atMs: number | null; wall: number }>({ epoch: replay?.clockEpoch ?? 0, atMs: null, wall: 0 });
-  if (replay && replay.clockEpoch !== jumpRef.current.epoch) {
-    jumpRef.current = { epoch: replay.clockEpoch, atMs: virtualNow(), wall: Date.now() };
-  }
-  const sourceMs = payload ? Date.parse(liveSourceCheckedAtOf(payload)) : NaN;
-  const jump = jumpRef.current;
-  const settling =
-    replay !== null &&
-    !clockFormation &&
-    !awaitingRace &&
-    jump.atMs !== null &&
-    Date.now() - jump.wall < 5_000 &&
-    (!Number.isFinite(sourceMs) || Math.abs(sourceMs - jump.atMs) > 8_000 + replay.playbackSpeed * 2_500);
-  if (!settling && jump.atMs !== null && Number.isFinite(sourceMs)) jump.atMs = null;
 
   return (
     <section className={`live-desk${settling ? ' live-desk--settling' : ''}`} data-live-desk data-desk-phase={shownPhase} aria-label="The race, now">
@@ -1012,7 +1020,7 @@ const LiveDesk = ({
       {replay ? (
         <>
           <ReplayBar replay={replay} payload={payload} onExit={onExit} lead={readout} />
-          {axis ? <RaceBar replay={replay} axis={axis} timeline={replay.timeline} virtualNow={virtualNow} now={now} onSeek={seek} /> : null}
+          {axis ? <RaceBar replay={replay} axis={axis} timeline={replay.timeline} virtualNow={virtualNow} now={now} place={isRace ? place : undefined} onSeek={seek} /> : null}
         </>
       ) : payload ? (
         <div className="live-desk__bar live-desk__bar--live">

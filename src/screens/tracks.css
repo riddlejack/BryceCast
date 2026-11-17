@@ -248,13 +248,9 @@
   gap: 28px var(--yoy-gap) !important;
 }
 
-/* The gap before the footer: the page's own gap between sections (the footer's
- * rule then stands where the next section's rule would). Was the page's 96 px
- * bottom padding plus the footer's 40 px margin, 136 px, against 72 px between
- * the sections above. Desktop only: a phone keeps the room the tab bar needs. */
-@media (min-width: 900px) {
-  .page.tracks-page { padding-bottom: max(0px, calc(var(--section-gap) - 40px)); }
-}
+/* The gap before the footer is now every page's (round 9, theme.css: the
+ * footer's margin is one section gap and the page keeps no bottom padding), so
+ * the Tracks page needs no rule of its own here. */
 
 .tracks-page .tracks-years > .row:not(.row--between) > * {
   min-width: 0 !important;
@@ -389,3 +385,8 @@
 .tracks-page .tracks-replay .track3d__stage { max-height: min(calc(100dvh - 290px), 940px); min-height: 360px; }
 .tracks-page .tracks-replay .track3d__caption { margin-top: 6px; font-size: 12px; }
 .tracks-page .tracks-replay__out { margin: 0; font-size: 13.5px; }
+/* Phones: the stage takes the model's own shape (track3d.css), never a floor
+ * that left empty paper above and below it (round 9). */
+@media (max-width: 700px) {
+  .tracks-page .tracks-replay .track3d__stage { min-height: 0; }
+}

@@ -11,10 +11,11 @@
  *  No lap, sector, weather, or team-pace claims: Euro's records hold none. */
 
 import { useMemo, useState } from 'react';
-import { ChartTipCard, chartFont, focusFade, useMeasuredWidth, type ChartTip } from '../app/charts';
+import { ChartTipCard, chartFont, focusFade, useMeasuredWidth, PointerOpen, PointerWord, type ChartTip } from '../app/charts';
 import { SourcePill } from '../app/components';
 import { asNumber, ordinal } from '../app/format';
 import { useRouter } from '../app/router';
+import { useTapPreview } from '../app/tapPreview';
 import { Link } from '../app/router';
 import { uiDataPackage } from '../data/uiDataPackage';
 import { chapterTint, raceHref } from './careerExplorer';
@@ -62,6 +63,7 @@ const QualiToRace = () => {
   const { navigate } = useRouter();
   const [hovered, setHovered] = useState<number | null>(null);
   const [tip, setTip] = useState<ChartTip | null>(null);
+  const tap = useTapPreview();
 
   const layer = uiDataPackage.screens.careerLab.qualifyingLayer;
   const euroSummary = useMemo(() => (layer.bySeries ?? []).find((row) => row.seriesName === EURO_SERIES) ?? null, [layer]);
@@ -131,34 +133,38 @@ const QualiToRace = () => {
                     stroke="transparent"
                     strokeWidth={14}
                     style={{ cursor: 'pointer' }}
-                    onMouseEnter={() => {
-                      setHovered(index);
-                      const outcome = row.conversionOutcome === 'ahead' ? 'gained on his grid' : row.conversionOutcome === 'behind' ? 'lost ground' : 'held station';
-                      setTip({
-                        x: (leftX + rightX) / 2,
-                        y: (y1 + y2) / 2 - 6,
-                        title: `${row.eventName.replace('Euroformula Open ', '')} · ${row.raceLabel}`,
-                        detail: `qualified P${row.qualiRank} → finished P${row.finish} · ${outcome}`,
-                        action: 'Open the race'
-                      });
-                    }}
-                    onMouseLeave={() => {
-                      setHovered(null);
-                      setTip(null);
-                    }}
-                    onClick={() => navigate(raceHref(row.raceSessionId))}
+                    {...tap.target(row.raceSessionId, {
+                      show: () => {
+                        setHovered(index);
+                        const outcome = row.conversionOutcome === 'ahead' ? 'gained on his grid' : row.conversionOutcome === 'behind' ? 'lost ground' : 'held station';
+                        setTip({
+                          x: (leftX + rightX) / 2,
+                          y: (y1 + y2) / 2 - 6,
+                          over: Math.min(y1, y2) - 6,
+                          under: Math.max(y1, y2) + 6,
+                          title: `${row.eventName.replace('Euroformula Open ', '')} · ${row.raceLabel}`,
+                          detail: `qualified P${row.qualiRank} → finished P${row.finish} · ${outcome}`,
+                          action: 'Open the race'
+                        });
+                      },
+                      hide: () => {
+                        setHovered(null);
+                        setTip(null);
+                      },
+                      open: () => navigate(raceHref(row.raceSessionId))
+                    })}
                   />
                 </g>
               );
             })}
           </svg>
         ) : null}
-        {tip ? <ChartTipCard tip={tip} width={width} /> : null}
+        {tip ? <ChartTipCard tip={tip} width={width} tap={tap} /> : null}
       </div>
       <p className="euro-caption">
         Each line is one race, qualifying slot to flag · a Euro-magenta line marks a race he gained on his grid · P1 at the top.
         Only the {races.length} of 17 races whose grid a qualifying session set are shown. Euro’s three-race weekends also use
-        reverse and second grids, which aren’t a read on qualifying. Click a line to open the race.
+        reverse and second grids, which aren’t a read on qualifying. <PointerOpen start what="a line" then="to open the race" />.
       </p>
     </div>
   );
@@ -239,7 +245,7 @@ const EuroVenues = ({ races }: { races: EuroRace[] }) => {
       </div>
       <p className="euro-caption">
         Field beat = the average share of the grid he finished ahead of, across each venue’s races. Small samples, so read it as
-        texture. Click a venue to open his best race there.
+        texture. <PointerWord mouse="Click" touch="Tap" /> a venue to open his best race there.
       </p>
     </div>
   );

@@ -3,6 +3,7 @@ import { ArrowLeft, Flag, Users } from 'lucide-react';
 import { Card, SourcePill, Stat, Unavailable, type SourceEntry } from '../app/components';
 import { ChartTipCard, chartFont, inkGoldDiverging, useCoarsePointer, useMeasuredWidth, type ChartTip } from '../app/charts';
 import { TrackArt } from '../app/trackArt';
+import { useTapPreview } from '../app/tapPreview';
 import { trackOutlineFor, type TrackOutline } from '../assets/tracks';
 import {
   hasDerivedRemainder,
@@ -109,6 +110,8 @@ export const LapChart = ({ story, building }: { story: LapChartStory; building?:
   const [focusedDriver, setFocusedDriver] = useState<string | null>(null);
   const [tip, setTip] = useState<ChartTip | null>(null);
   const dotTipActive = useRef(false);
+  /* Round 9: a tap reads a line or a gold moment as hover does; a tap elsewhere lets go. */
+  const tap = useTapPreview();
 
   const { totalLaps, fieldSize, drivers } = story.lapChart;
   const height = Math.max(280, Math.min(420, Math.round(width * 0.34)));
@@ -149,15 +152,15 @@ export const LapChart = ({ story, building }: { story: LapChartStory; building?:
     if (!dotTipActive.current) setTip(null);
   };
 
-  const onMove = (event: React.MouseEvent<SVGSVGElement>) => {
-    if (dotTipActive.current) return;
+  const onMove = (event: React.MouseEvent<Element>): string | null => {
+    if (dotTipActive.current) return null;
     const bounds = svgRef.current?.getBoundingClientRect();
-    if (!bounds) return;
+    if (!bounds) return null;
     const mouseX = event.clientX - bounds.left;
     const mouseY = event.clientY - bounds.top;
     if (mouseX < margin.left - 8 || mouseX > width - margin.right + 8 || mouseY < margin.top - 8 || mouseY > height - margin.bottom + 8) {
       clearHover();
-      return;
+      return null;
     }
     const lap = Math.min(Math.max(lapFromX(mouseX), 1), totalLaps);
     let best: { driver: RaceStoryLapDriver; position: number; distance: number } | null = null;
@@ -169,7 +172,7 @@ export const LapChart = ({ story, building }: { story: LapChartStory; building?:
     }
     if (!best || best.distance > 26) {
       clearHover();
-      return;
+      return null;
     }
     setFocusedDriver(best.driver.driverId);
     const lastLap = best.driver.laps[best.driver.laps.length - 1]?.[0] ?? totalLaps;
@@ -189,6 +192,7 @@ export const LapChart = ({ story, building }: { story: LapChartStory; building?:
         .filter(Boolean)
         .join(' · ')
     });
+    return `${best.driver.driverId}-${lap}`;
   };
 
   const lineFor = (driver: RaceStoryLapDriver) => driver.laps.map(([lap, position]) => `${x(lap)},${y(position)}`).join(' ');
@@ -202,8 +206,7 @@ export const LapChart = ({ story, building }: { story: LapChartStory; building?:
           height={height}
           role="img"
           aria-label="Running position of every car, lap by lap"
-          onMouseMove={onMove}
-          onMouseLeave={clearHover}
+          {...tap.surface({ find: onMove, clear: clearHover })}
         >
           {/* Live shell only: caution spans shade as they happen (same quiet
               wash as the Live page's gap chart). Never present on a debrief. */}
@@ -359,27 +362,29 @@ export const LapChart = ({ story, building }: { story: LapChartStory; building?:
                     cy={y(moment.toPosition)}
                     r={11}
                     fill="transparent"
-                    onMouseEnter={() => {
-                      dotTipActive.current = true;
-                      setFocusedDriver(null);
-                      setTip({
-                        x: x(moment.lap),
-                        y: y(moment.toPosition),
-                        title: `Lap ${moment.lap}`,
-                        detail: `P${moment.fromPosition ?? '—'} → P${moment.toPosition}${triggerCopy[moment.trigger] ? ` · ${triggerCopy[moment.trigger]}` : ''}`
-                      });
-                    }}
-                    onMouseLeave={() => {
-                      dotTipActive.current = false;
-                      setTip(null);
-                    }}
+                    {...tap.target(`moment-${moment.lap}-${moment.toPosition}`, {
+                      show: () => {
+                        dotTipActive.current = true;
+                        setFocusedDriver(null);
+                        setTip({
+                          x: x(moment.lap),
+                          y: y(moment.toPosition),
+                          title: `Lap ${moment.lap}`,
+                          detail: `P${moment.fromPosition ?? '—'} → P${moment.toPosition}${triggerCopy[moment.trigger] ? ` · ${triggerCopy[moment.trigger]}` : ''}`
+                        });
+                      },
+                      hide: () => {
+                        dotTipActive.current = false;
+                        setTip(null);
+                      }
+                    })}
                   />
                 </g>
               ))
             : null}
         </svg>
       ) : null}
-      {tip ? <ChartTipCard tip={tip} width={width} /> : null}
+      {tip ? <ChartTipCard tip={tip} width={width} tap={tap} /> : null}
     </div>
   );
 };
@@ -988,6 +993,7 @@ const RestartsCard = ({ story }: { story: RaceStoryPack }) => {
 const TeamStrip = ({ story }: { story: RaceStoryPack }) => {
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();
   const [tip, setTip] = useState<ChartTip | null>(null);
+  const tap = useTapPreview();
   const teammates = story.teammates;
   const fieldSize = Math.max(story.lapChart.fieldSize, ...teammates.map((teammate) => teammate.finishPosition ?? 1));
   const height = 66;
@@ -1049,15 +1055,17 @@ const TeamStrip = ({ story }: { story: RaceStoryPack }) => {
                   cy={axisY}
                   r={12}
                   fill="transparent"
-                  onMouseEnter={() => setTip({ x: pointX, y: axisY - 8, title: teammate.driverName, detail: detailParts.join(' · ') })}
-                  onMouseLeave={() => setTip(null)}
+                  {...tap.target(teammate.driverName, {
+                    show: () => setTip({ x: pointX, y: axisY - 8, under: axisY + 12, title: teammate.driverName, detail: detailParts.join(' · ') }),
+                    hide: () => setTip(null)
+                  })}
                 />
               </g>
             );
           })}
         </svg>
       ) : null}
-      {tip ? <ChartTipCard tip={tip} width={width} /> : null}
+      {tip ? <ChartTipCard tip={tip} width={width} tap={tap} /> : null}
     </div>
   );
 };

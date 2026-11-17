@@ -615,6 +615,8 @@
 .live-marks__dot { fill: var(--ink); stroke: var(--paper); stroke-width: 1.5; }
 .live-marks__no { font-family: var(--font-ui); font-size: 9.5px; font-weight: 700; fill: var(--paper); font-variant-numeric: tabular-nums; }
 .live-marks__car.is-focus .live-marks__dot { fill: var(--link); }
+/* A pile's count beside its one plate (round 9), haloed in paper so it reads over the track. */
+.live-marks__more { font-family: var(--font-ui); font-size: 10px; font-weight: 650; fill: var(--ink-secondary); font-variant-numeric: tabular-nums; paint-order: stroke; stroke: var(--paper); stroke-width: 3px; stroke-linejoin: round; pointer-events: none; }
 .live-marks__shadow { fill: rgba(30, 28, 26, 0.28); filter: blur(1.6px); }
 .live-marks__stem { stroke: var(--ink); stroke-width: 1.5; }
 .live-marks__foot { fill: var(--ink); }
@@ -663,6 +665,8 @@
 .race-bar__readout { font-size: 13px; font-weight: 600; color: var(--ink-primary); font-variant-numeric: tabular-nums; min-width: 13ch; }
 .race-bar__readout.is-pointing { color: var(--link); }
 .race-bar__keys { font-size: 12px; }
+/* Keys mean nothing on a phone or tablet: the hint is for a mouse and keyboard only (round 9). */
+@media (hover: none), (pointer: coarse) { .race-bar__keys { display: none; } }
 .race-bar__skip { margin-left: auto; }
 .race-bar__track { position: relative; min-width: 0; touch-action: none; user-select: none; }
 .race-bar__svg { display: block; cursor: pointer; }

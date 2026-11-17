@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { Card, SourcePill, Stat, Unavailable } from '../app/components';
-import { ChartTipCard, chartFont, focusFade, useCoarsePointer, useInViewOnce, useMeasuredWidth, useReducedMotion, type ChartTip } from '../app/charts';
+import { ChartTipCard, chartFont, focusFade, useCoarsePointer, useInViewOnce, useMeasuredWidth, useReducedMotion, PointerOpen, type ChartTip } from '../app/charts';
 import { asNumber, asString, ordinal } from '../app/format';
 import { restartBaselineSentence } from '../data/restartBaseline';
 import { Link, useRouter } from '../app/router';
+import { useTapPreview, type TapPreview } from '../app/tapPreview';
 import { uiDataPackage, type UiCareerMoment, type UiSeasonCampaign } from '../data/uiDataPackage';
 import { useImsaDaytonaStint } from '../data/imsaDaytonaStint';
 
@@ -195,6 +196,7 @@ export const TheClimb = () => {
   const { navigate } = useRouter();
   const [hovered, setHovered] = useState<number | null>(null);
   const [tip, setTip] = useState<ChartTip | null>(null);
+  const tap = useTapPreview();
 
   const n = rows.length;
   /* Full width on the page, so the chart grows with it: about a third as tall
@@ -251,9 +253,9 @@ export const TheClimb = () => {
     setTip(null);
   };
 
-  const onMove = (event: React.MouseEvent<SVGSVGElement>) => {
+  const onMove = (event: React.MouseEvent<Element>): number | null => {
     const bounds = svgRef.current?.getBoundingClientRect();
-    if (!bounds) return;
+    if (!bounds) return null;
     const mouseX = event.clientX - bounds.left;
     const mouseY = event.clientY - bounds.top;
     let best: { index: number; distance: number } | null = null;
@@ -263,11 +265,12 @@ export const TheClimb = () => {
     }
     if (!best || best.distance > 28) {
       clearHover();
-      return;
+      return null;
     }
     setHovered(best.index);
     const row = rows[best.index];
     setTip({ x: x(best.index), y: y(row.percentile), ...tipFor(row) });
+    return best.index;
   };
 
   if (n < 10) return null;
@@ -308,7 +311,7 @@ export const TheClimb = () => {
     >
       <p className="caption caption--secondary" style={{ margin: '0 0 8px' }}>
         Every race a dot, every chapter its color · rings mark named moments · higher = more of the field beaten · the line
-        follows his running form · ○ a day that ended early · click any dot to open its race
+        follows his running form · ○ a day that ended early · <PointerOpen what="any dot" then="to open its race" />
       </p>
       <div ref={viewRef}>
       <div ref={ref} style={{ width: '100%', position: 'relative' }}>
@@ -321,11 +324,7 @@ export const TheClimb = () => {
             aria-label={`Finishing percentile across every career race. Named moments: ${momentPoints
               .map((moment) => moment.shortLabel)
               .join(', ')}.`}
-            onMouseMove={onMove}
-            onMouseLeave={clearHover}
-            onClick={() => {
-              if (hovered !== null) navigate(raceHref(rows[hovered].sessionId));
-            }}
+            {...tap.surface({ find: onMove, clear: clearHover, open: (index) => () => navigate(raceHref(rows[index as number].sessionId)) })}
             style={{ cursor: hovered !== null ? 'pointer' : 'default' }}
           >
             {bands.map((band, index) => {
@@ -463,7 +462,7 @@ export const TheClimb = () => {
             )}
           </svg>
         ) : null}
-        {tip ? <ChartTipCard tip={tip} width={width} /> : null}
+        {tip ? <ChartTipCard tip={tip} width={width} tap={tap} /> : null}
       </div>
       </div>
     </Card>
@@ -477,6 +476,7 @@ export const ChapterStrip = ({ seriesName }: { seriesName: string }) => {
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();
   const { navigate } = useRouter();
   const [tip, setTip] = useState<ChartTip | null>(null);
+  const tap = useTapPreview();
   const chapterRows = useMemo(() => rows.filter((row) => row.seriesName === seriesName), [rows, seriesName]);
   if (chapterRows.length === 0) return null;
 
@@ -509,9 +509,11 @@ export const ChapterStrip = ({ seriesName }: { seriesName: string }) => {
               stroke={row.status === 'running' ? 'none' : chapterTint(row.seriesName)}
               strokeWidth={1.2}
               style={{ cursor: 'pointer' }}
-              onMouseEnter={() => setTip({ x: x(row.percentile), y: axisY - 6, ...tipFor(row) })}
-              onMouseLeave={() => setTip(null)}
-              onClick={() => navigate(raceHref(row.sessionId))}
+              {...tap.target(row.sessionId + index, {
+                show: () => setTip({ x: x(row.percentile), y: axisY - 6, under: axisY + dotRadius + 2, ...tipFor(row) }),
+                hide: () => setTip(null),
+                open: () => navigate(raceHref(row.sessionId))
+              })}
             />
           ))}
           <rect x={x(median) - 1.75} y={axisY - 9} width={3.5} height={18} rx={1.75} fill="var(--ink-primary)" />
@@ -523,7 +525,7 @@ export const ChapterStrip = ({ seriesName }: { seriesName: string }) => {
           </text>
         </svg>
       ) : null}
-      {tip ? <ChartTipCard tip={tip} width={width} /> : null}
+      {tip ? <ChartTipCard tip={tip} width={width} tap={tap} /> : null}
     </div>
   );
 };
@@ -590,6 +592,7 @@ const ConversionPlot = ({ rows }: { rows: CareerRow[] }) => {
   const { navigate } = useRouter();
   const [hovered, setHovered] = useState<number | null>(null);
   const [tip, setTip] = useState<ChartTip | null>(null);
+  const tap = useTapPreview();
 
   const height = 340;
   const margin = { top: 22, right: 18, bottom: 38, left: 44 };
@@ -611,9 +614,9 @@ const ConversionPlot = ({ rows }: { rows: CareerRow[] }) => {
     setTip(null);
   };
 
-  const onMove = (event: React.MouseEvent<SVGSVGElement>) => {
+  const onMove = (event: React.MouseEvent<Element>): number | null => {
     const bounds = svgRef.current?.getBoundingClientRect();
-    if (!bounds) return;
+    if (!bounds) return null;
     const mouseX = event.clientX - bounds.left;
     const mouseY = event.clientY - bounds.top;
     let best: { index: number; distance: number } | null = null;
@@ -625,11 +628,12 @@ const ConversionPlot = ({ rows }: { rows: CareerRow[] }) => {
     }
     if (!best || best.distance > 24) {
       clearHover();
-      return;
+      return null;
     }
     setHovered(best.index);
     const row = rows[best.index];
     setTip({ x: x(row.start ?? 1), y: y(row.finish), ...tipFor(row) });
+    return best.index;
   };
 
   return (
@@ -641,11 +645,7 @@ const ConversionPlot = ({ rows }: { rows: CareerRow[] }) => {
           height={height}
           role="img"
           aria-label="Start position against finish position for every filtered race"
-          onMouseMove={onMove}
-          onMouseLeave={clearHover}
-          onClick={() => {
-            if (hovered !== null) navigate(raceHref(rows[hovered].sessionId));
-          }}
+          {...tap.surface({ find: onMove, clear: clearHover, open: (index) => () => navigate(raceHref(rows[index as number].sessionId)) })}
           style={{ cursor: hovered !== null ? 'pointer' : 'default' }}
         >
           {ticks.map((tick) => (
@@ -712,7 +712,7 @@ const ConversionPlot = ({ rows }: { rows: CareerRow[] }) => {
           })}
         </svg>
       ) : null}
-      {tip ? <ChartTipCard tip={tip} width={width} /> : null}
+      {tip ? <ChartTipCard tip={tip} width={width} tap={tap} /> : null}
     </div>
   );
 };
@@ -723,6 +723,7 @@ const GroupedStrips = ({ rows, groupBy }: { rows: CareerRow[]; groupBy: GroupBy 
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();
   const { navigate } = useRouter();
   const [tip, setTip] = useState<ChartTip | null>(null);
+  const tap = useTapPreview();
 
   const groups = useMemo(() => {
     const keyFor = (row: CareerRow) =>
@@ -817,9 +818,11 @@ const GroupedStrips = ({ rows, groupBy }: { rows: CareerRow[]; groupBy: GroupBy 
                       stroke={row.status === 'running' ? 'none' : tint}
                       strokeWidth={1.2}
                       style={{ cursor: 'pointer' }}
-                      onMouseEnter={() => setTip({ x: x(row.percentile), y: rowY - 6, ...tipFor(row) })}
-                      onMouseLeave={() => setTip(null)}
-                      onClick={() => navigate(raceHref(row.sessionId))}
+                      {...tap.target(`${group.key}-${row.sessionId}-${index}`, {
+                        show: () => setTip({ x: x(row.percentile), y: rowY - 6, under: rowY + 6, ...tipFor(row) }),
+                        hide: () => setTip(null),
+                        open: () => navigate(raceHref(row.sessionId))
+                      })}
                     />
                   );
                 })}
@@ -841,7 +844,7 @@ const GroupedStrips = ({ rows, groupBy }: { rows: CareerRow[]; groupBy: GroupBy 
           })}
         </svg>
       ) : null}
-      {tip ? <ChartTipCard tip={tip} width={width} /> : null}
+      {tip ? <ChartTipCard tip={tip} width={width} tap={tap} /> : null}
     </div>
   );
 };
@@ -955,7 +958,7 @@ export const CareerExplorer = () => {
             </p>
             <ConversionPlot rows={withStart} />
             <p className="caption caption--secondary" style={{ margin: '6px 0 0' }}>
-              {wins > 0 ? 'gold marks a win · ' : ''}○ a day that ended early · click any dot to open its race
+              {wins > 0 ? 'gold marks a win · ' : ''}○ a day that ended early · <PointerOpen what="any dot" then="to open its race" />
               {withoutStart > 0
                 ? ` · ${withoutStart} ${withoutStart === 1 ? 'race' : 'races'} without a sourced grid position (${seriesWithoutStart.join(', ')}) not drawn`
                 : ''}
@@ -976,7 +979,7 @@ export const CareerExplorer = () => {
           </p>
           <GroupedStrips rows={filtered} groupBy={groupBy} />
           <p className="caption caption--secondary" style={{ margin: '6px 0 0' }}>
-            ○ a day that ended early · {coarse ? 'tap any dot to open its race' : 'hover any dot · click any dot to open its race'}
+            ○ a day that ended early · {coarse ? <PointerOpen what="any dot" then="to open its race" /> : 'hover any dot · click any dot to open its race'}
             {groupBy === 'conditions' ? ' · condition lanes cover races with a sourced report' : ''}
           </p>
         </>
@@ -1051,6 +1054,7 @@ export const RivalsCard = () => {
   /* No entrance animation on reading pages (site direction): the dots are placed at rest. */
   const swarmShown = true;
   const [tip, setTip] = useState<ChartTip | null>(null);
+  const tap = useTapPreview();
   const rivals = uiDataPackage.screens.careerLab.headToHead ?? [];
 
   /* Five shared races is the honest floor — below that a record is a coin flip. */
@@ -1103,6 +1107,7 @@ export const RivalsCard = () => {
   const tipForRival = (dot: RivalDot): ChartTip => ({
     x: dot.x,
     y: dot.y - dot.r,
+    under: dot.y + dot.r,
     title: dot.name,
     detail: [
       `Bryce ahead in ${dot.ahead} of ${dot.races} shared races`,
@@ -1178,14 +1183,13 @@ export const RivalsCard = () => {
                       ? 'fill-opacity 150ms ease'
                       : `transform 460ms cubic-bezier(0.23, 1, 0.32, 1) ${delay}ms, opacity 340ms ease ${delay}ms, fill-opacity 150ms ease`
                   }}
-                  onMouseEnter={() => setTip(tipForRival(dot))}
-                  onMouseLeave={() => setTip(null)}
+                  {...tap.target(dot.name, { show: () => setTip(tipForRival(dot)), hide: () => setTip(null) })}
                 />
               );
             })}
           </svg>
         ) : null}
-        {tip ? <ChartTipCard tip={tip} width={width} /> : null}
+        {tip ? <ChartTipCard tip={tip} width={width} tap={tap} /> : null}
       </div>
       </div>
       <p className="caption caption--secondary" style={{ margin: '4px 0 0' }}>
@@ -1232,12 +1236,14 @@ const ConditionLane = ({
   label,
   laneRows,
   width,
-  onTip
+  onTip,
+  tap
 }: {
   label: string;
   laneRows: CareerRow[];
   width: number;
   onTip: (tip: ChartTip | null) => void;
+  tap: TapPreview;
 }) => {
   const { navigate } = useRouter();
   const height = 44;
@@ -1268,9 +1274,11 @@ const ConditionLane = ({
           stroke={row.status === 'running' ? 'none' : 'var(--ink-muted)'}
           strokeWidth={1.2}
           style={{ cursor: 'pointer' }}
-          onMouseEnter={() => onTip({ x: x(row.percentile), y: axisY - 6, ...tipFor(row) })}
-          onMouseLeave={() => onTip(null)}
-          onClick={() => navigate(raceHref(row.sessionId))}
+          {...tap.target(`${label}-${row.sessionId}-${index}`, {
+            show: () => onTip({ x: x(row.percentile), y: axisY - 6, under: axisY + 6, ...tipFor(row) }),
+            hide: () => onTip(null),
+            open: () => navigate(raceHref(row.sessionId))
+          })}
         />
       ))}
       <rect x={x(median) - 1.75} y={axisY - 9} width={3.5} height={18} rx={1.75} fill="var(--ink-primary)" />
@@ -1287,6 +1295,7 @@ export const CareerRestarts = () => {
   const { navigate } = useRouter();
   const [hovered, setHovered] = useState<number | null>(null);
   const [tip, setTip] = useState<ChartTip | null>(null);
+  const tap = useTapPreview();
 
   const races = useMemo(
     () => (report.byRace ?? []).filter((row) => (row.bryceRestartsCounted ?? 0) > 0),
@@ -1312,9 +1321,9 @@ export const CareerRestarts = () => {
     setTip(null);
   };
 
-  const onMove = (event: React.MouseEvent<SVGSVGElement>) => {
+  const onMove = (event: React.MouseEvent<Element>): number | null => {
     const bounds = svgRef.current?.getBoundingClientRect();
-    if (!bounds) return;
+    if (!bounds) return null;
     const mouseX = event.clientX - bounds.left;
     const mouseY = event.clientY - bounds.top;
     let best: { index: number; distance: number } | null = null;
@@ -1324,7 +1333,7 @@ export const CareerRestarts = () => {
     }
     if (!best || best.distance > 26) {
       clearHover();
-      return;
+      return null;
     }
     setHovered(best.index);
     const row = races[best.index];
@@ -1342,6 +1351,7 @@ export const CareerRestarts = () => {
       detail: `${restartCount} restart${restartCount === 1 ? '' : 's'} · ${move}${rank}`,
       action: 'open the race'
     });
+    return best.index;
   };
 
   if (n < 4) return null;
@@ -1397,7 +1407,7 @@ export const CareerRestarts = () => {
       <p className="caption caption--secondary" style={{ margin: '0 0 8px' }}>
         Every race with a restart a dot · higher = more ground made up · the dashed line is the field's typical restart · the
         fuller dots are days he out-restarted the field's typical move
-        {races.some((row) => row.soleBestInField) ? ' · a ring marks a best-in-field day' : ''} · click a dot to open its race
+        {races.some((row) => row.soleBestInField) ? ' · a ring marks a best-in-field day' : ''} · <PointerOpen what="a dot" then="to open its race" />
       </p>
       <div ref={ref} style={{ width: '100%', position: 'relative' }}>
         {width > 0 ? (
@@ -1407,11 +1417,7 @@ export const CareerRestarts = () => {
             height={height}
             role="img"
             aria-label={`Net positions gained on restarts across ${n} INDY NXT races.`}
-            onMouseMove={onMove}
-            onMouseLeave={clearHover}
-            onClick={() => {
-              if (hovered !== null) navigate(raceHref(races[hovered].sessionId));
-            }}
+            {...tap.surface({ find: onMove, clear: clearHover, open: (index) => () => navigate(raceHref(races[index as number].sessionId)) })}
             style={{ cursor: hovered !== null ? 'pointer' : 'default' }}
           >
             {/* A quiet scale so the dots aren't floating: one hairline + label
@@ -1511,7 +1517,7 @@ export const CareerRestarts = () => {
             })}
           </svg>
         ) : null}
-        {tip ? <ChartTipCard tip={tip} width={width} /> : null}
+        {tip ? <ChartTipCard tip={tip} width={width} tap={tap} /> : null}
       </div>
 
       <p style={{ margin: '12px 0 0', fontSize: 11.5, color: 'var(--ink-muted)' }}>
@@ -1535,6 +1541,7 @@ export const QualiConversion = () => {
   const svgRef = useRef<SVGSVGElement | null>(null);
   const [hovered, setHovered] = useState<number | null>(null);
   const [tip, setTip] = useState<ChartTip | null>(null);
+  const tap = useTapPreview();
 
   const career = layer.career;
   // Series that carry a grid column and so a real conversion, career-ordered.
@@ -1581,9 +1588,9 @@ export const QualiConversion = () => {
     setTip(null);
   };
 
-  const onMove = (event: React.MouseEvent<SVGSVGElement>) => {
+  const onMove = (event: React.MouseEvent<Element>): number | null => {
     const bounds = svgRef.current?.getBoundingClientRect();
-    if (!bounds) return;
+    if (!bounds) return null;
     const mouseX = event.clientX - bounds.left;
     const mouseY = event.clientY - bounds.top;
     let best: { index: number; distance: number } | null = null;
@@ -1593,7 +1600,7 @@ export const QualiConversion = () => {
     }
     if (!best || best.distance > 22) {
       clearHover();
-      return;
+      return null;
     }
     const row = rows[best.index];
     // Gate on the row's horizontal bar bounds too (plus a small transparent hit
@@ -1604,7 +1611,7 @@ export const QualiConversion = () => {
     const rightBound = centerX + row.finishedAhead * scale + HIT_PAD;
     if (mouseX < leftBound || mouseX > rightBound) {
       clearHover();
-      return;
+      return null;
     }
     setHovered(best.index);
     const start =
@@ -1615,8 +1622,10 @@ export const QualiConversion = () => {
       x: centerX,
       y: rowY(best.index) - 6,
       title: `${row.seriesName}${row.firstSeason ? ` · from ${row.firstSeason}` : ''}`,
-      detail: `${start} · made up ground in ${row.finishedAhead}, held ${row.held}, gave ground ${row.finishedBehind} of ${row.conversionRaces}`
+      detail: `${start} · made up ground in ${row.finishedAhead}, held ${row.held}, gave ground ${row.finishedBehind} of ${row.conversionRaces}`,
+      under: rowY(best.index) + barH
     });
+    return best.index;
   };
 
   if (career.conversionRaces < 4 || n === 0) return null;
@@ -1673,8 +1682,7 @@ export const QualiConversion = () => {
             height={height}
             role="img"
             aria-label={`Qualifying-to-flag conversion by chapter: races finished ahead of the grid slot lean right, races behind lean left.`}
-            onMouseMove={onMove}
-            onMouseLeave={clearHover}
+            {...tap.surface({ find: onMove, clear: clearHover })}
           >
             {/* The grid slot: the vertical anchor every bar diverges from. */}
             <line x1={centerX} x2={centerX} y1={margin.top - 12} y2={height - margin.bottom} stroke="var(--ink-primary)" strokeWidth={1} strokeDasharray="2 3" opacity={0.5} />
@@ -1740,7 +1748,7 @@ export const QualiConversion = () => {
             })}
           </svg>
         ) : null}
-        {tip ? <ChartTipCard tip={tip} width={width} /> : null}
+        {tip ? <ChartTipCard tip={tip} width={width} tap={tap} /> : null}
       </div>
     </Card>
   );
@@ -1751,6 +1759,8 @@ export const RainDays = () => {
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();
   const [dryTip, setDryTip] = useState<ChartTip | null>(null);
   const [wetTip, setWetTip] = useState<ChartTip | null>(null);
+  /* One hold across both lanes: a tap on a wet day lets go of a dry one. */
+  const tap = useTapPreview();
 
   const reported = useMemo(() => rows.filter((row) => row.wetDry !== null), [rows]);
   const dry = useMemo(() => reported.filter((row) => row.wetDry === 'dry'), [reported]);
@@ -1800,18 +1810,18 @@ export const RainDays = () => {
         {width > 0 ? (
           <div className="stack" style={{ gap: 2 }}>
             <div style={{ position: 'relative' }}>
-              <ConditionLane label={`Dry · ${dry.length} races`} laneRows={dry} width={width} onTip={setDryTip} />
-              {dryTip ? <ChartTipCard tip={dryTip} width={width} /> : null}
+              <ConditionLane label={`Dry · ${dry.length} races`} laneRows={dry} width={width} onTip={setDryTip} tap={tap} />
+              {dryTip ? <ChartTipCard tip={dryTip} width={width} tap={tap} /> : null}
             </div>
             <div style={{ position: 'relative' }}>
-              <ConditionLane label={`Wet, damp or drying · ${wet.length} races`} laneRows={wet} width={width} onTip={setWetTip} />
-              {wetTip ? <ChartTipCard tip={wetTip} width={width} /> : null}
+              <ConditionLane label={`Wet, damp or drying · ${wet.length} races`} laneRows={wet} width={width} onTip={setWetTip} tap={tap} />
+              {wetTip ? <ChartTipCard tip={wetTip} width={width} tap={tap} /> : null}
             </div>
           </div>
         ) : null}
       </div>
       <p className="caption caption--secondary" style={{ margin: 'auto 0 0', paddingTop: 10 }}>
-        Ink ticks mark each lane’s median · ○ a day that ended early · click any dot to open its race
+        Ink ticks mark each lane’s median · ○ a day that ended early · <PointerOpen what="any dot" then="to open its race" />
       </p>
     </Card>
   );
@@ -1922,9 +1932,11 @@ const CampaignArc = ({ campaign }: { campaign: UiSeasonCampaign }) => {
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();
   const svgRef = useRef<SVGSVGElement | null>(null);
   const { navigate } = useRouter();
-  const coarsePointer = useCoarsePointer();
   const [hovered, setHovered] = useState<number | null>(null);
   const [tip, setTip] = useState<ChartTip | null>(null);
+  /* Round 9: the arc read nothing on a phone (its hover was switched off for
+   * touch); now a tap reads a race and a second tap, or the card, opens it. */
+  const tap = useTapPreview();
 
   const races = campaign.races;
   const n = races.length;
@@ -1973,23 +1985,23 @@ const CampaignArc = ({ campaign }: { campaign: UiSeasonCampaign }) => {
     };
   };
 
-  const onMove = (event: React.MouseEvent<SVGSVGElement>) => {
+  const onMove = (event: React.MouseEvent<Element>): number | null => {
     const bounds = svgRef.current?.getBoundingClientRect();
-    if (!bounds || n === 0) return;
+    if (!bounds || n === 0) return null;
     const mouseX = event.clientX - bounds.left;
     if (mouseX < margin.left - 14 || mouseX > width - margin.right + 14) {
       clearHover();
-      return;
+      return null;
     }
     const index = Math.min(n - 1, Math.max(0, Math.round(((mouseX - margin.left) / plotWidth) * (n - 1))));
     setHovered(index);
     setTip(tipFor(index));
+    return index;
   };
 
-  const openHovered = () => {
-    if (hovered === null) return;
-    const race = races[hovered];
-    if (race.hasRacePage) navigate(raceHref(race.sessionId));
+  const opener = (index: number) => {
+    const race = races[index];
+    return race.hasRacePage ? () => navigate(raceHref(race.sessionId)) : null;
   };
 
   return (
@@ -2001,9 +2013,7 @@ const CampaignArc = ({ campaign }: { campaign: UiSeasonCampaign }) => {
           height={height}
           role="img"
           aria-label={`${campaign.seriesShort} ${campaign.seasonYear} championship points, race by race`}
-          onMouseMove={coarsePointer ? undefined : onMove}
-          onMouseLeave={clearHover}
-          onClick={openHovered}
+          {...tap.surface({ find: onMove, clear: clearHover, open: (index) => opener(index as number) })}
           style={{ cursor: hovered !== null && races[hovered].hasRacePage ? 'pointer' : 'default', display: 'block' }}
         >
           {/* Baseline + ceiling: the two numbers that bound the climb. */}
@@ -2099,7 +2109,7 @@ const CampaignArc = ({ campaign }: { campaign: UiSeasonCampaign }) => {
           ) : null}
         </svg>
       ) : null}
-      {tip ? <ChartTipCard tip={tip} width={width} /> : null}
+      {tip ? <ChartTipCard tip={tip} width={width} tap={tap} /> : null}
     </div>
   );
 };

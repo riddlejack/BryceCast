@@ -2,13 +2,14 @@ import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { CloudSun, ExternalLink, MapPin, Route, Tv } from 'lucide-react';
 import { trackOutlineFor } from '../assets/tracks';
 import { Card, Countdown, HeroPanel, SourcePill, Stat, Unavailable } from '../app/components';
-import { ChartTipCard, chartFont, focusFade, inkConnector, useMeasuredWidth, type ChartTip } from '../app/charts';
+import { ChartTipCard, chartFont, focusFade, inkConnector, useMeasuredWidth, PointerOpen, PointerWord, type ChartTip } from '../app/charts';
 import { TrackArt } from '../app/trackArt';
 import { asNumber, asString, formatClock, formatDate, formatGain, formatNumber, formatWind, ordinal, shortVenue, trackTypeLabel } from '../app/format';
 import { restartBaselineSentence, restartThinVenueNote } from '../data/restartBaseline';
 import { FactDelta } from '../app/weatherGlyphs';
 import { currentWindPill, observedAgoLabel, useEventWeather, type EventWeather } from '../app/useEventWeather';
 import { Link, useRouter } from '../app/router';
+import { useTapPreview } from '../app/tapPreview';
 import { useApiJson } from '../app/useApiJson';
 import { normalizedName, useNextSession } from '../app/useNextSession';
 import {
@@ -87,6 +88,7 @@ const ConversionChart = ({ prep, debriefIds }: { prep: UiNextEventPrep; debriefI
   const { navigate } = useRouter();
   const [hovered, setHovered] = useState<string | null>(null);
   const [tip, setTip] = useState<ChartTip | null>(null);
+  const tap = useTapPreview();
   const races = prep.races;
   /* The gutter grows to the longest label so right-anchored names never spill off
      the SVG's left edge. Short oval labels keep their established width (the floor);
@@ -148,20 +150,21 @@ const ConversionChart = ({ prep, debriefIds }: { prep: UiNextEventPrep; debriefI
               <g
                 key={race.sessionId}
                 style={{ opacity: hovered !== null && !isHovered ? focusFade : 1, transition: 'opacity 150ms ease', cursor: linked ? 'pointer' : 'default' }}
-                onMouseEnter={() => {
-                  setHovered(race.sessionId);
-                  setTip({
-                    x: x(finish),
-                    y: rowTop + 4,
-                    title: rowLabel,
-                    detail: `started P${start} · finished P${finish}${clean ? '' : ` · ${race.officialStatus}`}`,
-                    action: linked ? 'open the race page' : null
-                  });
-                }}
-                onMouseLeave={leave}
-                onClick={() => {
-                  if (linked) navigate(`/races/${encodeURIComponent(race.sessionId)}`);
-                }}
+                {...tap.target(race.sessionId, {
+                  show: () => {
+                    setHovered(race.sessionId);
+                    setTip({
+                      x: x(finish),
+                      y: rowTop + 4,
+                      under: rowTop + rowHeight,
+                      title: rowLabel,
+                      detail: `started P${start} · finished P${finish}${clean ? '' : ` · ${race.officialStatus}`}`,
+                      action: linked ? 'open the race page' : null
+                    });
+                  },
+                  hide: leave,
+                  open: linked ? () => navigate(`/races/${encodeURIComponent(race.sessionId)}`) : null
+                })}
               >
                 <rect x={0} y={rowTop} width={width} height={rowHeight} fill="transparent" />
                 <text
@@ -227,7 +230,7 @@ const ConversionChart = ({ prep, debriefIds }: { prep: UiNextEventPrep; debriefI
           })}
         </svg>
       ) : null}
-      {tip ? <ChartTipCard tip={tip} width={width} /> : null}
+      {tip ? <ChartTipCard tip={tip} width={width} tap={tap} /> : null}
     </div>
   );
 };
@@ -270,7 +273,7 @@ const OvalStory = ({ prep, trackTypeName, debriefIds }: { prep: UiNextEventPrep;
       <p style={{ margin: '10px 0 0', fontSize: 12, color: 'var(--ink-secondary)' }}>
         When the car finished: average finish {formatNumber(summary.cleanAvgFinish)}, average gain {gainText}, top-10 in{' '}
         {summary.cleanTop10Count} of {summary.cleanRaceCount} · mechanical DNF shown dashed, excluded from these averages
-        {anyLinked ? ' · click a race for its full story' : ''}.
+        {anyLinked ? <> · <PointerOpen what="a race" then="for its full story" /></> : ''}.
       </p>
     </Card>
   );
@@ -412,7 +415,7 @@ const RestartPrior = ({ trackName }: { trackName: string }) => {
         })}
       </div>
       <p style={{ margin: '12px 0 0', fontSize: 12.5, color: 'var(--ink-muted)' }}>
-        Net running order over the two green laps after each restart, against the full field. Positions, not lap times · click a
+        Net running order over the two green laps after each restart, against the full field. Positions, not lap times · <PointerWord mouse="click" touch="tap" /> a
         year for its race.
       </p>
     </Card>
@@ -493,6 +496,7 @@ const CautionStrip = ({
   const { navigate } = useRouter();
   const [active, setActive] = useState<number | null>(null);
   const [tip, setTip] = useState<ChartTip | null>(null);
+  const tap = useTapPreview();
 
   if (events.length === 0) return null;
 
@@ -539,6 +543,7 @@ const CautionStrip = ({
     setTip({
       x: mark.px,
       y: mark.y - dotR,
+      under: mark.y + dotR + 4,
       title: `${seasonShort} · ${event.category}`.trim(),
       detail: event.totalRaceLaps ? `lap ${event.startLap} of ${event.totalRaceLaps}` : `lap ${event.startLap}`,
       action: debriefIds.has(event.sessionId) ? 'open the race page' : null
@@ -587,11 +592,9 @@ const CautionStrip = ({
                 role={linked ? 'link' : 'img'}
                 aria-label={label}
                 style={{ cursor: linked ? 'pointer' : 'default', outline: 'none' }}
-                onMouseEnter={() => focusMark(mark)}
-                onMouseLeave={clear}
+                {...tap.target(mark.index, { show: () => focusMark(mark), hide: clear, open: linked ? () => openMark(mark) : null })}
                 onFocus={() => focusMark(mark)}
                 onBlur={clear}
-                onClick={() => openMark(mark)}
                 onKeyDown={(keyEvent) => {
                   if (keyEvent.key === 'Enter' || keyEvent.key === ' ') {
                     keyEvent.preventDefault();
@@ -623,7 +626,7 @@ const CautionStrip = ({
           })}
         </svg>
       ) : null}
-      {tip ? <ChartTipCard tip={tip} width={width} /> : null}
+      {tip ? <ChartTipCard tip={tip} width={width} tap={tap} /> : null}
       {/* Non-hover event list: year · lap · cause for every caution, reachable
           by keyboard and screen reader with no chart interaction. */}
       <ul aria-label="Every full-course caution here, by year and lap" style={{ listStyle: 'none', margin: '10px 0 0', padding: 0, display: 'grid', gap: 3 }}>
@@ -722,6 +725,7 @@ const FridaySlope = ({ prep, debriefIds }: { prep: UiNextEventPrep; debriefIds: 
   const { navigate } = useRouter();
   const [hovered, setHovered] = useState<string | null>(null);
   const [tip, setTip] = useState<ChartTip | null>(null);
+  const tap = useTapPreview();
   const rows = prep.fridaySignal.filter((row) => row.officialStatus === 'running' && row.bestPracticeRank !== null && row.raceFinish !== null);
   if (rows.length < 3) return null;
   const worst = Math.max(...rows.flatMap((row) => [row.bestPracticeRank ?? 1, row.raceFinish ?? 1]));
@@ -789,20 +793,22 @@ const FridaySlope = ({ prep, debriefIds }: { prep: UiNextEventPrep; debriefIds: 
               <g
                 key={row.sessionId}
                 style={{ cursor: linked ? 'pointer' : 'default' }}
-                onMouseEnter={() => {
-                  setHovered(row.sessionId);
-                  setTip({
-                    x: (leftX + rightX) / 2,
-                    y: Math.min(y(practice), y(finish)),
-                    title: rowLabel,
-                    detail: `best practice P${practice} → finished P${finish}`,
-                    action: linked ? 'open the race page' : null
-                  });
-                }}
-                onMouseLeave={leave}
-                onClick={() => {
-                  if (linked) navigate(`/races/${encodeURIComponent(row.sessionId)}`);
-                }}
+                {...tap.target(row.sessionId, {
+                  show: () => {
+                    setHovered(row.sessionId);
+                    setTip({
+                      x: (leftX + rightX) / 2,
+                      y: Math.min(y(practice), y(finish)),
+                      over: Math.min(y(practice), y(finish)) - 6,
+                      under: Math.max(y(practice), y(finish)) + 6,
+                      title: rowLabel,
+                      detail: `best practice P${practice} → finished P${finish}`,
+                      action: linked ? 'open the race page' : null
+                    });
+                  },
+                  hide: leave,
+                  open: linked ? () => navigate(`/races/${encodeURIComponent(row.sessionId)}`) : null
+                })}
               >
                 <line x1={leftX} x2={rightX} y1={y(practice)} y2={y(finish)} stroke="transparent" strokeWidth={14} />
                 <g style={{ opacity: hovered !== null && !isHovered ? 0.12 : focused ? 1 : 0.34, transition: 'opacity 150ms ease' }}>
@@ -838,7 +844,7 @@ const FridaySlope = ({ prep, debriefIds }: { prep: UiNextEventPrep; debriefIds: 
           })}
         </svg>
       ) : null}
-      {tip ? <ChartTipCard tip={tip} width={width} /> : null}
+      {tip ? <ChartTipCard tip={tip} width={width} tap={tap} /> : null}
     </div>
   );
 };
@@ -900,6 +906,7 @@ const FridaySignal = ({ prep, trackTypeName, debriefIds }: { prep: UiNextEventPr
 const PointsStrip = ({ snapshot }: { snapshot: Extract<UiStandingsSnapshot, { available: true }> }) => {
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();
   const [tip, setTip] = useState<ChartTip | null>(null);
+  const tap = useTapPreview();
   const bryceRank = snapshot.bryce.pointsRankInCapture;
   const nearby = snapshot.entries.filter((entry) => Math.abs(entry.pointsRankInCapture - bryceRank) <= 3);
   const minPoints = Math.min(...nearby.map((entry) => entry.points));
@@ -932,15 +939,18 @@ const PointsStrip = ({ snapshot }: { snapshot: Extract<UiStandingsSnapshot, { av
                 cy={axisY}
                 r={12}
                 fill="transparent"
-                onMouseEnter={() =>
-                  setTip({
-                    x: pointX,
-                    y: axisY - 8,
-                    title: entry.driverName,
-                    detail: `${entry.points} pts${gapText ? ` · ${gapText}` : ''}`
-                  })
-                }
-                onMouseLeave={() => setTip(null)}
+                {...tap.target(entry.carNo, {
+                  show: () =>
+                    setTip({
+                      x: pointX,
+                      y: axisY - 8,
+                      over: axisY - 12,
+                      under: axisY + 12,
+                      title: entry.driverName,
+                      detail: `${entry.points} pts${gapText ? ` · ${gapText}` : ''}`
+                    }),
+                  hide: () => setTip(null)
+                })}
               />
             );
             return (
@@ -997,7 +1007,7 @@ const PointsStrip = ({ snapshot }: { snapshot: Extract<UiStandingsSnapshot, { av
           })}
         </svg>
       ) : null}
-      {tip ? <ChartTipCard tip={tip} width={width} /> : null}
+      {tip ? <ChartTipCard tip={tip} width={width} tap={tap} /> : null}
     </div>
   );
 };

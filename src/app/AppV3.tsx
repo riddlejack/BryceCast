@@ -9,6 +9,7 @@ import { switchValue } from '../review/switches';
 import { useReadiness } from './useReadiness';
 import { useLiveSessionHistory } from './useLiveSessionHistory';
 import { useReplaySession } from './useReplaySession';
+import { useLiveTabShown } from './liveTab';
 import { HomeScreen } from '../screens/HomeScreen';
 
 /* Every screen except Home is lazy: Home is what a cold visit renders first,
@@ -62,6 +63,9 @@ const Shell = ({
 }) => {
   const { route } = useRouter();
   const liveish = !replayActive && (liveState === 'ready' || liveState === 'degraded');
+  // Live is in the nav only while a session is on (round 9; src/app/liveTab.ts).
+  const liveTab = useLiveTabShown(liveState, replayActive, route.search);
+  const shownItems = liveTab ? navItems : navItems.filter((item) => item.to !== '/live');
   return (
     <>
       <nav className="topnav">
@@ -70,7 +74,7 @@ const Shell = ({
           BryceCast
         </Link>
         <div className="row" style={{ gap: 24, flex: 1 }}>
-          {navItems.slice(1).map((item) => (
+          {shownItems.slice(1).map((item) => (
             <Link key={item.to} to={item.to} className={`navlink${isActive(route.path, item.to) ? ' navlink--active' : ''}`}>
               {item.label}
               {item.to === '/live' && liveish ? <span className="live-dot" style={{ color: 'var(--status-good)' }} aria-hidden /> : null}
@@ -98,8 +102,8 @@ const Shell = ({
           </span>
         </div>
       </footer>
-      <nav className="tabbar">
-        {navItems.map((item) => {
+      <nav className="tabbar" data-tabs={shownItems.length}>
+        {shownItems.map((item) => {
           const Icon = item.icon;
           const active = isActive(route.path, item.to);
           return (

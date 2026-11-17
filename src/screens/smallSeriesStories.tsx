@@ -32,6 +32,7 @@ import type {
   UiSourceRef
 } from '../data/uiDataPackage';
 import { chapterTint, raceHref } from './careerExplorer';
+import { PointerWord } from '../app/charts';
 
 const F1600_TINT = chapterTint('F1600 Championship Series');
 const FROC_TINT = chapterTint('Castrol Toyota Formula Regional Oceania Championship');
@@ -148,7 +149,7 @@ export const F1600SeasonStory = () => {
         </div>
         <p className="ss-caption">
           Each weekend, left to right: where he qualified, then the round&rsquo;s races. A blue dot marks a podium. F1600 2019
-          carries no sourced grid positions, so there is no grid-to-finish here; qualifying is only where he lined up. Click a
+          carries no sourced grid positions, so there is no grid-to-finish here; qualifying is only where he lined up. <PointerWord mouse="Click" touch="Tap" /> a
           race to open it.
         </p>
       </div>
@@ -272,7 +273,7 @@ export const FrocCampaignStory = () => {
         </div>
         <p className="ss-caption">
           Each race reads grid to flag; a green dot marks a podium. Position change is the plain difference between start and
-          finish, never a pace claim. Click a race to open it.
+          finish, never a pace claim. <PointerWord mouse="Click" touch="Tap" /> a race to open it.
         </p>
       </div>
     </div>

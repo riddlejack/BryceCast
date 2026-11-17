@@ -8,8 +8,9 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 // (immutable, see scripts/api-server.mjs) independent of app code.
 import worldLandTextureUrl from '../../analysis/career-atlas/output/world_land_texture.png?url';
 import { SourcePill, Unavailable } from '../app/components';
-import { focusFade, useInViewOnce, useMeasuredWidth, useReducedMotion } from '../app/charts';
+import { ChartTipCard, focusFade, useCoarsePointer, useInViewOnce, useMeasuredWidth, useReducedMotion, PointerOpen } from '../app/charts';
 import { useRouter } from '../app/router';
+import { useTapPreview } from '../app/tapPreview';
 import {
   uiDataPackage,
   type UiCareerAtlasSeriesSpan,
@@ -691,6 +692,10 @@ export const CareerAtlas = () => {
     [maxZoom, minZoom]
   );
   const [activeVenueId, setActiveVenueId] = useState<string | null>(null);
+  /* Round 9: on a phone the first tap on a track reads it (the ring and the
+   * card), the second tap or the card's button opens its latest race. */
+  const tap = useTapPreview();
+  const coarse = useCoarsePointer();
   const [seriesFilter, setSeriesFilter] = useState<string | null>(null);
   const [regionFilter, setRegionFilter] = useState<AtlasRegion | null>(null);
   const [globeView, setGlobeView] = useState<GlobeView>(defaultView);
@@ -1133,7 +1138,11 @@ export const CareerAtlas = () => {
                   if (drag && drag.pointerId === event.pointerId) {
                     const dx = event.clientX - drag.startClientX;
                     const dy = event.clientY - drag.startClientY;
-                    if (!drag.moved && Math.hypot(dx, dy) > 4) drag.moved = true;
+                    if (!drag.moved && Math.hypot(dx, dy) > 4) {
+                      drag.moved = true;
+                      /* A spin lets go of a track a tap was reading. */
+                      if (tap.armed !== null) tap.dismiss();
+                    }
                     if (drag.moved) {
                       const degreesPerPixel = RAD_TO_DEG / Math.max(height * SPHERE_RADIUS_RATIO * drag.startView.zoom, 1);
                       takeControl();
@@ -1154,6 +1163,7 @@ export const CareerAtlas = () => {
                 }}
                 onPointerDown={(event) => {
                   if (event.button !== 0) return;
+                  tap.press(event);
                   event.currentTarget.setPointerCapture(event.pointerId);
                   dragRef.current = {
                     pointerId: event.pointerId,
@@ -1174,6 +1184,17 @@ export const CareerAtlas = () => {
                     window.setTimeout(() => {
                       ignoreClickRef.current = false;
                     }, 0);
+                  } else if (event.pointerType === 'touch') {
+                    const view = nearestVenue(event.clientX, event.clientY, 38);
+                    /* A track read by a tap holds still: the globe stops following the journey. */
+                    if (view) takeControl();
+                    setActiveVenueId(view?.venue.venueId ?? null);
+                    tap.settle(
+                      event,
+                      view?.venue.venueId ?? null,
+                      () => setActiveVenueId(null),
+                      view ? () => navigate(view.latestRace.raceHref) : null
+                    );
                   }
                   if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
                   dragRef.current = null;
@@ -1184,7 +1205,9 @@ export const CareerAtlas = () => {
                   setIsDragging(false);
                   setActiveVenueId(null);
                 }}
-                onPointerLeave={() => {
+                onPointerLeave={(event) => {
+                  /* A finger leaves as it lifts: the track it tapped stays read. */
+                  if (event.pointerType === 'touch') return;
                   if (!dragRef.current) setActiveVenueId(null);
                 }}
                 onClick={(event) => {
@@ -1192,8 +1215,10 @@ export const CareerAtlas = () => {
                     ignoreClickRef.current = false;
                     return;
                   }
-                  const view = nearestVenue(event.clientX, event.clientY, 38);
-                  if (view) navigate(view.latestRace.raceHref);
+                  tap.click(event, () => {
+                    const view = nearestVenue(event.clientX, event.clientY, 38);
+                    if (view) navigate(view.latestRace.raceHref);
+                  });
                 }}
                 onKeyDown={(event) => {
                   if (event.currentTarget !== event.target) return;
@@ -1301,7 +1326,24 @@ export const CareerAtlas = () => {
                 <Unavailable>No venues match this series and region combination.</Unavailable>
               </div>
             ) : null}
-            {activeView && activePoint ? <AtlasTipCard view={activeView} x={activePoint.x} y={activePoint.y} width={width} /> : null}
+            {activeView && activePoint ? (
+              coarse || tap.armed !== null ? (
+                <ChartTipCard
+                  tip={{
+                    x: activePoint.x,
+                    y: activePoint.y - activePoint.radius - 3,
+                    under: activePoint.y + activePoint.radius + 3,
+                    title: activeView.venue.trackName,
+                    detail: venueDetail(activeView),
+                    action: 'open the latest applicable race'
+                  }}
+                  width={width}
+                  tap={tap}
+                />
+              ) : (
+                <AtlasTipCard view={activeView} x={activePoint.x} y={activePoint.y} width={width} />
+              )
+            ) : null}
             <div className="career-atlas__zoom" role="group" aria-label="Globe zoom controls">
               <button type="button" aria-label="Zoom in" title="Zoom in" disabled={globeView.zoom >= maxZoom} onClick={() => zoomBy(ZOOM_STEP)}>
                 +
@@ -1324,7 +1366,7 @@ export const CareerAtlas = () => {
               ))}
             </div>
             <p className="career-travel__hint">
-              Each track a dot, sized by its races and coloured by series. Drag to spin, pinch to zoom, click a track to open its latest race.
+              Each track a dot, sized by its races and coloured by series. Drag to spin, pinch to zoom, <PointerOpen what="a track" then="to open its latest race" />.
             </p>
             <div className="career-atlas__filters">
               <ControlRow label="Series">

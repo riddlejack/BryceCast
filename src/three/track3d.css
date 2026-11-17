@@ -12,6 +12,17 @@
 .track3d__stage {
   position: relative;
   width: 100%;
+  max-width: 100%;
+  /* Round 9 (Jack on an iPhone: "the whole track is grayed out"): iOS lays its
+   * grey tap highlight over a pressed element, and over a long-pressed one the
+   * selection veil, until the touch ends; neither belongs on a model you hold
+   * to turn. And no double-tap zoom of the page from the stage or its buttons,
+   * which pushed the stage and its "−" past the screen's right edge. */
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: manipulation;
   /* the opening view's own shape (TrackModel3D sets --track3d-aspect), 16:9 until it is known */
   aspect-ratio: var(--track3d-aspect, 16 / 9);
   max-height: min(82vh, 1040px);
@@ -33,6 +44,8 @@
   cursor: grab;
   /* phones: one finger up and down scrolls the page; sideways turns the model */
   touch-action: pan-y;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
   outline: none;
 }
 
@@ -69,6 +82,8 @@
 }
 
 .track3d__controls button {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
   font: inherit;
   font-size: 13px;
   line-height: 1;

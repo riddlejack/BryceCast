@@ -9,7 +9,8 @@
  *  trace, no strategy root cause, no forecast — the pack holds none of those. */
 
 import { useMemo, useState } from 'react';
-import { ChartTipCard, chartFont, useMeasuredWidth, type ChartTip } from '../app/charts';
+import { ChartTipCard, chartFont, useMeasuredWidth, PointerWord, type ChartTip } from '../app/charts';
+import { useTapPreview } from '../app/tapPreview';
 import { Plate } from '../app/components';
 import {
   useImsaDaytonaStint,
@@ -25,6 +26,7 @@ const StintTimeline = ({ pack }: { pack: ImsaDaytonaStintPack }) => {
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();
   const [tip, setTip] = useState<ChartTip | null>(null);
   const [hovered, setHovered] = useState<string | null>(null);
+  const tap = useTapPreview();
 
   const totalLaps = pack.car85Result.lapsCompleted ?? 780;
   const stints = useMemo(() => [...pack.bryceStintContext].sort((a, b) => a.startLap - b.startLap), [pack]);
@@ -52,6 +54,7 @@ const StintTimeline = ({ pack }: { pack: ImsaDaytonaStintPack }) => {
     return {
       x: mid,
       y: top - 6,
+      under: top + barH + 2,
       title: `Stint ${stint.driverStintIndex} · hour ${stint.startSessionHour}`,
       detail: `laps ${stint.startLap}–${stint.endLap} · ${stint.lapCount} laps${clean}`
     };
@@ -100,24 +103,26 @@ const StintTimeline = ({ pack }: { pack: ImsaDaytonaStintPack }) => {
                   fill="var(--chapter-imsa)"
                   fillOpacity={focused ? 0.9 : 0.35}
                   style={{ cursor: 'pointer', transition: 'fill-opacity 150ms ease' }}
-                  onMouseEnter={() => {
-                    setHovered(stint.stintId);
-                    setTip(tipFor(stint));
-                  }}
-                  onMouseLeave={() => {
-                    setHovered(null);
-                    setTip(null);
-                  }}
+                  {...tap.target(stint.stintId, {
+                    show: () => {
+                      setHovered(stint.stintId);
+                      setTip(tipFor(stint));
+                    },
+                    hide: () => {
+                      setHovered(null);
+                      setTip(null);
+                    }
+                  })}
                 />
               );
             })}
           </svg>
         ) : null}
-        {tip ? <ChartTipCard tip={tip} width={width} /> : null}
+        {tip ? <ChartTipCard tip={tip} width={width} tap={tap} /> : null}
       </div>
       <p className="imsa-caption">
         Each blue block is one of his stints, placed by race distance across the car’s {totalLaps} laps; the gaps are his
-        co-drivers at the wheel. Stint boundaries come from pit in/out laps on the official time card. Hover a stint for its hour
+        co-drivers at the wheel. Stint boundaries come from pit in/out laps on the official time card. <PointerWord mouse="Hover" touch="Tap" /> a stint for its hour
         of the race, laps, and typical green pace.
       </p>
     </div>

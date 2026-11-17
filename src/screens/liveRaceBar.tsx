@@ -164,6 +164,7 @@ export const RaceBar = ({
   timeline,
   virtualNow,
   now,
+  place,
   onSeek
 }: {
   replay: ReplaySession;
@@ -172,6 +173,11 @@ export const RaceBar = ({
   virtualNow: VirtualNow;
   /** The desk's shared clock readout (the header reads the same one). */
   now: ReplayNow | null;
+  /** His place now, from the same frame the page's header and running
+   *  order show (null while that frame is still on its way). Given, the bar's
+   *  own readout of now uses it, so the two can never disagree; the trace and
+   *  a pointed-at moment read the race timeline. */
+  place?: number | null;
   /** Commit a jump to this moment. */
   onSeek: (atMs: number) => void;
 }) => {
@@ -296,7 +302,7 @@ export const RaceBar = ({
               axis.basis === 'laps' ? `Lap ${now.lap}` : `${Math.floor(now.pos)} min in`,
               now.flag === 'red' ? 'red flag' : now.flag ?? flagWordsAt(timeline, axis, now.atMs),
               (() => {
-                const rank = positionAt(timeline, now.atMs);
+                const rank = place !== undefined ? place : positionAt(timeline, now.atMs);
                 return rank !== null ? `P${rank}` : null;
               })()
             ]

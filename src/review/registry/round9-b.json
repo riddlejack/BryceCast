@@ -1,0 +1,55 @@
+{
+  "lane": "round-9",
+  "entries": [
+    {
+      "id": "track3d-phone-veil",
+      "page": [
+        "/tracks",
+        "/races/*"
+      ],
+      "title": "No grey veil over the 3D track on a phone",
+      "switch": null,
+      "noswitch": "the grey was a fault you found on the iPhone; there is nothing to switch back to",
+      "look": "On the iPhone, drag the track sideways, tap a section, press the + and − buttons quickly: the model stays its own colours on the paper, with no grey over it, and the page doesn't zoom, so the stage and its − button stay inside the screen. Every 3D model on the site (Tracks, and both on a race page).",
+      "with": {
+        "venue": "Portland International Raceway"
+      },
+      "anchor": ".track3d",
+      "added": "2026-11-17T00:50",
+      "reviewed": false
+    },
+    {
+      "id": "career-phone-figures",
+      "page": "/career",
+      "title": "The other drivers and When it went wrong, cleanly on a phone",
+      "switch": null,
+      "noswitch": "the broken labels and the two-and-one year strips were faults you found; there is nothing to switch back to",
+      "look": "On the phone: every label under a number fits one line, no chevron on a line of its own ('In single-seaters', 'Cautions naming him' are the phone's shorter forms; the laptop keeps the full words). The INDY NXT seasons are one row a year, 2024, 2025, 2026, the year first, so the squares line up.",
+      "anchor": ".odo-group[data-group='people']",
+      "added": "2026-11-17T00:50",
+      "reviewed": false
+    },
+    {
+      "id": "career-indynxt-three",
+      "page": "/career",
+      "title": "INDY NXT: average finish, field beaten and top-ten rate three across",
+      "switch": null,
+      "noswitch": "you asked for three across in place of two and one; the old wrap was the fault",
+      "look": "On the phone, the INDY NXT chapter's three numbers share one row in equal thirds, their numbers on one line; 'Field beaten, on average' takes two even lines above its number.",
+      "anchor": ".chapter-panel__stats",
+      "added": "2026-11-17T00:50",
+      "reviewed": false
+    },
+    {
+      "id": "footer-gap",
+      "page": "*",
+      "title": "Less white space above the footer, on every page",
+      "switch": null,
+      "noswitch": "the empty band was a fault you found; the space is now the same gap as between the sections",
+      "look": "Scroll to the bottom of any page: the footer's rule sits one section gap under the last section (40 px on the phone, 72 px on the laptop and the Dell), where it was 140 and 136.",
+      "anchor": ".footer",
+      "added": "2026-11-17T00:50",
+      "reviewed": false
+    }
+  ]
+}

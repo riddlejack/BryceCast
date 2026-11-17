@@ -10,10 +10,11 @@
  *  deliberately no pace-trace, stint, or sector module here. */
 
 import { useMemo, useState } from 'react';
-import { ChartTipCard, chartFont, focusFade, useMeasuredWidth, type ChartTip } from '../app/charts';
+import { ChartTipCard, chartFont, focusFade, useMeasuredWidth, PointerOpen, PointerWord, type ChartTip } from '../app/charts';
 import { SourcePill } from '../app/components';
 import { ordinal } from '../app/format';
 import { Link, useRouter } from '../app/router';
+import { useTapPreview } from '../app/tapPreview';
 import { useGb3DeepDive, gb3DeepDiveRef, type Gb3DeepDivePack, type Gb3RaceResult, type Gb3TeamContext, type Gb3EventSummary } from '../data/gb3DeepDive';
 import { chapterTint, raceHref } from './careerExplorer';
 
@@ -59,6 +60,7 @@ const WithinTeamStrip = ({ pack }: { pack: Gb3DeepDivePack }) => {
   const { navigate } = useRouter();
   const [tip, setTip] = useState<ChartTip | null>(null);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const tap = useTapPreview();
 
   const rows = useMemo(() => [...pack.teamContext].sort((a, b) => chronoKey(a) - chronoKey(b)), [pack]);
   /* Official race status by session, for the two races with no classified
@@ -145,8 +147,10 @@ const WithinTeamStrip = ({ pack }: { pack: Gb3DeepDivePack }) => {
                     stroke="var(--ink-muted)"
                     strokeWidth={1.2}
                     style={{ cursor: 'default' }}
-                    onMouseEnter={() => setTip({ x: cx, y: missY - 8, title: raceLabel(row), detail: statusWord })}
-                    onMouseLeave={() => setTip(null)}
+                    {...tap.target(row.sessionId, {
+                      show: () => setTip({ x: cx, y: missY - 8, under: missY + 8, title: raceLabel(row), detail: statusWord }),
+                      hide: () => setTip(null)
+                    })}
                   />
                 );
               }
@@ -161,27 +165,28 @@ const WithinTeamStrip = ({ pack }: { pack: Gb3DeepDivePack }) => {
                   fill={led ? 'var(--chapter-gb3)' : 'var(--ink-primary)'}
                   fillOpacity={led || hoveredId === row.sessionId ? 1 : 0.38}
                   style={{ cursor: 'pointer', transition: 'fill-opacity 150ms ease' }}
-                  onMouseEnter={() => {
-                    setHoveredId(row.sessionId);
-                    setTip({ x: cx, y: cy - 8, title: raceLabel(row), detail: rankPhrase(row) });
-                  }}
-                  onMouseLeave={() => {
-                    setHoveredId(null);
-                    setTip(null);
-                  }}
-                  onClick={() => navigate(raceHref(row.sessionId))}
+                  {...tap.target(row.sessionId, {
+                    show: () => {
+                      setHoveredId(row.sessionId);
+                      setTip({ x: cx, y: cy - 8, under: cy + 8, title: raceLabel(row), detail: rankPhrase(row) });
+                    },
+                    hide: () => {
+                      setHoveredId(null);
+                      setTip(null);
+                    },
+                    open: () => navigate(raceHref(row.sessionId))
+                  })}
                 />
               );
             })}
           </svg>
         ) : null}
-        {tip ? <ChartTipCard tip={tip} width={width} /> : null}
+        {tip ? <ChartTipCard tip={tip} width={width} tap={tap} /> : null}
       </div>
       <p className="gb3-caption">
         Amber = races he led the team’s cars home · result order only: where he placed among his own cars, not a read on
         machinery, setup, or strategy.
-        {unclassified > 0 ? ` ${unclassified} of ${rows.length} races have no classified result (shown open).` : ''} Click any
-        race to open it.
+        {unclassified > 0 ? ` ${unclassified} of ${rows.length} races have no classified result (shown open).` : ''} <PointerOpen start what="any race" then="to open it" />.
       </p>
     </div>
   );
@@ -194,6 +199,7 @@ const QualifyingToRace = ({ pack }: { pack: Gb3DeepDivePack }) => {
   const { navigate } = useRouter();
   const [hovered, setHovered] = useState<number | null>(null);
   const [tip, setTip] = useState<ChartTip | null>(null);
+  const tap = useTapPreview();
 
   const races = useMemo(
     () =>
@@ -221,6 +227,8 @@ const QualifyingToRace = ({ pack }: { pack: Gb3DeepDivePack }) => {
     return {
       x: (leftX + rightX) / 2,
       y: (y(row.startPosition ?? 1) + y(row.finishPosition ?? 1)) / 2 - 6,
+      over: Math.min(y(row.startPosition ?? 1), y(row.finishPosition ?? 1)) - 6,
+      under: Math.max(y(row.startPosition ?? 1), y(row.finishPosition ?? 1)) + 6,
       title: raceLabel(row),
       detail: `P${row.startPosition} → P${row.finishPosition} · ${move}`,
       action: 'Open the race'
@@ -274,26 +282,28 @@ const QualifyingToRace = ({ pack }: { pack: Gb3DeepDivePack }) => {
                     stroke="transparent"
                     strokeWidth={14}
                     style={{ cursor: 'pointer' }}
-                    onMouseEnter={() => {
-                      setHovered(index);
-                      setTip(tipFor(row));
-                    }}
-                    onMouseLeave={() => {
-                      setHovered(null);
-                      setTip(null);
-                    }}
-                    onClick={() => navigate(raceHref(row.sessionId))}
+                    {...tap.target(row.sessionId, {
+                      show: () => {
+                        setHovered(index);
+                        setTip(tipFor(row));
+                      },
+                      hide: () => {
+                        setHovered(null);
+                        setTip(null);
+                      },
+                      open: () => navigate(raceHref(row.sessionId))
+                    })}
                   />
                 </g>
               );
             })}
           </svg>
         ) : null}
-        {tip ? <ChartTipCard tip={tip} width={width} /> : null}
+        {tip ? <ChartTipCard tip={tip} width={width} tap={tap} /> : null}
       </div>
       <p className="gb3-caption">
         Each line is one race, grid to flag · amber marks a race he gained ground · P1 sits at the top. Grid data is unavailable
-        for 2022’s official feed, so 2022 starts aren’t shown. Click a line to open the race.
+        for 2022’s official feed, so 2022 starts aren’t shown. <PointerOpen start what="a line" then="to open the race" />.
       </p>
     </div>
   );
@@ -381,7 +391,7 @@ const VenueRows = ({ pack }: { pack: Gb3DeepDivePack }) => {
       </div>
       <p className="gb3-caption">
         Field beat = the average share of the grid finished ahead of, across each venue’s races. Cross-venue comparison mixes
-        2021 and 2022 fields, so read it as texture. Click a venue to open its best race.
+        2021 and 2022 fields, so read it as texture. <PointerWord mouse="Click" touch="Tap" /> a venue to open its best race.
       </p>
     </div>
   );
@@ -449,6 +459,7 @@ const SeasonArc = ({ pack }: { pack: Gb3DeepDivePack }) => {
   const { navigate } = useRouter();
   const [tip, setTip] = useState<ChartTip | null>(null);
   const [hoveredKey, setHoveredKey] = useState<string | null>(null);
+  const tap = useTapPreview();
 
   const events = useMemo(
     () => [...pack.eventSummary].sort((a, b) => a.seasonYear * 100 + roundOf(a.eventName) - (b.seasonYear * 100 + roundOf(b.eventName))),
@@ -574,6 +585,8 @@ const SeasonArc = ({ pack }: { pack: Gb3DeepDivePack }) => {
             setTip({
               x: cx,
               y: (fy ?? qy ?? panel.yTop) - 8,
+              over: Math.min(fy ?? Infinity, qy ?? Infinity, fy ?? qy ?? panel.yTop) - PODIUM_R - 4,
+              under: Math.max(fy ?? -Infinity, qy ?? -Infinity, fy ?? qy ?? panel.yTop) + PODIUM_R + 4,
               title: `${row.seasonYear} R${roundOf(row.eventName)} · ${row.trackName}`,
               detail: `${q} · ${f} · ${row.raceRows} ${row.raceRows === 1 ? 'race' : 'races'}`,
               action: race ? 'Open the round’s best race' : undefined
@@ -605,9 +618,7 @@ const SeasonArc = ({ pack }: { pack: Gb3DeepDivePack }) => {
                 height={panel.panelH + 12}
                 fill="transparent"
                 style={{ cursor: race ? 'pointer' : 'default' }}
-                onMouseEnter={showTip}
-                onMouseLeave={clear}
-                onClick={() => race && navigate(raceHref(race.sessionId))}
+                {...tap.target(key, { show: showTip, hide: clear, open: race ? () => navigate(raceHref(race.sessionId)) : null })}
               />
               {/* round label */}
               <text x={cx} y={panel.labelY} textAnchor="middle" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={9.5}>
@@ -655,12 +666,12 @@ const SeasonArc = ({ pack }: { pack: Gb3DeepDivePack }) => {
             {panels.map(renderPanel)}
           </svg>
         ) : null}
-        {tip ? <ChartTipCard tip={tip} width={width} /> : null}
+        {tip ? <ChartTipCard tip={tip} width={width} tap={tap} /> : null}
       </div>
       <p className="gb3-caption">
         Open marks = qualifying, filled = the round’s best finish; the amber line follows his best finish through each season, and
         amber dots mark podium rounds. 2021 qualifying is official TSL grid; 2022 reads the qualifying-session order (no dedicated
-        grid feed), so the two seasons stay side by side, never merged. Click a round to open its best race.
+        grid feed), so the two seasons stay side by side, never merged. <PointerOpen start what="a round" then="to open its best race" />.
       </p>
     </div>
   );
