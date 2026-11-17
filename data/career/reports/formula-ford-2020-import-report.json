@@ -1,23 +1,23 @@
 {
-  "checkedAt": "2026-06-16T18:12:18.025Z",
+  "checkedAt": "2026-11-16T17:29:41.114Z",
   "year": 2020,
   "refresh": false,
   "fetched": 0,
-  "cached": 11,
+  "cached": 23,
   "pdfsConverted": 0,
-  "textCached": 8,
-  "classificationSessionsDiscovered": 46,
-  "gridPagesDiscovered": 32,
-  "lapAnalysisPagesDiscovered": 24,
-  "sessionsImported": 46,
-  "resultRowsImported": 1094,
-  "gridRowsImported": 755,
-  "lapSamplesImported": 282,
-  "bryceResultRowsImported": 24,
-  "bryceLapSamplesImported": 282,
-  "weatherObservationsImported": 46,
+  "textCached": 14,
+  "classificationSessionsDiscovered": 72,
+  "gridPagesDiscovered": 50,
+  "lapAnalysisPagesDiscovered": 39,
+  "sessionsImported": 72,
+  "resultRowsImported": 1666,
+  "gridRowsImported": 1148,
+  "lapSamplesImported": 433,
+  "bryceResultRowsImported": 42,
+  "bryceLapSamplesImported": 433,
+  "weatherObservationsImported": 72,
   "penaltiesImported": 4,
-  "mediaAssetsImported": 11,
+  "mediaAssetsImported": 23,
   "rawArtifacts": [
     "data/career/raw/formula-ford-2020/walter-hayes-trophy-event.html",
     "data/career/raw/formula-ford-2020/pdf/walter-hayes-trophy-grand-final.pdf",
@@ -38,6 +38,24 @@
     "data/career/raw/formula-ford-2020/event-pages/champion-of-brands-event.html",
     "data/career/raw/formula-ford-2020/pdf/champion-of-brands-book.pdf",
     "data/career/raw/formula-ford-2020/text/champion-of-brands-book.txt",
+    "data/career/raw/formula-ford-2020/event-pages/castle-combe-202768-event.html",
+    "data/career/raw/formula-ford-2020/pdf/castle-combe-202768-book.pdf",
+    "data/career/raw/formula-ford-2020/text/castle-combe-202768-book.txt",
+    "data/career/raw/formula-ford-2020/event-pages/castle-combe-203168-event.html",
+    "data/career/raw/formula-ford-2020/pdf/castle-combe-203168-book.pdf",
+    "data/career/raw/formula-ford-2020/text/castle-combe-203168-book.txt",
+    "data/career/raw/formula-ford-2020/event-pages/castle-combe-203668-event.html",
+    "data/career/raw/formula-ford-2020/pdf/castle-combe-203668-book.pdf",
+    "data/career/raw/formula-ford-2020/text/castle-combe-203668-book.txt",
+    "data/career/raw/formula-ford-2020/event-pages/champion-of-brands-203505-event.html",
+    "data/career/raw/formula-ford-2020/pdf/champion-of-brands-203505-book.pdf",
+    "data/career/raw/formula-ford-2020/text/champion-of-brands-203505-book.txt",
+    "data/career/raw/formula-ford-2020/event-pages/champion-of-brands-203851-event.html",
+    "data/career/raw/formula-ford-2020/pdf/champion-of-brands-203851-book.pdf",
+    "data/career/raw/formula-ford-2020/text/champion-of-brands-203851-book.txt",
+    "data/career/raw/formula-ford-2019/event-pages/formula-ford-festival-2019-event.html",
+    "data/career/raw/formula-ford-2019/pdf/formula-ford-festival-2019-book.pdf",
+    "data/career/raw/formula-ford-2019/text/formula-ford-festival-2019-book.txt",
     "data/career/raw/formula-ford-2020/extracted-classifications.json"
   ],
   "crossChecks": [
@@ -726,16 +744,6 @@
       "reason": "official_grid_row_has_no_imported_classification_result_row"
     },
     {
-      "sourceId": "national_silverstone",
-      "sessionSlug": "race_3",
-      "sessionName": "RACE 3",
-      "pageNumber": 13,
-      "position": 17,
-      "carNumber": "156",
-      "driverName": "Horatio FITZ-SIMON",
-      "reason": "official_grid_row_has_no_imported_classification_result_row"
-    },
-    {
       "sourceId": "champion_brands",
       "sessionSlug": "race_5",
       "sessionName": "RACE 5",
@@ -754,6 +762,336 @@
       "carNumber": "18",
       "driverName": "Chris PERKINS",
       "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "castle_combe_203168",
+      "sessionSlug": "race_4",
+      "sessionName": "Race 4",
+      "pageNumber": 12,
+      "position": 18,
+      "carNumber": "91",
+      "driverName": "Bob HAWKINS",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "castle_combe_203168",
+      "sessionSlug": "race_8",
+      "sessionName": "Race 8",
+      "pageNumber": 13,
+      "position": 9,
+      "carNumber": "28",
+      "driverName": "Tom HAWKINS",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "castle_combe_203168",
+      "sessionSlug": "race_8",
+      "sessionName": "Race 8",
+      "pageNumber": 13,
+      "position": 17,
+      "carNumber": "91",
+      "driverName": "Bob HAWKINS",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "castle_combe_203668",
+      "sessionSlug": "race_3",
+      "sessionName": "RACE 3",
+      "pageNumber": 12,
+      "position": 21,
+      "carNumber": "91",
+      "driverName": "Bob HAWKINS",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "castle_combe_203668",
+      "sessionSlug": "race_8",
+      "sessionName": "RACE 8",
+      "pageNumber": 13,
+      "position": 2,
+      "carNumber": "26",
+      "driverName": "Felix FISHER",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "castle_combe_203668",
+      "sessionSlug": "race_8",
+      "sessionName": "RACE 8",
+      "pageNumber": 13,
+      "position": 3,
+      "carNumber": "122",
+      "driverName": "Jonathan BROWNE",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "castle_combe_203668",
+      "sessionSlug": "race_8",
+      "sessionName": "RACE 8",
+      "pageNumber": 13,
+      "position": 5,
+      "carNumber": "44",
+      "driverName": "David VIVIAN",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "castle_combe_203668",
+      "sessionSlug": "race_8",
+      "sessionName": "RACE 8",
+      "pageNumber": 13,
+      "position": 15,
+      "carNumber": "77",
+      "driverName": "Chris HODGEN",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "castle_combe_203668",
+      "sessionSlug": "race_8",
+      "sessionName": "RACE 8",
+      "pageNumber": 13,
+      "position": 18,
+      "carNumber": "69",
+      "driverName": "Alan SLATER",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "castle_combe_203668",
+      "sessionSlug": "race_8",
+      "sessionName": "RACE 8",
+      "pageNumber": 13,
+      "position": 19,
+      "carNumber": "91",
+      "driverName": "Bob HAWKINS",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "castle_combe_203668",
+      "sessionSlug": "race_8",
+      "sessionName": "RACE 8",
+      "pageNumber": 13,
+      "position": 22,
+      "carNumber": "33",
+      "driverName": "Chris WARDEN",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "castle_combe_203668",
+      "sessionSlug": "race_8",
+      "sessionName": "RACE 8",
+      "pageNumber": 13,
+      "position": 24,
+      "carNumber": "84",
+      "driverName": "Steve BRACEGIRDLE",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "champion_brands_203505",
+      "sessionSlug": "race_10",
+      "sessionName": "RACE 10",
+      "pageNumber": 12,
+      "position": 8,
+      "carNumber": "87",
+      "driverName": "Ian JEARY",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "champion_brands_203505",
+      "sessionSlug": "race_10",
+      "sessionName": "RACE 10",
+      "pageNumber": 12,
+      "position": 15,
+      "carNumber": "77",
+      "driverName": "Phil ATTWOOD",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "champion_brands_203851",
+      "sessionSlug": "race_20",
+      "sessionName": "RACE 20",
+      "pageNumber": 23,
+      "position": 18,
+      "carNumber": "79",
+      "driverName": "Andrew PRYKE",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "festival",
+      "sessionSlug": "race_8_heats_last_chance_sponsored_by_cam_tech",
+      "sessionName": "RACE 8 - HEATS LAST CHANCE Sponsored by Cam-Tech",
+      "pageNumber": 74,
+      "position": 9,
+      "carNumber": "73",
+      "driverName": "Simon PRUCE",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "festival",
+      "sessionSlug": "race_8_heats_last_chance_sponsored_by_cam_tech",
+      "sessionName": "RACE 8 - HEATS LAST CHANCE Sponsored by Cam-Tech",
+      "pageNumber": 74,
+      "position": 21,
+      "carNumber": "49",
+      "driverName": "Jordan HARRISON",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "festival",
+      "sessionSlug": "race_14_semi_final_2_sponsored_by_cam_tech",
+      "sessionName": "RACE 14 - SEMI FINAL 2 Sponsored by Cam-Tech",
+      "pageNumber": 102,
+      "position": 15,
+      "carNumber": "128",
+      "driverName": "David McCULLOUGH",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "festival",
+      "sessionSlug": "race_14_semi_final_2_sponsored_by_cam_tech",
+      "sessionName": "RACE 14 - SEMI FINAL 2 Sponsored by Cam-Tech",
+      "pageNumber": 102,
+      "position": 21,
+      "carNumber": "7",
+      "driverName": "Peter LUCAS",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "festival",
+      "sessionSlug": "race_14_semi_final_2_sponsored_by_cam_tech",
+      "sessionName": "RACE 14 - SEMI FINAL 2 Sponsored by Cam-Tech",
+      "pageNumber": 102,
+      "position": 23,
+      "carNumber": "30",
+      "driverName": "Steve BARLOW",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "festival",
+      "sessionSlug": "race_14_semi_final_2_sponsored_by_cam_tech",
+      "sessionName": "RACE 14 - SEMI FINAL 2 Sponsored by Cam-Tech",
+      "pageNumber": 102,
+      "position": 28,
+      "carNumber": "35",
+      "driverName": "Tom CLOET",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "festival",
+      "sessionSlug": "race_17_historic_final_spons_by_wilkins_kennedy",
+      "sessionName": "RACE 17 - HISTORIC FINAL Spons by Wilkins Kennedy",
+      "pageNumber": 117,
+      "position": 16,
+      "carNumber": "124",
+      "driverName": "Oliver CHAPMAN",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "festival",
+      "sessionSlug": "race_17_historic_final_spons_by_wilkins_kennedy",
+      "sessionName": "RACE 17 - HISTORIC FINAL Spons by Wilkins Kennedy",
+      "pageNumber": 117,
+      "position": 17,
+      "carNumber": "40",
+      "driverName": "Dan Rene LARSEN",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "festival",
+      "sessionSlug": "race_19_last_chance_race_in_recognition_of_diz",
+      "sessionName": "RACE 19 - LAST CHANCE RACE in recognition of 'Diz",
+      "pageNumber": 130,
+      "position": 8,
+      "carNumber": "33",
+      "driverName": "Richard DAVISON",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "festival",
+      "sessionSlug": "race_19_last_chance_race_in_recognition_of_diz",
+      "sessionName": "RACE 19 - LAST CHANCE RACE in recognition of 'Diz",
+      "pageNumber": 130,
+      "position": 15,
+      "carNumber": "69",
+      "driverName": "Peter DALY",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "festival",
+      "sessionSlug": "race_19_last_chance_race_in_recognition_of_diz",
+      "sessionName": "RACE 19 - LAST CHANCE RACE in recognition of 'Diz",
+      "pageNumber": 130,
+      "position": 16,
+      "carNumber": "78",
+      "driverName": "Joe WALTON",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "festival",
+      "sessionSlug": "race_19_last_chance_race_in_recognition_of_diz",
+      "sessionName": "RACE 19 - LAST CHANCE RACE in recognition of 'Diz",
+      "pageNumber": 130,
+      "position": 18,
+      "carNumber": "888",
+      "driverName": "Chris STUART",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "festival",
+      "sessionSlug": "race_19_last_chance_race_in_recognition_of_diz",
+      "sessionName": "RACE 19 - LAST CHANCE RACE in recognition of 'Diz",
+      "pageNumber": 130,
+      "position": 20,
+      "carNumber": "140",
+      "driverName": "Laurie HUGHES",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "festival",
+      "sessionSlug": "race_19_last_chance_race_in_recognition_of_diz",
+      "sessionName": "RACE 19 - LAST CHANCE RACE in recognition of 'Diz",
+      "pageNumber": 130,
+      "position": 21,
+      "carNumber": "90",
+      "driverName": "Henry CAMPBELL",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "festival",
+      "sessionSlug": "race_19_last_chance_race_in_recognition_of_diz",
+      "sessionName": "RACE 19 - LAST CHANCE RACE in recognition of 'Diz",
+      "pageNumber": 130,
+      "position": 22,
+      "carNumber": "124",
+      "driverName": "Oliver CHAPMAN",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "festival",
+      "sessionSlug": "race_19_last_chance_race_in_recognition_of_diz",
+      "sessionName": "RACE 19 - LAST CHANCE RACE in recognition of 'Diz",
+      "pageNumber": 130,
+      "position": 23,
+      "carNumber": "13",
+      "driverName": "Stuart KESTENBAUM",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "festival",
+      "sessionSlug": "race_19_last_chance_race_in_recognition_of_diz",
+      "sessionName": "RACE 19 - LAST CHANCE RACE in recognition of 'Diz",
+      "pageNumber": 130,
+      "position": 24,
+      "carNumber": "177",
+      "driverName": "Philip ATTWOOD",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "festival",
+      "sessionSlug": "race_19_last_chance_race_in_recognition_of_diz",
+      "sessionName": "RACE 19 - LAST CHANCE RACE in recognition of 'Diz",
+      "pageNumber": 130,
+      "position": 27,
+      "carNumber": "91",
+      "driverName": "Stephen MAWHINNEY",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
     }
   ],
   "gridRowsMatchedByDriverName": [
@@ -770,6 +1108,51 @@
     }
   ],
   "gridStartHoldouts": [
+    {
+      "resultId": "result_formula_ford_2019_festival_race_14_semi_final_2_sponsored_by_cam_tech_177_driver_philip_attwood",
+      "sessionId": "session_formula_ford_2019_festival_race_14_semi_final_2_sponsored_by_cam_tech",
+      "sessionName": "RACE 14 - SEMI FINAL 2 Sponsored by Cam-Tech",
+      "carNumber": "177",
+      "driverId": "driver_philip_attwood",
+      "finishPosition": null,
+      "reason": "official_classification_row_has_no_safe_original_grid_start_match"
+    },
+    {
+      "resultId": "result_formula_ford_2019_festival_race_14_semi_final_2_sponsored_by_cam_tech_888_driver_chris_stuart",
+      "sessionId": "session_formula_ford_2019_festival_race_14_semi_final_2_sponsored_by_cam_tech",
+      "sessionName": "RACE 14 - SEMI FINAL 2 Sponsored by Cam-Tech",
+      "carNumber": "888",
+      "driverId": "driver_chris_stuart",
+      "finishPosition": 22,
+      "reason": "official_classification_row_has_no_safe_original_grid_start_match"
+    },
+    {
+      "resultId": "result_formula_ford_2019_festival_race_17_historic_final_spons_by_wilkins_kennedy_73_driver_simon_pruce",
+      "sessionId": "session_formula_ford_2019_festival_race_17_historic_final_spons_by_wilkins_kennedy",
+      "sessionName": "RACE 17 - HISTORIC FINAL Spons by Wilkins Kennedy",
+      "carNumber": "73",
+      "driverId": "driver_simon_pruce",
+      "finishPosition": 17,
+      "reason": "official_classification_row_has_no_safe_original_grid_start_match"
+    },
+    {
+      "resultId": "result_formula_ford_2019_festival_race_17_historic_final_spons_by_wilkins_kennedy_87_driver_ian_jeary",
+      "sessionId": "session_formula_ford_2019_festival_race_17_historic_final_spons_by_wilkins_kennedy",
+      "sessionName": "RACE 17 - HISTORIC FINAL Spons by Wilkins Kennedy",
+      "carNumber": "87",
+      "driverId": "driver_ian_jeary",
+      "finishPosition": 13,
+      "reason": "official_classification_row_has_no_safe_original_grid_start_match"
+    },
+    {
+      "resultId": "result_formula_ford_2019_festival_race_19_last_chance_race_in_recognition_of_diz_128_driver_david_mccullough",
+      "sessionId": "session_formula_ford_2019_festival_race_19_last_chance_race_in_recognition_of_diz",
+      "sessionName": "RACE 19 - LAST CHANCE RACE in recognition of 'Diz",
+      "carNumber": "128",
+      "driverId": "driver_david_mccullough",
+      "finishPosition": 12,
+      "reason": "official_classification_row_has_no_safe_original_grid_start_match"
+    },
     {
       "resultId": "result_formula_ford_2020_champion_brands_race_11_87_driver_ian_jeary",
       "sessionId": "session_formula_ford_2020_champion_brands_race_11",
@@ -839,7 +1222,7 @@
       "id": "gap_formula_ford_2020_grid_start_source_asymmetry_holdouts",
       "scope": "series_formula_ford:2020:grid_start_positions",
       "status": "open",
-      "description": "Formula Ford 2020 official grid/start import is complete for 755 race/heat rows. The remaining 7 classified race/heat rows are held out because the official source family exposes reserve-only entries, restart-grid-only positions, or original-grid rows that do not safely match the classified driver/car row. These rows remain explicit holdouts instead of guessed grid/start positions. Lap-analysis imports remain scoped to Bryce-labeled blocks; continuation pages without a repeated Bryce label stay held out until a layout-aware parser can match them deterministically.",
+      "description": "Formula Ford 2020 official grid/start import is complete for 1148 race/heat rows. The remaining 12 classified race/heat rows are held out because the official source family exposes reserve-only entries, restart-grid-only positions, or original-grid rows that do not safely match the classified driver/car row. These rows remain explicit holdouts instead of guessed grid/start positions. Lap-analysis imports remain scoped to Bryce-labeled blocks; continuation pages without a repeated Bryce label stay held out until a layout-aware parser can match them deterministically.",
       "provenanceRefs": [
         "source_formula_ford_2020_festival_book_pdf",
         "source_formula_ford_2020_wht_book_pdf",
@@ -847,10 +1230,21 @@
         "source_formula_ford_2020_national_brands_hatch_book_pdf",
         "source_formula_ford_2020_national_silverstone_book_pdf",
         "source_formula_ford_2020_champion_cadwell_book_pdf",
-        "source_formula_ford_2020_champion_brands_book_pdf"
+        "source_formula_ford_2020_champion_brands_book_pdf",
+        "source_formula_ford_2020_castle_combe_202768_book_pdf",
+        "source_formula_ford_2020_castle_combe_203168_book_pdf",
+        "source_formula_ford_2020_castle_combe_203668_book_pdf",
+        "source_formula_ford_2020_champion_brands_203505_book_pdf",
+        "source_formula_ford_2020_champion_brands_203851_book_pdf",
+        "source_formula_ford_2019_festival_book_pdf"
       ],
       "raw": {
         "resultIds": [
+          "result_formula_ford_2019_festival_race_14_semi_final_2_sponsored_by_cam_tech_177_driver_philip_attwood",
+          "result_formula_ford_2019_festival_race_14_semi_final_2_sponsored_by_cam_tech_888_driver_chris_stuart",
+          "result_formula_ford_2019_festival_race_17_historic_final_spons_by_wilkins_kennedy_73_driver_simon_pruce",
+          "result_formula_ford_2019_festival_race_17_historic_final_spons_by_wilkins_kennedy_87_driver_ian_jeary",
+          "result_formula_ford_2019_festival_race_19_last_chance_race_in_recognition_of_diz_128_driver_david_mccullough",
           "result_formula_ford_2020_champion_brands_race_11_87_driver_ian_jeary",
           "result_formula_ford_2020_national_oulton_park_race_1_16_driver_neil_mcarthur",
           "result_formula_ford_2020_wht_grand_final_3_driver_roger_orgee",
@@ -860,6 +1254,51 @@
           "result_formula_ford_2020_wht_semi_final_2_91_driver_bob_hawkins"
         ],
         "holdouts": [
+          {
+            "resultId": "result_formula_ford_2019_festival_race_14_semi_final_2_sponsored_by_cam_tech_177_driver_philip_attwood",
+            "sessionId": "session_formula_ford_2019_festival_race_14_semi_final_2_sponsored_by_cam_tech",
+            "sessionName": "RACE 14 - SEMI FINAL 2 Sponsored by Cam-Tech",
+            "carNumber": "177",
+            "driverId": "driver_philip_attwood",
+            "finishPosition": null,
+            "reason": "official_classification_row_has_no_safe_original_grid_start_match"
+          },
+          {
+            "resultId": "result_formula_ford_2019_festival_race_14_semi_final_2_sponsored_by_cam_tech_888_driver_chris_stuart",
+            "sessionId": "session_formula_ford_2019_festival_race_14_semi_final_2_sponsored_by_cam_tech",
+            "sessionName": "RACE 14 - SEMI FINAL 2 Sponsored by Cam-Tech",
+            "carNumber": "888",
+            "driverId": "driver_chris_stuart",
+            "finishPosition": 22,
+            "reason": "official_classification_row_has_no_safe_original_grid_start_match"
+          },
+          {
+            "resultId": "result_formula_ford_2019_festival_race_17_historic_final_spons_by_wilkins_kennedy_73_driver_simon_pruce",
+            "sessionId": "session_formula_ford_2019_festival_race_17_historic_final_spons_by_wilkins_kennedy",
+            "sessionName": "RACE 17 - HISTORIC FINAL Spons by Wilkins Kennedy",
+            "carNumber": "73",
+            "driverId": "driver_simon_pruce",
+            "finishPosition": 17,
+            "reason": "official_classification_row_has_no_safe_original_grid_start_match"
+          },
+          {
+            "resultId": "result_formula_ford_2019_festival_race_17_historic_final_spons_by_wilkins_kennedy_87_driver_ian_jeary",
+            "sessionId": "session_formula_ford_2019_festival_race_17_historic_final_spons_by_wilkins_kennedy",
+            "sessionName": "RACE 17 - HISTORIC FINAL Spons by Wilkins Kennedy",
+            "carNumber": "87",
+            "driverId": "driver_ian_jeary",
+            "finishPosition": 13,
+            "reason": "official_classification_row_has_no_safe_original_grid_start_match"
+          },
+          {
+            "resultId": "result_formula_ford_2019_festival_race_19_last_chance_race_in_recognition_of_diz_128_driver_david_mccullough",
+            "sessionId": "session_formula_ford_2019_festival_race_19_last_chance_race_in_recognition_of_diz",
+            "sessionName": "RACE 19 - LAST CHANCE RACE in recognition of 'Diz",
+            "carNumber": "128",
+            "driverId": "driver_david_mccullough",
+            "finishPosition": 12,
+            "reason": "official_classification_row_has_no_safe_original_grid_start_match"
+          },
           {
             "resultId": "result_formula_ford_2020_champion_brands_race_11_87_driver_ian_jeary",
             "sessionId": "session_formula_ford_2020_champion_brands_race_11",

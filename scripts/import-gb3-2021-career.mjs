@@ -89,8 +89,25 @@ const eventsConfig = [
     sessions: ['qu1', 'qu2', 'rc1', 'rc2', 'rc3']
   },
   {
-    eventId: '213605',
+    // Meeting 6 (races 16-18), August 14-15. Its sheets sit under MSVR/2021/ rather than BF3GT/2021/.
+    eventId: '213252',
     round: 6,
+    venue: 'Silverstone',
+    trackId: 'track_silverstone_gp',
+    trackName: 'Silverstone GP',
+    startDate: '2021-08-14',
+    endDate: '2021-08-15',
+    country: 'United Kingdom',
+    timezone: 'Europe/London',
+    organizer: 'MSVR',
+    filePrefix: 'MSVR/2021',
+    sessions: ['qu1', 'qu2', 'rc1', 'rc2', 'rc3']
+  },
+  {
+    eventId: '213605',
+    // The sheets make Oulton Park meeting 7 (races 19-21). The id keeps its original r6 so existing references hold.
+    round: 7,
+    idRound: 6,
     venue: 'Oulton Park',
     trackId: 'track_oulton_park_international',
     trackName: 'Oulton Park International',
@@ -103,7 +120,9 @@ const eventsConfig = [
   },
   {
     eventId: '214105',
-    round: 7,
+    // Meeting 8 (races 22-24); the id keeps its original r7.
+    round: 8,
+    idRound: 7,
     venue: 'Donington Park',
     trackId: 'track_donington_park_gp',
     trackName: 'Donington Park GP',
@@ -386,9 +405,12 @@ const parseClassificationRows = (text, sessionType) => {
   const failures = [];
   const lines = text.split(/\r?\n/);
   let inRows = false;
+  // MSVR-run meetings (Silverstone, August) print no NAT column; a blank keeps the column order.
+  let hasNationality = true;
   for (const line of lines) {
     if (/^POS\s+NO\s+/i.test(line.trim())) {
       inRows = true;
+      hasNationality = /\bNAT\b/.test(line);
       continue;
     }
     if (!inRows) continue;
@@ -398,15 +420,40 @@ const parseClassificationRows = (text, sessionType) => {
     if (!/^\s*(\d+|DNF|DNS|DQ|DSQ)\s+\S+/.test(line)) continue;
 
     const parts = line.trim().split(/\s{2,}/).filter(Boolean);
-    if (parts.length < 8 && !(sessionType === 'race' && /^(DNF|DNS|DQ|DSQ)$/i.test(parts[0] ?? '') && parts.length >= 6) && !(sessionType !== 'race' && parts.length >= 6)) {
+    // "55 * Dexter PATTERSON" prints car and name with one space between them on status rows.
+    const fusedStatusRow = /^(DNF|DNS|DQ|DSQ)$/i.test(parts[0] ?? '') ? String(parts[1] ?? '').match(/^(\d+)\s*\*?\s+([A-Za-z].+)$/) : null;
+    if (fusedStatusRow) parts.splice(1, 1, fusedStatusRow[1], fusedStatusRow[2]);
+    if (!hasNationality) parts.splice(3, 0, '');
+    // A race DQ/DNS row can carry only position, car, name, nationality and team
+    // (Silverstone June Race 3: " DQ     23 *    Bryce ARON   USA   Carlin").
+    const statusOnlyRaceRow = /^(DNF|DNS|DQ|DSQ)$/i.test(parts[0] ?? '') && parts.length === 5;
+    if (parts.length < 8 && !statusOnlyRaceRow && !(sessionType === 'race' && /^(DNF|DNS|DQ|DSQ)$/i.test(parts[0] ?? '') && parts.length >= 6) && !(sessionType !== 'race' && parts.length >= 6)) {
       failures.push({ line, reason: 'too_few_columns' });
+      continue;
+    }
+    if (statusOnlyRaceRow) {
+      rows.push({
+        positionRaw: parts[0],
+        position: parsePosition(parts[0]),
+        carNumber: cleanCarNumber(parts[1]),
+        driverName: parts[2].replace(/\s+/g, ' ').trim(),
+        nationalityCode: parts[3] || null,
+        team: parts[4],
+        lapsCompleted: null,
+        totalTime: null,
+        gapToLeader: null,
+        gapToAhead: null,
+        averageSpeed: null,
+        bestLapTime: null,
+        bestLapNumber: null
+      });
       continue;
     }
 
     const positionRaw = parts[0];
     let numberRaw = parts[1];
     let nameRaw = parts[2];
-    let nationalityCode = parts[3];
+    let nationalityCode = parts[3] || null;
     let team = parts[4];
     let dataStartIndex = 5;
     if (sessionType === 'race' && /^(DNF|DNS|DQ|DSQ)$/i.test(positionRaw)) {
@@ -538,7 +585,9 @@ const parseBryceStanding = (html) => {
 };
 
 const relative = (path) => path.replace(`${root}/`, '');
-const sessionPdfUrl = (eventId, code) => `${baseUrl}/file/?f=BF3GT/2021/${eventId}${code}bf3.pdf`;
+const filePrefixByEvent = new Map(eventsConfig.map((event) => [event.eventId, event.filePrefix ?? 'BF3GT/2021']));
+const sessionPdfUrl = (eventId, code) => `${baseUrl}/file/?f=${filePrefixByEvent.get(eventId)}/${eventId}${code}bf3.pdf`;
+const eventIdFor = (event) => `event_gb3_${year}_r${event.idRound ?? event.round}_${slug(event.venue)}`;
 const gridPdfUrl = sessionPdfUrl;
 const sessionSlug = (code) => slug(sessionLabels[code]?.label ?? code);
 const sessionIdFor = (event, code) => `session_gb3_${year}_${event.eventId}_${sessionSlug(code)}`;
@@ -694,7 +743,7 @@ const main = async () => {
     }));
 
     upsert(events, {
-      id: `event_gb3_${year}_r${event.round}_${slug(event.venue)}`,
+      id: eventIdFor(event),
       seriesId,
       seasonYear: year,
       name: `GB3 ${year} Round ${event.round} - ${event.venue}`,
@@ -717,7 +766,7 @@ const main = async () => {
       url: bookUrl,
       rightsStatus: 'link_only',
       publishedAt: event.endDate,
-      eventId: `event_gb3_${year}_r${event.round}_${slug(event.venue)}`,
+      eventId: eventIdFor(event),
       sessionId: null,
       driverId: null,
       summary: `Official TSL PDF book for GB3/BRDC British F3 at ${event.venue}.`,
@@ -758,7 +807,7 @@ const main = async () => {
   const gridByEventRaceCodeCar = new Map();
   for (const entry of stagedGrids) {
     const { event, code, label } = entry;
-    const eventId = `event_gb3_${year}_r${event.round}_${slug(event.venue)}`;
+    const eventId = eventIdFor(event);
     const evidenceId = `source_gb3_2021_${event.eventId}_${code}_bf3_pdf`;
     const assetId = `asset_gb3_${year}_${event.eventId}_${code}_pdf`;
 
@@ -866,7 +915,7 @@ const main = async () => {
 
   for (const entry of staged) {
     const { event, code, label } = entry;
-    const eventId = `event_gb3_${year}_r${event.round}_${slug(event.venue)}`;
+    const eventId = eventIdFor(event);
     const sessionId = sessionIdFor(event, code);
     const evidenceId = `source_gb3_2021_${event.eventId}_${code}_bf3_pdf`;
     const assetId = `asset_gb3_${year}_${event.eventId}_${code}_pdf`;
@@ -1033,7 +1082,8 @@ const main = async () => {
 
       upsert(drivers, {
         id: driverId,
-        displayName: row.driverName.replace(/\b([A-Z]+)\b/g, (match) => match[0] + match.slice(1).toLowerCase()),
+        // A driver already in the dataset keeps the display name another importer gave it.
+        displayName: drivers.get(driverId)?.displayName ?? row.driverName.replace(/\b([A-Z]+)\b/g, (match) => match[0] + match.slice(1).toLowerCase()),
         givenName: null,
         familyName: null,
         nationality: row.nationalityCode === 'USA' ? 'United States' : null,
@@ -1041,7 +1091,8 @@ const main = async () => {
         dateOfBirth: null,
         externalIds: {
           gb3_2021_name: row.driverName,
-          gb3_2021_nationalityCode: row.nationalityCode
+          // MSVR sheets print no nationality; leave an earlier meeting's code in place.
+          ...(row.nationalityCode ? { gb3_2021_nationalityCode: row.nationalityCode } : {})
         },
         provenanceRefs: [evidenceId]
       });

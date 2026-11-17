@@ -65,7 +65,7 @@
     "sourceSha256": "9e0729ee253ca7d7a5c4ae9395fb1902264c5377c52e224d13dd85010e2835d9",
     "sourceUrl": "https://github.com/nvkelso/natural-earth-vector/blob/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_land.geojson"
   },
-  "raceCount": 150,
+  "raceCount": 173,
   "schemaVersion": "brycecast.careerAtlas.v3",
   "sourceRefs": [
     {
@@ -86,12 +86,12 @@
     {
       "note": "A2 track identity and sourced coordinates for every career venue.",
       "path": "analysis/career-life-stats/data/venue_facts.csv",
-      "sha256": "878cf8ba950686b43399cead48f7a66699121404ba6fb9546a4c6f261b5e6f10"
+      "sha256": "4b8eb66640ea2a04a673230460e63659d101ad8d04094ee94d98ffee892f681a"
     },
     {
       "note": "A2 personally attributable ledger covering every canonical Bryce race row.",
       "path": "analysis/career-life-stats/output/tables/miles_raced.csv",
-      "sha256": "32703bc453ba7c45b18e60a36b501eca1b3ecb02c57f22e2fa95422ff591d377"
+      "sha256": "cc9b78a452623854d079084081c4ccf1ad3cede192a4f51e9214b1e7ff970995"
     },
     {
       "note": "A2 metric-grain and confidence-class contracts.",
@@ -101,10 +101,10 @@
     {
       "note": "Canonical race identity, series, date, and classified finish fields.",
       "path": "data/career/career.dataset.json",
-      "sha256": "d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd"
+      "sha256": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5"
     }
   ],
-  "venueCount": 34,
+  "venueCount": 38,
   "venues": [
     {
       "bestFinish": 4,
@@ -329,7 +329,7 @@
       "venueId": "venue_barber_motorsports_park"
     },
     {
-      "bestFinish": 3,
+      "bestFinish": 2,
       "confidence": {
         "bestFinish": "observed_exact",
         "coordinates": "observed_exact",
@@ -343,9 +343,9 @@
       ],
       "country": "United Kingdom",
       "dominantChapter": {
-        "bestFinish": 3,
-        "firstRaceDate": "2020-09-12",
-        "firstYear": 2020,
+        "bestFinish": 2,
+        "firstRaceDate": "2019-10-26",
+        "firstYear": 2019,
         "lastYear": 2020,
         "latestRace": {
           "eventId": "event_formula_ford_2020_formula_ford_festival",
@@ -355,12 +355,12 @@
           "sessionId": "session_formula_ford_2020_festival_grand_final_race_21"
         },
         "latestRaceDate": "2020-10-24",
-        "raceCount": 7,
+        "raceCount": 12,
         "seriesId": "series_formula_ford",
         "seriesName": "Formula Ford",
         "seriesShort": "Formula Ford"
       },
-      "firstYear": 2020,
+      "firstYear": 2019,
       "lastYear": 2022,
       "lat": 51.3569,
       "latestRace": {
@@ -375,13 +375,13 @@
         "x": 869.017,
         "y": 50.541
       },
-      "raceCount": 13,
+      "raceCount": 18,
       "region": "Europe",
       "seriesSpans": [
         {
-          "bestFinish": 3,
-          "firstRaceDate": "2020-09-12",
-          "firstYear": 2020,
+          "bestFinish": 2,
+          "firstRaceDate": "2019-10-26",
+          "firstYear": 2019,
           "lastYear": 2020,
           "latestRace": {
             "eventId": "event_formula_ford_2020_formula_ford_festival",
@@ -391,7 +391,7 @@
             "sessionId": "session_formula_ford_2020_festival_grand_final_race_21"
           },
           "latestRaceDate": "2020-10-24",
-          "raceCount": 7,
+          "raceCount": 12,
           "seriesId": "series_formula_ford",
           "seriesName": "Formula Ford",
           "seriesShort": "Formula Ford"
@@ -495,6 +495,80 @@
       ],
       "trackName": "Cadwell Park Circuit",
       "venueId": "venue_cadwell_park_circuit"
+    },
+    {
+      "bestFinish": 2,
+      "confidence": {
+        "bestFinish": "observed_exact",
+        "coordinates": "observed_exact",
+        "latestRace": "observed_exact",
+        "raceCount": "observed_exact",
+        "seriesSpans": "observed_exact"
+      },
+      "coordinateSources": [
+        "Wikipedia circuit profile | https://en.wikipedia.org/wiki/Castle_Combe_Circuit"
+      ],
+      "country": "United Kingdom",
+      "dominantChapter": {
+        "bestFinish": 2,
+        "firstRaceDate": "2020-07-04",
+        "firstYear": 2020,
+        "lastYear": 2020,
+        "latestRace": {
+          "eventId": "event_formula_ford_2020_castle_combe_203668",
+          "raceDate": "2020-08-31",
+          "raceHref": "/career/race/session_formula_ford_2020_castle_combe_203668_race_8",
+          "raceLabel": "Castle Combe Racing Club FF1600 2020 - 2020-08-31 \u00b7 RACE 8",
+          "sessionId": "session_formula_ford_2020_castle_combe_203668_race_8"
+        },
+        "latestRaceDate": "2020-08-31",
+        "raceCount": 6,
+        "seriesId": "series_formula_ford",
+        "seriesName": "Formula Ford",
+        "seriesShort": "Formula Ford"
+      },
+      "firstYear": 2020,
+      "lastYear": 2020,
+      "lat": 51.4897,
+      "latestRace": {
+        "eventId": "event_formula_ford_2020_castle_combe_203668",
+        "raceDate": "2020-08-31",
+        "raceHref": "/career/race/session_formula_ford_2020_castle_combe_203668_race_8",
+        "raceLabel": "Castle Combe Racing Club FF1600 2020 - 2020-08-31 \u00b7 RACE 8",
+        "sessionId": "session_formula_ford_2020_castle_combe_203668_race_8"
+      },
+      "lon": -2.2125,
+      "projected": {
+        "x": 858.401,
+        "y": 49.972
+      },
+      "raceCount": 6,
+      "region": "Europe",
+      "seriesSpans": [
+        {
+          "bestFinish": 2,
+          "firstRaceDate": "2020-07-04",
+          "firstYear": 2020,
+          "lastYear": 2020,
+          "latestRace": {
+            "eventId": "event_formula_ford_2020_castle_combe_203668",
+            "raceDate": "2020-08-31",
+            "raceHref": "/career/race/session_formula_ford_2020_castle_combe_203668_race_8",
+            "raceLabel": "Castle Combe Racing Club FF1600 2020 - 2020-08-31 \u00b7 RACE 8",
+            "sessionId": "session_formula_ford_2020_castle_combe_203668_race_8"
+          },
+          "latestRaceDate": "2020-08-31",
+          "raceCount": 6,
+          "seriesId": "series_formula_ford",
+          "seriesName": "Formula Ford",
+          "seriesShort": "Formula Ford"
+        }
+      ],
+      "trackIds": [
+        "track_castle_combe"
+      ],
+      "trackName": "Castle Combe Circuit",
+      "venueId": "venue_castle_combe_circuit"
     },
     {
       "bestFinish": 1,
@@ -663,6 +737,80 @@
       ],
       "trackName": "Circuit de Spa-Francorchamps",
       "venueId": "venue_circuit_de_spa_francorchamps"
+    },
+    {
+      "bestFinish": 3,
+      "confidence": {
+        "bestFinish": "observed_exact",
+        "coordinates": "observed_exact",
+        "latestRace": "observed_exact",
+        "raceCount": "observed_exact",
+        "seriesSpans": "observed_exact"
+      },
+      "coordinateSources": [
+        "Wikipedia circuit profile | https://en.wikipedia.org/wiki/Circuit_of_the_Americas"
+      ],
+      "country": "United States",
+      "dominantChapter": {
+        "bestFinish": 3,
+        "firstRaceDate": "2019-02-08",
+        "firstYear": 2019,
+        "lastYear": 2019,
+        "latestRace": {
+          "eventId": "event_scca_super_tour_2019_circuit_of_the_americas",
+          "raceDate": "2019-02-08",
+          "raceHref": "/career/race/session_scca_super_tour_2019_cota_sunday_race",
+          "raceLabel": "Hoosier SCCA Super Tour 2019 - Circuit of the Americas (Lone Star Region Polar Prix) \u00b7 Group 7 Sunday Race",
+          "sessionId": "session_scca_super_tour_2019_cota_sunday_race"
+        },
+        "latestRaceDate": "2019-02-08",
+        "raceCount": 2,
+        "seriesId": "series_scca_super_tour",
+        "seriesName": "Hoosier SCCA Super Tour",
+        "seriesShort": "SCCA"
+      },
+      "firstYear": 2019,
+      "lastYear": 2019,
+      "lat": 30.1328,
+      "latestRace": {
+        "eventId": "event_scca_super_tour_2019_circuit_of_the_americas",
+        "raceDate": "2019-02-08",
+        "raceHref": "/career/race/session_scca_super_tour_2019_cota_sunday_race",
+        "raceLabel": "Hoosier SCCA Super Tour 2019 - Circuit of the Americas (Lone Star Region Polar Prix) \u00b7 Group 7 Sunday Race",
+        "sessionId": "session_scca_super_tour_2019_cota_sunday_race"
+      },
+      "lon": -97.6411,
+      "projected": {
+        "x": 449.172,
+        "y": 141.519
+      },
+      "raceCount": 2,
+      "region": "North America",
+      "seriesSpans": [
+        {
+          "bestFinish": 3,
+          "firstRaceDate": "2019-02-08",
+          "firstYear": 2019,
+          "lastYear": 2019,
+          "latestRace": {
+            "eventId": "event_scca_super_tour_2019_circuit_of_the_americas",
+            "raceDate": "2019-02-08",
+            "raceHref": "/career/race/session_scca_super_tour_2019_cota_sunday_race",
+            "raceLabel": "Hoosier SCCA Super Tour 2019 - Circuit of the Americas (Lone Star Region Polar Prix) \u00b7 Group 7 Sunday Race",
+            "sessionId": "session_scca_super_tour_2019_cota_sunday_race"
+          },
+          "latestRaceDate": "2019-02-08",
+          "raceCount": 2,
+          "seriesId": "series_scca_super_tour",
+          "seriesName": "Hoosier SCCA Super Tour",
+          "seriesShort": "SCCA"
+        }
+      ],
+      "trackIds": [
+        "track_circuit_of_the_americas"
+      ],
+      "trackName": "Circuit of the Americas",
+      "venueId": "venue_circuit_of_the_americas"
     },
     {
       "bestFinish": 6,
@@ -1331,6 +1479,80 @@
       "venueId": "venue_iowa_speedway"
     },
     {
+      "bestFinish": 5,
+      "confidence": {
+        "bestFinish": "observed_exact",
+        "coordinates": "observed_exact",
+        "latestRace": "observed_exact",
+        "raceCount": "observed_exact",
+        "seriesSpans": "observed_exact"
+      },
+      "coordinateSources": [
+        "Wikipedia circuit profile | https://en.wikipedia.org/wiki/Lucas_Oil_Indianapolis_Raceway_Park"
+      ],
+      "country": "United States",
+      "dominantChapter": {
+        "bestFinish": 5,
+        "firstRaceDate": "2024-05-23",
+        "firstYear": 2024,
+        "lastYear": 2024,
+        "latestRace": {
+          "eventId": "event_usf_pro_2000_2024_lucas_oil_freedom_90",
+          "raceDate": "2024-05-23",
+          "raceHref": "/career/race/session_usf_pro_2000_2024_lucas_oil_race",
+          "raceLabel": "USF Pro 2000 2024 - Freedom 90, Lucas Oil Indianapolis Raceway Park \u00b7 Freedom 90",
+          "sessionId": "session_usf_pro_2000_2024_lucas_oil_race"
+        },
+        "latestRaceDate": "2024-05-23",
+        "raceCount": 1,
+        "seriesId": "series_usf_pro_2000",
+        "seriesName": "USF Pro 2000 Championship",
+        "seriesShort": "USF Pro 2000"
+      },
+      "firstYear": 2024,
+      "lastYear": 2024,
+      "lat": 39.8128,
+      "latestRace": {
+        "eventId": "event_usf_pro_2000_2024_lucas_oil_freedom_90",
+        "raceDate": "2024-05-23",
+        "raceHref": "/career/race/session_usf_pro_2000_2024_lucas_oil_race",
+        "raceLabel": "USF Pro 2000 2024 - Freedom 90, Lucas Oil Indianapolis Raceway Park \u00b7 Freedom 90",
+        "sessionId": "session_usf_pro_2000_2024_lucas_oil_race"
+      },
+      "lon": -86.3408,
+      "projected": {
+        "x": 497.632,
+        "y": 100.026
+      },
+      "raceCount": 1,
+      "region": "North America",
+      "seriesSpans": [
+        {
+          "bestFinish": 5,
+          "firstRaceDate": "2024-05-23",
+          "firstYear": 2024,
+          "lastYear": 2024,
+          "latestRace": {
+            "eventId": "event_usf_pro_2000_2024_lucas_oil_freedom_90",
+            "raceDate": "2024-05-23",
+            "raceHref": "/career/race/session_usf_pro_2000_2024_lucas_oil_race",
+            "raceLabel": "USF Pro 2000 2024 - Freedom 90, Lucas Oil Indianapolis Raceway Park \u00b7 Freedom 90",
+            "sessionId": "session_usf_pro_2000_2024_lucas_oil_race"
+          },
+          "latestRaceDate": "2024-05-23",
+          "raceCount": 1,
+          "seriesId": "series_usf_pro_2000",
+          "seriesName": "USF Pro 2000 Championship",
+          "seriesShort": "USF Pro 2000"
+        }
+      ],
+      "trackIds": [
+        "track_lucas_oil_indianapolis_raceway_park"
+      ],
+      "trackName": "Lucas Oil Indianapolis Raceway Park",
+      "venueId": "venue_lucas_oil_indianapolis_raceway_park"
+    },
+    {
       "bestFinish": 3,
       "confidence": {
         "bestFinish": "observed_exact",
@@ -1376,9 +1598,27 @@
         "x": 508.451,
         "y": 124.314
       },
-      "raceCount": 3,
+      "raceCount": 5,
       "region": "North America",
       "seriesSpans": [
+        {
+          "bestFinish": 4,
+          "firstRaceDate": "2019-03-15",
+          "firstYear": 2019,
+          "lastYear": 2019,
+          "latestRace": {
+            "eventId": "event_scca_super_tour_2019_road_atlanta",
+            "raceDate": "2019-03-15",
+            "raceHref": "/career/race/session_scca_super_tour_2019_road_atlanta_sunday_race",
+            "raceLabel": "Hoosier SCCA Super Tour 2019 - Michelin Raceway Road Atlanta (Atlanta Region) \u00b7 Group 3 Sunday Race",
+            "sessionId": "session_scca_super_tour_2019_road_atlanta_sunday_race"
+          },
+          "latestRaceDate": "2019-03-15",
+          "raceCount": 2,
+          "seriesId": "series_scca_super_tour",
+          "seriesName": "Hoosier SCCA Super Tour",
+          "seriesShort": "SCCA"
+        },
         {
           "bestFinish": 3,
           "firstRaceDate": "2019-04-18",
@@ -1405,7 +1645,7 @@
       "venueId": "venue_michelin_raceway_road_atlanta"
     },
     {
-      "bestFinish": 3,
+      "bestFinish": 1,
       "confidence": {
         "bestFinish": "observed_exact",
         "coordinates": "observed_exact",
@@ -1450,7 +1690,7 @@
         "x": 513.521,
         "y": 96.269
       },
-      "raceCount": 7,
+      "raceCount": 8,
       "region": "North America",
       "seriesSpans": [
         {
@@ -1470,6 +1710,24 @@
           "seriesId": "series_frp_f1600",
           "seriesName": "F1600 Championship Series",
           "seriesShort": "F1600"
+        },
+        {
+          "bestFinish": 1,
+          "firstRaceDate": "2019-06-28",
+          "firstYear": 2019,
+          "lastYear": 2019,
+          "latestRace": {
+            "eventId": "event_rcffs_2019_mid_ohio",
+            "raceDate": "2019-06-28",
+            "raceHref": "/career/race/session_rcffs_2019_mid_ohio_race_3",
+            "raceLabel": "Right Coast Formula F Series 2019 - Race Weekend 2, Mid-Ohio (FRP All Formula Weekend) \u00b7 Race 3 (RCFFS 50th Anniversary feature)",
+            "sessionId": "session_rcffs_2019_mid_ohio_race_3"
+          },
+          "latestRaceDate": "2019-06-28",
+          "raceCount": 1,
+          "seriesId": "series_rcffs",
+          "seriesName": "Right Coast Formula F Series",
+          "seriesShort": "RCFFS"
         },
         {
           "bestFinish": 12,
@@ -2033,6 +2291,80 @@
       "venueId": "venue_road_america"
     },
     {
+      "bestFinish": 10,
+      "confidence": {
+        "bestFinish": "observed_exact",
+        "coordinates": "observed_exact",
+        "latestRace": "observed_exact",
+        "raceCount": "observed_exact",
+        "seriesSpans": "observed_exact"
+      },
+      "coordinateSources": [
+        "Wikipedia circuit profile | https://en.wikipedia.org/wiki/Sebring_International_Raceway"
+      ],
+      "country": "United States",
+      "dominantChapter": {
+        "bestFinish": 10,
+        "firstRaceDate": "2019-01-11",
+        "firstYear": 2019,
+        "lastYear": 2019,
+        "latestRace": {
+          "eventId": "event_scca_super_tour_2019_sebring",
+          "raceDate": "2019-01-11",
+          "raceHref": "/career/race/session_scca_super_tour_2019_sebring_race_2",
+          "raceLabel": "Hoosier SCCA Super Tour 2019 - Sebring (Central Florida Region, Winter Vacation) \u00b7 Group 7 Race 2",
+          "sessionId": "session_scca_super_tour_2019_sebring_race_2"
+        },
+        "latestRaceDate": "2019-01-11",
+        "raceCount": 2,
+        "seriesId": "series_scca_super_tour",
+        "seriesName": "Hoosier SCCA Super Tour",
+        "seriesShort": "SCCA"
+      },
+      "firstYear": 2019,
+      "lastYear": 2019,
+      "lat": 27.455,
+      "latestRace": {
+        "eventId": "event_scca_super_tour_2019_sebring",
+        "raceDate": "2019-01-11",
+        "raceHref": "/career/race/session_scca_super_tour_2019_sebring_race_2",
+        "raceLabel": "Hoosier SCCA Super Tour 2019 - Sebring (Central Florida Region, Winter Vacation) \u00b7 Group 7 Race 2",
+        "sessionId": "session_scca_super_tour_2019_sebring_race_2"
+      },
+      "lon": -81.35,
+      "projected": {
+        "x": 519.034,
+        "y": 152.998
+      },
+      "raceCount": 2,
+      "region": "North America",
+      "seriesSpans": [
+        {
+          "bestFinish": 10,
+          "firstRaceDate": "2019-01-11",
+          "firstYear": 2019,
+          "lastYear": 2019,
+          "latestRace": {
+            "eventId": "event_scca_super_tour_2019_sebring",
+            "raceDate": "2019-01-11",
+            "raceHref": "/career/race/session_scca_super_tour_2019_sebring_race_2",
+            "raceLabel": "Hoosier SCCA Super Tour 2019 - Sebring (Central Florida Region, Winter Vacation) \u00b7 Group 7 Race 2",
+            "sessionId": "session_scca_super_tour_2019_sebring_race_2"
+          },
+          "latestRaceDate": "2019-01-11",
+          "raceCount": 2,
+          "seriesId": "series_scca_super_tour",
+          "seriesName": "Hoosier SCCA Super Tour",
+          "seriesShort": "SCCA"
+        }
+      ],
+      "trackIds": [
+        "track_sebring_international_raceway"
+      ],
+      "trackName": "Sebring International Raceway",
+      "venueId": "venue_sebring_international_raceway"
+    },
+    {
       "bestFinish": 3,
       "confidence": {
         "bestFinish": "observed_exact",
@@ -2058,7 +2390,7 @@
           "sessionId": "session_gb3_2022_1096"
         },
         "latestRaceDate": "2022-07-30",
-        "raceCount": 8,
+        "raceCount": 12,
         "seriesId": "series_gb3",
         "seriesName": "GB3 Championship",
         "seriesShort": "GB3"
@@ -2078,7 +2410,7 @@
         "x": 863.528,
         "y": 47.448
       },
-      "raceCount": 12,
+      "raceCount": 16,
       "region": "Europe",
       "seriesSpans": [
         {
@@ -2112,7 +2444,7 @@
             "sessionId": "session_gb3_2022_1096"
           },
           "latestRaceDate": "2022-07-30",
-          "raceCount": 8,
+          "raceCount": 12,
           "seriesId": "series_gb3",
           "seriesName": "GB3 Championship",
           "seriesShort": "GB3"

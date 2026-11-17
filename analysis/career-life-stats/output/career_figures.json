@@ -1,22 +1,22 @@
 {
   "checks": {
-    "eventCount": 83,
-    "otherSessionsTimed": 177,
+    "eventCount": 95,
+    "otherSessionsTimed": 185,
     "raceLitres": [
-      3354.0,
-      4559.3,
-      6024.4
+      3535.9,
+      4802.9,
+      6348.6
     ],
     "sessionLitres": [
-      6396.7,
-      8699.8,
-      11482.6
+      6630.0,
+      9012.3,
+      11898.6
     ],
-    "spanDays": 2699,
-    "spanWeeks": 386,
-    "timedRaces": 122,
+    "spanDays": 2796,
+    "spanWeeks": 400,
+    "timedRaces": 139,
     "undatedSessions": 4,
-    "untimedRaces": 26
+    "untimedRaces": 30
   },
   "classes": {
     "counted": "Exact from the data.",
@@ -28,24 +28,24 @@
       "caveat": null,
       "class": "counted",
       "denominator": null,
-      "display": "150",
-      "how": "Every race he has a result in, across seven series. Heats are not counted.",
+      "display": "173",
+      "how": "Every race he has a result in, across ten series. Heats are not counted.",
       "id": "races",
       "label": "Races",
       "parts": null,
       "range": null,
       "scope": "career",
       "unit": "races",
-      "value": 150
+      "value": 173
     },
     {
       "caveat": null,
       "class": "counted",
       "denominator": {
         "unit": "races",
-        "value": 150
+        "value": 173
       },
-      "display": "6",
+      "display": "7",
       "how": "Races where he was classified first.",
       "id": "wins",
       "label": "Wins",
@@ -53,16 +53,16 @@
       "range": null,
       "scope": "career",
       "unit": "races",
-      "value": 6
+      "value": 7
     },
     {
       "caveat": null,
       "class": "counted",
       "denominator": {
         "unit": "races",
-        "value": 150
+        "value": 173
       },
-      "display": "25",
+      "display": "33",
       "how": "Races where he finished in the top three.",
       "id": "podiums",
       "label": "Podiums",
@@ -70,16 +70,16 @@
       "range": null,
       "scope": "career",
       "unit": "races",
-      "value": 25
+      "value": 33
     },
     {
       "caveat": null,
       "class": "counted",
       "denominator": {
         "unit": "races",
-        "value": 150
+        "value": 173
       },
-      "display": "98",
+      "display": "114",
       "how": "Races where he finished tenth or better.",
       "id": "topTens",
       "label": "Top tens",
@@ -87,13 +87,13 @@
       "range": null,
       "scope": "career",
       "unit": "races",
-      "value": 98
+      "value": 114
     },
     {
       "caveat": "Daytona counts his 142 laps, not the 780 the shared car ran.",
       "class": "counted",
       "denominator": null,
-      "display": "3,274",
+      "display": "3,566",
       "how": "His laps in every race added up. At Daytona only the laps he drove himself count.",
       "id": "raceLaps",
       "label": "Race laps",
@@ -101,27 +101,27 @@
       "range": null,
       "scope": "career",
       "unit": "laps",
-      "value": 3274
+      "value": 3566
     },
     {
-      "caveat": "About 29% of one trip around the equator.",
+      "caveat": "About 32% of one trip around the equator.",
       "class": "counted",
       "denominator": null,
-      "display": "7,316",
-      "how": "Each race's laps times that track's length, added up race by race: 7,316.4 miles to the tenth.",
+      "display": "7,900",
+      "how": "Each race's laps times that track's length, added up race by race: 7,899.9 miles to the tenth.",
       "id": "raceMiles",
       "label": "Miles raced",
       "parts": null,
       "range": null,
       "scope": "career",
       "unit": "miles",
-      "value": 7316.4
+      "value": 7899.9
     },
     {
       "caveat": "The turn counts come from each track's published layout; an oval counts as four corners.",
       "class": "counted",
       "denominator": null,
-      "display": "36,112",
+      "display": "39,265",
       "how": "His laps in each race times the number of numbered turns on that track.",
       "id": "raceCorners",
       "label": "Corners in races",
@@ -129,109 +129,109 @@
       "range": null,
       "scope": "career",
       "unit": "corners",
-      "value": 36112
+      "value": 39265
     },
     {
-      "caveat": "Covers 122 of 150 races and includes time behind the safety car.",
+      "caveat": "Covers 139 of 173 races and includes time behind the safety car.",
       "class": "counted",
       "denominator": null,
-      "display": "60 h 22 min",
+      "display": "65 h 3 min",
       "how": "The official race time from the start to his finish, added up over the races that publish one.",
       "id": "raceTimeTimed",
       "label": "Time racing, timed races",
       "parts": [
         {
           "label": "races covered",
-          "value": 122
+          "value": 139
         },
         {
           "label": "races in all",
-          "value": 150
+          "value": 173
         }
       ],
       "range": null,
       "scope": "career",
       "unit": "hours",
-      "value": 60.37
+      "value": 65.05
     },
     {
-      "caveat": "Covers 148 of 150 races; the other 2 had no laps. Real laps are slower than his best, so the true time is longer.",
+      "caveat": "Covers 169 of 173 races; the other 4 had no laps. Real laps are slower than his best, so the true time is longer.",
       "class": "lower_bound",
       "denominator": null,
-      "display": "71 h 46 min+",
+      "display": "78 h 24 min+",
       "how": "The timed races, plus his laps times his best lap for the races with no official time.",
       "id": "raceTimeAll",
       "label": "Time racing, all races",
       "parts": [
         {
           "label": "races covered",
-          "value": 148
+          "value": 169
         },
         {
           "label": "races in all",
-          "value": 150
+          "value": 173
         }
       ],
       "range": null,
       "scope": "career",
       "unit": "hours",
-      "value": 71.78
+      "value": 78.41
     },
     {
       "caveat": "Leaves out sessions with no lap count and every private test.",
       "class": "lower_bound",
       "denominator": null,
-      "display": "133 h+",
-      "how": "Race time, plus his laps times his best lap in every practice, qualifying and test session with a lap count: 133.2 hours to the tenth.",
+      "display": "141 h+",
+      "how": "Race time, plus his laps times his best lap in every practice, qualifying and test session with a lap count: 141.7 hours to the tenth.",
       "id": "sessionHours",
       "label": "Time on track, all official sessions",
       "parts": null,
       "range": null,
       "scope": "career",
       "unit": "hours",
-      "value": 133.2
+      "value": 141.7
     },
     {
-      "caveat": "Some names appear twice under different spellings, so this is between 491 and 498 people. About half are from the one 24-hour race at Daytona.",
+      "caveat": "Some names appear twice under different spellings, so this is between 611 and 618 people. About half are from the one 24-hour race at Daytona.",
       "class": "counted",
       "denominator": null,
-      "display": "499",
+      "display": "619",
       "how": "Every other driver name on the results of the races he was in, counted once each.",
       "id": "otherDriverRecords",
       "label": "Other drivers in his races",
       "parts": null,
       "range": {
         "base": null,
-        "high": 498,
-        "low": 491
+        "high": 618,
+        "low": 611
       },
       "scope": "career",
       "unit": "driver records",
-      "value": 499
+      "value": 619
     },
     {
-      "caveat": "Between 261 and 268 people, for the same reason.",
+      "caveat": "Between 381 and 388 people, for the same reason.",
       "class": "counted",
       "denominator": null,
-      "display": "269",
+      "display": "389",
       "how": "The same count without the Daytona 24-hour race, so only the drivers he raced in single-seaters.",
       "id": "otherDriverRecordsSingleSeater",
       "label": "Other drivers, leaving out Daytona",
       "parts": null,
       "range": {
         "base": null,
-        "high": 268,
-        "low": 261
+        "high": 388,
+        "low": 381
       },
       "scope": "career",
       "unit": "driver records",
-      "value": 269
+      "value": 389
     },
     {
       "caveat": null,
       "class": "counted",
       "denominator": null,
-      "display": "34",
+      "display": "38",
       "how": "Different circuits he has raced at. Two layouts at one circuit count once.",
       "id": "venues",
       "label": "Tracks",
@@ -239,7 +239,7 @@
       "range": null,
       "scope": "career",
       "unit": "tracks",
-      "value": 34
+      "value": 38
     },
     {
       "caveat": null,
@@ -259,42 +259,42 @@
       "caveat": "The least distance anyone could cover between his races, not his real travel: trips home and testing are left out.",
       "class": "lower_bound",
       "denominator": null,
-      "display": "60,561+",
-      "how": "A straight line from each race's track to the next race's track, added up in date order: 60,561.1 miles to the tenth.",
+      "display": "63,216+",
+      "how": "A straight line from each race's track to the next race's track, added up in date order: 63,216.2 miles to the tenth.",
       "id": "milesBetweenTracks",
       "label": "Miles between tracks",
       "parts": null,
       "range": null,
       "scope": "career",
       "unit": "miles",
-      "value": 60561.1
+      "value": 63216.2
     },
     {
       "caveat": "The stretch factors are assumptions. Still only track to track, not his real travel.",
       "class": "modelled_range",
       "denominator": null,
-      "display": "63,671 to 71,512",
+      "display": "66,464 to 74,650",
       "how": "The straight lines stretched to allow for roads on short trips and flight paths on long ones.",
       "id": "milesBetweenTracksByRoad",
       "label": "Miles between tracks, by road and air",
       "parts": null,
       "range": {
-        "base": 66842.2,
-        "high": 71512.1,
-        "low": 63670.6
+        "base": 69774.6,
+        "high": 74649.5,
+        "low": 66463.7
       },
       "scope": "career",
       "unit": "miles",
       "value": null
     },
     {
-      "caveat": "Out of the 2,699 days from his first race meeting to his last.",
+      "caveat": "Out of the 2,796 days from his first race meeting to his last.",
       "class": "counted",
       "denominator": {
         "unit": "days",
-        "value": 2699
+        "value": 2796
       },
-      "display": "177",
+      "display": "198",
       "how": "Every day from the first to the last day of each race meeting, counting a day once even when two meetings share it.",
       "id": "eventDays",
       "label": "Days at race meetings",
@@ -302,16 +302,16 @@
       "range": null,
       "scope": "career",
       "unit": "days",
-      "value": 177
+      "value": 198
     },
     {
       "caveat": "4 sessions have no date and are left out.",
       "class": "counted",
       "denominator": {
         "unit": "days",
-        "value": 2699
+        "value": 2796
       },
-      "display": "185",
+      "display": "202",
       "how": "Different dates on which he ran in at least one official session.",
       "id": "sessionDays",
       "label": "Days he was on track",
@@ -319,16 +319,16 @@
       "range": null,
       "scope": "career",
       "unit": "days",
-      "value": 185
+      "value": 202
     },
     {
       "caveat": null,
       "class": "counted",
       "denominator": {
         "unit": "weeks",
-        "value": 386
+        "value": 400
       },
-      "display": "75",
+      "display": "86",
       "how": "Calendar weeks, Monday to Sunday, that held at least one day of a race meeting.",
       "id": "raceWeeks",
       "label": "Weeks with a race meeting",
@@ -336,21 +336,21 @@
       "range": null,
       "scope": "career",
       "unit": "weeks",
-      "value": 75
+      "value": 86
     },
     {
       "caveat": "The fuel rates are assumptions, not measurements.",
       "class": "modelled_range",
       "denominator": null,
-      "display": "886 to 1,591",
+      "display": "934 to 1,677",
       "how": "His race miles times a low, middle and high guess at how much fuel each car uses per mile.",
       "id": "fuelRaces",
       "label": "Fuel burned in races",
       "parts": null,
       "range": {
-        "base": 1204,
-        "high": 1591,
-        "low": 886
+        "base": 1269,
+        "high": 1677,
+        "low": 934
       },
       "scope": "career",
       "unit": "US gallons",
@@ -360,15 +360,15 @@
       "caveat": "The fuel rates are assumptions, and sessions with no lap count are left out.",
       "class": "modelled_range",
       "denominator": null,
-      "display": "1,690 to 3,033",
+      "display": "1,751 to 3,143",
       "how": "The same fuel rates applied to his miles in every practice, qualifying, test and race.",
       "id": "fuelAllSessions",
       "label": "Fuel burned in all official sessions",
       "parts": null,
       "range": {
-        "base": 2298,
-        "high": 3033,
-        "low": 1690
+        "base": 2381,
+        "high": 3143,
+        "low": 1751
       },
       "scope": "career",
       "unit": "US gallons",
@@ -451,7 +451,7 @@
         "class": "counted",
         "denominator": null,
         "display": "15",
-        "how": "His age on April 19, 2019, the day of his first car race.",
+        "how": "His age on January 12, 2019, the day of his first car race.",
         "id": "ageAtFirstRace",
         "label": "Age at his first race",
         "parts": null,
@@ -495,42 +495,42 @@
           "unit": "days",
           "value": 8378
         },
-        "display": "2.1%",
+        "display": "2.4%",
         "how": "His days at race meetings out of every day he has been alive.",
         "id": "eventDaysShareOfLife",
         "label": "Days at race meetings, share of his life",
         "parts": [
           {
             "label": "days at race meetings",
-            "value": 177
+            "value": 198
           }
         ],
         "range": null,
         "scope": "career",
         "unit": "percent",
-        "value": 2.1
+        "value": 2.4
       },
       {
         "caveat": null,
         "class": "counted",
         "denominator": {
           "unit": "days",
-          "value": 2699
+          "value": 2796
         },
-        "display": "6.6%",
+        "display": "7.1%",
         "how": "His days at race meetings out of every day from his first race meeting to his last.",
         "id": "eventDaysShareOfCareer",
         "label": "Days at race meetings, share of his racing years",
         "parts": [
           {
             "label": "days at race meetings",
-            "value": 177
+            "value": 198
           }
         ],
         "range": null,
         "scope": "career",
         "unit": "percent",
-        "value": 6.6
+        "value": 7.1
       },
       {
         "caveat": null,
@@ -539,42 +539,42 @@
           "unit": "days",
           "value": 8378
         },
-        "display": "2.2%",
+        "display": "2.4%",
         "how": "Days he ran in at least one official session, out of every day he has been alive.",
         "id": "sessionDaysShareOfLife",
         "label": "Days on track, share of his life",
         "parts": [
           {
             "label": "days on track",
-            "value": 185
+            "value": 202
           }
         ],
         "range": null,
         "scope": "career",
         "unit": "percent",
-        "value": 2.2
+        "value": 2.4
       },
       {
         "caveat": null,
         "class": "counted",
         "denominator": {
           "unit": "days",
-          "value": 2699
+          "value": 2796
         },
-        "display": "6.9%",
+        "display": "7.2%",
         "how": "Days he ran in at least one official session, out of every day from his first race meeting to his last.",
         "id": "sessionDaysShareOfCareer",
         "label": "Days on track, share of his racing years",
         "parts": [
           {
             "label": "days on track",
-            "value": 185
+            "value": 202
           }
         ],
         "range": null,
         "scope": "career",
         "unit": "percent",
-        "value": 6.9
+        "value": 7.2
       },
       {
         "caveat": null,
@@ -597,7 +597,7 @@
           "unit": "weeks",
           "value": 1197
         },
-        "display": "75",
+        "display": "86",
         "how": "Weeks that held at least one day of a race meeting, out of every week he has lived.",
         "id": "raceWeeksShareOfLife",
         "label": "Race weeks among the weeks he has lived",
@@ -605,24 +605,90 @@
         "range": null,
         "scope": "career",
         "unit": "weeks",
-        "value": 75
+        "value": 86
       }
     ],
-    "firstRaceDate": "2019-04-19",
+    "firstRaceDate": "2019-01-12",
     "lastRaceDate": "2026-09-06"
   },
   "schemaVersion": "brycecast.careerFigures.v1",
   "span": {
-    "days": 2699,
-    "firstDay": "2019-04-18",
+    "days": 2796,
+    "firstDay": "2019-01-11",
     "lastDay": "2026-09-06",
-    "weeks": 386
+    "weeks": 400
   },
   "travelLegs": {
     "class": "lower_bound",
     "how": "Each leg is a straight line from one race meeting's track to the next one's, in date order. Drive or flight is a rule of thumb (same country and under 750 miles counts as a drive), not how he travelled.",
-    "legCount": 82,
+    "legCount": 94,
     "legs": [
+      {
+        "from": {
+          "country": "United States",
+          "date": "2019-01-11",
+          "eventId": "event_scca_super_tour_2019_sebring",
+          "lat": 27.455,
+          "lon": -81.35,
+          "trackName": "Sebring International Raceway"
+        },
+        "greatCircleMiles": 1002.7,
+        "index": 1,
+        "modeProxy": "flight",
+        "runningMiles": 1002.7,
+        "to": {
+          "country": "United States",
+          "date": "2019-02-08",
+          "eventId": "event_scca_super_tour_2019_circuit_of_the_americas",
+          "lat": 30.1328,
+          "lon": -97.6411,
+          "trackName": "Circuit of the Americas"
+        }
+      },
+      {
+        "from": {
+          "country": "United States",
+          "date": "2019-02-08",
+          "eventId": "event_scca_super_tour_2019_circuit_of_the_americas",
+          "lat": 30.1328,
+          "lon": -97.6411,
+          "trackName": "Circuit of the Americas"
+        },
+        "greatCircleMiles": 854.1,
+        "index": 2,
+        "modeProxy": "flight",
+        "runningMiles": 1856.8,
+        "to": {
+          "country": "United States",
+          "date": "2019-03-15",
+          "eventId": "event_scca_super_tour_2019_road_atlanta",
+          "lat": 34.146667,
+          "lon": -83.817778,
+          "trackName": "Michelin Raceway Road Atlanta"
+        }
+      },
+      {
+        "from": {
+          "country": "United States",
+          "date": "2019-03-15",
+          "eventId": "event_scca_super_tour_2019_road_atlanta",
+          "lat": 34.146667,
+          "lon": -83.817778,
+          "trackName": "Michelin Raceway Road Atlanta"
+        },
+        "greatCircleMiles": 0.0,
+        "index": 3,
+        "modeProxy": "same_venue",
+        "runningMiles": 1856.8,
+        "to": {
+          "country": "United States",
+          "date": "2019-04-18",
+          "eventId": "event_frp_f1600_2019_r1_road_atlanta",
+          "lat": 34.146667,
+          "lon": -83.817778,
+          "trackName": "Michelin Raceway Road Atlanta"
+        }
+      },
       {
         "from": {
           "country": "United States",
@@ -633,9 +699,9 @@
           "trackName": "Michelin Raceway Road Atlanta"
         },
         "greatCircleMiles": 677.7,
-        "index": 1,
+        "index": 4,
         "modeProxy": "drive",
-        "runningMiles": 677.7,
+        "runningMiles": 2534.5,
         "to": {
           "country": "United States",
           "date": "2019-05-10",
@@ -655,9 +721,9 @@
           "trackName": "Watkins Glen International"
         },
         "greatCircleMiles": 316.4,
-        "index": 2,
+        "index": 5,
         "modeProxy": "drive",
-        "runningMiles": 994.1,
+        "runningMiles": 2850.9,
         "to": {
           "country": "United States",
           "date": "2019-06-28",
@@ -676,10 +742,32 @@
           "lon": -82.6355,
           "trackName": "Mid-Ohio Sports Car Course"
         },
+        "greatCircleMiles": 0.0,
+        "index": 6,
+        "modeProxy": "same_venue",
+        "runningMiles": 2850.9,
+        "to": {
+          "country": "United States",
+          "date": "2019-06-28",
+          "eventId": "event_rcffs_2019_mid_ohio",
+          "lat": 40.6893,
+          "lon": -82.6355,
+          "trackName": "Mid-Ohio Sports Car Course"
+        }
+      },
+      {
+        "from": {
+          "country": "United States",
+          "date": "2019-06-28",
+          "eventId": "event_rcffs_2019_mid_ohio",
+          "lat": 40.6893,
+          "lon": -82.6355,
+          "trackName": "Mid-Ohio Sports Car Course"
+        },
         "greatCircleMiles": 340.0,
-        "index": 3,
+        "index": 7,
         "modeProxy": "drive",
-        "runningMiles": 1334.1,
+        "runningMiles": 3190.9,
         "to": {
           "country": "United States",
           "date": "2019-07-26",
@@ -699,9 +787,9 @@
           "trackName": "Virginia International Raceway"
         },
         "greatCircleMiles": 302.6,
-        "index": 4,
+        "index": 8,
         "modeProxy": "drive",
-        "runningMiles": 1636.7,
+        "runningMiles": 3493.5,
         "to": {
           "country": "United States",
           "date": "2019-08-02",
@@ -721,9 +809,9 @@
           "trackName": "Pittsburgh International Race Complex"
         },
         "greatCircleMiles": 167.8,
-        "index": 5,
+        "index": 9,
         "modeProxy": "drive",
-        "runningMiles": 1804.5,
+        "runningMiles": 3661.3,
         "to": {
           "country": "United States",
           "date": "2019-08-23",
@@ -743,9 +831,9 @@
           "trackName": "Summit Point Motorsports Park Main Circuit"
         },
         "greatCircleMiles": 156.0,
-        "index": 6,
+        "index": 10,
         "modeProxy": "drive",
-        "runningMiles": 1960.5,
+        "runningMiles": 3817.3,
         "to": {
           "country": "United States",
           "date": "2019-09-13",
@@ -764,10 +852,54 @@
           "lon": -75.061628,
           "trackName": "New Jersey Motorsports Park Thunderbolt Raceway"
         },
-        "greatCircleMiles": 3430.7,
-        "index": 7,
+        "greatCircleMiles": 3582.9,
+        "index": 11,
         "modeProxy": "flight",
-        "runningMiles": 5391.2,
+        "runningMiles": 7400.2,
+        "to": {
+          "country": "United Kingdom",
+          "date": "2019-10-26",
+          "eventId": "event_formula_ford_2019_formula_ford_festival",
+          "lat": 51.3569,
+          "lon": 0.2631,
+          "trackName": "Brands Hatch Circuit"
+        }
+      },
+      {
+        "from": {
+          "country": "United Kingdom",
+          "date": "2019-10-26",
+          "eventId": "event_formula_ford_2019_formula_ford_festival",
+          "lat": 51.3569,
+          "lon": 0.2631,
+          "trackName": "Brands Hatch Circuit"
+        },
+        "greatCircleMiles": 107.0,
+        "index": 12,
+        "modeProxy": "drive",
+        "runningMiles": 7507.2,
+        "to": {
+          "country": "United Kingdom",
+          "date": "2020-07-04",
+          "eventId": "event_formula_ford_2020_castle_combe_202768",
+          "lat": 51.4897,
+          "lon": -2.2125,
+          "trackName": "Castle Combe Circuit"
+        }
+      },
+      {
+        "from": {
+          "country": "United Kingdom",
+          "date": "2020-07-04",
+          "eventId": "event_formula_ford_2020_castle_combe_202768",
+          "lat": 51.4897,
+          "lon": -2.2125,
+          "trackName": "Castle Combe Circuit"
+        },
+        "greatCircleMiles": 117.8,
+        "index": 13,
+        "modeProxy": "drive",
+        "runningMiles": 7625.0,
         "to": {
           "country": "United Kingdom",
           "date": "2020-07-18",
@@ -786,10 +918,32 @@
           "lon": -2.614,
           "trackName": "Oulton Park"
         },
-        "greatCircleMiles": 106.0,
-        "index": 8,
+        "greatCircleMiles": 117.8,
+        "index": 14,
         "modeProxy": "drive",
-        "runningMiles": 5497.2,
+        "runningMiles": 7742.8,
+        "to": {
+          "country": "United Kingdom",
+          "date": "2020-08-01",
+          "eventId": "event_formula_ford_2020_castle_combe_203168",
+          "lat": 51.4897,
+          "lon": -2.2125,
+          "trackName": "Castle Combe Circuit"
+        }
+      },
+      {
+        "from": {
+          "country": "United Kingdom",
+          "date": "2020-08-01",
+          "eventId": "event_formula_ford_2020_castle_combe_203168",
+          "lat": 51.4897,
+          "lon": -2.2125,
+          "trackName": "Castle Combe Circuit"
+        },
+        "greatCircleMiles": 155.1,
+        "index": 15,
+        "modeProxy": "drive",
+        "runningMiles": 7897.9,
         "to": {
           "country": "United Kingdom",
           "date": "2020-08-22",
@@ -809,9 +963,53 @@
           "trackName": "Cadwell Park Circuit"
         },
         "greatCircleMiles": 135.7,
-        "index": 9,
+        "index": 16,
         "modeProxy": "drive",
-        "runningMiles": 5632.9,
+        "runningMiles": 8033.6,
+        "to": {
+          "country": "United Kingdom",
+          "date": "2020-08-30",
+          "eventId": "event_formula_ford_2020_champion_brands_203505",
+          "lat": 51.3569,
+          "lon": 0.2631,
+          "trackName": "Brands Hatch Circuit"
+        }
+      },
+      {
+        "from": {
+          "country": "United Kingdom",
+          "date": "2020-08-30",
+          "eventId": "event_formula_ford_2020_champion_brands_203505",
+          "lat": 51.3569,
+          "lon": 0.2631,
+          "trackName": "Brands Hatch Circuit"
+        },
+        "greatCircleMiles": 107.0,
+        "index": 17,
+        "modeProxy": "drive",
+        "runningMiles": 8140.6,
+        "to": {
+          "country": "United Kingdom",
+          "date": "2020-08-31",
+          "eventId": "event_formula_ford_2020_castle_combe_203668",
+          "lat": 51.4897,
+          "lon": -2.2125,
+          "trackName": "Castle Combe Circuit"
+        }
+      },
+      {
+        "from": {
+          "country": "United Kingdom",
+          "date": "2020-08-31",
+          "eventId": "event_formula_ford_2020_castle_combe_203668",
+          "lat": 51.4897,
+          "lon": -2.2125,
+          "trackName": "Castle Combe Circuit"
+        },
+        "greatCircleMiles": 107.0,
+        "index": 18,
+        "modeProxy": "drive",
+        "runningMiles": 8247.6,
         "to": {
           "country": "United Kingdom",
           "date": "2020-09-12",
@@ -831,9 +1029,31 @@
           "trackName": "Brands Hatch Circuit"
         },
         "greatCircleMiles": 0.0,
-        "index": 10,
+        "index": 19,
         "modeProxy": "same_venue",
-        "runningMiles": 5632.9,
+        "runningMiles": 8247.6,
+        "to": {
+          "country": "United Kingdom",
+          "date": "2020-09-20",
+          "eventId": "event_formula_ford_2020_champion_brands_203851",
+          "lat": 51.3569,
+          "lon": 0.2631,
+          "trackName": "Brands Hatch Circuit"
+        }
+      },
+      {
+        "from": {
+          "country": "United Kingdom",
+          "date": "2020-09-20",
+          "eventId": "event_formula_ford_2020_champion_brands_203851",
+          "lat": 51.3569,
+          "lon": 0.2631,
+          "trackName": "Brands Hatch Circuit"
+        },
+        "greatCircleMiles": 0.0,
+        "index": 20,
+        "modeProxy": "same_venue",
+        "runningMiles": 8247.6,
         "to": {
           "country": "United Kingdom",
           "date": "2020-09-26",
@@ -853,9 +1073,9 @@
           "trackName": "Brands Hatch Circuit"
         },
         "greatCircleMiles": 74.1,
-        "index": 11,
+        "index": 21,
         "modeProxy": "drive",
-        "runningMiles": 5707.0,
+        "runningMiles": 8321.7,
         "to": {
           "country": "United Kingdom",
           "date": "2020-10-10",
@@ -875,9 +1095,9 @@
           "trackName": "Silverstone Circuit"
         },
         "greatCircleMiles": 74.1,
-        "index": 12,
+        "index": 22,
         "modeProxy": "drive",
-        "runningMiles": 5781.1,
+        "runningMiles": 8395.8,
         "to": {
           "country": "United Kingdom",
           "date": "2020-10-24",
@@ -897,9 +1117,9 @@
           "trackName": "Brands Hatch Circuit"
         },
         "greatCircleMiles": 74.1,
-        "index": 13,
+        "index": 23,
         "modeProxy": "drive",
-        "runningMiles": 5855.2,
+        "runningMiles": 8469.9,
         "to": {
           "country": "United Kingdom",
           "date": "2020-10-31",
@@ -919,9 +1139,9 @@
           "trackName": "Silverstone Circuit"
         },
         "greatCircleMiles": 74.1,
-        "index": 14,
+        "index": 24,
         "modeProxy": "drive",
-        "runningMiles": 5929.3,
+        "runningMiles": 8544.0,
         "to": {
           "country": "United Kingdom",
           "date": "2021-05-22",
@@ -941,9 +1161,9 @@
           "trackName": "Brands Hatch Circuit"
         },
         "greatCircleMiles": 74.1,
-        "index": 15,
+        "index": 25,
         "modeProxy": "drive",
-        "runningMiles": 6003.4,
+        "runningMiles": 8618.1,
         "to": {
           "country": "United Kingdom",
           "date": "2021-06-26",
@@ -963,9 +1183,9 @@
           "trackName": "Silverstone Circuit"
         },
         "greatCircleMiles": 54.1,
-        "index": 16,
+        "index": 26,
         "modeProxy": "drive",
-        "runningMiles": 6057.5,
+        "runningMiles": 8672.2,
         "to": {
           "country": "United Kingdom",
           "date": "2021-07-10",
@@ -985,9 +1205,9 @@
           "trackName": "Donington Park"
         },
         "greatCircleMiles": 355.6,
-        "index": 17,
+        "index": 27,
         "modeProxy": "flight",
-        "runningMiles": 6413.1,
+        "runningMiles": 9027.8,
         "to": {
           "country": "Belgium",
           "date": "2021-07-24",
@@ -1007,9 +1227,9 @@
           "trackName": "Circuit de Spa-Francorchamps"
         },
         "greatCircleMiles": 257.6,
-        "index": 18,
+        "index": 28,
         "modeProxy": "flight",
-        "runningMiles": 6670.7,
+        "runningMiles": 9285.4,
         "to": {
           "country": "United Kingdom",
           "date": "2021-08-07",
@@ -1028,10 +1248,32 @@
           "lon": 0.9479,
           "trackName": "Snetterton Circuit"
         },
-        "greatCircleMiles": 156.7,
-        "index": 19,
+        "greatCircleMiles": 87.2,
+        "index": 29,
         "modeProxy": "drive",
-        "runningMiles": 6827.4,
+        "runningMiles": 9372.6,
+        "to": {
+          "country": "United Kingdom",
+          "date": "2021-08-14",
+          "eventId": "event_gb3_2021_r6_silverstone",
+          "lat": 52.0786,
+          "lon": -1.0169,
+          "trackName": "Silverstone Circuit"
+        }
+      },
+      {
+        "from": {
+          "country": "United Kingdom",
+          "date": "2021-08-14",
+          "eventId": "event_gb3_2021_r6_silverstone",
+          "lat": 52.0786,
+          "lon": -1.0169,
+          "trackName": "Silverstone Circuit"
+        },
+        "greatCircleMiles": 101.2,
+        "index": 30,
+        "modeProxy": "drive",
+        "runningMiles": 9473.8,
         "to": {
           "country": "United Kingdom",
           "date": "2021-09-11",
@@ -1051,9 +1293,9 @@
           "trackName": "Oulton Park"
         },
         "greatCircleMiles": 56.8,
-        "index": 20,
+        "index": 31,
         "modeProxy": "drive",
-        "runningMiles": 6884.2,
+        "runningMiles": 9530.6,
         "to": {
           "country": "United Kingdom",
           "date": "2021-10-16",
@@ -1073,9 +1315,9 @@
           "trackName": "Donington Park"
         },
         "greatCircleMiles": 56.8,
-        "index": 21,
+        "index": 32,
         "modeProxy": "drive",
-        "runningMiles": 6941.0,
+        "runningMiles": 9587.4,
         "to": {
           "country": "United Kingdom",
           "date": "2022-04-15",
@@ -1095,9 +1337,9 @@
           "trackName": "Oulton Park"
         },
         "greatCircleMiles": 101.2,
-        "index": 22,
+        "index": 33,
         "modeProxy": "drive",
-        "runningMiles": 7042.2,
+        "runningMiles": 9688.6,
         "to": {
           "country": "United Kingdom",
           "date": "2022-05-07",
@@ -1117,9 +1359,9 @@
           "trackName": "Silverstone Circuit"
         },
         "greatCircleMiles": 54.1,
-        "index": 23,
+        "index": 34,
         "modeProxy": "drive",
-        "runningMiles": 7096.3,
+        "runningMiles": 9742.7,
         "to": {
           "country": "United Kingdom",
           "date": "2022-05-28",
@@ -1139,9 +1381,9 @@
           "trackName": "Donington Park"
         },
         "greatCircleMiles": 100.6,
-        "index": 24,
+        "index": 35,
         "modeProxy": "drive",
-        "runningMiles": 7196.9,
+        "runningMiles": 9843.3,
         "to": {
           "country": "United Kingdom",
           "date": "2022-06-25",
@@ -1161,9 +1403,9 @@
           "trackName": "Snetterton Circuit"
         },
         "greatCircleMiles": 257.6,
-        "index": 25,
+        "index": 36,
         "modeProxy": "flight",
-        "runningMiles": 7454.5,
+        "runningMiles": 10100.9,
         "to": {
           "country": "Belgium",
           "date": "2022-07-23",
@@ -1183,9 +1425,9 @@
           "trackName": "Circuit de Spa-Francorchamps"
         },
         "greatCircleMiles": 322.6,
-        "index": 26,
+        "index": 37,
         "modeProxy": "flight",
-        "runningMiles": 7777.1,
+        "runningMiles": 10423.5,
         "to": {
           "country": "United Kingdom",
           "date": "2022-07-30",
@@ -1205,9 +1447,9 @@
           "trackName": "Silverstone Circuit"
         },
         "greatCircleMiles": 74.1,
-        "index": 27,
+        "index": 38,
         "modeProxy": "drive",
-        "runningMiles": 7851.2,
+        "runningMiles": 10497.6,
         "to": {
           "country": "United Kingdom",
           "date": "2022-09-10",
@@ -1227,9 +1469,9 @@
           "trackName": "Brands Hatch Circuit"
         },
         "greatCircleMiles": 123.3,
-        "index": 28,
+        "index": 39,
         "modeProxy": "drive",
-        "runningMiles": 7974.5,
+        "runningMiles": 10620.9,
         "to": {
           "country": "United Kingdom",
           "date": "2022-10-15",
@@ -1249,9 +1491,9 @@
           "trackName": "Donington Park"
         },
         "greatCircleMiles": 1133.4,
-        "index": 29,
+        "index": 40,
         "modeProxy": "flight",
-        "runningMiles": 9107.9,
+        "runningMiles": 11754.3,
         "to": {
           "country": "Portugal",
           "date": "2023-04-29",
@@ -1271,9 +1513,9 @@
           "trackName": "Autodromo Internacional do Algarve"
         },
         "greatCircleMiles": 1162.9,
-        "index": 30,
+        "index": 41,
         "modeProxy": "flight",
-        "runningMiles": 10270.8,
+        "runningMiles": 12917.2,
         "to": {
           "country": "Belgium",
           "date": "2023-05-27",
@@ -1293,9 +1535,9 @@
           "trackName": "Circuit de Spa-Francorchamps"
         },
         "greatCircleMiles": 632.4,
-        "index": 31,
+        "index": 42,
         "modeProxy": "flight",
-        "runningMiles": 10903.2,
+        "runningMiles": 13549.6,
         "to": {
           "country": "Hungary",
           "date": "2023-06-17",
@@ -1315,9 +1557,9 @@
           "trackName": "Hungaroring"
         },
         "greatCircleMiles": 716.9,
-        "index": 32,
+        "index": 43,
         "modeProxy": "flight",
-        "runningMiles": 11620.1,
+        "runningMiles": 14266.5,
         "to": {
           "country": "France",
           "date": "2023-07-22",
@@ -1337,9 +1579,9 @@
           "trackName": "Circuit Paul Ricard"
         },
         "greatCircleMiles": 515.1,
-        "index": 33,
+        "index": 44,
         "modeProxy": "flight",
-        "runningMiles": 12135.2,
+        "runningMiles": 14781.6,
         "to": {
           "country": "Austria",
           "date": "2023-09-09",
@@ -1359,9 +1601,9 @@
           "trackName": "Red Bull Ring"
         },
         "greatCircleMiles": 283.7,
-        "index": 34,
+        "index": 45,
         "modeProxy": "flight",
-        "runningMiles": 12418.9,
+        "runningMiles": 15065.3,
         "to": {
           "country": "Italy",
           "date": "2023-09-23",
@@ -1381,9 +1623,9 @@
           "trackName": "Autodromo Nazionale Monza"
         },
         "greatCircleMiles": 11599.1,
-        "index": 35,
+        "index": 46,
         "modeProxy": "flight",
-        "runningMiles": 24018.0,
+        "runningMiles": 26664.4,
         "to": {
           "country": "New Zealand",
           "date": "2024-02-09",
@@ -1403,9 +1645,9 @@
           "trackName": "Euromarque Motorsport Park"
         },
         "greatCircleMiles": 194.8,
-        "index": 36,
+        "index": 47,
         "modeProxy": "drive",
-        "runningMiles": 24212.8,
+        "runningMiles": 26859.2,
         "to": {
           "country": "New Zealand",
           "date": "2024-02-16",
@@ -1425,9 +1667,9 @@
           "trackName": "Highlands Motorsport Park"
         },
         "greatCircleMiles": 8406.3,
-        "index": 37,
+        "index": 48,
         "modeProxy": "flight",
-        "runningMiles": 32619.1,
+        "runningMiles": 35265.5,
         "to": {
           "country": "United States",
           "date": "2024-03-08",
@@ -1447,9 +1689,9 @@
           "trackName": "Streets of St. Petersburg"
         },
         "greatCircleMiles": 463.4,
-        "index": 38,
+        "index": 49,
         "modeProxy": "drive",
-        "runningMiles": 33082.5,
+        "runningMiles": 35728.9,
         "to": {
           "country": "United States",
           "date": "2024-04-26",
@@ -1469,9 +1711,9 @@
           "trackName": "Barber Motorsports Park"
         },
         "greatCircleMiles": 433.1,
-        "index": 39,
+        "index": 50,
         "modeProxy": "drive",
-        "runningMiles": 33515.6,
+        "runningMiles": 36162.0,
         "to": {
           "country": "United States",
           "date": "2024-05-10",
@@ -1491,9 +1733,9 @@
           "trackName": "Indianapolis Motor Speedway Road Course"
         },
         "greatCircleMiles": 0.0,
-        "index": 40,
+        "index": 51,
         "modeProxy": "same_venue",
-        "runningMiles": 33515.6,
+        "runningMiles": 36162.0,
         "to": {
           "country": "United States",
           "date": "2024-05-10",
@@ -1512,10 +1754,32 @@
           "lon": -86.2353,
           "trackName": "Indianapolis Motor Speedway Road Course"
         },
-        "greatCircleMiles": 241.6,
-        "index": 41,
+        "greatCircleMiles": 5.8,
+        "index": 52,
         "modeProxy": "drive",
-        "runningMiles": 33757.2,
+        "runningMiles": 36167.8,
+        "to": {
+          "country": "United States",
+          "date": "2024-05-23",
+          "eventId": "event_usf_pro_2000_2024_lucas_oil_freedom_90",
+          "lat": 39.8128,
+          "lon": -86.3408,
+          "trackName": "Lucas Oil Indianapolis Raceway Park"
+        }
+      },
+      {
+        "from": {
+          "country": "United States",
+          "date": "2024-05-23",
+          "eventId": "event_usf_pro_2000_2024_lucas_oil_freedom_90",
+          "lat": 39.8128,
+          "lon": -86.3408,
+          "trackName": "Lucas Oil Indianapolis Raceway Park"
+        },
+        "greatCircleMiles": 244.5,
+        "index": 53,
+        "modeProxy": "drive",
+        "runningMiles": 36412.3,
         "to": {
           "country": "United States",
           "date": "2024-05-31",
@@ -1535,9 +1799,9 @@
           "trackName": "Detroit Downtown Street Circuit"
         },
         "greatCircleMiles": 269.5,
-        "index": 42,
+        "index": 54,
         "modeProxy": "drive",
-        "runningMiles": 34026.7,
+        "runningMiles": 36681.8,
         "to": {
           "country": "United States",
           "date": "2024-06-07",
@@ -1557,9 +1821,9 @@
           "trackName": "Road America"
         },
         "greatCircleMiles": 1836.4,
-        "index": 43,
+        "index": 55,
         "modeProxy": "flight",
-        "runningMiles": 35863.1,
+        "runningMiles": 38518.2,
         "to": {
           "country": "United States",
           "date": "2024-06-21",
@@ -1579,9 +1843,9 @@
           "trackName": "WeatherTech Raceway Laguna Seca"
         },
         "greatCircleMiles": 0.0,
-        "index": 44,
+        "index": 56,
         "modeProxy": "same_venue",
-        "runningMiles": 35863.1,
+        "runningMiles": 38518.2,
         "to": {
           "country": "United States",
           "date": "2024-06-22",
@@ -1601,9 +1865,9 @@
           "trackName": "WeatherTech Raceway Laguna Seca"
         },
         "greatCircleMiles": 2112.6,
-        "index": 45,
+        "index": 57,
         "modeProxy": "flight",
-        "runningMiles": 37975.7,
+        "runningMiles": 40630.8,
         "to": {
           "country": "United States",
           "date": "2024-07-05",
@@ -1623,9 +1887,9 @@
           "trackName": "Mid-Ohio Sports Car Course"
         },
         "greatCircleMiles": 543.7,
-        "index": 46,
+        "index": 58,
         "modeProxy": "drive",
-        "runningMiles": 38519.4,
+        "runningMiles": 41174.5,
         "to": {
           "country": "United States",
           "date": "2024-07-12",
@@ -1645,9 +1909,9 @@
           "trackName": "Iowa Speedway"
         },
         "greatCircleMiles": 258.5,
-        "index": 47,
+        "index": 59,
         "modeProxy": "drive",
-        "runningMiles": 38777.9,
+        "runningMiles": 41433.0,
         "to": {
           "country": "United States",
           "date": "2024-08-16",
@@ -1667,9 +1931,9 @@
           "trackName": "World Wide Technology Raceway"
         },
         "greatCircleMiles": 1722.9,
-        "index": 48,
+        "index": 60,
         "modeProxy": "flight",
-        "runningMiles": 40500.8,
+        "runningMiles": 43155.9,
         "to": {
           "country": "United States",
           "date": "2024-08-23",
@@ -1689,9 +1953,9 @@
           "trackName": "Portland International Raceway"
         },
         "greatCircleMiles": 1710.6,
-        "index": 49,
+        "index": 61,
         "modeProxy": "flight",
-        "runningMiles": 42211.4,
+        "runningMiles": 44866.5,
         "to": {
           "country": "United States",
           "date": "2024-08-30",
@@ -1711,9 +1975,9 @@
           "trackName": "The Milwaukee Mile"
         },
         "greatCircleMiles": 489.3,
-        "index": 50,
+        "index": 62,
         "modeProxy": "drive",
-        "runningMiles": 42700.7,
+        "runningMiles": 45355.8,
         "to": {
           "country": "United States",
           "date": "2024-09-14",
@@ -1733,9 +1997,9 @@
           "trackName": "Nashville Superspeedway"
         },
         "greatCircleMiles": 566.7,
-        "index": 51,
+        "index": 63,
         "modeProxy": "drive",
-        "runningMiles": 43267.4,
+        "runningMiles": 45922.5,
         "to": {
           "country": "United States",
           "date": "2025-01-25",
@@ -1755,9 +2019,9 @@
           "trackName": "Daytona International Speedway"
         },
         "greatCircleMiles": 136.3,
-        "index": 52,
+        "index": 64,
         "modeProxy": "drive",
-        "runningMiles": 43403.7,
+        "runningMiles": 46058.8,
         "to": {
           "country": "United States",
           "date": "2025-02-28",
@@ -1777,9 +2041,9 @@
           "trackName": "Streets of St. Petersburg"
         },
         "greatCircleMiles": 463.4,
-        "index": 53,
+        "index": 65,
         "modeProxy": "drive",
-        "runningMiles": 43867.1,
+        "runningMiles": 46522.2,
         "to": {
           "country": "United States",
           "date": "2025-05-02",
@@ -1799,9 +2063,9 @@
           "trackName": "Barber Motorsports Park"
         },
         "greatCircleMiles": 433.1,
-        "index": 54,
+        "index": 66,
         "modeProxy": "drive",
-        "runningMiles": 44300.2,
+        "runningMiles": 46955.3,
         "to": {
           "country": "United States",
           "date": "2025-05-09",
@@ -1821,9 +2085,9 @@
           "trackName": "Indianapolis Motor Speedway Road Course"
         },
         "greatCircleMiles": 0.0,
-        "index": 55,
+        "index": 67,
         "modeProxy": "same_venue",
-        "runningMiles": 44300.2,
+        "runningMiles": 46955.3,
         "to": {
           "country": "United States",
           "date": "2025-05-09",
@@ -1843,9 +2107,9 @@
           "trackName": "Indianapolis Motor Speedway Road Course"
         },
         "greatCircleMiles": 241.6,
-        "index": 56,
+        "index": 68,
         "modeProxy": "drive",
-        "runningMiles": 44541.8,
+        "runningMiles": 47196.9,
         "to": {
           "country": "United States",
           "date": "2025-05-30",
@@ -1865,9 +2129,9 @@
           "trackName": "Detroit Downtown Street Circuit"
         },
         "greatCircleMiles": 451.0,
-        "index": 57,
+        "index": 69,
         "modeProxy": "drive",
-        "runningMiles": 44992.8,
+        "runningMiles": 47647.9,
         "to": {
           "country": "United States",
           "date": "2025-06-14",
@@ -1887,9 +2151,9 @@
           "trackName": "World Wide Technology Raceway"
         },
         "greatCircleMiles": 372.6,
-        "index": 58,
+        "index": 70,
         "modeProxy": "drive",
-        "runningMiles": 45365.4,
+        "runningMiles": 48020.5,
         "to": {
           "country": "United States",
           "date": "2025-06-20",
@@ -1909,9 +2173,9 @@
           "trackName": "Road America"
         },
         "greatCircleMiles": 347.9,
-        "index": 59,
+        "index": 71,
         "modeProxy": "drive",
-        "runningMiles": 45713.3,
+        "runningMiles": 48368.4,
         "to": {
           "country": "United States",
           "date": "2025-07-04",
@@ -1931,9 +2195,9 @@
           "trackName": "Mid-Ohio Sports Car Course"
         },
         "greatCircleMiles": 543.7,
-        "index": 60,
+        "index": 72,
         "modeProxy": "drive",
-        "runningMiles": 46257.0,
+        "runningMiles": 48912.1,
         "to": {
           "country": "United States",
           "date": "2025-07-11",
@@ -1953,9 +2217,9 @@
           "trackName": "Iowa Speedway"
         },
         "greatCircleMiles": 1572.2,
-        "index": 61,
+        "index": 73,
         "modeProxy": "flight",
-        "runningMiles": 47829.2,
+        "runningMiles": 50484.3,
         "to": {
           "country": "United States",
           "date": "2025-07-25",
@@ -1975,9 +2239,9 @@
           "trackName": "WeatherTech Raceway Laguna Seca"
         },
         "greatCircleMiles": 0.0,
-        "index": 62,
+        "index": 74,
         "modeProxy": "same_venue",
-        "runningMiles": 47829.2,
+        "runningMiles": 50484.3,
         "to": {
           "country": "United States",
           "date": "2025-07-26",
@@ -1997,9 +2261,9 @@
           "trackName": "WeatherTech Raceway Laguna Seca"
         },
         "greatCircleMiles": 624.4,
-        "index": 63,
+        "index": 75,
         "modeProxy": "drive",
-        "runningMiles": 48453.6,
+        "runningMiles": 51108.7,
         "to": {
           "country": "United States",
           "date": "2025-08-08",
@@ -2019,9 +2283,9 @@
           "trackName": "Portland International Raceway"
         },
         "greatCircleMiles": 1710.6,
-        "index": 64,
+        "index": 76,
         "modeProxy": "flight",
-        "runningMiles": 50164.2,
+        "runningMiles": 52819.3,
         "to": {
           "country": "United States",
           "date": "2025-08-23",
@@ -2041,9 +2305,9 @@
           "trackName": "The Milwaukee Mile"
         },
         "greatCircleMiles": 489.3,
-        "index": 65,
+        "index": 77,
         "modeProxy": "drive",
-        "runningMiles": 50653.5,
+        "runningMiles": 53308.6,
         "to": {
           "country": "United States",
           "date": "2025-08-30",
@@ -2063,9 +2327,9 @@
           "trackName": "Nashville Superspeedway"
         },
         "greatCircleMiles": 613.3,
-        "index": 66,
+        "index": 78,
         "modeProxy": "drive",
-        "runningMiles": 51266.8,
+        "runningMiles": 53921.9,
         "to": {
           "country": "United States",
           "date": "2026-02-27",
@@ -2085,9 +2349,9 @@
           "trackName": "Streets of St. Petersburg"
         },
         "greatCircleMiles": 928.1,
-        "index": 67,
+        "index": 79,
         "modeProxy": "flight",
-        "runningMiles": 52194.9,
+        "runningMiles": 54850.0,
         "to": {
           "country": "United States",
           "date": "2026-03-13",
@@ -2107,9 +2371,9 @@
           "trackName": "Grand Prix of Arlington Street Circuit"
         },
         "greatCircleMiles": 608.2,
-        "index": 68,
+        "index": 80,
         "modeProxy": "drive",
-        "runningMiles": 52803.1,
+        "runningMiles": 55458.2,
         "to": {
           "country": "United States",
           "date": "2026-03-27",
@@ -2129,9 +2393,9 @@
           "trackName": "Barber Motorsports Park"
         },
         "greatCircleMiles": 0.0,
-        "index": 69,
+        "index": 81,
         "modeProxy": "same_venue",
-        "runningMiles": 52803.1,
+        "runningMiles": 55458.2,
         "to": {
           "country": "United States",
           "date": "2026-03-28",
@@ -2151,9 +2415,9 @@
           "trackName": "Barber Motorsports Park"
         },
         "greatCircleMiles": 433.1,
-        "index": 70,
+        "index": 82,
         "modeProxy": "drive",
-        "runningMiles": 53236.2,
+        "runningMiles": 55891.3,
         "to": {
           "country": "United States",
           "date": "2026-05-08",
@@ -2173,9 +2437,9 @@
           "trackName": "Indianapolis Motor Speedway Road Course"
         },
         "greatCircleMiles": 0.0,
-        "index": 71,
+        "index": 83,
         "modeProxy": "same_venue",
-        "runningMiles": 53236.2,
+        "runningMiles": 55891.3,
         "to": {
           "country": "United States",
           "date": "2026-05-08",
@@ -2195,9 +2459,9 @@
           "trackName": "Indianapolis Motor Speedway Road Course"
         },
         "greatCircleMiles": 241.6,
-        "index": 72,
+        "index": 84,
         "modeProxy": "drive",
-        "runningMiles": 53477.8,
+        "runningMiles": 56132.9,
         "to": {
           "country": "United States",
           "date": "2026-05-29",
@@ -2217,9 +2481,9 @@
           "trackName": "Detroit Downtown Street Circuit"
         },
         "greatCircleMiles": 451.0,
-        "index": 73,
+        "index": 85,
         "modeProxy": "drive",
-        "runningMiles": 53928.8,
+        "runningMiles": 56583.9,
         "to": {
           "country": "United States",
           "date": "2026-06-06",
@@ -2239,9 +2503,9 @@
           "trackName": "World Wide Technology Raceway"
         },
         "greatCircleMiles": 372.6,
-        "index": 74,
+        "index": 86,
         "modeProxy": "drive",
-        "runningMiles": 54301.4,
+        "runningMiles": 56956.5,
         "to": {
           "country": "United States",
           "date": "2026-06-19",
@@ -2261,9 +2525,9 @@
           "trackName": "Road America"
         },
         "greatCircleMiles": 0.0,
-        "index": 75,
+        "index": 87,
         "modeProxy": "same_venue",
-        "runningMiles": 54301.4,
+        "runningMiles": 56956.5,
         "to": {
           "country": "United States",
           "date": "2026-06-20",
@@ -2283,9 +2547,9 @@
           "trackName": "Road America"
         },
         "greatCircleMiles": 347.9,
-        "index": 76,
+        "index": 88,
         "modeProxy": "drive",
-        "runningMiles": 54649.3,
+        "runningMiles": 57304.4,
         "to": {
           "country": "United States",
           "date": "2026-07-03",
@@ -2305,9 +2569,9 @@
           "trackName": "Mid-Ohio Sports Car Course"
         },
         "greatCircleMiles": 0.0,
-        "index": 77,
+        "index": 89,
         "modeProxy": "same_venue",
-        "runningMiles": 54649.3,
+        "runningMiles": 57304.4,
         "to": {
           "country": "United States",
           "date": "2026-07-04",
@@ -2327,9 +2591,9 @@
           "trackName": "Mid-Ohio Sports Car Course"
         },
         "greatCircleMiles": 380.3,
-        "index": 78,
+        "index": 90,
         "modeProxy": "drive",
-        "runningMiles": 55029.6,
+        "runningMiles": 57684.7,
         "to": {
           "country": "United States",
           "date": "2026-07-18",
@@ -2349,9 +2613,9 @@
           "trackName": "Nashville Superspeedway"
         },
         "greatCircleMiles": 1988.7,
-        "index": 79,
+        "index": 91,
         "modeProxy": "flight",
-        "runningMiles": 57018.3,
+        "runningMiles": 59673.4,
         "to": {
           "country": "United States",
           "date": "2026-08-07",
@@ -2371,9 +2635,9 @@
           "trackName": "Portland International Raceway"
         },
         "greatCircleMiles": 1710.6,
-        "index": 80,
+        "index": 92,
         "modeProxy": "flight",
-        "runningMiles": 58728.9,
+        "runningMiles": 61384.0,
         "to": {
           "country": "United States",
           "date": "2026-08-29",
@@ -2393,9 +2657,9 @@
           "trackName": "The Milwaukee Mile"
         },
         "greatCircleMiles": 1832.2,
-        "index": 81,
+        "index": 93,
         "modeProxy": "flight",
-        "runningMiles": 60561.1,
+        "runningMiles": 63216.2,
         "to": {
           "country": "United States",
           "date": "2026-09-04",
@@ -2415,9 +2679,9 @@
           "trackName": "WeatherTech Raceway Laguna Seca"
         },
         "greatCircleMiles": 0.0,
-        "index": 82,
+        "index": 94,
         "modeProxy": "same_venue",
-        "runningMiles": 60561.1,
+        "runningMiles": 63216.2,
         "to": {
           "country": "United States",
           "date": "2026-09-05",
@@ -2428,15 +2692,109 @@
         }
       }
     ],
-    "totalMiles": 60561.1
+    "totalMiles": 63216.2
   },
   "weeksGrid": {
-    "firstWeek": "2019-W16",
+    "firstWeek": "2019-W02",
     "how": "One cell per calendar week, Monday to Sunday, from his first race meeting to his latest. A week is filled when it holds a day of a race meeting; each race sits in the week of its own date.",
     "lastWeek": "2026-W36",
-    "raceWeekCount": 75,
-    "weekCount": 386,
+    "raceWeekCount": 86,
+    "weekCount": 400,
     "weeks": [
+      {
+        "isoWeek": "2019-W02",
+        "monday": "2019-01-07",
+        "races": [
+          {
+            "bestFinish": 10,
+            "eventId": "event_scca_super_tour_2019_sebring",
+            "eventName": "Hoosier SCCA Super Tour 2019 - Sebring (Central Florida Region, Winter Vacation)",
+            "raceCount": 2,
+            "seriesId": "series_scca_super_tour"
+          }
+        ]
+      },
+      {
+        "isoWeek": "2019-W03",
+        "monday": "2019-01-14",
+        "races": []
+      },
+      {
+        "isoWeek": "2019-W04",
+        "monday": "2019-01-21",
+        "races": []
+      },
+      {
+        "isoWeek": "2019-W05",
+        "monday": "2019-01-28",
+        "races": []
+      },
+      {
+        "isoWeek": "2019-W06",
+        "monday": "2019-02-04",
+        "races": [
+          {
+            "bestFinish": 3,
+            "eventId": "event_scca_super_tour_2019_circuit_of_the_americas",
+            "eventName": "Hoosier SCCA Super Tour 2019 - Circuit of the Americas (Lone Star Region Polar Prix)",
+            "raceCount": 2,
+            "seriesId": "series_scca_super_tour"
+          }
+        ]
+      },
+      {
+        "isoWeek": "2019-W07",
+        "monday": "2019-02-11",
+        "races": []
+      },
+      {
+        "isoWeek": "2019-W08",
+        "monday": "2019-02-18",
+        "races": []
+      },
+      {
+        "isoWeek": "2019-W09",
+        "monday": "2019-02-25",
+        "races": []
+      },
+      {
+        "isoWeek": "2019-W10",
+        "monday": "2019-03-04",
+        "races": []
+      },
+      {
+        "isoWeek": "2019-W11",
+        "monday": "2019-03-11",
+        "races": [
+          {
+            "bestFinish": 4,
+            "eventId": "event_scca_super_tour_2019_road_atlanta",
+            "eventName": "Hoosier SCCA Super Tour 2019 - Michelin Raceway Road Atlanta (Atlanta Region)",
+            "raceCount": 2,
+            "seriesId": "series_scca_super_tour"
+          }
+        ]
+      },
+      {
+        "isoWeek": "2019-W12",
+        "monday": "2019-03-18",
+        "races": []
+      },
+      {
+        "isoWeek": "2019-W13",
+        "monday": "2019-03-25",
+        "races": []
+      },
+      {
+        "isoWeek": "2019-W14",
+        "monday": "2019-04-01",
+        "races": []
+      },
+      {
+        "isoWeek": "2019-W15",
+        "monday": "2019-04-08",
+        "races": []
+      },
       {
         "isoWeek": "2019-W16",
         "monday": "2019-04-15",
@@ -2513,6 +2871,13 @@
             "eventName": "FRP F1600 2019 Round 3 - Mid Ohio Sports Car Course",
             "raceCount": 3,
             "seriesId": "series_frp_f1600"
+          },
+          {
+            "bestFinish": 1,
+            "eventId": "event_rcffs_2019_mid_ohio",
+            "eventName": "Right Coast Formula F Series 2019 - Race Weekend 2, Mid-Ohio (FRP All Formula Weekend)",
+            "raceCount": 1,
+            "seriesId": "series_rcffs"
           }
         ]
       },
@@ -2631,7 +2996,15 @@
       {
         "isoWeek": "2019-W43",
         "monday": "2019-10-21",
-        "races": []
+        "races": [
+          {
+            "bestFinish": 11,
+            "eventId": "event_formula_ford_2019_formula_ford_festival",
+            "eventName": "BRSCC Formula Ford Festival 2019",
+            "raceCount": 2,
+            "seriesId": "series_formula_ford"
+          }
+        ]
       },
       {
         "isoWeek": "2019-W44",
@@ -2811,7 +3184,15 @@
       {
         "isoWeek": "2020-W27",
         "monday": "2020-06-29",
-        "races": []
+        "races": [
+          {
+            "bestFinish": 3,
+            "eventId": "event_formula_ford_2020_castle_combe_202768",
+            "eventName": "Castle Combe Racing Club FF1600 2020 - 2020-07-04",
+            "raceCount": 2,
+            "seriesId": "series_formula_ford"
+          }
+        ]
       },
       {
         "isoWeek": "2020-W28",
@@ -2839,7 +3220,15 @@
       {
         "isoWeek": "2020-W31",
         "monday": "2020-07-27",
-        "races": []
+        "races": [
+          {
+            "bestFinish": 2,
+            "eventId": "event_formula_ford_2020_castle_combe_203168",
+            "eventName": "Castle Combe Racing Club FF1600 2020 - 2020-08-01",
+            "raceCount": 2,
+            "seriesId": "series_formula_ford"
+          }
+        ]
       },
       {
         "isoWeek": "2020-W32",
@@ -2867,12 +3256,28 @@
       {
         "isoWeek": "2020-W35",
         "monday": "2020-08-24",
-        "races": []
+        "races": [
+          {
+            "bestFinish": 2,
+            "eventId": "event_formula_ford_2020_champion_brands_203505",
+            "eventName": "Champion of Brands 2020 - Brands Hatch GP (British GT support)",
+            "raceCount": 1,
+            "seriesId": "series_formula_ford"
+          }
+        ]
       },
       {
         "isoWeek": "2020-W36",
         "monday": "2020-08-31",
-        "races": []
+        "races": [
+          {
+            "bestFinish": 2,
+            "eventId": "event_formula_ford_2020_castle_combe_203668",
+            "eventName": "Castle Combe Racing Club FF1600 2020 - 2020-08-31",
+            "raceCount": 2,
+            "seriesId": "series_formula_ford"
+          }
+        ]
       },
       {
         "isoWeek": "2020-W37",
@@ -2890,7 +3295,15 @@
       {
         "isoWeek": "2020-W38",
         "monday": "2020-09-14",
-        "races": []
+        "races": [
+          {
+            "bestFinish": null,
+            "eventId": "event_formula_ford_2020_champion_brands_203851",
+            "eventName": "Champion of Brands 2020 - Brands Hatch Indy, September 20",
+            "raceCount": 2,
+            "seriesId": "series_formula_ford"
+          }
+        ]
       },
       {
         "isoWeek": "2020-W39",
@@ -3135,7 +3548,7 @@
             "bestFinish": 9,
             "eventId": "event_gb3_2021_r2_silverstone",
             "eventName": "GB3 2021 Round 2 - Silverstone",
-            "raceCount": 2,
+            "raceCount": 3,
             "seriesId": "series_gb3"
           }
         ]
@@ -3197,7 +3610,15 @@
       {
         "isoWeek": "2021-W32",
         "monday": "2021-08-09",
-        "races": []
+        "races": [
+          {
+            "bestFinish": 7,
+            "eventId": "event_gb3_2021_r6_silverstone",
+            "eventName": "GB3 2021 Round 6 - Silverstone",
+            "raceCount": 3,
+            "seriesId": "series_gb3"
+          }
+        ]
       },
       {
         "isoWeek": "2021-W33",
@@ -3221,7 +3642,7 @@
           {
             "bestFinish": 8,
             "eventId": "event_gb3_2021_r6_oulton_park",
-            "eventName": "GB3 2021 Round 6 - Oulton Park",
+            "eventName": "GB3 2021 Round 7 - Oulton Park",
             "raceCount": 3,
             "seriesId": "series_gb3"
           }
@@ -3254,7 +3675,7 @@
           {
             "bestFinish": 6,
             "eventId": "event_gb3_2021_r7_donington_park",
-            "eventName": "GB3 2021 Round 7 - Donington Park",
+            "eventName": "GB3 2021 Round 8 - Donington Park",
             "raceCount": 3,
             "seriesId": "series_gb3"
           }
@@ -4105,7 +4526,15 @@
       {
         "isoWeek": "2024-W21",
         "monday": "2024-05-20",
-        "races": []
+        "races": [
+          {
+            "bestFinish": 5,
+            "eventId": "event_usf_pro_2000_2024_lucas_oil_freedom_90",
+            "eventName": "USF Pro 2000 2024 - Freedom 90, Lucas Oil Indianapolis Raceway Park",
+            "raceCount": 1,
+            "seriesId": "series_usf_pro_2000"
+          }
+        ]
       },
       {
         "isoWeek": "2024-W22",

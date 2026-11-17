@@ -15,12 +15,67 @@ const textDir = join(rawDir, 'text');
 const eventPagesDir = join(rawDir, 'event-pages');
 const extractedPath = join(rawDir, 'extracted-classifications.json');
 const reportPath = join(root, 'data/career/reports/formula-ford-2020-import-report.json');
+// The 2019 Formula Ford Festival book lives in its own raw folder; every other book is 2020.
+const rawDir2019 = join(root, 'data/career/raw/formula-ford-2019');
+const pdfDir2019 = join(rawDir2019, 'pdf');
+const textDir2019 = join(rawDir2019, 'text');
+const eventPagesDir2019 = join(rawDir2019, 'event-pages');
 
 const year = 2020;
+const ownedYears = [2019, 2020];
 const timezone = 'Europe/London';
 const sourceLicenseNotes = 'Public official TSL/BRSCC timing PDFs/pages; store extracted facts, source URLs, and page references.';
 const refresh = process.argv.includes('--refresh');
 const pdftotextBin = process.env.PDFTOTEXT_BIN ?? 'pdftotext';
+
+
+const castleCombeTrack = {
+  id: 'track_castle_combe',
+  name: 'Castle Combe',
+  canonicalName: 'Castle Combe Circuit',
+  country: 'United Kingdom',
+  region: 'Wiltshire',
+  city: 'Castle Combe',
+  latitude: 51.4897,
+  longitude: -2.2125,
+  timezone,
+  trackType: 'road',
+  configuration: 'Full Circuit with Chicanes',
+  lengthMi: 1.85,
+  lengthKm: 2.977,
+  direction: 'clockwise',
+  surface: 'asphalt',
+  elevationM: null,
+  cornerCount: 12,
+  passingDifficulty: null,
+  brakingSeverity: null,
+  temporary: false,
+  altitudeM: null,
+  aliases: ['Castle Combe', 'Castle Combe Circuit']
+};
+
+const castleCombeSource = (officialEventId, date, raceList) => ({
+  keepKnownCarFields: true,
+  id: `castle_combe_${officialEventId}`,
+  eventId: `event_formula_ford_2020_castle_combe_${officialEventId}`,
+  eventName: `Castle Combe Racing Club FF1600 2020 - ${date}`,
+  eventStartDate: date,
+  eventEndDate: date,
+  country: 'United Kingdom',
+  trackId: 'track_castle_combe',
+  track: castleCombeTrack,
+  url: `https://www.tsl-timing.com/file/?f=CCRC/2020/${officialEventId}cf6.pdf`,
+  eventPageUrl: `https://www.tsl-timing.com/event/${officialEventId}`,
+  eventPagePath: join(eventPagesDir, `castle-combe-${officialEventId}-event.html`),
+  pdfPath: join(pdfDir, `castle-combe-${officialEventId}-book.pdf`),
+  textPath: join(textDir, `castle-combe-${officialEventId}-book.txt`),
+  sourceEvidenceId: `source_formula_ford_2020_castle_combe_${officialEventId}_book_pdf`,
+  sourceName: `CCRC Castle Combe FF1600 ${date} TSL results book`,
+  sourceType: 'official_pdf',
+  officialEventId,
+  coverage: `Official TSL/Castle Combe Racing Club FF1600 result book (${raceList}) with qualifying, grids, race classifications, lap charts, and timing analysis.`,
+  sourceNotes: `Primary source for the Castle Combe FF1600 classifications of ${date}. Parser imports classification, grid, and source-labeled Bryce lap-analysis pages; the 2ND FASTEST qualifying pages are skipped as duplicates of the qualifying classification.`
+});
 
 const sources = [
   {
@@ -320,8 +375,83 @@ const sources = [
     officialEventId: '203752',
     coverage: 'Official TSL/MSVR Champion of Brands 2020 result book with qualifying, grids, race classifications, lap charts, and timing analysis.',
     sourceNotes: 'Primary source for 2020 Champion of Brands classifications. Parser imports classification, grid, and source-labeled Bryce lap-analysis pages.'
+  },
+  castleCombeSource('202768', '2020-07-04', 'Races 2 and 6'),
+  castleCombeSource('203168', '2020-08-01', 'Races 4 and 8'),
+  // The cover of this book says August 1; every session sheet inside it is dated August 31.
+  castleCombeSource('203668', '2020-08-31', 'Races 3 and 8'),
+  {
+    id: 'champion_brands_203505',
+    keepKnownCarFields: true,
+    eventId: 'event_formula_ford_2020_champion_brands_203505',
+    eventName: 'Champion of Brands 2020 - Brands Hatch GP (British GT support)',
+    eventStartDate: '2020-08-30',
+    eventEndDate: '2020-08-30',
+    country: 'United Kingdom',
+    trackId: 'track_brands_hatch_gp',
+    track: null,
+    url: 'https://www.tsl-timing.com/file/?f=BF3GT/2020/203505Cob.pdf',
+    eventPageUrl: 'https://www.tsl-timing.com/event/203505',
+    eventPagePath: join(eventPagesDir, 'champion-of-brands-203505-event.html'),
+    pdfPath: join(pdfDir, 'champion-of-brands-203505-book.pdf'),
+    textPath: join(textDir, 'champion-of-brands-203505-book.txt'),
+    sourceEvidenceId: 'source_formula_ford_2020_champion_brands_203505_book_pdf',
+    sourceName: 'Champion of Brands 2020 Brands Hatch GP TSL results book',
+    sourceType: 'official_pdf',
+    officialEventId: '203505',
+    coverage: 'Official TSL Champion of Brands result book from the British GT meeting at Brands Hatch GP, with qualifying, grid, race classification, lap chart, and timing analysis.',
+    sourceNotes: 'Primary source for the August 30, 2020 Champion of Brands Race 10 classification. Parser imports classification, grid, and source-labeled Bryce lap-analysis pages.'
+  },
+  {
+    id: 'champion_brands_203851',
+    keepKnownCarFields: true,
+    eventId: 'event_formula_ford_2020_champion_brands_203851',
+    eventName: 'Champion of Brands 2020 - Brands Hatch Indy, September 20',
+    eventStartDate: '2020-09-20',
+    eventEndDate: '2020-09-20',
+    country: 'United Kingdom',
+    trackId: 'track_brands_hatch_indy',
+    track: null,
+    url: 'https://www.tsl-timing.com/file/?f=MSVR/2020/203851cob.pdf',
+    eventPageUrl: 'https://www.tsl-timing.com/event/203851',
+    eventPagePath: join(eventPagesDir, 'champion-of-brands-203851-event.html'),
+    pdfPath: join(pdfDir, 'champion-of-brands-203851-book.pdf'),
+    textPath: join(textDir, 'champion-of-brands-203851-book.txt'),
+    sourceEvidenceId: 'source_formula_ford_2020_champion_brands_203851_book_pdf',
+    sourceName: 'MSVR Champion of Brands 2020 September 20 TSL results book',
+    sourceType: 'official_pdf',
+    officialEventId: '203851',
+    coverage: 'Official TSL/MSVR Champion of Brands result book for September 20, 2020 with qualifying, grids, race classifications, lap charts, and timing analysis.',
+    sourceNotes: 'Primary source for the September 20, 2020 Champion of Brands Race 16 and Race 20 classifications. Parser imports classification, grid, and source-labeled Bryce lap-analysis pages.'
+  },
+  {
+    id: 'festival',
+    year: 2019,
+    keepKnownCarFields: true,
+    eventId: 'event_formula_ford_2019_formula_ford_festival',
+    eventName: 'BRSCC Formula Ford Festival 2019',
+    eventStartDate: '2019-10-26',
+    eventEndDate: '2019-10-27',
+    country: 'United Kingdom',
+    trackId: 'track_brands_hatch_indy',
+    track: null,
+    url: 'https://www.tsl-timing.com/file/?f=BRSCC/2019/194331fok.pdf',
+    eventPageUrl: 'https://www.tsl-timing.com/event/194331',
+    eventPagePath: join(eventPagesDir2019, 'formula-ford-festival-2019-event.html'),
+    pdfPath: join(pdfDir2019, 'formula-ford-festival-2019-book.pdf'),
+    textPath: join(textDir2019, 'formula-ford-festival-2019-book.txt'),
+    sourceEvidenceId: 'source_formula_ford_2019_festival_book_pdf',
+    sourceName: 'BRSCC Formula Ford Festival 2019 TSL results book',
+    sourceType: 'official_pdf',
+    officialEventId: '194331',
+    coverage: 'Official TSL/BRSCC Formula Ford Festival 2019 result book with qualifying, heats, semi-finals, last chance races, finals, lap charts, and timing analysis.',
+    sourceNotes: 'Primary source for the 2019 Formula Ford Festival classifications. Parser imports classification, grid, and source-labeled Bryce lap-analysis pages.',
+    // The heat 1 grid page spells its sponsor line differently from its classification page.
+    gridSessionAliases: { race_4_heat_1_sponsord_by_hedtec: 'race_4_heat_1_sponsored_by_hedtec' }
   }
 ];
+
+for (const source of sources) source.year ??= year;
 
 const supportingSources = [
   {
@@ -516,11 +646,12 @@ const parseCircuitLengthMi = (page) => {
 
 const sessionTypeFromTitle = (title) => {
   if (/QUALIFYING/i.test(title)) return 'qualifying';
-  if (/^HEAT\s+\d+/i.test(title)) return 'heat';
+  // 2020 titles start with HEAT n; the 2019 Festival prints "RACE 5 - HEAT 2 ...".
+  if (/\bHEAT\s+\d+\b/i.test(title)) return 'heat';
   return 'race';
 };
 
-const sessionNameFromTitle = (title) => title.replace(/\s+-\s+CLASSIFICATION(?:\s+-\s+AMENDED)?$/i, '').trim();
+const sessionNameFromTitle = (title) => title.replace(/\s+-\s+CLASSIFICATION(?:\s+-\s+AMENDED(?:\s+V\d+)?)?$/i, '').trim();
 
 const parseRaceNumber = (title) => {
   const raceMatch = title.match(/\bRACE\s+(\d+)\b/i);
@@ -537,7 +668,7 @@ const parseHeatNumber = (title) => {
 
 const isClassToken = (value) => {
   const clean = String(value ?? '').replace(/\*/g, '').trim();
-  return Boolean(clean) && /^(Pro|Club|SCA|SCB|SCC|SCD|SCE|CH|JC|O|H|P)$/i.test(clean);
+  return Boolean(clean) && /^(Pro|Club|SCA|SCB|SCC|SCD|SCE|SCS|CH|JC|O|H|P|A|B|C|D)$/i.test(clean);
 };
 
 const cleanClass = (value) => {
@@ -568,7 +699,8 @@ const splitName = (name) => {
 const parseCarAndClass = (parts, startIndex) => {
   const first = String(parts[startIndex] ?? '').trim();
   const tokens = first.split(/\s+/).filter(Boolean);
-  const carNumber = tokens.shift() ?? null;
+  // A penalty marker can be printed against the number ("1*").
+  const carNumber = tokens.shift()?.replace(/\*+$/, '') ?? null;
   let classRaw = tokens.filter((token) => token !== '*').join(' ') || null;
   let index = startIndex + 1;
   while (isClassToken(parts[index])) {
@@ -594,7 +726,7 @@ const parseResultLine = (line, sessionType) => {
   if (parts.length < 5) return null;
   const positionRaw = parts[0];
   const numericPosition = /^\d+$/.test(positionRaw) ? Number(positionRaw) : null;
-  const status = numericPosition ? 'running' : positionRaw.toLowerCase() === 'dnf' ? 'dnf' : positionRaw.toLowerCase() === 'dns' ? 'dns' : positionRaw.toLowerCase().startsWith('dq') ? 'dsq' : 'unknown';
+  const status = numericPosition ? 'running' : ['dnf', 'nc'].includes(positionRaw.toLowerCase()) ? 'dnf' : positionRaw.toLowerCase() === 'dns' ? 'dns' : positionRaw.toLowerCase().startsWith('dq') ? 'dsq' : 'unknown';
   const { carNumber, classRaw, index: afterCarIndex } = parseCarAndClass(parts, 1);
   const { pic, name } = parsePositionAndName(parts[afterCarIndex], Boolean(numericPosition));
   const entry = parts[afterCarIndex + 1] ?? null;
@@ -661,6 +793,8 @@ const parseClassificationPages = (source, text) => {
     const lines = page.split('\n');
     const title = lines.find((line) => /CLASSIFICATION/i.test(line))?.trim();
     if (!title) continue;
+    // Castle Combe books add a "2ND FASTEST" qualifying page (second-best laps); it is not a separate session.
+    if (/\b2ND\s+FASTEST\b/i.test(title)) continue;
     const sessionName = sessionNameFromTitle(title);
     const sessionType = sessionTypeFromTitle(title);
     const printedDate = parsePrintedDate(page, source.eventStartDate);
@@ -671,7 +805,7 @@ const parseClassificationPages = (source, text) => {
     const parsedRows = [];
     for (const line of lines.slice(headerIndex + 1)) {
       if (/^\s*FASTEST LAP\b/i.test(line) || /^\s*Weather\s*\/\s*Track/i.test(line)) break;
-      if (!/^\s*(?:\d+|DNF|DNS|DQ)\s+/.test(line)) continue;
+      if (!/^\s*(?:\d+|DNF|DNS|DQ|NC)\s+/.test(line)) continue;
       const parsed = parseResultLine(line, sessionType);
       if (parsed) parsedRows.push(parsed);
     }
@@ -695,6 +829,7 @@ const parseClassificationPages = (source, text) => {
 
     sessions.set(key, {
       sourceId: source.id,
+      sourceYear: source.year,
       eventId: source.eventId,
       trackId: source.trackId,
       sessionSlug,
@@ -757,7 +892,8 @@ const parseGridPages = (source, text) => {
     const sessionName = sessionNameFromGridTitle(gridTitle);
     grids.push({
       sourceId: source.id,
-      sessionSlug: slug(sessionName),
+      sourceYear: source.year,
+      sessionSlug: source.gridSessionAliases?.[slug(sessionName)] ?? slug(sessionName),
       sessionName,
       title: gridTitle,
       pageNumber: pageIndex + 1,
@@ -780,6 +916,7 @@ const parsePenaltyNotes = (source, text) => {
         const sessionName = sessionNameFromGridTitle(gridTitle);
         penalties.push({
           sourceId: source.id,
+          sourceYear: source.year,
           sessionSlug: slug(sessionName),
           sessionName,
           carNumber: gridMatch.groups.carNumber,
@@ -798,6 +935,7 @@ const parsePenaltyNotes = (source, text) => {
         const sessionName = sessionNameFromTitle(classificationTitle);
         penalties.push({
           sourceId: source.id,
+          sourceYear: source.year,
           sessionSlug: slug(sessionName),
           sessionName,
           carNumber: timeMatch.groups.carNumber,
@@ -928,6 +1066,7 @@ const parseLapAnalysisPages = (source, text) => {
     if (!rows.length) continue;
     analyses.push({
       sourceId: source.id,
+      sourceYear: source.year,
       sessionSlug,
       sessionName,
       title,
@@ -940,7 +1079,7 @@ const parseLapAnalysisPages = (source, text) => {
   return analyses.sort((a, b) => a.sessionSlug.localeCompare(b.sessionSlug) || a.pageNumber - b.pageNumber);
 };
 
-const resultStatusLabel = (row) => row.status === 'running' ? String(row.finishPosition ?? row.positionRaw) : row.status.toUpperCase();
+const resultStatusLabel = (row) => row.status === 'running' ? String(row.finishPosition ?? row.positionRaw) : /^NC$/i.test(row.positionRaw) ? 'NC' : row.status.toUpperCase();
 
 const main = async () => {
   await mkdir(pdfDir, { recursive: true });
@@ -959,24 +1098,26 @@ const main = async () => {
   const seasons = new Map(asArray(existing.seasons).map((row) => [row.id, row]));
   const events = new Map(asArray(existing.events).map((row) => [row.id, row]));
   const sessions = new Map(asArray(existing.sessions).map((row) => [row.id, row]));
-  const ownedResultPrefix = `result_formula_ford_${year}_`;
-  const ownedCarPrefix = `car_formula_ford_${year}_`;
-  const ownedPenaltyPrefix = `penalty_formula_ford_${year}_`;
+  const ownedBy = (kind) => (id) => ownedYears.some((ownedYear) => String(id ?? '').startsWith(`${kind}_formula_ford_${ownedYear}_`));
+  const isOwnedResult = ownedBy('result');
+  const isOwnedCar = ownedBy('car');
+  const isOwnedPenalty = ownedBy('penalty');
+  const isOwnedLap = ownedBy('lap');
   const results = new Map(asArray(existing.results).map((row) => [row.id, {
     ...row,
-    penaltyRefs: asArray(row.penaltyRefs).filter((ref) => !String(ref).startsWith(ownedPenaltyPrefix))
-  }]).filter(([id]) => !String(id).startsWith(ownedResultPrefix)));
-  for (const id of [...cars.keys()].filter((id) => String(id).startsWith(ownedCarPrefix))) {
+    penaltyRefs: asArray(row.penaltyRefs).filter((ref) => !isOwnedPenalty(ref))
+  }]).filter(([id]) => !isOwnedResult(id)));
+  for (const id of [...cars.keys()].filter((id) => isOwnedCar(id))) {
     cars.delete(id);
   }
   const penalties = new Map(
     asArray(existing.penalties)
-      .filter((row) => !String(row.id ?? '').startsWith(ownedPenaltyPrefix))
+      .filter((row) => !isOwnedPenalty(row.id))
       .map((row) => [row.id, row])
   );
   const lapSamples = new Map(
     asArray(existing.lapSamples)
-      .filter((row) => !String(row.id ?? '').startsWith(`lap_formula_ford_${year}_`))
+      .filter((row) => !isOwnedLap(row.id))
       .map((row) => [row.id, row])
   );
   const weatherObservations = new Map(asArray(existing.weatherObservations).map((row) => [row.id, row]));
@@ -1047,7 +1188,7 @@ const main = async () => {
     }));
     if (source.eventPageUrl && source.eventPagePath) {
       upsert(sourceEvidenceMap, sourceEvidence({
-        id: `source_formula_ford_2020_${source.id}_event_page`,
+        id: `source_formula_ford_${source.year}_${source.id}_event_page`,
         sourceType: 'official_page',
         sourceName: `${source.eventName} TSL event page`,
         url: source.eventPageUrl,
@@ -1091,17 +1232,17 @@ const main = async () => {
   report.lapAnalysisPagesDiscovered = extractedLapAnalyses.length;
   const gridPagesBySession = new Map();
   for (const grid of extractedGridPages) {
-    const key = `${grid.sourceId}:${grid.sessionSlug}`;
+    const key = `${grid.sourceYear}:${grid.sourceId}:${grid.sessionSlug}`;
     if (!gridPagesBySession.has(key)) gridPagesBySession.set(key, grid);
   }
   const penaltyNotesBySession = new Map();
   for (const note of extractedPenaltyNotes) {
-    const key = `${note.sourceId}:${note.sessionSlug}`;
+    const key = `${note.sourceYear}:${note.sourceId}:${note.sessionSlug}`;
     penaltyNotesBySession.set(key, [...(penaltyNotesBySession.get(key) ?? []), note]);
   }
   const lapAnalysesBySession = new Map();
   for (const analysis of extractedLapAnalyses) {
-    const key = `${analysis.sourceId}:${analysis.sessionSlug}`;
+    const key = `${analysis.sourceYear}:${analysis.sourceId}:${analysis.sessionSlug}`;
     lapAnalysesBySession.set(key, [...(lapAnalysesBySession.get(key) ?? []), analysis]);
   }
   await writeFile(extractedPath, `${JSON.stringify({ extractedAt: retrievedAt, sessions: extractedSessions, grids: extractedGridPages, penaltyNotes: extractedPenaltyNotes, lapAnalyses: extractedLapAnalyses }, null, 2)}\n`);
@@ -1126,16 +1267,18 @@ const main = async () => {
 
   for (const source of sources) {
     const bookEvidenceId = source.sourceEvidenceId;
-    const sourceEventPageEvidenceId = source.eventPageUrl ? `source_formula_ford_2020_${source.id}_event_page` : null;
+    const sourceEventPageEvidenceId = source.eventPageUrl ? `source_formula_ford_${source.year}_${source.id}_event_page` : null;
     const eventEvidenceId = source.id === 'wht' ? 'source_formula_ford_2020_wht_event_page' : sourceEventPageEvidenceId ?? bookEvidenceId;
-    upsert(tracks, {
-      ...source.track,
-      provenanceRefs: [bookEvidenceId]
-    });
+    if (source.track) {
+      upsert(tracks, {
+        ...source.track,
+        provenanceRefs: [bookEvidenceId]
+      });
+    }
     upsert(events, {
       id: source.eventId,
       seriesId: 'series_formula_ford',
-      seasonYear: year,
+      seasonYear: source.year,
       name: source.eventName,
       round: null,
       eventStartDate: source.eventStartDate,
@@ -1146,7 +1289,7 @@ const main = async () => {
       provenanceRefs: [eventEvidenceId]
     });
     upsert(mediaAssets, {
-      id: `asset_formula_ford_2020_${source.id}_book_pdf`,
+      id: `asset_formula_ford_${source.year}_${source.id}_book_pdf`,
       assetType: 'pdf',
       title: source.sourceName,
       url: source.url,
@@ -1162,7 +1305,7 @@ const main = async () => {
     report.mediaAssetsImported += 1;
     if (source.eventPageUrl && sourceEventPageEvidenceId) {
       upsert(mediaAssets, {
-        id: `asset_formula_ford_2020_${source.id}_event_page`,
+        id: `asset_formula_ford_${source.year}_${source.id}_event_page`,
         assetType: 'timing_sheet',
         title: `${source.eventName} TSL event page`,
         url: source.eventPageUrl,
@@ -1210,9 +1353,9 @@ const main = async () => {
   report.mediaAssetsImported += 2;
 
   for (const parsedSession of extractedSessions) {
-    const source = sources.find((entry) => entry.id === parsedSession.sourceId);
-    const sessionId = `session_formula_ford_2020_${source.id}_${parsedSession.sessionSlug}`;
-    const sessionEvidenceId = `source_formula_ford_2020_${source.id}_${parsedSession.sessionSlug}_classification`;
+    const source = sources.find((entry) => entry.id === parsedSession.sourceId && entry.year === parsedSession.sourceYear);
+    const sessionId = `session_formula_ford_${source.year}_${source.id}_${parsedSession.sessionSlug}`;
+    const sessionEvidenceId = `source_formula_ford_${source.year}_${source.id}_${parsedSession.sessionSlug}_classification`;
     const pageNote = `Imported from PDF page(s) ${parsedSession.pageNumbers.join(', ')}.`;
     upsert(sourceEvidenceMap, sourceEvidence({
       id: sessionEvidenceId,
@@ -1225,7 +1368,7 @@ const main = async () => {
       notes: `${pageNote} Session title: ${parsedSession.title}.`
     }));
 
-    const weatherId = parsedSession.weather ? `weather_formula_ford_2020_${source.id}_${parsedSession.sessionSlug}_official_conditions` : null;
+    const weatherId = parsedSession.weather ? `weather_formula_ford_${source.year}_${source.id}_${parsedSession.sessionSlug}_official_conditions` : null;
     upsert(sessions, {
       id: sessionId,
       eventId: source.eventId,
@@ -1263,8 +1406,8 @@ const main = async () => {
         observedAt: parsedSession.actualStart ?? parsedSession.scheduledStart,
         source: 'TSL official classification weather/track line',
         stationId: 'official_session_report',
-        latitude: source.track.latitude,
-        longitude: source.track.longitude,
+        latitude: (source.track ?? tracks.get(source.trackId))?.latitude ?? null,
+        longitude: (source.track ?? tracks.get(source.trackId))?.longitude ?? null,
         distanceFromTrackKm: 0,
         ambientTempC: null,
         ambientConditionRaw: parsedSession.weather.weatherRaw,
@@ -1308,14 +1451,17 @@ const main = async () => {
       const normalizedName = identityName(row.driverName);
       const { givenName, familyName } = splitName(row.driverName);
       const className = row.classRaw || 'Formula Ford';
-      const carId = `car_formula_ford_2020_${slug(row.entry)}_${slug(row.carNumber)}`;
-      const resultId = `result_formula_ford_2020_${source.id}_${parsedSession.sessionSlug}_${slug(row.carNumber)}_${driverId}`;
+      const carId = `car_formula_ford_${source.year}_${slug(row.entry)}_${slug(row.carNumber)}`;
+      const resultId = `result_formula_ford_${source.year}_${source.id}_${parsedSession.sessionSlug}_${slug(row.carNumber)}_${driverId}`;
 
+      // A driver already in the dataset keeps the display name another importer gave it;
+      // TSL prints family names in capitals ("Bryce ARON").
+      const knownDriver = drivers.get(driverId);
       upsert(drivers, {
         id: driverId,
-        displayName: normalizedName,
-        givenName,
-        familyName,
+        displayName: knownDriver?.displayName ?? normalizedName,
+        givenName: knownDriver?.givenName ?? givenName,
+        familyName: knownDriver?.familyName ?? familyName,
         nationality: driverId === 'driver_bryce_aron' ? 'United States' : null,
         hometown: driverId === 'driver_bryce_aron' ? 'Winnetka, Illinois' : null,
         dateOfBirth: null,
@@ -1325,16 +1471,19 @@ const main = async () => {
         provenanceRefs: [sessionEvidenceId]
       });
 
+      // A car record spans every book in which the same entry and number appear.
+      // Books added in November 2026 do not overwrite the class or spelling the original books gave it.
+      const knownCar = source.keepKnownCarFields ? cars.get(carId) : null;
       upsert(cars, {
         id: carId,
         seriesId: 'series_formula_ford',
-        seasonYear: year,
-        chassis: row.entry,
+        seasonYear: source.year,
+        chassis: knownCar?.chassis ?? row.entry,
         engine: null,
         tireSupplier: null,
-        class: className,
+        class: knownCar?.class ?? className,
         carNumber: row.carNumber,
-        entrant: row.entry,
+        entrant: knownCar?.entrant ?? row.entry,
         teamId: null,
         liveryNotes: null,
         provenanceRefs: [sessionEvidenceId]
@@ -1392,9 +1541,9 @@ const main = async () => {
       if (driverId === 'driver_bryce_aron') report.bryceResultRowsImported += 1;
     }
 
-    const gridPage = gridPagesBySession.get(`${source.id}:${parsedSession.sessionSlug}`);
+    const gridPage = gridPagesBySession.get(`${source.year}:${source.id}:${parsedSession.sessionSlug}`);
     if (gridPage) {
-      const gridEvidenceId = `source_formula_ford_2020_${source.id}_${parsedSession.sessionSlug}_grid`;
+      const gridEvidenceId = `source_formula_ford_${source.year}_${source.id}_${parsedSession.sessionSlug}_grid`;
       upsert(sourceEvidenceMap, sourceEvidence({
         id: gridEvidenceId,
         sourceType: 'official_pdf',
@@ -1467,9 +1616,9 @@ const main = async () => {
       }
     }
 
-    const penaltyNotes = penaltyNotesBySession.get(`${source.id}:${parsedSession.sessionSlug}`) ?? [];
+    const penaltyNotes = penaltyNotesBySession.get(`${source.year}:${source.id}:${parsedSession.sessionSlug}`) ?? [];
     if (penaltyNotes.length > 0) {
-      const penaltyEvidenceId = `source_formula_ford_2020_${source.id}_${parsedSession.sessionSlug}_penalty_notes`;
+      const penaltyEvidenceId = `source_formula_ford_${source.year}_${source.id}_${parsedSession.sessionSlug}_penalty_notes`;
       upsert(sourceEvidenceMap, sourceEvidence({
         id: penaltyEvidenceId,
         sourceType: 'official_pdf',
@@ -1486,14 +1635,14 @@ const main = async () => {
         const driverId = driverIdsByCarNumber.get(note.carNumber);
         if (!resultId || !driverId) {
           report.gaps.push({
-            id: `gap_formula_ford_2020_${source.id}_${parsedSession.sessionSlug}_penalty_car_${slug(note.carNumber)}_unmatched`,
-            scope: 'formula_ford_2020',
+            id: `gap_formula_ford_${source.year}_${source.id}_${parsedSession.sessionSlug}_penalty_car_${slug(note.carNumber)}_unmatched`,
+            scope: `formula_ford_${source.year}`,
             status: 'open',
             description: `Official penalty note could not be linked to an imported result row: ${note.announcementRaw}`
           });
           continue;
         }
-        const penaltyId = `penalty_formula_ford_${year}_${source.id}_${parsedSession.sessionSlug}_car_${slug(note.carNumber)}_${note.penaltyType === 'grid_position_loss' ? 'grid_positions' : 'time_seconds'}`;
+        const penaltyId = `penalty_formula_ford_${source.year}_${source.id}_${parsedSession.sessionSlug}_car_${slug(note.carNumber)}_${note.penaltyType === 'grid_position_loss' ? 'grid_positions' : 'time_seconds'}`;
         upsert(penalties, {
           id: penaltyId,
           sessionId,
@@ -1521,13 +1670,13 @@ const main = async () => {
       }
     }
 
-    const lapAnalyses = lapAnalysesBySession.get(`${source.id}:${parsedSession.sessionSlug}`) ?? [];
+    const lapAnalyses = lapAnalysesBySession.get(`${source.year}:${source.id}:${parsedSession.sessionSlug}`) ?? [];
     for (const analysis of lapAnalyses) {
       const bryceCarNumber = Array.from(driverIdsByCarNumber.entries()).find(([, driverId]) => driverId === 'driver_bryce_aron')?.[0];
       const resultId = bryceCarNumber ? resultIdsByCarNumber.get(bryceCarNumber) : null;
       const result = resultId ? results.get(resultId) : null;
       if (result?.driverId !== 'driver_bryce_aron') continue;
-      const lapEvidenceId = `source_formula_ford_2020_${source.id}_${parsedSession.sessionSlug}_lap_analysis`;
+      const lapEvidenceId = `source_formula_ford_${source.year}_${source.id}_${parsedSession.sessionSlug}_lap_analysis`;
       upsert(sourceEvidenceMap, sourceEvidence({
         id: lapEvidenceId,
         sourceType: 'official_pdf',
@@ -1539,7 +1688,7 @@ const main = async () => {
         notes: `Imported Bryce lap-analysis rows from PDF page ${analysis.pageNumber}. Session analysis title: ${analysis.title}. Parser: ${analysis.parser}.`
       }));
       for (const row of analysis.rows) {
-        const lapId = `lap_formula_ford_${year}_${source.id}_${parsedSession.sessionSlug}_bryce_aron_${String(row.lapNumber).padStart(3, '0')}`;
+        const lapId = `lap_formula_ford_${source.year}_${source.id}_${parsedSession.sessionSlug}_bryce_aron_${String(row.lapNumber).padStart(3, '0')}`;
         upsert(lapSamples, {
           id: lapId,
           sessionId,
@@ -1584,30 +1733,33 @@ const main = async () => {
     }
   }
 
-  const bryceFormulaFordResults = Array.from(results.values()).filter((row) => {
-    if (row.driverId !== 'driver_bryce_aron') return false;
-    const session = sessions.get(row.sessionId);
-    return session?.eventId?.startsWith('event_formula_ford_2020_') && ['heat', 'race'].includes(session.sessionType);
-  });
-  const bryceFormulaFordRaceResults = bryceFormulaFordResults.filter((row) => row.finishPosition !== null || ['dnf', 'dns', 'dsq'].includes(row.status));
-  upsert(seasons, {
-    id: 'season_formula_ford_2020_bryce_aron',
-    year,
-    seriesId: 'series_formula_ford',
-    driverId: 'driver_bryce_aron',
-    teamIds: [],
-    carIds: Array.from(new Set(bryceFormulaFordRaceResults.map((row) => row.carId).filter(Boolean))),
-    championshipPosition: null,
-    points: null,
-    starts: bryceFormulaFordRaceResults.length,
-    wins: bryceFormulaFordRaceResults.filter((row) => row.finishPosition === 1).length,
-    poles: null,
-    podiums: bryceFormulaFordRaceResults.filter((row) => row.finishPosition !== null && row.finishPosition <= 3).length,
-    top5: bryceFormulaFordRaceResults.filter((row) => row.finishPosition !== null && row.finishPosition <= 5).length,
-    top10: bryceFormulaFordRaceResults.filter((row) => row.finishPosition !== null && row.finishPosition <= 10).length,
-    dnfs: bryceFormulaFordRaceResults.filter((row) => row.status !== 'running').length,
-    provenanceRefs: sources.map((source) => source.sourceEvidenceId)
-  });
+  for (const seasonYear of ownedYears) {
+    const seasonSources = sources.filter((source) => source.year === seasonYear);
+    const bryceFormulaFordResults = Array.from(results.values()).filter((row) => {
+      if (row.driverId !== 'driver_bryce_aron') return false;
+      const session = sessions.get(row.sessionId);
+      return session?.eventId?.startsWith(`event_formula_ford_${seasonYear}_`) && ['heat', 'race'].includes(session.sessionType);
+    });
+    const bryceFormulaFordRaceResults = bryceFormulaFordResults.filter((row) => row.finishPosition !== null || ['dnf', 'dns', 'dsq'].includes(row.status));
+    upsert(seasons, {
+      id: `season_formula_ford_${seasonYear}_bryce_aron`,
+      year: seasonYear,
+      seriesId: 'series_formula_ford',
+      driverId: 'driver_bryce_aron',
+      teamIds: [],
+      carIds: Array.from(new Set(bryceFormulaFordRaceResults.map((row) => row.carId).filter(Boolean))),
+      championshipPosition: null,
+      points: null,
+      starts: bryceFormulaFordRaceResults.length,
+      wins: bryceFormulaFordRaceResults.filter((row) => row.finishPosition === 1).length,
+      poles: null,
+      podiums: bryceFormulaFordRaceResults.filter((row) => row.finishPosition !== null && row.finishPosition <= 3).length,
+      top5: bryceFormulaFordRaceResults.filter((row) => row.finishPosition !== null && row.finishPosition <= 5).length,
+      top10: bryceFormulaFordRaceResults.filter((row) => row.finishPosition !== null && row.finishPosition <= 10).length,
+      dnfs: bryceFormulaFordRaceResults.filter((row) => row.status !== 'running').length,
+      provenanceRefs: seasonSources.map((source) => source.sourceEvidenceId)
+    });
+  }
 
   const staleGapIds = new Set([
     'gap_remaining_non_indy_nxt_career_rows',
@@ -1620,14 +1772,14 @@ const main = async () => {
   ]);
   const currentGaps = asArray(existing.gaps).filter((gap) =>
     !staleGapIds.has(gap.id) &&
-    !String(gap.id ?? '').startsWith('gap_formula_ford_2020_')
+    !ownedYears.some((ownedYear) => String(gap.id ?? '').startsWith(`gap_formula_ford_${ownedYear}_`))
   );
   const finalResults = Array.from(results.values()).sort((a, b) => a.id.localeCompare(b.id));
   const finalCars = Array.from(cars.values()).sort((a, b) => a.id.localeCompare(b.id));
   report.gridStartHoldouts = finalResults
     .filter((row) => {
       const session = sessions.get(row.sessionId);
-      return session?.eventId?.startsWith('event_formula_ford_2020_') &&
+      return /^event_formula_ford_(?:2019|2020)_/.test(session?.eventId ?? '') &&
         ['race', 'heat'].includes(session.sessionType) &&
         row.gridPosition == null &&
         row.startPosition == null;
@@ -1663,7 +1815,7 @@ const main = async () => {
     ...finalResults.map((row) => row.driverId).filter(Boolean),
     ...finalCars.map((row) => row.driverId).filter(Boolean)
   ]);
-  for (const staleDriverId of ['driver_h', 'driver_o', 'driver_p', 'driver_jc', 'driver_ch', 'driver_sca', 'driver_scb', 'driver_scc', 'driver_scd', 'driver_sce']) {
+  for (const staleDriverId of ['driver_h', 'driver_o', 'driver_p', 'driver_jc', 'driver_ch', 'driver_sca', 'driver_scb', 'driver_scc', 'driver_scd', 'driver_sce', 'driver_scs', 'driver_a', 'driver_b', 'driver_c', 'driver_d']) {
     if (!referencedDriverIds.has(staleDriverId)) drivers.delete(staleDriverId);
   }
 

@@ -48,7 +48,7 @@
     "paceIndex": 0.314
   },
   "eventStartDate": "2025-05-30",
-  "generatedAt": "2026-09-20T00:00:33Z",
+  "generatedAt": "2026-11-17T22:23:55Z",
   "id": "debrief_session_indy_nxt_2025_6455",
   "lapStory": {
     "bryceBestRunningPosition": 9.0,
@@ -102,7 +102,7 @@
     "weakestSectionFamilies": "I12 to I13:0.22; I2 to I3:0.23; I11 to 12:0.23; I9 to I10:0.26"
   },
   "sessionId": "session_indy_nxt_2025_6455",
-  "sourceHash": "d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd",
+  "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
   "sourceRefs": [
     {
       "bytes": 21641,
@@ -153,10 +153,10 @@
       "sha256": "b1db72b354b2e4cc488091bb493c2bdc44c9f3353ff5c9e1f5084aa7c2928394"
     },
     {
-      "bytes": 363806137,
+      "bytes": 366289057,
       "path": "data/career/career.dataset.json",
       "role": "canonical event/session chronology",
-      "sha256": "d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd"
+      "sha256": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5"
     }
   ],
   "sourceState": "derived_from_official_results_lap_chart_sections_and_modeled_weather",

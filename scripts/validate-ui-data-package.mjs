@@ -1183,11 +1183,19 @@ for (const [field, sourceField] of [
     fail('careerLab.lifeStats.travelLegs must add up to the great-circle minimum.');
   }
 }
+// A race whose official sheet lists no laps (a disqualification) stays a race
+// row with unknown mileage; it must not be counted as covered, nor dropped.
+const expectedUnlappedRaceRows = canonicalDataset.results.filter(
+  (row) => row.driverId === 'driver_bryce_aron' && expectedCareerRaceSessionIds.has(row.sessionId) && (row.lapsCompleted === null || row.lapsCompleted === undefined)
+).length;
 if (
   lifeStats.personalRaceMileage.raceRows !== expectedCareerRaceSessionIds.size ||
-  lifeStats.personalRaceMileage.coveredRaceRows !== expectedCareerRaceSessionIds.size
+  lifeStats.personalRaceMileage.coveredRaceRows !== expectedCareerRaceSessionIds.size - expectedUnlappedRaceRows
 ) {
-  fail(`careerLab.lifeStats must cover all ${expectedCareerRaceSessionIds.size} canonical Bryce race results.`);
+  fail(
+    `careerLab.lifeStats must cover all ${expectedCareerRaceSessionIds.size} canonical Bryce race results ` +
+      `(${expectedUnlappedRaceRows} without laps on the sheet stay uncovered).`
+  );
 }
 assertSetEqual(new Set(lifeStats.coveredSessionIds ?? []), expectedCareerRaceSessionIds, 'careerLab.lifeStats covered race sessionIds');
 if (!(lifeStats.personalRaceMileage.laps > 0) || !(lifeStats.personalRaceMileage.miles > 0)) {
@@ -1216,11 +1224,26 @@ for (const dimension of ['season', 'series', 'session_type', 'venue', 'country',
 if (!(lifeStats.travelModeBreakdown ?? []).every((row) => row.travelModeProxy && row.legCount >= 0)) {
   fail('careerLab.lifeStats travelModeBreakdown must be visualization-ready.');
 }
+// Career chapters come from the canonical race rows, not a fixed count.
+const canonicalBryceRaceSeriesSeasons = (() => {
+  const { sessions, events } = canonicalIndexes(canonicalDataset);
+  const seriesSeasons = new Set();
+  const series = new Set();
+  for (const sessionId of expectedCareerRaceSessionIds) {
+    const event = events.get(sessions.get(sessionId)?.eventId);
+    if (!event) continue;
+    seriesSeasons.add(`${event.seriesId}:${event.seasonYear}`);
+    series.add(event.seriesId);
+  }
+  return { seriesSeasons: seriesSeasons.size, series: series.size };
+})();
 for (const [name, rows, low, base, high] of [
   ['fuelEstimateRanges', lifeStats.fuelEstimateRanges, 'estimatedFuelLowLiters', 'estimatedFuelBaseLiters', 'estimatedFuelHighLiters'],
   ['tireEstimateRanges', lifeStats.tireEstimateRanges, 'estimatedUniqueTiresLow', 'estimatedUniqueTiresBase', 'estimatedUniqueTiresHigh']
 ]) {
-  if (!Array.isArray(rows) || rows.length !== 10) fail(`careerLab.lifeStats.${name} must carry ten series/year rows.`);
+  if (!Array.isArray(rows) || rows.length !== canonicalBryceRaceSeriesSeasons.seriesSeasons) {
+    fail(`careerLab.lifeStats.${name} must carry one row per canonical series/year (${canonicalBryceRaceSeriesSeasons.seriesSeasons}).`);
+  }
   for (const row of rows) {
     if (row.confidenceClass !== 'modeled_range' || !(row[low] <= row[base] && row[base] <= row[high]) || !row.sourceUrl?.startsWith('https://')) {
       fail(`careerLab.lifeStats.${name} contains an invalid modeled range.`);
@@ -1367,8 +1390,8 @@ for (const entry of qualifyingLayer.sourceFamilyMap ?? []) {
   }
 }
 const qualiBySeries = qualifyingLayer.bySeries ?? [];
-if (qualiBySeries.length === 0 || qualiBySeries.length > 7) {
-  fail('careerLab.qualifyingLayer.bySeries must cover at least one and at most the seven canonical chapters.');
+if (qualiBySeries.length === 0 || qualiBySeries.length > canonicalBryceRaceSeriesSeasons.series) {
+  fail(`careerLab.qualifyingLayer.bySeries must cover at least one and at most the ${canonicalBryceRaceSeriesSeasons.series} canonical chapters.`);
 }
 const qualiConversionSum = qualiBySeries.reduce((sum, row) => sum + (row.conversionRaces ?? 0), 0);
 if (qualiConversionSum !== qualiCareer.conversionRaces) {

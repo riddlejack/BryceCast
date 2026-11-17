@@ -6,9 +6,9 @@ This review stress-tests the GB3 deep dive against the canonical source shape.
 
 | sourceFamily | bryceRaceRows | qualifyingContextRows | gridStartRaceRows | weatherConditionRows | pitStopCountRaceRows | lapSampleRows | sectionMetricRows | analysisStatus |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 2021 TSL official PDFs | 20 | 14 | 369 | 39 | 0 | 0 | 0 | complete_source_bounded |
+| 2021 TSL official PDFs | 24 | 16 | 425 | 44 | 0 | 0 | 0 | complete_source_bounded |
 | 2022 GB3 official JSON | 24 | 8 | 0 | 0 | 513 | 0 | 0 | complete_source_bounded |
-| GB3 combined | 44 | 22 | 369 | 39 | 513 | 0 | 0 | complete_with_source_family_split |
+| GB3 combined | 48 | 24 | 425 | 44 | 513 | 0 | 0 | complete_with_source_family_split |
 
 ## Unsupported Or Constrained Claim Families
 
@@ -16,8 +16,8 @@ This review stress-tests the GB3 deep dive against the canonical source shape.
 | --- | --- | --- | --- |
 | lap_shape | 0 | unsupported | Use result conversion and event summaries only. |
 | section_pace | 0 | unsupported | Omit section pace modules for GB3. |
-| weather_causality | 39 | context_only | Show official 2021 condition labels without causal language. |
-| team_engineering_root_cause | 44 | unsupported | Use within-team result order and denominator labels. |
+| weather_causality | 44 | context_only | Show official 2021 condition labels without causal language. |
+| team_engineering_root_cause | 48 | unsupported | Use within-team result order and denominator labels. |
 | 2022_start_conversion | 0 | unsupported | Show 2022 qualifying rank to finish context, with start unavailable. |
 
 ## Structural Issues
@@ -28,7 +28,7 @@ This review stress-tests the GB3 deep dive against the canonical source shape.
 | high | Lap and section modules have no GB3 support. | 0 GB3 lap samples and 0 GB3 section metric rows. | Omit lap trace, stint-shape, sector-shape, and section-pace UI for GB3. |
 | medium | Qualifying context spans two canonical shapes. | 2021 context is in `qualifyingResults`; 2022 context is in qualifying session result rows. | Label 2022 qualifying context as medium confidence source-family normalization. |
 | medium | Team context can be overread. | Full-field rows support team result order only. | Use result order language only, with no engineering or setup attribution. |
-| medium | Weather context is 2021-only. | 39 official condition rows, all from the 2021 TSL source family. | Show 2022 weather as unavailable, not blank or inferred. |
+| medium | Weather context is 2021-only. | 44 official condition rows, all from the 2021 TSL source family. | Show 2022 weather as unavailable, not blank or inferred. |
 
 ## Acceptance Tests Applied
 

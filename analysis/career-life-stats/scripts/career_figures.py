@@ -88,6 +88,12 @@ def hm(seconds: float) -> str:
     return f"{minutes // 60} h {minutes % 60} min"
 
 
+SERIES_WORDS = {
+    1: "one", 2: "two", 3: "three", 4: "four", 5: "five", 6: "six", 7: "seven",
+    8: "eight", 9: "nine", 10: "ten", 11: "eleven", 12: "twelve",
+}
+
+
 def fmt_int(value: int) -> str:
     return f"{value:,}"
 
@@ -184,6 +190,7 @@ def build_career_figures(
     race_results = [row for row in bryce_results if sessions[row["sessionId"]]["sessionType"] == "race"]
     race_ids = {row["sessionId"] for row in race_results}
     race_count = len(race_results)
+    race_series_count = len({events[sessions[sid]["eventId"]]["seriesId"] for sid in race_ids})
     race_by_session = {row["sessionId"]: row for row in race_rows}
 
     # ---- Results ------------------------------------------------------------
@@ -393,7 +400,7 @@ def build_career_figures(
     figures = [
         figure(
             "races", "Races", "counted", "races", fmt_int(race_count),
-            "Every race he has a result in, across seven series. Heats are not counted.",
+            f"Every race he has a result in, across {SERIES_WORDS.get(race_series_count, fmt_int(race_series_count))} series. Heats are not counted.",
             value=race_count,
         ),
         figure(
