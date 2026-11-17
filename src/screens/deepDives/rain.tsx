@@ -401,13 +401,13 @@ export const RainDeepDive = () => {
   const lede =
     wetMedian > dryMedian && rainNeverLifted && mostWet ? (
       <>
-        {mostWet.wetRows.length} of the {wet.length} wet days came in {mostWet.short}
-        {strongest && strongest.name === mostWet.name ? ', his strongest series' : ''}, which lifts the wet number. Within each series,
-        his wet days sit <strong>at or below his dry ones</strong>.
+        {mostWet.wetRows.length} of his {wet.length} wet races were in {mostWet.short}
+        {strongest && strongest.name === mostWet.name ? ', his strongest series' : ''}, and that raises the wet average. Compared
+        within each series, he beat <strong>the same share of the field or a smaller one</strong> in the wet.
       </>
     ) : wetMedian > dryMedian ? (
       <>
-        When the sky got involved, his typical day got <strong>better</strong>.
+        In a typical wet race he beat <strong>a larger share of the field</strong> than in a typical dry one.
       </>
     ) : (
       <>
@@ -452,7 +452,7 @@ export const RainDeepDive = () => {
     <DeepDive
       className="rain"
       figure={figure}
-      unit="of the field beaten on a typical wet day, against a dry one"
+      unit="of the field beaten in a typical wet race, against a typical dry one"
       lede={lede}
       sources={sources}
       controls={
