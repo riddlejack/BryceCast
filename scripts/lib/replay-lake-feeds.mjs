@@ -33,6 +33,38 @@ const readJson = (path) => {
   }
 };
 
+// Every feed line the reducer writes opens with its top-level `checkedAt`
+// (`{"checkedAt":"…","sessionKey":…`), which is all the time index needs.
+// Reading it from the line's first bytes avoids JSON.parse-ing ~19 MB of rows on
+// every cold load: that parse was ~85% of a load and ran synchronously on the
+// event loop, and with more sessions in play than cache slots every replay poll
+// was a cold load, so a handful of replay viewers held the one Node process that
+// also serves the static site (the November 15, 2026 outage).
+const leadingCheckedAt = /^\{"checkedAt":"([^"\\]*)"/;
+
+/** One feed row, indexed by time, with `summary` and `raw` parsed on first use
+ *  from the exact line bytes, so served values are identical to a full parse.
+ *  A line in any other shape falls back to the full parse up front. */
+export const lazyFeedRow = (line) => {
+  const match = leadingCheckedAt.exec(line);
+  if (!match) {
+    const row = JSON.parse(line);
+    return { ms: parseTime(row.checkedAt), checkedAt: row.checkedAt, summary: row.summary, raw: row.raw };
+  }
+  let parsed = null;
+  const body = () => (parsed ??= JSON.parse(line));
+  return {
+    ms: parseTime(match[1]),
+    checkedAt: match[1],
+    get summary() {
+      return body().summary;
+    },
+    get raw() {
+      return body().raw;
+    }
+  };
+};
+
 export const createLakeReplayFeeds = ({
   enabled = false,
   manifestPath = process.env.BRYCECAST_REPLAY_FEEDS_MANIFEST ?? defaultManifestPath,
@@ -141,8 +173,7 @@ export const createLakeReplayFeeds = ({
     const rows = [];
     for (const line of text.split('\n')) {
       if (!line) continue;
-      const row = JSON.parse(line);
-      rows.push({ ms: parseTime(row.checkedAt), checkedAt: row.checkedAt, summary: row.summary, raw: row.raw });
+      rows.push(lazyFeedRow(line));
     }
     rows.sort((a, b) => a.ms - b.ms);
     return rows;
