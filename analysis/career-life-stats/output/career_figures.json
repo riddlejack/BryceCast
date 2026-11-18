@@ -192,40 +192,40 @@
       "value": 142.3
     },
     {
-      "caveat": "Some names appear twice under different spellings, so this is between 616 and 623 people. About half are from the one 24-hour race at Daytona.",
+      "caveat": "Some names appear twice under different spellings, so this is between 608 and 610 people. About half are from the one 24-hour race at Daytona.",
       "class": "counted",
       "denominator": null,
-      "display": "624",
+      "display": "610",
       "how": "Every other driver name on the results of the races he was in, counted once each.",
       "id": "otherDriverRecords",
       "label": "Other drivers in his races",
       "parts": null,
       "range": {
         "base": null,
-        "high": 623,
-        "low": 616
+        "high": 610,
+        "low": 608
       },
       "scope": "career",
       "unit": "driver records",
-      "value": 624
+      "value": 610
     },
     {
-      "caveat": "Between 386 and 393 people, for the same reason.",
+      "caveat": "Between 378 and 380 people, for the same reason.",
       "class": "counted",
       "denominator": null,
-      "display": "394",
+      "display": "380",
       "how": "The same count without the Daytona 24-hour race, so only the drivers he raced in single-seaters.",
       "id": "otherDriverRecordsSingleSeater",
       "label": "Other drivers, leaving out Daytona",
       "parts": null,
       "range": {
         "base": null,
-        "high": 393,
-        "low": 386
+        "high": 380,
+        "low": 378
       },
       "scope": "career",
       "unit": "driver records",
-      "value": 394
+      "value": 380
     },
     {
       "caveat": null,
@@ -629,11 +629,11 @@
         ""
       ],
       [
-        "Burton August",
+        "Burton Kyle August",
         0,
         2019,
-        7,
-        "variant"
+        27,
+        ""
       ],
       [
         "Chuck McAbee",
@@ -667,7 +667,7 @@
         "David Livingston",
         0,
         2019,
-        4,
+        6,
         ""
       ],
       [
@@ -692,17 +692,17 @@
         ""
       ],
       [
-        "Jack Walbran",
-        0,
-        2019,
-        4,
-        ""
-      ],
-      [
         "John Robinson II",
         0,
         2019,
         5,
+        ""
+      ],
+      [
+        "John W. Walbran",
+        0,
+        2019,
+        8,
         ""
       ],
       [
@@ -744,7 +744,7 @@
         "Russell Strate Jr.",
         0,
         2019,
-        4,
+        8,
         ""
       ],
       [
@@ -836,7 +836,7 @@
         0,
         2019,
         2,
-        ""
+        "variant"
       ],
       [
         "Russell Fredericks",
@@ -867,13 +867,6 @@
         ""
       ],
       [
-        "F Russell Strate Jr",
-        0,
-        2019,
-        4,
-        ""
-      ],
-      [
         "Hunter Phelps-Barron",
         0,
         2019,
@@ -895,13 +888,6 @@
         ""
       ],
       [
-        "John W. Walbran",
-        0,
-        2019,
-        4,
-        ""
-      ],
-      [
         "Mike Landon",
         0,
         2019,
@@ -913,7 +899,7 @@
         0,
         2019,
         9,
-        ""
+        "variant"
       ],
       [
         "Peter Gonzalez",
@@ -965,13 +951,6 @@
         ""
       ],
       [
-        "Burton Kyle August",
-        0,
-        2019,
-        20,
-        "variant"
-      ],
-      [
         "Charlie Rogers",
         0,
         2019,
@@ -980,13 +959,6 @@
       ],
       [
         "Craig Laprade",
-        0,
-        2019,
-        2,
-        ""
-      ],
-      [
-        "David H. Livingston, Jr.",
         0,
         2019,
         2,
@@ -1507,7 +1479,7 @@
         "Jonathan Browne",
         3,
         2019,
-        40,
+        41,
         ""
       ],
       [
@@ -1634,7 +1606,7 @@
         3,
         2019,
         1,
-        ""
+        "variant"
       ],
       [
         "Adam Fathers",
@@ -1868,11 +1840,11 @@
         ""
       ],
       [
-        "Alexander Walker",
+        "Alex Walker",
         3,
         2020,
-        2,
-        "variant"
+        12,
+        ""
       ],
       [
         "Andrew Thomas",
@@ -2012,7 +1984,7 @@
         3,
         2020,
         10,
-        ""
+        "variant"
       ],
       [
         "Trevor Morgan",
@@ -2027,13 +1999,6 @@
         2020,
         3,
         ""
-      ],
-      [
-        "Alex Walker",
-        3,
-        2020,
-        7,
-        "variant"
       ],
       [
         "Hayden Hardyman",
@@ -2166,7 +2131,7 @@
         3,
         2020,
         2,
-        ""
+        "variant"
       ],
       [
         "Mataeo Pearce",
@@ -2176,10 +2141,10 @@
         ""
       ],
       [
-        "Matt Hayes",
+        "Matthew Hayes",
         3,
         2020,
-        3,
+        4,
         ""
       ],
       [
@@ -2204,11 +2169,11 @@
         ""
       ],
       [
-        "Chris Perkins",
+        "Christopher Perkins",
         3,
         2020,
-        1,
-        "variant"
+        2,
+        ""
       ],
       [
         "Christopher Sharples",
@@ -2235,8 +2200,8 @@
         "Max Esterson",
         3,
         2020,
-        29,
-        "variant"
+        34,
+        ""
       ],
       [
         "Pascal Monbaron",
@@ -2281,20 +2246,6 @@
         ""
       ],
       [
-        "Alexander (Henry) Walker",
-        3,
-        2020,
-        3,
-        "variant"
-      ],
-      [
-        "Maxwell Esterson",
-        3,
-        2020,
-        5,
-        "variant"
-      ],
-      [
         "Paul Tucker",
         3,
         2020,
@@ -2330,13 +2281,6 @@
         ""
       ],
       [
-        "1",
-        3,
-        2020,
-        1,
-        "artifact"
-      ],
-      [
         "Joe Walton",
         3,
         2020,
@@ -2358,25 +2302,18 @@
         ""
       ],
       [
-        "Matthew Hayes",
-        3,
-        2020,
-        1,
-        ""
-      ],
-      [
         "Steve Barlow",
         3,
         2020,
-        1,
-        "variant"
+        2,
+        ""
       ],
       [
         "Thomas McArthur",
         3,
         2020,
         2,
-        ""
+        "variant"
       ],
       [
         "Goffredo Pirro",
@@ -2398,13 +2335,6 @@
         2020,
         1,
         ""
-      ],
-      [
-        "Christopher Perkins",
-        3,
-        2020,
-        1,
-        "variant"
       ],
       [
         "Dan Fox",
@@ -2454,13 +2384,6 @@
         2020,
         1,
         ""
-      ],
-      [
-        "Stephen Barlow",
-        3,
-        2020,
-        1,
-        "variant"
       ],
       [
         "Will Everington",
@@ -2596,11 +2519,11 @@
         ""
       ],
       [
-        "Robero Faria",
+        "Roberto Faria",
         4,
         2021,
-        3,
-        "variant"
+        48,
+        ""
       ],
       [
         "Sebastian Alvarez",
@@ -2622,13 +2545,6 @@
         2021,
         24,
         ""
-      ],
-      [
-        "Roberto Faria",
-        4,
-        2021,
-        45,
-        "variant"
       ],
       [
         "Roman Bilinski",
@@ -2655,7 +2571,7 @@
         "Tommy Smith",
         4,
         2021,
-        23,
+        47,
         ""
       ],
       [
@@ -2750,17 +2666,10 @@
         ""
       ],
       [
-        "TBC Tbc",
+        "Zak Taylor",
         4,
         2022,
         24,
-        ""
-      ],
-      [
-        "Zak Taylor Fortec (Old)",
-        4,
-        2022,
-        18,
         ""
       ],
       [
@@ -2768,13 +2677,6 @@
         4,
         2022,
         18,
-        ""
-      ],
-      [
-        "Zak Taylor",
-        4,
-        2022,
-        6,
         ""
       ],
       [
@@ -5002,7 +4904,7 @@
       "series_usf_pro_2000",
       "series_imsa_weathertech"
     ],
-    "singleSeaterCount": 394
+    "singleSeaterCount": 380
   },
   "schemaVersion": "brycecast.careerFigures.v1",
   "span": {

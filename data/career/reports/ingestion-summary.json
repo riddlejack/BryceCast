@@ -1,10 +1,10 @@
 {
   "schemaVersion": "bryce-career-ingestion-summary.v1",
-  "generatedAt": "2026-11-18T07:41:39.611Z",
+  "generatedAt": "2026-11-18T08:07:06.026Z",
   "datasetPath": "data/career/career.dataset.json",
   "validation": {
     "ok": true,
-    "checkedAt": "2026-11-18T07:41:38.527Z",
+    "checkedAt": "2026-11-18T08:07:05.104Z",
     "errors": [],
     "warnings": [
       {
@@ -15,7 +15,7 @@
     ]
   },
   "counts": {
-    "drivers": 688,
+    "drivers": 669,
     "series": 10,
     "teams": 84,
     "cars": 706,
@@ -35,7 +35,7 @@
     "notificationRules": 0,
     "notificationEvents": 0,
     "derivedMetrics": 453,
-    "sourceEvidence": 1467,
+    "sourceEvidence": 1468,
     "gaps": 11
   },
   "readiness": {
@@ -73,9 +73,10 @@
     "analyticsBlockedOrPartial": []
   },
   "sourceEvidence": {
-    "total": 1467,
+    "total": 1468,
     "bySourceType": {
       "archived_official_page": 2,
+      "curated_identity_table": 1,
       "official_pdf": 904,
       "official_page": 132,
       "official_api": 304,

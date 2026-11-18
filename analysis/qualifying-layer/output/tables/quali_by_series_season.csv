@@ -1,12 +1,12 @@
 seriesId,seriesName,seasonYear,sourceFamily,qualifyingSessions,gridSettingSessions,avgQualiRank,bestQualiRank,avgQualiFieldSize,conversionRaces,finishedAhead,held,finishedBehind,avgQualiRankConverted,avgFinishConverted,sourceHash
-series_formula_ford,Formula Ford,2019,qualifying_session_result,1,1,10.0,10,24.0,0,0,0,0,,,256f79d0d302096f27d52bebb84a66a25ea09f6fcd34ee62d9faff8abe0ef03c
-series_frp_f1600,F1600 Championship Series,2019,qualifying_session_result,6,6,4.5,3,15.5,0,0,0,0,,,256f79d0d302096f27d52bebb84a66a25ea09f6fcd34ee62d9faff8abe0ef03c
-series_formula_ford,Formula Ford,2020,qualifying_session_result,12,12,4.0,1,23.0,10,4,2,4,4.0,4.1,256f79d0d302096f27d52bebb84a66a25ea09f6fcd34ee62d9faff8abe0ef03c
-series_gb3,GB3 Championship,2021,official_qualifying,16,8,12.25,10,17.875,15,8,2,5,11.533,10.067,256f79d0d302096f27d52bebb84a66a25ea09f6fcd34ee62d9faff8abe0ef03c
-series_gb3,GB3 Championship,2022,qualifying_session_result,7,7,12.714,3,21.286,0,0,0,0,,,256f79d0d302096f27d52bebb84a66a25ea09f6fcd34ee62d9faff8abe0ef03c
-series_euroformula_open,Euroformula Open,2023,official_qualifying,6,6,4.833,3,8.833,7,3,2,2,5.143,4.857,256f79d0d302096f27d52bebb84a66a25ea09f6fcd34ee62d9faff8abe0ef03c
-series_froc,Castrol Toyota Formula Regional Oceania Championship,2024,qualifying_session_result,5,5,6.2,3,14.0,4,1,1,2,6.0,6.5,256f79d0d302096f27d52bebb84a66a25ea09f6fcd34ee62d9faff8abe0ef03c
-series_indy_nxt,INDY NXT,2024,official_qualifying,23,13,9.154,5,19.0,12,4,0,8,9.333,11.917,256f79d0d302096f27d52bebb84a66a25ea09f6fcd34ee62d9faff8abe0ef03c
-series_usf_pro_2000,USF Pro 2000 Championship,2024,qualifying_session_result,1,1,6.0,6,19.0,1,1,0,0,6.0,5.0,256f79d0d302096f27d52bebb84a66a25ea09f6fcd34ee62d9faff8abe0ef03c
-series_indy_nxt,INDY NXT,2025,official_qualifying,23,13,10.923,3,17.923,11,8,0,3,11.727,12.182,256f79d0d302096f27d52bebb84a66a25ea09f6fcd34ee62d9faff8abe0ef03c
-series_indy_nxt,INDY NXT,2026,official_qualifying,31,17,13.118,5,23.882,17,10,0,7,13.118,13.294,256f79d0d302096f27d52bebb84a66a25ea09f6fcd34ee62d9faff8abe0ef03c
+series_formula_ford,Formula Ford,2019,qualifying_session_result,1,1,10.0,10,24.0,0,0,0,0,,,5a06df282a620e6ace31865c95f16372ab854c5865573be0a00d0cd41b54e600
+series_frp_f1600,F1600 Championship Series,2019,qualifying_session_result,6,6,4.5,3,15.5,0,0,0,0,,,5a06df282a620e6ace31865c95f16372ab854c5865573be0a00d0cd41b54e600
+series_formula_ford,Formula Ford,2020,qualifying_session_result,12,12,4.0,1,23.0,10,4,2,4,4.0,4.1,5a06df282a620e6ace31865c95f16372ab854c5865573be0a00d0cd41b54e600
+series_gb3,GB3 Championship,2021,official_qualifying,16,8,12.25,10,17.875,15,8,2,5,11.533,10.067,5a06df282a620e6ace31865c95f16372ab854c5865573be0a00d0cd41b54e600
+series_gb3,GB3 Championship,2022,qualifying_session_result,7,7,12.714,3,21.286,0,0,0,0,,,5a06df282a620e6ace31865c95f16372ab854c5865573be0a00d0cd41b54e600
+series_euroformula_open,Euroformula Open,2023,official_qualifying,6,6,4.833,3,8.833,7,3,2,2,5.143,4.857,5a06df282a620e6ace31865c95f16372ab854c5865573be0a00d0cd41b54e600
+series_froc,Castrol Toyota Formula Regional Oceania Championship,2024,qualifying_session_result,5,5,6.2,3,14.0,4,1,1,2,6.0,6.5,5a06df282a620e6ace31865c95f16372ab854c5865573be0a00d0cd41b54e600
+series_indy_nxt,INDY NXT,2024,official_qualifying,23,13,9.154,5,19.0,12,4,0,8,9.333,11.917,5a06df282a620e6ace31865c95f16372ab854c5865573be0a00d0cd41b54e600
+series_usf_pro_2000,USF Pro 2000 Championship,2024,qualifying_session_result,1,1,6.0,6,19.0,1,1,0,0,6.0,5.0,5a06df282a620e6ace31865c95f16372ab854c5865573be0a00d0cd41b54e600
+series_indy_nxt,INDY NXT,2025,official_qualifying,23,13,10.923,3,17.923,11,8,0,3,11.727,12.182,5a06df282a620e6ace31865c95f16372ab854c5865573be0a00d0cd41b54e600
+series_indy_nxt,INDY NXT,2026,official_qualifying,31,17,13.118,5,23.882,17,10,0,7,13.118,13.294,5a06df282a620e6ace31865c95f16372ab854c5865573be0a00d0cd41b54e600

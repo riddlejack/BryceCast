@@ -1,0 +1,182 @@
+{
+  "table": "data/career/identity/driver-aliases.json",
+  "foldedThisRun": [
+    {
+      "from": "driver_david_h_livingston_jr",
+      "to": "driver_david_livingston",
+      "results": 2,
+      "qualifying": 0
+    },
+    {
+      "from": "driver_milan_de_lart",
+      "to": "driver_milan_de_laet",
+      "results": 1,
+      "qualifying": 0
+    }
+  ],
+  "aliases": [
+    {
+      "from": "driver_1",
+      "to": "driver_jonathan_browne",
+      "kind": "parse_error",
+      "results": 1,
+      "qualifying": 0
+    },
+    {
+      "from": "driver_tbc_tbc",
+      "to": "driver_tommy_smith",
+      "kind": "placeholder_name",
+      "results": 76,
+      "qualifying": 0
+    },
+    {
+      "from": "driver_zak_taylor_fortec_old",
+      "to": "driver_zak_taylor",
+      "kind": "same_driver",
+      "results": 58,
+      "qualifying": 0
+    },
+    {
+      "from": "driver_robero_faria",
+      "to": "driver_roberto_faria",
+      "kind": "misspelling",
+      "results": 6,
+      "qualifying": 2
+    },
+    {
+      "from": "driver_maxwell_esterson",
+      "to": "driver_max_esterson",
+      "kind": "same_driver",
+      "results": 8,
+      "qualifying": 0
+    },
+    {
+      "from": "driver_alexander_walker",
+      "to": "driver_alex_walker",
+      "kind": "same_driver",
+      "results": 3,
+      "qualifying": 0
+    },
+    {
+      "from": "driver_alexander_henry_walker",
+      "to": "driver_alex_walker",
+      "kind": "same_driver",
+      "results": 4,
+      "qualifying": 0
+    },
+    {
+      "from": "driver_chris_perkins",
+      "to": "driver_christopher_perkins",
+      "kind": "same_driver",
+      "results": 2,
+      "qualifying": 0
+    },
+    {
+      "from": "driver_burton_august",
+      "to": "driver_burton_kyle_august",
+      "kind": "same_driver",
+      "results": 10,
+      "qualifying": 0
+    },
+    {
+      "from": "driver_stephen_barlow",
+      "to": "driver_steve_barlow",
+      "kind": "same_driver",
+      "results": 3,
+      "qualifying": 0
+    },
+    {
+      "from": "driver_cam_jackson",
+      "to": "driver_cameron_jackson",
+      "kind": "same_driver",
+      "results": 3,
+      "qualifying": 0
+    },
+    {
+      "from": "driver_matt_hayes",
+      "to": "driver_matthew_hayes",
+      "kind": "same_driver",
+      "results": 5,
+      "qualifying": 0
+    },
+    {
+      "from": "driver_stephen_bracegirdle",
+      "to": "driver_steve_bracegirdle",
+      "kind": "same_driver",
+      "results": 7,
+      "qualifying": 0
+    },
+    {
+      "from": "driver_f_russell_strate_jr",
+      "to": "driver_russell_strate_jr",
+      "kind": "same_driver",
+      "results": 4,
+      "qualifying": 0
+    },
+    {
+      "from": "driver_jack_walbran",
+      "to": "driver_john_w_walbran",
+      "kind": "same_driver",
+      "results": 4,
+      "qualifying": 0
+    },
+    {
+      "from": "driver_phil_attwood",
+      "to": "driver_philip_attwood",
+      "kind": "same_driver",
+      "results": 1,
+      "qualifying": 0
+    },
+    {
+      "from": "driver_phil_hart",
+      "to": "driver_philip_hart",
+      "kind": "same_driver",
+      "results": 6,
+      "qualifying": 0
+    },
+    {
+      "from": "driver_david_h_livingston_jr",
+      "to": "driver_david_livingston",
+      "kind": "same_driver",
+      "results": 2,
+      "qualifying": 0
+    },
+    {
+      "from": "driver_milan_de_lart",
+      "to": "driver_milan_de_laet",
+      "kind": "misspelling",
+      "results": 1,
+      "qualifying": 0
+    }
+  ],
+  "heldApart": [
+    {
+      "ids": [
+        "driver_josh_smith",
+        "driver_joshua_smith"
+      ],
+      "reason": "Van Diemen JL13 both, a common car, in different numbers (1 in 2019; 20 and 59 in 2020). Nothing on the sheets ties them."
+    },
+    {
+      "ids": [
+        "driver_tom_ward",
+        "driver_thomas_ward"
+      ],
+      "reason": "Medina Sport BH20 in car 24 all 2020, a BH21 in car 124 at the Walter Hayes Trophy: possibly one driver in a new car, not shown by the sheets."
+    },
+    {
+      "ids": [
+        "driver_tom_mcarthur",
+        "driver_thomas_mcarthur"
+      ],
+      "reason": "Different cars (Medina JL18 car 17 in 2019, Van Diemen LA10 car 317 in 2020) in a family of McArthur drivers."
+    },
+    {
+      "ids": [
+        "driver_mikhail_goikhberg",
+        "driver_misha_goikhberg"
+      ],
+      "reason": "Both in Mygales in 2019, but in cars 06 and 13/18; Misha is a short form of Mikhail, and no sheet ties them."
+    }
+  ]
+}

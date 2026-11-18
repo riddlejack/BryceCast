@@ -113,8 +113,10 @@ def validate_career_figures(
     if not (by_id["raceTimeTimed"]["value"] <= by_id["raceTimeAll"]["value"] <= by_id["sessionHours"]["value"]):
         fail("Time figures must nest: timed races <= all races <= all sessions")
     people = by_id["otherDriverRecords"]
-    if not (people["range"]["low"] <= people["range"]["high"] < people["value"]):
-        fail("People range must sit below the driver-record count")
+    # Duplicate records and parse errors are folded in the dataset (scripts/backfill-driver-identities.mjs),
+    # so the top of the range can equal the record count; lookalikes held apart widen it downward.
+    if not (people["range"]["low"] <= people["range"]["high"] <= people["value"]):
+        fail("People range must sit at or below the driver-record count")
 
     span = payload["span"]
     grid = payload["weeksGrid"]["weeks"]

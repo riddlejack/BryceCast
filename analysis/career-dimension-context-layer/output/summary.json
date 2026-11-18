@@ -22,7 +22,7 @@
   },
   "counts": {
     "carRows": 706,
-    "driverRows": 688,
+    "driverRows": 669,
     "qualifyingRows": 1967,
     "qualifyingSessionRows": 133,
     "resultRows": 9866,
@@ -33,14 +33,14 @@
   },
   "driverCohortCounts": {
     "bryce": 1,
-    "observed_competitor_or_codriver": 63,
-    "shared_race_field": 600,
+    "observed_competitor_or_codriver": 58,
+    "shared_race_field": 586,
     "teammate_overlap": 24
   },
-  "generatedAt": "2026-11-18T07:42:04Z",
+  "generatedAt": "2026-11-18T08:07:23Z",
   "ok": true,
   "publicPointPrediction": false,
-  "sourceHash": "256f79d0d302096f27d52bebb84a66a25ea09f6fcd34ee62d9faff8abe0ef03c",
+  "sourceHash": "5a06df282a620e6ace31865c95f16372ab854c5865573be0a00d0cd41b54e600",
   "trackArchetypeCounts": {
     "oval_short_low_corner_count": 5,
     "road_long_high_corner_count": 9,

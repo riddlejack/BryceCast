@@ -2646,3 +2646,18 @@ console.log(JSON.stringify({
   const wht = dataset.results.find((row) => row.id === 'result_formula_ford_2020_wht_grand_final_21_driver_bryce_aron');
   assert.equal(wht?.startPosition, wht?.gridPosition, 'A restarted race (WHT Grand Final) keeps the original grid slot as the start');
 }
+
+/* Duplicate driver records folded (proxy review 3, November 18): no result or qualifying row
+ * still names a `from` record, and each folded row cites the alias table. */
+{
+  const aliasTable = JSON.parse(await readFile('data/career/identity/driver-aliases.json', 'utf8'));
+  const driverIds = new Set(dataset.drivers.map((row) => row.id));
+  for (const alias of aliasTable.aliases) {
+    assert.ok(!driverIds.has(alias.from), `${alias.from} must be folded into ${alias.to}`);
+    assert.ok(driverIds.has(alias.to), `${alias.to} must remain a driver record`);
+    assert.ok(!dataset.results.some((row) => row.driverId === alias.from), `no result row may still name ${alias.from}`);
+    const moved = dataset.results.filter((row) => row.raw?.identityAlias?.fromDriverId === alias.from);
+    assert.ok(moved.every((row) => row.driverId === alias.to && row.provenanceRefs.includes('source_driver_identity_aliases')), `${alias.from} rows must sit on ${alias.to} and cite the alias table`);
+  }
+  assert.equal(dataset.results.filter((row) => row.driverId === 'driver_tommy_smith' && row.sessionId.startsWith('session_gb3_2022_')).length, 76, 'GB3 2022 car 16 (the "TBC TBC" rows) is Tommy Smith');
+}
