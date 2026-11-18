@@ -1025,9 +1025,17 @@ export const CareerAtlas = () => {
     return nearest && nearest.distance <= maxDistance ? nearest.view : null;
   };
 
-  const visibleChapters = [...new Map(filteredViews.map((view) => [view.chapter.seriesId, view.chapter])).values()].sort(
-    (left, right) => chapterOrder.indexOf(left.seriesId) - chapterOrder.indexOf(right.seriesId)
-  );
+  /* Round 3 (proxy review 5): the key names every series raced at the tracks in
+   * view, not only the series a dot wears. A dot wears the series he raced most
+   * there, so RCFFS (one race, at Mid-Ohio, where INDY NXT leads) had been left
+   * out though the filter offers it. */
+  const visibleChapters = [
+    ...new Map(
+      filteredViews
+        .flatMap((view) => (seriesFilter === null ? view.venue.seriesSpans : [view.chapter]))
+        .map((span) => [span.seriesId, span])
+    ).values()
+  ].sort((left, right) => chapterOrder.indexOf(left.seriesId) - chapterOrder.indexOf(right.seriesId));
 
   /* ---- the legs drawn so far ---- */
   const doneCount = finished ? legs.length : started ? currentIndex : 0;
@@ -1415,7 +1423,7 @@ export const CareerAtlas = () => {
               ))}
             </div>
             <p className="career-travel__hint">
-              Each track a dot, sized by its races and coloured by series. Drag to spin, pinch to zoom, <PointerOpen what="a track" then="to open its latest race" />.
+              Each track a dot, sized by its races and coloured by {seriesFilter === null ? 'the series he raced most there' : 'series'}. Drag to spin, pinch to zoom, <PointerOpen what="a track" then="to open its latest race" />.
             </p>
             <div className="career-atlas__filters">
               <ControlRow label="Series">
