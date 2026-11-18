@@ -25,6 +25,31 @@ import './tapPreview.css';
 
 export type TapKey = string | number;
 
+/** How far apart (px) two taps can land and still be one mark tapped twice,
+ *  where the chart draws no shape to tell its marks apart. */
+const SAME_SPOT = 12;
+
+/** The drawn mark nearest a tap: the smallest unit a reader can point at,
+ *  whatever key the chart gives it (the restarts key every dot by its race). */
+const markNear = (scope: Element, x: number, y: number): { x: number; y: number } | null => {
+  let best: { x: number; y: number } | null = null;
+  let bestD = 30;
+  const shapes = scope.matches('circle, ellipse, rect, path, polygon, [data-mark]') ? [scope] : [...scope.querySelectorAll('circle, ellipse, rect, path, polygon, [data-mark]')];
+  for (const el of shapes) {
+    if (el.closest('[data-tap-card]')) continue;
+    const r = el.getBoundingClientRect();
+    if (r.width === 0 || r.height === 0 || r.width > 28 || r.height > 28) continue;
+    const cx = r.left + r.width / 2;
+    const cy = r.top + r.height / 2;
+    const d = Math.hypot(cx - x, cy - y);
+    if (d < bestD) {
+      best = { x: cx, y: cy };
+      bestD = d;
+    }
+  }
+  return best;
+};
+
 let lastPointer = 'mouse';
 let listening = false;
 const listen = () => {
@@ -119,6 +144,11 @@ export const useTapPreview = (): TapPreview => {
    * the open a second tap on it earned. */
   const heldAtDown = useRef<TapKey | null | undefined>(undefined);
   const earned = useRef<(() => void) | null>(null);
+  /* Where the finger read the held mark, and where it was at this press: a
+   * chart that keys several dots by one race (the restarts) must not open
+   * that race when the finger moves to the next dot of it. */
+  const heldAt = useRef<{ x: number; y: number; mark: { x: number; y: number } | null } | null>(null);
+  const heldAtDownPoint = useRef<{ x: number; y: number; mark: { x: number; y: number } | null } | null>(null);
   const id = useRef<symbol>(Symbol('tap'));
 
   useEffect(listen, []);
@@ -127,6 +157,7 @@ export const useTapPreview = (): TapPreview => {
     const held = armedRef.current;
     armedRef.current = null;
     earned.current = null;
+    heldAt.current = null;
     setArmed(null);
     held?.clear();
   }, []);
@@ -147,6 +178,7 @@ export const useTapPreview = (): TapPreview => {
     if (event.pointerType !== 'touch' || inCard(event)) return;
     claim(event.nativeEvent, id.current);
     heldAtDown.current = armedRef.current?.key ?? null;
+    heldAtDownPoint.current = armedRef.current ? heldAt.current : null;
   };
 
   /** Let go of the mark held before this tap, so the next one shows clean. */
@@ -159,15 +191,27 @@ export const useTapPreview = (): TapPreview => {
   const settle = (event: PointerEvent<Element>, key: TapKey | null, clear: () => void, open: (() => void) | null) => {
     if (event.pointerType !== 'touch') return;
     const before = heldAtDown.current;
+    const beforeAt = heldAtDownPoint.current;
     heldAtDown.current = undefined;
+    heldAtDownPoint.current = null;
     if (key === null) {
       armedRef.current = null;
       earned.current = null;
+      heldAt.current = null;
       setArmed(null);
       return;
     }
-    earned.current = before === key && open ? open : null;
+    const here = { x: event.clientX, y: event.clientY, mark: event.currentTarget instanceof Element ? markNear(event.currentTarget, event.clientX, event.clientY) : null };
+    /* A second tap opens only on the same mark: the same drawn dot where the
+     * chart draws one, else the same spot. A neighbouring dot that shares the
+     * mark's key reads instead. */
+    const same =
+      before === key &&
+      beforeAt !== null &&
+      (here.mark && beforeAt.mark ? Math.hypot(here.mark.x - beforeAt.mark.x, here.mark.y - beforeAt.mark.y) <= 3 : Math.hypot(here.x - beforeAt.x, here.y - beforeAt.y) <= SAME_SPOT);
+    earned.current = same && open ? open : null;
     armedRef.current = { key, clear, open };
+    heldAt.current = here;
     setArmed(key);
   };
 
@@ -234,15 +278,41 @@ export const useTapPreview = (): TapPreview => {
   return { armed, plain, openArmed, dismiss, target, surface, press, settle, click };
 };
 
-/* ---------- the card a tap opens: inside the screen, never over its mark ---------- */
+/* ---------- the card a tap opens: inside the screen, off the marks ---------- *
+ * Proxy review 3 (Nov 18): with a card open, a tap on a neighbouring mark at
+ * 393 often landed on the card and opened the card's race. Three rules now:
+ *   - the card goes where it covers the fewest of the chart's marks: any spot
+ *     on the screen, above the tab bar, that leaves the tapped mark clear and
+ *     hides least (the button's band counts triple, since a tap there opens);
+ *     ties go to the spot nearest the mark;
+ *   - a second tap opens only on the same drawn mark (same centre), not on
+ *     another dot the chart keys by the same race;
+ *   - the card's body lets a tap through to the chart under it (CSS:
+ *     [data-tap-card] is pointer-events none, its button and links auto), so a
+ *     mark under the card's words still reads;
+ *   - only the button opens, and not in the first moment after the card
+ *     appears or changes (TapAction). */
 
 const GUTTER = 8;
 const GAP = 10;
+const BUTTON_BAND = 48;
+const MARK_MAX = 28;
 
-/** Places a touch card above its mark (below it when the screen has no room
- *  above), centred on it and kept inside the screen and above the tab bar.
- *  `x`, `y` are the mark's top in the card's positioned parent; `under` is
- *  the y below the mark, for a card placed under it. */
+/** The chart's marks in screen space: its small SVG shapes and tagged marks. */
+const marksIn = (parent: HTMLElement, card: HTMLElement): Array<{ x: number; y: number }> => {
+  const out: Array<{ x: number; y: number }> = [];
+  for (const el of parent.querySelectorAll('svg circle, svg ellipse, svg rect, svg path, svg polygon, [data-mark]')) {
+    if (card.contains(el)) continue;
+    const r = el.getBoundingClientRect();
+    if (r.width === 0 || r.height === 0 || r.width > MARK_MAX || r.height > MARK_MAX) continue;
+    out.push({ x: r.left + r.width / 2, y: r.top + r.height / 2 });
+  }
+  return out;
+};
+
+/** Places a touch card off the chart's marks where it can, centred on its
+ *  mark and kept inside the screen and above the tab bar. `x`, `y` are the
+ *  mark's top in the card's positioned parent; `under` is the y below it. */
 export const useTouchPlacement = (
   ref: RefObject<HTMLElement | null>,
   x: number,
@@ -267,16 +337,56 @@ export const useTouchPlacement = (
     const left = Math.max(GUTTER, Math.min(originX + x - w / 2, screenW - GUTTER - w));
     const markTop = originY + y;
     const markBottom = originY + under;
-    const above = markTop - GAP - h;
-    const below = markBottom + GAP;
-    const roomAbove = above >= GUTTER;
-    const roomBelow = below + h <= floor - GUTTER;
-    const goBelow = !roomAbove && (roomBelow || floor - markBottom > markTop);
-    setPlace({ left: left - originX, top: (goBelow ? below : above) - originY });
+
+    /* Every top that fits on screen, 4 px apart, scored by the marks the card
+     * would hide (those under its button count three times) and then by how
+     * far it sits from the tapped mark. Tall charts (the explorer, Rain, the
+     * climb) have marks everywhere, so the four classic spots (above or below
+     * the mark, above or below the chart) are often all on top of other marks. */
+    const fits = (top: number) => top >= GUTTER && top + h <= floor - GUTTER;
+    const marks = marksIn(parent, card);
+    const covers = (top: number) => {
+      let n = 0;
+      for (const m of marks) {
+        if (m.x < left - 4 || m.x > left + w + 4 || m.y < top - 4 || m.y > top + h + 4) continue;
+        n += m.y >= top + h - BUTTON_BAND ? 3 : 1;
+      }
+      return n;
+    };
+    const away = (top: number) => {
+      if (top + h <= markTop - GAP) return markTop - GAP - (top + h);
+      if (top >= markBottom + GAP) return top - (markBottom + GAP);
+      return Infinity; // on the tapped mark itself
+    };
+    const tops = [markTop - GAP - h, markBottom + GAP, box.top - GAP - h, box.bottom + GAP];
+    for (let top = GUTTER; top + h <= floor - GUTTER; top += 4) tops.push(top);
+    let best: number | null = null;
+    let bestCost = Infinity;
+    for (const top of tops) {
+      if (!fits(top)) continue;
+      const gap = away(top);
+      if (!Number.isFinite(gap)) continue;
+      const c = covers(top) * 10000 + gap;
+      if (c < bestCost) {
+        best = top;
+        bestCost = c;
+      }
+    }
+    if (best === null) {
+      /* nowhere fits whole: the side of the mark with more room, as before */
+      const above = markTop - GAP - h;
+      const below = markBottom + GAP;
+      const goBelow = !(above >= GUTTER) && (below + h <= floor - GUTTER || floor - markBottom > markTop);
+      best = goBelow ? below : above;
+    }
+    const next = { left: left - originX, top: best - originY };
+    setPlace((current) => (current && Math.abs(current.left - next.left) < 0.5 && Math.abs(current.top - next.top) < 0.5 ? current : next));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [x, y, under, content]);
   return place ? { left: place.left, top: place.top } : { left: 0, top: 0, visibility: 'hidden' };
 };
+
+const BUTTON_SETTLE_MS = 350;
 
 const capitalise = (text: string) => text.charAt(0).toUpperCase() + text.slice(1);
 const lower = (text: string) => text.charAt(0).toLowerCase() + text.slice(1);
@@ -287,6 +397,13 @@ const lower = (text: string) => text.charAt(0).toLowerCase() + text.slice(1);
  *  loops") reads as it does under a mouse. */
 export const TapAction = ({ tap, label, fallback = 'open the race' }: { tap?: TapPreview; label?: string | null; fallback?: string }) => {
   const open = tap?.openArmed ?? null;
+  /* The moment a card appears or changes mark, its button holds still: a
+   * finger already on its way down to the next dot cannot open this race. */
+  const shownAt = useRef(0);
+  const armedKey = tap?.armed ?? null;
+  useEffect(() => {
+    shownAt.current = performance.now();
+  }, [armedKey]);
   if (open) {
     const words = label ?? fallback;
     if (tap?.plain) return <div className="tap-card__again">Tap again to {lower(words)}</div>;
@@ -296,6 +413,7 @@ export const TapAction = ({ tap, label, fallback = 'open the race' }: { tap?: Ta
         className="tap-card__open"
         onClick={(event) => {
           event.stopPropagation();
+          if (performance.now() - shownAt.current < BUTTON_SETTLE_MS) return;
           open();
         }}
       >

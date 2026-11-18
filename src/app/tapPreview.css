@@ -63,3 +63,10 @@
   svg[role='img'],
   svg[role='group'] { touch-action: manipulation; }
 }
+
+/* Proxy review 3 (Nov 18): a touch card's words let a tap through to the
+ * chart beneath, so a mark under the card still reads; only its own button
+ * (and any link in it) takes the tap. */
+[data-tap-card] { pointer-events: none !important; }
+[data-tap-card] button,
+[data-tap-card] a { pointer-events: auto !important; }
