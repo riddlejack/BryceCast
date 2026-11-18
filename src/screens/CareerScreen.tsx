@@ -367,12 +367,6 @@ const OdometerLive = ({ lifeStats, live }: { lifeStats: UiCareerLifeStats; live:
 
 /* ---------- the drawings, one per group ---------- */
 
-const ordinal = (n: number): string => {
-  const mod100 = n % 100;
-  if (mod100 >= 11 && mod100 <= 13) return `${n}th`;
-  return `${n}${['th', 'st', 'nd', 'rd'][n % 10] ?? 'th'}`;
-};
-
 /** Races by series, from the weeks grid (every race sits in exactly one week). */
 const racesBySeries = (lifeStats: UiCareerLifeStats): Array<{ seriesId: string; races: number }> => {
   const counts = new Map<string, number>();
@@ -1362,7 +1356,7 @@ const ageOn = (birth: number, time: number): number => {
 
 type GridRace = UiCareerWeeksGrid['weeks'][number]['races'][number];
 type LifeEvent = { eventId: string; seriesId: string; trackName: string; country: string; start: number };
-type RaceResult = { label: string; finish: number | null; status: string };
+type RaceResult = { label: string; finish: number | null; field: number | null; status: string };
 
 type LifeWeek = {
   index: number;
@@ -1431,7 +1425,7 @@ const useLifeModel = (lifeStats: UiCareerLifeStats) =>
       const wet = wetFor(asString(row.sessionId) ?? '');
       if (wet) wetByEvent.set(eventId, [...(wetByEvent.get(eventId) ?? []), wet]);
       const list = results.get(eventId) ?? [];
-      list.push({ label: asString(row.raceLabel) ?? '', finish: asNumber(row.finishPosition), status: asString(row.status) ?? 'running' });
+      list.push({ label: asString(row.raceLabel) ?? '', finish: asNumber(row.finishPosition), field: asNumber(row.fieldSize), status: asString(row.status) ?? 'running' });
       results.set(eventId, list);
     }
     for (const list of results.values()) list.sort((a, b) => a.label.localeCompare(b.label, 'en', { numeric: true }));
@@ -1488,10 +1482,15 @@ const useLifeModel = (lifeStats: UiCareerLifeStats) =>
 
 type LifeModel = ReturnType<typeof useLifeModel>;
 
-const resultWord = (result: RaceResult): string => {
-  if (result.status === 'contact') return `${result.finish ? `${ordinal(result.finish)}, ` : ''}out after contact`;
-  if (result.status === 'mechanical') return `${result.finish ? `${ordinal(result.finish)}, ` : ''}out with a mechanical failure`;
-  return result.finish ? ordinal(result.finish) : 'finished';
+/* Round 3 (proxy review 2): the site's one finish grammar, "P8 of 23"
+ * (raceFacts.ts), not ordinals. One race in the line also says who he beat. */
+const resultWord = (result: RaceResult, alone = false): string => {
+  const place = placeLine(result.finish, result.field);
+  if (result.status === 'contact') return `${place ? `${place}, ` : ''}out after contact`;
+  if (result.status === 'mechanical') return `${place ? `${place}, ` : ''}out with a mechanical failure`;
+  if (!place) return 'finished';
+  const beat = alone ? beatLine(result.finish, result.field) : null;
+  return beat ? `${place} · ${beat}` : place;
 };
 
 /** One line per venue and series in the week: an INDY NXT doubleheader is two
@@ -1509,12 +1508,12 @@ const WeekRaceLines = ({ model, races }: { model: LifeModel; races: GridRace[] }
   if (inWeek === 0) {
     outcome = 'Days of this meeting; its races fell in another week';
   } else if (first.seriesId === 'series_imsa_weathertech') {
-    outcome = `The 24-hour race: ${results[0]?.finish ? ordinal(results[0].finish) : 'finished'} overall, in a car shared with three co-drivers`;
+    outcome = `The 24-hour race: ${placeLine(results[0]?.finish, results[0]?.field) ?? 'finished'} overall, in a car shared with three co-drivers`;
   } else if (inWeek === total && results.length > 0) {
     const missing = total - results.length;
-    outcome = `${counted(total)}: ${results.map(resultWord).join(', ')}${missing > 0 ? `; ${missing} not classified` : ''}`;
+    outcome = `${counted(total)}: ${results.map((result) => resultWord(result, results.length === 1)).join(', ')}${missing > 0 ? `; ${missing} not classified` : ''}`;
   } else {
-    outcome = `${inWeek} of this meeting's ${total} races fell this week${results.length ? `. The meeting: ${results.map(resultWord).join(', ')}` : ''}`;
+    outcome = `${inWeek} of this meeting's ${total} races fell this week${results.length ? `. The meeting: ${results.map((result) => resultWord(result)).join(', ')}` : ''}`;
   }
   return (
     <span className="life-tip__race">
@@ -1649,7 +1648,7 @@ const weekLabel = (model: LifeModel, week: LifeWeek): string => {
     return `${base}: ${week.races
       .map((race) => {
         const event = model.events.get(race.eventId);
-        return `${seriesMetaById(race.seriesId).short} at ${event?.trackName ?? race.eventName}${race.bestFinish ? `, best ${ordinal(race.bestFinish)}` : ''}`;
+        return `${seriesMetaById(race.seriesId).short} at ${event?.trackName ?? race.eventName}${race.bestFinish ? `, best P${race.bestFinish}` : ''}`;
       })
       .join('; ')}.`;
   }
