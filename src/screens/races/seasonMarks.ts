@@ -24,6 +24,11 @@ export interface SeasonMark {
   href: string;
   /** The venue's short name, under the weekend's races. */
   venueShort: string;
+  /** The axis's names for the weekend: in full ("Donington, October") and in
+   *  its shortest form ("Donington Oct"), for when the full one has no room. */
+  axis: { long: string; short: string };
+  /** The series: a weekend, and the line through its averages, never crosses one. */
+  series: string;
   /** The race day (YYYY-MM-DD), for grouping a weekend's races. */
   day: string;
   finish: number | null;
@@ -71,13 +76,56 @@ const SHORT: Record<string, string> = {
   'grand prix of arlington street circuit': 'Arlington'
 };
 
-export const venueShortOf = (name: string): string => {
+/* A venue visited twice in a season carries its month in the race name
+ * (careerRaceNames): "Donington Park, October", "Champion of Brands, 12
+ * September". The place is shortened on its own, then the month put back. */
+const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const WHEN = new RegExp(`^(.*?),\\s*((?:\\d{1,2}\\s+)?(?:${MONTHS.join('|')}))$`, 'i');
+const splitWhen = (meeting: string): { place: string; when: string | null } => {
+  const match = meeting.trim().match(WHEN);
+  return match ? { place: match[1], when: match[2] } : { place: meeting, when: null };
+};
+/** "12 September" → "12 Sep", "October" → "Oct". */
+const whenShort = (when: string): string => when.replace(/([A-Za-z]{3})[A-Za-z]*$/, '$1');
+
+const shortPlace = (name: string): string => {
   const key = name.trim().toLowerCase();
   if (SHORT[key]) return SHORT[key];
   return name
     .replace(/\b(International|Motorsports?|Race Complex|Raceway|Speedway|Circuit|Park)\b/gi, '')
     .replace(/\s+/g, ' ')
     .trim() || name;
+};
+
+export const venueShortOf = (name: string): string => {
+  const { place, when } = splitWhen(name);
+  const short = shortPlace(place);
+  return when ? `${short}, ${when}` : short;
+};
+
+/* The axis's last resort on a crowded season: the word people use for the place. */
+const TINY: Record<string, string> = {
+  'Brands Hatch': 'Brands',
+  'Castle Combe': 'Combe',
+  'Cadwell Park': 'Cadwell',
+  'Laguna Seca': 'Laguna',
+  'Road Atlanta': 'Atlanta',
+  'Watkins Glen': 'Watkins',
+  'Summit Point': 'Summit',
+  'FF Festival': 'Festival',
+  'Walter Hayes': 'Hayes',
+  'Paul Ricard': 'Ricard',
+  'Red Bull Ring': 'Red Bull',
+  Hungaroring: 'Hungary'
+};
+
+/** The axis's two names for a meeting or a track: "Brands Hatch, 12 September"
+ *  and "Brands 12 Sep"; "Oulton" both ways. */
+export const axisNames = (name: string): { long: string; short: string } => {
+  const { place, when } = splitWhen(name);
+  const short = shortPlace(place);
+  const tiny = TINY[short] ?? short;
+  return { long: when ? `${short}, ${when}` : short, short: when ? `${tiny} ${whenShort(when)}` : tiny };
 };
 
 /* ---------- INDY NXT rounds ---------- */
@@ -107,6 +155,8 @@ export const indyMarks = (rows: UiSeasonIndexRow[]): SeasonMark[] => {
       id: row.sessionId,
       href: `/races/${encodeURIComponent(row.sessionId)}`,
       venueShort: venueShortOf(row.trackName ?? ''),
+      axis: axisNames(row.trackName ?? ''),
+      series: 'INDY NXT',
       day,
       finish: row.finishPosition,
       field,
@@ -190,6 +240,8 @@ export const archiveMarks = (races: ArchiveRace[], firstWins: Map<string, string
       id: race.sessionId,
       href: race.href,
       venueShort: short,
+      axis: axisNames(meetingOf(race)),
+      series: race.seriesId,
       day: race.day,
       finish: race.finish,
       field: race.field,

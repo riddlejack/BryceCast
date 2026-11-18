@@ -45,7 +45,7 @@ const clamp01 = (t: number) => Math.min(Math.max(t, 0), 1);
 interface Weekend {
   from: number;
   to: number;
-  label: string;
+  label: { long: string; short: string };
   marks: number[];
 }
 
@@ -60,7 +60,7 @@ const weekendsOf = (marks: SeasonMark[]): Weekend[] => {
       last.marks.push(index);
       last.to = index;
     } else {
-      out.push({ from: index, to: index, label: mark.venueShort, marks: [index] });
+      out.push({ from: index, to: index, label: mark.axis, marks: [index] });
     }
   });
   return out;
@@ -162,32 +162,60 @@ export const FieldSeason = ({
   const raceT = (index: number) => ease(clamp01((p - (index / Math.max(n, 1)) * 0.62) / 0.38));
   const lineT = clamp01((p - 0.25) / 0.75);
 
-  /* the weekend line: each weekend's average, through the weekend's middle */
+  /* the weekend line: each weekend's average in each series, through those
+   * races' middle. It joins one series only: where the series changes, a new
+   * line starts ("Also in 2024": FR Oceania's two weekends, then USF's one
+   * race alone; 2019's Mid-Ohio, F1600 and SCCA each their own point). */
   const formPts = weekends
-    .map((weekend) => {
-      const ys = weekend.marks.map((index) => yOf(marks[index])).filter((value): value is number => value !== null);
-      if (!ys.length) return null;
-      return { x: (xs[weekend.from] + xs[weekend.to]) / 2, y: ys.reduce((a, b) => a + b, 0) / ys.length };
+    .flatMap((weekend) => {
+      const bySeries = new Map<string, number[]>();
+      for (const index of weekend.marks) bySeries.set(marks[index].series, [...(bySeries.get(marks[index].series) ?? []), index]);
+      return [...bySeries].map(([series, indexes]) => {
+        const ys = indexes.map((index) => yOf(marks[index])).filter((value): value is number => value !== null);
+        if (!ys.length) return null;
+        const x = indexes.reduce((a, index) => a + xs[index], 0) / indexes.length;
+        return { x, y: ys.reduce((a, b) => a + b, 0) / ys.length, series };
+      });
     })
-    .filter((value): value is { x: number; y: number } => value !== null);
-  const formD = formPts.map((pt, k) => `${k ? 'L' : 'M'}${pt.x.toFixed(1)} ${pt.y.toFixed(1)}`).join(' ');
+    .filter((value): value is { x: number; y: number; series: string } => value !== null)
+    .sort((a, b) => a.x - b.x);
+  const formD = formPts
+    .map((pt, k) => `${k && formPts[k - 1].series === pt.series ? 'L' : 'M'}${pt.x.toFixed(1)} ${pt.y.toFixed(1)}`)
+    .join(' ');
+  const formJoins = formPts.some((pt, k) => k > 0 && formPts[k - 1].series === pt.series);
 
-  /* weekend names, two rows at most; a name that fits neither is left to the card */
-  const labelRows: Array<Array<[number, number]>> = [[], []];
+  /* Weekend names, in up to three rows (four on a phone): the full name where it fits ("Brands
+   * Hatch, 12 September"), else the short one ("Brands 12 Sep"); the phone
+   * goes straight to the short ones. A short form two weekends share (a place
+   * and month both visited twice) is never used: those weekends keep the full
+   * name or, on a phone with no room, the card. */
+  const ROWS = phone ? 4 : 3;
+  const labelRows: Array<Array<[number, number]>> = Array.from({ length: ROWS }, () => []);
+  const shortCount = new Map<string, number>();
+  for (const weekend of weekends) shortCount.set(weekend.label.short, (shortCount.get(weekend.label.short) ?? 0) + 1);
   const placed = weekends.map((weekend) => {
     const cx = (xs[weekend.from] + xs[weekend.to]) / 2;
-    const w = textW(weekend.label, fs - 0.5) + 10;
-    const lo = Math.max(cx - w / 2, 2);
-    const hi = Math.min(lo + w, Math.max(width - 2, lo + w));
-    for (let row = 0; row < (phone ? 2 : 2); row += 1) {
-      if (labelRows[row].every(([a, b]) => hi <= a || lo >= b)) {
-        labelRows[row].push([lo, hi]);
-        return { cx: Math.min(Math.max(cx, w / 2 - 4), width - w / 2 + 4), row };
+    const short = shortCount.get(weekend.label.short) === 1 ? weekend.label.short : null;
+    const names = (phone ? [short ?? weekend.label.long] : [weekend.label.long, short]).filter((text, k, all): text is string => !!text && all.indexOf(text) === k);
+    /* a name may slide a little off its bracket's middle, never off the bracket */
+    const reach = Math.max((xs[weekend.to] - xs[weekend.from]) / 2, 0) + 4;
+    for (const text of names) {
+      const w = textW(text, fs - 0.5) + 10;
+      for (let row = 0; row < ROWS; row += 1) {
+        for (const nudge of [0, -reach / 2, reach / 2, -reach, reach]) {
+          const lc = Math.min(Math.max(cx + nudge, w / 2 + 2), width - w / 2 - 2);
+          const lo = lc - w / 2;
+          const hi = lc + w / 2;
+          if (labelRows[row].every(([a, b]) => hi <= a || lo >= b)) {
+            labelRows[row].push([lo, hi]);
+            return { cx: lc, row, text };
+          }
+        }
       }
     }
     return null;
   });
-  const usedRows = placed.some((value) => value?.row === 1) ? 2 : 1;
+  const usedRows = Math.max(1, ...placed.map((value) => (value ? value.row + 1 : 0)));
   const labelsBottom = bracketY + 6 + usedRows * (fs + 5);
 
   /* standing (INDY NXT): its own thin panel under the weekends */
@@ -234,7 +262,9 @@ export const FieldSeason = ({
 
   const hoveredMark = hovered !== null ? marks[hovered] : null;
   const hoveredWeekend = hovered !== null ? weekends.findIndex((weekend) => hovered >= weekend.from && hovered <= weekend.to) : -1;
-  const placeTicks = [1, 5, 10, 15, 20, 25, 30, 35].filter((tick) => tick <= maxPlace && (maxPlace <= 15 || tick !== 5));
+  /* P1, then even steps of 5 (10 where five places would crowd the labels) */
+  const tickStep = (5 / Math.max(maxPlace - 1, 1)) * plotH >= fs + 6 ? 5 : 10;
+  const placeTicks = [1, ...Array.from({ length: Math.floor(maxPlace / tickStep) }, (_, k) => (k + 1) * tickStep)];
 
   if (n === 0) return null;
 
@@ -316,8 +346,9 @@ export const FieldSeason = ({
             })}
 
             {/* the weekend line */}
-            {formPts.length > 1 && lineT > 0 ? (
+            {formJoins && lineT > 0 ? (
               <path
+                className="fseason__form"
                 d={formD}
                 fill="none"
                 stroke="var(--ink)"
@@ -404,6 +435,7 @@ export const FieldSeason = ({
               return (
                 <g key={`w${w}`}>
                   <path
+                    className="fseason__bracket"
                     d={x1 > x0 ? `M${x0 - 3} ${bracketY - 5} V${bracketY} H${x1 + 3} V${bracketY - 5}` : `M${x0} ${bracketY - 5} V${bracketY}`}
                     fill="none"
                     stroke="var(--ink)"
@@ -412,6 +444,7 @@ export const FieldSeason = ({
                   />
                   {where ? (
                     <text
+                      className="fseason__wk"
                       x={where.cx}
                       y={bracketY + 6 + (where.row + 1) * (fs + 5) - 5}
                       textAnchor="middle"
@@ -420,7 +453,7 @@ export const FieldSeason = ({
                       fontWeight={lit ? 600 : 400}
                       fill={lit ? 'var(--ink)' : 'var(--ink-muted)'}
                     >
-                      {weekend.label}
+                      {where.text}
                     </text>
                   ) : null}
                 </g>
