@@ -33,6 +33,7 @@ import { FormulaFordDepthLayer } from './formulaFordDepth';
 import { DaytonaDepthLayer } from './daytonaDepth';
 import { EuroformulaDepthLayer } from './euroformulaDepth';
 import { F1600SeasonStory, FormulaFordBridge, FrocCampaignStory, OriginTimeline } from './smallSeriesStories';
+import { chapterSignature, useOldChapters } from './chapters';
 import {
   BestClimbs,
   CareerExplorer,
@@ -2133,6 +2134,11 @@ const ChapterPanel = ({
   // the honest split straight from that story so the two agree.
   const f1600Totals = chapter.key === 'f1600' ? uiDataPackage.screens.careerLab.smallSeriesStories.f1600?.totals ?? null : null;
   const depth = chapterDepth(chapter.key);
+  /* Career round 3: each chapter tells what only its season had, in one
+   * visual of its own (INDY NXT: a row a season), in place of the shared
+   * tiles and strip (`?chapters=old` shows round 2's). */
+  const oldChapters = useOldChapters();
+  const signature = oldChapters ? null : chapterSignature(chapter.key);
   return (
     <div className={`journey__chapter chapter-panel${current ? ' journey__chapter--current' : ''}`}>
       <div className="chapter-panel__summary">
@@ -2155,8 +2161,10 @@ const ChapterPanel = ({
           {chapter.short && chapter.short !== chapter.name && !oneRace ? <span className="chapter-panel__full">{chapter.name}</span> : null}
         </div>
         <div className="chapter-panel__body">
-          <p className="chapter-panel__narrative">{chapter.narrative}</p>
-          {oneRace ? (
+          {signature ? null : <p className="chapter-panel__narrative">{chapter.narrative}</p>}
+          {signature ? (
+            signature({ narrative: chapter.narrative, extra })
+          ) : oneRace ? (
             /* A single dot on a percentile strip says nothing — the one-race
              * chapter gets told as the race it was. */
             <DaytonaChapterBody />

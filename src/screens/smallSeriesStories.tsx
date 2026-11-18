@@ -148,7 +148,7 @@ export const F1600SeasonStory = () => {
           ))}
         </div>
         <p className="ss-caption">
-          Each weekend, left to right: where he qualified, then the round&rsquo;s races. A blue dot marks a podium. F1600 2019
+          Each weekend, left to right: where he qualified, then the round&rsquo;s races. A coloured dot marks a podium. F1600 2019
           carries no sourced grid positions, so there is no grid-to-finish here; qualifying is only where he lined up. <PointerWord mouse="Click" touch="Tap" /> a
           race to open it.
         </p>
