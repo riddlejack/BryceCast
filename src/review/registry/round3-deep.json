@@ -34,16 +34,16 @@
     {
       "id": "r3-tyres",
       "page": "/career",
-      "title": "The rivals' tyres, cleaner: rubber, wheel, five plain spokes, hub",
+      "title": "The rivals' tyres, cleaner: a race slick (rubber, wheel, hub)",
       "switch": "rvtyre",
       "values": [
-        { "value": null, "label": "spoked (default): black rubber, gold wheel for Bryce and silver for the rival, five straight spokes; the small tyres on a phone drop the spokes" },
-        { "value": "slick", "label": "a race slick: rubber, wheel, hub and one white sidewall mark" },
+        { "value": null, "label": "slick (default): black rubber, a gold wheel for Bryce and silver for the rival, a hub, one white sidewall mark that shows the roll" },
+        { "value": "spoked", "label": "the same with five straight spokes (at actual size they read as stars)" },
         { "value": "old", "label": "round 2's tyre (tread ring, gold stripe, tapered spokes)" }
       ],
       "look": "Career → More from the archive → The rivals. Every rivals layout (?ddrivals=tyres, grid, the phone board) uses the same tyre. Watch them roll in; point at one for the race.",
       "anchor": "#archive-rivals",
-      "added": "2026-11-18T03:00",
+      "added": "2026-11-18T09:00",
       "reviewed": false
     }
   ]
