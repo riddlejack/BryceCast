@@ -4,16 +4,44 @@
     {
       "id": "r2-weather3d",
       "page": "/tracks",
-      "title": "The race hour's weather on the 3D track: sun, cloud and rain in the light, a wet track's sheen, the trees in the wind, and the wind's marker in the world",
+      "title": "The race's weather on the 3D track: sun, cloud and rain in the light, a wet track's sheen, the trees in the wind, and the wind's marker in the world",
       "switch": "wx",
       "values": [
         { "value": null, "label": "the arrow (default): a small ink arrow printed on the paper beside the model, pointing the way the air moved, longer in a stronger wind, with the speed printed under it on a wide screen" },
         { "value": "sock", "label": "the windsock: a striped sock on a pole by the start/finish line, standing out downwind (level by about 17 mph) and fluttering" },
-        { "value": "off", "label": "off: no weather on the models or stills (the model as it was)" }
+        { "value": "off", "label": "off: no weather on the models, stills or hover cards (the model as it was)" }
       ],
-      "look": "Tracks → Mid-Ohio, 2026 · Race 1 (mainly clear, warm sun) against 2026 · Race 2 (moderate rain: greyer light, a wet sheen on the track, rain falling); Road America 2024 (17 mph, gusts 35: zoom into the woods to watch them sway); Laguna Seca 2025 · Race 1 (overcast); Streets of Detroit 2024 (drizzle). Turn the model: the arrow and the sheen belong to the world. Press 'Replay this race': the replay's track has the same weather. The years row's stills each carry their own race's weather.",
+      "look": "Tracks → Indianapolis Road Course, 2026 · Race 1 (rain, a wet track: greyer light, a sheen on the track, rain falling) against 2025 · Race 1 (clear, an evening sun low in the west); Road America 2024 (17 mph, gusts 35: zoom into the woods to watch them sway); Laguna Seca 2025 · Race 1 (overcast). Turn the model: the arrow and the sheen belong to the world. Press 'Replay this race': the replay's track has the same weather. The years row's stills each carry their own race's weather.",
       "anchor": null,
       "added": "2026-11-17T23:59",
+      "reviewed": false
+    },
+    {
+      "id": "r2-weather3d-races",
+      "page": "/career/race/session_formula_ford_2020_national_oulton_park_race_1",
+      "title": "The same weather on every race page's 3D track and on the hover cards' stills (the race's own: sky, rain, wind arrow)",
+      "switch": "wx",
+      "values": [
+        { "value": null, "label": "on (default)" },
+        { "value": "off", "label": "off" }
+      ],
+      "look": "Race pages: Oulton Park 2020 Race 1 (wet, official), Cadwell Park 2020 Race 2 (19 mph, gusts 44), Portimão 2023 Race 1 (overcast), Hungaroring 2023 Race 2 (clear); an INDY NXT race page, /races/session_indy_nxt_2026_6756 (rain). Hover cards: the Races page's spine dots and Career → The explorer's dots; each card's still carries its race's sky, rain and a small wind arrow. The caption says where wet or dry came from: 'track wet (official)' where the series reported it.",
+      "anchor": null,
+      "added": "2026-11-18T01:00",
+      "reviewed": false
+    },
+    {
+      "id": "r2-weather3d-sun",
+      "page": "/tracks?venue=WeatherTech%20Raceway%20Laguna%20Seca",
+      "title": "The sun where it stood at the race's start: a morning race lit from the east, an evening one from low in the west",
+      "switch": "wxsun",
+      "values": [
+        { "value": null, "label": "the race's own sun (default)" },
+        { "value": "fixed", "label": "the kit's fixed sun, as before" }
+      ],
+      "look": "Laguna Seca 2026 · Race 2 (10:00, sun in the east-south-east) against 2026 · Race 1 (16:00, west-south-west): the shadows fall the other way. Indianapolis 2025 · Race 1 (19:00, the sun 19 degrees up in the west).",
+      "anchor": null,
+      "added": "2026-11-18T01:00",
       "reviewed": false
     }
   ]

@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { useCoarsePointer } from '../app/charts';
 import { TAP_CARD, TapAction, useTouchPlacement, type TapPreview } from '../app/tapPreview';
-import { useVenuePicture, type VenueRef } from '../app/venuePeek';
+import { CardStill, useVenuePicture, type VenueRef } from '../app/venuePeek';
 import type { StillPicture } from '../app/trackStill';
 import { TrackIcon } from '../app/trackArt';
 import { trackOutlineFor } from '../assets/tracks';
@@ -85,7 +85,7 @@ const MouseStillCard = ({ venue, x, y, r, width, action = 'open the race', ...bo
       }}
       role="status"
     >
-      {picture ? <img className="rsc__still" src={picture.src600} width={picture.width} height={picture.height} alt="" decoding="async" /> : null}
+      {picture ? <CardStill className="rsc__still" venue={venue} picture={picture} /> : null}
       <div className="rsc__body">
         <CardBody {...body} />
         <span className="rsc__action">Click to {action}</span>
@@ -110,7 +110,7 @@ const TouchStillCard = ({ venue, x, y, r, action = 'open the race', tap, ...body
   }, [body.title]);
   return (
     <div ref={ref} className="tap-card rsc-tap" style={tap && settled ? place : { ...place, pointerEvents: 'none' }} {...{ [TAP_CARD]: '' }} role="status">
-      {picture ? <img className="rsc__still rsc-tap__still" src={picture.src600} width={picture.width} height={picture.height} alt="" decoding="async" /> : null}
+      {picture ? <CardStill className="rsc__still rsc-tap__still" venue={venue} picture={picture} /> : null}
       <div className="rsc-tap__body">
         <CardBody {...body} />
       </div>

@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { useCoarsePointer } from '../../app/charts';
 import { TAP_CARD, TapAction, useTouchPlacement, type TapPreview } from '../../app/tapPreview';
-import { useVenuePicture } from '../../app/venuePeek';
+import { CardStill, useVenuePicture } from '../../app/venuePeek';
 import { chapterTint } from '../careerExplorer';
 import { beatLine, placeLine } from '../../app/raceFacts';
 import { clamp, statusWords, type ClimbRace } from './model';
@@ -73,7 +73,7 @@ export const ClimbCard = ({
       style={{ left: clamp(x, cardW / 2 + 2, Math.max(width - cardW / 2 - 2, cardW / 2 + 2)), top: below ? under + 10 : y - 10, width: cardW }}
       aria-hidden
     >
-      {picture ? <img className="climb-card__still" src={picture.src600} width={picture.width} height={picture.height} alt="" decoding="async" /> : null}
+      {picture ? <CardStill className="climb-card__still" venue={{ sessionId: race.sessionId, trackName: race.trackName }} picture={picture} /> : null}
       <div className="climb-card__body">
         <Body race={race} />
         <span className="climb-card__action">{race.hasPage ? 'Click to open the race' : 'No race page'}</span>

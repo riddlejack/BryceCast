@@ -42,3 +42,8 @@
   stroke-linejoin: round;
   opacity: 0.82;
 }
+
+/* A hover card's still with weather (venuePeek.tsx CardStill): the card's own
+ * still class sizes this box; the picture fills it. */
+.wx-peek { position: relative; display: block; overflow: hidden; }
+.wx-peek > .wx-peek__img { display: block; width: 100%; height: auto; margin: 0; }
